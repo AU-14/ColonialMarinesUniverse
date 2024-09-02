@@ -22,7 +22,7 @@ entities:
     - type: MetaData
       name: grid
     - type: Transform
-      parent: invalid
+      parent: 102
     - type: MapGrid
       chunks:
         0,0:
@@ -68,12 +68,29 @@ entities:
     - type: GasTileOverlay
     - type: RadiationGridResistance
     - type: Dropship
+      crashWarningSound: !type:SoundPathSpecifier
+        params:
+          volume: -5
+        path: /Audio/_RMC14/Announcements/ARES/dropship_emergency.ogg
+      attachmentPoints: []
       marineHijackSound: !type:SoundPathSpecifier
         params:
           volume: -6
         path: /Audio/_CM14/Announcements/ARES/hijack.ogg
       localHijackSound: !type:SoundPathSpecifier
         path: /Audio/_CM14/Machines/Shuttle/queen_alarm.ogg
+  - uid: 102
+    components:
+    - type: MetaData
+      name: Map Entity
+    - type: Transform
+    - type: Map
+      mapPaused: True
+    - type: PhysicsMap
+    - type: GridTree
+    - type: MovedGrids
+    - type: Broadphase
+    - type: OccluderTree
 - proto: AtmosDeviceFanTiny
   entities:
   - uid: 161
@@ -701,13 +718,6 @@ entities:
     - type: Transform
       pos: -1.5,10.5
       parent: 2
-- proto: CMAlamoWall93
-  entities:
-  - uid: 102
-    components:
-    - type: Transform
-      pos: 0.5,10.5
-      parent: 2
 - proto: CMAlamoWall94
   entities:
   - uid: 44
@@ -771,6 +781,13 @@ entities:
     components:
     - type: Transform
       pos: 1.5,10.5
+      parent: 2
+- proto: CMComputerDropshipWeapons
+  entities:
+  - uid: 184
+    components:
+    - type: Transform
+      pos: 0.5,10.5
       parent: 2
 - proto: CMLightFixtureAlwaysPowered
   entities:
