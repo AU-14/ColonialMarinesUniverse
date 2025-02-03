@@ -1,6 +1,6 @@
 ﻿- type: entity
   parent: CMBaseWeaponRifle
-  name: M54C assault rifle MK2
+  name: M41A pulse rifle MK2
   id: WeaponRifleM54C
   description: The standard issue rifle of the Marines. Commonly carried by most combat personnel. Uses 10x24mm caseless ammunition.
   components:

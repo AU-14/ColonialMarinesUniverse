@@ -1,5 +1,5 @@
 ﻿- type: entity
-  name: M54CE2 heavy assault rifle
+  name: M41AE2 heavy pulse rifle
   parent: CMBaseWeaponRifle
   id: WeaponRifleM54CE2
   description: A large squad support weapon capable of laying down sustained suppressing fire from a mounted position. While unstable and less accurate, it can be lugged and shot with two hands.
