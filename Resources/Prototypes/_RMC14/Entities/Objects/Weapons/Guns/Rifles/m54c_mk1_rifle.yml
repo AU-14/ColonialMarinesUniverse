@@ -45,10 +45,10 @@
         shotsToMaxScatter: 6
       FullAuto:
         fireDelay: 0
-        maxScatterModifier: 26
+        maxScatterModifier: 16
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 4
+        shotsToMaxScatter: 5
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.15
     accuracyMultiplierUnwielded: 0.65
@@ -65,7 +65,7 @@
           - CMMagazineRifleM54CMK1AP
         startingItem: CMMagazineRifleM54CMK1
   - type: GunDamageModifier
-    multiplier: 1.1
+    multiplier: 1.3
   - type: AttachableHolder
     slots:
       rmc-aslot-barrel:

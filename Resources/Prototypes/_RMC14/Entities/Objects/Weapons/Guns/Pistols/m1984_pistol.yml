@@ -9,7 +9,7 @@
     - Sidearm
     - CMWeaponPistolM1984
   - type: RMCSelectiveFire
-    scatterWielded: 10
+    scatterWielded: 8
     scatterUnwielded: 10
     baseFireRate: 10
     burstScatterMult: 5
@@ -114,7 +114,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 40
+        Piercing: 44
   - type: CMArmorPiercing
     amount: 10
 
@@ -139,7 +139,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 25
+        Piercing: 28
   - type: CMArmorPiercing
     amount: 40
 

@@ -31,8 +31,8 @@
     - Burst
     - FullAuto
     recoilUnwielded: 4
-    scatterWielded: 6
-    scatterUnwielded: 20
+    scatterWielded: 3
+    scatterUnwielded: 15
     baseFireRate: 4
     burstScatterMult: 1
   - type: RMCWeaponAccuracy
@@ -51,7 +51,7 @@
           - CMMagazineRifleM54CAP
           - CMMagazineRifleM54CExt
   - type: GunDamageModifier
-    multiplier: 1.1
+    multiplier: 1.3
   - type: AttachableHolder
     slots:
       rmc-aslot-barrel:

@@ -28,7 +28,7 @@
     baseFireModes:
     - SemiAuto
     recoilUnwielded: 2
-    scatterWielded: 6
+    scatterWielded: 2
     baseFireRate: 2.86
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.25
@@ -55,7 +55,7 @@
           - CMMagazineRifleM4SPRAP
           - CMMagazineRifleM4SPRExt
   - type: GunDamageModifier
-    multiplier: 1.4
+    multiplier: 1.6
   - type: AttachableHolder
     slots:
       rmc-aslot-barrel:

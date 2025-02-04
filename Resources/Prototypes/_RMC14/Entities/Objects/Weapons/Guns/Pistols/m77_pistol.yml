@@ -27,7 +27,7 @@
     baseFireModes:
     - SemiAuto
     - Burst
-    scatterWielded: 8
+    scatterWielded: 6
     scatterUnwielded: 8
     baseFireRate: 4
     burstScatterMult: 4
