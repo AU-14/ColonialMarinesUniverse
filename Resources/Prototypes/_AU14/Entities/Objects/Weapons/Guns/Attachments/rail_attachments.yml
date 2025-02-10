@@ -1,0 +1,47 @@
+-type: entity
+parent: RMCAttachmentScopeBase
+id: AU14AttachmentPVR-52E1
+name: AN/PVR-52E1 CCD television sight system
+description: An Armat produced scope with a CCD camera for night vision capabilities. The scope is locked at modest 2x magnification.
+components:
+  - type: Sprite
+    state: miniscope
+  - type: Tag
+    tags:
+    - RMCAttachmentRail
+    - AU14AttachmentAN/PVR52E1
+  - type: AttachableVisuals
+  - type: AttachableToggleable
+    breakOnMove: false
+    icon:
+      sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
+      state: miniscope
+    actionName: Look through the AN/PVR-52E1 CCD television sight system
+    actionDesc: An Armat produced scope with a CCD camera for night vision capabilities. The scope is locked at modest 2x magnification.
+  - type: AttachableToggleableSimpleActivate
+  - type: Scope
+    zoomLevels:
+    - zoom: 1
+      offset: 13
+      allowMovement: true
+      doAfter: 0
+  - type: AttachableSpeedMods
+    modifiers:
+    - conditions:
+        activeOnly: true
+      walk: -0.31
+      sprint: -0.448
+  - type: AttachableWieldDelayMods
+    modifiers:
+    - delay: 0.4
+  - type: AttachableWeaponRangedMods
+    modifiers:
+    - conditions:
+        activeOnly: true
+      fireDelayFlat: 0.15
+      accuracyAddMult: 0.35
+      damageFalloffAddMult: -0.2
+    - conditions:
+        wieldedOnly: true
+        inactiveOnly: true
+      accuracyAddMult: -0.05
