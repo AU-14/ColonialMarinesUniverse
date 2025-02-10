@@ -3,16 +3,8 @@
   parent:
   - BaseStation
   - BaseStationNews
-  - BaseStationCargo
   - BaseStationJobsSpawning
   - BaseStationRecords
-  - BaseStationShuttles
-  - BaseStationCentcomm
-  - BaseStationEvacuation
-  - BaseStationAlertLevels
-  - BaseStationSiliconLawCrewsimov
-  - BaseStationAllEventsEligible
-  - BaseStationNanotrasen
   categories: [ HideSpawnMenu ]
   components:
   - type: Transform

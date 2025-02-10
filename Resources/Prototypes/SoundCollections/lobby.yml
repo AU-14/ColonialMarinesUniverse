@@ -1,5 +1,5 @@
 - type: soundCollection
-  id: LobbyMusic
+  id: LobbyMusicOld # suffix old to not conflict with ours
   files:
 #    - /Audio/Lobby/thunderdome.ogg
 #    - /Audio/Lobby/absconditus.ogg

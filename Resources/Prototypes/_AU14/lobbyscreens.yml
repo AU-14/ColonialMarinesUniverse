@@ -1,0 +1,7 @@
+﻿- type: lobbyBackground
+  id: AU14Pyro
+  background: /Textures/_AU14/Lobby/PyrotechnicianXeno.png
+
+- type: lobbyBackground
+  id: AU14MarineMajor
+  background: /Textures/_AU14/Lobby/MarineMajor.png
