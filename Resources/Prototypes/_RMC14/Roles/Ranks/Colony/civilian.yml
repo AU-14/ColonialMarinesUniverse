@@ -1,4 +1,4 @@
-﻿- type: rank
+﻿﻿- type: rank
   id: RMCRankCivilian
   name: Civilian
   prefix: Civ.
@@ -34,43 +34,3 @@
   id: RMCRankCivilianSeniorOfficer
   name: Senior Officer
   prefix: Sr. Off.
-
-- type: rank
-  id: RMCRankCivilianAdministrator
-  name: Administrator
-  prefix: Admin.
-
-- type: rank
-  id: RMCRankCivilianSeniorAdministrator
-  name: Senior Administrator
-  prefix: Sr. Admin.
-
-- type: rank
-  id: RMCRankCivilianParkRanger
-  name: Ranger
-  prefix: Rngr.
-
-- type: rank
-  id: RMCRankCivilianSeniorParkRanger
-  name: Senior Ranger
-  prefix: Sr. Rngr.
-
-- type: rank
-  id: RMCRankCivilianCMBDeputy
-  name: Probationary Deputy Marshal
-  prefix: Prob. Dep.
-
-- type: rank
-  id: RMCRankCivilianCMBDeputy
-  name: Deputy Marshal
-  prefix: Dep.
-
-- type: rank
-  id: RMCRankCivilianSeniorCMBDeputy
-  name: Senior Deputy Marshal
-  prefix: Sr. Dep.
-
-- type: rank
-  id: RMCRankCivilianCMBMarshal
-  name: Marshal
-  prefix: Mshl.
