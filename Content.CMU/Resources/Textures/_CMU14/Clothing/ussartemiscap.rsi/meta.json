@@ -8,10 +8,10 @@
   },
   "states": [
     {
-      "name": "artemiscap"
+      "name": "icon"
     },
     {
-      "name": "sulacocap",
+      "name": "equipped-HELMET",
       "directions": 4
     }
   ]
