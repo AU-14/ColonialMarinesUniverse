@@ -1,0 +1,57 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AUColonyCook
+  name: Colony Cook
+  description: A resident of the colony and a Cook.
+  playTimeTracker: AUJobColonyCook
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AUGearColonyCook
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: cm-job-supervisors-nobody
+  accessGroups:
+  - Colonist
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 1
+        RMCSkillEndurance: 2
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 1
+    - type: EquipSurvivorPreset
+      preset: RMCSurvivorPresetCivilian
+    - type: Survivor
+    - type: MotionDetectorTracked
+    - type: UserIFF
+      faction: FactionSurvivor
+    - type: IntelRescueSurvivorObjective
+  hasIcon: false
+
+- type: startingGear
+  id: AUGearColonyCook
+  equipment:
+    jumpsuit: CMJumpsuitTShirtWhite
+    shoes: RMCShoesBrown
+    id: CMIDCardColonist
+    ears: CMHeadsetColony
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AUSpawnPointColonyCook
+  name: colony cook spawn point
+  components:
+  - type: SpawnPoint
+    job_id: AUColonyCook
+  - type: Sprite
+    layers:
+    - sprite: Markers/jobs.rsi
+      state: green
+    - sprite: _RMC14/Markers/cm_jobs.rsi
+      state: survivor
+
+- type: playTimeTracker
+  id: AUColonyCook
+  isHumanoid: true

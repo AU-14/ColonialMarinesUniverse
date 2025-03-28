@@ -1,0 +1,57 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AUColonyResident
+  name: Colony Resident
+  description: A resident of the colony.
+  playTimeTracker: AUJobColonyResident
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AUGearColonyResident
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: cm-job-supervisors-nobody
+  accessGroups:
+  - Colonist
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 1
+        RMCSkillEndurance: 2
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 1
+    - type: EquipSurvivorPreset
+      preset: RMCSurvivorPresetCivilian
+    - type: Survivor
+    - type: MotionDetectorTracked
+    - type: UserIFF
+      faction: FactionSurvivor
+    - type: IntelRescueSurvivorObjective
+  hasIcon: false
+
+- type: startingGear
+  id: AUGearColonyResident
+  equipment:
+    jumpsuit: CMJumpsuitTShirtWhite
+    shoes: RMCShoesBrown
+    id: CMIDCardColonist
+    ears: CMHeadsetColony
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AUSpawnPointColonyResident
+  name: colony resident spawn point
+  components:
+  - type: SpawnPoint
+    job_id: AUColonyResident
+  - type: Sprite
+    layers:
+    - sprite: Markers/jobs.rsi
+      state: green
+    - sprite: _RMC14/Markers/cm_jobs.rsi
+      state: survivor
+
+- type: playTimeTracker
+  id: AUColonyResident
+  isHumanoid: true

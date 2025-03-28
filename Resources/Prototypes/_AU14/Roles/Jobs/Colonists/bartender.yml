@@ -1,0 +1,57 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AUColonyBartender
+  name: Colony Bartender
+  description: A resident of the colony and a Bartender.
+  playTimeTracker: AUJobColonyBartender
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AUGearColonyBartender
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: cm-job-supervisors-nobody
+  accessGroups:
+  - Colonist
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 1
+        RMCSkillEndurance: 2
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 1
+    - type: EquipSurvivorPreset
+      preset: RMCSurvivorPresetCivilian
+    - type: Survivor
+    - type: MotionDetectorTracked
+    - type: UserIFF
+      faction: FactionSurvivor
+    - type: IntelRescueSurvivorObjective
+  hasIcon: false
+
+- type: startingGear
+  id: AUGearColonyBartender
+  equipment:
+    jumpsuit: CMJumpsuitTShirtWhite
+    shoes: RMCShoesBrown
+    id: CMIDCardColonist
+    ears: CMHeadsetColony
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AUSpawnPointColonyBartender
+  name: colony bartender spawn point
+  components:
+  - type: SpawnPoint
+    job_id: AUColonyBartender
+  - type: Sprite
+    layers:
+    - sprite: Markers/jobs.rsi
+      state: green
+    - sprite: _RMC14/Markers/cm_jobs.rsi
+      state: survivor
+
+- type: playTimeTracker
+  id: AUColonyBartender
+  isHumanoid: true

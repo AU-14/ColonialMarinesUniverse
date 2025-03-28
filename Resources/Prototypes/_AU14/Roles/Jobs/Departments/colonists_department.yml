@@ -1,0 +1,11 @@
+﻿- type: department
+  parent: CMDepartmentBase
+  id: AUColony
+  name: Colonists
+  description: All Colonists
+  color: "#C38312"
+  roles:
+  - AUColonyResident
+  - AUColonyBartender
+  - AUColonyCook
+  - AUWasteManagementSpecialist
