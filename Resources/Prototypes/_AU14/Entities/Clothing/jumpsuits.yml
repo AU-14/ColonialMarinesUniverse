@@ -1,7 +1,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14DesertFatigues
-  name: USCM Desert fatigues
+  name: USCM desert fatigues
   description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
   components:
   - type: Sprite
@@ -10,11 +10,29 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14JungleFatigues
-  name: USCM Jungle fatigues
+  name: USCM jungle fatigues
   description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
   components:
   - type: Sprite
     sprite: _AU14/Clothing/junglefatigues.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14SnowFatigues
+  name: USCM snow fatigues
+  description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/snowfatigues.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14MixedSnowFatigues
+  name: mixed USCM snow fatigues
+  description: A mix of winter and jungle USCM fatigues. Reservists don't get amazing funding, huh...
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/mixedsnowfatigues.rsi
 
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]

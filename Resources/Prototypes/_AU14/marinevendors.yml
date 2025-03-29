@@ -23,6 +23,10 @@
         amount: 30
       - id: AU14JungleFatigues
         amount: 30
+      - id: AU14SnowFatigues
+        amount: 30
+      - id: AU14MixedSnowFatigues
+        amount: 30
       - id: CMHandsBrown
         amount: 20
       - id: CMHandsBlackMarine
@@ -702,6 +706,10 @@
         amount: 2
       - id: AU14JungleFatigues
         amount: 2
+      - id: AU14SnowFatigues
+        amount: 30
+      - id: AU14MixedSnowFatigues
+        amount: 30
       - id: CMJumpsuitXOFormal
         amount: 2
       - id: CMJumpsuitOperations
@@ -741,7 +749,7 @@
         amount: 2
       - id: AU14DesertPatrolCap
         amount: 2
-    - name: Armor
+    - name: Armor and Rigs
       entries:
       - id: AU14ArmorM3JungleOne
         amount: 2
@@ -754,6 +762,8 @@
       - id: AU14ArmorM3DesertTwo
         amount: 2
       - id: AU14ArmorM3DesertThree
+        amount: 2
+      - id: AU14ExternalWebbing
         amount: 2
     - name: Backpack
       entries:
