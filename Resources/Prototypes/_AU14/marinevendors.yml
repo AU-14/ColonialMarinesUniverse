@@ -17,8 +17,6 @@
         amount: 20
       - id: CMBootsBrown
         amount: 20
-      - id: AU14BootsJungle
-        amount: 20
       - id: AU14DesertFatigues
         amount: 30
       - id: AU14JungleFatigues
@@ -135,18 +133,12 @@
         amount: 1
       - id: RMCPouchMagazine
         amount: 15
-      - id: RMCPouchMagazineLarge
-        amount: 2
-      - id: RMCPouchShotgunLarge
+      - id: RMCPouchShotgun
         amount: 4
       - id: RMCPouchGeneralMedium
         amount: 15
-      - id: RMCPouchGeneralLarge
-        amount: 2
       - id: RMCPouchMagazinePistol
         amount: 15
-      - id: RMCPouchMagazinePistolLarge
-        amount: 2
       - id: RMCPouchPistol
         amount: 15
       - id: RMCPouchConstruction
@@ -155,6 +147,8 @@
         amount: 1
       - id: RMCPouchFirstResponder
         name: First Responder Pouch (Empty)
+        amount: 2
+      - id: RMCPouchMagazinePistolLarge
         amount: 2
       - id: RMCPouchTools
         amount: 15
@@ -499,8 +493,6 @@
         amount: 2
       - id: CMBootsBrown
         amount: 2
-      - id: AU14BootsJungle
-        amount: 2
       - id: AU14TacticalFlightSuit
         amount: 2
       - id: CMJumpsuitPilot
@@ -700,8 +692,6 @@
         amount: 2
       - id: CMBootsBrown
         amount: 2
-      - id: AU14BootsJungle
-        amount: 2
       - id: AU14DesertFatigues
         amount: 2
       - id: AU14JungleFatigues
@@ -744,7 +734,6 @@
         amount: 2
       - id: RMCHeadBeretSquad
         amount: 2
-        name: Black Beret
       - id: AU14JunglePatrolCap
         amount: 2
       - id: AU14DesertPatrolCap
@@ -812,8 +801,6 @@
       - id: RMCPouchMagazinePistolLarge
         amount: 2
       - id: RMCPouchTools
-        amount: 2
-      - id: RMCPouchCommand
         amount: 2
 #      - id: Sling Pouch
 #        amount: 1
