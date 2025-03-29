@@ -149,14 +149,3 @@
     sprintModifier: .725
   - type: ClothingBlockBackpack
   - type: SmartGunArmor
-
-- type: entity
-  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
-  id: AU14ExternalWebbing
-  name: external webbing
-  description: An exterior webbing based off the original alice rig.
-  components:
-  - type: Sprite
-    sprite: _AU14/Clothing/externalwebbing.rsi
-  - type: Clothing
-    sprite: _AU14/Clothing/externalwebbing.rsi
