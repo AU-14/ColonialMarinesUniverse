@@ -23,10 +23,6 @@
         amount: 30
       - id: AU14JungleFatigues
         amount: 30
-      - id: AU14SnowFatigues
-        amount: 30
-      - id: AU14MixedSnowFatigues
-        amount: 30
       - id: CMHandsBrown
         amount: 20
       - id: CMHandsBlackMarine
@@ -469,6 +465,8 @@
         amount: 10
       - id: RMCGlassesMedicalHUDGlasses
         amount: 1
+      - id: AU14CMDefibrillator
+        amount: 2
     - name: Medical Gloves
       entries:
       - id: CMHandsLatex
@@ -706,10 +704,6 @@
         amount: 2
       - id: AU14JungleFatigues
         amount: 2
-      - id: AU14SnowFatigues
-        amount: 30
-      - id: AU14MixedSnowFatigues
-        amount: 30
       - id: CMJumpsuitXOFormal
         amount: 2
       - id: CMJumpsuitOperations
@@ -749,7 +743,7 @@
         amount: 2
       - id: AU14DesertPatrolCap
         amount: 2
-    - name: Armor and Rigs
+    - name: Armor
       entries:
       - id: AU14ArmorM3JungleOne
         amount: 2
@@ -762,8 +756,6 @@
       - id: AU14ArmorM3DesertTwo
         amount: 2
       - id: AU14ArmorM3DesertThree
-        amount: 2
-      - id: AU14ExternalWebbing
         amount: 2
     - name: Backpack
       entries:
