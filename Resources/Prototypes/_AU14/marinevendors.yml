@@ -465,6 +465,8 @@
         amount: 10
       - id: RMCGlassesMedicalHUDGlasses
         amount: 1
+      - id: AU14CMDefibrillator
+        amount: 2
     - name: Medical Gloves
       entries:
       - id: CMHandsLatex
