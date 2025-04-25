@@ -19,8 +19,8 @@
 - type: entity
   parent: ColMarTechBaseAnchorable
   id: CMVendorMedical
-  name: We-Ya-Med Plus
-  description: Medical pharmaceutical dispenser. Provided by We-Ya Pharmaceuticals Division(TM).
+  name: WY-Med Plus
+  description: Medical pharmaceutical dispenser. Provided by WY Pharmaceuticals Division(TM).
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/med.rsi
@@ -143,8 +143,8 @@
 - type: entity
   parent: CMVendorMedical
   id: CMVendorChemistry
-  name: We-Ya-Chem Plus
-  description: Medical chemistry dispenser. Provided by We-Ya Pharmaceuticals Division(TM).
+  name: WY-Chem Plus
+  description: Medical chemistry dispenser. Provided by WY Pharmaceuticals Division(TM).
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/chem.rsi

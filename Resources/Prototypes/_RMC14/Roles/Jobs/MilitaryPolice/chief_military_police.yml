@@ -3,6 +3,7 @@
   id: CMChiefMP
   name: cm-job-name-chief-mp
   description: cm-job-description-chief-mp
+  setPreference: false
   playTimeTracker: CMJobChiefMP
   requirements:
   - !type:DepartmentTimeRequirement

@@ -3,6 +3,7 @@
   id: CMSeniorEnlistedAdvisor
   name: cm-job-name-senior-enlisted-advisor
   description: cm-job-description-senior-enlisted-advisor
+  setPreference: false
   playTimeTracker: CMJobSeniorEnlistedAdvisor
   requirements:
   - !type:DepartmentTimeRequirement

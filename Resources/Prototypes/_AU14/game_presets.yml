@@ -1,0 +1,8 @@
+- type: gamePreset
+  id: Insurgency
+  alias:
+  - extended
+  name: insurgency-title
+  showInVote: true
+  description: insurgency-description
+  # rules:

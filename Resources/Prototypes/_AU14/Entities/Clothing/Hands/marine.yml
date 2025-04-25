@@ -1,0 +1,15 @@
+- type: entity
+  parent: ClothingHandsBase
+  id: AU14PVEHandsInsulatedBlackMarine
+  name: marine insulated combat gloves
+  description: "Standard issue marine tactical gloves with insulated fibers. It reads: 'knit by Marine Widows Association'."
+  components:
+  - type: Insulated
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Hands/Gloves/black.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Hands/Gloves/black.rsi
+  - type: Fiber
+    fiberMaterial: fibers-black
+    fiberColor: fibers-black
+  - type: FingerprintMask

@@ -3,6 +3,7 @@
   id: CMIntelOfficer
   name: cm-job-name-intel
   description: cm-job-description-intel
+  setPreference: false
   playTimeTracker: CMJobIntelOfficer
   requirements:
   - !type:DepartmentTimeRequirement

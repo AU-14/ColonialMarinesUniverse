@@ -3,6 +3,7 @@
   id: CMAuxiliarySupportOfficer
   name: cm-job-name-aso
   description: cm-job-description-aso
+  setPreference: false
   playTimeTracker: CMJobAuxiliarySupportOfficer
   requirements:
   - !type:DepartmentTimeRequirement

@@ -191,7 +191,7 @@
 - type: entity
   parent: RMCBaseSentry
   id: RMCSentry
-  name: UN 571-C sentry gun
+  name: UA 571-C sentry gun
   description: A deployable, semi-automated turret with AI targeting capabilities. Armed with an M30 Autocannon and a 500-round drum magazine.
   components:
   - type: Icon
@@ -206,8 +206,8 @@
 - type: entity
   parent: RMCSentry
   id: RMCSentryMini
-  name: UN 512-M mini sentry
-  description: A compact version of the UNMC defenses. Designed for quick deployment of the associated type in the field.
+  name: UA 512-M mini sentry
+  description: A compact version of the USCMC defenses. Designed for quick deployment of the associated type in the field.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Sentries/sentry.rsi
@@ -269,7 +269,7 @@
 - type: entity
   parent: RMCSentry
   id: RMCSentrySniper
-  name: UN 725-D sniper sentry
+  name: UA 725-D sniper sentry
   description: A fully-automated defence turret with long-range targeting capabilities. Armed with a modified M32-S Autocannon and an internal belt feed.
   components:
   - type: Sprite
@@ -329,7 +329,7 @@
 - type: entity
   parent: RMCSentry
   id: RMCSentryOmni
-  name: UN 571-D omnidirectional sentry gun
+  name: UA 571-D omnidirectional sentry gun
   description: A deployable, semi-automated turret with 360 degree range AI targeting capabilities. Armed with an M30 Autocannon and a 500-round drum magazine.
   components:
   - type: Sprite
@@ -373,7 +373,7 @@
 - type: entity
   parent: RMCSentry
   id: RMCSentryShotgun
-  name: UN 12-G Shotgun Sentry
+  name: UA 12-G Shotgun Sentry
   description: A deployable, semi-automated turret with specialized for close range combat. Protects itself with sturdier plating and steel tusks.
   components:
   - type: Sprite
@@ -439,7 +439,7 @@
 - type: entity
   parent: RMCBaseTurret
   id: RMCTurretGaussDumb
-  name: damaged UN-577 gauss turret
+  name: damaged UA-577 gauss turret
   description: A deployable, semi-automated turret with AI targeting capabilities. Armed with an M30 Autocannon and a high-capacity drum magazine. This one's IFF system has been fried via acid damage, and it will open fire on any targets within range.
   components:
   - type: Gun

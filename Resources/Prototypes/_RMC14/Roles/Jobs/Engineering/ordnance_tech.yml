@@ -3,6 +3,7 @@
   parent: CMJobBase
   name: cm-job-name-ordnance-tech
   description: cm-job-description-ordnance-tech
+  setPreference: false
   playTimeTracker: CMJobOrdnanceTech
   requirements:
   - !type:TotalJobsTimeRequirement

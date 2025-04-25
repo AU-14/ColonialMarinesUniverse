@@ -3,6 +3,7 @@
   id: CMMaintTech
   name: cm-job-name-maint-tech
   description: cm-job-description-maint-tech
+  setPreference: false
   playTimeTracker: CMJobMaintTech
   requirements:
   - !type:DepartmentTimeRequirement

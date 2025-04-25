@@ -29,7 +29,7 @@
         amount: 30
       - id: CMHandsBrown
         amount: 20
-      - id: CMHandsBlackMarine
+      - id: AU14PVEHandsInsulatedBlackMarine
         amount: 20
       - id: RMCHeadsetMarine
         amount: 20
@@ -277,7 +277,9 @@
       #  amount: 2
       #- id: CMSparePDTLBattleBuddyKit
       #  amount: 3
-      - id: RMCPowerCellCrap
+      - id: CMSandbagEmpty25
+        amount: 5
+      - id: RMCPowerCellHigh
         amount: 5
     - name: Attachments
       entries:
@@ -312,7 +314,7 @@
       - id: CMPacketPillsKelotane
         amount: 30
 
-#corpsman  
+#corpsman
 - type: entity
   parent: ColMarTechBase
   id: AU14USCMcorpsmanvendor
@@ -454,7 +456,9 @@
      #    CMMS11SmartRefillTank
      # FixOVien
       - id: CMRollerBedSpawnFolded
-        amount: 4
+        amount: 2
+      - id: RMCMedevacStretcherFolded
+        amount: 1
       - id: CMStasisBagFolded
         amount: 4
       - id: RMCBoxBodyBag
@@ -507,7 +511,7 @@
         amount: 2
       - id: CMHandsBrown
         amount: 2
-      - id: CMHandsBlackMarine
+      - id: AU14PVEHandsInsulatedBlackMarine
         amount: 2
       - id: CMHeadsetPilot
         amount: 2
@@ -716,7 +720,7 @@
         amount: 2
       - id: CMHandsBrown
         amount: 2
-      - id: CMHandsBlackMarine
+      - id: AU14PVEHandsInsulatedBlackMarine
         amount: 2
       - id: CMHeadsetSeniorCommand
         amount: 2

@@ -3,6 +3,7 @@
   id: CMChiefEngineer
   name: cm-job-name-chief-engineer
   description: cm-job-description-chief-engineer
+  setPreference: false
   playTimeTracker: CMJobChiefEngineer
   requirements:
   - !type:TotalJobsTimeRequirement

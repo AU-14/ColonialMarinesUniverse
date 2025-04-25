@@ -9,15 +9,15 @@
       department: CMSquad
       time: 36000 # 10 hours
   ranks:
-    RMCRankSergeant:
-    - !type:RoleTimeRequirement
-      role: CMJobSmartGunOperator
-      time: 252000 # 70 hours
     RMCRankCorporal:
     - !type:RoleTimeRequirement
       role: CMJobSmartGunOperator
+      time: 90000 # 25 hours
+    RMCRankLanceCorporal:
+    - !type:RoleTimeRequirement
+      role: CMJobSmartGunOperator
       time: 36000 # 10 hours
-    RMCRankLanceCorporal: []
+    RMCRankPrivateFirstClass: []
   startingGear: CMGearSmartGunOperator
   dummyStartingGear: CMGearSmartGunOperatorEquipped
   icon: "CMJobIconSmartGunOperator"

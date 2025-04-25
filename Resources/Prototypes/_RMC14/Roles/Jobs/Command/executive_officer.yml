@@ -3,6 +3,7 @@
   id: CMExecutiveOfficer
   name: cm-job-name-executive-officer
   description: cm-job-description-executive-officer
+  setPreference: false
   playTimeTracker: CMJobExecutiveOfficer
   requirements:
   - !type:DepartmentTimeRequirement

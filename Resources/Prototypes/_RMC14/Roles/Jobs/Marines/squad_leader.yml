@@ -21,12 +21,8 @@
     RMCRankGunnerySergeant:
     - !type:RoleTimeRequirement
       role: CMJobSquadLeader
-      time: 252000 # 70 hours
-    RMCRankStaffSergeant:
-    - !type:RoleTimeRequirement
-      role: CMJobSquadLeader
-      time: 36000 # 10 hours
-    RMCRankSergeant: []
+      time: 90000 # 25 hours
+    RMCRankStaffSergeant: []
   startingGear: CMGearSquadLeader
   dummyStartingGear: CMGearSquadLeaderEquipped
   icon: "CMJobIconSquadLeader"

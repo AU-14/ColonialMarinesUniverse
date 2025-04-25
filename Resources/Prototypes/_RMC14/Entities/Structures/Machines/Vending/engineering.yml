@@ -63,7 +63,7 @@
   parent: CMVendorTool
   id: CMVendorCircuits
   name: circuit board vendor
-  description: A safe storage for pre-programmed circuit boards, it has an internal gyroscope to keep any external force from moving the boards, thick insulation and a custom 2.1mm UPS port for charging various We-Ya exclusive devices (sold separately).
+  description: A safe storage for pre-programmed circuit boards, it has an internal gyroscope to keep any external force from moving the boards, thick insulation and a custom 2.1mm UPS port for charging various WY exclusive devices (sold separately).
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/robotics.rsi

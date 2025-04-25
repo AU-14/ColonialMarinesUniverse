@@ -9,15 +9,7 @@
     department: CMSquad
     time: 36000 # 10 hours
   ranks:
-    RMCRankSergeant:
-    - !type:RoleTimeRequirement
-      role: CMJobFireteamLeader
-      time: 252000 # 70 hours
-    RMCRankCorporal:
-    - !type:RoleTimeRequirement
-      role: CMJobFireteamLeader
-      time: 36000 # 10 hours
-    RMCRankLanceCorporal: []
+    RMCRankSergeant: []
   startingGear: CMGearFireteamLeader
   dummyStartingGear: CMGearFireteamLeaderEquipped
   icon: "CMJobIconFireteamLeader"

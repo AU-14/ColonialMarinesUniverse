@@ -3,6 +3,7 @@
   id: CMCombatTech
   name: cm-job-name-combat-tech
   description: cm-job-description-combat-tech
+  setPreference: false
   playTimeTracker: CMJobCombatTech
   requirements:
   - !type:DepartmentTimeRequirement

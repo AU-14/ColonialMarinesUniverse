@@ -1,7 +1,7 @@
 ﻿- type: entity
   parent: CMAlamoDoor
   id: CMNormandyDoor
-  name: normandy crew hatch
+  name: lexington crew hatch
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Dropships/normandy.rsi

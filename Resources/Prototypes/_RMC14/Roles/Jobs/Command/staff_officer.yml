@@ -3,6 +3,7 @@
   id: CMStaffOfficer
   name: cm-job-name-staff-officer
   description: cm-job-description-staff-officer
+  setPreference: false
   playTimeTracker: CMJobStaffOfficer
   requirements:
   - !type:RoleTimeRequirement

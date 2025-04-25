@@ -3,6 +3,7 @@
   id: CMCommandingOfficer
   name: cm-job-name-commanding-officer
   description: cm-job-description-commanding-officer
+  setPreference: false
   playTimeTracker: CMJobCommandingOfficer
   requirements:
   - !type:DepartmentTimeRequirement

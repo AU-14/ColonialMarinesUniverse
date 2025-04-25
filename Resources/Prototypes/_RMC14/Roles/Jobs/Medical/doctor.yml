@@ -3,6 +3,7 @@
   id: CMDoctor
   name: cm-job-name-doctor
   description: cm-job-description-doctor
+  setPreference: false
   playTimeTracker: CMJobDoctor
   requirements:
   - !type:TotalJobsTimeRequirement

@@ -2,7 +2,7 @@
   abstract: true
   parent: CMBaseWallInvincible
   id: CMBaseNormandyWall
-  name: normandy wall
+  name: lexington wall
   components:
   - type: Corrodible
     isCorrodible: false

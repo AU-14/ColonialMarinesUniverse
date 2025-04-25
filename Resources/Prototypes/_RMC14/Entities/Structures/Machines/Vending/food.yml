@@ -23,7 +23,7 @@
     - name: Prepared Meals
       entries:
       - id: CMMRE
-        name: UNMC Meal Ready to Eat
+        name: USCM Meal Ready to Eat
         amount: 15
       - id: CMMarinePreparedMealChicken
         amount: 15
@@ -132,7 +132,7 @@
   parent: ColMarTechBaseAnchorable
   id: CMVendorChess
   name: Chess-o-mat
-  description: In 2143 Red Star Drinks, a SPP-CA (Colony Administration) affiliated corporation ran a promotional sweepstakes for drinkers who had found special codes on the inside of the caps of a limited run of Red Star Vodka, shipping them a Chess-O-Mat with unlimited refills.
+  description: In 2143 Red Star Drinks, a UPP-CA (Colony Administration) affiliated corporation ran a promotional sweepstakes for drinkers who had found special codes on the inside of the caps of a limited run of Red Star Vodka, shipping them a Chess-O-Mat with unlimited refills.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/chessomat.rsi

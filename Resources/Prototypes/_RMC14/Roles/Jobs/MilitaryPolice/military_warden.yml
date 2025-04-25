@@ -3,6 +3,7 @@
   id: CMMilitaryWarden
   name: cm-job-name-militarywarden
   description: cm-job-description-militarywarden
+  setPreference: false
   playTimeTracker: CMJobMilitaryWarden
   requirements:
   - !type:DepartmentTimeRequirement
