@@ -1,16 +1,10 @@
 ﻿- type: job
   parent: CMJobBase
   id: CMStaffOfficer
-  name: cm-job-name-staff-officer
-  description: cm-job-description-staff-officer
+  name: cm-job-name-platoon-operations-officer
+  description: cm-job-description-platoon-operations-officer
+  setPreference: true
   playTimeTracker: CMJobStaffOfficer
-  requirements:
-  - !type:RoleTimeRequirement
-    role: CMJobSquadLeader
-    time: 18000 # 5 hours
-  - !type:TotalDepartmentsTimeRequirement
-    group: CMDepartmentsHuman
-    time: 54000 # 15 hours
   ranks:
     RMCRankSecondLT: []
   weight: 5
@@ -18,7 +12,7 @@
   icon: "CMJobIconStaffOfficer"
   requireAdminNotify: true
   joinNotifyCrew: true
-  supervisors: cm-job-supervisors-co
+  supervisors: cm-job-supervisors-platco
   accessGroups:
   - MarineMain
   minimapIcon:
@@ -64,8 +58,6 @@
     ears: RMCHeadsetMarineCommand
     pocket1: RMCPouchGeneralLarge
     pocket2: RMCPouchGeneralLarge
-  inhand:
-    - RMCRangefinder
 
 - type: entity
   parent: CMSpawnPointJobBase

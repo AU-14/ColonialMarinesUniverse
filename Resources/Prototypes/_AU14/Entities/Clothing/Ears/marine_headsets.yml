@@ -1,0 +1,29 @@
+ #section
+
+- type: entity
+  parent: RMCHeadsetMarine
+  id: AU14HeadsetSectionMarine
+  name: marine section radio headset
+  description: This is used by marines in a rifle section.
+  components:
+  - type: Sprite
+    state: generic_headset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMEncryptionKeyDelta
+
+- type: entity
+  parent: RMCHeadsetMarine
+  id: AU14HeadsetSectionLeader
+  name: marine section leader radio headset
+  description: This is used by a section leader in a rifle section.
+  components:
+  - type: Sprite
+    state: generic_headset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMEncryptionKeyDelta
+      - CMEncryptionKeyJTAC
+      - CMEncryptionKeySquadLeader

@@ -3,8 +3,8 @@
 - type: entity
   parent: ColMarTechBase
   id: ColMarTechSGGear
-  name: ColMarTech squad smart gun operator gear rack
-  description: An automated gear rack for Squad Smart Gun Operators.
+  name: ColMarTech squad smartgunner gear rack
+  description: An automated gear rack for Squad Smartgunners.
   components:
   - type: AccessReader
     access:

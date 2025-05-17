@@ -1,0 +1,203 @@
+- type: entity
+  abstract: true
+  id: AU14TestVan
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,1.4,0.5"
+        density: 190
+        layer:
+        - MobMask
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/boxvvanwhite.rsi
+    offset: 0.5, 0.5
+    noRot: true
+  - type: Clickable
+  - type: DeleteOnExplosion
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: AU14TestVan
+  id: AU14PropVehicleWhiteVan
+  suffix: White
+  name: White Van
+  description: A vehicle.
+  components:
+  - type: Sprite
+    state: box_van_white
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: AU14TestVan
+  id: AU14PropVehicleBlueVan
+  suffix: Blue
+  name: Blue Van
+  description: A vehicle.
+  components:
+  - type: Sprite
+    state: box_van_bluegrey_damage_5
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: AU14TestVan
+  id: AU14PropVehicleKellandMiningVan
+  suffix: Kelland
+  name: Kelland Mining Van
+  description: A vehicle.
+  components:
+  - type: Sprite
+    state: box_van_kellandmining_damage_3
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: AU14TestVan
+  id: AU14PropVehicleMaintenanceVan
+  suffix: Bluetwo
+  name: Maintenance Van
+  description: A vehicle.
+  components:
+  - type: Sprite
+    state: box_van_maintenanceblue_damage_5
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: AU14TestVan
+  id: AU14PropVehiclePizzaVan
+  suffix: Pizza
+  name: Pizza Van
+  description: A vehicle.
+  components:
+  - type: Sprite
+    state: box_van_pizza
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: AU14TestVan
+  id: AU14PropVehicleCrane
+  suffix: Crane
+  name: Mobile Crane
+  description: A vehicle.
+  components:
+  - type: Sprite
+    state: crane
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: AU14TestVan
+  id: AU14PropVehicleCargoCrane
+  suffix: Cargo Crane
+  name: crane_cargo
+  description: A vehicle.
+  components:
+  - type: Sprite
+    state: crane
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: AU14TestVan
+  id: AU14PropVehicleDamagedCrane
+  suffix: Damaged Crane
+  name: crane_cargo
+  description: A damaged vehicle.
+  components:
+  - type: Sprite
+    state: crane_damaged
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget

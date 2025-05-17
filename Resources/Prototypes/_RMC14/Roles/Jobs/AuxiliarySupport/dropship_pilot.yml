@@ -3,6 +3,7 @@
   id: CMPilotDropship
   name: cm-job-name-dropship-pilot
   description: cm-job-description-dropship-pilot
+  setPreference: false
   playTimeTracker: CMJobPilotDropship
   requirements:
   - !type:TotalJobsTimeRequirement

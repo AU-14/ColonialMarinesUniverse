@@ -1,8 +1,8 @@
 ﻿- type: entity
   parent: CMBaseWeaponSMG
-  name: M63 submachine gun
+  name: M39 submachine gun
   id: WeaponSMGM63
-  description: The Aegis Battlefield Armaments M-63 submachinegun. Occasionally carried by light-infantry, scouts, engineers and medics.
+  description: The ARMAT Battlefield Armaments M39 submachinegun. Occasionally carried by light-infantry, scouts, engineers and medics.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/SMGs/m63/desert.rsi
@@ -110,7 +110,7 @@
 - type: entity
   parent: CMMagazineRifleBase
   id: CMMagazineSMGM63
-  name: "M63 HV magazine (10x20mm)"
+  name: "M39 HV magazine (10x20mm)"
   components:
   - type: Tag
     tags:
@@ -142,7 +142,7 @@
 - type: entity
   parent: CMMagazineSMGM63
   id: CMMagazineSMGM63AP
-  name: "M63 AP magazine (10x20mm)"
+  name: "M39 AP magazine (10x20mm)"
   components:
   - type: BallisticAmmoProvider
     whitelist:
@@ -168,7 +168,7 @@
 - type: entity
   parent: CMMagazineSMGM63
   id: CMMagazineSMGM63Ext
-  name: "M63 extended magazine (10x20mm)"
+  name: "M39 extended magazine (10x20mm)"
   components:
   - type: BallisticAmmoProvider
     capacity: 72

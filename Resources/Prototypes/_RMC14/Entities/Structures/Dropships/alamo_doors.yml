@@ -1,7 +1,7 @@
 ﻿- type: entity
   parent: CMBaseDoor
   id: CMAlamoDoor
-  name: alamo crew hatch
+  name: fallujah crew hatch
   placement:
     mode: SnapgridCenter
   components:

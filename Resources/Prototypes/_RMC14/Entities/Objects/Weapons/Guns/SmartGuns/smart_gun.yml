@@ -1,7 +1,7 @@
 ﻿- type: entity
   parent: [ CMBaseWeaponGun, BaseItem, RMCBaseAttachableHolder ]
   id: RMCSmartGun
-  name: ML66A smart gun
+  name: M56B smart gun
   description: The actual firearm in the Smart Gun System. Essentially a heavy, mobile machinegun.
   components:
   - type: Wieldable
@@ -37,6 +37,10 @@
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/Attachments/barrel.rsi
+      state: d_ml66_barrel
+      offset: 0.65, 0.0
+      map: [ "barrel" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
@@ -144,7 +148,7 @@
           - RMCAttachmentRailFlashlight
   - type: AttachableHolderVisuals
     offsets:
-      rmc-aslot-rail: -0.1875, 0.125
+      rmc-aslot-rail: 0.1900, 0.00
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: _RMC14/Objects/Weapons/Guns/SmartGuns/ml66a/jungle.rsi
@@ -160,8 +164,8 @@
 - type: entity
   parent: [ CMBaseWeaponGun, BaseItem, RMCBaseAttachableHolder ]
   id: RMCSmartGunCO
-  name: ML66B 'cavalier' smart gun
-  description: The actual firearm in the Smart Gun System. Back order only. Besides a more robust weapons casing, an ID lock system and a fancy paintjob, the gun's performance is identical to the standard-issue ML66A.
+  name: M56C 'cavalier' smart gun
+  description: The actual firearm in the Smart Gun System. Back order only. Besides a more robust weapons casing, an ID lock system and a fancy paintjob, the gun's performance is identical to the standard-issue M56B.
   components:
   - type: Wieldable
   - type: Item
@@ -286,7 +290,7 @@
     whitelist:
       components:
       - SmartGunArmor
-  - type: GunIDLock 
+  - type: GunIDLock
   - type: GunToggleableRecoil
   - type: GunToggleableAutoFire
   - type: ToggleableMotionDetector
@@ -315,7 +319,7 @@
 - type: entity
   parent: CMMagazineRifleBase
   id: RMCMagazineSmartGun
-  name: "ML66A drum magazine (10x30mm)"
+  name: "MM56B drum magazine (10x28mm)"
   components:
   - type: Tag
     tags:
@@ -347,7 +351,7 @@
 - type: entity
   parent: CMBaseCartridgeRifle
   id: CMCartridgeSmartGun10x30mm
-  name: cartridge (10x30mm)
+  name: cartridge (10x28mm)
   components:
   - type: Sprite
     sprite: Objects/Weapons/Guns/Ammunition/Casings/large_casing.rsi
@@ -363,7 +367,7 @@
 - type: entity
   parent: CMBulletBase
   id: CMBulletSmartGun10x30mm
-  name: bullet (10x30mm)
+  name: bullet (10x28mm)
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite

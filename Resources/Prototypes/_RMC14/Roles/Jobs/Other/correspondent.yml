@@ -3,6 +3,7 @@
   id: CMCorrespondent
   name: cm-job-name-correspondent
   description: cm-job-description-correspondent
+  setPreference: false
   playTimeTracker: CMJobCorrespondent
   requirements:
   - !type:TotalDepartmentsTimeRequirement

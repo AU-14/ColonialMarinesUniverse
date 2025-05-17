@@ -205,6 +205,12 @@
     },
     {
       "name": "pmc_sniperbarrel"
+    },
+    {
+      "name": "d_ml66_barrel"
+    },
+    {
+      "name": "d_ml66_barrel_a"
     }
   ]
 }

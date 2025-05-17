@@ -3,6 +3,7 @@
   id: CMCMO
   name: cm-job-name-cmo
   description: cm-job-description-cmo
+  setPreference: false
   playTimeTracker: CMJobCMO
   requirements:
   - !type:TotalJobsTimeRequirement

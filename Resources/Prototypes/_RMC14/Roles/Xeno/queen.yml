@@ -2,6 +2,7 @@
   parent: CMJobXenoBase
   id: CMXenoQueen
   name: cm-job-name-xeno-queen
+  setPreference: false
   playTimeTracker: CMJobXenoQueen
   requirements:
   - !type:TotalJobsTimeRequirement

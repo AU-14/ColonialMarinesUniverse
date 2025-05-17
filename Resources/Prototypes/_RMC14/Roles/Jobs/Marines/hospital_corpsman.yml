@@ -4,23 +4,12 @@
   name: cm-job-name-hospital-corpsman
   description: cm-job-description-hospital-corpsman
   playTimeTracker: CMJobHospitalCorpsman
-  requirements:
-  - !type:TotalJobsTimeRequirement
-    group: CMJobsMedical
-    time: 3600 # 1 hours
-  - !type:DepartmentTimeRequirement
-    department: CMSquad
-    time: 3600 # 1 hour
   ranks:
     RMCRankCorporal:
     - !type:RoleTimeRequirement
       role: CMJobHospitalCorpsman
-      time: 252000 # 70 hours
-    RMCRankLanceCorporal:
-    - !type:RoleTimeRequirement
-      role: CMJobHospitalCorpsman
-      time: 36000 # 10 hours
-    RMCRankPrivateFirstClass: []
+      time: 90000 # 25 hours
+    RMCRankLanceCorporal: []
   startingGear: CMGearHospitalCorpsman
   dummyStartingGear: CMGearHospitalCorpsmanEquipped
   icon: "CMJobIconHospitalCorpsman"
@@ -44,6 +33,8 @@
         RMCSkillJtac: 1
         RMCSkillMedical: 2
         RMCSkillSurgery: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
     - type: CMVendorUser
       points: 45
     - type: SquadArmorWearer

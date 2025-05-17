@@ -1,0 +1,64 @@
+- type: gameMap
+  id: Riptide
+  mapName: Riptide
+  mapPath: /Maps/_RMC14/USSRiptide.yml
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    Savannah:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'USS Riptide'
+        - type: StationJobs
+          availableJobs:
+            # Command
+            CMCommandingOfficer: [0, 0]
+            CMExecutiveOfficer: [1, 1]
+            CMStaffOfficer: [1, 1]
+            CMSeniorEnlistedAdvisor: [0, 0]
+
+            # Military Police
+            CMChiefMP: [0, 0]
+            CMMilitaryWarden: [0, 0]
+            CMMilitaryPolice: [0, 0]
+
+            # Auxiliary
+            CMAuxiliarySupportOfficer: [0, 0]
+            CMIntelOfficer: [0, 0]
+            CMPilotDropship: [0, 0]
+            CMPilotGunship: [1, 1]
+            CMDropshipCrewChief: [1, 1]
+
+            # Engineering
+            CMChiefEngineer: [0, 0]
+#            CMOrdnanceTech: [3, 3]
+            CMMaintTech: [0, 0]
+
+            # Medical
+            CMCMO: [0, 0]
+            CMDoctor: [0, 0]
+            CMNurse: [0, 0]
+#            CMResearcher: [2, 2]
+
+            # Requisition
+            CMQuartermaster: [0, 0]
+            CMCargoTech: [0, 0]
+#            CMMessTech: [1, 1]
+
+            # Marines
+            CMSquadLeader: [1, 1]
+            CMFireteamLeader: [2, 2]
+            CMSmartGunOperator: [2, 2]
+            CMWeaponsSpecialist: [0, 0]
+            CMCombatTech: [0, 0]
+            CMHospitalCorpsman: [1, 1]
+            CMRifleman: [ -1, -1 ]
+
+            # Civilians
+            CMCorrespondent: [0, 0]
+
+            # Other
+            CMLiaison: [0, 0]

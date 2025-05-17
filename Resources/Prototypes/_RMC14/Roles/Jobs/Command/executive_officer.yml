@@ -1,21 +1,18 @@
 ﻿- type: job
   parent: CMJobBase
   id: CMExecutiveOfficer
-  name: cm-job-name-executive-officer
-  description: cm-job-description-executive-officer
+  name: cm-job-name-platoon-commander
+  description: cm-job-description-platoon-commander
+  setPreference: true
   playTimeTracker: CMJobExecutiveOfficer
-  requirements:
-  - !type:DepartmentTimeRequirement
-    department: CMCommand
-    time: 36000 # 10 hours
   ranks:
-    RMCRankCaptain: []
+    RMCRankFirstLT: []
   weight: 5
   startingGear: CMGearExecutiveOfficer
   icon: "CMJobIconExecutiveOfficer"
   requireAdminNotify: true
   joinNotifyCrew: true
-  supervisors: cm-job-supervisors-co
+  supervisors: cm-job-supervisors-coyco
   accessGroups:
   - MarineMain
   minimapIcon:
@@ -60,15 +57,11 @@
   equipment:
     jumpsuit: CMJumpsuitBO
     shoes: RMCShoesLaceup
-    head: CMHeadCapPeakedService
-    outerClothing: RMCCoatService
+    head: CMHeadCap
     id: CMIDCardExecutiveOfficer
     ears: CMHeadsetSeniorCommand
     pocket1: RMCPouchGeneralLarge
     pocket2: RMCPouchGeneralLarge
-  storage:
-    pocket1:
-    - RMCRangefinder
 
 - type: entity
   parent: CMSpawnPointJobBase

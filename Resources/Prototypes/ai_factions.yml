@@ -73,6 +73,7 @@
   - Zombie
   - Revolutionary
   - AllHostile
+  - UNMC
 
 - type: npcFaction
   id: Zombie

@@ -4,7 +4,7 @@
   parent: ColMarTechBaseAnchorable
   id: CMVendorWalkman
   name: Rec-Vend
-  description: Contains We-Ya approved recreational items, like Walkmans and Cards.
+  description: Contains WY approved recreational items, like Walkmans and Cards.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/walkman.rsi

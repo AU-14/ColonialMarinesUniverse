@@ -168,14 +168,14 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      80: Dead
+      160: Dead
   - type: SlowOnDamage
     speedModifierThresholds:
       40: 0.7
   - type: MeleeWeapon
     damage:
       groups:
-        Brute: 6
+        Brute: 23
   - type: MovementSpeedModifier
     baseSprintSpeed: 4
   - type: Fixtures
@@ -205,7 +205,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      300: Dead
+      1250: Dead
   - type: SlowOnDamage
     speedModifierThresholds:
       150: 0.7
@@ -213,7 +213,7 @@
   - type: MeleeWeapon
     damage:
      groups:
-       Brute: 12
+       Brute: 45
   - type: Fixtures
     fixtures:
       fix1:

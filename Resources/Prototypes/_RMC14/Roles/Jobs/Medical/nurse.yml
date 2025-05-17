@@ -3,6 +3,7 @@
   id: CMNurse
   name: cm-job-name-nurse
   description: cm-job-description-nurse
+  setPreference: false
   playTimeTracker: CMJobNurse
   requirements:
   - !type:TotalDepartmentsTimeRequirement

@@ -123,7 +123,7 @@
 - type: entity
   parent: RMCBoxMagazineBase
   id: RMCBoxMagazineRifleM54CEmpty
-  name: magazine box (M54C x 10)
+  name: magazine box (M41A x 10)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -162,7 +162,7 @@
 - type: entity
   parent: RMCBoxMagazineAPBase
   id: RMCBoxMagazineRifleM54CAPEmpty
-  name: magazine box (AP M54C x 10)
+  name: magazine box (AP M41A x 10)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -188,7 +188,7 @@
 - type: entity
   parent: RMCBoxMagazineRifleM54CAPEmpty
   id: RMCBoxMagazineRifleM54CAP
-  name: magazine box (AP M54C x 10)
+  name: magazine box (AP M41A x 10)
   suffix: Filled
   components:
   - type: CMItemSlots
@@ -202,7 +202,7 @@
 - type: entity
   parent: RMCBoxMagazineBase
   id: RMCBoxMagazineRifleM54CExtEmpty
-  name: magazine box (Ext M54C x 8)
+  name: magazine box (Ext M41A x 8)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -229,7 +229,7 @@
   parent: RMCBoxMagazineRifleM54CExtEmpty
   id: RMCBoxMagazineRifleM54CExt
   suffix: Filled
-  name: magazine box (Ext M54C x 8)
+  name: magazine box (Ext M41A x 8)
   components:
   - type: CMItemSlots
     startingItem: CMMagazineRifleM54CExt
@@ -243,7 +243,7 @@
 - type: entity
   parent: RMCBoxMagazineHVBase
   id: RMCBoxMagazineSMGM63Empty
-  name: magazine box (M63 x 12)
+  name: magazine box (M39 x 12)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -269,7 +269,7 @@
 - type: entity
   parent: RMCBoxMagazineSMGM63Empty
   id: RMCBoxMagazineSMGM63
-  name: magazine box (M63 x 12)
+  name: magazine box (M39 x 12)
   components:
   - type: CMItemSlots
     startingItem: CMMagazineSMGM63
@@ -282,7 +282,7 @@
 - type: entity
   parent: RMCBoxMagazineBase
   id: RMCBoxMagazineSMGM63APEmpty
-  name: magazine box (AP M63 x 12)
+  name: magazine box (AP M39 x 12)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -309,7 +309,7 @@
   parent: RMCBoxMagazineSMGM63APEmpty
   id: RMCBoxMagazineSMGM63AP
   suffix: Full
-  name: magazine box (AP M63 x 12)
+  name: magazine box (AP M39 x 12)
   components:
   - type: CMItemSlots
     startingItem: CMMagazineSMGM63AP
@@ -322,7 +322,7 @@
 - type: entity
   parent: RMCBoxMagazineHVBase
   id: RMCBoxMagazineSMGM63ExtEmpty
-  name: magazine box (Ext M63 x 10)
+  name: magazine box (Ext M39 x 10)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -348,7 +348,7 @@
 - type: entity
   parent: RMCBoxMagazineSMGM63ExtEmpty
   id: RMCBoxMagazineSMGM63Ext
-  name: magazine box (Ext M63 x 10)
+  name: magazine box (Ext M39 x 10)
   suffix: Full
   components:
   - type: CMItemSlots
@@ -363,7 +363,7 @@
 - type: entity
   parent: RMCBoxMagazineBase
   id: RMCBoxMagazineRifleM4SPREmpty
-  name: magazine box (M4SPR x 16)
+  name: magazine box (M4RA x 16)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -389,7 +389,7 @@
 - type: entity
   parent: RMCBoxMagazineRifleM4SPREmpty
   id: RMCBoxMagazineRifleM4SPR
-  name: magazine box (M4SPR x 16)
+  name: magazine box (M4RA x 16)
   suffix: Filled
   components:
   - type: CMItemSlots
@@ -403,7 +403,7 @@
 - type: entity
   parent: RMCBoxMagazineBase
   id: RMCBoxMagazineRifleM4SPRAPEmpty
-  name: magazine box (AP M4SPR x 16)
+  name: magazine box (AP M4RA x 16)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -429,7 +429,7 @@
 - type: entity
   parent: RMCBoxMagazineRifleM4SPRAPEmpty
   id: RMCBoxMagazineRifleM4SPRAP
-  name: magazine box (AP M4SPR x 16)
+  name: magazine box (AP M4RA x 16)
   components:
   - type: CMItemSlots
     startingItem: CMMagazineRifleM4SPRAP
@@ -442,7 +442,7 @@
 - type: entity
   parent: RMCBoxMagazineBase
   id: RMCBoxMagazineRifleM4SPRExtEmpty
-  name: magazine box (Ext M4SPR x 12)
+  name: magazine box (Ext M4RA x 12)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -468,7 +468,7 @@
 - type: entity
   parent: RMCBoxMagazineRifleM4SPRExtEmpty
   id: RMCBoxMagazineRifleM4SPRExt
-  name: magazine box (Ext M4SPR x 12)
+  name: magazine box (Ext M4RA x 12)
   components:
   - type: CMItemSlots
     startingItem: CMMagazineRifleM4SPRExt
@@ -482,7 +482,7 @@
 - type: entity
   parent: RMCBoxMagazineBase
   id: RMCBoxMagazinePistolM1984Empty
-  name: magazine box (M1984 x 16)
+  name: magazine box (M4A3 x 16)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -520,7 +520,7 @@
 - type: entity
   parent: RMCBoxMagazineBase
   id: RMCBoxMagazinePistolM1984APEmpty
-  name: magazine box (AP M1984 x 16)
+  name: magazine box (AP M4A3 x 16)
   suffix: Empty
   components:
   - type: Construction
@@ -556,7 +556,7 @@
 - type: entity
   parent: RMCBoxMagazineAPBase
   id: RMCBoxMagazinePistolM77APEmpty
-  name: magazine box (M77 AP x 16)
+  name: magazine box (Mod 88 AP x 16)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -582,7 +582,7 @@
 - type: entity
   parent: RMCBoxMagazinePistolM77APEmpty
   id: RMCBoxMagazinePistolM77AP
-  name: magazine box (M77 AP x 16)
+  name: magazine box (Mod 88 AP x 16)
   components:
   - type: CMItemSlots
     startingItem: CMMagazinePistolM77AP

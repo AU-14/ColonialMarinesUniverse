@@ -3,6 +3,7 @@
   id: CMQuartermaster
   name: cm-job-name-quartermaster
   description: cm-job-description-quartermaster
+  setPreference: false
   playTimeTracker: CMJobQuartermaster
   requirements:
   - !type:DepartmentTimeRequirement

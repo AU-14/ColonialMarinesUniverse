@@ -3,6 +3,7 @@
   id: CMSurvivor
   name: cm-job-name-survivor
   description: cm-job-description-survivor
+  setPreference: false
   playTimeTracker: CMJobSurvivor
   requirements:
   - !type:DepartmentTimeRequirement

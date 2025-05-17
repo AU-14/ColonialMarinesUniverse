@@ -4,20 +4,8 @@
   name: cm-job-name-fireteam-leader
   description: cm-job-description-fireteam-leader
   playTimeTracker: CMJobFireteamLeader
-  requirements:
-  - !type:DepartmentTimeRequirement
-    department: CMSquad
-    time: 36000 # 10 hours
   ranks:
-    RMCRankSergeant:
-    - !type:RoleTimeRequirement
-      role: CMJobFireteamLeader
-      time: 252000 # 70 hours
-    RMCRankCorporal:
-    - !type:RoleTimeRequirement
-      role: CMJobFireteamLeader
-      time: 36000 # 10 hours
-    RMCRankLanceCorporal: []
+    RMCRankSergeant: []
   startingGear: CMGearFireteamLeader
   dummyStartingGear: CMGearFireteamLeaderEquipped
   icon: "CMJobIconFireteamLeader"
@@ -37,7 +25,7 @@
     - type: Skills
       skills:
         RMCSkillConstruction: 2
-        RMCSkillEngineer: 2
+        RMCSkillEngineer: 3
         RMCSkillFirearms: 1
         RMCSkillFireman: 1
         RMCSkillJtac: 3

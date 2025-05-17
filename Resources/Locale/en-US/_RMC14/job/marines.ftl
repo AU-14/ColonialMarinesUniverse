@@ -4,13 +4,13 @@ cm-job-description-rifleman = Follow orders from those above you. Do your job an
 cm-job-prefix-rifleman = RFN
 CMJobRifleman = Rifleman
 
-cm-job-name-squad-leader = Squad Leader
-cm-job-description-squad-leader = Leader of one of the four marine squads. Give your squad and fireteams objectives and follow orders from Command. Keep your squad in one piece.
+cm-job-name-squad-leader = Section Leader
+cm-job-description-squad-leader = Leader of a rifle section. Give your section and squads objectives and follow orders from Command. Keep your section in one piece.
 cm-job-prefix-squad-leader = SL
 CMJobSquaderLeader = Squad Leader
 
-cm-job-name-fireteam-leader = Fireteam Leader
-cm-job-description-fireteam-leader = Follow the squad leader's orders and command your fireteam. Co-ordinate with CAS and fire support elements.
+cm-job-name-fireteam-leader = Squad Leader
+cm-job-description-fireteam-leader = Follow the section leader's orders and command your squad.
 cm-job-prefix-fireteam-leader = FTL
 CMJobFireteamLeader = Fireteam Leader
 
