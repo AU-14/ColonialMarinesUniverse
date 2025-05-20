@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "Made by patogrone on discord for AU14",
+  "size": {
+    "x": 64,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "base"
+    },
+    {
+      "name": "icon"
+    },
+    {
+      "name": "bolt-open"
+    },
+    {
+      "name": "mag-2"
+    },
+    {
+      "name": "mag-0"
+    }
+  ]
+}
