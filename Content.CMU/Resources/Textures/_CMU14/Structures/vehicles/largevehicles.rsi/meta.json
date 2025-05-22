@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/structures/props/vehicles/armored_truck_wy_white.dmi, https://github.com/cmss13-devs/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/structures/props/vehicles/armored_truck_blue.dmi, https://github.com/cmss13-devs/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/structures/props/vehicles/armored_truck_wy_black.dmi, https://github.com/cmss13-devs/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/structures/props/vehicles/armored_truck_teal.dmi, https://github.com/cmss13-devs/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/structures/props/vehicles/long_truck_blue.dmi, https://github.com/cmss13-devs/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/structures/props/vehicles/long_truck_brown.dmi, https://github.com/cmss13-devs/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/structures/props/vehicles/long_truck_donk.dmi, https://github.com/cmss13-devs/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/structures/props/vehicles/long_truck_kelland.dmi, https://github.com/cmss13-devs/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/structures/props/vehicles/long_truck_red.dmi, https://github.com/cmss13-devs/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/structures/props/vehicles/long_truck_wy_black.dmi, https://github.com/cmss13-devs/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/structures/props/vehicles/long_truck_wy_blue.dmi, https://github.com/cmss13-devs/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/structures/props/vehicles/ambulance.dmi",
+  "size": {
+    "x": 128,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "armored_truck_wy_white",
+      "directions": 4,
+      "delays": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "armored_truck_blue",
+      "directions": 4
+    },
+    {
+      "name": "armored_truck_wy_black",
+      "directions": 4,
+      "delays": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "armored_truck_teal",
+      "directions": 4
+    },
+    {
+      "name": "longtruck_blue",
+      "directions": 4
+    },
+    {
+      "name": "longtruck_brown",
+      "directions": 4
+    },
+    {
+      "name": "longtruck_donk_damage_4",
+      "directions": 4
+    },
+    {
+      "name": "longtruck_kelland_damage_3",
+      "directions": 4
+    },
+    {
+      "name": "longtruck_red_damage_2",
+      "directions": 4
+    },
+    {
+      "name": "longtruck_wy_black_damage_3",
+      "directions": 4
+    },
+    {
+      "name": "longtruck_wy_blue_damage_2",
+      "directions": 4
+    },
+    {
+      "name": "ambulance",
+      "directions": 4
+    }
+  ]
+}
