@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "Taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/6d21afd56eaac6d233eae76cf712a2016759509d/icons/obj/vehicles/bison_prop.dmi",
+  "size": {
+    "x": 96,
+    "y": 96
+  },
+  "states": [
+    {
+      "name": "base_closed",
+      "directions": 4
+    },
+    {
+      "name": "base_closed_damaged",
+      "directions": 4
+    },
+    {
+      "name": "base_open",
+      "directions": 4
+    },
+    {
+      "name": "base_open_damaged",
+      "directions": 4
+    }
+  ]
+}
