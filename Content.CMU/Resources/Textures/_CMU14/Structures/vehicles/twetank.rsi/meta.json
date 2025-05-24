@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "Taken from SectorPatrol at https://github.com/Neroid-Sector/SectorPatrol/blob/15c9c18fcd965391c0acfbbbf0496fb711765800/icons/obj/vehicles/twe_tank.dmi",
+  "size": {
+    "x": 96,
+    "y": 96
+  },
+  "states": [
+    {
+      "name": "twe_tank"
+    }
+  ]
+}
