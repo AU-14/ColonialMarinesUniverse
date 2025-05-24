@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "Taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/1e1023cec5aa04ddfd142f3d7e32de2327bca245/icons/obj/structures/props/industrial/watchtower.dmi",
+  "size": {
+    "x": 64,
+    "y": 96
+  },
+  "states": [
+    {
+      "name": "watchtower"
+    }
+  ]
+}

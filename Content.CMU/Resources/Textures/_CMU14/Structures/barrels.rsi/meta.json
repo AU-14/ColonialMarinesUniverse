@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "Taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/structures/barrels.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "barrel_purewhite"
+    },
+    {
+      "name": "barrel_wy"
+    },
+    {
+      "name": "barrel_medical"
+    },
+    {
+      "name": "barrel_white"
+    }
+  ]
+}
