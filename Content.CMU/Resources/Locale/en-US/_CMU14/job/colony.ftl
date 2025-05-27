@@ -37,17 +37,17 @@ AU14JobCivilianWasteManagementSpecialist = Waste Management Specialist
 
 au14-job-name-civilianjournalist = Journalist
 au14-job-description-civilianjournalist = Report on the happenings of the colony.
-au14-job-prefix-journalist = NEWS
+au14-job-prefix-journalist = PRESS
 AU14JobCivilianJournalist = Journalist
 
 au14-job-name-civiliancolonyadministrator = Colony Administrator
 au14-job-description-civiliancolonyadministrator = The head honcho of the colony.
-au14-job-prefix-colonyadministrator = Lead the colony.
+au14-job-prefix-colonyadministrator = ADMIN
 AU14JobCivilianColonyAdministrator = ADMIN
 
 au14-job-name-civilianfreightsystemsspecialist = Freight Systems Specialist
 au14-job-description-civilianfreightsystemsspecialist = Manage the ASRS system and keep the colony supplied.
-au14-job-prefix-freightsystemsspecialist = LOGI
+au14-job-prefix-freightsystemsspecialist = FSS
 AU14JobCivilianFreightSystemsSpecialist = Freight Systems Specialist
 
 au14-job-name-civilianengineer = Engineer
