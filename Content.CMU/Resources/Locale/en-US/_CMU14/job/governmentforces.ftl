@@ -5,6 +5,7 @@ au14-departmentcombat-govforces = Government Forces Combat
 au14-department-govforcescombat-description = Government Forces Combat
 
 au14-job-supervisors-govforplatco = Company Command
+au14-job-supervisors-govfor = Platoon Commander
 
 AU14JobGOVFORPlatCo = Platoon Commander
 au14-job-name-govforplatco = Platoon Commander
