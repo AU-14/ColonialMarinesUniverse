@@ -42,8 +42,8 @@ AU14JobCivilianJournalist = Journalist
 
 au14-job-name-civiliancolonyadministrator = Colony Administrator
 au14-job-description-civiliancolonyadministrator = The head honcho of the colony.
-au14-job-prefix-colonyadministrator = Admin
-AU14JobCivilianColonyAdministrator = ADMIN
+au14-job-prefix-colonyadministrator = ADMIN
+AU14JobCivilianColonyAdministrator = Admin
 
 au14-job-name-civilianfreightsystemsspecialist = Freight Systems Specialist
 au14-job-description-civilianfreightsystemsspecialist = Manage the ASRS system and keep the colony supplied.
