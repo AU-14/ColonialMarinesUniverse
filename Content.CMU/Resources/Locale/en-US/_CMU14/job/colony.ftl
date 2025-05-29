@@ -105,7 +105,7 @@ au14-job-description-usasfrecruiter = You're a recruiter from the United States 
 au14-job-prefix-usasfrecruiter = USASFREC
 AU14JobCivilianUSASFRecruiter = USASF Recruiter
 
-au14-job-name-civiliancolo  nysynthetic = Colony Operations Synthetic
+au14-job-name-civiliancolonysynthetic = Colony Operations Synthetic
 au14-job-description-civiliancolonysynthetic = You're an artificial person created by the Weyland-Yutani Corporation. Aid the colony personnel in their day to day tasks. You are incapable of utilizing ballistic weaponry. (WARNING: THIS ROLE REQUIRES HIGH ROLEPLAY PROWESS)
 au14-job-prefix-civiliancolonysynthetic = CSYNTH
 AU14JobCivilianColonySynthetic = Colony Operations Synthetic
