@@ -120,10 +120,10 @@ AU14JobcivilianKellandWarden = Kelland Warden
 au14-job-name-civilianprisoner = Prisoner
 au14-job-description-civilianprisoner = You've been assigned to a Kelland mining facility to pay your debt for petty crime. If you behave the warden might even let you free roam the colony.. or you could try escaping
 au14-job-prefix-civilianprisoner = INMATE
-AU14JobCivilianprisoner = Prisoner
+AU14Jobcivilianprisoner = Prisoner
 
 
-au14-job-name-civilianMiner = Miner
-au14-job-description-civilianMiner = You're a Miner at this colony, coordinate with your foreman and company executives to get the materials you need. Be wary: There are older and fouler things than corpos in the deep places of the frontier
-au14-job-prefix-civilianMiner = MINE
-AU14JobcivilianMiner=  Miner
+au14-job-name-civilianminer = Miner
+au14-job-description-civilianminer = You're a Miner at this colony, coordinate with your foreman and company executives to get the materials you need. Be wary: There are older and fouler things than corpos in the deep places of the frontier
+au14-job-prefix-civilianminer = MINE
+AU14Jobcivilianminer=  Miner
