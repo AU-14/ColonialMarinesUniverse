@@ -111,10 +111,10 @@ au14-job-prefix-civiliancolonysynthetic = CSYNTH
 AU14JobCivilianColonySynthetic = Colony Operations Synthetic
 
 
-au14-job-name-AU14civilianKellandWarden = Kelland Warden
-au14-job-description-AU14civilianKellandWarden = You're middle management at the Kelland mining company, you have been assigned to management of the minimum security prison at this  colony. Have your prisoners, mine, produce and behave. If they're well-tempered allow them greater privilege or free travel in the colony.
-au14-job-prefix-AU14civilianKellandWarden = WARD
-AU14JobcivilianKellandWarden = Kelland Warden
+au14-job-name-AU14civiliankellandwarden = Kelland Warden
+au14-job-description-AU14civiliankellandwarden = You're middle management at the Kelland mining company, you have been assigned to management of the minimum security prison at this  colony. Have your prisoners, mine, produce and behave. If they're well-tempered allow them greater privilege or free travel in the colony.
+au14-job-prefix-AU14civiliankellandwarden = WARD
+AU14Jobciviliankellandwarden = Kelland Warden
 
 
 au14-job-name-civilianprisoner = Prisoner
