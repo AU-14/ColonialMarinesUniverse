@@ -86,12 +86,12 @@ au14-job-prefix-emergencyresponseofficer = ERO
 AU14JobCivilianEmergencyResponseOfficer = Emergency Response Officer
 
 au14-job-name-civiliancmbdeputy = CMB Deputy
-au14-job-description-civiliancmbdeputy = You're a deputy of the Colonial Marshal Bureau. Help the Marshal provide the colony with rule of law and help execute arrests and warrants. (Role avalible on LV-624)
+au14-job-description-civiliancmbdeputy = You're a deputy of the Colonial Marshal Bureau. Help the Marshal provide the colony with rule of law and help execute arrests and warrants. (Role avalible on LV-624 and LV-747)
 au14-job-prefix-cmbdeputy = CMBDEP
 AU14JobCivilianCMBDeputy = CMB Deputy
 
 au14-job-name-civiliancmbmarshal = CMB Marshal
-au14-job-description-civiliancmbmarshal = You're a Marshal of the Colonial Marshal Bureau. Provide the colony with rule of law and execute arrests and warrants. (Role avalible on LV-624)
+au14-job-description-civiliancmbmarshal = You're a Marshal of the Colonial Marshal Bureau. Provide the colony with rule of law and execute arrests and warrants. (Role avalible on LV-624 and LV-747)
 au14-job-prefix-cmbmarshal = CMBMAR
 AU14JobCivilianCMBMarshal = CMB Marshal
 
@@ -101,7 +101,7 @@ au14-job-prefix-civilianecologist = ECOLIST
 AU14JobCivilianEcologist = Ecologist
 
 au14-job-name-usasfrecruiter = USASF Recruiter
-au14-job-description-usasfrecruiter = You're a recruiter from the United States Aero-Space Forces. You've been stationed on the colony to legally enlist civilians into the USASF. (Role available on LV-624)
+au14-job-description-usasfrecruiter = You're a recruiter from the United States Aero-Space Force. You've been stationed on the colony to legally enlist civilians into the USASF. (Role available on LV-624)
 au14-job-prefix-usasfrecruiter = USASFREC
 AU14JobCivilianUSASFRecruiter = USASF Recruiter
 
@@ -112,18 +112,18 @@ AU14JobCivilianColonySynthetic = Colony Operations Synthetic
 
 
 au14-job-name-civiliankellandwarden = Kelland Warden
-au14-job-description-civiliankellandwarden = You're middle management at the Kelland mining company, you have been assigned to management of the minimum security prison at this  colony. Have your prisoners, mine, produce and behave. If they're well-tempered allow them greater privilege or free travel in the colony.
+au14-job-description-civiliankellandwarden = You're middle management at the Kelland mining company, you have been assigned to management of the minimum security prison at this colony. Have your prisoners, mine, produce and behave. If they're well-tempered allow them greater privilege or free travel in the colony. (Role available on LV-747)
 au14-job-prefix-civiliankellandwarden = WARD
 AU14Jobciviliankellandwarden = Kelland Warden
 
 
 au14-job-name-civilianprisoner = Prisoner
-au14-job-description-civilianprisoner = You've been assigned to a Kelland mining facility to pay your debt for petty crime. If you behave the warden might even let you free roam the colony.. or you could try escaping
+au14-job-description-civilianprisoner = You've been assigned to a Kelland mining facility to pay your debt for petty crime. If you behave the warden might even let you free roam the colony.. or you could try escaping. (Role available on LV-747)
 au14-job-prefix-civilianprisoner = INMATE
 AU14Jobcivilianprisoner = Prisoner
 
 
 au14-job-name-civilianminer = Miner
-au14-job-description-civilianminer = You're a Miner at this colony, coordinate with your foreman and company executives to get the materials you need. Be wary: There are older and fouler things than corpos in the deep places of the frontier
+au14-job-description-civilianminer = You're a Miner at this colony, coordinate with your foreman and company executives to get the materials you need. Be wary: There are older and fouler things than corpos in the deep places of the frontier. (Role available on LV-747)
 au14-job-prefix-civilianminer = MINE
-AU14Jobcivilianminer=  Miner
+AU14Jobcivilianminer = Miner
