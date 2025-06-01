@@ -22,6 +22,18 @@
       "name": "defib"
     },
     {
+      "name": "equipped-BACKPACK",
+      "directions": 4
+    },
+    {
+      "name": "equipped-BELT",
+      "directions": 4
+    },
+    {
+      "name": "equipped-OUTERCLOTHING",
+      "directions": 4
+    },
+    {
       "name": "defib_on",
       "delays": [
         [
