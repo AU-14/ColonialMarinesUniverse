@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Nzzy",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon",
+      "delays": [
+        [
+          0.7,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "ear",
+      "delays": [
+        [
+          0.7,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "ring",
+      "delays": [
+        [
+          0.7,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "equipped-BACKPACK",
+      "directions": 4
+    }
+  ]
+}

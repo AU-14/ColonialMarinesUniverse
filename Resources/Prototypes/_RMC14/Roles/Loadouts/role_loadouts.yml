@@ -987,3 +987,14 @@
   - FoodSweetsRMC
   - FoodPackagedRMC
   - FoodHealthyRMC
+
+- type: roleLoadout
+  id: AU14JobGOVFORRadioTelephoneOoperator
+  points: 7
+  groups:
+  - PaperworkRMC
+  - CannedDrinksRMC
+  - FlasksRMC
+  - FoodSweetsRMC
+  - FoodPackagedRMC
+  - FoodHealthyRMC

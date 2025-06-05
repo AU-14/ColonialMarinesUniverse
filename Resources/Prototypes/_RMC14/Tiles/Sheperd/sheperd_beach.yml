@@ -1,0 +1,74 @@
+- type: entity
+  id: AUShepFloorWaterEntity
+  name: shallow water
+  description: ""
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Sprite
+    drawdepth: BelowFloor
+    sprite: _RMC14/Tiles/sheperd/shep_beach.rsi
+  - type: Transform
+    anchored: true
+  - type: SyncSprite
+  - type: Clickable
+  - type: SolutionContainerManager
+    solutions:
+      pool:
+        maxVol: 9999999 #.inf seems to break the whole yaml file, but would definitely be preferable.
+        reagents:
+        - ReagentId: Water
+          Quantity: 9999999
+  - type: DrainableSolution
+    solution: pool
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        layer:
+        - SlipLayer
+        mask:
+        - ItemMask
+        density: 1000
+        hard: false
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepWater
+      params:
+        volume: 8
+  - type: BlockWeeds
+  - type: MinimapColor
+    color: "#94b0d59c"
+  - type: RMCWater
+    cover:
+      tags:
+      - Catwalk
+
+- type: entity
+  parent: AUShepFloorWaterEntity
+  id: AUEntityShepBeachCorner
+  components:
+  - type: Sprite
+    layers:
+    - state: shallow_corner
+
+- type: entity
+  parent: AUShepFloorWaterEntity
+  id: AUEntityShepBeachCornerEdge
+  components:
+  - type: Sprite
+    state: shallow_corner_edge
+
+- type: entity
+  parent: AUShepFloorWaterEntity
+  id: AUEntityShepBeachEdge
+  components:
+  - type: Sprite
+    state: shallow_edge

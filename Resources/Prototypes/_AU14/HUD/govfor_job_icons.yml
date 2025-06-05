@@ -60,3 +60,10 @@
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
     state: govfor_sergeant
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconRTO
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: govfor_rto

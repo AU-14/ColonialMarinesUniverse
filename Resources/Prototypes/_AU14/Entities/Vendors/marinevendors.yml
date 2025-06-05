@@ -125,8 +125,6 @@
         amount: 2
       - id: RMCScabbardShotgun
         amount: 2
-      - id: RMCBackpackRTO
-        amount: 1
       - id: RMCBackpackAmmo
         amount: 1
     - name: Belts
@@ -770,10 +768,6 @@
       entries:
       - id: AU14HeadsetSectionLeader
         amount: 2
-    - name: Backpack
-      entries:
-      - id: RMCBackpackRTO
-        amount: 2
     - name: Pouches
       entries:
       - id: RMCPouchCommandFill
@@ -857,10 +851,6 @@
         amount: 1
       - id: AU14DesertPatrolCap
         amount: 1
-    - name: Backpack
-      entries:
-      - id: RMCBackpackRTO
-        amount: 1
     - name: Miscellaneous
       entries:
       - id: RMCLaserDesignator
@@ -927,6 +917,26 @@
         amount: 2
       - id: RMCExplosiveBreachingCharge
         amount: 2
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14RTOVendor
+  name: radio telephone operator rack
+  description: An automated rack hooked up to a small storage of radio equipment.
+  components:
+  - type: AccessReader
+    access:
+    - [ "CMAccessMarinePrep" ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Portable Transceivers
+      entries:
+      - id: AU14BackpackRTOPackJungle
+        amount: 1
+      - id: AU14BackpackRTOPackDesert
+        amount: 1
 
 - type: entity
   parent: ColMarTechBase

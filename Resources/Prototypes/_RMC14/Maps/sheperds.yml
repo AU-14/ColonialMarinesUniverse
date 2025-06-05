@@ -1,0 +1,59 @@
+- type: gameMap
+  id: Sheperds
+  mapName: LV-112 Sheperds Pride (Insurgency)
+  mapPath: /Maps/_RMC14/sheperds.yml
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    Sheperds:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Sheperds'
+        - type: StationJobs
+          availableJobs:
+            AU14JobCivilianColonist: [ -1, -1 ]
+            AU14JobCivilianFoodServiceWorker: [2, 2]
+            AU14JobCivilianJournalist: [1, 1]
+            AU14JobCivilianColonySynthetic: [1, 1]
+
+            # Colony Command (non department)
+            AU14JobCivilianCorporateLiaison: [1, 1]
+            AU14JobCivilianColonyAdministrator: [1, 1]
+
+            # Security/LEO
+            #AU14JobCivilianCMBMarshal: [1, 1]
+            #AU14JobCivilianCMBDeputy: [1, 1]
+
+            # Engineering/Logi
+            AU14JobCivilianForeman: [1, 1]
+            AU14JobCivilianFreightSystemsSpecialist: [1, 1]
+            AU14JobCivilianEngineer: [3, 3]
+            AU14JobCivilianWasteManagementSpecialist: [2, 2]
+
+            # Medical
+            AU14JobCivilianPhysician: [1, 1]
+            AU14JobCivilianNurse: [1, 1]
+            AU14JobCivilianEthicsAndWellnessAdvisor: [1, 1]
+            AU14JobCivilianEmergencyResponseOfficer: [1, 1]
+
+            # Other
+
+            # CLF
+            AU14JobCLFGuerilla: [10, 10]
+            AU14JobCLFPhysician: [1, 1]
+            AU14JobCLFMachineGunner: [1, 1]
+            AU14JobCLFCellLeader: [1, 1]
+
+            # USCM
+            AU14JobGOVFORPlatCo: [1, 1]
+            AU14JobGOVFORPlatOp: [1, 1]
+            AU14JobGOVFORDSPilot: [1, 1]
+            AU14JobGOVFORDCC: [1, 1]
+            AU14JobGOVFORSectionSergeant: [1, 1]
+            AU14JobGOVFORSquadSergeant: [2, 2]
+            AU14JobGOVFORSquadRifleman: [2, 2]
+            AU14JobGOVFORSquadAutomaticRifleman: [2, 2]
+            AU14JobGOVFORPlatoonCorpsman: [1, 1]

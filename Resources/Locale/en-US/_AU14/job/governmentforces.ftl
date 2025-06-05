@@ -51,3 +51,8 @@ AU14JobGOVFORPlatoonCorpsman = Platoon Hospital Corpsman
 au14-job-name-govforplatooncorpsman = Platoon Hospital Corpsman
 au14-job-description-govforplatooncorpsman = Heal the troops.
 au14-job-prefix-govforplatooncorpsman = HM
+
+AU14JobGOVFORRadioTelephoneOoperator = Radio Telephone Operator
+au14-job-name-radiotelephoneooperator = Radio Telephone Operator
+au14-job-description-radiotelephoneooperator = Operate the radio and relay information.
+au14-job-prefix-radiotelephoneooperator = RTO

@@ -69,3 +69,11 @@
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORPlatoonCorpsman
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14JobIDCardGOVFORRadioTelephoneOoperator
+  name: radio telephone operator ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFORRadioTelephoneOoperator

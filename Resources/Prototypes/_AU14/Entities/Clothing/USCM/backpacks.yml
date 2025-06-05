@@ -45,3 +45,83 @@
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Back/corpsmansatchel.rsi
+
+- type: entity
+  parent: CMSatchel
+  id: AU14BackpackRTOPackJungle
+  name: "Jungle AN/PRC-55 Portable Transceiver"
+  description: "The AN/PRC-55 Portable Transceiver, also known as AN/PRC 55 Radio Set, is a man-pack, portable VHF FM combat-net radio transceiver manufactured by Armat Battlefield Systems and used to provide short-range, two-way radiotelephone voice communication."
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RTOPack/junglertopack.rsi
+    layers:
+    - state: icon
+      map: [ "base" ]
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,4,1
+  - type: CMStorageVisualizer
+    storageClosed: null
+    storageOpen: null
+  - type: RotaryPhone
+    category: Marine
+  - type: RotaryPhoneBackpack
+  - type: UserInterface
+    interfaces:
+      enum.RMCTelephoneUiKey.Key:
+        type: RMCTelephoneBui
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: GenericVisualizer
+    visuals:
+      enum.RotaryPhoneLayers.Layer:
+        base:
+          Base: { state: icon }
+          Ring: { state: ring }
+          Ear: { state: ear }
+  - type: Undisposable
+
+- type: entity
+  parent: CMSatchel
+  id: AU14BackpackRTOPackDesert
+  name: "Desert AN/PRC-55 Portable Transceiver"
+  description: "The AN/PRC-55 Portable Transceiver, also known as AN/PRC 55 Radio Set, is a man-pack, portable VHF FM combat-net radio transceiver manufactured by Armat Battlefield Systems and used to provide short-range, two-way radiotelephone voice communication."
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RTOPack/desertrtopack.rsi
+    layers:
+    - state: icon
+      map: [ "base" ]
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,4,1
+  - type: CMStorageVisualizer
+    storageClosed: null
+    storageOpen: null
+  - type: RotaryPhone
+    category: Marine
+  - type: RotaryPhoneBackpack
+  - type: UserInterface
+    interfaces:
+      enum.RMCTelephoneUiKey.Key:
+        type: RMCTelephoneBui
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: GenericVisualizer
+    visuals:
+      enum.RotaryPhoneLayers.Layer:
+        base:
+          Base: { state: icon }
+          Ring: { state: ring }
+          Ear: { state: ear }
+  - type: Undisposable
