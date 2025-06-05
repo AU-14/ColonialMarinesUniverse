@@ -1,0 +1,106 @@
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  name: AR10 assault rifle
+  id: AU14WeaponRifleAR10
+  description: An earlier version of the more widespread M16 rifle. Considered to be the father of the 20th century rifle. How one of these ended up here is a mystery of its own. It is chambered in 7.62x51mm. This version had it's burst firemode removed to comply with strict gun laws.
+  suffix: Filled
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/ar10.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/Attachments/stock.rsi # Stock has no effects, no reason to make it an attachment
+      state: ar10_stock
+      offset: -0.5, 0
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/ar10.rsi
+  - type: Gun
+    shotsPerBurst: 3
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      collection: CMAR10Shoot
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilUnwielded: 3
+    scatterWielded: 4
+    scatterUnwielded: 20
+    baseFireRate: 2
+    burstScatterMult: 2
+    modifiers:
+      Burst:
+        fireDelay: 0.1665
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+  - type: MagazineAmmoProvider
+    autoEject: false
+    soundAutoEject: null
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RMCMagazineRifleAR10
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RMCMagazineRifleAR10
+  - type: GunDamageModifier
+    multiplier: 1.4
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.4
+    accuracyMultiplierUnwielded: 0.5
+  - type: AttachableHolder
+    randomAttachmentChance: 0.1
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+        random:
+        - RMCAttachmentSuppressor
+        - RMCM5Bayonet
+        - RMCAttachmentRecoilCompensator
+        - RMCAttachmentExtendedBarrel
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+        random:
+        - RMCAttachmentS5RedDotSight
+        - RMCAttachmentS6ReflexSight
+        - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentBipod
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentLaserSight
+          - RMCAttachmentVerticalGrip
+        random:
+        - RMCAttachmentAngledGrip
+        - RMCAttachmentVerticalGrip
+        - RMCAttachmentBipod
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.75, 0.00
+      rmc-aslot-rail: -0.23, 0.091
+      rmc-aslot-underbarrel: 0.35, -0.3
