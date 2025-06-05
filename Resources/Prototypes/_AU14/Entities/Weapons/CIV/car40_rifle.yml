@@ -117,7 +117,7 @@
   - type: Tag
     tags:
     - CMMagazineRifle
-    - RMCMagazineRifleMAR40
+    - AU14MagazineRifleCAR40
   - type: BallisticAmmoProvider
     mayTransfer: True
     whitelist:
