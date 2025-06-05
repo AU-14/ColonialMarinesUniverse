@@ -1,4 +1,34 @@
 - type: rank
+  id: AU14RankUSASFSpaceAircrewmanRecruit
+  name: Crewman Recruit
+  prefix: CRR.
+  paygrade: E1
+
+- type: rank
+  id: AU14RankUSASFSpaceAircrewmanApprentice
+  name: Crewman
+  prefix: CR.
+  paygrade: E2
+
+- type: rank
+  id: AU14RankUSASFSpaceAircrewman
+  name: Crewman First Class
+  prefix: CR1.
+  paygrade: E3
+
+- type: rank
+  id: AU14RankUSASFSeniorSpaceAircrewman
+  name: Senior Crewman
+  prefix: SCR.
+  paygrade: E4
+
+- type: rank
+  id: AU14RankUSASFSergeant
+  name: Sergeant
+  prefix: Sgt.
+  paygrade: E5
+
+- type: rank
   id: AU14RankUSASFTechnicalSergeant
   name: Technical Sergeant
   prefix: TSgt.
@@ -27,3 +57,63 @@
   name: Command Chief Master Sergeant
   prefix: CCM.
   paygrade: E9
+
+- type: rank
+  id: AU14RankUSASF2dLT
+  name: Second Lieutenant
+  prefix: 2dLT.
+  paygrade: O1
+
+- type: rank
+  id: AU14RankUSASF1stLT
+  name: First Lieutenant
+  prefix: 1stLT.
+  paygrade: O2
+
+- type: rank
+  id: AU14RankUSASFCAP
+  name: Captain
+  prefix: Cap.
+  paygrade: O3
+
+- type: rank
+  id: AU14RankUSASFMAJ
+  name: Major
+  prefix: Maj.
+  paygrade: O4
+
+- type: rank
+  id: AU14RankUSASFLTCOL
+  name: Lieutenant Colonel
+  prefix: LtCol.
+  paygrade: O5
+
+- type: rank
+  id: AU14RankUSASFCOL
+  name: Colonel
+  prefix: Col.
+  paygrade: O6
+
+- type: rank
+  id: AU14RankUSASFRDML
+  name: Rear Admiral Lower Half
+  prefix: RDML.
+  paygrade: O7
+
+- type: rank
+  id: AU14RankUSASFRADM
+  name: Rear Admiral
+  prefix: RADM.
+  paygrade: O8
+
+- type: rank
+  id: AU14RankUSASFVADM
+  name: Vice Admiral
+  prefix: VADM.
+  paygrade: O9
+
+- type: rank
+  id: AU14RankUSASFADM
+  name: Admiral
+  prefix: ADM.
+  paygrade: O10
