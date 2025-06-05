@@ -1,0 +1,255 @@
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  id: AU14WeaponRifleM16A1 # TODO: Make the M16 grenadier rifle when impact nades exist
+  name: M16A1 rifle
+  description: An old, reliable design first adopted by the U.S. military in the 1960s. Something like this belongs in a museum of war history. It is chambered in 5.56x45mm.
+  suffix: Filled
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Civilian/aum1664x32.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-2
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Item
+    sprite: _AU14/Weapons/Guns/Civilian/aum1632x32.rsi
+    size: Large
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/Civilian/aum1632x32.rsi
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_m16.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - FullAuto
+    recoilUnwielded: 3
+    scatterWielded: 2
+    scatterUnwielded: 20
+    baseFireRate: 4
+    burstScatterMult: 2
+    modifiers:
+      Burst:
+        fireDelay: 0.1665
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+      FullAuto:
+        fireDelay: 0
+        maxScatterModifier: 13
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 4
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.35
+    accuracyMultiplierUnwielded: 0.65
+  - type: MagazineAmmoProvider
+    autoEject: false
+    soundAutoEject: null
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RMCMagazineRifleM16
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RMCMagazineRifleM16
+  - type: GunDamageModifier
+    multiplier: 1.3
+
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  id: AU14WeaponRifleM16A2 # TODO: Make the M16 grenadier rifle when impact nades exist
+  name: M16A2 rifle
+  description: An old, reliable design first adopted by the U.S. military in the 1980s. Something like this belongs in a museum of war history. It is chambered in 5.56x45mm.
+  suffix: Filled
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Civilian/aum16a264x32.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-2
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Item
+    sprite: _AU14/Weapons/Guns/Civilian/aum16a232x32.rsi
+    size: Large
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/Civilian/aum16a232x32.rsi
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_m16.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    recoilUnwielded: 3
+    scatterWielded: 2
+    scatterUnwielded: 20
+    baseFireRate: 4
+    burstScatterMult: 2
+    modifiers:
+      Burst:
+        fireDelay: 0.1665
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+      FullAuto:
+        fireDelay: 0
+        maxScatterModifier: 13
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 4
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.35
+    accuracyMultiplierUnwielded: 0.65
+  - type: MagazineAmmoProvider
+    autoEject: false
+    soundAutoEject: null
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RMCMagazineRifleM16
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RMCMagazineRifleM16
+  - type: GunDamageModifier
+    multiplier: 1.3
+
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  id: AU14WeaponRifleM16A2Larue # TODO: Make the M16 grenadier rifle when impact nades exist
+  name: M16A2 Larue rifle
+  description: "An 'improved' pattern of M16A2 recently released on the civilian market, proclaiming it is 'cutting edge modularity and optics friendliness on a budget' It met limited success in it's intended market It has seen stable but small sales regardless."
+  suffix: Filled
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Civilian/m16a2larue64x32.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-2
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Item
+    sprite: _AU14/Weapons/Guns/Civilian/aum16a232x32.rsi
+    size: Large
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/Civilian/aum16a232x32.rsi
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_m16.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    recoilUnwielded: 3
+    scatterWielded: 2
+    scatterUnwielded: 20
+    baseFireRate: 4
+    burstScatterMult: 2
+    modifiers:
+      Burst:
+        fireDelay: 0.1665
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+      FullAuto:
+        fireDelay: 0
+        maxScatterModifier: 13
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 4
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.35
+    accuracyMultiplierUnwielded: 0.65
+  - type: MagazineAmmoProvider
+    autoEject: false
+    soundAutoEject: null
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RMCMagazineRifleM16
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RMCMagazineRifleM16
+  - type: GunDamageModifier
+    multiplier: 1.3
+
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  id: AU14WeaponRifleAR10
+  name: AR10 rifle
+  description: An old, reliable design. Something like this belongs in a museum of war history. It is chambered in 5.56x45mm.
+  suffix: Filled
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Civilian/auar1064x32.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-2
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Item
+    sprite: _AU14/Weapons/Guns/Civilian/auar1032x32.rsi
+    size: Large
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/Civilian/auar1032x32.rsi
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_m16.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilUnwielded: 3
+    scatterWielded: 2
+    scatterUnwielded: 20
+    baseFireRate: 4
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.35
+    accuracyMultiplierUnwielded: 0.65
+  - type: MagazineAmmoProvider
+    autoEject: false
+    soundAutoEject: null
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RMCMagazineRifleM16
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RMCMagazineRifleM16
+  - type: GunDamageModifier
+    multiplier: 1.3

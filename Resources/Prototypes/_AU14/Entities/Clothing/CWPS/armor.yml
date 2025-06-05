@@ -1,0 +1,20 @@
+- type: entity
+  parent: [ClothingOuterStorageBase, RMCAllowSuitStorageClothingExternalWebbing]
+  id: AU14CWPSBomber
+  name: CWPS Bomber Jacket
+  description: A bomber jacket used by the rangers of the Colonial Wilderness Preservation Service.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/CWPS/bomberjacket.rsi
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,3,1 # 2 slots
+  - type: FixedItemSizeStorage
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - MRE
+      - PillPacket
+      - PillCanister
+      - CMSurgicalCase

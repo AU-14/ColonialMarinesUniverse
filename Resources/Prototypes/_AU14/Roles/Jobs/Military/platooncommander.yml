@@ -13,12 +13,12 @@
     RMCRankFirstLT: []
   startingGear: AU14GearGOVFORPlatCo
   dummyStartingGear: AU14GearGOVFORPlatCoDummy
-  icon: "CMJobIconExecutiveOfficer"
+  icon: "AU14JobIconPlatCo"
   requireAdminNotify: true
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-govforplatco
   accessGroups:
-  - Colonist
+  - Rifleman
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

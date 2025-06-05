@@ -14,12 +14,14 @@
     sections:
     - name: Rifles
       entries:
-      - id: WeaponRifleM16
+      - id: AU14WeaponRifleM16A1
+        amount: 2
+      - id: AU14WeaponRifleM16A2
+        amount: 3
+      - id: AU14WeaponRifleAR10
         amount: 3
       - id: RMCWeaponBoltActionRifle
         amount: 3
-      - id: WeaponRifleAR10
-        amount: 4
       - id: WeaponRifleMAR40
         amount: 2
       - id: RMCWeaponRifleType71C
@@ -53,9 +55,7 @@
     - name: Rifle Ammunition
       entries:
       - id: RMCMagazineRifleM16
-        amount: 35
-      - id: RMCMagazineRifleAR10
-        amount: 45
+        amount: 85
       - id: RMCMagazineRifleHunting
         amount: 25
       - id: RMCMagazineRifleMAR40
@@ -133,18 +133,14 @@
         amount: 20
     - name: Webbings
       entries:
-      - id: CMWebbingBrown
-        amount: 2
-      - id: CMWebbingBlack
-        amount: 2
-      - id: CMWebbing
-        amount: 2
-      - id: CMWebbingKnivesFilled
-        amount: 1
-      - id: CMWebbingPouch
-        amount: 3
-      - id: CMWebbingHolster
+      - id: AU14WebbingMagazine
+        amount: 6
+      - id: AU14WebbingUtility
         amount: 4
+      - id: AU14WebbingDropPouch
+        amount: 4
+      - id: AU14WebbingDumpPouch
+        amount: 1
     - name: Helmets and Hats
       entries:
       - id: RMCHardhatWhite
@@ -154,7 +150,7 @@
       - id: RMCCoatMilitiaVest
         amount: 1
       - id: AU14ExternalWebbing
-        amount: 6
+        amount: 8
     - name: Backpack
       entries:
       - id: CMBackpackMarine

@@ -47,7 +47,7 @@
   parent: CMSatchel
   id: RMCBackpackScout
   name: M68 thermal cloak
-  description: The lightweight thermal dampeners and optical camouflage provided by this cloak are weaker than those found in standard UNMC ghillie suits. In exchange, the cloak can be worn over combat armor and offers the wearer high maneuverability and adaptability to many environments.
+  description: The lightweight thermal dampeners and optical camouflage provided by this cloak are weaker than those found in standard USCM ghillie suits. In exchange, the cloak can be worn over combat armor and offers the wearer high maneuverability and adaptability to many environments.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/scout_cloak.rsi
@@ -186,8 +186,8 @@
 - type: entity
   parent: CMSatchel
   id: CMSatchelMarine
-  name: UNMC satchel
-  description: A heavy-duty satchel carried by some UNMC soldiers and support personnel.
+  name: USCM satchel
+  description: A heavy-duty satchel carried by some USCM soldiers and support personnel.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Satchels/Marines/standard/jungle-desert-classic.rsi
@@ -202,7 +202,7 @@
 - type: entity
   parent: CMSatchelMarine
   id: CMSatchelMarineIntel
-  name: UNMC lightweight expedition pack
+  name: USCM lightweight expedition pack
   description: A heavy-duty IMP based backpack that can be slung around the front or to the side, and can quickly be accessed with only one hand. Usually issued to Marine intelligence officers.
   components:
   - type: Sprite
@@ -221,8 +221,8 @@
 - type: entity
   parent: CMSatchelMarineIntel
   id: RMCSatchelMarineIntelChestrig
-  name: UNMC expedition chestrig
-  description: A heavy-duty IMP based chestrig, can quickly be accessed with only one hand. Usually issued to UNMC intelligence officers.
+  name: USCM expedition chestrig
+  description: A heavy-duty IMP based chestrig, can quickly be accessed with only one hand. Usually issued to USCM intelligence officers.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Chestrigs/intel/desert.rsi
@@ -237,7 +237,7 @@
 - type: entity
   parent: CMSatchelMarineIntel # Reskin for FORECON
   id: RMCSatchelMarineLogisticsBig
-  name: UNMC logistics IMP backpack
+  name: USCM logistics IMP backpack
   description: A standard-issue backpack worn by logistics personnel. It is occasionally issued to combat personnel for longer term expeditions and deep space incursions.
 
 - type: entity
@@ -285,7 +285,7 @@
 - type: entity
   parent: CMSatchel
   id: RMCSatchelGrenadeSpec
-  name: UNMC IMP M63A1 grenade satchel
+  name: USCM IMP M63A1 grenade satchel
   description: A satchel specially designed to maximize grenade carrying capacity while minimizing the risks of secondary ignition.
   components:
   # TODO ID locking feature + make lights green when unlocked.
@@ -305,8 +305,8 @@
 - type: entity
   parent: CMSatchel
   id: RMCSatchelWelder
-  name: UNMC technician welder-satchel
-  description: A specialized satchel worn by UNMC technicians and engineers. It carries two small fuel tanks for quick welder refueling and use.
+  name: USCM technician welder-satchel
+  description: A specialized satchel worn by USCM technicians and engineers. It carries two small fuel tanks for quick welder refueling and use.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Satchels/Marines/welder.rsi
@@ -358,8 +358,8 @@
 - type: entity
   parent: CMSatchel
   id: RMCSatchelDemoSpec
-  name: UNMC IMP M22 rocket bags
-  description: A specially-designed backpack that fits to the IMP mounting frame on standard UNMC infantry armor. It's made of two easily-accessible, waterproofed reinforced tubes and one smaller satchel slung at the bottom. The two silos are for rockets, but no one is stopping you from cramming other things in there.
+  name: USCM IMP M22 rocket bags
+  description: A specially-designed backpack that fits to the IMP mounting frame on standard USCM infantry armor. It's made of two easily-accessible, waterproofed reinforced tubes and one smaller satchel slung at the bottom. The two silos are for rockets, but no one is stopping you from cramming other things in there.
   components:
   - type: ExplosionResistance
     damageCoefficient: 0
@@ -401,7 +401,7 @@
 - type: entity
   parent: CMSatchel
   id: RMCBackpackRTO
-  name: UNMC radio telephone pack
+  name: Radio telephone pack
   description: A heavy-duty pack, used for telecommunications between central command. Commonly carried by RTOs.
   components:
   - type: Sprite

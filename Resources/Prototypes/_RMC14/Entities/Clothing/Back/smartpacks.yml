@@ -3,7 +3,7 @@
   id: RMCSmartpackBase
   abstract: true
   name: S-V42 backpack
-  description: A joint project between the UNMC and Weston-Yamada. It is said to be top-class engineering and state of the art technology with a built in shoulder-lamp.
+  description: A joint project between the USCM and Weyland-Yutani. It is said to be top-class engineering and state of the art technology with a built in shoulder-lamp.
   components:
   - type: Item
     heldPrefix: off
@@ -92,7 +92,7 @@
   id: RMCSmartpackA1Base
   abstract: true
   name: S-V42A1 backpack
-  description: A revised joint project between the UNMC and Weston-Yamada. It is said to be top-class engineering and state of the art technology with a built in shoulder-lamp.
+  description: A revised joint project between the USCM and Weyland-Yutani. It is said to be top-class engineering and state of the art technology with a built in shoulder-lamp.
 
 # V42
 

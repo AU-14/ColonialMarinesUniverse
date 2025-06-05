@@ -21,7 +21,7 @@
     AU14RankUSASFTechnicalSergeant: []
   startingGear: AU14GearGOVFORDCC
   dummyStartingGear: AU14GearGOVFORDCCDummy
-  icon: "CMJobIconDCC"
+  icon: "AU14JobIconDCC"
   requireAdminNotify: true
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-govfor

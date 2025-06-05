@@ -9,7 +9,7 @@
     RMCRankSecondLT: []
   startingGear: AU14GearGOVFORPlatOp
   dummyStartingGear: AU14GearGOVFORPlatOpDummy
-  icon: "CMJobIconStaffOfficer"
+  icon: "AU14JobIconOpsOfc"
   requireAdminNotify: true
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-govfor

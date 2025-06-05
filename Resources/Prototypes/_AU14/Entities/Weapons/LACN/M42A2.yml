@@ -55,6 +55,11 @@
         whitelist:
           tags:
           - RMCAttachmentBipod
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentMagneticHarness
   - type: AttachableHolderVisuals
     offsets:
       rmc-aslot-underbarrel: 0.21875, -0.343
+      rmc-aslot-rail: -0.37, 0.1

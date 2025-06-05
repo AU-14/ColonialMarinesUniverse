@@ -13,7 +13,7 @@
     RMCRankPrivate: []
   startingGear: AU14GearGOVFORSquadRifleman
   dummyStartingGear: AU14GearGOVFORRiflemanDummy
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconRFN"
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-govfor

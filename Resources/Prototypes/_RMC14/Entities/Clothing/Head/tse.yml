@@ -11,7 +11,7 @@
 - type: entity
   parent: CMHeadBeret
   id: RMCHeadBeretTSE
-  name: tse beret
+  name: TWE beret
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Head/TSE/tse_beret.rsi

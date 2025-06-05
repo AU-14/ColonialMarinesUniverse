@@ -1,0 +1,26 @@
+- type: entity
+  parent: RMCCigarettePackLuckySloths
+  id: AU14CigarettePackBalajj
+  name: balaji imperial packet
+  description: A pack of Balaji Imperials. Hand-rolled, filter-tipped cigarettes produced in the Three World Empire by the Balaji family of companies. Still family-run after six generations, the company’s known for mixing high-grade synthetic tobacco with trace amounts of real leaf. Expensive, smooth, and a favorite among officers and smugglers alike.
+  components:
+  - type: Sprite
+    sprite: _AU14/Items/Smokes/balaji_imperials.rsi
+
+- type: entity
+  parent: RMCCigarettePackLuckySloths
+  id: AU14CigaretteKoorlander
+  name: koorlander packet
+  description: First handed out in bulk to terraforming crews as a no-frills necessity, these cigarettes lit easily, burned evenly, and offered a straightforward, dependable smoke. The flat, dusty flavor and steady draw quickly made them a colonial staple. Koorlander later scaled production on frontier farming worlds and locked in exclusive trade deals with the Colonial Administration.
+  components:
+  - type: Sprite
+    sprite: _AU14/Items/Smokes/koorlander.rsi
+
+- type: entity
+  parent: RMCCigarettePackLuckySloths
+  id: AU14CigaretteLadyFingers
+  name: koorlander lady fingers packet
+  description: A bold experiment in marketing by the Koolander Corporation, these brutal, unfiltered menthol cigarettes come in dusty rose packaging aimed at the women of the Colonies. The scent is so overpowering that they are sometimes used to keep bugs out of field tents. Despite the effort, they are rarely chosen and mostly sit untouched in vending machines, quietly daring someone to try. Whether anyone actually likes them is another question.
+  components:
+  - type: Sprite
+    sprite: _AU14/Items/Smokes/lady_fingers.rsi

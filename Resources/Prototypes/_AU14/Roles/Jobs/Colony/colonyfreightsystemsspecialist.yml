@@ -15,7 +15,7 @@
   accessGroups:
   - Colonist
   - auengi
-  - CMQM
+  - CMCargoTech
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

@@ -64,6 +64,15 @@
         startingItem: AU14WeaponRifleKramerMagazineLSWStandard
   - type: GunDamageModifier
     multiplier: 1.1
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentMagneticHarness
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: -0.18, 0.16
 
 - type: entity
   parent: AU14WeaponRifleKramerLSW

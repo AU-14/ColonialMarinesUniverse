@@ -17,7 +17,7 @@
     RMCRankSecondLT: []
   startingGear: AU14GearGOVFORDSPilot
   dummyStartingGear: AU14GearGOVFORDSPilotDummy
-  icon: "CMJobIconPilotDropship"
+  icon: "AU14JobIconPilotOfficer"
   requireAdminNotify: true
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-govfor

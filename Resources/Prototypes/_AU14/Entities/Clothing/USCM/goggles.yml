@@ -87,3 +87,39 @@
     toggledRsi:
       sprite: _AU14/Clothing/Goggles/m1a1green.rsi
       state: helmet-down
+
+- type: entity
+  parent: RMCGogglesBallistic
+  id: AU14GogglesM1A1PolarizedBallistic
+  name: ventrax polarized goggles
+  description: On the market as civilian goggles, the brand’s pretty ambiguous, but they seem to be made by Ventrax, a subsidiary of some other Wey-Yu subsidiary. Figures. They were probably meant for skiing, you don’t really remember or care. Surprisingly, they make decent combat goggles... at least better than the M1A1s or God forbid, those M60s. The LT says the colored lens will get you killed by a sniper... but at least you’ll die looking cool.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Goggles/m1a1polarized.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/Goggles/m1a1polarized.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _AU14/Clothing/Goggles/m1a1polarized.rsi
+      state: helmet
+    toggledRsi:
+      sprite: _AU14/Clothing/Goggles/m1a1polarized.rsi
+      state: helmet-down
+
+- type: entity
+  parent: RMCGogglesBallistic
+  id: AU14GogglesM1A1OrangeBallistic
+  name: ventrax orange goggles
+  description: On the market as civilian goggles, the brand’s pretty ambiguous, but they seem to be made by Ventrax, a subsidiary of some other Wey-Yu subsidiary. Figures. They were probably meant for skiing, you don’t really remember or care. Surprisingly, they make decent combat goggles... at least better than the M1A1s or God forbid, those M60s. You swear the orange tint makes you see better at night.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Goggles/m1a1orange.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/Goggles/m1a1orange.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _AU14/Clothing/Goggles/m1a1orange.rsi
+      state: helmet
+    toggledRsi:
+      sprite: _AU14/Clothing/Goggles/m1a1orange.rsi
+      state: helmet-down

@@ -1,0 +1,286 @@
+- type: entity
+  parent: CMWebbingBase
+  id: AU14WebbingMagazine
+  name: magazine webbing
+  description: Synthcotton webbing with three pockets to hold your magazines.
+  components:
+    - type: Sprite
+      sprite: _AU14/Clothing/UniversalWebbing/magazinewebbing.rsi
+      state: webbing
+    - type: Storage
+      maxItemSize: Small
+      grid:
+        - 0,0,5,1 # 3 slots
+      blacklist:
+        tags:
+          - CMMagazineSmg
+    - type: FixedItemSizeStorage
+    - type: IgnoreContentsSize
+      items:
+        tags:
+          - MRE
+          - PillPacket
+          - PillCanister
+          - CMSurgicalCase
+    - type: Webbing
+      playerSprite:
+        sprite: _AU14/Clothing/UniversalWebbing/magazinewebbing.rsi
+        state: equipped
+      components:
+        - type: Storage
+          maxItemSize: Small
+          grid:
+            - 0,0,5,1 # 3 slots
+          blacklist:
+            tags:
+              - CMMagazineSmg
+        - type: IgnoreContentsSize
+          items:
+            tags:
+              - CMMagazineSmg
+              - CMMagazinePistol
+              - CMMagazineRifle
+              - CMMagazineSniper
+              - MRE
+              - PillPacket
+              - PillCanister
+              - CMSurgicalCase
+        - type: FixedItemSizeStorage
+        - type: RMCStorageEjectHand
+          state: Open
+        - type: ExplosionResistance
+          damageCoefficient: 0
+          worn: false
+        - type: StoreAfterFailedInteract
+
+- type: entity
+  parent: CMWebbingBase
+  id: AU14WebbingDumpPouch
+  name: dump pouch
+  description: A pouch to dump your empty mags into.
+  components:
+    - type: Sprite
+      sprite: _AU14/Clothing/UniversalWebbing/dumpouch.rsi
+      state: webbing
+    - type: Storage
+      maxItemSize: Normal
+      grid:
+            - 0,0,5,1 # 3 slots
+    - type: FixedItemSizeStorage
+    - type: IgnoreContentsSize
+      items:
+        tags:
+          - MRE
+          - PillPacket
+          - PillCanister
+          - CMSurgicalCase
+    - type: Webbing
+      playerSprite:
+        sprite: _AU14/Clothing/UniversalWebbing/dumpouch.rsi
+        state: equipped
+      components:
+        - type: Storage
+          maxItemSize: Small
+          grid:
+            - 0,0,5,1 # 3 slots
+        - type: IgnoreContentsSize
+          items:
+            tags:
+              - CMMagazineSmg
+              - CMMagazinePistol
+              - CMMagazineRifle
+              - CMMagazineSniper
+              - MRE
+              - PillPacket
+              - PillCanister
+              - CMSurgicalCase
+        - type: FixedItemSizeStorage
+        - type: RMCStorageEjectHand
+          state: Open
+        - type: ExplosionResistance
+          damageCoefficient: 0
+          worn: false
+        - type: StoreAfterFailedInteract
+
+- type: entity
+  parent: CMWebbingBase
+  id: AU14WebbingUtility
+  name: utility webbing
+  description: A synthcotton webbing vest with lots of pockets to hold whatever you need, but cannot hold in hands.
+  components:
+    - type: Sprite
+      sprite: _AU14/Clothing/UniversalWebbing/utilitywebbing.rsi
+      state: webbing
+    - type: Storage
+      maxItemSize: Small
+      grid:
+        - 0,0,9,1 # 5 slots
+      blacklist:
+        tags:
+          - CMMagazineSmg
+    - type: FixedItemSizeStorage
+    - type: IgnoreContentsSize
+      items:
+        tags:
+          - MRE
+          - PillPacket
+          - PillCanister
+          - CMSurgicalCase
+    - type: Webbing
+      playerSprite:
+        sprite: _AU14/Clothing/UniversalWebbing/utilitywebbing.rsi
+        state: equipped
+      components:
+        - type: Storage
+          maxItemSize: Small
+          grid:
+            - 0,0,9,1 # 5 slots
+          blacklist:
+            tags:
+              - CMMagazineSmg
+        - type: IgnoreContentsSize
+          items:
+            tags:
+              - MRE
+              - PillPacket
+              - PillCanister
+              - CMSurgicalCase
+        - type: FixedItemSizeStorage
+        - type: RMCStorageEjectHand
+          state: Open
+        - type: ExplosionResistance
+          damageCoefficient: 0
+          worn: false
+        - type: StoreAfterFailedInteract
+
+- type: entity
+  parent: CMWebbingBase
+  id: AU14WebbingDropPouch
+  name: drop pouch
+  description: A convenient pouch to carry loose items around.
+  components:
+    - type: Sprite
+      sprite: _AU14/Clothing/UniversalWebbing/droppouch.rsi
+      state: webbing
+    - type: Storage
+      maxItemSize: Normal
+      grid:
+        - 0,0,7,1   # up to 4 small or 8 tiny items
+      blacklist:
+        components:
+          - Bible
+        tags:
+          - CMFirstAidKit
+          - RMCBoxStorage
+    - type: Webbing
+      playerSprite:
+        sprite: _AU14/Clothing/UniversalWebbing/droppouch.rsi
+        state: equipped
+      components:
+        - type: Storage
+          maxItemSize: Normal
+          grid:
+            - 0,0,7,1   # up to 4 small or 8 tiny items
+          blacklist:
+            components:
+              - Bible
+            tags:
+              - CMFirstAidKit
+              - RMCBoxStorage
+        - type: RMCStorageEjectHand
+          state: Open
+        - type: ExplosionResistance
+          damageCoefficient: 0
+          worn: false
+        - type: StoreAfterFailedInteract
+
+- type: entity
+  parent: CMWebbingBase
+  id: AU14WebbingAdminPouch
+  name: admin pouch
+  description: A pouch to carry your administrative equipment around.
+  components:
+    - type: Sprite
+      sprite: _AU14/Clothing/UniversalWebbing/adminpouch.rsi
+      state: webbing
+    - type: Storage
+      maxItemSize: Normal
+      grid:
+        - 0,0,2,1   # up to 4 small or 8 tiny items
+      blacklist:
+        components:
+          - Bible
+        tags:
+          - CMFirstAidKit
+          - RMCBoxStorage
+    - type: Webbing
+      playerSprite:
+        sprite: _AU14/Clothing/UniversalWebbing/adminpouch.rsi
+        state: equipped
+      components:
+        - type: Storage
+          maxItemSize: Normal
+          grid:
+            - 0,0,2,1   # up to 4 small or 8 tiny items
+          blacklist:
+            components:
+              - Bible
+            tags:
+              - CMFirstAidKit
+              - RMCBoxStorage
+        - type: RMCStorageEjectHand
+          state: Open
+        - type: ExplosionResistance
+          damageCoefficient: 0
+          worn: false
+        - type: StoreAfterFailedInteract
+
+- type: entity
+  parent: CMWebbingBase
+  id: AU14WebbingKnives
+  name: knife webbing
+  description: An older generation knife vest. Can hold up to 5 knives. It is made of synthcotton.
+  components:
+    - type: Sprite
+      sprite: _AU14/Clothing/UniversalWebbing/knifevest.rsi
+      state: webbing
+    - type: Storage
+      grid:
+        - 0,0,9,1 # 5 slots
+      whitelist:
+        tags:
+          - Knife
+          - ThrowingKnife
+    - type: FixedItemSizeStorage
+    - type: ExplosionResistance
+      damageCoefficient: 0
+      worn: false
+    - type: CMHolster
+    - type: Webbing
+      playerSprite:
+        sprite: _AU14/Clothing/UniversalWebbing/knifevest.rsi
+        state: equipped
+      components:
+        - type: Storage
+          grid:
+            - 0,0,9,1 # 5 slots
+          whitelist:
+            tags:
+              - Knife
+              - ThrowingKnife
+        - type: FixedItemSizeStorage
+        - type: ExplosionResistance
+          damageCoefficient: 0
+          worn: false
+        - type: CMHolster
+        - type: StoreAfterFailedInteract
+
+- type: entity
+  parent: AU14WebbingKnives
+  id: AU14WebbingKnivesFilled
+  suffix: Filled
+  components:
+    - type: StorageFill
+      contents:
+        - id: CMM11Knife
+          amount: 5

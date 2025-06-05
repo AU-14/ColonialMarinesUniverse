@@ -32,14 +32,7 @@
       map: [ "icon" ]
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Eyes/Glasses/m42_scoutsight.rsi
-  - type: NightVisionItem
   - type: Appearance
-  - type: GenericVisualizer
-    visuals:
-      enum.NightVisionItemVisuals.Active:
-        icon:
-          True: { state: icon_on }
-          False: { state: icon }
 
 - type: entity
   parent: ClothingEyesHudMedical
@@ -56,14 +49,7 @@
       map: [ "icon" ]
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Eyes/Glasses/m42_scoutsight.rsi
-  - type: NightVisionItem
   - type: Appearance
-  - type: GenericVisualizer
-    visuals:
-      enum.NightVisionItemVisuals.Active:
-        icon:
-          True: { state: icon_on }
-          False: { state: icon }
 
 - type: entity
   parent: ClothingEyesBase
@@ -80,20 +66,11 @@
       map: [ "icon" ]
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Eyes/Glasses/ml66a_sight.rsi
-  - type: NightVisionItem
-    skills:
-      RMCSkillSmartGun: 1
   - type: ClothingRequireEquipped
     whitelist:
       components:
       - SmartGun
   - type: Appearance
-  - type: GenericVisualizer
-    visuals:
-      enum.NightVisionItemVisuals.Active:
-        icon:
-          True: { state: icon_on }
-          False: { state: icon }
 
 - type: entity
   parent: ClothingEyesBase
