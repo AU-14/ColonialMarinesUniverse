@@ -64,8 +64,8 @@
 - type: entity
   parent: CMHeadBeret
   id: CMHeadBeretCMP
-  name: UNMC Chief MP beret
-  description: A beret with the UNMC Military Police insignia emblazoned on it. It shines with the glow of corrupt authority and a smudge of doughnut.
+  name: USCM Chief MP beret
+  description: A beret with the USCM Military Police insignia emblazoned on it. It shines with the glow of corrupt authority and a smudge of doughnut.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Head/Hats/beret_wo.rsi
@@ -137,7 +137,7 @@
 - type: entity
   parent: CMHeadBeret
   id: RMCHeadBeretGreen
-  name: UNMC beret
+  name: USCM beret
   suffix: Green
   components:
   - type: Sprite
@@ -302,8 +302,8 @@
 - type: entity
   parent: RMCHeadCapFlippable
   id: CMHeadCapOfficer
-  name: UNMC officer cap
-  description: A hat usually worn by officers in the UNMC. While it provides no protection, some officers wear it in the field to make themselves more recognisable.
+  name: USCM officer cap
+  description: A hat usually worn by officers in the USCM. While it provides no protection, some officers wear it in the field to make themselves more recognisable.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Head/Hats/cap_officer/jungle.rsi
@@ -354,7 +354,7 @@
 - type: entity
   parent: CMHeadCapMP
   id: CMHeadFlapCap
-  name: UNMC expedition cap
+  name: USCM expedition cap
   description: It's a cap, with flaps. A patch stitched across the front reads "UNS ALMAYER".
   components:
   - type: Sprite
@@ -439,7 +439,7 @@
 - type: entity
   parent: CMHeadBeret
   id: RMCHeadBeretSquad
-  name: UNMC squad beret
+  name: USCM squad beret
   description: For those who want to show pride and have nothing to lose (in their head, at least).
   suffix: None
   components:
@@ -460,7 +460,7 @@
 - type: entity
   parent: CMHeadBeret
   id: RMCHeadBeretSquadAlpha
-  name: UNMC squad beret
+  name: USCM squad beret
   description: Often found atop heads, slightly less found on those still attached.
   suffix: Alpha
   components:
@@ -538,8 +538,8 @@
 - type: entity
   parent: CMHeadBeret
   id: RMCProvostCommandBeret
-  name: UNMC provost command beret
-  description: A beret with the UNMC Military Police insignia emblazoned on it.
+  name: USCM provost command beret
+  description: A beret with the USCM Military Police insignia emblazoned on it.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Head/Hats/pvciberet.rsi

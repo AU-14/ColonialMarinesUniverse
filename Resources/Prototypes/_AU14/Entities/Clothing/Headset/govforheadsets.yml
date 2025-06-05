@@ -29,7 +29,7 @@
     state: we_ya_key
 
 - type: entity
-  parent: RMCHeadsetMarine
+  parent: RMCHeadsetShip
   id: AU14HeadsetSectionMarine
   name: GOVFOR section radio headset
   description: This is used by GOVFOR personnel to communicate on the radio.
@@ -42,7 +42,7 @@
       - AU14EncryptionKeyGOVFOR
 
 - type: entity
-  parent: RMCHeadsetMarine
+  parent: RMCHeadsetShip
   id: AU14HeadsetSectionLeader
   name: GOVFOR command radio headset
   description: This is used by GOVFOR command members to communicate on the radio.

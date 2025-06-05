@@ -127,7 +127,7 @@
 - type: entity
   parent: [CMBaseDefibrillator, RMCPowerCellSlotUnremovable]
   id: RMCSynthResetKey
-  name: WeYa synthetic reset key
+  name: WY synthetic reset key
   description: This device can fix major glitches or programming errors of synthetic units, as well as being able to restart a synthetic that has suffered critical failure. It can only be used once before being reset.
   components:
   - type: Sprite

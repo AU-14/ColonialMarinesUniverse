@@ -13,7 +13,7 @@
     RMCRankLanceCorporal: []
   startingGear: AU14GearGOVFORPlatoonCorpsman
   dummyStartingGear: AU14GearGOVFORCorpsmanDummy
-  icon: "CMJobIconHospitalCorpsman"
+  icon: "AU14JobIconCorpsman"
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-govfor

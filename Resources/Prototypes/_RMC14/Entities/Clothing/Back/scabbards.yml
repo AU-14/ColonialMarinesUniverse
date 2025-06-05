@@ -104,8 +104,8 @@
 - type: entity
   parent: RMCScabbardBase
   id: RMCScabbardShotgun
-  name: L44 M42A2 shotgun scabbard
-  description: A large leather holster fitted for UNMC-issue shotguns. It has harnesses that allow it to be secured to the back for easy storage.
+  name: L44 M37A3 shotgun scabbard
+  description: A large leather holster fitted for USCM-issue shotguns. It has harnesses that allow it to be secured to the back for easy storage.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Scabbards/shotgun.rsi

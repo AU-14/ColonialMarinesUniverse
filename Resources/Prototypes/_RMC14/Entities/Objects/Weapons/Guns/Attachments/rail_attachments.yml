@@ -107,6 +107,34 @@
     - accuracyAddMult: -0.05
 
 - type: entity
+  parent: RMCAttachmentMagneticHarness
+  id: RMCAttachmentTwoPointSling # PVE
+  name: two-point sling
+  description: A traditional strip of toughened nylon fabric with clips on either end for attaching to suitable mounting points on most longarms in the UN armed forces arsenals.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Attachments/rifle_sling/classic-desert-jungle.rsi
+    state: pve-sling
+  - type: AttachableMagnetic
+  - type: AttachableVisuals
+  - type: AttachableWeaponRangedMods
+    modifiers:
+    - conditions:
+        unwieldedOnly: true
+      accuracyAddMult: 0.05
+      recoilFlat: -4
+      scatterFlat: -10
+  - type: Appearance
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _RMC14/Objects/Weapons/Guns/Attachments/rifle_sling/classic-desert-jungle.rsi
+      Desert: _RMC14/Objects/Weapons/Guns/Attachments/rifle_sling/classic-desert-jungle.rsi
+      Snow: _RMC14/Objects/Weapons/Guns/Attachments/rifle_sling/snow-urban.rsi
+      Classic: _RMC14/Objects/Weapons/Guns/Attachments/rifle_sling/classic-desert-jungle.rsi
+      Urban: _RMC14/Objects/Weapons/Guns/Attachments/rifle_sling/snow-urban.rsi
+
+
+- type: entity
   parent: RMCRailAttachmentBase
   id: RMCAttachmentS5RedDotSight # reddot
   name: S5 red-dot sight
@@ -362,8 +390,8 @@
 - type: entity
   parent: RMCAttachmentS42xTelescopicMiniscope
   id: RMCAttachmentB8SmartScope
-  name: B8 smart-scope
-  description: An experimental B8 Smart-Scope. Based on the technologies used in the Smart Gun by AEGIS, this sight has integrated IFF systems. It can only attach to the M4SPR Battle Rifle and the M44 Combat Revolver.
+  name: AN/PVR-52E1 scope
+  description: An AN/PVR-52E1 scope. It can only attach to the M4RA Battle Rifle. Despite popular belief, it in fact does not have IFF.
   components:
   - type: Sprite
     state: iffbarrel
@@ -372,20 +400,40 @@
     - RMCAttachmentRail
     - RMCAttachmentB8SmartScope
   - type: AttachableToggleable
-    doAfter: 0.8
+    breakOnMove: false
+    actionsToRelayWhitelist:
+      tags:
+      - RMCActionCycleZoomLevel
+    doAfter: 0.5
     icon:
       sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
       state: huntingscope
-    actionName: Look through B8 Smart-Scope
-    actionDesc: Lets you see further and shoot through your fellow marines without harming them.
-  - type: AttachableIFF
+    actionName: Look through AN/PVR-52E1 Scope
+    actionDesc: Lets you see further.
   - type: AttachableWeaponRangedMods
     modifiers:
-    - damageAddMult: -0.2
+    - fireDelayFlat: 0.1
+    - conditions:
+        activeOnly: true
+      fireDelayFlat: 0.25
+      accuracyAddMult: 0.35
+      damageFalloffAddMult: -0.4
     - conditions:
         wieldedOnly: true
         inactiveOnly: true
       accuracyAddMult: -0.05
+  - type: Scope
+    zoomLevels:
+    - name: 4x
+      zoom: 1.6
+      offset: 14
+      allowMovement: false
+      doAfter: 0
+    - name: 2x
+      zoom: 1
+      offset: 14
+      allowMovement: true
+      doAfter: 0
 
 - type: entity
   parent: RMCAttachmentScopeBase
