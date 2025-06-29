@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "license": null,
+    "copyright": "Heavily edited Mono-Supron by gixer94",
+    "size": {
+        "x": 64,
+        "y": 64
+    },
+    "states": [
+        {
+            "name": "stockcar"
+        }
+    ]
+}
