@@ -3,6 +3,9 @@
   id: AU14JobCivilianColonySynthetic
   name: au14-job-name-civiliancolonysynthetic
   description: au14-job-description-civiliancolonysynthetic
+  gamemodeNames:
+    Prometheus: au14-job-name-civiliancolonysynthetic-prometheus
+    ColonyFall: au14-job-name-civiliancolonysynthetic-colony-fall
   setPreference: true
   playTimeTracker: AU14JobCivilianColonySynthetic
   ranks:

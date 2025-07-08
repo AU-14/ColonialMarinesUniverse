@@ -4,6 +4,8 @@ using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Content.Shared.Roles;
+using Content.Server.Roles.Jobs;
+using Content.Server.GameTicking;
 using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 using Robust.Shared.Prototypes;
@@ -17,6 +19,7 @@ namespace Content.Server.GameTicking.Commands
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
         [Dependency] private readonly IAdminManager _adminManager = default!;
         [Dependency] private readonly IConfigurationManager _cfg = default!;
+        [Dependency] private readonly GameTicker _ticker = default!;
 
         public string Command => "joingame";
         public string Description => "";
@@ -69,7 +72,7 @@ namespace Content.Server.GameTicking.Commands
                 var jobPrototype = _prototypeManager.Index<JobPrototype>(id);
                 if(stationJobs.TryGetJobSlot(station, jobPrototype, out var slots) == false || slots == 0)
                 {
-                    shell.WriteLine($"{jobPrototype.LocalizedName} has no available slots.");
+                    shell.WriteLine($"{jobPrototype.GetGamemodeName(_ticker)} has no available slots.");
                     return;
                 }
 

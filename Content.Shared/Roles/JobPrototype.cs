@@ -36,6 +36,25 @@ namespace Content.Shared.Roles
         public string LocalizedName => Loc.GetString(Name);
 
         /// <summary>
+        ///     Optional names to use for specific gamemodes.
+        ///     Key is the ID of the <see cref="GamePresetPrototype"/> and the value is the loc string for the job name.
+        /// </summary>
+        [DataField("gamemodeNames")]
+        public Dictionary<string, LocId>? GamemodeNames;
+
+        /// <summary>
+        ///     Gets the localized job name for the specified gamemode ID.
+        ///     If no override exists the default <see cref="Name"/> is used.
+        /// </summary>
+        public string GetGamemodeName(string? gamemodeId)
+        {
+            if (gamemodeId != null && GamemodeNames != null && GamemodeNames.TryGetValue(gamemodeId, out var loc))
+                return Loc.GetString(loc);
+
+            return Loc.GetString(Name);
+        }
+
+        /// <summary>
         ///     The name of this job as displayed to players.
         /// </summary>
         [DataField("description")]

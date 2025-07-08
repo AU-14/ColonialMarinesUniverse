@@ -6,3 +6,38 @@
   showInVote: true
   description: insurgency-description
   # rules:
+- type: gamePreset
+  id: Prison
+  alias:
+  - extended
+  name: prison-title
+  showInVote: true
+  description: prison-description
+  # rules:
+
+- type: gamePreset
+  id: ColonyFall
+  alias:
+  - extended
+  name: colony-fall-title
+  showInVote: true
+  description: colony-fall-description
+  # rules:
+
+- type: gamePreset
+  id: FoF
+  alias:
+  - extended
+  name: fof-title
+  showInVote: true
+  description: fof-description
+  # rules:
+
+- type: gamePreset
+  id: Prometheus
+  alias:
+  - extended
+  name: prometheus-title
+  showInVote: true
+  description: prometheus-description
+  # rules:

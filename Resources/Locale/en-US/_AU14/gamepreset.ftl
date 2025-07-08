@@ -1,2 +1,10 @@
 insurgency-title = Insurgency/PvE
 insurgency-description = An extended gamemode.
+prison-title = Prison
+prison-description = Placeholder gamemode.
+colony-fall-title = Colony Fall
+colony-fall-description = Placeholder gamemode.
+fof-title = FoF
+fof-description = Placeholder gamemode.
+prometheus-title = Prometheus
+prometheus-description = Placeholder gamemode.
