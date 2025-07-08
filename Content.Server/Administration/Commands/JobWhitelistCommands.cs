@@ -53,7 +53,8 @@ public sealed class JobWhitelistAddCommand : LocalizedCommands
                 shell.WriteLine(Loc.GetString("cmd-jobwhitelistadd-already-whitelisted",
                     ("player", player),
                     ("jobId", job.Id),
-                    ("jobName", jobPrototype.GetGamemodeName(IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>()))));
+                    ("jobName", jobPrototype.GetGamemodeName(
+                        IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>())));
                 return;
             }
 
@@ -61,7 +62,8 @@ public sealed class JobWhitelistAddCommand : LocalizedCommands
             shell.WriteLine(Loc.GetString("cmd-jobwhitelistadd-added",
                 ("player", player),
                 ("jobId", job.Id),
-                ("jobName", jobPrototype.GetGamemodeName(IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>() )));
+                ("jobName", jobPrototype.GetGamemodeName(
+                    IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>())));
             return;
         }
 
@@ -181,7 +183,8 @@ public sealed class RemoveJobWhitelistCommand : LocalizedCommands
                 shell.WriteError(Loc.GetString("cmd-jobwhitelistremove-was-not-whitelisted",
                     ("player", player),
                     ("jobId", job.Id),
-                    ("jobName", jobPrototype.GetGamemodeName(IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>()))));
+                    ("jobName", jobPrototype.GetGamemodeName(
+                        IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>())));
                 return;
             }
 
@@ -189,7 +192,8 @@ public sealed class RemoveJobWhitelistCommand : LocalizedCommands
             shell.WriteLine(Loc.GetString("cmd-jobwhitelistremove-removed",
                 ("player", player),
                 ("jobId", job.Id),
-                ("jobName", jobPrototype.GetGamemodeName(IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>()))));
+                ("jobName", jobPrototype.GetGamemodeName(
+                    IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>())));
             return;
         }
 
