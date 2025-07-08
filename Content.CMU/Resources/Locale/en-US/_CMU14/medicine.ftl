@@ -21,5 +21,10 @@ reagent-desc-albuterol = Repairs 4 oxygen damage. OD of 35u.
 reagent-name-cmnaloxone = Naloxone
 reagent-desc-cmnaloxone = Instantly counteracts toxin damage. Primarily used to treat overdoses.
 
-reagent-name-goo = Strange Goop
-reagent-desc-goo = I wouldn't eat this
+au14-tq-user-popup = You apply a tourniquet to {$target}.
+au14-tq-target-popup = {$user} applies a tourniquet to you.
+au14-tq-others-popup = {$user} applies a tourniquet to {$target}.
+
+au14-hs-user-popup = You pack hemostatic gauze into {$target}'s wounds.
+au14-hs-target-popup = {$user} pack hemostatic gauze into your wounds.
+au14-hs-others-popup = {$user} packs hemostatic gauze into {$target}'s wounds.

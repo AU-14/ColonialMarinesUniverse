@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "license": null,
+    "copyright": "Made by gixer94 for the Aliens-For-Dead event.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "johnnycardboard"
+        }
+    ]
+}
