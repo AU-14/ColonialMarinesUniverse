@@ -49,7 +49,7 @@ au14-job-name-opforplatooncorpsman = Platoon Hospital Corpsman
 au14-job-description-opforplatooncorpsman = Provide field medical aid. Patch them up, keep them breathing, and get them back in the fight.
 au14-job-prefix-opforplatooncorpsman = HM
 
-AU14JobOpforRadioTelephoneOoperator = Radio Telephone Operator
-au14-job-name-poforradiotelephoneooperator = Radio Telephone Operator
-au14-job-description-opforradiotelephoneooperator = Operate long-range comms. You're the link between command and the boots. Don’t drop it.
-au14-job-prefix-opforradiotelephoneooperator = RTO
+AU14JobOpforRadioTelephoneOperator = Radio Telephone Operator
+au14-job-name-poforradiotelephoneoperator = Radio Telephone Operator
+au14-job-description-opforradiotelephoneoperator = Operate long-range comms. You're the link between command and the boots. Don’t drop it.
+au14-job-prefix-opforradiotelephoneoperator = RTO
