@@ -13,9 +13,6 @@ au14-department-colony-medical-description = Responsible for healthcare and emer
 au14-department-colony-security = Colony Security and Law Enforcement
 au14-department-colony-security-description = Enforces law, conducts arrests, protects personnel, and upholds order.
 
-au14-department-colony-mapspecific = Map Specific
-au14-department-colony-mapspecific-description = Roles limited to specific maps. Hover over job names to see map availability.
-
 au14-job-supervisors-colonycivilian = Colony Administrator
 
 au14-job-supervisors-colonyadministrator = The Colonial Administration
@@ -60,10 +57,10 @@ au14-job-description-foreman = Oversee the Engineering and Logistics department.
 au14-job-prefix-colonyforeman = FORM
 AU14JobCivilianForeman = Foreman
 
-au14-job-name-civiliancorporateliaison = WY Corporate Liaison
+au14-job-name-civiliancorporateliaison = WY Manager
 au14-job-description-civiliancorporateliaison = Ensure corporate interests are upheld and company policy is followed.
 au14-job-prefix-corporateliaison = WYCL
-AU14JobCivilianCorporateLiaison = WY Corporate Liaison
+AU14JobCivilianCorporateLiaison = WY Manager
 
 au14-job-name-civilianphysician = Physician
 au14-job-description-civilianphysician = Provide diagnosis, surgery, and treatment for the colony's personnel.
@@ -95,10 +92,10 @@ au14-job-description-civiliancmbmarshal = You're a Marshal of the Colonial Marsh
 au14-job-prefix-cmbmarshal = CMBMAR
 AU14JobCivilianCMBMarshal = CMB Marshal
 
-au14-job-name-civilianecologist = Ecologist
-au14-job-description-civilianecologist = You're a scientist sent by the Weyland-Yutani Corporation to study the environment and local fauna of LV-624. (Role available on LV-624)
-au14-job-prefix-civilianecologist = ECOLIST
-AU14JobCivilianEcologist = Ecologist
+au14-job-name-civilianscientist = scientist
+au14-job-description-civilianscientist = You're a scientist sent by the Weyland-Yutani Corporation to study the environment  (Role available on LV-624 and in select modes)
+au14-job-prefix-civilianscientist = Prof
+AU14JobCivilianscientist = scientist
 
 au14-job-name-usasfrecruiter = USASF Recruiter
 au14-job-description-usasfrecruiter = You're a recruiter from the United States Aero-Space Force. You've been stationed on the colony to legally enlist civilians into the USASF. (Role available on LV-624)
@@ -112,13 +109,13 @@ AU14JobCivilianColonySynthetic = Colony Operations Synthetic
 
 
 au14-job-name-civiliankellandwarden = Kelland Warden
-au14-job-description-civiliankellandwarden = You're middle management at the Kelland mining company, you have been assigned to management of the minimum security prison at this colony. Have your prisoners, mine, produce and behave. If they're well-tempered allow them greater privilege or free travel in the colony. (Role available on LV-747)
+au14-job-description-civiliankellandwarden = You're middle management at the Kelland mining company, you have been assigned to management of the prison at this colony. Have your prisoners: work, produce and behave. If they're well-tempered allow them greater privilege or free travel in the colony. (Role available on LV-747 and in select modes)
 au14-job-prefix-civiliankellandwarden = WARD
 AU14Jobciviliankellandwarden = Kelland Warden
 
 
 au14-job-name-civilianprisoner = Prisoner
-au14-job-description-civilianprisoner = You've been assigned to a Kelland mining facility to pay your debt for petty crime. If you behave the warden might even let you free roam the colony.. or you could try escaping. (Role available on LV-747)
+au14-job-description-civilianprisoner = You're a prisoner held at a corporate facility, if you're cooperative you may be allowed greater privilege (Role available on LV-747 and select modes)
 au14-job-prefix-civilianprisoner = INMATE
 AU14Jobcivilianprisoner = Prisoner
 
