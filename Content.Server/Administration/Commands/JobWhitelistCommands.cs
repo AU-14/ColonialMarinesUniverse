@@ -47,14 +47,14 @@ public sealed class JobWhitelistAddCommand : LocalizedCommands
         if (data != null)
         {
             var guid = data.UserId;
+            var ticker = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>();
             var isWhitelisted = await _db.IsJobWhitelisted(guid, job);
             if (isWhitelisted)
             {
                 shell.WriteLine(Loc.GetString("cmd-jobwhitelistadd-already-whitelisted",
                     ("player", player),
                     ("jobId", job.Id),
-                    ("jobName", jobPrototype.GetGamemodeName(
-                        IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>())));
+                    ("jobName", jobPrototype.GetGamemodeName(ticker))));
                 return;
             }
 
@@ -62,8 +62,7 @@ public sealed class JobWhitelistAddCommand : LocalizedCommands
             shell.WriteLine(Loc.GetString("cmd-jobwhitelistadd-added",
                 ("player", player),
                 ("jobId", job.Id),
-                ("jobName", jobPrototype.GetGamemodeName(
-                    IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>())));
+                ("jobName", jobPrototype.GetGamemodeName(ticker))));
             return;
         }
 
@@ -177,14 +176,14 @@ public sealed class RemoveJobWhitelistCommand : LocalizedCommands
         if (data != null)
         {
             var guid = data.UserId;
+            var ticker = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>();
             var isWhitelisted = await _db.IsJobWhitelisted(guid, job);
             if (!isWhitelisted)
             {
                 shell.WriteError(Loc.GetString("cmd-jobwhitelistremove-was-not-whitelisted",
                     ("player", player),
                     ("jobId", job.Id),
-                    ("jobName", jobPrototype.GetGamemodeName(
-                        IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>())));
+                    ("jobName", jobPrototype.GetGamemodeName(ticker))));
                 return;
             }
 
@@ -192,8 +191,7 @@ public sealed class RemoveJobWhitelistCommand : LocalizedCommands
             shell.WriteLine(Loc.GetString("cmd-jobwhitelistremove-removed",
                 ("player", player),
                 ("jobId", job.Id),
-                ("jobName", jobPrototype.GetGamemodeName(
-                    IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>())));
+                ("jobName", jobPrototype.GetGamemodeName(ticker))));
             return;
         }
 
