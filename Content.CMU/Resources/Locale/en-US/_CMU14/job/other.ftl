@@ -16,22 +16,16 @@ au14-department-criminal-description = Roles limited to use on the Criminal game
 au14-department-weyu = WeYu
 au14-department-wyu-description = Jobs part of Weyland Yutani
 
-
 au14-job-name-mobboss= Mob Boss
 au14-job-description-mobboss= You're the leader of the local crime syndicate, ensure the goals of your family are met
 au14-job-prefix-mobboss = MOB
-AU14Jobmobboss = Mob Boss
-
-
+AU14JobMobBoss = Mob Boss
 
 au14-job-name-mobgoon= Mob Goon
 au14-job-description-mobgoon = You're a soldier in local crime syndicate, listen to the boss
-AU14Jobmobgoon = Mob Goon
-
-
-
+AU14JobMobGoon = Mob Goon
 
 au14-job-name-wyguard = WeYu Guard
 au14-job-description-wyguard= You're corporate security hired by Weyland-Yutani. Listen to and protect the employees and company assets
 au14-job-prefix-wyguard = WYGUARD
-AU14Jobwyguard = WeYu guard
+AU14JobWYGuard = WeYu guard
