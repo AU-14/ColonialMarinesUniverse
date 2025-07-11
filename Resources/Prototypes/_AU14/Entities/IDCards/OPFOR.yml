@@ -1,0 +1,79 @@
+﻿- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardopforPlatCo
+  name: platoon commander ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOpforPlatCo
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardopforPlatOp
+  name: platoon operations officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOpforPlatOp
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardopforDSPilot
+  name: dropship pilot ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOpforDSPilot
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardopforDCC
+  name: dropship crew chief ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOpforDCC
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardopforSecSergeant
+  name: platoon sergeant ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOpforSectionSergeant
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardopforSquadSergeant
+  name: squad sergeant ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOpforSquadSergeant
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardopforSquadRifleman
+  name: squad sergeant ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOpforSquadRifleman
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardopforSquadAutomaticRifleman
+  name: squad sergeant ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOpforSquadAutomaticRifleman
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14JobIDCardopforPlatoonCorpsman
+  name: platoon corpsman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOpforPlatoonCorpsman
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14JobIDCardopforRadioTelephoneOperator
+  name: radio telephone operator ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOpforRadioTelephoneOperator

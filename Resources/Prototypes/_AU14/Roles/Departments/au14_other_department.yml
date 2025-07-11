@@ -1,0 +1,62 @@
+﻿- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentColonyMapSpecific
+  name: au14-department-colony-mapspecific
+  description: au14-department-colony-mapspecific-description
+  color: "#e3ce94"
+  roles:
+  - AU14JobCivilianCMBDeputy
+  - AU14JobCivilianCMBMarshal
+  - AU14JobCivilianCWPSRanger
+  - AU14JobCivilianScientist
+  - AU14JobCivilianUSASFRecruiter
+  - AU14JobCivilianMiner
+  - AU14JobCivilianPrisoner
+  - AU14JobCivilianKellandWarden
+  departmentRadio: null
+  headOfDepartment: null
+
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentPrometheus
+  name: au14-department-prometheus
+  description: au14-department-prometheus-description
+  color: "#e3ce94"
+  roles:
+  - AU14JobCivilianScientist
+  - AU14JobCivilianColonySynthetic
+  - AU14JobWYGuard
+  - AU14JobCivilianCorporateLiaison
+  departmentRadio: null
+  headOfDepartment: null
+
+
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentPrison
+  name: au14-department-prison
+  description: au14-department-prison-description
+  color: "#e3ce94"
+  roles:
+  - AU14JobCivilianPrisoner
+  - AU14JobWYGuard
+  - AU14JobCivilianKellandWarden
+  - AU14JobCivilianPhysician
+  - AU14JobCivilianFreightSystemsSpecialist
+  departmentRadio: null
+  headOfDepartment: null
+
+
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentCriminal
+  name: au14-department-criminal
+  description: au14-department-criminal-description
+  color: "#e3ce94"
+  roles:
+  - AU14JobMobBoss
+  - AU14JobMobGoon
+  departmentRadio: null
+  headOfDepartment: null
+
+

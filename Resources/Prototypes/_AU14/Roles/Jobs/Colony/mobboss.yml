@@ -1,0 +1,52 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobMobBoss
+  name: au14-job-name-mobboss
+  description: au14-job-description-mobboss
+  setPreference: true
+  playTimeTracker: AU14JobMobBoss
+  startingGear: AU14GearMobBoss
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-mobboss
+  accessGroups:
+  - aumob
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillFirearms: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-mobboss
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearMobBoss
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonCharcoal
+    shoes: RMCShoesLaceup
+    id: AU14IDCardMobBoss
+    ears: AU14HeadsetMob
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointMobBoss
+  name: Spawn Point Mob Boss
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobMobBoss
+  - type: Sprite
+    state: syn_spawn
+- type: playTimeTracker
+  id: AU14JobMobBoss
+  isHumanoid: true

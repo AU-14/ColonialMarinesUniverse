@@ -1,0 +1,34 @@
+# High Command
+- type: radioChannel #UNMC High Command, for events and such, basically CentComm channel
+  id: mob
+  name: chat-radio-mob
+  keycode: "l" #z in cm13
+  frequency: 1431
+  color: "#318779"
+  longRange: true
+
+- type: radioChannel #UNMC High Command, for events and such, basically CentComm channel
+  id: opfor
+  name: chat-radio-opfor
+  keycode: "z" #z in cm13
+  frequency: 1441
+  color: "#318779"
+  longRange: true
+
+- type: radioChannel
+  id: opforcommand
+  name: chat-radio-opforcommand
+  keycode: "6" #z in cm13
+  frequency: 1479
+  color: "#8c1002"
+  longRange: true
+
+- type: radioChannel
+  id: opforjtac
+  name: chat-radio-opforjtac
+  keycode: "9" #z in cm13
+  frequency: 1474
+  color: "#d08000"
+  longRange: true
+
+

@@ -857,7 +857,7 @@
   - FoodHealthyRMC
 
 - type: roleLoadout
-  id: AU14JobCivilianEcologist
+  id: AU14JobCivilianScientist
   points: 7
   groups:
   - PaperworkRMC
@@ -989,7 +989,7 @@
   - FoodHealthyRMC
 
 - type: roleLoadout
-  id: AU14JobGOVFORRadioTelephoneOoperator
+  id: AU14JobGOVFORRadioTelephoneOperator
   points: 7
   groups:
   - PaperworkRMC

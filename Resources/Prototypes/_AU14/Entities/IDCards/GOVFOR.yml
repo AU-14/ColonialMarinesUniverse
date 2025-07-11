@@ -72,8 +72,8 @@
 
 - type: entity
   parent: CMIDCardBase
-  id: AU14JobIDCardGOVFORRadioTelephoneOoperator
+  id: AU14JobIDCardGOVFORRadioTelephoneOperator
   name: radio telephone operator ID card
   components:
   - type: PresetIdCard
-    job: AU14JobGOVFORRadioTelephoneOoperator
+    job: AU14JobGOVFORRadioTelephoneOperator

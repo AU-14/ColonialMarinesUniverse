@@ -17,7 +17,7 @@
             AU14JobCivilianColonist: [ -1, -1 ]
             AU14JobCivilianFoodServiceWorker: [2, 2]
             AU14JobCivilianJournalist: [1, 1]
-            AU14JobCivilianEcologist: [3, 3]
+            AU14JobCivilianScientist: [3, 3]
             AU14JobCivilianColonySynthetic: [1, 1]
 
             # Colony Command (non department)

@@ -1,13 +1,13 @@
 - type: job
   parent: CMJobBase
-  id: AU14Jobcivilianminer
+  id: AU14JobCivilianMiner
   name: au14-job-name-civilianminer
   description: au14-job-description-civilianminer
   setPreference: true
-  playTimeTracker: AU14Jobcivilianminer
+  playTimeTracker: AU14JobCivilianMiner
   ranks:
     RMCRankCivilian: []
-  startingGear: AU14Gearcivilianminer
+  startingGear: AU14GearCivilianMiner
   icon: "CMJobIconEmpty"
   requireAdminNotify: false
   joinNotifyCrew: false
@@ -33,7 +33,7 @@
   hidden: false
 
 - type: startingGear
-  id: AU14Gearcivilianminer
+  id: AU14GearCivilianMiner
   equipment:
     jumpsuit: AU14CivilianKellandMiningClothes
     outerClothing: AU14CivilianHazardVestKellandMiningCorporation
@@ -44,14 +44,14 @@
 
 - type: entity
   parent: CMSpawnPointJobBase
-  id: AU14SpawnPointcivilianminer
+  id: AU14SpawnPointCivilianMiner
   name: Spawn Point Civilian Miner
   components:
   - type: SpawnPoint
-    job_id: AU14Jobcivilianminer
+    job_id: AU14JobCivilianMiner
   - type: Sprite
     state: syn_spawn
 
 - type: playTimeTracker
-  id: AU14Jobcivilianminer
+  id: AU14JobCivilianMiner
   isHumanoid: true

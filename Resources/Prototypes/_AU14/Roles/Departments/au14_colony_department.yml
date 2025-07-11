@@ -67,20 +67,3 @@
   departmentRadio: null
   headOfDepartment: null
 
-- type: department
-  parent: CMDepartmentBase
-  id: AU14DepartmentColonyMapSpecific
-  name: au14-department-colony-mapspecific
-  description: au14-department-colony-mapspecific-description
-  color: "#e3ce94"
-  roles:
-  - AU14JobCivilianCMBDeputy
-  - AU14JobCivilianCMBMarshal
-  - AU14JobCivilianCWPSRanger
-  - AU14JobCivilianEcologist
-  - AU14JobCivilianUSASFRecruiter
-  - AU14Jobcivilianminer
-  - AU14Jobcivilianprisoner
-  - AU14Jobciviliankellandwarden
-  departmentRadio: null
-  headOfDepartment: null

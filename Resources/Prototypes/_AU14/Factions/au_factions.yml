@@ -1,0 +1,53 @@
+﻿- type: npcFaction
+  id: AUGovfor
+  hostile:
+  - RMCXeno
+  - AUCLF
+  - AUGoo
+
+- type: npcFaction
+  id: RMCXeno
+  hostile:
+  - AUGovfor
+  - AUUpp
+  - AUWeYu
+  - AUColonist
+  - AUCLF
+
+- type: npcFaction
+  id: AUGoo
+  hostile:
+  - AUGovfor
+  - AUUpp
+  - AUWeYu
+  - AUColonist
+  - AUCLF
+
+- type: npcFaction
+  id: AUUpp
+  hostile:
+  - RMCXeno
+  - AUGoo
+
+- type: npcFaction
+  id: AUCLF
+  hostile:
+  - AUGovfor
+
+- type: npcFaction
+  id: AUWeYu
+  hostile:
+  - RMCXeno
+  - AUGoo
+
+- type: npcFaction
+  id: AUColonist
+  hostile:
+  - RMCXeno
+  - AUGoo
+
+- type: npcFaction
+  id: AUBureau
+  hostile:
+  - RMCXeno
+  - AUGoo

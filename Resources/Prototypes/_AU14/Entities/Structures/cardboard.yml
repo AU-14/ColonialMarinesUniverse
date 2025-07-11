@@ -27,7 +27,6 @@
       - !type:EmptyAllContainersBehaviour
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
-      
   - type: Sprite
-    sprite:  _AU14/Structures/cardboard.rsi
+    sprite: _AU14/Structures/cardboard.rsi
     state: johnnycardboard

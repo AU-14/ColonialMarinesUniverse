@@ -40,9 +40,9 @@
             AU14JobCivilianEmergencyResponseOfficer: [1, 1]
 
             # Other
-            AU14Jobcivilianminer: [5, 5]
-            AU14Jobcivilianprisoner: [4, 4]
-            AU14Jobciviliankellandwarden: [1, 1]
+            AU14JobCivilianMiner: [5, 5]
+            AU14JobCivilianPrisoner: [4, 4]
+            AU14JobCivilianKellandWarden: [1, 1]
 
             # CLF
             AU14JobCLFGuerilla: [10, 10]

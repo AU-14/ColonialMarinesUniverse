@@ -46,16 +46,4 @@
   - CMAccessColonyPublic
 
 
-- type: accessGroup
-  id: auwy
-  tags:
-  - CMAccessColonyPublic
-  - RMCAccessWeYa
 
-
-
-- type: accessGroup
-  id: aukelland #temporary cmb access until I make a kelland door
-  tags:
-  - CMAccessColonyPublic
-  - CMAccessColonyBrig

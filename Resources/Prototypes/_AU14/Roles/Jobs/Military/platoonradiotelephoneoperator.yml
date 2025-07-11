@@ -1,10 +1,10 @@
 - type: job
   parent: CMJobBase
-  id: AU14JobGOVFORRadioTelephoneOoperator
-  name: au14-job-name-radiotelephoneooperator
-  description: au14-job-description-radiotelephoneooperator
+  id: AU14JobGOVFORRadioTelephoneOperator
+  name: au14-job-name-radiotelephoneoperator
+  description: au14-job-description-radiotelephoneooerator
   setPreference: true
-  playTimeTracker: AU14JobGOVFORRadioTelephoneOoperator
+  playTimeTracker: AU14JobGOVFORRadioTelephoneOperator
   ranks:
     RMCRankCorporal:
     - !type:RoleTimeRequirement
@@ -15,8 +15,8 @@
       role: AU14JobGOVFORSquadAutomaticRifleman
       time: 1800 # 30 hours
     RMCRankPrivateFirstClass: []
-  startingGear: AU14GearGOVFORRadioTelephoneOoperator
-  dummyStartingGear: AU14GearGOVFORRadioTelephoneOoperatorDummy
+  startingGear: AU14GearGOVFORRadioTelephoneOperator
+  dummyStartingGear: AU14GearGOVFORRadioTelephoneOperatorDummy
   icon: "AU14JobIconRTO"
   requireAdminNotify: false
   joinNotifyCrew: false
@@ -38,7 +38,7 @@
         RMCSkillJtac: 3
         RMCSkillPolice: 1
     - type: JobPrefix
-      prefix: au14-job-prefix-radiotelephoneooperator
+      prefix: au14-job-prefix-radiotelephoneoperator
     - type: TacticalMapIcon
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
@@ -47,26 +47,26 @@
   hidden: false
 
 - type: startingGear
-  id: AU14GearGOVFORRadioTelephoneOoperator
+  id: AU14GearGOVFORRadioTelephoneOperator
   equipment:
-    id: AU14JobIDCardGOVFORRadioTelephoneOoperator
+    id: AU14JobIDCardGOVFORRadioTelephoneOperator
 
 - type: entity
   parent: CMSpawnPointJobBase
-  id: AU14SpawnPointGOVFORRadioTelephoneOoperator
-  name: Spawn Point GOVFOR Radio Telephone Ooperator
+  id: AU14SpawnPointGOVFORRadioTelephoneOperator
+  name: Spawn Point GOVFOR Radio Telephone Operator
   components:
   - type: SpawnPoint
-    job_id: AU14JobGOVFORRadioTelephoneOoperator
+    job_id: AU14JobGOVFORRadioTelephoneOperator
   - type: Sprite
     state: syn_spawn
 
 - type: playTimeTracker
-  id: AU14JobGOVFORRadioTelephoneOoperator
+  id: AU14JobGOVFORRadioTelephoneOperator
   isHumanoid: true
 
 - type: startingGear
-  id: AU14GearGOVFORRadioTelephoneOoperatorDummy
+  id: AU14GearGOVFORRadioTelephoneOperatorDummy
   equipment:
     outerClothing: AU14ArmorM3JungleOne
     shoes: CMBootsBrown

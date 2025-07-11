@@ -1,0 +1,81 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobOpforDCC
+  name: au14-job-name-opfordcc
+  description: au14-job-description-opfordcc
+  setPreference: true
+  playTimeTracker: AU14JobOpforDCC
+  ranks:
+    AU14RankUSASFCMSgt:
+    - !type:RoleTimeRequirement
+      role: AU14JobOpforDCC
+      time: 7200 # 120 hours
+    AU14RankUSASFSMSgt:
+    - !type:RoleTimeRequirement
+      role: AU14JobOpforDCC
+      time: 3600 # 60 hours
+    AU14RankUSASFMasterSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobOpforDCC
+      time: 720 # 12 hours
+    AU14RankUSASFTechnicalSergeant: []
+  startingGear: AU14GearopforDCC
+  dummyStartingGear: AU14GearopforDCCDummy
+  icon: "AU14JobIconDCC"
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-opfor
+  accessGroups:
+  - Pilot
+  - Rifleman
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 2
+        RMCSkillOverwatch: 1
+        RMCSkillPilot: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillSurgery: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-opfordcc
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearopforDCC
+  equipment:
+    id: AU14IDCardopforDCC
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforDCC
+  name: Spawn Point opfor Dropship Crew Chief
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOpforDCC
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobOpforDCC
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearopforDCCDummy
+  equipment:
+    outerClothing: AU14USASFICPS2
+    shoes: CMBootsBrown
+    head: AU14USASFAirCrewHelmet
+    jumpsuit: AU14USASFPilotJumpsuit

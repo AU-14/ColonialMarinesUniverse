@@ -1,15 +1,15 @@
 - type: job
   parent: CMJobBase
-  id: AU14Jobcivilianprisoner
+  id: AU14JobCivilianPrisoner
   name: au14-job-name-civilianprisoner
   description: au14-job-description-civilianprisoner
   setPreference: true
-  playTimeTracker: AU14Jobcivilianprisoner
-  startingGear: AU14Gearcivilianprisoner
+  playTimeTracker: AU14JobCivilianPrisoner
+  startingGear: AU14GearCivilianPrisoner
   icon: "CMJobIconEmpty"
   requireAdminNotify: false
   joinNotifyCrew: false
-  supervisors: au14-job-supervisors-Loner
+  supervisors: au14-job-supervisors-loner
   roleWeight: 0.6
   special:
   - !type:AddComponentSpecial
@@ -29,21 +29,20 @@
   hidden: false
 
 - type: startingGear
-  id: AU14Gearcivilianprisoner
+  id: AU14GearCivilianPrisoner
   equipment:
     jumpsuit: AU14CivilianPrisonJumpsuit
     shoes: RMCShoesBlack
 
 - type: entity
   parent: CMSpawnPointJobBase
-  id: AU14SpawnPointcivilianprisoner
-  name: Spawn Point civilian prisoner
+  id: AU14SpawnPointCivilianPrisoner
+  name: Spawn Point Civilian Prisoner
   components:
   - type: SpawnPoint
-    job_id: AU14Jobcivilianprisoner
+    job_id: AU14JobCivilianPrisoner
   - type: Sprite
     state: syn_spawn
-
 
 - type: entity
   parent: MarkerBase
@@ -61,8 +60,8 @@
   id: aughostprisoner
   components:
   - type: RMCJobSpawner
-    job: AU14Jobcivilianprisoner
+    job: AU14JobCivilianPrisoner
 
 - type: playTimeTracker
-  id: AU14Jobcivilianprisoner
+  id: AU14JobCivilianPrisoner
   isHumanoid: true

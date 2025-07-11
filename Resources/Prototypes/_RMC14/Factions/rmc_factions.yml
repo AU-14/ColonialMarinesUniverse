@@ -4,15 +4,6 @@
   - RMCXeno
 
 - type: npcFaction
-  id: RMCXeno
-  hostile:
-  - UNMC
-  - SPP
-  - WeYa
-  - Survivor
-  - CLF
-
-- type: npcFaction
   id: RMCDumb
   hostile:
   - UNMC

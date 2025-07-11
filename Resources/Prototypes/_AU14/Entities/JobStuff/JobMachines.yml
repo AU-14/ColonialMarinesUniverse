@@ -1,0 +1,36 @@
+- type: entity
+  abstract: true
+  id: AU14JobSubmissionPoint
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,1.4,0.5"
+        density: 190
+        layer:
+        - MobMask
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/boxvvanwhite.rsi
+    offset: 0.5, 0.5
+    noRot: true
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,2,2
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+  - type: Construction
+    graph: BoxCardboard
+    node: boxcardboard
+    containers:
+    - entity_storage
+  - type: PhysicalComposition

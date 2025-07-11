@@ -1,0 +1,74 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobOpforRadioTelephoneOperator
+  name: au14-job-name-radiotelephoneoperator
+  description: au14-job-description-radiotelephoneoperator
+  setPreference: true
+  playTimeTracker: AU14JobOpforRadioTelephoneOperator
+  ranks:
+    RMCRankCorporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobOpforSquadAutomaticRifleman
+      time: 3600 # 60 hours
+    RMCRankLanceCorporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobOpforSquadAutomaticRifleman
+      time: 1800 # 30 hours
+    RMCRankPrivateFirstClass: []
+  startingGear: AU14GearopforRadioTelephoneOperator
+  dummyStartingGear: AU14GearopforRadioTelephoneOperatorDummy
+  icon: "AU14JobIconRTO"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-opfor
+  accessGroups:
+  - FTL
+  overwatchSortPriority: -5
+  overwatchRoleName: Radio Telephone Operator
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 1
+        RMCSkillJtac: 3
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-radiotelephoneoperator
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: MarineOrders
+  hidden: false
+
+- type: startingGear
+  id: AU14GearopforRadioTelephoneOperator
+  equipment:
+    id: AU14JobIDCardopforRadioTelephoneOperator
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforRadioTelephoneOperator
+  name: Spawn Point opfor Radio Telephone Operator
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOpforRadioTelephoneOperator
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobOpforRadioTelephoneOperator
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearopforRadioTelephoneOperatorDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleOne
+    shoes: CMBootsBrown
+    head: AU14JungleBoonieHat
+    jumpsuit: AU14JungleFatigues

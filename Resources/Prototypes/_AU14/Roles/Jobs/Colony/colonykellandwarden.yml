@@ -1,13 +1,13 @@
 - type: job
   parent: CMJobBase
-  id: AU14Jobciviliankellandwarden
+  id: AU14JobCivilianKellandWarden
   name: au14-job-name-civiliankellandwarden
   description: au14-job-description-civiliankellandwarden
   setPreference: true
-  playTimeTracker: AU14Jobciviliankellandwarden
+  playTimeTracker: AU14JobCivilianKellandWarden
   ranks:
     RMCRankCivilian: [ ]
-  startingGear: AU14Gearciviliankellandwarden
+  startingGear: AU14GearCivilianKellandWarden
   icon: "CMJobIconEmpty"
   requireAdminNotify: false
   joinNotifyCrew: false
@@ -42,24 +42,24 @@
   hidden: false
 
 - type: startingGear
-  id: AU14Gearciviliankellandwarden
+  id: AU14GearCivilianKellandWarden
   equipment:
     jumpsuit: CMJumpsuitLiaisonBlack
     shoes: RMCShoesLaceupBrown
-    id: AU14IDCardciviliankellandwarden
+    id: AU14IDCardCivilianKellandWarden
     ears: AU14ColonyAdminHeadset #no kelland headset yet
     outerClothing: RMCJacketCorporateBlue
 
 - type: entity
   parent: CMSpawnPointJobBase
-  id: AU14SpawnPointciviliankellandwarden
+  id: AU14SpawnPointCivilianKellandWarden
   name: Spawn Point Kelland Warden
   components:
   - type: SpawnPoint
-    job_id: AU14Jobciviliankellandwarden
+    job_id: AU14JobCivilianKellandWarden
   - type: Sprite
     state: syn_spawn
 
 - type: playTimeTracker
-  id: AU14Jobciviliankellandwarden
+  id: AU14JobCivilianKellandWarden
   isHumanoid: true

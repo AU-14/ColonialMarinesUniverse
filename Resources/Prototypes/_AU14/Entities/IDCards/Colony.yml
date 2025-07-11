@@ -24,11 +24,11 @@
 
 - type: entity
   parent: CMIDCardBase
-  id: AU14IDCardColonyEcologist
-  name: ecologist ID card
+  id: AU14IDCardCivilianScientist
+  name: scientist ID card
   components:
   - type: PresetIdCard
-    job: AU14JobCivilianEcologist
+    job: AU14JobCivilianScientist
 
 - type: entity
   parent: CMIDCardBase
@@ -144,16 +144,16 @@
 
 - type: entity
   parent: CMIDCardBase
-  id: AU14IDCardciviliankellandwarden
-  name: Warden ID card
+  id: AU14IDCardCivilianKellandWarden
+  name: Kelland warden ID card
   components:
   - type: PresetIdCard
-    job: AU14Jobciviliankellandwarden
+    job: AU14JobCivilianKellandWarden
 
 - type: entity
   parent: CMIDCardBase
   id: AU14IDCardcivilianCWPSranger
-  name: CWPS Ranger ID card
+  name: CWPS ranger ID card
   components:
   - type: PresetIdCard
     job: AU14JobCivilianCWPSRanger

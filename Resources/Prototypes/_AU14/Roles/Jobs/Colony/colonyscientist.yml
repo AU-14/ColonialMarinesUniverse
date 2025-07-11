@@ -1,13 +1,13 @@
 - type: job
   parent: CMJobBase
-  id: AU14JobCivilianEcologist
-  name: au14-job-name-civilianecologist
-  description: au14-job-description-civilianecologist
+  id: AU14JobCivilianScientist
+  name: au14-job-name-civilianscientist
+  description: au14-job-description-civilianscientist
   setPreference: true
-  playTimeTracker: AU14JobCivilianEcologist
+  playTimeTracker: AU14JobCivilianScientist
   ranks:
-    RMCRankCivilianProfessor: []
-  startingGear: AU14GearCivilianEcologist
+    RMCRankCivilianScientist: []
+  startingGear: AU14GearCivilianScientist
   icon: "CMJobIconEmpty"
   requireAdminNotify: false
   joinNotifyCrew: false
@@ -26,7 +26,7 @@
         RMCSkillDomestics: 1
         RMCSkillFirearms: 1
     - type: JobPrefix
-      prefix: au14-job-prefix-civilianecologist
+      prefix: au14-job-prefix-civilianscientist
     - type: TacticalMapIcon
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
@@ -34,9 +34,9 @@
   hidden: false
 
 - type: startingGear
-  id: AU14GearCivilianEcologist
+  id: AU14GearCivilianScientist
   equipment:
-    id: AU14IDCardColonyEcologist
+    id: AU14IDCardCivilianScientist
     ears: CMHeadsetColony
     jumpsuit: AU14CivilianWorkwearGreen
     shoes: RMCShoesBlack
@@ -44,14 +44,14 @@
 
 - type: entity
   parent: CMSpawnPointJobBase
-  id: AU14SpawnPointCivilianEcologist
-  name: Spawn Point Civilian Ecologist
+  id: AU14SpawnPointCivilianScientist
+  name: Spawn Point Civilian Scientist
   components:
   - type: SpawnPoint
-    job_id: AU14JobCivilianEcologist
+    job_id: AU14JobCivilianScientist
   - type: Sprite
     state: syn_spawn
 
 - type: playTimeTracker
-  id: AU14JobCivilianEcologist
+  id: AU14JobCivilianScientist
   isHumanoid: true
