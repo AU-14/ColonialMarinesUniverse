@@ -54,7 +54,7 @@ public sealed class JobWhitelistAddCommand : LocalizedCommands
                 shell.WriteLine(Loc.GetString("cmd-jobwhitelistadd-already-whitelisted",
                     ("player", player),
                     ("jobId", job.Id),
-                    ("jobName", jobPrototype.GetGamemodeName(ticker))));
+                    ("jobName", jobPrototype.GetGamemodeName(ticker)));
                 return;
             }
 
@@ -62,7 +62,7 @@ public sealed class JobWhitelistAddCommand : LocalizedCommands
             shell.WriteLine(Loc.GetString("cmd-jobwhitelistadd-added",
                 ("player", player),
                 ("jobId", job.Id),
-                ("jobName", jobPrototype.GetGamemodeName(ticker))));
+                ("jobName", jobPrototype.GetGamemodeName(ticker)));
             return;
         }
 
@@ -152,6 +152,7 @@ public sealed class RemoveJobWhitelistCommand : LocalizedCommands
 
     public override string Command => "jobwhitelistremove";
 
+
     public override async void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (args.Length != 2)
@@ -183,7 +184,7 @@ public sealed class RemoveJobWhitelistCommand : LocalizedCommands
                 shell.WriteError(Loc.GetString("cmd-jobwhitelistremove-was-not-whitelisted",
                     ("player", player),
                     ("jobId", job.Id),
-                    ("jobName", jobPrototype.GetGamemodeName(ticker))));
+                    ("jobName", jobPrototype.GetGamemodeName(ticker)));
                 return;
             }
 
@@ -191,7 +192,7 @@ public sealed class RemoveJobWhitelistCommand : LocalizedCommands
             shell.WriteLine(Loc.GetString("cmd-jobwhitelistremove-removed",
                 ("player", player),
                 ("jobId", job.Id),
-                ("jobName", jobPrototype.GetGamemodeName(ticker))));
+                ("jobName", jobPrototype.GetGamemodeName(ticker)));
             return;
         }
 
@@ -206,6 +207,17 @@ public sealed class RemoveJobWhitelistCommand : LocalizedCommands
                 _players.Sessions.Select(s => s.Name),
                 Loc.GetString("cmd-jobwhitelist-hint-player"));
         }
+
+        if (args.Length == 2)
+        {
+            return CompletionResult.FromHintOptions(
+                _prototypes.EnumeratePrototypes<JobPrototype>().Select(p => p.ID),
+                Loc.GetString("cmd-jobwhitelist-hint-job"));
+        }
+
+        return CompletionResult.Empty;
+    }
+}
 
         if (args.Length == 2)
         {
