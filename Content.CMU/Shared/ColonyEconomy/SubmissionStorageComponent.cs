@@ -10,8 +10,5 @@ namespace Content.Shared.AU14.ColonyEconomy;
 public sealed partial class SubmissionStorageComponent : Component
 {
     [DataField("rewardAmount")]
-    public float RewardAmount = 100f;
-
-    [DataField("allowedPrototypes")]
-    public List<EntityPrototype> AllowedPrototypes = new();
+    public float RewardAmount = 60f;
 }

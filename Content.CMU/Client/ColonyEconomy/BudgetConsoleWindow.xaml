@@ -1,7 +1,7 @@
 <controls:BudgetConsoleWindow
     xmlns="https://spacestation14.io"
-    xmlns:controls="clr-namespace:Content.Client.AU14.ColonyEconomy"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Content.Client.AU14.ColonyEconomy"
     Title="Budget Console?" MinSize="400 200">
     <BoxContainer Orientation="Horizontal">
         <Label Name="WithdrawalsLabel" Access="Public" Text="Last Withdrawals:" />
