@@ -52,7 +52,7 @@ au14-job-name-govforplatooncorpsman = Platoon Hospital Corpsman
 au14-job-description-govforplatooncorpsman = Provide field medical aid. Patch them up, keep them breathing, and get them back in the fight.
 au14-job-prefix-govforplatooncorpsman = HM
 
-AU14JobGOVFORRadioTelephoneOoperator = Radio Telephone Operator
-au14-job-name-radiotelephoneooperator = Radio Telephone Operator
-au14-job-description-radiotelephoneooperator = Operate long-range comms. You're the link between command and the boots. Don’t drop it.
-au14-job-prefix-radiotelephoneooperator = RTO
+AU14JobGOVFORRadioTelephoneOperator = Radio Telephone Operator
+au14-job-name-radiotelephoneoperator = Radio Telephone Operator
+au14-job-description-radiotelephoneoperator = Operate long-range comms. You're the link between command and the boots. Don’t drop it.
+au14-job-prefix-radiotelephoneoperator = RTO
