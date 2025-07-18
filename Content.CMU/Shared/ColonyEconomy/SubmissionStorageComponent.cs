@@ -10,5 +10,5 @@ namespace Content.Shared.AU14.ColonyEconomy;
 public sealed partial class SubmissionStorageComponent : Component
 {
     [DataField("rewardAmount")]
-    public float RewardAmount = 60f;
+    public float RewardAmount = 40f;
 }
