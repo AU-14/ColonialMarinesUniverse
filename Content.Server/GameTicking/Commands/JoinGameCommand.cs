@@ -46,8 +46,6 @@ namespace Content.Server.GameTicking.Commands
 
             var ticker = _entManager.System<GameTicker>();
 
-            var stationJobs = _entManager.System<StationJobsSystem>();
-
             if (ticker.PlayerGameStatuses.TryGetValue(player.UserId, out var status) && status == PlayerGameStatus.JoinedGame)
             {
                 Logger.InfoS("security", $"{player.Name} ({player.UserId}) attempted to latejoin while in-game.");
