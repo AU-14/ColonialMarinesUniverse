@@ -9,6 +9,5 @@ namespace Content.Shared.AU14.ColonyEconomy;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class ColonyAtmComponent : Component
 {
-    [DataField("rewardAmount")]
-    public float RewardAmount = 40f;
+
 }
