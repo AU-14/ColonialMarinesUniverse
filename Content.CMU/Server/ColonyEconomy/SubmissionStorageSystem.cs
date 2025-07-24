@@ -1,5 +1,6 @@
 using Content.Server.Storage.Components;
 using Content.Shared.AU14.ColonyEconomy;
+using Content.Shared.Stacks;
 using Content.Shared.Storage;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
@@ -17,27 +18,32 @@ public sealed class SubmissionStorageSystem : EntitySystem
         SubscribeLocalEvent<SubmissionStorageComponent, EntInsertedIntoContainerMessage>(OnEntityInserted);
     }
 
-    private void OnEntityInserted(EntityUid uid, SubmissionStorageComponent storage, EntInsertedIntoContainerMessage args)
+    private void OnEntityInserted(EntityUid uid,
+        SubmissionStorageComponent storage,
+        EntInsertedIntoContainerMessage args)
     {
-        // Check if the storage's owner has a SubmissionStorageComponent
         if (!EntityManager.TryGetComponent(uid, out SubmissionStorageComponent? submission))
             return;
 
-//I know this is so atrocious but I don't care right now
-    //    EntityPrototype? proto = Prototype(uid);
+        int stackCount = 1;
+        if (EntityManager.TryGetComponent<StackComponent>(args.Entity, out var stack))
+        {
+            stackCount = stack.Count;
+            _colonyBudget.AddToBudget(submission.RewardAmount * stackCount);
 
-      //  if (proto == null)
-       //     return;
-        Console.WriteLine("testtwo");
+            EntityManager.QueueDeleteEntity(args.Entity);
 
+        }
 
-        _colonyBudget.AddToBudget(submission.RewardAmount);
-        Console.WriteLine(_colonyBudget.GetBudget());
-        Console.WriteLine("testthree");
+        else
+        {
+            _colonyBudget.AddToBudget(submission.RewardAmount);
 
-        // Delete the submitted entity
-        EntityManager.QueueDeleteEntity(args.Entity);
-        Console.WriteLine("testfour");
+            EntityManager.QueueDeleteEntity(args.Entity);
+
+        }
+
 
     }
-}
+    }
+
