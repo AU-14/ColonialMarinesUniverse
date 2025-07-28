@@ -28,3 +28,5 @@ au14-tq-others-popup = {$user} applies a tourniquet to {$target}.
 au14-hs-user-popup = You pack hemostatic gauze into {$target}'s wounds.
 au14-hs-target-popup = {$user} pack hemostatic gauze into your wounds.
 au14-hs-others-popup = {$user} packs hemostatic gauze into {$target}'s wounds.
+
+au-pill-contents-speed-demon = This is speed demon, a dangerous drug
