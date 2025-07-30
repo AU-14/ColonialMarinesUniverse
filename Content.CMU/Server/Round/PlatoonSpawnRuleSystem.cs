@@ -6,6 +6,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Maps;
+using Content.Shared._RMC14.Rules;
 using Content.Shared.GameTicking.Components;
 
 namespace Content.Server.AU14.Round;
@@ -28,22 +29,29 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
         var govPlatoon = SelectedGovforPlatoon;
         var opPlatoon = SelectedOpforPlatoon;
 
-        // Fallback to default platoon if none selected
-        var selectedMap = _gameMapManager.GetSelectedMap();
-        if (selectedMap != null)
+        // Fetch the selected planet entity and its RMCPlanetMapPrototypeComponent
+        EntityUid? selectedPlanet = null;
+        RMCPlanetMapPrototypeComponent? planetComp = null;
+        foreach (var ent in _entityManager.EntityQuery<RMCPlanetMapPrototypeComponent>())
         {
-            if (govPlatoon == null && !string.IsNullOrEmpty(selectedMap.DefaultGovforPlatoon))
-                govPlatoon = _prototypeManager.Index<PlatoonPrototype>(selectedMap.DefaultGovforPlatoon);
-            if (opPlatoon == null && !string.IsNullOrEmpty(selectedMap.DefaultOpforPlatoon))
-                opPlatoon = _prototypeManager.Index<PlatoonPrototype>(selectedMap.DefaultOpforPlatoon);
+            selectedPlanet = ent.Owner;
+            planetComp = ent;
+            break; // Assume only one planet is active/selected
+        }
+
+        // Fallback to default platoon if none selected, using planet component
+        if (planetComp != null)
+        {
+            if (govPlatoon == null && !string.IsNullOrEmpty(planetComp.DefaultGovforPlatoon))
+                govPlatoon = _prototypeManager.Index<PlatoonPrototype>(planetComp.DefaultGovforPlatoon);
+            if (opPlatoon == null && !string.IsNullOrEmpty(planetComp.DefaultOpforPlatoon))
+                opPlatoon = _prototypeManager.Index<PlatoonPrototype>(planetComp.DefaultOpforPlatoon);
         }
 
         // Find all vendor markers in the map
         var query = _entityManager.EntityQuery<VendorMarkerComponent>(true);
         foreach (var marker in query)
         {
-
-
             var markerClass = marker.Class;
             var markerUid = marker.Owner;
             var transform = _entityManager.GetComponent<TransformComponent>(markerUid);

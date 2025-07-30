@@ -16,6 +16,14 @@ namespace Content.Server.AU14.Round
         [DataField("jobs")]
         public Dictionary<ProtoId<JobPrototype>, int>? Jobs { get; set; }
 
+        [DataField("addToShip")]
+        public bool AddToShip { get; set; } = false;
+
+        /// <summary>
+        /// If set, designates which ship(s) to add jobs to: "govfor", "opfor", or null/empty for all.
+        /// </summary>
+        [DataField("shipFaction")]
+        public string? ShipFaction { get; set; } = null;
 
     }
 
