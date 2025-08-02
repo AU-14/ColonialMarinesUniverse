@@ -7,6 +7,7 @@ using Robust.Shared.Prototypes;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Maps;
 using Content.Shared._RMC14.Rules;
+using Content.Shared.AU14.util;
 using Content.Shared.GameTicking.Components;
 
 namespace Content.Server.AU14.Round;
@@ -30,11 +31,9 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
         var opPlatoon = SelectedOpforPlatoon;
 
         // Fetch the selected planet entity and its RMCPlanetMapPrototypeComponent
-        EntityUid? selectedPlanet = null;
         RMCPlanetMapPrototypeComponent? planetComp = null;
         foreach (var ent in _entityManager.EntityQuery<RMCPlanetMapPrototypeComponent>())
         {
-            selectedPlanet = ent.Owner;
             planetComp = ent;
             break; // Assume only one planet is active/selected
         }
@@ -68,6 +67,9 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
             // Get vendor prototype for this marker class
             if (!platoon.VendorMarkersByClass.TryGetValue(markerClass, out var vendorProtoId))
                 continue;
+
+            // Logic to override player jobs based on platoon settings
+
 
             if (!_prototypeManager.TryIndex<EntityPrototype>(vendorProtoId, out var vendorProto))
                 continue;

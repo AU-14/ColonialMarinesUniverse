@@ -77767,47 +77767,6 @@ entities:
           showEnts: False
           occludes: True
           ent: null
-  - uid: 745
-    components:
-    - type: Transform
-      pos: -147.5,20.5
-      parent: 1
-    - type: ContainerContainer
-      containers:
-        entity_storage: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 746
-          - invalid
-        paper_label: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
-- proto: CMClosetRadiation
-  entities:
-  - uid: 747
-    components:
-    - type: Transform
-      pos: 1.5,-99.5
-      parent: 1
-- proto: CMClosetToolFilled
-  entities:
-  - uid: 748
-    components:
-    - type: Transform
-      pos: -38.5,-85.5
-      parent: 1
-  - uid: 749
-    components:
-    - type: Transform
-      pos: 1.5,-100.5
-      parent: 1
-  - uid: 750
-    components:
-    - type: Transform
-      pos: -153.5,-2.5
-      parent: 1
 - proto: CMCoatMessTech
   entities:
   - uid: 18
@@ -78084,16 +78043,7 @@ entities:
     components:
     - type: Transform
       parent: 729
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-  - uid: 746
-    components:
-    - type: Transform
-      parent: 745
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
+    - type: PhysEntityStorage
   - uid: 790
     components:
     - type: Transform
