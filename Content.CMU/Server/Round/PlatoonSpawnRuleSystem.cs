@@ -1,8 +1,5 @@
-using Content.Server.GameTicking;
+using System.Linq;
 using Content.Server.AU14.VendorMarker;
-using Content.Server.Chat.Managers;
-using Content.Shared.AU14;
-using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Maps;
@@ -16,7 +13,8 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
 {
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IGameMapManager _gameMapManager = default!;
+    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
+    private static readonly ISawmill Sawmill = Logger.GetSawmill("platoonspawn");
 
     // Store selected platoons in the system
     public PlatoonPrototype? SelectedGovforPlatoon { get; set; }
@@ -30,21 +28,111 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
         var govPlatoon = SelectedGovforPlatoon;
         var opPlatoon = SelectedOpforPlatoon;
 
-        // Fetch the selected planet entity and its RMCPlanetMapPrototypeComponent
-        RMCPlanetMapPrototypeComponent? planetComp = null;
-        foreach (var ent in _entityManager.EntityQuery<RMCPlanetMapPrototypeComponent>())
+        // Use the selected planet from AuRoundSystem
+        var planetComp = _auRoundSystem.GetSelectedPlanet();
+        if (planetComp == null)
         {
-            planetComp = ent;
-            break; // Assume only one planet is active/selected
+            Sawmill.Debug("[PlatoonSpawnRuleSystem] No selected planet found in AuRoundSystem.");
+            return;
         }
 
         // Fallback to default platoon if none selected, using planet component
-        if (planetComp != null)
+        if (govPlatoon == null && !string.IsNullOrEmpty(planetComp.DefaultGovforPlatoon))
+            govPlatoon = _prototypeManager.Index<PlatoonPrototype>(planetComp.DefaultGovforPlatoon);
+        if (opPlatoon == null && !string.IsNullOrEmpty(planetComp.DefaultOpforPlatoon))
+            opPlatoon = _prototypeManager.Index<PlatoonPrototype>(planetComp.DefaultOpforPlatoon);
+
+        // --- SHIP VENDOR MARKER LOGIC ---
+        if (planetComp != null && (planetComp.GovforInShip || planetComp.OpforInShip))
         {
-            if (govPlatoon == null && !string.IsNullOrEmpty(planetComp.DefaultGovforPlatoon))
-                govPlatoon = _prototypeManager.Index<PlatoonPrototype>(planetComp.DefaultGovforPlatoon);
-            if (opPlatoon == null && !string.IsNullOrEmpty(planetComp.DefaultOpforPlatoon))
-                opPlatoon = _prototypeManager.Index<PlatoonPrototype>(planetComp.DefaultOpforPlatoon);
+            foreach (var (shipUid, shipFaction) in _entityManager.EntityQuery<ShipFactionComponent>(true)
+                         .Select(s => (s.Owner, s)))
+            {
+                PlatoonPrototype? shipPlatoon = null;
+                if (shipFaction.Faction == "govfor" && planetComp.GovforInShip && govPlatoon != null)
+                    shipPlatoon = govPlatoon;
+                else if (shipFaction.Faction == "opfor" && planetComp.OpforInShip && opPlatoon != null)
+                    shipPlatoon = opPlatoon;
+                else
+                    continue;
+
+                Sawmill.Debug($"Looking for ship vendor markers on ship {shipUid}");
+                var shipMarkers = _entityManager.EntityQuery<VendorMarkerComponent>(true)
+                    .Where(m => m.Ship && _entityManager.GetComponent<TransformComponent>(m.Owner).ParentUid == shipUid)
+                    .ToList();
+                Sawmill.Debug($"Found {shipMarkers.Count} ship vendor markers on ship {shipUid}");
+                foreach (var marker in shipMarkers)
+                {
+                    var markerClass = marker.Class;
+                    var markerUid = marker.Owner;
+                    var transform = _entityManager.GetComponent<TransformComponent>(markerUid);
+                    Sawmill.Debug($"Processing ship marker {markerUid} (class {markerClass}) on ship {shipUid}");
+
+                    // --- DOOR MARKER LOGIC ---
+                    string? doorProtoId = null;
+                    switch (markerClass)
+                    {
+                        case PlatoonMarkerClass.LockedCommandDoor:
+                            doorProtoId = shipFaction.Faction == "govfor"
+                                ? "CMAirlockCommandGovforLocked"
+                                : shipFaction.Faction == "opfor"
+                                    ? "CMAirlockCommandOpforLocked"
+                                    : null;
+                            break;
+                        case PlatoonMarkerClass.LockedSecurityDoor:
+                            doorProtoId = shipFaction.Faction == "govfor"
+                                ? "CMAirlockSecurityGovforLocked"
+                                : shipFaction.Faction == "opfor"
+                                    ? "CMAirlockSecurityOpforLocked"
+                                    : null;
+                            break;
+                        case PlatoonMarkerClass.LockedGlassDoor:
+                            doorProtoId = shipFaction.Faction == "govfor"
+                                ? "CMAirlockGovforGlassLocked"
+                                : shipFaction.Faction == "opfor"
+                                    ? "CMAirlockOpforGlassLocked"
+                                    : null;
+                            break;
+                        case PlatoonMarkerClass.LockedNormalDoor:
+                            doorProtoId = shipFaction.Faction == "govfor"
+                                ? "CMAirlockGovforLocked"
+                                : shipFaction.Faction == "opfor"
+                                    ? "CMAirlockOpforLocked"
+                                    : null;
+                            break;
+                    }
+                    if (doorProtoId != null)
+                    {
+                        if (_prototypeManager.TryIndex<EntityPrototype>(doorProtoId, out var doorProto))
+                        {
+                            Sawmill.Debug($"Spawning door {doorProtoId} at {transform.Coordinates}");
+                            _entityManager.SpawnEntity(doorProtoId, transform.Coordinates);
+                            Sawmill.Debug($"Spawned door {doorProtoId} at {transform.Coordinates}");
+                        }
+                        else
+                        {
+                            Sawmill.Debug($"Could not find door proto {doorProtoId}");
+                        }
+                        continue;
+                    }
+
+                    // --- VENDOR MARKER LOGIC ---
+                    if (!shipPlatoon.VendorMarkersByClass.TryGetValue(markerClass, out var vendorProtoId))
+                    {
+                        Sawmill.Debug($"No vendor proto for class {markerClass} in platoon {shipPlatoon.ID}");
+                        continue;
+                    }
+                    Sawmill.Debug($"Found vendor proto {vendorProtoId} for class {markerClass}");
+                    if (!_prototypeManager.TryIndex<EntityPrototype>(vendorProtoId, out var vendorProto))
+                    {
+                        Sawmill.Debug($"Could not find vendor proto {vendorProtoId}");
+                        continue;
+                    }
+                    Sawmill.Debug($"Spawning vendor {vendorProto.ID} at {transform.Coordinates}");
+                    _entityManager.SpawnEntity(vendorProto.ID, transform.Coordinates);
+                    Sawmill.Debug($"Spawned vendor {vendorProto.ID} at {transform.Coordinates}");
+                }
+            }
         }
 
         // Find all vendor markers in the map
@@ -55,7 +143,6 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
             var markerUid = marker.Owner;
             var transform = _entityManager.GetComponent<TransformComponent>(markerUid);
 
-            // Determine which platoon to use
             PlatoonPrototype? platoon = null;
             if (marker.Govfor && govPlatoon != null)
                 platoon = govPlatoon;
@@ -64,17 +151,12 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
             else
                 continue;
 
-            // Get vendor prototype for this marker class
             if (!platoon.VendorMarkersByClass.TryGetValue(markerClass, out var vendorProtoId))
                 continue;
-
-            // Logic to override player jobs based on platoon settings
-
 
             if (!_prototypeManager.TryIndex<EntityPrototype>(vendorProtoId, out var vendorProto))
                 continue;
 
-            // Spawn vendor at marker location
             _entityManager.SpawnEntity(vendorProto.ID, transform.Coordinates);
         }
     }

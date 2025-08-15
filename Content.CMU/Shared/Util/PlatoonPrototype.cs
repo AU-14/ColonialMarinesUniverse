@@ -12,8 +12,15 @@ namespace Content.Shared.AU14.util;
         [IdDataField]
         public string ID { get; private set; } = default!;
 
+        [DataField(",language", required: false)]
+        public string Language { get; private set; } = string.Empty;
         [DataField("name", required: true)]
         public string Name { get; private set; } = string.Empty;
+
+
+        [DataField("reqList", required: false)]
+        public string Req { get; private set; } = string.Empty;
+//Curretly reqlist and languge are unused but putting here for future - eg
 
         [DataField("VendorToMarker")]
         public Dictionary<PlatoonMarkerClass, ProtoId<EntityPrototype>> VendorMarkersByClass { get; private set; } = new();
@@ -33,9 +40,6 @@ namespace Content.Shared.AU14.util;
         [DataField("jobClassOverride")]
         public Dictionary<PlatoonJobClass, string> JobClassOverride { get; private set; } = new();
 
-        [DataField("jobSlotOverrideGovfor")]
-        public Dictionary<ProtoId<JobPrototype>, int> JobSlotOverrideGovfor { get; private set; } = new();
-
-        [DataField("jobSlotOverrideOpfor")]
-        public Dictionary<ProtoId<JobPrototype>, int> JobSlotOverrideOpfor { get; private set; } = new();
+        [DataField("jobSlotOverride")]
+        public Dictionary<PlatoonJobClass, int> JobSlotOverride { get; private set; } = new();
     }
