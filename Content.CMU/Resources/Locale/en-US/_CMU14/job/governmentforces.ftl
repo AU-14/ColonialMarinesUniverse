@@ -56,3 +56,14 @@ AU14JobGOVFORRadioTelephoneOperator = Radio Telephone Operator
 au14-job-name-radiotelephoneoperator = Radio Telephone Operator
 au14-job-description-radiotelephoneoperator = Operate long-range comms. You're the link between command and the boots. Don’t drop it.
 au14-job-prefix-radiotelephoneoperator = RTO
+
+au14-job-prefix-AU14JobGOVFORPlatCoWYPMC = OPDIR
+au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanWYPMC = CLS
+au14-job-prefix-AU14JobGOVFORDCCWYPMC = DCC
+au14-job-prefix-AU14JobGOVFORPlatOpWYPMC = OPADJ
+au14-job-prefix-AU14JobGOVFORDSPilotWYPMC = PO
+au14-job-prefix-AU14JobGOVFORRadioTelephoneOperatorWYPMC = COMS
+au14-job-prefix-AU14JobGOVFORSectionSergeantWYPMC = PLDFR
+au14-job-prefix-AU14JobGOVFORSquadAutomaticRiflemanWYPMC = SG
+au14-job-prefix-AU14JobGOVFORSquadRiflemanWYPMC = CNTR
+au14-job-prefix-AU14JobGOVFORSquadSergeantWYPMC = SL
