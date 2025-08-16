@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "Taken from Monkestation2.0 at https://github.com/Monkestation/Monkestation2.0/blob/67175e73aa192336cd69ad61f2c4b42423a87969/monkestation/icons/mob/sprite_accessories/hair.dmi, https://github.com/Monkestation/Monkestation2.0/blob/cc984e4c53fc489f762fd36c8ca5c5c14670a9e7/icons/mob/species/human/human_face.dmi. hair_low_ponytail_alt made via modification by Orion",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "hair_irs",
+      "directions": 4
+    },
+    {
+      "name": "hair_low_bun",
+      "directions": 4
+    },
+    {
+      "name": "hair_low_ponytail",
+      "directions": 4
+    },
+    {
+      "name": "hair_low_ponytail_alt",
+      "directions": 4
+    },
+    {
+      "name": "hair_elegantbun",
+      "directions": 4
+    },
+    {
+      "name": "hair_waver",
+      "directions": 4
+    },
+    {
+      "name": "hair_flatpressed",
+      "directions": 4
+    },
+    {
+      "name": "hair_cia2",
+      "directions": 4
+    },
+    {
+      "name": "hair_cia3",
+      "directions": 4
+    },
+    {
+      "name": "hair_cia4",
+      "directions": 4
+    },
+    {
+      "name": "hair_cia5",
+      "directions": 4
+    }
+  ]
+}
