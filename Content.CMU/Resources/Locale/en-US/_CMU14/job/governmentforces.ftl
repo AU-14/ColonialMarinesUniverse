@@ -67,3 +67,20 @@ au14-job-prefix-AU14JobGOVFORSectionSergeantWYPMC = PLDFR
 au14-job-prefix-AU14JobGOVFORSquadAutomaticRiflemanWYPMC = SG
 au14-job-prefix-AU14JobGOVFORSquadRiflemanWYPMC = CNTR
 au14-job-prefix-AU14JobGOVFORSquadSergeantWYPMC = SL
+
+au14-job-prefix-AU14JobGOVFORPlatCoUPP = PLTCO
+au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanUPP = FMDC
+au14-job-prefix-AU14JobGOVFORDCCUPP = DCC
+au14-job-prefix-AU14JobGOVFORPlatOpUPP = CMSR
+au14-job-prefix-AU14JobGOVFORDSPilotUPP = DP
+au14-job-prefix-AU14JobGOVFORRadioTelephoneOperatorUPP = RTO
+au14-job-prefix-AU14JobGOVFORSectionSergeantUPP = PLDR
+au14-job-prefix-AU14JobGOVFORSquadAutomaticRiflemanUPP = MG
+au14-job-prefix-AU14JobGOVFORSquadRiflemanUPP = RFN
+au14-job-prefix-AU14JobGOVFORSquadSergeantUPP = SL
+
+au14-job-prefix-AU14JobGOVFORPlatCoCMBCIU = MRSHL
+au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanCMBCIU = TACMED
+au14-job-prefix-AU14JobGOVFORSectionSergeantCMBCIU = ULDR
+au14-job-prefix-AU14JobGOVFORSquadRiflemanCMBCIU = OFF
+au14-job-prefix-AU14JobGOVFORSquadSergeantCMBCIU = TLDR
