@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from CM-SS13 PvE at https://github.com/cmss13-devs/cmss13-pve/tree/master/icons/obj/items/clothing",
+  "copyright": "Original sprites by patogrone on discord and touched up by nzzy on discord.",
   "size": {
     "x": 32,
     "y": 32
@@ -9,10 +9,34 @@
   "states": [
     {
       "name": "equipped-HELMET",
-      "directions": 4
+      "directions": 4,
+      "delays": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
     },
     {
-      "name": "icon"
+      "name": "icon",
+      "delays": [
+        [
+          1,
+          1
+        ]
+      ]
     }
   ]
 }
