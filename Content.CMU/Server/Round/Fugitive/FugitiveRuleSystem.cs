@@ -75,7 +75,7 @@ public sealed class FugitiveRuleSystem : GameRuleSystem<FugitiveRuleComponent>
         {
             key = _stationRecords.AddRecordEntry(station.Value, new GeneralStationRecord
             {
-                Name = name,
+                Name = "Fugitive: " + name,
                 Fingerprint = fingerprint,
                 DNA = dna
             });

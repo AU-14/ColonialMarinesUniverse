@@ -22,6 +22,10 @@ namespace Content.Shared.AU14.util
         Deco3,
         Deco4,
         Deco5,
-        Deco6
+        Deco6,
+        LockedCommandDoor,
+        LockedSecurityDoor,
+        LockedGlassDoor,
+        LockedNormalDoor
     }
 }
