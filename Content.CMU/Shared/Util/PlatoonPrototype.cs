@@ -12,7 +12,7 @@ namespace Content.Shared.AU14.util;
         [IdDataField]
         public string ID { get; private set; } = default!;
 
-        [DataField(",language", required: false)]
+        [DataField("language", required: false)]
         public string Language { get; private set; } = string.Empty;
         [DataField("name", required: true)]
         public string Name { get; private set; } = string.Empty;
