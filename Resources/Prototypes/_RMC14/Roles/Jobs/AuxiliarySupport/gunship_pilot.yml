@@ -3,25 +3,25 @@
   id: CMPilotGunship
   name: cm-job-name-gunship-pilot
   description: cm-job-description-gunship-pilot
+  setPreference: false
   playTimeTracker: CMJobPilotGunship
-  requirements:
-  - !type:TotalJobsTimeRequirement
-    group: CMJobsDropship
-    time: 7200 # 2 hours
   ranks:
-    RMCRankSecondLT: []
+    RMCRankSecondLT:
+    - !type:RoleTimeRequirement
+      role: CMJobPilotGunship
+      time: 252000 # 70 hours
+    RMCRankChiefWarrantOfficer:
+    - !type:RoleTimeRequirement
+      role: CMJobPilotGunship
+      time: 90000 # 25 hours
+    RMCRankWarrantOfficer: []
   startingGear: CMGearPilotGunship
   icon: "CMJobIconPilotGunship"
   joinNotifyCrew: false
+  marineAuthorityLevel: 8
   supervisors: cm-job-supervisors-aso
   accessGroups:
   - Pilot
-  minimapIcon:
-    sprite: _RMC14/Interface/map_blips.rsi
-    state: gp
-  minimapBackground:
-   sprite: _RMC14/Interface/map_blips.rsi
-   state: background_command
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
@@ -44,6 +44,14 @@
     - type: RMCPointing
     - type: JobPrefix
       prefix: cm-job-prefix-gunship-pilot
+    - type: ViewIntelObjectives
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: gp
+      background:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: background_command
 
 - type: startingGear
   id: CMGearPilotGunship
@@ -61,10 +69,7 @@
   - type: SpawnPoint
     job_id: CMPilotGunship
   - type: Sprite
-    layers:
-    - sprite: Markers/jobs.rsi
-      state: green
-    - state: pilot
+    state: po_spawn
 
 - type: playTimeTracker
   id: CMJobPilotGunship

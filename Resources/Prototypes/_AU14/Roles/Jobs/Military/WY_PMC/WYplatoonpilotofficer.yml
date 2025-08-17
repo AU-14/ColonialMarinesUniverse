@@ -1,0 +1,50 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobGOVFORDSPilotWYPMC
+  name: PMC Pilot Officer
+  description: au14-job-description-govfordspilot
+  setPreference: false
+  canBeAntag: false
+  playTimeTracker: AU14JobGOVFORDSPilotWYPMC
+  ranks:
+    AU14RankWeYuSeniorCrewChief:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDSPilotWYPMC
+      time: 1800 # 30 hours
+    AU14RankWeYuCrewChief: []
+  startingGear: AU14GearGOVFORDSPilot
+  dummyStartingGear: AU14GearGOVFORDSPilotDummy
+  icon: "AU14JobIconPilotOfficer"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - augovforpilot
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 2
+        RMCSkillOverwatch: 1
+        RMCSkillPilot: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillSurgery: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORDSPilotWYPMC
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: playTimeTracker
+  id: AU14JobGOVFORDSPilotWYPMC
+  isHumanoid: true

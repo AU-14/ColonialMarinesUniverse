@@ -1,0 +1,31 @@
+- type: entity
+  parent: CMPersonalStorageBase
+  id: AU14SlingSatchelBlue
+  name: Blue sling satchel
+  description: A very sturdy satchel. This one has a sling strap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Satchel/blueslingsatchel.rsi
+  - type: Storage
+    grid:
+    - 0,0,14,1 # 15
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+- type: entity
+  parent: CMPersonalStorageBase
+  id: AU14SlingSatchelBlack
+  name: Black sling satchel
+  description: A very sturdy satchel. This one has a sling strap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Satchel/blackslingsatchel.rsi
+  - type: Storage
+    grid:
+    - 0,0,14,1 # 15
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno

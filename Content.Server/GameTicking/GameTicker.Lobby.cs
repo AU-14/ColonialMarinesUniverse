@@ -4,11 +4,13 @@ using Content.Server.Station.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using System.Text;
+using Content.Server.AU14.Round;
 
 namespace Content.Server.GameTicking
 {
     public sealed partial class GameTicker
-    {
+    {    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
+
         [ViewVariables]
         private readonly Dictionary<NetUserId, PlayerGameStatus> _playerGameStatuses = new();
 
@@ -72,7 +74,7 @@ namespace Content.Server.GameTicking
                                     Loc.GetString("game-ticker-no-map-selected"));
             }
 
-            var planetName = _distressSignal.SelectedPlanetMapName ??
+            var planetName = _auRoundSystem.SelectedPlanetMapName ??
                 Loc.GetString("game-ticker-no-map-selected");
             var gmTitle = Loc.GetString(preset.ModeTitle);
             var desc = Loc.GetString(preset.Description);

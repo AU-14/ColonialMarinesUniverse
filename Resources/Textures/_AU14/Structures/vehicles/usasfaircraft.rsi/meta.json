@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "Taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/6c674d5fc1222577b66f7b1665a3911d38175bd6/icons/obj/vehicles/aircraft_prop.dmi",
+  "size": {
+    "x": 256,
+    "y": 256
+  },
+  "states": [
+    {
+      "name": "evac_uscm"
+    },
+    {
+      "name": "evac_usaf"
+    }
+  ]
+}

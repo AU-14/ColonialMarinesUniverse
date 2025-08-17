@@ -1,0 +1,391 @@
+- type: entity
+  parent: RMCHelmetGarbBase
+  id: AU14HelmetGarbM10SkrimJungle
+  name: Jungle M10 Helmet Cover
+  description: A camo cover for the M10 helmet. Seems a bit redundant since the helmet is already green...
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
+      state: helmet
+
+- type: entity
+  parent: RMCHelmetGarbBase
+  id: AU14HelmetGarbM10SkrimDesert
+  name: Desert M10 Helmet Cover
+  description: A camo cover for the M10 helmet.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMHelmetGarb/deserthelmetcover.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMHelmetGarb/deserthelmetcover.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMHelmetGarb/deserthelmetcover.rsi
+      state: helmet
+
+- type: entity
+  parent: RMCHelmetGarbBase
+  id: AU14HelmetGarbM10SkrimSnow
+  name: Snow M10 Helmet Cover
+  description: A camo cover for the M10 helmet.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMHelmetGarb/snowhelmetcover.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMHelmetGarb/snowhelmetcover.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMHelmetGarb/snowhelmetcover.rsi
+      state: helmet
+
+- type: entity
+  parent: RMCHelmetGarbBase
+  id: AU14HelmetGarbM10RainCover
+  name: M10 Helmet Rain Cover
+  description: A rain cover for the M10 helmet.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMHelmetGarb/rainhelmetcover.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMHelmetGarb/rainhelmetcover.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMHelmetGarb/rainhelmetcover.rsi
+      state: helmet
+
+- type: entity
+  parent: RMCHelmetGarbBase
+  id: AU14HelmetGarbM10Netting
+  name: M10 Helmet Netting
+  description: A netting cover for the M10 helmet.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMHelmetGarb/helmetnetting.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMHelmetGarb/helmetnetting.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMHelmetGarb/helmetnetting.rsi
+      state: helmet
+
+- type: entity
+  parent: RMCHelmetGarbBase
+  id: AU14HelmetGarbRiotVisor
+  name: riot visor
+  description: A visor that can be attached to many helmets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMHelmetGarb/riotvisor.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMHelmetGarb/riotvisor.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMHelmetGarb/riotvisor.rsi
+      state: helmet
+
+#armor garb
+
+#Jungle
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbJungleBracer
+  name: M3 Jungle Bracers
+  description: An armor piece made to be used in combination with M3 pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMArmorGarb/junglebracers.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMArmorGarb/junglebracers.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMArmorGarb/junglebracers.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbJungleGroinPlate
+  name: M3 Jungle Groin Plate
+  description: An armor piece made to be used in combination with M3 pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbJungleNeckGuard
+  name: M3 Jungle Neck Guard
+  description: An armor piece made to be used in combination with M3 pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbJungleShinGuards
+  name: M3 Jungle Shin Guards
+  description: An armor piece made to be used in combination with M3 pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbJungleShoulderPads
+  name: M3 Jungle Shoulder Pads
+  description: An armor piece made to be used in combination with M3 pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbJungleThighGuards
+  name: M3 Jungle Thigh Guards
+  description: An armor piece made to be used in combination with M3 pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMArmorGarb/junglethighguards.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMArmorGarb/junglethighguards.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMArmorGarb/junglethighguards.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbJunglePoncho
+  name: M3 Jungle Rain Poncho
+  description: A poncho made to be used in combination with M3 pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMArmorGarb/jungleponcho.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMArmorGarb/jungleponcho.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMArmorGarb/jungleponcho.rsi
+      state: helmet
+
+#desert
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbDesertBracer
+  name: M3 Desert Bracers
+  description: An armor piece made to be used in combination with M3 pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMArmorGarb/desertbracers.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMArmorGarb/desertbracers.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMArmorGarb/desertbracers.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbDesertGroinPlate
+  name: M3 Desert Groin Plate
+  description: An armor piece made to be used in combination with M3 pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMArmorGarb/desertgroinplate.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMArmorGarb/desertgroinplate.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMArmorGarb/desertgroinplate.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbDesertNeckGuard
+  name: M3 Desert Neck Guard
+  description: An armor piece made to be used in combination with M3 pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMArmorGarb/desertneckguard.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMArmorGarb/desertneckguard.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMArmorGarb/desertneckguard.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbDesertShinGuards
+  name: M3 Desert Shin Guards
+  description: An armor piece made to be used in combination with M3 pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMArmorGarb/desertshinguards.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMArmorGarb/desertshinguards.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMArmorGarb/desertshinguards.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbDesertShoulderPads
+  name: M3 Desert Shoulder Pads
+  description: An armor piece made to be used in combination with M3 pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMArmorGarb/desertshoulderpads.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMArmorGarb/desertshoulderpads.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMArmorGarb/desertshoulderpads.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbDesertThighGuards
+  name: M3 Desert Thigh Guards
+  description: An armor piece made to be used in combination with M3 pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMArmorGarb/desertthighguard.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMArmorGarb/desertthighguard.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMArmorGarb/desertthighguard.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbDesertPoncho
+  name: M3 Desert Rain Poncho
+  description: A poncho made to be used in combination with M3 pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMArmorGarb/desertponcho.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMArmorGarb/desertponcho.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMArmorGarb/desertponcho.rsi
+      state: helmet
+
+#Universal
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbShotgunShellHolder
+  name: M3 Shotgun Shell Holder
+  description: A shotgun shell holder made to be attached to the outside of M3 pattern armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMArmorGarb/shotgunwebbing.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMArmorGarb/shotgunwebbing.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMArmorGarb/shotgunwebbing.rsi
+      state: helmet
+
+#armor garb cases
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitJungleArmor
+  name: M3 Jungle Armor Customization Kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,0
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+    - id: AU14ArmorGarbJungleBracer
+    - id: AU14ArmorGarbJungleThighGuards
+    - id: AU14ArmorGarbJungleShoulderPads
+    - id: AU14ArmorGarbJungleShinGuards
+    - id: AU14ArmorGarbJungleNeckGuard
+    - id: AU14ArmorGarbJungleGroinPlate
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitDesertArmor
+  name: M3 Desert Armor Customization Kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,12,0
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+    - id: AU14ArmorGarbDesertBracer
+    - id: AU14ArmorGarbDesertThighGuards
+    - id: AU14ArmorGarbDesertShoulderPads
+    - id: AU14ArmorGarbDesertShinGuards
+    - id: AU14ArmorGarbDesertNeckGuard
+    - id: AU14ArmorGarbDesertGroinPlate

@@ -1,0 +1,46 @@
+﻿- type: entity
+  parent: BaseStructureDynamic
+  id: AU14HESCOBarrier
+  name: HESCO barrier
+  description: A sand filled box designed to stop bullets.
+  components:
+  - type: Anchorable
+  - type: Transform
+    anchored: true
+  - type: InteractionOutline
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Construction
+    graph: AU14HESCOGraph
+    node: nodeFilled
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 16000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 16000
+      behaviors:
+      - !type:EmptyAllContainersBehaviour
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Sprite
+    sprite: _AU14/Structures/hesco.rsi
+    state: sand_wall
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.49,-0.45,0.49,-0.15"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+  - type: BarricadeBlock
+    bidirectional: true
+    blocking: 85

@@ -1,0 +1,54 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobGOVFORSectionSergeantUPP
+  name: Platoon Leader
+  description: au14-job-description-govforSSG
+  setPreference: false
+  playTimeTracker: AU14JobGOVFORSectionSergeantUPP
+  ranks:
+    UPP_Plutonowy:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSectionSergeantUPP
+      time: 1800 # 30 hours
+    UPP_StarschySerzhant: []
+  startingGear: AU14GearGOVFORSectionSergeant
+  dummyStartingGear: AU14GearGOVFORPlatoonSergantDummy
+  icon: "AU14JobIconPlatoonSarge"
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - augovforcommand
+  overwatchSortPriority: -6
+  overwatchShowName: true
+  overwatchRoleName: Platoon Sergeant
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 2
+        RMCSkillCqc: 1
+        RMCSkillEndurance: 2
+        RMCSkillEngineer: 3
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSectionSergeantUPP
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: MarineOrders
+  hidden: false
+
+- type: playTimeTracker
+  id: AU14JobGOVFORSectionSergeantUPP
+  isHumanoid: true

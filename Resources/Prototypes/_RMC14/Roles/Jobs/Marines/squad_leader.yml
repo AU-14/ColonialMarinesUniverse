@@ -3,43 +3,22 @@
   id: CMSquadLeader
   name: cm-job-name-squad-leader
   description: cm-job-description-squad-leader
+  setPreference: false
   playTimeTracker: CMJobSquadLeader
-  requirements:
-  - !type:RoleTimeRequirement
-    role: CMJobHospitalCorpsman
-    time: 3600 # 1 hour
-  - !type:RoleTimeRequirement
-    role: CMJobCombatTech
-    time: 3600 # 1 hour
-  - !type:RoleTimeRequirement
-    role: CMJobFireteamLeader
-    time: 18000 # 5 hours
-  - !type:DepartmentTimeRequirement
-    department: CMSquad
-    time: 36000 # 10 hours
   ranks:
-    RMCRankGunnerySergeant:
-    - !type:RoleTimeRequirement
-      role: CMJobSquadLeader
-      time: 252000 # 70 hours
-    RMCRankStaffSergeant:
-    - !type:RoleTimeRequirement
-      role: CMJobSquadLeader
-      time: 36000 # 10 hours
-    RMCRankSergeant: []
+    RMCRankGunnerySergeant: []
+    RMCRankStaffSergeant: []
   startingGear: CMGearSquadLeader
   dummyStartingGear: CMGearSquadLeaderEquipped
   icon: "CMJobIconSquadLeader"
   joinNotifyCrew: false
   supervisors: cm-job-supervisors-co
+  marineAuthorityLevel: 2
   accessGroups:
   - SquadLeader
-  overwatchSortPriority: -5
+  overwatchSortPriority: -6
   overwatchShowName: true
   overwatchRoleName: Squad Leader
-  minimapIcon:
-    sprite: _RMC14/Interface/map_blips.rsi
-    state: leader
   roleWeight: 1
   special:
   - !type:AddComponentSpecial
@@ -49,7 +28,7 @@
         RMCSkillConstruction: 2
         RMCSkillCqc: 1
         RMCSkillEndurance: 2
-        RMCSkillEngineer: 2
+        RMCSkillEngineer: 3
         RMCSkillFirearms: 1
         RMCSkillFireman: 1
         RMCSkillIntel: 1
@@ -67,6 +46,13 @@
     - type: RMCPointing
     - type: JobPrefix
       prefix: cm-job-prefix-squad-leader
+    - type: ViewIntelObjectives
+    - type: CommandAccent
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: leader
+    - type: RMCTrackable
 
 - type: startingGear
   id: CMGearSquadLeader
@@ -96,10 +82,7 @@
   - type: SpawnPoint
     job_id: CMSquadLeader
   - type: Sprite
-    layers:
-    - sprite: Markers/jobs.rsi
-      state: green
-    - state: squad_leader
+    state: leader_spawn
 
 - type: entity
   parent: CMSpawnPointSquadLeader
@@ -109,6 +92,8 @@
   - type: SquadSpawner
     squad: SquadAlpha
     role: CMSquadLeader
+  - type: Sprite
+    state: leader_spawn_alpha
 
 - type: entity
   parent: CMSpawnPointSquadLeader
@@ -118,6 +103,8 @@
   - type: SquadSpawner
     squad: SquadBravo
     role: CMSquadLeader
+  - type: Sprite
+    state: leader_spawn_bravo
 
 - type: entity
   parent: CMSpawnPointSquadLeader
@@ -127,6 +114,8 @@
   - type: SquadSpawner
     squad: SquadCharlie
     role: CMSquadLeader
+  - type: Sprite
+    state: leader_spawn_charlie
 
 - type: entity
   parent: CMSpawnPointSquadLeader
@@ -136,4 +125,22 @@
   - type: SquadSpawner
     squad: SquadDelta
     role: CMSquadLeader
+  - type: Sprite
+    state: leader_spawn_delta
 
+- type: randomHumanoidSettings
+  parent: RMCRandomHumanoidBase
+  id: RMCSquadLeader
+  components:
+  - type: GhostRole
+    name: cm-job-name-squad-leader
+    description: cm-job-description-squad-leader
+    rules: ghost-role-information-nonantagonist-rules
+    reregister: false
+    raffle:
+      settings: default
+    job: CMSquadLeader
+    requirements:
+    - !type:RoleTimeRequirement
+      role: CMJobSquadLeader
+      time: 1

@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "Taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/2c86ac8909c70bd9992f52896dedb25b3b3beff0/icons/obj/vehicles/van_prop.dmi",
+  "size": {
+    "x": 96,
+    "y": 96
+  },
+  "states": [
+    {
+      "name": "van_base",
+      "directions": 4
+    },
+    {
+      "name": "van_broken",
+      "directions": 4
+    },
+    {
+      "name": "truck_base",
+      "directions": 4
+    },
+    {
+      "name": "truck_broken",
+      "directions": 4
+    }
+  ]
+}

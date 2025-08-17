@@ -1,0 +1,9 @@
+﻿- files: ["warcry.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Created by TyAshley (AllenTheGreat) at commit 7f6c7cd82943dbc9a1fe8a79d6a924ac600b3fdb, modified by Dutch-VanDerLinde at https://github.com/RMC-14/RMC-14/pull/3427/files, then modified by Orion Blackburn for use in AU14"
+  source: "https://github.com/TyAshley"
+
+- files: ["corpsman.png"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Created by Orion Blackburn"
+  source: "https://github.com/troytroy400"

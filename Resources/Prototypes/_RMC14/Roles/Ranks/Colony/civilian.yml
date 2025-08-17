@@ -16,8 +16,8 @@
   prefix: Dr.
 
 - type: rank
-  id: RMCRankCivilianProfessor
-  name: Professor
+  id: RMCRankCivilianScientist
+  name: scientist
   prefix: Prof.
 
 - type: rank

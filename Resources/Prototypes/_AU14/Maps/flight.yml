@@ -1,0 +1,59 @@
+- type: gameMap
+  id: Flight
+  mapName: Flight
+  mapPath: /Maps/_AU14/flight.yml
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    Flight:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Flight'
+        - type: StationJobs
+          availableJobs:
+            AU14JobCivilianColonist: [0, 0]
+            AU14JobCivilianFoodServiceWorker: [0, 0]
+            AU14JobCivilianJournalist: [0, 0]
+            AU14JobCivilianColonySynthetic: [0, 0]
+
+            # Colony Command (non department)
+            AU14JobCivilianCorporateLiaison: [0, 0]
+            AU14JobCivilianColonyAdministrator: [0, 0]
+
+            # Security/LEO
+            AU14JobCivilianCWPSRanger: [0, 0]
+
+            # Engineering/Logi
+            AU14JobCivilianForeman: [0, 0]
+            AU14JobCivilianFreightSystemsSpecialist: [0, 0]
+            AU14JobCivilianEngineer: [0, 0]
+            AU14JobCivilianWasteManagementSpecialist: [0, 0]
+
+            # Medical
+            AU14JobCivilianPhysician: [0, 0]
+            AU14JobCivilianNurse: [0, 0]
+            AU14JobCivilianEthicsAndWellnessAdvisor: [0, 0]
+            AU14JobCivilianEmergencyResponseOfficer: [0, 0]
+
+            # Other
+
+            # CLF
+            AU14JobCLFGuerilla: [10, 10]
+            AU14JobCLFPhysician: [1, 1]
+            AU14JobCLFMachineGunner: [1, 1]
+            AU14JobCLFCellLeader: [1, 1]
+
+            # USCM
+            AU14JobGOVFORPlatCo: [1, 1]
+            AU14JobGOVFORPlatOp: [1, 1]
+            AU14JobGOVFORDSPilot: [1, 1]
+            AU14JobGOVFORDCC: [1, 1]
+            AU14JobGOVFORSectionSergeant: [1, 1]
+            AU14JobGOVFORSquadSergeant: [2, 2]
+            AU14JobGOVFORSquadRifleman: [3, 3]
+            AU14JobGOVFORRadioTelephoneOperator: [1, 1]
+            AU14JobGOVFORSquadAutomaticRifleman: [2, 2]
+            AU14JobGOVFORPlatoonCorpsman: [1, 1]

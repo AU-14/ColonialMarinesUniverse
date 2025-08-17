@@ -1,0 +1,385 @@
+- type: entity
+  parent: RMCCassettePlayer
+  id: AU14CassettePlayerBlue
+  name: blue cassette player
+  description: A cassette player that first hit the market over 100 years ago. Crazy how these never went out of style.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/cassette_player.rsi
+    state: walkman_1
+  - type: Item
+    size: Small
+  - type: Clothing
+    slots:
+    - ears
+  - type: CassettePlayer
+
+- type: entity
+  parent: RMCCassettePlayer
+  id: AU14CassettePlayerGreen
+  name: green cassette player
+  description: A cassette player that first hit the market over 100 years ago. Crazy how these never went out of style.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/cassette_player.rsi
+    state: walkman_2
+  - type: Item
+    size: Small
+  - type: Clothing
+    slots:
+    - ears
+  - type: CassettePlayer
+
+- type: entity
+  parent: RMCCassettePlayer
+  id: AU14CassettePlayerPink
+  name: pink cassette player
+  description: A cassette player that first hit the market over 100 years ago. Crazy how these never went out of style.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/cassette_player.rsi
+    state: walkman_3
+  - type: Item
+    size: Small
+  - type: Clothing
+    slots:
+    - ears
+  - type: CassettePlayer
+
+- type: entity
+  parent: RMCCassettePlayer
+  id: AU14CassettePlayerOrange
+  name: orange cassette player
+  description: A cassette player that first hit the market over 100 years ago. Crazy how these never went out of style.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/cassette_player.rsi
+    state: walkman_4
+  - type: Item
+    size: Small
+  - type: Clothing
+    slots:
+    - ears
+  - type: CassettePlayer
+
+- type: entity
+  parent: RMCCassettePlayer
+  id: AU14CassettePlayerRainbow
+  name: rainbow cassette player
+  description: A cassette player that first hit the market over 100 years ago. Crazy how these never went out of style.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/cassette_player.rsi
+    state: walkman_5
+  - type: Item
+    size: Small
+  - type: Clothing
+    slots:
+    - ears
+  - type: CassettePlayer
+
+- type: entity
+  parent: RMCCassettePlayer
+  id: AU14CassettePlayerGray
+  name: gray cassette player
+  description: A cassette player that first hit the market over 100 years ago. Crazy how these never went out of style.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/cassette_player.rsi
+    state: walkman
+  - type: Item
+    size: Small
+  - type: Clothing
+    slots:
+    - ears
+  - type: CassettePlayer
+
+- type: entity
+  parent: RMCCassettePlayer
+  id: AU14CassettePlayerNeon
+  name: neon cassette player
+  description: A cassette player that first hit the market over 100 years ago. Crazy how these never went out of style.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/cassette_player.rsi
+    state: walkman_6
+  - type: Item
+    size: Small
+  - type: Clothing
+    slots:
+    - ears
+  - type: CassettePlayer
+
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapeRisingSun
+  name: Rising sun cassette
+  components:
+  - type: Sprite
+    state: cassette_rising_sun
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg
+
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapeBlueStripe
+  name: Blue stripe cassette
+  components:
+  - type: Sprite
+    state: cassette_orange_blue
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg
+
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapeNeon
+  name: Neon cassette
+  components:
+  - type: Sprite
+    state: cassette_aesthetic
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg
+
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapePurple
+  name: Purple cassette
+  components:
+  - type: Sprite
+    state: cassette_purple
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg
+
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapePartyApproved
+  name: UPP cassette
+  description: "A plastic cassette tape. This one is labled 'CULTURAL INSTRUCTION TAPE – UNION ARCHIVE. NOT FOR LISTENING MORE THAN 15 MINUTES AND ONLY DURING PERMITTED LABOR BREAKS'"
+  components:
+  - type: Sprite
+    state: cassette_camo
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg
+
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapeTan
+  name: Tan cassette
+  description: A plastic cassette tape. This one smells faintly of burning oil fields.
+  components:
+  - type: Sprite
+    state: cassette_tan
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg
+
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapeTWE
+  name: TWE cassette
+  description: "A plastic cassette tape. This one is labeled 'A Taste of Her Majesty's Land - Songs from the Three Worlds Empire.'"
+  components:
+  - type: Sprite
+    state: cassette_dam
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg
+
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapeWY
+  name: Weyland-Yutani cassette
+  components:
+  - type: Sprite
+    state: cassette_weya
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg
+
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapeGreen
+  name: Green cassette
+  components:
+  - type: Sprite
+    state: cassette_green
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg
+
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapePink
+  name: Pink striped cassette
+  components:
+  - type: Sprite
+    state: cassette_pink_stripe
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapeRainbow
+  name: Rainbow cassette
+  components:
+  - type: Sprite
+    state: cassette_rainbow
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg
+
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapeRedStripe
+  name: Red stripe cassette
+  components:
+  - type: Sprite
+    state: cassette_red_stripe
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg
+
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapeRedBlack
+  name: Red black cassette
+  components:
+  - type: Sprite
+    state: cassette_red_black
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg
+
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapeOcean
+  name: Ocean cassette
+  components:
+  - type: Sprite
+    state: cassette_ocean
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg
+
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapeWhite
+  name: White cassette
+  components:
+  - type: Sprite
+    state: cassette_regulation
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg
+
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapeRedDirt
+  name: Red dirt cassette
+  components:
+  - type: Sprite
+    state: cassette_solaris
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg
+
+- type: entity
+  parent: RMCCassetteTapeBase
+  id: AU14CassetteTapeCLF
+  name: CLF cassette
+  components:
+  - type: Sprite
+    state: cassette_worstmap
+  - type: Item
+    size: Small
+  - type: CassetteTape
+    songs:
+    - /Audio/_RMC14/Lobby/enemy_is_unknown.ogg
+    - /Audio/_RMC14/Lobby/Time_Is_Running_Out.ogg
+    - /Audio/_RMC14/Hijack/storm_the_iron_hive.ogg
+    - /Audio/_RMC14/Hijack/Last_Stand.ogg

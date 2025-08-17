@@ -1,0 +1,26 @@
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14UPPArmor
+  name: UPP Armor
+  description: A set of Union of Progressive Peoples armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/uppstandardarmor.rsi
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14UPPArmorMinimalistic
+  name: Minimalistic UPP Armor
+  description: A set of Minimalistic Union of Progressive Peoples armor. This pair is quite small compared to the standard, but should provide a similar amount of protection, or at least you hope.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/upplightarmor.rsi
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14UPPArmorBulky
+  name: Bulky UPP Armor
+  description: A set of quite bulky Union of Progressive Peoples armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/upplargearmor.rsi

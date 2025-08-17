@@ -1,0 +1,157 @@
+- type: entity
+  parent: CMBaseWeaponRifle
+  name: Kramer Assault Rifle
+  id: AU14WeaponRifleKramerAR
+  description: Alternately referred to as the Kramer or KAR, it is an automatic assault rifle manufactured by Kramer Metallarbeiten GmBH and is used by many military forces across the United Americas.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/LACN/kramer.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/LACN/kramer.rsi
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: Gun
+    selectedMode: FullAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    soundGunshot:
+      collection: CMM54CShoot
+    shotsPerBurst: 5
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilUnwielded: 5
+    scatterWielded: 5
+    scatterUnwielded: 25
+    baseFireRate: 6
+    burstScatterMult: 2
+    modifiers:
+      Burst:
+        fireDelay: 0.1665
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+      FullAuto:
+        fireDelay: 0
+        maxScatterModifier: 26
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 4
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.15
+    accuracyMultiplierUnwielded: 0.65
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14WeaponRifleKramerMagazineStandard
+          - AU14WeaponRifleKramerMagazineAP
+        startingItem: AU14WeaponRifleKramerMagazineStandard
+  - type: GunDamageModifier
+    multiplier: 1.1
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentMagneticHarness
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: -0.18, 0.16
+
+- type: entity
+  parent: AU14WeaponRifleKramerAR
+  id: AU14WeaponRifleKramerARAP
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14WeaponRifleKramerMagazineStandard
+          - AU14WeaponRifleKramerMagazineAP
+        startingItem: AU14WeaponRifleKramerMagazineAP
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14WeaponRifleKramerMagazineStandard
+  name: "Kramer magazine (10x24mm)"
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14WeaponRifleKramerMagazineStandard
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mm
+    proto: CMCartridgeRifle10x24mm
+    capacity: 40
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/kramermag.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifle
+
+- type: entity
+  parent: AU14WeaponRifleKramerMagazineStandard
+  id: AU14WeaponRifleKramerMagazineAP
+  name: "Kramer AP magazine (10x24mm)"
+  suffix: AP
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14WeaponRifleKramerMagazineAP
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mmAP
+    proto: CMCartridgeRifle10x24mmAP
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/kramermag.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifleAP
+
+- type: Tag
+  id: AU14WeaponRifleKramerAR
+
+- type: Tag
+  id: AU14WeaponRifleKramerMagazineStandard
+
+- type: Tag
+  id: AU14WeaponRifleKramerMagazineAP

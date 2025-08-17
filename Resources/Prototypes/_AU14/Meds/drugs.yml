@@ -1,0 +1,116 @@
+- type: reagent
+  id: AU14DrugSpeedDemon
+  name: reagent-name-speed-demon
+  desc: reagent-desc-speed-demon
+  color: "#8A2BE2"
+  overdose: 15
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: bitter
+  metabolisms:
+    Narcotic:
+      metabolismRate: 0.4
+      effects:
+        - !type:MovespeedModifier
+          walkSpeedModifier: 1.3
+          sprintSpeedModifier: 1.34
+        - !type:HealthChange
+          conditions:
+            - !type:ReagentThreshold
+              min: 40
+          damage:
+            types:
+              Poison: 2
+        - !type:HealthChange
+          conditions:
+            - !type:ReagentThreshold
+              min: 80
+          damage:
+            types:
+              Poison: 4
+        - !type:AdjustReagent
+          conditions:
+            - !type:ReagentThreshold
+              reagent: ChloralHydrate
+              min: 1
+          reagent: ChloralHydrate
+          amount: -10
+
+
+- type: entity
+  id: AU14DrugDealerDrugBottle
+  parent: PillCanister
+  name: Speed Demon Bottle
+  components:
+    - type: Label
+      currentLabel: Speed Demon
+    - type: StorageFill
+      contents:
+        - id: AU14PillSpeedDemon
+          amount: 5
+
+- type: entity
+  id: AU14PillSpeedDemon
+  parent: CMPill
+  name: Speed Demon Pill
+  description: A pill containing the dangerous street drug Speed Demon.
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: AU14DrugSpeedDemon
+          Quantity: 15
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: au-pill-contents-speed-demon
+
+
+
+- type: entity
+  parent: PillCanister
+  id: AU14PillBottleSpaceDrugs
+  name: Bottle of LSD Pills
+  components:
+  - type: Label
+    currentLabel: Drugs
+  - type: StorageFill
+    contents:
+    - id: PillSpaceDrugs
+      amount: 5
+
+
+- type: entity
+  id: AU14PillRMCPsilocybin
+  parent: CMPill
+  name: Grounded Mushrooms Pill
+  description: A pill containing the psychoactive compound Psilocybin.
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: RMCPsilocybin
+          Quantity: 15
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: au-pill-contents-psilocybin
+
+- type: entity
+  parent: PillCanister
+  id: AU14PillBottleRMCPsilocybin
+  name: Bottle of Psilocybin Pills
+  components:
+  - type: Label
+    currentLabel: RMCPsilocybin
+  - type: StorageFill
+    contents:
+    - id: AU14PillRMCPsilocybin
+      amount: 5

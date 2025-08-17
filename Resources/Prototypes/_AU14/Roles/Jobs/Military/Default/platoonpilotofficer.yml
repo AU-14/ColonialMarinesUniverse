@@ -1,0 +1,78 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobGOVFORDSPilot
+  name: au14-job-name-govfordspilot
+  description: au14-job-description-govfordspilot
+  setPreference: true
+  canBeAntag: false
+  playTimeTracker: AU14JobGOVFORDSPilot
+  ranks:
+    RMCRankCaptain:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDSPilot
+      time: 7200 # 120 hours
+    RMCRankFirstLT:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDSPilot
+      time: 3600 # 60 hours
+    RMCRankSecondLT: []
+  startingGear: AU14GearGOVFORDSPilot
+  dummyStartingGear: AU14GearGOVFORDSPilotDummy
+  icon: "AU14JobIconPilotOfficer"
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - augovforpilot
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 2
+        RMCSkillOverwatch: 1
+        RMCSkillPilot: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillSurgery: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-govfordspilot
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearGOVFORDSPilot
+  equipment:
+    id: AU14IDCardGOVFORDSPilot
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORDSPilot
+  name: Spawn Point GOVFOR Dropship Pilot
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORDSPilot
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobGOVFORDSPilot
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORDSPilotDummy
+  equipment:
+    outerClothing: AU14USASFICPS2
+    shoes: CMBootsBrown
+    mask: AU14MaskUSASFPilotOxygen
+    head: AU14USASFAirCrewHelmet
+    jumpsuit: AU14USASFPilotJumpsuit

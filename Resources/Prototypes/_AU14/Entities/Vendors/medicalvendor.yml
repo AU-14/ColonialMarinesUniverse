@@ -1,0 +1,120 @@
+﻿- type: entity
+  parent: ColMarTechBase
+  id: AU14GeneralMedicalVendor
+  name: WeYu Medical Supply Vendor
+  description: An automated supply vendor hooked up to a storage of medical supplies.
+  suffix: AU14 MED
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/med.rsi
+    layers:
+    - state: "off"
+    - state: "normal-unshaded"
+  - type: CMAutomatedVendor
+    sections:
+    - name: General Medical Supplies
+      entries:
+      - id: CMOintment10
+        amount: 30
+      - id: AU14HemostaticGauzePacket
+        amount: 30
+      - id: AU14Tourniquet
+        amount: 15
+      - id: CMBurnKit10
+        amount: 15
+      - id: CMTraumaKit10
+        amount: 15
+      - id: CMSurgicalLine
+        amount: 3
+      - id: CMSynthGraft
+        amount: 3
+      - id: CMSyringe
+        amount: 10
+    - name: Pill Bottles
+      entries:
+      - id: CMPillCanisterBicaridine
+        amount: 5
+      - id: CMPillCanisterDexalin
+        amount: 5
+      - id: CMPillCanisterDylovene
+        amount: 5
+      - id: CMPillCanisterInaprovaline
+        amount: 5
+      - id: CMPillCanisterKelotane
+        amount: 5
+      - id: CMPillCanisterTricordrazine
+        amount: 5
+      - id: AU14PillCanisterCryoxadone
+        amount: 1
+      - id: AU14PillCanisterLeporazine
+        amount: 1
+      - id: AU14PillCanisterImidazoline
+        amount: 1
+      - id: AU14PillCanisterEthylredoxrazine
+        amount: 1
+      - id: AU14PillCanisterAlbuterol
+        amount: 1
+#      - id: CMPillCanisterPeridaxon
+#      - id: CMPillCanisterTramadol
+    - name: Injectors
+      entries:
+      - id: CMEpinephrineAutoInjector
+        amount: 1
+      - id: AU14NaloxoneAutoInjector
+        amount: 2
+      - id: CMInaprovalineAutoInjector
+        amount: 4
+      - id: CMDexalinPlusAutoInjector
+        amount: 5
+      - id: CMTricordrazineAutoInjector
+        amount: 5
+    - name: Medical Utilities
+      entries:
+      - id: CMRollerBedSpawnFolded
+        amount: 2
+      - id: RMCBoxBodyBag
+        amount: 3
+      - id: RMCBoxSterileMask
+        amount: 2
+      - id: RMCBoxLatexGloves
+        amount: 2
+      - id: CMHealthAnalyzer
+        amount: 2
+      - id: RMCVial
+        amount: 10
+     # FixOVien
+
+- type: entity
+  parent: ColMarTechBaseAnchorable
+  id: AU14VendorBlood
+  name: WeYu Blood Dispenser
+  description: The WeYu Med-Sci Brand Blood Pack Dispensary is the premier, top-of-the-line blood dispenser of 2105! Get yours today! #dont update year, that`s a joke from cm13
+  suffix: AU14 MED
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/blood.rsi
+    snapCardinals: true
+    layers:
+    - state: "off"
+      map: ["enum.VendingMachineVisualLayers.Base"]
+    - state: "normal-unshaded"
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded" ]
+      shader: unshaded
+    - state: "panel"
+      visible: false
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: ApcPowerReceiver
+    needsPower: false # TODO RMC14
+    powerLoad: 0
+  - type: CMAutomatedVendor
+    hackable: true
+    sections:
+    - name: Blood Packs
+      entries:
+      - id: CMBloodPackFull
+        amount: 4
+    - name: Miscellaneous
+      entries:
+      - id: CMBloodPack
+        amount: 20
+        name: empty blood pack

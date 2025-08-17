@@ -1,27 +1,29 @@
-﻿using Content.Shared._RMC14.Areas;
+﻿using Content.Client._RMC14.UserInterface;
+using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.TacticalMap;
 using JetBrains.Annotations;
 using Robust.Client.Player;
-using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Localization;
 
 namespace Content.Client._RMC14.TacticalMap;
 
 [UsedImplicitly]
-public sealed class TacticalMapComputerBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
+public sealed class TacticalMapComputerBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<TacticalMapWindow>(owner, uiKey)
 {
     [Dependency] private readonly IPlayerManager _player = default!;
 
-    private TacticalMapWindow? _window;
+    protected override TacticalMapWindow? Window { get; set; }
     private bool _refreshed;
 
     protected override void Open()
     {
-        _window = this.CreateWindow<TacticalMapWindow>();
+        base.Open();
+        Window = this.CreatePopOutableWindow<TacticalMapWindow>();
 
-        TabContainer.SetTabTitle(_window.MapTab, "Map");
-        TabContainer.SetTabVisible(_window.MapTab, true);
+        TabContainer.SetTabTitle(Window.Wrapper.MapTab, Loc.GetString("ui-tactical-map-tab-map"));
+        TabContainer.SetTabVisible(Window.Wrapper.MapTab, true);
 
         var computer = EntMan.GetComponentOrNull<TacticalMapComputerComponent>(Owner);
         var skills = EntMan.System<SkillsSystem>();
@@ -29,63 +31,64 @@ public sealed class TacticalMapComputerBui(EntityUid owner, Enum uiKey) : BoundU
             _player.LocalEntity is { } player &&
             skills.HasSkill(player, computer.Skill, computer.SkillLevel))
         {
-            TabContainer.SetTabTitle(_window.CanvasTab, "Canvas");
-            TabContainer.SetTabVisible(_window.CanvasTab, true);
+            TabContainer.SetTabTitle(Window.Wrapper.CanvasTab, Loc.GetString("ui-tactical-map-tab-canvas"));
+            TabContainer.SetTabVisible(Window.Wrapper.CanvasTab, true);
         }
         else
         {
-            TabContainer.SetTabVisible(_window.CanvasTab, false);
+            TabContainer.SetTabVisible(Window.Wrapper.CanvasTab, false);
         }
 
         if (computer != null &&
             EntMan.TryGetComponent(computer.Map, out AreaGridComponent? areaGrid))
         {
-            _window.UpdateTexture((computer.Map.Value, areaGrid));
+            Window.Wrapper.UpdateTexture((computer.Map.Value, areaGrid));
         }
 
         Refresh();
 
-        _window.UpdateCanvasButton.OnPressed += _ => SendPredictedMessage(new TacticalMapUpdateCanvasMsg(_window.Canvas.Lines));
+        Window.Wrapper.UpdateCanvasButton.OnPressed += _ => SendPredictedMessage(new TacticalMapUpdateCanvasMsg(Window.Wrapper.Canvas.Lines, Window.Wrapper.Canvas.TacticalLabels));
     }
 
     public void Refresh()
     {
-        if (_window is not { IsOpen: true })
+        if (Window == null)
             return;
 
         var lineLimit = EntMan.System<TacticalMapSystem>().LineLimit;
-        _window.SetLineLimit(lineLimit);
+        Window.Wrapper.SetLineLimit(lineLimit);
         UpdateBlips();
+        UpdateLabels();
 
         if (EntMan.TryGetComponent(Owner, out TacticalMapComputerComponent? computer))
         {
-            _window.LastUpdateAt = computer.LastAnnounceAt;
-            _window.NextUpdateAt = computer.NextAnnounceAt;
+            Window.Wrapper.LastUpdateAt = computer.LastAnnounceAt;
+            Window.Wrapper.NextUpdateAt = computer.NextAnnounceAt;
         }
 
-        _window.Map.Lines.Clear();
+        Window.Wrapper.Map.Lines.Clear();
 
         var lines = EntMan.GetComponentOrNull<TacticalMapLinesComponent>(Owner);
         if (lines != null)
-            _window.Map.Lines.AddRange(lines.MarineLines);
+            Window.Wrapper.Map.Lines.AddRange(lines.MarineLines);
 
         if (_refreshed)
             return;
 
         if (lines != null)
-            _window.Canvas.Lines.AddRange(lines.MarineLines);
+            Window.Wrapper.Canvas.Lines.AddRange(lines.MarineLines);
 
         _refreshed = true;
     }
 
     private void UpdateBlips()
     {
-        if (_window is not { IsOpen: true })
+        if (Window == null)
             return;
 
         if (!EntMan.TryGetComponent(Owner, out TacticalMapComputerComponent? computer))
         {
-            _window.UpdateBlips(null);
+            Window.Wrapper.UpdateBlips(null);
             return;
         }
 
@@ -97,6 +100,26 @@ public sealed class TacticalMapComputerBui(EntityUid owner, Enum uiKey) : BoundU
             blips[i++] = blip;
         }
 
-        _window.UpdateBlips(blips);
+        Window.Wrapper.UpdateBlips(blips);
+    }
+
+    private void UpdateLabels()
+    {
+        if (Window == null)
+            return;
+
+        var labels = EntMan.GetComponentOrNull<TacticalMapLabelsComponent>(Owner);
+        if (labels != null)
+        {
+            Window.Wrapper.Map.UpdateTacticalLabels(labels.MarineLabels);
+            if (!_refreshed)
+                Window.Wrapper.Canvas.UpdateTacticalLabels(labels.MarineLabels);
+        }
+        else
+        {
+            Window.Wrapper.Map.UpdateTacticalLabels(new Dictionary<Vector2i, string>());
+            if (!_refreshed)
+                Window.Wrapper.Canvas.UpdateTacticalLabels(new Dictionary<Vector2i, string>());
+        }
     }
 }

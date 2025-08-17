@@ -1,0 +1,324 @@
+- type: entity
+  parent: CMAirlock
+  id: CMAirlockGovfor
+  suffix: Govfor
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door.rsi
+
+- type: entity
+  parent: CMAirlockGovfor
+  id: CMAirlockGovforLocked
+  suffix: Govfor, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessMarineRifleman"]]
+
+- type: entity
+  parent: CMAirlockGlass
+  id: CMAirlockGovforGlass
+  suffix: Govfor, Glass
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_glass.rsi
+
+- type: entity
+  parent: CMAirlockGovforGlass
+  id: CMAirlockGovforGlassLocked
+  suffix: Govfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessMarineRifleman"]]
+
+- type: entity
+  parent: CMDoubleDoorBase
+  id: CMDoubleDoorGovfor
+  suffix: Govfor, Solid
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/Double/govfor_solid.rsi
+  - type: Occluder
+
+- type: entity
+  parent: CMDoubleDoorGovfor
+  id: CMDoubleDoorGovforLocked
+  suffix: Govfor, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessMarineRifleman"]]
+
+- type: entity
+  parent: CMDoubleDoorBase
+  id: CMDoubleDoorGovforGlass
+  suffix: Govfor, Glass
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/Double/govfor_glass.rsi
+
+- type: entity
+  parent: CMDoubleDoorGovforGlass
+  id: CMDoubleDoorGovforGlassLocked
+  suffix: Govfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessMarineRifleman"]]
+
+- type: entity
+  parent: CMAirlockGovfor
+  id: CMAirlockCommandGovfor
+  suffix: Command, Govfor
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/command_govfor_door.rsi
+
+- type: entity
+  parent: CMAirlockCommandGovfor
+  id: CMAirlockCommandGovforLocked
+  suffix: Command, Govfor, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessGovforCommand"]]
+
+- type: entity
+  parent: CMAirlockGovforGlass
+  id: CMAirlockCommandGovforGlass
+  suffix: Command, Govfor, Glass
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/command_govfor_door_glass.rsi
+
+- type: entity
+  parent: CMAirlockCommandGovforGlass
+  id: CMAirlockCommandGovforGlassLocked
+  suffix: Command, Govfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessGovforCommand"]]
+
+- type: entity
+  parent: CMDoubleDoorGovfor
+  id: CMDoubleDoorCommandGovfor
+  suffix: Command, Govfor, Solid
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/Double/command_govfor_solid.rsi
+  - type: Occluder
+
+- type: entity
+  parent: CMDoubleDoorCommandGovfor
+  id: CMDoubleDoorCommandGovforLocked
+  suffix: Command, Govfor, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessGovforCommand"]]
+
+- type: entity
+  parent: CMDoubleDoorGovforGlass
+  id: CMDoubleDoorCommandGovforGlass
+  suffix: Command, Govfor, Glass
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/Double/command_govfor_glass.rsi
+
+- type: entity
+  parent: CMDoubleDoorCommandGovforGlass
+  id: CMDoubleDoorCommandGovforGlassLocked
+  suffix: Command, Govfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessGovforCommand"]]
+
+- type: entity
+  parent: CMAirlockGovfor
+  id: CMAirlockSecurityGovfor
+  suffix: Security, Govfor
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/security_govfor_door.rsi
+
+- type: entity
+  parent: CMAirlockSecurityGovfor
+  id: CMAirlockSecurityGovforLocked
+  suffix: Security, Govfor, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessBrig"]]
+
+- type: entity
+  parent: CMAirlockGovforGlass
+  id: CMAirlockSecurityGovforGlass
+  suffix: Security, Govfor, Glass
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/security_govfor_door_glass.rsi
+
+- type: entity
+  parent: CMAirlockSecurityGovforGlass
+  id: CMAirlockSecurityGovforGlassLocked
+  suffix: Security, Govfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessBrig"]]
+
+- type: entity
+  parent: CMDoubleDoorGovfor
+  id: CMDoubleDoorSecurityGovfor
+  suffix: Security, Govfor, Solid
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/Double/security_govfor_solid.rsi
+  - type: Occluder
+
+- type: entity
+  parent: CMDoubleDoorSecurityGovfor
+  id: CMDoubleDoorSecurityGovforLocked
+  suffix: Security, Govfor, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessBrig"]]
+
+- type: entity
+  parent: CMDoubleDoorGovforGlass
+  id: CMDoubleDoorSecurityGovforGlass
+  suffix: Security, Govfor, Glass
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/Double/security_govfor_glass.rsi
+
+- type: entity
+  parent: CMDoubleDoorSecurityGovforGlass
+  id: CMDoubleDoorSecurityGovforGlassLocked
+  suffix: Security, Govfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessBrig"]]
+
+- type: entity
+  parent: CMAirlockGovfor
+  id: CMAirlockMedicalGovfor
+  suffix: Medical, Govfor
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/medical_govfor_door.rsi
+
+- type: entity
+  parent: CMAirlockMedicalGovfor
+  id: CMAirlockMedicalGovforLocked
+  suffix: Medical, Govfor, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessMarineRifleman"]]
+
+- type: entity
+  parent: CMAirlockGovforGlass
+  id: CMAirlockMedicalGovforGlass
+  suffix: Medical, Govfor, Glass
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/medical_govfor_door_glass.rsi
+
+- type: entity
+  parent: CMAirlockMedicalGovforGlass
+  id: CMAirlockMedicalGovforGlassLocked
+  suffix: Medical, Govfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessMarineRifleman"]]
+
+- type: entity
+  parent: CMDoubleDoorGovfor
+  id: CMDoubleDoorMedicalGovfor
+  suffix: Medical, Govfor, Solid
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/Double/medical_govfor_solid.rsi
+  - type: Occluder
+
+- type: entity
+  parent: CMDoubleDoorMedicalGovfor
+  id: CMDoubleDoorMedicalGovforLocked
+  suffix: Medical, Govfor, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessMarineRifleman"]]
+
+- type: entity
+  parent: CMDoubleDoorGovforGlass
+  id: CMDoubleDoorMedicalGovforGlass
+  suffix: Medical, Govfor, Glass
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/Double/medical_govfor_glass.rsi
+
+- type: entity
+  parent: CMDoubleDoorMedicalGovforGlass
+  id: CMDoubleDoorMedicalGovforGlassLocked
+  suffix: Medical, Govfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessMarineRifleman"]]
+
+- type: entity
+  parent: CMAirlockGovfor
+  id: CMAirlockEngineerGovfor
+  suffix: Engineer, Govfor
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/engineer_govfor_door.rsi
+
+- type: entity
+  parent: CMAirlockEngineerGovfor
+  id: CMAirlockEngineerGovforLocked
+  suffix: Engineer, Govfor, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessMarineRifleman"]]
+
+- type: entity
+  parent: CMAirlockGovforGlass
+  id: CMAirlockEngineerGovforGlass
+  suffix: Engineer, Govfor, Glass
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/engineer_govfor_door_glass.rsi
+
+- type: entity
+  parent: CMAirlockEngineerGovforGlass
+  id: CMAirlockEngineerGovforGlassLocked
+  suffix: Engineer, Govfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessMarineRifleman"]]
+
+- type: entity
+  parent: CMDoubleDoorGovfor
+  id: CMDoubleDoorEngineerGovfor
+  suffix: Engineer, Govfor, Solid
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/Double/engineer_govfor_solid.rsi
+  - type: Occluder
+
+- type: entity
+  parent: CMDoubleDoorEngineerGovfor
+  id: CMDoubleDoorEngineerGovforLocked
+  suffix: Engineer, Govfor, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessMarineRifleman"]]
+
+- type: entity
+  parent: CMDoubleDoorGovforGlass
+  id: CMDoubleDoorEngineerGovforGlass
+  suffix: Engineer, Govfor, Glass
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Doors/Airlocks/Double/engineer_govfor_glass.rsi
+
+- type: entity
+  parent: CMDoubleDoorEngineerGovforGlass
+  id: CMDoubleDoorEngineerGovforGlassLocked
+  suffix: Engineer, Govfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessMarineRifleman"]]

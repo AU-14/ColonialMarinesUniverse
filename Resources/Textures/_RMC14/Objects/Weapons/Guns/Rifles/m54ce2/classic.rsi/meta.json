@@ -1,30 +1,21 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Created by Cephalopod222, equipped-SUITSTORAGE taken and modified from cmss13 at https://github.com/cmss13-devs/cmss13/commit/168c8a79a3d858a8c531ff7ed0bc3033e47d1d16, camouflaged variants recolored by MACMAN2003",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/0525b5ada7da1afcd9b260e76d5fea01500d9c8d/icons/obj/items/weapons/guns/ammo_by_faction/USCM/machineguns.dmi, https://github.com/cmss13-devs/cmss13/blob/7e3da429d0abfe55f0d948bb689bd7b49f3f304f/icons/obj/items/weapons/guns/guns_by_faction/USCM/machineguns.dmi, https://github.com/cmss13-devs/cmss13/blob/0525b5ada7da1afcd9b260e76d5fea01500d9c8d/icons/mob/humans/onmob/inhands/weapons/guns/machineguns_lefthand.dmi, https://github.com/cmss13-devs/cmss13/blob/0525b5ada7da1afcd9b260e76d5fea01500d9c8d/icons/mob/humans/onmob/inhands/weapons/guns/machineguns_righthand.dmi, https://github.com/cmss13-devs/cmss13/blob/fe930eec134c63136fb8abfc85dbd646873bd7bd/icons/mob/humans/onmob/clothing/back/guns_by_type/machineguns.dmi, https://github.com/cmss13-devs/cmss13/blob/0525b5ada7da1afcd9b260e76d5fea01500d9c8d/icons/mob/humans/onmob/clothing/suit_storage/guns_by_type/machineguns.dmi",
   "size": {
     "x": 32,
     "y": 32
   },
   "states": [
     {
-      "name": "wielded-inhand-left",
-      "directions": 4
-    },
-    {
-      "name": "wielded-inhand-right",
-      "directions": 4
-    },
-    {
-      "name": "equipped-BACKPACK",
-      "directions": 4
-    },
-    {
-      "name": "equipped-SUITSTORAGE",
-      "directions": 4
+      "name": "base"
     },
     {
       "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "wielded-inhand-left",
       "directions": 4
     },
     {
@@ -32,16 +23,25 @@
       "directions": 4
     },
     {
-      "name": "icon"
-    },
-    {
-      "name": "mag-0"
-    },
-    {
-      "name": "base"
+      "name": "wielded-inhand-right",
+      "directions": 4
     },
     {
       "name": "bolt-open"
+    },
+    {
+      "name": "icon"
+    },
+    {
+      "name": "equipped-SUITSTORAGE",
+      "directions": 4
+    },
+    {
+      "name": "equipped-BACKPACK",
+      "directions": 4
+    },
+    {
+      "name": "mag-0"
     }
   ]
 }

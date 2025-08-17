@@ -3,7 +3,6 @@ using System.Text;
 using Content.Server.Popups;
 using Content.Shared.UserInterface;
 using Content.Shared.DoAfter;
-using Content.Shared.Fluids.Components;
 using Content.Shared.Forensics;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
@@ -13,12 +12,18 @@ using Content.Shared.Tag;
 using Robust.Shared.Audio.Systems;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
-using Robust.Shared.Player;
 using Robust.Shared.Timing;
-using Content.Server.Chemistry.Containers.EntitySystems;
+using Content.Server.CriminalRecords.Systems;
+using Content.Server.Station.Systems;
+using Content.Server.StationRecords.Systems;
+using Content.Shared.CriminalRecords;
+using Content.Shared.Humanoid;
+using Content.Shared.StationRecords;
+using Robust.Shared.Prototypes;
+
 // todo: remove this stinky LINQy
 
-namespace Content.Server.Forensics
+namespace Content.Server.Forensics.Systems
 {
     public sealed class ForensicScannerSystem : EntitySystem
     {
@@ -32,6 +37,11 @@ namespace Content.Server.Forensics
         [Dependency] private readonly MetaDataSystem _metaData = default!;
         [Dependency] private readonly ForensicsSystem _forensicsSystem = default!;
         [Dependency] private readonly TagSystem _tag = default!;
+        [Dependency] private readonly CriminalRecordsConsoleSystem _criminalRecordsConsole = default!;
+        [Dependency] private readonly StationSystem _stationSystem = default!;
+        [Dependency] private readonly StationRecordsSystem _stationRecords = default!;
+
+        private static readonly ProtoId<TagPrototype> DnaSolutionScannableTag = "DNASolutionScannable";
 
         public override void Initialize()
         {
@@ -66,7 +76,7 @@ namespace Content.Server.Forensics
             if (args.Handled || args.Cancelled)
                 return;
 
-            if (!EntityManager.TryGetComponent(uid, out ForensicScannerComponent? scanner))
+            if (!TryComp(uid, out ForensicScannerComponent? scanner))
                 return;
 
             if (args.Args.Target != null)
@@ -86,15 +96,72 @@ namespace Content.Server.Forensics
                     scanner.Residues = forensics.Residues.ToList();
                 }
 
-                if (_tag.HasTag(args.Args.Target.Value, "DNASolutionScannable"))
+                if (_tag.HasTag(args.Args.Target.Value, DnaSolutionScannableTag))
                 {
                     scanner.SolutionDNAs = _forensicsSystem.GetSolutionsDNA(args.Args.Target.Value);
-                } else
+                }
+                else
                 {
                     scanner.SolutionDNAs = new();
                 }
 
                 scanner.LastScannedName = MetaData(args.Args.Target.Value).EntityName;
+
+                // Only add a record if the last thing scanned was a humanoid
+                if (!TryComp(args.Args.Target.Value, out HumanoidAppearanceComponent? _))
+                    return;
+
+                // Try to get DNA and fingerprint directly from components if present
+                string? dnaValue = null;
+                string? fingerprintValue = null;
+                if (TryComp<Content.Shared.Forensics.Components.DnaComponent>(args.Args.Target.Value, out var dnaComp) && !string.IsNullOrEmpty(dnaComp.DNA))
+                {
+                    dnaValue = dnaComp.DNA;
+                }
+                if (TryComp<Content.Shared.Forensics.Components.FingerprintComponent>(args.Args.Target.Value, out var fpComp) && !string.IsNullOrEmpty(fpComp.Fingerprint))
+                {
+                    fingerprintValue = fpComp.Fingerprint;
+                }
+
+                // Add a general record if not present (required for criminal record)
+                var station = _stationSystem.GetOwningStation(uid);
+                if (station == null)
+                    return;
+                var generalKey = _stationRecords.GetRecordByName(station.Value, scanner.LastScannedName);
+                StationRecordKey key;
+                if (generalKey is not uint id)
+                {
+                    key = _stationRecords.AddRecordEntry(station.Value, new GeneralStationRecord
+                    {
+                        Name = scanner.LastScannedName,
+                        // Prefer component DNA/fingerprint, fallback to scanned evidence, then N/A
+                        DNA = dnaValue ?? (scanner.TouchDNAs.Count > 0 ? string.Join(", ", scanner.TouchDNAs) : "N/A"),
+                        Fingerprint = fingerprintValue ?? (scanner.Fingerprints.Count > 0 ? string.Join(", ", scanner.Fingerprints) : "N/A")
+                    });
+                }
+                else
+                {
+                    key = new StationRecordKey(id, station.Value);
+                    // Update existing record with DNA and fingerprint info
+                    if (_stationRecords.TryGetRecord<GeneralStationRecord>(key, out var record))
+                    {
+                        record.DNA = dnaValue ?? (scanner.TouchDNAs.Count > 0 ? string.Join(", ", scanner.TouchDNAs) : "N/A");
+                        record.Fingerprint = fingerprintValue ?? (scanner.Fingerprints.Count > 0 ? string.Join(", ", scanner.Fingerprints) : "N/A");
+                    }
+                }
+
+                // Add the criminal record with bounty 2500, all else null/default
+                _stationRecords.AddRecordEntry<CriminalRecord>(key, new CriminalRecord
+                {
+
+                    Status = Content.Shared.Security.SecurityStatus.None,
+                    Reason = "Scanned by forensic scanner",
+                    InitiatorName = "Forensic Scanner",
+                    History = new System.Collections.Generic.List<CrimeHistory>()
+                }, null);
+
+                // Add to scanned records so it appears on the console
+                _criminalRecordsConsole.AddScannedRecord(key);
             }
 
             OpenUserInterface(args.Args.User, (uid, scanner));
@@ -193,7 +260,7 @@ namespace Content.Server.Forensics
             }
 
             // Spawn a piece of paper.
-            var printed = EntityManager.SpawnEntity(component.MachineOutput, Transform(uid).Coordinates);
+            var printed = Spawn(component.MachineOutput, Transform(uid).Coordinates);
             _handsSystem.PickupOrDrop(args.Actor, printed, checkActionBlocker: false);
 
             if (!TryComp<PaperComponent>(printed, out var paperComp))

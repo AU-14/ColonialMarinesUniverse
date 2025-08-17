@@ -1,0 +1,419 @@
+﻿- type: entity
+  parent: CMBaseStructure
+  id: AU14WeymartRacks1
+  name: store rack
+  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        path:
+          "/Audio/Weapons/dodgeball.ogg"
+  - type: InteractionOutline
+  - type: PlaceableSurface
+  - type: Sprite
+    sprite: _AU14/Structures/hybrisiaracks.rsi
+    state: longrack1
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        density: 140
+        mask:
+        - TableMask
+        layer:
+        - TableLayer
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 60
+      behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 30
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+          params:
+            volume: -6
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Climbable
+  - type: DamageMultiplierFlags
+    flags: Breaching
+  - type: XenoLeapDestroyOnPass
+    spawnPrototype: CMSheetMetalBase
+  - type: XenoToggleChargingDamage
+    destroy: true
+
+- type: entity
+  parent: CMBaseStructure
+  id: AU14WeymartRacks2
+  name: store rack
+  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        path:
+          "/Audio/Weapons/dodgeball.ogg"
+  - type: InteractionOutline
+  - type: PlaceableSurface
+  - type: Sprite
+    sprite: _AU14/Structures/hybrisiaracks.rsi
+    state: longrack2
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        density: 140
+        mask:
+        - TableMask
+        layer:
+        - TableLayer
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 60
+      behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 30
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+          params:
+            volume: -6
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Climbable
+  - type: DamageMultiplierFlags
+    flags: Breaching
+  - type: XenoLeapDestroyOnPass
+    spawnPrototype: CMSheetMetalBase
+  - type: XenoToggleChargingDamage
+    destroy: true
+
+- type: entity
+  parent: CMBaseStructure
+  id: AU14WeymartRacks3
+  name: store rack
+  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        path:
+          "/Audio/Weapons/dodgeball.ogg"
+  - type: InteractionOutline
+  - type: PlaceableSurface
+  - type: Sprite
+    sprite: _AU14/Structures/hybrisiaracks.rsi
+    state: longrack3
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        density: 140
+        mask:
+        - TableMask
+        layer:
+        - TableLayer
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 60
+      behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 30
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+          params:
+            volume: -6
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Climbable
+  - type: DamageMultiplierFlags
+    flags: Breaching
+  - type: XenoLeapDestroyOnPass
+    spawnPrototype: CMSheetMetalBase
+  - type: XenoToggleChargingDamage
+    destroy: true
+
+- type: entity
+  parent: CMBaseStructure
+  id: AU14WeymartRacks4
+  name: store rack
+  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        path:
+          "/Audio/Weapons/dodgeball.ogg"
+  - type: InteractionOutline
+  - type: PlaceableSurface
+  - type: Sprite
+    sprite: _AU14/Structures/hybrisiaracks.rsi
+    state: longrack4
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        density: 140
+        mask:
+        - TableMask
+        layer:
+        - TableLayer
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 60
+      behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 30
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+          params:
+            volume: -6
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Climbable
+  - type: DamageMultiplierFlags
+    flags: Breaching
+  - type: XenoLeapDestroyOnPass
+    spawnPrototype: CMSheetMetalBase
+  - type: XenoToggleChargingDamage
+    destroy: true
+
+- type: entity
+  parent: CMBaseStructure
+  id: AU14WeymartRacks5
+  name: store rack
+  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        path:
+          "/Audio/Weapons/dodgeball.ogg"
+  - type: InteractionOutline
+  - type: PlaceableSurface
+  - type: Sprite
+    sprite: _AU14/Structures/hybrisiaracks.rsi
+    state: longrack5
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        density: 140
+        mask:
+        - TableMask
+        layer:
+        - TableLayer
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 60
+      behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 30
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+          params:
+            volume: -6
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Climbable
+  - type: DamageMultiplierFlags
+    flags: Breaching
+  - type: XenoLeapDestroyOnPass
+    spawnPrototype: CMSheetMetalBase
+  - type: XenoToggleChargingDamage
+    destroy: true
+
+- type: entity
+  parent: CMBaseStructure
+  id: AU14WeymartRacks6
+  name: store rack
+  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        path:
+          "/Audio/Weapons/dodgeball.ogg"
+  - type: InteractionOutline
+  - type: PlaceableSurface
+  - type: Sprite
+    sprite: _AU14/Structures/hybrisiaracks.rsi
+    state: longrack6
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        density: 140
+        mask:
+        - TableMask
+        layer:
+        - TableLayer
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 60
+      behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 30
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+          params:
+            volume: -6
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Climbable
+  - type: DamageMultiplierFlags
+    flags: Breaching
+  - type: XenoLeapDestroyOnPass
+    spawnPrototype: CMSheetMetalBase
+  - type: XenoToggleChargingDamage
+    destroy: true
+
+- type: entity
+  parent: CMBaseStructure
+  id: AU14WeymartRacks7
+  name: store rack
+  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        path:
+          "/Audio/Weapons/dodgeball.ogg"
+  - type: InteractionOutline
+  - type: PlaceableSurface
+  - type: Sprite
+    sprite: _AU14/Structures/hybrisiaracks.rsi
+    state: longrack7
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        density: 140
+        mask:
+        - TableMask
+        layer:
+        - TableLayer
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 60
+      behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 30
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+          params:
+            volume: -6
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Climbable
+  - type: DamageMultiplierFlags
+    flags: Breaching
+  - type: XenoLeapDestroyOnPass
+    spawnPrototype: CMSheetMetalBase
+  - type: XenoToggleChargingDamage
+    destroy: true

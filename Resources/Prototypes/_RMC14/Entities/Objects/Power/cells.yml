@@ -26,8 +26,8 @@
 - type: entity
   parent: RMCPowerCell
   id: RMCPowerCellCrap
-  name: We-Ya rechargeable mini-battery
-  description: Cheap, throwaway batteries provided by the Weston-Yamada Corporation. The 'rechargeable' feature was added to be more marketable to independent colonists hell-bent on 'using it till it disintegrates', a common sentiment on the frontier.
+  name: We-Yu rechargeable mini-battery
+  description: Cheap, throwaway batteries provided by the Weyland-Yutani Corporation. The 'rechargeable' feature was added to be more marketable to independent colonists hell-bent on 'using it till it disintegrates', a common sentiment on the frontier.
   components:
   - type: Sprite
     layers:
@@ -89,6 +89,13 @@
   - type: Battery
     maxCharge: 10000
     startingCharge: 10000
+  - type: Tag
+    tags:
+    - PowerCell
+    - RMCPowerCellHigh
+
+- type: Tag
+  id: RMCPowerCellHigh
 
 - type: entity
   parent: RMCPowerCellHigh
@@ -185,7 +192,7 @@
 - type: entity
   parent: RMCPowerCell
   id: RMCPowerCellSmartgun
-  name: smart gun ML66A battery
+  name: smart gun DV9 battery
   description: "A standard-issue 9-volt lithium dry-cell battery, most commonly used within the UNMC to power smartguns. Per the manual, one battery is good for up to 50000 rounds and plugs directly into the smartgun's power receptacle, which is only compatible with this type of battery. Various auxiliary modes usually bring the round count far lower. While this cell is incompatible with most standard electrical system, it can be charged by common rechargers in a pinch. UNMC smartgunners often guard them jealously."
   components:
   - type: Sprite

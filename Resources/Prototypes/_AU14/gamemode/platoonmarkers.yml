@@ -1,0 +1,514 @@
+- type: entity
+  name: Marker Base
+  parent: MarkerBase
+  id: Vmarker
+  components:
+  - type: Sprite
+    state: green
+
+- type: entity
+  name: Opfor corpsman marker
+  id: VMarkerOpforplatcorp
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: Corpsman
+
+- type: entity
+  name: Opfor Arifleman marker
+  id: VMarkerOpforAutomaticRifleman
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: Arifleman
+
+- type: entity
+  name: Opfor rifleman marker
+  id: VMarkerOpforRifleman
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: Rifleman
+
+- type: entity
+  name: Opfor dcc marker
+  id: VMarkerOpforDCC
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: Dcc
+
+- type: entity
+  name: Opfor operations officer marker
+  id: VMarkerOpforoperationsOfficer
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: OperationsOfficer
+
+- type: entity
+  name: Opfor RTO  marker
+  id: VMarkerOpforradiotelephoneOperator
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: Rto
+
+- type: entity
+  name: Opfor section sergeant  marker
+  id: VMarkerOpforsectionSergeant
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: SectionSergeant
+
+- type: entity
+  name: Opfor pilot  marker
+  id: VMarkerOpforpilot
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: Pilot
+
+- type: entity
+  name: Opfor extra vendor 1 marker
+  id: VMarkerOpforExtraVendor1
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: ExtraVendor1
+
+- type: entity
+  name: Opfor extra vendor 2 marker
+  id: VMarkerOpforExtraVendor2
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: ExtraVendor2
+
+- type: entity
+  name: Opfor extra vendor 3 marker
+  id: VMarkerOpforExtraVendor3
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: ExtraVendor3
+
+- type: entity
+  name: Opfor extra vendor 4 marker
+  id: VMarkerOpforExtraVendor4
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: ExtraVendor4
+
+- type: entity
+  name: Gov corpsman marker
+  id: VMarkerGovforcorpsman
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: Corpsman
+
+- type: entity
+  name: Gov Clothing marker
+  id: VMarkerGovforClothing
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: Clothing
+
+- type: entity
+  name: Gov Weapons marker
+  id: VMarkerGovforWeapons
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: Weapons
+
+- type: entity
+  name: Gov special weapons marker
+  id: VMarkerGovforSWeapons
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: SWeapons
+
+- type: entity
+  name: Gov Arifleman marker
+  id: VMarkerGovforAutomaticRifleman
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: Arifleman
+
+- type: entity
+  name: Gov rifleman marker
+  id: VMarkerGovforRifleman
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: Rifleman
+
+- type: entity
+  name: Gov dcc marker
+  id: VMarkerGovforDCC
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: Dcc
+
+- type: entity
+  name: Gov operations officer marker
+  id: VMarkerGovforoperationsOfficer
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: OperationsOfficer
+
+- type: entity
+  name: Gov RTO  marker
+  id: VMarkerGovforradiotelephoneOperator
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: Rto
+
+- type: entity
+  name: Gov section sergeant  marker
+  id: VMarkerGovforsectionSergeant
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: SectionSergeant
+
+- type: entity
+  name: Gov pilot  marker
+  id: VMarkerGovforpilot
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: Pilot
+
+- type: entity
+  name: Gov extra vendor 1 marker
+  id: VMarkerGovforExtraVendor1
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: ExtraVendor1
+
+- type: entity
+  name: Gov extra vendor 2 marker
+  id: VMarkerGovforExtraVendor2
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: ExtraVendor2
+
+- type: entity
+  name: Gov extra vendor 3 marker
+  id: VMarkerGovforExtraVendor3
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: ExtraVendor3
+
+- type: entity
+  name: Gov extra vendor 4 marker
+  id: VMarkerGovforExtraVendor4
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: ExtraVendor4
+
+- type: entity
+  name: Gov deco marker 1
+  id: VMarkerGovforDeco1
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: Deco1
+
+- type: entity
+  name: Gov deco marker 2
+  id: VMarkerGovforDeco2
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: Deco2
+
+- type: entity
+  name: Gov deco marker 3
+  id: VMarkerGovforDeco3
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: Deco3
+
+- type: entity
+  name: Gov deco marker 4
+  id: VMarkerGovforDeco4
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: Deco4
+
+- type: entity
+  name: Gov deco marker 5
+  id: VMarkerGovforDeco5
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: Deco5
+
+- type: entity
+  name: Gov deco marker 6
+  id: VMarkerGovforDeco6
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: Deco6
+
+- type: entity
+  name: Opfor deco marker 1
+  id: VMarkerOpforDeco1
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: false
+      opfor: true
+      class: Deco1
+
+- type: entity
+  name: Opfor deco marker 2
+  id: VMarkerOpforDeco2
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: false
+      opfor: true
+      class: Deco2
+
+- type: entity
+  name: Opfor deco marker 3
+  id: VMarkerOpforDeco3
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: false
+      opfor: true
+      class: Deco3
+
+- type: entity
+  name: Opfor deco marker 4
+  id: VMarkerOpforDeco4
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: false
+      opfor: true
+      class: Deco4
+
+- type: entity
+  name: Opfor deco marker 5
+  id: VMarkerOpforDeco5
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: false
+      opfor: true
+      class: Deco5
+
+- type: entity
+  name: Opfor deco marker 6
+  id: VMarkerOpforDeco6
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: false
+      opfor: true
+      class: Deco6
+
+- type: entity
+  name: Ship Marker Base
+  parent: Vmarker
+  id: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+
+# Ship markers (shared for all platoons, no govfor/opfor distinction)
+- type: entity
+  name: Ship corpsman marker
+  id: VMarkerShipCorpsman
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      class: Corpsman
+
+- type: entity
+  name: Ship Arifleman marker
+  id: VMarkerShipAutomaticRifleman
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      class: Arifleman
+
+- type: entity
+  name: Ship rifleman marker
+  id: VMarkerShipRifleman
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      class: Rifleman
+
+- type: entity
+  name: Ship dcc marker
+  id: VMarkerShipDCC
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      class: Dcc
+
+- type: entity
+  name: Ship operations officer marker
+  id: VMarkerShipOperationsOfficer
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      class: OperationsOfficer
+
+- type: entity
+  name: Ship RTO marker
+  id: VMarkerShipRadiotelephoneOperator
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      class: Rto
+
+- type: entity
+  name: Ship section sergeant marker
+  id: VMarkerShipSectionSergeant
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      class: SectionSergeant
+
+- type: entity
+  name: Ship pilot marker
+  id: VMarkerShipPilot
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      class: Pilot
+
+- type: entity
+  name: Ship locked command door marker
+  id: VMarkerShipLockedCommandDoor
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      class: LockedCommandDoor
+
+- type: entity
+  name: Ship locked security door marker
+  id: VMarkerShipLockedSecurityDoor
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      class: LockedSecurityDoor
+
+- type: entity
+  name: Ship locked glass door marker
+  id: VMarkerShipLockedGlassDoor
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      class: LockedGlassDoor
+
+- type: entity
+  name: Ship locked normal door marker
+  id: VMarkerShipLockedNormalDoor
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      class: LockedNormalDoor

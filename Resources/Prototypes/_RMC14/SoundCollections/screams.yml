@@ -1,20 +1,20 @@
 - type: soundCollection
   id: CMMaleScreams
   files:
-  #  - /Audio/_RMC14/Voice/Human/male_scream_1.ogg
-    - /Audio/_RMC14/Voice/Human/male_scream_2.ogg
-    - /Audio/_RMC14/Voice/Human/male_scream_3.ogg
-    - /Audio/_RMC14/Voice/Human/male_scream_4.ogg
-    - /Audio/_RMC14/Voice/Human/male_scream_5.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_6.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_2.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_3.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_4.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_5.ogg
 
 - type: soundCollection
   id: CMFemaleScreams
   files:
-    - /Audio/_RMC14/Voice/Human/female_scream_1.ogg
-    - /Audio/_RMC14/Voice/Human/female_scream_2.ogg
-    - /Audio/_RMC14/Voice/Human/female_scream_3.ogg
-    - /Audio/_RMC14/Voice/Human/female_scream_4.ogg
-    - /Audio/_RMC14/Voice/Human/female_scream_5.ogg
+    - /Audio/_AU14/Voice/Screams/female_scream_1.ogg
+    - /Audio/_AU14/Voice/Screams/female_scream_2.ogg
+    - /Audio/_AU14/Voice/Screams/female_scream_3.ogg
+    - /Audio/_AU14/Voice/Screams/female_scream_4.ogg
+    - /Audio/_AU14/Voice/Screams/female_scream_5.ogg
 
 
 # TODO add this

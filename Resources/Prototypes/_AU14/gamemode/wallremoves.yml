@@ -1,0 +1,137 @@
+# Wall removes for various presets
+- type: entity
+  id: rockwallremoveinssolaris
+  name: Rock Wall Remove Solaris (Insurgency)
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: Insurgency
+
+- type: entity
+  id: rockwallremoveinshybrisia
+  name: Rock Wall Remove hybrisia (Insurgency)
+  parent: RMCWallHybrisaRock
+  components:
+  - type: DestroyOnPreset
+    preset: Insurgency
+
+- type: entity
+  id: rockwallremoveinshbyrisia
+  name: Rock Wall Remove Kutjevo (Insurgency)
+  parent: RMCWallKutjevoRock
+  components:
+  - type: DestroyOnPreset
+    preset: Insurgency
+
+- type: entity
+  id: rockwallremovein
+  name: Rock Wall Remove  (Insurgency)
+  parent: CMWallRock
+  components:
+  - type: DestroyOnPreset
+    preset: Insurgency
+
+- type: entity
+  id: barrierremove
+  name: Invis Barrier Remove (Insurgency)
+  parent: RMCBarrierBase
+  components:
+  - type: DestroyOnPreset
+    preset: Insurgency
+
+- type: entity
+  id: rockwallremoveinssolaris_forceonforce
+  name: Rock Wall Remove Solaris (ForceOnForce)
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: ForceOnForce
+
+- type: entity
+  id: rockwallremoveinshybrisia_forceonforce
+  name: Rock Wall Remove Hybrisia (ForceOnForce)
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: ForceOnForce
+
+- type: entity
+  id: rockwallremoveinshbyrisia_forceonforce
+  name: Rock Wall Remove Kutjevo (ForceOnForce)
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: ForceOnForce
+
+- type: entity
+  id: rockwallremoveinssolaris_criminal
+  name: Rock Wall Remove Solaris (Criminal)
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: Criminal
+
+- type: entity
+  id: rockwallremoveinshybrisia_criminal
+  name: Rock Wall Remove Hybrisia (Criminal)
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: Criminal
+
+- type: entity
+  id: rockwallremoveinshbyrisia_criminal
+  name: Rock Wall Remove Kutjevo (Criminal)
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: Criminal
+
+- type: entity
+  id: rockwallremoveinssolaris_prometheus
+  name: Rock Wall Remove Solaris (Prometheus)
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: Prometheus
+
+- type: entity
+  id: rockwallremoveinshybrisia_prometheus
+  name: Rock Wall Remove Hybrisia (Prometheus)
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: Prometheus
+
+- type: entity
+  id: rockwallremoveinshbyrisia_prometheus
+  name: Rock Wall Remove Kutjevo (Prometheus)
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: Prometheus
+
+- type: entity
+  id: rockwallremoveinssolaris_colonyfall
+  name: Rock Wall Remove Solaris (ColonyFall)
+  parent: CMWallSolarisRock
+  components:
+    - type: DestroyOnPreset
+      preset: ColonyFall
+
+- type: entity
+  id: rockwallremoveinshybrisia_colonyfall
+  name: Rock Wall Remove Hybrisia (ColonyFall)
+  parent: RMCWallHybrisaRock
+  components:
+    - type: DestroyOnPreset
+      preset: ColonyFall
+
+- type: entity
+  id: rockwallremoveinshbyrisia_colonyfall
+  name: Rock Wall Remove Kutjevo (ColonyFall)
+  parent: RMCWallKutjevoRock
+  components:
+    - type: DestroyOnPreset
+      preset: ColonyFall
+

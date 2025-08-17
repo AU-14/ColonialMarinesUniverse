@@ -1,0 +1,174 @@
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: AUbudgetConsole
+  name: budget console
+  description: A budget console
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.BudgetConsoleUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.BudgetConsoleUi.Key:
+        type: BudgetConsoleBui
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: BudgetConsole
+
+
+
+- type: entity
+  parent: BaseStructure
+  id: AUSubmissionPointBase
+  name: Submission Point
+  description: A place to submit  resources for shipping.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/ore_processor.rsi
+    layers:
+    - state: icon
+      map: ["enum.LatheVisualLayers.IsRunning"]
+    - state: unlit
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+    - state: inserting
+      map: ["enum.MaterialStorageVisualLayers.Inserting"]
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: InteractionOutline
+  - type: SubmissionStorage
+
+- type: entity
+  parent: AUSubmissionPointBase
+  id: AUSubmissionPointSteel
+  name: Submission Point (steel)
+  description: A place to submit  resources for shipping.
+  components:
+  - type: ItemSlots
+    slots:
+      ItemCabinet:
+        whitelist:
+          tags:
+          - SteelOre
+
+
+
+- type: entity
+  parent: AUSubmissionPointBase
+  id: AUSubmissionPointWood
+  name: Submission Point (wood)
+  description: A place to submit  resources for shipping.
+  components:
+  - type: ItemSlots
+    slots:
+      ItemCabinet:
+        whitelist:
+          tags:
+          - AUwood
+
+- type: Tag
+  id: SteelOre
+
+- type: Tag
+  id: AUwood
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: AUColonyCommsConsole
+  name: Colony Communications Console
+  description: Used to send announcements to all colony intercoms in range.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.ColonyCommsConsoleUI.Key
+  - type: UserInterface
+    interfaces:
+      enum.ColonyCommsConsoleUI.Key:
+        type: ColonyCommsConsoleBui
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: ColonyCommsConsole
+
+
+- type: entity
+  id: AUColonyIntercom
+  name: Colony Intercom
+  description: A public intercom for colony-wide announcements.
+  components:
+  - type: IntrinsicRadioReceiver
+  - type: Speech
+  - type: ActiveRadio
+    channels:
+    - colonyalert
+  - type: RadioSpeaker
+    enabled: true
+    channels:
+    - colonyalert
+  - type: Sprite
+    noRot: false
+    drawdepth: SmallObjects
+    sprite: _RMC14/Structures/Wallmounts/intercom.rsi
+    layers:
+    - state: intercom-p
+    - state: intercom
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+      shader: unshaded
+    - state: broadcasting
+      map: ["enum.RadioDeviceVisualLayers.Broadcasting"]
+      shader: unshaded
+      visible: false
+    - state: speaker
+      map: ["enum.RadioDeviceVisualLayers.Speaker"]
+      shader: unshaded
+      visible: false
+  - type: Transform
+    noRot: false
+    anchored: true
+
+
+- type: entity
+  id: colonysiren
+  name: Colony Siren
+  parent: BaseStructure
+  description: Emits a loud siren when activated.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Anchorable
+    flags:
+    - Anchorable
+  - type: Sprite
+    noRot: true
+    sprite: _RMC14/Objects/Misc/Lights/trafficlights.rsi
+    offset: 0.65,0.8
+    layers:
+    - state: trafficlight
+    - state: trafficlight_on
+      visible: false
+      map: [ "light" ]
+    drawdepth: Mobs
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.1,-0.1,0.1,0.1"
+        density: 50
+        mask:
+        - MachineMask
+        layer:
+        - WallLayer
+  - type: ColonySiren
+

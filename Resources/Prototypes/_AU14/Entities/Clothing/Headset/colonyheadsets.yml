@@ -1,0 +1,52 @@
+- type: entity
+  parent: CMEncryptionKey
+  id: AU14EncryptionKeyCMB
+  name: CMB encryption key
+  description: An encryption key used to communicate on colony and CMB radio channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - Colony
+    - CMB
+    defaultChannel: Colony
+  - type: Sprite
+    state: we_ya_key
+
+- type: entity
+  parent: CMEncryptionKey
+  id: AU14EncryptionKeyAdmin
+  name: colony admin encryption key
+  description: An encryption key used to communicate on colony, weyu and CMB radio channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - Colony
+    - CMB
+    - WEYA
+    defaultChannel: Colony
+  - type: Sprite
+    state: we_ya_key
+
+- type: entity
+  parent: RMCHeadsetMarine
+  id: AU14CMBHeadset
+  name: CMB headset
+  description: A headset used by the CMB to communicate.
+  suffix: CMB, Colony
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyCMB
+
+- type: entity
+  parent: RMCHeadsetLiaison
+  id: AU14ColonyAdminHeadset
+  name: colony administration headset
+  description: A headset used by the colony administration to communicate.
+  suffix: CMB, Colony
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyAdmin

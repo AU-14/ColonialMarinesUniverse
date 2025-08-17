@@ -25,7 +25,7 @@
 
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        Damage to UNMC Property
+        Damage to GOVFOR Property
       </Box>
     </ColorBox>
     <ColorBox>

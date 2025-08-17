@@ -2,43 +2,99 @@
   # Ranks
 
   ## Officer
-  Brigadier General\nPrefix: BGen\nPaygrade: O7
 
-  Colonel\nPrefix: Col\nPaygrade: O6
+  Brigadier General (Army, Air Force, Marine Corps)\nPrefix: BGen\nPaygrade: O7  
+  Rear Admiral (Lower Half) (Navy)\nPrefix: RDML\nPaygrade: O7
 
-  Lieutenant Colonel\nPrefix: LtCol\nPaygrade: O5
+  Colonel (Army, Air Force, Marine Corps)\nPrefix: Col\nPaygrade: O6  
+  Captain (Navy)\nPrefix: CAPT\nPaygrade: O6
 
-  Major\nPrefix: Maj\nPaygrade: O4
+  Lieutenant Colonel (Army, Air Force, Marine Corps)\nPrefix: LtCol\nPaygrade: O5  
+  Commander (Navy)\nPrefix: CDR\nPaygrade: O5
 
-  Captain\nPrefix: Capt\nPaygrade: O3
+  Major (Army, Air Force, Marine Corps)\nPrefix: Maj\nPaygrade: O4  
+  Lieutenant Commander (Navy)\nPrefix: LCDR\nPaygrade: O4
 
-  First Lieutenant\nPrefix: 1stLt\nPaygrade: O2
+  Captain (Army, Air Force, Marine Corps)\nPrefix: Capt\nPaygrade: O3  
+  Lieutenant (Navy)\nPrefix: LT\nPaygrade: O3
 
-  Second Lieutenant\nPrefix: 2ndLt\nPaygrade: O1
+  First Lieutenant (Army, Air Force, Marine Corps)\nPrefix: 1stLt\nPaygrade: O2  
+  Lieutenant Junior Grade (Navy)\nPrefix: LTJG\nPaygrade: O2
 
+  Second Lieutenant (Army, Air Force, Marine Corps)\nPrefix: 2ndLt\nPaygrade: O1  
+  Ensign (Navy)\nPrefix: ENS\nPaygrade: O1
+
+  ## Warrant Officer
+
+  Chief Warrant Officer 5 (Army, Marine Corps, Navy)\nPrefix: CWO5\nPaygrade: W5  
+  Chief Warrant Officer 4 (Army, Marine Corps, Navy)\nPrefix: CWO4\nPaygrade: W4  
+  Chief Warrant Officer 3 (Army, Marine Corps, Navy)\nPrefix: CWO3\nPaygrade: W3  
+  Chief Warrant Officer 2 (Army, Marine Corps, Navy)\nPrefix: CWO2\nPaygrade: W2  
+  Warrant Officer 1 (Army, Marine Corps, Navy)\nPrefix: WO1\nPaygrade: W1  
 
   ## Enlisted
 
-  Sergeant Major\nPrefix: SgtMaj\nPaygrade: E9E
+  ### E9
 
-  Master Gunnery Sergeant\nPrefix: MGySgt\nPaygrade: E9
+  Sergeant Major (Army, Marine Corps)\nPrefix: SgtMaj\nPaygrade: E9E  
+  Command Sergeant Major (Army)\nPrefix: CSM\nPaygrade: E9E  
+  Master Gunnery Sergeant (Marine Corps)\nPrefix: MGySgt\nPaygrade: E9  
+  Sergeant Major of the Army\nPrefix: SMA\nPaygrade: E9S  
+  Sergeant Major of the Marine Corps\nPrefix: SMMC\nPaygrade: E9S  
+  Chief Master Sergeant (Air Force)\nPrefix: CMSgt\nPaygrade: E9  
+  Command Chief Master Sergeant (Air Force)\nPrefix: CCM\nPaygrade: E9E  
+  Chief Master Sergeant of the Air Force\nPrefix: CMSAF\nPaygrade: E9S  
+  Master Chief Petty Officer (Navy)\nPrefix: MCPO\nPaygrade: E9  
+  Command Master Chief Petty Officer (Navy)\nPrefix: CMDCM\nPaygrade: E9E  
+  Master Chief Petty Officer of the Navy\nPrefix: MCPON\nPaygrade: E9S
 
-  First Sergeant\nPrefix: 1Sgt\nPaygrade: E8E
+  ### E8
 
-  Master Sergeant\nPrefix: MSgt\nPaygrade: E8
+  First Sergeant (Army, Marine Corps, Air Force)\nPrefix: 1Sgt\nPaygrade: E8E  
+  Master Sergeant (Army, Marine Corps, Air Force)\nPrefix: MSgt\nPaygrade: E8  
+  Senior Master Sergeant (Air Force)\nPrefix: SMSgt\nPaygrade: E8  
+  Senior Chief Petty Officer (Navy)\nPrefix: SCPO\nPaygrade: E8
 
-  Gunnery Sergeant\nPrefix: GySgt\nPaygrade: E7
+  ### E7
 
-  Staff Sergeant\nPrefix: SSgt\nPaygrade: E6
+  Gunnery Sergeant (Marine Corps)\nPrefix: GySgt\nPaygrade: E7  
+  Sergeant First Class (Army)\nPrefix: SFC\nPaygrade: E7  
+  Master Sergeant (Air Force)\nPrefix: MSgt\nPaygrade: E7  
+  Chief Petty Officer (Navy)\nPrefix: CPO\nPaygrade: E7
 
-  Sergeant\nPrefix: Sgt\nPaygrade: E5
+  ### E6
 
-  Corporal\nPrefix: Cpl\nPaygrade: E4
+  Staff Sergeant (Army, Marine Corps, Air Force)\nPrefix: SSgt\nPaygrade: E6  
+  Petty Officer First Class (Navy)\nPrefix: PO1\nPaygrade: E6
 
-  Lance Corporal\nPrefix: LCpl\nPaygrade: E3
+  ### E5
 
-  Private First Class\nPrefix: PFC\nPaygrade: E2
+  Sergeant (Army, Marine Corps, Air Force)\nPrefix: Sgt\nPaygrade: E5  
+  Petty Officer Second Class (Navy)\nPrefix: PO2\nPaygrade: E5
 
-  Private\nPrefix: PVT\nPaygrade: E1
+  ### E4
 
+  Corporal (Army, Marine Corps)\nPrefix: Cpl\nPaygrade: E4  
+  Specialist (Army)\nPrefix: SPC\nPaygrade: E4  
+  Senior Airman (Air Force)\nPrefix: SrA\nPaygrade: E4  
+  Petty Officer Third Class (Navy)\nPrefix: PO3\nPaygrade: E4
+
+  ### E3
+
+  Lance Corporal (Marine Corps)\nPrefix: LCpl\nPaygrade: E3  
+  Private First Class (Army)\nPrefix: PFC\nPaygrade: E3  
+  Airman First Class (Air Force)\nPrefix: A1C\nPaygrade: E3  
+  Seaman (Navy)\nPrefix: SN\nPaygrade: E3
+
+  ### E2
+
+  Private (Army, Marine Corps)\nPrefix: PVT\nPaygrade: E2  
+  Airman (Air Force)\nPrefix: Amn\nPaygrade: E2  
+  Seaman Apprentice (Navy)\nPrefix: SA\nPaygrade: E2
+
+  ### E1
+
+  Private (Army, Marine Corps)\nPrefix: PVT\nPaygrade: E1  
+  Airman Basic (Air Force)\nPrefix: AB\nPaygrade: E1  
+  Seaman Recruit (Navy)\nPrefix: SR\nPaygrade: E1
 </Document>

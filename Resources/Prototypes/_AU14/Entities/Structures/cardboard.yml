@@ -1,0 +1,32 @@
+- type: entity
+  parent: BaseStructureDynamic
+  id: AU14L4D2cardboardcutoutjohnnywayne
+  name: Johnny Wayne Jr. cardboard cutout
+  description: A cardboard cutout of famous UA stockcar racer Johnny Wayne Jr. The real him spawns every 15 days.
+  components:
+  - type: Anchorable
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: InteractionOutline
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:EmptyAllContainersBehaviour
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Sprite
+    sprite: _AU14/Structures/cardboard.rsi
+    state: johnnycardboard

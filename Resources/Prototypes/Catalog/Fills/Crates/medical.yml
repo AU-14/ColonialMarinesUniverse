@@ -16,21 +16,6 @@
       - id: BoxSterileMask
       - id: BoxMouthSwab
 
-- type: entity
-  id: CrateChemistrySupplies
-  parent: CrateMedical
-  name: chemistry supplies crate
-  description: Basic chemistry supplies.
-  components:
-  - type: StorageFill
-    contents:
-      - id: BoxSyringe
-      - id: BoxBeaker
-      - id: BoxPillCanister
-      - id: Dropper
-        amount: 2
-      - id: BoxBottle
-        amount: 2
 
 - type: entity
   id: CrateChemistryVials

@@ -1,0 +1,69 @@
+﻿- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentColony
+  name: au14-department-colony
+  description: au14-department-colony-description
+  color: "#e3ce94"
+  roles:
+  - AU14JobCivilianColonist
+  - AU14JobCivilianFoodServiceWorker
+  - AU14JobCivilianJournalist
+  - AU14JobCivilianColonySynthetic
+  departmentRadio: null
+  headOfDepartment: null
+
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentColonyCommand
+  name: au14-department-colony-command
+  description: au14-department-colony-command-description
+  color: "#e3ce94"
+  roles:
+  - AU14JobCivilianColonyAdministrator
+  - AU14JobCivilianForeman
+  - AU14JobCivilianCorporateLiaison
+  - AU14JobCivilianCMBMarshal
+  departmentRadio: null
+  headOfDepartment: null
+
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentColonyEngineeringLogistics
+  name: au14-department-colony-engineeringlogistics
+  description: au14-department-colony-engineeringlogistics-description
+  color: "#e3ce94"
+  roles:
+  - AU14JobCivilianForeman
+  - AU14JobCivilianFreightSystemsSpecialist
+  - AU14JobCivilianEngineer
+  - AU14JobCivilianWasteManagementSpecialist
+  departmentRadio: null
+  headOfDepartment: null
+
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentColonyMedical
+  name: au14-department-colony-medical
+  description: au14-department-colony-medical-description
+  color: "#e3ce94"
+  roles:
+  - AU14JobCivilianPhysician
+  - AU14JobCivilianNurse
+  - AU14JobCivilianEthicsAndWellnessAdvisor
+  - AU14JobCivilianEmergencyResponseOfficer
+  departmentRadio: null
+  headOfDepartment: null
+
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentColonySecurity
+  name: au14-department-colony-security
+  description: au14-department-colony-security-description
+  color: "#e3ce94"
+  roles:
+  - AU14JobCivilianCMBDeputy
+  - AU14JobCivilianCMBMarshal
+  - AU14JobCivilianCWPSRanger
+  departmentRadio: null
+  headOfDepartment: null
+

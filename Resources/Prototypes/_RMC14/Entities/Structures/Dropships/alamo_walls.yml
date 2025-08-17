@@ -2,7 +2,7 @@
   abstract: true
   parent: CMBaseWallInvincible
   id: CMBaseAlamoWall
-  name: alamo wall
+  name: fallujah wall
   components:
   - type: Corrodible
     isCorrodible: false

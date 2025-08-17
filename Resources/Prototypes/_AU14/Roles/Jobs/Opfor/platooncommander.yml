@@ -1,0 +1,78 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobOpforPlatCo
+  name: au14-job-name-opforplatco
+  description: au14-job-description-opforplatco
+  setPreference: true
+  canBeAntag: false
+
+  playTimeTracker: AU14JobOpforPlatCo
+  ranks:
+    RMCRankCaptain:
+    - !type:RoleTimeRequirement
+      role: AU14JobOpforPlatCo
+      time: 7200 # 120 hours
+    RMCRankFirstLT: []
+  startingGear: AU14GearopforPlatCo
+  dummyStartingGear: AU14GearopforPlatCoDummy
+  icon: "AU14JobIconPlatCo"
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-opforplatco
+  accessGroups:
+  - Rifleman
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillCqc: 2
+        RMCSkillConstruction: 2
+        RMCSkillEndurance: 2
+        RMCSkillEngineer: 2
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 2
+        RMCSkillIntel: 2
+        RMCSkillJtac: 4
+        RMCSkillLeadership: 3
+        RMCSkillMedical: 3
+        RMCSkillNavigations: 1
+        RMCSkillOverwatch: 1
+        RMCSkillPolice: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillSurgery: 1
+        RMCSkillVehicles: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-opforplatco
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearopforPlatCo
+  equipment:
+    id: AU14IDCardopforPlatCo
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforPlatCo
+  name: Spawn Point opfor Platoon Commander
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOpforPlatCo
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobOpforPlatCo
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearopforPlatCoDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: CMHeadCapPeakedFormal
+    jumpsuit: CMJumpsuitXOFormal

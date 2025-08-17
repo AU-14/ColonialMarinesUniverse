@@ -1,0 +1,23 @@
+- type: accessGroup
+  id: augovforcommand
+  tags:
+  - CMAccessGovforCommand
+  - CMAccessBrig
+  - CMAccessMedPrep
+  - CMAccessMarineRifleman
+  - CMAccessMarinePrep
+  - CMAccessSmartPrep
+  - CMAccessSquadLeaderPrep
+  - CMAccessDropship
+  - CMAccessPilot
+  - CMAccessCrewman
+
+- type: accessGroup
+  id: augovforpilot
+  tags:
+  - CMAccessMarineRifleman
+  - CMAccessMarinePrep
+  - CMAccessDropship
+  - CMAccessPilot
+  - CMAccessCrewman
+  - CMAccessMedPrep

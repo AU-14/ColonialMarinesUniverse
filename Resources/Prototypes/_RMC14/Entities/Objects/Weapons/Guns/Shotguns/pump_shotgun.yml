@@ -1,8 +1,8 @@
-﻿- type: entity
+- type: entity
   parent: [ RMCBaseWeaponShotgun, RMCBaseAttachableHolder ]
-  name: M42A2 Pump Shotgun
+  name: M37A3 pump shotgun
   id: WeaponShotgunM42A2
-  description: An Aegis Battlefield Armaments classic design, the M42A2 combines close-range firepower with long term reliability. Needs to be pumped.
+  description: An ARMAT Battlefield Armaments classic design, the M37A3 combines close-range firepower with long term reliability. Needs to be pumped.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Shotguns/m42a2/desert.rsi
@@ -23,9 +23,19 @@
     scatterUnwielded: 10
     baseFireRate: 0.5
     burstScatterMult: 5
+  - type: BallisticAmmoProvider
+    capacity: 10 # todo change to 9 when bullet chambering is added
+    whitelist:
+      tags:
+      - RMCShellShotgunBuckshot
+      - RMCShellShotgunSlugs
+      - RMCShellShotgunFlechette
+      - RMCShellShotgunIncendiaryBuckshot
+      - RMCShellShotgunIncendiary
+      - RMCShellShotgunBeanbag
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.15
-    accuracyMultiplierUnwielded: 0.95
+    accuracyMultiplierUnwielded: 0.5
   - type: PumpAction
   - type: AttachableHolder
     slots:
@@ -35,6 +45,7 @@
           - RMCAttachmentExtendedBarrel
           - RMCAttachmentBarrelCharger
           - RMCAttachmentRecoilCompensator
+          - RMCAttachmentShotgunChoke
           - RMCM5Bayonet
       rmc-aslot-rail:
         whitelist:
@@ -54,11 +65,12 @@
           - RMCAttachmentFlashlightGrip
           - RMCAttachmentGyroscopicStabilizer
           - RMCAttachmentVerticalGrip
+          - RMCAttachmentExtinguisher
   - type: AttachableHolderVisuals
     offsets:
       rmc-aslot-barrel: 0.81, 0.06
       rmc-aslot-rail: -0.025, 0.125
-      rmc-aslot-stock: -0.375, -0.029
+      rmc-aslot-stock: -0.40625, 0.03125
       rmc-aslot-underbarrel: 0.25, -0.31
   - type: ItemCamouflage
     camouflageVariations:
@@ -70,6 +82,7 @@
   - type: Tag
     tags:
     - RMCWeaponShotgunM42A2
+    - RMCWeaponShotgun
 
 - type: Tag
   id: RMCWeaponShotgunM42A2

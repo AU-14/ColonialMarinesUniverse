@@ -1,0 +1,67 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobGOVFORSquadSergeant
+  name: au14-job-name-govforsquadsergeant
+  description: au14-job-description-govforsquadsergeant
+  setPreference: true
+  canBeAntag: false
+  playTimeTracker: AU14JobGOVFORSquadSergeant
+  ranks:
+    RMCRankSergeant: []
+  startingGear: AU14GearGOVFORSquadSergeant
+  dummyStartingGear: AU14GearGOVFORSquadSergantDummy
+  icon: "AU14JobIconSarge"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - FTL
+  overwatchSortPriority: -5
+  overwatchRoleName: Squad Sergeant
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 1
+        RMCSkillJtac: 3
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforsquadsergeant
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: MarineOrders
+  hidden: false
+
+- type: startingGear
+  id: AU14GearGOVFORSquadSergeant
+  equipment:
+    id: AU14IDCardSquadSergeant
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORSquadSergeant
+  name: Spawn Point GOVFOR Squad Sergeant
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORSquadSergeant
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobGOVFORSquadSergeant
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORSquadSergantDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleOne
+    shoes: CMBootsBrown
+    head: AU14JungleBoonieHat
+    jumpsuit: AU14JungleFatigues

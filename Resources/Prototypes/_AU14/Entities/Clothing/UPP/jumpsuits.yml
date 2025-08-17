@@ -1,0 +1,12 @@
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14UPPFatigues
+  name: UPP Naval Infantry Fatigues
+  description: A standard set of Union of Progressive Peoples Fatigues. It has shards of light Kevlar to help protect against shrapnel.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/uppfatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUPP
+    - AU14PatchUPPNavalInfantry

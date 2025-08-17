@@ -1,0 +1,73 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianCWPSRanger
+  name: au14-job-name-civiliancwpsranger
+  description: au14-job-description-civiliancwpsranger
+  setPreference: true
+  canBeAntag: false
+  playTimeTracker: AU14JobCivilianCWPSRanger
+  ranks:
+    AU14RankCWPSSeniorRanger:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCWPSRanger
+      time: 2400 # 20 hours
+    AU14RankCWPSRanger:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCWPSRanger
+      time: 120 # 2 hours
+    AU14RankCWPSRangerTrainee: []
+  startingGear: AU14GearCivilianCWPSRanger
+  icon: "RMCJobIconBureauDeputy"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - aucmb
+  - Colonist
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillCqc: 2
+        RMCSkillEndurance: 2
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 2
+        RMCSkillIntel: 1
+        RMCSkillMedical: 1
+        RMCSkillMeleeWeapons: 1
+        RMCSkillOverwatch: 1
+        RMCSkillPolice: 2
+        RMCSkillVehicles: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-civiliancwpsranger
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianCWPSRanger
+  equipment:
+    head: AU14CWPSCampaignHat
+    jumpsuit: AU14CWPSUniform
+    belt: CMBeltSecurityMarshalFilled
+    shoes: RMCBootsPMCFilled
+    id: AU14IDCardcivilianCWPSranger
+    ears: AU14CMBHeadset
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianCWPSRanger
+  name: Spawn Point Civilian CWPS Ranger
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianCWPSRanger
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianCWPSRanger
+  isHumanoid: true

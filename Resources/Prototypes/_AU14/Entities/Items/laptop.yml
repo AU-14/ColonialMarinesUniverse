@@ -1,0 +1,14 @@
+- type: entity
+  parent: BaseItem
+  id: AU14PropItemLaptop
+  name: Laptop
+  description: A portable computer.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    sprite:  _AU14/Items/laptop.rsi
+    state: laptop_off

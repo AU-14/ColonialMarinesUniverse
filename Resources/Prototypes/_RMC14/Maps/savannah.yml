@@ -27,7 +27,7 @@
 
             # Auxiliary
             CMAuxiliarySupportOfficer: [1, 1]
-#            CMIntelOfficer: [4, 4]
+            CMIntelOfficer: [4, 4]
             CMPilotDropship: [1, 1]
             CMPilotGunship: [1, 1]
             CMDropshipCrewChief: [2, 2]
@@ -46,7 +46,7 @@
             # Requisition
             CMQuartermaster: [1, 1]
             CMCargoTech: [4, 4]
-#            CMMessTech: [1, 1]
+            CMMessTech: [1, 1]
 
             # Marines
             CMSquadLeader: [4, 4]

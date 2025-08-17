@@ -1,0 +1,142 @@
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14DesertM10CorpsmanHelmet
+  name: Desert M10 Corpsman Helmet
+  description: Standard Issue Helmet used by USCM. Provides modest protection from bullet and melee attacks at the head. It also has an inbuilt camera allowing for command staff to observe the squad's actions. This one is painted with the red cross.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertHats/m10corpsmanhelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/DesertHats/m10corpsmanhelmet.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14DesertM10Helmet
+  name: Desert M10 Helmet
+  description: Standard Issue Helmet used by USCM. Provides modest protection from bullet and melee attacks at the head. It also has an inbuilt camera allowing for command staff to observe the squad's actions.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertHats/m10helmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/DesertHats/m10helmet.rsi
+    
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14DesertM10MPHelmet
+  name: Desert M10 MP Helmet
+  description: Standard Issue Helmet used by USCM. Provides modest protection from bullet and melee attacks at the head. It also has an inbuilt camera allowing for command staff to observe the squad's actions. This one is painted in the colors of the Military Police.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertHats/m10mphelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/DesertHats/m10mphelmet.rsi
+    
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14DesertM11Helmet
+  name: Desert M11 Helmet
+  description: A slightly fancier helmet for USCM leadership. This one contains a small built-in camera and has cushioning to project your fragile brain.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertHats/m11helmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/DesertHats/m11helmet.rsi
+    
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14DesertM30Helmet
+  name: Desert M30 Helmet
+  description: The M30 tactical helmet has an left eyepiece filter used to filter flight data. It is issued to Pilots and DCCs.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertHats/m30pilothelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/DesertHats/m30pilothelmet.rsi
+    
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14DesertM50Helmet #meant to have a built-in welding visor
+  name: Desert M50 Helmet
+  description: A lightweight M50 tanker helmet designed for use by vehicle crewmen in the USCM. It offers low weight protection, and allows agile movement inside the confines of an armored vehicle.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertHats/m50tankerhelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/DesertHats/m50tankerhelmet.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14JungleM10CorpsmanHelmet
+  name: Jungle M10 Corpsman Helmet
+  description: Standard Issue Helmet used by USCM. Provides modest protection from bullet and melee attacks at the head. It also has an inbuilt camera allowing for command staff to observe the squad's actions. This one is painted with the red cross.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14JungleM10Helmet
+  name: Jungle M10 Helmet
+  description: Standard Issue Helmet used by USCM. Provides modest protection from bullet and melee attacks at the head. It also has an inbuilt camera allowing for command staff to observe the squad's actions.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/m10helmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/m10helmet.rsi
+    
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14JungleM11Helmet
+  name: Jungle M11 Helmet
+  description: A slightly fancier helmet for USCM leadership. This one contains a small built-in camera and has cushioning to project your fragile brain.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/m11helmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/m11helmet.rsi
+    
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14JungleM30Helmet
+  name: Jungle M30 Helmet
+  description: The M30 tactical helmet has an left eyepiece filter used to filter flight data. It is issued to Pilots and DCCs.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/m30pilothelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/m30pilothelmet.rsi
+    
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14JungleM50Helmet #meant to have a built-in welding visor
+  name: Jungle M50 Helmet
+  description: A lightweight M50 tanker helmet designed for use by vehicle crewmen in the USCM. It offers low weight protection, and allows agile movement inside the confines of an armored vehicle.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/m50tankerhelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/m50tankerhelmet.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14UACGHelmet
+  name: UACG Riot Helmet
+  description: A cheap and lightweight riot helmet used by the United Americas Colonial Guard. Provides little to no ballistic protection.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/uacghelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/uacghelmet.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14USASFAirCrewHelmet
+  name: USASF LAH-99 aircrew helmet
+  description: A helmet made for USASF aircrew. This one contains a small built-in camera and has cushioning to protect your fragile brain.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USASFSecurityForces/USASFPilot/helmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/USASFSecurityForces/USASFPilot/helmet.rsi

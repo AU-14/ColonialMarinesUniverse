@@ -1,31 +1,10 @@
 - type: marking
-  id: HumanFacialHairAbe
-  bodyPart: FacialHair
-  markingCategory: FacialHair
-  sprites:
-    - sprite: Mobs/Customization/human_facial_hair.rsi
-      state: abe
-- type: marking
-  id: HumanFacialHairBrokenman
-  bodyPart: FacialHair
-  markingCategory: FacialHair
-  sprites:
-    - sprite: Mobs/Customization/human_facial_hair.rsi
-      state: brokenman
-- type: marking
   id: HumanFacialHairChin
   bodyPart: FacialHair
   markingCategory: FacialHair
   sprites:
     - sprite: Mobs/Customization/human_facial_hair.rsi
       state: chin
-- type: marking
-  id: HumanFacialHairDwarf
-  bodyPart: FacialHair
-  markingCategory: FacialHair
-  sprites:
-    - sprite: Mobs/Customization/human_facial_hair.rsi
-      state: dwarf
 - type: marking
   id: HumanFacialHairFullbeard
   bodyPart: FacialHair
@@ -47,13 +26,6 @@
   sprites:
     - sprite: Mobs/Customization/human_facial_hair.rsi
       state: gt
-- type: marking
-  id: HumanFacialHairHip
-  bodyPart: FacialHair
-  markingCategory: FacialHair
-  sprites:
-    - sprite: Mobs/Customization/human_facial_hair.rsi
-      state: hip
 - type: marking
   id: HumanFacialHairJensen
   bodyPart: FacialHair
@@ -83,26 +55,12 @@
     - sprite: Mobs/Customization/human_facial_hair.rsi
       state: muttonmus
 - type: marking
-  id: HumanFacialHairMartialartist
-  bodyPart: FacialHair
-  markingCategory: FacialHair
-  sprites:
-    - sprite: Mobs/Customization/human_facial_hair.rsi
-      state: martialartist
-- type: marking
   id: HumanFacialHairChinlessbeard
   bodyPart: FacialHair
   markingCategory: FacialHair
   sprites:
     - sprite: Mobs/Customization/human_facial_hair.rsi
       state: chinlessbeard
-- type: marking
-  id: HumanFacialHairMoonshiner
-  bodyPart: FacialHair
-  markingCategory: FacialHair
-  sprites:
-    - sprite: Mobs/Customization/human_facial_hair.rsi
-      state: moonshiner
 - type: marking
   id: HumanFacialHairLongbeard
   bodyPart: FacialHair
@@ -202,26 +160,12 @@
     - sprite: Mobs/Customization/human_facial_hair.rsi
       state: selleck
 - type: marking
-  id: HumanFacialHairChaplin
-  bodyPart: FacialHair
-  markingCategory: FacialHair
-  sprites:
-    - sprite: Mobs/Customization/human_facial_hair.rsi
-      state: chaplin
-- type: marking
   id: HumanFacialHairVandyke
   bodyPart: FacialHair
   markingCategory: FacialHair
   sprites:
     - sprite: Mobs/Customization/human_facial_hair.rsi
       state: vandyke
-- type: marking
-  id: HumanFacialHairWatson
-  bodyPart: FacialHair
-  markingCategory: FacialHair
-  sprites:
-    - sprite: Mobs/Customization/human_facial_hair.rsi
-      state: watson
 - type: marking
   id: HumanFacialHairElvis
   bodyPart: FacialHair

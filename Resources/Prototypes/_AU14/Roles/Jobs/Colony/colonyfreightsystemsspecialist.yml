@@ -1,0 +1,65 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianFreightSystemsSpecialist
+  name: au14-job-name-civilianfreightsystemsspecialist
+  description: au14-job-description-civilianfreightsystemsspecialist
+  setPreference: true
+  canBeAntag: false
+  playTimeTracker: AU14JobCivilianFreightSystemsSpecialist
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianFreightSystemsSpecialist
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonyadministrator
+  accessGroups:
+  - Colonist
+  - auengi
+  - CMCargoTech
+  - AUPrisonStaff
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillFirearms: 1
+        RMCSkillDomestics: 1
+        RMCSkillEngineer: 2
+        RMCSkillConstruction: 2
+        RMCSkillPowerLoader: 2
+    - type: JobPrefix
+      prefix: au14-job-prefix-freightsystemsspecialist
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianFreightSystemsSpecialist
+  equipment:
+    head: RMCHardhatOrange
+    jumpsuit: AU14CivilianBoilerSuitCyan
+    outerClothing: RMCHazardVest
+    shoes: RMCBootsCorporate
+    id: AU14IDCardColonyFreightSystemsSpecialist
+  inhand:
+  - CMStampApproved
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianFreightSystemsSpecialist
+  name: Spawn Point Freight Systems Specialist
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianFreightSystemsSpecialist
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianFreightSystemsSpecialist
+  isHumanoid: true

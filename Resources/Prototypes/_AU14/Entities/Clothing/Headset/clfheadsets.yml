@@ -1,0 +1,25 @@
+- type: entity
+  parent: CMEncryptionKey
+  id: AU14EncryptionKeyCLF
+  name: modified colony encryption key
+  description: An encryption key used to communicate on colony and CLF radio channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - Colony
+    - MarineEcho
+    defaultChannel: MarineEcho
+  - type: Sprite
+    state: we_ya_key
+
+- type: entity
+  parent: RMCHeadsetMarine
+  id: AU14CLFHeadset
+  name: colony headset
+  description: A headset used by colony personnel to communicate.
+  suffix: CLF, Colony
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyCLF

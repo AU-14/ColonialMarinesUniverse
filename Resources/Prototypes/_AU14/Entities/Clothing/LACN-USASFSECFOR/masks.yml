@@ -1,0 +1,39 @@
+- type: entity
+  parent: [ClothingMaskBase, BaseFoldable]
+  id: AU14MaskLACNPilotOxygen
+  name: LACN LAH-99 Oxygen Mask
+  description: A mask attached to LACN LAH-99 helmets to provide aircrew with breathable oxygen.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/PilotGear/mask.rsi
+    layers:
+    - state: icon
+      map: [ "unfoldedLayer" ]
+    - state: icon
+      map: ["foldedLayer"]
+      visible: false
+  - type: HideLayerClothing
+    slots:
+    - Hair
+    - HeadTop
+    - HeadSide
+    - Snout
+  - type: Clothing
+    sprite: _AU14/Clothing/LACN/PilotGear/mask.rsi
+  - type: IdentityBlocker
+    coverage: MOUTH
+  - type: Item
+    storedRotation: -90
+  - type: Appearance
+  - type: Foldable
+    canFoldInsideContainer: true
+  - type: FoldableClothing
+    foldedEquippedPrefix: up
+    foldedHeldPrefix: up
+    foldedHideLayers:
+    - HeadTop
+    - HeadSide
+    unfoldedHideLayers:
+    - HeadTop
+    - HeadSide
+    - Snout

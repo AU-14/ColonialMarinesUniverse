@@ -1,0 +1,76 @@
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14USCMVeteranCap
+  name: USCM Veteran Ball Cap
+  description: "A black ball cap with the patch of the USCM, surrounded by the words 'USCMC Veteran Semper Fi'"
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/ussartemiscap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/ussartemiscap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14CivBallCapBlack
+  name: Black Ball Cap
+  description: A simple ball cap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Hats/blackballcap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/Civilian/Hats/blackballcap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14CivFedoraTan
+  name: Tan Fedora
+  description: A stylish hat.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Hats/fedoratan.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/Civilian/Hats/fedoratan.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14CivFedoraBrown
+  name: Brown Fedora
+  description: A stylish hat.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Hats/fedorabrown.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/Civilian/Hats/fedorabrown.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14CivFedoraGray
+  name: Gray Fedora
+  description: A stylish hat.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Hats/fedoragray.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/Civilian/Hats/fedoragray.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14CivBallCapBlueTrucker
+  name: Blue Trucker Ball Cap
+  description: A trucker ball cap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Hats/bluetruckercap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/Civilian/Hats/bluetruckercap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14CivBallCapRedTrucker
+  name: Red Trucker Ball Cap
+  description: A trucker ball cap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Hats/redtruckercap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/Civilian/Hats/redtruckercap.rsi

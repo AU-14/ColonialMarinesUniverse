@@ -1,0 +1,22 @@
+- type: gameMap
+  id: tartarusprison
+  mapName: Tartarus Prison (Jailbreak
+  mapPath: /Maps/_AU14/TartarusPrison.yml
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    tartarusprisoncompmap:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'tartarusprisoncompmap'
+        - type: StationJobs
+          availableJobs:
+            AU14JobCivilianPrisoner: [ -1, -1 ]
+            AU14JobWYGuard: [4, 4]
+            AU14JobCivilianKellandWarden: [1, 1]
+            AU14JobCivilianScientist: [3, 3]
+            AU14JobCivilianFreightSystemsSpecialist: [1, 1]
+            AU14JobCivilianPhysician: [1, 1]

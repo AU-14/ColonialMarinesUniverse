@@ -1,0 +1,57 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianJournalist
+  name: au14-job-name-civilianjournalist
+  description: au14-job-description-civilianjournalist
+  setPreference: true
+  playTimeTracker: AU14JobCivilianJournalist
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianJournalist
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  - aunews
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillFirearms: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-journalist
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianJournalist
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonIvy
+    shoes: RMCShoesBlue
+    id: AU14IDCardColonyJournalist
+
+    outerClothing: AU14CivilianJacketTanPufferVest
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianJournalist
+  name: Spawn Point Civilian Journalist
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianJournalist
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianJournalist
+  isHumanoid: true

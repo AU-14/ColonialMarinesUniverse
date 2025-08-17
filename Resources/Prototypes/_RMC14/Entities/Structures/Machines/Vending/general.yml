@@ -1,27 +1,76 @@
 # GENERAL
-
 - type: entity
   parent: ColMarTechBaseAnchorable
-  id: CMVendorWalkman
+  id: CMVendorCassettes
   name: Rec-Vend
-  description: Contains We-Ya approved recreational items, like Walkmans and Cards.
+  description: Contains recreational items, like Cassette Players and Cards.
   components:
   - type: Sprite
-    sprite: _RMC14/Structures/Machines/VendingMachines/walkman.rsi
+    sprite: _RMC14/Structures/Machines/VendingMachines/cassette_player.rsi
     layers:
     - state: "off"
     - state: "normal-unshaded"
   - type: CMAutomatedVendor
+    hackable: true
     sections:
-    - name: WalkMan
-      entries: []
+    - name: Cassette Players
+      entries:
+      - id: AU14CassettePlayerGray
+        amount: 10
+      - id: AU14CassettePlayerBlue
+        amount: 10
+      - id: AU14CassettePlayerGreen
+        amount: 10
+      - id: AU14CassettePlayerPink
+        amount: 10
+      - id: AU14CassettePlayerOrange
+        amount: 10
+      - id: AU14CassettePlayerRainbow
+        amount: 10
+      - id: AU14CassettePlayerNeon
+        amount: 10
+    - name: Cassettes
+      entries:
+      - id: AU14CassetteTapeBlueStripe
+        amount: 30
+      - id: AU14CassetteTapeRisingSun
+        amount: 30
+      - id: AU14CassetteTapeOcean
+        amount: 30
+      - id: AU14CassetteTapeGreen
+        amount: 30
+      - id: AU14CassetteTapeRedBlack
+        amount: 30
+      - id: AU14CassetteTapePink
+        amount: 30
+      - id: AU14CassetteTapeRainbow
+        amount: 30
+      - id: AU14CassetteTapeRedStripe
+        amount: 30
+      - id: AU14CassetteTapeWhite
+        amount: 30
+      - id: AU14CassetteTapeNeon
+        amount: 30
+      - id: AU14CassetteTapePurple
+        amount: 30
+      - id: AU14CassetteTapeRedDirt
+        amount: 30
+      - id: AU14CassetteTapeTan
+        amount: 30
+      - id: AU14CassetteTapeTWE
+        amount: 30
+      - id: AU14CassetteTapeCLF
+        amount: 30
+      - id: AU14CassetteTapePartyApproved
+        amount: 30
+      - id: AU14CassetteTapeWY
+        amount: 30
     - name: Cards
       entries: []
-    #TODO RMC14 Walkman and music
     - name: Other
-      entries: 
+      entries:
       - id: CMPaper
-        amount: 15
+        amount: 40
       - id: CMPen
         amount: 10
       - id: d20Dice

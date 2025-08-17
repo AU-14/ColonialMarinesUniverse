@@ -1,0 +1,332 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "Taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/structures/props/containers/containersextended.dmi, https://github.com/Steelpoint/cmss13/blob/bf751971a956160f294b8f0e71addb109f0242be/icons/obj/structures/props/containers/contain.dmi",
+  "size": {
+    "x": 32,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "blueleft"
+    },
+    {
+      "name": "blueright"
+    },
+    {
+      "name": "greenleft"
+    },
+    {
+      "name": "greenright"
+    },
+    {
+      "name": "tanleft"
+    },
+    {
+      "name": "tanright"
+    },
+    {
+      "name": "greywyleft"
+    },
+    {
+      "name": "greywyright"
+    },
+    {
+      "name": "lightgreywyleft"
+    },
+    {
+      "name": "lightgreywyright"
+    },
+    {
+      "name": "blackwyleft"
+    },
+    {
+      "name": "blackwyright"
+    },
+    {
+      "name": "whitewyleft"
+    },
+    {
+      "name": "whitewyright"
+    },
+    {
+      "name": "grafcontain_l"
+    },
+    {
+      "name": "grafcontain_rm"
+    },
+    {
+      "name": "grafcontain_r"
+    },
+    {
+      "name": "grafcontain2_l"
+    },
+    {
+      "name": "grafcontain2_rm"
+    },
+    {
+      "name": "grafcontain2_r"
+    },
+    {
+      "name": "grafcontain3_l"
+    },
+    {
+      "name": "grafcontain3_rm"
+    },
+    {
+      "name": "grafcontain3_r"
+    },
+    {
+      "name": "redleft"
+    },
+    {
+      "name": "redright"
+    },
+    {
+      "name": "tanwywingsleft"
+    },
+    {
+      "name": "tanwywingsright"
+    },
+    {
+      "name": "greenwywingsleft"
+    },
+    {
+      "name": "greenwywingsright"
+    },
+    {
+      "name": "bluewywingsleft"
+    },
+    {
+      "name": "bluewywingsright"
+    },
+    {
+      "name": "redwywingsleft"
+    },
+    {
+      "name": "redwywingsright"
+    },
+    {
+      "name": "medicalleft"
+    },
+    {
+      "name": "medicalright"
+    },
+    {
+      "name": "emptymedicalleft"
+    },
+    {
+      "name": "emptymedicalright"
+    },
+    {
+      "name": "kelland_alt_l"
+    },
+    {
+      "name": "kelland_alt_r"
+    },
+    {
+      "name": "upp_t_m"
+    },
+    {
+      "name": "watatsumi_l"
+    },
+    {
+      "name": "watatsumi_lm"
+    },
+    {
+      "name": "watatsumi_m"
+    },
+    {
+      "name": "watatsumi_rm"
+    },
+    {
+      "name": "watatsumi_r"
+    },
+    {
+      "name": "grant_l"
+    },
+    {
+      "name": "grant_lm"
+    },
+    {
+      "name": "grant_rm"
+    },
+    {
+      "name": "grant_r"
+    },
+    {
+      "name": "arious_l"
+    },
+    {
+      "name": "arious_lm"
+    },
+    {
+      "name": "arious_m"
+    },
+    {
+      "name": "arious_rm"
+    },
+    {
+      "name": "arious_r"
+    },
+    {
+      "name": "wy_l"
+    },
+    {
+      "name": "wy_m"
+    },
+    {
+      "name": "wy_r"
+    },
+    {
+      "name": "hd_l"
+    },
+    {
+      "name": "hd_m"
+    },
+    {
+      "name": "hd_r"
+    },
+    {
+      "name": "trijent_l"
+    },
+    {
+      "name": "trijent_m"
+    },
+    {
+      "name": "trijent_r"
+    },
+    {
+      "name": "trijent_l_alt"
+    },
+    {
+      "name": "trijent_m_alt"
+    },
+    {
+      "name": "trijent_r_alt"
+    },
+    {
+      "name": "hd_l_alt"
+    },
+    {
+      "name": "hd_m_alt"
+    },
+    {
+      "name": "hd_r_alt"
+    },
+    {
+      "name": "kelland_l"
+    },
+    {
+      "name": "kelland_r"
+    },
+    {
+      "name": "ferret_l"
+    },
+    {
+      "name": "ferret_m"
+    },
+    {
+      "name": "ferret_r"
+    },
+    {
+      "name": "lockmart_l"
+    },
+    {
+      "name": "lockmart_m"
+    },
+    {
+      "name": "lockmart_r"
+    },
+    {
+      "name": "seegson_l"
+    },
+    {
+      "name": "seegson_m"
+    },
+    {
+      "name": "seegson_r"
+    },
+    {
+      "name": "canc_g_l"
+    },
+    {
+      "name": "canc_g_m"
+    },
+    {
+      "name": "canc_g_r"
+    },
+    {
+      "name": "canc_t_l"
+    },
+    {
+      "name": "canc_t_m"
+    },
+    {
+      "name": "canc_t_r"
+    },
+    {
+      "name": "upp_l"
+    },
+    {
+      "name": "upp_m"
+    },
+    {
+      "name": "upp_r"
+    },
+    {
+      "name": "upp_t_l"
+    },
+    {
+      "name": "upp_t_r"
+    },
+    {
+      "name": "mk6_l"
+    },
+    {
+      "name": "mk6_m"
+    },
+    {
+      "name": "mk6_r"
+    },
+    {
+      "name": "uscm1_l"
+    },
+    {
+      "name": "uscm1_m"
+    },
+    {
+      "name": "uscm2_l"
+    },
+    {
+      "name": "uscm2_m"
+    },
+    {
+      "name": "uscm3_l"
+    },
+    {
+      "name": "uscm3_m"
+    },
+    {
+      "name": "uscm4_l"
+    },
+    {
+      "name": "uscm4_m"
+    },
+    {
+      "name": "uscm5_l"
+    },
+    {
+      "name": "uscm5_m"
+    },
+    {
+      "name": "uscm6_l"
+    },
+    {
+      "name": "uscm_m"
+    },
+    {
+      "name": "uscm_r"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+- type: entity
+  parent: CMBackpack
+  id: AU14LACNBackpack
+  name: LACN standardweight backpack
+  description: The standard-issue pack of LACN landing forces. Designed to lug gear into the battlefield.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/Storage/lacnpack.rsi
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,22,1
+
+- type: entity
+  parent: CMBackpack
+  id: AU14LACNAmmoBackpack
+  name: LACN ammo bearer backpack
+  description: The standard-issue pack of LACN landing forces with an extra ammo can attached to it. Designed to lug gear into the battlefield.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/Storage/lacnammopack.rsi
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,25,1

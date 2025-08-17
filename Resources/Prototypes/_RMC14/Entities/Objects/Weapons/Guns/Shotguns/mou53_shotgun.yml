@@ -2,7 +2,7 @@
   parent: [ RMCBaseBreechloader, RMCBaseAttachableHolder ]
   name: MOU53 break action shotgun
   id: WeaponShotgunMOU53
-  description: A limited production Kerchner MOU53 triple break action classic. Respectable damage output at medium ranges, while the Aegis M42 is the king of CQC, the Kerchner MOU53 is what hits the broadside of that barn. This specific model cannot safely fire buckshot shells.
+  description: A limited production Kerchner MOU53 triple break action classic. Respectable damage output at medium ranges, while the ARMAT M37 is the king of CQC, the Kerchner MOU53 is what hits the broadside of that barn. This specific model cannot safely fire buckshot shells.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Shotguns/mou53/jungle.rsi
@@ -24,11 +24,11 @@
     recoilUnwielded: 4
     scatterWielded: 9
     scatterUnwielded: 18
-    baseFireRate: 2
+    baseFireRate: 4
     burstScatterMult: 1
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1
-    accuracyMultiplierUnwielded: 0.95
+    accuracyMultiplierUnwielded: 0.5
   - type: BallisticAmmoProvider
     cycleable: true
     whitelist:
@@ -76,6 +76,7 @@
           - RMCAttachmentAngledGrip
           - RMCAttachmentVerticalGrip
           - RMCAttachmentLaserSight
+          - RMCAttachmentExtinguisher
   - type: AttachableHolderVisuals
     offsets:
       rmc-aslot-barrel: 0.8, 0.06

@@ -23,8 +23,8 @@
 - type: entity
   parent: RMCGunCaseBase
   id: RMCGunCasePistolMK80
-  name: MK80 pistol case
-  description: A gun case containing the MK80. Comes with two magazines.
+  name: VP78 pistol case
+  description: A gun case containing the VP78. Comes with two magazines.
   components:
   - type: Storage
     maxItemSize: Huge
@@ -74,8 +74,8 @@
 - type: entity
   parent: RMCGunCaseBase
   id: RMCGunCasePistolM77
-  name: M77 Combat Pistol case
-  description: A gun case containing a M77 Combat Pistol. Comes with a rail flashlight and 6 magazines.
+  name: Mod 88 Combat Pistol case
+  description: A gun case containing a Mod 88 Combat Pistol. Comes with a rail flashlight and 6 magazines.
   components:
   - type: Storage
     maxItemSize: Huge
@@ -120,7 +120,7 @@
 - type: entity
   parent: RMCGunCaseBase
   id: RMCGunCasePistolM1984
-  name: M1984 service pistol case
+  name: M4A3 service pistol case
   description:
   components:
   - type: Storage
@@ -163,12 +163,35 @@
       amount: 6
 
 # rifles
+# M54C
+- type: entity
+  parent: RMCGunCaseBase
+  id: RMCGunCaseRifleM54C
+  name: M54C assault rifle MK2 case
+  description: A gun case containing the M54C assault rifle MK2.
+  components:
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,7,1
+    whitelist:
+      tags:
+      - RMCWeaponRifleM54CMK2
+      - CMMagazineRifleM54C
+  - type: StorageFill
+    contents:
+    - id: WeaponRifleM54C
+    - id: CMMagazineRifleM54C
+    - id: CMMagazineRifleM54C
+    - id: CMMagazineRifleM54C
+    - id: CMMagazineRifleM54C
+
 # M54CE2
 - type: entity
   parent: RMCGunCaseBase
   id: RMCGunCaseRifleM54CE2
-  name: M54CE2 heavy assault rifle case
-  description: A gun case containing the M54CE2 heavy assault rifle. You can get additional ammunition at requisitions.
+  name: M41AE2 heavy assault rifle case
+  description: A gun case containing the M41AE2 heavy pulse rifle. You can get additional ammunition at requisitions.
   components:
   - type: Storage
     maxItemSize: Ginormous
@@ -184,7 +207,7 @@
     contents:
     - id: WeaponRifleM54CE2
     - id: CMMagazineRifleM54CE2
-    - id: CMMagazineRifleM54CE2 # Replace with a holotargeting mag once that ammo is implemented.
+    - id: CMMagazineRifleM54CE2HT
 
 # XM88
 - type: entity
@@ -226,7 +249,7 @@
   - type: Storage
     maxItemSize: Huge
     grid:
-    - 0,0,9,1
+    - 0,0,13,1
     whitelist:
       tags:
       - RMCAttachmentXM51Stock
@@ -243,6 +266,13 @@
     - id: RMCBoxShotgunBreaching
       amount: 2
     - id: RMCBeltXM51
+  - type: RemoveOnlyStorage
+    whitelist:
+      tags:
+      - RMCAttachmentXM51Stock
+      - RMCWeaponShotgunXM51
+      - RMCMagazineShotgunXM51
+      - RMCXM51Holster
 
 # MOU53
 - type: entity
@@ -287,8 +317,8 @@
 - type: entity
   parent: RMCGunCaseBase
   id: RMCM54CMK1CaseAP
-  name: M54C assault rifle MK1 AP case
-  description: A gun case containing the M54C assault rifle MK1 loaded with AP rounds. It can only use proprietary MK1 magazines.
+  name: M41A pulse rifle MK1 AP case
+  description: A gun case containing the M41A pulse rifle MK1 loaded with AP rounds. It can only use proprietary MK1 magazines.
   components:
   - type: Storage
     maxItemSize: Huge
@@ -307,8 +337,8 @@
 - type: entity
   parent: RMCGunCaseBase
   id: RMCM54CMK2Case
-  name: M54C assault rifle MK2 case
-  description: A gun case containing the M54C assault rifle MK2.
+  name: M41A pulse rifle MK2 case
+  description: A gun case containing the M41A pulse rifle MK2.
   components:
   - type: Storage
     maxItemSize: Huge
@@ -329,8 +359,8 @@
 - type: entity
   parent: RMCGunCaseBase
   id: RMCM42A2ShotgunCase
-  name: M42A2 pump shotgun case
-  description: A gun case containing the M42A2 pump shotgun.
+  name: M37A3 pump shotgun case
+  description: A gun case containing the M37A3 pump shotgun.
   components:
   - type: Storage
     maxItemSize: Huge
@@ -373,3 +403,26 @@
     - id: CMShellShotgunFlechette
       prob: 0.25
       orGroup: ShellThree
+
+# Launchers
+# M79
+- type: entity
+  parent: RMCGunCaseBase
+  id: RMCM79Case
+  name: M79 grenade launcher case
+  description: A gun case containing the M79 grenade launcher. Comes with three different grenade packets
+  components:
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,7,1
+    whitelist:
+      tags:
+      - RMCWeaponLauncherM79
+      - RMCPacketGrenade
+  - type: StorageFill
+    contents:
+    - id: CMWeaponLauncherM79
+    - id: RMCPacketGrenadeM74AGMSStarShellFilled
+    - id: RMCPacketGrenadeM74AGMSHornetFilled
+    - id: RMCPacketGrenadeBatonSlugHIRRFilled

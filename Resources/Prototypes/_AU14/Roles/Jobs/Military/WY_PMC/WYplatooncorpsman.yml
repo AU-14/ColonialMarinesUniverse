@@ -1,0 +1,48 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobGOVFORPlatoonCorpsmanWYPMC
+  name: PMC Combat Lifesaver
+  description: au14-job-description-govforplatooncorpsman
+  setPreference: false
+  playTimeTracker: AU14JobGOVFORPlatoonCorpsmanWYPMC
+  ranks:
+    AU14RankWeYuSeniorOperator:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatoonCorpsmanWYPMC
+      time: 1800 # 30 hours
+    AU14RankWeYuOperator: []
+  startingGear: AU14GearGOVFORPlatoonCorpsman
+  dummyStartingGear: AU14GearGOVFORCorpsmanDummy
+  icon: "AU14JobIconCorpsman"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - HospitalCorpsman
+  overwatchSortPriority: -2
+  overwatchRoleName: Hospital Corpsmen
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 1
+        RMCSkillJtac: 1
+        RMCSkillMedical: 2
+        RMCSkillSurgery: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanWYPMC
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: playTimeTracker
+  id: AU14JobGOVFORPlatoonCorpsmanWYPMC
+  isHumanoid: true

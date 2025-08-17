@@ -41,7 +41,8 @@ namespace Content.Client.Voting.UI
             { StandardVoteType.Restart, new CreateVoteOption("ui-vote-type-restart", new(), false, null) },
             { StandardVoteType.Preset, new CreateVoteOption("ui-vote-type-gamemode", new(), false, null) },
             { StandardVoteType.Map, new CreateVoteOption("ui-vote-type-map", new(), false, null) },
-            { StandardVoteType.Votekick, new CreateVoteOption("ui-vote-type-votekick", new(), true, 0) }
+            { StandardVoteType.Votekick, new CreateVoteOption("ui-vote-type-votekick", new(), true, 0) },
+            { StandardVoteType.Platoon, new CreateVoteOption("ui-vote-type-platoon", new(), false, null) }
         };
 
         public Dictionary<string, string> VotekickReasons = new Dictionary<string, string>()
@@ -64,7 +65,6 @@ namespace Content.Client.Voting.UI
             _votingSystem = _entityManager.System<VotingSystem>();
 
             Stylesheet = IoCManager.Resolve<IStylesheetManager>().SheetSpace;
-            CloseButton.OnPressed += _ => Close();
             VoteNotTrustedLabel.Text = Loc.GetString("ui-vote-trusted-users-notice", ("timeReq", _cfg.GetCVar(CCVars.VotekickEligibleVoterDeathtime)));
 
             foreach (StandardVoteType voteType in Enum.GetValues<StandardVoteType>())
@@ -75,7 +75,6 @@ namespace Content.Client.Voting.UI
 
             _state.OnStateChanged += OnStateChanged;
             VoteTypeButton.OnItemSelected += VoteTypeSelected;
-            CreateButton.OnPressed += CreatePressed;
             FollowButton.OnPressed += FollowSelected;
         }
 
@@ -174,11 +173,9 @@ namespace Content.Client.Voting.UI
             var isAvailable = _voteManager.CanCallStandardVote(typeKey, out var timeout);
             if (typeKey == StandardVoteType.Votekick && !IsAllowedVotekick)
             {
-                CreateButton.Disabled = true;
             }
             else
             {
-                CreateButton.Disabled = !isAvailable;
             }
             VoteTypeTimeoutLabel.Visible = !isAvailable;
 
@@ -274,13 +271,11 @@ namespace Content.Client.Voting.UI
     }
 
     [UsedImplicitly, AnyCommand]
-    public sealed class VoteMenuCommand : IConsoleCommand
+    public sealed class VoteMenuCommand : LocalizedCommands
     {
-        public string Command => "votemenu";
-        public string Description => Loc.GetString("ui-vote-menu-command-description");
-        public string Help => Loc.GetString("ui-vote-menu-command-help-text");
+        public override string Command => "votemenu";
 
-        public void Execute(IConsoleShell shell, string argStr, string[] args)
+        public override void Execute(IConsoleShell shell, string argStr, string[] args)
         {
             new VoteCallMenu().OpenCentered();
         }

@@ -1,0 +1,136 @@
+- type: entity
+  parent: RemoteSignaller
+  id: AU14RemoteSignallerAdvanced
+  name: ProtonCall XL Portable Telephone
+  description: A Weyland-Yutani brickphone made by a subsidiary of their communications division. Probably pried from the dead hands of some corporate shmuck. This one’s being used for dialing CLF IEDs. Someone etched 'Fuck the United Americas' into the side.
+  components:
+  - type: Sprite
+    sprite: _AU14/Items/IEDs/signaller.rsi
+    state: advanced
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: advanced-inhand-left
+      right:
+      - state: advanced-inhand-right
+  - type: WirelessNetworkConnection
+    range: 600
+  - type: StaticPrice
+    price: 30
+
+- type: entity
+  name: improvised explosive device
+  description: A remote explosive designed to cripple foot soldiers and lightly armored vehicles. A saboteur’s and insurgent’s favorite tool of terror. Be careful... its very unstable.
+  parent: [BasePlasticExplosive, BaseSyndicateContraband]
+  id: AU14IED
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Bombs/c4.rsi
+    state: icon
+    layers:
+    - state: icon
+      map: ["base"]
+  - type: OnUseTimerTrigger
+    delay: 3
+    delayOptions: [3, 4]
+    initialBeepDelay: 2
+    beepSound: /Audio/_AU14/IED/detonate.ogg
+    startOnStick: true
+    canToggleStartOnStick: true
+  - type: TimerStartOnSignal
+  - type: DeviceLinkSink
+    ports:
+      - Timer
+  - type: Explosive
+    explosionType: RMC
+    totalIntensity: 2000
+    intensitySlope: 2
+    maxIntensity: 80
+    canCreateVacuum: false
+  - type: ExplodeOnTrigger
+
+- type: entity
+  name: huge improvised explosive device
+  description: A rather large remote explosive designed to cripple foot soldiers and lightly armored vehicles. A saboteur’s and insurgent’s favorite tool of terror. Be careful... its very unstable.
+  parent: [BasePlasticExplosive, BaseSyndicateContraband]
+  id: AU14IEDLarge
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Bombs/c4.rsi
+    state: icon
+    layers:
+    - state: icon
+      map: ["base"]
+  - type: OnUseTimerTrigger
+    delay: 5
+    delayOptions: [3, 4]
+    initialBeepDelay: 2
+    beepSound: /Audio/_AU14/IED/detonate.ogg
+    startOnStick: true
+    canToggleStartOnStick: true
+  - type: TimerStartOnSignal
+  - type: DeviceLinkSink
+    ports:
+      - Timer
+  - type: Explosive
+    explosionType: RMC
+    totalIntensity: 1800
+    intensitySlope: 1.5
+    maxIntensity: 100
+    canCreateVacuum: false
+  - type: ExplodeOnTrigger
+
+- type: entity
+  name: improvised explosive vest
+  description: A worn suicide explosive vest designed to cripple foot soldiers. Those who use it will never return...
+  parent: [BasePlasticExplosive, BaseSyndicateContraband]
+  id: AU14IEDVest
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/CLF/pbied.rsi
+    state: icon
+    layers:
+    - state: icon
+      map: ["base"]
+  - type: Clothing
+    sprite: _AU14/Clothing/CLF/pbied.rsi
+    slots:
+    - OUTERCLOTHING
+    quickEquip: false
+    equipDelay: 10
+    unequipDelay: 6
+  - type: OnUseTimerTrigger
+    delay: 3
+    delayOptions: [3, 4]
+    initialBeepDelay: 0
+    beepSound: /Audio/_AU14/IED/vestbeep.ogg
+    startOnStick: true
+    canToggleStartOnStick: true
+  - type: TimerStartOnSignal
+  - type: DeviceLinkSink
+    ports:
+      - Timer
+  - type: Explosive
+    explosionType: RMC
+    totalIntensity: 800
+    intensitySlope: 1.6
+    maxIntensity: 79
+    canCreateVacuum: false
+  - type: ExplodeOnTrigger
+
+- type: entity
+  parent: CMPaperWritten
+  id: AU14IEDGuide
+  name: improvised explosives guide
+  components:
+  - type: Paper
+    content: "1. Grab yerself an IED make sure it ain tickin.
+      2. Plug it into yer phone usin that fancy access tuner thing I put in the equipment rack.
+      3. Hide real good bu make sure you can see when dem feds are nearby your bomb.
+      4. Use the phone to call the dam IED.
+      5. Dont be standin there when it goes she blows fast.
+      The big one will blow up a whole 7 or 8 meters I rekon. The small one youll hav to blow up closa maybe four or fiv. Try puttin em in a closet or somethin hide it well.
+      Be careful it wil blow up if you touch it to much even after connectin it.
+      If god forbid you chose to use the vest god speed an make it count. You hook it up the same way.
+      Now I gotta get goin fore them feds find this place. for lif limb and libertie
+      -Uncle Derek Totter"

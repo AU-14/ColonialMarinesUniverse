@@ -1,0 +1,8 @@
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14WYPMCFatigues
+  name: WY PMC Fatigues
+  description: A standard set of Weyland-Yutani PMC Fatigues. It has shards of light Kevlar to help protect against shrapnel.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/WY_PMC/wypmcfatigues.rsi

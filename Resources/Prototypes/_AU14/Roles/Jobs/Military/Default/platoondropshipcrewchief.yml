@@ -1,0 +1,82 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobGOVFORDCC
+  name: au14-job-name-govfordcc
+  description: au14-job-description-govfordcc
+  setPreference: true
+  canBeAntag: false
+
+  playTimeTracker: AU14JobGOVFORDCC
+  ranks:
+    AU14RankUSASFCMSgt:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDCC
+      time: 7200 # 120 hours
+    AU14RankUSASFSMSgt:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDCC
+      time: 3600 # 60 hours
+    AU14RankUSASFMasterSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDCC
+      time: 720 # 12 hours
+    AU14RankUSASFTechnicalSergeant: []
+  startingGear: AU14GearGOVFORDCC
+  dummyStartingGear: AU14GearGOVFORDCCDummy
+  icon: "AU14JobIconDCC"
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - augovforpilot
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 2
+        RMCSkillOverwatch: 1
+        RMCSkillPilot: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillSurgery: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-govfordcc
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearGOVFORDCC
+  equipment:
+    id: AU14IDCardGOVFORDCC
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORDCC
+  name: Spawn Point GOVFOR Dropship Crew Chief
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORDCC
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobGOVFORDCC
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORDCCDummy
+  equipment:
+    outerClothing: AU14USASFICPS2
+    shoes: CMBootsBrown
+    head: AU14USASFAirCrewHelmet
+    jumpsuit: AU14USASFPilotJumpsuit

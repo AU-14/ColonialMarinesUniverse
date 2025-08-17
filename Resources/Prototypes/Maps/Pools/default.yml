@@ -2,7 +2,7 @@
   id: DefaultMapPool
   maps:
   - Savannah
-  - Almayer
+ # - Almayer
 
 - type: gameMapPool
   id: DefaultMapPoolAlmayer

@@ -1,0 +1,218 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "PEPW",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "oob"
+    },
+    {
+      "name": "military"
+    },
+    {
+      "name": "military_barracks"
+    },
+    {
+      "name": "military_barracks2"
+    },
+    {
+      "name": "military_baths"
+    },
+    {
+      "name": "military_briefing"
+    },
+    {
+      "name": "military_brig"
+    },
+    {
+      "name": "military_cic"
+    },
+    {
+      "name": "military_w_gate"
+    },
+    {
+      "name": "military_e_gate"
+    },
+    {
+      "name": "military_garage"
+    },
+    {
+      "name": "military_hospital"
+    },
+    {
+      "name": "military_lz"
+    },
+    {
+      "name": "military_nw_observe"
+    },
+    {
+      "name": "military_ne_observe"
+    },
+    {
+      "name": "military_sw_observe"
+    },
+    {
+      "name": "military_se_observe"
+    },
+    {
+      "name": "military_office"
+    },
+    {
+      "name": "military_perimeter"
+    },
+    {
+      "name": "military_platoon_commander"
+    },
+    {
+      "name": "military_waste"
+    },
+    {
+      "name": "military_yard"
+    },
+    {
+      "name": "n_road"
+    },
+    {
+      "name": "c_road"
+    },
+    {
+      "name": "s_road"
+    },
+    {
+      "name": "nw_jungle"
+    },
+    {
+      "name": "ne_jungle"
+    },
+    {
+      "name": "w_jungle"
+    },
+    {
+      "name": "c_jungle"
+    },
+    {
+      "name": "e_jungle"
+    },
+    {
+      "name": "sw_jungle"
+    },
+    {
+      "name": "se_jungle"
+    },
+    {
+      "name": "n_river"
+    },
+    {
+      "name": "c_river"
+    },
+    {
+      "name": "s_river"
+    },
+    {
+      "name": "colony_baths"
+    },
+    {
+      "name": "colony_dorms"
+    },
+    {
+      "name": "colony_perimeter"
+    },
+    {
+      "name": "colony_waste"
+    },
+    {
+      "name": "hospital"
+    },
+    {
+      "name": "hospital_breakroom"
+    },
+    {
+      "name": "hospital_dorms"
+    },
+    {
+      "name": "hospital_morgue"
+    },
+    {
+      "name": "hospital_psychology"
+    },
+    {
+      "name": "hospital_surgery"
+    },
+    {
+      "name": "tavern"
+    },
+    {
+      "name": "tavern_dorms"
+    },
+    {
+      "name": "tavern_hydroponics"
+    },
+    {
+      "name": "tavern_kitchen"
+    },
+    {
+      "name": "tavern_storage"
+    },
+    {
+      "name": "fm_building"
+    },
+    {
+      "name": "eal_asrs"
+    },
+    {
+      "name": "eal_dorms"
+    },
+    {
+      "name": "eal_reactor"
+    },
+    {
+      "name": "eal_lz"
+    },
+    {
+      "name": "eal_perimeter"
+    },
+    {
+      "name": "eal_storage"
+    },
+    {
+      "name": "ca_building"
+    },
+    {
+      "name": "ca_perimeter"
+    },
+    {
+      "name": "cl_building"
+    },
+    {
+      "name": "cl_perimeter"
+    },
+    {
+      "name": "spo_building"
+    },
+    {
+      "name": "spo_perimeter"
+    },
+    {
+      "name": "fishery"
+    },
+    {
+      "name": "fishery_baths"
+    },
+    {
+      "name": "fishery_docks"
+    },
+    {
+      "name": "tunnel"
+    },
+    {
+      "name": "hdn_cabins"
+    },
+    {
+      "name": "hdn_lz"
+    }
+  ]
+}

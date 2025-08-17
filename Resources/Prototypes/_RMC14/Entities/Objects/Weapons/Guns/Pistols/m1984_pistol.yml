@@ -1,8 +1,8 @@
 - type: entity
   parent: CMWeaponPistolBase
   id: CMWeaponPistolM1984
-  name: M1984 service pistol
-  description: An M1984 Service Pistol, once the standard issue sidearm of the Marines but has recently been replaced with the M77 combat pistol. Fires 9mm pistol rounds.
+  name: M4A3 service pistol
+  description: An M4A3 Service Pistol, once the standard issue sidearm of the Marines but has recently been replaced with the Mod 88 combat pistol. Fires 9mm pistol rounds.
   components:
   - type: Tag
     tags:
@@ -134,7 +134,7 @@
 - type: entity
   parent: CMMagazinePistolM1984
   id: RMCMagazinePistolM1984AP
-  name: M1984 AP magazine (9mm)
+  name: M4A3 AP magazine (9mm)
   description: A pistol magazine. This one contains armor-piercing bullets, which have noticeably higher stopping power on well-armored targets, and noticeably less on unarmored or lightly-armored targets.
   components:
   - type: Tag

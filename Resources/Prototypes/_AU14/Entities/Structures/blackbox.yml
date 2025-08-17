@@ -1,0 +1,37 @@
+﻿- type: entity
+  parent: BaseStructureDynamic
+  id: AU14BlackBoxRecorder
+  name: colony blackbox recorder
+  description: An ICC mandated data recorder installed in all UA, UPP and TWE registered colonies. Engineered to survive catastrophic events, it continuously logs critical environmental, structural and operational data. In the event of a disaster, it enables investigators to reconstruct the sequence of events and determine the root cause of failure. This one however, is not red.
+  components:
+  - type: Anchorable
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: InteractionOutline
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:EmptyAllContainersBehaviour
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CMSheetMetal1:
+            min: 1
+            max: 1
+  - type: Sprite
+    sprite:  _AU14/Structures/blackbox.rsi
+    state: blackbox

@@ -1,0 +1,102 @@
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14DesertFatigues
+  name: USCM desert fatigues
+  description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/desertfatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSCM
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14JungleFatigues
+  name: USCM jungle fatigues
+  description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/junglefatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSCM
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14SnowFatigues
+  name: USCM snow fatigues
+  description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/snowfatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSCM
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14MixedSnowFatigues
+  name: mixed USCM snow fatigues
+  description: A mix of winter and jungle USCM fatigues. Reservists don't get amazing funding, huh...
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/mixedsnowfatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSCM
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14TacticalFlightSuit
+  name: Aircrew Flightsuit
+  description: Standard-issue USCM flightsuit. It has integrated life support mechanisms.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/tacticalflightsuit.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14USCMOperationsUniform
+  name: USCM operations uniform
+  description: Standard-issue USCM operations uniform. Used by command and support personnel on USCM installations.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/uscmoperationsuniform.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14UACGFatigues
+  name: UACG fatigues
+  description: Standard-issue UACG fatigues.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Uniforms/kahkiboilersuit.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories: [ AU14PatchUAFlag ]
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14UASFFatigues
+  name: USASF fatigues
+  description: Standard-issue USASF fatigues.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/junglefatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUAFlag
+    - AU14PatchUSASF
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14USASFPilotJumpsuit
+  name: USASF Aircrew Jumpsuit
+  description: A standard USASF Aircrew Jumpsuit. It has shards of light Kevlar to help protect against shrapnel.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USASFSecurityForces/USASFPilot/uniform.rsi

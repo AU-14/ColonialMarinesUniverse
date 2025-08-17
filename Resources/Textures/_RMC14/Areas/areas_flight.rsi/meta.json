@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "PEPW",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "roof-in"
+    },
+    {
+      "name": "roof-out"
+    },
+    {
+      "name": "minus1-in"
+    },
+    {
+      "name": "minus1-out"
+    },
+    {
+      "name": "minus2-in"
+    },
+    {
+      "name": "minus2-out"
+    },
+    {
+      "name": "minus3-in"
+    },
+    {
+      "name": "minus3-out"
+    },
+    {
+      "name": "minus4-in"
+    },
+    {
+      "name": "minus4-out"
+    },
+    {
+      "name": "minus5-in"
+    },
+    {
+      "name": "minus5-out"
+    },
+    {
+      "name": "minus6-in"
+    },
+    {
+      "name": "minus6-out"
+    },
+    {
+      "name": "minus7-in"
+    },
+    {
+      "name": "minus7-out"
+    },
+    {
+      "name": "minus8-in"
+    },
+    {
+      "name": "minus8-out"
+    }
+  ]
+}

@@ -1,0 +1,347 @@
+- type: entity
+  parent: RMCBaseMarineArmorLight
+  id: AU14BaseArmor
+  name: Example
+  description: Standard Issue Armor used by many UA military organizations. Provides modest protection from bullet and melee attacks. It also has a shoulder-mounted directional flashlight for night time combat.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/Armor/m3/standard/padded/jungle.rsi
+  - type: CMArmor
+    bullet: 20
+    bio: 20
+    explosionArmor: 15
+  - type: RMCArmorSpeedTier
+    speedTier: medium
+  - type: ClothingSpeedModifier
+    walkModifier: 0.666
+    sprintModifier: 0.666
+  - type: ExplosionResistance
+    damageCoefficient: 0
+    worn: false
+  - type: Storage
+    maxItemSize: Tiny
+    grid:
+    - 0,0,15,1
+    blacklist:
+      tags:
+      - Pouch
+  - type: LimitedStorage
+    limits:
+    - popup: rmc-storage-limit-cant-fit
+      count: 2
+      whitelist:
+        components:
+        - RMCFlask
+        - CMScalpel
+        - Figurine
+        - CassettePlayer
+        tags:
+        #       - TODO RMC14 cards
+        - Slice
+        #       - TODO RMC14 glasses (eyewear)
+        - Pen
+        - Crayon
+        - RMCHandful
+        - Flashlight
+        - Brutepack
+        - CMOintment
+        - CMAutoInjector
+        - PillPacket
+        - Syringe
+        - Pill
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: [ ]
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: IgnoreContentsSize
+    items:
+      components:
+      - RMCLighter
+      - RMCFlaskwas
+      - CMScalpel
+      - Figurine
+      - Matchbox
+      - OuterClothingAccessory
+      - CassettePlayer
+      - CassetteTape
+      tags:
+      - CigPack
+      - Cigarette
+      #      - TODO RMC14 cards
+      - Slice
+      #      - TODO RMC14 glasses (eyewear)
+      - Pen
+      - Crayon
+      - RMCHandful
+      - Flashlight
+      - Brutepack
+      - CMOintment
+      - CMAutoInjector
+      - PillPacket
+  - type: FixedItemSizeStorage
+  - type: Appearance
+  - type: OuterClothingAccessoryHolder
+
+- type: entity
+  parent: RMCBaseArmor
+  id: AU14BaseArmorLight
+  name: Example
+  description: Example
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/Armor/m3/standard/padded/jungle.rsi
+  - type: ClothingSpeedModifier
+    walkModifier: 0.725
+    sprintModifier: 0.725
+  - type: CMArmor
+    bullet: 20
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14ArmorM3JungleOne
+  name: M3 pattern jungle smooth USCM armor
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleArmor/uscmarmorone.rsi
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14ArmorM3JungleTwo
+  name: M3 pattern jungle ribbed USCM armor
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleArmor/uscmarmortwo.rsi
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14ArmorM3JungleThree
+  name: M3 pattern jungle dimpled USCM armor
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleArmor/uscmarmorthree.rsi
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14ArmorM3DesertOne
+  name: M3 pattern desert smooth USCM armor
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertArmor/uscmarmorone.rsi
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14ArmorM3DesertTwo
+  name: M3 pattern desert ribbed USCM armor
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertArmor/uscmarmortwo.rsi
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14ArmorM3DesertThree
+  name: M3 pattern desert dimpled USCM armor
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertArmor/uscmarmorthree.rsi
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14ArmorM3UACG
+  name: M3 pattern colonial guard armor
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/uacgarmor.rsi
+
+- type: entity
+  parent: AU14BaseArmorLight
+  id: AU14ArmorBallisticVest
+  description: A light ballistic vest.
+  name: ballistic vest
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/ballisticarmor.rsi
+
+- type: entity
+  parent: AU14BaseArmorLight
+  id: AU14ArmorPilotFlakJacket
+  name: aircrew flak jacket
+  description: A light flak jacket designed for USCM aircrew. Provides very little protection.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/pilotflakvest.rsi
+
+- type: entity
+  parent: [ RMCAllowSuitStorageClothingSmartgunner, AU14BaseArmor ]
+  id: AU14ArmorSmartGunDesertCombatHarness
+  name: M56 Desert Combat Harness
+  description: An M56 Combat Harness specially made for Smartgunners.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertArmor/uscmarmorsmartgunner.rsi
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,3,1 # 2 slots
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: ClothingBlockBackpack
+  - type: SmartGunArmor
+
+- type: entity
+  parent: [ RMCAllowSuitStorageClothingSmartgunner, AU14BaseArmor ]
+  id: AU14ArmorSmartGunJungleCombatHarness
+  name: M56 Jungle Harness
+  description: An M56 Combat Harness specially made for Smartgunners.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleArmor/uscmarmorsmartgunner.rsi
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,3,1 # 2 slots
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: ClothingBlockBackpack
+  - type: SmartGunArmor
+
+- type: entity
+  parent: [ClothingOuterStorageBase, RMCAllowSuitStorageClothingExternalWebbing]
+  id: AU14ExternalWebbing
+  name: external webbing
+  description: Designed to be worn over a jumpsuit rather than clipped on.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/Misc/external_webbing.rsi
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,3,1 # 2 slots
+  - type: FixedItemSizeStorage
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - MRE
+      - PillPacket
+      - PillCanister
+      - CMSurgicalCase
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14USASFICPS2
+  name: USASF ICPS-2 Aircrew Armor
+  description: A set of ballistic armor used by USASF aircrew.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USASFSecurityForces/USASFPilot/armor.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: CMArmor
+    bullet: 10
+    bio: 10
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor, RMCHelmetBase]
+  id: foldabletestarmor
+  name: USASF ICPS-2 Aircrew Armor
+  description: A set of ballistic armor used by USASF aircrew.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USASFSecurityForces/USASFPilot/armor.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: CMArmor
+    bullet: 10
+    bio: 10
+    explosionArmor: 10
+  - type: CMHardArmor
+  - type: Storage
+    maxItemSize: Tiny
+    grid:
+    - 0,0,7,1 # 4 slots, only 2 can fit useful items (meds, cigarettes)
+    blacklist:
+      tags:
+      - Pouch
+  - type: LimitedStorage
+    limits:
+    - popup: rmc-storage-limit-cant-fit
+      count: 2
+      whitelist:
+        components:
+        - RMCFlask
+        - CMScalpel
+        - Figurine
+        - CassettePlayer
+        - CassetteTape
+        tags:
+        #       - TODO RMC14 cards
+        - Slice
+        #       - TODO RMC14 glasses (eyewear)
+        - Pen
+        - Crayon
+        - RMCHandful
+        - Flashlight
+        - Brutepack
+        - CMOintment
+        - CMAutoInjector
+        - PillPacket
+        - Syringe
+        - Pill
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: [ ]
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: IgnoreContentsSize
+    items:
+      components:
+      - RMCLighter
+      - RMCFlask
+      - CMScalpel
+      - Figurine
+      - Matchbox
+      - OuterClothingAccessory
+      - CassetteTape
+      tags:
+      - CigPack
+      - Cigarette
+      #      - TODO RMC14 cards
+      - Slice
+      #      - TODO RMC14 glasses (eyewear)
+      - Pen
+      - Crayon
+      - RMCHandful
+      - Flashlight
+      - Brutepack
+      - CMOintment
+      - CMAutoInjector
+      - PillPacket
+  - type: FixedItemSizeStorage
+  - type: Appearance
+  - type: OuterClothingAccessoryHolder
+  - type: SquadArmor
+    layer: Helmet
+    slot: HEAD
+    rsi:
+      sprite: _RMC14/Objects/Clothing/Head/Helmets/helmet_overlays.rsi
+      state: std-helmet
+    leaderRsi:
+      sprite: _RMC14/Objects/Clothing/Head/Helmets/helmet_overlays.rsi
+      state: sql-helmet

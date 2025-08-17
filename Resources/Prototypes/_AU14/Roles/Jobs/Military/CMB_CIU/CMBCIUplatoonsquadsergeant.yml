@@ -1,0 +1,44 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobGOVFORSquadSergeantCMBCIU
+  name: Team Leader
+  description: au14-job-description-govforsquadsergeant
+  setPreference: false
+  canBeAntag: false
+  playTimeTracker: AU14JobGOVFORSquadSergeantCMBCIU
+  ranks:
+    AU14RankCMBSrDeputy: []
+  startingGear: AU14GearGOVFORSquadSergeant
+  dummyStartingGear: AU14GearGOVFORSquadSergantDummy
+  icon: "AU14JobIconSarge"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - FTL
+  overwatchSortPriority: -5
+  overwatchRoleName: Squad Sergeant
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 1
+        RMCSkillJtac: 3
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadSergeantCMBCIU
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: MarineOrders
+  hidden: false
+
+- type: playTimeTracker
+  id: AU14JobGOVFORSquadSergeantCMBCIU
+  isHumanoid: true

@@ -1,0 +1,55 @@
+ #section
+
+- type: entity
+  parent: CMEncryptionKey
+  id: AU14EncryptionKeyGOVFOR
+  name: GOVFOR encryption key
+  description: An encryption key used to communicate on the GOVFOR channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - MarineDelta
+    defaultChannel: MarineDelta
+  - type: Sprite
+    state: we_ya_key
+
+- type: entity
+  parent: CMEncryptionKey
+  id: AU14EncryptionKeyGOVFORCommand
+  name: GOVFOR command encryption key
+  description: An encryption key used to communicate on all GOVFOR channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - MarineDelta
+    - MarineCommand
+    - MarineJTAC
+    defaultChannel: MarineDelta
+  - type: Sprite
+    state: we_ya_key
+
+- type: entity
+  parent: RMCHeadsetShip
+  id: AU14HeadsetSectionMarine
+  name: GOVFOR section radio headset
+  description: This is used by GOVFOR personnel to communicate on the radio.
+  components:
+  - type: Sprite
+    state: generic_headset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGOVFOR
+
+- type: entity
+  parent: RMCHeadsetShip
+  id: AU14HeadsetSectionLeader
+  name: GOVFOR command radio headset
+  description: This is used by GOVFOR command members to communicate on the radio.
+  components:
+  - type: Sprite
+    state: generic_headset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGOVFORCommand

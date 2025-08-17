@@ -1,12 +1,4 @@
 - type: marking
-  id: HumanHairShorterLongBedhead
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/shorter_long_bedhead.rsi
-      state: hair_verybadlycut
-
-- type: marking
   id: RMCHumanHairCrew
   bodyPart: Hair
   markingCategory: Hair
@@ -167,28 +159,12 @@
       state: hair_parted
 
 - type: marking
-  id: RMCHumanHairPompadour
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_pompadour
-
-- type: marking
   id: RMCHumanHairCleancut
   bodyPart: Hair
   markingCategory: Hair
   sprites:
     - sprite: _RMC14/Mobs/Customization/human_hair.rsi
       state: hair_cleancut
-
-- type: marking
-  id: RMCHumanHairQuiff
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_quiff
 
 - type: marking
   id: RMCHumanHairBedhead
@@ -295,14 +271,6 @@
       state: hair_father
 
 - type: marking
-  id: RMCHumanHairReverseMohawk
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_reversemohawk
-
-- type: marking
   id: RMCHumanHairDevillock
   bodyPart: Hair
   markingCategory: Hair
@@ -325,30 +293,6 @@
   sprites:
     - sprite: _RMC14/Mobs/Customization/human_hair.rsi
       state: hair_curls
-
-- type: marking
-  id: RMCHumanHairAfro
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_afro
-
-- type: marking
-  id: RMCHumanHairAfro2
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_afro2
-
-- type: marking
-  id: RMCHumanHairAfroLarge
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_bigafro
 
 - type: marking
   id: RMCHumanHairSargeant
@@ -407,22 +351,6 @@
       state: hair_feather
 
 - type: marking
-  id: RMCHumanHairHitop
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_hitop
-
-- type: marking
-  id: RMCHumanHairMohawk
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_mohawk
-
-- type: marking
   id: RMCHumanHairJensen
   bodyPart: Hair
   markingCategory: Hair
@@ -479,22 +407,6 @@
       state: hair_himecut
 
 - type: marking
-  id: RMCHumanHairBraid
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_braid
-
-- type: marking
-  id: RMCHumanHairMediumBraid
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_shortbraid
-
-- type: marking
   id: RMCHumanHairBraid2
   bodyPart: Hair
   markingCategory: Hair
@@ -519,14 +431,6 @@
       state: hair_ombre
 
 - type: marking
-  id: RMCHumanHairUpdo
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_updo
-
-- type: marking
   id: RMCHumanHairSkinhead
   bodyPart: Hair
   markingCategory: Hair
@@ -543,30 +447,6 @@
       state: hair_baldinghair
 
 - type: marking
-  id: RMCHumanHairFamilyman
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_thefamilyman
-
-- type: marking
-  id: RMCHumanHairMahdrills
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_drillruru
-
-- type: marking
-  id: RMCHumanHairDandypomp
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_dandypompadour
-
-- type: marking
   id: RMCHumanHairPoofy
   bodyPart: Hair
   markingCategory: Hair
@@ -581,14 +461,6 @@
   sprites:
     - sprite: _RMC14/Mobs/Customization/human_hair.rsi
       state: hair_toriyama
-
-- type: marking
-  id: RMCHumanHairVegeta
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_toriyama2
 
 - type: marking
   id: RMCHumanHairCIA
@@ -621,14 +493,6 @@
   sprites:
     - sprite: _RMC14/Mobs/Customization/human_hair.rsi
       state: hair_nitori
-
-- type: marking
-  id: RMCHumanHairJoestar
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_joestar
 
 - type: marking
   id: RMCHumanHairFlatTopFade
@@ -1063,30 +927,6 @@
       state: hair_sideswept
 
 - type: marking
-  id: RMCHumanHairMohawkShaved
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_mohawkshaved
-
-- type: marking
-  id: RMCHumanHairMohawkShaved2
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_mohawkshaved2
-
-- type: marking
-  id: RMCHumanHairMohawkShaved3
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_mohawkshavednaomi
-
-- type: marking
   id: RMCHumanHairSideUndercut
   bodyPart: Hair
   markingCategory: Hair
@@ -1277,3 +1117,85 @@
   sprites:
     - sprite: _RMC14/Mobs/Customization/human_hair.rsi
       state: hair_braid3
+
+# AU14 Added Hair
+
+- type: marking
+  id: AU14HumanHairCIA2
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_cia2
+
+- type: marking
+  id: AU14HumanHairCIA3
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_cia3
+
+- type: marking
+  id: AU14HumanHairCIA5
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_cia5
+
+- type: marking
+  id: AU14HumanHairIRS
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_irs
+
+- type: marking
+  id: AU14HumanHairFlatPressed
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_flatpressed
+
+- type: marking
+  id: AU14HumanHairWaver
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_waver
+
+- type: marking
+  id: AU14HumanHairElegant
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_elegantbun
+
+- type: marking
+  id: AU14HumanHairLowBun
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_low_bun
+
+- type: marking
+  id: AU14HumanHairLowPonyTail
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_low_ponytail
+
+- type: marking
+  id: AU14HumanHairLowPonyTailAlt
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_low_ponytail_alt

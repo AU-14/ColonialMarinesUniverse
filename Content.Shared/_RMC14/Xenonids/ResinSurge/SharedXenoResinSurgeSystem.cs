@@ -5,15 +5,15 @@ using Content.Shared._RMC14.Xenonids.Fruit;
 using Content.Shared._RMC14.Xenonids.Fruit.Components;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Plasma;
-using Content.Shared._RMC14.Xenonids.Spray;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Actions;
 using Content.Shared.Coordinates;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.DoAfter;
+using Content.Shared.Doors.Components;
+using Content.Shared.Examine;
 using Content.Shared.Maps;
 using Content.Shared.Popups;
-using Content.Shared.Timing;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
@@ -34,8 +34,9 @@ public sealed class SharedXenoResinSurgeSystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly SharedRMCMapSystem _rmcMap = default!;
+    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
     [Dependency] private readonly SharedXenoWeedsSystem _weeds = default!;
+    [Dependency] private readonly ExamineSystemShared _examine = default!;
 
     public override void Initialize()
     {
@@ -67,13 +68,14 @@ public sealed class SharedXenoResinSurgeSystem : EntitySystem
         }
     }
 
-    private void ReduceSurgeCooldown(Entity<XenoResinSurgeComponent> xeno, TimeSpan? cooldown = null)
+
+    private void ReduceSurgeCooldown(Entity<XenoResinSurgeComponent> xeno, double? cooldownMult = null)
     {
         foreach (var action in _actions.GetActions(xeno))
         {
-            if (TryComp(action.Id, out XenoResinSurgeActionComponent? actionComp))
+            if (TryComp(action, out XenoResinSurgeActionComponent? actionComp))
             {
-                _actions.SetCooldown(action.Id, cooldown ?? actionComp.FailCooldown);
+                _actions.SetCooldown(action.AsNullable(), actionComp.SuccessCooldown * (cooldownMult ?? actionComp.FailCooldownMult));
                 break;
             }
         }
@@ -83,9 +85,9 @@ public sealed class SharedXenoResinSurgeSystem : EntitySystem
     {
         foreach (var action in _actions.GetActions(xeno))
         {
-            if (TryComp(action.Id, out XenoResinSurgeActionComponent? actionComp))
+            if (TryComp(action, out XenoResinSurgeActionComponent? actionComp))
             {
-                _actions.SetCooldown(action.Id, cooldown ?? actionComp.SuccessCooldown);
+                _actions.SetCooldown(action.AsNullable(), cooldown ?? actionComp.SuccessCooldown);
                 break;
             }
         }
@@ -96,17 +98,20 @@ public sealed class SharedXenoResinSurgeSystem : EntitySystem
         if (args.Handled)
             return;
 
-        args.Handled = true;
-
-        if (args.Coords is not { } target)
-            return;
-
         // Check if target on grid
-        if (_transform.GetGrid(target) is not { } gridId ||
+        if (_transform.GetGrid(args.Target) is not { } gridId ||
             !TryComp(gridId, out MapGridComponent? grid))
             return;
 
-        target = target.SnapToGrid(EntityManager, _map);
+        if (!_examine.InRangeUnOccluded(xeno.Owner, args.Target, xeno.Comp.Range))
+        {
+            _popup.PopupClient(Loc.GetString("rmc-xeno-resin-surge-see-fail"), xeno, xeno);
+            return;
+        }
+
+        args.Handled = true;
+
+        var target = args.Target.SnapToGrid(EntityManager, _map);
 
         // Check if user has enough plasma
         if (xeno.Comp.ResinDoafter != null || !_xenoPlasma.TryRemovePlasmaPopup((xeno.Owner, null), args.PlasmaCost))
@@ -134,6 +139,13 @@ public sealed class SharedXenoResinSurgeSystem : EntitySystem
                 _popup.PopupPredicted(popupSelf, popupOthers, xeno, xeno);
 
                 _xenoReinforce.Reinforce(entity, xeno.Comp.ReinforceAmount, xeno.Comp.ReinforceDuration);
+                if (_net.IsServer)
+                {
+                    if (HasComp<DoorComponent>(entity))
+                        SpawnAttachedTo(xeno.Comp.SurgeDoorEffect, entity.ToCoordinates());
+                    else
+                        SpawnAttachedTo(xeno.Comp.SurgeWallEffect, entity.ToCoordinates());
+                }
                 return;
             }
 
@@ -151,11 +163,15 @@ public sealed class SharedXenoResinSurgeSystem : EntitySystem
                 }
 
                 _popup.PopupClient(Loc.GetString("rmc-xeno-resin-surge-fruit", ("target", entity)), xeno, xeno);
+                args.Handled = false;
+                var cooldownTimeMult = (fruit.GrowTime.TotalSeconds - (fruit.GrowTime / xeno.Comp.FruitCooldownDivisor)) * 0.1;
+                ReduceSurgeCooldown(xeno, cooldownTimeMult);
+
                 return;
             }
 
             // Check if target is on weeds
-            if (TryComp(entity, out XenoWeedsComponent? weeds) || _weeds.IsOnWeeds(entity))
+            if (TryComp(entity, out XenoWeedsComponent? weeds) || _weeds.IsOnFriendlyWeeds(entity))
             {
                 EntityUid weedEnt = entity;
                 if (weeds == null)

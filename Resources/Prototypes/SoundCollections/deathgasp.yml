@@ -1,20 +1,22 @@
 - type: soundCollection
   id: MaleDeathGasp
   files:
-  - /Audio/Effects/Gasp/male_deathgasp_1.ogg
-  - /Audio/Effects/Gasp/male_deathgasp_2.ogg
-  - /Audio/Effects/Gasp/male_deathgasp_3.ogg
-  - /Audio/Effects/Gasp/male_deathgasp_4.ogg
-  - /Audio/Effects/Gasp/male_deathgasp_5.ogg
+  - /Audio/_AU14/Voice/DeathGasps/malegasp1.ogg
+  - /Audio/_AU14/Voice/DeathGasps/malegasp2.ogg
+  - /Audio/_AU14/Voice/DeathGasps/malegasp3.ogg
+  - /Audio/_AU14/Voice/DeathGasps/malegasp4.ogg
+  - /Audio/_AU14/Voice/DeathGasps/malegasp5.ogg
+  - /Audio/_AU14/Voice/DeathGasps/malegasp6.ogg
+  - /Audio/_AU14/Voice/DeathGasps/malegasp7.ogg
 
 - type: soundCollection
   id: FemaleDeathGasp
   files:
-  - /Audio/Effects/Gasp/female_deathgasp_1.ogg
-  - /Audio/Effects/Gasp/female_deathgasp_2.ogg
-  - /Audio/Effects/Gasp/female_deathgasp_3.ogg
-  - /Audio/Effects/Gasp/female_deathgasp_4.ogg
-  - /Audio/Effects/Gasp/female_deathgasp_5.ogg
+  - /Audio/_AU14/Voice/DeathGasps/femalegasp.ogg
+  - /Audio/_AU14/Voice/DeathGasps/femalegasp2.ogg
+  - /Audio/_AU14/Voice/DeathGasps/femalegasp3.ogg
+  - /Audio/_AU14/Voice/DeathGasps/femalegasp4.ogg
+  - /Audio/_AU14/Voice/DeathGasps/femalegasp5.ogg
 
 - type: soundCollection
   id: DeathGasp

@@ -1,0 +1,72 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobGOVFORPlatoonCorpsman
+  name: au14-job-name-govforplatooncorpsman
+  description: au14-job-description-govforplatooncorpsman
+  setPreference: true
+  playTimeTracker: AU14JobGOVFORPlatoonCorpsman
+  ranks:
+    RMCRankCorporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatoonCorpsman
+      time: 1200 # 20 hours
+    RMCRankLanceCorporal: []
+  startingGear: AU14GearGOVFORPlatoonCorpsman
+  dummyStartingGear: AU14GearGOVFORCorpsmanDummy
+  icon: "AU14JobIconCorpsman"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - HospitalCorpsman
+  overwatchSortPriority: -2
+  overwatchRoleName: Hospital Corpsmen
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 1
+        RMCSkillJtac: 1
+        RMCSkillMedical: 2
+        RMCSkillSurgery: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforplatooncorpsman
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearGOVFORPlatoonCorpsman
+  equipment:
+    id: AU14JobIDCardGOVFORPlatoonCorpsman
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORPlatoonCorpsman
+  name: Spawn Point GOVFOR Squad Sergeant
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORPlatoonCorpsman
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobGOVFORPlatoonCorpsman
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORCorpsmanDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleOne
+    gloves: CMHandsLatex
+    shoes: CMBootsBlack
+    head: AU14JungleM10CorpsmanHelmet
+    jumpsuit: AU14JungleFatigues

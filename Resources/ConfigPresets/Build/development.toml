@@ -1,9 +1,11 @@
 ﻿[game]
+defaultpreset = "ColonyFall"
 # Straight in-game baby
-lobbyenabled = false
-# Dev map for faster loading & convenience
-map = "RMCDev"
+lobbyenabled = true
 role_timers = false
+
+[events]
+enabled = false
 
 [ghost]
 role_time = 0.5
@@ -12,8 +14,11 @@ quick_lottery = true
 [gateway]
 generator_enabled = false
 
+[movement]
+mob_pushing = true
+
 [net]
-tickrate = 15
+tickrate = 30
 
 [physics]
 # Makes mapping annoying
@@ -37,5 +42,9 @@ preload_grids = false
 [admin]
 see_own_notes = true
 
-[rmc]
-planet_map_vote = false
+
+[ic]
+# random_characters = true
+random_species_weights = ""
+ssd_sleep_time = 3600
+id_job_length = 50

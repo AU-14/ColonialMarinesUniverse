@@ -1,0 +1,143 @@
+- type: entity
+  parent: CMPaper
+  id: AUPaperRunawaySynth
+  name: Fugitive Alert
+  components:
+  - type: Paper
+    stampState: paper_stamp-cmb
+    stampedBy:
+    - stampedColor: "#b0901b"
+      stampedName: CMB
+    content: >2-
+      [color=#383838]█[/color][color=#ffffff]░░[/color][color=#8c0000]█ [color=#383838]█▄[/color] █ [/color][head=3]Colonial Marshall Bureau[/head]
+
+      [color=#383838]▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[/color]
+      [color=#8c0000]▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀[/color]
+
+      [head=2][color=goldenrod]Fugitive Alert[/color][/head]
+
+      [bold]To:[/bold] [italic]CMB Office Staff[/italic]
+      [bold]From:[/bold] [bold]CMB Sectoral HQ[/bold]|
+      [color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]
+      Sheriff,
+        A runaway Synth has been detected at Your colony, liquidate it and the 2500$ bounty is yours.
+
+      Signed,
+      [color=#dfc189][bolditalic]Regional HQ [color=black]|[/color]
+      [color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]
+
+
+- type: entity
+  parent: CMPaper
+  id: AUPaperRunawaySynthDead
+  name: Fugitive Termination Confirmation
+  components:
+  - type: Paper
+    stampState: paper_stamp-cmb
+    stampedBy:
+    - stampedColor: "#b0901b"
+      stampedName: CMB
+    content: >2-
+
+      [color=#383838]█[/color][color=#ffffff]░░[/color][color=#8c0000]█ [color=#383838]█▄[/color] █ [/color][head=3]Colonial Marshall Bureau[/head]
+
+      [color=#383838]▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[/color]
+      [color=#8c0000]▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀[/color]
+
+      [head=2][color=goldenrod]Fugitive Alert[/color][/head]
+
+      [bold]To:[/bold] [italic]CMB Office Staff[/italic]
+      [bold]From:[/bold] [bold]CMB Sectoral HQ[/bold]|
+      [color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]
+      Sheriff,
+        Excellent work terminating the Synthetic. The bounty has been transferred to the Colony account.
+      Signed,
+      [color=#dfc189][bolditalic]Regional HQ [color=black]|[/color]
+      [color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]
+
+- type: entity
+  parent: CMPaper
+  id: AUPaperFugitiveCaptured
+  name: Fugitive Capture Confirmation
+  components:
+  - type: Paper
+    stampState: paper_stamp-cmb
+    stampedBy:
+    - stampedColor: "#b0901b"
+      stampedName: CMB
+    content: >2-
+
+      [color=#383838]█[/color][color=#ffffff]░░[/color][color=#8c0000]█ [color=#383838]█▄[/color] █ [/color][head=3]Colonial Marshall Bureau[/head]
+
+      [color=#383838]▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[/color]
+      [color=#8c0000]▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀[/color]
+
+      [head=2][color=goldenrod]Fugitive Alert[/color][/head]
+
+      [bold]To:[/bold] [italic]CMB Office Staff[/italic]
+      [bold]From:[/bold] [bold]CMB Sectoral HQ[/bold]|
+      [color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]
+      Sheriff,
+        Excellent work capturing th enemy of justice, we'll send a team to pick them up soon.
+      Signed,
+      [color=#dfc189][bolditalic]Regional HQ [color=black]|[/color]
+      [color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]
+
+
+- type: entity
+  parent: CMPaper
+  id: AUPaperFugitive
+  name: Fugitive Capture Confirmation
+  components:
+  - type: Paper
+    stampState: paper_stamp-cmb
+    stampedBy:
+    - stampedColor: "#b0901b"
+      stampedName: CMB
+    content: >2-
+
+      [color=#383838]█[/color][color=#ffffff]░░[/color][color=#8c0000]█ [color=#383838]█▄[/color] █ [/color][head=3]Colonial Marshall Bureau[/head]
+
+      [color=#383838]▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[/color]
+      [color=#8c0000]▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀[/color]
+
+      [head=2][color=goldenrod]Fugitive Alert[/color][/head]
+
+      [bold]To:[/bold] [italic]CMB Office Staff[/italic]
+      [bold]From:[/bold] [bold]CMB Sectoral HQ[/bold]|
+      [color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]
+      Sheriff,
+        A long time criminal has been located to be hiding out near your duty station. He has a sizeable bounty and wanted ALIVE. Bring him in and get that bounty, more information on your records console.
+      Signed,
+      [color=#dfc189][bolditalic]Regional HQ [color=black]|[/color]
+      [color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]
+
+
+
+- type: entity
+  parent: CMPaper
+  id: AUPaperDrugs
+  name: Fugitive Capture Confirmation
+  components:
+  - type: Paper
+    stampState: paper_stamp-cmb
+    stampedBy:
+    - stampedColor: "#b0901b"
+      stampedName: CMB
+    content: >2-
+
+      [color=#383838]█[/color][color=#ffffff]░░[/color][color=#8c0000]█ [color=#383838]█▄[/color] █ [/color][head=3]Colonial Marshall Bureau[/head]
+
+      [color=#383838]▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[/color]
+      [color=#8c0000]▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀[/color]
+
+      [head=2][color=goldenrod]Narcotics Alert[/color][/head]
+
+      [bold]To:[/bold] [italic]CMB Office Staff[/italic]
+      [bold]From:[/bold] [bold]CMB Sectoral HQ[/bold]|
+      [color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]
+      Sheriff,
+        We've noticed the surge in drug deaths at your post. Fix it, now.
+      Signed,
+      [color=#dfc189][bolditalic]Regional HQ [color=black]|[/color]
+      [color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]

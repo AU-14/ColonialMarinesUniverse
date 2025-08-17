@@ -1,0 +1,10 @@
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14UPPNavalInfantryHelmet
+  name: UPP Naval Infantry Helmet
+  description: A UPP Naval Infantry helmet.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/upphelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UPP/upphelmet.rsi

@@ -1,0 +1,65 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianForeman
+  name: au14-job-name-foreman
+  description: au14-job-description-foreman
+  setPreference: true
+  canBeAntag: false
+  playTimeTracker: AU14JobCivilianForeman
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianForeman
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonyadministrator
+  accessGroups:
+  - Colonist
+  - auadmin
+  - auengi
+  - CMCargoTech
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFireman: 2
+        RMCSkillFirearms: 2
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillEngineer: 4
+        RMCSkillConstruction: 4
+        RMCSkillPowerLoader: 2
+        RMCSkillPilot: 1
+        RMCSkillNavigations: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-colonyforeman
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianForeman
+  equipment:
+    head: RMCHardhatBlue
+    jumpsuit: AU14CivilianWeYuEngineerFormanClothes
+    shoes: RMCBootsCorporate
+    id: AU14IDCardColonyForeman
+    ears: AU14ColonyAdminHeadset
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianForeman
+  name: Spawn Point Civilian Foreman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianForeman
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianForeman
+  isHumanoid: true

@@ -1,0 +1,32 @@
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14UPPBoonie
+  name: UPP Boonie
+  description: A UPP boonie hat.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/uppboonie.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UPP/uppboonie.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14UPPPatrolCap
+  name: UPP Patrol Cap
+  description: A UPP patrol cap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/uppcap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UPP/uppcap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14UPPUshanka
+  name: UPP Ushanka
+  description: A UPP Ushanka.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/uppushanka.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UPP/uppushanka.rsi

@@ -146,13 +146,13 @@ public sealed partial class CCVars
     ///     The delay for which two votekicks are allowed to be made by separate people, in seconds.
     /// </summary>
     public static readonly CVarDef<float> VotekickTimeout =
-        CVarDef.Create("votekick.timeout", 120f, CVar.SERVERONLY);
+        CVarDef.Create("votekick.timeout", 60f, CVar.SERVERONLY);
 
     /// <summary>
     ///     Sets the duration of the votekick vote timer.
     /// </summary>
     public static readonly CVarDef<int>
-        VotekickTimer = CVarDef.Create("votekick.timer", 60, CVar.SERVERONLY);
+        VotekickTimer = CVarDef.Create("votekick.timer", 45, CVar.SERVERONLY);
 
     /// <summary>
     ///     Config for how many hours playtime a player must have to get protection from the Raider votekick type when playing as an antag.
@@ -177,4 +177,16 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<bool> VotekickIgnoreGhostReqInLobby =
         CVarDef.Create("votekick.ignore_ghost_req_in_lobby", true, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Controls if platoon votes should be run.
+    /// </summary>
+    public static readonly CVarDef<bool> VotePlatoonEnabled =
+        CVarDef.Create("vote.platoon_enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Sets the duration of the platoon vote timer in seconds.
+    /// </summary>
+    public static readonly CVarDef<int> VotePlatoonDuration =
+        CVarDef.Create("vote.platoon_duration", 30, CVar.SERVERONLY);
 }

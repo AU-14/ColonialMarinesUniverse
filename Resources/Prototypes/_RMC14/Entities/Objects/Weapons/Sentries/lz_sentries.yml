@@ -11,8 +11,8 @@
     fixtures:
       fix1:
         shape:
-          !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,0.45"
+          !type:PhysShapeCircle
+          radius: 0.45
         density: 60
         mask:
         - MachineMask
@@ -62,7 +62,7 @@
 - type: entity
   parent: RMCBaseTurret
   id: RMCTurretGaussSpaceborne
-  name: UN-577 spaceborne gauss turret
+  name: UA-577 spaceborne gauss turret
   description: A fully-automated defence turret with mid-range targeting capabilities. Armed with a modified M32-S Autocannon and an internal belt feed.
   components:
   - type: InteractionPopup

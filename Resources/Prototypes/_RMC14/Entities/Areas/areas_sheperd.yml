@@ -1,0 +1,988 @@
+- type: entity
+  parent: RMCAreaBase
+  id: RMCAreaShep
+  name: LV-112 Sheperds' Pride
+  components:
+  - type: Sprite
+    sprite: _RMC14/Areas/areas_sheperd.rsi
+    state: oob
+  - type: Area
+    buildSpecial: true
+    powerNet: ground
+    minimapColor: '#91BDCFE7'
+
+- type: entity
+  parent: RMCAreaShep
+  id: RMCAreaShepIndoors
+  name: Sheperds' - Indoors
+  components:
+  - type: Area
+    CAS: true
+    fulton: true
+    mortarPlacement: false
+    mortarFire: true
+    lasing: false
+    medevac: false
+    OB: true
+    supplyDrop: true
+    weatherEnabled: false
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepMil
+  name: Military
+  components:
+  - type: Sprite
+    state: military
+  - type: Area
+    minimapColor: '#97A0A6CC'
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilBarracks
+  name: Military - Barracks
+  components:
+  - type: Sprite
+    state: military_barracks
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilBaths
+  name: Military - Baths
+  components:
+  - type: Sprite
+    state: military_baths
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilBriefing
+  name: Military - Briefing
+  components:
+  - type: Sprite
+    state: military_briefing
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilBrig
+  name: Military - Brig
+  components:
+  - type: Sprite
+    state: military_brig
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilCIC
+  name: Military - CIC
+  components:
+  - type: Sprite
+    state: military_cic
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilWestGate
+  name: Military - West Gate Observation
+  components:
+  - type: Sprite
+    state: military_w_gate
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilEastGate
+  name: Military - East Gate Observation
+  components:
+  - type: Sprite
+    state: military_e_gate
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilNWObservation
+  name: Military - North West Observation
+  components:
+  - type: Sprite
+    state: military_nw_observe
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilNEObservation
+  name: Military - North East Observation
+  components:
+  - type: Sprite
+    state: military_ne_observe
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilSWObservation
+  name: Military - South West Observation
+  components:
+  - type: Sprite
+    state: military_sw_observe
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilSEObservation
+  name: Military - South East Observation
+  components:
+  - type: Sprite
+    state: military_se_observe
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilGarage
+  name: Military - Garage
+  components:
+  - type: Sprite
+    state: military_garage
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilHospital
+  name: Military - Hospital
+  components:
+  - type: Sprite
+    state: military_hospital
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilOffice
+  name: Military - Office
+  components:
+  - type: Sprite
+    state: military_office
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilPlatoonCommander
+  name: Military - Platoon Commander
+  components:
+  - type: Sprite
+    state: military_platoon_commander
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilBarracks2
+  name: Military - Officers & Auxiliary
+  components:
+  - type: Sprite
+    state: military_barracks2
+
+- type: entity
+  parent: RMCAreaShepMil
+  id: RMCAreaShepMilWaste
+  name: Military - Waste Management
+  components:
+  - type: Sprite
+    state: military_waste
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepNorthColonyBaths
+  name: North Colony - Baths
+  components:
+  - type: Sprite
+    state: colony_baths
+  - type: Area
+    minimapColor: '#9F9F09CC'
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepSouthColonyBaths
+  name: South Colony - Baths
+  components:
+  - type: Sprite
+    state: colony_baths
+  - type: Area
+    minimapColor: '#9F9F09CC'
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepNorthColonyDorms1
+  name: North Colony - Dorm 1
+  components:
+  - type: Sprite
+    state: colony_dorms
+  - type: Area
+    minimapColor: '#9F9F09CC'
+
+- type: entity
+  parent: RMCAreaShepNorthColonyDorms1
+  id: RMCAreaShepNorthColonyDorms2
+  name: North Colony - Dorm 2
+  components:
+  - type: Sprite
+    state: colony_dorms
+
+- type: entity
+  parent: RMCAreaShepNorthColonyDorms1
+  id: RMCAreaShepNorthColonyDorms3
+  name: North Colony - Dorm 3
+  components:
+  - type: Sprite
+    state: colony_dorms
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepSouthColonyDorms1
+  name: South Colony - Dorm 1
+  components:
+  - type: Sprite
+    state: colony_dorms
+  - type: Area
+    minimapColor: '#9F9F09CC'
+
+- type: entity
+  parent: RMCAreaShepSouthColonyDorms1
+  id: RMCAreaShepSouthColonyDorms2
+  name: South Colony - Dorm 2
+  components:
+  - type: Sprite
+    state: colony_dorms
+
+- type: entity
+  parent: RMCAreaShepSouthColonyDorms1
+  id: RMCAreaShepSouthColonyDorms3
+  name: South Colony - Dorm 3
+  components:
+  - type: Sprite
+    state: colony_dorms
+
+- type: entity
+  parent: RMCAreaShepSouthColonyDorms1
+  id: RMCAreaShepSouthColonyDorms4
+  name: South Colony - Dorm 4
+  components:
+  - type: Sprite
+    state: colony_dorms
+
+- type: entity
+  parent: RMCAreaShepSouthColonyDorms1
+  id: RMCAreaShepSouthColonyDorms5
+  name: South Colony - Dorm 5
+  components:
+  - type: Sprite
+    state: colony_dorms
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepNorthColonyWaste
+  name: North Colony - Waste Management
+  components:
+  - type: Sprite
+    state: colony_waste
+  - type: Area
+    minimapColor: '#9F9F09CC'
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepSouthColonyWaste
+  name: South Colony - Waste Management
+  components:
+  - type: Sprite
+    state: colony_waste
+  - type: Area
+    minimapColor: '#9F9F09CC'
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepHospital
+  name: Hospital
+  components:
+  - type: Sprite
+    state: hospital
+  - type: Area
+    minimapColor: '#218F39CC'
+
+- type: entity
+  parent: RMCAreaShepHospital
+  id: RMCAreaShepHospitalBreakroom
+  name: Hospital - Breakroom
+  components:
+  - type: Sprite
+    state: hospital_breakroom
+
+- type: entity
+  parent: RMCAreaShepHospital
+  id: RMCAreaShepHospitalDorms
+  name: Hospital - Dorms
+  components:
+  - type: Sprite
+    state: hospital_dorms
+
+- type: entity
+  parent: RMCAreaShepHospital
+  id: RMCAreaShepHospitalMorgue
+  name: Hospital - Morgue
+  components:
+  - type: Sprite
+    state: hospital_morgue
+
+- type: entity
+  parent: RMCAreaShepHospital
+  id: RMCAreaShepHospitalPsychology
+  name: Hospital - Psychology
+  components:
+  - type: Sprite
+    state: hospital_psychology
+
+- type: entity
+  parent: RMCAreaShepHospital
+  id: RMCAreaShepHospitalSurgery
+  name: Hospital - Surgery
+  components:
+  - type: Sprite
+    state: hospital_surgery
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepTavern
+  name: The Drunk Carp
+  components:
+  - type: Sprite
+    state: tavern
+  - type: Area
+    minimapColor: '#7B0920CC'
+
+- type: entity
+  parent: RMCAreaShepTavern
+  id: RMCAreaShepTavernDorms
+  name: The Drunk Carp - Dorms
+  components:
+  - type: Sprite
+    state: tavern_dorms
+
+- type: entity
+  parent: RMCAreaShepTavern
+  id: RMCAreaShepTavernHydroponics
+  name: The Drunk Carp - Hydroponics
+  components:
+  - type: Sprite
+    state: tavern_hydroponics
+
+- type: entity
+  parent: RMCAreaShepTavern
+  id: RMCAreaShepTavernKitchen
+  name: The Drunk Carp - Kitchen
+  components:
+  - type: Sprite
+    state: tavern_kitchen
+
+- type: entity
+  parent: RMCAreaShepTavern
+  id: RMCAreaShepTavernStorage
+  name: The Drunk Carp - Storage
+  components:
+  - type: Sprite
+    state: tavern_storage
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepForeman
+  name: Foreman
+  components:
+  - type: Sprite
+    state: fm_building
+  - type: Area
+    minimapColor: '#92673ECC'
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepEALASRS
+  name: Engineering & Logistics - ASRS
+  components:
+  - type: Sprite
+    state: eal_asrs
+  - type: Area
+    minimapColor: '#92673ECC'
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepEALDorms
+  name: Engineering & Logistics - Dorms
+  components:
+  - type: Sprite
+    state: eal_dorms
+  - type: Area
+    minimapColor: '#92673ECC'
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepEALReactor
+  name: Engineering & Logistics - Reactor
+  components:
+  - type: Sprite
+    state: eal_reactor
+  - type: Area
+    minimapColor: '#92673ECC'
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepEALStorage
+  name: Engineering & Logistics - Storage
+  components:
+  - type: Sprite
+    state: eal_storage
+  - type: Area
+    minimapColor: '#92673ECC'
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepColonyAdministrator
+  name: Colony Administrator
+  components:
+  - type: Sprite
+    state: ca_building
+  - type: Area
+    minimapColor: '#986566CC'
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepCorporateLiaison
+  name: Corporate Liaison
+  components:
+  - type: Sprite
+    state: cl_building
+  - type: Area
+    minimapColor: '#986566CC'
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepSpareOffice
+  name: Spare Office
+  components:
+  - type: Sprite
+    state: spo_building
+  - type: Area
+    minimapColor: '#6E7598CC'
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepFishery
+  name: Fishery
+  components:
+  - type: Sprite
+    state: fishery
+  - type: Area
+    minimapColor: '#8A794CCC'
+
+- type: entity
+  parent: RMCAreaShepFishery
+  id: RMCAreaShepFisheryBaths
+  name: Fishery - Baths
+  components:
+  - type: Sprite
+    state: fishery_baths
+
+- type: entity
+  parent: RMCAreaShepFishery
+  id: RMCAreaShepFisheryDocks
+  name: Fishery - Docks
+  components:
+  - type: Sprite
+    state: fishery_docks
+
+- type: entity
+  parent: RMCAreaShepIndoors
+  id: RMCAreaShepTunnel
+  name: Tunnel
+  components:
+  - type: Sprite
+    state: tunnel
+  - type: Area
+    CAS: false
+    fulton: false
+    mortarPlacement: false
+    mortarFire: false
+    lasing: false
+    medevac: false
+    OB: true
+    supplyDrop: false
+    minimapColor: '#4B3921CC'
+
+- type: entity
+  parent: RMCAreaShep
+  id: RMCAreaShepOutdoors
+  name: Sheperds' - Outdoors
+  components:
+  - type: Area
+    CAS: true
+    fulton: true
+    mortarPlacement: true
+    mortarFire: true
+    lasing: true
+    medevac: true
+    OB: true
+    supplyDrop: true
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepMilLZ1
+  name: Military - LZ 1
+  components:
+  - type: Sprite
+    state: military_lz
+  - type: Area
+    resinAllowed: false
+    minimapColor: '#384852CC'
+    linkedLz: dropship_lz1
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepMilLZ2
+  name: Military - LZ 2
+  components:
+  - type: Sprite
+    state: military_lz
+  - type: Area
+    resinAllowed: false
+    minimapColor: '#384852CC'
+    linkedLz: dropship_lz2
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepMilPerimeter
+  name: Military - Perimeter
+  components:
+  - type: Sprite
+    state: military_perimeter
+  - type: Area
+    minimapColor: '#97A0A6CC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepMilYard
+  name: Military - Yard
+  components:
+  - type: Sprite
+    state: military_yard
+  - type: Area
+    minimapColor: '#97A0A6CC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepNRoad
+  name: North Road
+  components:
+  - type: Sprite
+    state: n_road
+  - type: Area
+    minimapColor: '#6B562ACC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepCRoad
+  name: Central Road
+  components:
+  - type: Sprite
+    state: c_road
+  - type: Area
+    minimapColor: '#6B562ACC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepSRoad
+  name: South Road
+  components:
+  - type: Sprite
+    state: s_road
+  - type: Area
+    minimapColor: '#6B562ACC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepNWJungle
+  name: North West Jungle
+  components:
+  - type: Sprite
+    state: nw_jungle
+  - type: Area
+    minimapColor: '#295B43CC'
+
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepNEJungle
+  name: North East Jungle
+  components:
+  - type: Sprite
+    state: ne_jungle
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepWJungle
+  name: West Jungle
+  components:
+  - type: Sprite
+    state: w_jungle
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepEJungle
+  name: East Jungle
+  components:
+  - type: Sprite
+    state: e_jungle
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepCJungle
+  name: Central Jungle
+  components:
+  - type: Sprite
+    state: c_jungle
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepSWJungle
+  name: South West Jungle
+  components:
+  - type: Sprite
+    state: sw_jungle
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepSEJungle
+  name: South East Jungle
+  components:
+  - type: Sprite
+    state: se_jungle
+  - type: Area
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepNRiver
+  name: North River
+  components:
+  - type: Sprite
+    state: n_river
+  - type: Area
+    resinAllowed: false
+    noTunnel: true
+    unweedable: true
+    minimapColor: '#015B6BCC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepCRiver
+  name: Central River
+  components:
+  - type: Sprite
+    state: c_river
+  - type: Area
+    resinAllowed: false
+    noTunnel: true
+    unweedable: true
+    minimapColor: '#015B6BCC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepSRiver
+  name: South River
+  components:
+  - type: Sprite
+    state: s_river
+  - type: Area
+    resinAllowed: false
+    noTunnel: true
+    unweedable: true
+    minimapColor: '#015B6BCC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepNorthColonyPerimeter
+  name: North Colony
+  components:
+  - type: Sprite
+    state: colony_perimeter
+  - type: Area
+    minimapColor: '#9F9F09CC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepSouthColonyPerimeter
+  name: South Colony
+  components:
+  - type: Sprite
+    state: colony_perimeter
+  - type: Area
+    minimapColor: '#9F9F09CC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepEALPerimeter
+  name: Engineering & Logistics
+  components:
+  - type: Sprite
+    state: eal_perimeter
+  - type: Area
+    minimapColor: '#92673ECC'
+
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepEALLZ
+  name: Engineering & Logistics - LZ
+  components:
+  - type: Sprite
+    state: eal_lz
+  - type: Area
+    resinAllowed: false
+    minimapColor: '#64462CCC'
+    linkedLz: dropship_lz3
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepCAPerimeter
+  name: Colony Administrator
+  components:
+  - type: Sprite
+    state: ca_perimeter
+  - type: Area
+    minimapColor: '#986566CC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepCLPerimeter
+  name: Corporate Liaison
+  components:
+  - type: Sprite
+    state: cl_perimeter
+  - type: Area
+    minimapColor: '#A6A657CC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepSPOPerimeter
+  name: Spare Office
+  components:
+  - type: Sprite
+    state: spo_perimeter
+  - type: Area
+    minimapColor: '#6E7598CC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepHiddenCabins
+  name: North West Jungle
+  components:
+  - type: Sprite
+    state: hdn_cabins
+  - type: Area
+    CAS: false
+    fulton: false
+    lasing: false
+    mortarPlacement: false
+    mortarFire: false
+    medevac: false
+    supplyDrop: false
+    minimapColor: '#295B43CC'
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepHiddenLZ
+  name: North West Jungle
+  components:
+  - type: Sprite
+    state: hdn_lz
+  - type: Area
+    CAS: false
+    fulton: false
+    lasing: false
+    mortarPlacement: false
+    mortarFire: false
+    medevac: false
+    supplyDrop: false
+    minimapColor: '#295B43CC'
+    linkedLz: dropship_lz4
+
+- type: entity
+  parent: RMCAreaShepOutdoors
+  id: RMCAreaShepFisheryDocksWater
+  name: Fishery - Docks
+  components:
+  - type: Sprite
+    state: fishery_docks
+  - type: Area
+    resinAllowed: false
+    noTunnel: true
+    unweedable: true
+    minimapColor: '#8A794CCC'
+
+- type: entity
+  parent: RMCAreaShep
+  id: RMCAreaShepOOB
+  name: Out Of Bounds
+  components:
+  - type: Sprite
+    state: oob
+  - type: Area
+    CAS: false
+    fulton: false
+    lasing: false
+    mortarPlacement: false
+    mortarFire: false
+    medevac: false
+    OB: false
+    supplyDrop: false
+    resinAllowed: false
+    avoidBioscan: false
+    noTunnel: true
+    unweedable: false
+    minimapColor: '#141D25CC'
+
+- type: entity
+  parent: RMCAreaShepOOB
+  id: RMCAreaShepMilOOB
+  name: Military - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: military
+    - state: oob
+  - type: Area
+    minimapColor: '#141D25CC'
+
+- type: entity
+  parent: RMCAreaShepOOB
+  id: RMCAreaShepNWJungleOOB
+  name: North West Jungle - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: nw_jungle
+    - state: oob
+  - type: Area
+    minimapColor: '#091111CC'
+
+- type: entity
+  parent: RMCAreaShepOOB
+  id: RMCAreaShepNEJungleOOB
+  name: North East Jungle - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: ne_jungle
+    - state: oob
+  - type: Area
+    minimapColor: '#091111CC'
+
+- type: entity
+  parent: RMCAreaShepOOB
+  id: RMCAreaShepWJungleOOB
+  name: West Jungle - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: w_jungle
+    - state: oob
+  - type: Area
+    minimapColor: '#091111CC'
+
+- type: entity
+  parent: RMCAreaShepOOB
+  id: RMCAreaShepCJungleOOB
+  name: Central Jungle - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: c_jungle
+    - state: oob
+  - type: Area
+    minimapColor: '#091111CC'
+
+- type: entity
+  parent: RMCAreaShepOOB
+  id: RMCAreaShepEJungleOOB
+  name: East Jungle - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: e_jungle
+    - state: oob
+  - type: Area
+    minimapColor: '#091111CC'
+
+- type: entity
+  parent: RMCAreaShepOOB
+  id: RMCAreaShepSWJungleOOB
+  name: South West Jungle - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: sw_jungle
+    - state: oob
+  - type: Area
+    minimapColor: '#091111CC'
+
+- type: entity
+  parent: RMCAreaShepOOB
+  id: RMCAreaShepSEJungleOOB
+  name: South East Jungle - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: se_jungle
+    - state: oob
+  - type: Area
+    minimapColor: '#091111CC'
+
+- type: entity
+  parent: RMCAreaShepOOB
+  id: RMCAreaShepNRiverOOB
+  name: North River - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: n_river
+    - state: oob
+  - type: Area
+    unweedable: true
+    minimapColor: '#012644CC'
+
+- type: entity
+  parent: RMCAreaShepOOB
+  id: RMCAreaShepCRiverOOB
+  name: Central River - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: c_river
+    - state: oob
+  - type: Area
+    unweedable: true
+    minimapColor: '#012644CC'
+
+- type: entity
+  parent: RMCAreaShepOOB
+  id: RMCAreaShepSRiverOOB
+  name: South River - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: s_river
+    - state: oob
+  - type: Area
+    unweedable: true
+    minimapColor: '#012644CC'
+
+- type: entity
+  parent: RMCAreaShepOOB
+  id: RMCAreaShepTunnelOOB
+  name: Tunnel - Out Of Bounds
+  components:
+  - type: Sprite
+    layers:
+    - state: tunnel
+    - state: oob
+    - type: Area
+      minimapColor: '#1D1511CC'

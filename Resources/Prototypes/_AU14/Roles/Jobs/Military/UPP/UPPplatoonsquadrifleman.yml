@@ -1,0 +1,46 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobGOVFORSquadRiflemanUPP
+  name: Rifleman
+  description: au14-job-description-govforsquadrifleman
+  setPreference: false
+  playTimeTracker: AU14JobGOVFORSquadRiflemanUPP
+  ranks:
+    UPP_Yefreytor:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadRiflemanUPP
+      time: 1800 # 30 hours
+    UPP_Ryadovoy: []
+  startingGear: AU14GearGOVFORSquadRifleman
+  dummyStartingGear: AU14GearGOVFORRiflemanDummy
+  icon: "AU14JobIconRFN"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - Rifleman
+  hasIcon: false
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 1
+        RMCSkillFirearms: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadRiflemanUPP
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: playTimeTracker
+  id: AU14JobGOVFORSquadRiflemanUPP
+  isHumanoid: true

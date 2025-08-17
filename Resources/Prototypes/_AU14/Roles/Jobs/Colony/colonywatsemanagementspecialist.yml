@@ -1,0 +1,62 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianWasteManagementSpecialist
+  name: au14-job-name-civilianwastemanagementspecialist
+  description: au14-job-description-civilianwastemanagementspecialist
+  setPreference: true
+  playTimeTracker: AU14JobCivilianWasteManagementSpecialist
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianWasteManagementSpecialist
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  - auengi
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillCqc: 1
+        RMCSkillEndurance: 1
+        RMCSkillFireman: 2
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillEngineer: 2
+        RMCSkillConstruction: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillFirearms: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-civilianwastemanagementspecialist
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianWasteManagementSpecialist
+  equipment:
+    jumpsuit: AU14CivilianSanitationClothes
+    outerClothing: AU14CivilianFullSuitSanitation
+    shoes: RMCBootsCorporate
+    id: AU14IDCardColonyWasteManagementSpecialist
+
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianWasteManagementSpecialist
+  name: Spawn Point Waste Management Specialist
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianWasteManagementSpecialist
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianWasteManagementSpecialist
+  isHumanoid: true

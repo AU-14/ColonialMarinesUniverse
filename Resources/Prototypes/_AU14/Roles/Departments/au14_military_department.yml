@@ -1,0 +1,29 @@
+﻿- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentGovernmentForces
+  name: au14-department-govforces
+  description: au14-department-govforces-description
+  color: "#e3ce94"
+  roles:
+  - AU14JobGOVFORPlatCo
+  - AU14JobGOVFORPlatOp
+  - AU14JobGOVFORDSPilot
+  - AU14JobGOVFORDCC
+  departmentRadio: null
+  headOfDepartment: null
+
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentGovernmentForcesCombat
+  name: au14-departmentcombat-govforces
+  description: au14-department-govforcescombat-description
+  color: "#e3ce94"
+  roles:
+  - AU14JobGOVFORSectionSergeant
+  - AU14JobGOVFORSquadSergeant
+  - AU14JobGOVFORSquadRifleman
+  - AU14JobGOVFORRadioTelephoneOperator
+  - AU14JobGOVFORSquadAutomaticRifleman
+  - AU14JobGOVFORPlatoonCorpsman
+  departmentRadio: null
+  headOfDepartment: null

@@ -1,0 +1,163 @@
+﻿- type: entity
+  parent: ColMarTechBase
+  id: AU14CMBequipmentvendor
+  name: CMB equipment vendor
+  description: An automated rack hooked up to a small storage of CMB equipment.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Clothes
+      entries:
+      - id: AU14CMBUniform
+        amount: 2
+      - id: AU14CMBDeputyWindbreaker
+        amount: 1
+      - id: AU14CMBMarshalWindbreaker
+        amount: 1
+      - id: RMCHeadCapBureau
+        amount: 2
+      - id: RMCBootsPMCFilled
+        amount: 2
+    - name: Glasses
+      entries:
+      - id: CMGlassesSecurity
+        amount: 2
+    - name: Storage
+      entries:
+      - id: CMBeltSecurityMarshalFilled
+        amount: 2
+      - id: RMCBeltUtilityGeneral
+        amount: 2
+      - id: CMWebbingHolster
+        amount: 2
+      - id: CMSatchelSecurity
+        amount: 2
+      - id: CMSatchel
+        amount: 2
+      - id: RMCSatchelLightpack
+        amount: 2
+    - name: Pouches
+      entries:
+      - id: RMCPouchFirstAidSplintsGauzeOintment
+        amount: 2
+      - id: RMCPouchRadio
+        amount: 2
+      - id: RMCPouchGeneralMedium
+        amount: 2
+      - id: RMCPouchPistol
+        amount: 2
+      - id: RMCPouchMagazinePistol
+        amount: 2
+    - name: Equipment
+      entries:
+      - id: RMCRadioHandheldColonyOff
+        amount: 2
+      - id: RMCGrenadeFlashBang
+        amount: 2
+      - id: RMCHandcuffs
+        amount: 4
+      - id: Zipties
+        amount: 20
+    - name: Headsets
+      entries:
+      - id: AU14CMBHeadset
+        amount: 2
+    - name: Duty Weapons
+      entries:
+      - id: RMCGunCasePistolM1984
+        amount: 1
+      - id: RMCGunCasePistolM77
+        amount: 1
+      - id: RMCGunCaseRevolverRSh9
+        amount: 1
+    - name: Less Than Lethal Ammunition
+      entries:
+      - id: RMCMagazinePistolM1984Rubber
+        amount: 2
+      - id: RMCMagazinePistolM77Rubber
+        amount: 2
+    - name: Medical Supplies
+      entries:
+      - id: AU14HemostaticGauzePacket
+        amount: 4
+      - id: AU14Tourniquet
+        amount: 2
+    - name: Inmate Clothing
+      entries:
+      - id: AU14CivilianPrisonJumpsuit
+        amount: 10
+      - id: RMCShoesBlack
+        amount: 10
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14CWPSequipmentvendor
+  name: CWPS equipment vendor
+  description: An automated rack hooked up to a small storage of CWPS equipment.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Clothes
+      entries:
+      - id: AU14CWPSUniform
+        amount: 1
+      - id: AU14CWPSBomber
+        amount: 1
+      - id: AU14CWPSCampaignHat
+        amount: 1
+      - id: AU14CWPSCap
+        amount: 1
+      - id: RMCBootsPMCFilled
+        amount: 1
+    - name: Storage
+      entries:
+      - id: CMBeltSecurityMarshalFilled
+        amount: 1
+      - id: RMCBeltUtilityGeneral
+        amount: 1
+      - id: CMWebbingHolster
+        amount: 1
+      - id: CMSatchel
+        amount: 1
+      - id: RMCSatchelLightpack
+        amount: 1
+    - name: Pouches
+      entries:
+      - id: RMCPouchRadio
+        amount: 1
+      - id: RMCPouchGeneralMedium
+        amount: 1
+      - id: RMCPouchPistol
+        amount: 1
+      - id: RMCPouchMagazinePistol
+        amount: 1
+    - name: Equipment
+      entries:
+      - id: RMCRadioHandheldColonyOff
+        amount: 1
+      - id: RMCHandcuffs
+        amount: 4
+      - id: Zipties
+        amount: 20
+    - name: Headsets
+      entries:
+      - id: AU14CMBHeadset
+        amount: 1
+    - name: Duty Weapons
+      entries:
+      - id: RMCGunCasePistolM1984
+        amount: 1
+      - id: AU14WeaponRifleAR10
+        amount: 1
+      - id: RMCMagazineRifleM16
+        amount: 4
+    - name: Medical Supplies
+      entries:
+      - id: AU14HemostaticGauzePacket
+        amount: 2
+      - id: AU14Tourniquet
+        amount: 1

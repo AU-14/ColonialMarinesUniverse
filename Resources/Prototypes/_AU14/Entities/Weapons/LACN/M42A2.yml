@@ -1,0 +1,65 @@
+- type: entity
+  parent: RMCBaseWeaponSniperRifle
+  id: AU14WeaponSniperRifleM42A2
+  name: M42A2 Scout Rifle
+  description: The M42A2 Scout Rifle is a designated marksman currently used by the LACN landing forces, originally supposed to be mass produced for the USCM until it lost his place against the M4RA due to its superior magazine capacity, longer barrel and superior modularity. the M42A2 still was a pretty decent option due to its lower production cost and more compact figure that lead to it getting adopted by both the LACN Landing Forces and Naval Commandos. the Commandos specially using it in larger numbers due to how reliable and easy to maintain it was during deep infiltration operations. This rifle takes M42A magazines.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/LACN/M42A2-64x32.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-2
+      map: ["enum.GunVisualLayers.Mag"]
+      shader: unshaded
+  - type: Item
+    sprite: _AU14/Weapons/Guns/LACN/M42A2-32x32.rsi
+    size: Large
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/LACN/M42A2-32x32.rsi
+  - type: Tag
+    tags:
+    - CMM96SSniperRifle
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 12
+  - type: Gun
+    shotsPerBurst: 1
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_sniper.ogg
+  - type: RMCSelectiveFire
+    recoilWielded: 1
+    scatterWielded: 0
+    baseFireRate: 1
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 3
+  - type: WieldDelay
+    baseDelay: 1.2
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineSniperM96S
+  - type: GunRequiresWield
+  - type: Corrodible
+    isCorrodible: false
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBipod
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentMagneticHarness
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-underbarrel: 0.21875, -0.343
+      rmc-aslot-rail: -0.37, 0.1

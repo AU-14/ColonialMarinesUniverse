@@ -1,9 +1,12 @@
 using Content.Shared.Access.Components;
 using Content.Shared.Examine;
 using Content.Shared.Inventory;
+using Content.Shared.Au14.Util;
 using Content.Shared.PDA;
 using Content.Shared.Verbs;
+using Content.Shared._RMC14.UniformAccessories;
 using Robust.Shared.Utility;
+using Robust.Shared.Containers;
 
 namespace Content.Shared.Access.Systems;
 
@@ -11,6 +14,7 @@ public sealed class IdExaminableSystem : EntitySystem
 {
     [Dependency] private readonly ExamineSystemShared _examineSystem = default!;
     [Dependency] private readonly InventorySystem _inventorySystem = default!;
+    [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
 
     public override void Initialize()
     {
@@ -48,26 +52,37 @@ public sealed class IdExaminableSystem : EntitySystem
 
     public string? GetInfo(EntityUid uid)
     {
+        // Try to get ID card from inventory slot
         if (_inventorySystem.TryGetSlotEntity(uid, "id", out var idUid))
         {
             // PDA
-            if (EntityManager.TryGetComponent(idUid, out PdaComponent? pda) &&
-                TryComp<IdCardComponent>(pda.ContainedId, out var id))
+            if (TryComp(idUid, out PdaComponent? pda) &&
+                TryComp<IdCardComponent>(pda.ContainedId, out var idCardFromPda))
             {
-                return GetNameAndJob(id);
+                var jobTitle = GetOverridingJobTitle(uid, idCardFromPda.LocalizedJobTitle);
+                return GetNameAndJob(idCardFromPda, jobTitle);
             }
             // ID Card
-            if (EntityManager.TryGetComponent(idUid, out id))
+            if (TryComp(idUid, out IdCardComponent? idCard))
             {
-                return GetNameAndJob(id);
+                var jobTitle = GetOverridingJobTitle(uid, idCard.LocalizedJobTitle);
+                return GetNameAndJob(idCard, jobTitle);
             }
+        }
+        // If no ID card, check for a JobTitleChangerComponent directly (equipped or uniform accessories)
+        var overrideJobTitle = GetOverridingJobTitle(uid, null);
+        if (!string.IsNullOrWhiteSpace(overrideJobTitle))
+        {
+            // Fallback display if no ID card exists, but a job title override is present
+            return Loc.GetString("access-id-card-component-owner-name-job-title-text", ("jobSuffix", $" ({overrideJobTitle})"));
         }
         return null;
     }
 
-    private string GetNameAndJob(IdCardComponent id)
+    private string GetNameAndJob(IdCardComponent id, string? overrideJobTitle = null)
     {
-        var jobSuffix = string.IsNullOrWhiteSpace(id.LocalizedJobTitle) ? string.Empty : $" ({id.LocalizedJobTitle})";
+        var jobTitle = overrideJobTitle ?? id.LocalizedJobTitle;
+        var jobSuffix = string.IsNullOrWhiteSpace(jobTitle) ? string.Empty : $" ({jobTitle})";
 
         var val = string.IsNullOrWhiteSpace(id.FullName)
             ? Loc.GetString(id.NameLocId,
@@ -77,5 +92,50 @@ public sealed class IdExaminableSystem : EntitySystem
                 ("jobSuffix", jobSuffix));
 
         return val;
+    }
+
+    private string? GetOverridingJobTitle(EntityUid uid, string? fallback)
+    {
+        // Check all equipped items for a JobTitleChangerComponent with Override=true
+        if (TryComp(uid, out InventoryComponent? inventory))
+        {
+            foreach (var item in _inventorySystem.GetHandOrInventoryEntities(uid))
+            {
+                // Directly on equipped item
+                if (TryComp<JobTitleChangerComponent>(item, out var changer) && changer.Override && !string.IsNullOrWhiteSpace(changer.JobTitle))
+                {
+                    return changer.JobTitle;
+                }
+                // Check for accessories on equipped item
+                if (TryComp<UniformAccessoryHolderComponent>(item, out var accessoryHolder))
+                {
+                    if (_containerSystem.TryGetContainer(item, accessoryHolder.ContainerId, out var container))
+                    {
+                        foreach (var accessory in container.ContainedEntities)
+                        {
+                            if (TryComp<JobTitleChangerComponent>(accessory, out var changer2) && changer2.Override && !string.IsNullOrWhiteSpace(changer2.JobTitle))
+                            {
+                                return changer2.JobTitle;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // Check uniform accessories directly on the entity (legacy/fallback)
+        if (TryComp(uid, out UniformAccessoryHolderComponent? directAccessoryHolder))
+        {
+            if (_containerSystem.TryGetContainer(uid, directAccessoryHolder.ContainerId, out var container))
+            {
+                foreach (var accessory in container.ContainedEntities)
+                {
+                    if (TryComp<JobTitleChangerComponent>(accessory, out var changer) && changer.Override && !string.IsNullOrWhiteSpace(changer.JobTitle))
+                    {
+                        return changer.JobTitle;
+                    }
+                }
+            }
+        }
+        return fallback;
     }
 }

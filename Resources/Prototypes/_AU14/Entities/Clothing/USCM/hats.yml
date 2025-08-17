@@ -1,0 +1,98 @@
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14ArtemisCap
+  name: USS Artemis Cap
+  description: A black cap with the patch of the USS Artemis.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/ussartemiscap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/ussartemiscap.rsi
+    
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14DesertPatrolCap
+  name: Desert Patrol Cap
+  description: A simple patrol cap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertHats/cap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/DesertHats/cap.rsi
+    
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14DesertFlapCap
+  name: Desert Patrol Flap-Cap
+  description: A simple patrol cap with a sun flap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertHats/flapcap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/DesertHats/flapcap.rsi
+  
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14DesertBoonieHat
+  name: Desert Boonie Hat
+  description: A brimmed hat to protect your face from the sun.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertHats/booniehat.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/DesertHats/booniehat.rsi
+  
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14JunglePatrolCap
+  name: Jungle Patrol Cap
+  description: A simple patrol cap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/cap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/cap.rsi
+    
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14JungleFlapCap
+  name: Jungle Patrol Flap-Cap
+  description: A simple patrol cap with a sun flap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/flapcap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/flapcap.rsi
+    
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14JungleBoonieHat
+  name: Jungle Boonie Hat
+  description: A brimmed hat to protect your face from the sun.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/booniehat.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/booniehat.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14UACGPatrolCap
+  name: UACG Patrol Cap
+  description: A simple patrol cap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/DesertHats/cap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/DesertHats/cap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14USASFCap
+  name: USASF Cap
+  description: A simple USASF cap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/cap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/cap.rsi

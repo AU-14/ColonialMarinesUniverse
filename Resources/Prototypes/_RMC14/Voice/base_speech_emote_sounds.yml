@@ -2,7 +2,7 @@
   id: RMCBaseHumanoidSounds
   abstract: true
   params:
-    variation: 0.125
+    variation: 0
   sounds:
     Snore:
       collection: Snores
@@ -28,6 +28,10 @@
       collection: MaleGasp
     DefaultDeathgasp:
       collection: MaleDeathGasp
+    Warcry: 
+      collection: AU14MaleWarcry
+    Corpsman: 
+      collection: AU14MaleCorpsman
 
 - type: emoteSounds
   parent: RMCBaseHumanoidSounds
@@ -48,3 +52,7 @@
       collection: FemaleGasp
     DefaultDeathgasp:
       collection: FemaleDeathGasp
+    Warcry: 
+      collection: AU14FemaleWarcry
+    Corpsman: 
+      collection: AU14FemaleCorpsman

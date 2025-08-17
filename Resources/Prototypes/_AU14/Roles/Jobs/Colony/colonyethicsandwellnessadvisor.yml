@@ -1,0 +1,57 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianEthicsAndWellnessAdvisor
+  name: au14-job-name-ethicsandwellnessadvisor
+  description: au14-job-description-ethicsandwellnessadvisor
+  setPreference: true
+  playTimeTracker: AU14JobCivilianEthicsAndWellnessAdvisor
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianEthicsAndWellnessAdvisor
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  - aumed
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillMedical: 1
+        RMCSkillFireman: 2
+        RMCSkillFirearms: 1
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-ethicsandwellnessadvisor
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianEthicsAndWellnessAdvisor
+  equipment:
+    jumpsuit: AU14CivilianWorkwearPink
+    shoes: RMCShoesBlack
+    id: AU14IDCardColonyEthicsAndWellnessAdvisor
+    outerClothing: AU14CivilianJacketGrayPufferJacket
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianEthicsAndWellnessAdvisor
+  name: Spawn Point Civilian Ethics And Wellness Advisor
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianEthicsAndWellnessAdvisor
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianEthicsAndWellnessAdvisor
+  isHumanoid: true

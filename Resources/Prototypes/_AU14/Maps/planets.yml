@@ -1,0 +1,92 @@
+#Currently using both map and maprototype but will chang as I migrate all systems from CMdistress to au roles - eg
+
+- type: entity
+  id: AUPlanetLV747
+  name: Solaris Gulch
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Solaris Gulch"
+    mapId: AU747
+    camouflage: Desert
+    announcement: "Weston-Yamada has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weston-Yamada."
+    platoonsOpfor:
+    - UPP
+    - WEYU
+    platoonsGovfor:
+    - LACN
+    - USCM
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    faction: ua
+
+- type: entity
+  id: AUPlanetShepherdsPride
+  name: Shepherd's Pride
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Shepherds Pride"
+    mapId: Sheperds
+    camouflage: Jungle
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsOpfor:
+    - UPP
+    - WEYU
+    platoonsGovfor:
+    - LACN
+    - USCM
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+
+
+
+- type: entity
+  id: AUPlanetStableGarrison
+  name: Stable Garrison
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Stable Garrison"
+    mapId: au14garrisonmapthingtemp
+    camouflage: Jungle
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsOpfor:
+    - UPP
+    - WEYU
+    - LACN
+    platoonsGovfor:
+    - LACN
+    - USCM
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: false
+    opforinship: true
+    daycycleenabled: true
+    faction: ua
+
+- type: entity
+  id: AUPlanetLV624
+  name: LV624
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "LV624 Green Hell"
+    mapId: LV624
+    camouflage: Jungle
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsOpfor:
+    - LACN
+    platoonsGovfor:
+    - LACN
+    - UPP
+    - USCM
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: false
+    opforinship: true
+    daycycleenabled: true
+    faction: ua
+

@@ -1,0 +1,53 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianColonist
+  name: au14-job-name-civiliancolonist
+  description: au14-job-description-civiliancolonist
+  setPreference: true
+  playTimeTracker: AU14JobCivilianColonist
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianColonist
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillFirearms: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-civiliancolonist
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianColonist
+  equipment:
+    jumpsuit: CMJumpsuitColonist
+    shoes: RMCShoesBlack
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianColonist
+  name: Spawn Point Civilian Colonist
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianColonist
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianColonist
+  isHumanoid: true

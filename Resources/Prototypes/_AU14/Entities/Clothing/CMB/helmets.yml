@@ -1,0 +1,10 @@
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14CMBCIUHelmet
+  name: CMB CIU Helmet
+  description: A CMB Crisis Intervention Unit riot helmet.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/uacghelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/uacghelmet.rsi

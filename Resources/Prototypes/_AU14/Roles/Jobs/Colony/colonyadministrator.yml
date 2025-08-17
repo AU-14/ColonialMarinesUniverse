@@ -1,0 +1,73 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianColonyAdministrator
+  name: au14-job-name-civiliancolonyadministrator
+  description: au14-job-description-civiliancolonyadministrator
+  setPreference: true
+  playTimeTracker: AU14JobCivilianColonyAdministrator
+  ranks:
+    AU14RankColonySeniorAdministrator:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianColonyAdministrator
+      time: 1800 # 30 hours
+    AU14RankColonyAdministrator: []
+  startingGear: AU14GearCivilianColonyAdministrator
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  canBeAntag: false
+  supervisors: au14-job-supervisors-colonyadministrator
+  accessGroups:
+  - auadmin
+  - Colonist
+  - CMCargoTech
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillCqc: 1
+        RMCSkillEngineer: 1
+        RMCSkillConstruction: 1
+        RMCSkillOverwatch: 1
+        RMCSkillResearch: 1
+        RMCSkillPolice: 1
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillIntel: 1
+        RMCSkillDomestics: 1
+        RMCSkillNavigations: 1
+        RMCSkillFirearms: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-colonyadministrator
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianColonyAdministrator
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlack
+    shoes: RMCShoesLaceupBrown
+    id: AU14IDCardColonyAdministrator
+    ears: AU14ColonyAdminHeadset
+    outerClothing: RMCJacketCorporateBlue
+  inhand:
+  - RMCRadioHandheldColonyOff
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianColonyAdministrator
+  name: Spawn Point Colony Administrator
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianColonyAdministrator
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianColonyAdministrator
+  isHumanoid: true

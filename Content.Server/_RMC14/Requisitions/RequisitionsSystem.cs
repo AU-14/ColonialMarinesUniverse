@@ -4,20 +4,25 @@ using Content.Server.Administration.Logs;
 using Content.Server.Cargo.Components;
 using Content.Server.Chat.Systems;
 using Content.Server.Storage.EntitySystems;
+using Content.Server.Store.Components;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared.AU14.ColonyEconomy;
+using Content.Shared.Cargo.Components;
 using Content.Shared.Chasm;
 using Content.Shared.Coordinates;
 using Content.Shared.Database;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Random.Helpers;
+using Content.Shared.Stacks;
 using Content.Shared.UserInterface;
 using Robust.Server.Audio;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
+using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -60,6 +65,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         _chasmQuery = GetEntityQuery<ChasmComponent>();
         _chasmFallingQuery = GetEntityQuery<ChasmFallingComponent>();
+        SubscribeLocalEvent<ColonyAtmComponent, EntInsertedIntoContainerMessage>(OnMoneyInserted);
 
         SubscribeLocalEvent<RequisitionsComputerComponent, MapInitEvent>(OnComputerMapInit);
         SubscribeLocalEvent<RequisitionsComputerComponent, BeforeActivatableUIOpenEvent>(OnComputerBeforeActivatableUIOpen);
@@ -72,6 +78,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         Subs.CVar(_config, RMCCVars.RMCRequisitionsBalanceGain, v => _gain = v, true);
         Subs.CVar(_config, RMCCVars.RMCRequisitionsFreeCratesXenoDivider, v => _freeCratesXenoDivider = v, true);
+
     }
 
     private void OnComputerMapInit(Entity<RequisitionsComputerComponent> ent, ref MapInitEvent args)
@@ -427,14 +434,14 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         var accounts = EntityQueryEnumerator<RequisitionsAccountComponent>();
         while (accounts.MoveNext(out var uid, out var account))
         {
-            if (time > account.NextGain)
-            {
-                account.NextGain = time + account.GainEvery;
-                account.Balance += _gain;
-                Dirty(uid, account);
-
-                updateUI = true;
-            }
+            // Disabled periodic budget gain
+            // if (time > account.NextGain)
+            // {
+            //     account.NextGain = time + account.GainEvery;
+            //     account.Balance += _gain;
+            //     Dirty(uid, account);
+            //     updateUI = true;
+            // }
 
             var xenos = _xeno.GetGroundXenosAlive();
             var randomCrates = CollectionsMarshal.AsSpan(account.RandomCrates);
@@ -595,5 +602,21 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         }
 
         return false;
+    }
+
+    private void OnMoneyInserted(EntityUid uid, ColonyAtmComponent comp, EntInsertedIntoContainerMessage args)
+    {
+        int stackCount = 1;
+        if (TryComp(args.Entity, out StackComponent? stack))
+            stackCount = stack.Count;
+
+        // Add to requisitions budget for each item in the stack
+        _adminLogs.Add(LogType.RMCRequisitionsBuy, $"ATM submission: +{stackCount} to requisitions budget");
+        var reqAccount = GetAccount();
+        reqAccount.Comp.Balance += stackCount;
+        Dirty(reqAccount);
+
+        EntityManager.QueueDeleteEntity(args.Entity);
+        SendUIStateAll();
     }
 }

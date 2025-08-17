@@ -1,0 +1,80 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobGOVFORSquadAutomaticRifleman
+  name: au14-job-name-govforsquadautomaticrifleman
+  description: au14-job-description-govforsquadautomaticrifleman
+  setPreference: true
+  playTimeTracker: AU14JobGOVFORSquadAutomaticRifleman
+  ranks:
+    RMCRankCorporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 3600 # 60 hours
+    RMCRankLanceCorporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 1800 # 30 hours
+    RMCRankPrivateFirstClass:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 900 # 15 hours
+    RMCRankPrivate: []
+  startingGear: AU14GearGOVFORSquadAutomaticRifleman
+  dummyStartingGear: AU14GearGOVFORAutoRiflemanDummy
+  icon: "AU14JobIconAFN"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - SmartGunOperator
+  overwatchSortPriority: -3
+  overwatchShowName: true
+  overwatchRoleName: Automatic Rifleman
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 1
+        RMCSkillJtac: 1
+        RMCSkillSmartGun: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillPolice: 1
+    - type: SquadArmorWearer
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforsquadautomaticrifleman
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: smartgunner
+  hidden: false
+
+- type: startingGear
+  id: AU14GearGOVFORSquadAutomaticRifleman
+  equipment:
+    id: AU14IDCardSquadAutomaticRifleman
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORSquadAutomaticRifleman
+  name: Spawn Point GOVFOR Squad Rifleman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORSquadAutomaticRifleman
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobGOVFORSquadAutomaticRifleman
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORAutoRiflemanDummy
+  equipment:
+    outerClothing: AU14ArmorSmartGunJungleCombatHarness
+    shoes: AU14BootsJungle
+    head: AU14JungleM10Helmet
+    jumpsuit: AU14JungleFatigues

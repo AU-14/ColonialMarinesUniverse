@@ -39,6 +39,7 @@ public sealed class SetStationRecordFilter : BoundUserInterfaceMessage
 public enum StationRecordFilterType : byte
 {
     Name,
+    Job,
     Prints,
     DNA,
 }

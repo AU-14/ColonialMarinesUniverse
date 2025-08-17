@@ -1,0 +1,61 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianPhysician
+  name: au14-job-name-civilianphysician
+  description: au14-job-description-civilianphysician
+  setPreference: true
+  playTimeTracker: AU14JobCivilianPhysician
+  ranks:
+    RMCRankCivilianDoctor: []
+  startingGear: AU14GearCivilianPhysician
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  - aumed
+  - AUPrisonStaff
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillMedical: 3
+        RMCSkillResearch: 1
+        RMCSkillSurgery: 2
+        RMCSkillFirearms: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-physician
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianPhysician
+  equipment:
+    id: AU14IDCardColonyPhysician
+
+    jumpsuit: RMCScrubsLightBlue
+    shoes: RMCShoesBlack
+    outerClothing: RMCLabcoatOpened
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianPhysician
+  name: Spawn Point Civilian Physician
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianPhysician
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianPhysician
+  isHumanoid: true

@@ -1,0 +1,17 @@
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14WYPMCArmor
+  name: WY PMC Armor
+  description: A set of Weyland-Yutani PMC armor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/WY_PMC/wypmcstandardarmor.rsi
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14WYPMCArmorMin
+  name: WY PMC Minimalistic Armor
+  description: A set of Weyland-Yutani PMC armor. This pair is quite small compared to the standard, but should provide a similar amount of protection, or at least you hope.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/WY_PMC/wypmclightarmor.rsi

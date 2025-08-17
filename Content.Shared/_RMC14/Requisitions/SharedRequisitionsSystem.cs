@@ -179,10 +179,8 @@ public abstract class SharedRequisitionsSystem : EntitySystem
 
         account.Comp.Started = true;
 
-        var startingPoints = Starting;
-        var scalePoints = (int) (PointsScale * scale);
-        var perMarinePoints = (int) (StartingDollarsPerMarine * marines);
-        account.Comp.Balance = startingPoints + scalePoints + perMarinePoints;
+        // Only give the base starting points, do not scale with marines or scale for late joiners
+        account.Comp.Balance = Starting;
 
         Dirty(account);
     }

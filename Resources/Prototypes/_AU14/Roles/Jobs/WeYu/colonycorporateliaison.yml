@@ -1,0 +1,68 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianCorporateLiaison
+  name: au14-job-name-civiliancorporateliaison
+  description: au14-job-description-civiliancorporateliaison
+  setPreference: true
+  playTimeTracker: AU14JobCivilianCorporateLiaison
+  ranks:
+    RMCRankWeYaExecutiveSpecialist:
+    - !type:RoleTimeRequirement
+      role: CMJobLiaison
+      time: 630000 # 175 hours
+    RMCRankWeYaSeniorExecutive:
+    - !type:RoleTimeRequirement
+      role: CMJobLiaison
+      time: 252000 # 70 hours
+    RMCRankWeYaExecutive:
+    - !type:RoleTimeRequirement
+      role: CMJobLiaison
+      time: 90000 # 25 hours
+    RMCRankWeYaJuniorExecutive: []
+  startingGear: AU14GearCivilianCorporateLiaison
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  - auwy
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillFirearms: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-corporateliaison
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianCorporateLiaison
+  equipment:
+    jumpsuit: AU14CivilianWorkwearBlue
+    shoes: RMCShoesLaceup
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14CivilianJacketOrangePufferJacket
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianCorporateLiaison
+  name: Spawn Point Civilian Corporate Liaison
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianCorporateLiaison
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianCorporateLiaison
+  isHumanoid: true

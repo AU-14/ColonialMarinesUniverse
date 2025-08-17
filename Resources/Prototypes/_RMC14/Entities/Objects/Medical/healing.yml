@@ -55,7 +55,7 @@
     noWoundsOnTargetPopup: cm-burns-already-treated-target-popup
   - type: MedicallyUnskilledDoAfter
     min: 2
-    doAfter: 1
+    doAfter: 5
   - type: Stack
     stackType: CMOintment
     count: 10
@@ -123,7 +123,7 @@
     noWoundsOnTargetPopup: cm-wounds-already-treated-target-popup
   - type: MedicallyUnskilledDoAfter
     min: 2
-    doAfter: 1
+    doAfter: 5
   - type: Stack
     stackType: CMGauze
     count: 10
@@ -171,8 +171,8 @@
     treats: false
     group: Brute
     consumable: false
-    scalingDoAfter: 0.25
-    damage: -10
+    scalingDoAfter: 0.95
+    damage: -12
     canUseUnskilled: false
     skills:
       RMCSkillMedical: 2
@@ -192,8 +192,8 @@
     noWoundsOnUserPopup: cm-wounds-already-treated-self-popup
     noWoundsOnTargetPopup: cm-wounds-already-treated-target-popup
   - type: MedicallyUnskilledDoAfter
-    min: 2
-    doAfter: 3
+    min: 6
+    doAfter: 8
   - type: StackPrice
     price: 10
 
@@ -215,8 +215,8 @@
     treats: false
     group: Burn
     consumable: false
-    scalingDoAfter: 0.25
-    damage: -10
+    scalingDoAfter: 0.95
+    damage: -12
     canUseUnskilled: false
     skills:
       RMCSkillMedical: 2
@@ -236,8 +236,8 @@
     noWoundsOnUserPopup: cm-burns-already-treated-self-popup
     noWoundsOnTargetPopup: cm-burns-already-treated-target-popup
   - type: MedicallyUnskilledDoAfter
-    min: 2
-    doAfter: 3
+    min: 6
+    doAfter: 8
   - type: StackPrice
     price: 10
 
@@ -266,7 +266,7 @@
     treats: true
     group: Burn
     consumable: true
-    damage: -12
+    damage: -9
     unskilledDamage: -3
     canUseUnskilled: true
     skills:
@@ -283,8 +283,8 @@
     noWoundsOnUserPopup: cm-burns-already-treated-self-popup
     noWoundsOnTargetPopup: cm-burns-already-treated-target-popup
   - type: MedicallyUnskilledDoAfter
-    min: 2
-    doAfter: 3
+    min: 4
+    doAfter: 6
 
 - type: entity
   id: CMBurnKit1
@@ -334,7 +334,7 @@
     treats: true
     group: Brute
     consumable: true
-    damage: -12
+    damage: -9
     unskilledDamage: -3
     canUseUnskilled: true
     skills:
@@ -351,8 +351,8 @@
     noWoundsOnUserPopup: cm-wounds-already-treated-self-popup
     noWoundsOnTargetPopup: cm-wounds-already-treated-target-popup
   - type: MedicallyUnskilledDoAfter
-    min: 2
-    doAfter: 3
+    min: 4
+    doAfter: 6
 
 - type: entity
   id: CMTraumaKit1

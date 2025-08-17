@@ -1,0 +1,49 @@
+﻿
+
+- type: accessGroup
+  id: auadmin
+  tags:
+  - CMAccessCommand
+  - CMAccessResearch
+  - CMAccessMedical
+  - CMAccessColonyPublic
+  - CMAccessColonyResearch
+  - CMAccessColonyEngineering
+  - CMAccessColonyLogistics
+  - CMAccessColonyBrig
+  - CMAccessColonyMedbay
+
+
+- type: accessGroup
+  id: auengi
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyEngineering
+  - CMAccessColonyLogistics
+
+- type: accessGroup
+  id: aucmb
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyBrig
+  - CMAccessColonyCommand
+  - CMAccessColonyEngineering
+  - CMAccessColonyMedbay
+  - CMAccessColonyBrig
+
+
+- type: accessGroup
+  id: aumed
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyResearch
+  - CMAccessColonyMedbay
+  - CMAccessColonyChem
+
+- type: accessGroup
+  id: aunews
+  tags:
+  - CMAccessColonyPublic
+
+
+

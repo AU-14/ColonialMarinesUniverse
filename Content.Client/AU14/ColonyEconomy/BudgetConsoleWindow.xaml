@@ -1,0 +1,36 @@
+<controls:BudgetConsoleWindow
+    xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Content.Client.AU14.ColonyEconomy"
+    Title="Budget Console" MinSize="400 200">
+    <BoxContainer Orientation="Horizontal">
+        <Label Name="WithdrawalsLabel" Access="Public" Text="Last Withdrawals:" />
+        <BoxContainer>
+            <Label Name="withdrawbox" Access="Public" Text="" />
+        </BoxContainer>
+    </BoxContainer>
+    <BoxContainer Orientation="Vertical">
+        <Label Name="BudgetLabel" Access="Public" Text="Current Budget: $0.00" />
+        <BoxContainer Orientation="Horizontal">
+            <Control HorizontalExpand="True" />
+            <Button Name="Withdraw100" Access="Public" Text="100"
+                    StyleClasses="OpenBoth" HorizontalExpand="True" SizeFlagsStretchRatio="3"
+                    Margin="0 2" />
+            <Control HorizontalExpand="True" />
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal">
+            <Control HorizontalExpand="True" />
+            <Button Name="Withdraw250" Access="Public" Text="250"
+                    StyleClasses="OpenBoth" HorizontalExpand="True" SizeFlagsStretchRatio="3"
+                    Margin="0 2" />
+            <Control HorizontalExpand="True" />
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal">
+            <Control HorizontalExpand="True" />
+            <Button Name="Withdraw500" Access="Public" Text="500"
+                    StyleClasses="OpenBoth" HorizontalExpand="True" SizeFlagsStretchRatio="3"
+                    Margin="0 2" />
+            <Control HorizontalExpand="True" />
+        </BoxContainer>
+    </BoxContainer>
+</controls:BudgetConsoleWindow>

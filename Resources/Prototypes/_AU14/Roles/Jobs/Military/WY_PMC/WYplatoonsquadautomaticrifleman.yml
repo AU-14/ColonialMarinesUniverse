@@ -1,0 +1,49 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+  name: PMC Smartgun Operator
+  description: au14-job-description-govforsquadautomaticrifleman
+  setPreference: false
+  playTimeTracker: AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+  ranks:
+    AU14RankWeYuSeniorOperator:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+      time: 1800 # 30 hours
+    AU14RankWeYuOperator: []
+  startingGear: AU14GearGOVFORSquadAutomaticRifleman
+  dummyStartingGear: AU14GearGOVFORAutoRiflemanDummy
+  icon: "AU14JobIconAFN"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - SmartGunOperator
+  overwatchSortPriority: -3
+  overwatchShowName: true
+  overwatchRoleName: Automatic Rifleman
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 1
+        RMCSkillJtac: 1
+        RMCSkillSmartGun: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillPolice: 1
+    - type: SquadArmorWearer
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: smartgunner
+  hidden: false
+
+- type: playTimeTracker
+  id: AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+  isHumanoid: true

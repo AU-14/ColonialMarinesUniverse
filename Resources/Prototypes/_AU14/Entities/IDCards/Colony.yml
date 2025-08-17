@@ -1,0 +1,159 @@
+﻿- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardColonyColonist
+  name: colonist ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianColonist
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFoodServiceWorker
+  name: food service worker ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianFoodServiceWorker
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardColonyJournalist
+  name: journalist ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianJournalist
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardCivilianScientist
+  name: scientist ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianScientist
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardColonySynthetic
+  name: colony operations synthetic ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianColonySynthetic
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardColonyAdministrator
+  name: colony administrator ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianColonyAdministrator
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardColonyCorporateLiaison
+  name: corporate liaison ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianCorporateLiaison
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardColonyForeman
+  name: foreman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianForeman
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardColonyFreightSystemsSpecialist
+  name: freight systems specialist ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianFreightSystemsSpecialist
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardColonyEngineer
+  name: engineer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianEngineer
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardColonyWasteManagementSpecialist
+  name: waste management specialist ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianWasteManagementSpecialist
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardColonyPhysician
+  name: physician ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianPhysician
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardColonyNurse
+  name: nurse ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianNurse
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardColonyEthicsAndWellnessAdvisor
+  name: ethics and wellness advisor ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianEthicsAndWellnessAdvisor
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardColonyEmergencyResponseOfficer
+  name: emergency response officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianEmergencyResponseOfficer
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardColonyCMBDeputy
+  name: CMB deputy ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianCMBDeputy
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardColonyCMBMarshal
+  name: CMB marshal ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianCMBMarshal
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardColonyUSASFRecruiter
+  name: USASF recruiter ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianUSASFRecruiter
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardCivilianKellandWarden
+  name: Warden ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianKellandWarden
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardcivilianCWPSranger
+  name: CWPS ranger ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianCWPSRanger

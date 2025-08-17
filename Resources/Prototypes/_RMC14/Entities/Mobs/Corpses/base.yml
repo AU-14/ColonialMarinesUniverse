@@ -1,13 +1,7 @@
-- type: entity
-  parent: CMMobHuman
-  id: RMCHumanCorpse
-  save: false
-  name: unidentified corpse
-  description: I think they're dead.
-  suffix: RMC14, Dead
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: RMCCorpse
   components:
-  - type: RandomHumanoidAppearance
-    randomizeName: false
   - type: Damageable
     damage:
       types:
@@ -24,5 +18,5 @@
     jumpsuit: CMJumpsuitColonist
     back: CMSatchel
     id: CMIDCardColonist
-    ears: CMHeadsetColony
+
 # TODO RMC14 random equipment and weapon

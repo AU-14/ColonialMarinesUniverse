@@ -1,7 +1,9 @@
 ﻿using Content.Server.Mind;
 using Content.Server.Roles;
 using Content.Server.Roles.Jobs;
+using Content.Shared.Au14.Util;
 using Content.Shared.CharacterInfo;
+using Content.Shared.Inventory;
 using Content.Shared.Objectives;
 using Content.Shared.Objectives.Components;
 using Content.Shared.Objectives.Systems;
@@ -54,6 +56,37 @@ public sealed class CharacterInfoSystem : EntitySystem
 
             // Get briefing
             briefing = _roles.MindGetBriefing(mindId);
+        }
+
+        // Check inventory and hands for JobTitleChangerComponent
+        if (EntityManager.TryGetComponent(entity, out InventoryComponent? inventory))
+        {
+            var invSys = EntityManager.System<InventorySystem>();
+            foreach (var item in invSys.GetHandOrInventoryEntities(entity))
+            {
+                if (EntityManager.TryGetComponent<JobTitleChangerComponent>(item, out var changer) && !string.IsNullOrWhiteSpace(changer.JobTitle))
+                {
+                    jobTitle = changer.JobTitle;
+                    break;
+                }
+            }
+        }
+
+        // Check uniform accessories (e.g., armbands) for JobTitleChangerComponent
+        if (EntityManager.TryGetComponent(entity, out Content.Shared._RMC14.UniformAccessories.UniformAccessoryHolderComponent? accessoryHolder))
+        {
+            var containerSys = EntityManager.EntitySysManager.GetEntitySystem<Robust.Shared.Containers.SharedContainerSystem>();
+            if (containerSys.TryGetContainer(entity, accessoryHolder.ContainerId, out var container))
+            {
+                foreach (var accessory in container.ContainedEntities)
+                {
+                    if (EntityManager.TryGetComponent<JobTitleChangerComponent>(accessory, out var changer) && !string.IsNullOrWhiteSpace(changer.JobTitle))
+                    {
+                        jobTitle = changer.JobTitle;
+                        break;
+                    }
+                }
+            }
         }
 
         RaiseNetworkEvent(new CharacterInfoEvent(GetNetEntity(entity), jobTitle, objectives, briefing), args.SenderSession);

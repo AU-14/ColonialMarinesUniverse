@@ -1,0 +1,119 @@
+- type: platoon
+  id: LACN
+  name: LACN Landing Forces Platoon
+  VendorToMarker:
+    Rifleman: AU14LACNequipmentvendor
+    Clothing: AU14LACNclothingequipmentvendor
+    Weapons: AU14LACNWeaponsVendor
+    SWeapons: AU14LACNSpecialWeaponsVendor
+    Corpsman: AU14LACNcorpsmanvendor
+    Arifleman: AU14LACNMGequipmentvendor
+    Dcc: AU14LACNaircrewvendor
+    OperationsOfficer: AU14LACNcommandequipmentvendor
+    Rto: AU14RTOVendor
+    SectionSergeant: AU14USCMsectionleaderequipmentvendor
+    Pilot: AU14AircrewWeaponsVendor
+  possibleships:
+    - Riptide
+
+- type: platoon
+  id: USCM
+  name: USCM Platoon
+  VendorToMarker:
+    Rifleman: AU14USCMequipmentvendor
+    Clothing: AU14USCMclothingequipmentvendor
+    Weapons: AU14USCMWeaponsVendor
+    SWeapons: AU14USCMSpecialWeaponsVendor
+    Corpsman: AU14USCMcorpsmanvendor
+    Arifleman: AU14USCMSGequipmentvendor
+    Dcc: AU14USCMaircrewvendor
+    OperationsOfficer: AU14USCMcommandequipmentvendor
+    Rto: AU14RTOVendor
+    SectionSergeant: AU14USCMsectionleaderequipmentvendor
+    Pilot: AU14AircrewWeaponsVendor
+    ExtraVendor1: VMarkerOpforDeco5
+    Deco1: VMarkerOpforDeco5
+  possibleships:
+      - Riptide
+
+- type: platoon
+  id: UPP
+  reqList: UPPBasic
+  language: russian
+  name: UPP Naval Infantry Platoon
+  VendorToMarker:
+    Rifleman: AU14UPPequipmentvendor
+    Clothing: AU14UPPclothingapparelvendor
+    Weapons: AU14UPPWeaponsVendor
+    SWeapons: AU14UPPSpecialWeaponsVendor
+    Corpsman: AU14UPPMedicalVendor
+    Arifleman: AU14UPPgunnerequipment
+    Dcc: AU14UPPaircrewvendor
+    OperationsOfficer: AU14UPPcommandvendor
+    Rto: AU14RTOVendor
+    SectionSergeant: AU14UPPSectionLeaderVendor
+    Pilot: AU14UPPAirCrewWeaponsVendor
+  possibleships:
+      - Riptide
+
+- type: platoon
+  id: WEYU
+  name: Weyland-Yutani PMC Platoon
+  VendorToMarker:
+    Rifleman: AU14WYequipmentvendor
+    Clothing: AU14WYclothingequipmentvendor
+    Weapons: AU14WYWeaponsVendor
+    SWeapons: AU14WYSpecialWeaponsVendor
+    Corpsman: AU14WYcorpsmanvendor
+    Arifleman: AU14WYSGequipmentvendor
+    Dcc: AU14WYaircrewvendor
+    OperationsOfficer: AU14WYdirectorequipmentvendor
+    Rto: AU14RTOVendor
+    SectionSergeant: AU14WYsupervisorequipmentvendor
+    Pilot: AU14AircrewWeaponsVendor
+  possibleships:
+      - Riptide
+
+- type: platoon
+  id: CMBCIU
+  name: CMB Crisis Intervention Unit
+  VendorToMarker:
+    Rifleman: AU14CMBCIUequipmentvendor
+    Clothing: AU14CMBCIUapparelvendor
+    Weapons: AU14CMBCIUWeaponsVendor
+    SWeapons: AU14CMBCIUSpecialWeaponsVendor
+    Corpsman: AU14CMBCIUTacticalMedicVendor
+    Arifleman: AU14CMBCIUGunnerVendor
+    Dcc: AU14UPPaircrewvendor
+    OperationsOfficer: AU14CMBCIUCommandVendor
+    Rto: AU14RTOVendor
+    SectionSergeant: AU14CMBCIUSectionLeader
+    Pilot: AU14UPPAirCrewWeaponsVendor
+  possibleships:
+      - Riptide
+
+- type: platoon
+  id: exampleplatoon
+  name: exampleplatoon
+  VendorToMarker:
+    Rifleman: AU14USCMequipmentvendor
+    Corpsman: AU14USCMcorpsmanvendor
+    Arifleman: AU14USCMequipmentvendor
+    Dcc: AU14AircrewWeaponsVendor
+    OperationsOfficer: AU14USCMsectionleaderequipmentvendor
+    Rto: AU14RTOVendor
+    SectionSergeant: AU14USCMsectionleaderequipmentvendor
+    Pilot: AU14AircrewWeaponsVendor
+  possibleships:
+    - Riptide
+  jobClassOverride:
+    SquadRifleman: RMCSPPRifleman
+    DSPilot: RMCSPPPilot
+    SquadAutomaticRifleman: AU14JobCivilianColonyAdministrator
+  jobSlotOverride:
+    SquadRifleman: 12
+    PlatoonCorpsman: 1
+    PlatoonCommander: 1
+    DSPilot: 1
+
+# Add more platoons as needed

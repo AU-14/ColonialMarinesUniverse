@@ -1,0 +1,29 @@
+- type: rank
+  id: AU14RankUSASFTechnicalSergeant
+  name: Technical Sergeant
+  prefix: TSgt.
+  paygrade: E6
+
+- type: rank
+  id: AU14RankUSASFMasterSergeant
+  name: Master Sergeant
+  prefix: MSgt.
+  paygrade: E7
+
+- type: rank
+  id: AU14RankUSASFSMSgt
+  name: Senior Master Sergeant
+  prefix: SMSgt.
+  paygrade: E8
+
+- type: rank
+  id: AU14RankUSASFCMSgt
+  name: Chief Master Sergeant
+  prefix: CMSgt.
+  paygrade: E9
+
+- type: rank
+  id: AU14RankUSASFCCMSgt
+  name: Command Chief Master Sergeant
+  prefix: CCM.
+  paygrade: E9

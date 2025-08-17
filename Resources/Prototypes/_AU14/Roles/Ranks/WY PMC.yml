@@ -1,0 +1,92 @@
+#platoon ranks
+- type: rank
+  id: AU14RankWeYuRecruit
+  name: Associate Operator
+  prefix: ASC. OPR.
+  paygrade: PMC-F1
+
+- type: rank
+  id: AU14RankWeYuOperator
+  name: Operator
+  prefix: OPR.
+  paygrade: PMC-F2
+
+- type: rank
+  id: AU14RankWeYuSeniorOperator
+  name: Senior Operator
+  prefix: SR. OPR.
+  paygrade: PMC-F3
+
+- type: rank
+  id: AU14RankWeYuEnforcer
+  name: Enforcer
+  prefix: ENF.
+  paygrade: PMC-F4
+
+- type: rank
+  id: AU14RankWeYuEnforcerSenior
+  name: Senior Enforcer
+  prefix: SR. ENF.
+  paygrade: PMC-F5
+
+- type: rank
+  id: AU14RankWeYuEnforcerLead
+  name: Lead Enforcer
+  prefix: LD. ENF.
+  paygrade: PMC-F6
+
+- type: rank
+  id: AU14RankWeYuAdjutant
+  name: Adjutant
+  prefix: ADJ.
+  paygrade: PMC-S1
+
+- type: rank
+  id: AU14RankWeYuCommander
+  name: Commander
+  prefix: CDR.
+  paygrade: PMC-S2
+
+- type: rank
+  id: AU14RankWeYuCommanderSenior
+  name: Senior Commander
+  prefix: SR. CDR.
+  paygrade: PMC-S3
+
+#aviation
+- type: rank
+  id: AU14RankWeYuPilot
+  name: Pilot
+  prefix: PLT.
+  paygrade: PMC-AVO1
+
+- type: rank
+  id: AU14RankWeYuSeniorPilot
+  name: Senior Pilot
+  prefix: SR. PLT.
+  paygrade: PMC-AVO2
+
+- type: rank
+  id: AU14RankWeYuCrewChief
+  name: Crew Chief
+  prefix: CC.
+  paygrade: PMC-AVC3
+
+- type: rank
+  id: AU14RankWeYuSeniorCrewChief
+  name: Senior Crew Chief
+  prefix: SR. CC.
+  paygrade: PMC-AVC4
+
+# other
+- type: rank
+  id: AU14RankWeYuDeputyDirector
+  name: Deputy Site Director
+  prefix: Deputy Director
+  paygrade: PMC-C10
+
+- type: rank
+  id: AU14RankWeYuSiteDirector
+  name: PMC Site Director
+  prefix: Director
+  paygrade: PMC-C11

@@ -1,0 +1,189 @@
+- type: entity
+  parent: RMCAreaBase
+  id: RMCAreaFlight
+  name: Flight
+  components:
+  - type: Sprite
+    sprite: _RMC14/Areas/areas_flight.rsi
+    state: roof-out
+  - type: Area
+    buildSpecial: true
+    powerNet: ground
+    minimapColor: '#91BDCFE7'
+
+- type: entity
+  parent: RMCAreaFlight
+  id: RMCAreaFlightIN
+  name: Flight - IN
+  components:
+  - type: Area
+    CAS: true
+    fulton: true
+    mortarPlacement: false
+    mortarFire: true
+    lasing: false
+    medevac: false
+    OB: true
+    supplyDrop: true
+    weatherEnabled: false
+
+- type: entity
+  parent: RMCAreaFlightIN
+  id: RMCAreaFlightINRoof
+  name: Roof - Indoors
+  components:
+  - type: Sprite
+    state: roof-in
+
+- type: entity
+  parent: RMCAreaFlightIN
+  id: RMCAreaFlightINMinus1
+  name: Minus 1 - Indoors
+  components:
+  - type: Sprite
+    state: minus1-in
+
+- type: entity
+  parent: RMCAreaFlightIN
+  id: RMCAreaFlightINMinus2
+  name: Minus 2 - Indoors
+  components:
+  - type: Sprite
+    state: minus2-in
+
+- type: entity
+  parent: RMCAreaFlightIN
+  id: RMCAreaFlightINMinus3
+  name: Minus 3 - Indoors
+  components:
+  - type: Sprite
+    state: minus3-in
+
+- type: entity
+  parent: RMCAreaFlightIN
+  id: RMCAreaFlightINMinus4
+  name: Minus 4 - Indoors
+  components:
+  - type: Sprite
+    state: minus4-in
+
+- type: entity
+  parent: RMCAreaFlightIN
+  id: RMCAreaFlightINMinus5
+  name: Minus 5 - Indoors
+  components:
+  - type: Sprite
+    state: minus5-in
+
+- type: entity
+  parent: RMCAreaFlightIN
+  id: RMCAreaFlightINMinus6
+  name: Minus 6 - Indoors
+  components:
+  - type: Sprite
+    state: minus6-in
+
+- type: entity
+  parent: RMCAreaFlightIN
+  id: RMCAreaFlightINMinus7
+  name: Minus 7 - Indoors
+  components:
+  - type: Sprite
+    state: minus7-in
+
+- type: entity
+  parent: RMCAreaFlightIN
+  id: RMCAreaFlightINMinus8
+  name: Minus 8 - Indoors
+  components:
+  - type: Sprite
+    state: minus8-in
+
+- type: entity
+  parent: RMCAreaFlight
+  id: RMCAreaFlightOUT
+  name: Flight - Outdoors
+  components:
+  - type: Area
+    CAS: true
+    fulton: true
+    mortarPlacement: true
+    mortarFire: true
+    lasing: true
+    medevac: true
+    OB: true
+    supplyDrop: true
+    minimapColor: '#295B43CC'
+    weatherEnabled: true
+
+- type: entity
+  parent: RMCAreaFlightOUT
+  id: RMCAreaFlightOUTRoof
+  name: Roof - Out
+  components:
+  - type: Sprite
+    state: roof-out
+
+- type: entity
+  parent: RMCAreaFlightOUT
+  id: RMCAreaFlightOUTMinus1
+  name: Minus 1 - Outdoors
+  components:
+  - type: Sprite
+    state: minus1-out
+
+- type: entity
+  parent: RMCAreaFlightOUT
+  id: RMCAreaFlightOUTMinus2
+  name: Minus 2 - Outdoors
+  components:
+  - type: Sprite
+    state: minus2-out
+
+- type: entity
+  parent: RMCAreaFlightOUT
+  id: RMCAreaFlightOUTMinus3
+  name: Minus 3 - Outdoors
+  components:
+  - type: Sprite
+    state: minus3-out
+
+- type: entity
+  parent: RMCAreaFlightOUT
+  id: RMCAreaFlightOUTMinus4
+  name: Minus 4 - Outdoors
+  components:
+  - type: Sprite
+    state: minus4-out
+
+- type: entity
+  parent: RMCAreaFlightOUT
+  id: RMCAreaFlightOUTMinus5
+  name: Minus 5 - Outdoors
+  components:
+  - type: Sprite
+    state: minus5-out
+
+- type: entity
+  parent: RMCAreaFlightOUT
+  id: RMCAreaFlightOUTMinus6
+  name: Minus 6 - Outdoors
+  components:
+  - type: Sprite
+    state: minus6-out
+
+- type: entity
+  parent: RMCAreaFlightOUT
+  id: RMCAreaFlightOUTMinus7
+  name: Minus 7 - Outdoors
+  components:
+  - type: Sprite
+    state: minus7-out
+
+- type: entity
+  parent: RMCAreaFlightOUT
+  id: RMCAreaFlightOUTMinus8
+  name: Minus 8 - Outdoors
+  components:
+  - type: Sprite
+    state: minus8-out

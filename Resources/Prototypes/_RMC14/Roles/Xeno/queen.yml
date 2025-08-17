@@ -2,6 +2,7 @@
   parent: CMJobXenoBase
   id: CMXenoQueen
   name: cm-job-name-xeno-queen
+  setPreference: false
   playTimeTracker: CMJobXenoQueen
   requirements:
   - !type:TotalJobsTimeRequirement
@@ -20,12 +21,6 @@
   accessGroups:
   - CMAccessXeno
   - CMAccessXenoQueen
-  minimapIcon:
-    sprite: _RMC14/Interface/map_blips.rsi
-    state: xenoqueen
-  minimapBackground:
-   sprite: _RMC14/Interface/map_blips.rsi
-   state: xeno_ruler
 
 - type: playTimeTracker
   id: CMJobXenoQueen

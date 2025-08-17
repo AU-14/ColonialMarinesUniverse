@@ -2,7 +2,7 @@
 - type: radioChannel #UNMC High Command, for events and such, basically CentComm channel
   id: MarineHighCommand
   name: chat-radio-marine-highcommand
-  keycode: "z" #z in cm13
+  keycode: "8" #z in cm13
   frequency: 1471
   color: "#318779"
   longRange: true
@@ -137,6 +137,8 @@
   longRange: true
   tower: true
 
+
+
 # Non Marine
 - type: radioChannel
   id: Colony
@@ -167,9 +169,27 @@
 - type: radioChannel
   id: CMB
   name: chat-radio-CMB
-  keycode: "l"
+  keycode: "4"
   frequency: 1220
   color: "#1b748c"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: Provost
+  name: chat-radio-provost
+  keycode: "r"
+  frequency: 1473
+  color: "#9b0612"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: RoyalMarine
+  name: chat-radio-royal-marine
+  keycode: "q"
+  frequency: 1551
+  color: "#e1580e"
   longRange: true
   tower: true
 

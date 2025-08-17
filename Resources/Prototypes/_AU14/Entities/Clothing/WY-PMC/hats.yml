@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14WYPMCBallCap
+  name: WY PMC Ball Cap
+  description: A WY PMC patrol cap.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/WY_PMC/wypmccap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/WY_PMC/wypmccap.rsi

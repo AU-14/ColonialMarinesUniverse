@@ -1,0 +1,170 @@
+- type: gamePreset
+  id: ForceOnForce
+  alias:
+    - forceonforce
+  name: Force on Force
+  showInVote: true
+  description: Force on Force mode
+  requiresOpforVote: true
+  requiresGovforVote: true
+  supportedPlanets:
+    - AUPlanetLV747
+    - AUPlanetShepherdsPride
+  rules:
+  - AuVoteRule
+  - PlatoonSpawn
+  - AddGovfor
+  - AddOpfor
+
+- type: gamePreset
+  id: Insurgency
+  alias:
+    - insurgency
+  name: Insurgency
+  showInVote: true
+  description: Insurgency mode
+  requiresGovforVote: true
+  supportedPlanets:
+    - AUPlanetLV747
+    - AUPlanetShepherdsPride
+    - AUPlanetLV624
+  rules:
+  - AuVoteRule
+  - PlatoonSpawn
+  - AddGovfor
+  - AddClf
+  - ColonyAntags
+
+- type: gamePreset
+  id: ColonyFall
+  alias:
+    - colonyfall
+  name: Colony Fall
+  showInVote: true
+  description: Colony Fall mode
+  rules:
+    - AuVoteRule
+    - ColonyAntags
+  supportedPlanets:
+    - AUPlanetLV747
+    - AUPlanetShepherdsPride
+    - AUPlanetLV624
+
+- type: gamePreset
+  id: Jailbreak
+  alias:
+    - jailbreak
+  name: Jailbreak
+  showInVote: false
+  description: Jailbreak mode
+  rules:
+    - AuVoteRule
+
+- type: gamePreset
+  id: Prometheus
+  alias:
+    - prometheus
+  name: Prometheus
+  showInVote: false
+  description: Prometheus mode
+  rules:
+    - AuVoteRule
+
+- type: gamePreset
+  id: Criminal
+  alias:
+    - criminal
+  name: Criminal
+  showInVote: false
+  description: Criminal mode
+  rules:
+    - AuVoteRule
+
+
+
+
+
+
+
+- type: entity
+  id: PlatoonSpawn
+  parent: BaseGameRule
+  components:
+  - type: PlatoonSpawnRule
+
+- type: entity
+  id: AddGovfor
+  parent: BaseGameRule
+  components:
+  - type: AddJobsRule
+    addToShip: true
+    shipFaction: govfor
+    jobs:
+      AU14JobGOVFORPlatCo: 1
+      AU14JobGOVFORPlatoonCorpsman: 3
+      AU14JobGOVFORDCC: 2
+      AU14JobGOVFORPlatOp: 1
+      AU14JobGOVFORDSPilot: 1
+      AU14JobGOVFORRadioTelephoneOperator: 1
+      AU14JobGOVFORSectionSergeant: 1
+      AU14JobGOVFORSquadAutomaticRifleman: 1
+      AU14JobGOVFORSquadRifleman: 14
+
+
+- type: entity
+  id: AddOpfor
+  parent: BaseGameRule
+  components:
+  - type: AddJobsRule
+    shipFaction: opfor
+    addToShip: true
+    jobs:
+      AU14JobOpforPlatCo: 1
+      AU14JobOpforPlatoonCorpsman: 3
+      AU14JobOpforDCC: 2
+      AU14JobOpforPlatOp: 1
+      AU14JobOpforDSPilot: 1
+      AU14JobOpforRadioTelephoneOperator: 1
+      AU14JobOpforSectionSergeant: 1
+      AU14JobOpforSquadAutomaticRifleman: 1
+      AU14JobOpforSquadRifleman: 14
+
+- type: entity
+  id: AddClf
+  parent: BaseGameRule
+  components:
+  - type: AddJobsRule
+    jobs:
+      AU14JobCLFCellLeader: 1
+      AU14JobCLFPhysician: 1
+      AU14JobCLFGuerilla: 6
+      AU14JobCLFMachineGunner: 1
+
+- type: entity
+  id: ColonyAntags
+  parent: BaseGameRule
+  name: Colony Antags
+  description: Randomly rolls for each colony antag to be present this round.
+  components:
+  - type: GameRule
+  - type: ColonyAntagsRule
+
+
+- type: entity
+  id: AuVoteRule
+  parent: BaseGameRule
+  name: Colony Antags
+  description: If you want your mode to load planets and platoons automatically
+  components:
+  - type: AuVoteRule
+
+
+
+
+- type: GamePlanetPool
+  id: ColonyPlanetPool
+  planets:
+    - AUPlanetLV747
+    - AUPlanetShepherdsPride
+    - AUPlanetStableGarrison
+    - AUPlanetLV624

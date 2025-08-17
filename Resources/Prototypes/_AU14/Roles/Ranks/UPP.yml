@@ -1,0 +1,147 @@
+# enlisted
+- type: rank
+  id: UPP_Ryadovoy
+  name: Ryadovoy
+  prefix: Ryad.
+  paygrade: E1
+
+- type: rank
+  id: UPP_Yefreytor
+  name: Yefreytor
+  prefix: Yefr.
+  paygrade: E2
+
+- type: rank
+  id: UPP_StarschyRyadovoy
+  name: Starschy Ryadovoy
+  prefix: SRyad.
+  paygrade: E3
+
+- type: rank
+  id: UPP_Serzhant
+  name: Serzhant
+  prefix: Serzh.
+  paygrade: E4
+
+- type: rank
+  id: UPP_StarschySerzhant
+  name: Starschy Serzhant
+  prefix: SSerzh.
+  paygrade: E5
+
+- type: rank
+  id: UPP_Plutonowy
+  name: Plutonowy
+  prefix: Plut.
+  paygrade: E6
+
+- type: rank
+  id: UPP_Shangshi
+  name: Shangshi
+  prefix: Shang.
+  paygrade: E7
+
+#  warrant Officers
+- type: rank
+  id: UPP_Praporshchik
+  name: Praporshchik
+  prefix: Prap.
+  paygrade: W1
+
+- type: rank
+  id: UPP_StarschyPraporshchik
+  name: Starschy Praporshchik
+  prefix: SPrap.
+  paygrade: W2
+
+- type: rank
+  id: UPP_Hauptfeldwebel
+  name: Hauptfeldwebel
+  prefix: Hauptf.
+  paygrade: W3
+
+- type: rank
+  id: UPP_MariscalDeCampo
+  name: Mariscal de Campo
+  prefix: MCampo
+  paygrade: W4
+
+# officers
+- type: rank
+  id: UPP_Leytenant
+  name: Leytenant
+  prefix: Leyt.
+  paygrade: O1
+
+- type: rank
+  id: UPP_StarschyLeytenant
+  name: Starschy Leytenant
+  prefix: SLeyt.
+  paygrade: O2
+
+- type: rank
+  id: UPP_Hauptmann
+  name: Hauptmann
+  prefix: Hauptm.
+  paygrade: O3
+
+- type: rank
+  id: UPP_Kapitan
+  name: Kapitan
+  prefix: Kapit.
+  paygrade: O4
+
+#field officers
+- type: rank
+  id: UPP_Major
+  name: Major
+  prefix: Maj.
+  paygrade: O5
+
+- type: rank
+  id: UPP_Podpolkovnik
+  name: Podpolkovnik
+  prefix: Podpolk.
+  paygrade: O6
+
+- type: rank
+  id: UPP_Polkovnik
+  name: Polkovnik
+  prefix: Polk.
+  paygrade: O7
+
+# Generals
+- type: rank
+  id: UPP_GeneralMajor
+  name: General-Major
+  prefix: GenMaj.
+  paygrade: O8
+
+- type: rank
+  id: UPP_GeneralLeytenant
+  name: General-Leytenant
+  prefix: GenLeyt.
+  paygrade: O9
+
+- type: rank
+  id: UPP_GeneralPolkovnik
+  name: General-Polkovnik
+  prefix: GenPolk.
+  paygrade: O10
+
+- type: rank
+  id: UPP_Mariscal
+  name: Mariscal
+  prefix: Maris.
+  paygrade: O10
+
+- type: rank
+  id: UPP_ChairmanMilitaryCouncil
+  name: Chairman of Military Council
+  prefix: CMC
+  paygrade: O10
+
+- type: rank
+  id: UPP_Commissar
+  name: Commissar
+  prefix: Comrade 

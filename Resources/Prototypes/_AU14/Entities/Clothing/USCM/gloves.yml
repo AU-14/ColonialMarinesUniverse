@@ -1,0 +1,37 @@
+- type: entity
+  parent: ClothingHandsBase
+  id: AU14PVEHandsInsulatedBlackMarine
+  name: marine insulated combat gloves
+  description: "Standard issue marine tactical gloves with insulated fibers. It reads: 'knit by Marine Widows Association'."
+  components:
+  - type: Insulated
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Hands/Gloves/black.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Hands/Gloves/black.rsi
+  - type: Fiber
+    fiberMaterial: fibers-black
+    fiberColor: fibers-black
+  - type: FingerprintMask
+
+- type: entity
+  parent: ClothingHandsBase
+  id: AU14PVEHandsFingerlessBlackGloves
+  name: marine black fingerless combat gloves
+  description: "Standard issue marine tactical gloves with the fingers cut off, no longer providing protection against electrical shocks. It reads: 'Knit by Marine Widows Association'."
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Hands/black-fingerless.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/Hands/black-fingerless.rsi
+
+- type: entity
+  parent: ClothingHandsBase
+  id: AU14PVEHandsFingerlessBrownGloves
+  name: marine brown fingerless combat gloves
+  description: "Standard issue marine tactical gloves with the fingers cut off, no longer providing protection against electrical shocks. It reads: 'Knit by Marine Widows Association'."
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Hands/brown-fingerless.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/Hands/brown-fingerless.rsi

@@ -1,0 +1,67 @@
+ #section
+
+- type: entity
+  parent: CMEncryptionKey
+  id: AU14EncryptionKeyopfor
+  name: opfor encryption key
+  description: An encryption key used to communicate on the opfor channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - opfor
+    defaultChannel: opfor
+  - type: Sprite
+    state: we_ya_key
+
+- type: entity
+  parent: CMEncryptionKey
+  id: AU14EncryptionKeyopforCommand
+  name: opfor command encryption key
+  description: An encryption key used to communicate on all opfor channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - opfor
+    - opforcommand
+    defaultChannel: opfor
+  - type: Sprite
+    state: we_ya_key
+
+- type: entity
+  parent: RMCHeadsetShip
+  id: AU14HeadsetSectionOpfor
+  name: opfor section radio headset
+  description: This is used by opfor personnel to communicate on the radio.
+  components:
+  - type: Sprite
+    state: generic_headset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyopfor
+
+- type: entity
+  parent: RMCHeadsetShip
+  id: AU14HeadsetSectionLeaderopfor
+  name: opfor command radio headset
+  description: This is used by opfor command members to communicate on the radio.
+  components:
+  - type: Sprite
+    state: generic_headset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyopforCommand
+
+- type: entity
+  parent: CMEncryptionKey
+  id: AU14EncryptionKeyopforjtac
+  name: opfor JTAC encryption key
+  description: An encryption key used to communicate on JTAC  channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - opforjtac
+    defaultChannel: opforjtac
+  - type: Sprite
+    state: we_ya_key

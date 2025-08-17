@@ -25,12 +25,9 @@
       - RMCCrateBoxShellsShotgunBreaching
       - RMCCrateBoxMagazineBreaching
       - RMCCrateMagazineSmartGun
-#      - RMCCrateMagazineNapalm
+      - RMCCrateMagazineNapthalUT
 #      - RMCCrateMagazineNapalmGel
 #      - RMCCrateMagazineFlamerMixed
-      - RMCCrateMortarShellHE
-      - RMCCrateMortarShellIncendiary
-      - RMCCrateMortarShellFlare
       - RMCCrateGearPackFlare
       - RMCCrateFoodMRE
       - RMCCrateFlashlights
@@ -43,6 +40,13 @@
   description: A console for the Automated Storage Retrieval System.
   suffix: Requisitions
   components:
+  - type: ItemSlots
+    slots:
+      ItemCabinet:
+        whitelist:
+          tags:
+          - Currency
+  - type: ColonyAtm
   - type: Sprite
     sprite: _RMC14/Structures/Machines/asrs_console.rsi
     layers:

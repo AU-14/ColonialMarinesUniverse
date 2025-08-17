@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13-pve at https://github.com/cmss13-devs/cmss13-pve/blob/11a335233a9879ee006d652798e51fa9ba20f330/icons/obj/items/helmet_garb.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/11a335233a9879ee006d652798e51fa9ba20f330/icons/mob/humans/onmob/helmet_garb.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "helmet",
+      "directions": 4
+    }
+  ]
+}

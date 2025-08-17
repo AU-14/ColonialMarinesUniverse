@@ -7,8 +7,7 @@ namespace Content.Shared.Roles;
 /// <summary>
 ///     Describes information for a single antag.
 /// </summary>
-[Prototype("antag")]
-[Serializable, NetSerializable]
+[Prototype]
 public sealed partial class AntagPrototype : IPrototype
 {
     [ViewVariables]
@@ -53,4 +52,10 @@ public sealed partial class AntagPrototype : IPrototype
     /// </summary>
     [DataField]
     public List<ProtoId<GuideEntryPrototype>>? Guides;
+
+    /// <summary>
+    ///     The category this antag belongs to, for UI grouping.
+    /// </summary>
+    [DataField("category")]
+    public string? Category { get; private set; }
 }

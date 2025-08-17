@@ -1,8 +1,8 @@
 - type: entity
   parent: WeaponRifleM4SPR
-  name: M4SPR custom battle rifle
+  name: M4RA custom battle rifle
   id: WeaponRifleM4SPRCustom
-  description: An improvement over the already great M4SPR. Able to take A19 rounds, as well as having better control and accuracy at the cost of being harder to use. Can take traditional M4SPR mags, at lower damage.
+  description: An improvement over the already great M4RA. Able to take A19 rounds, as well as having better control and accuracy at the cost of being harder to use. Can take traditional M4RA mags, at lower damage.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/m4spr_custom/desert.rsi
@@ -18,11 +18,20 @@
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
+    - Burst
     recoilWielded: 1
     recoilUnwielded: 4
     scatterWielded: 2.5
     scatterUnwielded: 8
     baseFireRate: 1.8
+    burstFireRateMultiplier: 15
+    modifiers:
+      Burst:
+        # fireDelay: 0.01
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.1
   - type: GunDamageModifier
@@ -34,9 +43,11 @@
     heavy: 1
   - type: Gun
     shotsPerBurst: 2
+    burstCooldown: 0.75
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
+    - Burst
     soundGunshot:
       path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_m4spr.ogg
   - type: GunUserWhitelist
@@ -48,10 +59,9 @@
   - type: Clothing
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/m4spr_custom/desert.rsi
   - type: MeleeWeapon
-    attackRate: 1
     damage:
       types:
-        Slash: 31 # Yes this does this much damage in 13. 51 with a bayonet attached.
+        Blunt: 26 # Yes this does this much damage in 13.
   - type: AttachableHolder
     slots:
       rmc-aslot-barrel:
@@ -77,6 +87,8 @@
           - RMCAttachmentFlashlightGrip
           - RMCAttachmentLaserSight
           - RMCAttachmentVerticalGrip
+          - RMCAttachmentU7UnderbarrelShotgun
+          - RMCAttachmentExtinguisher
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -112,7 +124,7 @@
   parent: CMMagazineRifleBase
   id: RMCMagazineRifleM4SPRA19
   name: "A19 HV magazine (10x24mm)"
-  description: "A magazine of A19 high velocity rounds for use in the M4SPR custom battle rifle. The M4SPR custom battle rifle is the only gun that can chamber these rounds."
+  description: "A magazine of A19 high velocity rounds for use in the M4RA custom battle rifle. The M4RA custom battle rifle is the only gun that can chamber these rounds."
   components:
   - type: Tag
     tags:
@@ -137,7 +149,7 @@
   parent: RMCMagazineRifleM4SPRA19
   id: RMCMagazineRifleM4SPRA19Impact
   name: "A19 HV high impact magazine (10x24mm)"
-  description: "A magazine of A19 HV high impact rounds for use in the M4SPR custom battle rifle. The M4SPR custom battle rifle is the only gun that can chamber these rounds."
+  description: "A magazine of A19 HV high impact rounds for use in the M4RA custom battle rifle. The M4RA custom battle rifle is the only gun that can chamber these rounds."
   components:
   - type: Tag
     tags:
@@ -162,7 +174,7 @@
   parent: RMCMagazineRifleM4SPRA19
   id: RMCMagazineRifleM4SPRA19Incendiary
   name: "A19 HV incendiary magazine (10x24mm)"
-  description: "A magazine of A19 HV incendiary rounds for use in the M4SPR custom battle rifle. The M4SPR custom battle rifle is the only gun that can chamber these rounds."
+  description: "A magazine of A19 HV incendiary rounds for use in the M4RA custom battle rifle. The M4RA custom battle rifle is the only gun that can chamber these rounds."
   components:
   - type: Tag
     tags:
@@ -187,7 +199,7 @@
   parent: CMBaseCartridgeRifle
   id: RMCCartridgeRifleM4SPRA19
   name: cartridge (A19 high-velocity)
-  description: A high-velocity A19 cartridge. Fits in M4SPR custom magazines.
+  description: A high-velocity A19 cartridge. Fits in M4RA custom magazines.
   components:
   - type: Tag
     tags:
@@ -200,7 +212,7 @@
   parent: RMCCartridgeRifleM4SPRA19
   id: RMCCartridgeRifleM4SPRA19Impact
   name: cartridge (A19 high-velocity high impact)
-  description: A high-velocity high impact A19 cartridge. Fits in M4SPR custom magazines.
+  description: A high-velocity high impact A19 cartridge. Fits in M4RA custom magazines.
   components:
   - type: Tag
     tags:
@@ -213,7 +225,7 @@
   parent: RMCCartridgeRifleM4SPRA19
   id: RMCCartridgeRifleM4SPRA19Incendiary
   name: cartridge (A19 high-velocity incendiary)
-  description: A high-velocity incendiary A19 cartridge. Fits in M4SPR custom magazines.
+  description: A high-velocity incendiary A19 cartridge. Fits in M4RA custom magazines.
   components:
   - type: Tag
     tags:
@@ -241,6 +253,11 @@
     - range: 4
       falloff: 10
       buildup: true
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 24
+      falloff: 9999
+      ignoreModifiers: true
 
 - type: entity
   parent: RMCBaseBullet
@@ -266,6 +283,12 @@
       falloff: 10
     - range: 4
       falloff: 10
+      buildup: true
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 24
+      falloff: 9999
+      ignoreModifiers: true
 
 - type: entity
   parent: RMCBaseBullet
@@ -280,7 +303,18 @@
     amount: 25
   - type: RMCProjectileAccuracy
     accuracy: 105
+    thresholds:
+    - range: 16
+      falloff: 10
+    - range: 4
+      falloff: 10
+      buildup: true
   - type: IgniteOnProjectileHit
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 24
+      falloff: 9999
+      ignoreModifiers: true
 
 - type: Tag
   id: RMCMagazineRifleM4SPRA19

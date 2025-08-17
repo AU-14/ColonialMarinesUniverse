@@ -8,7 +8,7 @@ namespace Content.Shared.CriminalRecords;
 /// Can be viewed and edited in a criminal records console by security.
 /// </summary>
 [Serializable, NetSerializable, DataRecord]
-public sealed record CriminalRecord
+public sealed partial record CriminalRecord
 {
     /// <summary>
     /// Status of the person (None, Wanted, Detained).
@@ -35,6 +35,12 @@ public sealed record CriminalRecord
     /// </summary>
     [DataField]
     public List<CrimeHistory> History = new();
+
+    /// <summary>
+    /// Bounty placed on the person, can be set by security.
+    /// </summary>
+    [DataField]
+    public int Bounty;
 }
 
 /// <summary>

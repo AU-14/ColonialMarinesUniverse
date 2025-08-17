@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "Taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/94a83393192db3197a1466320660f73607d17077/icons/obj/structures/props/64x64.dmi, https://github.com/Steelpoint/cmss13/blob/5e66378de08af7e9cc629c1020286002ba187dfe/icons/obj/structures/props/64x64.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "deadbody"
+    },
+    {
+      "name": "army_guy"
+    }
+  ]
+}

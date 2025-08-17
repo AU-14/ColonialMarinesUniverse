@@ -22,6 +22,7 @@
     state: shuttle
   - type: Area
     linkedLz: dropship_lz1
+    weatherEnabled: true
 
 - type: entity
   parent: RMCAreaShuttleDrop2
@@ -33,6 +34,7 @@
     state: shuttle2
   - type: Area
     linkedLz: dropship_lz2
+    weatherEnabled: true
 
 - type: entity
   parent: RMCAreaKutjevo
@@ -50,6 +52,7 @@
     medevac: true
     OB: true
     supplyDrop: true
+    weatherEnabled: true
 
 - type: entity
   parent: RMCAreaKutjevo
@@ -67,6 +70,7 @@
     medevac: false
     OB: true
     supplyDrop: false
+    weatherEnabled: false
 
 - type: entity
   parent: RMCAreaKutjevoInterior
@@ -635,13 +639,13 @@
     mortarPlacement: false
     mortarFire: false
     medevac: false
-    OB: false
+    OB: true
     supplyDrop: false
 
 - type: entity
   parent: RMCAreaKutjevoInterior
   id: RMCAreaKutjevoInteriorColonySEast
-  name: Kutjevo - North East Colony Caves
+  name: Kutjevo - Southeast Colony Caves
   components:
   - type: Sprite
     state: colony_caves_2
@@ -652,13 +656,13 @@
     mortarPlacement: false
     mortarFire: false
     medevac: false
-    OB: false
+    OB: true
     supplyDrop: false
 
 - type: entity
   parent: RMCAreaKutjevoInterior
   id: RMCAreaKutjevoInteriorColonyNEast
-  name: Kutjevo - South East Colony Caves
+  name: Kutjevo - Northeast Colony Caves
   components:
   - type: Sprite
     state: colony_caves_2
@@ -669,7 +673,7 @@
     mortarPlacement: false
     mortarFire: false
     medevac: false
-    OB: false
+    OB: true
     supplyDrop: false
 
 - type: entity
@@ -686,7 +690,7 @@
     mortarPlacement: false
     mortarFire: false
     medevac: false
-    OB: false
+    OB: true
     supplyDrop: false
 
 - type: entity
@@ -703,6 +707,6 @@
     mortarPlacement: false
     mortarFire: false
     medevac: false
-    OB: false
+    OB: true
     supplyDrop: false
     minimapColor: '#5A4501E7'

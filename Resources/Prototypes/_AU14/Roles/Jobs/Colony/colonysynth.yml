@@ -1,0 +1,117 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianColonySynthetic
+  name: au14-job-name-civiliancolonysynthetic
+  description: au14-job-description-civiliancolonysynthetic
+  setPreference: true
+  canBeAntag: false
+  playTimeTracker: AU14JobCivilianColonySynthetic
+  ranks:
+    RMCRankSyntheticColonist: []
+  startingGear: AU14GearCivilianColonySynthetic
+  icon: "RMCJobIconSynth"
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  - auadmin
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillCqc: 4
+        RMCSkillEngineer: 4
+        RMCSkillConstruction: 3
+        RMCSkillOverwatch: 1
+        RMCSkillMedical: 4
+        RMCSkillSurgery: 3
+        RMCSkillResearch: 1
+        RMCSkillMeleeWeapons: 2
+        RMCSkillPilot: 2
+        RMCSkillPolice: 2
+        RMCSkillFireman: 5
+        RMCSkillFirearms: 1
+        RMCSkillPowerLoader: 2
+        RMCSkillVehicles: 2
+        RMCSkillJtac: 3
+        RMCSkillIntel: 2
+        RMCSkillDomestics: 2
+        RMCSkillNavigations: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-civiliancolonysynthetic
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: MeleeWeapon
+      soundHit:
+        path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+        params:
+          variation: 0.15
+          volume: -1
+      angle: 30
+      animation: WeaponArcFist
+      attackRate: 1
+      damage:
+        types:
+          Blunt: 35
+    - type: Synth
+      welderDamageToRepair:
+        types:
+          Blunt: -15
+          Piercing: -15
+          Slash: -15
+      cableCoilDamageToRepair:
+        types:
+          Caustic: -15
+          Heat: -15
+          Shock: -15
+          Cold: -15
+      addComponents:
+      # TODO darksight instead of night vision
+      - type: NightVision
+        innate: true
+      - type: EyeProtection
+      - type: WoundableUntreatable
+      - type: Insulated
+      removeComponents:
+      - type: CMSurgeryTarget
+      - type: Infectable
+      - type: Hunger
+      - type: Thirst
+      - type: Perishable
+      - type: ThermalRegulator
+      - type: Stamina
+      - type: DamageForceSay
+      - type: Dna
+      - type: InjectableSolution
+      - type: Fingerprint
+      - type: IVDripTarget
+      - type: RMCSuicide
+        damage: { }
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianColonySynthetic
+  equipment:
+    jumpsuit: RMCJumpsuitCivilian
+    shoes: RMCBootsCorporate
+    id: AU14IDCardColonySynthetic
+    ears: AU14ColonyAdminHeadset
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianColonySynthetic
+  name: Spawn Point AU14 Colony Synthetic
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianColonySynthetic
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianColonySynthetic
+  isHumanoid: true

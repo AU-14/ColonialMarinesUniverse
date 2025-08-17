@@ -43,11 +43,11 @@
 - type: entity
   parent: CMFax
   id: CMFaxWY
-  name: we-ya fax machine
+  name: WY fax machine
   suffix: WEYA
   components:
   - type: FaxMachine
-    name: "We-Ya"
+    name: "Weyland-Yutani"
     notifyAdmins: true
 
 - type: entity
@@ -93,7 +93,7 @@
   suffix: SPP
   components:
   - type: FaxMachine
-    name: "Socialist Progressive Peoples"
+    name: "Union of Progressive Peoples"
     notifyAdmins: true
 
 - type: entity
@@ -102,5 +102,15 @@
   suffix: TSE
   components:
   - type: FaxMachine
-    name: "Three Suns Empire"
+    name: "Three World Empire"
+    notifyAdmins: true
+
+- type: entity
+  parent: CMFax
+  id: CMFaxColonyAdmin
+  name: colony administrator fax machine
+  suffix: Admin
+  components:
+  - type: FaxMachine
+    name: "Colony Administrator"
     notifyAdmins: true

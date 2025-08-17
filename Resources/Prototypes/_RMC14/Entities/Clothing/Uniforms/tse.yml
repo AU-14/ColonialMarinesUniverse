@@ -1,0 +1,10 @@
+# TSEPA
+
+- type: entity
+  parent: RMCMarineUniformBase
+  id: RMCJumpsuitTSEPA
+  name: nspa uniform
+  description: The standard uniform of a Neroid Sector Policing Authority officer.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Uniforms/TSE/TSEPA/standard.rsi

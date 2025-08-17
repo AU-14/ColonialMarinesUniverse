@@ -1,0 +1,140 @@
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14LACNArmorStandard
+  name: LACN BL-1 Armor
+  description: A set of ballistic armor used by the LACN landing forces.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/Armor/lacninfantryarmor.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: CMArmor
+    bullet: 20
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14LACNArmorStandardPadless
+  name: Padless LACN BL-1 Armor
+  description: A set of ballistic armor used by the LACN landing forces. This one is missing the grieves and shoulder pads.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/Armor/lacninfantryarmorstripped.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: CMArmor
+    bullet: 20
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14LACNArmorSL
+  name: LACN BL-2 Armor
+  description: A set of ballistic armor used by the LACN landing forces NCOs and Officers.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/Armor/lacninfantryarmorsl.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: CMArmor
+    bullet: 20
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14LACNCommandoArmorStandard
+  name: LACN BL-4L Armor
+  description: A set of ballistic armor used by the LACN naval commandos.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/Armor/lacncommandoarmor.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: CMArmor
+    bullet: 20
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14LACNCommandoArmorScout
+  name: LACN BL-4L Scout Armor
+  description: A set of ballistic armor used by the LACN naval commando scouts.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/Armor/lacncommandoscoutarmor.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: CMArmor
+    bullet: 20
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14LACNCommandoArmorPointman
+  name: LACN BL-4L Pointman Armor
+  description: A set of ballistic armor used by the LACN naval commando pointmen.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/Armor/lacncommandopointmanarmor.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: CMArmor
+    bullet: 20
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14USASFSECFORChestrig
+  name: USASF Security Forces Chestrig
+  description: An exterior chestrig used by USASF SECFOR.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USASFSecurityForces/chestrig.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/USASFSecurityForces/chestrig.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14LACNICPS2
+  name: LACN ICPS-2 Aircrew Armor
+  description: A set of ballistic armor used by LACN aircrew.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/PilotGear/armor.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: CMArmor
+    bullet: 10
+    bio: 10
+    explosionArmor: 10
+  - type: CMHardArmor

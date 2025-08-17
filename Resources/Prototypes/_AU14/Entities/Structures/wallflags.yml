@@ -1,0 +1,118 @@
+﻿- type: entity
+  parent: BaseSign
+  id: AU14WallFlagBase
+  abstract: true
+  components:
+  - type: WallMount
+    arc: 360
+  - type: Sprite
+    drawdepth: WallTops
+    sprite: _AU14/Structures/wallflags.rsi
+    snapCardinals: true
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 5
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/poster_broken.ogg
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          PosterBroken:
+            min: 1
+            max: 1
+        offset: 0
+        
+- type: entity
+  parent: AU14WallFlagBase
+  id: AU14WallFlagUA
+  name: "UA Flag"
+  description: "The flag of the United Americas."
+  components:
+  - type: Sprite
+    state: uaflag
+    
+- type: entity
+  parent: AU14WallFlagBase
+  id: AU14WallFlagUAWorn
+  name: "Worn UA Flag"
+  description: "The flag of the United Americas. This one has seen better days."
+  components:
+  - type: Sprite
+    state: uaflag_worn
+    
+- type: entity
+  parent: AU14WallFlagBase
+  id: AU14WallFlagCLF
+  name: "CLF Flag"
+  description: "The flag of the Colonial Liberation Front."
+  components:
+  - type: Sprite
+    state: clfflag
+    
+- type: entity
+  parent: AU14WallFlagBase
+  id: AU14WallFlagCLFWorn
+  name: "Worn CLF Flag"
+  description: "The flag of the Colonial Liberation Front. This one has seen better days."
+  components:
+  - type: Sprite
+    state: clfflag_worn
+    
+- type: entity
+  parent: AU14WallFlagBase
+  id: AU14WallFlagUSCM
+  name: "USCM Flag"
+  description: "The flag of the United States Colonial Marine Corps."
+  components:
+  - type: Sprite
+    state: cmflag
+    
+- type: entity
+  parent: AU14WallFlagBase
+  id: AU14WallFlagUSCMWorn
+  name: "Worn USCM Flag"
+  description: "The flag of the United States Colonial Marine Corps. This one has seen better days."
+  components:
+  - type: Sprite
+    state: cmflag_worn
+    
+- type: entity
+  parent: AU14WallFlagBase
+  id: AU14WallFlagTWE
+  name: "TWE Flag"
+  description: "The flag of the Three World Empire."
+  components:
+  - type: Sprite
+    state: tweflag
+    
+- type: entity
+  parent: AU14WallFlagBase
+  id: AU14WallFlagTWEWorn
+  name: "Worn TWE Flag"
+  description: "The flag of the Three World Empire. This one has seen better days."
+  components:
+  - type: Sprite
+    state: tweflag_worn
+
+- type: entity
+  parent: AU14WallFlagBase
+  id: AU14WallFlagUPP
+  name: "UPP Flag"
+  description: "The flag of the Union of Progressive Peoples."
+  components:
+  - type: Sprite
+    state: uppflag
+    
+- type: entity
+  parent: AU14WallFlagBase
+  id: AU14WallFlagUPPWorn
+  name: "Worn UPP Flag"
+  description: "The flag of the Union of Progressive Peoples. This one has seen better days."
+  components:
+  - type: Sprite
+    state: uppflag_worn

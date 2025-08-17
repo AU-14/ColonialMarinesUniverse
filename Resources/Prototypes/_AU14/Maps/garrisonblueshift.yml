@@ -1,0 +1,25 @@
+- type: gameMap
+  id: au14garrisonmapthingtemp
+  mapName: Stable Garrison
+  mapPath: /Maps/_AU14/garrison.yml
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    au14garrisonmapthingtemp:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'au14garrisonmapthingtemp'
+        - type: StationJobs
+          availableJobs:
+            AU14JobGOVFORPlatCo: [1, 1]
+            AU14JobGOVFORPlatOp: [1, 1]
+            AU14JobGOVFORDSPilot: [1, 1]
+            AU14JobGOVFORDCC: [1, 1]
+            AU14JobGOVFORSectionSergeant: [1, 1]
+            AU14JobGOVFORSquadSergeant: [2, 2]
+            AU14JobGOVFORSquadRifleman: [15, 15]
+            AU14JobGOVFORSquadAutomaticRifleman: [2, 2]
+            AU14JobGOVFORPlatoonCorpsman: [1, 1]

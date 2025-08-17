@@ -1,0 +1,58 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCLFGuerilla
+  name: au14-job-name-clfguerilla
+  description: au14-job-description-clfguerilla
+  setPreference: true
+  playTimeTracker: AU14JobCLFGuerilla
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCLFGuerilla
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clflrs
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 1
+        RMCSkillFirearms: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-clfguerilla
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCLFGuerilla
+  equipment:
+    jumpsuit: CMJumpsuitColonist
+    shoes: RMCBootsPMCFilled
+    ears: AU14CLFHeadset
+    neck: RMCCLFArmband
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCLFGuerilla
+  name: Spawn Point CLF Guerilla
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCLFGuerilla
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCLFGuerilla
+  isHumanoid: true

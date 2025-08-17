@@ -1,0 +1,66 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianKellandWarden
+  name: au14-job-name-civiliankellandwarden
+  description: au14-job-description-civiliankellandwarden
+  setPreference: true
+  playTimeTracker: AU14JobCivilianKellandWarden
+  ranks:
+    RMCRankCivilian: [ ]
+  startingGear: AU14GearCivilianKellandWarden
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-civiliankellandwarden
+  accessGroups:
+  - Colonist
+  - auwy
+  - AUPrisonStaff
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillCqc: 2
+        RMCSkillEngineer: 2
+        RMCSkillConstruction: 3
+        RMCSkillOverwatch: 1
+        RMCSkillResearch: 1
+        RMCSkillPolice: 2
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 2
+        RMCSkillIntel: 1
+        RMCSkillDomestics: 1
+        RMCSkillNavigations: 1
+        RMCSkillFirearms: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-civiliankellandwarden
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianKellandWarden
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlack
+    shoes: RMCShoesLaceupBrown
+    id: AU14IDCardCivilianKellandWarden
+    ears: AU14ColonyAdminHeadset #no kelland headset yet
+    outerClothing: RMCJacketCorporateBlue
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianKellandWarden
+  name: Spawn Point Kelland Warden
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianKellandWarden
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianKellandWarden
+  isHumanoid: true

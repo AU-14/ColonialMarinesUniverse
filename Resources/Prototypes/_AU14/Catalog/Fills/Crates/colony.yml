@@ -1,0 +1,448 @@
+﻿#table parts
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxGamblingTableParts
+  name: Gaming Table Parts Crate (15x gambling table parts)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCTablePartGambling
+      amount: 15
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxGrayTableParts
+  name: Gray Table Parts Crate (15x gray table parts)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCTablePartAlmayer
+      amount: 15
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxtanTableParts
+  name: Tan Table Parts Crate (15x tan table parts)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCTablePartTan
+      amount: 15
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxReinforcedTableParts
+  name: Reinforced Table Parts Crate (15x reinforced table parts)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCTablePartReinforced
+      amount: 15
+
+#cooking
+
+- type: entity
+  parent: RMCCratePlastic
+  id: AU14CrateBoxboxofingredients
+  name: Crate (5x box of ingredients)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBoxIngredients
+      amount: 5
+
+- type: entity
+  parent: RMCCratePlastic
+  id: AU14CrateBoxMeat
+  name: Raw Meat Crate (5x Raw Meat, 5x Raw Fish)
+  components:
+  - type: StorageFill
+    contents:
+    - id: FoodMeat
+      amount: 5
+    - id: FoodMeatFish
+      amount: 5
+
+- type: entity
+  parent: RMCCratePlastic
+  id: AU14Cratealcoholicdrinks
+  name: Assorted Alcoholic Drinks Crate
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMDrinkCanBeerLite
+      amount: 12
+    - id: RMCDrinkAlcoholPurpleWine
+      amount: 1
+    - id: RMCDrinkAlcoholWhiskey
+      amount: 2
+    - id: RMCDrinkAlcoholVodka
+      amount: 1
+    - id: RMCDrinkAlcoholGin
+      amount: 1
+    - id: RMCDrinkAlcoholRum
+      amount: 1
+
+- type: entity
+  parent: RMCCratePlastic
+  id: AU14CrateBoxPizza
+  name: Assorted Pizza Crate (4x Filled Pizza Boxes)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBoxPizzaMargherita
+      amount: 1
+    - id: RMCBoxPizzaMeat
+      amount: 5
+    - id: RMCBoxPizzaVegetable
+      amount: 1
+    - id: RMCBoxPizzaMushroom
+      amount: 1
+
+#guns and ammo
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxHuntingRifleCrate
+  name: Hunting Rifle Crate (1x Basira Hunting Rifle, x4 Basira Magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponBoltActionRifle
+      amount: 1
+    - id: RMCMagazineRifleHunting
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxSkeetShootingCrate
+  name: Skeet Shooting Crate (1x M357 Rival, x2 box of flechette shells)
+  components:
+  - type: StorageFill
+    contents:
+    - id: WeaponShotgunM357
+      amount: 1
+    - id: RMCBoxShotgunFlechette
+      amount: 2
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxD18
+  name: D18 Pistol Crate (x1 D18 pistol case, x4 D18 magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCD18Case
+      amount: 1
+    - id: RMCMagazinePistolD18
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxBasiraMagazines
+  name: Basira Magazine Crate (x6 Basira Magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleHunting
+      amount: 6
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxShotgunShells
+  name: Assorted Shotgun Shell Crate (x1 box of slug shells, x1 box of flechette shells, x1 box of buckshot shells)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBoxShotgunBuckshot
+      amount: 1
+    - id: RMCBoxShotgunFlechette
+      amount: 1
+    - id: RMCBoxShotgunSlugs
+      amount: 1
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxD18Magazines
+  name: D18 Magazine Crate (x8 D18 Magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazinePistolD18
+      amount: 8
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxAR10
+  name: AR10 assault rifle crate (x1 AR10 assault rifle, x4 M16 Magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponRifleAR10
+      amount: 1
+    - id: RMCMagazineRifleM16
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxAR10Magazines
+  name: M16/AR10 Magazine Crate (x6 M16 Magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleM16
+      amount: 6
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxM44
+  name: M44 Revolver Crate (x1 M44 Revolver, x3 M44 Speedloader, x1 M44 Marksman Speedloader)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponRevolverM44
+      amount: 1
+    - id: RMCSpeedLoaderM44
+      amount: 3
+    - id: RMCSpeedLoader44Marksman
+      amount: 1
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxM44SL
+  name: M44 Speed Loader Crate (x7 M44 speed loader)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpeedLoaderM44
+      amount: 7
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxM44SLM
+  name: M44 Marksman Speed Loader Crate (x7 M44 marksman speed loader)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpeedLoader44Marksman
+      amount: 7
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxRSH9
+  name: RSh-9 Revolver Crate (x1 RSh-9 Revolver, x4 RSh-9 Speed loader, x1 rail flashlight)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponRevolverRSh9
+      amount: 1
+    - id: RMCSpeedLoaderRsh9
+      amount: 4
+    - id: RMCAttachmentRailFlashlight
+      amount: 1
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxRSH9SL
+  name: RSh-9 Speed Loader Crate (x7 RSh-9 Speed loader)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpeedLoaderRsh9
+      amount: 7
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxTPR23B
+  name: TPR23B handgun Crate (x1 TPR23B handgun, x4 M4A3 magazine )
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponPistolTPR23B
+      amount: 1
+    - id: CMMagazinePistolM1984
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxTPR23BMag
+  name: "TPR23B/M4A3 magazines (x7 M4A3 magazine)"
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazinePistolM1984
+      amount: 7
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxM4A3
+  name: M4A3 service pistol crate (x1 M4A3 service pistol, x4 M4A3 magazine )
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMWeaponPistolM1984
+      amount: 1
+    - id: CMMagazinePistolM1984
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxRevolverM2019
+  name: "M2019 autorevolver crate (1x M2019 autorevolver, 4x Speed loader (.357)"
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponRevolverM2019
+      amount: 1
+    - id: RMCSpeedLoader357
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBox357HP
+  name: ".357 hollowpoint speed loader crate (x7 hollowpoint speed loader .357)"
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpeedLoader357Hollowpoint
+      amount: 7
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBox357
+  name: ".357 speed loader crate (x7 speed loader .357)"
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpeedLoader357
+      amount: 7
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxMod88
+  name: "Mod 88 Combat Pistol crate (x6 Mod 88 AP magazine, x1 Mod 88 combat pistol, x1 rail flashlight)"
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCGunCasePistolM77
+      amount: 1
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxMod88Mags
+  name: "Mod 88 AP magazine crate (x7 Mod 88 AP magazine)"
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazinePistolM77AP
+      amount: 7
+
+#Tools
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateAssortedKnives
+  name: Assorted Knives Crate (2x M2132 machete, 4x M5 bayonet, x5 M11 throwing knife)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMM2132Machete
+      amount: 2
+    - id: RMCM5Bayonet
+      amount: 4
+    - id: CMM11Knife
+      amount: 5
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxToolbelt
+  name: Toolbelt Crate (4x filled M276 pattern toolbelt rig)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMBeltUtilityFilled
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxFieldSupplyEngin
+  name: Engineering Field Supply Crate (1x engineering supply kit)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCKitEngineering
+      amount: 1
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxHandhelds
+  name: Shortwave Radio Crate (8x shortwave radio)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRadioHandheldColonyOff
+      amount: 8
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxCivBinocs
+  name: Binoculars Crate (3x binoculars)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBinocularsCiv
+      amount: 3
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxBackpacks
+  name: Backpack Crate (3x backpack)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMBackpack
+      amount: 3
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxFirefighting
+  name: Firefighting Crate (3x firefighter helmet, 3x Firefighting Turnout Gear, 6x fire extinguisher)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCHardhatRed
+      amount: 3
+    - id: AU14CivilianTurnoutGear
+      amount: 3
+    - id: CMFireExtinguisher
+      amount: 6
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxFloorTiles
+  name: Metal Floor Tile Crate (30x metal floor tile)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMTileItemSteel
+      amount: 30
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxFloorTilesWood
+  name: Wooden Floor Tile Crate (30x wood floor tile)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMTileItemWood
+      amount: 30
+
+#medical
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxHospitalBeds
+  name: Hospital Roller Bed Crate (4x hospital roller bed)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRollerBedHospitalFolded
+      amount: 4

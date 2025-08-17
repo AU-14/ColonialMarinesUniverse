@@ -1,0 +1,220 @@
+- type: entity
+  id: RunawaySynth
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: RunawaySynthRule
+  - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
+    definitions:
+    - prefRoles: [ RunawaySynthRole ]
+      max: 1
+      playerRatio: 15
+      briefing:
+        text: runawaysynth-role-greeting
+        color: CornflowerBlue
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      components:
+      - type: NightVision
+        innate: true
+      - type: RunawaySynth
+      - type: EyeProtection
+      - type: WoundableUntreatable
+      - type: Insulated
+      - type: RMCLeapProtection
+      - type: Synth
+        changeBrain: false
+        removeComponents:
+        - type: CMSurgeryTarget
+        - type: Infectable
+        - type: Hunger
+        - type: Thirst
+        - type: Perishable
+        - type: ThermalRegulator
+        - type: Stamina
+        - type: DamageForceSay
+        - type: Dna
+        - type: Fingerprint
+        - type: InjectableSolution
+        - type: IVDripTarget
+        - type: RMCSuicide
+          damage: { }
+        canUseGuns: true
+        hideGeneration: true
+        useHumanHealthIcons: true
+  #    mindRoles:
+   #   - MindRoleRunawaySynth
+
+
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleRunawaySynth
+  name: Runaway Synth  Role
+  components:
+  - type: MindRole
+    antagPrototype: RunawaySynthRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+
+- type: antag
+  id: RunawaySynthRole
+  name: roles-antag-runaway-synth-name
+  antagonist: true
+  category: Colony Antags
+  setPreference: true
+  objective: roles-antag-synth-objective
+  isCM: true
+
+
+
+## fugitive
+
+- type: entity
+  id: Fugitive
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: FugitiveRule
+  - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
+    definitions:
+    - prefRoles: [ FugitiveRole ]
+      max: 1
+      playerRatio: 15
+      briefing:
+        text: fugitive-role-greeting
+        color: CornflowerBlue
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      components:
+      - type: Fugitive
+      mindRoles:
+      - MindRoleFugitive
+
+
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleFugitive
+  name: Fugitive  Role
+  components:
+  - type: MindRole
+    antagPrototype: FugitiveRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  id: FugitiveRole
+  name: roles-antag-fugitive-name
+  antagonist: true
+  category: Colony Antags
+  setPreference: true
+  objective: roles-antag-fugitive-objective
+  isCM: true
+
+
+- type: entity
+  id: DrugDealer
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: DrugDealerRule
+  - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
+    definitions:
+    - prefRoles: [ DrugDealerRole ]
+      max: 1
+      playerRatio: 15
+      briefing:
+        text: dealer-role-greeting
+        color: MediumVioletRed
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      startingGear: AU14GearDrugDealer
+      components:
+      - type: DrugDealer
+      mindRoles:
+      - MindRoleDrugDealer
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleDrugDealer
+  name: Drug Dealer Role
+  components:
+  - type: MindRole
+    antagPrototype: DrugDealerRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  id: DrugDealerRole
+  name: roles-antag-dealer-name
+  antagonist: true
+  category: Colony Antags
+  setPreference: true
+  objective: roles-antag-dealer-objective
+  isCM: true
+
+
+- type: startingGear
+  id: AU14GearDrugDealer
+  equipment:
+    back: AU14DrugDealerDrugBackpack
+
+- type: entity
+  id: CorporateSpy
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: AntagSelection
+    selectionTime: IntraPlayerSpawn
+    definitions:
+    - prefRoles: [ CorporateSpyRole ]
+      max: 1
+      playerRatio: 15
+      briefing:
+        text: spy-role-greeting
+        color: DarkSlateGray
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      components:
+      - type: CorporateSpy
+      mindRoles:
+      - MindRoleCorporateSpy
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCorporateSpy
+  name: Corporate Spy Role
+  components:
+  - type: MindRole
+    antagPrototype: CorporateSpyRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  id: CorporateSpyRole
+  name: roles-antag-spy-name
+  antagonist: true
+  category: Colony Antags
+  setPreference: true
+  objective: roles-antag-spy-objective
+  isCM: True
+
+- type: entity
+  parent: RMCSatchelBlack
+  id: AU14DrugDealerDrugBackpack
+  name: drug dealer's satchel
+  description: A black satchel filled with illicit substances.
+  components:
+  - type: StorageFill
+    contents:
+    - id: Joint
+      amount: 3
+    - id: AU14DrugDealerDrugBottle
+      amount: 4
+    - id: AU14PillBottleSpaceDrugs
+      amount: 3
+    - id: RMCSyringeDrugs
+      amount: 2
+    - id: AU14PillBottleRMCPsilocybin
+      amount: 2

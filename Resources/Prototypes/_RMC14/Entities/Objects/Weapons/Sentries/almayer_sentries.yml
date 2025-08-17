@@ -1,8 +1,8 @@
 ﻿- type: entity
   parent: RMCBaseTurret
   id: RMCTurretAlmayer
-  name: UN-635C static gauss turret
-  description: A fully-automated defence turret with mid-range targeting capabilities. Armed with a modified M32-S Autocannon and an internal belt feed and modified for UN warship use.
+  name: UA-635C static gauss turret
+  description: A fully-automated defence turret with mid-range targeting capabilities. Armed with a modified M32-S Autocannon and an internal belt feed and modified for UA warship use.
   components:
   - type: InteractionPopup
     interactDelay: 0.2

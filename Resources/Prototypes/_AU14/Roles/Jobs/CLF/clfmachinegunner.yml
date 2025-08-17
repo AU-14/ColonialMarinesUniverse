@@ -1,0 +1,63 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCLFMachineGunner
+  name: au14-job-name-clfmachinegunner
+  description: au14-job-description-clfmachinegunner
+  setPreference: true
+  playTimeTracker: AU14JobCLFMachineGunner
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCLFMachineGunner
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clflrs
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 2
+        RMCSkillFirearms: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFireman: 2
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-clfmachinegunner
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCLFMachineGunner
+  equipment:
+    outerClothing: AU14ArmorBallisticVest
+    gloves: CMHandsInsulated
+    shoes: RMCBootsPMCFilled
+    neck: RMCCLFArmband
+    jumpsuit: CMJumpsuitColonist
+    id: AU14IDCardColonyColonist
+    ears: AU14CLFHeadset
+  inhand:
+  - RMCWeaponLMGM60
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCLFMachineGunner
+  name: Spawn Point CLF Machine Gunner
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCLFMachineGunner
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCLFMachineGunner
+  isHumanoid: true

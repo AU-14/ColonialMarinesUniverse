@@ -1,0 +1,10 @@
+marking-AU14HumanHairCIA2 = CIA 2
+marking-AU14HumanHairCIA3 = CIA 3
+marking-AU14HumanHairCIA5 = CIA 4
+marking-AU14HumanHairIRS = IRS Agent
+marking-AU14HumanHairFlatPressed = Pressed Flat
+marking-AU14HumanHairWaver = Waver
+marking-AU14HumanHairElegant = Elegant Bun
+marking-AU14HumanHairLowBun = Low Bun
+marking-AU14HumanHairLowPonyTail = Low Ponytail
+marking-AU14HumanHairLowPonyTailAlt = Low Profile Ponytail

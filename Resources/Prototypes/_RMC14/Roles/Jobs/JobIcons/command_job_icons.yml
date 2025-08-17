@@ -3,7 +3,7 @@
   id: CMJobIconStaffOfficer
   icon:
     sprite: _RMC14/Interface/cm_job_icons.rsi
-    state: staff_officer
+    state: hudsquad_wo_xo
 
 - type: jobIcon
   parent: CMJobIconBase
@@ -24,4 +24,4 @@
   id: CMJobIconExecutiveOfficer
   icon:
     sprite: _RMC14/Interface/cm_job_icons.rsi
-    state: hudsquad_xo
+    state: hudsquad_wo_co

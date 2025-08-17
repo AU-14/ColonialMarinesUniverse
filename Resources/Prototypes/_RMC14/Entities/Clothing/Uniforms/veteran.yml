@@ -2,25 +2,43 @@
   parent: RMCMarineUniformBase
   id: RMCJumpsuitVeteranPMC
   name: PMC fatigues
-  description: A white set of fatigues, designed for private security operators. The symbol of the Weston-Yamada corporation is emblazed on the suit.
+  description: A white set of fatigues, designed for private security operators. The symbol of the Weyland-Yutani corporation is emblazed on the suit.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Uniforms/PMC/standard.rsi
+  - type: WebbingClothing
+    startingWebbing: RMCWebbingPMC
+
+- type: entity
+  parent: RMCJumpsuitVeteranPMC
+  id: RMCJumpsuitVeteranPMCMedic
+  components:
+  - type: WebbingClothing
+    startingWebbing: RMCWebbingPMCMedic
+
+- type: entity
+  parent: RMCJumpsuitVeteranPMC
+  id: RMCJumpsuitVeteranPMCGunner
+  components:
+  - type: WebbingClothing
+    startingWebbing: RMCWebbingPMCGunner
 
 - type: entity
   parent: RMCMarineUniformBase
   id: RMCJumpsuitVeteranPMCLeader
   name: PMC command fatigues
-  description: A white set of fatigues, designed for private security operators. The symbol of the Weston-Yamada corporation is emblazed on the suit. This particular suit looks like it belongs to a high-ranking officer.
+  description: A white set of fatigues, designed for private security operators. The symbol of the Weyland-Yutani corporation is emblazed on the suit. This particular suit looks like it belongs to a high-ranking officer.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Uniforms/PMC/officer.rsi
+  - type: WebbingClothing
+    startingWebbing: RMCWebbingPMC
 
 - type: entity
   parent: [RMCMarineUniformBase, RMCFoldableUniformBase]
   id: RMCJumpsuitVeteranPMCCommando
   name: PMC commando uniform
-  description: An armored uniform worn by We-Ya elite commandos. It is well protected while remaining light and comfortable.
+  description: An armored uniform worn by We-Yu elite commandos. It is well protected while remaining light and comfortable.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Uniforms/PMC/commando.rsi
@@ -32,7 +50,7 @@
   parent: [RMCMarineUniformBase, RMCFoldableUniformBase]
   id: RMCJumpsuitVeteranPMCCorporate
   name: We-Ya corporate security uniform
-  description: An armored uniform worn by We-Ya corporate security members. This variant is commonly worn by what are known as 'goons'.
+  description: An armored uniform worn by We-Yu corporate security members. This variant is commonly worn by what are known as 'goons'.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Uniforms/PMC/corporate.rsi
@@ -44,10 +62,52 @@
   parent: [RMCMarineUniformBase, RMCFoldableUniformBase]
   id: RMCJumpsuitVeteranPMCCorporateLead
   name: We-Ya corporate security uniform
-  description: An armored uniform worn by We-Ya corporate security members. This variant is commonly worn by the lead of the 'goonsquad', as they are colloquially known.
+  description: An armored uniform worn by We-Yu corporate security members. This variant is commonly worn by the lead of the 'goonsquad', as they are colloquially known.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Uniforms/PMC/corporate_lead.rsi
   - type: Foldable
     unfoldVerbText: rmc-sleeves-verb-unfold
     foldVerbText: rmc-sleeves-verb-fold
+
+- type: entity
+  parent: RMCJumpsuitVeteranPMCCorporate
+  id: RMCJumpsuitVeteranPMCKutjevo
+  description: An armored uniform worn by We-Yu corporate security members. This variant is more breathable for use in hot, dry environments.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Uniforms/PMC/kutjevo.rsi
+
+- type: entity
+  parent: RMCJumpsuitVeteranPMCCorporateLead
+  id: RMCJumpsuitVeteranPMCKutjevoLead
+  description: An armored uniform worn by We-Yu corporate security members. This variant is more breathable for use in hot, dry environments and has gold armbands denoting the team leader
+  suffix: Kutjevo
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Uniforms/PMC/kutjevo_lead.rsi
+
+- type: entity
+  parent: RMCJumpsuitVeteranPMCCorporate
+  id: RMCJumpsuitVeteranPMCHybrisa
+  suffix: Hybrisa
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Uniforms/PMC/hybrisa.rsi
+
+- type: entity
+  parent: RMCJumpsuitVeteranPMCCorporateLead
+  id: RMCJumpsuitVeteranPMCHybrisaLead
+  suffix: Hybrisa
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Uniforms/PMC/hybrisa_lead.rsi
+
+- type: entity
+  parent: RMCMarineUniformBase
+  id: RMCJumpsuitVeteranPMCDirector
+  name: director's suit
+  description: It's a suit that oozes with authority. Belongs to someone very important.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Uniforms/PMC/director.rsi

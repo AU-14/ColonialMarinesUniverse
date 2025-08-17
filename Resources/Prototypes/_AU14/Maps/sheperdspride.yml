@@ -1,0 +1,41 @@
+- type: gameMap
+  id: Sheperds
+  mapName: LV-112 Sheperds Pride
+  mapPath: /Maps/_AU14/sheperds.yml
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    Sheperds:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Sheperds'
+        - type: StationJobs
+          availableJobs:
+            AU14JobCivilianColonist: [ -1, -1 ]
+            AU14JobCivilianFoodServiceWorker: [2, 2]
+            AU14JobCivilianJournalist: [1, 1]
+            AU14JobCivilianColonySynthetic: [1, 1]
+
+            # Colony Command (non department)
+            AU14JobCivilianCorporateLiaison: [1, 1]
+            AU14JobCivilianColonyAdministrator: [1, 1]
+
+            # Security/LEO
+            AU14JobCivilianCWPSRanger: [1, 1]
+
+            # Engineering/Logi
+            AU14JobCivilianForeman: [1, 1]
+            AU14JobCivilianFreightSystemsSpecialist: [1, 1]
+            AU14JobCivilianEngineer: [3, 3]
+            AU14JobCivilianWasteManagementSpecialist: [2, 2]
+
+            # Medical
+            AU14JobCivilianPhysician: [1, 1]
+            AU14JobCivilianNurse: [1, 1]
+            AU14JobCivilianEthicsAndWellnessAdvisor: [1, 1]
+            AU14JobCivilianEmergencyResponseOfficer: [1, 1]
+
+

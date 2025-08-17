@@ -11,11 +11,11 @@ game-ticker-player-join-game-message = Welcome to RMC14! If this is your first t
 game-ticker-get-info-text = Hi and welcome to [color=white]RMC14![/color]
                             The current round is: [color=white]#{$roundId}[/color]
                             The current player count is: [color=white]{$playerCount}[/color]
-                            The current map is: [color=white]{$mapName}[/color]
+                            The current ship is: [color=white]{$mapName}[/color]
                             The current planet is: [color=white]{$planetName}[/color]
                             The current game mode is: [color=white]{$gmTitle}[/color]
                             >[color=yellow]{$desc}[/color]
-game-ticker-get-info-preround-text = Hi and welcome to [color=white]Rouny's Marine Corps 14![/color]
+game-ticker-get-info-preround-text = Hi and welcome to [color=white]Alien Universe 14![/color]
                             The current round is: [color=white]#{$roundId}[/color]
                             The current player count is: [color=white]{$playerCount}[/color] ([color=white]{$readyCount}[/color] {$readyCount ->
                                 [one] is

@@ -1,0 +1,12 @@
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CCAFUniform
+  name: CCAF Fatigues
+  description: Standard-issue Canadian Colonial Armed Forces fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/CCAF/ccafuniform.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14CanadaPatch
+    - AU14CCAFPatch

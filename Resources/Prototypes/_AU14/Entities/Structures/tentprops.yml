@@ -1,0 +1,161 @@
+- type: entity
+  abstract: true
+  id: AU14PropTents
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,1.4,0.5"
+        density: 190
+        layer:
+        - MobMask
+  - type: Sprite
+    sprite: _AU14/Structures/tentprops.rsi
+    offset: 0.5, 0.5
+    noRot: true
+  - type: Clickable
+  - type: DeleteOnExplosion
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: AU14PropTents
+  id: AU14PropTent1
+  suffix: Tent
+  name: Command Tent
+  description: A tent.
+  components:
+  - type: Sprite
+    state: command_tent
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: AU14PropTents
+  id: AU14PropTent2
+  suffix: Tent
+  name: Medical Tent
+  description: A tent.
+  components:
+  - type: Sprite
+    state: medical_tent
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: AU14PropTents
+  id: AU14PropTent3
+  suffix: Tent
+  name: Closed Tent
+  description: A tent.
+  components:
+  - type: Sprite
+    state: small_closed_tent
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: AU14PropTents
+  id: AU14PropTent4
+  suffix: Tent
+  name: Closed Tent
+  description: A tent.
+  components:
+  - type: Sprite
+    state: small_closed_tent_back
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: AU14PropTents
+  id: AU14PropTent5
+  suffix: Tent
+  name: Tent
+  description: A tent.
+  components:
+  - type: Sprite
+    state: small_tent
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: AU14PropTents
+  id: AU14PropTent6
+  suffix: Tent
+  name: Supply Tent
+  description: A tent.
+  components:
+  - type: Sprite
+    state: supply_tent
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget

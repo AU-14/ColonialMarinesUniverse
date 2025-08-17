@@ -29,7 +29,7 @@ public sealed partial class RottingComponent : Component
     /// How long in between each rot update.
     /// </summary>
     [DataField]
-    public TimeSpan RotUpdateRate = TimeSpan.FromSeconds(5);
+    public TimeSpan RotUpdateRate = TimeSpan.FromSeconds(9);
 
     /// <summary>
     /// How long has this thing been rotting?

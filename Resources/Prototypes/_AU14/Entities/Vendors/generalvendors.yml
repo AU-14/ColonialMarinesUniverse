@@ -1,0 +1,213 @@
+﻿- type: entity
+  parent: CMVendor
+  id: AU14VendorKoorCigs
+  name: Koorlander Cigarette Machine
+  description: Manufactured by the Koorlander Corporation as part of their "Worker Morale Suite," these vending units were once standard issue for deep-bore miners, orbital rig crews and indentured work colonies. When Koorlander realized it was more profitable to sell cigarettes than drill oil or move rock, they laid off 32000 workers overnight and pivoted entirely to tobacco production. The machines stayed behind, now full of the only thing they still make.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/koorcigs.rsi
+  - type: VendingMachine
+    pack: AU14VendorKoorCigs
+
+- type: vendingMachineInventory
+  id: AU14VendorKoorCigs
+  startingInventory:
+    AU14CigaretteKoorlander: 50
+    AU14CigaretteLadyFingers: 20
+    RMCMatchboxFull: 15
+    RMCZippo: 10
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14CivilianSnowflakeVendor
+  name: Snowflake Clothing Vendor
+  description: "A vendor containing all the clothes you would ever need. You're such a fuckin' snowflake huh... so special."
+  suffix: Civ
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/snowflakevendor.rsi
+    layers:
+    - state: "base"
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
+  - type: CMAutomatedVendor
+    sections:
+    - name: Shoes
+      entries:
+      - id: RMCShoesBlack
+        amount: 30
+      - id: RMCShoesBlue
+        amount: 30
+      - id: RMCShoesBrown
+        amount: 30
+      - id: RMCShoesGreen
+        amount: 30
+      - id: RMCShoesOrange
+        amount: 30
+      - id: RMCShoesPurple
+        amount: 30
+      - id: RMCShoesRed
+        amount: 30
+      - id: RMCShoesWhite
+        amount: 30
+      - id: RMCShoesYellow
+        amount: 30
+      - id: RMCBootsPMC
+        amount: 30
+      - id: RMCBootsVanBandolier
+        amount: 30
+      - id: RMCShoesLaceupBrown
+        amount: 30
+      - id: RMCShoesLaceup
+        amount: 30
+      - id: RMCShoesLeather
+        amount: 30
+    - name: Work Wear
+      entries:
+      - id: AU14CivilianWorkwearYellow
+        amount: 30
+      - id: AU14CivilianWorkwearPink
+        amount: 30
+      - id: AU14CivilianWorkwearBlue
+        amount: 30
+      - id: AU14CivilianWorkwearGreen
+        amount: 30
+    - name: Business Attire
+      entries:
+      - id: CMJumpsuitLiaisonBlack
+        amount: 30
+      - id: CMJumpsuitLiaisonBlue
+        amount: 30
+      - id: CMJumpsuitLiaisonBrown
+        amount: 30
+      - id: CMJumpsuitLiaisonField
+        amount: 30
+      - id: CMJumpsuitLiaisonIvy
+        amount: 30
+      - id: CMJumpsuitLiaisonCorporateFormal
+        amount: 30
+      - id: CMJumpsuitLiaisonFormal
+        amount: 30
+      - id: CMJumpsuitLiaison
+        amount: 30
+      - id: CMJumpsuitLiaisonBlazer
+        amount: 30
+      - id: CMJumpsuitLiaisonCharcoal
+        amount: 30
+    - name: Miscellaneous Clothes
+      entries:
+      - id: RMCJumpsuitDutchBandolier
+        amount: 30
+      - id: RMCJumpsuitCivilian
+        amount: 30
+      - id: CMJumpsuitColonist
+        amount: 30
+      - id: CMJumpsuitTShirtWhite
+        amount: 30
+      - id: CMJumpsuitTShirtGray
+        amount: 30
+      - id: CMJumpsuitTShirtRed
+        amount: 30
+    - name: Suit Jackets
+      entries:
+      - id: RMCJacketCorporateKhaki
+        amount: 30
+      - id: RMCJacketCorporateBlack
+        amount: 30
+      - id: RMCJacketCorporateBlue
+        amount: 30
+      - id: RMCJacketCorporateBrown
+        amount: 30
+    - name: Puffer Vests
+      entries:
+      - id: AU14CivilianJacketGrayPufferVest
+        amount: 30
+      - id: AU14CivilianJacketKhakiPufferVest
+        amount: 30
+      - id: AU14CivilianJacketTanPufferVest
+        amount: 30
+    - name: Puffer Jackets
+      entries:
+      - id: AU14CivilianJacketGrayPufferJacket
+        amount: 30
+      - id: AU14CivilianJacketOrangePufferJacket
+        amount: 30
+      - id: AU14CivilianJacketKhakiPufferJacket
+        amount: 30
+    - name: Windbreakers
+      entries:
+      - id: AU14WindbreakerBlue
+        amount: 30
+      - id: AU14WindbreakerGray
+        amount: 30
+      - id: AU14WindbreakerGreen
+        amount: 30
+      - id: AU14WindbreakerKhakiGreenMix
+        amount: 30
+      - id: AU14WindbreakerKhaki
+        amount: 30
+    - name: Parkas
+      entries:
+      - id: AU14CivilianJacketBlueParka
+        amount: 30
+      - id: AU14CivilianJacketGreenParka
+        amount: 30
+      - id: AU14CivilianJacketRedParka
+        amount: 30
+      - id: AU14CivilianJacketYellowParka
+        amount: 30
+    - name: Trench Coats
+      entries:
+      - id: AU14CivilianTanTrenchCoat
+        amount: 30
+      - id: AU14CivilianBrownTrenchCoat
+        amount: 30
+      - id: AU14CivilianGrayTrenchCoat
+        amount: 30
+    - name: Miscellaneous Jackets
+      entries:
+      - id: AU14CivilianJacketBomberJacket
+        amount: 30
+      - id: AU14CivilianJacketOldCoat
+        amount: 30
+      - id: AU14CivilianJacketSnowSuit
+        amount: 30
+    - name: Hats
+      entries:
+      - id: AU14CivBallCapBlack
+        amount: 30
+      - id: AU14USCMVeteranCap
+        amount: 30
+      - id: ClothingHeadHatFedoraBrown
+        amount: 30
+    - name: Glasses
+      entries:
+      - id: RMCSunglasses
+        amount: 30
+      - id: RMCHipsterGlasses
+        amount: 30
+      - id: RMCSunglassesBig
+        amount: 30
+      - id: AU14GlassesPersonalOrange
+        amount: 30
+      - id: RMCGlassesAviators
+        amount: 30
+      - id: RMCGlassesTriMaxYellow
+        amount: 30
+      - id: RMCGlassesTriMaxBlack
+        amount: 30
+      - id: RMCGlassesTriMaxBronze
+        amount: 30
+      - id: AU14GlassesBiMexOrange
+        amount: 30
+    - name: Gloves
+      entries:
+      - id: CMHandsBrown
+        amount: 30
+      - id: CMHandsLightBrown
+        amount: 30
+    - name: Storage
+      entries:
+      - id: CMSatchel
+        amount: 30
+      - id: RMCBeltUtilityGeneral
+        amount: 30

@@ -1,0 +1,61 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobWYGuard
+  name: au14-job-name-wyguard
+  description: au14-job-description-wyguard
+  setPreference: true
+  playTimeTracker: AU14JobWYGuard
+  startingGear: AU14GearWYGuard
+  icon: "RMCJobIconBureauDeputy"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillCqc: 2
+        RMCSkillEndurance: 2
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 2
+        RMCSkillIntel: 1
+        RMCSkillMedical: 1
+        RMCSkillMeleeWeapons: 1
+        RMCSkillOverwatch: 1
+        RMCSkillPolice: 2
+        RMCSkillVehicles: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-wyguard
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearWYGuard
+  equipment:
+    head: RMCHeadCapBureau
+    jumpsuit: CMJumpsuitLiaisonCharcoal
+    belt: CMBeltSecurityMarshalFilled
+    shoes: RMCBootsPMCFilled
+    id: AU14IDCardColonyCorporateLiaison
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointWYGuard
+  name: Spawn Point WY guard
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobWYGuard
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobWYGuard
+  isHumanoid: true

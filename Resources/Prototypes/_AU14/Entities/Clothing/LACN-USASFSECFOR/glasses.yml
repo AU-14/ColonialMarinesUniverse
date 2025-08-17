@@ -1,0 +1,63 @@
+- type: entity
+  parent: RMCHelmetGarbBase
+  id: AU14GogglesLACNLAH99VisorMirror
+  name: Orange LAH-99 Visor
+  description: A visor attached to LACN LAH-99 helmets, this one is reflective. This item must be attached to a LAH-99 helmet.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/PilotGear/visor.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/LACN/PilotGear/visor.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _AU14/Clothing/LACN/PilotGear/visor.rsi
+      state: helmet
+
+- type: entity
+  parent: RMCHelmetGarbBase
+  id: AU14GogglesLACNLAH99Visor
+  name: Transparent Orange LAH-99 Visor
+  description: A visor attached to LAH-99 helmets. This item must be attached to a LAH-99 helmet.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/LACN/PilotGear/transvisor.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/LACN/PilotGear/transvisor.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _AU14/Clothing/LACN/PilotGear/transvisor.rsi
+      state: helmet
+
+- type: entity
+  parent: RMCHelmetGarbBase
+  id: AU14GogglesLAH99VisorHighTech
+  name: IHADSS LAH-99 Visor
+  description: An Integrated Helmet and Display Sighting System attached to LAH-99 helmets. This item must be attached to a LAH-99 helmet.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USASFSecurityForces/USASFPilot/hightechvisor.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USASFSecurityForces/USASFPilot/hightechvisor.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _AU14/Clothing/USASFSecurityForces/USASFPilot/hightechvisor.rsi
+      state: helmet
+
+- type: entity
+  parent: RMCHelmetGarbBase
+  id: AU14GogglesLACNLAH99VisorClear
+  name: Transparent LAH-99 Visor
+  description: A visor attached to LAH-99 helmets. This item must be attached to a LAH-99 helmet.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USASFSecurityForces/USASFPilot/clearvisor.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USASFSecurityForces/USASFPilot/clearvisor.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _AU14/Clothing/USASFSecurityForces/USASFPilot/clearvisor.rsi
+      state: helmet

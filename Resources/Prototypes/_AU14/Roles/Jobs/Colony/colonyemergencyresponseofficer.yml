@@ -1,0 +1,67 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianEmergencyResponseOfficer
+  name: au14-job-name-colonyemergencyresponseofficer
+  description: au14-job-description-colonyemergencyresponseofficer
+  setPreference: true
+  playTimeTracker: AU14JobCivilianEmergencyResponseOfficer
+  ranks:
+    RMCRankCivilianSeniorOfficer:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianEmergencyResponseOfficer
+      time: 1200 # 20 hours
+    RMCRankCivilianOfficer: []
+  startingGear: AU14GearCivilianEmergencyResponseOfficer
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  - aumed
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFireman: 3
+        RMCSkillVehicles: 2
+        RMCSkillDomestics: 1
+        RMCSkillEndurance: 2
+        RMCSkillMedical: 2
+        RMCSkillCqc: 1
+        RMCSkillMeleeWeapons: 1
+        RMCSkillFirearms: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-emergencyresponseofficer
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianEmergencyResponseOfficer
+  equipment:
+    jumpsuit: AU14CivilianParamedicClothesRed
+    shoes: RMCBootsPMC
+    id: AU14IDCardColonyEmergencyResponseOfficer
+
+    gloves: CMHandsBrown
+    head: AU14CivBallCapBlack
+    outerClothing: AU14CivilianFullSuitParamedicRed
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianEmergencyResponseOfficer
+  name: Spawn Point Civilian Emergency Response Officer
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianEmergencyResponseOfficer
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianEmergencyResponseOfficer
+  isHumanoid: true

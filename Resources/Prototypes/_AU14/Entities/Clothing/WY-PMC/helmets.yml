@@ -1,0 +1,10 @@
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14WYPMCHelmet
+  name: WY PMC Helmet
+  description: A WY PMC helmet.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/WY_PMC/wypmchelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/WY_PMC/wypmchelmet.rsi

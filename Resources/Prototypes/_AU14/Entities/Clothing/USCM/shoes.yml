@@ -1,0 +1,15 @@
+- type: entity
+  parent: CMBootsBlack
+  id: AU14BootsJungle
+  name: jungle boots
+  description: Standard issue USCM jungle boots.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Shoes/jungleboots.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/Shoes/jungleboots.rsi
+
+- type: entity
+  parent: [RMCItemSlotM5Bayonet, CMBootsJungle]
+  id: AU14BootsJungleFilled
+  suffix: Filled

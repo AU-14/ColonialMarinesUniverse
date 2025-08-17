@@ -1,0 +1,76 @@
+- type: construction
+  parent: RMC
+  name: HESCO Barrier
+  id: AU14HESCOBarrier
+  graph: AU14HESCOGraph
+  startNode: start
+  targetNode: nodeFilled
+  category: construction-category-cm-structures
+  description: A modular, sand-filled defensive barrier used to protect against explosives and small arms fire.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+    - !type:TileBarricadeClear
+
+- type: constructionGraph
+  parent: RMC
+  id: AU14HESCOGraph
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DeleteEntity
+    edges:
+    - to: nodeFilled
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSandbagFull
+        amount: 50
+        doAfter: 30
+
+  - node: nodeFilled
+    entity: AU14HESCOBarrier
+    edges:
+    - to: start
+      completed:
+      - !type:ConditionalAction
+        condition:
+          !type:MinHealth
+          threshold: 1
+          byProportion: true
+        action:
+          !type:SpawnPrototype
+          prototype: CMSandbagFull
+          amount: 50
+        else:
+          !type:ConditionalAction
+          condition:
+            !type:MinHealth
+            threshold: 0.75
+            byProportion: true
+          action:
+            !type:SpawnPrototype
+            prototype: CMSandbagFull
+            amount: 35
+          else:
+            !type:ConditionalAction
+            condition:
+              !type:MinHealth
+              threshold: 0.5
+              byProportion: true
+            action:
+              !type:SpawnPrototype
+              prototype: CMSandbagFull
+              amount: 20
+      - !type:DeleteEntity
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      steps:
+      - tool: Screwing
+        doAfter: 1
+      - tool: Prying
+        doAfter: 2

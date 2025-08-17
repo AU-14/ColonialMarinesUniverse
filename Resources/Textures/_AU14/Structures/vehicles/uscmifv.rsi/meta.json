@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "Taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/fe4e154bdc57a0bb397b4782ce6c765e23300499/icons/obj/vehicles/ifv_prop.dmi",
+  "size": {
+    "x": 128,
+    "y": 128
+  },
+  "states": [
+    {
+      "name": "ifv_base",
+      "directions": 4
+    },
+    {
+      "name": "ifv_destroyed",
+      "directions": 4
+    }
+  ]
+}

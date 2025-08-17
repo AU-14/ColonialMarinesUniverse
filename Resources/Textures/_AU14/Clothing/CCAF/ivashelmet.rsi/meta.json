@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Original sprites by patogrone on discord and touched up by nzzy on discord.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "equipped-HELMET",
+      "directions": 4,
+      "delays": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "icon",
+      "delays": [
+        [
+          1,
+          1
+        ]
+      ]
+    }
+  ]
+}

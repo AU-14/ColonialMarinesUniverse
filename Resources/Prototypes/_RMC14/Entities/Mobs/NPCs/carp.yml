@@ -1,0 +1,120 @@
+- type: entity
+  parent: [SimpleMobBase]
+  id: AUSheperdCarpAncestor
+  name: genetic ancestor
+  description: The genetic ancestor of... Uh... Something. Yeah, there's definitely something on the planet that descended from whatever this is.
+  abstract: true
+  components:
+  - type: CombatMode
+  - type: Inventory
+    templateId: carp
+    speciesId: carp
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.40
+        density: 80
+        mask:
+          - MobMask
+        layer:
+          - MobLayer
+  - type: Sprite
+    drawdepth: Mobs
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: alive
+      sprite: _RMC14/Mobs/Animals/sheperds_carp.rsi
+    - map: [ "mask" ]
+  - type: Body
+    prototype: Bloodsucker
+    requiredLegs: 1
+  - type: FireVisuals
+    sprite: Mobs/Effects/onfire.rsi
+    normalState: Generic_mob_burning
+  - type: InteractionPopup
+    interactSuccessString: petting-success-carp
+    interactFailureString: petting-failure-carp
+    interactFailureSound:
+      path: /Audio/Items/wirecutter.ogg
+  - type: MeleeWeapon
+    altDisarm: false
+    soundHit:
+      path: /Audio/Effects/bite.ogg
+    angle: 0
+    animation: WeaponArcBite
+    damage:
+      types:
+        Blunt: 3
+        Piercing: 3
+  - type: Butcherable
+    butcheringType: Spike
+    spawned:
+    - id: FoodMeatFish
+      amount: 2
+  - type: NPCRetaliation
+    attackMemoryLength: 10
+  - type: FactionException
+  - type: NpcFactionMember
+    factions:
+      - Passive
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+  - type: Tag
+    tags:
+    - Carp
+    - DoorBumpOpener
+
+- type: entity
+  parent: [AUSheperdCarpAncestor, RMCSmallHost]
+  id: AUSheperdCarp
+  name: carp
+  description: It's a carp. Adapted to migrate up hill both ways.
+  suffix: AU
+  components:
+  - type: ReplacementAccent
+    accent: genericAggressive
+  - type: Speech
+    speechVerb: LargeMob
+  - type: GhostRole
+    prob: 0
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      35: Critical
+      40: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.5
+    baseSprintSpeed: 3.5
+  - type: Stamina
+    critThreshold: 100
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: alive
+      Critical:
+        Base: crit
+      Dead:
+        Base: dead
+
+- type: entity
+  name: Carp Spawner
+  id: AUSpawnSheperdCarp
+  parent: MarkerBase
+  suffix: AU
+  components:
+  - type: Sprite
+    layers:
+    - state: carp_spawn
+      sprite: _RMC14/Mobs/Animals/sheperds_carp.rsi
+  - type: ProportionalSpawner
+    id: AUSpawnSheperdCarp
+    prototypes:
+    - AUSheperdCarp
