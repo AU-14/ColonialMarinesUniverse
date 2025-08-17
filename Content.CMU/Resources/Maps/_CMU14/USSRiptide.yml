@@ -19438,7 +19438,7 @@ entities:
     - type: Transform
       pos: 35.5,-16.5
       parent: 1
-- proto: VMarkerShipLockedGlassDoor
+- proto: CMChair
   entities:
   - uid: 989
     components:

@@ -12,6 +12,9 @@ namespace Content.Shared.AU14.util;
         [IdDataField]
         public string ID { get; private set; } = default!;
 
+        [DataField("factions", required: false)]
+        public List<string> Factions { get; private set; } = new();
+
         [DataField("language", required: false)]
         public string Language { get; private set; } = string.Empty;
         [DataField("name", required: true)]
@@ -25,12 +28,6 @@ namespace Content.Shared.AU14.util;
         [DataField("VendorToMarker")]
         public Dictionary<PlatoonMarkerClass, ProtoId<EntityPrototype>> VendorMarkersByClass { get; private set; } = new();
 
-       // [DataField("ship")]
-        //public ProtoId<GameMapPrototype>? GameMap;
-
-      //  [DataField("language")]
-       // public ProtoId<LanguagePrototype> Language { get; private set; } = default!;
-
         [DataField("logilist")]
         public RequisitionsComputerComponent Logilist { get; private set; } = default!;
 
@@ -43,3 +40,4 @@ namespace Content.Shared.AU14.util;
         [DataField("jobSlotOverride")]
         public Dictionary<PlatoonJobClass, int> JobSlotOverride { get; private set; } = new();
     }
+

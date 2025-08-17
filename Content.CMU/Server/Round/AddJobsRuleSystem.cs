@@ -30,11 +30,15 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
         {
             platoon = platoonSpawnRule.SelectedOpforPlatoon;
         }
-        else if (planet != null && planet.PlatoonsGovfor != null && planet.PlatoonsGovfor.Count > 0)
+        else
         {
-            // Use the first govfor platoon as fallback
-            if (protoMgr.TryIndex<PlatoonPrototype>(planet.PlatoonsGovfor[0], out var foundPlatoon))
-                platoon = foundPlatoon;
+            // Prefer the selected govfor platoon if available
+            platoon = platoonSpawnRule.SelectedGovforPlatoon;
+            if (platoon == null && planet != null && planet.PlatoonsGovfor.Count > 0)
+            {
+                if (protoMgr.TryIndex<PlatoonPrototype>(planet.PlatoonsGovfor[0], out var foundPlatoon))
+                    platoon = foundPlatoon;
+            }
         }
 
         // If the platoon has a jobSlotOverride, use ONLY those jobs and skip all other job logic

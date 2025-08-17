@@ -116,6 +116,34 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                         continue;
                     }
 
+                    // --- OVERWATCH CONSOLE MARKER LOGIC ---
+                    if (markerClass == PlatoonMarkerClass.OverwatchConsole)
+                    {
+                        string? overwatchConsoleProtoId = null;
+                        if (marker.Govfor)
+                            overwatchConsoleProtoId = "RMCOverwatchConsoleGovfor";
+                        else if (marker.Opfor)
+                            overwatchConsoleProtoId = "RMCOverwatchConsoleOpfor";
+                        else if (marker.Ship)
+                        {
+                            // Try to determine ship faction by parent entity
+                            var parentUid = transform.ParentUid;
+                            if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var parentShipFaction))
+                            {
+                                overwatchConsoleProtoId = parentShipFaction.Faction == "govfor"
+                                    ? "RMCOverwatchConsoleGovfor"
+                                    : parentShipFaction.Faction == "opfor"
+                                        ? "RMCOverwatchConsoleOpfor"
+                                        : null;
+                            }
+                        }
+                        if (overwatchConsoleProtoId != null && _prototypeManager.TryIndex<EntityPrototype>(overwatchConsoleProtoId, out var consoleProto))
+                        {
+                            _entityManager.SpawnEntity(overwatchConsoleProtoId, transform.Coordinates);
+                        }
+                        continue;
+                    }
+
                     // --- VENDOR MARKER LOGIC ---
                     if (!shipPlatoon.VendorMarkersByClass.TryGetValue(markerClass, out var vendorProtoId))
                     {
@@ -150,6 +178,34 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                 platoon = opPlatoon;
             else
                 continue;
+
+            // --- OVERWATCH CONSOLE MARKER LOGIC ---
+            if (markerClass == PlatoonMarkerClass.OverwatchConsole)
+            {
+                string? overwatchConsoleProtoId = null;
+                if (marker.Govfor)
+                    overwatchConsoleProtoId = "RMCOverwatchConsoleGovfor";
+                else if (marker.Opfor)
+                    overwatchConsoleProtoId = "RMCOverwatchConsoleOpfor";
+                else if (marker.Ship)
+                {
+                    // Try to determine ship faction by parent entity
+                    var parentUid = transform.ParentUid;
+                    if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var shipFaction))
+                    {
+                        overwatchConsoleProtoId = shipFaction.Faction == "govfor"
+                            ? "RMCOverwatchConsoleGovfor"
+                            : shipFaction.Faction == "opfor"
+                                ? "RMCOverwatchConsoleOpfor"
+                                : null;
+                    }
+                }
+                if (overwatchConsoleProtoId != null && _prototypeManager.TryIndex<EntityPrototype>(overwatchConsoleProtoId, out var consoleProto))
+                {
+                    _entityManager.SpawnEntity(overwatchConsoleProtoId, transform.Coordinates);
+                }
+                continue;
+            }
 
             if (!platoon.VendorMarkersByClass.TryGetValue(markerClass, out var vendorProtoId))
                 continue;

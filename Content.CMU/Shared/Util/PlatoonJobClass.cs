@@ -5,7 +5,7 @@ namespace Content.Shared.AU14.util
         SquadAutomaticRifleman,
         PlatoonCorpsman,
         DCC,
-        PlatoonCommander,
+        PlatCo,
         RadioTelephoneOperator,
         SectionSergeant,
         PlatOp,

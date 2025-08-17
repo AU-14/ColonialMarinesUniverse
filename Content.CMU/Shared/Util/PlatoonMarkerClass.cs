@@ -26,6 +26,7 @@ namespace Content.Shared.AU14.util
         LockedCommandDoor,
         LockedSecurityDoor,
         LockedGlassDoor,
-        LockedNormalDoor
+        LockedNormalDoor,
+        OverwatchConsole
     }
 }
