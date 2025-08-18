@@ -8,10 +8,10 @@ namespace Content.Shared.AU14.util
         PlatCo,
         RadioTelephoneOperator,
         SectionSergeant,
+        SquadSergeant,
         PlatOp,
         SquadRifleman,
         DSPilot,
-        OperationsOfficer,
 
     }
 }
