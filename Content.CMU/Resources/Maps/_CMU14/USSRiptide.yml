@@ -15175,6 +15175,9 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -13.5,-0.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - AU14AccessGovforSecurity
   - uid: 235
     components:
     - type: MetaData
@@ -15183,6 +15186,9 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -13.5,-14.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - AU14AccessGovforSecurity
 - proto: CMAirlockCommandLocked
   entities:
   - uid: 236
@@ -15191,6 +15197,9 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -12.5,11.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - AU14AccessGovforCommand
   - uid: 237
     components:
     - type: MetaData
@@ -15198,6 +15207,9 @@ entities:
     - type: Transform
       pos: -10.5,7.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - AU14AccessGovforCommand
 - proto: CMAirlockPrepMedical
   entities:
   - uid: 238
@@ -15206,6 +15218,9 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 55.5,2.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - AU14AccessGovforMedical
 - proto: CMAirlockPrepSL
   entities:
   - uid: 239
@@ -15216,6 +15231,9 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 55.5,7.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - AU14AccessGovforCommand
 - proto: CMAirlockPrepSmart
   entities:
   - uid: 240
@@ -15224,6 +15242,9 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 65.5,2.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - AU14AccessGovforGunner
 - proto: CMAirlockSecure
   entities:
   - uid: 241
@@ -21360,6 +21381,9 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -28.5,-21.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - AU14AccessGovforPilot
   - uid: 1240
     components:
     - type: MetaData
@@ -21368,6 +21392,9 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -27.5,-21.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - AU14AccessGovforPilot
 - proto: CMDoubleDoorPreparations
   entities:
   - uid: 1241
