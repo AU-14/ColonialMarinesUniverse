@@ -1,0 +1,13 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      Title="Objectives Console"
+                      MinSize="800 700">
+    <BoxContainer Orientation="Vertical" Margin="8 8">
+        <controls:StripeBack>
+            <Label Text="Objective Intel" HorizontalAlignment="Center"/>
+        </controls:StripeBack>
+        <Label Text="Intel details will appear here." HorizontalAlignment="Center" Margin="0 16 0 0"/>
+    </BoxContainer>
+</controls:FancyWindow>
+
