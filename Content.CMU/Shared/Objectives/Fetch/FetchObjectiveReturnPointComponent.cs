@@ -13,5 +13,7 @@ public sealed partial class FetchObjectiveReturnPointComponent: Component
     [DataField("returnid", required: false)]
     public string FetchId  { get; private set; } = "";
     // where to return the fetched item, if none is set will be generic
+    [DataField("returnpointfaction", required: false)]
+    public string ReturnPointFaction { get; private set; } = string.Empty;
 
 }

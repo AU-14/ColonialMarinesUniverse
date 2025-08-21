@@ -36,7 +36,9 @@ namespace Content.Shared.AU14.util;
 
         [DataField("jobClassOverride")]
         public Dictionary<PlatoonJobClass, string> JobClassOverride { get; private set; } = new();
-
+        [DataField("PlatoonFlag")]
+        public string PlatoonFlag { get; private set; } = string.Empty;
+        //used for capture objectives and deco
         [DataField("jobSlotOverride")]
         public Dictionary<PlatoonJobClass, int> JobSlotOverride { get; private set; } = new();
     }
