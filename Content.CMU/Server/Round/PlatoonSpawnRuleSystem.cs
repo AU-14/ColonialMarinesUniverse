@@ -20,6 +20,8 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
     [Dependency] private readonly SharedDropshipSystem _sharedDropshipSystem = default!;
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
+
     private static readonly ISawmill Sawmill = Logger.GetSawmill("platoonspawn");
 
     // Store selected platoons in the system
@@ -184,9 +186,14 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
 
                     if (markerClass == PlatoonMarkerClass.DropshipDestination)
                     {
-
                         string dropshipDestinationProtoId = "CMDropshipDestination";
                         var dropshipEntity = _entityManager.SpawnEntity(dropshipDestinationProtoId, transform.Coordinates);
+                        // Inherit the metadata name from the marker
+                        if (_entityManager.TryGetComponent<MetaDataComponent>(markerUid, out var markerMeta) &&
+                            _entityManager.TryGetComponent<MetaDataComponent>(dropshipEntity, out var destMeta))
+                        {
+                            _metaData.SetEntityName(dropshipEntity, markerMeta.EntityName, destMeta);
+                        }
                         _sharedDropshipSystem.SetFactionController(dropshipEntity, shipFaction.Faction);
                         _sharedDropshipSystem.SetDestinationType(dropshipEntity, "Dropship");
                         continue;
