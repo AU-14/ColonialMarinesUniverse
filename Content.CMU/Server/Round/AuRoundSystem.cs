@@ -254,19 +254,22 @@ namespace Content.Server.AU14.Round
                     if (args.Winner is PlatoonPrototype winnerId)
                     {
                         platoonSpawnRuleSystem.SelectedGovforPlatoon = winnerId;
-                        // Ship vote for Govfor after a timer to avoid nesting
-                        Timer.Spawn(TimeSpan.FromMilliseconds(100),
-                            () =>
-                            {
-                                StartShipVote(winnerId.PossibleShips,
-                                    "Govfor Ship Vote",
-                                    shipId => _selectedGovforShip = shipId);
-                            });
+                        // Only start ship vote if planet allows govfor in ship
+                        if (_selectedPlanet.GovforInShip)
+                        {
+                            Timer.Spawn(TimeSpan.FromMilliseconds(100),
+                                () =>
+                                {
+                                    StartShipVote(winnerId.PossibleShips,
+                                        "Govfor Ship Vote",
+                                        shipId => _selectedGovforShip = shipId);
+                                });
+                        }
                     }
                 };
             }
 
-            if (_selectedPreset.RequiresOpforVote && opforPlatoons != null && opforPlatoons.Count > 0)
+            if (_selectedPreset.RequiresOpforVote && opforPlatoons.Count > 0)
             {
                 var optionsplatoons = new List<(string text, object data)>();
                 foreach (var platoonId in opforPlatoons)
@@ -288,14 +291,17 @@ namespace Content.Server.AU14.Round
                     if (args.Winner is PlatoonPrototype winnerId)
                     {
                         platoonSpawnRuleSystem.SelectedOpforPlatoon = winnerId;
-                        // Ship vote for Opfor after a timer to avoid nesting
-                        Timer.Spawn(TimeSpan.FromMilliseconds(100),
-                            () =>
-                            {
-                                StartShipVote(winnerId.PossibleShips,
-                                    "Opfor Ship Vote",
-                                    shipId => _selectedOpforShip = shipId);
-                            });
+                        // Only start ship vote if planet allows opfor in ship
+                        if (_selectedPlanet.OpforInShip)
+                        {
+                            Timer.Spawn(TimeSpan.FromMilliseconds(100),
+                                () =>
+                                {
+                                    StartShipVote(winnerId.PossibleShips,
+                                        "Opfor Ship Vote",
+                                        shipId => _selectedOpforShip = shipId);
+                                });
+                        }
                     }
                 };
             }
@@ -368,6 +374,27 @@ namespace Content.Server.AU14.Round
                 _entityManager.AddComponent<TacticalMapComponent>(map);
 
 
+        }
+
+        public void SetOpfor(string opfor)
+        {
+            _selectedOpforShip = opfor;
+        }
+
+        public void SetGovfor(string govfor)
+        {
+            _selectedGovforShip = govfor;
+        }
+
+        public bool SetPlanet(string planetId)
+        {
+            if (_prototypeManager.TryIndex<EntityPrototype>(planetId, out var proto) &&
+                proto.TryGetComponent(out RMCPlanetMapPrototypeComponent? planetComp, IoCManager.Resolve<IComponentFactory>()))
+            {
+                _selectedPlanet = planetComp;
+                return true;
+            }
+            return false;
         }
     }
 }

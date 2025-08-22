@@ -8,6 +8,7 @@ using Content.Shared.GameTicking.Components;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 using JetBrains.Annotations;
+using Robust.Shared.Map;
 
 namespace Content.Server.AU14.Round;
 
@@ -18,6 +19,7 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
     [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
     [Dependency] private readonly StationSystem _stationSystem = default!;
     [Dependency] private readonly PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
 
     protected override void Started(EntityUid uid, AddJobsRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
@@ -62,19 +64,29 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
             return;
 
 
-        if (planet != null && component.AddToShip && !string.IsNullOrEmpty(component.ShipFaction))
+        if (planet != null && !string.IsNullOrEmpty(component.ShipFaction))
         {
-            // Check if the planet wants to spawn in ship for this faction
-            bool spawnInShip = component.ShipFaction == "govfor" && planet.GovforInShip;
-            if (component.ShipFaction == "opfor" && planet.OpforInShip)
-                spawnInShip = true;
+            var faction = component.ShipFaction.ToLower();
+            var addToShip = false;
+            var addToPlanet = false;
 
-            if (spawnInShip)
+            if (faction == "govfor")
+            {
+                addToShip = planet.GovforInShip;
+                addToPlanet = !planet.GovforInShip;
+            }
+            else if (faction == "opfor")
+            {
+                addToShip = planet.OpforInShip;
+                addToPlanet = !planet.OpforInShip;
+            }
+
+            if (addToShip && component.AddToShip)
             {
                 // Find the ship entity with ShipFactionComponent matching the faction
                 foreach (var (shipUid, shipFaction) in EntityManager.EntityQuery<ShipFactionComponent>(true).Select(s => (s.Owner, s)))
                 {
-                    if (shipFaction.Faction != component.ShipFaction)
+                    if (string.IsNullOrEmpty(shipFaction.Faction) || shipFaction.Faction.ToLower() != faction)
                         continue;
                     // Find the station entity that owns this ship
                     var stationUid = _stationSystem.GetOwningStation(shipUid);
@@ -90,25 +102,67 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                         _stationJobs.TryAdjustJobSlot(stationUid.Value, jobId.ToString(), amount, true, false, stationJobs);
                     }
                     // Only add to the first matching ship's station
-                    return;
+                    break;
                 }
             }
+
+            if (addToPlanet)
+            {
+                // Get the main map id for the round
+                var mapId = _gameTicker.DefaultMap;
+                // Use StationSystem to get the correct station entity for the map
+                var stationUid = _stationSystem.GetStationInMap(mapId);
+                if (stationUid != null && EntityManager.EntityExists(stationUid.Value))
+                {
+                    var stationJobs = EntityManager.GetComponentOrNull<StationJobsComponent>(stationUid.Value);
+                    if (stationJobs != null)
+                    {
+                        foreach (var entry in component.Jobs)
+                        {
+                            var jobId = entry.Key;
+                            var amount = entry.Value;
+                            _stationJobs.TryAdjustJobSlot(stationUid.Value, jobId.ToString(), amount, true, false, stationJobs);
+                        }
+                    }
+                }
+            }
+            return;
         }
 
-        // --- Default: Add jobs to the planet's station as before ---
         if (planet != null)
         {
-            foreach (var (planetUid, station) in EntityManager.EntityQuery<StationJobsComponent>(true).Select(s => (s.Owner, s)))
+            var addToPlanet = true;
+            // Check if we should add to the planet instead of the ship
+            if (component.ShipFaction != null && component.ShipFaction.ToLower() == "opfor")
             {
-                if (!EntityManager.HasComponent(planetUid, planet.GetType()))
-                    continue;
-                foreach (var entry in component.Jobs)
+                // Opfor always adds to the ship
+                addToPlanet = false;
+            }
+            else if (component.ShipFaction != null && component.ShipFaction.ToLower() == "govfor")
+            {
+                // Govfor adds to the planet only if the planet is not set to spawn in the ship
+                addToPlanet = !planet.GovforInShip;
+            }
+
+            if (addToPlanet)
+            {
+                // Get the main map id for the round
+                var mapId = _gameTicker.DefaultMap;
+                // Use StationSystem to get the correct station entity for the map
+                var stationUid = _stationSystem.GetStationInMap(mapId);
+                if (stationUid != null && EntityManager.EntityExists(stationUid.Value))
                 {
-                    var jobId = entry.Key;
-                    var amount = entry.Value;
-                    _stationJobs.TryAdjustJobSlot(planetUid, jobId.ToString(), amount, true, false, station);
+                    var stationJobs = EntityManager.GetComponentOrNull<StationJobsComponent>(stationUid.Value);
+                    if (stationJobs != null)
+                    {
+                        foreach (var entry in component.Jobs)
+                        {
+                            var jobId = entry.Key;
+                            var amount = entry.Value;
+                            _stationJobs.TryAdjustJobSlot(stationUid.Value, jobId.ToString(), amount, true, false, stationJobs);
+                        }
+                    }
                 }
-                break;
             }
         }
     }
