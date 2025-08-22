@@ -56,5 +56,17 @@ public sealed partial class ObjectiveMasterComponent : Component
     [DataField("requiredwinpointsscientist")]
     public int RequiredWinPointsScientist = 100;
 
-}
+    // --- NEW: Track completed objectives ---
+    [DataField("completedObjectives")]
+    public List<CompletedObjectiveRecord> CompletedObjectives = new();
 
+    [Serializable]
+    public class CompletedObjectiveRecord
+    {
+        public EntityUid ObjectiveUid;
+    }
+
+    [NonSerialized]
+    public HashSet<string> FinalObjectiveGivenFactions = new();
+
+}
