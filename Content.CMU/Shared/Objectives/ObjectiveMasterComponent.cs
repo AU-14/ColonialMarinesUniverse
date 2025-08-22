@@ -69,4 +69,23 @@ public sealed partial class ObjectiveMasterComponent : Component
     [NonSerialized]
     public HashSet<string> FinalObjectiveGivenFactions = new();
 
+    [DataField("minGovforMinorObjectives", required: false)]
+    public int? MinGovforMinorObjectives = null;
+    [DataField("minGovforMajorObjectives", required: false)]
+    public int? MinGovforMajorObjectives = null;
+    [DataField("minOpforMinorObjectives", required: false)]
+    public int? MinOpforMinorObjectives = null;
+    [DataField("minOpforMajorObjectives", required: false)]
+    public int? MinOpforMajorObjectives = null;
+    [DataField("minCLFMinorObjectives", required: false)]
+    public int? MinCLFMinorObjectives = null;
+    [DataField("minCLFMajorObjectives", required: false)]
+    public int? MinCLFMajorObjectives = null;
+    [DataField("minScientistMinorObjectives", required: false)]
+    public int? MinScientistMinorObjectives = null;
+    [DataField("minScientistMajorObjectives", required: false)]
+    public int? MinScientistMajorObjectives = null;
+
+    // if set, then allows a random amount to be selected (min-normal)
+
 }

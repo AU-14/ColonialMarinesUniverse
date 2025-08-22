@@ -18,6 +18,10 @@ public sealed partial class AuObjectiveComponent : Component
 
     public int Maxplayers { get; private set; } = 200;
 
+    [DataField("minplayers", required: false)]
+    public int MinPlayers { get; private set; } = 0;
+    // Specifies the minimum player count required for the objective to be eligible
+
     [DataField("applicableModes", required: true)]
     public List<string> ApplicableModes { get; private set; } = new();
 
@@ -65,6 +69,9 @@ public sealed partial class AuObjectiveComponent : Component
     [DataField("blacklistedPlatoons", required: false)]
     public List<string> BlacklistedPlatoons { get; private set; } = new();
 
+    [DataField("objectiveweight", required: false)]
+    public int ObjectiveWeight { get; private set; } = 1;
+
     public enum ObjectiveStatus
     {
         Incomplete,
@@ -78,3 +85,5 @@ public sealed partial class AuObjectiveComponent : Component
 
     public int TimesCompleted = 0;
 }
+
+public sealed class ObjectiveActivatedEvent : EntityEventArgs {}

@@ -29,6 +29,15 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
         SubscribeLocalEvent<MetaDataComponent, ComponentStartup>(OnMetaDataStartup);
     }
 
+    public void ActivateFetchObjectiveIfNeeded(EntityUid uid, AuObjectiveComponent comp)
+    {
+        if (!_entManager.TryGetComponent(uid, out FetchObjectiveComponent? fetchComp))
+            return;
+        if (!comp.Active || fetchComp.ItemsSpawned)
+            return;
+        OnObjectiveStartup(uid, fetchComp, ref Unsafe.NullRef<ComponentStartup>());
+    }
+
     private void OnMetaDataStartup(EntityUid uid, MetaDataComponent meta, ref ComponentStartup args)
     {
         if (meta.EntityPrototype == null)
@@ -51,11 +60,6 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
 
     private void OnFetchObjectiveHandleState(EntityUid uid, FetchObjectiveComponent component, ref ComponentHandleState args)
     {
-        var objComp = EnsureComp<AuObjectiveComponent>(uid);
-        if (objComp.Active)
-        {
-            OnObjectiveStartup(uid, component, ref Unsafe.NullRef<ComponentStartup>());
-        }
     }
 
     private void OnObjectiveStartup(EntityUid uid, FetchObjectiveComponent component, ref ComponentStartup args)
@@ -231,7 +235,10 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
     {
         fetchComp.AmountFetched = 0;
         fetchComp.AmountFetchedPerFaction.Clear();
-        fetchComp.ItemsSpawned = false; // Reset so items can respawn
-        OnObjectiveStartup(uid, fetchComp, ref Unsafe.NullRef<ComponentStartup>());
+        if (fetchComp.RespawnOnRepeat)
+        {
+            fetchComp.ItemsSpawned = false; // Reset so items can respawn
+            OnObjectiveStartup(uid, fetchComp, ref Unsafe.NullRef<ComponentStartup>());
+        }
     }
 }

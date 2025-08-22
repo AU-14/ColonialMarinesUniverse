@@ -14,7 +14,10 @@ public sealed partial class KillObjectiveComponent : Component
     [DataField("humanonly", required: false)]
     public bool HumanOnly { get; private set; } = false;
 
-
+    [DataField("amounttospawn", required:  false)]
+    public int AmountToSpawn { get; private set; } = 1;
+    [DataField("spawn")]
+    public bool Spawn { get; private set; } = false;
 
     [DataField("synthonly", required: false)]
     public bool SynthOnly { get; private set; } = false;
@@ -35,6 +38,10 @@ public sealed partial class KillObjectiveComponent : Component
     [DataField("amounttokill", required: false)]
     public int AmountToKill { get; private set; } = 1;
 
+    [DataField("respawnOnRepeat", required: false)]
+    public bool RespawnOnRepeat { get; private set; } = false;
+
+    public bool MobsSpawned = false;
 
 
     public Dictionary<string, int> AmountKilledPerFaction { get; set; } = new();

@@ -148,6 +148,8 @@ namespace Content.Server.AU14.Objectives.Kill
                     continue;
                 if (!EntityManager.TryGetComponent<AuObjectiveComponent>(objectiveUid, out var auObj))
                     continue;
+                if (!auObj.Active)
+                    continue;
 
                 var factionKey = factionToCredit.ToLowerInvariant();
                 string targetFaction;
@@ -250,6 +252,40 @@ namespace Content.Server.AU14.Objectives.Kill
             {
                 comp.AssociatedObjectives.Remove(objUid);
             }
+        }
+
+        public void ActivateKillObjectiveIfNeeded(EntityUid uid, AuObjectiveComponent comp)
+        {
+            if (!EntityManager.TryGetComponent(uid, out KillObjectiveComponent? killObj))
+                return;
+            if (!killObj.SpawnMob || killObj.MobsSpawned || string.IsNullOrEmpty(killObj.MobToKill) || killObj.AmountToSpawn <= 0)
+                return;
+
+            // Find all relevant markers
+            var markers = new List<EntityUid>();
+            var genericMarkers = new List<EntityUid>();
+            var markerQuery = EntityManager.AllEntityQueryEnumerator<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveMarkerComponent, TransformComponent>();
+            while (markerQuery.MoveNext(out var markerUid, out var markerComp, out _))
+            {
+                if (!string.IsNullOrEmpty(killObj.SpawnMarker) && markerComp.FetchId == killObj.SpawnMarker)
+                    markers.Add(markerUid);
+                else if (string.IsNullOrEmpty(killObj.SpawnMarker) && markerComp.Generic)
+                    genericMarkers.Add(markerUid);
+            }
+            if (markers.Count == 0)
+                markers = genericMarkers;
+            if (markers.Count == 0)
+                return;
+
+            // Spawn mobs round-robin at markers
+            for (var i = 0; i < killObj.AmountToSpawn; i++)
+            {
+                var markerIndex = i % markers.Count;
+                var markerUid = markers[markerIndex];
+                var xform = EntityManager.GetComponent<TransformComponent>(markerUid);
+                EntityManager.SpawnEntity(killObj.MobToKill, xform.Coordinates);
+            }
+            killObj.MobsSpawned = true;
         }
     }
 }

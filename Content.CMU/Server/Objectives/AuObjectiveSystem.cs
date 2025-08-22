@@ -1,4 +1,6 @@
 using System.Linq;
+using Content.Server.AU14.Objectives.Fetch;
+using Content.Server.AU14.Objectives.Kill;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
 using Content.Shared._RMC14.Rules;
@@ -8,6 +10,7 @@ using Content.Shared.AU14.Objectives;
 using Robust.Server.Player;
 using Content.Server.GameTicking.Events;
 using Content.Shared.AU14.Objectives.Fetch;
+using Content.Shared.AU14.Objectives.Kill;
 using Content.Shared.Clothing.Components;
 
 namespace Content.Server.AU14.Objectives;
@@ -24,6 +27,8 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly RoundEnd.RoundEndSystem _roundEnd = default!;
     [Dependency] private readonly Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
+    [Dependency] private readonly AuFetchObjectiveSystem _fetchObjectiveSystem = default!;
+    [Dependency] private readonly AuKillObjectiveSystem _killObjectiveSystem = default!;
 
     private ObjectiveMasterComponent? _objectiveMaster = null;
 
@@ -63,6 +68,19 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         SubscribeLocalEvent<AuObjectiveComponent, ComponentHandleState>(OnObjectiveHandleState);
         SubscribeLocalEvent<AuObjectiveComponent, ComponentStartup>(OnObjectiveStartup);
         SubscribeLocalEvent<ObjectiveMasterComponent, ComponentStartup>(OnObjectiveMasterStartup);
+        SubscribeLocalEvent<AuObjectiveComponent, ObjectiveActivatedEvent>(OnObjectiveActivated);
+    }
+
+    private void OnObjectiveActivated(EntityUid uid, AuObjectiveComponent component, ref ObjectiveActivatedEvent args)
+    {
+        if (_entityManager.TryGetComponent(uid, out FetchObjectiveComponent? fetchComp))
+        {
+            _fetchObjectiveSystem.ActivateFetchObjectiveIfNeeded(uid, component);
+        }
+        if (_entityManager.TryGetComponent(uid, out KillObjectiveComponent? killComp))
+        {
+            _killObjectiveSystem.ActivateKillObjectiveIfNeeded(uid, component);
+        }
     }
 
     private void OnObjectiveMasterStartup(EntityUid uid, ObjectiveMasterComponent component, ref ComponentStartup args)
@@ -160,30 +178,31 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
 
         if (presetId == "insurgency")
         {
-            govforMinor = SelectObjectives("govfor", 1, _objectiveMaster);
-            govforMajor = SelectObjectives("govfor", 2, _objectiveMaster);
-            clfMinor = SelectObjectives("clf", 1, _objectiveMaster);
-            clfMajor = SelectObjectives("clf", 2, _objectiveMaster);
+            govforMinor = SelectObjectives("govfor", 1, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.GovforMinorObjectives, _objectiveMaster.MinGovforMinorObjectives));
+            govforMajor = SelectObjectives("govfor", 2, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.GovforMajorObjectives, _objectiveMaster.MinGovforMajorObjectives));
+            clfMinor = SelectObjectives("clf", 1, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.CLFMinorObjectives, _objectiveMaster.MinCLFMinorObjectives));
+            clfMajor = SelectObjectives("clf", 2, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.CLFMajorObjectives, _objectiveMaster.MinCLFMajorObjectives));
         }
         else if (presetId == "forceonforce")
         {
-            govforMinor = SelectObjectives("govfor", 1, _objectiveMaster);
-            govforMajor = SelectObjectives("govfor", 2, _objectiveMaster);
-            opforMinor = SelectObjectives("opfor", 1, _objectiveMaster);
-            opforMajor = SelectObjectives("opfor", 2, _objectiveMaster);
+            govforMinor = SelectObjectives("govfor", 1, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.GovforMinorObjectives, _objectiveMaster.MinGovforMinorObjectives));
+            govforMajor = SelectObjectives("govfor", 2, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.GovforMajorObjectives, _objectiveMaster.MinGovforMajorObjectives));
+            opforMinor = SelectObjectives("opfor", 1, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.OpforMinorObjectives, _objectiveMaster.MinOpforMinorObjectives));
+            opforMajor = SelectObjectives("opfor", 2, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.OpforMajorObjectives, _objectiveMaster.MinOpforMajorObjectives));
         }
         else if (presetId == "distresssignal")
         {
-            govforMinor = SelectObjectives("govfor", 1, _objectiveMaster);
-            govforMajor = SelectObjectives("govfor", 2, _objectiveMaster);
+            govforMinor = SelectObjectives("govfor", 1, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.GovforMinorObjectives, _objectiveMaster.MinGovforMinorObjectives));
+            govforMajor = SelectObjectives("govfor", 2, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.GovforMajorObjectives, _objectiveMaster.MinGovforMajorObjectives));
         }
 
-        scientistMinor = SelectObjectives("scientist", 1, _objectiveMaster);
-        scientistMajor = SelectObjectives("scientist", 2, _objectiveMaster);
+        scientistMinor = SelectObjectives("scientist", 1, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.ScientistMinorObjectives, _objectiveMaster.MinScientistMinorObjectives));
+        scientistMajor = SelectObjectives("scientist", 2, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.ScientistMajorObjectives, _objectiveMaster.MinScientistMajorObjectives));
 
         foreach (var obj in govforMinor)
         {
             obj.Active = true;
+            RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
             obj.Faction = "govfor";
             Logger.Info($"[OBJ DEBUG] Set govforMinor objective '{obj.objectiveDescription}' active");
         }
@@ -191,6 +210,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         foreach (var obj in govforMajor)
         {
             obj.Active = true;
+            RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
             obj.Faction = "govfor";
             Logger.Info($"[OBJ DEBUG] Set govforMajor objective '{obj.objectiveDescription}' active");
         }
@@ -198,6 +218,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         foreach (var obj in opforMinor)
         {
             obj.Active = true;
+            RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
             obj.Faction = "opfor";
             Logger.Info($"[OBJ DEBUG] Set opforMinor objective '{obj.objectiveDescription}' active");
         }
@@ -205,6 +226,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         foreach (var obj in opforMajor)
         {
             obj.Active = true;
+            RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
             obj.Faction = "opfor";
             Logger.Info($"[OBJ DEBUG] Set opforMajor objective '{obj.objectiveDescription}' active");
         }
@@ -212,6 +234,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         foreach (var obj in clfMinor)
         {
             obj.Active = true;
+            RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
             obj.Faction = "clf";
             Logger.Info($"[OBJ DEBUG] Set clfMinor objective '{obj.objectiveDescription}' active");
         }
@@ -219,6 +242,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         foreach (var obj in clfMajor)
         {
             obj.Active = true;
+            RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
             obj.Faction = "clf";
             Logger.Info($"[OBJ DEBUG] Set clfMajor objective '{obj.objectiveDescription}' active");
         }
@@ -226,6 +250,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         foreach (var obj in scientistMinor)
         {
             obj.Active = true;
+            RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
             obj.Faction = "scientist";
             Logger.Info($"[OBJ DEBUG] Set scientistMinor objective '{obj.objectiveDescription}' active");
         }
@@ -233,6 +258,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         foreach (var obj in scientistMajor)
         {
             obj.Active = true;
+            RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
             obj.Faction = "scientist";
             Logger.Info($"[OBJ DEBUG] Set scientistMajor objective '{obj.objectiveDescription}' active");
         }
@@ -258,6 +284,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                     if (obj.Factions.Count > 0)
                     {
                         obj.Active = true;
+                        RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
                         Logger.Info($"[OBJ DEBUG] Set neutral objective '{obj.objectiveDescription}' active");
                     }
                 }
@@ -267,9 +294,9 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
 
     private List<AuObjectiveComponent> SelectObjectives(string faction,
         int? objectiveLevel = null,
-        ObjectiveMasterComponent? objectiveMaster = null)
+        ObjectiveMasterComponent? objectiveMaster = null,
+        int maxCount = int.MaxValue)
     {
-
         var playercount = _playerManager.PlayerCount;
         var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
         var presetId = ticker.Preset?.ID ?? string.Empty;
@@ -293,52 +320,61 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             bool modeMatch = objective.ApplicableModes.Any(m => m.ToLowerInvariant() == presetIdLower);
             bool factionMatch = objective.Factions.Any(f => f.ToLowerInvariant() == factionLower);
             bool maxPlayersMatch = (objective.Maxplayers == 0 || objective.Maxplayers >= playercount);
+            bool minPlayersMatch = (objective.MinPlayers == 0 || playercount >= objective.MinPlayers);
             bool levelMatch = (objectiveLevel == null
                 ? (objective.ObjectiveLevel == 1 || objective.ObjectiveLevel == 2)
                 : (objective.ObjectiveLevel == objectiveLevel));
             if (!modeMatch)
-            {
-                Logger.Info(
-                    $"[OBJ SELECT DEBUG] Skipping '{objective.objectiveDescription}' - mode mismatch: presetId={presetId}, modes=[{string.Join(",", objective.ApplicableModes)}]");
                 continue;
-            }
-
             if (!factionMatch)
-            {
-                Logger.Info(
-                    $"[OBJ SELECT DEBUG] Skipping '{objective.objectiveDescription}' - faction mismatch: faction={faction}, possible=[{string.Join(",", objective.Factions)}]");
                 continue;
-            }
-
             if (!maxPlayersMatch)
-            {
-                Logger.Info(
-                    $"[OBJ SELECT DEBUG] Skipping '{objective.objectiveDescription}' - player count too high: {playercount} > {objective.Maxplayers}");
                 continue;
-            }
-
+            if (!minPlayersMatch)
+                continue;
             if (!levelMatch)
-            {
-                Logger.Info(
-                    $"[OBJ SELECT DEBUG] Skipping '{objective.objectiveDescription}' - level mismatch: {objective.ObjectiveLevel} != {objectiveLevel}");
                 continue;
-            }
-
             if (selectedPlatoonId != null && objective.BlacklistedPlatoons.Contains(selectedPlatoonId))
-            {
-                Logger.Info($"[OBJ SELECT DEBUG] Skipping '{objective.objectiveDescription}' - blacklisted for selected platoon: {selectedPlatoonId}");
                 continue;
-            }
-
-            Logger.Info($"[OBJ SELECT DEBUG] Picking '{objective.objectiveDescription}'");
             selected.Add(objective);
         }
-
+        // Randomly select up to maxCount objectives if more are available
+        if (selected.Count > maxCount)
+        {
+            // Weighted random selection without replacement
+            var rng = new Random();
+            var weighted = selected.Select(obj => (obj, weight: Math.Max(1, obj.ObjectiveWeight))).ToList();
+            var chosen = new List<AuObjectiveComponent>();
+            for (int i = 0; i < maxCount && weighted.Count > 0; i++)
+            {
+                int totalWeight = weighted.Sum(x => x.weight);
+                int pick = rng.Next(0, totalWeight);
+                int cumulative = 0;
+                for (int j = 0; j < weighted.Count; j++)
+                {
+                    cumulative += weighted[j].weight;
+                    if (pick < cumulative)
+                    {
+                        chosen.Add(weighted[j].obj);
+                        weighted.RemoveAt(j);
+                        break;
+                    }
+                }
+            }
+            selected = chosen;
+        }
         return selected;
     }
 
-
-
+    private int GetRandomObjectiveCount(int max, int? min)
+    {
+        if (min.HasValue && min.Value < max)
+        {
+            var rng = new System.Random();
+            return rng.Next(min.Value, max + 1);
+        }
+        return max;
+    }
 
 
 
@@ -434,9 +470,15 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                     .GetEntitySystem<Content.Server.AU14.Objectives.Fetch.AuFetchObjectiveSystem>();
                 fetchSystem.ResetAndRespawnFetchObjective(uid, fetchComp);
             }
-
+            // Kill objective: reset MobsSpawned if RespawnOnRepeat is true
+            if (_entityManager.TryGetComponent(uid, out KillObjectiveComponent? killComp))
+            {
+                if (killComp.RespawnOnRepeat)
+                    killComp.MobsSpawned = false;
+            }
             // Reactivate the objective
             objective.Active = true;
+            RaiseLocalEvent(uid, new ObjectiveActivatedEvent());
             Logger.Info($"[OBJ REPEAT DEBUG] Restarted repeating objective '{objective.objectiveDescription}'");
             // Refresh consoles for all relevant factions
             if (objective.FactionNeutral)
@@ -469,6 +511,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
 
             // Reactivate the objective
             objective.Active = true;
+            RaiseLocalEvent(uid, new ObjectiveActivatedEvent());
             Logger.Info($"[OBJ REPEAT DEBUG] Restarted repeating objective '{objective.objectiveDescription}'");
             // Refresh consoles for all relevant factions
             if (objective.FactionNeutral)
@@ -494,7 +537,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         _gameTicker.EndRound(faction.ToUpperInvariant() + " Won the round by: " + message);
     }
 
-    private void AwardPointsToFaction(string faction, AuObjectiveComponent objective)
+    public void AwardPointsToFaction(string faction, AuObjectiveComponent objective)
     {
         if (_objectiveMaster == null)
             return;
@@ -540,6 +583,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                 var random = new Random();
                 var selected = finalObjectives[random.Next(finalObjectives.Count)];
                 selected.Active = true;
+                RaiseLocalEvent(selected.Owner, new ObjectiveActivatedEvent());
                 selected.Faction = factionKey;
                 Logger.Info(
                     $"[OBJ FINAL DEBUG] Activated final objective '{selected.objectiveDescription}' for faction '{factionKey}'");

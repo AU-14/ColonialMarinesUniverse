@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared.AU14.Objectives;
+using Content.Shared.AU14.Objectives.Capture;
 using Content.Shared.AU14.Objectives.Fetch;
 using Content.Shared.AU14.Objectives.Kill;
 using Robust.Server.GameObjects;
@@ -64,7 +65,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
             }
             break; // Only use the first master found
         }
-        while (query.MoveNext(out _, out var objComp))
+        while (query.MoveNext(out var objUid, out var objComp))
         {
             if (!objComp.Active)
                 continue;
@@ -82,7 +83,48 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
                     continue;
             }
             ObjectiveStatusDisplay statusDisplay;
-            if (objComp.FactionStatuses.TryGetValue(consoleFaction, out var status))
+            // Special handling for capture objectives
+            if (EntityManager.TryGetComponent(objUid, out CaptureObjectiveComponent? captureComp))
+            {
+                var capStatus = captureComp.GetObjectiveStatus(consoleFaction, objComp);
+                switch (capStatus)
+                {
+                    case CaptureObjectiveComponent.CaptureObjectiveStatus.Completed:
+                        statusDisplay = ObjectiveStatusDisplay.Completed;
+                        break;
+                    case CaptureObjectiveComponent.CaptureObjectiveStatus.Failed:
+                        statusDisplay = ObjectiveStatusDisplay.Failed;
+                        break;
+                    case CaptureObjectiveComponent.CaptureObjectiveStatus.Captured:
+                        statusDisplay = ObjectiveStatusDisplay.Captured;
+                        break;
+                    case CaptureObjectiveComponent.CaptureObjectiveStatus.Uncaptured:
+                        statusDisplay = ObjectiveStatusDisplay.Uncaptured;
+                        break;
+                    default:
+                        statusDisplay = ObjectiveStatusDisplay.Uncompleted;
+                        break;
+                }
+                // --- Progress for capture objectives ---
+                int factionProgress = 0;
+                var factionKey = consoleFaction.ToLowerInvariant();
+                if (captureComp.TimesIncrementedPerFaction.TryGetValue(factionKey, out var val))
+                    factionProgress = val;
+                string capProgress = captureComp.MaxHoldTimes > 0
+                    ? $"{factionProgress}/{captureComp.MaxHoldTimes}"
+                    : $"{factionProgress}";
+                objectives.Add(new ObjectiveEntry(
+                    objComp.objectiveDescription,
+                    statusDisplay,
+                    objComp.ObjectiveLevel == 3 ? ObjectiveTypeDisplay.Win : objComp.ObjectiveLevel == 2 ? ObjectiveTypeDisplay.Major : ObjectiveTypeDisplay.Minor,
+                    capProgress,
+                    objComp.Repeating,
+                    objComp.Repeating ? objComp.TimesCompleted : (int?)null,
+                    objComp.MaxRepeatable,
+                    objComp.CustomPoints != 0 ? objComp.CustomPoints : (objComp.ObjectiveLevel == 1 ? 5 : 20)));
+                continue;
+            }
+            else if (objComp.FactionStatuses.TryGetValue(consoleFaction, out var status))
             {
                 switch (status)
                 {
@@ -110,8 +152,8 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
                 typeDisplay = ObjectiveTypeDisplay.Minor;
 
             // Fetch progress logic
-            string? progress = null;
-            if (EntityManager.TryGetComponent(objComp.Owner, out FetchObjectiveComponent? fetchComp))
+            string? fetchProgress = null;
+            if (EntityManager.TryGetComponent(objUid, out FetchObjectiveComponent? fetchComp))
             {
                 int fetched = 0;
                 int toFetch = fetchComp.AmountToFetch;
@@ -123,22 +165,21 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
                 {
                     fetchComp.AmountFetchedPerFaction.TryGetValue(objComp.Faction.ToLowerInvariant(), out fetched);
                 }
-                progress = $"{fetched}/{toFetch}";
+                fetchProgress = $"{fetched}/{toFetch}";
             }
             // Add logic to display kill progress for KillObjectiveComponent
-            if (EntityManager.TryGetComponent(objComp.Owner, out KillObjectiveComponent? killComp))
+            if (EntityManager.TryGetComponent(objUid, out KillObjectiveComponent? killComp))
             {
                 int killed = 0;
                 int toKill = killComp.AmountToKill;
                 killComp.AmountKilledPerFaction.TryGetValue(consoleFaction.ToLowerInvariant(), out killed);
-                progress = $"{killed}/{toKill} kills";
+                fetchProgress = $"{killed}/{toKill} kills";
             }
 
             int? repeatsCompleted = objComp.Repeating ? objComp.TimesCompleted : (int?)null;
             int? maxRepeatable = objComp.MaxRepeatable;
-            // Calculate points: use CustomPoints if set, otherwise default (5 for minor, 20 for major/win)
             int points = objComp.CustomPoints != 0 ? objComp.CustomPoints : (objComp.ObjectiveLevel == 1 ? 5 : 20);
-            objectives.Add(new ObjectiveEntry(objComp.objectiveDescription, statusDisplay, typeDisplay, progress, objComp.Repeating, repeatsCompleted, maxRepeatable, points));
+            objectives.Add(new ObjectiveEntry(objComp.objectiveDescription, statusDisplay, typeDisplay, fetchProgress, objComp.Repeating, repeatsCompleted, maxRepeatable, points));
         }
         var state = new ObjectivesConsoleBoundUserInterfaceState(objectives, currentWinPoints, requiredWinPoints);
         _ui.SetUiState(uid, ObjectivesConsoleKey.Key, state);

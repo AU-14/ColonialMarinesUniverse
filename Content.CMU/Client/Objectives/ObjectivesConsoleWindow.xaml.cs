@@ -69,6 +69,14 @@ public sealed partial class ObjectivesConsoleWindow : FancyWindow
                     statusText = "Failed";
                     statusColor = Color.Red;
                     break;
+                case ObjectiveStatusDisplay.Captured:
+                    statusText = "Captured";
+                    statusColor = Color.Cyan;
+                    break;
+                case ObjectiveStatusDisplay.Uncaptured:
+                    statusText = "Uncaptured";
+                    statusColor = Color.Orange;
+                    break;
                 default:
                     statusText = "Uncompleted";
                     statusColor = Color.Gold;

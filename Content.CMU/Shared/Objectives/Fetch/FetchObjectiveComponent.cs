@@ -43,4 +43,7 @@ public sealed partial class FetchObjectiveComponent : Component
     public string? SpawnOther { get; private set; } = null;
 
     // will spawn but not apply the fetchentity component, good if you want to spawn say a corpse and the obj is to collect a patch
+
+    [DataField("respawnOnRepeat", required: false)]
+    public bool RespawnOnRepeat { get; private set; } = false;
 }

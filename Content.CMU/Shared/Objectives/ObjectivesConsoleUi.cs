@@ -8,7 +8,9 @@ public enum ObjectiveStatusDisplay
 {
     Uncompleted,
     Completed,
-    Failed
+    Failed,
+    Captured,
+    Uncaptured
 }
 
 [Serializable, NetSerializable]
