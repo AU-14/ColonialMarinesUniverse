@@ -40,10 +40,10 @@ public sealed partial class CaptureObjectiveComponent : Component
     public int timesincremented = 0;
 // for maxholdtimes
     [DataField("flaghealth", required: false)]
+
     public float FlagInitialHealth { get; private set; } = 100f;
 
-    public float FlagHealth = 100f;
-
+public float FlagHealth = 20f;
     public enum CaptureObjectiveStatus
     {
         Failed,

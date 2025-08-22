@@ -1,5 +1,7 @@
 using Content.Shared.AU14.Objectives.Capture;
 using Content.Shared._RMC14.Flag;
+using Content.Shared.AU14.Objectives;
+using Content.Shared.Pinpointer;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameObjects;
 using Robust.Shared.GameStates;
@@ -20,8 +22,7 @@ public sealed class ClientCaptureObjectiveSystem : EntitySystem
     {
         base.Initialize();
         _sawmill = _logManager.GetSawmill("client-capture-obj");
-        SubscribeLocalEvent<CaptureObjectiveComponent, ComponentStartup>(OnCaptureObjectiveStartup);
-        SubscribeLocalEvent<CaptureObjectiveComponent, ComponentHandleState>(OnCaptureObjectiveState);
+        // Add map marker logic for visible objectives
     }
 
     private void OnCaptureObjectiveStartup(EntityUid uid, CaptureObjectiveComponent comp, ref ComponentStartup args)
@@ -57,4 +58,6 @@ public sealed class ClientCaptureObjectiveSystem : EntitySystem
             spriteState = "uaflag";
         _sawmill.Debug($"[CLIENT CAPTURE OBJ] Set sprite state for {flagUid} to {spriteState} (controller: {faction})");
     }
+
+
 }

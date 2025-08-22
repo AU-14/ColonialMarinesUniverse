@@ -3,7 +3,9 @@ using Content.Shared.AU14.Objectives.Capture;
 using Robust.Shared.IoC;
 using Robust.Shared.Log;
 using Content.Server.Popups;
+using Content.Shared.Damage;
 using Content.Shared.Interaction;
+using Content.Shared.Pinpointer;
 using Content.Shared.Popups;
 using Robust.Client.GameObjects;
 using Robust.Client.GameObjects;
@@ -17,6 +19,7 @@ public sealed class CaptureObjectiveSystem : EntitySystem
     [Dependency] private readonly Content.Server.AU14.Objectives.AuObjectiveSystem _objectiveSystem = default!;
     [Dependency] private readonly Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
     [Dependency] private readonly Robust.Shared.Prototypes.IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly Content.Server._RMC14.Dropship.DropshipSystem _dropshipSystem = default!;
 
     // Tracks ongoing hoists to prevent multiple simultaneous hoists per structure
     private readonly HashSet<EntityUid> _hoisting = new();
@@ -24,18 +27,36 @@ public sealed class CaptureObjectiveSystem : EntitySystem
     // Tracks time since last increment for each capture objective
     private readonly Dictionary<EntityUid, float> _timeSinceLastIncrement = new();
 
+    // Tracks last known slash damage for each capture objective
+    private readonly Dictionary<EntityUid, float> _lastSlashDamage = new();
+
     private static readonly ISawmill Sawmill = Logger.GetSawmill("capture-obj");
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<CaptureObjectiveComponent, FlagHoistStartedEvent>(OnFlagHoistStarted);
-        SubscribeLocalEvent<CaptureObjectiveComponent, FlagHoistedEvent>(OnFlagHoisted);
+        // Removed broken damage event subscription
+    }
+
+    private string? GetPlatoonNameForFaction(string faction)
+    {
+        switch (faction.ToLowerInvariant())
+        {
+            case "govfor":
+                return _platoonSpawnRuleSystem.SelectedGovforPlatoon?.Name;
+            case "opfor":
+                return _platoonSpawnRuleSystem.SelectedOpforPlatoon?.Name;
+            default:
+                return null;
+        }
     }
 
     private void OnFlagHoistStarted(EntityUid uid, CaptureObjectiveComponent comp, FlagHoistStartedEvent args)
     {
-        _popup.PopupEntity($"You begin hoisting the flag for {args.Faction}...", uid, args.User, PopupType.Medium);
+        var platoonName = GetPlatoonNameForFaction(args.Faction);
+        var displayName = !string.IsNullOrEmpty(platoonName) ? platoonName : args.Faction;
+        _popup.PopupEntity($"You begin hoisting the flag for {displayName}...", uid, args.User, PopupType.Medium);
     }
 
     private void OnFlagHoisted(EntityUid uid, CaptureObjectiveComponent comp, FlagHoistedEvent args)
@@ -87,14 +108,17 @@ public sealed class CaptureObjectiveSystem : EntitySystem
             _popup.PopupEntity($"Your faction cannot hoist this flag. The flag is lowered.", uid, args.User, PopupType.Medium);
             return;
         }
-        // Allowed: set controller to the preferred/allowed faction
         comp.CurrentController = allowed;
-        _popup.PopupEntity($"You have hoisted the flag for {allowed}!", uid, args.User, PopupType.Medium);
+        // --- End: Update linked dropship destination's FactionController if Airfield is set ---
+        var platoonName = GetPlatoonNameForFaction(allowed);
+        var displayName = !string.IsNullOrEmpty(platoonName) ? platoonName : allowed;
+        _popup.PopupEntity($"{displayName} has hoisted the flag!", uid, args.User, PopupType.Medium);
     }
+
 
     public override void Update(float frameTime)
     {
-        base.Update(frameTime);
+
         // Get selected platoons and their flag states
         var govforPlatoon = _platoonSpawnRuleSystem.SelectedGovforPlatoon;
         var opforPlatoon = _platoonSpawnRuleSystem.SelectedOpforPlatoon;
@@ -106,6 +130,31 @@ public sealed class CaptureObjectiveSystem : EntitySystem
         var query = EntityQueryEnumerator<CaptureObjectiveComponent, Content.Shared.AU14.Objectives.AuObjectiveComponent>();
         while (query.MoveNext(out var uid, out var comp, out var objComp))
         {
+            // --- Begin: Slash damage tracking ---
+            if (_entManager.TryGetComponent(uid, out Content.Shared.Damage.DamageableComponent? damageable))
+            {
+                float currentSlash = 0f;
+                if (damageable.Damage.DamageDict.TryGetValue("Slash", out var slash))
+                    currentSlash = (float)slash.Float();
+                float lastSlash = 0f;
+                _lastSlashDamage.TryGetValue(uid, out lastSlash);
+                float delta = currentSlash - lastSlash;
+                if (delta > 0f)
+                {
+                    comp.FlagHealth -= delta;
+                    if (comp.FlagHealth <= 0f)
+                    {
+                        comp.FlagHealth = comp.FlagInitialHealth;
+                        if (!string.IsNullOrEmpty(comp.CurrentController))
+                        {
+                            comp.CurrentController = string.Empty;
+                            _popup.PopupEntity($"The flag has been lowered due to heavy damage!", uid, PopupType.Medium);
+                        }
+                    }
+                }
+                _lastSlashDamage[uid] = currentSlash;
+            }
+            // --- End: Slash damage tracking ---
             // Set the flag states for this objective
             comp.GovforFlagState = govforFlag;
             comp.OpforFlagState = opforFlag;

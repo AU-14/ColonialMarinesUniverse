@@ -12,6 +12,7 @@ using Content.Server.GameTicking.Events;
 using Content.Shared.AU14.Objectives.Fetch;
 using Content.Shared.AU14.Objectives.Kill;
 using Content.Shared.Clothing.Components;
+using Content.Shared.Mobs.Components;
 
 namespace Content.Server.AU14.Objectives;
 
@@ -537,6 +538,25 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         _gameTicker.EndRound(faction.ToUpperInvariant() + " Won the round by: " + message);
     }
 
+    // Checks if a Kill objective is completable: at least one entity is marked for this objective
+    private bool IsKillObjectiveCompletable(AuObjectiveComponent obj)
+    {
+        // Only care about objectives with a KillObjectiveComponent
+        if (!_entityManager.TryGetComponent(obj.Owner, out KillObjectiveComponent? killObj))
+            return false;
+        // If the objective will spawn a mob and hasn't yet, it will be completable after activation
+        if (killObj.SpawnMob && !killObj.MobsSpawned)
+            return true;
+        // Check if any entity is marked for this objective
+        var query = _entityManager.EntityQueryEnumerator<MarkedForKillComponent>();
+        while (query.MoveNext(out var ent, out var markComp))
+        {
+            if (markComp.AssociatedObjectives.ContainsKey(obj.Owner))
+                return true;
+        }
+        return false;
+    }
+
     public void AwardPointsToFaction(string faction, AuObjectiveComponent objective)
     {
         if (_objectiveMaster == null)
@@ -573,15 +593,29 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
 
         if (!_objectiveMaster.FinalObjectiveGivenFactions.Contains(factionKey) && newPoints >= requiredPoints)
         {
+            // Only activate a final objective if it is completable (for Kill objectives)
             var finalObjectives = EntityManager.EntityQuery<AuObjectiveComponent>()
                 .Where(obj =>
                     !obj.Active && obj.Factions.Any(f => f.ToLowerInvariant() == factionKey) &&
                     obj.ObjectiveLevel == 3)
                 .ToList();
-            if (finalObjectives.Count > 0)
+            // Try to find a completable final objective
+            AuObjectiveComponent? selected = null;
+            var random = new Random();
+            var shuffled = finalObjectives.OrderBy(_ => random.Next()).ToList();
+            foreach (var obj in shuffled)
             {
-                var random = new Random();
-                var selected = finalObjectives[random.Next(finalObjectives.Count)];
+                if (_entityManager.TryGetComponent(obj.Owner, out KillObjectiveComponent? killObj))
+                {
+                    if (!IsKillObjectiveCompletable(obj))
+                        continue;
+                }
+                // Fetch and Capture are always completable
+                selected = obj;
+                break;
+            }
+            if (selected != null)
+            {
                 selected.Active = true;
                 RaiseLocalEvent(selected.Owner, new ObjectiveActivatedEvent());
                 selected.Faction = factionKey;
@@ -595,6 +629,10 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                     var fetchComp = EntityManager.GetComponent<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveComponent>(selected.Owner);
                     fetchSystem.TryActivateFetchObjective(selected.Owner, fetchComp);
                 }
+            }
+            else
+            {
+                Logger.Warning($"[OBJ FINAL DEBUG] No completable final objective found for faction '{factionKey}'. None activated.");
             }
         }
     }
