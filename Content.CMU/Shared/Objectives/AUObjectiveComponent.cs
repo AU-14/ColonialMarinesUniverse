@@ -45,7 +45,6 @@ public sealed partial class AuObjectiveComponent : Component
     // If set, this will override the points given for completing the objective.
 
     public string Faction = string.Empty;
-//active faction. seperate from disallowed
     public int Intellevel = 0;
 
     [DataField("ObjectiveDescription", required: true)]
@@ -62,6 +61,9 @@ public sealed partial class AuObjectiveComponent : Component
 
     [DataField("maxrepeatable", required: false)]
     public int? MaxRepeatable { get; private set; } = null; // If set, limits how many times this objective can repeat
+
+    [DataField("blacklistedPlatoons", required: false)]
+    public List<string> BlacklistedPlatoons { get; private set; } = new();
 
     public enum ObjectiveStatus
     {

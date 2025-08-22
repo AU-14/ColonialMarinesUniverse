@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Shared.AU14.Objectives;
 using Content.Shared.AU14.Objectives.Fetch;
+using Content.Shared.AU14.Objectives.Kill;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects;
 
@@ -37,13 +38,12 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
     {
         var objectives = new List<ObjectiveEntry>();
         var query = EntityManager.EntityQueryEnumerator<AuObjectiveComponent>();
-        var factionKey = comp.Faction.ToLowerInvariant();
         int currentWinPoints = 0;
         int requiredWinPoints = 0;
         // Find the ObjectiveMaster for this faction
         foreach (var master in EntityManager.EntityQuery<ObjectiveMasterComponent>())
         {
-            switch (factionKey)
+            switch (comp.Faction.ToLowerInvariant())
             {
                 case "govfor":
                     currentWinPoints = master.CurrentWinPointsGovfor;
@@ -81,7 +81,6 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
                 if (string.IsNullOrEmpty(objComp.Faction) || objComp.Faction.ToLowerInvariant() != consoleFaction)
                     continue;
             }
-            Robust.Shared.Log.Logger.Info($"[OBJ CONSOLE DEBUG] Checking objective '{objComp.objectiveDescription}' for factionKey '{factionKey}'. FactionStatuses keys: [{string.Join(", ", objComp.FactionStatuses.Keys)}]");
             ObjectiveStatusDisplay statusDisplay;
             if (objComp.FactionStatuses.TryGetValue(consoleFaction, out var status))
             {
@@ -126,6 +125,14 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
                 }
                 progress = $"{fetched}/{toFetch}";
             }
+            // Add logic to display kill progress for KillObjectiveComponent
+            if (EntityManager.TryGetComponent(objComp.Owner, out KillObjectiveComponent? killComp))
+            {
+                int killed = 0;
+                int toKill = killComp.AmountToKill;
+                killComp.AmountKilledPerFaction.TryGetValue(consoleFaction.ToLowerInvariant(), out killed);
+                progress = $"{killed}/{toKill} kills";
+            }
 
             int? repeatsCompleted = objComp.Repeating ? objComp.TimesCompleted : (int?)null;
             int? maxRepeatable = objComp.MaxRepeatable;
@@ -139,7 +146,6 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
 
     public void RefreshConsolesForFaction(string faction)
     {
-        var factionKey = faction.ToLowerInvariant();
         var query = EntityManager.EntityQueryEnumerator<ObjectivesConsoleComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {

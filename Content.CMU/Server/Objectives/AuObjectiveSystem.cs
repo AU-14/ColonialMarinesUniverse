@@ -23,6 +23,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
 
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly RoundEnd.RoundEndSystem _roundEnd = default!;
+    [Dependency] private readonly Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
 
     private readonly HashSet<string> _finalObjectiveGivenFactions = new();
 
@@ -278,6 +279,17 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         var factionLower = faction.ToLowerInvariant();
         var allObjectives = GetObjectives();
         var selected = new List<AuObjectiveComponent>();
+        string? selectedPlatoonId = null;
+        switch (factionLower)
+        {
+            case "govfor":
+                selectedPlatoonId = _platoonSpawnRuleSystem.SelectedGovforPlatoon?.ID;
+                break;
+            case "opfor":
+                selectedPlatoonId = _platoonSpawnRuleSystem.SelectedOpforPlatoon?.ID;
+                break;
+            // Add more cases if other factions can have platoons
+        }
         foreach (var objective in allObjectives)
         {
             bool modeMatch = objective.ApplicableModes.Any(m => m.ToLowerInvariant() == presetIdLower);
@@ -311,6 +323,12 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             {
                 Logger.Info(
                     $"[OBJ SELECT DEBUG] Skipping '{objective.objectiveDescription}' - level mismatch: {objective.ObjectiveLevel} != {objectiveLevel}");
+                continue;
+            }
+
+            if (selectedPlatoonId != null && objective.BlacklistedPlatoons.Contains(selectedPlatoonId))
+            {
+                Logger.Info($"[OBJ SELECT DEBUG] Skipping '{objective.objectiveDescription}' - blacklisted for selected platoon: {selectedPlatoonId}");
                 continue;
             }
 
