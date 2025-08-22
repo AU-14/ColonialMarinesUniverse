@@ -69,6 +69,11 @@ public sealed partial class AuObjectiveComponent : Component
     [DataField("blacklistedPlatoons", required: false)]
     public List<string> BlacklistedPlatoons { get; private set; } = new();
 
+
+
+    [DataField("WhitelistedPlatoons", required: false)]
+    public List<string> WhitelistedPlatoons { get; private set; } = new();
+
     [DataField("objectiveweight", required: false)]
     public int ObjectiveWeight { get; private set; } = 1;
 
