@@ -144,6 +144,28 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                         continue;
                     }
 
+                    // --- OBJECTIVES CONSOLE MARKER LOGIC ---
+                    if (markerClass == PlatoonMarkerClass.ObjectivesConsole)
+                    {
+                        const string objectivesConsoleProtoId = "RMCObjectivesConsole";
+                        if (_prototypeManager.TryIndex<EntityPrototype>(objectivesConsoleProtoId, out var objectivesConsoleProto))
+                        {
+                            _entityManager.SpawnEntity(objectivesConsoleProtoId, transform.Coordinates);
+                        }
+                        continue;
+                    }
+
+                    // --- GENERIC FETCH RETURN POINT MARKER LOGIC ---
+                    if (markerClass == PlatoonMarkerClass.ReturnPointGeneric)
+                    {
+                        const string fetchReturnProtoId = "RMCFetchReturnPointGeneric";
+                        if (_prototypeManager.TryIndex<EntityPrototype>(fetchReturnProtoId, out var fetchReturnProto))
+                        {
+                            _entityManager.SpawnEntity(fetchReturnProtoId, transform.Coordinates);
+                        }
+                        continue;
+                    }
+
                     // --- VENDOR MARKER LOGIC ---
                     if (!shipPlatoon.VendorMarkersByClass.TryGetValue(markerClass, out var vendorProtoId))
                     {
@@ -203,6 +225,28 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                 if (overwatchConsoleProtoId != null && _prototypeManager.TryIndex<EntityPrototype>(overwatchConsoleProtoId, out var consoleProto))
                 {
                     _entityManager.SpawnEntity(overwatchConsoleProtoId, transform.Coordinates);
+                }
+                continue;
+            }
+
+            // --- OBJECTIVES CONSOLE MARKER LOGIC ---
+            if (markerClass == PlatoonMarkerClass.ObjectivesConsole)
+            {
+                const string objectivesConsoleProtoId = "RMCObjectivesConsole";
+                if (_prototypeManager.TryIndex<EntityPrototype>(objectivesConsoleProtoId, out var objectivesConsoleProto))
+                {
+                    _entityManager.SpawnEntity(objectivesConsoleProtoId, transform.Coordinates);
+                }
+                continue;
+            }
+
+            // --- GENERIC FETCH RETURN POINT MARKER LOGIC ---
+            if (markerClass == PlatoonMarkerClass.ReturnPointGeneric)
+            {
+                const string fetchReturnProtoId = "RMCFetchReturnPointGeneric";
+                if (_prototypeManager.TryIndex<EntityPrototype>(fetchReturnProtoId, out var fetchReturnProto))
+                {
+                    _entityManager.SpawnEntity(fetchReturnProtoId, transform.Coordinates);
                 }
                 continue;
             }

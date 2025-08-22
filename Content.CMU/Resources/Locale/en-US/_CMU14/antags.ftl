@@ -15,3 +15,13 @@ roles-antag-dealer-objective = Sell your product
 spy-role-greeting = You're a corporate spy, reduce the profits of any rival corporations, steal research and DON'T GET CAUGHT.
 roles-antag-spy-name = Corporate Spy
 roles-antag-spy-objective = Hurt the competition
+
+
+exped-traitor-role-greeting = You're a traitor to the expedition, for reasons of insanity, malfunction, or greed. It matters not. Eliminate them.
+roles-antag-exped-traitor-name = Expedition Traitor
+roles-antag-exped-traitor-objective = Fuel your sick desire
+
+
+monster-antag-role-greeting = This planet is your home, and these scientists have got to go.
+monster-traitor-name = Thing from another world
+monster-traitor-objective = Eliminate those infringing on your territory

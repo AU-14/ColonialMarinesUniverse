@@ -6,6 +6,8 @@ namespace Content.Shared.AU14.util
         Clothing,
         Weapons,
         SWeapons,
+        ObjectivesConsole,
+        ReturnPointGeneric,
         Arifleman,
         Rifleman,
         Dcc,
