@@ -35364,7 +35364,6 @@ entities:
     - type: Transform
       pos: 186.5,-121.5
       parent: 2
-
 - proto: FireAlarm
   entities:
   - uid: 4290

@@ -1455,27 +1455,6 @@ entities:
       parent: 2
     - type: OnUseTimerTrigger
       delay: 4
-- proto: AU14JungleM10Helmet
-  entities:
-  - uid: 29
-    components:
-    - type: Transform
-      pos: 66.40348,-7.3575563
-      parent: 2
-    - type: CycleableVisor
-      action: 30
-    - type: ContainerContainer
-      containers:
-        storagebase: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
-        actions: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 30
-    - type: ActionsContainer
 - proto: AU14LargeTruckArmoredWYBlack
   entities:
   - uid: 31
@@ -38576,17 +38555,7 @@ entities:
       parent: 2
     - type: Fixtures
       fixtures: {}
-- proto: RMCActionCycleVisor
-  entities:
-  - uid: 30
-    mapInit: true
-    paused: true
-    components:
-    - type: Transform
-      parent: 29
-    - type: Action
-      originalIconColor: '#FFFFFFFF'
-      container: 29
+
 - proto: RMCAirlockHybrisa
   entities:
   - uid: 6793
@@ -39582,15 +39551,6 @@ entities:
     - type: Transform
       pos: 94.475296,138.5984
       parent: 2
-- proto: RMCHipsterGlasses
-  entities:
-  - uid: 122
-    components:
-    - type: Transform
-      parent: 220
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: RMCHybrisaStairs
   entities:
   - uid: 6939
