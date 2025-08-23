@@ -35364,14 +35364,7 @@ entities:
     - type: Transform
       pos: 186.5,-121.5
       parent: 2
-- proto: fetchoreobjectivemarkergenericspwanpoint
-  entities:
-  - uid: 4289
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 23.5,-0.5
-      parent: 2
+
 - proto: FireAlarm
   entities:
   - uid: 4290
