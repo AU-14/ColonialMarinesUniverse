@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Roles;
+using Robust.Shared.Utility;
 
 namespace Content.Shared.AU14.util;
     [Prototype]
@@ -42,5 +43,10 @@ namespace Content.Shared.AU14.util;
         [DataField("jobSlotOverride")]
         public Dictionary<PlatoonJobClass, int> JobSlotOverride { get; private set; } = new();
 
-    }
+        [DataField("CompatibleDropships")]
+        public List<ResPath> CompatibleDropships { get; private set; } = new();
 
+        [DataField("compatibleFighters")]
+        public List<ResPath> CompatibleFighters { get; private set; } = new();
+
+    }

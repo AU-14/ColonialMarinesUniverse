@@ -76,8 +76,12 @@ public sealed class SharedCaptureObjectiveSystem : EntitySystem
         _hoisting.Remove(uid);
         if (args.Cancelled || args.Handled)
             return;
+        Sawmill.Info($"[DEBUG] OnHoistFlagDoAfter: Entity={uid}, Airfield='{comp.Airfield}', CurrentController='{comp.CurrentController}'");
+        if (_entManager.TryGetComponent<MetaDataComponent>(uid, out var peenits))
+        {
+            Sawmill.Info($"[DEBUG] Entity Prototype Name: {peenits.EntityPrototype?.Name}");
+        }
         comp.CurrentController = args.Faction;
-        // --- Begin: Update linked dropship destination's FactionController if Airfield is set ---
         if (!string.IsNullOrEmpty(comp.Airfield))
         {
             var airfieldId = comp.Airfield.ToLowerInvariant();
@@ -87,11 +91,11 @@ public sealed class SharedCaptureObjectiveSystem : EntitySystem
                 var protoId = meta.EntityPrototype?.Name.ToLowerInvariant();
                 if (protoId == airfieldId)
                 {
+                    Sawmill.Info($"[DEBUG] Matched airfield: {protoId} (destUid={destUid})");
                     _dropshipSystem.SetFactionController(destUid, args.Faction);
                 }
             }
         }
-        // --- End: Update linked dropship destination's FactionController if Airfield is set ---
         Sawmill.Info($"Flag at {uid} hoisted by {args.Faction}");
         // Raise event for popup logic
         var hoistedEvent = new FlagHoistedEvent(args.User, args.Faction);
