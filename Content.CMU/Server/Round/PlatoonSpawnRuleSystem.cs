@@ -304,8 +304,8 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
         }
 
         // --- DROPSHIP & FIGHTER CONSOLE SPAWNING LOGIC ---
-        // Helper: Find a destination entity for a given faction and type
-        EntityUid? FindDestination(string faction, DropshipDestinationComponent.DestinationType type)
+        // Helper: Find a destination entity for a given faction and type, optionally filtering by grid
+        EntityUid? FindDestination(string faction, DropshipDestinationComponent.DestinationType type, EntityUid? gridUid = null)
         {
             foreach (var dest in _entityManager.EntityQuery<DropshipDestinationComponent>(true))
             {
@@ -313,7 +313,17 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                 if (_entityManager.TryGetComponent<DropshipDestinationComponent>(destUid, out DropshipDestinationComponent? comp) && comp != null)
                 {
                     if (comp.FactionController == faction && comp.Destinationtype == type)
-                        return destUid;
+                    {
+                        if (gridUid != null)
+                        {
+                            if (_entityManager.GetComponent<TransformComponent>(destUid).GridUid == gridUid)
+                                return destUid;
+                        }
+                        else
+                        {
+                            return destUid;
+                        }
+                    }
                 }
             }
             return null;
@@ -478,7 +488,15 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                 var gridMapId = _entityManager.GetComponent<TransformComponent>(grid.Value).MapID;
                 _mapSystem.InitializeMap(gridMapId);
                 // Fly to a destination
-                var dest = FindDestination(faction, DropshipDestinationComponent.DestinationType.Figher);
+                EntityUid? dest;
+                if ((faction == "govfor" && planetComp != null && !planetComp.GovforInShip) || (faction == "opfor" && planetComp != null && !planetComp.OpforInShip))
+                {
+                    dest = FindDestination(faction, DropshipDestinationComponent.DestinationType.Figher, grid.Value);
+                }
+                else
+                {
+                    dest = FindDestination(faction, DropshipDestinationComponent.DestinationType.Figher);
+                }
                 Sawmill.Debug($"[FIGHTER] Found destination {dest} for faction {faction}");
                 var navComputer = FindNavComputerOnGrid(grid.Value);
                 Sawmill.Debug($"[FIGHTER] Found nav computer {navComputer} on grid {grid}");
