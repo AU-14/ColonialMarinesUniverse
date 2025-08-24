@@ -7,7 +7,7 @@ meta:
   time: 08/23/2025 01:33:55
   entityCount: 7773
 maps:
-- 1
+- 2
 grids:
 - 2
 orphans: []
@@ -74,23 +74,27 @@ tilemap:
 entities:
 - proto: ""
   entities:
-  - uid: 1
+  - uid: 2
     components:
     - type: MetaData
-      name: Map Entity
-    - type: Transform
+      name: Gixens Caverns
     - type: Map
       mapPaused: True
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree
-  - uid: 2
-    components:
-    - type: MetaData
-      name: grid
-    - type: Transform
-      pos: -0.59375,-0.59375
-      parent: 1
+    - type: MapLight
+    - type: RMCAmbientLightEffects
+    - type: SpreaderGrid
+    - type: GridPathfinding
+    - type: Gravity
+      gravityShakeSound: !type:SoundPathSpecifier
+        path: /Audio/Effects/alert.ogg
+      inherent: True
+      enabled: True
+    - type: StationInfiniteBatteryTarget
+    - type: BecomesStation
+      id: GixensCaverns
     - type: MapGrid
       chunks:
         0,0:
@@ -741,22 +745,6 @@ entities:
           ind: 0,-2
           tiles: BQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAA==
           version: 7
-    - type: Broadphase
-    - type: Physics
-      bodyStatus: InAir
-      fixedRotation: False
-      bodyType: Dynamic
-    - type: Fixtures
-      fixtures: {}
-    - type: OccluderTree
-    - type: SpreaderGrid
-    - type: Shuttle
-      dampingModifier: 0.25
-    - type: ImplicitRoof
-    - type: GridPathfinding
-    - type: Gravity
-      gravityShakeSound: !type:SoundPathSpecifier
-        path: /Audio/Effects/alert.ogg
     - type: DecalGrid
       chunkCollection:
         version: 2
@@ -1352,53 +1340,6 @@ entities:
         chunkSize: 4
     - type: GasTileOverlay
     - type: RadiationGridResistance
-- proto: ActionToggleLight
-  entities:
-  - uid: 5
-    mapInit: true
-    paused: true
-    components:
-    - type: Transform
-      parent: 4
-    - type: Action
-      originalIconColor: '#FFFFFFFF'
-      container: 4
-  - uid: 7
-    mapInit: true
-    paused: true
-    components:
-    - type: Transform
-      parent: 6
-    - type: Action
-      originalIconColor: '#FFFFFFFF'
-      container: 6
-  - uid: 9
-    mapInit: true
-    paused: true
-    components:
-    - type: Transform
-      parent: 8
-    - type: Action
-      originalIconColor: '#FFFFFFFF'
-      container: 8
-  - uid: 11
-    mapInit: true
-    paused: true
-    components:
-    - type: Transform
-      parent: 10
-    - type: Action
-      originalIconColor: '#FFFFFFFF'
-      container: 10
-  - uid: 13
-    mapInit: true
-    paused: true
-    components:
-    - type: Transform
-      parent: 12
-    - type: Action
-      originalIconColor: '#FFFFFFFF'
-      container: 12
 - proto: AU14CassettePlayerBlue
   entities:
   - uid: 14
@@ -1514,27 +1455,6 @@ entities:
       parent: 2
     - type: OnUseTimerTrigger
       delay: 4
-- proto: AU14JungleM10Helmet
-  entities:
-  - uid: 29
-    components:
-    - type: Transform
-      pos: 66.40348,-7.3575563
-      parent: 2
-    - type: CycleableVisor
-      action: 30
-    - type: ContainerContainer
-      containers:
-        storagebase: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
-        actions: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 30
-    - type: ActionsContainer
 - proto: AU14LargeTruckArmoredWYBlack
   entities:
   - uid: 31
@@ -1735,7 +1655,7 @@ entities:
     - type: Transform
       rot: -18.84955592153876 rad
       pos: 111.33014,61.913128
-      parent: 1
+      parent: 2
 - proto: AU14WallFlagCLFWorn
   entities:
   - uid: 58
@@ -2368,13 +2288,9 @@ entities:
         entity_storage: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - 4
-          - invalid
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
-          ent: null
   - uid: 120
     components:
     - type: Transform
@@ -2459,13 +2375,9 @@ entities:
         entity_storage: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - 133
-          - 134
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
-          ent: null
   - uid: 135
     components:
     - type: Transform
@@ -2497,12 +2409,9 @@ entities:
         entity_storage: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - invalid
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
-          ent: null
   - uid: 139
     components:
     - type: Transform
@@ -2616,7 +2525,7 @@ entities:
       desc: Hey! I think you left this back at Black Mesa!
       name: particular crowbar
     - type: Transform
-      parent: 120
+      parent: 220
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -3719,7 +3628,7 @@ entities:
   - uid: 131
     components:
     - type: Transform
-      parent: 130
+      parent: 230
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -10309,12 +10218,6 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -6.5,21.5
-      parent: 2
-  - uid: 1513
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -5.5,21.5
       parent: 2
   - uid: 1514
     components:
@@ -36259,7 +36162,7 @@ entities:
   - uid: 149
     components:
     - type: Transform
-      parent: 148
+      parent: 248
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -38652,17 +38555,7 @@ entities:
       parent: 2
     - type: Fixtures
       fixtures: {}
-- proto: RMCActionCycleVisor
-  entities:
-  - uid: 30
-    mapInit: true
-    paused: true
-    components:
-    - type: Transform
-      parent: 29
-    - type: Action
-      originalIconColor: '#FFFFFFFF'
-      container: 29
+
 - proto: RMCAirlockHybrisa
   entities:
   - uid: 6793
@@ -38699,29 +38592,6 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 15.5,-6.5
       parent: 2
-- proto: RMCArmorMARSOCXM40
-  entities:
-  - uid: 10
-    components:
-    - type: Transform
-      pos: 35.575047,143.24695
-      parent: 2
-    - type: HandheldLight
-      toggleActionEntity: 11
-    - type: ContainerContainer
-      containers:
-        storagebase: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
-        actions: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 11
-    - type: PointLight
-      enabled: True
-    - type: ActionsContainer
 - proto: RMCBarricadeHandrailKutjevo
   entities:
   - uid: 6798
@@ -39217,7 +39087,7 @@ entities:
   - uid: 124
     components:
     - type: Transform
-      parent: 123
+      parent: 223
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -39524,47 +39394,6 @@ entities:
     - type: Transform
       pos: 2.6441746,103.49895
       parent: 2
-  - uid: 6915
-    components:
-    - type: Transform
-      pos: 17.274446,137.30855
-      parent: 2
-    - type: PointLight
-      enabled: True
-- proto: RMCFlashlightLantern
-  entities:
-  - uid: 8
-    components:
-    - type: Transform
-      pos: -11.933923,44.80673
-      parent: 2
-    - type: PointLight
-      enabled: True
-    - type: HandheldLight
-      toggleActionEntity: 9
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - 9
-  - uid: 12
-    components:
-    - type: MetaData
-      name: Tim's Lantern
-    - type: Transform
-      pos: 40.82851,15.530758
-      parent: 2
-    - type: HandheldLight
-      toggleActionEntity: 13
-    - type: SpriteColor
-      color: '#39FF14FF'
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - 13
   - uid: 6916
     components:
     - type: Transform
@@ -39683,60 +39512,19 @@ entities:
     - type: Transform
       pos: 43.5,80.5
       parent: 2
-- proto: RMCHardHat
-  entities:
-  - uid: 133
-    components:
-    - type: Transform
-      parent: 132
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
   - uid: 137
     components:
     - type: Transform
-      parent: 136
+      parent: 236
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
   - uid: 142
     components:
     - type: Transform
-      parent: 141
+      parent: 241
     - type: Physics
       canCollide: False
-    - type: InsideEntityStorage
-- proto: RMCHardhatBlue
-  entities:
-  - uid: 6935
-    components:
-    - type: MetaData
-      desc: '"ROCK AND STONE!" is engraved on the side.'
-    - type: Transform
-      pos: -15.64291,61.703243
-      parent: 2
-- proto: RMCHardhatOrange
-  entities:
-  - uid: 4
-    components:
-    - type: Transform
-      parent: 3
-    - type: HandheldLight
-      toggleActionEntity: 5
-    - type: ContainerContainer
-      containers:
-        storagebase: !type:Container
-          showEnts: False
-          occludes: True
-          ents: []
-        actions: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 5
-    - type: Physics
-      canCollide: False
-    - type: ActionsContainer
     - type: InsideEntityStorage
   - uid: 6936
     components:
@@ -39763,15 +39551,6 @@ entities:
     - type: Transform
       pos: 94.475296,138.5984
       parent: 2
-- proto: RMCHipsterGlasses
-  entities:
-  - uid: 122
-    components:
-    - type: Transform
-      parent: 120
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: RMCHybrisaStairs
   entities:
   - uid: 6939
@@ -39899,26 +39678,6 @@ entities:
       id: 2
     - type: Fixtures
       fixtures: {}
-- proto: RMCLamp
-  entities:
-  - uid: 6
-    components:
-    - type: Transform
-      pos: 12.4195385,-7.198137
-      parent: 2
-    - type: HandheldLight
-      toggleActionEntity: 7
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - 7
-  - uid: 6954
-    components:
-    - type: Transform
-      pos: 58.56768,72.74494
-      parent: 2
 - proto: RMCLampTripod
   entities:
   - uid: 6955
@@ -40103,7 +39862,7 @@ entities:
   - uid: 125
     components:
     - type: Transform
-      parent: 123
+      parent: 223
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -40156,25 +39915,6 @@ entities:
     - type: Transform
       pos: -11.5,23.5
       parent: 2
-- proto: RMCMedalPlatinumService
-  entities:
-  - uid: 6992
-    mapInit: true
-    paused: true
-    components:
-    - type: Transform
-      pos: 50.9736,92.6324
-      parent: 2
-    - type: UniformAccessory
-      user: invalid
-    - type: EmitSoundOnCollide
-      nextSound: -20621.9127114
-    - type: Forensics
-      residues: []
-      dnas: []
-      fibers: []
-      fingerprints:
-      - AB91F0D5C3E3CBA62E2DDAD88510B186
 - proto: RMCPersonalDesktop
   entities:
   - uid: 6993
@@ -40188,14 +39928,14 @@ entities:
   - uid: 134
     components:
     - type: Transform
-      parent: 132
+      parent: 232
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
   - uid: 140
     components:
     - type: Transform
-      parent: 139
+      parent: 239
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -44065,7 +43805,7 @@ entities:
   - uid: 128
     components:
     - type: Transform
-      parent: 127
+      parent: 227
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -44585,7 +44325,7 @@ entities:
   - uid: 126
     components:
     - type: Transform
-      parent: 123
+      parent: 223
     - type: Physics
       canCollide: False
     - type: UseDelay
@@ -44817,7 +44557,7 @@ entities:
     - type: Transform
       anchored: False
       pos: 61.5,-19.5
-      parent: 1
+      parent: 2
 - proto: SpawnMobCatGeneric
   entities:
   - uid: 7728
