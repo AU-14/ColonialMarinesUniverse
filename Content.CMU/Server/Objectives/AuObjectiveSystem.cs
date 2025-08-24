@@ -337,6 +337,12 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                 continue;
             if (selectedPlatoonId != null && objective.BlacklistedPlatoons.Contains(selectedPlatoonId))
                 continue;
+            // --- WhitelistedPlatoons logic ---
+            if (objective.WhitelistedPlatoons.Count > 0)
+            {
+                if (selectedPlatoonId == null || !objective.WhitelistedPlatoons.Contains(selectedPlatoonId))
+                    continue;
+            }
             selected.Add(objective);
         }
         // Randomly select up to maxCount objectives if more are available
