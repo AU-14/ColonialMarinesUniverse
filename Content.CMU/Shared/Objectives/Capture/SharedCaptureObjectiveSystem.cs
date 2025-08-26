@@ -21,85 +21,69 @@ public sealed class SharedCaptureObjectiveSystem : EntitySystem
     [Dependency] private readonly Content.Shared._RMC14.Dropship.SharedDropshipSystem _dropshipSystem = default!;
     private static readonly ISawmill Sawmill = Logger.GetSawmill("capture-obj");
 
-    // Tracks ongoing hoists to prevent multiple simultaneous hoists per structure
-    private readonly HashSet<EntityUid> _hoisting = new();
-
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<CaptureObjectiveComponent, InteractHandEvent>(OnInteractHand);
-        SubscribeLocalEvent<CaptureObjectiveComponent, HoistFlagDoAfterEvent>(OnHoistFlagDoAfter);
     }
-
-
 
     private void OnInteractHand(EntityUid uid, CaptureObjectiveComponent comp, InteractHandEvent args)
     {
         if (args.Handled)
             return;
-        if (_hoisting.Contains(uid))
+        // Only allow interaction if the flag is not busy (ActionState == Idle)
+        if (comp.ActionState != CaptureObjectiveComponent.FlagActionState.Idle)
         {
             args.Handled = true;
-            // Popup logic should be handled in server/client system
-            return;
-        }
-        if (!string.IsNullOrEmpty(comp.CurrentController))
-        {
-            args.Handled = true;
-            // Popup logic should be handled in server/client system
             return;
         }
         if (!_entManager.TryGetComponent<NpcFactionMemberComponent>(args.User, out var npcFaction) || npcFaction.Factions.Count == 0)
         {
             args.Handled = true;
-            // Popup logic should be handled in server/client system
             return;
         }
-        // Only allow one faction per user
-        var faction = npcFaction.Factions.First().ToString().ToUpperInvariant();
-        _hoisting.Add(uid);
+        var userFactions = npcFaction.Factions.Select(f => f.ToString().ToLowerInvariant()).ToList();
+        // If the flag is currently raised, allow anyone to lower it
+        if (!string.IsNullOrEmpty(comp.CurrentController))
+        {
+            args.Handled = true;
+            // Allow lowering for anyone
+            var startedEvent = new FlagHoistStartedEvent(args.User, comp.CurrentController);
+            RaiseLocalEvent(uid, startedEvent);
+            var doAfterArgs = new DoAfterArgs(_entManager, args.User, comp.HoistTime, new HoistFlagDoAfterEvent { Faction = comp.CurrentController }, uid)
+            {
+                BreakOnMove = true,
+                BreakOnDamage = true,
+                NeedHand = true
+            };
+            _doAfter.TryStartDoAfter(doAfterArgs);
+            return;
+        }
+        // If the flag is lowered, only allow raising for allowed factions
+        string? allowed = null;
+        foreach (var fac in new[] { "govfor", "opfor", "clf" })
+        {
+            if (userFactions.Contains(fac))
+            {
+                allowed = fac;
+                break;
+            }
+        }
+        if (allowed == null)
+        {
+            args.Handled = true;
+            // Optionally, show a popup here: "Your faction cannot raise this flag."
+            return;
+        }
         args.Handled = true;
-        // Raise event for popup logic
-        var startedEvent = new FlagHoistStartedEvent(args.User, faction);
-        RaiseLocalEvent(uid, startedEvent);
-        var doAfterArgs = new DoAfterArgs(_entManager, args.User, comp.HoistTime, new HoistFlagDoAfterEvent { Faction = faction }, uid)
+        var startedRaiseEvent = new FlagHoistStartedEvent(args.User, allowed);
+        RaiseLocalEvent(uid, startedRaiseEvent);
+        var doAfterRaiseArgs = new DoAfterArgs(_entManager, args.User, comp.HoistTime, new HoistFlagDoAfterEvent { Faction = allowed }, uid)
         {
             BreakOnMove = true,
             BreakOnDamage = true,
             NeedHand = true
         };
-        _doAfter.TryStartDoAfter(doAfterArgs);
-    }
-
-    private void OnHoistFlagDoAfter(EntityUid uid, CaptureObjectiveComponent comp, HoistFlagDoAfterEvent args)
-    {
-        _hoisting.Remove(uid);
-        if (args.Cancelled || args.Handled)
-            return;
-        Sawmill.Info($"[DEBUG] OnHoistFlagDoAfter: Entity={uid}, Airfield='{comp.Airfield}', CurrentController='{comp.CurrentController}'");
-        if (_entManager.TryGetComponent<MetaDataComponent>(uid, out var peenits))
-        {
-            Sawmill.Info($"[DEBUG] Entity Prototype Name: {peenits.EntityPrototype?.Name}");
-        }
-        comp.CurrentController = args.Faction;
-        if (!string.IsNullOrEmpty(comp.Airfield))
-        {
-            var airfieldId = comp.Airfield.ToLowerInvariant();
-            var destQuery = _entManager.EntityQueryEnumerator<Content.Shared._RMC14.Dropship.DropshipDestinationComponent, MetaDataComponent>();
-            while (destQuery.MoveNext(out var destUid, out _, out var meta))
-            {
-                var protoId = meta.EntityPrototype?.Name.ToLowerInvariant();
-                if (protoId == airfieldId)
-                {
-                    Sawmill.Info($"[DEBUG] Matched airfield: {protoId} (destUid={destUid})");
-                    _dropshipSystem.SetFactionController(destUid, args.Faction);
-                }
-            }
-        }
-        Sawmill.Info($"Flag at {uid} hoisted by {args.Faction}");
-        // Raise event for popup logic
-        var hoistedEvent = new FlagHoistedEvent(args.User, args.Faction);
-        RaiseLocalEvent(uid, hoistedEvent);
-        // Sprite and popup logic should be handled in server/client system
+        _doAfter.TryStartDoAfter(doAfterRaiseArgs);
     }
 }

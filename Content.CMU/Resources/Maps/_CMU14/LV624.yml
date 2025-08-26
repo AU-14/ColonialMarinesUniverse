@@ -75399,6 +75399,17 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
+- proto: CMActionToggleScope
+  entities:
+  - uid: 371
+    mapInit: true
+    paused: true
+    components:
+    - type: Transform
+      parent: 370
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 370
 - proto: CMAirlockGlassHybrisa
   entities:
   - uid: 372
@@ -76207,6 +76218,41 @@ entities:
     - type: Transform
       pos: 17.5,-66.5
       parent: 1
+- proto: CMBeltMarineBuckshot
+  entities:
+  - uid: 504
+    components:
+    - type: Transform
+      parent: 503
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+- proto: CMBeltMarineHunting
+  entities:
+  - uid: 506
+    components:
+    - type: Transform
+      pos: -53.491535,-95.51535
+      parent: 1
+  - uid: 507
+    components:
+    - type: Transform
+      pos: -81.45354,-98.7918
+      parent: 1
+  - uid: 509
+    components:
+    - type: Transform
+      parent: 508
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+  - uid: 510
+    components:
+    - type: Transform
+      parent: 508
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
 - proto: CMBeltMarineMP5
   entities:
   - uid: 519
@@ -77661,7 +77707,6 @@ entities:
           occludes: True
           ents:
           - 732
-          - 730
           - 731
         paper_label: !type:ContainerSlot
           showEnts: False
@@ -77991,13 +78036,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: 44.5,-243.5
       parent: 1
-- proto: CMEncryptionKeyWEYAColony
-  entities:
-  - uid: 730
-    components:
-    - type: Transform
-      parent: 729
-    - type: PhysEntityStorage
   - uid: 790
     components:
     - type: Transform
@@ -213198,6 +213236,81 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
+- proto: RMCBible
+  entities:
+  - uid: 2
+    components:
+    - type: Transform
+      pos: 21.575687,-70.39978
+      parent: 1
+    - type: Summonable
+      summonActionEntity: 3
+      summonSound: !type:SoundCollectionSpecifier
+        params:
+          volume: -4
+        collection: Summon
+    - type: ContainerContainer
+      containers:
+        storagebase: !type:Container
+          showEnts: False
+          occludes: True
+          ents: []
+        actions: !type:Container
+          showEnts: False
+          occludes: True
+          ents:
+          - 3
+    - type: ActionsContainer
+- proto: RMCBinocularsCiv
+  entities:
+  - uid: 370
+    components:
+    - type: Transform
+      pos: 39.217983,-73.15109
+      parent: 1
+    - type: Scope
+      scopingToggleActionEntity: 371
+    - type: ActionsContainer
+    - type: ContainerContainer
+      containers:
+        actions: !type:Container
+          ents:
+          - 371
+  - uid: 26282
+    components:
+    - type: Transform
+      pos: 39.67632,-73.17151
+      parent: 1
+  - uid: 26283
+    components:
+    - type: Transform
+      pos: 39.405483,-73.525925
+      parent: 1
+- proto: RMCBookcase
+  entities:
+  - uid: 26284
+    components:
+    - type: Transform
+      pos: -27.5,125.5
+      parent: 1
+- proto: RMCBootsSPPFilled
+  entities:
+  - uid: 738
+    components:
+    - type: Transform
+      parent: 736
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+- proto: RMCBootsVanBandolier
+  entities:
+  - uid: 26286
+    components:
+    - type: Transform
+      parent: 26285
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
 - proto: RMCBoxBodyBag
   entities:
   - uid: 26288
@@ -223506,7 +223619,95 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
-- uid: 2891
+- proto: RMCBushn1
+  entities:
+  - uid: 27701
+    components:
+    - type: Transform
+      pos: -11.581515,55.131382
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+- proto: RMCCabinetBase
+  entities:
+  - uid: 21
+    components:
+    - type: Transform
+      pos: -180.5,-103.5
+      parent: 1
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          showEnts: False
+          occludes: True
+          ents:
+          - 22
+          - 23
+          - 24
+        paper_label: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: null
+  - uid: 29
+    components:
+    - type: Transform
+      pos: -178.5,-105.5
+      parent: 1
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          showEnts: False
+          occludes: True
+          ents:
+          - 31
+          - 30
+        paper_label: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: null
+  - uid: 508
+    components:
+    - type: Transform
+      pos: 0.5,102.5
+      parent: 1
+    - type: EntityStorage
+      air:
+        volume: 200
+        immutable: False
+        temperature: 293.14673
+        moles:
+        - 1.7459903
+        - 6.568249
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          showEnts: False
+          occludes: True
+          ents:
+          - 517
+          - 515
+          - 512
+          - 511
+          - 514
+          - 513
+          - 510
+          - 516
+          - 509
+        paper_label: !type:ContainerSlot
+          showEnts: False
+          occludes: True
+          ent: null
+  - uid: 2891
     components:
     - type: Transform
       pos: -178.5,-104.5
@@ -251163,7 +251364,7 @@ entities:
     components:
     - type: Transform
       pos: 18.5,-92.5
-      parent: 1ac
+      parent: 1
   - uid: 32479
     components:
     - type: Transform

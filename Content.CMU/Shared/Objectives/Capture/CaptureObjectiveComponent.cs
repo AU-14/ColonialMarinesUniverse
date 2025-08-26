@@ -63,7 +63,7 @@ public float FlagHealth = 20f;
             if (status == AuObjectiveComponent.ObjectiveStatus.Failed)
                 return CaptureObjectiveStatus.Failed;
         }
-        // If the objective is still active, show captured for the current holder
+        // If the objective is still active, show captured for theF current holder
         if (!string.IsNullOrEmpty(CurrentController) && CurrentController.ToLowerInvariant() == factionKey)
             return CaptureObjectiveStatus.Captured;
         // If the flag is not held, show uncaptured
@@ -78,5 +78,17 @@ public float FlagHealth = 20f;
 
     // Tracks how many times each faction has held the flag (for progress display)
     public Dictionary<string, int> TimesIncrementedPerFaction { get; set; } = new();
+
+    public enum FlagActionState
+    {
+        Idle,
+        Hoisting,
+        Lowering
+    }
+
+    public FlagActionState ActionState = FlagActionState.Idle;
+    public EntityUid? ActionUser = null;
+    public float ActionTimeRemaining = 0f;
+    public string? ActionUserFaction = null;
 
 }

@@ -18,8 +18,6 @@ public sealed class CaptureObjectiveSystem : EntitySystem
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly Content.Server.AU14.Objectives.AuObjectiveSystem _objectiveSystem = default!;
     [Dependency] private readonly Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
-    [Dependency] private readonly Robust.Shared.Prototypes.IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly Content.Server._RMC14.Dropship.DropshipSystem _dropshipSystem = default!;
 
     // Tracks ongoing hoists to prevent multiple simultaneous hoists per structure
     private readonly HashSet<EntityUid> _hoisting = new();
@@ -36,6 +34,7 @@ public sealed class CaptureObjectiveSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<CaptureObjectiveComponent, FlagHoistStartedEvent>(OnFlagHoistStarted);
+        SubscribeLocalEvent<CaptureObjectiveComponent, HoistFlagDoAfterEvent>(OnHoistFlagDoAfter); // Subscribe to DoAfter completion
         // Removed broken damage event subscription
     }
 
@@ -54,71 +53,86 @@ public sealed class CaptureObjectiveSystem : EntitySystem
 
     private void OnFlagHoistStarted(EntityUid uid, CaptureObjectiveComponent comp, FlagHoistStartedEvent args)
     {
-        var platoonName = GetPlatoonNameForFaction(args.Faction);
-        var displayName = !string.IsNullOrEmpty(platoonName) ? platoonName : args.Faction;
-        _popup.PopupEntity($"You begin hoisting the flag for {displayName}...", uid, args.User, PopupType.Medium);
-    }
-
-    private void OnFlagHoisted(EntityUid uid, CaptureObjectiveComponent comp, FlagHoistedEvent args)
-    {
-        var allowedFactions = new[] { "govfor", "opfor", "clf" };
-        // Get the objective component for allowed factions list
-        if (!_entManager.TryGetComponent(uid, out Content.Shared.AU14.Objectives.AuObjectiveComponent? objComp))
+        // If already in progress, block further actions
+        if (comp.ActionState != CaptureObjectiveComponent.FlagActionState.Idle)
         {
-            comp.CurrentController = string.Empty;
-            _popup.PopupEntity($"You cannot hoist the flag.", uid, args.User, PopupType.Medium);
+            _popup.PopupEntity($"The flag is already being {(comp.ActionState == CaptureObjectiveComponent.FlagActionState.Hoisting ? "hoisted" : "lowered")}!", uid, args.User, PopupType.Medium);
             return;
         }
-        // Get all factions for the user (player or NPC)
         var userFactions = new List<string>();
         if (args.User != EntityUid.Invalid && _entManager.TryGetComponent(args.User, out Content.Shared.NPC.Components.NpcFactionMemberComponent? factionComp))
         {
             userFactions.AddRange(factionComp.Factions.Select(f => f.ToString().ToLowerInvariant()));
         }
-        // Always include args.Faction as a fallback (for legacy or player cases)
         var hoistingFaction = args.Faction.ToLowerInvariant();
         if (!userFactions.Contains(hoistingFaction))
             userFactions.Add(hoistingFaction);
-        // Find the first allowed faction, preferring govfor > opfor > clf > others in objComp.Factions
-        string? allowed = null;
-        foreach (var pref in allowedFactions)
+        // Lowering: anyone can lower if the flag is raised and not being lowered
+        if (!string.IsNullOrEmpty(comp.CurrentController))
         {
-            if (userFactions.Contains(pref))
+            comp.ActionState = CaptureObjectiveComponent.FlagActionState.Lowering;
+            comp.ActionUser = args.User;
+            comp.ActionTimeRemaining = comp.HoistTime;
+            comp.ActionUserFaction = comp.CurrentController; // Track which faction is being lowered
+            _popup.PopupEntity($"You begin lowering the flag...", uid, args.User, PopupType.Medium);
+            return;
+        }
+        // Raising: only allowed factions can raise if the flag is lowered and not being hoisted
+        string? allowed = null;
+        foreach (var fac in new[] { "govfor", "opfor", "clf" })
+        {
+            if (userFactions.Contains(fac))
             {
-                allowed = pref;
+                allowed = fac;
                 break;
             }
         }
         if (allowed == null)
         {
-            // Check for any allowed faction in the objective's possiblefactions
-            foreach (var possible in objComp.Factions.Select(f => f.ToLowerInvariant()))
-            {
-                if (userFactions.Contains(possible))
-                {
-                    allowed = possible;
-                    break;
-                }
-            }
-        }
-        if (allowed == null)
-        {
-            // Not allowed: lower the flag
-            comp.CurrentController = string.Empty;
-            _popup.PopupEntity($"Your faction cannot hoist this flag. The flag is lowered.", uid, args.User, PopupType.Medium);
+            _popup.PopupEntity($"Your faction cannot raise this flag.", uid, args.User, PopupType.Medium);
             return;
         }
-        comp.CurrentController = allowed;
-        // --- End: Update linked dropship destination's FactionController if Airfield is set ---
+        comp.ActionState = CaptureObjectiveComponent.FlagActionState.Hoisting;
+        comp.ActionUser = args.User;
+        comp.ActionTimeRemaining = comp.HoistTime;
+        comp.ActionUserFaction = allowed; // Track which faction is being raised
         var platoonName = GetPlatoonNameForFaction(allowed);
+
         var displayName = !string.IsNullOrEmpty(platoonName) ? platoonName : allowed;
-        _popup.PopupEntity($"{displayName} has hoisted the flag!", uid, args.User, PopupType.Medium);
+
+        _popup.PopupEntity($"You begin raising the flag for {displayName}...", uid, args.User, PopupType.Medium);
     }
 
+    // New handler for DoAfter completion
+    private void OnHoistFlagDoAfter(EntityUid uid, CaptureObjectiveComponent comp, HoistFlagDoAfterEvent args)
+    {
+        // Always reset action state after DoAfter completes (success or cancel)
+        comp.ActionState = CaptureObjectiveComponent.FlagActionState.Idle;
+        comp.ActionUser = null;
+        comp.ActionUserFaction = null;
+        comp.ActionTimeRemaining = 0f;
+
+        if (args.Cancelled)
+            return;
+        var popupUser = args.User != EntityUid.Invalid ? args.User : uid;
+        // If the flag is currently held, this is a lowering action
+        if (!string.IsNullOrEmpty(comp.CurrentController))
+        {
+            comp.CurrentController = string.Empty;
+            _popup.PopupEntity($"You have lowered the flag.", uid, popupUser, PopupType.Medium);
+        }
+        else // Otherwise, this is a hoisting action
+        {
+            comp.CurrentController = args.Faction;
+            var allowed = comp.CurrentController;
+            var platoonName = GetPlatoonNameForFaction(allowed);
+            var displayName = !string.IsNullOrEmpty(platoonName) ? platoonName : allowed;
+            _popup.PopupEntity($"You have raised the flag for {displayName}.", uid, popupUser, PopupType.Medium);
+        }
+    }
 
     public override void Update(float frameTime)
     {
-
         // Get selected platoons and their flag states
         var govforPlatoon = _platoonSpawnRuleSystem.SelectedGovforPlatoon;
         var opforPlatoon = _platoonSpawnRuleSystem.SelectedOpforPlatoon;
@@ -154,26 +168,22 @@ public sealed class CaptureObjectiveSystem : EntitySystem
                 }
                 _lastSlashDamage[uid] = currentSlash;
             }
-            // --- End: Slash damage tracking ---
-            // Set the flag states for this objective
+
             comp.GovforFlagState = govforFlag;
             comp.OpforFlagState = opforFlag;
             // Only process active objectives
             if (!objComp.Active)
                 continue;
-            // If completed, skip
             if (comp.MaxHoldTimes > 0 && comp.timesincremented >= comp.MaxHoldTimes)
                 continue;
             if (comp.OnceOnly && comp.timesincremented > 0)
                 continue;
-            // Only increment if there is a controller
             if (string.IsNullOrEmpty(comp.CurrentController))
                 continue;
-            // Track time
             if (!_timeSinceLastIncrement.ContainsKey(uid))
                 _timeSinceLastIncrement[uid] = 0f;
             _timeSinceLastIncrement[uid] += frameTime;
-            // Check if it's time to increment
+
             if (_timeSinceLastIncrement[uid] >= comp.PointIncrementTime)
             {
                 _timeSinceLastIncrement[uid] = 0f;
@@ -199,6 +209,7 @@ public sealed class CaptureObjectiveSystem : EntitySystem
                     Sawmill.Info($"[CAPTURE OBJ] Completed capture objective {uid} for {comp.CurrentController} after max hold times");
                 }
             }
+            // --- Hoist/Lower timer logic removed ---
         }
     }
 }

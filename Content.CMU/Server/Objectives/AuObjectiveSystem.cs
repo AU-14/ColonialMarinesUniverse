@@ -15,7 +15,7 @@ using Content.Shared.Clothing.Components;
 using Content.Shared.Mobs.Components;
 
 namespace Content.Server.AU14.Objectives;
-
+// should probably consolidate some of these methods and make it 90% less shitcode but I am incredibly lazy and will do it another day - eg
 public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
 {
     [Dependency] private readonly IPlayerManager _playerManager = default!;

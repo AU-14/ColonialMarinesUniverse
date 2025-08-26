@@ -7,7 +7,7 @@ meta:
   time: 08/23/2025 21:45:27
   entityCount: 16791
 maps:
-- 1
+- 2
 grids:
 - 2
 orphans: []
@@ -149,15 +149,12 @@ tilemap:
 entities:
 - proto: ""
   entities:
-  - uid: 1
+  - uid: 2
     components:
-    - type: MetaData
-      name: Map Entity
     - type: Transform
     - type: Map
       mapPaused: True
     - type: GridTree
-    - type: Broadphase
     - type: OccluderTree
     - type: DayNightCycle
       timeEntries:
@@ -186,12 +183,8 @@ entities:
         colorHex: '#02020B'
       - time: 1
         colorHex: '#000000'
-  - uid: 2
-    components:
     - type: MetaData
-      name: grid
-    - type: Transform
-      parent: 1
+      name: stablegarrison
     - type: MapGrid
       chunks:
         0,0:
@@ -10264,8 +10257,7 @@ entities:
         -3,-30: RMCAreaLv522IndoorsABlockAdmin
         -3,-31: RMCAreaLv522IndoorsABlockAdmin
     - type: BecomesStation
-      id: au14garrisonmapthingtemp
-    - type: OccluderTree
+      id: stablegarrison
     - type: SpreaderGrid
     - type: ImplicitRoof
     - type: GridPathfinding
@@ -17425,48 +17417,6 @@ entities:
       parent: 651
     - type: Physics
       canCollide: False
-  - uid: 1211
-    components:
-    - type: Transform
-      parent: 1210
-    - type: Physics
-      canCollide: False
-  - uid: 1212
-    components:
-    - type: Transform
-      parent: 1210
-    - type: Physics
-      canCollide: False
-  - uid: 1213
-    components:
-    - type: Transform
-      parent: 1210
-    - type: Physics
-      canCollide: False
-  - uid: 1214
-    components:
-    - type: Transform
-      parent: 1210
-    - type: Physics
-      canCollide: False
-  - uid: 1215
-    components:
-    - type: Transform
-      parent: 1210
-    - type: Physics
-      canCollide: False
-  - uid: 1216
-    components:
-    - type: Transform
-      parent: 1210
-    - type: Physics
-      canCollide: False
-  - uid: 1217
-    components:
-    - type: Transform
-      parent: 1210
-    - type: Physics
-      canCollide: False
   - uid: 1218
     components:
     - type: Transform
@@ -17554,36 +17504,7 @@ entities:
     - type: Transform
       pos: 258.5,-118.5
       parent: 2
-- proto: CMPaperBin30
-  entities:
-  - uid: 1210
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 64.5,-8.5
-      parent: 2
-    - type: Bin
-      items:
-      - 1211
-      - 1212
-      - 1213
-      - 1214
-      - 1215
-      - 1216
-      - 1217
-    - type: ContainerContainer
-      containers:
-        bin-container: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 1211
-          - 1212
-          - 1213
-          - 1214
-          - 1215
-          - 1216
-          - 1217
+
   - uid: 1233
     components:
     - type: Transform
@@ -77187,11 +77108,6 @@ entities:
     components:
     - type: Transform
       pos: 25.5,3.5
-      parent: 2
-  - uid: 11589
-    components:
-    - type: Transform
-      pos: 25.5,4.5
       parent: 2
   - uid: 11590
     components:
