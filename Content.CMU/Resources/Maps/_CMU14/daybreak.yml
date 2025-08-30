@@ -7945,7 +7945,7 @@ entities:
         60,-14: RMCAreaOCP-583
         60,-13: RMCAreaOCP-583
     - type: BecomesStation
-      id: OCP-583
+      id: Daybreak
     - type: ImplicitRoof
 - proto: AU14ContainerTartarusLeftBlackWY
   entities:
@@ -9143,7 +9143,7 @@ entities:
     - type: Transform
       pos: -4.5,-11.5
       parent: 2
-- proto: CMDropshipDestination
+- proto: dropshipdestshipmarker
   entities:
   - uid: 190
     components:

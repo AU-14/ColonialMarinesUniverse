@@ -14,7 +14,7 @@ public sealed partial class CaptureObjectiveComponent : Component
     [DataField("siege", required: false)]
     public bool Siege { get; private set; } = false;
     // not yet implemented
-    [DataField("onceonly", required: false)]
+    [DataField("", required: false)]
     public bool OnceOnly { get; private set; } = false;
 
     [DataField("maxholdtimes", required: false)]

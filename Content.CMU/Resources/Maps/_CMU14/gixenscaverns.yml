@@ -87,6 +87,8 @@ entities:
     - type: RMCAmbientLightEffects
     - type: SpreaderGrid
     - type: GridPathfinding
+    - type: TacticalMap
+
     - type: Gravity
       gravityShakeSound: !type:SoundPathSpecifier
         path: /Audio/Effects/alert.ogg
@@ -2302,6 +2304,8 @@ entities:
           showEnts: False
           occludes: True
           ents:
+          - 122
+          - 121
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -2317,6 +2321,9 @@ entities:
           showEnts: False
           occludes: True
           ents:
+          - 126
+          - 125
+          - 124
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -2332,6 +2339,7 @@ entities:
           showEnts: False
           occludes: True
           ents:
+          - 128
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -2352,6 +2360,7 @@ entities:
           showEnts: False
           occludes: True
           ents:
+          - 131
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -2387,7 +2396,8 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          paper_label: !type:ContainerSlot
+          - 137
+        paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
           ent: null
@@ -2415,6 +2425,7 @@ entities:
           showEnts: False
           occludes: True
           ents:
+          - 140
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -2430,6 +2441,7 @@ entities:
           showEnts: False
           occludes: True
           ents:
+          - 142
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -2502,9 +2514,23 @@ entities:
           showEnts: False
           occludes: True
           ents:
+          - 149
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
+          ent: null
+- proto: CMCrowbarRed
+  entities:
+  - uid: 121
+    components:
+    - type: MetaData
+      desc: Hey! I think you left this back at Black Mesa!
+      name: particular crowbar
+    - type: Transform
+      parent: 220
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
 - proto: CMDisposalUnit
   entities:
   - uid: 150
@@ -3599,6 +3625,15 @@ entities:
     - type: Transform
       pos: 3.5,66.5
       parent: 2
+- proto: CMStampQM
+  entities:
+  - uid: 131
+    components:
+    - type: Transform
+      parent: 230
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
 - proto: CMTableAlmayer
   entities:
   - uid: 332
@@ -36124,6 +36159,15 @@ entities:
     - type: Transform
       pos: 39.668243,82.64906
       parent: 2
+- proto: GoldOre
+  entities:
+  - uid: 149
+    components:
+    - type: Transform
+      parent: 248
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
 - proto: killteamobjective
   entities:
   - uid: 6365
@@ -39040,6 +39084,21 @@ entities:
     - type: Transform
       pos: 39.219772,227.66728
       parent: 2
+- proto: RMCCLFArmband
+  entities:
+  - uid: 124
+    components:
+    - type: Transform
+      parent: 223
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+  - uid: 6866
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 17.244776,198.19063
+      parent: 2
 - proto: RMCColonyLiberationFrontCup
   entities:
   - uid: 6867
@@ -39455,6 +39514,20 @@ entities:
     - type: Transform
       pos: 43.5,80.5
       parent: 2
+  - uid: 137
+    components:
+    - type: Transform
+      parent: 236
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+  - uid: 142
+    components:
+    - type: Transform
+      parent: 241
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
   - uid: 6936
     components:
     - type: Transform
@@ -39786,6 +39859,15 @@ entities:
       parent: 6981
     - type: Physics
       canCollide: False
+- proto: RMCMagazinePistolD18
+  entities:
+  - uid: 125
+    components:
+    - type: Transform
+      parent: 223
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
 - proto: RMCMarkerSoundAlienRuin
   entities:
   - uid: 6983
@@ -39845,6 +39927,20 @@ entities:
       parent: 2
 - proto: RMCPickaxe
   entities:
+  - uid: 134
+    components:
+    - type: Transform
+      parent: 232
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+  - uid: 140
+    components:
+    - type: Transform
+      parent: 239
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
   - uid: 6994
     components:
     - type: Transform
@@ -43706,6 +43802,20 @@ entities:
     - type: Transform
       pos: 57.14499,68.747475
       parent: 2
+- proto: RMCToolboxElectricalFilled
+  entities:
+  - uid: 128
+    components:
+    - type: Transform
+      parent: 227
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+  - uid: 7623
+    components:
+    - type: Transform
+      pos: 57.429638,236.77853
+      parent: 2
 - proto: RMCToolboxEmergency
   entities:
   - uid: 7624
@@ -44212,6 +44322,28 @@ entities:
           endTime: 30505.1490423
           startTime: 30514.8361518
           length: 0.4
+- proto: RMCWeaponPistolD18
+  entities:
+  - uid: 126
+    components:
+    - type: Transform
+      parent: 223
+    - type: Physics
+      canCollide: False
+    - type: UseDelay
+      delays:
+        RMCWieldDelay:
+          endTime: 41056.7117664
+          startTime: 42721.0906122
+          length: 0.4
+    - type: RMCWeaponAccuracy
+      modifiedAccuracyMultiplier: 0.85
+    - type: InsideEntityStorage
+  - uid: 7701
+    components:
+    - type: Transform
+      pos: 18.0729,198.23428
+      parent: 2
 - proto: RMCWeaponPistolM77Empty
   entities:
   - uid: 7702

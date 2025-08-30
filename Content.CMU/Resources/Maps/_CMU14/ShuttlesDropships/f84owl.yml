@@ -6,7 +6,8 @@ meta:
   forkVersion: ""
   time: 07/30/2025 02:23:01
   entityCount: 31
-maps: []
+maps:
+- 1
 grids:
 - 1
 orphans:
@@ -78,7 +79,7 @@ entities:
         chunkSize: 4
     - type: GasTileOverlay
     - type: RadiationGridResistance
-- proto: CMComputerDropshipNavigation
+- proto: dropshipshuttlevmarker
   entities:
   - uid: 31
     components:

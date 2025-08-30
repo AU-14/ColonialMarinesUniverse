@@ -152,6 +152,8 @@ entities:
   - uid: 2
     components:
     - type: Transform
+    - type: TacticalMap
+
     - type: Map
       mapPaused: True
     - type: GridTree
@@ -10264,6 +10266,8 @@ entities:
     - type: Gravity
       gravityShakeSound: !type:SoundPathSpecifier
         path: /Audio/Effects/alert.ogg
+      inherent: True
+      enabled: True
 - proto: ArmorHelmetPMCCorporateLead
   entities:
   - uid: 3

@@ -99,7 +99,7 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                     {
                         var jobId = entry.Key;
                         var amount = entry.Value;
-                        _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, amount, stationJobs);
+                        _stationJobs.TryAdjustJobSlot(stationUid.Value, jobId.ToString(), amount, true, false, stationJobs);
                     }
                     // Only add to the first matching ship's station
                     break;
@@ -121,7 +121,7 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                         {
                             var jobId = entry.Key;
                             var amount = entry.Value;
-                            _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, amount, stationJobs);
+                            _stationJobs.TryAdjustJobSlot(stationUid.Value, jobId.ToString(), amount, true, false, stationJobs);
                         }
                     }
                 }
@@ -159,7 +159,7 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                         {
                             var jobId = entry.Key;
                             var amount = entry.Value;
-                            _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, amount, stationJobs);
+                            _stationJobs.TryAdjustJobSlot(stationUid.Value, jobId.ToString(), amount, true, false, stationJobs);
                         }
                     }
                 }
