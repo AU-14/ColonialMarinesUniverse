@@ -31,7 +31,8 @@
 - type: radioChannel
   id: MarineMedical
   name: chat-radio-marine-medical
-  keycode: "ň" #m in cm13
+  keycode: "m" #m in cm13
+  radioPrefix: '!'
   frequency: 1482
   color: "#009771"
   longRange: true
@@ -40,7 +41,7 @@
 - type: radioChannel
   id: MarineEngineer
   name: chat-radio-marine-engineer
-  keycode: "ě" #n in cm13
+  keycode: "m" #n in cm13
   frequency: 1483
   color: "#e4860c"
   longRange: true
@@ -147,11 +148,20 @@
   longRange: true
   tower: true
 
-#- type: radioChannel
-#  id: RoyalMarine
-#  name: chat-radio-royal-marine
-#  keycode: "q"
-#  frequency: 1551
-#  color: "#e1580e"
-#  longRange: true
-#  tower: true
+- type: radioChannel
+  id: RoyalMarine
+  name: chat-radio-royal-marine
+  keycode: "q"
+  radioPrefix: '!'
+  frequency: 1551
+  color: "#e1580e"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: Hivemind
+  name: chat-radio-hivemind
+  keycode: "h"
+  frequency: 426
+  color: "#8b36a6"
+  longRange: true
