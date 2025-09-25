@@ -1,0 +1,97 @@
+- type: entity
+  parent:
+  - CMXenoDeveloped
+  - CMXenoFlammable
+  - RMCXenoCommendationReceiver
+  - RMCXenoMobCollision
+  id: AU14Wendigo
+  name: Wendigo
+  description: A large, menacing creature with a skull for head and sharp claws. Terrifying.
+  components:
+  - type: GhostRole
+    name: cm-job-name-xeno-warrior
+  - type: Sprite
+    sprite: _AU14/Mobs/MiscMob/wendigo.rsi
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      1500: Dead
+  - type: Xeno
+    role: CMXenoWarrior
+    actionIds:
+    - ActionXenoWatch
+    - ActionXenoPunch
+    - ActionXenoPounce
+    - ActionXenoHeadbite
+    tier: 3
+    hudOffset: -0.15,0.25
+  - type: XenoRegen
+    standHealingMultiplier: 0.3
+  - type: XenoHeavy
+  - type: XenoPunch
+    damage:
+      types:
+        Blunt: 30
+  - type: XenoLeap
+    plasmaCost: 0
+    delay: 0
+    moveDelayTime: 1.5
+    knockdownTime: 3
+    knockdownRequiresInvisibility: false
+    unrootOnMelee: true
+  - type: XenoPlasma
+    plasma: 0
+    maxPlasma: 0
+    plasmaRegenOnWeeds: 0
+  - type: CMArmor
+    xenoArmor: 25
+    explosionArmor: 40
+  - type: XenoClaws
+    clawType: Sharp
+  - type: MeleeWeapon
+    damage:
+      groups:
+        Brute: 45
+  - type: XenoHeadbite
+    damage:
+      groups:
+        Brute: 60
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3
+    baseSprintSpeed: 4
+  - type: Tackle
+    max: 4
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.6
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 0.6
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 0.4
+      whitelist:
+        components:
+        - XenoHeavy
+  - type: XenoLifesteal
+    prefix: warrior
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: warrior
+  - type: IntelRecoverCorpseObjectiveOnDeath
+    value: 0.2
+  - type: RMCSize
+    size: Big
+
+- type: speechVerb
+  id: AU14WendigoSpeech
+  name: chat-speech-verb-name-default
+  speechVerbStrings:
+  - Growl
