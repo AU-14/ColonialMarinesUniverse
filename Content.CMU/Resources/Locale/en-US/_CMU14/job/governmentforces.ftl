@@ -1,8 +1,5 @@
-au14-department-govforces-description = Forces assigned to support and lead the GOVFOR combat roles.
-au14-department-govforces = Government Forces Auxiliary
-
-au14-departmentcombat-govforces = Government Forces Combat
-au14-department-govforcescombat-description = The combat arm of the Government Forces. Boots on the ground.
+au14-department-govforces-description = Government Forces
+au14-department-govforces = Government Forces
 
 au14-job-supervisors-govforplatco = Company Command
 au14-job-supervisors-govfor = Platoon Commander

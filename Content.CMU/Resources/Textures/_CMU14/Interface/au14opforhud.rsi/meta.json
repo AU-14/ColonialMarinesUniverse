@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13-pve at https://github.com/cmss13-devs/cmss13-pve/blob/279b570b35c7715d45541ad752f57a94eba8f949/icons/mob/hud/marine_hud.dmi and modified by Blackburn and nzzy for use in AU14.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "afn"
+    },
+    {
+      "name": "background"
+    },
+    {
+      "name": "corpsman"
+    },
+    {
+      "name": "dcc"
+    },
+    {
+      "name": "opsofc"
+    },
+    {
+      "name": "platco"
+    },
+    {
+      "name": "platoonsergeant"
+    },
+    {
+      "name": "po"
+    },
+    {
+      "name": "sergeant"
+    },
+    {
+      "name": "rto"
+    },
+    {
+      "name": "rfn"
+    }
+  ]
+}
