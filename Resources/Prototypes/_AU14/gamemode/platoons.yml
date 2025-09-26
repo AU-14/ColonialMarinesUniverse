@@ -236,4 +236,38 @@
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml
   possibleships:
       - Riptide
+
+- type: platoon
+  id: UNISC
+  name: UNISC Peacekeepers
+  VendorToMarker:
+    Rifleman: AU14UNISCequipmentvendor
+    Clothing: AU14UNISCclothingequipmentvendor
+    Weapons: AU14UNISCWeaponsVendor
+    SWeapons: AU14UNISCWeaponsVendor
+    Corpsman: AU14UNISCcorpsmanvendor
+    Arifleman: AU14UNISCclothingequipmentvendor
+    Dcc: AU14UNISCaircrewvendor
+    OperationsOfficer: AU14UNISCcommandequipmentvendor
+    Rto: AU14RTOVendor
+    SectionSergeant: AU14UNISCsectionleaderequipmentvendor
+    Pilot: AU14AircrewWeaponsVendor
+  jobClassOverride:
+    SquadRifleman: AU14JobGOVFORSquadRifleman
+    SectionSergeant: AU14JobGOVFORSectionSergeant
+    PlatoonCorpsman: AU14JobGOVFORPlatoonCorpsman
+    PlatCo: AU14JobGOVFORPlatCo
+    SquadSergeant: AU14JobGOVFORSquadSergeant
+    DSPilot: AU14JobGOVFORDSPilot
+    RadioTelephoneOperator: AU14JobGOVFORRadioTelephoneOperator
+    PlatOp: AU14JobGOVFORPlatOp
+    DCC: AU14JobGOVFORDCC
+  CompatibleDropships:
+  - /Maps/_RMC14/alamo.yml
+  possibleships:
+      - Daybreak
+  compatibleFighters:
+  - /Maps/_AU14/ShuttlesDropships/f84owl.yml
+  - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+
 # Add more platoons as needed

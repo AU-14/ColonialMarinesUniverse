@@ -13,6 +13,19 @@
 
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14USArmyDesertFatigues
+  name: US army 1st cavalry division desert fatigues
+  description: Standard-issue US Army fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/desertfatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14Patch1stCav
+    - AU14PatchUSArmy
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14JungleFatigues
   name: USCM jungle fatigues
   description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.

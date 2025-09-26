@@ -229,3 +229,17 @@
     playerSprite:
       sprite: _AU14/Clothing/Patches/hazops_patch.rsi
       state: patch
+
+- type: entity
+  parent: RMCPatchBase
+  id: AU14UNISCArmband
+  name: UNISC Armband
+  description: A armband bearing the colors of the United Nations Interstellar Settlement Corps.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UNISC/armband.rsi
+    state: icon
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/UNISC/armband.rsi
+      state: patch

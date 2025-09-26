@@ -15,6 +15,7 @@
     platoonsGovfor:
     - LACN
     - USCM
+    - UNISC
     defaultgovfor: USCM
     defaultopfor: UPP
     govforinship: true
@@ -59,8 +60,6 @@
     platoonsOpfor:
     - UPP
     - WEYU
-    - HAZOPS
-
     platoonsGovfor:
     - LACN
     - CCAF
