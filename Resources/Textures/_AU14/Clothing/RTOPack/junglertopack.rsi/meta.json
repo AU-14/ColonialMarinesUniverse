@@ -8,11 +8,20 @@
   },
   "states": [
     {
-      "name": "icon",
+      "name": "ring",
       "delays": [
         [
           0.7,
-          0.5
+          0.7
+        ]
+      ]
+    },
+    {
+      "name": "icon",
+      "delays": [
+        [
+          0.8,
+          0.8
         ]
       ]
     },
@@ -20,22 +29,61 @@
       "name": "ear",
       "delays": [
         [
-          0.7,
-          0.5
-        ]
-      ]
-    },
-    {
-      "name": "ring",
-      "delays": [
-        [
-          0.7,
-          0.5
+          0.75,
+          0.75
         ]
       ]
     },
     {
       "name": "equipped-BACKPACK",
+      "directions": 4,
+      "delays": [
+        [
+          0.8,
+          0.8
+        ],
+        [
+          0.8,
+          0.8
+        ],
+        [
+          0.8,
+          0.8
+        ],
+        [
+          0.8,
+          0.8
+        ]
+      ]
+    },
+    {
+      "name": "ear-equipped-BACKPACK",
+      "directions": 4,
+      "delays": [
+        [
+          0.75,
+          0.75
+        ],
+        [
+          0.75,
+          0.75
+        ],
+        [
+          0.75,
+          0.75
+        ],
+        [
+          0.75,
+          0.75
+        ]
+      ]
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "inhand-left",
       "directions": 4
     }
   ]
