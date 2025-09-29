@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "Taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/1e1023cec5aa04ddfd142f3d7e32de2327bca245/icons/obj/structures/barricades.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "sand_wall",
+      "directions": 4
+    }
+  ]
+}
