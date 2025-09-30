@@ -12,6 +12,8 @@ public sealed partial class AuObjectiveComponent : Component
 {
 
 
+    [DataField("id", required: true)]
+    public string ID { get; private set; } = "";
     public bool Active = false;
 
     [DataField("maxplayers", required: false)]
@@ -76,6 +78,10 @@ public sealed partial class AuObjectiveComponent : Component
 
     [DataField("objectiveweight", required: false)]
     public int ObjectiveWeight { get; private set; } = 1;
+
+    [DataField("rollanyway", required: false)]
+    public bool RollAnyway { get; private set; } = false;
+    // If true, this objective will be eligible for roundstart rolling even if it's a win/final objective.
 
     public enum ObjectiveStatus
     {
