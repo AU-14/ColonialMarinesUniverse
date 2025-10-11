@@ -4,7 +4,7 @@ meta:
   engineVersion: 264.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/11/2025 15:39:40
+  time: 10/11/2025 15:59:53
   entityCount: 112
 maps:
 - 1
@@ -550,6 +550,13 @@ entities:
     - type: Transform
       pos: -2.5,-2.5
       parent: 2
+- proto: CMUOspreyWall19
+  entities:
+  - uid: 36
+    components:
+    - type: Transform
+      pos: -2.5,-1.5
+      parent: 2
 - proto: CMUOspreyWall2
   entities:
   - uid: 13
@@ -629,11 +636,6 @@ entities:
       parent: 2
 - proto: CMUOspreyWall3
   entities:
-  - uid: 36
-    components:
-    - type: Transform
-      pos: 1.5,-5.5
-      parent: 2
   - uid: 41
     components:
     - type: Transform
@@ -834,7 +836,7 @@ entities:
   - uid: 28
     components:
     - type: Transform
-      pos: -2.5,-1.5
+      pos: 1.5,-5.5
       parent: 2
 - proto: dropshipshuttlevmarker
   entities:
