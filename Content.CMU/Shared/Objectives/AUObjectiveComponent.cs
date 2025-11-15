@@ -1,8 +1,10 @@
 using Content.Shared.AU14;
 using Robust.Shared.Prototypes;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
+using Content.Shared.AU14.util;
 using Content.Shared.Roles;
 using Robust.Shared.GameStates;
 
@@ -95,6 +97,13 @@ public sealed partial class AuObjectiveComponent : Component
     public Dictionary<string, ObjectiveStatus> FactionStatuses { get; set; } = new();
 
     public int TimesCompleted = 0;
+
+
+    [DataField("possibleInserts")]
+    public List<AuInsertPrototype> Inserts { get; private set; } = new();
+
+
 }
+
 
 public sealed class ObjectiveActivatedEvent : EntityEventArgs {}
