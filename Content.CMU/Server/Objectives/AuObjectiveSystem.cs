@@ -455,6 +455,8 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                             // End round, other faction wins
                             var otherFaction = objective.Factions.FirstOrDefault(f => f != checkFaction) ?? "Unknown";
                             _gameTicker.EndRound($"{otherFaction.ToUpperInvariant()} wins: {checkFaction} cannot win due to failed objectives.");
+                            _roundEnd.EndRound();
+
                         }
                     }
                 }
@@ -578,6 +580,9 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         if (string.IsNullOrEmpty(message))
             message = $"{faction.ToUpperInvariant()} has won the round!";
         _gameTicker.EndRound(faction.ToUpperInvariant() + " Won the round by: " + message);
+
+        _roundEnd.EndRound();
+
     }
 
     // Checks if a Kill objective is completable: at least one entity is marked for this objective
