@@ -438,7 +438,13 @@ namespace Content.Server.AU14.Round
 
 
         {
-            Logger.Debug($"[AuRoundSystem]  ffddgffgfht threat:");
+            var presetId = _selectedPreset?.ID;
+            var allowedPresets = new[] { "Prometheus", "ColonyFall", "DistressSignal", "Jailbreak" };
+            if (string.IsNullOrEmpty(presetId) || !allowedPresets.Any(p => p.Equals(presetId, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                return;
+            }
+             Logger.Debug($"[AuRoundSystem]  ffddgffgfht threat:");
 
             var platoonSpawnRuleSystem = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
 
