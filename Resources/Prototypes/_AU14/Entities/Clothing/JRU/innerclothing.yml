@@ -1,0 +1,21 @@
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMU14JRUFEMAReliefJumpsuit
+  name: FEMA Jumpsuit
+  description: Rugged waterproof clothes for the hardworking man.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Uniforms/darkblueboilersuit.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories: [ AU14PatchUAFlag, AU14JRUPatch ]
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMU14UACGJRUFatigues
+  name: JRU UACG fatigues
+  description: Standard-issue UACG fatigues used by JRU personnel.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Uniforms/kahkiboilersuit.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories: [ AU14PatchUAFlag, AU14JRUPatch ]
