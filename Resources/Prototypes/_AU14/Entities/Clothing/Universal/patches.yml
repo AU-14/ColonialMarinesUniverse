@@ -162,9 +162,9 @@
 
 - type: entity
   parent: RMCPatchBase
-  id: AU14PatchBrazilUACGPatch
-  name: Brazilian UACG patch
-  description: A patch bearing the logo of brazilian UACG units.
+  id: AU14PatchBrazilarmyPatch
+  name: Brazilian army patch
+  description: A patch bearing the logo of brazilian army units.
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Patches/brazilunit_patch.rsi
@@ -242,4 +242,18 @@
   - type: UniformAccessory
     playerSprite:
       sprite: _AU14/Clothing/UNISC/armband.rsi
+      state: patch
+
+- type: entity
+  parent: RMCPatchBase
+  id: AU14JRUPatch
+  name: JRU Patch
+  description: A patch stamped with "JRU" in plain white. Won't stop the Dollar Flu.
+  components:
+  - type: Sprite
+    sprite: _AU14\Clothing\Patches\jru.rsi
+    state: icon
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14\Clothing\Patches\jru.rsi
       state: patch
