@@ -296,4 +296,30 @@
   - /Maps/_AU14/ShuttlesDropships/f84owl.yml
   - /Maps/_AU14/ShuttlesDropships/ud_6.yml
 
+- type: platoon
+  id: JRU
+  name: Joint Relief Unit
+  VendorToMarker:
+    Rifleman: AU14JRUequipmentvendor
+    Clothing: AU14JRUclothingequipmentvendor
+    Weapons: AU14JRUWeaponsVendor
+    SWeapons: AU14JRUSpecialWeaponsVendor
+    Corpsman: AU14JRUcorpsmanvendor
+    Arifleman: AU14USCMSGequipmentvendor
+    Dcc: AU14USCMaircrewvendor
+    OperationsOfficer: AU14JRUcommandequipmentvendor
+    Rto: AU14RTOVendorJRU
+    SectionSergeant: AU14USCMsectionleaderequipmentvendor
+    Pilot: AU14AircrewWeaponsVendor
+    ExtraVendor1: VMarkerOpforDeco5
+    Deco1: VMarkerOpforDeco5
+  #platoonflag:  uaflag
+  CompatibleDropships:
+  - /Maps/_CMU14/Shuttles/alamo.yml
+  compatibleFighters:
+    - /Maps/_AU14/ShuttlesDropships/f84owl.yml
+    - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+  possibleships:
+      - Daybreak
+
 # Add more platoons as needed
