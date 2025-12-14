@@ -16,6 +16,7 @@
     - LACN
     - USCM
     - UNISC
+    - JRU
     defaultgovfor: USCM
     defaultopfor: UPP
     govforinship: true
@@ -98,6 +99,7 @@
     - USCM
     - CCAF
     - CMBCIU
+    - JRU
     defaultgovfor: USCM
     defaultopfor: UPP
     govforinship: true
