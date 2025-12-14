@@ -1,0 +1,65 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobGOVFORPlatoonCorpsmanJRU
+  name: Relief Worker
+  description: au14-job-description-govforplatooncorpsman
+  setPreference: true
+  playTimeTracker: AU14JobGOVFORPlatoonCorpsmanJRU
+  ranks:
+    AU14RankJRUSeniorReliefWorker:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatoonCorpsmanJRU
+      time: 1200 # 20 hours
+    AU14RankJRUReliefWorker: []
+  startingGear: AU14GearGOVFORPlatoonCorpsmanJRU
+  icon: "AU14JobIconCorpsman"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforCorpsman
+  - AU14GovforSquad
+  overwatchSortPriority: -2
+  overwatchRoleName: Relief Worker
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 1
+        RMCSkillJtac: 1
+        RMCSkillMedical: 2
+        RMCSkillSurgery: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforplatooncorpsman
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearGOVFORPlatoonCorpsmanJRU
+  equipment:
+    id: AU14JobIDCardGOVFORPlatoonCorpsman
+    ears: AU14HeadsetSectionMarine
+    uniform: AU14CivilianSanitationClothes
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORPlatoonCorpsman
+  name: Spawn Point GOVFOR Squad Sergeant
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORPlatoonCorpsman
+  - type: Sprite
+    state: syn_spawn
+

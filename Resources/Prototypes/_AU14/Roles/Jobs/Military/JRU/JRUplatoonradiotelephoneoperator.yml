@@ -1,0 +1,46 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobGOVFORRadioTelephoneOperatorJRU
+  name: Counter-Recrutiment Specialist
+  description: Recruit civilians before the CLF gets to them.
+  setPreference: true
+  playTimeTracker: AU14JobGOVFORRadioTelephoneOperatorJRU
+  ranks:
+    AU14RankJRUSeniorCounterRecSpec:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 1800 # 30 hours
+    AU14RankJRUCounterRecSpec: []
+  startingGear: AU14GearGOVFORRadioTelephoneOperator
+  dummyStartingGear: AU14GearGOVFORRadioTelephoneOperatorDummy
+  icon: "AU14JobIconRTO"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforFTL
+  overwatchSortPriority: -5
+  overwatchRoleName: Counter-Recruitment Specialist
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 2
+        RMCSkillJtac: 3
+        RMCSkillPolice: 3
+    - type: JobPrefix
+      prefix: au14-job-prefix-radiotelephoneoperator
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: MarineOrders
+  hidden: false
