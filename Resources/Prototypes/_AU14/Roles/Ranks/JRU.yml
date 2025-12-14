@@ -1,0 +1,26 @@
+- type: rank
+  id: AU14RankJRUReliefWorker
+  name: Relief Worker
+  prefix: Rlif. Wrkr.
+  paygrade: E1
+
+- type: rank
+  id: AU14RankJRUSeniorReliefWorker
+  name: Senior Relief Worker
+  prefix: Sr. Rlif. Wrkr.
+  paygrade: E2
+
+
+- type: rank
+  id: AU14RankJRUCounterRecSpec
+  name: Counter-Recruitment Specialist
+  prefix: COUN-REC Spec.
+  paygrade: E2
+
+- type: rank
+  id: AU14RankJRUSeniorCounterRecSpec
+  name: Counter-Recruitment Specialist Second Class
+  prefix: Sr. COUN-REC Spec.
+  paygrade: E3
+
+
