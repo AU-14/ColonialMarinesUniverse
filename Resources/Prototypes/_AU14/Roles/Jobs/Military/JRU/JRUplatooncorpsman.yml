@@ -53,13 +53,4 @@
     ears: AU14HeadsetSectionMarine
     uniform: AU14CivilianSanitationClothes
 
-- type: entity
-  parent: CMSpawnPointJobBase
-  id: AU14SpawnPointGOVFORPlatoonCorpsman
-  name: Spawn Point GOVFOR Squad Sergeant
-  components:
-  - type: SpawnPoint
-    job_id: AU14JobGOVFORPlatoonCorpsman
-  - type: Sprite
-    state: syn_spawn
 
