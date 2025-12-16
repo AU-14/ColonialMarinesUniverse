@@ -251,9 +251,9 @@
   description: A patch stamped with "JRU" in plain white. Won't stop the Dollar Flu.
   components:
   - type: Sprite
-    sprite: _AU14\Clothing\Patches\jru.rsi
+    sprite: _AU14/Clothing/Patches/jru.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14\Clothing\Patches\jru.rsi
+      sprite: _AU14/Clothing/Patches/jru.rsi
       state: patch
