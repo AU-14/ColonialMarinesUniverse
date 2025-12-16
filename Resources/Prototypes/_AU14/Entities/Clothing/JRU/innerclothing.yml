@@ -2,7 +2,7 @@
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: CMU14JRUFEMAReliefJumpsuit
   name: FEMA Jumpsuit
-  description: Rugged waterproof clothes for the hardworking man.
+  description: A jumpsuit used by hard-working FEMA responders.
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Civilian/Uniforms/darkblueboilersuit.rsi
@@ -19,3 +19,4 @@
     sprite: _AU14/Clothing/Civilian/Uniforms/kahkiboilersuit.rsi
   - type: UniformAccessoryHolder
     startingAccessories: [ AU14PatchUAFlag, AU14JRUPatch ]
+
