@@ -162,7 +162,7 @@
 
 - type: entity
   parent: RMCPatchBase
-  id: AU14PatchBrazilarmyPatch
+  id: AU14PatchBrazilUACGPatch
   name: Brazilian army patch
   description: A patch bearing the logo of brazilian army units.
   components:
