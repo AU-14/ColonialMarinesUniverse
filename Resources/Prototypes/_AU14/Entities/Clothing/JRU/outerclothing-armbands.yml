@@ -5,7 +5,7 @@
   description: A specialized reflective vest stuffed with armor plating and geared with extra webbing issued to JRU personnel. Very stealthy.
   components:
   - type: Sprite
-    sprite: _AU14\Clothing\JRU\armoredreflective.rsi
+    sprite: _AU14/Clothing/JRU/armoredreflective.rsi
   - type: CMArmor
     bullet: 18
     bio: 25
@@ -102,4 +102,5 @@
   - type: JobTitleChanger
     jobTitle: JRU Recruit
     override: true
+
 
