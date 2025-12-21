@@ -309,7 +309,7 @@
     Dcc: AU14USCMaircrewvendor
     OperationsOfficer: AU14JRUcommandequipmentvendor
     Rto: AU14RTOVendorJRU
-    SectionSergeant: AU14USCMsectionleaderequipmentvendor
+    SectionSergeant: AU14JRUsectionleaderequipmentvendor
     Pilot: AU14AircrewWeaponsVendor
     ExtraVendor1: VMarkerOpforDeco5
     Deco1: VMarkerOpforDeco5
