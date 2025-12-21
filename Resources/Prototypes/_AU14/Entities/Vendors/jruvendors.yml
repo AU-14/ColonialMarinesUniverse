@@ -588,17 +588,15 @@
     - name: Riot Gear
       entries:
       - id: RMCWeaponLauncherM81
-        amount: 4
+        amount: 1
       - id: RMCGrenadeFlashBang
-        amount: 15
+        amount: 3
       - id: RMCWeaponShotgunHG3712
         amount: 2
       - id: RMCBoxShotgunBeanbag
-        amount: 6
-      - id: CMStunBaton
-        amount: 15
-    - name: M4RA battle rifle
-      entries:
+        amount: 4
+    - name: M4SPR Battle Rifle
+       entries:
       - id: WeaponRifleM4SPR
         amount: 1
       - id: RMCAttachmentB8SmartScope
@@ -617,4 +615,5 @@
         amount: 6
       - id: RMCBoxShotgunFlechette
         amount: 6
+
 
