@@ -140,3 +140,14 @@
     sprite: _AU14/Clothing/USASFSecurityForces/USASFPilot/helmet.rsi
   - type: Clothing
     sprite: _AU14/Clothing/USASFSecurityForces/USASFPilot/helmet.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14UACGM10Helmet
+  name: UACG Combat Helmet
+  description: M10 helmet used by the UACG. It has an inbuilt camera allowing for command staff to observe the squad's actions.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/JungleHats/m10helmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/JungleHats/m10helmet.rsi
