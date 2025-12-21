@@ -1,0 +1,24 @@
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitJRURecruitkit
+  name: JRU Recruit kit
+  components:
+  - type: Item
+    size: Medium
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,0
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+    - id: RMCBootsSPPFilled
+    - id: CMU14ArmbandJRU
+    - id: CMWebbingBrown
+    - id: RMCWeaponPistolM13
+    - id: RMCMagazinePistolM13
+    - id: RMCMagazinePistolM13
+    - id: AU14EncryptionKeyGOVFOR
