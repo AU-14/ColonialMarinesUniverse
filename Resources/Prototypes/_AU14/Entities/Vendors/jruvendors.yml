@@ -595,8 +595,8 @@
         amount: 2
       - id: RMCBoxShotgunBeanbag
         amount: 4
-    - name: M4SPR Battle Rifle
-       entries:
+    - name: M4RA battle rifle
+      entries:
       - id: WeaponRifleM4SPR
         amount: 1
       - id: RMCAttachmentB8SmartScope
@@ -615,5 +615,6 @@
         amount: 6
       - id: RMCBoxShotgunFlechette
         amount: 6
+
 
 
