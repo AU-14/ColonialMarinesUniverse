@@ -131,8 +131,8 @@
         amount: 1
       - id: RMCPouchTools
         amount: 15
-#      - id: Sling Pouch
-#        amount: 1
+#     - id: Sling Pouch
+#       amount: 1
     - name: Mask
       entries:
       - id: CMMaskGas
@@ -459,7 +459,7 @@
 
 - type: entity
   parent: ColMarTechBase
-  id: AU14USCMsectionleaderequipmentvendor
+  id: AU14JRUsectionleaderequipmentvendor
   name: JRU section leader vendor
   description: An automated rack hooked up to a small storage of apparel and equipment for the section leader.
   components:
@@ -471,7 +471,7 @@
     sections:
     - name: Helmets and Hats
       entries:
-      - id: AU14DesertM11Helmet
+      - id: AU14JungleM11Helmet
         amount: 1
       - id: RMCHeadBeretSquad
         amount: 1
@@ -617,3 +617,4 @@
         amount: 6
       - id: RMCBoxShotgunFlechette
         amount: 6
+
