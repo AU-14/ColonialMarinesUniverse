@@ -82,7 +82,7 @@
 - type: entity
   parent: CMBaseMagazinePistol
   id: CMMagazinePistolM1984
-  name: M1984 magazine (9mm)
+  name: M4A3 magazine (9mm)
   components:
   - type: Tag
     tags:
