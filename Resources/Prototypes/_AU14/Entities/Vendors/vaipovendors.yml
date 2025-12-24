@@ -765,8 +765,8 @@
 
 - type: entity
   parent: ColMarTechBase
-  id: AU14prodigySpecialWeaponsVendor
-  name: vanguard arriw special weapons rack
+  id: AU14VAIPOSpecialWeaponsVendor
+  name: vanguard arrow special weapons rack
   description: An automated rack hooked up to a small storage of special weapons.
   components:
   - type: AccessReader

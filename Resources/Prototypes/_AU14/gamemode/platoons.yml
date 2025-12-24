@@ -199,17 +199,17 @@
   id: VAIPO
   name: VAI Primary Operations
   VendorToMarker:
-    Rifleman: AU14vaipoequipmentvendor
-    Clothing: AU14vaipoclothingequipmentvendor
-    Weapons: AU14vaipoWeaponsVendor
-    SWeapons: AU14vaipoSpecialWeaponsVendor
-    Corpsman: AU14vaipocorpsmanvendor
-    Arifleman: AU14vaipoSGequipmentvendor
-    Dcc: AU14vaipoaircrewvendor
-    OperationsOfficer: AU14vaipocommandequipmentvendor
-    Rto: AU14vaipoRTOVendor
-    SectionSergeant: AU14vaiposectionleaderequipmentvendor
-    Pilot: AU14vaipoAircrewWeaponsVendor
+    Rifleman: AU14VAIPOequipmentvendor
+    Clothing: AU14VAIPOclothingequipmentvendor
+    Weapons: AU14VAIPOWeaponsVendor
+    SWeapons: AU14VAIPOSpecialWeaponsVendor
+    Corpsman: AU14VAIPOcorpsmanvendor
+    Arifleman: AU14VAIPOSGequipmentvendor
+    Dcc: AU14VAIPOaircrewvendor
+    OperationsOfficer: AU14VAIPOcommandequipmentvendor
+    Rto: AU14VAIPORTOVendor
+    SectionSergeant: AU14VAIPOsectionleaderequipmentvendor
+    Pilot: AU14VAIPOAircrewWeaponsVendor
     ExtraVendor1: VMarkerOpforDeco5
     Deco1: VMarkerOpforDeco5
   #platoonflag:  uaflag
