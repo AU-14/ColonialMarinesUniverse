@@ -1,7 +1,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14VAIPOclothingequipmentvendor
-  name: vanguard arrow apparel vendor
+  name: VAIPO apparel vendor
   description: An automated rack hooked up to a small storage of standard mercenary apparel.
   components:
   - type: AccessReader
@@ -187,7 +187,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14VAIPOequipmentvendor
-  name: vanguard arrow equipment vendor
+  name: VAIPO equipment vendor
   description: An automated rack hooked up to a small storage of standard mercenary equipment.
   components:
   - type: AccessReader
@@ -280,8 +280,8 @@
 #corpsman
 - type: entity
   parent: ColMarTechBase
-  id: AU14prodigycorpsmanvendor
-  name: vanguard arrow medical vendor
+  id: AU14VAIPOcorpsmanvendor
+  name: VAIPO medical vendor
   description: An automated rack hooked up to a small storage of medical supplies.
   components:
   - type: AccessReader
@@ -383,7 +383,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14VAIPOaircrewvendor
-  name: vanguard arrow aircrew vendor
+  name: VAIPO aircrew vendor
   description: An automated rack hooked up to a small storage of aircrew apparel and equipment.
   components:
   - type: AccessReader
@@ -593,7 +593,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14VAIPOcommandequipmentvendor
-  name: vanguard arrow command vendor
+  name: VAIPO command vendor
   description: An automated rack hooked up to a small storage of command apparel and equipment.
   components:
   - type: AccessReader
@@ -618,7 +618,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14VAIPOSGequipmentvendor
-  name: vanguard arrow automatic rifleman equipment vendor
+  name: VAIPO automatic rifleman equipment vendor
   description: An automated rack hooked up to a small storage of an automatic rifleman equipment.
   components:
   - type: AccessReader
@@ -646,7 +646,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14VAIPOsectionleaderequipmentvendor
-  name: vanguard arrow section leader vendor
+  name: VAIPO section leader vendor
   description: An automated rack hooked up to a small storage of apparel and equipment for the section leader.
   components:
   - type: AccessReader
@@ -667,7 +667,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14VAIPOWeaponsVendor
-  name: vanguard arrow weapons rack
+  name: VAIPO weapons rack
   description: An automated rack hooked up to a small storage of weapons.
   components:
   - type: AccessReader
@@ -765,7 +765,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14VAIPOSpecialWeaponsVendor
-  name: vanguard arrow special weapons rack
+  name: VAIPO special weapons rack
   description: An automated rack hooked up to a small storage of special weapons.
   components:
   - type: AccessReader
