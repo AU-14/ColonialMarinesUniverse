@@ -16,7 +16,7 @@
   - type: GhostRole
     name: cm-job-name-xeno-sentinel
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Sentinel/sentinel.rsi
+    sprite: _CMU14/Mobs/Xenos/Sentinel/sentinel.rsi # CMU14-Edit
   - type: MobState
     allowedStates:
     - Alive

@@ -375,7 +375,7 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                     var navMarkers = FindMarkersOnGrid(grid, "dropshipshuttlevmarker");
                     if (navMarkers.Count > 0)
                     {
-                        var navProto = faction == "govfor" ? "CMComputerDropshipNavigation" : "CMComputerDropshipNavigationOpfor";
+                        var navProto = faction == "govfor" ? "CMComputerDropshipNavigationGovfor" : "CMComputerDropshipNavigationOpfor";
                         foreach (var navMarkerUid in navMarkers)
                         {
                             SpawnWeaponsConsole(navProto, navMarkerUid, faction, DropshipDestinationComponent.DestinationType.Dropship);
@@ -430,7 +430,7 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                     var fighterMarkers = FindMarkersOnGrid(grid, "dropshipfighterdestmarker");
                     if (fighterMarkers.Count > 0)
                     {
-                        var proto = faction == "govfor" ? "CMComputerDropshipNavigation" : "CMComputerDropshipNavigationOpfor";
+                        var proto = faction == "govfor" ? "CMComputerDropshipNavigationGovfor" : "CMComputerDropshipNavigationOpfor";
                         foreach (var markerUid in fighterMarkers)
                         {
                             SpawnWeaponsConsole(proto, markerUid, faction, DropshipDestinationComponent.DestinationType.Figher);

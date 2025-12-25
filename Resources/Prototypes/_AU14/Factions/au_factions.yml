@@ -52,3 +52,10 @@
   - CLF
   - GOVFOR
   - AUGoo
+
+
+- type: npcFaction
+  id: THREAT
+  hostile:
+   - GOVFOR
+

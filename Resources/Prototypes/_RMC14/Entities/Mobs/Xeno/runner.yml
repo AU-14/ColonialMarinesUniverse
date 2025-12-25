@@ -14,7 +14,7 @@
   - type: GhostRole
     name: cm-job-name-xeno-runner
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Runner/runner.rsi
+    sprite: _RMC14/Mobs/Xenonids/Runner/runner.rsi # TODO CMU14: Replace sprite
   - type: Eye
     pvsScale: 1.5
   - type: MobState
@@ -162,7 +162,7 @@
   suffix: Acider
   components:
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Runner/acider_runner.rsi
+    sprite: _RMC14/Mobs/Xenonids/Runner/acider_runner.rsi # TODO CMU14: Replace sprite
     layers:
     - map: [ "enum.XenoVisualLayers.Base", "enum.ForTheHiveVisualLayers.Base" ]
       state: alive
@@ -233,8 +233,8 @@
           Heat: 1
       duration: 20
   - type: ForTheHive
-    baseSprite: _RMC14/Mobs/Xenonids/Runner/acider_runner.rsi
-    activeSprite: _RMC14/Mobs/Xenonids/Runner/acider_runner_primed.rsi
+    baseSprite: _RMC14/Mobs/Xenonids/Runner/acider_runner.rsi # TODO CMU14: Replace sprite
+    activeSprite: _RMC14/Mobs/Xenonids/Runner/acider_runner_primed.rsi # TODO CMU14: Replace sprite
     baseDamage:
       types:
         Heat: 1

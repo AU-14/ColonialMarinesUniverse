@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.Administration.Managers;
 using Content.Server.Antag;
+using Content.Server.AU14.Round;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server.Station.Components;
 using Content.Server.Station.Events;
@@ -20,6 +21,7 @@ public sealed partial class StationJobsSystem
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IBanManager _banManager = default!;
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
+    [Dependency] private readonly AuJobSelectionSystem _auJobSelectionSystem = default!;
 
     private Dictionary<int, HashSet<string>> _jobsByWeight = default!;
     private List<int> _orderedWeights = default!;
@@ -68,6 +70,41 @@ public sealed partial class StationJobsSystem
 
         // Player <-> (job, station)
         var assigned = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>(profiles.Count);
+
+        // --- AU14: Assign forced jobs first ---
+        var forcedAssignments = _auJobSelectionSystem.ForcedJobAssignments;
+        var forcedToRemove = new List<NetUserId>();
+        foreach (var (player, jobId) in forcedAssignments)
+        {
+            if (!profiles.ContainsKey(player))
+                continue;
+            // Find a station with the job available
+            EntityUid? assignedStation = null;
+            ProtoId<JobPrototype>? protoJob = null;
+            foreach (var station in stations)
+            {
+                var jobs = useRoundStartJobs ? GetRoundStartJobs(station) : GetJobs(station);
+                if (jobs.ContainsKey(jobId) && (jobs[jobId] == null || jobs[jobId] > 0))
+                {
+                    assignedStation = station;
+                    protoJob = new ProtoId<JobPrototype>(jobId);
+                    break;
+                }
+            }
+            // If not found, just assign to first station (fallback)
+            if (assignedStation == null && stations.Count > 0)
+            {
+                assignedStation = stations[0];
+                protoJob = new ProtoId<JobPrototype>(jobId);
+            }
+            assigned[player] = (protoJob, assignedStation ?? EntityUid.Invalid);
+            forcedToRemove.Add(player);
+        }
+        // Remove forced players from profiles so they are not assigned again
+        foreach (var player in forcedToRemove)
+        {
+            profiles.Remove(player);
+        }
 
         // The jobs left on the stations. This collection is modified as jobs are assigned to track what's available.
         var stationJobs = new Dictionary<EntityUid, Dictionary<ProtoId<JobPrototype>, int?>>();

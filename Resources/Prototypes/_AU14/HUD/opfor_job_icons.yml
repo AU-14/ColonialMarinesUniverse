@@ -1,0 +1,69 @@
+﻿- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORAFN
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: afn
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORCorpsman
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: corpsman
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORDCC
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: dcc
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFOROpsOfc
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: opsofc
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORPlatCo
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: platco
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORPlatoonSarge
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: platoonsergeant
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORPilotOfficer
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: po
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORRFN
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: rfn
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORSarge
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: sergeant
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORRTO
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: rto

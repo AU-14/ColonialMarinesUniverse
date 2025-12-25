@@ -1,0 +1,12 @@
+- type: threat
+  id: wendigoThreat
+  winconditions:
+  - KillAllGovforRule
+  roundstartspawns: wendigoParty
+
+- type: partySpawn
+  id: wendigoParty
+  leadersToSpawn:
+    AU14Wendigo: 1
+  scalewithpop: false
+  spawnTogether: true

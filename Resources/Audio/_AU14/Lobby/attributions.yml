@@ -1,29 +1,34 @@
-- files: ["dawsons_christan.ogg"]
+- files: ["AliensTitle.ogg"]
   license: "Custom"
-  copyright: "Dawsons Christan by Vic Tyler"
-  source: "https://youtu.be/GS0NUtRpyPA?si=uoFmtpcyDH4bO9Yn"
+  copyright: "James Horner - Aliens Soundtrack"
+  source: "Aliens Track 01 - Main Title"
 
-- files: ["fire_in_the_sky.ogg"]
+- files: ["DarkDiscovery.ogg"]
   license: "Custom"
-  copyright: "Fire in the Sky by Kristoph Klover"
-  source: "https://youtu.be/KJA6QW1kFjo?si=7DKe188c8IvN3L0a"
+  copyright: "James Horner - Aliens Soundtrack"
+  source: "Aliens Track 03 - Dark Discovery"
 
-- files: ["sam_jones.ogg"]
+- files: ["LV426.ogg"]
   license: "Custom"
-  copyright: "Sam Jones by Carmen Miranda"
-  source: "https://youtu.be/TyxFnPMHJ6s?si=37m57tYnj_yWDTJS"
+  copyright: "James Horner - Aliens Soundtrack"
+  source: "Aliens Track 04 - LV426"
 
-- files: ["bomber.ogg"]
+- files: ["AlienMainTitle.ogg"]
   license: "Custom"
-  copyright: "Bomber by Vic Tyler"
-  source: "https://youtu.be/EEVvQx9H3B4?si=KokuuVuVuISMdl4r"
-  
-- files: ["the_day_it_fell_apart.ogg"]
-  license: "Custom"
-  copyright: "The Day it Fell Apart by Leslie Fish"
-  source: "https://youtu.be/4aYVbt5ZwTc?si=xnXxiDqU17vPisft"
+  copyright: "Jerry Goldsmith - Alien Soundtrack"
+  source: "Alien Track 01 - Main Title"
 
-- files: ["mazianni.ogg"]
+- files: ["HyperSleep.ogg"]
   license: "Custom"
-  copyright: "Finity's End 05 - Mazianni"
-  source: "https://youtu.be/S3LV3-hb4vI?si=9o7ZcmlxfrQuLljt"
+  copyright: "Jerry Goldsmith - Aliens Soundtrack"
+  source: "Alien Track 02 - Hyper Sleep"
+
+- files: ["TheSurvivorIsAWoman.ogg"]
+  license: "Custom"
+  copyright: "Elliot Goldenthal - Aliens Soundtrack"
+  source: "Alien 3 Track 04 - The Survivor is a Woman"
+
+- files: ["Morgue.ogg"]
+  license: "Custom"
+  copyright: "Elliot Goldenthal - Aliens Soundtrack"
+  source: "Alien 3 Track 08 - Morgue"

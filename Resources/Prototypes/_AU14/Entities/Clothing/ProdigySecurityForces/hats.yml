@@ -1,0 +1,21 @@
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14ProdigyCap
+  name: Prodigy Security Forces Cap
+  description: A simple patrol cap with the logo of the Prodigy Corporation on the front.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/ProdigySecurityForces/cap.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/ProdigySecurityForces/cap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14ProdigyBeret
+  name: Prodigy Security Forces Beret
+  description: A beret used by command members of the Prodigy Corporation.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/ProdigySecurityForces/beret.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/ProdigySecurityForces/beret.rsi

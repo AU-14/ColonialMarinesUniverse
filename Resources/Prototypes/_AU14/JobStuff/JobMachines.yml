@@ -29,7 +29,7 @@
   description: A place to submit  resources for shipping.
   components:
   - type: Sprite
-    sprite: Structures/Machines/ore_processor.rsi
+    sprite: _AU14/Structures/colony_processor.rsi
     layers:
     - state: icon
       map: ["enum.LatheVisualLayers.IsRunning"]

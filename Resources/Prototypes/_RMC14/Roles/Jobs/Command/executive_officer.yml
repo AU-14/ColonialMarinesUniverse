@@ -4,6 +4,7 @@
   name: cm-job-name-executive-officer
   description: cm-job-description-executive-officer
   playTimeTracker: CMJobExecutiveOfficer
+  setPreference: false
   requirements: []
   ranks:
     RMCRankCaptain: []

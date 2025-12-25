@@ -129,3 +129,8 @@ au14-job-name-civiliancwpsranger = CWPS Ranger
 au14-job-description-civiliancwpsranger = You're a Ranger with the Colonial Wilderness Preservation Service. Enforce colony law, protect the ecosystem and keep the locals in check. No poaching, no dumping and no overfishing will happen on your watch. (Available on LV-112)
 au14-job-prefix-civiliancwpsranger = CWPSRNGR
 AU14JobCivilianCWPSRanger = CWPS Ranger
+
+au14-job-name-civiliannspaConstable = NSPA Constable
+au14-job-description-civiliannspaConstable = You're a constable of the Neroid Sector Policing Authority. Provide the colony with rule of law and execute arrests and warrants. (Role avalible on LV-759)
+au14-job-prefix-civiliannspaConstable = NSPACNTSBLE
+AU14JobCiviliannspaConstable = NSPA Constable

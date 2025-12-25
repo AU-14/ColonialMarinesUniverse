@@ -4,6 +4,7 @@
   name: cm-job-name-staff-officer
   description: cm-job-description-staff-officer
   playTimeTracker: CMJobStaffOfficer
+  setPreference: false
   requirements: []
   ranks:
     RMCRankFirstLT:

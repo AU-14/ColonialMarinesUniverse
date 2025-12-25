@@ -1,0 +1,47 @@
+- type: entity
+  parent: BaseItem
+  id: AU14ObjectiveItemPortableRadioTransceiver
+  name: "AN/PRC-982 portable radio transceiver box"
+  description: A gray radio box that is used to receive long-range communications. It also records all radio traffic it receives.
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite:  _AU14/Items/objectiveprops.rsi
+    state: objective1
+
+- type: entity
+  parent: BaseItem
+  id: AU14ObjectiveItemBlackboxRecorder
+  name: "CIR-60 'blackbox' colony information recorder"
+  description: A small red box that records colony announcements, colonist flatlines and other key readouts. Usually refered to the black box, although this one comes in bloody red.
+  components:
+  - type: Item
+    size: Normal
+  - type: Sprite
+    sprite:  _AU14/Items/objectiveprops.rsi
+    state: objective2
+
+- type: entity
+  parent: BaseItem
+  id: AU14ObjectiveItemAtmosphericRadarStorageUnit
+  name: "ARCS-9 atmospheric radar data storage unit"
+  description: A black data box that is used to store information from atmospheric radar arrays.
+  components:
+  - type: Item
+    size: Large
+  - type: Sprite
+    sprite:  _AU14/Items/objectiveprops.rsi
+    state: objective3
+
+- type: entity
+  parent: BaseItem
+  id: AU14ObjectiveItemWYLaptop
+  name: Weyland-Yutani bioweapons division laptop
+  description: A portable computer containing research data from Weyland-Yutani's Bioweapons Division.
+  components:
+  - type: Item
+    size: Normal
+  - type: Sprite
+    sprite:  _AU14/Items/laptop.rsi
+    state: laptop_off_objective

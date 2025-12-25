@@ -1,0 +1,14 @@
+- type: gameMap
+  id: USSBush
+  mapName: USSBush
+  mapPath: /Maps/_AU14/USSBush.yml
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    Daybreak:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'USSBush'

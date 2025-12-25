@@ -14,7 +14,26 @@
     raffle:
       settings: short
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/LesserDrone/lesser_drone.rsi
+    sprite: _CMU14/Mobs/Xenos/LesserDrone/lesser_drone.rsi # CMU14-Edit Start
+    layers:
+    - map: [ "enum.XenoVisualLayers.Base" ]
+      state: alive
+    - map: [ "enum.XenoInhandVisualLayers.Left" ]
+      visible: false
+    - map: [ "enum.XenoInhandVisualLayers.Right" ]
+      visible: false
+    - map: [ "focused" ]
+      sprite: _RMC14/Interface/xeno_hud.rsi
+      state: hudeye
+      visible: false
+    - map: [ "targetedDirection" ]
+      sprite: _RMC14/Effects/targeted.rsi
+      state: sniper_lockon_direction
+      visible: false
+    - map: [ "targetedDirectionIntense" ]
+      sprite: _RMC14/Effects/targeted.rsi
+      state: sniper_lockon_intense_direction
+      visible: false  # CMU14-Edit End
   - type: MobState
     allowedStates:
     - Alive

@@ -841,3 +841,18 @@
   - FoodHealthyRMC
   - RMCLoadoutGroupPins
   - SmokablesRMC
+
+- type: roleLoadout
+  id: AU14JobCiviliannspaConstable
+  points: 7
+  groups:
+  - EyewearRMC
+  - MasksRMC
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksRMC
+  - FoodSweetsRMC
+  - FoodPackagedRMC
+  - FoodHealthyRMC
+  - RMCLoadoutGroupPins
+  - SmokablesRMC

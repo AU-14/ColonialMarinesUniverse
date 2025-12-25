@@ -15,7 +15,7 @@
     raffle:
       settings: parasiteTimeRequirement
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Parasite/parasite.rsi
+    sprite: _RMC14/Mobs/Xenonids/Parasite/parasite.rsi # TODO CMU14: Replace sprite
   - type: MobState
     allowedStates:
     - Alive

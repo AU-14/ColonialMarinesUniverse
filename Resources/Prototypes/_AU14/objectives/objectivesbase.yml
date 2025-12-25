@@ -19,6 +19,18 @@
 
 
 
+- type: entity
+  name: Objective Master
+  parent: MarkerBase
+  id: ObjectiveMasterBaseDistress
+  components:
+  - type: Sprite
+    state: red
+  - type: ObjectiveMaster
+    Mode: DistressSignal
+    govforMinorObjectives: 10
+    govforMajorObjectives: 5
+    requiredwinpointsgovfor: 30
 
 
 

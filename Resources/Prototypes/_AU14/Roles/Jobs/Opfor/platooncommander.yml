@@ -14,7 +14,7 @@
     RMCRankFirstLT: []
   startingGear: AU14GearopforPlatCo
   dummyStartingGear: AU14GearopforPlatCoDummy
-  icon: "AU14JobIconPlatCo"
+  icon: "AU14JobIconOPFORPlatCo"
   requireAdminNotify: true
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-opforplatco

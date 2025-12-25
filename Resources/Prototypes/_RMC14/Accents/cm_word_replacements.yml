@@ -15,6 +15,13 @@
     cm-chatsan-word-deltoids: cm-chatsan-replacement-deltoids
     cm-chatsan-word-xenoid: cm-chatsan-replacement-xenoid
     cm-chatsan-word-xenoids: cm-chatsan-replacement-xenoids
+    cm-chatsan-word-unmc: cm-chatsan-replacement-unmc
+    cm-chatsan-word-spp: cm-chatsan-replacement-spp
+    cm-chatsan-word-weya: cm-chatsan-replacement-weya
+    cm-chatsan-word-unmcfull: cm-chatsan-replacement-unmcfull
+    cm-chatsan-word-sppfull: cm-chatsan-replacement-sppfull
+    cm-chatsan-word-weyafull: cm-chatsan-replacement-weyafull
+    cm-chatsan-word-weyafullhyphenated: cm-chatsan-replacement-weyafullhyphenated
 
 - type: accent
   id: CMChatSanitizeMarine
@@ -257,4 +264,3 @@
     cm-chatsan-word-folder: cm-chatsan-replacement-folder
     cm-chatsan-word-papers: cm-chatsan-replacement-papers
     cm-chatsan-word-folders: cm-chatsan-replacement-folders
-

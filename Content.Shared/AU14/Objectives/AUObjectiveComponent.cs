@@ -1,8 +1,10 @@
 using Content.Shared.AU14;
 using Robust.Shared.Prototypes;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
+using Content.Shared.AU14.util;
 using Content.Shared.Roles;
 using Robust.Shared.GameStates;
 
@@ -12,6 +14,8 @@ public sealed partial class AuObjectiveComponent : Component
 {
 
 
+    [DataField("id", required: true)]
+    public string ID { get; private set; } = "";
     public bool Active = false;
 
     [DataField("maxplayers", required: false)]
@@ -77,6 +81,10 @@ public sealed partial class AuObjectiveComponent : Component
     [DataField("objectiveweight", required: false)]
     public int ObjectiveWeight { get; private set; } = 1;
 
+    [DataField("rollanyway", required: false)]
+    public bool RollAnyway { get; private set; } = false;
+    // If true, this objective will be eligible for roundstart rolling even if it's a win/final objective.
+
     public enum ObjectiveStatus
     {
         Incomplete,
@@ -89,6 +97,13 @@ public sealed partial class AuObjectiveComponent : Component
     public Dictionary<string, ObjectiveStatus> FactionStatuses { get; set; } = new();
 
     public int TimesCompleted = 0;
+
+
+    [DataField("possibleInserts")]
+    public List<AuInsertPrototype> Inserts { get; private set; } = new();
+
+
 }
+
 
 public sealed class ObjectiveActivatedEvent : EntityEventArgs {}

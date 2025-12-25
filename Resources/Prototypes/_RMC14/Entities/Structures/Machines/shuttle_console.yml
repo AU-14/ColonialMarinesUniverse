@@ -249,3 +249,60 @@
   - type: DropshipHijackDestination
   - type: FTLSmashImmune
   - type: NoFTL
+
+
+- type: entity
+  parent: MarkerBase
+  id: CMDropshipDestinationThirdPartyWhitelist
+  name: dropship destination (third party)
+  description: Defines a valid location for third party dropships to FTL to when piloted.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: green
+  - type: FTLBeacon
+  - type: DropshipDestination
+    FactionControlling: thirdparty
+  - type: FTLSmashImmune
+  - type: NoFTL
+
+
+- type: entity
+  parent: MarkerBase
+  id: CMDropshipDestinationGovforWhitelist
+  name: dropship destination (govfor)
+  description: Defines a valid location for third party dropships to FTL to when piloted.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: green
+  - type: FTLBeacon
+  - type: DropshipDestination
+    FactionControlling: govfor
+  - type: FTLSmashImmune
+  - type: NoFTL
+
+- type: entity
+  parent: CMComputerDropshipNavigation
+  id: CMComputerDropshipNavigationGovfor
+  name: dropship navigation computer (govfor)
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
+  - type: WhitelistedShuttle
+    faction: govfor
+    ShuttleType: Dropship
+
+
+- type: entity
+  parent: CMComputerDropshipNavigation
+  id: CMComputerDropshipNavigationThirdParty
+  name: dropship navigation computer (Third Party)
+  components:
+  - type: WhitelistedShuttle
+    faction: govfor
+    ShuttleType: Dropship
+
+

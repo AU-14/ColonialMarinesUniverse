@@ -1,10 +1,10 @@
-- type: trait
-  id: Snoring
-  name: trait-snoring-name
-  description: trait-snoring-desc
-  category: Quirks
-  components:
-  - type: Snoring
+#- type: trait
+#  id: Snoring
+#  name: trait-snoring-name
+#  description: trait-snoring-desc
+#  category: Quirks
+#  components:
+#  - type: Snoring
 
 - type: trait
   id: LightweightDrunk
@@ -16,23 +16,20 @@
     boozeStrengthMultiplier: 2
 
 - type: trait
-  id: SocialAnxiety
-  name: trait-socialanxiety-name
-  description: trait-socialanxiety-desc
-  category: SpeechTraits
-  cost: 2
+  id: NonResuscitable
+  name: au14-trait-unrevivable-name
+  description: au14-trait-unrevivable-desc
+  category: Disabilities
   components:
-  - type: StutteringAccent
-    matchRandomProb: 0.1
-    fourRandomProb: 0
-    threeRandomProb: 0
-    cutRandomProb: 0
+    - type: Unrevivable
+      cloneable: true
 
 - type: trait
-  id: FrontalLisp
-  name: trait-frontal-lisp-name
-  description: trait-frontal-lisp-desc
-  category: SpeechTraits
-  cost: 2
+  id: Epilepsy
+  name: au14-trait-epilepsy-name
+  description: au14-trait-epilepsy-desc
+  category: Disabilities
   components:
-  - type: FrontalLisp
+    - type: Narcolepsy
+      timeBetweenIncidents: 3600, 4600
+      durationOfIncident: 3, 9

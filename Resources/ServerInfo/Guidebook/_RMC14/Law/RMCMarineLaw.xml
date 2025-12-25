@@ -1,18 +1,17 @@
 ﻿<Document>
   # UCMJ Law
 
-  UCMJ and SOP applies to all GOVFOR personnel as well as those aboard a GOVFOR vessel or base.
+  UCMJ and SOP applies to all GOVFOR and OPFOR personnel as well as those aboard a GOVFOR/OPFOR vessel or base.
 
   ## Basics
 
-  - Command and [color=#ff000d][bold]MP[/bold][/color] are required to both enforce the law and abide by it, where allowed by their position on the ship.
-  - [color=#ff000d][bold]MP[/bold][/color] may, at their discretion, ignore Minor Crimes unless they are ordered to enforce one.
-  - [color=#ff000d][bold]MP[/bold][/color] cannot be ordered to ignore Minor Crimes.
-  - [color=#ff000d][bold]MP[/bold][/color] breaking the law in any capacity cannot be ignored.
+  - Command and [color=#ff000d][bold]MP/Law Enforcement[/bold][/color] are required to both enforce the law and abide by it.
+  - [color=#ff000d][bold]MP/Law Enforcement[/bold][/color] and Command may, at their discretion, ignore Minor Crimes unless they are ordered to enforce one by a higher position.
+  - [color=#ff000d][bold]MP/Law Enforcement[/bold][/color] breaking the law in any capacity cannot be ignored.
 
-  Should [color=#ff000d][bold]MP[/bold][/color]s disagree on cases, GOVFOR Law rank structure must be followed.
+  Should [color=#ff000d][bold]MP[/bold][/color]s disagree on cases, GOVFOR/OPFOR Law rank structure must be followed.
 
-  - [color=#ffa500][bold]Provost Marshal Office[/bold][/color] > [color=#00CBFE][bold]Company Command[/bold][/color] > [color=#ff000d][bold]MP[/bold][/color] > Deputized [color=#ff000d][bold]MP[/bold][/color] > [color=#8B0000][bold]Platoon Commander[/bold][/color] > [bold]Operations Officer[/bold]
+  - [color=#00CBFE][bold]High Command (Usually Faxed)[/bold][/color] > [color=#ff000d][bold]MP/Law Enforcement[/bold][/color] > Deputized [color=#ff000d][bold]MP/Law Enforcement[/bold][/color] > [color=#8B0000][bold]Faction Command[/bold][/color]
 
   ## Law and Related
   - [textlink="Commander Succession" link="RMCCommandChain"]
@@ -28,7 +27,7 @@
 
   ## Standard Operating Procedure
 
-  These are sets of regulations and polices of GOVFOR.
+  These are sets of regulations and polices of GOVFOR/OPFOR.
   Failure to follow the Standard Operating Procedure may result in [bold]Failure to Follow Procedure[/bold] charges.
 
   - [textlink="Standard Operating Procedure" link="RMCMarineSOP"]

@@ -29,3 +29,12 @@ au14-job-name-wyguard = WeYu Guard
 au14-job-description-wyguard= You're corporate security hired by Weyland-Yutani. Listen to and protect the employees and company assets
 au14-job-prefix-wyguard = WYGUARD
 AU14JobWYGuard = WeYu guard
+
+au14-department-third-party = Third Party
+au14-department-third-party-description = Select this job to play as a third party
+
+au14-department-threat = threat
+au14-department-threat-description = Select this job to play as the threat
+
+
+

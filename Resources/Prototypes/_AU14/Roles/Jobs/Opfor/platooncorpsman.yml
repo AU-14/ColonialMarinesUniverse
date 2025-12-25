@@ -13,7 +13,7 @@
     RMCRankLanceCorporal: []
   startingGear: AU14GearopforPlatoonCorpsman
   dummyStartingGear: AU14GearopforCorpsmanDummy
-  icon: "AU14JobIconCorpsman"
+  icon: "AU14JobIconOPFORCorpsman"
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-opfor
@@ -48,7 +48,7 @@
   id: AU14GearopforPlatoonCorpsman
   equipment:
     id: AU14JobIDCardopforPlatoonCorpsman
-    ears: AU14HeadsetSectionMarine
+    ears: AU14HeadsetSectionOpfor
 
 - type: entity
   parent: CMSpawnPointJobBase

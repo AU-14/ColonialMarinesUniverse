@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Content.Shared.AU14.Objectives;
 using Content.Shared.AU14.Objectives.Fetch;
@@ -27,6 +28,7 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
         SubscribeLocalEvent<AuFetchItemComponent, PullStoppedMessage>(OnFetchItemUndragged);
         SubscribeLocalEvent<FetchObjectiveReturnPointComponent, DragDropTargetEvent>(OnReturnPointDragDropTarget);
         SubscribeLocalEvent<MetaDataComponent, ComponentStartup>(OnMetaDataStartup);
+        SubscribeLocalEvent<AuFetchItemComponent, EntityTerminatingEvent>(OnFetchItemDestroyed);
     }
 
     public void ActivateFetchObjectiveIfNeeded(EntityUid uid, AuObjectiveComponent comp)
@@ -81,6 +83,8 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
         var markerQuery = EntityManager.AllEntityQueryEnumerator<FetchObjectiveMarkerComponent, TransformComponent>();
         while (markerQuery.MoveNext(out var markerUid, out var markerComp, out _))
         {
+            if (markerComp.Used)
+                continue; // Skip used markers
             if (markerComp.FetchId == markerFetchId)
                 markers.Add(markerUid);
             else if (markerComp.Generic)
@@ -93,15 +97,35 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
         if (markers.Count == 0 || string.IsNullOrEmpty(entityToSpawn))
             return;
 
-        for (var i = 0; i < amount; i++)
+        // Shuffle markers for random selection
+        var rng = new Random();
+        if (markers.Count > 1)
         {
-            var markerIndex = i % markers.Count;
-            var markerUid = markers[markerIndex];
+            // Fisher-Yates shuffle for robust randomness
+            int n = markers.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                (markers[n], markers[k]) = (markers[k], markers[n]);
+            }
+        }
+
+        int toSpawn = Math.Min(amount, markers.Count);
+        for (var i = 0; i < toSpawn; i++)
+        {
+            var markerUid = markers[i];
+            var markerComp = EntityManager.GetComponent<FetchObjectiveMarkerComponent>(markerUid);
+            if (markerComp.Used)
+                continue; // Double check, should not happen
             var xform = EntityManager.GetComponent<TransformComponent>(markerUid);
             var ent = EntityManager.SpawnEntity(entityToSpawn, xform.Coordinates);
             var comp = _entManager.EnsureComponent<AuFetchItemComponent>(ent);
             comp.FetchObjective = component;
             comp.ObjectiveUid = uid;
+            // Mark this marker as used
+            markerComp.Used = true;
+            if (!string.IsNullOrEmpty(component.SpawnOther))
             {
                 EntityManager.SpawnEntity(component.SpawnOther, xform.Coordinates);
             }
@@ -239,6 +263,40 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
         {
             fetchComp.ItemsSpawned = false; // Reset so items can respawn
             OnObjectiveStartup(uid, fetchComp, ref Unsafe.NullRef<ComponentStartup>());
+        }
+    }
+
+
+    private void OnFetchItemDestroyed(EntityUid uid, AuFetchItemComponent comp, ref EntityTerminatingEvent args)
+    {
+        var fetchObj = comp.FetchObjective;
+        if (comp.Fetched)
+            return;
+        int unfetched = 0;
+        var query = EntityManager.EntityQueryEnumerator<AuFetchItemComponent>();
+        while (query.MoveNext(out var ent, out var itemComp))
+        {
+            if (itemComp.FetchObjective == fetchObj && !itemComp.Fetched && ent != uid)
+                unfetched++;
+        }
+        var objComp = EnsureComp<AuObjectiveComponent>(comp.ObjectiveUid);
+        var factions = objComp.FactionNeutral ? objComp.Factions : new List<string> { objComp.Faction };
+        foreach (var faction in factions)
+        {
+            var factionKey = faction.ToLowerInvariant();
+            int alreadyFetched = 0;
+            fetchObj.AmountFetchedPerFaction.TryGetValue(factionKey, out alreadyFetched);
+            int possible = alreadyFetched + unfetched;
+            if (possible < fetchObj.AmountToFetch)
+            {
+                if (objComp.FactionStatuses.TryGetValue(factionKey, out var status) && status == AuObjectiveComponent.ObjectiveStatus.Incomplete)
+                {
+                    objComp.FactionStatuses[factionKey] = AuObjectiveComponent.ObjectiveStatus.Failed;
+                    Logger.Info($"[FETCH FAIL] Objective {comp.ObjectiveUid} failed for faction {factionKey} due to destroyed fetch items");
+                    // Optionally, refresh consoles or notify
+                    _objectiveSystem?.AwardPointsToFaction(factionKey, objComp); // Optionally award 0 points to trigger UI update
+                }
+            }
         }
     }
 }

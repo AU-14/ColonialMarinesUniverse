@@ -12,3 +12,35 @@
   - type: Sprite
     sprite:  _AU14/Items/laptop.rsi
     state: laptop_off
+
+- type: entity
+  parent: RMCOverwatchConsoleGovfor
+  id: AU14ItemLaptopOverwatchGOVFOR
+  name: Overwatch Laptop
+  description: A portable tactical computer for overwatching and monitoring friendly units.
+  suffix: GOVFOR
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    sprite:  _AU14/Items/laptop.rsi
+    state: laptop_off_govfor
+
+- type: entity
+  parent: RMCOverwatchConsoleOpfor
+  id: AU14ItemLaptopOverwatchOPFOR
+  name: Overwatch Laptop
+  description: A portable tactical computer for overwatching and monitoring friendly units.
+  suffix: OPFOR
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    sprite:  _AU14/Items/laptop.rsi
+    state: laptop_off_opfor

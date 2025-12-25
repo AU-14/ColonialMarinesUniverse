@@ -30,7 +30,7 @@
     </ColorBox>
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        To resist a lawful arrest or search by a Military Police officer.
+        To resist a lawful arrest or search by an officer.
       </Box>
     </ColorBox>
     <ColorBox>
@@ -40,7 +40,7 @@
     </ColorBox>
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        Resisting a legal arrest by an MP by fleeing or using force.\n[bold]10 minutes.[/bold]
+        Resisting a legal arrest by fleeing or using force.\n[bold]10 minutes.[/bold]
       </Box>
     </ColorBox>
 

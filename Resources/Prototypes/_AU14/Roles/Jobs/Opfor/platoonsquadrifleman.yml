@@ -13,7 +13,7 @@
     RMCRankPrivate: []
   startingGear: AU14GearopforSquadRifleman
   dummyStartingGear: AU14GearopforRiflemanDummy
-  icon: "AU14JobIconRFN"
+  icon: "AU14JobIconOPFORRFN"
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-opfor
@@ -48,7 +48,7 @@
   id: AU14GearopforSquadRifleman
   equipment:
     id: AU14IDCardopforSquadRifleman
-    ears: AU14HeadsetSectionMarine
+    ears: AU14HeadsetSectionOpfor
 
 - type: entity
   parent: CMSpawnPointJobBase

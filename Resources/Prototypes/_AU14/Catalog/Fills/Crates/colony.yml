@@ -54,12 +54,12 @@
 - type: entity
   parent: RMCCratePlastic
   id: AU14CrateBoxMeat
-  name: Raw Meat Crate (5x Raw Meat, 5x Raw Fish)
+  name: Raw Meat Crate (10x Raw Meat, 5x Raw Fish)
   components:
   - type: StorageFill
     contents:
     - id: FoodMeat
-      amount: 5
+      amount: 10
     - id: FoodMeatFish
       amount: 5
 
@@ -100,10 +100,33 @@
       amount: 1
 
 #guns and ammo
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxHuntingRifleABRCrate
+  name: Hunting Rifle Crate (1x ABR-40 hunting rifle, x4 ABR-40 Magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponRifleABR40
+      amount: 1
+    - id: RMCMagazineRifleABR40
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxABR40Magazines
+  name: ABR-40 Magazine Crate (x6 ABR-40 Magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleABR40
+      amount: 6
+
 - type: entity
   parent: RMCCrateBase
   id: AU14CrateBoxHuntingRifleCrate
-  name: Hunting Rifle Crate (1x Basira Hunting Rifle, x4 Basira Magazine)
+  name: Scoped Hunting Rifle Crate (1x Basira Hunting Rifle, x4 Basira Magazine)
   components:
   - type: StorageFill
     contents:
@@ -446,3 +469,13 @@
     contents:
     - id: RMCRollerBedHospitalFolded
       amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateBoxDefibrillator
+  name: Lifepak 15F Crate (1x LifePak 15F)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14CMDefibrillator
+      amount: 1

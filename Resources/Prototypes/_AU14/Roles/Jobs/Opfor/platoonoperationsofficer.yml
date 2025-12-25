@@ -10,7 +10,7 @@
     RMCRankSecondLT: []
   startingGear: AU14GearopforPlatOp
   dummyStartingGear: AU14GearopforPlatOpDummy
-  icon: "AU14JobIconOpsOfc"
+  icon: "AU14JobIconOPFOROpsOfc"
   requireAdminNotify: true
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-opfor

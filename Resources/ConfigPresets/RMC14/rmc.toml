@@ -63,14 +63,14 @@ flavor_text = true
 id_job_length = 50
 
 [infolinks]
-#appeal = "https://appeal.rouny-ss14.com"
-bug_report = "https://github.com/RMC-14/RMC-14/issues/new?assignees=&labels=&projects=&template=issue_report.md&title="
-discord = "https://discord.gg/rouny"
-#forum = "https://forum.rouny-ss14.com"
-github = "https://github.com/RMC-14/RMC-14"
-patreon = "https://www.patreon.com/RMC14"
+#appeal = "https://discord.gg/FtsCESsrzD"
+bug_report = "https://github.com/AU-14/ColonialMarinesUniverse/issues"
+discord = "https://discord.gg/FtsCESsrzD"
+forum = "https://forum.cm-ss13.com"
+github = "https://github.com/AU-14/ColonialMarinesUniverse"
+#patreon = "https://github.com/AU-14/ColonialMarinesUniverse"
 #website = ""
-wiki = "https://wiki.rouny-ss14.com"
+wiki = "https://cm-ss13.com/wiki/Main_Page"
 
 [net]
 tickrate = 25

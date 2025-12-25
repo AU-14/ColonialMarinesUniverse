@@ -13,4 +13,6 @@ public sealed partial class FetchObjectiveMarkerComponent: Component
     [DataField("fetchid", required: false)]
     public string FetchId  { get; private set; } = "";
 
+    public bool Used { get; set; } = false;
+
 }

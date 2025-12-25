@@ -1,0 +1,2 @@
+au14-trait-unrevivable-name = Non-Resuscitable
+au14-trait-unrevivable-desc = Due to a congenital defect, once your heart stops, it cannot be restarted. All revival methods are futile. One life, one chance.

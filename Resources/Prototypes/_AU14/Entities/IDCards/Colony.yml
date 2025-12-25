@@ -157,3 +157,11 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianCWPSRanger
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardciviliannspaConstable
+  name: NSPA constable ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCiviliannspaConstable

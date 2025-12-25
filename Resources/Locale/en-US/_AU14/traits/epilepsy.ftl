@@ -1,0 +1,2 @@
+au14-trait-epilepsy-name = Epilepsy  
+au14-trait-epilepsy-desc = You suffer from a neurological disorder that can cause sudden seizures. Episodes will strike infrequently, some may send you unconscious or render you unable to move for a short period of time.

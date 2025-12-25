@@ -25,17 +25,17 @@
 
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        Damage to GOVFOR Property
+        Damage to Property
       </Box>
     </ColorBox>
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        Damaging the ship or making any unauthorized modifications to it as outlined in Standard Operating Procedure.\nMaterials for repairs should be taken from maintenance storages.
+        Damaging the faction property or making any unauthorized modifications to it as outlined in Standard Operating Procedure.\nMaterials for repairs should be taken from maintenance storages.
       </Box>
     </ColorBox>
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        Breaking a window, damaging a wall, etc.\n[bold]Return the ship to it's exact previous state, or serve 7.5 minutes if not possible.[/bold]
+        Breaking a window, damaging a wall, etc.\n[bold]Return the property to it's exact previous state, or serve 7.5 minutes if not possible.[/bold]
       </Box>
     </ColorBox>
     <ColorBox>
@@ -103,7 +103,7 @@
     </ColorBox>
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        Illegally placing a listening device in a secure area, or area with privacy shutters, such as CIC or the CL's office.\n[italic]If the listening device is also tied to a foreign government or terror organisation this is additionally considered Subterfuge[/italic].\n[bold]15 minutes.[/bold]
+        Illegally placing a listening device in a secure area, or area with privacy shutters.\n[italic]If the listening device is also tied to a foreign government or terror organisation this is additionally considered Subterfuge[/italic].\n[bold]15 minutes.[/bold]
       </Box>
     </ColorBox>
 

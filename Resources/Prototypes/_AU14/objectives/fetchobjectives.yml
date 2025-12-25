@@ -6,6 +6,7 @@
   - type: Sprite
     state: red
   - type: AuObjective
+    id: fetchoreobj
     factioneutral: true
     applicableModes:
     - ForceOnForce
@@ -67,6 +68,7 @@
   - type: Sprite
     state: red
   - type: AuObjective
+    id: fetchcrownobj
     factioneutral: false
     applicableModes:
     - ForceOnForce
@@ -80,12 +82,116 @@
     ObjectiveDescription: "Retrieve the Crown Artifact"
   - type: FetchObjective
     entitytospawn: ClothingHeadHatXmasCrown
-    markerentity: FetchBlackBoxObjectiveMarker
+    markerentity: fetchobjectivemarkergenericspawnpoint
     amounttospawn: 1
     amounttofetch: 1
 
+- type: entity
+  name: Fetch AN/PRC-982 Objecive
+  parent: MarkerBase
+  id: fetchanprcobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: AuObjective
+    id: fetchanprcobj
+    factioneutral: false
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - opfor
+    - govfor
+    repeating: false
+    objectivelevel: 1
+    custompoints: 15
+    roundEndMessage: Finding the AN/PRC-982
+    ObjectiveDescription: "Retrieve the AN/PRC-982 portable radio transceiver box"
+  - type: FetchObjective
+    entitytospawn: AU14ObjectiveItemPortableRadioTransceiver
+    markerentity: fetchobjectivemarkergenericspawnpoint
+    amounttospawn: 1
+    amounttofetch: 1
 
+- type: entity
+  name: Fetch CIR-60 Blackbox Objecive
+  parent: MarkerBase
+  id: fetchblackboxobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: AuObjective
+    id: fetchblackboxobj
+    factioneutral: false
+    applicableModes:
+    - ForceOnForce
+    - DistressSignal
+    possiblefactions:
+    - opfor
+    - govfor
+    repeating: false
+    objectivelevel: 1
+    custompoints: 15
+    roundEndMessage: Finding the CIR-60 Blackbox
+    ObjectiveDescription: "Retrieve the CIR-60 'blackbox' colony information recorder"
+  - type: FetchObjective
+    entitytospawn: AU14ObjectiveItemBlackboxRecorder
+    markerentity: fetchobjectivemarkergenericspawnpoint
+    amounttospawn: 1
+    amounttofetch: 1
 
+- type: entity
+  name: Fetch RCS-9 ARDSU Objecive
+  parent: MarkerBase
+  id: fetchattmosdatastorageunitobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: AuObjective
+    id: fetchdatastorageobj
+    factioneutral: false
+    applicableModes:
+    - ForceOnForce
+    - DistressSignal
+    possiblefactions:
+    - opfor
+    - govfor
+    repeating: false
+    objectivelevel: 1
+    custompoints: 15
+    roundEndMessage: Finding the RCS-9 ARDSU
+    ObjectiveDescription: "Retrieve the ARCS-9 atmospheric radar data storage unit"
+  - type: FetchObjective
+    entitytospawn: AU14ObjectiveItemAtmosphericRadarStorageUnit
+    markerentity: fetchobjectivemarkergenericspawnpoint
+    amounttospawn: 1
+    amounttofetch: 1
+
+- type: entity
+  name: Fetch WY Laptop Objecive
+  parent: MarkerBase
+  id: fetchwylaptopobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: AuObjective
+    id: fetchwylaptopobjj
+    factioneutral: false
+    applicableModes:
+    - ForceOnForce
+    - DistressSignal
+    possiblefactions:
+    - opfor
+    - govfor
+    repeating: false
+    objectivelevel: 2
+    custompoints: 15
+    roundEndMessage: Finding the WY laptop
+    ObjectiveDescription: "Retrieve the Weyland-Yutani bioweapons division laptop"
+  - type: FetchObjective
+    entitytospawn: AU14ObjectiveItemAtmosphericRadarStorageUnit
+    markerentity: fetchobjectivemarkergenericspawnpoint
+    amounttospawn: 1
+    amounttofetch: 1
 
 - type: entity
   name: Fetch  Generic Spawnpoint

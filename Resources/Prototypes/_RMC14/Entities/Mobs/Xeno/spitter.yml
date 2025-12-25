@@ -16,7 +16,7 @@
   - type: GhostRole
     name: cm-job-name-xeno-spitter
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Spitter/spitter.rsi
+    sprite: _CMU14/Mobs/Xenos/Spitter/spitter.rsi # CMU14-Edit
   - type: MobState
     allowedStates:
     - Alive

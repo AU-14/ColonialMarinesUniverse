@@ -147,8 +147,8 @@ entities:
       name: Map Entity
     - type: Transform
     - type: Map
-      mapPaused: True
-    - type: GridTree
+`      mapPaused: True
+`    - type: GridTree
     - type: Broadphase
     - type: OccluderTree
 - proto: BasaltRandom

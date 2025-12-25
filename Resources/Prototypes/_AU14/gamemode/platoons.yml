@@ -1,6 +1,6 @@
 - type: platoon
   id: LACN
-  name: LACN Landing
+  name: LACN Landing Forces
   VendorToMarker:
     Rifleman: AU14LACNequipmentvendor
     Clothing: AU14LACNclothingequipmentvendor
@@ -14,10 +14,28 @@
     SectionSergeant: AU14USCMsectionleaderequipmentvendor
     Pilot: AU14AircrewWeaponsVendor
   possibleships:
-    - Riptide
+    - Daybreak
   #platoonflag: uaflag
   CompatibleDropships:
-  - /Maps/_RMC14/alamo.yml
+  - /Maps/_CMU14/Shuttles/alamo.yml
+
+- type: platoon
+  id: LACNcommando
+  name: LACN Naval Commando Platoon
+  VendorToMarker:
+    Rifleman: AU14LACNequipmentvendor
+    Clothing: AU14LACNcommandoclothingequipmentvendor
+    Weapons: AU14LACNcommandoWeaponsVendor
+    SWeapons: AU14LACNcommandoSpecialWeaponsVendor
+    Corpsman: AU14LACNcorpsmanvendor
+    Arifleman: AU14LACNMGequipmentvendor
+    Dcc: AU14LACNaircrewvendor
+    OperationsOfficer: AU14LACNcommandocommandequipmentvendor
+    Rto: AU14RTOVendor
+    SectionSergeant: AU14LACNcommandosectionleaderequipmentvendor
+    Pilot: AU14AircrewWeaponsVendor
+  possibleships:
+    - Daybreak
 
 - type: platoon
   id: USCM
@@ -38,13 +56,12 @@
     Deco1: VMarkerOpforDeco5
   #platoonflag:  uaflag
   CompatibleDropships:
-  - /Maps/_RMC14/alamo.yml
+  - /Maps/_CMU14/Shuttles/alamo.yml
   compatibleFighters:
     - /Maps/_AU14/ShuttlesDropships/f84owl.yml
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml
-
   possibleships:
-      - Riptide
+      - Daybreak
 
 - type: platoon
   id: UPP
@@ -64,7 +81,7 @@
     SectionSergeant: AU14UPPSectionLeaderVendor
     Pilot: AU14UPPAirCrewWeaponsVendor
   possibleships:
-      - Riptide
+      - Daybreak
   jobClassOverride:
     SquadRifleman: Au14JobGOVFORSquadRiflemanUPP
     SectionSergeant: AU14JobGOVFORSectionSergeantUPP
@@ -77,7 +94,7 @@
     PlatOp: AU14JobGOVFORPlatOpUPP
     DCC: AU14JobGOVFORDCCUPP
   CompatibleDropships:
-  - /Maps/_RMC14/alamo.yml
+  - /Maps/_CMU14/Shuttles/alamo.yml
 
 
 
@@ -109,7 +126,7 @@
     PlatOp: AU14JobGOVFORPlatOpWYPMC
     DCC: AU14JobGOVFORDCCWYPMC
   CompatibleDropships:
-  - /Maps/_RMC14/alamo.yml
+  - /Maps/_CMU14/Shuttles/alamo.yml
   possibleships:
       - Daybreak
   compatibleFighters:
@@ -147,7 +164,7 @@
   possibleships:
       - Daybreak
   CompatibleDropships:
-  - /Maps/_RMC14/alamo.yml
+  - /Maps/_CMU14/Shuttles/alamo.yml
   compatibleFighters:
     - /Maps/_AU14/ShuttlesDropships/cmbsquadcar.yml
 
@@ -164,7 +181,7 @@
     SectionSergeant: AU14USCMsectionleaderequipmentvendor
     Pilot: AU14AircrewWeaponsVendor
   possibleships:
-    - Riptide
+    - Daybreak
   jobSlotOverride:
     SquadRifleman: 12
     PlatoonCorpsman: 1
@@ -187,13 +204,97 @@
     SectionSergeant: AU14HAZOPSsectionleaderequipmentvendor
     Pilot: AU14AircrewWeaponsVendor
   possibleships:
-      - Riptide
+      - Daybreak
   CompatibleDropships:
-  - /Maps/_AU14/ShuttlesDropships/osprey.yml
+  - /Maps/_CMU14/Shuttles/osprey.yml
   compatibleFighters:
   - /Maps/_AU14/ShuttlesDropships/f84owl.yml
   - /Maps/_AU14/ShuttlesDropships/ud_6.yml
 
+- type: platoon
+  id: CCAF
+  name: CCAF
+  VendorToMarker:
+    Rifleman: AU14USCMequipmentvendor
+    Clothing: AU14CCAFclothingequipmentvendor
+    Weapons: AU14CCAFWeaponsVendor
+    SWeapons: AU14CCAFSpecialWeaponsVendor
+    Corpsman: AU14LACNcorpsmanvendor
+    Arifleman: AU14USCMSGequipmentvendor
+    Dcc: AU14USCMaircrewvendor
+    OperationsOfficer: AU14CCAFcommandequipmentvendor
+    Rto: AU14RTOVendor
+    SectionSergeant: AU14CCAFsectionleaderequipmentvendor
+    Pilot: AU14AircrewWeaponsVendor
+    ExtraVendor1: VMarkerOpforDeco5
+    Deco1: VMarkerOpforDeco5
+  #platoonflag:  uaflag
+  CompatibleDropships:
+  - /Maps/_CMU14/Shuttles/alamo.yml
+  compatibleFighters:
+    - /Maps/_AU14/ShuttlesDropships/f84owl.yml
+    - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+  possibleships:
+      - Daybreak
+
+- type: platoon
+  id: ProdigySF
+  name: Prodigy Security Forces
+  VendorToMarker:
+    Rifleman: AU14prodigyequipmentvendor
+    Clothing: AU14prodigyclothingequipmentvendor
+    Weapons: AU14prodigyWeaponsVendor
+    SWeapons: AU14prodigySpecialWeaponsVendor
+    Corpsman: AU14prodigycorpsmanvendor
+    Arifleman: AU14prodigySGequipmentvendor
+    Dcc: AU14prodigyaircrewvendor
+    OperationsOfficer: AU14prodigycommandequipmentvendor
+    Rto: AU14prodigyRTOVendor
+    SectionSergeant: AU14prodigysectionleaderequipmentvendor
+    Pilot: AU14prodigyAircrewWeaponsVendor
+    ExtraVendor1: VMarkerOpforDeco5
+    Deco1: VMarkerOpforDeco5
+  #platoonflag:  uaflag
+  CompatibleDropships:
+  - /Maps/_CMU14/Shuttles/alamo.yml
+  compatibleFighters:
+    - /Maps/_AU14/ShuttlesDropships/f84owl.yml
+    - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+  possibleships:
+      - Daybreak
+
+- type: platoon
+  id: UNISC
+  name: UNISC Peacekeepers
+  VendorToMarker:
+    Rifleman: AU14UNISCequipmentvendor
+    Clothing: AU14UNISCclothingequipmentvendor
+    Weapons: AU14UNISCWeaponsVendor
+    SWeapons: AU14UNISCWeaponsVendor
+    Corpsman: AU14UNISCcorpsmanvendor
+    Arifleman: AU14UNISCclothingequipmentvendor
+    Dcc: AU14UNISCaircrewvendor
+    OperationsOfficer: AU14UNISCcommandequipmentvendor
+    Rto: AU14RTOVendor
+    SectionSergeant: AU14UNISCsectionleaderequipmentvendor
+    Pilot: AU14AircrewWeaponsVendor
+  jobClassOverride:
+    SquadRifleman: AU14JobGOVFORSquadRifleman
+    SectionSergeant: AU14JobGOVFORSectionSergeant
+    PlatoonCorpsman: AU14JobGOVFORPlatoonCorpsman
+    PlatCo: AU14JobGOVFORPlatCo
+    SquadSergeant: AU14JobGOVFORSquadSergeant
+    DSPilot: AU14JobGOVFORDSPilot
+    RadioTelephoneOperator: AU14JobGOVFORRadioTelephoneOperator
+    PlatOp: AU14JobGOVFORPlatOp
+    DCC: AU14JobGOVFORDCC
+  CompatibleDropships:
+  - /Maps/_CMU14/Shuttles/alamo.yml
+  possibleships:
+      - Daybreak
+  compatibleFighters:
+  - /Maps/_AU14/ShuttlesDropships/f84owl.yml
+  - /Maps/_AU14/ShuttlesDropships/ud_6.yml
 
 - type: platoon
   id: VAIPO

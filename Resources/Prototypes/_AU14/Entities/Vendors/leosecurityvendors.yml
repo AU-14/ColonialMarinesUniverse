@@ -28,15 +28,15 @@
       entries:
       - id: CMBeltSecurityMarshalFilled
         amount: 2
-      - id: RMCBeltUtilityGeneral
+      - id: RMCBeltHolsterPistolTSE
         amount: 2
       - id: CMWebbingHolster
         amount: 2
       - id: CMSatchelSecurity
         amount: 2
-      - id: CMSatchel
+      - id: AU14SlingSatchelBlack
         amount: 2
-      - id: RMCSatchelLightpack
+      - id: RMCSatchelTSEPA
         amount: 2
     - name: Pouches
       entries:
@@ -65,13 +65,11 @@
       - id: AU14CMBHeadset
         amount: 2
     - name: Duty Weapons
+      choices: { CMUCMBDutyWeapons: 1 }
       entries:
       - id: RMCGunCasePistolM1984
-        amount: 1
       - id: RMCGunCasePistolM77
-        amount: 1
       - id: RMCGunCaseRevolverRSh9
-        amount: 1
     - name: Less Than Lethal Ammunition
       entries:
       - id: RMCMagazinePistolM1984Rubber
@@ -117,13 +115,15 @@
       entries:
       - id: CMBeltSecurityMarshalFilled
         amount: 1
-      - id: RMCBeltUtilityGeneral
+      - id: RMCBeltHolsterPistolTSE
         amount: 1
       - id: CMWebbingHolster
         amount: 1
-      - id: CMSatchel
+      - id: CMSatchelSecurity
         amount: 1
-      - id: RMCSatchelLightpack
+      - id: AU14SlingSatchelBlack
+        amount: 1
+      - id: RMCSatchelTSEPA
         amount: 1
     - name: Pouches
       entries:
@@ -161,3 +161,103 @@
         amount: 2
       - id: AU14Tourniquet
         amount: 1
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14NSPAequipmentvendor
+  name: NSPA equipment vendor
+  description: An automated rack hooked up to a small storage of NSPA equipment.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Clothes
+      entries:
+      - id: RMCJumpsuitTSEPA
+        amount: 2
+      - id: RMCArmorVestTSEPA
+        amount: 2
+      - id: RMCCoatTSEPA
+        amount: 2
+      - id: RMCCoatTSEPAHighVis
+        amount: 2
+      - id: RMCCoatTSEPAHighVisVest
+        amount: 2
+      - id: RMCHeadCapTSEPA
+        amount: 2
+      - id: RMCHeadBeretTSE
+        amount: 2
+      - id: RMCHeadBeretTSEPA
+        amount: 2
+      - id: RMCHeadCapTSEPAPeaked
+        amount: 2
+      - id: RMCBootsPMCFilled
+        amount: 2
+    - name: Glasses
+      entries:
+      - id: CMGlassesSecurity
+        amount: 2
+    - name: Storage
+      entries:
+      - id: CMBeltSecurityMarshalFilled
+        amount: 2
+      - id: RMCBeltHolsterPistolTSE
+        amount: 2
+      - id: CMWebbingHolster
+        amount: 2
+      - id: CMSatchelSecurity
+        amount: 2
+      - id: AU14SlingSatchelBlack
+        amount: 2
+      - id: RMCSatchelTSEPA
+        amount: 2
+    - name: Pouches
+      entries:
+      - id: RMCPouchFirstAidSplintsGauzeOintment
+        amount: 2
+      - id: RMCPouchRadio
+        amount: 2
+      - id: RMCPouchGeneralMedium
+        amount: 2
+      - id: RMCPouchPistol
+        amount: 2
+      - id: RMCPouchMagazinePistol
+        amount: 2
+    - name: Equipment
+      entries:
+      - id: RMCRadioHandheldColonyOff
+        amount: 2
+      - id: RMCGrenadeFlashBang
+        amount: 2
+      - id: RMCHandcuffs
+        amount: 4
+      - id: Zipties
+        amount: 20
+    - name: Headsets
+      entries:
+      - id: AU14CMBHeadset
+        amount: 2
+    - name: Duty Weapons
+      choices: { CMUNSPADutyWeapons: 1 }
+      entries:
+      - id: RMCGunCasePistolM1984
+      - id: RMCGunCasePistolM77
+    - name: Less Than Lethal Ammunition
+      entries:
+      - id: RMCMagazinePistolM1984Rubber
+        amount: 2
+      - id: RMCMagazinePistolM77Rubber
+        amount: 2
+    - name: Medical Supplies
+      entries:
+      - id: AU14HemostaticGauzePacket
+        amount: 4
+      - id: AU14Tourniquet
+        amount: 2
+    - name: Inmate Clothing
+      entries:
+      - id: AU14CivilianPrisonJumpsuit
+        amount: 10
+      - id: RMCShoesBlack
+        amount: 10

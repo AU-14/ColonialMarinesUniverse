@@ -35,7 +35,7 @@
       entries:
       - id: AU14WebbingMagazine
         amount: 25
-      - id: CMWebbingBlack
+      - id: AU14WebbingUtility
         amount: 30
       - id: AU14WebbingDumpPouch
         amount: 25
@@ -246,6 +246,8 @@
       entries:
       - id: RMCWeaponSMGMP5Alt
         amount: 10
+      - id: WeaponSMGMP5
+        amount: 5
       - id: AU14WeaponRifleM16A2
         amount: 5
     - name: Primary Ammunition
@@ -270,12 +272,8 @@
       entries:
       - id: RMCAttachmentRailFlashlight
         amount: 12
-      - id: RMCAttachmentMiniFlamethrower
-        amount: 3
       - id: RMCAttachmentM203GrenadeLauncher
         amount: 5
-      - id: RMCAttachmentU7UnderbarrelShotgun
-        amount: 3
     - name: Explosives
       entries:
       - id: RMCBoxHEDP
@@ -306,14 +304,12 @@
     - name: M240 Incinerator
       entries:
       - id: RMCWeaponFlamer
-        amount: 3
+        amount: 2
       - id: RMCTankFlamer
-        amount: 9
+        amount: 8
       - id: RMCBackpackFlamer
         name: G4-1 fueltank
-        amount: 3
-      - id: CMAttachmentXMVESG1FlamerNozzle
-        amount: 1
+        amount: 2
     - name: M85A1 grenade launcher
       entries:
       - id: RMCWeaponLauncherM85A1
@@ -325,12 +321,10 @@
     - name: MK221 tactical shotgun
       entries:
       - id: WeaponShotgunM890
-        amount: 3
+        amount: 1
       - id: RMCBoxShotgunBuckshot
-        amount: 30
+        amount: 12
       - id: RMCBoxShotgunSlugs
-        amount: 24
-      - id: RMCBoxShotgunIncendiaryBuckshot
         amount: 12
 
 - type: entity

@@ -1370,3 +1370,9 @@ RMCTallFloodlight: AU14TallFloodlight
 RMCFloodlightBroken: AU14FloodlightBroken
 RMCStreetlight: AU14Streetlight
 RMCStreetlightBroken: AU14StreetlightBroken
+
+# 2025-11-22 temporary hotfix for glue trap issue, remove once resolved
+CMFireExtinguisher: RMCBoxFlashlights
+CMFireExtinguisherPortable: RMCBoxFlashlights
+CMHypospray: RMCBoxFlashlights
+RMCSprayBottleSpaceCleaner: RMCBoxFlashlights

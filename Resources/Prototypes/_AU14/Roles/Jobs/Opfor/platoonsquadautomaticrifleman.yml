@@ -21,7 +21,7 @@
     RMCRankPrivate: []
   startingGear: AU14GearopforSquadAutomaticRifleman
   dummyStartingGear: AU14GearopforAutoRiflemanDummy
-  icon: "AU14JobIconAFN"
+  icon: "AU14JobIconOPFORAFN"
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-opfor

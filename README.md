@@ -1,20 +1,16 @@
 
-AU14 is a Multiplayer Sandbox game set in the Universe of the Xenomorph.
-
-
-AU14 is forked from RMC14  and uses assets from both them and the CM13 project, copyright in metadata files.
+CMU is a multiplayer sandbox game set in the Alien universe. It is a fork of RMC14, itself based on CM13, and incorporates assets from a variety of sources (copyright information is included in each metadata file).
 
 ## Links
 
-[AU14 Discord](https://discord.gg/AXwvzDw9CY/) 
+[CMU Discord](https://discord.gg/FtsCESsrzD)
 
 ## Contributing
 
-AU14 is happy to take contributions and has a list of things needing to be done! You can join our discord for further inquiry
+CMU welcomes contributions from the community! We maintain a list of tasks and projects needing help which can be found under the repository issues tab. Join our Discord to get involved and discuss contributions.
 
 ## License
 
 All code for the content repository is licensed under [MIT](https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT).
 
 Most assets are licensed under [CC-BY-SA-3.0](https://creativecommons.org/licenses/by-sa/3.0/) unless stated otherwise. Assets have their license and the copyright in the metadata file. [Example](https://github.com/space-wizards/space-station-14/blob/master/Resources/Textures/Objects/Tools/crowbar.rsi/meta.json).
-
