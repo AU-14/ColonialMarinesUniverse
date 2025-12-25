@@ -366,10 +366,6 @@
         amount: 15
       - id: CMTricordrazineAutoInjector
         amount: 15
-    - name: Medical Armor
-      choices: { CMUPlatoonMedicalArmor: 1 }
-      entries:
-      - id: CMUArmorProdigyFlakVestMedical
     - name: Medical Gloves
       choices: { CMUPlatoonMedicalGloves: 1 }
       entries:
@@ -811,7 +807,7 @@
 
 - type: entity
   parent: ColMarTechBase
-  id: AU14prodigyAircrewWeaponsVendor
+  id: AU14VAIPOAircrewWeaponsVendor
   name: aircrew weapons rack
   description: An automated rack hooked up to a small storage of weapons.
   components:
