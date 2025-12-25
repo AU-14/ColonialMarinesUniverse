@@ -1,11 +1,15 @@
 ﻿- type: lobbyBackground
-  id: AU14Pyro
-  background: /Textures/_AU14/Lobby/PyrotechnicianXeno.png
+  id: AU14LobbyColonyShip
+  background: /Textures/_AU14/Lobby/ColonyShip.png
 
 - type: lobbyBackground
-  id: AU14MarineMajor
-  background: /Textures/_AU14/Lobby/MarineMajor.png
+  id: AU14LobbyColonyPowerLoader
+  background: /Textures/_AU14/Lobby/ColonyPowerLoader.png
 
 - type: lobbyBackground
-  id: AU14MarineExtract
+  id: AU14LobbyMarineCorpsman
+  background: /Textures/_AU14/Lobby/MarineCorpsman.png
+
+- type: lobbyBackground
+  id: AU14LobbyMarineExtract
   background: /Textures/_AU14/Lobby/MarineExtract.png

@@ -1,0 +1,705 @@
+- type: entity
+  abstract: true
+  id: CMUBaseOspreyWall
+  name: osprey wall
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    sprite: _CMU14/Structures/Dropships/osprey.rsi
+    drawdepth: Walls
+  - type: Icon
+    sprite: _CMU14/Structures/Dropships/osprey.rsi
+  - type: PlacementReplacement
+    key: walls
+  - type: Occluder
+  - type: Airtight
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+  - type: XenoWeedable
+    spawn: XenoWeedsWall
+  - type: XenoConstructionSupport
+  - type: RMCDropshipBlocked
+  - type: MinimapColor
+    color: "#ebe5e5ee"
+  - type: IsRoof
+  - type: SunShadowCast
+  - type: Tag
+    tags:
+    - Wall
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall1
+  suffix: 1
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Dropships/osprey_tail.rsi
+    state: "1"
+    drawdepth: Overdoors
+    offset: 0,-1.5
+  - type: Icon
+    sprite: _CMU14/Structures/Dropships/osprey_tail.rsi
+    state: "1"
+  - type: Occluder
+    enabled: false
+  - type: SpriteFade
+  - type: InteractionOutline
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.5,-0.5,1.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall2
+  suffix: 2
+  components:
+  - type: Sprite
+    state: "2"
+  - type: Icon
+    state: "2"
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall3
+  suffix: 3
+  components:
+  - type: Sprite
+    state: "3"
+  - type: Icon
+    state: "3"
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall4
+  suffix: 4
+  components:
+  - type: Sprite
+    state: "4"
+  - type: Icon
+    state: "4"
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall5
+  suffix: 5
+  components:
+  - type: Sprite
+    state: "5"
+  - type: Icon
+    state: "5"
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall6
+  suffix: 6
+  components:
+  - type: Sprite
+    state: "6"
+  - type: Icon
+    state: "6"
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall7
+  suffix: 7
+  components:
+  - type: Sprite
+    state: "7"
+  - type: Icon
+    state: "7"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall8
+  suffix: 8
+  components:
+  - type: Sprite
+    state: "8"
+  - type: Icon
+    state: "8"
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall9
+  suffix: 9
+  components:
+  - type: Sprite
+    state: "9"
+  - type: Icon
+    state: "9"
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: "10"
+  - type: Icon
+    state: "10"
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall11
+  suffix: 11
+  components:
+  - type: Sprite
+    state: "11"
+  - type: Icon
+    state: "11"
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall12
+  suffix: 12
+  components:
+  - type: Sprite
+    state: "12"
+  - type: Icon
+    state: "12"
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall13
+  suffix: 13
+  components:
+  - type: Sprite
+    state: "13"
+  - type: Icon
+    state: "13"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall14
+  suffix: 14
+  components:
+  - type: Sprite
+    state: "14"
+  - type: Icon
+    state: "14"
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall15
+  suffix: 15
+  components:
+  - type: Sprite
+    state: "15"
+  - type: Icon
+    state: "15"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall16
+  suffix: 16
+  components:
+  - type: Sprite
+    state: "16"
+  - type: Icon
+    state: "16"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall17
+  suffix: 17
+  components:
+  - type: Sprite
+    state: "17"
+  - type: Icon
+    state: "17"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall18
+  suffix: 18
+  components:
+  - type: Sprite
+    state: "18"
+  - type: Icon
+    state: "18"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall19
+  suffix: 19
+  components:
+  - type: Sprite
+    state: "19"
+  - type: Icon
+    state: "19"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall20
+  suffix: 20
+  components:
+  - type: Sprite
+    state: "20"
+  - type: Icon
+    state: "20"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall21
+  suffix: 21
+  components:
+  - type: Sprite
+    state: "21"
+  - type: Icon
+    state: "21"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall22
+  name: port fore weapon attach point
+  description: A place where heavy equipment can be installed with a powerloader.
+  suffix: 22
+  components:
+  - type: Sprite
+    layers:
+    - state: "22"
+    - map: [ "enum.DropshipWeaponPointLayers.Layer" ]
+      offset: 0.5, 0.5
+  - type: Icon
+    state: "22"
+  - type: Occluder
+    enabled: false
+  - type: InteractionOutline
+  - type: Clickable
+  - type: DropshipWeaponPoint
+    dirOffset: Flip
+  - type: Appearance
+  - type: Tag
+    tags:
+    - RMCDropshipWeaponPoint
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall23
+  suffix: 23
+  components:
+  - type: Sprite
+    state: "23"
+  - type: Icon
+    state: "23"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall24
+  suffix: 24
+  components:
+  - type: Sprite
+    state: "24"
+  - type: Icon
+    state: "24"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall25
+  suffix: 25
+  components:
+  - type: Sprite
+    state: "25"
+  - type: Icon
+    state: "25"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall26
+  suffix: 26
+  components:
+  - type: Sprite
+    state: "26"
+  - type: Icon
+    state: "26"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall27
+  suffix: 27
+  components:
+  - type: Sprite
+    state: "27"
+  - type: Icon
+    state: "27"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall28
+  suffix: 28
+  components:
+  - type: Sprite
+    state: "28"
+  - type: Icon
+    state: "28"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUOspreyWall22
+  id: CMUOspreyWall29
+  name: starboard fore weapon attach point
+  description: A place where heavy equipment can be installed with a powerloader.
+  suffix: 29
+  components:
+  - type: Sprite
+    layers:
+    - state: "29"
+    - map: [ "enum.DropshipWeaponPointLayers.Layer" ]
+      offset: 0.5, 0.5
+  - type: Icon
+    state: "29"
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall30
+  suffix: 30
+  components:
+  - type: Sprite
+    state: "30"
+  - type: Icon
+    state: "30"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall31
+  suffix: 31
+  components:
+  - type: Sprite
+    state: "31"
+  - type: Icon
+    state: "31"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall32
+  suffix: 32
+  components:
+  - type: Sprite
+    state: "32"
+  - type: Icon
+    state: "32"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall33
+  suffix: 33
+  components:
+  - type: Sprite
+    state: "33"
+  - type: Icon
+    state: "33"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall34
+  suffix: 34
+  components:
+  - type: Sprite
+    state: "34"
+    drawdepth: Overdoors
+  - type: Icon
+    state: "34"
+  - type: Occluder
+    enabled: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+        hard: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall35
+  suffix: 35
+  components:
+  - type: Sprite
+    state: "35"
+    drawdepth: Overdoors
+  - type: Icon
+    state: "35"
+  - type: Occluder
+    enabled: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+        hard: false
+
+- type: entity
+  parent: CMPosterMissApril
+  id: CMPosterMissApril35
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Overdoors
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall36
+  suffix: 36
+  components:
+  - type: Sprite
+    state: "36"
+  - type: Icon
+    state: "36"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall37
+  suffix: 37
+  components:
+  - type: Sprite
+    state: "37"
+    drawdepth: Overdoors
+  - type: Icon
+    state: "37"
+  - type: Occluder
+    enabled: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+        hard: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall38
+  suffix: 38
+  components:
+  - type: Sprite
+    state: "38"
+  - type: Icon
+    state: "38"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall39
+  suffix: 39
+  components:
+  - type: Sprite
+    state: "39"
+  - type: Icon
+    state: "39"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall40
+  suffix: 40
+  components:
+  - type: Sprite
+    state: "40"
+  - type: Icon
+    state: "40"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall41
+  suffix: 41
+  components:
+  - type: Sprite
+    state: "41"
+  - type: Icon
+    state: "41"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall42
+  suffix: 42
+  components:
+  - type: Sprite
+    state: "42"
+  - type: Icon
+    state: "42"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall43
+  suffix: 43
+  components:
+  - type: Sprite
+    state: "43"
+  - type: Icon
+    state: "43"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall44
+  suffix: 44
+  components:
+  - type: Sprite
+    state: "44"
+  - type: Icon
+    state: "44"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall45
+  suffix: 45
+  components:
+  - type: Sprite
+    state: "45"
+  - type: Icon
+    state: "45"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall46
+  suffix: 46
+  components:
+  - type: Sprite
+    state: "46"
+  - type: Icon
+    state: "46"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall47
+  suffix: 47
+  components:
+  - type: Sprite
+    state: "47"
+  - type: Icon
+    state: "47"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall48
+  suffix: 48
+  components:
+  - type: Sprite
+    state: "48"
+  - type: Icon
+    state: "48"
+  - type: Occluder
+    enabled: false
+
+- type: entity
+  parent: CMUBaseOspreyWall
+  id: CMUOspreyWall49
+  suffix: 49
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Dropships/osprey_nose.rsi
+    state: "49"
+  - type: Icon
+    sprite: _CMU14/Structures/Dropships/osprey_nose.rsi
+    state: "49"
+  - type: Occluder
+    enabled: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.5,-0.5,1.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000

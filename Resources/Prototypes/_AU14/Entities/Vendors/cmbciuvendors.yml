@@ -258,127 +258,91 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
   - type: CMAutomatedVendor
     sections:
-    - name: Heads Up Display
+    - name: Essential Equipment
+      takeAll: CMUEssentialEquipment
       entries:
       - id: RMCVisorMedical
-        amount: 1
+      - id: AU14CMDefibrillator
+      - id: CMHealthAnalyzer
+      - id: RMCFlashlightPen
+      - id: ClothingNeckStethoscope
+      - id: CMRollerBedSpawnFolded
+      - id: RMCMedevacStretcherFolded
+      - id: CMSurgicalLine
+      - id: CMSynthGraft
     - name: Medical Pouches
+      choices: { CMUPlatoonMedicalPouch: 2 }
       entries:
       - id: RMCPouchAutoinjector
-        amount: 2
       - id: RMCPouchFirstResponder
-        amount: 2
-      - id: RMCPouchVialFill
-        name: vial pouch (Full)
-        amount: 2
       - id: RMCPouchMedical
-        amount: 2
       - id: RMCPouchSyringeFill
-        amount: 2
       - id: RMCPouchFirstAidSplintsGauzeOintment
         name: first-aid pouch (gauze, ointment) # TODO RMC14 splints
-        amount: 2
       - id: RMCPouchFirstAidPills
         name: first-aid pouch (pills)
-        amount: 2
     - name: Medical Storage
+      choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
       - id: CMBeltMedical
-        amount: 1
       - id: CMBeltMedicBag
-        amount: 1
-      - id: AU14CorpsmanIMPBackpackMarine
-        amount: 1
     - name: General Medical Supplies
       entries:
-      - id: CMOintment10
-        amount: 60
       - id: AU14HemostaticGauzePacket
         amount: 60
       - id: AU14Tourniquet
+        amount: 60
+      - id: CMOintment10
         amount: 60
       - id: CMBurnKit10
         amount: 30
       - id: CMTraumaKit10
         amount: 30
-      - id: CMSurgicalLine
-        amount: 6
-      - id: CMSynthGraft
-        amount: 6
-      - id: CMSyringe
-        amount: 10
+    - name: Limited Medications
+      choices: { CMUPlatoonMedicalLimitedMedications: 2 }
+      entries:
+      - id: AU14PillCanisterMeralyne
+      - id: AU14PillCanisterDermaline
+      - id: AU14PillCanisterAlbuterol
+      - id: AU14PillCanisterImidazoline
+      - id: AU14PillCanisterEthylredoxrazine
     - name: Pill Bottles
       entries:
       - id: CMPillCanisterBicaridine
-        amount: 10
+        amount: 15
       - id: CMPillCanisterDexalin
-        amount: 10
+        amount: 15
       - id: CMPillCanisterDylovene
-        amount: 10
+        amount: 15
       - id: CMPillCanisterInaprovaline
-        amount: 10
+        amount: 15
       - id: CMPillCanisterKelotane
-        amount: 10
+        amount: 15
       - id: CMPillCanisterTricordrazine
-        amount: 10
-      - id: AU14PillCanisterMeralyne
-        amount: 1
-      - id: AU14PillCanisterDermaline
-        amount: 1
-      - id: AU14PillCanisterImidazoline
-        amount: 1
-      - id: AU14PillCanisterEthylredoxrazine
-        amount: 1
-      - id: AU14PillCanisterAlbuterol
-        amount: 1
+        amount: 15
 #      - id: CMPillCanisterPeridaxon
 #      - id: CMPillCanisterTramadol
     - name: Injectors
       entries:
       - id: CMEpinephrineAutoInjector
-        amount: 3
+        amount: 15
       - id: AU14NaloxoneAutoInjector
-        amount: 2
+        amount: 15
       - id: CMInaprovalineAutoInjector
-        amount: 8
+        amount: 15
       - id: CMDexalinPlusAutoInjector
         amount: 15
       - id: CMTricordrazineAutoInjector
         amount: 15
-    - name: Medical Utilities
-      entries:
-     #    CMMS11SmartRefillTank
-     # FixOVien
-      - id: AU14CMDefibrillator
-        amount: 1
-      - id: CMRollerBedSpawnFolded
-        amount: 3
-      - id: RMCBoxBodyBag
-        amount: 3
-      - id: RMCBoxSterileMask
-        amount: 1
-      - id: RMCBoxLatexGloves
-        amount: 1
-      - id: CMHealthAnalyzer
-        amount: 1
-      - id: RMCFlashlightPen
-        amount: 1
-      - id: ClothingNeckStethoscope
-        amount: 1
-      - id: RMCGlassesMedicalHUDGlasses
-        amount: 1
-      - id: RMCVial
-        amount: 10
     - name: Medical Gloves
+      choices: { CMUPlatoonMedicalGloves: 1 }
       entries:
       - id: CMHandsLatex
-        amount: 1
       - id: ClothingHandsGlovesNitrile
-        amount: 1
     - name: Medical Masks
+      choices: { CMUPlatoonMedicalMasks: 1 }
       entries:
       - id: CMMaskSterile
-        amount: 1
 
 - type: entity
   parent: ColMarTechBase
@@ -581,4 +545,4 @@
       - id: RMCWeaponLauncherM81
         amount: 1
       - id: RMCGrenadeFlashBang
-        amount: 4
+        amount: 5

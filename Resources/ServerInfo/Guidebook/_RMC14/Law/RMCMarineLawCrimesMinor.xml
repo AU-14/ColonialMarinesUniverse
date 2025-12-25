@@ -46,7 +46,7 @@
     </ColorBox>
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        [bold]10 Minutes.[/bold]
+        [bold]5 Minutes.[/bold]
       </Box>
     </ColorBox>
 
@@ -57,12 +57,12 @@
     </ColorBox>
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        Behavior that is generally disruptive to the ship or base and its crew that classifies as low-level shenanigans not deserving of more severe punishment. Things such as excessive window knocking, force-feeding other GOVFOR or failing to conduct oneself properly during the briefing, such as climbing the Briefing overview. This can escalate to [bold]Disorderly Conduct[/bold].
+        Behavior that is generally disruptive to the ship or base and its crew that classifies as low-level shenanigans not deserving of more severe punishment. Things such as excessive window knocking, force-feeding or failing to conduct oneself properly during the briefing, such as climbing the Briefing overview. This can escalate to [bold]Disorderly Conduct[/bold].
       </Box>
     </ColorBox>
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        [bold]NJP.[/bold]
+        [bold]NJP or 5 minutes.[/bold]
       </Box>
     </ColorBox>
 
@@ -89,7 +89,7 @@
     </ColorBox>
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        To consume alcohol or other substances such as alcohol or hallucinogenic drugs resulting in impaired job performance.
+        To consume alcohol, marijana or other substances such as drugs resulting in being mentally or physically impaired.
       </Box>
     </ColorBox>
     <ColorBox>
@@ -137,7 +137,7 @@
     </ColorBox>
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        To intentionally and willingly lie to an MP, or deputized officer, during a criminal investigation with the intent to disrupt said investigation.
+        To intentionally and willingly lie to an MP/Law Enforcement Officer, or deputized officer, during a criminal investigation with the intent to disrupt said investigation.
       </Box>
     </ColorBox>
     <ColorBox>

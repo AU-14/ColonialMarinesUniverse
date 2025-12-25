@@ -25,7 +25,7 @@
     </ColorBox>
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        Directly and intentionally disrupting primary operations of the ship. Fighting in the requisitions line, extensively or repeatedly disrupting the briefing.
+        Directly and intentionally disrupting primary operations of the faction. Fighting in the requisitions line, extensively or repeatedly disrupting the briefing.
       </Box>
     </ColorBox>
     <ColorBox>
@@ -41,7 +41,7 @@
     </ColorBox>
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        Carrying out objectives or being tied to material that describe planned actions that go against GOVFOR. Strong proof is required that the individual is working against GOVFOR.\n[italic]A major charge of Unauthorized use of a Listening Device when such a device is also tied to a foreign government or terror organisation is additionally considered Subterfuge.[/italic]
+        Carrying out objectives or being tied to material that describe planned actions that go against their faction. Strong proof is required that the individual is working against their faction.\n[italic]A major charge of Unauthorized use of a Listening Device when such a device is also tied to a foreign government or terror organisation is additionally considered Subterfuge.[/italic]
       </Box>
     </ColorBox>
     <ColorBox>
@@ -170,7 +170,7 @@
     </ColorBox>
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        The exercising of power to a [bold]malicious extent[/bold] by [color=#ff000d][bold]MP[/bold][/color] or deputized personnel acting as an [color=#ff000d][bold]MP[/bold][/color].
+        The exercising of power to a [bold]malicious extent[/bold] by [color=#ff000d][bold]MP/Law Enforcement[/bold][/color] or deputized personnel acting as an [color=#ff000d][bold]MP/Law Enforcement[/bold][/color].
         \n[italic]Examples include beating a downed prisoner, excessive use of harmful or non-lethal force, or other abusive actions that led to the harm of a person in custody.[/italic]\nDetained suspects should not have more force used on them than necessary in order to pacify them.
       </Box>
     </ColorBox>
@@ -189,7 +189,7 @@
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
         To deploy into the area of operations without permission of the relevant head of department or [color=#008000][bold]Commander[/bold][/color] where appropriate whilst still performing assigned duties. (I.E A doctor deploying without permission, with the intentions to perform field surgery.) Deploying without intent to perform assigned duties remains desertion.
         \n- The relevant Head of Department or the [color=#008000][bold]Commander[/bold][/color] where appropriate may retroactively authorize deployment. The [color=#008000][bold]Commander[/bold][/color] may overrule the Head of Department on this.
-        \n- The relevant Head of Department or the [color=#008000][bold]Commander[/bold][/color] may designate an alternate person to deploy in the stead of an unauthorized person, in which case [color=#ff000d][bold]MP[/bold][/color]s should coordinate with the designated person to reduce disruption in the field. The maximum delay for this period is five minutes.
+        \n- The relevant Head of Department or the [color=#008000][bold]Commander[/bold][/color] may designate an alternate person to deploy in the stead of an unauthorized person, in which case [color=#ff000d][bold]MP/Law Enforcement[/bold][/color]s should coordinate with the designated person to reduce disruption in the field. The maximum delay for this period is five minutes.
       </Box>
     </ColorBox>
     <ColorBox>

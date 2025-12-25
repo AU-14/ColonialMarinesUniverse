@@ -17,7 +17,7 @@
     RMCRankPrivateFirstClass: []
   startingGear: AU14GearopforRadioTelephoneOperator
   dummyStartingGear: AU14GearopforRadioTelephoneOperatorDummy
-  icon: "AU14JobIconRTO"
+  icon: "AU14JobIconOPFORRTO"
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-opfor
@@ -53,7 +53,7 @@
   id: AU14GearopforRadioTelephoneOperator
   equipment:
     id: AU14JobIDCardopforRadioTelephoneOperator
-    ears: AU14HeadsetSectionMarine
+    ears: AU14HeadsetSectionOpfor
 
 - type: entity
   parent: CMSpawnPointJobBase

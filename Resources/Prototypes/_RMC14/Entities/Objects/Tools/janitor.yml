@@ -112,12 +112,12 @@
       amount: 0
 
 - type: entity
-  parent: SprayBottleSpaceCleaner
+  parent: CMLightReplacer
   id: RMCSprayBottleSpaceCleaner
-  suffix: RMC
+  name: light replacer
+  suffix: Empty
   components:
-  - type: Sprite
-    sprite: _RMC14/Objects/Misc/Janitorial/space_cleaner.rsi
-    state: icon
-  - type: Item
-    sprite: _RMC14/Objects/Misc/Janitorial/space_cleaner.rsi
+  - type: LightReplacer
+    contents:
+    - id: CMLightTube
+      amount: 0

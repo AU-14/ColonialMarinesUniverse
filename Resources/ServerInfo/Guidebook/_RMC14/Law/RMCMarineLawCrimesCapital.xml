@@ -59,7 +59,6 @@
         To engage in actions or refuse to follow orders as to overthrow or usurp the legitimate command structure.
         Creating a massive threat to the ship without the knowledge and approval of the [color=#008000][bold]Commander[/bold][/color] falls under sedition.
         A [color=#90EE90][bold]Duty Officer[/bold][/color] is unable to approve actions that fall under this condition.
-        Proclaiming allegiance to, or acting on behalf of, the supposed CLF is an act of sedition against the UN.
       </Box>
     </ColorBox>
 
@@ -76,12 +75,12 @@
 
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        Crimes against Sapience
+        Crimes against humanity
       </Box>
     </ColorBox>
     <ColorBox>
       <Box HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="3">
-        To engage in actions that violate sapient life rights or otherwise are heinous acts against sapient life. Examples are torture, cannibalism and forced infection of any kind.
+        To engage in actions that violate human rights or otherwise are heinous acts against sapient life. Examples are torture, cannibalism and forced infection of any kind.
       </Box>
     </ColorBox>
 

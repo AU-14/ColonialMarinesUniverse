@@ -1,0 +1,76 @@
+- type: entity
+  parent: CMBaseMobSpeciesOrganic
+  id: cultistJob
+  name: Cultist
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ CMUGearCultist ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cm-cultist-name
+    description: cm-cultist-description
+    raffle:
+      settings: short
+    rules: cm-cultist-rules
+
+
+- type: threat
+  id: cultistThreat
+  winconditions:
+  - KillAllGovforRule
+  roundstartspawns: cultistParty
+
+- type: partySpawn
+  id: cultistParty
+  leadersToSpawn:
+    cultistJob: 2
+  scalewithpop: true
+  spawnTogether: true
+
+
+- type: startingGear
+  id: CMUGearCultist
+  equipment:
+    outerClothing: ClothingOuterRobesCult
+    jumpsuit: CMJumpsuitColonist
+    shoes: ClothingShoesCult
+    head: ClothingHeadHatHoodCulthood
+    pocket1: RMCPouchGeneralLarge
+    pocket2: RMCPouchGeneralLarge
+    back: AU14CultistSatchel
+  inhand:
+  - XenoEgg
+  - RMCM42A2ShotgunCase
+  - RMCBoxShellsSlugs
+
+- type: entity
+  parent: RMCSatchelBlack
+  id: AU14CultistSatchel
+  name: Cultist satchel
+  description: A black satchel covered in occult symbols.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RitualDagger
+    - id: CMTraumaKit10
+      amount: 3
+    - id: CMTricordrazineAutoInjector
+      amount: 3
+    - id: CMShellShotgunBuckshot
+      amount: 5
+
+
+- type: auThirdParty
+  id: cultistThirdParty
+  partyspawn: cultistParty
+  enterbyshuttle: false
+  weight: 10
+  minplayers: 0
+  maxplayers: 100
+  GhostsNeeded: 1
+  roundstart: true

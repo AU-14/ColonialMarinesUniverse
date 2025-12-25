@@ -14,7 +14,7 @@
   - type: GhostRole
     name: cm-job-name-xeno-praetorian
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Praetorian/praetorian.rsi
+    sprite: _CMU14/Mobs/Xenos/Praetorian/praetorian.rsi # CMU14-Edit
   - type: MobState
     allowedStates:
     - Alive
@@ -160,7 +160,7 @@
     guides:
     - RMCGuideRoleValkyrie
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Praetorian/valkyrie_praetorian.rsi
+    sprite: _CMU14/Mobs/Xenos/Praetorian/valkyrie_praetorian.rsi # CMU14-Edit
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -228,7 +228,7 @@
   suffix: Dancer
   components:
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Praetorian/dancer_praetorian.rsi
+    sprite: _CMU14/Mobs/Xenos/Praetorian/dancer_praetorian.rsi # CMU14-Edit
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -265,7 +265,7 @@
     guides:
     - RMCGuideRoleVanguard
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Praetorian/vanguard_praetorian.rsi
+    sprite: _CMU14/Mobs/Xenos/Praetorian/vanguard_praetorian.rsi # CMU14-Edit
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -316,7 +316,7 @@
     guides:
     - RMCGuideRoleOppressor
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Praetorian/oppressor_praetorian.rsi
+    sprite: _CMU14/Mobs/Xenos/Praetorian/oppressor_praetorian.rsi # CMU14-Edit
   - type: Xeno
     actionIds:
     - ActionXenoRest

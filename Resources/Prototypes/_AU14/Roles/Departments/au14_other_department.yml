@@ -8,6 +8,7 @@
   - AU14JobCivilianCMBDeputy
   - AU14JobCivilianCMBMarshal
   - AU14JobCivilianCWPSRanger
+  - AU14JobCiviliannspaConstable
   - AU14JobCivilianScientist
   - AU14JobCivilianUSASFRecruiter
   - AU14JobCivilianMiner
@@ -18,34 +19,14 @@
 
 - type: department
   parent: CMDepartmentBase
-  id: AU14DepartmentPrometheus
-  name: au14-department-prometheus
-  description: au14-department-prometheus-description
-  color: "#e3ce94"
-  roles:
-  - AU14JobCivilianScientist
-  - AU14JobCivilianColonySynthetic
-  - AU14JobWYGuard
-  - AU14JobCivilianCorporateLiaison
-  departmentRadio: null
-  headOfDepartment: null
-
-
-- type: department
-  parent: CMDepartmentBase
   id: AU14DepartmentPrison
   name: au14-department-prison
   description: au14-department-prison-description
   color: "#e3ce94"
   roles:
-  - AU14JobCivilianPrisoner
   - AU14JobWYGuard
-  - AU14JobCivilianKellandWarden
-  - AU14JobCivilianPhysician
-  - AU14JobCivilianFreightSystemsSpecialist
   departmentRadio: null
   headOfDepartment: null
-
 
 - type: department
   parent: CMDepartmentBase
@@ -59,4 +40,28 @@
   departmentRadio: null
   headOfDepartment: null
 
+
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentThreat
+  name:  au-job-name-threat-member
+  description: au14-department-threat-description
+  color: "#e3ce94"
+  roles:
+  - AU14JobThreatLeader
+  - AU14JobThreatMember
+  departmentRadio: null
+  headOfDepartment: null
+
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentThirdParty
+  name: au14-department-third-party
+  description: au14-department-third-party-description
+  color: "#e3ce94"
+  roles:
+  - AU14JobThirdPartyLeader
+  - AU14JobThirdPartyMember
+  departmentRadio: null
+  headOfDepartment: null
 

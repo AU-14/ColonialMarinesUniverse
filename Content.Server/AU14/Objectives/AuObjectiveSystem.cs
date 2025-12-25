@@ -11,6 +11,7 @@ using Robust.Server.Player;
 using Content.Server.GameTicking.Events;
 using Content.Shared.AU14.Objectives.Fetch;
 using Content.Shared.AU14.Objectives.Kill;
+using Content.Shared.AU14.Threats;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Mobs.Components;
 
@@ -30,7 +31,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
     [Dependency] private readonly Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
     [Dependency] private readonly AuFetchObjectiveSystem _fetchObjectiveSystem = default!;
     [Dependency] private readonly AuKillObjectiveSystem _killObjectiveSystem = default!;
-
+    public bool iswinactive = false;
     private ObjectiveMasterComponent? _objectiveMaster = null;
 
     public (int govforMinor, int govforMajor, int opforMinor, int opforMajor, int clfMinor, int clfMajor, int
@@ -146,6 +147,8 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
 
     public void Main()
     {
+        iswinactive = false;
+
         var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
         var presetId = ticker.Preset?.ID?.ToLowerInvariant();
         var govforMinor = new List<AuObjectiveComponent>();
@@ -177,12 +180,14 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                                allMasters[0];
         }
 
+
+
         if (presetId == "insurgency")
         {
             govforMinor = SelectObjectives("govfor", 1, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.GovforMinorObjectives, _objectiveMaster.MinGovforMinorObjectives));
             govforMajor = SelectObjectives("govfor", 2, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.GovforMajorObjectives, _objectiveMaster.MinGovforMajorObjectives));
             clfMinor = SelectObjectives("clf", 1, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.CLFMinorObjectives, _objectiveMaster.MinCLFMinorObjectives));
-            clfMajor = SelectObjectives("clf", 2, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.CLFMajorObjectives, _objectiveMaster.MinCLFMajorObjectives));
+            clfMajor = SelectObjectives("clf", 2, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.CLFMajorObjectives, _objectiveMaster.MinCLFMinorObjectives));
         }
         else if (presetId == "forceonforce")
         {
@@ -306,6 +311,11 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         var allObjectives = GetObjectives();
         var selected = new List<AuObjectiveComponent>();
         string? selectedPlatoonId = null;
+        // Get the current threat prototype if available
+        ThreatPrototype? currentThreat = null;
+        var auRoundSystem = _entityManager.EntitySysManager.GetEntitySystem<Content.Server.AU14.Round.AuRoundSystem>();
+        if (auRoundSystem != null)
+            currentThreat = auRoundSystem._selectedthreat;
         switch (factionLower)
         {
             case "govfor":
@@ -318,6 +328,9 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         }
         foreach (var objective in allObjectives)
         {
+            // Exclude win/final objectives (ObjectiveLevel == 3) from roundstart unless RollAnyway is true
+            if (objective.ObjectiveLevel == 3 && !objective.RollAnyway)
+                continue;
             bool modeMatch = objective.ApplicableModes.Any(m => m.ToLowerInvariant() == presetIdLower);
             bool factionMatch = objective.Factions.Any(f => f.ToLowerInvariant() == factionLower);
             bool maxPlayersMatch = (objective.Maxplayers == 0 || objective.Maxplayers >= playercount);
@@ -325,6 +338,14 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             bool levelMatch = (objectiveLevel == null
                 ? (objective.ObjectiveLevel == 1 || objective.ObjectiveLevel == 2)
                 : (objective.ObjectiveLevel == objectiveLevel));
+            // Threat objective whitelist check
+            bool threatWhitelistMatch = true;
+            if (currentThreat != null && currentThreat.ObjectiveWhitelist.Count > 0)
+            {
+                // Only allow objectives whose id is in the threat's whitelist
+                if (!currentThreat.ObjectiveWhitelist.Contains(objective.ID))
+                    threatWhitelistMatch = false;
+            }
             if (!modeMatch)
                 continue;
             if (!factionMatch)
@@ -334,6 +355,8 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             if (!minPlayersMatch)
                 continue;
             if (!levelMatch)
+                continue;
+            if (!threatWhitelistMatch)
                 continue;
             if (selectedPlatoonId != null && objective.BlacklistedPlatoons.Contains(selectedPlatoonId))
                 continue;
@@ -419,6 +442,22 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                     {
                         objective.FactionStatuses[key] = AuObjectiveComponent.ObjectiveStatus.Failed;
                         Logger.Info($"[OBJ COMPLETE DEBUG] Set FactionStatuses['{key}'] = Failed");
+                    }
+                }
+                var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
+                var presetId = ticker.Preset?.ID?.ToLowerInvariant();
+                if (presetId == "distresssignal" || presetId == "forceonforce")
+                {
+                    foreach (var checkFaction in objective.Factions)
+                    {
+                        if (!CanFactionWin(checkFaction))
+                        {
+                            // End round, other faction wins
+                            var otherFaction = objective.Factions.FirstOrDefault(f => f != checkFaction) ?? "Unknown";
+                            _gameTicker.EndRound($"{otherFaction.ToUpperInvariant()} wins: {checkFaction} cannot win due to failed objectives.");
+                            _roundEnd.EndRound();
+
+                        }
                     }
                 }
             }
@@ -537,11 +576,13 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
 
     private void EndRound(string faction, string? roundendmessage)
     {
-        // Compose a round end message if not provided
         var message = roundendmessage;
         if (string.IsNullOrEmpty(message))
             message = $"{faction.ToUpperInvariant()} has won the round!";
         _gameTicker.EndRound(faction.ToUpperInvariant() + " Won the round by: " + message);
+
+        _roundEnd.EndRound();
+
     }
 
     // Checks if a Kill objective is completable: at least one entity is marked for this objective
@@ -553,7 +594,6 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         // If the objective will spawn a mob and hasn't yet, it will be completable after activation
         if (killObj.SpawnMob && !killObj.MobsSpawned)
             return true;
-        // Check if any entity is marked for this objective
         var query = _entityManager.EntityQueryEnumerator<MarkedForKillComponent>();
         while (query.MoveNext(out var ent, out var markComp))
         {
@@ -599,7 +639,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
 
         if (!_objectiveMaster.FinalObjectiveGivenFactions.Contains(factionKey) && newPoints >= requiredPoints)
         {
-            // Only activate a final objective if it is completable (for Kill objectives)
+            // Only activate a final objective if it is completable
             var finalObjectives = EntityManager.EntityQuery<AuObjectiveComponent>()
                 .Where(obj =>
                     !obj.Active && obj.Factions.Any(f => f.ToLowerInvariant() == factionKey) &&
@@ -616,7 +656,6 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                     if (!IsKillObjectiveCompletable(obj))
                         continue;
                 }
-                // Fetch and Capture are always completable
                 selected = obj;
                 break;
             }
@@ -628,7 +667,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                 Logger.Info(
                     $"[OBJ FINAL DEBUG] Activated final objective '{selected.objectiveDescription}' for faction '{factionKey}'");
                 _objectiveMaster.FinalObjectiveGivenFactions.Add(factionKey);
-
+                iswinactive = true;
                 if (selected.Owner != EntityUid.Invalid && EntityManager.HasComponent<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveComponent>(selected.Owner))
                 {
                     var fetchSystem = EntityManager.EntitySysManager.GetEntitySystem<Content.Server.AU14.Objectives.Fetch.AuFetchObjectiveSystem>();
@@ -658,5 +697,40 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             var key = obj.Faction.ToLowerInvariant();
             obj.FactionStatuses.TryAdd(key, AuObjectiveComponent.ObjectiveStatus.Incomplete);
         }
+    }
+
+    // --- Add this helper method at the end of the class ---
+    private bool CanFactionWin(string faction)
+    {
+        if (_objectiveMaster == null)
+            return true;
+        var factionKey = faction.ToLowerInvariant();
+        int currentPoints = 0;
+        int requiredPoints = 0;
+        switch (factionKey)
+        {
+            case "govfor":
+                currentPoints = _objectiveMaster.CurrentWinPointsGovfor;
+                requiredPoints = _objectiveMaster.RequiredWinPointsGovfor;
+                break;
+            case "opfor":
+                currentPoints = _objectiveMaster.CurrentWinPointsOpfor;
+                requiredPoints = _objectiveMaster.RequiredWinPointsOpfor;
+                break;
+            case "clf":
+                currentPoints = _objectiveMaster.CurrentWinPointsClf;
+                requiredPoints = _objectiveMaster.RequiredWinPointsClf;
+                break;
+            case "scientist":
+                currentPoints = _objectiveMaster.CurrentWinPointsScientist;
+                requiredPoints = _objectiveMaster.RequiredWinPointsScientist;
+                break;
+            default:
+                return true;
+        }
+        // Calculate max possible points from remaining incomplete objectives
+        var remainingObjectives = GetObjectives().Where(obj => obj.Factions.Any(f => f.ToLowerInvariant() == factionKey) && obj.FactionStatuses.TryGetValue(factionKey, out var status) && status == AuObjectiveComponent.ObjectiveStatus.Incomplete);
+        int possiblePoints = remainingObjectives.Sum(obj => obj.CustomPoints == 0 ? (obj.ObjectiveLevel == 1 ? 5 : 20) : obj.CustomPoints);
+        return (currentPoints + possiblePoints) >= requiredPoints;
     }
 }

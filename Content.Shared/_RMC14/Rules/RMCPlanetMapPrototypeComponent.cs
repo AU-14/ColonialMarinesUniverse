@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Item;
 using Content.Shared.AU14;
+using Content.Shared.AU14.Threats;
 using Content.Shared.AU14.util;
 using Content.Shared.Roles;
 using Robust.Shared.GameStates;
@@ -99,6 +100,12 @@ public sealed partial class RMCPlanetMapPrototypeComponent : Component
 
     [DataField("opfordropships")]
     public int opfordropships = 1;
+
+    [DataField("threats")]
+    public List<ProtoId<ThreatPrototype>> AllowedThreats = new();
+    [DataField("thirdparties")]
+    public List<ProtoId<AuThirdPartyPrototype>> ThirdParties = new();
+
 
 }
 

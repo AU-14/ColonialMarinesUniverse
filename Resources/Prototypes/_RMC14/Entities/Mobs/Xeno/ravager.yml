@@ -17,7 +17,7 @@
   - type: GhostRole
     name: cm-job-name-xeno-ravager
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Ravager/ravager.rsi
+    sprite: _CMU14/Mobs/Xenos/Ravager/ravager.rsi # CMU14-Edit
   - type: MobState
     allowedStates:
     - Alive
@@ -171,7 +171,7 @@
   suffix: Berserker
   components:
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Ravager/berserker_ravager.rsi
+    sprite: _CMU14/Mobs/Xenos/Ravager/berserker_ravager.rsi # CMU14-Edit
   - type: Xeno
     actionIds:
     - ActionXenoRest

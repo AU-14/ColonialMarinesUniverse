@@ -19,7 +19,7 @@
     RMCRankSecondLT: []
   startingGear: AU14GearopforDSPilot
   dummyStartingGear: AU14GearopforDSPilotDummy
-  icon: "AU14JobIconPilotOfficer"
+  icon: "AU14JobIconOPFORPilotOfficer"
   requireAdminNotify: true
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-opfor

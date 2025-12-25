@@ -172,7 +172,7 @@
     group: Brute
     consumable: false
     scalingDoAfter: 0.95
-    damage: -12
+    damage: -16
     canUseUnskilled: false
     skills:
       RMCSkillMedical: 2
@@ -192,8 +192,8 @@
     noWoundsOnUserPopup: cm-wounds-already-treated-self-popup
     noWoundsOnTargetPopup: cm-wounds-already-treated-target-popup
   - type: MedicallyUnskilledDoAfter
-    min: 6
-    doAfter: 8
+    min: 8
+    doAfter: 3
   - type: StackPrice
     price: 10
 
@@ -216,7 +216,7 @@
     group: Burn
     consumable: false
     scalingDoAfter: 0.95
-    damage: -12
+    damage: -16
     canUseUnskilled: false
     skills:
       RMCSkillMedical: 2
@@ -236,8 +236,8 @@
     noWoundsOnUserPopup: cm-burns-already-treated-self-popup
     noWoundsOnTargetPopup: cm-burns-already-treated-target-popup
   - type: MedicallyUnskilledDoAfter
-    min: 6
-    doAfter: 8
+    min: 8
+    doAfter: 3
   - type: StackPrice
     price: 10
 

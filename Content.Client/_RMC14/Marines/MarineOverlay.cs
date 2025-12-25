@@ -1,4 +1,5 @@
 using System.Linq;
+using System;
 using System.Numerics;
 using Content.Shared._RMC14.CrashLand;
 using Content.Shared._RMC14.Marines;
@@ -72,6 +73,17 @@ public sealed class MarineOverlay : Overlay
         if (!_marineIconsQuery.TryComp(_players.LocalEntity, out var marineHudComp))
             return;
 
+        var localEnt = _players.LocalEntity;
+        var isSpectator = false;
+        if (localEnt != null && _entity.TryGetComponent(localEnt.Value, out MetaDataComponent? localMeta))
+        {
+            var protoId = localMeta.EntityPrototype?.ID;
+            if (!string.IsNullOrEmpty(protoId) && (string.Equals(protoId, "MobObserver", StringComparison.InvariantCultureIgnoreCase) || string.Equals(protoId, "RMCAdminObserver", StringComparison.InvariantCultureIgnoreCase)))
+            {
+                isSpectator = true;
+            }
+        }
+
         var handle = args.WorldHandle;
 
         var eyeRot = args.Viewport.Eye?.Rotation ?? default;
@@ -119,10 +131,15 @@ public sealed class MarineOverlay : Overlay
                 if (_npcFactionMemberQuery.TryComp(uid, out var factionMember))
                 {
                     // First faction is the entity's default faction
-                    if (factionIcons.TryGetValue(factionMember.Factions.First(), out var newIcon))
+                    var isClf = factionMember.Factions.Any(f => string.Equals(f.ToString(), "CLF", StringComparison.InvariantCultureIgnoreCase));
+                    if (!isClf || isSpectator)
                     {
-                        icon.Background = null;
-                        icon.Icon = newIcon;
+                        var primaryFaction = factionMember.Factions.First();
+                        if (factionIcons.TryGetValue(primaryFaction, out var newIcon))
+                        {
+                            icon.Background = null;
+                            icon.Icon = newIcon;
+                        }
                     }
                 }
             }

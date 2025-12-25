@@ -23,18 +23,26 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
 
     protected override void Started(EntityUid uid, AddJobsRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
+
+
+
         PlatoonPrototype? platoon = null;
         var planet = _auRoundSystem.GetSelectedPlanet();
         var protoMgr = IoCManager.Resolve<IPrototypeManager>();
         var platoonSpawnRule = _platoonSpawnRule;
-        // Determine which side's platoon to use
+
+        var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
+        var isDistressPreset = !string.IsNullOrEmpty(presetId) && (
+            presetId.Equals("distresssignal", StringComparison.InvariantCultureIgnoreCase)
+        );
+        var isColonyFallPreset = !string.IsNullOrEmpty(presetId) && presetId.Equals("ColonyFall", StringComparison.InvariantCultureIgnoreCase);
+
         if (component.ShipFaction != null && component.ShipFaction.ToLower() == "opfor")
         {
             platoon = platoonSpawnRule.SelectedOpforPlatoon;
         }
         else
         {
-            // Prefer the selected govfor platoon if available
             platoon = platoonSpawnRule.SelectedGovforPlatoon;
             if (platoon == null && planet != null && planet.PlatoonsGovfor.Count > 0)
             {
@@ -61,6 +69,10 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
 
         // If there are no jobs to add, return early
         if (component.Jobs == null || component.Jobs.Count == 0)
+            return;
+
+        // If this is ColonyFall, don't add GOVFOR jobs
+        if (isColonyFallPreset && !string.IsNullOrEmpty(component.ShipFaction) && component.ShipFaction.Equals("govfor", StringComparison.InvariantCultureIgnoreCase))
             return;
 
 
@@ -95,6 +107,7 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                     var stationJobs = EntityManager.GetComponentOrNull<StationJobsComponent>(stationUid.Value);
                     if (stationJobs == null)
                         continue;
+
                     foreach (var entry in component.Jobs)
                     {
                         var jobId = entry.Key;
@@ -117,6 +130,15 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                     var stationJobs = EntityManager.GetComponentOrNull<StationJobsComponent>(stationUid.Value);
                     if (stationJobs != null)
                     {
+                        if (isDistressPreset)
+                        {
+                            var existing = stationJobs.JobList.Keys.ToList();
+                            foreach (var jobKey in existing)
+                            {
+                                _stationJobs.TrySetJobSlot(stationUid.Value, jobKey.ToString(), 0, false, stationJobs);
+                            }
+                        }
+
                         foreach (var entry in component.Jobs)
                         {
                             var jobId = entry.Key;
@@ -155,6 +177,15 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                     var stationJobs = EntityManager.GetComponentOrNull<StationJobsComponent>(stationUid.Value);
                     if (stationJobs != null)
                     {
+                        if (isDistressPreset)
+                        {
+                            var existing = stationJobs.JobList.Keys.ToList();
+                            foreach (var jobKey in existing)
+                            {
+                                _stationJobs.TrySetJobSlot(stationUid.Value, jobKey.ToString(), 0, false, stationJobs);
+                            }
+                        }
+
                         foreach (var entry in component.Jobs)
                         {
                             var jobId = entry.Key;

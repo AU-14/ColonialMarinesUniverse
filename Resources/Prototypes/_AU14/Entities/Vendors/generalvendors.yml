@@ -175,9 +175,17 @@
       entries:
       - id: AU14CivBallCapBlack
         amount: 30
+      - id: AU14CivBallCapBlueTrucker
+        amount: 30
+      - id: AU14CivBallCapRedTrucker
+        amount: 30
       - id: AU14USCMVeteranCap
         amount: 30
-      - id: ClothingHeadHatFedoraBrown
+      - id: AU14CivFedoraTan
+        amount: 30
+      - id: AU14CivFedoraBrown
+        amount: 30
+      - id: AU14CivFedoraGray
         amount: 30
     - name: Glasses
       entries:
@@ -209,5 +217,11 @@
       entries:
       - id: CMSatchel
         amount: 30
+      - id: AU14SlingSatchelBlack
+        amount: 30
+      - id: AU14SlingSatchelBlue
+        amount: 30
       - id: RMCBeltUtilityGeneral
+        amount: 30
+      - id: RMCPouchGeneral
         amount: 30

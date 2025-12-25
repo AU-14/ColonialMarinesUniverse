@@ -3,7 +3,7 @@
   parent: ColMarTechBaseAnchorable
   id: CMVendorCassettes
   name: Rec-Vend
-  description: Contains recreational items, like Cassette Players and Cards.
+  description: Contains recreational items, like Cards.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/cassette_player.rsi
@@ -13,58 +13,6 @@
   - type: CMAutomatedVendor
     hackable: true
     sections:
-    - name: Cassette Players
-      entries:
-      - id: AU14CassettePlayerGray
-        amount: 10
-      - id: AU14CassettePlayerBlue
-        amount: 10
-      - id: AU14CassettePlayerGreen
-        amount: 10
-      - id: AU14CassettePlayerPink
-        amount: 10
-      - id: AU14CassettePlayerOrange
-        amount: 10
-      - id: AU14CassettePlayerRainbow
-        amount: 10
-      - id: AU14CassettePlayerNeon
-        amount: 10
-    - name: Cassettes
-      entries:
-      - id: AU14CassetteTapeBlueStripe
-        amount: 30
-      - id: AU14CassetteTapeRisingSun
-        amount: 30
-      - id: AU14CassetteTapeOcean
-        amount: 30
-      - id: AU14CassetteTapeGreen
-        amount: 30
-      - id: AU14CassetteTapeRedBlack
-        amount: 30
-      - id: AU14CassetteTapePink
-        amount: 30
-      - id: AU14CassetteTapeRainbow
-        amount: 30
-      - id: AU14CassetteTapeRedStripe
-        amount: 30
-      - id: AU14CassetteTapeWhite
-        amount: 30
-      - id: AU14CassetteTapeNeon
-        amount: 30
-      - id: AU14CassetteTapePurple
-        amount: 30
-      - id: AU14CassetteTapeRedDirt
-        amount: 30
-      - id: AU14CassetteTapeTan
-        amount: 30
-      - id: AU14CassetteTapeTWE
-        amount: 30
-      - id: AU14CassetteTapeCLF
-        amount: 30
-      - id: AU14CassetteTapePartyApproved
-        amount: 30
-      - id: AU14CassetteTapeWY
-        amount: 30
     - name: Cards
       entries: []
     - name: Other

@@ -15,8 +15,8 @@ RELEASE_DIR = "release"
 # CONFIGURATION PARAMETERS
 # Forks should change these to publish to their own infrastructure.
 #
-ROBUST_CDN_URL = "https://wizards.cdn.spacestation14.com/"
-FORK_ID = "wizards"
+ROBUST_CDN_URL = "https://cmu-cdn.cm-ss13.com/"
+FORK_ID = "cmu"
 
 def main():
     parser = argparse.ArgumentParser()

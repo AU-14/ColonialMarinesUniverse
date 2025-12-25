@@ -21,7 +21,7 @@
 - type: rank
   id: AU14RankCMBMarshal
   name: CMB Marshal
-  prefix: Marshal
+  prefix: Mrshl.
 
 - type: rank
   id: AU14RankColonyAdministrator
@@ -47,3 +47,18 @@
   id: AU14RankCWPSSeniorRanger
   name: Senior Ranger
   prefix: Sr. Ranger
+
+- type: rank
+  id: AU14RankNSPAConstable
+  name: Constable
+  prefix: Constable
+
+- type: rank
+  id: AU14RankNSPASeniorConstable
+  name: Senior Constable
+  prefix: Sr. Constable
+
+- type: rank
+  id: AU14RankNSPAInspector
+  name: Inspector
+  prefix: Insp.

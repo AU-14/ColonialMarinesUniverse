@@ -29,11 +29,6 @@
   parent: RMCExtinguisherCabinet
   id: RMCExtinguisherCabinetFilled
   suffix: RMC14, Filled
-  components:
-  - type: ContainerFill
-    containers:
-      ItemCabinet:
-      - CMFireExtinguisher
 
 - type: entity
   parent: [RMCExtinguisherCabinetFilled, RMCExtinguisherCabinetOpen]
@@ -71,11 +66,6 @@
   parent: RMCExtinguisherCabinetAlt
   id: RMCExtinguisherCabinetAltFilled
   suffix: RMC14, Alt, Filled
-  components:
-  - type: ContainerFill
-    containers:
-      ItemCabinet:
-      - CMFireExtinguisher
 
 - type: entity
   parent: [RMCExtinguisherCabinetAltFilled, RMCExtinguisherCabinetAltOpen]

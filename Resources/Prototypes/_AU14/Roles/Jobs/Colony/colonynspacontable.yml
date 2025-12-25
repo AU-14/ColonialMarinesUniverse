@@ -1,0 +1,73 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCiviliannspaConstable
+  name: au14-job-name-civiliannspaConstable
+  description: au14-job-description-civiliannspaConstable
+  setPreference: true
+  canBeAntag: false
+  playTimeTracker: AU14JobCiviliannspaConstable
+  ranks:
+    AU14RankNSPAInspector:
+    - !type:RoleTimeRequirement
+      role: AU14JobCiviliannspaConstable
+      time: 1500 # 25 hours
+    AU14RankNSPASeniorConstable:
+    - !type:RoleTimeRequirement
+      role: AU14JobCiviliannspaConstable
+      time: 600 # 10 hours
+    AU14RankNSPAConstable: []
+  startingGear: AU14GearCiviliannspaConstable
+  icon: "RMCJobIconBureauDeputy"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - aucmb
+  - Colonist
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillCqc: 2
+        RMCSkillEndurance: 2
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 2
+        RMCSkillIntel: 1
+        RMCSkillMedical: 1
+        RMCSkillMeleeWeapons: 1
+        RMCSkillOverwatch: 1
+        RMCSkillPolice: 2
+        RMCSkillVehicles: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-civiliannspaConstable
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCiviliannspaConstable
+  equipment:
+    head: RMCHeadCapTSEPAPeaked
+    jumpsuit: RMCJumpsuitTSEPA
+    belt: CMBeltSecurityMarshalFilled
+    shoes: RMCBootsPMCFilled
+    id: AU14IDCardciviliannspaConstable
+    ears: AU14CMBHeadset
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCiviliannspaConstable
+  name: Spawn Point Civilian nspa Constable
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCiviliannspaConstable
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCiviliannspaConstable
+  isHumanoid: true

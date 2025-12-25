@@ -18,7 +18,7 @@
     RMCRankStaffSergeant: []
   startingGear: AU14GearopforSectionSergeant
   dummyStartingGear: AU14GearopforPlatoonSergantDummy
-  icon: "AU14JobIconPlatoonSarge"
+  icon: "AU14JobIconOPFORPlatoonSarge"
   requireAdminNotify: true
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-opfor

@@ -1,0 +1,19 @@
+- type: entity
+  id: KillAllGovforRule
+  parent: BaseGameRule
+  name: Kill All Govfor
+  description: Threat wins when all Govfor are dead.
+  components:
+    - type: GameRule
+    - type: KillAllGovforRule
+
+- type: entity
+  id: ThreatSurviveRule
+  parent: BaseGameRule
+  name: Threat Survive Timer
+  description: Threat wins if they survive X minutes after round start.
+  components:
+    - type: GameRule
+    - type: ThreatSurviveRule
+      minutes: 10 # Set this to the desired number of minutes
+

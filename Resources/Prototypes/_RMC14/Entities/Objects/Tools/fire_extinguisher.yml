@@ -2,79 +2,24 @@
   id: CMFireExtinguisherPortable
 
 - type: entity
-  parent: FireExtinguisher
+  parent: CMLightReplacer
   id: CMFireExtinguisher
-  name: fire extinguisher
-  description: A traditional red fire extinguisher.
+  suffix: Empty
   components:
-  - type: Item
-    sprite: _RMC14/Objects/fire_extinguisher.rsi
-  - type: Spray
-    transferAmount: 5
-    sprayedPrototype: RMCExtinguisherSpray
-    vaporAmount: 3
-    sprayDistance: 5
-    sprayVelocity: 5
-  - type: SolutionContainerManager
-    solutions:
-      spray:
-        maxVol: 50
-        reagents:
-        - ReagentId: Water
-          Quantity: 50
-  - type: Sprite
-    sprite: _RMC14/Objects/fire_extinguisher.rsi
-    layers:
-    - state: fire_extinguisher0
-      map: [ "enum.ToggleableVisuals.Layer" ]
-  - type: GenericVisualizer
-    visuals:
-      enum.ToggleableVisuals.Enabled:
-        enum.ToggleableVisuals.Layer:
-          True: { state: fire_extinguisher1 } # TODO RMC14
-          False: { state: fire_extinguisher0 }
-  - type: InteractedBlacklist
-    blacklist:
-      components:
-      - Xeno
-  - type: Clothing
-    sprite: _RMC14/Objects/fire_extinguisher.rsi
-    quickEquip: false
-    slots:
-    - Belt
+  - type: LightReplacer
+    contents:
+    - id: CMLightTube
+      amount: 0
 
 - type: entity
-  parent: CMFireExtinguisher
+  parent: CMLightReplacer
   id: CMFireExtinguisherPortable
-  name: portable fire extinguisher
-  description: A light and compact fibreglass-framed model fire extinguisher.
+  suffix: Empty
   components:
-  - type: Item
-    sprite: _RMC14/Objects/fire_extinguisher_mini.rsi
-    size: Small
-  - type: SolutionContainerManager
-    solutions:
-      spray:
-        maxVol: 30
-        reagents:
-        - ReagentId: Water
-          Quantity: 30
-  - type: Sprite
-    sprite: _RMC14/Objects/fire_extinguisher_mini.rsi
-    layers:
-    - state: minife1
-      map: [ "enum.ToggleableVisuals.Layer" ]
-  - type: GenericVisualizer
-    visuals:
-      enum.ToggleableVisuals.Enabled:
-        enum.ToggleableVisuals.Layer:
-          True: { state: minife1 } # TODO RMC14
-          False: { state: minife0 }
-  - type: Tag
-    tags:
-    - CMFireExtinguisherPortable
-  - type: Clothing
-    sprite: _RMC14/Objects/fire_extinguisher_mini.rsi
+  - type: LightReplacer
+    contents:
+    - id: CMLightTube
+      amount: 0
 
 - type: entity
   parent: ExtinguisherSpray

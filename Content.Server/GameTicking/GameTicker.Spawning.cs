@@ -28,6 +28,8 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
 using Content.Server._RMC14.Announce;
+using Content.Server.AU14.Round;
+using Content.Server.AU14.Threats;
 
 namespace Content.Server.GameTicking
 {
@@ -37,6 +39,8 @@ namespace Content.Server.GameTicking
         [Dependency] private readonly SharedJobSystem _jobs = default!;
         [Dependency] private readonly AdminSystem _admin = default!;
         [Dependency] private readonly MarinePresenceAnnounceSystem _marinePresenceAnnounce = default!;
+        [Dependency] private readonly AuJobSelectionSystem _auJobSelectionSystem = default!;
+        [Dependency] private readonly AuThreatSystem _auThreatSystem = default!;
 
         public static readonly EntProtoId ObserverPrototypeName = "MobObserver";
         public static readonly EntProtoId AdminObserverPrototypeName = "RMCAdminObserver";
@@ -91,8 +95,14 @@ namespace Content.Server.GameTicking
                 }
             }
 
+            _auJobSelectionSystem.AssignThreatAndThirdPartyJobs(profiles);
+
             var spawnableStations = GetSpawnableStations();
             var assignedJobs = _stationJobs.AssignJobs(profiles, spawnableStations);
+            if (_auRoundSystem._selectedthreat != null)
+            {
+                _auThreatSystem.SpawnThreatAtRoundStart(_auRoundSystem._selectedthreat, DefaultMap, assignedJobs);
+            }
 
             _stationJobs.AssignOverflowJobs(ref assignedJobs, playerNetIds, profiles, spawnableStations);
 
@@ -119,6 +129,8 @@ namespace Content.Server.GameTicking
             // Spawn everybody in!
             foreach (var (player, (job, station)) in assignedJobs)
             {
+                if (job != null && (job == "AU14JobThreatLeader" || job == "AU14JobThreatMember"))
+                    continue;
                 if (job == null)
                     continue;
 

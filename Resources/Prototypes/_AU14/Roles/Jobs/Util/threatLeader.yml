@@ -1,0 +1,17 @@
+- type: job
+  parent: AUThreatJobBase
+  id: AU14JobThreatLeader
+  name: au-job-name-threat-leader
+  setPreference: true
+  playTimeTracker: AUJobThreatLeader
+  hidden: false
+  supervisors: nobody
+  jobPreviewEntity: RMCPlayerXenoQueenPreview
+  accessGroups:
+  - CMAccessXeno
+  - CMAccessXenoQueen
+
+- type: playTimeTracker
+  id: AUJobThreatLeader
+
+

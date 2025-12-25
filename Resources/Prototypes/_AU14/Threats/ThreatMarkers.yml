@@ -1,0 +1,32 @@
+- type: entity
+  name: Generic Threat Leader Spawn Marker
+  parent: MarkerBase
+  id: threatleaderspawnmarker
+  components:
+    - type: Sprite
+      state: green
+    - type: ThreatSpawnMarker
+      threatmarkertype: Leader
+
+
+
+- type: entity
+  name: Generic Threat Member Spawn Marker
+  parent: MarkerBase
+  id: threatmemberspawnmarker
+  components:
+  - type: Sprite
+    state: green
+
+
+
+- type: entity
+  name: Generic Threat Entity Spawn Marker
+  parent: MarkerBase
+  id: threatentityspawnmarker
+  components:
+  - type: Sprite
+    state: green
+
+
+

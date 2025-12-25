@@ -16,12 +16,12 @@
   - type: GhostRole
     name: cm-job-name-xeno-queen
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Queen/queen.rsi
+    sprite: _CMU14/Mobs/Xenos/Queen/queen.rsi # CMU14-Edit
     layers:
     - map: [ "enum.XenoVisualLayers.Base" ]
       state: alive
     - map: [ "enum.XenoVisualLayers.Ovipositor" ]
-      sprite: _RMC14/Mobs/Xenonids/Queen/ovipositor.rsi
+      sprite: _CMU14/Mobs/Xenos/Queen/ovipositor.rsi # CMU14-Edit
     - map: [ "enum.RMCDamageVisualLayers.Base" ]
       visible: false
     - map: [ "enum.XenoInhandVisualLayers.Left" ]

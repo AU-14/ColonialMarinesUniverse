@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.Server.Announcements;
+using Content.Server.AU14.Threats;
 using Content.Server.Discord;
 using Content.Server.GameTicking.Events;
 using Content.Server.Ghost;
@@ -496,7 +497,6 @@ namespace Content.Server.GameTicking
             // MapInitialize *before* spawning players, our codebase is too shit to do it afterwards...
             _map.InitializeMap(DefaultMap);
             _power.RecalculatePower();
-
             SpawnPlayers(readyPlayers, readyPlayerProfiles, force);
 
             _roundStartDateTime = DateTime.UtcNow;

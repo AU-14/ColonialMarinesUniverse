@@ -1,6 +1,7 @@
 using Content.Server._RMC14.Rules;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
+using Content.Server.AU14.Objectives;
 using Content.Server.AU14.Round;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
@@ -69,7 +70,7 @@ namespace Content.Server.GameTicking
         [Dependency] private readonly SharedRoleSystem _roles = default!;
         [Dependency] private readonly ServerDbEntryManager _dbEntryManager = default!;
         [Dependency] private readonly CMDistressSignalRuleSystem _distressSignal = default!;
-
+        [Dependency] private readonly AuObjectiveSystem _auobjectivesystem = default!;
         [ViewVariables] private bool _initialized;
         [ViewVariables] private bool _postInitialized;
 
@@ -141,6 +142,20 @@ namespace Content.Server.GameTicking
 
         private void OnTickerJoinLobbyEvent(Content.Shared.GameTicking.TickerJoinLobbyEvent ev, EntitySessionEventArgs args)
         {
+            var presetId = CurrentPreset?.ID?.ToLowerInvariant();
+            if (presetId != "forceonforce")
+            {
+                _chatManager.DispatchServerMessage(args.SenderSession, "Respawn is disabled in this gamemode");
+                return;
+            }
+
+            if (_auobjectivesystem.iswinactive)
+            {
+
+                _chatManager.DispatchServerMessage(args.SenderSession, "Respawn is disabled in this gamemode");
+                return;
+
+            }
             // Send the requesting player to the lobby
             PlayerJoinLobby(args.SenderSession);
         }

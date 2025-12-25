@@ -1,0 +1,17 @@
+- type: job
+  parent: AUThirdPartyJobBase
+  id: AU14JobThirdPartyLeader
+  name: au-job-name-third-party-leader
+  setPreference: true
+  playTimeTracker: AUJobThirdPartyLeader
+  hidden: false
+  supervisors: nobody
+  jobPreviewEntity: RMCPlayerXenoQueenPreview
+  accessGroups:
+  - CMAccessXeno
+  - CMAccessXenoQueen
+
+- type: playTimeTracker
+  id: AUJobThirdPartyLeader
+
+

@@ -16,7 +16,7 @@
   - type: GhostRole
     name: cm-job-name-xeno-warrior
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Warrior/warrior.rsi
+    sprite: _CMU14/Mobs/Xenos/Warrior/warrior.rsi # CMU14-Edit
   - type: MobState
     allowedStates:
     - Alive

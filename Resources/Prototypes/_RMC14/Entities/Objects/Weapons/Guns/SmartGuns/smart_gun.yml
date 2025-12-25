@@ -1,7 +1,7 @@
 ﻿- type: entity
   parent: [ CMBaseWeaponGun, BaseItem, RMCBaseAttachableHolder ]
   id: RMCSmartGun
-  name: ML66A smart gun
+  name: M56B smart gun
   description: The actual firearm in the Smart Gun System. Essentially a heavy, mobile machinegun.
   components:
   - type: Wieldable
@@ -164,8 +164,8 @@
 - type: entity
   parent: RMCSmartGun
   id: RMCSmartGunWhiteOut
-  name: ML79A smart gun
-  description: The actual firearm in the 4-piece ML79A Smartgun System. If you have this, you're about to bring some serious pain to anyone in your way. You may toggle firing restrictions by using a special action.
+  name: M56T smart gun
+  description: The actual firearm in the 4-piece M56T Smartgun System. If you have this, you're about to bring some serious pain to anyone in your way. You may toggle firing restrictions by using a special action.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/ml79a.rsi
@@ -231,8 +231,8 @@
 - type: entity
   parent: RMCSmartGun
   id: RMCSmartGunCO
-  name: ML66B 'cavalier' smart gun
-  description: The actual firearm in the Smart Gun System. Back order only. Besides a more robust weapons casing, an ID lock system and a fancy paintjob, the gun's performance is identical to the standard-issue ML66A.
+  name: M56C 'cavalier' smart gun
+  description: The actual firearm in the Smart Gun System. Back order only. Besides a more robust weapons casing, an ID lock system and a fancy paintjob, the gun's performance is identical to the standard-issue M56B.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/CO.rsi # the game cries errors if i dont add blank camo sprites even though they dont fucking appear
@@ -281,8 +281,8 @@
 - type: entity
   parent: RMCSmartGun
   id: RMCSmartGunRoyal
-  name: ML66C 'royal' smart gun
-  description: The actual firearm in the 2-piece ML66C Smart Gun System. This Variant is used by the Three Sun Empires Royal Marines Commando units. You may toggle firing restrictions by using a special action.
+  name: L56 smart gun
+  description: The actual firearm in the 2-piece L56 Smart Gun System. This smartgun is used by Three World Empires Imperial Space Armed Forces and Royal Marine Commando units. You may toggle firing restrictions by using a special action.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/ml66a_royal.rsi
@@ -319,7 +319,7 @@
 - type: entity
   parent: CMMagazineRifleBase
   id: RMCMagazineSmartGun
-  name: "ML66A drum magazine (10x30mm)"
+  name: "M56 drum magazine (10x30mm)"
   components:
   - type: Tag
     tags:
@@ -344,7 +344,7 @@
 - type: entity
   parent: RMCMagazineSmartGun
   id: RMCMagazineSmartGunirradiated
-  name: "ML79A drum magazine irradiated (10x30mm)"
+  name: "M56 drum magazine irradiated (10x30mm)"
   components:
   - type: BallisticAmmoProvider
     whitelist:

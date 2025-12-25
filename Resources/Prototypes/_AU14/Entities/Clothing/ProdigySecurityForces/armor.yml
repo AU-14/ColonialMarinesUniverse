@@ -1,0 +1,26 @@
+- type: entity
+  parent: AU14BaseArmorLight
+  id: CMUArmorProdigyFlakVest
+  description: A light flak vest.
+  name: flak vest w/ webbing
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/ProdigySecurityForces/flakvest.rsi
+
+- type: entity
+  parent: AU14BaseArmorLight
+  id: CMUArmorProdigyFlakVestAlt
+  description: A light flak vest.
+  name: flak vest w/ belt
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/ProdigySecurityForces/flakvestlight.rsi
+
+- type: entity
+  parent: AU14BaseArmorLight
+  id: CMUArmorProdigyFlakVestMedical
+  description: A light flak vest.
+  name: medical flak vest
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/ProdigySecurityForces/flakvestmedical.rsi

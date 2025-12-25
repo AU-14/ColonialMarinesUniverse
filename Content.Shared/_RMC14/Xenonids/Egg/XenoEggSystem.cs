@@ -670,66 +670,6 @@ public sealed class XenoEggSystem : EntitySystem
     private bool CanPlaceEggPopup(EntityUid user, Entity<XenoEggComponent> egg, EntityCoordinates coordinates, bool handled, out bool hasHiveWeeds)
     {
         hasHiveWeeds = false;
-        if (HasComp<MarineComponent>(user))
-        {
-            // TODO RMC14 this should have a better filter than marine component
-            if (!handled)
-            {
-                _hands.TryDrop(user, egg, coordinates);
-                _popup.PopupClient(Loc.GetString("cm-xeno-egg-failed-plant-outside"), user, user);
-            }
-
-            return false;
-        }
-
-        if (_transform.GetGrid(coordinates) is not { } gridId ||
-            !TryComp(gridId, out MapGridComponent? grid))
-        {
-            return false;
-        }
-
-        var tile = _map.TileIndicesFor(gridId, grid, coordinates);
-        var anchored = _map.GetAnchoredEntitiesEnumerator(gridId, grid, tile);
-        hasHiveWeeds = _weeds.IsOnHiveWeeds((gridId, grid), coordinates);
-        while (anchored.MoveNext(out var uid))
-        {
-            if (HasComp<XenoEggComponent>(uid))
-            {
-                var msg = Loc.GetString("cm-xeno-egg-failed-already-there");
-                _popup.PopupClient(msg, uid.Value, user, PopupType.SmallCaution);
-                return false;
-            }
-
-            if (HasComp<XenoConstructComponent>(uid) ||
-                _tags.HasAnyTag(uid.Value, StructureTag, AirlockTag) ||
-                HasComp<StrapComponent>(uid) ||
-                HasComp<XenoTunnelComponent>(uid))
-            {
-                var msg = Loc.GetString("cm-xeno-egg-blocked");
-                _popup.PopupClient(msg, uid.Value, user, PopupType.SmallCaution);
-                return false;
-            }
-        }
-
-        if (_turf.IsTileBlocked(gridId, tile, Impassable | MidImpassable | HighImpassable, grid))
-        {
-            var msg = Loc.GetString("cm-xeno-egg-blocked");
-            _popup.PopupClient(msg, coordinates, user, PopupType.SmallCaution);
-            return false;
-        }
-
-        if (!hasHiveWeeds)
-        {
-            if (!HasComp<XenoEggSustainerComponent>(user))
-                _popup.PopupClient(Loc.GetString("cm-xeno-egg-failed-must-hive-weeds"), user, user);
-            else if (!_weeds.IsOnWeeds((gridId, grid), coordinates))
-                _popup.PopupClient(Loc.GetString("cm-xeno-egg-failed-must-weeds"), user, user);
-            else
-                return true;
-
-            return false;
-        }
-
         return true;
     }
 

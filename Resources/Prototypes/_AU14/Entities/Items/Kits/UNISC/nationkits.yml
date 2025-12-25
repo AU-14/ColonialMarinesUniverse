@@ -1,0 +1,184 @@
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitUNISCRiflemanUPP
+  name: UNISC UPP Equipment Kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,0
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+    - id: AU14UPPUshanka
+    - id: AU14UPPPatrolCap
+    - id: AU14UPPFatigues
+    - id: RMCBootsSPPFilled
+    - id: RMCWeaponRifleType71
+    - id: RMCWeaponPistolL54Empty
+    - id: AU14PatchUPPNavalInfantry
+    - id: AU14PatchUPP
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitUNISCRiflemanCCAF
+  name: UNISC CCAF Equipment Kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,11,0
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+    - id: AU14CCAFUniform
+    - id: CMBootsBlack
+    - id: AUWeaponRifleM75AMAS
+    - id: AU14WeaponPistolTPR23BEmpty
+    - id: AU14CanadaPatch
+    - id: AU14CCAFPatch
+    - id: AU14PatchUAFlag
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitUNISCRiflemanUSCM
+  name: UNISC USCM Equipment Kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,15,0
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+    - id: AU14JungleFatigues
+    - id: AU14BootsJungle
+    - id: AU14JungleBoonieHat
+    - id: AU14JunglePatrolCap
+    - id: AU14JungleFlapCap
+    - id: WeaponRifleM54CMK1Unloaded
+    - id: CMWeaponPistolM1984Empty
+    - id: AU14PatchUSCM
+    - id: AU14PatchUAFlag
+    - id: AU14PatchUSFlag
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitUNISCRiflemanUSArmy
+  name: UNISC US Army Equipment Kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,0
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+    - id: AU14USArmyDesertFatigues
+    - id: RMCBootsSPPFilled
+    - id: WeaponRifleM54CMK1Unloaded
+    - id: RMCWeaponPistolM77Empty
+    - id: AU14PatchUSArmy
+    - id: AU14Patch1stCav
+    - id: AU14PatchUAFlag
+    - id: AU14PatchUSFlag
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitUNISCRiflemanLACN
+  name: UNISC LACN Equipment Kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,0
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+    - id: AU14LACNUniformCoat
+    - id: AU14LACNUniform
+    - id: AU14LACNBoots
+    - id: AU14LACNNavyCap
+    - id: AU14LACNGloves
+    - id: AU14WeaponRifleKramerAR
+    - id: AU14WeaponPistolTPR23BEmpty
+    - id: AU14PatchUAFlag
+    - id: AU14PatchBrazilFlag
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitUNISCAircrewUSASF
+  name: UNISC USASF Aircrew Equipment Kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,0
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+    - id: AU14USASFPilotJumpsuit
+    - id: AU14MaskUSASFPilotOxygen
+    - id: AU14USASFAirCrewHelmet
+    - id: CMBootsBlack
+    - id: RMCWeaponPistolM77Empty
+    - id: AU14PatchUSASF
+    - id: AU14PatchUAFlag
+    - id: AU14PatchUSFlag
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitUNISCAircrewLACN
+  name: UNISC LACN Aircrew Equipment Kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,11,0
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+    - id: AU14LACNAirCrewHelmet
+    - id: AU14MaskLACNPilotOxygen
+    - id: AU14LACNPilotJumpsuit
+    - id: AU14LACNBoots
+    - id: AU14LACNNavyCap
+    - id: AU14LACNGloves
+    - id: AU14WeaponPistolTPR23BEmpty
+    - id: AU14PatchUAFlag
+    - id: AU14PatchBrazilFlag

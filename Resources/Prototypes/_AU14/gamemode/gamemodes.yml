@@ -8,7 +8,7 @@
   requiresOpforVote: true
   requiresGovforVote: true
   supportedPlanets:
-  - AUPlanetGixensCaverns
+  #- AUPlanetGixensCaverns Rout of rotation till fixed - eg
   - AUPlanetStableGarrison
  # - AUPlanetShepherdsPride
 
@@ -37,6 +37,24 @@
   - AddGovfor
   - AddClf
   - ColonyAntags
+
+- type: gamePreset
+  id: DistressSignal
+  name: Distress Signal
+  showInVote: true
+  description: Distress Signal
+  requiresGovforVote: true
+  supportedPlanets:
+  - AUPlanetShepherdsPride
+  - AUPlanetLV747
+
+  # - AUPlanetStableGarrison
+  rules:
+  - AuVoteRule
+  - PlatoonSpawn
+  - AddGovfor
+
+
 
 - type: gamePreset
   id: ColonyFall
@@ -105,13 +123,13 @@
     jobs:
       AU14JobGOVFORPlatCo: 1
       AU14JobGOVFORPlatoonCorpsman: 3
-      AU14JobGOVFORDCC: 2
+      AU14JobGOVFORDCC: 1
       AU14JobGOVFORPlatOp: 1
       AU14JobGOVFORDSPilot: 1
       AU14JobGOVFORRadioTelephoneOperator: 1
       AU14JobGOVFORSectionSergeant: 1
-      AU14JobGOVFORSquadAutomaticRifleman: 1
-      AU14JobGOVFORSquadRifleman: 14
+      AU14JobGOVFORSquadAutomaticRifleman: 2
+      AU14JobGOVFORSquadRifleman: 13
 
 
 - type: entity
@@ -124,13 +142,13 @@
     jobs:
       AU14JobOpforPlatCo: 1
       AU14JobOpforPlatoonCorpsman: 3
-      AU14JobOpforDCC: 2
+      AU14JobOpforDCC: 1
       AU14JobOpforPlatOp: 1
       AU14JobOpforDSPilot: 1
       AU14JobOpforRadioTelephoneOperator: 1
       AU14JobOpforSectionSergeant: 1
-      AU14JobOpforSquadAutomaticRifleman: 1
-      AU14JobOpforSquadRifleman: 14
+      AU14JobOpforSquadAutomaticRifleman: 2
+      AU14JobOpforSquadRifleman: 13
 
 - type: entity
   id: AddClf
@@ -140,7 +158,7 @@
     jobs:
       AU14JobCLFCellLeader: 1
       AU14JobCLFPhysician: 1
-      AU14JobCLFGuerilla: 6
+      AU14JobCLFGuerilla: 7
       AU14JobCLFMachineGunner: 1
 
 - type: entity
@@ -171,3 +189,5 @@
     - AUPlanetShepherdsPride
     - AUPlanetStableGarrison
     - AUPlanetLV624
+
+

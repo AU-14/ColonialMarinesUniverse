@@ -7,14 +7,14 @@ game-ticker-unknown-role = Unknown
 game-ticker-delay-start = Round start has been delayed for {$seconds} seconds.
 game-ticker-pause-start = Round start has been paused.
 game-ticker-pause-start-resumed = Round start countdown is now resumed.
-game-ticker-player-join-game-message = Welcome to RMC14! If this is your first time playing, be sure to read the game rules, and don't be afraid to ask for help in LOOC (local OOC) or OOC (usually available only between rounds).
+game-ticker-player-join-game-message = Welcome to CMU! If this is your first time playing, be sure to read the game rules, and don't be afraid to ask for help in LOOC (local OOC) or OOC (usually available only between rounds).
 game-ticker-get-info-text = Hi and welcome to [color=white]RMC14![/color]
                             The current Govfor ship is: [color=white]{$mapName}[/color]
                             The current Opfor ship is: [color=white]{$mapName}[/color]
                             The current planet is: [color=white]{$planetName}[/color]
                             The current game mode is: [color=white]{$gmTitle}[/color]
                             >[color=yellow]{$desc}[/color]
-game-ticker-get-info-preround-text = Hi and welcome to [color=white]Alien Universe 14![/color]
+game-ticker-get-info-preround-text = Hi and welcome to [color=white]Colonial Marines Universe![/color]
                             The current round is: [color=white]#{$roundId}[/color]
                             The current player count is: [color=white]{$playerCount}[/color] ([color=white]{$readyCount}[/color] {$readyCount ->
                                 [one] is

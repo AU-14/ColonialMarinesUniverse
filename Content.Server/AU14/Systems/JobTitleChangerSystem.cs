@@ -6,7 +6,6 @@ using Content.Shared.Access.Components;
 using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared.Au14.Util;
 using Robust.Shared.Containers;
-using Robust.Shared.GameObjects;
 
 namespace Content.Server.au14.Systems;
 
@@ -14,6 +13,7 @@ public sealed class JobTitleChangerSystem : EntitySystem
 {
     [Dependency] private readonly MindSystem _minds = default!;
     [Dependency] private readonly JobSystem _jobs = default!;
+    [Dependency] private readonly SharedContainerSystem _containers = default!;
 
     public override void Initialize()
     {
@@ -23,12 +23,37 @@ public sealed class JobTitleChangerSystem : EntitySystem
         // Listen for accessories being inserted/removed from the uniform accessory holder
         SubscribeLocalEvent<UniformAccessoryHolderComponent, EntInsertedIntoContainerMessage>(OnAccessoryInserted);
         SubscribeLocalEvent<UniformAccessoryHolderComponent, EntRemovedFromContainerMessage>(OnAccessoryRemoved);
+        // If the accessory (or clothing with this component) is deleted or the component shuts down, revert titles
+        SubscribeLocalEvent<JobTitleChangerComponent, ComponentShutdown>(OnJobTitleChangerShutdown);
+    }
+
+    private void OnJobTitleChangerShutdown(EntityUid uid, JobTitleChangerComponent comp, ComponentShutdown args)
+    {
+        if (_containers.TryGetContainingContainer(uid, out var container))
+        {
+            var owner = container.Owner;
+            if (owner != EntityUid.Invalid && EntityManager.EntityExists(owner) && EntityManager.TryGetComponent(owner, out IdCardComponent? idCard))
+            {
+                if (!string.IsNullOrWhiteSpace(comp.JobTitle) && idCard._jobTitle == comp.JobTitle)
+                {
+                    if (_minds.TryGetMind(owner, out var mindId, out _) && _jobs.MindTryGetJobName(mindId, out var jobName))
+                    {
+                        idCard._jobTitle = jobName;
+                    }
+                    else
+                    {
+                        idCard._jobTitle = null;
+                    }
+                    Dirty(owner, idCard);
+                }
+            }
+        }
     }
 
     private void OnEquipped(EntityUid uid, JobTitleChangerComponent comp, GotEquippedEvent args)
     {
         // Only apply if equipped to a humanoid
-        if (!EntityManager.TryGetComponent(args.Equipee, out InventoryComponent? inventory))
+        if (!EntityManager.TryGetComponent(args.Equipee, out InventoryComponent? _))
             return;
 
         // Set the temporary job title
@@ -45,14 +70,14 @@ public sealed class JobTitleChangerSystem : EntitySystem
     private void OnUnequipped(EntityUid uid, JobTitleChangerComponent comp, GotUnequippedEvent args)
     {
         // Only apply if unequipped from a humanoid
-        if (!EntityManager.TryGetComponent(args.Equipee, out InventoryComponent? inventory))
+        if (!EntityManager.TryGetComponent(args.Equipee, out InventoryComponent? _))
             return;
 
         // Revert to original job title
         if (EntityManager.TryGetComponent(args.Equipee, out IdCardComponent? idCard))
         {
             // Try to get the mind's job name
-            if (_minds.TryGetMind(args.Equipee, out var mindId, out var mind) &&
+            if (_minds.TryGetMind(args.Equipee, out var mindId, out _) &&
                 _jobs.MindTryGetJobName(mindId, out var jobName))
             {
                 idCard._jobTitle = jobName;
@@ -98,7 +123,7 @@ public sealed class JobTitleChangerSystem : EntitySystem
                 idCard._jobTitle == changer.JobTitle)
             {
                 // Try to get the mind's job name
-                if (_minds.TryGetMind(uid, out var mindId, out var mind) &&
+                if (_minds.TryGetMind(uid, out var mindId, out _) &&
                     _jobs.MindTryGetJobName(mindId, out var jobName))
                 {
                     idCard._jobTitle = jobName;

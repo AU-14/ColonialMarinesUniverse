@@ -21,13 +21,13 @@
     - SemiAuto
     - Burst
     soundGunshot:
-      collection: CMAR10Shoot
+      collection: AU14M41FireSound
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
     - Burst
     recoilUnwielded: 3
-    scatterWielded: 4
+    scatterWielded: 3
     scatterUnwielded: 20
     baseFireRate: 5
     burstScatterMult: 2

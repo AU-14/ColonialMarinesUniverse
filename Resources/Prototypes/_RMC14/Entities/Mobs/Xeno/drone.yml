@@ -109,7 +109,7 @@
     guides:
     - RMCGuideRoleDrone
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Drone/drone.rsi
+    sprite: _RMC14/Mobs/Xenonids/Drone/drone.rsi # TODO CMU14: Replace sprite
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -147,7 +147,7 @@
   suffix: Gardener
   components:
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Drone/gardener_drone.rsi
+    sprite: _RMC14/Mobs/Xenonids/Drone/gardener_drone.rsi # TODO CMU14: Replace sprite
     layers:
     - map: [ "enum.XenoVisualLayers.Base" ]
       state: alive
@@ -216,7 +216,7 @@
   suffix: Healer
   components:
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Drone/healer_drone.rsi
+    sprite: _RMC14/Mobs/Xenonids/Drone/healer_drone.rsi # TODO CMU14: Replace sprite
     layers:
     - map: [ "enum.XenoVisualLayers.Base" ]
       state: alive

@@ -8,5 +8,5 @@
     sprite: _AU14/Clothing/snowfatigues.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
-    - AU14PatchUAFlag
+    - AU14PatchUSCM
     - AU14HAZOPShecuPatch

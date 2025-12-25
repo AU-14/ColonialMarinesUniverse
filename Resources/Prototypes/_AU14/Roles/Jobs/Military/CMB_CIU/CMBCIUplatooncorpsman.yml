@@ -35,7 +35,7 @@
         RMCSkillSurgery: 1
         RMCSkillConstruction: 2
         RMCSkillEngineer: 3
-        RMCSkillPolice: 1
+        RMCSkillPolice: 2
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanCMBCIU
     - type: TacticalMapIcon
