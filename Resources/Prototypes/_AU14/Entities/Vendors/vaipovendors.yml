@@ -655,7 +655,6 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
     sections:
-    - name: Headgear
     - name: Miscellaneous
       entries:
       - id: RMCLaserDesignator
