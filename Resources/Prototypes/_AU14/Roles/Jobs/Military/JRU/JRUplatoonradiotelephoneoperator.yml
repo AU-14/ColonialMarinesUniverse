@@ -44,3 +44,8 @@
         state: synth
     - type: MarineOrders
   hidden: false
+
+- type: playTimeTracker
+  id: AU14JobGOVFORRadioTelephoneOperatorJRU
+  isHumanoid: true
+
