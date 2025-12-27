@@ -4,7 +4,7 @@
   name: JRU Recruit kit
   components:
   - type: Item
-    size: Medium
+    size: Large
   - type: Storage
     maxItemSize: Ginormous
     grid:
@@ -22,3 +22,4 @@
     - id: RMCMagazinePistolM13
     - id: RMCMagazinePistolM13
     - id: AU14EncryptionKeyGOVFOR
+
