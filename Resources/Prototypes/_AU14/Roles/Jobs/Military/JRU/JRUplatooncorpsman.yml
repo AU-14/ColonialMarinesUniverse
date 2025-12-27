@@ -46,7 +46,7 @@
         state: synth
   hidden: false
 
-  - type: playTimeTracker
+- type: playTimeTracker
   id: AU14JobGOVFORPlatoonCorpsmanJRU
   isHumanoid: true
 
@@ -56,6 +56,7 @@
     id: AU14JobIDCardGOVFORPlatoonCorpsman
     ears: AU14HeadsetSectionMarine
     uniform: AU14CivilianSanitationClothes
+
 
 
 
