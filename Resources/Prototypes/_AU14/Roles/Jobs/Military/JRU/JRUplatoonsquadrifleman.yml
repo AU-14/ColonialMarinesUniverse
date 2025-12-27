@@ -41,3 +41,7 @@
         state: synth
   hidden: false
 
+- type: playTimeTracker
+  id: AU14JobGOVFORSquadRiflemanJRU
+  isHumanoid: true
+
