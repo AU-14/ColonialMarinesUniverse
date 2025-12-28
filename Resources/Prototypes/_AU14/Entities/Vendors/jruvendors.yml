@@ -433,7 +433,7 @@
         amount: 2
     - name: Headgear
       entries:
-      - id: AU14DesertM11Helmet
+      - id: AU14UACGM10Helmet
         amount: 2
       - id: AU14UACGPatrolCap
         amount: 2
@@ -471,7 +471,7 @@
     sections:
     - name: Helmets and Hats
       entries:
-      - id: AU14JungleM11Helmet
+      - id: AU14UACGM10Helmet
         amount: 1
       - id: RMCHeadBeretSquad
         amount: 1
@@ -615,6 +615,7 @@
         amount: 6
       - id: RMCBoxShotgunFlechette
         amount: 6
+
 
 
 
