@@ -195,7 +195,7 @@
       entries:
       - id: AU14JRUPatch
         amount: 20
-      - id: AU14PatchUSFlag
+      - id: AU14PatchUAFlag
         amount: 20
     - name: Riot Gear
       entries:
@@ -615,6 +615,7 @@
         amount: 6
       - id: RMCBoxShotgunFlechette
         amount: 6
+
 
 
 
