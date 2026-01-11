@@ -1,0 +1,845 @@
+- type: entity
+  parent: ColMarTechBase
+  id: AU14VAIPOclothingequipmentvendor
+  name: VAIPO apparel vendor
+  description: An automated rack hooked up to a small storage of standard mercenary apparel.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Fatigues
+      entries:
+      - id: CMJumpsuitTShirtGray
+        amount: 50
+      - id: CMJumpsuitTShirtWhite
+        amount: 50
+      - id: CMJumpsuitTShirtRed
+        amount: 50
+    - name: Footwear
+      entries:
+      - id: CMBootsBlack
+        amount: 50
+    - name: Gloves
+      entries:
+      - id: AU14PVEHandsInsulatedBlackMarine
+        amount: 50
+      - id: AU14PVEHandsFingerlessBlackGloves
+        amount: 50
+    - name: Webbings
+      entries:
+      - id: AU14WebbingMagazine
+        amount: 25
+      - id: AU14WebbingUtility
+        amount: 25
+      - id: AU14WebbingDumpPouch
+        amount: 25
+      - id: AU14WebbingAdminPouch
+        amount: 15
+      - id: AU14WebbingDropPouch
+        amount: 15
+      - id: AU14WebbingKnivesFilled
+        amount: 1
+    - name: Headgear
+      entries:
+      - id: AU14DesertM10Helmet
+        amount: 50
+      - id: AU14DesertPatrolCap
+        amount: 25
+      - id: AU14DesertBoonieHat
+        amount: 25
+      - id: RMCM5CameraGear
+        amount: 25
+    - name: Heads Up Display
+      entries:
+      - id: RMCVisorSquad
+        amount: 25
+      - id: RMCVisorWelding
+        amount: 5
+    - name: Armor
+      entries:
+      - id: CMArmorM3VLBallistics
+        amount: 25
+    - name: Backpack
+      entries:
+      - id: CMBackpackMarine
+        amount: 15
+      - id: AU14IMPBackpackMarine
+        amount: 3
+      - id: AU14TechBackpackMarine
+        amount: 3
+      - id: CMSatchelMarine
+        amount: 15
+#      - id: Marine Chestrig
+#        amount: 15
+      - id: RMCSatchelWelderChestrig
+        amount: 2
+      - id: RMCScabbardShotgun
+        amount: 2
+      - id: RMCBackpackAmmo
+        amount: 1
+    - name: Belts
+      entries:
+      - id: CMBeltMarine
+        amount: 25
+      - id: RMCBeltGrenade
+        amount: 2
+      - id: RMCM276ShotgunShellLoadingRig
+        amount: 2
+      - id: RMCBeltHolsterPistolTSE
+        amount: 15
+      - id: RMCBeltHolsterRevolver
+        amount: 15
+#      - id: M276 Pattern M82F Holster Rig
+#        amount: 5
+      - id: CMBeltKnifeFilled
+        name: M276 Knife Rig (Full)
+        amount: 1
+      - id: RMCBeltUtilityGeneral
+        amount: 15
+    - name: Pouches
+      entries:
+      - id: RMCPouchBayonet
+        name: Bayonet Sheath
+        amount: 15
+      - id: RMCPouchFlareFilled
+        name: Flare Pouch (Full)
+        amount: 15
+      - id: RMCPouchDocumentSmall
+        amount: 1
+      - id: RMCPouchMagazine
+        amount: 15
+      - id: RMCPouchMagazineLarge
+        amount: 2
+      - id: RMCPouchShotgunLarge
+        amount: 4
+      - id: RMCPouchGeneralMedium
+        amount: 15
+      - id: RMCPouchGeneralLarge
+        amount: 2
+      - id: RMCPouchMagazinePistol
+        amount: 15
+      - id: RMCPouchMagazinePistolLarge
+        amount: 2
+      - id: RMCPouchPistol
+        amount: 15
+      - id: RMCPouchConstruction
+        amount: 1
+      - id: RMCPouchExplosive
+        amount: 1
+      - id: RMCPouchTools
+        amount: 15
+#      - id: Sling Pouch
+#        amount: 1
+    - name: Mask
+      entries:
+      - id: CMMaskGas
+        amount: 20
+      - id: CMMaskCoif
+        amount: 10
+      - id: RMCMaskScarfBlack
+        amount: 10
+      - id: RMCMaskScarfGray
+        amount: 10
+      - id: RMCMaskScarfTan
+        amount: 10
+      - id: RMCMaskTornScarfGreen
+        amount: 10
+      - id: RMCMaskTornScarfDesert
+        amount: 10
+      - id: RMCMaskTornScarfSnow
+        amount: 10
+      - id: RMCMaskTornScarfBlack
+        amount: 10
+      - id: RMCMaskSmockBlack
+        amount: 10
+      - id: RMCMaskNeckerchiefGray
+        amount: 10
+    - name: Glasses & Goggles
+      entries:
+      - id: RMCSunglassesBigFake
+        amount: 25
+      - id: AU14GogglesM1A1ClearBallistic
+        amount: 20
+      - id: AU14GogglesM1A1Ballistic
+        amount: 20
+      - id: AU14GogglesM1A1DarkBallistic
+        amount: 20
+      - id: AU14GogglesM1A1LaserBallistic
+        amount: 20
+      - id: AU14GogglesM1A1OrangeBallistic
+        amount: 20
+      - id: AU14GogglesM1A1PolarizedBallistic
+        amount: 20
+      - id: AU14GogglesM60
+        amount: 20
+      - id: RMCGlassesMarineRpg
+        amount: 20
+      - id: AU14GlassesBiMex
+        amount: 20
+      - id: AU14GlassesBiMexOrange
+        amount: 20
+      - id: RMCGlassesTriMaxBronze
+        amount: 20
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14VAIPOequipmentvendor
+  name: VAIPO equipment vendor
+  description: An automated rack hooked up to a small storage of standard mercenary equipment.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Food
+      entries:
+      - id: CMMRE
+        name: MRE
+        amount: 30
+      - id: RMCBoxMRE
+        amount: 5
+    - name: Tools
+      entries:
+      - id: RMCM5Bayonet
+        amount: 30
+      - id: CMM11Knife
+        amount: 15
+      - id: CMEntrenchingTool
+        amount: 15
+      - id: CMScrewdriver
+        amount: 5
+      - id: CMWirecutter
+        amount: 5
+      - id: CMCrowbar
+        amount: 5
+      - id: CMWrench
+        amount: 5
+      - id: CMMultitool
+        amount: 5
+      - id: CMWelder
+        amount: 5
+    - name: Flares and lights
+      entries:
+      - id: RMCFlashlight # Combat Flashlight
+        amount: 15
+#      #- id: RMCBoxFlashlights
+#      #  amount: 1
+      - id: RMCBoxPackFlare
+        amount: 5
+      - id: CMPackFlare
+        amount: 5
+      - id: RMCPackFlareCAS
+        amount: 2
+    - name: Medical Supplies
+      entries:
+      - id: AU14HemostaticGauzePacket
+        amount: 40
+      - id: AU14Tourniquet
+        amount: 40
+      - id: CMOintment10
+        amount: 40
+      - id: CMPacketPillsTricordrazine
+        amount: 12
+      - id: AU14NaloxoneAutoInjector
+        amount: 2
+    - name: Miscellaneous
+      entries:
+      - id: RMCEngineerKit
+        amount: 1
+      #- id: CMMap
+      #  amount: 5
+      - id: CMFireExtinguisher
+        amount: 2
+      - id: CMFireExtinguisherPortable
+        amount: 5
+      - id: CMRollerBedSpawnFolded
+        amount: 1
+      - id: RMCScabbardMacheteFilled
+        name: machete scabbard (Full)
+        amount: 5
+      - id: RMCBinoculars
+        amount: 2
+      #- id: CMFoldingBarricadesMB6x3
+      #  amount: 2
+      #- id: CMSparePDTLBattleBuddyKit
+      #  amount: 3
+      - id: CMSandbagEmpty25
+        amount: 30
+      - id: RMCPowerCellHigh
+        amount: 5
+      - id: BedrollFolded
+        amount: 20
+      - id: RMCZipties
+        amount: 30
+
+#corpsman
+- type: entity
+  parent: ColMarTechBase
+  id: AU14VAIPOcorpsmanvendor
+  name: VAIPO medical vendor
+  description: An automated rack hooked up to a small storage of medical supplies.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforMedical" ], [ "AU14AccessOpforMedical" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Essential Equipment
+      takeAll: CMUEssentialEquipment
+      entries:
+      - id: RMCVisorMedical
+      - id: AU14CMDefibrillator
+      - id: CMHealthAnalyzer
+      - id: RMCFlashlightPen
+      - id: ClothingNeckStethoscope
+      - id: CMRollerBedSpawnFolded
+      - id: RMCMedevacStretcherFolded
+      - id: CMSurgicalLine
+      - id: CMSynthGraft
+    - name: Medical Pouches
+      choices: { CMUPlatoonMedicalPouch: 2 }
+      entries:
+      - id: RMCPouchAutoinjector
+      - id: RMCPouchFirstResponder
+      - id: RMCPouchMedical
+      - id: RMCPouchSyringeFill
+      - id: RMCPouchFirstAidSplintsGauzeOintment
+        name: first-aid pouch (gauze, ointment) # TODO RMC14 splints
+      - id: RMCPouchFirstAidPills
+        name: first-aid pouch (pills)
+    - name: Medical Storage
+      choices: { CMUPlatoonMedicalStorage: 1 }
+      entries:
+      - id: CMBeltMedical
+      - id: CMBeltMedicBag
+    - name: General Medical Supplies
+      entries:
+      - id: AU14HemostaticGauzePacket
+        amount: 60
+      - id: AU14Tourniquet
+        amount: 60
+      - id: CMOintment10
+        amount: 60
+      - id: CMBurnKit10
+        amount: 30
+      - id: CMTraumaKit10
+        amount: 30
+    - name: Limited Medications
+      choices: { CMUPlatoonMedicalLimitedMedications: 2 }
+      entries:
+      - id: AU14PillCanisterMeralyne
+      - id: AU14PillCanisterDermaline
+      - id: AU14PillCanisterAlbuterol
+      - id: AU14PillCanisterImidazoline
+      - id: AU14PillCanisterEthylredoxrazine
+    - name: Pill Bottles
+      entries:
+      - id: CMPillCanisterBicaridine
+        amount: 15
+      - id: CMPillCanisterDexalin
+        amount: 15
+      - id: CMPillCanisterDylovene
+        amount: 15
+      - id: CMPillCanisterInaprovaline
+        amount: 15
+      - id: CMPillCanisterKelotane
+        amount: 15
+      - id: CMPillCanisterTricordrazine
+        amount: 15
+#      - id: CMPillCanisterPeridaxon
+#      - id: CMPillCanisterTramadol
+    - name: Injectors
+      entries:
+      - id: CMEpinephrineAutoInjector
+        amount: 15
+      - id: AU14NaloxoneAutoInjector
+        amount: 15
+      - id: CMInaprovalineAutoInjector
+        amount: 15
+      - id: CMDexalinPlusAutoInjector
+        amount: 15
+      - id: CMTricordrazineAutoInjector
+        amount: 15
+    - name: Medical Gloves
+      choices: { CMUPlatoonMedicalGloves: 1 }
+      entries:
+      - id: CMHandsLatex
+      - id: ClothingHandsGlovesNitrile
+    - name: Medical Masks
+      choices: { CMUPlatoonMedicalMasks: 1 }
+      entries:
+      - id: CMMaskSterile
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14VAIPOaircrewvendor
+  name: VAIPO aircrew vendor
+  description: An automated rack hooked up to a small storage of aircrew apparel and equipment.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Fatigues
+      entries:
+      - id: CMJumpsuitTShirtGray
+        amount: 2
+      - id: CMJumpsuitTShirtWhite
+        amount: 2
+      - id: CMJumpsuitTShirtRed
+        amount: 2
+    - name: Body Armor
+      entries:
+      - id: CMArmorM3VLFlakVest
+        amount: 2
+    - name: Footwear
+      entries:
+      - id: CMBootsBlack
+        amount: 2
+    - name: Gloves
+      entries:
+      - id: AU14PVEHandsInsulatedBlackMarine
+        amount: 2
+      - id: AU14PVEHandsFingerlessBlackGloves
+        amount: 2
+    - name: Headgear
+      entries:
+      - id: CMArmorHelmetM30
+        amount: 2
+      - id: RMCM5CameraGear
+        amount: 2
+    - name: Webbings
+      entries:
+      - id: AU14WebbingMagazine
+        amount: 2
+      - id: AU14WebbingUtility
+        amount: 2
+      - id: AU14WebbingDumpPouch
+        amount: 2
+      - id: AU14WebbingAdminPouch
+        amount: 2
+      - id: AU14WebbingDropPouch
+        amount: 2
+    - name: Backpack
+      entries:
+      - id: CMSatchelMarine
+        amount: 2
+    - name: Belts
+      entries:
+      - id: RMCBeltHolsterPistol
+        amount: 2
+      - id: RMCBeltHolsterRevolver
+        amount: 2
+#      - id: M276 Pattern M82F Holster Rig
+#        amount: 5
+      - id: RMCBeltUtilityGeneral
+        amount: 2
+    - name: Pouches
+      entries:
+      - id: RMCPouchBayonet
+        name: Bayonet Sheath
+        amount: 2
+      - id: RMCPouchFlareFilled
+        name: Flare Pouch (Full)
+        amount: 2
+      - id: RMCPouchDocumentSmall
+        amount: 2
+      - id: RMCPouchMagazine
+        amount: 2
+      - id: RMCPouchGeneralMedium
+        amount: 2
+      - id: RMCPouchPistol
+        amount: 2
+      - id: RMCPouchMagazinePistolLarge
+        amount: 2
+      - id: RMCPouchTools
+        amount: 2
+    - name: Mask
+      entries:
+      - id: RMCMaskScarfBlack
+        amount: 2
+      - id: RMCMaskScarfGray
+        amount: 2
+      - id: RMCMaskScarfTan
+        amount: 2
+      - id: RMCMaskTornScarfBlack
+        amount: 2
+    - name: Miscellaneous
+      entries:
+      - id: RMCSunglassesBigFake
+        amount: 2
+      - id: RMCGlassesMarineRpg
+        amount: 2
+      - id: AU14GlassesBiMex
+        amount: 2
+      - id: AU14GlassesBiMexOrange
+        amount: 2
+      - id: RMCGlassesAviators
+        amount: 2
+    - name: Heads Up Display
+      entries:
+      - id: RMCVisorMedical
+        amount: 2
+    - name: Medical Pouches
+      entries:
+      - id: RMCPouchAutoinjector
+        amount: 2
+      - id: RMCPouchFirstResponder
+        amount: 2
+      - id: RMCPouchVialFill
+        name: vial pouch (Full)
+        amount: 2
+      - id: RMCPouchMedical
+        amount: 2
+      - id: RMCPouchSyringeFill
+        amount: 2
+      - id: RMCPouchFirstAidSplintsGauzeOintment
+        name: first-aid pouch (gauze, ointment) # TODO RMC14 splints
+        amount: 2
+      - id: RMCPouchFirstAidPills
+        name: first-aid pouch (pills)
+        amount: 2
+    - name: Medical Belts
+      entries:
+      - id: CMBeltMedical
+        amount: 2
+      - id: CMBeltMedicBag
+        amount: 2
+    - name: General Medical Supplies
+      entries:
+      - id: CMOintment10
+        amount: 60
+      - id: CMGauze10
+        amount: 60
+      - id: CMBurnKit10
+        amount: 30
+      - id: CMTraumaKit10
+        amount: 30
+      - id: CMSurgicalLine
+        amount: 6
+      - id: CMSynthGraft
+        amount: 6
+      - id: CMSyringe
+        amount: 10
+    - name: Pill Bottles
+      entries:
+      - id: CMPillCanisterBicaridine
+        amount: 10
+      - id: CMPillCanisterDexalin
+        amount: 10
+      - id: CMPillCanisterDylovene
+        amount: 10
+      - id: CMPillCanisterInaprovaline
+        amount: 10
+      - id: CMPillCanisterKelotane
+        amount: 10
+      - id: CMPillCanisterTricordrazine
+        amount: 10
+#      - id: CMPillCanisterPeridaxon
+#      - id: CMPillCanisterTramadol
+    - name: Injectors
+      entries:
+      - id: CMEpinephrineAutoInjector
+        amount: 3
+      - id: CMInaprovalineAutoInjector
+        amount: 8
+      - id: CMDexalinPlusAutoInjector
+        amount: 15
+      - id: CMTricordrazineAutoInjector
+        amount: 15
+    - name: Medical Utilities
+      entries:
+     #    CMMS11SmartRefillTank
+     # FixOVien
+      - id: AU14CMDefibrillator
+        amount: 1
+      - id: CMRollerBedSpawnFolded
+        amount: 3
+      - id: RMCBoxBodyBag
+        amount: 3
+      - id: RMCBoxSterileMask
+        amount: 2
+      - id: RMCBoxLatexGloves
+        amount: 2
+      - id: CMHealthAnalyzer
+        amount: 2
+      - id: RMCFlashlightPen
+        amount: 2
+      - id: ClothingNeckStethoscope
+        amount: 2
+      - id: RMCGlassesMedicalHUDGlasses
+        amount: 2
+      - id: RMCVial
+        amount: 10
+    - name: Medical Gloves
+      entries:
+      - id: CMHandsLatex
+        amount: 2
+      - id: ClothingHandsGlovesNitrile
+        amount: 2
+    - name: Medical Masks
+      entries:
+      - id: CMMaskSterile
+        amount: 2
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14VAIPOcommandequipmentvendor
+  name: VAIPO command vendor
+  description: An automated rack hooked up to a small storage of command apparel and equipment.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessOpforCommand" ] ]
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmcommandclothes.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Pouches
+      entries:
+      - id: RMCPouchCommandFill
+        amount: 2
+    - name: Miscellaneous
+      entries:
+      - id: RMCLaserDesignator
+        amount: 2
+      - id: RMCWhistle
+        amount: 2
+      - id: RMCPackFlareCAS
+        amount: 2
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14VAIPOSGequipmentvendor
+  name: VAIPO automatic rifleman equipment vendor
+  description: An automated rack hooked up to a small storage of an automatic rifleman equipment.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforGunner" ], [ "AU14AccessOpforGunner" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Essential Equipment
+      entries:
+      - id: WeaponRifleM54CE2
+        amount: 2
+      - id: RMCAttachmentBipod
+    - name: Belts
+      entries:
+      - id: CMBeltMarine
+        amount: 2
+    - name: SAW Munitions
+      entries:
+      - id: CMMagazineRifleM54CE2AP
+        amount: 2
+      - id: CMMagazineRifleM54CE2
+        amount: 8
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14VAIPOsectionleaderequipmentvendor
+  name: VAIPO section leader vendor
+  description: An automated rack hooked up to a small storage of apparel and equipment for the section leader.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessOpforFTL" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Miscellaneous
+      entries:
+      - id: RMCLaserDesignator
+        amount: 2
+      - id: RMCWhistle
+        amount: 2
+      - id: RMCPackFlareCAS
+        amount: 2
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14VAIPOWeaponsVendor
+  name: VAIPO weapons rack
+  description: An automated rack hooked up to a small storage of weapons.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Rifles
+      entries:
+      - id: RMCWeaponRifleMAR30
+        amount: 10
+      - id: WeaponRifleM54CMK1
+        amount: 2
+    - name: Rifle Ammunition
+      entries:
+      - id: RMCMagazineRifleMAR40
+        amount: 85
+      - id: CMMagazineRifleM54CMK1
+        amount: 12
+      - id: CMMagazineRifleM54CMK1AP
+        amount: 2
+    - name: Handguns
+      entries:
+      - id: AU14WeaponPistolTPR23B
+        amount: 12
+    - name: Handgun Ammunition
+      entries:
+      - id: CMMagazinePistolM1984
+        amount: 62
+    - name: Attachments
+      entries:
+      - id: RMCAttachmentRailFlashlight
+        amount: 12
+      - id: AU14AttachmentTwoPointSling
+        amount: 6
+      - id: RMCAttachmentExtendedBarrel
+        amount: 5
+      - id: RMCAttachmentSuppressor
+        amount: 5
+      - id: RMCAttachmentMagneticHarness
+        amount: 2
+      - id: RMCAttachmentS5RedDotSight
+        amount: 8
+      - id: RMCAttachmentS6ReflexSight
+        amount: 2
+      - id: RMCAttachmentAngledGrip
+        amount: 5
+      - id: RMCAttachmentLaserSight
+        amount: 1
+      - id: RMCAttachmentU7UnderbarrelShotgun
+        amount: 1
+      - id: RMCAttachmentVerticalGrip
+        amount: 5
+    - name: Explosives
+      entries:
+      - id: RMCBoxHEDP
+        amount: 1
+      - id: CMGrenadeSmoke
+        amount: 6
+      - id: RMCGrenadeBlastM12
+        amount: 6
+      - id: RMCExplosivePlastic
+        amount: 4
+      - id: RMCExplosiveBreachingCharge
+        amount: 2
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14VAIPORTOVendor
+  name: radio telephone operator rack
+  description: An automated rack hooked up to a small storage of radio equipment.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessOpforFTL" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Portable Transceivers
+      entries:
+      - id: AU14BackpackRTOPackJungle
+        amount: 1
+      - id: AU14BackpackRTOPackDesert
+        amount: 1
+    - name: Equipment
+      entries:
+      - id: RMCLaserDesignator
+        amount: 1
+      - id: RMCWhistle
+        amount: 1
+      - id: RMCPackFlareCAS
+        amount: 2
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14VAIPOSpecialWeaponsVendor
+  name: VAIPO special weapons rack
+  description: An automated rack hooked up to a small storage of special weapons.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/genericweaponrack.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: MK221 Tactical Shotgun
+      entries:
+      - id: WeaponShotgunM890
+        amount: 2
+      - id: RMCBoxShotgunBuckshot
+        amount: 16
+      - id: RMCBoxShotgunSlugs
+        amount: 12
+      - id: RMCBoxShotgunFlechette
+        amount: 12
+    - name: M39 Submachine Gun
+      entries:
+        - id: WeaponSMGM63
+          amount: 1
+        - id: CMMagazineSMGM63Ext
+          amount: 2
+        - id: CMMagazineSMGM63AP
+          amount: 2
+        - id: CMMagazineSMGM63
+          amount: 3
+        - id: RMCBeltHolsterSMGPouch
+          amount: 1
+    - name: M4RA Designated Marksman Rifle
+      entries:
+       - id: WeaponRifleM4SPR
+         amount: 1
+       - id: CMMagazineRifleM4SPRAP
+         amount: 2
+       - id: CMMagazineRifleM4SPR
+         amount: 5
+       - id: RMCAttachmentS84xTelescopicScope
+         amount: 1
+       - id: RMCAttachmentBipod
+         amount: 1
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14VAIPOAircrewWeaponsVendor
+  name: aircrew weapons rack
+  description: An automated rack hooked up to a small storage of weapons.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Submachine Guns
+      entries:
+      - id: WeaponSMGM63
+        amount: 2
+    - name: Submachine Gun Ammunition
+      entries:
+      - id: CMMagazineSMGM63
+        amount: 20
+    - name: Handguns
+      entries:
+      - id: RMCWeaponPistolM77Empty
+        amount: 2
+    - name: Handgun Ammunition
+      entries:
+      - id: CMMagazinePistolM77AP
+        amount: 20
+    - name: Attachments
+      entries:
+      - id: RMCAttachmentS6ReflexSight
+        amount: 2
+      - id: RMCAttachmentFlashlightGrip
+        amount: 2

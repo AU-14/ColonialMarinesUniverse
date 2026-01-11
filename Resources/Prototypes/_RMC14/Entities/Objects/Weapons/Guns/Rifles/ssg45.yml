@@ -1,8 +1,8 @@
 ﻿- type: entity
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   id: RMCWeaponRifleSSG45NoLock
-  name: SSG-45 Assault Rifle
-  description: Developed by Weston-Yamada as a modern successor to the aging M5 platform, the SpezialSturmGewehr is engineered for precision mid-to-long range combat. The primary rifle of the Weston-Yamada PMCs.
+  name: NSG-23 Assault Rifle
+  description: Developed by Weyland-Yutani as a modern successor to the aging M5 platform, the SpezialSturmGewehr is engineered for precision mid-to-long range combat. The primary rifle of the Weyland-Yutani PMCs.
   suffix: No ID Lock
   components:
   - type: Sprite
@@ -168,7 +168,7 @@
 - type: entity
   parent: CMMagazineRifleBase
   id: RMCMagazineRifleSSG45
-  name: "SSG45 magazine (7x62mm)"
+  name: "NSG-23 magazine (7x62mm)"
   components:
   - type: Tag
     tags:
@@ -195,7 +195,7 @@
 - type: entity
   parent: RMCMagazineRifleSSG45
   id: RMCMagazineRifleSSG45Extended
-  name: "SSG45 extended magazine (7x62mm)"
+  name: "NSG-23 extended magazine (7x62mm)"
   components:
   - type: Tag
     tags:
@@ -223,7 +223,7 @@
 - type: entity
   parent: RMCMagazineRifleSSG45
   id: RMCMagazineRifleSSG45AP
-  name: "SSG45 AP magazine (7x62mm)"
+  name: "NSG-23 AP magazine (7x62mm)"
   components:
   - type: Tag
     tags:
@@ -249,7 +249,7 @@
 - type: entity
   parent: RMCMagazineRifleSSG45
   id: RMCMagazineRifleSSG45HEAP
-  name: "SSG45 HEAP magazine (7x62mm)"
+  name: "NSG-23 HEAP magazine (7x62mm)"
   components:
   - type: Tag
     tags:
@@ -275,7 +275,7 @@
 - type: entity
   parent: RMCMagazineRifleSSG45
   id: RMCMagazineRifleSSG45Incend
-  name: "SSG45 Incendiary magazine (7x62mm)"
+  name: "NSG-23 Incendiary magazine (7x62mm)"
   components:
   - type: Tag
     tags:
