@@ -64236,6 +64236,8 @@ entities:
         colorHex: '#02020B'
       - time: 1
         colorHex: '#000000'
+    - type: Roof
+      data: {}
 - proto: AtmosFixFreezerMarker
   entities:
   - uid: 3
@@ -69136,7 +69138,6 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - CMAccessCommand
       - - CMAccessColonyCommand
 - proto: CMApcConstructed
   entities:
@@ -76985,7 +76986,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: -61.5,-35.501
       parent: 1
-- proto: CMLightReplacer
+- proto: RMCLightReplacer
   entities:
   - uid: 2144
     components:
@@ -163141,7 +163142,6 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - CMAccessCommand
       - - CMAccessColonyCommand
   - uid: 18297
     components:
@@ -163150,7 +163150,6 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - CMAccessCommand
       - - CMAccessColonyCommand
   - uid: 18298
     components:
@@ -163159,7 +163158,6 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - CMAccessCommand
       - - CMAccessColonyCommand
 - proto: RMCCrateSecureWeYa
   entities:

@@ -3,7 +3,6 @@
   id: RMCSurvivorCommandingOfficer
   name: rmc-job-name-survivor-co
   description: rmc-job-description-survivor-co
-  setPreference: false
   playTimeTracker: RMCJobSurvivorCO
   startingGear: CMGearCommandingOfficer
   joinNotifyCrew: false
@@ -11,7 +10,10 @@
   whitelisted: true
   spawnMenuRoleName: Survivor CO (Base)
   useLoadoutOfJob: RMCSurvivorCommandingOfficer # for inheritance
+  basePlaytimeTracker: true
+  whitelistParent: CMCommandingOfficer
 
 - type: playTimeTracker
   id: RMCJobSurvivorCO
+  name: rmc-playtime-tracker-job-name-survivor-co
   isHumanoid: true

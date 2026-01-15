@@ -8,3 +8,6 @@
   - CMChiefEngineer
   - CMOrdnanceTech
   - CMMaintTech
+  departmentRadio: MarineEngineer
+  headOfDepartment: CMChiefEngineer
+  hidden: true

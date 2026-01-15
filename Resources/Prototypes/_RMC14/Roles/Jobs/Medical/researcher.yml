@@ -5,12 +5,6 @@
   description: cm-job-description-researcher
   setPreference: false
   playTimeTracker: CMJobResearcher
-  requirements:
-  - !type:TotalJobsTimeRequirement
-    group: CMJobsMedical
-    time: 18000 # 5 hours
-  ranks:
-    RMCRankSecondLT: []
   startingGear: CMGearResearcher
   icon: "CMJobIconResearcher"
   joinNotifyCrew: false
@@ -30,6 +24,10 @@
         RMCSkillResearch: 1
         RMCSkillSurgery: 2
     - type: RMCUserBulkyArmorIncapable
+    - type: NpcFactionMember
+      factions:
+      - WeYa
+      - UNMC
     - type: JobPrefix
       prefix: cm-job-prefix-researcher
     - type: ViewIntelObjectives
@@ -39,7 +37,8 @@
         state: researcher
       background:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: background_shipside
+        state: background_medical
+    - type: MutinyEligible
   hidden: true # TODO RMC14
 
 - type: startingGear
@@ -47,7 +46,7 @@
   equipment:
     jumpsuit: CMJumpsuitResearch
     shoes: RMCShoesLaceup
-    id: CMIDCardResearcher
+    id: CMIDCardResearcher # TODO ID has both Marine and WeYa IFF
     # TODO RMC14 random chemical synthesis note, syringe,
 
 - type: startingGear

@@ -3,20 +3,13 @@
   id: RMCSurvivorHybrisaHeavyVehicleOperator
   name: rmc-job-name-survivor-heavy-vehicle-operator
   description: cm-job-description-survivor
-  playTimeTracker: RMCJobSurvivorHybrisaHeavyVehicleOperator
   startingGear: RMCGearSurvivorHybrisaHeavyVehicleOperator
   spawnMenuRoleName: Heavy Vehicle Operator (Hybrisa Survivor)
   special:
   - !type:AddComponentSpecial
     components:
     - type: Skills
-      skills:
-        RMCSkillEndurance: 2
-        RMCSkillFirearms: 1
-        RMCSkillFireman: 1
-        RMCSkillEngineer: 2
-        RMCSkillConstruction: 2
-        RMCSkillVehicles: 3
+      preset: RMCSkillPresetSurvivorTrucker
     - type: RMCSurvivor
     - type: MotionDetectorTracked
     - type: NpcFactionMember
@@ -26,16 +19,13 @@
     - type: RMCAllowSuitStorage
     - type: EquipSurvivorPreset
       preset: RMCGearSurvivorPresetHybrisaHeavyVehicleOperator
+  useLoadoutOfJob: CMSurvivorEngineer # for inheritance
 
 - type: startingGear
   parent: RMCGearSurvivorBaseNoBackpack
   id: RMCGearSurvivorHybrisaHeavyVehicleOperator # TODO wheels inhand
   equipment:
     pocket2: RMCPouchToolsFill
-
-- type: playTimeTracker
-  id: RMCJobSurvivorHybrisaHeavyVehicleOperator
-  isHumanoid: true
 
 - type: entity
   parent: RMCSurvivorPresetEngineer

@@ -743,8 +743,6 @@
         amount: 2
       - id: RMCPouchMedkitFillAdvanced
         amount: 1
-      - id: RMCToolWebbingSmallERTFilled
-        amount: 1
     - name: Utilities
       entries:
       - id: RMCFireAxe

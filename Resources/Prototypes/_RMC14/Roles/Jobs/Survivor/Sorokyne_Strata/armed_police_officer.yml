@@ -3,7 +3,7 @@
   id: CMJobSurvivorArmedPoliceOfficer
   name: rmc-job-name-survivor-armed-police-officer
   description: cm-job-description-survivor
-  playTimeTracker: CMJobSurvivorArmedPoliceOfficer
+  playTimeTracker: CMJobSurvivorSecurity
   ranks:
     RMCRankSPPStrsh:
     - !type:RoleTimeRequirement
@@ -18,21 +18,11 @@
   accessGroups:
   - ColonistSec
   spawnMenuRoleName: People's Armed Police Officer (Sorokyne Survivor)
-  useLoadoutOfJob: CMSurvivorSecurity
   special:
   - !type:AddComponentSpecial
     components:
     - type: Skills
-      skills:
-        RMCSkillEngineer: 2
-        RMCSkillMeleeWeapons: 1
-        RMCSkillConstruction: 1
-        RMCSkillMedical: 1
-        RMCSkillEndurance: 2
-        RMCSkillCqc: 2
-        RMCSkillFirearms: 1
-        RMCSkillPolice: 0 # RMC14
-        RMCSkillFireman: 2
+      preset: RMCSkillPresetSurvivorMarshal
     - type: EquipSurvivorPreset
       preset: RMCGearSurvivorPresetArmedPoliceOfficer
     - type: RMCSurvivor
@@ -43,6 +33,7 @@
       - Civilian
     - type: IntelRescueSurvivorObjective
     - type: RMCAllowSuitStorage
+  useLoadoutOfJob: CMSurvivorSecurity # for inheritance
 
 - type: startingGear
   parent: RMCGearSurvivorBase
@@ -54,6 +45,7 @@
     outerClothing: RMCCoatPaP
     gloves: RMCHandsVeteran
     shoes: CMBootsBlackFilled
+    pocket1: RMCPouchSurvivalBlackFilled
     pocket2: RMCPouchMagazine
     id: RMCIDCardPaP
     back: RMCSatchelBlack
@@ -73,10 +65,6 @@
     layers:
     - sprite: _RMC14/Markers/landmarks.rsi
       state: surv
-
-- type: playTimeTracker
-  id: CMJobSurvivorArmedPoliceOfficer
-  isHumanoid: true
 
 - type: entity
   parent: RMCSurvivorPresetSecurity

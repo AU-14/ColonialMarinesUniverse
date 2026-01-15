@@ -15,6 +15,9 @@
   special:
   - !type:AddComponentSpecial
     components:
+    - type: NpcFactionMember
+      factions:
+      - SPP
     - type: Skills
       skills:
         RMCSkillEndurance: 1
@@ -64,7 +67,6 @@
       time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
 
-
 - type: randomHumanoidSettings
   parent: RMCSPPRifleman
   id: RMCSPPRiflemanFriendly
@@ -79,11 +81,11 @@
       settings: short
   - type: GhostRoleApplySpecial
 
-
 - type: startingGear
   id: RMCGearSPPRifleman
   equipment:
     head: ArmorHelmetSPP
+
     jumpsuit: CMJumpsuitSPP
     outerClothing: RMCArmorSPPRifleman
     gloves: RMCHandsVeteranSPP

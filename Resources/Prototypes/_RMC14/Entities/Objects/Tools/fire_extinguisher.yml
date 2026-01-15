@@ -2,23 +2,23 @@
   id: CMFireExtinguisherPortable
 
 - type: entity
-  parent: CMLightReplacer
+  parent: RMCLightReplacer
   id: CMFireExtinguisher
   suffix: Empty
   components:
   - type: LightReplacer
     contents:
-    - id: CMLightTube
+    - id: RMCLightTube
       amount: 0
 
 - type: entity
-  parent: CMLightReplacer
+  parent: RMCLightReplacer
   id: CMFireExtinguisherPortable
   suffix: Empty
   components:
   - type: LightReplacer
     contents:
-    - id: CMLightTube
+    - id: RMCLightTube
       amount: 0
 
 - type: entity
@@ -27,3 +27,11 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Undisposable
+
+- type: entity
+  parent: RMCExtinguisherSpray
+  id: RMCExtinguisherSpraySpec
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RMCExtinguisherPower
+    power: 48

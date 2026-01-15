@@ -86,7 +86,6 @@
       settings: short
   - type: GhostRoleApplySpecial
 
-
 - type: randomHumanoidSettings
   parent: RMCSPPLeader
   id: RMCSPPLeaderFriendly
@@ -101,11 +100,11 @@
       settings: short
   - type: GhostRoleApplySpecial
 
-
 - type: startingGear
   id: RMCGearSPPLeader
   equipment:
     head: CMHeadCapSPPBeret
+    ears2: RMCM5CameraGear
     jumpsuit: CMJumpsuitSPP
     outerClothing: RMCArmorSPPRifleman
     gloves: RMCHandsVeteranSPP

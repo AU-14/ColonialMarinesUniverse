@@ -72,7 +72,6 @@
       time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
 
-
 - type: randomHumanoidSettings
   parent: RMCSPPMedic
   id: RMCSPPMedicFriendly
@@ -88,11 +87,11 @@
     requirements:
   - type: GhostRoleApplySpecial
 
-
 - type: startingGear
   id: RMCGearSPPMedic
   equipment:
     head: CMHeadCapSPP
+    ears2: RMCM5CameraGear
     eyes: RMCGlassesMedicalHUDGlasses
     jumpsuit: CMJumpsuitSPPMedic
     outerClothing: RMCArmorSPPSupport

@@ -3,7 +3,7 @@
   id: RMCSurvivorCommanderNewVaradero
   name: rmc-job-name-survivor-commander-new-varadero
   description: cm-job-description-commanding-officer
-  playTimeTracker: RMCJobSurvivorCommanderNewVaradero
+  playTimeTracker: RMCJobSurvivorCO
   ranks:
     RMCRankLieutenantColonel: []
   startingGear: RMCGearSurvivorCommanderNewVaradero
@@ -16,28 +16,11 @@
   - !type:AddComponentSpecial
     components:
     - type: Skills
-      skills:
-        RMCSkillCqc: 2
-        RMCSkillConstruction: 2
-        RMCSkillFirearms: 1
-        RMCSkillFireman: 2
-        RMCSkillEndurance: 2
-        RMCSkillEngineer: 2
-        RMCSkillExecution: 1
-        RMCSkillIntel: 2
-        RMCSkillJtac: 4
-        RMCSkillLeadership: 3
-        RMCSkillMedical: 3
-        RMCSkillNavigations: 1
-        RMCSkillOverwatch: 1
-        RMCSkillPolice: 2
-        RMCSkillPowerLoader: 2
-        RMCSkillSmartGun: 1
-        RMCSkillSurgery: 1
-        RMCSkillVehicles: 1
+      preset: RMCSkillPresetCommander
     - type: MarineOrders
     - type: RMCPointing
     - type: CommandAccent
+    - type: InnateCommandSpeech
     - type: IntelRescueSurvivorObjective
     - type: RMCAllowSuitStorage
     - type: NpcFactionMember
@@ -53,8 +36,8 @@
         state: background_shipside
     - type: EquipSurvivorPreset
       preset: RMCSurvivorPresetNoGun
-  useLoadoutOfJob: RMCSurvivorCommandingOfficer
   hidden: true
+  useLoadoutOfJob: RMCSurvivorCommandingOfficer # for inheritance
 
 - type: startingGear
   id: RMCGearSurvivorCommanderNewVaradero
@@ -89,10 +72,6 @@
     job_id: RMCSurvivorCommanderNewVaradero
   - type: Sprite
     state: co_spawn
-
-- type: playTimeTracker
-  id: RMCJobSurvivorCommanderNewVaradero
-  isHumanoid: true
 
 - type: jobIcon
   parent: CMJobIconBase

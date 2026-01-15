@@ -2,10 +2,8 @@
   parent: CMBaseWindow
   id: AU14WindowTintedWhite
   name: tinted window
-  description: A tinted glass window. Something tells you this one is somehow indestructible.
+  description: A tinted glass window with an impact resistant coating. It looks rather strong. Might take a few good hits to shatter it.
   components:
-  - type: Corrodible
-    isCorrodible: false
   - type: Sprite
     sprite: _AU14/Structures/Windows/white_tinted_window.rsi
     state: white_tinted_window0
@@ -16,6 +14,111 @@
     key: walls
     base: white_tinted_window
     mode: CardinalFlags
+  - type: Repairable
+  - type: MinimapColor
+    color: "#0a0a0aee"
+  - type: Destructible
+    thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 600 # excessive damage destroys window and frame
+        behaviors:
+          - !type:PlaySoundBehavior
+            sound:
+              collection: WindowShatter
+          - !type:DoActsBehavior
+            acts: ["Destruction"]
+      - trigger:
+          !type:DamageTrigger
+          damage: 100
+        behaviors:
+          - !type:PlaySoundBehavior
+            sound:
+              collection: WindowShatter
+          - !type:SpawnEntitiesBehavior
+            spawn:
+              CMShardGlass:
+                min: 2
+                max: 2
+          - !type:ChangeConstructionNodeBehavior
+            node: windowFrameWhiteTextured
+  - type: RMCWallExplosionDeletable
+  - type: DestroyedByExplosionType
+  - type: Construction
+    graph: AU14WindowTintedWhiteTextured
+    node: windowTintedWhite
+  - type: DestroyOnXenoPierceScissor
+    spawnPrototype: AU14WindowFrameWhiteTextured
+    sound:
+      collection: WindowShatter
+
+- type: entity
+  parent: RMCBaseWindowFrame
+  id: AU14WindowFrameWhiteTextured
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Windows/Frames/white_textured_frame.rsi
+    state: white_textured_frame0
+  - type: Icon
+    sprite: _AU14/Structures/Windows/Frames/white_textured_frame.rsi
+    state: white_textured_frame0
+  - type: IconSmooth
+    key: walls
+    base: white_textured_frame
+    mode: CardinalFlags
+  - type: Construction
+    graph: AU14WindowTintedWhiteTextured
+    node: windowFrameWhiteTextured
+  - type: MinimapColor
+    color: "#ebe5e5ee"
+
+- type: constructionGraph
+  parent: RMC
+  id: AU14WindowTintedWhiteTextured
+  start: start
+  graph:
+  - node: start # not currently buildable
+  - node: windowFrameWhiteTextured
+    entity: AU14WindowFrameWhiteTextured
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 2
+      - !type:DeleteEntity
+      conditions:
+      - !type:EntityAnchored {}
+      steps:
+      - tool: Anchoring
+        doAfter: 2
+        duplicateConditions: All
+    - to: windowTintedWhite
+      completed:
+      - !type:SnapToGrid
+        southRotation: true
+      conditions:
+      - !type:EntityAnchored {}
+      steps:
+      - material: CMGlassReinforced
+        amount: 3
+        doAfter: 2
+  - node: windowTintedWhite
+    entity: AU14WindowTintedWhite
+    edges:
+    - to: windowFrameWhiteTextured
+      completed:
+      - !type:SnapToGrid
+        southRotation: true
+      - !type:SpawnPrototype
+        prototype: CMSheetGlassReinforced1
+        amount: 3
+      conditions:
+      - !type:EntityAnchored {}
+      steps:
+      - tool: Screwing
+      - tool: Prying
+      - tool: Screwing
 
 - type: entity
   parent: MarkerBase
@@ -106,3 +209,179 @@
   - type: BarricadeBlock
     bidirectional: true
     blocking: 0
+
+- type: tile
+  parent: RMCFloorEmpty
+  id: CMUFloorEmpty
+  name: tiles-cmu-empty-subfloor
+  isSpace: true
+  weather: true
+  friction: 0
+
+- type: entity
+  parent: MarkerBase
+  id: CMUFlightFall
+  suffix: 5
+  components:
+  - type: FTLSmashImmune
+  - type: NoFTL
+  - type: Sprite
+    state: red
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: BarricadeBlock
+    bidirectional: true
+    blocking: 0
+  - type: CMUFalling
+    adjust: 0,-70
+    teleportDamage:
+      types:
+        Blunt: 5
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        layer:
+        - WallLayer
+        mask:
+        - ItemMask
+        density: 1000
+        hard: false
+
+- type: entity
+  parent: CMUFlightFall
+  id: CMUFlightFall10
+  suffix: 10
+  components:
+  - type: CMUFalling
+    adjust: 0,-140
+    teleportDamage:
+      types:
+        Blunt: 10
+
+- type: entity
+  parent: CMUFlightFall
+  id: CMUFlightFall25
+  suffix: 25
+  components:
+  - type: CMUFalling
+    adjust: 0,-210
+    teleportDamage:
+      types:
+        Blunt: 25
+
+- type: entity
+  parent: CMUFlightFall
+  id: CMUFlightFall45
+  suffix: 45
+  components:
+  - type: CMUFalling
+    adjust: 0,-280
+    teleportDamage:
+      types:
+        Blunt: 45
+
+- type: entity
+  parent: CMUFlightFall
+  id: CMUFlightFall70
+  suffix: 70
+  components:
+  - type: CMUFalling
+    adjust: 0,-350
+    teleportDamage:
+      types:
+        Blunt: 70
+
+- type: entity
+  parent: CMUFlightFall
+  id: CMUFlightFall100
+  suffix: 100
+  components:
+  - type: CMUFalling
+    adjust: 0,-420
+    teleportDamage:
+      types:
+        Blunt: 100
+
+- type: entity
+  parent: CMUFlightFall
+  id: CMUFlightFall135
+  suffix: 135
+  components:
+  - type: CMUFalling
+    adjust: 0,-490
+    teleportDamage:
+      types:
+        Blunt: 135
+
+- type: entity
+  parent: CMUFlightFall
+  id: CMUFlightFall175
+  suffix: 175
+  components:
+  - type: CMUFalling
+    adjust: 0,-560
+    teleportDamage:
+      types:
+        Blunt: 175
+
+- type: entity
+  parent: CMUFlightFall
+  id: CMUFlightFall220
+  suffix: 220
+  components:
+  - type: CMUFalling
+    adjust: 0,-630
+    teleportDamage:
+      types:
+        Blunt: 220
+
+- type: entity
+  parent:  MarkerBase
+  id: CMUFlightDisposalPipe
+  suffix: Flight
+  components:
+  - type: Sprite
+    sprite: Structures/Piping/disposal.rsi
+    layers:
+    - map: [ "pipe" ]
+      state: conpipe-s
+  - type: DisposalTube
+    containerId: DisposalTransit
+  - type: DisposalTransit
+  - type: ContainerContainer
+    containers:
+      DisposalTransit: !type:Container
+  - type: GenericVisualizer
+    visuals:
+      enum.DisposalTubeVisuals.VisualState:
+        pipe:
+          Free: { state: conpipe-s }
+          Anchored: { state: pipe-s }
+
+- type: entity
+  parent: MarkerBase
+  id: CMUFlightDisposalBend
+  suffix: Flight
+  components:
+  - type: Sprite
+    sprite: Structures/Piping/disposal.rsi
+    layers:
+    - map: [ "pipe" ]
+      state: conpipe-c
+  - type: DisposalTube
+    containerId: DisposalBend
+  - type: DisposalBend
+  - type: ContainerContainer
+    containers:
+      DisposalBend: !type:Container
+  - type: GenericVisualizer
+    visuals:
+      enum.DisposalTubeVisuals.VisualState:
+        pipe:
+          Free: { state: conpipe-c }
+          Anchored: { state: pipe-c }

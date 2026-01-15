@@ -3,20 +3,13 @@
   id: CMSurvivorTrijentTrucker
   name: cm-job-name-survivor-trijent-trucker
   description: cm-job-description-survivor
-  playTimeTracker: CMJobSurvivorTrijentTrucker
   startingGear: RMCGearSurvivorTrijentTrucker
   spawnMenuRoleName: Trijent Heavy Vehicle Operator (Trijent Survivor)
   special:
   - !type:AddComponentSpecial
     components:
     - type: Skills
-      skills:
-        RMCSkillFireman: 1
-        RMCSkillEngineer: 1
-        RMCSkillConstruction: 2
-        RMCSkillVehicles: 3
-        RMCSkillEndurance: 2
-        RMCSkillFirearms: 1
+      preset: RMCSkillPresetSurvivorTrucker
     - type: RMCSurvivor
     - type: MotionDetectorTracked
     - type: NpcFactionMember
@@ -26,6 +19,7 @@
     - type: RMCAllowSuitStorage
     - type: EquipSurvivorPreset
       preset: RMCGearSurvivorPresetTrijentTrucker
+  useLoadoutOfJob: CMSurvivor # for inheritance
 
 - type: startingGear
   parent: RMCGearSurvivorTrucker
@@ -47,10 +41,6 @@
     layers:
     - sprite: _RMC14/Markers/landmarks.rsi
       state: surv
-
-- type: playTimeTracker
-  id: CMJobSurvivorTrijentTrucker
-  isHumanoid: true
 
 - type: entity
   parent: RMCSurvivorPresetTrucker

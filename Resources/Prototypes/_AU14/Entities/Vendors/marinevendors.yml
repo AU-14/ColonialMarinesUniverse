@@ -824,7 +824,7 @@
     sections:
     - name: Rifles
       entries:
-      - id: WeaponRifleM54CMK1
+      - id: RMCWeaponRifleM54CMK1
         amount: 6
     - name: Rifle Ammunition
       entries:

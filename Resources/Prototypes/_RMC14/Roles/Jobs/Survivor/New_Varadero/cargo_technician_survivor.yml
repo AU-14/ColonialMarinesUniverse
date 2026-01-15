@@ -3,20 +3,14 @@
   id: CMSurvivorCargoTechnician
   name: cm-job-name-survivor-cargo-technician
   description: cm-job-description-survivor
-  playTimeTracker: CMJobSurvivorCargoTechnician
+  playTimeTracker: CMJobSurvivorEngineer
   startingGear: RMCGearSurvivorCargoTechnician
   spawnMenuRoleName: Cargo Technician (NV Survivor)
   special:
   - !type:AddComponentSpecial
     components:
     - type: Skills
-      skills:
-        RMCSkillEndurance: 2
-        RMCSkillFirearms: 1
-        RMCSkillFireman: 1
-        RMCSkillEngineer: 2
-        RMCSkillConstruction: 2
-        RMCSkillVehicles: 3
+      preset: RMCSkillPresetSurvivorTrucker
     - type: RMCSurvivor
     - type: MotionDetectorTracked
     - type: NpcFactionMember
@@ -26,7 +20,7 @@
     - type: RMCAllowSuitStorage
     - type: EquipSurvivorPreset
       preset: RMCGearSurvivorPresetCargoTechnician
-  useLoadoutOfJob: CMSurvivorEngineer
+  useLoadoutOfJob: CMSurvivorEngineer # for inheritance
 
 - type: startingGear
   id: RMCGearSurvivorCargoTechnician
@@ -37,7 +31,6 @@
     shoes: RMCShoesJackboots
     gloves: CMHandsBrown
     id: CMIDCardColonistEngineer
-
     pocket1: RMCPouchSurvivalFill
     pocket2: RMCPouchToolsFill
 # TODO RMC Meson Goggles
@@ -53,10 +46,6 @@
     layers:
     - sprite: _RMC14/Markers/landmarks.rsi
       state: surv
-
-- type: playTimeTracker
-  id: CMJobSurvivorCargoTechnician
-  isHumanoid: true
 
 - type: entity
   parent: RMCSurvivorPresetEngineer

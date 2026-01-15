@@ -3,8 +3,10 @@
   id: CMLiaison
   name: cm-job-name-liaison
   description: cm-job-description-liaison
-  setPreference: false
-  requirements: []
+  requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMDepartmentsHuman
+    time: 36000 # 10 hours
   ranks:
     RMCRankWeYaExecutiveSpecialist:
     - !type:RoleTimeRequirement
@@ -40,6 +42,7 @@
         RMCSkillFirearms: 0
         RMCSkillVehicles: 1
     - type: CMVendorUser
+      id: CMLiaison
       points: 40
     - type: RMCVendorUserRecharge
       maxPoints: 50

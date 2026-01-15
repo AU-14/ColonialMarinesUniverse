@@ -24,21 +24,6 @@
       - type: RMCLeapProtection
       - type: Synth
         changeBrain: false
-        removeComponents:
-        - type: CMSurgeryTarget
-        - type: Infectable
-        - type: Hunger
-        - type: Thirst
-        - type: Perishable
-        - type: ThermalRegulator
-        - type: Stamina
-        - type: DamageForceSay
-        - type: Dna
-        - type: Fingerprint
-        - type: InjectableSolution
-        - type: IVDripTarget
-        - type: RMCSuicide
-          damage: { }
         canUseGuns: true
         hideGeneration: true
         useHumanHealthIcons: true

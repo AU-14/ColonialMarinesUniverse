@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Item;
 using Content.Shared.AU14;
 using Content.Shared.AU14.Threats;
 using Content.Shared.AU14.util;
+using Content.Shared.Paper;
 using Content.Shared.Roles;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -27,8 +28,8 @@ public sealed partial class RMCPlanetMapPrototypeComponent : Component
     [DataField, AutoNetworkedField]
     public int MaxPlayers;
 
-    [DataField(required: true), AutoNetworkedField]
-    public string Announcement = string.Empty;
+    [DataField, AutoNetworkedField]
+    public string? Announcement;
 
     [DataField, AutoNetworkedField]
     public List<(ProtoId<JobPrototype> Job, int Amount)>? SurvivorJobs;
@@ -56,11 +57,27 @@ public sealed partial class RMCPlanetMapPrototypeComponent : Component
     public bool SelectRandomSurvivorInsert = true;
 
     /// <summary>
+    /// List of survivor jobs that appear in a specific scenario. These have a higher priority than other job types.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public Dictionary<string, Dictionary<ProtoId<JobPrototype>, List<(ProtoId<JobPrototype> Special, int Amount)>>>? SurvivorJobScenarios;
+
+    /// <summary>
     /// List of nightmare scenarios that can occur, which are used for conditionally spawning map inserts.
     /// Only one scenario will be selected using cumulative probability.
     /// </summary>
     [DataField, AutoNetworkedField]
     public List<RMCNightmareScenario>? NightmareScenarios;
+
+    [DataField, AutoNetworkedField]
+    public bool InRotation = true;
+
+    /// <summary>
+    /// Special faxes that should be sent roundstart.
+    /// The dictionary is the fax ID and then the entity to be faxed.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public Dictionary<string, EntProtoId<PaperComponent>>? SpecialFaxes;
 
     [DataField, AutoNetworkedField]
     public List<ProtoId<PlatoonPrototype>> PlatoonsGovfor = new();

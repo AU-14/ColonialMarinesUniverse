@@ -7,3 +7,6 @@
   roles:
   - CMQuartermaster
   - CMCargoTech
+  departmentRadio: MarineRequisition
+  headOfDepartment: CMQuartermaster
+  hidden: true

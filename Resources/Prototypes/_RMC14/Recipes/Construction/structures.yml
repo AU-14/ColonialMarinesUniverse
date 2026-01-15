@@ -12,7 +12,7 @@
   placementMode: SnapgridCenter
   canBuildInImpassable: false
   conditions:
-    - !type:TileNotBlocked
+  - !type:TileNotBlocked
 
 - type: construction
   parent: RMC
@@ -27,9 +27,9 @@
   placementMode: SnapgridCenter
   canBuildInImpassable: false
   conditions:
-    - !type:TileNotBlocked
+  - !type:TileNotBlocked
 
-# Directional Windows
+  # Directional Windows
 - type: construction
   parent: RMC
   name: directional window
@@ -41,8 +41,8 @@
   description: A glass window. It looks thin and flimsy.
   canBuildInImpassable: true
   conditions:
-    - !type:EmptyOrWindowValidInTile
-    - !type:NoWindowsInTile
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
   objectType: Structure
   placementMode: SnapgridCenter
 
@@ -57,8 +57,8 @@
   description: A glass window reinforced with bracing rods. It looks rather strong.
   canBuildInImpassable: true
   conditions:
-    - !type:EmptyOrWindowValidInTile
-    - !type:NoWindowsInTile
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
   objectType: Structure
   placementMode: SnapgridCenter
 
@@ -76,7 +76,7 @@
   placementMode: SnapgridCenter
   canBuildInImpassable: true
   conditions:
-    - !type:TileNotBlocked
+  - !type:TileNotBlocked
 
 - type: construction
   parent: RMC
@@ -91,9 +91,9 @@
   placementMode: SnapgridCenter
   canBuildInImpassable: true
   conditions:
-    - !type:TileNotBlocked
+  - !type:TileNotBlocked
 
-# Barricades
+  # Barricades
 - type: construction
   parent: RMC
   name: Metal Barricade
@@ -107,8 +107,8 @@
   placementMode: SnapgridCenter
   canBuildInImpassable: false
   conditions:
-    - !type:TileNotBlocked
-    - !type:TileBarricadeClear
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
   rmcPrototype: RMCMetalBarricadeBuild
 
 - type: construction
@@ -124,8 +124,8 @@
   placementMode: SnapgridCenter
   canBuildInImpassable: false
   conditions:
-    - !type:TileNotBlocked
-    - !type:TileBarricadeClear
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
   rmcPrototype: RMCPlasteelBarricadeBuild
 
 - type: construction
@@ -141,8 +141,8 @@
   placementMode: SnapgridCenter
   canBuildInImpassable: false
   conditions:
-    - !type:TileNotBlocked
-    - !type:TileBarricadeClear
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
   rmcPrototype: RMCWoodenBarricadeBuild
 
 - type: construction
@@ -158,8 +158,8 @@
   placementMode: SnapgridCenter
   canBuildInImpassable: false
   conditions:
-    - !type:TileNotBlocked
-    - !type:TileBarricadeClear
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
   rmcPrototype: RMCMetalBarricadeFoldableBuild
 
 - type: construction
@@ -175,16 +175,16 @@
   placementMode: SnapgridCenter
   canBuildInImpassable: false
   conditions:
-    - !type:TileNotBlocked
-    - !type:TileBarricadeClear
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
   rmcPrototype: RMCPlasteelBarricadeFoldableBuild
 
 #lighting
 - type: construction
   parent: RMC
   name: tube light fixture
-  id: CMLightTubeFixture
-  graph: CMLightFixture
+  id: RMCLightTubeFixture
+  graph: RMCLightFixture
   startNode: start
   targetNode: tubeLight
   category: construction-category-cm-structures
@@ -194,13 +194,13 @@
   canRotate: true
   canBuildInImpassable: false
   conditions:
-    - !type:TileNotBlocked
+  - !type:TileNotBlocked
 
 - type: construction
   parent: RMC
   name: bulb light fixture
-  id: CMLightBulbFixture
-  graph: CMLightFixture
+  id: RMCLightBulbFixture
+  graph: RMCLightFixture
   startNode: start
   targetNode: bulbLight
   category: construction-category-cm-structures
@@ -210,4 +210,4 @@
   canRotate: true
   canBuildInImpassable: false
   conditions:
-    - !type:TileNotBlocked
+  - !type:TileNotBlocked

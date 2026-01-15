@@ -71,7 +71,7 @@
     - id: AU14JungleBoonieHat
     - id: AU14JunglePatrolCap
     - id: AU14JungleFlapCap
-    - id: WeaponRifleM54CMK1Unloaded
+    - id: RMCWeaponRifleM54CMK1Unloaded
     - id: CMWeaponPistolM1984Empty
     - id: AU14PatchUSCM
     - id: AU14PatchUAFlag
@@ -96,7 +96,7 @@
     contents:
     - id: AU14USArmyDesertFatigues
     - id: RMCBootsSPPFilled
-    - id: WeaponRifleM54CMK1Unloaded
+    - id: RMCWeaponRifleM54CMK1Unloaded
     - id: RMCWeaponPistolM77Empty
     - id: AU14PatchUSArmy
     - id: AU14Patch1stCav

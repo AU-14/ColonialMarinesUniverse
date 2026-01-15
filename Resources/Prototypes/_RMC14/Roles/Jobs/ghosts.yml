@@ -142,3 +142,9 @@
   components:
   - type: GhostRoleApplySpecial
     squad: SquadIntel
+
+- type: randomHumanoidSettings
+  parent: RMCRandomHumanoidBase
+  id: RMCUnassignedBase
+  components:
+  - type: GhostRoleApplySpecial

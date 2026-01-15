@@ -6,7 +6,7 @@
   suffix: Requisitions, Locked
   components:
   - type: AccessReader
-    access: [ ["CMAccessRequisitions"], ["CMAccessCommand"] ]
+    access: [ ["CMAccessRequisitions"] ]
   - type: PaintableAirlock
     department: CMRequisitions
 
@@ -16,7 +16,7 @@
   suffix: Requisitions, Locked, Maint
   components:
   - type: AccessReader
-    access: [ [ "CMAccessRequisitions" ], ["CMAccessCommand"] ]
+    access: [ [ "CMAccessRequisitions" ] ]
   - type: PaintableAirlock
     department: CMRequisitions
 
@@ -57,7 +57,7 @@
   suffix: Engineering, Locked
   components:
   - type: AccessReader
-    access: [ [ "CMAccessEngineering" ], ["CMAccessCommand"] ]
+    access: [ [ "CMAccessEngineering" ] ]
 
 - type: entity
   parent: CMAirlockGlassEngineer
@@ -65,7 +65,7 @@
   suffix: Engineering, Locked, Glass
   components:
   - type: AccessReader
-    access: [ [ "CMAccessEngineering" ], ["CMAccessCommand"] ]
+    access: [ [ "CMAccessEngineering" ] ]
 
 - type: entity
   parent: CMAirlockMaint
@@ -73,7 +73,7 @@
   suffix: Engineering, Locked, Maint
   components:
   - type: AccessReader
-    access: [ [ "CMAccessEngineering" ], ["CMAccessCommand"] ]
+    access: [ [ "CMAccessEngineering" ] ]
   - type: PaintableAirlock
     department: CMEngineering
 
@@ -111,6 +111,14 @@
     access: [ [ "CMAccessMedical" ] ]
   - type: PaintableAirlock
     department: CMMedbay
+
+- type: entity
+  parent: CMAirlockMedical
+  id: CMAirlockMorgueLocked
+  suffix: Morgue, Locked
+  components:
+  - type: AccessReader
+    access: [ [ "RMCAccessMorgue" ] ]
 
 - type: entity
   parent: CMAirlockMedical
@@ -166,7 +174,7 @@
   suffix: Security, Locked
   components:
   - type: AccessReader
-    access: [ [ "CMAccessBrig" ], [ "CMAccessCommand" ] ]
+    access: [ [ "CMAccessBrig" ]]
 
 - type: entity
   parent: CMAirlockGlassSecurity
@@ -174,7 +182,7 @@
   suffix: Security, Locked
   components:
   - type: AccessReader
-    access: [ [ "CMAccessBrig" ], [ "CMAccessCommand" ] ]
+    access: [ [ "CMAccessBrig" ] ]
 
 # Liaison
 - type: entity

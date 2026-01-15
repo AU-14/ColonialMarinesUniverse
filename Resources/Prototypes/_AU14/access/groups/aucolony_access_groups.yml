@@ -3,7 +3,6 @@
 - type: accessGroup
   id: auadmin
   tags:
-  - CMAccessCommand
   - CMAccessResearch
   - CMAccessMedical
   - CMAccessColonyPublic

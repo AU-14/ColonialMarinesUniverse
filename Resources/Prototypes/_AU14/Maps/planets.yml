@@ -114,8 +114,6 @@
     - cultistThreat
     - wendigoThreat
 
-
-
 - type: entity
   id: AUPlanetGixensCaverns
   name: Gixens Caverns
@@ -141,4 +139,30 @@
     daycycleenabled: false
     #faction: ua
 
-
+- type: entity
+  id: AUPlanetFlight
+  name: Flight
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Flight"
+    mapId: Flight
+    camouflage: Urban
+    announcement: "A nine-story mixed-use building surrounded by an artificial city landscape, has gone dark. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsOpfor:
+    - UPP
+    - WEYU
+    - ProdigySF
+    platoonsGovfor:
+    - LACN
+    - CCAF
+    - UNISC
+    - USCM
+    - HAZOPS
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    threats:
+    - cultistThreat
+    - wendigoThreat

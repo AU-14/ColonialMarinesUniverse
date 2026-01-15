@@ -8,58 +8,46 @@
   },
   "states": [
     {
-      "name": "roof-in"
+      "name": "basement"
     },
     {
-      "name": "roof-out"
+      "name": "floor1"
     },
     {
-      "name": "minus1-in"
+      "name": "floor2"
     },
     {
-      "name": "minus1-out"
+      "name": "floor3"
     },
     {
-      "name": "minus2-in"
+      "name": "floor4"
     },
     {
-      "name": "minus2-out"
+      "name": "floor5"
     },
     {
-      "name": "minus3-in"
+      "name": "floor6"
     },
     {
-      "name": "minus3-out"
+      "name": "floor7"
     },
     {
-      "name": "minus4-in"
+      "name": "floor8"
     },
     {
-      "name": "minus4-out"
+      "name": "floor9"
     },
     {
-      "name": "minus5-in"
+      "name": "roof"
     },
     {
-      "name": "minus5-out"
+      "name": "out"
     },
     {
-      "name": "minus6-in"
+      "name": "lz"
     },
     {
-      "name": "minus6-out"
-    },
-    {
-      "name": "minus7-in"
-    },
-    {
-      "name": "minus7-out"
-    },
-    {
-      "name": "minus8-in"
-    },
-    {
-      "name": "minus8-out"
+      "name": "midair"
     }
   ]
 }

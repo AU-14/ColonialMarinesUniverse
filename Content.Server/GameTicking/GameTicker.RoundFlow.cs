@@ -8,6 +8,7 @@ using Content.Server.Ghost;
 using Content.Server.Maps;
 using Content.Server.Roles;
 using Content.Shared._RMC14.Power;
+using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Prototypes;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared.CCVar;
@@ -745,6 +746,10 @@ namespace Content.Server.GameTicking
 
             PlayersJoinedRoundNormally = 0;
 
+            //RMC14
+            //Adding this because I do not fucking trust admins to actually remember to turn this shit off...
+            _cfg.SetCVar(RMCCVars.RMCDelayRoundEnd, false);
+            //RMC14
             RunLevel = GameRunLevel.PreRoundLobby;
             RandomizeLobbyBackground();
             ResettingCleanup();
@@ -766,6 +771,9 @@ namespace Content.Server.GameTicking
                 UpdateInfoText();
 
                 ReqWindowAttentionAll();
+
+                if (_cfg.GetCVar(RMCCVars.RMCLobbyStartPaused))
+                    PauseStart();
             }
         }
 

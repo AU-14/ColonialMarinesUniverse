@@ -1,7 +1,9 @@
-﻿using Content.Shared._RMC14.CrashLand;
+using Content.Shared._RMC14.CrashLand;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Prototypes;
+using Content.Shared._RMC14.Storage.Containers;
+using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
@@ -10,6 +12,7 @@ using Content.Shared.Item;
 using Content.Shared.Lock;
 using Content.Shared.ParaDrop;
 using Content.Shared.Popups;
+using Content.Shared.Roles;
 using Content.Shared.Storage;
 using Content.Shared.Storage.Components;
 using Content.Shared.Storage.EntitySystems;
@@ -77,6 +80,11 @@ public sealed class RMCStorageSystem : EntitySystem
         SubscribeLocalEvent<RMCEntityStorageWhitelistComponent, ContainerIsInsertingAttemptEvent>(OnEntityStorageWhitelistAttempt);
 
         SubscribeLocalEvent<EntityStorageCloseOnMapInitComponent, MapInitEvent>(OnEntityStorageClose);
+
+        SubscribeLocalEvent<RMCContainerEmptyOnDestructionComponent, DestructionEventArgs>(OnContainerEmptyDestroyed);
+        SubscribeLocalEvent<RMCContainerEmptyOnDestructionComponent, EntityTerminatingEvent>(OnContainerEmptyDeleted);
+
+        SubscribeLocalEvent<OpenStorageOnGearEquipComponent, StartingGearEquippedEvent>(OnOpenStorageStartingGear);
 
         Subs.BuiEvents<StorageCloseOnMoveComponent>(StorageUiKey.Key, subs =>
         {
@@ -471,6 +479,40 @@ public sealed class RMCStorageSystem : EntitySystem
         return true;
     }
 
+    private void OnContainerEmptyDestroyed(Entity<RMCContainerEmptyOnDestructionComponent> containerEnt, ref DestructionEventArgs args)
+    {
+        if (!containerEnt.Comp.OnDestruction)
+            return;
+
+        ContainerDestructionEmpty(containerEnt);
+    }
+
+    private void OnContainerEmptyDeleted(Entity<RMCContainerEmptyOnDestructionComponent> containerEnt, ref EntityTerminatingEvent args)
+    {
+        if (!containerEnt.Comp.OnDelete)
+            return;
+
+        ContainerDestructionEmpty(containerEnt);
+    }
+
+    private void ContainerDestructionEmpty(Entity<RMCContainerEmptyOnDestructionComponent> containerEnt)
+    {
+        if (!TryComp(containerEnt, out TransformComponent? transform) || TerminatingOrDeleted(transform.GridUid) || !Exists(containerEnt) || !TryComp(containerEnt, out ContainerManagerComponent? containerManager))
+            return;
+
+        var ev = new RMCContainerDestructionEmptyEvent();
+        RaiseLocalEvent(containerEnt, ref ev);
+
+        if (ev.Handled)
+            return;
+
+        var containers = _container.GetAllContainers(containerEnt, containerManager);
+        foreach (var contain in containers)
+        {
+            _container.EmptyContainer(contain);
+        }
+    }
+
     public int EstimateFreeColumns(Entity<StorageComponent?> storage)
     {
         if (!Resolve(storage, ref storage.Comp, false))
@@ -498,6 +540,21 @@ public sealed class RMCStorageSystem : EntitySystem
         }
 
         return columns;
+    }
+
+    private void OnOpenStorageStartingGear(Entity<OpenStorageOnGearEquipComponent> ent, ref StartingGearEquippedEvent args)
+    {
+        var slots = _inventory.GetSlotEnumerator(ent.Owner);
+        while (slots.MoveNext(out var slot))
+        {
+            if (!_storageQuery.TryComp(slot.ContainedEntity, out var storageComp))
+                continue;
+
+            if (!_entityWhitelist.CheckBoth(slot.ContainedEntity, ent.Comp.Blacklist, ent.Comp.Whitelist))
+                continue;
+
+            _storage.OpenStorageUI(slot.ContainedEntity.Value, ent.Owner, storageComp, doAfter: false);
+        }
     }
 
     public override void Update(float frameTime)

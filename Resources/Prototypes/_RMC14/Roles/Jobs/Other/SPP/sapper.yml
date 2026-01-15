@@ -73,7 +73,6 @@
       time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
 
-
 - type: randomHumanoidSettings
   parent: RMCSPPEngineer
   id: RMCSPPEngineerFriendly
@@ -87,7 +86,6 @@
     raffle:
       settings: short
   - type: GhostRoleApplySpecial
-
 
 - type: startingGear
   id: RMCGearSPPEngineer

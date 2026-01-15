@@ -26,7 +26,23 @@
       collection: RMCKeyboardTyping
       params:
         volume: -1
+- type: entity
+  parent: RMCOverwatchConsole
+  id: RMCOverwatchConsoleRotating
+  suffix: Rotating
+  components:
+  - type: Sprite
+    overrideDir: South
+    enableOverrideDir: false
 
+- type: entity
+  parent: RMCOverwatchConsoleRotating
+  id: RMCOverwatchConsoleRotatingPowered
+  suffix: Rotating, Powered
+  components:
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false # intentionally!
 - type: entity
   parent: RMCCommunicationsConsoleBase
   id: RMCGroundsideOperationsConsole
@@ -106,14 +122,6 @@
   - type: TacticalMapComputer
   - type: SupplyDropComputer
 
-- type: entity
-  parent: RMCOverwatchConsole
-  id: RMCOverwatchConsoleRotating
-  suffix: Rotating
-  components:
-  - type: Sprite
-    overrideDir: South
-    enableOverrideDir: false
 
 - type: entity
   parent: RMCCommunicationsConsoleBase

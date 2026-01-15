@@ -75,7 +75,6 @@
       time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
 
-
 - type: randomHumanoidSettings
   parent: RMCSPPSpecialist
   id: RMCSPPSpecialistFriendly
@@ -90,11 +89,11 @@
       settings: short
   - type: GhostRoleApplySpecial
 
-
 - type: startingGear
   id: RMCGearSPPSpecialist
   equipment:
     head: ArmorHelmetSPPHeavy
+
     jumpsuit: CMJumpsuitSPP
     outerClothing: RMCArmorSPPHeavySpecialist
     gloves: RMCHandsVeteranSPP

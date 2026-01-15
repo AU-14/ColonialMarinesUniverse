@@ -75,6 +75,7 @@ wiki = "https://cm-ss13.com/wiki/Main_Page"
 [net]
 tickrate = 25
 bindto = "::,0.0.0.0"
+log_late_msg = false
 
 [physics]
 grid_splitting = false

@@ -3,22 +3,16 @@
   id: CMJobSurvivorSoroMiner
   name: rmc-job-name-survivor-soro-miner
   description: cm-job-description-survivor
-  playTimeTracker: CMJobSurvivorSoroMiner
+  playTimeTracker: CMJobSurvivor
   startingGear: RMCGearSurvivorSoroMiner
   spawnMenuRoleName: Miner (Sorokyne Survivor)
   special:
   - !type:AddComponentSpecial
     components:
     - type: Skills
-      skills:
-        RMCSkillConstruction: 1
-        RMCSkillEndurance: 2
-        RMCSkillFireman: 1
-        RMCSkillFirearms: 1
-        RMCSkillMedical: 3
-        RMCSkillSurgery: 2
+      preset: RMCSkillPresetSurvivorMiner
     - type: EquipSurvivorPreset
-      preset: RMCGearSurvivorPresetSoroMiner
+      preset: RMCSurvivorPresetCivilian
     - type: RMCSurvivor
     - type: MotionDetectorTracked
     - type: NpcFactionMember
@@ -35,7 +29,7 @@
     head: RMCHardhatWhiteAlt
     jumpsuit: RMCJumpsuitSPPCiv5
     back: CMSatchelEngineer
-    OuterClothing: RMCOuterClothingExternalWebbingBrown
+    outerClothing: RMCOuterClothingExternalWebbingBrown
     shoes: RMCBootsSPP
     pocket2: RMCPouchToolsFill
     gloves: RMCHandsVeteran
@@ -55,13 +49,3 @@
     layers:
     - sprite: _RMC14/Markers/landmarks.rsi
       state: surv
-
-- type: playTimeTracker
-  id: CMJobSurvivorSoroMiner
-  isHumanoid: true
-
-- type: entity
-  parent: RMCSurvivorPresetCivilian
-  id: RMCGearSurvivorPresetSoroMiner
-  name: sorokyne miner preset
-  categories: [ HideSpawnMenu ]

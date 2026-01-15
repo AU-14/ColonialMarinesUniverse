@@ -3,13 +3,13 @@
   id: CMSurvivorDoctor
   name: cm-job-name-survivor-doctor
   description: cm-job-description-survivor
-  setPreference: false
   playTimeTracker: CMJobSurvivorDoctor
   ranks:
     RMCRankCivilianDoctor: []
   startingGear: RMCGearSurvivorDoctor
   accessGroups:
   - ColonistMedical
+  basePlaytimeTracker: true
   special:
   - !type:AddComponentSpecial
     components:
@@ -36,7 +36,6 @@
   id: RMCGearSurvivorDoctor
   equipment:
     mask: CMMaskSterile
-
     jumpsuit: CMJumpsuitLiaisonBlue
     outerClothing: RMCLabcoat
     gloves: CMHandsLatex
@@ -59,6 +58,7 @@
 
 - type: playTimeTracker
   id: CMJobSurvivorDoctor
+  name: rmc-playtime-tracker-job-name-survivor-doctor
   isHumanoid: true
 
 - type: entity

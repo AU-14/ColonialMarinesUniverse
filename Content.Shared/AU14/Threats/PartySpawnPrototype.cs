@@ -26,7 +26,7 @@ public sealed partial class PartySpawnPrototype : IPrototype
 
     [DataField("scalewithpop", required: false)]
     public bool ScalewithPop { get; private set; } = false;
-
+// does nothing yet
     [DataField("Markers", required: false)]
     public Dictionary<ThreatMarkerType, string> Markers { get; private set; } = new Dictionary<ThreatMarkerType, string>();
     // threatmarkertype, custommarkerid. if blank use generic

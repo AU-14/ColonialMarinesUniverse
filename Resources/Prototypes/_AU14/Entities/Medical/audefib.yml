@@ -43,10 +43,6 @@
     doAfterDuration: 12.5
     allowDoAfterMovement: false
     canDefibCrit: false
-    cmZapHeal:
-    - Brute: -10
-    - Burn: -10
-    - Toxin: -4
     zapHeal:
       groups:
         Airloss: -150

@@ -43,6 +43,7 @@
         RMCSkillSurgery: 1
     - type: MarineOrders
     - type: CMVendorUser
+      id: CMDropshipCrewChief
       points: 45
     - type: RMCPointing
     - type: JobPrefix
@@ -54,7 +55,7 @@
       background:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: background_shipside
-  hidden: false
+    - type: MutinyEligible
 
 - type: startingGear
   id: CMGearDCC
