@@ -29,7 +29,7 @@
         RMCSkillEngineer: 2
         RMCSkillMeleeWeapons: 1
         RMCSkillIntel: 1
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
     - type: MarineOrders
     - type: SquadLeader
       icon:

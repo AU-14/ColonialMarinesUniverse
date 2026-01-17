@@ -36,7 +36,7 @@
         RMCSkillFireman: 1
         RMCSkillVehicles: 1
         RMCSkillDomestics: 1
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
     - type: JobPrefix
       prefix: au14-job-prefix-corporateliaison
     - type: TacticalMapIcon

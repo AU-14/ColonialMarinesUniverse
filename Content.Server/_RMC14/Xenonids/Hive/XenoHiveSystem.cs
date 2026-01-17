@@ -19,6 +19,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using System.Data;
+using Content.Server.AU14.Round;
 using IConfigurationManager = Robust.Shared.Configuration.IConfigurationManager;
 
 namespace Content.Server._RMC14.Xenonids.Hive;
@@ -35,6 +36,7 @@ public sealed class XenoHiveSystem : SharedXenoHiveSystem
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly SharedCMChatSystem _rmcChat = default!;
+    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
 
     private readonly List<string> _announce = [];
     private readonly EntProtoId _defaultHive = "CMXenoHive";
@@ -204,6 +206,7 @@ public sealed class XenoHiveSystem : SharedXenoHiveSystem
 
     public void EvoScreech(HiveComponent hive)
     {
+
         if (hive.CurrentQueen is not { } queen)
             return;
 
@@ -218,15 +221,22 @@ public sealed class XenoHiveSystem : SharedXenoHiveSystem
 
             if (HasComp<XenoComponent>(recipient))
                 continue;
+            if (_auRoundSystem._selectedthreat.hiveevolution)
+            {
+                var popupText = Loc.GetString(HasComp<SynthComponent>(recipient)
+                    ? "rmc-hive-supports-castes-synth"
+                    : "rmc-hive-supports-castes-human");
 
-            var popupText = Loc.GetString(HasComp<SynthComponent>(recipient)
-                ? "rmc-hive-supports-castes-synth"
-                : "rmc-hive-supports-castes-human");
+                popupText = $"[bold][font size=24][color=red]\n{popupText}\n[/color][/font][/bold]";
 
-            popupText = $"[bold][font size=24][color=red]\n{popupText}\n[/color][/font][/bold]";
+                _audio.PlayEntity(hive.MarineAnnounceSound, recipient, recipient);
+                _rmcChat.ChatMessageToOne(ChatChannel.Radio, popupText, popupText, default, false, session.Channel);
 
-            _audio.PlayEntity(hive.MarineAnnounceSound, recipient, recipient);
-            _rmcChat.ChatMessageToOne(ChatChannel.Radio, popupText, popupText, default, false, session.Channel);
+            }
+
+
+
+
         }
     }
 }

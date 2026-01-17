@@ -44,6 +44,8 @@
         amount: 5
       - id: CMPillCanisterTricordrazine
         amount: 5
+      - id: RMCPillCanisterIron
+        amount: 2
       - id: AU14PillCanisterCryoxadone
         amount: 1
       - id: AU14PillCanisterLeporazine

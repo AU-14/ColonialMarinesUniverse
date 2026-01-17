@@ -448,47 +448,42 @@
   - type: CMAutomatedVendor
     sections:
     - name: Weapons
+      choices: { CMUPrimaryWeapon: 1 }
       entries:
       - id: AU14WeaponRifleM16A1
-        amount: 2
       - id: AU14WeaponRifleM16A2
-        amount: 4
       - id: WeaponSMGMP5
-        amount: 4
       - id: RMCWeaponSMGMP5Alt
-        amount: 2
       - id: RMCWeaponSMGP90
-        amount: 2
     - name: Weapon Ammunition
       entries:
       - id: RMCMagazineRifleM16
-        amount: 90
+        amount: 120
       - id: CMMagazineSMGMP5
-        amount: 60
+        amount: 120
       - id: RMCMagazineSMGP90
-        amount: 30
+        amount: 120
     - name: Handguns
+      choices: { CMUHandgunsWeapon: 1 }
       entries:
       - id: CMWeaponPistolM1984Empty
-        amount: 4
       - id: RMCWeaponPistolB92FS
-        amount: 4
-      - id: RMCMK80
-        amount: 2
+      - id: RMCWeaponPistolHG45Marina
     - name: Handgun Ammunition
       entries:
       - id: CMMagazinePistolM1984
-        amount: 22
+        amount: 120
       - id: RMCMagazinePistolM1984AP
-        amount: 6
+        amount: 4
       - id: RMCMagazinePistolB92FS
-        amount: 22
-      - id: CMMagazinePistolMK80
-        amount: 12
+        amount: 120
+      - id: RMCMagazinePistolMK45
+        amount: 120
     - name: Attachments
+      choices: { CMUAttachmentsVendor: 1 }
       entries:
       - id: RMCAttachmentRailFlashlight
-        amount: 12
+      - id: RMCAttachmentTwoPointSling
     - name: Explosives
       entries:
       - id: CMGrenadeFrag

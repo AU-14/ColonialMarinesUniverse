@@ -90,7 +90,7 @@
       skills:
         RMCSkillConstruction: 1
         RMCSkillEndurance: 2
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
         RMCSkillFireman: 1
     - type: RMCTrackable
   hasIcon: true
@@ -230,7 +230,7 @@
         RMCSkillMedical: 1
         RMCSkillEngineer: 1
         RMCSkillIntel: 2
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
     - type: RMCTrackable
   hasIcon: true
   hidden: true
@@ -304,7 +304,7 @@
         RMCSkillMedical: 1
         RMCSkillEngineer: 1
         RMCSkillIntel: 2
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
     - type: RMCTrackable
   hasIcon: true
   hidden: true
@@ -366,7 +366,7 @@
         RMCSkillMedical: 1
         RMCSkillEngineer: 1
         RMCSkillIntel: 2
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
     - type: RMCTrackable
   hasIcon: true
   hidden: true
@@ -431,7 +431,7 @@
         RMCSkillPolice: 2
         RMCSkillFireman: 1
         RMCSkillIntel: 2
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
     - type: RMCTrackable
   hasIcon: true
   hidden: true
@@ -508,7 +508,7 @@
         RMCSkillPolice: 2
         RMCSkillFireman: 1
         RMCSkillIntel: 2
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
     - type: RMCTrackable
   hasIcon: true
   hidden: true

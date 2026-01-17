@@ -15,5 +15,13 @@
   components:
     - type: GameRule
     - type: ThreatSurviveRule
-      minutes: 10 # Set this to the desired number of minutes
+      minutes: 120 # Set this to the desired number of minutes
 
+- type: entity
+  id: KillAllColonistRule
+  parent: BaseGameRule
+  name: Kill All Colonists
+  description: Threat wins when all AUColonists are dead.
+  components:
+    - type: GameRule
+    - type: KillAllColonistRule

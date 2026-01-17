@@ -17,6 +17,8 @@
   components:
   - type: Sprite
     state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Member
 
 
 

@@ -183,15 +183,15 @@
   - type: CMAutomatedVendor
     sections:
     - name: Essential Equipment
+      takeAll: CMUAREssentialEquipment
       entries:
       - id: RMCWeaponLMGM60
-        amount: 1
       - id: CMBeltMarine
-        amount: 1
       - id: AU14IMPBackpackMarine
-        amount: 1
+    - name: Munitions
+      entries:
       - id: RMCMagazineLMGM60
-        amount: 5
+        amount: 40
 
 - type: entity
   parent: ColMarTechBase
@@ -203,30 +203,33 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
   - type: CMAutomatedVendor
     sections:
-    - name: Primary Weapons
+    - name: Weapons
+      choices: { CMUPrimaryWeapon: 1 }
       entries:
       - id: AUWeaponRifleM75AMAS
-        amount: 12
     - name: Primary Ammunition
       entries:
       - id: AU14MagazineRifleM75AMAS
         amount: 120
     - name: Handguns
+      choices: { CMUHandgunsWeapon: 1 }
       entries:
       - id: AU14WeaponPistolTPR23BEmpty
-        amount: 12
     - name: Handgun Ammunition
       entries:
       - id: CMMagazinePistolM1984
-        amount: 64
+        amount: 120
     - name: Attachments
+      choices: { CMUAttachmentsVendor: 1 }
       entries:
       - id: RMCAttachmentRailFlashlight
-        amount: 12
+      - id: RMCAttachmentTwoPointSling
     - name: Explosives
       entries:
       - id: RMCBoxHEDP
-        amount: 2
+        amount: 1
+      - id: RMCBoxHEFA
+        amount: 1
       - id: CMGrenadeSmoke
         amount: 6
       - id: RMCExplosivePlastic

@@ -31,7 +31,7 @@
     - type: Skills
       skills:
         RMCSkillEndurance: 1
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
         RMCSkillConstruction: 2
         RMCSkillEngineer: 3
         RMCSkillFireman: 1

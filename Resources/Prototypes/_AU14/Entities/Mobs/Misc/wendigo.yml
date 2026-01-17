@@ -1,4 +1,6 @@
 - type: entity
+
+  abstract: true
   parent:
   - CMXenoDeveloped
   - CMXenoFlammable
@@ -21,13 +23,14 @@
       0: Alive
       1500: Dead
   - type: Xeno
+    BypassTierCount: true
     role: CMXenoWarrior
     actionIds:
     - ActionXenoWatch
     - ActionXenoPunch
     - ActionXenoPounce
     - ActionXenoHeadbite
-    tier: 3
+    tier: 99
     hudOffset: -0.15,0.25
   - type: XenoRegen
     standHealingMultiplier: 0.3

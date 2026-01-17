@@ -28,19 +28,24 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
 using Content.Server._RMC14.Announce;
+using Content.Server._RMC14.Xenonids.Hive;
 using Content.Server.AU14.Round;
 using Content.Server.AU14.Threats;
+using Content.Shared._RMC14.Xenonids.Hive;
 
 namespace Content.Server.GameTicking
 {
     public sealed partial class GameTicker
     {
+        [Dependency] private readonly XenoHiveSystem _hive = default!;
+
         [Dependency] private readonly IAdminManager _adminManager = default!;
         [Dependency] private readonly SharedJobSystem _jobs = default!;
         [Dependency] private readonly AdminSystem _admin = default!;
         [Dependency] private readonly MarinePresenceAnnounceSystem _marinePresenceAnnounce = default!;
         [Dependency] private readonly AuJobSelectionSystem _auJobSelectionSystem = default!;
         [Dependency] private readonly AuThreatSystem _auThreatSystem = default!;
+        [Dependency] private readonly Content.Server.AU14.ThirdParty.AuThirdPartySystem _auThirdParty = default!;
 
         public static readonly EntProtoId ObserverPrototypeName = "MobObserver";
         public static readonly EntProtoId AdminObserverPrototypeName = "RMCAdminObserver";
@@ -70,6 +75,8 @@ namespace Content.Server.GameTicking
             Dictionary<NetUserId, HumanoidCharacterProfile> profiles,
             bool force)
         {
+            _distressSignal.TheHive = _hive.CreateHive("xenonid hive", "CMXenoHive");
+
             // Allow game rules to spawn players by themselves if needed. (For example, nuke ops or wizard)
             RaiseLocalEvent(new RulePlayerSpawningEvent(readyPlayers, profiles, force));
 
@@ -99,10 +106,8 @@ namespace Content.Server.GameTicking
 
             var spawnableStations = GetSpawnableStations();
             var assignedJobs = _stationJobs.AssignJobs(profiles, spawnableStations);
-            if (_auRoundSystem._selectedthreat != null)
-            {
-                _auThreatSystem.SpawnThreatAtRoundStart(_auRoundSystem._selectedthreat, DefaultMap, assignedJobs);
-            }
+            _auThreatSystem.SpawnThreatAtRoundStart(_auRoundSystem._selectedthreat, DefaultMap, assignedJobs);
+            _auThirdParty.StartThirdPartySpawning(_auRoundSystem._selectedthreat);
 
             _stationJobs.AssignOverflowJobs(ref assignedJobs, playerNetIds, profiles, spawnableStations);
 

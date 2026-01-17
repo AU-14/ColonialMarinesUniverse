@@ -12,7 +12,7 @@ public sealed class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovforRuleCo
 {
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly Content.Server.AU14.Round.AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private readonly Round.AuRoundSystem _auRoundSystem = default!;
 
     public override void Initialize()
     {

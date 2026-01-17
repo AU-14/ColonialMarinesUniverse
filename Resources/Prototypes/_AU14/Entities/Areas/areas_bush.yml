@@ -1,0 +1,10 @@
+﻿- type: entity
+  parent: RMCAreaBase
+  id: AU14AreaUSSGeorgeBush
+  name: "USS George W. Bush"
+  components:
+  - type: Sprite
+    sprite: _RMC14/Areas/areas.rsi
+    state: west
+  - type: Area
+    powerNet: Bush

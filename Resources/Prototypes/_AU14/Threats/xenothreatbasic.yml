@@ -1,0 +1,21 @@
+
+- type: threat
+  id: XenoThreat
+  winconditions:
+  - KillAllGovforRule
+  roundstartspawns: XenoThreatSpawns
+  blacklistedgamemodes:
+  - ColonyFall
+
+
+
+- type: partySpawn
+  id: XenoThreatSpawns
+  leadersToSpawn:
+    CMXenoQueen: 1
+  gruntsToSpawn:
+    CMXenoLarva: 8
+  scalewithpop: true
+  spawnTogether: true
+
+

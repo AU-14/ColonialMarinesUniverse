@@ -64,4 +64,8 @@ public sealed partial class AuThirdPartyPrototype : IPrototype
     [DataField("partyspawn", required: true)]
     public ProtoId<PartySpawnPrototype> PartySpawn { get; private set; } = new();
 
+
+    [DataField("announcearrival", required: false)]
+    public string? AnnounceArrival { get; private set; } = "A new force has entered the battlefield.";
+
 }

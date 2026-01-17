@@ -596,35 +596,24 @@
   - type: CMAutomatedVendor
     sections:
     - name: Essential Equipment
+      takeAll: CMUAREssentialEquipment
       entries:
       - id: RMCSmartGunWhiteOut
-        amount: 1
       - id: RMCScabbardMacheteSGFilled
-        amount: 1
       - id: RMCGlassesSmartGunSight
-        amount: 1
-    - name: Smartgunner Clothing
+      - id: RMCPowerCellSmartgun
+      - id: RMCBeltSmartGunOperatorPistolPMC
+      - id: RMCPouchDrumPMC
+    - name: Clothing
+      takeAll: CMUAREssentialEquipmentClothing
       entries:
       - id: RMCJumpsuitVeteranPMCGunner
-        amount: 1
       - id: CMArmorM4PMCSmartGunHarness
-        amount: 1
       - id: ArmorHelmetPMCGunner
-        amount: 1
-    - name: Smartgun Equipment
-      entries:
-      - id: RMCBeltSmartGunOperatorPistolPMC
-        amount: 1
-      - id: RMCPouchDrumPMC
-        amount: 2
     - name: Smartgun Munitions
       entries:
       - id: RMCMagazineSmartGun
-        amount: 10
-      - id: RMCMagazineSmartGunirradiated
-        amount: 1
-      - id: RMCPowerCellSmartgun
-        amount: 2
+        amount: 25
 
 - type: entity
   parent: ColMarTechBase
@@ -672,33 +661,31 @@
   - type: CMAutomatedVendor
     sections:
     - name: Weapons
+      choices: { CMUPrimaryWeapon: 1 }
       entries:
       - id: RMCWeaponSMGFP9000PMC
-        amount: 6
       - id: RMCWeaponSMGM63B2
-        amount: 2
     - name: Weapon Ammunition
       entries:
       - id: RMCMagazineSMGFP9000
-        amount: 42
+        amount: 120
       - id: CMMagazineSMGM63
-        amount: 42
+        amount: 120
       - id: CMMagazineSMGM63AP
         amount: 2
     - name: Handguns
+      choices: { CMUHandgunsWeapon: 1 }
       entries:
       - id: RMCWeaponPistolM77Empty
-        amount: 6
     - name: Handgun Ammunition
       entries:
       - id: CMMagazinePistolM77AP
-        amount: 20
+        amount: 120
     - name: Attachments
+      choices: { CMUAttachmentsVendor: 1 }
       entries:
+      - id: RMCAttachmentTwoPointSling
       - id: RMCAttachmentRailFlashlight
-        amount: 12
-      - id: RMCAttachmentS5RedDotSight
-        amount: 4
     - name: Explosives
       entries:
       - id: RMCBoxHEDP
@@ -735,21 +722,10 @@
     - name: NSG 23 Assault Rifle
       entries:
       - id: RMCWeaponRifleSSG45NoLock
-        amount: 1
+        amount: 2
       - id: RMCMagazineRifleSSG45
-        amount: 12
+        amount: 24
       - id: RMCMagazineRifleSSG45Extended
         amount: 2
       - id: RMCMagazineRifleSSG45AP
         amount: 2
-      - id: RMCMagazineRifleSSG45Incend
-        amount: 1
-    - name: XM43E1 Anti-Material Rifle
-      entries:
-      - id: RMCXM43E1AntiMaterielRifle
-        amount: 1
-      - id: RMCMagazineSniperXM43E1AntiMateriel
-        amount: 6
-      - id: RMCScoutShoes
-        amount: 1
-

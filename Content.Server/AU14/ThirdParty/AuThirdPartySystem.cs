@@ -16,6 +16,8 @@ using Robust.Shared.Prototypes;
 using Content.Server.AU14.VendorMarker;
 using Content.Shared.Ghost;
 using Robust.Shared.Console;
+using Content.Server.Chat.Managers;
+using Content.Server.Chat.Systems;
 
 namespace Content.Server.AU14.ThirdParty;
 
@@ -29,6 +31,7 @@ public sealed class AuThirdPartySystem : EntitySystem
     private readonly ISawmill _sawmill = Logger.GetSawmill("thirdparty");
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly IConsoleHost _consoleHost = default!;
 
     // --- State for round third party spawning ---
@@ -292,6 +295,11 @@ public sealed class AuThirdPartySystem : EntitySystem
                 roleSystem.MindAddJobRole(mind, silent: true, jobPrototype: "AU14JobThreatMember");
             }
         }
+        if (!string.IsNullOrWhiteSpace(party.AnnounceArrival))
+        {
+            _chat.DispatchGlobalAnnouncement(party.AnnounceArrival, "", playSound: false, colorOverride: Color.DarkOrange);
+            _sawmill.Info($"[AuThirdPartySystem] Announced arrival for third party {party.ID}: {party.AnnounceArrival}");
+        }
 
     }
 
@@ -349,6 +357,18 @@ public sealed class AuThirdPartySystem : EntitySystem
         _thirdPartyList = _auRoundSystem.SelectedThirdParties.ToList();
         _nextThirdPartyIndex = 0;
         _spawnTimer = 0f;
+        if (_currentThreat != null)
+        {
+            try
+            {
+                _spawnInterval = TimeSpan.FromSeconds(Math.Max(1, _currentThreat.ThirdPartyInterval));
+            }
+            catch
+            {
+                _sawmill.Warning("[AuThirdPartySystem] Invalid ThirdPartyInterval on threat; using default interval.");
+            }
+        }
+
         _spawningActive = true;
         if (_thirdPartyList == null)
             return;

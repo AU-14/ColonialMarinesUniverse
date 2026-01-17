@@ -275,6 +275,7 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
 
     private void OnMapLoading(LoadingMapsEvent ev)
     {
+
         SelectRandomPlanet();
         //Just in case the info text is not updated previousely
         GameTicker.UpdateInfoText();
@@ -967,7 +968,6 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
 
     private void OnPlayerSpawning(PlayerSpawningEvent ev)
     {
-        TheHive = _hive.CreateHive("xenonid hive", "CMXenoHive");
 
         if (ev.Job is not { } jobId ||
             !_prototypes.TryIndex(jobId, out var job) ||
@@ -1254,6 +1254,7 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
 
     protected override void OnStartAttempt(Entity<CMDistressSignalRuleComponent, GameRuleComponent> gameRule, RoundStartAttemptEvent ev)
     {
+
         if (ev.Forced || ev.Cancelled)
             return;
 

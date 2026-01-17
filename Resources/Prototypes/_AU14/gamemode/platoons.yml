@@ -2,7 +2,7 @@
   id: LACN
   name: LACN Landing Forces
   VendorToMarker:
-    Rifleman: AU14LACNequipmentvendor
+    Rifleman: AU14USCMequipmentvendor
     Clothing: AU14LACNclothingequipmentvendor
     Weapons: AU14LACNWeaponsVendor
     SWeapons: AU14LACNSpecialWeaponsVendor
@@ -15,6 +15,7 @@
     Pilot: AU14AircrewWeaponsVendor
   possibleships:
     - Daybreak
+    - USSBush
   #platoonflag: uaflag
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
@@ -23,7 +24,7 @@
   id: LACNcommando
   name: LACN Naval Commando Platoon
   VendorToMarker:
-    Rifleman: AU14LACNequipmentvendor
+    Rifleman: AU14USCMequipmentvendor
     Clothing: AU14LACNcommandoclothingequipmentvendor
     Weapons: AU14LACNcommandoWeaponsVendor
     SWeapons: AU14LACNcommandoSpecialWeaponsVendor
@@ -36,6 +37,7 @@
     Pilot: AU14AircrewWeaponsVendor
   possibleships:
     - Daybreak
+    - USSBush
 
 - type: platoon
   id: USCM
@@ -62,6 +64,7 @@
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml
   possibleships:
       - Daybreak
+      - USSBush
 
 - type: platoon
   id: UPP
@@ -69,7 +72,7 @@
   language: russian
   name: UPP Infantry
   VendorToMarker:
-    Rifleman: AU14UPPequipmentvendor
+    Rifleman: AU14USCMequipmentvendor
     Clothing: AU14UPPclothingapparelvendor
     Weapons: AU14UPPWeaponsVendor
     SWeapons: AU14UPPSpecialWeaponsVendor
@@ -82,8 +85,9 @@
     Pilot: AU14UPPAirCrewWeaponsVendor
   possibleships:
       - Daybreak
+      - USSBush
   jobClassOverride:
-    SquadRifleman: Au14JobGOVFORSquadRiflemanUPP
+    SquadRifleman: AU14JobGOVFORSquadRiflemanUPP
     SectionSergeant: AU14JobGOVFORSectionSergeantUPP
     PlatoonCorpsman: AU14JobGOVFORPlatoonCorpsmanUPP
     PlatCo: AU14JobGOVFORPlatCoUPP
@@ -103,7 +107,7 @@
   id: WEYU
   name: WY PMC
   VendorToMarker:
-    Rifleman: AU14WYequipmentvendor
+    Rifleman: AU14USCMequipmentvendor
     Clothing: AU14WYclothingequipmentvendor
     Weapons: AU14WYWeaponsVendor
     SWeapons: AU14WYSpecialWeaponsVendor
@@ -137,7 +141,7 @@
   id: CMBCIU
   name: CMB Crisis Intervention
   VendorToMarker:
-    Rifleman: AU14CMBCIUequipmentvendor
+    Rifleman: AU14USCMequipmentvendor
     Clothing: AU14CMBCIUapparelvendor
     Weapons: AU14CMBCIUWeaponsVendor
     SWeapons: AU14CMBCIUSpecialWeaponsVendor
@@ -205,6 +209,7 @@
     Pilot: AU14AircrewWeaponsVendor
   possibleships:
       - Daybreak
+      - USSBush
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/osprey.yml
   compatibleFighters:
@@ -236,12 +241,12 @@
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml
   possibleships:
       - Daybreak
-
+      - USSBush
 - type: platoon
   id: ProdigySF
   name: Prodigy Security Forces
   VendorToMarker:
-    Rifleman: AU14prodigyequipmentvendor
+    Rifleman: AU14USCMequipmentvendor
     Clothing: AU14prodigyclothingequipmentvendor
     Weapons: AU14prodigyWeaponsVendor
     SWeapons: AU14prodigySpecialWeaponsVendor
@@ -267,7 +272,7 @@
   id: UNISC
   name: UNISC Peacekeepers
   VendorToMarker:
-    Rifleman: AU14UNISCequipmentvendor
+    Rifleman: AU14USCMequipmentvendor
     Clothing: AU14UNISCclothingequipmentvendor
     Weapons: AU14UNISCWeaponsVendor
     SWeapons: AU14UNISCWeaponsVendor
@@ -292,6 +297,7 @@
   - /Maps/_CMU14/Shuttles/alamo.yml
   possibleships:
       - Daybreak
+      - USSBush
   compatibleFighters:
   - /Maps/_AU14/ShuttlesDropships/f84owl.yml
   - /Maps/_AU14/ShuttlesDropships/ud_6.yml
@@ -317,7 +323,7 @@
   id: VAIPO
   name: VAIPO
   VendorToMarker:
-    Rifleman: AU14VAIPOequipmentvendor
+    Rifleman: AU14USCMequipmentvendor
     Clothing: AU14VAIPOclothingequipmentvendor
     Weapons: AU14VAIPOWeaponsVendor
     SWeapons: AU14VAIPOSpecialWeaponsVendor
@@ -337,5 +343,6 @@
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml
   possibleships:
       - Daybreak
+      - USSBush
 
 # Add more platoons as needed

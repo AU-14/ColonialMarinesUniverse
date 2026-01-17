@@ -29,7 +29,7 @@
         RMCSkillMedical: 3
         RMCSkillResearch: 1
         RMCSkillSurgery: 2
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
         RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-clfphysician

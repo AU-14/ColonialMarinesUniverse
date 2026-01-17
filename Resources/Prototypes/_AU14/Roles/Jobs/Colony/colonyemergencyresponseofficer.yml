@@ -32,7 +32,7 @@
         RMCSkillMedical: 2
         RMCSkillCqc: 1
         RMCSkillMeleeWeapons: 1
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
     - type: JobPrefix
       prefix: au14-job-prefix-emergencyresponseofficer
     - type: TacticalMapIcon

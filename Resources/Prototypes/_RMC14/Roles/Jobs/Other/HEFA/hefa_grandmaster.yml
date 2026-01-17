@@ -22,7 +22,7 @@
         RMCSkillMeleeWeapons: 1
         RMCSkillEndurance: 2
         RMCSkillJtac: 1
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
     - type: GrenadeSpecWhitelist
     - type: JobPrefix
       prefix: rmc-job-prefix-hefa-grandmaster

@@ -25,7 +25,7 @@
     - type: Skills
       skills:
         RMCSkillCqc: 1
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
         RMCSkillPolice: 2
         RMCSkillFireman: 2
         RMCSkillConstruction: 2

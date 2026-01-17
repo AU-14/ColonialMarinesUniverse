@@ -846,7 +846,7 @@ public abstract class SharedRMCPowerSystem : EntitySystem
     private void OffsetApc(Entity<RMCApcComponent> ent)
     {
         var sprite = EnsureComp<SpriteSetRenderOrderComponent>(ent);
-        switch (Transform(ent).LocalRotation.GetDir())
+        /*switch (Transform(ent).LocalRotation.GetDir())
         {
             case Direction.South:
                 _sprite.SetOffset(ent, new Vector2(0.45f, -0.32f));
@@ -860,7 +860,7 @@ public abstract class SharedRMCPowerSystem : EntitySystem
             case Direction.West:
                 _sprite.SetOffset(ent, new Vector2(-0.7f, -0.4f));
                 break;
-        }
+        }*/
 
         Dirty(ent, sprite);
     }

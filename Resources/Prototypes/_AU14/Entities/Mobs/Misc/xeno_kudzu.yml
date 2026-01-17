@@ -1,0 +1,217 @@
+- type: entity
+  parent: Kudzu
+  id: CMUXenoKudzu
+  name: roots
+  suffix: Xeno, Kudzu
+  description: A weird, rapidly growing cluster of roots.
+  components:
+  - type: Sprite
+    drawdepth: HighFloorObjects
+    sprite: _AU14/Misc/xenokudzu.rsi
+    state: kudzu_11
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 20
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Kudzu
+    spreadChance: 0.15
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.8
+    sprintSpeedModifier: 0.8
+    ignoreWhitelist:
+      components:
+      - IgnoreKudzu
+      - Xeno
+  - type: RandomSpawner
+    deleteSpawnerAfterSpawn: false
+    rareChance: 0.10
+    offset: 0
+    chance: 0.02
+    prototypes:
+    - XenoWeedsSource
+    rarePrototypes:
+    - CMUSentryXenoKudzu
+  - type: UserIFF
+    faction: FactionXeno
+
+- type: entity
+  id: CMUXenoKudzuSource
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomSpawner
+    deleteSpawnerAfterSpawn: true
+    offset: 0
+    chance: 1
+    prototypes:
+    - XenoWeedsSource
+  - type: EntityTableSpawner
+    table: !type:GroupSelector
+      prob: 1
+      children:
+      - id: CMUXenoKudzu
+
+- type: entity
+  parent: BaseStructure
+  id: CMUSentryXenoKudzu
+  name: xeno turret
+  suffix: Xeno, Kudzu
+  description: Shoots 9mm acid projectiles.
+  components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Actions
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 20
+        layer:
+        - MidImpassable
+        - BulletImpassable
+        mask:
+        - MidImpassable
+        - BulletImpassable
+        hard: false
+  - type: CollisionWake
+    enabled: false
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Turrets/xenoturret.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - state: acid_turret
+  - type: Appearance
+  - type: CombatMode
+    toggleMouseRotator: false
+  - type: Gun
+    fireRate: 1
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot: /Audio/Weapons/Xeno/alien_spitacid.ogg
+  - type: BallisticAmmoProvider
+    proto: BulletAcid
+    capacity: 500
+  - type: HTN
+    rootTask:
+      task: RMCSentryCompound
+    blackboard:
+      SoundTargetInLOS: !type:SoundPathSpecifier
+        path: /Audio/Animals/snake_hiss.ogg
+      VisionRadius: !type:Single
+        11.0
+      AggroVisionRadius: !type:Single
+        11.0
+  - type: MouseRotator
+    angleTolerance: 5
+    rotationSpeed: 180
+    simple4DirMode: false
+  - type: NoRotateOnInteract
+  - type: NoRotateOnMove
+  - type: GunIFF
+    enabled: true
+    intrinsic: true
+  - type: Damageable
+    damageContainer: Biological
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/gib1.ogg
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          FoodMeatXeno:
+            min: 3
+            max: 5
+  - type: RequireProjectileTarget
+  - type: RMCWeaponAccuracy
+  #- type: Sentry
+  - type: NpcFactionMember
+    factions:
+    - RMCXeno
+  - type: UserIFF
+    faction: FactionXeno
+  - type: RandomSpawner
+    deleteSpawnerAfterSpawn: false
+    chance: 1
+    prototypes:
+    - XenoWeedsSource
+
+- type: entity
+  parent: CMUSentryXenoKudzu
+  id: CMUSentryXenoKudzuBig
+  name: big xeno turret
+  description: Shoots .700in acid projectiles.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Turrets/xenoturretbig.rsi
+    offset: 0,0.5
+    layers:
+    - state: acid_turret_big
+  - type: BallisticAmmoProvider
+    proto: CMUBulletAcidBig
+    capacity: 500
+  - type: Gun
+    fireRate: 2
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/gib1.ogg
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          FoodMeatXeno:
+            min: 5
+            max: 9
+  - type: RandomSpawner
+    prototypes:
+    - CMUXenoKudzuSource
+
+- type: entity
+  parent: BulletAcid
+  id: CMUBulletAcidBig
+  name: big acid spit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.2,-0.2,0.2,0.2"
+        hard: false
+        mask:
+        - Impassable
+        - BulletImpassable
+  - type: Projectile
+    damage:
+      types:
+        Caustic: 9
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Projectiles/xeno_toxic_big.rsi
+    layers:
+    - state: xeno_toxic_big
+
+- type: entity
+  id: FactionXeno
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IFFFaction

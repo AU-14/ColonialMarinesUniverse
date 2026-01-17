@@ -148,24 +148,16 @@ namespace Content.Client.LateJoin
                 {
                     VerticalExpand = true,
                     Children = { jobList },
-                    Visible = false,
+                    Visible = true,
                 };
 
-                if (_jobLists.Count == 0)
-                    jobListScroll.Visible = true;
 
                 _jobLists.Add(jobListScroll);
 
                 _base.AddChild(jobListScroll);
 
-                collapseButton.OnToggled += _ =>
-                {
-                    foreach (var section in _jobLists)
-                    {
-                        section.Visible = false;
-                    }
-                    jobListScroll.Visible = true;
-                };
+                collapseButton.Pressed = true;
+                collapseButton.OnToggled += args => jobListScroll.Visible = args.Pressed;
 
                 var firstCategory = true;
                 var departments = _prototypeManager.EnumerateCM<DepartmentPrototype>().ToArray();

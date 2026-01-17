@@ -61,7 +61,7 @@
 - type: entity
   parent: CMIDCardBase
   id: AU14IDCardopforSquadRifleman
-  name: squad sergeant ID card
+  name: squad rifleman ID card
   components:
   - type: PresetIdCard
     job: AU14JobOpforSquadRifleman

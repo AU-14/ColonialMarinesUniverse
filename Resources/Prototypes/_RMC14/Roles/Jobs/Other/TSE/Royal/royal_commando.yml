@@ -21,7 +21,7 @@
     - type: Skills
       skills:
         RMCSkillCqc: 2
-        RMCSkillFirearms: 1 # While parity commando has firearms 2, they also have the reworked 3 level
+        RMCSkillFirearms: 2 # While parity commando has firearms 2, they also have the reworked 3 level
         RMCSkillPolice: 2
         RMCSkillFireman: 2
         RMCSkillConstruction: 1

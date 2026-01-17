@@ -29,7 +29,7 @@
         RMCSkillEngineer: 2
         RMCSkillConstruction: 2
         RMCSkillPowerLoader: 2
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
     - type: JobPrefix
       prefix: au14-job-prefix-civilianwastemanagementspecialist
     - type: TacticalMapIcon

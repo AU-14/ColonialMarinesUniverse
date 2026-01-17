@@ -15,7 +15,7 @@
     components:
     - type: Skills
       skills:
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
         RMCSkillFireman: 1
         RMCSkillMedical: 2
         RMCSkillSurgery: 2

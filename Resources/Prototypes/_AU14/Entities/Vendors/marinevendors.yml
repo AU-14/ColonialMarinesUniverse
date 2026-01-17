@@ -251,7 +251,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14USCMequipmentvendor
-  name: USCM equipment vendor
+  name: equipment vendor
   description: An automated rack hooked up to a small storage of standard marine equipment.
   components:
   - type: AccessReader
@@ -264,43 +264,16 @@
       entries:
       - id: CMMRE
         name: MRE
-        amount: 30
+        recommended: true
+        amount: 60
       - id: RMCBoxMRE
-        amount: 5
-    - name: Tools
-      entries:
-      - id: RMCM5Bayonet
-        amount: 30
-      - id: CMM11Knife
-        amount: 15
-      - id: CMEntrenchingTool
-        amount: 15
-      - id: CMScrewdriver
-        amount: 5
-      - id: CMWirecutter
-        amount: 5
-      - id: CMCrowbar
-        amount: 5
-      - id: CMWrench
-        amount: 5
-      - id: CMMultitool
-        amount: 5
-      - id: CMWelder
-        amount: 5
-    - name: Flares and lights
-      entries:
-      - id: RMCFlashlight # Combat Flashlight
-        amount: 15
-#      #- id: RMCBoxFlashlights
-#      #  amount: 1
-      - id: RMCBoxPackFlare
-        amount: 5
-      - id: CMPackFlare
-        amount: 5
-      - id: RMCPackFlareCAS
-        amount: 2
+        amount: 10
     - name: Medical Supplies
       entries:
+      - id: AU14PouchIFAKFill
+        name: infantry first aid kit (Full)
+        recommended: true
+        amount: 40
       - id: AU14HemostaticGauzePacket
         amount: 40
       - id: AU14Tourniquet
@@ -311,35 +284,82 @@
         amount: 12
       - id: AU14NaloxoneAutoInjector
         amount: 2
-    - name: Miscellaneous
+    - name: Tools
       entries:
-      - id: RMCEngineerKit
-        amount: 1
-      #- id: CMMap
-      #  amount: 5
-      - id: CMFireExtinguisher
-        amount: 2
-      - id: CMFireExtinguisherPortable
-        amount: 5
-      - id: CMRollerBedSpawnFolded
-        amount: 1
+      - id: CMEntrenchingTool
+        recommended: true
+        amount: 30
+      - id: RMCM5Bayonet
+        amount: 30
+      - id: CMM11Knife
+        amount: 15
       - id: RMCScabbardMacheteFilled
         name: machete scabbard (Full)
         amount: 5
-      - id: RMCBinoculars
+      - id: CMScrewdriver
+        amount: 5
+      - id: CMWirecutter
+        amount: 5
+      - id: CMCrowbar
+        amount: 5
+      - id: CMWrench
+        amount: 5
+      - id: CMMultitool
+        amount: 5
+      - id: CMWelderSmall
+        amount: 3
+      - id: RMCWelderPVE
         amount: 2
+    - name: Construction Supplies
+      entries:
+      - id: CMSandbagEmpty25
+        recommended: true
+        amount: 60
+      - id: BarbedWire15
+        amount: 4
+      - id: CMSheetMetal50
+        amount: 2
+      - id: CMSheetPlasteel50
+        amount: 1
+      - id: RMCTentUNMCBigFolded
+        name: folded tent
+        amount: 1
+    - name: Flares and lights
+      entries:
+      - id: RMCBoxFlashlights
+        amount: 5
+      - id: RMCFlashlight
+        amount: 5
+      - id: RMCBoxPackFlare
+        amount: 5
+      - id: CMPackFlare
+        amount: 5
+      - id: RMCBoxPackFlareCAS
+        amount: 1
+      - id: RMCPackFlareCAS
+        amount: 2
+    - name: Miscellaneous
+      entries:
+      - id: RMCZipties
+        amount: 60
+      - id: RMCPVECaseMotionDetector
+        amount: 1
+      #- id: CMMap
+      #  amount: 5
+      - id: CMRollerBedSpawnFolded
+        amount: 1
+      - id: RMCLaserDesignatorPVE
+        amount: 3
+      - id: RMCBinocularsPVE
+        amount: 4
       #- id: CMFoldingBarricadesMB6x3
       #  amount: 2
       #- id: CMSparePDTLBattleBuddyKit
       #  amount: 3
-      - id: CMSandbagEmpty25
-        amount: 30
       - id: RMCPowerCellHigh
         amount: 5
       - id: BedrollFolded
         amount: 20
-      - id: RMCZipties
-        amount: 30
 
 #corpsman
 - type: entity
@@ -750,31 +770,27 @@
   - type: CMAutomatedVendor
     sections:
     - name: Essential Equipment
+      takeAll: CMUAREssentialEquipment
       entries:
       - id: RMCSmartGun
-        amount: 1
       - id: RMCScabbardMacheteSGFilled
-        amount: 1
       - id: RMCGlassesSmartGunSight
-        amount: 1
-    - name: Smartgun Harnesses
+      - id: RMCPowerCellSmartgun
+      - id: RMCPouchDrumPMC
+    - name: Smartgun Harness
+      choices: { SmartgunHarness: 1 }
       entries:
       - id: AU14ArmorSmartGunDesertCombatHarness
-        amount: 1
       - id: AU14ArmorSmartGunJungleCombatHarness
-        amount: 1
     - name: Smartgun Belts
+      choices: { SmartgunBelts: 1 }
       entries:
       - id: RMCBeltSmartGunOperatorPistolFilled
-        amount: 1
       - id: CMBeltSmartGunOperatorFilled
-        amount: 1
     - name: Smartgun Munitions
       entries:
       - id: RMCMagazineSmartGun
-        amount: 5
-      - id: RMCPowerCellSmartgun
-        amount: 2
+        amount: 40
 
 - type: entity
   parent: ColMarTechBase
@@ -822,34 +838,32 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
   - type: CMAutomatedVendor
     sections:
-    - name: Rifles
+    - name: Weapons
+      choices: { CMUPrimaryWeapon: 1 }
       entries:
       - id: RMCWeaponRifleM54CMK1
-        amount: 6
     - name: Rifle Ammunition
       entries:
       - id: CMMagazineRifleM54CMK1
-        amount: 42
+        amount: 120
       - id: CMMagazineRifleM54CMK1AP
         amount: 2
     - name: Handguns
+      choices: { CMUHandgunsWeapon: 1 }
       entries:
       - id: CMWeaponPistolM1984Empty
-        amount: 6
       - id: RMCWeaponPistolM77Empty
-        amount: 2
     - name: Handgun Ammunition
       entries:
       - id: CMMagazinePistolM1984
-        amount: 42
+        amount: 120
       - id: CMMagazinePistolM77AP
-        amount: 14
+        amount: 120
     - name: Attachments
+      choices: { CMUAttachmentsVendor: 1 }
       entries:
       - id: RMCAttachmentRailFlashlight
-        amount: 12
       - id: AU14AttachmentTwoPointSling
-        amount: 6
     - name: Explosives
       entries:
       - id: RMCBoxHEDP
@@ -911,14 +925,14 @@
       entries:
       - id: RMCWeaponFlamer
         amount: 1
-      - id: RMCTankFlamer
-        amount: 3
+      - id: RMCPVECaseFlamerFuel
+        amount: 1
       - id: RMCBackpackFlamer
         name: G4-1 fueltank
         amount: 1
-    - name: M4RA battle rifle
+    - name: M5RA battle rifle
       entries:
-      - id: WeaponRifleM4SPR
+      - id: RMCPVECaseM5SPR
         amount: 1
       - id: RMCAttachmentB8SmartScope
         amount: 1

@@ -18,7 +18,7 @@
       - CLF
     - type: Skills
       skills:
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
         RMCSkillMeleeWeapons: 1
         RMCSkillPolice: 2
         RMCSkillFireman: 1

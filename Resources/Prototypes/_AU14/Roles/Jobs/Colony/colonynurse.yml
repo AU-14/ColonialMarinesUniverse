@@ -26,7 +26,7 @@
         RMCSkillDomestics: 1
         RMCSkillMedical: 2
         RMCSkillSurgery: 1
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
     - type: JobPrefix
       prefix: au14-job-prefix-nurse
     - type: TacticalMapIcon

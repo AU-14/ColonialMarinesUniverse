@@ -17,6 +17,8 @@
   - PlatoonSpawn
   - AddGovfor
   - AddOpfor
+  - RemoveAllJobs
+
 
 - type: gamePreset
   id: Insurgency
@@ -54,6 +56,7 @@
   - AuVoteRule
   - PlatoonSpawn
   - AddGovfor
+  - RemoveAllJobs
 
 
 
@@ -124,15 +127,14 @@
     shipFaction: govfor
     jobs:
       AU14JobGOVFORPlatCo: 1
-      AU14JobGOVFORPlatoonCorpsman: 4
-      AU14JobGOVFORDCC: 1
-      AU14JobGOVFORPlatOp: 2
+      AU14JobGOVFORPlatoonCorpsman: 8
+      AU14JobGOVFORDCC: 2
+      AU14JobGOVFORPlatOp: 4
       AU14JobGOVFORDSPilot: 2
-      AU14JobGOVFORRadioTelephoneOperator: 1
-      AU14JobGOVFORSectionSergeant: 1
-      AU14JobGOVFORSquadSergeant: 4
-      AU14JobGOVFORSquadAutomaticRifleman: 2
-      AU14JobGOVFORSquadRifleman: 28
+      AU14JobGOVFORRadioTelephoneOperator: 3
+      AU14JobGOVFORSectionSergeant: 3
+      AU14JobGOVFORSquadAutomaticRifleman: 3
+      AU14JobGOVFORSquadRifleman: 100
 
 
 - type: entity
@@ -144,15 +146,14 @@
     addToShip: true
     jobs:
       AU14JobOpforPlatCo: 1
-      AU14JobOpforPlatoonCorpsman: 4
-      AU14JobOpforDCC: 1
-      AU14JobOpforPlatOp: 2
+      AU14JobOpforPlatoonCorpsman: 10
+      AU14JobOpforDCC: 2
+      AU14JobOpforPlatOp: 4
       AU14JobOpforDSPilot: 2
-      AU14JobOpforRadioTelephoneOperator: 1
-      AU14JobOpforSectionSergeant: 1
-      AU14JobOpforSquadSergeant: 4
-      AU14JobOpforSquadAutomaticRifleman: 2
-      AU14JobOpforSquadRifleman: 28
+      AU14JobOpforRadioTelephoneOperator: 3
+      AU14JobOpforSectionSergeant: 3
+      AU14JobOpforSquadAutomaticRifleman: 3
+      AU14JobOpforSquadRifleman: 100
 
 - type: entity
   id: AddClf
@@ -162,8 +163,8 @@
     jobs:
       AU14JobCLFCellLeader: 1
       AU14JobCLFPhysician: 2
-      AU14JobCLFGuerilla: 10
-      AU14JobCLFMachineGunner: 2
+      AU14JobCLFGuerilla: 16
+      AU14JobCLFMachineGunner: 1
 
 - type: entity
   id: ColonyAntags
@@ -186,6 +187,16 @@
 
 
 
+- type: entity
+  id: RemoveAllJobs
+  parent: BaseGameRule
+  name: Remove All Jobs
+  description: Removes all jobs on the planet's main station prior to round start. Optionally removes jobs on ship stations.
+  components:
+  - type: RemoveJobsRule
+
+
+
 - type: GamePlanetPool
   id: ColonyPlanetPool
   planets:
@@ -194,5 +205,4 @@
     - AUPlanetStableGarrison
     - AUPlanetLV624
     - AUPlanetFlight
-
 

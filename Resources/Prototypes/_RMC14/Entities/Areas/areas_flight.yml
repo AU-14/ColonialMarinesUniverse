@@ -36,6 +36,12 @@
   components:
   - type: Sprite
     state: basement
+  - type: Area
+    CAS: false
+    fulton: false
+    mortarFire: false
+    OB: false
+    supplyDrop: false
 
 - type: entity
   parent: RMCAreaFlightIn

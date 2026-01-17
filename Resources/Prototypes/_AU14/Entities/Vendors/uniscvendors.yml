@@ -701,27 +701,26 @@
     - name: Rifle Ammunition
       entries:
       - id: CMMagazineRifleM54CMK1
-        amount: 65
+        amount: 120
       - id: RMCMagazineRifleType71
-        amount: 65
+        amount: 120
       - id: AU14MagazineRifleM75AMAS
-        amount: 65
+        amount: 120
       - id: AU14WeaponRifleKramerMagazineStandard
-        amount: 65
+        amount: 120
     - name: Handgun Ammunition
       entries:
       - id: CMMagazinePistolM77AP
-        amount: 65
+        amount: 120
       - id: CMMagazinePistolM1984
-        amount: 65
+        amount: 120
       - id: RMCMagazinePistolT73
-        amount: 65
+        amount: 120
     - name: Attachments
+      choices: { CMUAttachmentsVendor: 1 }
       entries:
       - id: RMCAttachmentRailFlashlight
-        amount: 24
       - id: AU14AttachmentTwoPointSling
-        amount: 12
     - name: Explosives
       entries:
       - id: RMCBoxHEDP

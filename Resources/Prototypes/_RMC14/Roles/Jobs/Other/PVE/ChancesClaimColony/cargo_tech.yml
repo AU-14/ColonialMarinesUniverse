@@ -15,7 +15,7 @@
         RMCSkillConstruction: 2
         RMCSkillEndurance: 2
         RMCSkillFireman: 1
-        RMCSkillFirearms: 1
+        RMCSkillFirearms: 2
         RMCSkillEngineer: 2
         RMCSkillVehicles: 3
     - type: RMCSurvivor

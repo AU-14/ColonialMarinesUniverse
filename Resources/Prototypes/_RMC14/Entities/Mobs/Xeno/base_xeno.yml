@@ -409,6 +409,8 @@
   - type: EmoteCooldown
   - type: RMCMesonsNonviewable
     xenoVisible: true
+  - type: UserIFF
+    faction: FactionXeno
 
 - type: entity
   abstract: true

@@ -628,20 +628,18 @@
   - type: CMAutomatedVendor
     sections:
     - name: Essential Equipment
+      takeAll: CMUAREssentialEquipment
       entries:
       - id: RMCWeaponRifleM54CE2
-        amount: 2
-      - id: RMCAttachmentBipod
-    - name: Belts
-      entries:
       - id: CMBeltMarine
-        amount: 2
+      - id: RMCAttachmentS5RedDotSight
+      - id: RMCAttachmentExtendedCompensator
     - name: SAW Munitions
       entries:
       - id: CMMagazineRifleM54CE2AP
         amount: 2
       - id: CMMagazineRifleM54CE2
-        amount: 8
+        amount: 28
 
 - type: entity
   parent: ColMarTechBase
@@ -676,52 +674,44 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
   - type: CMAutomatedVendor
     sections:
-    - name: Rifles
+    - name: Weapons
+      choices: { CMUPrimaryWeapon: 1 }
       entries:
       - id: RMCWeaponRifleMAR30
-        amount: 10
       - id: RMCWeaponRifleM54CMK1
-        amount: 2
     - name: Rifle Ammunition
       entries:
       - id: RMCMagazineRifleMAR40
-        amount: 85
+        amount: 120
       - id: CMMagazineRifleM54CMK1
-        amount: 12
+        amount: 120
       - id: CMMagazineRifleM54CMK1AP
         amount: 2
     - name: Handguns
+      choices: { CMUHandgunsWeapon: 1 }
       entries:
       - id: AU14WeaponPistolTPR23B
-        amount: 12
     - name: Handgun Ammunition
       entries:
       - id: CMMagazinePistolM1984
-        amount: 62
+        amount: 120
     - name: Attachments
+      choices: { CMUAttachmentsVendor: 3 }
       entries:
       - id: RMCAttachmentRailFlashlight
-        amount: 12
       - id: AU14AttachmentTwoPointSling
-        amount: 6
       - id: RMCAttachmentExtendedBarrel
-        amount: 5
       - id: RMCAttachmentSuppressor
-        amount: 5
-      - id: RMCAttachmentMagneticHarness
-        amount: 2
+      - id: RMCAttachmentExtendedCompensator
+      - id: RMCAttachmentRecoilCompensator
       - id: RMCAttachmentS5RedDotSight
-        amount: 8
       - id: RMCAttachmentS6ReflexSight
-        amount: 2
+      - id: RMCAttachmentS5MicroRedDotSight
       - id: RMCAttachmentAngledGrip
-        amount: 5
       - id: RMCAttachmentLaserSight
-        amount: 1
+      - id: RMCAttachmentMicroLaserSight
       - id: RMCAttachmentU7UnderbarrelShotgun
-        amount: 1
       - id: RMCAttachmentVerticalGrip
-        amount: 5
     - name: Explosives
       entries:
       - id: RMCBoxHEDP
@@ -748,11 +738,12 @@
   - type: CMAutomatedVendor
     sections:
     - name: Portable Transceivers
+      choices: { CMUPlatoonRTOBags: 1 }
       entries:
       - id: AU14BackpackRTOPackJungle
-        amount: 1
       - id: AU14BackpackRTOPackDesert
-        amount: 1
+      - id: AU14BackpackRTOPackGray
+      - id: AU14BackpackRTOPackBlack
     - name: Equipment
       entries:
       - id: RMCLaserDesignator

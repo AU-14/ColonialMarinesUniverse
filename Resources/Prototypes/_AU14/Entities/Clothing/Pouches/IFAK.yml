@@ -1,0 +1,50 @@
+﻿- type: entity
+  parent: [RMCPouchOpenClosed, RMCPouchStorage]
+  id: AU14PouchIFAK
+  name: infantry first aid kit pouch
+  description: It can carry small medical supplies.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Pouches/medical.rsi
+  - type: Storage
+    maxItemSize: Large
+    grid:
+    - 0,0,9,1 #4 slots
+    whitelist:
+      tags:
+      - DiscreteHealthAnalyzer
+      - Dropper
+      - Pill
+      - Bottle
+      - Syringe
+      - PillCanister
+      - CMTraumaKit
+      - CMBurnKit
+      - CMOintment
+      - Brutepack
+      - CMBloodPack
+      #      - TODO RMC14 splint
+      - RMCPenlight
+      - CMAutoInjector
+      - CMFireExtinguisherPortable
+      - RMCSyringeCase
+      - CMSurgicalLine
+      - CMSynthGraft
+      - PillPacket
+      - Hypospray
+      components:
+      - Hypospray
+  - type: FixedItemSizeStorage
+
+- type: entity
+  parent: AU14PouchIFAK
+  id: AU14PouchIFAKFill
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14Tourniquet
+    - id: AU14HemostaticGauze
+    - id: AU14HemostaticGauze #      - TODO replace with RMC14 splint
+    - id: CMOintment10
+    - id: CMPacketPillsTricordrazine

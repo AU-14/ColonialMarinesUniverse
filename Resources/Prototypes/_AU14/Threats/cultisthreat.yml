@@ -24,11 +24,14 @@
   winconditions:
   - KillAllGovforRule
   roundstartspawns: cultistParty
-
+  blacklistedgamemodes:
+  - DistressSignal
 - type: partySpawn
   id: cultistParty
   leadersToSpawn:
     cultistJob: 2
+  gruntsToSpawn:
+    cultistJob: 4
   scalewithpop: true
   spawnTogether: true
 

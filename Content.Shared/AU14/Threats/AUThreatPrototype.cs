@@ -76,6 +76,13 @@ public sealed partial class ThreatPrototype : IPrototype
     [DataField("maxthirdParties")]
     public int MaxThirdParties { get; private set; } = 4;
 
+    [DataField("thirdpartyinterval", required: false)]
+
+    public int ThirdPartyInterval { get; private set; } = 300;
+
+    [DataField("hiveevolution")]
+    public bool hiveevolution { get; private set; } = false;
+    // if xeno evo should send messages
 
 
 }
