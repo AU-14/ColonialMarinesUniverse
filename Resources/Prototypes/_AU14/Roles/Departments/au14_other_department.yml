@@ -30,19 +30,6 @@
 
 - type: department
   parent: CMDepartmentBase
-  id: AU14DepartmentCriminal
-  name: au14-department-criminal
-  description: au14-department-criminal-description
-  color: "#e3ce94"
-  roles:
-  - AU14JobMobBoss
-  - AU14JobMobGoon
-  departmentRadio: null
-  headOfDepartment: null
-
-
-- type: department
-  parent: CMDepartmentBase
   id: AU14DepartmentThreat
   name:  au-job-name-threat-member
   description: au14-department-threat-description

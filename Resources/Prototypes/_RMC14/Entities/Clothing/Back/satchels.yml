@@ -341,8 +341,8 @@
 - type: entity
   parent: CMSatchel
   id: CMSatchelMarine
-  name: USCM satchel
-  description: A heavy-duty satchel carried by some USCM soldiers and support personnel.
+  name: satchel
+  description: A heavy-duty satchel.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Satchels/Marines/standard/jungle-desert-classic.rsi
@@ -452,8 +452,8 @@
 - type: entity
   parent: CMSatchelMarine
   id: CMSatchelMarineTech
-  name: Marine technician chestrig
-  description: A heavy-duty chestrig used by some Marine technicians.
+  name: chestrig
+  description: A heavy-duty chestrig.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Chestrigs/tech/jungle-classic.rsi

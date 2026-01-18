@@ -2,7 +2,7 @@
   parent: [ RMCBaseWeaponShotgun, RMCBaseAttachableHolder ]
   name: MK221 tactical shotgun
   id: WeaponShotgunM890
-  description: A Weston-Yamada semi-automatic shotgun with a rapid fire rate and an attached Underslung Grenade Launcher. Holds 8 shotgun shells in the chamber.
+  description: A Weyland-Yutani semi-automatic shotgun with a rapid fire rate and an attached Underslung Grenade Launcher. Holds 8 shotgun shells in the chamber.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Shotguns/m890.rsi

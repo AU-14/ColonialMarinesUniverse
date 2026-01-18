@@ -86,19 +86,19 @@ public sealed partial class CCVars
     ///     How long a shuttle spends in FTL.
     /// </summary>
     public static readonly CVarDef<float> FTLTravelTime =
-        CVarDef.Create("shuttle.travel_time", 20f, CVar.SERVERONLY);
+        CVarDef.Create("shuttle.travel_time", 100f, CVar.SERVERONLY);
 
     /// <summary>
     ///     How long the final stage of FTL before arrival should be.
     /// </summary>
     public static readonly CVarDef<float> FTLArrivalTime =
-        CVarDef.Create("shuttle.arrival_time", 5f, CVar.SERVERONLY);
+        CVarDef.Create("shuttle.arrival_time", 10f, CVar.SERVERONLY);
 
     /// <summary>
     ///     How much time needs to pass before a shuttle can FTL again.
     /// </summary>
     public static readonly CVarDef<float> FTLCooldown =
-        CVarDef.Create("shuttle.cooldown", 10f, CVar.SERVERONLY);
+        CVarDef.Create("shuttle.cooldown", 60f, CVar.SERVERONLY);
 
     /// <summary>
     ///     The maximum <see cref="PhysicsComponent.Mass"/> a grid can have before it becomes unable to FTL.

@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Client.Eui;
+using Content.Client.Ghost;
 using Content.Client.Players.PlayTimeTracking;
 using Content.Shared.Eui;
 using Content.Shared.Ghost.Roles;
@@ -89,6 +90,8 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
             var sysManager = entityManager.EntitySysManager;
             var spriteSystem = sysManager.GetEntitySystem<SpriteSystem>();
             var requirementsManager = IoCManager.Resolve<JobRequirementsManager>();
+            var ghostSystem = sysManager.GetEntitySystem<GhostSystem>();
+            var isLocalGhost = ghostSystem?.IsGhost ?? false;
 
             // TODO: role.Requirements value doesn't work at all as an equality key, this must be fixed
             // Grouping roles
@@ -104,6 +107,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
                     group.Key.Requirements,
                     null,
                     out var reason);
+
 
                 // Adding a new role
                 _window.AddEntry(name, description, hasAccess, reason, group, spriteSystem);

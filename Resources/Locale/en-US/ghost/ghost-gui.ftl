@@ -15,7 +15,7 @@ ghost-target-window-title = Ghost Warp
 ghost-target-window-current-button = Warp: {$name}
 ghost-target-window-warp-to-most-followed = Warp to Most Followed
 
-ghost-roles-window-title = Ghost Roles
+ghost-roles-window-title = Threats and Third Parties
 ghost-roles-window-available-button = Available ({$rolesCount})
 ghost-roles-window-join-raffle-button = Join raffle
 ghost-roles-window-raffle-in-progress-button =

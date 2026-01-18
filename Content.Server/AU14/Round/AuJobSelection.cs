@@ -53,6 +53,11 @@ public sealed class AuJobSelectionSystem : EntitySystem
             // fallback: only third party
             thirdPartyRatio = 0.15f;
         }
+
+        if (_auRoundSystem.SelectedThirdParties.Count == 0)
+        {
+            thirdPartyRatio = 0f;
+        }
         Logger.DebugS("au14.jobs", $"[DEBUG] threatRatio: {threatRatio}, thirdPartyRatio: {thirdPartyRatio}");
 
         // Modes that do NOT use threat jobs (e.g., insurgency, forceonforce)

@@ -147,8 +147,8 @@
 - type: entity
   parent: CMBackpackMarine
   id: CMBackpackMarineMedic
-  name: USCM corpsman backpack
-  description: A standard-issue backpack worn by USCM medics.
+  name: medical backpack
+  description: A standard-issue medical backpack.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/medic/jungle-desert-classic.rsi

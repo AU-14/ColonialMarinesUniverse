@@ -29,6 +29,89 @@
   components:
   - type: Sprite
     state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Entity
 
 
+
+
+
+
+
+
+- type: entity
+  name: Generic Third Party  Spawn Marker
+  parent: MarkerBase
+  id: thirdpartyleaderspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Leader
+    thirdparty: true
+
+
+
+- type: entity
+  name: Generic Third Party Member Spawn Marker
+  parent: MarkerBase
+  id: thirdpartymemberspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Member
+    thirdparty: true
+
+
+- type: entity
+  name: Generic Third Party Entity Spawn Marker
+  parent: MarkerBase
+  id: thirdpartyentityspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Entity
+    thirdparty: true
+
+
+
+
+
+- type: entity
+  name: xeno cf threat entity Spawn Marker
+  parent: MarkerBase
+  id: xenocfthreatentityspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Entity
+    ID: xenocf
+
+
+
+- type: entity
+  name: xeno cf threat member Spawn Marker
+  parent: MarkerBase
+  id: xenocfthreatmemberspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Member
+    ID: xenocf
+
+
+- type: entity
+  name: xeno cf threat Leader Spawn Marker
+  parent: MarkerBase
+  id: xenocfthreatleaderspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Leader
+    ID: xenocf
 

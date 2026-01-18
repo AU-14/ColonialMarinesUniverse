@@ -17,21 +17,26 @@
     raffle:
       settings: short
     rules: cm-cultist-rules
+  - type: UserIFF
+    faction: FactionXeno
+  - type: NpcFactionMember
+    factions:
+    - RMCXeno
 
 
 - type: threat
   id: cultistThreat
-  winconditions:
-  - KillAllGovforRule
   roundstartspawns: cultistParty
+  whitelistedgamemodes:
+  - ColonyFall
   blacklistedgamemodes:
   - DistressSignal
 - type: partySpawn
   id: cultistParty
   leadersToSpawn:
-    cultistJob: 2
+    CMXenoQueen: 1
   gruntsToSpawn:
-    cultistJob: 4
+    cultistJob: 2
   scalewithpop: true
   spawnTogether: true
 
@@ -66,7 +71,7 @@
       amount: 3
     - id: CMShellShotgunBuckshot
       amount: 5
-
+    - id: RMCFlashlight
 
 - type: auThirdParty
   id: cultistThirdParty

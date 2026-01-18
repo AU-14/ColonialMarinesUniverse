@@ -1,9 +1,9 @@
-
+## stable garrison
 - type: entity
-  name: Capture the UA Flag
+  name: Capture the Street
   parent: AU14WallFlagUA
   id: captureuaflagobjective
-  description: "Capture the United Americas flag for your faction."
+  description: "Capture mainstreet  for your faction."
   components:
     - type: AuObjective
       id: captureuaflagobj
@@ -16,7 +16,7 @@
         - clf
       objectivelevel: 2
       custompoints: 5
-      ObjectiveDescription: "Capture the United Americas flag for your faction."
+      ObjectiveDescription: "Capture mainstreet  for your faction."
       roundEndMessage: "By capturing the UA flag"
     - type: CaptureObjective
       hoisttime: 8
@@ -24,8 +24,98 @@
       pointincrementtime: 360
       visibleonmap: true
       flaghealth: 100
+    - type: NavMapBeacon
+      text: Main Street
 
 
+- type: entity
+  name: Capture the Supermarket
+  parent: AU14WallFlagUA
+  id: capturesupermarketobjective
+  description: "Capture the supermarket  for your faction."
+  components:
+  - type: AuObjective
+    id: capturesupermarketobjective
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    - clf
+    objectivelevel: 2
+    custompoints: 5
+    ObjectiveDescription: "Capture the supermarket  for your faction."
+    roundEndMessage: "By capturing the UA flag"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 10
+    pointincrementtime: 360
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: Super market
+
+
+
+- type: entity
+  name: Capture the Tunnel
+  parent: AU14WallFlagUA
+  id: capturetunnelobjective
+  description: "Capture the Tunnel  for your faction."
+  components:
+  - type: AuObjective
+    id: capturetunnelobjective
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    - clf
+    objectivelevel: 2
+    custompoints: 5
+    ObjectiveDescription: "Capture the Tunnel  for your faction."
+    roundEndMessage: "By capturing the Tunnel"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 10
+    pointincrementtime: 360
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: Tunnel
+
+
+- type: entity
+  name: Capture the Desert
+  parent: AU14WallFlagUA
+  id: capturedesertobjective
+  description: "Capture the Desert  for your faction."
+  components:
+  - type: AuObjective
+    id: capturedesertobjective
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    - clf
+    objectivelevel: 1
+    custompoints: 3
+    ObjectiveDescription: "Capture the Desert  for your faction."
+    roundEndMessage: "By capturing the Desert"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 15
+    pointincrementtime: 360
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: Desert
+
+#gixens
 
 - type: entity
   name: Capture the mine
@@ -55,3 +145,210 @@
     airfield: Mountain LZ
     visibleonmap: true
     flaghealth: 250
+
+
+
+#solaris
+- type: entity
+  name: Capture Solar Farms
+  parent: AU14WallFlagUA
+  id: capturesolarfarmsgobjective
+  description: "Capture the Solar Farms"
+  components:
+  - type: AuObjective
+    id: capturesolarfarmsobj
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    objectivelevel: 2
+    custompoints: 5
+    ObjectiveDescription: "Capture the Solar Farms  for your faction."
+    roundEndMessage: "By capturing the Solar farms"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 20
+    pointincrementtime: 180
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: Solar Farms
+
+
+
+- type: entity
+  name: Capture the cabin
+  parent: AU14WallFlagUA
+  id: capturhermitscabinobjective
+  description: "Capture the Hermits Cabin"
+  components:
+  - type: AuObjective
+    id: capturehermitscabingobj
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    objectivelevel: 2
+    custompoints: 4
+    ObjectiveDescription: "Capture the Hermits Cabin for your faction."
+    roundEndMessage: "By capturing the Cabin"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 20
+    pointincrementtime: 400
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: Hermits Cabin
+  - type: AreaLabel
+
+
+
+- type: entity
+  name: Capture the Admins Office
+  parent: AU14WallFlagUA
+  id: captureadminobjective
+  description: "Capture the Admins Office "
+  components:
+  - type: AuObjective
+    id: captureadminofficeobj
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    objectivelevel: 1
+    custompoints: 6
+    ObjectiveDescription: "Capture the Administrators Office  for your faction."
+    roundEndMessage: "By capturing the Administrators office"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 20
+    pointincrementtime: 800
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: Admins Office
+  - type: AreaLabel
+
+
+- type: entity
+  name: Capture the Abandoned Camp
+  parent: AU14WallFlagUA
+  id: captureabandonedcampobjective
+  description: "Capture the Abandoned Camp "
+  components:
+  - type: AuObjective
+    id: captureadminofficeobj
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    objectivelevel: 1
+    custompoints: 3
+    ObjectiveDescription: "Capture the Abandoned Camp  for your faction."
+    roundEndMessage: "By capturing the Abandoned Camp"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 20
+    pointincrementtime: 360
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: Abandoned Camp
+
+
+
+# Flight
+- type: entity
+  name: Capture the Basement
+  parent: AU14WallFlagUA
+  id: capturebasementobj
+  description: "Capture the basement "
+  components:
+  - type: AuObjective
+    id: capturebasementobj
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    objectivelevel: 2
+    custompoints: 6
+    ObjectiveDescription: "Capture the basement  for your faction."
+    roundEndMessage: "By capturing the basement"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 20
+    pointincrementtime: 800
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: Basement
+  - type: AreaLabel
+
+
+- type: entity
+  name: Capture the Roof
+  parent: AU14WallFlagUA
+  id: captureroofobj
+  description: "Capture the Roof "
+  components:
+  - type: AuObjective
+    id: captureroofobj
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    objectivelevel: 1
+    custompoints: 6
+    ObjectiveDescription: "Capture the Roof for your faction."
+    roundEndMessage: "By capturing the Roof"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 20
+    pointincrementtime: 800
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: Roof
+  - type: AreaLabel
+
+
+- type: entity
+  name: Capture the Middle Floor
+  parent: AU14WallFlagUA
+  id: capturemidobj
+  description: "Capture the Middle floor "
+  components:
+  - type: AuObjective
+    id: capturermidobj
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    objectivelevel: 1
+    custompoints: 6
+    ObjectiveDescription: "Capture the Middle Floor for your faction."
+    roundEndMessage: "By capturing the Middle Floor"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 20
+    pointincrementtime: 800
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: Middle Floor
+  - type: AreaLabel

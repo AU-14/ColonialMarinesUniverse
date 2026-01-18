@@ -40,14 +40,18 @@ namespace Content.Client.LateJoin
         private readonly CrewManifestSystem _crewManifest;
         private readonly ISawmill _sawmill;
 
+        private readonly string? _factionFilter;
+
         private readonly Dictionary<NetEntity, Dictionary<string, List<JobButton>>> _jobButtons = new();
         private readonly Dictionary<NetEntity, Dictionary<string, BoxContainer>> _jobCategories = new();
         private readonly List<ScrollContainer> _jobLists = new();
 
         private readonly Control _base;
 
-        public LateJoinGui()
+
+        public LateJoinGui(string? factionFilter = null)
         {
+            _factionFilter = factionFilter?.ToLowerInvariant();
             MinSize = SetSize = new Vector2(360, 560);
             IoCManager.InjectDependencies(this);
             _sprites = _entitySystem.GetEntitySystem<SpriteSystem>();
@@ -77,6 +81,42 @@ namespace Content.Client.LateJoin
             };
 
             _gameTicker.LobbyJobsAvailableUpdated += JobsAvailableUpdated;
+        }
+
+        private bool DepartmentMatchesFilter(DepartmentPrototype department)
+        {
+            if (string.IsNullOrEmpty(_factionFilter))
+                return true;
+
+            // Prefer explicit faction field if present on the department prototype
+            if (!string.IsNullOrEmpty(department.Faction))
+            {
+                var f = department.Faction.ToLowerInvariant();
+                if (_factionFilter == "govfor")
+                    return f == "govfor";
+                if (_factionFilter == "opfor")
+                    return f == "opfor";
+                if (_factionFilter == "humans" || _factionFilter == "colonists")
+                    return f == "humans" || f == "human" || f == "colonists" || f == "colonist" || f == "default" || f == "";
+
+                return f == _factionFilter;
+            }
+
+            // Fallback to heuristic matching on ID/name for older prototypes
+            var id = department.ID.ToLowerInvariant();
+            var name = department.Name.ToString().ToLowerInvariant();
+
+            var isGov = id.Contains("govfor") || id.Contains("government") || id.Contains("gov") || name.Contains("govfor") || name.Contains("government") || name.Contains("gov");
+            var isOp = id.Contains("opfor") || id.Contains("op") || name.Contains("opfor") || name.Contains("op");
+
+            if (_factionFilter == "govfor")
+                return isGov;
+            if (_factionFilter == "opfor")
+                return isOp;
+            if (_factionFilter == "humans" || _factionFilter == "colonists")
+                return !isGov && !isOp;
+
+            return true;
         }
 
         private void RebuildUI()
@@ -133,16 +173,7 @@ namespace Content.Client.LateJoin
                     }
                 });
 
-                if (_configManager.GetCVar(CCVars.CrewManifestWithoutEntity))
-                {
-                    var crewManifestButton = new Button()
-                    {
-                        Text = Loc.GetString("crew-manifest-button-label")
-                    };
-                    crewManifestButton.OnPressed += _ => _crewManifest.RequestCrewManifest(id);
 
-                    _base.AddChild(crewManifestButton);
-                }
 
                 var jobListScroll = new ScrollContainer()
                 {
@@ -165,8 +196,13 @@ namespace Content.Client.LateJoin
 
                 _jobButtons[id] = new Dictionary<string, List<JobButton>>();
 
+                var stationHasDepartments = false;
+
                 foreach (var department in departments)
                 {
+                    if (!DepartmentMatchesFilter(department))
+                        continue;
+
                     var departmentName = Loc.GetString(department.Name);
                     _jobCategories[id] = new Dictionary<string, BoxContainer>();
                     var stationAvailable = _gameTicker.JobsAvailable[id];
@@ -185,6 +221,8 @@ namespace Content.Client.LateJoin
                     // Do not display departments with no jobs available.
                     if (jobsAvailable.Count == 0)
                         continue;
+
+                    stationHasDepartments = true;
 
                     var category = new BoxContainer
                     {
@@ -286,6 +324,11 @@ namespace Content.Client.LateJoin
 
                         _jobButtons[id][prototype.ID].Add(jobButton);
                     }
+                }
+
+                if (!stationHasDepartments)
+                {
+                    jobList.AddChild(new Label { Text = Loc.GetString("late-join-gui-no-departments-available") });
                 }
             }
         }

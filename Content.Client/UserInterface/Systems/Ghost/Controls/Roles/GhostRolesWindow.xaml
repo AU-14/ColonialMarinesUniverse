@@ -3,7 +3,7 @@
             MinSize="490 400"
             SetSize="490 500">
     <BoxContainer Orientation="Vertical">
-        <RichTextLabel Text="[bold]Use the join as xeno or find parasite actions on the top left if you want to join as a xenonid![/bold]" />
+        <RichTextLabel Text="[bold]Join as an inhumane threat or mysterious third party![/bold]" />
         <Label Name="NoRolesMessage"
                Text="{Loc 'ghost-roles-window-no-roles-available-label'}"
                VerticalAlignment="Top" />

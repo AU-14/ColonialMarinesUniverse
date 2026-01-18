@@ -11,13 +11,13 @@
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup
-          mapNameTemplate: 'AU14Routerra'
+          mapNameTemplate: 'SolarisGulch'
         - type: StationJobs
           availableJobs:
             AU14JobCivilianColonist: [ -1, -1 ]
-            AU14JobCivilianFoodServiceWorker: [2, 2]
-            AU14JobCivilianJournalist: [1, 1]
-            AU14JobCivilianColonySynthetic: [1, 1]
+            AU14JobCivilianFoodServiceWorker: [3, 3]
+            AU14JobCivilianJournalist: [2, 2]
+            AU14JobCivilianColonySynthetic: [3, 3]
 
             # Colony Command (non department)
             AU14JobCivilianCorporateLiaison: [1, 1]
@@ -25,38 +25,22 @@
 
             # Security/LEO
             AU14JobCivilianCMBMarshal: [1, 1]
-            AU14JobCivilianCMBDeputy: [1, 2]
-            AU14JobWYGuard: [1,2]
+            AU14JobCivilianCMBDeputy: [7, 7]
+            AU14JobWYGuard: [4,4]
             # Engineering/Logi
             AU14JobCivilianForeman: [1, 1]
-            AU14JobCivilianFreightSystemsSpecialist: [1, 1]
-            AU14JobCivilianEngineer: [3, 3]
-            AU14JobCivilianWasteManagementSpecialist: [2, 2]
+            AU14JobCivilianFreightSystemsSpecialist: [2, 2]
+            AU14JobCivilianEngineer: [5, 5]
+            AU14JobCivilianWasteManagementSpecialist: [3, 3]
 
             # Medical
-            AU14JobCivilianPhysician: [1, 1]
-            AU14JobCivilianNurse: [1, 1]
-            AU14JobCivilianEthicsAndWellnessAdvisor: [1, 1]
-            AU14JobCivilianEmergencyResponseOfficer: [1, 1]
+            AU14JobCivilianPhysician: [3, 3]
+            AU14JobCivilianNurse: [3, 3]
+            AU14JobCivilianEthicsAndWellnessAdvisor: [2, 2]
+            AU14JobCivilianEmergencyResponseOfficer: [3, 3]
 
             # Other
-            AU14JobCivilianMiner: [5, 5]
-            AU14JobCivilianPrisoner: [4, 4]
+            AU14JobCivilianMiner: [10, 10]
+            AU14JobCivilianPrisoner: [7, 7]
             AU14JobCivilianKellandWarden: [1, 1]
 
-            # CLF
-            AU14JobCLFGuerilla: [0, 0]
-            AU14JobCLFPhysician: [0, 0]
-            AU14JobCLFMachineGunner: [0, 0]
-            AU14JobCLFCellLeader: [0, 0]
-
-            # LACN
-            AU14JobGOVFORPlatCo: [0, 0]
-            AU14JobGOVFORPlatOp: [0, 0]
-            AU14JobGOVFORDSPilot: [0, 0]
-            AU14JobGOVFORDCC: [0, 0]
-            AU14JobGOVFORSectionSergeant: [0, 0]
-            AU14JobGOVFORSquadSergeant: [0, 0]
-            AU14JobGOVFORSquadRifleman: [0, 0]
-            AU14JobGOVFORSquadAutomaticRifleman: [0, 0]
-            AU14JobGOVFORPlatoonCorpsman: [0, 0]

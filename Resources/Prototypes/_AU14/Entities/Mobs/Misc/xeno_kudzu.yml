@@ -77,7 +77,6 @@
         mask:
         - MidImpassable
         - BulletImpassable
-        hard: false
   - type: CollisionWake
     enabled: false
   - type: Sprite
@@ -96,7 +95,7 @@
     - FullAuto
     soundGunshot: /Audio/Weapons/Xeno/alien_spitacid.ogg
   - type: BallisticAmmoProvider
-    proto: BulletAcid
+    proto: CMUBulletAcid
     capacity: 500
   - type: HTN
     rootTask:
@@ -117,13 +116,16 @@
   - type: GunIFF
     enabled: true
     intrinsic: true
+  - type: UserIFF
+    faction: FactionXeno
   - type: Damageable
-    damageContainer: Biological
+    damageContainer: StructuralXeno
+    damageModifierSet: Resin
   - type: Destructible
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 100
+        damage: 160
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
@@ -133,16 +135,13 @@
       - !type:SpawnEntitiesBehavior
         spawn:
           FoodMeatXeno:
-            min: 3
-            max: 5
-  - type: RequireProjectileTarget
+            min: 0
+            max: 3
+  #- type: RequireProjectileTarget
   - type: RMCWeaponAccuracy
-  #- type: Sentry
   - type: NpcFactionMember
     factions:
     - RMCXeno
-  - type: UserIFF
-    faction: FactionXeno
   - type: RandomSpawner
     deleteSpawnerAfterSpawn: false
     chance: 1
@@ -169,7 +168,7 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 200
+        damage: 320
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
@@ -179,11 +178,21 @@
       - !type:SpawnEntitiesBehavior
         spawn:
           FoodMeatXeno:
-            min: 5
-            max: 9
+            min: 3
+            max: 6
   - type: RandomSpawner
     prototypes:
     - CMUXenoKudzuSource
+
+- type: entity
+  parent: BulletAcid
+  id: CMUBulletAcid
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Projectile
+      damage:
+        types:
+          Caustic: 10
 
 - type: entity
   parent: BulletAcid
@@ -204,7 +213,7 @@
   - type: Projectile
     damage:
       types:
-        Caustic: 9
+        Caustic: 15
   - type: Sprite
     sprite: _AU14/Weapons/Guns/Projectiles/xeno_toxic_big.rsi
     layers:

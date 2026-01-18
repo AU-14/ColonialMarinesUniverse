@@ -19,41 +19,41 @@
       - id: AU14HemostaticGauzePacket
         amount: 30
       - id: AU14Tourniquet
-        amount: 15
+        amount: 30
       - id: CMBurnKit10
         amount: 15
       - id: CMTraumaKit10
         amount: 15
       - id: CMSurgicalLine
-        amount: 3
+        amount: 6
       - id: CMSynthGraft
-        amount: 3
+        amount: 6
       - id: CMSyringe
         amount: 10
     - name: Pill Bottles
       entries:
       - id: CMPillCanisterBicaridine
-        amount: 5
+        amount: 10
       - id: CMPillCanisterDexalin
-        amount: 5
+        amount: 10
       - id: CMPillCanisterDylovene
-        amount: 5
+        amount: 10
       - id: CMPillCanisterInaprovaline
-        amount: 5
+        amount: 10
       - id: CMPillCanisterKelotane
-        amount: 5
+        amount: 10
       - id: CMPillCanisterTricordrazine
-        amount: 5
+        amount: 10
       - id: RMCPillCanisterIron
-        amount: 2
+        amount: 5
       - id: AU14PillCanisterCryoxadone
-        amount: 1
+        amount: 5
       - id: AU14PillCanisterLeporazine
-        amount: 1
+        amount: 5
       - id: AU14PillCanisterImidazoline
-        amount: 1
+        amount: 5
       - id: AU14PillCanisterEthylredoxrazine
-        amount: 1
+        amount: 5
       - id: AU14PillCanisterAlbuterol
         amount: 1
 #      - id: CMPillCanisterPeridaxon
@@ -61,15 +61,17 @@
     - name: Injectors
       entries:
       - id: CMEpinephrineAutoInjector
-        amount: 1
+        amount: 8
       - id: AU14NaloxoneAutoInjector
-        amount: 2
+        amount: 8
+      - id: RMCIronAutoInjector
+        amount: 20
       - id: CMInaprovalineAutoInjector
-        amount: 4
+        amount: 20
       - id: CMDexalinPlusAutoInjector
-        amount: 5
+        amount: 20
       - id: CMTricordrazineAutoInjector
-        amount: 5
+        amount: 20
     - name: Medical Utilities
       entries:
       - id: CMRollerBedSpawnFolded
@@ -81,7 +83,7 @@
       - id: RMCBoxLatexGloves
         amount: 2
       - id: CMHealthAnalyzer
-        amount: 2
+        amount: 4
       - id: RMCVial
         amount: 10
      # FixOVien
@@ -114,9 +116,9 @@
     - name: Blood Packs
       entries:
       - id: CMBloodPackFull
-        amount: 4
+        amount: 25
     - name: Miscellaneous
       entries:
       - id: CMBloodPack
-        amount: 20
+        amount: 25
         name: empty blood pack

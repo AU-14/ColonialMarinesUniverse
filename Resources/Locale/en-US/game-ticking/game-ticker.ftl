@@ -8,7 +8,7 @@ game-ticker-delay-start = Round start has been delayed for {$seconds} seconds.
 game-ticker-pause-start = Round start has been paused.
 game-ticker-pause-start-resumed = Round start countdown is now resumed.
 game-ticker-player-join-game-message = Welcome to CMU! If this is your first time playing, be sure to read the game rules, and don't be afraid to ask for help in LOOC (local OOC) or OOC (usually available only between rounds).
-game-ticker-get-info-text = Hi and welcome to [color=white]RMC14![/color]
+game-ticker-get-info-text = Hi and welcome to [color=white]Colonial marines Universe![/color]
                             The current Govfor ship is: [color=white]{$mapName}[/color]
                             The current Opfor ship is: [color=white]{$mapName}[/color]
                             The current planet is: [color=white]{$planetName}[/color]

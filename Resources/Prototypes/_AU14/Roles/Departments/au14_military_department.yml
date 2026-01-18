@@ -4,6 +4,7 @@
   name: au14-department-govforces
   description: au14-department-govforces-description
   color: "#e3ce94"
+  faction: govfor
   roles:
   - AU14JobGOVFORSectionSergeant
   - AU14JobGOVFORSquadSergeant

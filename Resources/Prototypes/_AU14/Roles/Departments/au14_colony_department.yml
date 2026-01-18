@@ -11,6 +11,7 @@
   - AU14JobCivilianColonySynthetic
   departmentRadio: null
   headOfDepartment: null
+  faction: colonist
 
 - type: department
   parent: CMDepartmentBase
@@ -25,6 +26,7 @@
   - AU14JobCivilianCMBMarshal
   departmentRadio: null
   headOfDepartment: null
+  faction: colonist
 
 - type: department
   parent: CMDepartmentBase
@@ -39,6 +41,7 @@
   - AU14JobCivilianWasteManagementSpecialist
   departmentRadio: null
   headOfDepartment: null
+  faction: colonist
 
 - type: department
   parent: CMDepartmentBase
@@ -53,6 +56,7 @@
   - AU14JobCivilianEmergencyResponseOfficer
   departmentRadio: null
   headOfDepartment: null
+  faction: colonist
 
 - type: department
   parent: CMDepartmentBase
@@ -67,4 +71,5 @@
   - AU14JobCiviliannspaConstable
   departmentRadio: null
   headOfDepartment: null
+  faction: colonist
 

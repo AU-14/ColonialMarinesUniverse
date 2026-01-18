@@ -133,6 +133,8 @@
   - /Maps/_CMU14/Shuttles/alamo.yml
   possibleships:
       - Daybreak
+      - USSBush
+
   compatibleFighters:
   - /Maps/_AU14/ShuttlesDropships/f84owl.yml
   - /Maps/_AU14/ShuttlesDropships/ud_6.yml
@@ -167,6 +169,7 @@
     SectionSergeant: 1
   possibleships:
       - Daybreak
+      - USSBush
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
   compatibleFighters:
@@ -186,6 +189,7 @@
     Pilot: AU14AircrewWeaponsVendor
   possibleships:
     - Daybreak
+    - USSBush
   jobSlotOverride:
     SquadRifleman: 12
     PlatoonCorpsman: 1
@@ -267,6 +271,7 @@
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml
   possibleships:
       - Daybreak
+      - USSBush
 
 - type: platoon
   id: UNISC

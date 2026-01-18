@@ -5,7 +5,7 @@
   - CMXenoFlammable
   - RMCXenoVentCrawler
   id: CMXenoParasiteBase
-  name: Parasite
+  name: Facehugger
   components:
   - type: GuideHelp
     guides:

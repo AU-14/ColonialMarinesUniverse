@@ -79,7 +79,7 @@
     objectivelevel: 3
     custompoints: 100
     roundEndMessage: Finding the Crown
-    ObjectiveDescription: "Retrieve the Crown Artifact"
+    ObjectiveDescription: "Retrieve the Alien Crown Artifact"
   - type: FetchObjective
     entitytospawn: ClothingHeadHatXmasCrown
     markerentity: fetchobjectivemarkergenericspawnpoint

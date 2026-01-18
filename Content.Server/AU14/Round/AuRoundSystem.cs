@@ -210,7 +210,23 @@ namespace Content.Server.AU14.Round
             _selectedThirdParties.Clear();
             if (_selectedPreset == null || _selectedPlanet == null)
                 return;
-            var allThirdParties = _prototypeManager.EnumeratePrototypes<AuThirdPartyPrototype>().ToList();
+
+            var allThirdParties = new List<AuThirdPartyPrototype>();
+            if (_selectedPlanet.ThirdParties.Count > 0)
+            {
+                foreach (var protoId in _selectedPlanet.ThirdParties)
+                {
+                    if (_prototypeManager.TryIndex(protoId, out AuThirdPartyPrototype? proto))
+                        allThirdParties.Add(proto);
+                    else
+                        Logger.Warning($"[AuRoundSystem] Could not find AuThirdPartyPrototype for ID: {protoId}");
+                }
+            }
+            else
+            {
+                return;
+            }
+
             var playerCount = _playerManager.PlayerCount;
             var currentGamemode = _selectedPreset.ID;
             var currentThreat = _selectedthreat?.ID;
@@ -319,6 +335,8 @@ namespace Content.Server.AU14.Round
                             Options = shipOptions,
                             Duration = duration
                         };
+                        voteopt.SetInitiatorOrServer(null);
+
                         var handle = _voteManager.CreateVote(voteopt);
                         handle.OnFinished += (_, args) =>
                         {

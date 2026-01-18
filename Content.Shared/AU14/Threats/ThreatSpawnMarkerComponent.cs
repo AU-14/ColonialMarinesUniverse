@@ -17,6 +17,9 @@ public sealed partial class ThreatSpawnMarkerComponent: Component
     [DataField("threatmarkertype", required: false)]
     public ThreatMarkerType ThreatMarkerType  { get; private set; } = ThreatMarkerType.Member;
 
+    [DataField("thirdparty", required: false)]
+    public bool ThirdParty { get; private set; } = false;
+
 }
 
 public enum  ThreatMarkerType

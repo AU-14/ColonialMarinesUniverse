@@ -3,7 +3,7 @@
   mapName: LV-624
   mapPath: /Maps/_AU14/LV624.yml
   minPlayers: 0
-  maxPlayers: 75
+  maxPlayers: 65
   maxRandomOffset: 0
   randomRotation: false
   stations:
@@ -11,14 +11,14 @@
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup
-          mapNameTemplate: 'lv624colonyfallcompmap'
+          mapNameTemplate: 'LV624 Green Hell'
         - type: StationJobs
           availableJobs:
             AU14JobCivilianColonist: [ -1, -1 ]
             AU14JobCivilianFoodServiceWorker: [2, 2]
             AU14JobCivilianJournalist: [1, 1]
             AU14JobCivilianScientist: [3, 3]
-            AU14JobCivilianColonySynthetic: [1, 1]
+            AU14JobCivilianColonySynthetic: [2, 2]
 
             # Colony Command (non department)
             AU14JobCivilianCorporateLiaison: [1, 1]
@@ -26,19 +26,19 @@
 
             # Security/LEO
             AU14JobCivilianCMBMarshal: [1, 1]
-            AU14JobCivilianCMBDeputy: [1, 1]
+            AU14JobCivilianCMBDeputy: [3, 3]
 
             # Engineering/Logi
             AU14JobCivilianForeman: [1, 1]
-            AU14JobCivilianFreightSystemsSpecialist: [1, 1]
-            AU14JobCivilianEngineer: [3, 3]
+            AU14JobCivilianFreightSystemsSpecialist: [2, 2]
+            AU14JobCivilianEngineer: [4, 4]
             AU14JobCivilianWasteManagementSpecialist: [2, 2]
 
             # Medical
-            AU14JobCivilianPhysician: [1, 1]
-            AU14JobCivilianNurse: [1, 1]
+            AU14JobCivilianPhysician: [2, 2]
+            AU14JobCivilianNurse: [3, 3]
             AU14JobCivilianEthicsAndWellnessAdvisor: [1, 1]
-            AU14JobCivilianEmergencyResponseOfficer: [1, 1]
+            AU14JobCivilianEmergencyResponseOfficer: [3, 3]
 
             # Other
             AU14JobCivilianUSASFRecruiter: [1, 1]

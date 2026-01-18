@@ -127,10 +127,6 @@ public sealed class GhostRoleSystem : EntitySystem
 
     public void OpenEui(ICommonSession session)
     {
-        if (session.AttachedEntity is not { Valid: true } attached ||
-            !HasComp<GhostComponent>(attached))
-            return;
-
         if (_openUis.ContainsKey(session))
             CloseEui(session);
 
@@ -268,17 +264,13 @@ public sealed class GhostRoleSystem : EntitySystem
         }
     }
 
+
+
     private bool TryTakeover(ICommonSession player, uint identifier)
     {
-        // TODO: the following two checks are kind of redundant since they should already be removed
-        //           from the raffle
-        // can't win if you are disconnected (although you shouldn't be a candidate anyway)
-        if (player.Status != SessionStatus.InGame)
+        if (player.Status == SessionStatus.Disconnected || player.Status == SessionStatus.Zombie)
             return false;
 
-        // can't win if you are no longer a ghost (e.g. if you returned to your body)
-        if (player.AttachedEntity == null || !HasComp<GhostComponent>(player.AttachedEntity))
-            return false;
 
         if (Takeover(player, identifier))
         {
@@ -465,6 +457,7 @@ public sealed class GhostRoleSystem : EntitySystem
     /// <param name="identifier">ID of the ghost role.</param>
     public void Request(ICommonSession player, uint identifier)
     {
+        // Allow any connected session (including lobby/preview) to request or join raffles.
         if (!_ghostRoles.TryGetValue(identifier, out var roleEnt))
             return;
 
@@ -516,11 +509,9 @@ public sealed class GhostRoleSystem : EntitySystem
         if (!Resolve(roleUid, ref role))
             return;
 
-        DebugTools.AssertNotNull(player.ContentData());
-
+        // Sessions in the lobby may not have ContentData or an attached entity; don't require them.
         // After taking a ghost role, the player cannot return to the original body, so wipe the player's current mind
-        // unless it is a visiting mind
-        if(_mindSystem.TryGetMind(player.UserId, out _, out var mind) && !mind.IsVisitingEntity)
+        if (_mindSystem.TryGetMind(player.UserId, out _, out var mind) && !mind.IsVisitingEntity)
             _mindSystem.WipeMind(player);
 
         var newMind = _mindSystem.CreateMind(player.UserId,

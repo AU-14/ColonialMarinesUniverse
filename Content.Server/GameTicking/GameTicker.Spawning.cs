@@ -107,7 +107,6 @@ namespace Content.Server.GameTicking
             var spawnableStations = GetSpawnableStations();
             var assignedJobs = _stationJobs.AssignJobs(profiles, spawnableStations);
             _auThreatSystem.SpawnThreatAtRoundStart(_auRoundSystem._selectedthreat, DefaultMap, assignedJobs);
-            _auThirdParty.StartThirdPartySpawning(_auRoundSystem._selectedthreat);
 
             _stationJobs.AssignOverflowJobs(ref assignedJobs, playerNetIds, profiles, spawnableStations);
 
@@ -143,6 +142,7 @@ namespace Content.Server.GameTicking
             }
 
             RefreshLateJoinAllowed();
+            _auThirdParty.StartThirdPartySpawning(_auRoundSystem._selectedthreat, assignedJobs);
 
             // Allow rules to add roles to players who have been spawned in. (For example, on-station traitors)
             RaiseLocalEvent(new RulePlayerJobsAssignedEvent(

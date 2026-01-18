@@ -18,6 +18,7 @@ using Content.Shared.Ghost;
 using Robust.Shared.Console;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
+using Robust.Shared.Timing;
 
 namespace Content.Server.AU14.ThirdParty;
 
@@ -151,16 +152,22 @@ public sealed class AuThirdPartySystem : EntitySystem
                         markers.Add(uid);
                 }
             }
+
+            var thirdPartyMarked = markers.Where(m => _entityManager.TryGetComponent<Content.Shared.AU14.Threats.ThreatSpawnMarkerComponent>(m, out var c) && c.ThirdParty).ToList();
+            if (thirdPartyMarked.Count > 0)
+            {
+                _sawmill.Debug($"[AuThirdPartySystem] Found {thirdPartyMarked.Count} third-party-marked markers for type {markerType} on map {mapId}; using only those.");
+                return thirdPartyMarked;
+            }
+
             _sawmill.Debug($"[AuThirdPartySystem] GetMarkers({markerType}): Found {markers.Count} markers with markerId '{markerId}' on map {mapId}");
             return markers;
         }
-        // --- Spawn Together logic ---
         bool spawnTogether = newpartySpawn?.SpawnTogether == true;
         Dictionary<Content.Shared.AU14.Threats.ThreatMarkerType, List<EntityUid>> markerCache = new();
         EntityUid? centerMarker = null;
         if (spawnTogether)
         {
-            // Gather all markers of all types
             var allMarkers = new List<EntityUid>();
             foreach (Content.Shared.AU14.Threats.ThreatMarkerType type in System.Enum.GetValues(typeof(Content.Shared.AU14.Threats.ThreatMarkerType)))
             {
@@ -260,8 +267,8 @@ public sealed class AuThirdPartySystem : EntitySystem
         if (roundStart && assignedJobs != null)
         {
             _sawmill.Debug($"[AuThirdPartySystem] Assigning minds to third party entities (roundstart)");
-            var leaderJobId = new ProtoId<JobPrototype>("AU14JobThreatLeader");
-            var memberJobId = new ProtoId<JobPrototype>("AU14JobThreatMember");
+            var leaderJobId = new ProtoId<JobPrototype>("AU14JobThirdPartyLeader");
+            var memberJobId = new ProtoId<JobPrototype>("AU14JobThirdPartyMember");
             var leaderPlayers = assignedJobs.Where(x => x.Value.Item1 == leaderJobId).Select(x => x.Key).ToList();
             var memberPlayers = assignedJobs.Where(x => x.Value.Item1 == memberJobId).Select(x => x.Key).ToList();
             var mindSystem = _entityManager.System<SharedMindSystem>();
@@ -278,7 +285,7 @@ public sealed class AuThirdPartySystem : EntitySystem
                 var mind = mindSystem.GetMind(playerNetId) ?? mindSystem.CreateMind(playerNetId, data?.Name ?? "Third Party Player");
                 mindSystem.SetUserId(mind, playerNetId);
                 mindSystem.TransferTo(mind, entity);
-                roleSystem.MindAddJobRole(mind, silent: true, jobPrototype: "AU14JobThreatLeader");
+                roleSystem.MindAddJobRole(mind, silent: true, jobPrototype: "AU14JobThirdPartyLeader");
             }
             for (int i = 0; i < memberPlayers.Count && i < spawnedGrunts.Count; i++)
             {
@@ -292,7 +299,7 @@ public sealed class AuThirdPartySystem : EntitySystem
                 var mind = mindSystem.GetMind(playerNetId) ?? mindSystem.CreateMind(playerNetId, data?.Name ?? "Third Party Player");
                 mindSystem.SetUserId(mind, playerNetId);
                 mindSystem.TransferTo(mind, entity);
-                roleSystem.MindAddJobRole(mind, silent: true, jobPrototype: "AU14JobThreatMember");
+                roleSystem.MindAddJobRole(mind, silent: true, jobPrototype: "AU14JobThirdPartyMember");
             }
         }
         if (!string.IsNullOrWhiteSpace(party.AnnounceArrival))
@@ -351,7 +358,7 @@ public sealed class AuThirdPartySystem : EntitySystem
     }
 
 
-    public void StartThirdPartySpawning(ThreatPrototype threat)
+    public void StartThirdPartySpawning(ThreatPrototype threat, Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs = null)
     {
         _currentThreat = threat;
         _thirdPartyList = _auRoundSystem.SelectedThirdParties.ToList();
@@ -369,24 +376,33 @@ public sealed class AuThirdPartySystem : EntitySystem
             }
         }
 
-        _spawningActive = true;
-        if (_thirdPartyList == null)
-            return;
-        // Spawn all roundstart third parties immediately
-        foreach (var party in _thirdPartyList)
+        if (_thirdPartyList == null || _thirdPartyList.Count == 0)
         {
-            if (!party.RoundStart)
-                break;
-            if (_prototypeManager.TryIndex<PartySpawnPrototype>(party.PartySpawn, out var spawnProto))
+            _sawmill.Debug("[AuThirdPartySystem] No third parties selected for this planet; skipping third-party spawning.");
+            _spawningActive = false;
+            return;
+        }
+
+        _spawningActive = true;
+        // Spawn all roundstart third parties immediately (called after jobs assigned)
+        if (_thirdPartyList != null)
+        {
+            foreach (var party in _thirdPartyList)
             {
-                SpawnThirdParty(party, spawnProto, true);
-                _sawmill.Debug($"[AuThirdPartySystem] Spawned roundstart third party {party.ID}");
+                if (!party.RoundStart)
+                    break;
+
+                if (_prototypeManager.TryIndex<PartySpawnPrototype>(party.PartySpawn, out var spawnProto))
+                {
+                    SpawnThirdParty(party, spawnProto, true, assignedJobs);
+                    _sawmill.Debug($"[AuThirdPartySystem] Spawned roundstart third party {party.ID}");
+                }
+                else
+                {
+                    _sawmill.Error($"[AuThirdPartySystem] No spawn proto for roundstart third party {party.ID} (PartySpawn={party.PartySpawn})");
+                }
+                _nextThirdPartyIndex++;
             }
-            else
-            {
-                _sawmill.Error($"[AuThirdPartySystem] No spawn proto for roundstart third party {party.ID} (PartySpawn={party.PartySpawn})");
-            }
-            _nextThirdPartyIndex++;
         }
     }
 

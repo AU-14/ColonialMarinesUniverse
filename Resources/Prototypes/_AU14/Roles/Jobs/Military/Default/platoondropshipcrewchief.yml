@@ -63,7 +63,7 @@
   id: AU14GearGOVFORDCC
   equipment:
     id: AU14IDCardGOVFORDCC
-    ears: AU14HeadsetSectionMarine
+    ears: AU14HeadsetSectionLeader
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORDCC

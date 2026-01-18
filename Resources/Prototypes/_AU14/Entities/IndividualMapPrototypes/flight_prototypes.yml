@@ -216,7 +216,16 @@
   name: tiles-cmu-empty-subfloor
   isSpace: true
   weather: true
+  indestructible: true
   friction: 0
+
+- type: tile
+  parent: RMCFloorPlatingNoBuild
+  id: CMUFlightPlatingNoBuild
+  name: tiles-cmu-plating
+  sprite: /Textures/_RMC14/Tiles/almayer/plating.png
+  isSubfloor: false
+  indestructible: true
 
 - type: entity
   parent: MarkerBase

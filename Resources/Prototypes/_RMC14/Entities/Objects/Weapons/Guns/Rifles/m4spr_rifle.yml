@@ -112,9 +112,9 @@
 
 - type: entity
   parent: WeaponRifleM4SPR
-  name: M5SPR battle rifle
+  name: M5RA battle rifle
   id: WeaponRifleM5SPR
-  description: The M5SPR battle rifle is a modified version of the M4SPR, able to chamber High Velocity Piercing rounds, and equipped a two-burst configuration.
+  description: The M5RA battle rifle is a modified version of the M4RA, able to chamber High Velocity Piercing rounds, and equipped a two-burst configuration.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/m4spr_custom/desert.rsi
@@ -189,8 +189,8 @@
 - type: entity
   parent: WeaponRifleM5SPR
   id: WeaponRifleM5SPR2
-  name: M5SPR/2 battle rifle
-  description: The M5SPR/2 battle rifle is a modified version of the M5SPR, designed for PMC Operatives to take out targets at longer ranges.
+  name: M5RA/2 battle rifle
+  description: The M5RA/2 battle rifle is a modified version of the M5RA, designed for PMC Operatives to take out targets at longer ranges.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/m5spr2.rsi
@@ -267,7 +267,7 @@
 - type: entity
   parent: CMMagazineRifleBase
   id: CMMagazineRifleM4SPR
-  name: "M4SPR magazine (10x24mm)"
+  name: "M4RA magazine (10x24mm)"
   description: "A magazine of standard 10x24mm rounds for use in the M4SPR battle rifle."
   components:
   - type: Tag
@@ -429,8 +429,8 @@
 - type: entity
   parent: CMMagazineRifleM4SPR
   id: RMCMagazineRifleM5SPRHVP
-  name: "M5SPR HV-Piercing magazine (10x24mm)"
-  description: "A magazine of HV-Piercing 10x24mm rounds for use in the M5SPR battle rifle."
+  name: "M5RA HV-Piercing magazine (10x24mm)"
+  description: "A magazine of HV-Piercing 10x24mm rounds for use in the M5RA battle rifle."
   components:
   - type: BallisticAmmoProvider
     mayTransfer: True
@@ -457,7 +457,7 @@
   parent: CMBaseCartridgeRifle
   id: RMCCartridgeRifleM5SPRHVP
   name: cartridge (HV-Piercing)
-  description: A high-velocity HV-Piercing cartridge. Fits in M5SPR custom magazines.
+  description: A high-velocity HV-Piercing cartridge. Fits in M5RA custom magazines.
   components:
   - type: Tag
     tags:
@@ -497,7 +497,7 @@
   parent: CMBaseCartridgeRifle
   id: RMCCartridgeRifleM5SPRHVHIP
   name: cartridge (HVHI-Piercing)
-  description: A high-velocity HVHI-Piercing cartridge. Fits in M5SPR custom magazines.
+  description: A high-velocity HVHI-Piercing cartridge. Fits in M5RA custom magazines.
   components:
   - type: Tag
     tags:
@@ -523,8 +523,8 @@
 - type: entity
   parent: RMCMagazineRifleM5SPRHVP
   id: RMCMagazineRifleM5SPRHVHIP
-  name: "M5SPR HVHI-Piercing magazine (10x24mm)"
-  description: "A magazine of HVHI-Piercing 10x24mm rounds for use in the M5SPR battle rifle."
+  name: "M5RA HVHI-Piercing magazine (10x24mm)"
+  description: "A magazine of HVHI-Piercing 10x24mm rounds for use in the M5RA battle rifle."
   components:
   - type: BallisticAmmoProvider
     mayTransfer: True

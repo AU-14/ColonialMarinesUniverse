@@ -1,5 +1,4 @@
 using Content.Client._RMC14.LinkAccount;
-using Content.Client._RMC14.Lobby;
 using Content.Client.Audio;
 using Content.Client.GameTicking.Managers;
 using Content.Client.LateJoin;
@@ -37,6 +36,10 @@ namespace Content.Client.Lobby
 
         private ClientGameTicker _gameTicker = default!;
         private ContentAudioSystem _contentAudioSystem = default!;
+        // Cached references to join buttons (looked up from XAML at runtime)
+        private Robust.Client.UserInterface.Controls.Button? _joinGovforButton;
+        private Robust.Client.UserInterface.Controls.Button? _joinOpforButton;
+        private Robust.Client.UserInterface.Controls.Button? _joinOtherButton;
 
         protected override Type? LinkedScreenType { get; } = typeof(LobbyGui);
         public LobbyGui? Lobby;
@@ -81,10 +84,28 @@ namespace Content.Client.Lobby
             _gameTicker.LobbyStatusUpdated += LobbyStatusUpdated;
             _gameTicker.LobbyLateJoinStatusUpdated += LobbyLateJoinStatusUpdated;
 
-            // RMC14
-            Lobby.JoinXenoButton.OnPressed += _ =>
-                _userInterfaceManager.GetUIController<RMCLobbyUIController>().OpenJoinXenoWindow();
-            Lobby.JoinXenoButton.AddStyleClass("OpenRight");
+            // RMC14: look up join buttons from the loaded XAML and wire handlers
+            _joinGovforButton = Lobby.FindControl<Robust.Client.UserInterface.Controls.Button>("JoinGovforButton");
+            if (_joinGovforButton != null)
+            {
+                _joinGovforButton.OnPressed += OnJoinGovforPressed;
+                _joinGovforButton.AddStyleClass("OpenRight");
+            }
+
+            _joinOpforButton = Lobby.FindControl<Robust.Client.UserInterface.Controls.Button>("JoinOpforButton");
+            if (_joinOpforButton != null)
+            {
+                _joinOpforButton.OnPressed += OnJoinOpforPressed;
+                _joinOpforButton.AddStyleClass("OpenRight");
+            }
+
+            // 'Other' opens ghost roles UI (all ghost roles)
+            _joinOtherButton = Lobby.FindControl<Robust.Client.UserInterface.Controls.Button>("JoinOtherButton");
+            if (_joinOtherButton != null)
+            {
+                _joinOtherButton.OnPressed += OnJoinOtherPressed;
+                _joinOtherButton.AddStyleClass("OpenRight");
+            }
         }
 
         protected override void Shutdown()
@@ -102,6 +123,14 @@ namespace Content.Client.Lobby
             Lobby.CharacterPreview.PatronPerks.OnPressed -= OnPatronPerksPressed;
             Lobby!.ReadyButton.OnPressed -= OnReadyPressed;
             Lobby!.ReadyButton.OnToggled -= OnReadyToggled;
+
+            // Unhook RMC14 buttons
+            if (_joinGovforButton != null)
+                _joinGovforButton.OnPressed -= OnJoinGovforPressed;
+            if (_joinOpforButton != null)
+                _joinOpforButton.OnPressed -= OnJoinOpforPressed;
+            if (_joinOtherButton != null)
+                _joinOtherButton.OnPressed -= OnJoinOtherPressed;
 
             Lobby = null;
         }
@@ -130,7 +159,8 @@ namespace Content.Client.Lobby
                 return;
             }
 
-            new LateJoinGui().OpenCentered();
+            // Second-stage ready action: open colonists-filtered late-join UI
+            new LateJoinGui("colonists").OpenCentered();
         }
 
         private void OnReadyToggled(BaseButton.ButtonToggledEventArgs args)
@@ -205,7 +235,9 @@ namespace Content.Client.Lobby
 
                 // RMC14
                 Lobby.ReadyButton.AddStyleClass("OpenLeft");
-                Lobby.JoinXenoButton.Visible = true;
+                if (_joinGovforButton != null) _joinGovforButton.Visible = true;
+                if (_joinOpforButton != null) _joinOpforButton.Visible = true;
+                if (_joinOtherButton != null) _joinOtherButton.Visible = true;
             }
             else
             {
@@ -218,7 +250,9 @@ namespace Content.Client.Lobby
 
                 // RMC14
                 Lobby.ReadyButton.RemoveStyleClass("OpenLeft");
-                Lobby.JoinXenoButton.Visible = false;
+                if (_joinGovforButton != null) _joinGovforButton.Visible = false;
+                if (_joinOpforButton != null) _joinOpforButton.Visible = false;
+                if (_joinOtherButton != null) _joinOtherButton.Visible = false;
             }
 
             if (_gameTicker.ServerInfoBlob != null)
@@ -297,6 +331,22 @@ namespace Content.Client.Lobby
             }
 
             _consoleHost.ExecuteCommand($"toggleready {newReady}");
+        }
+
+        private void OnJoinGovforPressed(BaseButton.ButtonEventArgs args)
+        {
+            new LateJoinGui("govfor").OpenCentered();
+        }
+
+        private void OnJoinOpforPressed(BaseButton.ButtonEventArgs args)
+        {
+            new LateJoinGui("opfor").OpenCentered();
+        }
+
+        private void OnJoinOtherPressed(BaseButton.ButtonEventArgs args)
+        {
+             // Open the ghost roles UI (server-driven) to display all ghost roles
+             _consoleHost.RemoteExecuteCommand(null, "ghostroles");
         }
     }
 }

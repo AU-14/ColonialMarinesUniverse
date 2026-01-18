@@ -443,8 +443,8 @@
 - type: entity
   parent: RMCAttachmentS42xTelescopicMiniscope
   id: RMCAttachmentB8SmartScope
-  name: B8 smart-scope
-  description: An experimental B8 Smart-Scope. Based on the technologies used in the Smart Gun by AEGIS, this sight has integrated IFF systems. It can only attach to the M4SPR Battle Rifle and the M44 Combat Revolver.
+  name: B8 scope
+  description: An experimental B8 Scope. It can only attach to the M4 Battle Rifle series and the M44 Combat Revolver. Despite common opinion, it is in fact not smart.
   components:
   - type: Sprite
     state: iffbarrel

@@ -29,7 +29,7 @@ public sealed partial class ThreatPrototype : IPrototype
     /// <summary>
     /// List of game rule prototype IDs to add for this threat's win condition (e.g., "KillAllGovforRule", "ThreatSurviveRule").
     /// </summary>
-    [DataField("winconditions", required: true)]
+    [DataField("winconditions", required: false)]
     public List<string> WinConditions { get; private set; } = new();
 
 

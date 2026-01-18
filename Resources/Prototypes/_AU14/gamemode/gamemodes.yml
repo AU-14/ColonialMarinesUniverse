@@ -10,7 +10,8 @@
   supportedPlanets:
   #- AUPlanetGixensCaverns Rout of rotation till fixed - eg
   - AUPlanetStableGarrison
-  - AUPlanetShepherdsPride
+  #- AUPlanetShepherdsPride
+  - AUPlanetFlight
 
   rules:
   - AuVoteRule
@@ -32,6 +33,8 @@
     #- AUPlanetLV747
     - AUPlanetShepherdsPride
     - AUPlanetLV624
+    - AUPlanetLV747
+
    # - AUPlanetStableGarrison
   rules:
   - AuVoteRule
@@ -47,7 +50,7 @@
   description: Distress Signal
   requiresGovforVote: true
   supportedPlanets:
-  - AUPlanetShepherdsPride
+  #- AUPlanetShepherdsPride for playtest - eg
   - AUPlanetLV747
   - AUPlanetFlight
 
@@ -74,7 +77,6 @@
     - AUPlanetLV747
     - AUPlanetShepherdsPride
     - AUPlanetLV624
-    - AUPlanetFlight
 
 - type: gamePreset
   id: Jailbreak

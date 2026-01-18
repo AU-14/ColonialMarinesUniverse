@@ -349,6 +349,7 @@
   - type: SquadTeam
     roundStart: true
     color: "#1E90FF"
+    group: OPFOR
     radio: OpforIntel
     accessLevels:
     - AU14AccessOpfor
@@ -365,6 +366,8 @@
   - type: SquadTeam
     roundStart: true
     color: "#00CED1"
+    group: OPFOR
+
     radio: OpforBravo
     accessLevels:
     - AU14AccessOpfor
@@ -382,6 +385,8 @@
     roundStart: true
     color: "#FFD700"
     radio: OpforCharlie
+    group: OPFOR
+
     accessLevels:
     - AU14AccessOpfor
     - AU14AccessGovfor
@@ -414,6 +419,7 @@
   - type: SquadTeam
     roundStart: true
     color: "#32CD32"
+    group: GOVFOR
     radio: GovforBravo
     accessLevels:
     - AU14AccessGovforSquad
@@ -429,6 +435,8 @@
   components:
   - type: SquadTeam
     roundStart: true
+    group: GOVFOR
+
     color: "#ADFF2F"
     radio: GovforCharlie
     accessLevels:

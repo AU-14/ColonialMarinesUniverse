@@ -68,8 +68,8 @@
 - type: entity
   parent: RMCBasePVEEquipmentCase
   id: RMCPVECaseM5SPR
-  name: M5SPR battle rifle case
-  description: A large case for storing an M5SPR, a modified UNMC battle rifle equipped with HV-P Rounds.
+  name: M5RA battle rifle case
+  description: A large case for storing an M5RA, a modified battle rifle equipped with HV-P Rounds.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Storage/PVE_Cases/rifle.rsi
@@ -131,8 +131,8 @@
 - type: entity
   parent: RMCPVECaseM5SPR
   id: RMCPVECaseM5SPR2
-  name: M5SPR2 battle rifle case
-  description: A large case for storing an M5SPR2, a modified We-Ya PMC battle rifle equipped with HV-P Rounds.
+  name: M5RA/2 battle rifle case
+  description: A large case for storing an M5RA/2, a modified PMC battle rifle equipped with HV-P Rounds.
   components:
   - type: Storage
     whitelist:
@@ -286,8 +286,8 @@
 - type: entity
   parent: RMCBasePVEEquipmentCase
   id: RMCPVECaseFlamerFuel
-  name: M34 fuel canister case
-  description: A heavy case containing six fuel canisters for the M34 incinerator unit.
+  name: M240 fuel canister case
+  description: A heavy case containing six fuel canisters for the M240 incinerator unit.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Storage/PVE_Cases/flamer_fuel.rsi

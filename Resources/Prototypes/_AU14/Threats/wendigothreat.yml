@@ -1,7 +1,5 @@
 - type: threat
   id: wendigoThreat
-  winconditions:
-  - KillAllGovforRule
   roundstartspawns: wendigoParty
 
 - type: partySpawn

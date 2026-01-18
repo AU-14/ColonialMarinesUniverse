@@ -26,6 +26,13 @@ public sealed partial class DepartmentPrototype : IPrototype
     [DataField(required: true)]
     public Color Color;
 
+    /// <summary>
+    /// Optional faction tag for the department. Examples: "govfor", "opfor", "humans" (or null).
+    /// Used by filtered late-join UIs so the department can be shown/hidden by faction.
+    /// </summary>
+    [DataField("faction")]
+    public string? Faction = null;
+
     [DataField, ViewVariables(VVAccess.ReadWrite)]
     public List<ProtoId<JobPrototype>> Roles = new();
 
@@ -50,7 +57,7 @@ public sealed partial class DepartmentPrototype : IPrototype
 }
 
 /// <summary>
-/// Sorts <see cref="DepartmentPrototype"/> appropriately for display in the UI,
+/// Sorts <see cref="DepartmentPrototype"/>s appropriately for display in the UI,
 /// respecting their <see cref="DepartmentPrototype.Weight"/>.
 /// </summary>
 public sealed class DepartmentUIComparer : IComparer<DepartmentPrototype>

@@ -16,7 +16,7 @@
     repeating: true
     objectivelevel: 1
     custompoints: 3
-    maxrepeatable: 10
+    maxrepeatable: 100
     ObjectiveDescription: "kill the enemy"
   - type: KillObjective
     factiontokill: govfor
