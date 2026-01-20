@@ -12,6 +12,8 @@ namespace Content.Shared.AU14.util
         DSPilot,
         DropshipDestination,
         FighterDestination,
+        RequisitionsLift,
+        RequisitionsConsole,
         Arifleman,
         Rifleman,
         Dcc,

@@ -10,6 +10,7 @@ using Content.Shared.AU14.util;
 using Content.Shared.GameTicking.Components;
 using Robust.Client.GameObjects;
 using Robust.Shared.EntitySerialization.Systems;
+using Content.Server._RMC14.Requisitions;
 
 namespace Content.Server.AU14.Round;
 
@@ -24,8 +25,30 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
     [Dependency] private readonly MetaDataSystem _metaData = default!;
 
     // Store selected platoons in the system
-    public PlatoonPrototype? SelectedGovforPlatoon { get; set; }
-    public PlatoonPrototype? SelectedOpforPlatoon { get; set; }
+    private PlatoonPrototype? _selectedGovforPlatoon;
+    public PlatoonPrototype? SelectedGovforPlatoon
+    {
+        get => _selectedGovforPlatoon;
+        set
+        {
+            _selectedGovforPlatoon = value;
+            // Reapply catalogs to any existing requisitions consoles
+            var reqSys = EntityManager.EntitySysManager.GetEntitySystem<RequisitionsSystem>();
+            reqSys?.ReapplyPlatoonCatalogs();
+        }
+    }
+
+    private PlatoonPrototype? _selectedOpforPlatoon;
+    public PlatoonPrototype? SelectedOpforPlatoon
+    {
+        get => _selectedOpforPlatoon;
+        set
+        {
+            _selectedOpforPlatoon = value;
+            var reqSys = EntityManager.EntitySysManager.GetEntitySystem<RequisitionsSystem>();
+            reqSys?.ReapplyPlatoonCatalogs();
+        }
+    }
 
     protected override void Started(EntityUid uid, PlatoonSpawnRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
@@ -47,6 +70,10 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
             govPlatoon = _prototypeManager.Index<PlatoonPrototype>(planetComp.DefaultGovforPlatoon);
         if (opPlatoon == null && !string.IsNullOrEmpty(planetComp.DefaultOpforPlatoon))
             opPlatoon = _prototypeManager.Index<PlatoonPrototype>(planetComp.DefaultOpforPlatoon);
+
+        // Store the resolved selections back onto the system so other systems can access them
+        SelectedGovforPlatoon = govPlatoon;
+        SelectedOpforPlatoon = opPlatoon;
 
         // --- SHIP VENDOR MARKER LOGIC ---
         if ((planetComp.GovforInShip || planetComp.OpforInShip))
@@ -201,6 +228,39 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                         {
                             _entityManager.SpawnEntity(vendorProto.ID, transform.Coordinates);
                         }
+                    }
+
+                    // --- REQUISITIONS CONSOLE / LIFT MARKER LOGIC (shipside) ---
+                    if (markerClass == PlatoonMarkerClass.RequisitionsConsole)
+                    {
+                        string? reqConsoleProto = null;
+                        // Use ship faction directly for ship markers (don't rely on marker govfor/opfor flags)
+                        if (shipFaction.Faction == "govfor")
+                            reqConsoleProto = "CMASRSConsoleGovfor";
+                        else if (shipFaction.Faction == "opfor")
+                            reqConsoleProto = "CMASRSConsoleOpfor";
+
+                        if (reqConsoleProto != null && _prototypeManager.TryIndex(reqConsoleProto, out _))
+                        {
+                            _entityManager.SpawnEntity(reqConsoleProto, transform.Coordinates);
+                        }
+                        continue;
+                    }
+
+                    if (markerClass == PlatoonMarkerClass.RequisitionsLift)
+                    {
+                        string? liftProto = null;
+                        // For ships we can use the ship faction
+                        if (shipFaction.Faction == "govfor")
+                            liftProto = "CMCargoElevatorGovfor";
+                        else if (shipFaction.Faction == "opfor")
+                            liftProto = "CMCargoElevatorOpfor";
+
+                        if (liftProto != null && _prototypeManager.TryIndex(liftProto, out _))
+                        {
+                            _entityManager.SpawnEntity(liftProto, transform.Coordinates);
+                        }
+                        continue;
                     }
                 }
             }

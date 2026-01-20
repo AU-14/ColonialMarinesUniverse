@@ -22,9 +22,8 @@ namespace Content.Shared.AU14.util;
         public string Name { get; private set; } = string.Empty;
 
 
-        [DataField("reqList", required: false)]
-        public string Req { get; private set; } = string.Empty;
-//Curretly reqlist and languge are unused but putting here for future - eg
+        [DataField("reqlist", required: false)]
+        public string Reqlist { get; private set; } = string.Empty;
 
         [DataField("VendorToMarker")]
         public Dictionary<PlatoonMarkerClass, ProtoId<EntityPrototype>> VendorMarkersByClass { get; private set; } = new();
@@ -48,5 +47,6 @@ namespace Content.Shared.AU14.util;
 
         [DataField("compatibleFighters")]
         public List<ResPath> CompatibleFighters { get; private set; } = new();
+
 
     }
