@@ -9,10 +9,10 @@ au14-job-name-opforplatco = Commander
 au14-job-description-opforplatco = Command the unit. Manage strategy, unit coordination and liaise with command from the CIC.
 au14-job-prefix-opforplatco = CMNDR
 
-AU14JobOpforPlatOp = Operations Officer
-au14-job-name-opforplatop = Operations Officer
+AU14JobOpforPlatOp = Junior Officer
+au14-job-name-opforplatop = Junior Officer
 au14-job-description-opforplatop = Assist the Commander with logistics, coordination, and operational oversight.
-au14-job-prefix-opforplatop = OPOF
+au14-job-prefix-opforplatop = JO
 
 AU14JobOpforDSPilot = Dropship Pilot
 au14-job-name-opfordspilot = Dropship Pilot
@@ -53,3 +53,8 @@ AU14JobOpforRadioTelephoneOperator = Radio Operator
 au14-job-name-poforradiotelephoneoperator = Radio Operator
 au14-job-description-opforradiotelephoneoperator = Operate long-range comms. You're the link between command and the boots. Don’t drop it.
 au14-job-prefix-opforradiotelephoneoperator = RTO
+
+AU14JobOPFORAuxSupportSynth = Support Synthetic
+au14-job-name-opforauxsupportsynth = Support Synthetic
+au14-job-description-opforauxsupportsynth = Provide logistics, medical, police and command support for your faction.
+au14-job-prefix-opforauxsupportsynth = SYNTH

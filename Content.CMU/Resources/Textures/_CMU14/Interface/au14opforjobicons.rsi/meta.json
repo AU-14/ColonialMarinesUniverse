@@ -20,7 +20,13 @@
       "name": "opsofc"
     },
     {
+      "name": "advisor"
+    },
+    {
       "name": "platco"
+    },
+    {
+      "name": "synth"
     },
     {
       "name": "platoonsergeant"
