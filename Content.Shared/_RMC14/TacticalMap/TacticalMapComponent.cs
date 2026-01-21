@@ -11,6 +11,9 @@ public sealed partial class TacticalMapComponent : Component
    public TimeSpan NextUpdate = TimeSpan.FromSeconds(1);
 
    [DataField]
+   public string? Faction;
+
+   [DataField]
    public Dictionary<int, TacticalMapBlip> MarineBlips = new();
 
    [DataField]

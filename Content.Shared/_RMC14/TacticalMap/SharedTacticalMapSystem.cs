@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.CCVar;
+﻿﻿using Content.Shared._RMC14.CCVar;
 using Robust.Shared.Configuration;
 
 namespace Content.Shared._RMC14.TacticalMap;
@@ -20,7 +20,7 @@ public abstract class SharedTacticalMapSystem : EntitySystem
 
     private void OnUserOpenAction(Entity<TacticalMapUserComponent> ent, ref OpenTacticalMapActionEvent args)
     {
-        if (TryGetTacticalMap(out var map))
+        if (TryGetTacticalMap(out var map, ent.Comp.Faction))
             UpdateUserData(ent, map);
 
         ToggleMapUI(ent);
@@ -28,19 +28,22 @@ public abstract class SharedTacticalMapSystem : EntitySystem
 
     private void OnUserOpenAlert(Entity<TacticalMapUserComponent> ent, ref OpenTacMapAlertEvent args)
     {
-        if (TryGetTacticalMap(out var map))
+        if (TryGetTacticalMap(out var map, ent.Comp.Faction))
             UpdateUserData(ent, map);
 
         ToggleMapUI(ent);
     }
 
-    public bool TryGetTacticalMap(out Entity<TacticalMapComponent> map)
+    public bool TryGetTacticalMap(out Entity<TacticalMapComponent> map, string? faction = null)
     {
         var query = EntityQueryEnumerator<TacticalMapComponent>();
         while (query.MoveNext(out var uid, out var mapComp))
         {
-            map = (uid, mapComp);
-            return true;
+            if (faction == null || mapComp.Faction == faction)
+            {
+                map = (uid, mapComp);
+                return true;
+            }
         }
 
         map = default;
@@ -49,13 +52,13 @@ public abstract class SharedTacticalMapSystem : EntitySystem
 
     protected void UpdateMapData(Entity<TacticalMapComputerComponent> computer)
     {
-        if (!TryGetTacticalMap(out var map))
+        if (!TryGetTacticalMap(out var map, computer.Comp.Faction))
             return;
 
         UpdateMapData(computer, map);
     }
 
-    protected void UpdateMapData(Entity<TacticalMapComputerComponent> computer, TacticalMapComponent map)
+    protected virtual void UpdateMapData(Entity<TacticalMapComputerComponent> computer, TacticalMapComponent map)
     {
         var ev = new TacticalMapIncludeXenosEvent();
         RaiseLocalEvent(ref ev);
@@ -79,7 +82,7 @@ public abstract class SharedTacticalMapSystem : EntitySystem
         Dirty(computer, lines);
     }
 
-    public void OpenComputerMap(Entity<TacticalMapComputerComponent?> computer, EntityUid user)
+    public virtual void OpenComputerMap(Entity<TacticalMapComputerComponent?> computer, EntityUid user)
     {
         if (!Resolve(computer, ref computer.Comp, false))
             return;

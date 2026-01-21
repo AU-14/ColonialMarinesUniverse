@@ -13,6 +13,9 @@ public sealed partial class TacticalMapComputerComponent : Component
     public EntityUid? Map;
 
     [DataField, AutoNetworkedField]
+    public string? Faction;
+
+    [DataField, AutoNetworkedField]
     public Dictionary<int, TacticalMapBlip> Blips = new();
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]

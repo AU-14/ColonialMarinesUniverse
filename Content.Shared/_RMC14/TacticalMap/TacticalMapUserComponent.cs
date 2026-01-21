@@ -21,6 +21,9 @@ public sealed partial class TacticalMapUserComponent : Component
     public EntityUid? Map;
 
     [DataField, AutoNetworkedField]
+    public string? Faction;
+
+    [DataField, AutoNetworkedField]
     public bool LiveUpdate;
 
     [DataField, AutoNetworkedField]

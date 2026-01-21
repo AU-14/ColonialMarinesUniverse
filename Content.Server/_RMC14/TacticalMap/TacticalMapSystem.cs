@@ -134,6 +134,10 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
                 subs.Event<BoundUIClosedEvent>(OnUserBUIClosed);
                 subs.Event<TacticalMapUpdateCanvasMsg>(OnUserUpdateCanvasMsg);
                 subs.Event<TacticalMapQueenEyeMoveMsg>(OnUserQueenEyeMoveMsg);
+                subs.Event<TacticalMapCreateLabelMsg>(OnUserCreateLabelMsg);
+                subs.Event<TacticalMapEditLabelMsg>(OnUserEditLabelMsg);
+                subs.Event<TacticalMapDeleteLabelMsg>(OnUserDeleteLabelMsg);
+                subs.Event<TacticalMapMoveLabelMsg>(OnUserMoveLabelMsg);
             });
 
         Subs.BuiEvents<TacticalMapComputerComponent>(TacticalMapComputerUi.Key,
@@ -141,6 +145,10 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
             {
                 subs.Event<BoundUIOpenedEvent>(OnComputerBUIOpened);
                 subs.Event<TacticalMapUpdateCanvasMsg>(OnComputerUpdateCanvasMsg);
+                subs.Event<TacticalMapCreateLabelMsg>(OnComputerCreateLabelMsg);
+                subs.Event<TacticalMapEditLabelMsg>(OnComputerEditLabelMsg);
+                subs.Event<TacticalMapDeleteLabelMsg>(OnComputerDeleteLabelMsg);
+                subs.Event<TacticalMapMoveLabelMsg>(OnComputerMoveLabelMsg);
             });
 
         Subs.CVar(_config,
@@ -184,15 +192,21 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         var users = EntityQueryEnumerator<TacticalMapUserComponent>();
         while (users.MoveNext(out var userId, out var userComp))
         {
-            userComp.Map = ent;
-            Dirty(userId, userComp);
+            if (userComp.Faction == ent.Comp.Faction)
+            {
+                userComp.Map = ent;
+                Dirty(userId, userComp);
+            }
         }
 
         var computers = EntityQueryEnumerator<TacticalMapComputerComponent>();
         while (computers.MoveNext(out var computerId, out var computerComp))
         {
-            computerComp.Map = ent;
-            Dirty(computerId, computerComp);
+            if (computerComp.Faction == ent.Comp.Faction)
+            {
+                computerComp.Map = ent;
+                Dirty(computerId, computerComp);
+            }
         }
     }
 
@@ -200,7 +214,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
     {
         _actions.AddAction(ent, ref ent.Comp.Action, ent.Comp.ActionId);
 
-        if (TryGetTacticalMap(out var map))
+        if (TryGetTacticalMap(out var map, ent.Comp.Faction))
             ent.Comp.Map = map;
 
         Dirty(ent);
@@ -208,7 +222,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
 
     private void OnComputerMapInit(Entity<TacticalMapComputerComponent> ent, ref MapInitEvent args)
     {
-        if (TryGetTacticalMap(out var map))
+        if (TryGetTacticalMap(out var map, ent.Comp.Faction))
             ent.Comp.Map = map;
 
         Dirty(ent);
@@ -401,10 +415,10 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         Dirty(ent);
 
         if (ent.Comp.Marines)
-            UpdateCanvas(lines, labels, true, false, user, ent.Comp.Sound);
+            UpdateCanvas(lines, labels, true, false, user, ent.Comp.Map, ent.Comp.Sound);
 
         if (ent.Comp.Xenos)
-            UpdateCanvas(lines, labels, false, true, user, ent.Comp.Sound);
+            UpdateCanvas(lines, labels, false, true, user, ent.Comp.Map, ent.Comp.Sound);
     }
 
     private void OnComputerUpdateCanvasMsg(Entity<TacticalMapComputerComponent> ent, ref TacticalMapUpdateCanvasMsg args)
@@ -430,12 +444,15 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         var computers = EntityQueryEnumerator<TacticalMapComputerComponent>();
         while (computers.MoveNext(out var uid, out var computer))
         {
+            if (computer.Faction != ent.Comp.Faction)
+                continue;
+
             computer.LastAnnounceAt = time;
             computer.NextAnnounceAt = nextAnnounce;
             Dirty(uid, computer);
         }
 
-        UpdateCanvas(lines, labels, true, false, user);
+        UpdateCanvas(lines, labels, true, false, user, ent.Comp.Map);
     }
 
     private void OnUserCreateLabelMsg(Entity<TacticalMapUserComponent> ent, ref TacticalMapCreateLabelMsg args)
@@ -449,10 +466,10 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
             return;
 
         if (ent.Comp.Marines)
-            UpdateIndividualLabel(args.Position, args.Text, true, false, user, LabelOperation.Create);
+            UpdateIndividualLabel(args.Position, args.Text, true, false, user, ent.Comp.Map, LabelOperation.Create);
 
         if (ent.Comp.Xenos)
-            UpdateIndividualLabel(args.Position, args.Text, false, true, user, LabelOperation.Create);
+            UpdateIndividualLabel(args.Position, args.Text, false, true, user, ent.Comp.Map, LabelOperation.Create);
     }
 
     private void OnUserEditLabelMsg(Entity<TacticalMapUserComponent> ent, ref TacticalMapEditLabelMsg args)
@@ -466,10 +483,10 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
             return;
 
         if (ent.Comp.Marines)
-            UpdateIndividualLabel(args.Position, args.NewText, true, false, user, LabelOperation.Edit);
+            UpdateIndividualLabel(args.Position, args.NewText, true, false, user, ent.Comp.Map, LabelOperation.Edit);
 
         if (ent.Comp.Xenos)
-            UpdateIndividualLabel(args.Position, args.NewText, false, true, user, LabelOperation.Edit);
+            UpdateIndividualLabel(args.Position, args.NewText, false, true, user, ent.Comp.Map, LabelOperation.Edit);
     }
 
     private void OnUserDeleteLabelMsg(Entity<TacticalMapUserComponent> ent, ref TacticalMapDeleteLabelMsg args)
@@ -483,10 +500,10 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
             return;
 
         if (ent.Comp.Marines)
-            UpdateIndividualLabel(args.Position, string.Empty, true, false, user, LabelOperation.Delete);
+            UpdateIndividualLabel(args.Position, string.Empty, true, false, user, ent.Comp.Map, LabelOperation.Delete);
 
         if (ent.Comp.Xenos)
-            UpdateIndividualLabel(args.Position, string.Empty, false, true, user, LabelOperation.Delete);
+            UpdateIndividualLabel(args.Position, string.Empty, false, true, user, ent.Comp.Map, LabelOperation.Delete);
     }
 
     private void OnUserMoveLabelMsg(Entity<TacticalMapUserComponent> ent, ref TacticalMapMoveLabelMsg args)
@@ -500,10 +517,10 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
             return;
 
         if (ent.Comp.Marines)
-            UpdateMoveLabel(args.OldPosition, args.NewPosition, true, false, user);
+            UpdateMoveLabel(args.OldPosition, args.NewPosition, true, false, user, ent.Comp.Map);
 
         if (ent.Comp.Xenos)
-            UpdateMoveLabel(args.OldPosition, args.NewPosition, false, true, user);
+            UpdateMoveLabel(args.OldPosition, args.NewPosition, false, true, user, ent.Comp.Map);
     }
 
     private void OnComputerCreateLabelMsg(Entity<TacticalMapComputerComponent> ent, ref TacticalMapCreateLabelMsg args)
@@ -516,7 +533,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         if (time < ent.Comp.NextAnnounceAt)
             return;
 
-        UpdateIndividualLabel(args.Position, args.Text, true, false, user, LabelOperation.Create);
+        UpdateIndividualLabel(args.Position, args.Text, true, false, user, ent.Comp.Map, LabelOperation.Create);
     }
 
     private void OnComputerEditLabelMsg(Entity<TacticalMapComputerComponent> ent, ref TacticalMapEditLabelMsg args)
@@ -529,7 +546,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         if (time < ent.Comp.NextAnnounceAt)
             return;
 
-        UpdateIndividualLabel(args.Position, args.NewText, true, false, user, LabelOperation.Edit);
+        UpdateIndividualLabel(args.Position, args.NewText, true, false, user, ent.Comp.Map, LabelOperation.Edit);
     }
 
     private void OnComputerDeleteLabelMsg(Entity<TacticalMapComputerComponent> ent, ref TacticalMapDeleteLabelMsg args)
@@ -542,7 +559,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         if (time < ent.Comp.NextAnnounceAt)
             return;
 
-        UpdateIndividualLabel(args.Position, string.Empty, true, false, user, LabelOperation.Delete);
+        UpdateIndividualLabel(args.Position, string.Empty, true, false, user, ent.Comp.Map, LabelOperation.Delete);
     }
 
     private void OnComputerMoveLabelMsg(Entity<TacticalMapComputerComponent> ent, ref TacticalMapMoveLabelMsg args)
@@ -555,7 +572,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         if (time < ent.Comp.NextAnnounceAt)
             return;
 
-        UpdateMoveLabel(args.OldPosition, args.NewPosition, true, false, user);
+        UpdateMoveLabel(args.OldPosition, args.NewPosition, true, false, user, ent.Comp.Map);
     }
 
     private enum LabelOperation
@@ -596,7 +613,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         _transform.SetWorldPosition(eye, worldPos.Position);
     }
 
-    public void OpenComputerMap(Entity<TacticalMapComputerComponent?> computer, EntityUid user)
+    public override void OpenComputerMap(Entity<TacticalMapComputerComponent?> computer, EntityUid user)
     {
         if (!Resolve(computer, ref computer.Comp, false))
             return;
@@ -606,79 +623,77 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         UpdateTacticalMapComputerState((computer.Owner, computer.Comp));
     }
 
-    private void UpdateIndividualLabel(Vector2i position, string text, bool marine, bool xeno, EntityUid user, LabelOperation operation)
+    private void UpdateIndividualLabel(Vector2i position, string text, bool marine, bool xeno, EntityUid user, EntityUid? mapId, LabelOperation operation)
     {
-        var maps = EntityQueryEnumerator<TacticalMapComponent>();
-        while (maps.MoveNext(out var mapId, out var map))
+        if (mapId == null || !_tacticalMapQuery.TryComp(mapId, out var map))
+            return;
+
+        map.MapDirty = true;
+
+        if (marine)
         {
-            map.MapDirty = true;
-
-            if (marine)
+            switch (operation)
             {
-                switch (operation)
-                {
-                    case LabelOperation.Create:
-                    case LabelOperation.Edit:
-                        if (string.IsNullOrWhiteSpace(text))
-                            map.MarineLabels.Remove(position);
-                        else
-                            map.MarineLabels[position] = text;
-                        break;
-                    case LabelOperation.Delete:
+                case LabelOperation.Create:
+                case LabelOperation.Edit:
+                    if (string.IsNullOrWhiteSpace(text))
                         map.MarineLabels.Remove(position);
-                        break;
-                }
-
-                _adminLog.Add(LogType.RMCTacticalMapUpdated,
-                    $"{ToPrettyString(user)} {operation.ToString().ToLower()}d a marine tactical map label at {position} for {ToPrettyString(mapId)}");
+                    else
+                        map.MarineLabels[position] = text;
+                    break;
+                case LabelOperation.Delete:
+                    map.MarineLabels.Remove(position);
+                    break;
             }
 
-            if (xeno)
+            _adminLog.Add(LogType.RMCTacticalMapUpdated,
+                $"{ToPrettyString(user)} {operation.ToString().ToLower()}d a marine tactical map label at {position} for {ToPrettyString(mapId.Value)}");
+        }
+
+        if (xeno)
+        {
+            switch (operation)
             {
-                switch (operation)
-                {
-                    case LabelOperation.Create:
-                    case LabelOperation.Edit:
-                        if (string.IsNullOrWhiteSpace(text))
-                            map.XenoLabels.Remove(position);
-                        else
-                            map.XenoLabels[position] = text;
-                        break;
-                    case LabelOperation.Delete:
+                case LabelOperation.Create:
+                case LabelOperation.Edit:
+                    if (string.IsNullOrWhiteSpace(text))
                         map.XenoLabels.Remove(position);
-                        break;
-                }
-
-                _adminLog.Add(LogType.RMCTacticalMapUpdated,
-                    $"{ToPrettyString(user)} {operation.ToString().ToLower()}d a xenonid tactical map label at {position} for {ToPrettyString(mapId)}");
+                    else
+                        map.XenoLabels[position] = text;
+                    break;
+                case LabelOperation.Delete:
+                    map.XenoLabels.Remove(position);
+                    break;
             }
+
+            _adminLog.Add(LogType.RMCTacticalMapUpdated,
+                $"{ToPrettyString(user)} {operation.ToString().ToLower()}d a xenonid tactical map label at {position} for {ToPrettyString(mapId.Value)}");
         }
     }
 
-    private void UpdateMoveLabel(Vector2i oldPosition, Vector2i newPosition, bool marine, bool xeno, EntityUid user)
+    private void UpdateMoveLabel(Vector2i oldPosition, Vector2i newPosition, bool marine, bool xeno, EntityUid user, EntityUid? mapId)
     {
-        var maps = EntityQueryEnumerator<TacticalMapComponent>();
-        while (maps.MoveNext(out var mapId, out var map))
+        if (mapId == null || !_tacticalMapQuery.TryComp(mapId, out var map))
+            return;
+
+        map.MapDirty = true;
+
+        if (marine && map.MarineLabels.TryGetValue(oldPosition, out var marineText))
         {
-            map.MapDirty = true;
+            map.MarineLabels.Remove(oldPosition);
+            map.MarineLabels[newPosition] = marineText;
 
-            if (marine && map.MarineLabels.TryGetValue(oldPosition, out var marineText))
-            {
-                map.MarineLabels.Remove(oldPosition);
-                map.MarineLabels[newPosition] = marineText;
+            _adminLog.Add(LogType.RMCTacticalMapUpdated,
+                $"{ToPrettyString(user)} moved a marine tactical map label from {oldPosition} to {newPosition} for {ToPrettyString(mapId.Value)}");
+        }
 
-                _adminLog.Add(LogType.RMCTacticalMapUpdated,
-                    $"{ToPrettyString(user)} moved a marine tactical map label from {oldPosition} to {newPosition} for {ToPrettyString(mapId)}");
-            }
+        if (xeno && map.XenoLabels.TryGetValue(oldPosition, out var xenoText))
+        {
+            map.XenoLabels.Remove(oldPosition);
+            map.XenoLabels[newPosition] = xenoText;
 
-            if (xeno && map.XenoLabels.TryGetValue(oldPosition, out var xenoText))
-            {
-                map.XenoLabels.Remove(oldPosition);
-                map.XenoLabels[newPosition] = xenoText;
-
-                _adminLog.Add(LogType.RMCTacticalMapUpdated,
-                    $"{ToPrettyString(user)} moved a xenonid tactical map label from {oldPosition} to {newPosition} for {ToPrettyString(mapId)}");
-            }
+            _adminLog.Add(LogType.RMCTacticalMapUpdated,
+                $"{ToPrettyString(user)} moved a xenonid tactical map label from {oldPosition} to {newPosition} for {ToPrettyString(mapId.Value)}");
         }
     }
 
@@ -728,13 +743,21 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
 
     private void BreakTracking(Entity<ActiveTacticalMapTrackedComponent> tracked)
     {
-        if (!_tacticalMapQuery.TryComp(tracked.Comp.Map, out var tacticalMap))
+        if (tracked.Comp.Map is not { } mapGrid)
             return;
 
-        tacticalMap.MarineBlips.Remove(tracked.Owner.Id);
-        tacticalMap.XenoBlips.Remove(tracked.Owner.Id);
-        tacticalMap.XenoStructureBlips.Remove(tracked.Owner.Id);
-        tacticalMap.MapDirty = true;
+        var maps = EntityQueryEnumerator<TacticalMapComponent>();
+        while (maps.MoveNext(out var mapId, out var map))
+        {
+            if (mapId != mapGrid && _transformQuery.TryComp(mapId, out var xform) && xform.GridUid != mapGrid)
+                continue;
+
+            map.MarineBlips.Remove(tracked.Owner.Id);
+            map.XenoBlips.Remove(tracked.Owner.Id);
+            map.XenoStructureBlips.Remove(tracked.Owner.Id);
+            map.MapDirty = true;
+        }
+
         tracked.Comp.Map = null;
     }
 
@@ -810,7 +833,6 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         if (!_transformQuery.TryComp(ent.Owner, out var xform) ||
             xform.GridUid is not { } gridId ||
             !_mapGridQuery.TryComp(gridId, out var gridComp) ||
-            !_tacticalMapQuery.TryComp(gridId, out var tacticalMap) ||
             !_transform.TryGetGridTilePosition((ent.Owner, xform), out var indices, gridComp))
         {
             BreakTracking(ent);
@@ -826,10 +848,10 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
             return;
         }
 
-        if (ent.Comp.Map != xform.GridUid)
+        if (ent.Comp.Map != gridId)
         {
             BreakTracking(ent);
-            ent.Comp.Map = xform.GridUid;
+            ent.Comp.Map = gridId;
         }
 
         var status = TacticalMapBlipStatus.Alive;
@@ -849,23 +871,36 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         }
 
         var blip = new TacticalMapBlip(indices, icon, ent.Comp.Color, status, ent.Comp.Background, ent.Comp.HiveLeader);
-        if (_marineMapTrackedQuery.HasComp(ent))
+
+        bool foundMap = false;
+        var maps = EntityQueryEnumerator<TacticalMapComponent>();
+        while (maps.MoveNext(out var mapId, out var tacticalMap))
         {
-            tacticalMap.MarineBlips[ent.Owner.Id] = blip;
-            tacticalMap.MapDirty = true;
+            if (mapId != gridId && _transformQuery.TryComp(mapId, out var mapXform) && mapXform.GridUid != gridId)
+                continue;
+
+            foundMap = true;
+            if (_marineMapTrackedQuery.HasComp(ent))
+            {
+                tacticalMap.MarineBlips[ent.Owner.Id] = blip;
+                tacticalMap.MapDirty = true;
+            }
+
+            if (_xenoMapTrackedQuery.HasComp(ent))
+            {
+                tacticalMap.XenoBlips[ent.Owner.Id] = blip;
+                tacticalMap.MapDirty = true;
+            }
+
+            if (_xenoStructureMapTrackedQuery.HasComp(ent))
+            {
+                tacticalMap.XenoStructureBlips[ent.Owner.Id] = blip;
+                tacticalMap.MapDirty = true;
+            }
         }
 
-        if (_xenoMapTrackedQuery.HasComp(ent))
-        {
-            tacticalMap.XenoBlips[ent.Owner.Id] = blip;
-            tacticalMap.MapDirty = true;
-        }
-
-        if (_xenoStructureMapTrackedQuery.HasComp(ent))
-        {
-            tacticalMap.XenoStructureBlips[ent.Owner.Id] = blip;
-            tacticalMap.MapDirty = true;
-        }
+        if (!foundMap)
+            BreakTracking(ent);
     }
 
     public override void UpdateUserData(Entity<TacticalMapUserComponent> user, TacticalMapComponent map)
@@ -956,49 +991,48 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         return null;
     }
 
-    private void UpdateCanvas(List<TacticalMapLine> lines, Dictionary<Vector2i, string> labels, bool marine, bool xeno, EntityUid user, SoundSpecifier? sound = null)
+    private void UpdateCanvas(List<TacticalMapLine> lines, Dictionary<Vector2i, string> labels, bool marine, bool xeno, EntityUid user, EntityUid? mapId, SoundSpecifier? sound = null)
     {
-        var maps = EntityQueryEnumerator<TacticalMapComponent>();
-        while (maps.MoveNext(out var mapId, out var map))
+        if (mapId == null || !_tacticalMapQuery.TryComp(mapId, out var map))
+            return;
+
+        map.MapDirty = true;
+
+        if (marine)
         {
-            map.MapDirty = true;
+            map.MarineLines = lines;
+            map.MarineLabels = new Dictionary<Vector2i, string>(labels);
+            map.LastUpdateMarineBlips = map.MarineBlips.ToDictionary();
 
-            if (marine)
+            var includeEv = new TacticalMapIncludeXenosEvent();
+            RaiseLocalEvent(ref includeEv);
+            if (includeEv.Include)
             {
-                map.MarineLines = lines;
-                map.MarineLabels = new Dictionary<Vector2i, string>(labels);
-                map.LastUpdateMarineBlips = map.MarineBlips.ToDictionary();
-
-                var includeEv = new TacticalMapIncludeXenosEvent();
-                RaiseLocalEvent(ref includeEv);
-                if (includeEv.Include)
+                foreach (var blip in map.XenoBlips)
                 {
-                    foreach (var blip in map.XenoBlips)
-                    {
-                        map.LastUpdateMarineBlips.TryAdd(blip.Key, blip.Value);
-                    }
+                    map.LastUpdateMarineBlips.TryAdd(blip.Key, blip.Value);
                 }
-
-                _marineAnnounce.AnnounceARESStaging(user, "The UNMC tactical map has been updated.", sound);
-                _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the marine tactical map for {ToPrettyString(mapId)}");
             }
 
-            if (xeno)
-            {
-                map.XenoLines = lines;
-                map.XenoLabels = new Dictionary<Vector2i, string>(labels);
-                map.LastUpdateXenoBlips = map.XenoBlips.ToDictionary();
-                map.LastUpdateXenoStructureBlips = map.XenoStructureBlips.ToDictionary();
-                _xenoAnnounce.AnnounceSameHive(user, "The Xenonid tactical map has been updated.", sound);
-                _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the xenonid tactical map for {ToPrettyString(mapId)}");
-            }
-
-            var ev = new TacticalMapUpdatedEvent(lines.ToList(), user);
-            RaiseLocalEvent(ref ev);
+            _marineAnnounce.AnnounceARESStaging(user, "The UNMC tactical map has been updated.", sound);
+            _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the marine tactical map for {ToPrettyString(mapId.Value)}");
         }
+
+        if (xeno)
+        {
+            map.XenoLines = lines;
+            map.XenoLabels = new Dictionary<Vector2i, string>(labels);
+            map.LastUpdateXenoBlips = map.XenoBlips.ToDictionary();
+            map.LastUpdateXenoStructureBlips = map.XenoStructureBlips.ToDictionary();
+            _xenoAnnounce.AnnounceSameHive(user, "The Xenonid tactical map has been updated.", sound);
+            _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the xenonid tactical map for {ToPrettyString(mapId.Value)}");
+        }
+
+        var ev = new TacticalMapUpdatedEvent(lines.ToList(), user);
+        RaiseLocalEvent(ref ev);
     }
 
-    protected void UpdateMapData(Entity<TacticalMapComputerComponent> computer, TacticalMapComponent map)
+    protected override void UpdateMapData(Entity<TacticalMapComputerComponent> computer, TacticalMapComponent map)
     {
         var ev = new TacticalMapIncludeXenosEvent();
         RaiseLocalEvent(ref ev);
