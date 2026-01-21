@@ -11,6 +11,7 @@ using Content.Shared.GameTicking.Components;
 using Robust.Client.GameObjects;
 using Robust.Shared.EntitySerialization.Systems;
 using Content.Server._RMC14.Requisitions;
+using Content.Shared._RMC14.Telephone;
 
 namespace Content.Server.AU14.Round;
 
@@ -81,6 +82,9 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
             foreach (var (shipUid, shipFaction) in _entityManager.EntityQuery<ShipFactionComponent>(true)
                          .Select(s => (s.Owner, s)))
             {
+                    // Ensure any existing rotary phones that belong to this ship inherit the ship faction
+                    if (!string.IsNullOrEmpty(shipFaction.Faction))
+                        SetPhonesFactionForParent(shipUid, shipFaction.Faction);
                 PlatoonPrototype? shipPlatoon = null;
                 if (shipFaction.Faction == "govfor" && planetComp.GovforInShip && govPlatoon != null)
                     shipPlatoon = govPlatoon;
@@ -206,7 +210,7 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
 
                     if (markerClass == PlatoonMarkerClass.DropshipDestination)
                     {
-                        string dropshipDestinationProtoId = "CMDropshipDestination";
+                        string dropshipDestinationProtoId = "CMDropshipDestinationHome";
                         var dropshipEntity = _entityManager.SpawnEntity(dropshipDestinationProtoId, transform.Coordinates);
                         // Inherit the metadata name from the marker
                         if (_entityManager.TryGetComponent<MetaDataComponent>(markerUid, out var markerMeta) &&
@@ -226,7 +230,15 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                     {
                         if (_prototypeManager.TryIndex<EntityPrototype>(vendorProtoId, out var vendorProto))
                         {
-                            _entityManager.SpawnEntity(vendorProto.ID, transform.Coordinates);
+                            var spawned = _entityManager.SpawnEntity(vendorProto.ID, transform.Coordinates);
+                            if (_entityManager.TryGetComponent<RotaryPhoneComponent>(spawned, out var spawnedPhone))
+                            {
+                                if (!string.IsNullOrEmpty(shipFaction.Faction))
+                                {
+                                    spawnedPhone.Faction = shipFaction.Faction;
+                                    Dirty(spawned, spawnedPhone);
+                                }
+                            }
                         }
                     }
 
@@ -339,8 +351,13 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                 continue;
             if (!_prototypeManager.TryIndex<EntityPrototype>(vendorProtoId, out var vendorProto))
                 continue;
-            _entityManager.SpawnEntity(vendorProto.ID, transform.Coordinates);
-            usedMarkers.Add(markerUid);
+            var spawnedEnt = _entityManager.SpawnEntity(vendorProto.ID, transform.Coordinates);
+            if (_entityManager.TryGetComponent<RotaryPhoneComponent>(spawnedEnt, out var spawnedPhone2))
+            {
+                spawnedPhone2.Faction = marker.Govfor ? "govfor" : "opfor";
+                Dirty(spawnedEnt, spawnedPhone2);
+            }
+             usedMarkers.Add(markerUid);
         }
 
         // --- DROPSHIP & FIGHTER CONSOLE SPAWNING LOGIC ---
@@ -385,6 +402,44 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                 }
             }
             return result;
+        }
+
+        void SetPhonesFactionOnGrid(EntityUid grid, string faction)
+        {
+            var query = _entityManager.EntityQuery<RotaryPhoneComponent>(true);
+            foreach (var phoneComp in query)
+            {
+                var phoneUid = phoneComp.Owner;
+                if (!_entityManager.TryGetComponent<TransformComponent>(phoneUid, out var phoneTransform))
+                    continue;
+                if (phoneTransform.GridUid == grid)
+                {
+                    phoneComp.Faction = faction;
+                    Dirty(phoneUid, phoneComp);
+                }
+            }
+        }
+
+        // Helper: Set faction for all phones that are parented to a given entity (or share its grid)
+        void SetPhonesFactionForParent(EntityUid parent, string faction)
+        {
+            if (!_entityManager.TryGetComponent<TransformComponent>(parent, out var parentTransform))
+                return;
+
+            var parentGrid = parentTransform.GridUid;
+            var query = _entityManager.EntityQuery<RotaryPhoneComponent>(true);
+            foreach (var phoneComp in query)
+            {
+                var phoneUid = phoneComp.Owner;
+                if (!_entityManager.TryGetComponent<TransformComponent>(phoneUid, out var phoneTransform))
+                    continue;
+
+                if (phoneTransform.ParentUid == parent || phoneTransform.GridUid == parentGrid)
+                {
+                    phoneComp.Faction = faction;
+                    Dirty(phoneUid, phoneComp);
+                }
+            }
         }
 
         // Helper: Find a navigation computer on a grid
@@ -433,6 +488,8 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                 {
                     var gridMapId = _entityManager.GetComponent<TransformComponent>(grid).MapID;
                     _mapSystem.InitializeMap(gridMapId);
+                    // Ensure any existing rotary phones on this grid inherit the platoon faction
+                    SetPhonesFactionOnGrid(grid, faction);
                     var navMarkers = FindMarkersOnGrid(grid, "dropshipshuttlevmarker");
                     if (navMarkers.Count > 0)
                     {
@@ -488,6 +545,8 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                 foreach (var grid in grids)
                 {
                     loadedFighterGrids.Add(grid);
+                    // Ensure any existing rotary phones on this fighter grid inherit the platoon faction
+                    SetPhonesFactionOnGrid(grid, faction);
                     var fighterMarkers = FindMarkersOnGrid(grid, "dropshipfighterdestmarker");
                     if (fighterMarkers.Count > 0)
                     {
