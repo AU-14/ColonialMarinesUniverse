@@ -12,6 +12,7 @@ using Robust.Client.GameObjects;
 using Robust.Shared.EntitySerialization.Systems;
 using Content.Server._RMC14.Requisitions;
 using Content.Shared._RMC14.Telephone;
+using Content.Shared._RMC14.Ladder;
 
 namespace Content.Server.AU14.Round;
 
@@ -420,6 +421,29 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
             }
         }
 
+        // New helper: offset ladder ids found on a grid by an integer offset (e.g., +100)
+        void OffsetLaddersOnGrid(EntityUid grid, int offset)
+        {
+            // Iterate all ladder components and adjust those on the target grid
+            foreach (var ladderComp in _entityManager.EntityQuery<LadderComponent>(true))
+            {
+                var ladderUid = ladderComp.Owner;
+                if (!_entityManager.TryGetComponent<TransformComponent>(ladderUid, out var ladderTransform))
+                    continue;
+                if (ladderTransform.GridUid != grid)
+                    continue;
+                if (ladderComp.Id == null)
+                    continue;
+
+                // Try to parse numeric id, otherwise skip
+                if (int.TryParse(ladderComp.Id, out var numeric))
+                {
+                    ladderComp.Id = (numeric + offset).ToString();
+                    Dirty(ladderUid, ladderComp);
+                }
+            }
+        }
+
         // Helper: Set faction for all phones that are parented to a given entity (or share its grid)
         void SetPhonesFactionForParent(EntityUid parent, string faction)
         {
@@ -490,6 +514,14 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                     _mapSystem.InitializeMap(gridMapId);
                     // Ensure any existing rotary phones on this grid inherit the platoon faction
                     SetPhonesFactionOnGrid(grid, faction);
+
+                    // Offset ladder IDs on opfor ships to avoid duplicate numeric IDs when the same ship/map
+                    // is loaded multiple times (adds 100 to numeric ladder IDs, e.g. "2" -> "102").
+                    if (faction == "opfor" && planetComp != null && planetComp.OpforInShip)
+                    {
+                        OffsetLaddersOnGrid(grid, 100);
+                    }
+
                     var navMarkers = FindMarkersOnGrid(grid, "dropshipshuttlevmarker");
                     if (navMarkers.Count > 0)
                     {
@@ -547,6 +579,13 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                     loadedFighterGrids.Add(grid);
                     // Ensure any existing rotary phones on this fighter grid inherit the platoon faction
                     SetPhonesFactionOnGrid(grid, faction);
+
+                    // Offset ladder IDs on opfor ships (fighters) as well
+                    if (faction == "opfor" && planetComp != null && planetComp.OpforInShip)
+                    {
+                        OffsetLaddersOnGrid(grid, 100);
+                    }
+
                     var fighterMarkers = FindMarkersOnGrid(grid, "dropshipfighterdestmarker");
                     if (fighterMarkers.Count > 0)
                     {
