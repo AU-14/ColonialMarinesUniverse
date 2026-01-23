@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/items/weapons/guns/guns_by_faction/TWE/assault_rifles.dmi, edited aug_dmr_e and aug_dmr",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "verticalgrip"
+    },
+    {
+      "name": "verticalgrip_a"
+    },
+    {
+      "name": "masterkey-on"
+    },
+    {
+      "name": "masterkey"
+    },
+        {
+      "name": "masterkey_a"
+    }
+  ]
+}
