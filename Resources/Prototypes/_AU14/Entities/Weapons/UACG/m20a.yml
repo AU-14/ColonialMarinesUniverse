@@ -6,12 +6,16 @@
   suffix: Filled
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/UACG/m20a.rsi
+    sprite: _AU14/Weapons/Guns/UACG/m20a38x32.rsi
     layers:
     - state: base
-      map: [ "enum.GunVisualLayers.Base" ]
+      map: ["enum.GunVisualLayers.Base"]
     - state: mag-0
-      map: [ "enum.GunVisualLayers.Mag" ]
+      map: ["enum.GunVisualLayers.Mag"]
+      shader: unshaded
+  - type: Item
+    sprite: _AU14/Weapons/Guns/UACG/m20a.rsi
+    size: Large
   - type: Clothing
     sprite: _AU14/Weapons/Guns/UACG/m20a.rsi
   - type: Gun
@@ -26,11 +30,11 @@
     baseFireModes:
     - SemiAuto
     - Burst
-    recoilUnwielded: 3
-    scatterWielded: 3
+    recoilUnwielded: 4
+    scatterWielded: 6
     scatterUnwielded: 20
-    baseFireRate: 5
-    burstScatterMult: 2
+    baseFireRate: 3.5
+    burstScatterMult: 1
     modifiers:
       Burst:
         fireDelay: 0.1665
@@ -55,8 +59,27 @@
   - type: GunDamageModifier
     multiplier: 1.4
   - type: RMCWeaponAccuracy
-    accuracyMultiplier: 1.4
-    accuracyMultiplierUnwielded: 0.5
+    accuracyMultiplier: 1.3
+    accuracyMultiplierUnwielded: 0.65
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+      rmc-aslot-underbarrel:
+        locked: true
+        startingAttachable: AU14AttachmentM20AUnderbarrelShotgun
+        whitelist:
+          tags:
+          - AU14AttachmentM20AUnderbarrelShotgun
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.75, 0.03
+      rmc-aslot-rail: -0.21, 0.13
+      rmc-aslot-stock: -0.78, 0.0325
+      rmc-aslot-underbarrel: 0.28, -0.343
 
 - type: entity
   parent: CMMagazineRifleBase
@@ -125,3 +148,77 @@
 
 - type: Tag
   id: AU14CartridgeRifleM20A
+
+- type: entity
+  parent: [ RMCUnderAttachmentBase, RMCAttachableToggleableBase ]
+  id: AU14AttachmentM20AUnderbarrelShotgun
+  name: M20A underbarrel shotgun
+  components:
+  - type: Sprite
+    state: masterkeygone
+  - type: Tag
+    tags:
+    - RMCAttachmentUnderbarrel
+    - AU14AttachmentM20AUnderbarrelShotgun
+  - type: Item
+    size: Normal
+  - type: Gun
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_shotgun_u7.ogg
+      params:
+        volume: -2
+  - type: RMCSelectiveFire
+    baseFireRate: 0.476
+  - type: GunDamageModifier
+    multiplier: 0.85
+  - type: RMCExtraProjectilesDamageMods
+    damageMultiplier: 0.36
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+  - type: RMCAmmoEject
+    containerID: ballistic-ammo
+    ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      tags:
+      - RMCShellShotgunBuckshot
+    capacity: 5
+    proto: CMShellShotgunBuckshot
+    soundInsert:
+      path: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+  - type: GunDamageMultipliers
+    multipliers:
+      Turf: 5
+      Breaching: 10.8
+  - type: UseDelay
+  - type: RMCWeaponAccuracy
+  - type: GunPointBlank
+  - type: AttachableToggleable
+    userOnly: true
+    attachedOnly: true
+    supercedeHolder: true
+    wieldedUseOnly: true
+    activatePopupText: attachable-popup-switch-to-generic
+    deactivatePopupText: attachable-popup-switch-from-generic
+    activateSound:
+      path: /Audio/_RMC14/Attachable/gun_u7_activate.ogg
+      params:
+        volume: -2
+    actionName: Switch to the U7 underbarrel shotgun
+    actionDesc: Switch to using the underbarrel shotgun.
+    icon:
+      sprite: _AU14/Weapons/Guns/Attachments/under.rsi
+      state: masterkeyicon
+    iconActive:
+      sprite: _AU14/Weapons/Guns/Attachments/under.rsi
+      state: masterkey-on
+  - type: AttachableVisuals
+  - type: WieldedCrosshair
+    rsi:
+      sprite: _RMC14/Interface/MousePointer/shotgun_mouse.rsi
+      state: all
+
+- type: Tag
+  id: AU14AttachmentM20AUnderbarrelShotgun

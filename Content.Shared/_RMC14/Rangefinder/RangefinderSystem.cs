@@ -1,6 +1,7 @@
 ﻿using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Inventory;
+using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Rules;
@@ -208,7 +209,14 @@ public sealed class RangefinderSystem : EntitySystem
         if (_squad.TryGetMemberSquad(user, out var squad))
             name = Loc.GetString("rmc-laser-designator-target-name-squad", ("squad", squad), ("id", id));
 
-        _dropshipWeapon.MakeDropshipTarget(targetEnt, abbreviation);
+        // Pass creator faction from the user if available
+        string? creatorFaction = null;
+        if (TryComp(user, out MarineComponent? marine))
+        {
+            creatorFaction = string.IsNullOrWhiteSpace(marine.Faction) ? null : marine.Faction;
+        }
+
+        _dropshipWeapon.MakeDropshipTarget(targetEnt, abbreviation, creatorFaction);
         _metaData.SetEntityName(targetEnt, name);
     }
 

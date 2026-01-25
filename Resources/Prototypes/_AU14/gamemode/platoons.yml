@@ -1,6 +1,7 @@
 - type: platoon
   id: LACN
   name: LACN Landing Forces
+  reqlist: LACNCargoCatalog
   VendorToMarker:
     Rifleman: AU14USCMequipmentvendor
     Clothing: AU14LACNclothingequipmentvendor
@@ -23,6 +24,7 @@
 - type: platoon
   id: LACNcommando
   name: LACN Naval Commando Platoon
+  reqlist: LACNCommandosCargoCatalog
   VendorToMarker:
     Rifleman: AU14USCMequipmentvendor
     Clothing: AU14LACNcommandoclothingequipmentvendor
@@ -69,9 +71,9 @@
 
 - type: platoon
   id: UPP
-  reqlist: UPPBasic
   language: russian
   name: UPP Infantry
+  reqlist: UPPCargoCatalog
   VendorToMarker:
     Rifleman: AU14USCMequipmentvendor
     Clothing: AU14UPPclothingapparelvendor
@@ -107,6 +109,7 @@
 - type: platoon
   id: WEYU
   name: WY PMC
+  reqlist: WYPMCCargoCatalog
   VendorToMarker:
     Rifleman: AU14USCMequipmentvendor
     Clothing: AU14WYclothingequipmentvendor
@@ -143,6 +146,7 @@
 - type: platoon
   id: CMBCIU
   name: CMB Crisis Intervention
+  reqlist: CMBCIUCargoCatalog
   VendorToMarker:
     Rifleman: AU14USCMequipmentvendor
     Clothing: AU14CMBCIUapparelvendor
@@ -177,29 +181,9 @@
     - /Maps/_AU14/ShuttlesDropships/cmbsquadcar.yml
 
 - type: platoon
-  id: exampleplatoon
-  name: exampleplatoon
-  VendorToMarker:
-    Rifleman: AU14USCMequipmentvendor
-    Corpsman: AU14USCMcorpsmanvendor
-    Arifleman: AU14USCMequipmentvendor
-    Dcc: AU14AircrewWeaponsVendor
-    OperationsOfficer: AU14USCMsectionleaderequipmentvendor
-    Rto: AU14RTOVendor
-    SectionSergeant: AU14USCMsectionleaderequipmentvendor
-    Pilot: AU14AircrewWeaponsVendor
-  possibleships:
-    - Daybreak
-    - USSBush
-  jobSlotOverride:
-    SquadRifleman: 12
-    PlatoonCorpsman: 1
-    PlatCo: 1
-    DSPilot: 1
-
-- type: platoon
   id: HAZOPS
   name: MARSOC HAZOPS
+  reqlist: HAZOPSCargoCatalog
   VendorToMarker:
     Rifleman: AU14USCMequipmentvendor
     Clothing: AU14HAZOPSclothingequipmentvendor
@@ -224,6 +208,7 @@
 - type: platoon
   id: CCAF
   name: CCAF
+  reqlist: CCAFCargoCatalog
   VendorToMarker:
     Rifleman: AU14USCMequipmentvendor
     Clothing: AU14CCAFclothingequipmentvendor
@@ -247,9 +232,11 @@
   possibleships:
       - Daybreak
       - USSBush
+
 - type: platoon
   id: ProdigySF
   name: Prodigy Security Forces
+  reqlist: ProdigyCargoCatalog
   VendorToMarker:
     Rifleman: AU14USCMequipmentvendor
     Clothing: AU14prodigyclothingequipmentvendor
@@ -259,9 +246,9 @@
     Arifleman: AU14prodigySGequipmentvendor
     Dcc: AU14prodigyaircrewvendor
     OperationsOfficer: AU14prodigycommandequipmentvendor
-    Rto: AU14prodigyRTOVendor
+    Rto: AU14RTOVendor
     SectionSergeant: AU14prodigysectionleaderequipmentvendor
-    Pilot: AU14prodigyAircrewWeaponsVendor
+    Pilot: AU14AircrewWeaponsVendor
     ExtraVendor1: VMarkerOpforDeco5
     Deco1: VMarkerOpforDeco5
   #platoonflag:  uaflag
@@ -277,6 +264,7 @@
 - type: platoon
   id: UNISC
   name: UNISC Peacekeepers
+  reqlist: UNISCCargoCatalog
   VendorToMarker:
     Rifleman: AU14USCMequipmentvendor
     Clothing: AU14UNISCclothingequipmentvendor
@@ -311,6 +299,7 @@
 - type: platoon
   id: VAIPO
   name: VAIPO
+  reqlist: VAIPOCargoCatalog
   VendorToMarker:
     Rifleman: AU14USCMequipmentvendor
     Clothing: AU14VAIPOclothingequipmentvendor
@@ -320,9 +309,9 @@
     Arifleman: AU14VAIPOSGequipmentvendor
     Dcc: AU14VAIPOaircrewvendor
     OperationsOfficer: AU14VAIPOcommandequipmentvendor
-    Rto: AU14VAIPORTOVendor
+    Rto: AU14RTOVendor
     SectionSergeant: AU14VAIPOsectionleaderequipmentvendor
-    Pilot: AU14VAIPOAircrewWeaponsVendor
+    Pilot: AU14AircrewWeaponsVendor
     ExtraVendor1: VMarkerOpforDeco5
     Deco1: VMarkerOpforDeco5
   CompatibleDropships:

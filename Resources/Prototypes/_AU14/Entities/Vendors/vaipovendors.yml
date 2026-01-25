@@ -671,34 +671,6 @@
 
 - type: entity
   parent: ColMarTechBase
-  id: AU14VAIPORTOVendor
-  name: radio telephone operator rack
-  description: An automated rack hooked up to a small storage of radio equipment.
-  components:
-  - type: AccessReader
-    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessOpforFTL" ] ]
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
-  - type: CMAutomatedVendor
-    sections:
-    - name: Portable Transceivers
-      choices: { CMUPlatoonRTOBags: 1 }
-      entries:
-      - id: AU14BackpackRTOPackJungle
-      - id: AU14BackpackRTOPackDesert
-      - id: AU14BackpackRTOPackGray
-      - id: AU14BackpackRTOPackBlack
-    - name: Equipment
-      entries:
-      - id: RMCLaserDesignator
-        amount: 1
-      - id: RMCWhistle
-        amount: 1
-      - id: RMCPackFlareCAS
-        amount: 2
-
-- type: entity
-  parent: ColMarTechBase
   id: AU14VAIPOSpecialWeaponsVendor
   name: VAIPO special weapons rack
   description: An automated rack hooked up to a small storage of special weapons.
@@ -744,37 +716,3 @@
        - id: RMCAttachmentBipod
          amount: 1
 
-- type: entity
-  parent: ColMarTechBase
-  id: AU14VAIPOAircrewWeaponsVendor
-  name: aircrew weapons rack
-  description: An automated rack hooked up to a small storage of weapons.
-  components:
-  - type: AccessReader
-    access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
-  - type: CMAutomatedVendor
-    sections:
-    - name: Submachine Guns
-      entries:
-      - id: WeaponSMGM63
-        amount: 2
-    - name: Submachine Gun Ammunition
-      entries:
-      - id: CMMagazineSMGM63
-        amount: 20
-    - name: Handguns
-      entries:
-      - id: RMCWeaponPistolM77Empty
-        amount: 2
-    - name: Handgun Ammunition
-      entries:
-      - id: CMMagazinePistolM77AP
-        amount: 20
-    - name: Attachments
-      entries:
-      - id: RMCAttachmentS6ReflexSight
-        amount: 2
-      - id: RMCAttachmentFlashlightGrip
-        amount: 2

@@ -16,4 +16,8 @@ public sealed partial class DropshipTargetComponent : Component
 
     [DataField, AutoNetworkedField]
     public Dictionary<EntityUid, EntityUid> Eyes = new();
+
+    // New: optional faction string of the creator (e.g., "govfor", "opfor"). If null/empty, no faction restriction applies.
+    [DataField, AutoNetworkedField]
+    public string? CreatorFaction;
 }

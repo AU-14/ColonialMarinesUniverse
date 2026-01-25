@@ -24,20 +24,20 @@
     - name: Prepared Meals
       entries:
       - id: CMMRE
-        name: UNMC Meal Ready to Eat
-        amount: 15
+        name: Meal Ready to Eat
+        amount: 25
       - id: CMMarinePreparedMealChicken
-        amount: 15
+        amount: 20
       - id: CMMarinePreparedMealCornbread
-        amount: 15
+        amount: 20
       - id: CMMarinePreparedMealPasta
-        amount: 15
+        amount: 20
       - id: CMMarinePreparedMealPizza
-        amount: 15
+        amount: 20
       - id: CMMarinePreparedMealPork
-        amount: 15
+        amount: 20
       - id: CMMarinePreparedMealTofu
-        amount: 15
+        amount: 20
       - id: CMMarineProteinBar
         amount: 50
     - name: Flasks

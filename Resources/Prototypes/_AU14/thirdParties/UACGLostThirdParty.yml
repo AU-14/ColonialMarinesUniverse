@@ -1,0 +1,235 @@
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: AU14JobUACGLostSquadLeader
+  name: Lost Colonial Guard Squad Leader
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearUACGLostSquadLeader ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Lost Colonial Guard Squad Leader
+    description: Your squad was separated from your platoon whilst on a short range patrol from your FOB, when extreme weather had veered you off course. Relink with Government Forces with those who remain.
+    raffle:
+      settings: short
+    rules: You are a Government Forces Third Party! You are friendly to GOVFOR forces and neutral to civilians. This third party asks for a slightly higher level of roleplay than others! Please keep this in mind.
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: Skills
+    skills:
+       RMCSkillEndurance: 1
+       RMCSkillFirearms: 1
+       RMCSkillFireman: 1
+       RMCSkillJtac: 2
+       RMCSkillMedical: 1
+       RMCSkillVehicles: 1
+
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: AU14JobUACGLostAmmobearer
+  name: Lost Colonial Guard Ammo Bearer
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearUACGLostAmmobearer ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Lost Colonial Guard Squad
+    description: You were separated from your platoon whilst on a short range patrol from your FOB, when extreme weather had veered you off course. Relink with Government Forces at the guidance of your squad leader.
+    raffle:
+      settings: short
+    rules: You are a Government Forces Third Party! You are friendly to GOVFOR forces and neutral to civilians. This third party asks for a slightly higher level of roleplay than others! Please keep this in mind.
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: Skills
+    skills:
+       RMCSkillFirearms: 2
+       RMCSkillFireman: 1
+       RMCSkillVehicles: 1
+
+
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: AU14JobUACGLostRifleman
+  name: Lost Colonial Guard Rifleman
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearUACGLostRifleman ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Lost Colonial Guard Squad
+    description: You were separated from your platoon whilst on a short range patrol from your FOB, when extreme weather had veered you off course. Relink with Government Forces at the guidance of your squad leader.
+    raffle:
+      settings: short
+    rules: You are a Government Forces Third Party! You are friendly to GOVFOR forces and neutral to civilians. This third party asks for a slightly higher level of roleplay than others! Please keep this in mind.
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: Skills
+    skills:
+       RMCSkillFirearms: 2
+       RMCSkillFireman: 1
+       RMCSkillVehicles: 1
+
+- type: partySpawn
+  id: UACGLostTeamSpawn
+  leadersToSpawn:
+    AU14JobUACGLostSquadLeader: 1
+  gruntsToSpawn:
+    AU14JobUACGLostAmmobearer: 1
+    AU14JobUACGLostRifleman: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: UACGLostTeam
+  partyspawn: UACGLostTeamSpawn
+  enterbyshuttle: false
+  weight: 20
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 3
+  roundstart: false
+
+- type: entity
+  parent: CMBeltMarine
+  id: AU14UACGBeltFilledM20a
+  suffix: UACG, Filled, M20a
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineRifleM20A
+      amount: 5
+
+- type: entity
+  parent: RMCPouchMagazine
+  id: AU14UACGPouchFilledM20a
+  suffix: UACG, Filled, M20a
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineRifleM20A
+      amount: 3
+
+- type: entity
+  parent: RMCPouchGeneralLarge
+  id: AU14UACGCigPouch
+  suffix: UACG, Filled, Cigarettes
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMCigarettePackLuckySlothsMini
+      amount: 1
+    - id: CMMatchBook
+      amount: 1
+    - id: CMShellShotgunBuckshot
+      amount: 1
+
+- type: entity
+  parent: RMCSatchelMarineLogisticsBig
+  id: AU14UACGPatrolRucksack
+  suffix: UACG, Backpack
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMRE
+      amount: 2
+    - id: CMCanteen
+      amount: 1
+    - id: BedrollFolded
+      amount: 1
+    - id: CMPackFlare
+      amount: 2
+    - id: CMEntrenchingTool
+      amount: 1
+
+- type: entity
+  parent: RMCSatchelMarineLogisticsBig
+  id: AU14UACGPatrolRucksackAmmobearer
+  suffix: UACG, Backpack, Ammobearer
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineLMGM60
+      amount: 6
+    - id: CMMatchBook
+      amount: 1
+
+- type: entity
+  parent: RMCBeltUtilityGeneral
+  id: AU14UACGAmmoBearerBelt
+  suffix: UACG, Belt
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMRE
+      amount: 2
+    - id: CMCanteen
+      amount: 1
+    - id: BedrollFolded
+      amount: 1
+    - id: CMCigarettePackLuckySlothsMini
+      amount: 1
+
+- type: startingGear
+  id: AU14GearUACGLostSquadLeader
+  equipment:
+    outerClothing: RMCOuterClothingExternalWebbingForeconSurvivorFill
+    jumpsuit: AU14UACGFatigues
+    shoes: CMBootsBrownFilled
+    mask: RMCMaskScarfTanDown
+    head: AU14UACGPatrolCap
+    belt: AU14UACGBeltFilledM20a
+    pocket1: AU14UACGCigPouch
+    pocket2: AU14PouchIFAKFill
+    back: AU14UACGPatrolRucksack
+  inhand:
+  - RMCBinocularsPVE
+  - AUWeaponRifleM20A
+
+- type: startingGear
+  id: AU14GearUACGLostAmmobearer
+  equipment:
+    outerClothing: RMCOuterClothingExternalWebbingForeconSurvivorFill
+    jumpsuit: AU14UACGFatigues
+    shoes: CMBootsBrownFilled
+    mask: RMCMaskScarfTanDown
+    head: AU14UACGPatrolCap
+    belt: AU14UACGAmmoBearerBelt
+    pocket1: AU14UACGPouchFilledM20a
+    pocket2: AU14PouchIFAKFill
+    back: AU14UACGPatrolRucksackAmmobearer
+  inhand:
+  - CMFlare
+  - AUWeaponRifleM20A
+
+- type: startingGear
+  id: AU14GearUACGLostRifleman
+  equipment:
+    outerClothing: RMCOuterClothingExternalWebbingForeconSurvivorFill
+    jumpsuit: AU14UACGFatigues
+    shoes: CMBootsBrownFilled
+    mask: RMCMaskScarfTanDown
+    head: AU14UACGPatrolCap
+    belt: AU14UACGBeltFilledM20a
+    pocket1: AU14UACGCigPouch
+    pocket2: AU14PouchIFAKFill
+    back: AU14UACGPatrolRucksack
+  inhand:
+  - CMFlare
+  - AUWeaponRifleM20A

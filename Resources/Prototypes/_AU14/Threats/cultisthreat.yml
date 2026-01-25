@@ -32,7 +32,51 @@
   - type: ActiveRadio
     channels:
     - Hivemind
+  - type: Skills
+    skills:
+       RMCSkillFirearms: 1
+       RMCSkillFireman: 1
+       RMCSkillVehicles: 1
 
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: cultistJobtwo
+  name: Cultist Two
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ CMUGearCultistTwo ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cm-cultist-name
+    description: cm-cultist-description
+    raffle:
+      settings: short
+    rules: cm-cultist-rules
+  - type: UserIFF
+    faction: FactionXeno
+  - type: NpcFactionMember
+    factions:
+    - RMCXeno
+  - type: RemoveComponents
+    components:
+    - type: Infectable
+  - type: IntrinsicRadioReceiver
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Hivemind
+  - type: ActiveRadio
+    channels:
+    - Hivemind
+  - type: Skills
+    skills:
+       RMCSkillFirearms: 1
+       RMCSkillFireman: 1
+       RMCSkillVehicles: 1
 
 - type: threat
   id: cultistThreat
@@ -46,7 +90,8 @@
   leadersToSpawn:
     CMXenoQueen: 1
   gruntsToSpawn:
-    cultistJob: 2
+    cultistJob: 1
+    cultistJobtwo: 1
   scalewithpop: true
   spawnTogether: true
 
@@ -56,31 +101,54 @@
   equipment:
     outerClothing: ClothingOuterRobesCult
     jumpsuit: CMJumpsuitColonist
-    shoes: ClothingShoesCult
+    shoes: CMBootsBrownFilled
     head: ClothingHeadHatHoodCulthood
-    pocket1: RMCPouchGeneralLarge
-    pocket2: RMCPouchGeneralLarge
+    pocket1: AU14PouchIFAKFill
+    pocket2: RMCPouchShotgunLargeSlugs
     back: AU14CultistSatchel
+    belt: RMCScabbardMacheteM2100Filled
   inhand:
   - XenoEgg
-  - RMCM42A2ShotgunCase
-  - RMCBoxShellsSlugs
+  - RMCWeaponShotgunHG3712
+
+- type: startingGear
+  id: CMUGearCultistTwo
+  equipment:
+    outerClothing: ClothingOuterRobesCult
+    jumpsuit: CMJumpsuitColonist
+    shoes: CMBootsBrownFilled
+    head: ClothingHeadHatHoodCulthood
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchMagazineFilledMP27
+    back: AU14CultistSatchelTwo
+    belt: AU14BeltHolsterPistolCultistMK45
+  inhand:
+  - XenoEgg
+  - RMCWeaponSMGMP27
 
 - type: entity
-  parent: RMCSatchelBlack
+  parent: AU14SlingSatchelBlack
   id: AU14CultistSatchel
   name: Cultist satchel
   description: A black satchel covered in occult symbols.
   components:
   - type: StorageFill
     contents:
-    - id: RitualDagger
-    - id: CMTraumaKit10
-      amount: 3
-    - id: CMTricordrazineAutoInjector
-      amount: 3
     - id: CMShellShotgunBuckshot
       amount: 5
+    - id: RMCFlashlight
+    - id: RMCGrenadeIED
+
+- type: entity
+  parent: AU14SlingSatchelBlack
+  id: AU14CultistSatchelTwo
+  name: Cultist satchel
+  description: A black satchel covered in occult symbols.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSMGMP27
+      amount: 4
     - id: RMCFlashlight
 
 - type: auThirdParty
@@ -88,7 +156,38 @@
   partyspawn: cultistParty
   enterbyshuttle: false
   weight: 10
-  minplayers: 0
+  minplayers: 35
   maxplayers: 100
   GhostsNeeded: 1
   roundstart: true
+
+- type: entity
+  parent: RMCPouchShotgunLarge
+  id: AU14PouchShotgunLargeBuckshot
+  suffix: Filled, Buckshot
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMShellShotgunBuckshot
+      amount: 7
+
+- type: entity
+  parent: RMCBeltHolsterPistolTSE
+  id: AU14BeltHolsterPistolCultistMK45
+  suffix: Cultist, Filled, HG45
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazinePistolMK45
+      amount: 6
+    - id: RMCWeaponPistolHG45Aguila
+
+- type: entity
+  parent: RMCPouchMagazine
+  id: AU14PouchMagazineFilledMP27
+  suffix: Filled, MP27
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSMGMP27
+      amount: 3

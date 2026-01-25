@@ -19,6 +19,7 @@ using Content.Shared._RMC14.Rangefinder;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Administration.Logs;
+using Content.Shared.AU14.Round;
 using Content.Shared.Coordinates;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
@@ -279,8 +280,26 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
     {
         var targets = new List<TargetEnt>();
         var targetsQuery = EntityQueryEnumerator<DropshipTargetComponent>();
+
+        // Determine console faction (if any)
+        string? consoleFaction = null;
+        if (TryComp(ent.Owner, out WhitelistedShuttleComponent? whitelist))
+            consoleFaction = string.IsNullOrWhiteSpace(whitelist.Faction) ? null : whitelist.Faction;
+
         while (targetsQuery.MoveNext(out var uid, out var target))
         {
+            // If the target was created by a faction-specific laser, only add it for consoles of the same faction
+            var creatorFaction = string.IsNullOrWhiteSpace(target.CreatorFaction) ? null : target.CreatorFaction;
+            if (!string.IsNullOrEmpty(creatorFaction) && !string.IsNullOrEmpty(consoleFaction) &&
+                !creatorFaction.Equals(consoleFaction, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            // If target has a creatorFaction but the console has no faction, do not show it
+            if (!string.IsNullOrEmpty(creatorFaction) && string.IsNullOrEmpty(consoleFaction))
+                continue;
+
             targets.Add(new TargetEnt(GetNetEntity(uid), target.Abbreviation));
         }
 
@@ -305,11 +324,28 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
         var terminals = EntityQueryEnumerator<DropshipTerminalWeaponsComponent>();
         while (terminals.MoveNext(out var uid, out var terminal))
         {
+            // Per-terminal faction check
+            string? consoleFaction = null;
+            if (TryComp(terminal.Owner, out WhitelistedShuttleComponent? whitelist))
+                consoleFaction = string.IsNullOrWhiteSpace(whitelist.Faction) ? null : whitelist.Faction;
+
             var targets = terminal.Targets;
             if (HasComp<MedevacStretcherComponent>(ent))
                 targets = terminal.Medevacs;
             else if (HasComp<RMCActiveFultonComponent>(ent))
                 targets = terminal.Fultons;
+
+            var creatorFaction = string.IsNullOrWhiteSpace(ent.Comp.CreatorFaction) ? null : ent.Comp.CreatorFaction;
+
+            // If the target is faction-bound, only add it to consoles of that faction
+            if (!string.IsNullOrEmpty(creatorFaction))
+            {
+                if (string.IsNullOrEmpty(consoleFaction) ||
+                    !creatorFaction.Equals(consoleFaction, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+            }
 
             targets.Add(new TargetEnt(netEnt, ent.Comp.Abbreviation));
             Dirty(uid, terminal);
@@ -1123,13 +1159,13 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
         active.Abbreviation = Loc.GetString("rmc-laser-designator-target-abbreviation", ("id", id));
         if (user != null)
             active.Abbreviation = GetUserAbbreviation(user.Value, id);
-    }
 
+        Dirty(ent, active);
+    }
     private bool IsFlareLit(EntityUid flare)
     {
         return TryComp(flare, out ExpendableLightComponent? expendable) && expendable.Activated;
     }
-
     private bool TryActivateSignalFlareTarget(Entity<ActiveFlareSignalComponent> ent)
     {
         if (HasComp<DropshipTargetComponent>(ent))
@@ -1156,9 +1192,9 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
         return _nextId++;
     }
 
-    public void MakeDropshipTarget(EntityUid ent, string abbreviation)
+    public void MakeDropshipTarget(EntityUid ent, string abbreviation, string? creatorFaction = null)
     {
-        var dropshipTarget = new DropshipTargetComponent { Abbreviation = abbreviation };
+        var dropshipTarget = new DropshipTargetComponent { Abbreviation = abbreviation, CreatorFaction = creatorFaction };
         AddComp(ent, dropshipTarget, true);
         Dirty(ent, dropshipTarget);
     }
@@ -1418,6 +1454,19 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
         var target = targetNullable.Value;
         if (!Resolve(target, ref target.Comp, false))
             return null;
+
+        // Faction gating: if terminal has a WhitelistedShuttleComponent Faction and target has CreatorFaction set and they differ, don't create the eye
+        string? consoleFaction = null;
+        if (TryComp(terminal.Owner, out WhitelistedShuttleComponent? whitelist))
+            consoleFaction = string.IsNullOrWhiteSpace(whitelist.Faction) ? null : whitelist.Faction;
+
+        string? creatorFaction = string.IsNullOrWhiteSpace(target.Comp.CreatorFaction) ? null : target.Comp.CreatorFaction;
+
+        if (!string.IsNullOrEmpty(consoleFaction) && !string.IsNullOrEmpty(creatorFaction) &&
+            !consoleFaction.Equals(creatorFaction, StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
 
         if (!target.Comp.Eyes.TryGetValue(terminal, out var eye))
         {

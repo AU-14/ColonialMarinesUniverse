@@ -384,11 +384,18 @@
       entries:
       - id: CMUtilityVestSynth
       - id: AU14ExternalWebbing
+      - id: RMCOuterClothingExternalWebbingBlack
     - name: Innerwear
       choices: { CMUciviliansynthinnerwear: 1 }
       entries:
       - id: CMJumpsuitSyntheticOutdated
+      - id: RMCJumpsuitSteward
       - id: RMCJumpsuitCivilian
+      - id: RMCJumpsuitCivilianYellow
+      - id: RMCJumpsuitCivilianRed
+      - id: RMCJumpsuitCivilianBrown
+      - id: RMCJumpsuitCivilianBlue
+      - id: RMCJumpsuitCivilianGreen
       - id: AU14CivilianBoilerSuitWhite
       - id: AU14CivilianBoilerSuitGray
       - id: AU14CivilianBoilerSuitLightBlue
@@ -422,6 +429,7 @@
     - name: Headgear
       choices: { CMUciviliansynthheadgear: 1 }
       entries:
+      - id: AU14CivBallCapBlack
       - id: RMCHardhatBlue
       - id: RMCHardhatOrange
       - id: RMCHardHat
@@ -430,16 +438,25 @@
       choices: { CMUciviliansynthgloves: 1 }
       entries:
       - id: RMCHandsVeteranInsulated
-    - name: Storage & Belts
-      choices: { CMUciviliansynthstorage: 4 }
+    - name: Belts
+      choices: { CMUciviliansynthstoragebelt: 1 }
+      entries:
+      - id: CMBeltUtilityFilled
+        name: M276 pattern toolbelt rig (filled)
+      - id: RMCBeltUtilityGeneral
+      - id: CMUBeltMedicBagSupportSynth
+        name: M276 pattern lifesaver bag (filled, advanced)
+    - name: Bags
+      choices: { CMUciviliansynthstoragebag: 1 }
       entries:
       - id: RMCSatchelLightpackWelder
       - id: CMSatchelEngineer
       - id: CMSatchel
       - id: AU14SlingSatchelBlack
       - id: AU14SlingSatchelBlue
-      - id: CMBeltUtilityFilled
-      - id: RMCBeltUtilityGeneral
+    - name: Pouches
+      choices: { CMUciviliansynthstoragepouch: 2 }
+      entries:
       - id: RMCPouchGeneralLarge
       - id: RMCPouchToolsSocFill
       - id: RMCPouchElectronics
@@ -451,7 +468,6 @@
       - id: RMCSynthBreachingHammer
       - id: CMRollerBedSpawnFolded
       - id: RMCRadioHandheldColonyOff
-      - id: CMFireExtinguisher
       - id: CMFireExtinguisherPortable
       - id: RMCFlashlightPen
       - id: RMCSynthResetKey

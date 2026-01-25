@@ -1,0 +1,182 @@
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: AU14JobCommandoSniperTeamSpotter
+  name: LACN Naval Commando Spotter
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearLACNCommandoSniperTeamSpotter ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: LACN Naval Commandos Scout Team
+    description: You have been loaned to the United Americas Allied Command by the LACN for a special mission on this planet, the details of which have not been disclosed to you. You have been ordered to investigate the area and report to the local GOVFOR command.
+    raffle:
+      settings: short
+    rules: au14-lacncommandosniper-rules
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: Skills
+    skills:
+       RMCSkillCqc: 1
+       RMCSkillEndurance: 1
+       RMCSkillFirearms: 2
+       RMCSkillFireman: 2
+       RMCSkillIntel: 2
+       RMCSkillJtac: 4
+       RMCSkillMedical: 1
+       RMCSkillVehicles: 1
+
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: AU14JobCommandoSniperTeamSniper
+  name: LACN Naval Commando Sniper
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearLACNCommandoSniperTeamSniper ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: LACN Naval Commandos Scout Team
+    description: You have been loaned to the United Americas Allied Command by the LACN for a special mission on this planet, the details of which have not been disclosed to you. You have been ordered to investigate the area and report to the local GOVFOR command.
+    raffle:
+      settings: short
+    rules: au14-lacncommandosniper-rules
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: Skills
+    skills:
+       RMCSkillCqc: 1
+       RMCSkillEndurance: 1
+       RMCSkillFirearms: 2
+       RMCSkillFireman: 2
+       RMCSkillIntel: 2
+       RMCSkillJtac: 3
+       RMCSkillLeadership: 1
+       RMCSkillMedical: 1
+       RMCSkillVehicles: 1
+
+- type: partySpawn
+  id: LACNSniperteamSpawn
+  leadersToSpawn:
+    AU14JobCommandoSniperTeamSniper: 1
+  gruntsToSpawn:
+    AU14JobCommandoSniperTeamSpotter: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: LACNSniperteam
+  partyspawn: LACNSniperteamSpawn
+  enterbyshuttle: true
+  weight: 20
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 0
+  roundstart: false
+
+- type: startingGear
+  id: AU14GearLACNCommandoSniperTeamSpotter
+  equipment:
+    outerClothing: AU14LACNCommandoArmorStandard
+    jumpsuit: AU14LACNUniformCoat
+    shoes: AU14LACNBoots
+    mask: RMCMaskScarfTanDown
+    head: AU14LACNCommandoBeanie
+    gloves: AU14LACNGloves
+    belt: AU14BeltHolsterPistolLACNTPR23B
+    pocket1: AU14PouchSlingBinocs
+    pocket2: AU14PouchIFAKFill
+    back: AU14LACNBackpackSpotter
+    ears: AU14HeadsetSectionMarine
+  inhand:
+  - RMCWeaponRifleL42A
+
+- type: startingGear
+  id: AU14GearLACNCommandoSniperTeamSniper
+  equipment:
+    outerClothing: AU14LACNCommandoArmorStandard
+    jumpsuit: AU14LACNUniformCoat
+    shoes: AU14LACNBoots
+    eyes: AU14GogglesM1A1Ballistic
+    mask: RMCMaskScarfTan
+    head: AU14LACNNavyCap
+    gloves: AU14LACNGloves
+    belt: AU14BeltHolsterPistolLACNTPR23B
+    pocket1: RMCPouchToolsSocMarineRaiderFill
+    pocket2: AU14PouchIFAKFill
+    back: AU14LACNBackpackSniper
+    ears: AU14HeadsetSectionMarine
+  inhand:
+  - AU14WeaponSniperRifleM42A2
+
+- type: entity
+  parent: RMCBeltHolsterPistolTSE
+  id: AU14BeltHolsterPistolLACNTPR23B
+  suffix: LACN, Filled, TPR23B
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazinePistolM1984
+      amount: 6
+    - id: AU14WeaponPistolTPR23B
+
+- type: entity
+  parent: RMCPouchSling
+  id: AU14PouchSlingBinocs
+  suffix: Filled, Laser Designator
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCLaserDesignatorSpotter
+
+- type: entity
+  parent: RMCPouchSling
+  id: AU14PouchSlingBinocsTwo
+  suffix: Filled, Binocs
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBinocularsPVE
+
+- type: entity
+  parent: AU14LACNBackpack
+  id: AU14LACNBackpackSpotter
+  suffix: Filled, LACN, Spotter
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMSandbagEmpty50
+    - id: CMEntrenchingTool
+    - id: CMMRE
+    - id: CMCanteen
+    - id: RMCMagazineRifleL42AWP
+    - id: RMCMagazineRifleL42AWP
+    - id: RMCMagazineRifleL42A
+    - id: RMCMagazineRifleL42A
+    - id: RMCMagazineRifleL42A
+
+- type: entity
+  parent: AU14LACNBackpack
+  id: AU14LACNBackpackSniper
+  suffix: Filled, LACN, Sniper
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMEntrenchingTool
+    - id: CMMRE
+    - id: CMCanteen
+    - id: CMMagazineSniperM96S
+    - id: CMMagazineSniperM96S
+    - id: CMMagazineSniperM96S
+    - id: CMMagazineSniperM96S
+    - id: CMMagazineSniperM96S

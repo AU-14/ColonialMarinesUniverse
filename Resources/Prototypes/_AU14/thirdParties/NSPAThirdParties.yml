@@ -1,0 +1,334 @@
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: NSPAInvestigationPartyJobDeputy
+  name: NSPA Constable
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearNSPADeputyInvestigation ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: NSPA Constable
+    description: You are a constable of the Neroid Sector Policing Authority on routine patrol through the sector. Patrol the area under the orders of your chief constable and ensure that the law is enforced.
+    raffle:
+      settings: short
+    rules: You are a constable of the Neroid Sector Policing Authority on routine patrol through the sector. Patrol the area under the orders of your chief constable and ensure that the law is enforced.
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+       RMCSkillFirearms: 1
+       RMCSkillFireman: 1
+       RMCSkillPolice: 2
+       RMCSkillVehicles: 1
+
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: NSPAInvestigationPartyJobDeputyShotgun
+  name: NSPA Constable SMG
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearNSPADeputyInvestigationShotgun ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: NSPA Constable
+    description: You are a constable of the Neroid Sector Policing Authority on routine patrol through the sector. Patrol the area under the orders of your inspector and ensure that the law is enforced.
+    raffle:
+      settings: short
+    rules: You are a constable of the Neroid Sector Policing Authority on routine patrol through the sector. Patrol the area under the orders of your chief constable and ensure that the law is enforced.
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+       RMCSkillFirearms: 1
+       RMCSkillFireman: 1
+       RMCSkillPolice: 2
+       RMCSkillVehicles: 1
+
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: NSPAInvestigationPartyJobMarshal
+  name: NSPA Inspector
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearNSPAMarshalInvestigation ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: NSPA Inspector
+    description: You are an Inspector of the Neroid Sector Policing Authority on routine patrol through the sector. Patrol the area with your constables and ensure that the law is enforced.
+    raffle:
+      settings: short
+    rules: You are an Inspector of the Neroid Sector Policing Authority on routine patrol through the sector. Patrol the area with your constables and ensure that the law is enforced.
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+       RMCSkillFirearms: 1
+       RMCSkillFireman: 1
+       RMCSkillPolice: 2
+       RMCSkillVehicles: 1
+
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: NSPAInvestigationPartyJobDeputyShotgunArmored
+  name: NSPA Constable SMG Armored Officer
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearNSPADeputyInvestigationShotgunArmored ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: NSPA Constable
+    description: You are a constable of the Neroid Sector Policing Authority on routine patrol through the sector. Patrol the area under the orders of your inspector and ensure that the law is enforced.
+    raffle:
+      settings: short
+    rules: You are a constable of the Neroid Sector Policing Authority on routine patrol through the sector. Patrol the area under the orders of your chief constable and ensure that the law is enforced.
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+       RMCSkillFirearms: 1
+       RMCSkillFireman: 1
+       RMCSkillPolice: 2
+       RMCSkillVehicles: 1
+
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: NSPAInvestigationPartyJobMarshalArmored
+  name: NSPA Armored Inspector
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearNSPAMarshalInvestigationArmored ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: NSPA Inspector
+    description: You are an Inspector of the Neroid Sector Policing Authority on routine patrol through the sector. Patrol the area with your constables and ensure that the law is enforced.
+    raffle:
+      settings: short
+    rules: You are an Inspector of the Neroid Sector Policing Authority on routine patrol through the sector. Patrol the area with your constables and ensure that the law is enforced.
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+       RMCSkillFirearms: 1
+       RMCSkillFireman: 1
+       RMCSkillPolice: 2
+       RMCSkillVehicles: 1
+
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: NSPAInvestigationPartyJobICCLiaison
+  name: Interstellar Commerce Commission Liaison
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearNSPAICCLiaison ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Interstellar Commerce Commission Liaison
+    description: You are an Interstellar Commerce Commission Corporate Liaison, a well experienced ICC Agent that has been attached to an NSPA team. You work with the NSPA specifically to observe proper trade practices and investigate any possibilities of smuggling or black market activity.
+    raffle:
+      settings: short
+    rules: You are an Interstellar Commerce Commission Corporate Liaison, a well experienced ICC Agent that has been attached to an NSPA team. You work with the NSPA specifically to observe proper trade practices and investigate any possibilities of smuggling or black market activity.
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+       RMCSkillFirearms: 1
+       RMCSkillFireman: 1
+       RMCSkillPolice: 2
+       RMCSkillVehicles: 1
+
+- type: partySpawn
+  id: NSPAInvestigationPartySpawn
+  leadersToSpawn:
+    NSPAInvestigationPartyJobMarshal: 1
+  gruntsToSpawn:
+    NSPAInvestigationPartyJobDeputy: 1
+    NSPAInvestigationPartyJobDeputyShotgun: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: NSPAInvestigationParty
+  partyspawn: NSPAInvestigationPartySpawn
+  enterbyshuttle: true
+  weight: 15
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 3
+  roundstart: false
+
+- type: partySpawn
+  id: NSPAInvestigationPartySpawnArmored
+  leadersToSpawn:
+    NSPAInvestigationPartyJobMarshalArmored: 1
+  gruntsToSpawn:
+    NSPAInvestigationPartyJobDeputyShotgunArmored: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: NSPAInvestigationPartyArmored
+  partyspawn: NSPAInvestigationPartySpawnArmored
+  enterbyshuttle: true
+  weight: 5
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 3
+  roundstart: false
+
+- type: partySpawn
+  id: NSPAInvestigationPartySpawnAlt
+  leadersToSpawn:
+    NSPAInvestigationPartyJobMarshal: 1
+  gruntsToSpawn:
+    NSPAInvestigationPartyJobDeputy: 1
+    NSPAInvestigationPartyJobDeputyShotgun: 1
+    NSPAInvestigationPartyJobICCLiaison: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: NSPAInvestigationPartyAlt
+  partyspawn: NSPAInvestigationPartySpawnAlt
+  enterbyshuttle: true
+  weight: 5
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 5
+  roundstart: false
+
+- type: startingGear
+  id: AU14GearNSPADeputyInvestigation
+  equipment:
+    outerClothing: RMCCoatTSEPAHighVisVest
+    jumpsuit: RMCJumpsuitTSEPA
+    shoes: RMCBootsPMCFilled
+    head: RMCHeadCapTSEPAPeaked
+    belt: RMCBeltHolsterPistolTSEFilledL54
+    pocket1: AU14PouchPoliceEquipmentSupportSynth
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelTSEPA
+    ears: AU14CMBHeadsetOnlyCMB
+
+- type: startingGear
+  id: AU14GearNSPADeputyInvestigationShotgun
+  equipment:
+    outerClothing: RMCCoatTSEPAHighVis
+    jumpsuit: RMCJumpsuitTSEPA
+    shoes: RMCBootsPMCFilled
+    head: RMCHeadCapTSEPAPeaked
+    belt: RMCBeltHolsterPistolTSEFilledL54
+    pocket1: AU14PouchPoliceEquipmentSupportSynth
+    pocket2: AU14PouchIFAKFill
+    back: AU14SatchelNSPAShotgun
+    ears: AU14CMBHeadsetOnlyCMB
+  inhand:
+  - RMCWeaponSMGP90
+
+- type: startingGear
+  id: AU14GearNSPAMarshalInvestigation
+  equipment:
+    outerClothing: RMCCoatTSEPA
+    jumpsuit: RMCJumpsuitTSEPA
+    shoes: RMCBootsPMCFilled
+    head: RMCHeadCapTSEPAPeakedGold
+    belt: RMCBeltHolsterPistolTSEFilledL54
+    pocket1: AU14PouchPoliceEquipmentSupportSynth
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelTSEPA
+    ears: AU14CMBHeadsetOnlyCMB
+
+- type: startingGear
+  id: AU14GearNSPAICCLiaison
+  equipment:
+    eyes: RMCSunglasses
+    head: RMCHardhatWhite
+    ears: AU14CMBHeadsetOnlyCMB
+    back: RMCSatchelICBLiaisonFill
+    jumpsuit: CMJumpsuitLiaisonBlack
+    outerClothing: RMCHazardVestYellow
+    gloves: CMHandsInsulated
+    shoes: RMCBootsPMCFilled
+    pocket1: AU14PouchIFAKFill
+    pocket2: RMCPouchGeneralLargeICBLiaison
+    suitStorage: RMCFlashlight
+  inhand:
+  - CMClipboard
+
+- type: entity
+  parent: RMCSatchelTSEPA
+  id: AU14SatchelNSPAShotgun
+  suffix: Filled, NSPA SMG
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSMGP90
+    - id: RMCMagazineSMGP90
+    - id: RMCMagazineSMGP90
+    - id: RMCMagazineSMGP90
+    - id: RMCMagazineSMGP90
+
+- type: startingGear
+  id: AU14GearNSPADeputyInvestigationShotgunArmored
+  equipment:
+    outerClothing: RMCArmorVestTSEPA
+    jumpsuit: RMCJumpsuitTSEPA
+    shoes: RMCBootsPMCFilled
+    head: RMCHeadBeretTSEPA
+    belt: RMCBeltHolsterPistolTSEFilledL54
+    pocket1: AU14PouchPoliceEquipmentSupportSynth
+    pocket2: AU14PouchIFAKFill
+    back: AU14SatchelNSPAShotgun
+    ears: AU14CMBHeadsetOnlyCMB
+  inhand:
+  - RMCWeaponSMGP90
+
+- type: startingGear
+  id: AU14GearNSPAMarshalInvestigationArmored
+  equipment:
+    outerClothing: RMCArmorVestTSEPA
+    jumpsuit: RMCJumpsuitTSEPA
+    shoes: RMCBootsPMCFilled
+    head: RMCHeadBeretTSE
+    belt: RMCBeltHolsterPistolTSEFilledL54
+    pocket1: AU14PouchPoliceEquipmentSupportSynth
+    pocket2: AU14PouchIFAKFill
+    back: AU14SatchelCMBShotgun
+    ears: AU14CMBHeadsetOnlyCMB
+  inhand:
+  - RMCWeaponShotgunHG3712

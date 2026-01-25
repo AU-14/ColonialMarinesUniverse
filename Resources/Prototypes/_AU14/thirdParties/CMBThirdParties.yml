@@ -1,0 +1,242 @@
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: CMBInvestigationPartyJobDeputy
+  name: CMB Deputy
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearCMBDeputyInvestigation ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: CMB Deputy
+    description: You have been sent by the Colonial Administration to investigate unspecified occurrences on this planet. Investigate the area under the orders of your marshal and ensure that the laws of Sol extend far beyond the Solar System.
+    raffle:
+      settings: short
+    rules: You have been dispatched by the Colonial Administration to investigate unspecified occurrences on this planet. Lead your deputies planetside and ensure that the laws of Sol extend far beyond the Solar System.v
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+       RMCSkillFirearms: 1
+       RMCSkillFireman: 1
+       RMCSkillPolice: 2
+       RMCSkillVehicles: 1
+
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: CMBInvestigationPartyJobDeputyShotgun
+  name: CMB Deputy Shotgunner
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearCMBDeputyInvestigationShotgun ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: CMB Deputy
+    description: You have been sent by the Colonial Administration to investigate unspecified occurrences on this planet. Investigate the area under the orders of your marshal and ensure that the laws of Sol extend far beyond the Solar System.
+    raffle:
+      settings: short
+    rules: You have been dispatched by the Colonial Administration to investigate unspecified occurrences on this planet. Lead your deputies planetside and ensure that the laws of Sol extend far beyond the Solar System.
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+       RMCSkillFirearms: 1
+       RMCSkillFireman: 1
+       RMCSkillPolice: 2
+       RMCSkillVehicles: 1
+
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: CMBInvestigationPartyJobMarshal
+  name: CMB Marshal
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearCMBMarshalInvestigation ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: CMB Marshal
+    description: You have been dispatched by the Colonial Administration to investigate unspecified occurrences on this planet. Lead your deputies planetside and ensure that the laws of Sol extend far beyond the Solar System.
+    raffle:
+      settings: short
+    rules: You have been dispatched by the Colonial Administration to investigate unspecified occurrences on this planet. Lead your deputies planetside and ensure that the laws of Sol extend far beyond the Solar System.
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+       RMCSkillFirearms: 1
+       RMCSkillFireman: 1
+       RMCSkillPolice: 2
+       RMCSkillVehicles: 1
+
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: CMBInvestigationPartyJobRightsObserver
+  name: Interstellar Human Rights Observer
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearCMBInvestigationRightsObserver ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Interstellar Human Rights Observer
+    description: Through hard work, you have managed to make your way onto the frontier alongside a CMB patrol to document and record any atrocities that may be occurring in this dark sector of space. It’s partly a PR stunt, but it’s important work. In an emergency, you may also be able to provide medical aid to those in need.
+    raffle:
+      settings: short
+    rules: Through hard work, you have managed to make your way onto the frontier alongside a CMB patrol to document and record any atrocities that may be occurring in this dark sector of space. It’s partly a PR stunt, but it’s important work. In an emergency, you may also be able to provide medical aid to those in need. This third party asks for a slightly higher level of roleplay than others! Please keep this in mind.
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+       RMCSkillEndurance: 2
+       RMCSkillFireman: 1
+       RMCSkillMedical: 3
+       RMCSkillSurgery: 2
+       RMCSkillVehicles: 1
+
+- type: partySpawn
+  id: CMBInvestigationPartySpawn
+  leadersToSpawn:
+    CMBInvestigationPartyJobMarshal: 1
+  gruntsToSpawn:
+    CMBInvestigationPartyJobDeputy: 1
+    CMBInvestigationPartyJobDeputyShotgun: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: partySpawn
+  id: CMBInvestigationPartySpawnAlt
+  leadersToSpawn:
+    CMBInvestigationPartyJobMarshal: 1
+  gruntsToSpawn:
+    CMBInvestigationPartyJobDeputy: 1
+    CMBInvestigationPartyJobDeputyShotgun: 1
+    CMBInvestigationPartyJobRightsObserver: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: CMBInvestigationPartyAlt
+  partyspawn: CMBInvestigationPartySpawnAlt
+  enterbyshuttle: true
+  weight: 10
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 6
+  roundstart: false
+
+- type: auThirdParty
+  id: CMBInvestigationParty
+  partyspawn: CMBInvestigationPartySpawn
+  enterbyshuttle: true
+  weight: 20
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 3
+  roundstart: false
+
+- type: entity
+  parent: RMCBeltHolsterPistolTSE
+  id: AU14BeltHolsterPistolCMBHG45
+  suffix: CMB, Filled, HG45
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazinePistolMK45
+      amount: 6
+    - id: RMCWeaponPistolHG45Marina
+
+- type: startingGear
+  id: AU14GearCMBDeputyInvestigation
+  equipment:
+    outerClothing: AU14CMBDeputyWindbreaker
+    jumpsuit: AU14CMBUniform
+    shoes: RMCBootsPMCFilled
+    head: RMCHeadCapBureau
+    belt: AU14BeltHolsterPistolCMBHG45
+    pocket1: AU14PouchPoliceEquipmentSupportSynth
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelTSEPA
+    ears: AU14CMBHeadsetOnlyCMB
+
+- type: startingGear
+  id: AU14GearCMBDeputyInvestigationShotgun
+  equipment:
+    outerClothing: AU14CMBDeputyWindbreaker
+    jumpsuit: AU14CMBUniform
+    shoes: RMCBootsPMCFilled
+    head: RMCHeadCapBureau
+    belt: AU14BeltHolsterPistolCMBHG45
+    pocket1: AU14PouchPoliceEquipmentSupportSynth
+    pocket2: AU14PouchIFAKFill
+    back: AU14SatchelCMBShotgun
+    ears: AU14CMBHeadsetOnlyCMB
+  inhand:
+  - RMCWeaponShotgunHG3712
+
+- type: startingGear
+  id: AU14GearCMBInvestigationRightsObserver
+  equipment:
+    eyes: RMCGlassesMedicalHUDGlasses # TODO RMC14 sensormate hud
+    back: RMCSatchelBureauObserverFill
+    jumpsuit: CMJumpsuitLiaisonBlue
+    outerClothing: RMCArmorVest
+    belt: CMBeltMedicBagFilled
+    shoes: CMBootsBlackFilled
+    ears: AU14CMBHeadsetOnlyCMB
+    ears2: RMCFlashlightPen
+    pocket1: RMCPouchAutoinjectorFill
+    pocket2: RMCPouchGeneralLargeBureauObserverFill
+    suitstorage: RMCFlashlight
+  inhand: # TODO RMC14 camera
+  - CMHealthAnalyzer
+
+- type: startingGear
+  id: AU14GearCMBMarshalInvestigation
+  equipment:
+    outerClothing: AU14CMBMarshalWindbreaker
+    jumpsuit: AU14CMBUniform
+    shoes: RMCBootsPMCFilled
+    head: RMCHeadCapBureau
+    belt: RMCBeltHolsterRevolverSpearheadFill
+    pocket1: AU14PouchPoliceEquipmentSupportSynth
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelTSEPA
+    ears: AU14CMBHeadsetOnlyCMB
+
+- type: entity
+  parent: RMCSatchelTSEPA
+  id: AU14SatchelCMBShotgun
+  suffix: Filled, CMB Shotgunner
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMShellShotgunBuckshot
+    - id: CMShellShotgunBuckshot
+    - id: CMShellShotgunBuckshot
+    - id: CMShellShotgunBuckshot
+    - id: CMShellShotgunBuckshot
+    - id: CMShellShotgunBuckshot
+    - id: CMShellShotgunBuckshot
+    - id: CMShellShotgunBuckshot

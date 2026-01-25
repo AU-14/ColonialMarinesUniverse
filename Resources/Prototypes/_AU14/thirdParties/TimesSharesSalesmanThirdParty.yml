@@ -1,0 +1,73 @@
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: AU14PartyJobTimeSharesSalesman
+  name: Timeshares Salesperson
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearTimeSharesSalesman ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Timeshares Salesperson
+    description: You are a timeshares salesperson sent to the frontier to sell vacation packages. You travel from colony to colony trying to convince people to buy into shared properties.
+    raffle:
+      settings: short
+    rules: You are a timeshares salesperson sent to the frontier to sell vacation packages. You travel from colony to colony trying to convince people to buy into shared properties.
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+       RMCSkillFireman: 1
+       RMCSkillVehicles: 1
+       RMCSkillDomestics: 1
+
+- type: partySpawn
+  id: TimeSharesSalesmanSpawn
+  leadersToSpawn:
+    AU14PartyJobTimeSharesSalesman: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: TimeSharesSalesman
+  partyspawn: TimeSharesSalesmanSpawn
+  enterbyshuttle: true
+  weight: 5
+  minplayers: 30
+  maxplayers: 400
+  GhostsNeeded: 2
+  roundstart: false
+
+- type: startingGear
+  id: AU14GearTimeSharesSalesman
+  equipment:
+    outerClothing: RMCFancySuitJacketLightBrown
+    jumpsuit: RMCJumpsuitWornSuit
+    shoes: RMCShoesLaceupBrown
+    pocket1: RMCFlashlight
+    back: AU14SlingSatchelBlueTimeSharesSalesman
+    head: RMCHeadFedoraBrown
+
+- type: entity
+  parent: AU14SlingSatchelBlack
+  id: AU14SlingSatchelBlueTimeSharesSalesman
+  suffix: Filled, Time Shares Salesman
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMPen
+    - id: CMPaper
+    - id: CMPaper
+    - id: CMPaper
+    - id: CMPaper
+    - id: CMPaper
+    - id: CMPaper
+    - id: CMPaper
+    - id: CMPaper
+    - id: AU14CigarettePackBalajj
+    - id: RMCLighter

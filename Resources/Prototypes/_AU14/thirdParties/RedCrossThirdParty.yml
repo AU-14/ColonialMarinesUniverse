@@ -1,0 +1,228 @@
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: AU14PartyJobICRCDoctor
+  name: ICRC Medical Staff CMO
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearICRCDoctor ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: ICRC Medical Staff
+    description: You are a member of the medical staff assigned to an International Committee of the Red Cross relief mission, traveling from colony to colony to provide vaccines, medical aid and humanitarian assistance. Provide care to those you encounter and help the people of the Neroid Sector.
+    raffle:
+      settings: short
+    rules: You are a member of the medical staff assigned to an International Committee of the Red Cross relief mission, traveling from colony to colony to provide vaccines, medical aid and humanitarian assistance. Provide care to those you encounter and help the people of the Neroid Sector.
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+       RMCSkillFireman: 1
+       RMCSkillMedical: 3
+       RMCSkillSurgery: 2
+       RMCSkillVehicles: 1
+
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: AU14PartyJobICRCDoctorAlt
+  name: ICRC Medical Staff Doctor
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearICRCDoctorAlt ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: ICRC Medical Staff
+    description: You are a member of the medical staff assigned to an International Committee of the Red Cross relief mission, traveling from colony to colony to provide vaccines, medical aid and humanitarian assistance. Provide care to those you encounter and help the people of the Neroid Sector.
+    raffle:
+      settings: short
+    rules: You are a member of the medical staff assigned to an International Committee of the Red Cross relief mission, traveling from colony to colony to provide vaccines, medical aid and humanitarian assistance. Provide care to those you encounter and help the people of the Neroid Sector.
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+       RMCSkillFireman: 1
+       RMCSkillMedical: 3
+       RMCSkillSurgery: 2
+       RMCSkillVehicles: 1
+
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: AU14PartyJobICRCNurse
+  name: ICRC Medical Staff Nurse
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearICRCNurse ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: ICRC Medical Staff
+    description: You are a member of the medical staff assigned to an International Committee of the Red Cross relief mission, traveling from colony to colony to provide vaccines, medical aid and humanitarian assistance. Provide care to those you encounter and help the people of the Neroid Sector.
+    raffle:
+      settings: short
+    rules: You are a member of the medical staff assigned to an International Committee of the Red Cross relief mission, traveling from colony to colony to provide vaccines, medical aid and humanitarian assistance. Provide care to those you encounter and help the people of the Neroid Sector.
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+       RMCSkillFireman: 1
+       RMCSkillMedical: 3
+       RMCSkillSurgery: 1
+       RMCSkillVehicles: 1
+
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: AU14PartyJobICRCNurseAlt
+  name: ICRC Medical Staff Nurse Two
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearICRCNurseAlt ]
+  - type: RandomHumanoidAppearance
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: ICRC Medical Staff
+    description: You are a member of the medical staff assigned to an International Committee of the Red Cross relief mission, traveling from colony to colony to provide vaccines, medical aid and humanitarian assistance. Provide care to those you encounter and help the people of the Neroid Sector.
+    raffle:
+      settings: short
+    rules: You are a member of the medical staff assigned to an International Committee of the Red Cross relief mission, traveling from colony to colony to provide vaccines, medical aid and humanitarian assistance. Provide care to those you encounter and help the people of the Neroid Sector.
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+       RMCSkillFireman: 1
+       RMCSkillMedical: 3
+       RMCSkillSurgery: 1
+       RMCSkillVehicles: 1
+
+- type: partySpawn
+  id: ICRCReliefPartySpawn
+  leadersToSpawn:
+    AU14PartyJobICRCDoctor: 1
+  gruntsToSpawn:
+    AU14PartyJobICRCDoctorAlt: 1
+    AU14PartyJobICRCNurse: 1
+    AU14PartyJobICRCNurseAlt: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: ICRCReliefParty
+  partyspawn: ICRCReliefPartySpawn
+  enterbyshuttle: true
+  weight: 20
+  minplayers: 50
+  maxplayers: 400
+  GhostsNeeded: 20
+  roundstart: false
+
+- type: startingGear
+  id: AU14GearICRCDoctor
+  equipment:
+    outerClothing: RMCLabcoatCMO
+    jumpsuit: CMScrubsBlue
+    shoes: RMCShoesBlack
+    belt: CMUBeltMedicBagICRCDoctor
+    pocket1: RMCPouchMedicalFill
+    pocket2: RMCPouchGeneralLargeBureauObserverFill
+    back: RMCSatchelICBLiaisonFill
+    ears: CMHeadsetColony
+    ears2: RMCFlashlightPen
+    neck: ClothingNeckStethoscope
+    eyes: RMCGlassesMedicalHUDGlasses
+  inhand:
+  - AU14CMDefibrillator
+
+- type: startingGear
+  id: AU14GearICRCDoctorAlt
+  equipment:
+    outerClothing: RMCLabcoat
+    jumpsuit: CMScrubsBlue
+    shoes: RMCShoesBlack
+    belt: CMUBeltMedicBagICRCDoctor
+    head: CMHeadCapSurgBlue
+    pocket1: RMCPouchMedicalFill
+    pocket2: RMCPouchGeneralLargeBureauObserverFill
+    back: RMCSatchelICBLiaisonFill
+    ears: CMHeadsetColony
+    ears2: RMCFlashlightPen
+    neck: ClothingNeckStethoscope
+    eyes: RMCGlassesMedicalHUDGlasses
+
+- type: startingGear
+  id: AU14GearICRCNurse
+  equipment:
+    jumpsuit: RMCScrubsLightBlue
+    shoes: RMCShoesBlack
+    belt: CMUBeltMedicBagICRCDoctor
+    pocket1: RMCPouchMedicalFill
+    pocket2: RMCPouchGeneralLargeBureauObserverFill
+    back: CMSatchel
+    ears: CMHeadsetColony
+    ears2: RMCFlashlightPen
+    neck: ClothingNeckStethoscope
+    eyes: RMCGlassesMedicalHUDGlasses
+
+- type: startingGear
+  id: AU14GearICRCNurseAlt
+  equipment:
+    jumpsuit: RMCScrubsLightBlue
+    shoes: RMCShoesBlack
+    head: AU14CivBallCapBlack
+    belt: CMUBeltMedicBagICRCDoctor
+    pocket1: RMCPouchMedicalFill
+    pocket2: RMCPouchGeneralLargeBureauObserverFill
+    back: AU14CMDefibrillator
+    ears: CMHeadsetColony
+    ears2: RMCFlashlightPen
+    neck: ClothingNeckStethoscope
+    eyes: RMCGlassesMedicalHUDGlasses
+
+- type: entity
+  parent: CMBeltMedicBag
+  id: CMUBeltMedicBagICRCDoctor
+  suffix: Filled, ICRC Doctor
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14Tourniquet
+    - id: AU14Tourniquet
+    - id: AU14PillCanisterMeralyne
+    - id: AU14PillCanisterDermaline
+    - id: RMCPillCanisterIron
+    # - id: CMPillCanisterTramadol
+    - id: CMPillCanisterDylovene
+    # - id: CMPillCanisterPeridaxon
+    - id: AU14PillCanisterAlbuterol
+    # - id: CMPillCanisterAlkysine
+    - id: RMCPillCanisterImidazoline
+    - id: CMTraumaKit10
+      amount: 3
+    - id: CMBurnKit10
+      amount: 3
+    # - id: RMCSplint
+    - id: AU14NaloxoneAutoInjector
+    - id: CMEpinephrineAutoInjector
+    - id: CMHealthAnalyzer
+    - id: CMSynthGraft
+    - id: CMSurgicalLine
+    - id: CMHandsLatex
