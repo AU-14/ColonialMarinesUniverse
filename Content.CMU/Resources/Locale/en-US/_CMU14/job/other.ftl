@@ -36,5 +36,6 @@ au14-department-third-party-description = Select this job to play as a third par
 au14-department-threat = threat
 au14-department-threat-description = Select this job to play as the threat
 
+au14-cmbinvestigate-rules = You are an officer of the law. Investigate the area. You are neutral unless attacked.
 
-
+au14-lacncommandosniper-rules = You are a commando from the Latin American Colonial Navy. You have been sent to investigate the area and eliminate any hostiles. You are friendly to GOVFOR forces and neutral to civilians.
