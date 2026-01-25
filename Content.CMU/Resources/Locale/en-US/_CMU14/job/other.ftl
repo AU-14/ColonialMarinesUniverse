@@ -38,4 +38,6 @@ au14-department-threat-description = Select this job to play as the threat
 
 au14-cmbinvestigate-rules = You are an officer of the law. Investigate the area. You are neutral unless attacked.
 
-au14-lacncommandosniper-rules = You are a commando from the Latin American Colonial Navy. You have been sent to investigate the area and eliminate any hostiles. You are friendly to GOVFOR forces and neutral to civilians.
+au14-lacncommandosniper-rules = You have been loaned to the United Americas Allied Command by the LACN for a special mission on this planet, the details of which have not been disclosed to you. You have been ordered to investigate the area and report to the local GOVFOR command. You are friendly to GOVFOR and neutral to civilians.
+
+au14-uacglostthreat-rules = You are a Government Forces Third Party! You are friendly to GOVFOR forces and neutral to civilians. This threat asks for a slightly higher level of roleplay than others! Please keep this in mind.
