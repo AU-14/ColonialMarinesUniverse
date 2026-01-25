@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/items/storage/packets.dmi, blob:https://github.com/7423eae3-d32b-4d49-8b03-9a263ce3c93d",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "general_packet"
+    },
+    {
+      "name": "hidp_packet"
+    },
+    {
+      "name": "hidp_packet_e"
+    },
+    {
+      "name": "hedp_packet"
+    },
+    {
+      "name": "hedp_packet_e"
+    },
+    {
+      "name": "hsdp_packet"
+    },
+    {
+      "name": "hsdp_packet_e"
+    },
+    {
+      "name": "l96"
+    },
+    {
+      "name": "l96_e"
+    }
+  ]
+}
