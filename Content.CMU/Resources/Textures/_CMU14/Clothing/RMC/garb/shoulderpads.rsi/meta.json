@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13-pve at blob:https://github.com/4c457488-9d84-4bd3-878c-461997845d88, blob:https://github.com/598c3d47-63be-4941-945c-7a0023466508",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "helmet",
+      "directions": 4
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at blob:https://github.com/470db9de-819b-41b9-bee4-5d77d37fb0ce, blob:https://github.com/69d2a849-05b6-420e-858d-22da9a715913, https://github.com/cmss13-devs/cmss13/blob/a50253802b9d56391f7b857684e345119a207f43/icons/mob/humans/onmob/items_lefthand_0.dmi, https://github.com/cmss13-devs/cmss13/blob/a50253802b9d56391f7b857684e345119a207f43/icons/mob/humans/onmob/items_righthand_0.dmi", 
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "equipped-BACKPACK",
+      "directions": 4
+    },
+    {
+      "name": "icon"
+    },
+    {
+      "name": "open"
+    },
+    {
+      "name": "closed"
+    }
+  ]
+}
