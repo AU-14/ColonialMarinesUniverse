@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "ttps://github.com/cmss13-devs/cmss13/blob/33e0129daa96bc985ef17333dc17e86b1ca318f0/icons/obj/items/clothing/belts.dmi https://github.com/cmss13-devs/cmss13/blob/4047c473d4d2f3e58e68efdec5aa95d0676bf4d1/icons/mob/humans/onmob/items_righthand_1.dmi https://github.com/cmss13-devs/cmss13/blob/4047c473d4d2f3e58e68efdec5aa95d0676bf4d1/icons/mob/humans/onmob/items_lefthand_1.dmi https://github.com/cmss13-devs/cmss13/blob/a1079f4912a96473dae51cceaa1d74eafb3939e2/icons/mob/humans/onmob/belt.dmi",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/168c8a79a3d858a8c531ff7ed0bc3033e47d1d16/icons/obj/items/clothing/belts.dmi, https://github.com/cmss13-devs/cmss13/blob/207f72c0f8ca3762632938b51fd1c41bca2c7747/icons/mob/humans/onmob/belt.dmi, https://github.com/cmss13-devs/cmss13/blob/168c8a79a3d858a8c531ff7ed0bc3033e47d1d16/icons/mob/humans/onmob/items_lefthand_1.dmi, https://github.com/cmss13-devs/cmss13/blob/168c8a79a3d858a8c531ff7ed0bc3033e47d1d16/icons/mob/humans/onmob/items_righthand_1.dmi, https://github.com/cmss13-devs/cmss13/blob/168c8a79a3d858a8c531ff7ed0bc3033e47d1d16/icons/mob/humans/onmob/items_lefthand_1.dmi",
   "size": {
     "x": 32,
     "y": 32
@@ -11,22 +11,14 @@
       "name": "icon"
     },
     {
-      "name": "sixth"
-    },
-    {
-      "name": "third"
-    },
-    {
       "name": "half"
     },
     {
-      "name": "twothirds"
-    },
-    {
-      "name": "fivesixths"
-    },
-    {
       "name": "full"
+    },
+    {
+      "name": "equipped-BELT",
+      "directions": 4
     },
     {
       "name": "inhand-right",
@@ -34,10 +26,6 @@
     },
     {
       "name": "inhand-left",
-      "directions": 4
-    },
-    {
-      "name": "equipped-BELT",
       "directions": 4
     }
   ]
