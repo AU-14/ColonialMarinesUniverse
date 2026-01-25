@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from blob:https://github.com/510dec4a-d685-427d-9c72-7d3dbdfdd2a5, blob:https://github.com/f9ae022c-5e7b-4331-bd24-5bf1fdf0a685, blob:https://github.com/e879c39c-eb60-404f-8e87-4ac19e4fda62",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "rmc-ballistic-icon"
+    },
+    {
+      "name": "rmc-ballistic-on"
+    },
+    {
+      "name": "rmc-ballistic-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "rmc-ballistic-inhand-left",
+      "directions": 4
+    }
+  ]
+}
