@@ -98,5 +98,7 @@ au14-job-name-govfordccRMC = Royal Dropship Chief Crew
 au14-job-name-govforplatopRMC = Royal Junior Officer
 au14-job-name-govfordspilotRMC = Royal Pilot Officer
 au14-job-prefix-govfordspilotRMC = PO
+au14-job-name-govforSSGRMC = Royal Platoon Sergeant
+au14-job-prefix-govforSSGRMC = PS
 au14-job-name-radiotelephoneoperatorRMC = Royal Radio Operator
 au14-job-name-govforsquadriflemanRMC = Royal Rifleman
