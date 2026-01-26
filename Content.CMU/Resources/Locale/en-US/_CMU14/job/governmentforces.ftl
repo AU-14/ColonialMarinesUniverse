@@ -86,3 +86,8 @@ au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanCMBCIU = TACMED
 au14-job-prefix-AU14JobGOVFORSectionSergeantCMBCIU = ULDR
 au14-job-prefix-AU14JobGOVFORSquadRiflemanCMBCIU = OFF
 au14-job-prefix-AU14JobGOVFORSquadSergeantCMBCIU = TLDR
+
+au14-job-name-govforsquadsergeantRMC = Team Leader
+au14-job-prefix-govforsquadsergeantRMC = SC
+au14-job-name-govforsquadautomaticriflemanRMC = Machinegunner
+au14-job-prefix-govforsquadautomaticriflemanRMC = MG

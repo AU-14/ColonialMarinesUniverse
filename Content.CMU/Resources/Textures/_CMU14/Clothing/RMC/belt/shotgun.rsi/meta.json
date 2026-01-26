@@ -27,6 +27,18 @@
     {
       "name": "inhand-left",
       "directions": 4
+    },
+    {
+      "name": "sixth"
+    },
+    {
+      "name": "third"
+    },
+    {
+      "name": "twothirds"
+    },
+    {
+      "name": "fivesixths"
     }
   ]
 }
