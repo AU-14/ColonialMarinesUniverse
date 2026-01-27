@@ -11,6 +11,9 @@
       "name": "icon"
     },
     {
+      "name": "icon-front"
+    },
+    {
       "name": "half"
     },
     {
@@ -27,9 +30,6 @@
     {
       "name": "inhand-left",
       "directions": 4
-    },
-    {
-      "name": "icon_front"
     }
   ]
 }
