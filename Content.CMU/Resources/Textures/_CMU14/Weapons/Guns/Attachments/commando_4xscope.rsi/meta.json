@@ -9,6 +9,9 @@
   "states": [
     {
       "name": "staticscope"
+    },
+    {
+      "name": "staticscope_a"
     }
   ]
 }
