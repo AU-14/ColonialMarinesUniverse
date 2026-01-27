@@ -8,8 +8,8 @@ using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
-using Content.Server.Players.RateLimiting;
-using Content.Server.Speech.Components;
+using Content.Server.Players.RateLimiting; // redundant, console warning me about this directive not being used anywhere in this ChatSystem.cs
+using Content.Server.Speech.Components; // redundant, same as above directive. I have tested the game without both of these, and it works fine, but I will leave them here for now. If you wanna remove them it should be safe to do so (optimisation possible)
 using Content.Server.Speech.Prototypes;
 using Content.Server.Speech.EntitySystems;
 using Content.Server.Station.Components;
@@ -539,7 +539,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         bool ignoreXenos = false
         )
     {
-        if (!_actionBlocker.CanSpeak(source) && !ignoreActionBlocker)
+        if (!_actionBlocker.CanSpeak(source) && !ignoreActionBlocker && !_mobStateSystem.IsCritical(source)) // mobs that are in critical can whisper
             return;
 
         var message = TransformSpeech(source, FormattedMessage.RemoveMarkupOrThrow(originalMessage));
@@ -629,7 +629,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         NetUserId? author = null
         )
     {
-        if (!_actionBlocker.CanEmote(source) && !ignoreActionBlocker)
+        if (!_actionBlocker.CanEmote(source) && !ignoreActionBlocker && !_mobStateSystem.IsCritical(source)) // mobs that are in critical can emote
             return;
 
         // get the entity's apparent name (if no override provided).
