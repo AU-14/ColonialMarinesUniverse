@@ -1,5 +1,5 @@
-au14-department-colonialliberationfront = Colonial Liberation Front
-au14-department-colonialliberationfront-description = To some, the Colonial Liberation Front are the militia to keep the peace, to others they're rebels who oppose the government. As a member of the CLF you fight for freedom against the many governments of the Neroid Sector, who foolishly believe that your homes belong to them.
+au14-department-colonialliberationfront = Insurgency
+au14-department-colonialliberationfront-description = To some, the Insurgency is the militia to keep the peace, to others they're rebels who oppose the government. As a member of the insurgency you fight for freedom against the many governments of the Neroid Sector, who foolishly believe that your homes belong to them.
 
 au14-job-supervisors-clflrs = The Cell Leader.
 au14-job-supervisors-clfcellleader = CLF High Command.

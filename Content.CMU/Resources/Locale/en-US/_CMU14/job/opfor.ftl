@@ -63,3 +63,8 @@ AU14JobOPFORSquadCombatTech = Combat Technician
 au14-job-name-opforsquadcombattech = Combat Technician
 au14-job-description-opforsquadcombattech = Provide engineering and construction support for your faction.
 au14-job-prefix-opforsquadcombattech = CT
+
+AU14JobOPFORadvisor = Advisor
+au14-job-name-opforadvisor = Advisor
+au14-job-description-opforadvisor = Advise command, mentor new soldiers and provide assistance wherever needed.
+au14-job-prefix-opforadvisor = ADV
