@@ -1,6 +1,6 @@
 chat-radio-opfor = Alpha
 chat-radio-opforcommand =  Command
-chat-radio-opforjtac =  JTAC
+chat-radio-opforjtac =  ATC
 chat-radio-opforintel =  Intel
 chat-radio-opforbravo =  Bravo
 chat-radio-opforcharlie =  Charlie

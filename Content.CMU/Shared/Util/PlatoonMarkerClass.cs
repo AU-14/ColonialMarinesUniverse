@@ -22,6 +22,7 @@ namespace Content.Shared.AU14.util
         SectionSergeant,
         Pilot,
         ExtraVendor1,
+        combattech,
         ExtraVendor2,
         ExtraVendor3,
         ExtraVendor4,

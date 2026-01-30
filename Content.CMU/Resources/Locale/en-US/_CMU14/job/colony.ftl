@@ -57,10 +57,10 @@ au14-job-description-foreman = Oversee the Engineering and Logistics department.
 au14-job-prefix-colonyforeman = FORM
 AU14JobCivilianForeman = Foreman
 
-au14-job-name-civiliancorporateliaison = WY Manager
+au14-job-name-civiliancorporateliaison = Corporate Manager
 au14-job-description-civiliancorporateliaison = Ensure corporate interests are upheld and company policy is followed.
-au14-job-prefix-corporateliaison = WYCL
-AU14JobCivilianCorporateLiaison = WY Manager
+au14-job-prefix-corporateliaison = CL
+AU14JobCivilianCorporateLiaison = Corporate Manager
 
 au14-job-name-civilianphysician = Physician
 au14-job-description-civilianphysician = Provide diagnosis, surgery, and treatment for the colony's personnel.

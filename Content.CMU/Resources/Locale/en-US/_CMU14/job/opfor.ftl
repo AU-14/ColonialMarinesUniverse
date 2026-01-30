@@ -58,3 +58,8 @@ AU14JobOPFORAuxSupportSynth = Support Synthetic
 au14-job-name-opforauxsupportsynth = Support Synthetic
 au14-job-description-opforauxsupportsynth = Provide logistics, medical, police and command support for your faction.
 au14-job-prefix-opforauxsupportsynth = SYNTH
+
+AU14JobOPFORSquadCombatTech = Combat Technician
+au14-job-name-opforsquadcombattech = Combat Technician
+au14-job-description-opforsquadcombattech = Provide engineering and construction support for your faction.
+au14-job-prefix-opforsquadcombattech = CT
