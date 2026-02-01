@@ -112,3 +112,5 @@ au14-job-name-govforSSGRMC = Senior Sergeant
 au14-job-prefix-govforSSGRMC = PS
 au14-job-name-radiotelephoneoperatorRMC = Signal Operator
 au14-job-name-govforsquadriflemanRMC = Rifleman
+
+au14-job-prefix-govfork9handler = K9

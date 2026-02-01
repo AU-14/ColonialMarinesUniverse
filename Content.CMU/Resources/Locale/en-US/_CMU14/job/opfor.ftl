@@ -68,3 +68,5 @@ AU14JobOPFORadvisor = Advisor
 au14-job-name-opforadvisor = Advisor
 au14-job-description-opforadvisor = Advise command, mentor new soldiers and provide assistance wherever needed.
 au14-job-prefix-opforadvisor = ADV
+
+au14-job-prefix-opfork9handler = K9
