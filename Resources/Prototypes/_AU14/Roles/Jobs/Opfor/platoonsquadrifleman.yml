@@ -4,7 +4,7 @@
   name: au14-job-name-opforsquadrifleman
   description: au14-job-description-opforsquadrifleman
   setPreference: true
-  playTimeTracker: AU14JobOpforSquadRifleman
+  playTimeTracker: AU14JobGOVFORSquadRifleman
   requirements:
   - !type:TraitsRequirement
     inverted: true
@@ -13,7 +13,7 @@
   ranks:
     RMCRankPrivateFirstClass:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforSquadRifleman
+      role: AU14JobGOVFORSquadRifleman
       time: 54000 # 15 hours
     RMCRankPrivate: []
   startingGear: AU14GearopforSquadRifleman
@@ -59,10 +59,6 @@
     job_id: AU14JobOpforSquadRifleman
   - type: Sprite
     state: syn_spawn
-
-- type: playTimeTracker
-  id: AU14JobOpforSquadRifleman
-  isHumanoid: true
 
 - type: startingGear
   id: AU14GearopforRiflemanDummy

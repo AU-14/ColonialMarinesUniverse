@@ -5,7 +5,7 @@
   description: au14-job-description-opforplatco
   setPreference: true
   canBeAntag: false
-  playTimeTracker: AU14JobOpforPlatCo
+  playTimeTracker: AU14JobGOVFORPlatCo
   requirements:
   - !type:OverallPlaytimeRequirement
     time: 18000 # 5 hours
@@ -22,7 +22,7 @@
   ranks:
     RMCRankCaptain:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforPlatCo
+      role: AU14JobGOVFORPlatCo
       time: 432000 # 120 hours
     RMCRankFirstLT: []
   startingGear: AU14GearopforPlatCo
@@ -67,10 +67,6 @@
     job_id: AU14JobOpforPlatCo
   - type: Sprite
     state: syn_spawn
-
-- type: playTimeTracker
-  id: AU14JobOpforPlatCo
-  isHumanoid: true
 
 - type: startingGear
   id: AU14GearopforPlatCoDummy

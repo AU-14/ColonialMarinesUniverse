@@ -14,11 +14,11 @@
   ranks:
     RMCRankCorporal:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadAutomaticRifleman
+      role: AU14JobGOVFORRadioTelephoneOperator
       time: 216000 # 60 hours
     RMCRankLanceCorporal:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadAutomaticRifleman
+      role: AU14JobGOVFORRadioTelephoneOperator
       time: 108000 # 30 hours
     RMCRankPrivateFirstClass: []
   startingGear: AU14GearGOVFORRadioTelephoneOperator

@@ -5,7 +5,7 @@
   description: au14-job-description-govforplatco
   setPreference: false
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORPlatCoCMBCIU
+  playTimeTracker: AU14JobGOVFORPlatCo
   ranks:
     AU14RankCMBMarshal: []
   startingGear: AU14GearGOVFORPlatCo
@@ -44,7 +44,3 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORPlatCoCMBCIU
-  isHumanoid: true

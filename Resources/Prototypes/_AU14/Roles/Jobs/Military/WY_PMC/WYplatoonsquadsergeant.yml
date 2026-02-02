@@ -5,11 +5,11 @@
   description: au14-job-description-govforsquadsergeant
   setPreference: false
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORSquadSergeantWYPMC
+  playTimeTracker: AU14JobGOVFORSquadSergeant
   ranks:
     AU14RankWeYuEnforcerSenior:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadSergeantWYPMC
+      role: AU14JobGOVFORSquadSergeant
       time: 1800 # 30 hours
     AU14RankWeYuEnforcer: []
   startingGear: AU14GearGOVFORSquadSergeant
@@ -42,7 +42,3 @@
         state: synth
     - type: MarineOrders
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORSquadSergeantWYPMC
-  isHumanoid: true

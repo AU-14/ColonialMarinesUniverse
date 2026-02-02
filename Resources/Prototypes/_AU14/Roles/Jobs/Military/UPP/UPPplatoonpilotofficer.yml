@@ -5,19 +5,19 @@
   description: au14-job-description-govfordspilot
   setPreference: false
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORDSPilotUPP
+  playTimeTracker: AU14JobGOVFORDSPilot
   ranks:
     UPP_MariscalDeCampo:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORDSPilotUPP
+      role: AU14JobGOVFORDSPilot
       time: 7200 # 120 hours
     UPP_Hauptfeldwebel:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORDSPilotUPP
+      role: AU14JobGOVFORDSPilot
       time: 3600 # 60 hours
     UPP_StarschyPraporshchik:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORDSPilotUPP
+      role: AU14JobGOVFORDSPilot
       time: 1800 # 30 hours
     UPP_Praporshchik: []
   startingGear: AU14GearGOVFORDSPilot
@@ -54,7 +54,3 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORDSPilotUPP
-  isHumanoid: true

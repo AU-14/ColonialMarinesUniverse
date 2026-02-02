@@ -4,11 +4,11 @@
   name: Platoon Leader
   description: au14-job-description-govforSSG
   setPreference: false
-  playTimeTracker: AU14JobGOVFORSectionSergeantUPP
+  playTimeTracker: AU14JobGOVFORSectionSergeant
   ranks:
     UPP_Plutonowy:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSectionSergeantUPP
+      role: AU14JobGOVFORSectionSergeant
       time: 1800 # 30 hours
     UPP_StarschySerzhant: []
   startingGear: AU14GearGOVFORSectionSergeant
@@ -48,7 +48,3 @@
         state: synth
     - type: MarineOrders
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORSectionSergeantUPP
-  isHumanoid: true

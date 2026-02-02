@@ -6,6 +6,20 @@
     - /Audio/_AU14/Voice/Screams/male_scream_3.ogg
     - /Audio/_AU14/Voice/Screams/male_scream_4.ogg
     - /Audio/_AU14/Voice/Screams/male_scream_5.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_p1.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_p2.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_p3.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_p4.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_p5.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_p6.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_p7.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_p8.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_p9.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_p10.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_p11.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_p12.ogg
+    - /Audio/_AU14/Voice/Screams/male_scream_p13.ogg
+
 
 - type: soundCollection
   id: CMFemaleScreams

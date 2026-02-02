@@ -5,7 +5,7 @@
   description: au14-job-description-govforplatop
   setPreference: false
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORPlatOpWYPMC
+  playTimeTracker: AU14JobGOVFORPlatOp
   ranks:
     AU14RankWeYuAdjutant: []
   startingGear: AU14GearGOVFORPlatOp
@@ -45,7 +45,3 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORPlatOpWYPMC
-  isHumanoid: true

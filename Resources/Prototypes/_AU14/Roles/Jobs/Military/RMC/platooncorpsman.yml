@@ -10,7 +10,7 @@
     traits:
     - Epilepsy
     - NonResuscitable
-  playTimeTracker: AU14JobGOVFORPlatoonCorpsmanRMC
+  playTimeTracker: AU14JobGOVFORPlatoonCorpsman
   ranks:
     RMC_Corporal:
     - !type:RoleTimeRequirement
@@ -54,7 +54,3 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORPlatoonCorpsmanRMC
-  isHumanoid: true

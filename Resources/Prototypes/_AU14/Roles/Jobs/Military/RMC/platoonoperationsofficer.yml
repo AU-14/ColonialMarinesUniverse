@@ -15,7 +15,7 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
-  playTimeTracker: AU14JobGOVFORPlatOpRMC
+  playTimeTracker: AU14JobGOVFORPlatOp
   ranks:
     RMC_2Lieutenant: []
   startingGear: AU14GearGOVFORPlatOp
@@ -60,7 +60,3 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORPlatOpRMC
-  isHumanoid: true

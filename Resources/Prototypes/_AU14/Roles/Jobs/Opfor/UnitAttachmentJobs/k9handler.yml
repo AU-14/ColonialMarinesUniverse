@@ -4,7 +4,7 @@
   name: K9 Handler
   description: K9 Handler
   setPreference: false
-  playTimeTracker: AU14JobOPFORk9handler
+  playTimeTracker: AU14JobGOVFORk9handler
   ranks:
     RMCRankStaffSergeant: []
   startingGear: AU14GearopforPlatoonCorpsman
@@ -35,10 +35,6 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobOPFORk9handler
-  isHumanoid: true
 
 - type: entity
   parent: CMSpawnPointJobBase

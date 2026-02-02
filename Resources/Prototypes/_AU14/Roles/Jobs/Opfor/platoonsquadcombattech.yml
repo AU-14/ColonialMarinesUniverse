@@ -10,19 +10,19 @@
     traits:
     - Epilepsy
     - NonResuscitable
-  playTimeTracker: AU14JobOPFORSquadCombatTech
+  playTimeTracker: AU14JobGOVFORSquadCombatTech
   ranks:
     RMCRankCorporal:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforSquadAutomaticRifleman
+      role: AU14JobGOVFORSquadCombatTech
       time: 216000 # 60 hours
     RMCRankLanceCorporal:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforSquadAutomaticRifleman
+      role: AU14JobGOVFORSquadCombatTech
       time: 108000 # 30 hours
     RMCRankPrivateFirstClass:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforSquadAutomaticRifleman
+      role: AU14JobGOVFORSquadCombatTech
       time: 54000 # 15 hours
     RMCRankPrivate: []
   startingGear: AU14GearOPFORSquadCombatTech
@@ -71,10 +71,6 @@
     job_id: AU14JobOPFORSquadCombatTech
   - type: Sprite
     state: syn_spawn
-
-- type: playTimeTracker
-  id: AU14JobOPFORSquadCombatTech
-  isHumanoid: true
 
 - type: startingGear
   id: AU14GearOPFORCTDummy

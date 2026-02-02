@@ -4,15 +4,15 @@
   name: Tactical Officer
   description: au14-job-description-govforsquadrifleman
   setPreference: false
-  playTimeTracker: AU14JobGOVFORSquadRiflemanCMBCIU
+  playTimeTracker: AU14JobGOVFORSquadRifleman
   ranks:
     AU14RankCMBSrDeputy:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadRiflemanCMBCIU
+      role: AU14JobGOVFORSquadRifleman
       time: 1800 # 30 hours
     AU14RankCMBDeputy:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadRiflemanCMBCIU
+      role: AU14JobGOVFORSquadRifleman
       time: 120 # 2 hours
     AU14RankCMBProbDeputy: []
   startingGear: AU14GearGOVFORSquadRifleman
@@ -44,7 +44,3 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORSquadRiflemanCMBCIU
-  isHumanoid: true

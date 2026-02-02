@@ -4,7 +4,7 @@
   name: au14-job-name-govforsquadautomaticriflemanRMC
   description: au14-job-description-govforsquadautomaticrifleman
   setPreference: true
-  playTimeTracker: AU14JobGOVFORSquadAutomaticRiflemanRMC
+  playTimeTracker: AU14JobGOVFORSquadAutomaticRifleman
   requirements:
   - !type:TraitsRequirement
     inverted: true
@@ -31,7 +31,7 @@
   - AU14GovforGunner
   overwatchSortPriority: -3
   overwatchShowName: true
-  overwatchRoleName: Machinegunner
+  overwatchRoleName: Automatic Rifleman
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
@@ -42,14 +42,7 @@
     - type: Marine
       Faction: govfor
     - type: Skills
-      skills:
-        RMCSkillFirearms: 2
-        RMCSkillFireman: 1
-        RMCSkillJtac: 1
-        RMCSkillSmartGun: 1
-        RMCSkillConstruction: 2
-        RMCSkillEngineer: 3
-        RMCSkillPolice: 1
+      preset: AU14SkillPresetPlatoonAutomaticRifleman
     - type: SquadArmorWearer
     - type: JobPrefix
       prefix: au14-job-prefix-govforsquadautomaticrifleman
@@ -58,7 +51,3 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: smartgunner
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORSquadAutomaticRiflemanRMC
-  isHumanoid: true

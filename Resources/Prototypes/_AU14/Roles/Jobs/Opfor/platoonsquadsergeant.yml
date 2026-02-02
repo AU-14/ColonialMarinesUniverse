@@ -12,7 +12,7 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
-  playTimeTracker: AU14JobOpforSquadSergeant
+  playTimeTracker: AU14JobGOVFORSquadSergeant
   ranks:
     RMCRankSergeant: []
   startingGear: AU14GearopforSquadSergeant
@@ -60,11 +60,7 @@
     job_id: AU14JobOpforSquadSergeant
   - type: Sprite
     state: syn_spawn
-
-- type: playTimeTracker
-  id: AU14JobOpforSquadSergeant
-  isHumanoid: true
-
+    
 - type: startingGear
   id: AU14GearopforSquadSergantDummy
   equipment:

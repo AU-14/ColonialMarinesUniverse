@@ -4,11 +4,11 @@
   name: Field Medic
   description: au14-job-description-govforplatooncorpsman
   setPreference: false
-  playTimeTracker: AU14JobGOVFORPlatoonCorpsmanUPP
+  playTimeTracker: AU14JobGOVFORPlatoonCorpsman
   ranks:
     UPP_StarschyRyadovoy:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORPlatoonCorpsmanUPP
+      role: AU14JobGOVFORPlatoonCorpsman
       time: 1800 # 30 hours
     UPP_Yefreytor: []
   startingGear: AU14GearGOVFORPlatoonCorpsman
@@ -43,7 +43,3 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORPlatoonCorpsmanUPP
-  isHumanoid: true

@@ -4,11 +4,11 @@
   name: Tactical Medic
   description: au14-job-description-govforplatooncorpsman
   setPreference: false
-  playTimeTracker: AU14JobGOVFORPlatoonCorpsmanCMBCIU
+  playTimeTracker: AU14JobGOVFORPlatoonCorpsman
   ranks:
     AU14RankCMBSrDeputy:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORPlatoonCorpsmanCMBCIU
+      role: AU14JobGOVFORPlatoonCorpsman
       time: 1800 # 30 hours
     AU14RankCMBDeputy: []
   startingGear: AU14GearGOVFORPlatoonCorpsman
@@ -43,7 +43,3 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORPlatoonCorpsmanCMBCIU
-  isHumanoid: true

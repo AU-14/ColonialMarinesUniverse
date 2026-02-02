@@ -16,6 +16,10 @@
     traits:
     - Epilepsy
   ranks:
+    RMCRankSergeantMajor:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORadvisor
+      time: 432000 # 120 hours
     RMCRankFirstSergeant: []
   startingGear: AU14GearGOVFORadvisor
   dummyStartingGear: AU14GearGOVFORadvisorDummy

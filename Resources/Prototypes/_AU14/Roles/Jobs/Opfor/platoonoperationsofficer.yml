@@ -15,7 +15,7 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
-  playTimeTracker: AU14JobOpforPlatOp
+  playTimeTracker: AU14JobGOVFORPlatOp
   ranks:
     RMCRankSecondLT: []
   startingGear: AU14GearopforPlatOp
@@ -61,10 +61,6 @@
     job_id: AU14JobOpforPlatOp
   - type: Sprite
     state: syn_spawn
-
-- type: playTimeTracker
-  id: AU14JobOpforPlatOp
-  isHumanoid: true
 
 - type: startingGear
   id: AU14GearopforPlatOpDummy

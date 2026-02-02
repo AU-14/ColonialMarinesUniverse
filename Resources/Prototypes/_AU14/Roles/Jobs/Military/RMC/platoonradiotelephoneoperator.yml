@@ -4,7 +4,7 @@
   name: au14-job-name-radiotelephoneoperatorRMC
   description: au14-job-description-radiotelephoneooerator
   setPreference: true
-  playTimeTracker: AU14JobGOVFORRadioTelephoneOperatorRMC
+  playTimeTracker: AU14JobGOVFORRadioTelephoneOperator
   requirements:
   - !type:TraitsRequirement
     inverted: true
@@ -56,7 +56,3 @@
         state: synth
     - type: MarineOrders
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORRadioTelephoneOperatorRMC
-  isHumanoid: true

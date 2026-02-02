@@ -5,11 +5,11 @@
   description: au14-job-description-govfordspilot
   setPreference: false
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORDSPilotWYPMC
+  playTimeTracker: AU14JobGOVFORDSPilot
   ranks:
     AU14RankWeYuSeniorCrewChief:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORDSPilotWYPMC
+      role: AU14JobGOVFORDSPilot
       time: 1800 # 30 hours
     AU14RankWeYuCrewChief: []
   startingGear: AU14GearGOVFORDSPilot
@@ -46,7 +46,3 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORDSPilotWYPMC
-  isHumanoid: true

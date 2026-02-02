@@ -5,7 +5,7 @@
   description: au14-job-description-opforadvisor
   setPreference: true
   canBeAntag: false
-  playTimeTracker: AU14JobOPFORadvisor
+  playTimeTracker: AU14JobGOVFORadvisor
   requirements:
   - !type:OverallPlaytimeRequirement
     time: 3600 # Set to 72000 once we are fully launched AU14 todo
@@ -16,6 +16,10 @@
     traits:
     - Epilepsy
   ranks:
+    RMCRankSergeantMajor:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORadvisor
+      time: 432000 # 120 hours
     RMCRankFirstSergeant: []
   startingGear: AU14GearOPFORadvisor
   dummyStartingGear: AU14GearOPFORadvisorDummy
@@ -61,10 +65,6 @@
     job_id: AU14JobOPFORadvisor
   - type: Sprite
     state: syn_spawn
-
-- type: playTimeTracker
-  id: AU14JobOPFORadvisor
-  isHumanoid: true
 
 - type: startingGear
   id: AU14GearOPFORadvisorDummy

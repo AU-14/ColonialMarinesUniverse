@@ -4,7 +4,7 @@
   name: au14-job-name-govforSSGRMC
   description: au14-job-description-govforSSG
   setPreference: true
-  playTimeTracker: AU14JobGOVFORSectionSergeantRMC
+  playTimeTracker: AU14JobGOVFORSectionSergeant
   requirements:
   - !type:AgeRequirement
     requiredAge: 25
@@ -63,7 +63,3 @@
         state: synth
     - type: MarineOrders
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORSectionSergeantRMC
-  isHumanoid: true

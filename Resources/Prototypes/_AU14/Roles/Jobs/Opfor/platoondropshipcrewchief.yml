@@ -10,19 +10,19 @@
     traits:
     - Epilepsy
     - NonResuscitable
-  playTimeTracker: AU14JobOpforDCC
+  playTimeTracker: AU14JobGOVFORDCC
   ranks:
     AU14RankUSASFCMSgt:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforDCC
+      role: AU14JobGOVFORDCC
       time: 432000 # 120 hours
     AU14RankUSASFSMSgt:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforDCC
+      role: AU14JobGOVFORDCC
       time: 216000 # 60 hours
     AU14RankUSASFMasterSergeant:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforDCC
+      role: AU14JobGOVFORDCC
       time: 43200 # 12 hours
     AU14RankUSASFTechnicalSergeant: []
   startingGear: AU14GearopforDCC
@@ -69,10 +69,6 @@
     job_id: AU14JobOpforDCC
   - type: Sprite
     state: syn_spawn
-
-- type: playTimeTracker
-  id: AU14JobOpforDCC
-  isHumanoid: true
 
 - type: startingGear
   id: AU14GearopforDCCDummy

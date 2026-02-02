@@ -14,15 +14,15 @@
   ranks:
     RMCRankCorporal:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforSquadAutomaticRifleman
+      role: AU14JobGOVFORSquadAutomaticRifleman
       time: 216000 # 60 hours
     RMCRankLanceCorporal:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforSquadAutomaticRifleman
+      role: AU14JobGOVFORSquadAutomaticRifleman
       time: 108000 # 30 hours
     RMCRankPrivateFirstClass:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforSquadAutomaticRifleman
+      role: AU14JobGOVFORSquadAutomaticRifleman
       time: 54000 # 15 hours
     RMCRankPrivate: []
   startingGear: AU14GearGOVFORSquadCombatTech

@@ -37,6 +37,25 @@
     - /Audio/_AU14/Voice/Corpsman/male_corpsman34.ogg
     - /Audio/_AU14/Voice/Corpsman/male_corpsman35.ogg
     - /Audio/_AU14/Voice/Corpsman/male_corpsman36.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/corpsman_male_p1.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/corpsman_male_p2.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/corpsman_male_p3.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/corpsman_male_p4.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/corpsman_male_p5.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/corpsman_male_p6.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/corpsman_male_p7.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/corpsman_male_p8.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/corpsman_male_p9.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/corpsman_male_p10.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/corpsman_male_p11.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/medic_male_p1.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/medic_male_p2.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/medic_male_p3.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/medic_male_p4.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/medic_male_p5.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/medic_male_p6.ogg
+    - /Audio/_RMC14/Voice/Human/Medic/medic_male_p7.ogg
+
 
 - type: soundCollection
   id: AU14FemaleCorpsman

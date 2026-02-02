@@ -22,7 +22,7 @@
   ranks:
     RMCRankCaptain:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforPlatCo
+      role: AU14JobGOVFORPlatCo
       time: 432000 # 120 hours
     RMCRankFirstLT: []
   startingGear: AU14GearGOVFORPlatCo

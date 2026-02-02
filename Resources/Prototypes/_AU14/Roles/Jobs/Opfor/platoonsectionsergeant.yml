@@ -5,7 +5,7 @@
   description: au14-job-description-opforSSG
   setPreference: true
   canBeAntag: false
-  playTimeTracker: AU14JobOpforSectionSergeant
+  playTimeTracker: AU14JobGOVFORSectionSergeant
   requirements:
   - !type:TraitsRequirement
     inverted: true
@@ -17,11 +17,11 @@
   ranks:
     RMCRankMasterSergeant:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforSectionSergeant
+      role: AU14JobGOVFORSectionSergeant
       time: 432000 # 120 hours
     RMCRankGunnerySergeant:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforSectionSergeant
+      role: AU14JobGOVFORSectionSergeant
       time: 216000 # 60 hours
     RMCRankStaffSergeant: []
   startingGear: AU14GearopforSectionSergeant
@@ -70,10 +70,6 @@
     job_id: AU14JobOpforSectionSergeant
   - type: Sprite
     state: syn_spawn
-
-- type: playTimeTracker
-  id: AU14JobOpforSectionSergeant
-  isHumanoid: true
 
 - type: startingGear
   id: AU14GearopforPlatoonSergantDummy

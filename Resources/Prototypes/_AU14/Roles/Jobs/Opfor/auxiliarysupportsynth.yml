@@ -5,7 +5,7 @@
   description: au14-job-description-opforauxsupportsynth
   setPreference: true
   canBeAntag: false
-  playTimeTracker: AU14JobOPFORAuxSupportSynth
+  playTimeTracker: AU14JobGOVFORAuxSupportSynth
   requirements:
   - !type:OverallPlaytimeRequirement
     time: 7200 # 2 hours
@@ -19,7 +19,7 @@
   ranks:
     RMCRankChiefWarrantOfficer:
     - !type:RoleTimeRequirement
-      role: AU14JobOPFORAuxSupportSynth
+      role: AU14JobGOVFORAuxSupportSynth
       time: 180000 # 50 hours
     RMCRankWarrantOfficer: []
   startingGear: AU14GearOPFORAuxSupportSynth
@@ -87,10 +87,6 @@
     job_id: AU14JobOPFORAuxSupportSynth
   - type: Sprite
     state: syn_spawn
-
-- type: playTimeTracker
-  id: AU14JobOPFORAuxSupportSynth
-  isHumanoid: true
 
 - type: startingGear
   id: AU14GearOPFORAuxSupportSynthDummy

@@ -4,11 +4,11 @@
   name: Radio Telephone Operator
   description: au14-job-description-radiotelephoneooerator
   setPreference: false
-  playTimeTracker: AU14JobGOVFORRadioTelephoneOperatorUPP
+  playTimeTracker: AU14JobGOVFORRadioTelephoneOperator
   ranks:
     UPP_StarschyRyadovoy:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORRadioTelephoneOperatorUPP
+      role: AU14JobGOVFORRadioTelephoneOperator
       time: 1800 # 30 hours
     UPP_Yefreytor: []
   startingGear: AU14GearGOVFORRadioTelephoneOperator
@@ -41,7 +41,3 @@
         state: synth
     - type: MarineOrders
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORRadioTelephoneOperatorUPP
-  isHumanoid: true

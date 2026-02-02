@@ -38,6 +38,12 @@
   - /Audio/_AU14/Voice/Warcrys/warcry_male_35.ogg
   - /Audio/_AU14/Voice/Warcrys/warcry_male_36.ogg
   - /Audio/_AU14/Voice/Warcrys/malewarcry.ogg
+  - /Audio/_AU14/Voice/Warcrys/warcry_male_p1.ogg
+  - /Audio/_AU14/Voice/Warcrys/warcry_male_p2.ogg
+  - /Audio/_AU14/Voice/Warcrys/warcry_male_p3.ogg
+  - /Audio/_AU14/Voice/Warcrys/warcry_male_p4.ogg
+  - /Audio/_AU14/Voice/Warcrys/warcry_male_p5.ogg
+  - /Audio/_AU14/Voice/Warcrys/warcry_male_p6.ogg
 
 - type: soundCollection
   id: AU14FemaleWarcry

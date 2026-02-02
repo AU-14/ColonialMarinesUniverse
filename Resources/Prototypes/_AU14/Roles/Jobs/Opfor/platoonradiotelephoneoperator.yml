@@ -4,7 +4,7 @@
   name: au14-job-name-radiotelephoneoperator
   description: au14-job-description-radiotelephoneoperator
   setPreference: true
-  playTimeTracker: AU14JobOpforRadioTelephoneOperator
+  playTimeTracker: AU14JobGOVFORRadioTelephoneOperator
   requirements:
   - !type:TraitsRequirement
     inverted: true
@@ -14,11 +14,11 @@
   ranks:
     RMCRankCorporal:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadAutomaticRifleman
+      role: AU14JobGOVFORRadioTelephoneOperator
       time: 216000 # 60 hours
     RMCRankLanceCorporal:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadAutomaticRifleman
+      role: AU14JobGOVFORRadioTelephoneOperator
       time: 108000 # 30 hours
     RMCRankPrivateFirstClass: []
   startingGear: AU14GearopforRadioTelephoneOperator

@@ -4,7 +4,7 @@
   name: au14-job-name-opforplatooncorpsman
   description: au14-job-description-opforplatooncorpsman
   setPreference: true
-  playTimeTracker: AU14JobOpforPlatoonCorpsman
+  playTimeTracker: AU14JobGOVFORPlatoonCorpsman
   requirements:
   - !type:TraitsRequirement
     inverted: true
@@ -14,7 +14,7 @@
   ranks:
     RMCRankCorporal:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforPlatoonCorpsman
+      role: AU14JobGOVFORPlatoonCorpsman
       time: 4320000 # 20 hours
     RMCRankLanceCorporal: []
   startingGear: AU14GearopforPlatoonCorpsman
@@ -57,10 +57,6 @@
     job_id: AU14JobOpforPlatoonCorpsman
   - type: Sprite
     state: syn_spawn
-
-- type: playTimeTracker
-  id: AU14JobOpforPlatoonCorpsman
-  isHumanoid: true
 
 - type: startingGear
   id: AU14GearopforCorpsmanDummy

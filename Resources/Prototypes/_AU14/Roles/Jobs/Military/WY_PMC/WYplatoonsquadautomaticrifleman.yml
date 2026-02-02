@@ -4,11 +4,11 @@
   name: PMC Smartgun Operator
   description: au14-job-description-govforsquadautomaticrifleman
   setPreference: false
-  playTimeTracker: AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+  playTimeTracker: AU14JobGOVFORSquadAutomaticRifleman
   ranks:
     AU14RankWeYuSeniorOperator:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+      role: AU14JobGOVFORSquadAutomaticRifleman
       time: 1800 # 30 hours
     AU14RankWeYuOperator: []
   startingGear: AU14GearGOVFORSquadAutomaticRifleman
@@ -43,7 +43,3 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: smartgunner
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORSquadAutomaticRiflemanWYPMC
-  isHumanoid: true

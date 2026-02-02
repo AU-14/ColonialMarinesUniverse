@@ -5,7 +5,7 @@
   description: au14-job-description-govforauxsupportsynth
   setPreference: true
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORAuxSupportSynthRMC
+  playTimeTracker: AU14JobGOVFORAuxSupportSynth
   requirements:
   - !type:OverallPlaytimeRequirement
     time: 7200 # 2 hours
@@ -81,7 +81,3 @@
           Blunt: 35
     - type: Synth
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORAuxSupportSynthRMC
-  isHumanoid: true

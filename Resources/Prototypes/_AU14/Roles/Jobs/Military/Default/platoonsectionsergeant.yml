@@ -16,11 +16,11 @@
   ranks:
     RMCRankMasterSergeant:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforSectionSergeant
+      role: AU14JobGOVFORSectionSergeant
       time: 432000 # 120 hours
     RMCRankGunnerySergeant:
     - !type:RoleTimeRequirement
-      role: AU14JobOpforSectionSergeant
+      role: AU14JobGOVFORSectionSergeant
       time: 216000 # 60 hours
     RMCRankStaffSergeant: []
   startingGear: AU14GearGOVFORSectionSergeant

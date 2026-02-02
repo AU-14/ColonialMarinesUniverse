@@ -4,7 +4,7 @@
   name: au14-job-name-govforsquadriflemanRMC
   description: au14-job-description-govforsquadrifleman
   setPreference: true
-  playTimeTracker: AU14JobGOVFORSquadRiflemanRMC
+  playTimeTracker: AU14JobGOVFORSquadRifleman
   requirements:
   - !type:TraitsRequirement
     inverted: true
@@ -50,7 +50,3 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
   hidden: false
-
-- type: playTimeTracker
-  id: AU14JobGOVFORSquadRiflemanRMC
-  isHumanoid: true
