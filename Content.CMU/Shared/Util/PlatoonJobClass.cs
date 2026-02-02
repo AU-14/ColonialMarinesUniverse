@@ -12,6 +12,7 @@ namespace Content.Shared.AU14.util
         PlatOp,
         SquadRifleman,
         DSPilot,
+        SupportSynth
 
     }
 }
