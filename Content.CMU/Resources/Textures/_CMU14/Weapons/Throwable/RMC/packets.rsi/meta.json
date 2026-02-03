@@ -33,6 +33,30 @@
     },
     {
       "name": "l96_e"
+    },
+    {
+      "name": "rmc_packet"
+    },
+    {
+      "name": "rmc_packet_e"
+    },
+    {
+      "name": "sebb-p"
+    },
+    {
+      "name": "wpsi-p"
+    },
+    {
+      "name": "bfab-p"
+    },
+    {
+      "name": "heap-p"
+    },
+    {
+      "name": "hirr-p"
+    },
+    {
+      "name": "hiaf-p"
     }
   ]
 }
