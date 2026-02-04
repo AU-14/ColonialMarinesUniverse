@@ -112,12 +112,14 @@ au14-job-name-govforSSGRMC = Senior Sergeant
 au14-job-prefix-govforSSGRMC = PS
 au14-job-name-radiotelephoneoperatorRMC = Signal Operator
 au14-job-name-govforsquadriflemanRMC = Rifleman
+au14-job-name-govforsquadcombattechRMC = Sapper
+au14-job-prefix-govforsquadcombattechRMC = SPR
 au14-job-name-govforspecialist-marksmanRMC = Marksman
 au14-job-prefix-govforspecialist-marksmanRMC = MRN
 au14-job-name-govforspecialist-pointmanRMC = Pointman
 au14-job-prefix-govforspecialist-pointmanRMC = PNM
-au14-job-name-govforspecialist-grenadierRMC = Sapper
-au14-job-prefix-govforspecialist-grenadierRMC = SPR
+au14-job-name-govforspecialist-grenadierRMC = Grenadier
+au14-job-prefix-govforspecialist-grenadierRMC = GNR
 
 au14-job-prefix-govfork9handler = K9
 
