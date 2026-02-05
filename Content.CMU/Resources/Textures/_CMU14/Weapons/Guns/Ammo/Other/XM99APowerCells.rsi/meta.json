@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "Taken from pandora-cmss13-pve at https://github.com/BonniePandora/pandora-cmss13-pve/blob/a333a935638eb328b67fb3edbef0cf47aaa189ac/icons/obj/items/weapons/guns/ammo_by_faction/uscm.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "xm99a_lcell_e"
+    },
+    {
+      "name": "xm99a_lcell"
+    },
+    {
+      "name": "xm99a_cell_e"
+    },
+    {
+      "name": "xm99a_cell"
+    }
+  ]
+}
