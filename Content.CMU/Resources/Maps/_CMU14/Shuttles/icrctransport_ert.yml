@@ -4,7 +4,7 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 02/07/2026 00:54:49
+  time: 02/07/2026 01:48:36
   entityCount: 103
 maps:
 - 1
@@ -138,6 +138,39 @@ entities:
     - type: GridAtmosphere
       version: 2
       data:
+        tiles:
+          0,0:
+            0: 32759
+          0,-1:
+            0: 30579
+          -1,0:
+            0: 52972
+          0,1:
+            0: 119
+          -1,1:
+            0: 204
+          0,-2:
+            0: 12288
+          -1,-2:
+            0: 32768
+          -1,-1:
+            0: 52424
+        uniqueMixes:
+        - volume: 2500
+          temperature: 293.15
+          moles:
+          - 21.824879
+          - 82.10312
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
+          - 0
         chunkSize: 4
 - proto: AtmosDeviceFanTiny
   entities:
