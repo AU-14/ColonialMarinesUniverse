@@ -41,3 +41,5 @@ au14-cmbinvestigate-rules = You are an officer of the law. Investigate the area.
 au14-lacncommandosniper-rules = You have been loaned to the United Americas Allied Command by the LACN for a special mission on this planet, the details of which have not been disclosed to you. You have been ordered to investigate the area and report to the local GOVFOR command. You are friendly to GOVFOR and neutral to civilians.
 
 au14-uacglostthreat-rules = You are a Government Forces Third Party! You are friendly to GOVFOR forces and neutral to civilians. This threat asks for a slightly higher level of roleplay than others! Please keep this in mind.
+
+au14-rmcert-rules = You have been dispatched as a Royal Marines Commando Rapid Reaction Troop member. The details of the mission have not been disclosed to you, however your main objective is to assist GOVFOR forces in the area of operation. You are friendly to GOVFOR command and neutral to civilians.

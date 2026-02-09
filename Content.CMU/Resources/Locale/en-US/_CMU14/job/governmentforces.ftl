@@ -112,5 +112,26 @@ au14-job-name-govforSSGRMC = Senior Sergeant
 au14-job-prefix-govforSSGRMC = PS
 au14-job-name-radiotelephoneoperatorRMC = Signal Operator
 au14-job-name-govforsquadriflemanRMC = Rifleman
+au14-job-name-govforsquadcombattechRMC = Sapper
+au14-job-prefix-govforsquadcombattechRMC = SPR
+au14-job-name-govforspecialist-marksmanRMC = Marksman
+au14-job-prefix-govforspecialist-marksmanRMC = MRN
+au14-job-name-govforspecialist-pointmanRMC = Pointman
+au14-job-prefix-govforspecialist-pointmanRMC = PNM
+au14-job-name-govforspecialist-grenadierRMC = Grenadier
+au14-job-prefix-govforspecialist-grenadierRMC = GNR
 
 au14-job-prefix-govfork9handler = K9
+
+au-14-job-name-rmcrrt-commander = RMC RRT Commander
+au-14-job-prefix-rmcrrt-commander = RRT CMD
+au-14-job-name-rmcrrt-rifleman = RMC RRT Rifleman
+au-14-job-prefix-rmcrrt-rifleman = RRT RFN
+au-14-job-name-rmcrrt-pointman = RMC RRT Pointman
+au-14-job-prefix-rmcrrt-pointman = RRT PNT
+au-14-job-name-rmcrrt-marksman = RMC RRT Marksman
+au-14-job-prefix-rmcrrt-marksman = RRT MRN
+au-14-job-name-rmcrrt-smartgunner = RMC RRT Machinegunner
+au-14-job-prefix-rmcrrt-smartgunner = RRT MG
+au-14-job-name-rmcrrt-corpsman = RMC RRT Corpsman
+au-14-job-prefix-rmcrrt-corpsman = RRT HC
