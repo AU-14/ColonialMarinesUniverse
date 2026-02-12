@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/TheKillfish/cmss13/blob/9824f617f94d39754b8629145132a63dad2d70a3/icons/mob/humans/undershirt.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "wy_shirt",
+      "directions": 4
+    },
+    {
+      "name": "uscm_shirt",
+      "directions": 4
+    }
+  ]
+}

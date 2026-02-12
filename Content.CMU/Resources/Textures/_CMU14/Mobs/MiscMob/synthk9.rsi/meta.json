@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": "Taken from cmss13 at https://github.com/blackdragonTOW/cmss13/blob/c78676031ac2b83942478d7db943876c9daed116/icons/mob/humans/species/synth_k9/r_k9.dmi, https://github.com/blackdragonTOW/cmss13/blob/934c8ed45c97fd99d10219357198927b347a6f18/icons/mob/humans/species/synth_k9/onmob/synth_k9_overlays.dmi, https://github.com/blackdragonTOW/cmss13/blob/934c8ed45c97fd99d10219357198927b347a6f18/icons/mob/humans/species/synth_k9/onmob/synth_k9_overlays.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "k9_closed",
+      "directions": 4
+    },
+    {
+      "name": "dead_backpack"
+    },
+    {
+      "name": "dead_medpack"
+    },
+    {
+      "name": "dead"
+    },
+    {
+      "name": "k9_closed_medpack",
+      "directions": 4
+    },
+    {
+      "name": "k9_closed_backpack",
+      "directions": 4
+    },
+    {
+      "name": "k9_closed_mp",
+      "directions": 4
+    }
+  ]
+}
