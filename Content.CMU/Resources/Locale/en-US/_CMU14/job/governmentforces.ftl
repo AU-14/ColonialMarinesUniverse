@@ -135,3 +135,10 @@ au-14-job-name-rmcrrt-smartgunner = RMC RRT Machinegunner
 au-14-job-prefix-rmcrrt-smartgunner = RRT MG
 au-14-job-name-rmcrrt-corpsman = RMC RRT Corpsman
 au-14-job-prefix-rmcrrt-corpsman = RRT HC
+
+au14-job-name-govforspecialist-heavyantitankUPP = Antitank
+au14-job-prefix-govforspecialist-heavyantitankUPP = HAT
+au14-job-name-govforspecialist-marksmanUPP = Marksman
+au14-job-prefix-govforspecialist-marksmanUPP = MRN
+au14-job-name-govforspecialist-pointmanUPP = Pointman
+au14-job-prefix-govforspecialist-pointmanUPP = PNM
