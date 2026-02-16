@@ -9,4 +9,4 @@ chat-radio-govforbravo =  Tango
 chat-radio-govforcharlie =  Uniform
 chat-radio-mob = Family
 chat-radio-alert = Colony Alerts
-
+chat-radio-uppsof = UPP SOF
