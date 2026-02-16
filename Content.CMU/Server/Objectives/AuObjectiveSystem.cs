@@ -9,6 +9,7 @@ using Robust.Shared.GameObjects;
 using Content.Shared.AU14.Objectives;
 using Robust.Server.Player;
 using Content.Server.GameTicking.Events;
+using Content.Shared._RMC14.Intel;
 using Content.Shared.AU14.Objectives.Fetch;
 using Content.Shared.AU14.Objectives.Kill;
 using Content.Shared.AU14.Threats;
@@ -34,6 +35,8 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
     public bool iswinactive = false;
     private ObjectiveMasterComponent? _objectiveMaster = null;
 
+
+    // not gonna lie I did vibecode like a quarter of this, additionally wayyyy to much is hardcoded. Eventually i'll go through and refactor but it works for testing - eg
     public (int govforMinor, int govforMajor, int opforMinor, int opforMajor, int clfMinor, int clfMajor, int
         scientistMinor, int scientistMajor) ObjectivesAmount()
     {
@@ -71,6 +74,8 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         SubscribeLocalEvent<AuObjectiveComponent, ComponentStartup>(OnObjectiveStartup);
         SubscribeLocalEvent<ObjectiveMasterComponent, ComponentStartup>(OnObjectiveMasterStartup);
         SubscribeLocalEvent<AuObjectiveComponent, ObjectiveActivatedEvent>(OnObjectiveActivated);
+        // Listen for shared spend-event to deduct AU win points from ObjectiveMaster
+        SubscribeLocalEvent<Content.Shared.AU14.Objectives.SpendWinPointsEvent>(OnSpendWinPoints);
     }
 
     private void OnObjectiveActivated(EntityUid uid, AuObjectiveComponent component, ref ObjectiveActivatedEvent args)
@@ -732,5 +737,50 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         var remainingObjectives = GetObjectives().Where(obj => obj.Factions.Any(f => f.ToLowerInvariant() == factionKey) && obj.FactionStatuses.TryGetValue(factionKey, out var status) && status == AuObjectiveComponent.ObjectiveStatus.Incomplete);
         int possiblePoints = remainingObjectives.Sum(obj => obj.CustomPoints == 0 ? (obj.ObjectiveLevel == 1 ? 5 : 20) : obj.CustomPoints);
         return (currentPoints + possiblePoints) >= requiredPoints;
+    }
+
+    private void OnSpendWinPoints(Content.Shared.AU14.Objectives.SpendWinPointsEvent ev)
+    {
+        if (string.IsNullOrEmpty(ev.Team) || ev.Team == Team.None)
+            return;
+
+        var key = ev.Team.ToLowerInvariant();
+        if (_objectiveMaster == null)
+        {
+            // Ensure we have a reference to the authoritative ObjectiveMaster
+            Main();
+            if (_objectiveMaster == null)
+                return;
+        }
+
+        switch (key)
+        {
+            case var t when t == Team.GovFor:
+                _objectiveMaster.CurrentWinPointsGovfor = Math.Max(0, _objectiveMaster.CurrentWinPointsGovfor - ev.Amount);
+                break;
+            case var t when t == Team.OpFor:
+                _objectiveMaster.CurrentWinPointsOpfor = Math.Max(0, _objectiveMaster.CurrentWinPointsOpfor - ev.Amount);
+                break;
+            case var t when t == Team.CLF:
+                _objectiveMaster.CurrentWinPointsClf = Math.Max(0, _objectiveMaster.CurrentWinPointsClf - ev.Amount);
+                break;
+            default:
+                if (key == "scientist")
+                    _objectiveMaster.CurrentWinPointsScientist = Math.Max(0, _objectiveMaster.CurrentWinPointsScientist - ev.Amount);
+                break;
+        }
+
+        // No need to call Dirty on the component reference directly; find the entity to mark dirty for replication
+        var query = EntityManager.EntityQueryEnumerator<ObjectiveMasterComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            // Update the concrete component instance on the entity to match the authoritative copy
+            comp.CurrentWinPointsGovfor = _objectiveMaster.CurrentWinPointsGovfor;
+            comp.CurrentWinPointsOpfor = _objectiveMaster.CurrentWinPointsOpfor;
+            comp.CurrentWinPointsClf = _objectiveMaster.CurrentWinPointsClf;
+            comp.CurrentWinPointsScientist = _objectiveMaster.CurrentWinPointsScientist;
+            Dirty(uid, comp);
+            break;
+        }
     }
 }
