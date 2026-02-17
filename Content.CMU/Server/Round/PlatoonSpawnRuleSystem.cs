@@ -121,11 +121,53 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                                     ? "CMAirlockSecurityOpforLocked"
                                     : null;
                             break;
+                        case PlatoonMarkerClass.LockedSecurityDoorGlass:
+                            doorProtoId = shipFaction.Faction == "govfor"
+                                ? "CMAirlockSecurityGovforGlassLocked"
+                                : shipFaction.Faction == "opfor"
+                                    ? "CMAirlockSecurityOpforGlassLocked"
+                                    : null;
+                            break;
                         case PlatoonMarkerClass.LockedGlassDoor:
                             doorProtoId = shipFaction.Faction == "govfor"
                                 ? "CMAirlockGovforGlassLocked"
                                 : shipFaction.Faction == "opfor"
                                     ? "CMAirlockOpforGlassLocked"
+                                    : null;
+                            break;
+                        case PlatoonMarkerClass.LockedCommandGlassDoor:
+                            doorProtoId = shipFaction.Faction == "govfor"
+                                ? "CMAirlockCommandGovforGlassLocked"
+                                : shipFaction.Faction == "opfor"
+                                    ? "CMAirlockCommandOpforGlassLocked"
+                                    : null;
+                            break;
+                        case PlatoonMarkerClass.LockedEngineeringDoor:
+                            doorProtoId = shipFaction.Faction == "govfor"
+                                ? "CMAirlockEngineerGovforLocked"
+                                : shipFaction.Faction == "opfor"
+                                    ? "CMAirlockEngineerOpforLocked"
+                                    : null;
+                            break;
+                        case PlatoonMarkerClass.LockedEngineeringGlassDoor:
+                            doorProtoId = shipFaction.Faction == "govfor"
+                                ? "CMAirlockEngineerGovforGlassLocked"
+                                : shipFaction.Faction == "opfor"
+                                    ? "CMAirlockEngineerOpforGlassLocked"
+                                    : null;
+                            break;
+                        case PlatoonMarkerClass.LockedMedicalDoor:
+                            doorProtoId = shipFaction.Faction == "govfor"
+                                ? "CMAirlockMedicalGovforLocked"
+                                : shipFaction.Faction == "opfor"
+                                    ? "CMAirlockMedicalOpforLocked"
+                                    : null;
+                            break;
+                        case PlatoonMarkerClass.LockedMedicalGlassDoor:
+                            doorProtoId = shipFaction.Faction == "govfor"
+                                ? "CMAirlockMedicalGovforGlassLocked"
+                                : shipFaction.Faction == "opfor"
+                                    ? "CMAirlockMedicalOpforGlassLocked"
                                     : null;
                             break;
                         case PlatoonMarkerClass.LockedNormalDoor:
@@ -154,9 +196,9 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                     {
                         string? overwatchConsoleProtoId = null;
                         if (marker.Govfor)
-                            overwatchConsoleProtoId = "RMCOverwatchConsoleGovfor";
+                            overwatchConsoleProtoId = "RMCOverwatchConsoleGovforRotating";
                         else if (marker.Opfor)
-                            overwatchConsoleProtoId = "RMCOverwatchConsoleOpfor";
+                            overwatchConsoleProtoId = "RMCOverwatchConsoleOpforRotating";
                         else if (marker.Ship)
                         {
                             // Try to determine ship faction by parent entity
@@ -164,9 +206,9 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                             if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var parentShipFaction))
                             {
                                 overwatchConsoleProtoId = parentShipFaction.Faction == "govfor"
-                                    ? "RMCOverwatchConsoleGovfor"
+                                    ? "RMCOverwatchConsoleGovforRotating"
                                     : parentShipFaction.Faction == "opfor"
-                                        ? "RMCOverwatchConsoleOpfor"
+                                        ? "RMCOverwatchConsoleOpforRotating"
                                         : null;
                             }
                         }
