@@ -15,6 +15,8 @@ using Content.Shared.AU14.Objectives.Kill;
 using Content.Shared.AU14.Threats;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Mobs.Components;
+using Robust.Shared.Prototypes; // added for prototype lookups
+using Content.Shared.Objectives.Components; // for ObjectiveComponent
 
 namespace Content.Server.AU14.Objectives;
 // should probably consolidate some of these methods and make it 90% less shitcode but I am incredibly lazy and will do it another day - eg
@@ -32,6 +34,8 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
     [Dependency] private readonly Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
     [Dependency] private readonly AuFetchObjectiveSystem _fetchObjectiveSystem = default!;
     [Dependency] private readonly AuKillObjectiveSystem _killObjectiveSystem = default!;
+    [Dependency] private readonly Content.Server.AU14.Objectives.Destroy.AuDestroyObjectiveSystem _destroyObjectiveSystem = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!; // for spawning by prototype
     public bool iswinactive = false;
     private ObjectiveMasterComponent? _objectiveMaster = null;
 
@@ -87,6 +91,10 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         if (_entityManager.TryGetComponent(uid, out KillObjectiveComponent? killComp))
         {
             _killObjectiveSystem.ActivateKillObjectiveIfNeeded(uid, component);
+        }
+        if (_entityManager.TryGetComponent(uid, out Content.Shared.AU14.Objectives.Destroy.DestroyObjectiveComponent? destroyComp))
+        {
+            _destroyObjectiveSystem.ActivateDestroyObjectiveIfNeeded(uid, component);
         }
     }
 
@@ -487,6 +495,8 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             EndRound(completingFaction, objective.RoundEndMessage);
         }
 
+        TryUnlockOrSpawnNextTier(uid, objective, completingFaction);
+
         if (objective.Repeating)
         {
             if (objective.MaxRepeatable is { } maxRepeat && objective.TimesCompleted + 1 >= maxRepeat)
@@ -576,6 +586,44 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             {
                 _objectivesConsoleSystem.RefreshConsolesForFaction(objective.Faction);
             }
+        }
+    }
+
+    private void TryUnlockOrSpawnNextTier(EntityUid completedUid, AuObjectiveComponent completedObjective, string completingFaction)
+    {
+            Logger.Info($"[OBJ NEXT DEBUG] Attempting to spawn next-tier for prototype='{completedObjective.NextTier}' for faction {completingFaction}");
+
+        // Nothing to do if NextTier is empty
+        if (string.IsNullOrEmpty(completedObjective.NextTier.Id))
+            return;
+
+        // Ensure we have the completed objective's transform to spawn at the same location
+        if (!_entityManager.TryGetComponent(completedUid, out TransformComponent? completedXform))
+            return;
+
+        // Ensure the referenced prototype actually contains an AuObjectiveComponent
+        if (!completedObjective.NextTier.TryGet(out AuObjectiveComponent? _ , _proto, EntityManager.ComponentFactory))
+        {
+            Logger.Warning($"[OBJ NEXT DEBUG] Next tier prototype '{completedObjective.NextTier}' does not contain an AuObjectiveComponent or is missing");
+            return;
+        }
+
+        var protoIdStr = completedObjective.NextTier.Id;
+
+        // Always spawn a new entity from the prototype (do not try to find and reuse an existing inactive objective)
+        var newEnt = EntityManager.SpawnEntity(protoIdStr, completedXform.Coordinates);
+        if (EntityManager.TryGetComponent(newEnt, out AuObjectiveComponent? newObjComp))
+        {
+            newObjComp.Faction = completingFaction.ToLowerInvariant();
+            newObjComp.Active = true;
+            InitializeObjectiveStatuses(newObjComp);
+            RaiseLocalEvent(newEnt, new ObjectiveActivatedEvent());
+            _objectivesConsoleSystem.RefreshConsolesForFaction(newObjComp.Faction);
+            Logger.Info($"[OBJ NEXT DEBUG] Spawned and activated next-tier objective '{newObjComp.objectiveDescription}' for faction {newObjComp.Faction}");
+        }
+        else
+        {
+            Logger.Warning($"[OBJ NEXT DEBUG] Spawned prototype {protoIdStr} but it does not contain an AuObjectiveComponent");
         }
     }
 

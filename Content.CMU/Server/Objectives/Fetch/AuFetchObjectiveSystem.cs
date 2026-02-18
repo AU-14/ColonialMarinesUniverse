@@ -27,7 +27,6 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
         SubscribeLocalEvent<AuFetchItemComponent, DroppedEvent>(OnFetchItemDropped);
         SubscribeLocalEvent<AuFetchItemComponent, PullStoppedMessage>(OnFetchItemUndragged);
         SubscribeLocalEvent<FetchObjectiveReturnPointComponent, DragDropTargetEvent>(OnReturnPointDragDropTarget);
-        SubscribeLocalEvent<MetaDataComponent, ComponentStartup>(OnMetaDataStartup);
         SubscribeLocalEvent<AuFetchItemComponent, EntityTerminatingEvent>(OnFetchItemDestroyed);
     }
 
@@ -40,24 +39,58 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
         OnObjectiveStartup(uid, fetchComp, ref Unsafe.NullRef<ComponentStartup>());
     }
 
-    private void OnMetaDataStartup(EntityUid uid, MetaDataComponent meta, ref ComponentStartup args)
+    /// <summary>
+    /// Scans a local radius around the objective for preplaced entities whose prototype matches
+    /// <paramref name="prototypeId"/> and attaches AuFetchItemComponent to them so they count for the objective.
+    /// This replaces the previous global MetaData startup handler which was extremely expensive.
+    /// Returns the number of entities registered.
+    /// </summary>
+    private int RegisterPreplacedFetchEntities(string prototypeId, EntityUid objectiveUid, FetchObjectiveComponent component, float radius = 48f)
     {
-        if (meta.EntityPrototype == null)
-            return;
-        var protoId = meta.EntityPrototype.ID;
-        var query = EntityManager.EntityQueryEnumerator<FetchObjectiveComponent>();
-        while (query.MoveNext(out var fetchUid, out var fetchComp))
+        if (string.IsNullOrEmpty(prototypeId))
+            return 0;
+
+        if (!EntityManager.TryGetComponent(objectiveUid, out TransformComponent? objXform))
+            return 0;
+
+        var registered = 0;
+
+        // Use a spatial query to limit the scan to nearby entities only
+        var center = objXform.Coordinates;
+        foreach (var ent in _lookup.GetEntitiesInRange(center, radius))
         {
-            var objComp = EnsureComp<AuObjectiveComponent>(fetchUid);
-            if (!objComp.Active || !fetchComp.UseAnyEntity || string.IsNullOrEmpty(fetchComp.EntityToSpawn))
+            // Skip the objective entity itself
+            if (ent == objectiveUid)
                 continue;
-            if (fetchComp.EntityToSpawn == protoId)
-            {
-                var comp = _entManager.EnsureComponent<AuFetchItemComponent>(uid);
-                comp.FetchObjective = fetchComp;
-                comp.ObjectiveUid = fetchUid;
-            }
+
+            // Skip if already has the fetch-item component
+            if (EntityManager.HasComponent<AuFetchItemComponent>(ent))
+                continue;
+
+            if (!EntityManager.TryGetComponent(ent, out MetaDataComponent? meta))
+                continue;
+
+            var proto = meta.EntityPrototype?.ID;
+            if (proto == null)
+                continue;
+
+            if (proto != prototypeId)
+                continue;
+
+            // Attach the fetch item component and link it to this objective
+            var itemComp = _entManager.EnsureComponent<AuFetchItemComponent>(ent);
+            itemComp.FetchObjective = component;
+            itemComp.ObjectiveUid = objectiveUid;
+            registered++;
         }
+
+        if (registered > 0)
+        {
+            component.ItemsSpawned = true;
+            Logger.Info($"[FETCH] Registered {registered} preplaced fetch entities for objective {objectiveUid}");
+        }
+
+        return registered;
     }
 
     private void OnFetchObjectiveHandleState(EntityUid uid, FetchObjectiveComponent component, ref ComponentHandleState args)
@@ -72,6 +105,14 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
         var objcomp = EnsureComp<AuObjectiveComponent>(uid);
         if (!objcomp.Active)
             return;
+
+        // If this objective accepts preplaced entities (UseAnyEntity), try a local registration first
+        if (component.UseAnyEntity && !string.IsNullOrEmpty(component.EntityToSpawn))
+        {
+            var registered = RegisterPreplacedFetchEntities(component.EntityToSpawn, uid, component);
+            if (registered > 0)
+                return; // we've satisfied the objective with preplaced items; don't spawn markers
+        }
 
         var entityToSpawn = component.EntityToSpawn;
         var markerFetchId = component.MarkerEntity;
@@ -139,6 +180,14 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
         var objComp = EnsureComp<AuObjectiveComponent>(uid);
         if (objComp.Active && !component.ItemsSpawned)
         {
+            // If objective accepts preplaced entities, register them now before spawning
+            if (component.UseAnyEntity && !string.IsNullOrEmpty(component.EntityToSpawn))
+            {
+                var registered = RegisterPreplacedFetchEntities(component.EntityToSpawn, uid, component);
+                if (registered > 0)
+                    return;
+            }
+
             OnObjectiveStartup(uid, component, ref Unsafe.NullRef<ComponentStartup>());
         }
     }

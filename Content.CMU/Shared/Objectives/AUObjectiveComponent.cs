@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.AU14.util;
 using Content.Shared.Roles;
 using Robust.Shared.GameStates;
+using Content.Shared.Objectives.Components;
 
 namespace Content.Shared.AU14.Objectives;
 [RegisterComponent, NetworkedComponent]
@@ -97,6 +98,10 @@ public sealed partial class AuObjectiveComponent : Component
     [DataField("rollanyway", required: false)]
     public bool RollAnyway { get; private set; } = false;
     // If true, this objective will be eligible for roundstart rolling even if it's a win/final objective.
+
+
+    [DataField("nexttier", required: false)]
+    public EntProtoId<AuObjectiveComponent> NextTier { get; private set; } = string.Empty;
 
 
     [DataField("intelTiers")]
