@@ -101,7 +101,7 @@ public sealed partial class AuObjectiveComponent : Component
 
 
     [DataField("nexttier", required: false)]
-    public EntProtoId<AuObjectiveComponent> NextTier { get; private set; } = string.Empty;
+    public EntProtoId<AuObjectiveComponent>? NextTier { get; private set; } = null;
 
 
     [DataField("intelTiers")]
