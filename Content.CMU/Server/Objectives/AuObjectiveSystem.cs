@@ -594,7 +594,12 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             Logger.Info($"[OBJ NEXT DEBUG] Attempting to spawn next-tier for prototype='{completedObjective.NextTier}' for faction {completingFaction}");
 
         // Nothing to do if NextTier is empty
-        if (string.IsNullOrEmpty(completedObjective.NextTier.Id))
+        var nextTier = completedObjective.NextTier;
+        if (!nextTier.HasValue)
+            return;
+
+        var protoIdStr = nextTier.Value.Id;
+        if (string.IsNullOrEmpty(protoIdStr))
             return;
 
         // Ensure we have the completed objective's transform to spawn at the same location
@@ -602,13 +607,12 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             return;
 
         // Ensure the referenced prototype actually contains an AuObjectiveComponent
-        if (!completedObjective.NextTier.TryGet(out AuObjectiveComponent? _ , _proto, EntityManager.ComponentFactory))
+        if (!nextTier.Value.TryGet(out AuObjectiveComponent? _ , _proto, EntityManager.ComponentFactory))
         {
-            Logger.Warning($"[OBJ NEXT DEBUG] Next tier prototype '{completedObjective.NextTier}' does not contain an AuObjectiveComponent or is missing");
+            Logger.Warning($"[OBJ NEXT DEBUG] Next tier prototype '{protoIdStr}' does not contain an AuObjectiveComponent or is missing");
             return;
         }
 
-        var protoIdStr = completedObjective.NextTier.Id;
 
         // Always spawn a new entity from the prototype (do not try to find and reuse an existing inactive objective)
         var newEnt = EntityManager.SpawnEntity(protoIdStr, completedXform.Coordinates);
