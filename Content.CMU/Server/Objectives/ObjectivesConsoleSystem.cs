@@ -74,9 +74,13 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
         }
         while (query.MoveNext(out var objUid, out var objComp))
         {
-            if (!objComp.Active)
-                continue;
+            // NOTE: Previously we filtered out any objective where objComp.Active == false.
+            // That caused completed objectives that had been deactivated to disappear from consoles.
+            // New behavior: only hide an objective if it is inactive AND NOT completed for the console's faction.
+
             var consoleFaction = comp.Faction.ToLowerInvariant();
+
+            // First, ensure this console should be able to see this objective based on faction mapping.
             if (objComp.FactionNeutral)
             {
                 if (objComp.Factions.Count == 0)
@@ -89,9 +93,39 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
                 if (string.IsNullOrEmpty(objComp.Faction) || objComp.Faction.ToLowerInvariant() != consoleFaction)
                     continue;
             }
+
+            // Determine whether we should show this objective: show if Active OR if it's completed for this console's faction.
+            var showObjective = objComp.Active;
+
+            // Try get capture component once and reuse it below to avoid duplicate lookups.
+            var hasCapture = EntityManager.TryGetComponent(objUid, out CaptureObjectiveComponent? captureComp);
+
+            if (!showObjective)
+            {
+                // If it's a capture objective, query its status for this faction.
+                if (hasCapture && captureComp != null)
+                {
+                    var capCheck = captureComp.GetObjectiveStatus(consoleFaction, objComp);
+                    if (capCheck == CaptureObjectiveComponent.CaptureObjectiveStatus.Completed)
+                        showObjective = true;
+                }
+                else
+                {
+                    // Non-capture: check the stored faction status map for completion.
+                    if (objComp.FactionStatuses.TryGetValue(consoleFaction, out var statusCheck) &&
+                        statusCheck == AuObjectiveComponent.ObjectiveStatus.Completed)
+                    {
+                        showObjective = true;
+                    }
+                }
+            }
+
+            if (!showObjective)
+                continue;
+
             ObjectiveStatusDisplay statusDisplay;
             // Special handling for capture objectives
-            if (EntityManager.TryGetComponent(objUid, out CaptureObjectiveComponent? captureComp))
+            if (hasCapture && captureComp != null)
             {
                 var capStatus = captureComp.GetObjectiveStatus(consoleFaction, objComp);
                 switch (capStatus)
