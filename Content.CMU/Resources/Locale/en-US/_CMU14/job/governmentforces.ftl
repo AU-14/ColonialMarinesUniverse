@@ -69,6 +69,11 @@ au14-job-name-govforadvisor = Advisor
 au14-job-description-govforadvisor = Advise command, mentor new soldiers and provide assistance wherever needed.
 au14-job-prefix-govforadvisor = ADV
 
+AU14JobMilitaryDoctorBase = Doctor
+au14-job-name-govforMilitaryDoctor = Doctor
+au14-job-description-govforMilitaryDoctor = Provide your faction with higher levels of medical care.
+au14-job-prefix-govforMilitaryDoctor = DOC
+
 au14-job-prefix-AU14JobGOVFORPlatCoWYPMC = OPDIR
 au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanWYPMC = CLS
 au14-job-prefix-AU14JobGOVFORDCCWYPMC = DCC

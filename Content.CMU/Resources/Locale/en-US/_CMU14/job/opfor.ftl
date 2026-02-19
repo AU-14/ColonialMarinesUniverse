@@ -69,4 +69,9 @@ au14-job-name-opforadvisor = Advisor
 au14-job-description-opforadvisor = Advise command, mentor new soldiers and provide assistance wherever needed.
 au14-job-prefix-opforadvisor = ADV
 
+AU14JobOPFORMilitaryDoctor = Doctor
+au14-job-name-opforMilitaryDoctor = Doctor
+au14-job-description-opforMilitaryDoctor = Provide your faction with high level medical care.
+au14-job-prefix-opforMilitaryDoctor = DOC
+
 au14-job-prefix-opfork9handler = K9
