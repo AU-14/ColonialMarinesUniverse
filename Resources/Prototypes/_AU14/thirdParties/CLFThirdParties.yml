@@ -1,0 +1,87 @@
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicBaseMilitary
+  id: AU14IntelThirdPartyCLFInsurgentReinforcements
+  name: Insurgent Reinforcements
+  components:
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Insurgent Reinforcements
+    description: You have been sent from a neighboring insurgent cell to aid the uprising in this area. Report to the local cell leader for orders.
+    job: AU14JobCLFGuerilla
+    raffle:
+      settings: short
+  - type: Skills
+    skills:
+       RMCSkillEndurance: 1
+       RMCSkillFirearms: 2
+       RMCSkillConstruction: 2
+       RMCSkillEngineer: 3
+       RMCSkillFireman: 1
+       RMCSkillVehicles: 1
+       RMCSkillPolice: 1
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicBaseMilitary
+  id: AU14IntelThirdPartyCLFInsurgentReinforcementsMachineGunner
+  name: Insurgent Machine Gunner
+  components:
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Insurgent Reinforcements
+    description: You have been sent from a neighboring insurgent cell to aid the uprising in this area. Report to the local cell leader for orders.
+    job: AU14JobCLFMachineGunner
+    raffle:
+      settings: short
+  - type: Skills
+    skills:
+       RMCSkillEndurance: 2
+       RMCSkillFirearms: 2
+       RMCSkillConstruction: 2
+       RMCSkillEngineer: 3
+       RMCSkillFireman: 2
+       RMCSkillVehicles: 1
+       RMCSkillPolice: 1
+
+- type: partySpawn
+  id: CLFReinforcementsSpawnIntel
+  leadersToSpawn:
+    AU14IntelThirdPartyCLFInsurgentReinforcements: 1
+  gruntsToSpawn:
+    AU14IntelThirdPartyCLFInsurgentReinforcements: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: CLFCellReinforcementsIntel
+  partyspawn: CLFReinforcementsSpawnIntel
+  entrymethod: ground
+  weight: 1
+  minplayers: 500
+  maxplayers: 600
+  GhostsNeeded: 600
+  roundstart: false
+
+
+
+- type: partySpawn
+  id: CLFReinforcementsSpawnIntelMachineGunner
+  leadersToSpawn:
+    AU14IntelThirdPartyCLFInsurgentReinforcementsMachineGunner: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: CLFCellReinforcementsIntelMachineGunner
+  partyspawn: CLFReinforcementsSpawnIntelMachineGunner
+  entrymethod: ground
+  weight: 1
+  minplayers: 500
+  maxplayers: 600
+  GhostsNeeded: 600
+  roundstart: false

@@ -175,8 +175,8 @@
 - type: entity
   parent: RMCSentryMini
   id: RMCSentryMiniSPP # TODO RMC14: Replace with the real one.
-  name: SPP SDS-R8 light sentry
-  description: A compact version of the SPP defense sentry SDS-R7. Designed for deployment in the field.
+  name: UPP SDS-R8 light sentry
+  description: A compact version of the UPP defense sentry SDS-R7. Designed for deployment in the field.
   components:
   - type: NpcFactionMember
     factions:

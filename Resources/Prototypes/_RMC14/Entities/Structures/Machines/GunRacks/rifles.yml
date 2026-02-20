@@ -386,7 +386,7 @@
   id: RMCGunRackType71Empty
   name: Type 71 gun rack
   suffix: Type 71, Empty
-  description: Some off-branded gun rack. Per SOF and SPPA regulations, weapons should be stored in secure safes and only given out when necessary. Of course, most (but not all!) units overlook this regulation, only storing their firearms in safes when inspection arrives.
+  description: Some off-branded gun rack. Per SOF and UPP Army regulations, weapons should be stored in secure safes and only given out when necessary. Of course, most (but not all!) units overlook this regulation, only storing their firearms in safes when inspection arrives.
   components:
   - type: ContainerContainer
     containers:
@@ -508,7 +508,7 @@
   id: RMCGunRackType71EmptyPVE
   name: Type 71 gun rack
   suffix: Type 71, Empty, PVE
-  description: Some off-branded gun rack. Per SOF and SPPA regulations, weapons should be stored in secure safes and only given out when necessary. Of course, most (but not all!) units overlook this regulation, only storing their firearms in safes when inspection arrives.
+  description: Some off-branded gun rack. Per SOF and UPP Army regulations, weapons should be stored in secure safes and only given out when necessary. Of course, most (but not all!) units overlook this regulation, only storing their firearms in safes when inspection arrives.
   components:
   - type: ContainerContainer
     containers:

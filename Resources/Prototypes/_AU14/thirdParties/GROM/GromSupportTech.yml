@@ -1,0 +1,107 @@
+- type: job
+  parent: CMJobBase
+  id: AU14UPPGROMSupportTech
+  name: au-14-job-name-uppgrom-supporttech
+  description: au14-uppgrom-description
+  playTimeTracker: AU14JobUPPGROMSupportTech
+  ranks:
+    UPP_StaffSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobUPPGROMSupportTech
+      time: 36000 #10 hours
+    UPP_Sergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobUPPGROMSupportTech
+      time: 18000 #5 hours
+    UPP_Plutonowy: []
+  spawnMenuRoleName: UPP GROM Support Tech
+  startingGear: AU14GearUPPGROMSupportTech
+  greeting: au14-uppgrom-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-uppgrom-squadleader
+  accessGroups:
+  - AU14GovforCommand
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: leader
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Marine
+      Faction: govfor
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadGROM # for future when there's a dedicated map for them, right now does nothing
+    - type: Skills
+      skills:
+        RMCSkillEngineer: 1
+        RMCSkillConstruction: 2
+        RMCSkillMeleeWeapons: 1
+        RMCSkillCqc: 1
+        RMCSkillFireman: 1
+        RMCSkillFirearms: 2
+        RMCSkillJtac: 1
+        RMCSkillMedical: 2
+        RMCSkillSurgery: 1
+        RMCSkillEndurance: 2
+        RMCSkillLeadership: 0
+        RMCSkillVehicles: 0
+    - type: JobPrefix
+      prefix: au-14-job-prefix-uppgrom-supporttech
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUPPGROM
+  id: AU14JobUPPGROMSupportTech
+  name: UPP GROM Support Tech
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au-14-job-name-uppgrom-supporttech
+    description: au14-uppgrom-description
+    reregister: false
+    job: AU14UPPGROMSupportTech
+    raffle:
+      settings: short
+    rules: au14-uppgrom-rules
+
+- type: startingGear
+  id: AU14GearUPPGROMSupportTech
+  equipment:
+    id: AU14IDCardUPPGROMSupportTech
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: AU14FatiguesUPPGROM
+    hands: CMHandsBrown
+    shoes: RMCBootsSPPFilled
+    eyes: RMCWeldingGoggles
+    head: AU14UPPPatrolCap
+    belt: AU14BeltMedicalUPPFullSupportTech
+    pocket1: AU14PouchToolsFilledComtech
+    pocket2: RMCPouchMagazineUPPFull
+    back: AU14CMDefibrillator
+    ears: RMCHeadsetGROM
+    suitstorage: AU14WeaponRifleAG80Filled
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUPPGROMSupportTech
+  name: UPP GROM Support Tech ID card
+  components:
+  - type: PresetIdCard
+    job: AU14UPPGROMSupportTech
+  - type: ItemIFF
+    faction: GOVFOR
+
+- type: playTimeTracker
+  id: AU14JobUPPGROMSupportTech

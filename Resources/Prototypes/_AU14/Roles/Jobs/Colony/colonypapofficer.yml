@@ -1,0 +1,76 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianPaPOfficer
+  name: au14-job-name-civilianpapofficer
+  description: au14-job-description-civilianpapofficer
+  setPreference: true
+  canBeAntag: false
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+  playTimeTracker: AU14JobCivilianPaPOfficer
+  ranks:
+    RMCRankCivilianSeniorOfficer:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianEmergencyResponseOfficer
+      time: 72000 # 20 hours
+    RMCRankCivilianOfficer: []
+  startingGear: AU14GearCivilianPaPOfficer
+  icon: "RMCJobIconBureauDeputy"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - aucmb
+  - Colonist
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillCqc: 2
+        RMCSkillEndurance: 2
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 2
+        RMCSkillIntel: 1
+        RMCSkillMedical: 1
+        RMCSkillMeleeWeapons: 1
+        RMCSkillOverwatch: 1
+        RMCSkillPolice: 2
+        RMCSkillVehicles: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-civilianpapofficer
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianPaPOfficer
+  equipment:
+    head: CMHeadCapSPPPeakedPolice
+    jumpsuit: RMCJumpsuitSPPPaP
+    belt: CMBeltSecurityMarshalFilled
+    shoes: RMCBootsPMCFilled
+    id: AU14IDCardcivilianPaPOfficer
+    ears: AU14CMBHeadset
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianPaPOfficer
+  name: Spawn Point Civilian PAP Officer
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianPaPOfficer
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianPaPOfficer
+  isHumanoid: true

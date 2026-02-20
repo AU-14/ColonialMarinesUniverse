@@ -57,7 +57,7 @@
     jumpsuit: AU14CMBUniform
     belt: CMBeltSecurityMarshalFilled
     shoes: RMCBootsPMCFilled
-    id: RMCIDCardCMBMarshal
+    id: AU14IDCardColonyCMBMarshal
     ears: AU14CMBHeadset
     outerClothing: AU14CMBMarshalWindbreaker
 

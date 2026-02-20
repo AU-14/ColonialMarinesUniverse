@@ -500,7 +500,7 @@
 - type: auThirdParty
   id: ICRCReliefParty
   partyspawn: ICRCReliefPartySpawn
-  enterbyshuttle: true
+  entrymethod: shuttle
   weight: 20
   minplayers: 50
   maxplayers: 400

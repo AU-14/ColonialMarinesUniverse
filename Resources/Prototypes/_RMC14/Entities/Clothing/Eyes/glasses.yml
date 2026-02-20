@@ -50,7 +50,7 @@
   parent: CMGlassesM42ScoutSight
   id: RMCGlassesSPPCommandoNightVision
   name: Type 9 commando goggles
-  description: A headset and night vision goggles system used by SPP forces. Allows highlighted imaging of surroundings.
+  description: A headset and night vision goggles system used by UPP forces. Allows highlighted imaging of surroundings.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Eyes/Glasses/spp_nv.rsi

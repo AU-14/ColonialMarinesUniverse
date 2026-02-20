@@ -47,6 +47,11 @@
     custompoints: 5
     ObjectiveDescription: "Capture the supermarket  for your faction."
     roundEndMessage: "By capturing the UA flag"
+    intelTiers:
+    - supermarkettier0
+    - supermarkettier1
+    - supermarkettier2
+
   - type: CaptureObjective
     hoisttime: 8
     maxholdtimes: 10
@@ -56,7 +61,18 @@
   - type: NavMapBeacon
     text: Super market
 
-
+- type: objectiveIntelTier
+  id: supermarkettier0
+  title: "Supermarket: Exterior Overview"
+  description: "Basic information about the supermarket exterior, entrances, and patrol routes."
+- type: objectiveIntelTier
+  id: supermarkettier1
+  title: "Supermarket: Interior Layout"
+  description: "Detailed layout of aisles, storeroom access, and high-value locations."
+- type: objectiveIntelTier
+  id: supermarkettier2
+  title: "Supermarket: Security Systems"
+  description: "Locations of cameras, alarm panels, and guard schedules."
 
 - type: entity
   name: Capture the Tunnel
@@ -352,3 +368,285 @@
   - type: NavMapBeacon
     text: Middle Floor
   - type: AreaLabel
+
+#Port Neroid
+
+- type: entity
+  name: Capture the PAEK-500 Reactor Control
+  parent: AU14WallFlagUA
+  id: captureobjectiveneroidreactorcontrol
+  description: "Capture the PAEK-500 Reactor Control for your faction."
+  components:
+  - type: AuObjective
+    id: captureneroidreactorcontrol
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    - clf
+    objectivelevel: 2
+    custompoints: 10
+    ObjectiveDescription: "Capture the PAEK-500 Reactor Control for your faction."
+    roundEndMessage: "By capturing the PAEK-500 Reactor Control"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 10
+    pointincrementtime: 360
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: PAEK-500 Reactor Control
+
+- type: entity
+  name: Capture the PAEK-500 Coolant Control
+  parent: AU14WallFlagUA
+  id: captureobjectiveneroidcoolantcontrol
+  description: "Capture the PAEK-500 Coolant Control for your faction."
+  components:
+  - type: AuObjective
+    id: captureneroidcoolantcontrol
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    - clf
+    objectivelevel: 2
+    custompoints: 5
+    ObjectiveDescription: "Capture the PAEK-500 Coolant Control for your faction."
+    roundEndMessage: "By capturing the PAEK-500 Coolant Control"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 10
+    pointincrementtime: 360
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: PAEK-500 Coolant Control
+
+- type: entity
+  name: Capture the PAEK-500 Engine Control
+  parent: AU14WallFlagUA
+  id: captureobjectiveneroidenginecontrol
+  description: "Capture the PAEK-500 Engine Control for your faction."
+  components:
+  - type: AuObjective
+    id: captureneroidenginecontrol
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    - clf
+    objectivelevel: 2
+    custompoints: 5
+    ObjectiveDescription: "Capture the PAEK-500 Engine Control for your faction."
+    roundEndMessage: "By capturing the PAEK-500 Engine Control"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 10
+    pointincrementtime: 360
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: PAEK-500 Engine Control
+
+- type: entity
+  name: Capture the PAEK-500 Turbine Control
+  parent: AU14WallFlagUA
+  id: captureobjectiveneroidturbinecontrol
+  description: "Capture the PAEK-500 Turbine Control for your faction."
+  components:
+  - type: AuObjective
+    id: captureneroidturbinecontrol
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    - clf
+    objectivelevel: 2
+    custompoints: 5
+    ObjectiveDescription: "Capture the PAEK-500 Turbine Control for your faction."
+    roundEndMessage: "By capturing the PAEK-500 Turbine Control"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 10
+    pointincrementtime: 360
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: PAEK-500 Turbine Control
+
+- type: entity
+  name: Capture the Colony Operations Room
+  parent: AU14WallFlagUA
+  id: captureobjectiveneroidcolonyoperationsroom
+  description: "Capture the Colony Operations Room for your faction."
+  components:
+  - type: AuObjective
+    id: captureneroidoperationsroom
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    - clf
+    objectivelevel: 1
+    custompoints: 5
+    ObjectiveDescription: "Capture the Colony Operations Room for your faction."
+    roundEndMessage: "By capturing the Colony Operations Room"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 10
+    pointincrementtime: 360
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: Colony Operations Room
+
+- type: entity
+  name: Capture the UAS-1 Mining Site
+  parent: AU14WallFlagUA
+  id: captureobjectiveneroidminingsite
+  description: "Capture the UAS-1 Mining Site for your faction."
+  components:
+  - type: AuObjective
+    id: captureneroiduasminingsite
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    - clf
+    objectivelevel: 1
+    custompoints: 5
+    ObjectiveDescription: "Capture the UAS-1 Mining Site for your faction."
+    roundEndMessage: "By capturing the UAS-1 Mining Site"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 10
+    pointincrementtime: 360
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: UAS-1 Mining Site
+
+- type: entity
+  name: Capture the Geothermal Generators
+  parent: AU14WallFlagUA
+  id: captureobjectiveneroidgeothermalgenerators
+  description: "Capture the Geothermal Generators for your faction."
+  components:
+  - type: AuObjective
+    id: captureneroidgeothermalgenerators
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    - clf
+    objectivelevel: 1
+    custompoints: 5
+    ObjectiveDescription: "Capture the Geothermal Generators for your faction."
+    roundEndMessage: "By capturing the Geothermal Generators"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 10
+    pointincrementtime: 360
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: Geothermal Generators
+
+- type: entity
+  name: Capture the Spaceport
+  parent: AU14WallFlagUA
+  id: captureobjectiveneroidspaceport
+  description: "Capture the Spaceport for your faction."
+  components:
+  - type: AuObjective
+    id: captureneroidspaceport
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    - clf
+    objectivelevel: 1
+    custompoints: 5
+    ObjectiveDescription: "Capture the Spaceport for your faction."
+    roundEndMessage: "By capturing the Spaceport"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 10
+    pointincrementtime: 360
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: Spaceport
+
+- type: entity
+  name: Capture the AC-170 Cargo Depot
+  parent: AU14WallFlagUA
+  id: captureobjectiveneroidac170cargodepot
+  description: "Capture the AC-170 Cargo Depot for your faction."
+  components:
+  - type: AuObjective
+    id: captureneroidac170cargodepot
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    - clf
+    objectivelevel: 1
+    custompoints: 5
+    ObjectiveDescription: "Capture the AC-170 Cargo Depot for your faction."
+    roundEndMessage: "By capturing the AC-170 Cargo Depot"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 10
+    pointincrementtime: 360
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: AC-170 Cargo Depot
+
+- type: entity
+  name: Capture the Cargo Pier
+  parent: AU14WallFlagUA
+  id: captureobjectiveneroidcargopier
+  description: "Capture the Cargo Pier for your faction."
+  components:
+  - type: AuObjective
+    id: captureneroidcargopier
+    factioneutral: true
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    - opfor
+    - clf
+    objectivelevel: 2
+    custompoints: 5
+    ObjectiveDescription: "Capture the Cargo Pier for your faction."
+    roundEndMessage: "By capturing the Cargo Pier"
+  - type: CaptureObjective
+    hoisttime: 8
+    maxholdtimes: 10
+    pointincrementtime: 360
+    visibleonmap: true
+    flaghealth: 100
+  - type: NavMapBeacon
+    text: Cargo Pier

@@ -1,0 +1,95 @@
+- type: job
+  parent: CMJobBase
+  id: AU14UPPGROMSquadleader
+  name: au-14-job-name-uppgrom-squadleader
+  description: au14-uppgrom-description
+  playTimeTracker: AU14JobUPPGROMSquadLeader
+  ranks:
+    UPP_SeniorLieutenant:
+    - !type:RoleTimeRequirement
+      role: AU14JobUPPGROMSquadLeader
+      time: 36000 #10 hours
+    UPP_Lieutenant:
+    - !type:RoleTimeRequirement
+      role: AU14JobUPPGROMSquadLeader
+      time: 18000 #5 hours
+    UPP_JuniorLieutenant: []
+  spawnMenuRoleName: UPP GROM Squad Leader
+  startingGear: AU14GearUPPGROMSquadleader
+  greeting: au14-uppgrom-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-uppgrom-commander
+  accessGroups:
+  - AU14GovforCommand
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: leader
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Marine
+      Faction: govfor
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadGROM # for future when there's a dedicated map for them, right now does nothing
+    - type: Skills
+      preset: AU14SkillPresetPlatoonSeniorSergeant
+    - type: JobPrefix
+      prefix: au-14-job-prefix-uppgrom-squadleader
+    - type: MarineOrders
+    - type: RMCPointing
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUPPGROM
+  id: AU14JobUPPGROMSquadleader
+  name: UPP GROM Squad Leader
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au-14-job-name-uppgrom-squadleader
+    description: au14-uppgrom-description
+    reregister: false
+    job: AU14UPPGROMSquadleader
+    raffle:
+      settings: short
+    rules: au14-uppgrom-rules
+
+- type: startingGear
+  id: AU14GearUPPGROMSquadleader
+  equipment:
+    id: AU14IDCardUPPGROMSquadleader
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: AU14FatiguesUPPGROM
+    shoes: RMCBootsSPPFilled
+    head: AU14UPPBoonie
+    belt: AU14BeltHolsterPistolUPPFull
+    pocket1: AU14PouchSlingBinocs
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelSPPFull
+    ears: RMCHeadsetGROM
+    suitstorage: AU14WeaponRifleAG80Filled
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUPPGROMSquadleader
+  name: UPP GROM Squad Leader ID card
+  components:
+  - type: PresetIdCard
+    job: AU14UPPGROMSquadleader
+  - type: ItemIFF
+    faction: GOVFOR
+
+- type: playTimeTracker
+  id: AU14JobUPPGROMSquadLeader

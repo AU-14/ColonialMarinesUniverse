@@ -9,7 +9,7 @@
   - type: CMAutomatedVendor
     sections:
     - name: Fatigues
-      entries: 
+      entries:
       - id: AU14HAZOPUrbanFatigues
         amount: 45
       - id: AU14MixedSnowFatigues
@@ -362,7 +362,7 @@
         amount: 2
     - name: Pouches
       entries:
-      - id: RMCPouchCommandFill
+      - id: AU14PouchCommandFill
         amount: 2
     - name: Miscellaneous
       entries:
@@ -404,5 +404,5 @@
       - id: RMCPackFlareCAS
         amount: 2
 
-      
+
 

@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeant
   name: au14-job-name-govforsquadsergeant
   description: au14-job-description-govforsquadsergeant
@@ -13,7 +13,6 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
-  playTimeTracker: AU14JobGOVFORSquadSergeant
   ranks:
     RMCRankSergeant: []
   startingGear: AU14GearGOVFORSquadSergeant
@@ -44,7 +43,7 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
     - type: MarineOrders
-  hidden: false
+  hidden: true
 
 - type: startingGear
   id: AU14GearGOVFORSquadSergeant
@@ -60,10 +59,6 @@
     job_id: AU14JobGOVFORSquadSergeant
   - type: Sprite
     state: syn_spawn
-
-- type: playTimeTracker
-  id: AU14JobGOVFORSquadSergeant
-  isHumanoid: true
 
 - type: startingGear
   id: AU14GearGOVFORSquadSergantDummy

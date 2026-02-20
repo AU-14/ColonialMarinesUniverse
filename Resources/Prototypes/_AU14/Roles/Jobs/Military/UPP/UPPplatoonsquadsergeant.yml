@@ -1,13 +1,12 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantUPP
   name: Squad Leader
   description: au14-job-description-govforsquadsergeant
   setPreference: false
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORSquadSergeant
   ranks:
-    UPP_Serzhant: []
+    UPP_Plutonowy: []
   startingGear: AU14GearGOVFORSquadSergeant
   dummyStartingGear: AU14GearGOVFORSquadSergantDummy
   icon: "AU14JobIconSarge"
@@ -37,4 +36,4 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
     - type: MarineOrders
-  hidden: false
+  hidden: true

@@ -1,16 +1,15 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobSquadAutomaticRiflemanBase
   id: AU14JobGOVFORSquadAutomaticRiflemanUPP
   name: Machine Gunner
   description: au14-job-description-govforsquadautomaticrifleman
   setPreference: false
-  playTimeTracker: AU14JobGOVFORSquadAutomaticRifleman
   ranks:
-    UPP_Yefreytor:
+    UPP_Gefreiter:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORSquadAutomaticRifleman
-      time: 1800 # 30 hours
-    UPP_Ryadovoy: []
+      time: 108000 # 30 hours
+    UPP_Private: []
   startingGear: AU14GearGOVFORSquadAutomaticRifleman
   dummyStartingGear: AU14GearGOVFORAutoRiflemanDummy
   icon: "AU14JobIconAFN"
@@ -42,4 +41,4 @@
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: smartgunner
-  hidden: false
+  hidden: true

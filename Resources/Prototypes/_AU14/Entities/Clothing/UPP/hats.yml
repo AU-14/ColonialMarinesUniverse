@@ -1,32 +1,32 @@
 - type: entity
   parent: ClothingHeadBase
   id: AU14UPPBoonie
-  name: UPP Boonie
-  description: A UPP boonie hat.
+  name: UPP boonie
+  description: UPP headgear issued to soldiers when they're not expected to face combat, and may be requested by officers and above.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/uppboonie.rsi
+    sprite: _AU14/Clothing/UPP/hats/uppboonie.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UPP/uppboonie.rsi
+    sprite: _AU14/Clothing/UPP/hats/uppboonie.rsi
 
 - type: entity
   parent: ClothingHeadBase
   id: AU14UPPPatrolCap
-  name: UPP Patrol Cap
-  description: A UPP patrol cap.
+  name: UPP UL2 patrol cap
+  description: UPP headgear issued to soldiers when they're not expected to face combat, and may be requested by officers and above.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/uppcap.rsi
+    sprite: _AU14/Clothing/UPP/hats/uppcap.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UPP/uppcap.rsi
+    sprite: _AU14/Clothing/UPP/hats/uppcap.rsi
 
 - type: entity
   parent: ClothingHeadBase
   id: AU14UPPUshanka
-  name: UPP Ushanka
-  description: A UPP Ushanka.
+  name: UPP UL8 ushanka
+  description: UPP headgear issued to soldiers when they're not expected to face combat, and may be requested by officers and above.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/uppushanka.rsi
+    sprite: _AU14/Clothing/UPP/hats/uppushanka.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UPP/uppushanka.rsi
+    sprite: _AU14/Clothing/UPP/hats/uppushanka.rsi

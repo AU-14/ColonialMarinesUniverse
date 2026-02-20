@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.AU14.util;
 using Content.Shared.Roles;
 using Robust.Shared.GameStates;
+using Content.Shared.Objectives.Components;
 
 namespace Content.Shared.AU14.Objectives;
 [RegisterComponent, NetworkedComponent]
@@ -53,7 +54,20 @@ public sealed partial class AuObjectiveComponent : Component
     // If set, this will override the points given for completing the objective.
 
     public string Faction = string.Empty;
-    public int Intellevel = 0;
+
+
+    // Per-faction tracking for unlocked intel tiers. Key is team string (lowercase), value is unlocked tier index.
+    [DataField("intelTierPerFaction", required: false)]
+    public Dictionary<string, int> IntelTierPerFaction { get; set; } = new Dictionary<string, int>()
+    {
+        { "govfor", 1 },
+        { "opfor", 1 },
+        { "clf", 1 },
+        { "scientist", 1 }
+
+
+    };
+
 
     [DataField("ObjectiveDescription", required: true)]
     public string objectiveDescription { get; private set; } = default!;
@@ -85,6 +99,14 @@ public sealed partial class AuObjectiveComponent : Component
     public bool RollAnyway { get; private set; } = false;
     // If true, this objective will be eligible for roundstart rolling even if it's a win/final objective.
 
+
+    [DataField("nexttier", required: false)]
+    public EntProtoId<AuObjectiveComponent>? NextTier { get; private set; } = null;
+
+
+    [DataField("intelTiers")]
+    public List<ProtoId<ObjectiveIntelTierPrototype>> IntelTiers { get; private set; } = new();
+    // obj tiers, unlocked sequentially with intel points if active
     public enum ObjectiveStatus
     {
         Incomplete,
@@ -98,9 +120,6 @@ public sealed partial class AuObjectiveComponent : Component
 
     public int TimesCompleted = 0;
 
-
-    [DataField("possibleInserts")]
-    public List<AuInsertPrototype> Inserts { get; private set; } = new();
 
 
 }

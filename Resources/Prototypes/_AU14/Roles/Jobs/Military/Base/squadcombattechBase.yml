@@ -1,0 +1,12 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobSquadCombatTechBase
+  name: au14-job-name-govforsquadcombattech
+  description: au14-job-description-govforsquadcombattech
+  playTimeTracker: AU14JobGOVFORSquadCombatTech
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: playTimeTracker
+  id: AU14JobGOVFORSquadCombatTech
+  isHumanoid: true

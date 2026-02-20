@@ -1,0 +1,143 @@
+- type: entity
+  parent: CMPacketBase
+  id: AU14PacketGrenadeHighExplosiveUPP
+  name: Type 6 fragmentation grenade packet
+  suffix: UPP
+  description: It contains six Type 6 fragmentation grenades. Handle with care.
+  components:
+  - type: Sprite
+    layers:
+    - state: hedp_packet
+      map: [ "closedLayer" ]
+    - state: hedp_packet_e
+      map: [ "openLayer", "emptyLayer" ]
+
+- type: entity
+  parent: AU14PacketGrenadeHighExplosiveUPP
+  id: AU14PacketGrenadeHighExplosiveUPPFilled
+  suffix: Filled, UPP
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14GrenadeHighExplosiveUPP
+      amount: 6
+
+- type: entity
+  parent: RMCBoxBase
+  id: AU14BoxHEDPUPP
+  suffix: UPP
+  name: Type 6 fragmentation grenade box
+  description: A secure box holding 12 type 6 fragmentation grenades. Ensure pins are in place before removing from the box.
+  components:
+  - type: Sprite
+    layers:
+    - state: d_nade_placeholder
+      map: [ "closedLayer" ]
+    - state: model_m40
+    - state: hedp
+    - state: d_nade_placeholder_e
+      map: [ "openLayer", "emptyLayer" ]
+  - type: Storage
+    whitelist:
+      tags:
+      - RMCGrenadeHEDP
+  - type: StorageFill
+    contents:
+    - id: AU14GrenadeHighExplosiveUPP
+      amount: 12
+
+- type: entity
+  parent: CMPacketBase
+  id: AU14PacketGrenadeSmokeUPP
+  name: RDG-17 smoke grenade packet
+  suffix: UPP
+  description: It contains six RDG-17 smoke grenades.
+  components:
+  - type: Sprite
+    layers:
+    - state: hsdp_packet
+      map: [ "closedLayer" ]
+    - state: hsdp_packet_e
+      map: [ "openLayer", "emptyLayer"]
+
+- type: entity
+  parent: AU14PacketGrenadeSmokeUPP
+  id: AU14PacketGrenadeSmokeUPPFilled
+  suffix: Filled, UPP
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14GrenadeSmokeUPP
+      amount: 6
+
+- type: entity
+  parent: RMCBoxBase
+  id: AU14BoxSmokeUPP
+  suffix: UPP
+  name: RDG-17 smoke grenade box
+  description: A secure box holding 12 RDG-17 smoke grenades. Ensure pins are in place before removing from the box.
+  components:
+  - type: Sprite
+    layers:
+    - state: d_nade_placeholder
+      map: [ "closedLayer" ]
+    - state: model_m40
+    - state: ccdp
+    - state: d_nade_placeholder_e
+      map: [ "openLayer", "emptyLayer" ]
+  - type: Storage
+    whitelist:
+      tags:
+      - RMCGrenadeHEDP
+  - type: StorageFill
+    contents:
+    - id: AU14GrenadeSmokeUPP
+      amount: 12
+
+- type: entity
+  parent: CMPacketBase
+  id: AU14PacketGrenadeIncendiaryUPP
+  name: Type 8 incendiary grenade packet
+  suffix: UPP
+  description: It contains three type 8 white phosphorus grenades.
+  components:
+  - type: Sprite
+    layers:
+    - state: hidp_packet
+      map: [ "closedLayer" ]
+    - state: hidp_packet_e
+      map: [ "openLayer", "emptyLayer"]
+
+- type: entity
+  parent: AU14PacketGrenadeIncendiaryUPP
+  id: AU14PacketGrenadeIncendiaryUPPFilled
+  suffix: Filled, UPP
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14GrenadeIncendiaryUPP
+      amount: 6
+
+- type: entity
+  parent: RMCBoxBase
+  id: AU14BoxHIDPUPP
+  suffix: UPP
+  name: Type 8 WP grenade box
+  description: A secure box holding 12 type 8 WP grenades. Ensure pins are in place before removing from the box.
+  components:
+  - type: Sprite
+    layers:
+    - state: d_nade_placeholder
+      map: [ "closedLayer" ]
+    - state: model_m40
+    - state: hidp
+    - state: d_nade_placeholder_e
+      map: [ "openLayer", "emptyLayer" ]
+  - type: Storage
+    whitelist:
+      tags:
+      - RMCGrenadeHEDP
+  - type: StorageFill
+    contents:
+    - id: AU14GrenadeIncendiaryUPP
+      amount: 12

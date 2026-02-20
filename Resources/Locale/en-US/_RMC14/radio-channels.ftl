@@ -9,9 +9,9 @@ chat-radio-marine-requisition = Req
 chat-radio-marine-intel = Auxiliary
 chat-radio-marine-jtac = ATC
 
-chat-radio-marine-alpha = Sierra
-chat-radio-marine-bravo = Tango
-chat-radio-marine-charlie = Uniform
+chat-radio-marine-alpha = Alpha
+chat-radio-marine-bravo = Bravo
+chat-radio-marine-charlie = Charlie
 chat-radio-marine-delta = GOVFOR
 chat-radio-marine-echo = CLF
 chat-radio-marine-foxtrot = Foxtrot

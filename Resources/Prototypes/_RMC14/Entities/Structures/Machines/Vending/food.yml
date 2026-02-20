@@ -75,7 +75,7 @@
     - name: Prepared Meals
       entries:
       - id: RMCMRESPP
-        name: SPP Combat Ration
+        name: UPP Combat Ration
         amount: 15
       - id: RMCMarinePreparedMealSPPBanush
         amount: 15
@@ -128,17 +128,15 @@
     - "CMAccessColonyPublic"
     hackable: true
     scaling: false
-    randomUnstockAmount: 3 # between 1 and 3
-    randomEmptyChance: 0.25 # 25% chance
     sections:
     - name: Alcohol
       entries:
       - id: CMDrinkCanAle
         name: ale
-        amount: 6
+        amount: 12
       - id: CMDrinkCanBeerLite
         name: beer
-        amount: 6
+        amount: 12
       - id: RMCDrinkAlcoholGrenadine
         amount: 5
       - id: RMCDrinkAlcoholTequila

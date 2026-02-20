@@ -415,7 +415,7 @@
 - type: auThirdParty
   id: CMBInvestigationPartyAlt
   partyspawn: CMBInvestigationPartySpawnAlt
-  enterbyshuttle: true
+  entrymethod: shuttle
   weight: 10
   minplayers: 0
   maxplayers: 400
@@ -425,7 +425,7 @@
 - type: auThirdParty
   id: CMBInvestigationParty
   partyspawn: CMBInvestigationPartySpawn
-  enterbyshuttle: true
+  entrymethod: shuttle
   weight: 20
   minplayers: 0
   maxplayers: 400

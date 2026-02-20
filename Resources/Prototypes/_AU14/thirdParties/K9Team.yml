@@ -1,0 +1,106 @@
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: AU14BaseMobSpeciesOrganicBaseMilitary
+  abstract: true
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: RandomHumanoidAppearance
+  - type: RandomHumanoidAppearanceWhitelisted
+    allowedMaleHairStyles:
+    - RMCHumanHairCrew
+    - RMCHumanHairAviator
+    - RMCHumanHairJensen
+    - RMCHumanHairAverageJoe
+    - AU14HumanHairCIA5
+    - RMCHumanHairCombover
+    - RMCHumanHairCombover2
+    - RMCHumanHairCplDietrich
+    - RMCHumanHairCut
+    - RMCHumanHairHeadStubble
+    - RMCHumanHairHighAndTight
+    - RMCHumanHairHighfade
+    - RMCHumanHairHighlight
+    - AU14HumanHairIRS
+    - RMCHumanHairLtRasczak
+    - RMCHumanHairMarineFade
+    - RMCHumanHairMarineFlatTop
+    - RMCHumanHairMedfade
+    - RMCHumanHairNofade
+    - RMCHumanHairShavedpart
+    - RMCHumanHairShavedHead
+    - RMCHumanHairShort
+    - RMCHumanHairSideUndercutHang
+    - RMCHumanHairSkinhead
+    - RMCHumanHairTaper
+    - RMCHumanHairWardaddy
+    - RMCHumanHairUndercut
+    - RMCHumanHairUndercutTop
+    allowedFemaleHairStyles:
+    - RMCHumanHairShortbangs
+    - RMCHumanHairBobcurl
+    - RMCHumanHairMarineBun
+    - RMCHumanHairBun
+    - RMCHumanHairFringetail
+    - AU14HumanHairLowBun
+    - AU14HumanHairLowPonyTail
+    - AU14HumanHairLowPonyTailAlt
+    - RMCHumanHairPonytail1
+    - RMCHumanHairPonytail7
+    - RMCHumanHairPvtRedding
+    - RMCHumanHairPvtVasquez
+    - RMCHumanHairLong
+    - RMCHumanHairPixieCutLeft
+    - RMCHumanHairPixieCutRight
+    allowedHairColorsHex:
+    - "#0B0B0B"
+    - "#1A1A1A"
+    - "#222222"
+    - "#2B1B0F"
+    - "#3B2314"
+    - "#4A2E1A"
+    - "#5A3A22"
+    - "#6B4A2F"
+    - "#9C8651"
+    - "#B79A5A"
+    - "#4A1F12"
+    - "#7A5E42"
+    allowedEyeColorsHex: [ "#000000" ]
+    beardChance: 0.1
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicBaseMilitary
+  id: AU14IntelThirdPartyK9HandlerGOVFOR
+  name: S&R K9 Handler
+  components:
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: S&R K9 Handler
+    description: You have been awakened by GOVFOR command alongside your Search and Rescue K9 via an intel purchase. Gear up using the corpsman vendor and report to your faction command for orders.
+    job: AU14JobGOVFORk9handler
+    raffle:
+      settings: short
+  - type: Skills
+    preset: AU14SkillPresetPlatoonHospitalCorpsman
+
+- type: partySpawn
+  id: AU14IntelThirdPartyK9HandlerSpawnGOVFOR
+  leadersToSpawn:
+    AU14IntelThirdPartyK9HandlerGOVFOR: 1
+  gruntsToSpawn:
+    AU14MobK9BagMedicGhostRole: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: AU14IntelThirdPartyK9GOVFOR
+  partyspawn: AU14IntelThirdPartyK9HandlerSpawnGOVFOR
+  entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
+  weight: 1
+  minplayers: 500
+  maxplayers: 600
+  GhostsNeeded: 600
+  roundstart: false

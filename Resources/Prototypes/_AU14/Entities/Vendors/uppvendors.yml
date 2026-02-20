@@ -12,11 +12,13 @@
     sections:
     - name: Fatigues
       entries:
-      - id: AU14UPPFatigues
+      - id: AU14FatiguesUPP
         amount: 25
     - name: Footwear
       entries:
-      - id: RMCBootsSPPFilled
+      - id: RMCBootsSPPBlack
+        amount: 25
+      - id: RMCBootsSPP
         amount: 25
     - name: Gloves
       entries:
@@ -32,15 +34,17 @@
         amount: 25
       - id: AU14WebbingDumpPouch
         amount: 25
-      - id: AU14WebbingAdminPouch
+      - id: AU14WebbingAdminPouchUPP
         amount: 15
-      - id: AU14WebbingDropPouch
+      - id: AU14WebbingDropPouchUPP
         amount: 15
     - name: Headgear
       entries:
       - id: AU14UPPNavalInfantryHelmet
         amount: 25
       - id: AU14UPPPatrolCap
+        amount: 25
+      - id: CMHeadCapSPPBeret
         amount: 25
       - id: AU14UPPBoonie
         amount: 25
@@ -60,6 +64,22 @@
         amount: 25
       - id: AU14UPPArmorBulky
         amount: 25
+    - name: Armor Components
+      entries:
+      - id: AU14ArmorGarbShinGuardsUPP
+        amount: 25
+      - id: AU14ArmorGarbShoulderPadsUPP
+        amount: 25
+      - id: AU14ArmorGarbCrotchPadUPP
+        amount: 25
+      - id: AU14ArmorGarbMagazineWebbingUPP
+        amount: 2
+      - id: AU14ArmorGarbLargeWebbingUPP
+        amount: 2
+      - id: AU14ArmorGarbSmallWebbingUPP
+        amount: 2
+      - id: AU14ArmorGarbJunglePonchoUPP
+        amount: 25
     - name: Backpack
       entries:
       - id: RMCSatchelSPP
@@ -76,22 +96,20 @@
         amount: 1
     - name: Belts
       entries:
-      - id: CMBeltMarine
+      - id: AU14BeltMarineUPP
         amount: 25
       - id: RMCBeltGrenade
         amount: 2
-      - id: RMCM276ShotgunShellLoadingRig
+      - id: AU14ShotgunShellLoadingRigUPP
         amount: 2
-      - id: RMCBeltHolsterPistol
-        amount: 15
-      - id: RMCBeltHolsterRevolver
+      - id: AU14BeltHolsterPistolUPP
         amount: 15
 #      - id: M276 Pattern M82F Holster Rig
 #        amount: 5
       - id: CMBeltKnifeFilled
         name: M276 Knife Rig (Full)
         amount: 1
-      - id: RMCBeltUtilityGeneral
+      - id: AU14BeltUtilityGeneralUPP
         amount: 15
     - name: Pouches
       entries:
@@ -117,7 +135,7 @@
         amount: 15
       - id: RMCPouchMagazinePistolLarge
         amount: 2
-      - id: RMCPouchPistol
+      - id: AU14PouchPistolAlt
         amount: 15
       - id: RMCPouchConstruction
         amount: 1
@@ -190,14 +208,14 @@
     sections:
     - name: Food
       entries:
-      - id: CMMRE
+      - id: RMCMRESPP
         name: MRE
         amount: 30
-      - id: RMCBoxMRE
+      - id: AU14BoxMREUPP
         amount: 5
     - name: Tools
       entries:
-      - id: RMCM5Bayonet
+      - id: RMCCombatUtilityKnifeA
         amount: 15
       - id: CMScrewdriver
         amount: 5
@@ -301,8 +319,8 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMBeltMedical
-      - id: CMBeltMedicBag
+      - id: AU14BeltMedicalUPP
+      - id: AU14BeltMedicBagUPP
     - name: General Medical Supplies
       entries:
       - id: AU14HemostaticGauzePacket
@@ -351,6 +369,14 @@
         amount: 15
       - id: CMTricordrazineAutoInjector
         amount: 15
+    - name: Medical Helmets
+      choices: { CMUPlatoonMedicalHelmet: 1 }
+      entries:
+      - id: AU14HeadHelmetRMCMedic
+    - name: Medical Uniform
+      choices: { CMUPlatoonMedicalUniform: 1 }
+      entries:
+      - id: AU14JumpsuitMedicUPP
     - name: Medical Gloves
       choices: { CMUPlatoonMedicalGloves: 1 }
       entries:
@@ -376,7 +402,7 @@
     - name: Fatigues
       choices: { CMUPlatoonAirCrewFatigues: 1 }
       entries:
-      - id: AU14UPPFatigues
+      - id: AU14BoilerFatiguesUPP
     - name: Body Armor
       choices: { CMUPlatoonAirCrewVest: 1 }
       entries:
@@ -397,6 +423,7 @@
       - id: AU14UPPPatrolCap
       - id: AU14UPPBoonie
       - id: AU14UPPUshanka
+      - id: CMHeadCapSPPBeret
     - name: Webbings
       choices: { CMUPlatoonAirCrewWebbings: 1 }
       entries:
@@ -412,9 +439,8 @@
     - name: Belts
       choices: { CMUPlatoonAirCrewBelts: 1 }
       entries:
-      - id: RMCBeltHolsterPistol
-      - id: RMCBeltHolsterRevolver
-      - id: RMCBeltUtilityGeneral
+      - id: AU14BeltHolsterPistolUPP
+      - id: AU14BeltUtilityGeneralUPP
     - name: Pouches
       choices: { CMUPlatoonAirCrewPouches: 2 }
       entries:
@@ -425,7 +451,7 @@
       - id: RMCPouchDocumentSmall
       - id: RMCPouchMagazine
       - id: RMCPouchGeneralMedium
-      - id: RMCPouchPistol
+      - id: AU14PouchPistolAlt
       - id: RMCPouchMagazinePistolLarge
       - id: RMCPouchTools
     - name: Glasses
@@ -457,8 +483,8 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMBeltMedical
-      - id: CMBeltMedicBag
+      - id: AU14BeltMedicalUPP
+      - id: AU14BeltMedicBagUPP
     - name: General Medical Supplies
       entries:
       - id: AU14HemostaticGauzePacket
@@ -524,11 +550,23 @@
     sections:
     - name: Fatigues
       entries:
-      - id: AU14UPPFatigues
+      - id: AU14JumpsuitOfficerUPP
+        amount: 2
+      - id: AU14JumpsuitMPUPP
+        amount: 2
+      - id: AU14ServiceFatiguesUPP
+        amount: 2
+    - name: Coats
+      entries:
+      - id: AU14CoatUPP
+        amount: 2
+      - id: AU14CoatUPPSenior
         amount: 1
+      - id: AU14CoatUPPMP
+        amount: 2
     - name: Footwear
       entries:
-      - id: RMCBootsPMCFilled
+      - id: RMCBootsSPPFilled
         amount: 2
       - id: CMBootsBrown
         amount: 2
@@ -542,7 +580,7 @@
         amount: 2
     - name: Pouches
       entries:
-      - id: RMCPouchCommandFill
+      - id: AU14PouchCommandFill
         amount: 2
     - name: Miscellaneous
       entries:
@@ -569,6 +607,11 @@
       takeAll: CMUAREssentialEquipment
       entries:
       - id: RMCWeaponLMGQYJ72
+    - name: Belt
+      choices: { CMUPlatoonMGBelt: 1 }
+      entries:
+      - id: AU14BeltSmartGunOperatorUPP
+      - id: AU14BeltSmartGunOperatorPistolUPP
     - name: Gun Munitions
       entries:
       - id: RMCMagazineLMGQYJ72
@@ -616,27 +659,18 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
-      - id: RMCWeaponRifleType71
-      - id: RMCWeaponRifleType71C
-      - id: RMCWeaponRifleAK4047
-      - id: RMCWeaponSMGType64
-      - id: RMCWeaponSMGType19
+      - id: AU14WeaponRifleAG80
     - name: Weapon Ammunition
       entries:
-      - id: RMCMagazineRifleType71
-        amount: 120
-      - id: RMCMagazineRifleType71AP
+      - id: AU14MagazineRifleAG80
+        amount: 240
+      - id: AU14MagazineRifleAG80AP
         amount: 2
-      - id: RMCMagazineRifleAK4047
-        amount: 120
-      - id: RMCMagazineSMGType64
-        amount: 120
-      - id: RMCMagazineSMGType19
-        amount: 120
+      - id: AU14MagazineRifleAG80Ext
+        amount: 2
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
       entries:
-      - id: RMCWeaponPistolL54Empty
       - id: RMCWeaponPistolT74
     - name: Handgun Ammunition
       entries:
@@ -660,41 +694,39 @@
     sprite: _AU14/Structures/Vendors/genericweaponrack.rsi
   - type: CMAutomatedVendor
     sections:
-    - name: Type 23 Riot Shotgun
+    - name: Type 23 Riot Shotgun Pointman kit
       entries:
-      - id: RMCPVECaseType23
+      - id: AU14KitUPPPointmanType23
         amount: 1
-      - id: RMCBoxShotgunHeavyBuckshot
-        amount: 2
-      - id: RMCBoxShotgunHeavyFlechette
-        amount: 2
-      - id: RMCBoxShotgunHeavySlugs
-        amount: 2
-    - name: HJRA-12 Anti-Tank RPG
+        giveSquadRoleName: au14-job-name-govforspecialist-pointmanUPP
+        givePrefix: au14-job-prefix-govforspecialist-pointmanUPP
+        isAppendPrefix: true
+        isAppendSquadRoleName: true
+    - name: Heavy Antitank HJRA-12 Rifleman kit
       entries:
-      - id: RMCWeaponLauncherHJRA12
+      - id: AU14KitUPPHATHJRA12
         amount: 1
-      - id: RMCRocketHJRA12AT
-        amount: 2
-      - id: RMCRocketHJRA12HE
-        amount: 1
-      - id: RMCRocketHJRA12Incen
-        amount: 1
+        giveSquadRoleName: au14-job-name-govforspecialist-heavyantitankUPP
+        givePrefix: au14-job-prefix-govforspecialist-heavyantitankUPP
+        isAppendPrefix: true
+        isAppendSquadRoleName: true
     - name: Type 71-F Assault Rifle
       entries:
       - id: RMCWeaponRifleType71Flamer
         amount: 1
-    - name: Type 88 DMR
+    - name: Type 88 Marksman kit
       entries:
-      - id: RMCPVECaseType88
+      - id: AU14KitUPPMarksmanType88
         amount: 1
-      - id: RMCMagazineSniperType88
-        amount: 8
+        giveSquadRoleName: au14-job-name-govforspecialist-marksmanUPP
+        givePrefix: au14-job-prefix-govforspecialist-marksmanUPP
+        isAppendPrefix: true
+        isAppendSquadRoleName: true
     - name: Explosives
       entries:
-      - id: CMPacketGrenadeFragOldFilled
+      - id: AU14PacketGrenadeHighExplosiveUPPFilled
         amount: 10
-      - id: RMCPacketGrenadeSmokeFilled
+      - id: AU14PacketGrenadeSmokeUPPFilled
         amount: 4
       - id: RMCExplosivePlastic
         amount: 4
@@ -725,3 +757,87 @@
         amount: 12
       - id: RMCMagazinePistolT73
         amount: 12
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14ComtechGearVendorUPP
+  name: UPP combat technicians gear rack
+  description: An automated gear rack for combat technicians.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforEngineering" ], [ "AU14AccessOpforEngineering" ] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/combat_technician_gear.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORSquadCombatTech
+    - AU14JobOPFORSquadCombatTech
+    sections:
+    - name: Engineer Set
+      takeAll: CMEngineerSet
+      entries:
+      - id: AU14VendorBundleCombatTechnicianEssentials
+    - name: Automated Sentry Gun
+      choices:  { CMHandheldDefense : 1 }
+      entries:
+      - id: AU14CaseSentry
+      - id: AU14CaseSentryMini
+      - id: AU14CaseSentrySniper
+    - name: Engineer Uniform
+      choices: { CMUPlatoonMedicalUniform: 1 }
+      entries:
+      - id: AU14JumpsuitEngiUPP
+    - name: Tool Storage
+      choices: { CMUCTToolStorage: 1 }
+      entries:
+      - id: AU14BeltUtilityCombatFilled
+        name: M276 pattern combat toolbelt rig (filled)
+        recommended: true
+      - id: AU14PouchToolsFilledComtech
+        name: tactical tools pouch (filled)
+      - id: AU14BeltUtilityFilled
+        name: M276 pattern toolbelt rig (filled)
+    - name: Engineering Storage Bag
+      choices: { CMUPouchesCTBag: 1 }
+      entries:
+      - id: RMCSatchelSPPWelder
+        recommended: true
+    - name: Engineering Storage Pouch
+      choices: { CMUPouchesCT: 1 }
+      entries:
+      - id: RMCPouchConstruction
+        recommended: true
+      - id: RMCPouchElectronics
+    - name: Engineering Supplies
+      entries:
+      - id: CMSheetMetal50
+        name: metal x50
+        points: 8
+        recommended: true
+      - id: CMSheetPlasteel50
+        name: plasteel x50
+        points: 10
+        recommended: true
+      - id: CMAPCElectronics
+        points: 2
+      - id: DoorElectronics
+        points: 2
+      - id: RMCPowerCellHigh
+        points: 3
+      - id: RMCPowerCellSuper
+        points: 8
+      - id: RMCMagazineSMGNailgun
+        points: 5
+    #- id: CMES11MobileFuelCanister
+    #  points: 4
+    - name: Explosives
+      entries:
+      - id: RMCExplosivePlastic
+        points: 5
+      - id: RMCExplosiveBreachingCharge
+        points: 8
+        recommended: true
+    - name: Utilities
+      entries:
+      - id: RMCSynthResetKey
+        points: 5

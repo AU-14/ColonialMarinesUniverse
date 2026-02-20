@@ -124,6 +124,9 @@ public sealed partial class RMCPlanetMapPrototypeComponent : Component
     public List<ProtoId<AuThirdPartyPrototype>> ThirdParties = new();
 
 
+    [DataField("thirdpartyinterval"), AutoNetworkedField]
+    public int? ThirdPartyInterval = null;
+
 }
 
 [DataDefinition]

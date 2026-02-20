@@ -32,7 +32,7 @@ reagent-name-rmcnapalm-ex = Napalm EX
 reagent-desc-rmcnapalm-ex = A sticky combustible liquid chemical made up of a combonation of rare and dangerous reagents both that penetrates the best fire retardants, and burns extremely hot.
 
 reagent-name-rmcr189 = R189
-reagent-desc-rmcr189 = A SPP chemical, it burns at an extremely high tempature and is designed to melt directly through fortified positions or bunkers.
+reagent-desc-rmcr189 = A UPP chemical, it burns at an extremely high tempature and is designed to melt directly through fortified positions or bunkers.
 
 reagent-name-rmcmethane = Methane
 reagent-desc-rmcmethane = An easily combustible hydrocarbon that can very rapidly expand a fire, even explosively at the right concentrations. It is used primarily as fuel to make heat and light or manufacturing of organic chemicals.

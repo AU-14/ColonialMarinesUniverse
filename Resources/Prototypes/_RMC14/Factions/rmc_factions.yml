@@ -3,6 +3,8 @@
   hostile:
   - RMCXeno
   - CLF
+  - AUColonist
+  - Civilian
 
 - type: npcFaction
   id: RMCXeno

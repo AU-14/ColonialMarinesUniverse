@@ -1,0 +1,466 @@
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  name: AG80 pulse rifle
+  id: AU14WeaponRifleAG80
+  description: Pulse action 9.7x16mm caseless assault rifle of the UPPAC Naval Infantry. Only recently entered service and has yet to see full integration.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/UPP/ag80.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/UPP/ag80.rsi
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: Gun
+    selectedMode: FullAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    soundGunshot:
+      collection: AU14M41FireSound
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilUnwielded: 4
+    scatterWielded: 10
+    scatterUnwielded: 25
+    baseFireRate: 3.9
+    burstScatterMult: 1
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.5
+    accuracyMultiplierUnwielded: 0.75
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleAG80
+          - AU14MagazineRifleAG80AP
+          - AU14MagazineRifleAG80Ext
+  - type: GunDamageModifier
+    multiplier: 1.1
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-stock:
+        startingAttachable: AU14AttachmentAG80StockCollapsible
+        whitelist:
+          tags:
+          - AU14AttachmentAG80StockCollapsible
+      rmc-aslot-underbarrel:
+        locked: true
+        startingAttachable: AU14AttachmentGP45GrenadeLauncher
+        whitelist:
+          tags:
+          - AU14AttachmentGP45GrenadeLauncher
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.84, 0.085
+      rmc-aslot-rail: -0.07, 0.16
+      rmc-aslot-stock: -0.5, 0.03
+      rmc-aslot-underbarrel: 0.1, -0.1
+  - type: ItemCamouflage
+    camouflageVariations: {}
+  - type: Tag
+    tags:
+    - AU14WeaponRifleAG80
+
+- type: entity
+  parent: AU14WeaponRifleAG80
+  id: AU14WeaponRifleAG80Filled
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineRifleAG80
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleAG80
+          - AU14MagazineRifleAG80AP
+          - AU14MagazineRifleAG80Ext
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: RMCAttachmentRailFlashlight
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-stock:
+        startingAttachable: AU14AttachmentAG80StockCollapsible
+        whitelist:
+          tags:
+          - AU14AttachmentAG80StockCollapsible
+      rmc-aslot-underbarrel:
+        locked: true
+        startingAttachable: AU14AttachmentGP45GrenadeLauncher
+        whitelist:
+          tags:
+          - AU14AttachmentGP45GrenadeLauncher
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14MagazineRifleAG80
+  name: "AG80 magazine (9.7x16mm)"
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleAG80
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - AU14CartridgeRifle97x16mm
+    proto: CMCartridgeRifle10x24mm
+    capacity: 60
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/ag80.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifle
+
+- type: entity
+  parent: CMMagazineRifleM54C
+  id: AU14MagazineRifleAG80AP
+  name: "AG80 AP magazine (9.7x16mm)"
+  suffix: AP
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleAG80AP
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - AU14CartridgeRifle97x16mmAP
+    proto: AU14CartridgeRifle97x16mmAP
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/ag80.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifleAP
+
+- type: entity
+  parent: CMMagazineRifleM54C
+  id: AU14MagazineRifleAG80Ext
+  name: "AG80 extended magazine (10x24mm)"
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleAG80Ext
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - AU14CartridgeRifle97x16mm
+    proto: AU14CartridgeRifle97x16mm
+    capacity: 99
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/ag80.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#e5b13c"
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+  - type: Appearance
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: AU14CartridgeRifle97x16mm
+  name: cartridge (9.7x16mm)
+  description: A 9.7x16mm cartridge. Fits in 9.7x16mm magazines.
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14CartridgeRifle97x16mm
+  - type: CartridgeAmmo
+    proto: BulletRifle97x16mm
+
+- type: entity
+  parent: AU14CartridgeRifle97x16mm
+  id: AU14CartridgeRifle97x16mmAP
+  name: AP cartridge (10x24mm)
+  description: An armor piercing 10x24mm cartridge. Fits in 10x24mm AP magazines.
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14CartridgeRifle97x16mmAP
+  - type: CartridgeAmmo
+    proto: BulletRifle97x16mmAP
+
+- type: entity
+  parent: RMCBaseBullet
+  id: BulletRifle97x16mm
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 35
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 24
+      falloff: 9999
+      ignoreModifiers: true
+    - range: 7
+      falloff: 4
+  - type: CMArmorPiercing
+    amount: 5
+  - type: RMCProjectileAccuracy
+    accuracy: 105
+    thresholds:
+    - range: 16
+      falloff: 10
+
+- type: entity
+  parent: BulletRifle97x16mm
+  id: BulletRifle97x16mmAP
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 35
+  - type: CMArmorPiercing
+    amount: 45
+
+- type: entity
+  parent: RMCStockAttachmentCollapsibleBase
+  id: AU14AttachmentAG80StockCollapsible
+  name: AG80 folding stock
+  description: The standard back end of any gun starting with AG80. Compatible with the AG80 series, this stock reduces recoil and scatter, but at a reduction to handling and agility. Also enhances the thwacking of things with the stock-end of the rifle.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Attachments/upp_attachments.rsi
+    state: ag80-col
+  - type: Tag
+    tags:
+    - RMCAttachmentStock
+    - AU14AttachmentAG80StockCollapsible
+  - type: AttachableToggleable
+    doAfterBreakOnMove: false
+    doAfter: 0.5
+    icon:
+      sprite: _AU14/Weapons/Guns/Attachments/upp_attachments.rsi
+      state: ag80-col
+    iconActive:
+      sprite: _AU14/Weapons/Guns/Attachments/upp_attachments.rsi
+      state: ag80-col-on
+    actionName: Toggle AG80 Folding Stock
+  - type: AttachableSizeMods
+    modifiers:
+      - size: 1
+  - type: AttachableSpeedMods
+    modifiers:
+    - conditions:
+        wieldedOnly: true
+        activeOnly: true
+      walk: -0.059
+      sprint: -0.101
+  - type: AttachableWieldDelayMods
+    modifiers:
+    - conditions:
+        activeOnly: true
+      delay: 0.2
+  - type: AttachableWeaponMeleeMods
+    modifiers:
+    - bonusDamage:
+        types:
+          Blunt: 5
+  - type: AttachableWeaponRangedMods
+    modifiers:
+    - conditions:
+        wieldedOnly: true
+        activeOnly: true
+      accuracyAddMult: 0.10
+      recoilFlat: -1
+      scatterFlat: -4
+    - conditions:
+        unwieldedOnly: true
+        activeOnly: true
+      accuracyAddMult: -0.15
+      recoilFlat: 2
+      scatterFlat: 6
+  - type: ItemCamouflage
+    camouflageVariations: {}
+
+- type: entity
+  parent: [ RMCUnderAttachmentBase, RMCAttachableToggleableBase ]
+  id: AU14AttachmentGP45GrenadeLauncher
+  name: GP-45 grenade launcher
+  description: A weapon-mounted, reloadable grenade launcher.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Attachments/upp_attachments.rsi
+    layers:
+    - state: grenade-ag80
+      map: [ "enum.BreechVisuals.Open" ]
+  - type: Item
+    size: Normal
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+  - type: RMCAmmoEject
+    containerID: ballistic-ammo
+    ejectSound:
+      path: /Audio/_RMC14/Weapons/Guns/Reload/grenade_insert.ogg
+  - type: AmmoCounter
+  - type: Gun
+    projectileSpeed: 20
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_ugl.ogg
+    resetOnHandSelected: false
+  - type: RMCSelectiveFire
+    baseFireRate: 0.417
+  - type: GunIgnorePrediction
+  - type: GunIFF
+    enabled: true
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      tags:
+      - RMCGrenadeM40
+      - RMCAirburstGrenade
+    capacity: 1
+    soundInsert:
+      path: /Audio/_RMC14/Weapons/Guns/Reload/grenade_insert.ogg
+      params:
+        volume: -2
+  - type: OnShootTriggerAmmoTimer
+    delay: 1.5
+    beepInterval: 2
+    initialBeepDelay: 0
+    beepSound:
+      path: "/Audio/Effects/beep1.ogg"
+      params:
+        volume: 5
+    timerStart: enum.TimerStartMode.OnHitGround
+  - type: ShootAtFixedPoint
+    shootArcProj: true
+    maxFixedRange: 7
+  - type: UniqueAction
+  - type: BreechLoaded
+    needOpenClose: true
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.BreechVisuals.Open:
+        enum.BreechVisuals.Open:
+          True: { state: grenade-ag80-open }
+          False: { state: grenade-ag80 }
+  - type: AttachableToggleable
+    userOnly: true
+    attachedOnly: true
+    supercedeHolder: true
+    wieldedUseOnly: true
+    activatePopupText: attachable-popup-switch-to-generic
+    deactivatePopupText: attachable-popup-switch-from-generic
+    actionName: Switch to the GP-45 Grenade Launcher
+    actionDesc: Switch to using the underbarrel grenade launcher.
+    icon:
+      sprite: _AU14/Weapons/Guns/Attachments/upp_attachments.rsi
+      state: grenade-ag80
+    iconActive:
+      sprite: _AU14/Weapons/Guns/Attachments/upp_attachments.rsi
+      state: grenade-ag80-on
+  - type: AttachableVisuals
+    redrawOnAppearanceChange: true
+  - type: Tag
+    tags:
+    - RMCAttachmentUnderbarrel
+    - AU14AttachmentGP45GrenadeLauncher
+  - type: WieldedCrosshair
+    rsi:
+      sprite: _RMC14/Interface/MousePointer/explosive_mouse.rsi
+      state: all
+
+- type: Tag
+  id: AU14WeaponRifleAG80
+
+- type: Tag
+  id: AU14MagazineRifleAG80
+
+- type: Tag
+  id: AU14MagazineRifleAG80AP
+
+- type: Tag
+  id: AU14AttachmentAG80StockCollapsible
+
+- type: Tag
+  id: AU14MagazineRifleAG80Ext
+
+- type: Tag
+  id: AU14CartridgeRifle97x16mm
+
+- type: Tag
+  id: AU14CartridgeRifle97x16mmAP
+
+- type: Tag
+  id: AU14AttachmentGP45GrenadeLauncher

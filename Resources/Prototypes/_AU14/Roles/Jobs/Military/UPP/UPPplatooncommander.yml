@@ -1,25 +1,20 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobPlatCoBase
   id: AU14JobGOVFORPlatCoUPP
   name: Platoon Commander
   description: au14-job-description-govforplatco
   setPreference: false
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORPlatCo
   ranks:
-    UPP_Kapitan:
+    UPP_Captain:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORPlatCo
-      time: 7200 # 120 hours
-    UPP_Hauptmann:
+      time: 432000 # 120 hours
+    UPP_SeniorLieutenant:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORPlatCo
-      time: 3600 # 60 hours
-    UPP_StarschyLeytenant:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORPlatCo
-      time: 1800 # 30 hours
-    UPP_Leytenant: []
+      time: 108000 # 30 hours
+    UPP_Lieutenant: []
   startingGear: AU14GearGOVFORPlatCo
   icon: "AU14JobIconPlatCo"
   requireAdminNotify: true
@@ -55,4 +50,4 @@
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
+  hidden: true

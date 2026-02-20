@@ -1,0 +1,80 @@
+- type: job
+  parent: AU14JobSectionSergeantBase
+  id: AU14JobOpforSectionSergeant
+  name: au14-job-name-opforSSG
+  description: au14-job-description-opforSSG
+  setPreference: true
+  canBeAntag: false
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankMasterSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSectionSergeant
+      time: 432000 # 120 hours
+    RMCRankGunnerySergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSectionSergeant
+      time: 216000 # 60 hours
+    RMCRankStaffSergeant: []
+  startingGear: AU14GearopforSectionSergeant
+  dummyStartingGear: AU14GearopforPlatoonSergantDummy
+  icon: "AU14JobIconOPFORPlatoonSarge"
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-opfor
+  accessGroups:
+  - AU14OpforCommand
+  overwatchSortPriority: -6
+  overwatchShowName: true
+  overwatchRoleName: Platoon Sergeant
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - OPFOR
+    - type: Marine
+      Faction: opfor
+    - type: Skills
+      preset: AU14SkillPresetPlatoonSeniorSergeant
+    - type: JobPrefix
+      prefix: au14-job-prefix-opforSSG
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: MarineOrders
+  hidden: true
+
+- type: startingGear
+  id: AU14GearopforSectionSergeant
+  equipment:
+    id: AU14IDCardopforSecSergeant
+    ears: AU14HeadsetSectionLeaderopfor
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforSectionSergeant
+  name: Spawn Point opfor Section Sergeant
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOpforSectionSergeant
+  - type: Sprite
+    state: syn_spawn
+
+- type: startingGear
+  id: AU14GearopforPlatoonSergantDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleTwo
+    shoes: CMBootsBrown
+    head: AU14JunglePatrolCap
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetSectionLeaderopfor

@@ -5,6 +5,6 @@
   description: A UPP Naval Infantry helmet.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/upphelmet.rsi
+    sprite: _AU14/Clothing/UPP/helmets/upphelmet.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UPP/upphelmet.rsi
+    sprite: _AU14/Clothing/UPP/helmets/upphelmet.rsi

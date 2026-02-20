@@ -1,0 +1,12 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobSquadAutomaticRiflemanBase
+  name: au14-job-name-govforsquadautomaticrifleman
+  description: au14-job-description-govforsquadautomaticrifleman
+  playTimeTracker: AU14JobGOVFORSquadAutomaticRifleman
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: playTimeTracker
+  id: AU14JobGOVFORSquadAutomaticRifleman
+  isHumanoid: true

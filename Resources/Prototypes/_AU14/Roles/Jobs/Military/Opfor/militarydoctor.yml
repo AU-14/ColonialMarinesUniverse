@@ -1,0 +1,88 @@
+- type: job
+  parent: AU14JobMilitaryDoctorBase
+  id: AU14JobOPFORMilitaryDoctor
+  name: au14-job-name-opforMilitaryDoctor
+  description: au14-job-description-opforMilitaryDoctor
+  setPreference: true
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 25
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankSecondLT: []
+  startingGear: AU14GearOPFORMilitaryDoctor
+  dummyStartingGear: AU14GearOPFORMilitaryDoctorDummy
+  icon: "AU14JobIconOPFORCorpsman"
+  requireAdminNotify: true
+  spawnMenuRoleName: Military Doctor (OPFOR)
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-opfor
+  accessGroups:
+  - AU14OpforCorpsman
+  - AU14OpforSquad
+  overwatchSortPriority: -6
+  overwatchShowName: true
+  overwatchRoleName: Doctor
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - OPFOR
+    - type: Marine
+      Faction: opfor
+    - type: Skills
+      preset: AU14SkillPresetMilitaryDoctor
+    - type: JobPrefix
+      prefix: au14-job-prefix-opforMilitaryDoctor
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: MarineOrders
+  hidden: true
+
+- type: startingGear
+  id: AU14GearOPFORMilitaryDoctor
+  equipment:
+    jumpsuit: AU14ScrubsGreenDoctorSurgical
+    head: CMHeadCapSurgGreen
+    shoes: CMBootsBlackFilled
+    belt: CMUBeltMedicBagSupportSynth
+    pocket1: AU14PouchGeneralLargeMilDoctorFill
+    pocket2: RMCPouchSyringeFill
+    back: CMSatchelMarine
+    outerClothing: RMCLabcoat
+    ears: AU14HeadsetSectionOpforAux
+    ears2: RMCFlashlightPen
+    id: AU14IDCardOPFORDoctor
+    neck: ClothingNeckStethoscope
+    eyes: RMCGlassesMedicalHUDGlasses
+  inhand:
+  - AU14CMDefibrillator
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFORMilitaryDoctor
+  name: Spawn Point OPFOR Doctor
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORMilitaryDoctor
+  - type: Sprite
+    state: syn_spawn
+
+- type: startingGear
+  id: AU14GearOPFORMilitaryDoctorDummy
+  equipment:
+    jumpsuit: AU14ScrubsGreenDoctorSurgical
+    shoes: CMBootsBlackFilled
+    belt: CMUBeltMedicBagSupportSynth
+    back: CMSatchelMarine
+    outerClothing: RMCLabcoat
+    id: AU14IDCardOPFORDoctor
+    neck: ClothingNeckStethoscope

@@ -1,0 +1,13 @@
+- type: job
+  parent: CMJobBase
+  id: AU14Jobk9handlerBase
+  name: K9 Handler
+  description: K9 Handler
+  setPreference: false
+  playTimeTracker: AU14JobGOVFORk9handler
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: playTimeTracker
+  id: AU14JobGOVFORk9handler
+  isHumanoid: true

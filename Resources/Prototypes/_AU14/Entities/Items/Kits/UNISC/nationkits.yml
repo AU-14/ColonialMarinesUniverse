@@ -18,11 +18,12 @@
   - type: StorageFill
     contents:
     - id: AU14UPPUshanka
+    - id: CMHeadCapSPPBeret
     - id: AU14UPPPatrolCap
-    - id: AU14UPPFatigues
+    - id: AU14FatiguesUPP
     - id: RMCBootsSPPFilled
-    - id: RMCWeaponRifleType71
-    - id: RMCWeaponPistolL54Empty
+    - id: AU14WeaponRifleAG80Filled
+    - id: RMCWeaponPistolT74
     - id: AU14PatchUPPNavalInfantry
     - id: AU14PatchUPP
 

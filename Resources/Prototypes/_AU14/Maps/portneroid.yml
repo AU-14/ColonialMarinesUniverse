@@ -1,0 +1,43 @@
+- type: gameMap
+  id: portneroid
+  mapName: LV-327 Port Neroid
+  mapPath: /Maps/_AU14/portneroid.yml
+  minPlayers: 0
+  maxPlayers: 200
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    portneroid:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Port Neroid'
+        - type: StationJobs
+          availableJobs:
+            AU14JobCivilianColonist: [ -1, -1 ]
+            AU14JobCivilianFoodServiceWorker: [3, 3]
+            AU14JobCivilianJournalist: [1, 1]
+            AU14JobCivilianColonySynthetic: [2, 2]
+
+            # Colony Command (non department)
+            AU14JobCivilianCorporateLiaison: [1, 1]
+            AU14JobCivilianColonyAdministrator: [1, 1]
+
+            # Security/LEO
+            AU14JobCivilianCMBMarshal: [1, 1]
+            AU14JobCivilianCMBDeputy: [4, 4]
+
+            # Engineering/Logi
+            AU14JobCivilianForeman: [1, 1]
+            AU14JobCivilianFreightSystemsSpecialist: [2, 2]
+            AU14JobCivilianEngineer: [4, 4]
+            AU14JobCivilianWasteManagementSpecialist: [3, 3]
+
+            # Medical
+            AU14JobCivilianPhysician: [1, 1]
+            AU14JobCivilianNurse: [2, 2]
+            AU14JobCivilianEthicsAndWellnessAdvisor: [1, 1]
+            AU14JobCivilianEmergencyResponseOfficer: [1, 1]
+
+            # Other
+            AU14JobCivilianMiner: [8, 8]

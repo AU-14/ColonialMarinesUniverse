@@ -1,16 +1,15 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobRadioTelephoneOperatorBase
   id: AU14JobGOVFORRadioTelephoneOperatorUPP
   name: Radio Telephone Operator
   description: au14-job-description-radiotelephoneooerator
   setPreference: false
-  playTimeTracker: AU14JobGOVFORRadioTelephoneOperator
   ranks:
-    UPP_StarschyRyadovoy:
+    UPP_SeniorGefreiter:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORRadioTelephoneOperator
-      time: 1800 # 30 hours
-    UPP_Yefreytor: []
+      time: 108000 # 30 hours
+    UPP_Gefreiter: []
   startingGear: AU14GearGOVFORRadioTelephoneOperator
   dummyStartingGear: AU14GearGOVFORRadioTelephoneOperatorDummy
   icon: "AU14JobIconRTO"
@@ -40,4 +39,4 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
     - type: MarineOrders
-  hidden: false
+  hidden: true

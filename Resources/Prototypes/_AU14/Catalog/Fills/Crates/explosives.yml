@@ -129,3 +129,69 @@
     contents:
     - id: AU14Packet20MMGrenadeHESHRMCFilled
       amount: 2
+
+# UPP
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: AU14CrateGrenadesHighExplosiveUPP
+  name: Type 6 fragmentation grenades crate (x6)
+  suffix: UPP
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14PacketGrenadeHighExplosiveUPPFilled
+      amount: 1
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: AU14CrateGrenadesIncendiaryUPP
+  name: Type 8 incendiary grenades crate (x6)
+  suffix: UPP
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14PacketGrenadeIncendiaryUPPFilled
+      amount: 1
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: AU14CrateGrenadesSmokeUPP
+  name: RDG-17 smoke grenades crate (x6)
+  suffix: UPP
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14PacketGrenadeSmokeUPPFilled
+      amount: 1
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: AU14CrateGrenadesHighExplosiveBoxUPP
+  suffix: UPP
+  name: Type 6 fragmentation grenade box crate (x12)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14BoxHEDPUPP
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: AU14CrateGrenadesIncendiaryBoxUPP
+  suffix: UPP
+  name: Type 8 incendiary grenade box crate (x12)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14BoxHIDPUPP
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: AU14CrateGrenadesSmokeBoxUPP
+  suffix: UPP
+  name: RDG-17 smoke grenades crate (x12)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14BoxSmokeUPP
+      amount: 1

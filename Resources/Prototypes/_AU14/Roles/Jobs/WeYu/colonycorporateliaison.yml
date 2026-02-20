@@ -39,6 +39,9 @@
         RMCSkillVehicles: 1
         RMCSkillDomestics: 1
         RMCSkillFirearms: 2
+    - type: CMVendorUser
+      id: AU14JobCivilianCorporateLiaison
+      points: 65
     - type: JobPrefix
       prefix: au14-job-prefix-corporateliaison
     - type: TacticalMapIcon
@@ -54,6 +57,8 @@
     shoes: RMCShoesLaceup
     id: AU14IDCardColonyCorporateLiaison
     outerClothing: AU14CivilianJacketOrangePufferJacket
+  inhand:
+  - RMCPortableVendorCorporate
 
 - type: entity
   parent: CMSpawnPointJobBase

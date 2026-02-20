@@ -2,6 +2,7 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.AU14.Threats;
 [RegisterComponent]
+[NetworkedComponent]
 
 public sealed partial class ThreatSpawnMarkerComponent: Component
 
@@ -19,6 +20,11 @@ public sealed partial class ThreatSpawnMarkerComponent: Component
 
     [DataField("thirdparty", required: false)]
     public bool ThirdParty { get; private set; } = false;
+
+
+
+    [DataField ("used", required: false)]
+    public bool Used { get; set; } = false;
 
 }
 

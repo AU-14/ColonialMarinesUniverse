@@ -1,11 +1,10 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobPlatOpBase
   id: AU14JobGOVFORPlatOpWYPMC
   name: PMC Operations Adjutant
   description: au14-job-description-govforplatop
   setPreference: false
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORPlatOp
   ranks:
     AU14RankWeYuAdjutant: []
   startingGear: AU14GearGOVFORPlatOp
@@ -44,4 +43,4 @@
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
+  hidden: true

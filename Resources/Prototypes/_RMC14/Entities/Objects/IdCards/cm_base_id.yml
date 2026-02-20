@@ -173,8 +173,6 @@
   - type: Tag
     tags:
     - DoorBumpOpener
-  - type: ItemIFF
-    faction: FactionMarine
   - type: Corrodible
     isCorrodible: false
 

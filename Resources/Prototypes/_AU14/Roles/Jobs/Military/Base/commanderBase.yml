@@ -1,0 +1,12 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobPlatCoBase
+  name: au14-job-name-govforplatco
+  description: au14-job-description-govforplatco
+  playTimeTracker: AU14JobGOVFORPlatCo
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: playTimeTracker
+  id: AU14JobGOVFORPlatCo
+  isHumanoid: true

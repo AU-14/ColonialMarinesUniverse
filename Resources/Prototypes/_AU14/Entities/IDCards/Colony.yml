@@ -1,4 +1,35 @@
 ﻿- type: entity
+  parent: Clothing
+  id: AU14IDCardBaseCivilianNoIFF
+  name: identification holo-badge
+  description: A slice of encoded compressed fiber glass. Used for identification and access control.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/id.rsi
+    state: plain
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/id.rsi
+  - type: Item
+    size: Small
+    heldPrefix: default
+  - type: Access
+  - type: IdCard
+    nameLocId: cm-access-id-card-component-owner-name-job-title-text
+    fullNameLocId: cm-access-id-card-component-owner-full-name-job-title-text
+    canMicrowave: false
+  - type: StationRecordKeyStorage
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: ItemIFF
+    faction: FactionSurvivor
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
   parent: CMIDCardBase
   id: AU14IDCardColonyColonist
   name: colonist ID card
@@ -7,7 +38,7 @@
     job: AU14JobCivilianColonist
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardFoodServiceWorker
   name: food service worker ID card
   components:
@@ -15,7 +46,7 @@
     job: AU14JobCivilianFoodServiceWorker
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyJournalist
   name: journalist ID card
   components:
@@ -23,7 +54,7 @@
     job: AU14JobCivilianJournalist
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardCivilianScientist
   name: scientist ID card
   components:
@@ -31,7 +62,7 @@
     job: AU14JobCivilianScientist
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonySynthetic
   name: colony operations synthetic ID card
   components:
@@ -39,7 +70,7 @@
     job: AU14JobCivilianColonySynthetic
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyAdministrator
   name: colony administrator ID card
   components:
@@ -47,7 +78,7 @@
     job: AU14JobCivilianColonyAdministrator
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyCorporateLiaison
   name: corporate liaison ID card
   components:
@@ -55,7 +86,7 @@
     job: AU14JobCivilianCorporateLiaison
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyForeman
   name: foreman ID card
   components:
@@ -63,7 +94,7 @@
     job: AU14JobCivilianForeman
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyFreightSystemsSpecialist
   name: freight systems specialist ID card
   components:
@@ -71,7 +102,7 @@
     job: AU14JobCivilianFreightSystemsSpecialist
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyEngineer
   name: engineer ID card
   components:
@@ -79,7 +110,7 @@
     job: AU14JobCivilianEngineer
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyWasteManagementSpecialist
   name: waste management specialist ID card
   components:
@@ -87,7 +118,7 @@
     job: AU14JobCivilianWasteManagementSpecialist
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyPhysician
   name: physician ID card
   components:
@@ -95,7 +126,7 @@
     job: AU14JobCivilianPhysician
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyNurse
   name: nurse ID card
   components:
@@ -103,7 +134,7 @@
     job: AU14JobCivilianNurse
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyEthicsAndWellnessAdvisor
   name: ethics and wellness advisor ID card
   components:
@@ -111,7 +142,7 @@
     job: AU14JobCivilianEthicsAndWellnessAdvisor
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyEmergencyResponseOfficer
   name: emergency response officer ID card
   components:
@@ -119,7 +150,7 @@
     job: AU14JobCivilianEmergencyResponseOfficer
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyCMBDeputy
   name: CMB deputy ID card
   components:
@@ -127,7 +158,7 @@
     job: AU14JobCivilianCMBDeputy
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyCMBMarshal
   name: CMB marshal ID card
   components:
@@ -135,7 +166,7 @@
     job: AU14JobCivilianCMBMarshal
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyUSASFRecruiter
   name: USASF recruiter ID card
   components:
@@ -143,7 +174,7 @@
     job: AU14JobCivilianUSASFRecruiter
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardCivilianKellandWarden
   name: Warden ID card
   components:
@@ -151,7 +182,7 @@
     job: AU14JobCivilianKellandWarden
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardcivilianCWPSranger
   name: CWPS ranger ID card
   components:
@@ -159,9 +190,17 @@
     job: AU14JobCivilianCWPSRanger
 
 - type: entity
-  parent: CMIDCardBase
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardciviliannspaConstable
   name: NSPA constable ID card
   components:
   - type: PresetIdCard
     job: AU14JobCiviliannspaConstable
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: AU14IDCardcivilianPaPOfficer
+  name: PAP officer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianPaPOfficer

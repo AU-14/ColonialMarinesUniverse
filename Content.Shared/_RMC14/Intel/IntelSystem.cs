@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Intel.Tech;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Power;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Actions;
@@ -15,6 +16,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.GameTicking;
+using Content.Shared.Ghost;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs;
@@ -59,10 +61,22 @@ public sealed class IntelSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+
+    // Runtime overrides set by server systems when an active platoon declares a TechTree.
+    // Key is normalized team string (lowercase), value is prototype id string.
+    private readonly Dictionary<string, string> _teamTechTreeOverrides = new();
 
     private static readonly ImmutableArray<char> UppercaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToImmutableArray();
 
     private static readonly EntProtoId<IntelTechTreeComponent> TechTreeProto = "RMCIntelTechTree";
+
+    // Team-specific tech tree prototype ids (convenience constants).
+    // Use these when you want to reference a specific team's tech-tree proto in code.
+    private static readonly EntProtoId<IntelTechTreeComponent> TechTreeProtoGovfor = "RMCIntelTechTree_govfor";
+    private static readonly EntProtoId<IntelTechTreeComponent> TechTreeProtoOpfor = "RMCIntelTechTree_opfor";
+    private static readonly EntProtoId<IntelTechTreeComponent> TechTreeProtoClf = "RMCIntelTechTree_clf";
+    private static readonly EntProtoId<IntelTechTreeComponent> TechTreeProtoScientist = "RMCIntelTechTree_clf";
 
     private static readonly EntProtoId PaperScrapProto = "RMCIntelPaperScrap";
     private static readonly EntProtoId ProgressReportProto = "RMCIntelProgressReport";
@@ -321,9 +335,11 @@ public sealed class IntelSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        var tree = EnsureTechTree();
+        // Resolve the actor's team and ensure we credit that team's tech tree explicitly.
+        var team = ResolveTeam(user);
+        var tree = EnsureTechTree(team);
         tree.Comp.Tree.Documents.Current++;
-        AddPoints(tree, ent.Comp.Value);
+        AddPoints(tree, ent.Comp.Value, team);
 
         var knowledge = EnsureComp<IntelKnowledgeComponent>(user);
         knowledge.Read.Add(ent);
@@ -360,8 +376,43 @@ public sealed class IntelSystem : EntitySystem
     {
         if (_net.IsServer)
         {
-            var tree = EnsureTechTree().Comp.Tree;
-            ent.Comp.Tree = tree;
+            // Determine actor performing the action from the BaseActionEvent in args
+            var performer = args.Performer;
+
+            // If the performer is a ghost, populate team trees for all teams (with AU-backed points)
+            var teamTrees = new Dictionary<string, IntelTechTree>();
+            if (HasComp<GhostComponent>(performer))
+            {
+                var techQuery = EntityQueryEnumerator<IntelTechTreeComponent>();
+                while (techQuery.MoveNext(out var uid, out var comp))
+                {
+                    // Ghosts see each team's intel tree as-is (internal points only).
+                    var copy = comp.Tree;
+                    copy.Points = GetAuWinPoints(comp.Team, copy.Points);
+                    teamTrees[comp.Team] = copy;
+                }
+
+                ent.Comp.TeamTrees = teamTrees;
+            }
+            else
+            {
+                // Non-ghosts: resolve the team from their MarineComponent faction.
+                // Use the faction string directly (normalized to lower-case) if present; otherwise fall back to Team.None.
+                string team = Team.None;
+                if (TryComp(performer, out Content.Shared._RMC14.Marines.MarineComponent? marine) && !string.IsNullOrEmpty(marine.Faction))
+                {
+                    team = marine.Faction.ToLowerInvariant();
+                }
+
+                var treeEntity = EnsureTechTree(team);
+                var tree = treeEntity.Comp.Tree;
+                // Show the AU win points instead of internal tech points for UI display
+                var displayTree = tree;
+                displayTree.Points = GetAuWinPoints(team, displayTree.Points);
+                ent.Comp.Tree = displayTree;
+                ent.Comp.TeamTrees.Clear();
+            }
+
             Dirty(ent);
         }
 
@@ -535,7 +586,7 @@ public sealed class IntelSystem : EntitySystem
                 retrieve.State != IntelObjectiveState.Complete &&
                 cluesComp.Category is { } category)
             {
-                var tree = EnsureTechTree();
+                var tree = EnsureTechTree(ent.Comp.Team);
                 var clues = tree.Comp.Tree.Clues.GetOrNew(category);
                 clues[GetNetEntity(unlock.Value)] = msg;
             }
@@ -549,10 +600,27 @@ public sealed class IntelSystem : EntitySystem
         if (unlocks.Unlocks.Count == 0)
             knowledge.Read.Remove(intel.Value);
 
-        if (knowledge.Read.Count > 0)
-            args.Repeat = true;
-        else
-            StopPopup(ref args);
+        if (unlocks.Unlocks.Count == 0)
+        {
+            var teamKey = ent.Comp.Team;
+
+
+            var teamTree = EnsureTechTree(teamKey);
+
+            if (TryComp(unlock, out IntelReadObjectiveComponent? readComp))
+            {
+                teamTree.Comp.Tree.Documents.Current++;
+                AddPoints(teamTree, readComp.Value, teamKey);
+            }
+            else if (TryComp(unlock, out IntelRetrieveItemObjectiveComponent? retrieveComp))
+            {
+                teamTree.Comp.Tree.RetrieveItems.Current++;
+                AddPoints(teamTree, retrieveComp.Value, teamKey);
+            }
+
+            // Feedback to the user for debugging/verification: which team got credited.
+            Logger.Debug($"[IntelSystem] AddPoints: credited  to team='{teamKey}");
+        }
     }
 
     private void OnIntelCluesMapInit(Entity<IntelCluesComponent> ent, ref MapInitEvent args)
@@ -607,13 +675,50 @@ public sealed class IntelSystem : EntitySystem
         return items;
     }
 
-    public Entity<IntelTechTreeComponent> EnsureTechTree()
+
+
+    public Entity<IntelTechTreeComponent> EnsureTechTree(string team)
     {
-        if (TryGetTechTree(out var tree))
+        if (TryGetTechTree(team, out var tree))
             return tree.Value;
 
-        var treeId = Spawn(TechTreeProto);
+        var protoId = TechTreeProto;
+
+
+
+        if (!string.IsNullOrEmpty(team))
+        {
+            var teamKey = team.ToLowerInvariant();
+            // Prefer explicit team constants where available
+            EntProtoId<IntelTechTreeComponent> candidateProto = teamKey switch
+            {
+                var t when t == Team.GovFor => TechTreeProtoGovfor,
+                var t when t == Team.OpFor => TechTreeProtoOpfor,
+                var t when t == Team.CLF => TechTreeProtoClf,
+                var t when t == "scientist" => TechTreeProtoScientist,
+                _ => (EntProtoId<IntelTechTreeComponent>)($"{(string)TechTreeProto}_{teamKey}")
+            };
+
+            var candidateIdStr = (string) candidateProto;
+            if (_prototypes.HasIndex(candidateIdStr))
+            {
+                protoId = candidateProto;
+            }
+        }
+
+        // Check for a runtime override set by server systems (e.g. AuRoundSystem, PlatoonSpawnRuleSystem)
+        if (_teamTechTreeOverrides.TryGetValue(team.ToLowerInvariant(), out var overrideProtoId) &&
+            _prototypes.TryIndex<EntityPrototype>(overrideProtoId, out _))
+        {
+            protoId = overrideProtoId;
+        }
+
+        // Log which prototype id we're about to spawn for visibility during testing.
+        Logger.Info($"[IntelSystem] Spawning tech tree for team='{team}' using prototype='{(string)protoId}'");
+
+        var treeId = Spawn(protoId);
         var treeComp = EnsureComp<IntelTechTreeComponent>(treeId);
+        treeComp.Team = team;
         tree = (treeId, treeComp);
 
         foreach (var tier in treeComp.Tree.Options)
@@ -629,13 +734,27 @@ public sealed class IntelSystem : EntitySystem
         return tree.Value;
     }
 
+    // Convenience overload: ensure the default (None) tech tree.
+    public Entity<IntelTechTreeComponent> EnsureTechTree()
+    {
+        return EnsureTechTree(Team.None);
+    }
+
     public bool TryGetTechTree([NotNullWhen(true)] out Entity<IntelTechTreeComponent>? tree)
+    {
+        return TryGetTechTree(Team.None, out tree);
+    }
+
+    public bool TryGetTechTree(string team, [NotNullWhen(true)] out Entity<IntelTechTreeComponent>? tree)
     {
         var techTreeQuery = EntityQueryEnumerator<IntelTechTreeComponent>();
         while (techTreeQuery.MoveNext(out var uid, out var comp))
         {
-            tree = (uid, comp);
-            return true;
+            if (comp.Team == team || (team == Team.None && comp.Team == Team.None))
+            {
+                tree = (uid, comp);
+                return true;
+            }
         }
 
         tree = default;
@@ -718,12 +837,40 @@ public sealed class IntelSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        var tree = EnsureTechTree();
+        var techTreeQuery = EntityQueryEnumerator<IntelTechTreeComponent>();
+        while (techTreeQuery.MoveNext(out var uid, out var comp))
+        {
+            if (comp.Tree.ColonyCommunications)
+                continue;
+
+            comp.Tree.ColonyCommunications = true;
+            Dirty(uid, comp);
+            // Explicitly pass the tech tree's team so AddPoints cannot accidentally credit the wrong team.
+            AddPoints((uid, comp), comp.ColonyCommunicationsPoints, comp.Team);
+        }
+    }
+
+    public void RestoreColonyCommunications(string team)
+    {
+        if (_net.IsClient)
+            return;
+
+        var tree = EnsureTechTree(team);
         if (tree.Comp.Tree.ColonyCommunications)
             return;
 
         tree.Comp.Tree.ColonyCommunications = true;
-        AddPoints(tree, tree.Comp.ColonyCommunicationsPoints);
+        AddPoints(tree, tree.Comp.ColonyCommunicationsPoints, team);
+    }
+
+    private void AddPointsToAllTeams(FixedPoint2 points)
+    {
+        // Ensure and award to each known team (except None)
+        foreach (string t in new[] { Team.GovFor, Team.OpFor, Team.CLF })
+        {
+            var tree = EnsureTechTree(t);
+            AddPoints(tree, points, t);
+        }
     }
 
     private void ConnectObjectives(EntityUid unlocksId, EntityUid requiresId)
@@ -808,7 +955,13 @@ public sealed class IntelSystem : EntitySystem
 
     public bool TryUsePoints(FixedPoint2 points)
     {
-        var tree = EnsureTechTree();
+        return TryUsePoints(Team.None, points);
+    }
+
+    public bool TryUsePoints(string team, FixedPoint2 points)
+    {
+        // IntelSystem must not touch AU/win points. Always spend from the intel tree's internal FixedPoint2 pool.
+        var tree = EnsureTechTree(team);
         if (points > tree.Comp.Tree.Points)
             return false;
 
@@ -818,29 +971,43 @@ public sealed class IntelSystem : EntitySystem
         return true;
     }
 
-    public void AddPoints(Entity<IntelTechTreeComponent> tree, FixedPoint2 points)
+    public void AddPoints(Entity<IntelTechTreeComponent> tree, FixedPoint2 points, string teamkey = "govfor")
     {
+
+        tree.Comp.Team = teamkey;
+        var before = tree.Comp.Tree.Points;
         tree.Comp.Tree.Points += points;
         tree.Comp.Tree.TotalEarned += points;
+        var after = tree.Comp.Tree.Points;
+        // Log every credit so uploads from consoles or any code path are visible in server logs.
+        Logger.Debug($"[IntelSystem] AddPoints: credited {points.Double()} to team='{teamkey}' before={before.Double()} after={after.Double()}");
         Dirty(tree);
         UpdateTree(tree);
     }
 
-    public void AddPoints(FixedPoint2 points)
-    {
-        if (TryGetTechTree(out var tree))
-            AddPoints(tree.Value, points);
-    }
+
+
+
 
     public void UpdateTree(Entity<IntelTechTreeComponent> tree)
     {
         var query = EntityQueryEnumerator<TechControlConsoleComponent>();
         while (query.MoveNext(out var uid, out var console))
         {
-            console.Tree = tree.Comp.Tree;
-            Dirty(uid, console);
+            if (console.Team == tree.Comp.Team || (console.Team == Team.None && tree.Comp.Team == Team.None))
+            {
+                // Display the intel tree state as-is. Do NOT substitute AU/win points here.
+                // Substitute AU win points for display: query the ObjectiveMaster if available on server
+                var displayed = tree.Comp.Tree;
+                displayed.Points = GetAuWinPoints(tree.Comp.Team, displayed.Points);
+                console.Tree = displayed;
+                Dirty(uid, console);
+            }
         }
     }
+
+    // NOTE: AU/win points are intentionally NOT present in this system. Any AU logic must live
+    // in the TechSystem or ObjectiveMaster-handling systems. Do not add AU helpers here.
 
     public override void Update(float frameTime)
     {
@@ -856,7 +1023,9 @@ public sealed class IntelSystem : EntitySystem
             Dirty(tree.Value);
 
             var ares = _ares.EnsureARES();
+            // Announcements reflect the intel tree's internal FixedPoint2 points only.
             var points = tree.Value.Comp.Tree.Points;
+
             var last = tree.Value.Comp.LastAnnouncePoints;
             tree.Value.Comp.LastAnnouncePoints = points;
             Dirty(tree.Value);
@@ -906,7 +1075,8 @@ public sealed class IntelSystem : EntitySystem
                         clues.Remove(GetNetEntity(intel));
                     }
 
-                    AddPoints(tree.Value, intel.Comp.Value);
+                    // Explicitly credit the team associated with the tech tree used.
+                    AddPoints(tree.Value, intel.Comp.Value, tree.Value.Comp.Team);
 
                     RemComp<ActiveIntelPositionComponent>(intel);
                 }
@@ -931,7 +1101,8 @@ public sealed class IntelSystem : EntitySystem
                 {
                     tree ??= EnsureTechTree();
                     tree.Value.Comp.Tree.RescueSurvivors++;
-                    AddPoints(tree.Value, intel.Comp.Value);
+                    // Explicitly credit the team associated with the tech tree used.
+                    AddPoints(tree.Value, intel.Comp.Value, tree.Value.Comp.Team);
 
                     RemComp<IntelRescueSurvivorObjectiveComponent>(intel);
                 }
@@ -968,7 +1139,9 @@ public sealed class IntelSystem : EntitySystem
                         tree.Value.Comp.HumanoidCorpses++;
                     }
 
-                    AddPoints(tree.Value, intel.Comp.Value);
+
+                    // Explicitly credit the team associated with the tech tree used.
+                    AddPoints(tree.Value, intel.Comp.Value, tree.Value.Comp.Team);
                 }
             }
         }
@@ -1007,8 +1180,107 @@ public sealed class IntelSystem : EntitySystem
             if (watts >= _powerObjectiveWattsRequired)
             {
                 tree.Value.Comp.Tree.ColonyPower = true;
-                AddPoints(tree.Value, tree.Value.Comp.PowerPoints);
+                // Give power points to all teams (global benefit)
+                AddPointsToAllTeams(tree.Value.Comp.PowerPoints);
             }
         }
     }
+
+    // Helper: read intel points (from the intel tech tree) for a team. Returns integer points.
+    public int GetIntelPoints(string team)
+    {
+        if (string.IsNullOrEmpty(team) || team == Team.None)
+            return 0;
+
+        if (TryGetTechTree(team, out var tree))
+        {
+            return (int)Math.Floor(tree.Value.Comp.Tree.Points.Double());
+        }
+
+        return 0;
+    }
+
+    // Attempt to spend intel points (from the intel tech tree). Returns true when successful.
+    public bool TrySpendIntelPoints(string team, double amount)
+    {
+        if (string.IsNullOrEmpty(team) || team == Team.None)
+            return false;
+
+        if (!TryGetTechTree(team, out var tree))
+            return false;
+
+        var costFp = FixedPoint2.New(amount);
+        if (tree.Value.Comp.Tree.Points < costFp)
+            return false;
+
+        tree.Value.Comp.Tree.Points -= costFp;
+        Dirty(tree.Value);
+        UpdateTree(tree.Value);
+        return true;
+    }
+
+    // New helper: resolve a team string from an entity (prefers MarineComponent.Faction)
+    private string ResolveTeam(EntityUid? uid)
+    {
+        if (uid is null)
+            return Team.None;
+
+        if (TryComp(uid.Value, out MarineComponent? marine) && !string.IsNullOrEmpty(marine.Faction))
+            return marine.Faction.ToLowerInvariant();
+
+        return Team.None;
+    }
+
+    // Read AU win points from the ObjectiveMaster (server-side) and return as FixedPoint2 for display.
+    private FixedPoint2 GetAuWinPoints(string team, FixedPoint2 fallback)
+    {
+        if (string.IsNullOrEmpty(team) || team == Team.None)
+            return fallback;
+
+        // Only query server-side ObjectiveMaster; shared code should not attempt this on clients.
+        if (_net.IsClient)
+            return fallback;
+
+        var query = EntityQueryEnumerator<Content.Shared.AU14.Objectives.ObjectiveMasterComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            switch (team.ToLowerInvariant())
+            {
+                case Team.GovFor:
+                    return FixedPoint2.New(comp.CurrentWinPointsGovfor);
+                case Team.OpFor:
+                    return FixedPoint2.New(comp.CurrentWinPointsOpfor);
+                case Team.CLF:
+                    return FixedPoint2.New(comp.CurrentWinPointsClf);
+                default:
+                    // support scientist or other factions
+                    if (team.ToLowerInvariant() == "scientist")
+                        return FixedPoint2.New(comp.CurrentWinPointsScientist);
+                    return fallback;
+            }
+        }
+
+        return fallback;
+    }
+
+
+    public void SetTeamTechTreeOverride(string team, string? protoId)
+    {
+        if (string.IsNullOrEmpty(team) || team == Team.None)
+            return;
+
+        var key = team.ToLowerInvariant();
+        if (string.IsNullOrEmpty(protoId))
+        {
+            _teamTechTreeOverrides.Remove(key);
+            return;
+        }
+
+        if (!_prototypes.TryIndex<EntityPrototype>(protoId, out _))
+            return;
+
+        _teamTechTreeOverrides[key] = protoId;
+    }
+
+
 }

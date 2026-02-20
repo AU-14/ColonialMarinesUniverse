@@ -24,12 +24,12 @@
 - type: entity
   parent: RMCPortableVendor
   id: RMCPortableVendorCorporate
-  name: Weston-Yamada automated storage briefcase
-  description: A suitcase-sized automated storage and retrieval system. Designed to efficiently store and selectively dispense small items. This one has the Weston-Yamada logo stamped on its side.
+  name: Weyland-Yutani automated storage briefcase
+  description: A suitcase-sized automated storage and retrieval system. Designed to efficiently store and selectively dispense small items. This one has the Weyland-Yutani logo stamped on its side.
   components:
   - type: CMAutomatedVendor
     jobs:
-    - CMLiaison
+    - AU14JobCivilianCorporateLiaison
     sections:
     - name: Incentives
       entries:
@@ -47,22 +47,26 @@
       #- id: /obj/item/trash/ceramic_plate
       #  points: 10
       - id: RMCSpaceCash1000 # TODO RMC14 counterfiet
-        name: $1000 UND, unmarked bills
-        points: 5
-      - id: CMEncryptionKeyWEYA
-        points: 5
+        name: $1000 USD, unmarked bills
+        points: 20
     - name: Smokables
       entries:
+      - id: AU14CigarettePackBalajj
+        points: 5
+      - id: AU14CigaretteLadyFingers
+        points: 5
+      - id: AU14CigaretteKoorlander
+        points: 5
+      - id: RMCCigarettePackWeYaGold
+        points: 5
       - id: RMCCigarCase
         points: 5
       - id: RMCShioRoyalsCase
         points: 5
-      - id: RMCCigarettePackWeYaGold
-        points: 5
       - id: RMCZippoExec
         points: 5
       - id: RMCZippoGold
-        points: 5
+        points: 10
     - name: Drinkables
       entries:
       - id: RMCDrinkAlcoholSake
@@ -75,16 +79,11 @@
         points: 5
       - id: DrinkGlass
         points: 1
-      - id: RMCWestonYamadaCup
-        points: 1
     - name: Stationary
       entries:
       - id: CMPenClicky
         points: 1
       - id: CMPaper
-        points: 1
-      - id: RMCPaperWeYaLiaison
-        name: We-Ya paper
         points: 1
       #- id: Carbon paper
       #  points: 1
@@ -95,23 +94,15 @@
       - id: RMCHollowCane
         name: hollow cane
         points: 15
-    - name: Ammo
+    - name: Weapons & Ammo
       entries:
+      - id: RMCWeaponPistolPK7
+        points: 30
       - id: RMCMagazinePistolPK7
-        points: 10
+        points: 15
     - name: Radio keys
       entries:
-      - id: CMEncryptionKeyAlpha
-        points: 15
-      - id: CMEncryptionKeyBravo
-        points: 15
-      - id: CMEncryptionKeyCharlie
-        points: 15
-      - id: CMEncryptionKeyDelta
-        points: 15
-      - id: CMEncryptionKeyEcho
-        points: 15
-      - id: CMEncryptionKeyFoxtrot
-        points: 15
       - id: CMEncryptionKeyColony
-        points: 20
+        points: 15
+      - id: CMEncryptionKeyWEYA
+        points: 15

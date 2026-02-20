@@ -77,6 +77,11 @@ public sealed class MarineAnnounceSystem : SharedMarineAnnounceSystem
             return;
         }
 
+        if (!string.IsNullOrWhiteSpace(computer.Comp.Faction))
+        {
+            _dropship.SetFactionController(lz.Value, computer.Comp.Faction!.ToLowerInvariant());
+        }
+
         _dropship.TryDesignatePrimaryLZ(user, lz.Value);
     }
 
@@ -88,6 +93,15 @@ public sealed class MarineAnnounceSystem : SharedMarineAnnounceSystem
 
         foreach (var (id, metaData) in _dropship.GetPrimaryLZCandidates())
         {
+            if (!string.IsNullOrWhiteSpace(computer.Comp.Faction))
+            {
+                if (EntityManager.TryGetComponent<DropshipDestinationComponent>(id, out var dest) &&
+                    !string.IsNullOrWhiteSpace(dest.FactionController))
+                {
+                    continue;
+                }
+            }
+
             landingZones.Add(new LandingZone(GetNetEntity(id), metaData.EntityName));
         }
 
@@ -101,15 +115,27 @@ public sealed class MarineAnnounceSystem : SharedMarineAnnounceSystem
         string message,
         SoundSpecifier? sound = null,
         Filter? filter = null,
-        bool excludeSurvivors = true)
+        bool excludeSurvivors = true,
+        string? faction = null)
     {
-        filter ??= Filter.Empty()
-            .AddWhereAttachedEntity(e =>
-                HasComp<MarineComponent>(e) ||
-                HasComp<GhostComponent>(e)
-            );
 
-        // TODO RMC14
+        if (filter == null)
+        {
+            var targetFaction = string.IsNullOrWhiteSpace(faction) ? "govfor" : faction.ToLowerInvariant();
+            filter = Filter.Empty().AddWhereAttachedEntity(e =>
+            {
+                if (TryComp<MarineComponent>(e, out var marine))
+                {
+                    return !string.IsNullOrWhiteSpace(marine.Faction) && string.Equals(marine.Faction, targetFaction, StringComparison.OrdinalIgnoreCase);
+                }
+
+                if (HasComp<GhostComponent>(e))
+                    return true;
+
+                return false;
+            });
+        }
+
         if (excludeSurvivors)
             filter.RemoveWhereAttachedEntity(HasComp<RMCSurvivorComponent>);
 
@@ -141,13 +167,31 @@ public sealed class MarineAnnounceSystem : SharedMarineAnnounceSystem
         EntityUid? source,
         string message,
         SoundSpecifier? sound = null,
-        LocId? announcement = null)
+        LocId? announcement = null,
+        string? faction = null)
     {
-        base.AnnounceARESStaging(source, message, sound, announcement);
+        base.AnnounceARESStaging(source, message, sound, announcement, faction);
 
         message = FormatARESStaging(announcement, message);
 
-        AnnounceToMarines(message, sound);
+        Filter? filter = null;
+        if (!string.IsNullOrWhiteSpace(faction))
+        {
+            var normalized = faction.ToLowerInvariant();
+            filter = Filter.Empty().AddWhereAttachedEntity(e =>
+            {
+                if (TryComp<MarineComponent>(e, out var marine))
+                {
+                    return !string.IsNullOrWhiteSpace(marine.Faction) && string.Equals(marine.Faction, normalized, StringComparison.OrdinalIgnoreCase);
+                }
+                // Allow ghosts to hear faction announcements as well
+                if (HasComp<GhostComponent>(e))
+                    return true;
+                return false;
+            });
+        }
+
+        AnnounceToMarines(message, sound, filter);
         _adminLogs.Add(LogType.RMCMarineAnnounce, $"{ToPrettyString(source):player} ARES announced message: {message}");
     }
 

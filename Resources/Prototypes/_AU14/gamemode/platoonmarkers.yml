@@ -37,7 +37,7 @@
     class: combattech
 
 - type: entity
-  name: Opfor rifleman marker
+  name: Opfor equipment marker
   id: VMarkerOpforRifleman
   parent: Vmarker
   components:
@@ -77,7 +77,7 @@
 
 
 - type: entity
-  name: Opfor operations officer marker
+  name: Opfor command marker
   id: VMarkerOpforoperationsOfficer
   parent: Vmarker
   components:
@@ -97,7 +97,7 @@
       class: Rto
 
 - type: entity
-  name: Opfor section sergeant  marker
+  name: Opfor senior sergeant  marker
   id: VMarkerOpforsectionSergeant
   parent: Vmarker
   components:
@@ -187,6 +187,9 @@
     opfor: false
     class: Clothing
     ship: true
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+    state: base
 
 
 
@@ -232,7 +235,7 @@
       class: Arifleman
 
 - type: entity
-  name: Gov rifleman marker
+  name: Gov equipment marker
   id: VMarkerGovforRifleman
   parent: Vmarker
   components:
@@ -262,7 +265,7 @@
       class: Dcc
 
 - type: entity
-  name: Gov operations officer marker
+  name: Gov command marker
   id: VMarkerGovforoperationsOfficer
   parent: Vmarker
   components:
@@ -282,7 +285,7 @@
       class: Rto
 
 - type: entity
-  name: Gov section sergeant  marker
+  name: Gov senior sergeant marker
   id: VMarkerGovforsectionSergeant
   parent: Vmarker
   components:
@@ -482,6 +485,9 @@
       govfor: false
       opfor: false
       class: Corpsman
+    - type: Sprite
+      sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
+      state: base
 
 - type: entity
   name: Ship combat technician marker
@@ -493,6 +499,9 @@
     govfor: false
     opfor: false
     class: combattech
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/combat_technician_gear.rsi
+    state: base
 
 - type: entity
   name: Ship Arifleman marker
@@ -504,9 +513,12 @@
       govfor: false
       opfor: false
       class: Arifleman
+    - type: Sprite
+      sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
+      state: base
 
 - type: entity
-  name: Ship rifleman marker
+  name: Ship equipment marker
   id: VMarkerShipRifleman
   parent: VmarkerShip
   components:
@@ -515,9 +527,12 @@
       govfor: false
       opfor: false
       class: Rifleman
+    - type: Sprite
+      sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+      state: base
 
 - type: entity
-  name: Ship dcc marker
+  name: Ship aircrew clothing marker
   id: VMarkerShipDCC
   parent: VmarkerShip
   components:
@@ -526,9 +541,12 @@
       govfor: false
       opfor: false
       class: Dcc
+    - type: Sprite
+      sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+      state: base
 
 - type: entity
-  name: Ship operations officer marker
+  name: Ship command marker
   id: VMarkerShipOperationsOfficer
   parent: VmarkerShip
   components:
@@ -537,6 +555,9 @@
       govfor: false
       opfor: false
       class: OperationsOfficer
+    - type: Sprite
+      sprite: _AU14/Structures/Vendors/uscmcommandclothes.rsi
+      state: base
 
 - type: entity
   name: Ship RTO marker
@@ -548,9 +569,12 @@
       govfor: false
       opfor: false
       class: Rto
+    - type: Sprite
+      sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+      state: base
 
 - type: entity
-  name: Ship section sergeant marker
+  name: Ship senior sergeant marker
   id: VMarkerShipSectionSergeant
   parent: VmarkerShip
   components:
@@ -559,9 +583,12 @@
       govfor: false
       opfor: false
       class: SectionSergeant
+    - type: Sprite
+      sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+      state: base
 
 - type: entity
-  name: Ship pilot marker
+  name: Ship aircrew weapons marker
   id: VMarkerShipPilot
   parent: VmarkerShip
   components:
@@ -570,6 +597,10 @@
       govfor: false
       opfor: false
       class: Pilot
+    - type: Sprite
+      sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+      state: base
+
 - type: entity
   name: Ship Weapons marker
   id: VMarkerShipWeapons
@@ -580,9 +611,12 @@
     govfor: false
     opfor: false
     class: Weapons
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+    state: base
 
 - type: entity
-  name: Ship locked command door marker
+  name: Ship command door marker
   id: VMarkerShipLockedCommandDoor
   parent: VmarkerShip
   components:
@@ -591,9 +625,28 @@
       govfor: false
       opfor: false
       class: LockedCommandDoor
+    - type: Sprite
+      drawdepth: Overdoors
+      sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+      state: com
 
 - type: entity
-  name: Ship locked security door marker
+  name: Ship command glass door marker
+  id: VMarkerShipLockedCommandDoorGlass
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      govfor: false
+      opfor: false
+      class: LockedCommandGlassDoor
+    - type: Sprite
+      drawdepth: Overdoors
+      sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+      state: comglass
+
+- type: entity
+  name: Ship security door marker
   id: VMarkerShipLockedSecurityDoor
   parent: VmarkerShip
   components:
@@ -602,9 +655,28 @@
       govfor: false
       opfor: false
       class: LockedSecurityDoor
+    - type: Sprite
+      drawdepth: Overdoors
+      sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+      state: sec
 
 - type: entity
-  name: Ship locked glass door marker
+  name: Ship security glass door marker
+  id: VMarkerShipLockedSecurityDoorGlass
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      govfor: false
+      opfor: false
+      class: LockedSecurityDoorGlass
+    - type: Sprite
+      drawdepth: Overdoors
+      sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+      state: secglass
+
+- type: entity
+  name: Ship glass door marker
   id: VMarkerShipLockedGlassDoor
   parent: VmarkerShip
   components:
@@ -613,9 +685,13 @@
       govfor: false
       opfor: false
       class: LockedGlassDoor
+    - type: Sprite
+      drawdepth: Overdoors
+      sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+      state: glass
 
 - type: entity
-  name: Ship locked normal door marker
+  name: Ship normal door marker
   id: VMarkerShipLockedNormalDoor
   parent: VmarkerShip
   components:
@@ -624,6 +700,71 @@
       govfor: false
       opfor: false
       class: LockedNormalDoor
+    - type: Sprite
+      drawdepth: Overdoors
+      sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+      state: normal
+
+- type: entity
+  name: Ship engineering glass door marker
+  id: VMarkerShipLockedGlassDoorEngineering
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      govfor: false
+      opfor: false
+      class: LockedEngineeringGlassDoor
+    - type: Sprite
+      drawdepth: Overdoors
+      sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+      state: engglass
+
+- type: entity
+  name: Ship locked engineering door marker
+  id: VMarkerShipLockedDoorEngineering
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      govfor: false
+      opfor: false
+      class: LockedEngineeringDoor
+    - type: Sprite
+      drawdepth: Overdoors
+      sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+      state: eng
+
+- type: entity
+  name: Ship medical glass door marker
+  id: VMarkerShipLockedGlassDoorMedical
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      govfor: false
+      opfor: false
+      class: LockedMedicalGlassDoor
+    - type: Sprite
+      drawdepth: Overdoors
+      sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+      state: medglass
+
+- type: entity
+  name: Ship locked medical door marker
+  id: VMarkerShipLockedDoorMedical
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      govfor: false
+      opfor: false
+      class: LockedMedicalDoor
+    - type: Sprite
+      drawdepth: Overdoors
+      sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+      state: med
+
 
 
 - type: entity
@@ -636,6 +777,9 @@
     govfor: false
     opfor: false
     class: OverwatchConsole
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: overwatch
 
 
 - type: entity
@@ -648,6 +792,9 @@
     govfor: false
     opfor: false
     class: SWeapons
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/genericweaponrack.rsi
+    state: base
 
 - type: entity
   name: Ship Objectives Console Marker
@@ -660,7 +807,8 @@
     opfor: false
     class: ObjectivesConsole
   - type: Sprite
-    state: green
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: operating0
 
 - type: entity
   name: Ship Generic Fetch Return Point Marker
@@ -743,8 +891,10 @@
   components:
   - type: VendorMarker
     ship: true
-
     class: RequisitionsConsole
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/asrs_console.rsi
+    state: off
 
 - type: entity
   name: Ship Requisitions Lift Marker
@@ -754,4 +904,7 @@
   - type: VendorMarker
     ship: true
     class: RequisitionsLift
-
+  - type: Sprite
+    sprite: _RMC14/Effects/elevator.rsi
+    state: supply_elevator_lowered
+    drawdepth: LowFloors

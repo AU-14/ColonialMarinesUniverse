@@ -6,4 +6,7 @@ namespace Content.Shared._RMC14.Intel.Tech;
 
 [DataRecord]
 [Serializable, NetSerializable]
-public sealed record TechLogisticsDeliveryEvent(EntProtoId Object);
+public sealed record TechLogisticsDeliveryEvent(EntProtoId Object)
+{
+    public string Team { get; init; } = String.Empty;
+}

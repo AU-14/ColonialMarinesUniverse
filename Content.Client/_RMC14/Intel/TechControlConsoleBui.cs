@@ -149,7 +149,11 @@ public sealed class TechControlConsoleBui : BoundUserInterface
 
         _optionWindow.PurchaseButton.OnPressed += _ =>
         {
-            SendPredictedMessage(new TechPurchaseOptionBuiMsg(tier, optionIndex));
+            var msg = new TechPurchaseOptionBuiMsg(tier, optionIndex);
+            if (EntMan.TryGetComponent(Owner, out TechControlConsoleComponent? console))
+                msg.Team = console.Team;
+
+            SendPredictedMessage(msg);
             _optionWindow.Close();
         };
     }

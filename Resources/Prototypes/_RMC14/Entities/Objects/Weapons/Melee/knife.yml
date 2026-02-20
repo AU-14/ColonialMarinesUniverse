@@ -218,7 +218,7 @@
   - type: MeleeWeapon
     damage:
       types:
-        Slash: 5
+        Slash: 55
   - type: LandAtCursor
   - type: DamageOtherOnHit
     damage:

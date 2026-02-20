@@ -122,15 +122,20 @@ AU14JobCivilianPrisoner = Prisoner
 
 au14-job-name-civilianminer = Miner
 au14-job-description-civilianminer = You're a Miner at this colony, coordinate with your foreman and company executives to get the materials you need. Be wary: There are older and fouler things than corpos in the deep places of the frontier. (Role available on LV-747)
-au14-job-prefix-civilianminer = MINE
+au14-job-prefix-civilianminer = MIN
 AU14JobCivilianMiner = Miner
 
 au14-job-name-civiliancwpsranger = CWPS Ranger
 au14-job-description-civiliancwpsranger = You're a Ranger with the Colonial Wilderness Preservation Service. Enforce colony law, protect the ecosystem and keep the locals in check. No poaching, no dumping and no overfishing will happen on your watch. (Available on LV-112)
-au14-job-prefix-civiliancwpsranger = CWPSRNGR
+au14-job-prefix-civiliancwpsranger = CWPS
 AU14JobCivilianCWPSRanger = CWPS Ranger
 
 au14-job-name-civiliannspaConstable = NSPA Constable
 au14-job-description-civiliannspaConstable = You're a constable of the Neroid Sector Policing Authority. Provide the colony with rule of law and execute arrests and warrants. (Role avalible on LV-759)
-au14-job-prefix-civiliannspaConstable = NSPACNTSBLE
+au14-job-prefix-civiliannspaConstable = NSPA
 AU14JobCiviliannspaConstable = NSPA Constable
+
+au14-job-name-civilianpapofficer = PAP Officer
+au14-job-description-civilianpapofficer = You're an Officer of the UPP People's Armed Police. Provide the colony with rule of law and execute arrests and warrants.
+au14-job-prefix-civilianpapofficer = PAP
+AU14JobCivilianPaPOfficer = PAP Officer

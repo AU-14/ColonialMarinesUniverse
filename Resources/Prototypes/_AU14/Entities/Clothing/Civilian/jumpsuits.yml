@@ -179,7 +179,7 @@
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianKellandMiningClothes
   name: Kelland Mining Clothes
-  description: Clothes made for the miners of the Kelland Mining Corporation. 
+  description: Clothes made for the miners of the Kelland Mining Corporation.
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Civilian/Uniforms/kellandmininguniform.rsi
@@ -192,3 +192,10 @@
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Civilian/Uniforms/cuppajoesuniform.rsi
+
+- type: entity
+  parent: CMScrubsGreen
+  id: AU14ScrubsGreenDoctorSurgical
+  components:
+  - type: WebbingClothing
+    startingWebbing: CMWebbingSurgicalGreen

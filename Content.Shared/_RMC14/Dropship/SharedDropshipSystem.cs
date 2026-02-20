@@ -3,6 +3,7 @@ using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Evacuation;
+using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Rules;
@@ -273,8 +274,14 @@ public abstract class SharedDropshipSystem : EntitySystem
             return;
         }
 
-        if (Count<PrimaryLandingZoneComponent>() > 0 &&
-            !HasComp<PrimaryLandingZoneComponent>(closestDestination))
+        // Determine user's faction if any (marines have MarineComponent.Faction)
+        string? userFaction = null;
+        if (EntityManager.TryGetComponent<MarineComponent>(user, out var marine))
+            userFaction = string.IsNullOrWhiteSpace(marine.Faction) ? null : marine.Faction.ToLowerInvariant();
+
+        // If a global primary exists OR a primary exists for the user's faction, and the closest destination isn't primary for that same faction, block.
+        if ((PrimaryExistsForFaction(null) || PrimaryExistsForFaction(userFaction)) &&
+            !IsPrimaryForFaction(closestDestination.Value.Owner, userFaction))
         {
             _popup.PopupEntity("The shuttle isn't responding to prompts, it looks like this isn't the primary shuttle.", user, user, PopupType.MediumCaution);
             return;
@@ -564,6 +571,29 @@ public abstract class SharedDropshipSystem : EntitySystem
         return false;
     }
 
+    // Helper: check if a primary landing zone exists for a given faction (null/empty = global)
+    protected bool PrimaryExistsForFaction(string? faction)
+    {
+        var normalized = string.IsNullOrWhiteSpace(faction) ? null : faction.ToLowerInvariant();
+        var query = EntityQueryEnumerator<PrimaryLandingZoneComponent>();
+        while (query.MoveNext(out _, out var comp))
+        {
+            var compFaction = string.IsNullOrWhiteSpace(comp.Faction) ? null : comp.Faction.ToLowerInvariant();
+            if (compFaction == normalized)
+                return true;
+        }
+        return false;
+    }
+
+    protected bool IsPrimaryForFaction(EntityUid destination, string? faction)
+    {
+        if (!EntityManager.TryGetComponent<PrimaryLandingZoneComponent>(destination, out var comp))
+            return false;
+        var compFaction = string.IsNullOrWhiteSpace(comp.Faction) ? null : comp.Faction.ToLowerInvariant();
+        var normalized = string.IsNullOrWhiteSpace(faction) ? null : faction.ToLowerInvariant();
+        return compFaction == normalized;
+    }
+
     private bool TryDropshipLaunchPopup(EntityUid computer, EntityUid user, bool predicted)
     {
         var roundDuration = _gameTicker.RoundDuration();
@@ -631,9 +661,15 @@ public abstract class SharedDropshipSystem : EntitySystem
             return false;
         }
 
-        if (Count<PrimaryLandingZoneComponent>() > 0)
+        // Determine desired faction from the DropshipDestination's FactionController (if any).
+        string? desiredFaction = null;
+        if (EntityManager.TryGetComponent<DropshipDestinationComponent>(lz, out var lzComp) && !string.IsNullOrWhiteSpace(lzComp.FactionController))
+            desiredFaction = lzComp.FactionController.ToLowerInvariant();
+
+        // Prevent duplicate primary for the same faction
+        if (PrimaryExistsForFaction(desiredFaction))
         {
-            Log.Warning($"{ToPrettyString(actor)} tried to designate as primary LZ entity {ToPrettyString(lz)} when one already exists!");
+            Log.Warning($"{ToPrettyString(actor)} tried to designate as primary LZ entity {ToPrettyString(lz)} when a primary already exists for that faction!");
             return false;
         }
 
@@ -652,19 +688,22 @@ public abstract class SharedDropshipSystem : EntitySystem
 
         _adminLog.Add(LogType.RMCPrimaryLZ, $"{ToPrettyString(actor):player} designated {ToPrettyString(lz):lz} as primary landing zone");
 
-        EnsureComp<PrimaryLandingZoneComponent>(lz);
+        var primary = EnsureComp<PrimaryLandingZoneComponent>(lz);
+        primary.Faction = desiredFaction;
+        EntityManager.Dirty(lz, primary);
         EnsureComp<RMCTrackableComponent>(lz);
         RefreshUI();
 
         var message = Loc.GetString("rmc-announcement-ares-lz-designated", ("name", Name(lz)));
-        _marineAnnounce.AnnounceARESStaging(actor, message);
+        _marineAnnounce.AnnounceARESStaging(actor, message, null, null, desiredFaction);
 
         return true;
     }
 
     public IEnumerable<Entity<MetaDataComponent>> GetPrimaryLZCandidates()
     {
-        if (Count<PrimaryLandingZoneComponent>() != 0)
+        // Only block candidates when a global primary exists.
+        if (PrimaryExistsForFaction(null))
             yield break;
 
         var landingZoneQuery = EntityQueryEnumerator<DropshipDestinationComponent, MetaDataComponent, TransformComponent>();

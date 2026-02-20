@@ -235,9 +235,6 @@
     sprite: _AU14/Clothing/Civilian/Jacket/browntrenchcoat.rsi
   - type: Clothing
     sprite: _AU14/Clothing/Civilian/Jacket/browntrenchcoat.rsi
-  - type: JobTitleChanger
-    jobTitle: CLF Fighter
-
 
 - type: entity
   parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]

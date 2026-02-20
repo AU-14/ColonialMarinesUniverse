@@ -1,0 +1,93 @@
+- type: job
+  parent: CMJobBase
+  id: AU14UPPGROMMarksman
+  name: au-14-job-name-uppgrom-marksman
+  description: au14-uppgrom-description
+  playTimeTracker: AU14JobUPPGROMMarksman
+  ranks:
+    UPP_Chotar:
+    - !type:RoleTimeRequirement
+      role: AU14JobUPPGROMMarksman
+      time: 36000 #10 hours
+    UPP_StaffSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobUPPGROMMarksman
+      time: 18000 #5 hours
+    UPP_Sergeant: []
+  spawnMenuRoleName: UPP GROM Marksman
+  startingGear: AU14GearUPPGROMMarksman
+  greeting: au14-uppgrom-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-uppgrom-squadleader
+  accessGroups:
+  - AU14GovforCommand
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: leader
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Marine
+      Faction: govfor
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadGROM # for future when there's a dedicated map for them, right now does nothing
+    - type: Skills
+      preset: AU14SkillPresetPlatoonRifleman
+    - type: JobPrefix
+      prefix: au-14-job-prefix-uppgrom-marksman
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUPPGROM
+  id: AU14JobUPPGROMMarksman
+  name: UPP GROM Marksman
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au-14-job-name-uppgrom-marksman
+    description: au14-uppgrom-description
+    reregister: false
+    job: AU14UPPGROMMarksman
+    raffle:
+      settings: short
+    rules: au14-uppgrom-rules
+
+- type: startingGear
+  id: AU14GearUPPGROMMarksman
+  equipment:
+    id: AU14IDCardUPPGROMMarksman
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: AU14FatiguesUPPGROM
+    shoes: RMCBootsSPPFilled
+    head: AU14UPPBoonie
+    belt: AU14BeltHolsterPistolUPPFull
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelSPPFullMarksman
+    ears: RMCHeadsetGROM
+    suitstorage: RMCWeaponRifleAK4047
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUPPGROMMarksman
+  name: UPP GROM Marksman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14UPPGROMMarksman
+  - type: ItemIFF
+    faction: GOVFOR
+
+- type: playTimeTracker
+  id: AU14JobUPPGROMMarksman

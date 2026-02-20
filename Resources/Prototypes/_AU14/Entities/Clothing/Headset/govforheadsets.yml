@@ -11,6 +11,7 @@
     trackerModes:
     - SquadLeader
     - FireteamLeader
+    - BattleBuddy
   - type: EncryptionKey
   - type: Sprite
     state: we_ya_key
@@ -22,10 +23,12 @@
   description: An encryption key used to communicate on all GOVFOR channels.
   components:
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: SquadLeader
+
     trackerModes:
     - SquadLeader
     - FireteamLeader
+    - BattleBuddy
   - type: EncryptionKey
     channels:
     - MarineCommand
@@ -33,6 +36,26 @@
     - MarineAlpha
     - GovforCharlie
     - GovforBravo
+    - GovforIntel
+    defaultChannel: MarineCommand
+  - type: Sprite
+    state: we_ya_key
+
+- type: entity
+  parent: CMEncryptionKey
+  id: AU14EncryptionKeyGOVFORauxiliarysupport
+  name: GOVFOR auxiliary support encryption key
+  description: An encryption key used to communicate on auxiliary support channels.
+  components:
+  - type: GrantSquadLeaderTracker
+    defaultMode: SquadLeader
+    trackerModes:
+    - SquadLeader
+    - FireteamLeader
+    - BattleBuddy
+  - type: EncryptionKey
+    channels:
+    - MarineCommand
     - GovforIntel
     defaultChannel: MarineCommand
   - type: Sprite
@@ -49,6 +72,7 @@
     trackerModes:
     - SquadLeader
     - FireteamLeader
+    - BattleBuddy
   - type: EncryptionKey
     channels:
     - GovforBravo
@@ -67,6 +91,7 @@
     trackerModes:
     - SquadLeader
     - FireteamLeader
+    - BattleBuddy
   - type: EncryptionKey
     channels:
     - GovforCharlie
@@ -85,6 +110,7 @@
     trackerModes:
     - SquadLeader
     - FireteamLeader
+    - BattleBuddy
   - type: EncryptionKey
     channels:
     - GovforIntel
@@ -95,14 +121,16 @@
 - type: entity
   parent: RMCHeadsetShip
   id: AU14HeadsetSectionMarine
-  name: GOVFOR section radio headset
+  name: GOVFOR radio headset
   description: This is used by GOVFOR personnel to communicate on the radio.
   components:
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: SquadLeader
+
     trackerModes:
     - SquadLeader
     - FireteamLeader
+    - BattleBuddy
   - type: GrantTacMapAlert
 
   - type: Sprite
@@ -119,10 +147,13 @@
   description: This is used by GOVFOR command members to communicate on the radio.
   components:
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: SquadLeader
+
     trackerModes:
     - SquadLeader
     - FireteamLeader
+    - BattleBuddy
+
   - type: Sprite
     state: generic_headset
   - type: ContainerFill
@@ -134,3 +165,22 @@
       - AU14EncryptionKeyGOVFORCharlie
       - AU14EncryptionKeyGOVFORIntel
 
+- type: entity
+  parent: RMCHeadsetShip
+  id: AU14HeadsetGOVFORAux
+  name: GOVFOR auxiliary support headset
+  description: This is used by GOVFOR auxiliary support members to communicate on the radio.
+  components:
+  - type: GrantSquadLeaderTracker
+    defaultMode: SquadLeader
+    trackerModes:
+    - SquadLeader
+    - FireteamLeader
+    - BattleBuddy
+
+  - type: Sprite
+    state: generic_headset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGOVFORauxiliarysupport

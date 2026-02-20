@@ -16,8 +16,9 @@
     repeating: true
     objectivelevel: 1
     custompoints: 3
-    maxrepeatable: 100
+    maxrepeatable: 1
     ObjectiveDescription: "kill the enemy"
+    nexttier: destroy_mineable_solaris_steel
   - type: KillObjective
     factiontokill: govfor
     amounttokill: 2
@@ -36,8 +37,10 @@
     id: opforkillplatcoobj
     applicableModes:
     - ForceOnForce
+    - insugency
     possiblefactions:
     - opfor
+    - clf
     repeating: false
     objectivelevel: 3
     custompoints: 20
@@ -149,3 +152,4 @@
     factiontokill: govfor
     amounttokill: 1
     specificjob: AU14JobGOVFORPlatCoRMC
+

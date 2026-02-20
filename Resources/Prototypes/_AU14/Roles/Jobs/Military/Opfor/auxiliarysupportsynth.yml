@@ -1,0 +1,99 @@
+- type: job
+  parent: AU14JobAuxSupportSynthBase
+  id: AU14JobOPFORAuxSupportSynth
+  name: au14-job-name-opforauxsupportsynth
+  description: au14-job-description-opforauxsupportsynth
+  setPreference: true
+  canBeAntag: false
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 7200 # 2 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankChiefWarrantOfficer:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORAuxSupportSynth
+      time: 180000 # 50 hours
+    RMCRankWarrantOfficer: []
+  startingGear: AU14GearOPFORAuxSupportSynth
+  dummyStartingGear: AU14GearOPFORAuxSupportSynthDummy
+  icon: "AU14JobIconOPFORSynth"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-opforplatco
+  accessGroups:
+  - AU14OpforCommand
+  - CMCargoTech
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - OPFOR
+    - type: Marine
+      Faction: govfor
+    - type: Skills
+      preset: AU14SkillPresetPlatoonAuxiliarySupportSynth
+    - type: JobPrefix
+      prefix: au14-job-prefix-opforauxsupportsynth
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: MeleeWeapon
+      soundHit:
+        path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+        params:
+          variation: 0.15
+          volume: -1
+      angle: 30
+      animation: WeaponArcFist
+      attackRate: 1
+      damage:
+        types:
+          Blunt: 35
+    - type: Synth
+  hidden: true
+
+- type: startingGear
+  id: AU14GearOPFORAuxSupportSynth
+  equipment:
+    id: AU14IDCardOPFORAuxSupportSynth
+    ears: RMCM5CameraGear
+    ears2: AU14HeadsetSectionLeaderopfor
+    gloves: CMHandsInsulated
+    shoes: CMBootsBlackFilled
+    jumpsuit: AU14CivilianBoilerSuitDarkBlueSynth
+    belt: CMUBeltMedicBagSupportSynth
+    head: AU14CivBallCapBlack
+    back: AU14SmartpackBlackFilled
+    pocket1: AU14PouchToolsFilledSupportSynthetic
+    pocket2: AU14PouchPoliceEquipmentSupportSynth
+    outerClothing: AU14CMDefibrillator
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFORAuxSupportSynth
+  name: Spawn Point OPFOR Support Synth
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORAuxSupportSynth
+  - type: Sprite
+    state: syn_spawn
+
+- type: startingGear
+  id: AU14GearOPFORAuxSupportSynthDummy
+  equipment:
+    gloves: CMHandsInsulated
+    shoes: CMBootsBlackFilled
+    jumpsuit: AU14CivilianBoilerSuitDarkBlueSynth
+    belt: CMUBeltMedicBagSupportSynth
+    head: AU14CivBallCapBlack
+    back: AU14SmartpackBlackFilled

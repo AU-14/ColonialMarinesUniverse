@@ -414,7 +414,7 @@
 - type: entity
   parent: RMCAreaStrataInterior
   id: RMCAreaStrataInteriorShuttleSof
-  name: SPP-DS-3 'Voron'
+  name: UPP-DS-3 'Voron'
   components:
   - type: Sprite
     state: outpost_engi_3
@@ -422,7 +422,7 @@
 - type: entity
   parent: RMCAreaStrataInterior
   id: RMCAreaStrataInteriorSupplyShuttleSof
-  name: SPP-DS-3 'Volk'
+  name: UPP-DS-3 'Volk'
   components:
   - type: Sprite
     state: outpost_engi_3

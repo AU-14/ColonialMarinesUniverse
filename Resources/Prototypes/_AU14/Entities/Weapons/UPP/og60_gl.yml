@@ -1,0 +1,51 @@
+﻿- type: entity
+  name: OG60 rotary grenade launcher
+  parent: [ RMCBaseWeaponGrenadeLauncher ]
+  id: AU14WeaponLauncherOG60
+  description: A heavy, 6-shot grenade launcher used by the UPP armed collective.
+  components:
+  - type: Item
+    size: Huge
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/UPP/m92.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/UPP/m92.rsi
+    slots:
+    - suitStorage
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: true
+    zeroOnlyOnEmpty: true
+  - type: RMCSelectiveFire
+    baseFireRate: 0.5
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - LauncherCompatibleGrenade
+    capacity: 6
+    proto: AU14GrenadeHighExplosiveUPP
+  - type: Corrodible
+    isCorrodible: false
+  - type: ExplosionResistance
+    damageCoefficient: 0
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentMagneticHarness
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: 0.0, 0.185
+  - type: Tag
+    tags:
+    - AU14WeaponLauncherOG60
+
+- type: Tag
+  id: AU14WeaponLauncherOG60

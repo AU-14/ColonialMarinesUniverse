@@ -48,7 +48,7 @@
     recoilUnwielded: 0
     scatterWielded: 4
     scatterUnwielded: 4
-    baseFireRate: 3.5
+    baseFireRate: 3
     burstScatterMult: 3
     modifiers:
       Burst:
@@ -59,7 +59,7 @@
         shotsToMaxScatter: 6
       FullAuto:
         fireDelay: 0.01
-        maxScatterModifier: 4
+        maxScatterModifier: 3
         shotsToMaxScatter: 6
   - type: ItemSlots
     slots:

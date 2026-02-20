@@ -128,3 +128,73 @@
     contents:
     - id: RMCDropshipAttachmentAmmoRocketNapalm
       amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: AU14CrateHJRA12
+  name: HJRA-12 anti-tank launcher crate (x1 HJRA-12, x2 AT rocket, x2 HE rocket)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponLauncherHJRA12
+      amount: 1
+    - id: RMCRocketHJRA12AT
+      amount: 2
+    - id: RMCRocketHJRA12HE
+      amount: 2
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateHJRA12MixedRocket
+  name: HJRA-12 mixed rocket crate (x2 HE rocket, x2 AT rocket)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRocketHJRA12AT
+      amount: 2
+    - id: RMCRocketHJRA12HE
+      amount: 2
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateHJRA12ATRocket
+  name: HJRA-12 AT rocket crate (x4 AT rocket)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRocketHJRA12AT
+      amount: 4
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateHJRA12HERocket
+  name: HJRA-12 HE rocket crate (x4 HE rocket)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRocketHJRA12HE
+      amount: 4
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateHJRA12EIIRocket
+  name: HJRA-12 Extreme-Intensity Incendiary rocket crate (x4 EI-I rocket)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRocketHJRA12Incen
+      amount: 4
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: AU14CrateOG60
+  name: OG60 rotary launcher crate (x1 OG60, x1 Frag Box, x1 Incend Box)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponLauncherOG60
+      amount: 1
+    - id: AU14BoxHEDPUPP
+      amount: 1
+    - id: AU14BoxHIDPUPP
+      amount: 1

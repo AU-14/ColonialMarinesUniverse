@@ -9,11 +9,14 @@ using Robust.Shared.GameObjects;
 using Content.Shared.AU14.Objectives;
 using Robust.Server.Player;
 using Content.Server.GameTicking.Events;
+using Content.Shared._RMC14.Intel;
 using Content.Shared.AU14.Objectives.Fetch;
 using Content.Shared.AU14.Objectives.Kill;
 using Content.Shared.AU14.Threats;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Mobs.Components;
+using Robust.Shared.Prototypes; // added for prototype lookups
+using Content.Shared.Objectives.Components; // for ObjectiveComponent
 
 namespace Content.Server.AU14.Objectives;
 // should probably consolidate some of these methods and make it 90% less shitcode but I am incredibly lazy and will do it another day - eg
@@ -31,9 +34,13 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
     [Dependency] private readonly Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
     [Dependency] private readonly AuFetchObjectiveSystem _fetchObjectiveSystem = default!;
     [Dependency] private readonly AuKillObjectiveSystem _killObjectiveSystem = default!;
+    [Dependency] private readonly Content.Server.AU14.Objectives.Destroy.AuDestroyObjectiveSystem _destroyObjectiveSystem = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!; // for spawning by prototype
     public bool iswinactive = false;
     private ObjectiveMasterComponent? _objectiveMaster = null;
 
+
+    // not gonna lie I did vibecode like a quarter of this, additionally wayyyy to much is hardcoded. Eventually i'll go through and refactor but it works for testing - eg
     public (int govforMinor, int govforMajor, int opforMinor, int opforMajor, int clfMinor, int clfMajor, int
         scientistMinor, int scientistMajor) ObjectivesAmount()
     {
@@ -71,6 +78,8 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         SubscribeLocalEvent<AuObjectiveComponent, ComponentStartup>(OnObjectiveStartup);
         SubscribeLocalEvent<ObjectiveMasterComponent, ComponentStartup>(OnObjectiveMasterStartup);
         SubscribeLocalEvent<AuObjectiveComponent, ObjectiveActivatedEvent>(OnObjectiveActivated);
+        // Listen for shared spend-event to deduct AU win points from ObjectiveMaster
+        SubscribeLocalEvent<Content.Shared.AU14.Objectives.SpendWinPointsEvent>(OnSpendWinPoints);
     }
 
     private void OnObjectiveActivated(EntityUid uid, AuObjectiveComponent component, ref ObjectiveActivatedEvent args)
@@ -82,6 +91,10 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         if (_entityManager.TryGetComponent(uid, out KillObjectiveComponent? killComp))
         {
             _killObjectiveSystem.ActivateKillObjectiveIfNeeded(uid, component);
+        }
+        if (_entityManager.TryGetComponent(uid, out Content.Shared.AU14.Objectives.Destroy.DestroyObjectiveComponent? destroyComp))
+        {
+            _destroyObjectiveSystem.ActivateDestroyObjectiveIfNeeded(uid, component);
         }
     }
 
@@ -482,6 +495,8 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             EndRound(completingFaction, objective.RoundEndMessage);
         }
 
+        TryUnlockOrSpawnNextTier(uid, objective, completingFaction);
+
         if (objective.Repeating)
         {
             if (objective.MaxRepeatable is { } maxRepeat && objective.TimesCompleted + 1 >= maxRepeat)
@@ -571,6 +586,48 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             {
                 _objectivesConsoleSystem.RefreshConsolesForFaction(objective.Faction);
             }
+        }
+    }
+
+    private void TryUnlockOrSpawnNextTier(EntityUid completedUid, AuObjectiveComponent completedObjective, string completingFaction)
+    {
+            Logger.Info($"[OBJ NEXT DEBUG] Attempting to spawn next-tier for prototype='{completedObjective.NextTier}' for faction {completingFaction}");
+
+        // Nothing to do if NextTier is empty
+        var nextTier = completedObjective.NextTier;
+        if (!nextTier.HasValue)
+            return;
+
+        var protoIdStr = nextTier.Value.Id;
+        if (string.IsNullOrEmpty(protoIdStr))
+            return;
+
+        // Ensure we have the completed objective's transform to spawn at the same location
+        if (!_entityManager.TryGetComponent(completedUid, out TransformComponent? completedXform))
+            return;
+
+        // Ensure the referenced prototype actually contains an AuObjectiveComponent
+        if (!nextTier.Value.TryGet(out AuObjectiveComponent? _ , _proto, EntityManager.ComponentFactory))
+        {
+            Logger.Warning($"[OBJ NEXT DEBUG] Next tier prototype '{protoIdStr}' does not contain an AuObjectiveComponent or is missing");
+            return;
+        }
+
+
+        // Always spawn a new entity from the prototype (do not try to find and reuse an existing inactive objective)
+        var newEnt = EntityManager.SpawnEntity(protoIdStr, completedXform.Coordinates);
+        if (EntityManager.TryGetComponent(newEnt, out AuObjectiveComponent? newObjComp))
+        {
+            newObjComp.Faction = completingFaction.ToLowerInvariant();
+            newObjComp.Active = true;
+            InitializeObjectiveStatuses(newObjComp);
+            RaiseLocalEvent(newEnt, new ObjectiveActivatedEvent());
+            _objectivesConsoleSystem.RefreshConsolesForFaction(newObjComp.Faction);
+            Logger.Info($"[OBJ NEXT DEBUG] Spawned and activated next-tier objective '{newObjComp.objectiveDescription}' for faction {newObjComp.Faction}");
+        }
+        else
+        {
+            Logger.Warning($"[OBJ NEXT DEBUG] Spawned prototype {protoIdStr} but it does not contain an AuObjectiveComponent");
         }
     }
 
@@ -732,5 +789,50 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         var remainingObjectives = GetObjectives().Where(obj => obj.Factions.Any(f => f.ToLowerInvariant() == factionKey) && obj.FactionStatuses.TryGetValue(factionKey, out var status) && status == AuObjectiveComponent.ObjectiveStatus.Incomplete);
         int possiblePoints = remainingObjectives.Sum(obj => obj.CustomPoints == 0 ? (obj.ObjectiveLevel == 1 ? 5 : 20) : obj.CustomPoints);
         return (currentPoints + possiblePoints) >= requiredPoints;
+    }
+
+    private void OnSpendWinPoints(Content.Shared.AU14.Objectives.SpendWinPointsEvent ev)
+    {
+        if (string.IsNullOrEmpty(ev.Team) || ev.Team == Team.None)
+            return;
+
+        var key = ev.Team.ToLowerInvariant();
+        if (_objectiveMaster == null)
+        {
+            // Ensure we have a reference to the authoritative ObjectiveMaster
+            Main();
+            if (_objectiveMaster == null)
+                return;
+        }
+
+        switch (key)
+        {
+            case var t when t == Team.GovFor:
+                _objectiveMaster.CurrentWinPointsGovfor = Math.Max(0, _objectiveMaster.CurrentWinPointsGovfor - ev.Amount);
+                break;
+            case var t when t == Team.OpFor:
+                _objectiveMaster.CurrentWinPointsOpfor = Math.Max(0, _objectiveMaster.CurrentWinPointsOpfor - ev.Amount);
+                break;
+            case var t when t == Team.CLF:
+                _objectiveMaster.CurrentWinPointsClf = Math.Max(0, _objectiveMaster.CurrentWinPointsClf - ev.Amount);
+                break;
+            default:
+                if (key == "scientist")
+                    _objectiveMaster.CurrentWinPointsScientist = Math.Max(0, _objectiveMaster.CurrentWinPointsScientist - ev.Amount);
+                break;
+        }
+
+        // No need to call Dirty on the component reference directly; find the entity to mark dirty for replication
+        var query = EntityManager.EntityQueryEnumerator<ObjectiveMasterComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            // Update the concrete component instance on the entity to match the authoritative copy
+            comp.CurrentWinPointsGovfor = _objectiveMaster.CurrentWinPointsGovfor;
+            comp.CurrentWinPointsOpfor = _objectiveMaster.CurrentWinPointsOpfor;
+            comp.CurrentWinPointsClf = _objectiveMaster.CurrentWinPointsClf;
+            comp.CurrentWinPointsScientist = _objectiveMaster.CurrentWinPointsScientist;
+            Dirty(uid, comp);
+            break;
+        }
     }
 }

@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobPlatoonCorpsmanBase
   id: AU14JobGOVFORPlatoonCorpsmanRMC
   name: au14-job-name-govforplatooncorpsmanRMC
   description: au14-job-description-govforplatooncorpsman
@@ -10,7 +10,6 @@
     traits:
     - Epilepsy
     - NonResuscitable
-  playTimeTracker: AU14JobGOVFORPlatoonCorpsman
   ranks:
     RMC_Corporal:
     - !type:RoleTimeRequirement
@@ -53,4 +52,4 @@
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
+  hidden: true

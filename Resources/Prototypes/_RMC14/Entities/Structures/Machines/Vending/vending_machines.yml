@@ -149,6 +149,7 @@
   id: CMVendorCoffee
   startingInventory:
     RMCDrinkCoffee: 25 # ?
+    RMCDrinkCoffeeGrind: 25 # $1.5
     RMCDrinkTea: 25 # $1.5
     RMCDrinkHotCocoa: 25
     #IceCup #Contraband
@@ -214,7 +215,7 @@
   parent: CMVendorSnack
   id: RMCVendorSnackSPP
   name: Surplus Ration Vendor
-  description: A vending machine full of surplus rations, viewed as the luxury of ready-avaliable SPP rations.
+  description: A vending machine full of surplus rations, viewed as the luxury of ready-avaliable UPP rations.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/spp_snack.rsi

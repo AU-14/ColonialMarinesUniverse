@@ -88,7 +88,7 @@
   name: chat-radio-marine-alpha
   keycode: "a" #a in cm13
   frequency: 1491
-  color: "#7B6CA5"
+  color: "#691200"
   longRange: true
   tower: true
 

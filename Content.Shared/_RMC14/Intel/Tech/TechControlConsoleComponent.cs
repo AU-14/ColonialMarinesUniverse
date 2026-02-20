@@ -15,4 +15,7 @@ public sealed partial class TechControlConsoleComponent : Component
 
     [DataField, AutoNetworkedField]
     public SpriteSpecifier.Rsi UnlockedRsi = new(new ResPath("_RMC14/Interface/tech_64.rsi"), "marine");
+
+    [DataField("team"), AutoNetworkedField]
+    public string Team = string.Empty;
 }

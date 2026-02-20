@@ -35,7 +35,6 @@
     - UACGLostTeam
     - NSPAInvestigationParty
     - NSPAInvestigationPartyAlt
-    - LACNSniperteam
     - RMCRRT
     - cultistThirdParty
     - CMBInvestigationParty
@@ -253,3 +252,104 @@
     - NSPAInvestigationPartyAlt
     - LACNSniperteam
     - RMCRRT
+
+- type: entity
+  id: AUPlanetLV327
+  name: Port Neroid
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Port Neroid"
+    mapId: portneroid
+    camouflage: Desert
+    announcement: "Weston-Yamada has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weston-Yamada."
+    platoonsOpfor:
+    - WEYU
+    - VAIPO
+    - ProdigySF
+    - UPP
+    platoonsGovfor:
+    - LACN
+    - CMBCIU
+    - USCM
+    - RMC
+    defaultgovfor: RMC
+    defaultopfor: WEYU
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    faction: ua
+    threats:
+    - cultistThreat
+    - XenoThreat
+    - XenoThreatCF
+    thirdparties:
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - UACGLostTeam
+    - NSPAInvestigationParty
+    - NSPAInvestigationPartyAlt
+    - LACNSniperteam
+
+- type: entity
+  id: AUPlanetCorsatStation
+  name: Corsat Station
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Corsat Station"
+    mapId: aucorsat
+    camouflage: Desert
+    announcement: "Weston-Yamada has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weston-Yamada."
+    platoonsOpfor:
+    - ProdigySF
+    - WEYU
+    - VAIPO
+    - UPP
+    platoonsGovfor:
+    - LACN
+    - CMBCIU
+    - USCM
+    - RMC
+    defaultgovfor: USCM
+    defaultopfor: WEYU
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    faction: ua
+    threats:
+    - cultistThreat
+    - XenoThreat
+    - XenoThreatCF
+    thirdparties:
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - NSPAInvestigationParty
+    - NSPAInvestigationPartyAlt
+
+- type: entity
+  id: AUPlanetSorokyne
+  name: au14sorokyne
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Sorokyne Strata"
+    mapId: au14sorokyne
+    camouflage: Desert
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsOpfor:
+    - LACN
+    - USCM
+    - RMC
+    platoonsGovfor:
+    - UPP
+    - ProdigySF
+    defaultgovfor: RMC
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    faction: ua
+    thirdparties:
+    - ICRCReliefParty
+    - cultistThirdParty
+    threats:
+    - cultistThreat
+    - XenoThreat

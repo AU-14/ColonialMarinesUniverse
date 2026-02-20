@@ -41,4 +41,8 @@ public sealed partial class RadioChannelPrototype : IPrototype
 
     [DataField]
     public bool Planet = true;
+
+
+    [DataField]
+    public string Faction = string.Empty;
 }

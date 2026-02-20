@@ -876,7 +876,7 @@
   parent: CMPosterBase
   id: CMPosterSPP1
   name: "The Stars Are Ours"
-  description: "A giant man wearing an EVA suit holds fast with a waving flag of the SPP."
+  description: "A giant man wearing an EVA suit holds fast with a waving flag of the UPP."
   components:
   - type: Sprite
     state: SPP_1
@@ -885,7 +885,7 @@
   parent: CMPosterSPP1
   id: CMPosterSPP2
   name: "The Stars Are Ours"
-  description: "A stylized depiction of the SPP home system and the stars"
+  description: "A stylized depiction of the UPP home system and the stars"
   components:
   - type: Sprite
     state: SPP_2
@@ -894,7 +894,7 @@
   parent: CMPosterSPP1
   id: CMPosterSPP3
   name: "Trust In The Strength Of The Union"
-  description: "A stylized depiction of the SPP star."
+  description: "A stylized depiction of the UPP star."
   components:
   - type: Sprite
     state: SPP_3
@@ -903,7 +903,7 @@
   parent: CMPosterSPP1
   id: CMPosterSPP4
   name: "Through The Union Our Power Is Secured"
-  description: "A stylized depiction of the SPP's flag and the words, 'Our Unity is the dream of all Peoples. Trust in the strength of their Union.'"
+  description: "A stylized depiction of the UPP's flag and the words, 'Our Unity is the dream of all Peoples. Trust in the strength of their Union.'"
   components:
   - type: Sprite
     state: SPP_4
@@ -912,7 +912,7 @@
   parent: CMPosterSPP1
   id: CMPosterSPP5
   name: "We Forge A Path Into the Stars"
-  description: "The head of a man in a SPPAC EVA suit smiles looking not at you, but up to the right of the poster."
+  description: "The head of a man in a UPPAC EVA suit smiles looking not at you, but up to the right of the poster."
   components:
   - type: Sprite
     state: SPP_5
@@ -921,7 +921,7 @@
   parent: CMPosterSPP1
   id: CMPosterSPP6
   name: "Our Militaries Secures Our Future"
-  description: "A SPPAC Ground Forces soldier stands, rifle at the ready with a defiant and steel-eyed look on his face. The SPP star is in the background."
+  description: "A UPPAC Ground Forces soldier stands, rifle at the ready with a defiant and steel-eyed look on his face. The UPP star is in the background."
   components:
   - type: Sprite
     state: SPP_6
@@ -948,7 +948,7 @@
   parent: CMPosterSPP1
   id: CMPosterSPP9
   name: "Ever Vigilant Against Capitalist Forces"
-  description: "A warped screaming eagle made to look like a vulture bears its talons over the SPP homeworld which has the SPP roundel super-imposed over it. The poster reads, 'The UN will not break the resolve of the people.'"
+  description: "A warped screaming eagle made to look like a vulture bears its talons over the UPP homeworld which has the UPP roundel super-imposed over it. The poster reads, 'The UN will not break the resolve of the people.'"
   components:
   - type: Sprite
     state: SPP_9
@@ -957,7 +957,7 @@
   parent: CMPosterSPP1
   id: CMPosterSPP10
   name: "Ever Vigilant Against The Stooges of Capitalism and Imperialism"
-  description: "A decrepit and desiccated, near claw-like hand reaches towards a stylized solar star shaped into the SPP star. The poster reads, 'Even in its death throes, we must remain vigilant of the encroachment of capitalist forces.'"
+  description: "A decrepit and desiccated, near claw-like hand reaches towards a stylized solar star shaped into the UPP star. The poster reads, 'Even in its death throes, we must remain vigilant of the encroachment of capitalist forces.'"
   components:
   - type: Sprite
     state: SPP_10
@@ -966,7 +966,7 @@
   parent: CMPosterSPP1
   id: CMPosterSPP11
   name: "The Stars Are Ours"
-  description: "A giant man wearing an EVA suit holds fast with a waving flag of the SPP."
+  description: "A giant man wearing an EVA suit holds fast with a waving flag of the UPP."
   components:
   - type: Sprite
     state: SPP_11
@@ -975,7 +975,7 @@
   parent: CMPosterSPP1
   id: CMPosterSPP12
   name: "The Stars Are Ours"
-  description: "A stylized depiction of the SPP home system and the stars"
+  description: "A stylized depiction of the UPP home system and the stars"
   components:
   - type: Sprite
     state: SPP_12
@@ -984,7 +984,7 @@
   parent: CMPosterSPP1
   id: CMPosterSPP13
   name: "We Forge A Path Into the Stars"
-  description: "The head of a man in a SPPAC EVA suit smiles looking not at you, but up to the right of the poster."
+  description: "The head of a man in a UPPAC EVA suit smiles looking not at you, but up to the right of the poster."
   components:
   - type: Sprite
     state: SPP_13

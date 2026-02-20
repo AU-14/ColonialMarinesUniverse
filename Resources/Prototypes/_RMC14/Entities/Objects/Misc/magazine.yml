@@ -94,7 +94,7 @@
   parent: RMCMagazineBootsN160
   id: RMCMagazineBootsN150
   name: Boots! Issue No.150.
-  description: The only official UNMC magazine, the headline reads 'SPP Rations, The truth.' Its cover features a captured SPP MRE.
+  description: The only official UNMC magazine, the headline reads 'UPP Rations, The truth.' Its cover features a captured UPP MRE.
   components:
   - type: RMCLoreExaminable
     content: rmc-lore-examinable-boots-150

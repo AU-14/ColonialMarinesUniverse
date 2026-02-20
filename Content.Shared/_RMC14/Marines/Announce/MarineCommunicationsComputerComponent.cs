@@ -39,6 +39,10 @@ public sealed partial class MarineCommunicationsComputerComponent : Component
     [DataField, AutoNetworkedField]
     public string? AnnounceName;
 
+
+    [DataField("faction"), AutoNetworkedField]
+    public string? Faction;
+
     /*
     [DataField, AutoNetworkedField]
     public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");

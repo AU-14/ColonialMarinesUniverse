@@ -11,7 +11,7 @@
   joinNotifyCrew: false
   accessGroups:
   - Rifleman
-  spawnMenuRoleName: SPP Rifleman (PVE)
+  spawnMenuRoleName: UPP Rifleman (PVE)
   special:
   - !type:AddComponentSpecial
     components:

@@ -1,3 +1,9 @@
+- type: localizedDataset
+  id: AU14NamesK9
+  values:
+    prefix: names-k9-first-dataset-
+    count: 13
+
 - type: entity
   parent:
   - BaseMob
@@ -6,6 +12,9 @@
   name: Synthetic K9
   description: "A Weyland-Yutani produced synthetic dog."
   components:
+  - type: RandomMetadata
+    nameSegments:
+     - AU14NamesK9
   - type: Sprite
     drawdepth: Mobs
     sprite: _AU14/Mobs/MiscMob/synthk9.rsi
@@ -46,6 +55,7 @@
   - type: CombatMode
     canDisarm: false
   - type: MobState
+  - type: GhostTakeoverAvailable
   - type: CrashLandable
   - type: StunShakeable
   - type: StunShakeableUser

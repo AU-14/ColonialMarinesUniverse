@@ -31,6 +31,7 @@ rmc-squad-info-PVESquadLeader = Squad Leader
 rmc-squad-info-SquadLeader = Squad Leader
 rmc-squad-info-FireteamLeader = Fireteam Leader
 rmc-squad-info-Rifleman = Rifleman
+rmc-squad-info-BattleBuddy = Battle Buddy
 
 rmc-squad-info-DirectorPmc = Director
 rmc-squad-info-LeaderPmcPVE = Force Leader

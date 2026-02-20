@@ -1,10 +1,9 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobPlatoonCorpsmanBase
   id: AU14JobGOVFORPlatoonCorpsmanCMBCIU
   name: Tactical Medic
   description: au14-job-description-govforplatooncorpsman
   setPreference: false
-  playTimeTracker: AU14JobGOVFORPlatoonCorpsman
   ranks:
     AU14RankCMBSrDeputy:
     - !type:RoleTimeRequirement
@@ -42,4 +41,4 @@
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
+  hidden: true

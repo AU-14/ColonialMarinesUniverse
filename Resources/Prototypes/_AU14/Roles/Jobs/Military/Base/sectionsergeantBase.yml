@@ -1,0 +1,12 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobSectionSergeantBase
+  name: au14-job-name-govforSSG
+  description: au14-job-description-govforSSG
+  playTimeTracker: AU14JobGOVFORSectionSergeant
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: playTimeTracker
+  id: AU14JobGOVFORSectionSergeant
+  isHumanoid: true

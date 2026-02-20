@@ -1,0 +1,24 @@
+- type: entity
+  parent: SquadBase
+  id: AU14SquadGROM
+  name: GROM
+  components:
+  - type: SquadTeam
+    color: "#32CD32"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: MarineAlpha
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+    canSupplyDrop: false
+    group: FORECON
+  - type: Tag
+    tags:
+    - AU14SquadGROM
+
+- type: Tag
+  id: AU14SquadGROM

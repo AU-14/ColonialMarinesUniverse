@@ -1,0 +1,12 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobPlatoonCorpsmanBase
+  name: au14-job-name-govforplatooncorpsman
+  description: au14-job-description-govforplatooncorpsman
+  playTimeTracker: AU14JobGOVFORPlatoonCorpsman
+  basePlaytimeTracker: true
+  hidden: true
+  
+- type: playTimeTracker
+  id: AU14JobGOVFORPlatoonCorpsman
+  isHumanoid: true

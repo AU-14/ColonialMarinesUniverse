@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Dialog;
+﻿﻿using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Marines.ControlComputer;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Marines.Skills;
@@ -109,7 +109,7 @@ public abstract class SharedMarineAnnounceSystem : EntitySystem
         var time = _timing.CurTime;
         if (_timing.CurTime < ent.Comp.LastAnnouncement + ent.Comp.Cooldown)
         {
-            var cooldownMessage = Loc.GetString("rmc-announcement-cooldown", ("seconds", (int) ent.Comp.Cooldown.TotalSeconds));
+            var cooldownMessage = Loc.GetString("rmc-announcement-cooldown", (("seconds", (int) ent.Comp.Cooldown.TotalSeconds)));
             _popup.PopupClient(cooldownMessage, args.Actor, PopupType.SmallCaution);
             return;
         }
@@ -119,7 +119,7 @@ public abstract class SharedMarineAnnounceSystem : EntitySystem
         if (text.Length > CharacterLimit)
             text = text[..CharacterLimit].Trim();
 
-        AnnounceSigned(args.Actor, text, name: ent.Comp.AnnounceName);
+        AnnounceSigned(args.Actor, text, name: ent.Comp.AnnounceName, faction: ent.Comp.Faction);
 
         ent.Comp.LastAnnouncement = time;
         Dirty(ent);
@@ -172,7 +172,8 @@ public abstract class SharedMarineAnnounceSystem : EntitySystem
         EntityUid? source,
         string message,
         SoundSpecifier? sound = null,
-        LocId? announcement = null)
+        LocId? announcement = null,
+        string? faction = null)
     {
     }
 
@@ -212,11 +213,13 @@ public abstract class SharedMarineAnnounceSystem : EntitySystem
     /// <param name="sound">GlobalSound for announcement.</param>
     /// <param name="filter">Who should be able to see and hear the announcement.</param>
     /// <param name="excludeSurvivors">Whether or not to exclude survivors from the list of recipients.</param>
+    /// <param name="faction">Optional faction to restrict the announcement to. If null, callers should treat as govfor.</param>
     public virtual void AnnounceToMarines(
         string message,
         SoundSpecifier? sound = null,
         Filter? filter = null,
-        bool excludeSurvivors = true)
+        bool excludeSurvivors = true,
+        string? faction = null)
     {
     }
 
@@ -250,7 +253,8 @@ public abstract class SharedMarineAnnounceSystem : EntitySystem
         string? name = null,
         SoundSpecifier? sound = null,
         Filter? filter = null,
-        bool excludeSurvivors = true)
+        bool excludeSurvivors = true,
+        string? faction = null)
     {
         if (_net.IsClient)
             return;
@@ -259,7 +263,7 @@ public abstract class SharedMarineAnnounceSystem : EntitySystem
         name ??= _rankSystem.GetSpeakerFullRankName(sender) ?? Name(sender);
         var wrappedMessage = Loc.GetString("rmc-announcement-message-signed", ("author", author), ("message", message), ("name", name));
 
-        AnnounceToMarines(wrappedMessage, sound, filter, excludeSurvivors);
+        AnnounceToMarines(wrappedMessage, sound, filter, excludeSurvivors, faction);
         _adminLog.Add(LogType.RMCMarineAnnounce, $"{ToPrettyString(sender):source} marine announced message: {message}");
     }
 

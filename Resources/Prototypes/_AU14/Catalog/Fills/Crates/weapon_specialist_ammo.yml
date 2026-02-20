@@ -7,3 +7,27 @@
     contents:
     - id: AU14MagazineSniperL64A3
       amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineType88
+  name: Type 88 DMR Magazine Crate (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSniperType88
+      amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateMagazineType23Mixed
+  name: Type 23 Mixed Ammo Crate (x2 Heavy Buckshot, x2 Heavy Flechette, x2 Heavy Slugs)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBoxShotgunHeavyBuckshot
+      amount: 2
+    - id: RMCBoxShotgunHeavyFlechette
+      amount: 2
+    - id: RMCBoxShotgunHeavySlugs
+      amount: 2

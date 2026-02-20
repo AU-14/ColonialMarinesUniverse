@@ -554,7 +554,7 @@
     sections:
     - name: Pouches
       entries:
-      - id: RMCPouchCommandFill
+      - id: AU14PouchCommandFill
         amount: 2
     - name: Miscellaneous
       entries:

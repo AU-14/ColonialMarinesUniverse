@@ -1,11 +1,10 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobPlatCoBase
   id: AU14JobGOVFORPlatCo
   name: au14-job-name-govforplatco
   description: au14-job-description-govforplatco
   setPreference: true
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORPlatCo
   requirements:
   - !type:OverallPlaytimeRequirement
     time: 18000 # 5 hours
@@ -42,6 +41,8 @@
       - GOVFOR
     - type: Marine
       Faction: govfor
+    - type: CommendationGiver
+    - type: InnateCommandSpeech
     - type: Skills
       preset: AU14SkillPresetPlatoonCommander
     - type: JobPrefix
@@ -50,13 +51,15 @@
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
+  hidden: true
 
 - type: startingGear
   id: AU14GearGOVFORPlatCo
   equipment:
     id: AU14IDCardGOVFORPlatCo
     ears: AU14HeadsetSectionLeader
+  inhand:
+    -  RMCTabletGovfor
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORPlatCo
@@ -66,10 +69,6 @@
     job_id: AU14JobGOVFORPlatCo
   - type: Sprite
     state: syn_spawn
-
-- type: playTimeTracker
-  id: AU14JobGOVFORPlatCo
-  isHumanoid: true
 
 - type: startingGear
   id: AU14GearGOVFORPlatCoDummy

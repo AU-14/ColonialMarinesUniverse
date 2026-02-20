@@ -13,7 +13,9 @@
   #- AUPlanetShepherdsPride
   - AUPlanetFlight
   - AUPlanetLV759
-
+  - AUPlanetLV327
+  - AUPlanetCorsatStation
+  - AUPlanetSorokyne
   rules:
   - AuVoteRule
   - PlatoonSpawn
@@ -35,6 +37,7 @@
     - AUPlanetLV624
     - AUPlanetLV747
     - AUPlanetLV759
+    - AUPlanetSorokyne
 
    # - AUPlanetStableGarrison
   rules:
@@ -54,7 +57,9 @@
   #- AUPlanetShepherdsPride for playtest - eg
   - AUPlanetLV747
   - AUPlanetFlight
-
+  - AUPlanetLV327
+  - AUPlanetSorokyne
+  - AUPlanetCorsatStation
   # - AUPlanetStableGarrison
   rules:
   - AuVoteRule
@@ -78,6 +83,8 @@
     - AUPlanetLV747
     - AUPlanetShepherdsPride
     - AUPlanetLV624
+    - AUPlanetLV327
+    - AUPlanetSorokyne
 
 - type: gamePreset
   id: Jailbreak
@@ -131,7 +138,7 @@
     jobs:
       AU14JobGOVFORPlatCo: 1
       AU14JobGOVFORPlatoonCorpsman: 9
-      AU14JobGOVFORDCC: 2
+      AU14JobGOVFORDCC: 1
       AU14JobGOVFORPlatOp: 2
       AU14JobGOVFORDSPilot: 2
       AU14JobGOVFORRadioTelephoneOperator: 3
@@ -142,6 +149,7 @@
       AU14JobGOVFORSquadRifleman: 100
       AU14JobGOVFORAuxSupportSynth: 2
       AU14JobGOVFORadvisor: 1
+      AU14JobGOVFORMilitaryDoctor: 1
 
 
 - type: entity
@@ -154,7 +162,7 @@
     jobs:
       AU14JobOpforPlatCo: 1
       AU14JobOpforPlatoonCorpsman: 9
-      AU14JobOpforDCC: 2
+      AU14JobOpforDCC: 1
       AU14JobOpforPlatOp: 2
       AU14JobOpforDSPilot: 2
       AU14JobOpforRadioTelephoneOperator: 3
@@ -165,6 +173,7 @@
       AU14JobOpforSquadRifleman: 100
       AU14JobOPFORAuxSupportSynth: 2
       AU14JobOPFORadvisor: 1
+      AU14JobOPFORMilitaryDoctor: 1
 
 - type: entity
   id: AddClf
@@ -174,7 +183,7 @@
     jobs:
       AU14JobCLFCellLeader: 1
       AU14JobCLFPhysician: 2
-      AU14JobCLFGuerilla: 16
+      AU14JobCLFGuerilla: 6
       AU14JobCLFMachineGunner: 1
 
 - type: entity

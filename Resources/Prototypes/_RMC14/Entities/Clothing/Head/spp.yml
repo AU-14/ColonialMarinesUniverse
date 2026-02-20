@@ -2,7 +2,7 @@
 - type: entity
   parent: ArmorHelmetM10
   id: ArmorHelmetSPP
-  name: SUPP UM4 helmet
+  name: UPP UM4 helmet
   description: Using highly skilled manufacturing techniques this UM4 helmet manages to be very resistant to ballistics damage, at the cost of its huge weight causing an extreme stress on the occupant's head that will most likely cause neck problems.
   components:
   - type: Sprite
@@ -40,7 +40,7 @@
   parent: ArmorHelmetSPP
   id: RMCArmorHelmetSPPArmy
   name: 6B82 combat helmet
-  description: An older version of the SPP Army's 6B92 combat helmet, still worn by certain units on planets the SPP deems less important.
+  description: An older version of the UPP Army's 6B92 combat helmet, still worn by certain units on planets the UPP deems less important.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Head/SPP/army_helmet.rsi
@@ -53,7 +53,7 @@
   parent: ArmorHelmetSPP
   id: RMCArmorHelmetSPPFirefighter
   name: T-20 firefighter helmet
-  description: "A reinforced, heat-resistant helmet issued to SPP emergency responders. Its durable composite shell provides protection against falling debris and extreme heat, while the attached fire-resistant shroud shields the wearer’s neck and shoulders. A red star is emblazoned on the front, marking its service within the socialist's progressive peoples."
+  description: "A reinforced, heat-resistant helmet issued to UPP emergency responders. Its durable composite shell provides protection against falling debris and extreme heat, while the attached fire-resistant shroud shields the wearer’s neck and shoulders. A red star is emblazoned on the front, marking its service within the socialist's progressive peoples."
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Head/SPP/fire_helmet.rsi
@@ -89,7 +89,7 @@
   parent: CMHeadCapSPPCivilian
   id: RMCHeadCapSPPCivilianPlantWorker
   name: white worker cap
-  description: A simple white fabric cap, commonly worn by various SPP workers to keep hair contained and maintain cleanliness. Lightweight and practical, but not very durable.
+  description: A simple white fabric cap, commonly worn by various UPP workers to keep hair contained and maintain cleanliness. Lightweight and practical, but not very durable.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Head/SPP/white_cap.rsi
@@ -109,8 +109,8 @@
 - type: entity
   parent: CMHeadCapSPPBeret
   id: RMCHeadCapSPPBeretArmy
-  name: SPP reservist beret
-  description: A well-made beret worn by reservists of the SPP armed forces. It signifies their continued commitment to the cause, even while not on active duty, and serves as a symbol of unity and service.
+  name: UPP reservist beret
+  description: A well-made beret worn by reservists of the UPP armed forces. It signifies their continued commitment to the cause, even while not on active duty, and serves as a symbol of unity and service.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Head/SPP/army_beret.rsi

@@ -314,7 +314,7 @@
   name: dropship navigation computer (Third Party)
   components:
   - type: WhitelistedShuttle
-    faction: govfor
+    faction: thirdparty
     ShuttleType: Dropship
 
 - type: entity

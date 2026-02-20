@@ -37,7 +37,7 @@
 - type: auThirdParty
   id: PizzaDeliveryBoyThirdParty
   partyspawn: PizzaDeliveryBoySpawn
-  enterbyshuttle: false
+  entrymethod: shuttle
   weight: 2
   minplayers: 0
   maxplayers: 400

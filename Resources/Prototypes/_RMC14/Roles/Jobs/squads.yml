@@ -115,6 +115,7 @@
   name: Auxiliary
   components:
   - type: SquadTeam
+
     color: "#053818"
     blacklistedSquadArmor:
     - Helmet
@@ -351,7 +352,6 @@
     roundStart: true
     color: "#B9A76D"
     group: OPFOR
-
     radio: OpforBravo
     accessLevels:
     - AU14AccessOpfor
@@ -385,6 +385,8 @@
   name: Auxiliary
   components:
   - type: SquadTeam
+    group: GOVFOR
+
     roundStart: true
     color: "#228B22"
     radio: GovforIntel
@@ -398,10 +400,10 @@
 - type: entity
   parent: SquadBase
   id: SquadGovfor
-  name: Sierra
+  name: Alpha
   components:
   - type: SquadTeam
-    color: "#7B6CA5"
+    color: "#691200"
     radio: MarineAlpha
     group: GOVFOR
     minimapBackground:
@@ -414,11 +416,11 @@
 - type: entity
   parent: SquadBase
   id: SquadGovforBravo
-  name: Tango
+  name: Bravo
   components:
   - type: SquadTeam
     roundStart: true
-    color: "#B9A76D"
+    color: "#594F00"
     group: GOVFOR
     radio: GovforBravo
     accessLevels:
@@ -431,13 +433,13 @@
 - type: entity
   parent: SquadBase
   id: SquadGovforCharlie
-  name: Uniform
+  name: Charlie
   components:
   - type: SquadTeam
     roundStart: true
     group: GOVFOR
 
-    color: "#7A967E"
+    color: "#2B0045"
     radio: GovforCharlie
     accessLevels:
     - AU14AccessGovforSquad

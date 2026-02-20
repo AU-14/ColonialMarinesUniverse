@@ -1,13 +1,16 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobPlatOpBase
   id: AU14JobGOVFORPlatOpUPP
-  name: Political Commissar
+  name: Staff Officer
   description: au14-job-description-govforplatop
   setPreference: false
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORPlatOp
   ranks:
-    UPP_Commissar: []
+    UPP_Lieutenant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatOp
+      time: 216000 # 60 hours
+    UPP_JuniorLieutenant: []
   startingGear: AU14GearGOVFORPlatOp
   dummyStartingGear: AU14GearGOVFORPlatOpDummy
   icon: "AU14JobIconOpsOfc"
@@ -44,4 +47,4 @@
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
+  hidden: true

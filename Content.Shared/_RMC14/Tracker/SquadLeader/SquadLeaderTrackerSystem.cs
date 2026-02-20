@@ -33,6 +33,10 @@ public sealed class SquadLeaderTrackerSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
 
+    // New: logging
+    [Dependency] private readonly ILogManager _logManager = default!;
+    private ISawmill _sawmill = default!;
+
     private readonly Dictionary<EntityUid, MapCoordinates> _squadLeaders = new();
     private readonly Dictionary<EntityUid, MapCoordinates>?[] _fireteamLeaders =
         new Dictionary<EntityUid, MapCoordinates>?[3];
@@ -77,6 +81,9 @@ public sealed class SquadLeaderTrackerSystem : EntitySystem
                 subs.Event<SquadLeaderTrackerDemoteFireteamLeaderMsg>(OnDemoteFireteamLeaderMsg);
                 subs.Event<SquadLeaderTrackerChangeTrackedMsg>(OnChangeTrackedMsg);
             });
+
+        // Initialize sawmill for logging
+        _sawmill = _logManager.GetSawmill("squadleader");
     }
 
     private void OnSquadMemberAdded(ref SquadMemberAddedEvent ev)
@@ -630,6 +637,8 @@ public sealed class SquadLeaderTrackerSystem : EntitySystem
             // Swap target to the new SquadLeader after it is swapped.
             if (tracker.Target != null && tracker.Mode == SquadLeaderMode && !HasComp<SquadLeaderComponent>(tracker.Target))
             {
+                _sawmill.Debug("BattleBuddy for {0} is invalid: {1}");
+
                 if (_squadMemberQuery.TryComp(tracker.Target.Value, out var target) &&
                     target.Squad is { } targetSquad &&
                     TryComp(targetSquad, out SquadTeamComponent? team) &&
@@ -675,6 +684,21 @@ public sealed class SquadLeaderTrackerSystem : EntitySystem
                     }
 
                     UpdateDirection((uid, tracker), squadLeader, targetSquadName);
+                    continue;
+                }
+            }
+
+            // New: BattleBuddy mode - if set, point towards your battle buddy
+            if (tracker.Mode == "BattleBuddy" && tracker.BattleBuddy != null)
+            {
+                var buddy = tracker.BattleBuddy.Value;
+                if (TerminatingOrDeleted(buddy))
+                {
+                }
+                else
+                {
+                    var coords = _transform.GetMapCoordinates(buddy);
+                    UpdateDirection((uid, tracker), coords, "");
                     continue;
                 }
             }
@@ -727,6 +751,33 @@ public sealed class SquadLeaderTrackerSystem : EntitySystem
 
             UpdateDirection((uid, tracker));
         }
+    }
+
+    public void SetBattleBuddy(EntityUid a, EntityUid b)
+    {
+        _sawmill.Debug("SetBattleBuddy called for {0} and {1}", a, b);
+        if (a == b)
+        {
+            _sawmill.Debug("SetBattleBuddy aborted: same entity");
+            return;
+        }
+
+        if (!TryComp<SquadLeaderTrackerComponent>(a, out var compA) || !TryComp<SquadLeaderTrackerComponent>(b, out var compB))
+        {
+            _sawmill.Debug("SetBattleBuddy aborted: missing tracker component on either {0} or {1}", a, b);
+            return;
+        }
+
+        compA.BattleBuddy = b;
+        compB.BattleBuddy = a;
+
+        Dirty(a, compA);
+        Dirty(b, compB);
+
+        var nameA = Name(a);
+        var nameB = Name(b);
+
+        _sawmill.Info("Set battle buddies: {0} <-> {1}", nameA, nameB);
     }
 }
 [ByRefEvent]

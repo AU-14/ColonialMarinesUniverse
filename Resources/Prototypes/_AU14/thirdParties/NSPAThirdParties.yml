@@ -583,7 +583,7 @@
 - type: auThirdParty
   id: NSPAInvestigationParty
   partyspawn: NSPAInvestigationPartySpawn
-  enterbyshuttle: true
+  entrymethod: shuttle
   weight: 15
   minplayers: 0
   maxplayers: 400
@@ -602,7 +602,7 @@
 - type: auThirdParty
   id: NSPAInvestigationPartyArmored
   partyspawn: NSPAInvestigationPartySpawnArmored
-  enterbyshuttle: true
+  entrymethod: shuttle
   weight: 5
   minplayers: 0
   maxplayers: 400
@@ -623,7 +623,7 @@
 - type: auThirdParty
   id: NSPAInvestigationPartyAlt
   partyspawn: NSPAInvestigationPartySpawnAlt
-  enterbyshuttle: true
+  entrymethod: shuttle
   weight: 5
   minplayers: 0
   maxplayers: 400

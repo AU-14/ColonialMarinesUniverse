@@ -1,16 +1,15 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobSquadRiflemanBase
   id: AU14JobGOVFORSquadRiflemanUPP
   name: Rifleman
   description: au14-job-description-govforsquadrifleman
   setPreference: false
-  playTimeTracker: AU14JobGOVFORSquadRifleman
   ranks:
-    UPP_Yefreytor:
+    UPP_Gefreiter:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORSquadRifleman
-      time: 1800 # 30 hours
-    UPP_Ryadovoy: []
+      time: 108000 # 30 hours
+    UPP_Private: []
   startingGear: AU14GearGOVFORSquadRifleman
   dummyStartingGear: AU14GearGOVFORRiflemanDummy
   icon: "AU14JobIconRFN"
@@ -39,4 +38,4 @@
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
+  hidden: true

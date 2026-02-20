@@ -102,11 +102,27 @@ public abstract class SharedRequisitionsSystem : EntitySystem
 
     public void ChangeBudget(int amount)
     {
+        ChangeBudget(amount, null);
+    }
+
+    public void ChangeBudget(int amount, string? faction)
+    {
         var accountQuery = EntityQueryEnumerator<RequisitionsAccountComponent>();
         while (accountQuery.MoveNext(out var uid, out var comp))
         {
-            comp.Balance += amount;
-            Dirty(uid, comp);
+            if (string.IsNullOrEmpty(faction) || faction == "none")
+            {
+                comp.Balance += amount;
+                Dirty(uid, comp);
+            }
+            else
+            {
+                if (comp.Faction == faction)
+                {
+                    comp.Balance += amount;
+                    Dirty(uid, comp);
+                }
+            }
         }
 
         SendUIStateAll();

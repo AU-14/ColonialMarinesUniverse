@@ -34,8 +34,14 @@ namespace Content.Shared.AU14.util
         Deco6,
         LockedCommandDoor,
         LockedSecurityDoor,
+        LockedSecurityDoorGlass,
         LockedGlassDoor,
+        LockedCommandGlassDoor,
         LockedNormalDoor,
+        LockedEngineeringDoor,
+        LockedEngineeringGlassDoor,
+        LockedMedicalDoor,
+        LockedMedicalGlassDoor,
         OverwatchConsole
     }
 }

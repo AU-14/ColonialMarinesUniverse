@@ -682,11 +682,7 @@ public sealed class OrbitalCannonSystem : EntitySystem
             firing.SecondWarningRange = warheadComp.SecondWarningRange;
             firing.ThirdWarningRange = warheadComp.ThirdWarningRange;
 
-            // Award intel points for specific warhead types
-            if (warheadComp.IntelPointsAwarded > 0 && _net.IsServer)
-            {
-                _intel.AddPoints(warheadComp.IntelPointsAwarded);
-            }
+
         }
 
         Dirty(cannon, firing);

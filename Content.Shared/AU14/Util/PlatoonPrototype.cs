@@ -49,4 +49,8 @@ namespace Content.Shared.AU14.util;
         public List<ResPath> CompatibleFighters { get; private set; } = new();
 
 
+        [DataField("techTree", required: false)]
+        public string TechTree { get; private set; } = string.Empty;
+
+
     }

@@ -1,11 +1,10 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobDSPilotBase
   id: AU14JobGOVFORDSPilotWYPMC
   name: PMC Pilot Officer
   description: au14-job-description-govfordspilot
   setPreference: false
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORDSPilot
   ranks:
     AU14RankWeYuSeniorCrewChief:
     - !type:RoleTimeRequirement
@@ -45,4 +44,4 @@
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
+  hidden: true

@@ -1,11 +1,10 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantWYPMC
   name: PMC Squad Leader
   description: au14-job-description-govforsquadsergeant
   setPreference: false
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORSquadSergeant
   ranks:
     AU14RankWeYuEnforcerSenior:
     - !type:RoleTimeRequirement
@@ -41,4 +40,4 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
     - type: MarineOrders
-  hidden: false
+  hidden: true

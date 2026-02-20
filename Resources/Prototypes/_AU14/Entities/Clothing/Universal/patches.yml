@@ -271,3 +271,17 @@
     playerSprite:
       sprite: _AU14/Clothing/Patches/twe_patch.rsi
       state: patch
+
+- type: entity
+  parent: RMCPatchBase
+  id: AU14GROMPatch
+  name: GROM Patch
+  description: A patch bearing the insignia of GROM Special Forces Unit.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Patches/grom_patch.rsi
+    state: icon
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Patches/grom_patch.rsi
+      state: patch

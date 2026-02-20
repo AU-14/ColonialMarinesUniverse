@@ -84,7 +84,7 @@
 - type: entity
   parent: RMCMapInsertTrijentBase
   id: RMCMapInsertTrijentCrashlandingSPPBar
-  name: Crashlanding SPP Bar
+  name: Crashlanding UPP Bar
   suffix: Insert Trijent
   components:
   - type: MapInsert

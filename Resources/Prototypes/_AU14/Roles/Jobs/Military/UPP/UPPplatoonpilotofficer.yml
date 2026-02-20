@@ -1,25 +1,24 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobDSPilotBase
   id: AU14JobGOVFORDSPilotUPP
   name: Dropship Pilot
   description: au14-job-description-govfordspilot
   setPreference: false
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORDSPilot
   ranks:
-    UPP_MariscalDeCampo:
+    UPP_Lieutenant:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDSPilot
-      time: 7200 # 120 hours
-    UPP_Hauptfeldwebel:
+      time: 432000 # 120 hours
+    UPP_JuniorLieutenant:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDSPilot
-      time: 3600 # 60 hours
-    UPP_StarschyPraporshchik:
+      time: 216000 # 60 hours
+    UPP_SeniorWarrantOfficer:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDSPilot
-      time: 1800 # 30 hours
-    UPP_Praporshchik: []
+      time: 108000 # 30 hours
+    UPP_WarrantOfficer: []
   startingGear: AU14GearGOVFORDSPilot
   dummyStartingGear: AU14GearGOVFORDSPilotDummy
   icon: "AU14JobIconPilotOfficer"
@@ -53,4 +52,4 @@
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
+  hidden: true

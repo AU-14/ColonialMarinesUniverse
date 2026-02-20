@@ -72,7 +72,7 @@
         shader: unshaded
 
 - type: entity
-  name: We-Ya executive zippo lighter
+  name: We-Yu executive zippo lighter
   description: A remarkable Zippo lighter embellished in the Company's black and gold shade.
   parent: RMCZippo
   id: RMCZippoExec

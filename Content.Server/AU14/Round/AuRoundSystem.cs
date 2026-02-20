@@ -7,6 +7,7 @@ using System.Linq;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
 using Content.Server.Voting;
+using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared.AU14;
@@ -52,7 +53,7 @@ namespace Content.Server.AU14.Round
         public IReadOnlyList<AuThirdPartyPrototype> SelectedThirdParties => _selectedThirdParties;
 
         // Default max third parties for rounds with no threat (e.g., ForceOnForce)
-        private const int DefaultMaxThirdPartiesNoThreat = 1;
+        private const int DefaultMaxThirdPartiesNoThreat =4;
 
         public override void Initialize()
         {
@@ -376,6 +377,14 @@ namespace Content.Server.AU14.Round
                             if (args.Winner is PlatoonPrototype winnerId)
                             {
                                 platoonSpawnRuleSystem.SelectedGovforPlatoon = winnerId;
+
+                                // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
+                                var intelSys = _entityManager.EntitySysManager.GetEntitySystem<Content.Shared._RMC14.Intel.IntelSystem>();
+                                if (!string.IsNullOrEmpty(winnerId.TechTree))
+                                {
+                                    intelSys.SetTeamTechTreeOverride(Team.GovFor, winnerId.TechTree);
+                                }
+
                                 // Only start ship vote if planet allows govfor in ship
                                 if (_selectedPlanet.GovforInShip)
                                 {
@@ -414,6 +423,14 @@ namespace Content.Server.AU14.Round
                             if (args.Winner is PlatoonPrototype winnerId)
                             {
                                 platoonSpawnRuleSystem.SelectedOpforPlatoon = winnerId;
+
+                                // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
+                                var intelSys = _entityManager.EntitySysManager.GetEntitySystem<Content.Shared._RMC14.Intel.IntelSystem>();
+                                if (intelSys != null && !string.IsNullOrEmpty(winnerId.TechTree))
+                                {
+                                    intelSys.SetTeamTechTreeOverride(Team.OpFor, winnerId.TechTree);
+                                }
+
                                 // Only start ship vote if planet allows opfor in ship
                                 if (_selectedPlanet.OpforInShip)
                                 {

@@ -1,0 +1,12 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobDSPilotBase
+  name: au14-job-name-govfordspilot
+  description: au14-job-description-govfordspilot
+  playTimeTracker: AU14JobGOVFORDSPilot
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: playTimeTracker
+  id: AU14JobGOVFORDSPilot
+  isHumanoid: true

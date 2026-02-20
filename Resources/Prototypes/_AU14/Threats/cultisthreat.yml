@@ -278,8 +278,8 @@
 - type: auThirdParty
   id: cultistThirdParty
   partyspawn: cultistParty
-  enterbyshuttle: false
-  weight: 10
+  entrymethod: shuttle
+  weight:  10
   minplayers: 35
   maxplayers: 100
   GhostsNeeded: 1

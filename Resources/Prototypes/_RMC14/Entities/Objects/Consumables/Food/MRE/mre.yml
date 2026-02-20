@@ -107,6 +107,14 @@
     sprite: _RMC14/Objects/Consumable/Food/mre_spp.rsi
 
 - type: entity
+  parent: RMCBoxMREEmpty
+  id: AU14BoxMREUPP
+  suffix: Filled
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMRESPP
+
+- type: entity
   parent: CMMRE
   id: RMCMREWeYa # TODO RMC14 - Custom Contents
   name: PMC CFR ration

@@ -1,138 +1,139 @@
 # enlisted
 - type: rank
-  id: UPP_Ryadovoy
-  name: Ryadovoy
-  prefix: Ryad.
+  id: UPP_Private
+  name: Private
+  prefix: Pvt.
   paygrade: E1
 
 - type: rank
-  id: UPP_Yefreytor
-  name: Yefreytor
-  prefix: Yefr.
+  id: UPP_Gefreiter
+  name: Gefreiter
+  prefix: Gefr.
   paygrade: E2
 
 - type: rank
-  id: UPP_StarschyRyadovoy
-  name: Starschy Ryadovoy
-  prefix: SRyad.
+  id: UPP_SeniorGefreiter
+  name: Senior Gefreiter
+  prefix: SnGefr.
   paygrade: E3
 
 - type: rank
-  id: UPP_Serzhant
-  name: Serzhant
-  prefix: Serzh.
-  paygrade: E4
-
-- type: rank
-  id: UPP_StarschySerzhant
-  name: Starschy Serzhant
-  prefix: SSerzh.
-  paygrade: E5
+  id: UPP_Corporal
+  name: Corporal
+  prefix: Corp.
+  paygrade: E3
 
 - type: rank
   id: UPP_Plutonowy
   name: Plutonowy
   prefix: Plut.
+  paygrade: E4
+
+- type: rank
+  id: UPP_Sergeant
+  name: Sergeant
+  prefix: Sgt.
+  paygrade: E5
+
+- type: rank
+  id: UPP_StaffSergeant
+  name: Staff Sergeant
+  prefix: SSgt.
   paygrade: E6
 
 - type: rank
-  id: UPP_Shangshi
-  name: Shangshi
-  prefix: Shang.
+  id: UPP_Chotar
+  name: Chotar
+  prefix: Chot.
   paygrade: E7
+
+- type: rank
+  id: UPP_FirstSergeant
+  name: First Sergeant
+  prefix: 1stSgt.
+  paygrade: E8
 
 #  warrant Officers
 - type: rank
-  id: UPP_Praporshchik
-  name: Praporshchik
-  prefix: Prap.
+  id: UPP_WarrantOfficer
+  name: Warrant Officer
+  prefix: WO.
   paygrade: W1
 
 - type: rank
-  id: UPP_StarschyPraporshchik
-  name: Starschy Praporshchik
-  prefix: SPrap.
+  id: UPP_SeniorWarrantOfficer
+  name: Senior Warrant Officer
+  prefix: SnWO.
   paygrade: W2
-
-- type: rank
-  id: UPP_Hauptfeldwebel
-  name: Hauptfeldwebel
-  prefix: Hauptf.
-  paygrade: W3
-
-- type: rank
-  id: UPP_MariscalDeCampo
-  name: Mariscal de Campo
-  prefix: MCampo
-  paygrade: W4
 
 # officers
 - type: rank
-  id: UPP_Leytenant
-  name: Leytenant
-  prefix: Leyt.
+  id: UPP_JuniorLieutenant
+  name: Junior Lieutenant
+  prefix: JnLt.
   paygrade: O1
 
 - type: rank
-  id: UPP_StarschyLeytenant
-  name: Starschy Leytenant
-  prefix: SLeyt.
+  id: UPP_Lieutenant
+  name: Lieutenant
+  prefix: Lt.
+  paygrade: O1
+
+- type: rank
+  id: UPP_SeniorLieutenant
+  name: Senior Lieutenant
+  prefix: SnLt.
   paygrade: O2
 
 - type: rank
-  id: UPP_Hauptmann
-  name: Hauptmann
-  prefix: Hauptm.
+  id: UPP_Captain
+  name: Captain
+  prefix: Capt.
   paygrade: O3
 
-- type: rank
-  id: UPP_Kapitan
-  name: Kapitan
-  prefix: Kapit.
-  paygrade: O4
 
 #field officers
 - type: rank
   id: UPP_Major
   name: Major
   prefix: Maj.
+  paygrade: O4
+
+- type: rank
+  id: UPP_LieutenantColonel
+  name: Lieutenant Colonel
+  prefix: Lt Col.
   paygrade: O5
 
 - type: rank
-  id: UPP_Podpolkovnik
-  name: Podpolkovnik
-  prefix: Podpolk.
+  id: UPP_Colonel
+  name: Colonel
+  prefix: Col.
   paygrade: O6
-
-- type: rank
-  id: UPP_Polkovnik
-  name: Polkovnik
-  prefix: Polk.
-  paygrade: O7
 
 # Generals
 - type: rank
-  id: UPP_GeneralMajor
-  name: General-Major
-  prefix: GenMaj.
+  id: UPP_BrigadierGeneral
+  name: Brigadier-General
+  prefix: Brig-Gen.
+  paygrade: O7
+
+- type: rank
+  id: UPP_DivisionalGeneral
+  name: Divisional General
+  prefix: Div-Gen.
   paygrade: O8
 
 - type: rank
-  id: UPP_GeneralLeytenant
-  name: General-Leytenant
-  prefix: GenLeyt.
+  id: UPP_GeneralOfTheBranch
+  name: General of the branch
+  prefix: Gen-Br.
   paygrade: O9
 
 - type: rank
-  id: UPP_GeneralPolkovnik
-  name: General-Polkovnik
-  prefix: GenPolk.
-  paygrade: O10
-
-- type: rank
-  id: UPP_Mariscal
-  name: Mariscal
-  prefix: Maris.
+  id: UPP_Marshal
+  name: Marshal
+  prefix: Marsh.
   paygrade: O10
 
 - type: rank
@@ -144,4 +145,4 @@
 - type: rank
   id: UPP_Commissar
   name: Commissar
-  prefix: Comrade 
+  prefix: Comrade

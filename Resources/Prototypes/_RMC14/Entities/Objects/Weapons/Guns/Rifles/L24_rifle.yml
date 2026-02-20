@@ -3,7 +3,6 @@
   id: RMCWeaponRifleL24
   name: L23 assault rifle
   description: Pulse action 8.8x51mm caseless assault rifle of the Royal Marine Commandos, personal friend of any Marine Commando. Comes with semi-auto and burst-fire firemodes and features an integrated 30mm grenade launcher that can hold two grenades on backup with one in the chamber.
-  suffix: Filled
   components:
   - type: Sprite
     sprite: _AU14/Weapons/Guns/RMC/L23.rsi
@@ -115,7 +114,7 @@
   - type: AttachableHolderVisuals
     offsets:
       rmc-aslot-barrel: 0.8, -0.03
-      rmc-aslot-rail: -0.0175, 0.19
+      rmc-aslot-rail: -0.0175, 0.12
       rmc-aslot-stock: -0.5, -0.1
       rmc-aslot-underbarrel: 0.3125, -0.315
 

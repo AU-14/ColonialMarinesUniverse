@@ -11,6 +11,17 @@
 
 - type: entity
   parent: RMCPouchGeneralLarge
+  id: AU14PouchGeneralLargeMilDoctorFill
+  suffix: Military Doctor, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMPortableSurgicalBedSpawnFolded
+    - id: CMRollerBedSpawnFolded
+    - id: CMBloodPackFull
+
+- type: entity
+  parent: RMCPouchGeneralLarge
   id: RMCPouchGeneralLargeICBLiaison
   suffix: Interstellar Commerce Bureau Liaison, Filled
   components:

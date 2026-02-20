@@ -151,6 +151,8 @@ public sealed class CommunicationsTowerSystem : EntitySystem
         args.Handled = true;
         var msg = $"You wipe the preexisting frequencies from the {Name(ent)}.";
         _popup.PopupClient(msg, ent, args.User, PopupType.Medium);
+        ent.Comp.Faction = string.Empty;
+        ent.Comp.Channels.Clear();
     }
 
     private void OnTowerDialogAddDoAfter(Entity<CommunicationsTowerComponent> ent, ref CommunicationsTowerAddDoAfterEvent args)
@@ -172,6 +174,7 @@ public sealed class CommunicationsTowerSystem : EntitySystem
         args.Handled = true;
         var msg = $"You add your faction's communication frequencies to the {Name(ent)}'s comm list.";
         _popup.PopupClient(msg, ent, args.User, PopupType.Medium);
+        ent.Comp.Faction = faction;
     }
 
     private void OnTowerInteractHand(Entity<CommunicationsTowerComponent> ent, ref InteractHandEvent args)
@@ -200,7 +203,26 @@ public sealed class CommunicationsTowerSystem : EntitySystem
         ChangeState(ent, state);
 
         if (ent.Comp.State == CommunicationsTowerState.On)
-            _intel.RestoreColonyCommunications();
+        {
+            // Credit comms to the tower's faction if set; otherwise prefer the user/operator's faction; otherwise credit globally.
+            var team = ent.Comp.Faction;
+            if (string.IsNullOrEmpty(team) || team == Team.None)
+            {
+                if (_gunIFF.TryGetFaction(args.User, out var userFaction) && !string.IsNullOrEmpty(userFaction) && userFaction != Team.None)
+                {
+                    team = userFaction;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(team) && team != Team.None)
+            {
+                _intel.RestoreColonyCommunications(team);
+            }
+            else
+            {
+                _intel.RestoreColonyCommunications();
+            }
+        }
     }
 
     private void OnTowerPowerChangedEvent(Entity<CommunicationsTowerComponent> ent, ref PowerChangedEvent args)
@@ -210,7 +232,11 @@ public sealed class CommunicationsTowerSystem : EntitySystem
 
         if (args.Powered)
         {
-            _intel.RestoreColonyCommunications();
+            var team =ent.Comp.Faction;
+            if (team != Team.None)
+                _intel.RestoreColonyCommunications(team);
+            else
+                _intel.RestoreColonyCommunications();
             return;
         }
 

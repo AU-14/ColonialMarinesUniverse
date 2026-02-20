@@ -6,7 +6,7 @@
   - type: PresetIdCard
     job: AU14JobGOVFORPlatCo
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 - type: entity
   parent: CMIDCardBase
@@ -16,7 +16,7 @@
   - type: PresetIdCard
     job: AU14JobGOVFORPlatOp
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 - type: entity
   parent: CMIDCardBase
@@ -26,7 +26,7 @@
   - type: PresetIdCard
     job: AU14JobGOVFORDSPilot
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 - type: entity
   parent: CMIDCardBase
@@ -36,7 +36,7 @@
   - type: PresetIdCard
     job: AU14JobGOVFORDCC
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 - type: entity
   parent: CMIDCardBase
@@ -46,7 +46,7 @@
   - type: PresetIdCard
     job: AU14JobGOVFORSectionSergeant
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 - type: entity
   parent: CMIDCardBase
@@ -56,7 +56,7 @@
   - type: PresetIdCard
     job: AU14JobGOVFORSquadSergeant
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 
 - type: entity
@@ -67,7 +67,7 @@
   - type: PresetIdCard
     job: AU14JobGOVFORSquadRifleman
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 
 - type: entity
@@ -78,7 +78,7 @@
   - type: PresetIdCard
     job: AU14JobGOVFORSquadAutomaticRifleman
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 
 - type: entity
@@ -89,7 +89,7 @@
   - type: PresetIdCard
     job: AU14JobGOVFORPlatoonCorpsman
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 
 - type: entity
@@ -100,7 +100,7 @@
   - type: PresetIdCard
     job: AU14JobGOVFORRadioTelephoneOperator
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 - type: entity
   parent: CMIDCardBase
@@ -110,7 +110,7 @@
   - type: PresetIdCard
     job: AU14JobGOVFORAuxSupportSynth
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 - type: entity
   parent: CMIDCardBase
@@ -120,7 +120,7 @@
   - type: PresetIdCard
     job: AU14JobGOVFORSquadCombatTech
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 - type: entity
   parent: CMIDCardBase
@@ -130,13 +130,33 @@
   - type: PresetIdCard
     job: AU14JobGOVFORadvisor
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardGOVFORDoctor
+  name: doctor ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFORMilitaryDoctor
+  - type: ItemIFF
+    faction: GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardSquadK9HandlerGOVFOR
+  name: k9 handler ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFORk9handler
+  - type: ItemIFF
+    faction: GOVFOR
 
   #- type: ItemIFF
   #  faction: FactionMarine
 
 - type: entity
-  id: FactionGOVFOR
+  id: GOVFOR
   categories: [ HideSpawnMenu ]
   components:
   - type: IFFFaction
@@ -147,20 +167,20 @@
     - MarineEngineer
     - MarineMilitaryPolice
     - MarineAlpha
-    - MarineBravo
-    - MarineCharlie
+    - GovforBravo
+    - GovforCharlie
     - MarineDelta
-    - MarineEcho
+    - GovforIntel
     - MarineFoxtrot
     - MarineRequisition
     - MarineJTAC
     - MarineIntel
-    - WEYA
+    - GovforCharlie
 
 
 
 - type: entity
-  id: FactionOPFOR
+  id: OPFOR
   categories: [ HideSpawnMenu ]
   components:
   - type: IFFFaction
@@ -169,3 +189,5 @@
     - opfor
     - opforcommand
     - opforjtac
+    - OpforBravo
+    - OpforCharlie

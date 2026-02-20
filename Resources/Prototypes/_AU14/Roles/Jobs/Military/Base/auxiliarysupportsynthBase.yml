@@ -1,0 +1,12 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobAuxSupportSynthBase
+  name: au14-job-name-govforauxsupportsynth
+  description: au14-job-description-govforauxsupportsynth
+  playTimeTracker: AU14JobGOVFORAuxSupportSynth
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: playTimeTracker
+  id: AU14JobGOVFORAuxSupportSynth
+  isHumanoid: true

@@ -1,10 +1,9 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobSectionSergeantBase
   id: AU14JobGOVFORSectionSergeantRMC
   name: au14-job-name-govforSSGRMC
   description: au14-job-description-govforSSG
   setPreference: true
-  playTimeTracker: AU14JobGOVFORSectionSergeant
   requirements:
   - !type:AgeRequirement
     requiredAge: 25
@@ -62,4 +61,4 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
     - type: MarineOrders
-  hidden: false
+  hidden: true

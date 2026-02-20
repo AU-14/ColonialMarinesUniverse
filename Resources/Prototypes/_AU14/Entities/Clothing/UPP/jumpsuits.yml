@@ -1,11 +1,78 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
-  id: AU14UPPFatigues
-  name: UPP Naval Infantry Fatigues
+  id: AU14FatiguesUPP
+  suffix: AU14
+  name: UPP naval infantry fatigues
   description: A standard set of Union of Progressive Peoples Fatigues. It has shards of light Kevlar to help protect against shrapnel.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/uppfatigues.rsi
+    sprite: _AU14/Clothing/UPP/jumpsuits/uppfatigues.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUPP
+    - AU14PatchUPPNavalInfantry
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  name: UPP engineer fatigues
+  id: AU14JumpsuitEngiUPP
+  suffix: AU14
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/jumpsuits/engi.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCFoldableUniformBase]
+  id: AU14JumpsuitMPUPP
+  name: UPP military police fatigues
+  suffix: AU14
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/jumpsuits/mp.rsi
+  
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  name: UPP medic fatigues
+  id: AU14JumpsuitMedicUPP
+  suffix: AU14
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/jumpsuits/medic.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCFoldableUniformBase]
+  name: UPP officer fatigues
+  id: AU14JumpsuitOfficerUPP
+  suffix: AU14
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Uniforms/SPP/officer.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUPP
+    - AU14PatchUPPNavalInfantry
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14ServiceFatiguesUPP
+  name: UPP service uniform
+  description: Standart-issue UPP Army service uniform. Usually worn by officers.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/jumpsuits/uppservice.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUPP
+    - AU14PatchUPPNavalInfantry
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14BoilerFatiguesUPP
+  name: UPP boiler jumpsuit
+  description: Standart-issue UPP Army service uniform. Usually worn by pilots and aircrews.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/jumpsuits/uppboiler.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14PatchUPP

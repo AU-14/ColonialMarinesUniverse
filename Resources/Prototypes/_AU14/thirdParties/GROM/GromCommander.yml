@@ -1,0 +1,91 @@
+- type: job
+  parent: CMJobBase
+  id: AU14UPPGROMCommander
+  name: au-14-job-name-uppgrom-commander
+  description: au14-uppgrom-description
+  playTimeTracker: AU14JobUPPGROMCommander
+  ranks:
+    UPP_Major:
+    - !type:RoleTimeRequirement
+      role: AU14JobUPPGROMCommander
+      time: 18000 # 5 hours
+    UPP_Captain: []
+  spawnMenuRoleName: UPP GROM Commander
+  startingGear: AU14GearUPPGROMCommander
+  greeting: au14-uppgrom-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforCommand
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: leader
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Marine
+      Faction: govfor
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadGROM # for future when there's a dedicated map for them, right now does nothing
+    - type: Skills
+      preset: AU14SkillPresetPlatoonCommander
+    - type: JobPrefix
+      prefix: au-14-job-prefix-uppgrom-commander
+    - type: MarineOrders
+    - type: RMCPointing
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUPPGROM
+  id: AU14JobUPPGROMCommander
+  name: UPP GROM Commander
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au-14-job-name-uppgrom-commander
+    description: au14-uppgrom-description
+    reregister: false
+    job: AU14UPPGROMCommander
+    raffle:
+      settings: short
+    rules: au14-uppgrom-rules
+
+- type: startingGear
+  id: AU14GearUPPGROMCommander
+  equipment:
+    id: AU14IDCardUPPGROMCommander
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: AU14FatiguesUPPGROM
+    shoes: RMCBootsSPPFilled
+    head: CMHeadCapSPPBeret
+    belt: AU14BeltMedicalUPPFull
+    pocket1: RMCPouchCommandFull
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelSPPFull
+    ears: RMCHeadsetGROM
+    suitstorage: AU14WeaponRifleAG80Filled
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUPPGROMCommander
+  name: UPP GROM Commander ID card
+  components:
+  - type: PresetIdCard
+    job: AU14UPPGROMCommander
+  - type: ItemIFF
+    faction: GOVFOR
+
+- type: playTimeTracker
+  id: AU14JobUPPGROMCommander

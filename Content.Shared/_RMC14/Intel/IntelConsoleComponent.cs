@@ -17,4 +17,7 @@ public sealed partial class IntelConsoleComponent : Component
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier? TypingSound = new SoundCollectionSpecifier("RMCKeyboardTyping", AudioParams.Default.WithVolume(-1));
+
+    [DataField("team"), AutoNetworkedField]
+    public string Team = string.Empty;
 }

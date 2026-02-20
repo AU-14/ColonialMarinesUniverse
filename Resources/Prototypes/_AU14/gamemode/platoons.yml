@@ -22,6 +22,7 @@
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/normandy.yml
+  techTree: RMCIntelTechTree_ua
 
 - type: platoon
   id: LACNcommando
@@ -43,6 +44,7 @@
   possibleships:
     - Daybreak
     - USSBush
+  techTree: RMCIntelTechTree_ua
 
 - type: platoon
   id: USCM
@@ -72,6 +74,7 @@
   possibleships:
       - Daybreak
       - USSBush
+  techTree: RMCIntelTechTree_ua
 
 - type: platoon
   id: UPP
@@ -236,6 +239,7 @@
   compatibleFighters:
   - /Maps/_AU14/ShuttlesDropships/f84owl.yml
   - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+  techTree: RMCIntelTechTree_ua
 
 - type: platoon
   id: CCAF
@@ -266,6 +270,7 @@
   possibleships:
       - Daybreak
       - USSBush
+  techTree: RMCIntelTechTree_ua
 
 - type: platoon
   id: ProdigySF
@@ -401,5 +406,6 @@
   possibleships: #TODO: RMC Ship
       - Daybreak
       - USSBush
+  techTree: RMCIntelTechTree_ua
 
 # Add more platoons as needed

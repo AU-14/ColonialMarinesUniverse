@@ -1,0 +1,14 @@
+- type: gameMap
+  id: aucorsat
+  mapName: Corsat Station
+  mapPath: /Maps/_AU14/corsat.yml
+  minPlayers: 0
+  maxPlayers: 200
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    aucorsat:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Corsat Station'

@@ -54,8 +54,8 @@
 - type: entity
   parent: RMCBannerBase
   id: RMCBannerSPP
-  name: SPP flag
-  description: A flag of the Socialist Progressive Peoples. Inspires patriotism, fear, or revulsion depending on the viewer's political leanings.
+  name: UPP flag
+  description: A flag of the Union of Progressive Peoples. Inspires patriotism, fear, or revulsion depending on the viewer's political leanings.
   components:
   - type: Sprite
     state: sppflag
@@ -63,8 +63,8 @@
 - type: entity
   parent: RMCBannerBase
   id: RMCBannerSPPWorn
-  name: worn SPP flag
-  description: A very worn flag of the Socialist Progressive Peoples. Inspires patriotism, fear, or revulsion depending on the viewer's political leanings.
+  name: worn UPP flag
+  description: A very worn flag of the Union of Progressive Peoples. Inspires patriotism, fear, or revulsion depending on the viewer's political leanings.
   components:
   - type: Sprite
     state: sppflag_worn

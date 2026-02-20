@@ -465,7 +465,7 @@
   parent: RMCColMarTechMedicalEquipmentPVE
   id: RMCSPPMedicalEquipmentPVE
   name: H-Tech squad medical equipment rack
-  description: An automated rack hooked up to a colossal storage of SPP corpsman standard-issue equipment.
+  description: An automated rack hooked up to a colossal storage of UPP corpsman standard-issue equipment.
   suffix: PVE, SPP
   components:
   - type: CMAutomatedVendor

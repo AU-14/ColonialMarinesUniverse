@@ -1,7 +1,7 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobDSPilotBase
   id: AU14JobGOVFORDSPilotRMC
-  name: au14-job-name-govfordspilotRMC
+  name: RMC Pilot Officer
   description: au14-job-description-govfordspilot
   setPreference: true
   canBeAntag: false
@@ -15,7 +15,6 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
-  playTimeTracker: AU14JobGOVFORDSPilot
   ranks:
     RMC_Lieutenant:
     - !type:RoleTimeRequirement
@@ -25,7 +24,11 @@
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDSPilot
       time: 216000 # 60 hours
-    RMC_WarrantOfficer1: []
+    RMC_WarrantOfficer1:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDSPilot
+      time: 108000 # 30 hours
+    RMC_WarrantOfficer2: []
   startingGear: AU14GearGOVFORDSPilot
   dummyStartingGear: AU14GearGOVFORDSPilotDummy
   icon: "AU14JobIconPilotOfficer"
@@ -64,4 +67,4 @@
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
+  hidden: true

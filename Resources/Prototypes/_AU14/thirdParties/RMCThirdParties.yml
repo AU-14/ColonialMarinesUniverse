@@ -409,7 +409,7 @@
 - type: auThirdParty
   id: RMCRRT
   partyspawn: RMCRRTSpawn
-  enterbyshuttle: True
+  entrymethod: shuttle
   weight: 20
   minplayers: 0
   maxplayers: 400
@@ -450,7 +450,7 @@
     pocket1: RMCPouchToolsSocMarineRaiderFill
     pocket2: AU14PouchIFAKFill
     back: AU14RMCRRTBackpackRifleman
-    ears: AU14HeadsetSectionMarine 
+    ears: AU14HeadsetSectionMarine
     suitstorage: AU14WeaponRifleL90Full
 
 - type: startingGear
@@ -623,7 +623,7 @@
   - type: PresetIdCard
     job: AU14RMCRRTCommander
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 - type: entity
   parent: CMIDCardBase
@@ -633,7 +633,7 @@
   - type: PresetIdCard
     job: AU14RMCRRTRifleman
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 - type: entity
   parent: CMIDCardBase
@@ -643,7 +643,7 @@
   - type: PresetIdCard
     job: AU14RMCRRTBreacher
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 - type: entity
   parent: CMIDCardBase
@@ -653,7 +653,7 @@
   - type: PresetIdCard
     job: AU14RMCRRTMarksman
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 - type: entity
   parent: CMIDCardBase
@@ -663,7 +663,7 @@
   - type: PresetIdCard
     job: AU14RMCRRTCorpsman
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 - type: entity
   parent: CMIDCardBase
@@ -673,7 +673,7 @@
   - type: PresetIdCard
     job: AU14RMCRRTSmartgunner
   - type: ItemIFF
-    faction: FactionGOVFOR
+    faction: GOVFOR
 
 - type: playTimeTracker
   id: AU14JobRMCRRTCommander

@@ -160,6 +160,62 @@
   - type: IntelConsole
 
 - type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCComputerIntelGovfor
+  name: govfor intel computer
+  description: A GovFor Intel Computer for data cataloguing and distribution.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: InteractionOutline
+  - type: IntelConsole
+    team: govfor
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCComputerIntelOpfor
+  name: opfor intel computer
+  description: An OpFor Intel Computer for data cataloguing and distribution.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: InteractionOutline
+  - type: IntelConsole
+    team: opfor
+
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCComputerIntelCLF
+  name: CLF intel computer
+  description: A CLF Intel Computer for data cataloguing and distribution.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: InteractionOutline
+  - type: IntelConsole
+    team: clf
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+
+- type: entity
   id: RMCIntelTechTree
   name: intel tech tree
   categories: [ HideSpawnMenu ]
@@ -344,3 +400,321 @@
   - type: IntelReadObjective
     state: Active
     value: 999
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCTechTreeConsoleGovfor
+  name: govfor tech tree console
+  description: A GovFor tech console used to make tech purchases for GovFor.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: techweb
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.TechControlConsoleUI.Key
+  - type: UserInterface
+    interfaces:
+      enum.TechControlConsoleUI.Key:
+        type: TechControlConsoleBui
+  - type: TechControlConsole
+    team: govfor
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCTechTreeConsoleOpfor
+  name: opfor tech tree console
+  description: An OpFor tech console used to make tech purchases for OpFor.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: techweb
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.TechControlConsoleUI.Key
+  - type: UserInterface
+    interfaces:
+      enum.TechControlConsoleUI.Key:
+        type: TechControlConsoleBui
+  - type: TechControlConsole
+    team: opfor
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCTechTreeConsoleCLF
+  name: CLF tech tree console
+  description: A CLF tech console used to make tech purchases for CLF.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: techweb
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.TechControlConsoleUI.Key
+  - type: UserInterface
+    interfaces:
+      enum.TechControlConsoleUI.Key:
+        type: TechControlConsoleBui
+  - type: TechControlConsole
+    team: clf
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+- type: entity
+  id: RMCIntelTechTree_opfor
+  parent: RMCIntelTechTree
+  name: intel tech tree (OpFor)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IntelTechTree
+    tree:
+      options:
+      -
+        - name: Unlock Tier 1
+          description: Transitions the tree to another tier.
+          cost: 0
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 1
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+      -
+        - name: Requisition Budget Increase
+          description: Distributes resources to requisitions for spending.
+          cost: 2
+          increase: 1
+          repurchasable: true
+          events:
+          - !type:TechRequisitionsBudgetEvent
+            amount: 5000
+          - !type:TechAnnounceEvent
+            author: ALMAYER SPECIAL ASSETS AUTHORIZED
+            message: Additional supply budget has been authorised for this operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_req
+
+- type: entity
+  id: RMCIntelTechTree_ua
+  parent: RMCIntelTechTree
+  name: intel tech tree (UA)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IntelTechTree
+    tree:
+      options:
+      -
+        - name: Unlock Tier 1
+          description: Transitions the tree to another tier.
+          cost: 0
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 1
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+      -
+        - name: Requisition Budget Increase
+          description: Distributes resources to requisitions for spending.
+          cost: 2
+          increase: 1
+          repurchasable: true
+          events:
+          - !type:TechRequisitionsBudgetEvent
+            amount: 5000
+          - !type:TechAnnounceEvent
+            author: SPECIAL ASSETS AUTHORIZED
+            message: Additional supply budget has been authorised for this operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_req
+        - name: Dropship Fabricator Budget Increase
+          description: Distributes resources to requisitions for spending.
+          cost: 1
+          repurchasable: false
+          events:
+          - !type:TechDropshipBudgetEvent
+            amount: 6000
+          - !type:TechAnnounceEvent
+            author: SPECIAL ASSETS AUTHORIZED
+            message: Additional dropship fabricator budget has been authorised for this operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_req
+        - name: Search and Rescue K9 Team
+          description: Summon a Search and Rescue K9 Team.
+          cost: 2
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: AU14IntelThirdPartyK9GOVFOR
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: A Search and Rescue K9 Team has been awoken to aid with the operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: cryotroops
+        - name: LACN Commandos Scout Team
+          description: Summon an LACN Commandos Scout Team.
+          cost: 2
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: LACNSniperteamIntel
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: An LACN Commandos Scout Team has been dispatched to aid with the operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: Unlock Tier 3
+          description: Transitions the tree to another tier.
+          cost: 1
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 3
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+      -
+        - name: RMC Rapid Reaction Troop
+          description: Summon a Royal Marines Commando Rapid Reaction Troop.
+          cost: 3
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: RMCRRT
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: A Royal Marines Commando Rapid Reaction Troop has been dispatched to aid with the operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+
+- type: entity
+  id: RMCIntelTechTree_govfor
+  parent: RMCIntelTechTree
+  name: intel tech tree (GovFor)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IntelTechTree
+    tree:
+      options:
+      -
+        - name: Unlock Tier 1
+          description: Transitions the tree to another tier.
+          cost: 0
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 1
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+      -
+        - name: Requisition Budget Increase
+          description: Distributes resources to requisitions for spending.
+          cost: 2
+          increase: 1
+          repurchasable: true
+          events:
+          - !type:TechRequisitionsBudgetEvent
+            amount: 5000
+          - !type:TechAnnounceEvent
+            author: ALMAYER SPECIAL ASSETS AUTHORIZED
+            message: Additional supply budget has been authorised for this operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_req
+        - name: CMB Investigation Party
+          description: Summon a CMB investigation party to the area.
+          cost: 1
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMBInvestigationPartyAlt
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: A CMB investigation party has been dispatched to investigate intel leads.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+
+
+- type: entity
+  id: RMCIntelTechTree_clf
+  parent: RMCIntelTechTree
+  name: intel tech tree (CLF)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IntelTechTree
+    tree:
+      options:
+      -
+        - name: Unlock Tier 1
+          description: Transitions the tree to another tier.
+          cost: 0
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 1
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+      -
+        - name: Requisition Budget Increase
+          description: Distributes resources to requisitions for spending.
+          cost: 2
+          increase: 1
+          repurchasable: true
+          events:
+          - !type:TechRequisitionsBudgetEvent
+            amount: 5000
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_req
+        - name: Insurgent Reinforcements
+          description: Summon reinforcements from a neighboring cell.
+          cost: 3
+          increase: 1
+          repurchasable: true
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CLFCellReinforcementsIntel
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: Machine Gunner
+          description: Summon a machine gunner from a neighboring cell.
+          cost: 4
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CLFCellReinforcementsIntelMachineGunner
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon

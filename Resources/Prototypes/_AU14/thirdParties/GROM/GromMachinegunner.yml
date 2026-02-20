@@ -1,0 +1,93 @@
+- type: job
+  parent: CMJobBase
+  id: AU14UPPGROMMachinegunner
+  name: au-14-job-name-uppgrom-machinegunner
+  description: au14-uppgrom-description
+  playTimeTracker: AU14JobUPPGROMMachinegunner
+  ranks:
+    UPP_StaffSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobUPPGROMMachinegunner
+      time: 36000 #10 hours
+    UPP_Sergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobUPPGROMMachinegunner
+      time: 18000 #5 hours
+    UPP_Plutonowy: []
+  spawnMenuRoleName: UPP GROM Machinegunner
+  startingGear: AU14GearUPPGROMMachinegunner
+  greeting: au14-uppgrom-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-uppgrom-squadleader
+  accessGroups:
+  - AU14GovforCommand
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: leader
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Marine
+      Faction: govfor
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadGROM # for future when there's a dedicated map for them, right now does nothing
+    - type: Skills
+      preset: AU14SkillPresetPlatoonAutomaticRifleman
+    - type: JobPrefix
+      prefix: au-14-job-prefix-uppgrom-machinegunner
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUPPGROM
+  id: AU14JobUPPGROMMachinegunner
+  name: UPP GROM Machinegunner
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au-14-job-name-uppgrom-machinegunner
+    description: au14-uppgrom-description
+    reregister: false
+    job: AU14UPPGROMMachinegunner
+    raffle:
+      settings: short
+    rules: au14-uppgrom-rules
+
+- type: startingGear
+  id: AU14GearUPPGROMMachinegunner
+  equipment:
+    id: AU14IDCardUPPGROMMachinegunner
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: AU14FatiguesUPPGROM
+    shoes: RMCBootsSPPFilled
+    head: AU14UPPPatrolCap
+    belt: AU14BeltSmartGunOperatorPistolUPPFull
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelSPPFullMachinegunner
+    ears: RMCHeadsetGROM
+    suitstorage: RMCWeaponLMGQYJ72
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUPPGROMMachinegunner
+  name: UPP GROM Machinegunner ID card
+  components:
+  - type: PresetIdCard
+    job: AU14UPPGROMMachinegunner
+  - type: ItemIFF
+    faction: GOVFOR
+
+- type: playTimeTracker
+  id: AU14JobUPPGROMMachinegunner

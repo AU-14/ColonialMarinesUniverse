@@ -1,13 +1,12 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14Jobk9handlerBase
   id: AU14JobGOVFORk9handler
   name: K9 Handler
   description: K9 Handler
   setPreference: false
-  playTimeTracker: AU14JobGOVFORk9handler
   ranks:
     RMCRankStaffSergeant: []
-  startingGear: AU14GearGOVFORPlatoonCorpsman
+  startingGear: AU14GearGOVFORK9Handler
   icon: "AU14JobIconGovK9Handler"
   requireAdminNotify: false
   joinNotifyCrew: false
@@ -34,12 +33,13 @@
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
+  hidden: true
 
-- type: playTimeTracker
-  id: AU14JobGOVFORk9handler
-  isHumanoid: true
-
+- type: startingGear
+  id: AU14GearGOVFORK9Handler
+  equipment:
+    id: AU14IDCardSquadK9HandlerGOVFOR
+    ears: AU14HeadsetSectionLeader
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORK9Handler

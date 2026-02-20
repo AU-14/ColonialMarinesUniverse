@@ -1,0 +1,83 @@
+- type: partySpawn
+  id: UPPGROMSpawn
+  leadersToSpawn:
+    AU14UPPGROMCommander: 1
+    AU14JobUPPGROMSquadleader: 1
+  gruntsToSpawn:
+    AU14JobUPPGROMRifleman: 1
+    AU14JobUPPGROMSupportTech: 1
+    AU14JobUPPGROMMachinegunner: 1
+    AU14JobUPPGROMMarksman: 1
+    AU14JobUPPGROMPointman: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: UPPGROM
+  partyspawn: UPPGROMSpawn
+  blacklistedgamemodes: 
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 20
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 7
+  roundstart: true
+
+- type: partySpawn
+  id: UPPGROMSpawnAlt
+  leadersToSpawn:
+    AU14UPPGROMCommander: 1
+    AU14JobUPPGROMSquadleader: 1
+  gruntsToSpawn:
+    AU14JobUPPGROMRifleman: 0
+    AU14JobUPPGROMSupportTech: 1
+    AU14JobUPPGROMMachinegunner: 0
+    AU14JobUPPGROMMarksman: 0
+    AU14JobUPPGROMPointman: 0
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: UPPGROMAlt
+  partyspawn: UPPGROMSpawnAlt
+  blacklistedgamemodes: 
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 20
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 3
+  roundstart: true
+
+- type: partySpawn
+  id: UPPGROMSpawnAlt2
+  leadersToSpawn:
+    AU14UPPGROMCommander: 1
+    AU14JobUPPGROMSquadleader: 1
+  gruntsToSpawn:
+    AU14JobUPPGROMRifleman: 0
+    AU14JobUPPGROMSupportTech: 1
+    AU14JobUPPGROMMachinegunner: 1
+    AU14JobUPPGROMMarksman: 1
+    AU14JobUPPGROMPointman: 0
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: UPPGROMAlt2
+  partyspawn: UPPGROMSpawnAlt2
+  blacklistedgamemodes: 
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 20
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 5
+  roundstart: true

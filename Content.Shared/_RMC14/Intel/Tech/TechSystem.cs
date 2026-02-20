@@ -4,12 +4,15 @@ using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared._RMC14.Scaling;
+using Content.Shared.AU14.Threats;
+using Content.Shared.AU14.Util;
 using Content.Shared.GameTicking;
 using Content.Shared.UserInterface;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Intel.Tech;
 
@@ -23,7 +26,9 @@ public sealed class TechSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedRequisitionsSystem _requisitions = default!;
     [Dependency] private readonly ScalingSystem _scaling = default!;
-
+    // NOTE: Do not depend on platform-specific AuThirdPartySystem here (shared) — use ExecuteTechPartySpawn helper
+    // to let server code call the server-side spawn implementation.
+    [Dependency] private readonly IPrototypeManager _proto = default!;
     public override void Initialize()
     {
         SubscribeLocalEvent<TechAnnounceEvent>(OnTechAnnounce);
@@ -49,16 +54,19 @@ public sealed class TechSystem : EntitySystem
 
     private void OnTechUnlockTier(TechUnlockTierEvent ev)
     {
-        var tree = _intel.EnsureTechTree();
+        var tree = _intel.EnsureTechTree(ev.Team);
         tree.Comp.Tree.Tier = ev.Tier;
         Dirty(tree);
+        _intel.UpdateTree(tree);
     }
 
     private void OnTechRequisitionsBudget(TechRequisitionsBudgetEvent ev)
     {
         var scaling = _scaling.GetAliveHumanoids() / 50;
         scaling = Math.Max(1, scaling);
-        _requisitions.ChangeBudget(ev.Amount * scaling);
+        // Apply budget to the specific team's requisitions account if provided
+        var faction = string.IsNullOrEmpty(ev.Team) ? null : ev.Team;
+        _requisitions.ChangeBudget(ev.Amount * scaling, faction);
     }
 
     private void OnTechDropshipBudget(TechDropshipBudgetEvent ev)
@@ -76,7 +84,10 @@ public sealed class TechSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        ent.Comp.Tree = _intel.EnsureTechTree().Comp.Tree;
+        var team = !string.IsNullOrEmpty(ent.Comp.Team) && ent.Comp.Team != Team.None ? ent.Comp.Team : Team.None;
+        var treeEntity = _intel.EnsureTechTree(team);
+        ent.Comp.Tree = treeEntity.Comp.Tree;
+        _intel.UpdateTree(treeEntity);
         Dirty(ent);
     }
 
@@ -85,7 +96,9 @@ public sealed class TechSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        var tree = _intel.EnsureTechTree();
+        var team = !string.IsNullOrEmpty(args.Team) && args.Team != Team.None ? args.Team : ent.Comp.Team;
+
+        var tree = _intel.EnsureTechTree(team);
         if (tree.Comp.Tree.Tier < args.Tier ||
             !tree.Comp.Tree.Options.TryGetValue(args.Tier, out var tier))
         {
@@ -106,7 +119,7 @@ public sealed class TechSystem : EntitySystem
         if (option.Purchased && !option.Repurchasable)
             return;
 
-        if (!_intel.TryUsePoints(option.CurrentCost))
+        if (!_intel.TryUsePoints(team, option.CurrentCost))
             return;
 
         tier[args.Index] = option with
@@ -116,11 +129,82 @@ public sealed class TechSystem : EntitySystem
         };
         Dirty(ent);
 
+        // Raise a shared event so the authoritative ObjectiveMaster/Objective system can deduct AU win points server-side.
+        var auAmount =option.CurrentCost;
+        var spendEv = new Content.Shared.AU14.Objectives.SpendWinPointsEvent { Team = team, Amount = auAmount };
+        RaiseLocalEvent(spendEv);
+
         foreach (var ev in option.Events)
         {
-            RaiseLocalEvent(ev);
+            if (ev is TechUnlockTierEvent tierEv)
+            {
+                var newEv = tierEv with { Team = team };
+                RaiseLocalEvent(newEv);
+            }
+            else if (ev is TechAnnounceEvent announceEv)
+            {
+                var newEv = announceEv with { Team = team };
+                RaiseLocalEvent(newEv);
+            }
+            else if (ev is TechRequisitionsBudgetEvent requisitionsEv)
+            {
+                var newEv = requisitionsEv with { Team = team };
+                RaiseLocalEvent(newEv);
+            }
+            else if (ev is TechDropshipBudgetEvent dropshipEv)
+            {
+                var newEv = dropshipEv with { Team = team };
+                RaiseLocalEvent(newEv);
+            }
+            else if (ev is TechLogisticsDeliveryEvent logisticsEv)
+            {
+                var newEv = logisticsEv with { Team = team };
+                RaiseLocalEvent(newEv);
+            }
+            else if (ev is TechPartySpawnEvent partySpawnEv)
+            {
+                if (string.IsNullOrEmpty(partySpawnEv.ThirdPartyId))
+                {
+                    Logger.Warning($"[TechSystem] TechPartySpawnEvent in tech option has empty ThirdPartyId; skipping (team={team}).");
+                }
+                else
+                {
+                    var newEv = partySpawnEv with { Team = team };
+                    RaiseLocalEvent(newEv);
+                }
+            }
+            else
+            {
+                // Unknown event type, raise as-is
+                RaiseLocalEvent(ev);
+            }
         }
 
         _intel.UpdateTree(tree);
+    }
+
+    /// <summary>
+    /// Shared helper: execute a TechPartySpawn by resolving the prototype and invoking the provided spawn action
+    /// for each requested amount. Returns true when the prototype was found and spawnAction invoked.
+    /// </summary>
+    public static bool ExecuteTechPartySpawn(IPrototypeManager proto, string thirdPartyId, Action<AuThirdPartyPrototype> spawnAction)
+    {
+        if (string.IsNullOrEmpty(thirdPartyId))
+        {
+            Logger.Warning("[TechSystem] ExecuteTechPartySpawn called with null/empty thirdPartyId.");
+            return false;
+        }
+        if (!proto.TryIndex<AuThirdPartyPrototype>(thirdPartyId, out var partyProto))
+        {
+            proto.TryIndex(thirdPartyId, out var _); // keep for debug if needed
+            Logger.Warning($"[TechSystem] Requested third party id '{thirdPartyId}' not found in prototypes.");
+            return false;
+        }
+
+
+            spawnAction(partyProto);
+
+
+        return true;
     }
 }

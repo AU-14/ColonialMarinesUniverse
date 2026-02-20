@@ -72,6 +72,7 @@
         mask:
         - FullTileMask
         layer:
+        - WallLayer
         - BulletImpassable
   - type: BarricadeBlock # I am guessing this is meant to block the player from going trough (it doesnt work), i have added - BarricadeImpassable above
     bidirectional: true

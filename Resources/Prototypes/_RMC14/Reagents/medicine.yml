@@ -171,11 +171,10 @@
   name: reagent-name-cminaprovaline
   desc: reagent-desc-cminaprovaline
   color: "#fe33cb"
-  overdose: 60
-  criticalOverdose: 100
+  overdose: 110
   metabolisms:
     Medicine:
-      metabolismRate: 0.1
+      metabolismRate: 0.5
       effects:
       - !type:HealthChange
         conditions:
@@ -187,24 +186,14 @@
       - !type:Jitter
         conditions:
         - !type:ReagentThreshold
-          min: 60
+          min: 110
       - !type:GenericStatusEffect
         conditions:
         - !type:ReagentThreshold
-          min: 60
+          min: 110
         key: Unconscious
         component: RMCUnconscious
-        time: 20 #Yes, it's this much.
-        type: Add
-        refresh: false
-      - !type:GenericStatusEffect
-        conditions:
-        - !type:ReagentThreshold #0.25 heart damage/s
-          min: 100               #5% chance emote twitch, blink_r, shiver
-        key: Unconscious
-        component: RMCUnconscious
-        probability: 0.05
-        time: 10
+        time: 10 #Yes, it's this much.
         type: Add
         refresh: false
 

@@ -82,8 +82,8 @@
 - type: entity
   parent: RMCCoffeeCup
   id: RMCSocialistPPCup
-  name: SPP mug
-  description: A tough, crimson cup stamped with the SPP emblem—built like a real krepky muzhik, ready to serve comrades in toil and glory among the stars.
+  name: UPP mug
+  description: A tough, crimson cup stamped with the UPP emblem—built like a real krepky muzhik, ready to serve comrades in toil and glory among the stars.
   components:
   - type: Sprite
     layers:

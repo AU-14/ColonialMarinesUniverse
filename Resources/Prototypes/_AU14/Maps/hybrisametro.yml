@@ -11,7 +11,7 @@
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup
-          mapNameTemplate: 'hybrisametro'
+          mapNameTemplate: 'Hybrisa Metropolitan'
         - type: StationJobs
           availableJobs:
             AU14JobCivilianColonist: [ -1, -1 ]

@@ -1,10 +1,9 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobSquadCombatTechBase
   id: AU14JobGOVFORSquadCombatTechRMC
   name: au14-job-name-govforsquadcombattechRMC
   description: au14-job-description-govforsquadcombattech
   setPreference: true
-  playTimeTracker: AU14JobGOVFORSquadCombatTech
   requirements:
   - !type:TraitsRequirement
     inverted: true
@@ -50,4 +49,4 @@
     - type: CMVendorUser
       id: AU14JobGOVFORSquadCombatTech
       points: 50
-  hidden: false
+  hidden: true

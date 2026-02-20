@@ -1,11 +1,10 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobAuxSupportSynthBase
   id: AU14JobGOVFORAuxSupportSynth
   name: au14-job-name-govforauxsupportsynth
   description: au14-job-description-govforauxsupportsynth
   setPreference: true
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORAuxSupportSynth
   requirements:
   - !type:OverallPlaytimeRequirement
     time: 7200 # 2 hours
@@ -61,13 +60,14 @@
         types:
           Blunt: 35
     - type: Synth
-  hidden: false
+  hidden: true
 
 - type: startingGear
   id: AU14GearGOVFORAuxSupportSynth
   equipment:
     id: AU14IDCardGOVFORAuxSupportSynth
-    ears: AU14HeadsetSectionLeader
+    ears: RMCM5CameraGear
+    ears2: AU14HeadsetSectionLeader
     gloves: CMHandsInsulated
     shoes: CMBootsBlackFilled
     jumpsuit: AU14CivilianBoilerSuitDarkBlueSynth
@@ -87,10 +87,6 @@
     job_id: AU14JobGOVFORAuxSupportSynth
   - type: Sprite
     state: syn_spawn
-
-- type: playTimeTracker
-  id: AU14JobGOVFORAuxSupportSynth
-  isHumanoid: true
 
 - type: startingGear
   id: AU14GearGOVFORAuxSupportSynthDummy

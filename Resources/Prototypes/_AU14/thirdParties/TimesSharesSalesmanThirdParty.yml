@@ -129,7 +129,7 @@
 - type: auThirdParty
   id: TimeSharesSalesman
   partyspawn: TimeSharesSalesmanSpawn
-  enterbyshuttle: true
+  entrymethod: shuttle
   weight: 5
   minplayers: 30
   maxplayers: 400

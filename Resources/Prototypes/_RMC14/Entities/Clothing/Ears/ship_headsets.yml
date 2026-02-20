@@ -255,9 +255,8 @@
   - type: RMCHeadset
     radioTextIncrease: 2
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: ExecutiveOfficer
     trackerModes:
-    - CommandingOfficer
     - ExecutiveOfficer
     - ChiefMilitaryPolice
     - MilitaryWarden
@@ -286,9 +285,10 @@
   - type: RMCHeadset
     radioTextIncrease: 3
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: SquadLeader
+
     trackerModes:
-    - CommandingOfficer
+
     - ExecutiveOfficer
     - AuxiliarySupportOfficer
     - MilitaryWarden
@@ -303,7 +303,7 @@
   - type: GrantSquadLeaderTracker
     defaultMode: ChiefMilitaryPolice
     trackerModes:
-    - CommandingOfficer
+
     - ExecutiveOfficer
     - AuxiliarySupportOfficer
     - ChiefMilitaryPolice
@@ -441,9 +441,10 @@
   - type: RMCHeadset
     radioTextIncrease: 3
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: SquadLeader
+
     trackerModes:
-    - CommandingOfficer
+
     - ExecutiveOfficer
 
 - type: entity
@@ -488,7 +489,7 @@
     - ProvostInspector
     - ProvostTeamLeader
     - ProvostAdvisor
-    - CommandingOfficer
+
     - ExecutiveOfficer
 
 - type: entity
@@ -509,9 +510,10 @@
   - type: RMCHeadset
     radioTextIncrease: 3
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: SquadLeader
+
     trackerModes:
-    - CommandingOfficer
+
     - ExecutiveOfficer
     - ChiefMilitaryPolice
     - Rifleman
@@ -532,9 +534,10 @@
   - type: HeadsetMultiBroadcast
     cooldown: 60
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: SquadLeader
+
     trackerModes:
-    - CommandingOfficer
+
     - ExecutiveOfficer
     - SquadLeader
     - PrimaryLandingZone

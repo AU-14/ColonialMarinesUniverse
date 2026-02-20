@@ -1,10 +1,9 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobRadioTelephoneOperatorBase
   id: AU14JobGOVFORRadioTelephoneOperatorWYPMC
   name: PMC Communications Specialist
   description: au14-job-description-radiotelephoneooerator
   setPreference: false
-  playTimeTracker: AU14JobGOVFORRadioTelephoneOperator
   ranks:
     AU14RankWeYuSeniorOperator:
     - !type:RoleTimeRequirement
@@ -40,4 +39,4 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
     - type: MarineOrders
-  hidden: false
+  hidden: true

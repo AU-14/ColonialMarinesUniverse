@@ -11,4 +11,4 @@
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup
-          mapNameTemplate: 'Daybreak'
+          mapNameTemplate: 'USCSS Daybreak'

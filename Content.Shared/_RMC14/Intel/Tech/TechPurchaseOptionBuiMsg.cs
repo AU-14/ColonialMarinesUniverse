@@ -7,4 +7,6 @@ public sealed class TechPurchaseOptionBuiMsg(int tier, int index) : BoundUserInt
 {
     public readonly int Tier = tier;
     public readonly int Index = index;
+
+    public string Team = String.Empty;
 }

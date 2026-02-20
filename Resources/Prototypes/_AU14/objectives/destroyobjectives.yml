@@ -1,0 +1,25 @@
+- type: entity
+  name: Destroy Solaris Steel Vein
+  parent: MarkerBase
+  id: destroy_mineable_solaris_steel
+  description: "Destroy a steel-rich mineable vein on the map"
+  components:
+  - type: Sprite
+    state: red
+  - type: AuObjective
+    id: destroymineablesolarissteel
+    factioneutral: false
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - opfor
+    - govfor
+    repeating: false
+    objectivelevel: 1
+    custompoints: 5
+    ObjectiveDescription: "Destroy a steel-rich mineable vein (mineablesolarisrocksteel)"
+  - type: DestroyObjective
+    entitytodestroy: mineablesolarisrocksteel
+    useanyentity: true
+    amounttodestroy: 1
+

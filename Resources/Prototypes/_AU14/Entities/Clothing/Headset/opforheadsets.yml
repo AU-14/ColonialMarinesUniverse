@@ -30,16 +30,50 @@
     state: we_ya_key
 
 - type: entity
+  parent: CMEncryptionKey
+  id: AU14EncryptionKeyopforaux
+  name: opfor auxiliary support encryption key
+  description: An encryption key used to communicate on auxiliary support channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - opforcommand
+    - OpforIntel
+    defaultChannel: OpforIntel
+  - type: Sprite
+    state: we_ya_key
+
+- type: entity
+  parent: RMCHeadsetShip
+  id: AU14HeadsetSectionOpforAux
+  name: opfor auxiliary support radio headset
+  description: This is used by auxiliary support personnel to communicate on the radio.
+  components:
+  - type: GrantSquadLeaderTracker
+    defaultMode: SquadLeader
+    trackerModes:
+    - SquadLeader
+    - FireteamLeader
+    - BattleBuddy
+  - type: Sprite
+    state: generic_headset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyopforaux
+
+- type: entity
   parent: RMCHeadsetShip
   id: AU14HeadsetSectionOpfor
   name: opfor section radio headset
   description: This is used by opfor personnel to communicate on the radio.
   components:
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: SquadLeader
     trackerModes:
     - SquadLeader
     - FireteamLeader
+    - BattleBuddy
   - type: Sprite
     state: generic_headset
   - type: ContainerFill
@@ -54,10 +88,11 @@
   description: This is used by OPFOR command members to communicate on the radio.
   components:
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: SquadLeader
     trackerModes:
     - SquadLeader
     - FireteamLeader
+    - BattleBuddy
   - type: Sprite
     state: generic_headset
   - type: ContainerFill
@@ -77,10 +112,11 @@
   description: An encryption key used to communicate on OPFOR ATC channels.
   components:
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: SquadLeader
     trackerModes:
     - SquadLeader
     - FireteamLeader
+    - BattleBuddy
   - type: EncryptionKey
     channels:
     - opforjtac

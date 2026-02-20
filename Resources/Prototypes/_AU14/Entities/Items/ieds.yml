@@ -100,7 +100,7 @@
     equipDelay: 10
     unequipDelay: 6
   - type: OnUseTimerTrigger
-    delay: 0.5
+    delay: 0.1
     delayOptions: [3, 4]
     initialBeepDelay: 0
     beepSound: /Audio/_AU14/IED/vestbeep.ogg

@@ -4,87 +4,67 @@
   components:
   - type: GhostTakeoverAvailable
   - type: RandomHumanoidAppearance
-  - type: RMCRandomMarkings
-    markings:
-      Moth:
-        Head: 0.5
-        HeadTop: 1
-        Chest: 0.25
-        Tail: 1
-        Arms: 0.25
-        Legs: 0.25
-      Reptilian:
-        Head: 0.25
-        Snout: 0.3
-        HeadTop: 0.5
-        HeadSide: 0.6
-        Chest: 0.5
-        Tail: 1
-        Arms: 0.25
-        Legs: 0.25
-      SlimePerson:
-        Head: 0.25
-        Arms: 0.25
-        Legs: 0.25
-      Diona:
-        Head: 0.5
-        HeadSide: 0.5
-        HeadTop: 0.5
-        Chest: 0.5
-      Arachnid:
-        HeadSide: 0.5
-        Chest: 0.25
-        Arms: 0.5
-        Legs: 0.5
-        Tail: 0.5
-      Skrell:
-        HeadTop: 1
-        Chest: 0.25
-      Avali:
-        Head: 0.5
-        HeadTop: 0.75
-        HeadSide: 0.25
-        Chest: 0.5
-        Tail: 0.75
-        Arms: 0.25
-        Legs: 0.25
-      Feroxi:
-        Head: 0.25
-        HeadTop: 0.75
-        HeadSide: 0.25
-        Chest: 0.5
-        Tail: 0.75
-        Arms: 0.25
-        Legs: 0.25
-      Rodentia:
-        Head: 0.25
-        HeadTop: 1
-        HeadSide: 1
-        Tail: 1
-        Arms: 1
-        Legs: 1
-      Vulpkanin:
-        Head: 0.25
-        HeadTop: 0.5
-        Chest: 0.25
-        Tail: 0.5
-        Arms: 0.1
-        Legs: 0.1
-      Felinid:
-        Head: 0.25
-        HeadTop: 0.5
-        Snout: 0.3
-        Tail: 1
-      Human:
-        Head: 0.25
-        Chest: 0.25
-        Arms: 0.25
-        Legs: 0.25
-      Dwarf:
-        Head: 0.25
-        Chest: 0.25
-        Arms: 0.25
-        Legs: 0.25
+  - type: RandomHumanoidAppearanceWhitelisted
+    allowedMaleHairStyles:
+    - RMCHumanHairCrew
+    - RMCHumanHairAviator
+    - RMCHumanHairJensen
+    - RMCHumanHairAverageJoe
+    - AU14HumanHairCIA5
+    - RMCHumanHairCombover
+    - RMCHumanHairCombover2
+    - RMCHumanHairCplDietrich
+    - RMCHumanHairCut
+    - RMCHumanHairHeadStubble
+    - RMCHumanHairHighAndTight
+    - RMCHumanHairHighfade
+    - RMCHumanHairHighlight
+    - AU14HumanHairIRS
+    - RMCHumanHairLtRasczak
+    - RMCHumanHairMarineFade
+    - RMCHumanHairMarineFlatTop
+    - RMCHumanHairMedfade
+    - RMCHumanHairNofade
+    - RMCHumanHairShavedpart
+    - RMCHumanHairShavedHead
+    - RMCHumanHairShort
+    - RMCHumanHairSideUndercutHang
+    - RMCHumanHairSkinhead
+    - RMCHumanHairTaper
+    - RMCHumanHairWardaddy
+    - RMCHumanHairUndercut
+    - RMCHumanHairUndercutTop
+    allowedFemaleHairStyles:
+    - RMCHumanHairShortbangs
+    - RMCHumanHairBobcurl
+    - RMCHumanHairMarineBun
+    - RMCHumanHairBun
+    - RMCHumanHairFringetail
+    - AU14HumanHairLowBun
+    - AU14HumanHairLowPonyTail
+    - AU14HumanHairLowPonyTailAlt
+    - RMCHumanHairPonytail1
+    - RMCHumanHairPonytail7
+    - RMCHumanHairPvtRedding
+    - RMCHumanHairPvtVasquez
+    - RMCHumanHairLong
+    - RMCHumanHairPixieCutLeft
+    - RMCHumanHairPixieCutRight
+    allowedHairColorsHex:
+    - "#0B0B0B"
+    - "#1A1A1A"
+    - "#222222"
+    - "#2B1B0F"
+    - "#3B2314"
+    - "#4A2E1A"
+    - "#5A3A22"
+    - "#6B4A2F"
+    - "#9C8651"
+    - "#B79A5A"
+    - "#4A1F12"
+    - "#7A5E42"
+    allowedEyeColorsHex: [ "#000000" ]
+    beardChance: 0.1
 
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid

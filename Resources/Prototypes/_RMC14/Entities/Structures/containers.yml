@@ -331,7 +331,7 @@
   parent: RMCContainerBase
   id: RMCContainerAICMiddle
   name: AIC Cargo Container
-  description: "A huge industrial shipping container.\nThis one is from the Asian Industrial Collective, which was absorded into the SPP. Their massive industrial output has ensured that cargo containers bearing their symbols and name won't be disappearing any time soon."
+  description: "A huge industrial shipping container.\nThis one is from the Asian Industrial Collective, which was absorded into the UPP. Their massive industrial output has ensured that cargo containers bearing their symbols and name won't be disappearing any time soon."
   suffix: AIC, Middle
   components:
   - type: Sprite
@@ -341,7 +341,7 @@
   parent: RMCContainerBase
   id: RMCContainerSPPLeft
   suffix: SPP, Left
-  name: SPP Cargo Container
+  name: UPP Cargo Container
   description: "A huge industrial shipping container.\nThis one is from the Socialist Progressive Peoples, as indicated by the massive symbol on the side."
   components:
   - type: Sprite
@@ -392,7 +392,7 @@
   id: RMCContainerMSPLeft
   suffix: MSP, Left
   name: Ministry of Space Protection Cargo Container
-  description: "A huge industrial shipping container.\nThis one belongs to the SPP's Ministry of Space Protection."
+  description: "A huge industrial shipping container.\nThis one belongs to the UPP's Ministry of Space Protection."
   components:
   - type: Sprite
     state: mspcontainerleft

@@ -1,0 +1,12 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobMilitaryPoliceBase
+  name: au14-job-name-govforMilitaryDoctor
+  description: au14-job-description-govforMilitaryDoctor
+  playTimeTracker: AU14JobGOVFORMilitaryDoctor
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: playTimeTracker
+  id: AU14JobGOVFORMilitaryDoctor
+  isHumanoid: true

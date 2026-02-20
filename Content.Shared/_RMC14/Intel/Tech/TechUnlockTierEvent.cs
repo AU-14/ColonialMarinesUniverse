@@ -4,4 +4,7 @@ namespace Content.Shared._RMC14.Intel.Tech;
 
 [DataRecord]
 [Serializable, NetSerializable]
-public sealed record TechUnlockTierEvent(int Tier);
+public sealed record TechUnlockTierEvent(int Tier)
+{
+    public string Team { get; init; } = String.Empty;
+}

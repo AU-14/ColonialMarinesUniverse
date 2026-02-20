@@ -1,4 +1,4 @@
-﻿using Robust.Shared.GameStates;
+﻿﻿using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
@@ -22,6 +22,9 @@ public sealed partial class SquadLeaderTrackerComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntityUid? Target;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? BattleBuddy;
 
     [DataField, AutoNetworkedField]
     public HashSet<ProtoId<TrackerModePrototype>> TrackerModes = new();

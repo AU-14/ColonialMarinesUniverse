@@ -206,3 +206,62 @@
         amount: 10
       - id: RMCShoesBlack
         amount: 10
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14PaPequipmentvendor
+  name: PaP equipment vendor
+  description: An automated rack hooked up to a small storage of PaP equipment.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Clothes
+      takeAll: CMUCMBEssentialEquipmentClothes
+      entries:
+      - id: RMCJumpsuitSPPPaP
+      - id: RMCCoatPaP
+      - id: CMHeadCapSPPPeakedPolice
+      - id: RMCBootsPMCFilled
+    - name: Belt
+      takeAll: CMUCMBEssentialEquipmentBelt
+      entries:
+      - id: CMBeltSecurityMarshalFilled
+    - name: Bag
+      choices: { CMUCMBDutyStorageBag: 1 }
+      entries:
+      - id: CMSatchelSecurity
+      - id: AU14SlingSatchelBlack
+      - id: RMCSatchelTSEPA
+    - name: Webbing
+      choices: { CMUCMBDutyStorageWebbing: 1 }
+      entries:
+      - id: CMWebbingHolster
+      - id: RMCWebbingHolsterBlack
+      - id: RMCWebbingLegPouchBlack
+    - name: Pouches
+      choices: { CMUCMBDutyPouches: 2 }
+      entries:
+      - id: RMCPouchFirstAidSplintsGauzeOintment
+      - id: RMCPouchRadio
+      - id: RMCPouchGeneralMedium
+      - id: RMCPouchPistol
+      - id: RMCPouchMagazinePistol
+      - id: AU14PouchIFAKFill
+    - name: Equipment
+      takeAll: CMUCMBEssentialEquipment
+      entries:
+      - id: RMCRadioHandheldColonyOff
+      - id: RMCHandcuffs
+      - id: RMCBinocularsCivPVE
+    - name: Duty Weapons
+      choices: { CMUCMBDutyWeapons: 1 }
+      entries:
+      - id: RMCBeltHolsterPistolSPPT73
+    - name: Inmate Clothing
+      entries:
+      - id: AU14CivilianPrisonJumpsuit
+        amount: 10
+      - id: RMCShoesBlack
+        amount: 10

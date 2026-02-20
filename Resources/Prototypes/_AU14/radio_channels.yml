@@ -25,6 +25,7 @@
   frequency: 1601
   color: "#7B6CA5"
   longRange: true
+  faction: "opfor"
 
 - type: radioChannel
   id: opforcommand
@@ -33,6 +34,7 @@
   frequency: 1479
   color: "#5b96d4"
   longRange: true
+  faction: "opfor"
 
 - type: radioChannel
   id: opforjtac
@@ -41,6 +43,7 @@
   frequency: 1474
   color: "#ad3b98"
   longRange: true
+  faction: "opfor"
 
 - type: radioChannel
   id: OpforIntel
@@ -49,6 +52,7 @@
   frequency: 1602
   color: "#e4860c"
   longRange: true
+  faction: "opfor"
 
 - type: radioChannel
   id: OpforBravo
@@ -57,14 +61,16 @@
   frequency: 1603
   color: "#B9A76D"
   longRange: true
+  faction: "opfor"
 
 - type: radioChannel
   id: OpforCharlie
   name: chat-radio-opforcharlie
   keycode: "x"
   frequency: 1604
-  color: "#7A967E"
+  color: "#bb44bd"
   longRange: true
+  faction: "opfor"
 
 - type: radioChannel
   id: GovforIntel
@@ -73,19 +79,31 @@
   frequency: 1605
   color: "#e4860c"
   longRange: true
+  faction: "govfor"
 
 - type: radioChannel
   id: GovforBravo
   name: chat-radio-govforbravo
   keycode: "z"
   frequency: 1606
-  color: "#B9A76D"
+  color: "#594F00"
   longRange: true
+  faction: "govfor"
 
 - type: radioChannel
   id: GovforCharlie
   name: chat-radio-govforcharlie
   keycode: "f"
   frequency: 1607
-  color: "#7A967E"
+  color: "#2B0045"
   longRange: true
+  faction: "govfor"
+
+- type: radioChannel
+  id: UPPSOF
+  name: chat-radio-uppsof
+  keycode: "7"
+  frequency: 1533
+  color: "#e4860c"
+  longRange: true
+  faction: "opfor"

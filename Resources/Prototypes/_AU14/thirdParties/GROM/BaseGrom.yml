@@ -1,0 +1,246 @@
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: AU14BaseMobSpeciesOrganicUPPGROM
+  abstract: true
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: RandomHumanoidAppearance
+  - type: RandomHumanoidAppearanceWhitelisted
+    allowedMaleHairStyles:
+    - RMCHumanHairCrew
+    - RMCHumanHairAviator
+    - RMCHumanHairJensen
+    - RMCHumanHairAverageJoe
+    - AU14HumanHairCIA5
+    - RMCHumanHairCombover
+    - RMCHumanHairCombover2
+    - RMCHumanHairCplDietrich
+    - RMCHumanHairCut
+    - RMCHumanHairHeadStubble
+    - RMCHumanHairHighAndTight
+    - RMCHumanHairHighfade
+    - RMCHumanHairHighlight
+    - AU14HumanHairIRS
+    - RMCHumanHairLtRasczak
+    - RMCHumanHairMarineFade
+    - RMCHumanHairMarineFlatTop
+    - RMCHumanHairMedfade
+    - RMCHumanHairNofade
+    - RMCHumanHairShavedpart
+    - RMCHumanHairShavedHead
+    - RMCHumanHairShort
+    - RMCHumanHairSideUndercutHang
+    - RMCHumanHairSkinhead
+    - RMCHumanHairTaper
+    - RMCHumanHairWardaddy
+    - RMCHumanHairUndercut
+    - RMCHumanHairUndercutTop
+    allowedFemaleHairStyles:
+    - RMCHumanHairShortbangs
+    - RMCHumanHairBobcurl
+    - RMCHumanHairMarineBun
+    - RMCHumanHairBun
+    - RMCHumanHairFringetail
+    - AU14HumanHairLowBun
+    - AU14HumanHairLowPonyTail
+    - AU14HumanHairLowPonyTailAlt
+    - RMCHumanHairPonytail1
+    - RMCHumanHairPonytail7
+    - RMCHumanHairPvtRedding
+    - RMCHumanHairPvtVasquez
+    - RMCHumanHairLong
+    - RMCHumanHairPixieCutLeft
+    - RMCHumanHairPixieCutRight
+    allowedHairColorsHex:
+    - "#0B0B0B"
+    - "#1A1A1A"
+    - "#222222"
+    - "#2B1B0F"
+    - "#3B2314"
+    - "#4A2E1A"
+    - "#5A3A22"
+    - "#6B4A2F"
+    - "#9C8651"
+    - "#B79A5A"
+    - "#4A1F12"
+    - "#7A5E42"
+    allowedEyeColorsHex: [ "#000000" ]
+    beardChance: 0.1
+
+# Equipment
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14FatiguesUPPGROM
+  suffix: AU14, GROM
+  name: UPP naval infantry fatigues
+  description: A standard set of Union of Progressive Peoples Fatigues. It has shards of light Kevlar to help protect against shrapnel. This one has blood and tears after countless battles.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/jumpsuits/upprecon.rsi
+  - type: WebbingClothing
+    startingWebbing: AU14WebbingDropPouchUPPFull
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14PatchUPP
+    - AU14GROMPatch
+
+- type: entity
+  parent: AU14BeltHolsterPistolUPP
+  id: AU14BeltHolsterPistolUPPFull
+  suffix: Full, T74, GROM
+  components: 
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponPistolT74
+    - id: RMCMagazinePistolT73
+      amount: 2
+
+- type: entity
+  parent: RMCOuterClothingExternalWebbing
+  id: RMCOuterClothingExternalWebbingBrownFull
+  suffix: Full, Crowbar
+  components: 
+  - type: StorageFill
+    contents:
+    - id: RMCTacticalPrybar
+
+- type: entity
+  parent: AU14WebbingDropPouchUPP
+  id: AU14WebbingDropPouchUPPFull
+  suffix: Full, GROM
+  components: 
+  - type: StorageFill
+    contents:
+    - id: AU14MREUPP
+    - id: CMCanteen
+
+- type: entity
+  parent: RMCSatchelSPP
+  id: RMCSatchelSPPFull
+  suffix: Full, GROM
+  components: 
+  - type: StorageFill
+    contents:
+    - id: RMCRadioHandheldColony
+    - id: AU14MagazineRifleAG80
+      amount: 1
+    - id: AU14MagazineRifleAG80Ext
+      amount: 1
+
+- type: entity
+  parent: RMCSatchelSPP
+  id: RMCSatchelSPPFullMarksman
+  suffix: Full, GROM
+  components: 
+  - type: StorageFill
+    contents:
+    - id: RMCRadioHandheldColony
+    - id: RMCMagazineRifleAK4047
+      amount: 2
+    - id: RMCMagazineRifleAK4047AP
+      amount: 2
+
+
+- type: entity
+  parent: RMCSatchelSPP
+  id: RMCSatchelSPPFullMachinegunner
+  suffix: Full, GROM
+  components: 
+  - type: StorageFill
+    contents:
+    - id: RMCRadioHandheldColony
+
+- type: entity
+  parent: RMCPouchCommand
+  id: RMCPouchCommandFull
+  suffix: Full, GROM
+  components: 
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponRevolverZHNK72
+
+- type: entity
+  parent: AU14ShotgunShellLoadingRigUPP
+  id: AU14ShotgunShellLoadingRigUPPFull
+  suffix: Full, GROM
+  components: 
+  - type: StorageFill
+    contents:
+    - id: RMCShellShotgunHeavySlugs
+      amount: 5
+
+- type: entity
+  parent: AU14BeltMedicalUPP
+  id: AU14BeltMedicalUPPFull
+  suffix: Full, GROM
+  components: 
+  - type: StorageFill
+    contents:
+    - id: CMBurnKit10
+      amount: 1
+    - id: CMHandsLatex
+    - id: CMSyringe
+    - id: CMPillCanisterBicaridine
+    - id: CMPillCanisterTricordrazine
+
+- type: entity
+  parent: AU14BeltMedicalUPP
+  id: AU14BeltMedicalUPPFullSupportTech
+  suffix: Full, GROM
+  components: 
+  - type: StorageFill
+    contents:
+    - id: CMSurgicalLine
+    - id: CMSynthGraft
+    - id: CMPillCanisterBicaridine
+
+- type: entity
+  parent: AU14PouchPistolAlt
+  id: AU14PouchPistolAltFull
+  suffix: Full, GROM, T74
+  components: 
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponPistolT74
+      amount: 1
+
+- type: entity
+  parent: AU14BeltSmartGunOperatorPistolUPP
+  id: AU14BeltSmartGunOperatorPistolUPPFull
+  suffix: Full, GROM, T74
+  components: 
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponPistolT74
+    - id: RMCMagazinePistolT73
+      amount: 2
+    - id: RMCMagazineLMGQYJ72
+
+- type: entity
+  parent: RMCPouchMagazine
+  id: RMCPouchMagazineUPPFull
+  suffix: Full, GROM, AG80
+  components: 
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineRifleAG80
+
+- type: entity
+  parent: RMCHeadsetMarine
+  id: RMCHeadsetGROM
+  name: UPP SOF headset
+  description: Issued exclusively to UPP Special Forces such as Kommando Spezialkrafte and GROM.
+  suffix: GROM
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/headsets.rsi
+    state: soc_headset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMEncryptionKeyColony
+  - type: RMCHeadset
+    channels:
+    - UPPSOF

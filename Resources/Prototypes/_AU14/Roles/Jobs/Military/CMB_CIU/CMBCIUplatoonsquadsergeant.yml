@@ -1,11 +1,10 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantCMBCIU
   name: Team Leader
   description: au14-job-description-govforsquadsergeant
   setPreference: false
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORSquadSergeant
   ranks:
     AU14RankCMBSrDeputy: []
   startingGear: AU14GearGOVFORSquadSergeant
@@ -37,4 +36,4 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
     - type: MarineOrders
-  hidden: false
+  hidden: true

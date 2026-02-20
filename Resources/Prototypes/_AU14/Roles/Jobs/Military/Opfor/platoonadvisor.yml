@@ -1,0 +1,75 @@
+- type: job
+  parent: AU14JobadvisorBase
+  id: AU14JobOPFORadvisor
+  name: au14-job-name-opforadvisor
+  description: au14-job-description-opforadvisor
+  setPreference: true
+  canBeAntag: false
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 3600 # Set to 72000 once we are fully launched AU14 todo
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+  ranks:
+    RMCRankSergeantMajor:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORadvisor
+      time: 432000 # 120 hours
+    RMCRankFirstSergeant: []
+  startingGear: AU14GearOPFORadvisor
+  dummyStartingGear: AU14GearOPFORadvisorDummy
+  icon: "AU14JobIconOPFORAdvisor"
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-opfor
+  whitelisted: true
+  accessGroups:
+  - AU14OpforCommand
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - OPFOR
+    - type: Marine
+      Faction: opfor
+    - type: Skills
+      preset: AU14SkillPresetPlatoonAdvisor
+    - type: JobPrefix
+      prefix: au14-job-prefix-opforadvisor
+    - type: SeeNewPlayers
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: true
+
+- type: startingGear
+  id: AU14GearOPFORadvisor
+  equipment:
+    id: AU14IDCardOPFORAdvisor
+    ears: AU14HeadsetSectionLeaderopfor
+    back: AU14SatchelMarineAdvisorMilitary
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFORadvisor
+  name: Spawn Point OPFOR Advisor
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORadvisor
+  - type: Sprite
+    state: syn_spawn
+
+- type: startingGear
+  id: AU14GearOPFORadvisorDummy
+  equipment:
+    shoes: CMBootsBrownFilled
+    head: CMHeadCapDrill
+    jumpsuit: CMJumpsuitBO
+    ears: AU14HeadsetSectionLeaderopfor

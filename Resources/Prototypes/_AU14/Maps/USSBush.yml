@@ -11,4 +11,4 @@
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup
-          mapNameTemplate: 'USSBush'
+          mapNameTemplate: 'USS George W. Bush'

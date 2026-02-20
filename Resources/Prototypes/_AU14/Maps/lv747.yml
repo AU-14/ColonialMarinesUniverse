@@ -11,7 +11,7 @@
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup
-          mapNameTemplate: 'SolarisGulch'
+          mapNameTemplate: 'Solaris Gulch'
         - type: StationJobs
           availableJobs:
             AU14JobCivilianColonist: [ -1, -1 ]

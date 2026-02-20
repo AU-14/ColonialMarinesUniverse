@@ -38,7 +38,7 @@
     - SemiAuto
     recoilWielded: 1
     scatterWielded: 3
-    baseFireRate: 1.6675
+    baseFireRate: 0.78
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 3
   - type: WieldableSpeedModifiers
@@ -70,7 +70,7 @@
   - type: Corrodible
     isCorrodible: false
   - type: GunIFF
-    enabled: true
+    enabled: false
   - type: RMCNameItemOnVend
     item: PrimaryGun
   - type: AttachableHolder

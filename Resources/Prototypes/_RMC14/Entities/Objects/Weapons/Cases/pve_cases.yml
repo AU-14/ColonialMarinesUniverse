@@ -103,7 +103,7 @@
   parent: RMCPVECaseM42A2
   id: RMCPVECaseType23
   name: Type 23 shotgun case
-  description: A heavy case for storing a type 23 pump-action shotgun, a SPP semi-automatic shotgun.
+  description: A heavy case for storing a type 23 pump-action shotgun, a UPP semi-automatic shotgun.
   components:
   - type: Storage
     maxItemSize: Ginormous
@@ -251,8 +251,8 @@
 - type: entity
   parent: RMCPVECaseSentry
   id: RMCPVECaseSentrySPP
-  name: SPP SDS-R8 Sentry Gun case
-  description: A gun case containing the SPP SDS-R8 unit and a spare drum.
+  name: UPP SDS-R8 Sentry Gun case
+  description: A gun case containing the UPP SDS-R8 unit and a spare drum.
   components:
   - type: StorageFill
     contents:

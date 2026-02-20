@@ -1,10 +1,9 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobSquadRiflemanBase
   id: AU14JobGOVFORSquadRiflemanCMBCIU
   name: Tactical Officer
   description: au14-job-description-govforsquadrifleman
   setPreference: false
-  playTimeTracker: AU14JobGOVFORSquadRifleman
   ranks:
     AU14RankCMBSrDeputy:
     - !type:RoleTimeRequirement
@@ -43,4 +42,4 @@
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
+  hidden: true

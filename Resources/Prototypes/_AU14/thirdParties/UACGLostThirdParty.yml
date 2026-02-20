@@ -282,8 +282,8 @@
 - type: auThirdParty
   id: UACGLostTeam
   partyspawn: UACGLostTeamSpawn
-  enterbyshuttle: false
-  weight: 20
+  entrymethod: shuttle
+  weight:  20
   minplayers: 0
   maxplayers: 400
   GhostsNeeded: 3

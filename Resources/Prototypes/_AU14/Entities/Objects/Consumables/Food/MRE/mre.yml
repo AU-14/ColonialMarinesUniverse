@@ -2,7 +2,16 @@
   parent: CMMRE
   id: AU14MRETWERMC # TODO custom contents
   name: TWE ORP ration
-  description: An Operation Ration Pack. Uses similar to UNCM MRE format, but utilizes expensive preserving materials and methods and not less expensive meals from TWE cuisine.
+  description: An Operation Ration Pack. Uses similar to USCM MRE format, but utilizes expensive preserving materials and methods and not less expensive meals from TWE cuisine.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/mre_tse.rsi
+
+- type: entity
+  parent: CMMRE
+  id: AU14MREUPP # TODO RMC14 - Custom Contents
+  name: UPP IRP ration pack
+  description: An Individual Meal Ration, mainly composed of a selection of canned food, despite being heavier, it has proven to be a lot more reliable.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Consumable/Food/mre_spp.rsi

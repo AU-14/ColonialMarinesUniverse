@@ -95,7 +95,7 @@
     state: red
   - type: AuObjective
     id: fetchanprcobj
-    factioneutral: false
+    factioneutral: true
     applicableModes:
     - ForceOnForce
     possiblefactions:
@@ -103,7 +103,7 @@
     - govfor
     repeating: false
     objectivelevel: 1
-    custompoints: 15
+    custompoints: 5
     roundEndMessage: Finding the AN/PRC-982
     ObjectiveDescription: "Retrieve the AN/PRC-982 portable radio transceiver box"
   - type: FetchObjective
@@ -121,7 +121,7 @@
     state: red
   - type: AuObjective
     id: fetchblackboxobj
-    factioneutral: false
+    factioneutral: true
     applicableModes:
     - ForceOnForce
     - DistressSignal
@@ -130,7 +130,7 @@
     - govfor
     repeating: false
     objectivelevel: 1
-    custompoints: 15
+    custompoints: 5
     roundEndMessage: Finding the CIR-60 Blackbox
     ObjectiveDescription: "Retrieve the CIR-60 'blackbox' colony information recorder"
   - type: FetchObjective
@@ -148,7 +148,7 @@
     state: red
   - type: AuObjective
     id: fetchdatastorageobj
-    factioneutral: false
+    factioneutral: true
     applicableModes:
     - ForceOnForce
     - DistressSignal
@@ -157,14 +157,14 @@
     - govfor
     repeating: false
     objectivelevel: 1
-    custompoints: 15
-    roundEndMessage: Finding the RCS-9 ARDSU
-    ObjectiveDescription: "Retrieve the ARCS-9 atmospheric radar data storage unit"
+    custompoints: 10
+    roundEndMessage: Finding the RCS-9 ARDSUs
+    ObjectiveDescription: "Retrieve two ARCS-9 atmospheric radar data storage units"
   - type: FetchObjective
     entitytospawn: AU14ObjectiveItemAtmosphericRadarStorageUnit
     markerentity: fetchobjectivemarkergenericspawnpoint
-    amounttospawn: 1
-    amounttofetch: 1
+    amounttospawn: 3
+    amounttofetch: 2
 
 - type: entity
   name: Fetch WY Laptop Objecive
@@ -175,7 +175,7 @@
     state: red
   - type: AuObjective
     id: fetchwylaptopobjj
-    factioneutral: false
+    factioneutral: true
     applicableModes:
     - ForceOnForce
     - DistressSignal
@@ -184,7 +184,7 @@
     - govfor
     repeating: false
     objectivelevel: 2
-    custompoints: 15
+    custompoints: 10
     roundEndMessage: Finding the WY laptop
     ObjectiveDescription: "Retrieve the Weyland-Yutani bioweapons division laptop"
   - type: FetchObjective

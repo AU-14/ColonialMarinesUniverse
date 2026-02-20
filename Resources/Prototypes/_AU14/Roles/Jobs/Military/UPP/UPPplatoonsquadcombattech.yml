@@ -1,0 +1,56 @@
+- type: job
+  parent: AU14JobSquadCombatTechBase
+  id: AU14JobGOVFORSquadCombatTechUPP
+  name: au14-job-name-govforsquadcombattech
+  description: au14-job-description-govforsquadcombattech
+  setPreference: true
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NonResuscitable
+  ranks:
+    UPP_Corporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadCombatTech
+      time: 216000 # 60 hours
+    UPP_SeniorGefreiter:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadCombatTech
+      time: 108000 # 30 hours
+    UPP_Gefreiter:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadCombatTech
+      time: 54000 # 15 hours
+    UPP_Private: []
+  startingGear: AU14GearGOVFORSquadCombatTech
+  dummyStartingGear: AU14GearGOVFORCTDummy
+  icon: "AU14JobIconGovCT"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforEngineer
+  hasIcon: true
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Marine
+      Faction: govfor
+    - type: Skills
+      preset: AU14SkillPresetPlatoonCombatTechnician
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforsquadcombattech
+    - type: TacticalMapIcon
+      icon:
+        sprite: _RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: CMVendorUser
+      id: AU14JobGOVFORSquadCombatTech
+      points: 50
+  hidden: true

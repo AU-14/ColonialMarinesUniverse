@@ -43,7 +43,7 @@
   parent: CMBaseMask
   id: RMCMaskGasSPP
   name: ShMB/4 gasmask
-  description: The standard issue gasmask utilized by the SPP Vanguard Collective and many SPP civilian organizations.
+  description: The standard issue gasmask utilized by the UPP Vanguard Collective and many UPP civilian organizations.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Mask/spp_gasmask.rsi
@@ -265,7 +265,7 @@
 - type: entity
   parent: RMCMaskBalaclavaMARSOC
   id: RMCMaskBalaclavaSPPCommando
-  name: SPP armored commando balaclava
+  name: UPP armored commando balaclava
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Mask/spp_commando_coif.rsi

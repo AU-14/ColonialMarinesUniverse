@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobPlatOpBase
   id: AU14JobGOVFORPlatOpRMC
   name: au14-job-name-govforplatopRMC
   description: au14-job-description-govforplatop
@@ -15,7 +15,6 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
-  playTimeTracker: AU14JobGOVFORPlatOp
   ranks:
     RMC_2Lieutenant: []
   startingGear: AU14GearGOVFORPlatOp
@@ -59,4 +58,4 @@
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
+  hidden: true

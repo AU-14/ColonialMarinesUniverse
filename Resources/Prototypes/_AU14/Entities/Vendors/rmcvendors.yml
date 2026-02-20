@@ -669,7 +669,7 @@
         amount: 2
     - name: Pouches
       entries:
-      - id: RMCPouchCommandFill
+      - id: AU14PouchCommandFill
         amount: 2
     - name: Miscellaneous
       entries:
@@ -876,7 +876,7 @@
         amount: 2
       - id: RMCPacketGrenadeSmokeFilled
         amount: 4
-      - id: AU14PacketGrenadeIncendiaryRMC
+      - id: AU14PacketGrenadeIncendiaryRMCFilled
         amount: 4
       - id: RMCExplosivePlastic
         amount: 4

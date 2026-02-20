@@ -1,11 +1,10 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobPlatCoBase
   id: AU14JobGOVFORPlatCoWYPMC
   name: PMC Operations Director
   description: au14-job-description-govforplatco
   setPreference: false
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORPlatCo
   ranks:
     AU14RankWeYuCommanderSenior:
     - !type:RoleTimeRequirement
@@ -47,4 +46,4 @@
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
+  hidden: true

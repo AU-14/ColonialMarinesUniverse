@@ -40,9 +40,8 @@
   - type: RMCHeadset
     radioTextIncrease: 3
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: SquadLeader
     trackerModes:
-    - CommandingOfficer
     - ExecutiveOfficer
     - SquadLeader
     - FireteamLeader
@@ -115,9 +114,10 @@
   - type: RMCHeadset
     radioTextIncrease: 3
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: SquadLeader
+
     trackerModes:
-    - CommandingOfficer
+
     - ExecutiveOfficer
     - SquadLeader
     - FireteamLeader
@@ -190,9 +190,10 @@
   - type: RMCHeadset
     radioTextIncrease: 3
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: SquadLeader
+
     trackerModes:
-    - CommandingOfficer
+
     - ExecutiveOfficer
     - SquadLeader
     - FireteamLeader
@@ -265,9 +266,10 @@
   - type: RMCHeadset
     radioTextIncrease: 3
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: SquadLeader
+
     trackerModes:
-    - CommandingOfficer
+
     - ExecutiveOfficer
     - SquadLeader
     - FireteamLeader
@@ -354,9 +356,10 @@
   - type: RMCHeadset
     radioTextIncrease: 2
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: SquadLeader
+
     trackerModes:
-    - CommandingOfficer
+
     - ExecutiveOfficer
     - SquadLeader
     - FireteamLeader
@@ -429,9 +432,10 @@
   - type: RMCHeadset
     radioTextIncrease: 2
   - type: GrantSquadLeaderTracker
-    defaultMode: CommandingOfficer
+    defaultMode: SquadLeader
+
     trackerModes:
-    - CommandingOfficer
+
     - ExecutiveOfficer
     - SquadLeader
     - FireteamLeader

@@ -1,0 +1,75 @@
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitUPPHATHJRA12
+  name: UPP Heavy Antitank Rifleman HJRA-12 Kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,5
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponLauncherHJRA12
+        amount: 1
+      - id: AU14SatchelDemoSpecUPP
+        amount: 1
+      - id: RMCRocketHJRA12AT
+        amount: 2
+      - id: RMCRocketHJRA12HE
+        amount: 1
+      - id: RMCRocketHJRA12Incen
+        amount: 1
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitUPPMarksmanType88
+  name: UPP Marksman Type 88 Kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,5
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: RMCPVECaseType88
+        amount: 1
+      - id: RMCMagazineSniperType88
+        amount: 8
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitUPPPointmanType23
+  name: UPP Pointman Type 23 Kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,5
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponShotgunType23
+      - id: RMCAttachmentType23Stock
+      - id: RMCBoxShotgunHeavyBuckshot
+        amount: 2
+      - id: RMCBoxShotgunHeavyFlechette
+        amount: 2
+      - id: RMCBoxShotgunHeavySlugs
+        amount: 2

@@ -8,3 +8,14 @@
     contents:
       - id: AU14MRETWERMC
         amount: 2
+
+- type: entity
+  id: AU14CrateFoodMREUPP
+  parent: RMCCratePlastic
+  suffix: UPP
+  name: UPP IRP crate
+  components:
+  - type: StorageFill
+    contents:
+      - id: AU14MREUPP
+        amount: 2

@@ -1,10 +1,9 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobSectionSergeantBase
   id: AU14JobGOVFORSectionSergeantWYPMC
   name: PMC Platoon Leader
   description: au14-job-description-govforSSG
   setPreference: false
-  playTimeTracker: AU14JobGOVFORSectionSergeant
   ranks:
     AU14RankWeYuEnforcerLead: []
   startingGear: AU14GearGOVFORSectionSergeant
@@ -43,4 +42,4 @@
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
     - type: MarineOrders
-  hidden: false
+  hidden: true

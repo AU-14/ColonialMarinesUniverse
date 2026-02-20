@@ -691,16 +691,6 @@ public sealed class DropshipSystem : SharedDropshipSystem
             }
         }
 
-        if (Count<PrimaryLandingZoneComponent>() > 0)
-            return;
 
-        if (_gameTicker.RoundDuration() < _lzPrimaryAutoDelay)
-            return;
-
-        foreach (var primaryLZCandidate in GetPrimaryLZCandidates())
-        {
-            if (TryDesignatePrimaryLZ(default, primaryLZCandidate))
-                break;
-        }
     }
 }

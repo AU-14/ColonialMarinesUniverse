@@ -23,6 +23,9 @@ public sealed partial class CommunicationsTowerComponent : Component
     [DataField, AutoNetworkedField]
     [Access(typeof(HiveBoonSystem))]
     public bool XenoControlled;
+    [DataField, AutoNetworkedField]
+    public string Faction = string.Empty;
+
 }
 
 [Serializable, NetSerializable]

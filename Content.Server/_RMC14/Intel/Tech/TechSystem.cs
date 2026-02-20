@@ -3,6 +3,8 @@ using Content.Server.Ghost.Roles.Components;
 using Content.Server.Humanoid.Components;
 using Content.Server.Spawners.Components;
 using Content.Shared._RMC14.Intel.Tech;
+using Content.Shared.AU14.Threats;
+using Content.Shared.AU14.Util;
 using Content.Shared.Humanoid.Prototypes;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
@@ -13,10 +15,10 @@ namespace Content.Server._RMC14.Intel.Tech;
 public sealed class ServerTechSystem : EntitySystem
 {
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IComponentFactory _componentFactory = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
-
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly Content.Server.AU14.ThirdParty.AuThirdPartySystem _thirdParty = default!;
     private static readonly EntProtoId CombatTechProto = "RMCRandomHumanoidFoxtrotCombatTech";
     private static readonly EntProtoId FireteamLeaderProto = "RMCRandomHumanoidFoxtrotFireteamLeader";
     private static readonly EntProtoId HospitalCorpsmanProto = "RMCRandomHumanoidFoxtrotHospitalCorpsman";
@@ -33,6 +35,7 @@ public sealed class ServerTechSystem : EntitySystem
         SubscribeLocalEvent<TechCryoMarinesEvent>(OnTechCryoMarines);
         SubscribeLocalEvent<TechCryoSpecEvent>(OnTechCryoSpec);
         SubscribeLocalEvent<RoundStartingEvent>(OnRoundStart);
+        SubscribeLocalEvent<TechPartySpawnEvent>(OnTechPartySpawn);
     }
 
     private void OnRoundStart(RoundStartingEvent ev)
@@ -54,6 +57,26 @@ public sealed class ServerTechSystem : EntitySystem
     private void OnTechCryoSpec(TechCryoSpecEvent ev)
     {
         SpawnCryo(WeaponsSpecialistProto, 1);
+    }
+
+    private void OnTechPartySpawn(TechPartySpawnEvent ev)
+    {
+        if (string.IsNullOrEmpty(ev.ThirdPartyId))
+        {
+            Logger.Warning("[ServerTechSystem] Received TechPartySpawnEvent with null/empty ThirdPartyId; ignoring.");
+            return;
+        }
+        TechSystem.ExecuteTechPartySpawn(_proto, ev.ThirdPartyId, proto =>
+        {
+            if (!_proto.TryIndex(proto.PartySpawn, out var spawnProto))
+            {
+                Logger.Warning($"[ServerTechSystem] PartySpawn prototype '{proto.PartySpawn}' not found for third party '{proto.ID}'.");
+                return;
+            }
+
+            // Call the server system to spawn the third party using resolved spawnProto.
+            _thirdParty.SpawnThirdParty(proto, spawnProto, false);
+        });
     }
 
     private void SpawnCryo(EntProtoId spawnerId, uint amount)
@@ -83,4 +106,6 @@ public sealed class ServerTechSystem : EntitySystem
             Spawn(spawnerId, _transform.GetMapCoordinates(choice));
         }
     }
+
+
 }

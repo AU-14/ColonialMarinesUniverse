@@ -1,11 +1,10 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobDCCBase
   id: AU14JobGOVFORDCCWYPMC
   name: PMC Crew Chief
   description: au14-job-description-govfordcc
   setPreference: false
   canBeAntag: false
-  playTimeTracker: AU14JobGOVFORDCC
   ranks:
     AU14RankWeYuSeniorCrewChief:
     - !type:RoleTimeRequirement
@@ -45,4 +44,4 @@
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
+  hidden: true

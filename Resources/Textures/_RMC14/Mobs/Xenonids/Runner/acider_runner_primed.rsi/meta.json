@@ -1,12 +1,32 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Sprites by @aleksh and @.sigma_draconis.",
+  "copyright": "Sprites by @aleksh and @.sigma_draconis. CM sprites from https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/xenos/castes/tier_1/runner.dmi.",
   "size": {
     "x": 64,
     "y": 64
   },
   "states": [
+    {
+      "name": "runner_walk_3",
+      "directions": 4
+    },
+    {
+      "name": "sleeping"
+    },
+    {
+      "name": "alive",
+      "directions": 4
+    },
+    {
+      "name": "crit"
+    },
+    {
+      "name": "dead"
+    },
+    {
+      "name": "runner_downed_0"
+    },
     {
       "name": "runner_downed_1"
     },
@@ -39,60 +59,6 @@
     {
       "name": "runner_walk_2",
       "directions": 4
-    },
-    {
-      "name": "runner_walk_3",
-      "directions": 4
-    },
-    {
-      "name": "sleeping",
-      "delays":  [
-        [
-          0.5,
-          0.3,
-          0.5,
-          0.3
-        ]
-      ]
-    },
-    {
-      "name": "alive",
-      "directions": 4,
-      "delays": [
-        [
-          0.5,
-          0.3,
-          0.5,
-          0.3
-        ],
-        [
-          0.5,
-          0.3,
-          0.5,
-          0.3
-        ],
-        [
-          0.5,
-          0.3,
-          0.5,
-          0.3
-        ],
-        [
-          0.5,
-          0.3,
-          0.5,
-          0.3
-        ]
-      ]
-    },
-    {
-      "name": "crit"
-    },
-    {
-      "name": "dead"
-    },
-    {
-      "name": "runner_downed_0"
     },
     {
       "name": "acid",

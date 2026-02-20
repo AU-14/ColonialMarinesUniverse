@@ -1045,7 +1045,7 @@
   parent: RMCCoatSnow
   id: RMCCoatSnowSoviet
   name: soviet snowcoat
-  description: A winter coat made in some desolate snowplanet. This wintercoat was made from the fur of local wildlife which donated their fur for the greater good of SPP!
+  description: A winter coat made in some desolate snowplanet. This wintercoat was made from the fur of local wildlife which donated their fur for the greater good of UPP!
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Snowsuits/soviet.rsi

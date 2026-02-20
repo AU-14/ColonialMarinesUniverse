@@ -256,3 +256,4 @@
         map: [ "light" ]
   - type: PointLight
     radius: 6
+    color: "#FFC458FF"

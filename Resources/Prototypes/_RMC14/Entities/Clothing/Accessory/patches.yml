@@ -363,8 +363,8 @@
 - type: entity
   parent: RMCPatchBase
   id: RMCPatchSPP
-  name: SPP patch
-  description: An old fire-resistant shoulder patch, worn by the men and women of the Socialists Progressive Peoples Armed Vanguard.
+  name: UPP patch
+  description: An old fire-resistant shoulder patch, worn by the men and women of the Union of Progressive Peoples Armed Vanguard.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Accessory/Patches/SPP/spp_patch.rsi
@@ -381,7 +381,7 @@
 - type: entity
   parent: RMCPatchBase
   id: RMCPatchSPPVDV
-  name: SPP Airborne Reconnaissance patch
+  name: UPP Airborne Reconnaissance patch
   description: A fire-resistant shoulder patch, worn by the men and women of the 173rd Airborne Reconnaissance Platoon.
   components:
   - type: Sprite
@@ -399,8 +399,8 @@
 - type: entity
   parent: RMCPatchBase
   id: RMCPatchSPPNaval
-  name: SPP Naval Infantry patch
-  description: A fire-resistant shoulder patch, worn by the men and women of the SPP Naval Infantry.
+  name: UPP Naval Infantry patch
+  description: A fire-resistant shoulder patch, worn by the men and women of the UPP Naval Infantry.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Accessory/Patches/SPP/spp_naval_patch.rsi
@@ -469,7 +469,7 @@
   parent: RMCPatchBase
   id: RMCPatchSPPCEC
   name: Exploration Corps patch
-  description: An old, worn and faded fire-resistant circular patch with a gold star on a split orange and red background. Once worn by members of the Exploration Corps, a division of the SPP dedicated to exploration, resource assessment, and establishing colonies on new worlds. The patch serves as a reminder of the EC's daring missions aboard aging starships, a symbol of perseverance in the face of adversity.
+  description: An old, worn and faded fire-resistant circular patch with a gold star on a split orange and red background. Once worn by members of the Exploration Corps, a division of the UPP dedicated to exploration, resource assessment, and establishing colonies on new worlds. The patch serves as a reminder of the EC's daring missions aboard aging starships, a symbol of perseverance in the face of adversity.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Accessory/Patches/SPP/cec_patch.rsi

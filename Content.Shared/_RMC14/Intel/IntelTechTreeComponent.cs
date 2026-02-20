@@ -34,4 +34,7 @@ public sealed partial class IntelTechTreeComponent : Component
 
     [DataField, AutoNetworkedField]
     public int HumanoidCorpses;
+
+    [DataField("team"), AutoNetworkedField]
+    public string Team = string.Empty;
 }

@@ -11,7 +11,7 @@
     - id: CMWrench
     - id: RMCCableCoil30
     - id: RMCPowerCellHigh
-    - id: CMAPCElectronics
+    - id: CMWelderSmall
     - id: CMMultitool
 
 - type: entity
@@ -49,9 +49,9 @@
   - type: FixedItemSizeStorage
   - type: StorageFill
     contents:
-    - id: RMCWeaponTaser
     - id: CMFlash
     - id: CMStunbaton
+    - id: RMCHandcuffs
     - id: RMCHandcuffs
     - id: RMCHandcuffs
     - id: RMCHandcuffs
