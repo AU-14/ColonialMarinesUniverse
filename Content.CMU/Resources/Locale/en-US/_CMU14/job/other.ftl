@@ -60,3 +60,20 @@ au14-uppgrom-greeting = You are a member of UPP's elite GROM special forces unit
 
 
 au14-uppgrom-description = You are a member of UPP's elite GROM special forces unit. Survive with your squad and contact any friendly Command.
+
+au-14-job-name-papthirdparty-investigator = PaP Investigator
+au-14-job-prefix-papthirdparty-investigator = Pap Inv
+au14-papthirdparty-description = You are part of PaP's Investigation group. You were called to a colony to investigate. You are not aware of the situation. Investigate.
+
+au-14-job-name-papthirdparty-captain = PaP Senior Investigator
+au-14-job-prefix-papthirdparty-captain = PaP SInv
+
+au-14-job-name-papthirdparty-observer = Interstellar Human Rights Observer
+au14-papthirdparty-description-observer = Through hard work, you have managed to make your way onto the frontier alongside a PaP investigation group to document and record any atrocities that may be occurring in this dark sector of space. It’s partly a PR stunt, but it’s important work. In an emergency, you may also be able to provide medical aid to those in need.
+au-14-job-prefix-papthirdparty-observer = PaP Obs
+
+au14-papthirdparty-greeting = You are member of People's armed Police of UPP. 
+
+    You have been dispatched to investigate colony you are making way to.
+
+    You have friendly to GOVFOR, neutral to civilians and hostile to CLF.
