@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "",
+  "size": {
+    "x": 7,
+    "y": 7
+  },
+  "states": [
+    {
+      "name": "background_sierra"
+    },
+    {
+      "name": "background_tango"
+    },
+    {
+      "name": "background_uniform"
+    },
+    {
+      "name": "enemy_blip"
+    }
+  ]
+}
