@@ -910,18 +910,6 @@
     },
     {
       "name": "gm_hash"
-    },
-    {
-      "name": "background_sierra"
-    },
-    {
-      "name": "background_tango"
-    },
-    {
-      "name": "background_uniform"
-    },
-    {
-      "name": "enemy_blip"
     }
   ]
 }
