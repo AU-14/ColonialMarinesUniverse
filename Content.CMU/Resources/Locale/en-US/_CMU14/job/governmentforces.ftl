@@ -69,6 +69,11 @@ au14-job-name-govforadvisor = Advisor
 au14-job-description-govforadvisor = Advise command, mentor new soldiers and provide assistance wherever needed.
 au14-job-prefix-govforadvisor = ADV
 
+AU14JobMilitaryDoctorBase = Doctor
+au14-job-name-govforMilitaryDoctor = Doctor
+au14-job-description-govforMilitaryDoctor = Provide your faction with higher levels of medical care.
+au14-job-prefix-govforMilitaryDoctor = DOC
+
 au14-job-prefix-AU14JobGOVFORPlatCoWYPMC = OPDIR
 au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanWYPMC = CLS
 au14-job-prefix-AU14JobGOVFORDCCWYPMC = DCC
@@ -135,3 +140,26 @@ au-14-job-name-rmcrrt-smartgunner = RMC RRT Machinegunner
 au-14-job-prefix-rmcrrt-smartgunner = RRT MG
 au-14-job-name-rmcrrt-corpsman = RMC RRT Corpsman
 au-14-job-prefix-rmcrrt-corpsman = RRT HC
+
+au14-job-name-govforspecialist-heavyantitankUPP = Antitank
+au14-job-prefix-govforspecialist-heavyantitankUPP = HAT
+au14-job-name-govforspecialist-marksmanUPP = Marksman
+au14-job-prefix-govforspecialist-marksmanUPP = MRN
+au14-job-name-govforspecialist-pointmanUPP = Pointman
+au14-job-prefix-govforspecialist-pointmanUPP = PNM
+
+au-14-job-name-uppgrom-commander = GROM Commander
+au-14-job-prefix-uppgrom-commander = GROM CMD
+au-14-job-name-uppgrom-squadleader = GROM Squad Leader
+au-14-job-prefix-uppgrom-squadleader = GROM SL
+au-14-job-name-uppgrom-rifleman = GROM Rifleman
+au-14-job-prefix-uppgrom-rifleman = GROM RFN
+au-14-job-name-uppgrom-pointman = GROM Pointman
+au-14-job-prefix-uppgrom-pointman = GROM PNT
+au-14-job-name-uppgrom-marksman = GROM Marksman
+au-14-job-prefix-uppgrom-marksman = GROM MRN
+au-14-job-name-uppgrom-machinegunner = GROM Machinegunner
+au-14-job-prefix-uppgrom-machinegunner = GROM MG
+au-14-job-name-uppgrom-supporttech = GROM Support Tech
+au-14-job-prefix-uppgrom-supporttech = GROM ST
+

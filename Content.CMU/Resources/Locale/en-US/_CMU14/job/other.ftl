@@ -43,3 +43,20 @@ au14-lacncommandosniper-rules = You have been loaned to the United Americas Alli
 au14-uacglostthreat-rules = You are a Government Forces Third Party! You are friendly to GOVFOR forces and neutral to civilians. This threat asks for a slightly higher level of roleplay than others! Please keep this in mind.
 
 au14-rmcert-rules = You have been dispatched as a Royal Marines Commando Rapid Reaction Troop member. The details of the mission have not been disclosed to you, however your main objective is to assist GOVFOR forces in the area of operation. You are friendly to GOVFOR command and neutral to civilians.
+
+au14-uppgrom-rules = You are a member of UPP's elite GROM special unit! You do not remember what happened or what is happening in round.
+
+au14-uppgrom-greeting = You are a member of UPP's elite GROM special forces unit! 
+
+    Your last mission was disastrous, you lost contact with your mothership and command. 
+
+    Your supplies are running low, and only by your adaptability you managed you survive. 
+
+    Ensure survival of yourself and your squadmates and contact nearest friendly command.  
+    Poland Is Not Yet Lost!
+
+    You are not hostile to the UPP and CCA and neutral to other countries!
+
+
+
+au14-uppgrom-description = You are a member of UPP's elite GROM special forces unit. Survive with your squad and contact any friendly Command.
