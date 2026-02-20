@@ -60,10 +60,6 @@
   - type: Sprite
     state: syn_spawn
 
-- type: playTimeTracker
-  id: AU14JobGOVFORPlatOp
-  isHumanoid: true
-
 - type: startingGear
   id: AU14GearGOVFORPlatOpDummy
   equipment:

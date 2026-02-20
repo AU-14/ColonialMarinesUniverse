@@ -59,10 +59,6 @@
   - type: Sprite
     state: syn_spawn
 
-- type: playTimeTracker
-  id: AU14JobGOVFORSquadRifleman
-  isHumanoid: true
-
 - type: startingGear
   id: AU14GearGOVFORRiflemanDummy
   equipment:
