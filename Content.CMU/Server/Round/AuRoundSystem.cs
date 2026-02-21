@@ -235,15 +235,19 @@ namespace Content.Server.AU14.Round
             var opforPlatoon = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>().SelectedOpforPlatoon?.ID;
             var filtered = allThirdParties.ToList();
             filtered.RemoveAll(proto =>
-                proto.BlacklistedGamemodes.Contains(currentGamemode) ||
-                (proto.whitelistedgamemodes.Count > 0 && !proto.whitelistedgamemodes.Contains(currentGamemode)) ||
+                // Gamemode blacklist/whitelist (case-insensitive)
+                proto.BlacklistedGamemodes.Any(s => s.Equals(currentGamemode, System.StringComparison.OrdinalIgnoreCase)) ||
+                (proto.whitelistedgamemodes.Count > 0 && !proto.whitelistedgamemodes.Any(s => s.Equals(currentGamemode, System.StringComparison.OrdinalIgnoreCase))) ||
+                // Player count limits
                 proto.MaxPlayers < playerCount ||
                 proto.MinPlayers > playerCount ||
-                (currentThreat != null && proto.BlacklistedThreats.Contains(currentThreat)) ||
-                (proto.WhitelistedThreats.Count > 0 && (currentThreat == null || !proto.WhitelistedThreats.Contains(currentThreat))) ||
-                (govforPlatoon != null && proto.BlacklistedPlatoons.Contains(govforPlatoon)) ||
-                (opforPlatoon != null && proto.BlacklistedPlatoons.Contains(opforPlatoon)) ||
-                (proto.WhitelistedPlatoons.Any() && ((govforPlatoon != null && !proto.WhitelistedPlatoons.Contains(govforPlatoon)) || (opforPlatoon != null && !proto.WhitelistedPlatoons.Contains(opforPlatoon))))
+                // Threat blacklist/whitelist (case-insensitive)
+                (currentThreat != null && proto.BlacklistedThreats.Any(t => t.Equals(currentThreat, System.StringComparison.OrdinalIgnoreCase))) ||
+                (proto.WhitelistedThreats.Count > 0 && (currentThreat == null || !proto.WhitelistedThreats.Any(t => t.Equals(currentThreat, System.StringComparison.OrdinalIgnoreCase)))) ||
+                // Platoon blacklist/whitelist (case-insensitive)
+                (govforPlatoon != null && proto.BlacklistedPlatoons.Any(p => p.Equals(govforPlatoon, System.StringComparison.OrdinalIgnoreCase))) ||
+                (opforPlatoon != null && proto.BlacklistedPlatoons.Any(p => p.Equals(opforPlatoon, System.StringComparison.OrdinalIgnoreCase))) ||
+                (proto.WhitelistedPlatoons.Any() && ((govforPlatoon != null && !proto.WhitelistedPlatoons.Any(p => p.Equals(govforPlatoon, System.StringComparison.OrdinalIgnoreCase))) || (opforPlatoon != null && !proto.WhitelistedPlatoons.Any(p => p.Equals(opforPlatoon, System.StringComparison.OrdinalIgnoreCase)))))
             );
             if (filtered.Count == 0)
                 return;
@@ -547,7 +551,7 @@ namespace Content.Server.AU14.Round
         {
             var noThreatPresets = new HashSet<string> { "ForceOnForce", "Insurgency" };
 
-            if (_selectedPreset != null && noThreatPresets.Contains(_selectedPreset.ID))
+            if (_selectedPreset != null && noThreatPresets.Any(s => s.Equals(_selectedPreset.ID, System.StringComparison.OrdinalIgnoreCase)))
             {
                 _selectedthreat = null!;
                 Logger.Debug($"[AuRoundSystem] Skipping threat selection for preset: {_selectedPreset.ID}");
@@ -602,16 +606,18 @@ namespace Content.Server.AU14.Round
                         var govforid = platoonSpawnRuleSystem?.SelectedGovforPlatoon?.ID;
                         var opforid = platoonSpawnRuleSystem?.SelectedOpforPlatoon?.ID;
                         threats.RemoveAll(_ =>
-                            threatproto?.BlacklistedGamemodes?.Contains(preset) == true ||
-                            (threatproto?.whitelistedgamemodes?.Count > 0 &&
-                             !threatproto.whitelistedgamemodes.Contains(preset)) ||
-                            threatproto?.MaxPlayers < playercount ||
-                            threatproto?.MinPlayers > playercount ||
-                            govforid != null && threatproto?.BlacklistedPlatoons.Contains(govforid) == true ||
-                            opforid != null && threatproto?.BlacklistedPlatoons.Contains(opforid) == true ||
-                            threatproto?.WhitelistedPlatoons.Any() == true &&
-                            ((govforid != null && !threatproto.WhitelistedPlatoons.Contains(govforid)) ||
-                             (opforid != null && !threatproto.WhitelistedPlatoons.Contains(opforid)))
+                            // Gamemode checks (case-insensitive)
+                            (threatproto?.BlacklistedGamemodes?.Any(s => s.Equals(preset, System.StringComparison.OrdinalIgnoreCase)) == true) ||
+                            (threatproto?.whitelistedgamemodes?.Count > 0 && !(threatproto.whitelistedgamemodes.Any(s => s.Equals(preset, System.StringComparison.OrdinalIgnoreCase)))) ||
+                            // Player counts
+                            (threatproto?.MaxPlayers < playercount) ||
+                            (threatproto?.MinPlayers > playercount) ||
+                            // Platoons blacklist/whitelist (case-insensitive)
+                            (govforid != null && (threatproto?.BlacklistedPlatoons?.Any(p => p.Equals(govforid, System.StringComparison.OrdinalIgnoreCase)) == true)) ||
+                            (opforid != null && (threatproto?.BlacklistedPlatoons?.Any(p => p.Equals(opforid, System.StringComparison.OrdinalIgnoreCase)) == true)) ||
+                            (threatproto?.WhitelistedPlatoons?.Any() == true &&
+                             ((govforid != null && !(threatproto.WhitelistedPlatoons.Any(p => p.Equals(govforid, System.StringComparison.OrdinalIgnoreCase)))) ||
+                              (opforid != null && !(threatproto.WhitelistedPlatoons.Any(p => p.Equals(opforid, System.StringComparison.OrdinalIgnoreCase))))))
                         );
                         if (threats.Count > 0)
                         {
