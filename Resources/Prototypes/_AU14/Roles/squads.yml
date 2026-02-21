@@ -12,7 +12,7 @@
     - Gloves
     radio: MarineAlpha
     minimapBackground:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      sprite: _RMC14/Interface/map_blips.rsi
       state: background_forecon
     canSupplyDrop: false
     group: FORECON

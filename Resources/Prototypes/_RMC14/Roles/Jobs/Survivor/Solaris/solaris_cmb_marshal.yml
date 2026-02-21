@@ -45,10 +45,10 @@
       preset: RMCSurvivorPresetNoGun
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        sprite: _RMC14/Interface/map_blips.rsi
         state: deputy
       background:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        sprite: _RMC14/Interface/map_blips.rsi
         state: background_cmb
     - type: JobPrefix
       prefix: cm-job-prefix-survivor-cmb-marshal

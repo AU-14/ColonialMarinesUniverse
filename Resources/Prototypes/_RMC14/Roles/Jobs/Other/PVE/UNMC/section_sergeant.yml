@@ -47,7 +47,7 @@
       prefix: cm-job-prefix-section-sergeant
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        sprite: _RMC14/Interface/map_blips.rsi
         state: leader
     - type: RMCTrackable
   hidden: true

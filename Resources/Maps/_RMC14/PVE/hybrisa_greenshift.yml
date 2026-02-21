@@ -218459,7 +218459,7 @@ entities:
     - type: ActiveTacticalMapTracked
       color: '#FFFFFFFF'
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        sprite: _RMC14/Interface/map_blips.rsi
         state: sensor_tower
 - proto: RMCSentry
   entities:
@@ -328177,7 +328177,7 @@ entities:
     - type: ActiveTacticalMapTracked
       color: '#FFFFFFFF'
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        sprite: _RMC14/Interface/map_blips.rsi
         state: xenotunnel
 - proto: XenoWeedsSource
   entities:

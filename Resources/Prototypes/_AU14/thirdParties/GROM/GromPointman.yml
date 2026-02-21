@@ -27,7 +27,7 @@
     components:
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        sprite: _RMC14/Interface/map_blips.rsi
         state: leader
     - type: NpcFactionMember
       factions:
@@ -88,6 +88,6 @@
     job: AU14UPPGROMPointman
   - type: ItemIFF
     faction: GOVFOR
-    
+
 - type: playTimeTracker
   id: AU14JobUPPGROMPointman

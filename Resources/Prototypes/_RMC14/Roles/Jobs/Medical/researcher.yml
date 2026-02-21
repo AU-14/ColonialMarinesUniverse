@@ -33,10 +33,10 @@
     - type: ViewIntelObjectives
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        sprite: _RMC14/Interface/map_blips.rsi
         state: researcher
       background:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        sprite: _RMC14/Interface/map_blips.rsi
         state: background_medical
     - type: MutinyEligible
   hidden: true # TODO RMC14

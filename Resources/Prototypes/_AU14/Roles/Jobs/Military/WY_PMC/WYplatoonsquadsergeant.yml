@@ -37,7 +37,7 @@
       prefix: au14-job-prefix-AU14JobGOVFORSquadSergeantWYPMC
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        sprite: _RMC14/Interface/map_blips.rsi
         state: synth
     - type: MarineOrders
   hidden: true

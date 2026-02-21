@@ -48,6 +48,6 @@
       prefix: au14-job-prefix-AU14JobGOVFORPlatCoUPP
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        sprite: _RMC14/Interface/map_blips.rsi
         state: synth
   hidden: true
