@@ -79,11 +79,11 @@ au14-papthirdparty-greeting = You are member of People's armed Police of UPP.
 
     You have friendly to GOVFOR, neutral to civilians and hostile to CLF.
 
-au-14-job-name-upptd-squadleader = Territorial Defense Squad Leader
+au-14-job-name-upptd-squadleader = Squad Leader
 au-14-job-prefix-upptd-squadleader = TD SL
-au-14-job-name-upptd-rifleman = Territorial Defense Rifleman
+au-14-job-name-upptd-rifleman = Rifleman
 au-14-job-prefix-upptd-rifleman = TD RFN
-au-14-job-name-upptd-loader = Territorial Defense Loader
+au-14-job-name-upptd-loader = Loader
 au-14-job-prefix-upptd-loader = TD LOAD
 au14-upptd-description = You are a member of UPP's Territorial Defense. You were on patrol and.. Well... Now you are lost. Find your command and follow their orders. 
 
