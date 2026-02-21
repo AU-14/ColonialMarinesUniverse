@@ -26,7 +26,7 @@ au14-job-prefix-govfordcc = DCC
 
 AU14JobGOVFORSectionSergeant = Senior Sergeant
 au14-job-name-govforSSG = Senior Sergeant
-au14-job-description-govforSSG = Senior enlisted. Keep the platoon running and lead them on the ground.
+au14-job-description-govforSSG = Senior enlisted. Keep the platoon running .
 au14-job-prefix-govforSSG = SNRSRGT
 
 AU14JobGOVFORSquadSergeant = Sergeant
@@ -49,10 +49,10 @@ au14-job-name-govforplatooncorpsman = Hospital Corpsman
 au14-job-description-govforplatooncorpsman = Provide field medical aid. Patch them up, keep them breathing, and get them back in the fight.
 au14-job-prefix-govforplatooncorpsman = HM
 
-AU14JobGOVFORRadioTelephoneOperator = Radio Operator
-au14-job-name-radiotelephoneoperator = Radio Operator
-au14-job-description-radiotelephoneoperator = Operate long-range comms. You're the link between command and the boots. Don’t drop it.
-au14-job-prefix-radiotelephoneoperator = RTO
+AU14JobGOVFORRadioTelephoneOperator =  Fireteam Lead
+au14-job-name-radiotelephoneoperator = Fireteam Leader
+au14-job-description-radiotelephoneoperator = Operate long-range comms and lead fireteams.
+au14-job-prefix-radiotelephoneoperator = FTL
 
 AU14JobGOVFORAuxSupportSynth = Support Synthetic
 au14-job-name-govforauxsupportsynth = Support Synthetic
@@ -162,3 +162,4 @@ au-14-job-name-uppgrom-machinegunner = GROM Machinegunner
 au-14-job-prefix-uppgrom-machinegunner = GROM MG
 au-14-job-name-uppgrom-supporttech = GROM Support Tech
 au-14-job-prefix-uppgrom-supporttech = GROM ST
+
