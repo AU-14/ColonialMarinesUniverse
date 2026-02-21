@@ -83,3 +83,21 @@ rmc-job-description-forecon-detachment = You are a member or USCMC FORECON. You 
 
 au14-job-name-forecon-spotter = Spotter
 au14-job-prefix-forecon-spotter = SPOT
+
+au-14-job-name-uacg-squadleader = Lost Squad Leader
+au-14-job-prefix-uacg-squadleader = Lost CG SL
+
+au-14-job-name-uacg-rifleman = Lost Rifleman
+au-14-job-prefix-uacg-rifleman = CG RFN
+
+au-14-job-name-uacg-ammobearer = Lost Ammo Bearer
+au-14-job-prefix-uacg-ammobearer = CG AB
+
+au14-uacg-rules = You are a Government Forces Third Party! You are friendly to GOVFOR forces and neutral to civilians. This third party asks for a slightly higher level of roleplay than others! Please keep this in mind.
+au14-uacg-description = Your squad was separated from your platoon whilst on a short range patrol from your FOB, when extreme weather had veered you off course. Relink with Government Forces with those who remain.
+
+au14-uacg-greeting = You are a member of UACG patrol! 
+
+    You were patrolling and got lost. Report to local command for further orders.
+
+    You are part of GOVFOR!
