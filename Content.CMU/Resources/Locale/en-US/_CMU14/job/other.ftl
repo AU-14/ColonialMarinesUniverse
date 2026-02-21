@@ -81,5 +81,5 @@ au14-forecon-detachment-rules = You were dispatched to GOVFOR. Report to command
 
 rmc-job-description-forecon-detachment = You are a member or USCMC FORECON. You were dispatched to GOVFOR. Report to command for further orders.
 
-rmc-job-name-forecon-spotter = Spotter
-rmc-job-prefix-forecon-spotter = SPOT
+au14-job-name-forecon-spotter = Spotter
+au14-job-prefix-forecon-spotter = SPOT
