@@ -57,6 +57,29 @@ au14-uppgrom-greeting = You are a member of UPP's elite GROM special forces unit
 
     You are not hostile to the UPP and CCA and neutral to other countries!
 
-
-
 au14-uppgrom-description = You are a member of UPP's elite GROM special forces unit. Survive with your squad and contact any friendly Command.
+
+au14-forecon-rules = You are a member of USCMC FORECON! You do not remember what happened or what is happening in round.
+
+au14-forecon-greeting = You are a member of USCMC elite FORECON special forces unit! 
+
+    Your last mission was disastrous, you lost contact with your mothership and command. 
+
+    Your supplies are running low, and only by your adaptability you managed you survive. 
+
+    Ensure survival of yourself and your squadmates and contact nearest friendly command.  
+
+    You are not hostile to the UA and TWE and neutral to other countries!
+
+au14-forecon-detachment-greeting = You are a member of USCMC elite FORECON special forces unit! 
+
+    You were dispatched to GOVFOR. Report to command for further orders.
+
+    You are part of GOVFOR!
+
+au14-forecon-detachment-rules = You were dispatched to GOVFOR. Report to command for further orders.
+
+rmc-job-description-forecon-detachment = You are a member or USCMC FORECON. You were dispatched to GOVFOR. Report to command for further orders.
+
+rmc-job-name-forecon-spotter = Spotter
+rmc-job-prefix-forecon-spotter = SPOT
