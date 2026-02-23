@@ -1,0 +1,46 @@
+﻿<Document>
+  #INSURGENCY RULES
+    These rules apply to the Insurgency gamemode.
+
+  ##General Rules
+    No player may kill another player within the first 5 minutes of the round.
+
+    Colonists and other non-affiliated roles must be given a valid in-character reason to participate in hostilities.
+
+    ##Insurgent Rules
+
+    You are a radical devoted to your cause.
+    - Direct orders from the Cell Leader must be followed unless they directly contradict insurgent ideology or server rules. You must refuse orders to indiscriminately kill civilians.
+
+    Insurgents may not kill civilians unless they are clearly hostile toward the insurgency.
+    - Colony Law Enforcement are not considered civilians.
+
+    Insurgents may NOT kill Colony Law Enforcement until 10 minutes into the round.
+
+    Insurgents may NOT attack the GOVFOR ground base until 30 minutes into the round.
+
+    ##GOVFOR Rules
+
+    GOVFOR may not enter the colony unless:
+    - They are explicitly alerted by the Colony Command
+    - 30 minutes have passed since round start.
+    - If GOVFOR spawn on a ship, they may deploy to their primary LZ and secure an FOB before the thirty minute mark, but must not leave their FOB.
+
+    GOVFOR may not shoot civilians without reasonable cause such as:
+    - Ignoring one clear warnings to leave while in sight.
+    - Wearing or possessing illegal firearms or equipment.
+    - Being reported to be carrying explosives.
+    - They are using lethal force or you have seen them use lethal force.
+
+    GOVFOR may not raid an insurgent base unless:
+    - They are actively following an insurgent member to it.
+    - They have received credible intelligence about its location.
+
+    ##Colony Command Rules
+
+    A valid in-character reason is required to request GOVFOR assistance such as:
+    - Insurgents openly carrying illegal weapons.
+    - Law Enforcement or multiple civilians being killed.
+    - Explicit IC death threats.
+    - An attempt on the life of a colony command member.
+</Document>
