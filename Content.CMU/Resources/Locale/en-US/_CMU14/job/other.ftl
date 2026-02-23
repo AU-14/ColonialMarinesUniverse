@@ -133,3 +133,27 @@ au14-uacg-greeting = You are a member of UACG patrol!
     You were patrolling and got lost. Report to local command for further orders.
 
     You are part of GOVFOR!
+
+au14-usarmy-greeting = You are a member of US Army 1st cavalry division!
+
+    During your last mission you lost contact with HQ.
+
+    You are aware of the threat.
+
+    Your objective is to eliminate the threat.
+
+    You are friendly to UA and neutral to other countries.
+
+au14-usarmy-rules = You are a member of US Army 1st cavalry division! You do not remember what happened or what is happening in round.
+
+rmc-squad-info-USArmyCommandingOfficer = US Army Commanding Officer
+
+au14-job-name-usarmy-trooper = Trooper
+au14-job-prefix-usarmy-trooper = TRP
+au14-job-name-usarmy-cet = Combat Engineering Technician
+au14-job-prefix-usarmy-cet = CET
+au14-job-name-usarmy-cmt = Combat Medical Technician
+au14-job-prefix-usarmy-cmt = CMT
+au14-job-name-usarmy-hg = Heavy Gunner
+au14-job-prefix-usarmy-hg = HG
+au14-job-description-usarmy = You are a member of US Army 1st Cavalry Regiment. Your unit sustained casualties, but you still have a job to do.

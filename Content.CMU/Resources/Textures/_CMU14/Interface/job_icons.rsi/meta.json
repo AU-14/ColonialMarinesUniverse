@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/1c026464019b7baae4975e4b1470a18b37dd1d1c/icons/mob/hud/factions/marine.dmi",
+  "size": {
+    "x": 16,
+    "y": 16
+  },
+    "states": [
+        {
+            "name": "hudsquad_cet"
+        },
+        {
+            "name": "hudsquad_cmt"
+        },
+        {
+            "name": "hudsquad_co_army"
+        },
+        {
+            "name": "hudsquad_mmg"
+        },
+        {
+            "name": "hudsquad_sl_army"
+        },
+        {
+            "name": "hudsquad_snpr"
+        },
+        {
+            "name": "hudsquad_syn_army"
+        },
+        {
+            "name": "hudsquad_trpr"
+        }
+    ]
+}
