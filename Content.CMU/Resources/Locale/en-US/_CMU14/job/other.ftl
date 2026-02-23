@@ -57,47 +57,36 @@ au14-uppgrom-greeting = You are a member of UPP's elite GROM special forces unit
 
     You are not hostile to the UPP and CCA and neutral to other countries!
 
+rmc-squad-info-GROMCommandingOfficer = GROM Commanding Officer
 au14-uppgrom-description = You are a member of UPP's elite GROM special forces unit. Survive with your squad and contact any friendly Command.
 
-au14-forecon-rules = You are a member of USCMC FORECON! You do not remember what happened or what is happening in round.
+au-14-job-name-papthirdparty-investigator = PaP Investigator
+au-14-job-prefix-papthirdparty-investigator = Pap Inv
+au14-papthirdparty-description = You are part of PaP's Investigation group. You were called to a colony to investigate. You are not aware of the situation. Investigate.
 
-au14-forecon-greeting = You are a member of USCMC elite FORECON special forces unit! 
+au-14-job-name-papthirdparty-captain = PaP Senior Investigator
+au-14-job-prefix-papthirdparty-captain = PaP SInv
 
-    Your last mission was disastrous, you lost contact with your mothership and command. 
+au-14-job-name-papthirdparty-observer = Interstellar Human Rights Observer
+au14-papthirdparty-description-observer = Through hard work, you have managed to make your way onto the frontier alongside a PaP investigation group to document and record any atrocities that may be occurring in this dark sector of space. It’s partly a PR stunt, but it’s important work. In an emergency, you may also be able to provide medical aid to those in need.
+au-14-job-prefix-papthirdparty-observer = PaP Obs
 
-    Your supplies are running low, and only by your adaptability you managed you survive. 
+au14-papthirdparty-greeting = You are member of People's armed Police of UPP. 
 
-    Ensure survival of yourself and your squadmates and contact nearest friendly command.  
+    You have been dispatched to investigate colony you are making way to.
 
-    You are not hostile to the UA and TWE and neutral to other countries!
+    You have friendly to GOVFOR, neutral to civilians and hostile to CLF.
 
-au14-forecon-detachment-greeting = You are a member of USCMC elite FORECON special forces unit! 
+au-14-job-name-upptd-squadleader = Squad Leader
+au-14-job-prefix-upptd-squadleader = TD SL
+au-14-job-name-upptd-rifleman = Rifleman
+au-14-job-prefix-upptd-rifleman = TD RFN
+au-14-job-name-upptd-loader = Loader
+au-14-job-prefix-upptd-loader = TD LOAD
+au14-upptd-description = You are a member of UPP's Territorial Defense. You were on patrol and.. Well... Now you are lost. Find your command and follow their orders. 
 
-    You were dispatched to GOVFOR. Report to command for further orders.
+au14-upptd-greeting = You are member of UPP's Territorial Defense. 
 
-    You are part of GOVFOR!
-
-au14-forecon-detachment-rules = You were dispatched to GOVFOR. Report to command for further orders.
-
-rmc-job-description-forecon-detachment = You are a member or USCMC FORECON. You were dispatched to GOVFOR. Report to command for further orders.
-
-au14-job-name-forecon-spotter = Spotter
-au14-job-prefix-forecon-spotter = SPOT
-
-au-14-job-name-uacg-squadleader = Lost Squad Leader
-au-14-job-prefix-uacg-squadleader = Lost CG SL
-
-au-14-job-name-uacg-rifleman = Lost Rifleman
-au-14-job-prefix-uacg-rifleman = CG RFN
-
-au-14-job-name-uacg-ammobearer = Lost Ammo Bearer
-au-14-job-prefix-uacg-ammobearer = CG AB
-
-au14-uacg-rules = You are a Government Forces Third Party! You are friendly to GOVFOR forces and neutral to civilians. This third party asks for a slightly higher level of roleplay than others! Please keep this in mind.
-au14-uacg-description = Your squad was separated from your platoon whilst on a short range patrol from your FOB, when extreme weather had veered you off course. Relink with Government Forces with those who remain.
-
-au14-uacg-greeting = You are a member of UACG patrol! 
-
-    You were patrolling and got lost. Report to local command for further orders.
-
-    You are part of GOVFOR!
+    You have been dispatched to patrol but got lost.
+    Find any local command and join their forces.
+    You have friendly to UPP and CCA, neutral to civilians and other countries, and hostile to CLF.
