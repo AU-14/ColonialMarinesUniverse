@@ -90,3 +90,46 @@ au14-upptd-greeting = You are member of UPP's Territorial Defense.
     You have been dispatched to patrol but got lost.
     Find any local command and join their forces.
     You have friendly to UPP and CCA, neutral to civilians and other countries, and hostile to CLF.
+
+au14-forecon-rules = You are a member of USCMC FORECON! You do not remember what happened or what is happening in round.
+
+au14-forecon-greeting = You are a member of USCMC elite FORECON special forces unit! 
+
+    Your last mission was disastrous, you lost contact with your mothership and command. 
+
+    Your supplies are running low, and only by your adaptability you managed you survive. 
+
+    Ensure survival of yourself and your squadmates and contact nearest friendly command.  
+
+    You are not hostile to the UA and TWE and neutral to other countries!
+
+au14-forecon-detachment-greeting = You are a member of USCMC elite FORECON special forces unit! 
+
+    You were dispatched to GOVFOR. Report to command for further orders.
+
+    You are part of GOVFOR!
+
+au14-forecon-detachment-rules = You were dispatched to GOVFOR. Report to command for further orders.
+
+rmc-job-description-forecon-detachment = You are a member or USCMC FORECON. You were dispatched to GOVFOR. Report to command for further orders.
+
+au14-job-name-forecon-spotter = Spotter
+au14-job-prefix-forecon-spotter = SPOT
+
+au-14-job-name-uacg-squadleader = Lost Squad Leader
+au-14-job-prefix-uacg-squadleader = Lost CG SL
+
+au-14-job-name-uacg-rifleman = Lost Rifleman
+au-14-job-prefix-uacg-rifleman = CG RFN
+
+au-14-job-name-uacg-ammobearer = Lost Ammo Bearer
+au-14-job-prefix-uacg-ammobearer = CG AB
+
+au14-uacg-rules = You are a Government Forces Third Party! You are friendly to GOVFOR forces and neutral to civilians. This third party asks for a slightly higher level of roleplay than others! Please keep this in mind.
+au14-uacg-description = Your squad was separated from your platoon whilst on a short range patrol from your FOB, when extreme weather had veered you off course. Relink with Government Forces with those who remain.
+
+au14-uacg-greeting = You are a member of UACG patrol! 
+
+    You were patrolling and got lost. Report to local command for further orders.
+
+    You are part of GOVFOR!
