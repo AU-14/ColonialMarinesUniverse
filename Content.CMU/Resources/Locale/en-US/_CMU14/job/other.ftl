@@ -164,10 +164,18 @@ au14-job-name-usarmy-tankloader = Tank Loader
 au14-job-prefix-usarmy-tankloader = TLOAD
 au14-job-description-usarmy-tankcrew = You are a member of US Army 32nd Armored Division. You lost contact with HQ and your tank got in the mud. Contact nearest friendly command. 
 
-au14-usarmy-tank-greeting = You are a member of 32nd Armored Division!
+au14-usarmy-tank-greeting = You are a member of US Army 32nd Armored Division!
 
     You lost contact with HQ, and your tank got into the mud so you abandoned it.
 
     Contact and join nearest friendly forces.
 
     You are friendly to UA and neutral to other countries.
+
+au14-usarmy-armored-greeting = You are a member of US Army 32nd Armored Division!
+
+    You were dispatched to aid GOVFOR forces in the AO!
+
+    Get ready for action and report to the GVOFR Commander!
+
+    You are friendly to GOVFOR, neutral to civilians and hostile to CLF!
