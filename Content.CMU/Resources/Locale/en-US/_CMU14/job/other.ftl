@@ -28,7 +28,7 @@ AU14JobMobGoon = Mob Goon
 au14-job-name-wyguard = Security Officer
 au14-job-description-wyguard= You're corporate security hired by Weyland-Yutani. Listen to and protect the employees and company assets
 au14-job-prefix-wyguard = WYSEC
-AU14JobWYGuard = Corporate Security Officer
+AU14JobWYGuard = Security Officer
 
 au14-department-third-party = Third Party
 au14-department-third-party-description = Select this job to play as a third party
