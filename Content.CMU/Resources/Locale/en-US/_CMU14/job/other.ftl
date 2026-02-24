@@ -144,7 +144,7 @@ au14-usarmy-greeting = You are a member of US Army 1st cavalry division!
 
     You are friendly to UA and neutral to other countries.
 
-au14-usarmy-rules = You are a member of US Army 1st cavalry division! You do not remember what happened or what is happening in round.
+au14-usarmy-rules = You are a member of US Army! You do not remember what happened or what is happening in round.
 
 rmc-squad-info-USArmyCommandingOfficer = US Army Commanding Officer
 
@@ -157,3 +157,17 @@ au14-job-prefix-usarmy-cmt = CMT
 au14-job-name-usarmy-hg = Heavy Gunner
 au14-job-prefix-usarmy-hg = HG
 au14-job-description-usarmy = You are a member of US Army 1st Cavalry Regiment. Your unit sustained casualties, but you still have a job to do.
+
+au14-job-name-usarmy-tankcommander = Tank Commander
+au14-job-prefix-usarmy-tankcommander = TC
+au14-job-name-usarmy-tankloader = Tank Loader
+au14-job-prefix-usarmy-tankloader = TLOAD
+au14-job-description-usarmy-tankcrew = You are a member of US Army 32nd Armored Division. You lost contact with HQ and your tank got in the mud. Contact nearest friendly command. 
+
+au14-usarmy-tank-greeting = You are a member of 32nd Armored Division!
+
+    You lost contact with HQ, and your tank got into the mud so you abandoned it.
+
+    Contact and join nearest friendly forces.
+
+    You are friendly to UA and neutral to other countries.
