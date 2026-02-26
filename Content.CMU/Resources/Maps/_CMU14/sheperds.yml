@@ -71156,323 +71156,233 @@ entities:
     - type: Transform
       pos: 147.5,10.5
       parent: 1
-- proto: AUSpawnSheperdCarp
+- proto: CMUSpawnMobCarp
   entities:
   - uid: 1047
     components:
     - type: Transform
       pos: 133.5,217.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1048
     components:
     - type: Transform
       pos: 86.5,222.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1049
     components:
     - type: Transform
       pos: 116.5,185.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1050
     components:
     - type: Transform
       pos: 76.5,172.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1051
     components:
     - type: Transform
       pos: 45.5,136.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1052
     components:
     - type: Transform
       pos: 141.5,260.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1053
     components:
     - type: Transform
       pos: 139.5,261.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1054
     components:
     - type: Transform
       pos: 141.5,262.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1055
     components:
     - type: Transform
       pos: 148.5,317.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1056
     components:
     - type: Transform
       pos: 154.5,282.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1057
     components:
     - type: Transform
       pos: 152.5,223.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1058
     components:
     - type: Transform
       pos: 138.5,190.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1059
     components:
     - type: Transform
       pos: 136.5,191.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1060
     components:
     - type: Transform
       pos: 138.5,192.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1061
     components:
     - type: Transform
       pos: 153.5,173.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1062
     components:
     - type: Transform
       pos: 146.5,134.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1063
     components:
     - type: Transform
       pos: 19.5,102.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1064
     components:
     - type: Transform
       pos: 150.5,101.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1065
     components:
     - type: Transform
       pos: 146.5,68.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1066
     components:
     - type: Transform
       pos: 153.5,43.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1067
     components:
     - type: Transform
       pos: 97.5,90.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1068
     components:
     - type: Transform
       pos: 95.5,91.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1069
     components:
     - type: Transform
       pos: 97.5,92.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1070
     components:
     - type: Transform
       pos: 95.5,89.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1071
     components:
     - type: Transform
       pos: 95.5,93.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1072
     components:
     - type: Transform
       pos: 113.5,101.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1073
     components:
     - type: Transform
       pos: 115.5,101.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1074
     components:
     - type: Transform
       pos: 117.5,101.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1075
     components:
     - type: Transform
       pos: 114.5,99.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1076
     components:
     - type: Transform
       pos: 116.5,99.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1077
     components:
     - type: Transform
       pos: 129.5,95.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1078
     components:
     - type: Transform
       pos: 129.5,93.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1079
     components:
     - type: Transform
       pos: 129.5,91.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1080
     components:
     - type: Transform
       pos: 127.5,92.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1081
     components:
     - type: Transform
       pos: 127.5,94.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1082
     components:
     - type: Transform
       pos: 121.5,75.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1083
     components:
     - type: Transform
       pos: 120.5,77.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1084
     components:
     - type: Transform
       pos: 122.5,78.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1085
     components:
     - type: Transform
       pos: 124.5,79.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1086
     components:
     - type: Transform
       pos: 122.5,80.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1087
     components:
     - type: Transform
       pos: 104.5,77.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1088
     components:
     - type: Transform
       pos: 106.5,76.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1089
     components:
     - type: Transform
       pos: 103.5,79.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1090
     components:
     - type: Transform
       pos: 106.5,78.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
   - uid: 1091
     components:
     - type: Transform
       pos: 101.5,78.5
       parent: 1
-    - type: ProportionalSpawner
-      ratio: 32
 - proto: AUSubmissionPointWood
   entities:
   - uid: 1092
@@ -71957,6 +71867,8 @@ entities:
       parent: 1
   - uid: 1160
     components:
+    - type: MetaData
+      name: Operations Officer
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 4.5,23.5
@@ -75805,11 +75717,15 @@ entities:
   entities:
   - uid: 1726
     components:
+    - type: MetaData
+      name: Hospital
     - type: Transform
       pos: 18.5,22.5
       parent: 1
   - uid: 1727
     components:
+    - type: MetaData
+      name: Hospital
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 18.5,21.5
