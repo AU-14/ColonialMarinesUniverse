@@ -25,10 +25,10 @@ au14-job-name-mobgoon= Mob Goon
 au14-job-description-mobgoon = You're a soldier in local crime syndicate, listen to the boss
 AU14JobMobGoon = Mob Goon
 
-au14-job-name-wyguard = Security Officer
+au14-job-name-wyguard = WeYu Guard
 au14-job-description-wyguard= You're corporate security hired by Weyland-Yutani. Listen to and protect the employees and company assets
-au14-job-prefix-wyguard = WYSEC
-AU14JobWYGuard = Security Officer
+au14-job-prefix-wyguard = WYGUARD
+AU14JobWYGuard = WeYu guard
 
 au14-department-third-party = Third Party
 au14-department-third-party-description = Select this job to play as a third party
@@ -58,6 +58,8 @@ au14-uppgrom-greeting = You are a member of UPP's elite GROM special forces unit
     You are not hostile to the UPP and CCA and neutral to other countries!
 
 rmc-squad-info-GROMCommandingOfficer = GROM Commanding Officer
+
+
 au14-uppgrom-description = You are a member of UPP's elite GROM special forces unit. Survive with your squad and contact any friendly Command.
 
 au-14-job-name-papthirdparty-investigator = PaP Investigator
@@ -91,91 +93,8 @@ au14-upptd-greeting = You are member of UPP's Territorial Defense.
     Find any local command and join their forces.
     You have friendly to UPP and CCA, neutral to civilians and other countries, and hostile to CLF.
 
-au14-forecon-rules = You are a member of USCMC FORECON! You do not remember what happened or what is happening in round.
+au14-professorvonbandolier-rules = Blast! No sign of proper game for weeks, and that was your last cup of good tea.
 
-au14-forecon-greeting = You are a member of USCMC elite FORECON special forces unit! 
-
-    Your last mission was disastrous, you lost contact with your mothership and command. 
-
-    Your supplies are running low, and only by your adaptability you managed you survive. 
-
-    Ensure survival of yourself and your squadmates and contact nearest friendly command.  
-
-    You are not hostile to the UA and TWE and neutral to other countries!
-
-au14-forecon-detachment-greeting = You are a member of USCMC elite FORECON special forces unit! 
-
-    You were dispatched to GOVFOR. Report to command for further orders.
-
-    You are part of GOVFOR!
-
-au14-forecon-detachment-rules = You were dispatched to GOVFOR. Report to command for further orders.
-
-rmc-job-description-forecon-detachment = You are a member or USCMC FORECON. You were dispatched to GOVFOR. Report to command for further orders.
-
-au14-job-name-forecon-spotter = Spotter
-au14-job-prefix-forecon-spotter = SPOT
-
-au-14-job-name-uacg-squadleader = Lost Squad Leader
-au-14-job-prefix-uacg-squadleader = Lost CG SL
-
-au-14-job-name-uacg-rifleman = Lost Rifleman
-au-14-job-prefix-uacg-rifleman = CG RFN
-
-au-14-job-name-uacg-ammobearer = Lost Ammo Bearer
-au-14-job-prefix-uacg-ammobearer = CG AB
-
-au14-uacg-rules = You are a Government Forces Third Party! You are friendly to GOVFOR forces and neutral to civilians. This third party asks for a slightly higher level of roleplay than others! Please keep this in mind.
-au14-uacg-description = Your squad was separated from your platoon whilst on a short range patrol from your FOB, when extreme weather had veered you off course. Relink with Government Forces with those who remain.
-
-au14-uacg-greeting = You are a member of UACG patrol! 
-
-    You were patrolling and got lost. Report to local command for further orders.
-
-    You are part of GOVFOR!
-
-au14-usarmy-greeting = You are a member of US Army 1st cavalry division!
-
-    During your last mission you lost contact with HQ.
-
-    You are aware of the threat.
-
-    Your objective is to eliminate the threat.
-
-    You are friendly to UA and neutral to other countries.
-
-au14-usarmy-rules = You are a member of US Army! You do not remember what happened or what is happening in round.
-
-rmc-squad-info-USArmyCommandingOfficer = US Army Commanding Officer
-
-au14-job-name-usarmy-trooper = Trooper
-au14-job-prefix-usarmy-trooper = TRP
-au14-job-name-usarmy-cet = Combat Engineering Technician
-au14-job-prefix-usarmy-cet = CET
-au14-job-name-usarmy-cmt = Combat Medical Technician
-au14-job-prefix-usarmy-cmt = CMT
-au14-job-name-usarmy-hg = Heavy Gunner
-au14-job-prefix-usarmy-hg = HG
-au14-job-description-usarmy = You are a member of US Army 1st Cavalry Regiment. Your unit sustained casualties, but you still have a job to do.
-
-au14-job-name-usarmy-tankcommander = Tank Commander
-au14-job-prefix-usarmy-tankcommander = TC
-au14-job-name-usarmy-tankloader = Tank Loader
-au14-job-prefix-usarmy-tankloader = TLOAD
-au14-job-description-usarmy-tankcrew = You are a member of US Army 32nd Armored Division. You lost contact with HQ and your tank got in the mud. Contact nearest friendly command. 
-
-au14-usarmy-tank-greeting = You are a member of US Army 32nd Armored Division!
-
-    You lost contact with HQ, and your tank got into the mud so you abandoned it.
-
-    Contact and join nearest friendly forces.
-
-    You are friendly to UA and neutral to other countries.
-
-au14-usarmy-armored-greeting = You are a member of US Army 32nd Armored Division!
-
-    You were dispatched to aid GOVFOR forces in the AO!
-
-    Get ready for action and report to the GVOFR Commander!
-
-    You are friendly to GOVFOR, neutral to civilians and hostile to CLF!
+    You have no allies or allegiences to any faction.
+    Set up in the local area - find, track, and hunt your chosen game.
+    Spare those not worth the hunt, unless they make themselves a problem.
