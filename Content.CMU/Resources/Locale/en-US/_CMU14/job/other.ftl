@@ -59,7 +59,6 @@ au14-uppgrom-greeting = You are a member of UPP's elite GROM special forces unit
 
 rmc-squad-info-GROMCommandingOfficer = GROM Commanding Officer
 
-
 au14-uppgrom-description = You are a member of UPP's elite GROM special forces unit. Survive with your squad and contact any friendly Command.
 
 au-14-job-name-papthirdparty-investigator = PaP Investigator
