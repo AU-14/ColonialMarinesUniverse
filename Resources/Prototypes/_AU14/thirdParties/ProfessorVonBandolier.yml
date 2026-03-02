@@ -1,0 +1,154 @@
+- type: entity
+  parent: RMCBaseMobSpeciesOrganic
+  id: AU14PartyJobProfessorVonBandolier
+  name: Professor Von Bandolier
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [ AU14GearProfessorVonBandolier ]
+  - type: RandomHumanoidAppearance
+  - type: RandomHumanoidAppearanceWhitelisted #civilian type
+    allowedMaleHairStyles:
+    - RMCHumanHairBaldingHair
+    - RMCHumanHairCrew
+    - RMCHumanHairLtRasczak
+    allowedFemaleHairStyles:
+    - AU14HumanHairLowPonyTail
+    - RMCHumanHairFlair2
+    - AU14HumanHairElegant
+    allowedHairColorsHex:
+    - "#995b2e"
+    allowedEyeColorsHex: [ "#995b2e" ]
+    beardChance: 0
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Professor Von Bandolier
+    description: Find the biggest and most dangerous game, whether that is space alien or a man with a gun and eloquently shoot them.
+    raffle:
+      settings: short
+    rules: au14-professorvonbandolier-rules
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+       RMCSkillConstruction: 2
+       RMCSkillCqc: 2
+       RMCSkillEndurance: 2
+       RMCSkillFirearms: 3
+       RMCSkillFireman: 2
+       RMCSkillIntel: 1
+       RMCSkillJtac: 1
+       RMCSkillLeadership: 1
+       RMCSkillMedical: 2
+       RMCSkillSurgery: 1
+       RMCSkillVehicles: 1
+
+- type: partySpawn
+  id: ProfessorVonBandolierSpawn
+  leadersToSpawn:
+    AU14PartyJobVonBandolier: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: ProfessorVonBandolier
+  partyspawn: ProfessorVonBandolierSpawn
+  entrymethod: shuttle
+  weight: 1
+  minplayers: 50
+  maxplayers: 400
+  GhostsNeeded: 0
+  roundstart: true
+
+- type: startingGear
+  id: AU14GearProfessorVonBandolier
+  equipment:
+    outerClothing: CMArmorDutchJacketVonBandolier
+    jumpsuit: RMCJumpsuitDutchBandolier
+    shoes: RMCBootsVanBandolier
+    head: AU14HeadPithHelmet
+    gloves: RMCHandsDeluxeMarine
+    belt: AU14M276ShotgunShellLoadingRigBlackVonBandolier
+    pocket1: RMCPouchMagazinePistolLargeVonBandolier
+    pocket2: RMCPouchMedkitVonBandolier
+    back: AU14WeaponRifleTwoBore
+    suitstorage: RMCBeltHolsterRevolverVonBandolier
+
+- type: entity
+  parent: AU14M276ShotgunShellLoadingRigBlack
+  id: AU14M276ShotgunShellLoadingRigBlackVonBandolier
+  suffix: Filled, Professor Von Bandolier
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14CartridgeRifleTwoBore
+    - id: AU14CartridgeRifleTwoBore
+    - id: AU14CartridgeRifleTwoBore
+    - id: AU14CartridgeRifleTwoBore
+    - id: AU14CartridgeRifleTwoBore
+    - id: AU14CartridgeRifleTwoBore
+    - id: AU14CartridgeRifleTwoBore
+    - id: AU14CartridgeRifleTwoBore
+    - id: AU14CartridgeRifleTwoBore
+    - id: AU14CartridgeRifleTwoBore
+    - id: AU14CartridgeRifleTwoBore
+    - id: AU14CartridgeRifleTwoBore
+
+- type: entity
+  parent: CMArmorDutchJacket
+  id: CMArmorDutchJacketVonBandolier
+  suffix: Filled, Professor Von Bandolier
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCShioRoyalsCase
+    - id: RMCZippoGold
+
+- type: entity
+  parent: RMCPouchMedkit
+  id: RMCPouchMedkitVonBandolier
+  suffix: Filled, Professor Von Bandolier
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMSurgicalLine
+    - id: CMSynthGraft
+    - id: CMPillCanisterKelotaneDermaline
+    - id: RMCPillCanisterMeralyneBicaridine
+    - id: CMTricordrazineAutoInjector
+    - id: CMTricordrazineAutoInjector
+    - id: CMHealthAnalyzer
+
+- type: entity
+  parent: RMCPouchMagazinePistolLarge
+  id: RMCPouchMagazinePistolLargeVonBandolier
+  suffix: Filled, Professor Von Bandolier
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpeedLoader44Marksman
+    - id: RMCSpeedLoader44Marksman
+    - id: RMCSpeedLoader44Marksman
+    - id: RMCSpeedLoader44Marksman
+    - id: RMCSpeedLoader44Marksman
+    - id: RMCSpeedLoader44Marksman
+
+
+- type: entity
+  parent: RMCBeltHolsterRevolver
+  id: RMCBeltHolsterRevolverVonBandolier
+  suffix: Filled, Professor Von Bandolier
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponRevolverM44Marksman
+    - id: RMCSpeedLoader44Marksman
+    - id: RMCSpeedLoader44Marksman
+    - id: RMCSpeedLoader44Marksman
+    - id: RMCSpeedLoader44Marksman
+    - id: RMCSpeedLoader44Marksman
+    - id: RMCSpeedLoader44Marksman

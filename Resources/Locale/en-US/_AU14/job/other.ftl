@@ -58,6 +58,7 @@ au14-uppgrom-greeting = You are a member of UPP's elite GROM special forces unit
     You are not hostile to the UPP and CCA and neutral to other countries!
 
 rmc-squad-info-GROMCommandingOfficer = GROM Commanding Officer
+
 au14-uppgrom-description = You are a member of UPP's elite GROM special forces unit. Survive with your squad and contact any friendly Command.
 
 au-14-job-name-papthirdparty-investigator = PaP Investigator
@@ -91,19 +92,25 @@ au14-upptd-greeting = You are member of UPP's Territorial Defense.
     Find any local command and join their forces.
     You have friendly to UPP and CCA, neutral to civilians and other countries, and hostile to CLF.
 
+au14-professorvonbandolier-rules = Blast! No sign of proper game for weeks, and that was your last cup of good tea.
+
+    You have no allies or allegiences to any faction.
+    Set up in the local area - find, track, and hunt your chosen game.
+    Spare those not worth the hunt, unless they make themselves a problem.
+
 au14-forecon-rules = You are a member of USCMC FORECON! You do not remember what happened or what is happening in round.
 
-au14-forecon-greeting = You are a member of USCMC elite FORECON special forces unit! 
+au14-forecon-greeting = You are a member of USCMC elite FORECON special forces unit!
 
-    Your last mission was disastrous, you lost contact with your mothership and command. 
+    Your last mission was disastrous, you lost contact with your mothership and command.
 
-    Your supplies are running low, and only by your adaptability you managed you survive. 
+    Your supplies are running low, and only by your adaptability you managed you survive.
 
-    Ensure survival of yourself and your squadmates and contact nearest friendly command.  
+    Ensure survival of yourself and your squadmates and contact nearest friendly command.
 
     You are not hostile to the UA and TWE and neutral to other countries!
 
-au14-forecon-detachment-greeting = You are a member of USCMC elite FORECON special forces unit! 
+au14-forecon-detachment-greeting = You are a member of USCMC elite FORECON special forces unit!
 
     You were dispatched to GOVFOR. Report to command for further orders.
 
@@ -128,7 +135,7 @@ au-14-job-prefix-uacg-ammobearer = CG AB
 au14-uacg-rules = You are a Government Forces Third Party! You are friendly to GOVFOR forces and neutral to civilians. This third party asks for a slightly higher level of roleplay than others! Please keep this in mind.
 au14-uacg-description = Your squad was separated from your platoon whilst on a short range patrol from your FOB, when extreme weather had veered you off course. Relink with Government Forces with those who remain.
 
-au14-uacg-greeting = You are a member of UACG patrol! 
+au14-uacg-greeting = You are a member of UACG patrol!
 
     You were patrolling and got lost. Report to local command for further orders.
 
@@ -162,7 +169,7 @@ au14-job-name-usarmy-tankcommander = Tank Commander
 au14-job-prefix-usarmy-tankcommander = TC
 au14-job-name-usarmy-tankloader = Tank Loader
 au14-job-prefix-usarmy-tankloader = TLOAD
-au14-job-description-usarmy-tankcrew = You are a member of US Army 32nd Armored Division. You lost contact with HQ and your tank got in the mud. Contact nearest friendly command. 
+au14-job-description-usarmy-tankcrew = You are a member of US Army 32nd Armored Division. You lost contact with HQ and your tank got in the mud. Contact nearest friendly command.
 
 au14-usarmy-tank-greeting = You are a member of US Army 32nd Armored Division!
 

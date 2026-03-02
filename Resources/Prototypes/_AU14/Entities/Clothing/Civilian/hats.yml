@@ -74,3 +74,19 @@
     sprite: _AU14/Clothing/Civilian/Hats/redtruckercap.rsi
   - type: Clothing
     sprite: _AU14/Clothing/Civilian/Hats/redtruckercap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14HeadPithHelmet
+  name: Pith Helmet
+  description: A relic of a by-gone era of imperalism, this fashionably plain and simple helmet is a favorite of a certain Big-Game Hunter.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Head/pith.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/Head/pith.rsi
+  - type: CMArmor
+    melee: 15
+    bullet: 15
+    bio: 15
+    explosionArmor: 10

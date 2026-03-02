@@ -43,6 +43,7 @@
     - cultistThirdParty
     - CMBInvestigationParty
     - CMBInvestigationPartyAlt
+    - ProfessorVonBandolier
 
 - type: entity
   id: AUPlanetShepherdsPride
@@ -86,6 +87,7 @@
     - CMBInvestigationParty
     - CMBInvestigationPartyAlt
     - XenoParasiteRunnerParty
+    - ProfessorVonBandolier
     threats:
     - cultistThreat
     - XenoThreat
@@ -130,6 +132,7 @@
     - CMBInvestigationParty
     - CMBInvestigationPartyAlt
     - cultistThirdPartyNoQueen
+    - ProfessorVonBandolier
 
 - type: entity
   id: AUPlanetLV624
@@ -170,6 +173,7 @@
     - cultistThirdPartyNoQueen
     - CMBInvestigationParty
     - CMBInvestigationPartyAlt
+    - ProfessorVonBandolier
     threats:
     - cultistThreat
     - XenoThreat
@@ -272,6 +276,7 @@
     - LACNSniperteam
     - RMCRRT
     - USArmyArmored
+    - ProfessorVonBandolier
 
 - type: entity
   id: AUPlanetLV327
@@ -313,6 +318,7 @@
     - NSPAInvestigationParty
     - NSPAInvestigationPartyAlt
     - LACNSniperteam
+    - ProfessorVonBandolier
 
 - type: entity
   id: AUPlanetCorsatStation
@@ -348,6 +354,7 @@
     - NSPAInvestigationPartyAlt
     - UPPGROMAlt
     - cultistThirdPartyNoQueen
+    - ProfessorVonBandolier
 
 - type: entity
   id: AUPlanetSorokyne
@@ -380,6 +387,7 @@
     - UPPTDLostTeam
     - PAPInvestigationPartyAlt
     - PAPInvestigationParty
+    - ProfessorVonBandolier
     threats:
     - cultistThreat
     - XenoThreat

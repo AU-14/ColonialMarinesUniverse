@@ -1220,6 +1220,21 @@
     - RMCAttachmentStock
     - RMCAttachmentAK4047StockCollapsible
 
+- type: entity
+  parent: RMCAttachableBase
+  id: AU14AttachmentTwoBoreStock
+  name: Two Bore Rifle solid stock
+  description: Intergrated into the Two Bore Rifle. You shouldn't have this.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Attachments/stock.rsi
+    state: twobore_stock
+  - type: AttachableVisuals
+    suffix: ""
+  - type: Tag
+    tags:
+    - RMCAttachmentStock
+    - AU14AttachmentTwoBoreStock
 
 - type: Tag
   id: RMCAttachmentHG3712Stock
@@ -1325,3 +1340,6 @@
 
 - type: Tag
   id: RMCAttachmentM13StockCollapsible
+
+- type: Tag
+  id: AU14AttachmentTwoBoreStock

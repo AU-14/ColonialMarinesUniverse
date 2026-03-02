@@ -1,0 +1,108 @@
+- type: entity
+  parent: [ RMCBaseBreechloader, RMCBaseAttachableHolder ]
+  name: Double-Deuce Two-Bore Rifle
+  id: AU14WeaponRifleTwoBore
+  description: A Custom-Built Twin-Barreled Two-Bore Guage Rifle. Built to hunt the largest - or most dangerous - of game. She's Forty-Five Pounds Dry, Illegal in three Sectors, and on a hair-trigger. Take care of her, and she'll take care of you - and anything you point her at.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Civilian/twobore_rifle.rsi
+  - type: Gun
+    shotsPerBurst: 2
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/mateba.ogg
+  - type: ShootUseDelay
+  - type: BreechLoaded
+    openSound:
+      path: /Audio/_RMC14/Weapons/Guns/Breech/pkd_open_chamber.ogg
+    closeSound:
+      path: /Audio/_RMC14/Weapons/Guns/Breech/pkd_close_chamber.ogg
+    toggleDelay: 3
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/Civilian/twobore_rifle.rsi
+  - type: BallisticAmmoProvider
+    cycleable: true
+    whitelist:
+      tags:
+      - AU14CartridgeRifleTwoBore
+    proto: AU14CartridgeRifleTwoBore
+    capacity: 2
+  - type: GunRequiresWield
+  - type: UseDelay
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilWielded: 5
+    recoilUnwielded: 5
+    scatterWielded: 5
+    scatterUnwielded: 14
+    baseFireRate: 0.1
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.5
+    accuracyMultiplierUnwielded: 0.5
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-stock:
+        startingAttachable: AU14AttachmentTwoBoreStock
+        whitelist:
+          tags:
+          - AU14AttachmentTwoBoreStock
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-stock: -.78, 0
+  - type: Item
+    size: Ginormous
+  - type: Tag
+    tags:
+    - AU14WeaponRifleTwoBore
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: AU14CartridgeRifleTwoBore
+  name: Rifle Cartridge (Two-Bore)
+  description: A Two-Bore rifle cartridge. This round makes a .50 Cal look like a pea-shooter. Pray you never get hit with this thing.
+  components:
+  - type: Sprite
+    sprite: _AU14/Items/cartridgetwobore.rsi
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14CartridgeRifleTwoBore
+  - type: CartridgeAmmo
+    proto: AU14BulletRifleTwoBore
+
+- type: entity
+  parent: BulletRifle10x24mm
+  id: AU14BulletRifleTwoBore
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 250
+  - type: CMArmorPiercing
+    amount: 50
+  - type: RMCStunOnHit
+    stuns:
+    - whitelist:
+        components:
+        - Marine
+        - Xeno
+        - VerySmallXeno
+      maxRange: 32
+      stunTime: 3
+      slowTime: 15
+      knockBackPowerMin: 1
+      knockBackPowerMax: 5
+      knockBackSpeed: 5
+      forceKnockBack: true
+      slowsEffectBigXenos: true
+      dazeTime: 5
+
+- type: Tag
+  id: AU14WeaponRifleTwoBore
+
+- type: Tag
+  id: AU14BulletRifleTwoBore
+
+- type: Tag
+  id: AU14CartridgeRifleTwoBore

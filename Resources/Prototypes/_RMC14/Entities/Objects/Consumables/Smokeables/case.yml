@@ -149,3 +149,5 @@
     contents:
     - id: RMCShioCigar
       amount: 5
+  - type: Item
+    size: Small
