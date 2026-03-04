@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created or reused for AU14/CMU14 https://github.com/AU-14/ColonialMarinesUniverse, https://github.com/RMC-14/RMC-14/blob/master/Resources/Textures/_RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/shotgun_projectiles.rsi/autocannon.png",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "bullet"
+    },
+    {
+      "name": "icon"
+    },
+    {
+      "name": "base"
+    },
+    {
+      "name": "base-spent"
+    }
+  ]
+}
