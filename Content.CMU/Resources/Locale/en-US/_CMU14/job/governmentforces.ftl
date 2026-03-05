@@ -128,18 +128,8 @@ au14-job-prefix-govforspecialist-grenadierRMC = GNR
 
 au14-job-prefix-govfork9handler = K9
 
-au-14-job-name-rmcrrt-commander = RMC RRT Commander
-au-14-job-prefix-rmcrrt-commander = RRT CMD
-au-14-job-name-rmcrrt-rifleman = RMC RRT Rifleman
-au-14-job-prefix-rmcrrt-rifleman = RRT RFN
-au-14-job-name-rmcrrt-pointman = RMC RRT Pointman
-au-14-job-prefix-rmcrrt-pointman = RRT PNT
-au-14-job-name-rmcrrt-marksman = RMC RRT Marksman
-au-14-job-prefix-rmcrrt-marksman = RRT MRN
-au-14-job-name-rmcrrt-smartgunner = RMC RRT Machinegunner
-au-14-job-prefix-rmcrrt-smartgunner = RRT MG
-au-14-job-name-rmcrrt-corpsman = RMC RRT Corpsman
-au-14-job-prefix-rmcrrt-corpsman = RRT HC
+au-14-job-name-rmcrrt-commander = Commander
+au-14-job-prefix-rmcrrt-commander = CMD
 
 au14-job-name-govforspecialist-heavyantitankUPP = Antitank
 au14-job-prefix-govforspecialist-heavyantitankUPP = HAT
@@ -148,18 +138,6 @@ au14-job-prefix-govforspecialist-marksmanUPP = MRN
 au14-job-name-govforspecialist-pointmanUPP = Pointman
 au14-job-prefix-govforspecialist-pointmanUPP = PNM
 
-au-14-job-name-uppgrom-commander = Commander
-au-14-job-prefix-uppgrom-commander = CMD
 au-14-job-name-uppgrom-squadleader = Squad Leader
 au-14-job-prefix-uppgrom-squadleader = SL
-au-14-job-name-uppgrom-rifleman = Rifleman
-au-14-job-prefix-uppgrom-rifleman = RFN
-au-14-job-name-uppgrom-pointman = Pointman
-au-14-job-prefix-uppgrom-pointman = PNT
-au-14-job-name-uppgrom-marksman = Marksman
-au-14-job-prefix-uppgrom-marksman = MRN
-au-14-job-name-uppgrom-machinegunner = Machinegunner
-au-14-job-prefix-uppgrom-machinegunner = MG
-au-14-job-name-uppgrom-supporttech = Support Tech
-au-14-job-prefix-uppgrom-supporttech = ST
 

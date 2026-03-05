@@ -167,6 +167,10 @@ au14-job-description-usarmy = You are a member of US Army 1st Cavalry Regiment. 
 
 au14-job-name-usarmy-tankcommander = Tank Commander
 au14-job-prefix-usarmy-tankcommander = TC
+au14-job-name-usarmy-tankdriver = Tank Driver
+au14-job-prefix-usarmy-tankdriver = TD
+au14-job-name-usarmy-tankgunner = Tank Gunner
+au14-job-prefix-usarmy-tankgunner = TG
 au14-job-name-usarmy-tankloader = Tank Loader
 au14-job-prefix-usarmy-tankloader = TLOAD
 au14-job-description-usarmy-tankcrew = You are a member of US Army 32nd Armored Division. You lost contact with HQ and your tank got in the mud. Contact nearest friendly command.
