@@ -247208,7 +247208,7 @@ entities:
     - type: Transform
       pos: 1.5,-101.5
       parent: 1
-- proto: RMCMagazineSMGP90
+- proto: RMCMagazineSMGPDW90
   entities:
   - uid: 2953
     components:
@@ -261119,7 +261119,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: RMCWeaponSMGP90
+- proto: RMCWeaponSMGPDW90
   entities:
   - uid: 2955
     components:
