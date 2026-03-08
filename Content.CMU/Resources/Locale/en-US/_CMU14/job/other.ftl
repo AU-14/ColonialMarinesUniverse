@@ -157,6 +157,8 @@ rmc-squad-info-USArmyCommandingOfficer = US Army Commanding Officer
 
 au14-job-name-usarmy-trooper = Trooper
 au14-job-prefix-usarmy-trooper = TRP
+au14-job-name-usarmy-trooper-lat = Anti Tank Trooper
+au14-job-prefix-usarmy-trooper-lat = LAT
 au14-job-name-usarmy-cet = Combat Engineering Technician
 au14-job-prefix-usarmy-cet = CET
 au14-job-name-usarmy-cmt = Combat Medical Technician
