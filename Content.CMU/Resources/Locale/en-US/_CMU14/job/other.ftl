@@ -157,6 +157,8 @@ rmc-squad-info-USArmyCommandingOfficer = US Army Commanding Officer
 
 au14-job-name-usarmy-trooper = Trooper
 au14-job-prefix-usarmy-trooper = TRP
+au14-job-name-usarmy-trooper-lat = Anti Tank Trooper
+au14-job-prefix-usarmy-trooper-lat = LAT
 au14-job-name-usarmy-cet = Combat Engineering Technician
 au14-job-prefix-usarmy-cet = CET
 au14-job-name-usarmy-cmt = Combat Medical Technician
@@ -167,6 +169,10 @@ au14-job-description-usarmy = You are a member of US Army 1st Cavalry Regiment. 
 
 au14-job-name-usarmy-tankcommander = Tank Commander
 au14-job-prefix-usarmy-tankcommander = TC
+au14-job-name-usarmy-tankdriver = Tank Driver
+au14-job-prefix-usarmy-tankdriver = TD
+au14-job-name-usarmy-tankgunner = Tank Gunner
+au14-job-prefix-usarmy-tankgunner = TG
 au14-job-name-usarmy-tankloader = Tank Loader
 au14-job-prefix-usarmy-tankloader = TLOAD
 au14-job-description-usarmy-tankcrew = You are a member of US Army 32nd Armored Division. You lost contact with HQ and your tank got in the mud. Contact nearest friendly command.
