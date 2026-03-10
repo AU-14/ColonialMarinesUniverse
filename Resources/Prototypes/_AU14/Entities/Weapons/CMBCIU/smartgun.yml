@@ -4,7 +4,7 @@
     id: CIUsmartgun
     name: M78 'enforcer' smartgun
     descripton: Based off the M56, the CMB decided to give the CIU the M78 Enforcer smartgun. Noticable differences include it being lighter at the cost of damage. This is the actual 'weapon' component in the system.
-      components:
+    components:
   - type: Wieldable
   - type: Item
     size: Huge
