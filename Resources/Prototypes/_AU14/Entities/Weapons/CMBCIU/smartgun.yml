@@ -33,7 +33,7 @@
     light: 0.5
     medium: 0.69
     heavy: 0.75
-    - type: Sprite
+  - type: Sprite
     sprite: _AU14/Weapons/Guns/CMBCIU/smartgun.png
     layers:
     - state: base
