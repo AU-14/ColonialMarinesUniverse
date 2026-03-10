@@ -99,7 +99,7 @@
           components:
           - SmartGunBattery
   - type: GunDamageModifier
-    multiplier: 1
+    multiplier: 0.95
   - type: GunToggleableAmmo
     settings:
     - damage:
