@@ -1,0 +1,10 @@
+- files: ["aperoarshort.ogg"]
+  copyright: "license on website"
+  license: "license on website"
+  source: "https://pixabay.com/sound-effects/horror-gorillaschrei-101222/"
+
+
+- files: [ "aperoarlong.ogg" ]
+  license: "license on website"
+  copyright: "license on website"
+  source: "https://pixabay.com/sound-effects/horror-silverback-gorilla-roar-491076/"
