@@ -1,0 +1,27 @@
+- type: job
+  abstract: true
+  id: AU14JobBase
+  isCM: true
+  canBeAntag: true
+  joinNotifyCrew: false
+  setPreference: true
+  medals:
+    Bronze: RMCMedalBronzeService
+    Silver: RMCMedalSilverService
+    Gold: RMCMedalGoldService
+    Platinum: RMCMedalPlatinumService
+    Ruby: RMCMedalRubyService
+    Amethyst: RMCMedalAmethystService
+    Emerald: RMCMedalEmeraldService
+    Prismatic: RMCMedalPrismaticServic
+    
+- type: job
+  abstract: true
+  parent: AU14JobBase
+  id: AU14JobMilitaryBase
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NonResuscitable

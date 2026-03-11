@@ -1,10 +1,38 @@
 - type: job
-  parent: CMJobBase
+  abstract: true
+  parent: AU14JobMilitaryBase
   id: AU14JobadvisorBase
   name: au14-job-name-govforadvisor
   description: au14-job-description-govforadvisor
   playTimeTracker: AU14JobGOVFORadvisor
+  setPreference: true
   basePlaytimeTracker: true
+  canBeAntag: false
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 3600 # Set to 72000 once we are fully launched AU14 todo
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+  whitelisted: true
+  requireAdminNotify: true
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Marine
+      Faction: govfor
+    - type: Skills
+      preset: AU14SkillPresetPlatoonAdvisor
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforadvisor
+    - type: SeeNewPlayers
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
   hidden: true
 
 - type: playTimeTracker
