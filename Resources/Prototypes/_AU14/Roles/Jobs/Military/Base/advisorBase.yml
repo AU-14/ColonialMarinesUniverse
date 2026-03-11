@@ -8,6 +8,12 @@
   setPreference: true
   basePlaytimeTracker: true
   canBeAntag: false
+  ranks:
+    RMCRankSergeantMajor:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORadvisor
+      time: 360000 # 100 hours
+    RMCRankFirstSergeant: []
   requirements:
   - !type:OverallPlaytimeRequirement
     time: 3600 # Set to 72000 once we are fully launched AU14 todo
@@ -19,11 +25,10 @@
     - Epilepsy
   whitelisted: true
   requireAdminNotify: true
+  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: Marine
-      Faction: govfor
     - type: Skills
       preset: AU14SkillPresetPlatoonAdvisor
     - type: JobPrefix

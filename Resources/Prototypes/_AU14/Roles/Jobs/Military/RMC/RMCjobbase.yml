@@ -1,0 +1,15 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobMilitaryBase
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Marine
+      Faction: TWE
+    - type: NpcFactionMember
+      factions:
+      - TWE
+    - type: UserIFF
+      factions:
+      - TWE

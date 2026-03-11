@@ -3,33 +3,14 @@
   id: AU14JobOPFORadvisor
   name: au14-job-name-opforadvisor
   description: au14-job-description-opforadvisor
-  setPreference: true
-  canBeAntag: false
-  requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 3600 # Set to 72000 once we are fully launched AU14 todo
-  - !type:AgeRequirement
-    requiredAge: 21
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
-  ranks:
-    RMCRankSergeantMajor:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORadvisor
-      time: 432000 # 120 hours
-    RMCRankFirstSergeant: []
+
   startingGear: AU14GearOPFORadvisor
   dummyStartingGear: AU14GearOPFORadvisorDummy
   icon: "AU14JobIconOPFORAdvisor"
-  requireAdminNotify: true
-  joinNotifyCrew: false
+  spawnMenuRoleName: Platoon Advisor (OPFOR)
   supervisors: au14-job-supervisors-opfor
-  whitelisted: true
   accessGroups:
   - AU14OpforCommand
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
@@ -38,8 +19,6 @@
       - OPFOR
     - type: Marine
       Faction: opfor
-    - type: Skills
-      preset: AU14SkillPresetPlatoonAdvisor
     - type: JobPrefix
       prefix: au14-job-prefix-opforadvisor
     - type: SeeNewPlayers
@@ -50,7 +29,7 @@
     - type: UserIFF
       factions:
       - OPFOR
-  hidden: false
+  hidden: true
 
 - type: startingGear
   id: AU14GearOPFORadvisor

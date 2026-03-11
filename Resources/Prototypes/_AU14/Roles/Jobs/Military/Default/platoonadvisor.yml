@@ -1,12 +1,6 @@
 - type: job
   parent: AU14JobadvisorBase
   id: AU14JobGOVFORadvisor
-  ranks:
-    RMCRankSergeantMajor:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORadvisor
-      time: 432000 # 120 hours
-    RMCRankFirstSergeant: []
   startingGear: AU14GearGOVFORadvisor
   dummyStartingGear: AU14GearGOVFORadvisorDummy
   icon: "AU14JobIconGovAdvisor"
@@ -14,17 +8,22 @@
   supervisors: au14-job-supervisors-govfor
   accessGroups:
   - AU14GovforCommand
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
+    - type: Marine
+      Faction: govfor
     - type: NpcFactionMember
       factions:
       - GOVFOR 
     - type: UserIFF
       factions:
       - GOVFOR
-  hidden: false
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: true
 
 - type: startingGear
   id: AU14GearGOVFORadvisor

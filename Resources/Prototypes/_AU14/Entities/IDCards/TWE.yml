@@ -1,0 +1,10 @@
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardRMCAdvisor
+  name: advisor ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFORadvisorRMC
+  - type: ItemIFF
+    factions:
+    - TWE

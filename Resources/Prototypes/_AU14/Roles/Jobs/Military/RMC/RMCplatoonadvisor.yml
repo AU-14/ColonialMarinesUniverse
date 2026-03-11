@@ -1,19 +1,8 @@
 - type: job
-  parent: AU14JobadvisorBase
+  parent: [ AU14JobadvisorBase, AU14JobMilitaryBase ]
   id: AU14JobGOVFORadvisorRMC
   name: au14-job-name-govforadvisor
   description: au14-job-description-govforadvisor
-  setPreference: true
-  canBeAntag: false
-  requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 3600 # Set to 72000 once we are fully launched AU14 todo
-  - !type:AgeRequirement
-    requiredAge: 21
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
   ranks:
     RMC_WarrantOfficer1:
     - !type:RoleTimeRequirement
@@ -23,28 +12,24 @@
   startingGear: AU14GearGOVFORadvisor
   dummyStartingGear: AU14GearGOVFORadvisorDummy
   icon: "AU14JobIconGovAdvisor"
-  requireAdminNotify: true
-  joinNotifyCrew: false
+  spawnMenuRoleName: Platoon Advisor (TWE RMC)
   supervisors: au14-job-supervisors-govfor
-  whitelisted: true
   accessGroups:
   - AU14GovforCommand
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: Marine
-      Faction: govfor
-    - type: Skills
-      preset: AU14SkillPresetPlatoonAdvisor
     - type: JobPrefix
       prefix: au14-job-prefix-govforadvisor
-    - type: SeeNewPlayers
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: synth
   hidden: true
+
+- type: startingGear
+  id: AU14GearRMCadvisor
+  equipment:
+    id: AU14IDCardRMCAdvisor
+    ears: AU14HeadsetSectionLeader
+    back: AU14SatchelMarineAdvisorMilitary
