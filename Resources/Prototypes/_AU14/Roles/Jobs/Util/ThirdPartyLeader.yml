@@ -14,4 +14,7 @@
 - type: playTimeTracker
   id: AUJobThirdPartyLeader
 
-
+- type: startingGear
+  id: AUThirdPartyL
+  equipment:
+    ears: AU14ColonyHeadset
