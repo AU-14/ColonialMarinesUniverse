@@ -70,7 +70,7 @@
     jumpsuit: RMCJumpsuitCivilian
     shoes: RMCBootsCorporate
     id: AU14IDCardColonySynthetic
-    ears: AU14ColonyAdminHeadset
+    ears: AU14ColonyWeysecHeadset
     eyes: RMCGlassesMedicalHUDGlasses
 
 - type: entity
