@@ -47,6 +47,7 @@
     shoes: RMCBootsCorporate
     id: AU14IDCardColonyUSASFRecruiter
     head: AU14USASFCap
+    ears: AU14ColonyHeadset
 
 - type: entity
   parent: CMSpawnPointJobBase
