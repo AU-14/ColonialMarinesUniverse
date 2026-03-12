@@ -39,7 +39,7 @@
   id: AU14GearCivilianNurse
   equipment:
     id: AU14IDCardColonyNurse
-
+    ears: AU14ColonyHeadset
     jumpsuit: RMCScrubsLightBlue
     shoes: RMCShoesBlack
 
