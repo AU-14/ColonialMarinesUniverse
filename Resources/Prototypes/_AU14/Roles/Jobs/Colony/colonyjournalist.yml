@@ -39,7 +39,7 @@
     jumpsuit: CMJumpsuitLiaisonIvy
     shoes: RMCShoesBlue
     id: AU14IDCardColonyJournalist
-
+    ears: AU14ColonyHeadset
     outerClothing: AU14CivilianJacketTanPufferVest
 
 - type: entity
