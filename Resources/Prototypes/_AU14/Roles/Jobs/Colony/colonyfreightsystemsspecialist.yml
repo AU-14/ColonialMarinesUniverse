@@ -47,6 +47,7 @@
     outerClothing: RMCHazardVest
     shoes: RMCBootsCorporate
     id: AU14IDCardColonyFreightSystemsSpecialist
+    ears: AU14ColonyHeadset
   inhand:
   - CMStampApproved
 
