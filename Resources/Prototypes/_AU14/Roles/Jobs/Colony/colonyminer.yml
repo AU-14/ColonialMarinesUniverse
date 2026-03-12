@@ -39,7 +39,7 @@
     outerClothing: AU14CivilianHazardVestKellandMiningCorporation
     shoes: RMCBootsCorporate
     id: AU14IDCardColonyColonist
-
+    ears: AU14ColonyHeadset
     head: RMCHardhatOrange
 
 - type: entity
