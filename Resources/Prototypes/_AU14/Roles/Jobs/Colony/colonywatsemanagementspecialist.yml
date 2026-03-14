@@ -45,7 +45,7 @@
     outerClothing: AU14CivilianFullSuitSanitation
     shoes: RMCBootsCorporate
     id: AU14IDCardColonyWasteManagementSpecialist
-    ears: AU14ColonyHeadset
+    ears: AU14ColonyWeylandHeadsetAlt
 
 - type: entity
   parent: CMSpawnPointJobBase
