@@ -40,7 +40,6 @@
     shoes: RMCShoesBlack
     id: AU14IDCardFoodServiceWorker
     outerClothing: RMCMedicalApron
-    ears: AU14ColonyHeadset
 
 - type: entity
   parent: CMSpawnPointJobBase
