@@ -156,6 +156,16 @@ namespace Content.Server.AU14.Round
                             }
                         }
 
+                        // Filter planets by their MinPlayers/MaxPlayers so planets intended for
+                        // specific player counts cannot be voted for when out of range.
+                        var playerCount = _playerManager.PlayerCount;
+                        planetProtos.RemoveAll(p =>
+                            // If MinPlayers is set (>0) and current players are fewer, exclude.
+                            (p.MinPlayers > 0 && playerCount < p.MinPlayers) ||
+                            // If MaxPlayers is set (>0) and current players exceed it, exclude.
+                            (p.MaxPlayers > 0 && playerCount > p.MaxPlayers)
+                        );
+
                         if (planetProtos.Count == 0)
                         {
                             _voteSequenceRunning = false;
