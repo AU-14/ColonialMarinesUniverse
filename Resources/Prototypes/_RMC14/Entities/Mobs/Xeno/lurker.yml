@@ -160,8 +160,8 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      390: Critical
-      490: Dead
+      375: Critical
+      475: Dead
   - type: XenoLeap
     delay: 0
     range: 4
@@ -178,7 +178,7 @@
     attackEffect: RMCEffectTailHit
     damage:
       groups:
-        Brute: 50
+        Brute: 55
   - type: XenoFlurry
     damage:
       groups:
@@ -191,7 +191,7 @@
     attackRate: 0.93
     damage:
       groups:
-        Brute: 30
+        Brute: 35
   - type: MovementSpeedModifier
     baseWalkSpeed: 3
     baseSprintSpeed: 6
@@ -200,8 +200,8 @@
     description: rmc-xeno-vampire-description
     popup: rmc-xeno-vampire-popup
   - type: CMArmor
-    xenoArmor: 20
-    explosionArmor: 20
+    xenoArmor: 10
+    explosionArmor: 15
   - type: XenoPlasma
     plasma: 0
     maxPlasma: 0
