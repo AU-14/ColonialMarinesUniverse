@@ -1,0 +1,174 @@
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  name: XMP5A6 CQW
+  id: AU14WeaponSMGXMP5A6HAZOPS
+  description: Winner of the 2172 Close Quarters Weapon program, this German-based SMG is being experimentally fielded in select units, such as HAZOPS. Despite low accuracy, it has a high firerate and impressive stopping power. Chambered in 10x24mm.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/HAZOPS/XMP5A6.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/HAZOPS/XMP5A6.rsi
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: Gun
+    selectedMode: FullAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    soundGunshot:
+      collection: AU14M41FireSound
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilUnwielded: 4
+    scatterWielded: 6
+    scatterUnwielded: 20
+    baseFireRate: 4
+    burstScatterMult: 1
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.3
+    accuracyMultiplierUnwielded: 0.65
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineRifleM54C
+          - CMMagazineRifleM54CAP
+          - CMMagazineRifleM54CExt
+          - RMCMagazineRifleM54CIncendiary
+          - RMCMagazineRifleM54CHEAP
+          - RMCMagazineRifleM54CWP
+  - type: GunDamageModifier
+    multiplier: 1.1
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCM5Bayonet
+      rmc-aslot-underbarrel:
+        startingAttachable: AU14AttachmentM203A6GrenadeLauncher
+        whitelist:
+          tags:
+          - AU14AttachmentM203A6GrenadeLauncher
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.75, 0.03
+      rmc-aslot-rail: -0.07, 0.18
+      rmc-aslot-stock: -0.78, 0.0325
+      rmc-aslot-underbarrel: 0, 0
+  - type: Tag
+    tags:
+    - AU14WeaponSMGXMP5A6HAZOPS
+
+- type: Tag
+  id: AU14WeaponSMGXMP5A6HAZOP                                                                                                                                                                             S
+
+- type: entity
+  parent: [ RMCUnderAttachmentBase, RMCAttachableToggleableBase ]
+  id: AU14AttachmentM203A4GrenadeLauncher
+  name: M203A4 grenade launcher
+  description: A weapon-mounted, reloadable grenade launcher.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Attachments/hazops_under.rsi
+    layers:
+    - state: grenade
+      map: [ "enum.BreechVisuals.Open" ]
+  - type: Item
+    size: Normal
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+  - type: RMCAmmoEject
+    containerID: ballistic-ammo
+    ejectSound:
+      path: /Audio/_RMC14/Weapons/Guns/Reload/grenade_insert.ogg
+  - type: AmmoCounter
+  - type: Gun
+    projectileSpeed: 20
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_ugl.ogg
+    resetOnHandSelected: false
+  - type: RMCSelectiveFire
+    baseFireRate: 0.417
+  - type: GunIgnorePrediction
+  - type: GunIFF
+    enabled: true
+  - type: BallisticAmmoProvider
+    cycleable: false
+    whitelist:
+      tags:
+      - RMCGrenadeM40
+      - RMCAirburstGrenade
+    capacity: 1
+    soundInsert:
+      path: /Audio/_RMC14/Weapons/Guns/Reload/grenade_insert.ogg
+      params:
+        volume: -2
+  - type: OnShootTriggerAmmoTimer
+    delay: 1.5
+    beepInterval: 2
+    initialBeepDelay: 0
+    beepSound:
+      path: "/Audio/Effects/beep1.ogg"
+      params:
+        volume: 5
+    timerStart: enum.TimerStartMode.OnHitGround
+  - type: ShootAtFixedPoint
+    shootArcProj: true
+    maxFixedRange: 7
+  - type: UniqueAction
+  - type: BreechLoaded
+    needOpenClose: true
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.BreechVisuals.Open:
+        enum.BreechVisuals.Open:
+          True: { state: grenade-open }
+          False: { state: grenade }
+  - type: AttachableToggleable
+    userOnly: true
+    attachedOnly: true
+    supercedeHolder: true
+    wieldedUseOnly: true
+    activatePopupText: attachable-popup-switch-to-generic
+    deactivatePopupText: attachable-popup-switch-from-generic
+    actionName: Switch to the GP-45 Grenade Launcher
+    actionDesc: Switch to using the underbarrel grenade launcher.
+    icon:
+      sprite: _AU14/Weapons/Guns/Attachments/hazops_under.rsi
+      state: grenade
+    iconActive:
+      sprite: _AU14/Weapons/Guns/Attachments/hazops_under.rsi
+      state: grenade-on
+  - type: AttachableVisuals
+    redrawOnAppearanceChange: true
+  - type: Tag
+    tags:
+    - RMCAttachmentUnderbarrel
+    - AU14AttachmentM203A4GrenadeLauncher
+  - type: WieldedCrosshair
+    rsi:
+      sprite: _RMC14/Interface/MousePointer/explosive_mouse.rsi
+      state: all
+
+- type: Tag
+  id: AU14AttachmentM203A4GrenadeLauncher
