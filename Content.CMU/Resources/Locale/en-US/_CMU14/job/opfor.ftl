@@ -29,10 +29,10 @@ au14-job-name-opforSSG = Senior Sergeant
 au14-job-description-opforSSG = Senior enlisted. Keep the platoon running and lead them on the ground.
 au14-job-prefix-opforSSG = SNRSRGT
 
-AU14JobOpforSquadSergeant = Sergeant
-au14-job-name-opforsquadsergeant = Sergeant
-au14-job-description-opforsquadsergeant = Lead a fireteam. Follow orders from the top and get your people home.
-au14-job-prefix-opforsquadsergeant = SGT
+AU14JobOpforSquadSergeant = Squad Leader
+au14-job-name-opforsquadsergeant = Squad Leader
+au14-job-description-opforsquadsergeant = Lead a squad. Follow orders from the top and get your people home.
+au14-job-prefix-opforsquadsergeant = SL
 
 AU14JobOpforSquadRifleman = Rifleman
 au14-job-name-opforsquadrifleman = Rifleman
