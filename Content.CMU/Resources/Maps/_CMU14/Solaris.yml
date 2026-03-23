@@ -4,8 +4,8 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 01/27/2026 01:45:32
-  entityCount: 55292
+  time: 03/23/2026 05:14:47
+  entityCount: 55296
 maps:
 - 1
 grids:
@@ -106861,11 +106861,6 @@ entities:
     - type: Transform
       pos: 135.5,-108.5
       parent: 1
-  - uid: 25
-    components:
-    - type: Transform
-      pos: 75.5,-84.5
-      parent: 1
   - uid: 26
     components:
     - type: Transform
@@ -106880,6 +106875,13 @@ entities:
     components:
     - type: Transform
       pos: 100.5,-53.5
+      parent: 1
+- proto: AU14CivilianColonyOperationsSyntheticVendor
+  entities:
+  - uid: 25
+    components:
+    - type: Transform
+      pos: 75.5,-84.5
       parent: 1
 - proto: AU14CivilianEmergencyResponderOfficerVendor
   entities:
@@ -107402,6 +107404,24 @@ entities:
       pos: 78.5,-84.5
       parent: 1
     - type: AuFetchItem
+  - uid: 55293
+    components:
+    - type: Transform
+      pos: 74.5,-6.5
+      parent: 1
+    - type: AuFetchItem
+  - uid: 55294
+    components:
+    - type: Transform
+      pos: -65.5,-143.5
+      parent: 1
+    - type: AuFetchItem
+  - uid: 55295
+    components:
+    - type: Transform
+      pos: 130.5,-76.5
+      parent: 1
+    - type: AuFetchItem
 - proto: AU14ObjectiveItemBlackboxRecorder
   entities:
   - uid: 112
@@ -107422,6 +107442,14 @@ entities:
     components:
     - type: Transform
       pos: 122.5,-67.5
+      parent: 1
+    - type: AuFetchItem
+- proto: AU14ObjectiveItemWYLaptop
+  entities:
+  - uid: 55296
+    components:
+    - type: Transform
+      pos: 129.5,-61.5
       parent: 1
     - type: AuFetchItem
 - proto: AU14PropARCDamaged
@@ -109054,7 +109082,7 @@ entities:
       lastSignals:
         DoorStatus: True
     - type: Door
-      secondsUntilStateChange: -6538.8438
+      secondsUntilStateChange: -7036.591
       state: Opening
   - uid: 376
     components:
@@ -339348,11 +339376,15 @@ entities:
       rot: 3.141592653589793 rad
       pos: -69.5,-151.5
       parent: 1
+    - type: Campfire
+      fuel: 5
   - uid: 43047
     components:
     - type: Transform
       pos: 254.5,31.5
       parent: 1
+    - type: Campfire
+      fuel: 5
     - type: PointLight
       energy: 2
       color: '#C26000FF'
@@ -339363,6 +339395,8 @@ entities:
       rot: 3.141592653589793 rad
       pos: 146.5,-311.5
       parent: 1
+    - type: Campfire
+      fuel: 5
     - type: PointLight
       radius: 12
 - proto: RMCCarPileup
@@ -340329,7 +340363,7 @@ entities:
       pos: 256.5,23.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -42342.977
+      secondsUntilStateChange: -42840.723
       state: Opening
   - uid: 43203
     components:
@@ -340366,7 +340400,7 @@ entities:
       pos: 166.5,-212.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -58071.94
+      secondsUntilStateChange: -58569.688
       state: Opening
   - uid: 43209
     components:
@@ -340393,7 +340427,7 @@ entities:
       pos: 28.5,-94.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -168687.08
+      secondsUntilStateChange: -169184.83
       state: Opening
   - uid: 43213
     components:
@@ -340408,7 +340442,7 @@ entities:
       pos: 25.5,-88.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -165888.73
+      secondsUntilStateChange: -166386.48
       state: Opening
   - uid: 43215
     components:
@@ -340417,7 +340451,7 @@ entities:
       pos: 28.5,-91.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -165886.97
+      secondsUntilStateChange: -166384.72
       state: Opening
   - uid: 43216
     components:
@@ -340444,7 +340478,7 @@ entities:
       pos: 156.5,-218.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -58442.773
+      secondsUntilStateChange: -58940.52
       state: Closing
 - proto: RMCDigitalClock
   entities:
