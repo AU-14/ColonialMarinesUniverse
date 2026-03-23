@@ -4,7 +4,7 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 02/07/2026 01:48:36
+  time: 03/23/2026 13:36:12
   entityCount: 103
 maps:
 - 1
@@ -122,6 +122,8 @@ entities:
         path: /Audio/_RMC14/Announcements/ARES/unidentified_lifesigns.ogg
       lastLocked: {}
       attachmentPoints: []
+      arrivalSound: !type:SoundPathSpecifier
+        path: /Audio/_RMC14/Machines/Shuttle/engine_landing.ogg
       crashWarningSound: !type:SoundPathSpecifier
         params:
           volume: -5
@@ -584,39 +586,54 @@ entities:
     - type: Transform
       pos: 3.5,-3.5
       parent: 2
-- proto: RMCLightFixtureBlueDoubleAlwaysPowered
+- proto: RMCLightFixtureBlueDouble
   entities:
-  - uid: 75
+  - uid: 23
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -1,5.499
+      rot: -1.5707963267948966 rad
+      pos: -1.499,-2
       parent: 2
-  - uid: 76
+    - type: ApcPowerReceiver
+      powerLoad: 0
+      needsPower: False
+  - uid: 75
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 2.499,-2
       parent: 2
+    - type: ApcPowerReceiver
+      powerLoad: 0
+      needsPower: False
   - uid: 97
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -1,5.499
+      parent: 2
+    - type: ApcPowerReceiver
+      powerLoad: 0
+      needsPower: False
+  - uid: 98
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 2,5.499
       parent: 2
-  - uid: 98
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -1.5,-2
-      parent: 2
-- proto: RMCLightFixtureSmallBlueAlwaysPowered
+    - type: ApcPowerReceiver
+      powerLoad: 0
+      needsPower: False
+- proto: RMCLightFixtureSmallBlue
   entities:
-  - uid: 23
+  - uid: 76
     components:
     - type: Transform
       pos: 0.5,-4.5
       parent: 2
+    - type: ApcPowerReceiver
+      powerLoad: 0
+      needsPower: False
 - proto: RMCRollerBedHospitalSheet2
   entities:
   - uid: 68
