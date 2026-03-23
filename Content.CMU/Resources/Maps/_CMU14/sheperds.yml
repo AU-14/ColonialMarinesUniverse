@@ -72152,7 +72152,7 @@ entities:
       pos: 41.5,19.5
       parent: 1
     - type: SpriteSetRenderOrder
-- proto: CMASRSConsole
+- proto: CMASRSConsolePowered
   entities:
   - uid: 1228
     components:
@@ -72169,8 +72169,6 @@ entities:
           showEnts: False
           occludes: True
           ent: null
-    - type: RequisitionsComputer
-      isLastInteracted: True
 - proto: CMASRSConsoleGovfor
   entities:
   - uid: 1229
@@ -161528,6 +161526,10 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 116.5,246.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - CMAccessColonyEngineering
+      - - CMAccessColonyCommand
   - uid: 18725
     components:
     - type: MetaData
@@ -161548,6 +161550,10 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 116.5,253.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - CMAccessColonyEngineering
+      - - CMAccessColonyCommand
   - uid: 18727
     components:
     - type: MetaData
@@ -161556,6 +161562,10 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 112.5,252.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - CMAccessColonyEngineering
+      - - CMAccessColonyCommand
 - proto: RMCDoubleDoorGenericGlass
   entities:
   - uid: 18728
