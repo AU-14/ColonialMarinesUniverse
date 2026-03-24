@@ -192,3 +192,14 @@ au14-usarmy-armored-greeting = You are a member of US Army 32nd Armored Division
     Get ready for action and report to the GVOFR Commander!
 
     You are friendly to GOVFOR, neutral to civilians and hostile to CLF!
+
+au14-job-description-forecon-killteam = You are member of FORECON Kill Team. Assasinate your target. 
+
+au14-job-description-forecon-killteam-greeting = You are a member of USCMC elite FORECON special forces unit!
+
+    You are a member of Sniper Scout's Kill Team. You were ordered to assasinate High Valuable Target.
+    (If admins did not order you anything, you are to assasinate Colony Admin. Reasoning from High Command was not disclosed to you)
+
+    You are NOT a part of GOVFOR, but do not be overly agressive to them. Do whatever is needed to succeed in your mission.
+
+au14-forecon-killteam-rules = You do not know what is going on in round. Your main goal is to assasinate the target. You are not a part of GOVFOR but do not be overly agressive to them.
