@@ -4,7 +4,7 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 02/07/2026 02:02:15
+  time: 03/23/2026 13:28:55
   entityCount: 89
 maps:
 - 1
@@ -120,6 +120,8 @@ entities:
         path: /Audio/_RMC14/Announcements/ARES/unidentified_lifesigns.ogg
       lastLocked: {}
       attachmentPoints: []
+      arrivalSound: !type:SoundPathSpecifier
+        path: /Audio/_RMC14/Machines/Shuttle/engine_landing.ogg
       crashWarningSound: !type:SoundPathSpecifier
         params:
           volume: -5
@@ -574,24 +576,36 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -1.499,3.5
       parent: 2
+    - type: ApcPowerReceiver
+      powerLoad: 0
+      needsPower: False
   - uid: 39
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 2.5,3.5
       parent: 2
+    - type: ApcPowerReceiver
+      powerLoad: 0
+      needsPower: False
   - uid: 41
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 2.5,-1.5
       parent: 2
+    - type: ApcPowerReceiver
+      powerLoad: 0
+      needsPower: False
   - uid: 46
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -1.499,-1.5
       parent: 2
+    - type: ApcPowerReceiver
+      powerLoad: 0
+      needsPower: False
 - proto: RMCUtilityAttachmentPoint
   entities:
   - uid: 191

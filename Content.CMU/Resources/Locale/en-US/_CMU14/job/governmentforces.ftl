@@ -152,3 +152,6 @@ au14-job-prefix-juniorofficer-eo = EO
 
 au14-job-name-juniorofficer-adj = Adjutant Officer
 au14-job-prefix-juniorofficer-adj = AO
+
+au14-job-name-specialist-pyro = Pyrotechnician
+au14-job-prefix-specialist-pyro = PYRO
