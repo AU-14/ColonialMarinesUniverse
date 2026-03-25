@@ -19,15 +19,23 @@
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
+    - FullAuto
     soundGunshot:
       path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_rifle.ogg
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
+    - FullAuto
     recoilUnwielded: 2
     scatterWielded: 6
     scatterUnwielded: 20
-    baseFireRate: 2.857
+    baseFireRate: 5
+    modifiers:
+      SemiAuto:
+        fireDelay: 0.2555
+      FullAuto:
+        maxScatterModifier: 30
+        shotsToMaxScatter: 4
   - type: MagazineAmmoProvider
     autoEject: false
     soundAutoEject: null
@@ -102,7 +110,7 @@
       tags:
       - CMCartridgeRifle10x24mm
     proto: CMCartridgeRifle10x24mm
-    capacity: 25
+    capacity: 20
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/l42a.rsi
     layers:
@@ -172,7 +180,7 @@
       tags:
       - CMCartridgeRifle10x24mmAP
     proto: CMCartridgeRifle10x24mmAP
-    capacity: 25
+    capacity: 20
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/l42a.rsi
     layers:
@@ -202,7 +210,7 @@
       tags:
       - RMCCartridgeRifle10x24mmWP
     proto: RMCCartridgeRifle10x24mmWP
-    capacity: 25
+    capacity: 20
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/l42a.rsi
     layers:
@@ -232,7 +240,7 @@
       tags:
       - RMCCartridgeRifle10x24mmIncendiary
     proto: RMCCartridgeRifle10x24mmIncendiary
-    capacity: 25
+    capacity: 20
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/l42a.rsi
     layers:

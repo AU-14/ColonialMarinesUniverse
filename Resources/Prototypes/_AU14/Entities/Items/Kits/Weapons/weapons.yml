@@ -235,7 +235,7 @@
     sprite: _RMC14/Objects/Storage/procase_mini.rsi
   - type: StorageFill
     contents:
-      - id: AU14WeaponPistolTPR23BEmpty
+      - id: CMWeaponPistolM1984Empty
         amount: 1
       - id: RMCMagazinePistolM1984AP
         amount: 1

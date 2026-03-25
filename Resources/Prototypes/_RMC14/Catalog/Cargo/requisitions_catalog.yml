@@ -18,15 +18,15 @@
         crate: RMCCrateReplacementLights
       - cost: 350
         crate: PortableGeneratorPacman
-      - cost: 300
+      - cost: 350
         crate: RMCCratePacmanParts
       - cost: 375
         crate: RMCCrateSuperPacmanParts
-      - cost: 300
+      - cost: 350
         crate: RMCCrateHighCapacityPowerCell
       - cost: 350
         crate: AU14CrateBoxToolbelt
-      - cost: 350
+      - cost: 3000
         crate: AU14CrateBoxFieldSupplyEngin
       - cost: 350
         crate: AU14CrateBoxFloorTiles
@@ -60,7 +60,7 @@
         crate: RMCCrateFoodDonuts
       - cost: 345
         crate: AU14CrateBoxPizza
-      - cost: 300
+      - cost: 350
         crate: AU14Cratealcoholicdrinks
     - name: Gear
       entries:
@@ -78,11 +78,11 @@
         crate: RMCCrateClothingLargePouches
       - cost: 320
         crate: RMCCrateClothingMedicalPouches
-      - cost: 300
+      - cost: 350
         crate: AU14CrateBoxFirefighting
     - name: Medical
       entries:
-      - cost: 300
+      - cost: 350
         crate: RMCCrateMedicalSurgery
       - cost: 335
         crate: RMCCrateMedicalBodyBag
@@ -98,13 +98,13 @@
         crate: AU14CrateBoxDefibrillator
     - name: Supplies
       entries:
-      - cost: 300
+      - cost: 350
         crate: RMCCrateSupplyInternals
       - cost: 370
         crate: RMCCrateSupplyEvacuation
       - cost: 390
         crate: RMCCrateSupplyJanitor
-      - cost: 300
+      - cost: 350
         crate: RMCCrateHydro
       - cost: 340
         crate: hydroponicsTray
@@ -158,11 +158,11 @@
         crate: AU14CrateBoxShotgunShells
       - cost: 333
         crate: AU14CrateBoxTPR23BMag
-      - cost: 300
+      - cost: 350
         crate: AU14CrateBoxM44SL
       - cost: 350
         crate: AU14CrateBoxM44SLM
-      - cost: 300
+      - cost: 350
         crate: AU14CrateBoxD18Magazines
       - cost: 355
         crate: AU14CrateBoxABR40Magazines

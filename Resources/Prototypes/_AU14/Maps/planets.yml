@@ -62,13 +62,13 @@
     - UPP
     - HAZOPS
     - VAIPO
-    - UNISC
     - ProdigySF
     platoonsGovfor:
     - LACN
     - USCM
     - WEYU
     - RMC
+    - UNISC
     defaultgovfor: USCM
     defaultopfor: UPP
     govforinship: false
@@ -419,3 +419,44 @@
     - apethreat
     - apethreatcf
     - wendigoThreat
+
+- type: entity
+  id: AUPlanetTrijent
+  name: Trijent
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Raijin Hydroelectric"
+    mapId: AUTrijentMap
+    camouflage: Desert
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsOpfor:
+    - LACN
+    - USCM
+    - RMC
+    platoonsGovfor:
+    - UPP
+    - WEYU
+    - VAIPO
+    - ProdigySF
+    defaultgovfor: UPP
+    defaultopfor: RMC
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    faction: ua
+    thirdparties:
+    - ICRCReliefParty
+    - cultistThirdParty
+    - cultistThirdPartyNoQueen
+    - UPPGROM
+    - UPPGROMAlt
+    - UPPGROMAlt2
+    - FORECON
+    - FORECONAlt
+    - FORECONAlt2
+    - LACNSniperteam
+    - UPPTDLostTeam
+    - PAPInvestigationPartyAlt
+    - PAPInvestigationParty
+    threats:
+    - XenoThreat

@@ -469,6 +469,10 @@
 - type: entity
   parent: [RMCLightFixtureSmallBlueAlwaysPowered, RMCLightFixtureSmallAlwaysPoweredOffset]
   id: RMCLightFixtureSmallBlueAlwaysPoweredOffset
+  suffix: Always Powered
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Wallmounts/LightingOffset/light_bulb.rsi
 
 - type: entity
   parent: RMCLightFixtureSmallAlwaysPowered

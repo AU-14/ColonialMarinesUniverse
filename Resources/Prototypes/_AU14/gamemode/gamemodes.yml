@@ -4,7 +4,7 @@
     - forceonforce
   name: Force on Force
   showInVote: true
-  description: Two units face each other in combat
+  description: Two units face each other in combat.
   minPlayers: 55
   requiresOpforVote: true
   requiresGovforVote: true
@@ -17,6 +17,7 @@
   - AUPlanetCorsatStation
   - AUPlanetSorokyne
   - AUPlanetStableGarrison
+  - AUPlanetTrijent
   rules:
   - AuVoteRule
   - PlatoonSpawn
@@ -32,14 +33,14 @@
   name: Insurgency
   showInVote: true
   description: Insurgency mode
-  minPlayers: 25
+  minPlayers: 30
   requiresGovforVote: true
   supportedPlanets:
     - AUPlanetShepherdsPride
     - AUPlanetLV624
     - AUPlanetLV747
-    - AUPlanetLV759
     - AUPlanetSorokyne
+#    - AUPlanetLV759 removed pending rework
   rules:
   - AuVoteRule
   - PlatoonSpawn
@@ -61,6 +62,7 @@
   - AUPlanetSorokyne
   - AUPlanetCorsatStation
   - AUPlanetStableGarrison
+  - AUPlanetTrijent
   rules:
   - AuVoteRule
   - PlatoonSpawn
@@ -146,7 +148,7 @@
       AU14JobGOVFORSquadSergeant: 3
       AU14JobGOVFORSquadAutomaticRifleman: 3
       AU14JobGOVFORSquadCombatTech: 6
-      AU14JobGOVFORSquadRifleman: 100
+      AU14JobGOVFORSquadRifleman: 75
       AU14JobGOVFORAuxSupportSynth: 2
       AU14JobGOVFORadvisor: 1
       AU14JobGOVFORMilitaryDoctor: 1
@@ -169,7 +171,7 @@
       AU14JobOpforSquadSergeant: 3
       AU14JobOpforSquadAutomaticRifleman: 3
       AU14JobOPFORSquadCombatTech: 6
-      AU14JobOpforSquadRifleman: 100
+      AU14JobOpforSquadRifleman: 75
       AU14JobOPFORAuxSupportSynth: 2
       AU14JobOPFORadvisor: 1
       AU14JobOPFORMilitaryDoctor: 1

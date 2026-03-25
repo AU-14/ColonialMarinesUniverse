@@ -73,3 +73,29 @@
         amount: 2
       - id: RMCBoxShotgunHeavySlugs
         amount: 2
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitUPPPyroLPO80
+  name: UPP Pyrotechnician LPO80 Kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,1
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponFlamerSPP
+      - id: RMCTankFlamerSPP
+      - id: RMCTankFlamerSPP
+      - id: RMCTankFlamerSPP
+      - id: RMCTankFlamerSPP
+      - id: RMCTankFlamerSPP
+      - id: RMCTankFlamerSPP
+      - id: RMCBackpackFlamer

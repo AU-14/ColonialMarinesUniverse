@@ -23,12 +23,34 @@
     factiontokill: govfor
     amounttokill: 2
 
-
+- type: entity
+  name: "Kill the OPFOR Commander (FOF)"
+  parent: MarkerBase
+  id: killplatcoobjectivegovforfof
+  components:
+  - type: Sprite
+    state: red
+  - type: AuObjective
+    factioneutral: false
+    id: govforkillplatcoobj
+    applicableModes:
+    - ForceOnForce
+    possiblefactions:
+    - govfor
+    repeating: false
+    objectivelevel: 1
+    custompoints: 10
+    ObjectiveDescription: "Kill the OPFOR Commander"
+    roundEndMessage: "By Killing the OPFOR Commander"
+  - type: KillObjective
+    factiontokill: opfor
+    amounttokill: 1
+    specificjob: AU14JobOpforPlatCo
 
 - type: entity
-  name: Kill Platoon Commander
+  name: "Kill the GOVFOR Commander (FOF)"
   parent: MarkerBase
-  id: killplatcoobjective
+  id: killplatcoobjectiveopforfof
   components:
   - type: Sprite
     state: red
@@ -37,23 +59,44 @@
     id: opforkillplatcoobj
     applicableModes:
     - ForceOnForce
-    - insugency
     possiblefactions:
     - opfor
-    - clf
     repeating: false
-    objectivelevel: 3
-    custompoints: 20
-    ObjectiveDescription: "Kill the Platoon Commander"
-    roundEndMessage: "By Killing the Commander"
+    objectivelevel: 1
+    custompoints: 10
+    ObjectiveDescription: "Kill the GOVFOR Commander"
+    roundEndMessage: "By Killing the GOVFOR Commander"
   - type: KillObjective
     factiontokill: govfor
     amounttokill: 1
     specificjob: AU14JobGOVFORPlatCo
 
+- type: entity
+  name: Kill GOVFOR Commander
+  parent: MarkerBase
+  id: killplatcoobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: AuObjective
+    factioneutral: false
+    id: clfkillplatcoobj
+    applicableModes:
+    - insugency
+    possiblefactions:
+    - clf
+    repeating: false
+    objectivelevel: 1
+    custompoints: 10
+    ObjectiveDescription: "Kill the GOVFOR Commander"
+    roundEndMessage: "By Killing the GOVFOR Commander"
+  - type: KillObjective
+    factiontokill: govfor
+    amounttokill: 1
+    specificjob: AU14JobGOVFORPlatCo
 
 - type: entity
-  name: Kill the CLF Leader
+  name: Kill the CLF Cell Leader
   parent: MarkerBase
   id: killcelleaderobjective
   components:
@@ -67,8 +110,8 @@
     possiblefactions:
     - govfor
     repeating: false
-    objectivelevel: 2
-    custompoints: 30
+    objectivelevel: 1
+    custompoints: 10
     ObjectiveDescription: "Kill the CLF Leader"
     roundEndMessage: "By Killing the Cell Leader"
   - type: KillObjective

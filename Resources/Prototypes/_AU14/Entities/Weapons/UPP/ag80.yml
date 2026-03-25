@@ -31,12 +31,12 @@
     - Burst
     - FullAuto
     recoilUnwielded: 4
-    scatterWielded: 8
-    scatterUnwielded: 25
-    baseFireRate: 3.9
+    scatterWielded: 6
+    scatterUnwielded: 18
+    baseFireRate: 4.3
     burstScatterMult: 1
   - type: RMCWeaponAccuracy
-    accuracyMultiplier: 1.5
+    accuracyMultiplier: 1.35
     accuracyMultiplierUnwielded: 0.75
   - type: ItemSlots
     slots:
@@ -262,7 +262,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 40
+        Piercing: 37
   - type: RMCProjectileDamageFalloff
     thresholds:
     - range: 24

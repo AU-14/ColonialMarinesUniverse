@@ -6,7 +6,6 @@
   components:
   - type: BarricadeSandbag
   - type: Climbable
-
   - type: MeleeSound
     soundGroups:
       Brute:

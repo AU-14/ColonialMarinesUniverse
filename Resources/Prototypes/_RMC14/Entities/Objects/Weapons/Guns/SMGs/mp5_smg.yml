@@ -25,9 +25,9 @@
     - FullAuto
     recoilWielded: 1
     recoilUnwielded: 1
-    scatterWielded: 6
+    scatterWielded: 4
     scatterUnwielded: 12
-    baseFireRate: 4
+    baseFireRate: 6.667
     burstScatterMult: 3
     modifiers:
       Burst:
@@ -37,7 +37,7 @@
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 6
       FullAuto:
-        maxScatterModifier: 3
+        maxScatterModifier: 2.75
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 4

@@ -717,15 +717,14 @@
         givePrefix: au14-job-prefix-govforspecialist-heavyantitankUPP
         isAppendPrefix: true
         isAppendSquadRoleName: true
-    - name: M240 Incinerator #Placeholder for LPO80
+    - name: LPO80 Pyrotechnician kit
       entries:
-      - id: RMCWeaponFlamer
+      - id: AU14KitUPPPyroLPO80
         amount: 1
-      - id: RMCPVECaseFlamerFuel
-        amount: 1
-      - id: RMCBackpackFlamer
-        name: G4-1 fueltank
-        amount: 1
+        giveSquadRoleName: au14-job-name-specialist-pyro
+        givePrefix: au14-job-prefix-specialist-pyro
+        isAppendPrefix: true
+        isAppendSquadRoleName: true
     - name: Type 88 Marksman kit
       entries:
       - id: AU14KitUPPMarksmanType88

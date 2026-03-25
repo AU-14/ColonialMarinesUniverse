@@ -1,10 +1,37 @@
 ﻿- type: entity
-  parent: BaseStructureDynamic
+  id: AU14BaseStructureDynamicNoAnchor
+  parent: BaseStructure
+  abstract: true
+  components:
+  # These might/might not be a good idea
+  #  - type: MovedByPressure
+  #  - type: DamageOnHighSpeedImpact
+  #  - type: TileFrictionModifier
+  #    modifier: 0.5
+  - type: Transform
+    anchored: false
+  - type: Clickable
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+
+- type: entity
+  parent: AU14BaseStructureDynamicNoAnchor
   id: AU14HESCOBarrier
   name: HESCO barrier
   description: A sand filled box designed to stop bullets.
   components:
-  - type: Anchorable
   - type: Transform
     anchored: true
   - type: InteractionOutline
