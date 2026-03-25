@@ -28,12 +28,20 @@ public sealed class RemoveJobsRuleSystem : GameRuleSystem<RemoveJobsRuleComponen
         if (stationJobs != null)
         {
             // Only clear jobs that are part of the station's setup (i.e., not jobs added by other gamerules)
-
-                var setupKeys = stationJobs.SetupAvailableJobs.Keys.ToList();
-                foreach (var jobKey in setupKeys)
+            var setupKeys = stationJobs.SetupAvailableJobs.Keys.ToList();
+            foreach (var jobKey in setupKeys)
+            {
+                // Clear both the active job list and the round-start setup slots.
+                _stationJobs.TrySetJobSlot(stationUid.Value, jobKey.ToString(), 0, false, stationJobs);
+                try
                 {
-                    _stationJobs.TrySetJobSlot(stationUid.Value, jobKey.ToString(), 0, false, stationJobs);
+                    _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobKey, 0, stationJobs);
                 }
+                catch
+                {
+                    // Swallow to avoid crashing if something odd happens.
+                }
+            }
 
         }
 

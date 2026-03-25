@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Station.Systems;
@@ -113,6 +114,24 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                         var jobId = entry.Key;
                         var amount = entry.Value;
                         _stationJobs.TryAdjustJobSlot(stationUid.Value, jobId.ToString(), amount, true, false, stationJobs);
+                        // Also update the round-start setup slots so readied players can spawn on these jobs.
+                        try
+                        {
+                            // Compute current round-start amount (if any) and add to it.
+                            if (stationJobs.SetupAvailableJobs.TryGetValue(jobId, out var arr) && arr.Length > 0)
+                            {
+                                var existing = arr[0];
+                                _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, existing + amount, stationJobs);
+                            }
+                            else
+                            {
+                                _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, amount, stationJobs);
+                            }
+                        }
+                        catch
+                        {
+                            // If anything goes wrong, fall back to not crashing the rule system.
+                        }
                     }
                     // Only add to the first matching ship's station
                     break;
@@ -144,6 +163,22 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                             var jobId = entry.Key;
                             var amount = entry.Value;
                             _stationJobs.TryAdjustJobSlot(stationUid.Value, jobId.ToString(), amount, true, false, stationJobs);
+                            // Keep round-start setup in sync so readied players see these jobs.
+                            try
+                            {
+                                if (stationJobs.SetupAvailableJobs.TryGetValue(jobId, out var arr) && arr.Length > 0)
+                                {
+                                    var existing = arr[0];
+                                    _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, existing + amount, stationJobs);
+                                }
+                                else
+                                {
+                                    _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, amount, stationJobs);
+                                }
+                            }
+                            catch
+                            {
+                            }
                         }
                     }
                 }
@@ -191,6 +226,22 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                             var jobId = entry.Key;
                             var amount = entry.Value;
                             _stationJobs.TryAdjustJobSlot(stationUid.Value, jobId.ToString(), amount, true, false, stationJobs);
+                            // Keep round-start setup in sync so readied players see these jobs.
+                            try
+                            {
+                                if (stationJobs.SetupAvailableJobs.TryGetValue(jobId, out var arr) && arr.Length > 0)
+                                {
+                                    var existing = arr[0];
+                                    _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, existing + amount, stationJobs);
+                                }
+                                else
+                                {
+                                    _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, amount, stationJobs);
+                                }
+                            }
+                            catch
+                            {
+                            }
                         }
                     }
                 }
@@ -198,3 +249,5 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
         }
     }
 }
+
+
