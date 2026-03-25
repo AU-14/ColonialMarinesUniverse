@@ -389,3 +389,67 @@
     - id: AU14ArmorGarbDesertShinGuards
     - id: AU14ArmorGarbDesertNeckGuard
     - id: AU14ArmorGarbDesertGroinPlate
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbCorpsmanWebbingForecon
+  name: M3-R Pattern Corpsman Webbing
+  description: A large pouch with M3-R Pattern webbing clips designed to house surgical tools for Corpsmen attached to FORECON units, where field hospitals are not readily available.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMC/Garb/corpsmanwebbing.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMC/Garb/corpsmanwebbing.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMC/Garb/corpsmanwebbing.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbShotgunShellHolderForecon
+  name: M3-R Pattern Shell Webbing
+  description: A modified variant of the M3-R Pattern grenade webbing for FORECON units, this one accepting 12 gauge.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMC/Garb/shellwebbing.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMC/Garb/shellwebbing.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMC/Garb/shellwebbing.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbGrenadeForecon
+  name: M3-R Pattern Grenade Webbing
+  description: An alternative to the M3-R Pattern webbing fitted to store M40 grenades.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMC/Garb/grenadewebbing.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMC/Garb/grenadewebbing.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMC/Garb/grenadewebbing.rsi
+      state: helmet
+
+- type: entity
+  parent: BaseItem
+  id: AU14ArmorGarbMagazineForecon
+  name: M3-R Pattern Magazine Webbing
+  description: A set of magazine webbing made in an alternative configuration for standard M3 Pattern armor. This one is exclusively issued to Force Reconnoissance units.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMC/Garb/magazinewebbing.rsi
+    state: icon
+  - type: Item
+    sprite: _AU14/Clothing/USCMC/Garb/magazinewebbing.rsi
+  - type: OuterClothingAccessory
+    rsi:
+      sprite: _AU14/Clothing/USCMC/Garb/magazinewebbing.rsi
+      state: helmet

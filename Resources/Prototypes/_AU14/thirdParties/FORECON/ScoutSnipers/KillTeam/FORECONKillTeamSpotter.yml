@@ -1,0 +1,86 @@
+- type: job
+  parent: AU14JobFORECONSpotterBase
+  id: AU14FORECONKillTeamSpotter
+  name: au14-job-name-forecon-spotter
+  description: au14-job-description-forecon-killteam
+  playTimeTracker: AU14FORECONSpotterDetachment
+  ranks:
+    RMCRankChiefWarrantOfficer:
+    - !type:RoleTimeRequirement
+      role: AU14FORECONSpotterDetachment
+      time: 18000 #5 hours
+    RMCRankWarrantOfficer: []
+  spawnMenuRoleName: FORECON Spotter (AU14, KillTeam)
+  startingGear: AU14GearFORECONKillTeamSpotter
+  greeting: au14-job-description-forecon-killteam-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: spotter
+    - type: Skills
+      preset: AU14SkillPresetPlatoonRifleman
+    - type: SpotterWhitelist
+    - type: JobPrefix
+      prefix: au14-job-prefix-forecon-spotter
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  suffix: AU14, FORECON, KillTeam
+  id: AU14JobFORECONKillTeamSpotter
+  name: FORECON Spotter (Kill Team)
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadFORECON
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-forecon-spotter
+    description: au14-job-description-forecon-killteam
+    reregister: false
+    job: AU14FORECONKillTeamSpotter
+    raffle:
+      settings: short
+    rules: au14-forecon-killteam-rules
+
+- type: startingGear
+  id: AU14GearFORECONKillTeamSpotter
+  equipment:
+    id: AU14IDCardFORECONKillTeamSpotter
+    outerClothing: AU14ArmorGhillie
+    jumpsuit: AU14JumpsuitFORECON
+    shoes: RMCScoutShoes
+    head: AU14HelmetGhillie
+    mask: RMCMaskBalaclava
+    belt: CMBeltMarine
+    pocket1: AU14PouchSlingBinocs
+    pocket2: AU14PouchIFAKFill
+    back: CMBackpackSniper
+    ears: RMCHeadsetForecon
+    suitstorage: AU14WeaponRifleM41AMK1ReconSuppressed
+  storage:
+    belt:
+    - CMMagazineRifleM54CMK1
+    - CMMagazineRifleM54CMK1
+    - CMMagazineRifleM54CMK1
+    back:
+    - RMCExplosiveBreachingCharge
+    - RMCExplosivePlastic
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONKillTeamSpotter
+  categories: [ HideSpawnMenu ]
+  name: FORECON Spotter ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONKillTeamSpotter

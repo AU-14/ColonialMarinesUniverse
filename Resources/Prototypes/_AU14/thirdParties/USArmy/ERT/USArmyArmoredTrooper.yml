@@ -59,7 +59,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicUSArmy
   id: AU14JobUSArmyTrooperArmored
-  name: US Army Trooper (32nd Arm)
+  name: US Army Trooper (ERT)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

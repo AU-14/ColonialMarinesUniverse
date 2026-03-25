@@ -42,7 +42,7 @@
   parent: AU14BaseMobSpeciesOrganicFORECON
   suffix: AU14, FORECON, Detachment
   id: AU14JobFORECONMarksmanDetachment
-  name: FORECON Marksman
+  name: FORECON Marksman (Detachment)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

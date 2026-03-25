@@ -1,0 +1,11 @@
+- type: entity
+  parent: RMCHandsVeteranCBRN
+  id: AU14GlovesCBRNUPP
+  name: UPP MOPP gloves
+  description: "Part of the UPP's MOPP suit."
+  components:
+  - type: Insulated
+  - type: Fiber
+    fiberMaterial: fibers-black
+    fiberColor: fibers-black
+  - type: FingerprintMask

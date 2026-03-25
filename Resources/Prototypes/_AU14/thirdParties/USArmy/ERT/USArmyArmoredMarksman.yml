@@ -60,7 +60,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicUSArmy
   id: AU14JobUSArmyMarksmanArmoreds
-  name: US Army Marksman (32nd Arm)
+  name: US Army Marksman (ERT)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

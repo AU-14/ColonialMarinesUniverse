@@ -37,3 +37,25 @@
     - HeadTop
     - HeadSide
     - Snout
+
+- type: entity
+  parent: CMBaseMask
+  id: AU14MOPPMask
+  suffix: AU14
+  name: CBRN M3 MOPP mask
+  description: The M3 MOPP mask includes a full covering cowl that securely attaches to the MOPP suit. The mask filters out harmful particles in the air to allow the wearer to breathe safely in the field. Depending on the hostility of the contaminated area the mask’s filter will last an average of 12 hours or less.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMC/Mask/cbrn.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/USCMC/Mask/cbrn.rsi
+  - type: IdentityBlocker
+    coverage: MOUTH
+  - type: Item
+    storedRotation: -90
+  - type: HideLayerClothing
+    slots:
+    - HeadTop
+    - HeadSide
+    - Hair
+    - Snout

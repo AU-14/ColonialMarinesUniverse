@@ -30,3 +30,20 @@
     sprite: _AU14/Clothing/UPP/hats/uppushanka.rsi
   - type: Clothing
     sprite: _AU14/Clothing/UPP/hats/uppushanka.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14UPPCBRNHood
+  name: UPP MOPP hood
+  description: Hood from the UPP's Armed Forces MOPP costume.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/hats/cbrn.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UPP/hats/cbrn.rsi
+  - type: HideLayerClothing
+    slots:
+    - HeadTop
+    - HeadSide
+    - Hair
+    - Snout

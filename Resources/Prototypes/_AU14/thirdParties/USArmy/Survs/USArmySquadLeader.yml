@@ -52,7 +52,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicUSArmy
   id: AU14JobUSArmySquadleader
-  name: US Army Squad Leader
+  name: US Army Squad Leader (Surv)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

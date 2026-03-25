@@ -63,7 +63,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicUSArmy
   id: AU14JobUSArmySquadleaderArmored
-  name: US Army Squad Leader (32nd Arm)
+  name: US Army Squad Leader (ERT)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

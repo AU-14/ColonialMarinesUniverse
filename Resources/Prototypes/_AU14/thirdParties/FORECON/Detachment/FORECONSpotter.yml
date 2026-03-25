@@ -1,9 +1,17 @@
 - type: job
   parent: CMJobBase
-  id: AU14FORECONSpotterDetachment
+  id: AU14JobFORECONSpotterBase
   name: au14-job-name-forecon-spotter
   description: rmc-job-description-forecon-detachment
   playTimeTracker: AU14FORECONSpotterDetachment
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: job
+  parent: AU14JobFORECONSpotterBase
+  id: AU14JobFORECONSpotterDetachment
+  name: au14-job-name-forecon-spotter
+  description: rmc-job-description-forecon-detachment
   ranks:
     RMCRankChiefWarrantOfficer:
     - !type:RoleTimeRequirement
@@ -41,7 +49,7 @@
   parent: AU14BaseMobSpeciesOrganicFORECON
   suffix: AU14, FORECON, Detachment
   id: AU14JobFORECONSpotterDetachment
-  name: FORECON Spotter
+  name: FORECON Spotter (Detachment)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

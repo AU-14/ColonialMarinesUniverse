@@ -59,7 +59,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicUSArmy
   id: AU14JobUSArmyHeavyGunnerArmored
-  name: US Army Heavy Gunner (32nd Arm)
+  name: US Army Heavy Gunner (ERT)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

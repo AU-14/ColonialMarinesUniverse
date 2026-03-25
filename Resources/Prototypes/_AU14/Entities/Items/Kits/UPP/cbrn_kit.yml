@@ -1,0 +1,42 @@
+- type: entity
+  parent: BaseStorageItem
+  id: AU14CBRNKitUPP
+  name: UPP CBRN Kit
+  description: 
+  components:
+  - type: Sprite
+    sprite: _AU14/Objects/Tools/CBRN/upp.rsi
+    state: closed
+  - type: Item
+    size: Small
+  - type: Storage
+    grid:
+    - 0,0,7,1
+    maxItemSize: Small
+  - type: Openable
+    sound:
+      collection: CMFoodRip
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.OpenableVisuals.Opened:
+        enum.OpenableVisuals.Layer:
+          True: { state: "open" }
+          False: { state: "closed" }
+  - type: StorageFill
+    contents:
+    - id: AU14UPPCBRNHood
+    - id: AU14SuitCBRNUPP
+    - id: RMCMaskGasSPP
+    - id: AU14GlovesCBRNUPP
+    - id: AU14BootsCBRNUPP
+    - id: AU14NaloxoneAutoInjector
+    - id: AU14NaloxoneAutoInjector
+    - id: CMTricordrazineAutoInjector
+    - id: AU14GeigerCounterUPP
+  - type: FixedItemSizeStorage
+  - type: RemoveOnlyStorage
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno

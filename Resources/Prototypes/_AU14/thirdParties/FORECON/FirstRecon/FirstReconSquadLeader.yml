@@ -1,0 +1,103 @@
+- type: job
+  parent: AU14FORECONSquadleaderBase
+  id: AU14FORECONFirstReconSquadleader
+  name: cm-job-name-squad-leader
+  description: au14-job-description-forecon-firstrecon
+  ranks:
+    RMCRankStaffSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobFORECONSquadLeader
+      time: 36000 #10 hours
+    RMCRankSergeant: []
+  spawnMenuRoleName: FORECON Section Leader (AU14, 3rd party)
+  startingGear: AU14GearFORECONFirstReconSquadleader
+  greeting: au14-job-description-forecon-firstrecon-greeting
+  icon: "CMJobIconSquadLeader"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: leader
+      background:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: background_forecon
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadFirstRecon
+    - type: Skills
+      preset: AU14SkillPresetPlatoonSeniorSergeant
+    - type: SpotterWhitelist
+    - type: JobPrefix
+      prefix: cm-job-prefix-squad-leader
+    - type: MarineOrders
+    - type: RMCTrackable
+    - type: SquadLeader
+    - type: RMCPointing
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  id: AU14JobFORECONFirstReconSquadleader
+  name: FORECON Section Leader (3rd party)
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadFirstRecon
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cm-job-name-squad-leader
+    description: au14-job-description-forecon-firstrecon
+    reregister: false
+    job: AU14FORECONFirstReconSquadleader
+    raffle:
+      settings: short
+    rules: au14-forecon-rules
+
+- type: startingGear
+  id: AU14GearFORECONFirstReconSquadleader
+  equipment:
+    id: AU14IDCardFORECONFirstReconSquadleader
+    outerClothing: AU14ArmorCBRN
+    jumpsuit: AU14JumpsuitFORECONDesert
+    shoes: CMBootsBrownFilled
+    head: AU14DesertM11Helmet
+    belt: CMBeltMarine
+    pocket1: AU14PouchSlingBinocs
+    pocket2: AU14PouchIFAKFill
+    back: CMSatchelMarine
+    ears: RMCHeadsetForecon
+    suitstorage: AU14WeaponRifleM41AMK1Recon
+  storage:
+    back:
+    - AU14CBRNKitUA
+    - AU14DesertBoonieHat
+    - CMPacketGrenadeHighExplosiveFilled
+    - RMCHelmetGarbNightVision
+    belt:
+    - CMMagazineRifleM54CMK1
+    - CMMagazineRifleM54CMK1
+    - CMMagazineRifleM54CMK1
+    - CMMagazineRifleM54CMK1
+    - CMMagazineRifleM54CMK1
+    outerClothing:
+    - AU14ArmorGarbGrenadeForecon
+    head:
+    - AU14HelmetGarbM10Netting
+    - AU14GogglesM1A1DarkBallistic
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONFirstReconSquadleader
+  categories: [ HideSpawnMenu ]
+  name: FORECON Section Leader ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONFirstReconSquadleader

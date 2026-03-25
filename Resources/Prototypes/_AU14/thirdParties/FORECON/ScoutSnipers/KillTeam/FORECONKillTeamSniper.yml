@@ -1,0 +1,84 @@
+- type: job
+  parent: AU14JobFORECONSniperBase
+  id: AU14FORECONKillTeamSniper
+  name: rmc-job-name-forecon-sniper
+  description: au14-job-description-forecon-killteam
+  ranks:
+    RMCRankChiefWarrantOfficer:
+    - !type:RoleTimeRequirement
+      role: AU14FORECONSniperDetachment
+      time: 18000 #5 hours
+    RMCRankWarrantOfficer: []
+  spawnMenuRoleName: FORECON Sniper (AU14, KillTeam)
+  icon: "CMJobIconEmpty"
+  startingGear: AU14GearFORECONKillTeamSniper
+  greeting: au14-job-description-forecon-killteam-greeting
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: spec_sniper
+    - type: Skills
+      preset: AU14SkillPresetPlatoonRifleman
+    - type: SpotterWhitelist
+    - type: SniperWhitelist
+    - type: JobPrefix
+      prefix: rmc-job-prefix-weapons-specialist-sniper
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  suffix: AU14, FORECON, KillTeam
+  id: AU14JobFORECONKillTeamSniper
+  name: FORECON Sniper (Kill Team)
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadFORECON
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rmc-job-name-forecon-sniper
+    description: au14-job-description-forecon-killteam
+    reregister: false
+    job: AU14FORECONKillTeamSniper
+    raffle:
+      settings: short
+    rules: au14-forecon-killteam-rules
+
+
+- type: startingGear
+  id: AU14GearFORECONKillTeamSniper
+  equipment:
+    id: AU14IDCardFORECONKillTeamSniper
+    outerClothing: AU14ArmorGhillie
+    jumpsuit: AU14JumpsuitFORECON
+    shoes: RMCScoutShoes
+    head: AU14HelmetGhillie
+    mask: RMCMaskBalaclava
+    belt: AU14BeltPostelPistolM48A4
+    pocket1: RMCPouchMagazine
+    pocket2: AU14PouchIFAKFill
+    back: CMBackpackSniper
+    ears: RMCHeadsetForecon
+    suitstorage: RMCM96SBSniperRifle
+  storage:
+    pocket1:
+    - CMMagazineSniperM96S
+    - CMMagazineSniperM96S
+    - CMMagazineSniperM96S
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONKillTeamSniper
+  categories: [ HideSpawnMenu ]
+  name: FORECON Sniper ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONKillTeamSniper

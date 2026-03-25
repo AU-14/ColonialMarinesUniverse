@@ -48,7 +48,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicUSArmy
   id: AU14JobUSArmyCET
-  name: US Army Combat Engineer Technician (1st Cav)
+  name: US Army Combat Engineer Technician (Surv)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

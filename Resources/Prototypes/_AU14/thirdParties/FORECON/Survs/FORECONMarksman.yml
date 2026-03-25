@@ -50,7 +50,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicFORECON
   id: AU14JobFORECONMarksman
-  name: FORECON Marksman
+  name: FORECON Marksman (Surv)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable
@@ -76,7 +76,7 @@
     jumpsuit: RMCJumpsuitSurvivorMarineDropPouch
     shoes: RMCScoutShoes
     head: RMCBoonieTan
-    belt: RMCM1984BeltFilled
+    belt: AU14BeltPostelPistolM48A4
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchIFAKFill
     back: RMCSatchelMarineForeconSurvivorFill

@@ -1,9 +1,17 @@
 - type: job
   parent: CMJobBase
+  id: AU14FORECONRiflemanBase
+  name: cm-job-name-rifleman
+  description: au14-job-description-govforadvisor
+  playTimeTracker: AU14JobFORECONRifleman
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: job
+  parent: AU14FORECONRiflemanBase
   id: AU14FORECONRifleman
   name: cm-job-name-rifleman
   description: rmc-job-description-forecon
-  playTimeTracker: AU14JobFORECONRifleman
   ranks:
     RMCRankStaffSergeant:
     - !type:RoleTimeRequirement
@@ -44,12 +52,12 @@
     - type: SpotterWhitelist
     - type: JobPrefix
       prefix: cm-job-prefix-rifleman
-  hidden: false
+  hidden: true
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicFORECON
   id: AU14JobFORECONRifleman
-  name: FORECON Rifleman
+  name: FORECON Rifleman (Surv)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable
@@ -75,7 +83,7 @@
     jumpsuit: RMCJumpsuitSurvivorMarineDropPouch
     shoes: CMBootsBlackFilled
     head: ArmorHelmetM10
-    belt: RMCM1984BeltFilled
+    belt: AU14BeltPostelPistolM48A4
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchIFAKFill
     back: RMCSatchelMarineForeconSurvivorFill

@@ -99,7 +99,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicUSArmy
   id: AU14JobUSArmySynthArmored
-  name: US Army Synthetic (32nd Arm)
+  name: US Army Synthetic (ERT)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

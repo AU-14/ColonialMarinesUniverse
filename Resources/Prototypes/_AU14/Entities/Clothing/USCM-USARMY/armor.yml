@@ -61,7 +61,7 @@
     items:
       components:
       - RMCLighter
-      - RMCFlaskwas
+      - RMCFlask
       - CMScalpel
       - Figurine
       - Matchbox
@@ -145,7 +145,7 @@
     items:
       components:
       - RMCLighter
-      - RMCFlaskwas
+      - RMCFlask
       - CMScalpel
       - Figurine
       - Matchbox
@@ -500,3 +500,31 @@
   - type: StorageFill
     contents:
     - id: RMCTacticalPrybar
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14ArmorM3RForecon
+  name: M3-R pattern light armor
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMC/Armor/forecon.rsi
+  - type: ClothingSpeedModifier # light armor speed
+    walkModifier: .725
+    sprintModifier: .725
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14ArmorCBRN
+  name: CBRN M3-M armor
+  description: While lacking the appearance of the M3 pattern armor worn in regular service, this armor piece is still a derivative of it. It has been heavily modified to fit over the MOPP suit with additional padding and Venlar composite layers removed, so as not to restrict the wearer’s movement. However, with the reduction of composite layers, the personal protection offered is less than desired with complaints having been lodged since 2165.
+  suffix: AU14
+  components:
+  - type: CMArmor
+    bullet: 20
+    bio: 70
+    explosionArmor: 15
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/cbrn.rsi
+  - type: ClothingSpeedModifier # heavy armor speed
+    walkModifier: .62
+    sprintModifier: .62

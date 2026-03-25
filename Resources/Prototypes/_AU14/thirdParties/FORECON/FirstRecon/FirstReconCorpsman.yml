@@ -1,0 +1,102 @@
+- type: job
+  parent: AU14FORECONSupportTechBase
+  id: AU14FORECONFirstReconCorpsman
+  name: au14-job-name-forecon-corpsman
+  description: au14-job-description-forecon-firstrecon
+  ranks:
+    RMCRankSergeant:
+  spawnMenuRoleName: FORECON Corpsman (AU14, 3rd party)
+  startingGear: AU14GearFORECONFirstReconCorpsman
+  greeting: au14-job-description-forecon-firstrecon-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: cm-job-name-squad-leader
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: engi
+      background:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: background_forecon
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadFirstRecon
+    - type: Skills
+      skills:
+        RMCSkillEngineer: 1
+        RMCSkillConstruction: 2
+        RMCSkillMeleeWeapons: 1
+        RMCSkillCqc: 1
+        RMCSkillFireman: 1
+        RMCSkillFirearms: 2
+        RMCSkillJtac: 1
+        RMCSkillMedical: 2
+        RMCSkillSurgery: 1
+        RMCSkillEndurance: 2
+        RMCSkillLeadership: 0
+        RMCSkillVehicles: 0
+    - type: SpotterWhitelist
+    - type: JobPrefix
+      prefix: au14-job-prefix-forecon-corpsman
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  id: AU14JobFORECONFirstReconCorpsman
+  name: FORECON Corpsman (3rd party)
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadFirstRecon
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-forecon-corpsman
+    description: au14-job-description-forecon-firstrecon
+    reregister: false
+    job: AU14FORECONFirstReconCorpsman
+    raffle:
+      settings: short
+    rules: au14-forecon-rules
+
+- type: startingGear
+  id: AU14GearFORECONFirstReconCorpsman
+  equipment:
+    id: AU14IDCardFORECONFirstReconCorpsman
+    outerClothing: AU14ArmorCBRN
+    jumpsuit: AU14JumpsuitFORECONDesert
+    shoes: CMBootsBrownFilled
+    head: RMCHeadDuragBlack
+    belt: CMUBeltMedicBagSupportSynth
+    pocket1: RMCPouchMagazine
+    pocket2: AU14PouchIFAKFill
+    back: CMSatchelMarine
+    ears: RMCHeadsetForecon
+    suitstorage: AU14WeaponRifleM41AMK1Recon
+  storage:
+    back:
+    - AU14CBRNKitUA
+    - AU14CMDefibrillator
+    - AU14DesertM10Helmet
+    - RMCHelmetGarbNightVision
+    pocket1:
+    - CMMagazineRifleM54CMK1
+    - CMMagazineRifleM54CMK1
+    - CMMagazineRifleM54CMK1
+    outerClothing:
+    - AU14ArmorGarbCorpsmanWebbingForecon
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONFirstReconCorpsman
+  categories: [ HideSpawnMenu ]
+  name: FORECON Corpsman 2. Class ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONFirstReconCorpsman

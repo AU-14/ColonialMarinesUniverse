@@ -48,7 +48,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicUSArmy
   id: AU14JobUSArmyHeavyGunner
-  name: US Army Heavy Gunner
+  name: US Army Heavy Gunner (Surv)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

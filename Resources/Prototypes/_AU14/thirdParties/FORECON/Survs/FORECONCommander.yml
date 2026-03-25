@@ -48,7 +48,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicFORECON
   id: AU14JobFORECONCommander
-  name: FORECON Commander
+  name: FORECON Commander (Surv)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable
@@ -74,7 +74,7 @@
     jumpsuit: RMCJumpsuitSurvivorMarineDropPouch
     shoes: CMBootsBlackFilled
     head: RMCBoonieTan
-    belt: RMCMatebaBeltForeconFilled
+    belt: AU14BeltPostelPistolM48A5Surv
     pocket1: RMCPouchCommand
     pocket2: AU14PouchIFAKFill
     back: RMCSatchelMarineForeconSurvivorCommanderFill

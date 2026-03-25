@@ -1,9 +1,17 @@
 - type: job
   parent: CMJobBase
+  id: AU14FORECONSquadleaderBase
+  name: cm-job-name-squad-leader
+  description: au14-job-description-govforadvisor
+  playTimeTracker: AU14JobFORECONSquadLeader
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: job
+  parent: AU14FORECONSquadleaderBase
   id: AU14FORECONSquadleader
   name: cm-job-name-squad-leader
   description: rmc-job-description-forecon
-  playTimeTracker: AU14JobFORECONSquadLeader
   ranks:
     RMCRankFirstLT:
     - !type:RoleTimeRequirement
@@ -44,12 +52,12 @@
     - type: RMCTrackable
     - type: SquadLeader
     - type: RMCPointing
-  hidden: false
+  hidden: true
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicFORECON
   id: AU14JobFORECONSquadleader
-  name: FORECON Section Leader
+  name: FORECON Section Leader (Surv)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable
@@ -75,7 +83,7 @@
     jumpsuit: RMCJumpsuitSurvivorMarineDropPouch
     shoes: CMBootsBlackFilled
     head: RMCHeadCapFlippable
-    belt: RMCM1984BeltFilled
+    belt: AU14BeltPostelPistolM48A4
     pocket1: AU14PouchSlingBinocs
     pocket2: AU14PouchIFAKFill
     back: RMCSatchelMarineForeconSurvivorFill

@@ -59,7 +59,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicUSArmy
   id: AU14JobUSArmyCETArmored
-  name: US Army Combat Engineer Technician (32nd Arm)
+  name: US Army Combat Engineer Technician (ERT)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

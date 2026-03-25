@@ -59,7 +59,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicUSArmy
   id: AU14JobUSArmyCMTArmored
-  name: US Army Combat Medical Technician (32nd Arm)
+  name: US Army Combat Medical Technician (ERT)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

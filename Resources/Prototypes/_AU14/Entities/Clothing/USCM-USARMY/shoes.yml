@@ -24,3 +24,10 @@
   parent: [RMCItemSlotM5Bayonet, AU14BootsUSArmy]
   id: AU14BootsUSArmyFilled
   suffix: Filled
+
+- type: entity
+  parent: RMCBootsCBRN
+  id: AU14BootsCBRN
+  components:
+  - type: Item
+    size: Small

@@ -1,0 +1,23 @@
+- type: partySpawn
+  id: AU14FORECONFirstReconSpawner
+  leadersToSpawn:
+    AU14JobFORECONFirstReconSquadleader: 1
+  gruntsToSpawn:
+    AU14JobFORECONFirstReconRifleman: 2
+    AU14JobFORECONFirstReconSmartGunOperator: 1
+    AU14JobFORECONFirstReconCorpsman: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: FORECONFirstRecon
+  partyspawn: AU14FORECONFirstReconSpawner
+  entrymethod: shuttle 
+  weight: 10
+  minplayers: 50
+  maxplayers: 600
+  GhostsNeeded: 5
+  roundstart: false
+  whitelistedgamemodes: 
+    - insurgency
+    - colonyfall

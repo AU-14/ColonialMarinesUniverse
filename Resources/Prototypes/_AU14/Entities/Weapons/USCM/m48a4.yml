@@ -1,0 +1,259 @@
+- type: entity
+  parent: CMWeaponPistolM1984
+  id: AU14WeaponPistolM48A4
+  name: M48A4 service pistol
+  description: A timeless classic since the first World War, the M1911A1 has limited use with the USCM, and is often used as a sidearm by non-governmental bodies due to its reliability. This is a modernized version with an ammo counter and a polymer grip, designated M48A4. Chambered in .45 ACP.
+  components:
+  - type: Gun
+    shotsPerBurst: 2
+    availableModes:
+    - SemiAuto
+    - Burst
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_kt42.ogg
+  - type: Tag
+    tags:
+    - Sidearm
+    - AU14WeaponPistolM48A4
+    - CMWeaponPistolM1984
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    scatterWielded: 12
+    scatterUnwielded: 14
+    baseFireRate: 10
+    burstScatterMult: 5
+    modifiers:
+      Burst:
+        fireDelay: 0.1665
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/USCM/m48a4.rsi
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/USCM/m48a4.rsi
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.2
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_88m4_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazinePistolM48A4
+        startingItem: AU14MagazinePistolM48A4
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentRecoilCompensator
+          - RMCAttachmentSuppressor
+          - RMCAttachmentSuppressorCompact
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS5MicroRedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBurstFireAssembly
+          - RMCAttachmentLaserSight
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.71, 0.095
+      rmc-aslot-rail: -0.065, 0.125
+      rmc-aslot-underbarrel: 0.312, -0.25
+
+- type: Tag
+  id: AU14WeaponPistolM48A4
+
+- type: entity
+  parent: AU14WeaponPistolM48A4
+  id: AU14WeaponPistolM48A4Empty
+  suffix: Empty
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_88m4_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazinePistolM48A4
+
+- type: entity
+  parent: AU14WeaponPistolM48A4
+  id: AU14WeaponPistolM48A5Officer
+  name: M48A5 service pistol
+  description: A timeless classic since the first World War, the M1911A1 has limited use with the USCM, and is often used as a sidearm by non-governmental bodies due to its reliability. An adaptation of the M48A4, with a reinforced chamber, barrel and slide to handle higher pressure loads, designated the M48A5. Chambered in .45 Super, but can load normal .45 ACP also.
+  components:
+  - type: Gun
+    shotsPerBurst: 2
+    availableModes:
+    - SemiAuto
+    - Burst
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_DE50.ogg
+  - type: Tag
+    tags:
+    - Sidearm
+    - AU14WeaponPistolM48A5
+    - CMWeaponPistolM1984
+  - type: GunDamageModifier
+    multiplier: 1.2
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_88m4_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazinePistolM48A4
+          - AU14MagazinePistolM48A5Super
+        startingItem: AU14MagazinePistolM48A5Super
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentRecoilCompensator
+          - RMCAttachmentSuppressor
+          - RMCAttachmentSuppressorCompact
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS5MicroRedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentLaserSight
+        whitelist:
+          tags:
+          - RMCAttachmentBurstFireAssembly
+          - RMCAttachmentLaserSight
+  - type: RMCAirShot
+    preparationTime: 1.5
+    requiresCombat: true
+    doAfterBreakOnMove: false
+    ignoreRoof: true
+    shakeAmount: 5
+    requiredSkills:
+      RMCSkillLeadership: 3
+
+- type: Tag
+  id: AU14WeaponPistolM48A5
+
+#.45
+- type: entity
+  parent: CMBaseMagazinePistol
+  id: AU14MagazinePistolM48A4
+  name: M48A4 magazine (.45)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - AU14MagazinePistolM48A4
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgePistolMK45
+    proto: CMCartridgePistolMK45
+    capacity: 12
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m1984.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+
+- type: Tag
+  id: AU14MagazinePistolM48A4
+
+
+#.45 super
+- type: entity
+  parent: AU14MagazinePistolM48A4
+  id: AU14MagazinePistolM48A5Super
+  name: M48A5 Super magazine (.45 Super)
+  description: A .45 Automagnum Super pistol magazine for the M48A5.
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - AU14MagazinePistolM48A5Super
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - AU14CartridgePistolM48A5Super
+    proto: AU14CartridgePistolM48A5Super
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m1984.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#BA5D00"
+- type: Tag
+  id: AU14MagazinePistolM48A5Super
+
+- type: entity
+  parent: CMCartridgePistolMK45
+  id: AU14CartridgePistolM48A5Super
+  name: cartridge (.45 Super)
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14CartridgePistolM48A5Super
+  - type: CartridgeAmmo
+    proto: AU14BulletPistol45Super
+
+- type: entity
+  parent: CMBulletBase
+  id: AU14BulletPistol45Super
+  name: bullet (.45 Super)
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 45
+  - type: CMArmorPiercing
+    amount: 5
+  - type: RMCProjectileAccuracy
+    accuracy: 70
+  - type: RMCDebilitate
+    blacklist:
+      components:
+      - Synth
+    whitelist:
+      components:
+      - Marine
+    knockdown: 4
+
+- type: Tag
+  id: AU14CartridgePistolM48A5Super

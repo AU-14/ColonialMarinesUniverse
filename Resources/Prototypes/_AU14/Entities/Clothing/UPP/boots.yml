@@ -1,0 +1,5 @@
+- type: entity
+  parent: AU14BootsCBRN
+  id: AU14BootsCBRNUPP
+  name: UPP MOPP boots
+  description: Part of the UPP's MOPP suit.

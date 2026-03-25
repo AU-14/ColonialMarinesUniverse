@@ -142,6 +142,28 @@
     tags:
     - AU14SquadRMCRRT
 
+- type: entity
+  parent: SquadBase
+  id: AU14SquadFirstRecon
+  name: First Recon
+  components:
+  - type: SquadTeam
+    color: "#32CD32"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UASOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+    canSupplyDrop: false
+    group: FORECON
+  - type: Tag
+    tags:
+    - AU14SquadFirstRecon
+
 - type: Tag
   id: AU14SquadUACG
 
@@ -156,3 +178,6 @@
 
 - type: Tag
   id: AU14SquadRMCRRT
+
+- type: Tag
+  id: AU14SquadFirstRecon

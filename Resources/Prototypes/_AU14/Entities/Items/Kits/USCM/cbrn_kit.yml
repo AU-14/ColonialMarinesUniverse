@@ -1,0 +1,41 @@
+- type: entity
+  parent: BaseStorageItem
+  id: AU14CBRNKitUA
+  name: UA CBRN Kit
+  description: 
+  components:
+  - type: Sprite
+    sprite: _AU14/Objects/Tools/CBRN/uscm.rsi
+    state: closed
+  - type: Item
+    size: Small
+  - type: Storage
+    grid:
+    - 0,0,7,1
+    maxItemSize: Small
+  - type: Openable
+    sound:
+      collection: CMFoodRip
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.OpenableVisuals.Opened:
+        enum.OpenableVisuals.Layer:
+          True: { state: "open" }
+          False: { state: "closed" }
+  - type: StorageFill
+    contents:
+    - id: AU14MOPPMask
+    - id: AU14CBRNSuit
+    - id: RMCHandsVeteranCBRN
+    - id: AU14BootsCBRN
+    - id: AU14NaloxoneAutoInjector
+    - id: AU14NaloxoneAutoInjector
+    - id: CMTricordrazineAutoInjector
+    - id: RMCGeigerCounter
+  - type: FixedItemSizeStorage
+  - type: RemoveOnlyStorage
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno

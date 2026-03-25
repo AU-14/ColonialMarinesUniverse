@@ -1,0 +1,21 @@
+- type: partySpawn
+  id: AU14FORECONKillTeamSpawner
+  leadersToSpawn:
+    AU14JobFORECONKillTeamSniper: 1
+  gruntsToSpawn:
+    AU14JobFORECONKillTeamSpotter: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: FORECONKillTeam
+  partyspawn: AU14FORECONKillTeamSpawner
+  entrymethod: shuttle 
+  weight: 1
+  minplayers: 50
+  maxplayers: 600
+  GhostsNeeded: 5
+  roundstart: false
+  whitelistedgamemodes: 
+    - insurgency
+    - colonyfall

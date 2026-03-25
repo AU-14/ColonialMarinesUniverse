@@ -1,5 +1,5 @@
 - type: entity
-  parent: CMWeaponPistolBase
+  parent: [ RMCBaseSlideMagazineVisuals, CMWeaponPistolBase ]
   id: CMWeaponPistolM1984
   name: M4A3 service pistol
   description: An M4A3 Service Pistol, once the standard issue sidearm of the Marines but has recently been replaced with the Mod 88 combat pistol. Fires 9mm pistol rounds.

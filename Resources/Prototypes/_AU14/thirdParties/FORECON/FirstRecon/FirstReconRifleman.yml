@@ -1,0 +1,93 @@
+- type: job
+  parent: AU14FORECONRiflemanBase
+  id: AU14FORECONFirstReconRifleman
+  name: cm-job-name-rifleman
+  description: au14-job-description-forecon-firstrecon
+  ranks:
+    RMCRankCorporal: []
+  spawnMenuRoleName: FORECON Rifleman (AU14, 3rd party)
+  startingGear: AU14GearFORECONFirstReconRifleman
+  greeting: au14-job-description-forecon-firstrecon-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: cm-job-name-squad-leader
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: private
+      background:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: background_forecon
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadFirstRecon
+    - type: Skills
+      preset: AU14SkillPresetPlatoonRifleman
+    - type: SpotterWhitelist
+    - type: JobPrefix
+      prefix: cm-job-prefix-rifleman
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  id: AU14JobFORECONFirstReconRifleman
+  name: FORECON Rifleman (3rd party)
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadFirstRecon
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cm-job-name-rifleman
+    description: au14-job-description-forecon-firstrecon
+    reregister: false
+    job: AU14FORECONFirstReconRifleman
+    raffle:
+      settings: short
+    rules: au14-forecon-rules
+
+- type: startingGear
+  id: AU14GearFORECONFirstReconRifleman
+  equipment:
+    id: AU14IDCardFORECONFirstReconRifleman
+    outerClothing: AU14ArmorCBRN
+    jumpsuit: AU14JumpsuitFORECONDesert
+    shoes: CMBootsBrownFilled
+    head: AU14DesertM10Helmet
+    belt: CMBeltMarine
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchIFAKFill
+    back: CMSatchelMarine
+    ears: RMCHeadsetForecon
+    suitstorage: AU14WeaponRifleM41AMK1Recon
+  storage:
+    back:
+    - AU14CBRNKitUA
+    - AU14DesertBoonieHat
+    - RMCHelmetGarbNightVision
+    belt:
+    - CMMagazineRifleM54CMK1
+    - CMMagazineRifleM54CMK1
+    - CMMagazineRifleM54CMK1
+    - CMMagazineRifleM54CMK1
+    - CMMagazineRifleM54CMK1
+    outerClothing:
+    - AU14ArmorGarbMagazineForecon
+    head:
+    - AU14HelmetGarbM10SkrimDesert
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardFORECONFirstReconRifleman
+  categories: [ HideSpawnMenu ]
+  name: FORECON Rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14FORECONFirstReconRifleman

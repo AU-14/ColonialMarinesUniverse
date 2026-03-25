@@ -79,8 +79,8 @@
   components: 
   - type: StorageFill
     contents:
-    - id: CMWeaponPistolM1984
-    - id: CMMagazinePistolM1984
+    - id: AU14WeaponPistolM48A4
+    - id: AU14MagazinePistolM48A4
       amount: 2
     - id: RMCMagazineSmartGun
 

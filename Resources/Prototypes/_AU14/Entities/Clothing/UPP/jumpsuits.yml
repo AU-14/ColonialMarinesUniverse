@@ -91,3 +91,14 @@
     startingAccessories:
     - AU14PatchUPP
     - AU14ArmbandYellow
+
+- type: entity
+  parent: RMCMarineUniformBase
+  id: AU14SuitCBRNUPP
+  name: UPP MOPP suit
+  description: Jumpsuit from the UPP's Armed Forces MOPP suit.
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _AU14/Clothing/UPP/jumpsuits/cbrn.rsi

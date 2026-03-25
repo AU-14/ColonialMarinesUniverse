@@ -257,7 +257,7 @@
     - Goggles
     - Armor
     - Gloves
-    radio: MarineAlpha
+    radio: UASOF
     minimapBackground:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: background_forecon

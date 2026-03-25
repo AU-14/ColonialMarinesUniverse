@@ -1,9 +1,17 @@
 - type: job
   parent: CMJobBase
+  id: AU14FORECONSupportTechBase
+  name: rmc-job-name-forecon-support-tech
+  description: au14-job-description-govforadvisor
+  playTimeTracker: AU14JobFORECONSupportTech
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: job
+  parent: AU14FORECONSupportTechBase
   id: AU14FORECONSupportTech
   name: rmc-job-name-forecon-support-tech
   description: rmc-job-description-forecon
-  playTimeTracker: AU14JobFORECONSupportTech
   ranks:
     RMCRankStaffSergeant:
     - !type:RoleTimeRequirement
@@ -56,12 +64,12 @@
     - type: SpotterWhitelist
     - type: JobPrefix
       prefix: rmc-job-prefix-forecon-support-tech
-  hidden: false
+  hidden: true
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicFORECON
   id: AU14JobFORECONSupportTech
-  name: FORECON Support Tech
+  name: FORECON Support Tech (Surv)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

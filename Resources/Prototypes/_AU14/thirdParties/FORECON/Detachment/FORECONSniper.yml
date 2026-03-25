@@ -1,9 +1,17 @@
 - type: job
   parent: CMJobBase
+  id: AU14JobFORECONSniperBase
+  name: au14-job-name-govforadvisor
+  description: au14-job-description-govforadvisor
+  playTimeTracker: AU14FORECONSniperDetachment
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: job
+  parent: AU14JobFORECONSniperBase
   id: AU14FORECONSniperDetachment
   name: rmc-job-name-forecon-sniper
   description: rmc-job-description-forecon-detachment
-  playTimeTracker: AU14FORECONSniperDetachment
   ranks:
     RMCRankChiefWarrantOfficer:
     - !type:RoleTimeRequirement
@@ -36,13 +44,13 @@
     - type: SniperWhitelist
     - type: JobPrefix
       prefix: rmc-job-prefix-weapons-specialist-sniper
-  hidden: false
+  hidden: true
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicFORECON
   suffix: AU14, FORECON, Detachment
   id: AU14JobFORECONSniperDetachment
-  name: FORECON Sniper
+  name: FORECON Sniper (Detachment)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable
