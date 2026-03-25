@@ -19,6 +19,7 @@ namespace Content.Shared.AU14.util
         Dcc,
         OperationsOfficer,
         Rto,
+        JuniorOfficer,
         SectionSergeant,
         Pilot,
         ExtraVendor1,

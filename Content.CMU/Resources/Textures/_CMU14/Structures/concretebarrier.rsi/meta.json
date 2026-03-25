@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created by Nzzy on discord for CMU",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "concrete",
+      "directions": 4
+    },
+    {
+      "name": "DamageOverlay_4",
+      "directions": 4
+    },
+    {
+      "name": "DamageOverlay_8",
+      "directions": 4
+    },
+    {
+      "name": "DamageOverlay_12",
+      "directions": 4
+    },
+    {
+      "name": "concrete_wire",
+      "directions": 4
+    }
+  ]
+}

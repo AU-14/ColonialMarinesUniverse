@@ -165,7 +165,7 @@ au14-job-name-usarmy-cmt = Combat Medical Technician
 au14-job-prefix-usarmy-cmt = CMT
 au14-job-name-usarmy-hg = Heavy Gunner
 au14-job-prefix-usarmy-hg = HG
-au14-job-description-usarmy = You are a member of US Army 1st Cavalry Regiment. Your unit sustained casualties, but you still have a job to do.
+au14-job-description-usarmy = You are a member of US Army. Follow your objectives and achieve victory.
 
 au14-job-name-usarmy-tankcommander = Tank Commander
 au14-job-prefix-usarmy-tankcommander = TC
