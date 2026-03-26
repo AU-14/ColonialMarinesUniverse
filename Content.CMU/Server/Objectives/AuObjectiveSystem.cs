@@ -465,10 +465,8 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                     {
                         if (!CanFactionWin(checkFaction))
                         {
-                            // End round, other faction wins
+
                             var otherFaction = objective.Factions.FirstOrDefault(f => f != checkFaction) ?? "Unknown";
-                            _gameTicker.EndRound($"{otherFaction.ToUpperInvariant()} wins: {checkFaction} cannot win due to failed objectives.");
-                            _roundEnd.EndRound();
 
                         }
                     }
@@ -492,7 +490,15 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
 
         if (objective.ObjectiveLevel == 3)
         {
-            EndRound(completingFaction, objective.RoundEndMessage);
+            // Only end the round automatically for final objectives if their FinalType is InstantWin.
+            if (objective.FinalType == AuObjectiveComponent.FinalObjectiveType.InstantWin)
+            {
+                EndRound(completingFaction, objective.RoundEndMessage);
+            }
+            else
+            {
+                Logger.Info($"[OBJ FINAL DEBUG] Final objective '{objective.objectiveDescription}' completed for faction '{completingFaction}' as Boon; not ending the round.");
+            }
         }
 
         TryUnlockOrSpawnNextTier(uid, objective, completingFaction);
