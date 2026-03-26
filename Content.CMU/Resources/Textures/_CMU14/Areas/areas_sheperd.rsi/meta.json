@@ -1,0 +1,230 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "@smh_jasen_tbh",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "oob"
+    },
+    {
+      "name": "military"
+    },
+    {
+      "name": "military_barracks"
+    },
+    {
+      "name": "military_baths"
+    },
+    {
+      "name": "military_briefing"
+    },
+    {
+      "name": "military_brig"
+    },
+    {
+      "name": "military_cic"
+    },
+    {
+      "name": "military_checkpoint"
+    },
+    {
+      "name": "military_garage"
+    },
+    {
+      "name": "military_hospital"
+    },
+    {
+      "name": "military_lz1"
+    },
+    {
+      "name": "military_mess"
+    },
+    {
+      "name": "military_w_observe"
+    },
+    {
+      "name": "military_ne_observe"
+    },
+    {
+      "name": "military_e_observe"
+    },
+    {
+      "name": "military_perimeter"
+    },
+    {
+      "name": "military_platoon_commander"
+    },
+    {
+      "name": "military_prep"
+    },
+    {
+      "name": "military_waste"
+    },
+    {
+      "name": "military_yard"
+    },
+    {
+      "name": "wy"
+    },
+    {
+      "name": "wy_barracks"
+    },
+    {
+      "name": "wy_breakroom"
+    },
+    {
+      "name": "wy_cic"
+    },
+    {
+      "name": "wy_dec"
+    },
+    {
+      "name": "wy_entrance"
+    },
+    {
+      "name": "wy_lab"
+    },
+    {
+      "name": "wy_perimeter"
+    },
+    {
+      "name": "wy_quarantine"
+    },
+    {
+      "name": "wy_quarters"
+    },
+    {
+      "name": "wy_storage"
+    },
+    {
+      "name": "n_colony"
+    },
+    {
+      "name": "n_colony_dorms"
+    },
+    {
+      "name": "s_colony"
+    },
+    {
+      "name": "s_colony_dorms"
+    },
+    {
+      "name": "s_colony_lz2"
+    },
+    {
+      "name": "hospital"
+    },
+    {
+      "name": "hospital_breakroom"
+    },
+    {
+      "name": "hospital_morgue"
+    },
+    {
+      "name": "hospital_psychology"
+    },
+    {
+      "name": "hospital_surgery"
+    },
+    {
+      "name": "tavern"
+    },
+    {
+      "name": "eal"
+    },
+    {
+      "name": "eal_asrs"
+    },
+    {
+      "name": "eal_foreman"
+    },
+    {
+      "name": "eal_lz3"
+    },
+    {
+      "name": "eal_reactor"
+    },
+    {
+      "name": "eal_storage"
+    },
+    {
+      "name": "eal_yard"
+    },
+    {
+      "name": "admin"
+    },
+    {
+      "name": "cwps"
+    },
+    {
+      "name": "cwps_perimeter"
+    },
+    {
+      "name": "cwps_preserve"
+    },
+    {
+      "name": "journalist"
+    },
+    {
+      "name": "fishery"
+    },
+    {
+      "name": "chapel"
+    },
+    {
+      "name": "n_road"
+    },
+    {
+      "name": "c_road"
+    },
+    {
+      "name": "s_road"
+    },
+    {
+      "name": "ne_jungle"
+    },
+    {
+      "name": "nw_jungle"
+    },
+    {
+      "name": "w_jungle"
+    },
+    {
+      "name": "c_jungle"
+    },
+    {
+      "name": "e_jungle"
+    },
+    {
+      "name": "se_jungle"
+    },
+    {
+      "name": "sw_jungle"
+    },
+    {
+      "name": "n_river"
+    },
+    {
+      "name": "c_river"
+    },
+    {
+      "name": "s_river"
+    },
+    {
+      "name": "cave"
+    },
+    {
+      "name": "clf"
+    },
+    {
+      "name": "comms"
+    },
+    {
+      "name": "hdn_lz4"
+    }
+  ]
+}

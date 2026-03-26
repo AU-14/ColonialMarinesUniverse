@@ -165,7 +165,7 @@ au14-job-name-usarmy-cmt = Combat Medical Technician
 au14-job-prefix-usarmy-cmt = CMT
 au14-job-name-usarmy-hg = Heavy Gunner
 au14-job-prefix-usarmy-hg = HG
-au14-job-description-usarmy = You are a member of US Army 1st Cavalry Regiment. Your unit sustained casualties, but you still have a job to do.
+au14-job-description-usarmy = You are a member of US Army. Follow your objectives and achieve victory.
 
 au14-job-name-usarmy-tankcommander = Tank Commander
 au14-job-prefix-usarmy-tankcommander = TC
@@ -192,3 +192,30 @@ au14-usarmy-armored-greeting = You are a member of US Army 32nd Armored Division
     Get ready for action and report to the GVOFR Commander!
 
     You are friendly to GOVFOR, neutral to civilians and hostile to CLF!
+
+au14-job-description-forecon-killteam = You are a member of FORECON Kill Team. Assasinate your target. 
+
+au14-job-description-forecon-killteam-greeting = You are a member of USCMC elite FORECON special forces unit!
+
+    You are a member of Scout Sniper's Kill Team. You were ordered to assasinate High Valuable Target.
+    (If admins did not order you anything, you are to assasinate Colony Admin. Reasoning from High Command was not disclosed to you)
+
+    You are NOT a part of GOVFOR, but do not be overly agressive to them. Do whatever is needed to succeed in your mission.
+
+au14-forecon-killteam-rules = You do not know what is going on in round. Your main goal is to assasinate the target. You are not a part of GOVFOR but do not be overly agressive to them.
+
+au14-job-description-forecon-firstrecon = You are a member USCMC FORECON 1st Battalion. You are here to investigate WMD.
+
+au14-job-description-forecon-firstrecon-greeting = You are a member of USCMC elite FORECON special forces unit!
+
+    You are a member of 1st Reconnaissance Battalion.
+    Your Intelligence reports a possibility of Weapons of Mass Destruction (WMD).
+    Find and secure any WMD.
+
+    Your Right of Engagement are to ONLY return fire. Never attack until provoked. If you are sure of ill intentions, you may fire first within reasonable limits.
+    Godfather is watching you!
+
+    You are NOT a part of GOVFOR, but you are not hostile until provoked. Your mission is securing or eliminating WMD.
+
+au14-job-name-forecon-corpsman = Hospital Corpsman 2. Class
+au14-job-prefix-forecon-corpsman = HC2

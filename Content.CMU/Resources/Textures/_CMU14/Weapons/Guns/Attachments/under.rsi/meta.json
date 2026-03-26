@@ -263,6 +263,12 @@
     },
     {
       "name": "laserlight-on"
+    },
+    {
+      "name": "lasersight_micro_a"
+    },
+    {
+      "name": "lasersight_micro"
     }
   ]
 }

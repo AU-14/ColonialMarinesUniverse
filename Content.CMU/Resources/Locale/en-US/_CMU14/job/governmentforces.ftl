@@ -29,10 +29,10 @@ au14-job-name-govforSSG = Senior Sergeant
 au14-job-description-govforSSG = Senior enlisted. Keep the platoon running .
 au14-job-prefix-govforSSG = SNRSRGT
 
-AU14JobGOVFORSquadSergeant = Sergeant
-au14-job-name-govforsquadsergeant = Sergeant
-au14-job-description-govforsquadsergeant = Lead a fireteam. Follow orders from the top and get your people home.
-au14-job-prefix-govforsquadsergeant = SGT
+AU14JobGOVFORSquadSergeant = Squad Leader
+au14-job-name-govforsquadsergeant = Squad Leader
+au14-job-description-govforsquadsergeant = Lead a Squad. Follow orders from the top and get your people home.
+au14-job-prefix-govforsquadsergeant = SL
 
 AU14JobGOVFORSquadRifleman = Rifleman
 au14-job-name-govforsquadrifleman = Rifleman
@@ -141,3 +141,17 @@ au14-job-prefix-govforspecialist-pointmanUPP = PNM
 au-14-job-name-uppgrom-squadleader = Squad Leader
 au-14-job-prefix-uppgrom-squadleader = SL
 
+au14-job-name-juniorofficer-so = Staff Officer
+au14-job-prefix-juniorofficer-so = SO
+
+au14-job-name-juniorofficer-io = Intelligence Officer
+au14-job-prefix-juniorofficer-io = IO
+
+au14-job-name-juniorofficer-eo = Engineering Officer
+au14-job-prefix-juniorofficer-eo = EO
+
+au14-job-name-juniorofficer-adj = Adjutant Officer
+au14-job-prefix-juniorofficer-adj = AO
+
+au14-job-name-specialist-pyro = Pyrotechnician
+au14-job-prefix-specialist-pyro = PYRO
