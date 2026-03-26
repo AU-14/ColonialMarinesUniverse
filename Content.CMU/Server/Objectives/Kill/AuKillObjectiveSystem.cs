@@ -46,7 +46,7 @@ namespace Content.Server.AU14.Objectives.Kill
                     if (faction == "govfor") return "opfor";
                     if (faction == "opfor") return "govfor";
                     break;
-                case "distresssingal":
+                case "distresssignal":
                     if (faction == "clf") return "govfor";
                     if (faction == "govfor") return "clf";
                     break;
