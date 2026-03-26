@@ -59,6 +59,9 @@
     {
       "name": "ravager_walk_2",
       "directions": 4
+    },
+    {
+      "name": "ravager_dissection"
     }
   ]
 }

@@ -59,6 +59,22 @@
     },
     {
       "name": "hivelord_rest_1"
+    },
+    {
+      "name": "hivelord_egg_right",
+      "directions": 4
+    },
+    {
+      "name": "hivelord_parasite_right",
+      "directions": 4
+    },
+    {
+      "name": "hivelord_egg_left",
+      "directions": 4
+    },
+    {
+      "name": "hivelord_parasite_left",
+      "directions": 4
     }
   ]
 }
