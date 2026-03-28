@@ -1,5 +1,6 @@
 using Content.Shared.AU14;
 using Robust.Shared.Prototypes;
+using Content.Shared.Research.Prototypes;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Content.Shared._RMC14.Requisitions;
@@ -104,6 +105,10 @@ public sealed partial class AuObjectiveComponent : Component
     public EntProtoId<AuObjectiveComponent>? NextTier { get; private set; } = null;
 
 
+    [DataField("techunlocks", required: false)]
+    public List<string> TechUnlocks { get; private set; } = new();
+
+
     [DataField("intelTiers")]
     public List<ProtoId<ObjectiveIntelTierPrototype>> IntelTiers { get; private set; } = new();
     // obj tiers, unlocked sequentially with intel points if active
@@ -119,6 +124,16 @@ public sealed partial class AuObjectiveComponent : Component
     public Dictionary<string, ObjectiveStatus> FactionStatuses { get; set; } = new();
 
     public int TimesCompleted = 0;
+
+
+    public enum FinalObjectiveType
+    {
+        InstantWin,
+        Boon
+    }
+
+    [DataField("finalType", required: false)]
+    public FinalObjectiveType FinalType { get; private set; } = FinalObjectiveType.InstantWin;
 
 
 
