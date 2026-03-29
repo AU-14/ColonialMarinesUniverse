@@ -1,16 +1,10 @@
-using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
-using Content.Server.GameTicking.Events;
-using Content.Shared.AU14;
 using Content.Shared.AU14.util;
-using Content.Shared.GameTicking.Components;
 
 namespace Content.Server.AU14;
 
 public sealed class DestroyOnPresetSystem : EntitySystem
 {
-    [Dependency] private readonly IChatManager _chatManager = default!;
-
     public override void Initialize()
     {
         base.Initialize();
@@ -26,10 +20,15 @@ public sealed class DestroyOnPresetSystem : EntitySystem
 
 
 
-            if (preset != null && preset.ID == component.Preset)
+            if (preset != null)
             {
+                var matches = preset.ID == component.Preset;
 
-                EntityManager.QueueDeleteEntity(component.Owner);
+                // If inverted is true, delete when it does NOT match. Otherwise delete when it matches.
+                if ((matches && !component.Inverted) || (!matches && component.Inverted))
+                {
+                    EntityManager.QueueDeleteEntity(uid);
+                }
             }
         }
 

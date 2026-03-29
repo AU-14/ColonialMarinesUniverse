@@ -106,6 +106,10 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
         if (!objcomp.Active)
             return;
 
+        // New behavior: when UseMarkers is false, items are registered by the Analyzer scan verb instead of being spawned at markers.
+        if (!component.UseMarkers)
+            return;
+
         // If this objective accepts preplaced entities (UseAnyEntity), try a local registration first
         if (component.UseAnyEntity && !string.IsNullOrEmpty(component.EntityToSpawn))
         {
@@ -180,6 +184,10 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
         var objComp = EnsureComp<AuObjectiveComponent>(uid);
         if (objComp.Active && !component.ItemsSpawned)
         {
+            // New behavior: when UseMarkers is false, items are registered by the Analyzer scan verb.
+            if (!component.UseMarkers)
+                return;
+
             // If objective accepts preplaced entities, register them now before spawning
             if (component.UseAnyEntity && !string.IsNullOrEmpty(component.EntityToSpawn))
             {
@@ -299,6 +307,125 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
         if (!EntityManager.TryGetComponent(args.Dragged, out AuFetchItemComponent? fetchItem))
             return;
         TryHandleFetchItemDropOrUndrag(args.Dragged, fetchItem);
+    }
+
+    /// <summary>
+    /// Scans a 5-tile radius around the analyzer for entities matching any active non-marker fetch
+    /// objective that belongs to the analyzer's faction. For every match found it directly credits
+    /// that faction (incrementing AmountFetchedPerFaction and marking the item Fetched) and
+    /// completes the objective when the threshold is reached — exactly as TryHandleFetchItemDropOrUndrag
+    /// does for the legacy return-point flow. The analyzer machine is the return point.
+    /// Returns the number of items newly fetched this scan.
+    /// </summary>
+    public int ScanForFetchItems(EntityUid analyzerUid)
+    {
+        if (!EntityManager.TryGetComponent(analyzerUid, out TransformComponent? analyzerXform))
+            return 0;
+
+        // Read the analyzer's faction — this determines which objectives it can credit.
+        var analyzerFaction = string.Empty;
+        if (EntityManager.TryGetComponent(analyzerUid, out Content.Shared.AU14.AnalyzerComponent? analyzerComp))
+            analyzerFaction = analyzerComp.Faction.ToLowerInvariant();
+
+        var analyzerCoords = analyzerXform.Coordinates;
+        var totalFetched = 0;
+
+        var query = EntityManager.EntityQueryEnumerator<FetchObjectiveComponent, AuObjectiveComponent>();
+        while (query.MoveNext(out var objUid, out var fetchComp, out var auComp))
+        {
+            if (!auComp.Active)
+                continue;
+
+            // New-behavior objectives only (UseMarkers == false).
+            if (fetchComp.UseMarkers)
+                continue;
+
+            if (string.IsNullOrEmpty(fetchComp.EntityToSpawn))
+                continue;
+
+            // Faction gate: skip objectives that don't belong to this analyzer's faction.
+            // Faction-neutral objectives are open to any analyzer.
+            // An analyzer with no faction set is a dev fallback and sees everything.
+            if (!string.IsNullOrEmpty(analyzerFaction) && !auComp.FactionNeutral)
+            {
+                if (auComp.Faction.ToLowerInvariant() != analyzerFaction)
+                    continue;
+            }
+
+            // The faction we are crediting for this objective.
+            var creditFaction = string.IsNullOrEmpty(analyzerFaction)
+                ? auComp.Faction.ToLowerInvariant()
+                : analyzerFaction;
+
+            var fetchedThisObjective = 0;
+
+            foreach (var ent in _lookup.GetEntitiesInRange(analyzerCoords, 5f))
+            {
+                if (ent == analyzerUid || ent == objUid)
+                    continue;
+
+                if (!EntityManager.TryGetComponent(ent, out MetaDataComponent? meta))
+                    continue;
+
+                var proto = meta.EntityPrototype?.ID;
+                if (proto == null || proto != fetchComp.EntityToSpawn)
+                    continue;
+
+                // Attach the fetch-item component if not already present, then check if already fetched.
+                var itemComp = _entManager.EnsureComponent<AuFetchItemComponent>(ent);
+                if (itemComp.Fetched)
+                    continue;
+
+                // Link the item to this objective (in case it was just created).
+                itemComp.FetchObjective = fetchComp;
+                itemComp.ObjectiveUid = objUid;
+
+                // Credit the faction — mirrors the return-point logic in TryHandleFetchItemDropOrUndrag.
+                if (!fetchComp.AmountFetchedPerFaction.ContainsKey(creditFaction))
+                    fetchComp.AmountFetchedPerFaction[creditFaction] = 0;
+
+                fetchComp.AmountFetchedPerFaction[creditFaction]++;
+                itemComp.Fetched = true;
+                totalFetched++;
+                fetchedThisObjective++;
+
+                Logger.Info($"[FETCH SCAN] Item {ent} ({proto}) fetched for faction {creditFaction}, objective {objUid}. " +
+                            $"Total: {fetchComp.AmountFetchedPerFaction[creditFaction]}/{fetchComp.AmountToFetch}");
+            }
+
+            if (fetchedThisObjective == 0)
+                continue;
+
+            // Check completion — same logic as TryHandleFetchItemDropOrUndrag.
+            fetchComp.AmountFetchedPerFaction.TryGetValue(creditFaction, out var totalForFaction);
+            if (auComp.FactionNeutral)
+            {
+                if (totalForFaction >= fetchComp.AmountToFetch)
+                {
+                    Logger.Info($"[FETCH SCAN] Objective {objUid} completed for faction {creditFaction}!");
+                    _objectiveSystem.CompleteObjectiveForFaction(objUid, auComp, creditFaction);
+                }
+            }
+            else
+            {
+                if (creditFaction == auComp.Faction.ToLowerInvariant() && totalForFaction >= fetchComp.AmountToFetch)
+                {
+                    Logger.Info($"[FETCH SCAN] Objective {objUid} completed for faction {creditFaction}!");
+                    _objectiveSystem.CompleteObjectiveForFaction(objUid, auComp, creditFaction);
+                }
+            }
+        }
+
+        return totalFetched;
+    }
+
+    /// <summary>
+    /// Completes a fetch objective for the given faction. Used by external systems (e.g. AnalyzerSystem)
+    /// that need to complete an objective without going through the full item-drop flow.
+    /// </summary>
+    public void CompleteFetchObjective(EntityUid uid, FetchObjectiveComponent fetchComp, AuObjectiveComponent auComp, string faction)
+    {
+        _objectiveSystem.CompleteObjectiveForFaction(uid, auComp, faction);
     }
 
     /// <summary>

@@ -139,3 +139,14 @@ au14-job-name-civilianpapofficer = PAP Officer
 au14-job-description-civilianpapofficer = You're an Officer of the UPP People's Armed Police. Provide the colony with rule of law and execute arrests and warrants.
 au14-job-prefix-civilianpapofficer = PAP
 AU14JobCivilianPaPOfficer = PAP Officer
+
+
+
+au14-job-name-leoleader = Law Enforcement Leader
+au14-job-description-leoleader = Colony Law Enforcement (Map specific)
+
+
+au14-job-name-leo = Law Enforcement OFficer
+au14-job-description-leo = Colony Law Enforcement (Map specific)
+
+
