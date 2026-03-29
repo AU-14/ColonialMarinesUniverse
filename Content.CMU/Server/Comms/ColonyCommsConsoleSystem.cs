@@ -1,3 +1,4 @@
+using Content.Server.Chat.Systems;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared.AU14;
 using Content.Shared.Audio;
@@ -10,6 +11,7 @@ public sealed class ColonyCommsConsoleSystem : EntitySystem
     [Dependency] private readonly RadioSystem _radioSystem = default!;
     [Dependency] private readonly SharedAmbientSoundSystem _ambientSound = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private readonly ChatSystem _chatSystem = default!;
 
     public override void Initialize()
     {
@@ -27,7 +29,13 @@ public sealed class ColonyCommsConsoleSystem : EntitySystem
 
     private void OnMessageSent(EntityUid uid, ColonyCommsConsoleComponent component, ColonyCommsConsoleMessage args)
     {
+        // Send to radio channel (for intercoms)
         _radioSystem.SendRadioMessage(uid, args.Message, "colonyalert", uid);
+
+        // Send global announcement to everyone
+        var sender = Loc.GetString("colony-comms-console-announcement-title");
+        var announcementSound = new SoundPathSpecifier("/Audio/Announcements/announce.ogg");
+        _chatSystem.DispatchGlobalAnnouncement(args.Message, sender, playSound: true, announcementSound: announcementSound);
     }
 
     private void OnSendMessageBuiMsg(EntityUid uid, ColonyCommsConsoleComponent component, ColonyCommsConsoleSendMessageBuiMsg args)
