@@ -110293,7 +110293,7 @@ entities:
       pos: 48.5,-106.5
       parent: 1
     - type: SpriteSetRenderOrder
-- proto: CMASRSConsole
+- proto: CMASRSConsoleColony
   entities:
   - uid: 553
     components:
@@ -110985,7 +110985,7 @@ entities:
     - type: Transform
       pos: 71.34198,-39.38129
       parent: 1
-- proto: CMCargoElevator
+- proto: CMCargoElevatorColony
   entities:
   - uid: 674
     components:

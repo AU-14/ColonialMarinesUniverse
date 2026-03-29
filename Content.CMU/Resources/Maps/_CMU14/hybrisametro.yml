@@ -80864,7 +80864,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: CMASRSConsole
+- proto: CMASRSConsoleColony
   entities:
   - uid: 1510
     components:

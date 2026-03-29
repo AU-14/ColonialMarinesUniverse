@@ -48896,7 +48896,7 @@ entities:
       pos: 174.5,9.5
       parent: 1
     - type: SpriteSetRenderOrder
-- proto: CMASRSConsole
+- proto: CMASRSConsoleColony
   entities:
   - uid: 509
     components:

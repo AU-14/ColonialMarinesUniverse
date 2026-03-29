@@ -80672,7 +80672,7 @@ entities:
       pos: 11.5,-54.5
       parent: 1
     - type: SpriteSetRenderOrder
-- proto: CMASRSConsole
+- proto: CMASRSConsoleColony
   entities:
   - uid: 536
     components:
@@ -81560,7 +81560,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: CMCargoElevator
+- proto: CMCargoElevatorColony
   entities:
   - uid: 616
     components:
