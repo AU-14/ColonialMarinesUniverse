@@ -29778,7 +29778,7 @@ entities:
     - type: Transform
       pos: 7.5,52.5
       parent: 1
-- proto: SpawnPointLatejoin
+- proto: CMSpawnPointRiflemanAlpha
   entities:
   - uid: 4343
     components:
