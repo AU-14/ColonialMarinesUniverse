@@ -219,6 +219,87 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                         continue;
                     }
 
+                    // --- INTEL COMPUTER MARKER LOGIC ---
+                    if (markerClass == PlatoonMarkerClass.IntelComputer)
+                    {
+                        string? intelConsoleProtoId = null;
+                        if (marker.Govfor)
+                            intelConsoleProtoId = "RMCComputerIntelGovfor";
+                        else if (marker.Opfor)
+                            intelConsoleProtoId = "RMCComputerIntelOpfor";
+                        else if (marker.Ship)
+                        {
+                            var parentUid = transform.ParentUid;
+                            if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var parentShipFaction))
+                            {
+                                intelConsoleProtoId = parentShipFaction.Faction == "govfor"
+                                    ? "RMCComputerIntelGovfor"
+                                    : parentShipFaction.Faction == "opfor"
+                                        ? "RMCComputerIntelOpfor"
+                                        : null;
+                            }
+                        }
+                        if (intelConsoleProtoId != null && _prototypeManager.TryIndex(intelConsoleProtoId, out _))
+                        {
+                            _entityManager.SpawnEntity(intelConsoleProtoId, transform.Coordinates);
+                        }
+                        continue;
+                    }
+
+                    // --- TECH TREE CONSOLE MARKER LOGIC ---
+                    if (markerClass == PlatoonMarkerClass.TechTree)
+                    {
+                        string? techTreeProtoId = null;
+                        if (marker.Govfor)
+                            techTreeProtoId = "RMCTechTreeConsoleGovfor";
+                        else if (marker.Opfor)
+                            techTreeProtoId = "RMCTechTreeConsoleOpfor";
+                        else if (marker.Ship)
+                        {
+                            var parentUid = transform.ParentUid;
+                            if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var parentShipFaction))
+                            {
+                                techTreeProtoId = parentShipFaction.Faction == "govfor"
+                                    ? "RMCTechTreeConsoleGovfor"
+                                    : parentShipFaction.Faction == "opfor"
+                                        ? "RMCTechTreeConsoleOpfor"
+                                        : null;
+                            }
+                        }
+                        if (techTreeProtoId != null && _prototypeManager.TryIndex(techTreeProtoId, out _))
+                        {
+                            _entityManager.SpawnEntity(techTreeProtoId, transform.Coordinates);
+                        }
+                        continue;
+                    }
+
+                    // --- GROUNDSIDE OPERATIONS CONSOLE MARKER LOGIC ---
+                    if (markerClass == PlatoonMarkerClass.GroundsideOps)
+                    {
+                        string? groundsideProtoId = null;
+                        if (marker.Govfor)
+                            groundsideProtoId = "RMCGroundsideOperationsConsole";
+                        else if (marker.Opfor)
+                            groundsideProtoId = "RMCGroundsideOperationsConsoleOpfor";
+                        else if (marker.Ship)
+                        {
+                            var parentUid = transform.ParentUid;
+                            if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var parentShipFaction))
+                            {
+                                groundsideProtoId = parentShipFaction.Faction == "govfor"
+                                    ? "RMCGroundsideOperationsConsole"
+                                    : parentShipFaction.Faction == "opfor"
+                                        ? "RMCGroundsideOperationsConsoleOpfor"
+                                        : null;
+                            }
+                        }
+                        if (groundsideProtoId != null && _prototypeManager.TryIndex(groundsideProtoId, out _))
+                        {
+                            _entityManager.SpawnEntity(groundsideProtoId, transform.Coordinates);
+                        }
+                        continue;
+                    }
+
                     // --- OBJECTIVES CONSOLE MARKER LOGIC ---
                     if (markerClass == PlatoonMarkerClass.ObjectivesConsole)
                     {
@@ -314,6 +395,23 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                         if (liftProto != null && _prototypeManager.TryIndex(liftProto, out _))
                         {
                             _entityManager.SpawnEntity(liftProto, transform.Coordinates);
+                        }
+                        continue;
+                    }
+
+                    // --- ANALYZER MARKER LOGIC (shipside) ---
+                    if (markerClass == PlatoonMarkerClass.Analyzer)
+                    {
+                        string? analyzerProto = null;
+                        // Use ship faction directly for ship markers
+                        if (shipFaction.Faction == "govfor")
+                            analyzerProto = "AU14AnalyzerMachine";
+                        else if (shipFaction.Faction == "opfor")
+                            analyzerProto = "AU14AnalyzerMachineOpfor";
+
+                        if (analyzerProto != null && _prototypeManager.TryIndex(analyzerProto, out _))
+                        {
+                            _entityManager.SpawnEntity(analyzerProto, transform.Coordinates);
                         }
                         continue;
                     }
@@ -678,5 +776,14 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
         var opforFighters = planetComp.opforfighters;
         HandlePlatoonConsoles(govPlatoon, "govfor", govforDropships, govforFighters);
         HandlePlatoonConsoles(opPlatoon, "opfor", opforDropships, opforFighters);
+    }
+
+    protected override void Ended(EntityUid uid, PlatoonSpawnRuleComponent component, GameRuleComponent gameRule, GameRuleEndedEvent args)
+    {
+        base.Ended(uid, component, gameRule, args);
+
+        // Clear selections on rule end/restart so they don't persist across restarts
+        SelectedGovforPlatoon = null;
+        SelectedOpforPlatoon = null;
     }
 }
