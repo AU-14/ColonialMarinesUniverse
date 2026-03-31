@@ -5,7 +5,7 @@ namespace Content.Shared.AU14.Objectives.Arrest;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class ArrestObjectiveComponent : Component
 {
-    [DataField("mobtokill", required: false)]
+    [DataField("mobtoarrest", required: false)]
     public string MobToArrest { get; private set; } = string.Empty;
 
     [DataField("humanonly", required: false)]
@@ -38,11 +38,8 @@ public sealed partial class ArrestObjectiveComponent : Component
     [DataField("respawnOnRepeat", required: false)]
     public bool RespawnOnRepeat { get; private set; } = false;
 
-    [DataField("countdead", required: false)]
-    public bool CountDead { get; private set; } = false;
-
-    [DataField("countkill", required: false)]
-    public bool CountKill { get; private set; } = true;
+    [DataField("removekillmark", required: false)]
+    public bool RemoveKillMark { get; private set; } = true;
 
     public bool MobsSpawned = false;
 

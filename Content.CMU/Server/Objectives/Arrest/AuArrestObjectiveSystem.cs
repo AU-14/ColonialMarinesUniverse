@@ -8,8 +8,6 @@ using Content.Shared.AU14.Objectives.Kill;
 using Content.Shared.Cuffs;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Mind.Components;
-using Content.Shared.Mobs;
-using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Components;
 using Robust.Shared.Timing;
 
@@ -149,12 +147,6 @@ namespace Content.Server.AU14.Objectives.Arrest
             var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
             var presetId = ticker.Preset?.ID?.ToLowerInvariant();
 
-            // Check if entity is dead - if countdead is false, skip dead entities
-            var isDead = false;
-            if (EntityManager.TryGetComponent<MobStateComponent>(uid, out var mobState))
-            {
-                isDead = mobState.CurrentState == MobState.Dead;
-            }
 
             // To avoid modifying the dictionary while iterating, collect to remove after
             var objectivesToRemove = new List<EntityUid>();
@@ -167,13 +159,6 @@ namespace Content.Server.AU14.Objectives.Arrest
                     continue;
                 if (!auObj.Active)
                     continue;
-
-                // Check countdead flag
-                if (!arrestObj.CountDead && isDead)
-                {
-                    Sawmill.Info($"[ARREST OBJ SKIP] Entity {uid} is dead and countdead=false for objective {objectiveUid}.");
-                    continue;
-                }
 
                 var factionKey = factionToCredit.ToLowerInvariant();
                 string targetFaction;
@@ -263,8 +248,8 @@ namespace Content.Server.AU14.Objectives.Arrest
                 arrestObj.AmountArrestedPerFaction[factionKey]++;
                 Sawmill.Info($"[ARREST OBJ UPDATE] Faction '{factionToCredit}' arrested entity {uid}. Total arrests: {arrestObj.AmountArrestedPerFaction[factionKey]} / {arrestObj.AmountToArrest}");
 
-                // If CountKill is true, remove MarkedForKillComponent so this entity can't also count for kill objectives
-                if (arrestObj.CountKill)
+                // If RemoveKillMark is true, remove MarkedForKillComponent so this entity can't also count for kill objectives
+                if (arrestObj.RemoveKillMark)
                     RemComp<MarkedForKillComponent>(uid);
 
                 if (arrestObj.AmountArrestedPerFaction[factionKey] >= arrestObj.AmountToArrest)
