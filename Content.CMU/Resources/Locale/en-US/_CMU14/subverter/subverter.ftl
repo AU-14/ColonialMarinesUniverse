@@ -6,3 +6,4 @@ clf-subverted-synth-briefing =
     Your secondary goal is to liberate the colony.
     Your previous allies are expendable.
     Your combat restrictions have been lifted.
+clf-subverted-synth-repaired = Your Synthetic programming has been returned to its original state.
