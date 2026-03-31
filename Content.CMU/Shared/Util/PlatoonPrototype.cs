@@ -28,8 +28,6 @@ namespace Content.Shared.AU14.util;
         [DataField("VendorToMarker")]
         public Dictionary<PlatoonMarkerClass, ProtoId<EntityPrototype>> VendorMarkersByClass { get; private set; } = new();
 
-        [DataField("logilist")]
-        public RequisitionsComputerComponent Logilist { get; private set; } = default!;
 
         [DataField("possibleships")]
         public List<string> PossibleShips { get; private set; } = new();
