@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Shared.Preferences;
 using Content.Shared.AU14.Threats;
+using Content.Shared.AU14.util;
 using Content.Shared.Roles;
 using Robust.Server.Player;
 using Robust.Shared.Prototypes;
@@ -71,8 +72,42 @@ public sealed class AuJobSelectionSystem : EntitySystem
         int numThreatMembers = 0;
         if (useThreat && threat != null && _prototypeManager.TryIndex(threat.RoundStartSpawn, out PartySpawnPrototype? partySpawn))
         {
-            numThreatLeaders = partySpawn.LeadersToSpawn.Values.Sum();
-            numThreatMembers = partySpawn.GruntsToSpawn.Values.Sum();
+            // Sum scaled counts for each individual leader entity prototype
+            foreach (var (protoId, staticCount) in partySpawn.LeadersToSpawn)
+            {
+                if (partySpawn.Scaling.TryGetValue(protoId, out var entry))
+                {
+                    var baseCount = entry.Benchmark ?? staticCount;
+                    var extra = 0;
+                    if (playerCount > entry.WhenToBeginScaling)
+                        extra = (int) Math.Floor((playerCount - entry.WhenToBeginScaling) * entry.Scale);
+                    numThreatLeaders += baseCount + extra;
+                    Logger.DebugS("au14.jobs", $"[DEBUG] Scaled threat leader '{protoId}' to {baseCount + extra} (base={baseCount}, extra={extra}, players={playerCount})");
+                }
+                else
+                {
+                    numThreatLeaders += staticCount;
+                }
+            }
+
+            // Sum scaled counts for each individual grunt/member entity prototype
+            foreach (var (protoId, staticCount) in partySpawn.GruntsToSpawn)
+            {
+                if (partySpawn.Scaling.TryGetValue(protoId, out var entry))
+                {
+                    var baseCount = entry.Benchmark ?? staticCount;
+                    var extra = 0;
+                    if (playerCount > entry.WhenToBeginScaling)
+                        extra = (int) Math.Floor((playerCount - entry.WhenToBeginScaling) * entry.Scale);
+                    numThreatMembers += baseCount + extra;
+                    Logger.DebugS("au14.jobs", $"[DEBUG] Scaled threat member '{protoId}' to {baseCount + extra} (base={baseCount}, extra={extra}, players={playerCount})");
+                }
+                else
+                {
+                    numThreatMembers += staticCount;
+                }
+            }
+
             Logger.DebugS("au14.jobs", $"[DEBUG] Threat leaders to assign: {numThreatLeaders}, members: {numThreatMembers}");
         }
         int numThreat = numThreatLeaders + numThreatMembers;

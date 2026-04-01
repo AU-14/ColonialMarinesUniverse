@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.AU14.Objectives.Fetch;
+using Content.Server.AU14.Objectives.Interact;
 using Content.Server.AU14.Objectives.Kill;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
@@ -11,6 +12,7 @@ using Robust.Server.Player;
 using Content.Server.GameTicking.Events;
 using Content.Shared._RMC14.Intel;
 using Content.Shared.AU14.Objectives.Fetch;
+using Content.Shared.AU14.Objectives.Interact;
 using Content.Shared.AU14.Objectives.Kill;
 using Content.Shared.AU14.Threats;
 using Content.Shared.Clothing.Components;
@@ -35,7 +37,10 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
     [Dependency] private readonly Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
     [Dependency] private readonly AuFetchObjectiveSystem _fetchObjectiveSystem = default!;
     [Dependency] private readonly AuKillObjectiveSystem _killObjectiveSystem = default!;
+    [Dependency] private readonly Content.Server.AU14.Objectives.Arrest.AuArrestObjectiveSystem _arrestObjectiveSystem = default!;
     [Dependency] private readonly Content.Server.AU14.Objectives.Destroy.AuDestroyObjectiveSystem _destroyObjectiveSystem = default!;
+    [Dependency] private readonly AuInteractObjectiveSystem _interactObjectiveSystem = default!;
+
     [Dependency] private readonly IPrototypeManager _proto = default!; // for spawning by prototype
     public bool iswinactive = false;
     private ObjectiveMasterComponent? _objectiveMaster = null;
@@ -93,9 +98,17 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         {
             _killObjectiveSystem.ActivateKillObjectiveIfNeeded(uid, component);
         }
+        if (_entityManager.TryGetComponent(uid, out Content.Shared.AU14.Objectives.Arrest.ArrestObjectiveComponent? arrestComp))
+        {
+            _arrestObjectiveSystem.ActivateArrestObjectiveIfNeeded(uid, component);
+        }
         if (_entityManager.TryGetComponent(uid, out Content.Shared.AU14.Objectives.Destroy.DestroyObjectiveComponent? destroyComp))
         {
             _destroyObjectiveSystem.ActivateDestroyObjectiveIfNeeded(uid, component);
+        }
+        if (_entityManager.TryGetComponent(uid, out InteractObjectiveComponent? interactComp))
+        {
+            _interactObjectiveSystem.ActivateInteractObjectiveIfNeeded(uid, component);
         }
     }
 
@@ -544,6 +557,11 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                 if (killComp.RespawnOnRepeat)
                     killComp.MobsSpawned = false;
             }
+            // Interact objective: reset completions and re-register entities
+            if (_entityManager.TryGetComponent(uid, out InteractObjectiveComponent? interactRepeatComp))
+            {
+                _interactObjectiveSystem.ResetInteractObjective(uid, interactRepeatComp);
+            }
             // Reactivate the objective
             objective.Active = true;
             RaiseLocalEvent(uid, new ObjectiveActivatedEvent());
@@ -575,6 +593,12 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                 var fetchSystem = _entityManager.EntitySysManager
                     .GetEntitySystem<Content.Server.AU14.Objectives.Fetch.AuFetchObjectiveSystem>();
                 fetchSystem.ResetAndRespawnFetchObjective(uid, fetchComp);
+            }
+
+            // Interact objective: reset completions and re-register entities
+            if (_entityManager.TryGetComponent(uid, out InteractObjectiveComponent? interactRepeatComp2))
+            {
+                _interactObjectiveSystem.ResetInteractObjective(uid, interactRepeatComp2);
             }
 
             // Reactivate the objective

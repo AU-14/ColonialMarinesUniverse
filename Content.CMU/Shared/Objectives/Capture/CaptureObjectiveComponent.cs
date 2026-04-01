@@ -13,7 +13,7 @@ public sealed partial class CaptureObjectiveComponent : Component
 
     [DataField("siege", required: false)]
     public bool Siege { get; private set; } = false;
-    // not yet implemented
+    // deprecated, use final obj boons
     [DataField("", required: false)]
     public bool OnceOnly { get; private set; } = false;
 
@@ -25,6 +25,7 @@ public sealed partial class CaptureObjectiveComponent : Component
 
     [DataField("visibleonmap", required: false)]
     public bool VisibleOnMap { get; private set; } = true;
+    // depreceated; use intel tiers
 
     [DataField("commlink", required: false)]
     public bool Commlink { get; private set; } = false;
