@@ -14,6 +14,8 @@ using Content.Server.Station.Systems;
 using Content.Server.StationRecords.Systems;
 using Content.Shared.StationRecords;
 using Content.Shared.CriminalRecords;
+using Content.Shared.Paper;
+using Robust.Shared.Random;
 
 namespace Content.Server.AU14;
 
@@ -29,6 +31,7 @@ public sealed class RunawaySynthRuleSystem : GameRuleSystem<RunawaySynthRuleComp
     [Dependency] private readonly Content.Server.CriminalRecords.Systems.CriminalRecordsSystem _criminalRecords = default!;
     [Dependency] private readonly Content.Server.CriminalRecords.Systems.CriminalRecordsConsoleSystem _criminalRecordsConsole = default!;
     [Dependency] private readonly ColonyBudgetSystem _colonyBudget = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
 
     public bool IsSynthAlive = true;
 
@@ -52,13 +55,68 @@ public sealed class RunawaySynthRuleSystem : GameRuleSystem<RunawaySynthRuleComp
     //hardcoding for now,but prob should be a config option - eg
     private void OnSynthSpawned(EntityUid uid, RunawaySynthComponent component, ComponentStartup args)
     {
-        _wantedSystem.SendFax(_entitySystemManager, _entityManager, "Colony Marshal Bureau", "AUPaperRunawaySynth", "Colony Administrator");
+        // Build a list of 12 colonist names (including the synth) for the fax
+        var synthName = _entityManager.GetComponentOrNull<MetaDataComponent>(uid)?.EntityName ?? "Unknown";
 
-        // Add criminal record for runaway synth
         var station = _stationSystem.GetOwningStation(uid);
+        var nameList = new System.Collections.Generic.List<string> { synthName };
+
+        if (station != null)
+        {
+            // Gather all colonist names from station records
+            var allNames = new System.Collections.Generic.List<string>();
+            foreach (var (_, record) in _stationRecords.GetRecordsOfType<GeneralStationRecord>(station.Value))
+            {
+                if (record.Name != synthName && !record.Name.Contains("(Unknown)") && !record.Name.Contains("Fugitive") && !record.Name.Contains("Runaway"))
+                    allNames.Add(record.Name);
+            }
+
+            // Pick up to 11 random colonists
+            _random.Shuffle(allNames);
+            var count = System.Math.Min(11, allNames.Count);
+            for (var i = 0; i < count; i++)
+                nameList.Add(allNames[i]);
+        }
+
+        // Shuffle the final list so the synth is in a random position
+        _random.Shuffle(nameList);
+
+        // Build the numbered list
+        var listText = "";
+        for (var i = 0; i < nameList.Count; i++)
+            listText += $"  {i + 1}. {nameList[i]}\n";
+
+        var faxContent = "[color=#383838]█[/color][color=#ffffff]░░[/color][color=#8c0000]█ [color=#383838]█▄[/color] █ [/color][head=3]Colonial Marshall Bureau[/head]\n\n" +
+            "[color=#383838]▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[/color]\n" +
+            "[color=#8c0000]▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀[/color]\n\n" +
+            "[head=2][color=goldenrod]Fugitive Alert[/color][/head]\n\n" +
+            "[bold]To:[/bold] [italic]CMB Office Staff[/italic]\n" +
+            "[bold]From:[/bold] [bold]CMB Sectoral HQ[/bold]\n" +
+            "[color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]\n" +
+            "Sheriff,\n" +
+            "  A runaway Synthetic has been detected at your colony. One of the following colonists is the synth. " +
+            "Liquidate it and the $2500 bounty is yours.\n\n" +
+            "[bold]Suspect List:[/bold]\n" +
+            listText + "\n" +
+            "Signed,\n" +
+            "[color=#dfc189][bolditalic]Regional HQ[/bolditalic][/color]\n" +
+            "[color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]";
+
+        _wantedSystem.SendCustomFax(
+            "Colony Marshal Bureau",
+            "Fugitive Alert",
+            faxContent,
+            "paper_stamp-cmb",
+            new System.Collections.Generic.List<StampDisplayInfo>
+            {
+                new() { StampedColor = Robust.Shared.Maths.Color.FromHex("#b0901b"), StampedName = "CMB" }
+            },
+            "Colony Administrator");
+
         if (station == null)
             return;
 
+        // Add criminal record for runaway synth
         // Add a general record if not present (required for criminal record)
         var generalKey = _stationRecords.GetRecordByName(station.Value, "Runaway Synthetic");
         StationRecordKey key;

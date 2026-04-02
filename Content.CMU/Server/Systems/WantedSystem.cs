@@ -47,6 +47,30 @@ public sealed class WantedSystem : EntitySystem
             }
         }
     }
+
+    /// <summary>
+    /// Sends a fax with dynamic content to a named fax machine.
+    /// </summary>
+    public void SendCustomFax(string faxname, string paperTitle, string content, string? stampState = null, List<StampDisplayInfo>? stampedBy = null, string? faxname2 = null)
+    {
+        var faxQuery = _entManager.EntityQueryEnumerator<FaxMachineComponent>();
+        while (faxQuery.MoveNext(out var faxEnt, out var faxComp))
+        {
+            if (faxComp.FaxName == faxname || (faxname2 != null && faxComp.FaxName == faxname2))
+            {
+                var printout = new FaxPrintout(
+                    content,
+                    paperTitle,
+                    null,
+                    "CMPaper",
+                    stampState,
+                    stampedBy
+                );
+
+                _faxSystem.Receive(faxEnt, printout, null, faxComp);
+            }
+        }
+    }
 }
 
 public record FugitiveInfo(string Name, string Crime, string AddedBy, DateTime AddedAt);
