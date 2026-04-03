@@ -219,3 +219,15 @@ au14-job-description-forecon-firstrecon-greeting = You are a member of USCMC eli
 
 au14-job-name-forecon-corpsman = Hospital Corpsman 2. Class
 au14-job-prefix-forecon-corpsman = HC2
+
+au14-wyht-description = You are a part of Weyland-Yutani Hazard Transportation party. Transport your crate to the nearest WeYu facility or make one to perform crazy experiments! 
+
+au14-wyht-greeting = You are a part of Weyland-Yutani Hazard Transportation party. 
+
+    Transport your crate to the nearest WeYu facility. If none present, you are equipped with medical tents.
+
+    Your goal is to perform experiment with given equipment.
+    
+    Company's profit is your goal.
+
+    Weyland-Yutani - building better worlds.
