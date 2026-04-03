@@ -227,7 +227,17 @@ au14-wyht-greeting = You are a part of Weyland-Yutani Hazard Transportation part
     Transport your crate to the nearest WeYu facility. If none present, you are equipped with medical tents.
 
     Your goal is to perform experiment with given equipment.
-    
+
+    Company's profit is your goal.
+
+    Weyland-Yutani - building better worlds.
+
+au14-pmcparty-description = You are a part of Weyland-Yutani PMC party! You were called for a special mission in the area, follow your orders.
+
+au14-pmcparty-greeting = You are a part of Weyland-Yutani PMC party! 
+
+    You were called for a special mission in the area, follow your orders.
+
     Company's profit is your goal.
 
     Weyland-Yutani - building better worlds.
