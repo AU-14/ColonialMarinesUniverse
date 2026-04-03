@@ -241,3 +241,24 @@ au14-pmcparty-greeting = You are a part of Weyland-Yutani PMC party!
     Company's profit is your goal.
 
     Weyland-Yutani - building better worlds.
+
+au14-ipie-lawyer-description = You are Intelectual Property Infringement Enforcement Lawyer of Weyland-Yutani Corporation. Defend Corporation's rights!
+au14-ipie-lawyer-greeting = You are Intelectual Property Infringement Enforcement Lawyer of Weyland-Yutani Corporation.
+
+    You were called to investigate Intelectual Property Infringement.
+    If you spawned as a synth, play as normal. You are undercover.
+    Find any inconsistencies and sue everyone!
+
+    Company's profit is your goal.
+
+    Weyland-Yutani - building better worlds.
+
+au14-ipie-ppo-description = You are Weyland-Yutani's Personal Protection Officer. Protect IPIE Lawyer with your life.
+au14-ipie-greeting = You are Weyland-Yutani's Personal Protection Officer. Protect IPIE Lawyer with your life.
+
+    You were called to investigate Intelectual Property Infringement.
+    Assist the IPIE Lawyer and ensure their safety.
+
+    Company's profit is your goal.
+
+    Weyland-Yutani - building better worlds.
