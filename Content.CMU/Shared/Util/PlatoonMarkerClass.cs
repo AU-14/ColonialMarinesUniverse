@@ -43,6 +43,11 @@ namespace Content.Shared.AU14.util
         LockedEngineeringGlassDoor,
         LockedMedicalDoor,
         LockedMedicalGlassDoor,
-        OverwatchConsole
+        OverwatchConsole,
+        IntelComputer,
+        TechTree,
+        GroundsideOps,
+        TacticalMap,
+        Analyzer
     }
 }

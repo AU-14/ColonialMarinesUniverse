@@ -1,8 +1,8 @@
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.AU14.Objectives;
-[RegisterComponent, NetworkedComponent]
 
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class ObjectiveMasterComponent : Component
 {
 
@@ -38,14 +38,18 @@ public sealed partial class ObjectiveMasterComponent : Component
     public int ScientistMajorObjectives = 8;
 
 
-    [DataField("currentwinpointsgovfor")]
+    [DataField("currentwinpointsgovfor"), AutoNetworkedField]
     public int CurrentWinPointsGovfor = 0;
-    [DataField("currentwinpointsopfor")]
+    [DataField("currentwinpointsopfor"), AutoNetworkedField]
     public int CurrentWinPointsOpfor = 0;
-    [DataField("currentwinpointsclf")]
+    [DataField("currentwinpointsclf"), AutoNetworkedField]
     public int CurrentWinPointsClf = 0;
-    [DataField("currentwinpointsscientist")]
+    [DataField("currentwinpointsscientist"), AutoNetworkedField]
     public int CurrentWinPointsScientist = 0;
+
+
+    [AutoNetworkedField]
+    public bool IsActive;
 
     [DataField("requiredwinpointsgovfor")]
     public int RequiredWinPointsGovfor = 100;

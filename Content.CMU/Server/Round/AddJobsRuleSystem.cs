@@ -1,11 +1,14 @@
 using System.Linq;
+using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Station.Systems;
 using Content.Server.Station.Components;
+using Content.Shared.AU14.Threats;
 using Content.Shared.AU14.util;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Roles;
+using Robust.Server.Player;
 using Robust.Shared.Prototypes;
 using JetBrains.Annotations;
 using Robust.Shared.Map;
@@ -20,6 +23,7 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
     [Dependency] private readonly StationSystem _stationSystem = default!;
     [Dependency] private readonly PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     protected override void Started(EntityUid uid, AddJobsRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
@@ -67,6 +71,128 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
             component.Jobs = jobsToAdd;
         }
 
+        // --- Job Scaling Logic ---
+        // ForceOnForce: read from planet's JobScalingFof
+        // Insurgency: read from planet's JobScalingIns
+        // ColonyFall / Distress: read from ThreatPrototype.JobScaling
+        // (Entity/threat spawn scaling is handled separately via PartySpawnPrototype.Scaling)
+        {
+            var playerCount = _playerManager.PlayerCount;
+            JobScalePrototype? scaleDef = null;
+
+            var isInsurgency = !string.IsNullOrEmpty(presetId) &&
+                               presetId.Equals("insurgency", StringComparison.InvariantCultureIgnoreCase);
+            var isFof = !string.IsNullOrEmpty(presetId) &&
+                        presetId.Equals("forceonforce", StringComparison.InvariantCultureIgnoreCase);
+
+            if (isDistressPreset || isColonyFallPreset)
+            {
+                // ColonyFall / Distress — scaling comes from the selected threat
+                var threat = _auRoundSystem._selectedthreat;
+                if (threat?.JobScaling != null)
+                    protoMgr.TryIndex<JobScalePrototype>(threat.JobScaling.Value, out scaleDef);
+            }
+            else if (isFof)
+            {
+                // ForceOnForce — scaling comes from planet's FOF field
+                if (planet?.JobScalingFof != null)
+                    protoMgr.TryIndex<JobScalePrototype>(planet.JobScalingFof.Value, out scaleDef);
+            }
+            else if (isInsurgency)
+            {
+                // Insurgency — scaling comes from planet's Insurgency field
+                if (planet?.JobScalingIns != null)
+                    protoMgr.TryIndex<JobScalePrototype>(planet.JobScalingIns.Value, out scaleDef);
+            }
+
+            if (scaleDef != null)
+            {
+                component.Jobs ??= new Dictionary<ProtoId<JobPrototype>, int>();
+
+                // Track which jobs in the scale definition are NOT part of component.Jobs
+                // (i.e. colony jobs that live on the station already). We'll scale those directly on the station.
+                var stationOnlyScaling = new Dictionary<ProtoId<JobPrototype>, int>();
+
+                foreach (var (jobId, entry) in scaleDef.Jobs)
+                {
+                    var jobProtoId = new ProtoId<JobPrototype>(jobId);
+                    var isComponentJob = component.Jobs.ContainsKey(jobProtoId);
+
+                    if (isComponentJob)
+                    {
+                        // Job managed by this component — scale in component.Jobs as before
+                        component.Jobs.TryGetValue(jobProtoId, out var existingSlots);
+                        var baseSlots = entry.Benchmark ?? existingSlots;
+
+                        var extra = 0;
+                        if (playerCount > entry.WhenToBeginScaling)
+                        {
+                            extra = (int) Math.Floor((playerCount - entry.WhenToBeginScaling) * entry.Scale);
+                        }
+
+                        component.Jobs[jobProtoId] = baseSlots + extra;
+                        Logger.Info($"[AddJobsRuleSystem] Job scaling (component): {jobId} => {baseSlots + extra} slots " +
+                                    $"(base={baseSlots}, extra={extra}, players={playerCount}, " +
+                                    $"benchmark={entry.Benchmark?.ToString() ?? "null"}, " +
+                                    $"scale={entry.Scale}, threshold={entry.WhenToBeginScaling})");
+                    }
+                    else
+                    {
+                        // Colony job — not in component.Jobs, need to scale directly on the station
+                        var extra = 0;
+                        if (playerCount > entry.WhenToBeginScaling)
+                        {
+                            extra = (int) Math.Floor((playerCount - entry.WhenToBeginScaling) * entry.Scale);
+                        }
+
+                        if (entry.Benchmark != null)
+                        {
+                            // Benchmark overrides: store the absolute value to set later
+                            stationOnlyScaling[jobProtoId] = entry.Benchmark.Value + extra;
+                        }
+                        else if (extra > 0)
+                        {
+                            // No benchmark: just store the extra to adjust on top of existing
+                            stationOnlyScaling[jobProtoId] = extra;
+                        }
+
+                        Logger.Info($"[AddJobsRuleSystem] Job scaling (station): {jobId} => " +
+                                    $"{(entry.Benchmark != null ? "set to " + (entry.Benchmark.Value + extra) : "+" + extra)} " +
+                                    $"(players={playerCount}, benchmark={entry.Benchmark?.ToString() ?? "null"}, " +
+                                    $"scale={entry.Scale}, threshold={entry.WhenToBeginScaling})");
+                    }
+                }
+
+                // Apply station-only scaling directly to the station's job list
+                if (stationOnlyScaling.Count > 0)
+                {
+                    var mapId = _gameTicker.DefaultMap;
+                    var stationUid = _stationSystem.GetStationInMap(mapId);
+                    if (stationUid != null && EntityManager.EntityExists(stationUid.Value))
+                    {
+                        var stationJobs = EntityManager.GetComponentOrNull<StationJobsComponent>(stationUid.Value);
+                        if (stationJobs != null)
+                        {
+                            foreach (var (jobProtoId, value) in stationOnlyScaling)
+                            {
+                                if (scaleDef.Jobs.TryGetValue(jobProtoId.Id, out var entry) && entry.Benchmark != null)
+                                {
+                                    // Benchmark set: override to absolute value
+                                    _stationJobs.TrySetJobSlot(stationUid.Value, jobProtoId.ToString(), value, true, stationJobs);
+                                }
+                                else
+                                {
+                                    // No benchmark: adjust on top of existing
+                                    _stationJobs.TryAdjustJobSlot(stationUid.Value, jobProtoId.ToString(), value, false, false, stationJobs);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // --- END: Job Scaling Logic ---
+
         // If there are no jobs to add, return early
         if (component.Jobs == null || component.Jobs.Count == 0)
             return;
@@ -113,6 +239,24 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                         var jobId = entry.Key;
                         var amount = entry.Value;
                         _stationJobs.TryAdjustJobSlot(stationUid.Value, jobId.ToString(), amount, true, false, stationJobs);
+                        // Also update the round-start setup slots so readied players can spawn on these jobs.
+                        try
+                        {
+                            // Compute current round-start amount (if any) and add to it.
+                            if (stationJobs.SetupAvailableJobs.TryGetValue(jobId, out var arr) && arr.Length > 0)
+                            {
+                                var existing = arr[0];
+                                _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, existing + amount, stationJobs);
+                            }
+                            else
+                            {
+                                _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, amount, stationJobs);
+                            }
+                        }
+                        catch
+                        {
+                            // If anything goes wrong, fall back to not crashing the rule system.
+                        }
                     }
                     // Only add to the first matching ship's station
                     break;
@@ -144,6 +288,22 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                             var jobId = entry.Key;
                             var amount = entry.Value;
                             _stationJobs.TryAdjustJobSlot(stationUid.Value, jobId.ToString(), amount, true, false, stationJobs);
+                            // Keep round-start setup in sync so readied players see these jobs.
+                            try
+                            {
+                                if (stationJobs.SetupAvailableJobs.TryGetValue(jobId, out var arr) && arr.Length > 0)
+                                {
+                                    var existing = arr[0];
+                                    _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, existing + amount, stationJobs);
+                                }
+                                else
+                                {
+                                    _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, amount, stationJobs);
+                                }
+                            }
+                            catch
+                            {
+                            }
                         }
                     }
                 }
@@ -191,6 +351,22 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                             var jobId = entry.Key;
                             var amount = entry.Value;
                             _stationJobs.TryAdjustJobSlot(stationUid.Value, jobId.ToString(), amount, true, false, stationJobs);
+                            // Keep round-start setup in sync so readied players see these jobs.
+                            try
+                            {
+                                if (stationJobs.SetupAvailableJobs.TryGetValue(jobId, out var arr) && arr.Length > 0)
+                                {
+                                    var existing = arr[0];
+                                    _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, existing + amount, stationJobs);
+                                }
+                                else
+                                {
+                                    _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, amount, stationJobs);
+                                }
+                            }
+                            catch
+                            {
+                            }
                         }
                     }
                 }
@@ -198,3 +374,5 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
         }
     }
 }
+
+

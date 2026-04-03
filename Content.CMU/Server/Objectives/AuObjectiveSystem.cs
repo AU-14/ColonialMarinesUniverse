@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.AU14.Objectives.Fetch;
+using Content.Server.AU14.Objectives.Interact;
 using Content.Server.AU14.Objectives.Kill;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
@@ -11,12 +12,14 @@ using Robust.Server.Player;
 using Content.Server.GameTicking.Events;
 using Content.Shared._RMC14.Intel;
 using Content.Shared.AU14.Objectives.Fetch;
+using Content.Shared.AU14.Objectives.Interact;
 using Content.Shared.AU14.Objectives.Kill;
 using Content.Shared.AU14.Threats;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.Prototypes; // added for prototype lookups
 using Content.Shared.Objectives.Components; // for ObjectiveComponent
+using Content.Shared._RMC14.Vendors;
 
 namespace Content.Server.AU14.Objectives;
 // should probably consolidate some of these methods and make it 90% less shitcode but I am incredibly lazy and will do it another day - eg
@@ -34,7 +37,10 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
     [Dependency] private readonly Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
     [Dependency] private readonly AuFetchObjectiveSystem _fetchObjectiveSystem = default!;
     [Dependency] private readonly AuKillObjectiveSystem _killObjectiveSystem = default!;
+    [Dependency] private readonly Content.Server.AU14.Objectives.Arrest.AuArrestObjectiveSystem _arrestObjectiveSystem = default!;
     [Dependency] private readonly Content.Server.AU14.Objectives.Destroy.AuDestroyObjectiveSystem _destroyObjectiveSystem = default!;
+    [Dependency] private readonly AuInteractObjectiveSystem _interactObjectiveSystem = default!;
+
     [Dependency] private readonly IPrototypeManager _proto = default!; // for spawning by prototype
     public bool iswinactive = false;
     private ObjectiveMasterComponent? _objectiveMaster = null;
@@ -92,9 +98,17 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         {
             _killObjectiveSystem.ActivateKillObjectiveIfNeeded(uid, component);
         }
+        if (_entityManager.TryGetComponent(uid, out Content.Shared.AU14.Objectives.Arrest.ArrestObjectiveComponent? arrestComp))
+        {
+            _arrestObjectiveSystem.ActivateArrestObjectiveIfNeeded(uid, component);
+        }
         if (_entityManager.TryGetComponent(uid, out Content.Shared.AU14.Objectives.Destroy.DestroyObjectiveComponent? destroyComp))
         {
             _destroyObjectiveSystem.ActivateDestroyObjectiveIfNeeded(uid, component);
+        }
+        if (_entityManager.TryGetComponent(uid, out InteractObjectiveComponent? interactComp))
+        {
+            _interactObjectiveSystem.ActivateInteractObjectiveIfNeeded(uid, component);
         }
     }
 
@@ -465,10 +479,8 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                     {
                         if (!CanFactionWin(checkFaction))
                         {
-                            // End round, other faction wins
+
                             var otherFaction = objective.Factions.FirstOrDefault(f => f != checkFaction) ?? "Unknown";
-                            _gameTicker.EndRound($"{otherFaction.ToUpperInvariant()} wins: {checkFaction} cannot win due to failed objectives.");
-                            _roundEnd.EndRound();
 
                         }
                     }
@@ -492,7 +504,15 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
 
         if (objective.ObjectiveLevel == 3)
         {
-            EndRound(completingFaction, objective.RoundEndMessage);
+            // Only end the round automatically for final objectives if their FinalType is InstantWin.
+            if (objective.FinalType == AuObjectiveComponent.FinalObjectiveType.InstantWin)
+            {
+                EndRound(completingFaction, objective.RoundEndMessage);
+            }
+            else
+            {
+                Logger.Info($"[OBJ FINAL DEBUG] Final objective '{objective.objectiveDescription}' completed for faction '{completingFaction}' as Boon; not ending the round.");
+            }
         }
 
         TryUnlockOrSpawnNextTier(uid, objective, completingFaction);
@@ -537,6 +557,11 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                 if (killComp.RespawnOnRepeat)
                     killComp.MobsSpawned = false;
             }
+            // Interact objective: reset completions and re-register entities
+            if (_entityManager.TryGetComponent(uid, out InteractObjectiveComponent? interactRepeatComp))
+            {
+                _interactObjectiveSystem.ResetInteractObjective(uid, interactRepeatComp);
+            }
             // Reactivate the objective
             objective.Active = true;
             RaiseLocalEvent(uid, new ObjectiveActivatedEvent());
@@ -568,6 +593,12 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                 var fetchSystem = _entityManager.EntitySysManager
                     .GetEntitySystem<Content.Server.AU14.Objectives.Fetch.AuFetchObjectiveSystem>();
                 fetchSystem.ResetAndRespawnFetchObjective(uid, fetchComp);
+            }
+
+            // Interact objective: reset completions and re-register entities
+            if (_entityManager.TryGetComponent(uid, out InteractObjectiveComponent? interactRepeatComp2))
+            {
+                _interactObjectiveSystem.ResetInteractObjective(uid, interactRepeatComp2);
             }
 
             // Reactivate the objective
@@ -667,6 +698,24 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         var points = objective.CustomPoints == 0
             ? (objective.ObjectiveLevel == 1 ? 5 : 20)
             : objective.CustomPoints;
+        ApplyWinPoints(faction, points);
+    }
+
+    /// <summary>
+    /// Awards a raw number of win points directly to a faction without requiring an objective.
+    /// Used by systems like the CLF Analyzer cash insertion that earn points outside the objective flow.
+    /// </summary>
+    public void AwardRawPointsToFaction(string faction, int points)
+    {
+        if (_objectiveMaster == null)
+            return;
+        ApplyWinPoints(faction, points);
+    }
+
+    private void ApplyWinPoints(string faction, int points)
+    {
+        if (_objectiveMaster == null)
+            return;
         var factionKey = faction.ToLowerInvariant();
         int newPoints = 0;
         int requiredPoints = 0;
@@ -693,6 +742,11 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                 requiredPoints = _objectiveMaster.RequiredWinPointsScientist;
                 break;
         }
+
+        // Push new balance to all objective-point vendors so their BUIs reflect it
+        // regardless of whether the ObjectiveMasterComponent entity is in the client's PVS.
+        var vendorSystem = EntityManager.EntitySysManager.GetEntitySystem<SharedCMAutomatedVendorSystem>();
+        vendorSystem.UpdateVendorFactionPointsCache(factionKey, newPoints);
 
         if (!_objectiveMaster.FinalObjectiveGivenFactions.Contains(factionKey) && newPoints >= requiredPoints)
         {
@@ -834,5 +888,17 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             Dirty(uid, comp);
             break;
         }
+
+        // Update all vendor caches so their BUIs reflect the new balance
+        var vendorSystem = EntityManager.EntitySysManager.GetEntitySystem<SharedCMAutomatedVendorSystem>();
+        var newBalance = key switch
+        {
+            var t when t == Team.GovFor => _objectiveMaster.CurrentWinPointsGovfor,
+            var t when t == Team.OpFor => _objectiveMaster.CurrentWinPointsOpfor,
+            var t when t == Team.CLF => _objectiveMaster.CurrentWinPointsClf,
+            "scientist" => _objectiveMaster.CurrentWinPointsScientist,
+            _ => 0
+        };
+        vendorSystem.UpdateVendorFactionPointsCache(key, newBalance);
     }
 }

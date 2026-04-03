@@ -41,6 +41,9 @@ public sealed partial class KillObjectiveComponent : Component
     [DataField("respawnOnRepeat", required: false)]
     public bool RespawnOnRepeat { get; private set; } = false;
 
+    [DataField("countarrest", required: false)]
+    public bool CountArrest { get; private set; } = true;
+
     public bool MobsSpawned = false;
 
 

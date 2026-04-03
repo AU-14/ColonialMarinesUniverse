@@ -2,13 +2,12 @@ using System.Linq;
 using Content.Server.GameTicking;
 using Content.Server.Roles.Jobs;
 using Content.Shared._RMC14.Synth;
-using Content.Shared.AU14.Objectives.Kill;
-using Content.Shared.Mobs;
 using Content.Shared.AU14.Objectives;
-using Content.Shared.Mind;
+using Content.Shared.AU14.Objectives.Arrest;
+using Content.Shared.AU14.Objectives.Kill;
 using Content.Shared.Mind.Components;
+using Content.Shared.Mobs;
 using Content.Shared.NPC.Components;
-using Content.Shared.Roles;
 using Robust.Shared.Timing;
 
 namespace Content.Server.AU14.Objectives.Kill
@@ -46,7 +45,12 @@ namespace Content.Server.AU14.Objectives.Kill
                     if (faction == "govfor") return "opfor";
                     if (faction == "opfor") return "govfor";
                     break;
-                case "distresssingal":
+                case "distresssignal":
+                    if (faction == "clf") return "govfor";
+                    if (faction == "govfor") return "clf";
+
+                    break;
+                case "insurgency":
                     if (faction == "clf") return "govfor";
                     if (faction == "govfor") return "clf";
                     break;
@@ -238,6 +242,10 @@ namespace Content.Server.AU14.Objectives.Kill
 
                 killObj.AmountKilledPerFaction[factionKey]++;
                 Sawmill.Info($"[KILL OBJ UPDATE] Faction '{factionToCredit}' killed entity {uid}. Total kills: {killObj.AmountKilledPerFaction[factionKey]} / {killObj.AmountToKill}");
+
+                // If CountArrest is true, remove MarkedForArrestComponent so this entity can't also count for arrest objectives
+                if (killObj.CountArrest)
+                    RemComp<MarkedForArrestComponent>(uid);
 
                 if (killObj.AmountKilledPerFaction[factionKey] >= killObj.AmountToKill)
                 {
