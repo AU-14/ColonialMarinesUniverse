@@ -94,7 +94,7 @@ AU14JobCivilianCMBMarshal = CMB Marshal
 
 au14-job-name-civilianscientist = Scientist
 au14-job-description-civilianscientist = You're a scientist sent by the Weyland-Yutani Corporation to study the environment  (Role available on LV-624 and in select modes)
-au14-job-prefix-civilianscientist = Prof
+au14-job-prefix-civilianscientist = SCI.
 AU14JobCivilianScientist = Scientist
 
 au14-job-name-usasfrecruiter = USASF Recruiter
