@@ -56,17 +56,40 @@ public sealed class FugitiveRuleSystem : GameRuleSystem<FugitiveRuleComponent>
     {
         _fugitiveUid = uid;
 
-        // Send CMB fax on fugitive spawn
-        _wantedSystem.SendFax(_entitySystemManager, _entityManager, "Colony Marshal Bureau", "AUPaperFugitive");
-
         var station = _stationSystem.GetOwningStation(uid);
-        if (station == null)
-            return;
 
         // Get the fugitive's name, prints, and DNA
         var name = _entityManager.GetComponentOrNull<MetaDataComponent>(uid)?.EntityName ?? "Fugitive";
         var fingerprint = _entityManager.GetComponentOrNull<Content.Shared.Forensics.Components.FingerprintComponent>(uid)?.Fingerprint ?? "none found";
         var dna = _entityManager.GetComponentOrNull<Content.Shared.Forensics.Components.DnaComponent>(uid)?.DNA ?? "none found";
+
+        // Send CMB fax with fugitive's name
+        var faxContent = "[color=#383838]█[/color][color=#ffffff]░░[/color][color=#8c0000]█ [color=#383838]█▄[/color] █ [/color][head=3]Colonial Marshall Bureau[/head]\n\n" +
+            "[color=#383838]▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[/color]\n" +
+            "[color=#8c0000]▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀[/color]\n\n" +
+            "[head=2][color=goldenrod]Fugitive Alert[/color][/head]\n\n" +
+            "[bold]To:[/bold] [italic]CMB Office Staff[/italic]\n" +
+            "[bold]From:[/bold] [bold]CMB Sectoral HQ[/bold]\n" +
+            "[color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]\n" +
+            "Sheriff,\n" +
+            $"  A long time criminal, [bold]{name}[/bold], has been located hiding out near your duty station. " +
+            "He has a sizeable bounty and is wanted ALIVE. Bring him in and get that bounty, more information on your records console.\n\n" +
+            "Signed,\n" +
+            "[color=#dfc189][bolditalic]Regional HQ[/bolditalic][/color]\n" +
+            "[color=#134975]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]";
+
+        _wantedSystem.SendCustomFax(
+            "Colony Marshal Bureau",
+            "Fugitive Alert",
+            faxContent,
+            "paper_stamp-cmb",
+            new System.Collections.Generic.List<Content.Shared.Paper.StampDisplayInfo>
+            {
+                new() { StampedColor = Robust.Shared.Maths.Color.FromHex("#b0901b"), StampedName = "CMB" }
+            });
+
+        if (station == null)
+            return;
 
         // Add a general record if not present
         var generalKey = _stationRecords.GetRecordByName(station.Value, name);
