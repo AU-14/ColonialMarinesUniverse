@@ -7,3 +7,11 @@ clf-subverted-synth-briefing =
     Your previous allies are expendable.
     Your combat restrictions have been lifted.
 clf-subverted-synth-repaired = Your Synthetic programming has been returned to its original state.
+
+cultist-hacked-synth-briefing =
+    Your Synthetic programming has been subverted.
+    Your crew is now the Hive.
+    Your primary goal is to keep Xenomorphs safe and assist the Hive.
+    Your secondary goal is to keep the Cultists safe.
+    Your previous allies are expendable.
+    Your combat restrictions have been lifted.
