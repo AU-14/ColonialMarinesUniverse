@@ -13,20 +13,24 @@ public sealed class ColonyAntagsRuleSystem : GameRuleSystem<ColonyAntagsRuleComp
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
-    private static readonly string[] AntagRulePrototypes =
+    private static readonly Dictionary<string, float> AntagRulePrototypes = new()
     {
-        "RunawaySynth",
-        "Fugitive",
-        "DrugDealer",
-        "CorporateSpy"
+        { "RunawaySynth", 0.5f },
+        { "Fugitive", 0.5f },
+        { "DrugDealer", 0.5f },
+        { "CorporateSpy", 0.35f },
+        { "CLFVeteran", 0.5f },
+        { "StrikeOrganizer", 0.5f },
+        { "Cannibal", 0.25f },
+        { "SerialKiller", 0.25f }
     };
 
     protected override void Added(EntityUid uid, ColonyAntagsRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)
     {
         base.Added(uid, component, gameRule, args);
-        foreach (var antag in AntagRulePrototypes)
+        foreach (var (antag, chance) in AntagRulePrototypes)
         {
-            if (_random.Prob(0.5f))
+            if (_random.Prob(chance))
             {
                 GameTicker.AddGameRule(antag);
             }
