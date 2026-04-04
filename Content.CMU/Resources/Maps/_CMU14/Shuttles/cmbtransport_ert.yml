@@ -98,11 +98,11 @@ entities:
     - type: RadiationGridResistance
     - type: Dropship
       localHijackSound: !type:SoundPathSpecifier
-        path: /Audio/_CM14/Machines/Shuttle/queen_alarm.ogg
+        path: /Audio/_RMC14/Machines/Shuttle/queen_alarm.ogg
       marineHijackSound: !type:SoundPathSpecifier
         params:
           volume: -6
-        path: /Audio/_CM14/Announcements/ARES/hijack.ogg
+        path: /Audio/_RMC14/Announcements/ARES/hijack.ogg
       generalQuartersSound: !type:SoundPathSpecifier
         path: /Audio/_RMC14/Announcements/ARES/GQfullcall.ogg
       unidentifledlifesignsSound: !type:SoundPathSpecifier
