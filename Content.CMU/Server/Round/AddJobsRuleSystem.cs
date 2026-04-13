@@ -112,7 +112,7 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
 
                 // Track which jobs in the scale definition are NOT part of component.Jobs
                 // (i.e. colony jobs that live on the station already). We'll scale those directly on the station.
-                var stationOnlyScaling = new Dictionary<ProtoId<JobPrototype>, int>();
+                var stationOnlyScaling = new Dictionary<ProtoId<JobPrototype>, JobScaleEntry>();
 
                 foreach (var (jobId, entry) in scaleDef.Jobs)
                 {
@@ -124,42 +124,25 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                         // Job managed by this component — scale in component.Jobs as before
                         component.Jobs.TryGetValue(jobProtoId, out var existingSlots);
                         var baseSlots = entry.Benchmark ?? existingSlots;
+                        var extra = JobScaling.CalculateExtraSlots(playerCount, entry);
+                        var scaledSlots = JobScaling.CalculateScaledSlots(playerCount, existingSlots, entry);
 
-                        var extra = 0;
-                        if (playerCount > entry.WhenToBeginScaling)
-                        {
-                            extra = (int) Math.Floor((playerCount - entry.WhenToBeginScaling) * entry.Scale);
-                        }
-
-                        component.Jobs[jobProtoId] = baseSlots + extra;
-                        Logger.Info($"[AddJobsRuleSystem] Job scaling (component): {jobId} => {baseSlots + extra} slots " +
+                        component.Jobs[jobProtoId] = scaledSlots;
+                        Logger.Info($"[AddJobsRuleSystem] Job scaling (component): {jobId} => {scaledSlots} slots " +
                                     $"(base={baseSlots}, extra={extra}, players={playerCount}, " +
                                     $"benchmark={entry.Benchmark?.ToString() ?? "null"}, " +
+                                    $"maximum={entry.Maximum?.ToString() ?? "null"}, " +
                                     $"scale={entry.Scale}, threshold={entry.WhenToBeginScaling})");
                     }
                     else
                     {
                         // Colony job — not in component.Jobs, need to scale directly on the station
-                        var extra = 0;
-                        if (playerCount > entry.WhenToBeginScaling)
-                        {
-                            extra = (int) Math.Floor((playerCount - entry.WhenToBeginScaling) * entry.Scale);
-                        }
-
-                        if (entry.Benchmark != null)
-                        {
-                            // Benchmark overrides: store the absolute value to set later
-                            stationOnlyScaling[jobProtoId] = entry.Benchmark.Value + extra;
-                        }
-                        else if (extra > 0)
-                        {
-                            // No benchmark: just store the extra to adjust on top of existing
-                            stationOnlyScaling[jobProtoId] = extra;
-                        }
+                        var extra = JobScaling.CalculateExtraSlots(playerCount, entry);
+                        stationOnlyScaling[jobProtoId] = entry;
 
                         Logger.Info($"[AddJobsRuleSystem] Job scaling (station): {jobId} => " +
-                                    $"{(entry.Benchmark != null ? "set to " + (entry.Benchmark.Value + extra) : "+" + extra)} " +
-                                    $"(players={playerCount}, benchmark={entry.Benchmark?.ToString() ?? "null"}, " +
+                                    $"(extra={extra}, players={playerCount}, benchmark={entry.Benchmark?.ToString() ?? "null"}, " +
+                                    $"maximum={entry.Maximum?.ToString() ?? "null"}, " +
                                     $"scale={entry.Scale}, threshold={entry.WhenToBeginScaling})");
                     }
                 }
@@ -174,17 +157,29 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                         var stationJobs = EntityManager.GetComponentOrNull<StationJobsComponent>(stationUid.Value);
                         if (stationJobs != null)
                         {
-                            foreach (var (jobProtoId, value) in stationOnlyScaling)
+                            foreach (var (jobProtoId, entry) in stationOnlyScaling)
                             {
-                                if (scaleDef.Jobs.TryGetValue(jobProtoId.Id, out var entry) && entry.Benchmark != null)
+                                _stationJobs.TryGetJobSlot(stationUid.Value, jobProtoId.ToString(), out var existingMaybe, stationJobs);
+                                if (existingMaybe == null && entry.Benchmark == null)
                                 {
-                                    // Benchmark set: override to absolute value
-                                    _stationJobs.TrySetJobSlot(stationUid.Value, jobProtoId.ToString(), value, true, stationJobs);
+                                    // Don't modify unlimited jobs without an explicit benchmark baseline.
+                                    continue;
+                                }
+
+                                var existingSlots = existingMaybe ?? 0;
+                                var scaledSlots = JobScaling.CalculateScaledSlots(playerCount, existingSlots, entry);
+
+                                if (entry.Benchmark != null)
+                                {
+                                    // Benchmark set: override to absolute value (with optional maximum cap).
+                                    _stationJobs.TrySetJobSlot(stationUid.Value, jobProtoId.ToString(), scaledSlots, true, stationJobs);
                                 }
                                 else
                                 {
-                                    // No benchmark: adjust on top of existing
-                                    _stationJobs.TryAdjustJobSlot(stationUid.Value, jobProtoId.ToString(), value, false, false, stationJobs);
+                                    // No benchmark: adjust to the computed absolute value (with optional maximum cap).
+                                    var delta = scaledSlots - existingSlots;
+                                    if (delta != 0)
+                                        _stationJobs.TryAdjustJobSlot(stationUid.Value, jobProtoId.ToString(), delta, false, false, stationJobs);
                                 }
                             }
                         }
