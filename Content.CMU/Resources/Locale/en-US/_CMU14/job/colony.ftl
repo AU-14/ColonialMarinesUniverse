@@ -18,8 +18,6 @@ au14-department-criminal = Colony Criminals
 au14-department-colony-engineering-description = Colonists who ensure the integrity of the colony's infrastructure and conduct repairs as needed.
 au14-department-colony-engineering = Colony Engineering
 
-au14-department-colony-description = General colonists.
-au14-department-colony = Colony Labor
 
 au14-department-colony-corporate = Corporate Employees
 au14-department-colony-corporate-description = Colonists who are employed directly by the Weyland-Yutani Corporation in a management or secure position.
@@ -39,6 +37,8 @@ au14-department-colony-security-description = Enforces law, conducts arrests, pr
 au14-job-supervisors-colonycivilian = Colony Administrator
 
 au14-job-supervisors-colonyadministrator = The Colonial Administration
+
+au14-id-job-title-colony-civilian = Colony Civilian
 
 au14-job-name-civiliancolonist = Colonist
 au14-job-description-civiliancolonist = A resident of the colony.

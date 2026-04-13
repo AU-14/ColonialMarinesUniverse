@@ -71,9 +71,8 @@ public sealed class RunawaySynthRuleSystem : GameRuleSystem<RunawaySynthRuleComp
                     allNames.Add(record.Name);
             }
 
-            // Pick up to 11 random colonists
             _random.Shuffle(allNames);
-            var count = System.Math.Min(11, allNames.Count);
+            var count = System.Math.Min(4, allNames.Count);
             for (var i = 0; i < count; i++)
                 nameList.Add(allNames[i]);
         }
