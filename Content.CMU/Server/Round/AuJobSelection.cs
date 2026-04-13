@@ -78,11 +78,10 @@ public sealed class AuJobSelectionSystem : EntitySystem
                 if (partySpawn.Scaling.TryGetValue(protoId, out var entry))
                 {
                     var baseCount = entry.Benchmark ?? staticCount;
-                    var extra = 0;
-                    if (playerCount > entry.WhenToBeginScaling)
-                        extra = (int) Math.Floor((playerCount - entry.WhenToBeginScaling) * entry.Scale);
-                    numThreatLeaders += baseCount + extra;
-                    Logger.DebugS("au14.jobs", $"[DEBUG] Scaled threat leader '{protoId}' to {baseCount + extra} (base={baseCount}, extra={extra}, players={playerCount})");
+                    var extra = JobScaling.CalculateExtraSlots(playerCount, entry);
+                    var scaledCount = JobScaling.CalculateScaledSlots(playerCount, staticCount, entry);
+                    numThreatLeaders += scaledCount;
+                    Logger.DebugS("au14.jobs", $"[DEBUG] Scaled threat leader '{protoId}' to {scaledCount} (base={baseCount}, extra={extra}, max={entry.Maximum?.ToString() ?? "null"}, players={playerCount})");
                 }
                 else
                 {
@@ -96,11 +95,10 @@ public sealed class AuJobSelectionSystem : EntitySystem
                 if (partySpawn.Scaling.TryGetValue(protoId, out var entry))
                 {
                     var baseCount = entry.Benchmark ?? staticCount;
-                    var extra = 0;
-                    if (playerCount > entry.WhenToBeginScaling)
-                        extra = (int) Math.Floor((playerCount - entry.WhenToBeginScaling) * entry.Scale);
-                    numThreatMembers += baseCount + extra;
-                    Logger.DebugS("au14.jobs", $"[DEBUG] Scaled threat member '{protoId}' to {baseCount + extra} (base={baseCount}, extra={extra}, players={playerCount})");
+                    var extra = JobScaling.CalculateExtraSlots(playerCount, entry);
+                    var scaledCount = JobScaling.CalculateScaledSlots(playerCount, staticCount, entry);
+                    numThreatMembers += scaledCount;
+                    Logger.DebugS("au14.jobs", $"[DEBUG] Scaled threat member '{protoId}' to {scaledCount} (base={baseCount}, extra={extra}, max={entry.Maximum?.ToString() ?? "null"}, players={playerCount})");
                 }
                 else
                 {

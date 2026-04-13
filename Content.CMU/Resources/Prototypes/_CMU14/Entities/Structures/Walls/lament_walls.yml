@@ -1,0 +1,41 @@
+- type: entity
+  parent: RMCWallStrataIceDirty
+  id: CMUWallLamentRockDark
+  name: rock wall
+  description: A rough wall of hardened rock.
+
+- type: entity
+  parent: RMCWallStrataIce
+  id: CMUWallLamentRock
+  name: rock wall
+  description: A rough wall of hardened rock.
+  
+- type: entity
+  id: CMUFogWallLamentWaterfallMist
+  name: waterfall mist
+  description: The mist of a waterfall, there might be something behind it!
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _RMC14/Effects/fog.rsi
+    state: smoke
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - MobMask
+        layer:
+        - MidImpassable
+  - type: Occluder
