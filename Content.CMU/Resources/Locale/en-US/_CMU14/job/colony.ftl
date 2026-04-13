@@ -9,7 +9,7 @@ au14-department-colony-description = General colonists.
 au14-department-colony = Colonist
 
 au14-department-colony-description-service  = Colonists who provide  services to the colony, such as food service, waste management, and shopkeeping.
-au14-department-service = Service Jobs.
+au14-department-colony-service = Service
 
 
 au14-department-criminal-description = Criminals and prisoners of the colony.
