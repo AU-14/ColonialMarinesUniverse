@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Sprites by Nzzy on Discord.",
+  "copyright": "Sprites by Nzzy, potatoed6 on Discord.",
   "size": {
     "x": 16,
     "y": 16
@@ -15,6 +15,39 @@
     },
     {
       "name": "advisor"
+    },
+    {
+      "name": "colony_pilot"
+    },
+    {
+      "name": "cca_ambassador"
+    },
+    {
+      "name": "icsc_ambassador"
+    },
+    {
+      "name": "laselle_liaison"
+    },
+    {
+      "name": "twe_ambassador"
+    },
+    {
+      "name": "ua_ambassador"
+    },
+    {
+      "name": "upp_ambassador"
+    },
+    {
+      "name": "corporate_assistant"
+    },
+    {
+      "name": "admin_assistant"
+    },
+    {
+      "name": "orbital_manager"
+    },
+    {
+      "name": "orbital_security"
     }
   ]
 }

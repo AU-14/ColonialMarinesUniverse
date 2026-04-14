@@ -197,3 +197,47 @@ AU14JobWorkingJoe = Working Joe
 
 au14-job-name-apollo = APOLLO Central A.I.
 au14-job-description-apollo = You are APOLLO Central A.I. You were manufactured by Seegson Corporation to monitor the Working Joes. You are held to a higher standard. Listen to ingame admin's directives! (WARNING: THIS ROLE REQUIRES HIGH ROLEPLAY PROWESS)
+
+au14-job-name-civiliancolonypilot = Commercial Pilot
+au14-job-description-civiliancolonypilot = Fly commercial dropships from and to the orbital station.
+au14-job-prefix-civiliancolonypilot = ComPil
+
+au14-job-name-civilianorbitalmanager = Orbital Manager
+au14-job-description-civilianorbitalmanager = Manage your orbital station effectively.
+au14-job-prefix-orbitalmanager = Orb. Man.
+
+au14-job-name-orbitalsecurity = Orbital Security
+au14-job-description-orbitalsecurity = Ensure orbital manager and station are safe.
+au14-job-prefix-orbitalsecurity = Orb. Sec.
+
+au14-job-name-civiliancolonyadminasssistant = Administrative Assistant
+au14-job-description-civiliancolonyadminassistant = Be the right hand of the Colony Administrator.
+au14-job-prefix-colonyadminassistant = Admin. Assist.
+
+au14-job-name-civiliancorporateassistant = Corporate Assistant
+au14-job-description-civiliancorporateassistant = Be the right hand of the Corporate Liaison.
+au14-job-prefix-civiliancorporateassistant = Corp. Assist.
+
+au14-job-name-civilianlaselleliaison = Laselle Liaison
+au14-job-description-civilianlaselleliaison = Liaison Laselle Bionational Corporation.
+au14-job-prefix-laselleliaison = LL
+
+au14-job-name-civilianambassadoricsc = ICSC Ambassador
+au14-job-description-civilianambassadoricsc = Lead ICSC diplomatic mission on the colony.
+au14-job-prefix-civilianambassadoricsc = ISCS Amb.
+
+au14-job-name-civilianambassadorupp = UPP Ambassador
+au14-job-description-civilianambassadorupp = Lead UPP diplomatic mission on the colony.
+au14-job-prefix-civilianambassadorupp = UPP Amb.
+
+au14-job-name-civilianambassadorua = UA Ambassador
+au14-job-description-civilianambassadorua = Lead UA diplomatic mission on the colony.
+au14-job-prefix-civilianambassadorua = UA Amb.
+
+au14-job-name-civilianambassadortwe = TWE Ambassador
+au14-job-description-civilianambassadortwe = Lead TWE diplomatic mission on the colony.
+au14-job-prefix-civilianambassadortwe = TWE Amb.
+
+au14-job-name-civilianambassadorcca = CCA Ambassador
+au14-job-description-civilianambassadorcca = Lead CCA diplomatic mission on the colony.
+au14-job-prefix-civilianambassadorcca = CCA Amb.
