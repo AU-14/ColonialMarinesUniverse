@@ -8,31 +8,25 @@ public sealed class DestroyOnPresetSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<DestroyOnPresetComponent, ComponentStartup>(OnStartup);
+
+        SubscribeLocalEvent<DestroyOnPresetComponent, MapInitEvent>(OnStartup);
     }
 
-    private void OnStartup(EntityUid uid, DestroyOnPresetComponent component, ComponentStartup args)
+    private void OnStartup(EntityUid uid, DestroyOnPresetComponent component, MapInitEvent args)
     {
-
-
         var gameTicker = EntityManager.System<GameTicker>();
         var preset = gameTicker.Preset;
 
+        if (preset != null)
+        {
+            var matches = preset.ID == component.Preset;
 
-
-            if (preset != null)
+            // If inverted is true, delete when it does NOT match. Otherwise delete when it matches.
+            if ((matches && !component.Inverted) || (!matches && component.Inverted))
             {
-                var matches = preset.ID == component.Preset;
-
-                // If inverted is true, delete when it does NOT match. Otherwise delete when it matches.
-                if ((matches && !component.Inverted) || (!matches && component.Inverted))
-                {
-                    EntityManager.QueueDeleteEntity(uid);
-                }
+                EntityManager.QueueDeleteEntity(uid);
             }
         }
-
     }
 
-
-
+}
