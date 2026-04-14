@@ -5,10 +5,11 @@ using Robust.Client.UserInterface.XAML;
 namespace Content.Client.AU14.ColonyEconomy;
 
 [GenerateTypedNameReferences]
-public sealed partial class BudgetConsoleWindow : DefaultWindow
+public sealed partial class ColonyAtmWindow : DefaultWindow
 {
-    public BudgetConsoleWindow()
+    public ColonyAtmWindow()
     {
         RobustXamlLoader.Load(this);
     }
 }
+
