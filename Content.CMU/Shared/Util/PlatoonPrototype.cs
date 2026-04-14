@@ -21,7 +21,7 @@ namespace Content.Shared.AU14.util;
         /// The allegiance associated with this platoon.
         /// Characters with a matching allegiance will preferentially spawn here.
         /// </summary>
-        [DataField("allegiance")]
+        [DataField("Allegiance")]
         public ProtoId<AllegiancePrototype>? Allegiance { get; private set; }
 
         [DataField("language", required: false)]
