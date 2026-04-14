@@ -1,0 +1,13 @@
+- type: entity
+  parent: XenoEgg
+  id: CMUXenoEggNotCF
+  components:
+  - type: DestroyOnPreset
+    preset: ColonyFall
+
+- type: entity
+  parent: XenoEgg
+  id: CMUXenoEggNotDS
+  components:
+  - type: DestroyOnPreset
+    preset: DistressSignal

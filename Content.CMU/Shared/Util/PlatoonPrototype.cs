@@ -1,4 +1,5 @@
 using Content.Shared.AU14;
+using Content.Shared.AU14.Allegiance;
 using Robust.Shared.Prototypes;
 using System.Collections.Generic;
 using Content.Shared._RMC14.Requisitions;
@@ -16,10 +17,20 @@ namespace Content.Shared.AU14.util;
         [DataField("factions", required: false)]
         public List<string> Factions { get; private set; } = new();
 
+        /// <summary>
+        /// The allegiance associated with this platoon.
+        /// Characters with a matching allegiance will preferentially spawn here.
+        /// </summary>
+        [DataField("Allegiance")]
+        public ProtoId<AllegiancePrototype>? Allegiance { get; private set; }
+
         [DataField("language", required: false)]
         public string Language { get; private set; } = string.Empty;
         [DataField("name", required: true)]
         public string Name { get; private set; } = string.Empty;
+
+        [DataField("lorePrimer")]
+        public ProtoId<LorePrimerPrototype>? LorePrimer { get; private set; }
 
 
         [DataField("reqlist", required: false)]

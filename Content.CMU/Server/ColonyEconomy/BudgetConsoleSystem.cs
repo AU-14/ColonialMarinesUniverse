@@ -1,52 +1,77 @@
-using Content.Server.AU14.ColonyEconomy;
 using Content.Server.Stack;
 using Content.Shared.AU14.ColonyEconomy;
-using Content.Shared.Interaction;
+using Content.Shared.Stacks;
 using Robust.Server.GameObjects;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Map;
+using Robust.Shared.Containers;
+
 namespace Content.Server.AU14.ColonyEconomy;
+
 public sealed class BudgetConsoleSystem : EntitySystem
 {
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly ColonyBudgetSystem _budget = default!;
     [Dependency] private readonly IEntityManager _entities = default!;
     [Dependency] private readonly StackSystem _stack = default!;
+    [Dependency] private readonly DepartmentConsoleSystem _department = default!;
+
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<BudgetConsoleComponent, BoundUIOpenedEvent>(OnUiOpened);
         SubscribeLocalEvent<BudgetConsoleComponent, BudgetConsoleWithdrawBuiMsg>(OnWithdraw);
-       // SubscribeLocalEvent<BudgetConsoleComponent, ActivateInWorldEvent>(OnActivate);
+        SubscribeLocalEvent<BudgetConsoleComponent, BudgetConsoleTransferToDeptBuiMsg>(OnTransferToDept);
+        SubscribeLocalEvent<BudgetConsoleComponent, BudgetConsoleDispenseSalariesBuiMsg>(OnDispenseSalaries);
+        SubscribeLocalEvent<BudgetConsoleComponent, EntInsertedIntoContainerMessage>(OnCashInserted);
+    }
+
+    private BudgetConsoleBuiState BuildState()
+    {
+        var departments = new List<BudgetConsoleDepartmentInfo>();
+        foreach (var (netUid, name, budget) in _department.GetAllDepartments())
+        {
+            departments.Add(new BudgetConsoleDepartmentInfo(netUid, name, budget));
+        }
+        return new BudgetConsoleBuiState(_budget.GetBudget(), departments);
     }
 
     private void OnUiOpened(EntityUid uid, BudgetConsoleComponent comp, BoundUIOpenedEvent args)
     {
-        var state = new BudgetConsoleBuiState(_budget.GetBudget(),_budget.givewithdrawers());
-        _ui.SetUiState(uid, BudgetConsoleUi.Key, state);
+        _ui.SetUiState(uid, BudgetConsoleUi.Key, BuildState());
     }
 
     private void OnWithdraw(EntityUid uid, BudgetConsoleComponent comp, BudgetConsoleWithdrawBuiMsg msg)
     {
-
         if (msg.Amount > _budget.GetBudget())
-        {
-
             return;
-        }
-        _budget.AddWithdraw(_entities.GetComponent<MetaDataComponent>(msg.Actor).EntityName);
-
-
-
 
         _budget.AddToBudget(-msg.Amount);
-        var xform = _entities.GetComponent<TransformComponent>(uid);
-        var stacks = _stack.SpawnMultiple("RMCSpaceCash", (int)msg.Amount, uid);
+        _stack.SpawnMultiple("RMCSpaceCash", (int) msg.Amount, uid);
 
-        var state = new BudgetConsoleBuiState(_budget.GetBudget(),_budget.givewithdrawers());
-        _ui.SetUiState(uid,  BudgetConsoleUi.Key, state);
+        _ui.SetUiState(uid, BudgetConsoleUi.Key, BuildState());
     }
 
+    private void OnTransferToDept(EntityUid uid, BudgetConsoleComponent comp, BudgetConsoleTransferToDeptBuiMsg msg)
+    {
+        var deptUid = _entities.GetEntity(msg.DeptConsoleUid);
+        _department.TransferToDepartment(deptUid, msg.Amount);
 
+        _ui.SetUiState(uid, BudgetConsoleUi.Key, BuildState());
+    }
 
+    private void OnDispenseSalaries(EntityUid uid, BudgetConsoleComponent comp, BudgetConsoleDispenseSalariesBuiMsg msg)
+    {
+        _department.DispenseSalaries();
+        _ui.SetUiState(uid, BudgetConsoleUi.Key, BuildState());
+    }
+
+    private void OnCashInserted(EntityUid uid, BudgetConsoleComponent comp, EntInsertedIntoContainerMessage args)
+    {
+        int stackCount = 1;
+        if (_entities.TryGetComponent<StackComponent>(args.Entity, out var stack))
+            stackCount = stack.Count;
+
+        _budget.AddToBudget(stackCount);
+        _entities.QueueDeleteEntity(args.Entity);
+        _ui.SetUiState(uid, BudgetConsoleUi.Key, BuildState());
+    }
 }

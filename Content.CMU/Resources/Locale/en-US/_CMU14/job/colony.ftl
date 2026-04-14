@@ -1,5 +1,26 @@
-au14-department-colony-description = The colony and all who live in it.
-au14-department-colony = Colony
+
+au14-department-colony-labor-description = Colonists who perform jobs such as mining and farming, this is the most essential and common department of the colony, often a stepping stone for colonists to move into other departments.
+au14-department-colony-labor = Colony Labor
+
+au14-department-colony-logistics-description = Colonists who manage the transport and acquisition of goods for the colony.
+au14-department-colony-logistics = Colony Logistics
+
+au14-department-colony-description = General colonists.
+au14-department-colony = Colonist
+
+au14-department-colony-description-service  = Colonists who provide  services to the colony, such as food service, waste management, and shopkeeping.
+au14-department-colony-service = Service
+
+
+au14-department-criminal-description = Criminals and prisoners of the colony.
+au14-department-criminal = Colony Criminals
+
+au14-department-colony-engineering-description = Colonists who ensure the integrity of the colony's infrastructure and conduct repairs as needed.
+au14-department-colony-engineering = Colony Engineering
+
+
+au14-department-colony-corporate = Corporate Employees
+au14-department-colony-corporate-description = Colonists who are employed directly by the Weyland-Yutani Corporation in a management or secure position.
 
 au14-department-colony-command = Colony Command
 au14-department-colony-command-description = Oversees all operations and governance of the colony.
@@ -17,6 +38,8 @@ au14-job-supervisors-colonycivilian = Colony Administrator
 
 au14-job-supervisors-colonyadministrator = The Colonial Administration
 
+au14-id-job-title-colony-civilian = Colony Civilian
+
 au14-job-name-civiliancolonist = Colonist
 au14-job-description-civiliancolonist = A resident of the colony.
 au14-job-prefix-civiliancolonist = CIV
@@ -26,6 +49,11 @@ au14-job-name-civilianfoodserviceworker = Food Service Worker
 au14-job-description-civilianfoodserviceworker = Run the kitchens, stock the bar, and keep the workforce fed.
 au14-job-prefix-civilianfoodserviceworker = FSW
 AU14JobCivilianFoodServiceWorker = Food Service Worker
+
+au14-job-name-civilianshopkeep = Shopkeep
+au14-job-description-civilianshopkeep = Keep the colony shop stocked, handle trade, and provide daily essentials.
+au14-job-prefix-civilianshopkeep = SHOP
+AU14JobCivilianShopkeep = Shopkeep
 
 au14-job-name-civilianwastemanagementspecialist = Waste Management Specialist
 au14-job-description-civilianwastemanagementspecialist = Clean, sanitize, and dispose. Sanity starts with sanitation.
@@ -52,8 +80,13 @@ au14-job-description-civilianengineer = Keep the colony’s lights on and repair
 au14-job-prefix-colonyengineer = ENGI
 AU14JobCivilianEngineer = Engineer
 
+au14-job-name-civilianheadofengineering = Head of Engineering
+au14-job-description-civilianheadofengineering = Lead engineering and logistics operations, prioritize repairs, and keep critical systems online.
+au14-job-prefix-headofengineering = HENG
+AU14JobCivilianHeadOfEngineering = Head of Engineering
+
 au14-job-name-foreman = Foreman
-au14-job-description-foreman = Oversee the Engineering and Logistics department. Handles work orders, priorities, and breakdowns.
+au14-job-description-foreman = Head of the labor department, coordinate with colonists to complete labor jobs and acqurie colony budget.
 au14-job-prefix-colonyforeman = FORM
 AU14JobCivilianForeman = Foreman
 
@@ -66,6 +99,11 @@ au14-job-name-civilianphysician = Physician
 au14-job-description-civilianphysician = Provide diagnosis, surgery, and treatment for the colony's personnel.
 au14-job-prefix-physician = DOCTR
 AU14JobCivilianPhysician = Physician
+
+au14-job-name-civilianheadphysician = Head Physician
+au14-job-description-civilianheadphysician = Direct the medical department, oversee treatment standards, and coordinate emergency medical response.
+au14-job-prefix-headphysician = HPHY
+AU14JobCivilianHeadPhysician = Head Physician
 
 au14-job-name-civiliannurse = Nurse
 au14-job-description-civiliannurse = Support the physician with patient care and medical logistics.
@@ -93,14 +131,14 @@ au14-job-prefix-cmbmarshal = CMBMAR
 AU14JobCivilianCMBMarshal = CMB Marshal
 
 au14-job-name-civilianscientist = Scientist
-au14-job-description-civilianscientist = You're a scientist sent by the Weyland-Yutani Corporation to study the environment  (Role available on LV-624 and in select modes)
+au14-job-description-civilianscientist = You're a scientist employed by the Weyland-Yutani corporation or government institution.
 au14-job-prefix-civilianscientist = SCI.
 AU14JobCivilianScientist = Scientist
 
-au14-job-name-usasfrecruiter = USASF Recruiter
-au14-job-description-usasfrecruiter = You're a recruiter from the United States Aero-Space Force. You've been stationed on the colony to legally enlist civilians into the USASF. (Role available on LV-624)
-au14-job-prefix-usasfrecruiter = USASFREC
-AU14JobCivilianUSASFRecruiter = USASF Recruiter
+au14-job-name-usasfrecruiter = UA Recruiter
+au14-job-description-usasfrecruiter = You're a recruiter from the United States Military. You've been stationed on the colony to legally enlist civilians into the UA Military. (Role available on LV-624)
+au14-job-prefix-usasfrecruiter = UA RECR
+AU14JobCivilianUSASFRecruiter = UA Recruiter
 
 au14-job-name-civiliancolonysynthetic = Colony Operations Synthetic
 au14-job-description-civiliancolonysynthetic = You're an artificial person created by the Weyland-Yutani Corporation. Aid the colony personnel in their day to day tasks. You are incapable of utilizing ballistic weaponry. (WARNING: THIS ROLE REQUIRES HIGH ROLEPLAY PROWESS)
@@ -109,13 +147,13 @@ AU14JobCivilianColonySynthetic = Colony Operations Synthetic
 
 
 au14-job-name-civiliankellandwarden = Kelland Warden
-au14-job-description-civiliankellandwarden = You're middle management at the Kelland mining company, you have been assigned to management of the prison at this colony. Have your prisoners: work, produce and behave. If they're well-tempered allow them greater privilege or free travel in the colony. (Role available on LV-747 and in select modes)
+au14-job-description-civiliankellandwarden = You're middle management at the Kelland mining company, a subsiduary of weyland-yutani you have been assigned to management of the prison at this colony. Have your prisoners: work, produce and behave. If they're well-tempered allow them greater privilege or free travel in the colony. (Role available on LV-747 and in select modes)
 au14-job-prefix-civiliankellandwarden = WARD
 AU14JobCivilianKellandWarden = Kelland Warden
 
 
 au14-job-name-civilianprisoner = Prisoner
-au14-job-description-civilianprisoner = You're a prisoner held at a corporate facility, if you're cooperative you may be allowed greater privilege (Role available on LV-747 and select modes)
+au14-job-description-civilianprisoner = You're a prisoner held at a corporate facility, if you're cooperative you may be allowed greater privilege.
 au14-job-prefix-civilianprisoner = INMATE
 AU14JobCivilianPrisoner = Prisoner
 
@@ -140,6 +178,10 @@ au14-job-description-civilianpapofficer = You're an Officer of the UPP People's 
 au14-job-prefix-civilianpapofficer = PAP
 AU14JobCivilianPaPOfficer = PAP Officer
 
+au14-job-name-civilianheadofservice = Head of Service
+au14-job-description-civilianheadofservice = Ensure stores and services are stocked, kitchens are manned and the colony stays clean. Coordinate with your department and the foreman to ensure the colony's needs are met.
+AU14JobCivilianHeadOfService = Head of Service
+au14-job-prefix-headofservice = HOS
 
 
 au14-job-name-leoleader = Law Enforcement Leader
