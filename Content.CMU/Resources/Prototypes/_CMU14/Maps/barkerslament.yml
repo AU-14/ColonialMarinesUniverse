@@ -24,6 +24,9 @@
             # Colony Command (non department)
             AU14JobCivilianCorporateLiaison: [1, 1]
             AU14JobCivilianColonyAdministrator: [1, 1]
+            AU14JobCivilianHeadOfEngineering: [1, 1]
+            AU14JobCivilianHeadOfService: [1, 1]
+            AU14JobCivilianHeadPhysician: [1, 1]
 
             # Security/LEO
             AU14JobCivilianCMBMarshal: [1, 1]
@@ -45,3 +48,5 @@
             AU14JobCivilianMiner: [10, 10]
             AU14JobCivilianPrisoner: [7, 7]
             AU14JobCivilianKellandWarden: [1, 1]
+            AU14JobMobBoss: [1, 1]
+            AU14JobMobGoon: [4, 4]
