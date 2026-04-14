@@ -58,6 +58,10 @@ public sealed class AllegianceSystem : EntitySystem
         if (job is { IgnoreAllegiance: true })
             return true;
 
+        // Characters with no allegiance (null) are considered unaffiliated and may join any platoon.
+        if (profile.Allegiance == null)
+            return true;
+
         if (platoon.Allegiance == null)
             return true;
 
@@ -82,6 +86,10 @@ public sealed class AllegianceSystem : EntitySystem
             return false;
 
         if (job is { IgnoreAllegiance: true })
+            return true;
+
+        // Characters with no allegiance (null) are considered unaffiliated and may join any colony.
+        if (profile.Allegiance == null)
             return true;
 
         if (colony.Allegiance == null)
@@ -109,7 +117,11 @@ public sealed class AllegianceSystem : EntitySystem
         if (job.AllegianceOverride == null)
             return true;
 
-        return profile.Allegiance != null && profile.Allegiance.Value == job.AllegianceOverride.Value;
+        // Characters with no allegiance should be allowed to take jobs unless the job explicitly requires a specific allegiance.
+        if (profile.Allegiance == null)
+            return true;
+
+        return profile.Allegiance.Value == job.AllegianceOverride.Value;
     }
 
     /// <summary>

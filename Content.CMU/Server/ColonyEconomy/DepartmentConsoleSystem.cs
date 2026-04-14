@@ -578,7 +578,7 @@ public sealed class DepartmentConsoleSystem : EntitySystem
         // Announce salary dispensal colony-wide
         if (announcements.Count > 0)
         {
-            var message = Loc.GetString("department-console-salaries-dispensed") + "\n" + string.Join("\n", announcements);
+            var message = Loc.GetString("department-console-salaries-dispensed"), announcements);
             var sender = Loc.GetString("department-console-salary-announcement-title");
             var announcementSound = new SoundPathSpecifier("/Audio/Announcements/announce.ogg");
             _chatSystem.DispatchGlobalAnnouncement(message, sender, true, announcementSound);
