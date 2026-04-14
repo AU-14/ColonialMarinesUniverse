@@ -48,3 +48,5 @@
             AU14JobCivilianMiner: [10, 10]
             AU14JobCivilianPrisoner: [7, 7]
             AU14JobCivilianKellandWarden: [1, 1]
+            AU14JobMobBoss: [1, 1]
+            AU14JobMobGoon: [4, 4]
