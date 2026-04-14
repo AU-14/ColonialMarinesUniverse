@@ -181,7 +181,7 @@ AU14JobCivilianPaPOfficer = PAP Officer
 au14-job-name-civilianheadofservice = Head of Service
 au14-job-description-civilianheadofservice = Ensure stores and services are stocked, kitchens are manned and the colony stays clean. Coordinate with your department and the foreman to ensure the colony's needs are met.
 AU14JobCivilianHeadOfService = Head of Service
-
+au14-job-prefix-headofservice - HOS
 
 
 au14-job-name-leoleader = Law Enforcement Leader
