@@ -10,8 +10,6 @@ au14-department-prison-description = Roles limited to use on the prison gamemode
 au14-department-isolation = Isolation
 au14-department-isolation-description = Roles limited to use on the Isolation gamemode
 
-au14-department-criminal = Criminal
-au14-department-criminal-description = Roles limited to use on the Criminal gamemode
 
 au14-department-weyu = WeYu
 au14-department-wyu-description = Jobs part of Weyland Yutani
@@ -193,7 +191,7 @@ au14-usarmy-armored-greeting = You are a member of US Army 32nd Armored Division
 
     You are friendly to GOVFOR, neutral to civilians and hostile to CLF!
 
-au14-job-description-forecon-killteam = You are a member of FORECON Kill Team. Assasinate your target. 
+au14-job-description-forecon-killteam = You are a member of FORECON Kill Team. Assasinate your target.
 
 au14-job-description-forecon-killteam-greeting = You are a member of USCMC elite FORECON special forces unit!
 
@@ -220,9 +218,9 @@ au14-job-description-forecon-firstrecon-greeting = You are a member of USCMC eli
 au14-job-name-forecon-corpsman = Hospital Corpsman 2. Class
 au14-job-prefix-forecon-corpsman = HC2
 
-au14-wyht-description = You are a part of Weyland-Yutani Hazard Transportation party. Transport your crate to the nearest WeYu facility or make one to perform crazy experiments! 
+au14-wyht-description = You are a part of Weyland-Yutani Hazard Transportation party. Transport your crate to the nearest WeYu facility or make one to perform crazy experiments!
 
-au14-wyht-greeting = You are a part of Weyland-Yutani Hazard Transportation party. 
+au14-wyht-greeting = You are a part of Weyland-Yutani Hazard Transportation party.
 
     Transport your crate to the nearest WeYu facility. If none present, you are equipped with medical tents.
 
@@ -234,7 +232,7 @@ au14-wyht-greeting = You are a part of Weyland-Yutani Hazard Transportation part
 
 au14-pmcparty-description = You are a part of Weyland-Yutani PMC party! You were called for a special mission in the area, follow your orders.
 
-au14-pmcparty-greeting = You are a part of Weyland-Yutani PMC party! 
+au14-pmcparty-greeting = You are a part of Weyland-Yutani PMC party!
 
     You were called for a special mission in the area, follow your orders.
 
