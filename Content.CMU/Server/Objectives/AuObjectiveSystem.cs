@@ -556,6 +556,8 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             {
                 if (killComp.RespawnOnRepeat)
                     killComp.MobsSpawned = false;
+
+                killComp.AmountKilledPerFaction.Clear();
             }
             // Interact objective: reset completions and re-register entities
             if (_entityManager.TryGetComponent(uid, out InteractObjectiveComponent? interactRepeatComp))

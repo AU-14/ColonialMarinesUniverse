@@ -160,13 +160,14 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                             foreach (var (jobProtoId, entry) in stationOnlyScaling)
                             {
                                 _stationJobs.TryGetJobSlot(stationUid.Value, jobProtoId.ToString(), out var existingMaybe, stationJobs);
-                                if (existingMaybe == null && entry.Benchmark == null)
+                                if (existingMaybe == null)
                                 {
-                                    // Don't modify unlimited jobs without an explicit benchmark baseline.
+                                    // Job doesn't exist on station yet — it will be added (and scaled) by its owning rule.
+                                    // Never pre-seed it here, or the owning rule will add on top and double the count.
                                     continue;
                                 }
 
-                                var existingSlots = existingMaybe ?? 0;
+                                var existingSlots = existingMaybe.Value;
                                 var scaledSlots = JobScaling.CalculateScaledSlots(playerCount, existingSlots, entry);
 
                                 if (entry.Benchmark != null)
