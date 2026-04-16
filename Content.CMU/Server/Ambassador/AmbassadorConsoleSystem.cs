@@ -241,12 +241,6 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
             if (a.SignalBoostActive) multiplier = Math.Min(multiplier, a.SignalBoostMultiplier);
             if (a.SignalJamActive) multiplier = Math.Max(multiplier, a.SignalJamMultiplier);
         }
-        var aiQ = EntityQueryEnumerator<AICoreConsoleComponent>();
-        while (aiQ.MoveNext(out _, out var ai))
-        {
-            if (ai.SignalBoostActive) multiplier = Math.Min(multiplier, ai.SignalBoostMultiplier);
-            if (ai.SignalJamActive) multiplier = Math.Max(multiplier, ai.SignalJamMultiplier);
-        }
         _thirdParty.SetSignalIntervalMultiplier(multiplier);
     }
 
@@ -254,8 +248,6 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
     {
         var ambQ = EntityQueryEnumerator<AmbassadorConsoleComponent>();
         while (ambQ.MoveNext(out _, out var a)) { if (a.CommsJamActive) return true; }
-        var aiQ = EntityQueryEnumerator<AICoreConsoleComponent>();
-        while (aiQ.MoveNext(out _, out var ai)) { if (ai.CommsJamActive) return true; }
         return false;
     }
 
