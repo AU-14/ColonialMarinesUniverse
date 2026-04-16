@@ -1,16 +1,15 @@
-using Content.Server.Storage.Components;
+using Content.Server.AU14.Ambassador;
 using Content.Shared.AU14.ColonyEconomy;
 using Content.Shared.Stacks;
-using Content.Shared.Storage;
 using Robust.Shared.Containers;
-using Robust.Shared.GameObjects;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server.AU14.ColonyEconomy;
 
 public sealed class SubmissionStorageSystem : EntitySystem
 {
     [Dependency] private readonly ColonyBudgetSystem _colonyBudget = default!;
+    [Dependency] private readonly AmbassadorConsoleSystem _ambassador = default!;
+    [Dependency] private readonly CorporateConsoleSystem _corporateConsole = default!;
 
     public override void Initialize()
     {
@@ -25,25 +24,23 @@ public sealed class SubmissionStorageSystem : EntitySystem
         if (!EntityManager.TryGetComponent(uid, out SubmissionStorageComponent? submission))
             return;
 
-        int stackCount = 1;
+        var mult = _ambassador.GetSubmissionMultiplier();
+        var tariff = _corporateConsole.GetTariff();
+
+        float reward;
         if (EntityManager.TryGetComponent<StackComponent>(args.Entity, out var stack))
-        {
-            stackCount = stack.Count;
-            _colonyBudget.AddToBudget(submission.RewardAmount * stackCount);
-
-            EntityManager.QueueDeleteEntity(args.Entity);
-
-        }
-
+            reward = submission.RewardAmount * stack.Count * mult;
         else
-        {
-            _colonyBudget.AddToBudget(submission.RewardAmount);
+            reward = submission.RewardAmount * mult;
 
-            EntityManager.QueueDeleteEntity(args.Entity);
+        EntityManager.QueueDeleteEntity(args.Entity);
 
-        }
+        // Split: tariff % goes to corporate budget, remainder to colony budget
+        var tariffAmount = reward * tariff;
+        var colonyAmount = reward - tariffAmount;
 
-
+        _colonyBudget.AddToBudget(colonyAmount);
+        if (tariffAmount > 0f)
+            _corporateConsole.AddToCorporateBudget(tariffAmount);
     }
-    }
-
+}

@@ -29,6 +29,8 @@ public sealed class ColonyCommsConsoleSystem : EntitySystem
 
     private void OnMessageSent(EntityUid uid, ColonyCommsConsoleComponent component, ColonyCommsConsoleMessage args)
     {
+
+
         // Send to radio channel (for intercoms)
         _radioSystem.SendRadioMessage(uid, args.Message, "colonyalert", uid);
 

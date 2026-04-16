@@ -1,0 +1,47 @@
+﻿<ambassador:AmbassadorConsoleWindow
+    xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ambassador="clr-namespace:Content.Client.AU14.Ambassador"
+    Title="Ambassador Console" MinSize="500 450">
+    <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+            <Label Name="BudgetLabel" Access="Public" Text="Budget: $0" StyleClasses="LabelHeading" Margin="4 4" />
+            <Label Name="FactionLabel" Access="Public" Text="" Margin="4 2" />
+            <Label Text="-- Withdraw --" Margin="4 2" />
+            <BoxContainer Orientation="Horizontal" Margin="4 2">
+                <Button Name="Withdraw100" Access="Public" Text="$100" Margin="2 0" />
+                <Button Name="Withdraw250" Access="Public" Text="$250" Margin="2 0" />
+                <Button Name="Withdraw500" Access="Public" Text="$500" Margin="2 0" />
+            </BoxContainer>
+            <Label Text="-- Economy --" Margin="4 2" />
+            <BoxContainer Orientation="Horizontal" Margin="4 2">
+                <Button Name="ToggleEmbargo" Access="Public" Text="Toggle Embargo" Margin="2 0" />
+                <Button Name="ToggleTradePact" Access="Public" Text="Toggle Trade Pact" Margin="2 0" />
+            </BoxContainer>
+            <Label Name="EmbargoStatus" Access="Public" Text="" Margin="8 0" />
+            <Label Name="TradePactStatus" Access="Public" Text="" Margin="8 0" />
+            <Label Text="-- Communications --" Margin="4 2" />
+            <Button Name="ToggleCommsJam" Access="Public" Text="Toggle Comms Jam" Margin="4 2" />
+            <Label Name="CommsJamStatus" Access="Public" Text="" Margin="8 0" />
+            <Label Text="-- Broadcast --" Margin="4 2" />
+            <BoxContainer Orientation="Horizontal" Margin="4 2">
+                <LineEdit Name="BroadcastInput" Access="Public" HorizontalExpand="True" PlaceHolder="Enter message..." Margin="2 0" />
+                <Button Name="SendBroadcast" Access="Public" Text="Send" Margin="2 0" />
+            </BoxContainer>
+            <Label Name="BroadcastCostLabel" Access="Public" Text="" Margin="8 0" />
+            <Label Text="-- Signal Control --" Margin="4 2" />
+            <BoxContainer Orientation="Horizontal" Margin="4 2">
+                <Button Name="ToggleSignalBoost" Access="Public" Text="Signal Boost" Margin="2 0" />
+                <Button Name="ToggleSignalJam" Access="Public" Text="Signal Jam" Margin="2 0" />
+            </BoxContainer>
+            <Label Name="SignalStatus" Access="Public" Text="" Margin="8 0" />
+            <Label Text="-- Colony Economy Overview --" Margin="4 2" />
+            <BoxContainer Name="EconomyStatusPanel" Access="Public" Orientation="Vertical" Margin="8 2" />
+            <Label Text="-- Incoming Shuttle Radar --" Margin="4 2" />
+            <Button Name="ScanRadarBtn" Access="Public" Text="Scan Radar" HorizontalExpand="True" Margin="4 2" />
+            <BoxContainer Name="RadarList" Access="Public" Orientation="Vertical" Margin="8 2" />
+            <Label Text="-- Third Party Support --" Margin="4 2" />
+            <Button Name="OpenThirdPartyBtn" Access="Public" Text="Open Third Party Menu" HorizontalExpand="True" Margin="4 2" />
+        </BoxContainer>
+    </ScrollContainer>
+</ambassador:AmbassadorConsoleWindow>

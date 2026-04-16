@@ -36,6 +36,14 @@ public sealed partial class DepartmentConsoleComponent : Component
     public bool ColonyManaged = true;
 
     /// <summary>
+    ///     The ASRS faction this department console orders from.
+    ///     Defaults to "colony". Set to "corporate" to route orders through the corporate ASRS.
+    ///     When set to "corporate", a sales tax is applied and the tax revenue goes to the colony budget.
+    /// </summary>
+    [DataField("asrsFaction")]
+    public string AsrsFaction = "colony";
+
+    /// <summary>
     ///     Budget for this department, filled via budget console transfers or cash insertion.
     /// </summary>
     public float DepartmentBudget;

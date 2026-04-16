@@ -12,6 +12,8 @@ public sealed class ColonyAtmSystem : EntitySystem
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly StackSystem _stack = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly AdminConsoleSystem _adminConsole = default!;
+    [Dependency] private readonly ColonyBudgetSystem _colonyBudget = default!;
 
     public override void Initialize()
     {
@@ -41,14 +43,15 @@ public sealed class ColonyAtmSystem : EntitySystem
 
     private void OnUiOpened(EntityUid uid, ColonyAtmComponent comp, BoundUIOpenedEvent args)
     {
+        var taxPct = _adminConsole.GetIncomeTax() * 100f;
         if (comp.SwipedCard == null || !TryComp<IdCardComponent>(comp.SwipedCard.Value, out var idCard))
         {
-            var state = new ColonyAtmBuiState(0, "No ID card swiped");
+            var state = new ColonyAtmBuiState(0, "No ID card swiped", taxPct);
             _ui.SetUiState(uid, ColonyAtmUi.Key, state);
             return;
         }
 
-        var uiState = new ColonyAtmBuiState(idCard.AccountBalance, idCard.FullName ?? "Unknown");
+        var uiState = new ColonyAtmBuiState(idCard.AccountBalance, idCard.FullName ?? "Unknown", taxPct);
         _ui.SetUiState(uid, ColonyAtmUi.Key, uiState);
     }
 
@@ -73,9 +76,18 @@ public sealed class ColonyAtmSystem : EntitySystem
         idCard.AccountBalance -= msg.Amount;
         Dirty(comp.SwipedCard.Value, idCard);
 
-        _stack.SpawnMultiple("RMCSpaceCash", msg.Amount, uid);
+        // Apply income tax — tax goes to colony budget, remainder dispensed as cash
+        var incomeTaxRate = _adminConsole.GetIncomeTax();
+        var taxAmount = (int) Math.Floor(msg.Amount * incomeTaxRate);
+        var netAmount = msg.Amount - taxAmount;
 
-        var state = new ColonyAtmBuiState(idCard.AccountBalance, idCard.FullName ?? "Unknown");
+        if (netAmount > 0)
+            _stack.SpawnMultiple("RMCSpaceCash", netAmount, uid);
+        if (taxAmount > 0)
+            _colonyBudget.AddToBudget(taxAmount);
+
+        var taxPct = incomeTaxRate * 100f;
+        var state = new ColonyAtmBuiState(idCard.AccountBalance, idCard.FullName ?? "Unknown", taxPct);
         _ui.SetUiState(uid, ColonyAtmUi.Key, state);
     }
 }

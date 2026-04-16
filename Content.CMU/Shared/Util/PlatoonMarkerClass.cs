@@ -48,6 +48,7 @@ namespace Content.Shared.AU14.util
         TechTree,
         GroundsideOps,
         TacticalMap,
-        Analyzer
+        Analyzer,
+        AICore
     }
 }

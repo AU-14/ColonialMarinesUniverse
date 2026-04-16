@@ -25,6 +25,9 @@ public sealed class ColonyAtmBui(EntityUid owner, Enum uiKey) : BoundUserInterfa
 
         _window.OwnerLabel.Text = $"Account: {s.OwnerName}";
         _window.BalanceLabel.Text = $"Balance: ${s.Balance}";
+        _window.IncomeTaxLabel.Text = s.IncomeTaxPercent > 0
+            ? $"Income Tax: {s.IncomeTaxPercent:F0}% (applied on withdrawal)"
+            : "No income tax.";
     }
 }
 

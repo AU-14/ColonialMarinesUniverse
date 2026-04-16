@@ -6,30 +6,31 @@
     <BoxContainer Orientation="Vertical">
         <Label Name="OwnerLabel" Access="Public" Text="Account: Unknown" />
         <Label Name="BalanceLabel" Access="Public" Text="Balance: $0" />
+        <Label Name="IncomeTaxLabel" Access="Public" Text="" StyleClasses="LabelSubText" Margin="0 2" />
         <BoxContainer Orientation="Horizontal">
             <Control HorizontalExpand="True" />
-            <Button Name="Withdraw50" Access="Public" Text="$50"
+            <Button Name="Withdraw50" Access="Public" Text="10"
                     StyleClasses="OpenBoth" HorizontalExpand="True" SizeFlagsStretchRatio="3"
                     Margin="0 2" />
             <Control HorizontalExpand="True" />
         </BoxContainer>
         <BoxContainer Orientation="Horizontal">
             <Control HorizontalExpand="True" />
-            <Button Name="Withdraw100" Access="Public" Text="$100"
+            <Button Name="Withdraw100" Access="Public" Text="25"
                     StyleClasses="OpenBoth" HorizontalExpand="True" SizeFlagsStretchRatio="3"
                     Margin="0 2" />
             <Control HorizontalExpand="True" />
         </BoxContainer>
         <BoxContainer Orientation="Horizontal">
             <Control HorizontalExpand="True" />
-            <Button Name="Withdraw250" Access="Public" Text="$250"
+            <Button Name="Withdraw250" Access="Public" Text="100"
                     StyleClasses="OpenBoth" HorizontalExpand="True" SizeFlagsStretchRatio="3"
                     Margin="0 2" />
             <Control HorizontalExpand="True" />
         </BoxContainer>
         <BoxContainer Orientation="Horizontal">
             <Control HorizontalExpand="True" />
-            <Button Name="Withdraw500" Access="Public" Text="$500"
+            <Button Name="Withdraw500" Access="Public" Text="$250"
                     StyleClasses="OpenBoth" HorizontalExpand="True" SizeFlagsStretchRatio="3"
                     Margin="0 2" />
             <Control HorizontalExpand="True" />
