@@ -47,7 +47,7 @@ public sealed class BudgetConsoleSystem : EntitySystem
         _budget.AddToBudget(-msg.Amount);
         _stack.SpawnMultiple("RMCSpaceCash", (int) msg.Amount, uid);
 
-        _ui.SetUiState(uid, BudgetConsoleUi.Key, BuildState());
+        UpdateAllUi();
     }
 
     private void OnTransferToDept(EntityUid uid, BudgetConsoleComponent comp, BudgetConsoleTransferToDeptBuiMsg msg)
@@ -55,13 +55,13 @@ public sealed class BudgetConsoleSystem : EntitySystem
         var deptUid = _entities.GetEntity(msg.DeptConsoleUid);
         _department.TransferToDepartment(deptUid, msg.Amount);
 
-        _ui.SetUiState(uid, BudgetConsoleUi.Key, BuildState());
+        UpdateAllUi();
     }
 
     private void OnDispenseSalaries(EntityUid uid, BudgetConsoleComponent comp, BudgetConsoleDispenseSalariesBuiMsg msg)
     {
         _department.DispenseSalaries();
-        _ui.SetUiState(uid, BudgetConsoleUi.Key, BuildState());
+        UpdateAllUi();
     }
 
     private void OnCashInserted(EntityUid uid, BudgetConsoleComponent comp, EntInsertedIntoContainerMessage args)
@@ -72,6 +72,14 @@ public sealed class BudgetConsoleSystem : EntitySystem
 
         _budget.AddToBudget(stackCount);
         _entities.QueueDeleteEntity(args.Entity);
-        _ui.SetUiState(uid, BudgetConsoleUi.Key, BuildState());
+        UpdateAllUi();
+    }
+
+    private void UpdateAllUi()
+    {
+        var state = BuildState();
+        var query = EntityQueryEnumerator<BudgetConsoleComponent>();
+        while (query.MoveNext(out var uid, out _))
+            _ui.SetUiState(uid, BudgetConsoleUi.Key, state);
     }
 }

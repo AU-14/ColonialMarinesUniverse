@@ -24,11 +24,13 @@ public sealed class ColonyAtmBuiState : BoundUserInterfaceState
 {
     public int Balance { get; }
     public string OwnerName { get; }
+    public float IncomeTaxPercent { get; }
 
-    public ColonyAtmBuiState(int balance, string ownerName)
+    public ColonyAtmBuiState(int balance, string ownerName, float incomeTaxPercent = 0f)
     {
         Balance = balance;
         OwnerName = ownerName;
+        IncomeTaxPercent = incomeTaxPercent;
     }
 }
 

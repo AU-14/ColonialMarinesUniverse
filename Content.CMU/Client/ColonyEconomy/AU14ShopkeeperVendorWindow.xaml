@@ -1,0 +1,27 @@
+<controls:AU14ShopkeeperVendorWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client.AU14.ColonyEconomy"
+    Title="Shop" MinSize="520 480">
+    <BoxContainer Orientation="Vertical" SeparationOverride="4" Margin="8">
+        <Label Name="InsertedCashLabel" Access="Public" Text="Inserted: $0"
+               StyleClasses="LabelHeading" Margin="0 4" />
+        <Label Text="Insert cash into the slot, then buy an item."
+               StyleClasses="LabelSubText" Margin="0 2" />
+        <Label Name="SalesTaxLabel" Access="Public" Text="" StyleClasses="LabelSubText" Margin="0 2" />
+        <Label Text="-- Items For Sale --" Margin="0 4" />
+        <ScrollContainer VerticalExpand="True" HScrollEnabled="False" MinSize="0 220">
+            <BoxContainer Name="ItemList" Access="Public" Orientation="Vertical" SeparationOverride="2" />
+        </ScrollContainer>
+        <Button Name="ReturnChangeBtn" Access="Public" Text="Return Change"
+                HorizontalExpand="True" Margin="0 4" />
+        <!-- Manage section: only visible for shopkeepers -->
+        <BoxContainer Name="ManageSection" Access="Public" Orientation="Vertical" SeparationOverride="4" Visible="False">
+            <Label Text="-- Manage Stock --" Margin="0 6" StyleClasses="LabelHeading" />
+            <Label Text="Use an item on this machine to add stock. Edit name/price below."
+                   StyleClasses="LabelSubText" Margin="0 2" />
+            <ScrollContainer VerticalExpand="True" HScrollEnabled="False" MinSize="0 160">
+                <BoxContainer Name="ManageList" Access="Public" Orientation="Vertical" SeparationOverride="4" />
+            </ScrollContainer>
+        </BoxContainer>
+    </BoxContainer>
+</controls:AU14ShopkeeperVendorWindow>

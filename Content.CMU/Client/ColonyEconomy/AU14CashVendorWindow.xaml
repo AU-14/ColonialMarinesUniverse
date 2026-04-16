@@ -1,0 +1,30 @@
+<controls:FancyWindow
+    xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+    MinHeight="300" MinWidth="300">
+    <BoxContainer Orientation="Vertical">
+        <!-- Cash display header -->
+        <BoxContainer Orientation="Horizontal" Margin="8 4">
+            <Label Text="Credit: " StyleClasses="LabelKeyText" />
+            <Label Name="InsertedCashLabel" Access="Public" Text="$0" StyleClasses="LabelKeyText" HorizontalExpand="True" />
+            <Button Name="ReturnChangeBtn" Access="Public" Text="Return Change" MinWidth="120" />
+        </BoxContainer>
+        <PanelContainer StyleClasses="LowDivider" />
+        <!-- Search bar -->
+        <LineEdit Name="SearchBar" Access="Public" PlaceHolder="Search..." HorizontalExpand="True" Margin="4 4" />
+        <!-- Item list -->
+        <ScrollContainer VerticalExpand="True" HScrollEnabled="False" Margin="4 0">
+            <BoxContainer Name="ItemList" Access="Public" Orientation="Vertical" SeparationOverride="2" />
+        </ScrollContainer>
+        <!-- Footer -->
+        <BoxContainer Orientation="Vertical">
+            <PanelContainer StyleClasses="LowDivider" />
+            <BoxContainer Orientation="Horizontal" Margin="10 2 5 0" VerticalAlignment="Bottom">
+                <Label Text="Insert cash, then select item." StyleClasses="WindowFooterText" />
+                <Label Name="TaxFooterLabel" Access="Public" Text="Prices incl. tax" StyleClasses="WindowFooterText"
+                       HorizontalAlignment="Right" HorizontalExpand="True" Margin="0 0 5 0" />
+            </BoxContainer>
+        </BoxContainer>
+    </BoxContainer>
+</controls:FancyWindow>
