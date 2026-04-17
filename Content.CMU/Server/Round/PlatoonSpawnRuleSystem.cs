@@ -416,38 +416,6 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                         }
                         continue;
                     }
-
-                    // --- AI CORE MARKER LOGIC (shipside) ---
-                    if (markerClass == PlatoonMarkerClass.AICore)
-                    {
-                        string? aiCoreProto = null;
-                        if (shipFaction.Faction == "govfor")
-                            aiCoreProto = "AU14AICoreGovfor";
-                        else if (shipFaction.Faction == "opfor")
-                            aiCoreProto = "AU14AICoreOpfor";
-
-                        if (aiCoreProto != null && _prototypeManager.TryIndex(aiCoreProto, out _))
-                        {
-                            _entityManager.SpawnEntity(aiCoreProto, transform.Coordinates);
-                        }
-                        continue;
-                    }
-
-                    // --- TACTICAL MAP MARKER LOGIC (shipside) ---
-                    if (markerClass == PlatoonMarkerClass.TacticalMap)
-                    {
-                        string? tacMapProto = null;
-                        if (shipFaction.Faction == "govfor")
-                            tacMapProto = "AU14TacticalMapTableGovfor";
-                        else if (shipFaction.Faction == "opfor")
-                            tacMapProto = "AU14TacticalMapTableOpfor";
-
-                        if (tacMapProto != null && _prototypeManager.TryIndex(tacMapProto, out _))
-                        {
-                            _entityManager.SpawnEntity(tacMapProto, transform.Coordinates);
-                        }
-                        continue;
-                    }
                 }
             }
         }
@@ -515,38 +483,6 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
                 if (objectivesConsoleProtoId != null && _prototypeManager.TryIndex(objectivesConsoleProtoId, out _))
                 {
                     _entityManager.SpawnEntity(objectivesConsoleProtoId, transform.Coordinates);
-                }
-                usedMarkers.Add(markerUid);
-                continue;
-            }
-
-            // --- TACTICAL MAP MARKER LOGIC (ground-side) ---
-            if (markerClass == PlatoonMarkerClass.TacticalMap)
-            {
-                string? tacMapProtoId = null;
-                if (marker.Govfor)
-                    tacMapProtoId = "AU14TacticalMapTableGovfor";
-                else if (marker.Opfor)
-                    tacMapProtoId = "AU14TacticalMapTableOpfor";
-                if (tacMapProtoId != null && _prototypeManager.TryIndex(tacMapProtoId, out _))
-                {
-                    _entityManager.SpawnEntity(tacMapProtoId, transform.Coordinates);
-                }
-                usedMarkers.Add(markerUid);
-                continue;
-            }
-
-            // --- AI CORE MARKER LOGIC (ground-side) ---
-            if (markerClass == PlatoonMarkerClass.AICore)
-            {
-                string? aiCoreProto = null;
-                if (marker.Govfor)
-                    aiCoreProto = "AU14AICoreGovfor";
-                else if (marker.Opfor)
-                    aiCoreProto = "AU14AICoreOpfor";
-                if (aiCoreProto != null && _prototypeManager.TryIndex(aiCoreProto, out _))
-                {
-                    _entityManager.SpawnEntity(aiCoreProto, transform.Coordinates);
                 }
                 usedMarkers.Add(markerUid);
                 continue;
