@@ -27,4 +27,6 @@ public sealed partial class CorporateConsoleComponent : Component
     /// </summary>
     [DataField("callableParties")]
     public Dictionary<string, float> CallableParties = new();
+
+    public HashSet<string> CalledParties = new();
 }
