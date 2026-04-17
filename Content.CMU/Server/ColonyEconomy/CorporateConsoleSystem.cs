@@ -118,6 +118,8 @@ public sealed class CorporateConsoleSystem : EntitySystem
     {
         if (!comp.CallableParties.TryGetValue(msg.ThirdPartyId, out var cost))
             return;
+        if (comp.CalledParties.Contains(msg.ThirdPartyId))
+            return;
         if (comp.CorporateBudget < cost)
             return;
         if (!_proto.TryIndex<AuThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto))
@@ -128,7 +130,10 @@ public sealed class CorporateConsoleSystem : EntitySystem
         // Deduct from ALL corporate consoles (they share one budget)
         var q = EntityQueryEnumerator<CorporateConsoleComponent>();
         while (q.MoveNext(out _, out var c))
+        {
             c.CorporateBudget -= cost;
+            c.CalledParties.Add(msg.ThirdPartyId);
+        }
 
         _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
         UpdateAllUi();
@@ -212,7 +217,7 @@ public sealed class CorporateConsoleSystem : EntitySystem
                 thirdParties[id] = (proto.DisplayName ?? proto.ID, cost);
         }
         _ui.SetUiState(uid, CorporateConsoleThirdPartyUi.Key,
-            new CorporateConsoleThirdPartyBuiState(comp.CorporateBudget, thirdParties));
+            new CorporateConsoleThirdPartyBuiState(comp.CorporateBudget, thirdParties, comp.CalledParties));
     }
 
     private void UpdateAllUi()
