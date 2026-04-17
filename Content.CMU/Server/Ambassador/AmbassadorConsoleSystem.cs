@@ -105,6 +105,7 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
             comp.SignalBoostTimer = source.SignalBoostTimer;
             comp.SignalJamActive = source.SignalJamActive;
             comp.SignalJamTimer = source.SignalJamTimer;
+            comp.CalledParties = new HashSet<string>(source.CalledParties);
         }
     }
 
@@ -337,7 +338,7 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
                 thirdParties[id] = (displayName, cost);
             }
         }
-        var thirdPartyState = new AmbassadorThirdPartyBuiState(comp.Budget, thirdParties);
+        var thirdPartyState = new AmbassadorThirdPartyBuiState(comp.Budget, thirdParties, comp.CalledParties);
         _ui.SetUiState(uid, AmbassadorThirdPartyUi.Key, thirdPartyState);
     }
 
@@ -371,10 +372,12 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
     private void OnCallThirdParty(EntityUid uid, AmbassadorConsoleComponent comp, AmbassadorCallThirdPartyBuiMsg msg)
     {
         if (!comp.CallableParties.TryGetValue(msg.ThirdPartyId, out var cost)) return;
+        if (comp.CalledParties.Contains(msg.ThirdPartyId)) return;
         if (comp.Budget < cost) return;
         if (!_proto.TryIndex<AuThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto)) return;
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto)) return;
         comp.Budget -= cost;
+        comp.CalledParties.Add(msg.ThirdPartyId);
         _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
         UpdateAllFactionUi(comp);
     }
