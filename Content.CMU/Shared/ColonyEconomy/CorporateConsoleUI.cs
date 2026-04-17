@@ -39,14 +39,14 @@ public sealed class CorporateConsoleBuiState : BoundUserInterfaceState
 public sealed class CorporateConsoleThirdPartyBuiState : BoundUserInterfaceState
 {
     public float Budget { get; }
-
-    /// <summary>Third-party ID → (display name, cost).</summary>
     public Dictionary<string, (string DisplayName, float Cost)> CallableParties { get; }
+    public HashSet<string> CalledParties { get; }
 
-    public CorporateConsoleThirdPartyBuiState(float budget, Dictionary<string, (string DisplayName, float Cost)> callableParties)
+    public CorporateConsoleThirdPartyBuiState(float budget, Dictionary<string, (string DisplayName, float Cost)> callableParties, HashSet<string> calledParties)
     {
         Budget = budget;
         CallableParties = callableParties;
+        CalledParties = calledParties;
     }
 }
 

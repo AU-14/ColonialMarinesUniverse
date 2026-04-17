@@ -155,6 +155,8 @@ public sealed class AdminConsoleSystem : EntitySystem
     {
         if (!comp.CallableParties.TryGetValue(msg.ThirdPartyId, out var cost))
             return;
+        if (comp.CalledParties.Contains(msg.ThirdPartyId))
+            return;
         if (_colonyBudget.GetBudget() < cost)
             return;
         if (!_proto.TryIndex<AuThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto))
@@ -163,6 +165,12 @@ public sealed class AdminConsoleSystem : EntitySystem
             return;
 
         _colonyBudget.AddToBudget(-cost);
+
+        // Mark as called on all admin consoles
+        var q = EntityQueryEnumerator<AdminConsoleComponent>();
+        while (q.MoveNext(out _, out var c))
+            c.CalledParties.Add(msg.ThirdPartyId);
+
         _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
         UpdateAllUi();
     }
@@ -182,7 +190,7 @@ public sealed class AdminConsoleSystem : EntitySystem
                 thirdParties[id] = (proto.DisplayName ?? proto.ID, cost);
         }
         _ui.SetUiState(uid, AdminConsoleThirdPartyUi.Key,
-            new AdminConsoleThirdPartyBuiState(_colonyBudget.GetBudget(), thirdParties));
+            new AdminConsoleThirdPartyBuiState(_colonyBudget.GetBudget(), thirdParties, comp.CalledParties));
     }
 
     public void UpdateAllUi()

@@ -26,4 +26,6 @@ public sealed partial class AdminConsoleComponent : Component
     /// </summary>
     [DataField("callableParties")]
     public Dictionary<string, float> CallableParties = new();
+
+    public HashSet<string> CalledParties = new();
 }

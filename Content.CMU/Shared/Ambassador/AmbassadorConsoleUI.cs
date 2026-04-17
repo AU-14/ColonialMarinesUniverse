@@ -83,15 +83,14 @@ public sealed class AmbassadorConsoleBuiState : BoundUserInterfaceState
 public sealed class AmbassadorThirdPartyBuiState : BoundUserInterfaceState
 {
     public float Budget { get; }
-    /// <summary>
-    /// Dictionary of third party ID to (DisplayName, Cost).
-    /// </summary>
     public Dictionary<string, (string DisplayName, float Cost)> CallableParties { get; }
+    public HashSet<string> CalledParties { get; }
 
-    public AmbassadorThirdPartyBuiState(float budget, Dictionary<string, (string DisplayName, float Cost)> callableParties)
+    public AmbassadorThirdPartyBuiState(float budget, Dictionary<string, (string DisplayName, float Cost)> callableParties, HashSet<string> calledParties)
     {
         Budget = budget;
         CallableParties = callableParties;
+        CalledParties = calledParties;
     }
 }
 

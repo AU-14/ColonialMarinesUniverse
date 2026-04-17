@@ -140,4 +140,9 @@ public sealed partial class AmbassadorConsoleComponent : Component
     /// </summary>
     [DataField("callableParties")]
     public Dictionary<string, float> CallableParties = new();
+
+    /// <summary>
+    /// Set of third party IDs that have already been called and cannot be called again.
+    /// </summary>
+    public HashSet<string> CalledParties = new();
 }
