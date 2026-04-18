@@ -4,7 +4,6 @@ using Content.Shared.Voting;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Configuration;
 using System.Linq;
-using Content.Server.Chat.Managers;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
 using Content.Server.Voting;
@@ -36,7 +35,6 @@ namespace Content.Server.AU14.Round
         [Dependency] private readonly IEntityManager _entityManager = default!;
         [Dependency] private readonly IPlayerManager _playerManager = default!;
         [Dependency] private readonly IRobustRandom _random = default!;
-        [Dependency] private readonly IChatManager _chatManager = default!;
 
         [ViewVariables]
         public string? SelectedPlanetMapName => SelectedPlanetMap?.Announcement;
@@ -55,15 +53,7 @@ namespace Content.Server.AU14.Round
         public IReadOnlyList<AuThirdPartyPrototype> SelectedThirdParties => _selectedThirdParties;
 
         // Default max third parties for rounds with no threat (e.g., ForceOnForce)
-        private const int DefaultMaxThirdPartiesNoThreat = 4;
-
-        private const int DistressSignalBonus = 5;
-
-        // Carryover voting dictionaries
-        private readonly Dictionary<string, int> _carryoverPresetVotes = new();
-        private readonly Dictionary<string, int> _carryoverPlanetVotes = new();
-        private readonly Dictionary<string, int> _carryoverGovforVotes = new();
-        private readonly Dictionary<string, int> _carryoverOpforVotes = new();
+        private const int DefaultMaxThirdPartiesNoThreat =4;
 
         public override void Initialize()
         {
@@ -84,96 +74,23 @@ namespace Content.Server.AU14.Round
         ///         // Each vote method takes a callback to call when finished
         private IVoteHandle? StartPresetVote(Action onFinished)
         {
-            // Build preset options ourselves so we can apply carryover voting + DistressSignal bonus
-            var presets = new List<(string id, string title)>();
-            foreach (var preset in _prototypeManager.EnumeratePrototypes<GamePresetPrototype>())
+            _voteManager.CreateStandardVote(null, StandardVoteType.Preset);
+            foreach (var vote in _voteManager.ActiveVotes)
             {
-                if (!preset.ShowInVote)
-                    continue;
-                if (_playerManager.PlayerCount < (preset.MinPlayers ?? int.MinValue))
-                    continue;
-                if (_playerManager.PlayerCount > (preset.MaxPlayers ?? int.MaxValue))
-                    continue;
-                presets.Add((preset.ID, preset.ModeTitle));
-            }
-
-            if (presets.Count == 0)
-            {
-                Logger.Debug("[AuRoundSystem] No presets available for vote.");
-                onFinished();
-                return null;
-            }
-
-            var options = new List<(string text, object data)>();
-            foreach (var (id, title) in presets)
-            {
-                var displayName = Loc.GetString(title);
-                var carryover = _carryoverPresetVotes.GetValueOrDefault(id);
-                // DistressSignal gets a permanent +5
-                if (id.Equals("DistressSignal", StringComparison.OrdinalIgnoreCase))
-                    carryover += DistressSignalBonus;
-                if (carryover > 0)
-                    displayName = $"{displayName} [+{carryover}]";
-                options.Add((displayName, id));
-            }
-
-            var voteOpts = new VoteOptions
-            {
-                Title = "Game Preset",
-                Options = options,
-                Duration = _playerManager.PlayerCount == 1
-                    ? TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.VoteTimerAlone))
-                    : TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.VoteTimerPreset)),
-            };
-            voteOpts.SetInitiatorOrServer(null);
-
-            var handle = _voteManager.CreateVote(voteOpts);
-            handle.OnFinished += (_, args) =>
-            {
-                // Calculate adjusted votes with carryover + DistressSignal bonus
-                var adjustedResults = new List<(string id, string title, int newVotes, int totalVotes)>();
-                for (int i = 0; i < presets.Count && i < args.Votes.Count; i++)
+                if (vote.Title == "Game Preset")
                 {
-                    var (id, title) = presets[i];
-                    var newVotes = args.Votes[i];
-                    var carryover = _carryoverPresetVotes.GetValueOrDefault(id);
-                    // DistressSignal permanent +5
-                    var bonus = id.Equals("DistressSignal", StringComparison.OrdinalIgnoreCase) ? DistressSignalBonus : 0;
-                    adjustedResults.Add((id, title, newVotes, newVotes + carryover + bonus));
-                }
-
-                string picked;
-                if (adjustedResults.Count > 0)
-                {
-                    var maxVotes = adjustedResults.Max(v => v.totalVotes);
-                    var winners = adjustedResults.Where(v => v.totalVotes == maxVotes).ToList();
-                    var winner = winners.Count > 1 ? _random.Pick(winners) : winners[0];
-                    picked = winner.id;
-
-                    _chatManager.DispatchServerAnnouncement($"Gamemode vote winner: {Loc.GetString(winner.title)}");
-
-                    // Update carryover: accumulate for losers, reset for winner
-                    foreach (var r in adjustedResults)
+                    vote.OnFinished += (_, __) =>
                     {
-                        if (r.id == picked)
-                            _carryoverPresetVotes[r.id] = 0;
-                        else
-                            _carryoverPresetVotes[r.id] = _carryoverPresetVotes.GetValueOrDefault(r.id) + r.newVotes;
-                    }
+                        Logger.Debug("[PlatoonVoteManagerSystem] Preset vote finished.");
+                        onFinished();
+                    };
+                    return vote;
                 }
-                else
-                {
-                    picked = args.Winner as string ?? presets[0].id;
-                }
+            }
 
-                // Apply the selected preset
-                var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
-                ticker.SetGamePreset(picked);
-
-                Logger.Debug($"[AuRoundSystem] Preset vote finished. Winner: {picked}");
-                onFinished();
-            };
-            return handle;
+            Logger.Debug("[PlatoonVoteManagerSystem] Preset vote finished (no active vote found).\n");
+            onFinished();
+            return null;
         }
 
         public void StartFullVoteSequence()
@@ -262,12 +179,6 @@ namespace Content.Server.AU14.Round
                             var displayName = string.IsNullOrWhiteSpace(planet.VoteName)
                                 ? planet.MapId
                                 : planet.VoteName;
-
-                            // Show carryover votes in display name
-                            var carryover = _carryoverPlanetVotes.GetValueOrDefault(planet.MapId);
-                            if (carryover > 0)
-                                displayName = $"{displayName} [+{carryover}]";
-
                             options.Add((displayName, planet));
                         }
 
@@ -280,50 +191,17 @@ namespace Content.Server.AU14.Round
                         vote.SetInitiatorOrServer(null);
                         var handle = _voteManager.CreateVote(vote);
 
-                        // Use OnFinished handler to set _selectedPlanet with carryover logic
+                        // Use OnFinished handler to set _selectedPlanet
                         handle.OnFinished += (_, args) =>
                         {
-                            // Calculate adjusted votes (new votes + carryover)
-                            var adjustedResults = new List<(RMCPlanetMapPrototypeComponent planet, int newVotes, int totalVotes)>();
-                            for (int i = 0; i < planetProtos.Count && i < args.Votes.Count; i++)
-                            {
-                                var p = planetProtos[i];
-                                var newVotes = args.Votes[i];
-                                var carryover = _carryoverPlanetVotes.GetValueOrDefault(p.MapId);
-                                adjustedResults.Add((p, newVotes, newVotes + carryover));
-                            }
-
-                            if (adjustedResults.Count > 0)
-                            {
-                                var maxVotes = adjustedResults.Max(v => v.totalVotes);
-                                var winners = adjustedResults.Where(v => v.totalVotes == maxVotes).ToList();
-                                _selectedPlanet = winners.Count > 1
-                                    ? _random.Pick(winners).planet
-                                    : winners[0].planet;
-
-                                _chatManager.DispatchServerAnnouncement($"Planet vote winner: {(string.IsNullOrWhiteSpace(_selectedPlanet.VoteName) ? _selectedPlanet.MapId : _selectedPlanet.VoteName)}");
-
-                                // Update carryover: accumulate for losers, reset for winner
-                                foreach (var r in adjustedResults)
-                                {
-                                    if (r.planet == _selectedPlanet)
-                                        _carryoverPlanetVotes[r.planet.MapId] = 0;
-                                    else
-                                        _carryoverPlanetVotes[r.planet.MapId] = _carryoverPlanetVotes.GetValueOrDefault(r.planet.MapId) + r.newVotes;
-                                }
-                            }
-                            else
-                            {
-                                // Fallback
-                                object? picked = null;
-                                if (args.Winner != null)
-                                    picked = args.Winner;
-                                else if (args.Winners is var winnersArray && winnersArray.Length > 0)
-                                    picked = winnersArray[0];
-                                if (picked == null && options.Count > 0)
-                                    picked = options[0].data;
-                                _selectedPlanet = picked as RMCPlanetMapPrototypeComponent;
-                            }
+                            object? picked = null;
+                            if (args.Winner != null)
+                                picked = args.Winner;
+                            else if (args.Winners is var winnersArray && winnersArray.Length > 0)
+                                picked = winnersArray[0];
+                            if (picked == null && options.Count > 0)
+                                picked = options[0].data;
+                            _selectedPlanet = picked as RMCPlanetMapPrototypeComponent;
                         };
 
                         Timer.Spawn(TimeSpan.FromSeconds(32),
@@ -492,18 +370,10 @@ namespace Content.Server.AU14.Round
                     if (_selectedPreset.RequiresGovforVote && govforPlatoons.Count > 0)
                     {
                         var optionsplatoons = new List<(string text, object data)>();
-                        var govforProtoList = new List<PlatoonPrototype>();
                         foreach (var platoonId in govforPlatoons)
                         {
                             var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
-                            govforProtoList.Add(platoon);
-
-                            var displayName = platoon.Name;
-                            var carryover = _carryoverGovforVotes.GetValueOrDefault(platoon.ID);
-                            if (carryover > 0)
-                                displayName = $"{displayName} [+{carryover}]";
-
-                            optionsplatoons.Add((displayName, platoon));
+                            optionsplatoons.Add((platoon.Name, platoon));
                         }
 
                         var voteopt = new VoteOptions
@@ -516,43 +386,9 @@ namespace Content.Server.AU14.Round
                         var handle = _voteManager.CreateVote(voteopt);
                         handle.OnFinished += (_, args) =>
                         {
-                            // Carryover logic for govfor platoons
-                            PlatoonPrototype? winnerId = null;
 
-                            var adjustedResults = new List<(PlatoonPrototype platoon, int newVotes, int totalVotes)>();
-                            for (int i = 0; i < govforProtoList.Count && i < args.Votes.Count; i++)
-                            {
-                                var p = govforProtoList[i];
-                                var newVotes = args.Votes[i];
-                                var carryover = _carryoverGovforVotes.GetValueOrDefault(p.ID);
-                                adjustedResults.Add((p, newVotes, newVotes + carryover));
-                            }
 
-                            if (adjustedResults.Count > 0)
-                            {
-                                var maxVotes = adjustedResults.Max(v => v.totalVotes);
-                                var winners = adjustedResults.Where(v => v.totalVotes == maxVotes).ToList();
-                                winnerId = winners.Count > 1
-                                    ? _random.Pick(winners).platoon
-                                    : winners[0].platoon;
-
-                                // Update carryover
-                                foreach (var r in adjustedResults)
-                                {
-                                    if (r.platoon == winnerId)
-                                        _carryoverGovforVotes[r.platoon.ID] = 0;
-                                    else
-                                        _carryoverGovforVotes[r.platoon.ID] = _carryoverGovforVotes.GetValueOrDefault(r.platoon.ID) + r.newVotes;
-                                }
-
-                                _chatManager.DispatchServerAnnouncement($"Govfor vote winner: {winnerId.Name}");
-                            }
-                            else if (args.Winner is PlatoonPrototype w)
-                            {
-                                winnerId = w;
-                            }
-
-                            if (winnerId != null)
+                            if (args.Winner is PlatoonPrototype winnerId)
                             {
                                 platoonSpawnRuleSystem.SelectedGovforPlatoon = winnerId;
 
@@ -582,18 +418,10 @@ namespace Content.Server.AU14.Round
                     if (_selectedPreset.RequiresOpforVote && opforPlatoons.Count > 0)
                     {
                         var optionsplatoons = new List<(string text, object data)>();
-                        var opforProtoList = new List<PlatoonPrototype>();
                         foreach (var platoonId in opforPlatoons)
                         {
                             var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
-                            opforProtoList.Add(platoon);
-
-                            var displayName = platoon.Name;
-                            var carryover = _carryoverOpforVotes.GetValueOrDefault(platoon.ID);
-                            if (carryover > 0)
-                                displayName = $"{displayName} [+{carryover}]";
-
-                            optionsplatoons.Add((displayName, platoon));
+                            optionsplatoons.Add((platoon.Name, platoon));
                         }
 
                         var voteopt = new VoteOptions
@@ -606,43 +434,7 @@ namespace Content.Server.AU14.Round
                         var handle = _voteManager.CreateVote(voteopt);
                         handle.OnFinished += (_, args) =>
                         {
-                            // Carryover logic for opfor platoons
-                            PlatoonPrototype? winnerId = null;
-
-                            var adjustedResults = new List<(PlatoonPrototype platoon, int newVotes, int totalVotes)>();
-                            for (int i = 0; i < opforProtoList.Count && i < args.Votes.Count; i++)
-                            {
-                                var p = opforProtoList[i];
-                                var newVotes = args.Votes[i];
-                                var carryover = _carryoverOpforVotes.GetValueOrDefault(p.ID);
-                                adjustedResults.Add((p, newVotes, newVotes + carryover));
-                            }
-
-                            if (adjustedResults.Count > 0)
-                            {
-                                var maxVotes = adjustedResults.Max(v => v.totalVotes);
-                                var winners = adjustedResults.Where(v => v.totalVotes == maxVotes).ToList();
-                                winnerId = winners.Count > 1
-                                    ? _random.Pick(winners).platoon
-                                    : winners[0].platoon;
-
-                                // Update carryover
-                                foreach (var r in adjustedResults)
-                                {
-                                    if (r.platoon == winnerId)
-                                        _carryoverOpforVotes[r.platoon.ID] = 0;
-                                    else
-                                        _carryoverOpforVotes[r.platoon.ID] = _carryoverOpforVotes.GetValueOrDefault(r.platoon.ID) + r.newVotes;
-                                }
-
-                                _chatManager.DispatchServerAnnouncement($"Opfor vote winner: {winnerId.Name}");
-                            }
-                            else if (args.Winner is PlatoonPrototype w)
-                            {
-                                winnerId = w;
-                            }
-
-                            if (winnerId != null)
+                            if (args.Winner is PlatoonPrototype winnerId)
                             {
                                 platoonSpawnRuleSystem.SelectedOpforPlatoon = winnerId;
 
@@ -914,13 +706,5 @@ namespace Content.Server.AU14.Round
             }
         }
     }
-
-
-
-
-
-
-
-
 
 

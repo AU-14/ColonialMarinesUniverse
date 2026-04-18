@@ -508,10 +508,12 @@
 - type: entity
   parent: CMUAreaLV376Inside
   id: CMUAreaLV376ATC
-  name: Barker's Lament - Air Traffic Control
+  name: Barker's Lament - ATC & Embassy
   components:
   - type: Sprite
     state: red2
+  - type: Area
+    minimapColor: '#2D3FA2EE'
 
 - type: entity
   parent: CMUAreaLV376Inside
@@ -858,13 +860,23 @@
 
 - type: entity
   parent: CMUAreaLV376WYFacility
-  name: Weyland-Yutani Facility - APOLLO Core
+  name: Weyland-Yutani Facility - AI Core
   id: CMUAreaLV376WYFacilityAC
   components:
   - type: Sprite
     state: purple
   - type: Area
     minimapColor: '#2D3FA2EE'
+
+- type: entity
+  parent: CMUAreaLV376WYFacility
+  name: Weyland-Yutani Facility - Storage
+  id: CMUAreaLV376WYFacilityASRS
+  components:
+  - type: Sprite
+    state: purple
+  - type: Area
+    minimapColor: '#C19504E7'
 
 - type: entity
   parent: CMUAreaLV376Underground

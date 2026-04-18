@@ -989,7 +989,7 @@
   components:
   - type: Tag
     tags:
-    - CMMagazineSmg
+    - CMMagazineRifle
     - AU14MagazineSMGL90A2
   - type: BallisticAmmoProvider
     mayTransfer: True

@@ -77,18 +77,18 @@
       scale: 0.01
       whenToBeginScaling: 40
     AU14JobCLFGuerilla:
-      scale: 0.05
+      scale: 0.025
       whenToBeginScaling: 40
       benchmark: 6
     AU14JobCLFPhysician:
       scale: 0.02
       whenToBeginScaling: 40
     AU14JobGOVFORSquadRifleman:
-      scale: 0.2
+      scale: 0.04
       whenToBeginScaling: 40
       benchmark: 6
     AU14JobGOVFORPlatoonCorpsman:
-      scale: 0.05
+      scale: 0.03
       whenToBeginScaling: 40
       benchmark: 3
     AU14JobGOVFORSquadCombatTech:
@@ -99,6 +99,11 @@
       scale: 0.01
       whenToBeginScaling: 40
       benchmark: 1
+    AU14JobGOVFORPlatOp:
+        scale: 0.04
+        whenToBeginScaling: 40
+        benchmark: 2
+        maximum: 7
 
 
 
