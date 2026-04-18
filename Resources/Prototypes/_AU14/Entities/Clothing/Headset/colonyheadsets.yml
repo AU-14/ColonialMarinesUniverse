@@ -14,6 +14,21 @@
 
 - type: entity
   parent: CMEncryptionKey
+  id: AU14EncryptionKeyWEYSEC
+  name: WEYSEC encryption key
+  description: An encryption key used to communicate on weyland and CMB radio channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - Colony
+    - CMB
+    - WEYA
+    defaultChannel: Colony
+  - type: Sprite
+    state: we_ya_key
+
+- type: entity
+  parent: CMEncryptionKey
   id: AU14EncryptionKeyWEYU
   name: Weyland colonial encryption key
   description: An encryption key used to communicate on colony and weyland radio channels.
@@ -103,3 +118,15 @@
     containers:
       key_slots:
       - AU14EncryptionKeyWEYU
+
+- type: entity
+  parent: RMCHeadsetLiaison
+  id: AU14ColonyWeySecHeadset
+  name: colony weyland security headset
+  description: A headset used by weyland security to communicate.
+  suffix: Colony
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyWEYSEC
