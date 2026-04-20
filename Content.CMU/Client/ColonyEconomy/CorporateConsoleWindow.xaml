@@ -1,0 +1,48 @@
+<controls:CorporateConsoleWindow
+    xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Content.Client.AU14.ColonyEconomy"
+    Title="Corporate Affairs Console" MinSize="480 480">
+    <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="8">
+            <Label Name="CorporateBudgetLabel" Access="Public" Text="Corporate Budget: $0"
+                   StyleClasses="LabelHeading" Margin="0 4" />
+
+            <!-- Withdraw -->
+            <Label Text="-- Withdraw Cash --" Margin="0 4" />
+            <Label Name="WithdrawTaxNote" Access="Public" Text=""
+                   StyleClasses="LabelSubText" Margin="0 2" />
+            <BoxContainer Orientation="Horizontal" SeparationOverride="4" Margin="0 2">
+                <Button Name="Withdraw100" Access="Public" Text="$100"
+                        HorizontalExpand="True" Margin="2 0" />
+                <Button Name="Withdraw250" Access="Public" Text="$250"
+                        HorizontalExpand="True" Margin="2 0" />
+                <Button Name="Withdraw500" Access="Public" Text="$500"
+                        HorizontalExpand="True" Margin="2 0" />
+            </BoxContainer>
+
+            <!-- Transit Tariff -->
+            <Label Text="-- Transit Tariff --" Margin="0 6" />
+            <Label Name="CurrentTariffLabel" Access="Public" Text="Current Transit Tariff: 0%"
+                   Margin="0 2" />
+            <Label Text="A percentage of all submission storage payouts that goes to the corporate budget instead of the colony."
+                   StyleClasses="LabelSubText" Margin="0 2" />
+            <BoxContainer Orientation="Horizontal" SeparationOverride="4" Margin="0 4">
+                <Label Text="New Tariff (0–50%): " />
+                <LineEdit Name="TariffInput" Access="Public" PlaceHolder="e.g. 15"
+                          HorizontalExpand="True" SizeFlagsStretchRatio="2" />
+                <Button Name="SetTariffButton" Access="Public" Text="Apply" />
+            </BoxContainer>
+
+            <!-- Economy Overview -->
+            <Label Text="-- Colony Economy Overview --" Margin="0 6" />
+            <BoxContainer Name="EconomyStatusPanel" Access="Public" Orientation="Vertical" Margin="4 2" />
+
+            <!-- Third Party -->
+            <Label Text="-- Third Party Support --" Margin="0 6" />
+            <Button Name="OpenThirdPartyBtn" Access="Public" Text="Open Third Party Menu"
+                    HorizontalExpand="True" Margin="0 4" />
+        </BoxContainer>
+    </ScrollContainer>
+</controls:CorporateConsoleWindow>
+

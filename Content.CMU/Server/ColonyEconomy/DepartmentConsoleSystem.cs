@@ -28,6 +28,7 @@ public sealed class DepartmentConsoleSystem : EntitySystem
     [Dependency] private readonly ChatSystem _chatSystem = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly ColonyBudgetSystem _budget = default!;
+    [Dependency] private readonly AdminConsoleSystem _adminConsole = default!;
     [Dependency] private readonly StackSystem _stack = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -156,9 +157,9 @@ public sealed class DepartmentConsoleSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Builds a catalog snapshot from the nearest colony ASRS computer.
+    ///     Builds a catalog snapshot from the nearest ASRS computer matching the department's configured faction.
     /// </summary>
-    private List<DepartmentOrderCatalogCategory> BuildCatalog(EntityUid consoleUid)
+    private List<DepartmentOrderCatalogCategory> BuildCatalog(EntityUid consoleUid, string asrsFaction)
     {
         var result = new List<DepartmentOrderCatalogCategory>();
 
@@ -169,7 +170,7 @@ public sealed class DepartmentConsoleSystem : EntitySystem
         var computers = EntityQueryEnumerator<RequisitionsComputerComponent>();
         while (computers.MoveNext(out var compUid, out var comp))
         {
-            if (comp.Faction != "colony")
+            if (comp.Faction != asrsFaction)
                 continue;
 
             var compCoords = _transform.GetMapCoordinates(compUid);
@@ -204,9 +205,9 @@ public sealed class DepartmentConsoleSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Finds the nearest colony-faction elevator.
+    ///     Finds the nearest elevator matching the given faction.
     /// </summary>
-    private Entity<RequisitionsElevatorComponent>? FindColonyElevator(EntityUid consoleUid)
+    private Entity<RequisitionsElevatorComponent>? FindColonyElevator(EntityUid consoleUid, string faction = "colony")
     {
         var consoleCoords = _transform.GetMapCoordinates(consoleUid);
         Entity<RequisitionsElevatorComponent>? nearest = null;
@@ -215,7 +216,7 @@ public sealed class DepartmentConsoleSystem : EntitySystem
         var elevators = EntityQueryEnumerator<RequisitionsElevatorComponent, TransformComponent>();
         while (elevators.MoveNext(out var uid, out var elevator, out var xform))
         {
-            if (elevator.Faction != "colony")
+            if (elevator.Faction != faction)
                 continue;
 
             var elevCoords = _transform.GetMapCoordinates(uid, xform);
@@ -266,7 +267,7 @@ public sealed class DepartmentConsoleSystem : EntitySystem
             comp.SalaryOverrides.Remove(rem);
         }
 
-        var catalog = BuildCatalog(uid);
+        var catalog = BuildCatalog(uid, comp.AsrsFaction);
 
         var state = new DepartmentConsoleBuiState(
             comp.DepartmentName,
@@ -448,11 +449,13 @@ public sealed class DepartmentConsoleSystem : EntitySystem
 
     /// <summary>
     ///     Handles ordering an item from the ASRS catalog through the department console.
-    ///     Deducts from department budget, queues on the colony elevator with department metadata.
+    ///     Deducts from department budget, queues on the elevator with department metadata.
+    ///     When ordering from the corporate ASRS ("corporate" faction), applies the current
+    ///     sales tax on top of the base cost and routes the tax revenue to the colony budget.
     /// </summary>
     private void OnOrder(EntityUid uid, DepartmentConsoleComponent comp, DepartmentConsoleOrderBuiMsg msg)
     {
-        // Find the colony ASRS computer to validate the order
+        // Find the ASRS computer for this department's configured faction
         var consoleCoords = _transform.GetMapCoordinates(uid);
         Entity<RequisitionsComputerComponent>? nearestComputer = null;
         var nearestDist = float.MaxValue;
@@ -460,7 +463,7 @@ public sealed class DepartmentConsoleSystem : EntitySystem
         var computers = EntityQueryEnumerator<RequisitionsComputerComponent>();
         while (computers.MoveNext(out var compUid, out var reqComp))
         {
-            if (reqComp.Faction != "colony")
+            if (reqComp.Faction != comp.AsrsFaction)
                 continue;
 
             var compCoords = _transform.GetMapCoordinates(compUid);
@@ -488,10 +491,15 @@ public sealed class DepartmentConsoleSystem : EntitySystem
 
         var entry = category.Entries[msg.EntryIndex];
 
-        if (entry.Cost > comp.DepartmentBudget)
+        // Apply sales tax when ordering from the corporate ASRS
+        var baseCost = entry.Cost;
+        var taxMultiplier = comp.AsrsFaction == "corporate" ? _adminConsole.GetSalesTax() : 0f;
+        var effectiveCost = (int) Math.Ceiling(baseCost * (1f + taxMultiplier));
+
+        if (effectiveCost > comp.DepartmentBudget)
             return;
 
-        var elevator = FindColonyElevator(uid);
+        var elevator = FindColonyElevator(uid, comp.AsrsFaction);
         if (elevator == null)
             return;
 
@@ -512,7 +520,16 @@ public sealed class DepartmentConsoleSystem : EntitySystem
             DeptName = comp.DepartmentName,
         };
 
-        comp.DepartmentBudget -= entry.Cost;
+        comp.DepartmentBudget -= effectiveCost;
+
+        // Route sales tax revenue to the colony budget
+        if (taxMultiplier > 0f)
+        {
+            var taxRevenue = effectiveCost - baseCost;
+            if (taxRevenue > 0)
+                _budget.AddToBudget(taxRevenue);
+        }
+
         elevator.Value.Comp.Orders.Add(deptOrder);
         Dirty(elevator.Value);
         UpdateAllUiForDepartment(uid, comp);
@@ -553,7 +570,9 @@ public sealed class DepartmentConsoleSystem : EntitySystem
                 continue;
             }
 
-            // Dispense salaries from the department's own budget
+            // Dispense salaries from the department's own budget (with income tax deduction)
+            var incomeTaxRate = _adminConsole.GetIncomeTax();
+            var totalTaxCollected = 0f;
             foreach (var idCardUid in dept.Members)
             {
                 if (!TryComp<IdCardComponent>(idCardUid, out var idCard))
@@ -563,12 +582,21 @@ public sealed class DepartmentConsoleSystem : EntitySystem
                     ? overrideSalary
                     : dept.DefaultSalary;
 
-                // Credit the ID card balance directly
-                idCard.AccountBalance += salary;
+                var taxAmount = (int) Math.Floor(salary * incomeTaxRate);
+                var netSalary = salary - taxAmount;
+                totalTaxCollected += taxAmount;
+
+                // Credit the ID card balance with net salary (after tax)
+                idCard.AccountBalance += netSalary;
                 Dirty(idCardUid, idCard);
             }
 
-            announcements.Add($"[bold]{dept.DepartmentName}[/bold]: ${deptCost:F0} dispensed");
+            // Route collected income tax to colony budget
+            if (totalTaxCollected > 0)
+                _budget.AddToBudget(totalTaxCollected);
+
+            announcements.Add($"[bold]{dept.DepartmentName}[/bold]: ${deptCost:F0} dispensed" +
+                (totalTaxCollected > 0 ? $" (${totalTaxCollected:F0} income tax)" : ""));
 
             dept.DepartmentBudget -= deptCost;
             UpdateAllUiForDepartment(deptUid, dept);
