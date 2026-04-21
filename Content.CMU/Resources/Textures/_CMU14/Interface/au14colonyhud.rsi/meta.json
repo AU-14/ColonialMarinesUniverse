@@ -51,6 +51,15 @@
     },
     {
       "name": "working_joe"
+    },
+    {
+      "name": "icrc_cmo"
+    },
+    {
+      "name": "icrc_doctor"
+    },
+    {
+      "name": "icrc_nurse"
     }
   ]
 }

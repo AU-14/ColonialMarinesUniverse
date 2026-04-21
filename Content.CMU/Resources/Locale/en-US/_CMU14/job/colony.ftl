@@ -241,3 +241,18 @@ au14-job-prefix-civilianambassadortwe = TWE Amb.
 au14-job-name-civilianambassadorcca = CCA Ambassador
 au14-job-description-civilianambassadorcca = Lead CCA diplomatic mission on the colony.
 au14-job-prefix-civilianambassadorcca = CCA Amb.
+
+au14-job-name-civilianrightsobserver = Interstellar Human Rights Observer
+au14-job-description-investigationrightsobserver = Through hard work, you have managed to make your way onto the frontier alongside a CMB patrol to document and record any atrocities that may be occurring in this dark sector of space. It’s partly a PR stunt, but it’s important work. In an emergency, you may also be able to provide medical aid to those in need.
+au14-job-prefix-civilianrightsobserver = IHRO
+AU14JobInvestigationCMBRightsObserver = Interstellar Human Rights Observer
+
+au14-job-name-civiliannspainspector = NSPA Inspector
+au14-job-description-civiliannspainspector = You're a Inspector of Neroid Sector Policing Authority. Provide the colony with rule of law and execute arrests and warrants. (Role avalible on Hybrisa and Port Neroid)
+au14-job-prefix-civiliannspainspector = NSPAINS
+AU14JobInvestigationNSPAInspector = NSPA Inspector
+
+au14-job-name-civilianiccliaison = Interstellar Commerce Commission Liaison
+au14-job-description-civilianiccliaison = You are an Interstellar Commerce Commission Corporate Liaison, a well experienced ICC Agent that has been attached to an NSPA team. You work with the NSPA specifically to observe proper trade practices and investigate any possibilities of smuggling or black market activity.
+au14-job-prefix-civilianiccliaison = ICCL
+NSPAInvestigationPartyJobICCLiaison =  Interstellar Commerce Commission Liaison
