@@ -395,8 +395,8 @@
 - type: entity
   parent: RMCAttachmentS42xTelescopicMiniscope
   id: RMCAttachmentS42xAdvancedTelescopicMiniscope
-  name: WeYa S4 2x advanced telescopic mini-scope
-  description: An AEGIS S4 telescoping eye piece, custom-tuned by WeYa scientists to be as ergonomic as possible.
+  name: We-Yu S4 2x advanced telescopic mini-scope
+  description: An AEGIS S4 telescoping eye piece, custom-tuned by WeYu scientists to be as ergonomic as possible.
   components:
   - type: Sprite
     state: miniscope-nsg23
@@ -408,8 +408,8 @@
     icon:
       sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
       state: miniscope-nsg23
-    actionName: Look through WeYa S4 2x Advanced Telescopic Mini-Scope
-    actionDesc: An AEGIS S4 telescoping eye piece, custom-tuned by WeYa scientists to be as ergonomic as possible.
+    actionName: Look through We-Yu S4 2x Advanced Telescopic Mini-Scope
+    actionDesc: An AEGIS S4 telescoping eye piece, custom-tuned by We-Yu scientists to be as ergonomic as possible.
   - type: Scope
     zoomLevels:
     - zoom: 1

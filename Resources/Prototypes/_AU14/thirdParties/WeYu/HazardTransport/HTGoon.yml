@@ -42,7 +42,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu
   id: AU14JobWYHTGoon
-  name: WY Hazard Transport Goon (3rd party)
+  name: We-Yu Hazard Transport Goon (3rd party)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

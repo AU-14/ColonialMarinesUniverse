@@ -17,7 +17,7 @@
   - Colony
   - RMCWeYa
   - HospitalCorpsman
-  spawnMenuRoleName: WEYA PMC Medic (PVE)
+  spawnMenuRoleName: We-Yu PMC Medic (PVE)
   special:
   - !type:AddComponentSpecial
     components:
@@ -51,7 +51,7 @@
 - type: entity
   parent: CMSpawnPointJobBase
   id: RMCSpawnPointPMCCorpsmanPVE
-  name: weya pmc medic spawn point
+  name: We-Yu pmc medic spawn point
   suffix: PVE
   components:
   - type: SpawnPoint

@@ -1,7 +1,7 @@
 - type: entity
   parent: AU14BaseArmor
   id: AU14WYPMCArmor
-  name: WY PMC Armor
+  name: We-Yu PMC Armor
   description: A set of Weyland-Yutani PMC armor.
   components:
   - type: Sprite
@@ -10,7 +10,7 @@
 - type: entity
   parent: AU14BaseArmorLight
   id: AU14WYPMCArmorMin
-  name: WY PMC Minimalistic Armor
+  name: We-Yu PMC Minimalistic Armor
   description: A set of Weyland-Yutani PMC armor. This pair is quite small compared to the standard, and will provide less protection.
   components:
   - type: Sprite
@@ -19,9 +19,9 @@
 - type: entity
   parent: RMCBaseBioSuit
   id: AU14SuitBioWeYu
-  name: WeYu-TSS MK I - bio suit
+  name: We-Yu-TSS MK I - bio suit
   description: The 'Weyland-Yutani TerraScientia bio-suit MK I'. An advanced light-weight bio-suit developed in-house by Weston-Yamada. It's a suit that protects against biological contamination.
-  suffix: AU14, Generic, WeYu
+  suffix: AU14, Generic, We-Yu
   components:
   - type: Item
     size: Small
@@ -33,7 +33,7 @@
 - type: entity
   parent: AU14BaseArmor
   id: AU14WYPMCArmorEngineer
-  name: WY PMC Engineer Armor
+  name: We-Yu PMC Engineer Armor
   description: A set of Weyland-Yutani PMC Engineer armor.
   components:
   - type: Sprite
@@ -42,7 +42,7 @@
 - type: entity
   parent: AU14BaseArmorLight
   id: AU14WYPPOArmor
-  name: WY PPO Armor
+  name: We-Yu PPO Armor
   description: A set of Weyland-Yutani Personal Protection Officer armor. This pair is quite small compared to the standard, and will provide less protection.
   components:
   - type: ClothingSpeedModifier

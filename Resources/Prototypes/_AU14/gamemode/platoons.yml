@@ -101,7 +101,7 @@
 
 - type: platoon
   id: WEYU
-  name: WY PMC
+  name: We-Yu PMC
   lorePrimer: AU14PrimerPlatoonWEYU
   reqlist: USCMCargoCatalog
   VendorToMarker:

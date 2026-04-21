@@ -393,7 +393,7 @@
   parent: CMJumpsuitLiaison
   id: RMCJumpsuitWEYATrainee
   name: trainee's uniform
-  description: It's a uniform with the WEYA insignia on it, with the words "Trainee" stamped below.
+  description: It's a uniform with the WeYu insignia on it, with the words "Trainee" stamped below.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Uniforms/Liaison/trainee.rsi

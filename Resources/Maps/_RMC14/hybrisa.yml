@@ -75260,7 +75260,7 @@ entities:
   - uid: 1030
     components:
     - type: MetaData
-      name: WeYa-LWI Horizon Runner HR-150 cockpit
+      name: We-Yu-LWI Horizon Runner HR-150 cockpit
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -184.5,-7.5
@@ -99370,7 +99370,7 @@ entities:
   - uid: 5548
     components:
     - type: MetaData
-      name: WeYa-LWI Horizon Runner HR-150 airlock
+      name: We-Yu-LWI Horizon Runner HR-150 airlock
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -182.5,-12.5
@@ -99378,7 +99378,7 @@ entities:
   - uid: 5549
     components:
     - type: MetaData
-      name: WeYa-LWI Horizon Runner HR-150 airlock
+      name: We-Yu-LWI Horizon Runner HR-150 airlock
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -187.5,-12.5
@@ -99386,7 +99386,7 @@ entities:
   - uid: 5551
     components:
     - type: MetaData
-      name: WeYa-LWI StarGlider SG-200 airlock
+      name: We-Yu-LWI StarGlider SG-200 airlock
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -208.5,-28.5
@@ -99394,7 +99394,7 @@ entities:
   - uid: 5554
     components:
     - type: MetaData
-      name: WeYa-LWI StarGlider SG-200 airlock
+      name: We-Yu-LWI StarGlider SG-200 airlock
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -202.5,-28.5
@@ -99404,7 +99404,7 @@ entities:
   - uid: 1266
     components:
     - type: MetaData
-      name: WeYa-LWI StarGlider SG-200 cargo hold
+      name: We-Yu-LWI StarGlider SG-200 cargo hold
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -205.5,-39.5
@@ -99414,7 +99414,7 @@ entities:
   - uid: 1268
     components:
     - type: MetaData
-      name: WeYa-LWI StarGlider SG-200 airlock
+      name: We-Yu-LWI StarGlider SG-200 airlock
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -208.5,-33.5
@@ -99424,7 +99424,7 @@ entities:
   - uid: 1269
     components:
     - type: MetaData
-      name: WeYa-LWI StarGlider SG-200 airlock
+      name: We-Yu-LWI StarGlider SG-200 airlock
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -202.5,-33.5
@@ -196234,7 +196234,7 @@ entities:
   - uid: 22092
     components:
     - type: MetaData
-      name: We-Ya Advanced Bio-Genomic Research Lab
+      name: We-Yu Advanced Bio-Genomic Research Lab
     - type: Transform
       pos: -190.5,-176.5
       parent: 1
@@ -196255,14 +196255,14 @@ entities:
   - uid: 22095
     components:
     - type: MetaData
-      name: We-Ya Celestia Gateway
+      name: We-Yu Celestia Gateway
     - type: Transform
       pos: -195.5,-30.5
       parent: 1
   - uid: 22096
     components:
     - type: MetaData
-      name: We-Ya Offices
+      name: We-Yu Offices
     - type: Transform
       pos: -151.5,-42.5
       parent: 1
@@ -196311,7 +196311,7 @@ entities:
   - uid: 22103
     components:
     - type: MetaData
-      name: We-Ya Dynagrid
+      name: We-Yu Dynagrid
     - type: Transform
       pos: -82.5,-79.5
       parent: 1
@@ -196325,7 +196325,7 @@ entities:
   - uid: 22105
     components:
     - type: MetaData
-      name: Weyamart
+      name: Weymart
     - type: Transform
       pos: -150.5,-102.5
       parent: 1
@@ -224559,7 +224559,7 @@ entities:
   - uid: 26880
     components:
     - type: MetaData
-      name: WeyaMart Lockdown
+      name: Weymart Lockdown
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -155.84619,-95.584785
@@ -224569,7 +224569,7 @@ entities:
   - uid: 26881
     components:
     - type: MetaData
-      name: WeyaMart Pharmacy Lockdown
+      name: Weymart Pharmacy Lockdown
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -157.81996,-107.58114
@@ -224579,7 +224579,7 @@ entities:
   - uid: 26882
     components:
     - type: MetaData
-      name: WeyaMart Pharmacy Lockdown
+      name: Weymart Pharmacy Lockdown
     - type: Transform
       pos: -157.77829,-107.10891
       parent: 1
@@ -224626,7 +224626,7 @@ entities:
   - uid: 26887
     components:
     - type: MetaData
-      name: We-Ya Research Cargo Podlocks
+      name: We-Yu Research Cargo Podlocks
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -188.5,-141.5
@@ -225398,21 +225398,21 @@ entities:
   - uid: 26988
     components:
     - type: MetaData
-      name: We-Ya Research Cargo Podlocks
+      name: We-Yu Research Cargo Podlocks
     - type: Transform
       pos: -191.5,-141.5
       parent: 1
   - uid: 26989
     components:
     - type: MetaData
-      name: We-Ya Research Cargo Podlocks
+      name: We-Yu Research Cargo Podlocks
     - type: Transform
       pos: -189.5,-141.5
       parent: 1
   - uid: 26990
     components:
     - type: MetaData
-      name: We-Ya Research Cargo Podlocks
+      name: We-Yu Research Cargo Podlocks
     - type: Transform
       pos: -190.5,-141.5
       parent: 1
@@ -225558,28 +225558,28 @@ entities:
   - uid: 27015
     components:
     - type: MetaData
-      name: WeYa-LWI Horizon Runner HR-150 cargo hold
+      name: We-Yu-LWI Horizon Runner HR-150 cargo hold
     - type: Transform
       pos: -185.5,-17.5
       parent: 1
   - uid: 27016
     components:
     - type: MetaData
-      name: WeYa-LWI Horizon Runner HR-150 cargo hold
+      name: We-Yu-LWI Horizon Runner HR-150 cargo hold
     - type: Transform
       pos: -184.5,-17.5
       parent: 1
   - uid: 27017
     components:
     - type: MetaData
-      name: WeYa-LWI Horizon Runner HR-150 cargo hold
+      name: We-Yu-LWI Horizon Runner HR-150 cargo hold
     - type: Transform
       pos: -185.5,-14.5
       parent: 1
   - uid: 27018
     components:
     - type: MetaData
-      name: WeYa-LWI Horizon Runner HR-150 cargo hold
+      name: We-Yu-LWI Horizon Runner HR-150 cargo hold
     - type: Transform
       pos: -184.5,-14.5
       parent: 1
@@ -234492,7 +234492,7 @@ entities:
   - uid: 28280
     components:
     - type: MetaData
-      name: WeyaMart Lockdown
+      name: Weymart Lockdown
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -140.5,-96.5
@@ -234500,7 +234500,7 @@ entities:
   - uid: 28281
     components:
     - type: MetaData
-      name: WeyaMart Lockdown
+      name: Weymart Lockdown
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -140.5,-97.5
@@ -234508,7 +234508,7 @@ entities:
   - uid: 28282
     components:
     - type: MetaData
-      name: WeyaMart Lockdown
+      name: Weymart Lockdown
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -142.5,-94.5
@@ -234516,7 +234516,7 @@ entities:
   - uid: 28283
     components:
     - type: MetaData
-      name: WeyaMart Lockdown
+      name: Weymart Lockdown
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -149.5,-94.5
@@ -234524,7 +234524,7 @@ entities:
   - uid: 28284
     components:
     - type: MetaData
-      name: WeyaMart Lockdown
+      name: Weymart Lockdown
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -153.5,-95.5
@@ -234532,7 +234532,7 @@ entities:
   - uid: 28285
     components:
     - type: MetaData
-      name: WeyaMart Lockdown
+      name: Weymart Lockdown
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -152.5,-95.5
@@ -234540,7 +234540,7 @@ entities:
   - uid: 28286
     components:
     - type: MetaData
-      name: WeyaMart Lockdown
+      name: Weymart Lockdown
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -157.5,-95.5
@@ -234548,7 +234548,7 @@ entities:
   - uid: 28287
     components:
     - type: MetaData
-      name: WeyaMart Lockdown
+      name: Weymart Lockdown
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -156.5,-95.5
@@ -234556,7 +234556,7 @@ entities:
   - uid: 28288
     components:
     - type: MetaData
-      name: WeyaMart Lockdown
+      name: Weymart Lockdown
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -159.5,-99.5
@@ -234564,7 +234564,7 @@ entities:
   - uid: 28289
     components:
     - type: MetaData
-      name: WeyaMart Lockdown
+      name: Weymart Lockdown
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -159.5,-100.5
@@ -234572,21 +234572,21 @@ entities:
   - uid: 28290
     components:
     - type: MetaData
-      name: WeyaMart Pharmacy Lockdown
+      name: Weymart Pharmacy Lockdown
     - type: Transform
       pos: -154.5,-107.5
       parent: 1
   - uid: 28291
     components:
     - type: MetaData
-      name: WeyaMart Pharmacy Lockdown
+      name: Weymart Pharmacy Lockdown
     - type: Transform
       pos: -153.5,-107.5
       parent: 1
   - uid: 28292
     components:
     - type: MetaData
-      name: WeyaMart Pharmacy Lockdown
+      name: Weymart Pharmacy Lockdown
     - type: Transform
       pos: -156.5,-107.5
       parent: 1

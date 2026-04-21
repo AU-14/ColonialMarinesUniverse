@@ -52,7 +52,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu
   id: AU14JobIPIEPPO
-  name: WY IPIE Personal Protection Officer (3rd party)
+  name: We-Yu IPIE Personal Protection Officer (3rd party)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

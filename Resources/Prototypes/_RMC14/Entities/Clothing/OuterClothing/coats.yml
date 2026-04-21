@@ -953,7 +953,7 @@
 - type: entity
   parent: RMCBaseJacket
   id: RMCBrownWEYACoat
-  name: brown WEYA coat
+  name: brown We-Yu coat
   description: A long, tough coat with the company logo on the back. Popular on colonies which require function over form.
   components:
   - type: Sprite
@@ -964,7 +964,7 @@
 - type: entity
   parent: RMCBaseJacket
   id: RMCWEYARainCoat
-  name: WEYA rain coat
+  name: We-Yu rain coat
   description: A bright, yellow raincoat with the Company logo. It's gaudy, sure, but it keeps the rain off well. Typically distributed to frontier colonies with heavy rain.
   components:
   - type: Sprite

@@ -13,7 +13,7 @@
     noRot: true
     state: crane
 
-#suffix: WeYa, Destroyed, Flipped
+#suffix: We-Yu, Destroyed, Flipped
 - type: entity
   parent: RMCPropVehicle2Base #use East and West
   id: RMCPropVehicleCargoCrane

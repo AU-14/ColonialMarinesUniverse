@@ -136,7 +136,7 @@
 - type: entity
   parent: RMCJumpsuitVeteranPMCLeaderNoWebbing
   id: RMCJumpsuitVeteranPMCCommandoSurvivor
-  name: We-Ya Commando fatigues
+  name: We-Yu Commando fatigues
   description: An armored uniform worn by We-Ya elite commandos. It is well protected while remaining light and comfortable.
   components:
   - type: UniformAccessoryHolder

@@ -2,7 +2,7 @@
   parent: RMCBaseMobSpeciesOrganic
   id: AU14BaseMobSpeciesOrganicWeYu
   abstract: true
-  suffix: AU14, WeYu
+  suffix: AU14, We-Yu
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

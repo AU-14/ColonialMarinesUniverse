@@ -1,7 +1,7 @@
 - type: job
   parent: CMSurvivor
   id: RMCSurvivorPMCCommandoShivas
-  name: rmc-job-name-survivor-shivas-weya-commando
+  name: rmc-job-name-survivor-shivas-We-Yu-commando
   description: rmc-job-description-survivor
   ranks:
     RMCRankWeYaCommando: []

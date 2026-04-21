@@ -12,7 +12,7 @@
   accessGroups:
   - Colony
   - RMCWeYa
-  spawnMenuRoleName: WEYA PMC Team Lead (PVE)
+  spawnMenuRoleName: We-Yu PMC Team Lead (PVE)
   special:
   - !type:AddComponentSpecial
     components:
@@ -55,7 +55,7 @@
 - type: entity
   parent: CMSpawnPointJobBase
   id: RMCSpawnPointPMCTeamLeadPVE
-  name: weya pmc team lead spawn point
+  name: We-Yu pmc team lead spawn point
   suffix: PVE
   components:
   - type: SpawnPoint

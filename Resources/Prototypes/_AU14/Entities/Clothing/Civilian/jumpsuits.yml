@@ -133,7 +133,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianWeYuEngineerClothes
-  name: WeYu Engineer Clothes
+  name: We-Yu Engineer Clothes
   description: Clothes designed for WeYu engineers.
   components:
   - type: Sprite

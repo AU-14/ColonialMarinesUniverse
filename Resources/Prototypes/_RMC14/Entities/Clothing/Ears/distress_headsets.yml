@@ -60,9 +60,9 @@
 - type: entity
   parent: RMCHeadsetIconsWeYa
   id: RMCHeadsetDistressWeYa
-  name: WeYa corporate headset
-  description: A headset commonly worn by WeYa corporate personnel.
-  suffix: WeYa, Colony
+  name: We-Yu corporate headset
+  description: A headset commonly worn by WeYu corporate personnel.
+  suffix: We-Yu, Colony
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/headsets.rsi
@@ -146,7 +146,7 @@
 - type: entity
   parent: RMCHeadsetDistressWeYa
   id: RMCHeadsetDistressGoon
-  name: We-Ya headset
+  name: We-Yu headset
   description: A special headset used by corporate personnel.
   components:
   - type: ContainerFill
@@ -178,7 +178,7 @@
 - type: entity
   parent: RMCHeadsetDistressWeYa
   id: RMCHeadsetDistressLawyerWeYa
-  name: We-Ya headset
+  name: We-Yu headset
   description: A special headset used by corporate personnel.
   suffix: Director
   components:

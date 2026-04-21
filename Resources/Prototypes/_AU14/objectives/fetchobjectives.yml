@@ -222,7 +222,7 @@
     amounttofetch: 2
 
 - type: entity
-  name: Fetch WY Laptop Objecive
+  name: Fetch We-Yu Laptop Objecive
   parent: MarkerBase
   id: fetchwylaptopobjective
   components:

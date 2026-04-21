@@ -1,7 +1,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: AU14WYPMCBallCap
-  name: WY PMC Ball Cap
+  name: We-Yu PMC Ball Cap
   description: A WY PMC patrol cap.
   components:
   - type: Sprite
@@ -12,7 +12,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: AU14WYPPOCap
-  name: WY PPO Ball Cap
+  name: We-Yu PPO Ball Cap
   description: A WY Personal Protection Officer cap.
   components:
   - type: Sprite

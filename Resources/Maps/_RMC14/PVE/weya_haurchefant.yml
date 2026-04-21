@@ -68,7 +68,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: WEYA Haurchefant
+      name: We-Yu Haurchefant
     - type: Transform
     - type: Map
       mapPaused: True
@@ -5786,7 +5786,7 @@ entities:
   - uid: 1655
     components:
     - type: MetaData
-      name: WEYA 'Haurchefant' Hangar
+      name: We-Yu 'Haurchefant' Hangar
     - type: Transform
       pos: 29.5,43.5
       parent: 1

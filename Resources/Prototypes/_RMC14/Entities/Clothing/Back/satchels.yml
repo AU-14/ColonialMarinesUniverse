@@ -50,7 +50,7 @@
     contents:
     - id: CMSheetMetal20
     - id: RMCHandcuffs
-      
+
 - type: entity
   parent: RMCSatchelBlack
   id: RMCSatchelBlackFillParaCO
@@ -656,7 +656,7 @@
 - type: entity
   parent: CMSatchel
   id: RMCBackpackRTOPMCBroken
-  name: broken We-Ya radio telephone pack
+  name: broken We-Yu radio telephone pack
   description: A heavy-duty extended-pack, used for telecommunications between central command. Commonly carried by RTOs. This one bears the logo of Weston-Yamada and internal systems seem to be completely fried and broken.
   components:
   - type: Sprite
@@ -675,7 +675,7 @@
 - type: entity
   parent: RMCBackpackRTO
   id: RMCBackpackRTOPMC
-  name: We-Ya radio telephone pack
+  name: We-Yu radio telephone pack
   description: A heavy-duty extended-pack, used for telecommunications between central command. Commonly carried by RTOs. This one bears the logo of Weyland-Yutani.
   components:
   - type: Sprite
@@ -879,7 +879,7 @@
       contents:
         - id: CMSheetMetal20
         - id: RMCRadioHandheldColony
-          
+
 - type: entity
   parent: RMCSatchelLightpack5Slot
   id: RMCSatchelLightpackFilledParaSynth

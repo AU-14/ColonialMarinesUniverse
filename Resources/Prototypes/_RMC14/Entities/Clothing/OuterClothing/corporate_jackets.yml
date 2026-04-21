@@ -56,7 +56,7 @@
 - type: entity
   parent: RMCBaseJacket
   id: RMCWeYaBrownVest
-  name: WeYa brown vest
+  name: We-Yu brown vest
   description: A brown puffer vest.
   components:
   - type: Sprite
@@ -67,7 +67,7 @@
 - type: entity
   parent: RMCBaseJacket
   id: RMCWeYaBlueVest
-  name: WeYa blue vest
+  name: We-Yu blue vest
   description: A blue puffer vest.
   components:
   - type: Sprite
@@ -78,7 +78,7 @@
 - type: entity
   parent: RMCBaseJacket
   id: RMCWeYaRedVest
-  name: WeYa red vest
+  name: We-Yu red vest
   description: A red puffer vest.
   components:
   - type: Sprite
@@ -89,7 +89,7 @@
 - type: entity
   parent: RMCBaseJacket
   id: RMCWeYaWhiteVest
-  name: WeYa white vest
+  name: We-Yu white vest
   description: A white puffer vest.
   components:
   - type: Sprite
@@ -122,7 +122,7 @@
 - type: entity
   parent: RMCBaseJacket
   id: RMCWeYaFurCoat
-  name: WeYa fur coat
+  name: We-Yu fur coat
   description: "An old, unmarked fur coat once issued to corporate liaisons stationed in harsh climates. It has clearly changed hands many times — the fabric is worn, it carries a distinct smell, and any manufacturer tags have long since faded. A faint corporate insignia remains, stitched above a yellowing label that simply reads: \"Dry clean only.\""
   components:
   - type: Sprite
@@ -145,7 +145,7 @@
   parent: RMCBaseJacket
   id: RMCCorporateLogisticsJacket
   name: corporate logistics jacket
-  description: A white jacket with brown accents. A popular choice among WEYA Logistic Managers.
+  description: A white jacket with brown accents. A popular choice among WeYu Logistic Managers.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Corporate/logistics_jacket.rsi

@@ -75,7 +75,7 @@
 - type: entity
   id: AU14CashDrinkMachine
   parent: AU14CashVendorShopkeepBase
-  name: WY Refreshments
+  name: We-Yu Refreshments
   description: A Weyland-Yutani branded beverage dispenser. Insert cash to purchase a drink. Prices subject to colonial sales tax.
   suffix: Cash, Drinks
   components:
@@ -89,7 +89,7 @@
 - type: entity
   id: AU14CashSnackMachine
   parent: AU14CashVendorBase
-  name: WY Provisions
+  name: We-Yu Provisions
   description: A Weyland-Yutani branded snack dispenser. Insert cash to purchase a snack. Prices subject to colonial sales tax.
   suffix: Cash, Snacks
   components:

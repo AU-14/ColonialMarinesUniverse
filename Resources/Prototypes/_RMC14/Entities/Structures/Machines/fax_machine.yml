@@ -45,8 +45,8 @@
 - type: entity
   parent: CMFax
   id: CMFaxWY
-  name: WY fax machine
-  suffix: WEYA
+  name: We-Yu fax machine
+  suffix: We-Yu
   components:
   - type: FaxMachine
     name: "Weyland-Yutani"

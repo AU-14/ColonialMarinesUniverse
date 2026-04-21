@@ -85,7 +85,7 @@
 - type: entity
   parent: CMCanteenBase
   id: CMWEYAFlask
-  name: We-Ya flask
+  name: We-Yu flask
   description: A metal flask embossed with We-Yu's signature logo that some corporate bootlicker probably ordered to be stocked in UA military vessels' canteen vendors.
   components:
   - type: Sprite
@@ -94,7 +94,7 @@
 - type: entity
   parent: [CMCanteenBase, DrinkFlaskVisualsOpenable]
   id: RMCWeYaThermos
-  name: We-Ya thermos
+  name: We-Yu thermos
   description: A sleek metal thermos, decorated with the colours of the Weyland-Yutani Corporation. The marketing claims it can withstands equivalent to a nuclear blast, though that's probably just PR talking.
   components:
   - type: Sprite

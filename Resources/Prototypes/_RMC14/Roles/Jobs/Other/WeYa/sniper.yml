@@ -13,7 +13,7 @@
   accessGroups:
   - Colony
   - RMCWeYa
-  spawnMenuRoleName: WEYA PMC Sniper Specialist
+  spawnMenuRoleName: We-Yu PMC Sniper Specialist
   special:
   - !type:AddComponentSpecial
     components:
@@ -46,7 +46,7 @@
 
 - type: entity
   id: RMCRandomHumanoidPMCSniper
-  name: weya pmc ghost role sniper
+  name: We-Yu pmc ghost role sniper
   suffix: Spawner, Player
   components:
   - type: Sprite
@@ -58,7 +58,7 @@
 - type: entity
   parent: CMSpawnPointJobBase
   id: RMCSpawnPointPMCSniper
-  name: weya pmc sniper spawn point
+  name: We-Yu pmc sniper spawn point
   components:
   - type: SpawnPoint
     job_id: RMCPMCSniper

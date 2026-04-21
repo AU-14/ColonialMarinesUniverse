@@ -12,7 +12,7 @@
     state: soap
   - type: Item
     sprite: Objects/Specific/Janitorial/soap.rsi
-    size: Tiny  
+    size: Tiny
   - type: Physics
     bodyType: Dynamic
   - type: SolutionContainerManager
@@ -42,7 +42,7 @@
   - type: Residue
     residueAdjective: residue-slippery
     residueColor: residue-green
-    
+
 - type: entity
   name: soap
   id: CMSoapDeluxe
@@ -58,7 +58,7 @@
   - type: Residue
     residueAdjective: residue-slippery
     residueColor: residue-brown
-    
+
 - type: entity
   name: soap
   id: CMSoapSyndie
@@ -78,12 +78,12 @@
     flavors:
       - clean
       - punishment
-    
+
 - type: entity
   name: soap
   id: CMSoapNT
   parent: CMSoap
-  description: A WeYa brand bar of soap. Smells of phoron.
+  description: A WeYu brand bar of soap. Smells of phoron.
   components:
   - type: Sprite
     state: soap_nt

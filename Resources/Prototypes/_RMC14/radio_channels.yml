@@ -159,7 +159,7 @@
 
 - type: radioChannel # Only used by Corporate Liason to hand out to bodyguards / command.
   id: WEYA
-  name: chat-radio-WY
+  name: chat-radio-We-Yu
   keycode: "w" #w in CM13
   frequency: 1231
   color: "#fe9b24"

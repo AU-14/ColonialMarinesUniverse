@@ -864,7 +864,7 @@
 - type: entity
   parent: RMCBeltHolsterPistol
   id: RMCBeltHolsterPistolWeYa
-  name: WY-TM892 pattern general pistol holster rig
+  name: We-Yu-TM892 pattern general pistol holster rig
   description: The WY-TM892 is the standard load-bearing equipment of the W-Y security forces. It consists of a modular belt with various clips. This version has a holster assembly that allows one to carry the most common pistols. It also contains side pouches that can store most pistol magazines.
   components:
   - type: Sprite
@@ -1281,7 +1281,7 @@
 - type: entity
   parent: RMCMatebaBeltLuxurious
   id: RMCMatebaBeltLuxuriousFilledWEYA
-  suffix: Filled, WEYA Director
+  suffix: Filled, We-Yu Director
   components:
   - type: StorageFill
     contents:
@@ -1668,7 +1668,7 @@
 - type: entity
   parent: RMCBeltSmartGunOperatorPistol
   id: RMCBeltSmartGunOperatorPistolPMC
-  name: WY-TM410 pattern smargunner sidearm rig
+  name: We-Yu-TM410 pattern smargunner sidearm rig
   description: A special pattern of We-Ya made combat belt, designed to carry smartgun ammunition and a sidearm.
   components:
   - type: Sprite

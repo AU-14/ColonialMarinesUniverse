@@ -57964,7 +57964,7 @@ entities:
       pos: 15.5,113.5
       parent: 1
     - type: FaxMachine
-      name: Port Neriod WY Office
+      name: Port Neriod We-Yu Office
 - proto: CMFilingCabinet
   entities:
   - uid: 860

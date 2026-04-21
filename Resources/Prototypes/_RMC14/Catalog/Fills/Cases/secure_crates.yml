@@ -60,7 +60,7 @@
 - type: entity
   parent: RMCSecureCaseStrapped
   id: RMCSecureCaseStrappedWater
-  name: We-Ya Bottled Water crate (x50)
+  name: We-Yu Bottled Water crate (x50)
   description: A crate containing fifty Weston-Yamada Bottled Spring Water bottles.
   components:
   - type: CrateOpenable

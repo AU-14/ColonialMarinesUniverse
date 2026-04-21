@@ -1,7 +1,7 @@
 ﻿- type: entity
   parent: ColMarTechBase
   id: AU14GeneralMedicalVendor
-  name: WeYu Medical Supply Vendor
+  name: We-Yu Medical Supply Vendor
   description: An automated supply vendor hooked up to a storage of medical supplies.
   suffix: AU14 MED
   components:
@@ -89,7 +89,7 @@
 - type: entity
   parent: ColMarTechBaseAnchorable
   id: AU14VendorBlood
-  name: WeYu Blood Dispenser
+  name: We-Yu Blood Dispenser
   description: The WeYu Med-Sci Brand Blood Pack Dispensary is the premier, top-of-the-line blood dispenser of 2105! Get yours today! #dont update year, that`s a joke from cm13
   suffix: AU14 MED
   components:
@@ -124,7 +124,7 @@
 - type: entity
   parent: ColMarTechBaseAnchorable
   id: AU14VendorBloodField
-  name: WeYu Field Blood Dispenser
+  name: We-Yu Field Blood Dispenser
   description: The WeYu Med-Sci Brand Blood Pack Dispensary is the premier, top-of-the-line blood dispenser of 2105! Get yours today! #dont update year, that`s a joke from cm13
   suffix: AU14 MED
   components:
@@ -170,7 +170,7 @@
 - type: entity
   parent: ColMarTechBaseAnchorable
   id: AU14GeneralMedicalVendorLight
-  name: WeYu Medical Field Supply Vendor
+  name: We-Yu Medical Field Supply Vendor
   description: Medical Pharmaceutical dispenser with basic medical supplies.
   components:
   - type: Fixtures

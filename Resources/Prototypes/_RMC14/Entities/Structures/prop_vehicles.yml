@@ -307,7 +307,7 @@
 - type: entity
   parent: RMCPropVehicleMonoSupronOrange
   id: RMCPropVehicleMonoSupronWY
-  suffix: WeYa
+  suffix: We-Yu
   components:
   - type: Sprite
     state: mizutani_wy
@@ -315,7 +315,7 @@
 - type: entity
   parent: RMCPropVehicleMonoSupronOrange
   id: RMCPropVehicleMonoSupronWYFlipped
-  suffix: WeYa, Flipped
+  suffix: We-Yu, Flipped
   components:
   - type: Sprite
     state: mizutani_wy_f
@@ -541,7 +541,7 @@
 - type: entity
   parent: RMCPropVehicleMonoSupronOrangeDestroyed
   id: RMCPropVehicleMonoSupronWYDestroyed
-  suffix: WeYa, Destroyed
+  suffix: We-Yu, Destroyed
   components:
   - type: Sprite
     state: mizutani_wy_damage
@@ -549,7 +549,7 @@
 - type: entity
   parent: RMCPropVehicleMonoSupronOrangeDestroyed
   id: RMCPropVehicleMonoSupronWYDestroyedFlipped
-  suffix: WeYa, Destroyed, Flipped
+  suffix: We-Yu, Destroyed, Flipped
   components:
   - type: Sprite
     state: mizutani_wy_damage_f

@@ -78,7 +78,7 @@
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointWYGuard
-  name: Spawn Point WY guard
+  name: Spawn Point We-Yu guard
   components:
   - type: SpawnPoint
     job_id: AU14JobWYGuard

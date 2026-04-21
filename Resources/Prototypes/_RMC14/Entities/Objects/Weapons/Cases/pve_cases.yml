@@ -322,7 +322,7 @@
 - type: entity
   parent: RMCPVECaseSentry
   id: RMCPVECaseSentryPMC
-  name: We-Ya 512-M mini sentry case
+  name: We-Yu 512-M mini sentry case
   description: A gun case containing the We-Ya 512-M mini sentry and a spare drum.
   components:
   - type: Storage

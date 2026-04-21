@@ -1,7 +1,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14WYPMCFatigues
-  name: WY PMC Fatigues
+  name: We-Yu PMC Fatigues
   description: A standard set of Weyland-Yutani PMC Fatigues. It has shards of light Kevlar to help protect against shrapnel.
   components:
   - type: Sprite
@@ -36,7 +36,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14WYPMCFatiguesEngineer
-  name: WY PMC Engineer Fatigues
+  name: We-Yu PMC Engineer Fatigues
   description: A standard set of Weyland-Yutani PMC Engineer Fatigues. It has shards of light Kevlar to help protect against shrapnel.
   components:
   - type: Sprite
@@ -45,7 +45,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14WYGuardFatigues
-  name: WY Guard Fatigues
+  name: We-Yu Guard Fatigues
   description: A standard set of Weyland-Yutani Guard Fatigues. It has shards of light Kevlar to help protect against shrapnel.
   components:
   - type: Sprite

@@ -126,7 +126,7 @@
 - type: entity
   parent: RMCSpawnZombifiedColonist
   id: RMCSpawnZombifiedWeYaGoon
-  suffix: WeYa Goon
+  suffix: We-Yu Goon
   components:
   - type: CorpseSpawner
     spawn: RMCZombifiedGoon
@@ -141,7 +141,7 @@
 - type: entity
   parent: RMCSpawnZombifiedColonist
   id: RMCSpawnZombifiedWeYaPMC
-  suffix: WeYa PMC
+  suffix: We-Yu PMC
   components:
   - type: CorpseSpawner
     spawn: RMCZombifiedWeYaPMC

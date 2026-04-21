@@ -1,7 +1,7 @@
 - type: entity
   parent: MarkerBase
   id: AU14SpawnerRandomWeYuSupply
-  name: WeYu experimental supply spawner
+  name: We-Yu experimental supply spawner
   description: Spawns either set of xeno eggs, romerol or demon speed pills for experiments.
   components:
   - type: Sprite
@@ -14,6 +14,6 @@
       - AU14CrateSecureWeYuXenoEggs
       - AU14CrateSecureWeYuMMI
       - AU14CrateSecureWeYuMindBreaker # x2
-      - AU14CrateSecureWeYuMindBreaker 
+      - AU14CrateSecureWeYuMindBreaker
       - AU14CrateSecureWeYuDrug # x2
       - AU14CrateSecureWeYuDrug

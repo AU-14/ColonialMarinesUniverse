@@ -135,7 +135,7 @@
 - type: entity
   parent: RMCAreaPortNereidCargo
   id: RMCAreaPortNereidHeavyHaulter
-  name: Port Nereid - WEYA Hauler
+  name: Port Nereid - We-Yu Hauler
   components:
   - type: Sprite
     sprite: _RMC14/Areas/hybrisareas.rsi

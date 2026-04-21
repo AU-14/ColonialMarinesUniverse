@@ -13,7 +13,7 @@
   - Colony
   - RMCWeYa
   - SquadLeader
-  spawnMenuRoleName: WEYA PMC Force Lead (PVE)
+  spawnMenuRoleName: We-Yu PMC Force Lead (PVE)
   special:
   - !type:AddComponentSpecial
     components:
@@ -61,7 +61,7 @@
 - type: entity
   parent: CMSpawnPointJobBase
   id: RMCSpawnPointPMCForceLeadPVE
-  name: weya pmc force lead spawn point
+  name: We-Yu pmc force lead spawn point
   suffix: PVE
   components:
   - type: SpawnPoint

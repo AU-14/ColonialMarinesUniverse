@@ -112,7 +112,7 @@
 - type: entity
   parent: RMCCoffeeCup
   id: RMCWestonYamadaCup
-  name: WEYA mug
+  name: We-Yu mug
   description: A clean, stylish cup with the logo of the Weston-Yamada Corporation branded on the side. Used throughout the company hierarchy, from interns to division directors.
   components:
   - type: Sprite

@@ -13,7 +13,7 @@
   accessGroups:
   - Colony
   - RMCWeYa
-  spawnMenuRoleName: WEYA Corporate Executive Supervisor
+  spawnMenuRoleName: We-Yu Corporate Executive Supervisor
   special:
   - !type:AddComponentSpecial
     components:
@@ -61,7 +61,7 @@
 - type: entity
   parent: MarkerBase
   id: RMCRandomHumanoidWeYaLawyerSupervisor
-  name: weya corporate ghost role lawyer supervisor
+  name: We-Yu corporate ghost role lawyer supervisor
   suffix: Spawner, Player
   components:
   - type: Sprite

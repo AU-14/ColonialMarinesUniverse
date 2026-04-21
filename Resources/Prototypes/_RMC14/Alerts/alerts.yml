@@ -487,7 +487,7 @@
     state: trackon-west_cl
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
     state: trackon-southwest_cl
-  name: We-Ya Squad Tracker
+  name: We-Yu Squad Tracker
   description: Tracks the Corporate Liaison.
 
 - type: alert
@@ -516,7 +516,7 @@
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
     state: trackon-southwest_tl
   description: Tracks the Team Leader
-  
+
 - type: alert
   parent: SquadTracker
   id: SquadTrackerParaTeamLeader
@@ -570,7 +570,7 @@
     state: trackon-west_fl
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
     state: trackon-southwest_fl
-  name: We-Ya Squad Tracker
+  name: We-Yu Squad Tracker
   description: Tracks the Force Leader
 
 - type: alert

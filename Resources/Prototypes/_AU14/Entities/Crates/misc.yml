@@ -57,7 +57,7 @@
 - type: entity
   parent: RMCSecureCaseMedicalBig #Medical Vendor Crate
   id: AU14CrateMedicalBloodVendor
-  name: WeYu blood dispenser crate
+  name: We-Yu blood dispenser crate
   description: A crate containing one We-Yu-Med vendor.
   components:
   - type: SpawnOnTerminate

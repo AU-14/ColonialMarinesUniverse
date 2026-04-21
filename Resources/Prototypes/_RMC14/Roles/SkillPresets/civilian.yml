@@ -23,7 +23,7 @@
 - type: entity
   parent: RMCSkillPresetSurvivor
   id: RMCSkillPresetSurvivorWeYaManager
-  name: Survivor WeYa Manager
+  name: Survivor We-Yu Manager
   categories: [ HideSpawnMenu ]
   components:
   - type: SkillPreset

@@ -681,7 +681,7 @@
 - type: entity
   parent: RMCCrateSecure
   id: RMCCrateSecureWeYa
-  name: secure We-Ya crate
+  name: secure We-Yu crate
   description: A secure crate with a We-Ya insignia on it.
   suffix: We-Ya, Req, Locked
   components:

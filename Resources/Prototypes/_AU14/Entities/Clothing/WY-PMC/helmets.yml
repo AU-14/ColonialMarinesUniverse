@@ -1,7 +1,7 @@
 - type: entity
   parent: RMCMarineHelmetBase
   id: AU14WYPMCHelmet
-  name: WY PMC Helmet
+  name: We-Yu PMC Helmet
   description: A WY PMC helmet.
   components:
   - type: Sprite
@@ -12,7 +12,7 @@
 - type: entity
   parent: RMCMarineHelmetBase
   id: AU14WYPMCSniperHat
-  name: WY PMC Sniper Hat
+  name: We-Yu PMC Sniper Hat
   description: A WY PMC helmet.
   components:
   - type: Sprite
@@ -23,7 +23,7 @@
 - type: entity
   parent: [ArmorHelmetPMC, RMCMarineHelmetWithLightBase]
   id: AU14ArmorHelmetPMCTactical
-  name: WY PMC Tactical Helmet
+  name: We-Yu PMC Tactical Helmet
   description: A contender for service with the Royal Marines Commandos, it is presently, exclusively, field tested by Weyland-Yutani mercenaries. Features a ballistic mask and integrated display connected to the visor.
   components:
   - type: Sprite
@@ -48,7 +48,7 @@
 - type: entity
   parent: AU14ArmorHelmetPMCTactical
   id: AU14ArmorHelmetPMCTacticalEngi
-  name: WY PMC Tactical Engineer Helmet
+  name: We-Yu PMC Tactical Engineer Helmet
   description: A contender for service with the Royal Marines Commandos, it is presently, exclusively, field tested by Weyland-Yutani mercenaries. Features a ballistic mask and integrated display connected to the visor.
   components:
   - type: Sprite
@@ -59,7 +59,7 @@
 - type: entity
   parent: RMCMarineHelmetBase
   id: AU14WYPMCHelmetHeavy
-  name: WY PMC Heavy Helmet
+  name: We-Yu PMC Heavy Helmet
   description: A WY PMC helmet.
   components:
   - type: IdentityBlocker

@@ -103,7 +103,7 @@
 - type: entity
   parent: ArmorHelmetM10
   id: ArmorHelmetPMCCommandoSurvivor
-  name: damaged We-Ya Commando helmet
+  name: damaged We-Yu Commando helmet
   description: A standard enclosed helmet utilized by Weston-Yamada Commandos. Has been through a lot of wear and tear.
   components:
   - type: ItemCamouflage
@@ -159,7 +159,7 @@
 - type: entity
   parent: ArmorHelmetPMC
   id: RMCArmorHelmetPMCDark
-  name: We-Ya armored cap
+  name: We-Yu armored cap
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Head/PMC/hybrisa_cap.rsi
@@ -169,7 +169,7 @@
 - type: entity
   parent: ArmorHelmetPMC
   id: ArmorHelmetPMCCorporate
-  name: WY corporate security helmet
+  name: We-Yu corporate security helmet
   description: A basic skull-helm worn by corporate security assets, graded to protect your head from an unruly scientist armed with a crowbar.
   components:
   - type: Sprite
@@ -221,7 +221,7 @@
 - type: entity
   parent: ArmorHelmetPMC
   id: RMCArmorHelmetPMCKutjevoSecurity
-  name: We-Ya corporate security helmet
+  name: We-Yu corporate security helmet
   description: A basic skull-helm worn by corporate security assets. This variant comes with a wider brim to protect the user from the harsh climate of the desert.
   suffix: Kutjevo
   components:
@@ -233,7 +233,7 @@
 - type: entity
   parent: ArmorHelmetPMC
   id: RMCArmorHelmetPMCKutjevoMedical
-  name: We-Ya corporate medic helmet
+  name: We-Yu corporate medic helmet
   description: A basic skull-helm worn by corporate security assets. This variant comes with a wider brim to protect the user from the harsh climate of the desert and has a medical cross across the front.
   suffix: Kutjevo
   components:

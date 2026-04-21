@@ -124202,7 +124202,7 @@ entities:
   - uid: 9111
     components:
     - type: MetaData
-      name: Geothermal & WeYu Mart
+      name: Geothermal & Weymart
     - type: Transform
       pos: 124.5,-146.5
       parent: 1

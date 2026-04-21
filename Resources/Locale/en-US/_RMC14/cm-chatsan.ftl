@@ -53,10 +53,10 @@ cm-chatsan-word-sniper = sniper
 cm-chatsan-replacement-sniper = long spitter
 
 cm-chatsan-word-flare = flare
-cm-chatsan-replacement-flare = glow stick
+cm-chatsan-replacement-flare = flame stick
 
 cm-chatsan-word-flares = flares
-cm-chatsan-replacement-flares = glow sticks
+cm-chatsan-replacement-flares = flame sticks
 
 cm-chatsan-word-synth = synth
 cm-chatsan-replacement-synth = fake host
@@ -362,13 +362,13 @@ cm-chatsan-word-gls = gls
 cm-chatsan-replacement-gls = boomstick launchers
 
 cm-chatsan-word-bullet = bullet
-cm-chatsan-replacement-bullet = spit
+cm-chatsan-replacement-bullet =  metal spit
 
 cm-chatsan-word-bullets = bullets
-cm-chatsan-replacement-bullets = spits
+cm-chatsan-replacement-bullets = metal spits
 
 cm-chatsan-word-ammo = ammo
-cm-chatsan-replacement-ammo = spits
+cm-chatsan-replacement-ammo = metal spits
 
 # TODO RMC14 rouny > runner but only if no rouny was spawned in the round
 
@@ -700,10 +700,10 @@ cm-chatsan-word-flashlights = flashlights
 cm-chatsan-replacement-flashlights = glow tubes
 
 cm-chatsan-word-window = window
-cm-chatsan-replacement-window = tall membrane
+cm-chatsan-replacement-window = clear wall
 
 cm-chatsan-word-windows = windows
-cm-chatsan-replacement-windows = tall membranes
+cm-chatsan-replacement-windows = clear walls
 
 cm-chatsan-word-light-bulb = light bulb
 cm-chatsan-word-lightbulb = lightbulb
@@ -714,10 +714,10 @@ cm-chatsan-word-lightbulbs = lightbulbs
 cm-chatsan-replacement-light-bulbs = glow orbs
 
 cm-chatsan-word-crate = crate
-cm-chatsan-replacement-crate = containment box
+cm-chatsan-replacement-crate = nest box
 
 cm-chatsan-word-crates = crates
-cm-chatsan-replacement-crates = containment boxes
+cm-chatsan-replacement-crates = nest boxes
 
 cm-chatsan-word-gunshot = gunshot
 cm-chatsan-replacement-gunshot = spit burst
@@ -738,7 +738,7 @@ cm-chatsan-word-folders = folders
 cm-chatsan-replacement-folders = sheet holders
 
 cm-chatsan-word-weya = weya
-cm-chatsan-replacement-weya = weyu
+cm-chatsan-replacement-weya = We-Yu
 
 cm-chatsan-word-unmc = unmc
 cm-chatsan-replacement-unmc = uscm
@@ -757,6 +757,7 @@ cm-chatsan-replacement-unmcfull = United States Colonial Marines
 
 cm-chatsan-word-sppfull = Socialist Progressive Peoples
 cm-chatsan-replacement-sppfull = Union of Progressive Peoples
+
 cm-chatsan-word-zerker = zerker
 cm-chatsan-word-replacement-zerker = berserker
 

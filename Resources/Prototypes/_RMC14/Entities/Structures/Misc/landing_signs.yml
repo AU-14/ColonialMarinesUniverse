@@ -134,7 +134,7 @@
   parent: RMCBaseLandingSign
   id: RMCHybrisaProsperaMiningSign
   name: Hybrisa Prospera - Weston-Yamada Tartarus Mining - Landing Zone two sign
-  description: A large sign that reads 'WEYA - TMCC Mining - HBP - LZ - 01' The Tartarus Mining logo is adorns the sign.
+  description: A large sign that reads 'WeYu - TMCC Mining - HBP - LZ - 01' The Tartarus Mining logo is adorns the sign.
   components:
   - type: Sprite
     state: hybrisamining_sign

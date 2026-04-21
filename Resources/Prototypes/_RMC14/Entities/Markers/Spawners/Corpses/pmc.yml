@@ -2,7 +2,7 @@
 - type: entity
   parent: RMCSpawnerCorpse
   id: RMCSpawnerCorpseWeYaGoonLead
-  name: Corpse Spawner - We-Ya Goon Lead
+  name: Corpse Spawner - We-Yu Goon Lead
   components:
   - type: CorpseSpawner
     spawn: RMCCorpseWeYaGoonLead
@@ -10,7 +10,7 @@
 - type: entity
   parent: RMCSpawnerCorpseWeYaGoonLead
   id: RMCSpawnerCorpseWeYaGoonLeadBurst
-  name: Corpse Spawner - We-Ya Goon Lead
+  name: Corpse Spawner - We-Yu Goon Lead
   suffix: RMC14, Burst
   components:
   - type: CorpseSpawner
@@ -19,7 +19,7 @@
 - type: entity
   parent: RMCSpawnerCorpse
   id: RMCSpawnerCorpseWeYaPMC
-  name: Corpse Spawner - We-Ya PMC Standard
+  name: Corpse Spawner - We-Yu PMC Standard
   components:
   - type: CorpseSpawner
     spawn: RMCCorpseWeYaPMCStandard
@@ -27,7 +27,7 @@
 - type: entity
   parent: RMCSpawnerCorpseWeYaPMC
   id: RMCSpawnerCorpseWeYaPMCStandardBurst
-  name: Corpse Spawner - We-Ya PMC Standard
+  name: Corpse Spawner - We-Yu PMC Standard
   suffix: RMC14, Burst
   components:
   - type: CorpseSpawner
@@ -37,7 +37,7 @@
 - type: entity
   parent: RMCSpawnerCorpseWeYaGoonLead
   id: RMCSpawnerCorpseWeYaGoonLeadHybrisa
-  name: Corpse Spawner - We-Ya Goon Hybrisa Lead
+  name: Corpse Spawner - We-Yu Goon Hybrisa Lead
   components:
   - type: CorpseSpawner
     spawn: RMCCorpseWeYaGoonHybrisaLead
@@ -45,7 +45,7 @@
 - type: entity
   parent: RMCSpawnerCorpseWeYaGoonLead
   id: RMCSpawnerCorpseWeYaGoonLeadHybrisaBurst
-  name: Corpse Spawner - We-Ya Goon Hybrisa Lead
+  name: Corpse Spawner - We-Yu Goon Hybrisa Lead
   suffix: RMC14, Burst
   components:
   - type: CorpseSpawner
@@ -54,7 +54,7 @@
 - type: entity
   parent: RMCSpawnerCorpse
   id: RMCSpawnerCorpseWeYaGoonHybrisa
-  name: Corpse Spawner - We-Ya Goon Hybrisa
+  name: Corpse Spawner - We-Yu Goon Hybrisa
   components:
   - type: CorpseSpawner
     spawn: RMCCorpseWeYaGoonHybrisa
@@ -63,7 +63,7 @@
 - type: entity
   parent: RMCSpawnerCorpse
   id: RMCSpawnerCorpseWeYaGoonKutjevo
-  name: Corpse Spawner - We-Ya Goon Kutjevo
+  name: Corpse Spawner - We-Yu Goon Kutjevo
   components:
   - type: CorpseSpawner
     spawn: RMCCorpseWeYaGoonKutjevo

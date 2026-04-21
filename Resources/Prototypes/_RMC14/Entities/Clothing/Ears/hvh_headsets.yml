@@ -2,9 +2,9 @@
 - type: entity
   parent: RMCHeadsetIconsWeYa
   id: RMCHeadsetHvHWeYaPMC
-  name: WeYa corporate headset
+  name: We-Yu corporate headset
   description: A special headset used by corporate personnel.
-  suffix: WeYa, PMC, HvH,
+  suffix: We-Yu, PMC, HvH,
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/headsets.rsi
@@ -59,8 +59,8 @@
 - type: entity
   parent: RMCHeadsetHvHWeYaPMC
   id: RMCHeadsetHvHWeYaPMCCommando
-  name: We-Ya Commando headset
-  suffix: WeYa, PMC Commando, HvH
+  name: We-Yu Commando headset
+  suffix: We-Yu, PMC Commando, HvH
   description: A special headset used by unidentified operatives.
   components:
   - type: ContainerFill

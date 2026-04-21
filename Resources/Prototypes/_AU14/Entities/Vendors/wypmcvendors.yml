@@ -1,7 +1,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14WYclothingequipmentvendor
-  name: WY PMC apparel vendor
+  name: We-Yu PMC apparel vendor
   description: An automated rack hooked up to a small storage of standard pmc apparel.
   components:
   - type: AccessReader
@@ -168,7 +168,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14WYequipmentvendor
-  name: WY PMC equipment vendor
+  name: We-Yu PMC equipment vendor
   description: An automated rack hooked up to a small storage of standard Weyland-Yutani equipment.
   components:
   - type: AccessReader
@@ -255,7 +255,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14WYcorpsmanvendor
-  name: WY PMC medical vendor
+  name: We-Yu PMC medical vendor
   description: An automated rack hooked up to a small storage of medical supplies.
   components:
   - type: AccessReader
@@ -360,7 +360,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14WYaircrewvendor
-  name: WY PMC aircrew vendor
+  name: We-Yu PMC aircrew vendor
   description: An automated rack hooked up to a small storage of aircrew apparel and equipment.
   components:
   - type: AccessReader
@@ -509,7 +509,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14WYdirectorequipmentvendor
-  name: WY PMC command vendor
+  name: We-Yu PMC command vendor
   description: An automated rack hooked up to a small storage of director apparel and equipment.
   components:
   - type: AccessReader
@@ -550,7 +550,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14WYSGequipmentvendor
-  name: WY PMC smartgunner equipment vendor
+  name: We-Yu PMC smartgunner equipment vendor
   description: An automated rack hooked up to a small storage of smartgunner equipment.
   components:
   - type: AccessReader
@@ -582,7 +582,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14WYsupervisorequipmentvendor
-  name: WY PMC supervisor vendor
+  name: We-Yu PMC supervisor vendor
   description: An automated rack hooked up to a small storage of apparel and equipment for the supervisor.
   components:
   - type: AccessReader
@@ -615,7 +615,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14WYWeaponsVendor
-  name: WY PMC weapons rack
+  name: We-Yu PMC weapons rack
   description: An automated rack hooked up to a small storage of weapons.
   components:
   - type: AccessReader
@@ -652,7 +652,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14WYSpecialWeaponsVendor
-  name: WY PMC special weapons rack
+  name: We-Yu PMC special weapons rack
   description: An automated rack hooked up to a small storage of special weapons.
   components:
   - type: AccessReader

@@ -2941,7 +2941,7 @@ entities:
   - uid: 12
     components:
     - type: MetaData
-      name: WeYa Sector Communications Office
+      name: We-Yu Sector Communications Office
     - type: Transform
       pos: 35.5,-29.5
       parent: 2
@@ -10829,7 +10829,7 @@ entities:
   - uid: 1466
     components:
     - type: MetaData
-      name: We-Ya
+      name: We-Yu
     - type: Transform
       pos: 25.5,-21.5
       parent: 2
@@ -12451,7 +12451,7 @@ entities:
   - uid: 1724
     components:
     - type: MetaData
-      name: WeYa Communications Offices
+      name: We-Yu Communications Offices
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 27.5,-32.5

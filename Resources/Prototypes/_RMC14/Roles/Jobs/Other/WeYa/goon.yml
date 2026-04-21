@@ -13,7 +13,7 @@
   accessGroups:
   - Colony
   - RMCWeYa
-  spawnMenuRoleName: WEYA PMC Goon
+  spawnMenuRoleName: We-Yu PMC Goon
   special:
   - !type:AddComponentSpecial
     components:
@@ -74,7 +74,7 @@
 - type: entity
   parent: MarkerBase
   id: RMCRandomHumanoidWeYaGoon
-  name: weya corporate ghost role goon
+  name: We-Yu corporate ghost role goon
   suffix: Spawner, Player
   components:
   - type: Sprite

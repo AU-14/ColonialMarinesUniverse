@@ -360,12 +360,12 @@
   abstract: true
   parent: RMCBaseERTShuttleWall
   id: RMCERTShuttleWallWeYa
-  name: WeYa Shuttle Wall
+  name: We-Yu Shuttle Wall
 
 - type: entity
   parent: RMCERTShuttleWallWeYa
   id: RMCERTShuttleWallWeYaEngineLeft
-  name: WeYa Shuttle Engine
+  name: We-Yu Shuttle Engine
   suffix: Left
   components:
   - type: Sprite
@@ -376,7 +376,7 @@
 - type: entity
   parent: RMCERTShuttleWallWeYa
   id: RMCERTShuttleWallWeYaEngineRight
-  name: WeYa Shuttle Engine
+  name: We-Yu Shuttle Engine
   suffix: Right
   components:
   - type: Sprite

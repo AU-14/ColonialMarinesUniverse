@@ -51,7 +51,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu
   id: AU14JobIPIELawyer
-  name: WY IPIE Lawyer (3rd party)
+  name: We-Yu IPIE Lawyer (3rd party)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable
@@ -72,7 +72,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu
   id: AU14JobIPIELawyerSynth
-  name: WY IPIE Lawyer (3rd party, synth)
+  name: We-Yu IPIE Lawyer (3rd party, synth)
   components:
   - type: Synth
     changeBrain: false

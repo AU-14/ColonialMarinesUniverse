@@ -79,7 +79,7 @@
   id: CMIDCardLiaison
   name: corporate holo-badge
   description: A corporate holo-badge. It's a unique Corporate orange and white.
-  suffix: WeYa
+  suffix: We-Yu
   components:
   - type: Sprite
     state: corporate_liaison
@@ -95,7 +95,7 @@
   id: CMIDCardPMC
   name: pmc holo-badge
   description: A corporate holo-badge. It has a unique uncapped bottom.
-  suffix: WeYa
+  suffix: We-Yu
   components:
   - type: Sprite
     state: pmc
@@ -107,7 +107,7 @@
   parent: CMIDCardPMC
   id: CMIDCardCommando
   name: commando holo-badge
-  suffix: WeYa
+  suffix: We-Yu
   components:
   - type: Sprite
     state: commando
@@ -117,7 +117,7 @@
   id: CMIDCardPMCExecutive
   name: corporate holo-badge
   description: A corporate holo-badge in standard corporate orange and white. It has a unique uncapped bottom. It is fingerprint locked with 5-X clearance level. Commonly held by corporate managers.
-  suffix: WeYa
+  suffix: We-Yu
   components:
   - type: Sprite
     state: pmc

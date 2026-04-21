@@ -57,7 +57,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu
   id: AU14JobWYHTLiaison
-  name: WY Hazard Transport Liaison (3rd party)
+  name: We-Yu Hazard Transport Liaison (3rd party)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable

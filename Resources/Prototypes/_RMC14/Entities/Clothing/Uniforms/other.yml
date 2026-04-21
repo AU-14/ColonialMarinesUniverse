@@ -356,8 +356,8 @@
 - type: entity
   parent: RMCUniformBase
   id: RMCJumpsuitWeyamart
-  name: Weyamart uniform
-  description: A pair of dark-grey slacks and an orange button-down shirt; a standard uniform for the Weston-Yamada branded supermarket 'Weyamart'.
+  name: Weymart uniform
+  description: A pair of dark-grey slacks and an orange button-down shirt; a standard uniform for the Weston-Yamada branded supermarket 'WeYumart'.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Uniforms/Civilian/weyamart.rsi

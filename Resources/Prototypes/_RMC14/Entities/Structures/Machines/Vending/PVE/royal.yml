@@ -1,7 +1,7 @@
 - type: entity
   parent: ColMarTechBase
   id: RMCRoyalAssaultEngineerVendor
-  name: We-Ya section engineering equipment rack
+  name: We-Yu section engineering equipment rack
   suffix: PVE, RCM
   description: An automated rack hooked up to a colossal storage of assault engineer standard-issue equipment.
   components:
@@ -51,7 +51,7 @@
 - type: entity
   parent: ColMarTechBase
   id: RMCRoyalMedicalAssistantVendor
-  name: We-Ya section medical equipment rack
+  name: We-Yu section medical equipment rack
   suffix: PVE, RCM
   description: An automated rack hooked up to a colossal storage of medical assistant standard-issue equipment.
   components:
@@ -76,7 +76,7 @@
       - id: RMCBackpackRCMMedic
     - name: Belt
       choices: { CMBelt: 1 }
-      entries: 
+      entries:
       - id: RMCMedicalL75RCM
       - id: RMCBeltUtilityGeneralRCMPVE
     - name: Pouches
@@ -105,7 +105,7 @@
 - type: entity
   parent: ColMarTechBase
   id: RMCRoyalBombSpecVendor
-  name: We-Ya Section Fire Support Gear Rack # Labeled "OFS" in parity.
+  name: We-Yu Section Fire Support Gear Rack # Labeled "OFS" in parity.
   description: An automated rack hooked up to a colossal storage of bombardment specialist standard-issue equipment.
   suffix: PVE, RCM
   components:
@@ -125,7 +125,7 @@
       - id: RMCVendorBundleRCMPVEMGL
       - id: RMCMortarKit # TODO RMC14 L53A1 light mortar kit
     - name: Helmet (Mandatory)
-      takeOne: RMCAccessories 
+      takeOne: RMCAccessories
       entries:
       - id: RMCHeadRoyalHelmetBallistic
     - name: Backpack
@@ -141,7 +141,7 @@
       - id: RMCBeltHolsterPistolRCM
       - id: RMCBeltUtilityGeneralRCMPVE
     - name: Armor Webbing
-      choices: { RMCArmorWebbing: 1 } 
+      choices: { RMCArmorWebbing: 1 }
       entries:
       - id: RMCArmorWebbingGrenade
       - id: RMCArmorWebbingDrum
@@ -185,7 +185,7 @@
 - type: entity
   parent: ColMarTechBase
   id: RMCRoyalScoutSniperVendor
-  name: We-Ya Section Scout-Sniper Gear Rack 
+  name: We-Yu Section Scout-Sniper Gear Rack
   description: An automated rack hooked up to a colossal storage of scout-sniper standard-issue equipment.
   suffix: PVE, RCM
   components:
@@ -219,7 +219,7 @@
       - id: RMCBeltHolsterPistolRCM
       - id: RMCBeltUtilityGeneralRCMPVE
     - name: Armor Webbing
-      choices: { RMCArmorWebbing: 1 } 
+      choices: { RMCArmorWebbing: 1 }
       entries:
       - id: RMCArmorWebbingDrum
       - id: RMCArmorWebbingPouch
@@ -239,7 +239,7 @@
 - type: entity
   parent: ColMarTechBase
   id: RMCColMarTechSurplusRCMPVE
-  name: We-Ya Section Surplus Uniform Vendor
+  name: We-Yu Section Surplus Uniform Vendor
   description: An automated rack hooked up to a small storage of Royal Crown Marines uniforms.
   suffix: PVE, RCM
   components:
@@ -300,7 +300,7 @@
       - id: RMCPVEArmorKneeGuardKestrel
         amount: 15
     - name: Backpacks
-      entries: 
+      entries:
       - id: RMCBackpackRCMSmall
         amount: 15
       - id: RMCBackpackRCMMedium
@@ -362,7 +362,7 @@
   parent: ColMarTechBase
   id: RMCColMarTechUtilitiesRCMPVE
   suffix: PVE, RCM
-  name: We-Ya Automated Utilities Section Vendor
+  name: We-Yu Automated Utilities Section Vendor
   description: An automated supply rack hooked up to a small storage of various utilities, tools, and medical supplies. Can be accessed by any Royal marine.
   components:
   - type: Sprite

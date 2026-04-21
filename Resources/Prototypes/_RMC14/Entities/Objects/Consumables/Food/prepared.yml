@@ -378,7 +378,7 @@
 - type: entity
   parent: RMCTrayEmpty
   id: RMCTrayEmptyPMC
-  description: A standard WEYA-produced plastic tray, built for PMCs, by PMCs, to help PMCs meet their nutrient requirements.
+  description: A standard WeYu-produced plastic tray, built for PMCs, by PMCs, to help PMCs meet their nutrient requirements.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/prepared.rsi

@@ -66813,7 +66813,7 @@ entities:
   - uid: 4630
     components:
     - type: MetaData
-      name: WEYA Hanger Lockdown
+      name: We-Yu Hanger Lockdown
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -46.5,-56.5
@@ -66821,7 +66821,7 @@ entities:
   - uid: 4631
     components:
     - type: MetaData
-      name: WEYA Hanger Lockdown
+      name: We-Yu Hanger Lockdown
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -46.5,-55.5
@@ -66829,7 +66829,7 @@ entities:
   - uid: 4634
     components:
     - type: MetaData
-      name: WEYA Hanger Lockdown
+      name: We-Yu Hanger Lockdown
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -46.5,-47.5
@@ -66837,7 +66837,7 @@ entities:
   - uid: 4635
     components:
     - type: MetaData
-      name: WEYA Hanger Lockdown
+      name: We-Yu Hanger Lockdown
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -46.5,-46.5
@@ -66845,14 +66845,14 @@ entities:
   - uid: 4638
     components:
     - type: MetaData
-      name: WEYA Hanger Lockdown
+      name: We-Yu Hanger Lockdown
     - type: Transform
       pos: -40.5,-62.5
       parent: 1
   - uid: 4639
     components:
     - type: MetaData
-      name: WEYA Hanger Lockdown
+      name: We-Yu Hanger Lockdown
     - type: Transform
       pos: -39.5,-62.5
       parent: 1
@@ -67540,7 +67540,7 @@ entities:
   - uid: 4636
     components:
     - type: MetaData
-      name: WEYA Hanger Lockdown
+      name: We-Yu Hanger Lockdown
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -46.031433,-48.30475
@@ -67550,7 +67550,7 @@ entities:
   - uid: 4637
     components:
     - type: MetaData
-      name: WEYA Hanger Lockdown
+      name: We-Yu Hanger Lockdown
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -46.031433,-54.60674
@@ -67560,7 +67560,7 @@ entities:
   - uid: 4640
     components:
     - type: MetaData
-      name: WEYA Hanger Lockdown
+      name: We-Yu Hanger Lockdown
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -41.50776,-61.914978

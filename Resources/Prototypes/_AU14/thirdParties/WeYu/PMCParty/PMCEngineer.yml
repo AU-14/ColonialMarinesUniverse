@@ -32,7 +32,7 @@
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu
   id: AU14JobWYPMCPartyEngineer
-  name: WY PMC Party Combat Engineer (3rd party, M41A/2)
+  name: We-Yu PMC Party Combat Engineer (3rd party, M41A/2)
   components:
   - type: Threat
   - type: GhostTakeoverAvailable
