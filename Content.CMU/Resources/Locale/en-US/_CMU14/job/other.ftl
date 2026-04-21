@@ -260,3 +260,5 @@ au14-ipie-greeting = You are Weyland-Yutani's Personal Protection Officer. Prote
     Company's profit is your goal.
 
     Weyland-Yutani - building better worlds.
+
+au14-lacncommando-description = You have been loaned to the United Americas Allied Command by the LACN for a special mission on this planet, the details of which have not been disclosed to you. You have been ordered to investigate the area and report to the local GOVFOR command.
