@@ -135,6 +135,15 @@
     {
       "name": "eggsac_1",
       "directions": 4
+    },
+    {
+      "name": "eggsac_3_rest_active"
+    },
+    {
+      "name": "eggsac_3"
+    },
+    {
+      "name": "eggsac_3_active"
     }
   ]
 }
