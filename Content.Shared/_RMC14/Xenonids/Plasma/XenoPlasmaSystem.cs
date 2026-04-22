@@ -1,17 +1,31 @@
 using Content.Shared._RMC14.Actions;
+using Content.Shared._RMC14.Atmos;
+using Content.Shared._RMC14.Damage;
+using Content.Shared._RMC14.Xenonids.Announce;
 using Content.Shared._RMC14.Xenonids.Egg;
+using Content.Shared._RMC14.Xenonids.Energy;
 using Content.Shared._RMC14.Xenonids.Evolution;
+using Content.Shared._RMC14.Xenonids.Eye;
+using Content.Shared._RMC14.Xenonids.Hive;
+using Content.Shared._RMC14.Xenonids.Strain;
+using Content.Shared._RMC14.Xenonids.Watch;
+using Content.Shared.Actions;
+using Content.Shared.Actions.Components;
 using Content.Shared.Alert;
 using Content.Shared.Coordinates;
+using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
+using Content.Shared.Interaction;
 using Content.Shared.Jittering;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Rounding;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Xenonids.Plasma;
 
@@ -23,8 +37,30 @@ public sealed class XenoPlasmaSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedJitteringSystem _jitter = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
+    [Dependency] private readonly SharedRMCFlammableSystem _flammable = default!;
+    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
+    [Dependency] private readonly SharedInteractionSystem _interact = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private readonly QueenEyeSystem _queenEye = default!;
+    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private readonly SharedRMCDamageableSystem _rmcDamageable = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private readonly XenoEnergySystem _xenoEnergy = default!;
+    [Dependency] private readonly SharedXenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private readonly XenoStrainSystem _xenoStrain = default!;
+    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
+
+
 
     private EntityQuery<XenoPlasmaComponent> _xenoPlasmaQuery;
+    private Dictionary<EntityUid, EntityUid?> RemotePlasmaTransferAction = null!;
+    private Dictionary<EntityUid, ActionsContainerComponent?> ActionsContainer = null!;
 
     public override void Initialize()
     {
@@ -40,6 +76,11 @@ public sealed class XenoPlasmaSystem : EntitySystem
 
         SubscribeLocalEvent<XenoActionPlasmaComponent, RMCActionUseAttemptEvent>(OnXenoActionEnergyUseAttempt);
         SubscribeLocalEvent<XenoActionPlasmaComponent, RMCActionUseEvent>(OnXenoActionEnergyUse);
+
+        Subs.BuiEvents<XenoPlasmaComponent>(XenoWatchUIKey.Key, subs =>
+        {
+            subs.Event<XenoWatchBuiTransferPlasmaMsg>(OnXenoBUIRemoteTransfer);
+        });
     }
 
     private void OnXenoPlasmaMapInit(Entity<XenoPlasmaComponent> ent, ref MapInitEvent args)
@@ -301,5 +342,41 @@ public sealed class XenoPlasmaSystem : EntitySystem
             _popup.PopupCoordinates(Loc.GetString("cm-xeno-not-enough-plasma"), popupOn.Value, xeno, PopupType.MediumCaution);
 
         return false;
+    }
+
+    private void OnXenoBUIRemoteTransfer(Entity<XenoPlasmaComponent> ent, ref XenoWatchBuiTransferPlasmaMsg args)
+    {
+        if (!TryComp<ActionsComponent>(ent,out var actionscomp))
+            return;
+
+        var ev = new XenoTransferPlasmaActionEvent();
+        EntityUid target = GetEntity(args.Target);
+        ev.Target = target;
+
+
+
+        //_actions.PerformAction(ent.Owner, _r,ev, _timing.CurTime);
+
+
+        //_rmcActions.TryUseAction(ent.Owner,);
+        Logger.Debug("using remote plasma transfer");
+
+
+    }
+
+    public FixedPoint2 GetPlasmaPercentage(Entity<XenoPlasmaComponent?> ent)
+    {
+        FixedPoint2 percentage = 0;
+        if (Resolve(ent, ref ent.Comp, false))
+        {
+            FixedPoint2 maxplasma;
+            FixedPoint2 currentplasma;
+            maxplasma = ent.Comp.MaxPlasma;
+            currentplasma = ent.Comp.Plasma;
+            if (maxplasma == 0)
+                return percentage;
+            percentage = currentplasma / maxplasma;
+        }
+        return percentage;
     }
 }

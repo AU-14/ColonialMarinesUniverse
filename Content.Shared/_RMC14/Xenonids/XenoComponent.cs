@@ -14,6 +14,19 @@ namespace Content.Shared._RMC14.Xenonids;
 [Access(typeof(XenoSystem))]
 public sealed partial class XenoComponent : Component
 {
+    /// <summary>
+    /// Hides this xeno from the caste unlock announcements.
+    /// Use for admeme or unimplemented castes that can't be evolved to.
+    /// </summary>
+    [DataField]
+    public bool Hidden;
+
+    [DataField]
+    public bool Refresh = true;
+
+    [DataField]
+    public bool ShowInWatchWindowCounts = true;
+
     [DataField(required: true), AutoNetworkedField]
     public ProtoId<JobPrototype> Role;
 
