@@ -1,0 +1,8 @@
+- type: entity
+  parent: RMCFlagCarriableBase
+  id: AU14FlagCarriableUPP
+  name: UPP flag
+  description: "The flag of the Union of Progressive People. You can smell anti-consumerism." # This one looks ready to be planted into the ground."
+  components:
+  - type: Sprite
+    sprite: _AU14/Objects/Flags/upp_flag.rsi
