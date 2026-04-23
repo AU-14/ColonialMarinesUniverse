@@ -9,6 +9,7 @@
   winconditions:
   - KillAllColonistRule
   - KillAllApeRule
+  minplayers: 400 # off
 
 - type: partySpawn
   id: apePartycf
@@ -29,6 +30,7 @@
   winconditions:
   - KillAllGovforRule
   - KillAllApeRule
+  minplayers: 400 # off
 
 
 - type: partySpawn
