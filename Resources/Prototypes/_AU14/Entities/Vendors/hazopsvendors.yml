@@ -143,6 +143,8 @@
       entries:
       - id: AU14MaskGasHAZOPSM40
         amount: 40
+      - id: CMUGasMaskFilterHAZOPS
+        amount: 80
       - id: CMMaskCoif
         amount: 10
       - id: RMCMaskTornScarfGreen

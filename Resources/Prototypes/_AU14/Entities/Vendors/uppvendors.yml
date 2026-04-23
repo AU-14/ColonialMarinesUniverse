@@ -149,6 +149,8 @@
       entries:
       - id: RMCMaskGasSPP
         amount: 20
+      - id: CMUGasMaskFilterUPP
+        amount: 40
       - id: CMMaskCoif
         amount: 10
       - id: RMCMaskScarfBlack

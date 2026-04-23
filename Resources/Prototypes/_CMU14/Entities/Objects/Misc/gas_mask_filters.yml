@@ -1,0 +1,65 @@
+- type: entity
+  parent: BaseItem
+  id: CMUBaseGasMaskFilter
+  abstract: true
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _CMU14/Items/gas_mask_filter.rsi
+    layers:
+    - state: icon
+  - type: Tag
+    tags:
+    - CMUGasMaskFilter
+  - type: GasMaskFilter
+    neurotoxinResist: false
+    neurotoxinDamageMultiplier: 10 #1 second
+    baseIntegrity: 100
+
+- type: entity
+  parent: CMUBaseGasMaskFilter
+  id: CMUGasMaskFilter
+  name: gas mask filter
+  description: A little metal canister that allegedly contains an activated charcoal filter to prevent nasty airborne particles from killing your lungs.
+
+- type: entity
+  parent: CMUBaseGasMaskFilter
+  id: CMUGasMaskFilterUPP
+  name: ShMB/4 gas mask filter
+  description: A little metal canister. May possibly also filter out airborne contaminants. There is an asbestos warning label on the side.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Items/gas_mask_filter.rsi
+    layers:
+    - state: upp
+
+- type: entity
+  parent: CMUBaseGasMaskFilter
+  id: CMUGasMaskFilterHAZOPS
+  name: CBRN gas mask filter
+  description: A little metal canister that contains a big chunk of the periodic table. Rated for environments involving Chemical, Biological, Radiological, or Nuclear hazards.
+  components:
+  - type: GasMaskFilter
+    neurotoxinResist: true
+    neurotoxinDamageMultiplier: 2.5 # 4 seconds
+    baseIntegrity: 100
+  - type: Sprite
+    sprite: _CMU14/Items/gas_mask_filter.rsi
+    layers:
+    - state: fancy
+
+- type: entity
+  parent: CMUBaseGasMaskFilter
+  id: CMUGasMaskFilterWY
+  name: WY X-16 gas mask filter
+  description: A little metal canister. You don't know what's in it. It can filter out chemicals that have yet to be officialy discovered.
+  components:
+  - type: GasMaskFilter
+    neurotoxinResist: true
+    neurotoxinDamageMultiplier: 1.25 # 8 seconds
+    baseIntegrity: 100
+  - type: Sprite
+    sprite: _CMU14/Items/gas_mask_filter.rsi
+    layers:
+    - state: wy

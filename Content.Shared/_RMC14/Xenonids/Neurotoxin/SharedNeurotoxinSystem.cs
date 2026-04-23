@@ -1,4 +1,4 @@
-using System.Numerics;
+using Content.Shared._CMU14.GasMask;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.BlurredVision;
 using Content.Shared._RMC14.Chat;
@@ -13,6 +13,7 @@ using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Chat;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
 using Content.Shared.Drugs;
@@ -26,9 +27,11 @@ using Content.Shared.Random.Helpers;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Speech.EntitySystems;
 using Content.Shared.StatusEffect;
+using Content.Shared.Storage;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Systems;
@@ -36,6 +39,8 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using System.Numerics;
+using TerraFX.Interop.Xlib;
 
 namespace Content.Shared._RMC14.Xenonids.Neurotoxin;
 
@@ -67,6 +72,9 @@ public abstract class SharedNeurotoxinSystem : EntitySystem
     [Dependency] private readonly ISharedPlayerManager _player = default!;
     [Dependency] private readonly AreaSystem _area = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly SharedContainerSystem _con = default!;
+    [Dependency] private readonly ItemSlotsSystem _itemSlot = default!;
+    [Dependency] private readonly SharedGasMaskSystem _mask = default!;
 
     private readonly HashSet<Entity<MarineComponent>> _marines = new();
     public override void Initialize()
@@ -140,6 +148,58 @@ public abstract class SharedNeurotoxinSystem : EntitySystem
                     HasComp<VictimInfectedComponent>(marine))
                 {
                     continue;
+                }
+
+                if (TryComp<ContainerManagerComponent>(marine, out var uinv))
+                {
+                    bool blocked = false;
+
+                    {
+                        if (_con.HasContainer(marine, "mask", uinv) && _con.TryGetContainer(marine, "mask", out var mask, uinv) &&
+                            mask.ContainedEntities.Count > 0)
+                        {
+                            foreach (var item in mask.ContainedEntities)
+                            {
+                                if (TryComp<ItemSlotsComponent>(item, out var islot) &&
+                                    _itemSlot.TryGetSlot(item, "filter", out var slot, islot) &&
+                                    slot.ContainerSlot is not null && slot.ContainerSlot.ContainedEntity is not null &&
+                                    TryComp<GasMaskFilterComponent>(slot.ContainerSlot.ContainedEntity.Value, out var filt))
+                                {
+                                    if (filt.Integrity != 0f && filt.NeurotoxinResist)
+                                    {
+                                        blocked = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (_con.HasContainer(marine, "head", uinv) && _con.TryGetContainer(marine, "head", out var head, uinv) &&
+                        head.ContainedEntities.Count > 0)
+                    {
+                        foreach (var item in head.ContainedEntities)
+                        {
+                            if (TryComp<StorageComponent>(item, out var hslot) && hslot.Container is not null &&
+                                hslot.Container.ContainedEntities.Count > 0)
+                            {
+                                foreach (var aitem in hslot.Container.ContainedEntities)
+                                {
+                                    if (TryComp<ItemSlotsComponent>(aitem, out var islot) &&
+                                            _itemSlot.TryGetSlot(aitem, "filter", out var slot, islot) &&
+                                            slot.ContainerSlot is not null && slot.ContainerSlot.ContainedEntity is not null &&
+                                            TryComp<GasMaskFilterComponent>
+                                            (slot.ContainerSlot.ContainedEntity.Value, out var filt))
+                                    {
+                                        if (filt.Integrity != 0f && filt.NeurotoxinResist)
+                                        {
+                                            blocked = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (blocked)
+                        continue;
                 }
 
                 var ev = new NeurotoxinInjectAttemptEvent();

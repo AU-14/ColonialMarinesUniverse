@@ -165,6 +165,8 @@
       entries:
       - id: AU14MaskGasRMC
         amount: 20
+      - id: CMUGasMaskFilter
+        amount: 80
       - id: CMMaskCoif
         amount: 10
       - id: RMCMaskScarfBlack

@@ -34,6 +34,10 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Shared.Containers.ItemSlots;
+using Content.Shared._CMU14.GasMask;
+using Content.Shared.Storage;
+using Robust.Shared.Containers;
 
 namespace Content.Shared._RMC14.Damage;
 
@@ -55,6 +59,9 @@ public abstract class SharedRMCDamageableSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly XenoSystem _xeno = default!;
     [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
+    [Dependency] private readonly SharedContainerSystem _con = default!;
+    [Dependency] private readonly ItemSlotsSystem _itemSlot = default!;
+    [Dependency] private readonly SharedGasMaskSystem _mask = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
@@ -651,6 +658,68 @@ public abstract class SharedRMCDamageableSystem : EntitySystem
                     continue;
 
                 userDamage.NextDamageAt = time + userDamage.DamageEvery;
+
+                //this is horrible
+                if (TryComp<ContainerManagerComponent>(user, out var uinv))
+                {
+                    bool blocked = false;
+                    //these scopes are to help the compiler cope
+                    {
+                        if (_con.HasContainer(user, "mask", uinv) && _con.TryGetContainer(user, "mask", out var mask, uinv) &&
+                            mask.ContainedEntities.Count > 0)
+                        {
+                            foreach (var item in mask.ContainedEntities)
+                            {
+                                if (TryComp<ItemSlotsComponent>(item, out var islot) &&
+                                    _itemSlot.TryGetSlot(item, "filter", out var slot, islot) &&
+                                    slot.ContainerSlot is not null && slot.ContainerSlot.ContainedEntity is not null &&
+                                    TryComp<GasMaskFilterComponent>(slot.ContainerSlot.ContainedEntity.Value, out var filt))
+                                {
+                                    if (filt.Integrity != 0.0f && TryComp<GasMaskFilterDamageComponent>(contact, out var dam))
+                                    {
+                                        _mask.DamageFilter(slot.ContainerSlot.ContainedEntity.Value, filt, dam);
+                                        if (dam.Neurotoxin == filt.NeurotoxinResist)
+                                            blocked = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //also damage the integrated helmet ones simultaneously so stacking multiple doesn't
+                    //give you more protection :trollge:
+                    {
+                        if (_con.HasContainer(user, "head", uinv) && _con.TryGetContainer(user, "head", out var head, uinv) &&
+                            head.ContainedEntities.Count > 0)
+                        {
+                            foreach (var item in head.ContainedEntities)
+                            {
+                                if (TryComp<StorageComponent>(item, out var hslot) &&
+                                    hslot.Container is not null && hslot.Container.ContainedEntities.Count > 0)
+                                {
+                                    foreach (var aitem in hslot.Container.ContainedEntities)
+                                    {
+                                        if (TryComp<ItemSlotsComponent>(aitem, out var islot) &&
+                                            _itemSlot.TryGetSlot(aitem, "filter", out var slot, islot) &&
+                                            slot.ContainerSlot is not null && slot.ContainerSlot.ContainedEntity is not null &&
+                                            TryComp<GasMaskFilterComponent>
+                                            (slot.ContainerSlot.ContainedEntity.Value, out var filt))
+                                        {
+                                            if (filt.Integrity != 0.0f && TryComp<GasMaskFilterDamageComponent>
+                                                (contact, out var dam))
+                                            {
+                                                _mask.DamageFilter(slot.ContainerSlot.ContainedEntity.Value, filt, dam);
+                                                if (dam.Neurotoxin == filt.NeurotoxinResist)
+                                                    blocked = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (blocked)
+                        continue;
+                }
 
                 if (damage.Damage != null)
                     DoDamage((contact, damage), user, damage.Damage);

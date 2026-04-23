@@ -56,7 +56,7 @@
 - type: entity
   id: RMCSmokeNeurotoxin
   name: neurotoxin gas
-  categories: [ HideSpawnMenu ]
+  #categories: [ HideSpawnMenu ]
   components:
   - type: Transform
     anchored: true
@@ -112,6 +112,9 @@
       components:
       - Marine
   - type: DeleteOnExplosion
+  - type: GasMaskFilterDamage
+    damage: 10
+    neurotoxin: true
 
 - type: entity
   id: RMCSmokeRunner
