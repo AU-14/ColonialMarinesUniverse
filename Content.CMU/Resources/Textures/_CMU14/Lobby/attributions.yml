@@ -22,3 +22,8 @@
   license: "Custom"
   copyright: "Image by Free League Publishing made for the Alien RPG. No license provided."
   source: "https://freeleaguepublishing.com/shop/alien-rpg-2/colonial-marines-operations-manual/"
+
+- files: ["Dropship"]
+  license: "Custom"
+  copyright: "Image by EB67, commisoned by ak105intow. CC BY-NC-ND 4.0."
+  source: "Provided for CMU by ak105intow."
