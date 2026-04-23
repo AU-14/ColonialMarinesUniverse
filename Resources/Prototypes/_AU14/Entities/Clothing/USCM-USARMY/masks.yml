@@ -39,7 +39,7 @@
     - Snout
 
 - type: entity
-  parent: CMBaseMask
+  parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
   id: AU14MOPPMask
   suffix: AU14
   name: CBRN M3 MOPP mask

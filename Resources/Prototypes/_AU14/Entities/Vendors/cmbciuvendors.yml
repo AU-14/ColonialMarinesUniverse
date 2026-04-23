@@ -118,6 +118,10 @@
 #        amount: 1
     - name: Mask
       entries:
+      - id: CMMaskGas
+        amount: 40
+      - id: CMUGasMaskFilter
+        amount: 80
       - id: CMMaskCoif
         amount: 10
       - id: RMCMaskScarfBlack

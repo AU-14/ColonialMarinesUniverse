@@ -11,7 +11,7 @@
   - type: Appearance
 
 - type: entity
-  parent: CMBaseMask
+  parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
   id: CMMaskGas
   name: gas mask
   description: A face-covering mask that can be connected to an air supply. Filters harmful gases from the air.
@@ -41,7 +41,7 @@
     - GasMask
 
 - type: entity
-  parent: CMBaseMask
+  parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
   id: RMCMaskGasSPP
   name: ShMB/4 gasmask
   description: The standard issue gasmask utilized by the UPP Vanguard Collective and many UPP civilian organizations.
@@ -113,7 +113,7 @@
     size: Small
 
 - type: entity
-  parent: CMBaseMask
+  parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
   id: RMCMaskRebreather
   name: rebreather
   description: A close-fitting device that instantly heats or cools down air when you inhale so it doesn't damage your lungs.
@@ -128,7 +128,7 @@
     size: Small
 
 - type: entity
-  parent: CMBaseMask
+  parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
   id: RMCMaskKutjevoRespirator
   name: kutjevo respirator
   description: A respirator worn on the face that filters out harmful air particles often present in the air of Kutjevo.
@@ -296,7 +296,7 @@
     sprite: _RMC14/Objects/Clothing/Mask/skull_coif.rsi
 
 - type: entity
-  parent: CMBaseMask
+  parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
   id: RMCMaskSWAT
   name: SWAT mask
   description: A close-fitting tactical mask that can be connected to an air supply.

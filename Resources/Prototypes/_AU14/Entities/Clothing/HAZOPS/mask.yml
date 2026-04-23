@@ -1,5 +1,5 @@
 - type: entity
-  parent: CMBaseMask
+  parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
   id: AU14MaskGasHAZOPSM40
   name: M40A4 gas mask
   description: The distant cousin of the M40 gasmask from the 1990s. Designed specifically for HAZOPS teams, it provides heightened resistance to biological contaminants.
