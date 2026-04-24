@@ -1,4 +1,5 @@
 using Content.Shared.ActionBlocker;
+using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
@@ -118,6 +119,9 @@ public sealed class SharedCrawlWhileCritSystem : EntitySystem
             return;
 
         if (!TryComp<MobStateComponent>(ent, out var state) || state.CurrentState != MobState.Critical)
+            return;
+
+        if (TryComp<BuckleComponent>(ent, out var buckle) && buckle.Buckled)
             return;
 
         args.Uncancel();
