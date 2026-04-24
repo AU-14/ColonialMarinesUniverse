@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 04/24/2026 14:35:22
-  entityCount: 89648
+  entityCount: 89660
 maps:
 - 1
 grids:
@@ -600516,5 +600516,83 @@ entities:
     components:
     - type: Transform
       pos: -46.5,126.5
+      parent: 1
+- proto: RMCCarpetPink2
+  entities:
+  - uid: 97837
+    components:
+    - type: Transform
+      pos: -129.5,-83.5
+      parent: 1
+  - uid: 97849
+    components:
+    - type: Transform
+      pos: -130.5,-83.5
+      parent: 1
+- proto: RMCCarpetPink3
+  entities:
+  - uid: 97838
+    components:
+    - type: Transform
+      pos: -128.5,-83.5
+      parent: 1
+- proto: RMCCarpetPink5
+  entities:
+  - uid: 97840
+    components:
+    - type: Transform
+      pos: -129.5,-84.5
+      parent: 1
+  - uid: 97851
+    components:
+    - type: Transform
+      pos: -130.5,-84.5
+      parent: 1
+- proto: RMCCarpetPink6
+  entities:
+  - uid: 97841
+    components:
+    - type: Transform
+      pos: -128.5,-84.5
+      parent: 1
+- proto: RMCCarpetPink8
+  entities:
+  - uid: 97844
+    components:
+    - type: Transform
+      pos: -129.5,-85.5
+      parent: 1
+  - uid: 97852
+    components:
+    - type: Transform
+      pos: -130.5,-85.5
+      parent: 1
+- proto: RMCCarpetPink9
+  entities:
+  - uid: 97845
+    components:
+    - type: Transform
+      pos: -128.5,-85.5
+      parent: 1
+- proto: RMCCarpetPink4
+  entities:
+  - uid: 97846
+    components:
+    - type: Transform
+      pos: -131.5,-84.5
+      parent: 1
+- proto: RMCCarpetPink1
+  entities:
+  - uid: 97847
+    components:
+    - type: Transform
+      pos: -131.5,-83.5
+      parent: 1
+- proto: RMCCarpetPink7
+  entities:
+  - uid: 97848
+    components:
+    - type: Transform
+      pos: -131.5,-85.5
       parent: 1
 ...
