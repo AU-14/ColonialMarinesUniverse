@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 04/23/2026 05:18:58
-  entityCount: 89611
+  entityCount: 89648
 maps:
 - 1
 grids:
@@ -407,6 +407,7 @@ tilemap:
   384: RMCFloorCement7
   45: RMCFloorCement9
   35: RMCFloorHybrisaBeige
+  515: RMCFloorHybrisaBeigeBigLight
   20: RMCFloorHybrisaBeigeCarpet
   514: RMCFloorHybrisaBeigeCheck
   513: RMCFloorHybrisaBeigeSupermart
@@ -490,6 +491,7 @@ tilemap:
   64: RMCFloorPlateNoBuild
   49: RMCFloorPlatingNoBuild
   506: RMCFloorPlatingNorthEast
+  516: RMCFloorPlatingStriped
   507: RMCFloorPlatingStripedEast
   511: RMCFloorPlatingStripedNorth
   84: RMCFloorResearchContainmentCornerVar1ContainmentCornerVariant2
@@ -1083,7 +1085,7 @@ entities:
           version: 7
         -9,-6:
           ind: -9,-6
-          tiles: AAAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEQAAAAAAABEAAAAAAAARAAAAAAAAEQAAAAAAABEAAAAAAAARAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAAAAEQAAAAAAABEAAAAAAAARAAAAAAAAEQAAAAAAABEAAAAAAAARAAAAAAAAEQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAAsAAAAAAAALAAAAAAAACwAAAAAAAAsAAAAAAAALAAAAAAAACwAAAAAAAAAAAAAAAAALAAAAAAAAAAAAAAAAAAsAAAAAAAALAAAAAAAACwAAAAAAAAsAAAAAAAALAAAAAAAACwAAAAAAAAsAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAxAQAAAAAAxwAAAAAAAMcAAAAAAADHAAAAAAAAxwAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYQAAAAAAAGIAAAAAAABiAAAAAAAAYgAAAAAAAGIAAAAAAAA5AAAAAAAAOQAAAAAAAAAAAAAAAAAGAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGEAAAAAAABiAAAAAAAAYgAAAAAAAGIAAAAAAABiAAAAAAAAAAAAAAAAAAAAAAAAAAA2AAAAAAAABgAAAAAAAAYAAAAAAABaAAAAAAAAYgAAAAAAAMcAAAAAAADHAAAAAAAAxwAAAAAAAMcAAAAAAAAzAQAAAAAAYgAAAAAAAGIAAAAAAABiAAAAAAAAYgAAAAAAAAAAAAAAAAAAAAAAAAAANgAAAAAAAAYAAAAAAAAGAAAAAAAAAAAAAAAAAOYAAAAAAADFAAAAAAAAxQAAAAAAAMUAAAAAAADFAAAAAAAAxQAAAAAAAMUAAAAAAADFAAAAAAAAxQAAAAAAAMUAAAAAAAAAAAAAAAAAAAAAAAAAADYAAAAAAAAGAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2AAAAAAAABgAAAAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+          tiles: AAAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEQAAAAAAABEAAAAAAAARAAAAAAAAEQAAAAAAABEAAAAAAAARAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAAAAEQAAAAAAABEAAAAAAAARAAAAAAAAEQAAAAAAABEAAAAAAAARAAAAAAAAEQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAGUAAAAAAABlAAAAAAAAZQAAAAAAAAsAAAAAAAALAAAAAAAACwAAAAAAAAsAAAAAAAALAAAAAAAACwAAAAAAAAAAAAAAAAALAAAAAAAAAAAAAAAAAAsAAAAAAAALAAAAAAAACwAAAAAAAAsAAAAAAAALAAAAAAAACwAAAAAAAAsAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAgAAAAAAAwIAAAAAAAAAAAAAAAAxAQAAAAAAxwAAAAAAAMcAAAAAAADHAAAAAAAAxwAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwIAAAAAAAMCAAAAAAADAgAAAAAAYQAAAAAAAGIAAAAAAABiAAAAAAAAYgAAAAAAAGIAAAAAAAA5AAAAAAAAOQAAAAAAAAAAAAAAAAAGAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGEAAAAAAABiAAAAAAAAYgAAAAAAAGIAAAAAAABiAAAAAAAAAAAAAAAAAAAAAAAAAAA2AAAAAAAABgAAAAAAAAYAAAAAAABaAAAAAAAAYgAAAAAAAMcAAAAAAADHAAAAAAAAxwAAAAAAAMcAAAAAAAAzAQAAAAAAYgAAAAAAAGIAAAAAAABiAAAAAAAAYgAAAAAAAAAAAAAAAAAAAAAAAAAANgAAAAAAAAYAAAAAAAAGAAAAAAAAAAAAAAAAAOYAAAAAAADFAAAAAAAAxQAAAAAAAMUAAAAAAADFAAAAAAAAxQAAAAAAAMUAAAAAAADFAAAAAAAAxQAAAAAAAMUAAAAAAAAAAAAAAAAAAAAAAAAAADYAAAAAAAAGAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2AAAAAAAABgAAAAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
           version: 7
         -9,-7:
           ind: -9,-7
@@ -1935,7 +1937,7 @@ entities:
           version: 7
         -12,-3:
           ind: -12,-3
-          tiles: BAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAAEwAAAAAAAPgBAAAAAAD4AQAAAAAA+AEAAAAAAPgBAAAAAAD5AQAAAAAA+QEAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAABMAAAAAAAD4AQAAAAAA+AEAAAAAAPgBAAAAAAD4AQAAAAAA+QEAAAAAAPkBAAAAAAAEAAAAAAAAAAAAAAAAAAYAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+AEAAAAAAPkBAAAAAAD5AQAAAAAABAAAAAAAAAAAAAAAAAAGAAAAAAAABgAAAAAAAAAAAAAAAAD6AQAAAAAA+gEAAAAAAPoBAAAAAAAAAAAAAAAA+gEAAAAAAPoBAAAAAAD6AQAAAAAAAAAAAAAAAPgBAAAAAAAQAAAAAAAAEQAAAAAAAAQAAAAAAAAAAAAAAAAABgAAAAAAAAYAAAAAAAAAAAAAAAAA+gEAAAAAAPsBAAAAAAD6AQAAAAAAAAAAAAAAAPoBAAAAAAD6AQAAAAAA+gEAAAAAAAAAAAAAAAAGAAAAAAAACQAAAAAAAGUAAAAAAAAEAAAAAAAAAAAAAAAAAAYAAAAAAAAGAAAAAAAAAAAAAAAAAPoBAAAAAAD7AQAAAAAA+gEAAAAAAAAAAAAAAAD6AQAAAAAA+gEAAAAAAPoBAAAAAAAAAAAAAAAABgAAAAAAAAkAAAAAAABlAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAA+gEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPoBAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAJAAAAAAAAZQAAAAAAABABAAAAAAAAAAAAAAAABgAAAAAAAAYAAAAAAAAAAAAAAAAA+gEAAAAAAPoBAAAAAAD6AQAAAAAA+gEAAAAAAPoBAAAAAAD6AQAAAAAA+gEAAAAAAAAAAAAAAAAGAAAAAAAACgAAAAAAAAsAAAAAAAASAQAAAAAAAAAAAAAAAAYAAAAAAAAGAAAAAAAAAAAAAAAAAPoBAAAAAAD6AQAAAAAA+gEAAAAAAPoBAAAAAAD6AQAAAAAA+gEAAAAAAPoBAAAAAAAAAAAAAAAABgAAAAAAABsAAAAAAAAbAAAAAAAAFwEAAAAAAAAAAAAAAAAGAAAAAAAABgAAAAAAAAAAAAAAAAD6AQAAAAAA+gEAAAAAAPoBAAAAAAD6AQAAAAAA+gEAAAAAAPoBAAAAAAD6AQAAAAAAAAAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAYAAAAAAAAAAAAAAAAA+gEAAAAAAPoBAAAAAAD6AQAAAAAA+gEAAAAAAPoBAAAAAAD6AQAAAAAA+gEAAAAAAAAAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAAEAAAAAAAAAAAAAAAAAAYAAAAAAAAGAAAAAAAAAAAAAAAAAPoBAAAAAAD6AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAABAAAAAAAAAAAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAAKEAAAAAAAChAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAChAAAAAAAAoQAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAGAAAAAAAABgAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAA==
+          tiles: BAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAAEwAAAAAAAPgBAAAAAAD4AQAAAAAA+AEAAAAAAPgBAAAAAAD5AQAAAAAA+QEAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAABMAAAAAAAD4AQAAAAAA+AEAAAAAAPgBAAAAAAD4AQAAAAAA+QEAAAAAAPkBAAAAAAAEAAAAAAAAAAAAAAAAAAYAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+AEAAAAAAPkBAAAAAAD5AQAAAAAABAAAAAAAAAAAAAAAAAAGAAAAAAAABgAAAAAAAAAAAAAAAAD6AQAAAAAA+gEAAAAAAPoBAAAAAAAAAAAAAAAA+gEAAAAAAPoBAAAAAAD6AQAAAAAAAAAAAAAAAPgBAAAAAAAQAAAAAAAAEQAAAAAAAAQAAAAAAAAAAAAAAAAABgAAAAAAAAYAAAAAAAAAAAAAAAAA+gEAAAAAAPsBAAAAAAD6AQAAAAAAAAAAAAAAAPoBAAAAAAD6AQAAAAAA+gEAAAAAAAAAAAAAAAAGAAAAAAAACQAAAAAAAGUAAAAAAAAEAAAAAAAAAAAAAAAAAAYAAAAAAAAGAAAAAAAAAAAAAAAAAPoBAAAAAAD7AQAAAAAA+gEAAAAAAAAAAAAAAAD6AQAAAAAA+gEAAAAAAPoBAAAAAAAAAAAAAAAABgAAAAAAAAkAAAAAAABlAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAA+gEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPoBAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAJAAAAAAAAZQAAAAAAAAQCAAAAAAAAAAAAAAAABgAAAAAAAAYAAAAAAAAAAAAAAAAA+gEAAAAAAPoBAAAAAAD6AQAAAAAA+gEAAAAAAPoBAAAAAAD6AQAAAAAA+gEAAAAAAAAAAAAAAAAGAAAAAAAACgAAAAAAAAsAAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAGAAAAAAAAAAAAAAAAAPoBAAAAAAD6AQAAAAAA+gEAAAAAAPoBAAAAAAD6AQAAAAAA+gEAAAAAAPoBAAAAAAAAAAAAAAAABgAAAAAAABsAAAAAAAAbAAAAAAAA/wEAAAAAAAAAAAAAAAAGAAAAAAAABgAAAAAAAAAAAAAAAAD6AQAAAAAA+gEAAAAAAPoBAAAAAAD6AQAAAAAA+gEAAAAAAPoBAAAAAAD6AQAAAAAAAAAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAYAAAAAAAAAAAAAAAAA+gEAAAAAAPoBAAAAAAD6AQAAAAAA+gEAAAAAAPoBAAAAAAD6AQAAAAAA+gEAAAAAAAAAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAAEAAAAAAAAAAAAAAAAAAYAAAAAAAAGAAAAAAAAAAAAAAAAAPoBAAAAAAD6AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAABAAAAAAAAAAAAAAAAAAGAAAAAAAABgAAAAAAAAYAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAAKEAAAAAAAChAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAChAAAAAAAAoQAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAABsAAAAAAAAbAAAAAAAABgAAAAAAAAYAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAGAAAAAAAABgAAAAAAABsAAAAAAAAbAAAAAAAAGwAAAAAAAAYAAAAAAAAGAAAAAAAABgAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAA==
           version: 7
         -12,-4:
           ind: -12,-4
@@ -1967,7 +1969,7 @@ entities:
           version: 7
         -13,-3:
           ind: -13,-3
-          tiles: BAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAAAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAABgBAAAAAAAZAQAAAAAAGgEAAAAAAAAAAAAAAAAOAQAAAAAADwEAAAAAABABAAAAAAAAAAAAAAAADgEAAAAAAA8BAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAAAAAeAQAAAAAABAAAAAAAAB8BAAAAAAAAAAAAAAAAEQEAAAAAAAQAAAAAAAASAQAAAAAAAAAAAAAAABEBAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAAAAAAAAAAIgEAAAAAABMBAAAAAAAjAQAAAAAAAAAAAAAAABUBAAAAAAAWAQAAAAAAFwEAAAAAAAAAAAAAAAAVAQAAAAAAFgEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEQBAAAAAAAAAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAGQEAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAA8BAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAPAQAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAIAAAAAAAACAAAAAAAAAoQAAAAAAAPIBAAAAAACAAAAAAAAAoQAAAAAAAIAAAAAAAADyAQAAAAAAgAAAAAAAAKEAAAAAAACAAAAAAAAA8gEAAAAAAIAAAAAAAAChAAAAAAAAgAAAAAAAAPIBAAAAAACAAAAAAAAAgAAAAAAAAKEAAAAAAADyAQAAAAAAgAAAAAAAAKEAAAAAAACAAAAAAAAA8gEAAAAAAIAAAAAAAAChAAAAAAAAgAAAAAAAAPIBAAAAAACAAAAAAAAAoQAAAAAAAIAAAAAAAADyAQAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAA==
+          tiles: BAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAAAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAABgBAAAAAAAZAQAAAAAAGgEAAAAAAAAAAAAAAAAOAQAAAAAADwEAAAAAABABAAAAAAAAAAAAAAAABAIAAAAAAAQCAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAAAAAeAQAAAAAABAAAAAAAAB8BAAAAAAAAAAAAAAAAEQEAAAAAAAQAAAAAAAASAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAAAAAAAAAAIgEAAAAAABMBAAAAAAAjAQAAAAAAAAAAAAAAABUBAAAAAAAWAQAAAAAAFwEAAAAAAAAAAAAAAAD/AQAAAAAA/wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAGQEAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAA8BAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAIAAAAAAAACAAAAAAAAAoQAAAAAAAPIBAAAAAACAAAAAAAAAoQAAAAAAAIAAAAAAAADyAQAAAAAAgAAAAAAAAKEAAAAAAACAAAAAAAAA8gEAAAAAAIAAAAAAAAChAAAAAAAAgAAAAAAAAPIBAAAAAACAAAAAAAAAgAAAAAAAAKEAAAAAAADyAQAAAAAAgAAAAAAAAKEAAAAAAACAAAAAAAAA8gEAAAAAAIAAAAAAAAChAAAAAAAAgAAAAAAAAPIBAAAAAACAAAAAAAAAoQAAAAAAAIAAAAAAAADyAQAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAA==
           version: 7
         -13,-4:
           ind: -13,-4
@@ -144223,6 +144225,26 @@ entities:
     - type: Transform
       pos: -179.5,-50.5
       parent: 1
+  - uid: 97742
+    components:
+    - type: Transform
+      pos: -108.5,-82.5
+      parent: 1
+  - uid: 97743
+    components:
+    - type: Transform
+      pos: -121.5,-82.5
+      parent: 1
+  - uid: 97744
+    components:
+    - type: Transform
+      pos: -108.5,-88.5
+      parent: 1
+  - uid: 97745
+    components:
+    - type: Transform
+      pos: -108.5,-96.5
+      parent: 1
 - proto: AU14TriggerTeleporterViewer
   entities:
   - uid: 207
@@ -149055,12 +149077,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -145.5,-45.5
       parent: 1
-  - uid: 92463
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -192.5,-37.5
-      parent: 1
   - uid: 92478
     components:
     - type: Transform
@@ -149553,6 +149569,12 @@ entities:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -137.5,-107.5
+      parent: 1
+  - uid: 97771
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -133.5,-85.5
       parent: 1
 - proto: CMAirlockGovforLocked
   entities:
@@ -150646,6 +150668,16 @@ entities:
       access:
       - - AU14AccessGovforEngineering
     - type: SpriteSetRenderOrder
+  - uid: 97818
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -132.5,-82.5
+      parent: 1
+    - type: AccessReader
+      access:
+      - - AU14AccessGovforEngineering
+    - type: SpriteSetRenderOrder
 - proto: CMASRSConsoleColony
   entities:
   - uid: 1155
@@ -151416,6 +151448,21 @@ entities:
     - type: Transform
       pos: -142.5,-110.5
       parent: 1
+  - uid: 97787
+    components:
+    - type: Transform
+      pos: -191.5,-39.5
+      parent: 1
+  - uid: 97788
+    components:
+    - type: Transform
+      pos: -192.5,-39.5
+      parent: 1
+  - uid: 97789
+    components:
+    - type: Transform
+      pos: -193.5,-39.5
+      parent: 1
 - proto: CMChair
   entities:
   - uid: 1203
@@ -152091,6 +152138,17 @@ entities:
     - type: Transform
       pos: -139.5,-108.5
       parent: 1
+  - uid: 97751
+    components:
+    - type: Transform
+      pos: -129.5,-85.5
+      parent: 1
+  - uid: 97752
+    components:
+    - type: Transform
+      pos: -128.5,-83.5
+      parent: 1
+      rot: 1.5707963267948966 rad
 - proto: CMChairWood
   entities:
   - uid: 1308
@@ -153657,6 +153715,11 @@ entities:
     - type: Transform
       pos: -139.5,-105.5
       parent: 1
+  - uid: 97749
+    components:
+    - type: Transform
+      pos: -129.5,-82.5
+      parent: 1
 - proto: CMFilingCabinetChest
   entities:
   - uid: 1436
@@ -154099,6 +154162,28 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -142.5,-111.5
+      parent: 1
+  - uid: 97793
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -191.5,-38.5
+      parent: 1
+  - uid: 97794
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -191.5,-40.5
+      parent: 1
+  - uid: 97796
+    components:
+    - type: Transform
+      pos: -193.5,-38.5
+      parent: 1
+  - uid: 97795
+    components:
+    - type: Transform
+      pos: -193.5,-40.5
       parent: 1
 - proto: CMHypospray
   entities:
@@ -154694,6 +154779,11 @@ entities:
     - type: Transform
       pos: -155.5,-41.5
       parent: 1
+  - uid: 97754
+    components:
+    - type: Transform
+      pos: -128.5,-82.5
+      parent: 1
 - proto: CMPen
   entities:
   - uid: 1543
@@ -154836,6 +154926,11 @@ entities:
     components:
     - type: Transform
       pos: -155.75151,-41.5
+      parent: 1
+  - uid: 97756
+    components:
+    - type: Transform
+      pos: -128.5473971424969,-82.62441749905437
       parent: 1
 - proto: CMPenClicky
   entities:
@@ -156623,6 +156718,21 @@ entities:
     - type: Transform
       pos: -144.5,-38.5
       parent: 1
+  - uid: 97723
+    components:
+    - type: Transform
+      pos: -127.5,-86.5
+      parent: 1
+  - uid: 97750
+    components:
+    - type: Transform
+      pos: -130.5,-82.5
+      parent: 1
+  - uid: 97777
+    components:
+    - type: Transform
+      pos: -134.5,-86.5
+      parent: 1
 - proto: CMRack
   entities:
   - uid: 188
@@ -157518,6 +157628,11 @@ entities:
     - type: Transform
       pos: -146.52164,-38.250996
       parent: 1
+  - uid: 97773
+    components:
+    - type: Transform
+      pos: -132.98625956338432,-86.29648046491361
+      parent: 1
 - proto: CMSemioticBridge
   entities:
   - uid: 96867
@@ -157562,6 +157677,16 @@ entities:
     components:
     - type: Transform
       pos: -142.5011,-108.27949
+      parent: 1
+  - uid: 97797
+    components:
+    - type: Transform
+      pos: -193.0682,-37.299409999999995
+      parent: 1
+  - uid: 97801
+    components:
+    - type: Transform
+      pos: -191.450355892577,-37.31538351053256
       parent: 1
 - proto: CMSemioticEast
   entities:
@@ -157822,11 +157947,6 @@ entities:
     - type: Transform
       pos: -153.0485,-47.501255
       parent: 1
-  - uid: 97338
-    components:
-    - type: Transform
-      pos: -127.25805,-87.25784
-      parent: 1
   - uid: 97448
     components:
     - type: Transform
@@ -157906,6 +158026,16 @@ entities:
     components:
     - type: Transform
       pos: -171.4959,-27.771215
+      parent: 1
+  - uid: 97817
+    components:
+    - type: Transform
+      pos: -125.52928566080641,-87.7948083573797
+      parent: 1
+  - uid: 97820
+    components:
+    - type: Transform
+      pos: -133.01238947414055,-81.79883765624304
       parent: 1
 - proto: CMSemioticSecurity
   entities:
@@ -158359,6 +158489,12 @@ entities:
     - type: Transform
       pos: -136.5,-105.5
       parent: 1
+  - uid: 97782
+    components:
+    - type: Transform
+      pos: -136.2549555425452,-86.4636971174141
+      parent: 1
+      rot: 1.5707963267948966 rad
 - proto: CMSMESBasic
   entities:
   - uid: 1979
@@ -159747,6 +159883,24 @@ entities:
     - type: Transform
       pos: -139.5,-109.5
       parent: 1
+  - uid: 97746
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -127.5,-82.5
+      parent: 1
+  - uid: 97747
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -128.5,-82.5
+      parent: 1
+  - uid: 97748
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -127.5,-83.5
+      parent: 1
 - proto: CMTableWooden
   entities:
   - uid: 2170
@@ -160281,6 +160435,12 @@ entities:
     components:
     - type: Transform
       pos: -136.5,-106.5
+      parent: 1
+  - uid: 97778
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -135.5,-85.5
       parent: 1
 - proto: CMUArmorM4PMCCorporate
   entities:
@@ -181086,11 +181246,6 @@ entities:
     - type: Transform
       pos: -138.5,-80.5
       parent: 1
-  - uid: 6652
-    components:
-    - type: Transform
-      pos: -134.5,-85.5
-      parent: 1
   - uid: 6653
     components:
     - type: Transform
@@ -181171,11 +181326,6 @@ entities:
     - type: Transform
       pos: -131.5,-94.5
       parent: 1
-  - uid: 6669
-    components:
-    - type: Transform
-      pos: -136.5,-85.5
-      parent: 1
   - uid: 6670
     components:
     - type: Transform
@@ -181195,16 +181345,6 @@ entities:
     components:
     - type: Transform
       pos: -119.5,-97.5
-      parent: 1
-  - uid: 6674
-    components:
-    - type: Transform
-      pos: -135.5,-86.5
-      parent: 1
-  - uid: 6675
-    components:
-    - type: Transform
-      pos: -136.5,-86.5
       parent: 1
   - uid: 6676
     components:
@@ -181360,11 +181500,6 @@ entities:
     components:
     - type: Transform
       pos: -126.5,-96.5
-      parent: 1
-  - uid: 6707
-    components:
-    - type: Transform
-      pos: -135.5,-85.5
       parent: 1
   - uid: 6708
     components:
@@ -181600,11 +181735,6 @@ entities:
     components:
     - type: Transform
       pos: -122.5,-86.5
-      parent: 1
-  - uid: 6755
-    components:
-    - type: Transform
-      pos: -134.5,-86.5
       parent: 1
   - uid: 6756
     components:
@@ -549571,11 +549701,6 @@ entities:
     - type: Transform
       pos: -138.5,-81.5
       parent: 1
-  - uid: 79904
-    components:
-    - type: Transform
-      pos: -133.5,-85.5
-      parent: 1
   - uid: 79905
     components:
     - type: Transform
@@ -553591,6 +553716,16 @@ entities:
     - type: Transform
       pos: -144.5,-43.5
       parent: 1
+  - uid: 97769
+    components:
+    - type: Transform
+      pos: -136.5,-85.5
+      parent: 1
+  - uid: 97770
+    components:
+    - type: Transform
+      pos: -136.5,-86.5
+      parent: 1
 - proto: CMWallSolarisRock
   entities:
   - uid: 80603
@@ -556468,6 +556603,12 @@ entities:
     - type: Transform
       pos: -179.5,-90.5
       parent: 1
+  - uid: 97757
+    components:
+    - type: Transform
+      pos: -130.5,-82.5
+      parent: 1
+      rot: 4.71238898038469 rad
 - proto: CMWindowSolarisReinforced
   entities:
   - uid: 81130
@@ -559872,21 +560013,6 @@ entities:
     - type: Transform
       pos: -47.5,-12.5
       parent: 1
-  - uid: 92455
-    components:
-    - type: Transform
-      pos: -191.5,-40.5
-      parent: 1
-  - uid: 92459
-    components:
-    - type: Transform
-      pos: -191.5,-39.5
-      parent: 1
-  - uid: 92461
-    components:
-    - type: Transform
-      pos: -191.5,-38.5
-      parent: 1
   - uid: 92470
     components:
     - type: Transform
@@ -560609,6 +560735,21 @@ entities:
     components:
     - type: Transform
       pos: -142.5,-110.5
+      parent: 1
+  - uid: 97790
+    components:
+    - type: Transform
+      pos: -193.5,-39.5
+      parent: 1
+  - uid: 97791
+    components:
+    - type: Transform
+      pos: -192.5,-39.5
+      parent: 1
+  - uid: 97792
+    components:
+    - type: Transform
+      pos: -191.5,-39.5
       parent: 1
 - proto: RMCCableTerminal
   entities:
@@ -571479,6 +571620,11 @@ entities:
     - type: Transform
       pos: -47.5,4.5
       parent: 1
+  - uid: 97822
+    components:
+    - type: Transform
+      pos: -127.5,-82.5
+      parent: 1
 - proto: RMCGasTankPhoronFilled
   entities:
   - uid: 83660
@@ -575469,6 +575615,12 @@ entities:
     - type: Transform
       pos: -176.5,-31.5
       parent: 1
+  - uid: 97783
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -135.5,-85.5
+      parent: 1
 - proto: RMCLightFixtureOffset
   entities:
   - uid: 84194
@@ -577837,6 +577989,12 @@ entities:
       rot: 3.141592653589793 rad
       pos: -138.5,-109.5
       parent: 1
+  - uid: 97753
+    components:
+    - type: Transform
+      pos: -127.5,-83.5
+      parent: 1
+      rot: 4.71238898038469 rad
 - proto: RMCPhotocopierPro
   entities:
   - uid: 96807
@@ -579958,101 +580116,21 @@ entities:
     - type: Transform
       pos: -87.5,-52.5
       parent: 1
-  - uid: 84657
-    components:
-    - type: MetaData
-      name: military checkpoint B
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -137.5,-89.5
-      parent: 1
-  - uid: 84658
-    components:
-    - type: MetaData
-      name: military checkpoint B
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -137.5,-90.5
-      parent: 1
-  - uid: 84659
-    components:
-    - type: MetaData
-      name: military checkpoint B
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -137.5,-91.5
-      parent: 1
-  - uid: 84660
-    components:
-    - type: MetaData
-      name: military checkpoint B
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -135.5,-91.5
-      parent: 1
-  - uid: 84661
-    components:
-    - type: MetaData
-      name: military checkpoint B
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -135.5,-90.5
-      parent: 1
   - uid: 84662
     components:
     - type: MetaData
-      name: military checkpoint B
+      name: military checkpoint west
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -135.5,-89.5
       parent: 1
-  - uid: 84663
-    components:
-    - type: MetaData
-      name: military checkpoint A
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -124.5,-91.5
-      parent: 1
   - uid: 84664
     components:
     - type: MetaData
-      name: military checkpoint A
+      name: military checkpoint east
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -124.5,-89.5
-      parent: 1
-  - uid: 84665
-    components:
-    - type: MetaData
-      name: military checkpoint A
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -124.5,-90.5
-      parent: 1
-  - uid: 84666
-    components:
-    - type: MetaData
-      name: military checkpoint A
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -122.5,-91.5
-      parent: 1
-  - uid: 84667
-    components:
-    - type: MetaData
-      name: military checkpoint A
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -122.5,-90.5
-      parent: 1
-  - uid: 84668
-    components:
-    - type: MetaData
-      name: military checkpoint A
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -122.5,-89.5
       parent: 1
   - uid: 95770
     components:
@@ -580076,6 +580154,86 @@ entities:
     - type: Transform
       rot: 4.71238898038469 rad
       pos: -179.5,-82.5
+      parent: 1
+  - uid: 97732
+    components:
+    - type: MetaData
+      name: military checkpoint east
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -124.5,-90.5
+      parent: 1
+  - uid: 97733
+    components:
+    - type: MetaData
+      name: military checkpoint east
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -124.5,-91.5
+      parent: 1
+  - uid: 97734
+    components:
+    - type: MetaData
+      name: military checkpoint east
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -122.5,-89.5
+      parent: 1
+  - uid: 97735
+    components:
+    - type: MetaData
+      name: military checkpoint east
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -122.5,-90.5
+      parent: 1
+  - uid: 97736
+    components:
+    - type: MetaData
+      name: military checkpoint east
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -122.5,-91.5
+      parent: 1
+  - uid: 97737
+    components:
+    - type: MetaData
+      name: military checkpoint west
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -135.5,-90.5
+      parent: 1
+  - uid: 97738
+    components:
+    - type: MetaData
+      name: military checkpoint west
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -135.5,-91.5
+      parent: 1
+  - uid: 97739
+    components:
+    - type: MetaData
+      name: military checkpoint west
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -137.5,-89.5
+      parent: 1
+  - uid: 97740
+    components:
+    - type: MetaData
+      name: military checkpoint west
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -137.5,-90.5
+      parent: 1
+  - uid: 97741
+    components:
+    - type: MetaData
+      name: military checkpoint west
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -137.5,-91.5
       parent: 1
 - proto: RMCPodDoorAlmayerOpen
   entities:
@@ -580422,6 +580580,15 @@ entities:
       access:
       - - AU14AccessGovforCommand
       denyTags: []
+  - uid: 97825
+    components:
+    - type: MetaData
+      name: military checkpoint lockdown
+    - type: Transform
+      pos: -130.2233350721692,-86.4299855976489
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
 - proto: RMCPodDoorButtonBigRed
   entities:
   - uid: 59759
@@ -580767,66 +580934,6 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
-  - uid: 84694
-    components:
-    - type: MetaData
-      name: military checkpoint A
-    - type: Transform
-      pos: -125.5,-87.5
-      parent: 1
-    - type: Fixtures
-      fixtures: {}
-    - type: AccessReader
-      accessLog: []
-      accessKeys: []
-      access:
-      - - AU14AccessGovfor
-      denyTags: []
-  - uid: 84695
-    components:
-    - type: MetaData
-      name: military checkpoint A
-    - type: Transform
-      pos: -121.5,-87.5
-      parent: 1
-    - type: Fixtures
-      fixtures: {}
-    - type: AccessReader
-      accessLog: []
-      accessKeys: []
-      access:
-      - - AU14AccessGovfor
-      denyTags: []
-  - uid: 84696
-    components:
-    - type: MetaData
-      name: military checkpoint B
-    - type: Transform
-      pos: -134.5,-87.5
-      parent: 1
-    - type: Fixtures
-      fixtures: {}
-    - type: AccessReader
-      accessLog: []
-      accessKeys: []
-      access:
-      - - AU14AccessGovfor
-      denyTags: []
-  - uid: 84697
-    components:
-    - type: MetaData
-      name: military checkpoint B
-    - type: Transform
-      pos: -138.5,-87.5
-      parent: 1
-    - type: Fixtures
-      fixtures: {}
-    - type: AccessReader
-      accessLog: []
-      accessKeys: []
-      access:
-      - - AU14AccessGovfor
-      denyTags: []
   - uid: 96939
     components:
     - type: MetaData
@@ -580887,23 +580994,87 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
-  - uid: 97603
+  - uid: 97804
     components:
     - type: MetaData
-      name: military checkpoint B
+      name: military checkpoint east
     - type: Transform
-      rot: 4.71238898038469 rad
-      pos: -126.81240069723954,-85.72171538293863
+      pos: -122.0806802110826,-92.51451700527706
       parent: 1
+      rot: 1.5707963267948966 rad
     - type: Fixtures
       fixtures: {}
-  - uid: 97605
+    - type: AccessReader
+      accessLog: []
+      accessKeys: []
+      access:
+      - - AU14AccessGovfor
+      denyTags: []
+  - uid: 97808
     components:
     - type: MetaData
       name: military checkpoint A
     - type: Transform
+      pos: -124.91254916917228,-92.56969755619991
+      parent: 1
       rot: 4.71238898038469 rad
-      pos: -126.80962541996809,-85.35793554439715
+    - type: Fixtures
+      fixtures: {}
+    - type: AccessReader
+      accessLog: []
+      accessKeys: []
+      access:
+      - - AU14AccessGovfor
+      denyTags: []
+  - uid: 97811
+    components:
+    - type: MetaData
+      name: military checkpoint B
+    - type: Transform
+      pos: -135.05025268325596,-92.47440685194158
+      parent: 1
+      rot: 1.5707963267948966 rad
+    - type: Fixtures
+      fixtures: {}
+    - type: AccessReader
+      accessLog: []
+      accessKeys: []
+      access:
+      - - AU14AccessGovfor
+      denyTags: []
+  - uid: 97814
+    components:
+    - type: MetaData
+      name: military checkpoint B
+    - type: Transform
+      pos: -137.96254389077325,-92.53838972208762
+      parent: 1
+      rot: 4.71238898038469 rad
+    - type: Fixtures
+      fixtures: {}
+    - type: AccessReader
+      accessLog: []
+      accessKeys: []
+      access:
+      - - AU14AccessGovfor
+      denyTags: []
+  - uid: 97830
+    components:
+    - type: MetaData
+      name: military checkpoint west
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -128.77355760550898,-86.43686604358113
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 97831
+    components:
+    - type: MetaData
+      name: military checkpoint east
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -128.4017729567971,-86.43562172785829
       parent: 1
     - type: Fixtures
       fixtures: {}
@@ -581726,6 +581897,11 @@ entities:
     - type: Transform
       pos: -181.5,-86.5
       parent: 1
+  - uid: 97821
+    components:
+    - type: Transform
+      pos: -137.5,-82.5
+      parent: 1
 - proto: RMCRecharger
   entities:
   - uid: 1122
@@ -581898,17 +582074,6 @@ entities:
       category: Weyland-Yutani
     - type: Fixtures
       fixtures: {}
-  - uid: 84827
-    components:
-    - type: MetaData
-      name: Military Checkpoint
-    - type: Transform
-      pos: -130.02002,-86.34304
-      parent: 1
-    - type: RotaryPhone
-      category: Military
-    - type: Fixtures
-      fixtures: {}
   - uid: 84829
     components:
     - type: MetaData
@@ -581975,6 +582140,17 @@ entities:
       category: Military
     - type: Fixtures
       fixtures: {}
+  - uid: 97824
+    components:
+    - type: MetaData
+      name: Military Checkpoint
+    - type: Transform
+      pos: -130.66119386918328,-86.38510561130126
+      parent: 1
+    - type: RotaryPhone
+      category: Military
+    - type: Fixtures
+      fixtures: {}
 - proto: RMCRotaryPhoneWallmount
   entities:
   - uid: 84832
@@ -581994,18 +582170,6 @@ entities:
       name: Military Checkpoint Outside Booth
     - type: Transform
       pos: -111.95703,-93.636284
-      parent: 1
-    - type: RotaryPhone
-      category: Military
-    - type: Fixtures
-      fixtures: {}
-  - uid: 84834
-    components:
-    - type: MetaData
-      name: military checkpoint exterior
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -122.09715,-88.50178
       parent: 1
     - type: RotaryPhone
       category: Military
@@ -582075,6 +582239,17 @@ entities:
       name: Medbay
     - type: Transform
       pos: -144.50795,-99.75208
+      parent: 1
+    - type: RotaryPhone
+      category: Military
+    - type: Fixtures
+      fixtures: {}
+  - uid: 97809
+    components:
+    - type: MetaData
+      name: military checkpoint exterior
+    - type: Transform
+      pos: -121.47982878794373,-87.75502046928678
       parent: 1
     - type: RotaryPhone
       category: Military
@@ -583671,6 +583846,38 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -176.5,-86.5
+      parent: 1
+  - uid: 97760
+    components:
+    - type: MetaData
+      name: military checkpoint lockdown
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -131.5,-87.5
+      parent: 1
+  - uid: 97765
+    components:
+    - type: MetaData
+      name: military checkpoint lockdown
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -130.5,-87.5
+      parent: 1
+  - uid: 97766
+    components:
+    - type: MetaData
+      name: military checkpoint lockdown
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -129.5,-87.5
+      parent: 1
+  - uid: 97767
+    components:
+    - type: MetaData
+      name: military checkpoint lockdown
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -128.5,-87.5
       parent: 1
 - proto: RMCSmartFridge
   entities:
@@ -597460,6 +597667,11 @@ entities:
     - type: Transform
       pos: -147.5,-43.5
       parent: 1
+  - uid: 97785
+    components:
+    - type: Transform
+      pos: -131.5,-82.5
+      parent: 1
 - proto: RMCWeaponLauncherM85A1
   entities:
   - uid: 187
@@ -600290,5 +600502,19 @@ entities:
     components:
     - type: Transform
       pos: -148.5,-106.5
+      parent: 1
+- proto: CMAirlockGovforGlass
+  entities:
+  - uid: 97802
+    components:
+    - type: Transform
+      pos: -192.5,-37.5
+      parent: 1
+- proto: RMCDrinkCoffee
+  entities:
+  - uid: 97823
+    components:
+    - type: Transform
+      pos: -131.5,-86.5
       parent: 1
 ...
