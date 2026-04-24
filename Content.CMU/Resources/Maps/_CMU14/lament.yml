@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 04/23/2026 05:18:58
-  entityCount: 89603
+  entityCount: 89611
 maps:
 - 1
 grids:
@@ -560859,16 +560859,6 @@ entities:
     - type: Transform
       pos: -9.5,-16.5
       parent: 1
-  - uid: 97590
-    components:
-    - type: Transform
-      pos: -148.5,-106.5
-      parent: 1
-  - uid: 97591
-    components:
-    - type: Transform
-      pos: -150.5,-106.5
-      parent: 1
 - proto: RMCChemStorageGround
   entities:
   - uid: 81708
@@ -600246,5 +600236,59 @@ entities:
     components:
     - type: Transform
       pos: -144.5,-46.5
+      parent: 1
+- proto: CMMedilinkSupplyPort
+  entities:
+  - uid: 97711
+    components:
+    - type: Transform
+      pos: -144.5,-95.5
+      parent: 1
+  - uid: 97712
+    components:
+    - type: Transform
+      pos: -144.5,-96.5
+      parent: 1
+  - uid: 97714
+    components:
+    - type: Transform
+      pos: -144.5,-98.5
+      parent: 1
+  - uid: 97713
+    components:
+    - type: Transform
+      pos: -144.5,-97.5
+      parent: 1
+  - uid: 97715
+    components:
+    - type: Transform
+      pos: -150.5,-106.5
+      parent: 1
+  - uid: 97716
+    components:
+    - type: Transform
+      pos: -148.5,-106.5
+      parent: 1
+  - uid: 97717
+    components:
+    - type: Transform
+      pos: -147.5,-109.5
+      parent: 1
+  - uid: 97718
+    components:
+    - type: Transform
+      pos: -146.5,-109.5
+      parent: 1
+- proto: RMCChemDispenserMedbay
+  entities:
+  - uid: 97721
+    components:
+    - type: Transform
+      pos: -150.5,-106.5
+      parent: 1
+  - uid: 97722
+    components:
+    - type: Transform
+      pos: -148.5,-106.5
       parent: 1
 ...
