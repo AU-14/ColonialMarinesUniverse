@@ -4,7 +4,7 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 04/23/2026 05:18:58
+  time: 04/24/2026 14:35:22
   entityCount: 89648
 maps:
 - 1
@@ -143297,6 +143297,13 @@ entities:
     - type: Transform
       pos: -143.5,-40.5
       parent: 1
+- proto: AU14JOGenericVendor
+  entities:
+  - uid: 97695
+    components:
+    - type: Transform
+      pos: -141.5,-46.5
+      parent: 1
 - proto: AU14KitWeaponL54
   entities:
   - uid: 88646
@@ -144009,6 +144016,30 @@ entities:
     - type: Transform
       pos: -186.5,-42.5
       parent: 1
+- proto: AU14SpawnPointGOVFORDCC
+  entities:
+  - uid: 97553
+    components:
+    - type: Transform
+      pos: -162.5,-24.5
+      parent: 1
+  - uid: 97554
+    components:
+    - type: Transform
+      pos: -162.5,-25.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORDSPilot
+  entities:
+  - uid: 97555
+    components:
+    - type: Transform
+      pos: -163.5,-24.5
+      parent: 1
+  - uid: 97556
+    components:
+    - type: Transform
+      pos: -163.5,-25.5
+      parent: 1
 - proto: AU14SpawnPointGOVFORMilitaryDoctor
   entities:
   - uid: 97292
@@ -144059,6 +144090,18 @@ entities:
     components:
     - type: Transform
       pos: -170.5,-26.5
+      parent: 1
+- proto: AU14SpawnPointGOVFORPlatOp
+  entities:
+  - uid: 97696
+    components:
+    - type: Transform
+      pos: -143.5,-44.5
+      parent: 1
+  - uid: 97709
+    components:
+    - type: Transform
+      pos: -141.5,-44.5
       parent: 1
 - proto: AU14SpawnPointGOVFORRadioTelephoneOperator
   entities:
@@ -149576,6 +149619,13 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -133.5,-85.5
       parent: 1
+- proto: CMAirlockGovforGlass
+  entities:
+  - uid: 97802
+    components:
+    - type: Transform
+      pos: -192.5,-37.5
+      parent: 1
 - proto: CMAirlockGovforLocked
   entities:
   - uid: 1068
@@ -152146,9 +152196,9 @@ entities:
   - uid: 97752
     components:
     - type: Transform
+      rot: 1.5707963267948966 rad
       pos: -128.5,-83.5
       parent: 1
-      rot: 1.5707963267948966 rad
 - proto: CMChairWood
   entities:
   - uid: 1308
@@ -154175,15 +154225,15 @@ entities:
       rot: 3.141592653589793 rad
       pos: -191.5,-40.5
       parent: 1
-  - uid: 97796
-    components:
-    - type: Transform
-      pos: -193.5,-38.5
-      parent: 1
   - uid: 97795
     components:
     - type: Transform
       pos: -193.5,-40.5
+      parent: 1
+  - uid: 97796
+    components:
+    - type: Transform
+      pos: -193.5,-38.5
       parent: 1
 - proto: CMHypospray
   entities:
@@ -154293,6 +154343,48 @@ entities:
     - type: Transform
       pos: -157.37582,-106.0662
       parent: 1
+- proto: CMMedilinkSupplyPort
+  entities:
+  - uid: 97711
+    components:
+    - type: Transform
+      pos: -144.5,-95.5
+      parent: 1
+  - uid: 97712
+    components:
+    - type: Transform
+      pos: -144.5,-96.5
+      parent: 1
+  - uid: 97713
+    components:
+    - type: Transform
+      pos: -144.5,-97.5
+      parent: 1
+  - uid: 97714
+    components:
+    - type: Transform
+      pos: -144.5,-98.5
+      parent: 1
+  - uid: 97715
+    components:
+    - type: Transform
+      pos: -150.5,-106.5
+      parent: 1
+  - uid: 97716
+    components:
+    - type: Transform
+      pos: -148.5,-106.5
+      parent: 1
+  - uid: 97717
+    components:
+    - type: Transform
+      pos: -147.5,-109.5
+      parent: 1
+  - uid: 97718
+    components:
+    - type: Transform
+      pos: -146.5,-109.5
+      parent: 1
 - proto: CMMicrowave
   entities:
   - uid: 1521
@@ -154351,6 +154443,13 @@ entities:
     components:
     - type: Transform
       pos: -150.5,-109.5
+      parent: 1
+- proto: CMMop
+  entities:
+  - uid: 97538
+    components:
+    - type: Transform
+      pos: -142.5,-107.5
       parent: 1
 - proto: CMMorgue
   entities:
@@ -154930,7 +155029,7 @@ entities:
   - uid: 97756
     components:
     - type: Transform
-      pos: -128.5473971424969,-82.62441749905437
+      pos: -128.5474,-82.62442
       parent: 1
 - proto: CMPenClicky
   entities:
@@ -157631,7 +157730,7 @@ entities:
   - uid: 97773
     components:
     - type: Transform
-      pos: -132.98625956338432,-86.29648046491361
+      pos: -132.98627,-86.29648
       parent: 1
 - proto: CMSemioticBridge
   entities:
@@ -157681,12 +157780,12 @@ entities:
   - uid: 97797
     components:
     - type: Transform
-      pos: -193.0682,-37.299409999999995
+      pos: -193.0682,-37.29941
       parent: 1
   - uid: 97801
     components:
     - type: Transform
-      pos: -191.450355892577,-37.31538351053256
+      pos: -191.45036,-37.315384
       parent: 1
 - proto: CMSemioticEast
   entities:
@@ -158030,12 +158129,12 @@ entities:
   - uid: 97817
     components:
     - type: Transform
-      pos: -125.52928566080641,-87.7948083573797
+      pos: -125.52929,-87.79481
       parent: 1
   - uid: 97820
     components:
     - type: Transform
-      pos: -133.01238947414055,-81.79883765624304
+      pos: -133.01239,-81.798836
       parent: 1
 - proto: CMSemioticSecurity
   entities:
@@ -158492,9 +158591,9 @@ entities:
   - uid: 97782
     components:
     - type: Transform
-      pos: -136.2549555425452,-86.4636971174141
-      parent: 1
       rot: 1.5707963267948966 rad
+      pos: -136.25496,-86.4637
+      parent: 1
 - proto: CMSMESBasic
   entities:
   - uid: 1979
@@ -556606,9 +556705,9 @@ entities:
   - uid: 97757
     components:
     - type: Transform
+      rot: 4.71238898038469 rad
       pos: -130.5,-82.5
       parent: 1
-      rot: 4.71238898038469 rad
 - proto: CMWindowSolarisReinforced
   entities:
   - uid: 81130
@@ -560350,6 +560449,30 @@ entities:
     - type: Transform
       pos: -186.5,-84.5
       parent: 1
+- proto: RMCBoxBeaker
+  entities:
+  - uid: 97533
+    components:
+    - type: Transform
+      pos: -148.5,-107.5
+      parent: 1
+  - uid: 97534
+    components:
+    - type: Transform
+      pos: -148.5,-107.5
+      parent: 1
+- proto: RMCBoxPillCanister
+  entities:
+  - uid: 97535
+    components:
+    - type: Transform
+      pos: -148.5,-107.5
+      parent: 1
+  - uid: 97536
+    components:
+    - type: Transform
+      pos: -148.5,-107.5
+      parent: 1
 - proto: RMCBoxPizza
   entities:
   - uid: 83703
@@ -560496,6 +560619,13 @@ entities:
     components:
     - type: Transform
       pos: 147.93881,-86.17582
+      parent: 1
+- proto: RMCBucketJanitorial
+  entities:
+  - uid: 97537
+    components:
+    - type: Transform
+      pos: -142.5,-107.5
       parent: 1
 - proto: RMCBusha1
   entities:
@@ -561000,6 +561130,18 @@ entities:
     - type: Transform
       pos: -9.5,-16.5
       parent: 1
+- proto: RMCChemDispenserMedbay
+  entities:
+  - uid: 97721
+    components:
+    - type: Transform
+      pos: -150.5,-106.5
+      parent: 1
+  - uid: 97722
+    components:
+    - type: Transform
+      pos: -148.5,-106.5
+      parent: 1
 - proto: RMCChemStorageGround
   entities:
   - uid: 81708
@@ -561041,6 +561183,14 @@ entities:
     components:
     - type: Transform
       pos: 46.5,-100.5
+      parent: 1
+- proto: RMCComputerIntelGovfor
+  entities:
+  - uid: 97681
+    components:
+    - type: Transform
+      rot: 4.71238898038469 rad
+      pos: -146.5,-41.5
       parent: 1
 - proto: RMCCrateBlackmarketFireArms
   entities:
@@ -561676,6 +561826,13 @@ entities:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -111.6499,-13.575195
+      parent: 1
+- proto: RMCDrinkCoffee
+  entities:
+  - uid: 97823
+    components:
+    - type: Transform
+      pos: -131.5,-86.5
       parent: 1
 - proto: RMCDropper
   entities:
@@ -575867,15 +576024,15 @@ entities:
   - uid: 97699
     components:
     - type: Transform
+      rot: 4.71238898038469 rad
       pos: -144.5,-46.5
       parent: 1
-      rot: 4.71238898038469 rad
   - uid: 97700
     components:
     - type: Transform
+      rot: 4.71238898038469 rad
       pos: -144.5,-44.5
       parent: 1
-      rot: 4.71238898038469 rad
 - proto: RMCLightFixtureSmallOffset
   entities:
   - uid: 64307
@@ -577992,9 +578149,9 @@ entities:
   - uid: 97753
     components:
     - type: Transform
+      rot: 4.71238898038469 rad
       pos: -127.5,-83.5
       parent: 1
-      rot: 4.71238898038469 rad
 - proto: RMCPhotocopierPro
   entities:
   - uid: 96807
@@ -580555,7 +580712,7 @@ entities:
     - type: MetaData
       name: command armory
     - type: Transform
-      pos: -149.23476392328283,-41.56359822726311
+      pos: -149.23476,-41.5636
       parent: 1
     - type: Fixtures
       fixtures: {}
@@ -580570,7 +580727,7 @@ entities:
     - type: MetaData
       name: command lockdown
     - type: Transform
-      pos: -149.74632177273688,-41.566525
+      pos: -149.74632,-41.566525
       parent: 1
     - type: Fixtures
       fixtures: {}
@@ -580585,7 +580742,7 @@ entities:
     - type: MetaData
       name: military checkpoint lockdown
     - type: Transform
-      pos: -130.2233350721692,-86.4299855976489
+      pos: -130.22333,-86.429985
       parent: 1
     - type: Fixtures
       fixtures: {}
@@ -580990,7 +581147,7 @@ entities:
     - type: MetaData
       name: colony aux entrance south
     - type: Transform
-      pos: -82.47212658390603,-61.85381012857462
+      pos: -82.47213,-61.85381
       parent: 1
     - type: Fixtures
       fixtures: {}
@@ -580999,9 +581156,57 @@ entities:
     - type: MetaData
       name: military checkpoint east
     - type: Transform
-      pos: -122.0806802110826,-92.51451700527706
-      parent: 1
       rot: 1.5707963267948966 rad
+      pos: -122.08068,-92.51452
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+    - type: AccessReader
+      accessLog: []
+      accessKeys: []
+      access:
+      - - AU14AccessGovfor
+      denyTags: []
+  - uid: 97808
+    components:
+    - type: MetaData
+      name: military checkpoint A
+    - type: Transform
+      rot: 4.71238898038469 rad
+      pos: -124.91255,-92.569695
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+    - type: AccessReader
+      accessLog: []
+      accessKeys: []
+      access:
+      - - AU14AccessGovfor
+      denyTags: []
+  - uid: 97811
+    components:
+    - type: MetaData
+      name: military checkpoint B
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -135.05025,-92.4744
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+    - type: AccessReader
+      accessLog: []
+      accessKeys: []
+      access:
+      - - AU14AccessGovfor
+      denyTags: []
+  - uid: 97814
+    components:
+    - type: MetaData
+      name: military checkpoint B
+    - type: Transform
+      rot: 4.71238898038469 rad
+      pos: -137.96254,-92.53839
+      parent: 1
     - type: Fixtures
       fixtures: {}
     - type: AccessReader
@@ -581016,7 +581221,7 @@ entities:
       name: military checkpoint west
     - type: Transform
       rot: 3.141592653589793 rad
-      pos: -128.77355760550898,-86.43686604358113
+      pos: -128.77356,-86.43687
       parent: 1
     - type: Fixtures
       fixtures: {}
@@ -581026,58 +581231,10 @@ entities:
       name: military checkpoint east
     - type: Transform
       rot: 3.141592653589793 rad
-      pos: -128.4017729567971,-86.43562172785829
+      pos: -128.40178,-86.43562
       parent: 1
     - type: Fixtures
       fixtures: {}
-  - uid: 97814
-    components:
-    - type: MetaData
-      name: military checkpoint west
-    - type: Transform
-      pos: -137.96254389077325,-92.53838972208762
-      parent: 1
-      rot: 4.71238898038469 rad
-    - type: Fixtures
-      fixtures: {}
-    - type: AccessReader
-      accessLog: []
-      accessKeys: []
-      access:
-      - - AU14AccessGovfor
-      denyTags: []
-  - uid: 97811
-    components:
-    - type: MetaData
-      name: military checkpoint west
-    - type: Transform
-      pos: -135.05025268325596,-92.47440685194158
-      parent: 1
-      rot: 1.5707963267948966 rad
-    - type: Fixtures
-      fixtures: {}
-    - type: AccessReader
-      accessLog: []
-      accessKeys: []
-      access:
-      - - AU14AccessGovfor
-      denyTags: []
-  - uid: 97808
-    components:
-    - type: MetaData
-      name: military checkpoint east
-    - type: Transform
-      pos: -124.91254916917228,-92.56969755619991
-      parent: 1
-      rot: 4.71238898038469 rad
-    - type: Fixtures
-      fixtures: {}
-    - type: AccessReader
-      accessLog: []
-      accessKeys: []
-      access:
-      - - AU14AccessGovfor
-      denyTags: []
 - proto: RMCPodDoorButtonShip
   entities:
   - uid: 88073
@@ -582145,7 +582302,7 @@ entities:
     - type: MetaData
       name: Military Checkpoint
     - type: Transform
-      pos: -130.66119386918328,-86.38510561130126
+      pos: -130.6612,-86.38511
       parent: 1
     - type: RotaryPhone
       category: Military
@@ -582249,7 +582406,7 @@ entities:
     - type: MetaData
       name: military checkpoint exterior
     - type: Transform
-      pos: -121.47982878794373,-87.75502046928678
+      pos: -121.47983,-87.75502
       parent: 1
     - type: RotaryPhone
       category: Military
@@ -583878,6 +584035,23 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -128.5,-87.5
+      parent: 1
+- proto: RMCShutterHybrisaWindow
+  entities:
+  - uid: 97565
+    components:
+    - type: Transform
+      pos: -172.5,-83.5
+      parent: 1
+  - uid: 97566
+    components:
+    - type: Transform
+      pos: -172.5,-79.5
+      parent: 1
+  - uid: 97567
+    components:
+    - type: Transform
+      pos: -179.5,-88.5
       parent: 1
 - proto: RMCSmartFridge
   entities:
@@ -600164,6 +600338,40 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -170.5,-24.5
       parent: 1
+- proto: VMarkerGovforDCC
+  entities:
+  - uid: 97558
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -161.5,-24.5
+      parent: 1
+- proto: VMarkerGovforoperationsOfficer
+  entities:
+  - uid: 97705
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -142.5,-46.5
+      parent: 1
+  - uid: 97706
+    components:
+    - type: Transform
+      pos: -143.5,-46.5
+      parent: 1
+  - uid: 97708
+    components:
+    - type: Transform
+      pos: -144.5,-46.5
+      parent: 1
+- proto: VMarkerGovforpilot
+  entities:
+  - uid: 97559
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -161.5,-25.5
+      parent: 1
 - proto: VMarkerGovforradiotelephoneOperator
   entities:
   - uid: 87702
@@ -600172,6 +600380,44 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -167.5,-24.5
       parent: 1
+- proto: VMarkerGovforRifleman
+  entities:
+  - uid: 97652
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -175.5,-32.5
+      parent: 1
+  - uid: 97653
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -174.5,-32.5
+      parent: 1
+  - uid: 97654
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -173.5,-32.5
+      parent: 1
+  - uid: 97655
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -172.5,-32.5
+      parent: 1
+  - uid: 97656
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -171.5,-32.5
+      parent: 1
+  - uid: 97657
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -170.5,-32.5
+      parent: 1
 - proto: VMarkerGovforsectionSergeant
   entities:
   - uid: 87707
@@ -600179,6 +600425,46 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -165.5,-24.5
+      parent: 1
+- proto: VMarkerGovforSWeapons
+  entities:
+  - uid: 97638
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -161.5,-29.5
+      parent: 1
+  - uid: 97639
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -161.5,-30.5
+      parent: 1
+- proto: VMarkerGovforWeapons
+  entities:
+  - uid: 97660
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -168.5,-32.5
+      parent: 1
+  - uid: 97661
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -167.5,-32.5
+      parent: 1
+  - uid: 97662
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -166.5,-32.5
+      parent: 1
+  - uid: 97663
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -165.5,-32.5
       parent: 1
 - proto: xenocfthreatentityspawnmarker
   entities:
@@ -600230,291 +600516,5 @@ entities:
     components:
     - type: Transform
       pos: -46.5,126.5
-      parent: 1
-- proto: RMCBoxBeaker
-  entities:
-  - uid: 97533
-    components:
-    - type: Transform
-      pos: -148.5,-107.5
-      parent: 1
-  - uid: 97534
-    components:
-    - type: Transform
-      pos: -148.5,-107.5
-      parent: 1
-- proto: RMCBoxPillCanister
-  entities:
-  - uid: 97535
-    components:
-    - type: Transform
-      pos: -148.5,-107.5
-      parent: 1
-  - uid: 97536
-    components:
-    - type: Transform
-      pos: -148.5,-107.5
-      parent: 1
-- proto: RMCBucketJanitorial
-  entities:
-  - uid: 97537
-    components:
-    - type: Transform
-      pos: -142.5,-107.5
-      parent: 1
-- proto: CMMop
-  entities:
-  - uid: 97538
-    components:
-    - type: Transform
-      pos: -142.5,-107.5
-      parent: 1
-- proto: AU14SpawnPointGOVFORDCC
-  entities:
-  - uid: 97553
-    components:
-    - type: Transform
-      pos: -162.5,-24.5
-      parent: 1
-  - uid: 97554
-    components:
-    - type: Transform
-      pos: -162.5,-25.5
-      parent: 1
-- proto: AU14SpawnPointGOVFORDSPilot
-  entities:
-  - uid: 97555
-    components:
-    - type: Transform
-      pos: -163.5,-24.5
-      parent: 1
-  - uid: 97556
-    components:
-    - type: Transform
-      pos: -163.5,-25.5
-      parent: 1
-- proto: VMarkerGovforDCC
-  entities:
-  - uid: 97558
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -161.5,-24.5
-      parent: 1
-- proto: VMarkerGovforpilot
-  entities:
-  - uid: 97559
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -161.5,-25.5
-      parent: 1
-- proto: RMCShutterHybrisaWindow
-  entities:
-  - uid: 97565
-    components:
-    - type: Transform
-      pos: -172.5,-83.5
-      parent: 1
-  - uid: 97566
-    components:
-    - type: Transform
-      pos: -172.5,-79.5
-      parent: 1
-  - uid: 97567
-    components:
-    - type: Transform
-      pos: -179.5,-88.5
-      parent: 1
-- proto: VMarkerGovforSWeapons
-  entities:
-  - uid: 97638
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -161.5,-29.5
-      parent: 1
-  - uid: 97639
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -161.5,-30.5
-      parent: 1
-- proto: VMarkerGovforRifleman
-  entities:
-  - uid: 97652
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -175.5,-32.5
-      parent: 1
-  - uid: 97653
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -174.5,-32.5
-      parent: 1
-  - uid: 97654
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -173.5,-32.5
-      parent: 1
-  - uid: 97655
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -172.5,-32.5
-      parent: 1
-  - uid: 97656
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -171.5,-32.5
-      parent: 1
-  - uid: 97657
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -170.5,-32.5
-      parent: 1
-- proto: VMarkerGovforWeapons
-  entities:
-  - uid: 97660
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -168.5,-32.5
-      parent: 1
-  - uid: 97661
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -167.5,-32.5
-      parent: 1
-  - uid: 97662
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -166.5,-32.5
-      parent: 1
-  - uid: 97663
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -165.5,-32.5
-      parent: 1
-- proto: RMCComputerIntelGovfor
-  entities:
-  - uid: 97681
-    components:
-    - type: Transform
-      pos: -146.5,-41.5
-      parent: 1
-      rot: 4.71238898038469 rad
-- proto: AU14JOGenericVendor
-  entities:
-  - uid: 97695
-    components:
-    - type: Transform
-      pos: -141.5,-46.5
-      parent: 1
-- proto: AU14SpawnPointGOVFORPlatOp
-  entities:
-  - uid: 97696
-    components:
-    - type: Transform
-      pos: -143.5,-44.5
-      parent: 1
-  - uid: 97709
-    components:
-    - type: Transform
-      pos: -141.5,-44.5
-      parent: 1
-- proto: VMarkerGovforoperationsOfficer
-  entities:
-  - uid: 97705
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -142.5,-46.5
-      parent: 1
-  - uid: 97706
-    components:
-    - type: Transform
-      pos: -143.5,-46.5
-      parent: 1
-  - uid: 97708
-    components:
-    - type: Transform
-      pos: -144.5,-46.5
-      parent: 1
-- proto: CMMedilinkSupplyPort
-  entities:
-  - uid: 97711
-    components:
-    - type: Transform
-      pos: -144.5,-95.5
-      parent: 1
-  - uid: 97712
-    components:
-    - type: Transform
-      pos: -144.5,-96.5
-      parent: 1
-  - uid: 97714
-    components:
-    - type: Transform
-      pos: -144.5,-98.5
-      parent: 1
-  - uid: 97713
-    components:
-    - type: Transform
-      pos: -144.5,-97.5
-      parent: 1
-  - uid: 97715
-    components:
-    - type: Transform
-      pos: -150.5,-106.5
-      parent: 1
-  - uid: 97716
-    components:
-    - type: Transform
-      pos: -148.5,-106.5
-      parent: 1
-  - uid: 97717
-    components:
-    - type: Transform
-      pos: -147.5,-109.5
-      parent: 1
-  - uid: 97718
-    components:
-    - type: Transform
-      pos: -146.5,-109.5
-      parent: 1
-- proto: RMCChemDispenserMedbay
-  entities:
-  - uid: 97721
-    components:
-    - type: Transform
-      pos: -150.5,-106.5
-      parent: 1
-  - uid: 97722
-    components:
-    - type: Transform
-      pos: -148.5,-106.5
-      parent: 1
-- proto: CMAirlockGovforGlass
-  entities:
-  - uid: 97802
-    components:
-    - type: Transform
-      pos: -192.5,-37.5
-      parent: 1
-- proto: RMCDrinkCoffee
-  entities:
-  - uid: 97823
-    components:
-    - type: Transform
-      pos: -131.5,-86.5
       parent: 1
 ...
