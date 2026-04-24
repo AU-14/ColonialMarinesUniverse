@@ -581010,54 +581010,6 @@ entities:
       access:
       - - AU14AccessGovfor
       denyTags: []
-  - uid: 97808
-    components:
-    - type: MetaData
-      name: military checkpoint A
-    - type: Transform
-      pos: -124.91254916917228,-92.56969755619991
-      parent: 1
-      rot: 4.71238898038469 rad
-    - type: Fixtures
-      fixtures: {}
-    - type: AccessReader
-      accessLog: []
-      accessKeys: []
-      access:
-      - - AU14AccessGovfor
-      denyTags: []
-  - uid: 97811
-    components:
-    - type: MetaData
-      name: military checkpoint B
-    - type: Transform
-      pos: -135.05025268325596,-92.47440685194158
-      parent: 1
-      rot: 1.5707963267948966 rad
-    - type: Fixtures
-      fixtures: {}
-    - type: AccessReader
-      accessLog: []
-      accessKeys: []
-      access:
-      - - AU14AccessGovfor
-      denyTags: []
-  - uid: 97814
-    components:
-    - type: MetaData
-      name: military checkpoint B
-    - type: Transform
-      pos: -137.96254389077325,-92.53838972208762
-      parent: 1
-      rot: 4.71238898038469 rad
-    - type: Fixtures
-      fixtures: {}
-    - type: AccessReader
-      accessLog: []
-      accessKeys: []
-      access:
-      - - AU14AccessGovfor
-      denyTags: []
   - uid: 97830
     components:
     - type: MetaData
@@ -581078,6 +581030,54 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+  - uid: 97814
+    components:
+    - type: MetaData
+      name: military checkpoint west
+    - type: Transform
+      pos: -137.96254389077325,-92.53838972208762
+      parent: 1
+      rot: 4.71238898038469 rad
+    - type: Fixtures
+      fixtures: {}
+    - type: AccessReader
+      accessLog: []
+      accessKeys: []
+      access:
+      - - AU14AccessGovfor
+      denyTags: []
+  - uid: 97811
+    components:
+    - type: MetaData
+      name: military checkpoint west
+    - type: Transform
+      pos: -135.05025268325596,-92.47440685194158
+      parent: 1
+      rot: 1.5707963267948966 rad
+    - type: Fixtures
+      fixtures: {}
+    - type: AccessReader
+      accessLog: []
+      accessKeys: []
+      access:
+      - - AU14AccessGovfor
+      denyTags: []
+  - uid: 97808
+    components:
+    - type: MetaData
+      name: military checkpoint east
+    - type: Transform
+      pos: -124.91254916917228,-92.56969755619991
+      parent: 1
+      rot: 4.71238898038469 rad
+    - type: Fixtures
+      fixtures: {}
+    - type: AccessReader
+      accessLog: []
+      accessKeys: []
+      access:
+      - - AU14AccessGovfor
+      denyTags: []
 - proto: RMCPodDoorButtonShip
   entities:
   - uid: 88073
