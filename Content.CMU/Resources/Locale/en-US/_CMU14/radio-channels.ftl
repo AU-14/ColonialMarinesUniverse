@@ -11,4 +11,6 @@ chat-radio-mob = Family
 chat-radio-alert = Colony Alerts
 chat-radio-uppsof = UPP SOF
 chat-radio-uasof = UA SOF
+chat-radio-twe = TWE SOF
+chat-radio-icsc = ICSC SOF
 chat-radio-ai = AI
