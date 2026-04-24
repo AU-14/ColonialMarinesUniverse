@@ -9,6 +9,8 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
+using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -24,6 +26,7 @@ public sealed class SharedCrawlWhileCritSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly IPrototypeManager _protoManager = default!;
+    [Dependency] private readonly SharedContainerSystem _container = default!;
 
     public override void Initialize()
     {
@@ -41,6 +44,8 @@ public sealed class SharedCrawlWhileCritSystem : EntitySystem
         {
             if (IsWithinCrawlWindow(ent))
                 TryBeginCrawl(ent);
+            else
+                ShowServerPopup(ent, "cmu-crawl-crit-past-window", PopupType.SmallCaution);
             return;
         }
 
@@ -124,6 +129,9 @@ public sealed class SharedCrawlWhileCritSystem : EntitySystem
         if (TryComp<BuckleComponent>(ent, out var buckle) && buckle.Buckled)
             return;
 
+        if (HasComp<XenoNestedComponent>(ent))
+            return;
+
         args.Uncancel();
     }
 
@@ -170,7 +178,21 @@ public sealed class SharedCrawlWhileCritSystem : EntitySystem
             _blocker.UpdateCanMove(uid);
             _speed.RefreshMovementSpeedModifiers(uid);
 
-            ShowServerPopup(uid, "cmu-crawl-crit-started", PopupType.Small);
+            ShowServerPopup(uid, GetActivationPopupKey(uid), PopupType.Small);
         }
+    }
+
+    private string GetActivationPopupKey(EntityUid ent)
+    {
+        if (HasComp<XenoNestedComponent>(ent))
+            return "cmu-crawl-crit-nested";
+
+        if (TryComp<BuckleComponent>(ent, out var buckle) && buckle.Buckled)
+            return "cmu-crawl-crit-restrained";
+
+        if (_container.IsEntityInContainer(ent))
+            return "cmu-crawl-crit-in-container";
+
+        return "cmu-crawl-crit-started";
     }
 }
