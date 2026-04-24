@@ -1,0 +1,71 @@
+- type: entity
+  parent: RMCSurveillanceCameraAlmayer
+  id: CMUSurveillanceCameraColonyGOVFOR
+  name: colony-grade camera
+  suffix: Colony, Govfor
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wallmount
+  components:
+  - type: RMCCamera
+    id: CMUSurveillanceCameraColonyGOVFOR
+
+- type: entity
+  parent: RMCSurveillanceCameraAlmayer
+  id: CMUSurveillanceCameraColonyWEYU
+  name: colony-grade camera
+  suffix: Colony, We-Yu
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wallmount
+  components:
+  - type: RMCCamera
+    id: CMUSurveillanceCameraColonyWEYU
+
+- type: entity
+  parent: RMCSurveillanceCameraAlmayer
+  id: CMUSurveillanceCameraColonyCMB
+  name: colony-grade camera
+  suffix: Colony, CMB
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wallmount
+  components:
+  - type: RMCCamera
+    id: CMUSurveillanceCameraColonyCMB
+
+- type: entity
+  parent: RMCMonitorCameraAlmayer
+  id: CMUMonitorCameraColonyGovfor
+  name: colony security cameras
+  description: Used to access the various cameras on the colony.
+  suffix: Colony, Govfor
+  components:
+  - type: RMCCameraComputer
+    protoIds:
+    - CMUSurveillanceCameraColonyGOVFOR
+
+- type: entity
+  parent: RMCMonitorCameraAlmayer
+  id: CMUMonitorCameraColonyWEYU
+  name: colony security cameras
+  description: Used to access the various cameras on the colony.
+  suffix: Colony, We-Yu
+  components:
+  - type: RMCCameraComputer
+    protoIds:
+    - CMUSurveillanceCameraColonyWEYU
+
+- type: entity
+  parent: RMCMonitorCameraAlmayer
+  id: CMUMonitorCameraColonyCMB
+  name: colony security cameras
+  description: Used to access the various cameras on the colony.
+  suffix: Colony, CMB
+  components:
+  - type: RMCCameraComputer
+    protoIds:
+    - CMUSurveillanceCameraColonyCMB

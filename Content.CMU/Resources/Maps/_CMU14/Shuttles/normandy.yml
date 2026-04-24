@@ -4,8 +4,8 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 03/23/2026 13:00:22
-  entityCount: 190
+  time: 04/23/2026 14:10:14
+  entityCount: 188
 maps:
 - 1
 grids:
@@ -143,8 +143,6 @@ entities:
         path: /Audio/_RMC14/Announcements/ARES/unidentified_lifesigns.ogg
       lastLocked: {}
       attachmentPoints: []
-      arrivalSound: !type:SoundPathSpecifier
-        path: /Audio/_RMC14/Machines/Shuttle/engine_landing.ogg
       crashWarningSound: !type:SoundPathSpecifier
         params:
           volume: -5
@@ -157,6 +155,8 @@ entities:
         params:
           volume: -1
         path: /Audio/_RMC14/Dropship/dropship_incoming.ogg
+      arrivalSound: !type:SoundPathSpecifier
+        path: /Audio/_RMC14/Machines/Shuttle/engine_landing.ogg
     - type: ImplicitRoof
 - proto: AtmosDeviceFanTiny
   entities:
@@ -201,20 +201,6 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 1.5,-7.5
-      parent: 2
-- proto: CMAlamoWall85
-  entities:
-  - uid: 105
-    components:
-    - type: Transform
-      pos: -2.5,7.5
-      parent: 2
-- proto: CMAlamoWall85Flipped
-  entities:
-  - uid: 106
-    components:
-    - type: Transform
-      pos: 3.5,7.5
       parent: 2
 - proto: CMNormandyCockpit
   entities:
