@@ -561130,14 +561130,12 @@ entities:
     - type: Transform
       pos: -9.5,-16.5
       parent: 1
-- proto: RMCChemDispenserMedbay
-  entities:
-  - uid: 97721
+  - uid: 97853
     components:
     - type: Transform
       pos: -150.5,-106.5
       parent: 1
-  - uid: 97722
+  - uid: 97854
     components:
     - type: Transform
       pos: -148.5,-106.5
