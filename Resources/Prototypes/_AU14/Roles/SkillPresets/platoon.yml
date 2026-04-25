@@ -309,6 +309,8 @@
         RMCSkillPowerLoader: 2
         RMCSkillVehicles: 2
         RMCSkillDomestics: 2
+        RMCSkillMedical: 2
+        RMCSkillSurgery: 1
 
 - type: entity
   id: AU14SkillPresetMilitaryPolice
