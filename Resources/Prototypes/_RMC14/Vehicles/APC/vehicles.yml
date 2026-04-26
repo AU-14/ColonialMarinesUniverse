@@ -17,9 +17,11 @@
     xenoBlockMinimumSize: Immobile
     xenoPushMinimumSize: Immobile
     canSmashWalls: true
-    wallSmashMinSpeed: 2.1
+    wallSmashMinSpeed: 3
     wallSmashWheelDamage: 0.4
     wallSmashHullDamage: 15
+    wallSmashSlowdownMultiplier: 0.2
+    wallSmashSlowdownDuration: 1.5
     speedAtZeroIntegrity: 0.5
   - type: VehicleOvercharge
     speedMultiplier: 1.4

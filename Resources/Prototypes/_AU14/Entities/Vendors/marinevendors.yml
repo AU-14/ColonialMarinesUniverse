@@ -591,21 +591,6 @@
       entries:
       - id: RMCBackpackRTO
         amount: 5
-    - name: Headsets
-      entries:
-#     TODO: FoF -> OPFOR has access
-      - id: AU14HeadsetSectionLeader
-        amount: 2
-#     - id: AU14EncryptionKeyGOVFOR # empty
-#       amount: 9
-#     - id: AU14EncryptionKeyGOVFORBravo
-#       amount: 9
-#     - id: AU14EncryptionKeyGOVFORCharlie
-#       amount: 9
-#     - id: AU14EncryptionKeyGOVFORIntel
-#       amount: 6
-#     - id: AU14EncryptionKeyGOVFORauxiliarysupport
-#       amount: 4
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill

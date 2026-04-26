@@ -1145,6 +1145,13 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (sound.CollisionSound == null)
             return;
 
+        if (TryComp<GridVehicleMoverComponent>(uid, out var mover)
+            && mover.WallSmashMinSpeed > 0f
+            && MathF.Abs(mover.CurrentSpeed) < mover.WallSmashMinSpeed)
+        {
+            return;
+        }
+
         if (_net.IsClient)
             return;
 

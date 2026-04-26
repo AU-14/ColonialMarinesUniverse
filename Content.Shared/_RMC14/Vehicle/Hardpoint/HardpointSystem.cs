@@ -646,6 +646,10 @@ public sealed class HardpointSystem : EntitySystem
         if (amount <= 0f)
             return;
 
+        var cap = integrity.MaxIntegrity * 0.5f;
+        if (amount > cap)
+            amount = cap;
+
         DamageHardpoint(vehicle, hardpoint, amount, integrity);
     }
 

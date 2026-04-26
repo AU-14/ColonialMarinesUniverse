@@ -14,6 +14,7 @@ using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Sentry;
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
 using Robust.Shared.Map;
@@ -53,6 +54,16 @@ public sealed class VehicleDeploySystem : EntitySystem
         SubscribeLocalEvent<VehicleDeployableComponent, VehicleCanRunEvent>(OnVehicleCanRun);
         SubscribeLocalEvent<HardpointSlotsChangedEvent>(OnHardpointSlotsChanged);
         SubscribeLocalEvent<HardpointItemComponent, AttemptShootEvent>(OnDeployableAttemptShoot);
+        SubscribeLocalEvent<VehicleDeployableComponent, GetIFFGunUserEvent>(OnDeployableGetIFFGunUser);
+    }
+
+    private void OnDeployableGetIFFGunUser(Entity<VehicleDeployableComponent> ent, ref GetIFFGunUserEvent args)
+    {
+        if (args.GunUser != null)
+            return;
+
+        if (ent.Comp.Deployer is { } deployer)
+            args.GunUser = deployer;
     }
 
     private void OnDriverStrapped(Entity<StrapComponent> ent, ref StrappedEvent args)

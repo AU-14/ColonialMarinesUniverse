@@ -22,6 +22,7 @@
   - !type:AddComponentSpecial
     components:
     - type: Skills
+      preset: AU14SkillPresetPlatoonHospitalCorpsman
     - type: JobPrefix
       prefix: au14-job-prefix-govfork9handler
     - type: TacticalMapIcon
@@ -64,8 +65,8 @@
     - AU14IVFoldableFolded
     - CMDefibrillator
     - RMCRadioHandheldColonyOff
-    inhand:
-    - RMCZippo
+  inhand:
+  - RMCZippo
 
 - type: entity
   parent: CMSpawnPointJobBase

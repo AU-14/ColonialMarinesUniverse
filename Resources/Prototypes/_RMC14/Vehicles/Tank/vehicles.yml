@@ -12,7 +12,7 @@
     - VehicleHeavy
   - type: RequireProjectileTarget
   - type: GridVehicleMover
-    maxSpeed: 3
+    maxSpeed: 2.5
     acceleration: 1
     deceleration: 8
     maxReverseSpeed: 2
@@ -26,7 +26,11 @@
     xenoBlockMinimumSize: Immobile
     canXenosPush: false
     canSmashWalls: true
-    wallSmashMinSpeed: 0.9
+    wallSmashMinSpeed: 1.5
+    wallSmashWheelDamage: 0.6
+    wallSmashHullDamage: 12
+    wallSmashSlowdownMultiplier: 0.2
+    wallSmashSlowdownDuration: 1.5
     speedAtZeroIntegrity: 0.7
   - type: VehicleRideSurface
     bounds:

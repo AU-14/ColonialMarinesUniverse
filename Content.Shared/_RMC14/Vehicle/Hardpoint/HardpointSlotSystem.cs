@@ -26,6 +26,7 @@ public sealed class HardpointSlotSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<HardpointSlotsComponent, ItemSlotInsertAttemptEvent>(OnInsertAttempt);
+        SubscribeLocalEvent<HardpointSlotsComponent, ItemSlotEjectAttemptEvent>(OnEjectAttempt);
         SubscribeLocalEvent<HardpointSlotsComponent, HardpointInsertDoAfterEvent>(OnInsertDoAfter);
         SubscribeLocalEvent<HardpointSlotsComponent, InteractUsingEvent>(OnSlotsInteractUsing, before: new[] { typeof(ItemSlotsSystem) });
         SubscribeLocalEvent<HardpointSlotsComponent, BoundUIOpenedEvent>(OnHardpointUiOpened);
@@ -86,6 +87,17 @@ public sealed class HardpointSlotSystem : EntitySystem
             ent.Comp.PendingInserts.Remove(slot.Id);
             ent.Comp.PendingInsertUsers.Remove(args.User.Value);
         }
+    }
+
+    private void OnEjectAttempt(Entity<HardpointSlotsComponent> ent, ref ItemSlotEjectAttemptEvent args)
+    {
+        if (args.User == null)
+            return;
+
+        if (!_hardpoints.TryGetSlot(ent.Comp, args.Slot.ID, out _))
+            return;
+
+        args.Cancelled = true;
     }
 
     private void OnInsertDoAfter(Entity<HardpointSlotsComponent> ent, ref HardpointInsertDoAfterEvent args)

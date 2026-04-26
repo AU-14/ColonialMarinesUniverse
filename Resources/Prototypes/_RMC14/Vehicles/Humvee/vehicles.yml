@@ -15,13 +15,14 @@
     xenoBlockMinimumSize: Immobile
     xenoPushMinimumSize: Immobile
     canSmashWalls: true
-    wallSmashMinSpeed: 6
+    wallSmashMinSpeed: 7
     wallSmashWheelDamage: 3
     wallSmashHullDamage: 150
+    wallSmashSlowdownMultiplier: 0.2
+    wallSmashSlowdownDuration: 1.5
     mobCollisionHullDamage: 20
-    speedAtZeroIntegrity: 0.2
-    crashImmobileDuration: 30
-    crashImmobileMinSpeed: 8
+    speedAtZeroIntegrity: 0
+    crashImmobileDuration: 90
     mobCrashImmobileDuration: 20
     xenoMobCrashImmobileDuration: 60
   - type: VehicleOvercharge
@@ -190,7 +191,7 @@
           - HardpointItem
   - type: Damageable
     damageContainer: StructuralMarine
-    damageModifierSet: StructuralMarine
+    damageModifierSet: VehicleFrameHumvee
   - type: HardpointIntegrity
     maxIntegrity: 1000
     repairFuelCost: 12
@@ -204,7 +205,7 @@
   components:
   - type: Damageable
     damageContainer: StructuralMarine
-    damageModifierSet: StructuralMarine
+    damageModifierSet: VehicleFrameHumvee
   - type: HardpointIntegrity
     maxIntegrity: 1000
     repairFuelCost: 12
@@ -272,7 +273,7 @@
   components:
   - type: Damageable
     damageContainer: StructuralMarine
-    damageModifierSet: StructuralMarine
+    damageModifierSet: VehicleFrameHumvee
   - type: HardpointIntegrity
     maxIntegrity: 1000
     repairFuelCost: 12

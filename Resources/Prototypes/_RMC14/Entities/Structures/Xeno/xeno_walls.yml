@@ -23,7 +23,7 @@
   - type: VehicleSmashable
     deleteOnHit: true
     damageOnHit: 900
-    selfDamageMultiplier: 0.1
+    selfDamageMultiplier: 0.6
     requiredVehicleTag: VehicleHeavy
     smashSound:
       collection: XenoResinBreak
@@ -65,7 +65,7 @@
   - type: VehicleSmashable
     deleteOnHit: true
     damageOnHit: 1350
-    selfDamageMultiplier: 0.25
+    selfDamageMultiplier: 1.2
     requiredVehicleTag: VehicleHeavy
     smashSound:
       collection: XenoResinBreak

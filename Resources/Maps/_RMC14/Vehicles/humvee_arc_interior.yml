@@ -132,7 +132,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 1.4560254,-0.7182076
       parent: 2
-- proto: RMCOverwatchConsole
+- proto: RMCOverwatchConsoleGovfor
   entities:
   - uid: 11
     components:
