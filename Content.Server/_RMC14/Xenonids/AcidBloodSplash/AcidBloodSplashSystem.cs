@@ -36,6 +36,7 @@ public sealed class AcidBloodSplashSystem : EntitySystem
     [Dependency] private readonly SharedColorFlashEffectSystem _colorFlash = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly XenoSystem _xeno = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     private static readonly ProtoId<EmotePrototype> ScreamProto = "Scream";
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -60,12 +61,16 @@ public sealed class AcidBloodSplashSystem : EntitySystem
 
     private void ActivateSplash(Entity<AcidBloodSplashComponent> ent, float splashRadius)
     {
+        // Parent to the grid (mover coordinates), not to ent itself. If ent is mid-gib
+        // (e.g. dropship landing on top of the xeno via Smimsh), self-parenting the decal
+        // hits a transform-init assert.
+        var splashCoords = _transform.GetMoverCoordinates(ent.Owner);
+
         if (!_prototypes.TryIndex(ent.Comp.BloodDecalSpawnerPrototype, out var prototype) ||
             !prototype.TryGetComponent(out RandomDecalSpawnerComponent? spawner, _compFactory) ||
             _rmcDecal.GetDecalsInTile(ent, spawner.Decals) < spawner.MaxDecalsPerTile)
         {
-            // create decal, probability inside prototype
-            Spawn(ent.Comp.BloodDecalSpawnerPrototype, ent.Owner.ToCoordinates());
+            Spawn(ent.Comp.BloodDecalSpawnerPrototype, splashCoords);
         }
 
         var i = 0; // parity moment, I would prefer a for loop if I knew how to do it in not ugly way.

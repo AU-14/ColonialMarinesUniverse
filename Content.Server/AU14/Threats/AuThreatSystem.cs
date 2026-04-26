@@ -239,6 +239,8 @@ public sealed class AuThreatSystem : EntitySystem
                     $"[DEBUG] Assigned leader mind {mind.Value} to entity {entity} for player {playerNetId}");
                 // Assign job role
                 _roles.MindAddJobRole(mind.Value, silent: true, jobPrototype: "AU14JobThreatLeader");
+                // Mark as antagonist so AntagSelectionSystem (e.g. RunawaySynth) won't also pick this player
+                _roles.MindAddRole(mind.Value, "MindRoleThreat", silent: true);
                 // Add to threat NPC faction
                 EnsureComp<Content.Shared.NPC.Components.NpcFactionMemberComponent>(entity);
                 _npcFaction.AddFaction((entity,
@@ -277,6 +279,8 @@ public sealed class AuThreatSystem : EntitySystem
                     $"[DEBUG] Assigned member mind {mind.Value} to entity {entity} for player {playerNetId}");
                 // Assign job role
                 _roles.MindAddJobRole(mind.Value, silent: true, jobPrototype: "AU14JobThreatMember");
+                // Mark as antagonist so AntagSelectionSystem (e.g. RunawaySynth) won't also pick this player
+                _roles.MindAddRole(mind.Value, "MindRoleThreat", silent: true);
                 // Add to threat NPC faction
                 EnsureComp<Content.Shared.NPC.Components.NpcFactionMemberComponent>(entity);
                 _npcFaction.AddFaction((entity,

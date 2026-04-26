@@ -503,29 +503,37 @@ public sealed class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComp
         }
 
         // --- DROPSHIP & FIGHTER CONSOLE SPAWNING LOGIC ---
-        // Helper: Find a destination entity for a given faction and type, optionally filtering by grid
+        // Track destinations already handed out this round so multiple ships of the same
+        // faction/type don't all pile onto the same LZ (e.g. both dropships at LZ1 on USSBush).
+        var usedDestinations = new HashSet<EntityUid>();
+        var destinationRandom = new Random();
+
+        // Helper: Find a destination entity for a given faction and type, optionally filtering by grid.
+        // Picks a random unused destination from the matching pool and marks it as used.
         EntityUid? FindDestination(string faction, DropshipDestinationComponent.DestinationType type, EntityUid? gridUid = null)
         {
+            var candidates = new List<EntityUid>();
             foreach (var dest in _entityManager.EntityQuery<DropshipDestinationComponent>(true))
             {
                 var destUid = dest.Owner;
-                if (_entityManager.TryGetComponent<DropshipDestinationComponent>(destUid, out DropshipDestinationComponent? comp) && comp != null)
-                {
-                    if (comp.FactionController == faction && comp.Destinationtype == type)
-                    {
-                        if (gridUid != null)
-                        {
-                            if (_entityManager.GetComponent<TransformComponent>(destUid).GridUid == gridUid)
-                                return destUid;
-                        }
-                        else
-                        {
-                            return destUid;
-                        }
-                    }
-                }
+                if (usedDestinations.Contains(destUid))
+                    continue;
+                if (!_entityManager.TryGetComponent<DropshipDestinationComponent>(destUid, out DropshipDestinationComponent? comp) || comp == null)
+                    continue;
+                if (comp.FactionController != faction || comp.Destinationtype != type)
+                    continue;
+                if (gridUid != null &&
+                    _entityManager.GetComponent<TransformComponent>(destUid).GridUid != gridUid)
+                    continue;
+                candidates.Add(destUid);
             }
-            return null;
+
+            if (candidates.Count == 0)
+                return null;
+
+            var picked = candidates[destinationRandom.Next(candidates.Count)];
+            usedDestinations.Add(picked);
+            return picked;
         }
 
         // Helper: For a given grid, find all marker UIDs of a given prototype ID

@@ -12,4 +12,7 @@ public sealed partial class HiveKingVoteComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan EndAt;
+
+    [DataField]
+    public HashSet<NetUserId> OpenedFor = new();
 }

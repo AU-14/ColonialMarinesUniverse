@@ -424,7 +424,7 @@ public sealed partial class EmergencyShuttleSystem : EntitySystem
     /// Teleports the emergency shuttle to its station and starts the countdown until it launches.
     /// </summary>
     /// <remarks>
-    /// If the emergency shuttle is disabled, this immediately ends the round.
+    /// Im not sure anymore but this should stop this system from ending the round at round start
     /// </remarks>
     public void DockEmergencyShuttle()
     {
@@ -432,10 +432,7 @@ public sealed partial class EmergencyShuttleSystem : EntitySystem
             return;
 
         if (!_emergencyShuttleEnabled)
-        {
-            _roundEnd.EndRound();
             return;
-        }
 
         _consoleAccumulator = _configManager.GetCVar(CCVars.EmergencyShuttleDockTime);
         EmergencyShuttleArrived = true;

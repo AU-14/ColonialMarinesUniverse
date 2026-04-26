@@ -218,12 +218,14 @@ public sealed class HiveBoonSystem : EntitySystem
             return;
         }
 
+        if (!TryComp(cocoon, out HiveKingCocoonComponent? cocoonComp))
+            return;
+
         GetKingVotingData(ent.Owner, cocoon, out _, out var canVote);
         if (!canVote)
             return;
 
-        GetKingVotingData(votedId, cocoon, out var canBeKing, out _);
-        if (!canBeKing)
+        if (!IsKingCandidate(votedId, (cocoon, cocoonComp)))
             return;
 
         if (!TryComp(votedId, out ActorComponent? actor))
@@ -352,34 +354,76 @@ public sealed class HiveBoonSystem : EntitySystem
 
     private void StartKingVote(Entity<HiveKingCocoonComponent> cocoon)
     {
+        RefreshXenoJobs();
+
+        var hasEligibleCandidate = false;
+        var xenosQuery = EntityQueryEnumerator<ActorComponent, XenoComponent>();
+        while (xenosQuery.MoveNext(out var uid, out var actor, out _))
+        {
+            GetKingVotingData((uid, actor), cocoon, out var canBeKing, out _);
+            if (!canBeKing)
+                continue;
+
+            hasEligibleCandidate = true;
+            break;
+        }
+
+        if (!hasEligibleCandidate)
+        {
+            cocoon.Comp.AnyoneCanBeKing = true;
+            Dirty(cocoon);
+        }
+
+        EnsureVote(cocoon);
+        OpenKingVoteForVoters(cocoon);
+    }
+
+    private void OpenKingVoteForVoters(Entity<HiveKingCocoonComponent> cocoon)
+    {
+        RefreshXenoJobs();
+
+        var vote = EnsureVote(cocoon);
+        var netCocoon = GetNetEntity(cocoon);
+
+        var options = new List<DialogOption>();
+        var optionsQuery = EntityQueryEnumerator<ActorComponent, XenoComponent>();
+        while (optionsQuery.MoveNext(out var uid, out var actor, out _))
+        {
+            if (IsKingCandidate((uid, actor), cocoon))
+                options.Add(new DialogOption(Name(uid), new HiveKingVoteDialogEvent(netCocoon, GetNetEntity(uid))));
+        }
+
+        if (options.Count == 0)
+            return;
+
+        var votersQuery = EntityQueryEnumerator<ActorComponent, XenoComponent>();
+        while (votersQuery.MoveNext(out var uid, out var actor, out _))
+        {
+            GetKingVotingData((uid, actor), cocoon, out _, out var canVote);
+            if (!canVote)
+                continue;
+
+            if (!vote.Comp.OpenedFor.Add(actor.PlayerSession.UserId))
+                continue;
+
+            _dialog.OpenOptions(uid, "Choose a sister", options, "Vote for a sister you wish to become the King.");
+        }
+    }
+
+    private void RefreshXenoJobs()
+    {
         _xenoJobs.Clear();
         foreach (var prototype in _prototype.EnumeratePrototypes<PlayTimeTrackerPrototype>())
         {
             if (prototype.IsXeno)
                 _xenoJobs.Add(prototype.ID);
         }
+    }
 
-        var options = new List<DialogOption>();
-        var canVoteList = new List<EntityUid>();
-        var netCocoon = GetNetEntity(cocoon);
-        var xenosQuery = EntityQueryEnumerator<ActorComponent, XenoComponent>();
-        while (xenosQuery.MoveNext(out var uid, out var actor, out _))
-        {
-            GetKingVotingData((uid, actor), cocoon, out var canBeKing, out var canVote);
-
-            if (canBeKing)
-                options.Add(new DialogOption(Name(uid), new HiveKingVoteDialogEvent(netCocoon, GetNetEntity(uid))));
-
-            if (canVote)
-                canVoteList.Add(uid);
-        }
-
-        foreach (var uid in canVoteList)
-        {
-            _dialog.OpenOptions(uid, "Choose a sister", options, "Vote for a sister you wish to become the King.");
-        }
-
-        EnsureVote(cocoon);
+    private bool IsKingCandidate(Entity<ActorComponent?> xeno, Entity<HiveKingCocoonComponent> cocoon)
+    {
+        GetKingVotingData(xeno, cocoon.Owner, out var canBeKing, out var canVote);
+        return cocoon.Comp.AnyoneCanBeKing ? canVote : canBeKing;
     }
 
     private void GetKingVotingData(Entity<ActorComponent?> xeno, EntityUid cocoon, out bool canBeKing, out bool canVote)
@@ -777,6 +821,10 @@ public sealed class HiveBoonSystem : EntitySystem
                 Dirty(cocoonId, cocoonComp);
                 StartKingVote((cocoonId, cocoonComp));
             }
+            else
+            {
+                OpenKingVoteForVoters((cocoonId, cocoonComp));
+            }
 
             if (cocoonComp.TimeLeft > _kingVoteStartHatchingTime)
                 continue;
@@ -799,13 +847,11 @@ public sealed class HiveBoonSystem : EntitySystem
                 continue;
 
             var vote = EnsureVote(cocoonId);
-            var votes = new List<(NetUserId Id, int Votes)>();
-            foreach (var (user, userVotes) in vote.Comp.Votes)
-            {
-                votes.Add((user, userVotes));
-            }
+            var votes = vote.Comp.Votes
+                .Select(kvp => (Id: kvp.Key, Votes: kvp.Value))
+                .OrderByDescending(a => a.Votes)
+                .ToList();
 
-            votes = votes.OrderByDescending(a => a.Votes).ToList();
             var king = SpawnAtPosition(cocoonComp.Spawn, cocoonId.ToCoordinates());
             _hive.SetSameHive(cocoonId, king);
             EnsureComp<HiveConstructionSuppressAnnouncementsComponent>(cocoonId);
@@ -815,16 +861,16 @@ public sealed class HiveBoonSystem : EntitySystem
             {
                 _mind.ControlMob(user, king);
                 if (TryComp(king, out ActorComponent? actor) && actor.PlayerSession.UserId == user)
-                {
-                    QueueDel(vote);
-
-                    var areaName = _area.GetAreaName(cocoonId);
-                    _marineAnnounce.AnnounceToMarines(Loc.GetString("rmc-boon-king-announcement-hatch-marine",
-                        ("area", areaName)));
-                    _xenoAnnounce.AnnounceSameHiveDefaultSound(cocoonId, Loc.GetString("rmc-boon-king-announcement-hatch-xeno"));
-                    return;
-                }
+                    break;
             }
+
+            QueueDel(vote);
+
+            var hatchAreaName = _area.GetAreaName(cocoonId);
+            _marineAnnounce.AnnounceToMarines(Loc.GetString("rmc-boon-king-announcement-hatch-marine",
+                ("area", hatchAreaName)));
+            _xenoAnnounce.AnnounceSameHiveDefaultSound(cocoonId, Loc.GetString("rmc-boon-king-announcement-hatch-xeno"));
+            return;
         }
     }
 
