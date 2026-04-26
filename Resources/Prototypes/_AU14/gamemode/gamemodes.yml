@@ -159,6 +159,8 @@
       AU14JobGOVFORadvisor: 1
       AU14JobGOVFORMilitaryDoctor: 1
       AU14JobGOVFORMilitaryPoliceMan: 2
+      AU14JobGOVFORVehicleCommand: 1
+      AU14JobGOVFORVehicleCrew: 2
 
 - type: entity
   id: AddOpfor

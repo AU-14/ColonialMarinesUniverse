@@ -22,5 +22,7 @@
   - AU14JobGOVFORadvisor
   - AU14JobGOVFORMilitaryDoctor
   - AU14JobGOVFORMilitaryPoliceMan
+  - AU14JobGOVFORVehicleCommand
+  - AU14JobGOVFORVehicleCrew
   departmentRadio: null
   headOfDepartment: null
