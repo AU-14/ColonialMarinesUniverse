@@ -79,6 +79,16 @@ au14-job-name-govformilitarypoliceman = Military Policeman
 au14-job-description-govformilitarypoliceman = Provide your faction with police support.
 au14-job-prefix-govformilitarypoliceman = MP
 
+AU14JobGOVFORVehicleCommand = Vehicle Commander
+au14-job-name-govforVehicleCommand = Vehicle Commander
+au14-job-description-govforVehicleCommander = Provide your faction with vehicle support.
+au14-job-prefix-govforVehicleCommand = VC
+
+AU14JobGOVFORVehicleCrew = Vehicle Commander
+au14-job-name-govforVehicleCrew = Vehicle Commander
+au14-job-description-govforVehicleCrew = Provide your faction with vehicle support.
+au14-job-prefix-govforVehicleCrew = VW
+
 au14-job-prefix-AU14JobGOVFORPlatCoWYPMC = OPDIR
 au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanWYPMC = CLS
 au14-job-prefix-AU14JobGOVFORDCCWYPMC = DCC

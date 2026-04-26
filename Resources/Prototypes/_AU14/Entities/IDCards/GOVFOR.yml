@@ -218,6 +218,28 @@
     factions:
     - GOVFOR
 
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardGOVFORVehicleCommander
+  name: vehicle commander ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFORVehicleCommand
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardGOVFORVehicleCrew
+  name: vehicle crew ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFORVehicleCrew
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
   #- type: ItemIFF
   #  faction: FactionMarine
 
