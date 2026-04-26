@@ -129,6 +129,7 @@ entities:
     - type: GasTileOverlay
     - type: RadiationGridResistance
     - type: Dropship
+      tacticalLandFootprint: 8,17
       localHijackSound: !type:SoundPathSpecifier
         path: /Audio/_RMC14/Machines/Shuttle/queen_alarm.ogg
       marineHijackSound: !type:SoundPathSpecifier

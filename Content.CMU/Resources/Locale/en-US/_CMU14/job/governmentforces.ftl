@@ -74,6 +74,11 @@ au14-job-name-govforMilitaryDoctor = Doctor
 au14-job-description-govforMilitaryDoctor = Provide your faction with higher levels of medical care.
 au14-job-prefix-govforMilitaryDoctor = DOC
 
+AU14JobGOVFORMilitaryPoliceMan = Military Policeman
+au14-job-name-govformilitarypoliceman = Military Policeman
+au14-job-description-govformilitarypoliceman = Provide your faction with police support.
+au14-job-prefix-govformilitarypoliceman = MP
+
 au14-job-prefix-AU14JobGOVFORPlatCoWYPMC = OPDIR
 au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanWYPMC = CLS
 au14-job-prefix-AU14JobGOVFORDCCWYPMC = DCC
