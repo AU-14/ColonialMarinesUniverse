@@ -1,0 +1,294 @@
+- type: entity
+  parent: [RMCBaseWeaponMount, BaseItem]
+  id: AU14MK86Mount
+  name: mk86 automatic grenade launcher
+  description: The disassembled Mk86 AGL, with its telescopic tripods folded up and unable to fire.
+  components:
+  - type: Item
+    size: Huge
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/USCM/mk86.rsi
+    state: m2c_gun_mount
+    layers:
+    - state: m2c
+      map: [ "enum.WeaponMountComponentVisualLayers.Mounted" ]
+      visible: false
+    - state: m2c_magazine
+      map: [ "enum.WeaponMountComponentVisualLayers.MountedAmmo" ]
+      visible: false
+    - state: m2c_gun_mount
+      map: [ "enum.WeaponMountComponentVisualLayers.Folded" ]
+      visible: false
+    - state: m2c_gun_mount_broken
+      map: [ "enum.WeaponMountComponentVisualLayers.Broken" ]
+      visible: false
+    - state: mag-0
+      map: [ "enum.WeaponMountComponentVisualLayers.FoldedAmmo" ]
+      visible: false
+    - state: m2c_overheat
+      map: [ "enum.WeaponMountComponentVisualLayers.Overheated" ]
+      visible: false
+  - type: Strap
+    enabled: false
+  - type: Clothing
+    slots:
+    - suitStorage
+    - Back
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 230
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Breakage" ]
+  - type: CollisionWake
+  - type: WeaponMount
+    fixedWeaponPrototype: "AU14AGLMK86"
+    isWeaponSecured: true
+    isWeaponLocked: true
+    canRotateWithoutTool: true
+    mountOnDeploy: false
+    mountExclusionAreaSize: 0
+    barricadeExclusionAreaSize: 2
+    assembleDelay: 5.5
+    undeploySound: null
+    acidableWhileUndeployed: true
+  - type: Tag
+    tags:
+    - MK86Mount
+  - type: Foldable
+    folded: true
+    isLocked: true
+  - type: Corrodible
+    isCorrodible: true
+
+- type: entity
+  parent: [ CMBaseWeaponGun, BaseItem]
+  id: AU14AGLMK86
+  categories: [ HideSpawnMenu ]
+  name: mk86 automatic grenade launcher
+  description: The top half of a Mk86 AGL. However it ain't much use without a tripod.
+  components:
+  - type: Item
+    size: Huge
+  - type: AmmoCounter
+  - type: StaticPrice
+    price: 500
+  - type: MagazineAmmoProvider
+    autoEject: true
+  - type: RMCAmmoEject
+  - type: MagazineVisuals
+    magState: mag
+    steps: 1
+    zeroVisible: true
+  - type: Appearance
+  - type: RMCNameItemOnVend
+    item: PrimaryGun
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/USCM/mk86.rsi
+    layers:
+    - state: m2c_gun_mount
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    slots:
+    - suitStorage
+    - Back
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 20
+  - type: Gun
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      collection: AU14Mk48Shoot
+      params:
+        volume: -2
+        variation: 0.05
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: OnShootTriggerAmmoTimer
+    timerStart: enum.TimerStartMode.OnHitGround
+    delay: 0
+  - type: ShootAtFixedPoint
+    shootArcProj: true
+    maxFixedRange: 25
+  - type: GunIgnorePrediction
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - FullAuto
+    recoilUnwielded: 0
+    scatterUnwielded: 0
+    baseFireRate: 3.5
+    modifiers:
+      FullAuto:
+        maxScatterModifier: 0
+        useBurstScatterMult: false
+        unwieldedScatterMultiplier: 0
+        shotsToMaxScatter: 125
+  - type: RMCWeaponAccuracy
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14Mk86Magazine
+  - type: GunDamageModifier
+    multiplier: 1
+  - type: GunRequiresSkills
+    skills:
+      RMCSkillEngineer: 1
+  - type: GunSkilledRecoil
+    setRecoil: 0
+    skills:
+      RMCSkillFirearms: 0
+    mustBeWielded: false
+  - type: WieldedCrosshair
+    rsi:
+      sprite: _RMC14/Interface/MousePointer/lmg_mouse.rsi
+      state: all
+  - type: MountableWeapon
+  - type: GunUnskilledPenalty
+    firearms: 0
+    angleIncrease: 0
+    accuracyAddMult: 0
+  - type: Scope
+    scopePopup: null
+    unScopePopup: null
+    canUseInsideContainer: true
+    canUseNightVision: true
+    zoomLevels:
+    - zoom: 1
+      offset: 7
+      doAfter: 0
+      allowMovement: true
+  - type: Tag
+    tags:
+    - RMCMachineGunM2C
+  - type: Overheat
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14MagazineMk86Frag
+  name: Mk86 Ammunition Box (AGM-F 40mm frag grenade)
+  description: A box of 15, AGM-F 40mm frag grenade rounds for the mk86 automatic grenade launcher system.
+  components:
+  - type: Tag
+    tags:
+    - AU14Mk86Magazine
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMC40MMGrenadeM74AGMF
+    proto: RMC40MMGrenadeM74AGMF
+    capacity: 15
+    deleteWhenEmpty: false
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/mk86.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Clothing
+    slots:
+    - suitStorage
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14MagazineMk86Hornet
+  name: Mk86 Ammunition Box (AGM-H 40mm hornet grenade)
+  description: A box of 15, AGM-H 40mm hornet grenade rounds for the mk86 automatic grenade launcher system.
+  components:
+  - type: Tag
+    tags:
+    - AU14Mk86Magazine
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMCHornetShellM74AGMS
+    proto: RMCHornetShellM74AGMS
+    capacity: 15
+    deleteWhenEmpty: false
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/mk86.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Clothing
+    slots:
+    - suitStorage
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14MagazineMk86Smoke
+  name: Mk86 Ammunition Box (AGM-S 40mm smoke grenade)
+  description: A box of 15, AGM-S 40mm smoke grenade rounds for the mk86 automatic grenade launcher system.
+  components:
+  - type: Tag
+    tags:
+    - AU14Mk86Magazine
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMC40MMGrenadeM74AGMS
+    proto: RMC40MMGrenadeM74AGMS
+    capacity: 15
+    deleteWhenEmpty: false
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/mk86.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Clothing
+    slots:
+    - suitStorage
+
+- type: entity
+  parent: RMCGunCaseBase
+  id: AU14Mk86Case
+  name: Mk86 automatic grenade launcher case
+  description: A gun case containing the Mk86 automatic grenade launcher. Comes with 5 magazines
+  components:
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,1
+    whitelist:
+      tags:
+      - MK86Mount
+      - AU14Mk86Magazine
+      - RMCSkillPamphlet
+  - type: StorageFill
+    contents:
+    - id: RMCPamphletHeavyMachineGunner
+    - id: AU14MK86Mount
+    - id: AU14MagazineMk86Hornet
+    - id: AU14MagazineMk86Hornet
+    - id: AU14MagazineMk86Hornet
+    - id: AU14MagazineMk86Frag
+    - id: AU14MagazineMk86Smoke
+
+- type: Tag
+  id: MK86Mount
+
+- type: Tag
+  id: AU14Mk86Magazine

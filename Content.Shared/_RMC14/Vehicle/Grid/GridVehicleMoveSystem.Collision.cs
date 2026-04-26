@@ -1156,8 +1156,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return;
 
         if (sound.CollisionSoundMinSpeed > 0f &&
-            TryComp<GridVehicleMoverComponent>(uid, out var mover) &&
-            MathF.Abs(mover.CurrentSpeed) < sound.CollisionSoundMinSpeed)
+            TryComp<GridVehicleMoverComponent>(uid, out var movers) &&
+            MathF.Abs(movers.CurrentSpeed) < sound.CollisionSoundMinSpeed)
         {
             return;
         }

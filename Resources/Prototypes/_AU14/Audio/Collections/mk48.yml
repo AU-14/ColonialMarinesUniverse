@@ -1,0 +1,9 @@
+- type: soundCollection
+  id: AU14Mk48Shoot
+  files:
+  - /Audio/_AU14/Weapons/agl/gun_agl_fire1.ogg
+  - /Audio/_AU14/Weapons/agl/gun_agl_fire2.ogg
+  - /Audio/_AU14/Weapons/agl/gun_agl_fire3.ogg
+  - /Audio/_AU14/Weapons/agl/gun_agl_fire4.ogg
+  - /Audio/_AU14/Weapons/agl/gun_agl_fire5.ogg
+  - /Audio/_AU14/Weapons/agl/gun_agl_fire6.ogg
