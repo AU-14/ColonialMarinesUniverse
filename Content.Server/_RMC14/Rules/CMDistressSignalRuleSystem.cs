@@ -1948,7 +1948,7 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
     /// Sets the hive of all loaded xeno friendly entities (e.g. weeds).
     /// Only makes sense for distress signal with 1 hive, with multiple hives you would need to determine which weeds belong to which hive
     /// </summary>
-    public void SetFriendlyHives(EntityUid hive)
+    private void SetFriendlyHives(EntityUid hive)
     {
         var query = EntityQueryEnumerator<XenoFriendlyComponent>();
         while (query.MoveNext(out var weeds, out _))

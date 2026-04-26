@@ -1,5 +1,4 @@
 ﻿using Content.Client.Message;
-using Content.Shared._CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared.Doors.Components;
 using Content.Shared.Shuttles.Systems;
@@ -20,7 +19,6 @@ public sealed class DropshipNavigationBui : BoundUserInterface
 
     private readonly Dictionary<DropshipButton, string> _destinations = new();
     private NetEntity? _selected;
-    private bool _tacticalLandActive;
 
     public DropshipNavigationBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
@@ -39,9 +37,6 @@ public sealed class DropshipNavigationBui : BoundUserInterface
 
         switch (state)
         {
-            case DropshipNavigationTacticalLandBuiState s:
-                Set(s);
-                return;
             case DropshipNavigationDestinationsBuiState s:
                 Set(s);
                 return;
@@ -70,12 +65,6 @@ public sealed class DropshipNavigationBui : BoundUserInterface
 
         _window.CancelButton.Button.OnPressed += _ =>
         {
-            if (_tacticalLandActive)
-            {
-                SendPredictedMessage(new DropshipNavigationTacticalLandCancelMsg());
-                return;
-            }
-
             SetLaunchDisabled(true);
             SetCancelDisabled(true);
             _selected = null;
@@ -85,12 +74,6 @@ public sealed class DropshipNavigationBui : BoundUserInterface
 
         _window.LaunchButton.Button.OnPressed += _ =>
         {
-            if (_tacticalLandActive)
-            {
-                SendPredictedMessage(new DropshipNavigationTacticalLandConfirmMsg());
-                return;
-            }
-
             if (_selected != null)
                 SendPredictedMessage(new DropshipNavigationLaunchMsg(_selected.Value));
 
@@ -117,10 +100,6 @@ public sealed class DropshipNavigationBui : BoundUserInterface
     {
         if (_window == null)
             return;
-
-        _tacticalLandActive = false;
-        _window.LaunchButton.Text = "Launch";
-        _window.CancelButton.Text = "Cancel";
 
         SetFlightHeader("Flight Controls");
 
@@ -173,54 +152,8 @@ public sealed class DropshipNavigationBui : BoundUserInterface
             _window.DestinationsContainer.AddChild(button);
         }
 
-        var tacticalButton = new DropshipButton
-        {
-            Text = "Tactical Land",
-            Disabled = false,
-            BorderColor = Color.FromHex("#2A6D2A"),
-            BorderThickness = new Thickness(1),
-        };
-        tacticalButton.Button.ToggleMode = false;
-        tacticalButton.Button.OnPressed += _ => SendPredictedMessage(new DropshipNavigationTacticalLandStartMsg());
-        _window.DestinationsContainer.AddChild(tacticalButton);
-
         RefreshDoorLockStatus(destinations.DoorLockStatus);
         SetRemoteControl(destinations.RemoteControlStatus);
-    }
-
-    private void Set(DropshipNavigationTacticalLandBuiState tactical)
-    {
-        if (_window == null)
-            return;
-
-        _tacticalLandActive = true;
-
-        SetFlightHeader("Tactical Landing");
-
-        _window.DestinationsContainer.Visible = true;
-        _window.ProgressBarContainer.Visible = false;
-        _window.CancelButton.Visible = true;
-        _window.LaunchButton.Visible = true;
-
-        _window.DestinationsContainer.DisposeAllChildren();
-        _destinations.Clear();
-
-        var status = new DropshipButton
-        {
-            Text = "WASD to position - red = obstructed",
-            Disabled = true,
-            BorderColor = Color.FromHex("#444466"),
-            BorderThickness = new Thickness(1),
-        };
-        _window.DestinationsContainer.AddChild(status);
-
-        _window.LaunchButton.Text = "Confirm";
-        _window.LaunchButton.Button.Disabled = false;
-        _window.CancelButton.Text = "Cancel";
-        _window.CancelButton.Button.Disabled = false;
-
-        RefreshDoorLockStatus(tactical.DoorLockStatus);
-        SetRemoteControl(tactical.RemoteControlStatus);
     }
 
     private void Set(DropshipNavigationTravellingBuiState travelling)

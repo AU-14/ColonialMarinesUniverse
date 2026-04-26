@@ -12,7 +12,4 @@ public sealed partial class ActiveFlareSignalComponent : Component
 
     [DataField, AutoNetworkedField]
     public Queue<NetCoordinates> LastCoordinates = new();
-
-    [DataField, AutoNetworkedField]
-    public string? CreatorFaction;
 }

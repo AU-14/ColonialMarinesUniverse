@@ -27,18 +27,9 @@ public sealed partial class VehicleSmashableComponent : Component
     [DataField]
     public bool RequiresDoorUnpowered;
 
-    /// <summary>
-    /// Multiplier applied to the smashing vehicle's own wheel/hull damage when it plows
-    /// through this entity. 1 = full damage, 0 = no self-damage. Lets soft targets like
-    /// resin walls be cheap to ram while concrete/windows keep their normal cost.
-    /// </summary>
     [DataField]
     public float SelfDamageMultiplier = 1f;
 
-    /// <summary>
-    /// If set, only vehicles tagged with this value are allowed to smash through; everyone
-    /// else bumps into it like a hard wall. Use for gating resin walls to heavy vehicles.
-    /// </summary>
     [DataField]
     public ProtoId<TagPrototype>? RequiredVehicleTag;
 }

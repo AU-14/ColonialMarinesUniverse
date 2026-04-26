@@ -1,14 +1,8 @@
-# Apparel, command, section-leader, weapons, special-weapons
-- type: entity
+﻿- type: entity
   parent: ColMarTechBase
   id: AU14LACNcommandoclothingequipmentvendor
-  name: LACN Naval Commandos apparel vendor
-  description: >-
-    An automated dispenser rack, hooked up to a small storage of Latin American Colonial Navy apparel for the Naval Commandos.
-    Standard issue aboard naval vessels, military outposts, corporate-science installations and civilian colonies across the frontier.
-    Manufactured to outfit personnel rapidly following cryogenic hypersleep or emergency mobilization.
-
-    For full operational readiness, select one item from each section: fatigues with a webbing, footwear, gloves, headgear, armor, backpack, belt and a pouch.
+  name: LACN naval commandos apparel vendor
+  description: An automated rack hooked up to a small storage of special LACN apparel.
   components:
   - type: AccessReader
     access:
@@ -20,170 +14,157 @@
     - name: Fatigues
       entries:
       - id: AU14LACNUniformCoat
-        amount: 40
+        amount: 30
       - id: AU14LACNUniform
-        amount: 40
+        amount: 30
     - name: Footwear
       entries:
       - id: AU14LACNBoots
-        amount: 40
+        amount: 30
     - name: Gloves
       entries:
       - id: AU14LACNGloves
-        amount: 40
+        amount: 4
     - name: Webbings
       entries:
       - id: AU14WebbingMagazine
-        amount: 40
+        amount: 25
       - id: AU14WebbingUtility
-        amount: 40
+        amount: 25
       - id: AU14WebbingDumpPouch
         amount: 25
       - id: AU14WebbingAdminPouch
         amount: 15
       - id: AU14WebbingDropPouch
-        amount: 20
-      - id: AU14WebbingKnivesFilled
-        amount: 2
+        amount: 15
     - name: Headgear
       entries:
       - id: AU14LACNCommandoBeanie
-        amount: 40
+        amount: 25
       - id: AU14LACNNavyCap
-        amount: 20
+        amount: 25
+      - id: RMCM5CameraGear
+        amount: 25
       - id: AU14JungleBoonieHat
-        amount: 20
-      - id: RMCWeldingGoggles
-        amount: 8
+        amount: 25
     - name: Headsets
       entries:
-      - id: RMCM5CameraGear
-        amount: 30
       - id: AU14HeadsetSectionMarine
-        name: empty headset
         amount: 20
     - name: Armor
       entries:
       - id: AU14LACNCommandoArmorStandard
-        amount: 40
+        amount: 25
       - id: AU14LACNCommandoArmorPointman
-        amount: 30
+        amount: 25
     - name: Backpack
       entries:
       - id: AU14LACNBackpack
-        amount: 40
+        amount: 25
       - id: AU14LACNAmmoBackpack
-        amount: 15
-      - id: RMCSatchelLightpackWelder
-        amount: 5
-      - id: CMSatchelMarine
-        amount: 40
+        amount: 3
     - name: Belts
       entries:
       - id: CMBeltMarine
-        amount: 40
+        amount: 25
       - id: RMCBeltGrenade
-        amount: 4
-      - id: RMCM276ShotgunShellLoadingRig
-        amount: 6
-      - id: RMCBeltHolsterPistol
-        amount: 20
-      - id: RMCBeltHolsterRevolver
-        amount: 20
-      - id: CMBeltKnifeFilled
         amount: 2
+      - id: RMCM276ShotgunShellLoadingRig
+        amount: 2
+      - id: RMCBeltHolsterPistol
+        amount: 15
+      - id: RMCBeltHolsterRevolver
+        amount: 15
+#      - id: M276 Pattern M82F Holster Rig
+#        amount: 5
       - id: RMCBeltUtilityGeneral
-        amount: 30
+        amount: 15
     - name: Pouches
       entries:
       - id: RMCPouchBayonet
         name: Bayonet Sheath
-        amount: 25
+        amount: 15
       - id: RMCPouchFlareFilled
         name: Flare Pouch (Full)
-        amount: 30
+        amount: 15
       - id: RMCPouchDocumentSmall
-        amount: 3
+        amount: 1
       - id: RMCPouchMagazine
-        amount: 50
+        amount: 15
       - id: RMCPouchMagazineLarge
-        amount: 8
-      - id: RMCPouchShotgunLarge
-        amount: 8
-      - id: RMCPouchGeneralMedium
-        amount: 25
-      - id: RMCPouchGeneralLarge
-        amount: 4
-      - id: RMCPouchMagazinePistol
-        amount: 25
-      - id: RMCPouchMagazinePistolLarge
-        amount: 6
-      - id: RMCPouchPistol
-        amount: 20
-      - id: AU14PouchIFAKFill
-        amount: 5
-      - id: RMCPouchConstruction
-        amount: 5
-      - id: RMCPouchExplosive
-        amount: 3
-      - id: RMCPouchFuelTank
         amount: 2
+      - id: RMCPouchShotgunLarge
+        amount: 4
+      - id: RMCPouchGeneralMedium
+        amount: 15
+      - id: RMCPouchGeneralLarge
+        amount: 2
+      - id: RMCPouchMagazinePistol
+        amount: 15
+      - id: RMCPouchMagazinePistolLarge
+        amount: 2
+      - id: RMCPouchPistol
+        amount: 15
+      - id: RMCPouchConstruction
+        amount: 1
+      - id: RMCPouchExplosive
+        amount: 1
       - id: RMCPouchTools
         amount: 15
+#      - id: Sling Pouch
+#        amount: 1
     - name: Mask
       entries:
       - id: CMMaskCoif
-        amount: 40
+        amount: 10
       - id: RMCMaskScarfBlack
-        amount: 20
+        amount: 10
       - id: RMCMaskScarfGray
-        amount: 20
+        amount: 10
       - id: RMCMaskScarfTan
-        amount: 20
+        amount: 10
       - id: RMCMaskTornScarfGreen
-        amount: 20
+        amount: 10
       - id: RMCMaskTornScarfDesert
-        amount: 20
+        amount: 10
       - id: RMCMaskTornScarfSnow
-        amount: 20
+        amount: 10
       - id: RMCMaskTornScarfBlack
-        amount: 20
+        amount: 10
       - id: RMCMaskSmockBlack
-        amount: 20
+        amount: 10
       - id: RMCMaskBalaclavaSkullBlack
-        amount: 20
+        amount: 10
     - name: Glasses & Goggles
       entries:
       - id: AU14GogglesM1A1ClearBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1Ballistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1DarkBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1LaserBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1OrangeBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1PolarizedBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM60
-        amount: 25
+        amount: 20
       - id: RMCGlassesMarineRpg
-        amount: 25
+        amount: 20
       - id: AU14GlassesBiMex
-        amount: 25
+        amount: 20
       - id: AU14GlassesBiMexOrange
-        amount: 25
+        amount: 20
       - id: RMCGlassesTriMaxBronze
-        amount: 25
+        amount: 20
 
 - type: entity
   parent: ColMarTechBase
   id: AU14LACNcommandocommandequipmentvendor
-  name: LACN Naval Commandos command vendor
-  description: >-
-    An automated command rack, hooked up to a restricted storage of Latin American Colonial Navy command-leadership equipment for the Naval Commandos.
-    Manufactured to equip commanding personnel following cryogenic hypersleep or an emergency directive is issued.
+  name: LACN naval commandos command vendor
+  description: An automated rack hooked up to a small storage of command apparel and equipment.
   components:
   - type: AccessReader
     access:
@@ -195,21 +176,21 @@
     - name: Fatigues
       entries:
       - id: AU14LACNUniformCoat
-        amount: 5
+        amount: 2
       - id: AU14LACNUniform
-        amount: 5
+        amount: 2
     - name: Footwear
       entries:
       - id: AU14LACNBoots
-        amount: 5
+        amount: 2
     - name: Headgear
       entries:
       - id: AU14LACNHelmetSL
-        amount: 5
+        amount: 2
       - id: AU14LACNCommandoBeanie
-        amount: 5
+        amount: 2
       - id: AU14LACNNavyCap
-        amount: 5
+        amount: 2
     - name: Headsets
       entries:
       - id: AU14HeadsetSectionLeader
@@ -217,27 +198,25 @@
     - name: Backpack
       entries:
       - id: RMCBackpackRTO
-        amount: 5
+        amount: 2
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill
-        amount: 10
+        amount: 2
     - name: Miscellaneous
       entries:
       - id: RMCLaserDesignator
-        amount: 4
+        amount: 2
       - id: RMCWhistle
-        amount: 10
+        amount: 2
       - id: RMCPackFlareCAS
-        amount: 10
+        amount: 2
 
 - type: entity
   parent: ColMarTechBase
   id: AU14LACNcommandosectionleaderequipmentvendor
-  name: LACN Naval Commandos section leader vendor
-  description: >-
-    An automated supervisor rack, hooked up to a compact storage of Latin American Colonial Navy section-leadership equipment for the Naval Commandos.
-    Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
+  name: LACN naval commandos section leader vendor
+  description: An automated rack hooked up to a small storage of apparel and equipment for the section leader.
   components:
   - type: AccessReader
     access:
@@ -290,13 +269,8 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14LACNcommandoWeaponsVendor
-  name: LACN Naval Commandos weapons rack
-  description: >-
-    An automated weapons rack, hooked up to a small armory of Latin American Colonial Navy weaponry for the Naval Commandos.
-    Standard issue across the frontier where threats can appear without warning.
-    Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
-
-    For immediate combat readiness: select a primary weapon kit and a sidearm.
+  name: LACN naval commandos weapons rack
+  description: An automated rack hooked up to a small storage of weapons.
   components:
   - type: AccessReader
     access:
@@ -348,13 +322,8 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14LACNcommandoSpecialWeaponsVendor
-  name: LACN Naval Commandos special weapons rack
-  description: >-
-    An automated special weapons rack, hooked up to a restricted armory of Latin American Colonial Navy heavy and breaching ordnance for the Naval Commandos.
-    Standard issue only for qualified operators.
-    Engineered to deliver overwhelming firepower the instant cryogenic hypersleep ends or an emergency mobilization is called.
-
-    Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
+  name: LACN naval commandos special weapons rack
+  description: An automated rack hooked up to a small storage of special weapons.
   components:
   - type: AccessReader
     access:
@@ -367,16 +336,14 @@
       entries:
       - id: RMCAttachmentMiniFlamethrower
         amount: 1
-      - id: CMFireExtinguisherPortable
-        amount: 1
     - name: M42A2 scout rifle
       entries:
       - id: AU14WeaponSniperRifleM42A2
         amount: 1
       - id: CMMagazineSniperM96S
-        amount: 12
+        amount: 6
       - id: CMMagazineSniperM96SFlak
-        amount: 3
+        amount: 2
       - id: CMMagazineSniperM96SIncendiary
         amount: 1
       - id: RMCScoutShoes
@@ -386,22 +353,6 @@
       - id: RMCAttachmentU7UnderbarrelShotgun
         amount: 2
       - id: RMCBoxShotgunBuckshot
-        amount: 16
-      - id: RMCBoxShotgunSlugs
-        amount: 4
-      - id: RMCBoxShotgunBreaching
-        amount: 5
-    - name: Disposable Special Light Anti-Tank Weapon
-      entries:
-      - id: AU14CrateM5A1SLAW
-        amount: 2
-    - name: Explosives
-      entries:
-      - id: RMCPacketGrenadeSmokeFilled
-        amount: 7
-      - id: RMCGrenadeCustomMetalFoam
         amount: 6
-      - id: RMCExplosiveBreachingCharge
-        amount: 18
-      - id: RMCExplosivePlastic
-        amount: 10
+      - id: RMCBoxShotgunBreaching
+        amount: 4

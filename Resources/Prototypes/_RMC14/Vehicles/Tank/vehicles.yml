@@ -12,7 +12,7 @@
     - VehicleHeavy
   - type: RequireProjectileTarget
   - type: GridVehicleMover
-    maxSpeed: 2.5
+    maxSpeed: 3
     acceleration: 1
     deceleration: 8
     maxReverseSpeed: 2
@@ -26,11 +26,7 @@
     xenoBlockMinimumSize: Immobile
     canXenosPush: false
     canSmashWalls: true
-    wallSmashMinSpeed: 1.5
-    wallSmashWheelDamage: 0.6
-    wallSmashHullDamage: 12
-    wallSmashSlowdownMultiplier: 0.2
-    wallSmashSlowdownDuration: 1.5
+    wallSmashMinSpeed: 0.9
     speedAtZeroIntegrity: 0.7
   - type: VehicleRideSurface
     bounds:
@@ -86,7 +82,7 @@
     damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameTank
   - type: MeleeReceivedMultiplier
-    xenoMultiplier: 3.4
+    xenoMultiplier: 2.4
     otherMultiplier: 1
   - type: InteractionOutline
   - type: Sprite

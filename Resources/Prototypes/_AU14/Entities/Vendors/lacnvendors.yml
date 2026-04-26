@@ -1,14 +1,8 @@
-# Apparel, equipment, medic, aircrew, command, AR, section-leader, weaponry, special-weapons
-- type: entity
+﻿- type: entity
   parent: ColMarTechBase
   id: AU14LACNclothingequipmentvendor
-  name: LACN Landing Forces apparel vendor
-  description: >-
-    An automated dispenser rack, hooked up to a small storage of Latin American Colonial Navy apparel for the Landing Forces.
-    Standard issue aboard naval vessels, military outposts, corporate-science installations and civilian colonies across the frontier.
-    Manufactured to outfit personnel rapidly following cryogenic hypersleep or emergency mobilization.
-
-    For full operational readiness, select one item from each section: fatigues with a webbing, footwear, gloves, headgear, armor, backpack, belt and a pouch.
+  name: LACN landing forces apparel vendor
+  description: An automated rack hooked up to a small storage of standard LACN apparel.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
@@ -19,183 +13,164 @@
     - name: Fatigues
       entries:
       - id: AU14LACNUniformCoat
-        amount: 40
+        amount: 30
       - id: AU14LACNUniform
-        amount: 40
+        amount: 30
     - name: Footwear
       entries:
       - id: AU14LACNBoots
-        amount: 40
+        amount: 30
     - name: Gloves
       entries:
       - id: AU14LACNGloves
-        amount: 40
+        amount: 2
     - name: Webbings
       entries:
       - id: AU14WebbingMagazine
-        amount: 40
+        amount: 25
       - id: AU14WebbingUtility
-        amount: 40
+        amount: 25
       - id: AU14WebbingDumpPouch
         amount: 25
       - id: AU14WebbingAdminPouch
-        amount: 20
+        amount: 15
       - id: AU14WebbingDropPouch
-        amount: 20
+        amount: 15
       - id: AU14WebbingKnivesFilled
-        amount: 2
+        amount: 1
     - name: Headgear
       entries:
       - id: AU14LACNHelmetStandard
-        amount: 40
+        amount: 25
       - id: AU14LACNNavyCap
-        amount: 20
-    - name: Headsets
-      entries:
+        amount: 25
       - id: RMCM5CameraGear
-        amount: 30
-      - id: AU14HeadsetSectionMarine
-        name: empty headset
-        amount: 20
-    - name: Heads Up Display
-      entries:
-      - id: RMCVisorSquad
-        amount: 40
-      - id: RMCVisorWelding
-        amount: 8
+        amount: 25
     - name: Armor
       entries:
       - id: AU14LACNArmorStandard
-        amount: 40
+        amount: 25
       - id: AU14LACNArmorStandardPadless
-        amount: 30
+        amount: 25
     - name: Backpack
       entries:
       - id: AU14LACNBackpack
-        amount: 40
+        amount: 25
       - id: AU14LACNAmmoBackpack
-        amount: 15
-      - id: RMCSatchelLightpackWelder
-        amount: 5
-      - id: CMSatchelMarine
-        amount: 40
+        amount: 3
     - name: Belts
       entries:
       - id: CMBeltMarine
-        amount: 40
+        amount: 25
       - id: RMCBeltGrenade
-        amount: 4
-      - id: RMCM276ShotgunShellLoadingRig
-        amount: 6
-      - id: RMCBeltHolsterPistol
-        amount: 20
-      - id: RMCBeltHolsterRevolver
-        amount: 20
-      - id: CMBeltKnifeFilled
         amount: 2
+      - id: RMCM276ShotgunShellLoadingRig
+        amount: 2
+      - id: RMCBeltHolsterPistol
+        amount: 15
+      - id: RMCBeltHolsterRevolver
+        amount: 15
+#      - id: M276 Pattern M82F Holster Rig
+#        amount: 5
+      - id: CMBeltKnifeFilled
+        name: M276 Knife Rig (Full)
+        amount: 1
       - id: RMCBeltUtilityGeneral
-        amount: 30
+        amount: 15
     - name: Pouches
       entries:
       - id: RMCPouchBayonet
         name: Bayonet Sheath
-        amount: 25
+        amount: 15
       - id: RMCPouchFlareFilled
         name: Flare Pouch (Full)
-        amount: 30
+        amount: 15
       - id: RMCPouchDocumentSmall
-        amount: 3
+        amount: 1
       - id: RMCPouchMagazine
-        amount: 50
+        amount: 15
       - id: RMCPouchMagazineLarge
-        amount: 8
-      - id: RMCPouchShotgunLarge
-        amount: 8
-      - id: RMCPouchGeneralMedium
-        amount: 25
-      - id: RMCPouchGeneralLarge
-        amount: 4
-      - id: RMCPouchMagazinePistol
-        amount: 25
-      - id: RMCPouchMagazinePistolLarge
-        amount: 6
-      - id: RMCPouchPistol
-        amount: 20
-      - id: AU14PouchIFAKFill
-        amount: 5
-      - id: RMCPouchConstruction
-        amount: 5
-      - id: RMCPouchExplosive
-        amount: 3
-      - id: RMCPouchFuelTank
         amount: 2
+      - id: RMCPouchShotgunLarge
+        amount: 4
+      - id: RMCPouchGeneralMedium
+        amount: 15
+      - id: RMCPouchGeneralLarge
+        amount: 2
+      - id: RMCPouchMagazinePistol
+        amount: 15
+      - id: RMCPouchMagazinePistolLarge
+        amount: 2
+      - id: RMCPouchPistol
+        amount: 15
+      - id: RMCPouchConstruction
+        amount: 1
+      - id: RMCPouchExplosive
+        amount: 1
       - id: RMCPouchTools
         amount: 15
+#      - id: Sling Pouch
+#        amount: 1
     - name: Mask
       entries:
       - id: CMMaskGas
-        amount: 40
+        amount: 20
       - id: CMUGasMaskFilter
-        amount: 80
+        amount: 40
       - id: CMMaskCoif
-        amount: 20
+        amount: 10
       - id: RMCMaskScarfBlack
-        amount: 20
+        amount: 10
       - id: RMCMaskScarfGray
-        amount: 20
+        amount: 10
       - id: RMCMaskScarfTan
-        amount: 20
+        amount: 10
       - id: RMCMaskTornScarfGreen
-        amount: 20
+        amount: 10
       - id: RMCMaskTornScarfDesert
-        amount: 20
+        amount: 10
       - id: RMCMaskTornScarfSnow
-        amount: 20
+        amount: 10
       - id: RMCMaskTornScarfBlack
-        amount: 20
+        amount: 10
       - id: RMCMaskSmockBlack
-        amount: 20
+        amount: 10
       - id: RMCMaskNeckerchiefGray
-        amount: 20
+        amount: 10
     - name: Glasses & Goggles
       entries:
       - id: AU14GogglesM1A1ClearBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1Ballistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1DarkBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1LaserBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1OrangeBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1PolarizedBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM60
-        amount: 25
+        amount: 20
       - id: RMCGlassesMarineRpg
-        amount: 25
+        amount: 20
       - id: AU14GlassesBiMex
-        amount: 25
+        amount: 20
       - id: AU14GlassesBiMexOrange
-        amount: 25
+        amount: 20
       - id: RMCGlassesTriMaxBronze
-        amount: 25
+        amount: 20
     - name: Helmet Garb
       entries:
       - id: RMCHelmetGarbGasmask
-        amount: 40
+        amount: 20
 
 - type: entity
   parent: ColMarTechBase
   id: AU14LACNequipmentvendor
-  name: LACN Landing Forces equipment vendor
-  description: >-
-    An automated dispenser rack, hooked up to a small storage of Latin American Colonial Navy equipment for the Landing Forces.
-    Stocked with medical supplies and field gear for rapid deployment following cryogenic hypersleep or emergency mobilization.
-    The interface is intentionally simple, even someone with tunnel-vision and frostbite can operate it.
-
-    Rapid-issue protocol: prioritize medical supplies, a ration pack, an e-tool and sandbags.
+  name: LACN landing forces equipment vendor
+  description: An automated rack hooked up to a small storage of standard LACN equipment.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
@@ -285,13 +260,8 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14LACNcorpsmanvendor
-  name: LACN Landing Forces corpsman medical vendor
-  description: >-
-    An automated medical rack, hooked up to a compact stock of Latin American Colonial Navy trauma supplies for the Landing Forces.
-    Standard issue for corpsmen aboard naval vessels, outposts and colonies where casualties arrive faster than reinforcements.
-    Designed for rapid reconstitution of combat medics following cryogenic hypersleep or emergency call-up.
-
-    Corpsman protocol: select the essential equipment set, storage and limited medications.
+  name: LACN landing forces corpsman medical vendor
+  description: An automated rack hooked up to a small storage of medical supplies.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforMedical" ], [ "AU14AccessOpforMedical" ] ]
@@ -396,11 +366,7 @@
   parent: ColMarTechBase
   id: AU14LACNaircrewvendor
   name: LACN aircrew vendor
-  description: >-
-    An automated dispenser rack, hooked up to a small storage of Latin American Colonial Navy aircrew flight and support gear for the Landing Forces.
-    Engineered to get flight personnel flight-ready in seconds after cryogenic hypersleep or scramble orders.
-
-    Aircrew protocol: select a set of fatigues, the essential medical equipment and storage kit.
+  description: An automated rack hooked up to a small storage of aircrew apparel and equipment.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
@@ -416,8 +382,6 @@
       choices: { CMUPlatoonAirCrewVest: 1 }
       entries:
       - id: AU14LACNICPS2
-      - id: RMCArmorVestSquad
-        amount: 2
     - name: Footwear
       choices: { CMUPlatoonAirCrewFootwear: 1 }
       entries:
@@ -474,7 +438,7 @@
       - id: RMCPouchMagazinePistolLarge
       - id: RMCPouchTools
     - name: Glasses
-      choices: { CMUPlatoonAirCrewGlasses: 1 }
+      choices: { CMUPlatoonAirCrewGlasses: 2 }
       entries:
       - id: RMCSunglassesBigFake
       - id: RMCGlassesMarineRpg
@@ -557,10 +521,8 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14LACNcommandequipmentvendor
-  name: LACN Landing Forces command vendor
-  description: >-
-    An automated command rack, hooked up to a restricted storage of Latin American Colonial Navy command-leadership equipment for the Landing Forces.
-    Manufactured to equip commanding personnel following cryogenic hypersleep or an emergency directive is issued.
+  name: LACN landing forces command vendor
+  description: An automated rack hooked up to a small storage of command apparel and equipment.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessOpforCommand" ] ]
@@ -571,51 +533,44 @@
     - name: Fatigues
       entries:
       - id: AU14LACNUniformCoat
-        amount: 5
+        amount: 2
       - id: AU14LACNUniform
-        amount: 5
+        amount: 2
     - name: Footwear
       entries:
       - id: AU14LACNBoots
-        amount: 5
+        amount: 2
     - name: Headgear
       entries:
       - id: AU14LACNHelmetSL
-        amount: 5
+        amount: 2
       - id: RMCHeadBeretSquad
-        amount: 5
+        amount: 2
         name: Black Beret
       - id: AU14LACNNavyCap
-        amount: 5
-    - name: Headsets
-      entries:
-      - id: AU14HeadsetSectionLeader
         amount: 2
     - name: Backpack
       entries:
       - id: RMCBackpackRTO
-        amount: 5
+        amount: 2
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill
-        amount: 10
+        amount: 2
     - name: Miscellaneous
       entries:
       - id: RMCLaserDesignator
-        amount: 4
+        amount: 2
       - id: RMCWhistle
-        amount: 10
+        amount: 2
       - id: RMCPackFlareCAS
-        amount: 10
+        amount: 2
 
 - type: entity
   parent: ColMarTechBase
   id: AU14LACNMGequipmentvendor
-  name: LACN Landing Forces machine gunner equipment vendor
-  description: >-
-    An automated weapons rack, hooked up to a small armory of Latin American Colonial Navy light-machine gun systems for the Landing Forces.
-    Standard issue for designated smart-gun crews on naval vessels and high-threat outposts.
-    Built to bring fire support online rapidly after cryogenic hypersleep or emergency mobilization.
+  name: LACN landing forces machine gunner equipment vendor
+  description: An automated rack hooked up to a small storage of machine gunner equipment.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforGunner" ], [ "AU14AccessOpforGunner" ] ]
@@ -638,10 +593,8 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14LACNsectionleaderequipmentvendor
-  name: LACN Landing Forces section leader vendor
-  description: >-
-    An automated supervisor rack, hooked up to a compact storage of Latin American Colonial Navy section-leadership equipment for the Landing Forces.
-    Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
+  name: LACN landing forces section leader vendor
+  description: An automated rack hooked up to a small storage of apparel and equipment for the section leader.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessOpforFTL" ] ]
@@ -674,13 +627,8 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14LACNWeaponsVendor
-  name: LACN Landing Forces weapons rack
-  description: >-
-    An automated weapons rack, hooked up to a small armory of Latin American Colonial Navy weaponry for the Landing Forces.
-    Standard issue across the frontier where threats can appear without warning.
-    Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
-
-    For immediate combat readiness: select a primary weapon kit and a sidearm.
+  name: LACN weapons rack
+  description: An automated rack hooked up to a small storage of weapons.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
@@ -713,13 +661,8 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14LACNSpecialWeaponsVendor
-  name: LACN Landing Forces special weapons rack
-  description: >-
-    An automated special weapons rack, hooked up to a restricted armory of Latin American Colonial Navy heavy and breaching ordnance for the Landing Forces.
-    Standard issue only for qualified operators.
-    Engineered to deliver overwhelming firepower the instant cryogenic hypersleep ends or an emergency mobilization is called.
-
-    Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
+  name: LACN special weapons rack
+  description: An automated rack hooked up to a small storage of special weapons.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
@@ -731,8 +674,6 @@
       entries:
       - id: RMCWeaponLauncherM85A1
         amount: 1
-      - id: RMCPacketGrenadeBatonSlugHIRRFilled
-        amount: 2
       - id: RMCPacketGrenadeM74AGMSHornetFilled
         amount: 4
       - id: RMCPacketGrenadeM74AGMFFilled
@@ -740,6 +681,8 @@
       - id: RMCPacketGrenadeM74AGMSFilled
         amount: 2
       - id: RMCPacketGrenadeM74AGMIFilled
+        amount: 1
+      - id: RMCPacketGrenadeBatonSlugHIRRFilled
         amount: 1
       - id: RMCPacketGrenadeM74AGMSStarShellFilled
         amount: 1
@@ -754,9 +697,9 @@
       - id: AU14WeaponSniperRifleM42A2
         amount: 1
       - id: CMMagazineSniperM96S
-        amount: 15
+        amount: 6
       - id: CMMagazineSniperM96SFlak
-        amount: 4
+        amount: 2
       - id: RMCScoutShoes
         amount: 1
     - name: MOU53 break action shotgun
@@ -766,16 +709,16 @@
       - id: RMCAttachmentMOU53Stock
         amount: 1
       - id: RMCBoxShotgunFlechette
-        amount: 12
+        amount: 7
       - id: RMCBoxShotgunSlugs
-        amount: 12
+        amount: 5
     - name: Explosives
       entries:
       - id: CMPacketGrenadeFragOldFilled
         amount: 15
       - id: RMCPacketGrenadeSmokeFilled
-        amount: 5
-      - id: RMCExplosiveBreachingCharge
-        amount: 16
+        amount: 4
       - id: RMCExplosivePlastic
-        amount: 12
+        amount: 4
+      - id: RMCExplosiveBreachingCharge
+        amount: 6

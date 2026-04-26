@@ -20,7 +20,6 @@ namespace Content.Shared.AU14.util
         OperationsOfficer,
         Rto,
         JuniorOfficer,
-        MilitaryPolice,
         SectionSergeant,
         Pilot,
         ExtraVendor1,

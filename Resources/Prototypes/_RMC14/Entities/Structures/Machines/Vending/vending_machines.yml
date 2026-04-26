@@ -359,11 +359,9 @@
     AU14CigarettePackBalajj: 20
     RMCCigarettePackWeYaGold: 10
     RMCCigarettePackExecutiveSelect: 10
-    RMCCigarCase: 1
     RMCTarbackTube: 20
     RMCMatchboxFull: 15
     RMCLighter: 25
-    RMCZippoGold: 1
 
 - type: entity
   parent: CMVendorCigs
@@ -473,7 +471,7 @@
     denyState: deny-unshaded
     ejectState: eject-unshaded
   - type: AccessReader
-    access: [ [ "AU14AccessGovforSecurity" ], [ "AU14AccessOpforSecurity" ] ]
+    access: [["CMAccessBrig"]]
 
 - type: vendingMachineInventory
   id: CMVendorSec
@@ -587,14 +585,14 @@
     ChemistryBottleRobustHarvest: 15
     PestSpray: 20
     Syringe: 5
-    RMCStoragePlantBag: 12
-    RMCToolSpade: 5
-    RMCToolHatchet: 5
+    RMCStoragePlantBag: 5
+    RMCToolSpade: 3
+    RMCToolHatchet: 3
     # AmmoniaBottle: 10 #Premium
     # DiethylamineBottle: 5 #Premium
     HydroponicsToolSpade: 3
     HydroponicsToolHatchet: 3
-    HydroponicsToolScythe: 5
+    HydroponicsToolScythe: 3
 
 
 # Seeds
@@ -693,72 +691,71 @@
     - name: Products
       entries:
       - id: RMCFork
-        amount: 16
+        amount: 6
       - id: RMCSpoon
-        amount: 12
+        amount: 4
       - id: RMCKitchenKnife
-        amount: 12
-      - id: DrinkShaker
-        amount: 8
-      - id: DrinkGlass
-        amount: 40
-      - id: ClothingOuterApronChef
         amount: 5
+      - id: DrinkShaker
+        amount: 5
+      - id: DrinkGlass
+        amount: 8
+      - id: ClothingOuterApronChef
+        amount: 2
       - id: RMCCondimentSmallSalt
-        amount: 8
+        amount: 4
       - id: RMCCondimentSmallPepper
-        amount: 8
+        amount: 4
       - id: RMCCondimentEnzyme
-        amount: 2
+        amount: 1
       - id: RMCCondiment
-        amount: 12
-      - id: FoodPlateTin
         amount: 8
+      - id: FoodPlateTin
+        amount: 5
       - id: FoodBowlBig
-        amount: 20
+        amount: 10
       - id: RMCKitchenKnifeButcher
-        amount: 2
+        amount: 1
       - id: RMCKitchenKnifeChef
         amount: 3
       - id: RMCRollingPin
-        amount: 5
+        amount: 4
       - id: PairedChopsticks
-        amount: 12
+        amount: 4
       - id: FoodPlate
-        amount: 20
+        amount: 10
       - id: FoodPlateSmall
-        amount: 20
+        amount: 10
       - id: FoodPlateMuffinTin
-        amount: 12
-      - id: FoodKebabSkewer
-        amount: 20
-      - id: CMBeaker
-        amount: 12
-      - id: CMBeakerLarge
-        amount: 8
-      - id: Pitcher
-        amount: 6
-      - id: DrinkMug
-        amount: 10
-      - id: DrinkMugBlack
-        amount: 10
-      - id: DrinkMugBlue
         amount: 5
-      - id: DrinkMugGreen
-        amount: 4
-      - id: DrinkMugRed
-        amount: 4
-      - id: DrinkMugHeart
+      - id: FoodKebabSkewer
+        amount: 5
+      - id: CMBeaker
+        amount: 5
+      - id: CMBeakerLarge
+        amount: 5
+      - id: Pitcher
         amount: 2
+      - id: DrinkMug
+        amount: 5
+      - id: DrinkMugBlack
+        amount: 2
+      - id: DrinkMugBlue
+        amount: 2
+      - id: DrinkMugGreen
+        amount: 2
+      - id: DrinkMugHeart
+        amount: 1
       - id: DrinkMugMetal
-        amount: 4
+        amount: 2
       - id: DrinkMugMoebius
         amount: 1
       - id: DrinkMugOne
         amount: 1
       - id: DrinkMugRainbow
         amount: 2
-
+      - id: DrinkMugRed
+        amount: 2
 
 - type: entity
   parent: CMVendorDinnerware
@@ -808,82 +805,82 @@
     - name: Products
       entries:
       - id: FoodContainerEgg
-        amount: 18
+        amount: 12
       - id: FoodMeatChicken
-        amount: 36
+        amount: 24
       - id: FoodMeatFish
-        amount: 24
+        amount: 18
       - id: RMCFoodMeatFish
-        amount: 18
+        amount: 12
       - id: FoodMeat
-        amount: 36
-      - id: FoodMeatBacon
-        amount: 36
-      - id: FoodMeatSausage
         amount: 24
-      - id: DrinkMilkCarton
-        amount: 36
-      - id: DrinkSoyMilkCarton
+      - id: FoodMeatBacon
+        amount: 24
+      - id: FoodMeatSausage
         amount: 18
+      - id: DrinkMilkCarton
+        amount: 24
+      - id: DrinkSoyMilkCarton
+        amount: 12
       - id: RMCCondimentEnzyme
         amount: 12
       - id: ReagentContainerFlour
-        amount: 18
+        amount: 12
       - id: RMCCondimentSugar
-        amount: 18
+        amount: 12
       - id: RMCCondimentCornOil
         amount: 12
       - id: RMCCondimentSmallSalt
-        amount: 14
+        amount: 12
       - id: RMCCondimentSmallPepper
-        amount: 14
+        amount: 12
       # TODO RMC14 Mint 12
       - id: FoodApple
-        amount: 16
+        amount: 12
       - id: FoodBanana
-        amount: 22
+        amount: 12
       - id: FoodMushroom
-        amount: 18
+        amount: 12
       - id: FoodCherry
-        amount: 16
+        amount: 12
       - id: FoodChiliPepper
-        amount: 14
+        amount: 12
       - id: FoodCabbage
-        amount: 24
+        amount: 12
       - id: FoodCarrot
-        amount: 14
+        amount: 12
       - id: FoodCorn
-        amount: 14
+        amount: 12
       - id: FoodEggplant
-        amount: 14
+        amount: 12
       - id: FoodLemon
-        amount: 22
+        amount: 12
       - id: FoodLime
-        amount: 18
+        amount: 12
       - id: FoodOrange
-        amount: 24
+        amount: 12
       - id: FoodPotato
-        amount: 36
+        amount: 12
       - id: FoodTomato
-        amount: 20
+        amount: 12
       - id: FoodWhiteBeet
         amount: 12
       - id: FoodOnion
-        amount: 18
+        amount: 12
       - id: FoodOnionRed
-        amount: 14
+        amount: 12
       - id: FoodGarlic
-        amount: 22
+        amount: 12
       - id: ReagentContainerRice
-        amount: 28
+        amount: 12
       - id: ReagentContainerOliveoil
-        amount: 22
+        amount: 12
       - id: FoodCondimentBottleVinegar
-        amount: 14
+        amount: 12
       - id: ReagentContainerCornmeal
         amount: 12
       - id: ReagentContainerMayo
-        amount: 26
+        amount: 12
 
 - type: entity
   parent: CMVendorIngredients

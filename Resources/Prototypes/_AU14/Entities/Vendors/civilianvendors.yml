@@ -1,4 +1,4 @@
-- type: entity
+﻿- type: entity
   parent: ColMarTechBase
   id: AU14CivilianClothingVendor
   name: Civilian Clothing Wardrobe
@@ -136,10 +136,6 @@
       - id: AU14SlingSatchelBlue
       - id: RMCBeltUtilityGeneral
       - id: RMCPouchGeneral
-    - name: Field Tents
-      entries:
-      - id: RMCTentUNMCStandardFolded
-        amount: 1
 
 - type: entity
   parent: ColMarTechBase
@@ -162,16 +158,12 @@
     - name: Hard Hats
       choices: { CMUcivilianengineeringhats: 1 }
       entries:
-      - id: RMCHardhatOrange
-      - id: RMCHardHat
       - id: RMCHardhatWhite
-      - id: RMCHardhatBlue
     - name: Engineering Clothing
       takeAll: CMUEngineeringClothes
       entries:
       - id: AU14CivilianWeYuEngineerClothes
       - id: AU14CivilianFullSuitWeYuEngineer
-      - id: RMCWeldingGoggles
     - name: Waste Management Clothing
       takeAll: CMUEngineeringClothesWM
       entries:
@@ -198,7 +190,6 @@
       - id: CMBeltUtilityFilled
       - id: RMCBeltUtilityGeneral
       - id: RMCPouchGeneral
-      - id: AU14PouchIFAKFill
       - id: RMCPouchToolsFill
       - id: RMCPouchElectronics
       - id: RMCPouchConstruction
@@ -208,7 +199,6 @@
       entries:
       - id: RMCSynthResetKey
       - id: CMStampApproved
-      - id: RMCRadioHandheldColonyOff
 
 - type: entity
   parent: ColMarTechBase
@@ -282,25 +272,18 @@
       - id: CMSurgicalLine
       - id: CMSynthGraft
       - id: CMSurgicalCaseFilled
-      - id: RMCRadioHandheldColonyOff
     - name: Medical Pouches
       choices: { CMUMedicalPouchCivDoc: 2 }
       entries:
-      - id: AU14PouchAutoinjectorFilledMilitaryDoctor
+      - id: RMCPouchAutoinjector
       - id: RMCPouchFirstResponder
       - id: RMCPouchMedical
       - id: RMCPouchSyringeFill
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: RMCBeltMedicalDefibAnalyzerFilled
-      - id: CMBeltMedicBagFilled
-    - name: Medical Equipment
-      entries:
-      - id: AU14CMDefibrillator
-        amount: 10
-      - id: AU14IVFoldableFolded
-        amount: 10
+      - id: CMBeltMedical
+      - id: CMBeltMedicBag
 
 - type: entity
   parent: ColMarTechBase
@@ -353,9 +336,9 @@
     - name: Pouches
       choices: { CMUcivilianmedicalpouches: 3 }
       entries:
-      - id: RMCPouchAutoinjectorFill
+      - id: RMCPouchAutoinjector
       - id: RMCPouchFirstResponder
-      - id: RMCPouchFirstAidPills
+      - id: RMCPouchFirstAid
       - id: RMCPouchToolsSocFill
       - id: RMCPouchGeneralLarge
       - id: RMCWebbingDropPouch
@@ -363,8 +346,8 @@
       choices: { CMUcivilianmedicalbelts: 2 }
       entries:
       - id: CMBeltUtilityFilled
-      - id: CMBeltMedicalFilled
-      - id: CMBeltMedicBagFilled
+      - id: CMBeltMedical
+      - id: CMBeltMedicBag
     - name: Bags
       choices: { CMUcivilianmedicalbags: 1 }
       entries:
@@ -374,7 +357,6 @@
     - name: Assorted Utilities
       takeAll: CMUEssentialEquipmentAssorted
       entries:
-      - id: RMCGlassesMedicalHUDGlasses
       - id: CMRollerBedSpawnFolded
       - id: CMHealthAnalyzer
       - id: RMCFlashlightPen
@@ -488,5 +470,4 @@
       - id: RMCRadioHandheldColonyOff
       - id: CMFireExtinguisherPortable
       - id: RMCFlashlightPen
-      - id: AU14CMDefibrillator
       - id: RMCSynthResetKey

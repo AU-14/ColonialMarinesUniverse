@@ -91,7 +91,6 @@ namespace Content.Server.Explosion.EntitySystems
 
             InitializeProximity();
             InitializeOnUse();
-            InitializeOnLight();
             InitializeSignal();
             InitializeTimedCollide();
             InitializeVoice();
@@ -327,15 +326,6 @@ namespace Content.Server.Explosion.EntitySystems
         /// Start the timer for triggering the device.
         /// </summary>
         public void StartTimer(Entity<OnUseTimerTriggerComponent?> ent, EntityUid? user)
-        {
-            if (!Resolve(ent, ref ent.Comp, false))
-                return;
-
-            var comp = ent.Comp;
-            HandleTimerTrigger(ent, user, comp.Delay, comp.BeepInterval, comp.InitialBeepDelay, comp.BeepSound);
-        }
-
-        public void StartFuseTimer(Entity<CMUOnLightTimerTriggerComponent?> ent, EntityUid? user)
         {
             if (!Resolve(ent, ref ent.Comp, false))
                 return;

@@ -36,6 +36,9 @@
   components:
   - type: Physics
     bodyType: Static
+  - type: Transform
+    anchored: true
+  - type: Godmode
   - type: Sprite
     sprite: _RMC14/Structures/Furniture/vehicle_seats.rsi
     state: pilot_chair
@@ -111,6 +114,9 @@
   id: RMCSeatArmoredDriver
   name: armored driver's seat
   components:
+  - type: Transform
+    anchored: true
+  - type: Godmode
   - type: VehicleDriverSeat
     skills:
       all: {}
@@ -120,6 +126,9 @@
   id: RMCSeatArmoredWeaponsOperator
   name: armored weapons operator seat
   components:
+  - type: Transform
+    anchored: true
+  - type: Godmode
   - type: VehicleWeaponsSeat
     skills:
       all: {}
@@ -136,6 +145,9 @@
   id: RMCSeatArmoredPortGunOperator
   name: armored port gun operator seat
   components:
+  - type: Transform
+    anchored: true
+  - type: Godmode
   - type: VehiclePortGunSeat
     skills:
       all: {}
@@ -147,6 +159,9 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: Transform
+    anchored: true
+  - type: Godmode
   - type: VehicleDriverSeat
     skills:
       all: {}
@@ -170,6 +185,9 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: Transform
+    anchored: true
+  - type: Godmode
   - type: VehicleWeaponsSeat
     skills:
       all: {}
@@ -188,6 +206,9 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: Transform
+    anchored: true
+  - type: Godmode
   - type: VehicleWeaponsSeat
     skills:
       all: {}
@@ -231,6 +252,9 @@
   id: RMCSeatHumveeDriver
   name: humvee driver seat
   components:
+  - type: Transform
+    anchored: true
+  - type: Godmode
   - type: VehicleDriverSeat
     skills:
       all: {}
@@ -240,6 +264,9 @@
   id: RMCSeatHumveeWeaponsOperator
   name: humvee gunner seat
   components:
+  - type: Transform
+    anchored: true
+  - type: Godmode
   - type: VehicleWeaponsSeat
     skills:
       all: {}

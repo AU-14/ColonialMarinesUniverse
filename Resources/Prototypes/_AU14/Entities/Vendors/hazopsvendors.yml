@@ -1,14 +1,8 @@
-# Apparel, smartgun, weaponry, special-weaponry, command, section-leader
 - type: entity
   parent: ColMarTechBase
   id: AU14HAZOPSclothingequipmentvendor
   name: HAZOPS apparel vendor
-  description: >-
-    An automated dispenser rack, hooked up to a small storage of Hazardous Operations apparel of the Marine Special Operations Command.
-    Standard issue aboard naval vessels, military outposts, corporate-science installations and civilian colonies across the frontier.
-    Manufactured to outfit personnel rapidly following cryogenic hypersleep or emergency mobilization.
-
-    For full operational readiness, select one item from each section: fatigues with a webbing, footwear, gloves, headgear, armor, backpack, belt and a pouch.
+  description: An automated rack hooked up to a small storage of specialized marine apparel.
   components:
   - type: Sprite
     sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
@@ -17,58 +11,55 @@
     - name: Fatigues
       entries:
       - id: AU14HAZOPUrbanFatigues
-        amount: 40
+        amount: 45
     - name: Footwear
       entries:
       - id: CMBootsBlack
         amount: 40
       - id: RMCBootsCBRN
-        amount: 25
+        amount: 10
     - name: Gloves
       entries:
-      - id: AU14PVEHandsInsulatedBlackMarine
-        amount: 40
       - id: CMHandsBrown
         amount: 20
+      - id: AU14PVEHandsInsulatedBlackMarine
+        amount: 20
       - id: AU14PVEHandsFingerlessBlackGloves
-        amount: 10
+        amount: 20
       - id: RMCHandsVeteranCBRN
-        amount: 25
+        amount: 10
     - name: Webbings
       entries:
       - id: AU14WebbingMagazine
-        amount: 40
+        amount: 25
       - id: AU14WebbingUtility
-        amount: 40
+        amount: 30
       - id: AU14WebbingDumpPouch
         amount: 25
       - id: AU14WebbingAdminPouch
-        amount: 20
+        amount: 15
       - id: AU14WebbingDropPouch
-        amount: 20
+        amount: 15
       - id: AU14WebbingKnivesFilled
-        amount: 2
+        amount: 1
     - name: Headgear
       entries:
       - id: AU14HAZOPShelmet
-        amount: 40
+        amount: 45
       - id: AU14JungleBoonieHat
-        amount: 20
+        amount: 35
       - id: AU14JunglePatrolCap
-        amount: 25
+        amount: 35
     - name: Headsets
       entries:
-      - id: RMCM5CameraGear
-        amount: 30
       - id: AU14HeadsetSectionMarine
-        name: empty headset
         amount: 20
     - name: Heads Up Display
       entries:
       - id: RMCVisorSquad
-        amount: 40
+        amount: 25
       - id: RMCVisorWelding
-        amount: 8
+        amount: 5
     - name: Armor
       entries:
       - id: AU14ArmorHAZOPSPWA
@@ -76,76 +67,78 @@
     - name: Armor Components
       entries:
       - id: AU14KitJungleArmor
-        amount: 40
+        amount: 30
     - name: Backpack
       entries:
       - id: CMBackpackMarine
-        amount: 25
-      - id: AU14IMPBackpackMarine
-        amount: 40
-      - id: AU14TechBackpackMarine
         amount: 15
-      - id: RMCSatchelWelderChestrig
-        amount: 5
-      - id: RMCScabbardShotgun
+      - id: AU14IMPBackpackMarine
         amount: 3
-      - id: RMCBackpackAmmo
-        amount: 4
+      - id: AU14TechBackpackMarine
+        amount: 3
       - id: CMSatchelMarine
-        amount: 40
+        amount: 15
+#      - id: Marine Chestrig
+#        amount: 15
+      - id: RMCSatchelWelderChestrig
+        amount: 2
+      - id: RMCScabbardShotgun
+        amount: 2
+      - id: RMCBackpackAmmo
+        amount: 1
     - name: Belts
       entries:
       - id: CMBeltMarine
-        amount: 40
+        amount: 25
       - id: RMCBeltGrenade
-        amount: 4
+        amount: 2
       - id: RMCM276ShotgunShellLoadingRig
-        amount: 6
+        amount: 2
       - id: RMCBeltHolsterPistol
-        amount: 20
+        amount: 15
       - id: RMCBeltHolsterRevolver
-        amount: 20
+        amount: 15
+#      - id: M276 Pattern M82F Holster Rig
+#        amount: 5
       - id: CMBeltKnifeFilled
         name: M276 Knife Rig (Full)
-        amount: 2
+        amount: 1
       - id: RMCBeltUtilityGeneral
-        amount: 30
+        amount: 15
     - name: Pouches
       entries:
       - id: RMCPouchBayonet
         name: Bayonet Sheath
-        amount: 25
+        amount: 15
       - id: RMCPouchFlareFilled
         name: Flare Pouch (Full)
-        amount: 30
+        amount: 15
       - id: RMCPouchDocumentSmall
-        amount: 3
+        amount: 1
       - id: RMCPouchMagazine
-        amount: 50
+        amount: 15
       - id: RMCPouchMagazineLarge
-        amount: 8
-      - id: RMCPouchShotgunLarge
-        amount: 8
-      - id: RMCPouchGeneralMedium
-        amount: 25
-      - id: RMCPouchGeneralLarge
-        amount: 4
-      - id: RMCPouchMagazinePistol
-        amount: 25
-      - id: RMCPouchMagazinePistolLarge
-        amount: 6
-      - id: RMCPouchPistol
-        amount: 20
-      - id: AU14PouchIFAKFill
-        amount: 5
-      - id: RMCPouchConstruction
-        amount: 5
-      - id: RMCPouchExplosive
-        amount: 3
-      - id: RMCPouchFuelTank
         amount: 2
+      - id: RMCPouchShotgunLarge
+        amount: 4
+      - id: RMCPouchGeneralMedium
+        amount: 15
+      - id: RMCPouchGeneralLarge
+        amount: 2
+      - id: RMCPouchMagazinePistol
+        amount: 15
+      - id: RMCPouchMagazinePistolLarge
+        amount: 2
+      - id: RMCPouchPistol
+        amount: 15
+      - id: RMCPouchConstruction
+        amount: 1
+      - id: RMCPouchExplosive
+        amount: 1
       - id: RMCPouchTools
         amount: 15
+#      - id: Sling Pouch
+#        amount: 1
     - name: Mask
       entries:
       - id: AU14MaskGasHAZOPSM40
@@ -153,13 +146,13 @@
       - id: CMUGasMaskFilterHAZOPS
         amount: 80
       - id: CMMaskCoif
-        amount: 20
+        amount: 10
       - id: RMCMaskTornScarfGreen
-        amount: 20
+        amount: 10
       - id: RMCMaskTornScarfSnow
-        amount: 20
+        amount: 10
       - id: RMCMaskTornScarfBlack
-        amount: 20
+        amount: 10
     - name: Glasses & Goggles
       entries:
       - id: AU14GogglesM1A1ClearBallistic
@@ -167,58 +160,51 @@
       - id: AU14GogglesM1A1Ballistic
         amount: 25
       - id: AU14GogglesM1A1DarkBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1LaserBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1OrangeBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1PolarizedBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM60
-        amount: 25
+        amount: 20
       - id: RMCGlassesMarineRpg
-        amount: 25
+        amount: 20
       - id: AU14GlassesBiMex
-        amount: 25
+        amount: 20
       - id: AU14GlassesBiMexOrange
-        amount: 25
+        amount: 20
       - id: RMCGlassesTriMaxBronze
-        amount: 25
+        amount: 20
     - name: Helmet Garb
       entries:
       - id: AU14HelmetGarbM10SkrimJungle
-        amount: 15
-      - id: AU14HelmetGarbM10SkrimDesert
-        amount: 15
+        amount: 20
       - id: AU14HelmetGarbM10SkrimSnow
-        amount: 15
+        amount: 20
       - id: AU14HelmetGarbM10RainCover
-        amount: 40
-      - id: AU14HelmetGarbM10Netting
-        amount: 40
+        amount: 20
       - id: RMCHelmetGarbGasmaskJungle
-        amount: 20
+        amount: 30
       - id: RMCHelmetGarbGasmaskUrban
-        amount: 20
+        amount: 30
     - name: Patches
       entries:
       - id: AU14PatchUAFlag
-        amount: 80
+        amount: 20
       - id: AU14PatchUSFlag
-        amount: 80
+        amount: 20
       - id: AU14PatchUSCM
-        amount: 80
+        amount: 20
       - id: AU14HAZOPShecuPatch
-        amount: 80
+        amount: 30
 
 - type: entity
   parent: ColMarTechBase
   id: AU14HAZOPSMGequipmentvendor
   name: HAZOPS smartgunner equipment vendor
-  description: >-
-    An automated smartgunner rack, hooked up to a small armory of Hazardous Operations heavy-weapon operator systems of the Marine Special Operations Command.
-    Standard issue for designated smart-gun crews on naval vessels and high-threat outposts.
-    Built to bring heavy fire support online rapidly after cryogenic hypersleep or emergency mobilization.
+  description: An automated rack hooked up to a small storage of smartgunner equipment.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
@@ -238,12 +224,7 @@
   parent: ColMarTechBase
   id: AU14HAZOPSWeaponsVendor
   name: HAZOPS weapons rack
-  description: >-
-    An automated weapons rack, hooked up to a small armory of Hazardous Operations weaponry of the Marine Special Operations Command.
-    Standard issue across the frontier where threats can appear without warning.
-    Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
-
-    For immediate combat readiness: select a primary weapon kit and a sidearm.
+  description: An automated rack hooked up to a small storage of weapons.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
@@ -275,12 +256,7 @@
   parent: ColMarTechBase
   id: AU14HAZOPSSpecialWeaponsVendor
   name: HAZOPS special weapons rack
-  description: >-
-    An automated special weapons rack, hooked up to a restricted armory of Hazardous Operations heavy and breaching ordnance of the Marine Special Operations Command.
-    Standard issue only for qualified operators.
-    Engineered to deliver overwhelming firepower the instant cryogenic hypersleep ends or an emergency mobilization is called.
-
-    Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
+  description: An automated rack hooked up to a small storage of special weapons.
   components:
   - type: Sprite
     sprite: _AU14/Structures/Vendors/genericweaponrack.rsi
@@ -290,15 +266,11 @@
       entries:
       - id: AU14WeaponFlamerM240A2HAZOPS
         amount: 1
-#     - id: RMCAttachmentUnderbarrelExtinguisherSpec
-#       amount: 1
       - id: AU14TankFlamerM240A2HAZOPS
         amount: 8
       - id: RMCBackpackFlamer
         name: G4-1 fueltank
         amount: 1
-      - id: RMCPouchFuelTankFilledExtinguisher
-        amount: 2
     - name: SPAS-12-HAZ Specialized Shotgun
       entries:
       - id: AU14WeaponShotgunSPAS12HAZOPS
@@ -307,18 +279,12 @@
         amount: 12
       - id: RMCBoxShotgunSlugs
         amount: 12
-      - id: RMCBoxShotgunBreaching
-        amount: 1
     - name: M50 'Bald Eagle' Handcannon
       entries:
       - id: AU14WeaponPistolM50HAZOPS
         amount: 8
       - id: AU14MagazinePistolM50
         amount: 80
-    - name: Disposable Special Light Anti-Tank Weapon
-      entries:
-      - id: AU14CrateM5A1SLAW
-        amount: 1
     - name: Explosives
       entries:
       - id: RMCBoxHEDP
@@ -326,19 +292,17 @@
       - id: CMPacketGrenadeFragOldFilled
         amount: 4
       - id: RMCPacketGrenadeSmokeFilled
-        amount: 5
+        amount: 4
       - id: RMCExplosivePlastic
-        amount: 12
+        amount: 4
       - id: RMCExplosiveBreachingCharge
-        amount: 16
+        amount: 6
 
 - type: entity
   parent: ColMarTechBase
   id: AU14HAZOPScommandequipmentvendor
   name: HAZOPS command vendor
-  description: >-
-    An automated command rack, hooked up to a restricted storage of Hazardous Operations command-leadership equipment of the Marine Special Operations Command.
-    Manufactured to equip commanding personnel following cryogenic hypersleep or an emergency directive is issued.
+  description: An automated rack hooked up to a small storage of command apparel and equipment. Let's go, Marines!
   components:
   - type: Sprite
     sprite: _AU14/Structures/Vendors/uscmcommandclothes.rsi
@@ -374,10 +338,6 @@
       entries:
       - id: AU14HeadsetSectionLeader
         amount: 2
-    - name: Backpack
-      entries:
-      - id: RMCBackpackRTO
-        amount: 5
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill
@@ -395,9 +355,7 @@
   parent: ColMarTechBase
   id: AU14HAZOPSsectionleaderequipmentvendor
   name: HAZOPS section leader vendor
-  description: >-
-    An automated supervisor rack, hooked up to a compact storage of Hazardous Operations section-leadership equipment of the Marine Special Operations Command.
-    Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
+  description: An automated rack hooked up to a small storage of apparel and equipment for the section leader.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
@@ -423,3 +381,6 @@
         amount: 1
       - id: RMCPackFlareCAS
         amount: 2
+
+
+

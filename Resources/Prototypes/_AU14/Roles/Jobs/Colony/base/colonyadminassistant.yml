@@ -63,7 +63,6 @@
     id: AU14IDCardColonyAdministrator
     ears: AU14ColonyAdminHeadset
     outerClothing: AU14CivilianJacketGrayPufferVest
-    back: CMSatchel
   inhand:
   - RMCRadioHandheldColonyOff
 

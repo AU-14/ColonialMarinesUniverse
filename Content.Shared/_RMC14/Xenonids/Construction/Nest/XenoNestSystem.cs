@@ -4,14 +4,12 @@ using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Ghost;
 using Content.Shared._RMC14.Inventory;
 using Content.Shared._RMC14.Map;
-using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
-using Content.Shared.Bed.Sleep;
 using Content.Shared.Coordinates;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
@@ -394,7 +392,7 @@ public sealed class XenoNestSystem : EntitySystem
         if (ent.Comp.Detached)
             return;
 
-        if (IsUnableToBreakOut(ent))
+        if (_mobState.IsIncapacitated(ent))
             return;
 
         if (_net.IsClient)
@@ -437,15 +435,8 @@ public sealed class XenoNestSystem : EntitySystem
 
     private void OnNestedBreakoutDoAfterAttempt(Entity<XenoNestedComponent> ent, ref DoAfterAttemptEvent<XenoNestBreakoutDoAfterEvent> args)
     {
-        if (ent.Comp.Detached || IsUnableToBreakOut(ent))
+        if (ent.Comp.Detached || _mobState.IsIncapacitated(ent))
             args.Cancel();
-    }
-
-    private bool IsUnableToBreakOut(EntityUid ent)
-    {
-        return _mobState.IsIncapacitated(ent) ||
-               HasComp<RMCUnconsciousComponent>(ent) ||
-               HasComp<SleepingComponent>(ent);
     }
 
     private void OnNestedBreakoutDoAfter(Entity<XenoNestedComponent> ent, ref XenoNestBreakoutDoAfterEvent args)

@@ -10,7 +10,6 @@ using Content.Shared._RMC14.Dropship.Utility.Systems;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Explosion.Implosion;
 using Content.Shared._RMC14.Map;
-using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Medical.MedevacStretcher;
@@ -1215,9 +1214,6 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
         if (user != null)
             active.Abbreviation = GetUserAbbreviation(user.Value, id);
 
-        if (user != null && TryComp<MarineComponent>(user.Value, out var marine) && !string.IsNullOrEmpty(marine.Faction))
-            active.CreatorFaction = marine.Faction;
-
         Dirty(ent, active);
     }
     private bool IsFlareLit(EntityUid flare)
@@ -1235,12 +1231,7 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
         if (ent.Comp.Abbreviation == null)
             return false;
 
-        var target = new DropshipTargetComponent
-        {
-            Abbreviation = ent.Comp.Abbreviation,
-            CreatorFaction = ent.Comp.CreatorFaction,
-            ActivatedAt = _timing.CurTime,
-        };
+        var target = new DropshipTargetComponent { Abbreviation = ent.Comp.Abbreviation };
         AddComp(ent, target, true);
         Dirty(ent, target);
 
@@ -1257,12 +1248,7 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
 
     public void MakeDropshipTarget(EntityUid ent, string abbreviation, string? creatorFaction = null)
     {
-        var dropshipTarget = new DropshipTargetComponent
-        {
-            Abbreviation = abbreviation,
-            CreatorFaction = creatorFaction,
-            ActivatedAt = _timing.CurTime,
-        };
+        var dropshipTarget = new DropshipTargetComponent { Abbreviation = abbreviation, CreatorFaction = creatorFaction };
         AddComp(ent, dropshipTarget, true);
         Dirty(ent, dropshipTarget);
     }

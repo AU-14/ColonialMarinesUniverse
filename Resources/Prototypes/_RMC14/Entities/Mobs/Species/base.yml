@@ -13,7 +13,6 @@
     - id: FoodMeatHuman
       amount: 6
   - type: Fingerprint
-  - type: FootPrints
   - type: Fixtures
     fixtures:
       fix1:

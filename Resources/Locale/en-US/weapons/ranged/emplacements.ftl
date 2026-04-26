@@ -20,7 +20,4 @@ emplacement-mount-RMCSmartGunMountedLoaded-description-mounted = A deployable, h
 emplacement-mount-RMCMachineGunM2C-description = The disassembled M2C HMG, with its telescopic tripods folded up and unable to fire.
 emplacement-mount-RMCMachineGunM2C-description-mounted = A deployable, heavy machine gun. The M2C 'Chimp' HB is a modified M2 HB reconfigured to fire 10x28 Caseless Tungsten rounds for USCM use. It is capable of recoilless fire and fast-rotating. However it has a debilitating overheating issue due to the poor quality of metals used in the parts, forcing it to be used in decisive, crushing engagements as a squad support weapon.
 
-emplacement-mount-AU14AGLMK86-description = The disassembled Mk86 automatic grenade launcher, with its telescopic tripods folded up and unable to fire.
-emplacement-mount-AU14AGLMK86-description-mounted = A deployable, automatic grenade launcher. The Mk86 'Chew' is based on the original designs of the MK19, improved over the past one hundred years to use airburst grenades.
-
 emplacement-mount-undeploy = Undeploy

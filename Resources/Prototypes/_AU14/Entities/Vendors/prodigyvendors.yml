@@ -1,14 +1,8 @@
-# Apparel, equipment, medical, aircrew, command, smartgun, section-leader, weaponry, special-weapons
-- type: entity
+﻿- type: entity
   parent: ColMarTechBase
   id: AU14prodigyclothingequipmentvendor
-  name: Prodigy Security Forces apparel vendor
-  description: >-
-    An automated dispenser rack, hooked up to a small storage of Security Forces apparel from the Prodigy Corporation.
-    Standard issue aboard naval vessels, military outposts, corporate-science installations and civilian colonies across the frontier.
-    Manufactured to outfit personnel rapidly following cryogenic hypersleep or emergency mobilization.
-
-    For full operational readiness, select one item from each section: fatigues with a webbing, footwear, gloves, headgear, armor, backpack, belt and a pouch.
+  name: Prodigy apparel vendor
+  description: An automated rack hooked up to a small storage of standard marine apparel.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
@@ -19,173 +13,157 @@
     - name: Fatigues
       entries:
       - id: AU14ProdigyFatigues
-        amount: 40
+        amount: 50
     - name: Footwear
       entries:
       - id: RMCBootsSPPBlackFilled
-        amount: 40
+        amount: 50
     - name: Gloves
       entries:
       - id: AU14PVEHandsInsulatedBlackMarine
-        amount: 40
+        amount: 50
       - id: AU14PVEHandsFingerlessBlackGloves
-        amount: 20
+        amount: 50
     - name: Webbings
       entries:
       - id: RMCWebbingBlackSmall
-        amount: 40
-      - id: CMWebbingBlack
-        amount: 40
-      - id: RMCWebbingHolsterBlack
-        amount: 20
-      - id: RMCWebbingDropPouchBlack
-        amount: 20
-      - id: RMCWebbingLegPouchBlack
         amount: 25
+      - id: CMWebbingBlack
+        amount: 25
+      - id: RMCWebbingHolsterBlack
+        amount: 15
+      - id: RMCWebbingDropPouchBlack
+        amount: 15
+      - id: RMCWebbingLegPouchBlack
+        amount: 15
     - name: Headgear
       entries:
       - id: AU14ProdigyBallisticHelmet
-        amount: 40
+        amount: 50
       - id: AU14ProdigyCap
-        amount: 20
-    - name: Headsets
-      entries:
+        amount: 25
       - id: RMCM5CameraGear
-        amount: 30
-      - id: AU14HeadsetSectionMarine
-        name: empty headset
-        amount: 20
+        amount: 25
     - name: Heads Up Display
       entries:
       - id: RMCVisorSquad
-        amount: 40
+        amount: 25
       - id: RMCVisorWelding
-        amount: 8
+        amount: 5
     - name: Armor
       entries:
-      - id: CMUArmorProdigyFlakVest
-        amount: 40
       - id: CMUArmorProdigyFlakVestAlt
-        amount: 30
+        amount: 25
+      - id: CMUArmorProdigyFlakVest
+        amount: 25
     - name: Backpack
       entries:
       - id: RMCSatchelLightpackBlack
-        amount: 40
+        amount: 25
       - id: AU14BackpackMarineBlack
-        amount: 30
-      - id: CMBackpackWelder
-        amount: 5
+        amount: 20
       - id: RMCScabbardShotgun
-        amount: 3
+        amount: 2
       - id: RMCBackpackAmmo
-        amount: 4
-      - id: CMSatchelMarine
-        amount: 40
+        amount: 1
     - name: Belts
       entries:
       - id: AU14BeltMarineBlack
-        amount: 40
+        amount: 25
       - id: RMCBeltGrenade
-        amount: 4
+        amount: 2
       - id: AU14M276ShotgunShellLoadingRigBlack
-        amount: 6
-      - id: RMCBeltHolsterPistolTSE
-        amount: 20
-      - id: AU14BeltHolsterPistolBlack
-        amount: 20
+        amount: 2
       - id: AU14BeltKnifeBlackFilled
         amount: 2
+      - id: RMCBeltHolsterPistolTSE
+        amount: 15
+      - id: AU14BeltHolsterPistolBlack
+        amount: 15
       - id: AU14BeltUtilityGeneralBlack
-        amount: 30
+        amount: 15
     - name: Pouches
       entries:
       - id: RMCPouchBayonet
         name: Bayonet Sheath
-        amount: 25
+        amount: 15
       - id: RMCPouchFlareFilled
         name: Flare Pouch (Full)
-        amount: 30
+        amount: 15
       - id: RMCPouchDocumentSmall
-        amount: 3
+        amount: 1
       - id: RMCPouchMagazine
-        amount: 50
+        amount: 15
       - id: RMCPouchMagazineLarge
-        amount: 8
-      - id: RMCPouchShotgunLarge
-        amount: 8
-      - id: RMCPouchGeneralMedium
-        amount: 25
-      - id: RMCPouchGeneralLarge
-        amount: 4
-      - id: RMCPouchMagazinePistol
-        amount: 25
-      - id: RMCPouchMagazinePistolLarge
-        amount: 6
-      - id: RMCPouchPistol
-        amount: 20
-      - id: AU14PouchIFAKFill
-        amount: 5
-      - id: RMCPouchConstruction
-        amount: 5
-      - id: RMCPouchExplosive
-        amount: 3
-      - id: RMCPouchFuelTank
         amount: 2
+      - id: RMCPouchShotgunLarge
+        amount: 4
+      - id: RMCPouchGeneralMedium
+        amount: 15
+      - id: RMCPouchGeneralLarge
+        amount: 2
+      - id: RMCPouchMagazinePistol
+        amount: 15
+      - id: RMCPouchMagazinePistolLarge
+        amount: 2
+      - id: RMCPouchPistol
+        amount: 15
+      - id: RMCPouchConstruction
+        amount: 1
+      - id: RMCPouchExplosive
+        amount: 1
       - id: RMCPouchTools
         amount: 15
+#      - id: Sling Pouch
+#        amount: 1
     - name: Mask
       entries:
       - id: CMMaskGas
-        amount: 40
+        amount: 20
       - id: CMUGasMaskFilter
-        amount: 80
+        amount: 40
       - id: CMMaskCoif
-        amount: 20
+        amount: 10
       - id: RMCMaskScarfBlack
-        amount: 20
+        amount: 10
       - id: RMCMaskScarfGray
-        amount: 20
+        amount: 10
       - id: RMCMaskTornScarfBlack
-        amount: 20
+        amount: 10
       - id: RMCMaskSmockBlack
-        amount: 20
+        amount: 10
       - id: RMCMaskNeckerchiefGray
-        amount: 20
+        amount: 10
     - name: Glasses & Goggles
       entries:
       - id: AU14GogglesM1A1ClearBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1Ballistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1DarkBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1LaserBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1OrangeBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1PolarizedBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM60
-        amount: 25
+        amount: 20
       - id: RMCGlassesMarineRpg
-        amount: 25
+        amount: 20
       - id: AU14GlassesBiMex
-        amount: 25
+        amount: 20
       - id: AU14GlassesBiMexOrange
-        amount: 25
+        amount: 20
       - id: RMCGlassesTriMaxBronze
-        amount: 25
+        amount: 20
 
 - type: entity
   parent: ColMarTechBase
   id: AU14prodigyequipmentvendor
-  name: Prodigy Security Forces equipment vendor
-  description: >-
-    An automated dispenser rack, hooked up to a small storage of Security Forces equipment from the Prodigy Corporation.
-    Stocked with medical supplies and field gear for rapid deployment following cryogenic hypersleep or emergency mobilization.
-    The interface is intentionally simple, even someone with tunnel-vision and frostbite can operate it.
-
-    Rapid-issue protocol: prioritize medical supplies, a ration pack, an e-tool and sandbags.
+  name: Prodigy equipment vendor
+  description: An automated rack hooked up to a small storage of standard marine equipment.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
@@ -274,16 +252,12 @@
       - id: RMCZipties
         amount: 30
 
+#corpsman
 - type: entity
   parent: ColMarTechBase
   id: AU14prodigycorpsmanvendor
-  name: Prodigy Security Forces medical vendor
-  description: >-
-    An automated medical rack, hooked up to a compact stock of Security Forces trauma supplies from the Prodigy Corporation.
-    Standard issue for corpsmen aboard naval vessels, outposts and colonies where casualties arrive faster than reinforcements.
-    Designed for rapid reconstitution of combat medics following cryogenic hypersleep or emergency call-up.
-
-    Corpsman protocol: select the essential equipment set, storage and limited medications.
+  name: Prodigy medical vendor
+  description: An automated rack hooked up to a small storage of medical supplies.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforMedical" ], [ "AU14AccessOpforMedical" ] ]
@@ -391,12 +365,8 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14prodigyaircrewvendor
-  name: Prodigy Security Forces aircrew vendor
-  description: >-
-    An automated dispenser rack, hooked up to a small storage of Security Forces aircrew flight and support gear from the Prodigy Corporation.
-    Engineered to get flight personnel flight-ready in seconds after cryogenic hypersleep or scramble orders.
-
-    Aircrew protocol: select a set of fatigues, the essential medical equipment and storage kit.
+  name: prodigy aircrew vendor
+  description: An automated rack hooked up to a small storage of aircrew apparel and equipment.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
@@ -413,8 +383,6 @@
       entries:
       - id: CMUArmorProdigyFlakVestAlt
       - id: RMCOuterClothingExternalWebbingBlack
-      - id: RMCArmorVestSquad
-        amount: 2
     - name: Footwear
       choices: { CMUPlatoonAirCrewFootwear: 1 }
       entries:
@@ -462,7 +430,7 @@
       - id: RMCPouchMagazinePistolLarge
       - id: RMCPouchTools
     - name: Glasses
-      choices: { CMUPlatoonAirCrewGlasses: 1 }
+      choices: { CMUPlatoonAirCrewGlasses: 2 }
       entries:
       - id: RMCSunglassesBigFake
       - id: RMCGlassesMarineRpg
@@ -545,10 +513,8 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14prodigycommandequipmentvendor
-  name: Prodigy Security Forces command vendor
-  description: >-
-    An automated command rack, hooked up to a restricted storage of Security Forces command-leadership equipment from the Prodigy Corporation.
-    Manufactured to equip commanding personnel following cryogenic hypersleep or an emergency directive is issued.
+  name: Prodigy command vendor
+  description: An automated rack hooked up to a small storage of command apparel and equipment.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessOpforCommand" ] ]
@@ -559,36 +525,25 @@
     - name: Headgear
       entries:
       - id: AU14ProdigyBeret
-        amount: 5
-    - name: Headsets
-      entries:
-      - id: AU14HeadsetSectionLeader
         amount: 2
-    - name: Backpack
-      entries:
-      - id: RMCBackpackRTO
-        amount: 5
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill
-        amount: 10
+        amount: 2
     - name: Miscellaneous
       entries:
       - id: RMCLaserDesignator
-        amount: 4
+        amount: 2
       - id: RMCWhistle
-        amount: 10
+        amount: 2
       - id: RMCPackFlareCAS
-        amount: 10
+        amount: 2
 
 - type: entity
   parent: ColMarTechBase
   id: AU14prodigySGequipmentvendor
-  name: Prodigy Security Forces smartgunner equipment vendor
-  description: >-
-    An automated smartgunner rack, hooked up to a small armory of Security Forces heavy-weapon operator systems from the Prodigy Corporation.
-    Standard issue for designated smart-gun crews on naval vessels and high-threat outposts.
-    Built to bring heavy fire support online rapidly after cryogenic hypersleep or emergency mobilization.
+  name: Prodigy smartgunner equipment vendor
+  description: An automated rack hooked up to a small storage of smartgunner equipment.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforGunner" ], [ "AU14AccessOpforGunner" ] ]
@@ -622,10 +577,8 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14prodigysectionleaderequipmentvendor
-  name: Prodigy Security Forces section leader vendor
-  description: >-
-    An automated supervisor rack, hooked up to a compact storage of Security Forces section-leadership equipment from the Prodigy Corporation.
-    Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
+  name: Prodigy section leader vendor
+  description: An automated rack hooked up to a small storage of apparel and equipment for the section leader.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessOpforFTL" ] ]
@@ -649,13 +602,8 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14prodigyWeaponsVendor
-  name: Prodigy Security Forces weapons rack
-  description: >-
-    An automated weapons rack, hooked up to a small armory of Security Forces weaponry from the Prodigy Corporation.
-    Standard issue across the frontier where threats can appear without warning.
-    Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
-
-    For immediate combat readiness: select a primary weapon kit and a sidearm.
+  name: Prodigy weapons rack
+  description: An automated rack hooked up to a small storage of weapons.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
@@ -695,13 +643,8 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14prodigySpecialWeaponsVendor
-  name: Prodigy Security Forces special weapons rack
-  description: >-
-    An automated special weapons rack, hooked up to a restricted armory of Security Forces heavy and breaching ordnance from the Prodigy Corporation.
-    Standard issue only for qualified operators.
-    Engineered to deliver overwhelming firepower the instant cryogenic hypersleep ends or an emergency mobilization is called.
-
-    Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
+  name: Prodigy special weapons rack
+  description: An automated rack hooked up to a small storage of special weapons.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
@@ -713,15 +656,15 @@
       entries:
       - id: RMCWeaponFlamer
         amount: 1
-      - id: RMCAttachmentUnderbarrelExtinguisher
-        amount: 1
       - id: RMCTankFlamer
         amount: 3
       - id: RMCBackpackFlamer
         name: G4-1 fueltank
         amount: 1
-      - id: RMCPouchFuelTankFilledExtinguisher
-        amount: 1
+    - name: M5A1 SLAW
+      entries:
+      - id: RMCWeaponLauncherDisposableFolded
+        amount: 2
     - name: HG 37-12 Pump Shotgun
       entries:
       - id: RMCWeaponShotgunHG3712
@@ -732,21 +675,17 @@
         amount: 12
       - id: RMCBoxShotgunFlechette
         amount: 12
-    - name: Disposable Special Light Anti-Tank Weapon
-      entries:
-      - id: RMCWeaponLauncherDisposableFolded
-        amount: 5
-      - id: AU14CrateM5A1SLAW
-        amount: 2
     - name: Explosives
       entries:
       - id: RMCBoxHEDP
         amount: 2
       - id: CMPacketGrenadeFragOldFilled
-        amount: 6
+        amount: 4
       - id: RMCPacketGrenadeSmokeFilled
-        amount: 12
-      - id: RMCExplosiveBreachingCharge
-        amount: 24
+        amount: 4
+      - id: RMCGrenadeCustomMetalFoam
+        amount: 3
       - id: RMCExplosivePlastic
-        amount: 18
+        amount: 4
+      - id: RMCExplosiveBreachingCharge
+        amount: 6

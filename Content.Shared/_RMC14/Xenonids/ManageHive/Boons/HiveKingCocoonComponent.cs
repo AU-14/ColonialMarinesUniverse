@@ -28,7 +28,4 @@ public sealed partial class HiveKingCocoonComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntProtoId Spawn = "RMCXenoKing";
-
-    [DataField]
-    public bool AnyoneCanBeKing;
 }

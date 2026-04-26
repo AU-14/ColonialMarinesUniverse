@@ -72637,7 +72637,7 @@ entities:
     - type: Transform
       pos: -20.517494,-135.68117
       parent: 1
-- proto: RMCPouchShotgunLargeBuckshot
+- proto: AU14PouchShotgunLargeBuckshot
   entities:
   - uid: 423
     components:

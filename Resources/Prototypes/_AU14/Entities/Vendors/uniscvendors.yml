@@ -1,14 +1,8 @@
-# Apparel, equipment, medic, aircrew, command, section-leader, weaponry
-- type: entity
+﻿- type: entity
   parent: ColMarTechBase
   id: AU14UNISCclothingequipmentvendor
   name: UNISC apparel vendor
-  description: >-
-    An automated dispenser rack, hooked up to a small storage of UN Interstellar Settlement Corps apparel.
-    Standard issue aboard naval vessels, military outposts, corporate-science installations and civilian colonies across the frontier.
-    Manufactured to outfit personnel rapidly following cryogenic hypersleep or emergency mobilization.
-
-    For full operational readiness, select one item from each section: nation equipment and a webbing, footwear, gloves, headgear, armor, backpack, belt and a pouch.
+  description: An automated rack hooked up to a small storage of standard marine apparel.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
@@ -27,193 +21,179 @@
       - id: AU14KitUNISCRiflemanRMC
     - name: Footwear
       entries:
-      - id: CMBootsBrown
-        amount: 10
-      - id: RMCBootsPMCFilled
-        amount: 5
-      - id: RMCBootsCorporate
-        amount: 15
+      - id: CMBootsBlack
+        amount: 20
     - name: Gloves
       entries:
-      - id: AU14PVEHandsInsulatedBlackMarine
-        amount: 40
       - id: CMHandsBrown
+        amount: 20
+      - id: AU14PVEHandsInsulatedBlackMarine
         amount: 20
       - id: AU14PVEHandsFingerlessBlackGloves
         amount: 20
       - id: AU14PVEHandsFingerlessBrownGloves
-        amount: 10
+        amount: 20
     - name: Webbings
       entries:
       - id: AU14WebbingMagazine
-        amount: 40
+        amount: 25
       - id: AU14WebbingUtility
-        amount: 40
+        amount: 25
       - id: AU14WebbingDumpPouch
         amount: 25
       - id: AU14WebbingAdminPouch
-        amount: 20
+        amount: 15
       - id: AU14WebbingDropPouch
-        amount: 20
+        amount: 15
       - id: AU14WebbingKnivesFilled
-        amount: 2
+        amount: 1
     - name: Headgear
       entries:
       - id: AU14UNISCM10Helmet
-        amount: 40
-      - id: AU14HelmetGarbRiotVisor
-        amount: 40
-    - name: Headsets
-      entries:
+        amount: 25
       - id: RMCM5CameraGear
-        amount: 30
-      - id: AU14HeadsetSectionMarine
-        name: empty headset
-        amount: 20
+        amount: 25
     - name: Heads Up Display
       entries:
       - id: RMCVisorSquad
-        amount: 40
+        amount: 25
       - id: RMCVisorWelding
-        amount: 8
+        amount: 5
     - name: Armor
       entries:
-      - id: AU14ArmorM3UNISCMedium
-        amount: 40
-      - id: AU14ArmorM3UNISC
-        amount: 30
       - id: AU14ArmorM3UNISCHeavy
+        amount: 25
+      - id: AU14ArmorM3UNISCMedium
+        amount: 25
+      - id: AU14ArmorM3UNISC
         amount: 25
     - name: Backpack
       entries:
       - id: CMBackpackMarine
-        amount: 25
-      - id: AU14IMPBackpackMarine
-        amount: 40
-      - id: AU14TechBackpackMarine
         amount: 15
-      - id: RMCSatchelWelderChestrig
-        amount: 5
-      - id: RMCScabbardShotgun
+      - id: AU14IMPBackpackMarine
         amount: 3
-      - id: RMCBackpackAmmo
-        amount: 4
+      - id: AU14TechBackpackMarine
+        amount: 3
       - id: CMSatchelMarine
-        amount: 40
+        amount: 15
+#      - id: Marine Chestrig
+#        amount: 15
+      - id: RMCSatchelWelderChestrig
+        amount: 2
+      - id: RMCScabbardShotgun
+        amount: 2
+      - id: RMCBackpackAmmo
+        amount: 1
     - name: Belts
       entries:
       - id: CMBeltMarine
-        amount: 40
+        amount: 25
       - id: RMCBeltGrenade
-        amount: 4
+        amount: 2
       - id: RMCM276ShotgunShellLoadingRig
-        amount: 6
+        amount: 2
       - id: RMCBeltHolsterPistol
-        amount: 20
+        amount: 15
       - id: RMCBeltHolsterRevolver
-        amount: 20
+        amount: 15
+#      - id: M276 Pattern M82F Holster Rig
+#        amount: 5
       - id: CMBeltKnifeFilled
         name: M276 Knife Rig (Full)
-        amount: 2
+        amount: 1
       - id: RMCBeltUtilityGeneral
-        amount: 30
+        amount: 15
     - name: Pouches
       entries:
       - id: RMCPouchBayonet
         name: Bayonet Sheath
-        amount: 25
+        amount: 15
       - id: RMCPouchFlareFilled
         name: Flare Pouch (Full)
-        amount: 30
+        amount: 15
       - id: RMCPouchDocumentSmall
-        amount: 3
+        amount: 1
       - id: RMCPouchMagazine
-        amount: 50
+        amount: 15
       - id: RMCPouchMagazineLarge
-        amount: 8
-      - id: RMCPouchShotgunLarge
-        amount: 8
-      - id: RMCPouchGeneralMedium
-        amount: 25
-      - id: RMCPouchGeneralLarge
-        amount: 4
-      - id: RMCPouchMagazinePistol
-        amount: 25
-      - id: RMCPouchMagazinePistolLarge
-        amount: 6
-      - id: RMCPouchPistol
-        amount: 20
-      - id: AU14PouchIFAKFill
-        amount: 5
-      - id: RMCPouchConstruction
-        amount: 5
-      - id: RMCPouchExplosive
-        amount: 3
-      - id: RMCPouchFuelTank
         amount: 2
+      - id: RMCPouchShotgunLarge
+        amount: 4
+      - id: RMCPouchGeneralMedium
+        amount: 15
+      - id: RMCPouchGeneralLarge
+        amount: 2
+      - id: RMCPouchMagazinePistol
+        amount: 15
+      - id: RMCPouchMagazinePistolLarge
+        amount: 2
+      - id: RMCPouchPistol
+        amount: 15
+      - id: RMCPouchConstruction
+        amount: 1
+      - id: RMCPouchExplosive
+        amount: 1
       - id: RMCPouchTools
         amount: 15
+#      - id: Sling Pouch
+#        amount: 1
     - name: Mask
       entries:
       - id: CMMaskGas
-        amount: 40
+        amount: 20
       - id: CMUGasMaskFilter
-        amount: 80
+        amount: 40
       - id: CMMaskCoif
-        amount: 20
+        amount: 10
       - id: RMCMaskScarfBlack
-        amount: 20
+        amount: 10
       - id: RMCMaskScarfGray
-        amount: 20
+        amount: 10
       - id: RMCMaskScarfTan
-        amount: 20
+        amount: 10
       - id: RMCMaskTornScarfGreen
-        amount: 20
+        amount: 10
       - id: RMCMaskTornScarfDesert
-        amount: 20
+        amount: 10
       - id: RMCMaskTornScarfSnow
-        amount: 20
+        amount: 10
       - id: RMCMaskTornScarfBlack
-        amount: 20
+        amount: 10
       - id: RMCMaskSmockBlack
-        amount: 20
+        amount: 10
       - id: RMCMaskNeckerchiefGray
-        amount: 20
+        amount: 10
     - name: Glasses & Goggles
       entries:
       - id: AU14GogglesM1A1ClearBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1Ballistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1DarkBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1LaserBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1OrangeBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM1A1PolarizedBallistic
-        amount: 25
+        amount: 20
       - id: AU14GogglesM60
-        amount: 25
+        amount: 20
       - id: RMCGlassesMarineRpg
-        amount: 25
+        amount: 20
       - id: AU14GlassesBiMex
-        amount: 25
+        amount: 20
       - id: AU14GlassesBiMexOrange
-        amount: 25
+        amount: 20
       - id: RMCGlassesTriMaxBronze
-        amount: 25
+        amount: 20
 
 - type: entity
   parent: ColMarTechBase
   id: AU14UNISCequipmentvendor
   name: UNISC equipment vendor
-  description: >-
-    An automated dispenser rack, hooked up to a small storage of UN Interstellar Settlement Corps equipment.
-    Stocked with medical supplies and field gear for rapid deployment following cryogenic hypersleep or emergency mobilization.
-    The interface is intentionally simple, even someone with tunnel-vision and frostbite can operate it.
-
-    Rapid-issue protocol: prioritize medical supplies, a ration pack, an e-tool and sandbags.
+  description: An automated rack hooked up to a small storage of standard marine equipment.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
@@ -302,16 +282,12 @@
       - id: RMCZipties
         amount: 30
 
+#corpsman
 - type: entity
   parent: ColMarTechBase
   id: AU14UNISCcorpsmanvendor
   name: UNISC medic vendor
-  description: >-
-    An automated medical rack, hooked up to a compact stock of UN Interstellar Settlement Corps trauma supplies.
-    Standard issue for corpsmen aboard naval vessels, outposts and colonies where casualties arrive faster than reinforcements.
-    Designed for rapid reconstitution of combat medics following cryogenic hypersleep or emergency call-up.
-
-    Corpsman protocol: select the essential equipment set, storage and limited medications.
+  description: An automated rack hooked up to a small storage of medical supplies.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforMedical" ], [ "AU14AccessOpforMedical" ] ]
@@ -416,11 +392,7 @@
   parent: ColMarTechBase
   id: AU14UNISCaircrewvendor
   name: UNISC aircrew vendor
-  description: >-
-    An automated dispenser rack, hooked up to a small storage of UN Interstellar Settlement Corps aircrew flight and support gear.
-    Engineered to get flight personnel flight-ready in seconds after cryogenic hypersleep or scramble orders.
-
-    Aircrew protocol: select a set of fatigues, the essential medical equipment and storage kit.
+  description: An automated rack hooked up to a small storage of aircrew apparel and equipment.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
@@ -440,8 +412,6 @@
       - id: AU14ArmorM3UNISC
       - id: AU14ExternalWebbing
       - id: RMCOuterClothingExternalWebbingBlack
-      - id: RMCArmorVestSquad
-        amount: 2
     - name: Footwear
       choices: { CMUPlatoonAirCrewFootwear: 1 }
       entries:
@@ -485,7 +455,7 @@
       - id: RMCPouchMagazinePistolLarge
       - id: RMCPouchTools
     - name: Glasses
-      choices: { CMUPlatoonAirCrewGlasses: 1 }
+      choices: { CMUPlatoonAirCrewGlasses: 2 }
       entries:
       - id: RMCSunglassesBigFake
       - id: RMCGlassesMarineRpg
@@ -569,9 +539,7 @@
   parent: ColMarTechBase
   id: AU14UNISCcommandequipmentvendor
   name: UNISC command vendor
-  description: >-
-    An automated command rack, hooked up to a restricted storage of UN Interstellar Settlement Corps command-leadership equipment.
-    Manufactured to equip commanding personnel following cryogenic hypersleep or an emergency directive is issued.
+  description: An automated rack hooked up to a small storage of command apparel and equipment.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessOpforCommand" ] ]
@@ -591,50 +559,40 @@
     - name: Fatigues
       entries:
       - id: CMJumpsuitXOFormal
-        amount: 5
+        amount: 2
     - name: Footwear
       entries:
       - id: CMBootsBlack
-        amount: 5
+        amount: 2
     - name: Headgear
       entries:
       - id: AU14UNISCM11Helmet
-        amount: 5
-      - id: CMHeadCapPeakedFormal
-        amount: 5
-      - id: CMHeadCapPeakedService
-        amount: 5
-      - id: RMCHeadBeretSquad
-        amount: 5
-        name: Black Beret
-    - name: Headsets
-      entries:
-      - id: AU14HeadsetSectionLeader
         amount: 2
-    - name: Backpack
-      entries:
-      - id: RMCBackpackRTO
-        amount: 5
+      - id: CMHeadCapPeakedFormal
+        amount: 2
+      - id: CMHeadCapPeakedService
+        amount: 2
+      - id: RMCHeadBeretSquad
+        amount: 2
+        name: Black Beret
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill
-        amount: 10
+        amount: 2
     - name: Miscellaneous
       entries:
       - id: RMCLaserDesignator
-        amount: 4
+        amount: 2
       - id: RMCWhistle
-        amount: 10
+        amount: 2
       - id: RMCPackFlareCAS
-        amount: 10
+        amount: 2
 
 - type: entity
   parent: ColMarTechBase
   id: AU14UNISCsectionleaderequipmentvendor
   name: UNISC section leader vendor
-  description: >-
-    An automated supervisor rack, hooked up to a compact storage of UN Interstellar Settlement Corps section-leadership equipment.
-    Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
+  description: An automated rack hooked up to a small storage of apparel and equipment for the section leader.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessOpforFTL" ] ]
@@ -659,12 +617,7 @@
   parent: ColMarTechBase
   id: AU14UNISCWeaponsVendor
   name: UNISC weapons rack
-  description: >-
-    An automated weapons rack, hooked up to a small armory of UN Interstellar Settlement Corps weaponry.
-    Standard issue across the frontier where threats can appear without warning.
-    Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
-
-    For immediate combat readiness: select a primary weapon kit and a sidearm.
+  description: An automated rack hooked up to a small storage of weapons.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
@@ -674,8 +627,6 @@
     sections:
     - name: Rifle Ammunition
       entries:
-      - id: CMMagazineRifleM54CMK1
-        amount: 120
       - id: CMMagazineRifleM54C
         amount: 120
       - id: AU14MagazineRifleAG80
@@ -685,8 +636,6 @@
       - id: AU14WeaponRifleKramerMagazineStandard
         amount: 120
       - id: RMCMagazineRifleL24
-        amount: 120
-      - id: AU14MagazineRifleL90
         amount: 120
     - name: Handgun Ammunition
       entries:
@@ -710,8 +659,6 @@
       - id: CMPacketGrenadeFragOldFilled
         amount: 1
       - id: RMCPacketGrenadeSmokeFilled
-        amount: 5
+        amount: 4
       - id: RMCExplosiveBreachingCharge
-        amount: 12
-      - id: RMCExplosivePlastic
         amount: 6

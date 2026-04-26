@@ -4,6 +4,7 @@ using Content.Shared.Vehicle.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 
 namespace Content.Shared._RMC14.Vehicle;
 
@@ -111,6 +112,16 @@ public sealed class VehicleLockSystem : EntitySystem
         }
 
         var lockComp = EnsureComp<VehicleLockComponent>(vehicle);
+
+        if (!lockComp.Locked && lockComp.ForcedOpen)
+        {
+            _popup.PopupCursor(
+                Loc.GetString("rmc-vehicle-lock-too-damaged"),
+                ent.Owner,
+                PopupType.SmallCaution);
+            return;
+        }
+
         lockComp.Locked = !lockComp.Locked;
 
         if (ent.Comp.Action is { } actionUid)
@@ -121,5 +132,63 @@ public sealed class VehicleLockSystem : EntitySystem
             ent.Owner,
             ent.Owner,
             PopupType.Small);
+    }
+
+    public void RefreshForcedOpen(EntityUid vehicle)
+    {
+        if (_net.IsClient)
+            return;
+
+        if (!TryComp(vehicle, out VehicleLockComponent? lockComp))
+            return;
+
+        if (!TryComp(vehicle, out HardpointIntegrityComponent? frame) || frame.MaxIntegrity <= 0f)
+            return;
+
+        var fraction = frame.Integrity / frame.MaxIntegrity;
+
+        if (!lockComp.ForcedOpen)
+        {
+            if (fraction < lockComp.ForceOpenBelowFraction)
+            {
+                lockComp.ForcedOpen = true;
+
+                if (lockComp.Locked)
+                {
+                    lockComp.Locked = false;
+                    UpdateOperatorLockAction(vehicle, false);
+                    AnnounceOnVehicle(vehicle, "rmc-vehicle-lock-broken-open", PopupType.MediumCaution);
+                }
+            }
+        }
+        else if (fraction >= lockComp.RelockAtFraction)
+        {
+            lockComp.ForcedOpen = false;
+            AnnounceOnVehicle(vehicle, "rmc-vehicle-lock-operational-again", PopupType.Medium);
+        }
+    }
+
+    private void UpdateOperatorLockAction(EntityUid vehicle, bool locked)
+    {
+        if (!TryComp(vehicle, out VehicleComponent? vehicleComp) || vehicleComp.Operator is not { } op)
+            return;
+
+        if (!TryComp(op, out VehicleLockActionComponent? actionComp) || actionComp.Action is not { } actionUid)
+            return;
+
+        _actions.SetToggled(actionUid, locked);
+    }
+
+    private void AnnounceOnVehicle(EntityUid vehicle, string locString, PopupType popupType)
+    {
+        var msg = Loc.GetString(locString);
+
+        _popup.PopupEntity(msg, vehicle, popupType);
+
+        foreach (var session in Filter.Pvs(vehicle).Recipients)
+        {
+            if (session.AttachedEntity is { } viewer)
+                _popup.PopupCursor(msg, viewer, popupType);
+        }
     }
 }

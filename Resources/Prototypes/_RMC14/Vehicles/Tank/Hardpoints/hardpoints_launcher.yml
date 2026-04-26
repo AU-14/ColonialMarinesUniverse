@@ -31,10 +31,10 @@
   - type: Gun
     fireRate: 1.0
     projectileSpeed: 20
-    selectedMode: FullAuto
+    selectedMode: SemiAuto
     availableModes:
-    - FullAuto
-    soundGunshot: /Audio/_RMC14/Weapons/Guns/Flamer/gun_flamethrower2.ogg
+    - SemiAuto
+    soundGunshot: /Audio/_RMC14/Vehicle/weapons/flamethrower.ogg
     cameraRecoilScalar: 0
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 4
@@ -42,15 +42,15 @@
   - type: SolutionContainerManager
     solutions:
       rmc_flamer_tank:
-        maxVol: 100
+        maxVol: 60
         reagents:
         - ReagentId: RMCNapalmUTTank
-          Quantity: 100
+          Quantity: 60
   - type: RMCFlamerAmmoProvider
   - type: RMCFlamerTank
     maxIntensity: 30
     maxDuration: 20
-    maxRange: 9
+    maxRange: 7
     reagentWhitelist:
     - RMCNapalmUTTank
   - type: RMCFlushableSolution
@@ -107,7 +107,7 @@
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
-    soundGunshot: /Audio/_AU14/Weapons/agl/gun_agl_fire1.ogg
+    soundGunshot: /Audio/Weapons/Guns/Gunshots/grenade_launcher.ogg
     cameraRecoilScalar: 0
   - type: ShootAtFixedPoint
     shootArcProj: true
@@ -177,7 +177,7 @@
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/_AU14/Weapons/vehicle/towfire.ogg
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/m5_shoot.ogg
     cameraRecoilScalar: 0
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 5

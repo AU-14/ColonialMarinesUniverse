@@ -190,13 +190,6 @@ namespace Content.Server.GameTicking
         {
             _distressSignal.TheHive = _hive.CreateHive("xenonid hive", "CMXenoHive");
 
-            // For presets without CMDistressSignalRule (e.g. AU14 DistressSignal), the planet map
-            // has already been loaded by LoadMaps and CMDistressSignalRuleSystem.OnRulePlayerSpawning
-            // won't run, so map-placed weeds/tunnels need their hive assigned here. CMDistressSignal
-            // handles its own assignment after it loads the planet via SpawnXenoMap.
-            if (!IsGameRuleActive<Content.Shared._RMC14.Rules.CMDistressSignalRuleComponent>())
-                _distressSignal.SetFriendlyHives(_distressSignal.TheHive);
-
             // Allow game rules to spawn players by themselves if needed. (For example, nuke ops or wizard)
             RaiseLocalEvent(new RulePlayerSpawningEvent(readyPlayers, profiles, force));
 
@@ -253,7 +246,7 @@ namespace Content.Server.GameTicking
             // Spawn everybody in!
             foreach (var (player, (job, station)) in assignedJobs)
             {
-                if (job != null && (job == "AU14JobThreatLeader" || job == "AU14JobThreatMember" || job == "AU14JobThirdPartyLeader" || job == "AU14JobThirdPartyMember"))
+                if (job != null && (job == "AU14JobThreatLeader" || job == "AU14JobThreatMember"))
                     continue;
                 if (job == null)
                     continue;
