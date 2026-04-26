@@ -266,7 +266,7 @@
 - type: entity
   parent: BaseItem
   id: MaintenanceJack
-  name: maintenance jack
+  name: vehicle maintenance jack
   description: A heavy-duty hardpoint jack for servicing armored vehicles. Works where a crowbar can't.
   components:
   - type: Sprite

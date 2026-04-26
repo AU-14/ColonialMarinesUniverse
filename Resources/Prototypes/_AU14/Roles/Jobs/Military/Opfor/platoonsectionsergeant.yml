@@ -24,6 +24,10 @@
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORSectionSergeant
       time: 216000 # 60 hours
+#   RMCRankStaffSergeant:
+#   - !type:RoleTimeRequirement
+#     role: AU14JobGOVFORSectionSergeant
+#     time: 36000 # 10 hours
     RMCRankStaffSergeant: []
   startingGear: AU14GearopforSectionSergeant
   dummyStartingGear: AU14GearopforPlatoonSergantDummy

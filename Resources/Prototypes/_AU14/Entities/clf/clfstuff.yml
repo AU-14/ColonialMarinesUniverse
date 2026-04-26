@@ -144,6 +144,9 @@
       - id: RMCGrenadeMolotov
         amount: 10
         points: 2
+      - id: CMUPipeBomb
+        amount: 10
+        points: 2
       - id: CMGrenadeSmoke
         amount: 5
         points: 2

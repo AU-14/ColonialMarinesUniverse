@@ -20,4 +20,7 @@ public sealed partial class DropshipTargetComponent : Component
     // New: optional faction string of the creator (e.g., "govfor", "opfor"). If null/empty, no faction restriction applies.
     [DataField, AutoNetworkedField]
     public string? CreatorFaction;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan ActivatedAt;
 }

@@ -1,0 +1,44 @@
+- type: constructionGraph
+  parent: RMC
+  id: RazorwireGraph
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DeleteEntity
+    edges:
+    - to: nodeRazorwire
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: BarbedWire
+        amount: 2
+        doAfter: 2.0
+
+  - node: nodeRazorwire
+    entity: RMCBarricadeRazorwire
+    edges:
+    - to: nodeRazorwireCut
+      completed:
+      - !type:PlaySound
+        sound:
+          path: /Audio/Items/wirecutter.ogg
+      steps:
+      - tool: Cutting
+        doAfter: 5.0
+
+  - node: nodeRazorwireCut
+    entity: RMCBarricadeRazorwireCut
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: BarbedWire1
+        amount: 1
+      - !type:DeleteEntity
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      steps:
+      - tool: Anchoring
+        doAfter: 5.0

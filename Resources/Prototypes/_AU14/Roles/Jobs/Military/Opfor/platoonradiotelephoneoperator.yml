@@ -11,15 +11,15 @@
     - Epilepsy
     - NonResuscitable
   ranks:
+#   RMCRankSergeant:
+#   - !type:RoleTimeRequirement
+#     role: AU14JobGOVFORRadioTelephoneOperator
+#     time: 216000 # 60 hours
     RMCRankCorporal:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORRadioTelephoneOperator
-      time: 216000 # 60 hours
-    RMCRankLanceCorporal:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORRadioTelephoneOperator
       time: 108000 # 30 hours
-    RMCRankPrivateFirstClass: []
+    RMCRankLanceCorporal: []
   startingGear: AU14GearopforRadioTelephoneOperator
   dummyStartingGear: AU14GearopforRadioTelephoneOperatorDummy
   icon: "AU14JobIconOPFORSarge"

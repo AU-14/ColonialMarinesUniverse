@@ -79,6 +79,8 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
             args.GunUser = op;
     }
 
+    // For nested guns (cannon inside turret inside vehicle), GiveAmmoIFF may land on the turret
+    // instead of the vehicle. Forward the lookup up to the vehicle so the primary gunner's faction applies.
     private void OnTurretGetIFFGunUser(Entity<VehicleTurretComponent> ent, ref GetIFFGunUserEvent args)
     {
         if (args.GunUser != null)

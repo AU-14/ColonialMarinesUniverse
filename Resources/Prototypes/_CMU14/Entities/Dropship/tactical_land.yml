@@ -1,0 +1,19 @@
+- type: entity
+  parent: StationAiHolo
+  id: CMUDropshipPilotEye
+  name: dropship view
+  description: A free-look projection of the dropship's nav console.
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: Sprite
+    visible: false
+  - type: Eye
+    drawFov: false
+  - type: DropshipPilotEye
+
+- type: entity
+  id: CMUHolographicWarningSign
+  name: holographic warning sign
+  description: A bright yellow hologram warning of incoming danger.
+  components:
+  - type: HolographicWarningSign

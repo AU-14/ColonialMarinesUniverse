@@ -6,6 +6,7 @@
   name: materials-metal
   icon: { sprite: _RMC14/Objects/Materials/Sheets/metal.rsi, state: metal }
   price: 0.00133
+  
 
 - type: stack
   id: CMSteel
@@ -90,6 +91,11 @@
       interfaces:
         enum.RMCConstructionUiKey.Key:
           type: RMCConstructionBui
+    - type: CraftIntoPipeBomb # Wow.. Its amazing..
+      Spawn: CMUPipeBombCasing
+      Time: 5
+      NeedBlowtorch: true
+      DestroyReq: false
     - type: Tag
       tags:
       - RMCSheetMetal

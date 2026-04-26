@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared._RMC14.Evasion;
 using Content.Shared._RMC14.Random;
+using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
@@ -46,6 +47,19 @@ public sealed class RMCProjectileSystem : EntitySystem
         SubscribeLocalEvent<SpawnOnTerminateComponent, EntityTerminatingEvent>(OnSpawnOnTerminatingTerminate);
 
         SubscribeLocalEvent<PreventCollideWithDeadComponent, PreventCollideEvent>(OnPreventCollideWithDead);
+
+        SubscribeLocalEvent<RMCAntiVehicleDamageComponent, ProjectileHitEvent>(OnAntiVehicleProjectileHit);
+    }
+
+    private void OnAntiVehicleProjectileHit(Entity<RMCAntiVehicleDamageComponent> ent, ref ProjectileHitEvent args)
+    {
+        if (ent.Comp.Multiplier <= 1f)
+            return;
+
+        if (!HasComp<HardpointSlotsComponent>(args.Target))
+            return;
+
+        args.Damage *= ent.Comp.Multiplier;
     }
 
     private void OnDeleteOnCollideStartCollide(Entity<DeleteOnCollideComponent> ent, ref StartCollideEvent args)

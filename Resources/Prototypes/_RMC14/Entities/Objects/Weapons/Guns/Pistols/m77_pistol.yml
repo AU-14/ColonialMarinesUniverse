@@ -103,6 +103,7 @@
   parent: CMBaseMagazinePistol
   id: CMMagazinePistolM77AP
   name: Mod 88 AP magazine (9mm)
+  description: A 19-round armor-piercing magazine for the Mod 88 combat pistol. It has found common use with We-Yu PMC operators to defeat armored threats when terminal effect is authorized.
   components:
   - type: Tag
     tags:
@@ -138,9 +139,10 @@
     amount: 40
 
 - type: entity
+  parent: CMCartridgePistolBase
   id: CMCartridgePistolM77AP
   name: cartridge (9mm AP)
-  parent: CMCartridgePistolBase
+  description: A 9mm armor-piercing cartridge for the Mod 88 combat pistol.
   components:
   - type: Tag
     tags:
@@ -148,6 +150,21 @@
     - CMCartridgePistol9mmAP
   - type: CartridgeAmmo
     proto: CMBulletPistolM77AP
+
+- type: entity
+  parent: RMCMagazinePistolM77Rubber
+  id: CMMagazinePistolM88Rubber
+  name: Mod 88 rubber magazine (9mm)
+  description: A 19-round rubber magazine for the Mod 88 combat pistol. The blue stripe and safety markings designate the non-lethal load designed to deform and deliver blunt-force trauma on impact. Standard issue to leverage security and suppression without creating unnecessary casualties.
+  components:
+  - type: BallisticAmmoProvider
+    proto: CMCartridgePistolM88Rubber
+
+- type: entity
+  parent: RMCCartridgePistol9mmRubber
+  id: CMCartridgePistolM88Rubber
+  description: A 9mm rubber projectile for the Mod 88 combat pistol.
+  # TODO: rubber sprite
 
 - type: Tag
   id: CMMagazinePistolM77AP

@@ -239,7 +239,6 @@
   - type: StorageFill
     contents:
     - id: AU14HeadHelmetRMCAircrew
-    - id: AU14HeadHelmetRMCAircrew
     - id: AU14HandsRMC
     - id: AU14PilotJumpsuitRMC
     - id: RMCBootsRoyal

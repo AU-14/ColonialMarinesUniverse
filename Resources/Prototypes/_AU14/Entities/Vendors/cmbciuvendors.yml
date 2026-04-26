@@ -1,8 +1,14 @@
+# Apparel, equipment, medic, aircrew, command, AR, section-leader, weaponry, special-weapons
 - type: entity
   parent: ColMarTechBase
   id: AU14CMBCIUapparelvendor
   name: CMB CIU apparel vendor
-  description: An automated rack hooked up to a small storage of standard CMB CIU apparel.
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Crisis Intervention Unit apparel from the Colonial Marshall Bureau.
+    Standard issue aboard naval vessels, military outposts, corporate-science installations and civilian colonies across the frontier.
+    Manufactured to outfit personnel rapidly following cryogenic hypersleep or emergency mobilization.
+
+    For full operational readiness, select one item from each section: fatigues with a webbing, footwear, gloves, headgear, armor, backpack, belt and a pouch.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
@@ -13,109 +19,120 @@
     - name: Fatigues
       entries:
       - id: AU14UniversalBlackFatigues
-        amount: 25
+        amount: 40
     - name: Footwear
       entries:
       - id: RMCBootsSPPBlack
-        amount: 25
+        amount: 40
     - name: Gloves
       entries:
       - id: AU14PVEHandsInsulatedBlackMarine
-        amount: 25
+        amount: 40
       - id: AU14PVEHandsFingerlessBlackGloves
-        amount: 15
+        amount: 20
     - name: Webbings
       entries:
       - id: RMCWebbingBlackSmall
-        amount: 25
+        amount: 40
       - id: CMWebbingBlack
-        amount: 25
+        amount: 40
       - id: RMCWebbingHolsterBlack
-        amount: 15
+        amount: 20
       - id: RMCWebbingDropPouchBlack
-        amount: 15
+        amount: 20
       - id: RMCWebbingLegPouchBlack
-        amount: 15
+        amount: 25
     - name: Headgear
       entries:
       - id: AU14CMBCIUHelmet
-        amount: 25
+        amount: 40
       - id: AU14HelmetGarbRiotVisor
-        amount: 25
+        amount: 40
       - id: RMCHeadCapBureau
         amount: 25
+    - name: Headsets
+      entries:
+      - id: RMCM5CameraGear
+        amount: 30
+      - id: AU14HeadsetSectionMarine
+        name: empty headset
+        amount: 20
     - name: Heads Up Display
       entries:
       - id: RMCVisorSquad
-        amount: 25
+        amount: 40
       - id: RMCVisorWelding
-        amount: 5
+        amount: 8
     - name: Armor
       entries:
       - id: RMCArmorM4RMedium
-        amount: 25
+        amount: 40
       - id: RMCArmorM4RLight
-        amount: 25
+        amount: 30
     - name: Backpack
       entries:
       - id: RMCSatchelTSEPA
-        amount: 20
+        amount: 40
       - id: AU14BackpackMarineBlack
-        amount: 20
+        amount: 30
       - id: RMCScabbardShotgun
-        amount: 2
+        amount: 3
       - id: RMCBackpackAmmo
-        amount: 1
+        amount: 4
+      - id: CMSatchelMarine
+        amount: 20
     - name: Belts
       entries:
       - id: AU14BeltMarineBlack
-        amount: 25
+        amount: 40
       - id: RMCBeltGrenade
-        amount: 2
+        amount: 4
       - id: AU14M276ShotgunShellLoadingRigBlack
-        amount: 2
+        amount: 6
       - id: RMCBeltHolsterPistolTSE
-        amount: 15
+        amount: 20
       - id: AU14BeltHolsterPistolBlack
-        amount: 15
+        amount: 20
       - id: CMBeltSecurityMarshal
-        amount: 15
+        amount: 30
       - id: AU14BeltUtilityGeneralBlack
-        amount: 15
+        amount: 30
     - name: Pouches
       entries:
       - id: RMCPouchBayonet
         name: Bayonet Sheath
-        amount: 15
+        amount: 25
       - id: RMCPouchFlareFilled
         name: Flare Pouch (Full)
-        amount: 15
+        amount: 30
       - id: RMCPouchDocumentSmall
-        amount: 1
+        amount: 12
       - id: RMCPouchMagazine
-        amount: 15
+        amount: 50
       - id: RMCPouchMagazineLarge
-        amount: 2
+        amount: 8
       - id: RMCPouchShotgunLarge
-        amount: 4
+        amount: 8
       - id: RMCPouchGeneralMedium
-        amount: 15
+        amount: 25
       - id: RMCPouchGeneralLarge
-        amount: 2
+        amount: 6
       - id: RMCPouchMagazinePistol
-        amount: 15
+        amount: 25
       - id: RMCPouchMagazinePistolLarge
-        amount: 2
+        amount: 6
       - id: RMCPouchPistol
-        amount: 15
+        amount: 20
+      - id: AU14PouchIFAKFill
+        amount: 5
       - id: RMCPouchConstruction
-        amount: 1
+        amount: 5
       - id: RMCPouchExplosive
-        amount: 1
+        amount: 3
+      - id: RMCPouchFuelTank
+        amount: 2
       - id: RMCPouchTools
         amount: 15
-#      - id: Sling Pouch
-#        amount: 1
     - name: Mask
       entries:
       - id: CMMaskGas
@@ -123,45 +140,50 @@
       - id: CMUGasMaskFilter
         amount: 80
       - id: CMMaskCoif
-        amount: 10
+        amount: 20
       - id: RMCMaskScarfBlack
-        amount: 10
+        amount: 20
       - id: RMCMaskScarfGray
-        amount: 10
+        amount: 20
       - id: RMCMaskTornScarfBlack
-        amount: 10
+        amount: 20
       - id: RMCMaskSmockBlack
-        amount: 10
+        amount: 20
       - id: RMCMaskNeckerchiefGray
-        amount: 10
+        amount: 20
     - name: Glasses & Goggles
       entries:
       - id: AU14GogglesM1A1ClearBallistic
-        amount: 20
+        amount: 25
       - id: AU14GogglesM1A1Ballistic
-        amount: 20
+        amount: 25
       - id: AU14GogglesM1A1DarkBallistic
-        amount: 20
+        amount: 25
       - id: AU14GogglesM1A1LaserBallistic
-        amount: 20
+        amount: 25
       - id: AU14GogglesM1A1OrangeBallistic
-        amount: 20
+        amount: 25
       - id: AU14GogglesM1A1PolarizedBallistic
-        amount: 20
+        amount: 25
       - id: CMGlassesSecurity
-        amount: 20
+        amount: 25
       - id: AU14GlassesBiMex
-        amount: 20
+        amount: 25
       - id: AU14GlassesBiMexOrange
-        amount: 20
+        amount: 25
       - id: RMCGlassesTriMaxBronze
-        amount: 20
+        amount: 25
 
 - type: entity
   parent: ColMarTechBase
   id: AU14CMBCIUequipmentvendor
   name: CMB CIU equipment vendor
-  description: An automated rack hooked up to a small storage of standard CMB CIU equipment.
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Crisis Intervention Unit equipment from the Colonial Marshall Bureau.
+    Stocked with medical supplies and field gear for rapid deployment following cryogenic hypersleep or emergency mobilization.
+    The interface is intentionally simple, even someone with tunnel-vision and frostbite can operate it.
+
+    Rapid-issue protocol: prioritize medical supplies, a ration pack, an e-tool and sandbags.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
@@ -227,7 +249,7 @@
       - id: CMFireExtinguisherPortable
         amount: 5
       - id: CMRollerBedSpawnFolded
-        amount: 1
+        amount: 5
       - id: RMCBinoculars
         amount: 2
       #- id: CMFoldingBarricadesMB6x3
@@ -243,12 +265,16 @@
       - id: RMCZipties
         amount: 30
 
-#corpsman
 - type: entity
   parent: ColMarTechBase
   id: AU14CMBCIUTacticalMedicVendor
   name: CMB CIU Tactical Medic Vendor
-  description: An automated rack hooked up to a small storage of medical supplies.
+  description: >-
+    An automated medical rack, hooked up to a compact stock of Crisis Intervention Unit trauma supplies from the Colonial Marshall Bureau.
+    Standard issue for corpsmen aboard naval vessels, outposts and colonies where casualties arrive faster than reinforcements.
+    Designed for rapid reconstitution of combat medics following cryogenic hypersleep or emergency call-up.
+
+    Corpsman protocol: select the essential equipment set, storage and limited medications.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforMedical" ], [ "AU14AccessOpforMedical" ] ]
@@ -353,7 +379,11 @@
   parent: ColMarTechBase
   id: AU14CMBCIUPilotVendor
   name: CMB CIU aircrew vendor
-  description: An automated rack hooked up to a small storage of aircrew apparel and equipment.
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Crisis Intervention Unit aircrew flight and support gear from the Colonial Marshall Bureau.
+    Engineered to get flight personnel flight-ready in seconds after cryogenic hypersleep or scramble orders.
+
+    Aircrew protocol: select a set of fatigues, the essential medical equipment and storage kit.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
@@ -369,6 +399,8 @@
       choices: { CMUPlatoonAirCrewVest: 1 }
       entries:
       - id: RMCOuterClothingExternalWebbingBlack
+      - id: RMCArmorVestSquad
+        amount: 2
     - name: Footwear
       choices: { CMUPlatoonAirCrewFootwear: 1 }
       entries:
@@ -414,7 +446,7 @@
       - id: RMCPouchMagazinePistolLarge
       - id: RMCPouchTools
     - name: Glasses
-      choices: { CMUPlatoonAirCrewGlasses: 2 }
+      choices: { CMUPlatoonAirCrewGlasses: 1 }
       entries:
       - id: RMCSunglassesBigFake
       - id: RMCGlassesMarineRpg
@@ -498,7 +530,9 @@
   parent: ColMarTechBase
   id: AU14CMBCIUCommandVendor
   name: CMB CIU command vendor
-  description: An automated rack hooked up to a small storage of CMB CIU command apparel and equipment.
+  description: >-
+    An automated command rack, hooked up to a restricted storage of Crisis Intervention Unit leadership equipment from the Colonial Marshall Bureau.
+    Manufactured to equip commanding personnel following cryogenic hypersleep or an emergency directive is issued.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessOpforCommand" ] ]
@@ -509,43 +543,50 @@
     - name: Fatigues
       entries:
       - id: AU14UniversalBlackFatigues
-        amount: 2
+        amount: 5
       - id: AU14CMBUniform
-        amount: 2
+        amount: 5
     - name: Footwear
       entries:
       - id: RMCBootsPMCFilled
-        amount: 2
+        amount: 5
       - id: CMBootsBrown
-        amount: 2
+        amount: 5
     - name: Outerwear
       entries:
       - id: AU14CMBMarshalWindbreaker
-        amount: 2
+        amount: 5
       - id: RMCArmorM4RMarshallMedium
-        amount: 2
+        amount: 5
     - name: Headsets
       entries:
       - id: AU14HeadsetSectionLeader
         amount: 2
+    - name: Backpack
+      entries:
+      - id: RMCBackpackRTO
+        amount: 5
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill
-        amount: 2
+        amount: 10
     - name: Miscellaneous
       entries:
       - id: RMCLaserDesignator
-        amount: 2
+        amount: 4
       - id: RMCWhistle
-        amount: 2
+        amount: 10
       - id: RMCPackFlareCAS
-        amount: 2
+        amount: 10
 
 - type: entity
   parent: ColMarTechBase
   id: AU14CMBCIUGunnerVendor
-  name: CMB CIU gunner equipment vendor
-  description: An automated rack hooked up to a small storage of gunner equipment.
+  name: CMB CIU automatic rifleman equipment vendor
+  description: >-
+    An automated weapons rack, hooked up to a small armory of Crisis Intervention Unit light-machine gun equipment from the Colonial Marshall Bureau.
+    Standard issue for designated LMG crews on naval vessels and outposts.
+    Built to bring fire support online rapidly after cryogenic hypersleep or emergency mobilization.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
@@ -568,7 +609,9 @@
   parent: ColMarTechBase
   id: AU14CMBCIUSectionLeader
   name: CMB CIU section leader vendor
-  description: An automated rack hooked up to a small storage of apparel and equipment for the section leader.
+  description: >-
+    An automated supervisor rack, hooked up to a compact storage of Crisis Intervention Unit section-leadership equipment from the Colonial Marshall Bureau.
+    Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessOpforFTL" ] ]
@@ -585,13 +628,16 @@
       - id: RMCPackFlareCAS
         amount: 2
 
-#weapons
-
 - type: entity
   parent: ColMarTechBase
   id: AU14CMBCIUWeaponsVendor
   name: CMB CIU weapons rack
-  description: An automated rack hooked up to a small storage of weapons.
+  description: >-
+    An automated weapons rack, hooked up to a small armory of Crisis Intervention Unit weaponry from the Colonial Marshall Bureau.
+    Standard issue across the frontier where threats can appear without warning.
+    Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
+
+    For immediate combat readiness: select a primary weapon kit and a sidearm.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
@@ -635,7 +681,12 @@
   parent: ColMarTechBase
   id: AU14CMBCIUSpecialWeaponsVendor
   name: CMB CIU Special Weapons Rack
-  description: An automated rack hooked up to a small storage of special weapons.
+  description: >-
+    An automated special weapons rack, hooked up to a restricted armory of Crisis Intervention Unit heavy and breaching ordnance from the Colonial Marshall Bureau.
+    Standard issue only for qualified operators.
+    Engineered to deliver overwhelming firepower the instant cryogenic hypersleep ends or an emergency mobilization is called.
+
+    Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
   components:
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
@@ -652,42 +703,62 @@
       - id: RMCAttachmentFlashlightGrip
         amount: 1
       - id: RMCBoxShotgunBuckshot
-        amount: 8
+        amount: 12
       - id: RMCBoxShotgunSlugs
-        amount: 6
+        amount: 10
       - id: RMCBoxShotgunFlechette
-        amount: 6
+        amount: 8
     - name: XM38 Tactical Shotgun
       entries:
       - id: RMCWeaponShotgunXM38
         amount: 1
+      - id: RMCAttachmentS6ReflexSight
+        amount: 1
+      - id: RMCAttachmentFlashlightGrip
+        amount: 1
       - id: RMCBoxShotgunBuckshot
         amount: 8
       - id: RMCBoxShotgunSlugs
-        amount: 6
+        amount: 10
       - id: RMCBoxShotgunFlechette
-        amount: 6
+        amount: 12
     - name: XM51 Breaching Scattergun
       entries:
       - id: RMCXM51Case
         amount: 1
       - id: RMCMagazineShotgunXM51
-        amount: 5
+        amount: 10
+      - id: RMCBoxShotgunBreaching
+        amount: 8
     - name: M85A1 Grenade Launcher
       entries:
       - id: RMCWeaponLauncherM85A1
         amount: 1
+      - id: RMCPacketGrenadeBatonSlugHIRRFilled
+        amount: 12
+#     - id: AU14PacketGrenadeNeuroRMCFilled
+#       amount: 2
       - id: CMPacketGrenadeFragFilled
-        amount: 5
+        amount: 4
+      - id: RMCPacketGrenadeM74AGMSFilled
+        amount: 8
+      - id: RMCPacketGrenadeM74AGMFFilled
+        amount: 1
+      - id: RMCPouchExplosive
+        amount: 2
     - name: Explosives
       entries:
+      - id: RMCBoxHEDP
+        amount: 4
       - id: RMCBoxHEFA
-        amount: 2
+        amount: 3
+      - id: RMCPouchExplosive
+        amount: 1
       - id: CMPacketGrenadeFragOldFilled
         amount: 2
       - id: RMCPacketGrenadeSmokeFilled
-        amount: 4
+        amount: 5
       - id: RMCExplosiveBreachingCharge
-        amount: 8
+        amount: 12
       - id: RMCExplosiveBreachingChargeRubber
-        amount: 4
+        amount: 22

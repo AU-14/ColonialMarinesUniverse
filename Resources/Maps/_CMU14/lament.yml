@@ -4,7 +4,7 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 04/24/2026 14:35:22
+  time: 04/25/2026 02:32:44
   entityCount: 89660
 maps:
 - 1
@@ -48272,55 +48272,55 @@ entities:
         -173,-96: CMUAreaLV376MilitaryPolice
         -173,-95: CMUAreaLV376MilitaryPolice
         -173,-94: CMUAreaLV376MilitaryPolice
-        -173,-93: CMUAreaLV376MilitaryPolice
-        -173,-92: CMUAreaLV376MilitaryPolice
-        -173,-91: CMUAreaLV376MilitaryPolice
-        -173,-90: CMUAreaLV376MilitaryPolice
-        -173,-89: CMUAreaLV376MilitaryPolice
+        -173,-93: CMUAreaLV376Brig
+        -173,-92: CMUAreaLV376Brig
+        -173,-91: CMUAreaLV376Brig
+        -173,-90: CMUAreaLV376Brig
+        -173,-89: CMUAreaLV376Brig
         -174,-99: CMUAreaLV376MBS
         -174,-98: CMUAreaLV376MilitaryPolice
         -174,-97: CMUAreaLV376MilitaryPolice
         -174,-96: CMUAreaLV376MilitaryPolice
         -174,-95: CMUAreaLV376MilitaryPolice
         -174,-94: CMUAreaLV376MilitaryPolice
-        -174,-93: CMUAreaLV376MilitaryPolice
-        -174,-92: CMUAreaLV376MilitaryPolice
-        -174,-91: CMUAreaLV376MilitaryPolice
-        -174,-90: CMUAreaLV376MilitaryPolice
-        -174,-89: CMUAreaLV376MilitaryPolice
+        -174,-93: CMUAreaLV376Brig
+        -174,-92: CMUAreaLV376Brig
+        -174,-91: CMUAreaLV376Brig
+        -174,-90: CMUAreaLV376Brig
+        -174,-89: CMUAreaLV376Brig
         -175,-99: CMUAreaLV376MBS
         -175,-98: CMUAreaLV376MilitaryPolice
         -175,-97: CMUAreaLV376MilitaryPolice
         -175,-96: CMUAreaLV376MilitaryPolice
         -175,-95: CMUAreaLV376MilitaryPolice
         -175,-94: CMUAreaLV376MilitaryPolice
-        -175,-93: CMUAreaLV376MilitaryPolice
-        -175,-92: CMUAreaLV376MilitaryPolice
-        -175,-91: CMUAreaLV376MilitaryPolice
-        -175,-90: CMUAreaLV376MilitaryPolice
-        -175,-89: CMUAreaLV376MilitaryPolice
+        -175,-93: CMUAreaLV376Brig
+        -175,-92: CMUAreaLV376Brig
+        -175,-91: CMUAreaLV376Brig
+        -175,-90: CMUAreaLV376Brig
+        -175,-89: CMUAreaLV376Brig
         -176,-99: CMUAreaLV376MBS
         -176,-98: CMUAreaLV376MilitaryPolice
         -176,-97: CMUAreaLV376MilitaryPolice
         -176,-96: CMUAreaLV376MilitaryPolice
         -176,-95: CMUAreaLV376MilitaryPolice
         -176,-94: CMUAreaLV376MilitaryPolice
-        -176,-93: CMUAreaLV376MilitaryPolice
-        -176,-92: CMUAreaLV376MilitaryPolice
-        -176,-91: CMUAreaLV376MilitaryPolice
-        -176,-90: CMUAreaLV376MilitaryPolice
-        -176,-89: CMUAreaLV376MilitaryPolice
+        -176,-93: CMUAreaLV376Brig
+        -176,-92: CMUAreaLV376Brig
+        -176,-91: CMUAreaLV376Brig
+        -176,-90: CMUAreaLV376Brig
+        -176,-89: CMUAreaLV376Brig
         -177,-99: CMUAreaLV376MBS
         -177,-98: CMUAreaLV376MilitaryPolice
         -177,-97: CMUAreaLV376MilitaryPolice
         -177,-96: CMUAreaLV376MilitaryPolice
         -177,-95: CMUAreaLV376MilitaryPolice
         -177,-94: CMUAreaLV376MilitaryPolice
-        -177,-93: CMUAreaLV376MilitaryPolice
-        -177,-92: CMUAreaLV376MilitaryPolice
-        -177,-91: CMUAreaLV376MilitaryPolice
-        -177,-90: CMUAreaLV376MilitaryPolice
-        -177,-89: CMUAreaLV376MilitaryPolice
+        -177,-93: CMUAreaLV376Brig
+        -177,-92: CMUAreaLV376Brig
+        -177,-91: CMUAreaLV376Brig
+        -177,-90: CMUAreaLV376Brig
+        -177,-89: CMUAreaLV376Brig
         -178,-99: CMUAreaLV376MBS
         -178,-98: CMUAreaLV376MilitaryPolice
         -178,-97: CMUAreaLV376MilitaryPolice
@@ -48944,15 +48944,15 @@ entities:
         -172,-59: CMUAreaLV376MBC
         -172,-58: CMUAreaLV376MBC
         -172,-57: CMUAreaLV376MBC
-        -173,-88: CMUAreaLV376MilitaryPolice
-        -173,-87: CMUAreaLV376MilitaryPolice
-        -173,-86: CMUAreaLV376MilitaryPolice
-        -173,-85: CMUAreaLV376MilitaryPolice
-        -173,-84: CMUAreaLV376MilitaryPolice
-        -173,-83: CMUAreaLV376MilitaryPolice
-        -173,-82: CMUAreaLV376MilitaryPolice
-        -173,-81: CMUAreaLV376MilitaryPolice
-        -173,-80: CMUAreaLV376MilitaryPolice
+        -173,-88: CMUAreaLV376Brig
+        -173,-87: CMUAreaLV376Brig
+        -173,-86: CMUAreaLV376Brig
+        -173,-85: CMUAreaLV376Brig
+        -173,-84: CMUAreaLV376Brig
+        -173,-83: CMUAreaLV376Brig
+        -173,-82: CMUAreaLV376Brig
+        -173,-81: CMUAreaLV376Brig
+        -173,-80: CMUAreaLV376Brig
         -173,-79: CMUAreaLV376MilitaryPolice
         -173,-78: CMUAreaLV376MilitaryPolice
         -173,-77: CMUAreaLV376MilitaryPolice
@@ -48976,15 +48976,15 @@ entities:
         -173,-59: CMUAreaLV376MBC
         -173,-58: CMUAreaLV376MBC
         -173,-57: CMUAreaLV376MBC
-        -174,-88: CMUAreaLV376MilitaryPolice
-        -174,-87: CMUAreaLV376MilitaryPolice
-        -174,-86: CMUAreaLV376MilitaryPolice
-        -174,-85: CMUAreaLV376MilitaryPolice
-        -174,-84: CMUAreaLV376MilitaryPolice
-        -174,-83: CMUAreaLV376MilitaryPolice
-        -174,-82: CMUAreaLV376MilitaryPolice
-        -174,-81: CMUAreaLV376MilitaryPolice
-        -174,-80: CMUAreaLV376MilitaryPolice
+        -174,-88: CMUAreaLV376Brig
+        -174,-87: CMUAreaLV376Brig
+        -174,-86: CMUAreaLV376Brig
+        -174,-85: CMUAreaLV376Brig
+        -174,-84: CMUAreaLV376Brig
+        -174,-83: CMUAreaLV376Brig
+        -174,-82: CMUAreaLV376Brig
+        -174,-81: CMUAreaLV376Brig
+        -174,-80: CMUAreaLV376Brig
         -174,-79: CMUAreaLV376MilitaryPolice
         -174,-78: CMUAreaLV376MilitaryPolice
         -174,-77: CMUAreaLV376MilitaryPolice
@@ -49008,15 +49008,15 @@ entities:
         -174,-59: CMUAreaLV376MBC
         -174,-58: CMUAreaLV376MBC
         -174,-57: CMUAreaLV376MBC
-        -175,-88: CMUAreaLV376MilitaryPolice
-        -175,-87: CMUAreaLV376MilitaryPolice
-        -175,-86: CMUAreaLV376MilitaryPolice
-        -175,-85: CMUAreaLV376MilitaryPolice
-        -175,-84: CMUAreaLV376MilitaryPolice
-        -175,-83: CMUAreaLV376MilitaryPolice
-        -175,-82: CMUAreaLV376MilitaryPolice
-        -175,-81: CMUAreaLV376MilitaryPolice
-        -175,-80: CMUAreaLV376MilitaryPolice
+        -175,-88: CMUAreaLV376Brig
+        -175,-87: CMUAreaLV376Brig
+        -175,-86: CMUAreaLV376Brig
+        -175,-85: CMUAreaLV376Brig
+        -175,-84: CMUAreaLV376Brig
+        -175,-83: CMUAreaLV376Brig
+        -175,-82: CMUAreaLV376Brig
+        -175,-81: CMUAreaLV376Brig
+        -175,-80: CMUAreaLV376Brig
         -175,-79: CMUAreaLV376MilitaryPolice
         -175,-78: CMUAreaLV376MilitaryPolice
         -175,-77: CMUAreaLV376MilitaryPolice
@@ -49040,15 +49040,15 @@ entities:
         -175,-59: CMUAreaLV376MBC
         -175,-58: CMUAreaLV376MBC
         -175,-57: CMUAreaLV376MBC
-        -176,-88: CMUAreaLV376MilitaryPolice
-        -176,-87: CMUAreaLV376MilitaryPolice
-        -176,-86: CMUAreaLV376MilitaryPolice
-        -176,-85: CMUAreaLV376MilitaryPolice
-        -176,-84: CMUAreaLV376MilitaryPolice
-        -176,-83: CMUAreaLV376MilitaryPolice
-        -176,-82: CMUAreaLV376MilitaryPolice
-        -176,-81: CMUAreaLV376MilitaryPolice
-        -176,-80: CMUAreaLV376MilitaryPolice
+        -176,-88: CMUAreaLV376Brig
+        -176,-87: CMUAreaLV376Brig
+        -176,-86: CMUAreaLV376Brig
+        -176,-85: CMUAreaLV376Brig
+        -176,-84: CMUAreaLV376Brig
+        -176,-83: CMUAreaLV376Brig
+        -176,-82: CMUAreaLV376Brig
+        -176,-81: CMUAreaLV376Brig
+        -176,-80: CMUAreaLV376Brig
         -176,-79: CMUAreaLV376MilitaryPolice
         -176,-78: CMUAreaLV376MilitaryPolice
         -176,-77: CMUAreaLV376MilitaryPolice
@@ -49743,9 +49743,9 @@ entities:
         -142,-41: CMUAreaLV376MBNE
         -142,-42: CMUAreaLV376MBNE
         -142,-43: CMUAreaLV376MBNE
-        -142,-44: CMUAreaLV376MBNE
-        -142,-45: CMUAreaLV376MBNE
-        -142,-46: CMUAreaLV376MBNE
+        -142,-44: CMUAreaLV376MilitaryCIC
+        -142,-45: CMUAreaLV376MilitaryCIC
+        -142,-46: CMUAreaLV376MilitaryCIC
         -141,-42: CMUAreaLV376MBNE
         -141,-41: CMUAreaLV376MBNE
         -145,-40: CMUAreaLV376MilitaryCIC
@@ -49842,24 +49842,24 @@ entities:
         -162,-45: CMUAreaLV376MBNE
         -161,-44: CMUAreaLV376MBNE
         -161,-45: CMUAreaLV376MBNE
-        -164,-25: CMUAreaLV376OOB
-        -164,-27: CMUAreaLV376OOB
-        -164,-26: CMUAreaLV376OOB
-        -163,-27: CMUAreaLV376OOB
-        -164,-33: CMUAreaLV376MBNE
-        -164,-34: CMUAreaLV376MBNE
+        -164,-25: CMUAreaLV376MilitaryArmory
+        -164,-27: CMUAreaLV376MilitaryArmory
+        -164,-26: CMUAreaLV376MilitaryArmory
+        -163,-27: CMUAreaLV376MilitaryArmory
+        -164,-33: CMUAreaLV376MilitaryArmory
+        -164,-34: CMUAreaLV376MilitaryArmory
         -164,-35: CMUAreaLV376MBNE
         -164,-36: CMUAreaLV376MBNE
-        -163,-33: CMUAreaLV376MBNE
-        -163,-34: CMUAreaLV376MBNE
+        -163,-33: CMUAreaLV376MilitaryArmory
+        -163,-34: CMUAreaLV376MilitaryArmory
         -163,-35: CMUAreaLV376MBNE
         -163,-36: CMUAreaLV376MBNE
-        -162,-33: CMUAreaLV376MBNE
-        -162,-34: CMUAreaLV376MBNE
+        -162,-33: CMUAreaLV376MilitaryArmory
+        -162,-34: CMUAreaLV376MilitaryArmory
         -162,-35: CMUAreaLV376MBNE
         -162,-36: CMUAreaLV376MBNE
-        -161,-33: CMUAreaLV376MBNE
-        -161,-34: CMUAreaLV376MBNE
+        -161,-33: CMUAreaLV376MilitaryArmory
+        -161,-34: CMUAreaLV376MilitaryArmory
         -161,-35: CMUAreaLV376MBNE
         -161,-36: CMUAreaLV376MBNE
         -160,-33: CMUAreaLV376MBNE
@@ -58232,15 +58232,15 @@ entities:
         -156,-23: CMUAreaLV376OOB
         -163,-23: CMUAreaLV376OOB
         -162,-23: CMUAreaLV376OOB
-        -162,-25: CMUAreaLV376OOB
-        -162,-24: CMUAreaLV376OOB
-        -161,-24: CMUAreaLV376OOB
+        -162,-25: CMUAreaLV376MilitaryArmory
+        -162,-24: CMUAreaLV376MilitaryArmory
+        -161,-24: CMUAreaLV376MilitaryArmory
         -161,-23: CMUAreaLV376OOB
         -160,-23: CMUAreaLV376OOB
         -160,-24: CMUAreaLV376OOB
         -160,-25: CMUAreaLV376OOB
-        -161,-25: CMUAreaLV376OOB
-        -161,-26: CMUAreaLV376OOB
+        -161,-25: CMUAreaLV376MilitaryArmory
+        -161,-26: CMUAreaLV376MilitaryArmory
         -160,-26: CMUAreaLV376OOB
         -157,-28: CMUAreaLV376OOB
         -158,-28: CMUAreaLV376OOB
@@ -58770,7 +58770,7 @@ entities:
         -141,-51: CMUAreaLV376OOB
         -141,-50: CMUAreaLV376OOB
         -141,-49: CMUAreaLV376OOB
-        -141,-48: CMUAreaLV376OOB
+        -141,-48: CMUAreaLV376MilitaryCIC
         -140,-59: CMUAreaLV376OOB
         -140,-60: CMUAreaLV376OOB
         -140,-54: CMUAreaLV376OOB
@@ -74336,13 +74336,13 @@ entities:
         -166,-22: CMUAreaLV376OOB
         -165,-23: CMUAreaLV376OOB
         -164,-23: CMUAreaLV376OOB
-        -164,-24: CMUAreaLV376OOB
-        -163,-24: CMUAreaLV376OOB
-        -162,-26: CMUAreaLV376OOB
-        -163,-25: CMUAreaLV376OOB
-        -163,-26: CMUAreaLV376OOB
-        -161,-27: CMUAreaLV376OOB
-        -162,-27: CMUAreaLV376OOB
+        -164,-24: CMUAreaLV376MilitaryArmory
+        -163,-24: CMUAreaLV376MilitaryArmory
+        -162,-26: CMUAreaLV376MilitaryArmory
+        -163,-25: CMUAreaLV376MilitaryArmory
+        -163,-26: CMUAreaLV376MilitaryArmory
+        -161,-27: CMUAreaLV376MilitaryArmory
+        -162,-27: CMUAreaLV376MilitaryArmory
         -160,-28: CMUAreaLV376OOB
         -159,-28: CMUAreaLV376OOB
         -159,-29: CMUAreaLV376OOB
@@ -74393,7 +74393,7 @@ entities:
         -122,-84: CMUAreaLV376OOB
         -138,-80: CMUAreaLV376OOB
         -138,-81: CMUAreaLV376OOB
-        -135,-87: CMUAreaLV376OOB
+        -135,-87: CMUAreaLV376MilitaryBooth
         -123,-87: CMUAreaLV376OOB
         -123,-86: CMUAreaLV376OOB
         -124,-87: CMUAreaLV376OOB
@@ -74441,7 +74441,7 @@ entities:
         -135,-81: CMUAreaLV376OOB
         -136,-80: CMUAreaLV376OOB
         -136,-81: CMUAreaLV376OOB
-        -136,-86: CMUAreaLV376OOB
+        -136,-86: CMUAreaLV376MilitaryBooth
         -127,-97: CMUAreaLV376OOB
         -127,-96: CMUAreaLV376OOB
         -128,-97: CMUAreaLV376OOB
@@ -74473,13 +74473,13 @@ entities:
         -134,-96: CMUAreaLV376OOB
         -134,-95: CMUAreaLV376OOB
         -135,-97: CMUAreaLV376OOB
-        -137,-87: CMUAreaLV376OOB
-        -136,-87: CMUAreaLV376OOB
+        -137,-87: CMUAreaLV376MilitaryBooth
+        -136,-87: CMUAreaLV376MilitaryBooth
         -120,-98: CMUAreaLV376OOB
         -118,-98: CMUAreaLV376OOB
         -119,-98: CMUAreaLV376OOB
         -126,-87: CMUAreaLV376OOB
-        -137,-86: CMUAreaLV376OOB
+        -137,-86: CMUAreaLV376MilitaryBooth
         -132,-95: CMUAreaLV376OOB
         -137,-80: CMUAreaLV376OOB
         -137,-81: CMUAreaLV376OOB
@@ -74494,9 +74494,9 @@ entities:
         -138,-97: CMUAreaLV376OOB
         -138,-96: CMUAreaLV376OOB
         -138,-95: CMUAreaLV376OOB
-        -138,-87: CMUAreaLV376OOB
-        -138,-86: CMUAreaLV376OOB
-        -135,-86: CMUAreaLV376OOB
+        -138,-87: CMUAreaLV376MilitaryBooth
+        -138,-86: CMUAreaLV376MilitaryBooth
+        -135,-86: CMUAreaLV376MilitaryBooth
         -139,-81: CMUAreaLV376OOB
         -139,-80: CMUAreaLV376OOB
         -140,-79: CMUAreaLV376OOB
@@ -74611,12 +74611,12 @@ entities:
         -120,-59: CMUAreaLV376OOB
         -120,-58: CMUAreaLV376OOB
         -142,-49: CMUAreaLV376MBNE
-        -142,-48: CMUAreaLV376MBNE
-        -142,-47: CMUAreaLV376MBNE
-        -141,-46: CMUAreaLV376OOB
-        -141,-47: CMUAreaLV376OOB
-        -141,-45: CMUAreaLV376OOB
-        -141,-44: CMUAreaLV376OOB
+        -142,-48: CMUAreaLV376MilitaryCIC
+        -142,-47: CMUAreaLV376MilitaryCIC
+        -141,-46: CMUAreaLV376MilitaryCIC
+        -141,-47: CMUAreaLV376MilitaryCIC
+        -141,-45: CMUAreaLV376MilitaryCIC
+        -141,-44: CMUAreaLV376MilitaryCIC
         -141,-43: CMUAreaLV376OOB
         -140,-43: CMUAreaLV376OOB
         -140,-42: CMUAreaLV376OOB
@@ -143264,6 +143264,17 @@ entities:
     - type: Transform
       pos: -6.5,-15.5
       parent: 1
+  - uid: 97311
+    components:
+    - type: Transform
+      pos: -144.5,-97.5
+      parent: 1
+    - type: AccessReader
+      accessLog: []
+      accessKeys: []
+      access:
+      - - AU14AccessGovforMedical
+      denyTags: []
 - proto: AU14HelmetGarbRiotVisor
   entities:
   - uid: 56
@@ -541109,16 +541120,6 @@ entities:
     - type: Transform
       pos: -194.5,-42.5
       parent: 1
-- proto: CMVendorMedical
-  entities:
-  - uid: 97311
-    components:
-    - type: Transform
-      pos: -144.5,-97.5
-      parent: 1
-    - type: AccessReader
-      access:
-      - - AU14AccessGovforMedical
 - proto: CMVendorNutri
   entities:
   - uid: 78240
@@ -557132,11 +557133,17 @@ entities:
     - type: Transform
       pos: -142.5,-105.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - AU14AccessGovforMedical
   - uid: 97289
     components:
     - type: Transform
       pos: -143.5,-105.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - AU14AccessGovforMedical
 - proto: ColMarTechMarineMedical
   entities:
   - uid: 97310
@@ -561102,6 +561109,84 @@ entities:
     components:
     - type: Transform
       pos: -138.5,-109.5
+      parent: 1
+- proto: RMCCarpetPink1
+  entities:
+  - uid: 97847
+    components:
+    - type: Transform
+      pos: -131.5,-83.5
+      parent: 1
+- proto: RMCCarpetPink2
+  entities:
+  - uid: 97837
+    components:
+    - type: Transform
+      pos: -129.5,-83.5
+      parent: 1
+  - uid: 97849
+    components:
+    - type: Transform
+      pos: -130.5,-83.5
+      parent: 1
+- proto: RMCCarpetPink3
+  entities:
+  - uid: 97838
+    components:
+    - type: Transform
+      pos: -128.5,-83.5
+      parent: 1
+- proto: RMCCarpetPink4
+  entities:
+  - uid: 97846
+    components:
+    - type: Transform
+      pos: -131.5,-84.5
+      parent: 1
+- proto: RMCCarpetPink5
+  entities:
+  - uid: 97840
+    components:
+    - type: Transform
+      pos: -129.5,-84.5
+      parent: 1
+  - uid: 97851
+    components:
+    - type: Transform
+      pos: -130.5,-84.5
+      parent: 1
+- proto: RMCCarpetPink6
+  entities:
+  - uid: 97841
+    components:
+    - type: Transform
+      pos: -128.5,-84.5
+      parent: 1
+- proto: RMCCarpetPink7
+  entities:
+  - uid: 97848
+    components:
+    - type: Transform
+      pos: -131.5,-85.5
+      parent: 1
+- proto: RMCCarpetPink8
+  entities:
+  - uid: 97844
+    components:
+    - type: Transform
+      pos: -129.5,-85.5
+      parent: 1
+  - uid: 97852
+    components:
+    - type: Transform
+      pos: -130.5,-85.5
+      parent: 1
+- proto: RMCCarpetPink9
+  entities:
+  - uid: 97845
+    components:
+    - type: Transform
+      pos: -128.5,-85.5
       parent: 1
 - proto: RMCCarPileup
   entities:
@@ -584036,15 +584121,17 @@ entities:
       parent: 1
 - proto: RMCShutterHybrisaWindow
   entities:
-  - uid: 97565
+  - uid: 185
     components:
     - type: Transform
-      pos: -172.5,-83.5
-      parent: 1
-  - uid: 97566
-    components:
-    - type: Transform
+      rot: -1.5707963267948966 rad
       pos: -172.5,-79.5
+      parent: 1
+  - uid: 194
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -172.5,-83.5
       parent: 1
   - uid: 97567
     components:
@@ -600514,83 +600601,5 @@ entities:
     components:
     - type: Transform
       pos: -46.5,126.5
-      parent: 1
-- proto: RMCCarpetPink2
-  entities:
-  - uid: 97837
-    components:
-    - type: Transform
-      pos: -129.5,-83.5
-      parent: 1
-  - uid: 97849
-    components:
-    - type: Transform
-      pos: -130.5,-83.5
-      parent: 1
-- proto: RMCCarpetPink3
-  entities:
-  - uid: 97838
-    components:
-    - type: Transform
-      pos: -128.5,-83.5
-      parent: 1
-- proto: RMCCarpetPink5
-  entities:
-  - uid: 97840
-    components:
-    - type: Transform
-      pos: -129.5,-84.5
-      parent: 1
-  - uid: 97851
-    components:
-    - type: Transform
-      pos: -130.5,-84.5
-      parent: 1
-- proto: RMCCarpetPink6
-  entities:
-  - uid: 97841
-    components:
-    - type: Transform
-      pos: -128.5,-84.5
-      parent: 1
-- proto: RMCCarpetPink8
-  entities:
-  - uid: 97844
-    components:
-    - type: Transform
-      pos: -129.5,-85.5
-      parent: 1
-  - uid: 97852
-    components:
-    - type: Transform
-      pos: -130.5,-85.5
-      parent: 1
-- proto: RMCCarpetPink9
-  entities:
-  - uid: 97845
-    components:
-    - type: Transform
-      pos: -128.5,-85.5
-      parent: 1
-- proto: RMCCarpetPink4
-  entities:
-  - uid: 97846
-    components:
-    - type: Transform
-      pos: -131.5,-84.5
-      parent: 1
-- proto: RMCCarpetPink1
-  entities:
-  - uid: 97847
-    components:
-    - type: Transform
-      pos: -131.5,-83.5
-      parent: 1
-- proto: RMCCarpetPink7
-  entities:
-  - uid: 97848
-    components:
-    - type: Transform
-      pos: -131.5,-85.5
       parent: 1
 ...

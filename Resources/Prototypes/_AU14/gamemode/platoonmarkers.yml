@@ -574,6 +574,20 @@
     state: base
 
 - type: entity
+  name: military policeman marker
+  id: VMarkerShipMPPoliceman
+  parent: VmarkerShip
+  components:
+  - type: VendorMarker
+    ship: true
+    govfor: false
+    opfor: false
+    class: MilitaryPolice
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmcommandclothes.rsi
+    state: base
+
+- type: entity
   name: Ship RTO marker
   id: VMarkerShipRadiotelephoneOperator
   parent: VmarkerShip

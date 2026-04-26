@@ -1,8 +1,14 @@
+# Apparel, AR, weaponry, special-weapons, command, section-leader
 - type: entity
   parent: ColMarTechBase
   id: AU14CCAFclothingequipmentvendor
   name: CCAF apparel vendor
-  description: An automated rack hooked up to a small storage of specialized marine apparel.
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Canadian Colonial Armed Forces apparel.
+    Standard issue aboard naval vessels, military outposts, corporate-science installations and civilian colonies across the frontier.
+    Manufactured to outfit personnel rapidly following cryogenic hypersleep or emergency mobilization.
+
+    For full operational readiness, select one item from each section: fatigues with a webbing, footwear, gloves, headgear, armor, backpack, belt and a pouch.
   components:
   - type: Sprite
     sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
@@ -18,115 +24,120 @@
         amount: 40
     - name: Gloves
       entries:
-      - id: CMHandsBrown
-        amount: 20
       - id: AU14PVEHandsInsulatedBlackMarine
+        amount: 40
+      - id: CMHandsBrown
         amount: 20
       - id: AU14PVEHandsFingerlessBlackGloves
         amount: 20
     - name: Webbings
       entries:
       - id: AU14WebbingMagazine
-        amount: 25
+        amount: 40
       - id: AU14WebbingUtility
-        amount: 30
+        amount: 40
       - id: AU14WebbingDumpPouch
         amount: 25
       - id: AU14WebbingAdminPouch
-        amount: 15
+        amount: 20
       - id: AU14WebbingDropPouch
-        amount: 15
+        amount: 20
       - id: AU14WebbingKnivesFilled
-        amount: 1
+        amount: 2
     - name: Headgear
       entries:
       - id: AU14CCAFHelmetISACV
-        amount: 45
+        amount: 40
+    - name: Headsets
+      entries:
+      - id: RMCM5CameraGear
+        amount: 30
+      - id: AU14HeadsetSectionMarine
+        name: empty headset
+        amount: 20
     - name: Heads Up Display
       entries:
       - id: RMCVisorSquad
-        amount: 25
+        amount: 40
       - id: RMCVisorWelding
-        amount: 5
+        amount: 8
     - name: Armor
       entries:
       - id: AU14CCAFArmor
-        amount: 30
+        amount: 40
       - id: AU14CCAFArmorPadless
         amount: 30
       - id: AU14CCAFArmorStripped
-        amount: 30
+        amount: 25
     - name: Backpack
       entries:
       - id: CMBackpackMarine
-        amount: 15
+        amount: 25
       - id: AU14IMPBackpackMarine
-        amount: 3
+        amount: 40
       - id: AU14TechBackpackMarine
-        amount: 3
-      - id: CMSatchelMarine
         amount: 15
-#      - id: Marine Chestrig
-#        amount: 15
       - id: RMCSatchelWelderChestrig
-        amount: 2
+        amount: 5
       - id: RMCScabbardShotgun
-        amount: 2
+        amount: 3
       - id: RMCBackpackAmmo
-        amount: 1
+        amount: 4
+      - id: CMSatchelMarine
+        amount: 40
     - name: Belts
       entries:
       - id: CMBeltMarine
-        amount: 25
+        amount: 40
       - id: RMCBeltGrenade
-        amount: 2
+        amount: 4
       - id: RMCM276ShotgunShellLoadingRig
-        amount: 2
+        amount: 6
       - id: RMCBeltHolsterPistol
-        amount: 15
+        amount: 20
       - id: RMCBeltHolsterRevolver
-        amount: 15
-#      - id: M276 Pattern M82F Holster Rig
-#        amount: 5
+        amount: 20
       - id: CMBeltKnifeFilled
         name: M276 Knife Rig (Full)
-        amount: 1
+        amount: 2
       - id: RMCBeltUtilityGeneral
-        amount: 15
+        amount: 30
     - name: Pouches
       entries:
       - id: RMCPouchBayonet
         name: Bayonet Sheath
-        amount: 15
+        amount: 25
       - id: RMCPouchFlareFilled
         name: Flare Pouch (Full)
-        amount: 15
+        amount: 30
       - id: RMCPouchDocumentSmall
-        amount: 1
+        amount: 3
       - id: RMCPouchMagazine
-        amount: 15
+        amount: 50
       - id: RMCPouchMagazineLarge
-        amount: 2
+        amount: 8
       - id: RMCPouchShotgunLarge
-        amount: 4
+        amount: 8
       - id: RMCPouchGeneralMedium
-        amount: 15
+        amount: 25
       - id: RMCPouchGeneralLarge
-        amount: 2
+        amount: 4
       - id: RMCPouchMagazinePistol
-        amount: 15
+        amount: 25
       - id: RMCPouchMagazinePistolLarge
-        amount: 2
+        amount: 6
       - id: RMCPouchPistol
-        amount: 15
+        amount: 20
+      - id: AU14PouchIFAKFill
+        amount: 5
       - id: RMCPouchConstruction
-        amount: 1
+        amount: 5
       - id: RMCPouchExplosive
-        amount: 1
+        amount: 3
+      - id: RMCPouchFuelTank
+        amount: 2
       - id: RMCPouchTools
         amount: 15
-#      - id: Sling Pouch
-#        amount: 1
     - name: Mask
       entries:
       - id: CMMaskGas
@@ -134,13 +145,13 @@
       - id: CMUGasMaskFilter
         amount: 80
       - id: CMMaskCoif
-        amount: 10
+        amount: 20
       - id: RMCMaskTornScarfGreen
-        amount: 10
+        amount: 20
       - id: RMCMaskTornScarfSnow
-        amount: 10
+        amount: 20
       - id: RMCMaskTornScarfBlack
-        amount: 10
+        amount: 20
     - name: Glasses & Goggles
       entries:
       - id: AU14GogglesM1A1ClearBallistic
@@ -148,37 +159,40 @@
       - id: AU14GogglesM1A1Ballistic
         amount: 25
       - id: AU14GogglesM1A1DarkBallistic
-        amount: 20
+        amount: 25
       - id: AU14GogglesM1A1LaserBallistic
-        amount: 20
+        amount: 25
       - id: AU14GogglesM1A1OrangeBallistic
-        amount: 20
+        amount: 25
       - id: AU14GogglesM1A1PolarizedBallistic
-        amount: 20
+        amount: 25
       - id: AU14GogglesM60
-        amount: 20
+        amount: 25
       - id: RMCGlassesMarineRpg
-        amount: 20
+        amount: 25
       - id: AU14GlassesBiMex
-        amount: 20
+        amount: 25
       - id: AU14GlassesBiMexOrange
-        amount: 20
+        amount: 25
       - id: RMCGlassesTriMaxBronze
-        amount: 20
+        amount: 25
     - name: Patches
       entries:
       - id: AU14PatchUAFlag
-        amount: 20
+        amount: 80
       - id: AU14CCAFPatch
-        amount: 20
+        amount: 80
       - id: AU14CanadaPatch
-        amount: 20
+        amount: 80
 
 - type: entity
   parent: ColMarTechBase
   id: AU14CCAFMGequipmentvendor
-  name: CCAF smart gunner equipment vendor
-  description: An automated rack hooked up to a small storage of machinegunner equipment.
+  name: CCAF automatic rifleman equipment vendor
+  description: >-
+    An automated weapons rack, hooked up to a small armory of Canadian Colonial Armed Forces light-machine gun systems.
+    Standard issue for designated automatic riflemen on naval vessels and high-threat outposts.
+    Built to bring fire support online rapidly after cryogenic hypersleep or emergency mobilization.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
@@ -199,7 +213,12 @@
   parent: ColMarTechBase
   id: AU14CCAFWeaponsVendor
   name: CCAF weapons rack
-  description: An automated rack hooked up to a small storage of weapons.
+  description: >-
+    An automated weapons rack, hooked up to a small armory of Canadian Colonial Armed Forces weaponry.
+    Standard issue across the frontier where threats can appear without warning.
+    Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
+
+    For immediate combat readiness: select a primary weapon kit and a sidearm.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
@@ -231,7 +250,12 @@
   parent: ColMarTechBase
   id: AU14CCAFSpecialWeaponsVendor
   name: CCAF special weapons rack
-  description: An automated rack hooked up to a small storage of special weapons.
+  description: >-
+    An automated special weapons rack, hooked up to a restricted armory of Canadian Colonial Armed Forces heavy and breaching ordnance.
+    Standard issue only for qualified operators.
+    Engineered to deliver overwhelming firepower the instant cryogenic hypersleep ends or an emergency mobilization is called.
+
+    Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
   components:
   - type: Sprite
     sprite: _AU14/Structures/Vendors/genericweaponrack.rsi
@@ -242,13 +266,13 @@
       - id: AUWeaponRifleC10A6BR
         amount: 1
       - id: AU14MagazineRifleC10A6BR
-        amount: 15
+        amount: 25
     - name: M100 MGR Airburst Grenade Launcher
       entries:
       - id: AUWeaponRifleM100MGR
         amount: 1
       - id: AU14MagazineRifleM100MGR
-        amount: 3
+        amount: 6
       - id: RMCPacketGrenadeM74AGMFFilled
         amount: 4
       - id: RMCPacketGrenadeM74AGMSHornetFilled
@@ -259,28 +283,34 @@
         amount: 2
       - id: RMCPacketGrenadeBatonSlugHIRRFilled
         amount: 1
-    - name: M5A1 Special Light Anti-Tank Weapon
+      - id: RMCPouchExplosive
+        amount: 2
+    - name: Disposable Special Light Anti-Tank Weapon
       entries:
       - id: RMCWeaponLauncherDisposableFolded
-        amount: 2
+        amount: 8
+      - id: AU14CrateM5A1SLAW
+        amount: 1
     - name: Explosives
       entries:
       - id: RMCBoxHEDP
         amount: 1
       - id: RMCBoxHEFA
-        amount: 1
+        amount: 2
       - id: CMGrenadeSmoke
-        amount: 6
+        amount: 7
       - id: RMCExplosivePlastic
-        amount: 2
+        amount: 7
       - id: RMCExplosiveBreachingCharge
-        amount: 2
+        amount: 14
 
 - type: entity
   parent: ColMarTechBase
   id: AU14CCAFcommandequipmentvendor
   name: CCAF command vendor
-  description: An automated rack hooked up to a small storage of command apparel and equipment. Let's go, Marines!
+  description: >-
+    An automated command rack, hooked up to a restricted storage of Canadian Colonial Armed Forces command-leadership equipment.
+    Manufactured to equip commanding personnel following cryogenic hypersleep or an emergency directive is issued.
   components:
   - type: Sprite
     sprite: _AU14/Structures/Vendors/uscmcommandclothes.rsi
@@ -291,39 +321,49 @@
       - id: CMJumpsuitXOFormal
         amount: 2
       - id: AU14CCAFUniform
-        amount: 2
+        amount: 3
     - name: Footwear
       entries:
       - id: CMBootsBlack
-        amount: 2
+        amount: 5
     - name: Headgear
       entries:
       - id: AU14CCAFHelmetISACV
-        amount: 2
+        amount: 5
       - id: CMHeadCapPeakedFormal
-        amount: 2
+        amount: 5
       - id: CMHeadCapPeakedService
-        amount: 2
+        amount: 5
       - id: AU14JunglePatrolCap
+        amount: 5
+    - name: Headsets
+      entries:
+      - id: AU14HeadsetSectionLeader
         amount: 2
+    - name: Backpack
+      entries:
+      - id: RMCBackpackRTO
+        amount: 5
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill
-        amount: 2
+        amount: 10
     - name: Miscellaneous
       entries:
       - id: RMCLaserDesignator
-        amount: 2
+        amount: 4
       - id: RMCWhistle
-        amount: 2
+        amount: 10
       - id: RMCPackFlareCAS
-        amount: 2
+        amount: 10
 
 - type: entity
   parent: ColMarTechBase
   id: AU14CCAFsectionleaderequipmentvendor
   name: CCAF section leader vendor
-  description: An automated rack hooked up to a small storage of apparel and equipment for the section leader.
+  description: >-
+    An automated supervisor rack, hooked up to a compact storage of Canadian Colonial Armed Forces section-leadership equipment.
+    Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
@@ -343,6 +383,3 @@
         amount: 1
       - id: RMCPackFlareCAS
         amount: 2
-
-
-

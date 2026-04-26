@@ -18,7 +18,6 @@ public sealed partial class InfectableComponent : Component
         [Sex.Unsexed] = new SoundPathSpecifier("/Audio/_RMC14/Voice/Human/infected_male.ogg")
     };
 
-    /* TODO add this
     [DataField, AutoNetworkedField]
     public Dictionary<Sex, SoundSpecifier> PreburstSound = new()
     {
@@ -32,5 +31,4 @@ public sealed partial class InfectableComponent : Component
             Params = AudioParams.Default.WithVolume(-3f),
         }
     };
-    */
 }

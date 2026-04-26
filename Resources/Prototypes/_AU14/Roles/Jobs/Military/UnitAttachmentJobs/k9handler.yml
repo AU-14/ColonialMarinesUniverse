@@ -34,13 +34,39 @@
 - type: startingGear
   id: AU14GearGOVFORK9Handler
   equipment:
+    jumpsuit: AU14UniversalBlackFatigues
     id: AU14IDCardSquadK9HandlerGOVFOR
     ears: AU14HeadsetSectionLeader
     eyes: RMCGlassesMedicalHUDGlasses
-    jumpsuit: AU14UniversalBlackFatigues
+    outerClothing: AU14WYPPOArmor
     shoes: CMBootsBlack
+    ears2: RMCM5CameraGear
+    head: ArmorHelmetPMCFieldOfficer
+    neck: RMCWhistle
+    gloves: AU14PVEHandsInsulatedBlackMarine
     belt: RMCM1984BeltFilled
-    pocket1: RMCFlashlight
+    pocket1: RMCPouchMedkitPMCFilled
+    pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
+    back: CMBackpackMedical
+    mask: CMTarbackCigar
+  storage:
+    back:
+    - CMBurnKit10
+    - CMBurnKit10
+    - CMTraumaKit10
+    - CMTraumaKit10
+    - CMPillCanisterBicaridine
+    - CMPillCanisterKelotane
+    - CMPillCanisterDexalin
+    - CMPillCanisterDylovene
+    - CMPillCanisterInaprovaline
+    - CMPillCanisterTricordrazine
+    - RMCPillCanisterIron
+    - AU14IVFoldableFolded
+    - CMDefibrillator
+    - RMCRadioHandheldColonyOff
+  inhand:
+  - RMCZippo
 
 - type: entity
   parent: CMSpawnPointJobBase

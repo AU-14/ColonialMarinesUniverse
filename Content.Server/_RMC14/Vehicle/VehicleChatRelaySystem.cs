@@ -119,6 +119,9 @@ public sealed class VehicleChatRelaySystem : EntitySystem
             return true;
         }
 
+        // Generic passengers/xenos riding inside the interior — they don't own the wheel
+        // or a weapon seat, but they should still hear (and be heard by) people next to the
+        // vehicle's shell on the outer map.
         if (TryComp(user, out VehicleInteriorOccupantComponent? interiorOccupant))
         {
             var occVehicle = interiorOccupant.Vehicle;

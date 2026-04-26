@@ -207,6 +207,17 @@
     factions:
     - GOVFOR
 
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardGOVFORMilitaryPoliceMan
+  name: military policeman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFORMilitaryPoliceMan
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
   #- type: ItemIFF
   #  faction: FactionMarine
 

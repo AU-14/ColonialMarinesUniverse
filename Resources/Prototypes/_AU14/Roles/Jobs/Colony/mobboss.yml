@@ -37,6 +37,7 @@
     shoes: RMCShoesLaceup
     id: AU14IDCardMobBoss
     ears: AU14HeadsetMob
+    back: CMSatchel
 
 - type: entity
   parent: CMSpawnPointJobBase

@@ -150,6 +150,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         var facing = mover.CurrentDirection;
         var hadFacing = facing != Vector2i.Zero;
 
+        // Crash immobility: driver loses both speed (capped to 0 via GetModifiedMaxSpeed) and
+        // steering. Turning used to leak through because TryApplyFacing has no speed gate.
         var immobilized = _timing.CurTime < mover.ImmobileUntil;
         if (immobilized)
         {

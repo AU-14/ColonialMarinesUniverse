@@ -249,6 +249,9 @@ public abstract class SharedXenoAcidSystem : EntitySystem
             acid = SpawnAttachedTo(acidId, target.ToCoordinates());
         }
 
+        if (!TryComp(target, out CorrodibleComponent? targetCorrodible) || !targetCorrodible.Structure)
+            AddComp(acid, new CorrosiveAcidLinkComponent { Target = target });
+
         if (!inherit)
             time += _timing.CurTime;
 
@@ -357,6 +360,24 @@ public abstract class SharedXenoAcidSystem : EntitySystem
             QueueDel(damageable.Acid);
             RemComp<DamageableCorrodingComponent>(uid);
         }
+    }
+
+    public bool TryGetAcidStrength(EntityUid uid, out XenoAcidStrength strength)
+    {
+        if (TryComp<TimedCorrodingComponent>(uid, out var timed))
+        {
+            strength = timed.Strength;
+            return true;
+        }
+
+        if (TryComp<DamageableCorrodingComponent>(uid, out var damageable))
+        {
+            strength = damageable.Strength;
+            return true;
+        }
+
+        strength = default;
+        return false;
     }
 
     /// <summary>

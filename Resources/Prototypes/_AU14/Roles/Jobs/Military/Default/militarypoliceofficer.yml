@@ -1,0 +1,83 @@
+- type: job
+  parent: AU14JobMilitaryPoliceBase
+  id: AU14JobGOVFORMilitaryPoliceMan
+  name: au14-job-name-govformilitarypoliceman
+  description: au14-job-description-govformilitarypoliceman
+  setPreference: true
+  canBeAntag: false
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankStaffSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORMilitaryPoliceMan
+      time: 360000 # 100 hours
+    RMCRankSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORMilitaryPoliceMan
+      time: 216000 # 60 hours
+    RMCRankCorporal: []
+  startingGear: AU14GearGOVFORMilitaryPoliceMan
+  dummyStartingGear: AU14GearGOVFORMilitaryPoliceManDummy
+  icon: "AU14JobIconRFN"
+  requireAdminNotify: true
+  spawnMenuRoleName: Military Policeman (GOVFOR)
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforCommand
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Marine
+      Faction: govfor
+    - type: Skills
+      preset: AU14SkillPresetMilitaryPolice
+    - type: JobPrefix
+      prefix: au14-job-prefix-govformilitarypoliceman
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: mp
+    - type: UserIFF
+      factions:
+      - GOVFOR
+  hidden: false
+
+- type: startingGear
+  id: AU14GearGOVFORMilitaryPoliceMan
+  equipment:
+    id: AU14IDCardGOVFORMilitaryPoliceMan
+    ears: RMCM5CameraGear
+    ears2: AU14HeadsetSectionLeader
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORMilitaryPoliceMan
+  name: Spawn Point GOVFOR Military Policeman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORMilitaryPoliceMan
+  - type: Sprite
+    state: syn_spawn
+
+- type: startingGear
+  id: AU14GearGOVFORMilitaryPoliceManDummy
+  equipment:
+    shoes: CMBootsBlackFilled
+    jumpsuit: AU14JungleFatigues
+    belt: CMBeltSecurityMPFilled
+    head: CMHeadBeretRed
+    ears: RMCM5CameraGear
+    ears2: AU14HeadsetSectionLeader
+    outerClothing: AU14ArmorM3JungleThree

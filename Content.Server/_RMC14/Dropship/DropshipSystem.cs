@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Numerics;
+using Content.Server._CMU14.Dropship.TacticalLand;
 using Content.Server._RMC14.Marines;
 using Content.Server.AU14.Round;
 using Content.Server.Doors.Systems;
@@ -49,6 +50,7 @@ namespace Content.Server._RMC14.Dropship;
 
 public sealed class DropshipSystem : SharedDropshipSystem
 {
+    [Dependency] private readonly DropshipTacticalLandSystem _tacticalLand = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
     [Dependency] private readonly AppearanceSystem _appearance = default!;
     [Dependency] private readonly AudioSystem _audio = default!;
@@ -328,7 +330,18 @@ public sealed class DropshipSystem : SharedDropshipSystem
         Dirty(ent);
 
         ToggleLandingLights(ent, false);
+
+        _tacticalLand.ClearLandingWarning(ent.Owner);
+
+        if (TryComp(ent.Comp.Ship, out DropshipComponent? dropship) &&
+            TryComp(ent.Owner, out TransformComponent? destXform) &&
+            (HasComp<RMCPlanetComponent>(destXform.MapUid) || HasComp<RMCPlanetComponent>(destXform.GridUid)))
+        {
+            dropship.LastLandingCoordinates = GetNetCoordinates(destXform.Coordinates);
+            Dirty(ent.Comp.Ship.Value, dropship);
+        }
     }
+
 
     private void OnDestinationLocationFTLUpdated(Entity<DropshipDestinationComponent> ent, ref DropshipRelayedEvent<FTLUpdatedEvent> args)
     {
@@ -352,6 +365,8 @@ public sealed class DropshipSystem : SharedDropshipSystem
                 Dirty(ent);
             }
         }
+
+        _tacticalLand.SpawnLandingWarning(ent, args.Relayer, ftl);
 
         ToggleLandingLights(ent, true);
     }
@@ -644,6 +659,9 @@ public sealed class DropshipSystem : SharedDropshipSystem
 
             while (query.MoveNext(out var uid, out var comp))
             {
+                if (HasComp<Content.Shared._CMU14.Dropship.TacticalLand.EphemeralDropshipDestinationComponent>(uid))
+                    continue;
+
                 if (IsStrictThirdPartyFaction(whitelistedFaction))
                 {
                     if (!IsThirdPartyDestination(comp))
@@ -694,17 +712,13 @@ public sealed class DropshipSystem : SharedDropshipSystem
         var departureName = string.Empty;
         if (TryComp(grid, out DropshipComponent? dropship))
         {
-            if (dropship.Destination is { } destinationUid)
+            if (dropship.Destination is { } destinationUid && !TerminatingOrDeleted(destinationUid))
                 destinationName = Name(destinationUid);
-            else
-            {
+            else if (dropship.Destination == null)
                 Log.Error($"Found in-travel dropship {ToPrettyString(grid)} with invalid destination");
-            }
 
-            if (dropship.DepartureLocation is { } departureUid)
-            {
+            if (dropship.DepartureLocation is { } departureUid && !TerminatingOrDeleted(departureUid))
                 departureName = Name(departureUid);
-            }
         }
 
         var travelState = new DropshipNavigationTravellingBuiState(ftl.State, ftl.StateTime, destinationName, departureName, doorLockStatus, computer.Comp.RemoteControl);

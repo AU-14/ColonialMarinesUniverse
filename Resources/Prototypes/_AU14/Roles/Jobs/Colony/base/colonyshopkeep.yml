@@ -41,6 +41,7 @@
     jumpsuit: AU14CivilianWorkwearYellow
     shoes: RMCShoesBlack
     id: AU14IDCardColonyShopkeep
+    back: CMSatchel
 
 - type: entity
   parent: CMSpawnPointJobBase

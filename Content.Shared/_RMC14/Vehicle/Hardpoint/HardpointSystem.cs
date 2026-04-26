@@ -60,7 +60,6 @@ public sealed class HardpointSystem : EntitySystem
     [Dependency] private readonly SharedExplosionSystem _explosion = default!;
     [Dependency] private readonly VehicleTopologySystem _topology = default!;
     [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly VehicleLockSystem _vehicleLock = default!;
 
     public override void Initialize()
     {
@@ -647,6 +646,10 @@ public sealed class HardpointSystem : EntitySystem
         if (amount <= 0f)
             return;
 
+        var cap = integrity.MaxIntegrity * 0.5f;
+        if (amount > cap)
+            amount = cap;
+
         DamageHardpoint(vehicle, hardpoint, amount, integrity);
     }
 
@@ -872,9 +875,6 @@ public sealed class HardpointSystem : EntitySystem
         if (previous > 0f && integrity.Integrity <= 0f)
             RefreshCanRun(vehicle);
 
-        if (hardpoint == vehicle)
-            _vehicleLock.RefreshForcedOpen(vehicle);
-
         UpdateHardpointUi(vehicle);
         return true;
     }
@@ -1004,9 +1004,6 @@ public sealed class HardpointSystem : EntitySystem
 
         if (ent.Comp.BypassEntryOnZero)
             RefreshCanRun(vehicle);
-
-        if (isFrame)
-            _vehicleLock.RefreshForcedOpen(ent.Owner);
 
         UpdateHardpointUi(vehicle);
 

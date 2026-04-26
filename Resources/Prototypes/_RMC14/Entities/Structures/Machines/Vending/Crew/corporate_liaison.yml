@@ -251,3 +251,23 @@
         amount: 1
       - id: RMCTieHorrible
         amount: 1
+    - name: Storage
+      entries:
+      - id: AU14SlingSatchelBlack
+        amount: 1
+      - id: AU14SlingSatchelBlue
+        amount: 1
+      - id: CMSatchel
+        amount: 1
+      - id: RMCPouchGeneral
+        amount: 1
+      - id: AU14WebbingAdminPouch
+        amount: 1
+      - id: RMCPouchDocument
+        amount: 1
+      - id: RMCBeltUtilityGeneral
+        amount: 1
+    - name: Field Tents
+      entries:
+      - id: RMCTentUNMCExtendedFolded # TODO: Custom We-Yu archeology tent
+        amount: 1

@@ -1,0 +1,95 @@
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: CMUIEDBase
+  name: grenade
+  description: Duck and cover.
+  components:
+  - type: Explosive
+    explosionType: RMC
+  - type: ExplosionResistance
+    damageCoefficient: 0
+  - type: IgnorePredictionHide
+  - type: Clothing
+    slots:
+    - suitStorage
+  - type: Destructible
+    thresholds: []
+  - type: ChangeItemSizeOnTimerTrigger
+  - type: CancelUseWithCloak
+  - type: Appearance
+  - type: AnimationPlayer
+  - type: GenericVisualizer
+    visuals:
+      enum.Trigger.TriggerVisuals.VisualState:
+        enum.ConstructionVisuals.Layer:
+          Primed: { state: primed }
+          Unprimed: { state: icon }
+
+- type: entity
+  parent: CMUIEDBase
+  id: CMUPipeBomb
+  name: pipe bomb
+  description: A cheap way to injure someone. Designed by your local insurgent’s.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Items/pipebomb.rsi
+    layers:
+    - state: base
+      map: ["enum.TriggerVisualLayers.Base"]
+    - state: wires
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    maxIntensity: 20
+    intensitySlope: 8
+    totalIntensity: 100
+    deleteAfterExplosion: false
+  - type: CMUOnLightTimerTrigger
+    examinable: false
+    initialBeepDelay: 0
+    beepSound: /Audio/Effects/lightburn.ogg
+    min: 1
+    max: 4
+    instantfusechance: true
+    instfusechance: 10
+  - type: ProjectileGrenade
+    fillPrototype: CMProjectileShrapnel
+    capacity: 20
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+  - type: CMExplosionEffect
+  - type: CMVocalizeTrigger
+  - type: RMCScorchEffect
+
+- type: entity
+  parent: BaseItem
+  id: CMUPipeBombFuse
+  name: pipe bomb
+  description: Incomplete. Seems like it need’s Cable as the fuse
+  suffix: Fuse
+  components:
+  - type: Sprite
+    sprite: _CMU14/Items/pipebomb.rsi
+    state: base
+  - type: CraftIntoPipeBomb
+    Spawn: CMUPipeBomb
+    NeedWires: true
+    DestroyReq: true
+    Time: 2
+
+- type: entity
+  parent: BaseItem
+  id: CMUPipeBombCasing
+  name: pipe bomb
+  description: Empty casing. Seems like it need a Lighter.
+  suffix: Casing
+  components:
+  - type: Sprite
+    sprite: _CMU14/Items/pipebomb.rsi
+    state: base
+  - type: CraftIntoPipeBomb
+    Spawn: CMUPipeBombFuse
+    NeedLighter: true
+    DestroyReq: true
+    Time: 2

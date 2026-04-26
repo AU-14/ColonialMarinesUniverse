@@ -261,3 +261,32 @@
         givePrefix: au14-job-prefix-juniorofficer-adj
         isAppendPrefix: false
         isAppendSquadRoleName: false
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14MilitaryPolicemanGenericVendor
+  name: military policeman equipment rack
+  description: An automated rack hooked up to a small storage of military police equipment.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+    jobs: [ AU14JobGOVFORMilitaryPoliceMan, AU14JobMilitaryPoliceBase ]
+    sections:
+    - name: Standard Equipment
+      takeAll: CMStandard
+      entries:
+      - id: CMGlassesSecurity
+      - id: CMBeltSecurityMPFilled
+      - id: AU14PouchPoliceEquipmentSupportSynth
+      - id: RMCGuidebookLawMarine
+      - id: RMCGuidebookSOP
+    - name: Hat
+      choices: { CMHat: 1 }
+      entries:
+      - id: CMHeadCapMP
+      - id: CMHeadBeretRed
+    - name: Backpack
+      choices: { CMBackpack: 1 }
+      entries:
+      - id: CMSatchelSecurity

@@ -9,12 +9,12 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Uniforms/pizza.rsi
 
-# Correspondent
+# Correspodent
 - type: entity
   parent: RMCMarineUniformBase
   id: RMCJumpsuitCorrespondent
-  name: correspodent uniform
-  description: Standard-issue correspodents's uniform.
+  name: correspondent uniform
+  description: Standard-issue correspondent's uniform.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Uniforms/Correspondent/white.rsi

@@ -68,17 +68,40 @@
     multiplier: 1.1
   - type: AttachableHolder
     slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
       rmc-aslot-rail:
         whitelist:
           tags:
+          - RMCAttachmentRailFlashlight
           - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentBipod
+          - RMCAttachmentExtinguisher
+          - RMCAttachmentFlamer
+          - RMCAttachmentLaserSight
   - type: AttachableHolderVisuals
     offsets:
-      rmc-aslot-rail: -0.18, 0.16
+      rmc-aslot-rail: -0.18, 0.12
+      rmc-aslot-barrel: 0.63, 0.031
+      rmc-aslot-underbarrel: 0.29, -0.31
 
 - type: entity
   parent: AU14WeaponRifleKramerAR
   id: AU14WeaponRifleKramerARAP
+  name: Kramer Assault Rifle (AP)
   components:
   - type: ItemSlots
     slots:

@@ -1,15 +1,18 @@
 using System.Linq;
+using System.Numerics;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Gibbing;
 using Content.Shared._RMC14.Hands;
+using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Sprite;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared._RMC14.Xenonids.Construction.ResinWhisper;
+using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Hide;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Leap;
@@ -45,6 +48,7 @@ using Content.Shared.Throwing;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
@@ -80,6 +84,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
     [Dependency] private readonly StatusEffectsSystem _status = default!;
     [Dependency] private readonly SharedRottingSystem _rotting = default!;
     [Dependency] private readonly TagSystem _tagSystem = default!;
+    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
     [Dependency] private readonly RMCSizeStunSystem _size = default!;
     [Dependency] private readonly RMCUnrevivableSystem _unrevivable = default!;
     [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
@@ -879,7 +884,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
 
         if (_doAfter.TryStartDoAfter(doAfterEventArgs))
         {
-            /* TODO add this
+
             if (_net.IsServer &&
                 TryComp(victim, out InfectableComponent? infectable) &&
                 TryComp(victim, out HumanoidAppearanceComponent? appearance) &&
@@ -889,7 +894,6 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
                 var filter = Filter.Pvs(victim);
                 _audio.PlayEntity(sound, filter, victim, true);
             }
-            */
 
             EnsureComp<VictimBurstComponent>(burstFrom);
             _appearance.SetData(burstFrom.Owner, BurstVisuals.Visuals, VictimBurstState.Bursting);
@@ -927,21 +931,94 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
 
         if (_container.TryGetContainer(ent, ent.Comp.LarvaContainerId, out var container))
         {
-            foreach (var larva in container.ContainedEntities)
+            var blockers = new HashSet<EntityUid>();
+            _entityLookup.GetEntitiesIntersecting(ent.Owner, blockers);
+
+            var larvae = container.ContainedEntities.ToArray();
+            foreach (var larva in larvae)
             {
                 RemCompDeferred<BursterComponent>(larva);
                 var invc = EnsureComp<RMCTemporaryInvincibilityComponent>(larva);
                 invc.ExpiresAt = _timing.CurTime + ent.Comp.LarvaInvincibilityTime;
                 Dirty(larva, invc);
+
+                var stuck = EnsureComp<XenoNewlyEvolvedComponent>(larva);
+                foreach (var blocker in blockers)
+                {
+                    if (blocker == ent.Owner)
+                        continue;
+
+                    if (HasComp<DoorComponent>(blocker) || HasComp<AirlockComponent>(blocker))
+                        stuck.StopCollide.Add(blocker);
+                }
+
+                if (stuck.StopCollide.Count == 0)
+                    RemCompDeferred<XenoNewlyEvolvedComponent>(larva);
+                else
+                    Dirty(larva, stuck);
             }
 
             _container.EmptyContainer(container, destination: coords);
+
+            foreach (var larva in larvae)
+            {
+                if (!IsIntersectingWall(larva))
+                    continue;
+
+                var larvaCoords = _transform.GetMoverCoordinates(larva);
+                if (FindFreeBurstTile(larvaCoords) is { } freeSpot)
+                    _transform.SetCoordinates(larva, freeSpot);
+            }
         }
 
         Dirty(ent);
         RemCompDeferred<VictimInfectedComponent>(ent);
 
         _audio.PlayPvs(ent.Comp.BurstSound, args.User);
+    }
+
+    private bool IsIntersectingWall(EntityUid larva)
+    {
+        var intersecting = new HashSet<EntityUid>();
+        _entityLookup.GetEntitiesIntersecting(larva, intersecting);
+        foreach (var other in intersecting)
+        {
+            if (other == larva)
+                continue;
+
+            if (!TryComp(other, out FixturesComponent? fixtures))
+                continue;
+
+            foreach (var fixture in fixtures.Fixtures.Values)
+            {
+                if (fixture.Hard && (fixture.CollisionLayer & (int)CollisionGroup.Impassable) != 0)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    private EntityCoordinates? FindFreeBurstTile(EntityCoordinates origin)
+    {
+        var snapped = _rmcMap.SnapToGrid(origin);
+        for (var radius = 1; radius <= 2; radius++)
+        {
+            for (var dx = -radius; dx <= radius; dx++)
+            {
+                for (var dy = -radius; dy <= radius; dy++)
+                {
+                    if (Math.Max(Math.Abs(dx), Math.Abs(dy)) != radius)
+                        continue;
+
+                    var candidate = snapped.Offset(new Vector2(dx, dy));
+                    if (!_rmcMap.IsTileBlocked(candidate))
+                        return candidate;
+                }
+            }
+        }
+
+        return null;
     }
 
     /// <summary>

@@ -1,0 +1,9 @@
+- type: rmcConstruction
+  id: RMCRazorwireBuild
+  name: razorwire
+  prototype: RMCBarricadeRazorwire
+  doAfterTime: 2
+  doAfterTimeMin: 1
+  materialCost: 2
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 1

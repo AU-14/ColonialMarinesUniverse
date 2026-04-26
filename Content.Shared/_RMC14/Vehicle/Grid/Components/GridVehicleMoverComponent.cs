@@ -263,54 +263,96 @@ public sealed partial class GridVehicleMoverComponent : Component
     [AutoNetworkedField]
     public TimeSpan SmashSlowdownUntil;
 
+    /// <summary>
+    /// when true, this vehicle rams through damageable wall-like structures instead of being blocked.
+    /// targets tagged with <c>VehicleSmashIgnore</c> still block.
+    /// </summary>
     [DataField]
     public bool CanSmashWalls;
 
+    /// <summary>Damage dealt to the wall per collision tick while ramming.</summary>
     [DataField]
     public float WallSmashDamage = 75f;
 
+    /// <summary>Wheel (or tread) damage dealt back to the vehicle per collision tick while ramming.</summary>
     [DataField]
     public float WallSmashWheelDamage = 0.25f;
 
+    /// <summary>Hull damage dealt back to the vehicle per collision tick while ramming.</summary>
     [DataField]
     public float WallSmashHullDamage = 5f;
 
+    /// <summary>
+    /// Multiplier applied to the vehicle's own tread/hull damage when a plow is installed
+    /// (any hardpoint item tagged <c>VehiclePlow</c>). Wall damage is unaffected.
+    /// </summary>
     [DataField]
     public float WallSmashPlowDamageMultiplier = 0.3f;
 
+    /// <summary>Speed multiplier applied while ramming.</summary>
     [DataField]
     public float WallSmashSlowdownMultiplier = 0.45f;
 
+    /// <summary>How long the slowdown lingers after a ram, seconds.</summary>
     [DataField]
     public float WallSmashSlowdownDuration = 0.4f;
 
+    /// <summary>Minimum seconds between smash damage ticks on the same target.</summary>
     [DataField]
     public float WallSmashCooldown = 0.5f;
 
+    /// <summary>
+    /// Minimum absolute current speed required to smash a wall. 0 = no gate (heavy vehicles like tanks/APCs).
+    /// Light vehicles set this > 0 so they can only ram at speed.
+    /// </summary>
     [DataField]
     public float WallSmashMinSpeed;
 
+    /// <summary>Server-tracked time of the next allowed smash tick. Not for YAML.</summary>
     [AutoNetworkedField]
     public TimeSpan NextWallSmashAt;
 
+    /// <summary>
+    /// Hull integrity damage dealt to the vehicle when it rams a mob (not counting the damage to the mob itself).
+    /// Light vehicles set this &gt; 0 so hitting people hurts the van; heavy vehicles leave it at 0.
+    /// Same smash cooldown as wall-smash applies.
+    /// </summary>
     [DataField]
     public float MobCollisionHullDamage;
 
+    /// <summary>
+    /// Speed multiplier applied at 0 frame integrity. At full integrity the multiplier is 1; it scales
+    /// linearly toward this value as integrity decreases. 1 = no penalty. 0.1 = 90% speed loss at death.
+    /// </summary>
     [DataField]
     public float SpeedAtZeroIntegrity = 1f;
 
+    /// <summary>
+    /// Seconds the vehicle is rendered immobile after a hard-wall crash (smash succeeded or blocked).
+    /// 0 = no immobility. Light vehicles set this high (90-120s) so ramming is a one-shot commit.
+    /// Only triggers when the crash happens at or above <see cref="WallSmashMinSpeed"/>.
+    /// </summary>
     [DataField]
     public float CrashImmobileDuration;
 
     [DataField]
     public float CrashImmobileMinSpeed;
 
+    /// <summary>
+    /// Seconds the vehicle is rendered immobile after hitting a humanoid mob. 0 = no lockout.
+    /// Unlike wall crashes, this does NOT require <see cref="WallSmashMinSpeed"/> — any mob collision triggers.
+    /// </summary>
     [DataField]
     public float MobCrashImmobileDuration;
 
+    /// <summary>
+    /// Seconds the vehicle is rendered immobile after hitting a xeno mob. 0 = no lockout.
+    /// Typically larger than <see cref="MobCrashImmobileDuration"/> — xenos are bigger and more punishing to hit.
+    /// </summary>
     [DataField]
     public float XenoMobCrashImmobileDuration;
 
+    /// <summary>Server-tracked: vehicle cannot accelerate until this time. Not for YAML.</summary>
     [AutoNetworkedField]
     public TimeSpan ImmobileUntil;
 }

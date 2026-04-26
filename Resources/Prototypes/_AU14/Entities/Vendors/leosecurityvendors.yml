@@ -1,8 +1,10 @@
-﻿- type: entity
+- type: entity
   parent: ColMarTechBase
   id: AU14CMBequipmentvendor
   name: CMB equipment vendor
-  description: An automated rack hooked up to a small storage of CMB equipment.
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Colonial Marshall Bureau equipment.
+    Stocked with apparel and law enforcement field gear for rapid deployment.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
@@ -12,11 +14,14 @@
       takeAll: CMUCMBEssentialEquipmentClothes
       entries:
       - id: AU14CMBUniform
-      - id: AU14CMBDeputyWindbreaker
-      - id: RMCCoatSnowSurvivorCMBDeputy
       - id: RMCHeadCapBureau
       - id: RMCBootsPMCFilled
       - id: CMGlassesSecurity
+    - name: Outerwear
+      choices: { CMUCMBDutyJacket: 1 }
+      entries:
+      - id: AU14CMBDeputyWindbreaker
+      - id: RMCCoatSnowSurvivorCMBDeputy
     - name: Belt
       takeAll: CMUCMBEssentialEquipmentBelt
       entries:
@@ -37,37 +42,42 @@
     - name: Pouches
       choices: { CMUCMBDutyPouches: 2 }
       entries:
-      - id: RMCPouchFirstAidSplintsGauzeOintment
+      - id: AU14PouchIFAKFill
       - id: RMCPouchRadio
       - id: RMCPouchGeneralMedium
       - id: RMCPouchPistol
       - id: RMCPouchMagazinePistol
-      - id: AU14PouchIFAKFill
     - name: Equipment
       takeAll: CMUCMBEssentialEquipment
       entries:
+      - id: RMCBinocularsCivPVE
+      - id: RMCHandcuffs
       - id: RMCRadioHandheldColonyOff
-      - id: RMCGrenadeFlashBang
-      - id: RMCHandcuffs
-      - id: RMCHandcuffs
-      - id: RMCHandcuffs
     - name: Duty Weapons
       choices: { CMUCMBDutyWeapons: 1 }
       entries:
       - id: RMCGunCasePistolM1984
       - id: AU14GunCasePistolHG45
+    - name: Restraining Gear
+      entries:
+      - id: RMCHandcuffs
+        amount: 10
+      - id: RMCZipties
+        amount: 30
     - name: Inmate Clothing
       entries:
       - id: AU14CivilianPrisonJumpsuit
-        amount: 10
+        amount: 40
       - id: RMCShoesBlack
-        amount: 10
+        amount: 40
 
 - type: entity
   parent: ColMarTechBase
   id: AU14CWPSequipmentvendor
   name: CWPS equipment vendor
-  description: An automated rack hooked up to a small storage of CWPS equipment.
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Colonial Wilderness Preservation Service equipment.
+    Stocked with apparel and law enforcement field gear for rapid deployment.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
@@ -78,9 +88,13 @@
       entries:
       - id: AU14CWPSUniform
       - id: AU14CWPSBomber
+      - id: RMCBootsPMCFilled
+      - id: CMGlassesSecurity
+    - name: Headgear
+      choices: { CMUCMBDutyHeadgear: 1 }
+      entries:
       - id: AU14CWPSCampaignHat
       - id: AU14CWPSCap
-      - id: RMCBootsPMCFilled
     - name: Belt
       takeAll: CMUCMBEssentialEquipmentBelt
       entries:
@@ -101,35 +115,42 @@
     - name: Pouches
       choices: { CMUCMBDutyPouches: 2 }
       entries:
-      - id: RMCPouchFirstAidSplintsGauzeOintment
+      - id: AU14PouchIFAKFill
       - id: RMCPouchRadio
       - id: RMCPouchGeneralMedium
       - id: RMCPouchPistol
       - id: RMCPouchMagazinePistol
-      - id: AU14PouchIFAKFill
     - name: Equipment
       takeAll: CMUCMBEssentialEquipment
       entries:
-      - id: RMCRadioHandheldColonyOff
-      - id: RMCHandcuffs
       - id: RMCBinocularsCivPVE
+      - id: RMCHandcuffs
+      - id: RMCRadioHandheldColonyOff
     - name: Duty Weapons
       choices: { CMUCMBDutyWeapons: 1 }
       entries:
       - id: AU14GunCasePistolHG45
       - id: RMCGunCasePistolM1984
+    - name: Restraining Gear
+      entries:
+      - id: RMCHandcuffs
+        amount: 10
+      - id: RMCZipties
+        amount: 30
     - name: Inmate Clothing
       entries:
       - id: AU14CivilianPrisonJumpsuit
-        amount: 10
+        amount: 40
       - id: RMCShoesBlack
-        amount: 10
+        amount: 40
 
 - type: entity
   parent: ColMarTechBase
   id: AU14NSPAequipmentvendor
   name: NSPA equipment vendor
-  description: An automated rack hooked up to a small storage of NSPA equipment.
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Neroid Sector Police Authority equipment.
+    Stocked with apparel and law enforcement field gear for rapid deployment.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
@@ -142,7 +163,7 @@
       - id: RMCBootsPMCFilled
       - id: CMGlassesSecurity
     - name: Headgear
-      choices: { CMUCMBDutyHeadgear: 2 }
+      choices: { CMUCMBDutyHeadgear: 1 }
       entries:
       - id: RMCHeadCapTSEPA
       - id: RMCHeadBeretTSE
@@ -156,7 +177,7 @@
       - id: RMCHeadCapTSEPAPeaked
         name: peaked NSPA cap (red and gold)
     - name: Outerwear
-      choices: { CMUCMBDutyJacket: 2 }
+      choices: { CMUCMBDutyJacket: 1 }
       entries:
       - id: RMCArmorVestTSEPA
       - id: RMCCoatTSEPA
@@ -182,36 +203,41 @@
     - name: Pouches
       choices: { CMUCMBDutyPouches: 2 }
       entries:
-      - id: RMCPouchFirstAidSplintsGauzeOintment
+      - id: AU14PouchIFAKFill
       - id: RMCPouchRadio
       - id: RMCPouchGeneralMedium
       - id: RMCPouchPistol
       - id: RMCPouchMagazinePistol
-      - id: AU14PouchIFAKFill
     - name: Equipment
       takeAll: CMUCMBEssentialEquipment
       entries:
+      - id: RMCBinocularsCivPVE
+      - id: RMCHandcuffs
       - id: RMCRadioHandheldColonyOff
-      - id: RMCGrenadeFlashBang
-      - id: RMCHandcuffs
-      - id: RMCHandcuffs
-      - id: RMCHandcuffs
     - name: Duty Weapons
       choices: { CMUCMBDutyWeapons: 1 }
       entries:
       - id: AU14GunCasePistolL45
+    - name: Restraining Gear
+      entries:
+      - id: RMCHandcuffs
+        amount: 10
+      - id: RMCZipties
+        amount: 30
     - name: Inmate Clothing
       entries:
       - id: AU14CivilianPrisonJumpsuit
-        amount: 10
+        amount: 40
       - id: RMCShoesBlack
-        amount: 10
+        amount: 40
 
 - type: entity
   parent: ColMarTechBase
   id: AU14PaPequipmentvendor
   name: PaP equipment vendor
-  description: An automated rack hooked up to a small storage of PaP equipment.
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Peoples Armed Police equipment.
+    Stocked with apparel and law enforcement field gear for rapid deployment.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
@@ -224,10 +250,12 @@
       - id: RMCCoatPaP
       - id: CMHeadCapSPPPeakedPolice
       - id: RMCBootsPMCFilled
+      - id: CMGlassesSecurity
     - name: Belt
       takeAll: CMUCMBEssentialEquipmentBelt
       entries:
       - id: CMBeltSecurityMarshalFilled
+      - id: RMCBeltHolsterPistolTSE
     - name: Bag
       choices: { CMUCMBDutyStorageBag: 1 }
       entries:
@@ -243,25 +271,30 @@
     - name: Pouches
       choices: { CMUCMBDutyPouches: 2 }
       entries:
-      - id: RMCPouchFirstAidSplintsGauzeOintment
+      - id: AU14PouchIFAKFill
       - id: RMCPouchRadio
       - id: RMCPouchGeneralMedium
       - id: RMCPouchPistol
       - id: RMCPouchMagazinePistol
-      - id: AU14PouchIFAKFill
     - name: Equipment
       takeAll: CMUCMBEssentialEquipment
       entries:
-      - id: RMCRadioHandheldColonyOff
-      - id: RMCHandcuffs
       - id: RMCBinocularsCivPVE
+      - id: RMCHandcuffs
+      - id: RMCRadioHandheldColonyOff
     - name: Duty Weapons
       choices: { CMUCMBDutyWeapons: 1 }
       entries:
       - id: RMCBeltHolsterPistolSPPT73
+    - name: Restraining Gear
+      entries:
+      - id: RMCHandcuffs
+        amount: 10
+      - id: RMCZipties
+        amount: 30
     - name: Inmate Clothing
       entries:
       - id: AU14CivilianPrisonJumpsuit
-        amount: 10
+        amount: 40
       - id: RMCShoesBlack
-        amount: 10
+        amount: 40

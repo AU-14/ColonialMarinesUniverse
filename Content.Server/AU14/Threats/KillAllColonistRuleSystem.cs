@@ -10,6 +10,7 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.SSDIndicator;
 
 namespace Content.Server.AU14.Threats;
@@ -40,7 +41,7 @@ public sealed class KillAllColonistRuleSystem : GameRuleSystem<KillAllColonistRu
     private bool IsExcludedFromKillCount(EntityUid uid)
     {
         return (TryComp<SSDIndicatorComponent>(uid, out var ssd) && ssd.IsSSD) ||
-               HasComp<XenoNestedComponent>(uid);
+               HasComp<XenoNestedComponent>(uid) || HasComp<SynthComponent>(uid);
     }
 
     private bool HasCrashedDropship()

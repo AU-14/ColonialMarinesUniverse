@@ -117,6 +117,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
 
         SubscribeLocalEvent<TacticalMapComputerComponent, MapInitEvent>(OnComputerMapInit);
         SubscribeLocalEvent<TacticalMapComputerComponent, BeforeActivatableUIOpenEvent>(OnComputerBeforeUIOpen);
+        SubscribeLocalEvent<DropshipTerminalWeaponsComponent, AfterActivatableUIOpenEvent>(OnDropshipWeaponsTerminalUIOpened);
 
         SubscribeLocalEvent<TacticalMapTrackedComponent, MapInitEvent>(OnTrackedMapInit);
         SubscribeLocalEvent<TacticalMapTrackedComponent, MobStateChangedEvent>(OnTrackedMobStateChanged);
@@ -359,8 +360,28 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         Dirty(ent);
     }
 
+    private void OnDropshipWeaponsTerminalUIOpened(Entity<DropshipTerminalWeaponsComponent> ent, ref AfterActivatableUIOpenEvent args)
+    {
+        if (!TryComp(ent.Owner, out TacticalMapComputerComponent? computer))
+            return;
+
+        if (TryGetTacticalMap(out var live) && computer.Map != live.Owner)
+        {
+            computer.Map = live.Owner;
+            Dirty(ent.Owner, computer);
+        }
+
+        UpdateMapData((ent.Owner, computer));
+    }
+
     private void OnComputerBeforeUIOpen(Entity<TacticalMapComputerComponent> ent, ref BeforeActivatableUIOpenEvent args)
     {
+        if (TryGetTacticalMap(out var live) && ent.Comp.Map != live.Owner)
+        {
+            ent.Comp.Map = live.Owner;
+            Dirty(ent);
+        }
+
         UpdateMapData((ent, ent));
     }
 

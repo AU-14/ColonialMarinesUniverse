@@ -119,7 +119,12 @@ public sealed partial class AttachableModifiersSystem : EntitySystem
             // Fire rate is shots per second. Fire delay is the interval between shots. They are inversely proportionate to each other.
             // First we divide 1 second by the fire rate to get our current fire delay, then we add the delay modifier, then we divide 1 by the result again to get the modified fire rate.
             var fireDelayMod = args.Args.Gun.Comp.SelectedMode == SelectiveFire.Burst ? modSet.FireDelayFlat / 2f : modSet.FireDelayFlat;
-            var fireRate = 1f / (1f / args.Args.FireRate + fireDelayMod);
+            var newFireDelay = 1f / args.Args.FireRate + fireDelayMod;
+            // Skip negative-delay modifiers when the gun is already faster than the modifier can accommodate
+            // (e.g. -0.1s applied to a gun whose base delay is 0.083s would yield a negative delay and break firing).
+            if (newFireDelay <= 0f)
+                continue;
+            var fireRate = 1f / newFireDelay;
             if (float.IsInfinity(fireRate))
                 continue;
 

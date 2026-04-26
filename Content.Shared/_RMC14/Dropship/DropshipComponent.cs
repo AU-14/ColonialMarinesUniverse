@@ -2,6 +2,7 @@ using Content.Shared.Doors.Components;
 using Content.Shared.Shuttles.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
@@ -107,4 +108,10 @@ public sealed partial class DropshipComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool IsHumanHijack;
+
+    [DataField, AutoNetworkedField]
+    public NetCoordinates? LastLandingCoordinates;
+
+    [DataField, AutoNetworkedField]
+    public Vector2i TacticalLandFootprint = new(11, 21);
 }

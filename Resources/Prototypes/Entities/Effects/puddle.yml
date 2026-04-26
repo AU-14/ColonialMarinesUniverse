@@ -194,6 +194,7 @@
       puddle:
         maxVol: 1000
   - type: Puddle
+  - type: PuddleFootPrints
   - type: MixableSolution
     solution: puddle
   - type: Appearance

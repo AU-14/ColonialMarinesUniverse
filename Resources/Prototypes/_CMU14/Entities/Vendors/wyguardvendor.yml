@@ -2,7 +2,10 @@
   parent: ColMarTechBase
   id: CMUWYGuardequipmentvendor
   name: We-Yu Guard equipment vendor
-  description: An automated rack hooked up to a small storage of We-Yu equipment.
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Weyland-Yutani Security Guard apparel and equipment.
+    Stocked with field gear for rapid deployment following cryogenic hypersleep or emergency mobilization.
+    The interface is intentionally simple, even someone with tunnel-vision and frostbite can operate it.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
@@ -13,8 +16,23 @@
       entries:
       - id: RMCJumpsuitVeteranPMCHybrisaLead
       - id: RMCOuterClothingExternalWebbingBlack
-      - id: AU14CivBallCapBlack
       - id: RMCBootsPMCFilled
+    - name: Headwear
+      choices: { CMUCMBDutyHeadgear: 1 }
+      entries:
+      - id: ArmorHelmetPMCCorporate
+      - id: RMCArmorHelmetPMCCorporateHybrisa
+      - id: RMCArmorHelmetPMCKutjevoSecurity
+      - id: AU14CivBallCapBlack
+      - id: RMCHeadCapWestonYamadaDark
+    - name: Uniform
+      choices: { CMUCMBDutyJacket: 1 }
+      entries:
+      - id: AU14JumpsuitVeteranPMCCorporateLead
+      - id: AU14JumpsuitVeteranPMCCorporate
+      - id: AU14WYGuardFatigues
+      - id: RMCJumpsuitMPCorporate
+      - id: RMCJumpsuitVeteranPMCKutjevo
     - name: Belt
       choices: { CMUCMBDutyBelt: 1 }
       entries:
@@ -39,26 +57,37 @@
     - name: Pouches
       choices: { CMUCMBDutyPouches: 2 }
       entries:
-      #- id: RMCPouchRadio
+      - id: AU14PouchIFAKFill
+      - id: RMCPouchFlareFilled
       - id: RMCPouchGeneralMedium
       - id: RMCPouchPistol
       - id: RMCPouchMagazinePistol
-      - id: AU14PouchIFAKFill
+#     - id: RMCPouchRadio
     - name: Equipment
       takeAll: CMUCMBEssentialEquipment
       entries:
-      #- id: RMCRadioHandheldColonyOff
       - id: RMCBinocularsCivPVE
       - id: RMCHandcuffs
-      - id: RMCHandcuffs
-      - id: RMCHandcuffs
+      - id: CMStunbaton
+      - id: RMCWeaponTaser
+#     - id: RMCRadioHandheldColonyOff
     - name: Duty Weapons
       choices: { CMUCMBDutyWeapons: 1 }
       entries:
       - id: RMCGunCasePistolM77
+    - name: Non-lethal Ammunition
+      entries:
+      - id: RMCMagazinePistolM88Rubber
+        amount: 25
+    - name: Restraining Gear
+      entries:
+      - id: RMCHandcuffs
+        amount: 10
+      - id: RMCZipties
+        amount: 30
     - name: Inmate Clothing
       entries:
       - id: AU14CivilianPrisonJumpsuit
-        amount: 10
+        amount: 40
       - id: RMCShoesBlack
-        amount: 10
+        amount: 40

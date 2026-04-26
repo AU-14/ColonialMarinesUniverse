@@ -28,6 +28,7 @@ public sealed class AcidPillarSystem : EntitySystem
 
     private readonly HashSet<Entity<MarineComponent>> _marines = new();
     private readonly HashSet<Entity<XenoComponent>> _xenos = new();
+    private readonly HashSet<Entity<CultistComponent>> _cultists = new();
 
     private bool CanTarget(EntityUid pillar, EntityUid target)
     {
@@ -86,10 +87,12 @@ public sealed class AcidPillarSystem : EntitySystem
 
             _marines.Clear();
             _xenos.Clear();
+            _cultists.Clear();
 
             var pillarCoords = _transform.GetMoverCoordinates(uid);
             _entityLookup.GetEntitiesInRange(pillarCoords, comp.Range, _marines, LookupFlags.Uncontained);
             _entityLookup.GetEntitiesInRange(pillarCoords, comp.Range, _xenos, LookupFlags.Uncontained);
+            _entityLookup.GetEntitiesInRange(pillarCoords, comp.Range, _cultists, LookupFlags.Uncontained);
 
             (EntityUid Ent, float Range) closest = (default, float.MaxValue);
             foreach (var marine in _marines)
@@ -100,6 +103,11 @@ public sealed class AcidPillarSystem : EntitySystem
             foreach (var xeno in _xenos)
             {
                 TrySetIfCloserTarget(ref closest, uid, xeno, pillarCoords);
+            }
+
+            foreach (var cultist in _cultists)
+            {
+                TrySetIfCloserTarget(ref closest, uid, cultist, pillarCoords);
             }
 
             if (closest.Ent == default)

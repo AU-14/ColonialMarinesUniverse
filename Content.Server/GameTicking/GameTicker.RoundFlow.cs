@@ -530,6 +530,8 @@ namespace Content.Server.GameTicking
 
                 _sawmill.Error($"Exception caught while trying to start the round! Restarting round...");
                 _runtimeLog.LogException(e, nameof(GameTicker));
+                // CMU debug: surface the exception to admin chat so we can diagnose prod-only round-start crashes.
+                _chatManager.SendAdminAlert($"[ROUND-START EXCEPTION] {e.GetType().Name}: {e.Message}\n{e.StackTrace}");
                 _startingRound = false;
                 RestartRound();
                 return;

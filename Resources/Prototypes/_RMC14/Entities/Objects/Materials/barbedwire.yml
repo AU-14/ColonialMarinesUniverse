@@ -36,6 +36,13 @@
     size: Small
   - type: Appearance
   - type: BarbedWire
+  - type: RMCConstructionItem
+    buildable:
+    - RMCRazorwireBuild
+  - type: UserInterface
+    interfaces:
+      enum.RMCConstructionUiKey.Key:
+        type: RMCConstructionBui
 
 - type: entity
   parent: BarbedWireBase

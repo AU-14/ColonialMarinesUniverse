@@ -9,6 +9,18 @@
     drawdepth: WallMountedItems
     layers:
     - state: acid_normal
+  - type: Physics
+    bodyType: Static
+    canCollide: true
+  - type: Fixtures
+    fixtures:
+      acidSensor:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        hard: false
+        layer:
+        - Opaque
 
 - type: entity
   parent: XenoAcidNormal

@@ -321,6 +321,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             if (vehicle.MovementKind != VehicleMovementKind.Grid)
                 continue;
 
+            // Detect the tick the crash lockout ends and tell the driver the engine is
+            // back. Server-only so it only fires once, not per predicting client.
             if (!_net.IsClient)
             {
                 var locked = _timing.CurTime < mover.ImmobileUntil;
@@ -330,6 +332,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 }
                 else if (_immobileAnnounced.Remove(uid) && vehicle.Operator is { } driver)
                 {
+                    // Cursor popup — driver's camera may be on vehicle or interior, this always renders on-screen.
                     _popup.PopupCursor(Loc.GetString("rmc-vehicle-crash-immobile-recovered"), driver, Content.Shared.Popups.PopupType.Medium);
                 }
             }
