@@ -75,7 +75,7 @@ public sealed class RMCChembombSystem : EntitySystem
 
     private void OnMapInit(Entity<RMCChembombCasingComponent> ent, ref MapInitEvent args)
     {
-        RefreshDetonatorState(ent);
+        UpdateCasingVisuals(ent);
     }
 
     private void OnUseInHand(Entity<RMCChembombCasingComponent> ent, ref UseInHandEvent args)
@@ -170,9 +170,9 @@ public sealed class RMCChembombSystem : EntitySystem
             _flammable.SpawnFireDiamond(
                 estimate.FireEntity,
                 tile,
-                (int)estimate.FireRadius,
-                (int)estimate.FireIntensity,
-                (int)estimate.FireDuration);
+                (int) estimate.FireRadius,
+                (int) estimate.FireIntensity,
+                (int) estimate.FireDuration);
         }
 
         if (estimate.HasShards)
@@ -289,53 +289,28 @@ public sealed class RMCChembombSystem : EntitySystem
 
     private void OnItemInserted(Entity<RMCChembombCasingComponent> ent, ref EntInsertedIntoContainerMessage args)
     {
-        if (!HasComp<RMCDetonatorAssemblyComponent>(args.Entity) && !HasComp<RMCOrdnanceAssemblyComponent>(args.Entity))
-            return;
-
-        _audio.PlayPredicted(InsertSound, ent.Owner, null);
-        RefreshDetonatorState(ent);
-    }
-
-    private void OnItemRemoved(Entity<RMCChembombCasingComponent> ent, ref EntRemovedFromContainerMessage args)
-    {
-        if (!HasComp<RMCDetonatorAssemblyComponent>(args.Entity) &&
-            !HasComp<RMCOrdnanceAssemblyComponent>(args.Entity))
-            return;
-
-        RefreshDetonatorState(ent);
-    }
-
-    private void ClearAssemblyTriggerComponents(Entity<RMCChembombCasingComponent> ent)
-    {
-        RemCompDeferred<OnUseTimerTriggerComponent>(ent);
-        RemCompDeferred<TriggerOnSignalComponent>(ent);
-    }
-
-    private void RefreshDetonatorState(Entity<RMCChembombCasingComponent> ent)
-    {
-        ClearAssemblyTriggerComponents(ent);
-        ent.Comp.HasActiveDetonator = false;
-
-        if (_itemSlots.TryGetSlot(ent.Owner, "detonator", out var slot) &&
-            slot.Item is { } inserted)
+        if (TryComp<RMCDetonatorAssemblyComponent>(args.Entity, out var oldComp))
         {
-            if (TryComp<RMCDetonatorAssemblyComponent>(inserted, out var oldComp) && oldComp.Ready)
-            {
-                ent.Comp.HasActiveDetonator = true;
-            }
-            else if (TryComp<RMCOrdnanceAssemblyComponent>(inserted, out var assembly) && assembly.IsLocked)
-            {
-                ent.Comp.HasActiveDetonator = true;
-                ApplyAssemblyBehavior(ent, assembly);
-            }
+            if (!oldComp.Ready)
+                return;
+
+            ent.Comp.HasActiveDetonator = true;
+            _audio.PlayPredicted(InsertSound, ent.Owner, null);
+            UpdateCasingVisuals(ent);
+            Dirty(ent);
+            return;
         }
 
+        if (!TryComp<RMCOrdnanceAssemblyComponent>(args.Entity, out var assembly) || !assembly.IsLocked)
+            return;
+
+        ent.Comp.HasActiveDetonator = true;
+        _audio.PlayPredicted(InsertSound, ent.Owner, null);
         UpdateCasingVisuals(ent);
         Dirty(ent);
-    }
 
-    private void ApplyAssemblyBehavior(Entity<RMCChembombCasingComponent> ent, RMCOrdnanceAssemblyComponent assembly)
-    {
+        ClearAssemblyTriggerComponents(ent);
+
         switch (GetAssemblyKind(assembly))
         {
             case RMCOrdnanceAssemblyKind.DoubleIgniter:
@@ -385,6 +360,31 @@ public sealed class RMCChembombSystem : EntitySystem
                 }
                 break;
         }
+    }
+
+    private void OnItemRemoved(Entity<RMCChembombCasingComponent> ent, ref EntRemovedFromContainerMessage args)
+    {
+        if (HasComp<RMCDetonatorAssemblyComponent>(args.Entity))
+        {
+            ent.Comp.HasActiveDetonator = false;
+            UpdateCasingVisuals(ent);
+            Dirty(ent);
+            return;
+        }
+
+        if (!HasComp<RMCOrdnanceAssemblyComponent>(args.Entity))
+            return;
+
+        ClearAssemblyTriggerComponents(ent);
+        ent.Comp.HasActiveDetonator = false;
+        UpdateCasingVisuals(ent);
+        Dirty(ent);
+    }
+
+    private void ClearAssemblyTriggerComponents(Entity<RMCChembombCasingComponent> ent)
+    {
+        RemCompDeferred<OnUseTimerTriggerComponent>(ent);
+        RemCompDeferred<TriggerOnSignalComponent>(ent);
     }
 
     private void StartToolDoAfter<T>(Entity<RMCChembombCasingComponent> ent, EntityUid user, EntityUid tool, float delay)
@@ -440,7 +440,7 @@ public sealed class RMCChembombSystem : EntitySystem
         return new RMCDemolitionsScannerBuiState(
             MetaData(target).EntityName,
             estimate.CurrentVolume,
-            (float)casing.MaxVolume,
+            (float) casing.MaxVolume,
             casing.HasActiveDetonator,
             casing.Stage,
             estimate.HasExplosion,
