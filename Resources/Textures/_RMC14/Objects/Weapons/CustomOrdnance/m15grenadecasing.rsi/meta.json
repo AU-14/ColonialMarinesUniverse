@@ -9,6 +9,21 @@
   "states": [
     {
       "name": "icon"
+    },
+    {
+      "name": "ass"
+    },
+    {
+      "name": "locked"
+    },
+    {
+      "name": "active",
+      "delays": [
+        [
+          0.1,
+          0.1
+        ]
+      ]
     }
   ]
 }

@@ -75,7 +75,7 @@ public sealed class RMCChembombSystem : EntitySystem
 
     private void OnMapInit(Entity<RMCChembombCasingComponent> ent, ref MapInitEvent args)
     {
-        UpdateCasingVisuals(ent);
+        RefreshDetonatorState(ent);
     }
 
     private void OnUseInHand(Entity<RMCChembombCasingComponent> ent, ref UseInHandEvent args)
@@ -289,69 +289,94 @@ public sealed class RMCChembombSystem : EntitySystem
 
     private void OnItemInserted(Entity<RMCChembombCasingComponent> ent, ref EntInsertedIntoContainerMessage args)
     {
-        if (TryComp<RMCDetonatorAssemblyComponent>(args.Entity, out var oldComp))
-        {
-            if (!oldComp.Ready)
-                return;
-
-            ent.Comp.HasActiveDetonator = true;
-            _audio.PlayPredicted(InsertSound, ent.Owner, null);
-            UpdateCasingVisuals(ent);
-            Dirty(ent);
+        if (!HasComp<RMCDetonatorAssemblyComponent>(args.Entity) && !HasComp<RMCOrdnanceAssemblyComponent>(args.Entity))
             return;
+
+        _audio.PlayPredicted(InsertSound, ent.Owner, null);
+        RefreshDetonatorState(ent);
+    }
+
+    private void OnItemRemoved(Entity<RMCChembombCasingComponent> ent, ref EntRemovedFromContainerMessage args)
+    {
+        if (!HasComp<RMCDetonatorAssemblyComponent>(args.Entity) &&
+            !HasComp<RMCOrdnanceAssemblyComponent>(args.Entity))
+            return;
+
+        RefreshDetonatorState(ent);
+    }
+
+    private void ClearAssemblyTriggerComponents(Entity<RMCChembombCasingComponent> ent)
+    {
+        RemCompDeferred<OnUseTimerTriggerComponent>(ent);
+        RemCompDeferred<TriggerOnSignalComponent>(ent);
+    }
+
+    private void RefreshDetonatorState(Entity<RMCChembombCasingComponent> ent)
+    {
+        ClearAssemblyTriggerComponents(ent);
+        ent.Comp.HasActiveDetonator = false;
+
+        if (_itemSlots.TryGetSlot(ent.Owner, "detonator", out var slot) &&
+            slot.Item is { } inserted)
+        {
+            if (TryComp<RMCDetonatorAssemblyComponent>(inserted, out var oldComp) && oldComp.Ready)
+            {
+                ent.Comp.HasActiveDetonator = true;
+            }
+            else if (TryComp<RMCOrdnanceAssemblyComponent>(inserted, out var assembly) && assembly.IsLocked)
+            {
+                ent.Comp.HasActiveDetonator = true;
+                ApplyAssemblyBehavior(ent, assembly);
+            }
         }
 
-        if (!TryComp<RMCOrdnanceAssemblyComponent>(args.Entity, out var assembly) || !assembly.IsLocked)
-            return;
-
-        ent.Comp.HasActiveDetonator = true;
-        _audio.PlayPredicted(InsertSound, ent.Owner, null);
         UpdateCasingVisuals(ent);
         Dirty(ent);
+    }
 
-        ClearAssemblyTriggerComponents(ent);
-
+    private void ApplyAssemblyBehavior(Entity<RMCChembombCasingComponent> ent, RMCOrdnanceAssemblyComponent assembly)
+    {
         switch (GetAssemblyKind(assembly))
         {
             case RMCOrdnanceAssemblyKind.DoubleIgniter:
-                {
-                    var trigger = EnsureComp<OnUseTimerTriggerComponent>(ent);
-                    trigger.Delay = 1f;
-                    trigger.DelayOptions = null;
-                    trigger.BeepSound = ArmSound;
-                    trigger.DoPopup = false;
-                    trigger.InitialBeepDelay = 0f;
-                    trigger.BeepInterval = 99999f;
-                    break;
-                }
+            {
+                var trigger = EnsureComp<OnUseTimerTriggerComponent>(ent);
+                trigger.Delay = 1f;
+                trigger.DelayOptions = null;
+                trigger.BeepSound = ArmSound;
+                trigger.DoPopup = false;
+                trigger.InitialBeepDelay = 0f;
+                trigger.BeepInterval = 99999f;
+                break;
+            }
             case RMCOrdnanceAssemblyKind.Timer:
+            {
+                var trigger = EnsureComp<OnUseTimerTriggerComponent>(ent);
+                trigger.Delay = assembly.TimerDelay;
+                trigger.DelayOptions = null;
+                trigger.BeepSound = ArmSound;
+                trigger.DoPopup = false;
+                trigger.InitialBeepDelay = 0f;
+                trigger.BeepInterval = 5f;
+
+                if (IsC4PlasticCasing(ent))
                 {
-                    var trigger = EnsureComp<OnUseTimerTriggerComponent>(ent);
-                    trigger.Delay = assembly.TimerDelay;
-                    trigger.DelayOptions = null;
-                    trigger.BeepSound = ArmSound;
-                    trigger.DoPopup = false;
-                    trigger.InitialBeepDelay = 0f;
-                    trigger.BeepInterval = 5f;
-
-                    if (IsC4PlasticCasing(ent))
-                    {
-                        trigger.BeepSound = C4TimerBeepSound;
-                        trigger.BeepInterval = 1f;
-                        trigger.StartOnStick = true;
-                        trigger.AllowToggleStartOnStick = true;
-                    }
-
-                    break;
+                    trigger.BeepSound = C4TimerBeepSound;
+                    trigger.BeepInterval = 1f;
+                    trigger.StartOnStick = true;
+                    trigger.AllowToggleStartOnStick = true;
                 }
+
+                break;
+            }
             case RMCOrdnanceAssemblyKind.Signaler:
-                {
-                    EnsureComp<TriggerOnSignalComponent>(ent);
-                    var network = EnsureComp<DeviceNetworkComponent>(ent);
-                    _deviceNetwork.SetReceiveFrequency(ent, assembly.SignalFrequency, network);
-                    _deviceNetwork.SetTransmitFrequency(ent, assembly.SignalFrequency, network);
-                    break;
-                }
+            {
+                EnsureComp<TriggerOnSignalComponent>(ent);
+                var network = EnsureComp<DeviceNetworkComponent>(ent);
+                _deviceNetwork.SetReceiveFrequency(ent, assembly.SignalFrequency, network);
+                _deviceNetwork.SetTransmitFrequency(ent, assembly.SignalFrequency, network);
+                break;
+            }
             case RMCOrdnanceAssemblyKind.Proximity:
                 if (TryComp<RMCMineCasingComponent>(ent, out var mine))
                 {
@@ -360,31 +385,6 @@ public sealed class RMCChembombSystem : EntitySystem
                 }
                 break;
         }
-    }
-
-    private void OnItemRemoved(Entity<RMCChembombCasingComponent> ent, ref EntRemovedFromContainerMessage args)
-    {
-        if (HasComp<RMCDetonatorAssemblyComponent>(args.Entity))
-        {
-            ent.Comp.HasActiveDetonator = false;
-            UpdateCasingVisuals(ent);
-            Dirty(ent);
-            return;
-        }
-
-        if (!HasComp<RMCOrdnanceAssemblyComponent>(args.Entity))
-            return;
-
-        ClearAssemblyTriggerComponents(ent);
-        ent.Comp.HasActiveDetonator = false;
-        UpdateCasingVisuals(ent);
-        Dirty(ent);
-    }
-
-    private void ClearAssemblyTriggerComponents(Entity<RMCChembombCasingComponent> ent)
-    {
-        RemCompDeferred<OnUseTimerTriggerComponent>(ent);
-        RemCompDeferred<TriggerOnSignalComponent>(ent);
     }
 
     private void StartToolDoAfter<T>(Entity<RMCChembombCasingComponent> ent, EntityUid user, EntityUid tool, float delay)
