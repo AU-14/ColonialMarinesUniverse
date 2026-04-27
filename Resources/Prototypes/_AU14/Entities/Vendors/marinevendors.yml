@@ -875,7 +875,7 @@
         amount: 10
       - id: CMWelderSmall
         amount: 10
-      - id: RMCWelder
+      - id: CMWelder
         amount: 4
       - id: RMCWelderPVE
         amount: 1

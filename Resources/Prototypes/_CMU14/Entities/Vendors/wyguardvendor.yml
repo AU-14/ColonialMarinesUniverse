@@ -77,7 +77,7 @@
       - id: RMCGunCasePistolM77
     - name: Non-lethal Ammunition
       entries:
-      - id: RMCMagazinePistolM88Rubber
+      - id: CMMagazinePistolM88Rubber
         amount: 25
     - name: Restraining Gear
       entries:
