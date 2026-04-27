@@ -1,0 +1,17 @@
+- type: Tag
+  id: RMCProximityAssembly
+
+- type: Tag
+  id: RMCOrdnanceAssemblyLocked
+
+- type: Tag
+  id: RMCDoubleIgniterAssembly
+
+- type: Tag
+  id: RMCTimerAssembly
+
+- type: Tag
+  id: RMCSignalerAssembly
+
+- type: Tag
+  id: RMC80mmMortarShell

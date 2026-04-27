@@ -1,0 +1,192 @@
+# Explosive reagents for Ordnance Technician chembomb crafting.
+# powerMod = added explosion power per unit
+# falloffMod = explosion falloff per unit (positive = smaller blast, negative = larger)
+# intensityMod/radiusMod/durationMod = fire modifiers per unit
+# Values are aligned to CMSS-13 OT chemistry where the RMC system has direct equivalents.
+
+- type: reagent
+  parent: CMReagent
+  id: RMCCyclonite
+  name: reagent-name-rmc-cyclonite
+  desc: reagent-desc-rmc-cyclonite
+  physicalDesc: reagent-physical-desc-crystalline
+  flavor: bitter
+  color: "#E3E0BA"
+  unknown: true
+  powerMod: 1.5
+  falloffMod: -0.4
+
+- type: reagent
+  parent: CMReagent
+  id: RMCANFO
+  name: reagent-name-rmc-anfo
+  desc: reagent-desc-rmc-anfo
+  physicalDesc: reagent-physical-desc-granular
+  flavor: bitter
+  color: "#E0E0E0"
+  unknown: true
+  powerMod: 1
+  falloffMod: -0.6
+
+- type: reagent
+  parent: CMReagent
+  id: RMCNitroglycerin
+  name: reagent-name-rmc-nitroglycerin
+  desc: reagent-desc-rmc-nitroglycerin
+  physicalDesc: reagent-physical-desc-oily
+  flavor: bitter
+  color: "#808080"
+  unknown: true
+  powerMod: 1
+  falloffMod: -0.5
+
+- type: reagent
+  parent: CMReagent
+  id: RMCOctogen
+  name: reagent-name-rmc-octogen
+  desc: reagent-desc-rmc-octogen
+  physicalDesc: reagent-physical-desc-crystalline
+  flavor: bitter
+  color: "#F5F5F5"
+  unknown: true
+  powerMod: 2
+  falloffMod: -0.2
+  intensityMod: 0.4
+  radiusMod: -0.02
+  durationMod: -0.2
+
+- type: reagent
+  parent: CMReagent
+  id: RMCAmmoniumNitrate
+  name: reagent-name-rmc-ammonium-nitrate
+  desc: reagent-desc-rmc-ammonium-nitrate
+  physicalDesc: reagent-physical-desc-granular
+  flavor: bitter
+  color: "#E5E5E5"
+  unknown: true
+  powerMod: 0.4
+  falloffMod: 1.5
+  intensityMod: 0.5
+  durationMod: -0.2
+
+- type: reagent
+  parent: CMReagent
+  id: RMCPotassiumHydroxide
+  name: reagent-name-rmc-potassium-hydroxide
+  desc: reagent-desc-rmc-potassium-hydroxide
+  physicalDesc: reagent-physical-desc-crystalline
+  flavor: bitter
+  color: "#F0F0F0"
+  unknown: true
+  powerMod: 0.5
+
+- type: reagent
+  parent: CMReagent
+  id: RMCHexamine
+  name: reagent-name-rmc-hexamine
+  desc: reagent-desc-rmc-hexamine
+  physicalDesc: reagent-physical-desc-crystalline
+  flavor: bitter
+  color: "#FFFAFA"
+  unknown: true
+  durationMod: 0.5
+
+- type: reagent
+  parent: CMReagent
+  id: RMCGlycerol
+  name: reagent-name-rmc-glycerol
+  desc: reagent-desc-rmc-glycerol
+  physicalDesc: reagent-physical-desc-oily
+  flavor: sweet
+  color: "#F5F5DC"
+  unknown: true
+
+# Synthesis reactions
+- type: reaction
+  id: RMCAmmoniumNitrateReaction
+  reactants:
+    Ammonia:
+      amount: 1
+    RMCPolytrinicAcid:
+      amount: 1
+  products:
+    RMCAmmoniumNitrate: 2
+
+- type: reaction
+  id: RMCANFOReaction
+  impact: High
+  reactants:
+    RMCAmmoniumNitrate:
+      amount: 2
+    WeldingFuel:
+      amount: 1
+  products:
+    RMCANFO: 2
+  effects:
+  - !type:RMCVolatileReactionEffect
+    threshold: 60.01
+
+- type: reaction
+  id: RMCPotassiumHydroxideReaction
+  impact: High
+  reactants:
+    RMCPotassium:
+      amount: 1
+    Water:
+      amount: 1
+  products:
+    RMCPotassiumHydroxide: 1
+  effects:
+  - !type:RMCVolatileReactionEffect
+
+- type: reaction
+  id: RMCHexamineReaction
+  reactants:
+    RMCFormaldehyde:
+      amount: 3
+    Ammonia:
+      amount: 2
+  products:
+    RMCHexamine: 3
+
+- type: reaction
+  id: RMCCycloniteReaction
+  priority: 1
+  reactants:
+    RMCHexamine:
+      amount: 1
+    RMCPolytrinicAcid:
+      amount: 1
+  products:
+    RMCCyclonite: 1
+
+- type: reaction
+  id: RMCOctogenReaction
+  priority: 10
+  reactants:
+    RMCHexamine:
+      amount: 1
+    RMCPolytrinicAcid:
+      amount: 1
+    RMCParaformaldehyde:
+      amount: 1
+    RMCAmmoniumNitrate:
+      amount: 1
+  products:
+    RMCOctogen: 2
+
+- type: reaction
+  id: RMCNitroglycerinReaction
+  impact: High
+  reactants:
+    RMCGlycerol:
+      amount: 1
+    RMCPolytrinicAcid:
+      amount: 1
+    RMCSulphuricAcid:
+      amount: 1
+  products:
+    RMCNitroglycerin: 2
+  effects:
+  - !type:RMCVolatileReactionEffect
+    threshold: 5.01

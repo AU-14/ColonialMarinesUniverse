@@ -1,0 +1,110 @@
+- type: entity
+  parent: BaseItem
+  id: RMCOrdnanceIgniter
+  name: ordnance igniter
+  description: A small electrical igniter used to assemble custom ordnance triggers.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Ordnance/igniter.rsi
+    state: igniter
+  - type: Item
+    size: Tiny
+  - type: RMCOrdnancePart
+    partType: RMCOrdnanceIgniter
+
+- type: entity
+  parent: BaseItem
+  id: RMCOrdnanceTimer
+  name: ordnance timer
+  description: A configurable countdown timer for custom ordnance.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Ordnance/timer.rsi
+    state: timer
+  - type: Item
+    size: Small
+  - type: RMCOrdnancePart
+    partType: RMCOrdnanceTimer
+
+- type: entity
+  parent: BaseItem
+  id: RMCOrdnanceProximitySensor
+  name: ordnance proximity sensor
+  description: A configurable proximity sensor for custom ordnance.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Ordnance/prox.rsi
+    state: prox
+  - type: Item
+    size: Small
+  - type: RMCOrdnancePart
+    partType: RMCOrdnanceProximitySensor
+
+- type: entity
+  parent: BaseItem
+  id: RMCOrdnanceSignaler
+  name: ordnance signaler
+  description: A handheld signaler that can also be combined into a remote-detonation assembly.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Ordnance/signaller.rsi
+    state: signaller
+  - type: Item
+    size: Small
+  - type: RMCOrdnancePart
+    partType: RMCOrdnanceSignaler
+  # - type: Signaller
+  - type: UseDelay
+  # - type: DeviceLinkSource
+  #   ports:
+  #   - Pressed
+  - type: DeviceNetwork
+    deviceNetId: Wireless
+    receiveFrequency: 1100
+    transmitFrequency: 1100
+  - type: WirelessNetworkConnection
+    range: 200
+  - type: ActivatableUI
+    key: enum.OrdnanceSignalerUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.OrdnanceSignalerUiKey.Key:
+        type: RMCOrdnanceSignalerBoundUserInterface
+  - type: RMCOrdnanceSignaler
+
+- type: entity
+  id: RMCOrdnanceAssembly
+  parent: BaseItem
+  name: ordnance assembly
+  description: A configurable ordnance assembly made from two trigger parts.
+  components:
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Ordnance/igniter.rsi
+      state: igniter_left
+      map: ["left"]
+    - sprite: _RMC14/Ordnance/igniter.rsi
+      state: igniter_right
+      map: ["right"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.RMCAssemblyVisualKey.LeftType:
+        left:
+          RMCOrdnanceIgniter: { sprite: _RMC14/Ordnance/igniter.rsi, state: igniter_left }
+          RMCOrdnanceTimer: { sprite: _RMC14/Ordnance/timer.rsi, state: timer_left }
+          RMCOrdnanceProximitySensor: { sprite: _RMC14/Ordnance/prox.rsi, state: prox_left }
+          RMCOrdnanceSignaler: { sprite: _RMC14/Ordnance/signaller.rsi, state: signaller_left }
+      enum.RMCAssemblyVisualKey.RightType:
+        right:
+          RMCOrdnanceIgniter: { sprite: _RMC14/Ordnance/igniter.rsi, state: igniter_right }
+          RMCOrdnanceTimer: { sprite: _RMC14/Ordnance/timer.rsi, state: timer_right }
+          RMCOrdnanceProximitySensor: { sprite: _RMC14/Ordnance/prox.rsi, state: prox_right }
+          RMCOrdnanceSignaler: { sprite: _RMC14/Ordnance/signaller.rsi, state: signaller_right }
+  - type: Item
+    size: Small
+  - type: UserInterface
+    interfaces:
+      enum.OrdnanceSignalerUiKey.Key:
+        type: RMCOrdnanceSignalerBoundUserInterface
+  - type: RMCOrdnanceAssembly

@@ -1,0 +1,47 @@
+<cc:RMCDemolitionsScannerWindow xmlns="https://spacestation14.io"
+                                 xmlns:cc="clr-namespace:Content.Client._RMC14.Ordnance"
+                                 Title="{Loc 'rmc-demolitions-scanner-ui-title'}"
+                                 MinSize="520 360"
+                                 SetSize="520 360">
+    <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="8">
+        <Label Name="StatusLabel"
+               Access="Public"
+               Text="{Loc 'rmc-demolitions-scanner-ui-idle'}"
+               FontColorOverride="#8fa1b8" />
+
+        <PanelContainer>
+            <BoxContainer Orientation="Horizontal" Margin="8" SeparationOverride="12">
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="4">
+                    <Label Text="{Loc 'rmc-demolitions-scanner-ui-section-overview'}"
+                           FontColorOverride="#d9e8ff" />
+                    <Label Name="CasingLabel" Access="Public" Text="-" />
+                    <Label Name="StageLabel" Access="Public" Text="-" />
+                    <Label Name="DetonatorLabel" Access="Public" Text="-" />
+                    <Label Name="VolumeLabel" Access="Public" Text="-" />
+                </BoxContainer>
+
+                <Control MinSize="1 0" />
+
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="4">
+                    <Label Text="{Loc 'rmc-demolitions-scanner-ui-section-yield'}"
+                           FontColorOverride="#ffd37a" />
+                    <RichTextLabel Name="BlastLabel" Access="Public" />
+                    <Label Text="{Loc 'rmc-demolitions-scanner-ui-section-fire'}"
+                           Margin="0 6 0 0"
+                           FontColorOverride="#ff9d6b" />
+                    <RichTextLabel Name="FireLabel" Access="Public" />
+                </BoxContainer>
+            </BoxContainer>
+        </PanelContainer>
+
+        <PanelContainer VerticalExpand="True">
+            <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="6">
+                <Label Text="{Loc 'rmc-demolitions-scanner-ui-section-summary'}"
+                       FontColorOverride="#9effb6" />
+                <RichTextLabel Name="SummaryLabel"
+                               Access="Public"
+                               VerticalExpand="True" />
+            </BoxContainer>
+        </PanelContainer>
+    </BoxContainer>
+</cc:RMCDemolitionsScannerWindow>

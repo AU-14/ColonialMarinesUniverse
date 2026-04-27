@@ -1,0 +1,67 @@
+# Plastic explosive casing for custom C4 payloads.
+- type: entity
+  name: C4 plastic casing
+  description: An empty C4 plastic explosive casing. Must be planted on an object. Fill with a detonator assembly and chemicals.
+  parent: RMCCasingBase
+  id: RMCC4PlasticCasing
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Explosives/plastic_explosives.rsi
+    layers:
+    - state: icon
+      map: ["state"]
+  - type: Sticky
+    stickDelay: 5
+    unstickDelay: 5
+    stickPopupStart: comp-sticky-start-stick-bomb
+    stickPopupSuccess: comp-sticky-success-stick-bomb
+    unstickPopupStart: comp-sticky-start-unstick-bomb
+    unstickPopupSuccess: comp-sticky-success-unstick-bomb
+    blacklist:
+      components:
+      - Item
+  - type: StickyVisualizer
+  - type: Appearance
+  - type: TimerTriggerVisuals
+    primingSound:
+      path: /Audio/_RMC14/Explosion/armbomb.ogg
+      params:
+        volume: -5
+  - type: GenericVisualizer
+    visuals:
+      enum.RMCCasingVisualKey.State:
+        state:
+          Empty: { state: icon }
+          Loaded: { state: icon }
+          Sealed: { state: icon }
+          Armed: { state: icon }
+      enum.Trigger.TriggerVisuals.VisualState:
+        state:
+          Primed: { state: active }
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 7500
+      RMCPlastic: 2000
+  - type: RMCChembombCasing
+    maxVolume: 180
+    basePower: 280
+    baseFalloff: 120
+    maxShards: 100
+    minFireIntensity: 4
+    maxFireIntensity: 50
+    minFireRadius: 2
+    maxFireRadius: 4
+    minFireDuration: 5
+    maxFireDuration: 20
+  - type: SolutionContainerManager
+    solutions:
+      chemicals:
+        maxVol: 180
+  - type: ItemSlots
+    slots:
+      detonator:
+        name: rmc-chembomb-detonator-slot
+        whitelist:
+          tags:
+          - RMCTimerAssembly
+          - RMCSignalerAssembly

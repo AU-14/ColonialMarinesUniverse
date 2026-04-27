@@ -208,6 +208,44 @@
   materials:
     CMGlass: 6250 # 5000
 
+- type: latheRecipe
+  id: RMCBeakerSilver
+  result: RMCBeakerSilver
+  completetime: 4
+  materials:
+    CMGlass: 6250 # 5000
+    Silver: 625 # 500
+
+- type: latheRecipe
+  id: RMCOrdnanceIgniter
+  result: RMCOrdnanceIgniter
+  completetime: 2
+  materials:
+    CMSteel: 625
+
+- type: latheRecipe
+  id: RMCOrdnanceTimer
+  result: RMCOrdnanceTimer
+  completetime: 2
+  materials:
+    CMSteel: 937
+
+- type: latheRecipe
+  id: RMCOrdnanceProximitySensor
+  result: RMCOrdnanceProximitySensor
+  completetime: 2
+  materials:
+    CMSteel: 1000
+    CMGlass: 250
+
+- type: latheRecipe
+  id: RMCOrdnanceSignaler
+  result: RMCOrdnanceSignaler
+  completetime: 2
+  materials:
+    CMSteel: 1250
+    CMGlass: 250
+
 #- type: latheRecipe
 #  id: CMDrinkingGlass
 #  result: DrinkGlass <- todo RMC14, rest is already complete

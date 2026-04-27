@@ -1,0 +1,65 @@
+- type: entity
+  parent: CMBaseStructure
+  id: RMCExplosionSimulator
+  name: explosion simulation computer
+  description: A high-powered simulation computer for analyzing ready ordnance payloads against different target types. Insert a finished grenade, mine, rocket, or other explosive sample, select a target profile, and run a two-minute simulation.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: true
+  - type: Sprite
+    drawdepth: SmallObjects
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    layers:
+    - state: demo_sim
+    - state: demo_sim0
+      map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
+      visible: false
+  - type: Clickable
+  - type: Corrodible
+    isCorrodible: false
+  - type: InteractionOutline
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: WallMount
+    arc: 360
+  - type: ContainerContainer
+    containers:
+      beakerSlot: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      beakerSlot:
+        name: rmc-explosion-sim-slot-sample
+        whitelist:
+          components:
+          - RMCChembombCasing
+          - RMCChemicalAmmoTransfer
+  - type: RMCExplosionSimulator
+  - type: ActivatableUI
+    key: enum.RMCExplosionSimulatorUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.RMCExplosionSimulatorUiKey.Key:
+        type: RMCExplosionSimulatorBui
+  - type: AccessReader
+    access:
+    - - OT
+    - - CMAccessCE

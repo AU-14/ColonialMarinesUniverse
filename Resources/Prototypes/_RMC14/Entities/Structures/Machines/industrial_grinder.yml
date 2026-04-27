@@ -1,0 +1,17 @@
+# Heavy-duty grinder for processing OT chemistry inputs in larger batches.
+- type: entity
+  parent: RMCKitchenReagentGrinder
+  id: RMCIndustrialGrinder
+  name: industrial reagent grinder
+  description: A heavy-duty grinder that pulverizes materials into their component reagents. Output accumulates in the internal reservoir.
+  components:
+  - type: ReagentGrinder
+    storageMaxEntities: 20
+  - type: RMCPowerReceiver
+    idleLoad: 5
+    activeLoad: 200
+    channel: Equipment
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno

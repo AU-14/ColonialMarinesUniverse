@@ -1,0 +1,184 @@
+- type: entity
+  name: 80mm mortar warhead
+  description: A warhead for the 80mm mortar. Insert a double-igniter assembly and fill with chemicals.
+  parent: RMCCasingBase
+  id: RMC80mmMortarWarhead
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/CustomOrdnance/80mmmortarwarhead.rsi
+    layers:
+    - state: icon
+      map: ["state"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.RMCCasingVisualKey.State:
+        state:
+          Empty: { state: icon }
+          Loaded: { state: ass }
+          Sealed: { state: locked }
+          Armed: { state: locked }
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 11250
+  - type: RMCChembombCasing
+    maxVolume: 240
+    basePower: 360
+    baseFalloff: 130
+    maxShards: 200
+    minFireIntensity: 5
+    maxFireIntensity: 45
+    minFireRadius: 3
+    maxFireRadius: 8
+    minFireDuration: 5
+    maxFireDuration: 48
+  - type: SolutionContainerManager
+    solutions:
+      chemicals:
+        maxVol: 240
+  - type: ItemSlots
+    slots:
+      detonator:
+        name: rmc-chembomb-detonator-slot
+        whitelist:
+          tags:
+          - RMCDoubleIgniterAssembly
+  - type: Item
+    size: Normal
+
+- type: entity
+  name: 80mm mortar shell casing
+  description: A shell for the 80mm mortar. Fill with 60u of hydrogen fuel before assembly.
+  parent: RMCCasingBase
+  id: RMC80mmMortarShell
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/CustomOrdnance/80mmmortarshell.rsi
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 18750
+  - type: SolutionContainerManager
+    solutions:
+      fuel:
+        maxVol: 60
+  - type: RefillableSolution
+    solution: fuel
+  - type: RMCOrdnancePayloadAssembly
+    fuelSolution: fuel
+    requiredFuel: 60
+    requiredFuelReagent: RMCHydrogen
+    results:
+    - payload: RMC80mmMortarWarhead
+      result: RMCMortarShellCustom
+    - payload: RMC80mmMortarCameraWarhead
+      result: RMCMortarShellCameraCustom
+  - type: Item
+    size: Normal
+  - type: Tag
+    tags:
+    - RMC80mmMortarShell
+
+- type: entity
+  name: 80mm mortar camera warhead
+  description: A camera warhead for the 80mm mortar. Meant to be used with Flash Powder.
+  parent: RMCCasingBase
+  id: RMC80mmMortarCameraWarhead
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/CustomOrdnance/80mmmortarwarhead.rsi
+    layers:
+    - state: icon
+      map: ["state"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.RMCCasingVisualKey.State:
+        state:
+          Empty: { state: icon }
+          Loaded: { state: ass }
+          Sealed: { state: locked }
+          Armed: { state: locked }
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 15000
+  - type: RMCChembombCasing
+    maxVolume: 180
+    basePower: 360
+    baseFalloff: 130
+    maxShards: 200
+    minFireIntensity: 5
+    maxFireIntensity: 45
+    minFireRadius: 3
+    maxFireRadius: 8
+    minFireDuration: 5
+    maxFireDuration: 48
+  - type: SolutionContainerManager
+    solutions:
+      chemicals:
+        maxVol: 180
+  - type: ItemSlots
+    slots:
+      detonator:
+        name: rmc-chembomb-detonator-slot
+        whitelist:
+          tags:
+          - RMCDoubleIgniterAssembly
+  - type: Item
+    size: Normal
+
+- type: entity
+  parent: RMCMortarShellBase
+  id: RMCMortarShellCustom
+  name: 80mm custom mortar shell
+  description: A custom 80mm mortar shell assembled with a chemical warhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/CustomOrdnance/80mmmortarshell.rsi
+    state: locked
+  - type: RMCChembombCasing
+    maxVolume: 240
+    chemicalSolution: chemicals
+    basePower: 360
+    baseFalloff: 130
+    maxShards: 200
+    minFireIntensity: 5
+    maxFireIntensity: 45
+    minFireRadius: 3
+    maxFireRadius: 8
+    minFireDuration: 5
+    maxFireDuration: 48
+    stage: Armed
+    hasActiveDetonator: true
+  - type: SolutionContainerManager
+    solutions:
+      chemicals:
+        maxVol: 240
+
+- type: entity
+  parent: RMCMortarShellCustom
+  id: RMCMortarShellCameraCustom
+  name: 80mm custom flare/camera mortar shell
+  description: A custom mortar shell assembled with a camera warhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/CustomOrdnance/80mmmortarshell.rsi
+    state: locked
+  - type: RMCChembombCasing
+    maxVolume: 180
+    chemicalSolution: chemicals
+    basePower: 360
+    baseFalloff: 130
+    maxShards: 200
+    minFireIntensity: 5
+    maxFireIntensity: 45
+    minFireRadius: 3
+    maxFireRadius: 8
+    minFireDuration: 5
+    maxFireDuration: 48
+    stage: Armed
+    hasActiveDetonator: true
+  - type: SolutionContainerManager
+    solutions:
+      chemicals:
+        maxVol: 180
+  - type: MortarCameraShell

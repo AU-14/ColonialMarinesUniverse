@@ -1,0 +1,172 @@
+- type: entity
+  name: 84mm rocket tube
+  description: A fuel tube for the 84mm rocket. Fill with 60u of methane before assembly.
+  parent: RMCCasingBase
+  id: RMC84mmRocketTube
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/CustomOrdnance/84mmrockettube.rsi
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 7500
+  - type: SolutionContainerManager
+    solutions:
+      fuel:
+        maxVol: 60
+  - type: RefillableSolution
+    solution: fuel
+  - type: RMCOrdnancePayloadAssembly
+    fuelSolution: fuel
+    requiredFuel: 60
+    requiredFuelReagent: RMCMethane
+    results:
+    - payload: RMC84mmRocketWarhead
+      result: RMCRocket84mmCustom
+  - type: Item
+    size: Normal
+
+- type: entity
+  name: 84mm rocket warhead
+  description: A warhead for the 84mm rocket. Insert a double-igniter assembly and fill with chemicals.
+  parent: RMCCasingBase
+  id: RMC84mmRocketWarhead
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/CustomOrdnance/84mmrocketwarhead.rsi
+    layers:
+    - state: icon
+      map: ["state"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.RMCCasingVisualKey.State:
+        state:
+          Empty: { state: icon }
+          Loaded: { state: ass }
+          Sealed: { state: locked }
+          Armed: { state: locked }
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 11250
+  - type: RMCChembombCasing
+    maxVolume: 180
+    basePower: 220
+    baseFalloff: 160
+    maxShards: 80
+    shrapnelSpread: 90
+    directionalShrapnel: true
+    minFireIntensity: 4
+    maxFireIntensity: 45
+    minFireRadius: 2
+    maxFireRadius: 4
+    minFireDuration: 5
+    maxFireDuration: 36
+  - type: SolutionContainerManager
+    solutions:
+      chemicals:
+        maxVol: 180
+  - type: ItemSlots
+    slots:
+      detonator:
+        name: rmc-chembomb-detonator-slot
+        whitelist:
+          tags:
+          - RMCDoubleIgniterAssembly
+  - type: Item
+    size: Normal
+
+- type: entity
+  id: RMCRocket84mmCustom
+  name: 84mm custom rocket
+  parent: BaseItem
+  description: A custom-built 84mm rocket loaded with a chemical warhead.
+  components:
+  - type: Tag
+    tags:
+    - RMCRocketAmmo84mm
+  - type: CartridgeAmmo
+    proto: RMCProjectileRocket84mmCustom
+    deleteOnSpawn: false
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Explosives/m5spec.rsi
+    layers:
+    - state: m5_84mm_custom_complete
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Item
+    size: Normal
+  - type: Appearance
+  - type: SpentAmmoVisuals
+    state: m5_84mm_custom_complete
+    suffix: false
+  - type: SolutionContainerManager
+    solutions:
+      chemicals:
+        maxVol: 180
+  - type: RMCChemicalAmmoTransfer
+    solution: chemicals
+  - type: IgnorePredictionHide
+  - type: AssistedReloadAmmo
+
+- type: entity
+  id: RMCProjectileRocket84mmCustom
+  name: 84mm custom rocket
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TriggerOnCollide
+    fixtureID: projectile
+  - type: Physics
+    bodyType: Dynamic
+    fixedRotation: false
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.15,-0.15,0.15,0.15"
+        hard: false
+        mask:
+        - Impassable
+        - BulletImpassable
+        restitution: 0.0
+        density: 20
+  - type: Projectile
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Blunt: 15
+    maxFixedRange: 6
+    queueDeletion: true
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/m5spec_projectiles.rsi
+    layers:
+    - state: m5_84mm_he
+  - type: RMCChembombCasing
+    maxVolume: 180
+    chemicalSolution: chemicals
+    basePower: 220
+    baseFalloff: 160
+    maxShards: 80
+    shrapnelSpread: 90
+    directionalShrapnel: true
+    hasActiveDetonator: true
+    stage: Armed
+    minFireIntensity: 4
+    maxFireIntensity: 45
+    minFireRadius: 2
+    maxFireRadius: 4
+    minFireDuration: 5
+    maxFireDuration: 36
+  - type: SolutionContainerManager
+    solutions:
+      chemicals:
+        maxVol: 180
+  - type: PointLight
+    radius: 3.5
+    color: orange
+    energy: 0.5
+  - type: IgnorePredictionHide
+  - type: RMCProjectileAccuracy
+    accuracy: 95
+    thresholds:
+    - range: 7
+      falloff: 10
