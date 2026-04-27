@@ -305,6 +305,7 @@
       - AU14JobGOVFORDCC
       - AU14JobGOVFORAuxSupportSynth
       - AU14JobGOVFORSquadCombatTech
+      - AU14JobGOVFOROrdnanceTech
       - AU14JobGOVFORadvisor
       - AU14JobGOVFORMilitaryDoctor
       - AU14JobCLFGuerilla
@@ -503,4 +504,3 @@
   setPreference: true
   objective: roles-antag-serialkiller-objective
   isCM: true
-

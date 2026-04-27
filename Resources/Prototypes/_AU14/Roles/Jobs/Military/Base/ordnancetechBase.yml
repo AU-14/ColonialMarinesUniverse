@@ -1,0 +1,12 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobOrdnanceTechBase
+  name: au14-job-name-govforordnancetech
+  description: au14-job-description-govforordnancetech
+  playTimeTracker: AU14JobGOVFOROrdnanceTech
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: playTimeTracker
+  id: AU14JobGOVFOROrdnanceTech
+  isHumanoid: true

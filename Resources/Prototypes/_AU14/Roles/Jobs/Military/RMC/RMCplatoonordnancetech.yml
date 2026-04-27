@@ -1,0 +1,53 @@
+- type: job
+  parent: AU14JobOrdnanceTechBase
+  id: AU14JobGOVFOROrdnanceTechRMC
+  name: au14-job-name-govforordnancetechRMC
+  description: au14-job-description-govforordnancetech
+  setPreference: true
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NonResuscitable
+  ranks:
+    RMC_Corporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 216000 # 60 hours
+    RMC_LanceCorporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 108000 # 30 hours
+    RMC_Marine: []
+  startingGear: AU14GearGOVFOROrdnanceTech
+  dummyStartingGear: AU14GearGOVFOROTDummy
+  icon: "CMJobIconOrdnanceTech"
+  requireAdminNotify: false
+  spawnMenuRoleName: Ordnance Technician (TWE RMC)
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforEngineer
+  hasIcon: true
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Marine
+      Faction: govfor
+    - type: Skills
+      preset: AU14SkillPresetPlatoonCombatTechnician
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforordnancetechRMC
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: ot
+    - type: CMVendorUser
+      id: AU14JobGOVFOROrdnanceTech
+      points: 50
+  hidden: true

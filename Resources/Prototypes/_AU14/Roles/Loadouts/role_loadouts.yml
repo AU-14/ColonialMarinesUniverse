@@ -589,6 +589,20 @@
   - SmokablesRMC
 
 - type: roleLoadout
+  id: JobAU14JobGOVFOROrdnanceTech
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: roleLoadout
   id: JobAU14JobGOVFORSquadRifleman
   points: 7
   groups:

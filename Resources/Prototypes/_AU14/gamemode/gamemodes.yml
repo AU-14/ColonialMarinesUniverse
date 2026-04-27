@@ -155,6 +155,7 @@
       AU14JobGOVFORSquadSergeant: 3
       AU14JobGOVFORSquadAutomaticRifleman: 3
       AU14JobGOVFORSquadCombatTech: 6
+      AU14JobGOVFOROrdnanceTech: 1
       AU14JobGOVFORSquadRifleman: 75
       AU14JobGOVFORAuxSupportSynth: 2
       AU14JobGOVFORadvisor: 1
@@ -232,4 +233,3 @@
     - AUPlanetStableGarrison
     - AUPlanetLV624
     - AUPlanetFlight
-

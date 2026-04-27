@@ -856,6 +856,7 @@
   - type: CMAutomatedVendor
     jobs:
     - AU14JobGOVFORSquadCombatTech
+    - AU14JobGOVFOROrdnanceTech
     - AU14JobOPFORSquadCombatTech
     sections:
     - name: Engineer Set

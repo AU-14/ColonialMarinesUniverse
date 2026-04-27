@@ -170,9 +170,9 @@ public sealed class RMCChembombSystem : EntitySystem
             _flammable.SpawnFireDiamond(
                 estimate.FireEntity,
                 tile,
-                (int) estimate.FireRadius,
-                (int) estimate.FireIntensity,
-                (int) estimate.FireDuration);
+                (int)estimate.FireRadius,
+                (int)estimate.FireIntensity,
+                (int)estimate.FireDuration);
         }
 
         if (estimate.HasShards)
@@ -314,44 +314,44 @@ public sealed class RMCChembombSystem : EntitySystem
         switch (GetAssemblyKind(assembly))
         {
             case RMCOrdnanceAssemblyKind.DoubleIgniter:
-            {
-                var trigger = EnsureComp<OnUseTimerTriggerComponent>(ent);
-                trigger.Delay = 1f;
-                trigger.DelayOptions = null;
-                trigger.BeepSound = ArmSound;
-                trigger.DoPopup = false;
-                trigger.InitialBeepDelay = 0f;
-                trigger.BeepInterval = 99999f;
-                break;
-            }
-            case RMCOrdnanceAssemblyKind.Timer:
-            {
-                var trigger = EnsureComp<OnUseTimerTriggerComponent>(ent);
-                trigger.Delay = assembly.TimerDelay;
-                trigger.DelayOptions = null;
-                trigger.BeepSound = ArmSound;
-                trigger.DoPopup = false;
-                trigger.InitialBeepDelay = 0f;
-                trigger.BeepInterval = 5f;
-
-                if (IsC4PlasticCasing(ent))
                 {
-                    trigger.BeepSound = C4TimerBeepSound;
-                    trigger.BeepInterval = 1f;
-                    trigger.StartOnStick = true;
-                    trigger.AllowToggleStartOnStick = true;
+                    var trigger = EnsureComp<OnUseTimerTriggerComponent>(ent);
+                    trigger.Delay = 1f;
+                    trigger.DelayOptions = null;
+                    trigger.BeepSound = ArmSound;
+                    trigger.DoPopup = false;
+                    trigger.InitialBeepDelay = 0f;
+                    trigger.BeepInterval = 99999f;
+                    break;
                 }
+            case RMCOrdnanceAssemblyKind.Timer:
+                {
+                    var trigger = EnsureComp<OnUseTimerTriggerComponent>(ent);
+                    trigger.Delay = assembly.TimerDelay;
+                    trigger.DelayOptions = null;
+                    trigger.BeepSound = ArmSound;
+                    trigger.DoPopup = false;
+                    trigger.InitialBeepDelay = 0f;
+                    trigger.BeepInterval = 5f;
 
-                break;
-            }
+                    if (IsC4PlasticCasing(ent))
+                    {
+                        trigger.BeepSound = C4TimerBeepSound;
+                        trigger.BeepInterval = 1f;
+                        trigger.StartOnStick = true;
+                        trigger.AllowToggleStartOnStick = true;
+                    }
+
+                    break;
+                }
             case RMCOrdnanceAssemblyKind.Signaler:
-            {
-                EnsureComp<TriggerOnSignalComponent>(ent);
-                var network = EnsureComp<DeviceNetworkComponent>(ent);
-                _deviceNetwork.SetReceiveFrequency(ent, assembly.SignalFrequency, network);
-                _deviceNetwork.SetTransmitFrequency(ent, assembly.SignalFrequency, network);
-                break;
-            }
+                {
+                    EnsureComp<TriggerOnSignalComponent>(ent);
+                    var network = EnsureComp<DeviceNetworkComponent>(ent);
+                    _deviceNetwork.SetReceiveFrequency(ent, assembly.SignalFrequency, network);
+                    _deviceNetwork.SetTransmitFrequency(ent, assembly.SignalFrequency, network);
+                    break;
+                }
             case RMCOrdnanceAssemblyKind.Proximity:
                 if (TryComp<RMCMineCasingComponent>(ent, out var mine))
                 {
@@ -440,7 +440,7 @@ public sealed class RMCChembombSystem : EntitySystem
         return new RMCDemolitionsScannerBuiState(
             MetaData(target).EntityName,
             estimate.CurrentVolume,
-            (float) casing.MaxVolume,
+            (float)casing.MaxVolume,
             casing.HasActiveDetonator,
             casing.Stage,
             estimate.HasExplosion,
