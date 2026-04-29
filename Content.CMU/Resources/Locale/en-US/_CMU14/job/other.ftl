@@ -262,3 +262,40 @@ au14-ipie-greeting = You are Weyland-Yutani's Personal Protection Officer. Prote
     Weyland-Yutani - building better worlds.
 
 au14-lacncommando-description = You have been loaned to the United Americas Allied Command by the LACN for a special mission on this planet, the details of which have not been disclosed to you. You have been ordered to investigate the area and report to the local GOVFOR command.
+
+au14-job-name-vai-mercenary = Contractor
+au14-vai-mercenary-description = You are Vanguard's Arrow Incorporated Mercenary. Follow your contract. For details, consult your primer.
+au14-job-prefix-vai-mercenary = VAIC
+
+au14-job-name-vai-teamleader = Team Leader
+au14-job-prefix-vai-teamleader = VAITL
+
+au14-job-name-vai-medic = Medical Specialist
+au14-job-prefix-vai-medic = VAIM
+
+au14-job-name-vai-engi = Engineering Specialist
+au14-job-prefix-vai-engi = VAIE
+
+au14-job-name-vai-machinegunner = Machinegunner
+au14-job-prefix-vai-machinegunner = VAIMG
+
+au14-vaipo-greeting = You are part of Vanguard's Arrow Incorporated Primary Operations. 
+
+    You received a call from local UA Ambassador and to investigate it.
+    Ensure safety of Ambassador for all cost.
+
+    You are FRIENDLY to all UA units.
+
+au14-vaiso-greeting = You are part of Vanguard's Arrow Incorporated Special Operations.
+
+    You are tasked unsavory operations, black ops, and the anti-WY work.
+
+    You received intel from local CLF insurgents on Weyland-Yutani research facility.
+
+    You are to raid it and retrieve any valuable intel.
+
+    Do it quickly, and dont draw unnecessery attention.
+
+    Remember, you are not here, never was and never will.
+
+    You are FRIENDLY to all UA units.
