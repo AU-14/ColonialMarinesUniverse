@@ -56,7 +56,7 @@
         amount: 15
       - id: AU14UPPUshanka
         amount: 40
-   - name: Headsets
+    - name: Headsets
       entries:
       - id: RMCM5CameraGear
         amount: 30
@@ -926,3 +926,59 @@
       entries:
       - id: RMCSynthResetKey
         points: 5
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14MilitaryPolicemanVendorUPP
+  name: UPP commissariat police equipment rack
+  description: An automated rack hooked up to a small storage of military police equipment.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+    jobs: [ AU14JobGOVFORMilitaryPoliceMan, AU14JobMilitaryPoliceBase ]
+    sections:
+    - name: Standard Equipment
+      takeAll: CMStandard
+      entries:
+      - id: CMGlassesSecurity
+      - id: CMBeltSecurityMPFilled
+      - id: RMCBoxZiptie
+      - id: RMCGuidebookLawMarine
+      - id: RMCGuidebookSOP
+    - name: Uniform
+      choices: { AU14Uniform: 1 }
+      entries:
+      - id: AU14JumpsuitMPUPP
+    - name: Footwear
+      choices: { AU14FootWear: 1 }
+      entries:
+      - id: RMCBootsSPPFilled
+    - name: Hat
+      choices: { CMHat: 1 }
+      entries:
+      - id: CMHeadCapSPPPeaked
+    - name: Helmet
+      choices: { AU14Helmet: 1 }
+      entries:
+      - id: AU14UPPNavalInfantryHelmet
+    - name: Outerwear
+      choices: { AU14vest: 1 }
+      entries:
+      - id: AU14CoatUPPMP
+    - name: Vest
+      choices: { AU14vest: 1 }
+      entries:
+      - id: AU14UPPArmorMinimalistic
+    - name: Backpack
+      choices: { CMBackpack: 1 }
+      entries:
+      - id: CMSatchelMarine
+      - id: CMSatchelSecurity
+    - name: Pouches
+      choices: { RMCPouch: 2 }
+      entries:
+      - id: RMCPouchGeneralMedium
+      - id: AU14PouchIFAKFill
+      - id: RMCPouchMagazinePistol
+      - id: RMCPouchPistol

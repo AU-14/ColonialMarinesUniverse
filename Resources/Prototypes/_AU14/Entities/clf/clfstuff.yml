@@ -22,29 +22,35 @@
     sections:
     - name: Rifles
       entries:
-      - id: AU14WeaponRifleM16A1
-        amount: 2
-        points: 6
-      - id: AU14WeaponRifleM16A2
-        amount: 3
-        points: 5
-      - id: AU14WeaponRifleAR10
-        amount: 3
-        points: 4
       - id: RMCWeaponBoltActionRifle
         amount: 3
         points: 2
+      - id: AU14WeaponRifleAR10
+        amount: 3
+        points: 4
+      - id: RMCWeaponRifleL42A
+        amount: 2
+        points: 5
+      - id: AUWeaponRifleM20A
+        amount: 4
+        points: 6
       - id: WeaponRifleMAR40
         amount: 2
-        points: 10
+        points: 7
       - id: RMCWeaponRifleType71C
         amount: 1
-        points: 7
+        points: 9
+      - id: RMCWeaponRifleType73
+        amount: 1
+        points: 12
     - name: Shotguns
       entries:
       - id: RMCWeaponShotgunHG3712
         amount: 1
         points: 7
+      - id: RMCWeaponShotgunM3717
+        amount: 1
+        points: 9
       - id: WeaponShotgunM357Sawn
         amount: 2
         points: 4
@@ -53,21 +59,24 @@
         points: 5
     - name: Handguns
       entries:
-      - id: CMWeaponPistolM1984Empty
-        amount: 3
+      - id: AU14WeaponPistolTPR23BEmpty
+        amount: 1
         points: 3
-      - id: RMCWeaponPistolB92FS
-        amount: 2
-        points: 4
+      - id: CMWeaponPistolM1984Empty
+        amount: 5
+        points: 3
       - id: RMCWeaponRevolverM44
         amount: 3
         points: 4
       - id: RMCWeaponPistolHoldout
         amount: 10
         points: 1
-      - id: RMCWeaponPistolD18
-        amount: 7
-        points: 3
+      - id: RMCWeaponPistolNP92Empty
+        amount: 4
+        points: 2
+      - id: RMCWeaponSMGUZI
+        amount: 4
+        points: 5
     - name: Special Weapons
       entries:
       - id: RMCWeaponLauncherHJRA12
@@ -78,7 +87,10 @@
         points: 8
       - id: RMCWeaponMar50LMG
         amount: 1
-        points: 11
+        points: 13
+      - id: RMCWeaponLMGM60
+        amount: 1
+        points: 15
       - id: RMCM2CMount
         amount: 1
         points: 19
@@ -87,27 +99,27 @@
       - id: RMCMagazineRifleM16
         amount: 85
         points: 1
+      - id: RMCMagazineRifleL42A
+        amount: 45
+        points: 1
+      - id: RMCMagazineRifleL42AExtended
+        amount: 4
+        points: 2
+      - id: AU14MagazineRifleM20A
+        amount: 85
+        points: 1
       - id: RMCMagazineRifleHunting
         amount: 25
         points: 1
       - id: RMCMagazineRifleMAR40
         amount: 35
         points: 1
-      - id: RMCMagazineMar50LMG
-        amount: 2
-        points: 3
-      - id: RMCMagazineLMGM60
-        amount: 5
-        points: 2
       - id: RMCMagazineRifleType71
         amount: 9
         points: 2
       - id: RMCMagazineRifleType71AP
         amount: 9
         points: 6
-      - id: RMCMagazineM2C
-        amount: 9
-        points: 4
     - name: Shotgun Ammunition
       entries:
       - id: RMCBoxShotgunFlechette
@@ -124,21 +136,47 @@
       - id: CMMagazinePistolM1984
         amount: 30
         points: 1
-      - id: RMCMagazinePistolB92FS
-        amount: 20
-        points: 1
-      - id: RMCMagazinePistolHoldout
-        amount: 30
-        points: 1
+      - id: RMCMagazinePistolM1984AP
+        amount: 4
+        points: 3
+      - id: RMCMagazinePistolM1984HP
+        amount: 2
+        points: 3
       - id: RMCSpeedLoaderM44
         amount: 30
         points: 1
       - id: RMCSpeedLoader44Marksman
-        amount: 2
+        amount: 4
         points: 2
-      - id: RMCMagazinePistolD18
-        amount: 35
+      - id: RMCMagazinePistolHoldout
+        amount: 30
         points: 1
+      - id: RMCMagazinePistolNP92
+        amount: 20
+        points: 1
+      - id: RMCMagazineSMGUZI
+        amount: 8
+        points: 1
+    - name: Special Ammunition
+      entries:
+      - id: RMCMagazineMar50LMG
+        amount: 5
+        points: 2
+      - id: RMCMagazineLMGM60
+        amount: 5
+        points: 2
+      - id: RMCMagazineM2C
+        amount: 5
+        points: 4
+      - id: RMCRocketHJRA12HE
+        amount: 4
+        points: 9
+      - id: RMCRocketHJRA12AT
+        amount: 5
+        points: 11
+      - id: RMCRocketHJRA12Incen
+        amount: 1
+        points: 12
     - name: Explosives
       entries:
       - id: RMCGrenadeMolotov
@@ -159,12 +197,6 @@
       - id: RMCExplosivePlastic
         amount: 2
         points: 8
-      - id: RMCRocketHJRA12HE
-        amount: 4
-        points: 9
-      - id: RMCRocketHJRA12AT
-        amount: 5
-        points: 11
     - name: Improvised Explosive Devices
       entries:
       - id: CMMultitool
@@ -199,17 +231,20 @@
       - id: CMUGasMaskFilter
         amount: 5
         points: 2
+      - id: CMUGasMaskFilterHAZOPS
+        amount: 3
+        points: 5
     - name: Special Equipment
       entries:
       - id: CMUCLFSynthSubversionKey
         amount: 1
         points: 20
       - id: AU14TattooInkCartridge
-        amount: 10
+        amount: 15
         points: 6
       - id: AU14TattooGun
         amount: 3
-        points: 8
+        points: 12
     - name: Mortar
       entries:
       - id: RMCRangefinder
@@ -219,14 +254,14 @@
         amount: 1
         points: 20
       - id: RMCMortarShellFlare
-        amount: 10
+        amount: 8
         points: 3
       - id: RMCMortarShellHE
-        amount: 10
-        points: 6
+        amount: 7
+        points: 4
       - id: AU14MortarShellHEATMP
-        amount: 10
-        points: 8
+        amount: 6
+        points: 5
       - id: RMCMortarShellIncendiary
         amount: 5
         points: 12

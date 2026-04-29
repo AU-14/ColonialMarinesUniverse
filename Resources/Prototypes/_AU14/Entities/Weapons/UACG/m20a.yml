@@ -96,7 +96,7 @@
       tags:
       - AU14MagazineRifleM20A
     proto: AU14CartridgeRifleM20A
-    capacity: 20
+    capacity: 40
   - type: Sprite
     sprite: _AU14/Weapons/Guns/Ammo/Magazines/m20amag.rsi
     layers:

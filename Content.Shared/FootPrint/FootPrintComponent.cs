@@ -14,4 +14,11 @@ public sealed partial class FootPrintComponent : Component
 
     [DataField]
     public Entity<SolutionComponent>? Solution;
+
+    /// <summary>
+    /// Set when the footprint's alpha has already been reduced because a weed exists on its tile.
+    /// Prevents stacking the dim effect each time a weed spreads onto the same tile.
+    /// </summary>
+    [ViewVariables]
+    public bool DimmedByWeeds;
 }

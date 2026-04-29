@@ -81,18 +81,17 @@
   displayName: seeds-peanut-display-name
   plantRsi: _RMC14/Objects/Kitchen/Plants/peanut.rsi
   packetPrototype: PeanutSeeds
-  harvestRepeat: Repeat
   productPrototypes:
   - FoodPeanut
   lifespan: 55
   maturation: 6
   production: 6
-  yield: 6
+  yield: 3
   potency: 10
   growthStages: 6
   lightTolerance: 6
-  waterConsumption: 0.60
-  nutrientConsumption: 0.50
+  waterConsumption: 0.70
+  nutrientConsumption: 0.60
   idealHeat: 288
   chemicals:
     Nutriment:
@@ -112,7 +111,7 @@
   lifespan: 25
   maturation: 6
   production: 7
-  yield: 5
+  yield: 3
   potency: 1
   growthStages: 3
   lightTolerance: 6
@@ -137,7 +136,7 @@
   lifespan: 60
   maturation: 6
   production: 6
-  yield: 6
+  yield: 3
   potency: 10
   growthStages: 6
   lightTolerance: 6

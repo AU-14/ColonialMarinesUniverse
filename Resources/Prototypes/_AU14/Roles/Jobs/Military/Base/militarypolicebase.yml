@@ -3,10 +3,10 @@
   id: AU14JobMilitaryPoliceBase
   name: au14-job-name-govformilitarypoliceman
   description: au14-job-description-govformilitarypoliceman
-  playTimeTracker: AU14JobMilitaryPoliceTracker
+  playTimeTracker: AU14JobGOVFORMilitaryPoliceMan
   basePlaytimeTracker: true
   hidden: true
 
 - type: playTimeTracker
-  id: AU14JobMilitaryPoliceTracker
+  id: AU14JobGOVFORMilitaryPoliceMan
   isHumanoid: true

@@ -41,4 +41,7 @@ public sealed partial class XenoChargeComponent : Component
 
     [DataField, AutoNetworkedField]
     public float Strength = 20;
+
+    [DataField]
+    public HashSet<EntityUid> AlreadyHit = new();
 }

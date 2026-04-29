@@ -278,7 +278,7 @@
       entries:
       - id: CMGlassesSecurity
       - id: CMBeltSecurityMPFilled
-      - id: AU14PouchPoliceEquipmentSupportSynth
+      - id: RMCBoxZiptie
       - id: RMCGuidebookLawMarine
       - id: RMCGuidebookSOP
     - name: Hat
@@ -289,4 +289,12 @@
     - name: Backpack
       choices: { CMBackpack: 1 }
       entries:
+      - id: CMSatchelMarine
       - id: CMSatchelSecurity
+    - name: Pouches
+      choices: { RMCPouch: 2 }
+      entries:
+      - id: RMCPouchGeneralMedium
+      - id: AU14PouchIFAKFill
+      - id: RMCPouchMagazinePistol
+      - id: RMCPouchPistol

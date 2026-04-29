@@ -12,6 +12,15 @@ public sealed partial class VehicleLockComponent : Component
 {
     [DataField]
     public bool Locked;
+
+    [DataField]
+    public float ForceOpenBelowFraction = 0.3f;
+
+    [DataField]
+    public float RelockAtFraction = 0.9f;
+
+    [DataField]
+    public bool ForcedOpen;
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]

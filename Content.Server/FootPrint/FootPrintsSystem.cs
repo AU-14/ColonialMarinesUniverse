@@ -3,9 +3,11 @@ using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.FootPrint;
+using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Random;
 
 namespace Content.Server.FootPrint;
@@ -15,6 +17,9 @@ public sealed class FootPrintsSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly IMapManager _map = default!;
+    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly SharedXenoWeedsSystem _weeds = default!;
 
     [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
@@ -23,6 +28,17 @@ public sealed class FootPrintsSystem : EntitySystem
     private EntityQuery<TransformComponent> _transformQuery;
     private EntityQuery<MobThresholdsComponent> _mobThresholdQuery;
     private EntityQuery<AppearanceComponent> _appearanceQuery;
+    private EntityQuery<MapGridComponent> _gridQuery;
+
+    // Cap how many Footstep entities can coexist on a single tile. Heavy traffic
+    // areas (e.g. blood-soaked corridors) used to spawn unbounded entities and tank server perf.
+    private const int MaxFootprintsPerTile = 8;
+
+    // Multiplier applied to a footprint's alpha when it is placed on, or covered by, xeno weeds —
+    // keeps the weeds underneath visible.
+    public const float WeedAlphaMultiplier = 0.3f;
+
+    private readonly HashSet<Entity<FootPrintComponent>> _footprintsInTile = new();
 
     public override void Initialize()
     {
@@ -31,6 +47,7 @@ public sealed class FootPrintsSystem : EntitySystem
         _transformQuery = GetEntityQuery<TransformComponent>();
         _mobThresholdQuery = GetEntityQuery<MobThresholdsComponent>();
         _appearanceQuery = GetEntityQuery<AppearanceComponent>();
+        _gridQuery = GetEntityQuery<MapGridComponent>();
 
         SubscribeLocalEvent<FootPrintsComponent, ComponentStartup>(OnStartupComponent);
         SubscribeLocalEvent<FootPrintsComponent, MoveEvent>(OnMove);
@@ -58,16 +75,37 @@ public sealed class FootPrintsSystem : EntitySystem
 
         component.RightStep = !component.RightStep;
 
-        var entity = Spawn(component.StepProtoId, CalcCoords(gridUid, component, transform, dragging));
+        var spawnCoords = CalcCoords(gridUid, component, transform, dragging);
+
+        // Bail if this tile has already hit the per-tile footprint cap.
+        if (_gridQuery.TryComp(gridUid, out var gridComp))
+        {
+            var tile = _mapSystem.CoordinatesToTile(gridUid, gridComp, spawnCoords);
+            _footprintsInTile.Clear();
+            _lookup.GetLocalEntitiesIntersecting(gridUid, tile, _footprintsInTile, gridComp: gridComp);
+            if (_footprintsInTile.Count >= MaxFootprintsPerTile)
+                return;
+        }
+
+        var entity = Spawn(component.StepProtoId, spawnCoords);
         var footPrintComponent = EnsureComp<FootPrintComponent>(entity);
 
         footPrintComponent.PrintOwner = uid;
+
+        // Dim the footprint if the tile already has weeds, so the weeds remain visible.
+        var stepColor = component.PrintsColor;
+        if (gridComp != null && _weeds.IsOnWeeds((gridUid, gridComp), spawnCoords))
+        {
+            stepColor = stepColor.WithAlpha(stepColor.A * WeedAlphaMultiplier);
+            footPrintComponent.DimmedByWeeds = true;
+        }
+
         Dirty(entity, footPrintComponent);
 
         if (_appearanceQuery.TryComp(entity, out var appearance))
         {
             _appearance.SetData(entity, FootPrintVisualState.State, PickState(uid, dragging), appearance);
-            _appearance.SetData(entity, FootPrintVisualState.Color, component.PrintsColor, appearance);
+            _appearance.SetData(entity, FootPrintVisualState.Color, stepColor, appearance);
         }
 
         if (!_transformQuery.TryComp(entity, out var stepTransform))

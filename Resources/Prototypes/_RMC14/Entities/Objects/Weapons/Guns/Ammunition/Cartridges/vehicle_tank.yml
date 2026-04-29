@@ -81,9 +81,9 @@
     centerRadius: 1
   - type: Explosive
     explosionType: RMCLTBCannon
-    maxIntensity: 40
-    intensitySlope: 18
-    totalIntensity: 650
+    maxIntensity: 11
+    intensitySlope: 4
+    totalIntensity: 150
     tileBreakScale: 0
     maxTileBreak: 0
 

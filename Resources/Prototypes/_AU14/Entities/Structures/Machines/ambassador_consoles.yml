@@ -55,9 +55,9 @@
     replenishAmount: 25
     replenishInterval: 60
     callableParties:
-      UPPGROM: 1000
-      UPPGROMAlt: 500
-      UPPGROMAlt2: 750
+      UPPGROM: 7500
+      UPPGROMAlt: 6000
+      UPPGROMAlt2: 4500
 
 # UA Ambassador Console - Can call in US Army
 - type: entity
@@ -76,9 +76,9 @@
     replenishAmount: 25
     replenishInterval: 60
     callableParties:
-      USArmy: 1000
-      USArmyAlt: 500
-      USArmyAlt2: 750
+      USArmy: 7500
+      USArmyAlt: 4500
+      USArmyAlt2: 6000
 
 # TWE Ambassador Console - Three World Empire
 - type: entity
@@ -97,8 +97,8 @@
     replenishAmount: 25
     replenishInterval: 60
     callableParties:
-      RMCRRT: 1300
-      NSPAInvestigationParty: 800
+      RMCRRT: 7500
+      NSPAInvestigationParty: 5000
 
 # Independent Systems Ambassador Console
 - type: entity

@@ -779,3 +779,53 @@
         amount: 16
       - id: RMCExplosivePlastic
         amount: 12
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14MilitaryPolicemanVendorLACN
+  name: LACN military police equipment rack
+  description: An automated rack hooked up to a small storage of military police equipment.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+    jobs: [ AU14JobGOVFORMilitaryPoliceMan, AU14JobMilitaryPoliceBase ]
+    sections:
+    - name: Standard Equipment
+      takeAll: CMStandard
+      entries:
+      - id: CMGlassesSecurity
+      - id: CMBeltSecurityMPFilled
+      - id: RMCBoxZiptie
+      - id: RMCGuidebookLawMarine
+      - id: RMCGuidebookSOP
+    - name: Uniform
+      choices: { AU14Uniform: 1 }
+      entries:
+      - id: AU14LACNUniform
+      - id: AU14LACNUniformCoat
+    - name: Footwear
+      choices: { AU14FootWear: 1 }
+      entries:
+      - id: AU14LACNBoots
+    - name: Hat
+      choices: { CMHat: 1 }
+      entries:
+      - id: CMHeadCapMP
+      - id: CMHeadBeretRed
+    - name: Vest
+      choices: { AU14vest: 1 }
+      entries:
+      - id: AU14LACNCommandoArmorStandard
+    - name: Backpack
+      choices: { CMBackpack: 1 }
+      entries:
+      - id: CMSatchelMarine
+      - id: CMSatchelSecurity
+    - name: Pouches
+      choices: { RMCPouch: 2 }
+      entries:
+      - id: RMCPouchGeneralMedium
+      - id: AU14PouchIFAKFill
+      - id: RMCPouchMagazinePistol
+      - id: RMCPouchPistol

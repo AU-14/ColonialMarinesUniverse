@@ -3,10 +3,11 @@
 - type: entity
   parent: RMCCrateWeapons
   id: AU14CrateMortarKitRMC
-  name: L53A1 light mortar crate (Mortar x1, Mortar shell backpack x1)
+  name: L53A1 light mortar crate (Mortar x1, Mortar shell backpack x1, 1x Mortar Kit)
   components:
   - type: StorageFill
     contents:
+    - id: RMCMortarEquipmentCase
     - id: AU14MortarKitRMC
     - id: AU14BackpackMortarFilled
 
@@ -18,7 +19,7 @@
   - type: StorageFill
     contents:
     - id: RMCMortarShellHE
-      amount: 6
+      amount: 12
 
 - type: entity
   parent: RMCCrateMortarAmmo
@@ -28,7 +29,7 @@
   - type: StorageFill
     contents:
     - id: RMCMortarShellIncendiary
-      amount: 6
+      amount: 12
 
 - type: entity
   parent: RMCCrateMortarAmmo
@@ -38,7 +39,7 @@
   - type: StorageFill
     contents:
     - id: RMCMortarShellFlare
-      amount: 6
+      amount: 12
 
 - type: entity
   parent: RMCCrateMortarAmmo
@@ -48,4 +49,4 @@
   - type: StorageFill
     contents:
     - id: RMCMortarShellFlare
-      amount: 6
+      amount: 12

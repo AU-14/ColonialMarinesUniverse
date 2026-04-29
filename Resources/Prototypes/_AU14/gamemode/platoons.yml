@@ -18,7 +18,7 @@
     Pilot: AU14AircrewWeaponsVendor
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
-    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryPolice: AU14MilitaryPolicemanVendorLACN
   possibleships:
     - USSBush
   #platoonflag: uaflag
@@ -47,7 +47,7 @@
     Pilot: AU14AircrewWeaponsVendor
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
-    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryPolice: AU14MilitaryPolicemanVendorUSCM
   #platoonflag:  uaflag
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
@@ -79,7 +79,7 @@
     JuniorOfficer: AU14JOGenericVendor
     SectionSergeant: AU14UPPSectionLeaderVendor
     Pilot: AU14UPPAirCrewWeaponsVendor
-    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryPolice: AU14MilitaryPolicemanVendorUPP
   possibleships:
       - USSBush
 #  jobClassOverride:
@@ -97,8 +97,6 @@
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/normandy.yml
   techTree: RMCIntelTechTree_ua
-
-
 
 - type: platoon
   id: WEYU
@@ -136,7 +134,6 @@
   - /Maps/_CMU14/Shuttles/normandy.yml
   possibleships:
       - USSBush
-
   compatibleFighters:
   - /Maps/_AU14/ShuttlesDropships/f84owl.yml
   - /Maps/_AU14/ShuttlesDropships/ud_6.yml
@@ -162,7 +159,7 @@
     Pilot: AU14CMBCIUPilotVendor
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
-    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryPolice: AU14MilitaryPolicemanGenericVendorCIU
 #  jobClassOverride:
 #    PlatCo: AU14JobGOVFORPlatCoCMBCIU
 #    SquadRifleman: AU14JobGOVFORSquadRiflemanCMBCIU
@@ -231,7 +228,7 @@
     Pilot: AU14AircrewWeaponsVendor
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
-    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryPolice: AU14MilitaryPolicemanVendorUSCM
   possibleships:
       - USSBush
   CompatibleDropships:
@@ -272,46 +269,6 @@
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml
   possibleships:
       - USSBush
-  techTree: RMCIntelTechTree_ua
-
-- type: platoon
-  id: UNISC
-  name: UNISC Peacekeepers
-  lorePrimer: AU14PrimerPlatoonUNISC
-  reqlist: USCMCargoCatalog
-  VendorToMarker:
-    Rifleman: AU14USCMequipmentvendor
-    Clothing: AU14UNISCclothingequipmentvendor
-    Weapons: AU14UNISCWeaponsVendor
-    SWeapons: AU14UNISCWeaponsVendor
-    Corpsman: AU14UNISCcorpsmanvendor
-    Arifleman: AU14UNISCclothingequipmentvendor
-    Dcc: AU14UNISCaircrewvendor
-    OperationsOfficer: AU14UNISCcommandequipmentvendor
-    Rto: AU14RTOVendor
-    SectionSergeant: AU14UNISCsectionleaderequipmentvendor
-    Pilot: AU14AircrewWeaponsVendor
-    combattech: AU14ComtechGearVendor
-    JuniorOfficer: AU14JOGenericVendor
-    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
-#  jobClassOverride:
-#    SquadRifleman: AU14JobGOVFORSquadRifleman
-#    SectionSergeant: AU14JobGOVFORSectionSergeant
-#    PlatoonCorpsman: AU14JobGOVFORPlatoonCorpsman
-#    PlatCo: AU14JobGOVFORPlatCo
-#    SquadSergeant: AU14JobGOVFORSquadSergeant
-#    DSPilot: AU14JobGOVFORDSPilot
-#    RadioTelephoneOperator: AU14JobGOVFORRadioTelephoneOperator
-#    PlatOp: AU14JobGOVFORPlatOp
-#    DCC: AU14JobGOVFORDCC
-  CompatibleDropships:
-  - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/normandy.yml
-  possibleships:
-      - USSBush
-  compatibleFighters:
-  - /Maps/_AU14/ShuttlesDropships/f84owl.yml
-  - /Maps/_AU14/ShuttlesDropships/ud_6.yml
   techTree: RMCIntelTechTree_ua
 
 - type: platoon
@@ -421,10 +378,6 @@
 - type: lorePrimer
   id: AU14PrimerPlatoonProdigySF
   PlatoonInfo: "Prodigy Security Forces"
-
-- type: lorePrimer
-  id: AU14PrimerPlatoonUNISC
-  PlatoonInfo: "UNISC peacekeepers are a multinational force dedicated to maintaining stability and enforcing peace agreements across contested regions, often deployed in high-tension zones to prevent escalation."
 
 - type: lorePrimer
   id: AU14PrimerPlatoonVAIPO

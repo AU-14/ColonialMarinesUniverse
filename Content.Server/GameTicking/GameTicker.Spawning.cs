@@ -226,7 +226,19 @@ namespace Content.Server.GameTicking
 
             var spawnableStations = GetSpawnableStations();
             var assignedJobs = _stationJobs.AssignJobs(profiles, spawnableStations);
-            _auThreatSystem.SpawnThreatAtRoundStart(_auRoundSystem._selectedthreat, DefaultMap, assignedJobs);
+
+            // Defensive: any exception inside SpawnPlayers propagates to StartRound's
+            // EXCEPTION_TOLERANCE catch (only enabled in Release/Tools builds), which calls
+            // RestartRound() — making the round appear to "instantly restart at start" in
+            // production. Wrap the threat spawn so a single subsystem can't take the round down.
+            try
+            {
+                _auThreatSystem.SpawnThreatAtRoundStart(_auRoundSystem._selectedthreat, DefaultMap, assignedJobs);
+            }
+            catch (Exception threatEx)
+            {
+                Log.Error($"SpawnThreatAtRoundStart threw — round will continue without threat spawn. {threatEx}");
+            }
 
             _stationJobs.AssignOverflowJobs(ref assignedJobs, playerNetIds, profiles, spawnableStations);
 
@@ -253,7 +265,18 @@ namespace Content.Server.GameTicking
             // Spawn everybody in!
             foreach (var (player, (job, station)) in assignedJobs)
             {
-                if (job != null && (job == "AU14JobThreatLeader" || job == "AU14JobThreatMember" || job == "AU14JobThirdPartyLeader" || job == "AU14JobThirdPartyMember"))
+                // Threat jobs are intentionally skipped here — AuThreatSystem.SpawnThreatAtRoundStart
+                // (called above) already spawns those entities at threat markers and mind-transfers
+                // the players to them.
+                //
+                // ThirdParty jobs deliberately fall through to the standard spawn path. Putting them
+                // in this skip list (as PR #838 did) caused both distress and insurgency rounds to
+                // restart at start: those players ended up bodyless, then SpawnThirdParty's
+                // mind-transfer block (called below) hit GetMind→null→CreateMind→PlayerJoinGame on a
+                // session still in lobby state, which threw, which propagated to StartRound's
+                // EXCEPTION_TOLERANCE catch and called RestartRound(). Keep them in the standard
+                // pipeline so they have a body even if SpawnThirdParty later no-ops.
+                if (job != null && (job == "AU14JobThreatLeader" || job == "AU14JobThreatMember"))
                     continue;
                 if (job == null)
                     continue;
@@ -275,7 +298,17 @@ namespace Content.Server.GameTicking
             }
 
             RefreshLateJoinAllowed();
-            _auThirdParty.StartThirdPartySpawning(_auRoundSystem._selectedthreat, assignedJobs);
+
+            // Defensive: same rationale as the SpawnThreatAtRoundStart try/catch above. Without
+            // this, an exception inside third-party spawning kills the entire round at start.
+            try
+            {
+                _auThirdParty.StartThirdPartySpawning(_auRoundSystem._selectedthreat, assignedJobs);
+            }
+            catch (Exception thirdPartyEx)
+            {
+                Log.Error($"StartThirdPartySpawning threw — round will continue without third-party spawn. {thirdPartyEx}");
+            }
 
             // Allow rules to add roles to players who have been spawned in. (For example, on-station traitors)
             RaiseLocalEvent(new RulePlayerJobsAssignedEvent(

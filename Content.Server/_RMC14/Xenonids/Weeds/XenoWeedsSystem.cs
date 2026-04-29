@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.Server.Atmos.Components;
+using Content.Server.FootPrint;
 using Content.Server.Spreader;
 using Content.Shared._RMC14.Communications;
 using Content.Shared._RMC14.Map;
@@ -10,6 +11,7 @@ using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Atmos;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.FootPrint;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Content.Shared.Tag;
@@ -33,11 +35,13 @@ public sealed class XenoWeedsSystem : SharedXenoWeedsSystem
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly PhysicsSystem _physics = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
 
     private static readonly ProtoId<TagPrototype> IgnoredTag = "SpreaderIgnore";
 
     private readonly List<EntityUid> _anchored = new();
     private readonly List<Entity<XenoWeedsComponent>> _spread = new();
+    private readonly HashSet<Entity<FootPrintComponent>> _footprintsOnTile = new();
 
     private EntityQuery<AirtightComponent> _airtightQuery;
     private EntityQuery<AllowWeedSpreadComponent> _allowWeedSpreadQuery;
@@ -168,6 +172,8 @@ public sealed class XenoWeedsSystem : SharedXenoWeedsSystem
                 var neighborWeeds = Spawn(prototype, coords);
                 var neighborWeedsEnt = AssignSource(neighborWeeds, (source.Value, sourceWeeds));
 
+                DimFootprintsOnTile(grid, neighbor);
+
                 _hive.SetSameHive(uid, neighborWeeds);
 
                 EnsureComp<ActiveEdgeSpreaderComponent>(neighborWeeds);
@@ -220,6 +226,31 @@ public sealed class XenoWeedsSystem : SharedXenoWeedsSystem
                     }
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// When a weed appears on a tile, fade any existing footprints on it so the weed remains visible.
+    /// </summary>
+    private void DimFootprintsOnTile(Entity<MapGridComponent> grid, Vector2i tile)
+    {
+        _footprintsOnTile.Clear();
+        _lookup.GetLocalEntitiesIntersecting(grid.Owner, tile, _footprintsOnTile, gridComp: grid.Comp);
+
+        foreach (var footprint in _footprintsOnTile)
+        {
+            if (footprint.Comp.DimmedByWeeds)
+                continue;
+
+            if (!TryComp(footprint.Owner, out AppearanceComponent? appearance))
+                continue;
+
+            if (!_appearance.TryGetData<Color>(footprint.Owner, FootPrintVisualState.Color, out var color, appearance))
+                continue;
+
+            var dimmed = color.WithAlpha(color.A * FootPrintsSystem.WeedAlphaMultiplier);
+            _appearance.SetData(footprint.Owner, FootPrintVisualState.Color, dimmed, appearance);
+            footprint.Comp.DimmedByWeeds = true;
         }
     }
 }

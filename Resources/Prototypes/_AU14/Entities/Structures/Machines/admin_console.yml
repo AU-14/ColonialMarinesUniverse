@@ -41,10 +41,10 @@
     state: terminal1_old
   - type: AdminConsole
     callableParties:
-      CMBInvestigationPartyAlt: 3700
+      CMBInvestigationPartyAlt: 4500
       ICRCReliefParty: 2800
-      NSPAInvestigationPartyArmored: 3500
-      PAPInvestigationParty: 4000
+      NSPAInvestigationPartyArmored: 6000
+      PAPInvestigationParty: 4500
   - type: AccessReader
     access: [ [ "CMAccessColonyCommand" ] ]
 

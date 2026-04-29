@@ -102,4 +102,7 @@ rmc-vehicle-exit-busy = Someone is already using this exit.
 rmc-vehicle-lock-not-driver = You need to be in the driver seat to lock or unlock the vehicle.
 rmc-vehicle-lock-set-locked = Vehicle doors locked.
 rmc-vehicle-lock-set-unlocked = Vehicle doors unlocked.
+rmc-vehicle-lock-too-damaged = The lock is too damaged to engage.
+rmc-vehicle-lock-broken-open = The vehicle's lock breaks open from the damage!
+rmc-vehicle-lock-operational-again = The vehicle's lock is operational again.
 rmc-hardpoint-remove-blocked = That hardpoint is fixed in place.

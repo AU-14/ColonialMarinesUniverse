@@ -78,9 +78,6 @@
   - type: Storage
     grid:
     - 0,0,14,1 # 15
-    whitelist:
-      components:
-      - XenoEgg
   - type: IgnoreContentsSize
     items:
       components:
@@ -94,9 +91,6 @@
   - type: Storage
     grid:
     - 0,0,14,1 # 15
-    whitelist:
-      components:
-      - XenoEgg
   - type: IgnoreContentsSize
     items:
       components:
@@ -110,9 +104,6 @@
   - type: Storage
     grid:
     - 0,0,14,1 # 15
-    whitelist:
-      components:
-      - XenoEgg
   - type: IgnoreContentsSize
     items:
       components:
@@ -126,9 +117,6 @@
   - type: Storage
     grid:
     - 0,0,9,1 # 9 slots
-    whitelist:
-      components:
-      - XenoEgg
   - type: IgnoreContentsSize
     items:
       components:
@@ -148,7 +136,7 @@
 - type: entity
   parent: RMCSynthResetKeySMART
   id: AU14SynthSubversionKeyCultist
-  name: modified WY synthetic reset key
+  name: WY synthetic reset key
   suffix: Cultist
   description: This device can fix major glitches or programming errors of synthetic units, as well as being able to restart a synthetic that has suffered critical failure. It can only be used once before being reset. This one has been illegally modified. Who knows what it could do.
   components:

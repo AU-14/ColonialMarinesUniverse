@@ -124,7 +124,7 @@
         crate: RMCCrateMedicalPill
     - name: Mortar
       entries:
-      - cost: 6000
+      - cost: 10000
         crate: AU14CrateMortarKitRMC
       - cost: 500
         crate: AU14CrateMortarShellFlareRMC

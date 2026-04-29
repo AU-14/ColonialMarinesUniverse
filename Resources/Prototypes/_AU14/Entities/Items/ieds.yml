@@ -114,11 +114,13 @@
       - Timer
   - type: Explosive
     explosionType: RMC
-    totalIntensity: 900
+    totalIntensity: 1500
     intensitySlope: 5
     maxIntensity: 100
     canCreateVacuum: false
   - type: ExplodeOnTrigger
+  - type: GibOnTrigger
+    deleteItems: false
 
 - type: entity
   parent: CMPaperWritten

@@ -10,6 +10,9 @@
   - type: PowerLoaderGrabbable
     virtualRight: RMCVirtualPowerLoaderRight
     virtualLeft: RMCVirtualPowerLoaderLeft
+  - type: RemoveComponents
+    components:
+    - type: Pullable
 
 - type: entity
   parent: RMCAPCHardpointBase

@@ -536,6 +536,11 @@
     minimapColor: '#3DBF75EE'
 
 - type: entity
+  parent: CMUAreaLV376Med
+  id: CMUAreaLV376MedGarage
+  name: Barker's Lament - Medical Garage
+
+- type: entity
   parent: CMUAreaLV376Inside
   id: CMUAreaLV376Cargo
   name: Barker's Lament - Requisitions
