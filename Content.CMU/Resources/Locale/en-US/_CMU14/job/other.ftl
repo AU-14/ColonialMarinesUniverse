@@ -299,3 +299,11 @@ au14-vaiso-greeting = You are part of Vanguard's Arrow Incorporated Special Oper
     Remember, you are not here, never was and never will.
 
     You are FRIENDLY to all UA units.
+
+au14-vaisp-greeting = You are part of Vanguard's Arrow Incorporated.
+
+    You are a part of Medical team called by UA Ambassador.
+
+    Ensure their safety at all cost.
+
+    You are FRIENDLY to all UA units.
