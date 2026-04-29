@@ -39,3 +39,19 @@
         layer:
         - MidImpassable
   - type: Occluder
+
+- type: entity
+  parent: RMCFogWall25
+  id: CMUFogWall45
+  suffix: 45 minutes
+  components:
+  - type: TimedDespawn
+    lifetime: 2700
+
+- type: entity
+  parent: CMUFogWall45
+  id: CMUFogWall45NotCF
+  suffix: 45 minutes, Not Colony Fall
+  components:
+  - type: DestroyOnPreset
+    preset: ColonyFall
