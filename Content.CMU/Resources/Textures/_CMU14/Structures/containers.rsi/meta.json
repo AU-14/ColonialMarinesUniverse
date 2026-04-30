@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "license": null,
+  "license": "CC-BY-SA-3.0",
   "copyright": "Taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/structures/props/containers/containersextended.dmi, https://github.com/Steelpoint/cmss13/blob/bf751971a956160f294b8f0e71addb109f0242be/icons/obj/structures/props/containers/contain.dmi",
   "size": {
     "x": 32,

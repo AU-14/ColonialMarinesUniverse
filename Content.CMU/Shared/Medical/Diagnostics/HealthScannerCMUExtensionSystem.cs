@@ -55,7 +55,13 @@ public sealed class HealthScannerCMUExtensionSystem : EntitySystem
         if (!HasComp<CMUHumanMedicalComponent>(args.Patient))
             return;
 
-        var skill = args.Examiner is { } examiner ? _skills.GetSkill(examiner, MedicalSkill) : 0;
+        var skill = 0;
+        if (args.Examiner is { } examiner)
+        {
+            skill = HasComp<BypassSkillChecksComponent>(examiner)
+                ? int.MaxValue
+                : _skills.GetSkill(examiner, MedicalSkill);
+        }
         var state = args.State;
 
         FillBodyParts(args.Patient, state);
