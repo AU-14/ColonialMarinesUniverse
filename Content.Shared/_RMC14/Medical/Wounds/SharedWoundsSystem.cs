@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Damage;
@@ -102,15 +102,20 @@ public abstract class SharedWoundsSystem : EntitySystem
 
     private void OnWoundedUnpaused(Entity<WoundedComponent> ent, ref EntityUnpausedEvent args)
     {
+        var dirty = false;
         var wounds = CollectionsMarshal.AsSpan(ent.Comp.Wounds);
         foreach (ref var wound in wounds)
         {
             if (wound.StopBleedAt != null)
+            {
                 wound.StopBleedAt = wound.StopBleedAt + args.PausedTime;
+                dirty = true;
+            }
         }
 
         ent.Comp.UpdateAt += args.PausedTime;
-        Dirty(ent);
+        if (dirty)
+            Dirty(ent);
     }
 
     private void OnWoundTreaterUseInHand(Entity<WoundTreaterComponent> ent, ref UseInHandEvent args)
@@ -123,6 +128,17 @@ public abstract class SharedWoundsSystem : EntitySystem
     {
         if (!args.CanReach || args.Target == null)
             return;
+
+        if (HasComp<Content.Shared._CMU14.Medical.CMUHumanMedicalComponent>(args.Target.Value)
+            && HasComp<Content.Shared._CMU14.Medical.CMUHumanMedicalComponent>(args.User))
+        {
+            var ev = new Content.Shared._CMU14.Medical.Wounds.Events.CMUWoundTreaterInterceptEvent(
+                args.User, ent.Owner, args.Target.Value);
+            RaiseLocalEvent(ref ev);
+            if (ev.Handled)
+                args.Handled = true;
+            return;
+        }
 
         StartTreatment(args.User, args.Target.Value, ent, out var handled);
         args.Handled = handled;
@@ -455,6 +471,7 @@ public abstract class SharedWoundsSystem : EntitySystem
         }
 
         limit ??= FixedPoint2.New(1f);
+        var dirty = false;
         var wounds = CollectionsMarshal.AsSpan(wounded.Comp.Wounds);
         for (var i = 0; i < wounds.Length; i++)
         {
@@ -468,10 +485,14 @@ public abstract class SharedWoundsSystem : EntitySystem
 
             wound.Healed += healing;
             amount += healing;
+            dirty = true;
 
             if (amount == FixedPoint2.Zero)
                 break;
         }
+
+        if (dirty)
+            Dirty(wounded.Owner, wounded.Comp);
     }
 
     public void AddWound(Entity<WoundableComponent?> woundable, FixedPoint2 total, WoundType type, TimeSpan? fixedDuration = null)
@@ -527,11 +548,18 @@ public abstract class SharedWoundsSystem : EntitySystem
             return;
 
         var wounds = wounded.Comp.Wounds;
+        var dirty = false;
         for (var i = wounds.Count - 1; i >= 0; i--)
         {
             if (wounds[i].Type == type)
+            {
                 wounds.RemoveSwap(i);
+                dirty = true;
+            }
         }
+
+        if (dirty)
+            Dirty(wounded.Owner, wounded.Comp);
     }
 
     public bool HasUntreated(Entity<WoundedComponent?> wounded, ProtoId<DamageGroupPrototype> group)

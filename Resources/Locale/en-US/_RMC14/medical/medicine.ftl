@@ -66,6 +66,9 @@ rmc-revivalmix-container-label-text = RM
 rmc-merabic-container-label-text = MB
 rmc-russianred-container-label-text = Rr
 rmc-iron-container-label-text = Fe
+rmc-tramadol-container-label-text = TA
+rmc-oxycodone-container-label-text = OC
+rmc-paracetamol-container-label-text = PL
 
 rmc-custom-container-label-text = {$customLabel}
 

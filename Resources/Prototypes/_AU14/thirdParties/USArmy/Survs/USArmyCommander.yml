@@ -59,7 +59,6 @@
   id: AU14JobUSArmyCommander
   name: US Army Commander (Surv)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadUSArmy

@@ -21,6 +21,7 @@ using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Timing;
+using Content.Shared._RMC14.Item;
 
 namespace Content.Server.AU14.Round
 {
@@ -35,6 +36,7 @@ namespace Content.Server.AU14.Round
         [Dependency] private readonly IEntityManager _entityManager = default!;
         [Dependency] private readonly IPlayerManager _playerManager = default!;
         [Dependency] private readonly IRobustRandom _random = default!;
+        [Dependency] private readonly ItemCamouflageSystem _camo = default!;
 
         [ViewVariables]
         public string? SelectedPlanetMapName => SelectedPlanetMap?.Announcement;
@@ -210,6 +212,7 @@ namespace Content.Server.AU14.Round
                                 // Fallback: if _selectedPlanet wasn't set by handler, pick manually
                                 if (_selectedPlanet == null && options.Count > 0)
                                     _selectedPlanet = options[0].data as RMCPlanetMapPrototypeComponent;
+                                SetCamoType();
                                 StartPlatoonVotes();
                             });
                     });
@@ -555,6 +558,18 @@ namespace Content.Server.AU14.Round
             }
 
             return false;
+        }
+
+        public void SetCamoType(CamouflageType? ct = null)
+        {
+            if (ct != null)
+            {
+                _camo.CurrentMapCamouflage = ct.Value;
+                return;
+            }
+
+            if (_selectedPlanet != null)
+                _camo.CurrentMapCamouflage = _selectedPlanet.Camouflage;
         }
 
         public void chooseThreat(RMCPlanetMapPrototypeComponent? planet)

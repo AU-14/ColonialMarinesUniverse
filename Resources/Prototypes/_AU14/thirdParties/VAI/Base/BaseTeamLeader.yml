@@ -1,0 +1,83 @@
+- type: job
+  parent: CMJobBase
+  id: AU14VAITeamLeaderBase
+  name: au14-job-name-vai-teamleader
+  description: au14-vai-mercenary-description
+  ranks:
+    VAI_TeamLeader: []
+  icon: "CMJobIconEmpty"
+  playTimeTracker: AU14VAITeamLeader
+  spawnMenuRoleName: VAI Team Leader (Base)
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadVAIPO
+    - type: Skills
+      skills:
+        RMCSkillCqc: 5
+        RMCSkillEngineer: 4
+        RMCSkillConstruction: 3
+        RMCSkillFirearms: 2
+        RMCSkillOverwatch: 1
+        RMCSkillMedical: 1
+        RMCSkillMeleeWeapons: 1
+        RMCSkillPilot: 1
+        RMCSkillPolice: 2
+        RMCSkillFireman: 5
+        RMCSkillPowerLoader: 2
+        RMCSkillVehicles: 2
+        RMCSkillJtac: 4
+        RMCSkillEndurance: 3
+        RMCSkillLeadership: 4
+    - type: EquipSurvivorPreset
+      preset: AU14VAIBasePreset
+    - type: JobPrefix
+      prefix: au14-job-prefix-vai-teamleader
+    - type: MarineOrders
+      moveOrderSoundMale:
+        collection: AU14MaleMoveOrder
+      moveOrderSoundFemale:
+        collection: AU14FemaleMoveOrder
+      focusOrderSoundMale:
+        collection: AU14MaleFocusOrder
+      focusOrderSoundFemale:
+        collection: AU14FemaleFocusOrder
+      holdOrderSoundMale:
+        collection: AU14MaleHoldOrder
+      holdOrderSoundFemale:
+        collection: AU14FemaleHoldOrder
+    - type: SquadLeader
+    - type: RMCTrackable
+    - type: RMCPointing
+  hidden: true
+
+- type: startingGear
+  parent: AU14GearVAIBase
+  id: AU14GearVAITeamLeader
+  equipment:
+    jumpsuit: AU14JumpsuitTShirtRedVAIHEDP
+    pocket1: RMCPouchAutoinjectorFill
+    pocket2: RMCPouchMagazineLarge
+    suitstorage: AU14WeaponRifleM41AMK1Tactical
+  storage:
+    pocket2:
+    - CMMagazineRifleM54CMK1AP
+    - CMMagazineRifleM54CMK1AP
+    - CMMagazineRifleM54CMK1AP
+    - CMMagazineRifleM54CMK1AP
+    outerClothing:
+    - RMCLaserDesignator
+    back:
+    - CMMRE
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+    - CMGrenadeFragOld
+    - CMGrenadeFragOld
+    - RMCTacticalPrybar
+    - AU14Tourniquet
+    - AU14HemostaticGauze

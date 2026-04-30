@@ -770,3 +770,13 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
+        - name: Call VAISO read on WY
+          description: Send intel on local WY facility to VAISO, summoning them for a raid. They are not hostile to CLF but not required to help directly!
+          cost: 80
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: VAISO
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon

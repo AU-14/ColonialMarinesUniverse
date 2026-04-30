@@ -1,0 +1,283 @@
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponMar30
+  name: MAR-30 carbine case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponRifleMAR30
+        amount: 1
+      - id: RMCMagazineRifleMAR40Ext
+        amount: 2
+      - id: RMCMagazineRifleMAR40
+        amount: 7
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponMar40
+  name: MAR-40 battle rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: WeaponRifleMAR40
+        amount: 1
+      - id: RMCMagazineRifleMAR40Ext
+        amount: 2
+      - id: RMCMagazineRifleMAR40
+        amount: 7
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponABR40
+  name: ABR-40 tactical hunting rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponRifleABR40Tactical
+        amount: 1
+      - id: RMCMagazineRifleL42AAP
+        amount: 2
+      - id: RMCMagazineRifleL42AExtended
+        amount: 7
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponM75A
+  name: M75A MAS rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: AUWeaponRifleM75AMAS
+        amount: 1
+      - id: AU14MagazineRifleM75AMAS
+        amount: 9
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponM16A1
+  name: M16A1 rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: AU14WeaponRifleM16A1
+        amount: 1
+      - id: RMCMagazineRifleM16
+        amount: 9
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponM16A2
+  name: M16A2 rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: AU14WeaponRifleM16A2
+        amount: 1
+      - id: RMCMagazineRifleM16
+        amount: 9
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponKramer
+  name: kramer rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: AU14WeaponRifleKramerAR
+        amount: 1
+      - id: AU14WeaponRifleKramerMagazineAP
+        amount: 1
+      - id: AU14WeaponRifleKramerMagazineStandard
+        amount: 8
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponM20a
+  name: M20A rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: AUWeaponRifleM20A
+        amount: 1
+      - id: AU14MagazineRifleM20A
+        amount: 9
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponL23
+  name: L23 rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponRifleL24
+        amount: 1
+      - id: RMCMagazineRifleL24AP
+        amount: 1
+      - id: RMCMagazineRifleL24
+        amount: 8
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponAG80
+  name: AG80 rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: AU14WeaponRifleAG80
+        amount: 1
+      - id: AU14MagazineRifleAG80Ext
+        amount: 1
+      - id: AU14MagazineRifleAG80AP
+        amount: 1
+      - id: AU14MagazineRifleAG80
+        amount: 7
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponM41AMK1
+  name: M41A MK1 rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponRifleM54CMK1Unloaded
+        amount: 1
+      - id: CMMagazineRifleM54CMK1AP
+        amount: 1
+      - id: CMMagazineRifleM54CMK1
+        amount: 8
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponM41AMK2
+  name: M41A MK2 rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponRifleM54C
+        amount: 1
+      - id: CMMagazineRifleM54CAP
+        amount: 2
+      - id: CMMagazineRifleM54CExt
+        amount: 2
+      - id: CMMagazineRifleM54C
+        amount: 6

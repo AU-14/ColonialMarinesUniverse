@@ -8,7 +8,7 @@
       sprite: _AU14/Clothing/UniversalWebbing/magazinewebbing.rsi
       state: webbing
     - type: Storage
-      maxItemSize: Small
+      maxItemSize: Normal
       grid:
         - 0,0,5,1 # 3 slots
       blacklist:

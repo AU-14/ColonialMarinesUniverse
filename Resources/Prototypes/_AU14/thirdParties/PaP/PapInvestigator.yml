@@ -58,7 +58,6 @@
   id: AU14JobPaPThirdpartyInvestigator
   name: UPP PAP Investigator
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole

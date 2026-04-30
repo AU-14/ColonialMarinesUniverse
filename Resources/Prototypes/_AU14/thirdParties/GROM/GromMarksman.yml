@@ -44,7 +44,6 @@
   id: AU14JobUPPGROMMarksman
   name: UPP GROM Marksman
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadGROM

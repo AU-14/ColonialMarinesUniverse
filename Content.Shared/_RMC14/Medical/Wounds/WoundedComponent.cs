@@ -1,4 +1,4 @@
-﻿using Content.Shared.Damage.Prototypes;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -23,10 +23,10 @@ public sealed partial class WoundedComponent : Component
     [DataField, AutoNetworkedField]
     public FixedPoint2 PassiveHealing = FixedPoint2.New(-0.05f);
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan UpdateAt;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public TimeSpan UpdateCooldown = TimeSpan.FromSeconds(1);
 }
 

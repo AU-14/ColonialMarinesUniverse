@@ -59,7 +59,6 @@
   id: CMBInvestigationPartyJobDeputyShotgun
   name: CMB Deputy Shotgunner
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole

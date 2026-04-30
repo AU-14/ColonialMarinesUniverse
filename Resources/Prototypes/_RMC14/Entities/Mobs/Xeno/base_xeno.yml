@@ -34,6 +34,8 @@
   save: false
   components: # TODO RMC14 camera recoil from large explosions? check 13
   - type: ZombieImmune
+  - type: BodyZoneTargeting
+    meleeAccuracy: 0.55
   - type: BlockEntityStorage
     whitelist:
       components:

@@ -373,6 +373,24 @@
     - RMCLabcoat
 
 - type: loadout
+  id: LabcoatRMCShort
+  storage:
+    back:
+    - RMCLabcoatShort
+
+- type: loadout
+  id: LabcoatRMCLong
+  storage:
+    back:
+    - RMCLabcoatLong
+
+- type: loadout
+  id: LabcoatRMCBrown
+  storage:
+    back:
+    - RMCLabcoatBrown
+
+- type: loadout
   id: QuartermasterJacketRMC
   storage:
     back:

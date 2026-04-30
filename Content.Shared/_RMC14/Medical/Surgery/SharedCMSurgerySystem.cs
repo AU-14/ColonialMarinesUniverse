@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery.Conditions;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
@@ -76,6 +76,12 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
 
         var ev = new CMSurgeryStepEvent(args.User, ent, part, GetTools(args.User));
         RaiseLocalEvent(step, ref ev);
+
+        if (GetNextStep(ent, part, surgery.Owner) is null)
+        {
+            var completeEv = new CMSurgeryCompleteEvent(ent, args.User, args.Surgery);
+            RaiseLocalEvent(ent, ref completeEv);
+        }
 
         RefreshUI(ent);
     }

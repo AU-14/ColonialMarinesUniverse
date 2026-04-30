@@ -197,6 +197,30 @@
     - GOVFOR
 
 - type: entity
+  parent: AU14IDCardGOVFORDoctor
+  id: AU14IDCardGOVFORDoctorPharmacist
+  name: pharmacist ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: Pharmacist
+
+- type: entity
+  parent: AU14IDCardGOVFORDoctor
+  id: AU14IDCardGOVFORDoctorSurgeon
+  name: surgeon ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: Surgeon
+
+- type: entity
+  parent: AU14IDCardGOVFORDoctor
+  id: AU14IDCardGOVFORDoctorMortician
+  name: mortician ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: Mortician
+
+- type: entity
   parent: CMIDCardBase
   id: AU14IDCardSquadK9HandlerGOVFOR
   name: k9 handler ID card

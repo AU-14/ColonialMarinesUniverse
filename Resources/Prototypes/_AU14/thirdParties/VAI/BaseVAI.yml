@@ -1,0 +1,265 @@
+- type: entity
+  parent: CMMobHuman
+  id: AU14BaseMobSpeciesOrganicVAI
+  abstract: true
+  suffix: AU14, UA, VAI
+  components:
+  - type: GhostTakeoverAvailable
+  - type: RandomHumanoidAppearance
+  - type: RandomHumanoidAppearanceWhitelisted
+    allowedMaleHairStyles:
+    - RMCHumanHairCrew
+    - RMCHumanHairAviator
+    - RMCHumanHairJensen
+    - RMCHumanHairAverageJoe
+    - AU14HumanHairCIA5
+    - RMCHumanHairCombover
+    - RMCHumanHairCombover2
+    - RMCHumanHairCplDietrich
+    - RMCHumanHairCut
+    - RMCHumanHairHeadStubble
+    - RMCHumanHairHighAndTight
+    - RMCHumanHairHighfade
+    - RMCHumanHairHighlight
+    - AU14HumanHairIRS
+    - RMCHumanHairLtRasczak
+    - RMCHumanHairMarineFade
+    - RMCHumanHairMarineFlatTop
+    - RMCHumanHairMedfade
+    - RMCHumanHairNofade
+    - RMCHumanHairShavedpart
+    - RMCHumanHairShavedHead
+    - RMCHumanHairShort
+    - RMCHumanHairSideUndercutHang
+    - RMCHumanHairSkinhead
+    - RMCHumanHairTaper
+    - RMCHumanHairWardaddy
+    - RMCHumanHairUndercut
+    - RMCHumanHairUndercutTop
+    - RMCHumanHairBowlcut2
+    - RMCHumanHairCIA
+    - AU14HumanHairCIA2
+    - AU14HumanHairCIA3
+    - RMCHumanHairFlowingHair
+    - RMCHumanHairCleancut
+    - RMCHumanHairIceman
+    - RMCHumanHairMulder
+    allowedFemaleHairStyles:
+    - RMCHumanHairShortbangs
+    - RMCHumanHairBobcurl
+    - RMCHumanHairMarineBun
+    - RMCHumanHairBun
+    - RMCHumanHairFringetail
+    - AU14HumanHairLowBun
+    - AU14HumanHairLowPonyTail
+    - AU14HumanHairLowPonyTailAlt
+    - RMCHumanHairPonytail1
+    - RMCHumanHairPonytail7
+    - RMCHumanHairPvtRedding
+    - RMCHumanHairPvtVasquez
+    - RMCHumanHairLong
+    - RMCHumanHairPixieCutLeft
+    - RMCHumanHairPixieCutRight
+    - RMCHumanHairBob
+    - RMCHumanHairCurls
+    - AU14HumanHairElegant
+    - RMCHumanHairFlair
+    - RMCHumanHairFlair2
+    - RMCHumanHairGentle
+    - RMCHumanHairGentle2
+    - RMCHumanHairGentlebraid
+    - RMCHumanHairLongEmo
+    - RMCHumanHairLongFringe
+    - RMCHumanHairLonger
+    - RMCHumanHairLongerAlt
+    - RMCHumanHairLongerAlt
+    - RMCHumanHairShortOvereye
+    - RMCHumanHairLongOvereye
+    - RMCHumanHairPonytail6
+    - RMCHumanHairPonytail3
+    - RMCHumanHairPonytail2
+    - RMCHumanHairScully
+    - RMCHumanHairScully2
+    - RMCHumanHairScully2Alt
+    - RMCHumanHairShavedbun
+    - RMCHumanHairLongAlt
+    - RMCHumanHairLongest
+    allowedHairColorsHex:
+    - "#0B0B0B"
+    - "#1A1A1A"
+    - "#222222"
+    - "#2B1B0F"
+    - "#3B2314"
+    - "#4A2E1A"
+    - "#5A3A22"
+    - "#6B4A2F"
+    - "#9C8651"
+    - "#B79A5A"
+    - "#4A1F12"
+    - "#7A5E42"
+    allowedEyeColorsHex: [ "#000000" ]
+    beardChance: 0.1
+
+# Equipment
+
+- type: entity
+  id: AU14VAIBasePreset
+  name: vai base preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SurvivorPreset
+    randomGearOther:
+    -
+      - [ AU14GlassesBiMex ] # glasses
+      - [ AU14GogglesM1A1ClearBallistic ]
+      - [ AU14GogglesM60 ]
+      - [ AU14GlassesBiMexOrange ]
+      - [ RMCGlassesTriMaxBronze ]
+      - [ RMCSunglassesBigFake ]
+    -
+      - [ AU14PVEHandsFingerlessBlackGloves ] # gloves
+      - [ AU14PVEHandsFingerlessBrownGloves ]
+      - [ AU14PVEHandsInsulatedBlackMarine ]
+      - [ CMHandsBrown ]
+
+- type: entity
+  id: AU14VAISOBasePreset
+  name: vaiso base preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SurvivorPreset
+    randomGearOther:
+    -
+      - [ AU14PVEHandsFingerlessBlackGloves ] # gloves
+      - [ AU14PVEHandsFingerlessBrownGloves ]
+      - [ AU14PVEHandsInsulatedBlackMarine ]
+      - [ CMHandsBrown ]
+
+- type: startingGear
+  id: AU14GearVAIBase
+  equipment:
+    shoes: CMBootsBlackFilled
+    outerClothing: CMArmorM3VLBallistics
+    belt: AU14BeltPostelPistolM48A4
+    head: AU14DesertM10Helmet
+    back: RMCSatchelLightpackBlack
+    pocket1: AU14PouchIFAKFill
+
+- type: startingGear
+  id: AU14GearVAISOBase
+  equipment:
+    shoes: CMBootsBlackFilled
+    outerClothing: CMArmorM3VLBallistics
+    belt: AU14BeltPostelPistolM48A4Tactical
+    back: RMCSatchelLightpackBlack
+    pocket1: AU14PouchIFAKFill
+    eyes: CMGlassesSecurity
+    head: AU14ArmorHelmetCovert
+    mask: RMCMaskCoifPMC
+  storage:
+    head:
+    - RMCHelmetGarbNightVision
+
+- type: entity
+  parent: CMWebbingBlack
+  id: AU14WebbingBlackHEDP
+  suffix: Filled, HEDP
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMGrenadeHighExplosive
+      amount: 5
+
+- type: entity
+  parent: AU14WebbingMagazine
+  id: AU14WebbingMagazineFilledMAR50
+  suffix: Filled, MAR50
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineMar50LMG
+      amount: 3
+
+- type: entity
+  parent: AU14WebbingMagazine
+  id: AU14WebbingMagazineFilledM41AE2
+  suffix: Filled, MAR50
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineRifleM54CE2
+      amount: 3
+
+- type: entity
+  parent: AU14WebbingMagazine
+  id: AU14WebbingMagazineFilledMAR40
+  suffix: Filled, MAR40 ext
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleMAR40Ext
+      amount: 3
+
+- type: entity
+  parent: AU14WebbingMagazine
+  id: AU14WebbingMagazineFilledL42AAP
+  suffix: Filled, L42A AP
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleL42AAP
+      amount: 3
+
+- type: entity
+  parent: AU14WebbingMagazine
+  id: AU14WebbingMagazineFilledM41A
+  suffix: Filled, M41A MK2 Ext
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineRifleM54CExt
+      amount: 3
+
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: AU14PouchMagazineLargeFilledM41A
+  suffix: Filled, M41A
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineRifleM54CMK1AP
+      amount: 2
+    - id: CMMagazineRifleM54CMK1
+      amount: 2
+
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: AU14PouchMagazineLargeFilledMAR40
+  suffix: Filled, MAR40 ext
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleMAR40Ext
+      amount: 4
+
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: AU14PouchMagazineLargeFilledL42A
+  suffix: Filled, L42A
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleL42AExtended
+      amount: 2
+    - id: RMCMagazineRifleL42AAP
+      amount: 2
+
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: AU14PouchMagazineLargeFilledM41AMK2AP
+  suffix: Filled, M41A MK2 AP
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineRifleM54CAP
+      amount: 4

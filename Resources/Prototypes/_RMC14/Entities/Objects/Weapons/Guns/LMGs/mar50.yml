@@ -43,10 +43,15 @@
     baseFireRate: 5
     burstScatterMult: 3
     modifiers:
+      FullAuto:
+        maxScatterModifier: 14
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 30
       Burst:
         fireDelay: 0.1332
   - type: RMCWeaponAccuracy
-    accuracyMultiplier: 1
+    accuracyMultiplier: 0.8
     accuracyMultiplierUnwielded: 0.65
   - type: ItemSlots
     slots:

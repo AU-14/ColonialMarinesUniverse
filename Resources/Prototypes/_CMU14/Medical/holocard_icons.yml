@@ -1,0 +1,20 @@
+- type: healthIcon
+  parent: HolocardIcon
+  id: StableHolocardIcon
+  icon:
+    sprite: /Textures/_RMC14/Interface/health_hud_holocard.rsi
+    state: hudhcorange   # placeholder — green icon TBD; uses RMC orange state for now
+
+- type: healthIcon
+  parent: HolocardIcon
+  id: TraumaHolocardIcon
+  icon:
+    sprite: /Textures/_RMC14/Interface/health_hud_holocard.rsi
+    state: hudhcorange
+
+- type: healthIcon
+  parent: HolocardIcon
+  id: OrganFailureHolocardIcon
+  icon:
+    sprite: /Textures/_RMC14/Interface/health_hud_holocard.rsi
+    state: hudhcred

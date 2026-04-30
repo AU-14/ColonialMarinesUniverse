@@ -181,6 +181,12 @@ public sealed class HealthScannerSystem : EntitySystem
         var bleeding = _rmcBloodstream.IsBleeding(target);
         var state = new HealthScannerBuiState(GetNetEntity(target), blood, maxBlood, temperature, chemicals, bleeding);
 
+        EntityUid? examiner = null;
+        if (_rmcHands.TryGetHolder(scanner, out var holder))
+            examiner = holder;
+        var buildEv = new HealthScannerBuildStateEvent(scanner.Owner, target, examiner, state);
+        RaiseLocalEvent(scanner.Owner, ref buildEv);
+
         _ui.SetUiState(scanner.Owner, HealthScannerUIKey.Key, state);
     }
 

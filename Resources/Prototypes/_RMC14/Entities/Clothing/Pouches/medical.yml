@@ -110,7 +110,7 @@
   - type: Storage
     maxItemSize: Large
     grid:
-    - 0,0,7,1 #4 slots
+    - 0,0,9,1 #4 slots
     whitelist:
       tags:
       - DiscreteHealthAnalyzer

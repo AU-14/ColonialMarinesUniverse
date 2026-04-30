@@ -47,7 +47,6 @@
   id: AU14JobWYPMCPartyLeader
   name: WY PMC Party Leader (3rd party, M41A/2)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadPMC

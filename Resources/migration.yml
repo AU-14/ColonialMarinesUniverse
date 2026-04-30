@@ -1490,6 +1490,9 @@ RMCSpawnerShuttleZSPA: RMCSpawnerShuttleTSEPA
 RMCWeaponSMGP90: RMCWeaponSMGPDW90
 RMCMagazineSMGP90: RMCMagazineSMGPDW90
 
-# 2026-04-023 - CMU
+# 2026-04-23 - CMU
 CMVendorMedical: AU14GeneralMedicalVendor
 CMVendorBlood: AU14VendorBlood
+
+# 2026-04-29 - CMU
+ColMarTechMarineMedical: AU14GeneralMedicalVendorLight

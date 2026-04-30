@@ -64,7 +64,7 @@
   id: AU14AmbassadorConsoleUA
   parent: AU14AmbassadorConsoleBase
   name: UA diplomatic console
-  description: A United Americas diplomatic console. Can request US Army support.
+  description: A United Americas diplomatic console. Can request US Army or VAI support.
   suffix: UA, Army
   components:
   - type: Sprite
@@ -76,16 +76,16 @@
     replenishAmount: 25
     replenishInterval: 60
     callableParties:
-      USArmy: 7500
-      USArmyAlt: 4500
-      USArmyAlt2: 6000
+      USArmyArmored: 10000
+      VAISP: 4500
+      VAIPO: 6000
 
 # TWE Ambassador Console - Three World Empire
 - type: entity
   id: AU14AmbassadorConsoleTWE
   parent: AU14AmbassadorConsoleBase
   name: TWE diplomatic console
-  description: A Three World Empire diplomatic console. Can request Weyland-Yutani PMC contractor support.
+  description: A Three World Empire diplomatic console. Can request NSPA or Royal Marines' support.
   suffix: TWE, PMC
   components:
   - type: Sprite
@@ -97,7 +97,7 @@
     replenishAmount: 25
     replenishInterval: 60
     callableParties:
-      RMCRRT: 7500
+      RMCRRT: 9000
       NSPAInvestigationParty: 5000
 
 # Independent Systems Ambassador Console

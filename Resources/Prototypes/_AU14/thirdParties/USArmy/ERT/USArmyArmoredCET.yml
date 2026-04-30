@@ -56,7 +56,6 @@
   id: AU14JobUSArmyCETArmored
   name: US Army Combat Engineer Technician (ERT)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadUSArmy32nd

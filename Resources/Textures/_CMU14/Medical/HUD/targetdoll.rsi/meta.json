@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/a83646eaf7fc1b9aec1715e8d055c1acc0a74930/icons/mob/hud/human_glass.dmi - parts repacked into 32x32 RSI frames for CMU.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "zone_sel"
+    },
+    {
+      "name": "head"
+    },
+    {
+      "name": "head_hover"
+    },
+    {
+      "name": "eyes"
+    },
+    {
+      "name": "eyes_hover"
+    },
+    {
+      "name": "mouth"
+    },
+    {
+      "name": "mouth_hover"
+    },
+    {
+      "name": "torso"
+    },
+    {
+      "name": "torso_hover"
+    },
+    {
+      "name": "groin"
+    },
+    {
+      "name": "groin_hover"
+    },
+    {
+      "name": "rightarm"
+    },
+    {
+      "name": "rightarm_hover"
+    },
+    {
+      "name": "leftarm"
+    },
+    {
+      "name": "leftarm_hover"
+    },
+    {
+      "name": "righthand"
+    },
+    {
+      "name": "righthand_hover"
+    },
+    {
+      "name": "lefthand"
+    },
+    {
+      "name": "lefthand_hover"
+    },
+    {
+      "name": "rightleg"
+    },
+    {
+      "name": "rightleg_hover"
+    },
+    {
+      "name": "leftleg"
+    },
+    {
+      "name": "leftleg_hover"
+    },
+    {
+      "name": "rightfoot"
+    },
+    {
+      "name": "rightfoot_hover"
+    },
+    {
+      "name": "leftfoot"
+    },
+    {
+      "name": "leftfoot_hover"
+    }
+  ]
+}

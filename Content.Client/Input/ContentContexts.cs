@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Input;
+using Content.Shared._CMU14.Input;
 using Content.Shared.Input;
 using Robust.Shared.Input;
 
@@ -148,6 +149,8 @@ namespace Content.Client.Input
             human.AddFunction(CMKeyFunctions.RMCPickUpDroppedItems);
             human.AddFunction(CMKeyFunctions.RMCInteractWithOtherHand);
             human.AddFunction(CMKeyFunctions.RMCRest);
+            human.AddFunction(CMUKeyFunctions.CMUCycleBodyZoneTarget);
+            human.AddFunction(CMUKeyFunctions.CMUCycleBodyZoneTargetReverse);
 
             //Xenonid
             var xenonid = contexts.New("xenonid", "human");

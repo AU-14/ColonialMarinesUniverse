@@ -418,6 +418,9 @@
       - Hypospray
       - Defibrillator
       - Pill
+      - CMUSplintItem
+      - RMCHandLabeler
+      - RMCStethoscope
       - RMCLighter
   - type: FixedItemSizeStorage
   - type: Tag

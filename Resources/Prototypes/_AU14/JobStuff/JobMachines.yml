@@ -219,8 +219,8 @@
   description: Swipe your ID card on the machine to withdraw cash from your personal account.
   components:
   - type: Sprite
-    sprite: _RMC14/Structures/Machines/computer.rsi
-    state: terminal
+    sprite: _CMU14/Structures/Machines/atm.rsi
+    state: atm
   - type: InteractionOutline
   - type: UserInterface
     interfaces:

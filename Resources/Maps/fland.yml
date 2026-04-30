@@ -30432,7 +30432,7 @@ entities:
     - type: Transform
       pos: 7.559045,47.574802
       parent: 13329
-- proto: BoxBottle
+- proto: RMCBoxPillCanister
   entities:
   - uid: 18489
     components:
@@ -30872,7 +30872,7 @@ entities:
     - type: Transform
       pos: 4.460208,71.69925
       parent: 13329
-- Proto CMBoxSyringe
+- proto: CMBoxSyringe
   entities:
   - uid: 18481
     components:

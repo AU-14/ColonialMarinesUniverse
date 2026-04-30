@@ -1,0 +1,84 @@
+- type: job
+  parent: CMJobBase
+  id: AU14VAIMachinegunnerBase
+  name: au14-job-name-vai-machinegunner
+  description: au14-vai-mercenary-description
+  ranks:
+    VAI_Mercenary: []
+  icon: "CMJobIconEmpty"
+  playTimeTracker: AU14VAIMachinegunner
+  spawnMenuRoleName: VAI Machinegunner (Base)
+  joinNotifyCrew: false
+  supervisors: au14-job-name-vai-teamleader
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadVAIPO
+    - type: Skills
+      skills:
+        RMCSkillCqc: 5
+        RMCSkillEngineer: 4
+        RMCSkillConstruction: 3
+        RMCSkillFirearms: 2
+        RMCSkillMedical: 1
+        RMCSkillMeleeWeapons: 1
+        RMCSkillPolice: 2
+        RMCSkillFireman: 5
+        RMCSkillPowerLoader: 2
+        RMCSkillVehicles: 2
+        RMCSkillJtac: 1
+        RMCSkillEndurance: 1
+        RMCSkillSmartGun: 1
+    - type: EquipSurvivorPreset
+      preset: AU14VAIMGPreset
+    - type: JobPrefix
+      prefix: au14-job-prefix-vai-machinegunner
+  hidden: true
+
+- type: entity
+  id: AU14VAIMGPreset
+  name: vai mg preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SurvivorPreset
+    randomGearOther:
+    -
+      - [ AU14GlassesBiMex ] # glasses
+      - [ AU14GogglesM1A1ClearBallistic ]
+      - [ AU14GogglesM60 ]
+      - [ AU14GlassesBiMexOrange ]
+      - [ RMCGlassesTriMaxBronze ]
+      - [ RMCSunglassesBigFake ]
+    -
+      - [ AU14PVEHandsFingerlessBlackGloves ] # gloves
+      - [ AU14PVEHandsFingerlessBrownGloves ]
+      - [ AU14PVEHandsInsulatedBlackMarine ]
+      - [ CMHandsBrown ]
+    randomWeapon:
+    - [ AU14WeaponMar50LMGTactical, AU14JumpsuitTShirtGrayVAIMAR50, AU14MagazineMar50LMGAP, AU14MagazineMar50LMGAP ]
+    - [ AU14WeaponMar50LMGTactical, AU14JumpsuitTShirtGrayVAIMAR50, AU14MagazineMar50LMGAP, AU14MagazineMar50LMGAP ] # 66%
+    - [ AU14WeaponRifleM41AE2Tactical, AU14JumpsuitTShirtGrayVAIM41AE2, AU14MagazineRifleM41AE2, AU14MagazineRifleM41AE2 ] # 33%
+    tryEquipRandomWeapon: true
+
+- type: startingGear
+  parent: AU14GearVAIBase
+  id: AU14GearVAIMG
+  equipment:
+    pocket2: RMCPouchExplosive
+  storage:
+    outerClothing:
+    - RMCBinocularsCivPVE
+    back:
+    - CMMRE
+    - CMGrenadeFragOld
+    - RMCPacketGrenadeSmokeFilled
+    - RMCTacticalPrybar
+    pocket2:
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge

@@ -20,4 +20,5 @@ jobs:
     - if: ${{ steps.checkUserMember.outputs.isTeamMember == 'true' }}
       uses: actions-ecosystem/action-add-labels@v1
       with:
+        github_token: ${{ github.token }}
         labels: "S: Approved"

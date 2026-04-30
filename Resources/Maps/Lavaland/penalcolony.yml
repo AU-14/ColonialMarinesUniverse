@@ -1148,7 +1148,7 @@ entities:
     - type: Transform
       pos: 17.368748,6.685386
       parent: 1
-- Proto CMBoxSyringe
+- proto: CMBoxSyringe
   entities:
   - uid: 839
     components:

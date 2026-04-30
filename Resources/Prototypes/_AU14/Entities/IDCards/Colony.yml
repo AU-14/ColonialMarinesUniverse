@@ -102,6 +102,14 @@
     jobTitle: Free Press Journalist
 
 - type: entity
+  parent: AU14IDCardColonyJournalist
+  id: AU14IDCardColonyJournalistPhotojournalist
+  name: photojournalist ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: Photojournalist
+
+- type: entity
   parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardCivilianScientist
   name: scientist ID card

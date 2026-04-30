@@ -1,0 +1,393 @@
+# ---- Bone setting ----------------------------------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgerySetSimpleFracture
+  name: Set Simple Fracture
+  components:
+  - type: CMSurgery
+    priority: 10
+    steps:
+    - CMUSurgeryStepSetSimpleBone
+  - type: CMUFracturedSurgeryCondition
+    requireSeverity: Simple
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgerySetCompoundFracture
+  name: Set Compound Fracture
+  components:
+  - type: CMSurgery
+    priority: 8
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMUSurgeryStepRealignCompoundBone
+    - CMUSurgeryStepApplyBoneGel
+    - CMSurgeryStepCloseIncision
+  - type: CMUFracturedSurgeryCondition
+    requireSeverity: Compound
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgerySetComminutedFracture
+  name: Set Comminuted Fracture
+  components:
+  - type: CMSurgery
+    priority: 7
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMUSurgeryStepRealignComminutedBone
+    - CMUSurgeryStepInsertBoneGraft
+    - CMUSurgeryStepApplyBoneGel
+    - CMSurgeryStepCloseIncision
+  - type: CMUFracturedSurgeryCondition
+    requireSeverity: Comminuted
+
+# ---- Internal-bleed clamp + close ------------------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryCauterizeInternalBleeding
+  name: Stop Internal Bleeding
+  components:
+  - type: CMSurgery
+    priority: 7
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMUSurgeryStepCauterizeBleed
+    - CMSurgeryStepCloseIncision
+
+# ---- Organ removal (torso, full ribcage flow) ------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRemoveLiver
+  name: Remove Liver
+  components:
+  - type: CMSurgery
+    priority: 5
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+    - CMUSurgeryStepClampLiverVessels
+    - CMUSurgeryStepExtractLiver
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRemoveLung
+  name: Remove Lungs
+  components:
+  - type: CMSurgery
+    priority: 5
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+    - CMUSurgeryStepClampLungVessels
+    - CMUSurgeryStepExtractLung
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRemoveKidney
+  name: Remove Kidneys
+  components:
+  - type: CMSurgery
+    priority: 5
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+    - CMUSurgeryStepClampKidneyVessels
+    - CMUSurgeryStepExtractKidney
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRemoveHeart
+  name: Remove Heart
+  components:
+  - type: CMSurgery
+    priority: 4
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+    - CMUSurgeryStepClampHeartVessels
+    - CMUSurgeryStepExtractHeart
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRemoveStomach
+  name: Remove Stomach
+  components:
+  - type: CMSurgery
+    priority: 5
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+    - CMUSurgeryStepClampStomachVessels
+    - CMUSurgeryStepExtractStomach
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMSurgeryStepCloseIncision
+
+# ---- Organ replacement (transplant) ---------------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryReplaceLiver
+  name: Replace Liver
+  components:
+  - type: CMSurgery
+    priority: 4
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+    - CMUSurgeryStepReinsertLiver
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryReplaceLung
+  name: Replace Lungs
+  components:
+  - type: CMSurgery
+    priority: 4
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+    - CMUSurgeryStepReinsertLung
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryReplaceKidney
+  name: Replace Kidneys
+  components:
+  - type: CMSurgery
+    priority: 4
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+    - CMUSurgeryStepReinsertKidney
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryTransplantHeart
+  name: Transplant Heart
+  components:
+  - type: CMSurgery
+    priority: 4
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+    - CMUSurgeryStepTransplantHeart
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryReplaceStomach
+  name: Replace Stomach
+  components:
+  - type: CMSurgery
+    priority: 4
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+    - CMUSurgeryStepReinsertStomach
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMSurgeryStepCloseIncision
+
+# ---- Suture organ (per-slot) ----------------------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRepairLiver
+  name: Suture Liver
+  components:
+  - type: CMSurgery
+    priority: 6
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+    - CMUSurgeryStepSutureLiver
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRepairLungs
+  name: Suture Lungs
+  components:
+  - type: CMSurgery
+    priority: 6
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+    - CMUSurgeryStepSutureLungs
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRepairKidneys
+  name: Suture Kidneys
+  components:
+  - type: CMSurgery
+    priority: 6
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+    - CMUSurgeryStepSutureKidneys
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRepairHeart
+  name: Suture Heart
+  components:
+  - type: CMSurgery
+    priority: 6
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+    - CMUSurgeryStepSutureHeart
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMSurgeryStepCloseIncision
+
+# ---- Brain / eye / ear repair (head, full skull-flow) ----------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRepairBrain
+  name: Repair Brain
+  components:
+  - type: CMSurgery
+    priority: 6
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMSurgeryStepSawBones
+    - CMSurgeryStepPriseOpenBones
+    - CMUSurgeryStepRepairBrain
+    - CMSurgeryStepCloseBones
+    - CMSurgeryStepMendRibcage
+    - CMSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRepairEyes
+  name: Repair Eyes
+  components:
+  - type: CMSurgery
+    priority: 6
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMUSurgeryStepRepairEyes
+    - CMSurgeryStepCloseIncision
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRepairEars
+  name: Repair Ears
+  components:
+  - type: CMSurgery
+    priority: 6
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMUSurgeryStepRepairEars
+    - CMSurgeryStepCloseIncision
+
+# ---- Limb reattachment (full sub-flow) -------------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryReattachLimb
+  name: Reattach Limb
+  components:
+  - type: CMSurgery
+    priority: 3
+    steps:
+    - CMSurgeryStepOpenIncisionScalpel
+    - CMSurgeryStepClampBleeders
+    - CMSurgeryStepRetractSkin
+    - CMUSurgeryStepRemoveStump
+    - CMUSurgeryStepPrepReattachSocket
+    - CMUSurgeryStepReattachLimb
+    - CMUSurgeryStepCloseReattach

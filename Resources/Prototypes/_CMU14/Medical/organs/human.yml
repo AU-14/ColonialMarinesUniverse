@@ -1,0 +1,163 @@
+- type: entity
+  parent: OrganHumanHeart
+  id: CMUOrganHumanHeart
+  components:
+  - type: OrganHealth
+    max: 60
+    current: 60
+    damageWeight:
+      Brute: 1.5
+      Burn: 1.0
+    stageThresholds:
+      Healthy: 60
+      Bruised: 40
+      Damaged: 25
+      Failing: 8
+      Dead: 0
+    internalBleedAt: Damaged
+    nativeRegenPerTick: 0.5
+  - type: Heart
+
+- type: entity
+  parent: OrganHumanLungs
+  id: CMUOrganHumanLungs
+  components:
+  - type: OrganHealth
+    max: 55
+    current: 55
+    damageWeight:
+      Brute: 1.0
+      Burn: 1.2
+      Airloss: 1.5
+    stageThresholds:
+      Healthy: 55
+      Bruised: 38
+      Damaged: 22
+      Failing: 6
+      Dead: 0
+    internalBleedAt: Damaged
+    nativeRegenPerTick: 1
+  - type: Lungs
+
+- type: entity
+  parent: OrganHumanLiver
+  id: CMUOrganHumanLiver
+  components:
+  - type: OrganHealth
+    max: 50
+    current: 50
+    damageWeight:
+      Toxin: 1.5
+      Brute: 1.0
+      Burn: 0.5
+    stageThresholds:
+      Healthy: 50
+      Bruised: 35
+      Damaged: 20
+      Failing: 5
+      Dead: 0
+    internalBleedAt: Damaged
+    nativeRegenPerTick: 1
+  - type: Liver
+
+- type: entity
+  parent: OrganHumanKidneys
+  id: CMUOrganHumanKidneys
+  components:
+  - type: OrganHealth
+    max: 45
+    current: 45
+    damageWeight:
+      Toxin: 1.2
+      Brute: 0.8
+    stageThresholds:
+      Healthy: 45
+      Bruised: 30
+      Damaged: 18
+      Failing: 5
+      Dead: 0
+    internalBleedAt: Damaged
+    nativeRegenPerTick: 0.8
+  - type: Kidneys
+
+- type: entity
+  parent: OrganHumanStomach
+  id: CMUOrganHumanStomach
+  components:
+  - type: OrganHealth
+    max: 40
+    current: 40
+    damageWeight:
+      Brute: 1.0
+      Toxin: 0.8
+    stageThresholds:
+      Healthy: 40
+      Bruised: 28
+      Damaged: 16
+      Failing: 5
+      Dead: 0
+    internalBleedAt: Damaged
+    nativeRegenPerTick: 0.8
+  - type: CMUStomach
+
+- type: entity
+  parent: OrganHumanBrain
+  id: CMUOrganHumanBrain
+  components:
+  - type: OrganHealth
+    max: 50
+    current: 50
+    damageWeight:
+      Brute: 1.0
+      Burn: 0.6
+      Genetic: 1.5
+    stageThresholds:
+      Healthy: 50
+      Bruised: 35
+      Damaged: 20
+      Failing: 5
+      Dead: 0
+    internalBleedAt: Damaged
+    nativeRegenPerTick: 0.5
+    nativeRegenCap: 0.85
+  - type: CMUBrain
+
+- type: entity
+  parent: OrganHumanEyes
+  id: CMUOrganHumanEyes
+  components:
+  - type: OrganHealth
+    max: 30
+    current: 30
+    damageWeight:
+      Brute: 1.0
+      Burn: 1.5
+    stageThresholds:
+      Healthy: 30
+      Bruised: 22
+      Damaged: 12
+      Failing: 4
+      Dead: 0
+    internalBleedAt: Failing
+    nativeRegenPerTick: 0.5
+  - type: Eyes
+
+- type: entity
+  parent: OrganHumanEars
+  id: CMUOrganHumanEars
+  components:
+  - type: OrganHealth
+    max: 30
+    current: 30
+    damageWeight:
+      Brute: 1.0
+      Burn: 1.0
+    stageThresholds:
+      Healthy: 30
+      Bruised: 22
+      Damaged: 12
+      Failing: 4
+      Dead: 0
+    internalBleedAt: Failing
+    nativeRegenPerTick: 0.5
+  - type: Ears

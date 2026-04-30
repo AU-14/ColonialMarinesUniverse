@@ -19,7 +19,6 @@
         innate: true
       - type: RunawaySynth
       - type: EyeProtection
-      - type: WoundableUntreatable
       - type: Insulated
       - type: RMCLeapProtection
       - type: Synth

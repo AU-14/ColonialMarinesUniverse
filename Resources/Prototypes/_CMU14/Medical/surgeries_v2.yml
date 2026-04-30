@@ -1,0 +1,25 @@
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepDebrideEschar
+  name: Debride eschar
+  components:
+  - type: CMSurgeryStep
+    skill: 2
+    tool:
+    - type: CMScalpel
+  - type: CMUEscharSurgeryCondition
+  - type: CMUSurgeryStepDebrideEscharEffect
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/scalpel.rsi
+    state: scalpel
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryDebrideEschar
+  name: Debride Eschar
+  components:
+  - type: CMSurgery
+    priority: 9
+    steps:
+    - CMUSurgeryStepDebrideEschar
+  - type: CMUEscharSurgeryCondition

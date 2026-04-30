@@ -1,5 +1,6 @@
-﻿using Content.Shared.Mobs;
+using Content.Shared.Mobs;
 using Content.Shared.Traits.Assorted;
+using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Medical.Unrevivable;
@@ -7,6 +8,10 @@ namespace Content.Shared._RMC14.Medical.Unrevivable;
 public sealed class RMCUnrevivableSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly INetManager _net = default!;
+
+    private const float UnrevivableScanInterval = 1f;
+    private float _scanAccumulator;
 
     public override void Initialize()
     {
@@ -83,6 +88,14 @@ public sealed class RMCUnrevivableSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        if (_net.IsClient)
+            return;
+
+        _scanAccumulator += frameTime;
+        if (_scanAccumulator < UnrevivableScanInterval)
+            return;
+        _scanAccumulator = 0f;
 
         var revivableQuery = EntityQueryEnumerator<RMCRevivableComponent>();
         while (revivableQuery.MoveNext(out var uid, out var revivable))

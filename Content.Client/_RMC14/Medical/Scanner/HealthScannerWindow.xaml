@@ -3,92 +3,177 @@
     xmlns:scanner="clr-namespace:Content.Client._RMC14.Medical.Scanner"
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
-    MinSize="500 600">
-    <BoxContainer Orientation="Vertical">
-        <BoxContainer Orientation="Horizontal">
-            <Label Name="PatientLabel" Access="Public" />
-            <Control HorizontalExpand="True" />
-            <Label Text="{Loc cm-wounds-brackets-translators-note}" />
-        </BoxContainer>
-        <cc:HSeparator Color="#4972A1" Margin="0 0 0 5" />
-        <BoxContainer Orientation="Horizontal" Margin="0 0 0 5">
-            <Label Text="Health:" MinWidth="80" Modulate="#5B88B0" />
-            <ProgressBar Name="HealthBar" Access="Public"
-                         HorizontalExpand="True">
-                <Label Name="HealthBarText" Access="Public" Align="Right" Margin="0 0 5 0" />
-            </ProgressBar>
-        </BoxContainer>
-        <BoxContainer Orientation="Horizontal" Margin="0 0 0 20">
-            <Label Text="Damage:" MinWidth="80" Modulate="#5B88B0" />
-            <PanelContainer Margin="0 0 5 0">
+    MinSize="800 900"
+    SetSize="800 900">
+    <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" Margin="2 4">
+
+            <!-- Header: patient name on the left, holocard mini-panel + change
+                 button on the right. Replaces the V1 separator-stacked
+                 patient row. -->
+            <BoxContainer Orientation="Horizontal" Margin="0 0 0 6">
+                <Label Name="PatientLabel" Access="Public" StyleClasses="LabelHeading" />
+                <Control HorizontalExpand="True" />
+                <PanelContainer Name="HolocardPanel" Access="Public" Visible="True" Margin="0 0 4 0">
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat BackgroundColor="#984A16" />
+                    </PanelContainer.PanelOverride>
+                    <Label Name="HolocardDescription" Access="Public" Align="Center" MinWidth="120" Margin="6 2" />
+                </PanelContainer>
+                <Button Name="ChangeHolocardButton" Access="Public" StyleClasses="OpenBoth" />
+            </BoxContainer>
+
+            <!-- Status banner: STABLE / SERIOUS / CRITICAL / DECEASED.
+                 Hidden on non-CMU patients (BUI sets Visible from the
+                 CMUParts presence + severity rollup). -->
+            <PanelContainer Name="CMUStatusBanner" Access="Public" Visible="False" Margin="0 0 0 4">
                 <PanelContainer.PanelOverride>
-                    <graphics:StyleBoxFlat BorderColor="#4972A1" BorderThickness="2" />
+                    <graphics:StyleBoxFlat BackgroundColor="#3FB44A" />
                 </PanelContainer.PanelOverride>
-                <RichTextLabel Name="BruteLabel" Access="Public" Margin="5 2" />
+                <BoxContainer Orientation="Vertical" Margin="8 4">
+                    <Label Name="CMUStatusBannerLabel" Access="Public" StyleClasses="LabelHeading"
+                           FontColorOverride="White" />
+                    <Label Name="CMUStatusBannerDetail" Access="Public" FontColorOverride="White" />
+                </BoxContainer>
             </PanelContainer>
-            <PanelContainer Margin="0 0 5 0">
+
+            <!-- Big-number stat card: HEALTH / PULSE / BLOOD / TEMP. Each
+                 value is a large RichTextLabel; a small uppercase label
+                 underneath tags it. Health gets a thin progress bar. -->
+            <PanelContainer Margin="0 0 0 4">
                 <PanelContainer.PanelOverride>
-                    <graphics:StyleBoxFlat BorderColor="#4972A1" BorderThickness="2" />
+                    <graphics:StyleBoxFlat BackgroundColor="#1B1F2A" />
                 </PanelContainer.PanelOverride>
-                <RichTextLabel Name="BurnLabel" Access="Public" Margin="5 2" />
+                <BoxContainer Orientation="Vertical" Margin="10 8">
+                    <BoxContainer Orientation="Horizontal">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                            <Label Name="CMUBigHealthValue" Access="Public"
+                                   Text="--" StyleClasses="LabelHeading" />
+                            <Label Text="{Loc cmu-medical-scanner-stat-health}"
+                                   Modulate="#5B88B0" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                            <Label Name="CMUBigPulseValue" Access="Public"
+                                   Text="--" StyleClasses="LabelHeading" />
+                            <Label Text="{Loc cmu-medical-scanner-stat-pulse}"
+                                   Modulate="#5B88B0" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                            <Label Name="CMUBigBloodValue" Access="Public"
+                                   Text="--" StyleClasses="LabelHeading" />
+                            <Label Text="{Loc cmu-medical-scanner-stat-blood}"
+                                   Modulate="#5B88B0" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                            <Label Name="CMUBigTempValue" Access="Public"
+                                   Text="--" StyleClasses="LabelHeading" />
+                            <Label Text="{Loc cmu-medical-scanner-stat-temp}"
+                                   Modulate="#5B88B0" />
+                        </BoxContainer>
+                    </BoxContainer>
+                    <ProgressBar Name="HealthBar" Access="Public" HorizontalExpand="True"
+                                 Margin="0 6 0 0">
+                        <Label Name="HealthBarText" Access="Public" Align="Right" Margin="0 0 5 0" />
+                    </ProgressBar>
+                </BoxContainer>
             </PanelContainer>
-            <PanelContainer Margin="0 0 5 0">
+
+            <!-- Damage strip card: Brute / Burn / Tox / Air / Clone in one
+                 dense horizontal row. Existing AddGroup() populator stays;
+                 each label is just re-parented into this strip. -->
+            <PanelContainer Margin="0 0 0 4">
                 <PanelContainer.PanelOverride>
-                    <graphics:StyleBoxFlat BorderColor="#4972A1" BorderThickness="2" />
+                    <graphics:StyleBoxFlat BackgroundColor="#1B1F2A" />
                 </PanelContainer.PanelOverride>
-                <RichTextLabel Name="ToxinLabel" Access="Public" Margin="5 2" />
+                <BoxContainer Orientation="Horizontal" Margin="10 6">
+                    <RichTextLabel Name="BruteLabel" Access="Public" Margin="0 0 12 0" />
+                    <RichTextLabel Name="BurnLabel" Access="Public" Margin="0 0 12 0" />
+                    <RichTextLabel Name="ToxinLabel" Access="Public" Margin="0 0 12 0" />
+                    <RichTextLabel Name="OxygenLabel" Access="Public" Margin="0 0 12 0" />
+                    <PanelContainer Name="CloneBox" Access="Public" Visible="False">
+                        <RichTextLabel Name="CloneLabel" Access="Public" />
+                    </PanelContainer>
+                    <Control HorizontalExpand="True" />
+                    <Label Name="BloodTypeLabel" Access="Public" Modulate="#5B88B0" Margin="0 0 6 0" />
+                    <RichTextLabel Name="BloodAmountLabel" Access="Public" Margin="0 0 6 0" />
+                    <RichTextLabel Name="Bleeding" Access="Public" />
+                </BoxContainer>
             </PanelContainer>
-            <PanelContainer Margin="0 0 5 0">
+
+            <!-- Body chart card: per-part rows added by the BUI. Each row
+                 has fixed-width name / number / bar / severity-word
+                 columns, then a flexible chip strip on the right (chips
+                 only render when the part has a fracture, bleed, splint,
+                 cast, or wound count). Severed parts use a "—" number
+                 and dark-red bar but otherwise share the row layout, so
+                 the column anchors stay stable as patient state changes. -->
+            <BoxContainer Name="CMUBodyMapSection" Access="Public" Orientation="Vertical"
+                          Visible="False" Margin="0 0 0 4">
+                <PanelContainer>
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat BackgroundColor="#1B1F2A" />
+                    </PanelContainer.PanelOverride>
+                    <BoxContainer Orientation="Vertical" Margin="10 6">
+                        <Label Text="{Loc cmu-medical-scanner-card-body}" Modulate="#5B88B0"
+                               Margin="0 0 0 4" />
+                        <BoxContainer Name="CMUBodyChartContainer" Access="Public"
+                                      Orientation="Vertical" />
+                        <Label Text="{Loc cmu-medical-scanner-card-organs}" Modulate="#5B88B0"
+                               Margin="0 8 0 4" />
+                        <BoxContainer Name="CMUOrgansContainer" Access="Public"
+                                      Orientation="Vertical" />
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
+
+            <!-- Reagents card: in-bloodstream chemicals + unknown badge. -->
+            <PanelContainer Name="ChemicalContentsCard" Access="Public" Visible="False" Margin="0 0 0 4">
                 <PanelContainer.PanelOverride>
-                    <graphics:StyleBoxFlat BorderColor="#4972A1" BorderThickness="2" />
+                    <graphics:StyleBoxFlat BackgroundColor="#1B1F2A" />
                 </PanelContainer.PanelOverride>
-                <RichTextLabel Name="OxygenLabel" Access="Public" Margin="5 2" />
+                <BoxContainer Orientation="Vertical" Margin="10 6">
+                    <Label Name="ChemicalContentsLabel" Access="Public"
+                           Text="{Loc cmu-medical-scanner-card-reagents}"
+                           Modulate="#5B88B0" Margin="0 0 0 4" />
+                    <cc:HSeparator Name="ChemicalContentsSeparator" Access="Public" Visible="False" />
+                    <PanelContainer Name="UnknownChemicalsPanel" Access="Public" Visible="False" Margin="0 0 0 4">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#984A16" />
+                        </PanelContainer.PanelOverride>
+                        <RichTextLabel Name="UnknownReagentsLabel" Access="Public" Margin="5 2" />
+                    </PanelContainer>
+                    <BoxContainer Name="ChemicalsContainer" Access="Public" Orientation="Vertical" />
+                </BoxContainer>
             </PanelContainer>
-            <PanelContainer Margin="0 0 5 0" Name="CloneBox" Access="Public">
+
+            <!-- Recommended-action card. Hidden on perma-dead patients
+                 (the existing isPermaDead branch in BUI continues to
+                 hide MedicalAdviceLabel + MedicalAdviceSeparator). -->
+            <PanelContainer Name="MedicalAdviceCard" Access="Public" Visible="False" Margin="0 0 0 4">
                 <PanelContainer.PanelOverride>
-                    <graphics:StyleBoxFlat BorderColor="#4972A1" BorderThickness="2" />
+                    <graphics:StyleBoxFlat BackgroundColor="#1B1F2A" />
                 </PanelContainer.PanelOverride>
-                <RichTextLabel Name="CloneLabel" Access="Public" Margin="5 2" />
+                <BoxContainer Orientation="Vertical" Margin="10 6">
+                    <Label Name="MedicalAdviceLabel" Access="Public"
+                           Text="{Loc cmu-medical-scanner-card-recommended}"
+                           Modulate="#5B88B0" Margin="0 0 0 4" />
+                    <cc:HSeparator Name="MedicalAdviceSeparator" Access="Public" Visible="False" />
+                    <BoxContainer Name="AdviceContainer" Access="Public" Orientation="Vertical" />
+                </BoxContainer>
             </PanelContainer>
+
+            <!-- Body temperature row — stays in the legacy stat cluster as
+                 a fallback for callers that route through it. The big-stat
+                 card above mirrors this value in the BUI populator. -->
+            <BoxContainer Orientation="Horizontal" Visible="False">
+                <Label Text="Body Temperature:" MinWidth="160" Modulate="#5B88B0" />
+                <RichTextLabel Name="BodyTemperatureLabel" Access="Public" />
+            </BoxContainer>
+            <BoxContainer Orientation="Horizontal" Visible="False">
+                <Label Text="Pulse:" MinWidth="160" Modulate="#5B88B0" />
+                <RichTextLabel Name="PulseLabel" Access="Public" />
+            </BoxContainer>
+            <Label Text="{Loc cm-wounds-brackets-translators-note}" Visible="False" />
         </BoxContainer>
-        <BoxContainer Orientation="Horizontal">
-            <Label Text="Holocard:" MinWidth="80" Modulate="#5B88B0" />
-			<PanelContainer Name="HolocardPanel" Access="Public" Visible="True" Margin="2 5">
-				<PanelContainer.PanelOverride>
-					<graphics:StyleBoxFlat BackgroundColor="#984A16" />
-				</PanelContainer.PanelOverride>
-				<Label Name="HolocardDescription" Access="Public" Align="Right" MinWidth="160" Margin="2 2"/>
-			</PanelContainer>			
-            <Button Name="ChangeHolocardButton" Access="Public" StyleClasses="OpenBoth" Margin="5 0 0 0" />
-        </BoxContainer>
-        <BoxContainer Orientation="Horizontal">
-            <Label Name="BloodTypeLabel" Access="Public" MinWidth="160" Modulate="#5B88B0" />
-            <RichTextLabel Name="BloodAmountLabel" Access="Public" />
-            <RichTextLabel Name="Bleeding" Access="Public" />
-        </BoxContainer>
-        <BoxContainer Orientation="Horizontal">
-            <Label Text="Body Temperature:" MinWidth="160" Modulate="#5B88B0" />
-            <RichTextLabel Name="BodyTemperatureLabel" Access="Public" />
-        </BoxContainer>
-        <BoxContainer Orientation="Horizontal" Visible="False">
-            <Label Text="Pulse:" MinWidth="160" Modulate="#5B88B0" />
-            <RichTextLabel Name="PulseLabel" Access="Public" />
-        </BoxContainer>
-        <Label Name="ChemicalContentsLabel" Access="Public" Text="Chemical Contents" Margin="0 20 0 0" />
-        <cc:HSeparator Name="ChemicalContentsSeparator" Access="Public" Color="#4972A1" Margin="0 0 0 5" />
-        <BoxContainer Orientation="Vertical">
-            <PanelContainer Name="UnknownChemicalsPanel" Access="Public" Visible="False" Margin="0 5">
-                <PanelContainer.PanelOverride>
-                    <graphics:StyleBoxFlat BackgroundColor="#984A16" />
-                </PanelContainer.PanelOverride>
-                <RichTextLabel Name="UnknownReagentsLabel" Access="Public" Margin="5 2" />
-            </PanelContainer>
-            <BoxContainer Name="ChemicalsContainer" Access="Public" Orientation="Vertical" />
-        </BoxContainer>
-        <Label Name="MedicalAdviceLabel" Access="Public" Text="Medical Advice" Margin="0 20 0 0" />
-        <cc:HSeparator Name="MedicalAdviceSeparator" Access="Public" Color="#4972A1" Margin="0 0 0 5" />
-        <BoxContainer Orientation="Vertical">
-            <BoxContainer Name="AdviceContainer" Access="Public" Orientation="Vertical" />
-        </BoxContainer>
-    </BoxContainer>
+    </ScrollContainer>
 </scanner:HealthScannerWindow>

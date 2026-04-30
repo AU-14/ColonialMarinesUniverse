@@ -1,0 +1,557 @@
+# ---- Bone-setting steps ----------------------------------------------
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepSetSimpleBone
+  name: Realign simple fracture
+  components:
+  - type: CMSurgeryStep
+    skill: 2
+    tool:
+    - type: CMBoneSetter
+    remove:
+    - type: Fracture
+  - type: CMUFracturedSurgeryCondition
+    requireSeverity: Simple
+  - type: CMUSurgeryStepSetBoneEffect
+    downgradeFrom: Simple
+    downgradeTo: None
+    integrityRestore: 70
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/bonesetter.rsi
+    state: bonesetter
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepRealignCompoundBone
+  name: Realign compound fracture
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMBoneSetter
+  - type: CMUFracturedSurgeryCondition
+    requireSeverity: Compound
+  - type: CMUSurgeryStepSetBoneEffect
+    downgradeFrom: Compound
+    downgradeTo: Simple
+    integrityRestore: 40
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/bonesetter.rsi
+    state: bonesetter
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepApplyBoneGel
+  name: Apply bone gel
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMBoneGel
+    remove:
+    - type: Fracture
+  - type: CMUFracturedSurgeryCondition
+    requireAtLeast: Simple
+  - type: CMUSurgeryStepSetBoneEffect
+    downgradeFrom: Simple
+    downgradeTo: None
+    integrityRestore: 60
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/bone_gel.rsi
+    state: bone-gel
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepRealignComminutedBone
+  name: Realign comminuted fracture
+  components:
+  - type: CMSurgeryStep
+    skill: 4
+    tool:
+    - type: CMBoneSetter
+  - type: CMUFracturedSurgeryCondition
+    requireSeverity: Comminuted
+  - type: CMUSurgeryStepSetBoneEffect
+    downgradeFrom: Comminuted
+    downgradeTo: Compound
+    integrityRestore: 25
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/bonesetter.rsi
+    state: bonesetter
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepInsertBoneGraft
+  name: Insert bone graft
+  components:
+  - type: CMSurgeryStep
+    skill: 4
+    tool:
+    - type: CMUBoneGraft
+  - type: CMUFracturedSurgeryCondition
+    requireSeverity: Compound
+  - type: CMUSurgeryStepSetBoneEffect
+    downgradeFrom: Compound
+    downgradeTo: Simple
+    integrityRestore: 40
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/bone_gel.rsi
+    state: bone-gel
+
+# ---- Internal-bleed clamp step ---------------------------------------
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepCauterizeBleed
+  name: Clamp internal bleed
+  components:
+  - type: CMSurgeryStep
+    skill: 2
+    tool:
+    - type: CMHemostat
+    remove:
+    - type: InternalBleeding
+  - type: CMUInternalBleedingSurgeryCondition
+  - type: CMUSurgeryStepCauterizeBleedEffect
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+# ---- Organ removal: clamp / sever / extract per slot -----------------
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepClampLiverVessels
+  name: Clamp liver vessels
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMUOrganClamp
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepExtractLiver
+  name: Extract liver
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMHemostat
+    add:
+    - type: CMULiverRemovedMarker
+  - type: CMUOrganDamagedSurgeryCondition
+    organSlot: liver
+    minStage: Healthy   # extraction is valid even on healthy organs (donor harvesting)
+  - type: CMUSurgeryStepRemoveOrganEffect
+    organSlot: liver
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepReinsertLiver
+  name: Insert replacement liver
+  components:
+  - type: CMSurgeryStep
+    skill: 4
+    remove:
+    - type: CMULiverRemovedMarker
+  - type: CMUSurgeryStepReinsertOrganEffect
+    organSlot: liver
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepClampLungVessels
+  name: Clamp lung vessels
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMUOrganClamp
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepExtractLung
+  name: Extract lungs
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMHemostat
+    add:
+    - type: CMULungsRemovedMarker
+  - type: CMUOrganDamagedSurgeryCondition
+    organSlot: lungs
+    minStage: Healthy
+  - type: CMUSurgeryStepRemoveOrganEffect
+    organSlot: lungs
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepReinsertLung
+  name: Insert replacement lungs
+  components:
+  - type: CMSurgeryStep
+    skill: 4
+    remove:
+    - type: CMULungsRemovedMarker
+  - type: CMUSurgeryStepReinsertOrganEffect
+    organSlot: lungs
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepClampKidneyVessels
+  name: Clamp kidney vessels
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMUOrganClamp
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepExtractKidney
+  name: Extract kidneys
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMHemostat
+    add:
+    - type: CMUKidneysRemovedMarker
+  - type: CMUOrganDamagedSurgeryCondition
+    organSlot: kidneys
+    minStage: Healthy
+  - type: CMUSurgeryStepRemoveOrganEffect
+    organSlot: kidneys
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepReinsertKidney
+  name: Insert replacement kidneys
+  components:
+  - type: CMSurgeryStep
+    skill: 4
+    remove:
+    - type: CMUKidneysRemovedMarker
+  - type: CMUSurgeryStepReinsertOrganEffect
+    organSlot: kidneys
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepClampHeartVessels
+  name: Clamp heart vessels
+  components:
+  - type: CMSurgeryStep
+    skill: 4
+    tool:
+    - type: CMUOrganClamp
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepExtractHeart
+  name: Extract heart
+  components:
+  - type: CMSurgeryStep
+    skill: 4
+    tool:
+    - type: CMHemostat
+    add:
+    - type: CMUHeartRemovedMarker
+  - type: CMUOrganDamagedSurgeryCondition
+    organSlot: heart
+    minStage: Healthy
+  - type: CMUSurgeryStepRemoveOrganEffect
+    organSlot: heart
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepTransplantHeart
+  name: Transplant donor heart
+  components:
+  - type: CMSurgeryStep
+    skill: 4
+    remove:
+    - type: CMUHeartRemovedMarker
+  - type: CMUSurgeryStepReinsertOrganEffect
+    organSlot: heart
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepClampStomachVessels
+  name: Clamp stomach vessels
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMUOrganClamp
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepExtractStomach
+  name: Extract stomach
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMHemostat
+    add:
+    - type: CMUStomachRemovedMarker
+  - type: CMUOrganDamagedSurgeryCondition
+    organSlot: stomach
+    minStage: Healthy
+  - type: CMUSurgeryStepRemoveOrganEffect
+    organSlot: stomach
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepReinsertStomach
+  name: Insert replacement stomach
+  components:
+  - type: CMSurgeryStep
+    skill: 4
+    remove:
+    - type: CMUStomachRemovedMarker
+  - type: CMUSurgeryStepReinsertOrganEffect
+    organSlot: stomach
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+# ---- Generic suture-organ step (parametrised by surgery prototype) ----
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepSutureLiver
+  name: Suture liver
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMHemostat
+  - type: CMUOrganDamagedSurgeryCondition
+    organSlot: liver
+    minStage: Bruised
+  - type: CMUSurgeryStepRepairOrganEffect
+    organSlot: liver
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepSutureLungs
+  name: Suture lungs
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMHemostat
+  - type: CMUOrganDamagedSurgeryCondition
+    organSlot: lungs
+    minStage: Bruised
+  - type: CMUSurgeryStepRepairOrganEffect
+    organSlot: lungs
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepSutureKidneys
+  name: Suture kidneys
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMHemostat
+  - type: CMUOrganDamagedSurgeryCondition
+    organSlot: kidneys
+    minStage: Bruised
+  - type: CMUSurgeryStepRepairOrganEffect
+    organSlot: kidneys
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepSutureHeart
+  name: Suture heart
+  components:
+  - type: CMSurgeryStep
+    skill: 4
+    tool:
+    - type: CMHemostat
+  - type: CMUOrganDamagedSurgeryCondition
+    organSlot: heart
+    minStage: Bruised
+  - type: CMUSurgeryStepRepairOrganEffect
+    organSlot: heart
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+# ---- Limb reattachment -----------------------------------------------
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepRemoveStump
+  name: Trim necrotic stump
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMBoneSaw
+    add:
+    - type: CMUStumpRemoved
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/saw.rsi
+    state: saw
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepPrepReattachSocket
+  name: Prep reattachment socket
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMHemostat
+    add:
+    - type: CMUReattachPrepped
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepReattachLimb
+  name: Reattach severed limb
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    add:
+    - type: CMUReattachComplete
+  - type: CMUSurgeryStepReattachLimbEffect
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepCloseReattach
+  name: Close incision
+  components:
+  - type: CMSurgeryStep
+    tool:
+    - type: CMCautery
+    remove:
+    - type: CMSkinRetracted
+    - type: CMBleedersClamped
+    - type: CMIncisionOpen
+    - type: CMUStumpRemoved
+    - type: CMUReattachPrepped
+    - type: CMUReattachComplete
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/cautery.rsi
+    state: cautery
+  - type: CMSurgeryStepEmoteEffect
+
+# ---- Brain / eye / ear repair ---------------------------------------
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepRepairBrain
+  name: Repair brain
+  components:
+  - type: CMSurgeryStep
+    skill: 4
+    tool:
+    - type: CMHemostat
+  - type: CMUOrganDamagedSurgeryCondition
+    organSlot: brain
+    minStage: Bruised
+  - type: CMUSurgeryStepRepairOrganEffect
+    organSlot: brain
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepRepairEyes
+  name: Repair eyes
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMHemostat
+  - type: CMUOrganDamagedSurgeryCondition
+    organSlot: eyes
+    minStage: Bruised
+  - type: CMUSurgeryStepRepairOrganEffect
+    organSlot: eyes
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepRepairEars
+  name: Repair ears
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: CMHemostat
+  - type: CMUOrganDamagedSurgeryCondition
+    organSlot: ears
+    minStage: Bruised
+  - type: CMUSurgeryStepRepairOrganEffect
+    organSlot: ears
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat

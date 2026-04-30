@@ -45,6 +45,9 @@
         whitelist:
           tags:
           - RMCMagazineRifleABR40
+          - RMCMagazineRifleL42A
+          - RMCMagazineRifleL42AExtended
+          - RMCMagazineRifleL42AAP
   - type: GunDamageModifier
     multiplier: 1.3
   - type: RMCWeaponAccuracy
@@ -89,7 +92,7 @@
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   name: ABR-40 Tactical hunting rifle
   id: RMCWeaponRifleABR40Tactical
-  description: TThe civilian version of the L42A battle rifle that is often wielded by Marines. Almost identical and even cross-compatible with L42 magazines, just don't take the stock off. This rifle seems to have unique tacticool blue-black furniture alongside some miscellaneous aftermarket modding.
+  description: The civilian version of the L42A battle rifle that is often wielded by Marines. Almost identical and even cross-compatible with L42 magazines, just don't take the stock off. This rifle seems to have unique tacticool blue-black furniture alongside some miscellaneous aftermarket modding.
   suffix: Filled
   components:
   - type: Sprite
@@ -109,16 +112,24 @@
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
+    - FullAuto
     soundGunshot:
       path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_rifle.ogg
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
+    - FullAuto
     recoilWielded: 1
     recoilUnwielded: 2
     scatterWielded: 6
     scatterUnwielded: 16
-    baseFireRate: 3.33
+    baseFireRate: 5
+    modifiers:
+      SemiAuto:
+        fireDelay: 0.2555
+      FullAuto:
+        maxScatterModifier: 30
+        shotsToMaxScatter: 4
   - type: MagazineAmmoProvider
     autoEject: false
     soundAutoEject: null
@@ -133,8 +144,11 @@
         whitelist:
           tags:
           - RMCMagazineRifleABR40
+          - RMCMagazineRifleL42A
+          - RMCMagazineRifleL42AExtended
+          - RMCMagazineRifleL42AAP
   - type: GunDamageModifier
-    multiplier: 1.35
+    multiplier: 1.3
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.25
     accuracyMultiplierUnwielded: 0.8

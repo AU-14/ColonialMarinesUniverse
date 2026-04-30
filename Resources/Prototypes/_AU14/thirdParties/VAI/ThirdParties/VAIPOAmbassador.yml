@@ -1,0 +1,52 @@
+- type: partySpawn
+  id: VAIPOSpawn
+  leadersToSpawn:
+    AU14VAITeamLeader: 1
+  gruntsToSpawn:
+    AU14VAIMercenary: 2
+    AU14VAIEngi: 1
+    AU14VAIMachinegunner: 1
+    AU14VAIMedic: 1
+    # AU14VAISynth: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: VAIPO
+  displayName: VAIPO Mercenaries squad
+  partyspawn: VAIPOSpawn
+  blacklistedgamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: shuttle
+  weight: 20
+  minplayers: 100
+  maxplayers: 400
+  GhostsNeeded: 0
+  roundstart: false
+
+- type: partySpawn
+  id: VAISPSpawn
+  leadersToSpawn:
+    AU14VAISPTeamLeader: 1
+  gruntsToSpawn:
+    AU14VAISPMercenary: 1
+    AU14VAISPMedic: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: VAISP
+  displayName: VAISP Mercenaries squad
+  partyspawn: VAISPSpawn
+  blacklistedgamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: shuttle
+  weight: 20
+  minplayers: 100
+  maxplayers: 400
+  GhostsNeeded: 0
+  roundstart: false

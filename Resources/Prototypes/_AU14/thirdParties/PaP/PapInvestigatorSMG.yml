@@ -49,7 +49,6 @@
   id: AU14JobPaPThirdpartyInvestigatorSMG
   name: UPP PAP Investigator (SMG)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole

@@ -1,0 +1,14 @@
+- type: entity
+  parent: BaseItem
+  id: CMUBoneGraftItem
+  name: bone graft
+  description: A vial of synthetic bone material for grafting comminuted fractures.
+  components:
+  - type: Item
+    size: Small
+  - type: CMUBoneGraft
+  - type: CMSurgeryTool
+    skill: 4
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/bone_gel.rsi
+    state: bone-gel

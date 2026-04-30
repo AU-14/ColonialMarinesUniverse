@@ -54,7 +54,6 @@
   id: AU14JobIPIEPPO
   name: WY IPIE Personal Protection Officer (3rd party)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadPMC

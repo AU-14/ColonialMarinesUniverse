@@ -37,7 +37,8 @@
   - AU14GovforCorpsman
   - AU14GovforSquad
   - CMCargoTech
-  - CMAccessRequisitions
+# access:
+# - CMAccessRequisitions # NOTE: CMCargoTech provides this
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

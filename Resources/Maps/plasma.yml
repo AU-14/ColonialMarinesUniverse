@@ -25293,7 +25293,7 @@ entities:
     - type: Transform
       pos: -40.496006,-33.367466
       parent: 2
-- proto: BoxBottle
+- proto: RMCBoxPillCanister
   entities:
   - uid: 6472
     components:
@@ -25487,7 +25487,7 @@ entities:
     - type: Transform
       pos: -34.443893,-27.24779
       parent: 2
-- Proto CMBoxSyringe
+- proto: CMBoxSyringe
   entities:
   - uid: 4187
     components:
@@ -129147,7 +129147,7 @@ entities:
       pos: -92.551506,-19.605207
       parent: 2
     - type: Paper
-      stampState: paper_stamp-warden
+      stampState: paper_stamp-mw
       stampedBy:
       - stampedColor: '#5B0000FF'
         stampedName: Aussec

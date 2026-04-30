@@ -64,7 +64,6 @@
   id: NSPAInvestigationPartyJobConstable
   name: NSPA Constable
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole

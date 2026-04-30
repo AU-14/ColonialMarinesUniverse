@@ -1,0 +1,14 @@
+- type: entity
+  parent: BaseItem
+  id: CMUOrganClampItem
+  name: organ vessel clamp
+  description: A surgical clamp for sealing organ vessels mid-surgery.
+  components:
+  - type: Item
+    size: Small
+  - type: CMUOrganClamp
+  - type: CMSurgeryTool
+    skill: 3
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat

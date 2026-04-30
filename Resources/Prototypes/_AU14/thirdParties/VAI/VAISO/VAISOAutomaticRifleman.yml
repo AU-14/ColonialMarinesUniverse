@@ -1,0 +1,103 @@
+- type: job
+  parent: AU14VAIMachinegunnerBase
+  id: AU14VAISOMachinegunner
+  spawnMenuRoleName: VAISO Machinegunner
+  playTimeTracker: AU14VAISOMachinegunner
+  icon: "CMJobIconEmpty"
+  greeting: au14-vaiso-greeting
+  startingGear: AU14GearVAISOMachinegunner
+  basePlaytimeTracker: true
+  accessGroups:
+  - auadmin
+  - Colonist
+  - CMCargoTech
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadVAISO
+    - type: Skills
+      skills:
+        RMCSkillCqc: 5
+        RMCSkillEngineer: 4
+        RMCSkillConstruction: 3
+        RMCSkillFirearms: 2
+        RMCSkillMedical: 1
+        RMCSkillMeleeWeapons: 1
+        RMCSkillPolice: 2
+        RMCSkillFireman: 5
+        RMCSkillPowerLoader: 2
+        RMCSkillVehicles: 2
+        RMCSkillJtac: 1
+        RMCSkillEndurance: 1
+        RMCSkillSmartGun: 1
+    - type: EquipSurvivorPreset
+      preset: AU14VAISOMGPreset
+    - type: JobPrefix
+      prefix: au14-job-prefix-vai-machinegunner
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicVAI
+  id: AU14VAISOMachinegunner
+  name: VAISO Machinegunner
+  components:
+  - type: EquipSurvivorPreset
+    preset: AU14VAISOMGPreset
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadVAISO
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: VAISO Machinegunner
+    description: You have received intel on Weyland-Yutani's facility from local CLF insurgent group. Your mission is to raid the facility, securing any valuable intel. Do it without excessive attention.
+    job: AU14VAISOMachinegunner
+    raffle:
+      settings: short
+
+- type: entity
+  id: AU14VAISOMGPreset
+  name: vaiso mg preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SurvivorPreset
+    randomGearOther:
+    -
+      - [ AU14PVEHandsFingerlessBlackGloves ] # gloves
+      - [ AU14PVEHandsFingerlessBrownGloves ]
+      - [ AU14PVEHandsInsulatedBlackMarine ]
+      - [ CMHandsBrown ]
+    randomWeapon:
+    - [ AU14WeaponMar50LMGTactical, AU14JumpsuitCivilianVAIMAR50, AU14MagazineMar50LMGAP, AU14MagazineMar50LMGAP ]
+    - [ AU14WeaponMar50LMGTactical, AU14JumpsuitCivilianVAIMAR50, AU14MagazineMar50LMGAP, AU14MagazineMar50LMGAP ] # 66%
+    - [ AU14WeaponRifleM41AE2Tactical, AU14JumpsuitCivilianYellowVAIM41AE2, AU14MagazineRifleM41AE2, AU14MagazineRifleM41AE2 ] # 33%
+    tryEquipRandomWeapon: true
+
+- type: startingGear
+  parent: AU14GearVAISOBase
+  id: AU14GearVAISOMachinegunner
+  equipment:
+    id: AU14IDCardVAIMercenary
+    ears: AU14HeadsetVAI
+    pocket2: RMCPouchExplosive
+  storage:
+    outerClothing:
+    - RMCBinocularsCivPVE
+    back:
+    - CMMRE
+    - CMGrenadeFragOld
+    - RMCPacketGrenadeSmokeFilled
+    - RMCTacticalPrybar
+    pocket2:
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+
+- type: playTimeTracker
+  id: AU14VAISOMachinegunner

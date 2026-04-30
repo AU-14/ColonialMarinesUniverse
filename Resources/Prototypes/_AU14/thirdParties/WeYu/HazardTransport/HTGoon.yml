@@ -44,7 +44,6 @@
   id: AU14JobWYHTGoon
   name: WY Hazard Transport Goon (3rd party)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadPMC

@@ -106,6 +106,7 @@
   frequency: 1533
   color: "#e4860c"
   longRange: true
+  tower: true
 
 - type: radioChannel
   id: UASOF
@@ -128,13 +129,21 @@
   name: chat-radio-twe
   keycode: "q"
   frequency: 1557
-  color: "#2e4f68"
+  color: "#701ba7"
   longRange: true
 
 - type: radioChannel
   id: ICSCSOF
   name: chat-radio-icsc
   keycode: "g"
-  frequency: 1557
-  color: "#2e4f68"
+  frequency: 1558
+  color: "#0b93b9"
+  longRange: true
+
+- type: radioChannel
+  id: VAI
+  name: chat-radio-vai
+  keycode: "z"
+  frequency: 1559
+  color: "#e3580e"
   longRange: true

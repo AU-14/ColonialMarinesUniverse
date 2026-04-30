@@ -1,0 +1,183 @@
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponMP5
+  name: MP5 submachine gun case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: WeaponSMGMP5
+        amount: 1
+      - id: CMMagazineSMGMP5
+        amount: 9
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponP90
+  name: P90 personal defense weapon case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponSMGPDW90
+        amount: 1
+      - id: RMCMagazineSMGPDW90
+        amount: 9
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponL90A2
+  name: L90A2 personal defense weapon case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: AU14WeaponSMGL90A2oldnoattachments
+        amount: 1
+      - id: AU14MagazineSMGL90A2AP
+        amount: 1
+      - id: AU14MagazineSMGL90A2
+        amount: 8
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponM39
+  name: M39 submachine gun case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: WeaponSMGM63
+        amount: 1
+      - id: CMMagazineSMGM63AP
+        amount: 1
+      - id: CMMagazineSMGM63
+        amount: 8
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponM39B2
+  name: "M39B/2 submachine gun case"
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponSMGM63B2
+        amount: 1
+      - id: CMMagazineSMGM63AP
+        amount: 1
+      - id: CMMagazineSMGM63
+        amount: 8
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponFP9000
+  name: "FP9000/2 submachine gun case"
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponSMGFP9000PMC
+        amount: 1
+      - id: RMCMagazineSMGFP9000
+        amount: 9
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponType64
+  name: type 64 submachine gun case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponSMGType64
+        amount: 1
+      - id: RMCMagazineSMGType64
+        amount: 9
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitWeaponXMP5A6
+  name: XMP5A6/10 CQW case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: AU14WeaponSMGXMP5A6HAZOPS
+        amount: 1
+      - id: CMMagazineRifleM54CAP
+        amount: 1
+      - id: AU14MagazineXMP5A6
+        amount: 8

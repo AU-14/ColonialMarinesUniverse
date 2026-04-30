@@ -5,3 +5,11 @@
   components:
   - type: CMItemSlots
     startingItem: AU14FlareRMC
+    cooldown: 1
+    cooldownPopup: You need to wait before taking another flare!
+    count: 16
+    slot:
+      name: Flare
+      whitelist:
+        tags:
+        - AU14FlareRMC

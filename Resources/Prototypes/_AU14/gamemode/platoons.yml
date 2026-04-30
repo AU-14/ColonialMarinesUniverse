@@ -19,6 +19,7 @@
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
     MilitaryPolice: AU14MilitaryPolicemanVendorLACN
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
   possibleships:
     - USSBush
   #platoonflag: uaflag
@@ -48,6 +49,7 @@
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
     MilitaryPolice: AU14MilitaryPolicemanVendorUSCM
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
   #platoonflag:  uaflag
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
@@ -80,6 +82,7 @@
     SectionSergeant: AU14UPPSectionLeaderVendor
     Pilot: AU14UPPAirCrewWeaponsVendor
     MilitaryPolice: AU14MilitaryPolicemanVendorUPP
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
   possibleships:
       - USSBush
 #  jobClassOverride:
@@ -118,6 +121,7 @@
     Pilot: AU14AircrewWeaponsVendor
     combattech: AU14ComtechGearVendor
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
 #  jobClassOverride:
 #    SquadRifleman: AU14JobGOVFORSquadRiflemanWYPMC
 #    SectionSergeant: AU14JobGOVFORSectionSergeantWYPMC
@@ -160,6 +164,7 @@
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
     MilitaryPolice: AU14MilitaryPolicemanGenericVendorCIU
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
 #  jobClassOverride:
 #    PlatCo: AU14JobGOVFORPlatCoCMBCIU
 #    SquadRifleman: AU14JobGOVFORSquadRiflemanCMBCIU
@@ -199,6 +204,7 @@
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
   possibleships:
       - USSBush
   jobSlotOverride:
@@ -229,10 +235,12 @@
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
     MilitaryPolice: AU14MilitaryPolicemanVendorUSCM
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
   possibleships:
       - USSBush
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/osprey.yml
+  - /Maps/_CMU14/Shuttles/normandy.yml
   compatibleFighters:
   - /Maps/_AU14/ShuttlesDropships/f84owl.yml
   - /Maps/_AU14/ShuttlesDropships/ud_6.yml
@@ -260,6 +268,7 @@
     ExtraVendor1: VMarkerOpforDeco5
     Deco1: VMarkerOpforDeco5
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
   #platoonflag:  uaflag
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
@@ -293,6 +302,7 @@
     ExtraVendor1: VMarkerOpforDeco5
     Deco1: VMarkerOpforDeco5
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/normandy.yml
@@ -326,6 +336,7 @@
     ExtraVendor1: VMarkerOpforDeco5
     Deco1: VMarkerOpforDeco5
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
   #jobClassOverride:
    # SquadRifleman: AU14JobGOVFORSquadRiflemanRMC
    # SectionSergeant: AU14JobGOVFORSectionSergeantRMC

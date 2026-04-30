@@ -1,0 +1,40 @@
+- type: entity
+  parent: WeaponShotgunM890
+  id: AU14WeaponShotgunM890Tactical
+  suffix: Filled, Tactical
+  components:
+  - type: BallisticAmmoProvider
+    proto: CMShellShotgunBuckshot
+    cycleable: false
+    whitelist:
+      tags:
+      - RMCShellShotgun
+    capacity: 8
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        startingAttachable: RMCAttachmentExtendedBarrel
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentRecoilCompensator
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-stock:
+        startingAttachable: RMCAttachmentM890Stock
+        whitelist:
+          tags:
+          - RMCAttachmentM890Stock
+      rmc-aslot-underbarrel:
+        locked: true
+        startingAttachable: RMCAttachmentU1GrenadeLauncher
+        whitelist:
+          tags:
+          - RMCAttachmentU1GrenadeLauncher

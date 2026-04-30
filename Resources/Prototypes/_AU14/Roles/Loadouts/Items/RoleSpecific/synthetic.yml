@@ -20,6 +20,28 @@
   equipment:
     id: AU14IDCardColonySyntheticCommand
 
+# GOVFOR Doctor Specializations
+
+- type: loadout
+  id: GOVFORDoctorSpecializationDefaultAU14
+  equipment:
+    id: AU14IDCardGOVFORDoctor
+
+- type: loadout
+  id: GOVFORDoctorSpecializationSurgeonAU14
+  equipment:
+    id: AU14IDCardGOVFORDoctorSurgeon
+
+- type: loadout
+  id: GOVFORDoctorSpecializationPharmacistAU14
+  equipment:
+    id: AU14IDCardGOVFORDoctorPharmacist
+
+- type: loadout
+  id: GOVFORDoctorSpecializationMorticianAU14
+  equipment:
+    id: AU14IDCardGOVFORDoctorMortician
+
 # GOVFOR Synth Specializations
 - type: loadout
   id: GOVFORSynthSpecializationDefaultAU14

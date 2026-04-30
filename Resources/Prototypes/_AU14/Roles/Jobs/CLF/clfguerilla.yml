@@ -6,6 +6,9 @@
   setPreference: true
   ignoreAllegiance: true
   playTimeTracker: AU14JobCLFGuerilla
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 7200 # 2 hours
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCLFGuerilla

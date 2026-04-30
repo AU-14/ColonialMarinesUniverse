@@ -1,0 +1,336 @@
+# ----- Missing-limb markers -----------------------------------------------
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUMissingArmLeft
+  name: missing left arm
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: MissingArm
+  - type: StatusEffect
+    alert: CMUMissingArm
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUMissingArmRight
+  name: missing right arm
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: MissingArm
+  - type: StatusEffect
+    alert: CMUMissingArm
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUMissingHandLeft
+  name: missing left hand
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: MissingHand
+  - type: StatusEffect
+    alert: CMUMissingHand
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUMissingHandRight
+  name: missing right hand
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: MissingHand
+  - type: StatusEffect
+    alert: CMUMissingHand
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUMissingLegLeft
+  name: missing left leg
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: MissingLeg
+  - type: StatusEffect
+    alert: CMUMissingLeg
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUMissingLegRight
+  name: missing right leg
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: MissingLeg
+  - type: StatusEffect
+    alert: CMUMissingLeg
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUMissingFootLeft
+  name: missing left foot
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: MissingFoot
+  - type: StatusEffect
+    alert: CMUMissingFoot
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUMissingFootRight
+  name: missing right foot
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: MissingFoot
+  - type: StatusEffect
+    alert: CMUMissingFoot
+
+# ----- Per-organ subsystem status effects ---------------------------------
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUTachycardia
+  name: tachycardia
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Tachycardia
+  - type: StatusEffect
+    alert: CMUTachycardia
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUArrhythmia
+  name: arrhythmia
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Arrhythmia
+  - type: StatusEffect
+    alert: CMUArrhythmia
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUCardiacArrest
+  name: cardiac arrest
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CardiacArrest
+  - type: StatusEffect
+    alert: CMUCardiacArrest
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUPulmonaryEdema
+  name: pulmonary edema
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PulmonaryEdema
+  - type: StatusEffect
+    alert: CMUPulmonaryEdema
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUHepaticFailure
+  name: hepatic failure
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HepaticFailure
+  - type: StatusEffect
+    alert: CMUHepaticFailure
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMURenalFailure
+  name: renal failure
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RenalFailure
+  - type: StatusEffect
+    alert: CMURenalFailure
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUNausea
+  name: nausea
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Nausea
+  - type: StatusEffect
+    alert: CMUNausea
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUTinnitus
+  name: tinnitus
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Tinnitus
+  - type: StatusEffect
+    alert: CMUTinnitus
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUDeafened
+  name: deafened
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Deafened
+  - type: StatusEffect
+    alert: CMUDeafened
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUConcussed
+  name: concussed
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Concussed
+  - type: StatusEffect
+    alert: CMUConcussed
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUTraumaticBrainInjury
+  name: traumatic brain injury
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TraumaticBrainInjury
+  - type: StatusEffect
+    alert: CMUTraumaticBrainInjury
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUUnconscious
+  name: unconscious
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ForcedSleepingStatusEffect
+
+# ----- Semi-permanent injuries --------------------------------------------
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUWhiplash
+  name: whiplash
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Whiplash
+  - type: StatusEffect
+    alert: CMUWhiplash
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMURecoveringSurgery
+  name: recovering from surgery
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RecoveringFromSurgery
+  - type: StatusEffect
+    alert: CMURecoveringFromSurgery
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUTransplantRejection
+  name: organ rejection
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TransplantRejection
+  - type: StatusEffect
+    alert: CMUTransplantRejection
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUNerveDamageArm
+  name: nerve damage (arm)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NerveDamage
+    part: Arm
+  - type: StatusEffect
+    alert: CMUNerveDamage
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUNerveDamageHand
+  name: nerve damage (hand)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NerveDamage
+    part: Hand
+  - type: StatusEffect
+    alert: CMUNerveDamage
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUNerveDamageLeg
+  name: nerve damage (leg)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NerveDamage
+    part: Leg
+  - type: StatusEffect
+    alert: CMUNerveDamage
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUNerveDamageFoot
+  name: nerve damage (foot)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: NerveDamage
+    part: Foot
+  - type: StatusEffect
+    alert: CMUNerveDamage
+
+# ----- Chemistry-driven status effects ------------------------------------
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUPainSuppression
+  name: pain suppression
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StatusEffect
+    alert: CMUPainSuppression
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUBoneRegenBoost
+  name: accelerated bone regen
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StatusEffect
+    alert: CMUBoneRegenBoost
+
+# ----- Pain shock ---------------------------------------------------------
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUPainShock
+  name: pain shock
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUPainShockStatus
+  - type: StatusEffect
+    alert: CMUPainShock
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUPainMild
+  name: aching
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StatusEffect
+    alert: CMUPainMild
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUPainModerate
+  name: hurt
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StatusEffect
+    alert: CMUPainModerate
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUPainSevere
+  name: agony
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StatusEffect
+    alert: CMUPainSevere

@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: CMVendor
   id: AU14VendorKoorCigs
   name: Koorlander Cigarette Machine
@@ -298,3 +298,89 @@
       - id: AU14PouchIFAKFill
       - id: RMCPouchMagazinePistol
       - id: RMCPouchPistol
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14MilitaryDoctorGenericVendor
+  name: military doctor equipment rack
+  description: An automated rack hooked up to a small storage of military doctor equipment.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+    jobs: [ AU14JobMilitaryDoctorBase, AU14JobGOVFORMilitaryDoctor, AU14JobOPFORMilitaryDoctor ]
+    sections:
+    - name: Essential Equipment
+      takeAll: CMUEssentialEquipment
+      entries:
+      - id: AU14VendorBundleMilitaryDoctorEssentials
+    - name: Clothing
+      choices: { CMUPlatoonMedicalClothing: 1 }
+      entries:
+      - id: RMCScrubsOlive
+    - name: Footwear
+      choices: { CMUPlatoonMedicalClothingFeet: 1 }
+      entries:
+      - id: RMCBootsSPPBlackFilled
+      - id: RMCShoesBlack
+    - name: Labcoats
+      choices: { CMUPlatoonMedicalClothingLabcoat: 1 }
+      entries:
+      - id: RMCLabcoat
+      - id: RMCLabcoatShort
+      - id: RMCLabcoatLong
+    - name: Cold Weather Gear
+      choices: { CMUPlatoonMedicalClothingCold: 1 }
+      entries:
+      - id: AU14CivilianJacketSnowSuit
+    - name: Storage
+      choices: { CMUPlatoonMedicalStorageBack: 1 }
+      entries:
+      - id: CMSatchelMarine
+    - name: Medical Pouches
+      choices: { CMUPlatoonMedicalPouch: 2 }
+      entries:
+      - id: RMCPouchAutoinjector
+      - id: RMCPouchFirstResponder
+      - id: RMCPouchMedical
+      - id: RMCPouchSyringeFill
+    - name: Medical Storage
+      choices: { CMUPlatoonMedicalStorage: 2 }
+      entries:
+      - id: CMBeltMedicBag
+      - id: AU14BeltMedicBagBlack
+    - name: Medical Webbing
+      choices: { CMUPlatoonMedicalStorage: 1 }
+      entries:
+      - id: CMWebbingSurgicalGreen
+    - name: Medical Gloves
+      choices: { CMUPlatoonMedicalGloves: 1 }
+      entries:
+      - id: CMHandsLatex
+      - id: ClothingHandsGlovesNitrile
+    - name: Medical Masks
+      choices: { CMUPlatoonMedicalMasks: 1 }
+      entries:
+      - id: CMMaskSterile
+
+- type: entity
+  parent: CMVendorBundleRiflemanApparel
+  id: AU14VendorBundleMilitaryDoctorEssentials
+  name: essential doctor set
+  description: Essential doctor equipment.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/first_aid_kits.rsi
+    state: firstaid
+  - type: CMVendorBundle
+    bundle:
+    - RMCGlassesMedicalHUDGlasses
+    - AU14CMDefibrillator
+    - CMHealthAnalyzer
+    - RMCFlashlightPen
+    - ClothingNeckStethoscope
+    - CMHandLabeler
+    - CMRollerBedSpawnFolded
+    - CMPortableSurgicalBedSpawnFolded
+    - AU14IVFoldableFolded
+    - AU14TentBigFoldedSurgical

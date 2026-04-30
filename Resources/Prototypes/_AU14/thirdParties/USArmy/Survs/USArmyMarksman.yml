@@ -49,7 +49,6 @@
   id: AU14JobUSArmyMarksman
   name: US Army Marksman (Surv)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadUSArmy

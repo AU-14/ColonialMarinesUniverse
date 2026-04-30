@@ -10,6 +10,7 @@
   - AU14AccessOpforEngineering
   - AU14AccessOpforGunner
   - AU14AccessOpforPilot
+  - CMAccessBrig
 
 - type: accessGroup
   id: AU14OpforFTL
@@ -55,3 +56,7 @@
   tags:
   - AU14AccessOpfor
   - AU14AccessOpforSquad
+
+- type: accessGroup
+  parent: AU14OpforCommand
+  id: AU14OpforSecurity

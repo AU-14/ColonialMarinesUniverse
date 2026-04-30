@@ -12,3 +12,30 @@
       Female: RMCFemaleHuman
   - type: FixedIdentity
     name: cm-chatsan-replacement-human
+  - type: CMUHumanMedical
+  - type: HitLocation
+  - type: PainShock
+  - type: BodyZoneTargeting
+  - type: Body
+    prototype: CMUHumanBody
+    requiredLegs: 2
+  - type: UserInterface
+    interfaces:
+      enum.VoiceMaskUIKey.Key:
+        type: VoiceMaskBoundUserInterface
+      enum.HumanoidMarkingModifierKey.Key:
+        type: HumanoidMarkingModifierBoundUserInterface
+      enum.StrippingUiKey.Key:
+        type: StrippableBoundUserInterface
+      enum.CMSurgeryUIKey.Key:
+        type: CMSurgeryBui
+      enum.HolocardChangeUIKey.Key:
+        type: HolocardChangeBoundUserInterface
+        interactionRange: 0
+        requireInputValidation: false
+      enum.CMMobStateActionsUI.Key:
+        type: CMGhostActionBui
+      enum.BodyPartPickerUIKey.Key:
+        type: BodyPartPickerBui
+      enum.CMUSurgeryUIKey.Key:
+        type: CMUSurgeryBui

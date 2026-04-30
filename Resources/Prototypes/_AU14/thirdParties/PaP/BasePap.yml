@@ -4,7 +4,6 @@
   abstract: true
   suffix: AU14, UPP, PAP
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: RandomHumanoidAppearance
   - type: RandomHumanoidAppearanceWhitelisted

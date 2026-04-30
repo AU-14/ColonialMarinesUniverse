@@ -43,7 +43,6 @@
   id: AU14JobWYPMCPartyMedic
   name: WY PMC Party Combat Lifesaver (3rd party, M41A/2)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadPMC

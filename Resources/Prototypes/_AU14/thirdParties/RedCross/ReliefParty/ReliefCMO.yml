@@ -67,7 +67,6 @@
   id: AU14PartyJobICRCCMO
   name: ICRC Medical Staff CMO
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole

@@ -1,0 +1,49 @@
+- type: body
+  id: CMUHumanBody
+  name: "human"
+  root: torso
+  slots:
+    head:
+      part: CMUPartHumanHead
+      connections:
+      - torso
+      organs:
+        brain: CMUOrganHumanBrain
+        eyes: CMUOrganHumanEyes
+    torso:
+      part: CMUPartHumanTorso
+      connections:
+      - right_arm
+      - left_arm
+      - right_leg
+      - left_leg
+      organs:
+        heart: CMUOrganHumanHeart
+        lungs: CMUOrganHumanLungs
+        stomach: CMUOrganHumanStomach
+        liver: CMUOrganHumanLiver
+        kidneys: CMUOrganHumanKidneys
+    right_arm:
+      part: CMUPartHumanRightArm
+      connections:
+      - right_hand
+    left_arm:
+      part: CMUPartHumanLeftArm
+      connections:
+      - left_hand
+    right_hand:
+      part: RightHandHuman
+    left_hand:
+      part: LeftHandHuman
+    right_leg:
+      part: CMUPartHumanRightLeg
+      connections:
+      - right_foot
+    left_leg:
+      part: CMUPartHumanLeftLeg
+      connections:
+      - left_foot
+    right_foot:
+      part: RightFootHuman
+    left_foot:
+      part: LeftFootHuman

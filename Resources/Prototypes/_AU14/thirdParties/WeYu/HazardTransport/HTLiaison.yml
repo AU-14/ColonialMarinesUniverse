@@ -59,7 +59,6 @@
   id: AU14JobWYHTLiaison
   name: WY Hazard Transport Liaison (3rd party)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadPMC

@@ -44,7 +44,6 @@
   id: AU14JobFORECONFirstReconSquadleader
   name: FORECON Section Leader (3rd party)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadFirstRecon

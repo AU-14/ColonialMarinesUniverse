@@ -1,0 +1,76 @@
+- type: entity
+  parent: RMCWeaponMar50LMG
+  id: AU14WeaponMar50LMGTactical
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        startingAttachable: RMCAttachmentBarrelMar50
+        locked: true
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelMar50
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14MagazineMar50LMGAP
+  name: MAR AP drum magazine (7.62x39mm)
+  description: A 7.62x39mm drum magazine for the MAR-50 LMG.
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - RMCMagazineMar50LMG
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - AU14CartridgeRifleMAR40AP
+    proto: AU14CartridgeRifleMAR40AP
+    capacity: 100
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/mar50.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+#  - type: RefillableByBulletBox No Bullet Box yet
+#    bulletType: RMCBoxBulletsRifle
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: AU14CartridgeRifleMAR40AP
+  name: Cartridge (7.62x39mm AP)
+  description: A 7.62x39mm AP rifle cartridge
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14CartridgeRifleMAR40AP
+  - type: CartridgeAmmo
+    proto: AU14BulletRifleMAR40AP
+
+- type: entity
+  parent: BulletRifleMAR40
+  id: AU14BulletRifleMAR40AP
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 45
+  - type: CMArmorPiercing
+    amount: 40
+
+- type: Tag
+  id: AU14CartridgeRifleMAR40AP

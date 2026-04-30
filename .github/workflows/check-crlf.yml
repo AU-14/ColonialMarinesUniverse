@@ -1,15 +1,24 @@
-﻿name: CRLF Check
+name: CRLF Check
 
 on:
   pull_request:
     types: [ opened, reopened, synchronize, ready_for_review ]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: crlf-${{github.ref}}
+  cancel-in-progress: true
+
 jobs:
-  build:
+  crlf:
     name: CRLF Check
-    if: github.event.pull_request.draft == false
+    if: ${{ github.event.pull_request.draft == false }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4.2.2
-    - name: Check for CRLF
-      run: Tools/check_crlf.py
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python3 Tools/check_crlf.py

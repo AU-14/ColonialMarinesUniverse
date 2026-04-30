@@ -1,0 +1,62 @@
+<controls:CMUSurgeryWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client._CMU14.Medical.Surgery"
+    xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    MinSize="640 600"
+    SetSize="640 600">
+    <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" Margin="2 4">
+
+            <!-- Patient header. -->
+            <BoxContainer Orientation="Horizontal" Margin="0 0 0 6">
+                <Label Name="PatientLabel" Access="Public" StyleClasses="LabelHeading" />
+                <Control HorizontalExpand="True" />
+            </BoxContainer>
+
+            <!-- IN-PROGRESS hero panel. Visible only when the patient
+                 holds the in-flight lock. Surfaces the surgery name,
+                 originating surgeon + elapsed, current step + tool,
+                 plus an action hint and Abandon button. -->
+            <PanelContainer Name="InProgressPanel" Access="Public" Visible="False" Margin="0 0 0 6">
+                <PanelContainer.PanelOverride>
+                    <graphics:StyleBoxFlat BackgroundColor="#5B3FB4" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical" Margin="10 8">
+                    <Label Name="InProgressHeadingLabel" Access="Public" StyleClasses="LabelHeading"
+                           FontColorOverride="White" Text="IN PROGRESS" />
+                    <Label Name="InProgressSubtitleLabel" Access="Public" FontColorOverride="White" />
+                    <Label Name="InProgressCreditLabel" Access="Public" FontColorOverride="#D8D2EE"
+                           Margin="0 0 0 4" />
+                    <Label Name="InProgressStepLabel" Access="Public" StyleClasses="LabelKeyText"
+                           FontColorOverride="White" />
+                    <Label Name="InProgressActionLabel" Access="Public" FontColorOverride="#FFD56B"
+                           Margin="0 2 0 4" />
+                    <BoxContainer Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Name="AbandonButton" Access="Public"
+                                Text="{Loc 'cmu-medical-surgery-abandon-button'}"
+                                StyleClasses="OpenBoth" />
+                    </BoxContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <!-- Hint card visible when nothing is in progress. -->
+            <PanelContainer Name="HintPanel" Access="Public" Visible="True" Margin="0 0 0 6">
+                <PanelContainer.PanelOverride>
+                    <graphics:StyleBoxFlat BackgroundColor="#1B1F2A" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical" Margin="10 6">
+                    <Label Text="{Loc 'cmu-medical-surgery-window-hint'}"
+                           FontColorOverride="#B6BFCE" />
+                </BoxContainer>
+            </PanelContainer>
+
+            <!-- Part stack. One PanelContainer per CMU-supported part
+                 (head / torso / arm L+R / leg L+R) populated by the BUI.
+                 Each panel has a header row with the part name + status
+                 + expand/collapse caret, and a body BoxContainer that
+                 hosts surgery rows when expanded. -->
+            <BoxContainer Name="PartStackContainer" Access="Public" Orientation="Vertical" />
+
+        </BoxContainer>
+    </ScrollContainer>
+</controls:CMUSurgeryWindow>

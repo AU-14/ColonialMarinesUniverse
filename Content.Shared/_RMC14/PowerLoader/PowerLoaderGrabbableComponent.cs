@@ -1,4 +1,4 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.PowerLoader;
@@ -11,8 +11,8 @@ public sealed partial class PowerLoaderGrabbableComponent : Component
     public TimeSpan Delay;
 
     [DataField, AutoNetworkedField]
-    public EntProtoId VirtualRight;
+    public EntProtoId VirtualRight = "RMCVirtualPowerLoaderRight";
 
     [DataField, AutoNetworkedField]
-    public EntProtoId VirtualLeft;
+    public EntProtoId VirtualLeft = "RMCVirtualPowerLoaderLeft";
 }

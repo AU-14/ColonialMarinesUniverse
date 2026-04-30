@@ -1,0 +1,14 @@
+- type: entity
+  parent: BaseItem
+  id: CMUCastItem
+  name: medical cast
+  description: A rigid cast that immobilises and slowly heals fractures up to Simple severity.
+  components:
+  - type: Item
+    size: Normal
+  - type: CMUCastItem
+    applyDelay: 6
+    maxSuppressed: Simple
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/bone_gel.rsi
+    state: bone-gel

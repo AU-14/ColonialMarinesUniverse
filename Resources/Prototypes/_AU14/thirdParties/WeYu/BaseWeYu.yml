@@ -4,7 +4,6 @@
   abstract: true
   suffix: AU14, WeYu
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: RandomHumanoidAppearance
   - type: RandomHumanoidAppearanceWhitelisted

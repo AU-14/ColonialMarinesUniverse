@@ -446,8 +446,12 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
     private void OnFetchItemDestroyed(EntityUid uid, AuFetchItemComponent comp, ref EntityTerminatingEvent args)
     {
         var fetchObj = comp.FetchObjective;
-        if (comp.Fetched)
+        if (comp.Fetched ||
+            comp.ObjectiveUid == EntityUid.Invalid ||
+            TerminatingOrDeleted(comp.ObjectiveUid) ||
+            !TryComp<AuObjectiveComponent>(comp.ObjectiveUid, out var objComp))
             return;
+
         int unfetched = 0;
         var query = EntityManager.EntityQueryEnumerator<AuFetchItemComponent>();
         while (query.MoveNext(out var ent, out var itemComp))
@@ -455,7 +459,7 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
             if (itemComp.FetchObjective == fetchObj && !itemComp.Fetched && ent != uid)
                 unfetched++;
         }
-        var objComp = EnsureComp<AuObjectiveComponent>(comp.ObjectiveUid);
+
         var factions = objComp.FactionNeutral ? objComp.Factions : new List<string> { objComp.Faction };
         foreach (var faction in factions)
         {

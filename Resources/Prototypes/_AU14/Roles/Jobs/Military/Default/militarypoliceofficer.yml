@@ -31,7 +31,7 @@
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-govfor
   accessGroups:
-  - AU14GovforCommand
+  - AU14GovforSecurity
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

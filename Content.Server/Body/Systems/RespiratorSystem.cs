@@ -3,6 +3,8 @@ using Content.Server.Atmos.EntitySystems;
 using Content.Server.Body.Components;
 using Content.Server.Chat.Systems;
 using Content.Server.EntityEffects;
+using Content.Shared._CMU14.Medical;
+using Content.Shared._CMU14.Medical.Organs.Lungs.Events;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Alert;
@@ -138,7 +140,16 @@ public sealed class RespiratorSystem : EntitySystem
             return false;
         }
 
-        var gas = ev.Gas.RemoveVolume(entity.Comp.BreathVolume);
+        var efficiencyMultiplier = 1.0f;
+        if (HasComp<CMUHumanMedicalComponent>(entity.Owner))
+        {
+            var efficiencyEv = new LungEfficiencyMultiplyEvent(entity.Owner, efficiencyMultiplier);
+            RaiseLocalEvent(entity, ref efficiencyEv);
+            efficiencyMultiplier = efficiencyEv.Multiplier;
+        }
+
+        var breathVolume = entity.Comp.BreathVolume * Math.Max(0f, efficiencyMultiplier);
+        var gas = ev.Gas.RemoveVolume(breathVolume);
 
         var inhaleEv = new InhaledGasEvent(gas);
         RaiseLocalEvent(entity, ref inhaleEv);

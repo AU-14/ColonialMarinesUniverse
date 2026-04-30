@@ -1,0 +1,59 @@
+- type: job
+  parent: CMJobBase
+  id: AU14VAIEngiBase
+  name: au14-job-name-vai-engi
+  description: au14-vai-mercenary-description
+  ranks:
+    VAI_Mercenary: []
+  icon: "CMJobIconEmpty"
+  playTimeTracker: AU14VAIEngi
+  spawnMenuRoleName: VAI Engineer (Base)
+  joinNotifyCrew: false
+  supervisors: au14-job-name-vai-teamleader
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadVAIPO
+    - type: Skills
+      skills:
+        RMCSkillCqc: 5
+        RMCSkillEngineer: 4
+        RMCSkillConstruction: 4
+        RMCSkillFirearms: 2
+        RMCSkillMedical: 1
+        RMCSkillMeleeWeapons: 1
+        RMCSkillPolice: 2
+        RMCSkillFireman: 5
+        RMCSkillPowerLoader: 2
+        RMCSkillVehicles: 2
+        RMCSkillJtac: 3
+        RMCSkillEndurance: 1
+    - type: EquipSurvivorPreset
+      preset: AU14VAIBasePreset
+    - type: JobPrefix
+      prefix: au14-job-prefix-vai-engi
+  hidden: true
+
+- type: startingGear
+  parent: AU14GearVAIBase
+  id: AU14GearVAIEngi
+  equipment:
+    jumpsuit: AU14JumpsuitTShirtWhiteVAIToolWebbing
+    pocket2: AU14PouchMagazineLargeFilledMAR40
+    suitstorage: AU14WeaponRifleMAR30Tactical
+    eyes: RMCWeldingGogglesSuperior
+  storage:
+    outerClothing:
+    - RMCLaserDesignator
+    back:
+    - CMMRE
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+    - CMGrenadeFragOld
+    - RMCSentryMini
+    - CMSheetPlasteel50
+    - CMSheetMetal50

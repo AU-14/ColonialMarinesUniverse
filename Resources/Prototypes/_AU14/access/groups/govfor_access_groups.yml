@@ -10,6 +10,7 @@
   - AU14AccessGovforEngineering
   - AU14AccessGovforGunner
   - AU14AccessGovforPilot
+  - CMAccessBrig
 
 - type: accessGroup
   id: AU14GovforEngineer
@@ -55,3 +56,7 @@
   tags:
   - AU14AccessGovfor
   - AU14AccessGovforSquad
+
+- type: accessGroup
+  parent: AU14GovforCommand # NOTE: AA inheritance for MPs
+  id: AU14GovforSecurity

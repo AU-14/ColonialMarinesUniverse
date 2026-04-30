@@ -47,7 +47,6 @@
   id: AU14PartyJobProfessorVonBandolier
   name: Professor Von Bandolier
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: RandomHumanoidAppearanceWhitelisted #civilian type
     allowedMaleHairStyles:

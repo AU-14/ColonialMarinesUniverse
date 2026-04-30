@@ -5,7 +5,9 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Storage;
 using Content.Shared.Storage.EntitySystems;
+using Robust.Shared.Map.Events;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
@@ -23,14 +25,56 @@ public sealed class SurvivorSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
 
+    private readonly HashSet<EntityUid> _appliedPresets = new();
+
     public override void Initialize()
     {
-        SubscribeLocalEvent<EquipSurvivorPresetComponent, PlayerSpawnCompleteEvent>(OnPresetPlayerSpawnComplete, after: [typeof(CMArmorSystem)]);
+        SubscribeLocalEvent<EquipSurvivorPresetComponent, PlayerSpawnCompleteEvent>(
+            OnPresetPlayerSpawnComplete,
+            after: [typeof(CMArmorSystem)]);
+
+        SubscribeLocalEvent<EquipSurvivorPresetComponent, PlayerAttachedEvent>(
+            OnPresetPlayerAttached,
+            after: [typeof(CMArmorSystem)]);
+
+        // Fires when the entity is spawned into the map directly
+        // (admin spawn, map placement, etc.) with no player involved
+        SubscribeLocalEvent<EquipSurvivorPresetComponent, MapInitEvent>(
+            OnPresetMapInit,
+            after: [typeof(CMArmorSystem)]);
+    }
+
+    private void OnPresetMapInit(Entity<EquipSurvivorPresetComponent> ent, ref MapInitEvent args)
+    {
+        // Only apply here if this entity was NOT spawned through the job system.
+        // Job spawns will call OnPresetPlayerSpawnComplete shortly after, which
+        // is guarded by _appliedPresets, so double-apply is safe either way.
+        if (!_appliedPresets.Add(ent))
+            return;
+
+        ApplyPreset(ent, ent.Comp.Preset);
     }
 
     private void OnPresetPlayerSpawnComplete(Entity<EquipSurvivorPresetComponent> ent, ref PlayerSpawnCompleteEvent args)
     {
+        if (!_appliedPresets.Add(ent))
+            return;
+
         ApplyPreset(ent, ent.Comp.Preset);
+    }
+
+    private void OnPresetPlayerAttached(Entity<EquipSurvivorPresetComponent> ent, ref PlayerAttachedEvent args)
+    {
+        if (!_appliedPresets.Add(ent))
+            return;
+
+        ApplyPreset(ent, ent.Comp.Preset);
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+        _appliedPresets.Clear();
     }
 
     private void ApplyPreset(EntityUid mob, EntProtoId<SurvivorPresetComponent> preset)
@@ -160,7 +204,7 @@ public sealed class SurvivorSystem : EntitySystem
             }
 
             if (!_rmcStorage.CanInsertStoreSkill(storageItem, toInsert, mob, out _))
-                return false;
+                continue;
 
             if (_storage.Insert(storageItem, toInsert, out _, storageComp: storage, playSound: false))
                 return true;

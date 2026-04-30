@@ -2,7 +2,7 @@
   parent: [RMCBaseSlideMagazineVisuals, CMWeaponPistolBase]
   id: AU14WeaponPistolM50HAZOPS
   name: M50 'Bald Eagle' Handcannon
-  description: Produced by Armat in celebration of the upcoming United States' 400th anniversery, this pistol fires jet-propelled .50 AE rounds, which does high damage and can penetrate armor. Loved by HAZOPS due to it's mobility combined with high-damage. Must be cocked after every mag.
+  description: Produced by Armat in celebration of the upcoming United States' 400th anniversary, this pistol fires jet-propelled .50 AE rounds, which does high damage and can penetrate armor. Loved by HAZOPS due to it's mobility combined with high-damage. Must be cocked after every mag.
   suffix: Filled
   components:
   - type: RMCSelectiveFire

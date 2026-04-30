@@ -1,4 +1,6 @@
-﻿using Content.Shared.Administration.Logs;
+﻿using Content.Shared._RMC14.Medical.Surgery;
+using Content.Shared._RMC14.Medical.Surgery.Tools;
+using Content.Shared.Administration.Logs;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Database;
@@ -51,6 +53,9 @@ public sealed class SharpSystem : EntitySystem
     private void OnAfterInteract(EntityUid uid, SharpComponent component, AfterInteractEvent args)
     {
         if (args.Handled || args.Target is null || !args.CanReach)
+            return;
+
+        if (HasComp<CMSurgeryToolComponent>(uid) && HasComp<CMSurgeryTargetComponent>(args.Target.Value))
             return;
 
         if (TryStartButcherDoafter(uid, args.Target.Value, args.User))

@@ -97,6 +97,26 @@
       class: Rto
 
 - type: entity
+  name: Opfor Doctor marker
+  id: VMarkerOpfordoctor
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: MilitaryDoctor
+
+- type: entity
+  name: Opfor Military Police  marker
+  id: VMarkerOpforMilitaryPolice
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: MilitaryPolice
+
+- type: entity
   name: Opfor senior sergeant  marker
   id: VMarkerOpforsectionSergeant
   parent: Vmarker
@@ -263,6 +283,26 @@
       govfor: true
       opfor: false
       class: Dcc
+
+- type: entity
+  name: Gov doctor marker
+  id: VMarkerGovforDoctor
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: MilitaryDoctor
+
+- type: entity
+  name: Gov military police marker
+  id: VMarkerGovforMilitaryPolice
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: MilitaryPolice
 
 - type: entity
   name: Gov command marker
@@ -485,6 +525,20 @@
       govfor: false
       opfor: false
       class: Corpsman
+    - type: Sprite
+      sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
+      state: base
+
+- type: entity
+  name: Ship doctor marker
+  id: VMarkerShipDoctor
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      govfor: false
+      opfor: false
+      class: MilitaryDoctor
     - type: Sprite
       sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
       state: base

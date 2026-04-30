@@ -320,7 +320,7 @@
       sprite: _RMC14/Objects/Tools/hand_labeler.rsi
       state: hand_labeler
     - type: Item
-      size: Normal
+      size: Small
       sprite: _RMC14/Objects/Tools/hand_labeler.rsi
       storedRotation: 0
     - type: RMCHandLabeler

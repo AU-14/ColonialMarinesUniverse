@@ -1,0 +1,99 @@
+- type: job
+  parent: AU14VAIMedicBase
+  id: AU14VAISOMedic
+  spawnMenuRoleName: VAISO Medic
+  playTimeTracker: AU14VAISOMedic
+  icon: "CMJobIconEmpty"
+  startingGear: AU14GearVAIMSCovertMedic
+  basePlaytimeTracker: true
+  accessGroups:
+  - auadmin
+  - Colonist
+  - CMCargoTech
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadVAIPO
+    - type: Skills
+      skills:
+        RMCSkillCqc: 5
+        RMCSkillEngineer: 4
+        RMCSkillConstruction: 3
+        RMCSkillFirearms: 2
+        RMCSkillMedical: 3
+        RMCSkillSurgery: 3
+        RMCSkillMeleeWeapons: 1
+        RMCSkillPolice: 2
+        RMCSkillFireman: 5
+        RMCSkillPowerLoader: 2
+        RMCSkillVehicles: 2
+        RMCSkillJtac: 1
+        RMCSkillEndurance: 1
+    - type: EquipSurvivorPreset
+      preset: AU14VAISOBasePreset
+    - type: JobPrefix
+      prefix: au14-job-prefix-vai-medic
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicVAI
+  id: AU14VAISOMedic
+  name: VAISO Medical Specialist
+  components:
+  - type: EquipSurvivorPreset
+    preset: AU14VAISOBasePreset
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadVAISO
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: VAISO Medical Specialist
+    description: You have received intel on Weyland-Yutani's facility from local CLF insurgent group. Your mission is to raid the facility, securing any valuable intel. Do it without excessive attention.
+    job: AU14VAISOMedic
+    raffle:
+      settings: short
+
+- type: startingGear
+  parent: AU14GearVAISOBase
+  id: AU14GearVAIMSCovertMedic
+  equipment:
+    id: AU14IDCardVAIMercenary
+    ears: AU14HeadsetVAI
+    jumpsuit: AU14JumpsuitCivilianBlueVAIWebbingSurgical
+    pocket1: RMCPouchMedkitFillAdvanced
+    pocket2: AU14PouchMagazineLargeFilledMAR40
+    suitstorage: AU14WeaponRifleMAR30Tactical
+    eyes: RMCGlassesMedicalHUDGlasses
+    belt: CMBeltMedicBag
+  storage:
+    belt:
+    - AU14PillCanisterAlbuterol
+    - AU14PillCanisterDermaline
+    - AU14PillCanisterMeralyne
+    - CMPillCanisterDylovene
+    - RMCPillCanisterImidazoline
+    - RMCPillCanisterIron
+    - CMPillCanisterBicaridine
+    - CMPillCanisterKelotane
+    - CMEpinephrineAutoInjector
+    - AU14NaloxoneAutoInjector
+    - CMHealthAnalyzer
+    outerClothing:
+    - RMCLaserDesignator
+    back:
+    - CMMRE
+    - AU14CMDefibrillator
+    - CMRollerBedSpawnFolded
+    - CMPortableSurgicalBedSpawnFolded
+    - RMCPacketGrenadeSmokeFilled
+    - RMCMagazineRifleMAR40Ext
+    - RMCMagazineRifleMAR40
+    - CMHandsLatex
+
+- type: playTimeTracker
+  id: AU14VAISOMedic
