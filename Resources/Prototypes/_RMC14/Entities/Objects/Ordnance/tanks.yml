@@ -1,0 +1,97 @@
+- type: entity
+  parent: RMCTankReagentEmpty
+  id: RMCTankReagentOctogen
+  suffix: Octogen
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: RMCOctogen
+          Quantity: 1000
+  - type: Label
+    currentLabel: reagent-name-octogen
+
+- type: entity
+  parent: RMCTankReagentEmpty
+  id: RMCTankReagentRMCPolytrinicAcid
+  suffix: RMCPolytrinicAcid
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: RMCPolytrinicAcid
+          Quantity: 1000
+  - type: Label
+    currentLabel: reagent-name-polytrinic-acid
+
+- type: entity
+  parent: RMCTankReagentEmpty
+  id: RMCTankReagentRMCOxygen
+  suffix: RMCOxygen
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: RMCOxygen
+          Quantity: 1000
+  - type: Label
+    currentLabel: reagent-name-oxygen
+
+- type: entity
+  parent: RMCTankReagentEmpty
+  id: RMCTankReagentAmmonia
+  suffix: Ammonia
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: Ammonia
+          Quantity: 1000
+  - type: Label
+    currentLabel: reagent-name-ammonia
+
+- type: entity
+  parent: RMCTankReagentEmpty
+  id: RMCTankReagentRMCMethane
+  suffix: RMCMethane
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: RMCMethane
+          Quantity: 1000
+  - type: Label
+    currentLabel: reagent-name-methane
+
+- type: entity
+  parent: RMCTankReagentEmpty
+  id: RMCTankReagentRMCHydrogen
+  suffix: RMCHydrogen
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: RMCHydrogen
+          Quantity: 1000
+  - type: Label
+    currentLabel: reagent-name-hydrogen
+
+- type: entity
+  parent: RMCTankReagentEmpty
+  id: RMCTankReagentRMCEthanol
+  suffix: RMCEthanol
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: RMCEthanol
+          Quantity: 1000
+  - type: Label
+    currentLabel: reagent-name-ethanol

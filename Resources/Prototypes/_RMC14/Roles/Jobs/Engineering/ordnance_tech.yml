@@ -38,7 +38,7 @@
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: background_shipside
     - type: MutinyEligible
-  hidden: true # TODO RMC14
+  hidden: false
 
 - type: startingGear
   id: CMGearOrdnanceTech
@@ -49,7 +49,7 @@
     id: CMIDCardOrdnanceTech
     ears: CMHeadsetEngineer
     belt: CMBeltUtilityFilled
-#    pocket1: CMDemolitionsScanner TODO RMC14
+    pocket1: CMDemolitionsScanner
     pocket2: RMCPouchGeneralMedium
 
 - type: entity

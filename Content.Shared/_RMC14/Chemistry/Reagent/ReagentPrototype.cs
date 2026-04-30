@@ -7,6 +7,13 @@ namespace Content.Shared.Chemistry.Reagent;
 
 public partial class ReagentPrototype
 {
+    /// <summary>
+    ///     Additional CM-style shard count contributed per unit when this reagent is present in a custom ordnance mix.
+    ///     Runtime shard count starts from a fixed base and is then clamped by the casing's shard cap.
+    /// </summary>
+    [DataField]
+    public FixedPoint2 ShardMod;
+
     [DataField]
     public bool Unknown;
 
@@ -36,6 +43,12 @@ public partial class ReagentPrototype
 
     [DataField]
     public FixedPoint2 RadiusMod;
+
+    [DataField]
+    public FixedPoint2 PowerMod;
+
+    [DataField]
+    public FixedPoint2 FalloffMod;
 
     [DataField]
     public bool FireSpread;

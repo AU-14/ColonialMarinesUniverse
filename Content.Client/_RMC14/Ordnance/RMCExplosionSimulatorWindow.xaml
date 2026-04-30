@@ -1,0 +1,179 @@
+<cc:RMCExplosionSimulatorWindow xmlns="https://spacestation14.io"
+                                 xmlns:cc="clr-namespace:Content.Client._RMC14.Ordnance"
+                                 Title="{Loc 'rmc-explosion-sim-ui-title'}"
+                                 MinSize="500 560"
+                                 SetSize="500 560">
+    <ScrollContainer HorizontalExpand="True"
+                     VerticalExpand="True"
+                     HScrollEnabled="False"
+                     VScrollEnabled="True">
+        <BoxContainer Orientation="Vertical"
+                      HorizontalExpand="True"
+                      VerticalExpand="True"
+                      Margin="8"
+                      SeparationOverride="8">
+
+            <PanelContainer HorizontalExpand="True">
+                <BoxContainer Orientation="Vertical"
+                              HorizontalExpand="True"
+                              Margin="10"
+                              SeparationOverride="8">
+                    <BoxContainer Orientation="Vertical"
+                                  HorizontalExpand="True"
+                                  SeparationOverride="4">
+                        <Label Name="HeaderLabel"
+                               Access="Public" />
+                        <Label Text="{Loc 'rmc-explosion-sim-ui-subtitle'}"
+                               FontColorOverride="#7c8ea8" />
+                    </BoxContainer>
+
+                    <PanelContainer HorizontalExpand="True">
+                        <BoxContainer Orientation="Vertical"
+                                      HorizontalExpand="True"
+                                      Margin="8"
+                                      SeparationOverride="4">
+                            <Label Text="{Loc 'rmc-explosion-sim-ui-analysis-cycle'}"
+                                   FontColorOverride="#b8d5ff" />
+                            <ProgressBar Name="ProcessingBar"
+                                         Access="Public"
+                                         HorizontalExpand="True"
+                                         MaxValue="1"
+                                         MinValue="0"
+                                         MinSize="0 24">
+                                <Label Name="ProcessingLabel"
+                                       Access="Public"
+                                       HorizontalAlignment="Center"
+                                       Margin="4 0"
+                                       Text="{Loc 'rmc-explosion-sim-ui-standby'}" />
+                            </ProgressBar>
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <PanelContainer HorizontalExpand="True">
+                <BoxContainer Orientation="Vertical"
+                              HorizontalExpand="True"
+                              Margin="10"
+                              SeparationOverride="8">
+                    <Label Text="{Loc 'rmc-explosion-sim-ui-target-profile'}"
+                           FontColorOverride="#d9e8ff" />
+                    <Label Text="{Loc 'rmc-explosion-sim-ui-target-help'}"
+                           FontColorOverride="#7c8ea8" />
+
+                    <Button Name="MarinesButton"
+                            Access="Public"
+                            Text="{Loc 'rmc-explosion-sim-ui-target-marines'}"
+                            HorizontalExpand="True"
+                            MinSize="0 36" />
+                    <Button Name="SpecialForcesButton"
+                            Access="Public"
+                            Text="{Loc 'rmc-explosion-sim-ui-target-special-forces'}"
+                            HorizontalExpand="True"
+                            MinSize="0 36" />
+                    <Button Name="XenomorphsButton"
+                            Access="Public"
+                            Text="{Loc 'rmc-explosion-sim-ui-target-xenomorphs'}"
+                            HorizontalExpand="True"
+                            MinSize="0 36" />
+
+                    <PanelContainer StyleClasses="Inset"
+                                    HorizontalExpand="True">
+                        <BoxContainer Orientation="Vertical"
+                                      HorizontalExpand="True"
+                                      Margin="8"
+                                      SeparationOverride="4">
+                            <Label Text="{Loc 'rmc-explosion-sim-ui-threat-notes'}"
+                                   FontColorOverride="#9effb6" />
+                            <Label Name="TargetNotesLabel"
+                                   Access="Public"
+                                   HorizontalExpand="True" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer StyleClasses="Inset"
+                                    HorizontalExpand="True">
+                        <BoxContainer Orientation="Vertical"
+                                      HorizontalExpand="True"
+                                      Margin="8"
+                                      SeparationOverride="4">
+                            <Label Text="{Loc 'rmc-explosion-sim-ui-sample-status'}"
+                                   FontColorOverride="#ffd37a" />
+                            <Label Name="SampleLabel"
+                                   Access="Public"
+                                   Text="{Loc 'rmc-explosion-sim-ui-no-sample'}" />
+                            <Label Name="ReadinessLabel"
+                                   Access="Public" />
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <PanelContainer HorizontalExpand="True">
+                <BoxContainer Orientation="Vertical"
+                              HorizontalExpand="True"
+                              Margin="10"
+                              SeparationOverride="4">
+                    <Label Text="{Loc 'rmc-explosion-sim-ui-blast-projection'}"
+                           FontColorOverride="#ffd37a" />
+                    <Label Name="BlastLabel"
+                           Access="Public"
+                           HorizontalExpand="True" />
+                </BoxContainer>
+            </PanelContainer>
+
+            <PanelContainer HorizontalExpand="True">
+                <BoxContainer Orientation="Vertical"
+                              HorizontalExpand="True"
+                              Margin="10"
+                              SeparationOverride="4">
+                    <Label Text="{Loc 'rmc-explosion-sim-ui-incendiary-projection'}"
+                           FontColorOverride="#ff9d6b" />
+                    <Label Name="FireLabel"
+                           Access="Public"
+                           HorizontalExpand="True" />
+                </BoxContainer>
+            </PanelContainer>
+
+            <PanelContainer HorizontalExpand="True">
+                <BoxContainer Orientation="Vertical"
+                              HorizontalExpand="True"
+                              Margin="10"
+                              SeparationOverride="6">
+                    <Label Text="{Loc 'rmc-explosion-sim-ui-summary'}"
+                           FontColorOverride="#9effb6" />
+                    <Label Name="StatusLabel"
+                           Access="Public"
+                           HorizontalExpand="True" />
+                </BoxContainer>
+            </PanelContainer>
+
+            <BoxContainer Orientation="Vertical"
+                          HorizontalExpand="True"
+                          SeparationOverride="8">
+                <Button Name="SimulateButton"
+                        Access="Public"
+                        Text="{Loc 'rmc-explosion-sim-ui-run-analysis'}"
+                        HorizontalExpand="True"
+                        MinSize="0 36" />
+                <Button Name="ReplayButton"
+                        Access="Public"
+                        Text="{Loc 'rmc-explosion-sim-ui-replay'}"
+                        HorizontalExpand="True"
+                        MinSize="0 36"
+                        Disabled="True" />
+            </BoxContainer>
+
+            <BoxContainer Orientation="Vertical"
+                          HorizontalExpand="True"
+                          SeparationOverride="2"
+                          Margin="4 0 4 0">
+                <Label Text="{Loc 'rmc-explosion-sim-ui-footer-left'}"
+                       StyleClasses="WindowFooterText" />
+                <Label Text="{Loc 'rmc-explosion-sim-ui-footer-right'}"
+                       StyleClasses="WindowFooterText"
+                       HorizontalExpand="True" />
+            </BoxContainer>
+        </BoxContainer>
+    </ScrollContainer>
+</cc:RMCExplosionSimulatorWindow>

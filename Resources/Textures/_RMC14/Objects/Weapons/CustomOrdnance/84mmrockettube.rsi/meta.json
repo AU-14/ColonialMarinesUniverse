@@ -9,6 +9,21 @@
   "states": [
     {
       "name": "icon"
+    },
+    {
+      "name": "custom"
+    },
+    {
+      "name": "custom_unlocked"
+    },
+    {
+      "name": "custom_no_fuel"
+    },
+    {
+      "name": "custom_locked"
+    },
+    {
+      "name": "custom_e"
     }
   ]
 }

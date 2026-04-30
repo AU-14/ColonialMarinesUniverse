@@ -64,6 +64,11 @@ au14-job-name-govforsquadcombattech = Combat Technician
 au14-job-description-govforsquadcombattech = Provide engineering and construction support for your faction.
 au14-job-prefix-govforsquadcombattech = CT
 
+AU14JobGOVFOROrdnanceTech = Ordnance Technician
+au14-job-name-govforordnancetech = Ordnance Technician
+au14-job-description-govforordnancetech = Handle demolitions, explosive logistics, and ordnance support for your faction.
+au14-job-prefix-govforordnancetech = OT
+
 AU14JobGOVFORadvisor = Advisor
 au14-job-name-govforadvisor = Advisor
 au14-job-description-govforadvisor = Advise command, mentor new soldiers and provide assistance wherever needed.
@@ -124,6 +129,8 @@ au14-job-name-radiotelephoneoperatorRMC = Signal Operator
 au14-job-name-govforsquadriflemanRMC = Rifleman
 au14-job-name-govforsquadcombattechRMC = Sapper
 au14-job-prefix-govforsquadcombattechRMC = SPR
+au14-job-name-govforordnancetechRMC = Ordnance Technician
+au14-job-prefix-govforordnancetechRMC = OT
 au14-job-name-govforspecialist-marksmanRMC = Marksman
 au14-job-prefix-govforspecialist-marksmanRMC = MRN
 au14-job-name-govforspecialist-pointmanRMC = Pointman

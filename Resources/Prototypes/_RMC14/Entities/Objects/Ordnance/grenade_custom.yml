@@ -1,0 +1,111 @@
+- type: entity
+  name: 30mm grenade casing (M40)
+  description: An empty M40 grenade casing. Fill with a detonator assembly and chemicals, then prime.
+  parent: RMCCasingBase
+  id: RMCM40GrenadeCasing
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/CustomOrdnance/m40grenadecasing.rsi
+    layers:
+    - state: icon
+      map: ["state"]
+  - type: Appearance
+  - type: TimerTriggerVisuals
+    primingSound:
+      path: /Audio/_RMC14/Explosion/armbomb.ogg
+      params:
+        volume: -5
+  - type: GenericVisualizer
+    visuals:
+      enum.RMCCasingVisualKey.State:
+        state:
+          Empty: { state: icon }
+          Loaded: { state: ass }
+          Sealed: { state: locked }
+          Armed: { state: locked }
+      enum.Trigger.TriggerVisuals.VisualState:
+        state:
+          Primed: { state: active }
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 4250
+  - type: RMCChembombCasing
+    maxVolume: 120
+    basePower: 180
+    baseFalloff: 80
+    maxShards: 40
+    minFireIntensity: 3
+    maxFireIntensity: 25
+    minFireRadius: 1
+    maxFireRadius: 5
+    minFireDuration: 3
+    maxFireDuration: 24
+  - type: SolutionContainerManager
+    solutions:
+      chemicals:
+        maxVol: 120
+  - type: ItemSlots
+    slots:
+      detonator:
+        name: rmc-chembomb-detonator-slot
+        whitelist:
+          tags:
+          - RMCTimerAssembly
+  - type: Tag
+    tags:
+    - RMCGrenadeM40
+    - LauncherCompatibleGrenade
+
+- type: entity
+  name: M15 grenade casing
+  description: An empty M15 grenade casing. Fill with a detonator assembly and chemicals, then prime.
+  parent: RMCCasingBase
+  id: RMCM15GrenadeCasing
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/CustomOrdnance/m15grenadecasing.rsi
+    layers:
+    - state: icon
+      map: ["state"]
+  - type: Appearance
+  - type: TimerTriggerVisuals
+    primingSound:
+      path: /Audio/_RMC14/Explosion/armbomb.ogg
+      params:
+        volume: -5
+  - type: GenericVisualizer
+    visuals:
+      enum.RMCCasingVisualKey.State:
+        state:
+          Empty: { state: icon }
+          Loaded: { state: ass }
+          Sealed: { state: locked }
+          Armed: { state: locked }
+      enum.Trigger.TriggerVisuals.VisualState:
+        state:
+          Primed: { state: active }
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 7000
+  - type: RMCChembombCasing
+    maxVolume: 180
+    basePower: 220
+    baseFalloff: 120
+    maxShards: 80
+    minFireIntensity: 3
+    maxFireIntensity: 30
+    minFireRadius: 1
+    maxFireRadius: 6
+    minFireDuration: 3
+    maxFireDuration: 32
+  - type: SolutionContainerManager
+    solutions:
+      chemicals:
+        maxVol: 180
+  - type: ItemSlots
+    slots:
+      detonator:
+        name: rmc-chembomb-detonator-slot
+        whitelist:
+          tags:
+          - RMCTimerAssembly

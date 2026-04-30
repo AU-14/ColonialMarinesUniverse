@@ -1,0 +1,88 @@
+- type: job
+  parent: AU14JobOrdnanceTechBase
+  id: AU14JobGOVFOROrdnanceTech
+  name: au14-job-name-govforordnancetech
+  description: au14-job-description-govforordnancetech
+  setPreference: true
+  overwatchSortPriority: -4
+  overwatchRoleName: Ordnance Technician
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NonResuscitable
+  ranks:
+    RMCRankCorporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 216000 # 60 hours
+    RMCRankLanceCorporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 108000 # 30 hours
+    RMCRankPrivateFirstClass:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 54000 # 15 hours
+    RMCRankPrivate: []
+  startingGear: AU14GearGOVFOROrdnanceTech
+  dummyStartingGear: AU14GearGOVFOROTDummy
+  icon: "CMJobIconOrdnanceTech"
+  requireAdminNotify: false
+  spawnMenuRoleName: Ordnance Technician (GOVFOR)
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforEngineer
+  hasIcon: true
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Marine
+      Faction: govfor
+    - type: Skills
+      preset: AU14SkillPresetPlatoonCombatTechnician
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforordnancetech
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: ot
+    - type: CMVendorUser
+      id: AU14JobGOVFOROrdnanceTech
+      points: 50
+    - type: UserIFF
+      factions:
+      - GOVFOR
+  hidden: false
+
+- type: startingGear
+  id: AU14GearGOVFOROrdnanceTech
+  equipment:
+    id: AU14IDCardGOVFOROrdnanceTech
+    ears: AU14HeadsetSectionMarine
+    pocket1: CMDemolitionsScanner
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFOROrdnanceTech
+  name: Spawn Point GOVFOR Ordnance Technician
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFOROrdnanceTech
+  - type: Sprite
+    state: ot_spawn
+
+- type: startingGear
+  id: AU14GearGOVFOROTDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleThree
+    shoes: AU14BootsJungle
+    head: AU14JungleM10Helmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetSectionMarine

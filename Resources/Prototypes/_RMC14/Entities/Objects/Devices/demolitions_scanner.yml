@@ -1,0 +1,22 @@
+- type: entity
+  parent: BaseItem
+  id: CMDemolitionsScanner
+  name: demolitions scanner
+  description: A handheld scanner for analysing custom ordnance. Use it on a chembomb casing to get a readout of its projected explosive and fire characteristics.
+  components:
+  - type: Sprite
+    sprite: Objects/Tools/handheld_mass_scanner.rsi
+    state: scanner
+  - type: Item
+    size: Small
+  - type: ActivatableUI
+    key: enum.RMCDemolitionsScannerUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.RMCDemolitionsScannerUiKey.Key:
+        type: RMCDemolitionsScannerBui
+  - type: RMCDemolitionsScanner
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 20
+      CMGlass: 10

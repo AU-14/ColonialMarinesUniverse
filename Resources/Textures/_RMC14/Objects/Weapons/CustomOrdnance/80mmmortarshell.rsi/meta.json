@@ -9,6 +9,21 @@
   "states": [
     {
       "name": "icon"
+    },
+    {
+      "name": "unlocked",
+      "delays": [
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "no_fuel"
+    },
+    {
+      "name": "locked"
     }
   ]
 }

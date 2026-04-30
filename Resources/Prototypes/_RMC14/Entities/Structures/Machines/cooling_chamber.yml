@@ -1,0 +1,18 @@
+# Keeps inserted beakers cold enough for temperature-sensitive ordnance synthesis.
+- type: entity
+  parent: CMLockerFridge
+  id: RMCCoolingChamber
+  name: cooling chamber
+  description: An industrial refrigeration unit for maintaining low temperatures during synthesis of sensitive chemical compounds.
+  components:
+  - type: ApcPowerReceiver
+  - type: RMCPowerReceiver
+    idleLoad: 5
+    activeLoad: 200
+    channel: Equipment
+  - type: RMCCoolingChamber
+  - type: AccessReader
+    access: []
+  - type: Lock
+    locked: false
+    lockOnClick: false

@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": null,
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "prox_scanning",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "prox_timing",
+      "delays": [
+        [
+          0.3,
+          0.9
+        ]
+      ]
+    },
+    {
+      "name": "prox"
+    },
+    {
+      "name": "prox_scanning_l",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "prox_timing_l",
+      "delays": [
+        [
+          0.3,
+          0.9
+        ]
+      ]
+    },
+    {
+      "name": "prox_left"
+    },
+    {
+      "name": "prox_scanning_r",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "prox_timing_r",
+      "delays": [
+        [
+          0.3,
+          0.9
+        ]
+      ]
+    },
+    {
+      "name": "prox_right"
+    }
+  ]
+}

@@ -176,6 +176,17 @@
 
 - type: entity
   parent: CMIDCardBase
+  id: AU14IDCardGOVFOROrdnanceTech
+  name: ordnance technician ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFOROrdnanceTech
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
   id: AU14IDCardSquadAdvisor
   name: advisor ID card
   components:

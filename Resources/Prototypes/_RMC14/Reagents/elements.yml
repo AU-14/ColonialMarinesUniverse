@@ -125,6 +125,7 @@
   physicalDesc: reagent-physical-desc-gaseous
   flavor: bitter
   color: "#808080"
+  powerMod: 0.15
   durationMod: -0.5
   radiusMod: 0.2
   intensityMod: -0.5
@@ -144,6 +145,7 @@
   physicalDesc: reagent-physical-desc-metallic
   flavor: metallic
   color: "#a19d94"
+  shardMod: 1
   overdose: 30
   criticalOverdose: 50
   metabolisms:

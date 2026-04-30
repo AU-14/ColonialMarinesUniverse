@@ -9,6 +9,34 @@
   "states": [
     {
       "name": "icon"
+    },
+    {
+      "name": "active",
+      "directions": 4,
+      "delays": [
+        [
+          3,
+          0.2
+        ],
+        [
+          3,
+          0.2
+        ],
+        [
+          3,
+          0.2
+        ],
+        [
+          3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "locked"
+    },
+    {
+      "name": "ass"
     }
   ]
 }
