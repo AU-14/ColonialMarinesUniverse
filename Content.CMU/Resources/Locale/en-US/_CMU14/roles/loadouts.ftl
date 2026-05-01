@@ -24,5 +24,6 @@ au14-loadout-group-civilian-masks = Civilian masks
 au14-loadout-group-military-hats = Military hats
 au14-loadout-group-military-jumpsuit = Military fatigues
 au14-loadout-group-military-patches = Military patches
+au14-loadout-group-militarylabcoat = Labcoats
 
 au14-loadout-group-role-clf-id = Fake ID's
