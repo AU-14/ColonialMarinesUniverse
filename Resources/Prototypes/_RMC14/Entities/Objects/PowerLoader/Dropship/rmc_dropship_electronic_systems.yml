@@ -61,3 +61,32 @@
   - type: CameraSignalGranter
     protoIds:
     - RMCMonitorCameraLandingZone
+
+- type: entity
+  parent: RMCDropshipAttachmentElectronicSystem
+  id: RMCDropShipFlareModule
+  name: ALA-17/B Flare Dispenser
+  description: A dispenser that can take a variaty of flares or chaff and dispense them at a moments notice. Fits on electronics attach points of dropships. Moving this will require a powerloader.
+  components:
+  - type: Sprite
+    layers:
+    - state: flaredispenser
+  - type: DropshipFlareDispenser
+  - type: DropshipFabricatorPrintable
+    cost: 600
+  - type: DropshipWeapon
+    abbreviation: FLR
+    fireDelay: 1
+    fireInTransport: true
+    skills:
+      all:
+        RMCSkillPilot: 1
+    weaponAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: flare_module_installed
+    ammoEmptyAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: flare_module_loaded
+    ammoAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: flare_module_loaded

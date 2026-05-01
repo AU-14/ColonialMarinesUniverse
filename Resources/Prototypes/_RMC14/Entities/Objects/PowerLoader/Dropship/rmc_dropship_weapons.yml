@@ -98,3 +98,90 @@
       sprite: _RMC14/Objects/dropship_attachments.rsi
       state: minirocket_pod_loaded
     ammoSpriteThresholds: [5, 4, 3, 2, 1]
+
+  - type: entity
+  parent: RMCDropshipAttachmentUtility
+  id: RMCDropshipAttachmentBOFORS
+  name: L/60 40mm BOFORS Autocannon
+  description: A 40mm BOFORS autocannon capable of sustained fire on a position. Fits on both the external weapon and crew compartment attach points of dropships.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/dropship_utility_attachments.rsi
+    layers:
+    - state: bofors_cannon
+  - type: DropshipFabricatorPrintable
+    cost: 800
+  - type: DropshipWeapon
+    abbreviation: ATC
+    fireDelay: 5
+    weaponAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: bofors_autocannon_installed
+    ammoEmptyAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: bofors_autocannon_empty
+    ammoAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: bofors_autocannon_loaded
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipUtilityPoint
+    - RMCDropshipWeaponPoint
+
+  - type: entity
+  parent: RMCDropshipAttachmentUtility
+  id: RMCDropshipAttachmentJDAMBombClamp
+  name: JDAM Bomb Clamp
+  description: A JDAM bomb clamp, holds one JDAM family bomb rack. Fits on both the external weapon and crew compartment attach points of dropships.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/dropship_utility_attachments.rsi
+    layers:
+    - state: bomb_clamp
+  - type: DropshipFabricatorPrintable
+    cost: 650
+  - type: DropshipWeapon
+    abbreviation: BMB
+    fireDelay: 10
+    weaponAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: bomb_clamp_installed
+    ammoEmptyAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: bomb_clamp_empty
+    ammoAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: bomb_clamp_loaded
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipUtilityPoint
+    - RMCDropshipWeaponPoint
+
+- type: entity
+  parent: RMCDropshipAttachmentUtility
+  id: RMCDropshipAttachmentHowitzer
+  name: M137 105mm Howitzer
+  description: A 105mm Howitzer, capable of wiping out reinforced positions. This model only holds one round, but can be reloaded in flight. Fits on both the external weapon and crew compartment attach points of dropships.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/dropship_utility_attachments.rsi
+    layers:
+    - state: howitzer_cannon
+  - type: DropshipFabricatorPrintable
+    cost: 1100
+  - type: DropshipWeapon
+    abbreviation: HWZ
+    fireDelay: 3
+    weaponAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: howitzer_installed
+    ammoEmptyAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: howitzer_empty
+    ammoAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: howitzer_loaded
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipUtilityPoint
+    - RMCDropshipWeaponPoint
