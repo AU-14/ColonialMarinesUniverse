@@ -20,20 +20,28 @@ namespace Content.Server.AU14.Objectives.Arrest
         [Dependency] private readonly JobSystem _jobSystem = default!;
         [Dependency] private readonly SharedCuffableSystem _cuffableSystem = default!;
 
-        private static readonly ISawmill Sawmill = Logger.GetSawmill("au14-arrestobj");
+        private static ISawmill Sawmill => Logger.GetSawmill("au14-arrestobj");
+        private bool _shuttingDown;
 
         public override void Initialize()
         {
             base.Initialize();
+            _shuttingDown = false;
             SubscribeLocalEvent<ArrestObjectiveTrackerComponent, ComponentStartup>(OnMobStateStartup);
             SubscribeLocalEvent<MarkedForArrestComponent, CuffedStateChangeEvent>(OnCuffStateChanged);
+        }
+
+        public override void Shutdown()
+        {
+            _shuttingDown = true;
+            base.Shutdown();
         }
 
         private void OnMobStateStartup(EntityUid uid, ArrestObjectiveTrackerComponent comp, ref ComponentStartup args)
         {
             Timer.Spawn(TimeSpan.FromSeconds(0.2), () =>
             {
-                if (!EntityManager.EntityExists(uid))
+                if (_shuttingDown || !EntityManager.EntityExists(uid))
                     return;
                 TryMarkForArrestDelayed(uid);
             });
@@ -61,6 +69,9 @@ namespace Content.Server.AU14.Objectives.Arrest
 
         private void TryMarkForArrestDelayed(EntityUid uid)
         {
+            if (_shuttingDown)
+                return;
+
             var meta = EntityManager.GetComponentOrNull<MetaDataComponent>(uid);
             var protoId = meta?.EntityPrototype?.ID ?? string.Empty;
             var factionComp = EntityManager.GetComponentOrNull<NpcFactionMemberComponent>(uid);

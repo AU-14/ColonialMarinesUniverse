@@ -70389,9 +70389,6 @@ entities:
       inSlot: head
     - type: Physics
       canCollide: False
-    - type: RMCRecentlyVended
-      preventCollide:
-      - invalid
   - uid: 39
     components:
     - type: Transform
@@ -70412,9 +70409,6 @@ entities:
       inSlot: head
     - type: Physics
       canCollide: False
-    - type: RMCRecentlyVended
-      preventCollide:
-      - invalid
 - proto: AU14CivFedoraTan
   entities:
   - uid: 46
@@ -82757,9 +82751,6 @@ entities:
       inSlot: jumpsuit
     - type: Physics
       canCollide: False
-    - type: RMCRecentlyVended
-      preventCollide:
-      - invalid
 - proto: CMLockerBase
   entities:
   - uid: 101
@@ -119784,9 +119775,6 @@ entities:
       inSlot: outerClothing
     - type: Physics
       canCollide: False
-    - type: RMCRecentlyVended
-      preventCollide:
-      - invalid
 - proto: RMCJumpsuitBlueWorkwear
   entities:
   - uid: 8454

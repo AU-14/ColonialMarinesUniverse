@@ -455,7 +455,11 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
             if (itemComp.FetchObjective == fetchObj && !itemComp.Fetched && ent != uid)
                 unfetched++;
         }
-        var objComp = EnsureComp<AuObjectiveComponent>(comp.ObjectiveUid);
+
+        if (comp.ObjectiveUid == EntityUid.Invalid ||
+            !EntityManager.TryGetComponent(comp.ObjectiveUid, out AuObjectiveComponent? objComp))
+            return;
+
         var factions = objComp.FactionNeutral ? objComp.Factions : new List<string> { objComp.Faction };
         foreach (var faction in factions)
         {
