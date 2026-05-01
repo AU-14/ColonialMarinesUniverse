@@ -70389,7 +70389,7 @@ entities:
       inSlot: head
     - type: Physics
       canCollide: False
-  - uid: 39
+  - uid: 60
     components:
     - type: Transform
       parent: 38
