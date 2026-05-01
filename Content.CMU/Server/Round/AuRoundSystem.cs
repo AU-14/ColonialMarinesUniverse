@@ -205,6 +205,8 @@ namespace Content.Server.AU14.Round
                                 picked = winnersArray[0];
                             if (picked == null && options.Count > 0)
                                 picked = options[0].data;
+                            if (picked != null)
+                                args.ResolveWinner(picked);
                             _selectedPlanet = picked as RMCPlanetMapPrototypeComponent;
                         };
 
@@ -360,12 +362,13 @@ namespace Content.Server.AU14.Round
                         var handle = _voteManager.CreateVote(voteopt);
                         handle.OnFinished += (_, args) =>
                         {
-
                             string? winner = args.Winner as string;
                             if (winner == null && args.Winners is var arr && arr.Length > 0)
                                 winner = arr[0] as string;
                             if (winner == null && shipOptions.Count > 0)
                                 winner = shipOptions[0].id;
+                            if (winner != null)
+                                args.ResolveWinner(winner);
                             onShipSelected(winner ?? string.Empty);
                         };
                     }
@@ -391,10 +394,13 @@ namespace Content.Server.AU14.Round
                         var handle = _voteManager.CreateVote(voteopt);
                         handle.OnFinished += (_, args) =>
                         {
+                            var winnerId = args.Winner as PlatoonPrototype;
+                            if (winnerId == null && args.Winners is var winnersArray && winnersArray.Length > 0)
+                                winnerId = winnersArray[0] as PlatoonPrototype;
 
-
-                            if (args.Winner is PlatoonPrototype winnerId)
+                            if (winnerId != null)
                             {
+                                args.ResolveWinner(winnerId);
                                 platoonSpawnRuleSystem.SelectedGovforPlatoon = winnerId;
 
                                 // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
@@ -439,8 +445,13 @@ namespace Content.Server.AU14.Round
                         var handle = _voteManager.CreateVote(voteopt);
                         handle.OnFinished += (_, args) =>
                         {
-                            if (args.Winner is PlatoonPrototype winnerId)
+                            var winnerId = args.Winner as PlatoonPrototype;
+                            if (winnerId == null && args.Winners is var winnersArray && winnersArray.Length > 0)
+                                winnerId = winnersArray[0] as PlatoonPrototype;
+
+                            if (winnerId != null)
                             {
+                                args.ResolveWinner(winnerId);
                                 platoonSpawnRuleSystem.SelectedOpforPlatoon = winnerId;
 
                                 // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
