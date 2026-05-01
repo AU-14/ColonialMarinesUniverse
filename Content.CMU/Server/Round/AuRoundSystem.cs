@@ -50,6 +50,8 @@ namespace Content.Server.AU14.Round
         public ThreatPrototype _selectedthreat = null!;
         private string? _selectedGovforShip;
         private string? _selectedOpforShip;
+        public void SetOpforShip(string shipId) => _selectedOpforShip = shipId;
+        public void SetGovforShip(string shipId) => _selectedGovforShip = shipId;
 
         private List<AuThirdPartyPrototype> _selectedThirdParties = new();
         public IReadOnlyList<AuThirdPartyPrototype> SelectedThirdParties => _selectedThirdParties;

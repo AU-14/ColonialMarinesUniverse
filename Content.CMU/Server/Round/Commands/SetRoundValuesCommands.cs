@@ -1,4 +1,6 @@
+using System.Linq;
 using Content.Server.Administration;
+using Content.Shared._RMC14.Rules;
 using Content.Shared.Administration;
 using Content.Shared.AU14.util;
 using Robust.Shared.Console;
@@ -29,8 +31,11 @@ namespace Content.Server.AU14.Round.Commands
                 return;
             }
             platoonSys.SelectedOpforPlatoon = platoon;
-            shell.WriteLine($"Opfor platoon set to: {platoon.Name.ToString()} ({platoon.ID.ToString()})");
+            shell.WriteLine($"Opfor platoon set to: {platoon.Name} ({platoon.ID})");
         }
+
+        public CompletionResult GetCompletion(IConsoleShell _, string[] args)
+            => RoundCommandCompletion.PlatoonCompletion(args);
     }
 
     [AdminCommand(AdminFlags.Admin)]
@@ -56,8 +61,57 @@ namespace Content.Server.AU14.Round.Commands
                 return;
             }
             platoonSys.SelectedGovforPlatoon = platoon;
-            shell.WriteLine($"Govfor platoon set to: {platoon.Name.ToString()} ({platoon.ID.ToString()})");
+            shell.WriteLine($"Govfor platoon set to: {platoon.Name} ({platoon.ID})");
         }
+
+        public CompletionResult GetCompletion(IConsoleShell _, string[] args)
+            => RoundCommandCompletion.PlatoonCompletion(args);
+    }
+
+    [AdminCommand(AdminFlags.Admin)]
+    public sealed class SetOpforShipCommand : IConsoleCommand
+    {
+        public string Command => "setopforship";
+        public string Description => "Sets the Opfor ship for the round.";
+        public string Help => "Usage: setopforship <shipId>";
+
+        public void Execute(IConsoleShell shell, string argStr, string[] args)
+        {
+            if (args.Length != 1)
+            {
+                shell.WriteError("Usage: setopforship <shipId>");
+                return;
+            }
+            var roundSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<AuRoundSystem>();
+            roundSystem.SetOpforShip(args[0]);
+            shell.WriteLine($"Opfor ship set to: {args[0]}");
+        }
+
+        public CompletionResult GetCompletion(IConsoleShell _, string[] args)
+            => RoundCommandCompletion.ShipCompletion(args);
+    }
+
+    [AdminCommand(AdminFlags.Admin)]
+    public sealed class SetGovforShipCommand : IConsoleCommand
+    {
+        public string Command => "setgovforship";
+        public string Description => "Sets the Govfor ship for the round.";
+        public string Help => "Usage: setgovforship <shipId>";
+
+        public void Execute(IConsoleShell shell, string argStr, string[] args)
+        {
+            if (args.Length != 1)
+            {
+                shell.WriteError("Usage: setgovforship <shipId>");
+                return;
+            }
+            var roundSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<AuRoundSystem>();
+            roundSystem.SetGovforShip(args[0]);
+            shell.WriteLine($"Govfor ship set to: {args[0]}");
+        }
+
+        public CompletionResult GetCompletion(IConsoleShell _, string[] args)
+            => RoundCommandCompletion.ShipCompletion(args);
     }
 
     [AdminCommand(AdminFlags.Admin)]
@@ -79,6 +133,54 @@ namespace Content.Server.AU14.Round.Commands
                 shell.WriteLine($"Planet set to: {args[0]}");
             else
                 shell.WriteError($"Planet prototype not found: {args[0]}");
+        }
+
+        public CompletionResult GetCompletion(IConsoleShell _, string[] args)
+            => RoundCommandCompletion.PlanetCompletion(args);
+    }
+
+    internal static class RoundCommandCompletion
+    {
+        internal static CompletionResult PlatoonCompletion(string[] args)
+        {
+            if (args.Length != 1) return CompletionResult.Empty;
+
+            var protoMan = IoCManager.Resolve<IPrototypeManager>();
+            var options = protoMan.EnumeratePrototypes<PlatoonPrototype>()
+                .OrderBy(p => p.ID)
+                .Select(p => p.ID)
+                .ToList();
+
+            return CompletionResult.FromHintOptions(options, "<platoonPrototypeId>");
+        }
+
+        internal static CompletionResult PlanetCompletion(string[] args)
+        {
+            if (args.Length != 1) return CompletionResult.Empty;
+
+            var protoMan = IoCManager.Resolve<IPrototypeManager>();
+            var factory = IoCManager.Resolve<IComponentFactory>();
+            var options = protoMan.EnumeratePrototypes<EntityPrototype>()
+                .Where(p => p.TryGetComponent(out RMCPlanetMapPrototypeComponent? _, factory))
+                .OrderBy(p => p.ID)
+                .Select(p => p.ID)
+                .ToList();
+
+            return CompletionResult.FromHintOptions(options, "<planetPrototypeId>");
+        }
+
+        internal static CompletionResult ShipCompletion(string[] args)
+        {
+            if (args.Length != 1) return CompletionResult.Empty;
+
+            var protoMan = IoCManager.Resolve<IPrototypeManager>();
+            var options = protoMan.EnumeratePrototypes<PlatoonPrototype>()
+                .SelectMany(p => p.PossibleShips)
+                .Distinct()
+                .OrderBy(id => id)
+                .ToList();
+
+            return CompletionResult.FromHintOptions(options, "<shipId>");
         }
     }
 }
