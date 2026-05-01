@@ -2526,7 +2526,7 @@ entities:
       desc: Hey! I think you left this back at Black Mesa!
       name: particular crowbar
     - type: Transform
-      parent: 220
+      parent: 120
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -3629,7 +3629,7 @@ entities:
   - uid: 131
     components:
     - type: Transform
-      parent: 230
+      parent: 130
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -36163,7 +36163,7 @@ entities:
   - uid: 149
     components:
     - type: Transform
-      parent: 248
+      parent: 148
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -39088,7 +39088,7 @@ entities:
   - uid: 124
     components:
     - type: Transform
-      parent: 223
+      parent: 123
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -39516,14 +39516,14 @@ entities:
   - uid: 137
     components:
     - type: Transform
-      parent: 236
+      parent: 136
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
   - uid: 142
     components:
     - type: Transform
-      parent: 241
+      parent: 141
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -39863,7 +39863,7 @@ entities:
   - uid: 125
     components:
     - type: Transform
-      parent: 223
+      parent: 123
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -39936,7 +39936,7 @@ entities:
   - uid: 140
     components:
     - type: Transform
-      parent: 239
+      parent: 139
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -43806,7 +43806,7 @@ entities:
   - uid: 128
     components:
     - type: Transform
-      parent: 227
+      parent: 127
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -44326,7 +44326,7 @@ entities:
   - uid: 126
     components:
     - type: Transform
-      parent: 223
+      parent: 123
     - type: Physics
       canCollide: False
     - type: UseDelay

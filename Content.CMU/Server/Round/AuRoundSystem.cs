@@ -21,6 +21,7 @@ using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Timing;
+using Content.Shared._RMC14.Item;
 
 namespace Content.Server.AU14.Round
 {
@@ -35,6 +36,7 @@ namespace Content.Server.AU14.Round
         [Dependency] private readonly IEntityManager _entityManager = default!;
         [Dependency] private readonly IPlayerManager _playerManager = default!;
         [Dependency] private readonly IRobustRandom _random = default!;
+        [Dependency] private readonly ItemCamouflageSystem _camo = default!;
 
         [ViewVariables]
         public string? SelectedPlanetMapName => SelectedPlanetMap?.Announcement;
@@ -48,6 +50,8 @@ namespace Content.Server.AU14.Round
         public ThreatPrototype _selectedthreat = null!;
         private string? _selectedGovforShip;
         private string? _selectedOpforShip;
+        public void SetOpforShip(string shipId) => _selectedOpforShip = shipId;
+        public void SetGovforShip(string shipId) => _selectedGovforShip = shipId;
 
         private List<AuThirdPartyPrototype> _selectedThirdParties = new();
         public IReadOnlyList<AuThirdPartyPrototype> SelectedThirdParties => _selectedThirdParties;
@@ -201,6 +205,8 @@ namespace Content.Server.AU14.Round
                                 picked = winnersArray[0];
                             if (picked == null && options.Count > 0)
                                 picked = options[0].data;
+                            if (picked != null)
+                                args.ResolveWinner(picked);
                             _selectedPlanet = picked as RMCPlanetMapPrototypeComponent;
                         };
 
@@ -210,6 +216,7 @@ namespace Content.Server.AU14.Round
                                 // Fallback: if _selectedPlanet wasn't set by handler, pick manually
                                 if (_selectedPlanet == null && options.Count > 0)
                                     _selectedPlanet = options[0].data as RMCPlanetMapPrototypeComponent;
+                                SetCamoType();
                                 StartPlatoonVotes();
                             });
                     });
@@ -355,12 +362,13 @@ namespace Content.Server.AU14.Round
                         var handle = _voteManager.CreateVote(voteopt);
                         handle.OnFinished += (_, args) =>
                         {
-
                             string? winner = args.Winner as string;
                             if (winner == null && args.Winners is var arr && arr.Length > 0)
                                 winner = arr[0] as string;
                             if (winner == null && shipOptions.Count > 0)
                                 winner = shipOptions[0].id;
+                            if (winner != null)
+                                args.ResolveWinner(winner);
                             onShipSelected(winner ?? string.Empty);
                         };
                     }
@@ -386,10 +394,13 @@ namespace Content.Server.AU14.Round
                         var handle = _voteManager.CreateVote(voteopt);
                         handle.OnFinished += (_, args) =>
                         {
+                            var winnerId = args.Winner as PlatoonPrototype;
+                            if (winnerId == null && args.Winners is var winnersArray && winnersArray.Length > 0)
+                                winnerId = winnersArray[0] as PlatoonPrototype;
 
-
-                            if (args.Winner is PlatoonPrototype winnerId)
+                            if (winnerId != null)
                             {
+                                args.ResolveWinner(winnerId);
                                 platoonSpawnRuleSystem.SelectedGovforPlatoon = winnerId;
 
                                 // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
@@ -434,8 +445,13 @@ namespace Content.Server.AU14.Round
                         var handle = _voteManager.CreateVote(voteopt);
                         handle.OnFinished += (_, args) =>
                         {
-                            if (args.Winner is PlatoonPrototype winnerId)
+                            var winnerId = args.Winner as PlatoonPrototype;
+                            if (winnerId == null && args.Winners is var winnersArray && winnersArray.Length > 0)
+                                winnerId = winnersArray[0] as PlatoonPrototype;
+
+                            if (winnerId != null)
                             {
+                                args.ResolveWinner(winnerId);
                                 platoonSpawnRuleSystem.SelectedOpforPlatoon = winnerId;
 
                                 // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
@@ -555,6 +571,18 @@ namespace Content.Server.AU14.Round
             }
 
             return false;
+        }
+
+        public void SetCamoType(CamouflageType? ct = null)
+        {
+            if (ct != null)
+            {
+                _camo.CurrentMapCamouflage = ct.Value;
+                return;
+            }
+
+            if (_selectedPlanet != null)
+                _camo.CurrentMapCamouflage = _selectedPlanet.Camouflage;
         }
 
         public void chooseThreat(RMCPlanetMapPrototypeComponent? planet)

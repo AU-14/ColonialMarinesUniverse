@@ -18,6 +18,7 @@ public sealed class CaptureObjectiveSystem : EntitySystem
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly Content.Server.AU14.Objectives.AuObjectiveSystem _objectiveSystem = default!;
     [Dependency] private readonly Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
+    [Dependency] private readonly ILogManager _logManager = default!;
 
     // Tracks ongoing hoists to prevent multiple simultaneous hoists per structure
     private readonly HashSet<EntityUid> _hoisting = new();
@@ -28,11 +29,12 @@ public sealed class CaptureObjectiveSystem : EntitySystem
     // Tracks last known slash damage for each capture objective
     private readonly Dictionary<EntityUid, float> _lastSlashDamage = new();
 
-    private static readonly ISawmill Sawmill = Logger.GetSawmill("capture-obj");
+    private ISawmill _sawmill = default!;
 
     public override void Initialize()
     {
         base.Initialize();
+        _sawmill = _logManager.GetSawmill("capture-obj");
         SubscribeLocalEvent<CaptureObjectiveComponent, FlagHoistStartedEvent>(OnFlagHoistStarted);
         SubscribeLocalEvent<CaptureObjectiveComponent, HoistFlagDoAfterEvent>(OnHoistFlagDoAfter); // Subscribe to DoAfter completion
         // Removed broken damage event subscription
@@ -195,18 +197,18 @@ public sealed class CaptureObjectiveSystem : EntitySystem
                 comp.TimesIncrementedPerFaction[factionKey]++;
                 // Award points
                 _objectiveSystem.AwardPointsToFaction(comp.CurrentController, objComp);
-                Sawmill.Info($"[CAPTURE OBJ] Awarded points to {comp.CurrentController} for {uid} (increment {comp.timesincremented}/{comp.MaxHoldTimes})");
+                _sawmill.Info($"[CAPTURE OBJ] Awarded points to {comp.CurrentController} for {uid} (increment {comp.timesincremented}/{comp.MaxHoldTimes})");
                 // If OnceOnly, complete after first increment
                 if (comp.OnceOnly && comp.timesincremented > 0)
                 {
                     _objectiveSystem.CompleteObjectiveForFaction(uid, objComp, comp.CurrentController);
-                    Sawmill.Info($"[CAPTURE OBJ] Completed once-only capture objective {uid} for {comp.CurrentController}");
+                    _sawmill.Info($"[CAPTURE OBJ] Completed once-only capture objective {uid} for {comp.CurrentController}");
                 }
                 // If reached max hold times, complete (but only if maxholdtimes > 0)
                 if (!comp.OnceOnly && comp.MaxHoldTimes > 0 && comp.timesincremented >= comp.MaxHoldTimes)
                 {
                     _objectiveSystem.CompleteObjectiveForFaction(uid, objComp, comp.CurrentController);
-                    Sawmill.Info($"[CAPTURE OBJ] Completed capture objective {uid} for {comp.CurrentController} after max hold times");
+                    _sawmill.Info($"[CAPTURE OBJ] Completed capture objective {uid} for {comp.CurrentController} after max hold times");
                 }
             }
             // --- Hoist/Lower timer logic removed ---

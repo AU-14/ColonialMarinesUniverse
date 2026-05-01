@@ -5,6 +5,14 @@ cm-pill-contents-imidazoline = Heals 1 eye damage. Fixes blurry vision and blind
 cm-pill-contents-cryoxadone = ONLY FUNCTIONS AT LOW TEMPERATURES. Heals 3 radiation damage. Heals 3 brute damage. Heals 3 burn damage. Heals 3 toxin damage. Heals 1 oxygen damage.
 cm-pill-contents-leporazine = Attempts to stabilize patient's temperature. Used to treat extreme cold or extreme heat exposure.
 cm-pill-contents-albuterol = Heals 4 oxygen damage per second. The more effective cousin of Dexalin.
+cm-pill-contents-oxycodone = A heavy painkiller, usually used in surgical procedures. Reduces pain heavily.
+cm-pill-contents-tramadol = A mid-level painkiller. Reduces pain.
+cm-pill-contents-paracetamol = A light painkillers. Reduces a light amount of pain.
+cm-pill-contents-hepatocytin = Heals liver damage.
+cm-pill-contents-pulmovine = Heals lung damage.
+cm-pill-contents-nephronate = Heals kidney damage.
+cm-pill-contents-cardiocaine = Heals heart damage.
+cm-pill-contents-osteocalc = Heals bone damage.
 
 rmc-ethylredoxrazine-container-label-text = ET
 rmc-dermaline-container-label-text = DE
@@ -14,6 +22,11 @@ rmc-cryoxadone-container-label-text = CR
 rmc-leporazine-container-label-text = LE
 rmc-albuterol-container-label-text = AL
 AU14-naloxone-medicine-container-label-text = NA
+rmc-osteocalc-container-label-text = OL
+rmc-cardiocaine-container-label-text = CE
+rmc-nephronate-container-label-text = NE
+rmc-pulmovine-container-label-text = PE
+rmc-hepatocytin-container-label-text = HN
 
 reagent-name-albuterol = Albuterol
 reagent-desc-albuterol = Repairs 4 oxygen damage. OD of 35u.

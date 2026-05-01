@@ -188,7 +188,7 @@ au14-job-name-leoleader = Law Enforcement Leader
 au14-job-description-leoleader = Colony Law Enforcement (Map specific)
 
 
-au14-job-name-leo = Law Enforcement OFficer
+au14-job-name-leo = Law Enforcement Officer
 au14-job-description-leo = Colony Law Enforcement (Map specific)
 
 au14-job-name-workingjoe = Working Joe

@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Ported from cmss13-pve PR #1017 by Almings",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "barbed_wire",
+      "directions": 4
+    },
+    {
+      "name": "barbed_wire_broken",
+      "directions": 4
+    }
+  ]
+}
