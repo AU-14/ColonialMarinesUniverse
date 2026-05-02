@@ -22,19 +22,13 @@ namespace Content.Server.AU14.Objectives.Arrest
         [Dependency] private readonly ILogManager _logManager = default!;
 
         private ISawmill _sawmill = default!;
-<<<<<<< buildsfixed
         private bool _shuttingDown;
-=======
->>>>>>> master
 
         public override void Initialize()
         {
             base.Initialize();
             _sawmill = _logManager.GetSawmill("au14-arrestobj");
-<<<<<<< buildsfixed
             _shuttingDown = false;
-=======
->>>>>>> master
             SubscribeLocalEvent<ArrestObjectiveTrackerComponent, ComponentStartup>(OnMobStateStartup);
             SubscribeLocalEvent<MarkedForArrestComponent, CuffedStateChangeEvent>(OnCuffStateChanged);
         }
