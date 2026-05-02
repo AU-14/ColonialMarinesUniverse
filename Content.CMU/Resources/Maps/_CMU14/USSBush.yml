@@ -38082,6 +38082,7 @@ entities:
       parent: 1
     - type: RotaryPhone
       category: USS George W. Bush
+      callableByAll: true
     - type: Fixtures
       fixtures: {}
   - uid: 5464
