@@ -11,7 +11,7 @@ AU14JobCLFGuerilla = CLF Guerilla Fighter
 
 au14-job-name-clfphysician = CLF Physician
 au14-job-description-clfphysician = Provide medical care to your fellow freedom fighters and fight for the CLF.
-au14-job-prefix-clfphysician = CIV
+au14-job-prefix-clfphysician = DOCTR
 AU14JobCLFPhysician = CLF Physician
 
 au14-job-name-clfmachinegunner = CLF Machine Gunner
