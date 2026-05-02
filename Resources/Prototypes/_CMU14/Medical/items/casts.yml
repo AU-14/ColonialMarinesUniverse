@@ -10,5 +10,5 @@
     applyDelay: 6
     maxSuppressed: Simple
   - type: Sprite
-    sprite: _RMC14/Objects/Medical/Surgery/bone_gel.rsi
-    state: bone-gel
+    sprite: _AU14/Objects/Medical/cast.rsi
+    state: cast

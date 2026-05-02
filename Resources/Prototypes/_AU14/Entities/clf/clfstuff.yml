@@ -368,9 +368,9 @@
   components:
   - type: TattooGun
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Cannons/syringe_gun.rsi
+    sprite: _AU14/Objects/Misc/TattooGun/tattoogun.rsi
     layers:
-    - state: syringe_gun
+    - state: inkgon
   - type: Storage
     maxItemSize: Normal
     grid:
@@ -395,16 +395,15 @@
   parent: BaseItem
   id: AU14TattooInkCartridge
   name: tattoo ink cartridge
-
   description: A small cartridge of dark ink for use with a tattoo gun.
   components:
   - type: Sprite
-    sprite: Objects/Specific/Chemistry/syringe.rsi
+    sprite: _AU14/Objects/Misc/TattooGun/tattoogunmag.rsi
     layers:
-    - state: minisyringe1
+    - state: inkmag
       map: ["enum.SolutionContainerLayers.Fill"]
       visible: true
-    - state: syringeproj
+    - state: inkmag
 
   - type: Item
     size: Tiny

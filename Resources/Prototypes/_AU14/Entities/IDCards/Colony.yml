@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: Clothing
   id: AU14IDCardBaseCivilianNoIFF
   name: identification holo-badge
@@ -290,6 +290,13 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianCMBDeputy
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/cmb_deputy.rsi
+    state: icon
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/cmb_deputy.rsi
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
@@ -298,6 +305,14 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianCMBMarshal
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/cmb_marshal.rsi
+    state: icon
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/cmb_marshal.rsi
+
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF

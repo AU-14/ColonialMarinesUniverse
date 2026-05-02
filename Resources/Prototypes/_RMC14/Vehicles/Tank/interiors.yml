@@ -262,6 +262,8 @@
   parent: VehicleTankHatch
   id: VehicleTankExitHatch
   components:
+  - type: Sprite
+    drawdepth: Overlays
   - type: RemoveComponents
     components:
     - type: Fixtures

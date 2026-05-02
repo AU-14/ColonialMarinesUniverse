@@ -30,6 +30,8 @@
         amount: 12
       - id: CMSynthGraft
         amount: 12
+      - id: CMUCastItem
+        amount: 12
       - id: CMSyringe
         amount: 30
     - name: Pill Bottles

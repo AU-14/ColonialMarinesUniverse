@@ -32,6 +32,7 @@ namespace Content.Shared.Containers.ItemSlots
         [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
         [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
         [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
+        [Dependency] private readonly SharedTransformSystem _transform = default!;
         [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
 
         public override void Initialize()
@@ -617,6 +618,33 @@ namespace Content.Shared.Containers.ItemSlots
 
             if (user != null)
                 _handsSystem.PickupOrDrop(user.Value, item.Value);
+
+            return true;
+        }
+
+        /// <summary>
+        ///     Try to eject item from a slot directly onto the ground.
+        /// </summary>
+        public bool TryEjectToGround(
+            EntityUid uid,
+            ItemSlot slot,
+            EntityUid? user,
+            bool excludeUserAudio = false,
+            EntityUid? dropAt = null)
+        {
+            if (!CanEject(uid, user, slot))
+                return false;
+
+            if (slot.Item is not { } item)
+                return false;
+
+            Eject(uid, slot, item, user, excludeUserAudio);
+
+            var itemXform = Transform(item);
+            _containers.AttachParentToContainerOrGrid((item, itemXform));
+
+            if (dropAt is { } dropEntity && Exists(dropEntity))
+                _transform.SetCoordinates(item, itemXform, Transform(dropEntity).Coordinates);
 
             return true;
         }

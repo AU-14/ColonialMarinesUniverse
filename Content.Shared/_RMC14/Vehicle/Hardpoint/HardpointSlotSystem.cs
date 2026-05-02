@@ -257,9 +257,9 @@ public sealed class HardpointSlotSystem : EntitySystem
             return;
         }
 
-        if (!_itemSlots.TryEjectToHands(location.Owner, location.Slot, args.User, true))
+        if (!_itemSlots.TryEjectToGround(location.Owner, location.Slot, args.User, true, dropAt: args.User))
         {
-            state.LastUiError = "Couldn't remove the hardpoint. Free a hand and try again.";
+            state.LastUiError = "Couldn't remove the hardpoint.";
             _hardpoints.SetContainingVehicleUiError(ent.Owner, state.LastUiError);
             _hardpoints.UpdateHardpointUi(ent.Owner, ent.Comp, location.ItemSlots, state);
             _hardpoints.UpdateContainingVehicleUi(ent.Owner);

@@ -10,5 +10,5 @@
   - type: CMSurgeryTool
     skill: 4
   - type: Sprite
-    sprite: _AU14/Objects/Medical/bone_graft.rsi
-    state: bone-gel
+    sprite: _AU14/Objects/Medical/bonegraft.rsi
+    state: bonegraft

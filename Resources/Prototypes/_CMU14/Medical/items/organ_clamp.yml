@@ -11,4 +11,4 @@
     skill: 3
   - type: Sprite
     sprite: _AU14/Objects/Medical/organclamp.rsi
-    state: hemostat
+    state: organclamp

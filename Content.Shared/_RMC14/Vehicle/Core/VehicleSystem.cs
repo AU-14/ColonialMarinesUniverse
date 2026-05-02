@@ -10,6 +10,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Ghost;
 using Content.Shared.Interaction;
 using Content.Shared.Maps;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Vehicle;
@@ -242,9 +243,22 @@ public sealed class VehicleSystem : EntitySystem
         var link = EnsureComp<VehicleInteriorLinkComponent>(mapUid);
         link.Vehicle = ent.Owner;
 
+        ProtectInteriorEntities(mapId);
         SpawnVehicleInteriorKey(ent.Owner, mapId);
 
         return true;
+    }
+
+    private void ProtectInteriorEntities(MapId mapId)
+    {
+        var xforms = EntityQueryEnumerator<TransformComponent>();
+        while (xforms.MoveNext(out var uid, out var xform))
+        {
+            if (xform.MapID != mapId || HasComp<MobStateComponent>(uid))
+                continue;
+
+            EnsureComp<VehicleInteriorIndestructibleComponent>(uid);
+        }
     }
 
     private bool TryGetInteriorEntryCoordinates(

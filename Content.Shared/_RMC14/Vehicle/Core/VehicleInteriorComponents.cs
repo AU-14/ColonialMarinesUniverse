@@ -26,6 +26,10 @@ public sealed partial class VehicleInteriorLinkComponent : Component
 }
 
 [RegisterComponent]
+[Access(typeof(VehicleSystem), typeof(VehicleInteriorProtectionSystem))]
+public sealed partial class VehicleInteriorIndestructibleComponent : Component;
+
+[RegisterComponent]
 [Access(typeof(VehicleSystem))]
 public sealed partial class VehicleInteriorOccupantComponent : Component
 {

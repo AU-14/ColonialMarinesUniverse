@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.CCVar;
+using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Xenonids.Energy;
 using Content.Shared.Explosion.EntitySystems;
 using Content.Shared.Weapons.Ranged.Events;
@@ -197,6 +198,13 @@ public abstract class SharedXenoAcidSystem : EntitySystem
     {
         time = TimeSpan.Zero;
         mult = 1;
+
+        if (HasComp<VehicleInteriorIndestructibleComponent>(target))
+        {
+            _popup.PopupClient(Loc.GetString("cm-xeno-acid-not-corrodible", ("target", target)), xeno, xeno, PopupType.SmallCaution);
+            return false;
+        }
+
         if (!TryComp(target, out CorrodibleComponent? corrodible) ||
             !corrodible.IsCorrodible)
         {
