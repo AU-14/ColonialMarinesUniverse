@@ -1,29 +1,14 @@
-- files: ["MarineExtract"]
-  license: "Custom"
-  copyright: "Image by Free League Publishing made for the Alien RPG. No license provided."
-  source: "https://freeleaguepublishing.com/shop/alien-rpg-2/colonial-marines-operations-manual/"
-
-- files: ["ColonyPowerLoader"]
-  license: "Custom"
-  copyright: "Image by Free League Publishing made for the Alien RPG. No license provided."
-  source: "https://freeleaguepublishing.com/shop/alien-rpg-2/colonial-marines-operations-manual/"
-
-- files: ["ColonyShip"]
-  license: "Custom"
-  copyright: "Image by Free League Publishing made for the Alien RPG. No license provided."
-  source: "https://freeleaguepublishing.com/shop/alien-rpg-2/colonial-marines-operations-manual/"
-
-- files: ["MarineCorpsman"]
-  license: "Custom"
-  copyright: "Image by Free League Publishing made for the Alien RPG. No license provided."
-  source: "https://freeleaguepublishing.com/shop/alien-rpg-2/colonial-marines-operations-manual/"
-
-- files: ["XenoAttack"]
-  license: "Custom"
-  copyright: "Image by Free League Publishing made for the Alien RPG. No license provided."
-  source: "https://freeleaguepublishing.com/shop/alien-rpg-2/colonial-marines-operations-manual/"
-
 - files: ["Dropship"]
   license: "CC-BY-NC-ND-4.0"
   copyright: "Image by EB67, commissioned and provided for CMU by ak105intow"
+  source: "https://github.com/AU-14/ColonialMarinesUniverse/"
+
+- files: ["CLF"]
+  license: "CC-BY-NC-ND-4.0"
+  copyright: "Commissioned and provided for CMU by ak105intow"
+  source: "https://github.com/AU-14/ColonialMarinesUniverse/"
+  
+  - files: ["HAZOPS"]
+  license: "CC-BY-NC-ND-4.0"
+  copyright: "Commissioned and provided for CMU by ak105intow"
   source: "https://github.com/AU-14/ColonialMarinesUniverse/"

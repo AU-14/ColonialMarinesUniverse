@@ -26,6 +26,7 @@ public sealed class HealthScannerCMUExtensionSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedBodySystem _body = default!;
     [Dependency] private readonly SharedContainerSystem _containers = default!;
+    [Dependency] private readonly SharedPainShockSystem _pain = default!;
     [Dependency] private readonly SkillsSystem _skills = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
@@ -55,7 +56,13 @@ public sealed class HealthScannerCMUExtensionSystem : EntitySystem
         if (!HasComp<CMUHumanMedicalComponent>(args.Patient))
             return;
 
-        var skill = args.Examiner is { } examiner ? _skills.GetSkill(examiner, MedicalSkill) : 0;
+        var skill = 0;
+        if (args.Examiner is { } examiner)
+        {
+            skill = HasComp<BypassSkillChecksComponent>(examiner)
+                ? int.MaxValue
+                : _skills.GetSkill(examiner, MedicalSkill);
+        }
         var state = args.State;
 
         FillBodyParts(args.Patient, state);
@@ -73,7 +80,7 @@ public sealed class HealthScannerCMUExtensionSystem : EntitySystem
     private void FillPainTier(EntityUid patient, HealthScannerBuiState state)
     {
         if (TryComp<PainShockComponent>(patient, out var pain))
-            state.CMUPainTier = pain.Tier;
+            state.CMUPainTier = _pain.GetEffectiveTier(patient, pain);
     }
 
     private void FillBodyParts(EntityUid patient, HealthScannerBuiState state)

@@ -20,20 +20,28 @@ namespace Content.Server.AU14.Objectives.Kill
         [Dependency] private readonly ILogManager _logManager = default!;
 
         private ISawmill _sawmill = default!;
+        private bool _shuttingDown;
 
         public override void Initialize()
         {
             base.Initialize();
             _sawmill = _logManager.GetSawmill("au14-killobj");
+            _shuttingDown = false;
             SubscribeLocalEvent<KillObjectiveTrackerComponent, ComponentStartup>(OnMobStateStartup);
             SubscribeLocalEvent<MarkedForKillComponent, MobStateChangedEvent>(OnMobStateChanged);
+        }
+
+        public override void Shutdown()
+        {
+            _shuttingDown = true;
+            base.Shutdown();
         }
 
         private void OnMobStateStartup(EntityUid uid, KillObjectiveTrackerComponent comp, ref ComponentStartup args)
         {
             Timer.Spawn(TimeSpan.FromSeconds(0.2), () =>
             {
-                if (!EntityManager.EntityExists(uid))
+                if (_shuttingDown || !EntityManager.EntityExists(uid))
                     return;
                 TryMarkForKillDelayed(uid);
             });
@@ -62,6 +70,9 @@ namespace Content.Server.AU14.Objectives.Kill
 
         private void TryMarkForKillDelayed(EntityUid uid)
         {
+            if (_shuttingDown)
+                return;
+
             var meta = EntityManager.GetComponentOrNull<MetaDataComponent>(uid);
             var protoId = meta?.EntityPrototype?.ID ?? string.Empty;
             var factionComp = EntityManager.GetComponentOrNull<NpcFactionMemberComponent>(uid);
