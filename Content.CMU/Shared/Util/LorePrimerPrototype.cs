@@ -8,19 +8,20 @@ public sealed class LorePrimerPrototype : IPrototype
     public string ID { get; private set; } = default!;
 
         [DataField("KnowledgeLevelsGovforThreat", required: false)]
-        public  Dictionary<string, int> KnowledgeLevels { get; private set; } = new();
+        public Dictionary<string, int>? KnowledgeLevels { get; private set; }
         // randomly select a level
         [DataField("planetText", required: false)]
-        public  string PlanetText { get; private set; } = default!;
+        public string? PlanetText { get; private set; }
 
 
         [DataField("PlatoonInfo", required: false)]
-        public  string PlatoonInfo { get; private set; } = default!;
+        public string? PlatoonInfo { get; private set; }
 
 
 
         [DataField("threattext", required: false)]
-        public  string ThreatText { get; private set; } = default!;
+        public string? ThreatText { get; private set; }
 
 
 }
+
