@@ -79,6 +79,11 @@ au14-job-name-govformilitarypoliceman = Military Policeman
 au14-job-description-govformilitarypoliceman = Provide your faction with police support.
 au14-job-prefix-govformilitarypoliceman = MP
 
+AU14JobGOVFORAuxTech = Auxiliary Technician
+au14-job-name-govforAuxTech = Auxiliary Technician
+au14-job-description-govforAuxTech = Run requisitions, keep the ship running and tidy. Provide your faction with shipside logistics and engineering support.
+au14-job-prefix-govforAuxTech = AXT
+
 au14-job-prefix-AU14JobGOVFORPlatCoWYPMC = OPDIR
 au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanWYPMC = CLS
 au14-job-prefix-AU14JobGOVFORDCCWYPMC = DCC
