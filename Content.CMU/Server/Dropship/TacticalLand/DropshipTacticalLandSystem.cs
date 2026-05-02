@@ -71,6 +71,12 @@ public sealed class DropshipTacticalLandSystem : SharedDropshipTacticalLandSyste
         if (HasComp<DropshipTacticalLandSessionComponent>(ent))
             return;
 
+        if (!IsThirdPartyNavigationConsole(ent.Owner))
+        {
+            _popup.PopupEntity("Only third party navigation consoles can designate tactical landings.", ent, pilot, PopupType.MediumCaution);
+            return;
+        }
+
         if (Transform(ent).GridUid is not { } gridUid ||
             !TryComp(gridUid, out DropshipComponent? dropship) ||
             dropship.Crashed)
@@ -129,6 +135,13 @@ public sealed class DropshipTacticalLandSystem : SharedDropshipTacticalLandSyste
             session.Pilot != args.Actor ||
             session.Eye is not { } eye)
         {
+            return;
+        }
+
+        if (!IsThirdPartyNavigationConsole(ent.Owner))
+        {
+            _popup.PopupEntity("Only third party navigation consoles can designate tactical landings.", ent, args.Actor, PopupType.MediumCaution);
+            EndSession(ent, session);
             return;
         }
 
@@ -513,6 +526,12 @@ public sealed class DropshipTacticalLandSystem : SharedDropshipTacticalLandSyste
             return whitelist.Faction;
 
         return null;
+    }
+
+    private bool IsThirdPartyNavigationConsole(EntityUid console)
+    {
+        return TryComp(console, out WhitelistedShuttleComponent? whitelist) &&
+               string.Equals(whitelist.Faction, "thirdparty", StringComparison.OrdinalIgnoreCase);
     }
 
     private string? GetPilotFaction(EntityUid pilot)
