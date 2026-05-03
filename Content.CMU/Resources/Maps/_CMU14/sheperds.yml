@@ -254196,7 +254196,7 @@ entities:
     - type: Transform
       pos: 133.875,21.625
       parent: 1
-- proto: rockwallremoveinshybrisia_colonyfall
+- proto: rockwallremoveinshybrisia_colonyfall_inverted
   entities:
   - uid: 149
     components:
