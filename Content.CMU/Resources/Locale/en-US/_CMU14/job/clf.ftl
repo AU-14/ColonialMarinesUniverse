@@ -14,6 +14,11 @@ au14-job-description-clfphysician = Provide medical care to your fellow freedom 
 au14-job-prefix-clfphysician = DOCTR
 AU14JobCLFPhysician = CLF Physician
 
+au14-job-name-clfsurgeon = CLF Surgeon
+au14-job-description-clfsurgeon = Keep your cell alive through field surgery and fight for the CLF.
+au14-job-prefix-clfsurgeon = SURG
+AU14JobCLFSurgeon = CLF Surgeon
+
 au14-job-name-clfmachinegunner = CLF Machine Gunner
 au14-job-description-clfmachinegunner = Fight for the CLF, support your fellow freedom fighters by laying down suppressing fire with your machine gun.
 au14-job-prefix-clfmachinegunner = CIV
