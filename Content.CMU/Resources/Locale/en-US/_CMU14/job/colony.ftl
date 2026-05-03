@@ -15,6 +15,9 @@ au14-department-colony-service = Service
 au14-department-criminal-description = Criminals and prisoners of the colony.
 au14-department-criminal = Colony Criminals
 
+au14-department-ambassadors-description = Ambassadors of various countries.
+au14-department-ambassadors = Ambassador
+
 au14-department-colony-engineering-description = Colonists who ensure the integrity of the colony's infrastructure and conduct repairs as needed.
 au14-department-colony-engineering = Colony Engineering
 
