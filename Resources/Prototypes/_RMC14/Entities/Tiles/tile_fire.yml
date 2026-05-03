@@ -46,7 +46,7 @@
     damage:
       types:
         Heat: 45
-    ignoreResistances: true
+    ignoreResistances: true 
   - type: TileFire
     id: RMCTileFire
     extinguishInstantly: true

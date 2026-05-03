@@ -59,3 +59,135 @@
       range: 3
       total: 16
     deleteOnEmpty: true
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmo
+  id: RMCDropshipAttachmentAmmoLaserCannonGreen
+  name: BTU-18/LW Hi-Cap Laser Battery
+  description: A higher-capacity laser battery used to power laser beam weapons.  Can be loaded into the LWU-6B Laser Cannon. This one seems to have a Green icon
+  components:
+  - type: Sprite
+    layers:
+    - state: laser_battery_10
+      map: [ "enum.DropshipAmmoVisuals.Fill"]
+  - type: DropshipAmmo
+    ammoType: laser_battery
+    rounds: 100
+    maxRounds: 100
+    roundsPerShot: 5
+    shotsPerVolley: 10
+    targetSpread: 1
+    bulletSpread: 0
+    travelTime: 1
+    weapon: RMCDropshipAttachmentLaserCannon
+    soundEveryShots: 1
+    soundCockpit: /Audio/Machines/phasein.ogg
+    soundMarker: /Audio/_RMC14/Binoculars/nightvision.ogg
+    soundImpact:
+      path: /Audio/_RMC14/Effects/laser_cannon.ogg
+      params:
+        volume: -6
+    fire:
+      type: RMCTileFireGreen
+      range: 6
+      total: 32
+    deleteOnEmpty: true
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmo
+  id: RMCDropshipAttachmentAmmoLaserCannonBlue
+  name: BTU-18/LW Hi-Cap Laser Battery
+  description: A Medium-capacity laser battery used to power laser beam weapons.  Can be loaded into the LWU-6B Laser Cannon. This one seems to have a Blue icon
+  components:
+  - type: Sprite
+    layers:
+    - state: laser_battery_10
+      map: [ "enum.DropshipAmmoVisuals.Fill"]
+  - type: DropshipAmmo
+    ammoType: laser_battery
+    rounds: 100
+    maxRounds: 100
+    roundsPerShot: 20
+    shotsPerVolley: 10
+    targetSpread: 1
+    bulletSpread: 0
+    travelTime: 1
+    weapon: RMCDropshipAttachmentLaserCannon
+    soundEveryShots: 1
+    soundCockpit: /Audio/Machines/phasein.ogg
+    soundMarker: /Audio/_RMC14/Binoculars/nightvision.ogg
+    soundImpact:
+      path: /Audio/_RMC14/Effects/laser_cannon.ogg
+      params:
+        volume: -6
+    fire:
+      type: RMCTileFireBlue
+      range: 3
+      total: 16
+    deleteOnEmpty: true
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmo
+  id: RMCDropshipAttachmentAmmoLaserCannonBlue
+  name: BTU-18/LW Hi-Cap Laser Battery
+  description: A Experimental Low-capacity laser battery used to power laser beam weapons, packing as much charge as possible into the tiny battery.  Can be loaded into the LWU-6B Laser Cannon. This one seems to have a White icon
+  components:
+  - type: Sprite
+    layers:
+    - state: laser_battery_10
+      map: [ "enum.DropshipAmmoVisuals.Fill"]
+  - type: DropshipAmmo
+    ammoType: laser_battery
+    rounds: 100
+    maxRounds: 100
+    roundsPerShot: 50
+    shotsPerVolley: 10
+    targetSpread: 1
+    bulletSpread: 0
+    travelTime: 1
+    weapon: RMCDropshipAttachmentLaserCannon
+    soundEveryShots: 1
+    soundCockpit: /Audio/Machines/phasein.ogg
+    soundMarker: /Audio/_RMC14/Binoculars/nightvision.ogg
+    soundImpact:
+      path: /Audio/_RMC14/Effects/laser_cannon.ogg
+      params:
+        volume: -6
+    fire:
+      type: RMCTileFireOB
+      range: 1.5
+      total: 8
+    deleteOnEmpty: false
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmo
+  id: RMCDropshipAttachmentAmmoLaserCannonBlue
+  name: BTU-18/LW Hi-Cap Laser Battery
+  description: A Medium-capacity laser battery used to power laser beam weapons, packing as much charge as possible into the tiny battery.  Can be loaded into the LWU-6B Laser Cannon. This one seems to have a Orange icon
+  components:
+  - type: Sprite
+    layers:
+    - state: laser_battery_10
+      map: [ "enum.DropshipAmmoVisuals.Fill"]
+  - type: DropshipAmmo
+    ammoType: laser_battery
+    rounds: 100
+    maxRounds: 100
+    roundsPerShot: 20
+    shotsPerVolley: 10
+    targetSpread: 1
+    bulletSpread: 0
+    travelTime: 1
+    weapon: RMCDropshipAttachmentLaserCannon
+    soundEveryShots: 1
+    soundCockpit: /Audio/Machines/phasein.ogg
+    soundMarker: /Audio/_RMC14/Binoculars/nightvision.ogg
+    soundImpact:
+      path: /Audio/_RMC14/Effects/laser_cannon.ogg
+      params:
+        volume: -6
+    fire:
+      type: RMCTileFireNapalm
+      range: 3
+      total: 16
+    deleteOnEmpty: true

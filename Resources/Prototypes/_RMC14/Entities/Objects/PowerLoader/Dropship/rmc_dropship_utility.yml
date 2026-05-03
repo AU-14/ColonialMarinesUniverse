@@ -159,3 +159,26 @@
     blacklist:
       components:
       - Xeno
+
+
+- type: entity
+  parent: RMCDropshipAttachmentUtility
+  id: RMCDropshipAttachmentFastrope
+  name: RMU-23 Dropship Fastrope System
+  description: A winch system to deploy troops to the battlefield while the dropship is in its hover state. It seems to be jammed and non-functioning
+  components:
+  - type: Sprite
+    layers:
+    - state: fastrope_system
+  #- type: DropshipFabricatorPrintable
+  #  cost: 200
+  # Uncomment when dropship hover is done and fast rope is fully implementated
+  - type: DropshipUtility
+    activateDelay: 10
+    activateInTransport: true
+  - type: DropshipAttachedSprite
+    sprite:
+      sprite: _RMC14/Objects/dropship_utility_attachments.rsi
+      state: fastrope_system_deployed
+  - type: CMUFastrope
+  - type: AnimationPlayer
