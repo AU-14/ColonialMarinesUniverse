@@ -11,6 +11,16 @@
     - id: AU14BackpackMortarFilled
 
 - type: entity
+  parent: RMCCrateWeapons
+  id: AU14CrateMortarKitRMC
+  name: m402 mortar crate (M402 Mortar Kit x1, Mortar shell backpack x1)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMortarKit
+    - id: AU14BackpackMortarFilled
+
+- type: entity
   parent: RMCCrateMortarAmmo
   id: AU14CrateMortarShellHERMC
   name: L53A1 light mortar shells crate (x12 HE)
