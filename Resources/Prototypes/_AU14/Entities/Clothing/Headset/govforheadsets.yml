@@ -184,3 +184,50 @@
     containers:
       key_slots:
       - AU14EncryptionKeyGOVFORauxiliarysupport
+
+- type: entity
+  parent: RMCHeadsetShip
+  id: AU14HeadsetGOVFORVehicleCrew
+  name: GOVFOR vehicle crewman headset
+  description: This is used by GOVFOR vehicle crew members to communicate on the radio.
+  components:
+  - type: GrantSquadLeaderTracker
+    defaultMode: SquadLeader
+    trackerModes:
+    - SquadLeader
+    - FireteamLeader
+    - BattleBuddy
+
+  - type: Sprite
+    state: generic_headset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGOVFORauxiliarysupport
+      - AU14EncryptionKeyMarineJTAC
+
+- type: entity
+  parent: RMCHeadsetShip
+  id: AU14HeadsetGOVFORVehicleCommander
+  name: GOVFOR vehicle command headset
+  description: This is used by GOVFOR vehicle crew command members to communicate on the radio.
+  components:
+  - type: GrantSquadLeaderTracker
+    defaultMode: SquadLeader
+    trackerModes:
+    - SquadLeader
+    - FireteamLeader
+    - BattleBuddy
+
+  - type: Sprite
+    state: generic_headset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGOVFORauxiliarysupport
+      - AU14EncryptionKeyGOVFORCommand
+      - AU14EncryptionKeyGOVFOR
+      - AU14EncryptionKeyGOVFORBravo
+      - AU14EncryptionKeyGOVFORCharlie
+      - AU14EncryptionKeyGOVFORIntel
+      - AU14EncryptionKeyMarineJTAC

@@ -30,7 +30,7 @@
   prefix: GySgt.
   paygrade: E7
 
-- type: rank
+- type: rank 
   id: RMCRankStaffSergeant
   name: Staff Sergeant
   prefix: SSgt.

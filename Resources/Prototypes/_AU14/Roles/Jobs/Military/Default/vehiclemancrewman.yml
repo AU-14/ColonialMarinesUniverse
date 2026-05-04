@@ -16,11 +16,11 @@
   ranks:
     RMCRankStaffSergeant:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORMilitaryPoliceMan
+      role: AU14JobGOVFORVehicleCrew
       time: 180000 # 50 hours
     RMCRankSergeant:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORMilitaryPoliceMan
+      role: AU14JobGOVFORVehicleCrew
       time: 86400 # 24 hours
     RMCRankCorporal:
     - !type:RoleTimeRequirement
@@ -63,7 +63,7 @@
   equipment:
     id: AU14IDCardGOVFORVehicleCrew
     ears: RMCM5CameraGear
-    ears2: AU14HeadsetVehicleCrew
+    ears2: AU14HeadsetGOVFORVehicleCrew
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -83,5 +83,5 @@
     belt: CMBeltSecurityMPFilled
     head: CMHeadBeretRed
     ears: RMCM5CameraGear
-    ears2: AU14HeadsetVehicleCrew
+    ears2: AU14HeadsetGOVFORVehicleCrew
     outerClothing: AU14ArmorM3JungleThree

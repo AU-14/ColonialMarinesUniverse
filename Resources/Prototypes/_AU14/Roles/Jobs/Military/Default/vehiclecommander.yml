@@ -1,0 +1,87 @@
+- type: job
+  parent: AU14JobVehicleCrewBase
+  id: AU14JobGOVFORVehicleCommand
+  name: au14-job-name-govforVehicleCommand
+  description: au14-job-description-govforVehicleCommand
+  setPreference: true
+  canBeAntag: false
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 24
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankMasterSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORVehicleCommand
+      time: 180000 # 50 hours
+    RMCRankGunnerySergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORVehicleCommand
+      time: 86400 # 24 hours
+    RMCRankStaffSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORVehicleCommand
+      time: 36000 # 10 hours
+    RMCRankSergeant: []
+  startingGear: AU14GearGOVFORVehicleCommandDummy
+  dummyStartingGear: AU14GearGOVFORVehicleCommandDummy
+  icon: "AU14JobIconRFN"
+  requireAdminNotify: true
+  spawnMenuRoleName: Vehicle Crewman (GOVFOR)
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14Govfor
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Marine
+      Faction: govfor
+    - type: Skills
+      preset: AU14SkillPresetMilitaryPolice
+    - type: JobPrefix
+      prefix: au14-job-prefix-govformilitarypoliceman
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: mp
+    - type: UserIFF
+      factions:
+      - GOVFOR
+  hidden: false
+
+- type: startingGear
+  id: AU14GearGOVFORVehicleCrew
+  equipment:
+    id: AU14IDCardGOVFORVehicleCommander
+    ears: RMCM5CameraGear
+    ears2: AU14HeadsetGOVFORVehicleCommander
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORVehicleCommander
+  name: Spawn Point GOVFOR Vehicle Commander
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORVehicleCommand
+  - type: Sprite
+    state: syn_spawn
+
+- type: startingGear
+  id: AU14GearGOVFORVehicleCommandDummy
+  equipment:
+    shoes: CMBootsBlackFilled
+    jumpsuit: AU14JungleFatigues
+    belt: CMBeltSecurityMPFilled
+    head: CMHeadBeretRed
+    ears: RMCM5CameraGear
+    ears2: AU14HeadsetGOVFORVehicleCommander
+    outerClothing: AU14ArmorM3JungleThree
