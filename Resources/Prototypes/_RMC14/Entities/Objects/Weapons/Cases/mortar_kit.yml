@@ -13,7 +13,7 @@
   - type: Storage
     maxItemSize: Ginormous
     grid:
-    - 0,0,15,3
+    - 0,0,15,4
     whitelist:
       components:
       - Mortar
@@ -36,7 +36,7 @@
       amount: 2
     - id: CMBeltMortar
       amount: 2
-    - id: CMBackpackMortar
+    - id: AU14BackpackMortarFilled
     - id: RMCMortarShellIncendiary # TODO RMC14 replace 1 incend and 1 HE with 2 Frag shells
       amount: 3
     - id: RMCMortarShellFlare

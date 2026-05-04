@@ -202,8 +202,8 @@
       entries:
       - cost: 100
         crate: RMCDropShipSpotlight
-      - cost: 200
-        crate: RMCDropShipLZDetector
+      #- cost: 200
+        #crate: RMCDropShipLZDetector
       - cost: 500
         crate: RMCDropshipAttachmentCoolingSystem
       - cost: 500

@@ -124,8 +124,8 @@
         crate: RMCCrateMedicalPill
     - name: Mortar
       entries:
-      - cost: 6000
-        crate: RMCCrateMortarKit
+      - cost: 10000
+        crate: AU14CrateMortarKitRMC
       - cost: 500
         crate: RMCCrateMortarShellFlare
       - cost: 1000
@@ -200,8 +200,8 @@
       entries:
       - cost: 100
         crate: RMCDropShipSpotlight
-      - cost: 200
-        crate: RMCDropShipLZDetector
+      #- cost: 200
+        #crate: RMCDropShipLZDetector
       - cost: 500
         crate: RMCDropshipAttachmentCoolingSystem
       - cost: 500
