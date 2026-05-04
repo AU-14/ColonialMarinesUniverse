@@ -22,7 +22,7 @@ namespace Content.Shared.AU14.util
         JuniorOfficer,
         MilitaryPolice,
         VehicleCommand,
-        VehicleCrew,
+        VehicleCrew, 
         SectionSergeant,
         Pilot,
         ExtraVendor1,

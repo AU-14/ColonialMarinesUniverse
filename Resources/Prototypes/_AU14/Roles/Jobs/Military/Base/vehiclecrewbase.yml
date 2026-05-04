@@ -1,12 +1,12 @@
 - type: job
   parent: CMJobBase
-  id: AU14JobGOVFORVehicleCrewBase
+  id: AU14JobVehicleCrewBase
   name: au14-job-name-govforVehicleCrew
   description: au14-job-description-govforVehicleCrew
-  playTimeTracker: AU14JobGOVFORVehicleCrewTracker
+  playTimeTracker: AU14JobVehicleCrewTracker
   basePlaytimeTracker: true
   hidden: true
 
 - type: playTimeTracker
-  id: AU14JobGOVFORVehicleCrewTracker
+  id: AU14JobVehicleCrewTracker 
   isHumanoid: true

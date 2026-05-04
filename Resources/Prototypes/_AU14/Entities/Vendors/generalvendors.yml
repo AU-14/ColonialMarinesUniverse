@@ -290,3 +290,32 @@
       choices: { CMBackpack: 1 }
       entries:
       - id: CMSatchelSecurity
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14VehicleCrewGenericVendor
+  name: vehicle crewman equipment rack
+  description: An automated rack hooked up to a small storage of vehicle crew equipment. It reeks of oil and gasoline.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+    jobs: [ AU14JobGOVFORVehicleCrew, AU14JobVehicleCrewBase ]
+    sections:
+    - name: Standard Equipment
+      takeAll: CMStandard
+      entries:
+      #- id: CMGlassesSecurity
+      #- id: CMBeltSecurityMPFilled
+      #- id: AU14PouchPoliceEquipmentSupportSynth
+      #- id: RMCGuidebookLawMarine
+      #- id: RMCGuidebookSOP
+    - name: Hat
+      choices: { CMHat: 1 }
+      entries:
+      #- id: CMHeadCapMP
+      #- id: CMHeadBeretRed
+    - name: Backpack
+      choices: { CMBackpack: 1 }
+      entries:
+      #- id: CMSatchelSecurity

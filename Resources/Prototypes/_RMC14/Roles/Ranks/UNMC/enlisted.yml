@@ -16,6 +16,8 @@
   prefix: 1stSgt.
   paygrade: E8E
 
+# AU-14 To-do, clean these up please.
+
 - type: rank
   id: RMCRankMasterSergeant
   name: Master Sergeant
