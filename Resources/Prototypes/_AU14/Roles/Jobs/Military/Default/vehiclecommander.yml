@@ -13,6 +13,9 @@
     traits:
     - NonResuscitable
     - Epilepsy
+  - !type:RoleTimeRequirement
+    role: AU14JobGOVFORVehicleCrew
+    time: 9000 # 2.5 hours
   ranks:
     RMCRankMasterSergeant:
     - !type:RoleTimeRequirement
@@ -31,7 +34,7 @@
   dummyStartingGear: AU14GearGOVFORVehicleCommandDummy
   icon: "AU14JobIconRFN"
   requireAdminNotify: true
-  spawnMenuRoleName: Vehicle Crewman (GOVFOR)
+  spawnMenuRoleName: Vehicle Commander (GOVFOR)
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-govfor
   accessGroups:
@@ -46,13 +49,13 @@
     - type: Marine
       Faction: govfor
     - type: Skills
-      preset: AU14SkillPresetMilitaryPolice
+      preset: AU14SkillPresetVehicleCommand
     - type: JobPrefix
-      prefix: au14-job-prefix-govformilitarypoliceman
+      prefix: au14-job-prefix-govforVehicleCommand
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: mp
+        state: vcc
     - type: UserIFF
       factions:
       - GOVFOR

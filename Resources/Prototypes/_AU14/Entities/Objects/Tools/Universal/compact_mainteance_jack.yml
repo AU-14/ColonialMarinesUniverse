@@ -1,0 +1,36 @@
+- type: entity
+  parent: BaseItem
+  id: CompactMaintenanceJack
+  name: compact vehicle maintenance jack
+  description: A heavy-duty hardpoint jack for servicing armored vehicles. Works where a crowbar can't. This one is special made for vehicle crewman
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
+    state: icon
+  - type: Item
+    size: Medium
+    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
+    slots:
+    - Suitstorage
+    - Belt
+    - Backpack
+  - type: Tool
+    qualities:
+    - VehicleServicing
+    speedModifier: 1.0
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 300
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 20
+  #- type: WhitelistPickupBy
+    #whitelist:
+      #components:
+        #- VehicleCrewman
+        #- VehicleCommand
+
+        # AU-14 TODO: MAKE WHITELIST FOR THIS TOOL TO CREWMAN ONLY!!!

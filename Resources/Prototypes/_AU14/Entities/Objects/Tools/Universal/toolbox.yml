@@ -4,7 +4,7 @@
   id: AU14ToolboxBase
   components:
   - type: Storage
-    maxItemSize: Medium
+    maxItemSize: small
     grid:
     - 0,0,13,1
   - type: FixedItemSizeStorage
@@ -45,6 +45,10 @@
   parent: [RMCToolboxMechanical, ToolboxMechanicalFilled]
   id: AU14ToolboxMechanicalFilledCrewman
   components:
+  - type: Storage
+    maxItemSize: Medium
+    grid:
+    - 0,0,13,1
   - type: StorageFill
     contents:
       - id: CMCrowbar
@@ -53,4 +57,5 @@
       - id: CMWirecutter
       - id: CMScrewdriver
       - id: RMCWeldingGogglesSuperior
-  suffix: RMC14, Filled
+      - id: CompactMaintenanceJack
+  suffix: AU14, Crewman, Filled

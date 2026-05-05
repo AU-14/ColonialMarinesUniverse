@@ -1,0 +1,12 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobVehicleCommandBase
+  name: au14-job-name-govforVehicleCommand
+  description: au14-job-description-govforVehicleCommand
+  playTimeTracker: AU14JobVehicleCommandTracker
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: playTimeTracker
+  id: AU14JobVehicleCommandTracker 
+  isHumanoid: true
