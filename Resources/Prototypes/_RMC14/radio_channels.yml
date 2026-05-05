@@ -67,7 +67,7 @@
 - type: radioChannel
   id: MarineIntel
   name: chat-radio-marine-intel
-  keycode: "z" #t in cm13
+  keycode: "ź" #t in cm13
   frequency: 1486
   color: "#059705"
   longRange: true

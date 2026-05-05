@@ -40,13 +40,16 @@
   - type: TimerStartOnSignal
   - type: DeviceLinkSink
     ports:
-      - Timer
+    - Timer
   - type: Explosive
     explosionType: RMC
     totalIntensity: 1400
     intensitySlope: 1.5
     maxIntensity: 80
     canCreateVacuum: false
+  - type: ProjectileGrenade
+    fillPrototype: CMProjectileShrapnel
+    capacity: 25
   - type: ExplodeOnTrigger
 
 - type: entity
@@ -72,13 +75,16 @@
   - type: TimerStartOnSignal
   - type: DeviceLinkSink
     ports:
-      - Timer
+    - Timer
   - type: Explosive
     explosionType: RMC
     totalIntensity: 1800
     intensitySlope: 1.5
     maxIntensity: 100
     canCreateVacuum: false
+  - type: ProjectileGrenade
+    fillPrototype: CMProjectileShrapnel
+    capacity: 35
   - type: ExplodeOnTrigger
 
 - type: entity
@@ -111,14 +117,19 @@
   - type: TimerStartOnSignal
   - type: DeviceLinkSink
     ports:
-      - Timer
+    - Timer
   - type: Explosive
     explosionType: RMC
-    totalIntensity: 900
-    intensitySlope: 5
+    totalIntensity: 1500
+    intensitySlope: 10
     maxIntensity: 100
     canCreateVacuum: false
+  - type: ProjectileGrenade
+    fillPrototype: CMProjectileShrapnel
+    capacity: 40
   - type: ExplodeOnTrigger
+  - type: GibOnTrigger
+    deleteItems: false
 
 - type: entity
   parent: CMPaperWritten

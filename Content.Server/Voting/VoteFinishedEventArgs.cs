@@ -20,11 +20,22 @@ namespace Content.Server.Voting
         /// </summary>
         public readonly List<int> Votes;
 
+        /// <summary>
+        ///     Winner chosen by a caller after resolving a tie.
+        /// </summary>
+        public object? SelectedWinner { get; private set; }
+
         public VoteFinishedEventArgs(object? winner, ImmutableArray<object> winners, List<int> votes)
         {
             Winner = winner;
             Winners = winners;
             Votes = votes;
+            SelectedWinner = winner;
+        }
+
+        public void ResolveWinner(object winner)
+        {
+            SelectedWinner = winner;
         }
     }
 }

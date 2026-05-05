@@ -44,7 +44,6 @@
   id: AU14JobUPPGROMRifleman
   name: UPP GROM Rifleman
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadGROM

@@ -120,6 +120,8 @@ public abstract class ClothingSystem : EntitySystem
     {
         if (args.Handled || args.Cancelled || args.Target is not { } target)
             return;
+        if (!_handsSystem.IsHolding(args.User, ent.Owner, out _))
+            return;
         args.Handled = _invSystem.TryEquip(args.User, target, ent, args.Slot, clothing: ent.Comp, predicted: true, checkDoafter: false);
     }
 

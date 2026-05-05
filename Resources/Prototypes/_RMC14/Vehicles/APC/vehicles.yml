@@ -7,18 +7,22 @@
   - type: Vehicle
     movementKind: Grid
   - type: Clickable
+  - type: RMCIgnoreGhostInteractionLimits
   - type: Tag
     tags:
     - VehicleHeavy
+  - type: RequireProjectileTarget
   - type: GridVehicleMover
-    maxSpeed: 7
+    maxSpeed: 5
     acceleration: 4
     deceleration: 10
+    turnDelay: 0.4
     xenoBlockMinimumSize: Immobile
-    xenoPushMinimumSize: Immobile
+    canXenosPush: false
     canSmashWalls: true
     wallSmashMinSpeed: 3
     wallSmashWheelDamage: 0.4
+    blockingMobBypassNudgeLimit: 2
     wallSmashHullDamage: 15
     wallSmashSlowdownMultiplier: 0.2
     wallSmashSlowdownDuration: 1.5
@@ -282,13 +286,16 @@
   description: An armored personnel carrier configured for SPP forces.
   components:
   - type: GridVehicleMover
-    maxSpeed: 6.5
+    maxSpeed: 5
     acceleration: 2.0
     deceleration: 7.5
     maxReverseSpeed: 2.5
     reverseAcceleration: 2.0
     turnDelay: 0.25
     turnInPlace: false
+    blockingMobBypassNudgeLimit: 2
+    xenoBlockMinimumSize: Immobile
+    canXenosPush: false
     speedAtZeroIntegrity: 0.5
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/sppapc.rsi
@@ -356,3 +363,14 @@
       insertDelay: 1.5
   - type: VehicleEnter
     interiorPath: /Maps/_RMC14/Vehicles/spp_apc_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 14
+    maxXenos: 4
+    entryPoints:
+    - offset: -1.5,0
+      radius: 0.7
+      interiorCoords: 4.45,-1.2
+    - offset: 1.5,0
+      radius: 0.7
+      interiorCoords: 4.45,1.7

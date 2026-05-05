@@ -100,6 +100,14 @@
   - type: PhysicalComposition
     materialComposition:
       Steel: 100
+  - type: CMSurgeryTool
+  - type: CMBoneSaw
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 2.0
+    mishapChance: 0.16
+    mishapDamageType: Slash
+    mishapDamageAmount: 5
+    failurePenalty: 1
 
 - type: entity
   name: spade

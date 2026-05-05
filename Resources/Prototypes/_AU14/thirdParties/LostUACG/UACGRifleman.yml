@@ -47,7 +47,6 @@
   id: AU14JobUACGLostRifleman
   name: Lost Rifleman
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadUACG

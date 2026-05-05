@@ -22,6 +22,8 @@
         type: StorageBoundUserInterface
   - type: Transform
     anchored: true
+  - type: Physics
+    bodyType: Static
   - type: Fixtures
     fixtures:
       fix1:

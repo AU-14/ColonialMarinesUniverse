@@ -1,5 +1,5 @@
 - type: entity
-  parent: CMBaseWeaponRifle
+  parent: AU14WeaponRifleKramerAR
   name: Kramer Light Support Weapon
   id: AU14WeaponRifleKramerLSW
   description: Also referred to as the Kramer or KAR, the Kramer Light Support Weapon is an automatic squad support variant of the standard Kramer assault rifle. Manufactured by Kramer Metallarbeiten GmbH, the KAR sees widespread use across United Americas.
@@ -13,25 +13,17 @@
           map: ["enum.GunVisualLayers.Mag"]
     - type: Clothing
       sprite: _AU14/Weapons/Guns/LACN/kramerLMG.rsi
-    - type: ContainerContainer
-      containers:
-        gun_magazine: !type:ContainerSlot
-        gun_chamber: !type:ContainerSlot
     - type: Gun
       selectedMode: FullAuto
       availableModes:
         - SemiAuto
         - FullAuto
-      soundGunshot:
-        collection: CMM54CShoot
-      shotsPerBurst: 5
     - type: RMCSelectiveFire
       baseFireModes:
         - SemiAuto
         - FullAuto
       recoilUnwielded: 5
       scatterWielded: 5
-      scatterUnwielded: 25
       baseFireRate: 4
       burstScatterMult: 2
       modifiers:
@@ -48,8 +40,7 @@
           unwieldedScatterMultiplier: 2
           shotsToMaxScatter: 4
     - type: RMCWeaponAccuracy
-      accuracyMultiplier: 1.15
-      accuracyMultiplierUnwielded: 0.65
+      accuracyMultiplier: 1.05
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -63,24 +54,9 @@
               - AU14WeaponRifleKramerMagazineLSWAP
           startingItem: AU14WeaponRifleKramerMagazineLSWStandard
     - type: GunDamageModifier
-      multiplier: 1.1
+      multiplier: 1.05
     - type: AttachableHolder
       slots:
-        rmc-aslot-barrel:
-          whitelist:
-            tags:
-              - RMCAttachmentExtendedBarrel
-              - RMCAttachmentExtendedCompensator
-              - RMCAttachmentSuppressor
-              - RMCM5Bayonet
-        rmc-aslot-rail:
-          whitelist:
-            tags:
-              - RMCAttachmentRailFlashlight
-              - RMCAttachmentMagneticHarness
-              - RMCAttachmentS5RedDotSight
-              - RMCAttachmentS6ReflexSight
-              - RMCAttachmentS42xTelescopicMiniscope
         rmc-aslot-underbarrel:
           startingAttachable: RMCAttachmentBipod
           whitelist:
@@ -90,11 +66,6 @@
               - RMCAttachmentFlashlightGrip
               - RMCAttachmentBipod
               - RMCAttachmentBurstFireAssembly
-    - type: AttachableHolderVisuals
-      offsets:
-        rmc-aslot-rail: -0.18, 0.12
-        rmc-aslot-barrel: 0.63, 0.031
-        rmc-aslot-underbarrel: 0.29, -0.31
     - type: GunRequiresWield
 
 - type: entity

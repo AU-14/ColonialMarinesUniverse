@@ -24,7 +24,6 @@
     - OpforBravo
     - OpforIntel
     - opforjtac
-
     defaultChannel: opfor
   - type: Sprite
     state: we_ya_key
@@ -42,6 +41,16 @@
     defaultChannel: OpforIntel
   - type: Sprite
     state: we_ya_key
+
+- type: entity
+  parent: CMEncryptionKey
+  id: AU14EncryptionKeyopforJTAC
+  name: JTAC encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - opforjtac
+    defaultChannel: opforjtac
 
 - type: entity
   parent: RMCHeadsetShip
@@ -66,7 +75,7 @@
   parent: RMCHeadsetShip
   id: AU14HeadsetSectionOpfor
   name: opfor section radio headset
-  description: This is used by opfor personnel to communicate on the radio.
+  description: This is used by OPFOR personnel to communicate on the radio.
   components:
   - type: GrantSquadLeaderTracker
     defaultMode: SquadLeader
@@ -80,6 +89,18 @@
     containers:
       key_slots:
       - CMEncryptionKeyCommon
+
+- type: entity
+  parent: AU14HeadsetSectionOpfor
+  id: AU14HeadsetSectionOpforFTL
+  name: OPFOR FTL radio headset
+  description: This is used by OPFOR fireteam leaders to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMEncryptionKeyCommon
+      - AU14EncryptionKeyopforJTAC
 
 - type: entity
   parent: RMCHeadsetShip
@@ -150,7 +171,6 @@
   - type: Sprite
     state: we_ya_key
 
-# OPFOR Intel key
 - type: entity
   parent: CMEncryptionKey
   id: AU14EncryptionKeyopforIntel

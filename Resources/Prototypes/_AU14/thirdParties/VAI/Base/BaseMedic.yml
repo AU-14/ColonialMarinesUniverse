@@ -1,0 +1,74 @@
+- type: job
+  parent: CMJobBase
+  id: AU14VAIMedicBase
+  name: au14-job-name-vai-medic
+  description: au14-vai-mercenary-description
+  ranks:
+    VAI_MedicalSpecialist: []
+  icon: "CMJobIconEmpty"
+  playTimeTracker: AU14VAIMedic
+  spawnMenuRoleName: VAI Medic (Base)
+  joinNotifyCrew: false
+  supervisors: au14-job-name-vai-teamleader
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadVAIPO
+    - type: Skills
+      skills:
+        RMCSkillCqc: 5
+        RMCSkillEngineer: 4
+        RMCSkillConstruction: 3
+        RMCSkillFirearms: 2
+        RMCSkillMedical: 3
+        RMCSkillSurgery: 3
+        RMCSkillMeleeWeapons: 1
+        RMCSkillPolice: 2
+        RMCSkillFireman: 5
+        RMCSkillPowerLoader: 2
+        RMCSkillVehicles: 2
+        RMCSkillJtac: 1
+        RMCSkillEndurance: 1
+    - type: EquipSurvivorPreset
+      preset: AU14VAIBasePreset
+    - type: JobPrefix
+      prefix: au14-job-prefix-vai-medic
+  hidden: true
+
+- type: startingGear
+  parent: AU14GearVAIBase
+  id: AU14GearVAIMedic
+  equipment:
+    jumpsuit: AU14JumpsuitTShirtWhiteVAIWebbingSurgical
+    pocket1: RMCPouchMedkitFillAdvanced
+    pocket2: AU14PouchMagazineLargeFilledMAR40
+    suitstorage: AU14WeaponRifleMAR30Tactical
+    eyes: RMCGlassesMedicalHUDGlasses
+    belt: CMBeltMedicBag
+  storage:
+    belt:
+    - AU14PillCanisterAlbuterol
+    - AU14PillCanisterDermaline
+    - AU14PillCanisterMeralyne
+    - CMPillCanisterDylovene
+    - RMCPillCanisterImidazoline
+    - RMCPillCanisterIron
+    - CMPillCanisterBicaridine
+    - CMPillCanisterKelotane
+    - CMEpinephrineAutoInjector
+    - AU14NaloxoneAutoInjector
+    - CMHealthAnalyzer
+    outerClothing:
+    - RMCLaserDesignator
+    back:
+    - CMMRE
+    - AU14CMDefibrillator
+    - CMRollerBedSpawnFolded
+    - CMPortableSurgicalBedSpawnFolded
+    - RMCPacketGrenadeSmokeFilled
+    - RMCMagazineRifleMAR40Ext
+    - RMCMagazineRifleMAR40
+    - CMHandsLatex

@@ -36,6 +36,12 @@ public sealed partial class HardpointItemComponent : Component
 
     [DataField]
     public float RepairRate = 0.01f;
+
+    [DataField]
+    public float DisabledIntegrityFraction = 0.15f;
+
+    [DataField]
+    public float MinimumPerformanceMultiplier = 0.35f;
 }
 
 
@@ -50,11 +56,16 @@ public sealed partial class HardpointSlotsComponent : Component
     public List<HardpointSlot> Slots = new();
 
     [DataField]
-    public float FrameDamageFractionWhileIntact = 0.1f;
+    public float FrameDamageFractionWhileIntact = 0.25f;
 
     [DataField]
     public ProtoId<ToolQualityPrototype> RemoveToolQuality = "VehicleServicing";
+}
 
+[RegisterComponent]
+[Access(typeof(HardpointSystem), typeof(HardpointSlotSystem))]
+public sealed partial class HardpointStateComponent : Component
+{
     [NonSerialized]
     public HashSet<string> PendingInserts = new();
 
@@ -99,13 +110,16 @@ public sealed partial class HardpointSlot
     public float RemoveDelay { get; set; } = -1f;
 
     [DataField]
+    public bool DisableEject { get; set; }
+
+    [DataField]
     public EntityWhitelist? Whitelist { get; set; }
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class HardpointIntegrityComponent : Component
 {
-    [DataField]
+    [DataField, AutoNetworkedField]
     public float MaxIntegrity = 100f;
 
     [DataField, AutoNetworkedField]
@@ -212,6 +226,64 @@ public sealed partial class HardpointRepairDoAfterEvent : DoAfterEvent
     public override DoAfterEvent Clone()
     {
         return new HardpointRepairDoAfterEvent();
+    }
+}
+
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(HardpointSystem), typeof(VehicleWeaponsSystem))]
+public sealed partial class VehicleHardpointFailureComponent : Component
+{
+    [DataField, AutoNetworkedField]
+    public List<VehicleHardpointFailure> ActiveFailures = new();
+
+    [DataField]
+    public int MaxActiveFailures = 2;
+
+    [NonSerialized]
+    public Dictionary<VehicleHardpointFailure, bool> Repairing = new();
+
+    [NonSerialized]
+    public Dictionary<VehicleHardpointFailure, int> RepairProgress = new();
+
+    [NonSerialized]
+    public TimeSpan NextRunawayFireAt = TimeSpan.Zero;
+}
+
+[Serializable, NetSerializable]
+public enum VehicleHardpointFailure : byte
+{
+    ArmorCompromised,
+    FeedJam,
+    RunawayTrigger,
+    TurretTraverseDamage,
+    EngineMisfire,
+    TransmissionSlip,
+    WarpedFrame,
+    DamagedMount,
+}
+
+[Serializable, NetSerializable]
+public sealed partial class VehicleHardpointFailureRepairDoAfterEvent : DoAfterEvent
+{
+    [DataField(required: true)]
+    public VehicleHardpointFailure Failure;
+
+    [DataField]
+    public int Step;
+
+    public VehicleHardpointFailureRepairDoAfterEvent()
+    {
+    }
+
+    public VehicleHardpointFailureRepairDoAfterEvent(VehicleHardpointFailure failure, int step)
+    {
+        Failure = failure;
+        Step = step;
+    }
+
+    public override DoAfterEvent Clone()
+    {
+        return new VehicleHardpointFailureRepairDoAfterEvent(Failure, Step);
     }
 }
 

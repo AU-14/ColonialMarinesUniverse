@@ -1,7 +1,7 @@
 - type: entity
   parent: BaseItem
   id: AU14BaseDefibrillator
-  name: LifePak 15F
+  name: lifepak 15f
   description: A portable emergency defibrillator and patient monitor designed for fibrillating patients, it delivers powerful defibrillation to restore normal heart rhythms in patients, sometimes even pulling them back from the brink of death.
   abstract: true
   components:
@@ -41,7 +41,7 @@
   - type: Defibrillator
     zapDelay: 0
     doAfterDuration: 12.5
-    allowDoAfterMovement: false
+    allowDoAfterMovement: true
     canDefibCrit: false
     zapHeal:
       groups:
@@ -85,7 +85,7 @@
   components:
   - type: PowerCellDraw
     enabled: false
-    useRate: 75
+    useRate: 50
   - type: RMCPowerUsageDisplay
 
 - type: entity

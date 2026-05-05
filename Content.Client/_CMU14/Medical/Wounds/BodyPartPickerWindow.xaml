@@ -1,0 +1,15 @@
+<controls:BodyPartPickerWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client._CMU14.Medical.Wounds"
+    MinSize="280 240">
+    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Margin="8">
+        <Label Name="HeaderLabel" Access="Public"
+               Text="Pick a part to bandage"
+               HorizontalAlignment="Center"
+               StyleClasses="LabelHeading" />
+        <ScrollContainer VScrollEnabled="True" HorizontalExpand="True" VerticalExpand="True"
+                         Margin="0 8 0 0">
+            <BoxContainer Name="PartList" Access="Public" Orientation="Vertical" />
+        </ScrollContainer>
+    </BoxContainer>
+</controls:BodyPartPickerWindow>

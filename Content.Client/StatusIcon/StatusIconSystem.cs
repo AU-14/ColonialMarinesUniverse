@@ -56,15 +56,21 @@ public sealed class StatusIconSystem : SharedStatusIconSystem
     public List<StatusIconData> GetStatusIcons(EntityUid uid, MetaDataComponent? meta = null)
     {
         var list = new List<StatusIconData>();
+        GetStatusIcons(uid, list, meta);
+        return list;
+    }
+
+    public void GetStatusIcons(EntityUid uid, List<StatusIconData> list, MetaDataComponent? meta = null)
+    {
+        list.Clear();
         if (!Resolve(uid, ref meta))
-            return list;
+            return;
 
         if (meta.EntityLifeStage >= EntityLifeStage.Terminating)
-            return list;
+            return;
 
         var ev = new GetStatusIconsEvent(list);
         RaiseLocalEvent(uid, ref ev);
-        return ev.StatusIcons;
     }
 
     /// <summary>

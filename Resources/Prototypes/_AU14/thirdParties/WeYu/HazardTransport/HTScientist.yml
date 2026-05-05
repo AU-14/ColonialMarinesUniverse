@@ -45,7 +45,6 @@
   id: AU14JobWYHTScientist
   name: WY Hazard Transport Scientist (3rd party)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadPMC

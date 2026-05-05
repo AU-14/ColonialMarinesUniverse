@@ -35,7 +35,7 @@ public sealed class FigurineSystem : EntitySystem
     public override void Shutdown()
     {
 #if !FULL_RELEASE
-        _ui.RootControl.RemoveChild(_control);
+        _control.Orphan();
 #endif
     }
 

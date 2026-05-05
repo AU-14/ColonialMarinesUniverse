@@ -133,6 +133,7 @@
   equipment:
     id: AU14IDCardColonyWorkingJoe
     ears: AU14HeadsetWorkingJoe
+    back: AU14IMPBackpackMarine
 
 - type: entity
   parent: CMSpawnPointJobBase

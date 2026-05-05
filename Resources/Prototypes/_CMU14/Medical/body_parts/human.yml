@@ -1,0 +1,122 @@
+- type: entity
+  parent: TorsoHuman
+  id: CMUPartHumanTorso
+  components:
+  - type: BodyPartHealth
+    max: 150
+    current: 150
+    severanceThreshold: 999999  # safety lock — torso never severs
+    resistance:
+      Brute: 0.9
+  - type: Bone
+    integrity: 120
+    integrityMax: 120
+    bruteAbsorbFraction: 0.65
+    fractureThresholds:
+      Hairline: 80
+      Simple: 50
+      Compound: 25
+      Comminuted: 5
+  - type: Sprite
+    drawdepth: Items
+
+- type: entity
+  parent: HeadHuman
+  id: CMUPartHumanHead
+  components:
+  - type: BodyPartHealth
+    max: 60
+    current: 60
+    severanceThreshold: 999999  # safety lock — head never severs
+    resistance:
+      Brute: 0.85
+  - type: Bone
+    integrity: 80
+    integrityMax: 80
+    bruteAbsorbFraction: 0.7
+    fractureThresholds:
+      Hairline: 65
+      Simple: 40
+      Compound: 20
+      Comminuted: 5
+  - type: Sprite
+    drawdepth: Items
+
+- type: entity
+  parent: LeftArmHuman
+  id: CMUPartHumanLeftArm
+  components:
+  - type: BodyPartHealth
+    max: 80
+    current: 80
+    severanceThreshold: 75
+  - type: Bone
+    integrity: 90
+    integrityMax: 90
+    bruteAbsorbFraction: 0.6
+    fractureThresholds:
+      Hairline: 65
+      Simple: 40
+      Compound: 20
+      Comminuted: 5
+  - type: Sprite
+    drawdepth: Items
+
+- type: entity
+  parent: RightArmHuman
+  id: CMUPartHumanRightArm
+  components:
+  - type: BodyPartHealth
+    max: 80
+    current: 80
+    severanceThreshold: 75
+  - type: Bone
+    integrity: 90
+    integrityMax: 90
+    bruteAbsorbFraction: 0.6
+    fractureThresholds:
+      Hairline: 65
+      Simple: 40
+      Compound: 20
+      Comminuted: 5
+  - type: Sprite
+    drawdepth: Items
+
+- type: entity
+  parent: LeftLegHuman
+  id: CMUPartHumanLeftLeg
+  components:
+  - type: BodyPartHealth
+    max: 90
+    current: 90
+    severanceThreshold: 75
+  - type: Bone
+    integrity: 100
+    integrityMax: 100
+    bruteAbsorbFraction: 0.65
+    fractureThresholds:
+      Hairline: 70
+      Simple: 45
+      Compound: 22
+      Comminuted: 5
+  - type: Sprite
+    drawdepth: Items
+
+- type: entity
+  parent: RightLegHuman
+  id: CMUPartHumanRightLeg
+  components:
+  - type: BodyPartHealth
+    max: 90
+    current: 90
+    severanceThreshold: 75
+  - type: Bone
+    integrity: 100
+    integrityMax: 100
+    bruteAbsorbFraction: 0.65
+    fractureThresholds:
+      Hairline: 70
+      Simple: 45
+      Compound: 22
+      Comminuted: 5
+

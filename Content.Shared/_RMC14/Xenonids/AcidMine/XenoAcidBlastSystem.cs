@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Xenonids.Construction.DeployedTraps;
 using Content.Shared._RMC14.Xenonids.DeployTraps;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
+using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared.Actions;
 using Content.Shared.Damage;
 using Content.Shared.Effects;
@@ -37,6 +38,7 @@ public sealed class XenoAcidBlastSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly MountableWeaponSystem _mg = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedHitLocationSystem _hitLocation = default!;
 
     public override void Initialize()
     {
@@ -82,10 +84,15 @@ public sealed class XenoAcidBlastSystem : EntitySystem
 
         var coords = Transform(ent.Owner).Coordinates;
 
-        _audio.PlayPredicted(ent.Comp.ExplosionSound, coords, ent.Owner, ent.Comp.ExplosionSound.Params.WithVolume(-10f));
 
         if (!_net.IsClient)
+        {
+            _audio.PlayPredicted(ent.Comp.ExplosionSound,
+                coords,
+                ent.Owner,
+                ent.Comp.ExplosionSound.Params.WithVolume(-10f));
             PredictedSpawnAtPosition(ent.Comp.SmokeEffect, coords);
+        }
 
         var hits = ProcessBlastHits(ent);
 
@@ -111,6 +118,9 @@ public sealed class XenoAcidBlastSystem : EntitySystem
     {
         var hits = 0;
         var position = _transform.GetMapCoordinates(ent);
+        using var targetingSuppression = ent.Comp.Attached is { } attached
+            ? _hitLocation.SuppressBodyZoneTargeting(attached)
+            : default;
 
         foreach (var target in _lookup.GetEntitiesInRange(position, ent.Comp.BlastRadius))
         {
@@ -143,6 +153,7 @@ public sealed class XenoAcidBlastSystem : EntitySystem
                 }
             }
         }
+
         return hits;
     }
 
@@ -188,25 +199,25 @@ public sealed class XenoAcidBlastSystem : EntitySystem
             _colorFlash.RaiseEffect(Color.Red, new List<EntityUid> { target }, filter);
         }
 
-        if(ent.Comp.Empowered)
+        if (ent.Comp.Empowered)
             ApplyOrExtendAcid(ent, target);
     }
 
     private void ApplyOrExtendAcid(Entity<XenoAcidBlastComponent> ent, EntityUid target)
     {
-            if (TryComp(target, out UserAcidedComponent? existing))
-            {
-                existing.ExpiresAt += ent.Comp.AcidProlongDuration;
-                Dirty(target, existing);
-            }
-            else
-            {
-                var acided = EnsureComp<UserAcidedComponent>(target);
-                acided.Duration = ent.Comp.AcidDuration;
-                acided.Damage = ent.Comp.AcidDamage;
-                acided.ArmorPiercing = ent.Comp.AcidArmorPiercing;
-                Dirty(target, acided);
-            }
+        if (TryComp(target, out UserAcidedComponent? existing))
+        {
+            existing.ExpiresAt += ent.Comp.AcidProlongDuration;
+            Dirty(target, existing);
+        }
+        else
+        {
+            var acided = EnsureComp<UserAcidedComponent>(target);
+            acided.Duration = ent.Comp.AcidDuration;
+            acided.Damage = ent.Comp.AcidDamage;
+            acided.ArmorPiercing = ent.Comp.AcidArmorPiercing;
+            Dirty(target, acided);
+        }
     }
 
     private void RefreshCooldowns(EntityUid xeno, int hits, XenoAcidBlastComponent blast)

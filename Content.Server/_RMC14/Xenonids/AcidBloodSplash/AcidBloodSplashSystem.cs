@@ -13,6 +13,7 @@ using Robust.Shared.Player;
 using Content.Shared._RMC14.Xenonids;
 using Robust.Shared.Audio.Systems;
 using System.Linq;
+using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Server._RMC14.Decals;
 using Content.Server.Spawners.Components;
 using Content.Shared.Body.Events;
@@ -37,6 +38,7 @@ public sealed class AcidBloodSplashSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly XenoSystem _xeno = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedHitLocationSystem _hitLocation = default!;
 
     private static readonly ProtoId<EmotePrototype> ScreamProto = "Scream";
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -78,6 +80,7 @@ public sealed class AcidBloodSplashSystem : EntitySystem
         var closeRangeTargets = _entityLookup.GetEntitiesInRange(ent.Owner.ToCoordinates(), ent.Comp.CloseSplashRadius);
         var targetsList = targetsSet.ToList(); // shuffle don't work on HashSet
         _random.Shuffle(targetsList);
+        using var targetingSuppression = _hitLocation.SuppressBodyZoneTargeting(ent.Owner);
         foreach (var target in targetsList)
         {
             if (!_xeno.CanAbilityAttackTarget(ent, target))
@@ -94,7 +97,7 @@ public sealed class AcidBloodSplashSystem : EntitySystem
                 continue;
 
             ent.Comp.NextSplashAvailable = _timing.CurTime + ent.Comp.SplashCooldown;
-            _damageable.TryChangeDamage(target, _xeno.TryApplyXenoAcidDamageMultiplier(target, ent.Comp.Damage));
+            _damageable.TryChangeDamage(target, _xeno.TryApplyXenoAcidDamageMultiplier(target, ent.Comp.Damage), origin: ent.Owner);
             i++;
 
             _audio.PlayPvs(ent.Comp.AcidSplashSound, target);

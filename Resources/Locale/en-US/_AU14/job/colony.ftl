@@ -15,6 +15,9 @@ au14-department-colony-service = Service
 au14-department-criminal-description = Criminals and prisoners of the colony.
 au14-department-criminal = Colony Criminals
 
+au14-department-ambassadors-description = Ambassadors of various countries.
+au14-department-ambassadors = Ambassador
+
 au14-department-colony-engineering-description = Colonists who ensure the integrity of the colony's infrastructure and conduct repairs as needed.
 au14-department-colony-engineering = Colony Engineering
 
@@ -256,3 +259,9 @@ au14-job-name-civilianiccliaison = Interstellar Commerce Commission Liaison
 au14-job-description-civilianiccliaison = You are an Interstellar Commerce Commission Corporate Liaison, a well experienced ICC Agent that has been attached to an NSPA team. You work with the NSPA specifically to observe proper trade practices and investigate any possibilities of smuggling or black market activity.
 au14-job-prefix-civilianiccliaison = ICCL
 NSPAInvestigationPartyJobICCLiaison =  Interstellar Commerce Commission Liaison
+
+au14-job-name-civiliangeneralpractitioner = General Practitioner
+
+au14-job-name-civiliansurgeon = Surgeon
+
+au14-job-name-civilianpharmacist = Pharmacist

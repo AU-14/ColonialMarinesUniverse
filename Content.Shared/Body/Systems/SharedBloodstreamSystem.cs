@@ -72,6 +72,15 @@ public abstract class SharedBloodstreamSystem : EntitySystem
             if (curTime < bloodstream.NextUpdate)
                 continue;
 
+            // Dead entities don't need bloodstream processing. Skip before DirtyField
+            // to avoid networking constant state updates for every corpse in the area.
+            if (_mobStateSystem.IsDead(uid))
+            {
+                // Still advance the timer so we don't hammer this check every frame.
+                bloodstream.NextUpdate += bloodstream.AdjustedUpdateInterval;
+                continue;
+            }
+
             bloodstream.NextUpdate += bloodstream.AdjustedUpdateInterval;
             DirtyField(uid, bloodstream, nameof(BloodstreamComponent.NextUpdate)); // needs to be dirtied on the client so it can be rerolled during prediction
 
@@ -91,8 +100,12 @@ public abstract class SharedBloodstreamSystem : EntitySystem
             // as well as stop their bleeding to a certain extent.
             if (bloodstream.BleedAmount > 0)
             {
-                // Blood is removed from the bloodstream at a 1-1 rate with the bleed amount
-                TryModifyBloodLevel((uid, bloodstream), -bloodstream.BleedAmount);
+                if (!_mobStateSystem.IsDead(uid))
+                {
+                    // Blood is removed from the bloodstream at a 1-1 rate with the bleed amount
+                    TryModifyBloodLevel((uid, bloodstream), -bloodstream.BleedAmount);
+                }
+
                 // Bleed rate is reduced by the bleed reduction amount in the bloodstream component.
                 TryModifyBleedAmount((uid, bloodstream), -bloodstream.BleedReductionAmount);
             }
@@ -116,14 +129,11 @@ public abstract class SharedBloodstreamSystem : EntitySystem
                     applySlur: false);
                 _stutteringSystem.DoStutter(uid, bloodstream.AdjustedUpdateInterval * 2, refresh: false);
 
-                // storing the drunk and stutter time so we can remove it independently from other effects additions
                 bloodstream.StatusTime += bloodstream.AdjustedUpdateInterval * 2;
                 DirtyField(uid, bloodstream, nameof(BloodstreamComponent.StatusTime));
             }
             else if (!_mobStateSystem.IsDead(uid))
             {
-                // If they're healthy, we'll try and heal some bloodloss instead.
-                // RMC14, to call change damage less often
                 if (_rmcDamageable.HasAnyDamage(uid, bloodstream.BloodlossHealDamage))
                 {
                     _damageableSystem.TryChangeDamage(
@@ -133,14 +143,14 @@ public abstract class SharedBloodstreamSystem : EntitySystem
                         interruptsDoAfters: false
                     );
                 }
-                // RMC14
 
-                // Remove the drunk effect when healthy. Should only remove the amount of drunk and stutter added by low blood level
-                _drunkSystem.TryRemoveDrunkenessTime(uid, bloodstream.StatusTime.TotalSeconds);
-                _stutteringSystem.DoRemoveStutterTime(uid, bloodstream.StatusTime.TotalSeconds);
-                // Reset the drunk and stutter time to zero
-                bloodstream.StatusTime = TimeSpan.Zero;
-                DirtyField(uid, bloodstream, nameof(BloodstreamComponent.StatusTime));
+                if (bloodstream.StatusTime > TimeSpan.Zero)
+                {
+                    _drunkSystem.TryRemoveDrunkenessTime(uid, bloodstream.StatusTime.TotalSeconds);
+                    _stutteringSystem.DoRemoveStutterTime(uid, bloodstream.StatusTime.TotalSeconds);
+                    bloodstream.StatusTime = TimeSpan.Zero;
+                    DirtyField(uid, bloodstream, nameof(BloodstreamComponent.StatusTime));
+                }
             }
         }
     }
@@ -248,7 +258,7 @@ public abstract class SharedBloodstreamSystem : EntitySystem
         var seed = SharedRandomExtensions.HashCodeCombine(new() { (int)_timing.CurTick.Value, GetNetEntity(ent).Id, GetNetEntity(args.Origin)?.Id ?? 0 });
         var rand = new System.Random(seed);
         var prob = Math.Clamp(totalFloat / 25, 0, 1);
-        if (totalFloat > 0 && rand.Prob(prob))
+        if (totalFloat > 0 && rand.Prob(prob) && !_mobStateSystem.IsDead(ent.Owner))
         {
             TryModifyBloodLevel(ent.AsNullable(), -total / 5);
             _audio.PlayPredicted(ent.Comp.InstantBloodSound, ent, args.Origin);

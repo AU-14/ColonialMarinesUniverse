@@ -125,6 +125,7 @@
   - type: RMCHeadset
     channels:
     - UASOF
+    - VAI
 
 - type: entity
   parent: AU14ColonyAdminHeadset
@@ -136,3 +137,14 @@
   - type: RMCHeadset
     channels:
     - UPPSOF
+
+- type: entity
+  parent: AU14ColonyAdminHeadset
+  id: AU14AmbassadorICSCHeadset
+  name: icsc ambassador headset
+  description: A headset used by ICSC' ambassadors to communicate.
+  suffix: Colony
+  components:
+  - type: RMCHeadset
+    channels:
+    - ICSCSOF

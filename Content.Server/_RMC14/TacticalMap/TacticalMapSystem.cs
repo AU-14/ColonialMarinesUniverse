@@ -17,6 +17,7 @@ using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared._RMC14.Sensor;
 using Content.Shared._RMC14.SupplyDrop;
 using Content.Shared._RMC14.TacticalMap;
+using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Construction.Tunnel;
 using Content.Shared._RMC14.Xenonids.Egg;
@@ -78,9 +79,12 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
     private EntityQuery<OpforMapTrackedComponent> _opforMapTrackedQuery;
     private EntityQuery<GovforMapTrackedComponent> _govforMapTrackedQuery;
     private EntityQuery<ClfMapTrackedComponent> _clfMapTrackedQuery;
+    private EntityQuery<VehicleInteriorOccupantComponent> _vehicleOccupantQuery;
 
     private readonly HashSet<Entity<TacticalMapTrackedComponent>> _toInit = new();
     private readonly HashSet<Entity<ActiveTacticalMapTrackedComponent>> _toUpdate = new();
+    // Deferred to end of Update tick — Passengers mutations settle by then.
+    private readonly HashSet<EntityUid> _vehicleBlipsToUpdate = new();
     private readonly List<TacticalMapLine> _emptyLines = new();
     private readonly Dictionary<Vector2i, string> _emptyLabels = new();
     private TimeSpan _announceCooldown;
@@ -106,6 +110,10 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         _opforMapTrackedQuery = GetEntityQuery<OpforMapTrackedComponent>();
         _govforMapTrackedQuery = GetEntityQuery<GovforMapTrackedComponent>();
         _clfMapTrackedQuery = GetEntityQuery<ClfMapTrackedComponent>();
+        _vehicleOccupantQuery = GetEntityQuery<VehicleInteriorOccupantComponent>();
+
+        SubscribeLocalEvent<VehicleInteriorComponent, MoveEvent>(OnVehicleMove);
+        SubscribeLocalEvent<VehicleInteriorOccupantComponent, ComponentShutdown>(OnVehicleOccupantShutdown);
 
         SubscribeLocalEvent<XenoOvipositorChangedEvent>(OnOvipositorChanged);
 
@@ -416,6 +424,65 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
     private void OnActiveTrackedMove(Entity<ActiveTacticalMapTrackedComponent> ent, ref MoveEvent args)
     {
         _toUpdate.Add(ent);
+
+        if (_vehicleOccupantQuery.TryComp(ent, out var occupant) && occupant.Vehicle != EntityUid.Invalid)
+            _vehicleBlipsToUpdate.Add(occupant.Vehicle);
+    }
+
+    private void OnVehicleMove(Entity<VehicleInteriorComponent> ent, ref MoveEvent args)
+    {
+        _vehicleBlipsToUpdate.Add(ent.Owner);
+    }
+
+    private void OnVehicleOccupantShutdown(Entity<VehicleInteriorOccupantComponent> ent, ref ComponentShutdown args)
+    {
+        if (ent.Comp.Vehicle != EntityUid.Invalid)
+            _vehicleBlipsToUpdate.Add(ent.Comp.Vehicle);
+
+        if (!TerminatingOrDeleted(ent.Owner) && _activeTacticalMapTrackedQuery.TryComp(ent, out var active))
+            _toUpdate.Add((ent.Owner, active));
+    }
+
+    private void UpdateVehicleBlip(Entity<VehicleInteriorComponent> vehicle)
+    {
+        if (TerminatingOrDeleted(vehicle.Owner))
+            return;
+
+        var occupants = vehicle.Comp.Passengers;
+        var totalLive = 0;
+        foreach (var passenger in occupants)
+        {
+            if (TerminatingOrDeleted(passenger))
+                continue;
+            if (_mobStateQuery.HasComp(passenger) && _mobState.IsDead(passenger))
+                continue;
+            totalLive++;
+        }
+
+        if (occupants.Count == 0 ||
+            !_transformQuery.TryComp(vehicle.Owner, out var xform) ||
+            xform.GridUid is not { } gridId ||
+            !_mapGridQuery.TryComp(gridId, out var gridComp) ||
+            !_tacticalMapQuery.TryComp(gridId, out var tacticalMap) ||
+            !_transform.TryGetGridTilePosition((vehicle.Owner, xform), out var indices, gridComp))
+        {
+            var maps = EntityQueryEnumerator<TacticalMapComponent>();
+            while (maps.MoveNext(out _, out var map))
+            {
+                if (map.MarineBlips.Remove(vehicle.Owner.Id))
+                    map.MapDirty = true;
+            }
+            return;
+        }
+
+        var status = totalLive > 0 ? TacticalMapBlipStatus.Alive : TacticalMapBlipStatus.Defibabble;
+        SpriteSpecifier.Rsi? icon = null;
+        if (_tacticalMapIconQuery.TryComp(vehicle.Owner, out var iconComp))
+            icon = iconComp.Icon;
+
+        var blip = new TacticalMapBlip(indices, icon, Color.White, status, null, false, totalLive);
+        tacticalMap.MarineBlips[vehicle.Owner.Id] = blip;
+        tacticalMap.MapDirty = true;
     }
 
     private void OnActiveTrackedRoleAdded(Entity<ActiveTacticalMapTrackedComponent> ent, ref RoleAddedEvent args)
@@ -450,6 +517,9 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
     {
         UpdateIcon(ent);
         UpdateTracked(ent);
+
+        if (_vehicleOccupantQuery.TryComp(ent, out var occupant) && occupant.Vehicle != EntityUid.Invalid)
+            _vehicleBlipsToUpdate.Add(occupant.Vehicle);
     }
 
     private void OnHiveLeaderStatusChanged(Entity<ActiveTacticalMapTrackedComponent> ent, ref HiveLeaderStatusChangedEvent args)
@@ -1269,6 +1339,14 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
             }
         }
 
+        if (_vehicleOccupantQuery.TryComp(ent, out var occupantComp))
+        {
+            if (occupantComp.Vehicle != EntityUid.Invalid)
+                _vehicleBlipsToUpdate.Add(occupantComp.Vehicle);
+            BreakTracking(ent);
+            return;
+        }
+
         if (!_transformQuery.TryComp(ent.Owner, out var xform) ||
             xform.GridUid is not { } gridId ||
             !_mapGridQuery.TryComp(gridId, out var gridComp) ||
@@ -2068,6 +2146,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         {
             _toInit.Clear();
             _toUpdate.Clear();
+            _vehicleBlipsToUpdate.Clear();
         }
 
         try
@@ -2113,6 +2192,19 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         finally
         {
             _toUpdate.Clear();
+        }
+
+        try
+        {
+            foreach (var vehicle in _vehicleBlipsToUpdate)
+            {
+                if (TryComp<VehicleInteriorComponent>(vehicle, out var interior))
+                    UpdateVehicleBlip((vehicle, interior));
+            }
+        }
+        finally
+        {
+            _vehicleBlipsToUpdate.Clear();
         }
 
         var maps = EntityQueryEnumerator<TacticalMapComponent>();

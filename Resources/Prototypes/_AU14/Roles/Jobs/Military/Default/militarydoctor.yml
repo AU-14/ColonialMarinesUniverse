@@ -28,6 +28,9 @@
   accessGroups:
   - AU14GovforCorpsman
   - AU14GovforSquad
+  access:
+  - CMAccessMedical
+  - CMAccessChemistry
   overwatchSortPriority: -6
   overwatchShowName: true
   overwatchRoleName: Doctor
@@ -69,22 +72,9 @@
 - type: startingGear
   id: AU14GearGOVFORMilitaryDoctor
   equipment:
-    jumpsuit: AU14ScrubsGreenDoctorSurgical
-    head: CMHeadCapSurgGreen
     shoes: CMBootsBlackFilled
-    belt: CMUBeltMedicBagSupportSynth
-    pocket1: AU14PouchFirstResponderFilledMilitaryDoctor
-    pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
-    back: AU14SatchelMilitaryDoctor
-    outerClothing: RMCLabcoat
     ears: AU14HeadsetGOVFORAux
     ears2: RMCM5CameraGear
-    id: AU14IDCardGOVFORDoctor
-    neck: ClothingNeckStethoscope
-    eyes: RMCGlassesMedicalHUDGlasses
-  inhand:
-  - AU14CMDefibrillator
-  - AU14TentBigFoldedSurgical
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -99,10 +89,5 @@
 - type: startingGear
   id: AU14GearGOVFORMilitaryDoctorDummy
   equipment:
-    jumpsuit: AU14ScrubsGreenDoctorSurgical
     shoes: CMBootsBlackFilled
-    belt: CMUBeltMedicBagSupportSynth
     back: CMSatchelMarine
-    outerClothing: RMCLabcoat
-    id: AU14IDCardGOVFORDoctor
-    neck: ClothingNeckStethoscope

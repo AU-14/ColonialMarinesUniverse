@@ -1,8 +1,8 @@
 - type: entity
   id: VehicleTankBase
   abstract: true
-  name: tank
-  description: A heavy armored tank built for battlefield dominance.
+  name: M34A2 Longstreet
+  description: "An older light tank made for all ground forces of the United Americas, although being phased out due to being outdated by the American Army and the CCAF, the longstreet still remains in service with USCM and LACN detachments in colonial sectors."
   components:
   - type: Vehicle
     movementKind: Grid
@@ -10,13 +10,14 @@
   - type: Tag
     tags:
     - VehicleHeavy
+  - type: RMCIgnoreGhostInteractionLimits
   - type: RequireProjectileTarget
   - type: GridVehicleMover
     maxSpeed: 2.5
-    acceleration: 1
+    acceleration: 1.154
     deceleration: 8
     maxReverseSpeed: 2
-    reverseAcceleration: 1
+    reverseAcceleration: 1.154
     turnDelay: 1
     turnInPlace: true
     turnInPlaceMaxSpeed: 0.5
@@ -85,9 +86,6 @@
   - type: Damageable
     damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameTank
-  - type: MeleeReceivedMultiplier
-    xenoMultiplier: 3.4
-    otherMultiplier: 1
   - type: InteractionOutline
   - type: Sprite
     drawdepth: Mobs
@@ -218,8 +216,8 @@
 - type: entity
   parent: VehicleTankBase
   id: VehicleSPPTank
-  name: SPP tank
-  description: A heavy SPP battle tank.
+  name: Cheetah 2A Light Tank
+  description: A light-weight tank made for all ground forces of the UPP.
   components:
   - type: VehicleEnter
     interiorPath: /Maps/_RMC14/Vehicles/spp_tank_interior.yml
@@ -316,8 +314,8 @@
 - type: entity
   parent: VehicleSPPTank
   id: VehicleSPPTankCommand
-  name: SPP command tank
-  description: A heavy SPP command tank.
+  name: Cheetah 2A Light Command Tank
+  description: A light-weight command tank made for all ground forces of the UPP.
   components:
   - type: VehicleEnter
     interiorPath: /Maps/_RMC14/Vehicles/spp_tank_command_interior.yml

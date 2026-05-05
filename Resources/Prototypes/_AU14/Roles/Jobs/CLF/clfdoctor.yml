@@ -7,13 +7,15 @@
   ignoreAllegiance: true
   playTimeTracker: AU14JobCLFPhysician
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 14400 # 4 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
     - NonResuscitable
     - Epilepsy
   ranks:
-    RMCRankCivilian: []
+    RMCRankCivilianDoctor: []
   startingGear: AU14GearCLFPhysician
   icon: "CMJobIconEmpty"
   requireAdminNotify: false
@@ -21,6 +23,7 @@
   supervisors: au14-job-supervisors-clflrs
   accessGroups:
   - Colonist
+  - aumed
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
@@ -53,14 +56,13 @@
 - type: startingGear
   id: AU14GearCLFPhysician
   equipment:
-    gloves: CMHandsLatex
-    jumpsuit: AU14RMCJumpsuitCivilianCLF
-    outerClothing: RMCLabcoatOpened
-    shoes: CMBootsBlackFilled
     ears2: RMCFlashlightPen
     suitstorage: RMCFlashlight
-    id: AU14IDCardCLFCivilian
+    id: AU14IDCardCLFPhysician
     neck: RMCCLFArmband
+  storage:
+    back:
+    - AU14CLFHeadset
 
 - type: entity
   parent: CMSpawnPointJobBase

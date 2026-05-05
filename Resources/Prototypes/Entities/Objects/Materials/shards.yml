@@ -79,6 +79,15 @@
   - type: DeleteOnTrigger
   - type: StaticPrice
     price: 0
+  - type: CMSurgeryTool
+  - type: CMScalpel
+  - type: CMRetractor
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 2.3
+    mishapChance: 0.18
+    mishapDamageType: Slash
+    mishapDamageAmount: 4
+    failurePenalty: 2
 
 - type: entity
   parent: ShardBase

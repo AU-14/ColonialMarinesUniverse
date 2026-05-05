@@ -24,5 +24,6 @@
   - AU14JobGOVFORMilitaryPoliceMan
   - AU14JobGOVFORVehicleCommand
   - AU14JobGOVFORVehicleCrew 
+  - AU14JobGOVFORAuxTech
   departmentRadio: null
   headOfDepartment: null

@@ -4,10 +4,10 @@
   name: GAU-19/H battery pack
   description: A hefty battery pack designed to power the GAU-19/H Minigun. Required for use.
   components:
-  - type: Sprite
-    sprite: _AU14/Clothing/HAZOPS/minigunbatterypack.rsi
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,4,1
-  - type: SmartGunArmor
+    - type: Sprite
+      sprite: _AU14/Clothing/HAZOPS/minigunbatterypack.rsi
+    - type: Storage
+      maxItemSize: Normal
+      grid:
+        - 0,0,4,1
+    - type: SmartGunArmor

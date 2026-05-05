@@ -9,10 +9,10 @@ game-ticker-pause-start = Round start has been paused.
 game-ticker-pause-start-resumed = Round start countdown is now resumed.
 game-ticker-player-join-game-message = Welcome to CMU! If this is your first time playing, be sure to read the game rules, and don't be afraid to ask for help in LOOC (local OOC) or OOC (usually available only between rounds).
 game-ticker-get-info-text = Hi and welcome to [color=white]Colonial Marines Universe![/color]
-                            The current GOVFOR ship is: [color=blue]{$govforShip}[/color]
-                            The current OPFOR ship is: [color=red]{$opforShip}[/color]
-                            The current GOVFOR platoon is: [color=blue]{$govforPlatoon}[/color]
-                            The current OPFOR platoon is: [color=red]{$opforPlatoon}[/color]
+                            The current GOVFOR ship is: [color=#007EE7]{$govforShip}[/color]
+                            The current OPFOR ship is: [color=#FF2000]{$opforShip}[/color]
+                            The current GOVFOR platoon is: [color=#007EE7]{$govforPlatoon}[/color]
+                            The current OPFOR platoon is: [color=#FF2000]{$opforPlatoon}[/color]
                             The current planet is: [color=white]{$planetName}[/color]
                             The current gamemode is: [color=white]{$gmTitle}[/color]
 game-ticker-get-info-preround-text = Hi and welcome to [color=white]Colonial Marines Universe![/color]
@@ -20,14 +20,14 @@ game-ticker-get-info-preround-text = Hi and welcome to [color=white]Colonial Mar
                                 [one] is
                                 *[other] are
                             } ready)
-                            The current GOVFOR ship is: [color=blue]{$govforShip}[/color]
-                            The current OPFOR ship is: [color=red]{$opforShip}[/color]
-                            The current GOVFOR platoon is: [color=blue]{$govforPlatoon}[/color]
-                            The current OPFOR platoon is: [color=red]{$opforPlatoon}[/color]
+                            The current GOVFOR ship is: [color=#007EE7]{$govforShip}[/color]
+                            The current OPFOR ship is: [color=#FF2000]{$opforShip}[/color]
+                            The current GOVFOR platoon is: [color=#007EE7]{$govforPlatoon}[/color]
+                            The current OPFOR platoon is: [color=#FF2000]{$opforPlatoon}[/color]
                             The current planet is: [color=white]{$planetName}[/color]
                             The current gamemode is: [color=white]{$gmTitle}[/color]
 
-game-ticker-no-map-selected = [color=yellow]Map not yet selected![/color]
+game-ticker-no-map-selected = [color=#FFB500]Map not yet selected![/color]
 game-ticker-player-no-jobs-available-when-joining = When attempting to join to the game, no jobs were available.
 
 # Displayed in chat to admins when a player joins

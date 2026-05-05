@@ -85,8 +85,8 @@
     - AU14WeaponSMGXMP5A6HAZOPS
 
 - type: Tag
-  id: AU14WeaponSMGXMP5A6HAZOPS   
-  
+  id: AU14WeaponSMGXMP5A6HAZOPS
+
 - type: entity
   parent: [ RMCUnderAttachmentBase, RMCAttachableToggleableBase ]
   id: AU14AttachmentM203A4GrenadeLauncher

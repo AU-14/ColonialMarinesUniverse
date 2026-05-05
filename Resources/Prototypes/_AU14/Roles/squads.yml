@@ -186,6 +186,72 @@
     tags:
     - AU14SquadLACNCommando
 
+- type: entity
+  parent: SquadBase
+  id: AU14SquadVAIPO
+  name: VAIPO
+  components:
+  - type: SquadTeam
+    color: "#e3580e"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: VAI
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+    canSupplyDrop: false
+    group: VAIPO
+  - type: Tag
+    tags:
+    - AU14SquadVAIPO
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadVAISO
+  name: VAISO
+  components:
+  - type: SquadTeam
+    color: "#943d0a"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: VAI
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+    canSupplyDrop: false
+    group: VAISO
+  - type: Tag
+    tags:
+    - AU14SquadVAISO
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadVAISP
+  name: VAISP
+  components:
+  - type: SquadTeam
+    color: "#1ecc43"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: VAI
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+    canSupplyDrop: false
+    group: VAISP
+  - type: Tag
+    tags:
+    - AU14SquadVAISP
+
 - type: Tag
   id: AU14SquadUACG
 
@@ -206,3 +272,12 @@
 
 - type: Tag
   id: AU14SquadLACNCommando
+
+- type: Tag
+  id: AU14SquadVAIPO
+
+- type: Tag
+  id: AU14SquadVAISO
+
+- type: Tag
+  id: AU14SquadVAISP

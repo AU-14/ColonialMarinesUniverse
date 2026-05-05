@@ -1,0 +1,121 @@
+- type: reagent
+  parent: CMReagentMedicine
+  id: CMUHepatocytin
+  name: reagent-name-cmu-hepatocytin
+  desc: reagent-desc-cmu-hepatocytin
+  flavor: bitter
+  physicalDesc: reagent-physical-desc-thick-and-grainy
+  color: "#a87830"
+  overdose: 25
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+      - !type:HealOrganEffect
+        organComponent: Liver
+        amount: 5
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentThreshold
+          min: 25
+        damage:
+          types:
+            Poison: 2
+
+- type: reagent
+  parent: CMReagentMedicine
+  id: CMUPulmovine
+  name: reagent-name-cmu-pulmovine
+  desc: reagent-desc-cmu-pulmovine
+  flavor: medicine
+  physicalDesc: reagent-physical-desc-fizzy
+  color: "#80c0ff"
+  overdose: 25
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+      - !type:HealOrganEffect
+        organComponent: Lungs
+        amount: 5
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentThreshold
+          min: 25
+        damage:
+          types:
+            Poison: 2
+
+- type: reagent
+  parent: CMReagentMedicine
+  id: CMUNephronate
+  name: reagent-name-cmu-nephronate
+  desc: reagent-desc-cmu-nephronate
+  flavor: medicine
+  physicalDesc: reagent-physical-desc-tangy
+  color: "#a0e070"
+  overdose: 25
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+      - !type:HealOrganEffect
+        organComponent: Kidneys
+        amount: 5
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentThreshold
+          min: 25
+        damage:
+          types:
+            Poison: 2
+
+- type: reagent
+  parent: CMReagentMedicine
+  id: CMUCardiocaine
+  name: reagent-name-cmu-cardiocaine
+  desc: reagent-desc-cmu-cardiocaine
+  flavor: metallic
+  physicalDesc: reagent-physical-desc-acrid
+  color: "#c02020"
+  overdose: 25
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+      - !type:HealOrganEffect
+        organComponent: Heart
+        amount: 5
+      - !type:CMURestartHeartEffect
+        chancePerTick: 0.05
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentThreshold
+          min: 25
+        damage:
+          types:
+            Poison: 3
+
+- type: reagent
+  parent: CMReagentMedicine
+  id: CMUOsteoCalc
+  name: reagent-name-cmu-osteocalc
+  desc: reagent-desc-cmu-osteocalc
+  flavor: chalky
+  physicalDesc: reagent-physical-desc-crystalline
+  color: "#e0e0c0"
+  overdose: 25
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+      - !type:CMUBoneRegenBoostEffect
+        multiplier: 1.5
+        durationSeconds: 15
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentThreshold
+          min: 25
+        damage:
+          types:
+            Blunt: 1

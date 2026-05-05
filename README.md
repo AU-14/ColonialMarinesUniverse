@@ -11,6 +11,10 @@ CMU welcomes contributions from the community! We maintain a list of tasks and p
 
 ## License
 
-The vast majority of code for the content repository is licensed under [MIT](https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT). The few exceptions will be clearly declared in both the header and the file as well as a reason for why.
+The vast majority of code implemented before 5/1/2026 is licensed under [MIT](https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT).
 
-Most assets are licensed under [CC-BY-SA-3.0](https://creativecommons.org/licenses/by-sa/3.0/) unless stated otherwise. Assets have their license and the copyright in the metadata file. [Example](https://github.com/space-wizards/space-station-14/blob/master/Resources/Textures/Objects/Tools/crowbar.rsi/meta.json).
+All code implemented post 4/30/2026 is licensed under an [AGPL 3.0 License](https://www.gnu.org/licenses/agpl-3.0.en.html) unless noted otherwise.
+
+Exceptions will be clearly declared in both the header and the file as well as a reason for why.
+
+Most art assets are licensed under [CC-BY-SA-3.0](https://creativecommons.org/licenses/by-sa/3.0/) unless stated otherwise. Assets have their license and the copyright in the metadata file. [Example](https://github.com/space-wizards/space-station-14/blob/master/Resources/Textures/Objects/Tools/crowbar.rsi/meta.json).

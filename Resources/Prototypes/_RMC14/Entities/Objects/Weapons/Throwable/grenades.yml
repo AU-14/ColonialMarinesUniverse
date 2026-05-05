@@ -310,20 +310,28 @@
       path: /Audio/_RMC14/Weapons/Guns/Flamer/gun_flamethrower2.ogg
 
 - type: entity
-  parent: RMCGrenadeIncendiary
+  parent: CMUIEDBase
   id: RMCGrenadeMolotov
   name: improvised firebomb
   description: A potent, improvised firebomb, coupled with a pinch of gunpowder. Cheap, very effective, and deadly in confined spaces. Commonly found in the hands of rebels and terrorists. It can be difficult to predict how many seconds you have before it goes off, so be careful. Chances are, it might explode in your face.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/molotov.rsi
-  - type: OnUseTimerTrigger
+    layers:
+    - state: icon
+  - type: CMUOnLightTimerTrigger
     examinable: false
-  - type: RandomTimerTrigger
+    initialBeepDelay: 0
+    beepSound: null
     min: 1
     max: 4
+    instantfusechance: false
+    instfusechance: 10
+  - type: CMVocalizeTrigger
   - type: TileFireOnTrigger
     spawn: RMCTileFire
+    sound:
+      path: /Audio/_RMC14/Weapons/Guns/Flamer/gun_flamethrower2.ogg
   - type: Tag
     tags:
     - Grenade

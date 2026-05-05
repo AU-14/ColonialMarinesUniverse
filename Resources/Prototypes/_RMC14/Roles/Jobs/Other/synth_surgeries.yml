@@ -1,0 +1,87 @@
+# Synth-only surgery flows. Marker `RMCSynthSurgery` filters
+# IsSurgeryValid / RefreshUI / dispatch eligibility so these only
+# appear on synth bodies and the standard human surgeries do not.
+
+- type: entity
+  parent: CMSurgeryBase
+  id: RMCSynthSurgeryReattachLimb
+  name: Reattach Synth Limb
+  components:
+  - type: CMSurgery
+    priority: 3
+    steps:
+    - RMCSynthSurgeryStepCutChassis
+    - RMCSynthSurgeryStepStripWires
+    - RMCSynthSurgeryStepReattachLimb
+    - RMCSynthSurgeryStepWeldChassis
+  - type: RMCSynthSurgery
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: RMCSynthSurgeryStepCutChassis
+  name: Cut chassis open
+  components:
+  - type: CMSurgeryStep
+    skill: 2
+    tool:
+    - type: Blowtorch
+    add:
+    - type: CMUStumpRemoved
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/welder.rsi
+    state: icon
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: RMCSynthSurgeryStepStripWires
+  name: Strip damaged wiring
+  components:
+  - type: CMSurgeryStep
+    skill: 2
+    tool:
+    - type: RMCCableCoil
+    add:
+    - type: CMUReattachPrepped
+  - type: Sprite
+    sprite: Objects/Tools/cable-coils.rsi
+    state: coil-30
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: RMCSynthSurgeryStepReattachLimb
+  name: Splice limb wiring
+  components:
+  - type: CMSurgeryStep
+    skill: 3
+    tool:
+    - type: RMCCableCoil
+    add:
+    - type: CMUReattachComplete
+  - type: CMUSurgeryStepReattachLimbEffect
+  - type: Sprite
+    sprite: Objects/Tools/cable-coils.rsi
+    state: coil-30
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: RMCSynthSurgeryStepWeldChassis
+  name: Weld chassis shut
+  components:
+  - type: CMSurgeryStep
+    skill: 2
+    tool:
+    - type: Blowtorch
+    remove:
+    - type: CMUStumpRemoved
+    - type: CMUReattachPrepped
+    - type: CMUReattachComplete
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/welder.rsi
+    state: icon
+
+- type: cmuSurgeryStepMetadata
+  id: RMCSynthSurgeryStepMetaReattachLimb
+  surgery: RMCSynthSurgeryReattachLimb
+  displayName: Reattach Synth Limb
+  validParts: [Arm, Leg]
+  category: reattach

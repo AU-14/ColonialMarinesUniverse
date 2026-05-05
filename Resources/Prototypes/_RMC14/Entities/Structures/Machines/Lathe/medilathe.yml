@@ -47,11 +47,13 @@
     - RMCRecipesMedilathe
   - type: MaterialStorage
     storage:
+      CMSteel: 30000
       CMGlass: 20000
       RMCPlastic: 40000
     whitelist:
       tags:
       - Plastic
+      - Metal
       - RMCGlass
   - type: Destructible
     thresholds:
@@ -125,37 +127,31 @@
   recipes:
   - CMSyringe
   - RMCDropper
+  - CMUBoneGraftItem
+  - CMBoneGel
   #    - RMC Spray bottle (500 plastic)->(625)
-  - RMCMedicAutoInjectorCustom5
-  - RMCMedicAutoInjectorCustom15
-  - RMCMedicAutoInjectorCustom30
-  - RMCMedicAutoInjectorCustom60
-  - RMCMedicAutoInjectorEZ1
-  - RMCMedicAutoInjectorEZ5
-  - RMCMedicAutoInjectorEZ10
-  - RMCMedicAutoInjectorEZ15
-  - RMCMedicAutoInjectorEZ30
-  - RMCMedicAutoInjectorEZ45
-  - RMCMedicAutoInjectorEZ60
-  - RMCMedicAutoInjector15
-  - RMCMedicAutoInjector30
-  - CMHypospray
   - CMBloodPack
   - RMCBeakerHighCapacity
   - CMBonesetter
   #    - FixOVein (5000 Plastic)->(6250)
   - CMStasisBag
   - CMRollerBed
+  - AU14PortableSurgicalBed
+  - AU14MedevacStretcherFolded
   - CMPillCanister
-  - CMFirstAidKit
-  - CMBurnAidKit
-  - CMToxinAidKit
-  - CMAdvFirstAidKit
-  - CMFirstAidO2Kit
-  - RMCRadiationAidKit
+  - AU14PacketPillsEmpty
   - RMCSyringeCase
+  - CMHandLabeler
   - CMSurgicalCase
   - RMCSurgicalTrayEmpty
   - RMCVialBox
-  - RMCPouchReagentCanister
-  - RMCPressurizedCanister
+  - CMScalpel
+  - CMCircularSaw
+  - CMSurgicalDrill
+  - CMRetractor
+  - CMCautery
+  - CMHemostat
+  - CMBeaker
+  - CMBeakerLarge
+  - AU14IVFoldableFolded
+  - CMUSplintItem

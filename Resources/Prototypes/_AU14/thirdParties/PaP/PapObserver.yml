@@ -45,7 +45,6 @@
   id: AU14JobPAPThirdpartyObserver
   name: UPP PAP Observer
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole

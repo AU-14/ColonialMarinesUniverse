@@ -22,5 +22,8 @@ public sealed partial class RMCMedicalExamineComponent : Component
     public LocId BleedText = "rmc-medical-examine-bleeding";
 
     [DataField, AutoNetworkedField]
+    public LocId BleedFromText = "rmc-medical-examine-bleeding-from";
+
+    [DataField, AutoNetworkedField]
     public bool Simple = false;
 }

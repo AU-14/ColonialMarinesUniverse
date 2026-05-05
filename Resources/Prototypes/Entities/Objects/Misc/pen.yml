@@ -15,6 +15,15 @@
     tags:
     - Write
     - Pen
+  - type: CMSurgeryTool
+  - type: CMSurgicalDrill
+  - type: CMBoneSaw
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 2.6
+    mishapChance: 0.20
+    mishapDamageType: Piercing
+    mishapDamageAmount: 4
+    failurePenalty: 2
   - type: PhysicalComposition
     materialComposition:
       Steel: 25

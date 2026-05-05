@@ -291,6 +291,15 @@
     damage:
       types:
         Blunt: 12
+  - type: CMSurgeryTool
+  - type: CMRetractor
+  - type: CMBoneSetter
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 1.8
+    mishapChance: 0.14
+    mishapDamageType: Blunt
+    mishapDamageAmount: 5
+    failurePenalty: 1
 
 - type: entity
   parent: CMCrowbar
@@ -320,7 +329,7 @@
       sprite: _RMC14/Objects/Tools/hand_labeler.rsi
       state: hand_labeler
     - type: Item
-      size: Normal
+      size: Small
       sprite: _RMC14/Objects/Tools/hand_labeler.rsi
       storedRotation: 0
     - type: RMCHandLabeler

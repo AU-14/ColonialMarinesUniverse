@@ -1,0 +1,7 @@
+- type: vendingMachineInventory
+  id: CMUMedVend
+  startingInventory:
+    CMUSplintItem: 10
+    CMUCastItem: 8
+    CMUOrganClampItem: 4
+    CMUBoneGraftItem: 4

@@ -23,6 +23,7 @@ namespace Content.Shared.AU14.util
         MilitaryPolice,
         VehicleCommand,
         VehicleCrew, 
+        MilitaryDoctor,
         SectionSergeant,
         Pilot,
         ExtraVendor1,
@@ -51,6 +52,7 @@ namespace Content.Shared.AU14.util
         TechTree,
         GroundsideOps,
         TacticalMap,
+        ReqVend,
         Analyzer,
         AICore
     }

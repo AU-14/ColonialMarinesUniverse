@@ -14,7 +14,6 @@
   accessGroups:
   - AU14GovforSquad
   special:
-
   - !type:AddComponentSpecial
     components:
     - type: Skills

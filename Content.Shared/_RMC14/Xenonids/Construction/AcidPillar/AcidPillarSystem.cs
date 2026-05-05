@@ -35,6 +35,9 @@ public sealed class AcidPillarSystem : EntitySystem
         if (_mobState.IsDead(target) || HasComp<XenoNestedComponent>(target))
             return false;
 
+        if (HasComp<CultistComponent>(target))
+            return false;
+
         if (_hive.FromSameHiveOrAlly(pillar, target))
         {
             return HasComp<XenoComponent>(target) &&

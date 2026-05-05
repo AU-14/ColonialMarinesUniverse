@@ -331,6 +331,8 @@
 - type: entity
   id: AU14SkillPresetVehicleCrew
   name: Vehicle Crew
+  id: AU14SkillPresetPlatoonAuxTech
+  name: Auxiliary Technician
   categories: [ HideSpawnMenu ]
   components:
   - type: SkillPreset
@@ -367,3 +369,14 @@
         RMCSkillNavigations: 2
         RMCSkillOverwatch: 1
         RMCSkillLeadership: 3
+        RMCSkillConstruction: 4
+        RMCSkillCqc: 1
+        RMCSkillEndurance: 1
+        RMCSkillEngineer: 4
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 2
+        RMCSkillVehicles: 1
+        RMCSkillJtac: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillIntel: 1
+        RMCSkillDomestics: 2

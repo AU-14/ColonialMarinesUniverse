@@ -37,6 +37,8 @@
   - type: ContainerContainer
     containers:
       CashSlot: !type:ContainerSlot {}
+  - type: AccessReader
+    access: [["AU14AccessColonyAmbassador"]]
 
 # UPP Ambassador Console - Can call in GROM
 - type: entity
@@ -55,16 +57,16 @@
     replenishAmount: 25
     replenishInterval: 60
     callableParties:
-      UPPGROM: 1000
-      UPPGROMAlt: 500
-      UPPGROMAlt2: 750
+      UPPGROM: 7500
+      UPPGROMAlt: 6000
+      UPPGROMAlt2: 4500
 
 # UA Ambassador Console - Can call in US Army
 - type: entity
   id: AU14AmbassadorConsoleUA
   parent: AU14AmbassadorConsoleBase
   name: UA diplomatic console
-  description: A United Americas diplomatic console. Can request US Army support.
+  description: A United Americas diplomatic console. Can request US Army or VAI support.
   suffix: UA, Army
   components:
   - type: Sprite
@@ -76,16 +78,16 @@
     replenishAmount: 25
     replenishInterval: 60
     callableParties:
-      USArmy: 1000
-      USArmyAlt: 500
-      USArmyAlt2: 750
+      USArmyArmored: 10000
+      VAISP: 4500
+      VAIPO: 6000
 
 # TWE Ambassador Console - Three World Empire
 - type: entity
   id: AU14AmbassadorConsoleTWE
   parent: AU14AmbassadorConsoleBase
   name: TWE diplomatic console
-  description: A Three World Empire diplomatic console. Can request Weyland-Yutani PMC contractor support.
+  description: A Three World Empire diplomatic console. Can request NSPA or Royal Marines' support.
   suffix: TWE, PMC
   components:
   - type: Sprite
@@ -97,22 +99,22 @@
     replenishAmount: 25
     replenishInterval: 60
     callableParties:
-      RMCRRT: 1300
-      NSPAInvestigationParty: 800
+      RMCRRT: 9000
+      NSPAInvestigationParty: 5000
 
 # Independent Systems Ambassador Console
 - type: entity
   id: AU14AmbassadorConsoleIS
   parent: AU14AmbassadorConsoleBase
-  name: IS diplomatic console
-  description: An Independent Systems diplomatic console. \
-  suffix: IS, PMC
+  name: ICSC diplomatic console
+  description: An Independent Core System Colonies diplomatic console.
+  suffix: ICSC, PMC
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: terminal1_old
   - type: AmbassadorConsole
-    factionName: Independent Systems
+    factionName: Independent Core System Colonies
     budget: 500
     replenishAmount: 25
     replenishInterval: 60

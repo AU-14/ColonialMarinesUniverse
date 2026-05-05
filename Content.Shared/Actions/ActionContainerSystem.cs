@@ -93,21 +93,31 @@ public sealed class ActionContainerSystem : EntitySystem
 
         if (Exists(actionId))
         {
-            if (!comp.Container.Contains(actionId.Value))
-            {
-                Log.Error($"Action {ToPrettyString(actionId.Value)} is not contained in the expected container {ToPrettyString(uid)}");
-                return false;
-            }
-
             if (_actions.GetAction(actionId) is not {} ent)
-                return false;
+            {
+                actionId = null;
+            }
+            else
+            {
+                if (comp.Container.Contains(ent) &&
+                    _container.IsEntityInContainer(ent) &&
+                    Transform(ent).ParentUid == uid)
+                {
+                    actionId = ent;
+                    action = ent.Comp;
 
-            actionId = ent;
-            action = ent.Comp;
-            DebugTools.Assert(Transform(ent).ParentUid == uid);
-            DebugTools.Assert(_container.IsEntityInContainer(ent));
-            DebugTools.Assert(ent.Comp.Container == uid);
-            return true;
+                    if (ent.Comp.Container != uid)
+                    {
+                        ent.Comp.Container = uid;
+                        DirtyField(ent, ent.Comp, nameof(ActionComponent.Container));
+                    }
+
+                    return true;
+                }
+
+                Log.Error($"Action {ToPrettyString(ent)} is not contained in the expected container {ToPrettyString(uid)}");
+                actionId = null;
+            }
         }
 
         // Null prototypes are never valid entities, they mean that someone didn't provide a proper prototype.

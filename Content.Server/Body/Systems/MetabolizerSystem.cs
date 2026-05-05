@@ -1,9 +1,12 @@
 using Content.Server.Body.Components;
+using Content.Shared._CMU14.Medical;
+using Content.Shared._CMU14.Medical.Metabolism.Events;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
+using Content.Shared.Body.Prototypes;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
@@ -34,6 +37,7 @@ namespace Content.Server.Body.Systems
 
         private EntityQuery<OrganComponent> _organQuery;
         private EntityQuery<SolutionContainerManagerComponent> _solutionQuery;
+        private readonly Dictionary<ProtoId<MetabolismGroupPrototype>, float> _cmuRateMultiplierCache = new();
 
         public override void Initialize()
         {
@@ -138,6 +142,16 @@ namespace Content.Server.Body.Systems
                 return;
             }
 
+            var medicalBody = ent.Comp2?.Body ?? ent.Owner;
+            var actualEntity = ent.Comp2?.Body ?? solutionEntityUid.Value;
+            var isCMUHuman = HasComp<CMUHumanMedicalComponent>(medicalBody);
+            if (isCMUHuman)
+                _cmuRateMultiplierCache.Clear();
+
+            var isDead = false;
+            if (TryComp<MobStateComponent>(solutionEntityUid.Value, out var state))
+                isDead = _mobStateSystem.IsDead(solutionEntityUid.Value, state);
+
             // randomize the reagent list so we don't have any weird quirks
             // like alphabetical order or insertion order mattering for processing
             var list = solution.Contents.ToArray();
@@ -174,23 +188,26 @@ namespace Content.Server.Body.Systems
                     if (!proto.Metabolisms.TryGetValue(group.Id, out var entry))
                         continue;
 
-                    var rate = entry.MetabolismRate * group.MetabolismRateModifier;
+                    var rateMultiplier = isCMUHuman
+                        ? GetCMURateMultiplier(medicalBody, group.Id)
+                        : 1.0f;
+
+                    var rate = entry.MetabolismRate * group.MetabolismRateModifier
+                               * (FixedPoint2)MathF.Max(0f, rateMultiplier);
+                    if (rate <= FixedPoint2.Zero)
+                        continue;
 
                     // Remove $rate, as long as there's enough reagent there to actually remove that much
                     mostToRemove = FixedPoint2.Clamp(rate, 0, quantity);
 
-                    float scale = (float) mostToRemove / (float) rate;
+                    float scale = (float)mostToRemove / (float)rate;
 
                     // if it's possible for them to be dead, and they are,
                     // then we shouldn't process any effects, but should probably
                     // still remove reagents
-                    if (TryComp<MobStateComponent>(solutionEntityUid.Value, out var state))
-                    {
-                        if (!proto.WorksOnTheDead && _mobStateSystem.IsDead(solutionEntityUid.Value, state))
-                            continue;
-                    }
+                    if (!proto.WorksOnTheDead && isDead)
+                        continue;
 
-                    var actualEntity = ent.Comp2?.Body ?? solutionEntityUid.Value;
                     var args = new EntityEffectReagentArgs(actualEntity, EntityManager, ent, solution, mostToRemove, proto, null, scale);
 
                     // do all effects, if conditions apply
@@ -226,6 +243,26 @@ namespace Content.Server.Body.Systems
             }
 
             _solutionContainerSystem.UpdateChemicals(soln.Value);
+        }
+
+        private float GetCMURateMultiplier(EntityUid body, ProtoId<MetabolismGroupPrototype> group)
+        {
+            // Poison and alcohol currently have liver side-effects in the CMU
+            // event handler, so preserve per-reagent dispatch for those groups.
+            if (group == "Poison" || group == "Alcohol")
+            {
+                var ev = new MetabolismGroupRateModifyEvent(body, group, 1.0f);
+                RaiseLocalEvent(ev.Body, ref ev);
+                return ev.Multiplier;
+            }
+
+            if (_cmuRateMultiplierCache.TryGetValue(group, out var cached))
+                return cached;
+
+            var rateModEv = new MetabolismGroupRateModifyEvent(body, group, 1.0f);
+            RaiseLocalEvent(rateModEv.Body, ref rateModEv);
+            _cmuRateMultiplierCache[group] = rateModEv.Multiplier;
+            return rateModEv.Multiplier;
         }
     }
 }

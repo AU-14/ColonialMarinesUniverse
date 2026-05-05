@@ -66,7 +66,6 @@
   id: NSPAInvestigationPartyJobInspectorArmored
   name: NSPA Inspector Armor
   components:  
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole

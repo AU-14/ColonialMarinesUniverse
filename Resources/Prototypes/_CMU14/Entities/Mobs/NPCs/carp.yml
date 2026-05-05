@@ -1,13 +1,11 @@
 - type: entity
-  parent: CMMobMonkey
-  id: CMUMobCarp
-  name: carp
-  description: It's a carp. Adapted to migrate up hill both ways.
-  suffix: CMU
+  name: genetic ancestor
+  id: CMUBaseMobCarp
+  parent: SimpleMobBase
+  description: The genetic bipedal ancestor of... Uh... Something. Yeah, there's definitely something on the planet that descended from whatever this is.
+  abstract: true
   components:
-  - type: Inventory
-    templateId: carp
-    speciesId: carp
+  - type: CombatMode
   - type: Fixtures
     fixtures:
       fix1:
@@ -19,21 +17,9 @@
         - MobMask
         layer:
         - MobLayer
-  - type: GhostRole
-    name: Carp
-    description: A endangered species of fish. They are adapted to migrate up hill both ways
-    prob: 0
-  - type: Sprite
-    drawdepth: Mobs
-    layers:
-    - map: ["enum.DamageStateVisualLayers.Base"]
-      state: alive
-      sprite: _AU14/Mobs/Animals/carp.rsi
-    - map: [ "mask" ]
-    - map: [ "clownedon" ]
-      sprite: "Effects/creampie.rsi"
-      state: "creampie_human"
-      visible: false
+  - type: Body
+    prototype: Bloodsucker
+    requiredLegs: 0
   - type: MobState
     allowedStates:
     - Alive
@@ -44,11 +30,6 @@
       0: Alive
       100: Critical
       200: Dead
-  - type: MovementSpeedModifier
-    baseWalkSpeed: 2.5
-    baseSprintSpeed: 3.5
-  - type: Stamina
-    critThreshold: 100
   - type: DamageStateVisuals
     states:
       Alive:
@@ -57,17 +38,6 @@
         Base: crit
       Dead:
         Base: dead
-  - type: Body
-    prototype: Bloodsucker
-    requiredLegs: 1
-  - type: FireVisuals
-    sprite: Mobs/Effects/onfire.rsi
-    normalState: Generic_mob_burning
-  - type: InteractionPopup
-    interactSuccessString: petting-success-carp
-    interactFailureString: petting-failure-carp
-    interactFailureSound:
-      path: /Audio/Items/wirecutter.ogg
   - type: MeleeWeapon
     soundHit:
       path: /Audio/Effects/bite.ogg
@@ -77,36 +47,64 @@
       types:
         Blunt: 3
         Piercing: 3
+  - type: TypingIndicator
+    proto: alien
+  - type: ReplacementAccent
+    accent: genericAggressive
+  - type: Speech
+    speechVerb: LargeMob
   - type: Butcherable
-    butcheringType: Spike
+    butcheringType: Knife # Spike
     spawned:
     - id: FoodMeatFish
       amount: 2
-  - type: TypingIndicator
-    proto: alien
+  - type: Reactive
+    groups:
+      Flammable: [ Touch ]
+      Extinguish: [ Touch ]
+  - type: NPCRetaliation
+    attackMemoryLength: 10
+  - type: FactionException
+  - type: NpcFactionMember
+    factions:
+    - Passive
   - type: Tag
     tags:
     - Carp
     - DoorBumpOpener
-  - type: ReplacementAccent
-    accent: genericAggressive
-  - type: Speech
-    speechSounds: Bass
-    speechVerb: LargeMob
   - type: RemoveComponents
     components:
-    - type: NameIdentifier
-    - type: MonkeyAccent
-    - type: AlwaysRevolutionaryConvertible
-    - type: Clumsy
-    - type: Deathgasp
-    - type: Cuffable
-    - type: Stripping
-    - type: Hands
-    - type: ComplexInteraction
-    - type: Puller
-    - type: CanHostGuardian
-    - type: IdExaminable
+    - type: Internals
+
+- type: entity
+  parent: [RMCSimpleMob, CMUBaseMobCarp, RMCSmallHost]
+  id: CMUMobCarp
+  name: carp
+  description: It's a carp. Adapted to migrate up hill both ways.
+  suffix: CMU
+  components:
+  - type: RotationVisuals
+    defaultRotation: 90
+    horizontalRotation: 90
+  - type: Inventory
+    templateId: carp
+    speciesId: carp
+  - type: GhostRole
+    name: Carp
+    description: An endangered species of fish. They are adapted to migrate up hill both ways
+    prob: 0
+  - type: Sprite
+    drawdepth: Mobs
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: alive
+      sprite: _AU14/Mobs/Animals/carp.rsi
+    - map: [ "mask" ]
+  - type: InteractionPopup
+    interactSuccessString: petting-success-carp
+    interactFailureString: petting-failure-carp
+    interactFailureSound:
+      path: /Audio/Effects/bite.ogg
 
 - type: inventoryTemplate
   id: carp

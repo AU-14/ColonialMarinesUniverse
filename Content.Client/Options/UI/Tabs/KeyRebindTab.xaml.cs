@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Client.Stylesheets;
+using Content.Shared._CMU14.Input;
 using Content.Shared._RMC14.Input;
 using Content.Shared.CCVar;
 using Content.Shared.Input;
@@ -167,6 +168,10 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(CMKeyFunctions.RMCPickUpDroppedItems);
             AddButton(CMKeyFunctions.RMCInteractWithOtherHand);
             AddButton(CMKeyFunctions.RMCRest);
+
+            AddHeader("ui-options-header-cmu-medical");
+            AddButton(CMUKeyFunctions.CMUCycleBodyZoneTarget);
+            AddButton(CMUKeyFunctions.CMUCycleBodyZoneTargetReverse);
 
             AddHeader("ui-options-header-rmc-xeno");
             AddButton(CMKeyFunctions.CMXenoWideSwing);

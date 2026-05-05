@@ -237,7 +237,7 @@
   name: ASRS console (Govfor)
   components:
   - type: AccessReader
-    access: [ [ "AU14AccessGovforCommand" ] ]
+    access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessGovforPilot" ], [ "AU14AccessGovforReq" ] ]
   - type: RequisitionsComputer
     faction: govfor
 
@@ -247,7 +247,7 @@
   name: ASRS console (Opfor)
   components:
   - type: AccessReader
-    access: [ [ "AU14AccessOpforCommand" ] ]
+    access: [ [ "AU14AccessOpforCommand" ], [ "AU14AccessOpforPilot" ] ]
   - type: RequisitionsComputer
     faction: opfor
 

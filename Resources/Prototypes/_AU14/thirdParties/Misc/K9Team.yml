@@ -3,7 +3,6 @@
   id: AU14BaseMobSpeciesOrganicBaseMilitary
   abstract: true
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
 
 - type: entity

@@ -51,7 +51,7 @@
 - type: loadoutGroup
   id: CivFootwearAU14
   name: au14-loadout-group-civilian-footwear
-  minLimit: 0
+  minLimit: 1
   maxLimit: 1
   loadouts:
   - ShoesBlackAU14
@@ -164,10 +164,22 @@
   - RMCPouchConstructionRightAU14
 
 # Nurse/Doctor
+
+- type: loadoutGroup
+  id: CivilianPhysicianSpecializationAU14
+  name: au14-loadout-group-role-specific-ID
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - CivilianPhysicianSpecializationDefaultAU14
+  - CivilianPhysicianSpecializationSurgeonAU14
+  - CivilianPhysicianSpecializationPharmacistAU14
+  - CivilianPhysicianSpecializationGeneralPractitionerAU14
+
 - type: loadoutGroup
   id: MedJumpsuitAU14
   name: au14-loadout-group-civilian-jumpsuit
-  minLimit: 0
+  minLimit: 1
   maxLimit: 1
   loadouts:
   - CivilianWorkwearYellowAU14
@@ -182,9 +194,19 @@
   - ScrubsGreyRMC
 
 - type: loadoutGroup
+  id: MedJacketMilitaryAU14
+  name: au14-loadout-group-militarylabcoat
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - LabcoatRMC
+  - LabcoatRMCShort
+  - LabcoatRMCLong
+
+- type: loadoutGroup
   id: MedHatsAU14
   name: au14-loadout-group-civilian-hat
-  minLimit: 0
+  minLimit: 1
   maxLimit: 1
   loadouts:
   - HeadCapSurgBlueAU14
@@ -193,10 +215,14 @@
 - type: loadoutGroup
   id: MedJacketAU14
   name: au14-loadout-group-civilian-jacket
-  minLimit: 0
+  minLimit: 1
+  maxLimit: 1
   loadouts:
-  - CivilianJacketSnowSuitAU14
   - LabcoatRMC
+  - LabcoatRMCShort
+  - LabcoatRMCLong
+  - LabcoatRMCBrown
+  - CivilianJacketSnowSuitAU14
 
 - type: loadoutGroup
   id: MedGlovesAU14
@@ -499,6 +525,7 @@
   maxLimit: 1
   loadouts:
   - ColonyJournalistSpecializationDefaultAU14
+  - ColonyJournalistSpecializationPhotoJournalistAU14
   - ColonyJournalistSpecializationIndependentAU14
   - ColonyJournalistSpecializationFreePressAU14
 
@@ -629,6 +656,16 @@
   - CLFFakeEmergencyResponseOfficerAU14
   - CLFFakeEmergencyResponseOfficerParamedicAU14
   - CLFFakeEmergencyResponseOfficerFirefighterAU14
+
+- type: loadoutGroup
+  id: CLFPhycisianSpecializationAU14
+  name: au14-loadout-group-role-specific-ID
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - CLFPhysicianSpecializationDefaultAU14
+  - CLFPhysicianSpecializationPharmacistAU14
+  - CLFPhysicianSpecializationGeneralPractitionerAU14
 
 # govfor/opfor
 
@@ -866,3 +903,34 @@
   - SynthBreachingHammerAU14
   - MaintenanceJackAU14
   - PortableDialysisAU14
+
+# Doctor
+
+- type: loadoutGroup
+  id: GOVFORDoctorEquipmentAU14
+  name: au14-loadout-group-doctor-equipment
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - GOVFORDoctorSpecializationDefaultAU14
+  - GOVFORDoctorSpecializationSurgeonAU14
+  - GOVFORDoctorSpecializationPharmacistAU14
+  - GOVFORDoctorSpecializationMorticianAU14
+
+- type: loadoutGroup
+  id: GOVFORDoctorUniformAU14
+  name: rmc-loadout-group-govfordoctor-uniform
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - ScrubsOliveRMC
+
+# Aux Tech
+
+- type: loadoutGroup
+  id: GOVFORAuxTechClothingAU14
+  name: au14-loadout-group-auxtech
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - GOVFORAuxTechClothingAU14Fatigues

@@ -21,6 +21,7 @@ using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Timing;
+using Content.Shared._RMC14.Item;
 
 namespace Content.Server.AU14.Round
 {
@@ -35,6 +36,7 @@ namespace Content.Server.AU14.Round
         [Dependency] private readonly IEntityManager _entityManager = default!;
         [Dependency] private readonly IPlayerManager _playerManager = default!;
         [Dependency] private readonly IRobustRandom _random = default!;
+        [Dependency] private readonly ItemCamouflageSystem _camo = default!;
 
         [ViewVariables]
         public string? SelectedPlanetMapName => SelectedPlanetMap?.Announcement;
@@ -43,17 +45,17 @@ namespace Content.Server.AU14.Round
         private RMCPlanetMapPrototypeComponent? SelectedPlanetMap { get; set; }
 
         private GamePresetPrototype? _selectedPreset;
+        public GamePresetPrototype? SelectedPreset => _selectedPreset;
         private RMCPlanetMapPrototypeComponent? _selectedPlanet;
         private bool _voteSequenceRunning;
         public ThreatPrototype _selectedthreat = null!;
         private string? _selectedGovforShip;
         private string? _selectedOpforShip;
+        public void SetOpforShip(string shipId) => _selectedOpforShip = shipId;
+        public void SetGovforShip(string shipId) => _selectedGovforShip = shipId;
 
         private List<AuThirdPartyPrototype> _selectedThirdParties = new();
         public IReadOnlyList<AuThirdPartyPrototype> SelectedThirdParties => _selectedThirdParties;
-
-        // Default max third parties for rounds with no threat (e.g., ForceOnForce)
-        private const int DefaultMaxThirdPartiesNoThreat =4;
 
         public override void Initialize()
         {
@@ -201,6 +203,8 @@ namespace Content.Server.AU14.Round
                                 picked = winnersArray[0];
                             if (picked == null && options.Count > 0)
                                 picked = options[0].data;
+                            if (picked != null)
+                                args.ResolveWinner(picked);
                             _selectedPlanet = picked as RMCPlanetMapPrototypeComponent;
                         };
 
@@ -210,16 +214,78 @@ namespace Content.Server.AU14.Round
                                 // Fallback: if _selectedPlanet wasn't set by handler, pick manually
                                 if (_selectedPlanet == null && options.Count > 0)
                                     _selectedPlanet = options[0].data as RMCPlanetMapPrototypeComponent;
+                                SetCamoType();
                                 StartPlatoonVotes();
                             });
                     });
             });
         }
 
+        public bool IsThirdPartyAllowedForCurrentContext(AuThirdPartyPrototype proto)
+        {
+            if (_selectedPreset == null)
+                return true;
+
+            var platoonSpawnRuleSystem = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
+            return IsThirdPartyAllowed(
+                proto,
+                _selectedPreset.ID,
+                _selectedthreat?.ID,
+                platoonSpawnRuleSystem.SelectedGovforPlatoon?.ID,
+                platoonSpawnRuleSystem.SelectedOpforPlatoon?.ID,
+                _playerManager.PlayerCount);
+        }
+
+        private static bool IsThirdPartyAllowed(
+            AuThirdPartyPrototype proto,
+            string currentGamemode,
+            string? currentThreat,
+            string? govforPlatoon,
+            string? opforPlatoon,
+            int playerCount)
+        {
+            if (ContainsIgnoreCase(proto.BlacklistedGamemodes, currentGamemode))
+                return false;
+
+            if (proto.whitelistedgamemodes.Count > 0 &&
+                !ContainsIgnoreCase(proto.whitelistedgamemodes, currentGamemode))
+                return false;
+
+            if (proto.MaxPlayers < playerCount || proto.MinPlayers > playerCount)
+                return false;
+
+            if (currentThreat != null && ContainsIgnoreCase(proto.BlacklistedThreats, currentThreat))
+                return false;
+
+            if (proto.WhitelistedThreats.Count > 0 &&
+                (currentThreat == null || !ContainsIgnoreCase(proto.WhitelistedThreats, currentThreat)))
+                return false;
+
+            if (govforPlatoon != null && ContainsIgnoreCase(proto.BlacklistedPlatoons, govforPlatoon))
+                return false;
+
+            if (opforPlatoon != null && ContainsIgnoreCase(proto.BlacklistedPlatoons, opforPlatoon))
+                return false;
+
+            if (proto.WhitelistedPlatoons.Any() &&
+                ((govforPlatoon != null && !ContainsIgnoreCase(proto.WhitelistedPlatoons, govforPlatoon)) ||
+                 (opforPlatoon != null && !ContainsIgnoreCase(proto.WhitelistedPlatoons, opforPlatoon))))
+                return false;
+
+            return true;
+        }
+
+        private static bool ContainsIgnoreCase(IEnumerable<string> values, string value)
+        {
+            return values.Any(candidate => candidate.Equals(value, StringComparison.OrdinalIgnoreCase));
+        }
+
         private void PreselectThirdParties()
         {
             _selectedThirdParties.Clear();
             if (_selectedPreset == null || _selectedPlanet == null)
+                return;
+            if (_selectedthreat == null)
                 return;
 
             var allThirdParties = new List<AuThirdPartyPrototype>();
@@ -238,27 +304,9 @@ namespace Content.Server.AU14.Round
                 return;
             }
 
-            var playerCount = _playerManager.PlayerCount;
-            var currentGamemode = _selectedPreset.ID;
-            var currentThreat = _selectedthreat?.ID;
-            var govforPlatoon = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>().SelectedGovforPlatoon?.ID;
-            var opforPlatoon = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>().SelectedOpforPlatoon?.ID;
-            var filtered = allThirdParties.ToList();
-            filtered.RemoveAll(proto =>
-                // Gamemode blacklist/whitelist (case-insensitive)
-                proto.BlacklistedGamemodes.Any(s => s.Equals(currentGamemode, System.StringComparison.OrdinalIgnoreCase)) ||
-                (proto.whitelistedgamemodes.Count > 0 && !proto.whitelistedgamemodes.Any(s => s.Equals(currentGamemode, System.StringComparison.OrdinalIgnoreCase))) ||
-                // Player count limits
-                proto.MaxPlayers < playerCount ||
-                proto.MinPlayers > playerCount ||
-                // Threat blacklist/whitelist (case-insensitive)
-                (currentThreat != null && proto.BlacklistedThreats.Any(t => t.Equals(currentThreat, System.StringComparison.OrdinalIgnoreCase))) ||
-                (proto.WhitelistedThreats.Count > 0 && (currentThreat == null || !proto.WhitelistedThreats.Any(t => t.Equals(currentThreat, System.StringComparison.OrdinalIgnoreCase)))) ||
-                // Platoon blacklist/whitelist (case-insensitive)
-                (govforPlatoon != null && proto.BlacklistedPlatoons.Any(p => p.Equals(govforPlatoon, System.StringComparison.OrdinalIgnoreCase))) ||
-                (opforPlatoon != null && proto.BlacklistedPlatoons.Any(p => p.Equals(opforPlatoon, System.StringComparison.OrdinalIgnoreCase))) ||
-                (proto.WhitelistedPlatoons.Any() && ((govforPlatoon != null && !proto.WhitelistedPlatoons.Any(p => p.Equals(govforPlatoon, System.StringComparison.OrdinalIgnoreCase))) || (opforPlatoon != null && !proto.WhitelistedPlatoons.Any(p => p.Equals(opforPlatoon, System.StringComparison.OrdinalIgnoreCase)))))
-            );
+            var filtered = allThirdParties
+                .Where(IsThirdPartyAllowedForCurrentContext)
+                .ToList();
             if (filtered.Count == 0)
                 return;
             var weighted = new List<AuThirdPartyPrototype>();
@@ -270,7 +318,7 @@ namespace Content.Server.AU14.Round
             }
             if (weighted.Count == 0)
                 return;
-            int maxThirdParties = _selectedthreat != null ? Math.Max(0, _selectedthreat.MaxThirdParties) : DefaultMaxThirdPartiesNoThreat;
+            int maxThirdParties = Math.Max(0, _selectedthreat.MaxThirdParties);
             if (maxThirdParties <= 0)
                 return;
             var selectedSet = new HashSet<AuThirdPartyPrototype>();
@@ -355,12 +403,13 @@ namespace Content.Server.AU14.Round
                         var handle = _voteManager.CreateVote(voteopt);
                         handle.OnFinished += (_, args) =>
                         {
-
                             string? winner = args.Winner as string;
                             if (winner == null && args.Winners is var arr && arr.Length > 0)
                                 winner = arr[0] as string;
                             if (winner == null && shipOptions.Count > 0)
                                 winner = shipOptions[0].id;
+                            if (winner != null)
+                                args.ResolveWinner(winner);
                             onShipSelected(winner ?? string.Empty);
                         };
                     }
@@ -386,10 +435,13 @@ namespace Content.Server.AU14.Round
                         var handle = _voteManager.CreateVote(voteopt);
                         handle.OnFinished += (_, args) =>
                         {
+                            var winnerId = args.Winner as PlatoonPrototype;
+                            if (winnerId == null && args.Winners is var winnersArray && winnersArray.Length > 0)
+                                winnerId = winnersArray[0] as PlatoonPrototype;
 
-
-                            if (args.Winner is PlatoonPrototype winnerId)
+                            if (winnerId != null)
                             {
+                                args.ResolveWinner(winnerId);
                                 platoonSpawnRuleSystem.SelectedGovforPlatoon = winnerId;
 
                                 // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
@@ -434,8 +486,13 @@ namespace Content.Server.AU14.Round
                         var handle = _voteManager.CreateVote(voteopt);
                         handle.OnFinished += (_, args) =>
                         {
-                            if (args.Winner is PlatoonPrototype winnerId)
+                            var winnerId = args.Winner as PlatoonPrototype;
+                            if (winnerId == null && args.Winners is var winnersArray && winnersArray.Length > 0)
+                                winnerId = winnersArray[0] as PlatoonPrototype;
+
+                            if (winnerId != null)
                             {
+                                args.ResolveWinner(winnerId);
                                 platoonSpawnRuleSystem.SelectedOpforPlatoon = winnerId;
 
                                 // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
@@ -555,6 +612,18 @@ namespace Content.Server.AU14.Round
             }
 
             return false;
+        }
+
+        public void SetCamoType(CamouflageType? ct = null)
+        {
+            if (ct != null)
+            {
+                _camo.CurrentMapCamouflage = ct.Value;
+                return;
+            }
+
+            if (_selectedPlanet != null)
+                _camo.CurrentMapCamouflage = _selectedPlanet.Camouflage;
         }
 
         public void chooseThreat(RMCPlanetMapPrototypeComponent? planet)

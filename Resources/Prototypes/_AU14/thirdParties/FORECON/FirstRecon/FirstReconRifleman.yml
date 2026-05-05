@@ -37,7 +37,6 @@
   id: AU14JobFORECONFirstReconRifleman
   name: FORECON Rifleman (3rd party)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadFirstRecon

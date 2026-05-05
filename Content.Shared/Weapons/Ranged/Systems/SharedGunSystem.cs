@@ -380,15 +380,6 @@ public abstract partial class SharedGunSystem : EntitySystem
 
         var originEntity = HasComp<GunUseGunOriginComponent>(gunUid) ? gunUid : user;
         var fromCoordinates = Transform(originEntity).Coordinates;
-
-        //RMC14
-        var shotOriginEv = new BeforeAttemptShootEvent(fromCoordinates, gun.ShootOriginOffset);
-        RaiseLocalEvent(user, ref shotOriginEv);
-
-        if (shotOriginEv.Handled)
-            fromCoordinates = shotOriginEv.Origin;
-        //
-
         var attemptEv = new AttemptShootEvent(user, null, fromCoordinates, toCoordinates);
         RaiseLocalEvent(gunUid, ref attemptEv);
 

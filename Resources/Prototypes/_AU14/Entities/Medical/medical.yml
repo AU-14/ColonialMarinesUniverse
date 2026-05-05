@@ -124,7 +124,364 @@
   - type: ExamineRequiresSkill
     skilledExamine: cm-pill-contents-albuterol
 
+- type: entity
+  parent: CMPill
+  id: AU14PillCMUParacetamol
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUParacetamol
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-paracetamol
+
+- type: entity
+  parent: CMPill
+  id: AU14PillCMUTramadol
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUTramadol
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill10
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-tramadol
+
+- type: entity
+  parent: CMPill
+  id: AU14PillCMUOxycodone
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUOxycodone
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-oxycodone
+
+# organ pills
+
+- type: entity
+  parent: CMPill
+  id: AU14PillCMUHepatocytin
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUHepatocytin
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-hepatocytin
+
+- type: entity
+  parent: CMPill
+  id: AU14PillCMUPulmovine
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUPulmovine
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-pulmovine
+
+- type: entity
+  parent: CMPill
+  id: AU14PillCMUNephronate
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUNephronate
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-nephronate
+
+- type: entity
+  parent: CMPill
+  id: AU14PillCMUCardiocaine
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUCardiocaine
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-cardiocaine
+
+- type: entity
+  parent: CMPill
+  id: AU14PillCMUOsteoCalc
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUOsteoCalc
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-osteocalc
+
 #pill bottles
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterOsteoCalc
+  name: osteocalc pill bottle
+  suffix: osteocalc, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister1
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUOsteoCalc
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-osteocalc-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterCardiocaine
+  name: cardiocaine pill bottle
+  suffix: cardiocaine, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister2
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUCardiocaine
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-cardiocaine-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterNephronate
+  name: nephronate pill bottle
+  suffix: nephronate, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister3
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUNephronate
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-nephronate-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterPulmovine
+  name: pulmovine pill bottle
+  suffix: pulmovine, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister4
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUPulmovine
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-pulmovine-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterHepatocytin
+  name: hepatocytin pill bottle
+  suffix: hepatocytin, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister5
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUHepatocytin
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-hepatocytin-container-label-text
+
+- type: entity
+  parent: CMPacketPills
+  id: AU14PacketPillsTramadol
+  name: tramadol pill packet
+  description: This packet contains tramadol pills. Alleviates moderate amounts of pain. Once you take them out, they don't go back in. Don't take more than 1 pill in a short period.
+  components:
+  - type: Sprite
+    state: tramadol_packet
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUTramadol
+      amount: 4
+  - type: IconLabel
+    labelTextLocId: rmc-tramadol-container-label-text
+
+- type: entity
+  parent: CMPacketPills
+  id: AU14PacketPillsEmpty
+  name: pill packet
+  description: An empty pills packet.
+  components:
+  - type: Sprite
+    state: pill_packet
+  - type: PhysicalComposition
+    materialComposition:
+      RMCPlastic: 100
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterParacetamol
+  name: paracetamol pill bottle
+  suffix: paracetamol, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister9
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUParacetamol
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-paracetamol-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterTramadol
+  name: tramadol pill bottle
+  suffix: tramadol, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister3
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUTramadol
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-tramadol-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: AU14PillCanisterOxycodone
+  name: oxycodone pill bottle
+  suffix: oxycodone, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister5
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: AU14PillCMUOxycodone
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-oxycodone-container-label-text
+
 - type: entity
   parent: CMPillCanister
   id: AU14PillCanisterEthylredoxrazine
@@ -517,6 +874,69 @@
   - type: IconLabel
     labelTextLocId: rmc-albudex-container-label-text
 
+- type: entity
+  parent: CMAutoInjector
+  id: AU14OxycodoneAutoInjector
+  name: oxycodone autoinjector
+  description: An autoinjector loaded with 3 uses of Oxycodone.
+  components:
+  - type: Hypospray
+    transferAmount: 20
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 60
+        reagents:
+        - ReagentId: CMUOxycodone
+          Quantity: 60
+  - type: CMRefillableSolution
+    reagents:
+      CMUOxycodone: 60
+  - type: IconLabel
+    labelTextLocId: rmc-oxycodone-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: AU14TramadolAutoInjector
+  name: tramadol autoinjector
+  description: An autoinjector loaded with 3 uses of Tramadol.
+  components:
+  - type: Hypospray
+    transferAmount: 20
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 60
+        reagents:
+        - ReagentId: CMUTramadol
+          Quantity: 60
+  - type: CMRefillableSolution
+    reagents:
+      CMUTramadol: 20
+  - type: IconLabel
+    labelTextLocId: rmc-tramadol-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: AU14ParacetamolAutoInjector
+  name: paracetamol autoinjector
+  description: An autoinjector loaded with 3 uses of Paracetamol.
+  components:
+  - type: Hypospray
+    transferAmount: 20
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 60
+        reagents:
+        - ReagentId: CMUParacetamol
+          Quantity: 60
+  - type: CMRefillableSolution
+    reagents:
+      CMUParacetamol: 60
+  - type: IconLabel
+    labelTextLocId: rmc-paracetamol-container-label-text
+
 #gauze
 
 - type: entity
@@ -628,25 +1048,8 @@
       - state: tourniquet-inhand-left
       right:
       - state: tourniquet-inhand-right
-  - type: WoundTreater
-    wound: Brute
-    treats: true
-    group: Brute
-    consumable: true
-    canUseUnskilled: true
-    skills:
-      RMCSkillMedical: 2
-    treatBeginSound:
-      path: "/Audio/_RMC14/Medical/splint.ogg"
-    treatEndSound:
-      path: "/Audio/Items/Medical/brutepack_begin.ogg"
-    userPopup: au14-tq-user-popup
-    targetPopup: au14-tq-target-popup
-    othersPopup: au14-tq-others-popup
-    noneSelfPopup: cm-gauze-none-self-popup
-    noneOtherPopup: cm-gauze-none-other-popup
-    noWoundsOnUserPopup: cm-wounds-already-treated-self-popup
-    noWoundsOnTargetPopup: cm-wounds-already-treated-target-popup
-  - type: MedicallyUnskilledDoAfter
-    min: 1
-    doAfter: 1
+  - type: CMUTourniquetItem
+    applyDelay: 1.5
+    removeDelay: 1.0
+    consumedOnApply: true
+    refundOnRemove: AU14Tourniquet

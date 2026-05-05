@@ -281,7 +281,7 @@
 - type: entity
   parent: CMPacketBase
   id: RMCPacketGrenadeIncendiary
-  name: M77 HIAM grenade packet
+  name: HIAM grenade packet
   description: It contains three M77 High-explosive-Incendiary, Anti-Mobility grenades.
   components:
   - type: Sprite
@@ -454,7 +454,7 @@
   description: It contains eight L109A1 20mm HE grenades.
   components:
   - type: Tag
-    tags: 
+    tags:
     - RMCGrenadePacket20mm
   - type: Sprite
     layers:
@@ -488,7 +488,7 @@
   description: It contains eight L109A2 20mm incendiary grenades.
   components:
   - type: Tag
-    tags: 
+    tags:
     - RMCGrenadePacket20mm
   - type: Sprite
     layers:

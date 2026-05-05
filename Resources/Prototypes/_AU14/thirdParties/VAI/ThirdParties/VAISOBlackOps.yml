@@ -1,0 +1,27 @@
+- type: partySpawn
+  id: VAISOSpawn
+  leadersToSpawn:
+    AU14VAISOTeamLeader: 1
+  gruntsToSpawn:
+    AU14VAISOMercenary: 1
+    AU14VAISOEngi: 1
+    AU14VAISOMachinegunner: 1
+    AU14VAISOMedic: 1
+    # AU14VAISynth: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: VAISO
+  displayName: VAISO Mercenaries squad
+  partyspawn: VAISOSpawn
+  blacklistedgamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: shuttle
+  weight: 20
+  minplayers: 100
+  maxplayers: 400
+  GhostsNeeded: 0
+  roundstart: false

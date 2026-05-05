@@ -53,7 +53,6 @@
   id: AU14JobUPPTerritorialDefenseRifleman
   name: UPP TD Rifleman
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadTD

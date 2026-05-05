@@ -122,6 +122,54 @@
     color: "#FFEFD2"
     mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
 
+- type: entity
+  parent: CMBaseStructure
+  id: RMCComputerDropshipWeaponsSmall
+  name: dropship weapons computer
+  description: A compact computer that can manage equipment, weapons and simulations installed on the dropship.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    drawdepth: Objects
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: security_cam
+    layers: [ ]
+  - type: Clickable
+  - type: Corrodible
+    isCorrodible: false
+  - type: InteractionOutline
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: WallMount
+    arc: 360
+  - type: ActivatableUI
+    key: enum.DropshipTerminalWeaponsUi.Key
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
+  - type: ActivatableUIRequiresAccess
+  - type: UserInterface
+    interfaces:
+      enum.DropshipTerminalWeaponsUi.Key:
+        type: DropshipWeaponsBui
+  - type: DropshipTerminalWeapons
+  - type: RequiresSkill
+    skills:
+      RMCSkillPilot: 1
+  - type: PointLight
+    enabled: true
+    radius: 1.5
+    netsync: true
+    energy: 1
+    offset: "0,0"
+    color: "#FFEFD2"
+    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+
 # TODO RMC14 alamo and normandy specific names for each
 - type: entity
   parent: CMComputerDropship
@@ -280,6 +328,12 @@
     FactionControlling: thirdparty
   - type: FTLSmashImmune
   - type: NoFTL
+
+- type: entity
+  parent: CMDropshipDestinationThirdPartyWhitelist
+  id: CMDropshipDestinationThirdPartyReturn
+  name: Return to Deep Space
+  description: Sends a third party dropship back to its holding pattern.
 
 - type: entity
   parent: MarkerBase

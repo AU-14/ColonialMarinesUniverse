@@ -366,6 +366,12 @@
     count: 10
   - type: StackPrice
     price: 10
+  - type: CMHemostat
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 2.4
+    mishapChance: 0.12
+    mishapDamageType: Blunt
+    mishapDamageAmount: 2
 
 - type: entity
   id: Gauze1

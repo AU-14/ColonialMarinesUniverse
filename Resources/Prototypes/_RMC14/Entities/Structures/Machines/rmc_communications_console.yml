@@ -205,6 +205,11 @@
 
 - type: entity
   parent: RMCTacticalMapTableLarge
+  id: RMCTacticalMapTableLargeSquare
+  suffix: Square
+
+- type: entity
+  parent: RMCTacticalMapTableLarge
   id: RMCTacticalMapTableLargeRotated
   suffix: Rotated
   components:

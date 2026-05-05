@@ -30,7 +30,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
                     return;
                 }
 
-                _windowRules = new GhostRoleRulesWindow(info.Rules, _ =>
+                _windowRules = new GhostRoleRulesWindow(info.Rules, info.Kind, _ =>
                 {
                     SendMessage(new RequestGhostRoleMessage(info.Identifier));
 
@@ -84,7 +84,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
             _window.SaveCollapsibleBoxesStates();
 
             // Clearing the container before adding new roles
-            _window.ClearEntries();
+            _window.BeginEntryUpdate();
 
             var entityManager = IoCManager.Resolve<IEntityManager>();
             var sysManager = entityManager.EntitySysManager;
@@ -93,24 +93,30 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
             var ghostSystem = sysManager.GetEntitySystem<GhostSystem>();
             var isLocalGhost = ghostSystem?.IsGhost ?? false;
 
-            // TODO: role.Requirements value doesn't work at all as an equality key, this must be fixed
-            // Grouping roles
-            var groupedRoles = ghostState.GhostRoles.GroupBy(
-                role => (role.Name, role.Description, role.Requirements));
-
-            // Add a new entry for each role group
-            foreach (var group in groupedRoles)
+            try
             {
-                var name = group.Key.Name;
-                var description = group.Key.Description;
-                var hasAccess = requirementsManager.CheckRoleRequirements(
-                    group.Key.Requirements,
-                    null,
-                    out var reason);
+                // TODO: role.Requirements value doesn't work at all as an equality key, this must be fixed
+                // Grouping roles
+                var groupedRoles = ghostState.GhostRoles.GroupBy(
+                    role => (role.Name, role.Description, role.Requirements));
 
+                // Add a new entry for each role group
+                foreach (var group in groupedRoles)
+                {
+                    var name = group.Key.Name;
+                    var description = group.Key.Description;
+                    var hasAccess = requirementsManager.CheckRoleRequirements(
+                        group.Key.Requirements,
+                        null,
+                        out var reason);
 
-                // Adding a new role
-                _window.AddEntry(name, description, hasAccess, reason, group, spriteSystem);
+                    // Adding a new role
+                    _window.AddEntry(name, description, hasAccess, reason, group, spriteSystem);
+                }
+            }
+            finally
+            {
+                _window.EndEntryUpdate();
             }
 
             // Restore the Collapsible box state if it is saved

@@ -36,8 +36,6 @@
 - type: startingGear
   id: AU14GearCivilianJournalist
   equipment:
-    jumpsuit: CMJumpsuitLiaisonIvy
-    shoes: RMCShoesBlue
     outerClothing: AU14CivilianJacketTanPufferVest
 
 - type: entity

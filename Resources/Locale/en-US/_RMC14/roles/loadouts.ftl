@@ -20,6 +20,7 @@ rmc-loadout-group-role-specific = Role specific
 rmc-loadout-group-pins = Pins
 rmc-loadout-group-civilian = Civilian only (Restricted)
 
+rmc-loadout-group-govfordoctor-uniform = Scrubs
 
 rmc-loadout-group-role-specific-ID = Commanding Officer (ID)
 rmc-loadout-group-role-specific-weapon = Commanding Officer (Sidearm)

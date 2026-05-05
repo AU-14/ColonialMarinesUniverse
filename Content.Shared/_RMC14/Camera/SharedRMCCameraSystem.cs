@@ -217,7 +217,13 @@ public abstract class SharedRMCCameraSystem : EntitySystem
     public bool GetComputerCameraName(Entity<RMCCameraComputerComponent> computer, EntityUid camera, [NotNullWhen(true)] out string? name)
     {
         var index = computer.Comp.CameraIds.IndexOf(GetNetEntity(camera));
-        if (index < 0)
+        if (index < 0 || index >= computer.Comp.CameraNames.Count)
+        {
+            name = default;
+            return false;
+        }
+
+        if (index >= computer.Comp.CameraNames.Count)
         {
             name = default;
             return false;
@@ -242,7 +248,8 @@ public abstract class SharedRMCCameraSystem : EntitySystem
                 if (index >= 0)
                 {
                     comp.CameraIds.RemoveAt(index);
-                    comp.CameraNames.RemoveAt(index);
+                    if (index < comp.CameraNames.Count)
+                        comp.CameraNames.RemoveAt(index);
                 }
 
                 if (comp.CurrentCamera == camera)

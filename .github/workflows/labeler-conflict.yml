@@ -3,19 +3,60 @@ name: Check Merge Conflicts
 on:
   pull_request_target:
     types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
+    - opened
+    - synchronize
+    - reopened
+    - ready_for_review
 
 jobs:
-  Label:
-    if: ( github.event.pull_request.draft == false ) && ( github.actor != 'PJBot' )
+  label:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
     steps:
       - name: Check for Merge Conflicts
-        uses: eps1lon/actions-label-merge-conflict@v3.0.0
+        uses: actions/github-script@v7
         with:
-          dirtyLabel: "S: Merge Conflict"
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          commentOnDirty: "This pull request has conflicts, please resolve those before we can evaluate the pull request."
+          script: |
+            const label = 'S: Merge Conflict';
+            const repo = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number
+            };
+
+            let pr;
+            for (let i=0; i<8; i++) {
+              const { data } = await github.rest.pulls.get({
+                owner: repo.owner,
+                repo: repo.repo,
+                pull_number: repo.issue_number
+              });
+              pr = data;
+
+              // mergeable_state tends to be unknown while GitHub async computes it
+              if (pr.mergeable_state && pr.mergeable_state !== "unknown") break;
+              await new Promise(r => setTimeout(r, 5000));
+            }
+
+            if (!pr.mergeable_state || pr.mergeable_state === "unknown") {
+              core.warning('Could not determine mergeable_state after retries, skipping.');
+              return;
+            }
+
+            const labels = (pr.labels || []).map(l => l.name);
+            if (pr.mergeable_state === "dirty") { // conflicts
+              if (!labels.includes(label)) {
+                await github.rest.issues.addLabels({ ...repo, labels: [label] });
+                await github.rest.issues.createComment({
+                  ...repo,
+                  body: 'This pull request has conflicts, please resolve those before we can evaluate the pull request.'
+                });
+              }
+            } else {
+              if (labels.includes(label)) {
+                await github.rest.issues.removeLabel({ ...repo, name: label });
+              }
+            }

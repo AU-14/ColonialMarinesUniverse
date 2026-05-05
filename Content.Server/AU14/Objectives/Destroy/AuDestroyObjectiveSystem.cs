@@ -16,8 +16,9 @@ public sealed class AuDestroyObjectiveSystem : EntitySystem
     [Robust.Shared.IoC.Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Robust.Shared.IoC.Dependency] private readonly AuObjectiveSystem _objectiveSystem = default!;
     [Robust.Shared.IoC.Dependency] private readonly SharedTransformSystem _xformSys = default!;
+    [Robust.Shared.IoC.Dependency] private readonly ILogManager _logManager = default!;
 
-    private static readonly ISawmill Sawmill = Logger.GetSawmill("au14-destroyobj");
+    private ISawmill _sawmill = default!;
 
     // Index: proto id (lowercase) -> list of objective uids interested in that proto
     private readonly Dictionary<string, List<EntityUid>> _protoToObjectives = new(StringComparer.OrdinalIgnoreCase);
@@ -27,6 +28,7 @@ public sealed class AuDestroyObjectiveSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        _sawmill = _logManager.GetSawmill("au14-destroyobj");
         SubscribeLocalEvent<DestroyObjectiveComponent, ComponentStartup>(OnObjectiveStartup);
         SubscribeLocalEvent<MarkedForDestroyComponent, EntityTerminatingEvent>(OnMarkedEntityDestroyed);
         SubscribeLocalEvent<DestroyObjectiveTrackerComponent, ComponentStartup>(OnTrackerStartup);
@@ -55,7 +57,7 @@ public sealed class AuDestroyObjectiveSystem : EntitySystem
         // Destroy objectives cannot be faction-neutral
         if (objcomp.FactionNeutral)
         {
-            Sawmill.Warning($"[DESTROY OBJ] Objective {uid} is faction-neutral which is invalid for destroy objectives. Deactivating.");
+            _sawmill.Warning($"[DESTROY OBJ] Objective {uid} is faction-neutral which is invalid for destroy objectives. Deactivating.");
             objcomp.Active = false;
             return;
         }
@@ -269,11 +271,11 @@ public sealed class AuDestroyObjectiveSystem : EntitySystem
             var factionKey = factionToCredit.ToLowerInvariant();
 
             destroyComp.AmountDestroyed++;
-            Sawmill.Info($"[DESTROY DEBUG] Objective {objectiveUid} counted destruction of proto {protoId} for faction {factionKey}. Total: {destroyComp.AmountDestroyed}/{destroyComp.AmountToDestroy}");
+            _sawmill.Info($"[DESTROY DEBUG] Objective {objectiveUid} counted destruction of proto {protoId} for faction {factionKey}. Total: {destroyComp.AmountDestroyed}/{destroyComp.AmountToDestroy}");
 
             if (destroyComp.AmountDestroyed >= destroyComp.AmountToDestroy)
             {
-                Sawmill.Info($"[DESTROY DEBUG] Objective {objectiveUid} completed for faction {factionKey}!");
+                _sawmill.Info($"[DESTROY DEBUG] Objective {objectiveUid} completed for faction {factionKey}!");
                 _objectiveSystem.CompleteObjectiveForFaction(objectiveUid, auObj, factionToCredit);
                 objectivesToRemove.Add(objectiveUid);
 

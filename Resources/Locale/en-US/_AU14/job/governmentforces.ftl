@@ -89,6 +89,11 @@ au14-job-name-govforVehicleCrew = Vehicle Crew
 au14-job-description-govforVehicleCrew = Follow your vehicle commanders orders and provide your faction with vehicle support.
 au14-job-prefix-govforVehicleCrew = VcW 
 
+AU14JobGOVFORAuxTech = Auxiliary Technician
+au14-job-name-govforAuxTech = Auxiliary Technician
+au14-job-description-govforAuxTech = Run requisitions, keep the ship running and tidy. Provide your faction with shipside logistics and engineering support.
+au14-job-prefix-govforAuxTech = AXT
+
 au14-job-prefix-AU14JobGOVFORPlatCoWYPMC = OPDIR
 au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanWYPMC = CLS
 au14-job-prefix-AU14JobGOVFORDCCWYPMC = DCC

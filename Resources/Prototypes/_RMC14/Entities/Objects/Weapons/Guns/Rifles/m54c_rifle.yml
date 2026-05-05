@@ -1,18 +1,18 @@
 - type: entity
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
-  name: M41A MK2 assault rifle
+  name: M41A MK2 pulse rifle
   id: RMCWeaponRifleM54C
   description: The standard issue rifle of the UA. Commonly carried by most combat personnel. Uses 10x24mm caseless ammunition.
   components:
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Rifles/m54c/desert.rsi
+    sprite: _AU14/Weapons/Guns/USCM/m41mk2.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: _RMC14/Objects/Weapons/Guns/Rifles/m54c/desert.rsi
+    sprite: _AU14/Weapons/Guns/USCM/m41mk2.rsi
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot
@@ -100,15 +100,10 @@
     offsets:
       rmc-aslot-barrel: 0.75, 0.03
       rmc-aslot-rail: -0.07, 0.18
-      rmc-aslot-stock: -0.78, 0.0325
+      rmc-aslot-stock: -0.78, -0.03
       rmc-aslot-underbarrel: 0.349, -0.37
   - type: ItemCamouflage
-    camouflageVariations:
-      Jungle: _RMC14/Objects/Weapons/Guns/Rifles/m54c/jungle.rsi
-      Desert: _RMC14/Objects/Weapons/Guns/Rifles/m54c/desert.rsi
-      Snow: _RMC14/Objects/Weapons/Guns/Rifles/m54c/snow.rsi
-      Classic: _RMC14/Objects/Weapons/Guns/Rifles/m54c/classic.rsi
-      Urban: _RMC14/Objects/Weapons/Guns/Rifles/m54c/urban.rsi
+    camouflageVariations: { }
   - type: Tag
     tags:
     - RMCWeaponRifleM54CMK2
@@ -375,7 +370,7 @@
 - type: entity
   parent: CMMagazineRifleBase
   id: CMMagazineRifleM54C
-  name: "M41A magazine (10x24mm)"
+  name: "M41A MK2 magazine (10x24mm)"
   components:
   - type: Tag
     tags:
@@ -402,7 +397,7 @@
 - type: entity
   parent: CMMagazineRifleM54C
   id: CMMagazineRifleM54CAP
-  name: "M41A AP magazine (10x24mm)"
+  name: "M41A MK2 AP magazine (10x24mm)"
   suffix: AP
   components:
   - type: Tag
@@ -431,7 +426,7 @@
 - type: entity
   parent: CMMagazineRifleM54C
   id: RMCMagazineRifleM54CIncendiary
-  name: "M41A Incendiary magazine (10x24mm)"
+  name: "M41A MK2 Incendiary magazine (10x24mm)"
   suffix: Incendiary
   components:
   - type: Tag
@@ -458,7 +453,7 @@
 - type: entity
   parent: CMMagazineRifleM54C
   id: RMCMagazineRifleM54CHEAP
-  name: "M41A HEAP magazine (10x24mm)"
+  name: "M41A MK2 HEAP magazine (10x24mm)"
   suffix: HEAP
   components:
   - type: Tag
@@ -493,7 +488,7 @@
 - type: entity
   parent: CMMagazineRifleM54C
   id: RMCMagazineRifleM54CWP
-  name: "M41A WP magazine (10x24mm)"
+  name: "M41A MK2 WP magazine (10x24mm)"
   suffix: WP
   components:
   - type: Tag
@@ -520,7 +515,7 @@
 - type: entity
   parent: CMMagazineRifleM54C
   id: CMMagazineRifleM54CExt
-  name: "M41A extended magazine (10x24mm)"
+  name: "M41A MK2 extended magazine (10x24mm)"
   components:
   - type: Tag
     tags:

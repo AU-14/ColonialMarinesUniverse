@@ -56,7 +56,6 @@
   id: AU14JobUPPGROMSupportTech
   name: UPP GROM Support Tech
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadGROM

@@ -47,7 +47,6 @@
   id: AU14JobUSArmyHeavyGunner
   name: US Army Heavy Gunner (Surv)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadUSArmy

@@ -57,7 +57,6 @@
   id: AU14JobUPPTerritorialDefenseSquadLeader
   name: UPP TD Squad Leader
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadTD

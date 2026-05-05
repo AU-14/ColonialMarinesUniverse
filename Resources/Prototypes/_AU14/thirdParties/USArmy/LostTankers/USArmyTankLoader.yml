@@ -44,7 +44,6 @@
   id: AU14JobUSArmyTankLoader
   name: US Army Tank Loader
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadUSArmy32nd

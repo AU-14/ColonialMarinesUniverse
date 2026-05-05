@@ -15,6 +15,11 @@
   equipment:
     id: AU14IDCardColonyJournalistFreePress
 
+- type: loadout
+  id: ColonyJournalistSpecializationPhotoJournalistAU14
+  equipment:
+    id: AU14IDCardColonyJournalistPhotojournalist
+
 # essentials
 
 - type: loadout

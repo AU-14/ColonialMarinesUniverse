@@ -1,0 +1,104 @@
+- type: job
+  parent: AU14VAIMercenaryBase
+  id: AU14VAISOMercenary
+  spawnMenuRoleName: VAISO Contractor
+  playTimeTracker: AU14VAISOMercenary
+  icon: "CMJobIconEmpty"
+  greeting: au14-vaiso-greeting
+  startingGear: AU14GearVAISOMercenary
+  basePlaytimeTracker: true
+  accessGroups:
+  - auadmin
+  - Colonist
+  - CMCargoTech
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadVAISO
+    - type: Skills
+      skills:
+        RMCSkillCqc: 5
+        RMCSkillEngineer: 4
+        RMCSkillConstruction: 3
+        RMCSkillFirearms: 2
+        RMCSkillMedical: 1
+        RMCSkillMeleeWeapons: 1
+        RMCSkillPolice: 2
+        RMCSkillFireman: 5
+        RMCSkillPowerLoader: 2
+        RMCSkillVehicles: 2
+        RMCSkillJtac: 1
+        RMCSkillEndurance: 1
+    - type: EquipSurvivorPreset
+      preset: AU14VAISOPreset
+    - type: JobPrefix
+      prefix: au14-job-prefix-vai-mercenary
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicVAI
+  id: AU14VAISOMercenary
+  name: VAISO Mercenary
+  components:
+  - type: EquipSurvivorPreset
+    preset: AU14VAISOPreset
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadVAISO
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: VAISO Mercenary
+    description: You have received intel on Weyland-Yutani's facility from local CLF insurgent group. Your mission is to raid the facility, securing any valuable intel. Do it without excessive attention.
+    job: AU14VAISOMercenary
+    raffle:
+      settings: short
+
+- type: entity
+  id: AU14VAISOPreset
+  name: vaiso mercenary preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SurvivorPreset
+    randomGearOther:
+    -
+      - [ AU14PVEHandsFingerlessBlackGloves ] # gloves
+      - [ AU14PVEHandsFingerlessBrownGloves ]
+      - [ AU14PVEHandsInsulatedBlackMarine ]
+      - [ CMHandsBrown ]
+    randomWeapon:
+    - [ AU14WeaponRifleMAR40Tactical, AU14JumpsuitCivilianVAIMAR40, AU14PouchMagazineLargeFilledMAR40, RMCMagazineRifleMAR40Ext, RMCPacketGrenadeSmokeFilled ]
+    - [ AU14WeaponRifleMAR40Tactical, AU14JumpsuitCivilianVAIMAR40, AU14PouchMagazineLargeFilledMAR40, RMCMagazineRifleMAR40Ext, RMCPacketGrenadeSmokeFilled ]
+    - [ AU14WeaponRifleMAR40Tactical, AU14JumpsuitCivilianVAIMAR40, AU14PouchMagazineLargeFilledMAR40, RMCMagazineRifleMAR40Ext, RMCPacketGrenadeSmokeFilled ] # 30%
+    - [ AU14WeaponRifleABR40TacticalVAI, RMCJumpsuitCivilianYellow, AU14PouchMagazineLargeFilledL42A, RMCMagazineRifleL42AExtended, RMCMagazineRifleL42AExtended,  RMCMagazineRifleL42AAP ]
+    - [ AU14WeaponRifleABR40TacticalVAI, RMCJumpsuitCivilianYellow, AU14PouchMagazineLargeFilledL42A, RMCMagazineRifleL42AExtended, RMCMagazineRifleL42AExtended,  RMCMagazineRifleL42AAP ] # 20%
+    - [ AU14WeaponRifleM41AMK2Tactical, AU14JumpsuitCivilianBrownVAIM41A, AU14PouchMagazineLargeFilledM41AMK2AP, CMMagazineRifleM54CExt, RMCPacketGrenadeSmokeFilled ]
+    - [ AU14WeaponRifleM41AMK2Tactical, AU14JumpsuitCivilianBrownVAIM41A, AU14PouchMagazineLargeFilledM41AMK2AP, CMMagazineRifleM54CExt, RMCPacketGrenadeSmokeFilled ] # 20 %
+    - [ AU14WeaponShotgunM890Tactical, AU14JumpsuitCivilianBrownVAIHEDP, RMCPouchShotgunLargeBuckshot, RMCExplosiveBreachingCharge, RMCPacketGrenadeSmokeFilled ] # 10%
+    - [ AU14WeaponRifleM41AMK1Tactical, AU14JumpsuitCivilianBrownVAIHEDP, AU14PouchMagazineLargeFilledM41A, CMMagazineRifleM54CMK1, RMCPacketGrenadeSmokeFilled ] # 10%
+    tryEquipRandomWeapon: true
+
+
+- type: startingGear
+  parent: AU14GearVAISOBase
+  id: AU14GearVAISOMercenary
+  equipment:
+    id: AU14IDCardVAIMercenary
+    ears: AU14HeadsetVAI
+  storage:
+    outerClothing:
+    - RMCLaserDesignator
+    back:
+    - CMMRE
+    - CMGrenadeFragOld
+    - CMGrenadeFragOld
+    - RMCPacketGrenadeSmokeFilled
+    - RMCTacticalPrybar
+    - RMCExplosiveBreachingCharge
+
+- type: playTimeTracker
+  id: AU14VAISOMercenary

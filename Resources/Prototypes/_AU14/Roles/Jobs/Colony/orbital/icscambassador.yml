@@ -11,11 +11,14 @@
   icon: "AU14JobIconICSCAmbassador"
   requireAdminNotify: false
   joinNotifyCrew: false
+  whitelisted: true
   supervisors: au14-job-supervisors-orbital
   accessGroups:
   - Colonist
   - auadmin
   - AUPrisonStaff
+  access:
+  - AU14AccessColonyAmbassador
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
@@ -51,7 +54,7 @@
     shoes: RMCShoesLaceupBrown
     id: AU14IDCardColonyCorporateLiaison
     outerClothing: RMCJacketCorporateBlack
-    ears: AU14ColonyAdminHeadset
+    ears: AU14AmbassadorICSCHeadset
   inhand:
   - RMCPortableVendorCorporate
 

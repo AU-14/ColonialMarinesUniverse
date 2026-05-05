@@ -32,14 +32,12 @@
     containers:
       CashSlot: !type:ContainerSlot {}
 
-
-
-
 - type: entity
   parent: BaseStructure
   id: AUSubmissionPointBase
-  name: Submission Point
+  name: submission point
   description: A place to submit  resources for shipping.
+  suffix: Any
   components:
   - type: Sprite
     sprite: _AU14/Structures/colony_processor.rsi
@@ -54,62 +52,88 @@
     - state: panel
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: InteractionOutline
+  - type: ThrowInsertContainer
+    containerId: submission
+    probability: 100
   - type: SubmissionStorage
+    rewards:
+      SteelOre: 100
+      AUwood: 25
+      Vegetable: 10
+      Fruit: 20
+      CottonBoll: 15
+      CMUGrain: 15
+  - type: ContainerContainer
+    containers:
+      submission: !type:Container
+  - type: DisposalUnit
+    whitelist:
+      tags:
+      - SteelOre
+      - AUwood
+      - Vegetable
+      - Fruit
+      - CottonBoll
+      - CMUGrain
 
 - type: entity
   parent: AUSubmissionPointBase
   id: AUSubmissionPointSteel
-  name: Submission Point (steel)
+  name: submission point (steel)
+  suffix: Steel
   description: A place to submit  resources for shipping.
   components:
-  - type: ItemSlots
-    slots:
-      ItemCabinet:
-        whitelist:
-          tags:
-          - SteelOre
-
-
+  - type: SubmissionStorage
+    rewards:
+      SteelOre: 100
+  - type: DisposalUnit
+    whitelist:
+      tags:
+      - SteelOre
 
 - type: entity
   parent: AUSubmissionPointBase
   id: AUSubmissionPointWood
-  name: Submission Point (wood)
+  name: submission point (wood)
+  suffix: Wood
   description: A place to submit  resources for shipping.
   components:
-  - type: ItemSlots
-    slots:
-      ItemCabinet:
-        whitelist:
-          tags:
-          - AUwood
-
+  - type: SubmissionStorage
+    rewards:
+      AUwood: 25
+  - type: DisposalUnit
+    whitelist:
+      tags:
+      - AUwood
 
 - type: entity
   parent: AUSubmissionPointBase
   id: AUSubmissionPointVegetables
-  name: Submission Point (Vegetables)
+  name: submission Point (vegetables)
   description: A place to submit  resources for shipping.
+  suffix: Vegetables
   components:
-  - type: ItemSlots
-    slots:
-      ItemCabinet:
-        whitelist:
-          tags:
-          - Vegetable
+  - type: SubmissionStorage
+    rewards:
+      Vegetable: 10
+  - type: DisposalUnit
+    whitelist:
+      tags:
+      - Vegetable
 
 - type: entity
   parent: AUSubmissionPointBase
   id: AUSubmissionPointFruit
-  name: Submission Point (Fruit)
+  name: submission point (fruit)
   description: A place to submit  resources for shipping.
   components:
-  - type: ItemSlots
-    slots:
-      ItemCabinet:
-        whitelist:
-          tags:
-          - Fruit
+  - type: SubmissionStorage
+    rewards:
+      Fruit: 20
+  - type: DisposalUnit
+    whitelist:
+      tags:
+      - Fruit
 
 - type: Tag
   id: SteelOre
@@ -138,7 +162,6 @@
       components:
       - Xeno
   - type: ColonyCommsConsole
-
 
 - type: entity
   id: AUColonyIntercom
@@ -174,7 +197,6 @@
   - type: Transform
     noRot: false
     anchored: true
-
 
 - type: entity
   id: colonysiren
@@ -219,15 +241,14 @@
   description: Swipe your ID card on the machine to withdraw cash from your personal account.
   components:
   - type: Sprite
-    sprite: _RMC14/Structures/Machines/computer.rsi
-    state: terminal
+    sprite: _CMU14/Structures/Machines/atm.rsi
+    state: atm
   - type: InteractionOutline
   - type: UserInterface
     interfaces:
       enum.ColonyAtmUi.Key:
         type: ColonyAtmBui
   - type: ColonyAtm
-
 
 # Department Consoles
 - type: entity
@@ -254,8 +275,7 @@
   - type: DepartmentConsole
   - type: ActivatableUIRequiresAccess
   - type: AccessReader
-    access:
-    - - CMAccessColonyCommand
+    access: [["CMAccessColonyCommand"]] # auadmin & aucmb
   - type: ItemSlots
     slots:
       CashSlot:
@@ -277,6 +297,8 @@
     departmentId: AU14DepartmentColonyMedical
     departmentAccessLevel: CMAccessColonyMedbay
     defaultSalary: 50
+  - type: AccessReader
+    access: [["AU14AccessColonyHeadPhysician"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase
@@ -289,6 +311,8 @@
     departmentId: AU14DepartmentEngineering
     departmentAccessLevel: CMAccessColonyEngineering
     defaultSalary: 50
+  - type: AccessReader
+    access: [["AU14AccessColonyHeadEngineer"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase
@@ -301,19 +325,22 @@
     departmentId: AU14DepartmentColonySecurity
     departmentAccessLevel: CMAccessColonyBrig
     defaultSalary: 60
-
+  - type: AccessReader
+    access: [["AU14AccessColonyMarshall"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase
   id: AUDepartmentConsoleLabor
   name: Labor Department Console
-  description: Manages employees, salaries, and announcements for the Labor  department.
+  description: Manages employees, salaries, and announcements for the Labor department.
   components:
   - type: DepartmentConsole
     departmentName: Cargo
     departmentId: AU14DepartmentLabor
     departmentAccessLevel: CMAccessColonyLogistics
     defaultSalary: 45
+  - type: AccessReader
+    access: [["AU14AccessColonyForeman"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase
@@ -326,6 +353,8 @@
     departmentId: AU14DepartmentColonyCommand
     departmentAccessLevel: CMAccessColonyCommand
     defaultSalary: 75
+  - type: AccessReader
+    access: [["AU14AccessColonyAdministrator"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase
@@ -338,6 +367,8 @@
     departmentId: AU14DepartmentCivilian
     departmentAccessLevel: CMAccessColonyPublic
     defaultSalary: 40
+  - type: AccessReader
+    access: [["AU14AccessColonyHeadOfService"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase
@@ -350,6 +381,8 @@
     departmentId: AU14DepartmentServices
     departmentAccessLevel: CMAccessColonyPublic
     defaultSalary: 40
+  - type: AccessReader
+    access: [["AU14AccessColonyHeadOfService"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase
@@ -364,4 +397,33 @@
     defaultSalary: 55
     colonyManaged: false
     asrsFaction: corporate
+  - type: AccessReader
+    access: [["AU14AccessColonyCorporateLiaison"]]
 
+- type: entity
+  parent: AUDepartmentConsoleBase
+  id: AUDepartmentConsoleHydroponics
+  name: Hydroponics Department Console
+  description: Manages employees, salaries, and announcements for the Hydroponics department.
+  components:
+  - type: DepartmentConsole
+    departmentName: Hydroponics
+    departmentId: AU14DepartmentHydroponics
+    departmentAccessLevel: CMAccessColonyPublic
+    defaultSalary: 45
+  - type: AccessReader
+    access: [["AU14AccessColonyHeadOfService"]]
+
+- type: entity
+  parent: AUDepartmentConsoleBase
+  id: AUDepartmentConsoleLumbermill
+  name: Lumbermill Department Console
+  description: Manages employees, salaries, and announcements for the Lumbermill department.
+  components:
+  - type: DepartmentConsole
+    departmentName: Lumbermill
+    departmentId: AU14DepartmentLumbermill
+    departmentAccessLevel: CMAccessColonyPublic
+    defaultSalary: 45
+  - type: AccessReader
+    access: [["AU14AccessColonyForeman"]]

@@ -1,4 +1,4 @@
-﻿name: "Labels: Untriaged"
+name: "Labels: Untriaged"
 
 on:
   issues:
@@ -8,9 +8,13 @@ on:
 
 jobs:
   add_label:
+    permissions:
+      issues: write
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
     - uses: actions-ecosystem/action-add-labels@v1
       if: join(github.event.issue.labels) == ''
       with:
+        github_token: ${{ github.token }}
         labels: "S: Untriaged"

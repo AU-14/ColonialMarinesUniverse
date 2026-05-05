@@ -43,7 +43,6 @@
   id: AU14JobWYPMCPartySmartgunner
   name: WY PMC Party Smartgun Operator (3rd party)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadPMC

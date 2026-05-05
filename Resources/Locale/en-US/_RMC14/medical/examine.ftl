@@ -17,4 +17,6 @@ rmc-medical-examine-alive = [color=green]{CAPITALIZE(SUBJECT($victim))} {CONJUGA
 
 rmc-medical-examine-bleeding = [color=#d10a0a]{CAPITALIZE(SUBJECT($victim))} {CONJUGATE-HAVE($victim)} bleeding wounds on {POSS-ADJ($victim)} body.[/color]
 
+rmc-medical-examine-bleeding-from = [color=#d10a0a]{CAPITALIZE(SUBJECT($victim))} {CONJUGATE-BE($victim)} bleeding from {POSS-ADJ($victim)} {$parts}.[/color]
+
 rmc-medical-examine-verb = Show medical actions

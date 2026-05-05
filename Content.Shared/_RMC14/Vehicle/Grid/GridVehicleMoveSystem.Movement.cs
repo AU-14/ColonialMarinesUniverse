@@ -14,6 +14,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 {
     private const float MinVehicleSpeed = 0.01f;
     private const float MinMoveDistance = 0.0001f;
+    private const float XenoOnboardSpeedMultiplier = 0.2f;
+    private const float XenoOnboardAccelerationMultiplier = 0.3f;
 
     private void UpdateMovement(
         EntityUid uid,
@@ -400,7 +402,9 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
         AddDebugMovementDecision(uid, grid, mover.Position, directTarget, forward, DebugMovementDecisionKind.DirectBlocked, false);
 
-        if (TryGetBlockingMobBypassCorrection(
+        var blockedByVehicleMob = HasBlockingVehicleMob(mover, _directMoveBlockers);
+        if (!blockedByVehicleMob &&
+            TryGetBlockingMobBypassCorrection(
                 uid,
                 mover,
                 grid,
@@ -418,7 +422,10 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 return true;
         }
 
-        if (TryGetLaneCorrection(
+        // Blocking xenos are meant to stop vehicles, not become soft obstacles
+        // that the lane solver can slide around with enough speed.
+        if (!blockedByVehicleMob &&
+            TryGetLaneCorrection(
                 uid,
                 mover,
                 grid,
@@ -990,6 +997,10 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             maxSpeed *= overcharge.SpeedMultiplier;
         if (TryComp<VehicleSpeedModifierComponent>(uid, out var speedMod))
             maxSpeed *= speedMod.SpeedMultiplier;
+        if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failureMod))
+            maxSpeed *= failureMod.SpeedMultiplier;
+        if (HasXenoOccupant(uid))
+            maxSpeed *= XenoOnboardSpeedMultiplier;
 
         return maxSpeed;
     }
@@ -1005,8 +1016,17 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             maxSpeed *= overcharge.SpeedMultiplier;
         if (TryComp<VehicleSpeedModifierComponent>(uid, out var speedMod))
             maxSpeed *= speedMod.SpeedMultiplier;
+        if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failureMod))
+            maxSpeed *= failureMod.ReverseSpeedMultiplier;
+        if (HasXenoOccupant(uid))
+            maxSpeed *= XenoOnboardSpeedMultiplier;
 
         return maxSpeed;
+    }
+
+    private bool HasXenoOccupant(EntityUid vehicle)
+    {
+        return TryComp(vehicle, out VehicleInteriorComponent? interior) && interior.Xenos.Count > 0;
     }
 
     private float GetIntegritySpeedMultiplier(EntityUid uid, GridVehicleMoverComponent mover)
@@ -1023,10 +1043,16 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
     private float GetAccelerationModifier(EntityUid uid)
     {
+        var multiplier = 1f;
         if (TryComp<VehicleAccelerationModifierComponent>(uid, out var accelMod))
-            return MathF.Max(0.05f, accelMod.AccelerationMultiplier);
+            multiplier = MathF.Max(0.05f, accelMod.AccelerationMultiplier);
+        if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failureMod))
+            multiplier *= MathF.Max(0.05f, failureMod.AccelerationMultiplier);
 
-        return 1f;
+        if (HasXenoOccupant(uid))
+            multiplier *= XenoOnboardAccelerationMultiplier;
+
+        return multiplier;
     }
 
     private void StopMover(GridVehicleMoverComponent mover)

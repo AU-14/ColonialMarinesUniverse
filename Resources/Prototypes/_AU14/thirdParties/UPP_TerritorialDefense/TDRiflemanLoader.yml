@@ -44,7 +44,6 @@
   id: AU14JobUPPTerritorialDefenseLoader
   name: UPP TD Loader
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadTD

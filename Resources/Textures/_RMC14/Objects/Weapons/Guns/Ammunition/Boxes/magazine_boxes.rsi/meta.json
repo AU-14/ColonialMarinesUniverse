@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Original Sprite by Aleksh, Modified by Ramiris, SharkSnake98 on Github, RavenCaat on GitHub, github noctyrnal, and @TadJohnson00 (GitHub), _24 and _a3 by github monomethylhydrazine",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "text_m1984"
+    },
+    {
+      "name": "text_m4spr"
+    },
+    {
+      "name": "text_m54"
+    },
+    {
+      "name": "text_m63"
+    },
+    {
+      "name": "text_m77"
+    },
+    {
+      "name": "text_mk80"
+    }
+  ]
+}

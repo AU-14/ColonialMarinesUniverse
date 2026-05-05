@@ -16,7 +16,6 @@
     whitelist:
       components:
       - Pill
-  - type: RemoveOnlyStorage
   - type: FixedItemSizeStorage
   - type: Tag
     tags:

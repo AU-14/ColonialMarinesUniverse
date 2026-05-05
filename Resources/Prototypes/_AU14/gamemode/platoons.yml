@@ -18,7 +18,9 @@
     Pilot: AU14AircrewWeaponsVendor
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
-    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryPolice: AU14MilitaryPolicemanVendorLACN
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14LACNRequisitionVendor
   possibleships:
     - USSBush
   #platoonflag: uaflag
@@ -47,7 +49,9 @@
     Pilot: AU14AircrewWeaponsVendor
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
-    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryPolice: AU14MilitaryPolicemanVendorUSCM
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14USCMRequisitionVendor
   #platoonflag:  uaflag
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
@@ -79,7 +83,9 @@
     JuniorOfficer: AU14JOGenericVendor
     SectionSergeant: AU14UPPSectionLeaderVendor
     Pilot: AU14UPPAirCrewWeaponsVendor
-    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryPolice: AU14MilitaryPolicemanVendorUPP
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14UPPRequisitionVendor
   possibleships:
       - USSBush
 #  jobClassOverride:
@@ -97,8 +103,6 @@
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/normandy.yml
   techTree: RMCIntelTechTree_ua
-
-
 
 - type: platoon
   id: WEYU
@@ -120,6 +124,8 @@
     Pilot: AU14AircrewWeaponsVendor
     combattech: AU14ComtechGearVendor
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14WYPMCRequisitionVendor
 #  jobClassOverride:
 #    SquadRifleman: AU14JobGOVFORSquadRiflemanWYPMC
 #    SectionSergeant: AU14JobGOVFORSectionSergeantWYPMC
@@ -136,7 +142,6 @@
   - /Maps/_CMU14/Shuttles/normandy.yml
   possibleships:
       - USSBush
-
   compatibleFighters:
   - /Maps/_AU14/ShuttlesDropships/f84owl.yml
   - /Maps/_AU14/ShuttlesDropships/ud_6.yml
@@ -162,7 +167,9 @@
     Pilot: AU14CMBCIUPilotVendor
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
-    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryPolice: AU14MilitaryPolicemanGenericVendorCIU
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14CMBCIURequisitionVendor
 #  jobClassOverride:
 #    PlatCo: AU14JobGOVFORPlatCoCMBCIU
 #    SquadRifleman: AU14JobGOVFORSquadRiflemanCMBCIU
@@ -202,6 +209,7 @@
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
   possibleships:
       - USSBush
   jobSlotOverride:
@@ -231,11 +239,14 @@
     Pilot: AU14AircrewWeaponsVendor
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
-    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryPolice: AU14MilitaryPolicemanVendorUSCM
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14HAZOPSRequisitionVendor
   possibleships:
       - USSBush
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/osprey.yml
+  - /Maps/_CMU14/Shuttles/normandy.yml
   compatibleFighters:
   - /Maps/_AU14/ShuttlesDropships/f84owl.yml
   - /Maps/_AU14/ShuttlesDropships/ud_6.yml
@@ -263,6 +274,8 @@
     ExtraVendor1: VMarkerOpforDeco5
     Deco1: VMarkerOpforDeco5
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14ProdigyRequisitionVendor
   #platoonflag:  uaflag
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
@@ -272,46 +285,6 @@
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml
   possibleships:
       - USSBush
-  techTree: RMCIntelTechTree_ua
-
-- type: platoon
-  id: UNISC
-  name: UNISC Peacekeepers
-  lorePrimer: AU14PrimerPlatoonUNISC
-  reqlist: USCMCargoCatalog
-  VendorToMarker:
-    Rifleman: AU14USCMequipmentvendor
-    Clothing: AU14UNISCclothingequipmentvendor
-    Weapons: AU14UNISCWeaponsVendor
-    SWeapons: AU14UNISCWeaponsVendor
-    Corpsman: AU14UNISCcorpsmanvendor
-    Arifleman: AU14UNISCclothingequipmentvendor
-    Dcc: AU14UNISCaircrewvendor
-    OperationsOfficer: AU14UNISCcommandequipmentvendor
-    Rto: AU14RTOVendor
-    SectionSergeant: AU14UNISCsectionleaderequipmentvendor
-    Pilot: AU14AircrewWeaponsVendor
-    combattech: AU14ComtechGearVendor
-    JuniorOfficer: AU14JOGenericVendor
-    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
-#  jobClassOverride:
-#    SquadRifleman: AU14JobGOVFORSquadRifleman
-#    SectionSergeant: AU14JobGOVFORSectionSergeant
-#    PlatoonCorpsman: AU14JobGOVFORPlatoonCorpsman
-#    PlatCo: AU14JobGOVFORPlatCo
-#    SquadSergeant: AU14JobGOVFORSquadSergeant
-#    DSPilot: AU14JobGOVFORDSPilot
-#    RadioTelephoneOperator: AU14JobGOVFORRadioTelephoneOperator
-#    PlatOp: AU14JobGOVFORPlatOp
-#    DCC: AU14JobGOVFORDCC
-  CompatibleDropships:
-  - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/normandy.yml
-  possibleships:
-      - USSBush
-  compatibleFighters:
-  - /Maps/_AU14/ShuttlesDropships/f84owl.yml
-  - /Maps/_AU14/ShuttlesDropships/ud_6.yml
   techTree: RMCIntelTechTree_ua
 
 - type: platoon
@@ -336,6 +309,8 @@
     ExtraVendor1: VMarkerOpforDeco5
     Deco1: VMarkerOpforDeco5
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14VAIPORequisitionVendor
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/normandy.yml
@@ -369,6 +344,8 @@
     ExtraVendor1: VMarkerOpforDeco5
     Deco1: VMarkerOpforDeco5
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14RMCRequisitionVendor
   #jobClassOverride:
    # SquadRifleman: AU14JobGOVFORSquadRiflemanRMC
    # SectionSergeant: AU14JobGOVFORSectionSergeantRMC
@@ -421,10 +398,6 @@
 - type: lorePrimer
   id: AU14PrimerPlatoonProdigySF
   PlatoonInfo: "Prodigy Security Forces"
-
-- type: lorePrimer
-  id: AU14PrimerPlatoonUNISC
-  PlatoonInfo: "UNISC peacekeepers are a multinational force dedicated to maintaining stability and enforcing peace agreements across contested regions, often deployed in high-tension zones to prevent escalation."
 
 - type: lorePrimer
   id: AU14PrimerPlatoonVAIPO

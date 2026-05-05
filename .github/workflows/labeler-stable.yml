@@ -9,8 +9,11 @@ on:
 
 jobs:
   add_label:
+    permissions:
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
     - uses: actions-ecosystem/action-add-labels@v1
       with:
+        github_token: ${{ github.token }}
         labels: "Branch: Stable"

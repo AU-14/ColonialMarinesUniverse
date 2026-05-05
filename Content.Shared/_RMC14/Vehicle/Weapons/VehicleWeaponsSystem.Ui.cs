@@ -262,7 +262,8 @@ public sealed partial class VehicleWeaponsSystem
         var selectable = canUseHardpointActions &&
                          slotAllowed &&
                          item != null &&
-                         HasComp<VehicleTurretComponent>(item.Value);
+                         HasComp<VehicleTurretComponent>(item.Value) &&
+                         _hardpoints.IsHardpointFunctional(item.Value);
         if (selectable && hasOperator && !operatorIsSelf && !sharedSelection)
             selectable = false;
 

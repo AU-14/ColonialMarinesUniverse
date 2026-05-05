@@ -2,34 +2,41 @@ name: YAML Linter
 
 on:
   push:
-    branches: [ master, staging, stable ]
+    branches: [master, staging, stable]
   merge_group:
   pull_request:
-    types: [ opened, reopened, synchronize, ready_for_review ]
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: yaml-linter-${{github.ref}}
+  cancel-in-progress: true
 
 jobs:
-  build:
+  linter:
     name: YAML Linter
-    if: github.actor != 'PJBot' && github.event.pull_request.draft == false
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.draft == false }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.2.2
-      - name: Setup submodule
+      - uses: actions/checkout@v6
+      - name: Initialize Content Submodules
         run: |
           git submodule update --init --recursive
       - name: Pull engine updates
         uses: space-wizards/submodule-dependency@v0.1.5
-      - name: Update Engine Submodules
+      - name: Initialize Engine Submodules
         run: |
           cd RobustToolbox/
           git submodule update --init --recursive
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v4.1.0
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 9.0.x
-      - name: Install dependencies
+      - name: Install Dependencies
         run: dotnet restore
-      - name: Build
+      - name: Build Release
         run: dotnet build --configuration Release --no-restore /p:WarningsAsErrors= /m
-      - name: Run Linter
+      - name: Run YAML Linter
         run: dotnet run --project Content.YAMLLinter/Content.YAMLLinter.csproj --no-build

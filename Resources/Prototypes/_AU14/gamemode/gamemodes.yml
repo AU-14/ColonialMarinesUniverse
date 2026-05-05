@@ -22,9 +22,9 @@
   rules:
   - AuVoteRule
   - PlatoonSpawn
+  - RemoveAllJobs
   - AddGovfor
   - AddOpfor
-  - RemoveAllJobs
 
 - type: gamePreset
   id: Insurgency
@@ -39,6 +39,7 @@
     - AUPlanetShepherdsPride
     #- AUPlanetLV624
     - CMUPlanetLament
+    - AUPlanetStableGarrison
     #- AUPlanetLV747
     #- AUPlanetSorokyne
     #- AUPlanetLV759 removed pending rework
@@ -57,23 +58,23 @@
   description: Investigate a mysterious distress signal as government forces.
   requiresGovforVote: true
   supportedPlanets:
-  - AUPlanetShepherdsPride
-  - AUPlanetLV747
+#  - AUPlanetShepherdsPride
+#  - AUPlanetLV747
   #- AUPlanetFlight
   - AUPlanetLV327
    - AUPlanetSorokyne
   - AUPlanetCorsatStation
-  - AUPlanetStableGarrison
+#  - AUPlanetStableGarrison
   - AUPlanetTrijent
 #  - AuPlanetFiorina -removed due to load errors
   - AuPlanetKutjevo
   - AuPlanetShivasSnowball
-  - CMUPlanetLament
+#  - CMUPlanetLament
   rules:
   - AuVoteRule
   - PlatoonSpawn
-  - AddGovfor
   - RemoveAllJobs
+  - AddGovfor
 
 - type: gamePreset
   id: ColonyFall
@@ -92,7 +93,7 @@
    # - AUPlanetLV624
    # - AUPlanetLV327
    # - AUPlanetSorokyne
-    #- AUPlanetStableGarrison
+    - AUPlanetStableGarrison
     - CMUPlanetLament
 
 - type: gamePreset
@@ -157,10 +158,11 @@
       AU14JobGOVFORSquadRifleman: 75
       AU14JobGOVFORAuxSupportSynth: 2
       AU14JobGOVFORadvisor: 1
-      AU14JobGOVFORMilitaryDoctor: 1
+      AU14JobGOVFORMilitaryDoctor: 3
       AU14JobGOVFORMilitaryPoliceMan: 2
       AU14JobGOVFORVehicleCommand: 1
       AU14JobGOVFORVehicleCrew: 4
+      AU14JobGOVFORAuxTech: 1
 
 - type: entity
   id: AddOpfor
@@ -192,6 +194,7 @@
     jobs:
       AU14JobCLFCellLeader: 1
       AU14JobCLFPhysician: 1
+      AU14JobCLFSurgeon: 1
       AU14JobCLFGuerilla: 3
 
 - type: entity

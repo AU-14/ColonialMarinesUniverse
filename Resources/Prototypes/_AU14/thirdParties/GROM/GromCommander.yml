@@ -55,7 +55,6 @@
   id: AU14JobUPPGROMCommander
   name: UPP GROM Commander
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadGROM

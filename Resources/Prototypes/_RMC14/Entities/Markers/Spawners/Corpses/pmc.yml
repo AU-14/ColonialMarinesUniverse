@@ -1,6 +1,14 @@
 
 - type: entity
   parent: RMCSpawnerCorpse
+  id: RMCSpawnerCorpseWeYaGoon
+  name: Corpse Spawner - We-Ya Goon
+  components:
+  - type: CorpseSpawner
+    spawn: RMCCorpseWeYaGoon
+
+- type: entity
+  parent: RMCSpawnerCorpse
   id: RMCSpawnerCorpseWeYaGoonLead
   name: Corpse Spawner - We-Ya Goon Lead
   components:

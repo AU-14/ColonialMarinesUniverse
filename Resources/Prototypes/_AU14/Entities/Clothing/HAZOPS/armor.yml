@@ -2,7 +2,7 @@
   parent: AU14BaseArmor
   id: AU14ArmorHAZOPSPWA
   name: powered warfighting armor
-  description: A specially designed vest for hazardous operations. Supposeably has a battery charge for "extra functionality", but nobody knows how to charge it.  Despite the armor plating providing higher biological resistance and slightly higher strike shielding, it is less protective against bullets than the standard issue USCM armor.
+  description: A specially designed vest for hazardous operations. Supposedly has a battery charge for "extra functionality", but nobody knows how to charge it.  Despite the armor plating providing higher biological resistance and slightly higher strike shielding, it is less protective against bullets than the standard issue USCM armor.
   components:
   - type: Sprite
     sprite: _AU14/Clothing/HAZOPS/poweredwarfightingarmor.rsi

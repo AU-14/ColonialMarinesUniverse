@@ -36,7 +36,6 @@
   id: AU14JobFORECONKillTeamSpotter
   name: FORECON Spotter (Kill Team)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadFORECON

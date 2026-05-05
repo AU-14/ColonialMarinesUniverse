@@ -19,7 +19,6 @@
         innate: true
       - type: RunawaySynth
       - type: EyeProtection
-      - type: WoundableUntreatable
       - type: Insulated
       - type: RMCLeapProtection
       - type: Synth
@@ -310,6 +309,7 @@
       - AU14JobCLFGuerilla
       - AU14JobCLFCellLeader
       - AU14JobCLFPhysician
+      - AU14JobCLFSurgeon
       briefing:
         text: clfveteran-role-greeting
         color: OliveDrab

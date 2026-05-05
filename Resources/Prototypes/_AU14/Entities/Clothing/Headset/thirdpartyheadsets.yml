@@ -46,3 +46,44 @@
   - type: RMCHeadset
     channels:
     - TWESOF
+
+- type: entity
+  parent: RMCHeadsetMarine
+  id: AU14HeadsetVAI
+  name: vanguard's arrow headset
+  description: A special headset used by Vanguard's Arrow Incorporated mercenaries, features a non-standard brace.
+  suffix: VAI, Ambassador
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMEncryptionKeyColony
+  - type: RMCHeadset
+    channels:
+    - VAI
+  - type: GrantSquadLeaderTracker
+    defaultMode: SquadLeader
+    trackerModes:
+    - SquadLeader
+
+- type: entity
+  parent: AU14HeadsetSectionLeader
+  id: AU14HeadsetVAIERT
+  name: vanguard's arrow headset
+  suffix: VAI, GOVFOR
+  description: A special headset used by Vanguard's Arrow Incorporated mercenaries, features a non-standard brace.
+  components:
+  - type: RMCHeadset
+    channels:
+    - VAI
+
+- type: entity
+  parent: AU14ColonyAdminHeadset
+  id: AU14HeadsetVAIColony
+  name: vanguard's arrow headset
+  description: A special headset used by Vanguard's Arrow Incorporated mercenaries, features a non-standard brace.
+  suffix: VAI, Colony
+  components:
+  - type: RMCHeadset
+    channels:
+    - VAI

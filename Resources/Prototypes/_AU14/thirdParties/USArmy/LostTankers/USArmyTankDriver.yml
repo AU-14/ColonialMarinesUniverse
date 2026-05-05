@@ -44,7 +44,6 @@
   id: AU14JobUSArmyTankDriver
   name: US Army Tank Driver
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadUSArmy32nd

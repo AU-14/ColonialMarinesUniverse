@@ -1,5 +1,3 @@
- #section
-
 - type: entity
   parent: CMEncryptionKey
   id: AU14EncryptionKeyGOVFOR
@@ -24,7 +22,6 @@
   components:
   - type: GrantSquadLeaderTracker
     defaultMode: SquadLeader
-
     trackerModes:
     - SquadLeader
     - FireteamLeader
@@ -119,6 +116,16 @@
     state: we_ya_key
 
 - type: entity
+  parent: CMEncryptionKey
+  id: AU14EncryptionKeyMarineJTAC
+  name: JTAC encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - MarineJTAC
+    defaultChannel: MarineJTAC
+
+- type: entity
   parent: RMCHeadsetShip
   id: AU14HeadsetSectionMarine
   name: GOVFOR radio headset
@@ -126,19 +133,28 @@
   components:
   - type: GrantSquadLeaderTracker
     defaultMode: SquadLeader
-
     trackerModes:
     - SquadLeader
     - FireteamLeader
     - BattleBuddy
-
-
   - type: Sprite
     state: generic_headset
   - type: ContainerFill
     containers:
       key_slots:
       - CMEncryptionKeyCommon
+
+- type: entity
+  parent: AU14HeadsetSectionMarine
+  id: AU14HeadsetSectionMarineFTL
+  name: GOVFOR FTL radio headset
+  description: This is used by GOVFOR fireteam leaders to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMEncryptionKeyCommon
+      - AU14EncryptionKeyMarineJTAC
 
 - type: entity
   parent: RMCHeadsetShip
@@ -148,12 +164,10 @@
   components:
   - type: GrantSquadLeaderTracker
     defaultMode: SquadLeader
-
     trackerModes:
     - SquadLeader
     - FireteamLeader
     - BattleBuddy
-
   - type: Sprite
     state: generic_headset
   - type: ContainerFill
@@ -177,7 +191,6 @@
     - SquadLeader
     - FireteamLeader
     - BattleBuddy
-
   - type: Sprite
     state: generic_headset
   - type: ContainerFill

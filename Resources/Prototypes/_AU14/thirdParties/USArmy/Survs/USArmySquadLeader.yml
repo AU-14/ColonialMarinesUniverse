@@ -63,7 +63,6 @@
   id: AU14JobUSArmySquadleader
   name: US Army Squad Leader (Surv)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadUSArmy

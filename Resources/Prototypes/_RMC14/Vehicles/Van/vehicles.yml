@@ -7,17 +7,22 @@
   - type: Vehicle
     movementKind: Grid
   - type: Clickable
+  - type: RMCIgnoreGhostInteractionLimits
+  - type: RequireProjectileTarget
   - type: GridVehicleMover
     maxSpeed: 8
     acceleration: 5
     deceleration: 12
+    turnDelay: 0.25
     pushCooldown: 2
-    xenoBlockMinimumSize: Immobile
+    xenoBlockMinimumSize: Xeno
     xenoPushMinimumSize: Immobile
     canSmashWalls: true
     wallSmashMinSpeed: 5
     wallSmashWheelDamage: 3
     wallSmashHullDamage: 150
+    wallSmashSlowdownMultiplier: 0.6
+    wallSmashSlowdownDuration: 0.35
     mobCollisionHullDamage: 20
     speedAtZeroIntegrity: 0
     crashImmobileDuration: 90
@@ -112,10 +117,17 @@
   - type: VehicleWeapons
   - type: InputMover
   - type: ItemSlots
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        showEnts: false
+        occludes: true
+        ent: null
   - type: HardpointSlots
     vehicleFamily: Van
     slots:
     - id: wheel-1
+      disableEject: true
       hardpointType: Wheel
       slotType: Wheel
       insertDelay: 1.5
@@ -124,10 +136,14 @@
         - VehicleWheelItem
   - type: VehicleWheelSlots
     slotCount: 1
+    slots:
+    - wheel-1
   - type: HardpointIntegrity
     maxIntegrity: 1000
+    integrity: 1000
     repairFuelCost: 10
     bypassEntryOnZero: true
+  - type: HardpointState
   - type: Appearance
   - type: VehicleEnter
     interiorPath: /Maps/_RMC14/Vehicles/van_interior.yml
@@ -201,13 +217,16 @@
     maxSpeed: 8
     acceleration: 5
     deceleration: 12
+    turnDelay: 0.25
     pushCooldown: 2
-    xenoBlockMinimumSize: Immobile
+    xenoBlockMinimumSize: Xeno
     xenoPushMinimumSize: Immobile
     canSmashWalls: true
     wallSmashMinSpeed: 5
     wallSmashWheelDamage: 3
     wallSmashHullDamage: 150
+    wallSmashSlowdownMultiplier: 0.6
+    wallSmashSlowdownDuration: 0.35
     mobCollisionHullDamage: 20
     speedAtZeroIntegrity: 0
     crashImmobileDuration: 90
@@ -301,10 +320,17 @@
   - type: VehicleWeapons
   - type: InputMover
   - type: ItemSlots
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        showEnts: false
+        occludes: true
+        ent: null
   - type: HardpointSlots
     vehicleFamily: Van
     slots:
     - id: wheel-1
+      disableEject: true
       hardpointType: Wheel
       slotType: Wheel
       insertDelay: 1.5
@@ -313,10 +339,14 @@
         - VehicleWheelItem
   - type: VehicleWheelSlots
     slotCount: 1
+    slots:
+    - wheel-1
   - type: HardpointIntegrity
     maxIntegrity: 1000
+    integrity: 1000
     repairFuelCost: 10
     bypassEntryOnZero: true
+  - type: HardpointState
   - type: Appearance
   - type: VehicleEnter
     interiorPath: /Maps/_RMC14/Vehicles/box_van_interior.yml
@@ -376,8 +406,8 @@
 - type: entity
   parent: VehicleVanBase
   id: VehicleSPPVan
-  name: SPP van
-  description: A rugged transport van painted in SPP colors.
+  name: Kheshig-1 LMP
+  description: A mine-resistant, multi-purpose vehicle utilized by the UPP for groundside operations.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/sppvan.rsi
@@ -410,6 +440,7 @@
     vehicleFamily: Van
     slots:
     - id: wheel-1
+      disableEject: true
       hardpointType: Wheel
       slotType: Wheel
       compatibilityId: SPPVan
@@ -418,8 +449,8 @@
 - type: entity
   parent: VehicleSPPVan
   id: VehicleSPPVanArmed
-  name: SPP van (armed)
-  description: An SPP van fitted with a roof-mounted weapon.
+  name: Kheshig-1 LMP (armed)
+  description: A mine-resistant, multi-purpose vehicle utilized by the UPP for groundside operations.
   components:
   - type: Sprite
     layers:
@@ -438,6 +469,7 @@
     slots:
       secondary:
         startingItem: VehicleSPPVanTurret
+        disableEject: true
         whitelist:
           components:
           - HardpointItem
@@ -445,6 +477,7 @@
     vehicleFamily: Van
     slots:
     - id: secondary
+      disableEject: true
       hardpointType: Secondary
       slotType: Launcher
       compatibilityId: SPPVan
@@ -452,6 +485,7 @@
       insertDelay: 2.0
       required: false
     - id: wheel-1
+      disableEject: true
       hardpointType: Wheel
       slotType: Wheel
       compatibilityId: SPPVan
@@ -476,8 +510,8 @@
 - type: entity
   parent: VehicleSPPVan
   id: VehicleSPPVanMedical
-  name: SPP van (medical)
-  description: An SPP van marked for casualty evacuation and field treatment.
+  name: Kheshig-1 LMP (medical)
+  description: A mine-resistant, multi-purpose vehicle utilized by the UPP for groundside operations.
   components:
   - type: Sprite
     layers:
@@ -508,8 +542,8 @@
 - type: entity
   parent: VehicleSPPVan
   id: VehicleSPPVanPrisoner
-  name: SPP van (prisoner)
-  description: An SPP van refitted for prisoner transport.
+  name: Kheshig-1 LMP (prisoner transport)
+  description: A mine-resistant, multi-purpose vehicle utilized by the UPP for groundside operations.
   components:
   - type: Sprite
     layers:
@@ -540,8 +574,8 @@
 - type: entity
   parent: VehicleBoxVanBase
   id: VehicleSPPVanLogistics
-  name: SPP van (logistics)
-  description: An SPP logistics van fitted with an enlarged cargo body.
+  name: Kheshig-1 LMP (logistics)
+  description: A mine-resistant, multi-purpose vehicle utilized by the UPP for groundside operations.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/sppvan_logistics.rsi
@@ -573,6 +607,7 @@
     vehicleFamily: Van
     slots:
     - id: wheel-1
+      disableEject: true
       hardpointType: Wheel
       slotType: Wheel
       compatibilityId: SPPVan
@@ -596,7 +631,7 @@
     - map: [ rmc-wheels ]
       state: wheels_1
   - type: VehicleEnter
-    interiorPath: /Maps/_RMC14/Vehicles/van_interior.yml
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/paddywagon.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 8

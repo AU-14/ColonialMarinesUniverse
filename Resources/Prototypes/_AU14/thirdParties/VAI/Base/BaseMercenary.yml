@@ -1,0 +1,83 @@
+- type: job
+  parent: CMJobBase
+  id: AU14VAIMercenaryBase
+  name: au14-job-name-vai-mercenary
+  playTimeTracker: AU14VAIMercenary
+  description: au14-vai-mercenary-description
+  ranks:
+    VAI_Mercenary: []
+  icon: "CMJobIconEmpty"
+  spawnMenuRoleName: VAI Contractor (Base)
+  joinNotifyCrew: false
+  supervisors: au14-job-name-vai-teamleader
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadVAIPO
+    - type: Skills
+      skills:
+        RMCSkillCqc: 5
+        RMCSkillEngineer: 4
+        RMCSkillConstruction: 3
+        RMCSkillFirearms: 2
+        RMCSkillMedical: 1
+        RMCSkillMeleeWeapons: 1
+        RMCSkillPolice: 2
+        RMCSkillFireman: 5
+        RMCSkillPowerLoader: 2
+        RMCSkillVehicles: 2
+        RMCSkillJtac: 1
+        RMCSkillEndurance: 1
+    - type: EquipSurvivorPreset
+      preset: AU14VAIPreset
+    - type: JobPrefix
+      prefix: au14-job-prefix-vai-mercenary
+  hidden: true
+
+
+- type: entity
+  id: AU14VAIPreset
+  name: vai mercenary preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SurvivorPreset
+    randomGearOther:
+    -
+      - [ AU14GlassesBiMex ] # glasses
+      - [ AU14GogglesM1A1ClearBallistic ]
+      - [ AU14GogglesM60 ]
+      - [ AU14GlassesBiMexOrange ]
+      - [ RMCGlassesTriMaxBronze ]
+      - [ RMCSunglassesBigFake ]
+    -
+      - [ AU14PVEHandsFingerlessBlackGloves ] # gloves
+      - [ AU14PVEHandsFingerlessBrownGloves ]
+      - [ AU14PVEHandsInsulatedBlackMarine ]
+      - [ CMHandsBrown ]
+    randomWeapon:
+    - [ AU14WeaponRifleMAR40Tactical, AU14JumpsuitTShirtGrayVAIMAR40, AU14PouchMagazineLargeFilledMAR40, RMCMagazineRifleMAR40Ext, RMCPacketGrenadeSmokeFilled ]
+    - [ AU14WeaponRifleMAR40Tactical, AU14JumpsuitTShirtGrayVAIMAR40, AU14PouchMagazineLargeFilledMAR40, RMCMagazineRifleMAR40Ext, RMCPacketGrenadeSmokeFilled ]
+    - [ AU14WeaponRifleMAR40Tactical, AU14JumpsuitTShirtGrayVAIMAR40, AU14PouchMagazineLargeFilledMAR40, RMCMagazineRifleMAR40Ext, RMCPacketGrenadeSmokeFilled ] # 30%
+    - [ AU14WeaponRifleABR40TacticalVAI, AU14JumpsuitTShirtGrayVAIL42A, AU14PouchMagazineLargeFilledL42A, RMCMagazineRifleL42AExtended, RMCMagazineRifleL42AExtended,  RMCMagazineRifleL42AAP ]
+    - [ AU14WeaponRifleABR40TacticalVAI, AU14JumpsuitTShirtGrayVAIL42A, AU14PouchMagazineLargeFilledL42A, RMCMagazineRifleL42AExtended, RMCMagazineRifleL42AExtended,  RMCMagazineRifleL42AAP ] # 20%
+    - [ AU14WeaponRifleM41AMK2Tactical, AU14JumpsuitTShirtGrayVAIM41A, AU14PouchMagazineLargeFilledM41AMK2AP, CMMagazineRifleM54CExt, RMCPacketGrenadeSmokeFilled ]
+    - [ AU14WeaponRifleM41AMK2Tactical, AU14JumpsuitTShirtGrayVAIM41A, AU14PouchMagazineLargeFilledM41AMK2AP, CMMagazineRifleM54CExt, RMCPacketGrenadeSmokeFilled ] # 20 %
+    - [ AU14WeaponShotgunM890Tactical, AU14JumpsuitTShirtGrayVAIHEDP, RMCPouchShotgunLargeBuckshot, RMCExplosiveBreachingCharge, RMCPacketGrenadeSmokeFilled ] # 10%
+    - [ AU14WeaponRifleM41AMK1Tactical, AU14JumpsuitTShirtGrayVAIHEDP, AU14PouchMagazineLargeFilledM41A, CMMagazineRifleM54CMK1, RMCPacketGrenadeSmokeFilled ] # 10%
+    tryEquipRandomWeapon: true
+
+- type: startingGear
+  parent: AU14GearVAIBase
+  id: AU14GearVAIMercenary
+  storage:
+    outerClothing:
+    - RMCBinocularsCivPVE
+    back:
+    - CMMRE
+    - CMGrenadeFragOld
+    - CMGrenadeFragOld
+    - RMCTacticalPrybar
+    - RMCExplosiveBreachingCharge

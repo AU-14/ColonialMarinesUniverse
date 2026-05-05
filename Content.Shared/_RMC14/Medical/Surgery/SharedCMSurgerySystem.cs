@@ -1,7 +1,8 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery.Conditions;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
+using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids.Organs;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Body.Part;
@@ -77,6 +78,12 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
         var ev = new CMSurgeryStepEvent(args.User, ent, part, GetTools(args.User));
         RaiseLocalEvent(step, ref ev);
 
+        if (GetNextStep(ent, part, surgery.Owner) is null)
+        {
+            var completeEv = new CMSurgeryCompleteEvent(ent, args.User, args.Surgery);
+            RaiseLocalEvent(ent, ref completeEv);
+        }
+
         RefreshUI(ent);
     }
 
@@ -135,6 +142,13 @@ public abstract partial class SharedCMSurgerySystem : EntitySystem
         {
             return false;
         }
+
+        // Block synth-marked surgeries on non-synth bodies. Synth bodies can
+        // still execute human surgery steps when their conditions are met —
+        // matches the dispatch-side filter so step validation doesn't reject
+        // what dispatch surfaced.
+        if (!HasComp<SynthComponent>(body) && HasComp<RMCSynthSurgeryComponent>(surgeryEntId))
+            return false;
 
         var ev = new CMSurgeryValidEvent(body, targetPart);
         RaiseLocalEvent(stepEnt, ref ev);

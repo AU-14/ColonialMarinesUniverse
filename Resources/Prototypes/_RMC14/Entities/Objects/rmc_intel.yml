@@ -556,7 +556,7 @@
       -
         - name: Requisition Budget Increase
           description: Distributes resources to requisitions for spending.
-          cost: 2
+          cost: 20
           increase: 1
           repurchasable: true
           events:
@@ -570,7 +570,7 @@
             state: budget_req
         - name: Dropship Fabricator Budget Increase
           description: Distributes resources to requisitions for spending.
-          cost: 1
+          cost: 20
           repurchasable: false
           events:
           - !type:TechDropshipBudgetEvent
@@ -583,7 +583,7 @@
             state: budget_req
         - name: Search and Rescue K9 Team
           description: Summon a Search and Rescue K9 Team.
-          cost: 2
+          cost: 15
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent
@@ -596,7 +596,7 @@
             state: cryotroops
         - name: LACN Commandos Scout Team
           description: Summon an LACN Commandos Scout Team.
-          cost: 8
+          cost: 25
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent
@@ -609,7 +609,7 @@
             state: beacon
         - name: FORECON Marksman Team
           description: Summon a FORECON Marksman Team.
-          cost: 4
+          cost: 30
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent
@@ -622,7 +622,7 @@
             state: cryotroops
         - name: FORECON Marksman Team
           description: Summon a FORECON Sniper Team.
-          cost: 4
+          cost: 25
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent
@@ -645,7 +645,7 @@
       -
         - name: RMC Rapid Reaction Troop
           description: Summon a Royal Marines Commando Rapid Reaction Troop.
-          cost: 3
+          cost: 50
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent
@@ -658,11 +658,11 @@
             state: beacon
         - name: US Army 32nd ArmDiv reinforcements
           description: Summon a squad from US Army 32nd Armored Division.
-          cost: 4
+          cost: 60
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent
-            thirdPartyId: RMCRRT
+            thirdPartyId: USArmyArmored
           - !type:TechAnnounceEvent
             author: INTEL OPERATIONS
             message: A US Army 32nd Armored Division squad has been dispatched to aid with the operation.
@@ -692,7 +692,7 @@
       -
         - name: Requisition Budget Increase
           description: Distributes resources to requisitions for spending.
-          cost: 2
+          cost: 20
           increase: 1
           repurchasable: true
           events:
@@ -706,7 +706,7 @@
             state: budget_req
         - name: CMB Investigation Party
           description: Summon a CMB investigation party to the area.
-          cost: 1
+          cost: 10
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: CMBInvestigationPartyAlt
@@ -767,6 +767,16 @@
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: CLFCellReinforcementsIntelMachineGunner
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: Call VAISO read on WY
+          description: Send intel on local WY facility to VAISO, summoning them for a raid. They are not hostile to CLF but not required to help directly!
+          cost: 80
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: VAISO
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon

@@ -1,0 +1,11 @@
+- type: entity
+  parent: RMCBeltHolsterPistol
+  id: AU14BeltPostelPistolM48A4Tactical
+  suffix: Filled, M48A4, Tactical
+  description: 
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponPistolM48A4Tactical
+    - id: AU14MagazinePistolM48A4
+      amount: 6

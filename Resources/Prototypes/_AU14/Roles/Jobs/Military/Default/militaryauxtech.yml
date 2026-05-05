@@ -1,0 +1,89 @@
+- type: job
+  parent: AU14JobAuxTechBase
+  id: AU14JobGOVFORAuxTech
+  name: au14-job-name-govforAuxTech
+  description: au14-job-description-govforAuxTech
+  setPreference: true
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORMilitaryPoliceMan
+      time: 216000 # 60 hours
+    RMCRankCorporal: []
+  startingGear: AU14GearGOVFORAuxTech
+  dummyStartingGear: AU14GearGOVFORAuxTechDummy
+  icon: "AU14JobIconRTO"
+  requireAdminNotify: false
+  spawnMenuRoleName: Auxiliary Technician (GOVFOR)
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforAuxTech
+  - CMCargoTech
+  overwatchSortPriority: -6
+  overwatchShowName: true
+  overwatchRoleName: Auxiliary Technician
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Marine
+      Faction: govfor
+    - type: Skills
+      preset: AU14SkillPresetPlatoonAuxTech
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforAuxTech
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: MarineOrders
+      moveOrderSoundMale:
+        collection: AU14MaleMoveOrder
+      moveOrderSoundFemale:
+        collection: AU14FemaleMoveOrder
+      focusOrderSoundMale:
+        collection: AU14MaleFocusOrder
+      focusOrderSoundFemale:
+        collection: AU14FemaleFocusOrder
+      holdOrderSoundMale:
+        collection: AU14MaleHoldOrder
+      holdOrderSoundFemale:
+        collection: AU14FemaleHoldOrder
+    - type: UserIFF
+      factions:
+      - GOVFOR
+  hidden: false
+
+- type: startingGear
+  id: AU14GearGOVFORAuxTech
+  equipment:
+    shoes: CMBootsBlackFilled
+    ears: AU14HeadsetGOVFORAux
+    ears2: RMCM5CameraGear
+    id: AU14JobIDCardGOVFORAuxTech
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORAuxTech
+  name: Spawn Point GOVFOR Auxiliary Technician
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORAuxTech
+  - type: Sprite
+    state: syn_spawn
+
+- type: startingGear
+  id: AU14GearGOVFORAuxTechDummy
+  equipment:
+    shoes: CMBootsBlackFilled
+    back: CMSatchelMarine

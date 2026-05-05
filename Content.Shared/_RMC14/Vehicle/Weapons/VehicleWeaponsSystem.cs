@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Content.Shared.Actions;
@@ -20,13 +21,19 @@ using Robust.Shared.Localization;
 using Robust.Shared.Network;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Vehicle.Components;
+using Robust.Shared.Map;
+using Robust.Shared.Maths;
 using Robust.Shared.Timing;
+using Robust.Shared.Random;
 
 namespace Content.Shared._RMC14.Vehicle;
 
 public sealed partial class VehicleWeaponsSystem : EntitySystem
 {
     private const string HardpointSelectActionId = "ActionVehicleSelectHardpoint";
+    private const float RunawayFireMinDelay = 12f;
+    private const float RunawayFireMaxDelay = 30f;
+    private const float RunawayFireDistance = 30f;
 
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
@@ -45,6 +52,9 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private readonly HardpointSystem _hardpoints = default!;
+    [Dependency] private readonly SharedGunSystem _guns = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
 
     public override void Initialize()
     {
@@ -68,6 +78,127 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
 
         SubscribeLocalEvent<VehicleWeaponsComponent, GetIFFGunUserEvent>(OnGetIFFGunUser);
         SubscribeLocalEvent<VehicleTurretComponent, GetIFFGunUserEvent>(OnTurretGetIFFGunUser);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        if (_net.IsClient)
+            return;
+
+        UpdateRunawayTriggerFailures();
+    }
+
+    private void UpdateRunawayTriggerFailures()
+    {
+        var now = _timing.CurTime;
+        var query = EntityQueryEnumerator<VehicleHardpointFailureComponent, GunComponent, VehicleTurretComponent>();
+        while (query.MoveNext(out var gunUid, out var failures, out var gun, out _))
+        {
+            if (!failures.ActiveFailures.Contains(VehicleHardpointFailure.RunawayTrigger))
+            {
+                failures.NextRunawayFireAt = TimeSpan.Zero;
+                continue;
+            }
+
+            if (failures.NextRunawayFireAt == TimeSpan.Zero)
+            {
+                failures.NextRunawayFireAt = GetNextRunawayFireTime(now);
+                continue;
+            }
+
+            if (now < failures.NextRunawayFireAt)
+                continue;
+
+            failures.NextRunawayFireAt = GetNextRunawayFireTime(now);
+            TryRunawayFire(gunUid, gun);
+        }
+    }
+
+    private TimeSpan GetNextRunawayFireTime(TimeSpan now)
+    {
+        return now + TimeSpan.FromSeconds(_random.NextFloat(RunawayFireMinDelay, RunawayFireMaxDelay));
+    }
+
+    private void TryRunawayFire(EntityUid gunUid, GunComponent gun)
+    {
+        if (!_topology.TryGetVehicle(gunUid, out var vehicle, includeSelf: false))
+            return;
+
+        if (!_hardpoints.IsHardpointFunctional(gunUid))
+            return;
+
+        if (!_guns.CanShoot(gun))
+            return;
+
+        if (!TryGetRunawayFireTarget(gunUid, vehicle, out var target))
+            return;
+
+        var fired = _guns.AttemptShoot((gunUid, gun), vehicle, target);
+        if (fired == null || fired.Count == 0)
+            return;
+
+        PopupRunawayFire(vehicle, gunUid);
+    }
+
+    private bool TryGetRunawayFireTarget(EntityUid gunUid, EntityUid vehicle, out EntityCoordinates target)
+    {
+        target = default;
+
+        if (!_turretSystem.TryResolveRotationTarget(gunUid, out var rotationTurretUid, out var rotationTurret) ||
+            !_turretSystem.TryGetTurretOrigin(rotationTurretUid, rotationTurret, out var origin))
+        {
+            return false;
+        }
+
+        var originMap = _transform.ToMapCoordinates(origin);
+        var vehicleRotation = _transform.GetWorldRotation(vehicle);
+        var shotRotation = (rotationTurret.WorldRotation + vehicleRotation).Reduced();
+        var targetMap = new MapCoordinates(
+            originMap.Position + shotRotation.ToWorldVec() * RunawayFireDistance,
+            originMap.MapId);
+
+        target = _transform.ToCoordinates(rotationTurretUid, targetMap);
+        return true;
+    }
+
+    private void PopupRunawayFire(EntityUid vehicle, EntityUid gunUid)
+    {
+        var message = $"{Name(gunUid)} discharges on its own!";
+        var recipients = new HashSet<EntityUid>();
+
+        if (TryComp(vehicle, out VehicleComponent? vehicleComp) && vehicleComp.Operator is { } driver)
+            recipients.Add(driver);
+
+        if (TryComp(vehicle, out VehicleWeaponsComponent? weapons))
+        {
+            if (weapons.Operator is { } weaponsOperator)
+                recipients.Add(weaponsOperator);
+
+            foreach (var operatorUid in weapons.OperatorSelections.Keys)
+            {
+                recipients.Add(operatorUid);
+            }
+
+            foreach (var operatorUid in weapons.HardpointOperators.Values)
+            {
+                recipients.Add(operatorUid);
+            }
+        }
+
+        var notified = false;
+        foreach (var recipient in recipients)
+        {
+            if (!Exists(recipient))
+                continue;
+
+            _popup.PopupCursor(message, recipient, PopupType.SmallCaution);
+            notified = true;
+        }
+
+        if (!notified)
+            _popup.PopupEntity(message, vehicle, vehicle, PopupType.SmallCaution);
     }
 
     private void OnGetIFFGunUser(Entity<VehicleWeaponsComponent> ent, ref GetIFFGunUserEvent args)
@@ -229,6 +360,20 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
             return;
         }
 
+        if (!_hardpoints.IsHardpointFunctional(selectedWeapon))
+        {
+            args.Cancel();
+            _popup.PopupEntity("That hardpoint is too damaged to fire.", ent.Owner, ent.Owner, PopupType.SmallCaution);
+            return;
+        }
+
+        if (_hardpoints.ShouldVehicleGunMisfire(selectedWeapon))
+        {
+            args.Cancel();
+            _popup.PopupEntity("The hardpoint feed jams and the shot misfires.", ent.Owner, ent.Owner, PopupType.SmallCaution);
+            return;
+        }
+
         var remaining = args.Used.Comp.NextFire - _timing.CurTime;
         if (remaining <= TimeSpan.Zero)
             return;
@@ -310,6 +455,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
             !_topology.TryGetMountedSlotByItem(vehicleUid, mountedWeapon.Value, out var mountedSlot, hardpoints, itemSlots) ||
             !HasComp<GunComponent>(mountedWeapon.Value) ||
             !HasComp<VehicleTurretComponent>(mountedWeapon.Value) ||
+            !_hardpoints.IsHardpointFunctional(mountedWeapon.Value) ||
             !TryGetMountedWeaponHardpointType(vehicleUid, mountedWeapon.Value, out var hardpointType, hardpoints, itemSlots) ||
             !IsHardpointTypeAllowed(seatComp, hardpointType))
         {
@@ -383,7 +529,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
         if (weapons.SelectedWeapon is { } selected &&
             Resolve(args.Vehicle, ref hardpoints, logMissing: false) &&
             Resolve(args.Vehicle, ref itemSlots, logMissing: false) &&
-            !IsSelectedWeaponInstalled(args.Vehicle, selected, hardpoints, itemSlots))
+            !IsSelectableMountedWeapon(args.Vehicle, selected, hardpoints, itemSlots))
         {
             weapons.SelectedWeapon = null;
             Dirty(args.Vehicle, weapons);
@@ -533,7 +679,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
         {
             if (!Exists(entry.Key) ||
                 !Exists(entry.Value) ||
-                !_topology.TryGetMountedSlotByItem(vehicle, entry.Key, out _, hardpoints, itemSlots))
+                !IsSelectableMountedWeapon(vehicle, entry.Key, hardpoints, itemSlots))
             {
                 weapons.HardpointOperators.Remove(entry.Key);
             }
@@ -543,7 +689,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
         {
             if (!Exists(entry.Key) ||
                 !Exists(entry.Value) ||
-                !_topology.TryGetMountedSlotByItem(vehicle, entry.Value, out _, hardpoints, itemSlots))
+                !IsSelectableMountedWeapon(vehicle, entry.Value, hardpoints, itemSlots))
             {
                 weapons.OperatorSelections.Remove(entry.Key);
             }
@@ -662,7 +808,8 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
             operatorComp.Vehicle == vehicle &&
             operatorComp.SelectedWeapon is { } operatorWeapon &&
             Exists(operatorWeapon) &&
-            HasComp<GunComponent>(operatorWeapon))
+            HasComp<GunComponent>(operatorWeapon) &&
+            IsSelectableMountedWeapon(vehicle, operatorWeapon))
         {
             weapon = operatorWeapon;
             return true;
@@ -671,7 +818,8 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
         if (weapons.Operator == operatorUid &&
             weapons.SelectedWeapon is { } primaryWeapon &&
             Exists(primaryWeapon) &&
-            HasComp<GunComponent>(primaryWeapon))
+            HasComp<GunComponent>(primaryWeapon) &&
+            IsSelectableMountedWeapon(vehicle, primaryWeapon))
         {
             weapon = primaryWeapon;
             return true;
@@ -748,6 +896,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
         return Exists(mountedWeapon) &&
                HasComp<VehicleTurretComponent>(mountedWeapon) &&
                HasComp<GunComponent>(mountedWeapon) &&
+               _hardpoints.IsHardpointFunctional(mountedWeapon) &&
                _topology.TryGetMountedSlotByItem(vehicle, mountedWeapon, out _, hardpoints, itemSlots);
     }
 }

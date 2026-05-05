@@ -18,6 +18,9 @@
     timeToApply: 4
     structure: true
   - type: XenoCrusherChargable
+    setDamage:
+      types:
+        Structural: 750
 
 - type: entity
   parent: BaseStructure
@@ -193,7 +196,6 @@
   - type: XenoRecentlyBuiltPreventCollisions
 
 # Invisible Wall
-
 - type: entity
   parent: MarkerBase
   id: RMCWallInvisibleBulletPassible

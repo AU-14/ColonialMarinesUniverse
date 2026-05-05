@@ -54,6 +54,5 @@
     - id: RMCHandcuffs
     - id: RMCHandcuffs
     - id: RMCHandcuffs
-    - id: RMCHandcuffs
 #    - id: Pepperspray # TODO RMC14
-#    - id: ForensicScanner # TODO RMC14 cm clue scanner
+    - id: ForensicScanner # TODO RMC14 cm clue scanner

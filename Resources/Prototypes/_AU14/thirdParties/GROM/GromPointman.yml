@@ -44,7 +44,6 @@
   id: AU14JobUPPGROMPointman
   name: UPP GROM Pointman
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: AU14SquadGROM

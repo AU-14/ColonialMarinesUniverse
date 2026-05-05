@@ -1,4 +1,9 @@
 - type: entity
+  parent: RMCPouchShotgunLargeBuckshot
+  id: AU14PouchShotgunLargeBuckshot
+  suffix: AU14
+
+- type: entity
   parent: RMCPouchPistol
   id: AU14PouchPistolAlt
   suffix: AU14, Black

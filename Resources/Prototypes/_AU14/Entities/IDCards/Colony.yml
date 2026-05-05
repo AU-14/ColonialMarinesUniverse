@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: Clothing
   id: AU14IDCardBaseCivilianNoIFF
   name: identification holo-badge
@@ -47,19 +47,66 @@
   components:
   - type: PresetIdCard
     job: AU14JobCLFCellLeader
+  - type: Access
+    groups:
+    - Colonist
   - type: IdCard
-    jobTitle: au14-id-job-title-colony-civilian
+    jobTitle: au14-job-name-civiliancolonist
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardCLFCivilian
-  name: colonist ID card
+  name: CLF guerilla ID card
   components:
   - type: Access
     groups:
     - Colonist
   - type: IdCard
-    jobTitle: au14-id-job-title-colony-civilian
+    jobTitle: au14-job-name-civiliancolonist
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: AU14IDCardCLFPhysician
+  name: CLF physician ID card
+  components:
+  - type: Access
+    groups:
+    - Colonist
+  - type: IdCard
+    jobTitle: au14-job-name-civilianphysician
+
+- type: entity
+  parent: AU14IDCardCLFPhysician
+  id: AU14IDCardCLFGeneralPractitioner
+  name: CLF general practitioner ID card
+  components:
+  - type: Access
+    groups:
+    - Colonist
+  - type: IdCard
+    jobTitle: au14-job-name-civiliangeneralpractitioner
+
+- type: entity
+  parent: AU14IDCardCLFPhysician
+  id: AU14IDCardCLFPharmacist
+  name: CLF pharmacist ID card
+  components:
+  - type: Access
+    groups:
+    - Colonist
+  - type: IdCard
+    jobTitle: au14-job-name-civilianpharmacist
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: AU14IDCardCLFSurgeon
+  name: CLF surgeon ID card
+  components:
+  - type: Access
+    groups:
+    - Colonist
+  - type: IdCard
+    jobTitle: au14-job-name-civiliansurgeon
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
@@ -100,6 +147,14 @@
   components:
   - type: JobTitleChanger
     jobTitle: Free Press Journalist
+
+- type: entity
+  parent: AU14IDCardColonyJournalist
+  id: AU14IDCardColonyJournalistPhotojournalist
+  name: photojournalist ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: Photojournalist
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
@@ -214,6 +269,30 @@
     job: AU14JobCivilianPhysician
 
 - type: entity
+  parent: AU14IDCardColonyPhysician
+  id: AU14IDCardColonySurgeon
+  name: surgeon ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: au14-job-name-civiliansurgeon
+
+- type: entity
+  parent: AU14IDCardColonyPhysician
+  id: AU14IDCardColonyGeneralPractitioner
+  name: general practitioner ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: au14-job-name-civiliangeneralpractitioner
+
+- type: entity
+  parent: AU14IDCardColonyPhysician
+  id: AU14IDCardColonyPharmacist
+  name: pharmacist ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: au14-job-name-civilianpharmacist
+
+- type: entity
   parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyHeadPhysician
   name: head physician ID card
@@ -268,6 +347,13 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianCMBDeputy
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/cmb_deputy.rsi
+    state: icon
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/cmb_deputy.rsi
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
@@ -276,6 +362,14 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianCMBMarshal
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/cmb_marshal.rsi
+    state: icon
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/cmb_marshal.rsi
+
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF

@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Shields;
 using Content.Shared._RMC14.Xenonids.Leap;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared._RMC14.Xenonids.Sweep;
+using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared.Actions;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
@@ -35,6 +36,7 @@ public sealed class XenoBlitzSystem : EntitySystem
     [Dependency] private readonly VanguardShieldSystem _vanguard = default!;
     [Dependency] private readonly SharedInteractionSystem _interact = default!;
     [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private readonly SharedHitLocationSystem _hitLocation = default!;
 
     public override void Initialize()
     {
@@ -102,6 +104,7 @@ public sealed class XenoBlitzSystem : EntitySystem
 
         var hits = 0;
 
+        using var targetingSuppression = _hitLocation.SuppressBodyZoneTargeting(xeno.Owner);
         foreach (var hit in _lookup.GetEntitiesInRange<MobStateComponent>(_transform.GetMapCoordinates(xeno), xeno.Comp.Range))
         {
             if (!_xeno.CanAbilityAttackTarget(xeno, hit))

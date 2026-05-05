@@ -1,34 +1,39 @@
 - files: ["AliensTitle.ogg"]
   license: "Custom"
-  copyright: "James Horner - Aliens Soundtrack"
-  source: "Aliens Track 01 - Main Title"
+  copyright: "James Horner - Aliens Soundtrack - Aliens Track 01 - Main Title"
+  source: "https://www.20thcenturystudios.com"
 
 - files: ["DarkDiscovery.ogg"]
   license: "Custom"
-  copyright: "James Horner - Aliens Soundtrack"
-  source: "Aliens Track 03 - Dark Discovery"
+  copyright: "James Horner - Aliens Soundtrack - Aliens Track 03 - Dark Discovery"
+  source: "https://www.20thcenturystudios.com"
 
 - files: ["LV426.ogg"]
   license: "Custom"
-  copyright: "James Horner - Aliens Soundtrack"
-  source: "Aliens Track 04 - LV426"
+  copyright: "James Horner - Aliens Soundtrack - Aliens Track 04 - LV426"
+  source: "https://www.20thcenturystudios.com"
+
 
 - files: ["AlienMainTitle.ogg"]
   license: "Custom"
-  copyright: "Jerry Goldsmith - Alien Soundtrack"
-  source: "Alien Track 01 - Main Title"
+  copyright: "Jerry Goldsmith - Alien Soundtrack - Alien Track 01 - Main Title"
+  source: "https://www.20thcenturystudios.com"
+
 
 - files: ["HyperSleep.ogg"]
   license: "Custom"
-  copyright: "Jerry Goldsmith - Aliens Soundtrack"
-  source: "Alien Track 02 - Hyper Sleep"
+  copyright: "Jerry Goldsmith - Aliens Soundtrack - Alien Track 02 - Hyper Sleep"
+  source: "https://www.20thcenturystudios.com"
+
 
 - files: ["TheSurvivorIsAWoman.ogg"]
   license: "Custom"
-  copyright: "Elliot Goldenthal - Aliens Soundtrack"
-  source: "Alien 3 Track 04 - The Survivor is a Woman"
+  copyright: "Elliot Goldenthal - Aliens Soundtrack - Alien 3 - Track 04 - The Survivor is a Woman"
+  source: "https://www.20thcenturystudios.com"
+
 
 - files: ["Morgue.ogg"]
   license: "Custom"
-  copyright: "Elliot Goldenthal - Aliens Soundtrack"
-  source: "Alien 3 Track 08 - Morgue"
+  copyright: "Elliot Goldenthal - Aliens Soundtrack - Alien 3 - Track 08 - Morgue"
+  source: "https://www.20thcenturystudios.com"
+

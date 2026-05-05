@@ -26,6 +26,8 @@
   - Colonist
   - auengi
   - CMCargoTech
+  access:
+  - AU14AccessColonyHeadEngineer
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

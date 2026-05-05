@@ -1,0 +1,8 @@
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardVAIMercenary
+  categories: [ HideSpawnMenu ]
+  name: vai contractor ID card
+  components:
+  - type: PresetIdCard
+    job: AU14VAIMercenary
