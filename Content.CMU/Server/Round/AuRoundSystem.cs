@@ -45,6 +45,7 @@ namespace Content.Server.AU14.Round
         private RMCPlanetMapPrototypeComponent? SelectedPlanetMap { get; set; }
 
         private GamePresetPrototype? _selectedPreset;
+        public GamePresetPrototype? SelectedPreset => _selectedPreset;
         private RMCPlanetMapPrototypeComponent? _selectedPlanet;
         private bool _voteSequenceRunning;
         public ThreatPrototype _selectedthreat = null!;
@@ -55,9 +56,6 @@ namespace Content.Server.AU14.Round
 
         private List<AuThirdPartyPrototype> _selectedThirdParties = new();
         public IReadOnlyList<AuThirdPartyPrototype> SelectedThirdParties => _selectedThirdParties;
-
-        // Default max third parties for rounds with no threat (e.g., ForceOnForce)
-        private const int DefaultMaxThirdPartiesNoThreat =4;
 
         public override void Initialize()
         {
@@ -223,10 +221,71 @@ namespace Content.Server.AU14.Round
             });
         }
 
+        public bool IsThirdPartyAllowedForCurrentContext(AuThirdPartyPrototype proto)
+        {
+            if (_selectedPreset == null)
+                return true;
+
+            var platoonSpawnRuleSystem = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
+            return IsThirdPartyAllowed(
+                proto,
+                _selectedPreset.ID,
+                _selectedthreat?.ID,
+                platoonSpawnRuleSystem.SelectedGovforPlatoon?.ID,
+                platoonSpawnRuleSystem.SelectedOpforPlatoon?.ID,
+                _playerManager.PlayerCount);
+        }
+
+        private static bool IsThirdPartyAllowed(
+            AuThirdPartyPrototype proto,
+            string currentGamemode,
+            string? currentThreat,
+            string? govforPlatoon,
+            string? opforPlatoon,
+            int playerCount)
+        {
+            if (ContainsIgnoreCase(proto.BlacklistedGamemodes, currentGamemode))
+                return false;
+
+            if (proto.whitelistedgamemodes.Count > 0 &&
+                !ContainsIgnoreCase(proto.whitelistedgamemodes, currentGamemode))
+                return false;
+
+            if (proto.MaxPlayers < playerCount || proto.MinPlayers > playerCount)
+                return false;
+
+            if (currentThreat != null && ContainsIgnoreCase(proto.BlacklistedThreats, currentThreat))
+                return false;
+
+            if (proto.WhitelistedThreats.Count > 0 &&
+                (currentThreat == null || !ContainsIgnoreCase(proto.WhitelistedThreats, currentThreat)))
+                return false;
+
+            if (govforPlatoon != null && ContainsIgnoreCase(proto.BlacklistedPlatoons, govforPlatoon))
+                return false;
+
+            if (opforPlatoon != null && ContainsIgnoreCase(proto.BlacklistedPlatoons, opforPlatoon))
+                return false;
+
+            if (proto.WhitelistedPlatoons.Any() &&
+                ((govforPlatoon != null && !ContainsIgnoreCase(proto.WhitelistedPlatoons, govforPlatoon)) ||
+                 (opforPlatoon != null && !ContainsIgnoreCase(proto.WhitelistedPlatoons, opforPlatoon))))
+                return false;
+
+            return true;
+        }
+
+        private static bool ContainsIgnoreCase(IEnumerable<string> values, string value)
+        {
+            return values.Any(candidate => candidate.Equals(value, StringComparison.OrdinalIgnoreCase));
+        }
+
         private void PreselectThirdParties()
         {
             _selectedThirdParties.Clear();
             if (_selectedPreset == null || _selectedPlanet == null)
+                return;
+            if (_selectedthreat == null)
                 return;
 
             var allThirdParties = new List<AuThirdPartyPrototype>();
@@ -245,27 +304,9 @@ namespace Content.Server.AU14.Round
                 return;
             }
 
-            var playerCount = _playerManager.PlayerCount;
-            var currentGamemode = _selectedPreset.ID;
-            var currentThreat = _selectedthreat?.ID;
-            var govforPlatoon = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>().SelectedGovforPlatoon?.ID;
-            var opforPlatoon = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>().SelectedOpforPlatoon?.ID;
-            var filtered = allThirdParties.ToList();
-            filtered.RemoveAll(proto =>
-                // Gamemode blacklist/whitelist (case-insensitive)
-                proto.BlacklistedGamemodes.Any(s => s.Equals(currentGamemode, System.StringComparison.OrdinalIgnoreCase)) ||
-                (proto.whitelistedgamemodes.Count > 0 && !proto.whitelistedgamemodes.Any(s => s.Equals(currentGamemode, System.StringComparison.OrdinalIgnoreCase))) ||
-                // Player count limits
-                proto.MaxPlayers < playerCount ||
-                proto.MinPlayers > playerCount ||
-                // Threat blacklist/whitelist (case-insensitive)
-                (currentThreat != null && proto.BlacklistedThreats.Any(t => t.Equals(currentThreat, System.StringComparison.OrdinalIgnoreCase))) ||
-                (proto.WhitelistedThreats.Count > 0 && (currentThreat == null || !proto.WhitelistedThreats.Any(t => t.Equals(currentThreat, System.StringComparison.OrdinalIgnoreCase)))) ||
-                // Platoon blacklist/whitelist (case-insensitive)
-                (govforPlatoon != null && proto.BlacklistedPlatoons.Any(p => p.Equals(govforPlatoon, System.StringComparison.OrdinalIgnoreCase))) ||
-                (opforPlatoon != null && proto.BlacklistedPlatoons.Any(p => p.Equals(opforPlatoon, System.StringComparison.OrdinalIgnoreCase))) ||
-                (proto.WhitelistedPlatoons.Any() && ((govforPlatoon != null && !proto.WhitelistedPlatoons.Any(p => p.Equals(govforPlatoon, System.StringComparison.OrdinalIgnoreCase))) || (opforPlatoon != null && !proto.WhitelistedPlatoons.Any(p => p.Equals(opforPlatoon, System.StringComparison.OrdinalIgnoreCase)))))
-            );
+            var filtered = allThirdParties
+                .Where(IsThirdPartyAllowedForCurrentContext)
+                .ToList();
             if (filtered.Count == 0)
                 return;
             var weighted = new List<AuThirdPartyPrototype>();
@@ -277,7 +318,7 @@ namespace Content.Server.AU14.Round
             }
             if (weighted.Count == 0)
                 return;
-            int maxThirdParties = _selectedthreat != null ? Math.Max(0, _selectedthreat.MaxThirdParties) : DefaultMaxThirdPartiesNoThreat;
+            int maxThirdParties = Math.Max(0, _selectedthreat.MaxThirdParties);
             if (maxThirdParties <= 0)
                 return;
             var selectedSet = new HashSet<AuThirdPartyPrototype>();
