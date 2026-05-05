@@ -22,6 +22,12 @@ public sealed partial class BodyZoneTargetingComponent : Component
     public float MeleeAccuracy = 0.65f;
 
     [DataField, AutoNetworkedField]
+    public float HeadAccuracyMultiplier = 1f;
+
+    [DataField, AutoNetworkedField]
+    public float TorsoAccuracyMultiplier = 1f;
+
+    [DataField, AutoNetworkedField]
     public float RangedBaseAccuracy = 0.15f;
 
     [DataField, AutoNetworkedField]

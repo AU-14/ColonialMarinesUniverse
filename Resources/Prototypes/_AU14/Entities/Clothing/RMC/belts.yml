@@ -231,7 +231,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Belt/mortar/snow-urban.rsi
   - type: Storage
-    maxItemSize: Huge
+    maxItemSize: Large
     grid:
     - 0,0,17,1
     whitelist:

@@ -5,7 +5,7 @@ using Robust.Shared.Map;
 namespace Content.Shared._RMC14.Vehicle;
 
 [RegisterComponent]
-[Access(typeof(VehicleSystem), Other = AccessPermissions.Read)]
+[Access(typeof(VehicleSystem))]
 public sealed partial class VehicleInteriorComponent : Component
 {
     public EntityUid Map = EntityUid.Invalid;
@@ -24,6 +24,10 @@ public sealed partial class VehicleInteriorLinkComponent : Component
 {
     public EntityUid Vehicle = EntityUid.Invalid;
 }
+
+[RegisterComponent]
+[Access(typeof(VehicleSystem), typeof(VehicleInteriorProtectionSystem))]
+public sealed partial class VehicleInteriorIndestructibleComponent : Component;
 
 [RegisterComponent]
 [Access(typeof(VehicleSystem))]

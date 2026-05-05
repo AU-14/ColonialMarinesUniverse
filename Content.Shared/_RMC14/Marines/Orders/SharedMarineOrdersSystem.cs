@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Evasion;
+using Content.Shared._CMU14.Medical.StatusEffects;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Actions;
 using Content.Shared.Damage;
@@ -24,6 +25,7 @@ public abstract class SharedMarineOrdersSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly SharedPainShockSystem _pain = default!;
     [Dependency] private readonly SkillsSystem _skills = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
@@ -263,8 +265,36 @@ public abstract class SharedMarineOrdersSystem : EntitySystem
         comp.Received.Add((multiplier, time + duration));
         comp.Received.Sort((a, b) => a.CompareTo(b));
 
+        if (_net.IsServer && comp is HoldOrderComponent hold)
+            ApplyHoldPainSuppression(receiver.Owner, hold, multiplier, duration);
+
         _movementSpeed.RefreshMovementSpeedModifiers(receiver);
         _evasionSystem.RefreshEvasionModifiers(receiver);
+    }
+
+    private void ApplyHoldPainSuppression(EntityUid receiver, HoldOrderComponent hold, int leadership, TimeSpan duration)
+    {
+        if (!_pain.IsLayerEnabled())
+            return;
+
+        if (!HasComp<PainShockComponent>(receiver))
+            return;
+
+        var strength = Math.Max(1, leadership);
+        var accumulationSuppression = (hold.PainModifier * strength).Float();
+        var decayBonus = (hold.PainDecayBonus * strength).Float();
+        var extraTierSuppression = Math.Max(0, (strength - 1) / 2);
+        var tierSuppression = Math.Clamp(
+            hold.PainTierSuppression + extraTierSuppression,
+            0,
+            hold.PainTierSuppressionMax);
+
+        _pain.AddAdditivePainSuppressionProfile(
+            receiver,
+            accumulationSuppression,
+            tierSuppression,
+            decayBonus,
+            duration);
     }
 
     private void RemoveExpired<T>() where T : IComponent, IOrderComponent

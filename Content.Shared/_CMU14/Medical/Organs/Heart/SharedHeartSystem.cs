@@ -30,6 +30,7 @@ public abstract class SharedHeartSystem : EntitySystem
     private static readonly EntProtoId Tachycardia = "StatusEffectCMUTachycardia";
     private static readonly EntProtoId Arrhythmia = "StatusEffectCMUArrhythmia";
     private static readonly EntProtoId CardiacArrest = "StatusEffectCMUCardiacArrest";
+    private static readonly EntProtoId Unconscious = "StatusEffectCMUUnconscious";
 
     private const float PulseScanInterval = 1f;
     private float _pulseScanAccumulator;
@@ -71,6 +72,9 @@ public abstract class SharedHeartSystem : EntitySystem
         var query = EntityQueryEnumerator<HeartComponent, OrganHealthComponent>();
         while (query.MoveNext(out var uid, out var heart, out var oh))
         {
+            if (heart.Stopped)
+                TickCardiacArrest((uid, heart, oh), now);
+
             if (heart.NextPulseUpdate > now)
                 continue;
             heart.NextPulseUpdate = now + heart.PulseUpdateInterval;
@@ -111,7 +115,7 @@ public abstract class SharedHeartSystem : EntitySystem
             return;
         }
 
-        var bpm = ComputeBpm(body.Value, oh);
+        var bpm = ComputeBpm(uid, body.Value, oh);
         var clamped = Math.Clamp(bpm, 0, heart.MaxBpm);
 
         // Threshold logic uses the stable (un-jittered) BPM so BelowThresholdSince
@@ -146,9 +150,16 @@ public abstract class SharedHeartSystem : EntitySystem
         }
     }
 
-    protected virtual int ComputeBpm(EntityUid body, OrganHealthComponent oh)
+    protected virtual int ComputeBpm(EntityUid heartUid, EntityUid body, OrganHealthComponent oh)
     {
-        var baseBpm = 70;
+        var baseBpm = oh.Stage switch
+        {
+            OrganDamageStage.Bruised => 95,
+            OrganDamageStage.Damaged => 50,
+            OrganDamageStage.Failing => 20,
+            OrganDamageStage.Dead => 0,
+            _ => 70,
+        };
 
         if (TryGetBloodFraction(body, out var fraction))
         {
@@ -161,6 +172,8 @@ public abstract class SharedHeartSystem : EntitySystem
         foreach (var (organId, _) in Body.GetBodyOrgans(body))
         {
             if (!TryComp<OrganHealthComponent>(organId, out var organHealth))
+                continue;
+            if (organId == heartUid)
                 continue;
             if (organHealth.Stage.IsAtLeast(OrganDamageStage.Bruised))
                 baseBpm += 5;
@@ -186,6 +199,8 @@ public abstract class SharedHeartSystem : EntitySystem
     {
         ent.Comp.Stopped = true;
         ent.Comp.BeatsPerMinute = 0;
+        ent.Comp.NoPulseSince ??= Timing.CurTime;
+        ent.Comp.NextCardiacArrestTick = Timing.CurTime;
         Dirty(ent);
 
         Status.TrySetStatusEffectDuration(body, CardiacArrest, duration: null);
@@ -202,7 +217,11 @@ public abstract class SharedHeartSystem : EntitySystem
             return;
         ent.Comp.Stopped = false;
         ent.Comp.BelowThresholdSince = null;
+        ent.Comp.NoPulseSince = null;
         Dirty(ent.Owner, ent.Comp);
+
+        if (GetBody(ent.Owner) is { } body)
+            Status.TryRemoveStatusEffect(body, CardiacArrest);
     }
 
     public void ResetHeart(Entity<HeartComponent?> ent, int beatsPerMinute = 70)
@@ -212,7 +231,11 @@ public abstract class SharedHeartSystem : EntitySystem
         ent.Comp.Stopped = false;
         ent.Comp.BeatsPerMinute = beatsPerMinute;
         ent.Comp.BelowThresholdSince = null;
+        ent.Comp.NoPulseSince = null;
         Dirty(ent.Owner, ent.Comp);
+
+        if (GetBody(ent.Owner) is { } body)
+            Status.TryRemoveStatusEffect(body, CardiacArrest);
     }
 
     private void OnStageChanged(Entity<HeartComponent> ent, ref OrganStageChangedEvent args)
@@ -221,14 +244,22 @@ public abstract class SharedHeartSystem : EntitySystem
         switch (args.New)
         {
             case OrganDamageStage.Healthy:
+                ent.Comp.MinBpmBeforeStop = 30;
+                ent.Comp.BelowThresholdSince = null;
+                Dirty(ent);
                 Status.TryRemoveStatusEffect(body, Tachycardia);
                 Status.TryRemoveStatusEffect(body, Arrhythmia);
                 break;
             case OrganDamageStage.Bruised:
+                ent.Comp.MinBpmBeforeStop = 30;
+                ent.Comp.BelowThresholdSince = null;
+                Dirty(ent);
                 Status.TryRemoveStatusEffect(body, Arrhythmia);
                 Status.TrySetStatusEffectDuration(body, Tachycardia, duration: null);
                 break;
             case OrganDamageStage.Damaged:
+                ent.Comp.MinBpmBeforeStop = 30;
+                Dirty(ent);
                 Status.TryRemoveStatusEffect(body, Tachycardia);
                 Status.TrySetStatusEffectDuration(body, Arrhythmia, duration: null);
                 break;
@@ -245,6 +276,33 @@ public abstract class SharedHeartSystem : EntitySystem
                     StopHeart(ent, body);
                 break;
         }
+    }
+
+    private void TickCardiacArrest(Entity<HeartComponent, OrganHealthComponent> ent, TimeSpan now)
+    {
+        if (ent.Comp1.NextCardiacArrestTick > now)
+            return;
+        ent.Comp1.NextCardiacArrestTick = now + TimeSpan.FromSeconds(1);
+
+        var body = GetBody(ent.Owner);
+        if (body is null)
+            return;
+
+        if (TryComp<MobStateComponent>(body.Value, out var mob) && mob.CurrentState == MobState.Dead)
+            return;
+
+        ent.Comp1.NoPulseSince ??= now;
+        Dirty(ent.Owner, ent.Comp1);
+
+        if (ent.Comp1.CardiacArrestAsphyxPerSecond > FixedPoint2.Zero)
+            ApplyCardiacArrestAsphyx(body.Value, ent.Owner, ent.Comp1.CardiacArrestAsphyxPerSecond);
+
+        if (now - ent.Comp1.NoPulseSince.Value >= ent.Comp1.CardiacArrestUnconsciousDelay)
+            Status.TrySetStatusEffectDuration(body.Value, Unconscious, TimeSpan.FromSeconds(3));
+    }
+
+    protected virtual void ApplyCardiacArrestAsphyx(EntityUid body, EntityUid heart, FixedPoint2 amount)
+    {
     }
 
     protected EntityUid? GetBody(EntityUid organ)

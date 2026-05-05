@@ -17,9 +17,6 @@ public sealed partial class CMUTourniquetComponent : Component
     [DataField, AutoNetworkedField, AutoPausedField]
     public TimeSpan NecrosisAt;
 
-    [DataField, AutoNetworkedField, AutoPausedField]
-    public TimeSpan SeveranceAt;
-
     [DataField, AutoPausedField]
     public TimeSpan NextUpdate;
 

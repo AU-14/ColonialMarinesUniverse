@@ -7,7 +7,7 @@
   - type: Sprite
     sprite: _AU14/Clothing/LACN/Storage/lacnpack.rsi
   - type: Storage
-    maxItemSize: Huge
+    maxItemSize: Large
     grid:
     - 0,0,22,1
 

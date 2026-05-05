@@ -16,6 +16,13 @@
     hatRsi:
       sprite: _RMC14/Objects/Clothing/Head/Hats/headband/green.rsi
       state: hat
+  - type: CMSurgeryTool
+  - type: CMUOrganClamp
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 2.5
+    mishapChance: 0.14
+    mishapDamageType: Blunt
+    mishapDamageAmount: 2
 
 - type: entity
   parent: CMHeadBandGreen
@@ -239,3 +246,10 @@
     sprite: _RMC14/Objects/Clothing/Head/Hats/headband/rebel.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Head/Hats/headband/rebel.rsi
+  - type: CMSurgeryTool
+  - type: CMUOrganClamp
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 2.5
+    mishapChance: 0.14
+    mishapDamageType: Blunt
+    mishapDamageAmount: 2

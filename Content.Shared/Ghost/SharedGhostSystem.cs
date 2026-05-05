@@ -120,11 +120,32 @@ namespace Content.Shared.Ghost
     [Serializable, NetSerializable]
     public struct GhostWarp
     {
-        public GhostWarp(NetEntity entity, string displayName, bool isWarpPoint)
+        public GhostWarp(
+            NetEntity entity,
+            string displayName,
+            bool isWarpPoint,
+            string? roleName = null,
+            string? tab = null,
+            string? section = null,
+            string? iconPrototype = null,
+            string? entityPrototype = null,
+            string? jobPrototype = null,
+            int sortWeight = 0,
+            int? xenoTier = null,
+            bool isXeno = false)
         {
             Entity = entity;
             DisplayName = displayName;
             IsWarpPoint = isWarpPoint;
+            RoleName = roleName;
+            Tab = tab;
+            Section = section;
+            IconPrototype = iconPrototype;
+            EntityPrototype = entityPrototype;
+            JobPrototype = jobPrototype;
+            SortWeight = sortWeight;
+            XenoTier = xenoTier;
+            IsXeno = isXeno;
         }
 
         /// <summary>
@@ -142,6 +163,51 @@ namespace Content.Shared.Ghost
         /// Whether this warp represents a warp point or a player
         /// </summary>
         public bool IsWarpPoint { get;  }
+
+        /// <summary>
+        /// The role or job title to show separately from the target name.
+        /// </summary>
+        public string? RoleName { get; }
+
+        /// <summary>
+        /// The top-level faction tab this warp should appear under.
+        /// </summary>
+        public string? Tab { get; }
+
+        /// <summary>
+        /// The subsection within the faction tab.
+        /// </summary>
+        public string? Section { get; }
+
+        /// <summary>
+        /// Optional job icon prototype to use for the row.
+        /// </summary>
+        public string? IconPrototype { get; }
+
+        /// <summary>
+        /// Optional entity prototype to use as a row preview icon.
+        /// </summary>
+        public string? EntityPrototype { get; }
+
+        /// <summary>
+        /// Optional job prototype used to build a dressed off-map preview.
+        /// </summary>
+        public string? JobPrototype { get; }
+
+        /// <summary>
+        /// Higher values sort earlier inside a subsection.
+        /// </summary>
+        public int SortWeight { get; }
+
+        /// <summary>
+        /// Xeno tier used by the UI for caste grouping.
+        /// </summary>
+        public int? XenoTier { get; }
+
+        /// <summary>
+        /// Whether this target is a xeno.
+        /// </summary>
+        public bool IsXeno { get; }
     }
 
     /// <summary>

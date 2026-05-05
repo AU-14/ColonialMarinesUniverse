@@ -184,6 +184,9 @@ public abstract class SharedWoundsSystem : EntitySystem
 
         if (anyWounds)
         {
+            // Force the next WoundsSystem tick to resync BleedAmount immediately;
+            // otherwise the analyzer keeps reading stale bleed for up to UpdateCooldown.
+            wounded.UpdateAt = _timing.CurTime;
             Dirty(target, wounded);
         }
         else if (damage == FixedPoint2.Zero)

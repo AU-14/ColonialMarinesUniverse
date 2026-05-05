@@ -1,0 +1,31 @@
+- type: accessLevel
+  id: AU14AccessColonyHeadPhysician
+  name: au14-job-name-civilianheadphysician
+
+- type: accessLevel
+  id: AU14AccessColonyHeadEngineer
+  name: au14-job-name-civilianheadofengineering
+
+- type: accessLevel
+  id: AU14AccessColonyMarshall
+  name: au14-job-name-leoleader
+
+- type: accessLevel
+  id: AU14AccessColonyForeman
+  name: au14-job-name-foreman
+
+- type: accessLevel
+  id: AU14AccessColonyAdministrator
+  name: au14-job-supervisors-colonycivilian
+
+- type: accessLevel
+  id: AU14AccessColonyHeadOfService
+  name: au14-job-name-civilianheadofservice
+
+- type: accessLevel
+  id: AU14AccessColonyCorporateLiaison
+  name: au14-job-name-civiliancorporateliaison
+
+- type: accessLevel
+  id: AU14AccessColonyAmbassador
+  name: au14-job-name-civilianambassador

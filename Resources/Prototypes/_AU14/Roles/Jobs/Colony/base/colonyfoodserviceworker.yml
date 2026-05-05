@@ -39,8 +39,6 @@
 - type: startingGear
   id: AU14GearCivilianFoodServiceWorker
   equipment:
-    jumpsuit: AU14CivilianWorkwearYellow
-    shoes: RMCShoesBlack
     id: AU14IDCardFoodServiceWorker
     outerClothing: RMCMedicalApron
 

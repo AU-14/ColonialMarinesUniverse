@@ -48,6 +48,8 @@
           - RMCMagazineRifleL42A
           - RMCMagazineRifleL42AExtended
           - RMCMagazineRifleL42AAP
+  - type: RMCWeaponDamageFalloff
+    falloffMultiplier: 0
   - type: GunDamageModifier
     multiplier: 1.3
   - type: RMCWeaponAccuracy
@@ -130,6 +132,8 @@
       FullAuto:
         maxScatterModifier: 30
         shotsToMaxScatter: 4
+  - type: RMCWeaponDamageFalloff
+    falloffMultiplier: 0
   - type: MagazineAmmoProvider
     autoEject: false
     soundAutoEject: null

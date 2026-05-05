@@ -59,6 +59,7 @@
     sprite: _AU14/Structures/hesco.rsi
     state: sand_wall
   - type: Physics
+    bodyType: Static
   - type: Fixtures
     fixtures:
       fix1:

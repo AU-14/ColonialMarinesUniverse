@@ -6,6 +6,7 @@ using Content.Shared._CMU14.Medical.Organs.Events;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._RMC14.Medical.HUD;
 using Content.Shared._RMC14.Medical.HUD.Components;
+using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
@@ -37,6 +38,7 @@ public sealed class AutoHolocardSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<FractureComponent, ComponentStartup>(OnFractureSpawn);
         SubscribeLocalEvent<InternalBleedingComponent, ComponentStartup>(OnInternalBleedSpawn);
+        SubscribeLocalEvent<VictimInfectedComponent, ComponentStartup>(OnInfectedSpawn);
         // Broadcast subscription — <OrganHealthComponent, OrganStageChangedEvent>
         // is already owned by SharedCMUWoundsSystem and SS14's directed bus
         // enforces one handler per (component, event). Broadcast delivery
@@ -61,6 +63,13 @@ public sealed class AutoHolocardSystem : EntitySystem
             return;
         if (TryGetBodyForPart(ent.Owner) is { } body)
             UpgradeHolocard(body, HolocardStatus.Trauma);
+    }
+
+    private void OnInfectedSpawn(Entity<VictimInfectedComponent> ent, ref ComponentStartup args)
+    {
+        if (!IsEnabled())
+            return;
+        UpgradeHolocard(ent.Owner, HolocardStatus.Xeno);
     }
 
     private void OnOrganStageBroadcast(ref OrganStageChangedEvent args)

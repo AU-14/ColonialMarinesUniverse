@@ -8,8 +8,6 @@
   - type: Item
     size: Large
   - type: PowerLoaderGrabbable
-    virtualRight: RMCVirtualPowerLoaderRight
-    virtualLeft: RMCVirtualPowerLoaderLeft
   - type: RemoveComponents
     components:
     - type: Pullable
@@ -111,7 +109,7 @@
     modifierSets:
     - VehicleArmorCaustic
   - type: VehicleAccelerationModifierAttachment
-    accelerationMultiplier: 0.9
+    accelerationMultiplier: 0.6
   - type: RemoveComponents
     components:
     - type: PowerLoaderGrabbable

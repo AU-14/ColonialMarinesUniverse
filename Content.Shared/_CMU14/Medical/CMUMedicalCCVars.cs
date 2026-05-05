@@ -30,15 +30,17 @@ public sealed partial class CMUMedicalCCVars : CVars
     public static readonly CVarDef<bool> DiagnosticsEnabled =
         CVarDef.Create("cmu.medical.diagnostics.enabled", true, CVar.REPLICATED | CVar.SERVER);
 
+    public static readonly CVarDef<bool> HideAttachedInternals =
+        CVarDef.Create("cmu.medical.hide_attached_internals", true, CVar.SERVER);
+
     public static readonly CVarDef<bool> StatusEffectsEnabled =
         CVarDef.Create("cmu.medical.status_effects.enabled", true, CVar.REPLICATED | CVar.SERVER);
 
     /// <summary>
-    ///     Defaults <c>false</c> — the penalty aggregator stays on
-    ///     <c>StatusEffectsEnabled</c> alone.
+    ///     Enables the CMU pain source-target loop and patient-facing pain pressure.
     /// </summary>
     public static readonly CVarDef<bool> PainEnabled =
-        CVarDef.Create("cmu.medical.pain.enabled", false, CVar.REPLICATED | CVar.SERVER);
+        CVarDef.Create("cmu.medical.pain.enabled", true, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> HitLocationHeadWeight =
         CVarDef.Create("cmu.medical.hit_location.head_weight", 0.15f, CVar.REPLICATED | CVar.SERVER);
@@ -96,7 +98,7 @@ public sealed partial class CMUMedicalCCVars : CVars
         CVarDef.Create("cmu.medical.pain.decay_per_second", 1.0f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> PainShockThreshold =
-        CVarDef.Create("cmu.medical.pain.shock_threshold", 70f, CVar.REPLICATED | CVar.SERVER);
+        CVarDef.Create("cmu.medical.pain.shock_threshold", 85f, CVar.REPLICATED | CVar.SERVER);
 
     /// <summary>
     ///     Pain tier downward-cross threshold offset (in raw pain units).
@@ -130,7 +132,4 @@ public sealed partial class CMUMedicalCCVars : CVars
 
     public static readonly CVarDef<float> TourniquetNecrosisMinutes =
         CVarDef.Create("cmu.medical.tourniquet.necrosis_minutes", 5f, CVar.REPLICATED | CVar.SERVER);
-
-    public static readonly CVarDef<float> TourniquetSeveranceMinutes =
-        CVarDef.Create("cmu.medical.tourniquet.severance_minutes", 10f, CVar.REPLICATED | CVar.SERVER);
 }

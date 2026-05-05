@@ -43,6 +43,13 @@
       Steel: 100
   - type: StaticPrice
     price: 30
+  - type: CMSurgeryTool
+  - type: CMHemostat
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 1.7
+    mishapChance: 0.10
+    mishapDamageType: Piercing
+    mishapDamageAmount: 2
 
 - type: entity
   name: screwdriver
@@ -87,6 +94,14 @@
       Steel: 100
   - type: StaticPrice
     price: 30
+  - type: CMSurgeryTool
+  - type: CMBoneGel
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 2.4
+    mishapChance: 0.14
+    mishapDamageType: Piercing
+    mishapDamageAmount: 3
+    failurePenalty: 1
 
 - type: entity
   name: wrench
@@ -129,6 +144,13 @@
   - type: GuideHelp
     guides:
     - Construction
+  - type: CMSurgeryTool
+  - type: CMBoneSetter
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 1.9
+    mishapChance: 0.12
+    mishapDamageType: Blunt
+    mishapDamageAmount: 4
 
 - type: entity
   name: multitool

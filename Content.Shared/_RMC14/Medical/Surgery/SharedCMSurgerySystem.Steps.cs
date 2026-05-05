@@ -285,6 +285,11 @@ public abstract partial class SharedCMSurgerySystem
 
     public bool CanPerformStep(EntityUid user, EntityUid body, BodyPartType part, EntityUid step, bool doPopup, out string? popup, out StepInvalidReason reason, out HashSet<EntityUid>? validTools)
     {
+        return CanPerformStep(user, body, part, step, doPopup, null, out popup, out reason, out validTools);
+    }
+
+    public bool CanPerformStep(EntityUid user, EntityUid body, BodyPartType part, EntityUid step, bool doPopup, EntityUid? usedTool, out string? popup, out StepInvalidReason reason, out HashSet<EntityUid>? validTools)
+    {
         var slot = part switch
         {
             BodyPartType.Head => SlotFlags.HEAD,
@@ -298,7 +303,11 @@ public abstract partial class SharedCMSurgerySystem
             _ => SlotFlags.NONE
         };
 
-        var check = new CMSurgeryCanPerformStepEvent(user, body, GetTools(user), slot);
+        var tools = GetTools(user);
+        if (usedTool is { } tool && !tools.Contains(tool))
+            tools.Add(tool);
+
+        var check = new CMSurgeryCanPerformStepEvent(user, body, tools, slot);
         RaiseLocalEvent(step, ref check);
         popup = check.Popup;
         validTools = check.ValidTools;
@@ -336,7 +345,8 @@ public abstract partial class SharedCMSurgerySystem
     {
         foreach (var tool in tools)
         {
-            if (HasComp(tool, component.GetType()))
+            if (HasComp(tool, component.GetType()) ||
+                component is CMBoneSawComponent && HasComp<CMSurgicalDrillComponent>(tool))
             {
                 withComp = tool;
                 return true;

@@ -11,7 +11,9 @@
       metabolismRate: 0.1
       effects:
       - !type:CMUApplyPainSuppressionEffect
-        suppressionPercent: 0.25
+        accumulationSuppression: 0.25
+        tierSuppression: 1
+        decayBonus: 0.25
         durationPerUnit: 30
 
 - type: reagent
@@ -28,7 +30,9 @@
       metabolismRate: 0.1
       effects:
       - !type:CMUApplyPainSuppressionEffect
-        suppressionPercent: 0.5
+        accumulationSuppression: 0.5
+        tierSuppression: 2
+        decayBonus: 0.75
         durationPerUnit: 60
       - !type:HealthChange
         conditions:
@@ -52,8 +56,14 @@
       metabolismRate: 0.1
       effects:
       - !type:CMUApplyPainSuppressionEffect
-        suppressionPercent: 0.75
+        accumulationSuppression: 0.75
+        tierSuppression: 4
+        decayBonus: 1.25
         durationPerUnit: 90
+      - !type:HealthChange
+        damage:
+          types:
+            Poison: 0.2
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold

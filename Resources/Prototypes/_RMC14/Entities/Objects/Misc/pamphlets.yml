@@ -203,11 +203,11 @@
     state: pamphlet_mortar
   - type: SkillPamphlet
     addSkills:
-      RMCSkillEngineer: 1
-      RMCSkillJtac: 2
+      RMCSkillEngineer: 2
+      RMCSkillJtac: 4
     skillCap:
-      RMCSkillEngineer: 1
-      RMCSkillJtac: 2
+      RMCSkillEngineer: 2
+      RMCSkillJtac: 4
     giveJobTitle: rmc-job-name-mortar-operator
     givePrefix: rmc-job-prefix-mortar-operator
     isAppendPrefix: false

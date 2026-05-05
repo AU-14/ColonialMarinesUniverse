@@ -1,0 +1,38 @@
+- type: soundCollection
+  id: RMCSurgeryScalpel
+  files:
+    - /Audio/_RMC14/Medical/Surgery/scalpel1.ogg
+    - /Audio/_RMC14/Medical/Surgery/scalpel2.ogg
+
+- type: soundCollection
+  id: RMCSurgeryHemostat
+  files:
+    - /Audio/_RMC14/Medical/Surgery/hemostat1.ogg
+
+- type: soundCollection
+  id: RMCSurgeryRetractor
+  files:
+    - /Audio/_RMC14/Medical/Surgery/retractor1.ogg
+    - /Audio/_RMC14/Medical/Surgery/retractor2.ogg
+
+- type: soundCollection
+  id: RMCSurgeryCautery
+  files:
+    - /Audio/_RMC14/Medical/Surgery/cautery1.ogg
+    - /Audio/_RMC14/Medical/Surgery/cautery2.ogg
+
+- type: soundCollection
+  id: RMCSurgerySaw
+  files:
+    - /Audio/_RMC14/Medical/Surgery/saw.ogg
+
+- type: soundCollection
+  id: RMCSurgeryOrgan
+  files:
+    - /Audio/_RMC14/Medical/Surgery/organ1.ogg
+    - /Audio/_RMC14/Medical/Surgery/organ2.ogg
+
+- type: soundCollection
+  id: RMCSurgerySplint
+  files:
+    - /Audio/_RMC14/Medical/splint.ogg

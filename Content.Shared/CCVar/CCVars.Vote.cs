@@ -59,6 +59,12 @@ public sealed partial class CCVars
         CVarDef.Create("vote.same_type_timeout", 240f, CVar.SERVERONLY);
 
     /// <summary>
+    ///     Whether completed votes should carry their totals into the next vote of the same kind.
+    /// </summary>
+    public static readonly CVarDef<bool> VoteCarryoverEnabled =
+        CVarDef.Create("vote.carryover_enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
     ///     Sets the duration of the map vote timer.
     /// </summary>
     public static readonly CVarDef<int>

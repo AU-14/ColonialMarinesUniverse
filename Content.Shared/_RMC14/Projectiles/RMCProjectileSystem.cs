@@ -48,10 +48,10 @@ public sealed class RMCProjectileSystem : EntitySystem
 
         SubscribeLocalEvent<PreventCollideWithDeadComponent, PreventCollideEvent>(OnPreventCollideWithDead);
 
-        SubscribeLocalEvent<RMCAntiVehicleDamageComponent, ProjectileHitEvent>(OnAntiVehicleProjectileHit);
+        SubscribeLocalEvent<VehicleDamageMultiplierComponent, ProjectileHitEvent>(OnVehicleDamageMultiplierProjectileHit);
     }
 
-    private void OnAntiVehicleProjectileHit(Entity<RMCAntiVehicleDamageComponent> ent, ref ProjectileHitEvent args)
+    private void OnVehicleDamageMultiplierProjectileHit(Entity<VehicleDamageMultiplierComponent> ent, ref ProjectileHitEvent args)
     {
         if (ent.Comp.Multiplier <= 1f)
             return;

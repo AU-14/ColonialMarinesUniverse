@@ -643,6 +643,9 @@ public sealed class GhostRoleSystem : EntitySystem
             roles.Add(new GhostRoleInfo
             {
                 Identifier = id,
+                Entity = GetNetEntity(uid),
+                EntityPrototype = GetGhostRolePreviewPrototype(role, meta),
+                JobPrototype = role.JobProto?.Id,
                 Name = role.RoleName,
                 Description = role.RoleDescription,
                 Rules = role.RoleRules,
@@ -660,6 +663,17 @@ public sealed class GhostRoleSystem : EntitySystem
         }
 
         return roles.ToArray();
+    }
+
+    private string? GetGhostRolePreviewPrototype(GhostRoleComponent role, MetaDataComponent meta)
+    {
+        if (role.JobProto is { } jobId &&
+            _prototype.TryIndex(jobId, out JobPrototype? job))
+        {
+            return job.JobPreviewEntity?.ToString() ?? job.JobEntity ?? meta.EntityPrototype?.ID;
+        }
+
+        return meta.EntityPrototype?.ID;
     }
 
     private void OnPlayerAttached(PlayerAttachedEvent message)

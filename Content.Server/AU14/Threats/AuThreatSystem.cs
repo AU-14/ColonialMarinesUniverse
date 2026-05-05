@@ -41,7 +41,7 @@ public sealed class AuThreatSystem : EntitySystem
     {
         if (threat == null)
         {
-            Logger.Error("[AuThreatSystem] SpawnThreatAtRoundStart called with null threat prototype. Aborting spawn.");
+            Logger.DebugS("au14.threat", "[AuThreatSystem] No threat selected for round start, skipping threat spawn.");
             return;
         }
 

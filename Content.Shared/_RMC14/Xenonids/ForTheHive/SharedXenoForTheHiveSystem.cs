@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared._RMC14.Xenonids.Energy;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Hive;
+using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
@@ -51,6 +52,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private readonly SharedHitLocationSystem _hitLocation = default!;
 
     public override void Initialize()
     {
@@ -184,6 +186,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
                     var maxBurnDamage = acid.Current / active.BurnDamageRatio;
 
                     var origin = _transform.GetMoverCoordinates(xeno);
+                    using var targetingSuppression = _hitLocation.SuppressBodyZoneTargeting(xeno);
 
                     //Everything the rouny has in view get hit
                     //Acid = smoke & cades

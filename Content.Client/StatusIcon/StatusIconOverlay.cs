@@ -24,6 +24,8 @@ public sealed class StatusIconOverlay : Overlay
     private readonly StatusIconSystem _statusIcon;
     private readonly ShaderInstance _unshadedShader;
     private readonly List<StatusIconData> _icons = new();
+    private readonly EntityLookupSystem _lookup;
+    private readonly HashSet<Entity<StatusIconComponent>> _statusCandidates = new();
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
 
@@ -34,6 +36,7 @@ public sealed class StatusIconOverlay : Overlay
         _sprite = _entity.System<SpriteSystem>();
         _transform = _entity.System<TransformSystem>();
         _statusIcon = _entity.System<StatusIconSystem>();
+        _lookup = _entity.System<EntityLookupSystem>();
         _unshadedShader = _prototype.Index(UnshadedShader).Instance();
     }
 
@@ -44,17 +47,34 @@ public sealed class StatusIconOverlay : Overlay
         var eyeRot = args.Viewport.Eye?.Rotation ?? default;
 
         var xformQuery = _entity.GetEntityQuery<TransformComponent>();
+        var spriteQuery = _entity.GetEntityQuery<SpriteComponent>();
+        var metaQuery = _entity.GetEntityQuery<MetaDataComponent>();
         var scaleMatrix = Matrix3Helpers.CreateScale(new Vector2(1, 1));
         var rotationMatrix = Matrix3Helpers.CreateRotation(-eyeRot);
+        var curTime = _timing.RealTime;
 
-        var query = _entity.AllEntityQueryEnumerator<StatusIconComponent, SpriteComponent, TransformComponent, MetaDataComponent>();
-        while (query.MoveNext(out var uid, out var comp, out var sprite, out var xform, out var meta))
+        _statusCandidates.Clear();
+        _lookup.GetEntitiesIntersecting(
+            args.MapId,
+            args.WorldAABB,
+            _statusCandidates,
+            LookupFlags.Uncontained);
+
+        foreach (var candidate in _statusCandidates)
         {
+            var uid = candidate.Owner;
+            var comp = candidate.Comp;
+            if (!spriteQuery.TryGetComponent(uid, out var sprite) ||
+                !xformQuery.TryGetComponent(uid, out var xform) ||
+                !metaQuery.TryGetComponent(uid, out var meta))
+            {
+                continue;
+            }
+
             if (xform.MapID != args.MapId || !sprite.Visible)
                 continue;
 
-            var spriteBounds = _sprite.GetLocalBounds((uid, sprite));
-            var bounds = comp.Bounds ?? spriteBounds;
+            var bounds = comp.Bounds ?? _sprite.GetLocalBounds((uid, sprite));
 
             var worldPos = _transform.GetWorldPosition(xform, xformQuery);
 
@@ -74,11 +94,11 @@ public sealed class StatusIconOverlay : Overlay
             var countR = 0;
             var accOffsetL = 0;
             var accOffsetR = 0;
-            var curTime = _timing.RealTime;
-            var fitHeightPx = spriteBounds.Height * EyeManager.PixelsPerMeter;
+            var fitHeightPx = bounds.Height * EyeManager.PixelsPerMeter;
             var crashOrParaDrop = _entity.HasComponent<CrashLandingComponent>(uid)
                 || _entity.HasComponent<ParaDroppingComponent>(uid);
-            _icons.Sort();
+            if (_icons.Count > 1)
+                _icons.Sort();
 
             foreach (var proto in _icons)
             {

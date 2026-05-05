@@ -11,11 +11,14 @@
   icon: "AU14JobIconUAAmbassador"
   requireAdminNotify: false
   joinNotifyCrew: false
+  whitelisted: true
   supervisors: au14-job-supervisors-orbital
   accessGroups:
   - Colonist
   - auadmin
   - AUPrisonStaff
+  access:
+  - AU14AccessColonyAmbassador
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

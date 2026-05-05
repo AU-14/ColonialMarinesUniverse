@@ -90,6 +90,13 @@
   - type: ItemTogglePointLight
   - type: PhysicalComposition
   - type: RMCLighter
+  - type: CMSurgeryTool
+  - type: CMCautery
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 2.3
+    mishapChance: 0.16
+    mishapDamageType: Heat
+    mishapDamageAmount: 4
 
 - type: entity
   name: cheap lighter

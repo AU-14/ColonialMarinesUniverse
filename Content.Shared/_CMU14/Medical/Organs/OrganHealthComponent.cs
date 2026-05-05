@@ -42,7 +42,36 @@ public sealed partial class OrganHealthComponent : Component
     public OrganDamageStage Stage = OrganDamageStage.Healthy;
 
     [DataField]
-    public OrganDamageStage InternalBleedAt = OrganDamageStage.Damaged;
+    public OrganDamageStage InternalBleedAt = OrganDamageStage.Dead;
+
+    /// <summary>
+    ///     Maximum fraction of <see cref="Max"/> that part-distribution and
+    ///     rib-fracture trauma can remove in one organ damage event.
+    /// </summary>
+    [DataField]
+    public float TraumaDamageCapFraction = 0.35f;
+
+    /// <summary>
+    ///     Prevents a single trauma event from deleting an organ that was not
+    ///     already failing. Reagents, surgery, and direct organ effects bypass
+    ///     this gate.
+    /// </summary>
+    [DataField]
+    public bool TraumaRequiresFailingToDie = true;
+
+    /// <summary>
+    ///     Window where repeated part-distribution / rib-fracture trauma to the
+    ///     same organ is dampened. This reduces focus-fire organ deletion without
+    ///     affecting surgery, reagents, or direct organ effects.
+    /// </summary>
+    [DataField]
+    public float RepeatTraumaWindowSeconds = 3f;
+
+    [DataField]
+    public float RepeatTraumaDamageMultiplier = 0.5f;
+
+    [DataField, AutoPausedField]
+    public TimeSpan LastTraumaAt;
 
     /// <summary>
     ///     HP regenerated per 10s tick while the organ is in Healthy / Bruised.

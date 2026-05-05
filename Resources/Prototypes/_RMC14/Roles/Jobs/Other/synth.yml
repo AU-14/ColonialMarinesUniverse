@@ -121,7 +121,6 @@
   id: RMCSynthRemoveComponents
   categories: [ HideSpawnMenu ]
   components:
-  - type: CMSurgeryTarget
   - type: Infectable
   - type: Hunger
   - type: Thirst

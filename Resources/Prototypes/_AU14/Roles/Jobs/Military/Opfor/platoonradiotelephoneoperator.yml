@@ -70,7 +70,7 @@
   id: AU14GearopforRadioTelephoneOperator
   equipment:
     id: AU14JobIDCardopforRadioTelephoneOperator
-    ears: AU14HeadsetSectionOpfor
+    ears: AU14HeadsetSectionOpforFTL
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -93,4 +93,4 @@
     shoes: CMBootsBrown
     head: AU14JungleBoonieHat
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetSectionOpfor
+    ears: AU14HeadsetSectionOpforFTL

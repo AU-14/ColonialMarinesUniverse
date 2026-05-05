@@ -86,6 +86,8 @@
   name: FORECON sniper equipment case
   description: "A large case containing your very own long-range M96S-B sniper rifle, M45 ghillie armor and helmet, ammunition and additional pieces of equipment.\n\nNOTE: You cannot put items back inside this case."
   components:
+  - type: Item
+    size: Ginormous
   - type: Storage
     maxItemSize: Ginormous
     grid:

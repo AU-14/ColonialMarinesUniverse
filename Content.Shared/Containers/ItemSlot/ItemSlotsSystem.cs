@@ -32,6 +32,7 @@ namespace Content.Shared.Containers.ItemSlots
         [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
         [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
         [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
+        [Dependency] private readonly SharedTransformSystem _transform = default!;
         [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
 
         public override void Initialize()
@@ -621,6 +622,33 @@ namespace Content.Shared.Containers.ItemSlots
             return true;
         }
 
+        /// <summary>
+        ///     Try to eject item from a slot directly onto the ground.
+        /// </summary>
+        public bool TryEjectToGround(
+            EntityUid uid,
+            ItemSlot slot,
+            EntityUid? user,
+            bool excludeUserAudio = false,
+            EntityUid? dropAt = null)
+        {
+            if (!CanEject(uid, user, slot))
+                return false;
+
+            if (slot.Item is not { } item)
+                return false;
+
+            Eject(uid, slot, item, user, excludeUserAudio);
+
+            var itemXform = Transform(item);
+            _containers.AttachParentToContainerOrGrid((item, itemXform));
+
+            if (dropAt is { } dropEntity && Exists(dropEntity))
+                _transform.SetCoordinates(item, itemXform, Transform(dropEntity).Coordinates);
+
+            return true;
+        }
+
         #endregion
 
         #region Verbs
@@ -871,6 +899,32 @@ namespace Content.Shared.Containers.ItemSlots
                 return;
 
             slot.Locked = locked;
+            Dirty(uid, itemSlots);
+        }
+
+        /// <summary>
+        ///     Toggle whether a slot contributes a context-menu eject verb.
+        /// </summary>
+        public void SetDisableEject(EntityUid uid, string id, bool disabled, ItemSlotsComponent? itemSlots = null)
+        {
+            if (!Resolve(uid, ref itemSlots))
+                return;
+
+            if (!itemSlots.Slots.TryGetValue(id, out var slot))
+                return;
+
+            SetDisableEject(uid, slot, disabled, itemSlots);
+        }
+
+        /// <summary>
+        ///     Toggle whether a slot contributes a context-menu eject verb.
+        /// </summary>
+        public void SetDisableEject(EntityUid uid, ItemSlot slot, bool disabled, ItemSlotsComponent? itemSlots = null)
+        {
+            if (!Resolve(uid, ref itemSlots))
+                return;
+
+            slot.DisableEject = disabled;
             Dirty(uid, itemSlots);
         }
 

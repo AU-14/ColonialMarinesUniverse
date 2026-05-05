@@ -53,8 +53,6 @@ public sealed partial class GhostGui : UIWidget
 
             _prevNumberRoles = (int)roles;
         }
-
-        TargetWindow.Populate();
     }
 
     protected override void Dispose(bool disposing)

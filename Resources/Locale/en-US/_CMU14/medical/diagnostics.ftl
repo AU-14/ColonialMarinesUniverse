@@ -45,17 +45,29 @@ cmu-medical-scanner-pain-mild              = Pain: Mild
 cmu-medical-scanner-pain-moderate          = Pain: Moderate
 cmu-medical-scanner-pain-severe            = Pain: Severe
 cmu-medical-scanner-pain-shock             = Pain: Shock
+cmu-medical-scanner-pain-risk-unknown      = ?
+cmu-medical-scanner-pain-risk-low          = Low
+cmu-medical-scanner-pain-risk-elevated     = Elevated
+cmu-medical-scanner-pain-risk-high         = High
+cmu-medical-scanner-pain-risk-imminent     = Imminent
+cmu-medical-scanner-pain-risk-active       = Active
+cmu-medical-scanner-pain-risk-suppressed-suffix =  (supp.)
 
 # V2-ε Stat-sheet redesign — dark cards + status banner + body chart
 cmu-medical-scanner-card-body              = Body
 cmu-medical-scanner-card-organs            = Organs
 cmu-medical-scanner-card-reagents          = Reagents in bloodstream
 cmu-medical-scanner-card-recommended       = Recommended
+cmu-medical-scanner-card-patient           = Patient
+cmu-medical-scanner-card-damage            = Damage profile
+cmu-medical-scanner-loading                = Receiving scan telemetry
+cmu-medical-scanner-loading-subtext        = resolving server state
 
 cmu-medical-scanner-stat-health            = HEALTH
 cmu-medical-scanner-stat-pulse             = PULSE BPM
 cmu-medical-scanner-stat-blood             = BLOOD
 cmu-medical-scanner-stat-temp              = TEMP °C
+cmu-medical-scanner-stat-shock-risk        = SHOCK RISK
 cmu-medical-scanner-stat-pulse-stopped     = 0
 cmu-medical-scanner-stat-deceased-short    = DEAD
 
@@ -91,6 +103,7 @@ cmu-medical-scanner-chip-wounds            = { $count } wound{ $count ->
 # knows whether to study up rather than assuming the patient is fine.
 cmu-medical-scanner-skill-hint-fractures   = Insufficient training to detect fractures or internal bleeding (Med-1 required).
 cmu-medical-scanner-skill-hint-organs      = Insufficient training to assess organ damage (Med-2 required).
+cmu-medical-scanner-synthetic-physiology   = Synthetic physiology detected
 
 # Legacy V2-ε Mix B keys (still referenced by tests / fallback paths)
 cmu-medical-scanner-vitals-pain            = Pain

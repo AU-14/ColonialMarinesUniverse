@@ -81,6 +81,9 @@
     interactSuccessString: rmc-patting-success-generic
     messagePerceivedByOthers: rmc-patting-success-generic-others
   - type: Blindable
+    maxDamage: 30
+  - type: CMUBlurDelay
+    threshold: 12
   - type: Tag
     tags:
     - CanPilot
@@ -106,8 +109,12 @@
   - type: Thirst
     baseDecayRate: 0.02083
   - type: Body
-    prototype: Human
+    prototype: CMUHumanBody
     requiredLegs: 2
+  - type: BodyZoneTargeting
+  - type: CMUHumanMedical
+  - type: HitLocation
+  - type: PainShock
   - type: Damageable
     damageContainer: Biological
     damageModifierSet: null
@@ -169,6 +176,10 @@
         type: DialogBui
       enum.ViewIntelObjectivesUI.Key:
         type: ViewIntelObjectivesBui
+      enum.BodyPartPickerUIKey.Key:
+        type: BodyPartPickerBui
+      enum.CMUSurgeryUIKey.Key:
+        type: CMUSurgeryBui
   - type: Infectable
   - type: Tackleable
   - type: XenoNestable

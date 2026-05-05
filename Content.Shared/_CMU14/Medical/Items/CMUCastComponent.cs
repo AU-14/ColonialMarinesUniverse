@@ -21,4 +21,22 @@ public sealed partial class CMUCastComponent : Component
 
     [DataField, AutoNetworkedField, AutoPausedField]
     public TimeSpan HealCompletesAt;
+
+    [DataField, AutoNetworkedField]
+    public bool ReadyToRemove;
+
+    [DataField, AutoNetworkedField, AutoPausedField]
+    public TimeSpan NextRemovePrompt;
+}
+
+public sealed class CMUCastChangedEvent : EntityEventArgs
+{
+    public CMUCastChangedEvent(EntityUid part, bool removed)
+    {
+        Part = part;
+        Removed = removed;
+    }
+
+    public EntityUid Part { get; }
+    public bool Removed { get; }
 }

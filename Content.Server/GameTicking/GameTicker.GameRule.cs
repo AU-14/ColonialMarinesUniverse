@@ -271,6 +271,8 @@ public sealed partial class GameTicker
         {
             EndGameRule(rule);
         }
+
+        _presetRuleEntities.Clear();
     }
 
     /// <summary>

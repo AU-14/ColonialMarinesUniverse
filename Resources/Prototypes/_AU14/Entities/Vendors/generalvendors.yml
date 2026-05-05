@@ -345,12 +345,12 @@
       - id: RMCPouchMedical
       - id: RMCPouchSyringeFill
     - name: Medical Storage
-      choices: { CMUPlatoonMedicalStorage: 2 }
+      choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
       - id: CMBeltMedicBag
       - id: AU14BeltMedicBagBlack
     - name: Medical Webbing
-      choices: { CMUPlatoonMedicalStorage: 1 }
+      choices: { CMUPlatoonSurgicalWebbing: 1 }
       entries:
       - id: CMWebbingSurgicalGreen
     - name: Medical Gloves
@@ -379,8 +379,7 @@
     - CMHealthAnalyzer
     - RMCFlashlightPen
     - ClothingNeckStethoscope
-    - CMHandLabeler
+    - RMCPortableDialysis
     - CMRollerBedSpawnFolded
     - CMPortableSurgicalBedSpawnFolded
     - AU14IVFoldableFolded
-    - AU14TentBigFoldedSurgical

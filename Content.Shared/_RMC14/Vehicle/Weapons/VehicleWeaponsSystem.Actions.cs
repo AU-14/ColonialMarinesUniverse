@@ -154,7 +154,8 @@ public sealed partial class VehicleWeaponsSystem
 
             if (mountedSlot.Item is not { } installed ||
                 !HasComp<VehicleTurretComponent>(installed) ||
-                !HasComp<GunComponent>(installed))
+                !HasComp<GunComponent>(installed) ||
+                !_hardpoints.IsHardpointFunctional(installed))
             {
                 continue;
             }

@@ -1,6 +1,8 @@
+using Content.Server.Body.Systems;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Medical.Wounds;
+using Content.Shared.Body.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
@@ -11,10 +13,9 @@ namespace Content.Server._CMU14.Medical.Wounds;
 
 public sealed class CMUWoundsSystem : SharedCMUWoundsSystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
     [Dependency] private readonly SharedRMCDamageableSystem _rmcDamageable = default!;
 
-    private static readonly ProtoId<DamageTypePrototype> Bloodloss = "Bloodloss";
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
 
@@ -22,11 +23,11 @@ public sealed class CMUWoundsSystem : SharedCMUWoundsSystem
     {
         if (amount <= 0f)
             return;
-        if (!_proto.TryIndex(Bloodloss, out _))
+
+        if (!TryComp<BloodstreamComponent>(body, out var bloodstream))
             return;
 
-        var spec = new DamageSpecifier { DamageDict = { [Bloodloss.Id] = (FixedPoint2)amount } };
-        Damageable.TryChangeDamage(body, spec, ignoreResistances: true, origin: part);
+        _bloodstream.TryModifyBloodLevel((body, bloodstream), -(FixedPoint2)amount);
     }
 
     protected override void ApplyWoundHealingDamage(EntityUid body, EntityUid part, WoundType type, FixedPoint2 amount)

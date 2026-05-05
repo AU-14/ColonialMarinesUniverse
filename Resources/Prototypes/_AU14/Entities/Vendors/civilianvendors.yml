@@ -223,6 +223,7 @@
     - state: "base"
       map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
   - type: CMAutomatedVendor
+    jobs: [ AU14JobCivilianNurse, AU14JobCivilianPhysician, AU14JobCivilianHeadPhysician, AU14JobCLFPhysician, AU14JobCLFSurgeon ]
     sections:
     - name: Shoes
       choices: { CMUcivilianmedicalshoes: 1 }
@@ -261,7 +262,9 @@
       choices: { CMUcivilianmedicaljackets: 2 }
       entries:
       - id: RMCLabcoat
-      - id: AU14CivilianJacketSnowSuit
+      - id: RMCLabcoatShort
+      - id: RMCLabcoatLong
+      - id: RMCCoatSnow
     - name: Medical Gloves
       choices: { CMUcivilianmedicalgloves: 1 }
       entries:
@@ -274,15 +277,8 @@
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
       entries:
-      - id: RMCGlassesMedicalHUDGlasses
-      - id: AU14CMDefibrillator
-      - id: CMHealthAnalyzer
-      - id: RMCFlashlightPen
-      - id: ClothingNeckStethoscope
-      - id: CMSurgicalLine
-      - id: CMSynthGraft
-      - id: CMSurgicalCaseFilled
-      - id: RMCRadioHandheldColonyOff
+      - id: AU14VendorBundleMilitaryDoctorEssentials
+      - id: RMCSurgicalTray
     - name: Medical Pouches
       choices: { CMUMedicalPouchCivDoc: 2 }
       entries:
@@ -293,8 +289,8 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: RMCBeltMedicalDefibAnalyzerFilled
-      - id: CMBeltMedicBagFilled
+      - id: CMBeltMedicBag
+      - id: AU14BeltMedicBagBlack
     - name: Medical Equipment
       entries:
       - id: AU14CMDefibrillator
@@ -315,6 +311,7 @@
     - state: "base"
       map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
   - type: CMAutomatedVendor
+    jobs: [ AU14JobCivilianEmergencyResponseOfficer, AU14JobCLFPhysician, AU14JobCLFSurgeon ]
     sections:
     - name: Shoes
       choices: { CMUcivilianmedicalshoes: 1 }

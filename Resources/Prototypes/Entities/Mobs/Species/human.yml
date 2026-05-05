@@ -34,6 +34,14 @@
   id: MobHumanDummy
   categories: [ HideSpawnMenu ]
   components:
+  - type: CMUHumanMedical
+  - type: HitLocation
+  - type: PainShock
+  - type: BodyZoneTargeting
+  - type: CMSurgeryTarget
+  - type: Body
+    prototype: CMUHumanBody
+    requiredLegs: 2
   - type: Inventory
     femaleDisplacements:
       jumpsuit:

@@ -43,6 +43,7 @@ public abstract class SharedSynthSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<SynthComponent, MapInitEvent>(OnMapInit, after: [typeof(SharedBloodstreamSystem)]);
+        SubscribeLocalEvent<SynthComponent, ComponentStartup>(OnSynthStartup);
         SubscribeLocalEvent<SynthComponent, AttackAttemptEvent>(OnMeleeAttempted);
         SubscribeLocalEvent<SynthComponent, ShotAttemptedEvent>(OnShotAttempted);
         SubscribeLocalEvent<SynthComponent, TryingToSleepEvent>(OnSleepAttempt);
@@ -57,8 +58,23 @@ public abstract class SharedSynthSystem : EntitySystem
         MakeSynth(ent);
     }
 
+    // Survivor synth jobs (colony, recon, paramarines, etc.) add SynthComponent
+    // through AddComponentSpecial after the mob is already map-initialized, so
+    // MapInitEvent never fires for the new component. ComponentStartup catches
+    // that path and ensures MakeSynth runs (and re-runs are no-ops because the
+    // adds/removes are idempotent).
+    private void OnSynthStartup(Entity<SynthComponent> ent, ref ComponentStartup args)
+    {
+        MakeSynth(ent);
+    }
+
     protected virtual void MakeSynth(Entity<SynthComponent> ent)
     {
+        if (ent.Comp.Initialized)
+            return;
+        ent.Comp.Initialized = true;
+        Dirty(ent);
+
         if (_prototypes.TryIndex(ent.Comp.AddComponents, out var addComponents))
             EntityManager.AddComponents(ent.Owner, addComponents.Components);
 
@@ -186,10 +202,10 @@ public abstract class SharedSynthSystem : EntitySystem
         }
         else if (HasComp<RMCCableCoilComponent>(used))
         {
-            args.Handled = true;
-
             if (HasDamage(synth, synth.Comp.CableCoilDamageGroup))
             {
+                args.Handled = true;
+
                 if (_doAfter.TryStartDoAfter(doAfter))
                 {
                     var selfMsg = Loc.GetString("rmc-synth-repair-burn-start-self", ("user", user), ("target", synth), ("tool", used), ("limb", "chest"));
@@ -201,10 +217,7 @@ public abstract class SharedSynthSystem : EntitySystem
                     _popup.PopupPredicted(selfMsg, othersMsg, user, user);
                 }
             }
-            else
-            {
-                _popup.PopupClient(Loc.GetString("rmc-repairable-not-damaged", ("target", synth)), user, user, PopupType.SmallCaution);
-            }
+            // No damage: leave InteractUsing unhandled so AfterInteract can open synth surgery dispatch.
         }
     }
 

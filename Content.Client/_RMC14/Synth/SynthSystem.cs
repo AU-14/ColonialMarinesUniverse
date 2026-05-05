@@ -12,20 +12,10 @@ public sealed class SynthSystem : SharedSynthSystem
 
     private static readonly ProtoId<DamageGroupPrototype> GroupToChange = "Brute";
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<SynthComponent, ComponentStartup>(OnCompStartup);
-    }
-
     protected override void MakeSynth(Entity<SynthComponent> ent)
     {
         base.MakeSynth(ent);
-    }
 
-    private void OnCompStartup(Entity<SynthComponent> ent, ref ComponentStartup args)
-    {
         if (!TryComp<SpriteComponent>(ent.Owner, out var sprite))
             return;
 

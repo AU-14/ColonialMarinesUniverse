@@ -49,10 +49,11 @@
 - type: startingGear
   id: AU14GearCLFGuerilla
   equipment:
-    jumpsuit: AU14CMJumpsuitColonistCLF
-    shoes: RMCBootsPMCFilled
     id: AU14IDCardCLFCivilian
    # neck: RMCCLFArmband
+  storage:
+    back:
+    - AU14CLFHeadset
 
 - type: entity
   parent: CMSpawnPointJobBase

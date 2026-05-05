@@ -6,7 +6,7 @@
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Smartpacks/V42/smartpack_black.rsi
   - type: Storage
-    maxItemSize: Huge
+    maxItemSize: Large
     grid:
     - 0,0,15,1
   - type: StorageFill
@@ -103,3 +103,4 @@
     - 0,0,19,1 # 20
   - type: ItemCamouflage
     camouflageVariations: { }
+

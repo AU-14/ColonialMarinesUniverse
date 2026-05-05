@@ -3,7 +3,7 @@
   id: AU14JobCivilianEthicsAndWellnessAdvisor
   name: au14-job-name-ethicsandwellnessadvisor
   description: au14-job-description-ethicsandwellnessadvisor
-  setPreference: false
+  setPreference: true
   playTimeTracker: AU14JobCivilianEthicsAndWellnessAdvisor
   ranks:
     RMCRankCivilian: []

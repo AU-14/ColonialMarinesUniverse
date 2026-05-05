@@ -33,6 +33,15 @@
     guides:
     - VoltageNetworks
     - Power
+  - type: CMSurgeryTool
+  - type: CMHemostat
+  - type: CMUOrganClamp
+  - type: CMCautery
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 2.2
+    mishapChance: 0.14
+    mishapDamageType: Blunt
+    mishapDamageAmount: 3
 
 - type: entity
   id: CableHVStack

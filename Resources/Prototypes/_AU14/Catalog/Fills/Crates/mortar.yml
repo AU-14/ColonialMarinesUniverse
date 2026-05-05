@@ -3,18 +3,17 @@
 - type: entity
   parent: RMCCrateWeapons
   id: AU14CrateMortarKitRMC
-  name: L53A1 light mortar crate (Mortar x1, Mortar shell backpack x1, 1x Mortar Kit)
+  name: L53A1 light mortar crate (Light L53A1 Mortar Kit x1, Mortar shell backpack x1)
   components:
   - type: StorageFill
     contents:
-    - id: RMCMortarEquipmentCase
-    - id: AU14MortarKitRMC
+    - id: AU14MortarEquipmentCaseRMC
     - id: AU14BackpackMortarFilled
 
 - type: entity
   parent: RMCCrateMortarAmmo
   id: AU14CrateMortarShellHERMC
-  name: L53A1 light mortar shells crate (x6 HE)
+  name: L53A1 light mortar shells crate (x12 HE)
   components:
   - type: StorageFill
     contents:
@@ -24,7 +23,7 @@
 - type: entity
   parent: RMCCrateMortarAmmo
   id: AU14CrateMortarShellIncendiaryRMC
-  name: L53A1 light mortar shells crate (x6 HE-INC)
+  name: L53A1 light mortar shells crate (x12 HE-INC)
   components:
   - type: StorageFill
     contents:
@@ -34,7 +33,7 @@
 - type: entity
   parent: RMCCrateMortarAmmo
   id: AU14CrateMortarShellFlareRMC
-  name: L53A1 light mortar shells crate (x6 ILLUM-OBS)
+  name: L53A1 light mortar shells crate (x12 ILLUM-OBS)
   components:
   - type: StorageFill
     contents:
@@ -44,7 +43,7 @@
 - type: entity
   parent: RMCCrateMortarAmmo
   id: AU14CrateMortarShellFlareHEATMP
-  name: L53A1 light mortar shells crate (x6 HEAT-MP)
+  name: L53A1 light mortar shells crate (x12 HEAT-MP)
   components:
   - type: StorageFill
     contents:

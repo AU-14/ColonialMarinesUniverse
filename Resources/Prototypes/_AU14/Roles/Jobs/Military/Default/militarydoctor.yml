@@ -30,6 +30,7 @@
   - AU14GovforSquad
   access:
   - CMAccessMedical
+  - CMAccessChemistry
   overwatchSortPriority: -6
   overwatchShowName: true
   overwatchRoleName: Doctor

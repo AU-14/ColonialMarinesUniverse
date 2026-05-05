@@ -332,6 +332,11 @@ public abstract class SharedDropshipSystem : EntitySystem
     private void OnNavigationOpen(Entity<DropshipNavigationComputerComponent> ent, ref AfterActivatableUIOpenEvent args)
     {
         RefreshUI(ent);
+        AfterNavigationOpen(ent, ref args);
+    }
+
+    protected virtual void AfterNavigationOpen(Entity<DropshipNavigationComputerComponent> ent, ref AfterActivatableUIOpenEvent args)
+    {
     }
 
     private void OnNavigationLockoutOverride(Entity<DropshipNavigationComputerComponent> ent, ref DropshipLockoutOverrideDoAfterEvent args)
@@ -1162,6 +1167,33 @@ public abstract class SharedDropshipSystem : EntitySystem
         {
             if (Enum.TryParse<DropshipDestinationComponent.DestinationType>(destinationtype, out var parsed))
                 comp.Destinationtype = parsed;
+            EntityManager.Dirty(uid, comp);
+        }
+    }
+
+    public void SetDestinationShip(EntityUid uid, EntityUid? ship)
+    {
+        if (EntityManager.TryGetComponent<DropshipDestinationComponent>(uid, out var comp))
+        {
+            comp.Ship = ship;
+            EntityManager.Dirty(uid, comp);
+        }
+    }
+
+    public void SetDestinationHome(EntityUid uid, bool home)
+    {
+        if (EntityManager.TryGetComponent<DropshipDestinationComponent>(uid, out var comp))
+        {
+            comp.Home = home;
+            EntityManager.Dirty(uid, comp);
+        }
+    }
+
+    public void SetDropshipDestination(EntityUid uid, EntityUid? destination)
+    {
+        if (EntityManager.TryGetComponent<DropshipComponent>(uid, out var comp))
+        {
+            comp.Destination = destination;
             EntityManager.Dirty(uid, comp);
         }
     }

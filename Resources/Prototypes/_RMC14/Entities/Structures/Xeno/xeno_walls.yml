@@ -24,6 +24,8 @@
     deleteOnHit: true
     damageOnHit: 900
     selfDamageMultiplier: 0.6
+    slowdownMultiplier: 0.2
+    slowdownDuration: 1.5
     requiredVehicleTag: VehicleHeavy
     smashSound:
       collection: XenoResinBreak
@@ -66,6 +68,8 @@
     deleteOnHit: true
     damageOnHit: 1350
     selfDamageMultiplier: 1.2
+    slowdownMultiplier: 0.2
+    slowdownDuration: 1.5
     requiredVehicleTag: VehicleHeavy
     smashSound:
       collection: XenoResinBreak

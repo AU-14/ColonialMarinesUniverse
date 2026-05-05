@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: [RMCBaseSlideMagazineVisuals, CMWeaponPistolBase]
   id: RMCMK80
   name: VP-78 pistol
@@ -25,8 +25,8 @@
     - Burst
     recoilWielded: 1
     recoilUnwielded: 2
-    scatterWielded: 10
-    scatterUnwielded: 10
+    scatterWielded: 7 # 5 degree, dual wield is 24
+    scatterUnwielded: 12 # 8 degree, do not question the dark arts
     baseFireRate: 2
     burstScatterMult: 4
     modifiers:
@@ -185,7 +185,7 @@
         whitelist:
           tags:
           - CMMagazinePistolMK80
-        
+
 - type: entity
   parent: CMMagazinePistolMK80
   id: AU14MagazinePistolL165A1

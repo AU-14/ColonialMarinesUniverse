@@ -1,16 +1,20 @@
+using System;
 using System.Collections.Generic;
 using Content.Shared.Actions;
+using Content.Shared.DoAfter;
+using Content.Shared.Tools;
 using Robust.Shared.GameObjects;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Vehicle;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(VehicleLockSystem), typeof(VehicleSystem))]
 public sealed partial class VehicleLockComponent : Component
 {
-    [DataField]
+    [DataField, AutoNetworkedField]
     public bool Locked;
 
     [DataField]
@@ -19,8 +23,34 @@ public sealed partial class VehicleLockComponent : Component
     [DataField]
     public float RelockAtFraction = 0.9f;
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public bool ForcedOpen;
+
+    [DataField, AutoNetworkedField]
+    public bool Broken;
+
+    [DataField, AutoNetworkedField]
+    public string? KeyId;
+
+    [DataField]
+    public ProtoId<ToolQualityPrototype> BreakToolQuality = "Cutting";
+
+    [DataField]
+    public TimeSpan BreakDelay = TimeSpan.FromSeconds(60);
+
+    [DataField]
+    public TimeSpan BreakAlarmInterval = TimeSpan.FromSeconds(2.5);
+
+    [DataField]
+    public TimeSpan BreakAlarmFlashDuration = TimeSpan.FromSeconds(0.6);
+
+    [DataField]
+    public ProtoId<ToolQualityPrototype> RepairToolQuality = "Screwing";
+
+    [DataField]
+    public TimeSpan RepairDelay = TimeSpan.FromSeconds(10);
+
+    public int AlarmToken;
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -41,3 +71,26 @@ public sealed partial class VehicleLockActionComponent : Component
 }
 
 public sealed partial class VehicleLockActionEvent : InstantActionEvent;
+ [Serializable, NetSerializable]
+public sealed partial class VehicleLockBreakDoAfterEvent : SimpleDoAfterEvent;
+ [Serializable, NetSerializable]
+public sealed partial class VehicleLockRepairDoAfterEvent : SimpleDoAfterEvent;
+
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(VehicleLockSystem))]
+public sealed partial class VehicleKeyComponent : Component
+{
+    [DataField, AutoNetworkedField]
+    public string? KeyId;
+
+    [DataField, AutoNetworkedField]
+    public VehicleKeyMode Mode = VehicleKeyMode.Normal;
+}
+
+[Serializable, NetSerializable]
+public enum VehicleKeyMode : byte
+{
+    Normal,
+    Blank,
+    Duplicator,
+}

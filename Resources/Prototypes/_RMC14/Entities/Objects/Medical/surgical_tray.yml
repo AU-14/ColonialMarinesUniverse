@@ -52,7 +52,7 @@
     - id: CMSurgicalDrill
     - id: CMBoneGel
     - id: CMBonesetter
-#   - FixOVein
-#   - Nanopaste
+    - id: CMUBoneGraftItem
+    - id: CMUOrganClampItem
     - id: CMSurgicalLine
     - id: CMSynthGraft

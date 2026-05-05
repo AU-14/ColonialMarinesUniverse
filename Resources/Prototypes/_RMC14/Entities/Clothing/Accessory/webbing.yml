@@ -965,20 +965,19 @@
   - type: FixedItemSizeStorage
   - type: StorageFill
     contents:
-#     - PICT System
-      - id: CMScalpel
-      - id: CMHemostat
-      - id: CMRetractor
-      - id: CMTraumaKit10
-      - id: CMCautery
-      - id: CMCircularSaw
-      - id: CMSurgicalDrill
-      - id: CMBoneGel
-      - id: CMBonesetter
-#     - FixOVein
-#     - Nanopaste
-      - id: CMSurgicalLine
-      - id: CMSynthGraft
+    - id: CMScalpel
+    - id: CMHemostat
+    - id: CMRetractor
+    - id: CMTraumaKit10
+    - id: CMCautery
+    - id: CMCircularSaw
+    - id: CMSurgicalDrill
+    - id: CMBoneGel
+    - id: CMBonesetter
+    - id: CMUBoneGraftItem
+    - id: CMUOrganClampItem
+    - id: CMSurgicalLine
+    - id: CMSynthGraft
 
 - type: entity
   parent: CMWebbingBase
@@ -1018,20 +1017,19 @@
   - type: FixedItemSizeStorage
   - type: StorageFill
     contents:
-#     - PICT System
-      - id: CMScalpel
-      - id: CMHemostat
-      - id: CMRetractor
-      - id: CMTraumaKit10
-      - id: CMCautery
-      - id: CMCircularSaw
-      - id: CMSurgicalDrill
-      - id: CMBoneGel
-      - id: CMBonesetter
-#     - FixOVein
-#     - Nanopaste
-      - id: CMSurgicalLine
-      - id: CMSynthGraft
+    - id: CMScalpel
+    - id: CMHemostat
+    - id: CMRetractor
+    - id: CMTraumaKit10
+    - id: CMCautery
+    - id: CMCircularSaw
+    - id: CMSurgicalDrill
+    - id: CMBoneGel
+    - id: CMBonesetter
+    - id: CMUBoneGraftItem
+    - id: CMUOrganClampItem
+    - id: CMSurgicalLine
+    - id: CMSynthGraft
 
 - type: entity
   parent: CMWebbing
