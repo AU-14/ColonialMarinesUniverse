@@ -5,9 +5,10 @@
   description: A rigid cast that immobilises and slowly heals fractures up to Simple severity.
   components:
   - type: Item
-    size: Normal
+    size: Small
   - type: CMUCastItem
     applyDelay: 6
+    uses: 4
     maxSuppressed: Simple
   - type: Tag
     tags:

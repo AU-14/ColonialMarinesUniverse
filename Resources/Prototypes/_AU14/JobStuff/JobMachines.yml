@@ -275,8 +275,7 @@
   - type: DepartmentConsole
   - type: ActivatableUIRequiresAccess
   - type: AccessReader
-    access:
-    - - CMAccessColonyCommand
+    access: [["CMAccessColonyCommand"]] # auadmin & aucmb
   - type: ItemSlots
     slots:
       CashSlot:
@@ -298,6 +297,8 @@
     departmentId: AU14DepartmentColonyMedical
     departmentAccessLevel: CMAccessColonyMedbay
     defaultSalary: 50
+  - type: AccessReader
+    access: [["AU14AccessColonyHeadPhysician"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase
@@ -310,6 +311,8 @@
     departmentId: AU14DepartmentEngineering
     departmentAccessLevel: CMAccessColonyEngineering
     defaultSalary: 50
+  - type: AccessReader
+    access: [["AU14AccessColonyHeadEngineer"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase
@@ -322,6 +325,8 @@
     departmentId: AU14DepartmentColonySecurity
     departmentAccessLevel: CMAccessColonyBrig
     defaultSalary: 60
+  - type: AccessReader
+    access: [["AU14AccessColonyMarshall"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase
@@ -334,6 +339,8 @@
     departmentId: AU14DepartmentLabor
     departmentAccessLevel: CMAccessColonyLogistics
     defaultSalary: 45
+  - type: AccessReader
+    access: [["AU14AccessColonyForeman"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase
@@ -346,6 +353,8 @@
     departmentId: AU14DepartmentColonyCommand
     departmentAccessLevel: CMAccessColonyCommand
     defaultSalary: 75
+  - type: AccessReader
+    access: [["AU14AccessColonyAdministrator"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase
@@ -358,6 +367,8 @@
     departmentId: AU14DepartmentCivilian
     departmentAccessLevel: CMAccessColonyPublic
     defaultSalary: 40
+  - type: AccessReader
+    access: [["AU14AccessColonyHeadOfService"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase
@@ -370,6 +381,8 @@
     departmentId: AU14DepartmentServices
     departmentAccessLevel: CMAccessColonyPublic
     defaultSalary: 40
+  - type: AccessReader
+    access: [["AU14AccessColonyHeadOfService"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase
@@ -384,6 +397,8 @@
     defaultSalary: 55
     colonyManaged: false
     asrsFaction: corporate
+  - type: AccessReader
+    access: [["AU14AccessColonyCorporateLiaison"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase
@@ -396,6 +411,8 @@
     departmentId: AU14DepartmentHydroponics
     departmentAccessLevel: CMAccessColonyPublic
     defaultSalary: 45
+  - type: AccessReader
+    access: [["AU14AccessColonyHeadOfService"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase
@@ -408,3 +425,5 @@
     departmentId: AU14DepartmentLumbermill
     departmentAccessLevel: CMAccessColonyPublic
     defaultSalary: 45
+  - type: AccessReader
+    access: [["AU14AccessColonyForeman"]]

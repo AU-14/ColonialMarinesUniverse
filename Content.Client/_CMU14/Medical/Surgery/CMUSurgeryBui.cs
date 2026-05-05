@@ -70,6 +70,7 @@ public sealed class CMUSurgeryBui : BoundUserInterface
 
         RefreshInProgressPanel(state);
         RefreshPartStack(state);
+        _window.ApplyUniformScale(true);
     }
 
     private void RefreshInProgressPanel(CMUSurgeryBuiState state)
@@ -325,6 +326,7 @@ public sealed class CMUSurgeryBui : BoundUserInterface
             _window.ProcedureHeaderLabel.Text = string.Empty;
             _window.PartListContainer.AddChild(CreateEmptyLabel(Loc.GetString("cmu-medical-surgery-no-eligible")));
             _window.ProcedureListContainer.AddChild(CreateEmptyLabel(Loc.GetString("cmu-medical-surgery-no-eligible")));
+            _window.ApplyUniformScale(true);
             return;
         }
 
@@ -340,10 +342,12 @@ public sealed class CMUSurgeryBui : BoundUserInterface
             _window.SelectedPartStatusLabel.Text = Loc.GetString("cmu-medical-surgery-no-part-selected");
             _window.ProcedureHeaderLabel.Text = string.Empty;
             _window.ProcedureListContainer.AddChild(CreateEmptyLabel(Loc.GetString("cmu-medical-surgery-no-part-selected")));
+            _window.ApplyUniformScale(true);
             return;
         }
 
         BuildProcedurePanel(selectedPart);
+        _window.ApplyUniformScale(true);
     }
 
     private void EnsureSelectedPart(CMUSurgeryBuiState state)
@@ -564,11 +568,11 @@ public sealed class CMUSurgeryBui : BoundUserInterface
         };
         panel.AddChild(root);
 
-        root.AddChild(new PanelContainer
+        var accent = new PanelContainer
         {
             MinSize = new Vector2(7, 44),
             PanelOverride = CreatePanelStyle(categoryColor, categoryColor, 0f),
-        });
+        };
 
         var labels = new BoxContainer
         {
@@ -591,6 +595,8 @@ public sealed class CMUSurgeryBui : BoundUserInterface
             FontColorOverride = TextSecondary,
             ClipText = true,
         });
+
+        root.AddChild(accent);
         root.AddChild(labels);
 
         var beginButton = CreateActionButton(

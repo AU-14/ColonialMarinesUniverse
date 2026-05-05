@@ -46,7 +46,6 @@
   id: AU14GearCivilianPhysician
   equipment:
     id: AU14IDCardColonyPhysician
-    shoes: RMCShoesBlack
 
 - type: entity
   parent: CMSpawnPointJobBase

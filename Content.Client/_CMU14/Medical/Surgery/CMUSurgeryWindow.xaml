@@ -3,10 +3,13 @@
     xmlns:controls="clr-namespace:Content.Client._CMU14.Medical.Surgery"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     Title="{Loc 'cmu-medical-surgery-window-title'}"
-    MinSize="900 600"
+    MinSize="560 420"
     SetSize="980 660">
 
-    <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+    <PanelContainer Name="ScaleRoot"
+                    Access="Public"
+                    HorizontalExpand="True"
+                    VerticalExpand="True">
         <PanelContainer.PanelOverride>
             <graphics:StyleBoxFlat
                 BackgroundColor="#121318"
@@ -20,10 +23,14 @@
                       HorizontalExpand="True"
                       VerticalExpand="True">
 
-            <BoxContainer Orientation="Horizontal"
+            <BoxContainer Name="SurgeryHeaderRow"
+                          Access="Public"
+                          Orientation="Horizontal"
                           SeparationOverride="8"
                           HorizontalExpand="True">
-                <PanelContainer MinSize="320 96"
+                <PanelContainer Name="PatientCard"
+                                Access="Public"
+                                MinSize="320 96"
                                 HorizontalExpand="True">
                     <PanelContainer.PanelOverride>
                         <graphics:StyleBoxFlat
@@ -47,7 +54,9 @@
                     </BoxContainer>
                 </PanelContainer>
 
-                <PanelContainer HorizontalExpand="True" MinSize="0 96">
+                <PanelContainer Name="WorkflowCard"
+                                Access="Public"
+                                HorizontalExpand="True" MinSize="0 96">
                     <PanelContainer.PanelOverride>
                         <graphics:StyleBoxFlat
                             BackgroundColor="#181A20E8"
@@ -96,7 +105,9 @@
                         BorderColor="#D2A95D"
                         BorderThickness="2"/>
                 </PanelContainer.PanelOverride>
-                <BoxContainer Orientation="Horizontal"
+                <BoxContainer Name="InProgressBody"
+                              Access="Public"
+                              Orientation="Horizontal"
                               SeparationOverride="10"
                               Margin="8"
                               HorizontalExpand="True">
@@ -154,11 +165,15 @@
                 </BoxContainer>
             </PanelContainer>
 
-            <BoxContainer Orientation="Horizontal"
+            <BoxContainer Name="SurgeryMainBody"
+                          Access="Public"
+                          Orientation="Horizontal"
                           SeparationOverride="6"
                           HorizontalExpand="True"
                           VerticalExpand="True">
-                <PanelContainer MinSize="320 0"
+                <PanelContainer Name="PartPanel"
+                                Access="Public"
+                                MinSize="320 0"
                                 VerticalExpand="True">
                     <PanelContainer.PanelOverride>
                         <graphics:StyleBoxFlat
@@ -185,7 +200,9 @@
                     </BoxContainer>
                 </PanelContainer>
 
-                <PanelContainer HorizontalExpand="True"
+                <PanelContainer Name="ProcedurePanel"
+                                Access="Public"
+                                HorizontalExpand="True"
                                 VerticalExpand="True">
                     <PanelContainer.PanelOverride>
                         <graphics:StyleBoxFlat
@@ -205,7 +222,9 @@
                                     BorderColor="#6A5B82"
                                     BorderThickness="1"/>
                             </PanelContainer.PanelOverride>
-                            <BoxContainer Orientation="Horizontal"
+                            <BoxContainer Name="SelectedPartHeaderRow"
+                                          Access="Public"
+                                          Orientation="Horizontal"
                                           Margin="8 6"
                                           SeparationOverride="8"
                                           HorizontalExpand="True">

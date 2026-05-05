@@ -615,14 +615,30 @@
       entries:
       - id: AU14PouchCommandFill
         amount: 10
-    - name: Miscellaneous
+    - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
+      - id: RMCWhistle
+      - id: RMCPackFlareCAS
+    - name: Spare Equipment
+      entries:
+      - id: RMCHeadBeretSquad
+        amount: 3
+      - id: RMCExplosiveBreachingCharge
+        amount: 4
+      - id: RMCBinoculars
+        amount: 5
+      - id: RMCLaserDesignator
+        amount: 2
+      - id: RMCFulton20
         amount: 4
       - id: RMCWhistle
         amount: 10
+      - id: RMCBoxPackFlareCAS
+        amount: 1
       - id: RMCPackFlareCAS
-        amount: 10
+        amount: 6
 
 - type: entity
   parent: ColMarTechBase
@@ -656,7 +672,7 @@
   id: AU14LACNsectionleaderequipmentvendor
   name: LACN Landing Forces section leader vendor
   description: >-
-    An automated supervisor rack, hooked up to a compact storage of Latin American Colonial Navy section-leadership equipment for the Landing Forces.
+    An automated equipment rack, hooked up to a compact storage of Latin American Colonial Navy section-leadership equipment for the Landing Forces.
     Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
   components:
   - type: AccessReader
@@ -666,26 +682,22 @@
   - type: CMAutomatedVendor
     sections:
     - name: Headgear
+      choices: { CMHat: 1 }
       entries:
       - id: AU14LACNHelmetSL
-        amount: 1
       - id: RMCHeadBeretSquad
-        amount: 1
         name: Black Beret
       - id: AU14LACNNavyCap
-        amount: 1
     - name: Armor and Rigs
+      choices: { AU14vest: 1 }
       entries:
       - id: AU14LACNArmorSL
-        amount: 1
-    - name: Miscellaneous
+    - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
-        amount: 1
       - id: RMCWhistle
-        amount: 1
       - id: RMCPackFlareCAS
-        amount: 2
 
 - type: entity
   parent: ColMarTechBase
@@ -865,11 +877,13 @@
     - name: special issue firearms
       entries:
       - id: WeaponShotgunM42A2
-        amount: 3
+        amount: 4
       - id: CMWeaponPistolM1984Empty
         amount: 5
       - id: RMCWeaponRevolverM44Empty
         amount: 5
+      - id: AU14Mk86Case
+        amount: 1
     - name: primary ammunition
       entries:
       - id: AU14WeaponRifleKramerMagazineStandard

@@ -627,14 +627,28 @@
       entries:
       - id: AU14PouchCommandFill
         amount: 10
-    - name: Miscellaneous
+    - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
+      - id: RMCWhistle
+      - id: RMCPackFlareCAS
+    - name: Spare Equipment
+      entries:
+      - id: RMCExplosiveBreachingCharge
+        amount: 4
+      - id: RMCBinoculars
+        amount: 5
+      - id: RMCLaserDesignator
+        amount: 2
+      - id: RMCFulton20
         amount: 4
       - id: RMCWhistle
         amount: 10
+      - id: RMCBoxPackFlareCAS
+        amount: 1
       - id: RMCPackFlareCAS
-        amount: 10
+        amount: 6
 
 - type: entity
   parent: ColMarTechBase
@@ -670,7 +684,7 @@
   id: AU14VAIPOsectionleaderequipmentvendor
   name: VAIPO section leader vendor
   description: >-
-    An automated supervisor rack, hooked up to a compact storage of Vanguard Arrow Incorporated mercenary section-leadership equipment used by their Primary Operations branch.
+    An automated equipment rack, hooked up to a compact storage of Vanguard Arrow Incorporated mercenary section-leadership equipment used by their Primary Operations branch.
     Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
   components:
   - type: AccessReader
@@ -679,14 +693,12 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
     sections:
-    - name: Miscellaneous
+    - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
-        amount: 2
       - id: RMCWhistle
-        amount: 2
       - id: RMCPackFlareCAS
-        amount: 2
 
 - type: entity
   parent: ColMarTechBase
@@ -846,6 +858,8 @@
         amount: 5
       - id: RMCWeaponPistolM77Empty
         amount: 5
+      - id: RMCM2CCase
+        amount: 1
     - name: primary ammunition
       entries:
       - id: CMMagazineRifleM54C

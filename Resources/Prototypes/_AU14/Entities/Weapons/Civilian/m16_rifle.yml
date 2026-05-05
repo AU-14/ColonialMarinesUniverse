@@ -2,7 +2,7 @@
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   id: AU14WeaponRifleM16A1 # TODO: Make the M16 grenadier rifle when impact nades exist
   name: M16A1 rifle
-  description: "An old, reliable design first adopted by the U.S. military in the 1960s. Something like this belongs in a museum of war history. It is chambered in 5.56x45mm."
+  description: An old, reliable design first adopted by the U.S. military in the 1960s. Something like this belongs in a museum of war history. It is chambered in 5.56x45mm.
   suffix: Filled
   components:
   - type: Sprite
@@ -99,7 +99,7 @@
   parent: AU14WeaponRifleM16A1
   id: AU14WeaponRifleM16A2
   name: M16A2 rifle
-  description: "An old, reliable design first adopted by the U.S. military in the 1980s. Something like this belongs in a museum of war history. It is chambered in 5.56x45mm."
+  description: An old, reliable design first adopted by the U.S. military in the 1980s. Something like this belongs in a museum of war history. It is chambered in 5.56x45mm.
   components:
   - type: Sprite
     sprite: _AU14/Weapons/Guns/Civilian/aum16a264x32.rsi
@@ -141,7 +141,7 @@
   parent: AU14WeaponRifleM16A1
   id: AU14WeaponRifleAR10
   name: AR10 rifle
-  description: "An old, reliable design. Something like this belongs in a museum of war history. It is chambered in 5.56x45mm."
+  description: An old, reliable design. Something like this belongs in a museum of war history. It is chambered in 5.56x45mm.
   components:
   - type: Sprite
     sprite: _AU14/Weapons/Guns/Civilian/auar1064x32.rsi

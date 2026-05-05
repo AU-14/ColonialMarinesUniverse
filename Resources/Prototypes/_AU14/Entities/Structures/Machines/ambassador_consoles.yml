@@ -37,6 +37,8 @@
   - type: ContainerContainer
     containers:
       CashSlot: !type:ContainerSlot {}
+  - type: AccessReader
+    access: [["AU14AccessColonyAmbassador"]]
 
 # UPP Ambassador Console - Can call in GROM
 - type: entity

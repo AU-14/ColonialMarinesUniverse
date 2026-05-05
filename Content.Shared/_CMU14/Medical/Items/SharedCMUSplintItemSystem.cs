@@ -140,8 +140,7 @@ public abstract class SharedCMUSplintItemSystem : EntitySystem
         if (ent.Comp.ApplySound is not null)
             Audio.PlayPredicted(ent.Comp.ApplySound, part, null);
 
-        if (ent.Comp.ConsumedOnApply && Net.IsServer)
-            QueueDel(ent.Owner);
+        ConsumeSplintUse(ent);
 
         return true;
     }
@@ -217,10 +216,29 @@ public abstract class SharedCMUSplintItemSystem : EntitySystem
         if (ent.Comp.ApplySound is not null)
             Audio.PlayPredicted(ent.Comp.ApplySound, part, null);
 
-        if (ent.Comp.ConsumedOnApply && Net.IsServer)
-            QueueDel(ent.Owner);
+        ConsumeCastUse(ent);
 
         return true;
+    }
+
+    private void ConsumeSplintUse(Entity<CMUSplintItemComponent> ent)
+    {
+        if (!ent.Comp.ConsumedOnApply || !Net.IsServer)
+            return;
+
+        ent.Comp.Uses--;
+        if (ent.Comp.Uses <= 0)
+            QueueDel(ent.Owner);
+    }
+
+    private void ConsumeCastUse(Entity<CMUCastItemComponent> ent)
+    {
+        if (!ent.Comp.ConsumedOnApply || !Net.IsServer)
+            return;
+
+        ent.Comp.Uses--;
+        if (ent.Comp.Uses <= 0)
+            QueueDel(ent.Owner);
     }
 
     public void AddCastRemoveVerb(Entity<CMUHumanMedicalComponent> patient, ref GetVerbsEvent<AlternativeVerb> args)

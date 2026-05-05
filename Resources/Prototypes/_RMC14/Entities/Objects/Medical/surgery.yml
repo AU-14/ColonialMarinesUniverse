@@ -447,7 +447,7 @@
     content: rmc-lore-examinable-bottle-of-bone-gel
   - type: PhysicalComposition
     materialComposition:
-      RMCPlastic: 7500
+      RMCPlastic: 150
   - type: StaticPrice
     price: 75
 

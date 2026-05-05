@@ -601,14 +601,30 @@
       entries:
       - id: AU14PouchCommandFill
         amount: 10
-    - name: Miscellaneous
+    - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
+      - id: RMCWhistle
+      - id: RMCPackFlareCAS
+    - name: Spare Equipment
+      entries:
+      - id: AU14ProdigyBeret
+        amount: 3
+      - id: RMCExplosiveBreachingCharge
+        amount: 4
+      - id: RMCBinoculars
+        amount: 5
+      - id: RMCLaserDesignator
+        amount: 2
+      - id: RMCFulton20
         amount: 4
       - id: RMCWhistle
         amount: 10
+      - id: RMCBoxPackFlareCAS
+        amount: 1
       - id: RMCPackFlareCAS
-        amount: 10
+        amount: 6
 
 - type: entity
   parent: ColMarTechBase
@@ -653,7 +669,7 @@
   id: AU14prodigysectionleaderequipmentvendor
   name: Prodigy Security Forces section leader vendor
   description: >-
-    An automated supervisor rack, hooked up to a compact storage of Security Forces section-leadership equipment from the Prodigy Corporation.
+    An automated equipment rack, hooked up to a compact storage of Security Forces section-leadership equipment from the Prodigy Corporation.
     Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
   components:
   - type: AccessReader
@@ -663,17 +679,15 @@
   - type: CMAutomatedVendor
     sections:
     - name: Headgear
+      choices: { CMHat: 1 }
       entries:
       - id: AU14ProdigyBeret
-        amount: 2
-    - name: Miscellaneous
+    - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
-        amount: 2
       - id: RMCWhistle
-        amount: 2
       - id: RMCPackFlareCAS
-        amount: 2
 
 - type: entity
   parent: ColMarTechBase
@@ -695,17 +709,13 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
-      - id: AU14KitWeaponM20a
+      - id: AU14KitWeaponMCX
       - id: AU14KitWeaponM39
     - name: Rifle Ammunition
       entries:
-      - id: AU14MagazineRifleM20A
+      - id: AU14WeaponRifleprodigyrifleMagazineStandard
         amount: 60
       - id: CMMagazineSMGM63
-        amount: 60
-    - name: Underbarrel Ammunition
-      entries:
-      - id: RMCBoxShotgunBuckshot
         amount: 60
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
@@ -718,6 +728,8 @@
     - name: Attachments
       choices: { CMUAttachmentsVendor: 1 }
       entries:
+      - id: RMCAttachmentS5RedDotSight
+      - id: RMCAttachmentS6ReflexSight
       - id: RMCAttachmentRailFlashlight
       - id: AU14AttachmentTwoPointSling
 
@@ -782,7 +794,7 @@
     sections:
     - name: Standard issue primaries
       entries:
-      - id: AUWeaponRifleM20A
+      - id: AU14WeaponRifleprodigyrifleAR
         amount: 30
       - id: WeaponSMGM63
         amount: 20
@@ -792,22 +804,32 @@
         amount: 20
     - name: special issue firearms
       entries:
+      - id: AUWeaponRifleM20A
+        amount: 10
       - id: RMCWeaponShotgunM3717
-        amount: 3
+        amount: 2
       - id: RMCWeaponShotgunHG3712
-        amount: 1
+        amount: 2
+      - id: AU14WeaponPistolM4A4Empty
+        amount: 4
       - id: AU14WeaponRevolverM2019Empty
         amount: 2
+      - id: AU14Mk86Case
+        amount: 1
     - name: primary ammunition
       entries:
-      - id: AU14MagazineRifleM20A
+      - id: AU14WeaponRifleprodigyrifleMagazineStandard
         amount: 200
+      - id: AU14WeaponRifleprodigyrifleMagazineAP
+        amount: 15
       - id: CMMagazineSMGM63
         amount: 200
       - id: CMMagazineSMGM63AP
         amount: 15
       - id: CMMagazineSMGM63Ext
         amount: 10
+      - id: AU14MagazineRifleM20A
+        amount: 100
       - id: RMCBoxShotgunBuckshot
         amount: 20
       - id: RMCBoxShotgunFlechette
@@ -872,20 +894,18 @@
         amount: 50
       - id: RMCAttachmentRailFlashlight
         amount: 25
+      - id: RMCAttachmentS5RedDotSight
+        amount: 5
+      - id: RMCAttachmentS6ReflexSight
+        amount: 5
       - id: RMCAttachmentS42xTelescopicMiniscope
         amount: 2
+      - id: RMCAttachmentS84xTelescopicScope
+        amount: 1
     - name: Underbarrel Attachments
       entries:
       - id: RMCAttachmentFlashlightGrip
-        amount: 15
-      - id: RMCAttachmentVerticalGrip
-        amount: 5
-      - id: RMCAttachmentBipod
-        amount: 5
-      - id: RMCAttachmentUnderbarrelExtinguisher
-        amount: 5
-      - id: RMCAttachmentU7UnderbarrelShotgun
-        amount: 3
+        amount: 25
     - name: Stock Attachments
       entries:
       - id: RMCAttachmentM63StockCollapsible
@@ -894,8 +914,6 @@
         amount: 10
       - id: RMCAttachmentM63ArmBrace
         amount: 10
-      - id: RMCAttachmentM42A2CollapsibleStock
-        amount: 3
     - name: Load Bearing Equipment
       entries:
       - id: RMCOuterClothingExternalWebbingBlack
@@ -912,12 +930,8 @@
         amount: 4
     - name: RTO Packs
       entries:
-      - id: AU14BackpackRTOPackJungle
-        amount: 1
-      - id: AU14BackpackRTOPackDesert
-        amount: 1
       - id: AU14BackpackRTOPackGray
-        amount: 1
+        amount: 3
     - name: Tents
       entries:
       - id: RMCTentUNMCStandardFolded

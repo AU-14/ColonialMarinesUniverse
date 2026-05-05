@@ -8,6 +8,9 @@ namespace Content.Shared.Ghost.Roles
     public struct GhostRoleInfo
     {
         public uint Identifier { get; set; }
+        public NetEntity Entity { get; set; }
+        public string? EntityPrototype { get; set; }
+        public string? JobPrototype { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Rules { get; set; }

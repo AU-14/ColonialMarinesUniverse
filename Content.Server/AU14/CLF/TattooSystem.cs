@@ -17,6 +17,7 @@ using Content.Shared._RMC14.Dialog;
 using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
 
 namespace Content.Server.AU14.CLF;
 
@@ -31,6 +32,7 @@ public sealed class TattooSystem : EntitySystem
     [Dependency] private readonly MindSystem _mind = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
+    [Dependency] private readonly GunIFFSystem _gunIFF = default!;
     [Dependency] private readonly ISharedPlayerManager _player = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly IPrototypeManager _protoManager = default!;
@@ -250,6 +252,7 @@ public sealed class TattooSystem : EntitySystem
 
         // Add CLF faction
         _npcFaction.AddFaction(target, comp.Faction);
+        _gunIFF.AddUserFaction(target, comp.IFF);
 
         // Add CLF member component
         EnsureComp<CLFMemberComponent>(target);

@@ -238,6 +238,20 @@
   displayName: Reattach Limb
   validParts: [Arm, Leg]
   category: reattach
+  minSkill: 3
+  steps:
+  - stepId: CMUSurgeryStepRemoveStump
+    label: Trim Necrotic Stump
+    toolCategory: bone_saw
+  - stepId: CMUSurgeryStepPrepReattachSocket
+    label: Prep Reattachment Socket
+    toolCategory: hemostat
+  - stepId: CMUSurgeryStepReattachLimb
+    label: Reattach Limb
+    toolCategory: severed_limb
+  - stepId: CMUSurgeryStepCloseReattach
+    label: Close Incision
+    toolCategory: cautery
 
 # ---- Larva extraction (torso only) ----------------------------------
 

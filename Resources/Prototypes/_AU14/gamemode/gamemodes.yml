@@ -22,9 +22,9 @@
   rules:
   - AuVoteRule
   - PlatoonSpawn
+  - RemoveAllJobs
   - AddGovfor
   - AddOpfor
-  - RemoveAllJobs
 
 - type: gamePreset
   id: Insurgency
@@ -73,8 +73,8 @@
   rules:
   - AuVoteRule
   - PlatoonSpawn
-  - AddGovfor
   - RemoveAllJobs
+  - AddGovfor
 
 - type: gamePreset
   id: ColonyFall

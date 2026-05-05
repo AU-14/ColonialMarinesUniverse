@@ -712,8 +712,8 @@
       - id: AU14HeadCapOfficerRMC
         amount: 5
       - id: AU14HeadBeretRMCOfficer
-        amount: 5
         name: Officer Beret
+        amount: 5
       - id: AU14JunglePatrolCap
         amount: 5
       - id: AU14DesertPatrolCap
@@ -730,14 +730,31 @@
       entries:
       - id: AU14PouchCommandFill
         amount: 10
-    - name: Miscellaneous
+    - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
+      - id: RMCWhistle
+      - id: RMCPackFlareCAS
+    - name: Spare Equipment
+      entries:
+      - id: AU14HeadBeretRMCOfficer
+        name: Officer Beret
+        amount: 3
+      - id: RMCExplosiveBreachingCharge
+        amount: 4
+      - id: RMCBinoculars
+        amount: 5
+      - id: RMCLaserDesignator
+        amount: 2
+      - id: RMCFulton20
         amount: 4
       - id: RMCWhistle
         amount: 10
+      - id: RMCBoxPackFlareCAS
+        amount: 1
       - id: RMCPackFlareCAS
-        amount: 10
+        amount: 6
 
 - type: entity
   parent: ColMarTechBase
@@ -785,7 +802,7 @@
   id: AU14RMCsectionleaderequipmentvendor
   name: Royal Marines section leader vendor
   description: >-
-    An automated supervisor rack, hooked up to a compact storage of Royal Marine Commandos section-leadership equipment.
+    An automated equipment rack, hooked up to a compact storage of Royal Marine Commandos section-leadership equipment.
     Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
   components:
   - type: AccessReader
@@ -795,31 +812,29 @@
   - type: CMAutomatedVendor
     sections:
     - name: Helmets and Hats
+      choices: { CMHat: 1 }
       entries:
       - id: AU14HeadHelmetRMC
-        amount: 1
       - id: AU14HeadHelmetRMCBallistic
-        amount: 1
       - id: AU14HeadBeretRMCLead
-        amount: 1
         name: Sergeant Beret
       - id: AU14JunglePatrolCap
-        amount: 1
       - id: AU14DesertPatrolCap
-        amount: 1
     - name: Uniforms
+      choices: { AU14Uniform: 1 }
       entries:
       - id: AU14FatiguesBlackRMCTeamlead
-        amount: 1
       - id: AU14FatiguesDesertRMCTeamlead
-        amount: 1
-    - name: Miscellaneous
+    - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
-        amount: 1
       - id: RMCWhistle
-        amount: 1
       - id: RMCPackFlareCAS
+    - name: Spare Equipment
+      entries:
+      - id: AU14HeadBeretRMCLead
+        name: Sergeant Beret
         amount: 2
 
 - type: entity
@@ -888,13 +903,21 @@
       - id: AU14BackpackRTOPackGray
       - id: AU14BackpackRTOPackBlack
     - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
-        amount: 1
       - id: RMCWhistle
-        amount: 1
       - id: RMCPackFlareCAS
+    - name: Spare Equipment
+      entries:
+      - id: RMCExplosiveBreachingCharge
         amount: 2
+      - id: RMCBinoculars
+        amount: 2
+      - id: RMCFulton20
+        amount: 1
+      - id: RMCBoxPackFlareCAS
+        amount: 1
 
 - type: entity
   parent: ColMarTechBase
@@ -1134,6 +1157,8 @@
         amount: 5
       - id: RMCWeaponRifleL90A2
         amount: 3
+      - id: AU14Mk86Case
+        amount: 1
     - name: primary ammunition
       entries:
       - id: RMCMagazineRifleL24

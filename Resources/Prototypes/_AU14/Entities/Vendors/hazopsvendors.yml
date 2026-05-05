@@ -366,46 +366,58 @@
       entries:
       - id: AU14PouchCommandFill
         amount: 2
-    - name: Miscellaneous
+    - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
-        amount: 2
       - id: RMCWhistle
-        amount: 2
       - id: RMCPackFlareCAS
+    - name: Spare Equipment
+      entries:
+      - id: AU14HAZOPShecuBeret
+        amount: 3
+      - id: RMCExplosiveBreachingCharge
+        amount: 4
+      - id: RMCBinoculars
+        amount: 5
+      - id: RMCLaserDesignator
         amount: 2
+      - id: RMCFulton20
+        amount: 4
+      - id: RMCWhistle
+        amount: 10
+      - id: RMCBoxPackFlareCAS
+        amount: 1
+      - id: RMCPackFlareCAS
+        amount: 6
 
 - type: entity
   parent: ColMarTechBase
   id: AU14HAZOPSsectionleaderequipmentvendor
   name: HAZOPS section leader vendor
   description: >-
-    An automated supervisor rack, hooked up to a compact storage of Hazardous Operations section-leadership equipment of the Marine Special Operations Command.
+    An automated equipment rack, hooked up to a compact storage of Hazardous Operations section-leadership equipment of the Marine Special Operations Command.
     Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
     sections:
-    - name: Headsets
-      entries:
-      - id: AU14HeadsetSectionLeader
-        amount: 1
     - name: Helmets and Hats
+      choices: { CMHat: 1 }
       entries:
       - id: AU14JungleM11Helmet
-        amount: 1
       - id: AU14HAZOPShecuBeret
-        amount: 4
       - id: AU14JunglePatrolCap
-        amount: 1
-    - name: Miscellaneous
+    - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
-        amount: 1
       - id: RMCWhistle
-        amount: 1
       - id: RMCPackFlareCAS
+    - name: Spare Equipment
+      entries:
+      - id: AU14HAZOPShecuBeret
         amount: 2
 
 - type: entity
@@ -444,6 +456,8 @@
         amount: 5
       - id: RMCWeaponRevolverM44Empty
         amount: 5
+      - id: RMCM2CCase
+        amount: 1
     - name: primary ammunition
       entries:
       - id: AU14MagazineXMP5A6

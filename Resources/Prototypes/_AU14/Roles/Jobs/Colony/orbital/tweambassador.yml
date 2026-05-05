@@ -17,6 +17,8 @@
   - Colonist
   - auadmin
   - AUPrisonStaff
+  access:
+  - AU14AccessColonyAmbassador
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

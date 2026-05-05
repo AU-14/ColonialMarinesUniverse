@@ -57,14 +57,13 @@
   id: AU14GearCLFSurgeon
   equipment:
     back: CMBackpackMedical
-    gloves: CMHandsLatex
-    jumpsuit: AU14RMCJumpsuitCivilianCLF
-    outerClothing: RMCLabcoatOpened
-    shoes: CMBootsBlackFilled
     ears2: RMCFlashlightPen
     suitstorage: RMCFlashlight
     id: AU14IDCardCLFSurgeon
     neck: RMCCLFArmband
+  storage:
+      back:
+      - AU14CLFHeadset
 
 - type: entity
   parent: CMSpawnPointJobBase

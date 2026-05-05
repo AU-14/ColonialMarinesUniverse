@@ -68,7 +68,7 @@ public sealed class AuThirdPartySystem : EntitySystem
 
     public float GetSignalIntervalMultiplier() => _signalIntervalMultiplier;
 
-    public void SpawnThirdParty(AuThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart, Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs = null, bool? overrideDropship = null)
+    public bool SpawnThirdParty(AuThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart, Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs = null, bool? overrideDropship = null)
     {
         const float SpawnTogetherRadius = 8f;
 
@@ -107,20 +107,20 @@ public sealed class AuThirdPartySystem : EntitySystem
             if (!foundDestination)
             {
                 _sawmill.Error("[AuThirdPartySystem] No valid dropship destination found (not landed, not controlled). Aborting third party spawn.");
-                return;
+                return false;
             }
             _sawmill.Debug($"[AuThirdPartySystem] Found valid dropship destination: {chosenDestination}");
             var deserializationOpts = DeserializationOptions.Default with { InitializeMaps = true };
             if (!_mapLoader.TryLoadMap(party.dropshippath, out var dropshipMap, out var grids, deserializationOpts))
             {
                 _sawmill.Error($"[AuThirdPartySystem] Failed to load dropship map: {party.dropshippath}");
-                return;
+                return false;
             }
             mainGridUid = grids.FirstOrDefault();
             if (mainGridUid == EntityUid.Invalid)
             {
                 _sawmill.Error($"[AuThirdPartySystem] No grids found in dropship map: {party.dropshippath}");
-                return;
+                return false;
             }
             _sawmill.Debug($"[AuThirdPartySystem] Dropship grid initialized: {mainGridUid}");
 
@@ -392,7 +392,7 @@ public sealed class AuThirdPartySystem : EntitySystem
             if (safeLeaderMarkers.Count < leaderReq || safeGruntMarkers.Count < gruntReq || safeEntityMarkers.Count < entityReq)
             {
                 _sawmill.Warning($"[AuThirdPartySystem] Not enough safe markers to spawn third party {party.ID}: leaders needed {leaderReq}, safe available {safeLeaderMarkers.Count}; grunts needed {gruntReq}, safe available {safeGruntMarkers.Count}; entities needed {entityReq}, safe available {safeEntityMarkers.Count}. Aborting spawn.");
-                return;
+                return false;
             }
 
             // Replace marker pools with safe lists so subsequent selection never picks an unsafe marker.
@@ -406,7 +406,7 @@ public sealed class AuThirdPartySystem : EntitySystem
             if (leaderMarkers.Count < leaderReq || gruntMarkers.Count < gruntReq || entityMarkers.Count < entityReq)
             {
                 _sawmill.Warning($"[AuThirdPartySystem] Not enough unused dropship markers to spawn third party {party.ID}: leaders needed {leaderReq}, available {leaderMarkers.Count}; grunts needed {gruntReq}, available {gruntMarkers.Count}; entities needed {entityReq}, available {entityMarkers.Count}. Aborting spawn.");
-                return;
+                return false;
             }
         }
 
@@ -637,12 +637,13 @@ public sealed class AuThirdPartySystem : EntitySystem
             _sawmill.Info($"[AuThirdPartySystem] Announced arrival for third party {party.ID}: {party.AnnounceArrival}");
         }
 
+        return true;
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-        if (!_spawningActive || _thirdPartyList == null || _currentThreat == null)
+        if (!_spawningActive || _thirdPartyList == null)
             return;
         if (_nextThirdPartyIndex >= _thirdPartyList.Count)
         {
@@ -661,7 +662,7 @@ public sealed class AuThirdPartySystem : EntitySystem
         {
             return;
         }
-        var interval = TimeSpan.FromTicks((long)(_spawnInterval.Ticks * _signalIntervalMultiplier / Math.Max(1, party.weight)));
+        var interval = TimeSpan.FromTicks((long)(_spawnInterval.Ticks * _signalIntervalMultiplier));
         if (_spawnTimer < interval.TotalSeconds)
             return;
         _spawnTimer = 0f;
@@ -671,14 +672,21 @@ public sealed class AuThirdPartySystem : EntitySystem
         {
             if (_prototypeManager.TryIndex(party.PartySpawn, out var spawnProto))
             {
-                SpawnThirdParty(party, spawnProto, false);
-                _sawmill.Debug($"[AuThirdPartySystem] Spawned third party {party.ID} (roll {roll} <= {chance})");
+                if (SpawnThirdParty(party, spawnProto, false))
+                {
+                    _sawmill.Debug($"[AuThirdPartySystem] Spawned third party {party.ID} (roll {roll} <= {chance})");
+                    _nextThirdPartyIndex++;
+                }
+                else
+                {
+                    _sawmill.Warning($"[AuThirdPartySystem] Spawn attempt for third party {party.ID} failed; keeping it queued for a later retry.");
+                }
             }
             else
             {
                 _sawmill.Error($"[AuThirdPartySystem] No spawn proto for third party {party.ID} (PartySpawn={party.PartySpawn})");
+                _nextThirdPartyIndex++;
             }
-            _nextThirdPartyIndex++;
         }
         else
         {
@@ -693,30 +701,13 @@ public sealed class AuThirdPartySystem : EntitySystem
         _thirdPartyList = _auRoundSystem.SelectedThirdParties.ToList();
         _nextThirdPartyIndex = 0;
         _spawnTimer = 0f;
-        if (_currentThreat != null)
+        try
         {
-            try
-            {
-                _spawnInterval = TimeSpan.FromSeconds(Math.Max(1, _currentThreat.ThirdPartyInterval));
-            }
-            catch
-            {
-                _sawmill.Warning("[AuThirdPartySystem] Invalid ThirdPartyInterval on threat; using default interval.");
-            }
+            _spawnInterval = TimeSpan.FromSeconds(Math.Max(1, _currentThreat.ThirdPartyInterval));
         }
-        else
+        catch
         {
-
-                var selectedPlanetField = _auRoundSystem.GetType().GetField("_selectedPlanet", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                var selectedPlanet = selectedPlanetField?.GetValue(_auRoundSystem) as Content.Shared._RMC14.Rules.RMCPlanetMapPrototypeComponent;
-                if (selectedPlanet != null && selectedPlanet.ThirdPartyInterval.HasValue)
-                {
-                    var val = Math.Max(1, selectedPlanet.ThirdPartyInterval.Value);
-                    _spawnInterval = TimeSpan.FromSeconds(val);
-                    _sawmill.Debug($"[AuThirdPartySystem] Using planet spawn interval: {val} seconds (no active threat)");
-                }
-
-
+            _sawmill.Warning("[AuThirdPartySystem] Invalid ThirdPartyInterval on threat; using default interval.");
         }
 
         if (_thirdPartyList == null || _thirdPartyList.Count == 0)
@@ -737,8 +728,10 @@ public sealed class AuThirdPartySystem : EntitySystem
 
                 if (_prototypeManager.TryIndex<PartySpawnPrototype>(party.PartySpawn, out var spawnProto))
                 {
-                    SpawnThirdParty(party, spawnProto, true, assignedJobs);
-                    _sawmill.Debug($"[AuThirdPartySystem] Spawned roundstart third party {party.ID}");
+                    if (SpawnThirdParty(party, spawnProto, true, assignedJobs))
+                        _sawmill.Debug($"[AuThirdPartySystem] Spawned roundstart third party {party.ID}");
+                    else
+                        _sawmill.Warning($"[AuThirdPartySystem] Roundstart spawn attempt for third party {party.ID} failed.");
                 }
                 else
                 {

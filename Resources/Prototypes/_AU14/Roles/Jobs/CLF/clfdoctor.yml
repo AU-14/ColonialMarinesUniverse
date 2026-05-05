@@ -15,7 +15,7 @@
     - NonResuscitable
     - Epilepsy
   ranks:
-    RMCRankCivilian: []
+    RMCRankCivilianDoctor: []
   startingGear: AU14GearCLFPhysician
   icon: "CMJobIconEmpty"
   requireAdminNotify: false
@@ -56,14 +56,13 @@
 - type: startingGear
   id: AU14GearCLFPhysician
   equipment:
-    gloves: CMHandsLatex
-    jumpsuit: AU14RMCJumpsuitCivilianCLF
-    outerClothing: RMCLabcoatOpened
-    shoes: CMBootsBlackFilled
     ears2: RMCFlashlightPen
     suitstorage: RMCFlashlight
     id: AU14IDCardCLFPhysician
     neck: RMCCLFArmband
+  storage:
+    back:
+    - AU14CLFHeadset
 
 - type: entity
   parent: CMSpawnPointJobBase

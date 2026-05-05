@@ -62,6 +62,7 @@
   blacklistedgamemodes:
   - insurgency
   - forceonforce
+  - DistressSignal
   entrymethod: shuttle
   weight: 3
   minplayers: 70
@@ -75,6 +76,7 @@
   blacklistedgamemodes:
   - insurgency
   - forceonforce
+  - DistressSignal
   entrymethod: ground
   weight: 15
   minplayers: 35

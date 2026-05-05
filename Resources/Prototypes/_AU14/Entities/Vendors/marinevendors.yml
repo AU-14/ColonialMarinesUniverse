@@ -611,14 +611,28 @@
       entries:
       - id: AU14PouchCommandFill
         amount: 10
-    - name: Miscellaneous
+    - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
+      - id: RMCWhistle
+      - id: RMCPackFlareCAS
+    - name: Spare Equipment
+      entries:
+      - id: RMCExplosiveBreachingCharge
+        amount: 4
+      - id: RMCBinoculars
+        amount: 5
+      - id: RMCLaserDesignator
+        amount: 2
+      - id: RMCFulton20
         amount: 4
       - id: RMCWhistle
         amount: 10
+      - id: RMCBoxPackFlareCAS
+        amount: 1
       - id: RMCPackFlareCAS
-        amount: 10
+        amount: 6
 
 - type: entity
   parent: ColMarTechBase
@@ -663,7 +677,7 @@
   id: AU14USCMsectionleaderequipmentvendor
   name: USCM section leader vendor
   description: >-
-    An automated supervisor rack, hooked up to a compact storage of US Colonial Marine Corps section-leadership equipment.
+    An automated equipment rack, hooked up to a compact storage of US Colonial Marine Corps section-leadership equipment.
     Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
   components:
   - type: AccessReader
@@ -673,26 +687,20 @@
   - type: CMAutomatedVendor
     sections:
     - name: Helmets and Hats
+      choices: { CMHat: 1 }
       entries:
       - id: AU14DesertM11Helmet
-        amount: 1
       - id: AU14JungleM11Helmet
-        amount: 1
       - id: RMCHeadBeretSquad
-        amount: 1
         name: Black Beret
       - id: AU14JunglePatrolCap
-        amount: 1
       - id: AU14DesertPatrolCap
-        amount: 1
-    - name: Miscellaneous
+    - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
-        amount: 1
       - id: RMCWhistle
-        amount: 1
       - id: RMCPackFlareCAS
-        amount: 2
 
 - type: entity
   parent: ColMarTechBase
@@ -955,13 +963,21 @@
       - id: AU14BackpackRTOPackGray
       - id: AU14BackpackRTOPackBlack
     - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
-        amount: 1
       - id: RMCWhistle
-        amount: 1
       - id: RMCPackFlareCAS
+    - name: Spare Equipment
+      entries:
+      - id: RMCExplosiveBreachingCharge
         amount: 2
+      - id: RMCBinoculars
+        amount: 2
+      - id: RMCFulton20
+        amount: 1
+      - id: RMCBoxPackFlareCAS
+        amount: 1
 
 # AirCrew Weapons (universal)
 - type: entity
@@ -1217,16 +1233,20 @@
         amount: 10
     - name: special issue firearms
       entries:
+      - id: RMCWeaponRifleM54C
+        amount: 8
+      - id: WeaponRifleM4SPR
+        amount: 6
       - id: WeaponShotgunM42A1
         amount: 2
       - id: WeaponShotgunM42A2
         amount: 1
-      - id: WeaponRifleM4SPR
-        amount: 3
       - id: AU14WeaponPistolM4A4Empty
-        amount: 5
+        amount: 8
       - id: RMCWeaponRevolverM44Empty
         amount: 5
+      - id: RMCML66DCase
+        amount: 1
     - name: primary ammunition
       entries:
       - id: CMMagazineRifleM54CMK1
@@ -1247,6 +1267,16 @@
         amount: 10
       - id: RMCMagazineRifleM4SPRWP
         amount: 5
+      - id: CMMagazineRifleM54C
+        amount: 100
+      - id: CMMagazineRifleM54CAP
+        amount: 15
+      - id: CMMagazineRifleM54CExt
+        amount: 10
+      - id: RMCMagazineRifleM54CWP
+        amount: 5
+      - id: RMCMagazineRifleM54CHEAPEmpty
+        amount: 0
       - id: RMCBoxShotgunBuckshot
         amount: 20
       - id: RMCBoxShotgunFlechette
@@ -1331,6 +1361,8 @@
       entries:
       - id: RMCAttachmentM54CStockCollapsible
         amount: 30
+      - id: RMCAttachmentM54CStockSolid
+        amount: 5
       - id: RMCAttachmentM63StockCollapsible
         amount: 15
       - id: RMCAttachmentM63Stock
@@ -1358,10 +1390,8 @@
     - name: RTO Packs
       entries:
       - id: AU14BackpackRTOPackJungle
-        amount: 1
+        amount: 2
       - id: AU14BackpackRTOPackDesert
-        amount: 1
-      - id: AU14BackpackRTOPackGray
         amount: 1
     - name: Tents
       entries:

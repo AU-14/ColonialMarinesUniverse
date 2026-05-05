@@ -3,6 +3,7 @@ using Content.Shared._CMU14.Medical;
 using Content.Shared._CMU14.Medical.Bones;
 using Content.Shared._CMU14.Medical.Items;
 using Content.Shared._CMU14.Medical.Surgery;
+using Content.Shared._CMU14.Medical.Surgery.Markers;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
@@ -195,6 +196,13 @@ public sealed class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
         {
             var stepEvent = new CMSurgeryStepEvent(surgeon, patient, stepPart, tools);
             RaiseLocalEvent(stepEnt, ref stepEvent);
+        }
+
+        if (IsReattachLimbStep(stepProtoId)
+            && TryFindClickedPart(patient, null, armed.TargetPartType, armed.TargetSymmetry, out var reattachedPart))
+        {
+            MoveReattachSurgeryStateToLimb(stepPart, reattachedPart);
+            stepPart = reattachedPart;
         }
 
         // Idempotent on subsequent steps, but EnsureSurgeryInFlight
@@ -402,6 +410,34 @@ public sealed class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
     {
         var stepId = ResolveStepPrototypeId(surgeryId, stepIndex);
         return stepId is not null && ClosureStepIds.Contains(stepId);
+    }
+
+    private static bool IsReattachLimbStep(string stepProtoId)
+    {
+        return stepProtoId is "CMUSurgeryStepReattachLimb"
+            or "RMCSynthSurgeryStepReattachLimb";
+    }
+
+    private void MoveReattachSurgeryStateToLimb(EntityUid source, EntityUid limb)
+    {
+        if (source == limb)
+            return;
+
+        MoveMarker<CMIncisionOpenComponent>(source, limb);
+        MoveMarker<CMBleedersClampedComponent>(source, limb);
+        MoveMarker<CMSkinRetractedComponent>(source, limb);
+        MoveMarker<CMUStumpRemovedComponent>(source, limb);
+        MoveMarker<CMUReattachPreppedComponent>(source, limb);
+        MoveMarker<CMUReattachCompleteComponent>(source, limb);
+    }
+
+    private void MoveMarker<T>(EntityUid source, EntityUid target) where T : Component, new()
+    {
+        if (!HasComp<T>(source))
+            return;
+
+        EnsureComp<T>(target);
+        RemComp<T>(source);
     }
 
     private static bool IsCloseUpSurgeryId(string surgeryId)

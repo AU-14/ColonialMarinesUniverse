@@ -60,6 +60,7 @@
   blacklistedgamemodes:
   - insurgency
   - forceonforce
+  - DistressSignal
   entrymethod: ground
   weight: 10
   minplayers: 0

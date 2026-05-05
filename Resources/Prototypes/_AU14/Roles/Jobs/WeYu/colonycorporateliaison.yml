@@ -45,6 +45,8 @@
   - auadmin
   - AUPrisonStaff
   - auwy
+  access:
+  - AU14AccessColonyCorporateLiaison
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

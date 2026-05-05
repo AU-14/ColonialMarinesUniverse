@@ -7,7 +7,7 @@
     - type: Sprite
       sprite: _AU14/Clothing/HAZOPS/minigunbatterypack.rsi
     - type: Storage
-      maxItemSize: Huge
+      maxItemSize: Normal
       grid:
         - 0,0,4,1
     - type: SmartGunArmor

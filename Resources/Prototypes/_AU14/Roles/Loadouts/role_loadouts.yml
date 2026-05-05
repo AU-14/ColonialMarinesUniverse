@@ -156,6 +156,7 @@
   - MedHatsAU14
   - MedJacketAU14
   - MedGlovesAU14
+  - CivFootwearAU14
   - MedMaskAU14
   - MedBeltAU14
   - MedPouchAU14
@@ -170,11 +171,13 @@
   id: JobAU14JobCivilianPhysician
   points: 7
   groups:
+  - CivilianPhysicianSpecializationAU14
   - MedBackpackAU14
   - MedJumpsuitAU14
   - MedHatsAU14
   - MedJacketAU14
   - MedGlovesAU14
+  - CivFootwearAU14
   - MedMaskAU14
   - MedBeltAU14
   - MedPouchAU14
@@ -393,6 +396,7 @@
   groups:
   - CivSatchelAU14
   - CivFootwearAU14
+  - CivJumpsuitAU14
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14
@@ -404,6 +408,7 @@
   groups:
   - CivSatchelAU14
   - CivFootwearAU14
+  - CivJumpsuitAU14
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14
@@ -413,15 +418,17 @@
   id: JobAU14JobCLFPhysician
   points: 7
   groups:
+  - CLFPhycisianSpecializationAU14
+  - MedBackpackAU14
   - MedJumpsuitAU14
   - MedHatsAU14
   - MedJacketAU14
   - MedGlovesAU14
+  - CivFootwearAU14
   - MedMaskAU14
   - MedBeltAU14
   - MedPouchAU14
   - MedPouchRightAU14
-  - MedBackpackAU14
   - ForceMedEssentialAU14
   - PaperworkRMC
   - RecreationalRMC
@@ -432,15 +439,16 @@
   id: JobAU14JobCLFSurgeon
   points: 7
   groups:
+  - MedBackpackAU14
   - MedJumpsuitAU14
   - MedHatsAU14
   - MedJacketAU14
   - MedGlovesAU14
+  - CivFootwearAU14
   - MedMaskAU14
   - MedBeltAU14
   - MedPouchAU14
   - MedPouchRightAU14
-  - MedBackpackAU14
   - ForceMedEssentialAU14
   - PaperworkRMC
   - RecreationalRMC

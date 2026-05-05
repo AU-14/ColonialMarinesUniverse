@@ -245,7 +245,7 @@
   suffix: Hedgehog
   components:
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Ravager/hedgehog_ravager.rsi
+    sprite: _AU14/Mobs/Xenos/Ravager/hedgehog_ravager.rsi
     layers:
     - state: hedgehog_1
       map: [ "enum.XenoShardVisualLayers.Base" ]

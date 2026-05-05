@@ -1,4 +1,5 @@
 using Content.Server.AU14.ThirdParty;
+using Content.Server.AU14.Round;
 using Content.Server.Chat.Systems;
 using Content.Server.Stack;
 using Content.Shared.AU14.ColonyEconomy;
@@ -17,6 +18,7 @@ public sealed class CorporateConsoleSystem : EntitySystem
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly AuThirdPartySystem _thirdParty = default!;
+    [Dependency] private readonly AuRoundSystem _auRound = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly StackSystem _stack = default!;
     [Dependency] private readonly AdminConsoleSystem _adminConsole = default!;
@@ -124,6 +126,8 @@ public sealed class CorporateConsoleSystem : EntitySystem
             return;
         if (!_proto.TryIndex<AuThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto))
             return;
+        if (!_auRound.IsThirdPartyAllowedForCurrentContext(partyProto))
+            return;
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto))
             return;
 
@@ -213,7 +217,8 @@ public sealed class CorporateConsoleSystem : EntitySystem
         var thirdParties = new Dictionary<string, (string DisplayName, float Cost)>();
         foreach (var (id, cost) in comp.CallableParties)
         {
-            if (_proto.TryIndex<AuThirdPartyPrototype>(id, out var proto))
+            if (_proto.TryIndex<AuThirdPartyPrototype>(id, out var proto) &&
+                _auRound.IsThirdPartyAllowedForCurrentContext(proto))
                 thirdParties[id] = (proto.DisplayName ?? proto.ID, cost);
         }
         _ui.SetUiState(uid, CorporateConsoleThirdPartyUi.Key,

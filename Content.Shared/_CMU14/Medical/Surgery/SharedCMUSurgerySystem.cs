@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Content.Shared._CMU14.Medical.Bones;
+using Content.Shared._CMU14.Medical.Items;
 using Content.Shared._CMU14.Medical.Organs;
 using Content.Shared._CMU14.Medical.Organs.Events;
 using Content.Shared._CMU14.Medical.Surgery.Conditions;
@@ -168,10 +169,15 @@ public abstract class SharedCMUSurgerySystem : EntitySystem
 
         Bone.RestoreIntegrity((args.Part, null), ent.Comp.IntegrityRestore);
         Fracture.SetSeverity((args.Part, frac), ent.Comp.DowngradeTo, forceUpgrade: false);
-        if (ent.Comp.DowngradeTo == FractureSeverity.None && HasComp<CMUMalunionComponent>(args.Part))
-            RemComp<CMUMalunionComponent>(args.Part);
-        if (ent.Comp.DowngradeTo == FractureSeverity.None && HasComp<CMUPostOpBoneSetComponent>(args.Part))
-            RemComp<CMUPostOpBoneSetComponent>(args.Part);
+        if (ent.Comp.DowngradeTo == FractureSeverity.None)
+        {
+            if (HasComp<CMUSplintedComponent>(args.Part))
+                RemComp<CMUSplintedComponent>(args.Part);
+            if (HasComp<CMUMalunionComponent>(args.Part))
+                RemComp<CMUMalunionComponent>(args.Part);
+            if (HasComp<CMUPostOpBoneSetComponent>(args.Part))
+                RemComp<CMUPostOpBoneSetComponent>(args.Part);
+        }
         Wounds.RecomputeInternalBleed(args.Part);
     }
 
