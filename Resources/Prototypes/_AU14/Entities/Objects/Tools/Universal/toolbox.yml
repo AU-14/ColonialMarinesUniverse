@@ -1,0 +1,56 @@
+- type: entity
+  parent: ToolboxBase
+  abstract: true
+  id: AU14ToolboxBase
+  components:
+  - type: Storage
+    maxItemSize: Medium
+    grid:
+    - 0,0,13,1
+  - type: FixedItemSizeStorage
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_RMC14/Handling/toolbox_pickup.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/Items/toolbox_drop.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/toolbox_drop.ogg
+      params:
+        volume: -4
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+- type: entity
+  name: mechanical toolbox
+  parent: [AU14ToolboxBase, ToolboxMechanical]
+  id: AU14ToolboxMechanical
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/Toolboxes/toolbox_blue.rsi
+    state: icon
+  - type: Item
+    sprite: _RMC14/Objects/Tools/Toolboxes/toolbox_blue.rsi
+  suffix: RMC14
+
+- type: entity
+  name: Vehicle Crewmans Toolbox
+  parent: [RMCToolboxMechanical, ToolboxMechanicalFilled]
+  id: AU14ToolboxMechanicalFilledCrewman
+  components:
+  - type: StorageFill
+    contents:
+      - id: CMCrowbar
+      - id: CMWrench
+      - id: CMWelder
+      - id: CMWirecutter
+      - id: CMScrewdriver
+      - id: RMCWeldingGogglesSuperior
+  suffix: RMC14, Filled

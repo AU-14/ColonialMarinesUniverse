@@ -98,6 +98,8 @@
     sprite: _RMC14/Objects/Tools/Toolboxes/toolbox_blue.rsi
   suffix: RMC14
 
+# AU-14 Todo- make toolboxes
+
 - type: entity
   parent: [RMCToolboxMechanical, ToolboxMechanicalFilled]
   id: RMCToolboxMechanicalFilled
