@@ -204,6 +204,56 @@
       RMCSkillPilot: 1
 
 - type: entity
+  parent: CMBaseStructure
+  id: AU14GovforComputerDropshipWeaponsSmall
+  name: dropship weapons computer
+  suffix: Govfor, small
+  description: A compact computer that can manage equipment, weapons and simulations installed on the dropship.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    drawdepth: Objects
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: security_cam
+    layers: [ ]
+  - type: Clickable
+  - type: Corrodible
+    isCorrodible: false
+  - type: InteractionOutline
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: WallMount
+    arc: 360
+  - type: ActivatableUI
+    key: enum.DropshipTerminalWeaponsUi.Key
+  - type: AccessReader
+    #access: [ [ "CMAccessPilot" ], [ "CMAccessSquadLeaderPrep" ], [ "RMCAccessWeYaFlight" ] ]
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
+  - type: ActivatableUIRequiresAccess
+  - type: UserInterface
+    interfaces:
+      enum.DropshipTerminalWeaponsUi.Key:
+        type: DropshipWeaponsBui
+  - type: DropshipTerminalWeapons
+  - type: RequiresSkill
+    skills:
+      RMCSkillPilot: 1
+  - type: PointLight
+    enabled: true
+    radius: 1.5
+    netsync: true
+    energy: 1
+    offset: "0,0"
+    color: "#FFEFD2"
+    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+
+- type: entity
   parent: CMComputerDropship
   id: CMComputerDropshipWeaponsGovfor
   name: weapons controls
@@ -362,6 +412,47 @@
     faction: govfor
     ShuttleType: Dropship
 
+- type: entity
+  parent: CMComputerDropshipNavigation
+  id: AU14GovforComputerDropshipPilotSmall
+  name: dropship weapons computer
+  suffix: Govfor, small
+  description: A compact computer that can manage equipment, weapons and simulations installed on the dropship.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    drawdepth: Objects
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: security_cam
+    layers: [ ]
+  - type: Clickable
+  - type: Corrodible
+    isCorrodible: false
+  - type: InteractionOutline
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: WallMount
+    arc: 360
+  - type: RequiresSkill
+    skills:
+      RMCSkillPilot: 1
+  - type: PointLight
+    enabled: true
+    radius: 1.5
+    netsync: true
+    energy: 1
+    offset: "0,0"
+    color: "#FFEFD2"
+    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+  - type: WhitelistedShuttle
+    faction: govfor
+    ShuttleType: Dropship
 
 - type: entity
   parent: CMComputerDropshipNavigation
