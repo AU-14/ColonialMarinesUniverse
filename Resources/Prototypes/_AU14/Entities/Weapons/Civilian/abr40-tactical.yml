@@ -4,6 +4,20 @@
   id: AU14WeaponRifleABR40TacticalVAI
   suffix: Filled, Tactical
   components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RMCMagazineRifleL42A
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RMCMagazineRifleABR40
+          - RMCMagazineRifleL42A
+          - RMCMagazineRifleL42AExtended
+          - RMCMagazineRifleL42AAP
   - type: AttachableHolder
     randomAttachmentChance: 0.1
     slots:

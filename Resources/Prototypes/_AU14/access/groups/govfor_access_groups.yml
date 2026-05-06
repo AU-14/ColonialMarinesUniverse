@@ -10,6 +10,7 @@
   - AU14AccessGovforEngineering
   - AU14AccessGovforGunner
   - AU14AccessGovforPilot
+  - AU14AccessGovforReq
   - CMAccessBrig
 
 - type: accessGroup
@@ -18,6 +19,14 @@
   - AU14AccessGovfor
   - AU14AccessGovforSquad
   - AU14AccessGovforEngineering
+
+- type: accessGroup
+  id: AU14GovforAuxTech
+  tags:
+  - AU14AccessGovfor
+  - AU14AccessGovforSquad
+  - AU14AccessGovforEngineering
+  - AU14AccessGovforReq
 
 - type: accessGroup
   id: AU14GovforFTL
@@ -31,6 +40,7 @@
   tags:
   - AU14AccessGovfor
   - AU14AccessGovforPilot
+  - AU14AccessGovforReq
 
 - type: accessGroup
   id: AU14GovforGunner

@@ -1,0 +1,313 @@
+- type: entity
+  parent: BaseStructure
+  id: CMUAutodocPod
+  name: autodoc pod
+  description: An automated surgical pod. A trained surgeon can queue procedures from its linked console.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    sprite: _CMU14/Structures/Machines/Medical/autodoc.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - state: autodoc_open
+      map: [ "base" ]
+    - state: autodoc_closed
+      map: [ "closed" ]
+      visible: false
+    - state: autodoc_closed_operate
+      map: [ "operate" ]
+      visible: false
+  - type: Icon
+    sprite: _CMU14/Structures/Machines/Medical/autodoc.rsi
+    state: autodoc_open
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        density: 200
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: InteractionOutline
+  - type: CMOperatingTable
+  - type: CMUAutodocPod
+  - type: ContainerContainer
+    containers:
+      cmu-autodoc-bodyContainer: !type:ContainerSlot
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUMedicalPodVisuals.Occupied:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        closed:
+          True: { visible: true }
+          False: { visible: false }
+      enum.CMUAutodocVisuals.Operating:
+        closed:
+          True: { visible: false }
+        operate:
+          True: { visible: true }
+          False: { visible: false }
+  - type: EmptyOnMachineDeconstruct
+    containers:
+    - cmu-autodoc-bodyContainer
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StrongMetallic
+  - type: RMCMesonsNonviewable
+
+- type: entity
+  parent: BaseStructure
+  id: CMUAutodocConsole
+  name: autodoc console
+  description: A dedicated terminal for queuing procedures on a nearby autodoc pod.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _CMU14/Structures/Machines/Medical/autodoc.rsi
+    drawdepth: Objects
+    layers:
+    - state: sleeperconsole
+  - type: Icon
+    sprite: _CMU14/Structures/Machines/Medical/autodoc.rsi
+    state: sleeperconsole-p
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.35,0.25,0.35"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: InteractionOutline
+  - type: Rotatable
+  - type: Anchorable
+  - type: ActivatableUI
+    key: enum.CMUAutodocUIKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUAutodocUIKey.Key:
+        type: CMUAutodocBui
+  - type: CMUAutodocConsole
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Electronic
+  - type: RMCMesonsNonviewable
+
+- type: entity
+  parent: BaseStructure
+  id: CMUBodyScannerPod
+  name: body scanner pod
+  description: A full-body diagnostic scanner with an enclosed patient bay.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: CMUBodyScannerPod
+  - type: Sprite
+    sprite: _CMU14/Structures/Machines/Medical/bodyscanner.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - state: body_scanner_open
+      map: [ "machineLayer" ]
+  - type: Icon
+    sprite: _CMU14/Structures/Machines/Medical/bodyscanner.rsi
+    state: body_scanner_open
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUMedicalPodVisuals.Occupied:
+        machineLayer:
+          True: { state: "body_scanner_closed" }
+          False: { state: "body_scanner_open" }
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        density: 200
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: InteractionOutline
+  - type: ContainerContainer
+    containers:
+      cmu-body-scanner-bodyContainer: !type:ContainerSlot
+  - type: Appearance
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StrongMetallic
+  - type: EmptyOnMachineDeconstruct
+    containers:
+    - cmu-body-scanner-bodyContainer
+  - type: RMCMesonsNonviewable
+
+- type: entity
+  parent: BaseStructure
+  id: CMUBodyScannerConsole
+  name: body scanner console
+  description: A medical console for reviewing enclosed body scans and calibrating surgical assistance.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _CMU14/Structures/Machines/Medical/bodyscanner.rsi
+    drawdepth: Objects
+    layers:
+    - state: body_scannerconsole
+  - type: Icon
+    sprite: _CMU14/Structures/Machines/Medical/bodyscanner.rsi
+    state: body_scannerconsole-p
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.35,0.25,0.35"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: InteractionOutline
+  - type: Rotatable
+  - type: Anchorable
+  - type: ActivatableUI
+    key: enum.CMUBodyScannerUIKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUBodyScannerUIKey.Key:
+        type: CMUBodyScannerBui
+  - type: CMUBodyScannerConsole
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Electronic
+  - type: RMCMesonsNonviewable
+
+- type: entity
+  parent: BaseStructure
+  id: CMULimbPrinter
+  name: limb printer
+  description: A surgical bioprinter that grows replacement human arms and legs from matrix reagent and a blood sample.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    sprite: _CMU14/Structures/Machines/Medical/limbprinter.rsi
+    drawdepth: Objects
+    noRot: true
+    layers:
+    - state: bioprinter
+      map: [ "base" ]
+    - state: bioprinter_working
+      map: [ "working" ]
+      visible: false
+  - type: Icon
+    sprite: _CMU14/Structures/Machines/Medical/limbprinter.rsi
+    state: bioprinter
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: InteractionOutline
+  - type: Anchorable
+  - type: ActivatableUI
+    key: enum.CMULimbPrinterUIKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMULimbPrinterUIKey.Key:
+        type: CMULimbPrinterBui
+  - type: ItemSlots
+    slots:
+      cmu-limb-printer-beakerSlot:
+        name: cmu-limb-printer-slot-beaker
+        startingItem: CMULimbPrinterMatrixBeaker
+        whitelist:
+          components:
+          - FitsInDispenser
+      cmu-limb-printer-syringeSlot:
+        name: cmu-limb-printer-slot-syringe
+        whitelist:
+          tags:
+          - Syringe
+  - type: ContainerContainer
+    containers:
+      cmu-limb-printer-beakerSlot: !type:ContainerSlot
+      cmu-limb-printer-syringeSlot: !type:ContainerSlot
+  - type: CMULimbPrinter
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMULimbPrinterVisuals.Working:
+        base:
+          True: { visible: false }
+          False: { visible: true }
+        working:
+          True: { visible: true }
+          False: { visible: false }
+  - type: EmptyOnMachineDeconstruct
+    containers:
+    - cmu-limb-printer-beakerSlot
+    - cmu-limb-printer-syringeSlot
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Electronic
+  - type: RMCMesonsNonviewable
+
+- type: entity
+  parent: CMBeakerLarge
+  id: CMULimbPrinterMatrixBeaker
+  name: biogenic matrix beaker
+  suffix: CMU, Filled
+  components:
+  - type: Label
+    currentLabel: biogenic matrix
+  - type: SolutionContainerManager
+    solutions:
+      beaker:
+        maxVol: 120
+        reagents:
+        - ReagentId: CMUBiogenicMatrix
+          Quantity: 120

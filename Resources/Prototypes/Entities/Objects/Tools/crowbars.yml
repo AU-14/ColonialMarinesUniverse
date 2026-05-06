@@ -41,6 +41,13 @@
     size: Normal
     shape:
     - 0,0,0,1
+  - type: CMSurgeryTool
+  - type: CMRetractor
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 1.8
+    mishapChance: 0.12
+    mishapDamageType: Blunt
+    mishapDamageAmount: 4
 
 # Standard (grey) Crowbar
 - type: entity

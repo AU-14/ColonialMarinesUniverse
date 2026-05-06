@@ -27,6 +27,17 @@
       - Slicing
     useSound:
       path: /Audio/Items/Culinary/chop.ogg
+  - type: CMSurgeryTool
+  - type: CMScalpel
+  - type: CMRetractor
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 1.8
+    mishapChance: 0.12
+    mishapDamageType: Slash
+    mishapDamageAmount: 3
+    failurePenalties:
+      retractor: 2
+      bone_saw: 1
   - type: DeleteOnExplosion
 
 - type: entity

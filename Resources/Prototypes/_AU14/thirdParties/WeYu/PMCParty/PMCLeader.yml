@@ -76,13 +76,10 @@
     belt: RMCMK80BeltPMCFilled
     pocket1: RMCPouchMagazineLargePMC
     pocket2: RMCPouchFirstAidPMCFill
-    back: RMCSatchelLightpackWeYa
+    back: RMCSatchelPMC
     ears2: RMCHeadsetDistressWeYa
     suitstorage: RMCWeaponRifleM54C2
   storage:
-    belt:
-    - CMSurgicalLine
-    - CMSynthGraft
     pocket1:
     - CMMagazineRifleM54CAP
     - CMMagazineRifleM54CAP
@@ -91,6 +88,8 @@
     pocket2:
     - AU14Tourniquet
     back:
+    - CMSurgicalLine
+    - CMSynthGraft
     - RMCMREWeYa
     - RMCRangefinder
     - CMStunbaton

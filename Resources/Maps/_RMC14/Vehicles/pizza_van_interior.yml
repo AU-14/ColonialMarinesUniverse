@@ -130,6 +130,11 @@ entities:
     - type: VehicleDriverSeat
       skills:
         all: {}
+    - type: RemoveComponents
+      components:
+      - type: Damageable
+      - type: Destructible
+      - type: Corrodible
     - type: Absorbent
       transferSound: !type:SoundPathSpecifier
         params:

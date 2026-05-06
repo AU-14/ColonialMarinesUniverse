@@ -3,10 +3,12 @@ using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.CCVar;
+using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Xenonids.Energy;
 using Content.Shared.Explosion.EntitySystems;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Coordinates;
+using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
@@ -137,7 +139,9 @@ public abstract class SharedXenoAcidSystem : EntitySystem
         if (args.Handled || args.Cancelled || args.Target is not { } target)
             return;
 
-        if (!TryComp(target, out CorrodibleComponent? corrodible) || !corrodible.IsCorrodible)
+        if (HasComp<BodyPartComponent>(target) ||
+            !TryComp(target, out CorrodibleComponent? corrodible) ||
+            !corrodible.IsCorrodible)
             return;
 
         if (!xeno.Comp.CanMeltStructures && corrodible.Structure)
@@ -197,7 +201,15 @@ public abstract class SharedXenoAcidSystem : EntitySystem
     {
         time = TimeSpan.Zero;
         mult = 1;
-        if (!TryComp(target, out CorrodibleComponent? corrodible) ||
+
+        if (HasComp<VehicleInteriorIndestructibleComponent>(target))
+        {
+            _popup.PopupClient(Loc.GetString("cm-xeno-acid-not-corrodible", ("target", target)), xeno, xeno, PopupType.SmallCaution);
+            return false;
+        }
+
+        if (HasComp<BodyPartComponent>(target) ||
+            !TryComp(target, out CorrodibleComponent? corrodible) ||
             !corrodible.IsCorrodible)
         {
             _popup.PopupClient(Loc.GetString("cm-xeno-acid-not-corrodible", ("target", target)), xeno, xeno, PopupType.SmallCaution);
@@ -236,6 +248,9 @@ public abstract class SharedXenoAcidSystem : EntitySystem
     public void ApplyAcid(EntProtoId acidId, XenoAcidStrength strength, EntityUid target, float dps, float lightDps, TimeSpan time, bool inherit = false)
     {
         if (_net.IsClient)
+            return;
+
+        if (HasComp<BodyPartComponent>(target))
             return;
 
         EntityUid acid;

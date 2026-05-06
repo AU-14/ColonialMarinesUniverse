@@ -102,6 +102,8 @@
     xenoArmor: 25
     explosionArmor: 100
   - type: XenoWordQueen
+  - type: VehicleDamageMultiplier
+    multiplier: 4
   - type: InnateCommandSpeech
   - type: RMCInnateRadioTextIncrease
     radioTextIncrease: 3

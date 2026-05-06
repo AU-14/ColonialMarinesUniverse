@@ -35,6 +35,7 @@ public abstract class SharedHitLocationSystem : EntitySystem
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
 
     private readonly Dictionary<EntityUid, HitLocationResolveEvent> _pendingHits = new();
+    private readonly Dictionary<EntityUid, int> _bodyZoneSuppressedOrigins = new();
 
     private bool _medicalEnabled;
     private bool _hitLocationEnabled;
@@ -45,6 +46,13 @@ public abstract class SharedHitLocationSystem : EntitySystem
 
     public bool TryConsumePendingHit(EntityUid target, out HitLocationResolveEvent hit)
         => _pendingHits.Remove(target, out hit);
+
+    public BodyZoneTargetingSuppression SuppressBodyZoneTargeting(EntityUid origin)
+    {
+        _bodyZoneSuppressedOrigins.TryGetValue(origin, out var depth);
+        _bodyZoneSuppressedOrigins[origin] = depth + 1;
+        return new BodyZoneTargetingSuppression(this, origin);
+    }
 
     /// <summary>
     ///     Sets the next-hit forced zone on <paramref name="target"/>. The override
@@ -95,13 +103,14 @@ public abstract class SharedHitLocationSystem : EntitySystem
         if (!HasLocalizableDamage(args.Damage))
             return;
 
-        var (forced, forcedSymmetry) = ResolveForcedSource(ent, args.Origin);
+        var suppressBodyZone = args.Origin is { } origin && IsBodyZoneTargetingSuppressed(origin);
+        var (forced, forcedSymmetry) = ResolveForcedSource(ent, args.Origin, suppressBodyZone);
 
         var resolve = new HitLocationResolveEvent(ent, args.Origin, args.Damage, forced, forcedSymmetry);
         RaiseLocalEvent(ent, ref resolve);
 
         if (!resolve.Handled)
-            ResolveRandomly(ent, ref resolve);
+            ResolveRandomly(ent, ref resolve, suppressBodyZone);
 
         if (resolve.Handled)
         {
@@ -116,10 +125,15 @@ public abstract class SharedHitLocationSystem : EntitySystem
     }
 
     private (BodyPartType? Forced, BodyPartSymmetry? Symmetry) ResolveForcedSource(
-        Entity<HitLocationComponent> target, EntityUid? attacker)
+        Entity<HitLocationComponent> target,
+        EntityUid? attacker,
+        bool suppressBodyZone)
     {
         if (target.Comp.NextHitOverride is { } sentinel)
             return (sentinel, null);
+
+        if (suppressBodyZone)
+            return (null, null);
 
         if (attacker is { } a && ZoneTargeting.TryGetFreshSelection(a) is { } zone)
         {
@@ -130,19 +144,54 @@ public abstract class SharedHitLocationSystem : EntitySystem
         return (null, null);
     }
 
-    private void ResolveRandomly(Entity<HitLocationComponent> ent, ref HitLocationResolveEvent args)
+    private void ResolveRandomly(
+        Entity<HitLocationComponent> ent,
+        ref HitLocationResolveEvent args,
+        bool suppressBodyZone)
     {
-        if (args.Forced is { } forced && RollAimAccuracy(ent.Owner, args.Attacker))
+        if (args.Forced is { } forced)
         {
-            args.ResolvedPart = forced;
-            args.ResolvedPartEntity =
-                FindFirstPartOfType(ent.Owner, forced, args.ForcedSymmetry)
-                ?? FindFirstPartOfType(ent.Owner, forced);
-            args.Handled = true;
-            return;
+            if (RollAimAccuracy(ent.Owner, args.Attacker, forced))
+            {
+                args.ResolvedPart = forced;
+                args.ResolvedPartEntity =
+                    FindFirstPartOfType(ent.Owner, forced, args.ForcedSymmetry)
+                    ?? FindFirstPartOfType(ent.Owner, forced);
+                args.Handled = true;
+                return;
+            }
+
+            if (TryResolveCalledShotMiss(ent, ref args, forced))
+                return;
         }
 
-        var weights = ReadWeights();
+        ResolveFromWeights(ent, ref args, suppressBodyZone ? ReadAreaDamageWeights() : ReadWeights());
+    }
+
+    private bool TryResolveCalledShotMiss(
+        Entity<HitLocationComponent> ent,
+        ref HitLocationResolveEvent args,
+        BodyPartType forced)
+    {
+        var weights = forced switch
+        {
+            BodyPartType.Head => new PartWeights(0f, _chestWeight, _armWeight, _legWeight),
+            BodyPartType.Torso => new PartWeights(0f, _chestWeight * 0.35f, _armWeight, _legWeight),
+            _ => default,
+        };
+
+        if (weights.Total <= 0f)
+            return false;
+
+        ResolveFromWeights(ent, ref args, weights);
+        return true;
+    }
+
+    private void ResolveFromWeights(
+        Entity<HitLocationComponent> ent,
+        ref HitLocationResolveEvent args,
+        PartWeights weights)
+    {
         var roll = Random.NextFloat() * weights.Total;
         var partType = weights.Pick(roll);
 
@@ -151,7 +200,7 @@ public abstract class SharedHitLocationSystem : EntitySystem
         args.Handled = true;
     }
 
-    private bool RollAimAccuracy(EntityUid target, EntityUid? attacker)
+    private bool RollAimAccuracy(EntityUid target, EntityUid? attacker, BodyPartType forced)
     {
         if (attacker is not { } a)
             return true;
@@ -173,6 +222,12 @@ public abstract class SharedHitLocationSystem : EntitySystem
             }
         }
 
+        accuracy *= forced switch
+        {
+            BodyPartType.Head => aim.HeadAccuracyMultiplier,
+            BodyPartType.Torso => aim.TorsoAccuracyMultiplier,
+            _ => 1f,
+        };
         accuracy = Math.Clamp(accuracy, 0f, 0.95f);
         return Random.NextFloat() <= accuracy;
     }
@@ -211,6 +266,46 @@ public abstract class SharedHitLocationSystem : EntitySystem
         Chest: _chestWeight,
         Arm: _armWeight,
         Leg: _legWeight);
+
+    private PartWeights ReadAreaDamageWeights() => new(
+        Head: _headWeight * 0.25f,
+        Chest: _chestWeight * 0.60f,
+        Arm: _armWeight * 1.40f,
+        Leg: _legWeight * 1.40f);
+
+    private bool IsBodyZoneTargetingSuppressed(EntityUid origin)
+        => _bodyZoneSuppressedOrigins.ContainsKey(origin);
+
+    private void UnsuppressBodyZoneTargeting(EntityUid origin)
+    {
+        if (!_bodyZoneSuppressedOrigins.TryGetValue(origin, out var depth))
+            return;
+
+        if (depth <= 1)
+        {
+            _bodyZoneSuppressedOrigins.Remove(origin);
+            return;
+        }
+
+        _bodyZoneSuppressedOrigins[origin] = depth - 1;
+    }
+
+    public readonly struct BodyZoneTargetingSuppression : IDisposable
+    {
+        private readonly SharedHitLocationSystem? _system;
+        private readonly EntityUid _origin;
+
+        public BodyZoneTargetingSuppression(SharedHitLocationSystem system, EntityUid origin)
+        {
+            _system = system;
+            _origin = origin;
+        }
+
+        public void Dispose()
+        {
+            _system?.UnsuppressBodyZoneTargeting(_origin);
+        }
+    }
 
     private readonly record struct PartWeights(float Head, float Chest, float Arm, float Leg)
     {

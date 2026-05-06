@@ -12,7 +12,7 @@
           !type:PhysShapeAabb
           bounds: "-0.45,-0.45,0.45,0.1"
         density: 190
-        hard: true
+        hard: false
         mask:
         - MachineMask
         layer:
@@ -88,4 +88,3 @@
       components:
       - Xeno
   - type: RequireProjectileTarget
-

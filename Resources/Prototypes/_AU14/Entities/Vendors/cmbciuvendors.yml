@@ -89,10 +89,10 @@
         amount: 4
       - id: AU14M276ShotgunShellLoadingRigBlack
         amount: 6
-      - id: RMCBeltHolsterPistolTSE
-        amount: 20
       - id: AU14BeltHolsterPistolBlack
         amount: 20
+      - id: RMCBeltHolsterRevolver
+        amount: 10
       - id: CMBeltSecurityMarshal
         amount: 30
       - id: AU14BeltUtilityGeneralBlack
@@ -276,11 +276,10 @@
 
     Corpsman protocol: select the essential equipment set, storage and limited medications.
   components:
-  - type: AccessReader
-    access: [ [ "AU14AccessGovforMedical" ], [ "AU14AccessOpforMedical" ] ]
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
   - type: CMAutomatedVendor
+    jobs: [ AU14JobPlatoonCorpsmanBase, AU14JobGOVFORPlatoonCorpsman, AU14JobOpforPlatoonCorpsman ]
     sections:
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
@@ -309,7 +308,6 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMBeltMedical
       - id: AU14BeltMedicBagBlack
     - name: General Medical Supplies
       entries:
@@ -570,14 +568,28 @@
       entries:
       - id: AU14PouchCommandFill
         amount: 10
-    - name: Miscellaneous
+    - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
+      - id: RMCWhistle
+      - id: RMCPackFlareCAS
+    - name: Spare Equipment
+      entries:
+      - id: RMCExplosiveBreachingCharge
+        amount: 4
+      - id: RMCBinoculars
+        amount: 5
+      - id: RMCLaserDesignator
+        amount: 2
+      - id: RMCFulton20
         amount: 4
       - id: RMCWhistle
         amount: 10
+      - id: RMCBoxPackFlareCAS
+        amount: 1
       - id: RMCPackFlareCAS
-        amount: 10
+        amount: 6
 
 - type: entity
   parent: ColMarTechBase
@@ -610,7 +622,7 @@
   id: AU14CMBCIUSectionLeader
   name: CMB CIU section leader vendor
   description: >-
-    An automated supervisor rack, hooked up to a compact storage of Crisis Intervention Unit section-leadership equipment from the Colonial Marshall Bureau.
+    An automated equipment rack, hooked up to a compact storage of Crisis Intervention Unit section-leadership equipment from the Colonial Marshall Bureau.
     Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
   components:
   - type: AccessReader
@@ -619,14 +631,12 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
     sections:
-    - name: Miscellaneous
+    - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
-        amount: 1
       - id: RMCWhistle
-        amount: 1
       - id: RMCPackFlareCAS
-        amount: 2
 
 - type: entity
   parent: ColMarTechBase
@@ -722,14 +732,6 @@
         amount: 10
       - id: RMCBoxShotgunFlechette
         amount: 12
-    - name: XM51 Breaching Scattergun
-      entries:
-      - id: RMCXM51Case
-        amount: 1
-      - id: RMCMagazineShotgunXM51
-        amount: 10
-      - id: RMCBoxShotgunBreaching
-        amount: 8
     - name: M85A1 Grenade Launcher
       entries:
       - id: RMCWeaponLauncherM85A1
@@ -746,22 +748,6 @@
         amount: 1
       - id: RMCPouchExplosive
         amount: 2
-    - name: Explosives
-      entries:
-      - id: RMCBoxHEDP
-        amount: 4
-      - id: RMCBoxHEFA
-        amount: 3
-      - id: RMCPouchExplosive
-        amount: 1
-      - id: CMPacketGrenadeFragOldFilled
-        amount: 2
-      - id: RMCPacketGrenadeSmokeFilled
-        amount: 5
-      - id: RMCExplosiveBreachingCharge
-        amount: 12
-      - id: RMCExplosiveBreachingChargeRubber
-        amount: 22
 
 - type: entity
   parent: ColMarTechBase
@@ -815,3 +801,184 @@
       - id: AU14PouchIFAKFill
       - id: RMCPouchMagazinePistol
       - id: RMCPouchPistol
+
+- type: entity
+  parent: ColMarTechCargo
+  id: AU14CMBCIURequisitionVendor
+  name: CMB CIU automated requisitions vendor
+  description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
+  components:
+  - type: AccessReader
+    access: [ ["AU14AccessGovforReq"] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+  - type: CMAutomatedVendor
+    baseSprite:
+      sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+      state: base
+    animationSprite:
+      sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+      state: vend
+    sections:
+    - name: Standard issue primaries
+      entries:
+      - id: AU14WeaponRifleM16A2
+        amount: 30
+      - id: AU14WeaponRifleM16A1
+        amount: 20
+      - id: WeaponSMGMP5
+        amount: 30
+      - id: RMCWeaponSMGPDW90
+        amount: 10
+    - name: standard issue secondaries
+      entries:
+      - id: RMCWeaponPistolHG45Marina
+        amount: 20
+      - id: CMWeaponPistolM1984Empty
+        amount: 10
+    - name: special issue firearms
+      entries:
+      - id: RMCWeaponSMGMP5Alt
+        amount: 10
+      - id: RMCWeaponShotgunHG3712
+        amount: 3
+      - id: RMCXM51Case
+        amount: 2
+    - name: primary ammunition
+      entries:
+      - id: RMCMagazineRifleM16
+        amount: 200
+      - id: CMMagazineSMGMP5
+        amount: 200
+      - id: RMCMagazineSMGPDW90
+        amount: 200
+      - id: RMCMagazineSMGPDW90AP
+        amount: 15
+      - id: RMCBoxShotgunBuckshot
+        amount: 20
+      - id: RMCBoxShotgunFlechette
+        amount: 20
+      - id: RMCBoxShotgunSlugs
+        amount: 20
+      - id: CMMagazineRifleM54CE2
+        amount: 25
+      - id: CMMagazineRifleM54CE2HT
+        amount: 10
+      - id: RMCMagazineShotgunXM51
+        amount: 10
+    - name: secondary ammunition
+      entries:
+      - id: CMMagazinePistolM1984
+        amount: 200
+      - id: RMCMagazinePistolM1984AP
+        amount: 15
+      - id: RMCMagazinePistolM1984HP
+        amount: 5
+      - id: RMCMagazinePistolMK45
+        amount: 200
+    - name: explosives
+      entries:
+      - id: CMPacketGrenadeHighExplosiveFilled
+        amount: 6
+      - id: RMCPacketGrenadeIncendiaryFilled
+        amount: 3
+      - id: CMPacketGrenadeFragFilled
+        amount: 6
+      - id: RMCPacketGrenadeSmokeFilled
+        amount: 6
+      - id: CMPacketGrenadeFragOldFilled
+        amount: 2
+      - id: RMCBoxClaymoreMineFilled
+        amount: 3
+      - id: RMCPacketGrenadeM74AGMFFilled
+        amount: 4
+      - id: RMCPacketGrenadeM74AGMSHornetFilled
+        amount: 4
+      - id: RMCPacketGrenadeM74AGMIFilled
+        amount: 2
+      - id: RMCPacketGrenadeM74AGMSStarShellFilled
+        amount: 4
+      - id: RMCPacketGrenadeM74AGMSFilled
+        amount: 4
+      - id: RMCExplosiveBreachingCharge
+        amount: 6
+      - id: RMCExplosivePlastic
+        amount: 8
+      - id: RMCWeaponLauncherDisposableFolded
+        amount: 2
+    - name: Barrel Attachments
+      entries:
+      - id: RMCAttachmentExtendedBarrel
+        amount: 5
+      - id: RMCAttachmentShotgunChoke
+        amount: 3
+    - name: Rail Attachments
+      entries:
+      - id: RMCAttachmentTwoPointSling
+        amount: 50
+      - id: RMCAttachmentRailFlashlight
+        amount: 25
+      - id: RMCAttachmentS42xTelescopicMiniscope
+        amount: 2
+    - name: Underbarrel Attachments
+      entries:
+      - id: RMCAttachmentFlashlightGrip
+        amount: 15
+      - id: RMCAttachmentVerticalGrip
+        amount: 5
+      - id: RMCAttachmentBipod
+        amount: 5
+      - id: RMCAttachmentUnderbarrelExtinguisher
+        amount: 5
+      - id: RMCAttachmentU7UnderbarrelShotgun
+        amount: 3
+    - name: Stock Attachments
+      entries:
+      - id: RMCAttachmentM54CStockCollapsible
+        amount: 30
+      - id: RMCAttachmentM63StockCollapsible
+        amount: 15
+      - id: RMCAttachmentM63Stock
+        amount: 10
+      - id: RMCAttachmentM63ArmBrace
+        amount: 10
+      - id: RMCAttachmentM42A2CollapsibleStock
+        amount: 3
+      - id: RMCAttachmentM44MagnumSharpshooterStock
+        amount: 2
+    - name: Load Bearing Equipment
+      entries:
+      - id: RMCOuterClothingExternalWebbingBlack
+        amount: 4
+      - id: RMCOuterClothingExternalWebbing
+        amount: 4
+    - name: Devices
+      entries:
+      - id: RMCIntelDetector
+        amount: 4
+      - id: RMCFulton20
+        amount: 4
+      - id: RMCSentryLaptop
+        amount: 4
+    - name: RTO Packs
+      entries:
+      - id: AU14BackpackRTOPackJungle
+        amount: 1
+      - id: AU14BackpackRTOPackDesert
+        amount: 1
+      - id: AU14BackpackRTOPackGray
+        amount: 1
+    - name: Tents
+      entries:
+      - id: RMCTentUNMCStandardFolded
+        amount: 2
+      - id: RMCTentUNMCExtendedFolded
+        amount: 1
+      - id: RMCTentUNMCBigFolded
+        amount: 1
+      - id: RMCTentUNMCStandardMedicalFolded
+        amount: 1
+      - id: AU14TentBigFoldedSurgical
+        amount: 1
+      - id: RMCTentUNMCExtendedMessFolded
+        amount: 1

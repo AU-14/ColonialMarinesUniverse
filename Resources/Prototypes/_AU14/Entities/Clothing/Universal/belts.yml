@@ -373,6 +373,7 @@
       - Pill
       - RMCHandLabeler
       - RMCStethoscope
+      - CMUCastItem
       - CMUSplintItem
       - RMCLighter
   - type: FixedItemSizeStorage

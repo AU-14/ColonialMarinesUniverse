@@ -196,7 +196,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: CMJumpsuitMaintTech
-  name: USCMC Engineer Uniform
+  name: Technician Uniform
   description: A uniform for a military engineer. It has shards of light Kevlar to help protect against stabbing weapons and bullets.
   components:
   - type: Sprite

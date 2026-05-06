@@ -1,0 +1,36 @@
+- type: loadout
+  id: CivilianPhysicianSpecializationDefaultAU14
+  equipment:
+    id: AU14IDCardColonyPhysician
+
+- type: loadout
+  id: CivilianPhysicianSpecializationSurgeonAU14
+  equipment:
+    id: AU14IDCardColonySurgeon
+
+- type: loadout
+  id: CivilianPhysicianSpecializationPharmacistAU14
+  equipment:
+    id: AU14IDCardColonyPharmacist
+
+- type: loadout
+  id: CivilianPhysicianSpecializationGeneralPractitionerAU14
+  equipment:
+    id: AU14IDCardColonyGeneralPractitioner
+
+# CLF
+
+- type: loadout
+  id: CLFPhysicianSpecializationDefaultAU14
+  equipment:
+    id: AU14IDCardCLFPhysician
+
+- type: loadout
+  id: CLFPhysicianSpecializationPharmacistAU14
+  equipment:
+    id: AU14IDCardCLFPharmacist
+
+- type: loadout
+  id: CLFPhysicianSpecializationGeneralPractitionerAU14
+  equipment:
+    id: AU14IDCardCLFGeneralPractitioner

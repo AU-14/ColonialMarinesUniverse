@@ -27,6 +27,8 @@
   - auadmin
   - auengi
   - CMCargoTech
+  access:
+  - AU14AccessColonyForeman
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

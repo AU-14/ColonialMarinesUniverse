@@ -1,4 +1,4 @@
-﻿- type: accessGroup
+- type: accessGroup
   id: auadmin
   tags:
   - CMAccessResearch
@@ -12,6 +12,14 @@
   - CMAccessColonyMedbay
   - CMAccessColonyArmory
   - CMAccessColonyCommand
+
+- type: accessGroup
+  id: auheadsofcolony
+  tags:
+  - AU14AccessColonyHeadPhysician
+  - AU14AccessColonyForeman
+  - AU14AccessColonyHeadEngineer
+  - AU14AccessColonyHeadOfService
 
 - type: accessGroup
   id: auengi

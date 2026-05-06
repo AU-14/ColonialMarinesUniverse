@@ -8,7 +8,8 @@
   icon: "RMCJobIconBureauMarshal"
   basePlaytimeTracker: true
   hidden: false
-
+  access:
+  - AU14AccessColonyMarshall
 
 - type: playTimeTracker
   id: AU14JobCivilianCMBMarshal

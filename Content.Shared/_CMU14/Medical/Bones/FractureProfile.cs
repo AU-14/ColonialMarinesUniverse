@@ -15,10 +15,10 @@ public static class FractureProfile
     private static readonly Dictionary<FractureSeverity, Profile> Table = new()
     {
         [FractureSeverity.None] = new(1.00f, 1.00f, 0, 0, false),
-        [FractureSeverity.Hairline] = new(0.95f, 1.10f, 1, 0, false),
-        [FractureSeverity.Simple] = new(0.85f, 1.25f, 2, 0, false),
-        [FractureSeverity.Compound] = new(0.70f, 1.40f, 3, 0.5f, false),
-        [FractureSeverity.Comminuted] = new(0.40f, 2.00f, 5, 1.0f, true),
+        [FractureSeverity.Hairline] = new(0.95f, 1.02f, 1, 0, false),
+        [FractureSeverity.Simple] = new(0.85f, 1.05f, 2, 0, false),
+        [FractureSeverity.Compound] = new(0.70f, 1.10f, 3, 0, false),
+        [FractureSeverity.Comminuted] = new(0.40f, 1.20f, 5, 0.5f, true),
     };
 
     public static Profile Get(FractureSeverity sev)

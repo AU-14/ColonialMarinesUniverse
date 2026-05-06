@@ -262,6 +262,8 @@
   parent: VehicleTankHatch
   id: VehicleTankExitHatch
   components:
+  - type: Sprite
+    drawdepth: Overlays
   - type: RemoveComponents
     components:
     - type: Fixtures
@@ -272,6 +274,7 @@
     bodyType: Static
     canCollide: false
   - type: VehicleExit
+  - type: RMCIgnoreGhostInteractionLimits
 
 - type: entity
   parent: VehicleTankRoofBase

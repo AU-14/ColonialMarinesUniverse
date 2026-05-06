@@ -1,0 +1,53 @@
+- type: entity
+  parent: CMWeaponPistolM1984
+  id: AU14WeaponPistolM4A4
+  name: M4A4 service pistol
+  description: A redesigned version of the M4A3 Service Pistol. The M4A4 was developed by ARMAT to be the next generation of service handgun used by US forces. However, due to limited budget constraints, the M4A4 has yet to see widespread adoption among the USCM and has mainly been issued to the US Army and Aerospace Force. This weapon uses M4A3 magazines.
+  components:
+  - type: Tag
+    tags:
+    - Sidearm
+    - AU14WeaponPistolM4A4
+  - type: RMCSelectiveFire
+    scatterWielded: 8
+    scatterUnwielded: 10
+    baseFireRate: 10
+    burstScatterMult: 5
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/USCM/m4a4.rsi
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/USCM/m4a4.rsi
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.2
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_m10_auto_pistol_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_m10_auto_pistol_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazinePistolM1984
+          - RMCMagazinePistolM1984AP
+          - RMCMagazinePistolM1984Rubber
+        startingItem: CMMagazinePistolM1984
+- type: Tag
+  id: AU14WeaponPistolM4A4
+
+- type: entity
+  parent: AU14WeaponPistolM4A4
+  id: AU14WeaponPistolM4A4Empty
+  suffix: Empty
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_m10_auto_pistol_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_m10_auto_pistol_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazinePistolM1984
+          - RMCMagazinePistolM1984AP

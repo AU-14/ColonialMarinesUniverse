@@ -173,16 +173,19 @@ public sealed class DropshipNavigationBui : BoundUserInterface
             _window.DestinationsContainer.AddChild(button);
         }
 
-        var tacticalButton = new DropshipButton
+        if (destinations.CanTacticalLand)
         {
-            Text = "Tactical Land",
-            Disabled = false,
-            BorderColor = Color.FromHex("#2A6D2A"),
-            BorderThickness = new Thickness(1),
-        };
-        tacticalButton.Button.ToggleMode = false;
-        tacticalButton.Button.OnPressed += _ => SendPredictedMessage(new DropshipNavigationTacticalLandStartMsg());
-        _window.DestinationsContainer.AddChild(tacticalButton);
+            var tacticalButton = new DropshipButton
+            {
+                Text = "Tactical Land",
+                Disabled = false,
+                BorderColor = Color.FromHex("#2A6D2A"),
+                BorderThickness = new Thickness(1),
+            };
+            tacticalButton.Button.ToggleMode = false;
+            tacticalButton.Button.OnPressed += _ => SendPredictedMessage(new DropshipNavigationTacticalLandStartMsg());
+            _window.DestinationsContainer.AddChild(tacticalButton);
+        }
 
         RefreshDoorLockStatus(destinations.DoorLockStatus);
         SetRemoteControl(destinations.RemoteControlStatus);

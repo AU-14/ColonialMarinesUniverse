@@ -28,6 +28,7 @@
     - Knife
     - RMCAttachmentBarrel
     - RMCM5Bayonet
+  - type: CMBoneSaw
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Melee/m5_bayonet.rsi
     state: icon
@@ -273,6 +274,16 @@
     speedModifier: 0.8
     useSound:
       path: /Audio/Items/crowbar.ogg
+  - type: CMSurgeryTool
+  - type: CMBoneSaw
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 2.1
+    mishapChance: 0.18
+    mishapDamageType: Slash
+    mishapDamageAmount: 5
+    failurePenalties:
+      retractor: 2
+      bone_saw: 1
   - type: DeleteOnExplosion
 
 - type: entity

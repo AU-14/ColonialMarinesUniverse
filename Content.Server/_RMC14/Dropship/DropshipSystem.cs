@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Server._CMU14.Dropship.TacticalLand;
 using Content.Server._RMC14.Marines;
 using Content.Server.AU14.Round;
+using Content.Server.AU14.ThirdParty;
 using Content.Server.Doors.Systems;
 using Content.Server.GameTicking;
 using Content.Server.Shuttles.Components;
@@ -31,12 +32,14 @@ using Content.Shared.CCVar;
 using Content.Shared.Coordinates;
 using Content.Shared.Database;
 using Content.Shared.Doors.Components;
+using Content.Shared.Interaction;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
 using Content.Shared.Timing;
+using Content.Shared.UserInterface;
 using Robust.Server.Audio;
 using Robust.Server.Containers;
 using Robust.Server.GameObjects;
@@ -87,6 +90,7 @@ public sealed class DropshipSystem : SharedDropshipSystem
     private bool _hijack;
 
     private const float DepartureLocationSearchRange = 12;
+    private const string ThirdPartyAutoReturnAnnouncement = "Automatic return to deep space in 2 minutes.";
 
     public override void Initialize()
     {
@@ -104,6 +108,7 @@ public sealed class DropshipSystem : SharedDropshipSystem
         SubscribeLocalEvent<DropshipComponent, FTLUpdatedEvent>(OnFTLUpdated);
 
         SubscribeLocalEvent<DropshipInFlyByComponent, FTLCompletedEvent>(OnInFlyByFTLCompleted);
+        SubscribeLocalEvent<ThirdPartyDropshipDeactivatedConsoleComponent, InteractHandEvent>(OnDeactivatedThirdPartyConsoleInteract);
 
         SubscribeLocalEvent<DropshipDestinationComponent, DropshipRelayedEvent<FTLStartedEvent>>(OnDepartureLocationFTLStarted);
         SubscribeLocalEvent<DropshipDestinationComponent, DropshipRelayedEvent<FTLCompletedEvent>>(OnDestinationLocationFTLCompleted);
@@ -293,6 +298,7 @@ public sealed class DropshipSystem : SharedDropshipSystem
         Dirty(grid, dropship);
 
         SetDocks(grid, args.DoorLocation);
+        RecordThirdPartyAutoReturnActivity(grid);
         OnRefreshUI((grid, dropship), ref args);
     }
 
@@ -300,7 +306,19 @@ public sealed class DropshipSystem : SharedDropshipSystem
     {
         ent.Comp.RemoteControl = !ent.Comp.RemoteControl;
         Dirty(ent, ent.Comp);
+
+        if (_transform.GetGrid(ent.Owner) is { } grid)
+            RecordThirdPartyAutoReturnActivity(grid);
+
         RefreshUI();
+    }
+
+    protected override void AfterNavigationOpen(Entity<DropshipNavigationComputerComponent> ent, ref AfterActivatableUIOpenEvent args)
+    {
+        if (_transform.GetGrid(ent.Owner) is not { } grid)
+            return;
+
+        RecordThirdPartyAutoReturnActivity(grid);
     }
 
     private void OnNavigationLockout(Entity<DropshipNavigationComputerComponent> ent, ref DropshipLockoutDoAfterEvent args)
@@ -340,6 +358,44 @@ public sealed class DropshipSystem : SharedDropshipSystem
             dropship.LastLandingCoordinates = GetNetCoordinates(destXform.Coordinates);
             Dirty(ent.Comp.Ship.Value, dropship);
         }
+
+        if (ent.Comp.Ship is { } landedDropship)
+            ArmThirdPartyAutoReturn(landedDropship, ent.Owner);
+
+        if (TryComp(ent.Owner, out ThirdPartyDropshipReturnDestinationComponent? returnDestination))
+            DisableReturnedThirdPartyDropship(args.Relayer, returnDestination);
+    }
+
+    private void DisableReturnedThirdPartyDropship(EntityUid dropship, ThirdPartyDropshipReturnDestinationComponent returnDestination)
+    {
+        if (returnDestination.Shuttle != dropship)
+            return;
+
+        EnsureComp<ThirdPartyDropshipReturnedComponent>(dropship);
+        EnsureComp<PreventFTLComponent>(dropship);
+
+        var children = Transform(dropship).ChildEnumerator;
+        while (children.MoveNext(out var child))
+        {
+            if (!HasComp<DropshipNavigationComputerComponent>(child))
+                continue;
+
+            _ui.CloseUis(child);
+            EnsureComp<ThirdPartyDropshipDeactivatedConsoleComponent>(child);
+            RemCompDeferred<DropshipNavigationComputerComponent>(child);
+            RemCompDeferred<ActivatableUIComponent>(child);
+        }
+
+        RefreshUI();
+    }
+
+    private void OnDeactivatedThirdPartyConsoleInteract(Entity<ThirdPartyDropshipDeactivatedConsoleComponent> ent, ref InteractHandEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        args.Handled = true;
+        _popup.PopupEntity("Shuttle has been deactivated.", ent.Owner, args.User, PopupType.MediumCaution);
     }
 
 
@@ -419,6 +475,24 @@ public sealed class DropshipSystem : SharedDropshipSystem
         if (!TryComp(dropshipId, out ShuttleComponent? shuttleComp))
         {
             Log.Warning($"Tried to launch {ToPrettyString(computer)} outside of a shuttle.");
+            return false;
+        }
+
+        if (HasComp<ThirdPartyDropshipReturnedComponent>(dropshipId.Value))
+        {
+            if (user != null)
+                _popup.PopupEntity("This dropship has returned to deep space and can no longer be routed.", computer.Owner, user.Value, PopupType.MediumCaution);
+
+            return false;
+        }
+
+        if (TryComp(destination, out ThirdPartyDropshipReturnDestinationComponent? returnDestination) &&
+            returnDestination.Shuttle != dropshipId.Value)
+        {
+            if (user != null)
+                _popup.PopupEntity("That return vector is not assigned to this dropship.", computer.Owner, user.Value, PopupType.MediumCaution);
+
+            Log.Warning($"{ToPrettyString(user)} tried to launch {ToPrettyString(dropshipId.Value)} to another third party dropship return destination {ToPrettyString(destination)}");
             return false;
         }
 
@@ -540,6 +614,7 @@ public sealed class DropshipSystem : SharedDropshipSystem
             destCoords = destCoords.Offset(new Vector2(-0.5f, -0.5f));
 
         _shuttle.FTLToCoordinates(dropshipId.Value, shuttleComp, destCoords, rotation, startupTime: startupTime, hyperspaceTime: hyperspaceTime);
+        ResetThirdPartyAutoReturnCountdown(dropshipId.Value);
 
         if (hijack)
         {
@@ -662,6 +737,12 @@ public sealed class DropshipSystem : SharedDropshipSystem
                 if (HasComp<Content.Shared._CMU14.Dropship.TacticalLand.EphemeralDropshipDestinationComponent>(uid))
                     continue;
 
+                if (TryComp(uid, out ThirdPartyDropshipReturnDestinationComponent? returnDestination) &&
+                    returnDestination.Shuttle != grid)
+                {
+                    continue;
+                }
+
                 if (IsStrictThirdPartyFaction(whitelistedFaction))
                 {
                     if (!IsThirdPartyDestination(comp))
@@ -703,7 +784,8 @@ public sealed class DropshipSystem : SharedDropshipSystem
                 destinations.Add(destination);
             }
 
-            var state = new DropshipNavigationDestinationsBuiState(flyBy, destinations, doorLockStatus, computer.Comp.RemoteControl);
+            var canTacticalLand = IsStrictThirdPartyFaction(whitelistedFaction);
+            var state = new DropshipNavigationDestinationsBuiState(flyBy, destinations, doorLockStatus, computer.Comp.RemoteControl, canTacticalLand);
             _ui.SetUiState(computer.Owner, DropshipNavigationUiKey.Key, state);
             return;
         }
@@ -748,6 +830,49 @@ public sealed class DropshipSystem : SharedDropshipSystem
         return string.Equals(destination.FactionController, "thirdparty", StringComparison.OrdinalIgnoreCase);
     }
 
+    private void ArmThirdPartyAutoReturn(EntityUid dropship, EntityUid destination)
+    {
+        if (!TryComp(dropship, out ThirdPartyDropshipAutoReturnComponent? autoReturn))
+            return;
+
+        autoReturn.ReturnAt = null;
+        autoReturn.NextWarningAt = TimeSpan.Zero;
+
+        if (destination == autoReturn.ReturnDestination ||
+            HasComp<ThirdPartyDropshipReturnDestinationComponent>(destination) ||
+            HasComp<ThirdPartyDropshipReturnedComponent>(dropship))
+        {
+            Dirty(dropship, autoReturn);
+            return;
+        }
+
+        autoReturn.LastActivity = _timing.CurTime;
+        Dirty(dropship, autoReturn);
+    }
+
+    private void RecordThirdPartyAutoReturnActivity(EntityUid dropship)
+    {
+        if (!TryComp(dropship, out ThirdPartyDropshipAutoReturnComponent? autoReturn) ||
+            autoReturn.ReturnAt != null)
+        {
+            return;
+        }
+
+        autoReturn.LastActivity = _timing.CurTime;
+        Dirty(dropship, autoReturn);
+    }
+
+    private void ResetThirdPartyAutoReturnCountdown(EntityUid dropship)
+    {
+        if (!TryComp(dropship, out ThirdPartyDropshipAutoReturnComponent? autoReturn))
+            return;
+
+        autoReturn.LastActivity = _timing.CurTime;
+        autoReturn.ReturnAt = null;
+        autoReturn.NextWarningAt = TimeSpan.Zero;
+        Dirty(dropship, autoReturn);
+    }
+
     protected override bool IsShuttle(EntityUid dropship)
     {
         return HasComp<ShuttleComponent>(dropship);
@@ -787,6 +912,126 @@ public sealed class DropshipSystem : SharedDropshipSystem
         while (computers.MoveNext(out var uid, out var comp))
         {
             RefreshUI((uid, comp));
+        }
+    }
+
+    private void UpdateThirdPartyAutoReturn(TimeSpan time)
+    {
+        var query = EntityQueryEnumerator<ThirdPartyDropshipAutoReturnComponent, DropshipComponent>();
+        while (query.MoveNext(out var uid, out var autoReturn, out var dropship))
+        {
+            if (dropship.Crashed ||
+                HasComp<ThirdPartyDropshipReturnedComponent>(uid) ||
+                TryComp(uid, out FTLComponent? _))
+            {
+                continue;
+            }
+
+            if (dropship.Destination is not { } destination ||
+                destination == autoReturn.ReturnDestination ||
+                HasComp<ThirdPartyDropshipReturnDestinationComponent>(destination))
+            {
+                if (autoReturn.ReturnAt != null || autoReturn.NextWarningAt != TimeSpan.Zero)
+                {
+                    autoReturn.ReturnAt = null;
+                    autoReturn.NextWarningAt = TimeSpan.Zero;
+                    Dirty(uid, autoReturn);
+                }
+
+                continue;
+            }
+
+            if (autoReturn.LastActivity == TimeSpan.Zero)
+            {
+                autoReturn.LastActivity = time;
+                Dirty(uid, autoReturn);
+            }
+
+            if (autoReturn.ReturnAt is not { } returnAt)
+            {
+                if (time < autoReturn.LastActivity + autoReturn.InactivityDelay)
+                    continue;
+
+                returnAt = time + autoReturn.ReturnDelay;
+                autoReturn.ReturnAt = returnAt;
+                autoReturn.NextWarningAt = time;
+                Dirty(uid, autoReturn);
+
+                LockAllDocks(uid);
+                RefreshUI();
+            }
+
+            if (time >= autoReturn.NextWarningAt && time < returnAt)
+            {
+                _popup.PopupEntity(ThirdPartyAutoReturnAnnouncement, uid, PopupType.LargeCaution);
+                autoReturn.NextWarningAt = time + autoReturn.WarningInterval;
+                Dirty(uid, autoReturn);
+            }
+
+            if (time >= returnAt)
+                AutoReturnThirdPartyDropship(uid, autoReturn);
+        }
+    }
+
+    private void AutoReturnThirdPartyDropship(EntityUid dropship, ThirdPartyDropshipAutoReturnComponent autoReturn)
+    {
+        if (!autoReturn.ReturnDestination.Valid ||
+            TerminatingOrDeleted(autoReturn.ReturnDestination))
+        {
+            Log.Warning($"Third party dropship {ToPrettyString(dropship)} has no valid deep space return destination.");
+            autoReturn.ReturnAt = _timing.CurTime + TimeSpan.FromSeconds(10);
+            Dirty(dropship, autoReturn);
+            return;
+        }
+
+        if (!TryGetDropshipNavigationComputer(dropship, out var computer))
+        {
+            Log.Warning($"Third party dropship {ToPrettyString(dropship)} has no navigation computer for automatic return.");
+            autoReturn.ReturnAt = _timing.CurTime + TimeSpan.FromSeconds(10);
+            Dirty(dropship, autoReturn);
+            return;
+        }
+
+        autoReturn.ReturnAt = null;
+        autoReturn.NextWarningAt = TimeSpan.Zero;
+        Dirty(dropship, autoReturn);
+
+        _popup.PopupEntity("Automatic return to deep space commencing.", dropship, PopupType.LargeCaution);
+        if (!FlyTo(computer, autoReturn.ReturnDestination, null))
+        {
+            autoReturn.ReturnAt = _timing.CurTime + TimeSpan.FromSeconds(10);
+            Dirty(dropship, autoReturn);
+        }
+    }
+
+    private bool TryGetDropshipNavigationComputer(EntityUid dropship, out Entity<DropshipNavigationComputerComponent> computer)
+    {
+        var children = Transform(dropship).ChildEnumerator;
+        while (children.MoveNext(out var child))
+        {
+            if (!TryComp(child, out DropshipNavigationComputerComponent? nav))
+                continue;
+
+            computer = (child, nav);
+            return true;
+        }
+
+        computer = default;
+        return false;
+    }
+
+    private void LockAllDocks(EntityUid dropship)
+    {
+        var enumerator = Transform(dropship).ChildEnumerator;
+        while (enumerator.MoveNext(out var child))
+        {
+            if (!_dockingQuery.HasComp(child) ||
+                !_doorBoltQuery.HasComp(child))
+            {
+                continue;
+            }
+
+            LockDoor(child);
         }
     }
 
@@ -984,6 +1229,7 @@ public sealed class DropshipSystem : SharedDropshipSystem
         base.Update(frameTime);
 
         var time = _timing.CurTime;
+        UpdateThirdPartyAutoReturn(time);
 
         var dropships = EntityQueryEnumerator<DropshipComponent, FTLComponent>();
         while (dropships.MoveNext(out var uid, out var dropship, out var ftl))

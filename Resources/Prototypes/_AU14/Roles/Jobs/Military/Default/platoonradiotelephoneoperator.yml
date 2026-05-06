@@ -70,7 +70,7 @@
   id: AU14GearGOVFORRadioTelephoneOperator
   equipment:
     id: AU14JobIDCardGOVFORRadioTelephoneOperator
-    ears: AU14HeadsetSectionMarine
+    ears: AU14HeadsetSectionMarineFTL
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORRadioTelephoneOperator
@@ -88,4 +88,4 @@
     shoes: CMBootsBrown
     head: AU14JungleBoonieHat
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetSectionMarine
+    ears: AU14HeadsetSectionMarineFTL

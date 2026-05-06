@@ -147,6 +147,120 @@
     CMTricordrazine: 2
 
 - type: reaction
+  id: CMUParacetamol
+  reactants:
+    CMInaprovaline:
+      amount: 1
+    RMCHydrogen:
+      amount: 1
+    RMCSugar:
+      amount: 1
+  products:
+    CMUParacetamol: 3
+
+- type: reaction
+  id: CMUTramadol
+  reactants:
+    CMUParacetamol:
+      amount: 1
+    CMDylovene:
+      amount: 1
+    RMCHydrogen:
+      amount: 1
+  products:
+    CMUTramadol: 3
+
+- type: reaction
+  id: CMUOxycodone
+  reactants:
+    CMUTramadol:
+      amount: 1
+    CMEpinephrine:
+      amount: 1
+    RMCEthanol:
+      amount: 1
+  products:
+    CMUOxycodone: 3
+
+- type: reaction
+  id: CMUHepatocytin
+  reactants:
+    CMDylovene:
+      amount: 1
+    CMBicaridine:
+      amount: 1
+    RMCCarbon:
+      amount: 1
+  products:
+    CMUHepatocytin: 3
+
+- type: reaction
+  id: CMUPulmovine
+  reactants:
+    CMDexalinPlus:
+      amount: 1
+    CMBicaridine:
+      amount: 1
+    RMCOxygen:
+      amount: 1
+  products:
+    CMUPulmovine: 3
+
+- type: reaction
+  id: CMUNephronate
+  reactants:
+    CMDylovene:
+      amount: 1
+    CMEpinephrine:
+      amount: 1
+    RMCPotassium:
+      amount: 1
+  products:
+    CMUNephronate: 3
+
+- type: reaction
+  id: CMUCardiocaine
+  reactants:
+    CMEpinephrine:
+      amount: 1
+    CMBicaridine:
+      amount: 1
+    RMCIron:
+      amount: 1
+  products:
+    CMUCardiocaine: 3
+
+- type: reaction
+  id: CMUOsteoCalc
+  reactants:
+    CMBicaridine:
+      amount: 1
+    CMKelotane:
+      amount: 1
+    RMCPhosphorus:
+      amount: 1
+  products:
+    CMUOsteoCalc: 3
+
+- type: reaction
+  id: CMUBiogenicMatrix
+  reactants:
+    CMBicaridine:
+      amount: 2
+    CMDermaline:
+      amount: 2
+    CMUOsteoCalc:
+      amount: 2
+    Protein:
+      amount: 3
+    RMCIron:
+      amount: 1
+    Water:
+      amount: 2
+  products:
+    CMUBiogenicMatrix: 10
+
+- type: reaction
   id: CMMeralyne
   reactants:
     RMCCarbon:

@@ -16,7 +16,7 @@
   - type: Sprite
     sprite: _AU14/Clothing/RMC/back/frame_2.rsi
   - type: Storage
-    maxItemSize: Huge
+    maxItemSize: Large
     grid:
     - 0,0,22,1
 
@@ -38,7 +38,7 @@
   - type: Sprite
     sprite: _AU14/Clothing/RMC/back/medic.rsi
   - type: Storage
-    maxItemSize: Huge
+    maxItemSize: Large
     grid:
     - 0,0,18,1
 
@@ -51,7 +51,7 @@
   - type: Sprite
     sprite: _AU14/Clothing/RMC/back/large.rsi
   - type: Storage
-    maxItemSize: Huge
+    maxItemSize: Large
     grid:
     - 0,0,25,1
 
@@ -63,3 +63,4 @@
   components:
   - type: Sprite
     sprite: _AU14/Clothing/RMC/back/sapper.rsi
+

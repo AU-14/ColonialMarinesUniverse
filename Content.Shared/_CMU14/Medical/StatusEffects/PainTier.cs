@@ -38,13 +38,27 @@ public static class PainTierThresholds
     ///     trigger immediately on the boundary.
     /// </summary>
     public static PainTier Get(PainTier currentTier, FixedPoint2 pain, float hysteresis = DefaultHysteresis)
+        => Get(currentTier, pain, hysteresis, UpwardThresholds[3]);
+
+    public static PainTier Get(
+        PainTier currentTier,
+        FixedPoint2 pain,
+        float hysteresis,
+        FixedPoint2 shockThreshold)
     {
         var hyst = (FixedPoint2)hysteresis;
+        var upwardThresholds = new[]
+        {
+            UpwardThresholds[0],
+            UpwardThresholds[1],
+            UpwardThresholds[2],
+            shockThreshold,
+        };
 
         var upTier = PainTier.None;
-        for (var i = 0; i < UpwardThresholds.Length; i++)
+        for (var i = 0; i < upwardThresholds.Length; i++)
         {
-            if (pain >= UpwardThresholds[i])
+            if (pain >= upwardThresholds[i])
                 upTier = (PainTier)(i + 1);
             else
                 break;
@@ -55,7 +69,7 @@ public static class PainTierThresholds
 
         if (currentTier > PainTier.None)
         {
-            var downBoundary = UpwardThresholds[(int)currentTier - 1] - hyst;
+            var downBoundary = upwardThresholds[(int)currentTier - 1] - hyst;
             if (pain >= downBoundary)
                 return currentTier;
         }

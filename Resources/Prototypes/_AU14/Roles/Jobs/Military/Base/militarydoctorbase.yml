@@ -1,8 +1,8 @@
 - type: job
   parent: CMJobBase
   id: AU14JobMilitaryDoctorBase
-  name: au14-job-name-govforsquadsergeant
-  description: au14-job-description-govforsquadsergeant
+  name: au14-job-name-govforMilitaryDoctor
+  description: au14-job-description-govforMilitaryDoctor
   playTimeTracker: AU14JobGOVFORMilitaryDoctor
   basePlaytimeTracker: true
   hidden: true

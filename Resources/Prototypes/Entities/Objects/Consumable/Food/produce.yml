@@ -57,6 +57,7 @@
   - type: Tag
     tags:
     - Wheat
+    - CMUGrain
 
 - type: entity
   name: meatwheat bushel
@@ -81,6 +82,9 @@
       path: /Audio/Voice/Slime/slime_squish.ogg
   - type: Produce
     seedId: meatwheat
+  - type: Tag
+    tags:
+    - CMUGrain
 
 - type: entity
   name: oat bushel
@@ -103,6 +107,9 @@
       reagents:
       - ReagentId: MilkOat
         Quantity: 5
+  - type: Tag
+    tags:
+    - CMUGrain
 
 - type: entity
   name: sugarcane
@@ -122,6 +129,10 @@
           Quantity: 10
   - type: Produce
     seedId: sugarcane
+    #literally not a grain but it's a grass so wtv
+  - type: Tag
+    tags:
+    - CMUGrain
 
 - type: entity
   name: papercane roll
@@ -139,6 +150,9 @@
   - type: Log
     spawnedPrototype: SheetPaper1
     spawnCount: 2
+  - type: Tag
+    tags:
+    - CMUGrain
 
 - type: entity
   parent: FoodProduceBase
@@ -197,7 +211,7 @@
     spawnCount: 1
   - type: Tag
     tags:
-       - AUwood
+    - AUwood
 
 - type: entity
   name: steel-cap log
@@ -219,6 +233,9 @@
   - type: Log
     spawnedPrototype: SheetSteel1
     spawnCount: 1
+  - type: Tag
+    tags:
+    - AUwood
 
 - type: entity
   name: nettle
@@ -1958,6 +1975,9 @@
           Quantity: 10
   - type: Produce
     seedId: rice
+  - type: Tag
+    tags:
+    - CMUGrain
 
 - type: entity
   name: soybeans

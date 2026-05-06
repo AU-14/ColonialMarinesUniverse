@@ -1,3 +1,11 @@
 ﻿- type: lobbyBackground
   id: AU14LobbyDropship
   background: /Textures/_AU14/Lobby/Dropship.png
+
+- type: lobbyBackground
+  id: AU14LobbyCLF
+  background: /Textures/_AU14/Lobby/CLF.png
+
+- type: lobbyBackground
+  id: AU14LobbyHAZOPS
+  background: /Textures/_AU14/Lobby/HAZOPS.png

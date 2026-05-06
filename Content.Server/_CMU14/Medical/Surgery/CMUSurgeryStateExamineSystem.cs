@@ -15,21 +15,25 @@ public sealed class CMUSurgeryStateExamineSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<CMUHumanMedicalComponent, ExaminedEvent>(OnPatientExamined);
+        SubscribeLocalEvent<ExaminedEvent>(OnPatientExamined);
         SubscribeLocalEvent<BodyPartComponent, ExaminedEvent>(OnPartExamined);
     }
 
-    private void OnPatientExamined(Entity<CMUHumanMedicalComponent> ent, ref ExaminedEvent args)
+    private void OnPatientExamined(ExaminedEvent args)
     {
         if (!args.IsInDetailsRange)
             return;
 
-        if (!TryComp<CMUSurgeryInProgressComponent>(ent, out var lockComp))
+        var patient = args.Examined;
+        if (!HasComp<CMUHumanMedicalComponent>(patient))
+            return;
+
+        if (!TryComp<CMUSurgeryInProgressComponent>(patient, out var lockComp))
             return;
         if (!TryComp<CMUSurgeryInFlightComponent>(lockComp.Part, out var flight))
             return;
 
-        var nextStep = ResolveNextStepLabel(ent, lockComp.Part, flight.LeafSurgeryId);
+        var nextStep = ResolveNextStepLabel(patient, lockComp.Part, flight.LeafSurgeryId);
         args.PushMarkup(Loc.GetString(
             "cmu-medical-surgery-examine-patient-in-progress",
             ("surgery", flight.LeafSurgeryDisplayName),
@@ -60,18 +64,18 @@ public sealed class CMUSurgeryStateExamineSystem : EntitySystem
     private string ResolveNextStepLabel(EntityUid body, EntityUid part, string leafSurgeryId)
     {
         if (_rmcSurgery.GetSingleton(leafSurgeryId) is not { } surgeryEnt)
-            return "—";
+            return "-";
         var bodyForLookup = body.IsValid() ? body : part;
         var next = _rmcSurgery.GetNextStep(bodyForLookup, part, surgeryEnt);
         if (next is null)
-            return "—";
+            return "-";
 
         var (nextSurgery, stepIdx) = next.Value;
         if (stepIdx < 0 || stepIdx >= nextSurgery.Comp.Steps.Count)
-            return "—";
+            return "-";
         var stepProtoId = nextSurgery.Comp.Steps[stepIdx];
         if (_rmcSurgery.GetSingleton(stepProtoId) is not { } stepEnt)
-            return "—";
+            return "-";
         return MetaData(stepEnt).EntityName;
     }
 }

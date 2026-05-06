@@ -402,7 +402,9 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
         AddDebugMovementDecision(uid, grid, mover.Position, directTarget, forward, DebugMovementDecisionKind.DirectBlocked, false);
 
-        if (TryGetBlockingMobBypassCorrection(
+        var blockedByVehicleMob = HasBlockingVehicleMob(mover, _directMoveBlockers);
+        if (!blockedByVehicleMob &&
+            TryGetBlockingMobBypassCorrection(
                 uid,
                 mover,
                 grid,
@@ -420,7 +422,10 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 return true;
         }
 
-        if (TryGetLaneCorrection(
+        // Blocking xenos are meant to stop vehicles, not become soft obstacles
+        // that the lane solver can slide around with enough speed.
+        if (!blockedByVehicleMob &&
+            TryGetLaneCorrection(
                 uid,
                 mover,
                 grid,
@@ -992,6 +997,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             maxSpeed *= overcharge.SpeedMultiplier;
         if (TryComp<VehicleSpeedModifierComponent>(uid, out var speedMod))
             maxSpeed *= speedMod.SpeedMultiplier;
+        if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failureMod))
+            maxSpeed *= failureMod.SpeedMultiplier;
         if (HasXenoOccupant(uid))
             maxSpeed *= XenoOnboardSpeedMultiplier;
 
@@ -1009,6 +1016,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             maxSpeed *= overcharge.SpeedMultiplier;
         if (TryComp<VehicleSpeedModifierComponent>(uid, out var speedMod))
             maxSpeed *= speedMod.SpeedMultiplier;
+        if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failureMod))
+            maxSpeed *= failureMod.ReverseSpeedMultiplier;
         if (HasXenoOccupant(uid))
             maxSpeed *= XenoOnboardSpeedMultiplier;
 
@@ -1037,6 +1046,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         var multiplier = 1f;
         if (TryComp<VehicleAccelerationModifierComponent>(uid, out var accelMod))
             multiplier = MathF.Max(0.05f, accelMod.AccelerationMultiplier);
+        if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failureMod))
+            multiplier *= MathF.Max(0.05f, failureMod.AccelerationMultiplier);
 
         if (HasXenoOccupant(uid))
             multiplier *= XenoOnboardAccelerationMultiplier;

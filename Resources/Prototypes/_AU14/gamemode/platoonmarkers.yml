@@ -75,6 +75,18 @@
     govfor: false
     class: Weapons
 
+- type: entity
+  name: OPFOR requisitions vendor marker
+  id: VMarkeropforrequisitionsvendor
+  parent: Vmarker
+  components:
+  - type: VendorMarker
+    govfor: false
+    opfor: true
+    class: ReqVend
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+    state: base
 
 - type: entity
   name: Opfor command marker
@@ -196,6 +208,18 @@
       opfor: false
       class: Clothing
 
+- type: entity
+  name: Govfor requisitions vendor marker
+  id: VMarkergovforrequisitionsvendor
+  parent: Vmarker
+  components:
+  - type: VendorMarker
+    govfor: true
+    opfor: false
+    class: ReqVend
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+    state: base
 
 - type: entity
   name: Ship Clothing marker
@@ -211,7 +235,19 @@
     sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
     state: base
 
-
+- type: entity
+  name: Ship requisitions vendor marker
+  id: VMarkershiprequisitionsvendor
+  parent: Vmarker
+  components:
+  - type: VendorMarker
+    govfor: false
+    opfor: false
+    class: ReqVend
+    ship: true
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+    state: base
 
 - type: entity
   name: Gov Weapons marker

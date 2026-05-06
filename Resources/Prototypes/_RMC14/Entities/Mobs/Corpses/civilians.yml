@@ -404,6 +404,23 @@
         Slash: 77
         Blunt: 43
 
+# Guidebook Marine
+- type: entity
+  id: RMCGuidebookCorpseMarine
+  parent: MobHuman
+  name: Dead Marine
+  categories: [ DoNotMap, HideSpawnMenu ]
+  components:
+  - type: Loadout
+    prototypes: [ CMGearRiflemanEquipped ]
+  - type: Damageable
+    damage:
+      types:
+        Bloodloss: 36
+        Asphyxiation: 44
+        Slash: 77
+        Blunt: 43
+
 # CMB Riot Control Officer
 - type: randomHumanoidSettings
   parent: RMCCorpse

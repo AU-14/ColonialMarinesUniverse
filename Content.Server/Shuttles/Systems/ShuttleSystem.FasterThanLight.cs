@@ -6,6 +6,7 @@ using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Station.Events;
 using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.Water;
 using Content.Shared.Body.Components;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
@@ -1019,8 +1020,9 @@ public sealed partial class ShuttleSystem
                     continue;
                 }
 
-                // If it has the FTLSmashImmuneComponent ignore it.
-                if (_immuneQuery.HasComponent(ent))
+                // Preserve floor-like water overlays so they reappear when the shuttle leaves.
+                if (_immuneQuery.HasComponent(ent) ||
+                    HasComp<RMCWaterComponent>(ent))
                 {
                     continue;
                 }

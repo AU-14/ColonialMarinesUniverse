@@ -79,3 +79,21 @@
     layers:
       - state: box
       - state: vials
+
+- type: entity
+  name: bottle box
+  parent: BoxCardboard
+  id: BoxBottle
+  description: A box full of empty bottles.
+  components:
+  - type: Storage
+    grid:
+    - 0,0,2,1
+  - type: StorageFill
+    contents:
+      - id: ChemistryEmptyBottle01
+        amount: 6
+  - type: Sprite
+    layers:
+      - state: box
+      - state: vials

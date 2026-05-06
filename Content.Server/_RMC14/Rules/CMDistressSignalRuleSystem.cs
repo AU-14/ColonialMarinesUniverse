@@ -178,7 +178,6 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
     private float _maximumSurvivors;
     private float _minimumSurvivors;
     private int _mapVoteExcludeLast;
-    private bool _useCarryoverVoting;
     private readonly TimeSpan _hijackStunTime = TimeSpan.FromSeconds(5);
     private bool _landingZoneMiasmaEnabled;
     private TimeSpan _sunsetDuration;
@@ -213,8 +212,6 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
     public string? OperationName { get; private set; }
 
     public string? ActiveNightmareScenario { get; set; }
-
-    private readonly Dictionary<EntProtoId<RMCPlanetMapPrototypeComponent>, int> _carryoverVotes = new();
 
     private IVoteHandle? _currentVote;
 
@@ -253,7 +250,6 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
         Subs.CVar(_config, RMCCVars.RMCSurvivorsMaximum, v => _maximumSurvivors = v, true);
         Subs.CVar(_config, RMCCVars.RMCSurvivorsMinimum, v => _minimumSurvivors = v, true);
         Subs.CVar(_config, RMCCVars.RMCPlanetMapVoteExcludeLast, v => _mapVoteExcludeLast = v, true);
-        Subs.CVar(_config, RMCCVars.RMCUseCarryoverVoting, v => _useCarryoverVoting = v, true);
         Subs.CVar(_config, RMCCVars.RMCLandingZoneMiasmaEnabled, v => _landingZoneMiasmaEnabled = v, true);
         Subs.CVar(_config, RMCCVars.RMCSunsetDuration, v => _sunsetDuration = TimeSpan.FromSeconds(v), true);
         Subs.CVar(_config, RMCCVars.RMCSunriseDuration, v => _sunriseDuration = TimeSpan.FromSeconds(v), true);
@@ -1735,25 +1731,12 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
             return;
 
         var planets = _rmcPlanet.GetCandidatesInRotation();
-        if (!_useCarryoverVoting)
-        {
-            foreach (var planet in planets)
-            {
-                _carryoverVotes[planet.Proto.ID] = 0;
-            }
-        }
-
         planets.RemoveAll(p => _lastPlanetMaps.Contains(p.Proto.ID));
 
         var options = new List<(string text, object data)>();
         foreach (var planet in planets)
         {
-            var name = planet.Proto.Name;
-            var votes = _carryoverVotes.GetValueOrDefault(planet.Proto.ID);
-            if (votes > 0)
-                name = $"{name} [+{votes}]";
-
-            options.Add((name, planet.Comp.MapId.ToString()));
+            options.Add((planet.Proto.Name, planet.Comp.MapId.ToString()));
         }
 
         var vote = new VoteOptions
@@ -1769,30 +1752,17 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
         {
             _currentVote = null;
             RMCPlanet picked;
-
-            var adjustedVotes = planets
-                .Zip(args.Votes, (planet, newVotes) => (
-                    planet,
-                    newVotes,
-                    totalVotes: newVotes + _carryoverVotes.GetValueOrDefault(planet.Proto.ID)
-                ))
-                .ToList();
-            var maxVotes = adjustedVotes.Max(v => v.totalVotes);
-            var winningMaps = adjustedVotes
-                .Where(v => v.totalVotes == maxVotes)
-                .Select(v => v.planet)
-                .ToList();
+            var totalVotes = planets.Zip(args.Votes, (planet, votes) => (planet, votes)).ToList();
+            var maxVotes = totalVotes.Max(v => v.votes);
+            var winningMaps = totalVotes.Where(v => v.votes == maxVotes).Select(v => v.planet).ToList();
 
             var sb = new StringBuilder();
             sb.AppendLine(Loc.GetString("rmc-distress-signal-next-map-header"));
-            foreach (var result in adjustedVotes)
+            foreach (var result in totalVotes)
             {
-                sb.AppendLine(Loc.GetString(result.newVotes > 0
-                    ? "rmc-distress-signal-next-map-votes-new"
-                    : "rmc-distress-signal-next-map-votes",
+                sb.AppendLine(Loc.GetString("rmc-distress-signal-next-map-votes",
                     ("map", result.planet.Proto.Name),
-                    ("votes", result.totalVotes),
-                    ("newVotes", result.newVotes)));
+                    ("votes", result.votes)));
             }
 
             if (winningMaps.Count > 1)
@@ -1803,6 +1773,7 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
                     sb.AppendLine($"    {map.Proto.Name}");
                 }
                 picked = _random.Pick(winningMaps);
+                args.ResolveWinner(picked.Comp.MapId.ToString());
             }
             else
             {
@@ -1811,14 +1782,6 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
             sb.AppendLine(Loc.GetString("rmc-distress-signal-next-map-win", ("winner", picked.Proto.Name)));
 
             _chatManager.DispatchServerAnnouncement(sb.ToString());
-
-            foreach (var (planet, votes) in planets.Zip(args.Votes))
-            {
-                var id = planet.Proto.ID;
-                _carryoverVotes[id] = _useCarryoverVoting ? _carryoverVotes.GetValueOrDefault(id) + votes : 0;
-            }
-
-            _carryoverVotes[picked.Proto.ID] = 0;
             SelectedPlanetMap = picked;
         };
         _currentVote.OnCancelled += _ => _currentVote = null;
@@ -2039,6 +2002,9 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
 
     private void OnXenoComponentInit(Entity<XenoComponent> ent, ref ComponentInit args)
     {
+        if (!TryComp<HiveComponent>(TheHive, out _))
+            return;
+
         _hive.SetHive(ent.Owner, TheHive);
         if (!_queenBuildingBoostEnabled)
             return;

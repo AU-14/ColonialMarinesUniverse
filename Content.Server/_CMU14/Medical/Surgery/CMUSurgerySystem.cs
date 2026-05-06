@@ -27,6 +27,7 @@ public sealed class CMUSurgerySystem : SharedCMUSurgerySystem
     [Dependency] private readonly SharedStatusEffectsSystem _status = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedBodyPartHealthSystem _partHealth = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     protected override void ApplyOrganRemovalSideEffects(EntityUid user, EntityUid body, EntityUid organ, string slot)
     {
@@ -109,6 +110,32 @@ public sealed class CMUSurgerySystem : SharedCMUSurgerySystem
         TryClearMissingLimbStatus(body, limbPart.PartType, limbPart.Symmetry);
 
         _popup.PopupEntity(Loc.GetString("cmu-medical-reattach-success"), body, user, PopupType.Medium);
+    }
+
+    protected override void ApplyLimbRemoval(EntityUid user, EntityUid body, EntityUid part)
+    {
+        if (!HasComp<CMUHumanMedicalComponent>(body))
+            return;
+
+        if (!TryComp<BodyPartComponent>(part, out var limbPart))
+            return;
+
+        if (limbPart.Body != body)
+            return;
+
+        if (limbPart.PartType is not (BodyPartType.Arm or BodyPartType.Leg))
+            return;
+
+        if (TryComp<TransformComponent>(body, out var bodyXform))
+            _transform.SetCoordinates(part, bodyXform.Coordinates);
+
+        _transform.AttachToGridOrMap(part);
+
+        if (StatusForPart(limbPart.PartType, limbPart.Symmetry) is { } statusProto)
+            _status.TrySetStatusEffectDuration(body, statusProto, duration: null);
+
+        _hands.TryPickupAnyHand(user, part, checkActionBlocker: false);
+        _popup.PopupEntity(Loc.GetString("cmu-medical-amputation-success"), body, user, PopupType.Medium);
     }
 
     private bool TryGetHeldLimb(EntityUid surgeon, out EntityUid limb, out BodyPartComponent limbPart)

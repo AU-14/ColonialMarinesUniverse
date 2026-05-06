@@ -8,6 +8,7 @@
   - AU14JobCLFGuerilla
   - AU14JobCLFCellLeader
   - AU14JobCLFPhysician
+  - AU14JobCLFSurgeon
   departmentRadio: null
   headOfDepartment: null
   faction: colonist

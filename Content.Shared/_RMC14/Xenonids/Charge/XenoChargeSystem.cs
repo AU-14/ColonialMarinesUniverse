@@ -333,8 +333,6 @@ public sealed class XenoChargeSystem : EntitySystem
             if (!_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, xeno.Comp.PlasmaCost))
                 return;
         }
-        if (!_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, xeno.Comp.PlasmaCost))
-            return;
 
         args.Handled = true;
 
@@ -378,7 +376,7 @@ public sealed class XenoChargeSystem : EntitySystem
         XenoCrusherChargableComponent? crush = null;
         var isValidTarget = _xeno.CanAbilityAttackTarget(xeno, targetId);
 
-        if (!isValidTarget && !TryComp(targetId, out crush) && !HasComp<DamageableComponent>(targetId))
+        if (!isValidTarget && !TryComp(targetId, out crush))
             return;
 
         if (xeno.Comp.AlreadyHit.Contains(targetId))

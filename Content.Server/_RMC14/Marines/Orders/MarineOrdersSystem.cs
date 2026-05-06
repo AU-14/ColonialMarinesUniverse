@@ -14,13 +14,13 @@ public sealed class MarineOrdersSystem : SharedMarineOrdersSystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<MarineOrdersComponent, MapInitEvent>(OnOrdersMapInit);
+        SubscribeLocalEvent<MarineOrdersComponent, ComponentStartup>(OnOrdersStartup);
         SubscribeLocalEvent<MarineOrdersComponent, ComponentShutdown>(OnOrdersShutdown);
     }
-
-    private void OnOrdersMapInit(Entity<MarineOrdersComponent> ent, ref MapInitEvent ev)
+    private void OnOrdersStartup(Entity<MarineOrdersComponent> ent, ref ComponentStartup ev)
     {
         var comp = ent.Comp;
+        if (comp.MoveActionEntity != null || comp.HoldActionEntity != null || comp.FocusActionEntity != null) return;
 
         // All the SetUseDelay calls are required because even tho we set the cooldown on all of them once an order
         // is issued for some reason the order that was pressed uses its delays and does not care about its cooldown

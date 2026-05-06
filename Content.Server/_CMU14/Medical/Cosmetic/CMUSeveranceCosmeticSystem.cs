@@ -22,6 +22,7 @@ public sealed class CMUSeveranceCosmeticSystem : EntitySystem
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly CMUMedicalVisibilitySystem _medicalVisibility = default!;
 
     /// <summary>
     ///     Bodies queued for next-tick hand-removal / shoe-drop / force-down.
@@ -69,6 +70,8 @@ public sealed class CMUSeveranceCosmeticSystem : EntitySystem
 
     private void OnPartRemoved(Entity<CMUHumanMedicalComponent> ent, ref BodyPartRemovedEvent args)
     {
+        _medicalVisibility.RefreshSubtree(args.Part.Owner);
+
         var partType = args.Part.Comp.PartType;
         var symmetry = args.Part.Comp.Symmetry;
 
@@ -100,6 +103,8 @@ public sealed class CMUSeveranceCosmeticSystem : EntitySystem
 
     private void OnPartAdded(Entity<CMUHumanMedicalComponent> ent, ref BodyPartAddedEvent args)
     {
+        _medicalVisibility.RefreshSubtree(args.Part.Owner);
+
         var partType = args.Part.Comp.PartType;
         var symmetry = args.Part.Comp.Symmetry;
 

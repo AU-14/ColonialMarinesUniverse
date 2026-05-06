@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Plasma;
+using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared.Actions;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
@@ -35,6 +36,7 @@ public sealed class XenoStompSystem : EntitySystem
     [Dependency] private readonly XenoSystem _xeno = default!;
     [Dependency] private readonly RMCSizeStunSystem _size = default!;
     [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private readonly SharedHitLocationSystem _hitLocation = default!;
 
     public override void Initialize()
     {
@@ -97,6 +99,7 @@ public sealed class XenoStompSystem : EntitySystem
         if (_net.IsServer)
             _audio.PlayPvs(xeno.Comp.Sound, xeno);
 
+        using var targetingSuppression = _hitLocation.SuppressBodyZoneTargeting(xeno.Owner);
         foreach (var receiver in _receivers)
         {
             if (!_xeno.CanAbilityAttackTarget(xeno, receiver))

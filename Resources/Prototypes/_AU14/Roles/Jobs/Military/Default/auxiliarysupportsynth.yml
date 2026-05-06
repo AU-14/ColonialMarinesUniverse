@@ -97,10 +97,4 @@
 - type: startingGear
   id: AU14GearGOVFORAuxSupportSynthDummy
   equipment:
-    gloves: CMHandsInsulated
-    shoes: CMBootsBlackFilled
-    jumpsuit: AU14CivilianBoilerSuitDarkBlueSynth
-    belt: CMUBeltMedicBagSupportSynth
     head: AU14CivBallCapBlack
-    back: AU14SmartpackBlackFilled
-    eyes: RMCGlassesMedicalHUDGlasses

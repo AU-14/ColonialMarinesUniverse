@@ -6,6 +6,7 @@
   frequency: 1431
   color: "#318779"
   longRange: true
+  tower: true
 
 # High Command
 - type: radioChannel
@@ -16,8 +17,6 @@
   color: "#318779"
   longRange: true
 
-
-
 - type: radioChannel
   id: opfor
   name: chat-radio-opfor
@@ -25,6 +24,7 @@
   frequency: 1601
   color: "#bb91d8"
   longRange: true
+  tower: true
   faction: "opfor"
 
 - type: radioChannel
@@ -34,6 +34,7 @@
   frequency: 1479
   color: "#5b96d4"
   longRange: true
+  tower: true
   faction: "opfor"
 
 - type: radioChannel
@@ -43,6 +44,7 @@
   frequency: 1474
   color: "#ad3b98"
   longRange: true
+  tower: true
   faction: "opfor"
 
 - type: radioChannel
@@ -52,6 +54,7 @@
   frequency: 1602
   color: "#e4860c"
   longRange: true
+  tower: true
   faction: "opfor"
 
 - type: radioChannel
@@ -61,6 +64,7 @@
   frequency: 1603
   color: "#c6c1a8"
   longRange: true
+  tower: true
   faction: "opfor"
 
 - type: radioChannel
@@ -70,7 +74,26 @@
   frequency: 1604
   color: "#bb44bd"
   longRange: true
+  tower: true
   faction: "opfor"
+
+- type: radioChannel
+  id: GovforCommand
+  name: chat-radio-marine-command
+  keycode: "v" #v in cm13
+  frequency: 2592
+  color: "#5b96d4"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: GovforJTAC
+  name: chat-radio-marine-jtac
+  keycode: "j" #j in CM13
+  frequency: 2598
+  color: "#ad3b98"
+  longRange: true
+  tower: true
 
 - type: radioChannel
   id: GovforIntel
@@ -79,7 +102,17 @@
   frequency: 1605
   color: "#e4860c"
   longRange: true
+  tower: true
   faction: "govfor"
+
+- type: radioChannel
+  id: GovforAlpha
+  name: chat-radio-marine-alpha
+  keycode: "a" #a in cm13
+  frequency: 2502
+  color: "#F0433E"
+  longRange: true
+  tower: true
 
 - type: radioChannel
   id: GovforBravo
@@ -88,6 +121,7 @@
   frequency: 1606
   color: "#c7b646"
   longRange: true
+  tower: true
   faction: "govfor"
 
 - type: radioChannel
@@ -97,7 +131,18 @@
   frequency: 1607
   color: "#9D3EF0"
   longRange: true
+  tower: true
   faction: "govfor"
+
+- type: radioChannel
+  id: CLF
+  name: chat-radio-clf
+  keycode: "6"
+  frequency: 1886
+  color: "#059705" #more closely matches the green on the flag
+  longRange: true
+  tower: true
+  faction: "clf"
 
 - type: radioChannel
   id: UPPSOF

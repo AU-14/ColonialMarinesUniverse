@@ -1,26 +1,19 @@
 using System.Globalization;
 using System.Numerics;
+using Content.Client._CMU14.Medical.UI;
 using Content.Client._RMC14.Medical.HUD;
-using Content.Client.Atmos.Rotting;
 using Content.Client.Message;
-using Content.Shared._CMU14.Medical.StatusEffects;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Marines.Skills;
-using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared._RMC14.Medical.HUD;
 using Content.Shared._RMC14.Medical.HUD.Components;
 using Content.Shared._RMC14.Medical.HUD.Systems;
 using Content.Shared._RMC14.Medical.Scanner;
-using Content.Shared._RMC14.Medical.Unrevivable;
-using Content.Shared._RMC14.Medical.Wounds;
-using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Body.Part;
 using Content.Shared.Chemistry.Reagent;
-using Content.Shared.Damage;
-using Content.Shared.Damage.Prototypes;
 using Content.Shared.IdentityManagement;
-using Content.Shared.Mobs.Systems;
+using Content.Shared.Mobs;
 using Content.Shared.Temperature;
 using JetBrains.Annotations;
 using Robust.Client.Graphics;
@@ -43,31 +36,32 @@ public sealed class HealthScannerBui : BoundUserInterface
     [ViewVariables]
     private HealthScannerWindow? _window;
     private NetEntity _lastTarget;
+    private bool _hasLastTarget;
 
     private readonly ShowHolocardIconsSystem _holocardIcons;
     private readonly SkillsSystem _skills;
-    private readonly SharedWoundsSystem _wounds;
-    private readonly RMCUnrevivableSystem _unrevivable;
-    private readonly MobStateSystem _mob;
-    private readonly RottingSystem _rot;
 
     private Dictionary<EntProtoId<SkillDefinitionComponent>, int> BloodPackSkill = new() { ["RMCSkillSurgery"] = 1 };
     private Dictionary<EntProtoId<SkillDefinitionComponent>, int> DefibSkill = new() { ["RMCSkillMedical"] = 2 };
     private Dictionary<EntProtoId<SkillDefinitionComponent>, int> LarvaSurgerySkill = new() { ["RMCSkillSurgery"] = 2 };
 
+    private const int MaxAdviceRecommendations = 4;
+
     public HealthScannerBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
         _holocardIcons = _entities.System<ShowHolocardIconsSystem>();
         _skills = _entities.System<SkillsSystem>();
-        _wounds = _entities.System<SharedWoundsSystem>();
-        _unrevivable = _entities.System<RMCUnrevivableSystem>();
-        _mob = _entities.System<MobStateSystem>();
-        _rot = _entities.System<RottingSystem>();
     }
 
     protected override void Open()
     {
         base.Open();
+
+        var window = EnsureWindow();
+        window.ShowServerLoadingPulse();
+        if (!window.IsOpen)
+            window.OpenCentered();
+
         if (State is HealthScannerBuiState state)
             UpdateState(state);
     }
@@ -80,54 +74,43 @@ public sealed class HealthScannerBui : BoundUserInterface
 
     private void UpdateState(HealthScannerBuiState uiState)
     {
-        if (_window == null)
-        {
-            _window = this.CreateWindow<HealthScannerWindow>();
-            _window.Title = Loc.GetString("rmc-health-analyzer-title");
-        }
+        _window = EnsureWindow();
 
         if (_entities.GetEntity(uiState.Target) is not { Valid: true } target)
             return;
 
+        if (_hasLastTarget && _lastTarget != uiState.Target)
+            _window.ShowServerLoadingPulse();
+
         _lastTarget = uiState.Target;
+        _hasLastTarget = true;
 
         _window.PatientLabel.Text = Loc.GetString("rmc-health-analyzer-patient", ("name", Identity.Name(target, _entities, _player.LocalEntity)));
 
-        var thresholdsSystem = _entities.System<MobThresholdSystem>();
-        if (!_entities.TryGetComponent(target, out DamageableComponent? damageable))
-        {
-            if (!_window.IsOpen)
-                _window.OpenCentered();
-
-            return;
-        }
-
-        var ent = new Entity<DamageableComponent>(target, damageable);
-        AddGroup(ent, _window.BruteLabel, Color.FromHex("#DF3E3E"), "Brute", Loc.GetString("rmc-health-analyzer-brute"));
-        AddGroup(ent, _window.BurnLabel, Color.FromHex("#FFB833"), "Burn", Loc.GetString("rmc-health-analyzer-burn"));
-        AddGroup(ent, _window.ToxinLabel, Color.FromHex("#25CA4C"), "Toxin", Loc.GetString("rmc-health-analyzer-toxin"));
-        AddGroup(ent, _window.OxygenLabel, Color.FromHex("#2E93DE"), "Airloss", Loc.GetString("rmc-health-analyzer-oxygen"));
-        if (damageable.DamagePerGroup["Genetic"] > 0)
+        var damage = uiState.Damage;
+        AddGroup(_window.BruteLabel, Color.FromHex("#DF3E3E"), damage.Brute, damage.UntreatedBruteWounds, Loc.GetString("rmc-health-analyzer-brute"));
+        AddGroup(_window.BurnLabel, Color.FromHex("#FFB833"), damage.Burn, damage.UntreatedBurnWounds, Loc.GetString("rmc-health-analyzer-burn"));
+        AddGroup(_window.ToxinLabel, Color.FromHex("#25CA4C"), damage.Toxin, false, Loc.GetString("rmc-health-analyzer-toxin"));
+        AddGroup(_window.OxygenLabel, Color.FromHex("#2E93DE"), damage.Airloss, false, Loc.GetString("rmc-health-analyzer-oxygen"));
+        if (damage.Genetic > 0)
         {
             _window.CloneBox.Visible = true;
-            AddGroup(ent, _window.CloneLabel, Color.FromHex("#02c9c0"), "Genetic", Loc.GetString("rmc-health-analyzer-clone"));
+            AddGroup(_window.CloneLabel, Color.FromHex("#02c9c0"), damage.Genetic, false, Loc.GetString("rmc-health-analyzer-clone"));
         }
         else
             _window.CloneBox.Visible = false;
 
-        bool isPermaDead = false;
+        var isPermaDead = uiState.PermaDead;
 
-        if (thresholdsSystem.TryGetIncapThreshold(target, out var threshold))
+        _window.HealthBar.MinValue = 0;
+        _window.HealthBar.MaxValue = 100;
+        if (uiState.HasIncapThreshold)
         {
-            var damage = threshold.Value - damageable.TotalDamage;
-            _window.HealthBar.MinValue = 0;
-            _window.HealthBar.MaxValue = 100;
+            var threshold = uiState.IncapThreshold;
+            var remaining = threshold - damage.Total;
 
-            if (_mob.IsDead(target) && (_entities.HasComponent<VictimBurstComponent>(target) ||
-                _rot.IsRotten(target) || _unrevivable.IsUnrevivable(target) ||
-                _entities.HasComponent<RMCDefibrillatorBlockedComponent>(target)))
+            if (isPermaDead)
             {
-                isPermaDead = true;
                 _window.HealthBar.Value = 100;
                 _window.HealthBar.ModulateSelfOverride = Color.Red;
                 _window.HealthBarText.Text = Loc.GetString("rmc-health-analyzer-permadead");
@@ -136,11 +119,10 @@ public sealed class HealthScannerBui : BoundUserInterface
             {
                 _window.HealthBar.ModulateSelfOverride = null;
                 //Scale negative values with how close to death we are - if we have a different crit and dead state
-                if (damage < 0 && thresholdsSystem.TryGetDeadThreshold(target, out var deadThreshold) &&
-                    deadThreshold != threshold)
-                    threshold = deadThreshold - threshold;
+                if (remaining < 0 && uiState.HasDeadThreshold && uiState.DeadThreshold != threshold)
+                    threshold = uiState.DeadThreshold - threshold;
 
-                var healthValue = damage.Float() / threshold.Value.Float() * 100f;
+                var healthValue = threshold.Float() == 0 ? 0 : remaining.Float() / threshold.Float() * 100f;
                 _window.HealthBar.Value = healthValue;
 
                 var healthString = MathHelper.CloseTo(healthValue, 100) ? "100%" : $"{healthValue:F2}%";
@@ -148,9 +130,20 @@ public sealed class HealthScannerBui : BoundUserInterface
                 _window.HealthBarText.Text = Loc.GetString("rmc-health-analyzer-healthy", ("percent", healthString));
             }
         }
+        else if (isPermaDead)
+        {
+            _window.HealthBar.Value = 100;
+            _window.HealthBar.ModulateSelfOverride = Color.Red;
+            _window.HealthBarText.Text = Loc.GetString("rmc-health-analyzer-permadead");
+        }
+        else
+        {
+            _window.HealthBar.Value = 100;
+            _window.HealthBar.ModulateSelfOverride = null;
+            _window.HealthBarText.Text = Loc.GetString("rmc-health-analyzer-healthy", ("percent", "100%"));
+        }
 
         _window.ChangeHolocardButton.Text = Loc.GetString("ui-health-scanner-holocard-change");
-        _window.ChangeHolocardButton.OnPressed += OpenChangeHolocardUI;
         if (_player.LocalEntity is { } viewer &&
             _skills.HasSkill(viewer, HolocardSystem.SkillType, HolocardSystem.MinimumRequiredSkill))
         {
@@ -201,7 +194,7 @@ public sealed class HealthScannerBui : BoundUserInterface
                 if (prototype.Overdose != null && reagent.Quantity > prototype.Overdose)
                     text = $"[bold][color=red]{FormattedMessage.EscapeText(text)} OD[/color][/bold]";
 
-                var label = new RichTextLabel();
+                var label = new CMUScaledRichTextLabel();
                 label.SetMarkupPermissive(text);
                 _window.ChemicalsContainer.AddChild(label);
                 anyChemicals = true;
@@ -252,7 +245,7 @@ public sealed class HealthScannerBui : BoundUserInterface
         {
             _window.MedicalAdviceLabel.Visible = true;
             _window.MedicalAdviceSeparator.Visible = true;
-            MedicalAdvice(ent, uiState, _window);
+            MedicalAdvice(uiState, _window);
             if (_window.AdviceContainer.ChildCount == 0)
             {
                 _window.MedicalAdviceLabel.Visible = false;
@@ -266,7 +259,7 @@ public sealed class HealthScannerBui : BoundUserInterface
         }
         _window.MedicalAdviceCard.Visible = _window.AdviceContainer.ChildCount > 0;
 
-        UpdateBigStatRow(uiState, damageable, thresholdsSystem, target, isPermaDead);
+        UpdateBigStatRow(uiState, isPermaDead);
 
         UpdateCMUBodyMap(uiState);
 
@@ -274,6 +267,19 @@ public sealed class HealthScannerBui : BoundUserInterface
         {
             _window.OpenCentered();
         }
+
+        _window.ApplyUniformScale(true);
+    }
+
+    private HealthScannerWindow EnsureWindow()
+    {
+        if (_window != null)
+            return _window;
+
+        _window = this.CreateWindow<HealthScannerWindow>();
+        _window.Title = Loc.GetString("rmc-health-analyzer-title");
+        _window.ChangeHolocardButton.OnPressed += OpenChangeHolocardUI;
+        return _window;
     }
 
     private enum PartSeverity : byte
@@ -287,9 +293,6 @@ public sealed class HealthScannerBui : BoundUserInterface
 
     private void UpdateBigStatRow(
         HealthScannerBuiState uiState,
-        DamageableComponent? damageable,
-        MobThresholdSystem thresholdsSystem,
-        EntityUid target,
         bool isPermaDead)
     {
         if (_window == null)
@@ -346,6 +349,11 @@ public sealed class HealthScannerBui : BoundUserInterface
             _window.CMUBigTempValue.Text = "--";
             _window.CMUBigTempValue.FontColorOverride = Color.FromHex("#5B88B0");
         }
+
+        _window.CMUBigShockRiskValue.Text = FormatPainShockRiskValue(
+            uiState.CMUPainShockRisk,
+            uiState.CMUPainShockSuppressed);
+        _window.CMUBigShockRiskValue.FontColorOverride = PainShockRiskColor(uiState.CMUPainShockRisk);
     }
 
     private void UpdateCMUBodyMap(HealthScannerBuiState uiState)
@@ -354,7 +362,7 @@ public sealed class HealthScannerBui : BoundUserInterface
             return;
 
         var section = _window.CMUBodyMapSection;
-        if (uiState.CMUParts == null)
+        if (uiState.CMUParts is not { Count: > 0 })
         {
             section.Visible = false;
             _window.CMUStatusBanner.Visible = false;
@@ -413,18 +421,53 @@ public sealed class HealthScannerBui : BoundUserInterface
     {
         var pct = part.Current.Float() / Math.Max(1f, part.Max.Float());
         var sev = SeverityFromHpFraction(pct);
-        var row = new BoxContainer { Orientation = LayoutOrientation.Horizontal, Margin = new Thickness(0, 1) };
+        var card = new PanelContainer
+        {
+            Margin = new Thickness(0, 0, 0, 6),
+            HorizontalExpand = true,
+            PanelOverride = new StyleBoxFlat
+            {
+                BackgroundColor = Color.FromHex("#10191E"),
+                BorderColor = Color.FromHex("#263A42"),
+                BorderThickness = new Thickness(1),
+            },
+        };
+
+        var stack = new BoxContainer
+        {
+            Orientation = LayoutOrientation.Vertical,
+            Margin = new Thickness(8, 6),
+            HorizontalExpand = true,
+        };
+        card.AddChild(stack);
+
+        var row = new BoxContainer
+        {
+            Orientation = LayoutOrientation.Horizontal,
+            HorizontalExpand = true,
+        };
+        stack.AddChild(row);
+
+        row.AddChild(new PanelContainer
+        {
+            MinSize = new Vector2(5, 28),
+            Margin = new Thickness(0, 0, 8, 0),
+            PanelOverride = new StyleBoxFlat { BackgroundColor = SeverityFillColor(sev) },
+        });
 
         row.AddChild(new Label
         {
             Text = PartDisplayName(part.Type, part.Symmetry),
-            MinWidth = 90,
+            MinWidth = 112,
+            VerticalAlignment = Control.VAlignment.Center,
+            ClipText = true,
         });
 
         row.AddChild(new Label
         {
             Text = $"{(int)Math.Round(pct * 100f)}%",
-            MinWidth = 44,
+            MinWidth = 48,
+            VerticalAlignment = Control.VAlignment.Center,
             FontColorOverride = SeverityTextColor(sev),
         });
 
@@ -433,12 +476,17 @@ public sealed class HealthScannerBui : BoundUserInterface
         row.AddChild(new Label
         {
             Text = SeverityWord(sev),
-            MinWidth = 78,
+            MinWidth = 82,
             Margin = new Thickness(8, 0, 0, 0),
+            VerticalAlignment = Control.VAlignment.Center,
             FontColorOverride = SeverityTextColor(sev),
         });
 
-        var chipStrip = new BoxContainer { Orientation = LayoutOrientation.Horizontal };
+        var chipStrip = new BoxContainer
+        {
+            Orientation = LayoutOrientation.Horizontal,
+            HorizontalExpand = true,
+        };
         AppendFractureChip(chipStrip, uiState, part);
         AppendBleedChip(chipStrip, uiState, part);
         AppendWoundChip(chipStrip, part);
@@ -450,47 +498,93 @@ public sealed class HealthScannerBui : BoundUserInterface
             chipStrip.AddChild(BuildChip(Loc.GetString("cmu-medical-scanner-chip-cast"), Color.FromHex("#5B88B0")));
         if (part.Tourniquet)
             chipStrip.AddChild(BuildChip(Loc.GetString("cmu-medical-scanner-chip-tourniquet"), Color.FromHex("#A02020")));
-        row.AddChild(chipStrip);
+        if (chipStrip.ChildCount > 0)
+        {
+            chipStrip.Margin = new Thickness(13, 5, 0, 0);
+            stack.AddChild(chipStrip);
+        }
 
-        return row;
+        return card;
     }
 
     private Control BuildSeveredRow(BodyPartType type, BodyPartSymmetry sym)
     {
-        var row = new BoxContainer { Orientation = LayoutOrientation.Horizontal, Margin = new Thickness(0, 1) };
+        var card = new PanelContainer
+        {
+            Margin = new Thickness(0, 0, 0, 6),
+            HorizontalExpand = true,
+            PanelOverride = new StyleBoxFlat
+            {
+                BackgroundColor = Color.FromHex("#10191E"),
+                BorderColor = Color.FromHex("#3B2226"),
+                BorderThickness = new Thickness(1),
+            },
+        };
+
+        var stack = new BoxContainer
+        {
+            Orientation = LayoutOrientation.Vertical,
+            Margin = new Thickness(8, 6),
+            HorizontalExpand = true,
+        };
+        card.AddChild(stack);
+
+        var row = new BoxContainer
+        {
+            Orientation = LayoutOrientation.Horizontal,
+            HorizontalExpand = true,
+        };
+        stack.AddChild(row);
+
+        row.AddChild(new PanelContainer
+        {
+            MinSize = new Vector2(5, 28),
+            Margin = new Thickness(0, 0, 8, 0),
+            PanelOverride = new StyleBoxFlat { BackgroundColor = SeverityFillColor(PartSeverity.Severed) },
+        });
         row.AddChild(new Label
         {
             Text = PartDisplayName(type, sym),
-            MinWidth = 90,
+            MinWidth = 112,
+            VerticalAlignment = Control.VAlignment.Center,
+            ClipText = true,
         });
         // Em-dash instead of "0%" so a missing limb reads visually
         // distinct from a 0-HP attached one.
         row.AddChild(new Label
         {
             Text = "—",
-            MinWidth = 44,
+            MinWidth = 48,
+            VerticalAlignment = Control.VAlignment.Center,
             FontColorOverride = SeverityTextColor(PartSeverity.Severed),
         });
         row.AddChild(BuildHpBar(0f, PartSeverity.Severed));
+
         row.AddChild(new Label
         {
             Text = SeverityWord(PartSeverity.Severed),
-            MinWidth = 78,
+            MinWidth = 82,
             Margin = new Thickness(8, 0, 0, 0),
+            VerticalAlignment = Control.VAlignment.Center,
             FontColorOverride = SeverityTextColor(PartSeverity.Severed),
         });
-        return row;
+        return card;
     }
 
     private static Control BuildHpBar(float pct, PartSeverity sev)
     {
-        const int trackWidth = 100;
+        const int trackWidth = 140;
         const int barHeight = 10;
         var track = new PanelContainer
         {
             MinSize = new Vector2(trackWidth, barHeight),
             VerticalAlignment = Control.VAlignment.Center,
-            PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#2A2F3A") },
+            PanelOverride = new StyleBoxFlat
+            {
+                BackgroundColor = Color.FromHex("#223039"),
+                BorderColor = Color.FromHex("#314B55"),
+                BorderThickness = new Thickness(1),
+            },
         };
         // For severed parts force the bar to render as a solid dark-red
         // strip so the medic sees the "limb gone" cue at a glance, even
@@ -579,15 +673,20 @@ public sealed class HealthScannerBui : BoundUserInterface
     {
         var panel = new PanelContainer
         {
-            Margin = new Thickness(4, 0, 0, 0),
+            Margin = new Thickness(0, 0, 5, 0),
             VerticalAlignment = Control.VAlignment.Center,
-            PanelOverride = new StyleBoxFlat { BackgroundColor = background },
+            PanelOverride = new StyleBoxFlat
+            {
+                BackgroundColor = background,
+                BorderColor = Color.FromHex("#D8E2E4"),
+                BorderThickness = new Thickness(1),
+            },
         };
         panel.AddChild(new Label
         {
             Text = text,
             FontColorOverride = Color.White,
-            Margin = new Thickness(6, 1),
+            Margin = new Thickness(7, 2),
         });
         return panel;
     }
@@ -638,11 +737,11 @@ public sealed class HealthScannerBui : BoundUserInterface
 
         var (word, bgColor) = worst switch
         {
-            PartSeverity.Severed => (Loc.GetString("cmu-medical-scanner-status-critical"), Color.FromHex("#A02020")),
-            PartSeverity.Critical => (Loc.GetString("cmu-medical-scanner-status-critical"), Color.FromHex("#A02020")),
-            PartSeverity.Damaged => (Loc.GetString("cmu-medical-scanner-status-serious"), Color.FromHex("#C07020")),
-            PartSeverity.Bruised => (Loc.GetString("cmu-medical-scanner-status-stable"), Color.FromHex("#3FB44A")),
-            _ => (Loc.GetString("cmu-medical-scanner-status-stable"), Color.FromHex("#3FB44A")),
+            PartSeverity.Severed => (Loc.GetString("cmu-medical-scanner-status-critical"), Color.FromHex("#8B2F35")),
+            PartSeverity.Critical => (Loc.GetString("cmu-medical-scanner-status-critical"), Color.FromHex("#8B2F35")),
+            PartSeverity.Damaged => (Loc.GetString("cmu-medical-scanner-status-serious"), Color.FromHex("#8B6334")),
+            PartSeverity.Bruised => (Loc.GetString("cmu-medical-scanner-status-stable"), Color.FromHex("#2C6E55")),
+            _ => (Loc.GetString("cmu-medical-scanner-status-stable"), Color.FromHex("#2C6E55")),
         };
         _window!.CMUStatusBanner.Visible = true;
         _window.CMUStatusBannerLabel.Text = word;
@@ -667,13 +766,38 @@ public sealed class HealthScannerBui : BoundUserInterface
                 "cmu-medical-scanner-skill-hint-organs"));
             return;
         }
+
+        if (uiState.CMUSyntheticPhysiology)
+        {
+            _window!.CMUOrgansContainer.AddChild(BuildSkillHint(
+                "cmu-medical-scanner-synthetic-physiology"));
+            return;
+        }
+
         if (uiState.CMUOrgans is not { Count: > 0 } organs)
             return;
 
         foreach (var organ in organs)
         {
             var sev = organ.Removed ? PartSeverity.Severed : SeverityFromOrganStage(organ.Stage);
-            var row = new BoxContainer { Orientation = LayoutOrientation.Horizontal };
+            var card = new PanelContainer
+            {
+                Margin = new Thickness(0, 0, 0, 5),
+                HorizontalExpand = true,
+                PanelOverride = new StyleBoxFlat
+                {
+                    BackgroundColor = Color.FromHex("#10191E"),
+                    BorderColor = Color.FromHex("#263A42"),
+                    BorderThickness = new Thickness(1),
+                },
+            };
+            var row = new BoxContainer
+            {
+                Orientation = LayoutOrientation.Horizontal,
+                Margin = new Thickness(7, 5),
+                HorizontalExpand = true,
+            };
+            card.AddChild(row);
             row.AddChild(new PanelContainer
             {
                 MinSize = new Vector2(10, 10),
@@ -705,7 +829,7 @@ public sealed class HealthScannerBui : BoundUserInterface
                     FontColorOverride = Color.FromHex("#5B88B0"),
                 });
             }
-            _window!.CMUOrgansContainer.AddChild(row);
+            _window!.CMUOrgansContainer.AddChild(card);
         }
     }
 
@@ -825,39 +949,36 @@ public sealed class HealthScannerBui : BoundUserInterface
         _ => idOrSlot.StartsWith("CMUOrganHuman") ? idOrSlot.Substring("CMUOrganHuman".Length) : idOrSlot,
     };
 
-    private static Color PainTierColor(PainTier? tier) => tier switch
+    private static Color PainShockRiskColor(CMUPainShockRisk? risk) => risk switch
     {
-        PainTier.Mild => Color.FromHex("#9CCC42"),
-        PainTier.Moderate => Color.FromHex("#FFAA00"),
-        PainTier.Severe => Color.FromHex("#FF6060"),
-        PainTier.Shock => Color.FromHex("#FF3030"),
+        CMUPainShockRisk.Elevated => Color.FromHex("#CFE070"),
+        CMUPainShockRisk.High => Color.FromHex("#FFAA00"),
+        CMUPainShockRisk.Imminent => Color.FromHex("#FF6060"),
+        CMUPainShockRisk.Active => Color.FromHex("#FF3030"),
+        CMUPainShockRisk.Low => Color.White,
         _ => Color.FromHex("#5B88B0"),
     };
 
-    private static string FormatPainTier(PainTier? tier) => tier switch
+    private static string FormatPainShockRiskValue(CMUPainShockRisk? risk, bool suppressed)
     {
-        null => Loc.GetString("cmu-medical-scanner-pain-unknown"),
-        PainTier.None => Loc.GetString("cmu-medical-scanner-pain-none"),
-        PainTier.Mild => Loc.GetString("cmu-medical-scanner-pain-mild"),
-        PainTier.Moderate => Loc.GetString("cmu-medical-scanner-pain-moderate"),
-        PainTier.Severe => Loc.GetString("cmu-medical-scanner-pain-severe"),
-        PainTier.Shock => Loc.GetString("cmu-medical-scanner-pain-shock"),
-        _ => Loc.GetString("cmu-medical-scanner-pain-unknown"),
-    };
+        if (risk is null)
+            return "--";
 
-    // Vitals stat-block variant: returns just the tier word so "Pain"
-    // can be the row label and the tier word the value (avoiding the
-    // "Pain    Pain: Severe" double-up).
-    private static string FormatPainTierValue(PainTier? tier) => tier switch
-    {
-        null => "?",
-        PainTier.None => "None",
-        PainTier.Mild => "Mild",
-        PainTier.Moderate => "Moderate",
-        PainTier.Severe => "Severe",
-        PainTier.Shock => "Shock",
-        _ => "?",
-    };
+        var key = risk.Value switch
+        {
+            CMUPainShockRisk.Low => "cmu-medical-scanner-pain-risk-low",
+            CMUPainShockRisk.Elevated => "cmu-medical-scanner-pain-risk-elevated",
+            CMUPainShockRisk.High => "cmu-medical-scanner-pain-risk-high",
+            CMUPainShockRisk.Imminent => "cmu-medical-scanner-pain-risk-imminent",
+            CMUPainShockRisk.Active => "cmu-medical-scanner-pain-risk-active",
+            _ => "cmu-medical-scanner-pain-risk-unknown",
+        };
+
+        var value = Loc.GetString(key);
+        if (suppressed)
+            value += Loc.GetString("cmu-medical-scanner-pain-risk-suppressed-suffix");
+        return value;
+    }
 
     private void OpenChangeHolocardUI(BaseButton.ButtonEventArgs obj)
     {
@@ -865,155 +986,178 @@ public sealed class HealthScannerBui : BoundUserInterface
             SendMessage(new OpenChangeHolocardUIEvent(_entities.GetNetEntity(viewer), _lastTarget));
     }
 
-    private void AddGroup(Entity<DamageableComponent> damageable, RichTextLabel label, Color color, ProtoId<DamageGroupPrototype> group, string labelStr)
+    private static void AddGroup(RichTextLabel label, Color color, Content.Shared.FixedPoint.FixedPoint2 damage, bool untreated, string labelStr)
     {
         var msg = new FormattedMessage();
         msg.AddText($"{labelStr}: ");
         msg.PushColor(color);
 
-        var damage = damageable.Comp.DamagePerGroup.GetValueOrDefault(group)
+        var text = damage
             .Int()
             .ToString(CultureInfo.InvariantCulture);
-        if (_wounds.HasUntreated(damageable.Owner, group))
-            msg.AddText($"{{{damage}}}");
+        if (untreated)
+            msg.AddText($"{{{text}}}");
         else
-            msg.AddText($"{damage}");
+            msg.AddText(text);
 
         msg.Pop();
         label.SetMessage(msg);
     }
 
-    private void MedicalAdvice(Entity<DamageableComponent> target, HealthScannerBuiState uiState, HealthScannerWindow window)
+    private void MedicalAdvice(HealthScannerBuiState uiState, HealthScannerWindow window)
     {
-        WoundedComponent? wounds = null;
-        _entities.TryGetComponent(target, out wounds);
-        bool hasBruteWounds = false;
-        bool hasBurnWounds = false;
-
-        if (wounds != null && _wounds.HasUntreated((target, wounds), wounds.BruteWoundGroup))
-            hasBruteWounds = true;
-
-        if (wounds != null && _wounds.HasUntreated((target, wounds), wounds.BurnWoundGroup))
-            hasBurnWounds = true;
-
         if (_player.LocalEntity is not { } viewer)
             return;
 
+        var recommendations = new List<AdviceRecommendation>();
+
         //Defibrilation related
-        if (_mob.IsDead(target))
+        if (uiState.MobState == MobState.Dead)
         {
-            var thresholdsSystem = _entities.System<MobThresholdSystem>();
-
-            if (thresholdsSystem.TryGetDeadThreshold(target, out var deadThreshold))
+            if (uiState.Advice.NeedsEpinephrine)
             {
-                if (deadThreshold + 30 < target.Comp.Damage.GetTotal() && uiState.Chemicals != null
-                    && !uiState.Chemicals.ContainsReagent("CMEpinephrine", null))
+                AddAdviceCandidate(recommendations, 100, Loc.GetString("rmc-health-analyzer-advice-epinedrine"));
+            }
+            else
+            {
+                var defib = string.Empty;
+                var priority = 0;
+                if (uiState.Advice.ShowRepeatedDefibWarning)
                 {
-                    AddAdvice(Loc.GetString("rmc-health-analyzer-advice-epinedrine"), window);
+                    defib = Loc.GetString("rmc-health-analyzer-advice-defib-repeated");
+                    priority = 96;
                 }
-                else
+                else if (uiState.Advice.ShowDefib)
                 {
-                    string defib = String.Empty;
-                    if (deadThreshold - 20 <= target.Comp.Damage.GetTotal() &&
-                        wounds != null && !hasBruteWounds && !hasBurnWounds)
-                        defib = Loc.GetString("rmc-health-analyzer-advice-defib-repeated");
-                    else if (deadThreshold > target.Comp.Damage.GetTotal())
-                        defib = Loc.GetString("rmc-health-analyzer-advice-defib");
-
-                    if (defib != String.Empty && !_skills.HasAllSkills(viewer, DefibSkill))
-                        defib = $"[color=#858585]{defib}[/color]";
-
-                    if (defib != String.Empty)
-                        AddAdvice(defib, window);
+                    defib = Loc.GetString("rmc-health-analyzer-advice-defib");
+                    priority = 95;
                 }
+
+                if (defib != string.Empty && !_skills.HasAllSkills(viewer, DefibSkill))
+                    defib = $"[color=#858585]{defib}[/color]";
+
+                if (defib != string.Empty)
+                    AddAdviceCandidate(recommendations, priority, defib);
             }
 
-            AddAdvice(Loc.GetString("rmc-health-analyzer-advice-cpr"), window);
+            if (uiState.Advice.ShowCpr)
+                AddAdviceCandidate(recommendations, 92, Loc.GetString("rmc-health-analyzer-advice-cpr"));
         }
 
         //Surgery related
-        var infected = _entities.GetComponentOrNull<VictimInfectedComponent>(target);
-        if (_entities.HasComponent<VictimBurstComponent>(target))
+        if (uiState.Advice.ShowLarvaBursted)
         {
-            AddAdvice(Loc.GetString("rmc-health-analyzer-advice-larva-bursted"), window);
+            AddAdviceCandidate(recommendations, 90, Loc.GetString("rmc-health-analyzer-advice-larva-bursted"));
         }
-        else if (infected != null ||
-                 (_entities.TryGetComponent(target, out HolocardStateComponent? holocardComponent) &&
-                  holocardComponent.HolocardStatus == HolocardStatus.Xeno))
+        else if (uiState.Advice.ShowLarvaSurgery)
         {
             string larvaSurgery = Loc.GetString("rmc-health-analyzer-advice-larva-surgery");
             if (!_skills.HasAllSkills(viewer, LarvaSurgerySkill))
                 larvaSurgery = $"[color=#858585]{larvaSurgery}[/color]";
-            AddAdvice(larvaSurgery, window);
+            AddAdviceCandidate(recommendations, 88, larvaSurgery);
         }
 
         //TODO RMC14 more surgery advice
 
         //Wound related
-        if (hasBruteWounds)
-            AddAdvice(Loc.GetString("rmc-health-analyzer-advice-brute-wounds"), window);
+        if (uiState.Advice.ShowBruteWounds)
+            AddAdviceCandidate(recommendations, 72, Loc.GetString("rmc-health-analyzer-advice-brute-wounds"));
 
-        if (hasBurnWounds)
-            AddAdvice(Loc.GetString("rmc-health-analyzer-advice-burn-wounds"), window);
+        if (uiState.Advice.ShowBurnWounds)
+            AddAdviceCandidate(recommendations, 71, Loc.GetString("rmc-health-analyzer-advice-burn-wounds"));
 
         //Blood related
-        if (uiState.Blood < uiState.MaxBlood)
+        if (uiState.Advice.ShowBloodPack)
         {
-            var bloodPercent = uiState.Blood / uiState.MaxBlood;
-
-            if (bloodPercent < 0.85)
-            {
-                string bloodpack = Loc.GetString("rmc-health-analyzer-advice-blood-pack");
-                if (!_skills.HasAllSkills(viewer, BloodPackSkill))
-                    bloodpack = $"[color=#858585]{bloodpack}[/color]";
-                AddAdvice(bloodpack, window);
-            }
-
-            if (bloodPercent < 0.9 && uiState.Chemicals != null && !uiState.Chemicals.ContainsReagent("Nutriment", null))
-                AddAdvice(Loc.GetString("rmc-health-analyzer-advice-food"), window);
+            string bloodpack = Loc.GetString("rmc-health-analyzer-advice-blood-pack");
+            if (!_skills.HasAllSkills(viewer, BloodPackSkill))
+                bloodpack = $"[color=#858585]{bloodpack}[/color]";
+            AddAdviceCandidate(recommendations, 78, bloodpack);
         }
 
-        //TODO RMC14 Pain related medical advice
+        if (uiState.Advice.ShowFood)
+            AddAdviceCandidate(recommendations, 25, Loc.GetString("rmc-health-analyzer-advice-food"));
 
         //Damage related
-        var airloss = target.Comp.DamagePerGroup.GetValueOrDefault("Airloss");
-        var brute = target.Comp.DamagePerGroup.GetValueOrDefault("Brute");
-        var burn = target.Comp.DamagePerGroup.GetValueOrDefault("Burn");
-        var toxin = target.Comp.DamagePerGroup.GetValueOrDefault("Toxin");
-        var genetic = target.Comp.DamagePerGroup.GetValueOrDefault("Genetic");
+        if (uiState.Advice.ShowCprCrit)
+            AddAdviceCandidate(recommendations, 84, Loc.GetString("rmc-health-analyzer-advice-cpr-crit"));
 
-        if (airloss > 0 && !_mob.IsDead(target))
-        {
-            if (airloss > 10 && _mob.IsCritical(target))
-                AddAdvice(Loc.GetString("rmc-health-analyzer-advice-cpr-crit"), window);
+        if (uiState.Advice.ShowDexalin)
+            AddAdviceCandidate(recommendations, 82, Loc.GetString("rmc-health-analyzer-advice-dexalin"));
 
-            if (airloss > 30 && uiState.Chemicals != null &&
-                !uiState.Chemicals.ContainsReagent("CMDexalin", null))
-                AddAdvice(Loc.GetString("rmc-health-analyzer-advice-dexalin"), window);
-        }
+        if (uiState.Advice.ShowBicaridine)
+            AddAdviceCandidate(recommendations, 58, Loc.GetString("rmc-health-analyzer-advice-bicaridine"));
 
-        if (brute > 30 && uiState.Chemicals != null &&
-            !uiState.Chemicals.ContainsReagent("CMBicaridine", null) &&
-            !_mob.IsDead(target))
-            AddAdvice(Loc.GetString("rmc-health-analyzer-advice-bicaridine"), window);
+        if (uiState.Advice.ShowKelotane)
+            AddAdviceCandidate(recommendations, 57, Loc.GetString("rmc-health-analyzer-advice-kelotane"));
 
-        if (burn > 30 && uiState.Chemicals != null &&
-            !uiState.Chemicals.ContainsReagent("CMKelotane", null) &&
-            !_mob.IsDead(target))
-            AddAdvice(Loc.GetString("rmc-health-analyzer-advice-kelotane"), window);
-
-        if (toxin > 10 && uiState.Chemicals != null &&
-            !uiState.Chemicals.ContainsReagent("CMDylovene", null) && !uiState.Chemicals.ContainsReagent("Inaprovaline", null) &&
-            !_mob.IsDead(target))
-            AddAdvice(Loc.GetString("rmc-health-analyzer-advice-dylovene"), window);
+        if (uiState.Advice.ShowDylovene)
+            AddAdviceCandidate(recommendations, 60, Loc.GetString("rmc-health-analyzer-advice-dylovene"));
 
         //TODO RMC14 Clone damage advice
+
+        recommendations.Sort((a, b) =>
+        {
+            var priority = b.Priority.CompareTo(a.Priority);
+            return priority != 0 ? priority : a.Sequence.CompareTo(b.Sequence);
+        });
+
+        var count = Math.Min(MaxAdviceRecommendations, recommendations.Count);
+        for (var i = 0; i < count; i++)
+            AddAdvice(recommendations[i], window);
     }
 
-    private void AddAdvice(string text, HealthScannerWindow window)
+    private static void AddAdviceCandidate(List<AdviceRecommendation> recommendations, int priority, string text)
     {
-        var label = new RichTextLabel();
-        label.SetMarkupPermissive(text);
-        window.AdviceContainer.AddChild(label);
+        recommendations.Add(new AdviceRecommendation(priority, recommendations.Count, text));
     }
+
+    private static void AddAdvice(AdviceRecommendation recommendation, HealthScannerWindow window)
+    {
+        var accent = AdviceAccentColor(recommendation.Priority);
+        var panel = new PanelContainer
+        {
+            HorizontalExpand = true,
+            Margin = new Thickness(0, 0, 0, 5),
+            PanelOverride = new StyleBoxFlat
+            {
+                BackgroundColor = Color.FromHex("#10191E"),
+                BorderColor = Color.FromHex("#263A42"),
+                BorderThickness = new Thickness(1),
+            },
+        };
+
+        var row = new BoxContainer
+        {
+            Orientation = LayoutOrientation.Horizontal,
+            Margin = new Thickness(7, 5),
+            HorizontalExpand = true,
+        };
+        panel.AddChild(row);
+
+        row.AddChild(new PanelContainer
+        {
+            MinSize = new Vector2(5, 24),
+            Margin = new Thickness(0, 0, 7, 0),
+            PanelOverride = new StyleBoxFlat { BackgroundColor = accent },
+        });
+
+        var label = new CMUScaledRichTextLabel();
+        label.SetMarkupPermissive(recommendation.Text);
+        label.HorizontalExpand = true;
+        row.AddChild(label);
+
+        window.AdviceContainer.AddChild(panel);
+    }
+
+    private static Color AdviceAccentColor(int priority)
+    {
+        if (priority >= 90)
+            return Color.FromHex("#B64646");
+        if (priority >= 70)
+            return Color.FromHex("#D2A95D");
+        return Color.FromHex("#5B88B0");
+    }
+
+    private readonly record struct AdviceRecommendation(int Priority, int Sequence, string Text);
 }

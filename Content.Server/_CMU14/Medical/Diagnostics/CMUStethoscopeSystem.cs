@@ -24,6 +24,7 @@ public sealed class CMUStethoscopeSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedBodySystem _body = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly SharedPainShockSystem _pain = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SkillsSystem _skills = default!;
 
@@ -135,7 +136,7 @@ public sealed class CMUStethoscopeSystem : EntitySystem
         var painStr = string.Empty;
         if (skill >= 2 && TryComp<PainShockComponent>(patient, out var pain))
         {
-            painStr = pain.Tier switch
+            painStr = _pain.GetEffectiveTier(patient, pain) switch
             {
                 PainTier.Mild => Loc.GetString("cmu-medical-stethoscope-pain-mild"),
                 PainTier.Moderate => Loc.GetString("cmu-medical-stethoscope-pain-moderate"),

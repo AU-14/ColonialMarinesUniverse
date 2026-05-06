@@ -7,8 +7,14 @@
   - type: Item
     size: Small
   - type: CMUOrganClamp
+  - type: Tag
+    tags:
+    - CMUOrganClamp
   - type: CMSurgeryTool
-    skill: 3
+    skill: 2
   - type: Sprite
-    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
-    state: hemostat
+    sprite: _AU14/Objects/Medical/organclamp.rsi
+    state: organclamp
+
+- type: Tag
+  id: CMUOrganClamp

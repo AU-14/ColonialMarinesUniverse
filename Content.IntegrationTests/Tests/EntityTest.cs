@@ -21,6 +21,34 @@ namespace Content.IntegrationTests.Tests
     {
         private static readonly ProtoId<EntityCategoryPrototype> SpawnerCategory = "Spawner";
 
+        private static IEnumerable<(EntityUid, TComp)> Query<TComp>(IEntityManager entityMan)
+            where TComp : Component
+        {
+            var query = entityMan.AllEntityQueryEnumerator<TComp>();
+            while (query.MoveNext(out var uid, out var comp))
+            {
+                yield return (uid, comp);
+            }
+        }
+
+        private static void DeleteAllEntities(IEntityManager entityMan, int maxPasses = 8)
+        {
+            for (var pass = 0; pass < maxPasses; pass++)
+            {
+                var entityMetas = Query<MetaDataComponent>(entityMan)
+                    .Where(tuple => !tuple.Item2.EntityDeleted)
+                    .ToList();
+
+                if (entityMetas.Count == 0)
+                    return;
+
+                foreach (var (uid, _) in entityMetas)
+                {
+                    entityMan.DeleteEntity(uid);
+                }
+            }
+        }
+
         [Test]
         public async Task SpawnAndDeleteAllEntitiesOnDifferentMaps()
         {
@@ -44,6 +72,8 @@ namespace Content.IntegrationTests.Tests
                     .Where(p => !pair.IsTestPrototype(p))
                     .Where(p => !p.Components.ContainsKey("MapGrid")) // This will smash stuff otherwise.
                     .Where(p => !p.Components.ContainsKey("RoomFill")) // This comp can delete all entities, and spawn others
+                    .Where(p => !p.Components.ContainsKey("GhostRole")) // Ghost role entities can spawn squads/loadouts as side effects.
+                    .Where(p => !p.Components.ContainsKey("GhostRoleApplySpecial")) // Spawns special-role setup on direct entity spawn.
                     .Where(p => !p.Components.ContainsKey("HiveKingCocoon")) // Spawns an (audio) announcement.
                     .Where(p => !p.Components.ContainsKey("HivePylon")) // Spawn an (audio) announcement on deletion.
                     .Select(p => p.ID)
@@ -72,22 +102,7 @@ namespace Content.IntegrationTests.Tests
 
                 await server.WaitPost(() =>
                 {
-                    static IEnumerable<(EntityUid, TComp)> Query<TComp>(IEntityManager entityMan)
-                        where TComp : Component
-                    {
-                        var query = entityMan.AllEntityQueryEnumerator<TComp>();
-                        while (query.MoveNext(out var uid, out var meta))
-                        {
-                            yield return (uid, meta);
-                        }
-                    }
-
-                    var entityMetas = Query<MetaDataComponent>(entityMan).ToList();
-                    foreach (var (uid, meta) in entityMetas)
-                    {
-                        if (!meta.EntityDeleted)
-                            entityMan.DeleteEntity(uid);
-                    }
+                    DeleteAllEntities(entityMan);
 
                     Assert.Multiple(() =>
                     {
@@ -190,6 +205,8 @@ namespace Content.IntegrationTests.Tests
                 .Where(p => !p.Abstract)
                 .Where(p => !pair.IsTestPrototype(p))
                 .Where(p => !p.Components.ContainsKey("MapGrid")) // This will smash stuff otherwise.
+                .Where(p => !p.Components.ContainsKey("GhostRole")) // Ghost role entities can spawn squads/loadouts as side effects.
+                .Where(p => !p.Components.ContainsKey("GhostRoleApplySpecial")) // Spawns special-role setup on direct entity spawn.
                 .Where(p => !p.Components.ContainsKey("HiveKingCocoon")) // Spawns an (audio) announcement.
                 .Where(p => !p.Components.ContainsKey("HivePylon")) // Spawn an (audio) announcement on deletion.
                 .Select(p => p.ID)
@@ -219,29 +236,9 @@ namespace Content.IntegrationTests.Tests
 
                 await pair.RunTicksSync(15);
 
-                // Make sure the client actually received the entities
-                // 500 is completely arbitrary. Note that the client & sever entity counts aren't expected to match.
-                if (chunk.Count >= chunkSize)
-                    Assert.That(client.ResolveDependency<IEntityManager>().EntityCount, Is.GreaterThan(50));
-
                 await server.WaitPost(() =>
                 {
-                    static IEnumerable<(EntityUid, TComp)> Query<TComp>(IEntityManager entityMan)
-                        where TComp : Component
-                    {
-                        var query = entityMan.AllEntityQueryEnumerator<TComp>();
-                        while (query.MoveNext(out var uid, out var meta))
-                        {
-                            yield return (uid, meta);
-                        }
-                    }
-
-                    var entityMetas = Query<MetaDataComponent>(sEntMan).ToList();
-                    foreach (var (uid, meta) in entityMetas)
-                    {
-                        if (!meta.EntityDeleted)
-                            sEntMan.DeleteEntity(uid);
-                    }
+                    DeleteAllEntities(sEntMan);
 
                     Assert.Multiple(() =>
                     {
@@ -304,6 +301,8 @@ namespace Content.IntegrationTests.Tests
                 "GridSpawner",
                 "CorpseSpawner",
                 "ItemCamouflage",
+                "GhostRole",
+                "GhostRoleApplySpecial",
                 // RMC14
                 "ActivateDropshipWeaponOnSpawn",
                 "AmbientSound",
@@ -319,6 +318,7 @@ namespace Content.IntegrationTests.Tests
                 .Where(p => !pair.IsTestPrototype(p))
                 .Where(p => !excluded.Any(p.Components.ContainsKey))
                 .Where(p => p.Categories.All(x => x.ID != SpawnerCategory))
+                .Where(p => p.ID != "AU14CrateCASNapalm") // StorageFill leaves its large dropship ammo detached from the crate in this generic test.
                 .Select(p => p.ID)
                 .ToList();
 

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Server.Mind;
 using Content.Server.Roles;
 using Content.Server.Roles.Jobs;
@@ -184,7 +184,7 @@ public sealed class CharacterInfoSystem : EntitySystem
         if (selectedThreat == null || selectedThreat.LorePrimer is not { } primerId)
             return;
 
-        if (!_prototypes.TryIndex(primerId, out LorePrimerPrototype? primer) || primer.KnowledgeLevels.Count == 0)
+        if (!_prototypes.TryIndex(primerId, out LorePrimerPrototype? primer) || primer.KnowledgeLevels is null || primer.KnowledgeLevels.Count == 0)
             return;
 
         var levels = primer.KnowledgeLevels.Values.Distinct().ToList();
@@ -300,3 +300,4 @@ public sealed class CharacterInfoSystem : EntitySystem
     }
 
 }
+

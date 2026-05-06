@@ -97,6 +97,12 @@ public sealed partial class StationJobsSystem
                     break;
                 }
             }
+            // Third-party utility jobs are only used as role labels after
+            // AuThirdPartySystem spawns the real entity. Falling back to a normal
+            // station spawn for them creates naked placeholder bodies.
+            if (assignedStation == null && (jobId == "AU14JobThirdPartyLeader" || jobId == "AU14JobThirdPartyMember"))
+                continue;
+
             // If not found, just assign to first station (fallback)
             if (assignedStation == null && stations.Count > 0)
             {

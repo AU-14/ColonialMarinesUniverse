@@ -40,6 +40,16 @@ namespace Content.Server.Voting
         public List<(string text, object data)> Options { get; set; } = new();
 
         /// <summary>
+        ///     Whether this vote should inherit totals from prior votes with the same carryover key.
+        /// </summary>
+        public bool CarryoverEnabled { get; set; } = true;
+
+        /// <summary>
+        ///     Stable key used to group repeated votes for carryover purposes. Defaults to <see cref="Title"/> when null.
+        /// </summary>
+        public string? CarryoverKey { get; set; }
+
+        /// <summary>
         ///     Which sessions may send a vote. Used when only a subset of players should be able to vote. Defaults to all.
         /// </summary>
         public VoteManager.VoterEligibility VoterEligibility = VoteManager.VoterEligibility.All;

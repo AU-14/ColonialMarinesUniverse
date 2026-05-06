@@ -327,3 +327,22 @@
         RMCSkillVehicles: 1
         RMCSkillJtac: 1
         RMCSkillPolice: 2
+
+- type: entity
+  id: AU14SkillPresetPlatoonAuxTech
+  name: Auxiliary Technician
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+        RMCSkillConstruction: 4
+        RMCSkillCqc: 1
+        RMCSkillEndurance: 1
+        RMCSkillEngineer: 4
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 2
+        RMCSkillVehicles: 1
+        RMCSkillJtac: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillIntel: 1
+        RMCSkillDomestics: 2

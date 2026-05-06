@@ -9,7 +9,7 @@ namespace Content.Shared._CMU14.Medical.Surgery;
 ///     Tool categories are resolved at click time. Allowed values include:
 ///     <c>scalpel</c>, <c>hemostat</c>, <c>retractor</c>, <c>cautery</c>,
 ///     <c>bone_saw</c>, <c>bone_setter</c>, <c>bone_gel</c>,
-///     <c>bone_graft</c>, <c>organ_clamp</c>.
+    ///     <c>bone_graft</c>, <c>organ_clamp</c>, <c>scalpel_or_burn_kit</c>.
 /// </summary>
 [Prototype("cmuSurgeryStepMetadata")]
 public sealed partial class CMUSurgeryStepMetadataPrototype : IPrototype
@@ -36,6 +36,28 @@ public sealed partial class CMUSurgeryStepMetadataPrototype : IPrototype
 
     [DataField]
     public string Category = "general";
+
+    /// <summary>
+    ///     Minimum RMCSkillSurgery level required to surface and arm this
+    ///     surgery from the CMU surgery window.
+    /// </summary>
+    [DataField]
+    public int MinSkill = 1;
+
+    /// <summary>
+    ///     Whether this surgery can be performed by the patient on themselves.
+    ///     Self-surgery is intentionally opt-in so organ/head/torso work stays
+    ///     blocked unless explicitly allowed.
+    /// </summary>
+    [DataField]
+    public bool AllowSelfSurgery;
+
+    /// <summary>
+    ///     Optional narrower part set for self-surgery. Empty means use
+    ///     <see cref="ValidParts"/>.
+    /// </summary>
+    [DataField]
+    public List<BodyPartType> SelfSurgeryValidParts = new();
 
     /// <summary>
     ///     Order MUST match the surgery prototype's <c>steps:</c> list. The

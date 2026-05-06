@@ -20,6 +20,7 @@
     JuniorOfficer: AU14JOGenericVendor
     MilitaryPolice: AU14MilitaryPolicemanVendorLACN
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14LACNRequisitionVendor
   possibleships:
     - USSBush
   #platoonflag: uaflag
@@ -50,6 +51,7 @@
     JuniorOfficer: AU14JOGenericVendor
     MilitaryPolice: AU14MilitaryPolicemanVendorUSCM
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14USCMRequisitionVendor
   #platoonflag:  uaflag
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
@@ -83,6 +85,7 @@
     Pilot: AU14UPPAirCrewWeaponsVendor
     MilitaryPolice: AU14MilitaryPolicemanVendorUPP
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14UPPRequisitionVendor
   possibleships:
       - USSBush
 #  jobClassOverride:
@@ -122,6 +125,7 @@
     combattech: AU14ComtechGearVendor
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14WYPMCRequisitionVendor
 #  jobClassOverride:
 #    SquadRifleman: AU14JobGOVFORSquadRiflemanWYPMC
 #    SectionSergeant: AU14JobGOVFORSectionSergeantWYPMC
@@ -165,6 +169,7 @@
     JuniorOfficer: AU14JOGenericVendor
     MilitaryPolice: AU14MilitaryPolicemanGenericVendorCIU
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14CMBCIURequisitionVendor
 #  jobClassOverride:
 #    PlatCo: AU14JobGOVFORPlatCoCMBCIU
 #    SquadRifleman: AU14JobGOVFORSquadRiflemanCMBCIU
@@ -236,6 +241,7 @@
     JuniorOfficer: AU14JOGenericVendor
     MilitaryPolice: AU14MilitaryPolicemanVendorUSCM
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14HAZOPSRequisitionVendor
   possibleships:
       - USSBush
   CompatibleDropships:
@@ -269,6 +275,7 @@
     Deco1: VMarkerOpforDeco5
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14ProdigyRequisitionVendor
   #platoonflag:  uaflag
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
@@ -303,6 +310,7 @@
     Deco1: VMarkerOpforDeco5
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14VAIPORequisitionVendor
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/normandy.yml
@@ -337,6 +345,7 @@
     Deco1: VMarkerOpforDeco5
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14RMCRequisitionVendor
   #jobClassOverride:
    # SquadRifleman: AU14JobGOVFORSquadRiflemanRMC
    # SectionSergeant: AU14JobGOVFORSectionSergeantRMC

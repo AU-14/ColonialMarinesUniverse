@@ -18,7 +18,7 @@
             AU14JobCivilianFoodServiceWorker: [3, 3]
             AU14JobCivilianJournalist: [2, 2]
             AU14JobCivilianScientist: [6, 6]
-            AU14JobCivilianColonySynthetic: [3, 3]
+            AU14JobCivilianColonySynthetic: [2, 2]
 
             # Colony Command (non department)
             AU14JobCivilianCorporateLiaison: [1, 1]
@@ -26,10 +26,12 @@
             AU14JobCivilianHeadOfEngineering: [1, 1]
             AU14JobCivilianHeadOfService: [1, 1]
             AU14JobCivilianHeadPhysician: [1, 1]
+            AU14JobCivilianAmbassadorTWE: [1, 1]
+            AU14JobCivilianAmbassadorUA: [1, 1]
 
             # Security/LEO
             AU14JobCivilianCMBMarshal: [1, 1]
-            AU14JobCivilianCMBDeputy: [7, 7]
+            AU14JobCivilianCMBDeputy: [5, 5]
             AU14JobWYGuard: [4,4]
             # Engineering/Logi
             AU14JobCivilianForeman: [1, 1]
@@ -41,11 +43,10 @@
             AU14JobCivilianPhysician: [3, 3]
             AU14JobCivilianNurse: [3, 3]
             AU14JobCivilianEthicsAndWellnessAdvisor: [1, 1]
-            AU14JobCivilianEmergencyResponseOfficer: [3, 3]
+            AU14JobCivilianEmergencyResponseOfficer: [2, 2]
 
             # Other
             AU14JobCivilianMiner: [10, 10]
-            AU14JobCivilianPrisoner: [7, 7]
-            AU14JobCivilianKellandWarden: [1, 1]
+            AU14JobCivilianPrisoner: [3, 3]
             AU14JobMobBoss: [1, 1]
-            AU14JobMobGoon: [4, 4]
+            AU14JobMobGoon: [3, 3]

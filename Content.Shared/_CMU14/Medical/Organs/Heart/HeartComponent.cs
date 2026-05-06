@@ -1,3 +1,4 @@
+using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._CMU14.Medical.Organs.Heart;
@@ -33,9 +34,24 @@ public sealed partial class HeartComponent : Component
     [DataField, AutoNetworkedField, AutoPausedField]
     public TimeSpan? BelowThresholdSince;
 
+    /// <summary>
+    ///     When did circulation fully stop? Used for collapse timing.
+    /// </summary>
+    [DataField, AutoNetworkedField, AutoPausedField]
+    public TimeSpan? NoPulseSince;
+
     [DataField, AutoPausedField]
     public TimeSpan NextPulseUpdate;
 
     [DataField]
     public TimeSpan PulseUpdateInterval = TimeSpan.FromSeconds(5);
+
+    [DataField, AutoPausedField]
+    public TimeSpan NextCardiacArrestTick;
+
+    [DataField]
+    public FixedPoint2 CardiacArrestAsphyxPerSecond = FixedPoint2.New(6);
+
+    [DataField]
+    public TimeSpan CardiacArrestUnconsciousDelay = TimeSpan.FromSeconds(5);
 }

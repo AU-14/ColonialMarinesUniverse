@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Shields;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.ScissorCut;
+using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
 using Content.Shared.Effects;
@@ -32,6 +33,7 @@ public sealed class XenoPierceSystem : EntitySystem
     [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private readonly LineSystem _line = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly SharedHitLocationSystem _hitLocation = default!;
 
     private readonly HashSet<Entity<MarineComponent>> _pierceEnts = new();
     private readonly HashSet<EntityUid> _hitAlready = new();
@@ -74,6 +76,7 @@ public sealed class XenoPierceSystem : EntitySystem
         _hitAlready.Clear();
         var hits = 0;
         EntityUid? hitEnt = null;
+        using var targetingSuppression = _hitLocation.SuppressBodyZoneTargeting(xeno.Owner);
 
         foreach (var tile in tiles)
         {

@@ -101,6 +101,13 @@
   - type: PhysicalComposition
     materialComposition:
       Steel: 200
+  - type: CMSurgeryTool
+  - type: CMCautery
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 1.5
+    mishapChance: 0.08
+    mishapDamageType: Heat
+    mishapDamageAmount: 4
   - type: StaticPrice
     price: 40
   - type: IgnitionSource

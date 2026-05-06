@@ -675,8 +675,8 @@
 - type: entity
   parent: RMCGunCaseBase
   id: RMCML66DCase
-  name: ML66D heavy machine gun case
-  description: A gun case containing the ML66D heavy machine gun. Comes with 2 magazines
+  name: M56D heavy machine gun case
+  description: A gun case containing the M56D heavy machine gun. Comes with 2 magazines
   components:
   - type: Storage
     maxItemSize: Ginormous

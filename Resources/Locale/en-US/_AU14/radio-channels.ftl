@@ -15,3 +15,5 @@ chat-radio-twe = TWE SOF
 chat-radio-icsc = ICSC SOF
 chat-radio-vai = VAI
 chat-radio-ai = AI
+chat-radio-colony-softwave = Softwave
+chat-radio-clf = CLF
