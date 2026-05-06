@@ -20,6 +20,15 @@
                        "name":  "apc_cmd"
                    },
                    {
+                       "name":  "apc_aa"
+                   },
+                   {
+                       "name":  "apc_medical"
+                   },
+                   {
+                       "name":  "apc_movie"
+                   },
+                   {
                        "name":  "van"
                    },
                    {
@@ -48,15 +57,6 @@
                    },
                    {
                        "name":  "spp_van_prisoner"
-                   },
-                   {
-                       "name":  "apc_aa"
-                   },
-                   {
-                       "name":  "apc_medical"
-                   },
-                   {
-                       "name":  "apc_movie"
                    }
-               ]
+              ]
 }

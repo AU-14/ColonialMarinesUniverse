@@ -39,9 +39,11 @@ public sealed class CMUSurgeryBuiState : BoundUserInterfaceState
 public sealed record CMUSurgeryInFlightInfo(
     NetEntity Part,
     string PartDisplayName,
+    string LeafSurgeryId,
     string LeafSurgeryDisplayName,
     string SurgeonName,
-    TimeSpan StartedAt);
+    TimeSpan StartedAt,
+    bool OwnedByViewer);
 
 [Serializable, NetSerializable]
 public sealed record CMUSurgeryPartEntry(

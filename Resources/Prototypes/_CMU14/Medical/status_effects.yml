@@ -283,18 +283,12 @@
   id: StatusEffectCMUPainSuppression
   name: pain suppression
   categories: [ HideSpawnMenu ]
-  components:
-  - type: StatusEffect
-    alert: CMUPainSuppression
 
 - type: entity
   parent: MobStatusEffectBase
   id: StatusEffectCMUBoneRegenBoost
   name: accelerated bone regen
   categories: [ HideSpawnMenu ]
-  components:
-  - type: StatusEffect
-    alert: CMUBoneRegenBoost
 
 # ----- Pain shock ---------------------------------------------------------
 
@@ -305,32 +299,21 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: CMUPainShockStatus
-  - type: StatusEffect
-    alert: CMUPainShock
 
 - type: entity
   parent: MobStatusEffectBase
   id: StatusEffectCMUPainMild
   name: aching
   categories: [ HideSpawnMenu ]
-  components:
-  - type: StatusEffect
-    alert: CMUPainMild
 
 - type: entity
   parent: MobStatusEffectBase
   id: StatusEffectCMUPainModerate
   name: hurt
   categories: [ HideSpawnMenu ]
-  components:
-  - type: StatusEffect
-    alert: CMUPainModerate
 
 - type: entity
   parent: MobStatusEffectBase
   id: StatusEffectCMUPainSevere
   name: agony
   categories: [ HideSpawnMenu ]
-  components:
-  - type: StatusEffect
-    alert: CMUPainSevere

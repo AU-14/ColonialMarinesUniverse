@@ -71,6 +71,18 @@
   - type: GuideHelp
     guides:
     - ExpandingRepairingStation
+  - type: CMSurgeryTool
+  - type: CMSurgicalDrill
+  - type: CMBoneSaw
+  - type: CMBoneGel
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 2.7
+    mishapChance: 0.18
+    mishapDamageType: Piercing
+    mishapDamageAmount: 4
+    failurePenalties:
+      bone_saw: 2
+      bone_gel: 1
 
 - type: entity
   parent: PartRodMetal

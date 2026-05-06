@@ -1,6 +1,7 @@
 using System;
 using Content.Shared._CMU14.Medical;
 using Content.Shared._CMU14.Medical.BodyPart;
+using Content.Shared._CMU14.Medical.Items;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Unrevivable;
@@ -33,6 +34,7 @@ public abstract class SharedCMUTourniquetSystem : EntitySystem
     [Dependency] protected readonly SharedCMUWoundsSystem Wounds = default!;
     [Dependency] protected readonly SharedHandsSystem Hands = default!;
     [Dependency] protected readonly RMCUnrevivableSystem Unrevivable = default!;
+    [Dependency] protected readonly SharedCMUSplintItemSystem Splints = default!;
     private const float TourniquetScanInterval = 0.5f;
     private float _tourniquetScanAccumulator;
 
@@ -115,22 +117,23 @@ public abstract class SharedCMUTourniquetSystem : EntitySystem
 
     private void OnPatientGetAltVerbs(Entity<CMUHumanMedicalComponent> patient, ref GetVerbsEvent<AlternativeVerb> args)
     {
-        if (!IsLayerEnabled())
-            return;
-        if (!args.CanInteract || !args.CanAccess)
-            return;
-        if (!FindTourniquettedLimb(args.User, patient.Owner, out var part))
-            return;
-
-        var user = args.User;
-        var patientUid = patient.Owner;
-        var verb = new AlternativeVerb
+        if (IsLayerEnabled()
+            && args.CanInteract
+            && args.CanAccess
+            && FindTourniquettedLimb(args.User, patient.Owner, out var part))
         {
-            Text = Loc.GetString("cmu-medical-tourniquet-verb-remove"),
-            Act = () => StartVerbRemoveDoAfter(user, patientUid, part),
-            Priority = 1,
-        };
-        args.Verbs.Add(verb);
+            var user = args.User;
+            var patientUid = patient.Owner;
+            var verb = new AlternativeVerb
+            {
+                Text = Loc.GetString("cmu-medical-tourniquet-verb-remove"),
+                Act = () => StartVerbRemoveDoAfter(user, patientUid, part),
+                Priority = 1,
+            };
+            args.Verbs.Add(verb);
+        }
+
+        Splints.AddCastRemoveVerb(patient, ref args);
     }
 
     private void StartVerbRemoveDoAfter(EntityUid user, EntityUid patient, EntityUid part)

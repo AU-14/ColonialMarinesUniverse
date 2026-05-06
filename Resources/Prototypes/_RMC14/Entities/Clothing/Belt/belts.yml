@@ -401,7 +401,6 @@
       - CMOintment
       - CMTraumaKit
       - CMBurnKit
-      #      - # TODO RMC14 splints
       - CMAutoInjector
       - CMRollerItem
       - BodyBag
@@ -412,8 +411,19 @@
       - RMCPenlight
       - Flare
       - RMCMiniTank
-      #      - # TODO RMC14 reagent analyzer
-      #      - # TODO RMC14 plant analyzer
+      # New Med
+      - CMBoneSaw
+      - CMSurgicalDrill
+      - CMCautery
+      - RMCScalpel
+      - CMBoneSetter
+      - CMRetractor
+      - CMUCastItem
+      - CMUOrganClamp
+      - CMHemostat
+      - CMUSplintItem
+      - CMUBoneGraft
+      - CMBoneGel
       components:
       - Hypospray
       - Defibrillator

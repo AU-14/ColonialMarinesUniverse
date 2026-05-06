@@ -64,6 +64,18 @@
 
 - type: entity
   parent: RMCNutriCoVendor
+  id: RMCVendorNutriCoFoodPMC
+  name: food dispenser
+  suffix: PMC
+
+- type: entity
+  parent: RMCNutriCoVendor
+  id: RMCNutriCoVendorRCM
+  name: food dispenser
+  suffix: RCM
+
+- type: entity
+  parent: RMCNutriCoVendor
   id: RMCVendorNutriCoFoodSPP
   name: food dispenser
   suffix: SPP

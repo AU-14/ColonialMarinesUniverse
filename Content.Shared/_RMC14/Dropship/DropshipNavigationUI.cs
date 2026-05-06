@@ -6,12 +6,13 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._RMC14.Dropship;
 
 [Serializable, NetSerializable]
-public sealed class DropshipNavigationDestinationsBuiState(NetEntity? flyBy, List<Destination> destinations, Dictionary<DoorLocation, bool> doorLockStatus, bool remoteControlStatus) : BoundUserInterfaceState
+public sealed class DropshipNavigationDestinationsBuiState(NetEntity? flyBy, List<Destination> destinations, Dictionary<DoorLocation, bool> doorLockStatus, bool remoteControlStatus, bool canTacticalLand) : BoundUserInterfaceState
 {
     public readonly NetEntity? FlyBy = flyBy;
     public readonly List<Destination> Destinations = destinations;
     public readonly Dictionary<DoorLocation, bool> DoorLockStatus = doorLockStatus;
     public readonly bool RemoteControlStatus = remoteControlStatus;
+    public readonly bool CanTacticalLand = canTacticalLand;
 }
 
 [Serializable, NetSerializable]

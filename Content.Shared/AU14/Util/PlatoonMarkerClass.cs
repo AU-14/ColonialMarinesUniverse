@@ -50,6 +50,7 @@ namespace Content.Shared.AU14.util
         TechTree,
         GroundsideOps,
         TacticalMap,
+        ReqVend,
         Analyzer,
         AICore
     }

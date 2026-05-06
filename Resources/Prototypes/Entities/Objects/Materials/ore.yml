@@ -120,6 +120,7 @@
     heldPrefix: iron
   - type: Tag
     tags:
+    - Ore
     - SteelOre
 
 - type: entity

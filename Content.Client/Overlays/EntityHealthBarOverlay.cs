@@ -32,9 +32,11 @@ public sealed class EntityHealthBarOverlay : Overlay
     private readonly StatusIconSystem _statusIconSystem;
     private readonly SpriteSystem _spriteSystem;
     private readonly ProgressColorSystem _progressColor;
+    private readonly EntityLookupSystem _lookup;
 
     private readonly EntityQuery<CrashLandingComponent> _crashLandingQuery;
     private readonly EntityQuery<ParaDroppingComponent> _paraDroppingQuery;
+    private readonly HashSet<Entity<MobThresholdsComponent>> _healthCandidates = new();
 
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
@@ -51,6 +53,7 @@ public sealed class EntityHealthBarOverlay : Overlay
         _statusIconSystem = _entManager.System<StatusIconSystem>();
         _spriteSystem = _entManager.System<SpriteSystem>();
         _progressColor = _entManager.System<ProgressColorSystem>();
+        _lookup = _entManager.System<EntityLookupSystem>();
         _crashLandingQuery = _entManager.GetEntityQuery<CrashLandingComponent>();
         _paraDroppingQuery = _entManager.GetEntityQuery<ParaDroppingComponent>();
     }
@@ -60,21 +63,41 @@ public sealed class EntityHealthBarOverlay : Overlay
         var handle = args.WorldHandle;
         var rotation = args.Viewport.Eye?.Rotation ?? Angle.Zero;
         var xformQuery = _entManager.GetEntityQuery<TransformComponent>();
+        var metaQuery = _entManager.GetEntityQuery<MetaDataComponent>();
+        var mobQuery = _entManager.GetEntityQuery<MobStateComponent>();
+        var damageQuery = _entManager.GetEntityQuery<DamageableComponent>();
+        var spriteQuery = _entManager.GetEntityQuery<SpriteComponent>();
+        var statusQuery = _entManager.GetEntityQuery<StatusIconComponent>();
 
         const float scale = 1f;
         var scaleMatrix = Matrix3Helpers.CreateScale(new Vector2(scale, scale));
         var rotationMatrix = Matrix3Helpers.CreateRotation(-rotation);
         _prototype.TryIndex(StatusIcon, out var statusIcon);
 
-        var query = _entManager.AllEntityQueryEnumerator<MobThresholdsComponent, MobStateComponent, DamageableComponent, SpriteComponent>();
-        while (query.MoveNext(out var uid,
-            out var mobThresholdsComponent,
-            out var mobStateComponent,
-            out var damageableComponent,
-            out var spriteComponent))
+        _healthCandidates.Clear();
+        _lookup.GetEntitiesIntersecting(
+            args.MapId,
+            args.WorldAABB,
+            _healthCandidates,
+            LookupFlags.Uncontained);
+
+        foreach (var candidate in _healthCandidates)
         {
-            if (statusIcon != null && !_statusIconSystem.IsVisible((uid, _entManager.GetComponent<MetaDataComponent>(uid)), statusIcon))
+            var uid = candidate.Owner;
+            var mobThresholdsComponent = candidate.Comp;
+            if (!mobQuery.TryGetComponent(uid, out var mobStateComponent) ||
+                !damageQuery.TryGetComponent(uid, out var damageableComponent) ||
+                !spriteQuery.TryGetComponent(uid, out var spriteComponent))
+            {
                 continue;
+            }
+
+            if (statusIcon != null &&
+                (!metaQuery.TryGetComponent(uid, out var meta) ||
+                 !_statusIconSystem.IsVisible((uid, meta), statusIcon)))
+            {
+                continue;
+            }
 
             // We want the stealth user to still be able to see his health bar himself
             if (!xformQuery.TryGetComponent(uid, out var xform) ||
@@ -85,7 +108,9 @@ public sealed class EntityHealthBarOverlay : Overlay
                 continue;
 
             // we use the status icon component bounds if specified otherwise use sprite
-            var bounds = _entManager.GetComponentOrNull<StatusIconComponent>(uid)?.Bounds ?? _spriteSystem.GetLocalBounds((uid, spriteComponent));
+            var bounds = statusQuery.TryGetComponent(uid, out var status)
+                ? status.Bounds ?? _spriteSystem.GetLocalBounds((uid, spriteComponent))
+                : _spriteSystem.GetLocalBounds((uid, spriteComponent));
             var worldPos = _transform.GetWorldPosition(xform, xformQuery);
 
             if (!bounds.Translated(worldPos).Intersects(args.WorldAABB))
@@ -95,8 +120,7 @@ public sealed class EntityHealthBarOverlay : Overlay
             if (CalcProgress(uid, mobStateComponent, damageableComponent, mobThresholdsComponent) is not { } deathProgress)
                 continue;
 
-            var worldPosition = _transform.GetWorldPosition(xform);
-            var worldMatrix = Matrix3Helpers.CreateTranslation(worldPosition);
+            var worldMatrix = Matrix3Helpers.CreateTranslation(worldPos);
 
             var scaledWorld = Matrix3x2.Multiply(scaleMatrix, worldMatrix);
             var matty = Matrix3x2.Multiply(rotationMatrix, scaledWorld);

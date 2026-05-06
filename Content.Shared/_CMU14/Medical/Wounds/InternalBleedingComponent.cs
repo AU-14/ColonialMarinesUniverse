@@ -25,3 +25,17 @@ public sealed partial class InternalBleedingComponent : Component
     [DataField, AutoPausedField]
     public TimeSpan NextBleedTick;
 }
+
+public sealed class InternalBleedingChangedEvent : EntityEventArgs
+{
+    public InternalBleedingChangedEvent(EntityUid body, EntityUid part, bool removed)
+    {
+        Body = body;
+        Part = part;
+        Removed = removed;
+    }
+
+    public EntityUid Body { get; }
+    public EntityUid Part { get; }
+    public bool Removed { get; }
+}

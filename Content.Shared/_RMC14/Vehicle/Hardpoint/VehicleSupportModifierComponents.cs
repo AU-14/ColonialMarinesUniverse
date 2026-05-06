@@ -130,3 +130,20 @@ public sealed partial class VehicleGunnerViewUserComponent : Component
     [DataField, AutoNetworkedField]
     public float CursorPvsIncrease;
 }
+
+/// <summary>
+/// Aggregated vehicle-wide movement penalties from named hardpoint failures.
+/// </summary>
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(HardpointSystem), typeof(Content.Shared.Vehicle.GridVehicleMoverSystem))]
+public sealed partial class VehicleMechanicalFailureModifierComponent : Component
+{
+    [DataField, AutoNetworkedField]
+    public float SpeedMultiplier = 1f;
+
+    [DataField, AutoNetworkedField]
+    public float ReverseSpeedMultiplier = 1f;
+
+    [DataField, AutoNetworkedField]
+    public float AccelerationMultiplier = 1f;
+}

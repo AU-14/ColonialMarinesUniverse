@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using Content.Shared._CMU14.Medical.Bones;
 using Content.Shared._CMU14.Medical.Organs;
-using Content.Shared._CMU14.Medical.StatusEffects;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared.Body.Part;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.FixedPoint;
+using Content.Shared.Mobs;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Medical.Scanner;
@@ -32,8 +32,54 @@ public sealed class HealthScannerBuiState(
     public List<CMUInternalBleedReadout>? CMUInternalBleeds;
     public int? CMUHeartBpm;
     public bool? CMUHeartStopped;
-    public PainTier? CMUPainTier;
+    public CMUPainShockRisk? CMUPainShockRisk;
+    public bool CMUPainShockSuppressed;
     public bool CMUExternalBleeding;
+    public bool CMUSyntheticPhysiology;
+    public HealthScannerDamageReadout Damage = new();
+    public HealthScannerAdviceReadout Advice = new();
+    public MobState MobState;
+    public bool HasIncapThreshold;
+    public FixedPoint2 IncapThreshold;
+    public bool HasDeadThreshold;
+    public FixedPoint2 DeadThreshold;
+    public bool PermaDead;
+    public bool VictimBurst;
+    public bool VictimInfected;
+    public bool HolocardXeno;
+}
+
+[Serializable, NetSerializable]
+public sealed class HealthScannerDamageReadout
+{
+    public FixedPoint2 Brute;
+    public FixedPoint2 Burn;
+    public FixedPoint2 Toxin;
+    public FixedPoint2 Airloss;
+    public FixedPoint2 Genetic;
+    public FixedPoint2 Total;
+    public bool UntreatedBruteWounds;
+    public bool UntreatedBurnWounds;
+}
+
+[Serializable, NetSerializable]
+public sealed class HealthScannerAdviceReadout
+{
+    public bool NeedsEpinephrine;
+    public bool ShowRepeatedDefibWarning;
+    public bool ShowDefib;
+    public bool ShowCpr;
+    public bool ShowLarvaBursted;
+    public bool ShowLarvaSurgery;
+    public bool ShowBruteWounds;
+    public bool ShowBurnWounds;
+    public bool ShowBloodPack;
+    public bool ShowFood;
+    public bool ShowCprCrit;
+    public bool ShowDexalin;
+    public bool ShowBicaridine;
+    public bool ShowKelotane;
+    public bool ShowDylovene;
 }
 
 [Serializable, NetSerializable]
@@ -70,6 +116,16 @@ public readonly record struct CMUInternalBleedReadout(
     BodyPartSymmetry Symmetry,
     bool ExactLocationKnown,
     float BloodlossPerSecond);
+
+[Serializable, NetSerializable]
+public enum CMUPainShockRisk : byte
+{
+    Low,
+    Elevated,
+    High,
+    Imminent,
+    Active,
+}
 
 [Serializable, NetSerializable]
 public enum HealthScannerUIKey

@@ -251,6 +251,7 @@ namespace Content.Shared.Containers.ItemSlots
 
             Name = other.Name;
             Locked = other.Locked;
+            DisableEject = other.DisableEject;
             InsertOnInteract = other.InsertOnInteract;
             EjectOnInteract = other.EjectOnInteract;
             EjectOnUse = other.EjectOnUse;

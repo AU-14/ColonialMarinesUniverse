@@ -4,8 +4,14 @@
   name: standard weight IMP backpack
   description: The standard-issue pack of UA forces. Designed to lug gear into the battlefield.
   components:
-  - type: Sprite
-    sprite: _AU14/Clothing/Back/impbag.rsi
+    - type: Sprite
+      sprite: _AU14/Clothing/Back/impbag.rsi
+    - type: Item
+      size: Huge
+    - type: Storage
+      maxItemSize: Huge
+      grid:
+        - 0,0,22,1
 
 - type: entity
   parent: CMBackpack
@@ -13,8 +19,8 @@
   name: standard weight medical IMP backpack
   description: The standard-issue pack of UA forces. Designed to lug gear into the battlefield. This one has a red cross on it.
   components:
-  - type: Sprite
-    sprite: _AU14/Clothing/Back/corpsmanbag.rsi
+    - type: Sprite
+      sprite: _AU14/Clothing/Back/corpsmanbag.rsi
 
 - type: entity
   parent: CMBackpack
@@ -22,8 +28,8 @@
   name: technician backpack
   description: A large pack. Designed to engineering equipment and explosives into the battlefield.
   components:
-  - type: Sprite
-    sprite: _AU14/Clothing/Back/techbag.rsi
+    - type: Sprite
+      sprite: _AU14/Clothing/Back/techbag.rsi
 
 - type: entity
   parent: CMSatchel
@@ -31,8 +37,8 @@
   name: corpsman satchel
   description: A sterile satchel used in medical departments.
   components:
-  - type: Sprite
-    sprite: _AU14/Clothing/Back/corpsmansatchel.rsi
+    - type: Sprite
+      sprite: _AU14/Clothing/Back/corpsmansatchel.rsi
 
 - type: entity
   parent: CMSatchel
@@ -40,39 +46,39 @@
   name: "Jungle AN/PRC-55 Portable Transceiver"
   description: "The AN/PRC-55 Portable Transceiver, also known as AN/PRC 55 Radio Set, is a man-pack, portable VHF FM combat-net radio transceiver manufactured by Armat Battlefield Systems and used to provide short-range, two-way radiotelephone voice communication."
   components:
-  - type: Sprite
-    sprite: _AU14/Clothing/RTOPack/junglertopack.rsi
-    layers:
-    - state: icon
-      map: [ "base" ]
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,4,1
-  - type: CMStorageVisualizer
-    storageClosed: null
-    storageOpen: null
-  - type: RotaryPhone
-    category: Marine
-  - type: RotaryPhoneBackpack
-  - type: UserInterface
-    interfaces:
-      enum.RMCTelephoneUiKey.Key:
-        type: RMCTelephoneBui
-      enum.StorageUiKey.Key:
-        type: StorageBoundUserInterface
-  - type: ActivatableUIBlacklist
-    blacklist:
-      components:
-      - Xeno
-  - type: GenericVisualizer
-    visuals:
-      enum.RotaryPhoneLayers.Layer:
-        base:
-          Base: { state: icon }
-          Ring: { state: ring }
-          Ear: { state: ear }
-  - type: Undisposable
+    - type: Sprite
+      sprite: _AU14/Clothing/RTOPack/junglertopack.rsi
+      layers:
+        - state: icon
+          map: ["base"]
+    - type: Storage
+      maxItemSize: Large
+      grid:
+        - 0,0,4,1
+    - type: CMStorageVisualizer
+      storageClosed: null
+      storageOpen: null
+    - type: RotaryPhone
+      category: Marine
+    - type: RotaryPhoneBackpack
+    - type: UserInterface
+      interfaces:
+        enum.RMCTelephoneUiKey.Key:
+          type: RMCTelephoneBui
+        enum.StorageUiKey.Key:
+          type: StorageBoundUserInterface
+    - type: ActivatableUIBlacklist
+      blacklist:
+        components:
+          - Xeno
+    - type: GenericVisualizer
+      visuals:
+        enum.RotaryPhoneLayers.Layer:
+          base:
+            Base: { state: icon }
+            Ring: { state: ring }
+            Ear: { state: ear }
+    - type: Undisposable
 
 - type: entity
   parent: CMSatchel
@@ -80,39 +86,39 @@
   name: "Desert AN/PRC-55 Portable Transceiver"
   description: "The AN/PRC-55 Portable Transceiver, also known as AN/PRC 55 Radio Set, is a man-pack, portable VHF FM combat-net radio transceiver manufactured by Armat Battlefield Systems and used to provide short-range, two-way radiotelephone voice communication."
   components:
-  - type: Sprite
-    sprite: _AU14/Clothing/RTOPack/desertrtopack.rsi
-    layers:
-    - state: icon
-      map: [ "base" ]
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,4,1
-  - type: CMStorageVisualizer
-    storageClosed: null
-    storageOpen: null
-  - type: RotaryPhone
-    category: Marine
-  - type: RotaryPhoneBackpack
-  - type: UserInterface
-    interfaces:
-      enum.RMCTelephoneUiKey.Key:
-        type: RMCTelephoneBui
-      enum.StorageUiKey.Key:
-        type: StorageBoundUserInterface
-  - type: ActivatableUIBlacklist
-    blacklist:
-      components:
-      - Xeno
-  - type: GenericVisualizer
-    visuals:
-      enum.RotaryPhoneLayers.Layer:
-        base:
-          Base: { state: icon }
-          Ring: { state: ring }
-          Ear: { state: ear }
-  - type: Undisposable
+    - type: Sprite
+      sprite: _AU14/Clothing/RTOPack/desertrtopack.rsi
+      layers:
+        - state: icon
+          map: ["base"]
+    - type: Storage
+      maxItemSize: Large
+      grid:
+        - 0,0,4,1
+    - type: CMStorageVisualizer
+      storageClosed: null
+      storageOpen: null
+    - type: RotaryPhone
+      category: Marine
+    - type: RotaryPhoneBackpack
+    - type: UserInterface
+      interfaces:
+        enum.RMCTelephoneUiKey.Key:
+          type: RMCTelephoneBui
+        enum.StorageUiKey.Key:
+          type: StorageBoundUserInterface
+    - type: ActivatableUIBlacklist
+      blacklist:
+        components:
+          - Xeno
+    - type: GenericVisualizer
+      visuals:
+        enum.RotaryPhoneLayers.Layer:
+          base:
+            Base: { state: icon }
+            Ring: { state: ring }
+            Ear: { state: ear }
+    - type: Undisposable
 
 - type: entity
   parent: CMSatchel
@@ -120,39 +126,39 @@
   name: "Gray AN/PRC-55 Portable Transceiver"
   description: "The AN/PRC-55 Portable Transceiver, also known as AN/PRC 55 Radio Set, is a man-pack, portable VHF FM combat-net radio transceiver manufactured by Armat Battlefield Systems and used to provide short-range, two-way radiotelephone voice communication."
   components:
-  - type: Sprite
-    sprite: _AU14/Clothing/RTOPack/classicrtopack.rsi
-    layers:
-    - state: icon
-      map: [ "base" ]
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,4,1
-  - type: CMStorageVisualizer
-    storageClosed: null
-    storageOpen: null
-  - type: RotaryPhone
-    category: Marine
-  - type: RotaryPhoneBackpack
-  - type: UserInterface
-    interfaces:
-      enum.RMCTelephoneUiKey.Key:
-        type: RMCTelephoneBui
-      enum.StorageUiKey.Key:
-        type: StorageBoundUserInterface
-  - type: ActivatableUIBlacklist
-    blacklist:
-      components:
-      - Xeno
-  - type: GenericVisualizer
-    visuals:
-      enum.RotaryPhoneLayers.Layer:
-        base:
-          Base: { state: icon }
-          Ring: { state: ring }
-          Ear: { state: ear }
-  - type: Undisposable
+    - type: Sprite
+      sprite: _AU14/Clothing/RTOPack/classicrtopack.rsi
+      layers:
+        - state: icon
+          map: ["base"]
+    - type: Storage
+      maxItemSize: Large
+      grid:
+        - 0,0,4,1
+    - type: CMStorageVisualizer
+      storageClosed: null
+      storageOpen: null
+    - type: RotaryPhone
+      category: Marine
+    - type: RotaryPhoneBackpack
+    - type: UserInterface
+      interfaces:
+        enum.RMCTelephoneUiKey.Key:
+          type: RMCTelephoneBui
+        enum.StorageUiKey.Key:
+          type: StorageBoundUserInterface
+    - type: ActivatableUIBlacklist
+      blacklist:
+        components:
+          - Xeno
+    - type: GenericVisualizer
+      visuals:
+        enum.RotaryPhoneLayers.Layer:
+          base:
+            Base: { state: icon }
+            Ring: { state: ring }
+            Ear: { state: ear }
+    - type: Undisposable
 
 - type: entity
   parent: CMSatchel
@@ -160,39 +166,39 @@
   name: "Black AN/PRC-55 Portable Transceiver"
   description: "The AN/PRC-55 Portable Transceiver, also known as AN/PRC 55 Radio Set, is a man-pack, portable VHF FM combat-net radio transceiver manufactured by Armat Battlefield Systems and used to provide short-range, two-way radiotelephone voice communication."
   components:
-  - type: Sprite
-    sprite: _AU14/Clothing/RTOPack/blackrtopack.rsi
-    layers:
-    - state: icon
-      map: [ "base" ]
-  - type: Storage
-    maxItemSize: Huge
-    grid:
-    - 0,0,4,1
-  - type: CMStorageVisualizer
-    storageClosed: null
-    storageOpen: null
-  - type: RotaryPhone
-    category: Marine
-  - type: RotaryPhoneBackpack
-  - type: UserInterface
-    interfaces:
-      enum.RMCTelephoneUiKey.Key:
-        type: RMCTelephoneBui
-      enum.StorageUiKey.Key:
-        type: StorageBoundUserInterface
-  - type: ActivatableUIBlacklist
-    blacklist:
-      components:
-      - Xeno
-  - type: GenericVisualizer
-    visuals:
-      enum.RotaryPhoneLayers.Layer:
-        base:
-          Base: { state: icon }
-          Ring: { state: ring }
-          Ear: { state: ear }
-  - type: Undisposable
+    - type: Sprite
+      sprite: _AU14/Clothing/RTOPack/blackrtopack.rsi
+      layers:
+        - state: icon
+          map: ["base"]
+    - type: Storage
+      maxItemSize: Large
+      grid:
+        - 0,0,4,1
+    - type: CMStorageVisualizer
+      storageClosed: null
+      storageOpen: null
+    - type: RotaryPhone
+      category: Marine
+    - type: RotaryPhoneBackpack
+    - type: UserInterface
+      interfaces:
+        enum.RMCTelephoneUiKey.Key:
+          type: RMCTelephoneBui
+        enum.StorageUiKey.Key:
+          type: StorageBoundUserInterface
+    - type: ActivatableUIBlacklist
+      blacklist:
+        components:
+          - Xeno
+    - type: GenericVisualizer
+      visuals:
+        enum.RotaryPhoneLayers.Layer:
+          base:
+            Base: { state: icon }
+            Ring: { state: ring }
+            Ear: { state: ear }
+    - type: Undisposable
 
 - type: entity
   parent: RMCSatchelMarineLogisticsBig
@@ -200,10 +206,10 @@
   name: M2 MOLLE Backpack
   description: Tactical backpack manufactured by one of the Alphatech subsidiaries. Very lightweight backpack that utilizes UA standard MOLLE fastening systems, which allows easy access and optimal weight distribution. Standard issue heavy duty pack for US army troopers.
   components:
-  - type: Sprite
-    sprite: _AU14/Clothing/US_Army/Back/molle.rsi
-  - type: ItemCamouflage
-    camouflageVariations: {}
+    - type: Sprite
+      sprite: _AU14/Clothing/US_Army/Back/molle.rsi
+    - type: ItemCamouflage
+      camouflageVariations: {}
 
 - type: entity
   parent: CMSatchelMarine
@@ -211,7 +217,7 @@
   name: M1 MOLLE Satchel
   description: Tactical satchel manufactured by one of the Alphatech subsidiaries. Very lightweight beltbag variant that utilizes UA standard MOLLE fastening systems. Standard issue pack for US army troopers.
   components:
-  - type: Sprite
-    sprite: _AU14/Clothing/US_Army/Back/molle_satchel.rsi
-  - type: ItemCamouflage
-    camouflageVariations: {}
+    - type: Sprite
+      sprite: _AU14/Clothing/US_Army/Back/molle_satchel.rsi
+    - type: ItemCamouflage
+      camouflageVariations: {}

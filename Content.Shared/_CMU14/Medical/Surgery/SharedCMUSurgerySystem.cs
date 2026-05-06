@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Content.Shared._CMU14.Medical.Bones;
+using Content.Shared._CMU14.Medical.Items;
 using Content.Shared._CMU14.Medical.Organs;
 using Content.Shared._CMU14.Medical.Organs.Events;
 using Content.Shared._CMU14.Medical.Surgery.Conditions;
@@ -51,9 +52,11 @@ public abstract class SharedCMUSurgerySystem : EntitySystem
         SubscribeLocalEvent<CMUSurgeryStepRemoveOrganEffectComponent, CMSurgeryStepEvent>(OnRemoveOrganStep);
         SubscribeLocalEvent<CMUSurgeryStepReinsertOrganEffectComponent, CMSurgeryStepEvent>(OnReinsertOrganStep);
         SubscribeLocalEvent<CMUSurgeryStepSetBoneEffectComponent, CMSurgeryStepEvent>(OnSetBoneStep);
+        SubscribeLocalEvent<CMUSurgeryStepSetBoneEffectComponent, CMSurgeryStepCompleteCheckEvent>(OnSetBoneCompleteCheck);
         SubscribeLocalEvent<CMUSurgeryStepRepairOrganEffectComponent, CMSurgeryStepEvent>(OnRepairOrganStep);
         SubscribeLocalEvent<CMUSurgeryStepCauterizeBleedEffectComponent, CMSurgeryStepEvent>(OnCauterizeBleedStep);
         SubscribeLocalEvent<CMUSurgeryStepReattachLimbEffectComponent, CMSurgeryStepEvent>(OnReattachLimbStep);
+        SubscribeLocalEvent<CMUSurgeryStepRemoveLimbEffectComponent, CMSurgeryStepEvent>(OnRemoveLimbStep);
         SubscribeLocalEvent<CMUSurgeryStepDebrideEscharEffectComponent, CMSurgeryStepEvent>(OnDebrideEscharStep);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
@@ -166,7 +169,26 @@ public abstract class SharedCMUSurgerySystem : EntitySystem
 
         Bone.RestoreIntegrity((args.Part, null), ent.Comp.IntegrityRestore);
         Fracture.SetSeverity((args.Part, frac), ent.Comp.DowngradeTo, forceUpgrade: false);
+        if (ent.Comp.DowngradeTo == FractureSeverity.None)
+        {
+            if (HasComp<CMUSplintedComponent>(args.Part))
+                RemComp<CMUSplintedComponent>(args.Part);
+            if (HasComp<CMUMalunionComponent>(args.Part))
+                RemComp<CMUMalunionComponent>(args.Part);
+            if (HasComp<CMUPostOpBoneSetComponent>(args.Part))
+                RemComp<CMUPostOpBoneSetComponent>(args.Part);
+        }
         Wounds.RecomputeInternalBleed(args.Part);
+    }
+
+    private void OnSetBoneCompleteCheck(Entity<CMUSurgeryStepSetBoneEffectComponent> ent, ref CMSurgeryStepCompleteCheckEvent args)
+    {
+        if (args.Cancelled)
+            return;
+        if (!TryComp<FractureComponent>(args.Part, out var frac))
+            return;
+        if (frac.Severity == ent.Comp.DowngradeFrom)
+            args.Cancelled = true;
     }
 
     private void OnRepairOrganStep(Entity<CMUSurgeryStepRepairOrganEffectComponent> ent, ref CMSurgeryStepEvent args)
@@ -186,7 +208,7 @@ public abstract class SharedCMUSurgerySystem : EntitySystem
     {
         if (!IsSurgeryEnabled())
             return;
-        Wounds.ClearInternalBleed(args.Part);
+        Wounds.SuppressInternalBleed(args.Part);
     }
 
     private void OnReattachLimbStep(Entity<CMUSurgeryStepReattachLimbEffectComponent> ent, ref CMSurgeryStepEvent args)
@@ -194,6 +216,13 @@ public abstract class SharedCMUSurgerySystem : EntitySystem
         if (!IsSurgeryEnabled())
             return;
         ApplyLimbReattach(args.User, args.Body, args.Part, ent.Comp.StartingHpFraction, ent.Comp.StartingFracture);
+    }
+
+    private void OnRemoveLimbStep(Entity<CMUSurgeryStepRemoveLimbEffectComponent> ent, ref CMSurgeryStepEvent args)
+    {
+        if (!IsSurgeryEnabled())
+            return;
+        ApplyLimbRemoval(args.User, args.Body, args.Part);
     }
 
     private void OnDebrideEscharStep(Entity<CMUSurgeryStepDebrideEscharEffectComponent> ent, ref CMSurgeryStepEvent args)
@@ -213,6 +242,10 @@ public abstract class SharedCMUSurgerySystem : EntitySystem
     }
 
     protected virtual void ApplyLimbReattach(EntityUid user, EntityUid body, EntityUid part, float startingHpFraction, FractureSeverity startingFracture)
+    {
+    }
+
+    protected virtual void ApplyLimbRemoval(EntityUid user, EntityUid body, EntityUid part)
     {
     }
 

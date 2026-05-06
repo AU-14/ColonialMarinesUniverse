@@ -1,0 +1,18 @@
+- type: partySpawn
+  id: CarpInvasivePartySpawn
+  leadersToSpawn:
+    CMUMobCarpInvasive: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: CarpInvasiveParty
+  partyspawn: CarpInvasivePartySpawn
+  blacklistedgamemodes:
+  - forceonforce
+  entrymethod: ground
+  weight: 40
+  minplayers: 40
+  maxplayers: 400
+  GhostsNeeded: 1
+  roundstart: true

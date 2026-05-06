@@ -15,6 +15,7 @@ using Content.Shared.Movement.Systems;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Penalties;
@@ -27,6 +28,7 @@ public abstract class SharedCMUMedicalSpeedSystem : EntitySystem
     [Dependency] protected readonly SharedFractureSystem Fracture = default!;
     [Dependency] protected readonly MovementSpeedModifierSystem Movement = default!;
     [Dependency] protected readonly SharedPainShockSystem Pain = default!;
+    [Dependency] protected readonly INetManager Net = default!;
 
     private bool _medicalEnabled;
     private bool _statusEffectsEnabled;
@@ -38,10 +40,9 @@ public abstract class SharedCMUMedicalSpeedSystem : EntitySystem
         SubscribeLocalEvent<CMUHumanMedicalComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovement);
 
         SubscribeLocalEvent<BoneFracturedEvent>(OnBoneFractured);
-        SubscribeLocalEvent<CMUSplintedComponent, ComponentStartup>(OnSplintStartup);
-        SubscribeLocalEvent<CMUSplintedComponent, ComponentRemove>(OnSplintRemove);
-        SubscribeLocalEvent<CMUCastComponent, ComponentStartup>(OnCastStartup);
-        SubscribeLocalEvent<CMUCastComponent, ComponentRemove>(OnCastRemove);
+        SubscribeLocalEvent<FractureSeverityChangedEvent>(OnFractureSeverityChanged);
+        SubscribeLocalEvent<CMUSplintChangedEvent>(OnSplintChanged);
+        SubscribeLocalEvent<CMUCastChangedEvent>(OnCastChanged);
         SubscribeLocalEvent<PainShockComponent, ComponentStartup>(OnPainStartup);
         SubscribeLocalEvent<PainTierChangedEvent>(OnPainTierChanged);
 
@@ -61,36 +62,27 @@ public abstract class SharedCMUMedicalSpeedSystem : EntitySystem
         RefreshAggregatedPenalties(args.Body);
     }
 
+    private void OnFractureSeverityChanged(ref FractureSeverityChangedEvent args)
+    {
+        RefreshAggregatedPenalties(args.Body);
+    }
+
     // Lifecycle handlers fire on the client during PVS state apply too. The aggregated
     // results (CMUAimAccuracyComponent, MovementSpeedModifierComponent) are networked,
     // so recomputing on state-replay is pure burn — and bursts hard when several injured
     // mobs come back into view at once. Skip the recompute during state apply.
-    private void OnSplintStartup(Entity<CMUSplintedComponent> ent, ref ComponentStartup _)
+    private void OnSplintChanged(CMUSplintChangedEvent args)
     {
         if (Timing.ApplyingState)
             return;
-        RefreshForPart(ent.Owner);
+        RefreshForPart(args.Part);
     }
 
-    private void OnSplintRemove(Entity<CMUSplintedComponent> ent, ref ComponentRemove _)
+    private void OnCastChanged(CMUCastChangedEvent args)
     {
         if (Timing.ApplyingState)
             return;
-        RefreshForPart(ent.Owner);
-    }
-
-    private void OnCastStartup(Entity<CMUCastComponent> ent, ref ComponentStartup _)
-    {
-        if (Timing.ApplyingState)
-            return;
-        RefreshForPart(ent.Owner);
-    }
-
-    private void OnCastRemove(Entity<CMUCastComponent> ent, ref ComponentRemove _)
-    {
-        if (Timing.ApplyingState)
-            return;
-        RefreshForPart(ent.Owner);
+        RefreshForPart(args.Part);
     }
 
     private void OnPainStartup(Entity<PainShockComponent> ent, ref ComponentStartup _)
@@ -112,14 +104,18 @@ public abstract class SharedCMUMedicalSpeedSystem : EntitySystem
 
     private void OnRefreshMovement(Entity<CMUHumanMedicalComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
     {
+        if (Net.IsClient)
+            return;
         if (!IsLayerEnabled())
             return;
         var mult = ComputeMovementMultiplier(ent.Owner);
         args.ModifySpeed(mult, mult);
     }
 
-    public void RefreshAggregatedPenalties(EntityUid body)
+    public virtual void RefreshAggregatedPenalties(EntityUid body)
     {
+        if (Net.IsClient)
+            return;
         if (!HasComp<CMUHumanMedicalComponent>(body))
             return;
 
@@ -129,6 +125,11 @@ public abstract class SharedCMUMedicalSpeedSystem : EntitySystem
         Dirty(body, aim);
 
         Movement.RefreshMovementSpeedModifiers(body);
+        RefreshAimDependentWeapons(body);
+    }
+
+    protected virtual void RefreshAimDependentWeapons(EntityUid body)
+    {
     }
 
     public float ComputeMovementMultiplier(EntityUid body)
@@ -197,10 +198,10 @@ public abstract class SharedCMUMedicalSpeedSystem : EntitySystem
             mult *= Pain.GetEffectiveTier(body, pain) switch
             {
                 PainTier.None => 1.00f,
-                PainTier.Mild => 1.05f,
-                PainTier.Moderate => 1.15f,
-                PainTier.Severe => 1.40f,
-                PainTier.Shock => 1.80f,
+                PainTier.Mild => 1.01f,
+                PainTier.Moderate => 1.03f,
+                PainTier.Severe => 1.08f,
+                PainTier.Shock => 1.15f,
                 _ => 1f,
             };
         }

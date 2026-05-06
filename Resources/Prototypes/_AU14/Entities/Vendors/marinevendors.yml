@@ -140,10 +140,12 @@
         amount: 4
       - id: RMCM276ShotgunShellLoadingRig
         amount: 6
+      - id: RMCBeltHolsterSMGPouch
+        amount: 5
       - id: RMCBeltHolsterPistol
         amount: 20
       - id: RMCBeltHolsterRevolver
-        amount: 20
+        amount: 10
       - id: CMBeltKnifeFilled
         name: M276 Knife Rig (Full)
         amount: 2
@@ -271,11 +273,10 @@
 
     Corpsman protocol: select the essential equipment set, storage and limited medications.
   components:
-  - type: AccessReader
-    access: [ [ "AU14AccessGovforMedical" ], [ "AU14AccessOpforMedical" ] ]
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
   - type: CMAutomatedVendor
+    jobs: [ AU14JobPlatoonCorpsmanBase, AU14JobGOVFORPlatoonCorpsman, AU14JobOpforPlatoonCorpsman ]
     sections:
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
@@ -610,14 +611,28 @@
       entries:
       - id: AU14PouchCommandFill
         amount: 10
-    - name: Miscellaneous
+    - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
+      - id: RMCWhistle
+      - id: RMCPackFlareCAS
+    - name: Spare Equipment
+      entries:
+      - id: RMCExplosiveBreachingCharge
+        amount: 4
+      - id: RMCBinoculars
+        amount: 5
+      - id: RMCLaserDesignator
+        amount: 2
+      - id: RMCFulton20
         amount: 4
       - id: RMCWhistle
         amount: 10
+      - id: RMCBoxPackFlareCAS
+        amount: 1
       - id: RMCPackFlareCAS
-        amount: 10
+        amount: 6
 
 - type: entity
   parent: ColMarTechBase
@@ -662,7 +677,7 @@
   id: AU14USCMsectionleaderequipmentvendor
   name: USCM section leader vendor
   description: >-
-    An automated supervisor rack, hooked up to a compact storage of US Colonial Marine Corps section-leadership equipment.
+    An automated equipment rack, hooked up to a compact storage of US Colonial Marine Corps section-leadership equipment.
     Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
   components:
   - type: AccessReader
@@ -672,26 +687,20 @@
   - type: CMAutomatedVendor
     sections:
     - name: Helmets and Hats
+      choices: { CMHat: 1 }
       entries:
       - id: AU14DesertM11Helmet
-        amount: 1
       - id: AU14JungleM11Helmet
-        amount: 1
       - id: RMCHeadBeretSquad
-        amount: 1
         name: Black Beret
       - id: AU14JunglePatrolCap
-        amount: 1
       - id: AU14DesertPatrolCap
-        amount: 1
-    - name: Miscellaneous
+    - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
-        amount: 1
       - id: RMCWhistle
-        amount: 1
       - id: RMCPackFlareCAS
-        amount: 2
 
 - type: entity
   parent: ColMarTechBase
@@ -794,26 +803,6 @@
       entries:
       - id: AU14CaseXM99A
         amount: 1
-    - name: Disposable Special Light Anti-Tank Weapon
-      entries:
-      - id: AU14CrateM5A1SLAW
-        amount: 2
-    - name: Explosives
-      entries:
-      - id: RMCBoxHEDP
-        amount: 2
-      - id: RMCPacketGrenadeSmokeFilled
-        amount: 5
-      - id: RMCPacketGrenadeM74AGMSFilled
-        amount: 2
-      - id: RMCPacketGrenadeM74AGMFFilled
-        amount: 2
-      - id: RMCPacketGrenadeM74AGMSHornetFilled
-        amount: 2
-      - id: RMCExplosiveBreachingCharge
-        amount: 16
-      - id: RMCExplosivePlastic
-        amount: 12
 
 # Equipment Vendor (universal)
 - type: entity
@@ -913,14 +902,6 @@
         amount: 5
       - id: RMCCableCoil
         amount: 15
-    - name: Tents
-      entries:
-      - id: RMCTentUNMCStandardFolded
-        amount: 1
-      - id: RMCTentUNMCExtendedFolded
-        amount: 1
-      - id: RMCTentUNMCStandardMedicalFolded
-        amount: 1
     - name: Flares and lights
       entries:
       - id: RMCBoxFlashlights
@@ -982,13 +963,21 @@
       - id: AU14BackpackRTOPackGray
       - id: AU14BackpackRTOPackBlack
     - name: Equipment
+      takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
-        amount: 1
       - id: RMCWhistle
-        amount: 1
       - id: RMCPackFlareCAS
+    - name: Spare Equipment
+      entries:
+      - id: RMCExplosiveBreachingCharge
         amount: 2
+      - id: RMCBinoculars
+        amount: 2
+      - id: RMCFulton20
+        amount: 1
+      - id: RMCBoxPackFlareCAS
+        amount: 1
 
 # AirCrew Weapons (universal)
 - type: entity
@@ -1211,3 +1200,210 @@
       - id: AU14PouchIFAKFill
       - id: RMCPouchMagazinePistol
       - id: RMCPouchPistol
+
+- type: entity
+  parent: ColMarTechCargo
+  id: AU14USCMRequisitionVendor
+  name: USCM automated requisitions vendor
+  description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
+  components:
+  - type: AccessReader
+    access: [ ["AU14AccessGovforReq"] ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+  - type: CMAutomatedVendor
+    baseSprite:
+      sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+      state: base
+    animationSprite:
+      sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+      state: vend
+    sections:
+    - name: Standard issue primaries
+      entries:
+      - id: RMCWeaponRifleM54CMK1Unloaded
+        amount: 30
+      - id: WeaponSMGM63
+        amount: 20
+    - name: standard issue secondaries
+      entries:
+      - id: CMWeaponPistolM1984Empty
+        amount: 20
+      - id: RMCWeaponPistolM77Empty
+        amount: 10
+    - name: special issue firearms
+      entries:
+      - id: RMCWeaponRifleM54C
+        amount: 8
+      - id: WeaponRifleM4SPR
+        amount: 6
+      - id: WeaponShotgunM42A1
+        amount: 2
+      - id: WeaponShotgunM42A2
+        amount: 1
+      - id: AU14WeaponPistolM4A4Empty
+        amount: 8
+      - id: RMCWeaponRevolverM44Empty
+        amount: 5
+      - id: RMCML66DCase
+        amount: 1
+    - name: primary ammunition
+      entries:
+      - id: CMMagazineRifleM54CMK1
+        amount: 200
+      - id: CMMagazineRifleM54CMK1AP
+        amount: 15
+      - id: CMMagazineSMGM63
+        amount: 200
+      - id: CMMagazineSMGM63AP
+        amount: 15
+      - id: CMMagazineSMGM63Ext
+        amount: 10
+      - id: CMMagazineRifleM4SPR
+        amount: 60
+      - id: CMMagazineRifleM4SPRAP
+        amount: 15
+      - id: CMMagazineRifleM4SPRExt
+        amount: 10
+      - id: RMCMagazineRifleM4SPRWP
+        amount: 5
+      - id: CMMagazineRifleM54C
+        amount: 100
+      - id: CMMagazineRifleM54CAP
+        amount: 15
+      - id: CMMagazineRifleM54CExt
+        amount: 10
+      - id: RMCMagazineRifleM54CWP
+        amount: 5
+      - id: RMCMagazineRifleM54CHEAPEmpty
+        amount: 0
+      - id: RMCBoxShotgunBuckshot
+        amount: 20
+      - id: RMCBoxShotgunFlechette
+        amount: 20
+      - id: RMCBoxShotgunSlugs
+        amount: 20
+      - id: RMCMagazineSmartGun
+        amount: 25
+      - id: RMCPowerCellSmartgun
+        amount: 10
+    - name: secondary ammunition
+      entries:
+      - id: CMMagazinePistolM1984
+        amount: 200
+      - id: RMCMagazinePistolM1984AP
+        amount: 15
+      - id: RMCMagazinePistolM1984HP
+        amount: 5
+      - id: CMMagazinePistolM77AP
+        amount: 200
+      - id: RMCSpeedLoaderM44
+        amount: 100
+      - id: RMCSpeedLoader44Marksman
+        amount: 10
+    - name: explosives
+      entries:
+      - id: CMPacketGrenadeHighExplosiveFilled
+        amount: 6
+      - id: RMCPacketGrenadeIncendiaryFilled
+        amount: 3
+      - id: CMPacketGrenadeFragFilled
+        amount: 6
+      - id: RMCPacketGrenadeSmokeFilled
+        amount: 6
+      - id: CMPacketGrenadeFragOldFilled
+        amount: 2
+      - id: RMCBoxClaymoreMineFilled
+        amount: 3
+      - id: RMCPacketGrenadeM74AGMFFilled
+        amount: 4
+      - id: RMCPacketGrenadeM74AGMSHornetFilled
+        amount: 4
+      - id: RMCPacketGrenadeM74AGMIFilled
+        amount: 2
+      - id: RMCPacketGrenadeM74AGMSStarShellFilled
+        amount: 4
+      - id: RMCPacketGrenadeM74AGMSFilled
+        amount: 4
+      - id: RMCExplosiveBreachingCharge
+        amount: 6
+      - id: RMCExplosivePlastic
+        amount: 8
+      - id: RMCWeaponLauncherDisposableFolded
+        amount: 2
+    - name: Barrel Attachments
+      entries:
+      - id: RMCAttachmentExtendedBarrel
+        amount: 5
+      - id: RMCAttachmentShotgunChoke
+        amount: 3
+    - name: Rail Attachments
+      entries:
+      - id: RMCAttachmentTwoPointSling
+        amount: 50
+      - id: RMCAttachmentRailFlashlight
+        amount: 25
+      - id: RMCAttachmentS42xTelescopicMiniscope
+        amount: 2
+    - name: Underbarrel Attachments
+      entries:
+      - id: RMCAttachmentFlashlightGrip
+        amount: 15
+      - id: RMCAttachmentVerticalGrip
+        amount: 5
+      - id: RMCAttachmentBipod
+        amount: 5
+      - id: RMCAttachmentUnderbarrelExtinguisher
+        amount: 5
+      - id: RMCAttachmentU7UnderbarrelShotgun
+        amount: 3
+    - name: Stock Attachments
+      entries:
+      - id: RMCAttachmentM54CStockCollapsible
+        amount: 30
+      - id: RMCAttachmentM54CStockSolid
+        amount: 5
+      - id: RMCAttachmentM63StockCollapsible
+        amount: 15
+      - id: RMCAttachmentM63Stock
+        amount: 10
+      - id: RMCAttachmentM63ArmBrace
+        amount: 10
+      - id: RMCAttachmentM42A2CollapsibleStock
+        amount: 3
+      - id: RMCAttachmentM44MagnumSharpshooterStock
+        amount: 2
+    - name: Load Bearing Equipment
+      entries:
+      - id: RMCOuterClothingExternalWebbingBlack
+        amount: 4
+      - id: RMCOuterClothingExternalWebbing
+        amount: 4
+    - name: Devices
+      entries:
+      - id: RMCIntelDetector
+        amount: 4
+      - id: RMCFulton20
+        amount: 4
+      - id: RMCSentryLaptop
+        amount: 4
+    - name: RTO Packs
+      entries:
+      - id: AU14BackpackRTOPackJungle
+        amount: 2
+      - id: AU14BackpackRTOPackDesert
+        amount: 1
+    - name: Tents
+      entries:
+      - id: RMCTentUNMCStandardFolded
+        amount: 2
+      - id: RMCTentUNMCExtendedFolded
+        amount: 1
+      - id: RMCTentUNMCBigFolded
+        amount: 1
+      - id: RMCTentUNMCStandardMedicalFolded
+        amount: 1
+      - id: AU14TentBigFoldedSurgical
+        amount: 1
+      - id: RMCTentUNMCExtendedMessFolded
+        amount: 1

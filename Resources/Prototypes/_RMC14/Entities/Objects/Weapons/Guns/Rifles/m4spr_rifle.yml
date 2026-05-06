@@ -272,8 +272,8 @@
 - type: entity
   parent: CMMagazineRifleM4SPR
   id: RMCMagazineRifleM4SPRWP
-  name: M4SPR WP magazine (10x24mm)
-  description: "A magazine of wall-piercing 10x24mm rounds for use in the M4SPR battle rifle."
+  name: M4RA WP magazine (10x24mm)
+  description: "A magazine of wall-piercing 10x24mm rounds for use in the M4RA battle rifle."
   suffix: WP
   components:
   - type: Tag
@@ -300,8 +300,8 @@
 - type: entity
   parent: CMMagazineRifleM4SPR
   id: RMCMagazineRifleM4SPRIncendiary
-  name: M4SPR incendiary magazine (10x24mm)
-  description: "A magazine of Incendiary 10x24mm rounds for use in the M4SPR battle rifle."
+  name: M4RA incendiary magazine (10x24mm)
+  description: "A magazine of Incendiary 10x24mm rounds for use in the M4RA battle rifle."
   suffix: Incendiary
   components:
   - type: Tag
@@ -328,8 +328,8 @@
 - type: entity
   parent: CMMagazineRifleM4SPR
   id: RMCMagazineRifleM4SPRHEAP
-  name: M4SPR HEAP magazine (10x24mm)
-  description: "A magazine of high-explosive-armor-piercing 10x24mm rounds for use in the M4SPR battle rifle."
+  name: M4RA HEAP magazine (10x24mm)
+  description: "A magazine of high-explosive-armor-piercing 10x24mm rounds for use in the M4RA battle rifle."
   suffix: HEAP
   components:
   - type: Tag
@@ -356,8 +356,8 @@
 - type: entity
   parent: CMMagazineRifleM4SPR
   id: CMMagazineRifleM4SPRAP
-  name: M4SPR AP magazine (10x24mm)
-  description: "A magazine of armor-piercing 10x24mm rounds for use in the M4SPR battle rifle."
+  name: M4RA AP magazine (10x24mm)
+  description: "A magazine of armor-piercing 10x24mm rounds for use in the M4RA battle rifle."
   suffix: AP
   components:
   - type: Tag
@@ -392,8 +392,8 @@
 - type: entity
   parent: CMMagazineRifleM4SPR
   id: CMMagazineRifleM4SPRExt
-  name: "M4SPR extended magazine (10x24mm)"
-  description: "An extended magazine of standard 10x24mm rounds for use in the M4SPR battle rifle."
+  name: "M4RA extended magazine (10x24mm)"
+  description: "An extended magazine of standard 10x24mm rounds for use in the M4RA battle rifle."
   components:
   - type: BallisticAmmoProvider
     capacity: 35

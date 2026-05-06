@@ -8,6 +8,7 @@ using Content.Shared._CMU14.Medical.StatusEffects;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Scanner;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.FixedPoint;
@@ -26,6 +27,7 @@ public sealed class HealthScannerCMUExtensionSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedBodySystem _body = default!;
     [Dependency] private readonly SharedContainerSystem _containers = default!;
+    [Dependency] private readonly SharedPainShockSystem _pain = default!;
     [Dependency] private readonly SkillsSystem _skills = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
@@ -66,21 +68,36 @@ public sealed class HealthScannerCMUExtensionSystem : EntitySystem
 
         FillBodyParts(args.Patient, state);
         if (skill >= 2)
+        {
+            state.CMUSyntheticPhysiology = HasComp<SynthComponent>(args.Patient);
             FillOrgans(args.Patient, state);
+        }
         if (skill >= 1)
             FillFractures(args.Patient, state, exactSeverity: skill >= 3);
         if (skill >= 1)
             FillInternalBleeds(args.Patient, state, exactLocation: skill >= 3);
         FillHeart(args.Patient, state);
         if (skill >= 1)
-            FillPainTier(args.Patient, state);
+            FillPainShockRisk(args.Patient, state);
     }
 
-    private void FillPainTier(EntityUid patient, HealthScannerBuiState state)
+    private void FillPainShockRisk(EntityUid patient, HealthScannerBuiState state)
     {
-        if (TryComp<PainShockComponent>(patient, out var pain))
-            state.CMUPainTier = pain.Tier;
+        if (!TryComp<PainShockComponent>(patient, out var pain))
+            return;
+
+        state.CMUPainShockRisk = PainShockRiskFromTier(_pain.GetEffectiveTier(patient, pain));
+        state.CMUPainShockSuppressed = _pain.IsPainRiskSuppressed(patient, pain);
     }
+
+    private static CMUPainShockRisk PainShockRiskFromTier(PainTier tier) => tier switch
+    {
+        PainTier.Mild => CMUPainShockRisk.Elevated,
+        PainTier.Moderate => CMUPainShockRisk.High,
+        PainTier.Severe => CMUPainShockRisk.Imminent,
+        PainTier.Shock => CMUPainShockRisk.Active,
+        _ => CMUPainShockRisk.Low,
+    };
 
     private void FillBodyParts(EntityUid patient, HealthScannerBuiState state)
     {

@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: Clothing
   id: AU14IDCardBaseCivilianNoIFF
   name: identification holo-badge
@@ -47,19 +47,83 @@
   components:
   - type: PresetIdCard
     job: AU14JobCLFCellLeader
+  - type: Access
+    groups:
+    - Colonist
   - type: IdCard
-    jobTitle: au14-id-job-title-colony-civilian
+    jobTitle: au14-job-name-civiliancolonist
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+    - FactionCLF
+
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardCLFCivilian
-  name: colonist ID card
+  name: CLF guerilla ID card
   components:
   - type: Access
     groups:
     - Colonist
   - type: IdCard
-    jobTitle: au14-id-job-title-colony-civilian
+    jobTitle: au14-job-name-civiliancolonist
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+    - FactionCLF   
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: AU14IDCardCLFPhysician
+  name: CLF physician ID card
+  components:
+  - type: Access
+    groups:
+    - Colonist
+  - type: IdCard
+    jobTitle: au14-job-name-civilianphysician
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+    - FactionCLF
+
+- type: entity
+  parent: AU14IDCardCLFPhysician
+  id: AU14IDCardCLFGeneralPractitioner
+  name: CLF general practitioner ID card
+  components:
+  - type: Access
+    groups:
+    - Colonist
+  - type: IdCard
+    jobTitle: au14-job-name-civiliangeneralpractitioner
+
+- type: entity
+  parent: AU14IDCardCLFPhysician
+  id: AU14IDCardCLFPharmacist
+  name: CLF pharmacist ID card
+  components:
+  - type: Access
+    groups:
+    - Colonist
+  - type: IdCard
+    jobTitle: au14-job-name-civilianpharmacist
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: AU14IDCardCLFSurgeon
+  name: CLF surgeon ID card
+  components:
+  - type: Access
+    groups:
+    - Colonist
+  - type: IdCard
+    jobTitle: au14-job-name-civiliansurgeon
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+    - FactionCLF
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
@@ -116,6 +180,9 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianScientist
+  - type: ItemIFF
+    factions:
+    - FactionWeYa
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
@@ -124,6 +191,10 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianColonySynthetic
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+    - FactionCMB
 
 - type: entity
   parent: AU14IDCardColonySynthetic
@@ -156,6 +227,10 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianColonyAdministrator
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+    - FactionCMB
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
@@ -164,6 +239,9 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianCorporateLiaison
+  - type: ItemIFF
+    factions:
+    - FactionWeYa
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
@@ -172,6 +250,10 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianForeman
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+    - FactionCMB
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
@@ -220,6 +302,30 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianPhysician
+
+- type: entity
+  parent: AU14IDCardColonyPhysician
+  id: AU14IDCardColonySurgeon
+  name: surgeon ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: au14-job-name-civiliansurgeon
+
+- type: entity
+  parent: AU14IDCardColonyPhysician
+  id: AU14IDCardColonyGeneralPractitioner
+  name: general practitioner ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: au14-job-name-civiliangeneralpractitioner
+
+- type: entity
+  parent: AU14IDCardColonyPhysician
+  id: AU14IDCardColonyPharmacist
+  name: pharmacist ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: au14-job-name-civilianpharmacist
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
@@ -276,6 +382,17 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianCMBDeputy
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/cmb_deputy.rsi
+    state: icon
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/cmb_deputy.rsi
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+    - FactionCMB
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
@@ -284,6 +401,17 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianCMBMarshal
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/cmb_marshal.rsi
+    state: icon
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/cmb_marshal.rsi
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+    - FactionCMB
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
@@ -366,6 +494,11 @@
   components:
   - type: PresetIdCard
     job: AU14JobColonyWorkingJoe
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+    - FactionCMB
+    - FactionWeYa
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
@@ -412,3 +545,21 @@
   components:
   - type: PresetIdCard
     job: AU14JobInvestigationICCLiaison
+
+- type: entity
+  id: FactionCLF
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IFFFaction
+  - type: FactionFrequencies
+    channels:
+    - CLF
+
+- type: entity
+  id: FactionCMB
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IFFFaction
+  - type: FactionFrequencies
+    channels:
+    - CMB

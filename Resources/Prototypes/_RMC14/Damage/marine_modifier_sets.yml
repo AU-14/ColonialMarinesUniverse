@@ -111,7 +111,7 @@
   coefficients:
     Blunt: 0.95
     Slash: 0.7
-    Piercing: 0.3
+    Piercing: 0.02
     Structural: 0.95
     Caustic: 1.5
 
@@ -120,7 +120,7 @@
   coefficients:
     Blunt: 0.95
     Slash: 0.8
-    Piercing: 0.45
+    Piercing: 0.02
     Structural: 0.95
     Caustic: 1.5
 

@@ -25,6 +25,14 @@
   - type: Construction
     graph: smokeableCigarette
     node: cigarette
+  - type: CMSurgeryTool
+  - type: CMCautery
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 2.8
+    mishapChance: 0.20
+    mishapDamageType: Heat
+    mishapDamageAmount: 3
+    failurePenalty: 2
 
 - type: entity
   id: SoakedCigarette

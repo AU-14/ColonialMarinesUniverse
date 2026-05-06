@@ -29,7 +29,6 @@
     cultistJob: 3
   spawnTogether: true
 
-
 - type: partySpawn
   id: cultistParty
   leadersToSpawn:
@@ -57,10 +56,13 @@
       scale: 0.2
       whenToBeginScaling: 50
 
-
 - type: auThirdParty
   id: cultistThirdParty
   partyspawn: cultistParty
+  blacklistedgamemodes:
+  - insurgency
+  - forceonforce
+  - DistressSignal
   entrymethod: shuttle
   weight: 3
   minplayers: 70
@@ -71,6 +73,10 @@
 - type: auThirdParty
   id: cultistThirdPartyNoQueen
   partyspawn: cultistPartyNoQueen
+  blacklistedgamemodes:
+  - insurgency
+  - forceonforce
+  - DistressSignal
   entrymethod: ground
   weight: 15
   minplayers: 35
@@ -80,7 +86,7 @@
 
 - type: partySpawn
   id: cultistPartyThreatOnMarkers
-  leadersToSpawn: 
+  leadersToSpawn:
     CMXenoQueen: 1
   gruntsToSpawn:
     cultistJob: 3
@@ -95,7 +101,7 @@
   Markers:
     Member: cultcfmarker
     Leader: cultcfmarker
-    
+
 - type: lorePrimer
   id: AU14PrimerThreatCultist
   threattext: "You are a member of the hive, grow and evolve!"

@@ -47,11 +47,6 @@
       whitelist:
         tags:
         - SquadPMC
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: Marine
-      Faction: govfor
   hidden: false
 
 - type: startingGear

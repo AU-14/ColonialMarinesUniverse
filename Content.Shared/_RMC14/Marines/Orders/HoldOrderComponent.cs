@@ -31,10 +31,24 @@ public sealed partial class HoldOrderComponent : Component, IOrderComponent
     /// <summary>
     /// Resistance to pain.
     /// </summary>
-    /// <remarks>
-    /// I am unsure of when pain will be implemented but I am putting this here for the future.
-    /// </remarks>
-    /// TODO RMC14 Make this do something meaningful when pain is actually a thing.
     [DataField, AutoNetworkedField]
-    public FixedPoint2 PainModifier;
+    public FixedPoint2 PainModifier = 0.1;
+
+    /// <summary>
+    /// Extra pain decay granted per leadership level while the order is active.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public FixedPoint2 PainDecayBonus = 0.1;
+
+    /// <summary>
+    /// Effective pain tier reduction granted by Hold. This stacks additively with painkillers.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int PainTierSuppression = 1;
+
+    /// <summary>
+    /// Maximum effective pain tier reduction that leadership scaling can reach.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int PainTierSuppressionMax = 2;
 }

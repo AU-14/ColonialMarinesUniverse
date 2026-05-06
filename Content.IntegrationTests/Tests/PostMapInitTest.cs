@@ -84,7 +84,6 @@ namespace Content.IntegrationTests.Tests
             // "Relic",
             // "dm01-entryway",
             // "Exo",
-            "RMCDev", // RMC14
             "Savannah",
             "Almayer",
             "RMCAdminFax",

@@ -184,6 +184,30 @@
 
 - type: entity
   parent: RMCKitBase
+  id: AU14KitWeaponMCX
+  name: MCS-X pulse rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponRifleprodigyrifleAR
+      amount: 1
+    - id: AU14WeaponRifleprodigyrifleMagazineAP
+      amount: 1
+    - id: AU14WeaponRifleprodigyrifleMagazineStandard
+      amount: 8
+
+- type: entity
+  parent: RMCKitBase
   id: AU14KitWeaponL23
   name: L23 rifle case
   components:

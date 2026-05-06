@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Damage.ObstacleSlamming;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Plasma;
+using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
 using Content.Shared.Effects;
@@ -32,6 +33,7 @@ public sealed class XenoTailSweepSystem : EntitySystem
     [Dependency] private readonly SharedInteractionSystem _interact = default!;
     [Dependency] private readonly RMCSizeStunSystem _size = default!;
     [Dependency] private readonly RMCObstacleSlammingSystem _obstacleSlamming = default!;
+    [Dependency] private readonly SharedHitLocationSystem _hitLocation = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _hit = new();
 
@@ -67,6 +69,7 @@ public sealed class XenoTailSweepSystem : EntitySystem
         _entityLookup.GetEntitiesInRange(transform.Coordinates, xeno.Comp.Range, _hit);
 
         var origin = _transform.GetMapCoordinates(xeno);
+        using var targetingSuppression = _hitLocation.SuppressBodyZoneTargeting(xeno.Owner);
         foreach (var mob in _hit)
         {
             if (!_xeno.CanAbilityAttackTarget(xeno, mob))

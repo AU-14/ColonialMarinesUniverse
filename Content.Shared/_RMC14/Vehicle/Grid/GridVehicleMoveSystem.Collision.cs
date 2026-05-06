@@ -541,7 +541,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         var selfDamageMult = HasPlowInstalled(vehicle) ? mover.WallSmashPlowDamageMultiplier : 1f;
         var hull = mover.MobCollisionHullDamage * selfDamageMult;
         if (hull > 0f)
-            _hardpoints.DamageHardpoint(vehicle, vehicle, hull);
+            _hardpoints.DamageVehicleHull(vehicle, hull);
     }
 
     /// <summary>
@@ -579,7 +579,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         {
             var hull = mover.WallSmashHullDamage * selfDamageMult;
             if (hull > 0f)
-                _hardpoints.DamageHardpoint(vehicle, vehicle, hull);
+                _hardpoints.DamageVehicleHull(vehicle, hull);
         }
     }
 
@@ -733,7 +733,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         {
             var hull = mover.WallSmashHullDamage * selfDamageMult;
             if (hull > 0f)
-                _hardpoints.DamageHardpoint(vehicle, vehicle, hull);
+                _hardpoints.DamageVehicleHull(vehicle, hull);
         }
 
         return true;

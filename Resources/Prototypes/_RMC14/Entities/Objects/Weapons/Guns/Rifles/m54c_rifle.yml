@@ -370,7 +370,7 @@
 - type: entity
   parent: CMMagazineRifleBase
   id: CMMagazineRifleM54C
-  name: "M41A magazine (10x24mm)"
+  name: "M41A MK2 magazine (10x24mm)"
   components:
   - type: Tag
     tags:
@@ -397,7 +397,7 @@
 - type: entity
   parent: CMMagazineRifleM54C
   id: CMMagazineRifleM54CAP
-  name: "M41A AP magazine (10x24mm)"
+  name: "M41A MK2 AP magazine (10x24mm)"
   suffix: AP
   components:
   - type: Tag
@@ -426,7 +426,7 @@
 - type: entity
   parent: CMMagazineRifleM54C
   id: RMCMagazineRifleM54CIncendiary
-  name: "M41A Incendiary magazine (10x24mm)"
+  name: "M41A MK2 Incendiary magazine (10x24mm)"
   suffix: Incendiary
   components:
   - type: Tag
@@ -453,7 +453,7 @@
 - type: entity
   parent: CMMagazineRifleM54C
   id: RMCMagazineRifleM54CHEAP
-  name: "M41A HEAP magazine (10x24mm)"
+  name: "M41A MK2 HEAP magazine (10x24mm)"
   suffix: HEAP
   components:
   - type: Tag
@@ -488,7 +488,7 @@
 - type: entity
   parent: CMMagazineRifleM54C
   id: RMCMagazineRifleM54CWP
-  name: "M41A WP magazine (10x24mm)"
+  name: "M41A MK2 WP magazine (10x24mm)"
   suffix: WP
   components:
   - type: Tag
@@ -515,7 +515,7 @@
 - type: entity
   parent: CMMagazineRifleM54C
   id: CMMagazineRifleM54CExt
-  name: "M41A extended magazine (10x24mm)"
+  name: "M41A MK2 extended magazine (10x24mm)"
   components:
   - type: Tag
     tags:

@@ -4,9 +4,9 @@
   name: Debride eschar
   components:
   - type: CMSurgeryStep
-    skill: 2
+    skill: 1
     tool:
-    - type: CMScalpel
+    - type: CMUBurnDebridementTool
     remove:
     - type: CMUEschar
   - type: CMUEscharSurgeryCondition

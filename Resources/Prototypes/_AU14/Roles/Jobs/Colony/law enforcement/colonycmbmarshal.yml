@@ -3,7 +3,7 @@
   id: AU14JobCivilianCMBMarshal
   name: au14-job-name-civiliancmbmarshal
   description: au14-job-description-civiliancmbmarshal
-  setPreference: false
+  setPreference: true
   canBeAntag: false
   requirements:
   - !type:AgeRequirement

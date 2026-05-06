@@ -152,6 +152,8 @@
     leapDamage:
       groups:
         Brute: 45
+  - type: VehicleDamageMultiplier
+    multiplier: 4
   - type: XenoScissorCut
     damage:
       types:
@@ -244,6 +246,9 @@
   components:
   - type: Sprite
     sprite: _AU14/Mobs/Xenos/Ravager/hedgehog_ravager.rsi
+    layers:
+    - state: hedgehog_1
+      map: [ "enum.XenoShardVisualLayers.Base" ]
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -314,3 +319,5 @@
   - type: XenoHidden
   - type: RMCActionOrder
     id: RMCXenoRavagerHedgehog
+
+

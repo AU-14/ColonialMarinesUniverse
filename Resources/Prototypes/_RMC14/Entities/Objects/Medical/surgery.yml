@@ -34,6 +34,9 @@
   - type: Item
     sprite: _RMC14/Objects/Medical/Surgery/retractor.rsi
   - type: CMRetractor
+  - type: Tag
+    tags:
+    - CMRetractor
   - type: PhysicalComposition
     materialComposition:
       CMSteel: 10000
@@ -66,6 +69,9 @@
   - type: Item
     sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
   - type: CMHemostat
+  - type: Tag
+    tags:
+    - CMHemostat
   - type: PhysicalComposition
     materialComposition:
       CMSteel: 5000
@@ -145,6 +151,9 @@
     soundHit:
       path: /Audio/Items/drill_hit.ogg
   - type: CMSurgicalDrill
+  - type: Tag
+    tags:
+    - CMSurgicalDrill
   - type: PhysicalComposition
     materialComposition:
       CMSteel: 15000
@@ -196,6 +205,7 @@
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: CMScalpel
+  - type: CMUBurnDebridementTool
   - type: Tag
     tags:
     - RMCScalpel
@@ -231,6 +241,10 @@
   - type: ItemToggle
     predictable: false
   - type: ItemToggleHot
+  - type: CMCautery
+  - type: Tag
+    tags:
+    - CMCautery
   - type: UseDelay
   - type: ItemToggleMeleeWeapon
     activatedDamage:
@@ -289,6 +303,7 @@
   components:
   - type: Sprite
     state: pict_system
+  - type: CMCautery
 
 # - Manager
 - type: entity
@@ -299,6 +314,7 @@
   components:
   - type: Sprite
     state: scalpel_manager
+  - type: CMUIncisionManagementSystem
 
 
 
@@ -328,6 +344,9 @@
     - Sawing
     speedModifier: 1.5
   - type: CMBoneSaw
+  - type: Tag
+    tags:
+    - CMBoneSaw
   - type: PhysicalComposition
     materialComposition:
       CMSteel: 20000
@@ -359,6 +378,9 @@
   - type: Item
     sprite: _RMC14/Objects/Medical/Surgery/bonesetter.rsi
   - type: CMBoneSetter
+  - type: Tag
+    tags:
+    - CMBoneSetter
   - type: PhysicalComposition
     materialComposition:
       RMCPlastic: 7500
@@ -418,11 +440,14 @@
     sprite: _RMC14/Objects/Medical/Surgery/bone_gel.rsi
     state: bone-gel
   - type: CMBoneGel
+  - type: Tag
+    tags:
+    - CMBoneGel
   - type: RMCLoreExaminable
     content: rmc-lore-examinable-bottle-of-bone-gel
   - type: PhysicalComposition
     materialComposition:
-      RMCPlastic: 7500
+      RMCPlastic: 150
   - type: StaticPrice
     price: 75
 
@@ -430,3 +455,30 @@
   parent: CMBoneGel
   id: RMCBoneGelEmpty
   suffix: Empty # TODO RMC14
+
+
+
+# Tags
+- type: Tag
+  id: CMBoneSaw
+
+- type: Tag
+  id: CMSurgicalDrill
+
+- type: Tag
+  id: CMCautery
+
+- type: Tag
+  id: CMScalpel
+
+- type: Tag
+  id: CMBoneSetter
+
+- type: Tag
+  id: CMRetractor
+
+- type: Tag
+  id: CMHemostat
+
+- type: Tag
+  id: CMBoneGel

@@ -39,7 +39,6 @@
   id: AU14GearCivilianNurse
   equipment:
     id: AU14IDCardColonyNurse
-    shoes: RMCShoesBlack
 
 - type: entity
   parent: CMSpawnPointJobBase

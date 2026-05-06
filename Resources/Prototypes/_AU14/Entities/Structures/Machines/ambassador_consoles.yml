@@ -37,6 +37,8 @@
   - type: ContainerContainer
     containers:
       CashSlot: !type:ContainerSlot {}
+  - type: AccessReader
+    access: [["AU14AccessColonyAmbassador"]]
 
 # UPP Ambassador Console - Can call in GROM
 - type: entity
@@ -104,15 +106,15 @@
 - type: entity
   id: AU14AmbassadorConsoleIS
   parent: AU14AmbassadorConsoleBase
-  name: IS diplomatic console
-  description: An Independent Systems diplomatic console. \
-  suffix: IS, PMC
+  name: ICSC diplomatic console
+  description: An Independent Core System Colonies diplomatic console.
+  suffix: ICSC, PMC
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: terminal1_old
   - type: AmbassadorConsole
-    factionName: Independent Systems
+    factionName: Independent Core System Colonies
     budget: 500
     replenishAmount: 25
     replenishInterval: 60

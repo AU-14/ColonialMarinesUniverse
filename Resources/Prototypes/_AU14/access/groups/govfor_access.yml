@@ -37,3 +37,7 @@
 - type: accessLevel
   id: AU14AccessJuniorOfficer
   name: Junior Officer
+
+- type: accessLevel
+  id: AU14AccessGovforReq
+  name: Govfor Requisitions

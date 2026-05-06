@@ -139,7 +139,7 @@
     id: AU14IDCardOPFORWorkingJoe
     ears: AU14HeadsetWorkingJoe
     ears2: RMCM5CameraGear
-    back: CMSatchelMarine
+    back: AU14IMPBackpackMarine
 
 - type: entity
   parent: CMSpawnPointJobBase

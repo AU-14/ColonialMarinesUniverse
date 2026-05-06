@@ -22,6 +22,8 @@
             # Colony Command (non department)
             AU14JobCivilianCorporateLiaison: [1, 1]
             AU14JobCivilianColonyAdministrator: [1, 1]
+            AU14JobCivilianColonyAdminAssistant: [1, 1]
+            AU14JobCivilianAmbassadorUA: [1, 1]
 
             # Security/LEO
             AU14JobCivilianCMBMarshal: [1, 1]
@@ -38,3 +40,4 @@
             AU14JobCivilianNurse: [3, 3]
             AU14JobCivilianEthicsAndWellnessAdvisor: [2, 2]
             AU14JobCivilianEmergencyResponseOfficer: [1, 1]
+            AU14JobCivilianHeadPhysician : [1, 1]

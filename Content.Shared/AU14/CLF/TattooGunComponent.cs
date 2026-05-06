@@ -3,6 +3,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Content.Shared.NPC.Prototypes;
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
 
 namespace Content.Shared.AU14.CLF;
 
@@ -36,6 +37,9 @@ public sealed partial class TattooGunComponent : Component
     /// </summary>
     [DataField]
     public string Role = "MindRoleCLFRecruit";
+
+    [DataField]
+    public EntProtoId<IFFFactionComponent> IFF = "FactionCLF";
 
     /// <summary>
     /// Sound played when the recruit receives their briefing.

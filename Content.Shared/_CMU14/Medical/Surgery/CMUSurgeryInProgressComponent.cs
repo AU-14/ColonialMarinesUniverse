@@ -29,4 +29,11 @@ public sealed partial class CMUSurgeryInProgressComponent : Component
 
     [DataField, AutoNetworkedField]
     public BodyPartSymmetry TargetSymmetry;
+
+    /// <summary>
+    ///     The functional repair is done and the medic must choose either
+    ///     another repair on this same open part or a close-up surgery.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool AwaitingClosureChoice;
 }

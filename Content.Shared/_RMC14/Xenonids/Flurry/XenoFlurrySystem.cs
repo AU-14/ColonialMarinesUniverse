@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Heal;
 using Content.Shared._RMC14.Xenonids.Stab;
+using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
 using Content.Shared.Effects;
@@ -33,6 +34,7 @@ public sealed class XenoFlurrySystem : EntitySystem
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly SharedXenoHealSystem _xenoHeal = default!;
+    [Dependency] private readonly SharedHitLocationSystem _hitLocation = default!;
 
     public override void Initialize()
     {
@@ -81,6 +83,7 @@ public sealed class XenoFlurrySystem : EntitySystem
 
         var hits = 0;
         EntityUid? hitEnt = null;
+        using var targetingSuppression = _hitLocation.SuppressBodyZoneTargeting(xeno.Owner);
 
         foreach (var victim in mobs)
         {

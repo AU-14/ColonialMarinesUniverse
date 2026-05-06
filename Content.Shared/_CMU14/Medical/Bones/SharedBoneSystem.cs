@@ -4,6 +4,8 @@ using Content.Shared._CMU14.Medical.Organs;
 using Content.Shared._CMU14.Medical.Organs.Events;
 using Content.Shared._CMU14.Medical.Organs.Heart;
 using Content.Shared._CMU14.Medical.Organs.Lungs;
+using Content.Shared._CMU14.Medical.StatusEffects;
+using Content.Shared.StatusEffectNew;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
@@ -24,8 +26,10 @@ public abstract class SharedBoneSystem : EntitySystem
     [Dependency] protected readonly INetManager Net = default!;
     [Dependency] protected readonly IPrototypeManager Proto = default!;
     [Dependency] protected readonly SharedFractureSystem Fracture = default!;
+    [Dependency] protected readonly SharedStatusEffectsSystem Status = default!;
     [Dependency] protected readonly RMCUnrevivableSystem Unrevivable = default!;
 
+    private const string BoneRegenBoostStatus = "StatusEffectCMUBoneRegenBoost";
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
 
     private const float IntegrityScanInterval = 1f;
@@ -85,7 +89,7 @@ public abstract class SharedBoneSystem : EntitySystem
         // Audio for Compound+ spawns is played server-side by Content.Server's
         // sealed BoneSystem to avoid a double-play on prediction rollback.
 
-        if (args.Type == BodyPartType.Torso && newSeverity.IsAtLeast(FractureSeverity.Compound))
+        if (args.Type == BodyPartType.Torso && newSeverity == FractureSeverity.Comminuted)
             RaiseRibBurst(args.Body, args.ContainedOrgans, args.Delta);
     }
 
@@ -101,11 +105,11 @@ public abstract class SharedBoneSystem : EntitySystem
         // Use a small, fixed slice of the damage so a single Comminuted hit
         // doesn't multi-apply the full Brute load to organs already taking the
         // distributed share.
-        var halved = new DamageSpecifier();
+        var burst = new DamageSpecifier();
         foreach (var (type, amount) in delta.DamageDict)
-            halved.DamageDict[type] = amount / 2;
+            burst.DamageDict[type] = amount / 4;
 
-        if (halved.GetTotal() <= FixedPoint2.Zero)
+        if (burst.GetTotal() <= FixedPoint2.Zero)
             return;
 
         foreach (var organ in partOrgans)
@@ -115,7 +119,7 @@ public abstract class SharedBoneSystem : EntitySystem
             if (!HasComp<OrganHealthComponent>(organ))
                 continue;
 
-            var ev = new OrganDamagedEvent(body, organ, halved, OrganDamageSource.RibFracture);
+            var ev = new OrganDamagedEvent(body, organ, burst, OrganDamageSource.RibFracture);
             RaiseLocalEvent(organ, ref ev);
         }
     }
@@ -165,10 +169,12 @@ public abstract class SharedBoneSystem : EntitySystem
         _integrityScanAccumulator = 0f;
 
         var now = Timing.CurTime;
-        var rate = _boneHealRate;
         var query = EntityQueryEnumerator<FractureComponent, BoneComponent, BodyPartComponent>();
         while (query.MoveNext(out var partUid, out var fracture, out var bone, out var part))
         {
+            if (HasComp<CMUMalunionComponent>(partUid))
+                continue;
+
             if (bone.NextIntegrityTick > now)
                 continue;
             bone.NextIntegrityTick = now + TimeSpan.FromSeconds(10);
@@ -176,9 +182,11 @@ public abstract class SharedBoneSystem : EntitySystem
             if (part.Body is not { } body || Unrevivable.IsUnrevivable(body))
                 continue;
 
-            if (!CanHeal(fracture.Severity))
+            var (boosted, multiplier) = GetBoneRegenBoost(body);
+            if (!CanHeal(fracture.Severity, boosted))
                 continue;
 
+            var rate = _boneHealRate * (FixedPoint2) multiplier;
             bone.Integrity = FixedPoint2.Min(bone.IntegrityMax, bone.Integrity + rate);
             Dirty(partUid, bone);
 
@@ -191,10 +199,24 @@ public abstract class SharedBoneSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Only Hairline fractures self-heal by default.
+    ///     Only Hairline fractures self-heal by default. Osteocalc's bone
+    ///     regen boost can also stabilize Simple and Compound fractures over
+    ///     time.
     /// </summary>
-    protected virtual bool CanHeal(FractureSeverity severity)
-        => severity == FractureSeverity.Hairline;
+    protected virtual bool CanHeal(FractureSeverity severity, bool hasBoneRegenBoost)
+        => severity == FractureSeverity.Hairline
+           || hasBoneRegenBoost && severity is FractureSeverity.Simple or FractureSeverity.Compound;
+
+    private (bool Boosted, float Multiplier) GetBoneRegenBoost(EntityUid body)
+    {
+        if (!Status.TryGetStatusEffect(body, BoneRegenBoostStatus, out var effectUid))
+            return (false, 1f);
+
+        if (!TryComp<BoneRegenBoostComponent>(effectUid.Value, out var boost))
+            return (true, 1f);
+
+        return (true, boost.Multiplier < 1f ? 1f : boost.Multiplier);
+    }
 
     public void RestoreIntegrity(Entity<BoneComponent?> part, FixedPoint2 newIntegrity)
     {

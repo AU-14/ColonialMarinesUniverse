@@ -104,7 +104,7 @@
     modifiers:
     - conditions:
         inactiveOnly: true
-      fireDelayFlat: 0.1
+      fireDelayFlat: 0.03
     - conditions:
         wieldedOnly: true
         inactiveOnly: true
@@ -126,12 +126,6 @@
           tags:
           - CMM96SSniperRifle
       fireDelayFlat: -0.5
-    - conditions:
-        activeOnly: true
-        blacklist:
-          tags:
-          - CMM96SSniperRifle
-      fireDelayFlat: -0.1
     - conditions:
         activeOnly: true
         whitelist:

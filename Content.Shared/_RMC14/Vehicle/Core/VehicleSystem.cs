@@ -7,7 +7,10 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
 using Content.Shared.DoAfter;
+using Content.Shared.Ghost;
 using Content.Shared.Interaction;
+using Content.Shared.Maps;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Vehicle;
@@ -20,7 +23,11 @@ using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Utility;
+using Content.Shared.Physics;
+using Content.Shared._RMC14.Map;
 
 namespace Content.Shared._RMC14.Vehicle;
 
@@ -40,6 +47,9 @@ public sealed class VehicleSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly Content.Shared.Vehicle.VehicleSystem _vehicles = default!;
     [Dependency] private readonly VehicleLockSystem _vehicleLock = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
+    [Dependency] private readonly TurfSystem _turf = default!;
 
     public override void Initialize()
     {
@@ -86,6 +96,12 @@ public sealed class VehicleSystem : EntitySystem
             return;
         }
 
+        if (HasComp<GhostComponent>(args.User))
+        {
+            args.Handled = TryEnter(ent, args.User, entryIndex);
+            return;
+        }
+
         var interior = EnsureComp<VehicleInteriorComponent>(ent.Owner);
 
         if (!interior.EntryLocks.Add(entryIndex))
@@ -121,10 +137,13 @@ public sealed class VehicleSystem : EntitySystem
         if (!EnsureInterior(ent, out var interior))
             return false;
 
-        PruneTrackedOccupants(ent.Owner, interior);
+        var isGhost = HasComp<GhostComponent>(user);
+
+        if (!isGhost)
+            PruneTrackedOccupants(ent.Owner, interior);
 
         var isXeno = HasComp<XenoComponent>(user);
-        if (isXeno)
+        if (!isGhost && isXeno)
         {
             if (ent.Comp.MaxXenos > 0 &&
                 !interior.Xenos.Contains(user) &&
@@ -145,25 +164,13 @@ public sealed class VehicleSystem : EntitySystem
             }
         }
 
-        var coords = interior.Entry;
-        MapCoordinates targetMapCoords;
-        if (entryIndex >= 0 && entryIndex < ent.Comp.EntryPoints.Count)
-        {
-            var entryPoint = ent.Comp.EntryPoints[entryIndex];
-            if (entryPoint.InteriorCoords is { } interiorCoord)
-            {
-                var parent = interior.Grid.IsValid() ? interior.Grid : interior.EntryParent;
-                var entityCoords = new EntityCoordinates(parent, interiorCoord);
-                targetMapCoords = _transform.ToMapCoordinates(entityCoords);
-                _rmcTeleporter.HandlePulling(user, targetMapCoords);
-                TrackOccupant(user, ent.Owner, isXeno);
-                return true;
-            }
-        }
+        if (!TryGetInteriorEntryCoordinates(ent, entryIndex, out var coords))
+            return false;
 
-        targetMapCoords = _transform.ToMapCoordinates(coords);
+        var targetMapCoords = _transform.ToMapCoordinates(coords);
         _rmcTeleporter.HandlePulling(user, targetMapCoords);
-        TrackOccupant(user, ent.Owner, isXeno);
+        if (!isGhost)
+            TrackOccupant(user, ent.Owner, isXeno);
         return true;
     }
 
@@ -236,6 +243,45 @@ public sealed class VehicleSystem : EntitySystem
         var link = EnsureComp<VehicleInteriorLinkComponent>(mapUid);
         link.Vehicle = ent.Owner;
 
+        ProtectInteriorEntities(mapId);
+        SpawnVehicleInteriorKey(ent.Owner, mapId);
+
+        return true;
+    }
+
+    private void ProtectInteriorEntities(MapId mapId)
+    {
+        var xforms = EntityQueryEnumerator<TransformComponent>();
+        while (xforms.MoveNext(out var uid, out var xform))
+        {
+            if (xform.MapID != mapId || HasComp<MobStateComponent>(uid))
+                continue;
+
+            EnsureComp<VehicleInteriorIndestructibleComponent>(uid);
+        }
+    }
+
+    private bool TryGetInteriorEntryCoordinates(
+        Entity<VehicleEnterComponent> ent,
+        int entryIndex,
+        out EntityCoordinates targetCoords)
+    {
+        targetCoords = default;
+
+        if (!EnsureInterior(ent, out var interior))
+            return false;
+
+        targetCoords = interior.Entry;
+
+        if (entryIndex < 0 || entryIndex >= ent.Comp.EntryPoints.Count)
+            return true;
+
+        var entryPoint = ent.Comp.EntryPoints[entryIndex];
+        if (entryPoint.InteriorCoords is not { } interiorCoord)
+            return true;
+
+        var parent = interior.Grid.IsValid() ? interior.Grid : interior.EntryParent;
+        targetCoords = new EntityCoordinates(parent, interiorCoord);
         return true;
     }
 
@@ -320,6 +366,12 @@ public sealed class VehicleSystem : EntitySystem
             return;
         }
 
+        if (HasComp<GhostComponent>(args.User))
+        {
+            args.Handled = TryExit(ent, args.User);
+            return;
+        }
+
         ent.Comp.PendingExit = true;
 
         var doAfter = new DoAfterArgs(EntityManager, args.User, enter.ExitDoAfter, new VehicleExitDoAfterEvent(), ent.Owner)
@@ -343,9 +395,11 @@ public sealed class VehicleSystem : EntitySystem
         if (ent.Comp.EntryPoints.Count == 0)
             return true;
 
-        var bypassEntry = TryComp(ent.Owner, out HardpointIntegrityComponent? frameIntegrity) &&
-                          frameIntegrity.BypassEntryOnZero &&
-                          frameIntegrity.Integrity <= 0f;
+        var bypassEntry =
+            HasComp<GhostComponent>(user) ||
+            TryComp(ent.Owner, out HardpointIntegrityComponent? frameIntegrity) &&
+            frameIntegrity.BypassEntryOnZero &&
+            frameIntegrity.Integrity <= 0f;
 
         var vehicleXform = Transform(ent.Owner);
         var userXform = Transform(user);
@@ -409,9 +463,6 @@ public sealed class VehicleSystem : EntitySystem
 
     private bool TryExit(Entity<VehicleExitComponent> ent, EntityUid user)
     {
-        if (!TryComp(ent, out TransformComponent? exitXform) || exitXform.MapID == MapId.Nullspace)
-            return false;
-
         if (!TryGetVehicleFromInterior(ent.Owner, out var vehicle) || vehicle is not { } vehicleUid)
             return false;
 
@@ -424,6 +475,30 @@ public sealed class VehicleSystem : EntitySystem
             return false;
         }
 
+        if (!TryGetExitCoordinates(ent, enter, vehicleUid, out var exitCoords, out var exitMapCoords))
+            return false;
+
+        if (!HasComp<GhostComponent>(user) && IsExitDestinationBlocked(exitCoords, vehicleUid, user))
+        {
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-exit-blocked"), user, user, PopupType.SmallCaution);
+            return false;
+        }
+
+        _rmcTeleporter.HandlePulling(user, exitMapCoords);
+        UntrackOccupant(user, vehicleUid);
+        return true;
+    }
+
+    private bool TryGetExitCoordinates(
+        Entity<VehicleExitComponent> ent,
+        VehicleEnterComponent enter,
+        EntityUid vehicleUid,
+        out EntityCoordinates exitCoords,
+        out MapCoordinates exitMapCoords)
+    {
+        exitCoords = default;
+        exitMapCoords = default;
+
         var vehicleXform = Transform(vehicleUid);
 
         EntityUid? parent = vehicleXform.ParentUid;
@@ -433,25 +508,75 @@ public sealed class VehicleSystem : EntitySystem
             return false;
 
         Vector2 offset;
-
         var entryIndex = ent.Comp.EntryIndex;
         if (entryIndex >= 0 && entryIndex < enter.EntryPoints.Count)
-        {
             offset = enter.EntryPoints[entryIndex].Offset;
-        }
         else
-        {
             offset = enter.ExitOffset;
-        }
 
         var rotated = vehicleXform.LocalRotation.RotateVec(offset);
         var position = vehicleXform.LocalPosition + rotated;
 
-        var exitCoords = new EntityCoordinates(parent.Value, position);
-        var exitMapCoords = _transform.ToMapCoordinates(exitCoords);
-        _rmcTeleporter.HandlePulling(user, exitMapCoords);
-        UntrackOccupant(user, vehicleUid);
-        return true;
+        exitCoords = new EntityCoordinates(parent.Value, position);
+        exitMapCoords = _transform.ToMapCoordinates(exitCoords);
+        return exitMapCoords.MapId != MapId.Nullspace;
+    }
+
+    private bool IsExitDestinationBlocked(EntityCoordinates exitCoords, EntityUid vehicle, EntityUid user)
+    {
+        if (!_turf.TryGetTileRef(exitCoords, out var tileRef))
+            return false;
+
+        var gridUid = tileRef.Value.GridUid;
+        if (!TryComp(gridUid, out MapGridComponent? gridComp))
+            return false;
+
+        var xformQuery = GetEntityQuery<TransformComponent>();
+        var fixtureQuery = GetEntityQuery<FixturesComponent>();
+        var gridXform = Transform(gridUid);
+        var (gridPos, gridRot, matrix) = _transform.GetWorldPositionRotationMatrix(gridXform, xformQuery);
+
+        var size = gridComp.TileSize;
+        var indices = tileRef.Value.GridIndices;
+        var localPos = new Vector2(indices.X * size + (size / 2f), indices.Y * size + (size / 2f));
+        var worldPos = Vector2.Transform(localPos, matrix);
+
+        var tileAabb = Box2.UnitCentered.Scale(0.95f * size).Translated(localPos);
+        var worldBox = new Box2Rotated(Box2.UnitCentered.Scale(0.95f * size).Translated(worldPos), gridRot, worldPos);
+
+        foreach (var ent in _lookup.GetEntitiesIntersecting(gridUid, worldBox, LookupFlags.Dynamic | LookupFlags.Static))
+        {
+            if (ent == vehicle || ent == user)
+                continue;
+
+            if (!fixtureQuery.TryGetComponent(ent, out var fixtures))
+                continue;
+
+            var entXform = xformQuery.GetComponent(ent);
+            var (pos, rot) = _transform.GetWorldPositionRotation(entXform, xformQuery);
+            rot -= gridRot;
+            pos = (-gridRot).RotateVec(pos - gridPos);
+
+            var fixtureTransform = new Transform(pos, (float) rot.Theta);
+
+            foreach (var fixture in fixtures.Fixtures.Values)
+            {
+                if (!fixture.Hard)
+                    continue;
+
+                if ((fixture.CollisionLayer & (int) CollisionGroup.MobMask) == 0)
+                    continue;
+
+                for (var i = 0; i < fixture.Shape.ChildCount; i++)
+                {
+                    var intersection = fixture.Shape.ComputeAABB(fixtureTransform, i).Intersect(tileAabb);
+                    if (intersection.Width * intersection.Height > 0.1f)
+                        return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private void OnVehicleExitDoAfter(Entity<VehicleExitComponent> ent, ref VehicleExitDoAfterEvent args)
@@ -600,6 +725,23 @@ public sealed class VehicleSystem : EntitySystem
         return count;
     }
 
+    private void SpawnVehicleInteriorKey(EntityUid vehicle, MapId mapId)
+    {
+        var keyId = _vehicleLock.EnsureVehicleKeyId(vehicle);
+        var seatQuery = EntityQueryEnumerator<VehicleDriverSeatComponent, TransformComponent>();
+        while (seatQuery.MoveNext(out var seatUid, out _, out var seatXform))
+        {
+            if (seatXform.MapID != mapId)
+                continue;
+
+            var key = Spawn("RMCVehicleKey", seatXform.Coordinates);
+            if (TryComp(key, out VehicleKeyComponent? keyComp))
+                _vehicleLock.BindKey((key, keyComp), keyId, vehicle);
+
+            return;
+        }
+    }
+
     private void OnDriverSeatStrapAttempt(Entity<VehicleDriverSeatComponent> ent, ref StrapAttemptEvent args)
     {
         if (args.Cancelled)
@@ -717,6 +859,9 @@ public sealed class VehicleSystem : EntitySystem
 
     private bool IsEntryBlockedByLock(EntityUid vehicle, EntityUid user)
     {
+        if (HasComp<GhostComponent>(user))
+            return false;
+
         if (!TryComp(vehicle, out VehicleLockComponent? vehicleLock) || !vehicleLock.Locked)
             return false;
 
@@ -725,6 +870,9 @@ public sealed class VehicleSystem : EntitySystem
 
     private bool IsExitBlockedByLock(EntityUid vehicle, EntityUid user)
     {
+        if (HasComp<GhostComponent>(user))
+            return false;
+
         if (!TryComp(vehicle, out VehicleLockComponent? vehicleLock) || !vehicleLock.Locked)
             return false;
 
@@ -791,5 +939,75 @@ public sealed class VehicleSystem : EntitySystem
 
         mapId = interior.MapId;
         return mapId != MapId.Nullspace;
+    }
+
+    public bool TryFindEntryPoint(EntityUid vehicle, EntityUid user, out int entryIndex)
+    {
+        entryIndex = -1;
+
+        if (!TryComp(vehicle, out VehicleEnterComponent? enter))
+            return false;
+
+        return TryFindEntry((vehicle, enter), user, out entryIndex);
+    }
+
+    public bool TryGetInteriorEntryCoordinates(EntityUid vehicle, int entryIndex, out EntityCoordinates targetCoords)
+    {
+        targetCoords = default;
+
+        if (!TryComp(vehicle, out VehicleEnterComponent? enter))
+            return false;
+
+        return TryGetInteriorEntryCoordinates((vehicle, enter), entryIndex, out targetCoords);
+    }
+
+    public bool TryGetInteriorPeekTarget(EntityUid vehicle, int entryIndex, out EntityUid target)
+    {
+        target = EntityUid.Invalid;
+
+        if (_net.IsClient ||
+            !TryComp(vehicle, out VehicleEnterComponent? enter) ||
+            !EnsureInterior((vehicle, enter), out var interior))
+        {
+            return false;
+        }
+
+        var exitQuery = EntityQueryEnumerator<VehicleExitComponent, TransformComponent>();
+        while (exitQuery.MoveNext(out var exitUid, out var exit, out var exitXform))
+        {
+            if (exitXform.MapID != interior.MapId)
+                continue;
+
+            if (exit.EntryIndex != entryIndex)
+                continue;
+
+            target = exitUid;
+            return true;
+        }
+
+        if (interior.EntryParent.IsValid())
+        {
+            var fallbackExitQuery = EntityQueryEnumerator<VehicleExitComponent, TransformComponent>();
+            while (fallbackExitQuery.MoveNext(out var exitUid, out _, out var exitXform))
+            {
+                if (exitXform.MapID != interior.MapId)
+                    continue;
+
+                if (exitXform.ParentUid != interior.EntryParent)
+                    continue;
+
+                target = exitUid;
+                return true;
+            }
+        }
+
+        if (interior.Grid.IsValid())
+        {
+            target = interior.Grid;
+            return true;
+        }
+
+        target = interior.Map;
+        return target.IsValid();
     }
 }

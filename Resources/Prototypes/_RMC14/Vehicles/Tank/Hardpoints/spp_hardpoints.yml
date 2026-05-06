@@ -8,8 +8,6 @@
   - type: Item
     size: Large
   - type: PowerLoaderGrabbable
-    virtualRight: RMCVirtualPowerLoaderRight
-    virtualLeft: RMCVirtualPowerLoaderLeft
 
 - type: entity
   parent: VehicleTankTurret

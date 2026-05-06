@@ -1,19 +1,60 @@
 <DefaultWindow xmlns="https://spacestation14.io"
-            Title="{Loc 'ghost-roles-window-title'}"
-            MinSize="490 400"
-            SetSize="490 500">
-    <BoxContainer Orientation="Vertical">
-        <RichTextLabel Text="[bold]Join as an inhumane threat or mysterious third party![/bold]" />
-        <Label Name="NoRolesMessage"
-               Text="{Loc 'ghost-roles-window-no-roles-available-label'}"
-               VerticalAlignment="Top" />
-        <ScrollContainer VerticalExpand="True"
-                         HScrollEnabled="False">
+               xmlns:ghost="clr-namespace:Content.Client.UserInterface.Systems.Ghost.Controls"
+               xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+               Title="{Loc 'ghost-roles-window-title'}"
+               MinSize="620 520"
+               SetSize="620 520">
+    <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+        <PanelContainer.PanelOverride>
+            <graphics:StyleBoxFlat BackgroundColor="#080D12" BorderColor="#1F3442" BorderThickness="1" />
+        </PanelContainer.PanelOverride>
+        <ghost:AspectRatioContainer Ratio="1.1923077"
+                                    HorizontalExpand="True"
+                                    VerticalExpand="True"
+                                    Margin="8">
             <BoxContainer Orientation="Vertical"
-                          Name="EntryContainer"
-                          VerticalExpand="True">
-                <!-- Ghost role entries are added here by code -->
+                          HorizontalExpand="True"
+                          VerticalExpand="True"
+                          SeparationOverride="8">
+                <BoxContainer Orientation="Horizontal"
+                              HorizontalExpand="True"
+                              MinHeight="34"
+                              SeparationOverride="8">
+                    <LineEdit Name="SearchBar"
+                              PlaceHolder="{Loc 'ghost-roles-window-search-placeholder'}"
+                              HorizontalExpand="True"
+                              MinHeight="34"
+                              SetHeight="34" />
+                    <Label Name="CountLabel"
+                           Text=""
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           ModulateSelfOverride="#7D95A7"
+                           MinWidth="96" />
+                </BoxContainer>
+                <PanelContainer Name="ContentPanel" HorizontalExpand="True" VerticalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat BackgroundColor="#0B131A" BorderColor="#1E3341" BorderThickness="1" />
+                    </PanelContainer.PanelOverride>
+                    <ScrollContainer Name="RoleScroll"
+                                     VerticalExpand="True"
+                                     HorizontalExpand="True"
+                                     HScrollEnabled="False">
+                        <BoxContainer Orientation="Vertical"
+                                      Name="EntryContainer"
+                                      SeparationOverride="8"
+                                      Margin="8"
+                                      VerticalExpand="True">
+                            <!-- Ghost role entries are added here by code -->
+                        </BoxContainer>
+                    </ScrollContainer>
+                </PanelContainer>
+                <Label Name="NoRolesMessage"
+                       Text="{Loc 'ghost-roles-window-no-roles-available-label'}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Visible="False" />
             </BoxContainer>
-        </ScrollContainer>
-    </BoxContainer>
+        </ghost:AspectRatioContainer>
+    </PanelContainer>
 </DefaultWindow>

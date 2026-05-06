@@ -24,6 +24,7 @@ public sealed class HardpointUiEntry
     public readonly bool HasItem;
     public readonly bool Required;
     public readonly bool Removing;
+    public readonly List<string> Failures = new();
 
     public HardpointUiEntry(
         string slotId,
@@ -47,6 +48,23 @@ public sealed class HardpointUiEntry
         HasItem = hasItem;
         Required = required;
         Removing = removing;
+    }
+
+    public HardpointUiEntry(
+        string slotId,
+        string hardpointType,
+        string? installedName,
+        NetEntity? installedEntity,
+        float integrity,
+        float maxIntegrity,
+        bool hasIntegrity,
+        bool hasItem,
+        bool required,
+        bool removing,
+        List<string> failures)
+        : this(slotId, hardpointType, installedName, installedEntity, integrity, maxIntegrity, hasIntegrity, hasItem, required, removing)
+    {
+        Failures = failures;
     }
 }
 

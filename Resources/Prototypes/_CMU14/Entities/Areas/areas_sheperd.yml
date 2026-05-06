@@ -294,26 +294,6 @@
 
 - type: entity
   parent: CMUAreaShepIndoors
-  id: CMUAreaShepSouthColonyEmbassy1
-  name: South Colony - UA Embassy
-  components:
-  - type: Sprite
-    state: s_colony_dorms
-  - type: Area
-    minimapColor: '#806721CC'
-
-- type: entity
-  parent: CMUAreaShepIndoors
-  id: CMUAreaShepSouthColonyEmbassy2
-  name: South Colony - UPP Embassy
-  components:
-  - type: Sprite
-    state: s_colony_dorms
-  - type: Area
-    minimapColor: '#806721CC'
-
-- type: entity
-  parent: CMUAreaShepIndoors
   id: CMUAreaShepHospital
   name: Hospital
   components:

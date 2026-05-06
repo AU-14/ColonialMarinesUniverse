@@ -27,6 +27,8 @@
         type: AdminConsoleBui
       enum.AdminConsoleThirdPartyUi.Key:
         type: AdminConsoleThirdPartyBui
+  - type: AccessReader
+    access: [["AU14AccessColonyAdministrator"]]
 
 # Colony Admin Console — placed in admin office, can call any third party
 - type: entity
@@ -45,6 +47,3 @@
       ICRCReliefParty: 2800
       NSPAInvestigationPartyArmored: 6000
       PAPInvestigationParty: 4500
-  - type: AccessReader
-    access: [ [ "CMAccessColonyCommand" ] ]
-

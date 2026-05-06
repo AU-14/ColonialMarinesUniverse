@@ -43,6 +43,11 @@
     jumpsuit: RMCScrubsOlive
 
 - type: loadout
+  id: GOVFORAuxTechClothingAU14Fatigues
+  equipment:
+    jumpsuit: CMJumpsuitMaintTech
+
+- type: loadout
   id: ScrubsGreyRMC
   equipment:
     jumpsuit: RMCScrubsGrey

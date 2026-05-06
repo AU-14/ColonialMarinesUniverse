@@ -7,19 +7,22 @@
   - type: Vehicle
     movementKind: Grid
   - type: Clickable
+  - type: RMCIgnoreGhostInteractionLimits
+  - type: RequireProjectileTarget
   - type: GridVehicleMover
-    maxSpeed: 9
-    acceleration: 6
+    maxSpeed: 6
+    acceleration: 5
     deceleration: 12
+    turnDelay: 0.25
     pushCooldown: 2
-    xenoBlockMinimumSize: Immobile
+    xenoBlockMinimumSize: Xeno
     xenoPushMinimumSize: Immobile
     canSmashWalls: true
     wallSmashMinSpeed: 7
     wallSmashWheelDamage: 3
     wallSmashHullDamage: 150
-    wallSmashSlowdownMultiplier: 0.2
-    wallSmashSlowdownDuration: 1.5
+    wallSmashSlowdownMultiplier: 0.6
+    wallSmashSlowdownDuration: 0.35
     mobCollisionHullDamage: 20
     speedAtZeroIntegrity: 0
     crashImmobileDuration: 90
@@ -124,6 +127,7 @@
     slots:
       wheel-1:
         startingItem: VehicleHumveeWheel
+        disableEject: true
         whitelist:
           components:
           - VehicleWheelItem
@@ -131,24 +135,28 @@
     vehicleFamily: Humvee
     slots:
     - id: turret
+      disableEject: true
       hardpointType: Turret
       slotType: Turret
       visualLayer: primary
       insertDelay: 2.0
       required: false
     - id: roof
+      disableEject: true
       hardpointType: RoofAttachment
       slotType: RoofAttachment
       visualLayer: support
       insertDelay: 1.5
       required: false
     - id: front
+      disableEject: true
       hardpointType: FrontAttachment
       slotType: FrontAttachment
       visualLayer: support-2
       insertDelay: 1.5
       required: false
     - id: wheel-1
+      disableEject: true
       hardpointType: Wheel
       slotType: Wheel
       insertDelay: 1.5
@@ -174,9 +182,6 @@
     - offset: 1,-0.1
       radius: 0.45
       interiorCoords: 2.41,-1.35
-  - type: MeleeReceivedMultiplier
-    xenoMultiplier: 4
-    otherMultiplier: 1
 
 - type: entity
   parent: VehicleHumveeBase
@@ -186,6 +191,7 @@
     slots:
       turret:
         startingItem: VehicleHumveeTurretArmed
+        disableEject: true
         whitelist:
           components:
           - HardpointItem
@@ -205,7 +211,7 @@
   components:
   - type: Damageable
     damageContainer: StructuralMarine
-    damageModifierSet: VehicleFrameHumvee
+    damageModifierSet: StructuralMarine
   - type: HardpointIntegrity
     maxIntegrity: 1000
     repairFuelCost: 12
@@ -230,18 +236,21 @@
     vehicleFamily: Humvee
     slots:
     - id: roof
+      disableEject: true
       hardpointType: RoofAttachment
       slotType: RoofAttachment
       visualLayer: support
       insertDelay: 1.5
       required: false
     - id: front
+      disableEject: true
       hardpointType: FrontAttachment
       slotType: FrontAttachment
       visualLayer: support-2
       insertDelay: 1.5
       required: false
     - id: wheel-1
+      disableEject: true
       hardpointType: Wheel
       slotType: Wheel
       insertDelay: 1.5
@@ -298,18 +307,21 @@
     vehicleFamily: Humvee
     slots:
     - id: roof
+      disableEject: true
       hardpointType: RoofAttachment
       slotType: RoofAttachment
       visualLayer: support
       insertDelay: 1.5
       required: false
     - id: front
+      disableEject: true
       hardpointType: FrontAttachment
       slotType: FrontAttachment
       visualLayer: support-2
       insertDelay: 1.5
       required: false
     - id: wheel-1
+      disableEject: true
       hardpointType: Wheel
       slotType: Wheel
       insertDelay: 1.5
@@ -343,6 +355,7 @@
     slots:
       turret:
         startingItem: VehicleHumveeARCTurret
+        disableEject: true
         whitelist:
           components:
           - HardpointItem

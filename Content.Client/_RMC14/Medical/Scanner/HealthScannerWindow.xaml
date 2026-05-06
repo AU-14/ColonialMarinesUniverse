@@ -1,179 +1,208 @@
 <scanner:HealthScannerWindow
     xmlns="https://spacestation14.io"
     xmlns:scanner="clr-namespace:Content.Client._RMC14.Medical.Scanner"
+    xmlns:cmui="clr-namespace:Content.Client._CMU14.Medical.UI"
+    xmlns:cooldown="clr-namespace:Content.Client.Cooldown"
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
-    MinSize="800 900"
-    SetSize="800 900">
-    <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
-        <BoxContainer Orientation="Vertical" Margin="2 4">
+    MinSize="520 420"
+    SetSize="980 820">
+    <PanelContainer Name="ScaleRoot" Access="Public">
+        <PanelContainer.PanelOverride>
+            <graphics:StyleBoxFlat BackgroundColor="#0E1418" BorderColor="#527078" BorderThickness="2" />
+        </PanelContainer.PanelOverride>
 
-            <!-- Header: patient name on the left, holocard mini-panel + change
-                 button on the right. Replaces the V1 separator-stacked
-                 patient row. -->
-            <BoxContainer Orientation="Horizontal" Margin="0 0 0 6">
-                <Label Name="PatientLabel" Access="Public" StyleClasses="LabelHeading" />
-                <Control HorizontalExpand="True" />
-                <PanelContainer Name="HolocardPanel" Access="Public" Visible="True" Margin="0 0 4 0">
-                    <PanelContainer.PanelOverride>
-                        <graphics:StyleBoxFlat BackgroundColor="#984A16" />
-                    </PanelContainer.PanelOverride>
-                    <Label Name="HolocardDescription" Access="Public" Align="Center" MinWidth="120" Margin="6 2" />
-                </PanelContainer>
-                <Button Name="ChangeHolocardButton" Access="Public" StyleClasses="OpenBoth" />
-            </BoxContainer>
-
-            <!-- Status banner: STABLE / SERIOUS / CRITICAL / DECEASED.
-                 Hidden on non-CMU patients (BUI sets Visible from the
-                 CMUParts presence + severity rollup). -->
-            <PanelContainer Name="CMUStatusBanner" Access="Public" Visible="False" Margin="0 0 0 4">
+        <BoxContainer Orientation="Vertical" Margin="10 10" HorizontalExpand="True" VerticalExpand="True">
+            <PanelContainer Name="LoadingPanel" Access="Public" Visible="False" Margin="0 0 0 8">
                 <PanelContainer.PanelOverride>
-                    <graphics:StyleBoxFlat BackgroundColor="#3FB44A" />
+                    <graphics:StyleBoxFlat BackgroundColor="#142129" BorderColor="#6FA8B8" BorderThickness="1" />
                 </PanelContainer.PanelOverride>
-                <BoxContainer Orientation="Vertical" Margin="8 4">
-                    <Label Name="CMUStatusBannerLabel" Access="Public" StyleClasses="LabelHeading"
-                           FontColorOverride="White" />
-                    <Label Name="CMUStatusBannerDetail" Access="Public" FontColorOverride="White" />
-                </BoxContainer>
-            </PanelContainer>
-
-            <!-- Big-number stat card: HEALTH / PULSE / BLOOD / TEMP. Each
-                 value is a large RichTextLabel; a small uppercase label
-                 underneath tags it. Health gets a thin progress bar. -->
-            <PanelContainer Margin="0 0 0 4">
-                <PanelContainer.PanelOverride>
-                    <graphics:StyleBoxFlat BackgroundColor="#1B1F2A" />
-                </PanelContainer.PanelOverride>
-                <BoxContainer Orientation="Vertical" Margin="10 8">
-                    <BoxContainer Orientation="Horizontal">
-                        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
-                            <Label Name="CMUBigHealthValue" Access="Public"
-                                   Text="--" StyleClasses="LabelHeading" />
-                            <Label Text="{Loc cmu-medical-scanner-stat-health}"
-                                   Modulate="#5B88B0" />
-                        </BoxContainer>
-                        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
-                            <Label Name="CMUBigPulseValue" Access="Public"
-                                   Text="--" StyleClasses="LabelHeading" />
-                            <Label Text="{Loc cmu-medical-scanner-stat-pulse}"
-                                   Modulate="#5B88B0" />
-                        </BoxContainer>
-                        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
-                            <Label Name="CMUBigBloodValue" Access="Public"
-                                   Text="--" StyleClasses="LabelHeading" />
-                            <Label Text="{Loc cmu-medical-scanner-stat-blood}"
-                                   Modulate="#5B88B0" />
-                        </BoxContainer>
-                        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
-                            <Label Name="CMUBigTempValue" Access="Public"
-                                   Text="--" StyleClasses="LabelHeading" />
-                            <Label Text="{Loc cmu-medical-scanner-stat-temp}"
-                                   Modulate="#5B88B0" />
-                        </BoxContainer>
-                    </BoxContainer>
-                    <ProgressBar Name="HealthBar" Access="Public" HorizontalExpand="True"
-                                 Margin="0 6 0 0">
-                        <Label Name="HealthBarText" Access="Public" Align="Right" Margin="0 0 5 0" />
-                    </ProgressBar>
-                </BoxContainer>
-            </PanelContainer>
-
-            <!-- Damage strip card: Brute / Burn / Tox / Air / Clone in one
-                 dense horizontal row. Existing AddGroup() populator stays;
-                 each label is just re-parented into this strip. -->
-            <PanelContainer Margin="0 0 0 4">
-                <PanelContainer.PanelOverride>
-                    <graphics:StyleBoxFlat BackgroundColor="#1B1F2A" />
-                </PanelContainer.PanelOverride>
-                <BoxContainer Orientation="Horizontal" Margin="10 6">
-                    <RichTextLabel Name="BruteLabel" Access="Public" Margin="0 0 12 0" />
-                    <RichTextLabel Name="BurnLabel" Access="Public" Margin="0 0 12 0" />
-                    <RichTextLabel Name="ToxinLabel" Access="Public" Margin="0 0 12 0" />
-                    <RichTextLabel Name="OxygenLabel" Access="Public" Margin="0 0 12 0" />
-                    <PanelContainer Name="CloneBox" Access="Public" Visible="False">
-                        <RichTextLabel Name="CloneLabel" Access="Public" />
-                    </PanelContainer>
+                <BoxContainer Name="LoadingRow" Access="Public" Orientation="Horizontal" Margin="8 6">
+                    <cooldown:CooldownGraphic Name="LoadingSpinner" Access="Public" SetWidth="24" SetHeight="24"
+                                              Margin="0 0 8 0" />
+                    <Label Text="{Loc cmu-medical-scanner-loading}" Modulate="#B7D8DF"
+                           VerticalAlignment="Center" />
                     <Control HorizontalExpand="True" />
-                    <Label Name="BloodTypeLabel" Access="Public" Modulate="#5B88B0" Margin="0 0 6 0" />
-                    <RichTextLabel Name="BloodAmountLabel" Access="Public" Margin="0 0 6 0" />
-                    <RichTextLabel Name="Bleeding" Access="Public" />
+                    <Label Name="LoadingSubtext" Access="Public"
+                           Text="{Loc cmu-medical-scanner-loading-subtext}" Modulate="#6D8E98"
+                           VerticalAlignment="Center" />
                 </BoxContainer>
             </PanelContainer>
 
-            <!-- Body chart card: per-part rows added by the BUI. Each row
-                 has fixed-width name / number / bar / severity-word
-                 columns, then a flexible chip strip on the right (chips
-                 only render when the part has a fracture, bleed, splint,
-                 cast, or wound count). Severed parts use a "—" number
-                 and dark-red bar but otherwise share the row layout, so
-                 the column anchors stay stable as patient state changes. -->
-            <BoxContainer Name="CMUBodyMapSection" Access="Public" Orientation="Vertical"
-                          Visible="False" Margin="0 0 0 4">
-                <PanelContainer>
-                    <PanelContainer.PanelOverride>
-                        <graphics:StyleBoxFlat BackgroundColor="#1B1F2A" />
-                    </PanelContainer.PanelOverride>
-                    <BoxContainer Orientation="Vertical" Margin="10 6">
-                        <Label Text="{Loc cmu-medical-scanner-card-body}" Modulate="#5B88B0"
-                               Margin="0 0 0 4" />
-                        <BoxContainer Name="CMUBodyChartContainer" Access="Public"
-                                      Orientation="Vertical" />
-                        <Label Text="{Loc cmu-medical-scanner-card-organs}" Modulate="#5B88B0"
-                               Margin="0 8 0 4" />
-                        <BoxContainer Name="CMUOrgansContainer" Access="Public"
-                                      Orientation="Vertical" />
-                    </BoxContainer>
-                </PanelContainer>
-            </BoxContainer>
-
-            <!-- Reagents card: in-bloodstream chemicals + unknown badge. -->
-            <PanelContainer Name="ChemicalContentsCard" Access="Public" Visible="False" Margin="0 0 0 4">
-                <PanelContainer.PanelOverride>
-                    <graphics:StyleBoxFlat BackgroundColor="#1B1F2A" />
-                </PanelContainer.PanelOverride>
-                <BoxContainer Orientation="Vertical" Margin="10 6">
-                    <Label Name="ChemicalContentsLabel" Access="Public"
-                           Text="{Loc cmu-medical-scanner-card-reagents}"
-                           Modulate="#5B88B0" Margin="0 0 0 4" />
-                    <cc:HSeparator Name="ChemicalContentsSeparator" Access="Public" Visible="False" />
-                    <PanelContainer Name="UnknownChemicalsPanel" Access="Public" Visible="False" Margin="0 0 0 4">
+            <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+                <BoxContainer Orientation="Vertical">
+                    <PanelContainer Margin="0 0 0 8">
                         <PanelContainer.PanelOverride>
-                            <graphics:StyleBoxFlat BackgroundColor="#984A16" />
+                            <graphics:StyleBoxFlat BackgroundColor="#121B20" BorderColor="#30434A" BorderThickness="1" />
                         </PanelContainer.PanelOverride>
-                        <RichTextLabel Name="UnknownReagentsLabel" Access="Public" Margin="5 2" />
+                        <BoxContainer Name="PatientHeaderRow" Access="Public" Orientation="Horizontal" Margin="12 10">
+                            <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                                <Label Text="{Loc cmu-medical-scanner-card-patient}" Modulate="#8EADB5" />
+                                <Label Name="PatientLabel" Access="Public" StyleClasses="LabelHeading"
+                                       Margin="0 2 0 0" />
+                            </BoxContainer>
+                            <PanelContainer Name="HolocardPanel" Access="Public" Visible="True"
+                                            VerticalAlignment="Center" Margin="0 0 8 0">
+                                <PanelContainer.PanelOverride>
+                                    <graphics:StyleBoxFlat BackgroundColor="#984A16" BorderColor="#C08B42" BorderThickness="1" />
+                                </PanelContainer.PanelOverride>
+                                <Label Name="HolocardDescription" Access="Public" Align="Center" MinWidth="150"
+                                       Margin="8 3" />
+                            </PanelContainer>
+                            <Button Name="ChangeHolocardButton" Access="Public" StyleClasses="OpenBoth"
+                                    VerticalAlignment="Center" />
+                        </BoxContainer>
                     </PanelContainer>
-                    <BoxContainer Name="ChemicalsContainer" Access="Public" Orientation="Vertical" />
-                </BoxContainer>
-            </PanelContainer>
 
-            <!-- Recommended-action card. Hidden on perma-dead patients
-                 (the existing isPermaDead branch in BUI continues to
-                 hide MedicalAdviceLabel + MedicalAdviceSeparator). -->
-            <PanelContainer Name="MedicalAdviceCard" Access="Public" Visible="False" Margin="0 0 0 4">
-                <PanelContainer.PanelOverride>
-                    <graphics:StyleBoxFlat BackgroundColor="#1B1F2A" />
-                </PanelContainer.PanelOverride>
-                <BoxContainer Orientation="Vertical" Margin="10 6">
-                    <Label Name="MedicalAdviceLabel" Access="Public"
-                           Text="{Loc cmu-medical-scanner-card-recommended}"
-                           Modulate="#5B88B0" Margin="0 0 0 4" />
-                    <cc:HSeparator Name="MedicalAdviceSeparator" Access="Public" Visible="False" />
-                    <BoxContainer Name="AdviceContainer" Access="Public" Orientation="Vertical" />
-                </BoxContainer>
-            </PanelContainer>
+                    <PanelContainer Name="CMUStatusBanner" Access="Public" Visible="False" Margin="0 0 0 8">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#2F8A53" BorderColor="#7DD5A1" BorderThickness="1" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Name="CMUStatusBannerRow" Access="Public" Orientation="Horizontal" Margin="12 7">
+                            <Label Name="CMUStatusBannerLabel" Access="Public" StyleClasses="LabelHeading"
+                                   FontColorOverride="White" MinWidth="160" />
+                            <Label Name="CMUStatusBannerDetail" Access="Public" FontColorOverride="#F3F6F5"
+                                   VerticalAlignment="Center" />
+                        </BoxContainer>
+                    </PanelContainer>
 
-            <!-- Body temperature row — stays in the legacy stat cluster as
-                 a fallback for callers that route through it. The big-stat
-                 card above mirrors this value in the BUI populator. -->
-            <BoxContainer Orientation="Horizontal" Visible="False">
-                <Label Text="Body Temperature:" MinWidth="160" Modulate="#5B88B0" />
-                <RichTextLabel Name="BodyTemperatureLabel" Access="Public" />
-            </BoxContainer>
-            <BoxContainer Orientation="Horizontal" Visible="False">
-                <Label Text="Pulse:" MinWidth="160" Modulate="#5B88B0" />
-                <RichTextLabel Name="PulseLabel" Access="Public" />
-            </BoxContainer>
-            <Label Text="{Loc cm-wounds-brackets-translators-note}" Visible="False" />
+                    <PanelContainer Margin="0 0 0 8">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#151E24" BorderColor="#2E4650" BorderThickness="1" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical" Margin="12 10">
+                            <GridContainer Name="CMUVitalsGrid" Access="Public" Columns="5" HorizontalExpand="True">
+                                <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="0 0 10 0">
+                                    <Label Name="CMUBigHealthValue" Access="Public"
+                                           Text="--" StyleClasses="LabelHeading" />
+                                    <Label Text="{Loc cmu-medical-scanner-stat-health}" Modulate="#7CA5B3" />
+                                </BoxContainer>
+                                <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="0 0 10 0">
+                                    <Label Name="CMUBigPulseValue" Access="Public"
+                                           Text="--" StyleClasses="LabelHeading" />
+                                    <Label Text="{Loc cmu-medical-scanner-stat-pulse}" Modulate="#7CA5B3" />
+                                </BoxContainer>
+                                <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="0 0 10 0">
+                                    <Label Name="CMUBigBloodValue" Access="Public"
+                                           Text="--" StyleClasses="LabelHeading" />
+                                    <Label Text="{Loc cmu-medical-scanner-stat-blood}" Modulate="#7CA5B3" />
+                                </BoxContainer>
+                                <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="0 0 10 0">
+                                    <Label Name="CMUBigTempValue" Access="Public"
+                                           Text="--" StyleClasses="LabelHeading" />
+                                    <Label Text="{Loc cmu-medical-scanner-stat-temp}" Modulate="#7CA5B3" />
+                                </BoxContainer>
+                                <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                                    <Label Name="CMUBigShockRiskValue" Access="Public"
+                                           Text="--" StyleClasses="LabelHeading" />
+                                    <Label Text="{Loc cmu-medical-scanner-stat-shock-risk}" Modulate="#7CA5B3" />
+                                </BoxContainer>
+                            </GridContainer>
+                            <ProgressBar Name="HealthBar" Access="Public" HorizontalExpand="True"
+                                         Margin="0 8 0 0">
+                                <Label Name="HealthBarText" Access="Public" Align="Right" Margin="0 0 6 0" />
+                            </ProgressBar>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Margin="0 0 0 8">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#151E24" BorderColor="#2E4650" BorderThickness="1" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical" Margin="12 8">
+                            <Label Text="{Loc cmu-medical-scanner-card-damage}" Modulate="#7CA5B3"
+                                   Margin="0 0 0 5" />
+                            <BoxContainer Name="DamageRow" Access="Public" Orientation="Horizontal">
+                                <cmui:CMUScaledRichTextLabel Name="BruteLabel" Access="Public" Margin="0 0 14 0" />
+                                <cmui:CMUScaledRichTextLabel Name="BurnLabel" Access="Public" Margin="0 0 14 0" />
+                                <cmui:CMUScaledRichTextLabel Name="ToxinLabel" Access="Public" Margin="0 0 14 0" />
+                                <cmui:CMUScaledRichTextLabel Name="OxygenLabel" Access="Public" Margin="0 0 14 0" />
+                                <PanelContainer Name="CloneBox" Access="Public" Visible="False" Margin="0 0 14 0">
+                                    <cmui:CMUScaledRichTextLabel Name="CloneLabel" Access="Public" />
+                                </PanelContainer>
+                                <Control Name="DamageSpacer" Access="Public" SetWidth="24" />
+                                <cmui:CMUScaledRichTextLabel Name="BloodTypeLabel" Access="Public" Modulate="#7CA5B3"
+                                                             Margin="0 0 6 0" />
+                                <cmui:CMUScaledRichTextLabel Name="BloodAmountLabel" Access="Public" Margin="0 0 6 0" />
+                                <cmui:CMUScaledRichTextLabel Name="Bleeding" Access="Public" />
+                            </BoxContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <BoxContainer Name="CMUBodyMapSection" Access="Public" Orientation="Horizontal"
+                                  Visible="False" Margin="0 0 0 8">
+                        <PanelContainer Name="CMUBodyCard" Access="Public" HorizontalExpand="True" Margin="0 0 8 0">
+                            <PanelContainer.PanelOverride>
+                                <graphics:StyleBoxFlat BackgroundColor="#151E24" BorderColor="#2E4650" BorderThickness="1" />
+                            </PanelContainer.PanelOverride>
+                            <BoxContainer Orientation="Vertical" Margin="12 8">
+                                <Label Text="{Loc cmu-medical-scanner-card-body}" Modulate="#7CA5B3"
+                                       Margin="0 0 0 6" />
+                                <BoxContainer Name="CMUBodyChartContainer" Access="Public"
+                                              Orientation="Vertical" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer Name="CMUOrgansCard" Access="Public" SetWidth="300">
+                            <PanelContainer.PanelOverride>
+                                <graphics:StyleBoxFlat BackgroundColor="#151E24" BorderColor="#2E4650" BorderThickness="1" />
+                            </PanelContainer.PanelOverride>
+                            <BoxContainer Orientation="Vertical" Margin="12 8">
+                                <Label Text="{Loc cmu-medical-scanner-card-organs}" Modulate="#7CA5B3"
+                                       Margin="0 0 0 6" />
+                                <BoxContainer Name="CMUOrgansContainer" Access="Public"
+                                              Orientation="Vertical" />
+                            </BoxContainer>
+                        </PanelContainer>
+                    </BoxContainer>
+
+                    <BoxContainer Name="ChemAdviceSection" Access="Public" Orientation="Horizontal" Margin="0 0 0 8">
+                        <PanelContainer Name="ChemicalContentsCard" Access="Public" Visible="False"
+                                        HorizontalExpand="True" Margin="0 0 8 0">
+                            <PanelContainer.PanelOverride>
+                                <graphics:StyleBoxFlat BackgroundColor="#151E24" BorderColor="#2E4650" BorderThickness="1" />
+                            </PanelContainer.PanelOverride>
+                            <BoxContainer Orientation="Vertical" Margin="12 8">
+                                <Label Name="ChemicalContentsLabel" Access="Public"
+                                       Text="{Loc cmu-medical-scanner-card-reagents}"
+                                       Modulate="#7CA5B3" Margin="0 0 0 5" />
+                                <cc:HSeparator Name="ChemicalContentsSeparator" Access="Public" Visible="False" />
+                                <PanelContainer Name="UnknownChemicalsPanel" Access="Public" Visible="False" Margin="0 0 0 5">
+                                    <PanelContainer.PanelOverride>
+                                        <graphics:StyleBoxFlat BackgroundColor="#7B4A25" BorderColor="#C89152" BorderThickness="1" />
+                                    </PanelContainer.PanelOverride>
+                                    <cmui:CMUScaledRichTextLabel Name="UnknownReagentsLabel" Access="Public" Margin="6 3" />
+                                </PanelContainer>
+                                <BoxContainer Name="ChemicalsContainer" Access="Public" Orientation="Vertical" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer Name="MedicalAdviceCard" Access="Public" Visible="False"
+                                        HorizontalExpand="True">
+                            <PanelContainer.PanelOverride>
+                                <graphics:StyleBoxFlat BackgroundColor="#151E24" BorderColor="#2E4650" BorderThickness="1" />
+                            </PanelContainer.PanelOverride>
+                            <BoxContainer Orientation="Vertical" Margin="12 8">
+                                <Label Name="MedicalAdviceLabel" Access="Public"
+                                       Text="{Loc cmu-medical-scanner-card-recommended}"
+                                       Modulate="#7CA5B3" Margin="0 0 0 5" />
+                                <cc:HSeparator Name="MedicalAdviceSeparator" Access="Public" Visible="False" />
+                                <BoxContainer Name="AdviceContainer" Access="Public" Orientation="Vertical" />
+                            </BoxContainer>
+                        </PanelContainer>
+                    </BoxContainer>
+
+                    <BoxContainer Orientation="Horizontal" Visible="False">
+                        <Label Text="Body Temperature:" MinWidth="160" Modulate="#7CA5B3" />
+                        <cmui:CMUScaledRichTextLabel Name="BodyTemperatureLabel" Access="Public" />
+                    </BoxContainer>
+                    <BoxContainer Orientation="Horizontal" Visible="False">
+                        <Label Text="Pulse:" MinWidth="160" Modulate="#7CA5B3" />
+                        <cmui:CMUScaledRichTextLabel Name="PulseLabel" Access="Public" />
+                    </BoxContainer>
+                    <Label Text="{Loc cm-wounds-brackets-translators-note}" Visible="False" />
+                </BoxContainer>
+            </ScrollContainer>
         </BoxContainer>
-    </ScrollContainer>
+    </PanelContainer>
 </scanner:HealthScannerWindow>

@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Stun;
+using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared.Damage;
 using Content.Shared.Effects;
 using Content.Shared.FixedPoint;
@@ -18,6 +19,7 @@ public sealed class RMCAreaDamageSystem : EntitySystem
     [Dependency] private readonly RMCSizeStunSystem _sizeStun = default!;
     [Dependency] private readonly SharedColorFlashEffectSystem _colorFlash = default!;
     [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly SharedHitLocationSystem _hitLocation = default!;
 
     public override void Initialize()
     {
@@ -51,6 +53,9 @@ public sealed class RMCAreaDamageSystem : EntitySystem
             return;
 
         var nearbyEntities = _entityLookup.GetEntitiesInRange<MobStateComponent>(Transform(target).Coordinates, areaDamage.DamageArea);
+        using var targetingSuppression = shooter is { } origin
+            ? _hitLocation.SuppressBodyZoneTargeting(origin)
+            : default;
 
         // Apply damage to all eligible entities in range.
         foreach (var entity in nearbyEntities)
@@ -77,7 +82,7 @@ public sealed class RMCAreaDamageSystem : EntitySystem
             if (size >= RMCSizes.SmallXeno)
                 newDamage *= 2;
 
-            var damageDealt = _damage.TryChangeDamage(entity, newDamage, armorPiercing: armorPiercing);
+            var damageDealt = _damage.TryChangeDamage(entity, newDamage, origin: shooter, armorPiercing: armorPiercing);
 
             if (!(damageDealt?.GetTotal() > FixedPoint2.Zero) || !_net.IsClient)
                 continue;

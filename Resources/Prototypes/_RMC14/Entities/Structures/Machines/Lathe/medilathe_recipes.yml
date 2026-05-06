@@ -20,7 +20,7 @@
   result: CMBoneGel
   completetime: 5
   materials:
-    RMCPlastic: 250 # 150
+    RMCPlastic: 187 # 150
 
 - type: latheRecipe
   id: CMUSplintItem

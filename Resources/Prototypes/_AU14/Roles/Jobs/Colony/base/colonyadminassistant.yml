@@ -30,6 +30,9 @@
   - auadmin
   - Colonist
   - CMCargoTech
+  - auheadsofcolony
+  access:
+  - AU14AccessColonyAdministrator
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

@@ -1,0 +1,11 @@
+# Map compatibility for old Sorokyne placements. SPP channels/headsets were
+# removed, so this key intentionally has no channels.
+- type: entity
+  parent: CMEncryptionKey
+  id: RMCEncryptionKeySPP
+  name: SPP encryption key
+  components:
+  - type: EncryptionKey
+  - type: Sprite
+    state: stripped_key
+

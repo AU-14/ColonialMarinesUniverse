@@ -56,7 +56,7 @@ public sealed class StartingGearPrototypeStorageTest
                     foreach (var ent in ents)
                     {
                         if (!storageSystem.CanInsert(bag, ent, null, out _))
-                            Assert.Fail($"StartingGearPrototype {gearProto.ID} could not successfully put items into storage {bag.Id}");
+                            Assert.Fail($"StartingGearPrototype {gearProto.ID} could not insert {server.EntMan.GetComponent<MetaDataComponent>(ent).EntityPrototype?.ID ?? ent.ToString()} into slot {slot} storage entity {storageProto} ({bag.Id})");
 
                         server.EntMan.DeleteEntity(ent);
                     }

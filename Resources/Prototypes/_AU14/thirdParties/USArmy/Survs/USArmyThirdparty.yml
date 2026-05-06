@@ -35,7 +35,7 @@
     AU14JobUSArmySquadleader: 1
   gruntsToSpawn:
     AU14JobUSArmyCET: 1
-    CMXenoParasite: 1
+    AU14JobUSArmyTrooper: 1
   scalewithpop: false
   spawnTogether: true
 

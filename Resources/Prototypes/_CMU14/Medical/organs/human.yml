@@ -14,7 +14,7 @@
       Damaged: 25
       Failing: 8
       Dead: 0
-    internalBleedAt: Damaged
+    internalBleedAt: Failing
     nativeRegenPerTick: 0.5
   - type: Heart
 
@@ -35,7 +35,7 @@
       Damaged: 22
       Failing: 6
       Dead: 0
-    internalBleedAt: Damaged
+    internalBleedAt: Failing
     nativeRegenPerTick: 1
   - type: Lungs
 
@@ -56,7 +56,7 @@
       Damaged: 20
       Failing: 5
       Dead: 0
-    internalBleedAt: Damaged
+    internalBleedAt: Dead
     nativeRegenPerTick: 1
   - type: Liver
 
@@ -76,7 +76,7 @@
       Damaged: 18
       Failing: 5
       Dead: 0
-    internalBleedAt: Damaged
+    internalBleedAt: Dead
     nativeRegenPerTick: 0.8
   - type: Kidneys
 
@@ -96,7 +96,7 @@
       Damaged: 16
       Failing: 5
       Dead: 0
-    internalBleedAt: Damaged
+    internalBleedAt: Dead
     nativeRegenPerTick: 0.8
   - type: CMUStomach
 
@@ -117,7 +117,7 @@
       Damaged: 20
       Failing: 5
       Dead: 0
-    internalBleedAt: Damaged
+    internalBleedAt: Dead
     nativeRegenPerTick: 0.5
     nativeRegenCap: 0.85
   - type: CMUBrain
@@ -138,7 +138,7 @@
       Damaged: 12
       Failing: 4
       Dead: 0
-    internalBleedAt: Failing
+    internalBleedAt: Dead
     nativeRegenPerTick: 0.5
   - type: Eyes
 
@@ -158,6 +158,6 @@
       Damaged: 12
       Failing: 4
       Dead: 0
-    internalBleedAt: Failing
+    internalBleedAt: Dead
     nativeRegenPerTick: 0.5
   - type: Ears

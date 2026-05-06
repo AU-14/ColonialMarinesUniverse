@@ -28,6 +28,8 @@ public sealed partial class GameTicker
     /// </summary>
     public int? ResetCountdown;
 
+    private readonly List<EntityUid> _presetRuleEntities = new();
+
     private bool StartPreset(ICommonSession[] origReadyPlayers, bool force)
     {
         var startAttempt = new RoundStartAttemptEvent(origReadyPlayers, force);
@@ -183,13 +185,15 @@ public sealed partial class GameTicker
     [PublicAPI]
     private bool AddGamePresetRules()
     {
+        _presetRuleEntities.Clear();
+
         if (DummyTicker || Preset == null)
             return false;
 
         CurrentPreset = Preset;
         foreach (var rule in Preset.Rules)
         {
-            AddGameRule(rule);
+            _presetRuleEntities.Add(AddGameRule(rule));
         }
 
         return true;
@@ -206,8 +210,18 @@ public sealed partial class GameTicker
 
     public void StartGamePresetRules()
     {
+        // Preset rules must start in the prototype's declared order. Setup rules
+        // like RemoveAllJobs/AddGovfor/AddOpfor depend on it, but GetAddedGameRules()
+        // is an entity query and has no stable ordering guarantee.
+        var started = new HashSet<EntityUid>();
+        foreach (var rule in _presetRuleEntities.ToArray())
+        {
+            StartGameRule(rule);
+            started.Add(rule);
+        }
+
         // May be touched by the preset during init.
-        var rules = new List<EntityUid>(GetAddedGameRules());
+        var rules = new List<EntityUid>(GetAddedGameRules().Where(rule => !started.Contains(rule)));
         foreach (var rule in rules)
         {
             StartGameRule(rule);

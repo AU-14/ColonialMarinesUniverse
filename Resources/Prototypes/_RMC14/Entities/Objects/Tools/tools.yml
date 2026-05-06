@@ -291,6 +291,15 @@
     damage:
       types:
         Blunt: 12
+  - type: CMSurgeryTool
+  - type: CMRetractor
+  - type: CMBoneSetter
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 1.8
+    mishapChance: 0.14
+    mishapDamageType: Blunt
+    mishapDamageAmount: 5
+    failurePenalty: 1
 
 - type: entity
   parent: CMCrowbar

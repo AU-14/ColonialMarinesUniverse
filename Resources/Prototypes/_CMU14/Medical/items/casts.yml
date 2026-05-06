@@ -5,10 +5,17 @@
   description: A rigid cast that immobilises and slowly heals fractures up to Simple severity.
   components:
   - type: Item
-    size: Normal
+    size: Small
   - type: CMUCastItem
     applyDelay: 6
+    uses: 4
     maxSuppressed: Simple
+  - type: Tag
+    tags:
+    - CMUCastItem
   - type: Sprite
-    sprite: _RMC14/Objects/Medical/Surgery/bone_gel.rsi
-    state: bone-gel
+    sprite: _AU14/Objects/Medical/cast.rsi
+    state: cast
+
+- type: Tag
+  id: CMUCastItem

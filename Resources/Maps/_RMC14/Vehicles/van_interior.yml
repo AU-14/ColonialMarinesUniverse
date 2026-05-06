@@ -151,6 +151,11 @@ entities:
     - type: VehicleDriverSeat
       skills:
         all: {}
+    - type: RemoveComponents
+      components:
+      - type: Damageable
+      - type: Destructible
+      - type: Corrodible
 - proto: VehicleVanBack1
   entities:
   - uid: 11
@@ -193,7 +198,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 3.5,-2.5
       parent: 2
-    - type: VehicleExit
 - proto: VehicleVanBack3
   entities:
   - uid: 17
@@ -243,7 +247,7 @@ entities:
       pos: 3.5,-1.5
       parent: 2
     - type: VehicleExit
-      entryIndex: 0
+      entryIndex: 1
     missingComponents:
     - InteractionTransparency
 - proto: VehicleVanFront1

@@ -3,7 +3,7 @@
   id: AU14JobCivilianCMBDeputy
   name: au14-job-name-civiliancmbdeputy
   description: au14-job-description-civiliancmbdeputy
-  setPreference: false
+  setPreference: true
   canBeAntag: false
   requirements:
   - !type:AgeRequirement

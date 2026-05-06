@@ -1,4 +1,5 @@
 using System.Text;
+using Content.Shared._CMU14.Medical;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Stun;
@@ -8,6 +9,7 @@ using Content.Shared.Body.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Verbs;
+using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -19,6 +21,8 @@ public sealed class RMCMedicalExamineSystem : EntitySystem
     [Dependency] private readonly RMCSizeStunSystem _sizeStun = default!;
     [Dependency] private readonly RMCUnrevivableSystem _unrevivable = default!;
     [Dependency] private readonly SharedBodySystem _body = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -46,7 +50,9 @@ public sealed class RMCMedicalExamineSystem : EntitySystem
     {
         var msg = new FormattedMessage();
 
-        if (TryComp<BloodstreamComponent>(ent, out var bloodstream) && bloodstream.BleedAmount > 0)
+        if (TryComp<BloodstreamComponent>(ent, out var bloodstream) &&
+            bloodstream.BleedAmount > 0 &&
+            !HasCmuBleedingWoundDetails(ent.Owner))
         {
             var partsText = GetBleedingPartsText(ent);
             if (partsText != null)
@@ -67,6 +73,35 @@ public sealed class RMCMedicalExamineSystem : EntitySystem
             msg.AddMarkupOrThrow(Loc.GetString(stateText, ("victim", ent.Owner)));
 
         return msg;
+    }
+
+    private bool HasCmuBleedingWoundDetails(EntityUid body)
+    {
+        if (!_cfg.GetCVar(CMUMedicalCCVars.Enabled) ||
+            !_cfg.GetCVar(CMUMedicalCCVars.WoundsEnabled) ||
+            !HasComp<CMUHumanMedicalComponent>(body))
+        {
+            return false;
+        }
+
+        var now = _timing.CurTime;
+        foreach (var (partUid, _) in _body.GetBodyChildren(body))
+        {
+            if (!TryComp<BodyPartWoundComponent>(partUid, out var pw))
+                continue;
+
+            foreach (var wound in pw.Wounds)
+            {
+                if (!wound.Treated &&
+                    wound.Bloodloss > 0f &&
+                    (wound.StopBleedAt is null || now < wound.StopBleedAt.Value))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private string? GetBleedingPartsText(EntityUid body)

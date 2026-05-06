@@ -69,11 +69,13 @@
     shoes: RMCScoutShoes
     neck: RMCCLFArmband
     head: AU14CivBallCapBlack
-    jumpsuit: AU14CMJumpsuitColonistCLF
     id: AU14IDCardCLFCellLeader
     eyes: RMCGlassesAviators
   inhand:
   - RMCWeaponRifleType71
+  storage:
+    back:
+    - AU14CLFHeadset
 
 - type: entity
   parent: CMSpawnPointJobBase
