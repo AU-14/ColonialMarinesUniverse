@@ -222,9 +222,9 @@
   - type: DropshipAmmo
     travelTime: 5
     implosion:
-      pullRange: 5.5
-      pullDistance: 3.5
-      pullSpeed: 15
+      pullRange: 12.5
+      pullDistance: 8.5
+      pullSpeed: 18
     fire:
       type: RMCTileFireThermobaric
       range: 1
@@ -309,6 +309,121 @@
       cardinalRange: 2
 
 - type: entity
+  parent: RMCDropshipAttachmentAmmoRocketMiniMike
+  id: RMCDropshipAttachmentAmmoRocketMiniMikeHEAT
+  name: AGR-59-H 'Mini-Mike'
+  description: The AGR-59-H 'Mini-Mike' HEAT minirocket is a cheap and efficient means of putting hate down range AND piercing through hard objects! Though rockets lack a guidance package, it makes up for it in ammunition count. Can be loaded into the LAU-229 Rocket Pod.
+  components:
+  - type: Sprite
+    layers:
+    - state: minirocket_heat_6
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    ammoType: minirocket_heat
+    explosion:
+      total: 500
+      slope: 5.5
+      max: 40
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoRocketMiniMike
+  id: RMCDropshipAttachmentAmmoRocketMiniMikePressure
+  name: AGR-59-P 'Mini-Mike'
+  description: The AGR-59-P 'Mini-Mike' pressure minirocket is a cheap and efficient means of putting hate down range AND pulling in enemies! Though rockets lack a guidance package, it makes up for it in ammunition count. Can be loaded into the LAU-229 Rocket Pod.
+  components:
+  - type: Sprite
+    layers:
+    - state: minirocket_blu_6
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    ammoType: minirocket_blu
+    implosion:
+      pullRange: 6
+      pullDistance: 2.5
+      pullSpeed: 16
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoRocketMiniMike
+  id: RMCDropshipAttachmentAmmoRocketMiniMikeFlare
+  name: AGR-59-F 'Mini-Mike'
+  description: The AGR-59-F 'Mini-Mike' flare minirocket is a cheap and efficient means of lighting up the area with light! Though rockets lack a guidance package, it makes up for it in ammunition count. Can be loaded into the LAU-229 Rocket Pod.
+  components:
+  - type: Sprite
+    layers:
+    - state: minirocket_flir_6
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    ammoType: minirocket_flir
+    explosion:
+      AU14FlareExplosionProofRocket
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoRocketMiniMike
+  id: RMCDropshipAttachmentAmmoRocketMiniMikeSmoke
+  name: AGR-59-WP 'Mini-Mike'
+  description: The AGR-59-WP 'Mini-Mike' smoke minirocket is a cheap and efficient means of creating smoke screens, although it burns as a side effect! Though rockets lack a guidance package, it makes up for it in ammunition count. Can be loaded into the LAU-229 Rocket Pod.
+  components:
+  - type: Sprite
+    layers:
+    - state: minirocket_smk_6
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    ammoType: minirocket_smk
+    impacteffect:
+      RMCSmokeExplosionProofMiniRocket
+    fire:
+      type: RMCTileFireMiniMikePhosphorus
+      range: 2
+      cardinalRange: 2
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoRocketMiniMike
+  id: RMCDropshipAttachmentAmmoRocketMiniMikeClusterIncendiary
+  name: AGR-59-CI 'Mini-Mike'
+  description: The AGR-59-CI 'Mini-Mike' cluster incendiary minirocket is a cheap and efficient means of putting hate down range multiple times AND setting them on fire! Though rockets lack a guidance package, it makes up for it in ammunition count. Can be loaded into the LAU-229 Rocket Pod.
+  components:
+  - type: Sprite
+    layers:
+    - state: minirocket_ci_6
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    ammoType: minirocket_ci
+    rounds: 6
+    maxRounds: 6
+    roundsPerShot: 1
+    bulletSpread: 5
+    explosion:
+      total: 50
+      slope: 6
+      max: 5.5
+    impactEffects:
+    - RMCEffectExplosionParticle
+    - RMCSmokeExplosionProofSmall
+    fire:
+      type: RMCTileFireMiniMike
+      range: 1
+      cardinalRange: 2
+
+#- type: entity
+  #parent: RMCDropshipAttachmentAmmoRocketMiniMike
+  #id: RMCDropshipAttachmentAmmoRocketMiniMikeWeedKiller
+  #name: AGR-59-WK 'Mini-Mike'
+  #description: The AGR-59-WK 'Mini-Mike' weed killer minirocket is a cheap and efficient means of deploying weed killer! Though rockets lack a guidance package, it makes up for it in ammunition count. Can be loaded into the LAU-229 Rocket Pod.
+  #components:
+  #- type: Sprite
+  #  layers:
+  #  - state: minirocket_wk_6
+  #    map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  #- type: DropshipAmmo
+  #  ammoType: minirocket_wk
+  #  fire:
+  #    type: RMCTileFireMiniMike
+  #    range: 1
+  #    cardinalRange: 2
+
+  # AU-14 Todo ^ figure out how to do the weed killer payload
+
+- type: entity
   parent: RMCDropshipAttachmentAmmoRocket
   id: AU14DropshipAttachmentAmmoRocketThermobaricTwo
   name: BLU-176 'Overpressure'
@@ -321,8 +436,8 @@
   - type: DropshipAmmo
     travelTime: 5
     implosion:
-      pullRange: 4
-      pullDistance: 2.5
+      pullRange: 10
+      pullDistance: 5
       pullSpeed: 16
     fire:
       type: RMCTileFireThermobaric
@@ -341,6 +456,35 @@
   - type: EvenSmoke
     spawn: RMCSmoke
     range: 5
+
+- type: entity
+  parent: RMCSmokeExplosionProofMiniRocket
+  id: AU14SmokeExplosionProofRocket
+  components:
+  - type: EvenSmoke
+    spawn: RMCSmoke
+    range: 15
+
+- type: entity
+  parent: RMCFlareExplosionProofMiniRocket
+  id: AU14FlareExplosionProofRocket
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Effects/effects.rsi
+    state: explosion_particle
+  - type: TimedDespawn
+    lifetime: 0.5
+  - type: EffectAlphaAnimation
+  - type: PointLight
+    enabled: true
+    radius: 30
+  - type: RMCScorchEffectOnSpawn
+    probability: 0.9
+    tileLimit: 10
+    scatter: true
+    randomRotation: true
 
 - type: entity
   id: AU14EffectExplosionParticleJDAM

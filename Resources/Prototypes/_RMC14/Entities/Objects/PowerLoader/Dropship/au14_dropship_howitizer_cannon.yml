@@ -1,0 +1,34 @@
+- type: entity
+  parent: RMCDropshipAttachmentWeapon
+  id: RMCDropshipAttachmentHowitzer
+  name: M137 105mm Howitzer
+  description: A 105mm Howitzer, capable of wiping out reinforced positions. This model only holds one round, but can be reloaded in flight if mounted on the interior. Fits on both the external weapon and crew compartment attach points of dropships.
+  components:
+  - type: Sprite
+    layers:
+    - state: cas_howitzer_105_uninstalled
+      offset: 0.5, 0.5
+  - type: DropshipFabricatorPrintable
+    cost: 600
+  - type: DropshipWeapon
+    abbreviation: HWR
+    fireDelay: 5
+    ammoEmptyUtilitySprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: howitzer_cannon_interior_unloaded
+    ammoAttatchedUtilitySprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: howitzer_cannon_interior_loaded
+    weaponSlotSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: cas_howitzer_105_installed_unloaded
+    ammoEmptyAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: cas_howitzer_105_installed_unloaded
+    ammoAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: cas_howitzer_105_installed_loaded
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipUtilityPoint
+    - RMCDropshipWeaponPoint

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/83239d4edde7b1e8d59e950d07d47b84ee7508e4/icons/obj/structures/props/almayer_props64.dmi and https://github.com/cmss13-devs/cmss13/blob/8a61ffe860c467e9575f29c9d4d0a69edc79f354/code/modules/cm_marines/dropship_ammo.dm",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/83239d4edde7b1e8d59e950d07d47b84ee7508e4/icons/obj/structures/props/almayer_props64.dmi and https://github.com/cmss13-devs/cmss13/blob/8a61ffe860c467e9575f29c9d4d0a69edc79f354/code/modules/cm_marines/dropship_ammo.dm. Howitzer, BOFORS, and Bomb Sprites by kenya0151 on discord for CMU-14",
   "size": {
     "x": 64,
     "y": 64
@@ -173,6 +173,48 @@
     {
       "name": "sentry_system_deployed",
       "directions": 4
+    },
+    {
+      "name": "bofors_cannon_interior_loaded"
+    },
+    {
+      "name": "bofors_cannon_interior_unloaded"
+    },
+    {
+      "name": "bofors_cannon_loaded"
+    },
+    {
+      "name": "bofors_cannon_unloaded"
+    },
+    {
+      "name": "bofors_cannon_unloadedalt"
+    },
+    {
+      "name": "boforsnew2"
+    },
+    {
+      "name": "bomb_clamp_interior_loaded"
+    },
+    {
+      "name": "bomb_clamp_unloaded"
+    },
+    {
+      "name": "cas_howitzer_105_installed_loaded"
+    },
+    {
+      "name": "cas_howitzer_105_installed_unloaded"
+    },
+    {
+      "name": "cas_howitzer_105_uninstalled"
+    },
+    {
+      "name": "cas_howitzer_105_uninstalled_loaded"
+    },
+    {
+      "name": "howitzer_cannon_interior_loaded"
+    },
+    {
+      "name": "howitzer_cannon_interior_unloaded"
     }
   ]
 }

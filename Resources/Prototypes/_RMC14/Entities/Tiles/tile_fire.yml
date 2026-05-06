@@ -295,6 +295,16 @@
     maxStacks: 25
     intensity: 25
 
+- type: entity
+  parent: RMCTileFireLaser
+  id: RMCTileFireMiniMikePhosphorus
+  components:
+  - type: TileFire
+    duration: 30
+  - type: RMCIgniteOnCollide
+    maxStacks: 30
+    intensity: 15
+
 #Forever fires for pve
 
 - type: entity
