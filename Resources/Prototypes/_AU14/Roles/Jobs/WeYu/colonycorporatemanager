@@ -1,0 +1,102 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianCorporateManagerbase
+  name: au14-job-name-civiliancorporatemanager
+  description: au14-job-description-civiliancorporatemanager
+  playTimeTracker: AU14JobCivilianCorporateManager
+  basePlaytimeTracker: true
+  hidden: true # gotta set those ID's to something. Desc and Playtime tracker will show nothing atm
+
+- type: job
+  parent: AU14JobCivilianCorporateManagerBase
+  id: AU14JobCivilianCorporateManager
+  name: au14-job-name-civiliancorporatemanager
+  description: au14-job-description-civiliancorporatemanager
+  setPreference: true
+  ranks:
+    RMCRankWeYaAssistantManager:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateManager
+      time: 360000000 # 100 hours
+    RMCRankWeYaExecutiveSupervisor:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateManager
+      time: 270000000 # 75 hours
+    RMCRankWeYaDeputyDirector:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateManager
+      time: 180000 # 50 hours Im scared to put any roles above so right now i just added some zeros to the back of the two above.
+    RMCRankWeYaChiefExecutive:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateManager
+      time: 90000 # 25 hours weirdly CEO is lower then Director? Probably doesnt actually mean CEO. Whatever, theyre not actually meant to be the CEO anyways, just flavor.
+    RMCRankWeYaDivisionManager:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateManager
+      time: 36000 # 10 hours By the way, HRP role only. Get the whitelist to play as Corporate Manager.
+    RMCRankWeYaAssistantManager: []
+  startingGear: AU14GearCivilianCorporateLiaison
+  icon: "CMJobIconLiaison"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  - auwy
+  access:
+  - AU14AccessColonyCorporateLiaison
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFireman: 2
+        RMCSkillVehicles: 2
+        RMCSkillDomestics: 1
+        RMCSkillFirearms: 2
+        RMCSkillIntel: 1
+        RMCSkillOverwatch: 1
+        RMCSkillMedical: 2
+    - type: CMVendorUser
+      id: AU14JobCivilianCorporateLiaison
+      points: 70
+    - type: JobPrefix
+      prefix: au14-job-prefix-corporateliaison # not sure if i should keep this
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - SquadPMC
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianCorporateLiaison
+  equipment:
+    jumpsuit: AU14CivilianWorkwearBlue
+    shoes: RMCShoesLaceup
+    id: AU14IDCardColonyCorporateLiaison # change later
+    outerClothing: AU14CivilianJacketOrangePufferJacket
+    ears: AU14ColonyWeylandHeadset
+    ears2: RMCM5CameraGear
+  inhand:
+  - RMCPortableVendorCorporate
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianCorporateLiaison
+  name: Spawn Point Civilian Corporate Liaison
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianCorporateLiaison
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianCorporateLiaison
+  isHumanoid: true
