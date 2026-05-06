@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Shared._CMU14.Medical.Items;
+using Content.Shared._CMU14.Medical.Surgery.Markers;
 using Content.Shared._CMU14.Medical.StatusEffects;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Steps;
+using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared._RMC14.Medical.Surgery.Tools;
 using Content.Shared._RMC14.Repairable;
 using Content.Shared.Bed.Sleep;
@@ -264,10 +266,29 @@ public abstract class SharedCMUSurgeryFlowSystem : EntitySystem
     {
         if (TryComp<CMUSurgeryInProgressComponent>(patient, out var lockComp))
         {
+            ClearAbandonedReattachState(patient, lockComp);
+
             if (lockComp.Part.IsValid() && HasComp<CMUSurgeryInFlightComponent>(lockComp.Part))
                 RemComp<CMUSurgeryInFlightComponent>(lockComp.Part);
             RemComp<CMUSurgeryInProgressComponent>(patient);
         }
+    }
+
+    private void ClearAbandonedReattachState(EntityUid patient, CMUSurgeryInProgressComponent lockComp)
+    {
+        // Reattach starts on the patient body because the target limb does
+        // not exist yet. If that temporary flow is abandoned before the limb
+        // is attached, remove the symbolic progress markers so another
+        // missing slot cannot inherit them.
+        if (!IsReattachSurgeryId(lockComp.LeafSurgeryId) || lockComp.Part != patient)
+            return;
+
+        RemComp<CMIncisionOpenComponent>(patient);
+        RemComp<CMBleedersClampedComponent>(patient);
+        RemComp<CMSkinRetractedComponent>(patient);
+        RemComp<CMUStumpRemovedComponent>(patient);
+        RemComp<CMUReattachPreppedComponent>(patient);
+        RemComp<CMUReattachCompleteComponent>(patient);
     }
 
     public void ClearArmed(EntityUid patient, CMUSurgeryArmedStepComponent? armed = null, bool expired = false)
@@ -289,6 +310,9 @@ public abstract class SharedCMUSurgeryFlowSystem : EntitySystem
 
     public bool CanOperateOnPatient(EntityUid patient, EntityUid surgeon, bool popup = false)
     {
+        if (HasComp<CMUAutodocContainedPatientComponent>(patient))
+            return true;
+
         if (RmcSurgery.IsLyingDown(patient))
             return true;
 
@@ -566,6 +590,40 @@ public abstract class SharedCMUSurgeryFlowSystem : EntitySystem
     /// </summary>
     protected virtual void RunStepEffect(EntityUid patient, CMUSurgeryArmedStepComponent armed, EntityUid surgeon, EntityUid? tool, EntityUid? targetPart)
     {
+    }
+
+    public bool TryCompleteAutomatedStep(EntityUid patient, CMUSurgeryArmedStepComponent armed, EntityUid surgeon)
+    {
+        if (!Net.IsServer)
+            return false;
+
+        if (armed.Surgeon != surgeon)
+            return false;
+
+        if (!CanOperateOnPatient(patient, surgeon, popup: true))
+        {
+            ClearArmed(patient, armed);
+            return false;
+        }
+
+        EntityUid targetPart;
+        if (TryFindClickedPart(patient, null, armed.TargetPartType, armed.TargetSymmetry, out var foundPart))
+        {
+            targetPart = foundPart;
+        }
+        else if (IsReattachSurgeryId(armed.LeafSurgeryId))
+        {
+            targetPart = patient;
+        }
+        else
+        {
+            Popup.PopupEntity(Loc.GetString("cmu-medical-surgery-wrong-part"), patient, surgeon, PopupType.SmallCaution);
+            ClearArmed(patient, armed);
+            return false;
+        }
+
+        RunStepEffect(patient, armed, surgeon, null, targetPart);
+        return true;
     }
 
     private void OnStepDoAfterAttempt(Entity<CMUSurgeryArmedStepComponent> ent, ref DoAfterAttemptEvent<CMUSurgeryStepDoAfterEvent> args)
@@ -912,7 +970,7 @@ public abstract class SharedCMUSurgeryFlowSystem : EntitySystem
         EntityUid? viewer = null)
     {
         CMUArmedStepInfo? armedInfo = null;
-        if (armed is not null && (viewer is null || armed.Surgeon == viewer.Value))
+        if (armed is not null)
         {
             // Surface the leaf the medic picked — SurgeryId may differ when
             // a prereq is currently being run.

@@ -326,7 +326,7 @@ public sealed class RMCHumanPrototypeRegressionTest
     }
 
     [Test]
-    public async Task CmuSurgeryToolUseByOtherSurgeonDoesNotExposeOrClearArmedStep()
+    public async Task CmuSurgeryToolUseByOtherSurgeonExposesArmedStepForTakeover()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -394,7 +394,7 @@ public sealed class RMCHumanPrototypeRegressionTest
                     Assert.That(entMan.HasComponent<CMUSurgeryWindowOpenComponent>(newSurgeon), Is.True);
                     Assert.That(currentArmed.Surgeon, Is.EqualTo(originalSurgeon));
                     Assert.That(originalState.CurrentArmedStep, Is.Not.Null);
-                    Assert.That(newState.CurrentArmedStep, Is.Null);
+                    Assert.That(newState.CurrentArmedStep, Is.Not.Null);
                 });
             }
             finally

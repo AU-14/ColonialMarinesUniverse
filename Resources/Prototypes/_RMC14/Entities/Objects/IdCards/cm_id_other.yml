@@ -204,6 +204,7 @@
   - type: ItemIFF
     factions:
     - FactionMarine
+    - FactionCMB
 
 - type: entity
   parent: CMIDCardSilver
@@ -216,6 +217,7 @@
   - type: ItemIFF
     factions:
     - FactionMarine
+    - FactionCMB
 
 - type: entity
   parent: CMIDCardSilver
@@ -379,3 +381,6 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: IFFFaction
+  - type: FactionFrequencies
+    channels:
+    - WEYA

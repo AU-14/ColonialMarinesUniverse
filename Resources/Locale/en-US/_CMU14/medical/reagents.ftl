@@ -17,6 +17,8 @@ reagent-name-cmu-cardiocaine                 = Cardiocaine
 reagent-desc-cmu-cardiocaine                 = A cardiac-targeting compound; attempts to restart a stopped heart.
 reagent-name-cmu-osteocalc                   = Osteocalc
 reagent-desc-cmu-osteocalc                   = A calcium-rich slurry that accelerates bone integrity regeneration.
+reagent-name-cmu-biogenic-matrix             = Biogenic Matrix
+reagent-desc-cmu-biogenic-matrix             = A sterile protein-lattice slurry used by limb printers to grow graft-ready replacement limbs.
 
 reagent-name-cmu-paracetamol                 = Paracetamol
 reagent-desc-cmu-paracetamol                 = A mild pain reliever. Suppresses pain accumulation, masks one pain tier, and helps excess pain fade.

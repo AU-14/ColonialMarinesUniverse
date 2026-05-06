@@ -9,7 +9,7 @@
     sprite: _RMC14/Objects/Misc/Books/Other/marine_law.rsi
   - type: GuideHelp
     guides:
-    - AU14SOP #todo AU14 make this use UCMJ
+    - AU14UCMJ
 
 - type: entity
   parent: RMCGuidebookLawMarine

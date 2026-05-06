@@ -4,6 +4,7 @@ using Content.Server.Body.Systems;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
 using Content.Shared._CMU14.Medical;
+using Content.Shared._CMU14.Medical.Surgery;
 using Content.Shared._CMU14.Medical.StatusEffects;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
@@ -188,6 +189,9 @@ public sealed class CMSurgerySystem : SharedCMSurgerySystem
 
     private void OnStepScreamComplete(Entity<CMSurgeryStepEmoteEffectComponent> ent, ref CMSurgeryStepEvent args)
     {
+        if (HasComp<CMUAutodocContainedPatientComponent>(args.Body))
+            return;
+
         if (TryComp<PainShockComponent>(args.Body, out var pain)
             && _cmuPain.GetSuppressionMultiplier(args.Body) < 1f
             && _cmuPain.GetEffectiveTier(args.Body, pain) <= PainTier.None)

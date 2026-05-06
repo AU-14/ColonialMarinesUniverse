@@ -28,13 +28,13 @@
     - BattleBuddy
   - type: EncryptionKey
     channels:
-    - MarineCommand
-    - MarineJTAC
-    - MarineAlpha
+    - GovforCommand
+    - GovforJTAC
+    - GovforAlpha
     - GovforCharlie
     - GovforBravo
     - GovforIntel
-    defaultChannel: MarineCommand
+    defaultChannel: GovforCommand
   - type: Sprite
     state: we_ya_key
 
@@ -52,9 +52,9 @@
     - BattleBuddy
   - type: EncryptionKey
     channels:
-    - MarineCommand
+    - GovforCommand
     - GovforIntel
-    defaultChannel: MarineCommand
+    defaultChannel: GovforCommand
   - type: Sprite
     state: we_ya_key
 
@@ -122,8 +122,8 @@
   components:
   - type: EncryptionKey
     channels:
-    - MarineJTAC
-    defaultChannel: MarineJTAC
+    - GovforJTAC
+    defaultChannel: GovforJTAC
 
 - type: entity
   parent: RMCHeadsetShip

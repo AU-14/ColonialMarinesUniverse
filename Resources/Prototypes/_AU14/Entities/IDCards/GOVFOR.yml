@@ -263,22 +263,12 @@
   - type: IFFFaction
   - type: FactionFrequencies
     channels:
-    - MarineCommand
-    - MarineMedical
-    - MarineEngineer
-    - MarineMilitaryPolice
-    - MarineAlpha
+    - GovforCommand
+    - GovforAlpha
     - GovforBravo
     - GovforCharlie
-    - MarineDelta
     - GovforIntel
-    - MarineFoxtrot
-    - MarineRequisition
-    - MarineJTAC
-    - MarineIntel
-    - GovforCharlie
-
-
+    - GovforJTAC
 
 - type: entity
   id: OPFOR

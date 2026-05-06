@@ -163,22 +163,16 @@ public sealed class CMUSurgeryBui : BoundUserInterface
         _window.InProgressChoiceContainer.DisposeAllChildren();
         if (inFlight is null || !TryGetInFlightPart(state, inFlight, out var part))
         {
-            if (stepArmed)
-            {
-                _window.InProgressActionRailPanel.Visible = true;
-                AddAbandonButton();
-            }
+            _window.InProgressActionRailPanel.Visible = true;
+            AddAbandonButton();
             return;
         }
-
-        if (!inFlight.OwnedByViewer && !stepArmed)
-            return;
 
         _window.InProgressActionRailPanel.Visible = true;
 
         var continuationCount = 0;
         CMUSurgeryEntry? closeUp = null;
-        if (!stepArmed && inFlight.OwnedByViewer)
+        if (!stepArmed)
         {
             foreach (var entry in part.EligibleSurgeries)
             {
@@ -214,8 +208,7 @@ public sealed class CMUSurgeryBui : BoundUserInterface
                 AddChoiceButton(part, close, Loc.GetString("cmu-medical-surgery-close-up-button"), true);
         }
 
-        if (stepArmed || inFlight.OwnedByViewer)
-            AddAbandonButton();
+        AddAbandonButton();
     }
 
     private static bool ShouldShowInProgressContinuation(CMUSurgeryEntry entry)

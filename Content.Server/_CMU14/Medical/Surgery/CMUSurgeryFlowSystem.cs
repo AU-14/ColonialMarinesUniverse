@@ -30,6 +30,7 @@ public sealed class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SkillsSystem _skills = default!;
+    [Dependency] private readonly CMUBodyScannerSystem _bodyScanner = default!;
 
     private const float StepDoAfterSeconds = 2f;
     private const float PostOpCastWindowMinutes = 5f;
@@ -78,7 +79,7 @@ public sealed class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
 
     protected override bool StartStepDoAfter(EntityUid patient, CMUSurgeryArmedStepComponent armed, EntityUid surgeon, EntityUid tool, EntityUid targetPart)
     {
-        var delay = ResolveStepDoAfterDelay(surgeon);
+        var delay = ResolveStepDoAfterDelay(surgeon, patient);
         if (TryComp<CMUImprovisedSurgeryToolComponent>(tool, out var improvised))
             delay = TimeSpan.FromSeconds(delay.TotalSeconds * MathF.Max(1f, improvised.DelayMultiplier));
 
@@ -115,9 +116,10 @@ public sealed class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
         return true;
     }
 
-    private TimeSpan ResolveStepDoAfterDelay(EntityUid surgeon)
+    private TimeSpan ResolveStepDoAfterDelay(EntityUid surgeon, EntityUid patient)
     {
         var multiplier = _skills.GetSkillDelayMultiplier(surgeon, SurgerySkill, SurgeryStepDelayMultipliers);
+        multiplier *= _bodyScanner.GetSurgeryDelayMultiplier(surgeon, patient);
         return TimeSpan.FromSeconds(StepDoAfterSeconds * multiplier);
     }
 

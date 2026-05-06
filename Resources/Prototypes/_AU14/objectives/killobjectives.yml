@@ -219,3 +219,48 @@
     amounttokill: 1
     specificjob: AU14JobGOVFORPlatCoRMC
 
+- type: entity
+  name: "Kill the threat leader (DS)"
+  parent: MarkerBase
+  id: killthreatleaderobjectiveds
+  components:
+  - type: Sprite
+    state: red
+  - type: AuObjective
+    factioneutral: false
+    id: threatkillleaderobj
+    applicableModes:
+    - DistressSignal
+    possiblefactions:
+    - govfor
+    repeating: false
+    objectivelevel: 1
+    custompoints: 35
+    ObjectiveDescription: "Eliminate the threat's leader."
+    roundEndMessage: "By Killing the threat leader."
+  - type: KillObjective
+    amounttokill: 1
+    specificjob: AU14JobThreatLeader
+
+- type: entity
+  name: "Kill the threat (DS)"
+  parent: MarkerBase
+  id: killthreatobjectiveds
+  components:
+  - type: Sprite
+    state: red
+  - type: AuObjective
+    factioneutral: false
+    id: threatkillobj
+    applicableModes:
+    - DistressSignal
+    possiblefactions:
+    - govfor
+    repeating: true
+    objectivelevel: 1
+    custompoints: 5
+    ObjectiveDescription: "Eliminate the threat."
+    roundEndMessage: "By killing the threat."
+  - type: KillObjective
+    amounttokill: 1
+    specificjob: AU14JobThreatMember

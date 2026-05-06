@@ -1,0 +1,96 @@
+- type: guideEntry
+  parent: RMC
+  id: AU14UCMJ
+  name: Uniform Code of Military Justice
+  text: "/ServerInfo/Guidebook/_AU14/UCMJ/AU14UCMJ.xml"
+  priority: 3
+  children:
+  - AU14UCMJLawRankStructure
+  - AI14UCMJRightToAppeal
+  - AI14UCMJNJP
+  - AU14UCMJArrestingProcedure
+  - AI14UCMJCriminalCode
+  - AI14UCMJDefinitionsandGlossary
+
+- type: guideEntry
+  parent: RMC
+  id: AU14UCMJLawRankStructure
+  name: Law Rank Structure
+  priority: 0
+  text: "/ServerInfo/Guidebook/_AU14/UCMJ/AU14UCMJEnforcementStructure.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AI14UCMJRightToAppeal
+  name: Right to Appeal
+  priority: 1
+  text: "/ServerInfo/Guidebook/_AU14/UCMJ/AI14UCMJRightToAppeal.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AI14UCMJNJP
+  name: Non-Judicial Punishments
+  priority: 3
+  text: "/ServerInfo/Guidebook/_AU14/UCMJ/AI14UCMJNJP.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14UCMJArrestingProcedure
+  name: Arresting Procedures
+  priority: 2
+  text: "/ServerInfo/Guidebook/_AU14/UCMJ/AU14UCMJArrestingProcedure.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AI14UCMJDefinitionsandGlossary
+  name: Definitions and Glossary
+  priority: 2
+  text: "/ServerInfo/Guidebook/_AU14/UCMJ/AI14UCMJDefinitionsandGlossary.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AI14UCMJCriminalCode
+  name: Criminal Code
+  text: "/ServerInfo/Guidebook/_AU14/UCMJ/AI14UCMJCriminalCode.xml"
+  priority: 3
+  children:
+  - AU14UCMJOptionalCrimes
+  - AU14UCMJMinorCrimes
+  - AU14UCMJMajorCrimes
+  - AU14UCMJCapitalCrimes
+  - AU14UCMJPrecautionaryCharges
+
+- type: guideEntry
+  parent: RMC
+  id: AU14UCMJOptionalCrimes
+  name: Optional Crimes
+  priority: 1
+  text: "/ServerInfo/Guidebook/_AU14/UCMJ/Crimes/AU14UCMJOptionalCrimes.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14UCMJMinorCrimes
+  name: Minor Crimes
+  priority: 2
+  text: "/ServerInfo/Guidebook/_AU14/UCMJ/Crimes/AU14UCMJMinorCrimes.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14UCMJMajorCrimes
+  name: Major Crimes
+  priority: 3
+  text: "/ServerInfo/Guidebook/_AU14/UCMJ/Crimes/AU14UCMJMajorCrimes.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14UCMJCapitalCrimes
+  name: Capital Crimes
+  priority: 4
+  text: "/ServerInfo/Guidebook/_AU14/UCMJ/Crimes/AU14UCMJCapitalCrimes.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14UCMJPrecautionaryCharges
+  name: Precautionary Charges
+  priority: 5
+  text: "/ServerInfo/Guidebook/_AU14/UCMJ/Crimes/AU14UCMJPrecautionaryCharges.xml"

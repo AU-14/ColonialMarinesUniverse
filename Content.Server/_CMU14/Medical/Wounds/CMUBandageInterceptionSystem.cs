@@ -7,6 +7,7 @@ using Content.Shared._CMU14.Medical.Surgery;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Wounds;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
@@ -64,6 +65,13 @@ public sealed class CMUBandageInterceptionSystem : EntitySystem
             return;
         if (!HasComp<CMUHumanMedicalComponent>(patient))
             return;
+
+        if (IsSynthPatient(patient))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-medical-bandage-synth-requires-repair-tools"), patient, args.User, PopupType.SmallCaution);
+            args.Handled = true;
+            return;
+        }
 
         if (ShouldYieldToArmedSurgeryTool(args.User, patient, used))
             return;
@@ -168,6 +176,9 @@ public sealed class CMUBandageInterceptionSystem : EntitySystem
 
     private bool HasTreatableDamage(EntityUid user, EntityUid patient, WoundTreaterComponent treater)
     {
+        if (IsSynthPatient(patient))
+            return false;
+
         if (ResolveTreaterDamage(user, treater) >= FixedPoint2.Zero)
             return false;
 
@@ -261,6 +272,12 @@ public sealed class CMUBandageInterceptionSystem : EntitySystem
         var treaterUid = ent.Comp.Treater;
 
         if (args.Cancelled)
+        {
+            RemComp<CMUBandagePendingComponent>(ent);
+            return;
+        }
+
+        if (IsSynthPatient(patient))
         {
             RemComp<CMUBandagePendingComponent>(ent);
             return;
@@ -363,6 +380,11 @@ public sealed class CMUBandageInterceptionSystem : EntitySystem
 
         QueueDel(treaterUid);
         return false;
+    }
+
+    private bool IsSynthPatient(EntityUid patient)
+    {
+        return HasComp<SynthComponent>(patient);
     }
 }
 
