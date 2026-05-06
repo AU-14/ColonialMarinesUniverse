@@ -32,3 +32,118 @@
     attachableTypes:
     - RMCDropshipUtilityPoint
     - RMCDropshipWeaponPoint
+
+- type: entity
+  abstract: true
+  parent: RMCDropshipAttachmentAmmo
+  id: RMCDropshipAttachmentAmmoHowitzer
+  name: Howitzer Shell
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/dropship_ammo_64.rsi
+    offset: 0.5, 0.5
+    layers:
+    - state: single
+      map: [ "enum.DropshipAmmoVisuals.Fill"]
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49, -0.49, 1.49, 0.49"
+        density: 100
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: DropshipAmmo
+    rounds: 1
+    maxRounds: 1
+    roundsPerShot: 1
+    targetSpread: 3 # TODO RMC14 max 6 when no longer lased
+    bulletSpread: 0
+    travelTime: 4
+    weapon: RMCDropshipAttachmentHowitzer
+    soundCockpit: /Audio/_RMC14/Effects/rocketpod_fire.ogg
+    soundMarker: /Audio/_RMC14/Effects/rocketpod_fire.ogg #If IncommingRocket.ogg was better then just use it rather then being 1:1 with CM-13 :godo:, sadly we dont have the file
+    deleteOnEmpty: true
+
+- type: entity
+  id: RMCDropshipAttachmentAmmoHowitzerHolderBase
+  name: M137 High-Explosive Shell Holder
+  description: Holds 4 M137 UNDEFINED Shells for the M137 105mm Howitzer. While its too heavy to carry, you can drag it around or carry it with a powerloader.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/dropship_ammo.rsi
+    offset: 0.5, 0.5
+    layers:
+    - state: howitzer_105mm_shell_4
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: PowerLoaderGrabbable
+  - type: Physics
+    bodyType: Dynamic
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49, -0.49, 0.49, 0.49"
+        density: 1000
+        mask:
+        - ItemMask
+        layer:
+        - ItemLayer
+  - type: DropshipAmmo
+    ammoType: howitzer_105mm_shell
+    rounds: 4
+    maxRounds: 4
+    roundsPerShot: 1
+  - type: AmmoHolder
+  - type: ItemSlots
+    slots:
+      shell1:
+        name: Shell Slot 1
+        startingItem: RMCDropshipAttachmentAmmoHowitzerHighExplosive
+        ejectOnInteract: true
+        insertOnInteract: true
+        whitelist:
+          components:
+          - DropshipAmmo
+      shell2:
+        name: Shell Slot 2
+        startingItem: RMCDropshipAttachmentAmmoHowitzerHighExplosive
+        ejectOnInteract: true
+        insertOnInteract: true
+        whitelist:
+          components:
+          - DropshipAmmo
+      shell3:
+        name: Shell Slot 3
+        startingItem: RMCDropshipAttachmentAmmoHowitzerHighExplosive
+        ejectOnInteract: true
+        insertOnInteract: true
+        whitelist:
+          components:
+          - DropshipAmmo
+      shell4:
+        name: Shell Slot 4
+        startingItem: RMCDropshipAttachmentAmmoHowitzerHighExplosive
+        ejectOnInteract: true
+        insertOnInteract: true
+        whitelist:
+          components:
+          - DropshipAmmo
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoHowitzer
+  id: RMCDropshipAttachmentAmmoHowitzerHighExplosive
+  name: M137 High-Explosive Shell
+  description: The M137 High-Explosive Shell is a powerful round designed for destroying fortified positions. It is capable of inflicting significant damage on armored targets and structures. Must be hand loaded into the M137 105mm Howitzer.
+  components:
+  - type: DropshipAmmo
+    travelTime: 3
+    explosion:
+      total: 3000
+      slope: 5.5
+      max: 55
+  - type: Item
+    size: Normal

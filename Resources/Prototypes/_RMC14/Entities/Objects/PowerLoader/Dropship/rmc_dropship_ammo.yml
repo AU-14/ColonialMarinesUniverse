@@ -118,7 +118,7 @@
     travelTime: 6
     weapon: RMCDropshipAttachmentGuidedMissileLauncher
     soundCockpit: /Audio/_RMC14/Effects/rocketpod_fire.ogg
-    soundMarker: /Audio/_RMC14/Effects/rocketpod_fire.ogg #IncommingRocket.ogg sounds better, and more accurate, but this is what is used in parity, i believe it to be a mistake in the original PR, but we can change it in the future
+    soundMarker: /Audio/_RMC14/Effects/rocketpod_fire.ogg #If IncommingRocket.ogg was better then just use it rather then being 1:1 with CM-13 :godo:, sadly we dont have the file
     deleteOnEmpty: true
 
 - type: entity
@@ -133,9 +133,10 @@
       total: 3000
       slope: 5.5
       max: 55
+
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
-  id: AU14DropshipAttachmentAmmoRocketWidowmakerDoubleADMIN
+  id: AU14DropshipAttachmentAmmoRocketWidowmakerDoubleADMIN # why make this an admin ammo and never let it be used???
   name: "AIM-224A 'Octuple Widow' (DO NOT MAP)"
   description: The AIM-224A missile is a retrofit of the latest in air-to-air missile technology. Earning the nickname of 'Double Widow' due to it being two Widow Makers stacked on top of each other. Both rockets are fired at the same time and are highly unpredictable. Not well suited for ground bombardment but its high velocity makes it reach its target quickly. This one has been modified to be a two round free-fall bomb as a result of dropship ammo shortages. Can be loaded into the LAU-444 Guided Missile Launcher.
   components:
@@ -319,6 +320,11 @@
     - state: minirocket_heat_6
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
   - type: DropshipAmmo
+    rounds: 6
+    maxRounds: 6
+    roundsPerShot: 1
+    bulletSpread: 0
+    travelTime: 8
     ammoType: minirocket_heat
     explosion:
       total: 500
@@ -336,6 +342,11 @@
     - state: minirocket_blu_6
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
   - type: DropshipAmmo
+    rounds: 6
+    maxRounds: 6
+    roundsPerShot: 1
+    bulletSpread: 0
+    travelTime: 8
     ammoType: minirocket_blu
     implosion:
       pullRange: 6
@@ -352,7 +363,15 @@
     layers:
     - state: minirocket_flir_6
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 500
   - type: DropshipAmmo
+    rounds: 6
+    maxRounds: 6
+    roundsPerShot: 1
+    bulletSpread: 0
+    travelTime: 8
     ammoType: minirocket_flir
     explosion:
       AU14FlareExplosionProofRocket
@@ -367,7 +386,15 @@
     layers:
     - state: minirocket_smk_6
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 500
   - type: DropshipAmmo
+    rounds: 6
+    maxRounds: 6
+    roundsPerShot: 1
+    bulletSpread: 0
+    travelTime: 2
     ammoType: minirocket_smk
     impacteffect:
       RMCSmokeExplosionProofMiniRocket
@@ -380,18 +407,19 @@
   parent: RMCDropshipAttachmentAmmoRocketMiniMike
   id: RMCDropshipAttachmentAmmoRocketMiniMikeClusterIncendiary
   name: AGR-59-CI 'Mini-Mike'
-  description: The AGR-59-CI 'Mini-Mike' cluster incendiary minirocket is a cheap and efficient means of putting hate down range multiple times AND setting them on fire! Though rockets lack a guidance package, it makes up for it in ammunition count. Can be loaded into the LAU-229 Rocket Pod.
+  description: The AGR-59-CI 'Mini-Mike' cluster incendiary minirocket is a cheap and efficient means of putting hate down range multiple times AND setting them on fire! It releases 6 mini-rockets per shot. Though rockets lack a guidance package, it makes up for it in ammunition count. Can be loaded into the LAU-229 Rocket Pod.
   components:
   - type: Sprite
     layers:
     - state: minirocket_ci_6
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
   - type: DropshipAmmo
-    ammoType: minirocket_ci
-    rounds: 6
-    maxRounds: 6
-    roundsPerShot: 1
+    rounds: 36
+    maxRounds: 36
+    roundsPerShot: 6
     bulletSpread: 5
+    travelTime: 8
+    ammoType: minirocket_ci
     explosion:
       total: 50
       slope: 6
@@ -414,7 +442,15 @@
   #  layers:
   #  - state: minirocket_wk_6
   #    map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  #- type: DropshipFabricatorPrintable
+  #  category: Ammo
+  #  cost: 500
   #- type: DropshipAmmo
+  #  rounds: 6
+  #  maxRounds: 6
+  #  roundsPerShot: 1
+  #  bulletSpread: 0
+  #  travelTime: 4
   #  ammoType: minirocket_wk
   #  fire:
   #    type: RMCTileFireMiniMike
