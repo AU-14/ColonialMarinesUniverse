@@ -8,6 +8,7 @@
   - type: DropshipAmmo
     rounds: 400
     maxRounds: 400
+    roundsPerShot: 1
   - type: PowerLoaderAttachable
     attachableTypes:
     - RMCDropshipWeaponPoint
@@ -58,6 +59,9 @@
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
   - type: DropshipAmmo
     ammoType: 30mm_crate_hv
+    rounds: 400
+    maxRounds: 400
+    roundsPerShot: 40
     bulletSpread: 4
     damage:
       groups:
@@ -128,6 +132,9 @@
   description: The AIM-224B missile is a retrofit of the latest in air-to-air missile technology. Earning the nickname of 'Widowmaker' from various dropship pilots after improvements to its guidance warhead prevents it from being jammed leading to its high kill rate. Not well suited for ground bombardment but its high velocity makes it reach its target quickly. This one has been modified to be a free-fall bomb as a result of dropship ammo shortages. Can be loaded into the LAU-444 Guided Missile Launcher.
   components:
   - type: DropshipAmmo
+    rounds: 1
+    maxRounds: 1
+    roundsPerShot: 1
     travelTime: 3
     explosion:
       total: 3000
@@ -166,6 +173,9 @@
     - state: paveway
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
+    rounds: 1
+    maxRounds: 1
+    roundsPerShot: 1
     travelTime: 2
     explosion:
       total: 905
@@ -204,6 +214,9 @@
     - state: harpoon
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
+    rounds: 1
+    maxRounds: 1
+    roundsPerShot: 1
     travelTime: 5
     explosion:
       total: 1850
@@ -221,6 +234,9 @@
     - state: fatty
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
+    rounds: 1
+    maxRounds: 1
+    roundsPerShot: 1
     travelTime: 5
     implosion:
       pullRange: 12.5
@@ -245,6 +261,9 @@
     - state: banshee
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
+    rounds: 1
+    maxRounds: 1
+    roundsPerShot: 1
     travelTime: 6
     explosion:
       total: 2000
@@ -284,6 +303,9 @@
   components:
   - type: DropshipAmmo
     ammoType: minirocket
+    rounds: 6
+    maxRounds: 6
+    roundsPerShot: 1
     explosion:
       total: 850
       slope: 8
@@ -304,6 +326,9 @@
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
   - type: DropshipAmmo
     ammoType: minirocket_inc
+    rounds: 6
+    maxRounds: 6
+    roundsPerShot: 1
     fire:
       type: RMCTileFireMiniMike
       range: 1
@@ -470,6 +495,9 @@
     - state: chubby
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
+    rounds: 1
+    maxRounds: 1
+    roundsPerShot: 1
     travelTime: 5
     implosion:
       pullRange: 10
@@ -554,6 +582,9 @@
     - state: jdam
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
+    rounds: 1
+    maxRounds: 1
+    roundsPerShot: 1
     travelTime: 12
     explosion:
       total: 10000
@@ -573,6 +604,9 @@
     - state: jdami
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
+    rounds: 1
+    maxRounds: 1
+    roundsPerShot: 1
     travelTime: 11
     explosion:
       total: 10000

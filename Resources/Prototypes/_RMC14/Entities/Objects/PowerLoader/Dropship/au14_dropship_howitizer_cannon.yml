@@ -140,6 +140,9 @@
   description: The M137 High-Explosive Shell is a powerful round designed for destroying fortified positions. It is capable of inflicting significant damage on armored targets and structures. Must be hand loaded into the M137 105mm Howitzer.
   components:
   - type: DropshipAmmo
+    rounds: 1
+    maxRounds: 1
+    roundsPerShot: 1
     travelTime: 3
     explosion:
       total: 3000
