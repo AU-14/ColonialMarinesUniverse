@@ -620,6 +620,9 @@ namespace Content.Server.AU14.Round
 
         public void chooseThreat(RMCPlanetMapPrototypeComponent? planet)
         {
+            if (_cfg.GetCVar(CCVars.GameDummyTicker))
+                return;
+
             var noThreatPresets = new HashSet<string> { "ForceOnForce", "Insurgency" };
 
             if (_selectedPreset != null && noThreatPresets.Any(s => s.Equals(_selectedPreset.ID, System.StringComparison.OrdinalIgnoreCase)))
