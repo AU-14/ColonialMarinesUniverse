@@ -14,7 +14,7 @@ public sealed partial class CMUAutodocPodComponent : Component
     public const string BodyContainerId = "cmu-autodoc-bodyContainer";
 
     [DataField]
-    public float StepDelay = 180f;
+    public float StepDelay = 45f;
 
     [DataField]
     public TimeSpan EntryDelay = TimeSpan.FromSeconds(2);

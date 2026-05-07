@@ -57,7 +57,7 @@ public sealed class CMUAutodocSystem : EntitySystem
     private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
     private const string AutodocWoundRepairId = "CMUAutodocRepairWounds";
     private const string AutodocWoundRepairCategory = "wound_repair";
-    private const float DefaultProcedureSeconds = 180f;
+    private const float DefaultProcedureSeconds = 45f;
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
 
@@ -652,23 +652,23 @@ public sealed class CMUAutodocSystem : EntitySystem
     private static float GetProcedureDurationSeconds(CMUSurgeryEntry surgery)
     {
         if (surgery.SurgeryId == AutodocWoundRepairId)
-            return 120f;
+            return 30f;
 
         if (surgery.SurgeryId.Contains("Comminuted", StringComparison.OrdinalIgnoreCase))
-            return 240f;
+            return 60f;
 
         if (surgery.SurgeryId.Contains("Compound", StringComparison.OrdinalIgnoreCase))
-            return 180f;
+            return 50f;
 
         if (surgery.SurgeryId.Contains("Simple", StringComparison.OrdinalIgnoreCase))
-            return 120f;
+            return 35f;
 
         return surgery.Category switch
         {
-            "fracture" => 180f,
-            "bleed" => 180f,
-            "suture" => 240f,
-            "head_organ" => 240f,
+            "fracture" => 45f,
+            "bleed" => 35f,
+            "suture" => 55f,
+            "head_organ" => 60f,
             _ => DefaultProcedureSeconds,
         };
     }

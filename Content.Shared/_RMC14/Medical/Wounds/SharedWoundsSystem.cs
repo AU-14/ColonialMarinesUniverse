@@ -4,6 +4,7 @@ using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.DoAfter;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
@@ -257,6 +258,15 @@ public abstract class SharedWoundsSystem : EntitySystem
         handle = false;
         wounded = default;
         damage = FixedPoint2.Zero;
+        if (HasComp<SynthComponent>(target))
+        {
+            handle = true;
+            if (doPopups)
+                _popup.PopupClient(Loc.GetString("cmu-medical-bandage-synth-requires-repair-tools"), target, user, PopupType.SmallCaution);
+
+            return false;
+        }
+
         if (!HasComp<WoundableComponent>(target) &&
             !TryComp(target, out wounded))
         {

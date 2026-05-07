@@ -92,6 +92,51 @@ internal static class CMUMedicalMachineStyle
         return button;
     }
 
+    public static PanelContainer WindowHeader(string title, out Button closeButton)
+    {
+        var panel = Panel(DeepCardBg, MutedBorder);
+        var row = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            SeparationOverride = 8,
+            Margin = new Thickness(8, 5),
+            HorizontalExpand = true,
+        };
+        panel.AddChild(row);
+
+        row.AddChild(new Label
+        {
+            Text = title,
+            StyleClasses = { "LabelHeading" },
+            FontColorOverride = Text,
+            ClipText = true,
+            HorizontalExpand = true,
+            VerticalAlignment = Control.VAlignment.Center,
+        });
+
+        closeButton = new Button
+        {
+            MinSize = new Vector2(30, 26),
+            SetSize = new Vector2(30, 26),
+            HorizontalExpand = false,
+        };
+
+        var closePanel = Panel(Color.FromHex("#2B2C36"), MutedBorder);
+        closePanel.AddChild(new Label
+        {
+            Text = "X",
+            Align = Label.AlignMode.Center,
+            StyleClasses = { "LabelKeyText" },
+            FontColorOverride = Text,
+            HorizontalAlignment = Control.HAlignment.Center,
+            VerticalAlignment = Control.VAlignment.Center,
+        });
+        closeButton.AddChild(closePanel);
+        row.AddChild(closeButton);
+
+        return panel;
+    }
+
     public static BoxContainer MakeTitledList(
         BoxContainer parent,
         string title,

@@ -1,0 +1,16 @@
+- type: reagent
+  parent: CMReagent
+  id: CMUBlackSludge
+  name: reagent-name-rmcblackgoo
+  desc: reagent-desc-rmcblackgoo
+  physicalDesc: reagent-physical-desc-unidentifiable
+  flavor: bitter
+  color: "#0a0b0d"
+  unknown: true
+  toxin: true
+  metabolisms:
+    Poison:
+      metabolismRate: 4
+      effects:
+      - !type:ChemVomit
+        probability: 0

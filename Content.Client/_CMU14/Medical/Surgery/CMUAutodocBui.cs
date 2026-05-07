@@ -509,6 +509,7 @@ public sealed class CMUAutodocWindow : FancyWindow
 
         SetSize = CMUMedicalWindowSizing.GetInitialSize(RememberedSizeKey, PreferredWindowSize);
         MinSize = MinimumWindowSize;
+        SetCloseButtonAppearance(CMUMedicalMachineStyle.Text, new Vector2(18f, 18f));
 
         _scaleRoot = new PanelContainer
         {
@@ -527,6 +528,10 @@ public sealed class CMUAutodocWindow : FancyWindow
             VerticalExpand = true,
         };
         _scaleRoot.AddChild(root);
+
+        var titleBar = CMUMedicalMachineStyle.WindowHeader(Loc.GetString("cmu-autodoc-window-title"), out var closeButton);
+        closeButton.OnPressed += _ => Close();
+        root.AddChild(titleBar);
 
         var header = new BoxContainer
         {

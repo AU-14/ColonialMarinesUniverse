@@ -164,6 +164,7 @@ public sealed class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             return;
         }
 
+        var leafId = string.IsNullOrEmpty(armed.LeafSurgeryId) ? armed.SurgeryId : armed.LeafSurgeryId;
         EntityUid stepPart = patient;
         if (targetPart is { } part
             && TryComp<BodyPartComponent>(part, out var targetPartComp)
@@ -171,6 +172,12 @@ public sealed class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             && targetPartComp.Symmetry == armed.TargetSymmetry)
         {
             stepPart = part;
+        }
+        else if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(leafId)
+                 && targetPart is { } reattachAnchor
+                 && HasComp<BodyPartComponent>(reattachAnchor))
+        {
+            stepPart = reattachAnchor;
         }
         else if (TryFindClickedPart(patient, null, armed.TargetPartType, armed.TargetSymmetry, out var foundPart))
         {
@@ -211,7 +218,6 @@ public sealed class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
         // refreshes the surgeon snapshot each time so a fresh surgeon
         // picking up an abandoned-but-armed surgery is credited as the
         // new operator.
-        var leafId = string.IsNullOrEmpty(armed.LeafSurgeryId) ? armed.SurgeryId : armed.LeafSurgeryId;
         var leafDisplay = ResolveLeafDisplayName(leafId);
         EnsureSurgeryInFlight(patient, stepPart, surgeon, leafId, leafDisplay, armed.TargetPartType, armed.TargetSymmetry);
 

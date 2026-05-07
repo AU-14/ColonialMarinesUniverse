@@ -585,7 +585,7 @@
   name: Trim necrotic stump
   components:
   - type: CMSurgeryStep
-    skill: 3
+    skill: 2
     tool:
     - type: CMBoneSaw
     add:
@@ -600,7 +600,7 @@
   name: Prep reattachment socket
   components:
   - type: CMSurgeryStep
-    skill: 3
+    skill: 2
     tool:
     - type: CMHemostat
     add:
@@ -615,7 +615,7 @@
   name: Reattach severed limb
   components:
   - type: CMSurgeryStep
-    skill: 3
+    skill: 2
     add:
     - type: CMUReattachComplete
   - type: CMUSurgeryStepReattachLimbEffect

@@ -132,6 +132,7 @@
   - type: Dna
   - type: InjectableSolution
   - type: IVDripTarget
+  - type: PainShock
   - type: Woundable
   - type: Wounded
   - type: RMCSuicide

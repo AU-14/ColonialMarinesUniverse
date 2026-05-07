@@ -20,9 +20,9 @@ public sealed partial class CMUSurgeryInProgressComponent : Component
     public string LeafSurgeryId = string.Empty;
 
     /// <summary>
-    ///     For reattach surgeries, <see cref="Part"/> is the patient body
-    ///     (no <see cref="BodyPartComponent"/>) — these fields disambiguate
-    ///     which severed slot the in-flight surgery is targeting.
+    ///     For reattach surgeries, <see cref="Part"/> can be a socket anchor
+    ///     while the limb is still missing. These fields disambiguate which
+    ///     severed slot the in-flight surgery is targeting.
     /// </summary>
     [DataField, AutoNetworkedField]
     public BodyPartType TargetPartType;

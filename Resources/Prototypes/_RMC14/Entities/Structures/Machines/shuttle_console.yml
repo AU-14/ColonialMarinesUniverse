@@ -95,10 +95,6 @@
   - type: Corrodible
     isCorrodible: false
   - type: InteractionOutline
-  - type: InteractedBlacklist
-    blacklist:
-      components:
-      - Xeno
   - type: WallMount
     arc: 360
   - type: DropshipNavigationComputer

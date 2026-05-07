@@ -22,12 +22,20 @@ public sealed partial class BodyPartHealthComponent : Component
     public FixedPoint2 Current = 100;
 
     /// <summary>
-    ///     Damage past <see cref="Max"/> at which the part severs. Set to a sentinel
-    ///     such as <c>999999</c> for parts that must not sever (torso, head guarded
-    ///     by safety CCVars).
+    ///     Structural damage past <see cref="Max"/> at which the part severs.
+    ///     Set to a sentinel such as <c>999999</c> for parts that must not sever
+    ///     (torso, head guarded by safety CCVars).
     /// </summary>
     [DataField, AutoNetworkedField]
     public FixedPoint2 SeveranceThreshold = 200;
+
+    /// <summary>
+    ///     Cumulative structural damage eligible for limb severance. This is
+    ///     intentionally tracked separately from <see cref="Current"/> so burn
+    ///     damage can injure a part without burning limbs off.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public FixedPoint2 SeveranceDamage;
 
     /// <summary>
     ///     Per-damage-group multiplier applied before deducting from <see cref="Current"/>.

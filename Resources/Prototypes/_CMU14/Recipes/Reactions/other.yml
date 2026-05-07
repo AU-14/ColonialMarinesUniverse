@@ -1,0 +1,14 @@
+- type: reaction
+  id: CMUCreateSludgeGC
+  quantized: true
+  reactants:
+    CMBicaridine:
+      amount: 16
+    CMMeralyne:
+      amount: 16
+    CMKelotane:
+      amount: 16
+    CMDermaline:
+      amount: 16
+  products:
+    CMUBlackSludge: 64

@@ -192,6 +192,9 @@ public sealed class CMSurgerySystem : SharedCMSurgerySystem
         if (HasComp<CMUAutodocContainedPatientComponent>(args.Body))
             return;
 
+        if (HasComp<SynthComponent>(args.Body))
+            return;
+
         if (TryComp<PainShockComponent>(args.Body, out var pain)
             && _cmuPain.GetSuppressionMultiplier(args.Body) < 1f
             && _cmuPain.GetEffectiveTier(args.Body, pain) <= PainTier.None)

@@ -1469,6 +1469,9 @@ public sealed class CMUUprightSpriteView : SpriteView
 
 public sealed class CMUScannerSweepControl : Control
 {
+    private const float SpriteScanWidthRatio = 0.58f;
+    private const float SpriteScanHeightRatio = 0.70f;
+
     [Dependency] private readonly IGameTiming _timing = default!;
 
     private TimeSpan? _pulseStartedAt;
@@ -1521,7 +1524,11 @@ public sealed class CMUScannerSweepControl : Control
     {
         base.Draw(handle);
 
-        var size = Size;
+        var size = PixelSize;
+        var previewScale = GetPreviewScale(size);
+        if (previewScale <= 0f)
+            return;
+
         var active = _total > 0 && _calibrationEndsAt is { } endsAt && _timing.CurTime < endsAt;
         var scanRect = GetSpriteScanRect(size);
         var feedbackActive = _lastFeedbackAt is { } feedbackAt &&
@@ -1531,41 +1538,44 @@ public sealed class CMUScannerSweepControl : Control
                             _lastPenaltySeconds > 0f &&
                             (_timing.CurTime - penaltyAt).TotalSeconds < 1.4f;
 
-        DrawScannerFrame(handle, scanRect, active, _selectedLayer);
+        DrawScannerFrame(handle, scanRect, active, _selectedLayer, previewScale);
 
         if (_total <= 0 || _pulseStartedAt is null)
         {
             return;
         }
 
-        DrawPhaseBand(handle, scanRect, _targetPhase, _windowSize, CMUMedicalMachineStyle.Cyan.WithAlpha(active ? 0.9f : 0.34f));
+        DrawPhaseBand(handle, scanRect, _targetPhase, _windowSize, CMUMedicalMachineStyle.Cyan.WithAlpha(active ? 0.9f : 0.34f), previewScale);
 
         var phase = CurrentPhase();
         var y = scanRect.Top + scanRect.Height * phase;
         var lineColor = active ? CMUMedicalMachineStyle.Text : CMUMedicalMachineStyle.Dim;
-        handle.DrawLine(new Vector2(scanRect.Left - 4f, y), new Vector2(scanRect.Right + 4f, y), lineColor);
-        handle.DrawRect(new UIBox2(scanRect.Left - 8f, y - 2f, scanRect.Left - 4f, y + 2f), lineColor);
-        handle.DrawRect(new UIBox2(scanRect.Right + 4f, y - 2f, scanRect.Right + 8f, y + 2f), lineColor);
+        var lineOverhang = 3f * previewScale;
+        var markerWidth = 3f * previewScale;
+        var markerHalfHeight = 2f * previewScale;
+        handle.DrawLine(new Vector2(scanRect.Left - lineOverhang, y), new Vector2(scanRect.Right + lineOverhang, y), lineColor);
+        handle.DrawRect(new UIBox2(scanRect.Left - lineOverhang - markerWidth, y - markerHalfHeight, scanRect.Left - lineOverhang, y + markerHalfHeight), lineColor);
+        handle.DrawRect(new UIBox2(scanRect.Right + lineOverhang, y - markerHalfHeight, scanRect.Right + lineOverhang + markerWidth, y + markerHalfHeight), lineColor);
 
         if (feedbackActive)
         {
             switch (_lastFeedbackKind)
             {
                 case CMUBodyScannerFeedbackKind.Correct:
-                    handle.DrawRect(Enlarge(scanRect, 4f), CMUMedicalMachineStyle.Cyan.WithAlpha(0.42f), false);
+                    handle.DrawRect(Enlarge(scanRect, 4f * previewScale), CMUMedicalMachineStyle.Cyan.WithAlpha(0.42f), false);
                     break;
                 case CMUBodyScannerFeedbackKind.WrongLayer:
-                    DrawStatic(handle, scanRect, CMUMedicalMachineStyle.Purple);
-                    handle.DrawRect(Enlarge(scanRect, 4f), CMUMedicalMachineStyle.Purple.WithAlpha(0.5f), false);
+                    DrawStatic(handle, scanRect, CMUMedicalMachineStyle.Purple, previewScale);
+                    handle.DrawRect(Enlarge(scanRect, 4f * previewScale), CMUMedicalMachineStyle.Purple.WithAlpha(0.5f), false);
                     break;
                 case CMUBodyScannerFeedbackKind.WrongTiming:
-                    handle.DrawRect(Enlarge(scanRect, 4f), CMUMedicalMachineStyle.Red.WithAlpha(0.6f), false);
+                    handle.DrawRect(Enlarge(scanRect, 4f * previewScale), CMUMedicalMachineStyle.Red.WithAlpha(0.6f), false);
                     break;
             }
         }
         else if (penaltyActive)
         {
-            handle.DrawRect(Enlarge(scanRect, 4f), CMUMedicalMachineStyle.Red.WithAlpha(0.4f), false);
+            handle.DrawRect(Enlarge(scanRect, 4f * previewScale), CMUMedicalMachineStyle.Red.WithAlpha(0.4f), false);
         }
     }
 
@@ -1582,17 +1592,24 @@ public sealed class CMUScannerSweepControl : Control
 
     private static UIBox2 GetSpriteScanRect(Vector2 size)
     {
-        // Calibrated to the upright SpriteView footprint: a little wider than
-        // the visible marine so the sweep catches arms/legs without scanning
-        // empty panel space.
-        var centerX = size.X * 0.725f + 1f;
-        var centerY = size.Y * 0.625f + 16f;
-        var halfWidth = size.X * 0.473f;
-        var halfHeight = size.Y * 0.473f;
-        return new UIBox2(centerX - halfWidth, centerY - halfHeight, centerX + halfWidth, centerY + halfHeight);
+        // SpriteView draws its entity at the center of its pixel box. Center
+        // the scanner on that same box instead of carrying resolution-specific
+        // offsets that can drift on different UI scales.
+        var center = size / 2f;
+        var halfWidth = size.X * SpriteScanWidthRatio / 2f;
+        var halfHeight = size.Y * SpriteScanHeightRatio / 2f;
+        return new UIBox2(center.X - halfWidth, center.Y - halfHeight, center.X + halfWidth, center.Y + halfHeight);
     }
 
-    private static void DrawScannerFrame(DrawingHandleScreen handle, UIBox2 scanRect, bool active, string? selectedLayer)
+    private static float GetPreviewScale(Vector2 size)
+    {
+        if (size.X <= 0f || size.Y <= 0f)
+            return 0f;
+
+        return MathF.Min(size.X / 96f, size.Y / 110f);
+    }
+
+    private static void DrawScannerFrame(DrawingHandleScreen handle, UIBox2 scanRect, bool active, string? selectedLayer, float scale)
     {
         var color = selectedLayer switch
         {
@@ -1604,14 +1621,15 @@ public sealed class CMUScannerSweepControl : Control
         };
 
         var frame = color.WithAlpha(active ? 0.46f : 0.22f);
-        DrawBracket(handle, scanRect, frame, 7f);
+        var railOffset = 4f * scale;
+        DrawBracket(handle, scanRect, frame, 7f * scale);
         handle.DrawLine(
-            new Vector2(scanRect.Left - 6f, scanRect.Top),
-            new Vector2(scanRect.Left - 6f, scanRect.Bottom),
+            new Vector2(scanRect.Left - railOffset, scanRect.Top),
+            new Vector2(scanRect.Left - railOffset, scanRect.Bottom),
             frame.WithAlpha(frame.A * 0.55f));
         handle.DrawLine(
-            new Vector2(scanRect.Right + 6f, scanRect.Top),
-            new Vector2(scanRect.Right + 6f, scanRect.Bottom),
+            new Vector2(scanRect.Right + railOffset, scanRect.Top),
+            new Vector2(scanRect.Right + railOffset, scanRect.Bottom),
             frame.WithAlpha(frame.A * 0.55f));
     }
 
@@ -1620,14 +1638,15 @@ public sealed class CMUScannerSweepControl : Control
         UIBox2 scanRect,
         float centerPhase,
         float size,
-        Color color)
+        Color color,
+        float scale)
     {
         var half = Math.Clamp(size, 0f, 1f) / 2f;
         centerPhase = Math.Clamp(centerPhase, half, 1f - half);
-        DrawNormalizedBand(handle, scanRect, centerPhase - half, centerPhase + half, color);
+        DrawNormalizedBand(handle, scanRect, centerPhase - half, centerPhase + half, color, scale);
     }
 
-    private static void DrawNormalizedBand(DrawingHandleScreen handle, UIBox2 scanRect, float start, float end, Color color)
+    private static void DrawNormalizedBand(DrawingHandleScreen handle, UIBox2 scanRect, float start, float end, Color color, float scale)
     {
         start = Math.Clamp(start, 0f, 1f);
         end = Math.Clamp(end, 0f, 1f);
@@ -1636,21 +1655,24 @@ public sealed class CMUScannerSweepControl : Control
 
         var top = scanRect.Top + scanRect.Height * start;
         var bottom = scanRect.Top + scanRect.Height * end;
-        var rect = new UIBox2(scanRect.Left - 4f, top, scanRect.Right + 4f, bottom);
+        var overhang = 4f * scale;
+        var rect = new UIBox2(scanRect.Left - overhang, top, scanRect.Right + overhang, bottom);
         handle.DrawRect(rect, color.WithAlpha(0.12f));
         handle.DrawLine(new Vector2(rect.Left, rect.Top), new Vector2(rect.Right, rect.Top), color);
         handle.DrawLine(new Vector2(rect.Left, rect.Bottom), new Vector2(rect.Right, rect.Bottom), color);
     }
 
-    private void DrawStatic(DrawingHandleScreen handle, UIBox2 scanRect, Color color)
+    private void DrawStatic(DrawingHandleScreen handle, UIBox2 scanRect, Color color, float scale)
     {
-        var offset = (float)((_timing.CurTime.TotalSeconds * 42d) % 18d);
+        var spacing = 18f * scale;
+        var offset = (float)((_timing.CurTime.TotalSeconds * 42d * scale) % spacing);
+        var overhang = 10f * scale;
         for (var i = -4; i < 13; i++)
         {
-            var y = scanRect.Top + i * 18f + offset;
+            var y = scanRect.Top + i * spacing + offset;
             handle.DrawLine(
-                new Vector2(scanRect.Left - 10f, y),
-                new Vector2(scanRect.Right + 10f, y + 9f),
+                new Vector2(scanRect.Left - overhang, y),
+                new Vector2(scanRect.Right + overhang, y + 9f * scale),
                 color.WithAlpha(0.28f));
         }
     }
@@ -1678,6 +1700,11 @@ public sealed class CMUBodyScannerWindow : FancyWindow
     private const string RememberedSizeKey = "cmu-body-scanner";
     private static readonly Vector2 PreferredWindowSize = new(1040f, 680f);
     private static readonly Vector2 MinimumWindowSize = new(680f, 440f);
+    private static readonly Vector2 PatientPreviewSize = new(88f, 88f);
+    private static readonly Vector2 PatientPreviewScale = new(1.55f, 1.55f);
+    private static readonly Vector2 ScanPreviewFrameSize = new(96f, 110f);
+    private static readonly Vector2 ScanPatientPreviewSize = new(92f, 106f);
+    private static readonly Vector2 ScanPatientPreviewScale = new(2.15f, 2.15f);
 
     [Dependency] private readonly IResourceCache _resourceCache = default!;
 
@@ -1711,6 +1738,7 @@ public sealed class CMUBodyScannerWindow : FancyWindow
 
         SetSize = CMUMedicalWindowSizing.GetInitialSize(RememberedSizeKey, PreferredWindowSize);
         MinSize = MinimumWindowSize;
+        SetCloseButtonAppearance(CMUMedicalMachineStyle.Text, new Vector2(18f, 18f));
 
         _scaleRoot = new PanelContainer
         {
@@ -1729,6 +1757,10 @@ public sealed class CMUBodyScannerWindow : FancyWindow
             VerticalExpand = true,
         };
         _scaleRoot.AddChild(root);
+
+        var titleBar = CMUMedicalMachineStyle.WindowHeader(Loc.GetString("cmu-body-scanner-window-title"), out var closeButton);
+        closeButton.OnPressed += _ => Close();
+        root.AddChild(titleBar);
 
         var header = new BoxContainer
         {
@@ -1761,12 +1793,12 @@ public sealed class CMUBodyScannerWindow : FancyWindow
 
         _patientPreview = new CMUUprightSpriteView
         {
-            SetSize = new Vector2(88, 88),
+            SetSize = PatientPreviewSize,
             OverrideDirection = Direction.South,
             WorldRotation = Angle.Zero,
             EyeRotation = Angle.Zero,
             Stretch = SpriteView.StretchMode.Fit,
-            Scale = new Vector2(1.55f, 1.55f),
+            Scale = PatientPreviewScale,
         };
         previewFrame.AddChild(_patientPreview);
 
@@ -1909,20 +1941,19 @@ public sealed class CMUBodyScannerWindow : FancyWindow
         sweepPanel.AddChild(sweepRow);
 
         var scanFrame = CMUMedicalMachineStyle.Panel(Color.FromHex("#081117"), CMUMedicalMachineStyle.Cyan);
-        scanFrame.MinSize = new Vector2(96, 110);
-        scanFrame.SetSize = new Vector2(96, 110);
+        scanFrame.MinSize = ScanPreviewFrameSize;
+        scanFrame.SetSize = ScanPreviewFrameSize;
         scanFrame.HorizontalExpand = false;
         sweepRow.AddChild(scanFrame);
 
         _scanPatientPreview = new CMUUprightSpriteView
         {
-            SetSize = new Vector2(92, 106),
+            SetSize = ScanPatientPreviewSize,
             OverrideDirection = Direction.South,
             WorldRotation = Angle.Zero,
             EyeRotation = Angle.Zero,
             Stretch = SpriteView.StretchMode.Fit,
-            Scale = new Vector2(2.15f, 2.15f),
-            Margin = new Thickness(2, 0, 0, 0),
+            Scale = ScanPatientPreviewScale,
             ModulateSelfOverride = Color.White,
         };
         scanFrame.AddChild(_scanPatientPreview);
@@ -1933,15 +1964,18 @@ public sealed class CMUBodyScannerWindow : FancyWindow
             Align = Label.AlignMode.Center,
             VerticalAlignment = Control.VAlignment.Center,
             HorizontalAlignment = Control.HAlignment.Center,
+            SetSize = ScanPreviewFrameSize,
+            MinSize = ScanPreviewFrameSize,
             FontColorOverride = CMUMedicalMachineStyle.Dim,
+            ClipText = true,
             Visible = false,
         };
         scanFrame.AddChild(_scanPreviewFallbackLabel);
 
         SweepControl = new CMUScannerSweepControl
         {
-            SetSize = new Vector2(96, 110),
-            MinSize = new Vector2(96, 110),
+            SetSize = ScanPreviewFrameSize,
+            MinSize = ScanPreviewFrameSize,
         };
         scanFrame.AddChild(SweepControl);
 
@@ -2099,6 +2133,8 @@ public sealed class CMUBodyScannerWindow : FancyWindow
 
         _layoutScale = scale;
         _uniformScaler.Apply(_scaleRoot, _layoutScale, _resourceCache);
+        _patientPreview.Scale = PatientPreviewScale * _layoutScale;
+        _scanPatientPreview.Scale = ScanPatientPreviewScale * _layoutScale;
     }
 
     private static Label MakeMetricLabel(BoxContainer parent, string title, Color accent)
