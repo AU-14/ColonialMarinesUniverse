@@ -175,12 +175,6 @@
       "directions": 4
     },
     {
-      "name": "bofors_cannon_interior_loaded"
-    },
-    {
-      "name": "bofors_cannon_interior_unloaded"
-    },
-    {
       "name": "bofors_cannon_loaded"
     },
     {
@@ -193,12 +187,6 @@
       "name": "boforsnew2"
     },
     {
-      "name": "bomb_clamp_interior_loaded"
-    },
-    {
-      "name": "bomb_clamp_unloaded"
-    },
-    {
       "name": "cas_howitzer_105_installed_loaded"
     },
     {
@@ -209,12 +197,6 @@
     },
     {
       "name": "cas_howitzer_105_uninstalled_loaded"
-    },
-    {
-      "name": "howitzer_cannon_interior_loaded"
-    },
-    {
-      "name": "howitzer_cannon_interior_unloaded"
     }
   ]
 }

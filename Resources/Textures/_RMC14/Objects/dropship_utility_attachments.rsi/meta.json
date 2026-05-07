@@ -90,6 +90,24 @@
     },
     {
       "name": "sentry_system_destroyed"
+    },
+    {
+      "name": "howitzer_cannon_interior_loaded"
+    },
+    {
+      "name": "howitzer_cannon_interior_unloaded"
+    },
+    {
+      "name": "bomb_clamp_interior_loaded"
+    },
+    {
+      "name": "bomb_clamp_unloaded"
+    },
+    {
+      "name": "bofors_cannon_interior_loaded"
+    },
+    {
+      "name": "bofors_cannon_interior_unloaded"
     }
   ]
 }
