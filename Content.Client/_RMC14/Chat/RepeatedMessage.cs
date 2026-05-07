@@ -4,14 +4,21 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._RMC14.Chat;
 
-public sealed class RepeatedMessage
+public sealed class RepeatedMessage(
+    int index,
+    FormattedMessage formattedMessage,
+    NetEntity senderEntity,
+    string message,
+    ChatChannel channel,
+    string? languageIcon
+)
 {
-    public readonly ChatMessageRow? Row;
-    public readonly int Index;
-    public readonly FormattedMessage FormattedMessage;
-    public readonly NetEntity SenderEntity;
-    public readonly string Message;
-    public readonly ChatChannel Channel;
+    public readonly int Index = index;
+    public readonly FormattedMessage FormattedMessage = formattedMessage;
+    public readonly NetEntity SenderEntity = senderEntity;
+    public readonly string Message = message;
+    public readonly ChatChannel Channel = channel;
+    public readonly string? LanguageIcon = languageIcon;
     public int Count = 1;
 
     public RepeatedMessage(ChatMessageRow row, FormattedMessage formattedMessage, NetEntity senderEntity, string message, ChatChannel channel)
