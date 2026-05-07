@@ -345,39 +345,31 @@ namespace Content.Server.AU14.Round
 
         private void StartPlatoonVotes()
         {
+            if (_selectedPreset == null || _selectedPlanet == null)
+            {
+                _voteSequenceRunning = false;
+                _selectedPreset = null;
+                _selectedPlanet = null;
+                return;
+            }
+
+            var presetProto = _selectedPreset;
+            var planetProto = _selectedPlanet;
 
             Timer.Spawn(TimeSpan.FromMilliseconds(100),
                 () =>
                 {
 
-                    chooseThreat(_selectedPlanet);
+                    chooseThreat(planetProto);
                 });
             Timer.Spawn(TimeSpan.FromMilliseconds(200),
                 () =>
                 {
                     PreselectThirdParties();
                 });
-            if (_selectedPreset == null || _selectedPlanet == null)
-                    {
-                        _voteSequenceRunning = false;
-                        _selectedPreset = null;
-                        _selectedPlanet = null;
-                        return;
-                    }
 
-
-
-                    var planetProto = _selectedPlanet;
-                    if (planetProto == null)
-                    {
-                        _voteSequenceRunning = false;
-                        _selectedPreset = null;
-                        _selectedPlanet = null;
-                        return;
-                    }
-
-                    var govforPlatoons = _selectedPlanet.PlatoonsGovfor;
-                    var opforPlatoons = _selectedPlanet.PlatoonsOpfor;
+                    var govforPlatoons = planetProto.PlatoonsGovfor;
+                    var opforPlatoons = planetProto.PlatoonsOpfor;
                     var duration = TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.VotePlatoonDuration));
                     var platoonSpawnRuleSystem =
                         _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
@@ -416,7 +408,7 @@ namespace Content.Server.AU14.Round
 
 
 
-                    if (_selectedPreset.RequiresGovforVote && govforPlatoons.Count > 0)
+                    if (presetProto.RequiresGovforVote && govforPlatoons.Count > 0)
                     {
                         var optionsplatoons = new List<(string text, object data)>();
                         foreach (var platoonId in govforPlatoons)
@@ -452,7 +444,7 @@ namespace Content.Server.AU14.Round
                                 }
 
                                 // Only start ship vote if planet allows govfor in ship
-                                if (_selectedPlanet.GovforInShip)
+                                if (planetProto.GovforInShip)
                                 {
                                     Timer.Spawn(TimeSpan.FromMilliseconds(100),
                                         () =>
@@ -467,7 +459,7 @@ namespace Content.Server.AU14.Round
                         };
                     }
 
-                    if (_selectedPreset.RequiresOpforVote && opforPlatoons.Count > 0)
+                    if (presetProto.RequiresOpforVote && opforPlatoons.Count > 0)
                     {
                         var optionsplatoons = new List<(string text, object data)>();
                         foreach (var platoonId in opforPlatoons)
@@ -503,7 +495,7 @@ namespace Content.Server.AU14.Round
                                 }
 
                                 // Only start ship vote if planet allows opfor in ship
-                                if (_selectedPlanet.OpforInShip)
+                                if (planetProto.OpforInShip)
                                 {
                                     Timer.Spawn(TimeSpan.FromMilliseconds(100),
                                         () =>
