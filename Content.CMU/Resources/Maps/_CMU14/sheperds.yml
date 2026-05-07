@@ -71520,7 +71520,7 @@ entities:
     - type: AccessReader
       access:
       - - AU14AccessGovforSecurity
-- proto: ButchCleaver
+- proto: RMCKitchenKnifeButcher
   entities:
   - uid: 1122
     components:
