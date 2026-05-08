@@ -4,11 +4,19 @@
   description: A light flak vest.
   name: flak webbing vest
   components:
+  - type: ClothingSpeedModifier
+    walkModifier: 0.825
+    sprintModifier: 0.825
+  - type: CMArmor
+    melee: 10
+    bullet: 15
+    bio: 10
+    explosionArmor: 20
   - type: Sprite
     sprite: _AU14/Clothing/ProdigySecurityForces/flakvest.rsi
 
 - type: entity
-  parent: AU14BaseArmorLight
+  parent: CMUArmorProdigyFlakVest
   id: CMUArmorProdigyFlakVestAlt
   description: A light flak vest.
   name: flak vest
@@ -17,7 +25,7 @@
     sprite: _AU14/Clothing/ProdigySecurityForces/flakvestlight.rsi
 
 - type: entity
-  parent: AU14BaseArmorLight
+  parent: CMUArmorProdigyFlakVest
   id: CMUArmorProdigyFlakVestMedical
   description: A light flak vest.
   name: medical flak vest

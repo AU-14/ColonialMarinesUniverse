@@ -997,8 +997,6 @@
         amount: 15
       - id: RMCRocket84mm
         amount: 7
-      - id: RMCPouchExplosive
-        amount: 1
 
 # AirCrew Weapons
 - type: entity

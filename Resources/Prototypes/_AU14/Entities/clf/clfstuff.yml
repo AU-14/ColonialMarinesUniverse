@@ -245,6 +245,9 @@
       - id: AU14TattooGun
         amount: 3
         points: 12
+      - id: AU14CLFHeadset
+        amount: 10
+        points: 8
     - name: Mortar
       entries:
       - id: RMCRangefinder

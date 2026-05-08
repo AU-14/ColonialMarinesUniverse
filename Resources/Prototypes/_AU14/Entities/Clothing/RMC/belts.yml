@@ -15,7 +15,7 @@
   parent: AU14BeltMarineRMC
   id: AU14BeltMarineRMCFullL90
   suffix: Full, L90
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: AU14MagazineRifleL90extended
@@ -25,7 +25,7 @@
     - id: AU14MagazineRifleL90
 
 - type: entity
-  parent: CMBeltBaseStorage
+  parent: AU14BeltUtilityGeneralBlack
   id: AU14BeltUtilityGeneralRMC
   name: L26 general utility pouch
   description: A small, lightweight pouch that can be clipped onto kestrel armour to provide additional storage. The newer model, while uncomfortable, can also be clipped around the waist.
@@ -112,7 +112,7 @@
   parent: AU14BeltHolsterPistolRMC
   id: AU14BeltHolsterPistolRMCFullL165A1
   suffix: Full, L165A1
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: AU14L165A1Filled
@@ -203,7 +203,7 @@
   parent: AU14ShotgunShellLoadingRigRMC
   id: AU14ShotgunShellLoadingRigRMCFullBuckshot
   suffix: Full, Buckshot
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: CMShellShotgunBuckshot

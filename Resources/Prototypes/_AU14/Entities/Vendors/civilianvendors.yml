@@ -297,7 +297,7 @@
       - id: AU14CMDefibrillator
         amount: 10
       - id: AU14IVFoldableFolded
-        amount: 10
+        amount: 20
 
 - type: entity
   parent: ColMarTechBase
