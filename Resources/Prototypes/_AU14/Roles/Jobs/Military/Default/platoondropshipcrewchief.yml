@@ -12,19 +12,27 @@
     - Epilepsy
     - NonResuscitable
   ranks:
-    AU14RankUSASFCMSgt:
+    RMCRankSecondLT:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDCC
+      time: 540000 # 150 hours
+    RMCRankChiefWarrantOfficer5:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDCC
       time: 360000 # 100 hours
-    AU14RankUSASFSMSgt:
+    RMCRankChiefWarrantOfficer4:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDCC
-      time: 216000 # 60 hours
-    AU14RankUSASFMasterSergeant:
+      time: 180000 # 50 hours
+    RMCRankChiefWarrantOfficer3:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDCC
-      time: 43200 # 12 hours
-    AU14RankUSASFTechnicalSergeant: []
+      time: 86400 # 24 hours
+    RMCRankChiefWarrantOfficer:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDCC
+      time: 36000 # 10 hours
+    RMCRankWarrantOfficer: []
   startingGear: AU14GearGOVFORDCC
   dummyStartingGear: AU14GearGOVFORDCCDummy
   icon: "AU14JobIconDCC"
