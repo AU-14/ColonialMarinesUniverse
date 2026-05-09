@@ -194,6 +194,15 @@
 - type: Tag
   id: AU14WeaponPistolM48A5
 
+- type: entity
+  parent: AU14WeaponPistolM48A5Officer
+  id:  AU14WeaponPistolM48A5CO
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        startingItem: AU14MagazinePistolM48A4
+
 #.45
 - type: entity
   parent: CMBaseMagazinePistol

@@ -1,0 +1,29 @@
+# sidearm
+
+
+- type: loadout
+  id: PlatCOSidearmMatebaCustomAU14
+  effects:
+    - !type:JobRequirementLoadoutEffect
+      requirement:
+        !type:RoleTimeRequirement
+        role: AU14JobGOVFORPlatCo
+        time: 36000 # 10 hrs
+  equipment:
+    id: AU14MatebaCustomBeltFilledAmmo
+
+- type: loadout
+  id: PlatCOSidearmMatebaSpecialAU14
+  effects:
+    - !type:JobRequirementLoadoutEffect
+      requirement:
+        !type:RoleTimeRequirement
+        role: AU14JobGOVFORPlatCo
+        time: 36000 # 10 hrs
+  equipment:
+    id:  AU14MatebaSpecialBeltFilledAmmo
+
+- type: loadout
+  id: PlatCOSidearmM48A5AU14
+  equipment:
+    id:  AU14BeltPostelPistolM48A5NoSuper

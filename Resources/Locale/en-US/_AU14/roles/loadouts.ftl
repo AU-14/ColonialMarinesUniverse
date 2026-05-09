@@ -7,6 +7,8 @@ au14-loadout-group-synth-suit-special = Suit (Special)
 au14-loadout-group-synth-equipment = Synthetic Equipment
 AU14JobGOVFORAuxSupportSynth-loadout = GOVFOR Support Synth loadout
 
+au14-loadout-group-commander-sidearm-belt = Sidearm Belt
+
 au14-loadout-group-doctor-equipment = Specialization
 
 au14-loadout-group-civilian-footwear = Civilian footwear
