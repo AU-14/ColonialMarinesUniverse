@@ -8,6 +8,10 @@ on:
     types: [ opened, reopened, synchronize, ready_for_review ]
     branches: [ master, staging, stable ]
 
+permissions:
+  contents: read
+  actions: write
+
 jobs:
   build:
     if: github.event.pull_request.draft == false
