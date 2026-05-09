@@ -355,8 +355,6 @@
       amount: 1
     - id: RMCBucket
       amount: 1
-    - id: RMCStoragePlantBag
-      amount: 1
     - id: RMCToolSpade
       amount: 1
     - id: RMCToolHatchet
@@ -406,6 +404,8 @@
     - id: GarlicSeeds
       amount: 1
     - id: OnionRedSeeds
+      amount: 1
+    - id: BoxMouthSwab
       amount: 1
 
 - type: entity
@@ -661,7 +661,7 @@
   description: A secure gear crate.
 
 - type: entity
-  parent: RMCCrateSecure
+  parent: RMCCrateHydro
   id: RMCCrateSecureHydro
   name: secure hydroponics crate
   description: A crate with a lock on it, painted in the scheme of the station's botanists.
