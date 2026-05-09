@@ -331,7 +331,8 @@ namespace Content.IntegrationTests.Tests
                 .EnumeratePrototypes<EntityPrototype>()
                 .Where(p => !p.Abstract)
                 .Where(p => !pair.IsTestPrototype(p))
-                .Where(p => !excluded.Any(p.Components.ContainsKey))
+                // .Where(p => !excluded.Contains(p.Components.ContainsKey))
+                .Where(p => !excluded.Contains(p.ID)) // prototypes excluded from cleanup test
                 .Where(p => p.Categories.All(x => x.ID != SpawnerCategory))
                 .Select(p => p.ID)
                 .ToList();

@@ -1,4 +1,4 @@
-﻿using Content.Server.GameTicking;
+using Content.Server.GameTicking;
 using Content.Shared.GameTicking;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Reflection;
@@ -29,7 +29,7 @@ namespace Content.IntegrationTests.Tests
         [Test]
         public async Task ResettingEntitySystemResetTest()
         {
-            await using var pair = await PoolManager.GetServerClient(new PoolSettings
+            var pair = await PoolManager.GetServerClient(new PoolSettings
             {
                 DummyTicker = false,
                 Connected = true,

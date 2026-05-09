@@ -851,8 +851,8 @@
         amount: 7
       - id: RMCRocketHJRA12Incen
         amount: 3
-      - id: RMCPouchExplosive
-        amount: 1
+      - id: AU14BackpackRockets
+        amount: 2
     - name: LPO80 Pyrotechnician kit
       entries:
       - id: AU14KitUPPPyroLPO80

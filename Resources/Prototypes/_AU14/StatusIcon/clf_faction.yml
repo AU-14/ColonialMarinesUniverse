@@ -1,7 +1,7 @@
 # CLF team identifier - visible only to other CLF members
 - type: factionIcon
   id: CLFFaction
-  priority: 11
+  priority: 12
   showTo:
     components:
     - ShowAntagIcons

@@ -6,6 +6,7 @@ using Content.Shared.Access.Components;
 using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared.Au14.Util;
 using Robust.Shared.Containers;
+using Robust.Shared.Localization;
 
 namespace Content.Server.au14.Systems;
 
@@ -34,7 +35,10 @@ public sealed class JobTitleChangerSystem : EntitySystem
             var owner = container.Owner;
             if (owner != EntityUid.Invalid && EntityManager.EntityExists(owner) && EntityManager.TryGetComponent(owner, out IdCardComponent? idCard))
             {
-                if (!string.IsNullOrWhiteSpace(comp.JobTitle) && idCard._jobTitle == comp.JobTitle)
+                var title = Loc.TryGetString(comp.JobTitle, out var localized)
+                    ? localized
+                    : comp.JobTitle;
+                if (!string.IsNullOrWhiteSpace(comp.JobTitle) && idCard._jobTitle == title)
                 {
                     if (_minds.TryGetMind(owner, out var mindId, out _) && _jobs.MindTryGetJobName(mindId, out var jobName))
                     {
@@ -61,7 +65,9 @@ public sealed class JobTitleChangerSystem : EntitySystem
         {
             if (EntityManager.TryGetComponent(args.Equipee, out IdCardComponent? idCard))
             {
-                idCard._jobTitle = comp.JobTitle;
+                idCard._jobTitle = Loc.TryGetString(comp.JobTitle, out var localized)
+                    ? localized
+                    : comp.JobTitle;
                 Dirty(args.Equipee, idCard);
             }
         }
@@ -103,7 +109,9 @@ public sealed class JobTitleChangerSystem : EntitySystem
             {
                 if (EntityManager.TryGetComponent(uid, out IdCardComponent? idCard))
                 {
-                    idCard._jobTitle = changer.JobTitle;
+                    idCard._jobTitle = Loc.TryGetString(changer.JobTitle, out var localized)
+                        ? localized
+                        : changer.JobTitle;
                     Dirty(uid, idCard);
                 }
             }
@@ -119,20 +127,25 @@ public sealed class JobTitleChangerSystem : EntitySystem
         if (EntityManager.TryGetComponent(uid, out IdCardComponent? idCard))
         {
             // Check if the removed entity had a JobTitleChangerComponent
-            if (EntityManager.TryGetComponent(args.Entity, out JobTitleChangerComponent? changer) &&
-                idCard._jobTitle == changer.JobTitle)
+            if (EntityManager.TryGetComponent(args.Entity, out JobTitleChangerComponent? changer))
             {
-                // Try to get the mind's job name
-                if (_minds.TryGetMind(uid, out var mindId, out _) &&
-                    _jobs.MindTryGetJobName(mindId, out var jobName))
+                var title = Loc.TryGetString(changer.JobTitle, out var localized)
+                    ? localized
+                    : changer.JobTitle;
+                if (idCard._jobTitle == title)
                 {
-                    idCard._jobTitle = jobName;
+                    // Try to get the mind's job name
+                    if (_minds.TryGetMind(uid, out var mindId, out _) &&
+                        _jobs.MindTryGetJobName(mindId, out var jobName))
+                    {
+                        idCard._jobTitle = jobName;
+                    }
+                    else
+                    {
+                        idCard._jobTitle = null;
+                    }
+                    Dirty(uid, idCard);
                 }
-                else
-                {
-                    idCard._jobTitle = null;
-                }
-                Dirty(uid, idCard);
             }
         }
     }

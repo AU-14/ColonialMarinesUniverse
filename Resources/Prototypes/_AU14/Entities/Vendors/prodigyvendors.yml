@@ -307,17 +307,6 @@
         name: first-aid pouch (gauze, ointment) # TODO RMC14 splints
       - id: RMCPouchFirstAidPills
         name: first-aid pouch (pills)
-    - name: Medical Pouches
-      choices: { CMUPlatoonMedicalPouch: 2 }
-      entries:
-      - id: RMCPouchAutoinjector
-      - id: RMCPouchFirstResponder
-      - id: RMCPouchMedical
-      - id: RMCPouchSyringeFill
-      - id: RMCPouchFirstAidSplintsGauzeOintment
-        name: first-aid pouch (gauze, ointment) # TODO RMC14 splints
-      - id: RMCPouchFirstAidPills
-        name: first-aid pouch (pills)
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:

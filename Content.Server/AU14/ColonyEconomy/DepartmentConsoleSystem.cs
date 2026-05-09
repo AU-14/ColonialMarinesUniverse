@@ -10,6 +10,7 @@ using Content.Shared.Roles;
 using Content.Shared.Stacks;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Access;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
@@ -554,7 +555,8 @@ public sealed class DepartmentConsoleSystem : EntitySystem
             var deptCost = 0f;
             foreach (var idCardUid in dept.Members)
             {
-                if (!TryComp<IdCardComponent>(idCardUid, out _))
+                if (!TryComp<IdCardComponent>(idCardUid, out var idCard)
+                    || (idCard.OriginalOwner != null && HasComp<SynthComponent>(idCard.OriginalOwner)))
                     continue;
 
                 var salary = dept.SalaryOverrides.TryGetValue(idCardUid, out var overrideSalary)
@@ -575,7 +577,8 @@ public sealed class DepartmentConsoleSystem : EntitySystem
             var totalTaxCollected = 0f;
             foreach (var idCardUid in dept.Members)
             {
-                if (!TryComp<IdCardComponent>(idCardUid, out var idCard))
+                if (!TryComp<IdCardComponent>(idCardUid, out var idCard)
+                    || (idCard.OriginalOwner != null && HasComp<SynthComponent>(idCard.OriginalOwner)))
                     continue;
 
                 var salary = dept.SalaryOverrides.TryGetValue(idCardUid, out var overrideSalary)
