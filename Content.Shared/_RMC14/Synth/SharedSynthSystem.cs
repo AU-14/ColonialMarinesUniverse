@@ -218,6 +218,14 @@ public abstract class SharedSynthSystem : EntitySystem
         var user = args.User;
         var selfRepair = args.User == synth.Owner;
 
+        var attemptEv = new RMCSynthRepairToolUseAttemptEvent(user, used, synth.Owner);
+        RaiseLocalEvent(synth.Owner, attemptEv);
+        if (attemptEv.Handled)
+        {
+            args.Handled = true;
+            return;
+        }
+
         var ev = new RMCSynthRepairEvent();
         var repairTime = selfRepair ? synth.Comp.SelfRepairTime : synth.Comp.RepairTime;
         var doAfter = new DoAfterArgs(EntityManager, user, repairTime, ev, synth, used: args.Used)
@@ -365,3 +373,10 @@ public abstract class SharedSynthSystem : EntitySystem
 
 [Serializable, NetSerializable]
 public sealed partial class RMCSynthRepairEvent : SimpleDoAfterEvent;
+
+public sealed class RMCSynthRepairToolUseAttemptEvent(EntityUid user, EntityUid used, EntityUid target) : HandledEntityEventArgs
+{
+    public EntityUid User { get; } = user;
+    public EntityUid Used { get; } = used;
+    public EntityUid Target { get; } = target;
+}

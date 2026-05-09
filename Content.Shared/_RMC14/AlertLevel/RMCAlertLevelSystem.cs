@@ -4,7 +4,6 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared.Administration.Logs;
-using Content.Shared.AU14;
 using Content.Shared.Database;
 using Content.Shared.Doors.Components;
 using Content.Shared.Doors.Systems;
@@ -41,7 +40,8 @@ public sealed class RMCAlertLevelSystem : EntitySystem
 
     private void OnDropshipHijackLanded(ref DropshipHijackLandedEvent ev)
     {
-        Set(RMCAlertLevels.Delta, null, playSound: false, sendAnnouncement: false);
+        // TODO RMC14 is this real
+        // Set(RMCAlertLevels.Red);
     }
 
     private bool TryGetAlertLevel(out Entity<RMCAlertLevelComponent> alert)
@@ -102,24 +102,18 @@ public sealed class RMCAlertLevelSystem : EntitySystem
 
         _adminLog.Add(LogType.RMCAlertLevel, $"{ToPrettyString(user)} set alert level to {level}");
 
-        var shipMaps = new HashSet<EntityUid>();
+        var almayers = new HashSet<EntityUid>();
         var almayerQuery = EntityQueryEnumerator<AlmayerComponent>();
         while (almayerQuery.MoveNext(out var uid, out _))
         {
-            shipMaps.Add(uid);
-        }
-
-        var shipFactionQuery = EntityQueryEnumerator<ShipFactionComponent>();
-        while (shipFactionQuery.MoveNext(out var uid, out _))
-        {
-            shipMaps.Add(uid);
+            almayers.Add(uid);
         }
 
         var transformQuery = EntityManager.TransformQuery;
         var filter = Filter.Empty()
             .AddWhereAttachedEntity(entity =>
             {
-                if (transformQuery.CompOrNull(entity)?.MapUid is { } map && shipMaps.Contains(map))
+                if (transformQuery.CompOrNull(entity)?.MapUid is { } map && almayers.Contains(map))
                     return true;
 
                 if (_ghostQuery.HasComp(entity))
@@ -139,12 +133,16 @@ public sealed class RMCAlertLevelSystem : EntitySystem
         {
             if (announcement != null)
             {
-                _marineAnnounce.AnnounceToMarines(Loc.GetString(announcement));
+                var text = Loc.GetString(announcement);
+                _marineAnnounce.AnnounceToMarines(text);
+                _marineAnnounce.AnnounceAlertLevel(level, text, filter);
             }
             else if (message != null)
             {
                 var ares = _ares.EnsureARES();
-                _marineAnnounce.AnnounceRadio(ares, Loc.GetString(message.Value), ent.Comp.RadioChannel);
+                var text = Loc.GetString(message.Value);
+                _marineAnnounce.AnnounceRadio(ares, text, ent.Comp.RadioChannel);
+                _marineAnnounce.AnnounceAlertLevel(level, text, filter);
             }
         }
 

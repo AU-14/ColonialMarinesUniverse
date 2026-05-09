@@ -1,6 +1,7 @@
 using Content.Shared._CMU14.Medical.Surgery;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Body.Part;
+using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Containers.ItemSlots;
@@ -22,6 +23,7 @@ public sealed class CMULimbPrinterSystem : EntitySystem
     [Dependency] private readonly ItemSlotsSystem _slots = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedBodySystem _body = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -117,6 +119,7 @@ public sealed class CMULimbPrinterSystem : EntitySystem
         ConsumeReagent(syringeSolution, blood, BloodReagent, ent.Comp.BloodCost);
 
         var limb = Spawn(limbPrototype, Transform(ent.Owner).Coordinates);
+        AttachPrintedExtremity(limb, msg.Type, msg.Symmetry);
         _transform.PlaceNextTo(limb, ent.Owner);
 
         ent.Comp.WorkingUntil = _timing.CurTime + TimeSpan.FromSeconds(1.2);
@@ -264,6 +267,33 @@ public sealed class CMULimbPrinterSystem : EntitySystem
         }
 
         return false;
+    }
+
+    private void AttachPrintedExtremity(EntityUid limb, BodyPartType type, BodyPartSymmetry symmetry)
+    {
+        (string Slot, BodyPartType Type, EntProtoId Prototype)? child = type switch
+        {
+            BodyPartType.Arm when symmetry == BodyPartSymmetry.Left =>
+                (Slot: "left_hand", Type: BodyPartType.Hand, Prototype: "LeftHandHuman"),
+            BodyPartType.Arm when symmetry == BodyPartSymmetry.Right =>
+                (Slot: "right_hand", Type: BodyPartType.Hand, Prototype: "RightHandHuman"),
+            BodyPartType.Leg when symmetry == BodyPartSymmetry.Left =>
+                (Slot: "left_foot", Type: BodyPartType.Foot, Prototype: "LeftFootHuman"),
+            BodyPartType.Leg when symmetry == BodyPartSymmetry.Right =>
+                (Slot: "right_foot", Type: BodyPartType.Foot, Prototype: "RightFootHuman"),
+            _ => null
+        };
+
+        if (child is not { } childInfo)
+            return;
+
+        var childUid = Spawn(childInfo.Prototype, Transform(limb).Coordinates);
+        var attached = TryComp<BodyPartComponent>(limb, out var limbPart)
+            && (_body.AttachPart(limb, childInfo.Slot, childUid, limbPart)
+                || _body.TryCreatePartSlotAndAttach(limb, childInfo.Slot, childUid, childInfo.Type, limbPart));
+
+        if (!attached)
+            QueueDel(childUid);
     }
 
     private bool TryGetSynthesisSolution(EntityUid uid, out Entity<SolutionComponent> solutionEnt, out Solution solution)

@@ -50,10 +50,12 @@ public partial class ChatBox : UIWidget
     private bool _splitAvailable = true;
     private bool _legacyChatEnabled;
     private bool _forceLegacyPresentation;
+    private bool _colorWholeMessage;
     private ChatChannel _legacyChannelMask = (ChatChannel) ushort.MaxValue;
     private int _secondaryRatioPercent = ChatUserSettings.DefaultSplitSecondaryRatioPercent;
     private bool _syncingFilter;
     private bool LegacyPresentation => _forceLegacyPresentation || _legacyChatEnabled;
+    private static readonly Color StructuredMessageTextColor = Color.FromHex("#D6DCE0");
 
     public bool Main { get; set; }
 
@@ -114,6 +116,7 @@ public partial class ChatBox : UIWidget
         ChatInput.FilterButton.Popup.OnRadioFilter += OnSettingsRadioFilter;
         ChatInput.FilterButton.Popup.OnStyleChanged += OnSettingsStyleChanged;
         ChatInput.FilterButton.Popup.OnStyleReset += OnSettingsStyleReset;
+        ChatInput.FilterButton.Popup.OnColorWholeMessageChanged += OnSettingsColorWholeMessageChanged;
         ChatInput.FilterButton.Popup.OnLegacyModeChanged += OnSettingsLegacyModeChanged;
         SplitButton.Popup.OnTabSelected += OnSplitTabSelected;
         TabOverflowButton.Popup.OnTabSelected += OnOverflowTabSelected;
@@ -125,6 +128,7 @@ public partial class ChatBox : UIWidget
         _controller.FilterableChannelsChanged += OnFilterableChannelsChanged;
         _controller.RegisterChat(this);
         _config.OnValueChanged(CCVars.ChatLegacyMode, OnLegacyModeCvarChanged);
+        _config.OnValueChanged(CCVars.ChatColorWholeMessage, OnColorWholeMessageCvarChanged);
 
         _tabs = ChatUserSettings.LoadTabs(_config.GetCVar(CCVars.ChatTabs));
         _styles = ChatUserSettings.LoadStyles(_config.GetCVar(CCVars.ChatChannelStyles));
@@ -133,6 +137,7 @@ public partial class ChatBox : UIWidget
         _secondaryTabId = split.SecondaryTabId;
         _secondaryRatioPercent = split.SecondaryRatioPercent;
         _legacyChatEnabled = _config.GetCVar(CCVars.ChatLegacyMode);
+        _colorWholeMessage = _config.GetCVar(CCVars.ChatColorWholeMessage);
         var radioChannels = _prototype.EnumeratePrototypes<RadioChannelPrototype>().ToList();
         _styleTargets = ChatUserSettings.CreateStyleTargets(radioChannels);
         _radioTargets = ChatUserSettings.CreateRadioTargets(radioChannels);
@@ -689,6 +694,7 @@ public partial class ChatBox : UIWidget
             !LegacyPresentation && !IsAllTab(activeTab) && (activeTab.ChannelMask & ChatChannel.Radio) != 0);
         ChatInput.FilterButton.Popup.ConfigureTabs(_tabs.Where(IsTabVisible).ToList(), _activeTabId);
         ChatInput.FilterButton.Popup.ConfigureStyles(_styles, _styleTargets);
+        ChatInput.FilterButton.Popup.SetColorWholeMessage(_colorWholeMessage);
         ChatInput.FilterButton.Popup.SetLegacyMode(LegacyPresentation);
         _syncingFilter = false;
     }
@@ -994,6 +1000,15 @@ public partial class ChatBox : UIWidget
         _config.SaveToFile();
     }
 
+    private void OnSettingsColorWholeMessageChanged(bool enabled)
+    {
+        if (_colorWholeMessage == enabled)
+            return;
+
+        _config.SetCVar(CCVars.ChatColorWholeMessage, enabled);
+        _config.SaveToFile();
+    }
+
     private void OnLegacyModeCvarChanged(bool enabled)
     {
         var wasLegacy = LegacyPresentation;
@@ -1008,6 +1023,19 @@ public partial class ChatBox : UIWidget
             ResetLegacyChannelMask();
 
         ApplyChatMode();
+        Repopulate();
+    }
+
+    private void OnColorWholeMessageCvarChanged(bool enabled)
+    {
+        if (_colorWholeMessage == enabled)
+        {
+            SyncFilterPopup();
+            return;
+        }
+
+        _colorWholeMessage = enabled;
+        SyncFilterPopup();
         Repopulate();
     }
 
@@ -1090,14 +1118,15 @@ public partial class ChatBox : UIWidget
         var styleColor = ChatUserSettings.ResolveColor(style);
         var fontSize = ChatUserSettings.ResolveFontSize(style) ?? ChatUserSettings.DefaultFontSize;
         var accentColor = styleColor ?? msg.Display?.AccentColor;
-        var color = styleColor ?? msg.MessageColorOverride ?? msg.Display?.AccentColor ?? msg.Channel.TextColor();
-        var formatted = CreateFormattedMessage(msg, color, style);
+        var messageColor = styleColor ?? msg.MessageColorOverride ?? msg.Display?.AccentColor ?? msg.Channel.TextColor();
+        var bodyColor = _colorWholeMessage ? messageColor : StructuredMessageTextColor;
+        var formatted = CreateFormattedMessage(msg, messageColor, style);
 
         var cmChat = _entManager.SystemOrNull<CMChatSystem>();
         if (cmChat?.TryRepetition(repeatQueue, msg.SenderEntity, msg.Message, msg.Channel, msg.RepeatCheckSender) ?? false)
             return;
 
-        var row = contents.AddMessage(msg, formatted, color, accentColor, fontSize);
+        var row = contents.AddMessage(msg, formatted, bodyColor, accentColor, fontSize);
         cmChat?.TrackRepetition(repeatQueue, row, formatted, msg.SenderEntity, msg.Message, msg.Channel);
     }
 
@@ -1132,12 +1161,35 @@ public partial class ChatBox : UIWidget
     private FormattedMessage CreateFormattedMessage(ChatMessage message, Color color, ChatStyleSettings? style = null)
     {
         var markup = StripDuplicateChannelPrefix(message.WrappedMessage, message);
+        markup = _colorWholeMessage
+            ? ChatUserSettings.ApplyStyleMarkup(markup, style, ChatUserSettings.DefaultFontSize)
+            : ChatUserSettings.ApplyFontMarkup(RemoveOuterColorMarkup(markup), style, ChatUserSettings.DefaultFontSize);
+
         var formatted = new FormattedMessage(3);
-        formatted.PushColor(color);
-        formatted.AddMarkupOrThrow(ChatUserSettings.ApplyStyleMarkup(markup, style, ChatUserSettings.DefaultFontSize));
-        formatted.Pop();
+        if (_colorWholeMessage)
+            formatted.PushColor(color);
+
+        formatted.AddMarkupOrThrow(markup);
+
+        if (_colorWholeMessage)
+            formatted.Pop();
 
         return FilterProblematicTags(formatted);
+    }
+
+    private static string RemoveOuterColorMarkup(string markup)
+    {
+        if (!markup.StartsWith("[color=", StringComparison.OrdinalIgnoreCase) ||
+            !markup.EndsWith("[/color]", StringComparison.OrdinalIgnoreCase))
+        {
+            return markup;
+        }
+
+        var openEnd = markup.IndexOf(']');
+        if (openEnd < 0)
+            return markup;
+
+        return markup.Substring(openEnd + 1, markup.Length - openEnd - "[/color]".Length - 1);
     }
 
     private FormattedMessage CreateLegacyFormattedMessage(ChatMessage message, Color color)
@@ -1319,6 +1371,7 @@ public partial class ChatBox : UIWidget
         _controller.HighlightsUpdated -= OnHighlightsUpdated;
         _controller.FilterableChannelsChanged -= OnFilterableChannelsChanged;
         _config.UnsubValueChanged(CCVars.ChatLegacyMode, OnLegacyModeCvarChanged);
+        _config.UnsubValueChanged(CCVars.ChatColorWholeMessage, OnColorWholeMessageCvarChanged);
         ChatInput.Input.OnTextEntered -= OnTextEntered;
         ChatInput.Input.OnKeyBindDown -= OnInputKeyBindDown;
         ChatInput.Input.OnTextChanged -= OnTextChanged;
@@ -1335,6 +1388,7 @@ public partial class ChatBox : UIWidget
         ChatInput.FilterButton.Popup.OnRadioFilter -= OnSettingsRadioFilter;
         ChatInput.FilterButton.Popup.OnStyleChanged -= OnSettingsStyleChanged;
         ChatInput.FilterButton.Popup.OnStyleReset -= OnSettingsStyleReset;
+        ChatInput.FilterButton.Popup.OnColorWholeMessageChanged -= OnSettingsColorWholeMessageChanged;
         ChatInput.FilterButton.Popup.OnLegacyModeChanged -= OnSettingsLegacyModeChanged;
         SplitButton.Popup.OnTabSelected -= OnSplitTabSelected;
         TabOverflowButton.Popup.OnTabSelected -= OnOverflowTabSelected;

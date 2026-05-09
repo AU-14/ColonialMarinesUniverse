@@ -212,6 +212,7 @@
   description: If you want your mode to load planets and platoons automatically
   components:
   - type: AuVoteRule
+  - type: Bioscan
 
 
 

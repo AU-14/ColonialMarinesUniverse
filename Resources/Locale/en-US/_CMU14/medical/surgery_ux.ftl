@@ -133,6 +133,9 @@ cmu-medical-surgery-tool-category-bone_gel = Bone Gel
 cmu-medical-surgery-tool-category-bone_graft = Bone Graft
 cmu-medical-surgery-tool-category-organ_clamp = Organ Clamp
 cmu-medical-surgery-tool-category-scalpel_or_burn_kit = Scalpel or burn kit
+cmu-medical-surgery-tool-category-severed_limb = Matching Limb
+cmu-medical-surgery-tool-category-blowtorch = Lit Welder
+cmu-medical-surgery-tool-category-cable_coil = Cable Coil
 
 # ---- Per-step labels -------------------------------------------------
 

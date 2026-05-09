@@ -1,0 +1,46 @@
+- type: entity
+  id: CMUBloodImpactEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.2
+  - type: Sprite
+    drawdepth: Effects
+    scale: 0.75, 0.75
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Effects/blood_impact.rsi
+      state: cm_bloodsplatter
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: CMUBloodImpactEffect
+  id: CMUBloodImpactEffect1
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    scale: 0.75, 0.75
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Effects/blood_impact.rsi
+      state: cmubloodsplatter1
+
+- type: entity
+  parent: CMUBloodImpactEffect
+  id: CMUBloodImpactEffect2
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    scale: 0.75, 0.75
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Effects/blood_impact.rsi
+      state: cmubloodsplatter2

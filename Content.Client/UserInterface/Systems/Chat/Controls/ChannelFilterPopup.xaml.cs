@@ -57,6 +57,7 @@ public sealed partial class ChannelFilterPopup : Popup
     public event Action<string, string?, string?>? OnStyleChanged;
     public event Action<string>? OnStyleReset;
     public event Action<bool>? OnLegacyModeChanged;
+    public event Action<bool>? OnColorWholeMessageChanged;
 
     public ChannelFilterPopup()
     {
@@ -81,6 +82,7 @@ public sealed partial class ChannelFilterPopup : Popup
         RenameTabButton.OnPressed += RenameTabPressed;
         RenameTabNameEdit.OnTextEntered += RenameTabEntered;
         RemoveTabButton.OnPressed += RemoveTabPressed;
+        ColorWholeMessageCheckBox.OnPressed += ColorWholeMessagePressed;
         LegacyChatCheckBox.OnPressed += LegacyModePressed;
 
         // Add a placeholder text to the highlights TextEdit.
@@ -397,6 +399,11 @@ public sealed partial class ChannelFilterPopup : Popup
         LegacyChatCheckBox.Pressed = enabled;
     }
 
+    public void SetColorWholeMessage(bool enabled)
+    {
+        ColorWholeMessageCheckBox.Pressed = enabled;
+    }
+
     public void UpdateHighlights(string highlights)
     {
         HighlightEdit.TextRope = new Rope.Leaf(highlights);
@@ -521,6 +528,11 @@ public sealed partial class ChannelFilterPopup : Popup
     private void LegacyModePressed(ButtonEventArgs args)
     {
         OnLegacyModeChanged?.Invoke(((CheckBox) args.Button).Pressed);
+    }
+
+    private void ColorWholeMessagePressed(ButtonEventArgs args)
+    {
+        OnColorWholeMessageChanged?.Invoke(((CheckBox) args.Button).Pressed);
     }
 
     private void ShowSettingsPage(Control page)
