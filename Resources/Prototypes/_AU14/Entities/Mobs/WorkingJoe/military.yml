@@ -6,9 +6,9 @@
   - type: IntrinsicRadioTransmitter
     channels:
     - AI
-    - MarineCommand
-    - MarineJTAC
-    - MarineAlpha
+    - GovforCommand
+    - GovforJTAC
+    - GovforAlpha
     - GovforCharlie
     - GovforBravo
     - GovforIntel

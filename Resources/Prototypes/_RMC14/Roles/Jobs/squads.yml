@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   id: SquadBase
   abstract: true
   components:
@@ -20,7 +20,7 @@
   name: Alpha
   components:
   - type: SquadTeam
-    roundStart: true
+    # roundStart: true
     color: "#E61919"
     radio: MarineAlpha
     accessLevels:
@@ -35,7 +35,7 @@
   name: Bravo
   components:
   - type: SquadTeam
-    roundStart: true
+    # roundStart: true
     color: "#FFC32D"
     radio: MarineBravo
     accessLevels:
@@ -50,7 +50,7 @@
   name: Charlie
   components:
   - type: SquadTeam
-    roundStart: true
+    # roundStart: true
     color: "#C864C8"
     radio: MarineCharlie
     accessLevels:
@@ -65,7 +65,7 @@
   name: Delta
   components:
   - type: SquadTeam
-    roundStart: true
+    # roundStart: true
     color: "#4148C8"
     radio: MarineDelta
     accessLevels:
@@ -407,7 +407,6 @@
     color: "#7A967E"
     radio: OpforCharlie
     group: OPFOR
-
     accessLevels:
     - AU14AccessOpfor
     - AU14AccessGovfor
@@ -423,7 +422,6 @@
   components:
   - type: SquadTeam
     group: GOVFOR
-
     roundStart: true
     color: "#228B22"
     radio: GovforIntel
@@ -441,8 +439,9 @@
   components:
   - type: SquadTeam
     color: "#F0433E"
-    radio: MarineAlpha
+    radio: GovforAlpha
     group: GOVFOR
+    roundStart: true
     minimapBackground:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: background_alpha
@@ -475,7 +474,6 @@
   - type: SquadTeam
     roundStart: true
     group: GOVFOR
-
     color: "#9D3EF0"
     radio: GovforCharlie
     accessLevels:

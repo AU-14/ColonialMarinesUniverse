@@ -85,6 +85,7 @@
   color: "#5b96d4"
   longRange: true
   tower: true
+  faction: "govfor"
 
 - type: radioChannel
   id: GovforJTAC
@@ -94,6 +95,7 @@
   color: "#ad3b98"
   longRange: true
   tower: true
+  faction: "govfor"
 
 - type: radioChannel
   id: GovforIntel
@@ -113,6 +115,7 @@
   color: "#F0433E"
   longRange: true
   tower: true
+  faction: "govfor"
 
 - type: radioChannel
   id: GovforBravo
