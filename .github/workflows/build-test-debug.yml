@@ -10,54 +10,195 @@ on:
 
 jobs:
   build:
-    if: github.actor != 'RounyBot' && github.event.pull_request.draft == false
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-latest]
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-    - name: Checkout Master
-      uses: actions/checkout@v4.2.2
-
-    - name: Setup Submodule
-      run: |
-        git submodule update --init --recursive
-
-    - name: Pull engine updates
-      uses: space-wizards/submodule-dependency@v0.1.5
-
-    - name: Update Engine Submodules
-      run: |
-        cd RobustToolbox/
-        git submodule update --init --recursive
-
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v4.1.0
-      with:
-        dotnet-version: 9.0.x
-
-    - name: Install dependencies
-      run: dotnet restore
-
-    - name: Build Project
-      run: dotnet build --configuration DebugOpt --no-restore /m
-
-    - name: Run Content.Tests
-      run: dotnet test --no-build --configuration DebugOpt Content.Tests/Content.Tests.csproj -- NUnit.ConsoleOut=0
-
-    - name: Run Content.IntegrationTests
-      shell: pwsh
-      run: |
-        $env:DOTNET_gcServer=1
-        dotnet test --no-build --configuration DebugOpt Content.IntegrationTests/Content.IntegrationTests.csproj -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed
-  ci-success:
-    name: Build & Test Debug
-    needs:
-      - build
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
-      - name: CI succeeded
-        run: exit 0
+      - uses: actions/checkout@v6
+
+      - name: Setup submodules
+        run: git submodule update --init --recursive
+
+      - name: Pull engine updates
+        uses: space-wizards/submodule-dependency@v0.1.5
+
+      - name: Update engine submodules
+        run: cd RobustToolbox && git submodule update --init --recursive
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 9.0.x
+          cache: true
+          cache-dependency-path: |
+            **/*.csproj
+            **/*.props
+            **/*.targets
+            **/packages.lock.json
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration DebugOpt --no-restore /m
+
+      - name: Run Content.Tests
+        run: dotnet test --no-build --configuration DebugOpt Content.Tests/Content.Tests.csproj -- NUnit.ConsoleOut=0
+
+      # Upload compiled output so shards can run --no-build without rebuilding
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: build-debugopt
+          path: "**/bin/DebugOpt"
+          retention-days: 1
+
+  integration-tests:
+    if: github.event.pull_request.draft == false
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard:
+          # Root-level tests: Tests/*.cs with namespace Content.IntegrationTests.Tests (no subfolder).
+          # Filter is generated at runtime by scanning for files in that namespace.
+          - name: root
+
+          - name: admin_access_ui
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Administration.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Access.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Commands.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.EncryptionKeys.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Lobby.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Roles.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Toolshed.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.UserInterface.
+
+          - name: atmos_fluids_physics
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Atmos.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Explosion.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Fluids.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Gravity.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Physics.
+
+          - name: mapping_station_shuttle_round
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.GameRules.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Mapping.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Procedural.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Replays.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Round.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Shuttle.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Station.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Tiles.
+
+          - name: cleanup_entities_world
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Cleanup.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Damageable.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Destructible.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.DeviceLinking.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.DeviceNetwork.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Disposal.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Doors.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Embedding.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.GameObjects.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Payload.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Power.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Weldable.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Wires.
+
+          - name: gameplay_core
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Actions.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Body.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Buckle.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Chameleon.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Climbing.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Cloning.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.DoAfter.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Interaction.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Internals.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Minds.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Movement.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Networking.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.NPC.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Puller.
+
+          - name: items_storage_crafting
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Chemistry.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Construction.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Hands.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Lathe.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Materials.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Sprite.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Storage.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Strip.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Tag.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Utility.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Vending.
+
+          - name: proto_lint_localization_serialization
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Guidebook.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Linter.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Localization.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Preferences.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.PrototypeTests.
+              || FullyQualifiedName~Content.IntegrationTests.Tests.Serialization.
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup submodules
+        run: git submodule update --init --recursive
+
+      - name: Pull engine updates
+        uses: space-wizards/submodule-dependency@v0.1.5
+
+      - name: Update engine submodules
+        run: cd RobustToolbox && git submodule update --init --recursive
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: build-debugopt
+
+      - name: Run integration tests (${{ matrix.shard.name }})
+        env:
+          DOTNET_gcServer: 1
+        run: |
+          if [ "${{ matrix.shard.name }}" = "root" ]; then
+            # Auto-detect root-level test classes: .cs files in Tests/ (not subdirectories)
+            # whose namespace declaration is exactly Content.IntegrationTests.Tests
+            filter=$(
+              grep -lE '^namespace Content\.IntegrationTests\.Tests\s*(\{|$)' \
+                Content.IntegrationTests/Tests/*.cs \
+              | sed 's|.*/||; s|\.cs$||' \
+              | sort -u \
+              | awk '{print "FullyQualifiedName~Content.IntegrationTests.Tests." $0}' \
+              | paste -sd ' || '
+            )
+          else
+            filter='${{ matrix.shard.filter }}'
+          fi
+
+          dotnet test \
+            Content.IntegrationTests/Content.IntegrationTests.csproj \
+            --no-build \
+            --configuration DebugOpt \
+            --filter "$filter" \
+            -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed
+
+  ci-success:
+    name: Build & Test Debug
+    needs: [ build, integration-tests ]
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 0
