@@ -73,6 +73,14 @@
     RMCPlastic: 9375 # 7500
 
 - type: latheRecipe
+  id: CMUOrganClamp
+  result: CMUOrganClampItem
+  completetime: 4
+  materials:
+    RMCPlastic: 1200
+    CMSteel: 2350
+
+- type: latheRecipe
   id: CMStasisBag
   result: CMStasisBagFolded
   completetime: 4

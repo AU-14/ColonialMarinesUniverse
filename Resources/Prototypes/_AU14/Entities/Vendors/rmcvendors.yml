@@ -997,6 +997,8 @@
         amount: 15
       - id: RMCRocket84mm
         amount: 7
+      - id: AU14BackpackRockets
+        amount: 2
 
 # AirCrew Weapons
 - type: entity
