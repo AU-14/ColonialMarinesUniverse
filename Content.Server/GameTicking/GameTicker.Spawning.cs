@@ -467,10 +467,10 @@ namespace Content.Server.GameTicking
 
             DebugTools.AssertNotNull(data);
 
-            var newMind = _mind.CreateMind(data!.UserId, character.Name);
-            _mind.SetUserId(newMind, data.UserId);
-
             var jobPrototype = _prototypeManager.Index<JobPrototype>(jobId);
+            var characterSpawnName = character.GetSpawnName(jobPrototype);
+            var newMind = _mind.CreateMind(data!.UserId, characterSpawnName);
+            _mind.SetUserId(newMind, data.UserId);
 
             _playTimeTrackings.PlayerRolesChanged(player);
 
@@ -523,13 +523,13 @@ namespace Content.Server.GameTicking
             {
                 _adminLogger.Add(LogType.LateJoin,
                     LogImpact.Medium,
-                    $"Player {player.Name} late joined as {character.Name:characterName} on station {Name(station):stationName} with {ToPrettyString(mob):entity} as a {jobName:jobName}.");
+                    $"Player {player.Name} late joined as {characterSpawnName:characterName} on station {Name(station):stationName} with {ToPrettyString(mob):entity} as a {jobName:jobName}.");
             }
             else
             {
                 _adminLogger.Add(LogType.RoundStartJoin,
                     LogImpact.Medium,
-                    $"Player {player.Name} joined as {character.Name:characterName} on station {Name(station):stationName} with {ToPrettyString(mob):entity} as a {jobName:jobName}.");
+                    $"Player {player.Name} joined as {characterSpawnName:characterName} on station {Name(station):stationName} with {ToPrettyString(mob):entity} as a {jobName:jobName}.");
             }
 
             // Make sure they're aware of extended access.

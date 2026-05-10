@@ -147,6 +147,7 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
         _prototypeManager.TryIndex(job ?? string.Empty, out var prototype, false);
         // Get the original job prototype for access/faction/ID
         _prototypeManager.TryIndex(originalJob ?? string.Empty, out var originalPrototype, false);
+        var namePrototype = originalPrototype ?? prototype;
         RoleLoadout? loadout = null;
 
         // Need to get the loadout up-front to handle names if we use an entity spawn override.
@@ -213,8 +214,9 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
 
         if (profile != null)
         {
+            var spawnName = profile.GetSpawnName(namePrototype);
             _humanoidSystem.LoadProfile(entity.Value, profile);
-            _metaSystem.SetEntityName(entity.Value, profile.Name);
+            _metaSystem.SetEntityName(entity.Value, spawnName);
 
             if (profile.FlavorText != "" && _configurationManager.GetCVar(CCVars.FlavorText))
             {
@@ -231,6 +233,13 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
         {
             var startingGear = _prototypeManager.Index<StartingGearPrototype>(prototype.StartingGear);
             EquipStartingGear(entity.Value, startingGear, raiseEvent: false);
+        }
+
+        if (profile != null)
+        {
+            var spawnName = profile.GetSpawnName(namePrototype);
+            if (spawnName != profile.Name)
+                _metaSystem.SetEntityName(entity.Value, spawnName);
         }
 
         if (!Equals(job, originalJob) && originalPrototype?.StartingGear != null)
