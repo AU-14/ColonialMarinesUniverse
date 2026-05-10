@@ -1,6 +1,7 @@
 - type: job
   parent: AU14JobPlatOpBase
   id: AU14JobOpforPlatOp
+  useCallsign: false
   name: au14-job-name-opforplatop
   description: au14-job-description-opforplatop
   setPreference: false

@@ -1,6 +1,7 @@
 - type: job
   parent: AU14JobSectionSergeantBase
   id: AU14JobOpforSectionSergeant
+  useCallsign: false
   name: au14-job-name-opforSSG
   description: au14-job-description-opforSSG
   setPreference: false

@@ -1,6 +1,7 @@
 - type: job
   parent: CMSurvivor
   id: RMCJobSyntheticColony
+  useSyntheticName: true
   name: rmc-job-name-synth-colony
   description: rmc-job-description-synth-colony
   playTimeTracker: RMCJobSyntheticColony

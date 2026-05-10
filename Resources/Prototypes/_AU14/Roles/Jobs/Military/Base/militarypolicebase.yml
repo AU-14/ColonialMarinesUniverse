@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobMilitaryPoliceBase
+  useCallsign: true
   name: au14-job-name-govformilitarypoliceman
   description: au14-job-description-govformilitarypoliceman
   playTimeTracker: AU14JobGOVFORMilitaryPoliceMan

@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobSquadAutomaticRiflemanBase
+  useCallsign: true
   name: au14-job-name-govforsquadautomaticrifleman
   description: au14-job-description-govforsquadautomaticrifleman
   playTimeTracker: AU14JobGOVFORSquadAutomaticRifleman

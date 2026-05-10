@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobSquadSergeantBase
+  useCallsign: true
   name: au14-job-name-govforsquadsergeant
   description: au14-job-description-govforsquadsergeant
   playTimeTracker: AU14JobGOVFORSquadSergeant

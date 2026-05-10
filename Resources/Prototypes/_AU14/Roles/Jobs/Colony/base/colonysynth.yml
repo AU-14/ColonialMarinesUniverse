@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobCivilianColonySynthetic
+  useSyntheticName: true
   name: au14-job-name-civiliancolonysynthetic
   description: au14-job-description-civiliancolonysynthetic
   setPreference: true

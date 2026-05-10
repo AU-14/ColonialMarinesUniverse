@@ -1,6 +1,7 @@
 - type: job
   parent: AU14JobDSPilotBase
   id: AU14JobOpforDSPilot
+  useCallsign: false
   name: au14-job-name-opfordspilot
   description: au14-job-description-opfordspilot
   setPreference: false

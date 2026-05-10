@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14USArmySynthBase
+  useSyntheticName: true
   name: rmc-job-name-forecon-synth
   description: au14-job-description-usarmy
   playTimeTracker: AU14JobUSArmySynth

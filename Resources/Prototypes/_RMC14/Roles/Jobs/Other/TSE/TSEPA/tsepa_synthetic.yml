@@ -2,6 +2,7 @@
 - type: job
   parent: CMJobBase
   id: RMCJobTSEPASynthetic
+  useSyntheticName: true
   name: rmc-job-name-tsepa-synth
   description: rmc-job-description-tsepa-synth
   playTimeTracker: RMCJobTSEPASynthetic

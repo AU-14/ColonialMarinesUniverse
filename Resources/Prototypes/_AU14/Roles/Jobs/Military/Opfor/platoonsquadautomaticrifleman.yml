@@ -1,6 +1,7 @@
 - type: job
   parent: AU14JobSquadAutomaticRiflemanBase
   id: AU14JobOpforSquadAutomaticRifleman
+  useCallsign: false
   name: au14-job-name-opforsquadautomaticrifleman
   description: au14-job-description-opforsquadautomaticrifleman
   setPreference: false

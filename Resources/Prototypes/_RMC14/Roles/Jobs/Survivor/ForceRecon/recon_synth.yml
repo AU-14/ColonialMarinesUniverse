@@ -1,6 +1,7 @@
 - type: job
   parent: RMCSurvivorForeconBase
   id: RMCSurvivorForeconSynth
+  useSyntheticName: true
   name: rmc-job-name-forecon-synth
   description: rmc-job-description-forecon
   playTimeTracker: RMCJobSyntheticColony

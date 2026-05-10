@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobPlatCoBase
+  useCallsign: true
   name: au14-job-name-govforplatco
   description: au14-job-description-govforplatco
   playTimeTracker: AU14JobGOVFORPlatCo

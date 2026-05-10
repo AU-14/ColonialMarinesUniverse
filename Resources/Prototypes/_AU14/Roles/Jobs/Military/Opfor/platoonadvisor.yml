@@ -1,6 +1,7 @@
 - type: job
   parent: AU14JobadvisorBase
   id: AU14JobOPFORadvisor
+  useCallsign: false
   name: au14-job-name-opforadvisor
   description: au14-job-description-opforadvisor
   setPreference: false

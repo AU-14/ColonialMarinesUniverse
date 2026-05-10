@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobDSPilotBase
+  useCallsign: true
   name: au14-job-name-govfordspilot
   description: au14-job-description-govfordspilot
   playTimeTracker: AU14JobGOVFORDSPilot

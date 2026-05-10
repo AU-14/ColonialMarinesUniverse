@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobRadioTelephoneOperatorBase
+  useCallsign: true
   name: au14-job-name-radiotelephoneoperator
   description: au14-job-description-radiotelephoneooerator
   playTimeTracker: AU14JobGOVFORRadioTelephoneOperator

@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobWorkingJoeBase
+  useSyntheticName: true
   name: au14-job-name-workingjoe
   description: au14-job-description-workingjoe
   abstract: true

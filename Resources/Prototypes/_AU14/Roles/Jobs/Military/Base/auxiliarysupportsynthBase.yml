@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobAuxSupportSynthBase
+  useSyntheticName: true
   name: au14-job-name-govforauxsupportsynth
   description: au14-job-description-govforauxsupportsynth
   playTimeTracker: AU14JobGOVFORAuxSupportSynth

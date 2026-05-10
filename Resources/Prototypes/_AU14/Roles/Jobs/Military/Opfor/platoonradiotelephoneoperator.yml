@@ -1,6 +1,7 @@
 - type: job
   parent: AU14JobRadioTelephoneOperatorBase
   id: AU14JobOpforRadioTelephoneOperator
+  useCallsign: false
   name: au14-job-name-radiotelephoneoperator
   description: au14-job-description-radiotelephoneoperator
   setPreference: false

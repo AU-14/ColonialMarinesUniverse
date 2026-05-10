@@ -1,6 +1,7 @@
 - type: job
   parent: AU14JobMilitaryDoctorBase
   id: AU14JobOPFORMilitaryDoctor
+  useCallsign: false
   name: au14-job-name-opforMilitaryDoctor
   description: au14-job-description-opforMilitaryDoctor
   setPreference: false

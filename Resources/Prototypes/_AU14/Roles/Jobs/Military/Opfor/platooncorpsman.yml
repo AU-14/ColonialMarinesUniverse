@@ -1,6 +1,7 @@
 - type: job
   parent: AU14JobPlatoonCorpsmanBase
   id: AU14JobOpforPlatoonCorpsman
+  useCallsign: false
   name: au14-job-name-opforplatooncorpsman
   description: au14-job-description-opforplatooncorpsman
   setPreference: false

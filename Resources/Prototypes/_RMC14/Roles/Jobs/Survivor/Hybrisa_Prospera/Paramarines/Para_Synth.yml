@@ -1,6 +1,7 @@
 - type: job
   parent: RMCSurvivorParaBase
   id: RMCSurvivorParaSupportSynthetic
+  useSyntheticName: true
   name: rmc-job-name-para-synth
   ranks:
     RMCRankSyntheticColonist: [ ]

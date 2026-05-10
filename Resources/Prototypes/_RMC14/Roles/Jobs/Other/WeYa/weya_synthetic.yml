@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: RMCCorporateSynthetic
+  useSyntheticName: true
   name: rmc-job-name-corp-synthetic
   description: rmc-job-description-corp-synthetic
   playTimeTracker: RMCJobCorporateSynthetic
