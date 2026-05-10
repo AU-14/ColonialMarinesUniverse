@@ -186,6 +186,10 @@ namespace Content.Client.Lobby.UI
 
             NameEdit.OnTextChanged += args => { SetName(args.Text); };
             NameEdit.IsValid = args => args.Length <= _maxNameLength;
+            CallsignEdit.OnTextChanged += args => { SetCallsign(args.Text); };
+            CallsignEdit.IsValid = args => args.Length <= _maxNameLength;
+            SyntheticNameEdit.OnTextChanged += args => { SetSyntheticName(args.Text); };
+            SyntheticNameEdit.IsValid = args => args.Length <= _maxNameLength;
             NameRandomize.OnPressed += args => RandomizeName();
             RandomizeEverythingButton.OnPressed += args => { RandomizeEverything(); };
             WarningLabel.SetMarkup($"[color=red]{Loc.GetString("humanoid-profile-editor-naming-rules-warning")}[/color]");
@@ -922,6 +926,8 @@ namespace Content.Client.Lobby.UI
             JobOverride = null;
 
             UpdateNameEdit();
+            UpdateCallsignEdit();
+            UpdateSyntheticNameEdit();
             UpdateFlavorTextEdit();
             UpdateSexControls();
             UpdateGenderControls();
@@ -1435,6 +1441,18 @@ namespace Content.Client.Lobby.UI
             _entManager.System<MetaDataSystem>().SetEntityName(PreviewDummy, newName);
         }
 
+        private void SetCallsign(string callsign)
+        {
+            Profile = Profile?.WithCallsign(callsign);
+            SetDirty();
+        }
+
+        private void SetSyntheticName(string syntheticName)
+        {
+            Profile = Profile?.WithSyntheticName(syntheticName);
+            SetDirty();
+        }
+
         private void SetSpawnPriority(SpawnPriorityPreference newSpawnPriority)
         {
             Profile = Profile?.WithSpawnPriorityPreference(newSpawnPriority);
@@ -1597,6 +1615,16 @@ namespace Content.Client.Lobby.UI
         private void UpdateNameEdit()
         {
             NameEdit.Text = Profile?.Name ?? "";
+        }
+
+        private void UpdateCallsignEdit()
+        {
+            CallsignEdit.Text = Profile?.Callsign ?? "";
+        }
+
+        private void UpdateSyntheticNameEdit()
+        {
+            SyntheticNameEdit.Text = Profile?.SyntheticName ?? "";
         }
 
         private void UpdateFlavorTextEdit()

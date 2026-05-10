@@ -67,6 +67,12 @@ namespace Content.Shared.Preferences
         [DataField]
         public string Name { get; set; } = "John Doe";
 
+        [DataField]
+        public string Callsign { get; private set; } = string.Empty;
+
+        [DataField]
+        public string SyntheticName { get; private set; } = string.Empty;
+
         /// <summary>
         /// Detailed text that can appear for the character if <see cref="CCVars.FlavorText"/> is enabled.
         /// </summary>
@@ -184,9 +190,13 @@ namespace Content.Shared.Preferences
             string xenoPrefix,
             string xenoPostfix,
             ProtoId<AllegiancePrototype>? allegiance = null,
-            ProtoId<OriginPrototype>? origin = null)
+            ProtoId<OriginPrototype>? origin = null,
+            string callsign = "",
+            string syntheticName = "")
         {
             Name = name;
+            Callsign = callsign;
+            SyntheticName = syntheticName;
             FlavorText = flavortext;
             Species = species;
             Age = age;
@@ -246,7 +256,9 @@ namespace Content.Shared.Preferences
                 other.XenoPrefix,
                 other.XenoPostfix,
                 other.Allegiance,
-                other.Origin)
+                other.Origin,
+                other.Callsign,
+                other.SyntheticName)
         {
         }
 
@@ -332,6 +344,16 @@ namespace Content.Shared.Preferences
         public HumanoidCharacterProfile WithName(string name)
         {
             return new(this) { Name = name };
+        }
+
+        public HumanoidCharacterProfile WithCallsign(string callsign)
+        {
+            return new(this) { Callsign = callsign };
+        }
+
+        public HumanoidCharacterProfile WithSyntheticName(string syntheticName)
+        {
+            return new(this) { SyntheticName = syntheticName };
         }
 
         public HumanoidCharacterProfile WithFlavorText(string flavorText)
@@ -560,6 +582,8 @@ namespace Content.Shared.Preferences
         {
             if (maybeOther is not HumanoidCharacterProfile other) return false;
             if (Name != other.Name) return false;
+            if (Callsign != other.Callsign) return false;
+            if (SyntheticName != other.SyntheticName) return false;
             if (Age != other.Age) return false;
             if (Sex != other.Sex) return false;
             if (Gender != other.Gender) return false;
@@ -650,6 +674,22 @@ namespace Content.Shared.Preferences
                 name = GetName(Species, gender);
             }
 
+            string ValidateOptionalName(string value)
+            {
+                value = value.Trim();
+
+                if (value.Length > maxNameLength)
+                    value = value[..maxNameLength];
+
+                if (configManager.GetCVar(CCVars.RestrictedNames))
+                    value = RestrictedNameRegex.Replace(value, string.Empty);
+
+                if (configManager.GetCVar(CCVars.ICNameCase))
+                    value = ICNameCaseRegex.Replace(value, m => m.Groups["word"].Value.ToUpper());
+
+                return value.Trim();
+            }
+
             string flavortext;
             var maxFlavorTextLength = configManager.GetCVar(CCVars.MaxFlavorTextLength);
             if (FlavorText.Length > maxFlavorTextLength)
@@ -708,6 +748,8 @@ namespace Content.Shared.Preferences
                          .ToList();
 
             Name = name;
+            Callsign = ValidateOptionalName(Callsign);
+            SyntheticName = ValidateOptionalName(SyntheticName);
             FlavorText = flavortext;
             Age = age;
             Sex = sex;
@@ -903,6 +945,8 @@ namespace Content.Shared.Preferences
             hashCode.Add(_traitPreferences);
             hashCode.Add(_loadouts);
             hashCode.Add(Name);
+            hashCode.Add(Callsign);
+            hashCode.Add(SyntheticName);
             hashCode.Add(FlavorText);
             hashCode.Add(Species);
             hashCode.Add(Age);
@@ -925,6 +969,29 @@ namespace Content.Shared.Preferences
         public void SetLoadout(RoleLoadout loadout)
         {
             _loadouts[loadout.Role.Id] = loadout;
+        }
+
+        public string GetSpawnName(JobPrototype? job)
+        {
+            if (job?.UseSyntheticName == true)
+                return !string.IsNullOrWhiteSpace(SyntheticName) ? SyntheticName : Name;
+
+            if (job?.UseCallsign == true && !string.IsNullOrWhiteSpace(Callsign))
+                return InsertCallsign(Name, Callsign);
+
+            return Name;
+        }
+
+        private static string InsertCallsign(string name, string callsign)
+        {
+            name = name.Trim();
+            callsign = callsign.Trim();
+
+            var split = name.LastIndexOf(' ');
+            if (split <= 0 || split >= name.Length - 1)
+                return $"{name} \"{callsign}\"";
+
+            return $"{name[..split]} \"{callsign}\" {name[(split + 1)..]}";
         }
 
         public HumanoidCharacterProfile WithLoadout(RoleLoadout loadout)

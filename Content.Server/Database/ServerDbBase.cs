@@ -320,7 +320,9 @@ namespace Content.Server.Database
                 profile.XenoPrefix,
                 profile.XenoPostfix,
                 allegiance,
-                origin
+                origin,
+                profile.Callsign,
+                profile.SyntheticName
             );
         }
 
@@ -336,6 +338,8 @@ namespace Content.Server.Database
             var markings = JsonSerializer.SerializeToDocument(markingStrings);
 
             profile.CharacterName = humanoid.Name;
+            profile.Callsign = humanoid.Callsign;
+            profile.SyntheticName = humanoid.SyntheticName;
             profile.FlavorText = humanoid.FlavorText;
             profile.Species = humanoid.Species;
             profile.Age = humanoid.Age;

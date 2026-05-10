@@ -86,6 +86,14 @@ namespace Content.Server.Database
                 .Property(p => p.XenoPostfix)
                 .HasDefaultValue(string.Empty);
 
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.Callsign)
+                .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.SyntheticName)
+                .HasDefaultValue(string.Empty);
+
             modelBuilder.Entity<Antag>()
                 .HasIndex(p => new {HumanoidProfileId = p.ProfileId, p.AntagName})
                 .IsUnique();
@@ -584,6 +592,8 @@ namespace Content.Server.Database
         public string EyeColor { get; set; } = null!;
         public string SkinColor { get; set; } = null!;
         public int SpawnPriority { get; set; } = 0;
+        public string Callsign { get; set; } = string.Empty;
+        public string SyntheticName { get; set; } = string.Empty;
         public List<Job> Jobs { get; } = new();
         public List<Antag> Antags { get; } = new();
         public List<Trait> Traits { get; } = new();

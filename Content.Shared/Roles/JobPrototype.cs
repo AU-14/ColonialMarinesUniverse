@@ -77,6 +77,18 @@ namespace Content.Shared.Roles
         public bool ApplyTraits { get; private set; } = true;
 
         /// <summary>
+        ///     Whether this job should insert the character callsign into the spawned name.
+        /// </summary>
+        [DataField("useCallsign")]
+        public bool UseCallsign { get; private set; }
+
+        /// <summary>
+        ///     Whether this job should use the character's synthetic name instead of their regular name.
+        /// </summary>
+        [DataField("useSyntheticName")]
+        public bool UseSyntheticName { get; private set; }
+
+        /// <summary>
         ///     Whether this job should show in the ID Card Console.
         ///     If set to null, it will default to SetPreference's value.
         /// </summary>

@@ -71,6 +71,18 @@
                                     <Control HorizontalExpand="True"/>
                                     <Button Name="PlaytimePerksButton" Pressed="True" ToggleMode="True" Text="{Loc 'humanoid-profile-editor-enable'}" HorizontalAlignment="Right" />
                                 </BoxContainer>
+                                <!-- Callsign -->
+                                <BoxContainer HorizontalExpand="True">
+                                    <Label Text="{Loc 'humanoid-profile-editor-callsign'}" />
+                                    <Control HorizontalExpand="True"/>
+                                    <LineEdit Name="CallsignEdit" HorizontalAlignment="Right" MinWidth="100" />
+                                </BoxContainer>
+                                <!-- Synthetic Name -->
+                                <BoxContainer HorizontalExpand="True">
+                                    <Label Text="{Loc 'humanoid-profile-editor-synthetic-name'}" />
+                                    <Control HorizontalExpand="True"/>
+                                    <LineEdit Name="SyntheticNameEdit" HorizontalAlignment="Right" MinWidth="100" />
+                                </BoxContainer>
                                 <!-- Xeno Prefix -->
                                 <BoxContainer HorizontalExpand="True">
                                     <Label Text="{Loc 'humanoid-profile-editor-xeno-prefix'}" />
