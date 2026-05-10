@@ -167,6 +167,7 @@ public abstract partial class SharedChatSystem : EntitySystem
                 ? _prototypeManager.Index<RadioChannelPrototype>(HivemindChannel)
                 : _prototypeManager.Index<RadioChannelPrototype>(CommonChannel);
 
+            // RMC14
             if (channel?.ID == HivemindChannel.Id &&
                 !_xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1))
             {
@@ -176,6 +177,7 @@ public abstract partial class SharedChatSystem : EntitySystem
                 output = SanitizeMessageCapital(input[1..].TrimStart());
                 return false;
             }
+            // RMC14
 
             return true;
         }

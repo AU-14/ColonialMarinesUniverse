@@ -91,7 +91,6 @@ namespace Content.Shared.Chat
         public bool UseEmoteSpeechBubble;
         public string? SpeechStyleClass;
         public bool RepeatCheckSender;
-        // RMC14
         public string? LanguageIcon;
         // RMC14
 
