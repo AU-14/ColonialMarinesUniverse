@@ -238,7 +238,7 @@
   displayName: Reattach Limb
   validParts: [Arm, Leg]
   category: reattach
-  minSkill: 3
+  minSkill: 2
   steps:
   - stepId: CMUSurgeryStepRemoveStump
     label: Trim Necrotic Stump

@@ -44,6 +44,7 @@
       - CMMagazineRifleM4SPR
       - CMMagazineRifleM4SPRAP
       - CMMagazineRifleM4SPRExt
+      - RMCAttachmentSuppressor
   - type: StorageFill
     contents:
     - id: AU14WeaponRifleM49A
@@ -51,6 +52,7 @@
       amount: 3
     - id: CMMagazineRifleM4SPRAP
       amount: 3
+    - id: RMCAttachmentSuppressor
   - type: ItemMapper
     mapLayers:
       gun:

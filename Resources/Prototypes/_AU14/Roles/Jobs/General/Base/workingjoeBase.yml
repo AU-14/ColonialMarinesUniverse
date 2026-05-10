@@ -11,7 +11,7 @@
   canBeAntag: false
   joinNotifyCrew: false
   roleWeight: 0.25
-  hidden: true
+  hidden: false
 
 - type: startingGear
   id: AU14GearWorkingJoeBase

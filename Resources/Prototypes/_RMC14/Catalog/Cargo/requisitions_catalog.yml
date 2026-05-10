@@ -50,6 +50,49 @@
         crate: RMCCrateWoodenPlanks
       - cost: 350
         crate: RMCCrateSuppliesBoxes
+    - name: Explosives
+      entries:
+      - cost: 3000
+        crate: RMCCrateGrenadesHighExplosive
+      - cost: 4000
+        crate: RMCCrateGrenadesIncendiary
+      - cost: 3000
+        crate: RMCCrateGrenadesFrag
+      # leaving this commented, as it is not parity, but we might want it in the future
+      #- cost: 2000
+      #  crate: RMCCrateGrenadesSmoke
+      - cost: 3200
+        crate: RMCCrateExplosiveWhitePhosphorusCompound
+      - cost: 10800
+        crate: RMCCrateExplosiveWhitePhosphorusCompoundBox
+      - cost: 4000
+        crate: RMCCrateGrenadesFragOld
+      - cost: 3000
+        crate: RMCCratePlasticExplosives
+      - cost: 4000
+        crate: RMCCrateBreachingCharges
+      - cost: 10000
+        crate: RMCCrateGrenadesHighExplosiveBox
+      - cost: 10000
+        crate: RMCCrateGrenadesBoxHEFA
+      - cost: 10000
+        crate: RMCCrateGrenadesAirburstFragBox
+      - cost: 10000
+        crate: RMCCrateBoxAGMI
+      - cost: 4000
+        crate: RMCCrateGrenadesAirburstFrag
+      - cost: 4000
+        crate: RMCCrateGrenadesAirburstIncendiary
+      - cost: 3000
+        crate: RMCCrateGrenadesAirburstSmoke
+      - cost: 4000
+        crate: RMCCrateGrenadesAirburstHornet
+      - cost: 4000
+        crate: RMCCrateGrenadesAirburstStarShell
+      - cost: 1000
+        crate: RMCCrateGrenadesBatonSlug
+      - cost: 3000
+        crate: RMCCrateExplosiveClaymoreMine
     - name: Food and Drinks
       entries:
       - cost: 380
@@ -194,6 +237,40 @@
         crate: AU14CrateBoxD18Magazines
       - cost: 355
         crate: AU14CrateBoxABR40Magazines
+      - cost: 4000
+        crate: RMCCrateMagazineM96SMixed
+      - cost: 3000
+        crate: RMCCrateMagazineM96SStandard
+      - cost: 3000
+        crate: RMCCrateMagazineM96SFlak
+      - cost: 3000
+        crate: RMCCrateMagazineM96SIncendiary
+      - cost: 3000
+        crate: RMCCrateMagazineXM43E1Standard
+      - cost: 3000
+        crate: RMCCrateM5DemoSpecMixed
+      - cost: 3000
+        crate: RMCCrateM5DemoSpecHighExplosive
+      - cost: 3000
+        crate: RMCCrateM5DemoSpecAntiArmor
+      - cost: 3000
+        crate: RMCCrateM5DemoSpecWhitePhosphorus
+      - cost: 4000
+        crate: RMCCrateMagazineM4SPRCustomMixed
+      - cost: 3000
+        crate: RMCCrateMagazineM4SPRCustomStandard
+      - cost: 3000
+        crate: RMCCrateMagazineM4SPRCustomImpact
+      - cost: 3000
+        crate: RMCCrateMagazineM4SPRCustomIncendiary
+      - cost: 6000
+        crate: RMCCratePyroTankMixed
+      - cost: 3000
+        crate: RMCCratePyroTankExtended
+      - cost: 3000
+        crate: RMCCratePyroTankTypeB
+      - cost: 4000
+        crate: RMCCratePyroTankTypeX
     - name: Furniture
       entries:
       - cost: 320

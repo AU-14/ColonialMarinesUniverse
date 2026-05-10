@@ -118,8 +118,11 @@ public abstract class SharedBodyPartHealthSystem : EntitySystem
             return false;
 
         var deduction = FixedPoint2.New(total * _bodyPartDamagePropagation);
+        var severanceDeduction = GetDamageInGroup(modified, BruteGroup) * (FixedPoint2)_bodyPartDamagePropagation;
 
         health.Current -= deduction;
+        if (severanceDeduction > FixedPoint2.Zero)
+            health.SeveranceDamage += severanceDeduction;
         Dirty(partUid, health);
 
         var organs = CollectOrgans(partUid);
@@ -127,7 +130,7 @@ public abstract class SharedBodyPartHealthSystem : EntitySystem
         var damaged = new BodyPartDamagedEvent(body, partUid, partType, modified, health.Current, organs);
         RaiseLocalEvent(partUid, ref damaged);
 
-        if (health.Current <= -health.SeveranceThreshold && !IsSeveranceLocked(partType))
+        if (health.SeveranceDamage >= health.Max + health.SeveranceThreshold && !IsSeveranceLocked(partType))
         {
             var severed = new BodyPartSeveredEvent(body, partUid, partType);
             RaiseLocalEvent(partUid, ref severed);
@@ -142,6 +145,21 @@ public abstract class SharedBodyPartHealthSystem : EntitySystem
         AddPositiveGroupDamage(result, damage, BruteGroup);
         AddPositiveGroupDamage(result, damage, BurnGroup);
         return result;
+    }
+
+    private FixedPoint2 GetDamageInGroup(DamageSpecifier damage, ProtoId<DamageGroupPrototype> groupId)
+    {
+        if (!_prototypes.TryIndex(groupId, out var group))
+            return FixedPoint2.Zero;
+
+        var total = FixedPoint2.Zero;
+        foreach (var type in group.DamageTypes)
+        {
+            if (damage.DamageDict.TryGetValue(type, out var amount) && amount > FixedPoint2.Zero)
+                total += amount;
+        }
+
+        return total;
     }
 
     private void AddPositiveGroupDamage(DamageSpecifier dest, DamageSpecifier src, ProtoId<DamageGroupPrototype> groupId)
@@ -208,6 +226,7 @@ public abstract class SharedBodyPartHealthSystem : EntitySystem
             var next = prev + healed;
 
             health.Current = next;
+            health.SeveranceDamage = FixedPoint2.Max(FixedPoint2.Zero, health.SeveranceDamage - healed);
             Dirty(partUid, health);
             RaiseHealedThresholdEvent(body, partUid, part.PartType, health, prev, next);
 
@@ -366,6 +385,9 @@ public abstract class SharedBodyPartHealthSystem : EntitySystem
             newCurrent = part.Comp.Max;
         var prev = part.Comp.Current;
         part.Comp.Current = newCurrent;
+        part.Comp.SeveranceDamage = FixedPoint2.Min(
+            part.Comp.SeveranceDamage,
+            FixedPoint2.Max(FixedPoint2.Zero, part.Comp.Max - newCurrent));
         Dirty(part.Owner, part.Comp);
 
         if (part.Comp.Max <= FixedPoint2.Zero)

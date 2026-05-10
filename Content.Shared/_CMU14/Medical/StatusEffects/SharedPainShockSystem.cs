@@ -10,6 +10,7 @@ using Content.Shared._CMU14.Medical.Organs.Events;
 using Content.Shared._CMU14.Medical.StatusEffects.Events;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._CMU14.Medical.Wounds.Events;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.FixedPoint;
@@ -103,6 +104,8 @@ public abstract class SharedPainShockSystem : EntitySystem
             return;
         if (!HasComp<CMUHumanMedicalComponent>(body))
             return;
+        if (TryClearSynthPain(body, pain))
+            return;
 
         if (TryComp<MobStateComponent>(body, out var mob) && mob.CurrentState == MobState.Dead)
             return;
@@ -170,6 +173,8 @@ public abstract class SharedPainShockSystem : EntitySystem
             return;
         if (!TryComp<PainShockComponent>(args.Target, out var pain))
             return;
+        if (TryClearSynthPain(args.Target, pain))
+            return;
 
         ent.Comp.ActiveProfiles.Clear();
         ent.Comp.AccumulationSuppression = 0f;
@@ -179,6 +184,52 @@ public abstract class SharedPainShockSystem : EntitySystem
 
         pain.NextUpdate = TimeSpan.Zero;
         UpdateTier(args.Target, pain, false);
+    }
+
+    private bool TryClearSynthPain(EntityUid body, PainShockComponent pain)
+    {
+        if (!HasComp<SynthComponent>(body))
+            return false;
+
+        if (Net.IsServer)
+            ClearPainState(body, pain);
+
+        return true;
+    }
+
+    private void ClearPainState(EntityUid body, PainShockComponent pain)
+    {
+        var changed = pain.Pain != FixedPoint2.Zero
+            || pain.PainTarget != FixedPoint2.Zero
+            || pain.CachedRiseRate != FixedPoint2.Zero
+            || pain.AccumulationRateDirty
+            || pain.RawTier != PainTier.None
+            || pain.Tier != PainTier.None
+            || pain.InShock
+            || pain.NextUpdate != TimeSpan.Zero
+            || pain.NextShockPulse != TimeSpan.Zero
+            || pain.NextTierAlertRefresh != TimeSpan.Zero
+            || pain.NextPainReflection != TimeSpan.Zero
+            || pain.NextPainRelief != TimeSpan.Zero;
+
+        pain.Pain = FixedPoint2.Zero;
+        pain.PainTarget = FixedPoint2.Zero;
+        pain.CachedRiseRate = FixedPoint2.Zero;
+        pain.AccumulationRateDirty = false;
+        pain.RawTier = PainTier.None;
+        pain.Tier = PainTier.None;
+        pain.InShock = false;
+        pain.NextUpdate = TimeSpan.Zero;
+        pain.NextShockPulse = TimeSpan.Zero;
+        pain.NextTierAlertRefresh = TimeSpan.Zero;
+        pain.NextPainReflection = TimeSpan.Zero;
+        pain.NextPainRelief = TimeSpan.Zero;
+
+        var removedStatus = TierStatusEffectId(PainTier.Shock) is { } shockStatus
+            && Status.TryRemoveStatusEffect(body, shockStatus);
+
+        if (changed || removedStatus)
+            Dirty(body, pain);
     }
 
     public override void Update(float frameTime)
@@ -200,6 +251,9 @@ public abstract class SharedPainShockSystem : EntitySystem
         var query = EntityQueryEnumerator<PainShockComponent, CMUHumanMedicalComponent, MobStateComponent>();
         while (query.MoveNext(out var uid, out var pain, out _, out var mob))
         {
+            if (TryClearSynthPain(uid, pain))
+                continue;
+
             if (mob.CurrentState == MobState.Dead || pain.NextUpdate > now)
                 continue;
             pain.NextUpdate = now + TimeSpan.FromSeconds(1);
@@ -227,6 +281,8 @@ public abstract class SharedPainShockSystem : EntitySystem
         if (!Resolve(ent.Owner, ref ent.Comp, logMissing: false))
             return;
         if (!HasComp<CMUHumanMedicalComponent>(ent.Owner))
+            return;
+        if (TryClearSynthPain(ent.Owner, ent.Comp))
             return;
         if (refreshCache)
             RefreshPainSources(ent.Owner, ent.Comp);
@@ -280,6 +336,8 @@ public abstract class SharedPainShockSystem : EntitySystem
         if (Net.IsClient)
             return;
         if (!TryComp<PainShockComponent>(body, out var pain))
+            return;
+        if (TryClearSynthPain(body, pain))
             return;
 
         UpdateTier(body, pain, false);
@@ -378,6 +436,9 @@ public abstract class SharedPainShockSystem : EntitySystem
 
     public PainTier GetEffectiveTier(EntityUid body, PainShockComponent pain)
     {
+        if (HasComp<SynthComponent>(body))
+            return PainTier.None;
+
         var rawTier = GetRawTier(pain);
         return ApplySuppressionToTier(body, rawTier);
     }
@@ -396,6 +457,9 @@ public abstract class SharedPainShockSystem : EntitySystem
 
     public PainSourceSnapshot ComputePainSourceProfile(EntityUid body)
     {
+        if (HasComp<SynthComponent>(body))
+            return new PainSourceSnapshot(FixedPoint2.Zero, FixedPoint2.Zero);
+
         var sources = new List<float>();
         var riseRate = 0f;
 

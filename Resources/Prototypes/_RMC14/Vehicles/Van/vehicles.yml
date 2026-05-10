@@ -100,7 +100,7 @@
         state: wheels_1
   - type: PointLight
     enabled: false
-    radius: 12
+    radius: 6
     energy: 2.5
     softness: 2
     autoRot: true

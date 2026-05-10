@@ -5,6 +5,7 @@ using Content.Server._RMC14.Marines;
 using Content.Server._RMC14.Rules;
 using Content.Server.Administration.Logs;
 using Content.Server.GameTicking.Events;
+using Content.Shared._RMC14.Announce;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Communications;
 using Content.Shared._RMC14.Dropship.Weapon;
@@ -42,6 +43,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -54,6 +56,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
     [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly CMDistressSignalRuleSystem _distressSignal = default!;
     [Dependency] private readonly XenoEvolutionSystem _evolution = default!;
+    [Dependency] private readonly GeneralAnnounceSystem _generalAnnounce = default!;
     [Dependency] private readonly MarineAnnounceSystem _marineAnnounce = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly INetManager _net = default!;
@@ -1930,7 +1933,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
                 if (TeamHasActiveSensors("MARINES"))
                     ReduceHumanBlipsToEnemy(map.LastUpdateMarineBlips, "MARINES");
 
-                _marineAnnounce.AnnounceARESStaging(user, "The tactical map has been updated.", sound, null, "MARINES");
+                AnnounceHumanTacticalMapUpdated(user, sound, "MARINES");
                 _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the marine tactical map for {ToPrettyString(mapId)}");
             }
 
@@ -1966,7 +1969,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
                 // Convert others to enemy blips for opfor updates
                 if (TeamHasActiveSensors("OPFOR"))
                     ReduceHumanBlipsToEnemy(map.LastUpdateOpforBlips, "OPFOR");
-                _marineAnnounce.AnnounceARESStaging(user, "The tactical map has been updated.", sound, null, "OPFOR");
+                AnnounceHumanTacticalMapUpdated(user, sound, "OPFOR");
                 _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the opfor tactical map for {ToPrettyString(mapId)}");
             }
 
@@ -1990,7 +1993,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
                 }
                 if (TeamHasActiveSensors("GOVFOR"))
                     ReduceHumanBlipsToEnemy(map.LastUpdateGovforBlips, "GOVFOR");
-                _marineAnnounce.AnnounceARESStaging(user, "The tactical map has been updated.", sound, null, "GOVFOR");
+                AnnounceHumanTacticalMapUpdated(user, sound, "GOVFOR");
                 _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the govfor tactical map for {ToPrettyString(mapId)}");
             }
 
@@ -2014,7 +2017,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
                 }
                 if (TeamHasActiveSensors("CLF"))
                     ReduceHumanBlipsToEnemy(map.LastUpdateClfBlips, "CLF");
-                _marineAnnounce.AnnounceARESStaging(user, "The tactical map has been updated.", sound, null, "CLF");
+                AnnounceHumanTacticalMapUpdated(user, sound, "CLF");
                 _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the clf tactical map for {ToPrettyString(mapId)}");
             }
 
@@ -2032,6 +2035,34 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
                 UpdateMapData((computerId, computer), map);
             }
         }
+    }
+
+    private void AnnounceHumanTacticalMapUpdated(EntityUid user, SoundSpecifier? sound, string faction)
+    {
+        const string message = "The tactical map has been updated.";
+        _marineAnnounce.AnnounceARESStaging(user, message, sound, null, faction);
+
+        var request = new AnnouncementRequest
+        {
+            Message = message,
+            Preset = "MarineCommand",
+            Target = AnnouncementTarget.Marines,
+            ShowSprite = false
+        };
+
+        _generalAnnounce.AnnounceAdvanced(request, BuildFactionAnnouncementFilter(faction));
+    }
+
+    private Filter BuildFactionAnnouncementFilter(string faction)
+    {
+        return Filter.Empty().AddWhereAttachedEntity(e =>
+        {
+            if (TryComp<MarineComponent>(e, out var marine))
+                return !string.IsNullOrWhiteSpace(marine.Faction) &&
+                       string.Equals(marine.Faction, faction, StringComparison.OrdinalIgnoreCase);
+
+            return HasComp<GhostComponent>(e);
+        });
     }
 
     // Use the shared implementation (it knows about faction filtering)

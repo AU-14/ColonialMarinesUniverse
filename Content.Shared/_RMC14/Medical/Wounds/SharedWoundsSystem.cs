@@ -4,6 +4,7 @@ using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.DoAfter;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
@@ -132,6 +133,13 @@ public abstract class SharedWoundsSystem : EntitySystem
         if (HasComp<Content.Shared._CMU14.Medical.CMUHumanMedicalComponent>(args.Target.Value)
             && HasComp<Content.Shared._CMU14.Medical.CMUHumanMedicalComponent>(args.User))
         {
+            var hasSkills = _skills.HasAllSkills(args.User, ent.Comp.Skills);
+            if (!CanUseWoundTreater(args.User, args.Target.Value, ent, hasSkills))
+            {
+                args.Handled = true;
+                return;
+            }
+
             var ev = new Content.Shared._CMU14.Medical.Wounds.Events.CMUWoundTreaterInterceptEvent(
                 args.User, ent.Owner, args.Target.Value);
             RaiseLocalEvent(ref ev);
@@ -257,6 +265,15 @@ public abstract class SharedWoundsSystem : EntitySystem
         handle = false;
         wounded = default;
         damage = FixedPoint2.Zero;
+        if (HasComp<SynthComponent>(target))
+        {
+            handle = true;
+            if (doPopups)
+                _popup.PopupClient(Loc.GetString("cmu-medical-bandage-synth-requires-repair-tools"), target, user, PopupType.SmallCaution);
+
+            return false;
+        }
+
         if (!HasComp<WoundableComponent>(target) &&
             !TryComp(target, out wounded))
         {
@@ -268,13 +285,8 @@ public abstract class SharedWoundsSystem : EntitySystem
 
         var targetName = Identity.Name(target, EntityManager, user);
         var hasSkills = _skills.HasAllSkills(user, treater.Comp.Skills);
-        if (!treater.Comp.CanUseUnskilled && !hasSkills)
-        {
-            if (doPopups)
-                _popup.PopupClient(Loc.GetString("cm-wounds-failed-unskilled", ("treater", treater.Owner)), target, user, PopupType.SmallCaution);
-
+        if (!CanUseWoundTreater(user, target, treater, hasSkills, doPopups))
             return false;
-        }
 
         if (!TryComp(target, out wounded) ||
             wounded.Wounds.Count == 0)
@@ -361,6 +373,22 @@ public abstract class SharedWoundsSystem : EntitySystem
         }
 
         wounded = default;
+        return false;
+    }
+
+    private bool CanUseWoundTreater(
+        EntityUid user,
+        EntityUid popupTarget,
+        Entity<WoundTreaterComponent> treater,
+        bool hasSkills,
+        bool doPopups = true)
+    {
+        if (treater.Comp.CanUseUnskilled || hasSkills)
+            return true;
+
+        if (doPopups)
+            _popup.PopupClient(Loc.GetString("cm-wounds-failed-unskilled", ("treater", treater.Owner)), popupTarget, user, PopupType.SmallCaution);
+
         return false;
     }
 

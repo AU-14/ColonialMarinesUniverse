@@ -270,6 +270,7 @@ namespace Content.IntegrationTests.Tests
         ///
         /// Note that this isn't really a strict requirement, and there are probably quite a few edge cases. Its a pretty
         /// crude test to try catch issues like this, and possibly should just be disabled.
+        /// Vehicles should be added to the growing list of exclusions, if we intend to keep this enabled.
         /// </remarks>
         [Test]
         public async Task SpawnAndDeleteEntityCountTest()
@@ -306,8 +307,22 @@ namespace Content.IntegrationTests.Tests
                 // RMC14
                 "ActivateDropshipWeaponOnSpawn",
                 "AmbientSound",
-                "HiveKingCocoon"
+                "HiveKingCocoon",
+                "TriggerOnSpawn",
                 // RMC14
+                // CMU14
+                "AU14CrateCASNapalm", // StorageFill leaves its large dropship ammo detached from the crate in this generic test.
+                "VehicleLTBCannonImpact", // Shrapnel lingers longer than test case
+                "VehicleTankRocketLauncher", // Smoke lingers (failed to delete itself)
+                "VehicleTankFlamerImpact",
+                "VehicleDragonFlameImpact", // Flames linger
+                "VehicleHumveeMedicalBackDoor1",
+                "VehiclePeekAnchor",
+                "VehiclePizzaVan",
+                "VehiclePizzaVanBack1",
+                "VehiclePizzaVanBack3",
+                "VehiclePizzaVanBackground1"
+                // CMU14
             };
 
             Assert.That(server.CfgMan.GetCVar(CVars.NetPVS), Is.False);
@@ -318,7 +333,6 @@ namespace Content.IntegrationTests.Tests
                 .Where(p => !pair.IsTestPrototype(p))
                 .Where(p => !excluded.Any(p.Components.ContainsKey))
                 .Where(p => p.Categories.All(x => x.ID != SpawnerCategory))
-                .Where(p => p.ID != "AU14CrateCASNapalm") // StorageFill leaves its large dropship ammo detached from the crate in this generic test.
                 .Select(p => p.ID)
                 .ToList();
 

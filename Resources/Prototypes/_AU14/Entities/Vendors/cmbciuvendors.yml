@@ -50,6 +50,8 @@
         amount: 40
       - id: RMCHeadCapBureau
         amount: 25
+      - id: AU14HeadCommandoBeanie
+        amount: 10
     - name: Headsets
       entries:
       - id: RMCM5CameraGear
@@ -601,7 +603,7 @@
     Built to bring fire support online rapidly after cryogenic hypersleep or emergency mobilization.
   components:
   - type: AccessReader
-    access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
+    access: [ [ "AU14AccessGovforGunner" ], [ "AU14AccessOpforGunner" ] ]
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
   - type: CMAutomatedVendor

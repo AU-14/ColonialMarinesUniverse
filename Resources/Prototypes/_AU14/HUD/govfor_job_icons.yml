@@ -1,4 +1,4 @@
-﻿- type: jobIcon
+- type: jobIcon
   parent: CMJobIconBase
   id: AU14JobIconAFN
   icon:
@@ -88,13 +88,6 @@
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
     state: govfor_ct
-
-- type: jobIcon
-  parent: CMJobIconBase
-  id: AU14JobIconGovK9Handler
-  icon:
-    sprite: _AU14/Interface/au14govforjobicons.rsi
-    state: govfor_k9handler
 
 - type: jobIcon
   parent: CMJobIconBase

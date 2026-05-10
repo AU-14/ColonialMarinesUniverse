@@ -104,7 +104,7 @@
         amount: 25
       - id: CMPortableSurgicalBedSpawnFolded
         amount: 5
-      - id: RMCWheelchair
+      - id: AU14Wheelchair
         amount: 10
       - id: RMCBoxBodyBag
         amount: 4

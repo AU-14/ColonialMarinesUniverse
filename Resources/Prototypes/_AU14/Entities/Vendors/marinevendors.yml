@@ -77,6 +77,8 @@
         amount: 15
       - id: AU14JungleFlapCap
         amount: 15
+      - id: AU14HeadCommandoBeanie
+        amount: 10
     - name: Headsets
       entries:
       - id: RMCM5CameraGear
@@ -804,7 +806,7 @@
       - id: AU14CaseXM99A
         amount: 1
 
-# Equipment Vendor (universal)
+# Equipment Vendor (universal except UPP/RMC)
 - type: entity
   parent: ColMarTechBase
   id: AU14USCMequipmentvendor

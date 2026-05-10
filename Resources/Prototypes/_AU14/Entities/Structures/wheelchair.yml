@@ -1,0 +1,41 @@
+- type: entity
+  parent: [RMCWheelchair, RMCBaseMeleeWeapon]
+  id: AU14Wheelchair
+  name: foldable wheelchair
+  description: Helps those with injuries related to immobility to move freely.
+  components:
+  - type: Item
+    size: Huge
+    sprite: _AU14/Structures/wheelchair.rsi
+  - type: MeleeWeapon
+    wideAnimationRotation: -110
+    attackRate: 0.85
+    damage:
+      types:
+        Blunt: 20
+    soundHit:
+      collection: MetalThud
+  - type: DamageExaminable
+  - type: Wieldable
+  - type: MeleeRequiresWield
+  - type: Sprite
+    sprite: _AU14/Structures/wheelchair.rsi
+    layers:
+    - state: wheelchair
+      map: ["unfoldedLayer"]
+      visible: false
+    - state: folded
+      map: ["foldedLayer"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.FoldedVisuals.State:
+        unfoldedLayer:
+          True: {visible: false}
+          False: {visible: true}
+        foldedLayer:
+          True: {visible: true}
+          False: {visible: false}
+  - type: Foldable
+    folded: true
+    canFoldInsideContainer: false

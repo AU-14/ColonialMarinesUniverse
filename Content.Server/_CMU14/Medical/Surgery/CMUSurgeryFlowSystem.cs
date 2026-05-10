@@ -30,6 +30,7 @@ public sealed class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SkillsSystem _skills = default!;
+    [Dependency] private readonly CMUBodyScannerSystem _bodyScanner = default!;
 
     private const float StepDoAfterSeconds = 2f;
     private const float PostOpCastWindowMinutes = 5f;
@@ -78,7 +79,7 @@ public sealed class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
 
     protected override bool StartStepDoAfter(EntityUid patient, CMUSurgeryArmedStepComponent armed, EntityUid surgeon, EntityUid tool, EntityUid targetPart)
     {
-        var delay = ResolveStepDoAfterDelay(surgeon);
+        var delay = ResolveStepDoAfterDelay(surgeon, patient);
         if (TryComp<CMUImprovisedSurgeryToolComponent>(tool, out var improvised))
             delay = TimeSpan.FromSeconds(delay.TotalSeconds * MathF.Max(1f, improvised.DelayMultiplier));
 
@@ -115,9 +116,10 @@ public sealed class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
         return true;
     }
 
-    private TimeSpan ResolveStepDoAfterDelay(EntityUid surgeon)
+    private TimeSpan ResolveStepDoAfterDelay(EntityUid surgeon, EntityUid patient)
     {
         var multiplier = _skills.GetSkillDelayMultiplier(surgeon, SurgerySkill, SurgeryStepDelayMultipliers);
+        multiplier *= _bodyScanner.GetSurgeryDelayMultiplier(surgeon, patient);
         return TimeSpan.FromSeconds(StepDoAfterSeconds * multiplier);
     }
 
@@ -162,6 +164,7 @@ public sealed class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             return;
         }
 
+        var leafId = string.IsNullOrEmpty(armed.LeafSurgeryId) ? armed.SurgeryId : armed.LeafSurgeryId;
         EntityUid stepPart = patient;
         if (targetPart is { } part
             && TryComp<BodyPartComponent>(part, out var targetPartComp)
@@ -169,6 +172,12 @@ public sealed class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             && targetPartComp.Symmetry == armed.TargetSymmetry)
         {
             stepPart = part;
+        }
+        else if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(leafId)
+                 && targetPart is { } reattachAnchor
+                 && HasComp<BodyPartComponent>(reattachAnchor))
+        {
+            stepPart = reattachAnchor;
         }
         else if (TryFindClickedPart(patient, null, armed.TargetPartType, armed.TargetSymmetry, out var foundPart))
         {
@@ -209,7 +218,6 @@ public sealed class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
         // refreshes the surgeon snapshot each time so a fresh surgeon
         // picking up an abandoned-but-armed surgery is credited as the
         // new operator.
-        var leafId = string.IsNullOrEmpty(armed.LeafSurgeryId) ? armed.SurgeryId : armed.LeafSurgeryId;
         var leafDisplay = ResolveLeafDisplayName(leafId);
         EnsureSurgeryInFlight(patient, stepPart, surgeon, leafId, leafDisplay, armed.TargetPartType, armed.TargetSymmetry);
 

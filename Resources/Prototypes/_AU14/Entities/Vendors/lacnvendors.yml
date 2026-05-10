@@ -50,6 +50,8 @@
         amount: 40
       - id: AU14LACNNavyCap
         amount: 20
+      - id: AU14LACNCommandoBeanie
+        amount: 10
     - name: Headsets
       entries:
       - id: RMCM5CameraGear
@@ -281,7 +283,6 @@
       - id: AU14NaloxoneAutoInjector
         amount: 2
 
-#corpsman
 - type: entity
   parent: ColMarTechBase
   id: AU14LACNcorpsmanvendor
@@ -750,7 +751,7 @@
     Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
   components:
   - type: AccessReader
-    access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
+    access: [ [ "AU14AccessGovforGunner" ], [ "AU14AccessOpforGunner" ] ]
   - type: Sprite
     sprite: _AU14/Structures/Vendors/genericweaponrack.rsi
   - type: CMAutomatedVendor

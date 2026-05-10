@@ -1492,8 +1492,9 @@ namespace Content.Client.Lobby.UI
             _allegiances.Clear();
 
             AllegianceButton.AddItem(Loc.GetString("humanoid-profile-editor-allegiance-none"), 0);
-
-            _allegiances.AddRange(_prototypeManager.EnumeratePrototypes<AllegiancePrototype>().Where(o => o.RoundStart));
+            _allegiances.AddRange(_prototypeManager.EnumeratePrototypes<AllegiancePrototype>()
+                    .Where(o => o.RoundStart)
+                    .OrderBy(o => Loc.GetString(o.Name)));
 
             for (var i = 0; i < _allegiances.Count; i++)
             {
@@ -1521,8 +1522,9 @@ namespace Content.Client.Lobby.UI
             _origins.Clear();
 
             OriginButton.AddItem(Loc.GetString("humanoid-profile-editor-origin-none"), 0);
-
-            _origins.AddRange(_prototypeManager.EnumeratePrototypes<OriginPrototype>().Where(o => o.RoundStart));
+            _origins.AddRange(_prototypeManager.EnumeratePrototypes<OriginPrototype>()
+                .Where(o => o.RoundStart)
+                .OrderBy(o => Loc.GetString(o.Name)));
 
             for (var i = 0; i < _origins.Count; i++)
             {

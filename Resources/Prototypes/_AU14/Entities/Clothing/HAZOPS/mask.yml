@@ -20,3 +20,26 @@
     - GasMask
   - type: CMArmor
     bio: 20
+
+- type: entity
+  parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
+  id: AU14MaskGasHAZOPSM17
+  name: M17A4 gas mask
+  description: The evolution of the same mask your great great grandaddy complained about during his deployment in 'Nam. Heavy, big, and uncomfortable to wear. Donned with a CBRN hood.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/HAZOPS/M17gasmask.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/HAZOPS/M17gasmask.rsi
+  - type: HideLayerClothing
+    slots:
+    - HeadTop
+    - HeadSide
+    - Snout
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - GasMask
+  - type: CMArmor
+    bio: 20

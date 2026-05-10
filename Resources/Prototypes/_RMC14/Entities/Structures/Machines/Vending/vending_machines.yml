@@ -479,27 +479,34 @@
   id: CMVendorSec
   startingInventory: # TODO RMC14
     RMCHandcuffs: 8
-    RMCZipties: 10
-    RMCGrenadeFlashBang: 4
+    RMCZipties: 16
+    RMCBoxZiptie: 2
     RMCWeaponTaser: 4
     # Pepper spray 4
     # InvestigationPepperSpray: 4
     CMStunbaton: 4
-    RMCFlashlight: 4
-    CMBeltSecurityMP: 10
+    RMCGunCasePistolM77: 4
+    CMMagazinePistolM77AP: 16
+    CMMagazinePistolM88Rubber: 40
+    # CMBeltSecurityMP: 10
     CMFlash: 5
-    RMCFoodDonut: 12
+    RMCGrenadeFlashBang: 6
     # Evidence box 6
     # PeakedMPCap: 6
-    CMGlassesSecurity: 3
     #RegulationTape: 5
     #TapeRecorder: 3
     #ClueScanner: 3
     #Camera: 8
     #CameraFilm: 8
     RMCWhistle: 5
-    RMCSunglasses: 2 #Contraband
+    RMCFoodDonut: 12
     RMCBoxDonut: 2 #Contraband
+    RMCFlashlight: 4
+    CMGlassesSecurity: 3
+    RMCSunglasses: 2 #Contraband
+    AU14CivilianPrisonJumpsuit: 25
+    RMCShoesBlack: 25
+    CMUCircuitboardRecharger: 1 # NOTE: Temporary until mappers implement more
 
 - type: entity
   parent: CMVendor

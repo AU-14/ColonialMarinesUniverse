@@ -11,10 +11,18 @@
     traits:
     - Epilepsy
   ranks:
+    #RMCRankCorporal:
+    #- !type:RoleTimeRequirement
+    #  role: AU14JobGOVFORSquadRifleman
+    #  time: 180000 # 50 hours
+    #RMCRankLanceCorporal:
+    #- !type:RoleTimeRequirement
+    #  role: AU14JobGOVFORSquadRifleman
+    #  time: 86400 # 24 hours
     RMCRankPrivateFirstClass:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORSquadRifleman
-      time: 54000 # 15 hours
+      time: 36000 # 10 hours
     RMCRankPrivate: []
   startingGear: AU14GearGOVFORSquadRifleman
   dummyStartingGear: AU14GearGOVFORRiflemanDummy

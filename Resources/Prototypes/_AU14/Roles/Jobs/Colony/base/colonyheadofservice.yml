@@ -24,8 +24,10 @@
   supervisors: au14-job-supervisors-colonyadministrator
   accessGroups:
   - Colonist
+  - auheadsofcolony
   access:
-  - AU14AccessColonyHeadOfService
+# - AU14AccessColonyHeadOfService # implicit
+  - AU14AccessColonyAdministrator
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

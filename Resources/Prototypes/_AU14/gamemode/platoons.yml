@@ -26,7 +26,7 @@
   #platoonflag: uaflag
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/normandy.yml
+  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   techTree: RMCIntelTechTree_ua
 
 - type: platoon
@@ -55,7 +55,7 @@
   #platoonflag:  uaflag
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/normandy.yml
+  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters:
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml
   possibleships:
@@ -70,7 +70,7 @@
   Allegiance: UPP
   reqlist: UPPCargoCatalog
   VendorToMarker:
-    Rifleman: AU14USCMequipmentvendor
+    Rifleman: AU14UPPequipmentvendor # unique
     Clothing: AU14UPPclothingapparelvendor
     Weapons: AU14UPPWeaponsVendor
     SWeapons: AU14UPPSpecialWeaponsVendor
@@ -101,7 +101,7 @@
 #    DCC: AU14JobGOVFORDCCUPP
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/normandy.yml
+  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   techTree: RMCIntelTechTree_ua
 
 - type: platoon
@@ -139,7 +139,7 @@
 #    DCC: AU14JobGOVFORDCCWYPMC
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/normandy.yml
+  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   possibleships:
       - USSBush
   compatibleFighters:
@@ -187,7 +187,7 @@
       - USSBush
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/normandy.yml
+  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters:
     - /Maps/_AU14/ShuttlesDropships/cmbsquadcar.yml
   techTree: RMCIntelTechTree_ua
@@ -246,7 +246,7 @@
       - USSBush
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/osprey.yml
-  - /Maps/_CMU14/Shuttles/normandy.yml
+  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters:
   - /Maps/_AU14/ShuttlesDropships/f84owl.yml
   - /Maps/_AU14/ShuttlesDropships/ud_6.yml
@@ -279,7 +279,7 @@
   #platoonflag:  uaflag
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/normandy.yml
+  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters:
     - /Maps/_AU14/ShuttlesDropships/f84owl.yml
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml
@@ -313,7 +313,7 @@
     ReqVend: AU14VAIPORequisitionVendor
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/normandy.yml
+  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters:
     - /Maps/_AU14/ShuttlesDropships/f84owl.yml
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml
@@ -328,7 +328,7 @@
   Allegiance: TWE
   reqlist: RMCCargoCatalog
   VendorToMarker:
-    Rifleman: AU14RMCequipmentvendor
+    Rifleman: AU14RMCequipmentvendor # unique
     Clothing: AU14RMCclothingequipmentvendor
     Weapons: AU14RMCWeaponsVendor
     SWeapons: AU14RMCSpecialWeaponsVendor
@@ -360,7 +360,7 @@
    # SupportSynth: AU14JobGOVFORAuxSupportSynthRMC
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/normandy.yml
+  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters: #TODO: RMC Fighters
     - /Maps/_AU14/ShuttlesDropships/f84owl.yml
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml

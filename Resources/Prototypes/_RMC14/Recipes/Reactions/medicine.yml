@@ -243,6 +243,24 @@
     CMUOsteoCalc: 3
 
 - type: reaction
+  id: CMUBiogenicMatrix
+  reactants:
+    CMBicaridine:
+      amount: 2
+    CMDermaline:
+      amount: 2
+    CMUOsteoCalc:
+      amount: 2
+    Protein:
+      amount: 3
+    RMCIron:
+      amount: 1
+    Water:
+      amount: 2
+  products:
+    CMUBiogenicMatrix: 10
+
+- type: reaction
   id: CMMeralyne
   reactants:
     RMCCarbon:

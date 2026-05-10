@@ -5,12 +5,15 @@ using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared._RMC14.Xenonids.Damage;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Body.Components;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Camera;
 using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.Effects;
+using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
@@ -26,6 +29,7 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 using Content.Shared.BarricadeBlock;
@@ -36,6 +40,14 @@ namespace Content.Shared.Projectiles;
 public abstract partial class SharedProjectileSystem : EntitySystem
 {
     public const string ProjectileFixture = "projectile";
+    private static readonly ProtoId<ReagentPrototype> BloodReagent = "Blood";
+    private static readonly FixedPoint2 BloodImpactPiercingThreshold = FixedPoint2.New(45);
+    private static readonly string[] BloodImpactEffects =
+    {
+        "CMUBloodImpactEffect",
+        "CMUBloodImpactEffect1",
+        "CMUBloodImpactEffect2",
+    };
 
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
@@ -233,14 +245,29 @@ public abstract partial class SharedProjectileSystem : EntitySystem
             Dirty(uid, predictedComp);
         }
 
-        if ((_net.IsServer || IsClientSide(uid)) && component.ImpactEffect != null)
+        var impactEffect = GetImpactEffect(component.ImpactEffect, target, modifiedDamage);
+        if ((_net.IsServer || IsClientSide(uid)) && impactEffect != null)
         {
-            var impactEffectEv = new ImpactEffectEvent(component.ImpactEffect, GetNetCoordinates(coordinates));
+            var impactEffectEv = new ImpactEffectEvent(impactEffect, GetNetCoordinates(coordinates));
             if (_net.IsServer)
                 RaiseNetworkEvent(impactEffectEv, filter);
             else
                 RaiseLocalEvent(impactEffectEv);
         }
+    }
+
+    private string? GetImpactEffect(string? fallback, EntityUid target, DamageSpecifier? damage)
+    {
+        if (damage == null ||
+            !damage.DamageDict.TryGetValue("Piercing", out var piercing) ||
+            piercing < BloodImpactPiercingThreshold ||
+            !TryComp(target, out BloodstreamComponent? bloodstream) ||
+            bloodstream.BloodReagent != BloodReagent)
+        {
+            return fallback;
+        }
+
+        return _random.Pick(BloodImpactEffects);
     }
 
     private void OnEmbedActivate(Entity<EmbeddableProjectileComponent> embeddable, ref ActivateInWorldEvent args)

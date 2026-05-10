@@ -904,6 +904,14 @@
   - MaintenanceJackAU14
   - PortableDialysisAU14
 
+- type: loadoutGroup
+  id: SynthAccesoriesSpecialAU14
+  name: au14-loadout-group-synth-equipment
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - WebbingSurgicalBlueAU14
+
 # Doctor
 
 - type: loadoutGroup
@@ -934,3 +942,15 @@
   maxLimit: 1
   loadouts:
   - GOVFORAuxTechClothingAU14Fatigues
+
+# Commander
+
+- type: loadoutGroup
+  id: GOVFORPlatCOSidearmBeltAU14
+  name: au14-loadout-group-commander-sidearm-belt
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - PlatCOSidearmM48A5AU14
+  - PlatCOSidearmMatebaCustomAU14
+  - PlatCOSidearmMatebaSpecialAU14

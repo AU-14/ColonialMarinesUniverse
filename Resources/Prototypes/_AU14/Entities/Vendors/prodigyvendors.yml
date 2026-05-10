@@ -48,6 +48,8 @@
         amount: 40
       - id: AU14ProdigyCap
         amount: 20
+      - id: AU14HeadCommandoBeanie
+        amount: 10
     - name: Headsets
       entries:
       - id: RMCM5CameraGear
@@ -365,8 +367,22 @@
         amount: 20
       - id: RMCPillCanisterIron
         amount: 20
-    #      - id: CMPillCanisterPeridaxon
-    #      - id: CMPillCanisterTramadol
+      - id: AU14PillCanisterParacetamol
+        amount: 20
+      - id: AU14PillCanisterTramadol
+        amount: 20
+      - id: AU14PillCanisterOxycodone
+        amount: 20
+      - id: AU14PillCanisterCardiocaine
+        amount: 20
+      - id: AU14PillCanisterHepatocytin
+        amount: 20
+      - id: AU14PillCanisterNephronate
+        amount: 20
+      - id: AU14PillCanisterOsteoCalc
+        amount: 20
+      - id: AU14PillCanisterPulmovine
+        amount: 20
     - name: Injectors
       entries:
       - id: CMEpinephrineAutoInjector
@@ -384,6 +400,12 @@
       - id: CMBicaridineAutoInjector
         amount: 40
       - id: CMKelotaneAutoInjector
+        amount: 40
+      - id: AU14ParacetamolAutoInjector
+        amount: 40
+      - id: AU14TramadolAutoInjector
+        amount: 40
+      - id: AU14OxycodoneAutoInjector
         amount: 40
     - name: Medical Gloves
       choices: { CMUPlatoonMedicalGloves: 1 }

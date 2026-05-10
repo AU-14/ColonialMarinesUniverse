@@ -119,6 +119,8 @@
         amount: 4
       - id: CMAutolatheMachineCircuitboard
         amount: 5
+      - id: CMUCircuitboardRecharger
+        amount: 4
 #      - id: CMCircuitboardDispenserBooze
 #        amount: 2
 #      - id: CMCircuitboardDispenserSoda
@@ -167,6 +169,8 @@
       - id: CMAutolatheMachineCircuitboard
         amount: 1
       - id: CMSMESMachineCircuitboard
+        amount: 1
+      - id: CMUCircuitboardRecharger
         amount: 1
 
 # Components

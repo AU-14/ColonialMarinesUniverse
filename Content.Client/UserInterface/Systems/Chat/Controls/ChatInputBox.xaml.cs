@@ -1,4 +1,5 @@
-﻿using Content.Client.Stylesheets;
+using System.Numerics;
+using Content.Client.Stylesheets;
 using Content.Shared.Chat;
 using Content.Shared.Input;
 using Robust.Client.UserInterface.Controls;
@@ -19,7 +20,8 @@ public class ChatInputBox : PanelContainer
         Container = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 4
+            SeparationOverride = 2,
+            Margin = new Thickness(0)
         };
         AddChild(Container);
 
@@ -28,7 +30,8 @@ public class ChatInputBox : PanelContainer
             Name = "ChannelSelector",
             ToggleMode = true,
             StyleClasses = {"chatSelectorOptionButton"},
-            MinWidth = 75
+            MinWidth = 74,
+            MinHeight = 20
         };
         Container.AddChild(ChannelSelector);
         Input = new HistoryLineEdit
@@ -42,11 +45,22 @@ public class ChatInputBox : PanelContainer
         FilterButton = new ChannelFilterButton
         {
             Name = "FilterButton",
-            StyleClasses = {"chatFilterOptionButton"}
+            StyleClasses = {"chatFilterOptionButton"},
+            MinSize = new Vector2(22, 20)
         };
         Container.AddChild(FilterButton);
         AddStyleClass(StyleNano.StyleClassChatSubPanel);
         ChannelSelector.OnChannelSelect += UpdateActiveChannel;
+    }
+
+    public void SetLegacyMode(bool legacy)
+    {
+        Container.SeparationOverride = legacy ? 4 : 2;
+        Container.Margin = new Thickness(0);
+        ChannelSelector.MinWidth = legacy ? 75 : 74;
+        ChannelSelector.MinHeight = legacy ? 0 : 20;
+        FilterButton.MinSize = legacy ? Vector2.Zero : new Vector2(22, 20);
+        FilterButton.SetLegacyMode(legacy);
     }
 
     private void UpdateActiveChannel(ChatSelectChannel selectedChannel)

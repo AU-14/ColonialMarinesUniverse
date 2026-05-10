@@ -179,7 +179,17 @@ public sealed class CMUSurgeryDispatchSystem : EntitySystem
 
         var targetPart = GetEntity(best.Part.Part);
         if (!HasComp<BodyPartComponent>(targetPart))
-            targetPart = patient;
+        {
+            if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(best.Entry.SurgeryId)
+                && _flowSurgery.TryGetReattachAnchorPart(patient, out var anchor))
+            {
+                targetPart = anchor;
+            }
+            else
+            {
+                targetPart = patient;
+            }
+        }
 
         var armed = _flowSurgery.TryArmStep(
             surgeon,
@@ -262,7 +272,7 @@ public sealed class CMUSurgeryDispatchSystem : EntitySystem
 
     private readonly record struct ToolIntentCandidate(CMUSurgeryPartEntry Part, CMUSurgeryEntry Entry, int Score);
 
-    public List<CMUSurgeryPartEntry> BuildPartEntries(EntityUid patient, EntityUid surgeon)
+    public List<CMUSurgeryPartEntry> BuildPartEntries(EntityUid patient, EntityUid surgeon, bool ignoreSkillRequirements = false)
     {
         var parts = new List<CMUSurgeryPartEntry>();
         if (!_flowSurgery.CanOperateOnPatient(patient, surgeon))
@@ -278,12 +288,16 @@ public sealed class CMUSurgeryDispatchSystem : EntitySystem
 
             attachedSlots.Add((childComp.PartType, childComp.Symmetry));
 
-            var eligible = BuildEligibleSurgeries(patient, childComp.PartType, childComp.Symmetry, surgeon, childId);
+            var eligible = BuildEligibleSurgeries(patient, childComp.PartType, childComp.Symmetry, surgeon, childId, ignoreSkillRequirements: ignoreSkillRequirements);
 
             var displayName = SharedCMUSurgeryFlowSystem.FormatPartName(childComp.PartType, childComp.Symmetry);
             var conditionSummary = BuildConditionSummary(childId, childComp.PartType);
-            var isInFlightHere = lockComp is not null && lockComp.Part == childId;
-            var lockedByOtherPart = lockComp is not null && lockComp.Part != childId;
+            var isReattachLock = lockComp is not null && SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(lockComp.LeafSurgeryId);
+            var isInFlightHere = lockComp is not null
+                && lockComp.Part == childId
+                && (!isReattachLock
+                    || (lockComp.TargetPartType == childComp.PartType && lockComp.TargetSymmetry == childComp.Symmetry));
+            var lockedByOtherPart = lockComp is not null && !isInFlightHere;
 
             parts.Add(new CMUSurgeryPartEntry(
                 GetNetEntity(childId),
@@ -316,11 +330,10 @@ public sealed class CMUSurgeryDispatchSystem : EntitySystem
 
                 var displayName = SharedCMUSurgeryFlowSystem.FormatPartName(slot.Type, symmetry);
                 var conditionSummary = Loc.GetString("cmu-medical-surgery-condition-missing");
-                var eligible = BuildEligibleSurgeries(patient, slot.Type, symmetry, surgeon, null);
-                // Reattach pins lockComp.Part to the patient body but stores
-                // the targeted slot in (TargetPartType, TargetSymmetry) — so
-                // only the matching synthesized slot is "in flight here";
-                // the other missing slot (if any) is locked.
+                var eligible = BuildEligibleSurgeries(patient, slot.Type, symmetry, surgeon, null, ignoreSkillRequirements: ignoreSkillRequirements);
+                // Reattach uses a socket anchor while the limb is missing
+                // and stores the targeted slot separately, so only the
+                // matching synthesized slot is "in flight here".
                 var isInFlightHere = lockComp is not null
                     && SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(lockComp.LeafSurgeryId)
                     && lockComp.TargetPartType == slot.Type
@@ -398,7 +411,8 @@ public sealed class CMUSurgeryDispatchSystem : EntitySystem
         BodyPartSymmetry symmetry,
         EntityUid surgeon,
         EntityUid? targetPart = null,
-        bool ignoreInProgressLock = false)
+        bool ignoreInProgressLock = false,
+        bool ignoreSkillRequirements = false)
     {
         var entries = new List<CMUSurgeryEntry>();
 
@@ -429,15 +443,13 @@ public sealed class CMUSurgeryDispatchSystem : EntitySystem
             if (patient == surgeon && !_flowSurgery.CanSelfOperateSurgery(metadata.Surgery, partType))
                 continue;
 
-            if (!HasRequiredSurgerySkill(surgeon, metadata.MinSkill))
+            if (!ignoreSkillRequirements && !HasRequiredSurgerySkill(surgeon, metadata.MinSkill))
                 continue;
 
             if (lockComp is not null && !ignoreInProgressLock)
             {
-                // Reattach uses patient body as anchor — match by stored
-                // target slot type/symmetry instead of part-equality so the
-                // synthesized missing-slot entry surfaces the in-flight
-                // reattach's next step.
+                // Reattach uses a socket anchor while the limb is missing,
+                // so match by stored target slot type/symmetry.
                 if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(metadata.Surgery))
                 {
                     if (lockComp.TargetPartType != partType || lockComp.TargetSymmetry != symmetry)
@@ -467,11 +479,15 @@ public sealed class CMUSurgeryDispatchSystem : EntitySystem
             if (!IsSurgeryEligible(patient, targetPart, surgeryProto, partType, surgeon))
                 continue;
 
-            // Reattach has no part — markers ride on the patient body.
             var resolveTarget = targetPart;
             if (resolveTarget is null
-                && (metadata.Surgery == "CMUSurgeryReattachLimb" || metadata.Surgery == "RMCSynthSurgeryReattachLimb"))
-                resolveTarget = patient;
+                && SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(metadata.Surgery))
+            {
+                if (!_flowSurgery.TryGetReattachAnchorPart(patient, out var anchor))
+                    continue;
+
+                resolveTarget = anchor;
+            }
 
             CMUResolvedStep resolved;
             if (TryComp<CMUSurgeryArmedStepComponent>(patient, out var armedComp)
@@ -746,11 +762,10 @@ public sealed class CMUSurgeryDispatchSystem : EntitySystem
         var patientIsSynth = HasComp<SynthComponent>(patient);
         var surgeryIsSynth = surgeryProto.HasComponent<RMCSynthSurgeryComponent>();
 
-        // Hide synth-marked surgeries on non-synth bodies. Synth bodies still
-        // see human surgeries — the per-surgery condition events (eschar,
-        // fracture, larva, etc.) are the source of truth for what's actually
-        // applicable, not a blanket body-type gate.
-        if (!patientIsSynth && surgeryIsSynth)
+        // Synth bodies use synth-marked surgery only. Their brute/burn repair
+        // stays on the synth tool-repair path, so human grafts and other
+        // organic procedures should never be surfaced for them.
+        if (patientIsSynth != surgeryIsSynth)
             return false;
 
         // Reattach surfaces ONLY on the synthesized missing-slot entries
@@ -759,8 +774,6 @@ public sealed class CMUSurgeryDispatchSystem : EntitySystem
         // unconditionally on the missing slot.
         if (surgeryProto.ID == "CMUSurgeryReattachLimb" || surgeryProto.ID == "RMCSynthSurgeryReattachLimb")
         {
-            if (patientIsSynth != surgeryIsSynth)
-                return false;
             if (targetPart is not null)
                 return false;
             return ReattachHasAnyMissingSlot(patient);
@@ -853,19 +866,23 @@ public sealed class CMUSurgeryDispatchSystem : EntitySystem
         if (!marker.Patient.IsValid())
             return;
 
-        // Reattach uses the patient body as a symbolic anchor (V1's
-        // ApplyLimbReattach drives slot lookup off the held-limb's
-        // BodyPartComponent). Synthesized missing-slot entries send the
-        // patient NetEntity as Part and supply (TargetPartType,
-        // TargetSymmetry) explicitly; real parts derive them from the
-        // BodyPartComponent on targetPart.
+        // Synthesized missing-slot entries send the patient NetEntity as
+        // Part and supply the slot explicitly; the surgery itself resolves
+        // through a real body-part anchor until the limb exists.
         EntityUid targetPart = GetEntity(args.Part);
         BodyPartType armedType = args.TargetPartType;
         BodyPartSymmetry armedSymmetry = args.TargetSymmetry;
-        if (TryComp<BodyPartComponent>(targetPart, out var partComp))
+        if (TryComp<BodyPartComponent>(targetPart, out var partComp)
+            && (!SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(args.SurgeryId)
+                || (partComp.PartType == armedType && partComp.Symmetry == armedSymmetry)))
         {
             armedType = partComp.PartType;
             armedSymmetry = partComp.Symmetry;
+        }
+        else if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(args.SurgeryId)
+                 && _flowSurgery.TryGetReattachAnchorPart(marker.Patient, out var anchor))
+        {
+            targetPart = anchor;
         }
         else
         {

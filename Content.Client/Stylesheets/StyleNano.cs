@@ -157,7 +157,7 @@ namespace Content.Client.Stylesheets
         public const string StyleClassButtonColorRed = "ButtonColorRed";
         public const string StyleClassButtonColorGreen = "ButtonColorGreen";
 
-        public static readonly Color ChatBackgroundColor = Color.FromHex("#131313");
+        public static readonly Color ChatBackgroundColor = Color.FromHex("#07090B");
 
         //Bwoink
         public const string StyleClassPinButtonPinned = "pinButtonPinned";
@@ -382,12 +382,20 @@ namespace Content.Client.Stylesheets
 
             var chatBg = new StyleBoxFlat
             {
-                BackgroundColor = ChatBackgroundColor
+                BackgroundColor = ChatBackgroundColor,
+                BorderColor = Color.FromHex("#263039"),
+                BorderThickness = new Thickness(1),
+                ContentMarginLeftOverride = 2,
+                ContentMarginRightOverride = 2,
+                ContentMarginTopOverride = 2,
+                ContentMarginBottomOverride = 2
             };
 
             var chatSubBg = new StyleBoxFlat
             {
-                BackgroundColor = ChatBackgroundColor,
+                BackgroundColor = Color.FromHex("#101317"),
+                BorderColor = Color.FromHex("#2f3941"),
+                BorderThickness = new Thickness(1),
             };
             chatSubBg.SetContentMarginOverride(StyleBox.Margin.All, 2);
 
@@ -958,12 +966,19 @@ namespace Content.Client.Stylesheets
                         new StyleProperty(PanelContainer.StylePropertyPanel, chatBg),
                     }),
 
+                new StyleRule(new SelectorElement(typeof(PanelContainer), new[] {StyleClassChatSubPanel}, null, null),
+                    new[]
+                    {
+                        new StyleProperty(PanelContainer.StylePropertyPanel, chatSubBg),
+                    }),
+
                 // Chat lineedit - we don't actually draw a stylebox around the lineedit itself, we put it around the
                 // input + other buttons, so we must clear the default stylebox
                 new StyleRule(new SelectorElement(typeof(LineEdit), new[] {StyleClassChatLineEdit}, null, null),
                     new[]
                     {
                         new StyleProperty(LineEdit.StylePropertyStyleBox, new StyleBoxEmpty()),
+                        new StyleProperty("font-color", Color.FromHex("#D6DCE0")),
                     }),
 
                 // Action searchbox lineedit

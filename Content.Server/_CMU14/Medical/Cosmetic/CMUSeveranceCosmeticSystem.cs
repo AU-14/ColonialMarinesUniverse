@@ -25,7 +25,7 @@ public sealed class CMUSeveranceCosmeticSystem : EntitySystem
     [Dependency] private readonly CMUMedicalVisibilitySystem _medicalVisibility = default!;
 
     /// <summary>
-    ///     Bodies queued for next-tick hand-removal / shoe-drop / force-down.
+    ///     Bodies queued for next-tick hand-removal / glove-drop / shoe-drop / force-down.
     ///     Doing it inline races with FlingPartFromBody's reparent of the
     ///     severed limb — RemoveHand's TryDrop + ShutdownContainer mutations
     ///     occurring mid-arm-reparent suppressed the dropped-arm spawn when
@@ -53,6 +53,10 @@ public sealed class CMUSeveranceCosmeticSystem : EntitySystem
         {
             if (Deleted(d.Body) || !HasComp<HandsComponent>(d.Body))
                 continue;
+
+            if (_inventory.TryGetSlotEntity(d.Body, "gloves", out _))
+                _inventory.TryUnequip(d.Body, "gloves", force: true);
+
             _hands.RemoveHand(d.Body, d.HandId);
         }
 

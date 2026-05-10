@@ -4,6 +4,7 @@ using Content.Shared._CMU14.Medical.Bones;
 using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared._CMU14.Medical.Organs;
 using Content.Shared._CMU14.Medical.Surgery;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
@@ -101,7 +102,12 @@ public sealed class CMUSurgerySystem : SharedCMUSurgerySystem
 
         // forceUpgrade:false — if the limb already carries a higher severity
         // (Comminuted) from prior trauma, leave it.
-        if (HasComp<BoneComponent>(limb))
+        if (HasComp<SynthComponent>(body))
+        {
+            if (TryComp<FractureComponent>(limb, out var existingFracture))
+                Fracture.SetSeverity((limb, existingFracture), FractureSeverity.None, forceUpgrade: false);
+        }
+        else if (HasComp<BoneComponent>(limb))
         {
             var fracture = EnsureComp<FractureComponent>(limb);
             Fracture.SetSeverity((limb, fracture), startingFracture, forceUpgrade: false);

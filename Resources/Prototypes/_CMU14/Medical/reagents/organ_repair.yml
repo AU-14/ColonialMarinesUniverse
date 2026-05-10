@@ -119,3 +119,12 @@
         damage:
           types:
             Blunt: 1
+
+- type: reagent
+  parent: CMReagentMedicine
+  id: CMUBiogenicMatrix
+  name: reagent-name-cmu-biogenic-matrix
+  desc: reagent-desc-cmu-biogenic-matrix
+  flavor: meaty
+  physicalDesc: reagent-physical-desc-viscous
+  color: "#b06f73"

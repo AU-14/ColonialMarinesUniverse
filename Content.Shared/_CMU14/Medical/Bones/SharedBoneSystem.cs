@@ -1,10 +1,12 @@
 using Content.Shared._CMU14.Medical.BodyPart.Events;
 using Content.Shared._CMU14.Medical.Bones.Events;
+using Content.Shared._CMU14.Medical.Items;
 using Content.Shared._CMU14.Medical.Organs;
 using Content.Shared._CMU14.Medical.Organs.Events;
 using Content.Shared._CMU14.Medical.Organs.Heart;
 using Content.Shared._CMU14.Medical.Organs.Lungs;
 using Content.Shared._CMU14.Medical.StatusEffects;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.StatusEffectNew;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared.Body.Part;
@@ -44,6 +46,7 @@ public abstract class SharedBoneSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<BoneComponent, BodyPartDamagedEvent>(OnBodyPartDamaged);
         SubscribeLocalEvent<BoneComponent, ComponentStartup>(OnBoneStartup);
+        SubscribeLocalEvent<BoneComponent, BoneFractureAttemptEvent>(OnBoneFractureAttempt);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.BoneEnabled, v => _boneEnabled = v, true);
@@ -53,6 +56,36 @@ public abstract class SharedBoneSystem : EntitySystem
     private void OnBoneStartup(Entity<BoneComponent> ent, ref ComponentStartup args)
     {
         ent.Comp.NextIntegrityTick = Timing.CurTime + TimeSpan.FromSeconds(10);
+
+        if (PartBelongsToSynth(ent.Owner))
+            ClearSynthFracture(ent.Owner);
+    }
+
+    private void OnBoneFractureAttempt(Entity<BoneComponent> ent, ref BoneFractureAttemptEvent args)
+    {
+        if (!PartBelongsToSynth(ent.Owner))
+            return;
+
+        args.Cancel();
+        ClearSynthFracture(ent.Owner);
+    }
+
+    private bool PartBelongsToSynth(EntityUid part)
+    {
+        return TryComp<BodyPartComponent>(part, out var bodyPart) &&
+               bodyPart.Body is { } body &&
+               HasComp<SynthComponent>(body);
+    }
+
+    private void ClearSynthFracture(EntityUid part)
+    {
+        if (TryComp<FractureComponent>(part, out var fracture))
+            Fracture.SetSeverity((part, fracture), FractureSeverity.None, forceUpgrade: false);
+
+        RemComp<CMUPostOpBoneSetComponent>(part);
+        RemComp<CMUMalunionComponent>(part);
+        RemComp<CMUSplintedComponent>(part);
+        RemComp<CMUCastComponent>(part);
     }
 
     private void OnBodyPartDamaged(Entity<BoneComponent> ent, ref BodyPartDamagedEvent args)

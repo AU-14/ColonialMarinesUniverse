@@ -13,7 +13,6 @@
 
 - type: auThirdParty
   id: VAISO
-  displayName: VAISO Mercenaries squad
   partyspawn: VAISOSpawn
   blacklistedgamemodes:
     - insurgency

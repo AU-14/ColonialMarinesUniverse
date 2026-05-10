@@ -171,7 +171,7 @@
   name: photojournalist ID card
   components:
   - type: JobTitleChanger
-    jobTitle: Photojournalist
+    jobTitle: Photo Journalist
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF

@@ -2,6 +2,7 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Atmos;
+using Content.Shared._RMC14.Camera;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.ElectronicSystem;
@@ -85,9 +86,11 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly PowerLoaderSystem _powerloader = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly SharedRMCCameraSystem _rmcCamera = default!;
     [Dependency] private readonly SharedRMCFlammableSystem _rmcFlammable = default!;
     [Dependency] private readonly SharedRMCExplosionSystem _rmcExplosion = default!;
     [Dependency] private readonly RMCImplosionSystem _rmcImplosion = default!;
+    [Dependency] private readonly SharedRMCOrbitalDeployerSystem _rmcOrbitalDeployable = default!;
     [Dependency] private readonly SkillsSystem _skills = default!;
     [Dependency] private readonly SquadSystem _squad = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -144,6 +147,7 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
                 subs.Event<DropshipTerminalWeaponsChooseParaDropMsg>(OnWeaponsChooseParaDropMsg);
                 subs.Event<DropshipTerminalWeaponsChooseSpotlightMsg>(OnWeaponsChooseSpotlightMsg);
                 subs.Event<DropshipTerminalWeaponsChooseEquipmentDeployerMsg>(OnWeaponsChooseEquipmentDeployerMsg);
+                subs.Event<DropshipTerminalWeaponsChooseLaunchBayMsg>(OnWeaponsChooseLaunchBayMsg);
                 subs.Event<DropshipTerminalWeaponsFireMsg>(OnWeaponsFireMsg);
                 subs.Event<DropshipTerminalWeaponsNightVisionMsg>(OnWeaponsNightVisionMsg);
                 subs.Event<DropshipTerminalWeaponsExitMsg>(OnWeaponsExitMsg);
@@ -163,6 +167,7 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
                 subs.Event<DropShipTerminalWeaponsSpotlightToggleMsg>(OnWeaponsSpotlightSelect);
                 subs.Event<DropShipTerminalWeaponsEquipmentDeployToggleMsg>(OnEquipmentDeploy);
                 subs.Event<DropShipTerminalWeaponsEquipmentAutoDeployToggleMsg>(OnEquipmentToggleAutoDeploy);
+                subs.Event<DropShipTerminalWeaponsLaunchOrdnanceMsg>(OnWeaponsLaunchOrdnance);
             });
 
         Subs.CVar(_config, RMCCVars.RMCDropshipCASDebug, v => CasDebug = v, true);
@@ -355,6 +360,16 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
             targets.Add(new TargetEnt(netEnt, ent.Comp.Abbreviation));
             Dirty(uid, terminal);
         }
+
+        if (!TryComp(ent, out MetaDataComponent? metaData) || metaData.EntityPrototype == null)
+            return;
+
+        var prototype = metaData.EntityPrototype.ID;
+
+        var camera = EnsureComp<RMCCameraComponent>(ent);
+        _rmcCamera.SetCameraName(ent, $"{Name(ent)} [{ent.Comp.Abbreviation}]", camera);
+        _rmcCamera.SetCameraId(ent, prototype, camera);
+        _rmcCamera.RefreshCameras(prototype);
     }
 
     private void OnDropshipTargetRemove<T>(Entity<DropshipTargetComponent> ent, ref T args)
@@ -387,6 +402,13 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
             }
 
             Dirty(uid, terminal);
+        }
+
+        if (_net.IsServer && TryComp(ent, out MetaDataComponent? metaData) && metaData.EntityPrototype is { } prototype)
+        {
+            RemComp<RMCCameraComponent>(ent);
+            RemComp<EyeComponent>(ent);
+            _rmcCamera.RefreshCameras(prototype);
         }
 
         if (_net.IsClient)
@@ -561,6 +583,11 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
     private void OnWeaponsChooseEquipmentDeployerMsg(Entity<DropshipTerminalWeaponsComponent> ent, ref DropshipTerminalWeaponsChooseEquipmentDeployerMsg args)
     {
         SetScreenUtility<RMCEquipmentDeployerComponent>(ent, args.First, EquipmentDeployer, args.Slot);
+    }
+
+    private void OnWeaponsChooseLaunchBayMsg(Entity<DropshipTerminalWeaponsComponent> ent, ref DropshipTerminalWeaponsChooseLaunchBayMsg args)
+    {
+        SetScreenUtility<RMCOrbitalDeployerComponent>(ent, args.First, Launch, args.Slot);
     }
 
     private void OnWeaponsFireMsg(Entity<DropshipTerminalWeaponsComponent> ent, ref DropshipTerminalWeaponsFireMsg args)
@@ -1026,7 +1053,9 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
     private void OnWeaponsSpotlightSelect(Entity<DropshipTerminalWeaponsComponent> ent,
         ref DropShipTerminalWeaponsSpotlightToggleMsg args)
     {
-        var selectedSystem = GetEntity(ent.Comp.SelectedSystem);
+        ref var screen = ref args.First ? ref ent.Comp.ScreenOne : ref ent.Comp.ScreenTwo;
+        var selectedSystem = GetEntity(screen.System);
+
         if (!_dropship.TryGetGridDropship(ent, out var dropship) ||
             dropship.Comp.AttachmentPoints.Count == 0)
             return;
@@ -1046,7 +1075,8 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
     private void OnEquipmentDeploy(Entity<DropshipTerminalWeaponsComponent> ent,
         ref DropShipTerminalWeaponsEquipmentDeployToggleMsg args)
     {
-        var selectedSystem = GetEntity(ent.Comp.SelectedSystem);
+        ref var screen = ref args.First ? ref ent.Comp.ScreenOne : ref ent.Comp.ScreenTwo;
+        var selectedSystem = GetEntity(screen.System);
         if (!_dropship.TryGetGridDropship(ent, out var dropship) ||
             dropship.Comp.AttachmentPoints.Count == 0)
             return;
@@ -1071,7 +1101,8 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
     private void OnEquipmentToggleAutoDeploy(Entity<DropshipTerminalWeaponsComponent> ent,
         ref DropShipTerminalWeaponsEquipmentAutoDeployToggleMsg args)
     {
-        var selectedSystem = GetEntity(ent.Comp.SelectedSystem);
+        ref var screen = ref args.First ? ref ent.Comp.ScreenOne : ref ent.Comp.ScreenTwo;
+        var selectedSystem = GetEntity(screen.System);
         if (!_dropship.TryGetGridDropship(ent, out var dropship) ||
             dropship.Comp.AttachmentPoints.Count == 0)
             return;
@@ -1080,6 +1111,39 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
             return;
 
         _equipmentDeployer.SetAutoDeploy(container.ContainedEntities[0], args.AutoDeploy);
+        RefreshWeaponsUI(ent);
+    }
+
+    private void OnWeaponsLaunchOrdnance(Entity<DropshipTerminalWeaponsComponent> ent, ref DropShipTerminalWeaponsLaunchOrdnanceMsg args)
+    {
+        ref var screen = ref args.First ? ref ent.Comp.ScreenOne : ref ent.Comp.ScreenTwo;
+        var selectedSystem = GetEntity(screen.System);
+
+        if (!_dropship.TryGetGridDropship(ent, out var dropship) ||
+            dropship.Comp.AttachmentPoints.Count == 0)
+            return;
+
+        if (ent.Comp.Target is not { } target)
+            return;
+
+        if (!CasDebug)
+        {
+            if (!IsValidTarget(target))
+                return;
+
+            if (!_area.CanCAS(target.ToCoordinates()))
+            {
+                var msg = Loc.GetString("rmc-laser-designator-not-cas");
+                _popup.PopupCursor(msg, args.Actor);
+                return;
+            }
+        }
+
+        if (!TryComp(selectedSystem, out RMCOrbitalDeployerComponent? deployer))
+            return;
+
+        _rmcOrbitalDeployable.TryDeploy(selectedSystem.Value, target,  args.Actor, deployer);
+
         RefreshWeaponsUI(ent);
     }
 
@@ -1645,7 +1709,7 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
 
         ref var screen = ref first ? ref ent.Comp.ScreenOne : ref ent.Comp.ScreenTwo;
         screen.State = state;
-        ent.Comp.SelectedSystem = selected;
+        screen.System = selected;
 
         Dirty(ent);
         RefreshWeaponsUI(ent);

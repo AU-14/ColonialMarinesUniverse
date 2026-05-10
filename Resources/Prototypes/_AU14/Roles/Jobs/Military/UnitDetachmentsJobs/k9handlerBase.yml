@@ -4,10 +4,10 @@
   name: K9 Handler
   description: K9 Handler
   setPreference: false
-  playTimeTracker: AU14JobGOVFORk9handler
+  playTimeTracker: AU14JobThirdPartyK9Handler
   basePlaytimeTracker: true
   hidden: true
 
 - type: playTimeTracker
-  id: AU14JobGOVFORk9handler
+  id: AU14JobThirdPartyK9Handler
   isHumanoid: true

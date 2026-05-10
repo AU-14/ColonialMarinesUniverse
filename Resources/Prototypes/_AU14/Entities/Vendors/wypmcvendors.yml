@@ -52,6 +52,8 @@
         amount: 40
       - id: AU14WYPMCBallCap
         amount: 20
+      - id: AU14HeadCommandoBeanie
+        amount: 10
     - name: Headsets
       entries:
       - id: RMCM5CameraGear
@@ -573,7 +575,7 @@
     sections:
     - name: Fatigues
       entries:
-      - id: AU14WYPMCFatigues
+      - id: RMCJumpsuitVeteranPMCLeaderNoWebbing
         amount: 5
     - name: Footwear
       entries:
@@ -589,13 +591,17 @@
         amount: 5
       - id: AU14WYPMCBallCap
         amount: 5
+    - name: Outerwear
+      entries:
+      - id: CMArmorM4PMCLeader
+        amount: 5
     - name: Headsets
       entries:
       - id: AU14HeadsetSectionLeader
         amount: 2
     - name: Backpack
       entries:
-      - id: RMCBackpackRTO
+      - id: RMCBackpackRTOPMC
         amount: 5
     - name: Pouches
       entries:

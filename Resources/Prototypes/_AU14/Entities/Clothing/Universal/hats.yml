@@ -41,3 +41,29 @@
     sprite: _RMC14/Objects/Clothing/Head/Hats/CO/beret_ltcol.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Head/Hats/CO/beret_ltcol.rsi
+
+- type: entity
+  parent: AU14LACNCommandoBeanie
+  id: AU14HeadCommandoBeanie
+  name: Beanie
+  description: A beanie to hide your bald head. Looks strangely similar to the beanie used by the LACN Naval Commandos.
+
+- type: entity
+  parent: [AU14HeadCommandoBeanie, BaseFoldable]
+  id: AU14HeadBeanieclava
+  components:
+  - type: Clothing
+    sprite: _AU14/Clothing/Civilian/Hats/beanieclava.rsi
+  - type: Appearance
+  - type: Foldable
+    canFoldInsideContainer: true
+  - type: FoldableClothing
+    foldedEquippedPrefix: folded
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Hats/beanieclava.rsi
+    layers:
+    - state: icon
+      map: ["unfoldedLayer"]
+    - state: icon
+      map: ["foldedLayer"]
+      visible: false

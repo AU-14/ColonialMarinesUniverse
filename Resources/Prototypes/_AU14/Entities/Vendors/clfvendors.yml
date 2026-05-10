@@ -147,6 +147,8 @@
       entries:
       - id: RMCHardhatWhite
         amount: 2
+      - id: AU14HeadBeanieclava
+        amount: 10
     - name: External Wear
       entries:
       - id: RMCCoatMilitiaVest
@@ -289,6 +291,8 @@
         amount: 5
       - id: RMCZipties
         amount: 30
+      - id: AU14Wheelchair
+        amount: 6
     - name: Medical Supplies
       entries:
       - id: AU14HemostaticGauzePacket

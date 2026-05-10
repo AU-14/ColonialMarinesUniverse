@@ -26,8 +26,10 @@
   - Colonist
   - aumed
   - AUPrisonStaff
+  - auheadsofcolony
   access:
-  - AU14AccessColonyHeadPhysician
+# - AU14AccessColonyHeadPhysician # implicit
+  - AU14AccessColonyAdministrator
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

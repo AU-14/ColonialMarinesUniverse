@@ -151,11 +151,12 @@ public sealed class RadioSystem : EntitySystem
             radioFontSize += innateRadioIncrease.RadioTextIncrease;
         }
 
+        var verb = Loc.GetString(_random.Pick(speech.SpeechVerbStrings));
         var wrappedMessage = Loc.GetString(speech.Bold ? "chat-radio-message-wrap-bold" : "chat-radio-message-wrap",
             ("color", channel.Color),
             ("fontType", speech.FontId),
             ("fontSize", radioFontSize), // RMC14
-            ("verb", Loc.GetString(_random.Pick(speech.SpeechVerbStrings))),
+            ("verb", verb),
             ("channel", $"\\[{channel.LocalizedName}\\]"),
             ("name", name),
             ("message", content));
@@ -167,7 +168,14 @@ public sealed class RadioSystem : EntitySystem
             wrappedMessage,
             GetNetEntity(messageSource),
             _chatManager.EnsurePlayer(CompOrNull<ActorComponent>(messageSource)?.PlayerSession.UserId)?.Key,
-            repeatCheckSender: !HasComp<ChatRepeatIgnoreSenderComponent>(radioSource));
+            repeatCheckSender: !HasComp<ChatRepeatIgnoreSenderComponent>(radioSource),
+            display: new ChatDisplayMetadata(
+                ChatDisplayKind.Radio,
+                senderName: name,
+                verb: verb,
+                channelLabel: channel.LocalizedName,
+                quoteBody: true,
+                accentColor: channel.Color));
         var chatMsg = new MsgChatMessage { Message = chat };
         var ev = new RadioReceiveEvent(message, messageSource, channel, radioSource, chatMsg);
 

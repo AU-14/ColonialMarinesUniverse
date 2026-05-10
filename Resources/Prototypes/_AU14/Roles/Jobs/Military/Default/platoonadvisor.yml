@@ -7,7 +7,8 @@
   canBeAntag: false
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 3600 # Set to 72000 once we are fully launched AU14 todo
+    time: 3600
+    # time: 72000 (uncomment on AU14 release) # 20 hours
   - !type:AgeRequirement
     requiredAge: 21
   - !type:TraitsRequirement
@@ -19,6 +20,14 @@
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORadvisor
       time: 360000 # 100 hours
+    RMCRankMasterGunnerySergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORadvisor
+      time: 86400 # 24 hours
+    #RMCRankFirstSergeant:
+    #- !type:RoleTimeRequirement
+    #  role: AU14JobGOVFORadvisor
+    #  time: 43200 # 12 hours
     RMCRankFirstSergeant: []
   startingGear: AU14GearGOVFORadvisor
   dummyStartingGear: AU14GearGOVFORadvisorDummy

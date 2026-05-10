@@ -49,12 +49,10 @@
 - type: entity
   parent: CMSurgeryStepBase
   id: RMCSynthSurgeryStepReattachLimb
-  name: Splice limb wiring
+  name: Reattach synth limb
   components:
   - type: CMSurgeryStep
-    skill: 3
-    tool:
-    - type: RMCCableCoil
+    skill: 2
     add:
     - type: CMUReattachComplete
   - type: CMUSurgeryStepReattachLimbEffect
@@ -85,3 +83,16 @@
   displayName: Reattach Synth Limb
   validParts: [Arm, Leg]
   category: reattach
+  steps:
+  - stepId: RMCSynthSurgeryStepCutChassis
+    label: Cut Chassis Open
+    toolCategory: blowtorch
+  - stepId: RMCSynthSurgeryStepStripWires
+    label: Strip Damaged Wiring
+    toolCategory: cable_coil
+  - stepId: RMCSynthSurgeryStepReattachLimb
+    label: Reattach Synth Limb
+    toolCategory: severed_limb
+  - stepId: RMCSynthSurgeryStepWeldChassis
+    label: Weld Chassis Shut
+    toolCategory: blowtorch

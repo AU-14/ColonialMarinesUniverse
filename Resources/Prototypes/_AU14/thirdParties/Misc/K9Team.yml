@@ -7,7 +7,7 @@
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicBaseMilitary
-  id: AU14IntelThirdPartyK9HandlerGOVFOR
+  id: AU14IntelThirdPartyK9Handler
   name: S&R K9 Handler
   components:
   - type: GhostRoleApplySpecial
@@ -16,30 +16,39 @@
     allowSpeech: true
     allowMovement: true
     name: S&R K9 Handler
-    description: You have been awakened by GOVFOR command alongside your Search and Rescue K9 via an intel purchase. Gear up using the corpsman vendor and report to your faction command for orders.
-    job: AU14JobGOVFORk9handler
+    description: You and your loyal canine companion were flying around and noticed a sudden long-range signal burst nearby. You decide to land and check it out.
+    job: AU14JobThirdPartyK9Handler
     raffle:
       settings: short
   - type: Skills
     preset: AU14SkillPresetPlatoonHospitalCorpsman
 
 - type: partySpawn
-  id: AU14IntelThirdPartyK9HandlerSpawnGOVFOR
+  id: AU14IntelThirdPartyK9HandlerSpawn
   leadersToSpawn:
-    AU14IntelThirdPartyK9HandlerGOVFOR: 1
+    AU14IntelThirdPartyK9Handler: 1
   gruntsToSpawn:
     AU14MobK9BagMedicGhostRole: 1
   scalewithpop: false
   spawnTogether: true
 
 - type: auThirdParty
-  id: AU14IntelThirdPartyK9GOVFOR
-  partyspawn: AU14IntelThirdPartyK9HandlerSpawnGOVFOR
-  entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
+  id: AU14IntelThirdPartyK9
+  partyspawn: AU14IntelThirdPartyK9HandlerSpawn
+  entrymethod: shuttle
   weight: 1
   minplayers: 500
   maxplayers: 600
   GhostsNeeded: 600
   roundstart: false
 
-
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardSquadK9Handler
+  name: k9 handler ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobThirdPartyK9Handler
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor

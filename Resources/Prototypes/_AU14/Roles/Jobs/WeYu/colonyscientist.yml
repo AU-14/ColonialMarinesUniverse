@@ -19,11 +19,11 @@
     AU14RankScientistProfessor:
     - !type:RoleTimeRequirement
       role: AU14JobCivilianScientist
-      time: 36000 # 10 hours
+      time: 86400 # 24 hours
     AU14RankScientistAssociate:
     - !type:RoleTimeRequirement
       role: AU14JobCivilianScientist
-      time: 7200 # 2 hours
+      time: 36000 # 10 hours
     AU14RankScientistAssistant: []
   startingGear: AU14GearCivilianScientist
   icon: "RMCJobIconPMCScientist"

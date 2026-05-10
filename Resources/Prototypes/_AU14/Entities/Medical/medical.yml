@@ -1019,7 +1019,7 @@
     noWoundsOnTargetPopup: cm-wounds-already-treated-target-popup
   - type: MedicallyUnskilledDoAfter
     min: 1
-    doAfter: 7
+    doAfter: 2.5
   - type: Stack
     stackType: CMGauze
     count: 6

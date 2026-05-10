@@ -227,7 +227,7 @@ public sealed class XenoHiveSystem : SharedXenoHiveSystem
                     ? "rmc-hive-supports-castes-synth"
                     : "rmc-hive-supports-castes-human");
 
-                popupText = $"[bold][font size=24][color=red]\n{popupText}\n[/color][/font][/bold]";
+                popupText = $"[bold][font size=24][color=red]{popupText}[/color][/font][/bold]";
 
                 _audio.PlayEntity(hive.MarineAnnounceSound, recipient, recipient);
                 _rmcChat.ChatMessageToOne(ChatChannel.Radio, popupText, popupText, default, false, session.Channel);
