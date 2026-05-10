@@ -354,7 +354,7 @@ public partial class ChatBox : UIWidget
         formatted.PushColor(color);
         // RMC14
         if (!string.IsNullOrWhiteSpace(languageIcon))
-            formatted.AddMarkupOrThrow($"[langicon path=\"{FormattedMessage.EscapeText(languageIcon)}\"][/langicon]");
+            formatted.AddMarkupOrThrow($"[langicon language=\"{FormattedMessage.EscapeText(languageIcon)}\"][/langicon]");
         // RMC14
         formatted.AddMarkupOrThrow(message);
         formatted.Pop();
