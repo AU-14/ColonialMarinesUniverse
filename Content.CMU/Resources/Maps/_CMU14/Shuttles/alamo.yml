@@ -849,7 +849,6 @@ entities:
   - uid: 47
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 2.75,-5.5
       parent: 2
   - uid: 48
