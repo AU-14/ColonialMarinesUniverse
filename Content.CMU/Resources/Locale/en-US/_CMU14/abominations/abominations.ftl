@@ -12,3 +12,5 @@ au14-job-name-abomination-spider = Spider Abomination
 au14-job-name-abomination-grunt = Grunt Abomination
 au14-job-name-abomination-skitter = Skitter Abomination
 au14-job-name-abomination-mimic = Mimic Abomination
+
+chat-radio-abomination-mimic = Mimicnet
