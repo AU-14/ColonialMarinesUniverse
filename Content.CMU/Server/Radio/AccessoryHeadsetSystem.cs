@@ -13,10 +13,10 @@ namespace Content.Server._AU14.Radio;
 ///     uniform accessory is inside a worn uniform. Mirrors the RadioImplantSystem pattern.
 ///     Also provides a default radio channel for the :h prefix via <see cref="AccessoryRadioWearerComponent"/>.
 /// </summary>
-public sealed class AccessoryHeadsetSystem : EntitySystem
+public sealed partial class AccessoryHeadsetSystem : EntitySystem
 {
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
 
     public override void Initialize()
     {

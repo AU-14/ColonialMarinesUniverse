@@ -17,15 +17,15 @@ using System.Security.Principal;
 
 namespace Content.Shared._CMU14.CraftIntoPipeBomb;
 
-public sealed class CraftIntoPipeBombSystem : EntitySystem
+public sealed partial class CraftIntoPipeBombSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly RMCRepairableSystem _repair = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private RMCRepairableSystem _repair = default!;
+    [Dependency] private TagSystem _tags = default!;
+    [Dependency] private SharedStackSystem _stack = default!;
 
     public static readonly ProtoId<TagPrototype> RMCMetal = "RMCSheetMetal";
 

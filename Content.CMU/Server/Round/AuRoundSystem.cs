@@ -28,15 +28,15 @@ namespace Content.Server.AU14.Round
     /// <summary>
     /// Persistent system that manages the full sequence of votes (preset, planet, platoon, etc.)
     /// </summary>
-    public sealed class AuRoundSystem : EntitySystem
+    public sealed partial class AuRoundSystem : EntitySystem
     {
-        [Dependency] private readonly IVoteManager _voteManager = default!;
-        [Dependency] private readonly IConfigurationManager _cfg = default!;
-        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-        [Dependency] private readonly IEntityManager _entityManager = default!;
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly IRobustRandom _random = default!;
-        [Dependency] private readonly ItemCamouflageSystem _camo = default!;
+        [Dependency] private IVoteManager _voteManager = default!;
+        [Dependency] private IConfigurationManager _cfg = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
+        [Dependency] private IEntityManager _entityManager = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private IRobustRandom _random = default!;
+        [Dependency] private ItemCamouflageSystem _camo = default!;
 
         [ViewVariables]
         public string? SelectedPlanetMapName => SelectedPlanetMap?.Announcement;

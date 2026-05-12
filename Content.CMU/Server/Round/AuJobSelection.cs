@@ -12,11 +12,11 @@ namespace Content.Server.AU14.Round;
 /// <summary>
 /// Handles forced assignment of threat jobs at roundstart to meet ThreatPrototype slots.
 /// </summary>
-public sealed class AuJobSelectionSystem : EntitySystem
+public sealed partial class AuJobSelectionSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
 
     public Dictionary<NetUserId, string> ForcedJobAssignments { get; } = new();

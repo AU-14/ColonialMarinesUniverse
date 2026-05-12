@@ -11,10 +11,10 @@ using Content.Shared._RMC14.Marines;
 
 namespace Content.Server.AU14.Objectives;
 
-public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
+public sealed partial class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly Content.Shared._RMC14.Intel.IntelSystem _intel = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private Content.Shared._RMC14.Intel.IntelSystem _intel = default!;
 
     public override void Initialize()
     {
@@ -45,11 +45,11 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
     {
         Logger.Debug($"[ObjectivesConsole] SendObjectives called for console={ToPrettyString(uid)} faction={comp.Faction}");
         var objectives = new List<ObjectiveEntry>();
-        var query = EntityManager.EntityQueryEnumerator<AuObjectiveComponent>();
+        var query = EntityQueryEnumerator<AuObjectiveComponent>();
         int currentWinPoints = 0;
         int requiredWinPoints = 0;
         // Find the ObjectiveMaster for this faction
-        foreach (var master in EntityManager.EntityQuery<ObjectiveMasterComponent>())
+        foreach (var master in EntityQuery<ObjectiveMasterComponent>())
         {
             switch (comp.Faction.ToLowerInvariant())
             {
@@ -98,7 +98,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
             var showObjective = objComp.Active;
 
             // Try get capture component once and reuse it below to avoid duplicate lookups.
-            var hasCapture = EntityManager.TryGetComponent(objUid, out CaptureObjectiveComponent? captureComp);
+            var hasCapture = TryComp(objUid, out CaptureObjectiveComponent? captureComp);
 
             if (!showObjective)
             {
@@ -222,7 +222,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
 
             // Fetch progress logic
             string? fetchProgress = null;
-            if (EntityManager.TryGetComponent(objUid, out FetchObjectiveComponent? fetchComp))
+            if (TryComp(objUid, out FetchObjectiveComponent? fetchComp))
             {
                 int fetched = 0;
                 int toFetch = fetchComp.AmountToFetch;
@@ -237,7 +237,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
                 fetchProgress = $"{fetched}/{toFetch}";
             }
             // Add logic to display kill progress for KillObjectiveComponent
-            if (EntityManager.TryGetComponent(objUid, out KillObjectiveComponent? killComp))
+            if (TryComp(objUid, out KillObjectiveComponent? killComp))
             {
                 int killed = 0;
                 int toKill = killComp.AmountToKill;
@@ -286,7 +286,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
         Logger.Debug($"[ObjectivesConsole] OnRequestIntel called for objective={msg.ObjectiveId} console={ToPrettyString(uid)} actor={msg.Actor} consoleFaction={comp.Faction}");
 
         // Find the objective by ID
-        var query = EntityManager.EntityQueryEnumerator<AuObjectiveComponent>();
+        var query = EntityQueryEnumerator<AuObjectiveComponent>();
         while (query.MoveNext(out var objUid, out var objComp))
         {
             if (objComp.ID != msg.ObjectiveId)
@@ -356,7 +356,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
     private void OnUnlockIntel(EntityUid uid, ObjectivesConsoleComponent comp, ObjectivesConsoleUnlockIntelMessage msg)
     {
         // Server-side: validate objective exists and tier index
-        var objQuery = EntityManager.EntityQueryEnumerator<AuObjectiveComponent>();
+        var objQuery = EntityQueryEnumerator<AuObjectiveComponent>();
         while (objQuery.MoveNext(out var objUid, out var objComp))
         {
             if (objComp.ID != msg.ObjectiveId)
@@ -417,7 +417,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
 
     public void RefreshConsolesForFaction(string faction)
     {
-        var query = EntityManager.EntityQueryEnumerator<ObjectivesConsoleComponent>();
+        var query = EntityQueryEnumerator<ObjectivesConsoleComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
             if (string.Equals(comp.Faction, faction, StringComparison.OrdinalIgnoreCase))

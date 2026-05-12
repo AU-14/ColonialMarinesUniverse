@@ -12,12 +12,12 @@ using Robust.Shared.Log;
 
 namespace Content.Server.AU14.Objectives.Fetch;
 
-public sealed class AuFetchObjectiveSystem : EntitySystem
+public sealed partial class AuFetchObjectiveSystem : EntitySystem
 {
-    [Robust.Shared.IoC.Dependency] private readonly IEntityManager _entManager = default!;
-    [Robust.Shared.IoC.Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Robust.Shared.IoC.Dependency] private readonly AuObjectiveSystem _objectiveSystem = default!;
-    [Robust.Shared.IoC.Dependency] private readonly SharedTransformSystem _xformSys = default!;
+    [Robust.Shared.IoC.Dependency] private IEntityManager _entManager = default!;
+    [Robust.Shared.IoC.Dependency] private EntityLookupSystem _lookup = default!;
+    [Robust.Shared.IoC.Dependency] private AuObjectiveSystem _objectiveSystem = default!;
+    [Robust.Shared.IoC.Dependency] private SharedTransformSystem _xformSys = default!;
 
     public override void Initialize()
     {
@@ -50,7 +50,7 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
         if (string.IsNullOrEmpty(prototypeId))
             return 0;
 
-        if (!EntityManager.TryGetComponent(objectiveUid, out TransformComponent? objXform))
+        if (!TryComp(objectiveUid, out TransformComponent? objXform))
             return 0;
 
         var registered = 0;
@@ -64,10 +64,10 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
                 continue;
 
             // Skip if already has the fetch-item component
-            if (EntityManager.HasComponent<AuFetchItemComponent>(ent))
+            if (HasComp<AuFetchItemComponent>(ent))
                 continue;
 
-            if (!EntityManager.TryGetComponent(ent, out MetaDataComponent? meta))
+            if (!TryComp(ent, out MetaDataComponent? meta))
                 continue;
 
             var proto = meta.EntityPrototype?.ID;
@@ -125,7 +125,7 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
 
         var markers = new List<EntityUid>();
         var genericMarkers = new List<EntityUid>();
-        var markerQuery = EntityManager.AllEntityQueryEnumerator<FetchObjectiveMarkerComponent, TransformComponent>();
+        var markerQuery = AllEntityQuery<FetchObjectiveMarkerComponent, TransformComponent>();
         while (markerQuery.MoveNext(out var markerUid, out var markerComp, out _))
         {
             if (markerComp.Used)
@@ -160,11 +160,11 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
         for (var i = 0; i < toSpawn; i++)
         {
             var markerUid = markers[i];
-            var markerComp = EntityManager.GetComponent<FetchObjectiveMarkerComponent>(markerUid);
+            var markerComp = Comp<FetchObjectiveMarkerComponent>(markerUid);
             if (markerComp.Used)
                 continue; // Double check, should not happen
-            var xform = EntityManager.GetComponent<TransformComponent>(markerUid);
-            var ent = EntityManager.SpawnEntity(entityToSpawn, xform.Coordinates);
+            var xform = Comp<TransformComponent>(markerUid);
+            var ent = Spawn(entityToSpawn, xform.Coordinates);
             var comp = _entManager.EnsureComponent<AuFetchItemComponent>(ent);
             comp.FetchObjective = component;
             comp.ObjectiveUid = uid;
@@ -172,7 +172,7 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
             markerComp.Used = true;
             if (!string.IsNullOrEmpty(component.SpawnOther))
             {
-                EntityManager.SpawnEntity(component.SpawnOther, xform.Coordinates);
+                Spawn(component.SpawnOther, xform.Coordinates);
             }
         }
         component.ItemsSpawned = true;
@@ -213,7 +213,7 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
     private void TryHandleFetchItemDropOrUndrag(EntityUid uid, AuFetchItemComponent comp)
     {
         Logger.Info($"[FETCH DEBUG] TryHandleFetchItemDropOrUndrag called for {uid}");
-        var xform = EntityManager.GetComponent<TransformComponent>(uid);
+        var xform = Comp<TransformComponent>(uid);
         var tile = xform.Coordinates;
         var gridId = _xformSys.GetGrid(tile);
         var tilePos = _xformSys.GetWorldPosition(xform);
@@ -222,9 +222,9 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
         foreach (var ent in _lookup.GetEntitiesInRange(tile, 10f))
         {
             Logger.Info($"[FETCH DEBUG] Checking entity {ent} in range");
-            if (!EntityManager.TryGetComponent(ent, out FetchObjectiveReturnPointComponent? returnPoint))
+            if (!TryComp(ent, out FetchObjectiveReturnPointComponent? returnPoint))
                 continue;
-            var returnXform = EntityManager.GetComponent<TransformComponent>(ent);
+            var returnXform = Comp<TransformComponent>(ent);
             var returnCoords = returnXform.Coordinates;
             var returnGridId = _xformSys.GetGrid(returnCoords);
             var returnTilePos = _xformSys.GetWorldPosition(returnXform);
@@ -304,7 +304,7 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
 
     private void OnReturnPointDragDropTarget(EntityUid uid, FetchObjectiveReturnPointComponent comp, ref DragDropTargetEvent args)
     {
-        if (!EntityManager.TryGetComponent(args.Dragged, out AuFetchItemComponent? fetchItem))
+        if (!TryComp(args.Dragged, out AuFetchItemComponent? fetchItem))
             return;
         TryHandleFetchItemDropOrUndrag(args.Dragged, fetchItem);
     }
@@ -319,18 +319,18 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
     /// </summary>
     public int ScanForFetchItems(EntityUid analyzerUid)
     {
-        if (!EntityManager.TryGetComponent(analyzerUid, out TransformComponent? analyzerXform))
+        if (!TryComp(analyzerUid, out TransformComponent? analyzerXform))
             return 0;
 
         // Read the analyzer's faction — this determines which objectives it can credit.
         var analyzerFaction = string.Empty;
-        if (EntityManager.TryGetComponent(analyzerUid, out Content.Shared.AU14.AnalyzerComponent? analyzerComp))
+        if (TryComp(analyzerUid, out Content.Shared.AU14.AnalyzerComponent? analyzerComp))
             analyzerFaction = analyzerComp.Faction.ToLowerInvariant();
 
         var analyzerCoords = analyzerXform.Coordinates;
         var totalFetched = 0;
 
-        var query = EntityManager.EntityQueryEnumerator<FetchObjectiveComponent, AuObjectiveComponent>();
+        var query = EntityQueryEnumerator<FetchObjectiveComponent, AuObjectiveComponent>();
         while (query.MoveNext(out var objUid, out var fetchComp, out var auComp))
         {
             if (!auComp.Active)
@@ -364,7 +364,7 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
                 if (ent == analyzerUid || ent == objUid)
                     continue;
 
-                if (!EntityManager.TryGetComponent(ent, out MetaDataComponent? meta))
+                if (!TryComp(ent, out MetaDataComponent? meta))
                     continue;
 
                 var proto = meta.EntityPrototype?.ID;
@@ -453,7 +453,7 @@ public sealed class AuFetchObjectiveSystem : EntitySystem
             return;
 
         int unfetched = 0;
-        var query = EntityManager.EntityQueryEnumerator<AuFetchItemComponent>();
+        var query = EntityQueryEnumerator<AuFetchItemComponent>();
         while (query.MoveNext(out var ent, out var itemComp))
         {
             if (itemComp.FetchObjective == fetchObj && !itemComp.Fetched && ent != uid)

@@ -12,11 +12,11 @@ namespace Content.Shared.AU14.Util;
 /// <summary>
 /// This handles...
 /// </summary>
-public abstract class AuThirdPartySystem : EntitySystem
+public abstract partial class AuThirdPartySystem : EntitySystem
 {
-    [Dependency] protected readonly IPrototypeManager PrototypeManager = default!;
-    [Dependency] protected readonly IPlayerManager PlayerManager = default!;
-    [Dependency] protected readonly IRobustRandom _random = default!;
+    [Dependency] protected IPrototypeManager PrototypeManager = default!;
+    [Dependency] protected IPlayerManager PlayerManager = default!;
+    [Dependency] protected IRobustRandom _random = default!;
 
     /// <inheritdoc/>
     public override void Initialize()

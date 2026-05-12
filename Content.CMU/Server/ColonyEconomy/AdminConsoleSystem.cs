@@ -11,14 +11,14 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.AU14.ColonyEconomy;
 
-public sealed class AdminConsoleSystem : EntitySystem
+public sealed partial class AdminConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly ColonyBudgetSystem _colonyBudget = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly AuThirdPartySystem _thirdParty = default!;
-    [Dependency] private readonly AuRoundSystem _auRound = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private AuThirdPartySystem _thirdParty = default!;
+    [Dependency] private AuRoundSystem _auRound = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {

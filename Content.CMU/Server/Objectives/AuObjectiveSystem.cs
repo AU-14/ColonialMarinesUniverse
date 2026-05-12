@@ -23,25 +23,25 @@ using Content.Shared._RMC14.Vendors;
 
 namespace Content.Server.AU14.Objectives;
 // should probably consolidate some of these methods and make it 90% less shitcode but I am incredibly lazy and will do it another day - eg
-public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
+public sealed partial class AuObjectiveSystem : AuSharedObjectiveSystem
 {
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
 
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
-    [Dependency] private readonly ObjectivesConsoleSystem _objectivesConsoleSystem = default!;
+    [Dependency] private ObjectivesConsoleSystem _objectivesConsoleSystem = default!;
 
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly RoundEnd.RoundEndSystem _roundEnd = default!;
-    [Dependency] private readonly Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
-    [Dependency] private readonly AuFetchObjectiveSystem _fetchObjectiveSystem = default!;
-    [Dependency] private readonly AuKillObjectiveSystem _killObjectiveSystem = default!;
-    [Dependency] private readonly Content.Server.AU14.Objectives.Arrest.AuArrestObjectiveSystem _arrestObjectiveSystem = default!;
-    [Dependency] private readonly Content.Server.AU14.Objectives.Destroy.AuDestroyObjectiveSystem _destroyObjectiveSystem = default!;
-    [Dependency] private readonly AuInteractObjectiveSystem _interactObjectiveSystem = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private RoundEnd.RoundEndSystem _roundEnd = default!;
+    [Dependency] private Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
+    [Dependency] private AuFetchObjectiveSystem _fetchObjectiveSystem = default!;
+    [Dependency] private AuKillObjectiveSystem _killObjectiveSystem = default!;
+    [Dependency] private Content.Server.AU14.Objectives.Arrest.AuArrestObjectiveSystem _arrestObjectiveSystem = default!;
+    [Dependency] private Content.Server.AU14.Objectives.Destroy.AuDestroyObjectiveSystem _destroyObjectiveSystem = default!;
+    [Dependency] private AuInteractObjectiveSystem _interactObjectiveSystem = default!;
 
-    [Dependency] private readonly IPrototypeManager _proto = default!; // for spawning by prototype
+    [Dependency] private IPrototypeManager _proto = default!; // for spawning by prototype
     public bool iswinactive = false;
     private ObjectiveMasterComponent? _objectiveMaster = null;
 
@@ -50,7 +50,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
     public (int govforMinor, int govforMajor, int opforMinor, int opforMajor, int clfMinor, int clfMajor, int
         scientistMinor, int scientistMajor) ObjectivesAmount()
     {
-        foreach (var comp in EntityManager.EntityQuery<ObjectiveMasterComponent>())
+        foreach (var comp in EntityQuery<ObjectiveMasterComponent>())
         {
             return (
                 comp.GovforMinorObjectives,
@@ -188,7 +188,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         var scientistMajor = new List<AuObjectiveComponent>();
 
         var allMasters = new List<ObjectiveMasterComponent>();
-        foreach (var comp in EntityManager.EntityQuery<ObjectiveMasterComponent>())
+        foreach (var comp in EntityQuery<ObjectiveMasterComponent>())
         {
             allMasters.Add(comp);
         }
@@ -648,8 +648,8 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
 
 
         // Always spawn a new entity from the prototype (do not try to find and reuse an existing inactive objective)
-        var newEnt = EntityManager.SpawnEntity(protoIdStr, completedXform.Coordinates);
-        if (EntityManager.TryGetComponent(newEnt, out AuObjectiveComponent? newObjComp))
+        var newEnt = Spawn(protoIdStr, completedXform.Coordinates);
+        if (TryComp(newEnt, out AuObjectiveComponent? newObjComp))
         {
             newObjComp.Faction = completingFaction.ToLowerInvariant();
             newObjComp.Active = true;
@@ -753,7 +753,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         if (!_objectiveMaster.FinalObjectiveGivenFactions.Contains(factionKey) && newPoints >= requiredPoints)
         {
             // Only activate a final objective if it is completable
-            var finalObjectives = EntityManager.EntityQuery<AuObjectiveComponent>()
+            var finalObjectives = EntityQuery<AuObjectiveComponent>()
                 .Where(obj =>
                     !obj.Active && obj.Factions.Any(f => f.ToLowerInvariant() == factionKey) &&
                     obj.ObjectiveLevel == 3)
@@ -781,10 +781,10 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                     $"[OBJ FINAL DEBUG] Activated final objective '{selected.objectiveDescription}' for faction '{factionKey}'");
                 _objectiveMaster.FinalObjectiveGivenFactions.Add(factionKey);
                 iswinactive = true;
-                if (selected.Owner != EntityUid.Invalid && EntityManager.HasComponent<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveComponent>(selected.Owner))
+                if (selected.Owner != EntityUid.Invalid && HasComp<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveComponent>(selected.Owner))
                 {
                     var fetchSystem = EntityManager.EntitySysManager.GetEntitySystem<Content.Server.AU14.Objectives.Fetch.AuFetchObjectiveSystem>();
-                    var fetchComp = EntityManager.GetComponent<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveComponent>(selected.Owner);
+                    var fetchComp = Comp<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveComponent>(selected.Owner);
                     fetchSystem.TryActivateFetchObjective(selected.Owner, fetchComp);
                 }
             }
@@ -879,7 +879,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         }
 
         // No need to call Dirty on the component reference directly; find the entity to mark dirty for replication
-        var query = EntityManager.EntityQueryEnumerator<ObjectiveMasterComponent>();
+        var query = EntityQueryEnumerator<ObjectiveMasterComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
             // Update the concrete component instance on the entity to match the authoritative copy

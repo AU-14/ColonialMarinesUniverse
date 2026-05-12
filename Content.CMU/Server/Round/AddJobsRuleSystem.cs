@@ -17,14 +17,14 @@ using Robust.Shared.Map;
 namespace Content.Server.AU14.Round;
 
 [UsedImplicitly]
-public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
+public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
 {
-    [Dependency] private readonly StationJobsSystem _stationJobs = default!;
-    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private StationJobsSystem _stationJobs = default!;
+    [Dependency] private AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     protected override void Started(EntityUid uid, AddJobsRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
@@ -152,7 +152,7 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                 {
                     var mapId = _gameTicker.DefaultMap;
                     var stationUid = _stationSystem.GetStationInMap(mapId);
-                    if (stationUid != null && EntityManager.EntityExists(stationUid.Value))
+                    if (stationUid != null && Exists(stationUid.Value))
                     {
                         var stationJobs = EntityManager.GetComponentOrNull<StationJobsComponent>(stationUid.Value);
                         if (stationJobs != null)
@@ -219,13 +219,13 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
             if (addToShip && component.AddToShip)
             {
                 // Find the ship entity with ShipFactionComponent matching the faction
-                foreach (var (shipUid, shipFaction) in EntityManager.EntityQuery<ShipFactionComponent>(true).Select(s => (s.Owner, s)))
+                foreach (var (shipUid, shipFaction) in EntityQuery<ShipFactionComponent>(true).Select(s => (s.Owner, s)))
                 {
                     if (string.IsNullOrEmpty(shipFaction.Faction) || shipFaction.Faction.ToLower() != faction)
                         continue;
                     // Find the station entity that owns this ship
                     var stationUid = _stationSystem.GetOwningStation(shipUid);
-                    if (stationUid == null || !EntityManager.EntityExists(stationUid.Value))
+                    if (stationUid == null || !Exists(stationUid.Value))
                         continue;
                     var stationJobs = EntityManager.GetComponentOrNull<StationJobsComponent>(stationUid.Value);
                     if (stationJobs == null)
@@ -266,7 +266,7 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                 var mapId = _gameTicker.DefaultMap;
                 // Use StationSystem to get the correct station entity for the map
                 var stationUid = _stationSystem.GetStationInMap(mapId);
-                if (stationUid != null && EntityManager.EntityExists(stationUid.Value))
+                if (stationUid != null && Exists(stationUid.Value))
                 {
                     var stationJobs = EntityManager.GetComponentOrNull<StationJobsComponent>(stationUid.Value);
                     if (stationJobs != null)
@@ -329,7 +329,7 @@ public sealed class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
                 var mapId = _gameTicker.DefaultMap;
                 // Use StationSystem to get the correct station entity for the map
                 var stationUid = _stationSystem.GetStationInMap(mapId);
-                if (stationUid != null && EntityManager.EntityExists(stationUid.Value))
+                if (stationUid != null && Exists(stationUid.Value))
                 {
                     var stationJobs = EntityManager.GetComponentOrNull<StationJobsComponent>(stationUid.Value);
                     if (stationJobs != null)
