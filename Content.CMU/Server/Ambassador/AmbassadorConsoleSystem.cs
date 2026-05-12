@@ -35,6 +35,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ColonyEconomy.AdminConsoleSystem _adminConsole = default!;
     [Dependency] private TagSystem _tag = default!;
+    [Dependency] private PopupSystem _popup = default!;
 
     private static readonly SoundSpecifier MarineAnnouncementSound =
         new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");

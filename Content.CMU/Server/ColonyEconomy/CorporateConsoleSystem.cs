@@ -25,6 +25,7 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
     [Dependency] private AdminConsoleSystem _adminConsole = default!;
     [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
     [Dependency] private TagSystem _tag = default!;
+    [Dependency] private PopupSystem _popup = default!;
 
     public override void Initialize()
     {

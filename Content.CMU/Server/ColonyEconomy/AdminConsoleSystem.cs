@@ -20,6 +20,7 @@ public sealed partial class AdminConsoleSystem : EntitySystem
     [Dependency] private AuThirdPartySystem _thirdParty = default!;
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private PopupSystem _popup = default!;
 
     public override void Initialize()
     {
