@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.AU14.Round;
 using Content.Server.AU14.ThirdParty;
 using Content.Server.Chat.Systems;
+using Content.Server.Popups;
 using Content.Server.Radio;
 using Content.Server.Radio.EntitySystems;
 using Content.Server.Stack;
@@ -380,9 +381,14 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         if (!_proto.TryIndex<AuThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto)) return;
         if (!_auRound.IsThirdPartyAllowedForCurrentContext(partyProto)) return;
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto)) return;
+        if (!_thirdParty.SpawnThirdParty(partyProto, spawnProto, false))
+        {
+            _popup.PopupEntity("Unable to dispatch support at this time.", uid, msg.Actor);
+            return;
+        }
+
         comp.Budget -= cost;
         comp.CalledParties.Add(msg.ThirdPartyId);
-        _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
         UpdateAllFactionUi(comp);
     }
 

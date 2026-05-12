@@ -3,6 +3,7 @@ using Content.Server.AU14.Ambassador;
 using Content.Server.AU14.Round;
 using Content.Server.AU14.ThirdParty;
 using Content.Server.Chat.Systems;
+using Content.Server.Popups;
 using Content.Shared.AU14.Ambassador;
 using Content.Shared.AU14.ColonyEconomy;
 using Content.Shared.AU14.Threats;
@@ -168,6 +169,12 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto))
             return;
 
+        if (!_thirdParty.SpawnThirdParty(partyProto, spawnProto, false))
+        {
+            _popup.PopupEntity("Unable to dispatch support at this time.", uid, msg.Actor);
+            return;
+        }
+
         _colonyBudget.AddToBudget(-cost);
 
         // Mark as called on all admin consoles
@@ -175,7 +182,6 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         while (q.MoveNext(out _, out var c))
             c.CalledParties.Add(msg.ThirdPartyId);
 
-        _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
         UpdateAllUi();
     }
 

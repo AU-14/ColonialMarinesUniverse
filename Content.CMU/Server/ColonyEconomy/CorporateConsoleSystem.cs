@@ -1,6 +1,7 @@
 using Content.Server.AU14.ThirdParty;
 using Content.Server.AU14.Round;
 using Content.Server.Chat.Systems;
+using Content.Server.Popups;
 using Content.Server.Stack;
 using Content.Shared.AU14.ColonyEconomy;
 using Content.Shared.AU14.Threats;
@@ -131,6 +132,12 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto))
             return;
 
+        if (!_thirdParty.SpawnThirdParty(partyProto, spawnProto, false))
+        {
+            _popup.PopupEntity("Unable to dispatch support at this time.", uid, msg.Actor);
+            return;
+        }
+
         // Deduct from ALL corporate consoles (they share one budget)
         var q = EntityQueryEnumerator<CorporateConsoleComponent>();
         while (q.MoveNext(out _, out var c))
@@ -139,7 +146,6 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
             c.CalledParties.Add(msg.ThirdPartyId);
         }
 
-        _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
         UpdateAllUi();
     }
 
