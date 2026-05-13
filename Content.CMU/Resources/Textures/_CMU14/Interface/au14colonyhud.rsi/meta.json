@@ -11,9 +11,6 @@
       "name": "admin"
     },
     {
-      "name": "synth"
-    },
-    {
       "name": "advisor"
     },
     {
@@ -48,9 +45,6 @@
     },
     {
       "name": "orbital_security"
-    },
-    {
-      "name": "working_joe"
     },
     {
       "name": "icrc_cmo"

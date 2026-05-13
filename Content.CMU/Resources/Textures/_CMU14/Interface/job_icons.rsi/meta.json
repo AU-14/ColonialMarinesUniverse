@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/1c026464019b7baae4975e4b1470a18b37dd1d1c/icons/mob/hud/factions/marine.dmi",
+  "copyright": "taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/1c026464019b7baae4975e4b1470a18b37dd1d1c/icons/mob/hud/factions/marine.dmi. threat_leader, threat_member, third_party_leader, third_party_member, working_joe by potatoed on Discord. synth by nnzy.",
   "size": {
     "x": 16,
     "y": 16
@@ -30,6 +30,24 @@
         },
         {
             "name": "hudsquad_trpr"
+        },
+        {
+            "name": "threat_leader"
+        },
+        {
+            "name": "threat_member"
+        },
+        {
+            "name": "third_party_leader"
+        },
+        {
+            "name": "third_party_member"
+        },
+        {
+            "name": "working_joe"
+        },
+        {
+            "name": "synth"
         }
     ]
 }
