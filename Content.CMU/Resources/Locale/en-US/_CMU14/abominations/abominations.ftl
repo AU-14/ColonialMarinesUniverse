@@ -17,6 +17,7 @@ abomination-mimic-picker-title = Mimic - Choose Form
 
 abomination-construction-picker-title = Choose Flesh Structure
 abomination-secrete-no-choice = You haven't chosen a flesh structure yet.
+abomination-secrete-nest-cooldown = Your insides still ache — you need more time before birthing another nest.
 
 au14-job-name-abomination-spider = Spider Abomination
 au14-job-name-abomination-grunt = Grunt Abomination
