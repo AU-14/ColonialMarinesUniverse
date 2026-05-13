@@ -8,6 +8,9 @@ abomination-mimic-transform-no-profiles = You have no assimilated forms to mimic
 abomination-mimic-transform-revert = Your borrowed form sloughs away.
 abomination-mimic-picker-title = Mimic - Choose Form
 
+abomination-construction-picker-title = Choose Flesh Structure
+abomination-secrete-no-choice = You haven't chosen a flesh structure yet.
+
 au14-job-name-abomination-spider = Spider Abomination
 au14-job-name-abomination-grunt = Grunt Abomination
 au14-job-name-abomination-skitter = Skitter Abomination
