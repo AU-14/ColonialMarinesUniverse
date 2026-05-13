@@ -8,6 +8,11 @@ abomination-assimilate-complete = {CAPITALIZE($target)} has been assimilated.
 abomination-mimic-transform-no-profiles = You have no assimilated forms to mimic yet.
 abomination-mimic-transform-revert = Your borrowed form starts to slough away!
 abomination-mimic-on-cooldown = Your flesh is still settling — you can't take another shape yet.
+
+reagent-name-abomination-venom = abomination venom
+reagent-desc-abomination-venom = A clotting, dark fluid wrung from rotted flesh. Causes the standard abomination infection in anyone unlucky enough to metabolise it.
+reagent-physical-desc-viscous = viscous
+reagent-effect-guidebook-cause-abomination-infection = Causes [color=#a83a55]abomination infection[/color] with a [color=red]{NATURALPERCENT($chance, 3)}%[/color] chance per metabolism tick.
 abomination-mimic-picker-title = Mimic - Choose Form
 
 abomination-construction-picker-title = Choose Flesh Structure
