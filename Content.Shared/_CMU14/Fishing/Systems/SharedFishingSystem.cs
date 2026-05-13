@@ -128,6 +128,12 @@ public abstract class SharedFishingSystem : EntitySystem
             var fishRod = fishingFloatComp.FishingRod;
             var fisher = Transform(fishingFloatComp.FishingRod).ParentUid;
 
+            if (!IsValidFisher(fisher, fishRod))
+            {
+                StopFishing((fishRod, fishRodComp), fisher);
+                continue;
+            }
+
             var activeFisher = EnsureComp<ActiveFisherComponent>(fisher);
             activeFisher.FishingRod = fishRod;
             activeFisher.ProgressPerUse *= fishRodComp.Efficiency;
@@ -157,14 +163,20 @@ public abstract class SharedFishingSystem : EntitySystem
 
             if (distance.Length() > fishingRodComp.BreakOnDistance ||
                 lurePos.MapId != rodPos.MapId ||
-                !_hands.IsHolding(fisher, lureComp.FishingRod) ||
-                !HasComp<ActorComponent>(fisher))
+                !IsValidFisher(fisher, lureComp.FishingRod))
             {
                 var rod = (lureComp.FishingRod, fishingRodComp);
                 StopFishing(rod, fisher);
-                ToggleFishingActions(rod, fisher, false);
             }
         }
+    }
+
+    private bool IsValidFisher(EntityUid fisher, EntityUid rod)
+    {
+        return Exists(fisher) &&
+               !TerminatingOrDeleted(fisher) &&
+               HasComp<ActorComponent>(fisher) &&
+               _hands.IsHolding(fisher, rod);
     }
 
     /// <summary>
@@ -173,15 +185,39 @@ public abstract class SharedFishingSystem : EntitySystem
     /// </summary>
     private void ToggleFishingActions(Entity<FishingRodComponent> ent, EntityUid fisher, bool addPulling)
     {
+        if (!Exists(fisher) ||
+            TerminatingOrDeleted(fisher) ||
+            TerminatingOrDeleted(ent))
+        {
+            return;
+        }
+
+        _actions.RemoveProvidedActions(fisher, ent);
+        SanitizeActionRef(ent, ref ent.Comp.ThrowLureActionEntity);
+        SanitizeActionRef(ent, ref ent.Comp.PullLureActionEntity);
+
         if (addPulling)
         {
-            _actions.RemoveAction(ent.Comp.ThrowLureActionEntity);
             _actions.AddAction(fisher, ref ent.Comp.PullLureActionEntity, ent.Comp.PullLureActionId, ent);
         }
         else
         {
-            _actions.RemoveAction(ent.Comp.PullLureActionEntity);
             _actions.AddAction(fisher, ref ent.Comp.ThrowLureActionEntity, ent.Comp.ThrowLureActionId, ent);
+        }
+    }
+
+    private void SanitizeActionRef(Entity<FishingRodComponent> ent, ref EntityUid? action)
+    {
+        if (_actions.GetAction(action, false) is not { } actionEnt)
+        {
+            action = null;
+            return;
+        }
+
+        if (actionEnt.Comp.Container != ent.Owner ||
+            TerminatingOrDeleted(actionEnt))
+        {
+            action = null;
         }
     }
 
@@ -205,25 +241,43 @@ public abstract class SharedFishingSystem : EntitySystem
         Entity<FishingRodComponent> fishingRod,
         EntityUid? fisher)
     {
-        if (fishingRod.Comp.FishingLure == null)
-            return;
-
-        var lureComp = FishLureQuery.Comp(fishingRod.Comp.FishingLure.Value);
-        ActiveFishSpotQuery.TryComp(lureComp.AttachedEntity, out var activeSpotComp);
-        FisherQuery.TryComp(fisher, out var fisherComp);
-
-        if (lureComp.AttachedEntity != null && activeSpotComp != null)
-            RemCompDeferred(lureComp.AttachedEntity.Value, activeSpotComp);
-
-        if (fisher != null)
+        if (fishingRod.Comp.FishingLure is not { } lure ||
+            TerminatingOrDeleted(lure) ||
+            !FishLureQuery.TryComp(lure, out var lureComp))
         {
-            if (fisherComp != null)
-                RemCompDeferred(fisher.Value, fisherComp);
-
-            ToggleFishingActions(fishingRod, fisher.Value, false);
+            fishingRod.Comp.FishingLure = null;
+            CleanupFisher(fishingRod, fisher);
+            return;
         }
 
+        ActiveFishSpotQuery.TryComp(lureComp.AttachedEntity, out var activeSpotComp);
+
+        if (lureComp.AttachedEntity is { } attachedEntity &&
+            !TerminatingOrDeleted(attachedEntity) &&
+            activeSpotComp != null)
+        {
+            RemCompDeferred(attachedEntity, activeSpotComp);
+        }
+
+        CleanupFisher(fishingRod, fisher);
+
         fishingRod.Comp.FishingLure = null;
+    }
+
+    private void CleanupFisher(Entity<FishingRodComponent> fishingRod, EntityUid? fisher)
+    {
+        if (fisher is not { } fisherUid ||
+            !Exists(fisherUid) ||
+            TerminatingOrDeleted(fisherUid))
+        {
+            return;
+        }
+
+        if (FisherQuery.TryComp(fisherUid, out var fisherComp))
+            RemCompDeferred(fisherUid, fisherComp);
+
+        if (!TerminatingOrDeleted(fishingRod))
+            ToggleFishingActions(fishingRod, fisherUid, false);
     }
 
     #region Terminating Events
@@ -313,7 +367,7 @@ public abstract class SharedFishingSystem : EntitySystem
 
         if (component.FishingLure == null)
         {
-            ToggleFishingActions(ent, player, true);
+            ToggleFishingActions(ent, player, false);
             args.Handled = true;
             return;
         }
@@ -341,19 +395,28 @@ public abstract class SharedFishingSystem : EntitySystem
         }
 
         StopFishing(ent, player);
-        ToggleFishingActions(ent, player, false);
         args.Handled = true;
     }
 
     private void OnFishingRodInit(Entity<FishingRodComponent> ent, ref MapInitEvent args)
     {
+        SanitizeActionRef(ent, ref ent.Comp.ThrowLureActionEntity);
         _actions.AddAction(ent, ref ent.Comp.ThrowLureActionEntity, ent.Comp.ThrowLureActionId);
     }
 
     private void OnRodParentChanged(Entity<FishingRodComponent> ent, ref EntParentChangedMessage args)
     {
+        if (TerminatingOrDeleted(ent))
+            return;
+
         // Anything that is an active fisher should be fine.
-        if (!FisherQuery.HasComp(args.Transform.ParentUid))
+        if (!TerminatingOrDeleted(args.Transform.ParentUid) &&
+            FisherQuery.HasComp(args.Transform.ParentUid))
+        {
+            return;
+        }
+
+        if (!TerminatingOrDeleted(args.OldParent))
         {
             StopFishing(ent, args.OldParent);
         }
@@ -362,17 +425,29 @@ public abstract class SharedFishingSystem : EntitySystem
     private void OnGetActions(Entity<FishingRodComponent> ent, ref GetItemActionsEvent args)
     {
         if (ent.Comp.FishingLure == null)
+        {
+            SanitizeActionRef(ent, ref ent.Comp.ThrowLureActionEntity);
             args.AddAction(ref ent.Comp.ThrowLureActionEntity, ent.Comp.ThrowLureActionId);
+        }
         else
+        {
+            SanitizeActionRef(ent, ref ent.Comp.PullLureActionEntity);
             args.AddAction(ref ent.Comp.PullLureActionEntity, ent.Comp.PullLureActionId);
+        }
     }
 
     private void OnRodEquippedHand(Entity<FishingRodComponent> ent, ref GotEquippedHandEvent args)
     {
         if (ent.Comp.FishingLure == null)
+        {
+            SanitizeActionRef(ent, ref ent.Comp.ThrowLureActionEntity);
             _actions.AddAction(args.User, ref ent.Comp.ThrowLureActionEntity, ent.Comp.ThrowLureActionId, ent);
+        }
         else
+        {
+            SanitizeActionRef(ent, ref ent.Comp.PullLureActionEntity);
             _actions.AddAction(args.User, ref ent.Comp.PullLureActionEntity, ent.Comp.PullLureActionId, ent);
+        }
     }
 
     private void OnRodUnequippedHand(Entity<FishingRodComponent> ent, ref GotUnequippedHandEvent args)
