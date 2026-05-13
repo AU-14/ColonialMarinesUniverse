@@ -11,7 +11,7 @@ abomination-mimic-on-cooldown = Your flesh is still settling — you can't take 
 
 reagent-name-abomination-venom = abomination venom
 reagent-desc-abomination-venom = A clotting, dark fluid wrung from rotted flesh. Causes the standard abomination infection in anyone unlucky enough to metabolise it.
-reagent-physical-desc-viscous = viscous
+# reagent-physical-desc-viscous is defined upstream in reagents/meta/physical-desc.ftl — don't redefine here.
 reagent-effect-guidebook-cause-abomination-infection = Causes [color=#a83a55]abomination infection[/color] with a [color=red]{NATURALPERCENT($chance, 3)}%[/color] chance per metabolism tick.
 abomination-mimic-picker-title = Mimic - Choose Form
 
