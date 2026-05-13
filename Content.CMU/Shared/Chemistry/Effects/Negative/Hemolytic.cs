@@ -23,7 +23,9 @@ public sealed partial class Hemolytic : RMCChemicalEffect
     private static readonly ProtoId<EmotePrototype> YawnEmote = "Yawn";
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {
-        return $"DESCRIPTION IS NOT IMPLEMENTED";
+        return $"Removes [color=red]{PotencyPerSecond * 5}[/color] blood from the bloodstream.\n" +
+               $"Overdoses cause [color=red]{PotencyPerSecond * 4}[/color] more blood to be removed from the bloodstream. Also causes gasping and yawning.\n" +
+               $"Critical overdoses cause [color=red]{PotencyPerSecond * 5}[/color] oxygen damage.";
     }
 
     protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
@@ -46,7 +48,7 @@ public sealed partial class Hemolytic : RMCChemicalEffect
         if (entman.TryGetComponent<BloodstreamComponent>(targ, out var blood))
         {
             var bloodsys = entman.System<SharedBloodstreamSystem>();
-            bloodsys.TryModifyBloodLevel((targ, blood), -(4.0 * PotencyPerSecond));
+            bloodsys.TryModifyBloodLevel((targ, blood), -(4.0 * potency));
             //TODO M.drowsiness
 
             var random = IoCManager.Resolve<IRobustRandom>();
