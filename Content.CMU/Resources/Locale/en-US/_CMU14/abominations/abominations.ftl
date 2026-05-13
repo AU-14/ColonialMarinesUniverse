@@ -2,10 +2,12 @@ abomination-assimilate-self = You cannot assimilate yourself.
 abomination-assimilate-not-humanoid = This target is not suitable for assimilation.
 abomination-assimilate-not-incapacitated = The target must be incapacitated first.
 abomination-assimilate-already = This victim has already been assimilated.
+abomination-assimilate-synth = Synthetics have nothing for you to absorb.
 abomination-assimilate-complete = {CAPITALIZE($target)} has been assimilated.
 
 abomination-mimic-transform-no-profiles = You have no assimilated forms to mimic yet.
-abomination-mimic-transform-revert = Your borrowed form sloughs away.
+abomination-mimic-transform-revert = Your borrowed form starts to slough away!
+abomination-mimic-on-cooldown = Your flesh is still settling — you can't take another shape yet.
 abomination-mimic-picker-title = Mimic - Choose Form
 
 abomination-construction-picker-title = Choose Flesh Structure
