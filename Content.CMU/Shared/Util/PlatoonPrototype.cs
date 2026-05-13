@@ -37,7 +37,7 @@ namespace Content.Shared.AU14.util;
         public string Reqlist { get; private set; } = string.Empty;
 
         [DataField("VendorToMarker")]
-        public Dictionary<PlatoonMarkerClass, ProtoId<EntityPrototype>> VendorMarkersByClass { get; private set; } = new();
+        public Dictionary<PlatoonMarkerClass, EntProtoId> VendorMarkersByClass { get; private set; } = new();
 
 
         [DataField("possibleships")]
