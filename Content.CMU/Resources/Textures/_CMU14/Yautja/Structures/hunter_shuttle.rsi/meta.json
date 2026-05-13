@@ -135,7 +135,7 @@
                        "name":  "hunter16"
                    },
                    {
-                       "name":  "left front"
+                       "name":  "left_front"
                    },
                    {
                        "name":  "hunter17"
@@ -156,7 +156,7 @@
                        "name":  "hunter22"
                    },
                    {
-                       "name":  "right front"
+                       "name":  "right_front"
                    },
                    {
                        "name":  "hunter23"
@@ -177,7 +177,7 @@
                        "name":  "hunter28"
                    },
                    {
-                       "name":  "front_middle window"
+                       "name":  "front_middle_window"
                    },
                    {
                        "name":  "hunterw_1"
@@ -204,7 +204,7 @@
                        "name":  "hunterw_8"
                    },
                    {
-                       "name":  "left window"
+                       "name":  "left_window"
                    },
                    {
                        "name":  "hunterw_9"
@@ -216,7 +216,7 @@
                        "name":  "hunterw_11"
                    },
                    {
-                       "name":  "right window"
+                       "name":  "right_window"
                    },
                    {
                        "name":  "hunterw_12"
@@ -228,7 +228,7 @@
                        "name":  "hunterw_14"
                    },
                    {
-                       "name":  "bottom window"
+                       "name":  "bottom_window"
                    },
                    {
                        "name":  "hunterw_15"
@@ -243,3 +243,4 @@
     "license":  "CC-BY-SA-3.0",
     "copyright":  "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/turf/walls/hunter_shuttle.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
 }
+
