@@ -118,13 +118,13 @@ public sealed class AuJobSelectionSystem : EntitySystem
 
         var playersQueuedForThreatLeader = unassignedPlayers
             .Where(p => profiles.TryGetValue(p, out var profile) &&
-                       profile.JobPriorities.TryGetValue(threatLeaderJobId, out var priority) &&
+                       profile.GetJobPrioritiesForGamemode(presetId).TryGetValue(threatLeaderJobId, out var priority) &&
                        priority != JobPriority.Never)
             .ToList();
 
         var playersQueuedForThreatMember = unassignedPlayers
             .Where(p => profiles.TryGetValue(p, out var profile) &&
-                       profile.JobPriorities.TryGetValue(threatMemberJobId, out var priority) &&
+                       profile.GetJobPrioritiesForGamemode(presetId).TryGetValue(threatMemberJobId, out var priority) &&
                        priority != JobPriority.Never)
             .ToList();
 
