@@ -67,12 +67,20 @@ public sealed class YautjaMarkSystem : EntitySystem
         if (!_rmcActions.TryUseAction(args))
             return;
 
-        if (!CanUsePanel(ent, args.Performer))
+        if (!TryOpenMarkPanel(ent, args.Performer))
             return;
 
         args.Handled = true;
-        _ui.TryOpenUi(ent.Owner, YautjaMarkUIKey.Key, args.Performer);
-        UpdateUi(ent, args.Performer);
+    }
+
+    public bool TryOpenMarkPanel(Entity<YautjaBracerComponent> bracer, EntityUid user)
+    {
+        if (!CanUsePanel(bracer, user))
+            return false;
+
+        _ui.TryOpenUi(bracer.Owner, YautjaMarkUIKey.Key, user);
+        UpdateUi(bracer, user);
+        return true;
     }
 
     private void OnUiOpened(Entity<YautjaBracerComponent> ent, ref BoundUIOpenedEvent args)

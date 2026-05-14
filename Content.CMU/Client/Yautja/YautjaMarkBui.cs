@@ -17,7 +17,6 @@ public sealed class YautjaMarkBui : BoundUserInterface
     {
         base.Open();
         _window = this.CreateWindow<YautjaMarkWindow>();
-        _window.OnRefresh += () => SendMessage(new YautjaMarkPanelRefreshMsg());
         _window.OnMark += (target, kind, reason) => SendMessage(new YautjaMarkPanelMarkMsg(target, kind, reason));
         _window.OnUnmark += (target, kind) => SendMessage(new YautjaMarkPanelUnmarkMsg(target, kind));
     }

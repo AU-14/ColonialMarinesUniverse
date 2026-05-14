@@ -8,6 +8,7 @@ using Content.Shared.Database;
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Humanoid;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
 using Content.Shared.Item.ItemToggle;
@@ -52,6 +53,7 @@ public sealed class YautjaSmartDiscSystem : EntitySystem
         SubscribeLocalEvent<YautjaSmartDiscComponent, ItemToggleActivateAttemptEvent>(OnActivateAttempt);
         SubscribeLocalEvent<YautjaSmartDiscComponent, ItemToggledEvent>(OnToggled);
         SubscribeLocalEvent<YautjaSmartDiscComponent, PreventCollideEvent>(OnPreventCollide);
+        SubscribeLocalEvent<YautjaSmartDiscComponent, ThrownEvent>(OnThrown);
         SubscribeLocalEvent<YautjaSmartDiscComponent, ThrowDoHitEvent>(OnThrowHit);
         SubscribeLocalEvent<YautjaSmartDiscComponent, StopThrowEvent>(OnStopThrow);
         SubscribeLocalEvent<YautjaSmartDiscComponent, GettingPickedUpAttemptEvent>(OnPickupAttempt);
@@ -111,6 +113,15 @@ public sealed class YautjaSmartDiscSystem : EntitySystem
         StopDisc(ent);
     }
 
+    private void OnThrown(Entity<YautjaSmartDiscComponent> ent, ref ThrownEvent args)
+    {
+        if (ent.Comp.Active || args.User is not { } user)
+            return;
+
+        ent.Comp.PendingThrowActivator = user;
+        ent.Comp.PendingThrowActivationAt = _timing.CurTime + ent.Comp.ThrowActivationDelay;
+    }
+
     private void OnPreventCollide(Entity<YautjaSmartDiscComponent> ent, ref PreventCollideEvent args)
     {
         if (!ent.Comp.Active)
@@ -142,8 +153,13 @@ public sealed class YautjaSmartDiscSystem : EntitySystem
 
     private void OnStopThrow(Entity<YautjaSmartDiscComponent> ent, ref StopThrowEvent args)
     {
-        if (ent.Comp.Active)
-            ent.Comp.NextRetarget = _timing.CurTime + ent.Comp.RetargetDelay;
+        if (!ent.Comp.Active)
+        {
+            ClearPendingThrowActivation(ent.Comp);
+            return;
+        }
+
+        ent.Comp.NextRetarget = _timing.CurTime + ent.Comp.RetargetDelay;
     }
 
     private void OnPickupAttempt(Entity<YautjaSmartDiscComponent> ent, ref GettingPickedUpAttemptEvent args)
@@ -163,6 +179,8 @@ public sealed class YautjaSmartDiscSystem : EntitySystem
 
     private void OnGotEquippedHand(Entity<YautjaSmartDiscComponent> ent, ref GotEquippedHandEvent args)
     {
+        ClearPendingThrowActivation(ent.Comp);
+
         if (ent.Comp.Active && HasComp<YautjaComponent>(args.User))
             _toggle.TrySetActive((ent.Owner, null), false, args.User, false);
     }
@@ -241,6 +259,8 @@ public sealed class YautjaSmartDiscSystem : EntitySystem
 
     private void StopDisc(Entity<YautjaSmartDiscComponent> ent)
     {
+        ClearPendingThrowActivation(ent.Comp);
+
         ent.Comp.Active = false;
         ent.Comp.CurrentTarget = null;
         ent.Comp.RogueTarget = null;
@@ -267,7 +287,10 @@ public sealed class YautjaSmartDiscSystem : EntitySystem
         while (query.MoveNext(out var uid, out var disc, out var physics))
         {
             if (!disc.Active)
+            {
+                TryActivatePendingThrow((uid, disc));
                 continue;
+            }
 
             if (_timing.CurTime >= disc.ActiveUntil)
             {
@@ -315,6 +338,31 @@ public sealed class YautjaSmartDiscSystem : EntitySystem
 
             SteerDisc(uid, disc, physics, owner, currentTarget);
         }
+    }
+
+    private void TryActivatePendingThrow(Entity<YautjaSmartDiscComponent> ent)
+    {
+        if (ent.Comp.PendingThrowActivator is not { } user)
+            return;
+
+        if (_timing.CurTime < ent.Comp.PendingThrowActivationAt)
+            return;
+
+        ClearPendingThrowActivation(ent.Comp);
+
+        if (TerminatingOrDeleted(user) ||
+            !TryComp(ent.Owner, out ThrownItemComponent? _))
+        {
+            return;
+        }
+
+        _toggle.TrySetActive((ent.Owner, null), true, user, false);
+    }
+
+    private static void ClearPendingThrowActivation(YautjaSmartDiscComponent disc)
+    {
+        disc.PendingThrowActivator = null;
+        disc.PendingThrowActivationAt = TimeSpan.Zero;
     }
 
     private void SteerDisc(EntityUid uid, YautjaSmartDiscComponent disc, PhysicsComponent physics, EntityUid owner, EntityUid target)
@@ -422,9 +470,10 @@ public sealed class YautjaSmartDiscSystem : EntitySystem
 
         if (TryComp(uid, out DamageOtherOnHitComponent? damage))
         {
+            var damageSpec = GetDiscDamageAgainstTarget(disc, target, damage.Damage);
             var dealt = _damage.TryChangeDamage(
                 target,
-                damage.Damage * _damage.UniversalThrownDamageModifier,
+                damageSpec * _damage.UniversalThrownDamageModifier,
                 damage.IgnoreResistances,
                 origin: disc.YautjaOwner ?? uid,
                 tool: uid);
@@ -435,6 +484,19 @@ public sealed class YautjaSmartDiscSystem : EntitySystem
 
         RegisterHit((uid, disc), target);
         return true;
+    }
+
+    private DamageSpecifier GetDiscDamageAgainstTarget(YautjaSmartDiscComponent disc, EntityUid target, DamageSpecifier damage)
+    {
+        if (IsHumanDiscTarget(target))
+            return damage * disc.HumanDamageMultiplier;
+
+        return damage;
+    }
+
+    private bool IsHumanDiscTarget(EntityUid target)
+    {
+        return HasComp<HumanoidAppearanceComponent>(target) && !HasComp<YautjaComponent>(target);
     }
 
     private bool TryFindHitTarget(Entity<YautjaSmartDiscComponent> ent, out EntityUid target)

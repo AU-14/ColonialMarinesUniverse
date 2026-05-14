@@ -38,29 +38,14 @@ public sealed class YautjaPowerSystem : EntitySystem
 
         var isYautja = HasComp<YautjaComponent>(args.User);
 
+        args.AddAction(ref ent.Comp.OpenBracerMenuAction, ent.Comp.OpenBracerMenuActionId);
         args.AddAction(ref ent.Comp.ToggleCloakAction, ent.Comp.ToggleCloakActionId);
-        if (isYautja)
-            args.AddAction(ref ent.Comp.OpenMarkPanelAction, ent.Comp.OpenMarkPanelActionId);
-
         args.AddAction(ref ent.Comp.RecallAction, ent.Comp.RecallActionId);
+
         if (isYautja)
             args.AddAction(ref ent.Comp.SelfDestructAction, ent.Comp.SelfDestructActionId);
 
-        args.AddAction(ref ent.Comp.ToggleLockAction, ent.Comp.ToggleLockActionId);
-        args.AddAction(ref ent.Comp.ToggleIdChipAction, ent.Comp.ToggleIdChipActionId);
-        args.AddAction(ref ent.Comp.CreateStabilisingCrystalAction, ent.Comp.CreateStabilisingCrystalActionId);
-        args.AddAction(ref ent.Comp.CreateHumanStabilisingCrystalAction, ent.Comp.CreateHumanStabilisingCrystalActionId);
-        args.AddAction(ref ent.Comp.CreateHealingCapsuleAction, ent.Comp.CreateHealingCapsuleActionId);
-
-        if (isYautja)
-        {
-            args.AddAction(ref ent.Comp.LinkThrallBracerAction, ent.Comp.LinkThrallBracerActionId);
-            args.AddAction(ref ent.Comp.StunThrallAction, ent.Comp.StunThrallActionId);
-            args.AddAction(ref ent.Comp.SelfDestructThrallAction, ent.Comp.SelfDestructThrallActionId);
-        }
-
-        if (isYautja || HasComp<YautjaThrallComponent>(args.User))
-            args.AddAction(ref ent.Comp.TransmitThrallMessageAction, ent.Comp.TransmitThrallMessageActionId);
+        args.AddAction(ref ent.Comp.TranslatorAction, ent.Comp.TranslatorActionId);
     }
 
     private void OnEquipped(Entity<YautjaBracerComponent> ent, ref GotEquippedEvent args)

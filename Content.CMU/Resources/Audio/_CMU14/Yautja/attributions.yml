@@ -8,6 +8,11 @@
   copyright: "Converted to mono PCM WAV from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
   source: "https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/sound/items/pred_bracer.ogg"
 
+- files: ["pred_translator.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
+  source: "https://github.com/cmss13-devs/cmss13/blob/d631df8846269b31210eb346ebe9483fc8205b4b/sound/items/pred_crystal_inject.ogg"
+
 - files: ["pred_countdown.ogg"]
   license: "CC-BY-SA-3.0"
   copyright: "Taken from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."

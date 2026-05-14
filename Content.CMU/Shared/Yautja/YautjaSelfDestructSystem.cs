@@ -5,6 +5,7 @@ using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Database;
 using Content.Shared.Inventory;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
@@ -20,6 +21,7 @@ public sealed class YautjaSelfDestructSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedRMCExplosionSystem _rmcExplosion = default!;
@@ -192,6 +194,12 @@ public sealed class YautjaSelfDestructSystem : EntitySystem
         if (!HasComp<YautjaComponent>(user) || bracer.Comp.User != user)
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-tech-denied"), user, user, PopupType.SmallCaution);
+            return false;
+        }
+
+        if (!_mobState.IsAlive(user) && !_mobState.IsCritical(user))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-dead"), user, user, PopupType.SmallCaution);
             return false;
         }
 

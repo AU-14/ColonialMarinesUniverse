@@ -1,4 +1,5 @@
 using Content.Server.Administration.Logs;
+using Content.Server.Chat.Managers;
 using Content.Shared._CMU14.Medical.BodyPart.Events;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Actions;
@@ -8,6 +9,7 @@ using Content.Shared.Access.Components;
 using Content.Shared.Actions;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
+using Content.Shared.Chat;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
@@ -18,18 +20,24 @@ using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
+using Content.Shared.UserInterface;
 using Content.Shared.Verbs;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.Network;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Server._CMU14.Yautja;
 
 public sealed class YautjaBracerUtilitySystem : EntitySystem
 {
     private const string IdSlot = "id";
+    private const int TranslatorMaxMessageLength = 160;
+    private static readonly Color TranslatorColor = Color.FromHex("#ff4d4d");
     private static readonly DamageSpecifier DefaultTechShockDamage = new()
     {
         DamageDict = new()
@@ -39,6 +47,7 @@ public sealed class YautjaBracerUtilitySystem : EntitySystem
     };
 
     [Dependency] private readonly IAdminLogManager _adminLog = default!;
+    [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly DamageableSystem _damage = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedBodySystem _body = default!;
@@ -54,6 +63,7 @@ public sealed class YautjaBracerUtilitySystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly YautjaCloakSystem _cloak = default!;
     [Dependency] private readonly YautjaPowerSystem _power = default!;
+    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {
@@ -61,11 +71,17 @@ public sealed class YautjaBracerUtilitySystem : EntitySystem
         SubscribeLocalEvent<YautjaBracerComponent, BeingUnequippedAttemptEvent>(OnBeingUnequippedAttempt);
         SubscribeLocalEvent<YautjaBracerComponent, InventoryRelayedEvent<GetVerbsEvent<EquipmentVerb>>>(OnGetEquipmentVerbs);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaToggleBracerLockActionEvent>(OnToggleLock);
+        SubscribeLocalEvent<YautjaBracerComponent, YautjaTranslatorActionEvent>(OnTranslator);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaToggleBracerIdChipActionEvent>(OnToggleIdChip);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateStabilisingCrystalActionEvent>(OnCreateStabilisingCrystal);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateHumanStabilisingCrystalActionEvent>(OnCreateHumanStabilisingCrystal);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateHealingCapsuleActionEvent>(OnCreateHealingCapsule);
         SubscribeLocalEvent<YautjaTechItemComponent, YautjaTechMisusedEvent>(OnTechMisused);
+
+        Subs.BuiEvents<YautjaBracerComponent>(YautjaTranslatorUIKey.Key, subs =>
+        {
+            subs.Event<YautjaTranslatorSendMessageMsg>(OnTranslatorMessage);
+        });
     }
 
     private void OnMapInit(Entity<YautjaBracerComponent> ent, ref MapInitEvent args)
@@ -112,16 +128,21 @@ public sealed class YautjaBracerUtilitySystem : EntitySystem
             return;
 
         args.Handled = true;
-        if (!TryResolveBracerUse(ent, args.Performer, out var randomFunction))
-            return;
+        TryToggleWornBracerLock(ent, args.Performer);
+    }
+
+    public bool TryToggleWornBracerLock(Entity<YautjaBracerComponent> ent, EntityUid user)
+    {
+        if (!TryResolveBracerUse(ent, user, out var randomFunction))
+            return false;
 
         if (randomFunction)
         {
-            RunRandomBracerFunction(ent, args.Performer);
-            return;
+            RunRandomBracerFunction(ent, user);
+            return true;
         }
 
-        ToggleLock(ent, args.Performer, args.Performer);
+        return ToggleLock(ent, user, user);
     }
 
     private void OnToggleIdChip(Entity<YautjaBracerComponent> ent, ref YautjaToggleBracerIdChipActionEvent args)
@@ -133,16 +154,30 @@ public sealed class YautjaBracerUtilitySystem : EntitySystem
             return;
 
         args.Handled = true;
-        if (!TryResolveBracerUse(ent, args.Performer, out var randomFunction))
+        TryToggleIdChip(ent, args.Performer);
+    }
+
+    private void OnTranslator(Entity<YautjaBracerComponent> ent, ref YautjaTranslatorActionEvent args)
+    {
+        if (args.Handled)
             return;
 
-        if (randomFunction)
+        if (!_rmcActions.TryUseAction(args))
+            return;
+
+        args.Handled = true;
+        TryOpenTranslator(ent, args.Performer);
+    }
+
+    private void OnTranslatorMessage(Entity<YautjaBracerComponent> ent, ref YautjaTranslatorSendMessageMsg args)
+    {
+        if (!IsBracerWornBy(ent, args.Actor))
         {
-            RunRandomBracerFunction(ent, args.Performer);
             return;
         }
 
-        ToggleIdChip(ent, args.Performer);
+        SendTranslatorMessage(ent, args.Actor, args.Message);
+        UpdateTranslatorUi(ent, args.Actor);
     }
 
     private void OnCreateStabilisingCrystal(Entity<YautjaBracerComponent> ent, ref YautjaCreateStabilisingCrystalActionEvent args)
@@ -154,16 +189,7 @@ public sealed class YautjaBracerUtilitySystem : EntitySystem
             return;
 
         args.Handled = true;
-        if (!TryResolveBracerUse(ent, args.Performer, out var randomFunction))
-            return;
-
-        if (randomFunction)
-        {
-            RunRandomBracerFunction(ent, args.Performer);
-            return;
-        }
-
-        TryCreateItem(ent, args.Performer, ent.Comp.StabilisingCrystalPrototype, ent.Comp.StabilisingCrystalCost, ent.Comp.StabilisingCrystalCooldown, ref ent.Comp.NextStabilisingCrystal, "cmu-yautja-bracer-crystal-created");
+        TryCreateStabilisingCrystal(ent, args.Performer);
     }
 
     private void OnCreateHumanStabilisingCrystal(Entity<YautjaBracerComponent> ent, ref YautjaCreateHumanStabilisingCrystalActionEvent args)
@@ -175,16 +201,7 @@ public sealed class YautjaBracerUtilitySystem : EntitySystem
             return;
 
         args.Handled = true;
-        if (!TryResolveBracerUse(ent, args.Performer, out var randomFunction))
-            return;
-
-        if (randomFunction)
-        {
-            RunRandomBracerFunction(ent, args.Performer);
-            return;
-        }
-
-        TryCreateItem(ent, args.Performer, ent.Comp.HumanStabilisingCrystalPrototype, ent.Comp.HumanStabilisingCrystalCost, ent.Comp.StabilisingCrystalCooldown, ref ent.Comp.NextStabilisingCrystal, "cmu-yautja-bracer-human-crystal-created");
+        TryCreateHumanStabilisingCrystal(ent, args.Performer);
     }
 
     private void OnCreateHealingCapsule(Entity<YautjaBracerComponent> ent, ref YautjaCreateHealingCapsuleActionEvent args)
@@ -196,16 +213,79 @@ public sealed class YautjaBracerUtilitySystem : EntitySystem
             return;
 
         args.Handled = true;
-        if (!TryResolveBracerUse(ent, args.Performer, out var randomFunction))
-            return;
+        TryCreateHealingCapsule(ent, args.Performer);
+    }
+
+    public bool TryOpenTranslator(Entity<YautjaBracerComponent> bracer, EntityUid user)
+    {
+        if (!TryResolveBracerUse(bracer, user, out var randomFunction))
+            return false;
 
         if (randomFunction)
         {
-            RunRandomBracerFunction(ent, args.Performer);
-            return;
+            RunRandomBracerFunction(bracer, user);
+            return true;
         }
 
-        TryCreateItem(ent, args.Performer, ent.Comp.HealingCapsulePrototype, ent.Comp.HealingCapsuleCost, ent.Comp.HealingCapsuleCooldown, ref ent.Comp.NextHealingCapsule, "cmu-yautja-bracer-healing-capsule-created");
+        _ui.TryOpenUi(bracer.Owner, YautjaTranslatorUIKey.Key, user);
+        UpdateTranslatorUi(bracer, user);
+        return true;
+    }
+
+    public bool TryToggleIdChip(Entity<YautjaBracerComponent> bracer, EntityUid user)
+    {
+        if (!TryResolveBracerUse(bracer, user, out var randomFunction))
+            return false;
+
+        if (randomFunction)
+        {
+            RunRandomBracerFunction(bracer, user);
+            return true;
+        }
+
+        return ToggleIdChip(bracer, user);
+    }
+
+    public bool TryCreateStabilisingCrystal(Entity<YautjaBracerComponent> bracer, EntityUid user)
+    {
+        if (!TryResolveBracerUse(bracer, user, out var randomFunction))
+            return false;
+
+        if (randomFunction)
+        {
+            RunRandomBracerFunction(bracer, user);
+            return true;
+        }
+
+        return TryCreateItem(bracer, user, bracer.Comp.StabilisingCrystalPrototype, bracer.Comp.StabilisingCrystalCost, bracer.Comp.StabilisingCrystalCooldown, ref bracer.Comp.NextStabilisingCrystal, "cmu-yautja-bracer-crystal-created");
+    }
+
+    public bool TryCreateHumanStabilisingCrystal(Entity<YautjaBracerComponent> bracer, EntityUid user)
+    {
+        if (!TryResolveBracerUse(bracer, user, out var randomFunction))
+            return false;
+
+        if (randomFunction)
+        {
+            RunRandomBracerFunction(bracer, user);
+            return true;
+        }
+
+        return TryCreateItem(bracer, user, bracer.Comp.HumanStabilisingCrystalPrototype, bracer.Comp.HumanStabilisingCrystalCost, bracer.Comp.StabilisingCrystalCooldown, ref bracer.Comp.NextStabilisingCrystal, "cmu-yautja-bracer-human-crystal-created");
+    }
+
+    public bool TryCreateHealingCapsule(Entity<YautjaBracerComponent> bracer, EntityUid user)
+    {
+        if (!TryResolveBracerUse(bracer, user, out var randomFunction))
+            return false;
+
+        if (randomFunction)
+        {
+            RunRandomBracerFunction(bracer, user);
+            return true;
+        }
+
+        return TryCreateItem(bracer, user, bracer.Comp.HealingCapsulePrototype, bracer.Comp.HealingCapsuleCost, bracer.Comp.HealingCapsuleCooldown, ref bracer.Comp.NextHealingCapsule, "cmu-yautja-bracer-healing-capsule-created");
     }
 
     private void OnTechMisused(Entity<YautjaTechItemComponent> ent, ref YautjaTechMisusedEvent args)
@@ -485,6 +565,59 @@ public sealed class YautjaBracerUtilitySystem : EntitySystem
         _audio.PlayPvs(bracer.Comp.FabricateSound, bracer.Owner);
         _popup.PopupEntity(Loc.GetString(createdMessage, ("item", item)), user, user);
         return true;
+    }
+
+    private void SendTranslatorMessage(Entity<YautjaBracerComponent> bracer, EntityUid user, string message)
+    {
+        var trimmed = FormattedMessage.RemoveMarkupPermissive(message.Trim());
+        if (trimmed.Length > TranslatorMaxMessageLength)
+            trimmed = trimmed[..TranslatorMaxMessageLength];
+
+        if (string.IsNullOrWhiteSpace(trimmed))
+            return;
+
+        if (!_power.TryRemovePower(user, bracer.Comp.TranslatorCost))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-not-enough-power"), user, user, PopupType.SmallCaution);
+            return;
+        }
+
+        var wrapped = Loc.GetString(
+            "chat-manager-entity-say-wrap-message",
+            ("entityName", FormattedMessage.EscapeText(Loc.GetString("cmu-yautja-translator-speaker"))),
+            ("verb", Loc.GetString("cmu-yautja-translator-verb")),
+            ("fontType", "Default"),
+            ("fontSize", 12),
+            ("message", FormattedMessage.EscapeText(trimmed)));
+
+        var channels = new HashSet<INetChannel>();
+        foreach (var recipient in Filter.Pvs(user, entityManager: EntityManager).Recipients)
+        {
+            channels.Add(recipient.Channel);
+        }
+
+        if (channels.Count > 0)
+            _chat.ChatMessageToMany(ChatChannel.Local, trimmed, wrapped, user, false, true, channels, TranslatorColor);
+
+        _audio.PlayPvs(bracer.Comp.TranslatorSound, user);
+
+        _adminLog.Add(LogType.Chat, LogImpact.Low,
+            $"{ToPrettyString(user):user} used Yautja translator: {trimmed}");
+    }
+
+    private void UpdateTranslatorUi(Entity<YautjaBracerComponent> bracer, EntityUid user)
+    {
+        if (!IsBracerWornBy(bracer, user))
+            return;
+
+        _ui.SetUiState(
+            bracer.Owner,
+            YautjaTranslatorUIKey.Key,
+            new YautjaTranslatorBuiState(
+                (int) bracer.Comp.Charge,
+                (int) bracer.Comp.MaxCharge,
+                (int) bracer.Comp.TranslatorCost,
+                TranslatorMaxMessageLength));
     }
 
     private void RunRandomBracerFunction(Entity<YautjaBracerComponent> bracer, EntityUid user)

@@ -3,12 +3,12 @@ using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.NightVision;
 using Content.Shared.Actions;
 using Content.Shared.Camera;
+using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
-using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
@@ -17,7 +17,6 @@ namespace Content.Shared._CMU14.Yautja;
 public sealed class YautjaMaskSystem : EntitySystem
 {
     [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedContentEyeSystem _contentEye = default!;
     [Dependency] private readonly INetManager _net = default!;
@@ -65,7 +64,6 @@ public sealed class YautjaMaskSystem : EntitySystem
         {
             var message = ent.Comp.VisorEnabled ? "cmu-yautja-visor-disabled" : "cmu-yautja-visor-enabled";
             _popup.PopupPredicted(Loc.GetString(message), args.Performer, args.Performer);
-            _audio.PlayPredicted(ent.Comp.ToggleVisorSound, ent.Owner, args.Performer);
             return;
         }
 
@@ -89,10 +87,7 @@ public sealed class YautjaMaskSystem : EntitySystem
         args.Handled = true;
         var enabling = !ent.Comp.Zoomed;
         if (_net.IsClient)
-        {
-            _audio.PlayPredicted(enabling ? ent.Comp.ZoomOnSound : ent.Comp.ZoomOffSound, ent.Owner, args.Performer);
             return;
-        }
 
         SetZoom(ent, args.Performer, enabling);
     }
@@ -143,7 +138,10 @@ public sealed class YautjaMaskSystem : EntitySystem
         var query = EntityQueryEnumerator<YautjaMaskComponent>();
         while (query.MoveNext(out var uid, out var mask))
         {
-            if (!mask.VisorEnabled || mask.User is not { } user || time < mask.NextDrain)
+            if (!mask.VisorEnabled ||
+                mask.Drain <= FixedPoint2.Zero ||
+                mask.User is not { } user ||
+                time < mask.NextDrain)
                 continue;
 
             mask.NextDrain = time + mask.DrainEvery;
@@ -173,7 +171,6 @@ public sealed class YautjaMaskSystem : EntitySystem
         if (!feedback)
             return;
 
-        _audio.PlayPredicted(mask.Comp.ToggleVisorSound, mask.Owner, user);
         _popup.PopupClient(Loc.GetString("cmu-yautja-visor-enabled"), user, user);
     }
 
@@ -199,7 +196,6 @@ public sealed class YautjaMaskSystem : EntitySystem
             return;
 
         _popup.PopupClient(Loc.GetString("cmu-yautja-visor-disabled"), user.Value, user.Value);
-        _audio.PlayPredicted(mask.Comp.ToggleVisorSound, mask.Owner, user.Value);
     }
 
     private void SetZoom(Entity<YautjaMaskComponent> mask, EntityUid user, bool zoomed, bool feedback = true)
@@ -237,7 +233,6 @@ public sealed class YautjaMaskSystem : EntitySystem
         if (!feedback)
             return;
 
-        _audio.PlayPredicted(zoomed ? mask.Comp.ZoomOnSound : mask.Comp.ZoomOffSound, mask.Owner, user);
         _popup.PopupClient(Loc.GetString(zoomed ? "cmu-yautja-mask-zoom-enabled" : "cmu-yautja-mask-zoom-disabled"), user, user);
     }
 

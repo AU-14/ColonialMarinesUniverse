@@ -1,7 +1,11 @@
+using Content.Shared.Damage;
+using Content.Shared.Damage.Events;
+using Content.Shared._RMC14.Damage;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
 using Content.Shared.Popups;
+using Content.Shared.Projectiles;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -14,11 +18,48 @@ public sealed class YautjaTechItemSystem : EntitySystem
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<DamageableComponent, DamageModifyAfterResistEvent>(OnDamageModifyAfterResist);
+        SubscribeLocalEvent<YautjaTechItemComponent, StaminaMeleeHitEvent>(OnStaminaMeleeHit);
+        SubscribeLocalEvent<YautjaTechItemComponent, ProjectileHitEvent>(OnProjectileHit);
         SubscribeLocalEvent<YautjaTechItemComponent, GettingPickedUpAttemptEvent>(OnPickupAttempt);
         SubscribeLocalEvent<YautjaTechItemComponent, UseInHandEvent>(OnUseInHand);
         SubscribeLocalEvent<YautjaTechItemComponent, AttemptMeleeEvent>(OnAttemptMelee);
         SubscribeLocalEvent<YautjaTechItemComponent, ThrowItemAttemptEvent>(OnThrowAttempt);
         SubscribeLocalEvent<YautjaTechItemComponent, AttemptShootEvent>(OnShootAttempt);
+    }
+
+    private void OnDamageModifyAfterResist(Entity<DamageableComponent> ent, ref DamageModifyAfterResistEvent args)
+    {
+        if (args.Tool is not { } tool ||
+            HasComp<ProjectileComponent>(tool) ||
+            !TryComp(tool, out YautjaTechItemComponent? tech) ||
+            tech.DamageMultiplier == 1f ||
+            !args.Damage.AnyPositive())
+        {
+            return;
+        }
+
+        args.Damage *= tech.DamageMultiplier;
+    }
+
+    private void OnProjectileHit(Entity<YautjaTechItemComponent> ent, ref ProjectileHitEvent args)
+    {
+        if (args.Handled ||
+            ent.Comp.DamageMultiplier == 1f ||
+            !args.Damage.AnyPositive())
+        {
+            return;
+        }
+
+        args.Damage *= ent.Comp.DamageMultiplier;
+    }
+
+    private void OnStaminaMeleeHit(Entity<YautjaTechItemComponent> ent, ref StaminaMeleeHitEvent args)
+    {
+        if (ent.Comp.DamageMultiplier == 1f)
+            return;
+
+        args.Multiplier *= ent.Comp.DamageMultiplier;
     }
 
     private void OnPickupAttempt(Entity<YautjaTechItemComponent> ent, ref GettingPickedUpAttemptEvent args)

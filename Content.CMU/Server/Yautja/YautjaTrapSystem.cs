@@ -202,7 +202,7 @@ public sealed class YautjaTrapSystem : EntitySystem
         trap.Comp.Armed = false;
         Dirty(trap);
 
-        _damage.TryChangeDamage(tripper, trap.Comp.Damage, true, origin: trap.Comp.TrapOwner ?? trap.Owner);
+        _damage.TryChangeDamage(tripper, trap.Comp.Damage, true, origin: trap.Comp.TrapOwner ?? trap.Owner, tool: trap.Owner);
         _stun.TryParalyze(tripper, trap.Comp.ParalyzeTime, true);
         if (trap.Comp.TrapOwner is { } trapOwner)
             _ritual.TryClaimCaptive(trapOwner, tripper, true);

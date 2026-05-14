@@ -44,6 +44,19 @@ public sealed partial class YautjaComponent : Component
     public int SkillLevel = 4;
 
     [DataField]
+    public float StunResistance = 2f;
+
+    [DataField]
+    public float ShoveChanceBonus = 0.2f;
+
+    [DataField]
+    public Dictionary<FixedPoint2, float> SlowOnDamageThresholds = new()
+    {
+        { 160, 0.9f },
+        { 240, 0.8f },
+    };
+
+    [DataField]
     public ProtoId<DamageModifierSetPrototype>? DamageModifierSet = "CMUYautja";
 
     [DataField]
@@ -168,6 +181,12 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public EntityUid? ToggleCloakAction;
 
     [DataField]
+    public EntProtoId OpenBracerMenuActionId = "CMUActionYautjaOpenBracerMenu";
+
+    [ViewVariables]
+    public EntityUid? OpenBracerMenuAction;
+
+    [DataField]
     public EntProtoId OpenMarkPanelActionId = "CMUActionYautjaOpenMarkPanel";
 
     [ViewVariables]
@@ -190,6 +209,12 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
 
     [ViewVariables]
     public EntityUid? ToggleLockAction;
+
+    [DataField]
+    public EntProtoId TranslatorActionId = "CMUActionYautjaTranslator";
+
+    [ViewVariables]
+    public EntityUid? TranslatorAction;
 
     [DataField]
     public EntProtoId ToggleIdChipActionId = "CMUActionYautjaToggleBracerIdChip";
@@ -376,6 +401,12 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public SoundSpecifier LockSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
 
     [DataField]
+    public SoundSpecifier TranslatorSound = new SoundCollectionSpecifier("CMUYautjaTranslator");
+
+    [DataField]
+    public FixedPoint2 TranslatorCost = 50;
+
+    [DataField]
     public SoundSpecifier IdChipSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_attach.wav");
 
     [DataField]
@@ -462,7 +493,7 @@ public sealed partial class YautjaMaskComponent : Component, IClothingSlots
     public EntityUid? User;
 
     [DataField]
-    public FixedPoint2 Drain = 3;
+    public FixedPoint2 Drain = 0;
 
     [DataField]
     public TimeSpan DrainEvery = TimeSpan.FromSeconds(2);
@@ -585,6 +616,9 @@ public sealed partial class YautjaTechAuthorizedComponent : Component;
 public sealed partial class YautjaHivebrokenXenoComponent : Component;
 
 [RegisterComponent]
+public sealed partial class YautjaMedicalItemComponent : Component;
+
+[RegisterComponent]
 public sealed partial class YautjaHealingGunComponent : Component
 {
     [DataField(required: true)]
@@ -598,6 +632,12 @@ public sealed partial class YautjaHealingGunComponent : Component
 
     [DataField]
     public List<ProtoId<DamageContainerPrototype>>? DamageContainers;
+
+    [DataField]
+    public bool TreatsWounds = true;
+
+    [DataField]
+    public bool RepairsFractures;
 
     [DataField]
     public SoundSpecifier? HealSound;
@@ -767,6 +807,12 @@ public sealed partial class YautjaSmartDiscComponent : Component
     public TimeSpan RetargetDelay = TimeSpan.FromSeconds(0.35);
 
     [DataField]
+    public TimeSpan ThrowActivationDelay = TimeSpan.FromSeconds(0.35);
+
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
+    public float HumanDamageMultiplier = 0.7f;
+
+    [DataField]
     public SoundSpecifier HitSound = new SoundPathSpecifier("/Audio/Weapons/star_hit.ogg");
 
     [ViewVariables(VVAccess.ReadWrite)]
@@ -795,6 +841,12 @@ public sealed partial class YautjaSmartDiscComponent : Component
 
     [ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan NextHit;
+
+    [ViewVariables(VVAccess.ReadWrite)]
+    public EntityUid? PendingThrowActivator;
+
+    [ViewVariables(VVAccess.ReadWrite)]
+    public TimeSpan PendingThrowActivationAt;
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -833,6 +885,9 @@ public sealed partial class YautjaCasterMode
 [RegisterComponent, NetworkedComponent]
 public sealed partial class YautjaTechItemComponent : Component
 {
+    [DataField]
+    public float DamageMultiplier = 1.5f;
+
     [DataField]
     public bool BlockPickup = true;
 
@@ -990,6 +1045,12 @@ public sealed partial class YautjaThrallBracerComponent : Component, IClothingSl
     [ViewVariables]
     public EntityUid? TransmitThrallMessageAction;
 
+    [DataField]
+    public EntProtoId ToggleLockActionId = "CMUActionYautjaToggleThrallBracerLock";
+
+    [ViewVariables]
+    public EntityUid? ToggleLockAction;
+
     [DataField, AutoNetworkedField]
     public bool SelfDestructArmed;
 
@@ -1037,6 +1098,9 @@ public sealed partial class YautjaThrallBracerComponent : Component, IClothingSl
 
     [DataField]
     public SoundSpecifier MessageSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
+
+    [DataField]
+    public SoundSpecifier LockSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
 
     [DataField]
     public SoundSpecifier ShockSound = new SoundPathSpecifier("/Audio/Effects/Lightning/lightningshock.ogg");

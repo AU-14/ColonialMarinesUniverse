@@ -1,4 +1,7 @@
 using Content.Shared._CMU14.Yautja;
+using Content.Shared._CMU14.Medical.Bones;
+using Content.Shared._CMU14.Medical.Items;
+using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
@@ -19,10 +22,14 @@ public sealed class YautjaHealingGunSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private readonly SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private readonly SharedBodySystem _body = default!;
+    [Dependency] private readonly SharedBoneSystem _bone = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly SharedFractureSystem _fracture = default!;
     [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private readonly SharedCMUWoundsSystem _wounds = default!;
 
     public override void Initialize()
     {
@@ -95,6 +102,11 @@ public sealed class YautjaHealingGunSystem : EntitySystem
                 _bloodstream.TryModifyBloodLevel((target, bloodstream), gun.Comp.ModifyBloodLevel);
         }
 
+        if (gun.Comp.TreatsWounds)
+            TreatWounds(target);
+
+        if (gun.Comp.RepairsFractures)
+            RepairFractures(target);
         var healed = _damageable.TryChangeDamage(target, gun.Comp.Damage * _damageable.UniversalTopicalsHealModifier, true, origin: user);
         var total = healed?.GetTotal() ?? FixedPoint2.Zero;
 
@@ -119,6 +131,12 @@ public sealed class YautjaHealingGunSystem : EntitySystem
 
     private bool HasDamage(Entity<YautjaHealingGunComponent> gun, Entity<DamageableComponent> target)
     {
+        if (gun.Comp.TreatsWounds && HasUntreatedWounds(target.Owner))
+            return true;
+
+        if (gun.Comp.RepairsFractures && HasFractures(target.Owner))
+            return true;
+
         foreach (var (type, amount) in gun.Comp.Damage.DamageDict)
         {
             if (amount < 0 &&
@@ -132,5 +150,74 @@ public sealed class YautjaHealingGunSystem : EntitySystem
         return TryComp(target, out BloodstreamComponent? bloodstream) &&
                gun.Comp.BloodlossModifier < 0 &&
                bloodstream.BleedAmount > 0;
+    }
+
+    private bool TreatWounds(EntityUid target)
+    {
+        var changed = false;
+        foreach (var (partUid, _) in _body.GetBodyChildren(target))
+        {
+            var guard = 0;
+            while (guard++ < 128 && _wounds.TryTreatWound(partUid, out _))
+            {
+                changed = true;
+            }
+        }
+
+        return changed;
+    }
+
+    private bool RepairFractures(EntityUid target)
+    {
+        var changed = false;
+        foreach (var (partUid, _) in _body.GetBodyChildren(target))
+        {
+            if (!TryComp<FractureComponent>(partUid, out var fracture))
+                continue;
+
+            if (TryComp<BoneComponent>(partUid, out var bone))
+                _bone.RestoreIntegrity((partUid, bone), bone.IntegrityMax);
+
+            _fracture.SetSeverity((partUid, fracture), FractureSeverity.None, forceUpgrade: false);
+            RemComp<CMUSplintedComponent>(partUid);
+            RemComp<CMUCastComponent>(partUid);
+            RemComp<CMUMalunionComponent>(partUid);
+            RemComp<CMUPostOpBoneSetComponent>(partUid);
+            _wounds.RecomputeInternalBleed(partUid);
+            changed = true;
+        }
+
+        return changed;
+    }
+
+    private bool HasUntreatedWounds(EntityUid target)
+    {
+        foreach (var (partUid, _) in _body.GetBodyChildren(target))
+        {
+            if (!TryComp<BodyPartWoundComponent>(partUid, out var wounds))
+                continue;
+
+            foreach (var wound in wounds.Wounds)
+            {
+                if (!wound.Treated)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool HasFractures(EntityUid target)
+    {
+        foreach (var (partUid, _) in _body.GetBodyChildren(target))
+        {
+            if (TryComp<FractureComponent>(partUid, out var fracture) &&
+                fracture.Severity != FractureSeverity.None)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

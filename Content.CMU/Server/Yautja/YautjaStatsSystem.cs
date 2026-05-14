@@ -1,8 +1,11 @@
 using Content.Shared._CMU14.Yautja;
+using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Pulling;
+using Content.Shared._RMC14.StatusEffect;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.IdentityManagement.Components;
@@ -14,6 +17,7 @@ using Content.Shared.Movement.Systems;
 using Content.Shared.Speech;
 using Content.Shared.Speech.Components;
 using Content.Shared.StatusIcon.Components;
+using Content.Shared.Whitelist;
 using Content.Shared.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Humanoid.Markings;
@@ -30,6 +34,7 @@ public sealed class YautjaStatsSystem : EntitySystem
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
     [Dependency] private readonly NamingSystem _naming = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly RMCStatusEffectSystem _rmcStatusEffects = default!;
     [Dependency] private readonly SkillsSystem _skills = default!;
 
     private const string YautjaSpecies = "Yautja";
@@ -83,6 +88,13 @@ public sealed class YautjaStatsSystem : EntitySystem
         EnsureComp<YautjaTrophyRecordComponent>(ent);
         RemComp<StatusIconComponent>(ent);
 
+        if (ent.Comp.StunResistance > 0f)
+            _rmcStatusEffects.GiveStunResistance(ent, ent.Comp.StunResistance);
+
+        var slowOnDamage = EnsureComp<SlowOnDamageComponent>(ent);
+        slowOnDamage.SpeedModifierThresholds = new(ent.Comp.SlowOnDamageThresholds);
+        Dirty(ent, slowOnDamage);
+
         var damageable = EnsureComp<DamageableComponent>(ent);
         _damageable.SetDamageModifierSetId(ent, ent.Comp.DamageModifierSet?.Id, damageable);
 
@@ -111,6 +123,7 @@ public sealed class YautjaStatsSystem : EntitySystem
         GrantAllSkills(ent);
         ClearMarineHudIcon(ent);
         NormalizeAppearance(ent);
+        SetFixedUnknownIdentity(ent);
         SetUnknownIdentity(ent);
         SetUnknownVoice(ent);
     }
@@ -213,6 +226,14 @@ public sealed class YautjaStatsSystem : EntitySystem
         }
 
         SetUnknownIdentity(ent, identityEntity);
+    }
+
+    private void SetFixedUnknownIdentity(Entity<YautjaComponent> ent)
+    {
+        var fixedIdentity = EnsureComp<FixedIdentityComponent>(ent);
+        fixedIdentity.Name = ent.Comp.IdentityName;
+        fixedIdentity.Whitelist = new EntityWhitelist { RequireAll = true };
+        Dirty(ent, fixedIdentity);
     }
 
     private void SetUnknownIdentity(Entity<YautjaComponent> ent, EntityUid identityEntity)
