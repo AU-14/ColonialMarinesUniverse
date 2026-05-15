@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Sprite contributed for AU-14 abomination threat. by EvergreenBloom",
+  "size": {
+    "x": 48,
+    "y": 48
+  },
+  "states": [
+    {
+      "name": "alive",
+      "directions": 4
+    }
+  ]
+}
