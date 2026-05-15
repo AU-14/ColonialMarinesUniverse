@@ -127,7 +127,7 @@
     - name: Mortar
       entries:
       - cost: 10000
-        crate: AU14CrateMortarKitRMC
+        crate: AU14CrateMortarKitRMCHeavy
       - cost: 500
         crate: AU14CrateMortarShellFlareRMC
       - cost: 1000
