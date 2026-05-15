@@ -15,9 +15,10 @@
     - NonResuscitable
     - Epilepsy
   ranks:
-    RMCRankCivilian: []
+    RMCRankCivilianDoctor: []
   startingGear: AU14GearCLFSurgeon
-  icon: "CMJobIconEmpty"
+  icon: "RMCJobIconCLFMedic"
+  hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-clflrs
@@ -32,6 +33,7 @@
       factions:
       - CLF
     - type: CLFMember
+      statusIcon: CLFFactionMedic
     - type: Skills
       skills:
         RMCSkillFireman: 1
@@ -61,9 +63,8 @@
     suitstorage: RMCFlashlight
     id: AU14IDCardCLFSurgeon
     neck: RMCCLFArmband
-  storage:
-      back:
-      - AU14CLFHeadset
+  inhand:
+  - AU14CLFHeadset
 
 - type: entity
   parent: CMSpawnPointJobBase

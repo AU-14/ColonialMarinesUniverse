@@ -1,0 +1,104 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobReturningDoctor
+  name: au14-job-name-civilianphysician
+  description: au14-job-description-civilianphysician
+  setPreference: true
+  playTimeTracker: AU14JobReturningDoctor
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+  ranks:
+    RMCRankCivilianDoctor: []
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: Phycisian (3rd party)
+  accessGroups:
+  - Colonist
+  - aumed
+  - AUPrisonStaff
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: EquipEntityPreset
+      preset: AU14ReturningDoctorPreset
+    - type: Skills
+      skills:
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillMedical: 3
+        RMCSkillResearch: 1
+        RMCSkillSurgery: 2
+        RMCSkillFirearms: 2
+    - type: JobPrefix
+      prefix: au14-job-prefix-physician
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: AU14JobReturningDoctor
+  name: Returning Colonist (doctor)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Returning Colonist (doctor)
+    description: You are a local colonist that is returning to the colony. You were on vacations, went to work abroad or any other factinating story. But no one cares now. Get back to work.
+    reregister: false
+    job: AU14JobReturningDoctor
+    raffle:
+      settings: short
+    rules: You do not know what is going on in the colony.
+
+- type: entity
+  id: AU14ReturningDoctorPreset
+  name: returning doctor preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomGearOther:
+    - 
+      - [ AU14IDCardColonyPhysician ]
+      - [ AU14IDCardColonySurgeon ]
+      - [ AU14IDCardColonyPharmacist ]
+      - [ AU14IDCardColonyGeneralPractitioner ]
+    - 
+      - [ CMJumpsuitColonist ]
+      - [ RMCJumpsuitCivilian ]
+      - [ CMJumpsuitTShirtWhite ]
+      - [ CMJumpsuitTShirtGray ]
+    -
+      - [ RMCShoesBlack ]
+      - [ RMCBootsVanBandolier ]
+      - [ RMCShoesBrown ]
+    -
+      - [ AU14SlingSatchelBlue ]
+      - [ AU14SlingSatchelBlack ]
+      - [ CMSatchel ]
+    -
+      - [ RMCSpaceCash200 ]
+      - [ RMCSpaceCash200 ]
+      - [ RMCSpaceCash100 ]
+      - [ RMCSpaceCash100 ]
+      - [ RMCSpaceCash100 ]
+      - [ RMCSpaceCash50 ]
+      - [ RMCSpaceCash50 ]
+      - [ RMCSpaceCash50 ]
+
+
+- type: playTimeTracker
+  id: AU14JobReturningDoctor
+  isHumanoid: true

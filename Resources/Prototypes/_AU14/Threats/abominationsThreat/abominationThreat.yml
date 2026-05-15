@@ -1,0 +1,63 @@
+# Abomination threat — Colony Fall only. Starts with a small core
+# (mimics + skitter + a flesh nest) and scales upward with pop count.
+# Map availability is gated by each planet's threats: list — see
+# planets.yml.
+- type: threat
+  id: abominationsThreat
+  lorePrimer: AU14PrimerThreatAbomination
+  roundstartspawns: abominationsParty
+  whitelistedgamemodes:
+  - ColonyFall
+  winconditions:
+  - KillAllColonistRule
+  minplayers: 0
+
+- type: partySpawn
+  id: abominationsParty
+  leadersToSpawn:
+    AU14AbominationMimic: 1
+  gruntsToSpawn:
+    AU14AbominationMimic: 1
+    AU14AbominationSkitter: 1
+  # PartySpawnPrototype field name in YAML is `entsToSpsawn` (sic).
+  # Drops the seed flesh nest at the spawn point so the threat has somewhere
+  # to retreat to from the very start.
+  entsToSpsawn:
+    AU14AbominationFleshNest: 1
+  scaling:
+    AU14AbominationMimic:
+      scale: 0.05
+      whenToBeginScaling: 30
+    AU14AbominationSkitter:
+      scale: 0.04
+      whenToBeginScaling: 45
+  spawnTogether: true
+
+# Small abomination party — drawn as a third party. One mimic + one
+# skitter, no nest seed. Available on every planet/mode.
+- type: partySpawn
+  id: abominationSmallParty
+  leadersToSpawn:
+    AU14AbominationMimic: 1
+  gruntsToSpawn:
+    AU14AbominationSkitter: 1
+  spawnTogether: true
+
+- type: auThirdParty
+  id: abominationThirdParty
+  partyspawn: abominationSmallParty
+  entrymethod: ground
+  weight: 4
+  minplayers: 0
+  maxplayers: 250
+  GhostsNeeded: 2
+  roundstart: false
+  announcearrival: "Anomalous biological signatures detected in the area of operation."
+
+- type: lorePrimer
+  id: AU14PrimerThreatAbomination
+  threattext: "You are an abomination. Spread the flesh, drag the prey, wear their faces."
+  KnowledgeLevelsGovforThreat:
+    "Threat Unknown": 1
+    "Reports of colonists turning on their own and bodies vanishing from the morgue.": 2
+    "Pulsing 'tendons' growing through colony infrastructure. Burn everything.": 3

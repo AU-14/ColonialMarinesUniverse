@@ -1,5 +1,6 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Utility;
+using Content.Shared.Whitelist;
 using static Robust.Shared.Utility.SpriteSpecifier;
 
 namespace Content.Shared._RMC14.UniformAccessories;
@@ -21,6 +22,9 @@ public sealed partial class UniformAccessoryComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool Hidden = false;
+
+    [DataField, AutoNetworkedField]
+    public EntityWhitelist? ViewerWhitelist;
 
     [DataField, AutoNetworkedField]
     public bool HiddenByJacketRolling = false;

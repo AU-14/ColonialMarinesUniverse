@@ -1,13 +1,9 @@
 <DefaultWindow xmlns="https://spacestation14.io"
                xmlns:ghost="clr-namespace:Content.Client.UserInterface.Systems.Ghost.Controls"
-               xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
                Title="{Loc 'ghost-target-window-title'}"
                MinSize="650 560"
                SetSize="650 560">
-    <PanelContainer HorizontalExpand="True" VerticalExpand="True">
-        <PanelContainer.PanelOverride>
-            <graphics:StyleBoxFlat BackgroundColor="#080D12" BorderColor="#1F3442" BorderThickness="1" />
-        </PanelContainer.PanelOverride>
+    <PanelContainer StyleClasses="CrtPanel" HorizontalExpand="True" VerticalExpand="True">
         <ghost:AspectRatioContainer Ratio="1.1769231"
                                     HorizontalExpand="True"
                                     VerticalExpand="True"
@@ -23,11 +19,10 @@
                               SeparationOverride="8">
                     <Button Name="GhostnadoButton"
                             Text="{Loc 'ghost-target-window-warp-to-most-followed'}"
-                            StyleClasses="ActionButton"
-                            ModulateSelfOverride="#C49A54"
+                            StyleClasses="CrtAttentionButton"
                             TextAlign="Center"
                             ClipText="True"
-                            MinWidth="210"
+                            MinWidth="250"
                             MinHeight="34"
                             SetHeight="34" />
                     <LineEdit Name="SearchBar"
@@ -44,12 +39,9 @@
                                  MinHeight="38">
                     <ghost:UniformWidthContainer Name="FactionTabBar"
                                                  HorizontalExpand="True"
-                                                 SeparationOverride="4" />
+                                                 SeparationOverride="6" />
                 </ScrollContainer>
-                <PanelContainer Name="ContentPanel" HorizontalExpand="True" VerticalExpand="True">
-                    <PanelContainer.PanelOverride>
-                        <graphics:StyleBoxFlat BackgroundColor="#0B131A" BorderColor="#1E3341" BorderThickness="1" />
-                    </PanelContainer.PanelOverride>
+                <PanelContainer Name="ContentPanel" StyleClasses="CrtInsetPanel" HorizontalExpand="True" VerticalExpand="True">
                     <BoxContainer Name="TabContentRoot"
                                   Orientation="Vertical"
                                   HorizontalExpand="True"
@@ -57,6 +49,7 @@
                 </PanelContainer>
                 <Label Name="EmptyLabel"
                        Text="{Loc 'ghost-target-window-empty'}"
+                       StyleClasses="CrtHeading"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Visible="False" />

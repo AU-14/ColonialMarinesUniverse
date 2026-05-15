@@ -60,6 +60,51 @@
     },
     {
       "name": "icrc_nurse"
+    },
+    {
+      "name": "colonist"
+    },
+    {
+      "name": "engineer"
+    },
+    {
+      "name": "ero"
+    },
+    {
+      "name": "fsw"
+    },
+    {
+      "name": "head_of_engineering"
+    },
+    {
+      "name": "head_physician"
+    },
+    {
+      "name": "journalist"
+    },
+    {
+      "name": "kelland_warden"
+    },
+    {
+      "name": "mob_boss"
+    },
+    {
+      "name": "mob_goon"
+    },
+    {
+      "name": "nurse"
+    },
+    {
+      "name": "physician"
+    },
+    {
+      "name": "prisoner"
+    },
+    {
+      "name": "shopkeep"
+    },
+    {
+      "name": "wms"
     }
   ]
 }

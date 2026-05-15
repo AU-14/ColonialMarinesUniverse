@@ -1,4 +1,4 @@
-﻿# all ship-side access
+# all ship-side access
 # CO uses this.
 - type: accessGroup
   id: ShipMasterAccess
@@ -43,6 +43,15 @@
   - RMCAccessTSEPA # tsepa
   - RMCAccessDatabase
   - RMCAccessSeniorCommand
+  # CMU14
+  - AU14AccessColonyHeadPhysician
+  - AU14AccessColonyHeadEngineer
+  - AU14AccessColonyMarshall
+  - AU14AccessColonyForeman
+  - AU14AccessColonyAdministrator
+  - AU14AccessColonyHeadOfService
+  - AU14AccessColonyCorporateLiaison
+  - AU14AccessColonyAmbassador
 
 - type: accessGroup
   id: CO

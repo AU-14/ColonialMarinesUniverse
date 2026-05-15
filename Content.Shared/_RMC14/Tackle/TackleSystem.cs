@@ -1,3 +1,4 @@
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Pulling;
@@ -84,7 +85,8 @@ public sealed class TackleSystem : EntitySystem
 
         var random = _random.NextFloat(0, 1);
 
-        if ((tracker.Count < tackle.Min || tackle.Chance < random) &&
+        var tackleChance = Math.Clamp(tackle.Chance + GetYautjaShoveChanceBonus(user), 0f, 1f);
+        if ((tracker.Count < tackle.Min || tackleChance < random) &&
             tracker.Count < tackle.Max)
         {
             _adminLog.Add(LogType.RMCTackle, $"{ToPrettyString(user)} tried to tackle {ToPrettyString(target)}.");
@@ -200,6 +202,7 @@ public sealed class TackleSystem : EntitySystem
         var attackerSkill = _skills.GetSkill(user, disarm.Skill);
         var defenderSkill = _skills.GetSkill(target.Owner, disarm.Skill);
         disarmChance -= 5 * attackerSkill;
+        disarmChance -= GetYautjaShoveChanceBonus(user) * 100f;
         disarmChance += 5 * defenderSkill;
 
         if (disarmChance <= 25)
@@ -294,6 +297,13 @@ public sealed class TackleSystem : EntitySystem
     private void DoDisarmEffects(EntityUid user, EntityUid target)
     {
         _colorFlash.RaiseEffect(Color.Aqua, new List<EntityUid> { target }, Filter.PvsExcept(user));
+    }
+
+    private float GetYautjaShoveChanceBonus(EntityUid user)
+    {
+        return TryComp(user, out YautjaComponent? yautja)
+            ? yautja.ShoveChanceBonus
+            : 0f;
     }
 
     private void DoPvsPopups(EntityUid user, EntityUid target, string selfPopup, string targetPopup, Func<EntityUid, string> othersPopup, PopupType selfPopupType = PopupType.Small)

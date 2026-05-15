@@ -41,7 +41,7 @@
     - type: MotionDetectorTracked
     - type: RMCAllowSuitStorage
     - type: IntelRescueSurvivorObjective
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetPMCBase
     - type: NpcFactionMember
       factions:

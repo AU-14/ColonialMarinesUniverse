@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.CCVar;
+using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Tackle;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared.ActionBlocker;
@@ -11,6 +12,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -76,7 +78,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     // RMC14
     [Dependency] private readonly IConfigurationManager _configuration = default!;
     [Dependency] private readonly SharedRMCMeleeWeaponSystem _rmcMelee = default!;
+    [Dependency] private readonly RMCReagentSystem _reagent = default!;
 
+    private static readonly ProtoId<ReagentPrototype> YautjaBloodReagent = "CMUYautjaBlood";
     private const int AttackMask = (int) (CollisionGroup.MobMask | CollisionGroup.Opaque);
 
     private static readonly EntProtoId DisarmEffect = "RMCWeaponArcDisarm"; // RMC14
@@ -644,6 +648,18 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     }
 
     protected abstract void DoDamageEffect(List<EntityUid> targets, EntityUid? user,  TransformComponent targetXform);
+
+    protected Color GetDamageEffectColor(EntityUid target)
+    {
+        if (TryComp(target, out BloodstreamComponent? bloodstream) &&
+            bloodstream.BloodReagent == YautjaBloodReagent &&
+            _reagent.TryIndex(bloodstream.BloodReagent, out var reagent))
+        {
+            return reagent.SubstanceColor;
+        }
+
+        return Color.Red;
+    }
 
     private bool DoHeavyAttack(EntityUid user, HeavyAttackEvent ev, EntityUid meleeUid, MeleeWeaponComponent component, ICommonSession? session)
     {

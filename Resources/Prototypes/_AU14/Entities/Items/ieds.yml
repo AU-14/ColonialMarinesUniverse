@@ -108,6 +108,7 @@
     unequipDelay: 6
   - type: ContainerContainer
     containers:
+      storagebase: !type:Container
       cluster-payload: !type:Container
   - type: OnUseTimerTrigger
     delay: 0.1

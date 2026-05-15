@@ -6,6 +6,7 @@
   playTimeTracker: AUThirdPartyMember
   hidden: false
   supervisors: nobody
+  icon: "AU14JobIconThirdPartyMember"
   jobPreviewEntity: RMCPlayerXenoQueenPreview
   accessGroups:
   - CMAccessXeno
@@ -21,7 +22,7 @@
   id: AUThirdPartyJobBase
   description: null
   joinNotifyCrew: false
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconThirdPartyMember"
   supervisors: au-job-name-third-party-leader
   accessGroups:
   - CMAccessXeno

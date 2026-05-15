@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.DoAfter;
@@ -131,7 +132,8 @@ public abstract class SharedWoundsSystem : EntitySystem
             return;
 
         if (HasComp<Content.Shared._CMU14.Medical.CMUHumanMedicalComponent>(args.Target.Value)
-            && HasComp<Content.Shared._CMU14.Medical.CMUHumanMedicalComponent>(args.User))
+            && (HasComp<Content.Shared._CMU14.Medical.CMUHumanMedicalComponent>(args.User)
+                || HasComp<YautjaMedicalItemComponent>(ent.Owner)))
         {
             var hasSkills = _skills.HasAllSkills(args.User, ent.Comp.Skills);
             if (!CanUseWoundTreater(args.User, args.Target.Value, ent, hasSkills))

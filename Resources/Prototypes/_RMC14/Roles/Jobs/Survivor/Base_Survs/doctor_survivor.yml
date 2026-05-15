@@ -21,7 +21,7 @@
         RMCSkillFirearms: 2
         RMCSkillMedical: 3
         RMCSkillSurgery: 2
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCSurvivorPresetDoctor
     - type: RMCSurvivor
     - type: MotionDetectorTracked
@@ -67,7 +67,7 @@
   name: doctor colonist preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomGearOther:
     -
       - [ RMCPouchFirstAidSplintsGauzeOintment ]

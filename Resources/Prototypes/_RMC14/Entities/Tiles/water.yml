@@ -46,6 +46,16 @@
         - ItemMask
         density: 1000
         hard: false
+      fishing:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        layer:
+        - ItemMask
+        mask:
+        - HighImpassable
+        density: 1000
+        hard: false
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepWater
@@ -58,6 +68,11 @@
     cover:
       tags:
       - Catwalk
+  - type: FishingSpot
+    fishList: !type:NestedSelector
+      tableId: WaterFishingLootTable
+    fishDefaultTimer: 25.0
+    fishTimerVariety: 15.0
 
 - type: entity
   parent: CMFloorShallowWaterEntity

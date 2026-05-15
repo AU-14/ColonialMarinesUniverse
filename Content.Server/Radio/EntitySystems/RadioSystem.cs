@@ -3,6 +3,7 @@ using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Power.Components;
 using Content.Server.Radio.Components;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Squads;
@@ -101,33 +102,7 @@ public sealed class RadioSystem : EntitySystem
         var evt = new TransformSpeakerNameEvent(messageSource, MetaData(messageSource).EntityName);
         RaiseLocalEvent(messageSource, evt);
 
-        var name = evt.VoiceName;
-        name = FormattedMessage.EscapeText(name);
-
-        if (TryComp(messageSource, out JobPrefixComponent? prefix))
-        {
-            var prefixText = (prefix.AdditionalPrefix != null ? $"{Loc.GetString(prefix.AdditionalPrefix.Value)} " : "") + Loc.GetString(prefix.Prefix);
-            if (TryComp(messageSource, out SquadMemberComponent? member) &&
-                TryComp(member.Squad, out SquadTeamComponent? team) &&
-                team.Radio != null &&
-                team.Radio != channel.ID)
-            {
-                name = $"({Name(member.Squad.Value)} {prefixText}) {name}";
-            }
-            else
-            {
-                if (TryComp(messageSource, out FireteamMemberComponent? fireteamMember) && fireteamMember.Fireteam >= 0)
-                {
-                    prefixText += $" FT{fireteamMember.Fireteam + 1}" + (TryComp(messageSource, out FireteamLeaderComponent? fireteamLeader) ? " TL" : "");
-                }
-                name = $"({prefixText}) {name}";
-            }
-        }
-        else if (TryComp(messageSource, out RMCRadioPrefixComponent? radioPrefix))
-        {
-            var prefixText = Loc.GetString(radioPrefix.Prefix);
-            name = $"{prefixText} {name}";
-        }
+        var name = GetRadioSpeakerName(messageSource, channel, evt.VoiceName);
 
         SpeechVerbPrototype speech;
         if (evt.SpeechVerb != null && _prototype.TryIndex(evt.SpeechVerb, out var evntProto))
@@ -152,32 +127,8 @@ public sealed class RadioSystem : EntitySystem
         }
 
         var verb = Loc.GetString(_random.Pick(speech.SpeechVerbStrings));
-        var wrappedMessage = Loc.GetString(speech.Bold ? "chat-radio-message-wrap-bold" : "chat-radio-message-wrap",
-            ("color", channel.Color),
-            ("fontType", speech.FontId),
-            ("fontSize", radioFontSize), // RMC14
-            ("verb", verb),
-            ("channel", $"\\[{channel.LocalizedName}\\]"),
-            ("name", name),
-            ("message", content));
-
-        // most radios are relayed to chat, so lets parse the chat message beforehand
-        var chat = new ChatMessage(
-            ChatChannel.Radio,
-            message,
-            wrappedMessage,
-            GetNetEntity(messageSource),
-            _chatManager.EnsurePlayer(CompOrNull<ActorComponent>(messageSource)?.PlayerSession.UserId)?.Key,
-            repeatCheckSender: !HasComp<ChatRepeatIgnoreSenderComponent>(radioSource),
-            display: new ChatDisplayMetadata(
-                ChatDisplayKind.Radio,
-                senderName: name,
-                verb: verb,
-                channelLabel: channel.LocalizedName,
-                quoteBody: true,
-                accentColor: channel.Color));
-        var chatMsg = new MsgChatMessage { Message = chat };
-        var ev = new RadioReceiveEvent(message, messageSource, channel, radioSource, chatMsg);
+        var chatMsg = CreateRadioChatMessage(messageSource, message, channel, radioSource, speech, radioFontSize, verb, name, content);
+        var chat = chatMsg.Message;
 
         var sendAttemptEv = new RadioSendAttemptEvent(channel, radioSource);
         RaiseLocalEvent(ref sendAttemptEv);
@@ -214,6 +165,8 @@ public sealed class RadioSystem : EntitySystem
                 continue;
 
             // send the message
+            var receiverChatMsg = GetRadioChatMessageForReceiver(receiver, messageSource, message, channel, radioSource, speech, radioFontSize, verb, name, content, chatMsg);
+            var ev = new RadioReceiveEvent(message, messageSource, channel, radioSource, receiverChatMsg);
             RaiseLocalEvent(receiver, ref ev);
         }
 
@@ -232,6 +185,124 @@ public sealed class RadioSystem : EntitySystem
 
         _replay.RecordServerMessage(chat);
         _messages.Remove(message);
+    }
+
+    private string GetRadioSpeakerName(EntityUid messageSource, RadioChannelPrototype channel, string voiceName)
+    {
+        var name = FormattedMessage.EscapeText(voiceName);
+
+        if (TryComp(messageSource, out JobPrefixComponent? prefix))
+        {
+            var prefixText = (prefix.AdditionalPrefix != null ? $"{Loc.GetString(prefix.AdditionalPrefix.Value)} " : "") + Loc.GetString(prefix.Prefix);
+            if (TryComp(messageSource, out SquadMemberComponent? member) &&
+                TryComp(member.Squad, out SquadTeamComponent? team) &&
+                team.Radio != null &&
+                team.Radio != channel.ID)
+            {
+                name = $"({Name(member.Squad.Value)} {prefixText}) {name}";
+            }
+            else
+            {
+                if (TryComp(messageSource, out FireteamMemberComponent? fireteamMember) && fireteamMember.Fireteam >= 0)
+                {
+                    prefixText += $" FT{fireteamMember.Fireteam + 1}" + (TryComp(messageSource, out FireteamLeaderComponent? fireteamLeader) ? " TL" : "");
+                }
+
+                name = $"({prefixText}) {name}";
+            }
+        }
+        else if (TryComp(messageSource, out RMCRadioPrefixComponent? radioPrefix))
+        {
+            var prefixText = Loc.GetString(radioPrefix.Prefix);
+            name = $"{prefixText} {name}";
+        }
+
+        return name;
+    }
+
+    private MsgChatMessage GetRadioChatMessageForReceiver(
+        EntityUid receiver,
+        EntityUid messageSource,
+        string message,
+        RadioChannelPrototype channel,
+        EntityUid radioSource,
+        SpeechVerbPrototype speech,
+        int radioFontSize,
+        string verb,
+        string defaultName,
+        string content,
+        MsgChatMessage defaultChatMsg)
+    {
+        if (!TryGetYautjaRadioName(receiver, messageSource, channel, defaultName, out var name))
+            return defaultChatMsg;
+
+        return CreateRadioChatMessage(messageSource, message, channel, radioSource, speech, radioFontSize, verb, name, content);
+    }
+
+    private bool TryGetYautjaRadioName(
+        EntityUid receiver,
+        EntityUid messageSource,
+        RadioChannelPrototype channel,
+        string defaultName,
+        out string name)
+    {
+        name = defaultName;
+
+        if (!HasComp<YautjaComponent>(messageSource))
+            return false;
+
+        var listener = receiver;
+        if (HasComp<HeadsetComponent>(receiver))
+        {
+            var parent = Transform(receiver).ParentUid;
+            if (parent.IsValid())
+                listener = parent;
+        }
+
+        if (!HasComp<YautjaComponent>(listener))
+            return false;
+
+        name = GetRadioSpeakerName(messageSource, channel, MetaData(messageSource).EntityName);
+        return name != defaultName;
+    }
+
+    private MsgChatMessage CreateRadioChatMessage(
+        EntityUid messageSource,
+        string message,
+        RadioChannelPrototype channel,
+        EntityUid radioSource,
+        SpeechVerbPrototype speech,
+        int radioFontSize,
+        string verb,
+        string name,
+        string content)
+    {
+        var wrappedMessage = Loc.GetString(speech.Bold ? "chat-radio-message-wrap-bold" : "chat-radio-message-wrap",
+            ("color", channel.Color),
+            ("fontType", speech.FontId),
+            ("fontSize", radioFontSize), // RMC14
+            ("verb", verb),
+            ("channel", $"\\[{channel.LocalizedName}\\]"),
+            ("name", name),
+            ("message", content));
+
+        // most radios are relayed to chat, so lets parse the chat message beforehand
+        var chat = new ChatMessage(
+            ChatChannel.Radio,
+            message,
+            wrappedMessage,
+            GetNetEntity(messageSource),
+            _chatManager.EnsurePlayer(CompOrNull<ActorComponent>(messageSource)?.PlayerSession.UserId)?.Key,
+            repeatCheckSender: !HasComp<ChatRepeatIgnoreSenderComponent>(radioSource),
+            display: new ChatDisplayMetadata(
+                ChatDisplayKind.Radio,
+                senderName: name,
+                verb: verb,
+                channelLabel: channel.LocalizedName,
+                quoteBody: true,
+                accentColor: channel.Color));
+
+        return new MsgChatMessage { Message = chat };
     }
 
     /// <inheritdoc cref="TelecomServerComponent"/>

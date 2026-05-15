@@ -63,6 +63,16 @@
         - MachineMask
         layer:
         - None
+      fishing:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        layer:
+        - ItemMask
+        mask:
+        - HighImpassable
+        density: 1000
+        hard: false
   - type: PlungerUse
   - type: Appearance
   - type: SecretStash
@@ -92,6 +102,11 @@
       reagents:
       - ReagentId: Water
         Quantity: 1
+  - type: FishingSpot
+    fishList: !type:NestedSelector
+      tableId: ToiletFishingLootTable
+    fishDefaultTimer: 45.0
+    fishTimerVariety: 15.0
   - type: DrainableSolution
     solution: tank
   - type: ReagentTank

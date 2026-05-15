@@ -34,7 +34,7 @@
         collection: AU14MaleHoldOrder
       holdOrderSoundFemale:
         collection: AU14FemaleHoldOrder
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCSurvivorPresetCivilian
     - type: RMCSurvivor
     - type: MotionDetectorTracked

@@ -71,9 +71,9 @@ public sealed class DropshipTacticalLandSystem : SharedDropshipTacticalLandSyste
         if (HasComp<DropshipTacticalLandSessionComponent>(ent))
             return;
 
-        if (!IsThirdPartyNavigationConsole(ent.Owner))
+        if (!CanDesignateTacticalLanding(ent))
         {
-            _popup.PopupEntity("Only third party navigation consoles can designate tactical landings.", ent, pilot, PopupType.MediumCaution);
+            _popup.PopupEntity("This navigation console cannot designate tactical landings.", ent, pilot, PopupType.MediumCaution);
             return;
         }
 
@@ -138,9 +138,9 @@ public sealed class DropshipTacticalLandSystem : SharedDropshipTacticalLandSyste
             return;
         }
 
-        if (!IsThirdPartyNavigationConsole(ent.Owner))
+        if (!CanDesignateTacticalLanding(ent))
         {
-            _popup.PopupEntity("Only third party navigation consoles can designate tactical landings.", ent, args.Actor, PopupType.MediumCaution);
+            _popup.PopupEntity("This navigation console cannot designate tactical landings.", ent, args.Actor, PopupType.MediumCaution);
             EndSession(ent, session);
             return;
         }
@@ -188,18 +188,18 @@ public sealed class DropshipTacticalLandSystem : SharedDropshipTacticalLandSyste
         if (lifetime < 2f)
             lifetime = 2f;
 
-        EntityUid? consoleUid = null;
+        Entity<DropshipNavigationComputerComponent>? console = null;
         var consoleQuery = EntityQueryEnumerator<DropshipNavigationComputerComponent, TransformComponent>();
-        while (consoleQuery.MoveNext(out var navUid, out _, out var navXform))
+        while (consoleQuery.MoveNext(out var navUid, out var navComp, out var navXform))
         {
             if (navXform.GridUid == dropshipGrid)
             {
-                consoleUid = navUid;
+                console = (navUid, navComp);
                 break;
             }
         }
 
-        var footprint = consoleUid is { } c ? GetFootprint(c, dropship) : dropship.TacticalLandFootprint;
+        var footprint = console is { } c ? GetFootprint(c, dropship) : dropship.TacticalLandFootprint;
 
         _audio.PlayPvs(WarningSound, destCoords, AudioParams.Default.WithVolume(2f));
         SpawnWarningBorder(destCoords, footprint, lifetime);
@@ -263,9 +263,12 @@ public sealed class DropshipTacticalLandSystem : SharedDropshipTacticalLandSyste
         }
     }
 
-    private Vector2i GetFootprint(EntityUid console, DropshipComponent dropship)
+    private Vector2i GetFootprint(Entity<DropshipNavigationComputerComponent> console, DropshipComponent dropship)
     {
-        if (TryComp(console, out WhitelistedShuttleComponent? whitelist) &&
+        if (console.Comp.TacticalLandFootprintOverride != Vector2i.Zero)
+            return console.Comp.TacticalLandFootprintOverride;
+
+        if (TryComp(console.Owner, out WhitelistedShuttleComponent? whitelist) &&
             string.Equals(whitelist.Faction, "thirdparty", StringComparison.OrdinalIgnoreCase))
         {
             return ThirdPartyFootprint;
@@ -528,9 +531,12 @@ public sealed class DropshipTacticalLandSystem : SharedDropshipTacticalLandSyste
         return null;
     }
 
-    private bool IsThirdPartyNavigationConsole(EntityUid console)
+    private bool CanDesignateTacticalLanding(Entity<DropshipNavigationComputerComponent> console)
     {
-        return TryComp(console, out WhitelistedShuttleComponent? whitelist) &&
+        if (console.Comp.CanTacticalLand)
+            return true;
+
+        return TryComp(console.Owner, out WhitelistedShuttleComponent? whitelist) &&
                string.Equals(whitelist.Faction, "thirdparty", StringComparison.OrdinalIgnoreCase);
     }
 

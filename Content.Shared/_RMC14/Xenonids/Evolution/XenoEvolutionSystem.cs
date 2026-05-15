@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Xenonids.Announce;
 using Content.Shared._RMC14.Xenonids.Egg;
@@ -132,6 +133,9 @@ public sealed class XenoEvolutionSystem : EntitySystem
         if (args.Handled)
             return;
 
+        if (!HivebrokenCheckPopup(xeno))
+            return;
+
         args.Handled = true;
         _ui.OpenUi(xeno.Owner, XenoEvolutionUIKey.Key, xeno);
 
@@ -211,6 +215,9 @@ public sealed class XenoEvolutionSystem : EntitySystem
             Log.Warning($"{ToPrettyString(actor)} sent an invalid strain choice: {args.Choice}.");
             return;
         }
+
+        if (!HivebrokenCheckPopup(xeno))
+            return;
 
         if (!ContainedCheckPopup(xeno))
             return;
@@ -333,9 +340,29 @@ public sealed class XenoEvolutionSystem : EntitySystem
         return false;
     }
 
+    private bool HivebrokenCheckPopup(EntityUid xeno, bool doPopup = true)
+    {
+        if (!IsHivebrokenXeno(xeno))
+            return true;
+
+        if (doPopup)
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-hivebroken-xeno-cant-evolve"), xeno, xeno, PopupType.MediumCaution);
+
+        return false;
+    }
+
+    private bool IsHivebrokenXeno(EntityUid uid)
+    {
+        return HasComp<YautjaHivebrokenXenoComponent>(uid) ||
+               TryComp(uid, out YautjaThrallComponent? thrall) && thrall.Hivebroken;
+    }
+
     private bool CanEvolvePopup(Entity<XenoEvolutionComponent> xeno, EntProtoId newXeno, bool doPopup = true)
     {
         if (!xeno.Comp.EvolvesTo.Contains(newXeno) && !xeno.Comp.EvolvesToWithoutPoints.Contains(newXeno))
+            return false;
+
+        if (!HivebrokenCheckPopup(xeno, doPopup))
             return false;
 
         if (!_prototypes.TryIndex(newXeno, out var prototype))
@@ -475,6 +502,9 @@ public sealed class XenoEvolutionSystem : EntitySystem
 
     private bool CanEvolveAny(Entity<XenoEvolutionComponent> xeno)
     {
+        if (!HivebrokenCheckPopup(xeno, false))
+            return false;
+
         if (xeno.Comp.Points >= xeno.Comp.Max && xeno.Comp.EvolvesTo.Count > 0)
             return true;
 

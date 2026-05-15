@@ -1,11 +1,11 @@
 meta:
   format: 7
   category: Map
-  engineVersion: v264.0.2-fix-physics
+  engineVersion: 264.0.2
   forkId: ""
   forkVersion: ""
-  time: 05/03/2026 02:51:02
-  entityCount: 89756
+  time: 05/11/2026 03:29:15
+  entityCount: 89679
 maps:
 - 1
 grids:
@@ -143019,37 +143019,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: 176.5,-54.5
       parent: 1
-- proto: AU14CivilianColonyOperationsSyntheticVendor
-  entities:
-  - uid: 39
-    components:
-    - type: Transform
-      pos: -62.5,10.5
-      parent: 1
-- proto: AU14CivilianEmergencyResponderOfficerVendor
-  entities:
-  - uid: 40
-    components:
-    - type: Transform
-      pos: -1.5,-15.5
-      parent: 1
-- proto: AU14CivilianEngineerVendor
-  entities:
-  - uid: 41
-    components:
-    - type: Transform
-      pos: 56.5,-9.5
-      parent: 1
-  - uid: 42
-    components:
-    - type: Transform
-      pos: 38.5,-32.5
-      parent: 1
-  - uid: 43
-    components:
-    - type: Transform
-      pos: -58.5,4.5
-      parent: 1
 - proto: AU14CivilianHazardVestKellandMiningCorporation
   entities:
   - uid: 44
@@ -143143,13 +143112,6 @@ entities:
     components:
     - type: Transform
       pos: 25.709835,65.335075
-      parent: 1
-- proto: AU14CivilianMedicalClothingVendor
-  entities:
-  - uid: 62
-    components:
-    - type: Transform
-      pos: -0.5,-15.5
       parent: 1
 - proto: AU14CMBequipmentvendor
   entities:
@@ -143269,16 +143231,6 @@ entities:
     components:
     - type: Transform
       pos: -169.5,-24.5
-      parent: 1
-  - uid: 79
-    components:
-    - type: Transform
-      pos: 162.5,-59.5
-      parent: 1
-  - uid: 80
-    components:
-    - type: Transform
-      pos: -6.5,-15.5
       parent: 1
   - uid: 81
     components:
@@ -144357,16 +144309,6 @@ entities:
     - type: Transform
       pos: -171.5,-24.5
       parent: 1
-  - uid: 264
-    components:
-    - type: Transform
-      pos: 161.5,-59.5
-      parent: 1
-  - uid: 265
-    components:
-    - type: Transform
-      pos: -7.5,-15.5
-      parent: 1
   - uid: 266
     components:
     - type: Transform
@@ -144376,13 +144318,6 @@ entities:
     components:
     - type: Transform
       pos: -144.5,-95.5
-      parent: 1
-- proto: AU14VendorKoorCigs
-  entities:
-  - uid: 268
-    components:
-    - type: Transform
-      pos: -53.5,-8.5
       parent: 1
 - proto: AU14WallFlagTWE
   entities:
@@ -162819,56 +162754,6 @@ entities:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -104.5,22.5
-      parent: 1
-- proto: CMURandomClothingCivilian
-  entities:
-  - uid: 3349
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -50.5,-6.5
-      parent: 1
-  - uid: 3350
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -46.5,-6.5
-      parent: 1
-  - uid: 3351
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -54.5,-8.5
-      parent: 1
-  - uid: 3352
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -46.5,-8.5
-      parent: 1
-  - uid: 3353
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -57.5,-8.5
-      parent: 1
-  - uid: 3354
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -57.5,-6.5
-      parent: 1
-  - uid: 3355
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -39.5,-8.5
-      parent: 1
-  - uid: 3356
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -39.5,-6.5
       parent: 1
 - proto: CMURandomFloraTree
   entities:
@@ -541265,23 +541150,6 @@ entities:
     - type: Transform
       pos: 23.5,91.5
       parent: 1
-- proto: CMUWYGuardequipmentvendor
-  entities:
-  - uid: 79026
-    components:
-    - type: Transform
-      pos: 164.5,-86.5
-      parent: 1
-  - uid: 79027
-    components:
-    - type: Transform
-      pos: 166.5,-86.5
-      parent: 1
-  - uid: 79028
-    components:
-    - type: Transform
-      pos: 165.5,-86.5
-      parent: 1
 - proto: CMUXenoEggNotCF
   entities:
   - uid: 79029
@@ -541339,26 +541207,6 @@ entities:
     - type: Transform
       pos: -33.5,130.5
       parent: 1
-- proto: CMVendorBooze
-  entities:
-  - uid: 79040
-    components:
-    - type: Transform
-      pos: 20.5,67.5
-      parent: 1
-  - uid: 79041
-    components:
-    - type: Transform
-      pos: -24.5,-21.5
-      parent: 1
-    - type: AccessReader
-      access:
-      - - CMAccessColonyPublic
-  - uid: 79042
-    components:
-    - type: Transform
-      pos: 118.5,-6.5
-      parent: 1
 - proto: CMVendorCassettes
   entities:
   - uid: 79043
@@ -541384,20 +541232,8 @@ entities:
     - type: AccessReader
       access:
       - - AU14AccessGovforMedical
-- proto: CMVendorChess
-  entities:
-  - uid: 79046
-    components:
-    - type: Transform
-      pos: 119.5,-6.5
-      parent: 1
 - proto: CMVendorCigs
   entities:
-  - uid: 79047
-    components:
-    - type: Transform
-      pos: -53.5,2.5
-      parent: 1
   - uid: 79048
     components:
     - type: Transform
@@ -541420,27 +541256,6 @@ entities:
       parent: 1
 - proto: CMVendorCircuits
   entities:
-  - uid: 79052
-    components:
-    - type: Transform
-      pos: 51.5,-9.5
-      parent: 1
-    - type: AccessReader
-      access:
-      - - CMAccessColonyLogistics
-  - uid: 79053
-    components:
-    - type: Transform
-      pos: -55.5,4.5
-      parent: 1
-    - type: AccessReader
-      access:
-      - - CMAccessColonyEngineering
-  - uid: 79054
-    components:
-    - type: Transform
-      pos: 144.5,-77.5
-      parent: 1
   - uid: 79055
     components:
     - type: Transform
@@ -541482,27 +541297,6 @@ entities:
       parent: 1
 - proto: CMVendorComponent
   entities:
-  - uid: 79063
-    components:
-    - type: Transform
-      pos: 53.5,-9.5
-      parent: 1
-    - type: AccessReader
-      access:
-      - - CMAccessColonyLogistics
-  - uid: 79064
-    components:
-    - type: Transform
-      pos: -55.5,6.5
-      parent: 1
-    - type: AccessReader
-      access:
-      - - CMAccessColonyEngineering
-  - uid: 79065
-    components:
-    - type: Transform
-      pos: 144.5,-74.5
-      parent: 1
   - uid: 79066
     components:
     - type: Transform
@@ -541515,11 +541309,6 @@ entities:
       parent: 1
 - proto: CMVendorDinnerware
   entities:
-  - uid: 79068
-    components:
-    - type: Transform
-      pos: -24.5,-20.5
-      parent: 1
   - uid: 79069
     components:
     - type: Transform
@@ -541532,27 +541321,6 @@ entities:
       parent: 1
 - proto: CMVendorElectronics
   entities:
-  - uid: 79071
-    components:
-    - type: Transform
-      pos: 54.5,-9.5
-      parent: 1
-    - type: AccessReader
-      access:
-      - - CMAccessColonyLogistics
-  - uid: 79072
-    components:
-    - type: Transform
-      pos: -55.5,7.5
-      parent: 1
-    - type: AccessReader
-      access:
-      - - CMAccessColonyEngineering
-  - uid: 79073
-    components:
-    - type: Transform
-      pos: 144.5,-79.5
-      parent: 1
   - uid: 79074
     components:
     - type: Transform
@@ -541565,16 +541333,6 @@ entities:
       parent: 1
 - proto: CMVendorIngredients
   entities:
-  - uid: 79076
-    components:
-    - type: Transform
-      pos: -24.5,-19.5
-      parent: 1
-  - uid: 79077
-    components:
-    - type: Transform
-      pos: 34.5,2.5
-      parent: 1
   - uid: 79078
     components:
     - type: Transform
@@ -541587,32 +541345,6 @@ entities:
       parent: 1
 - proto: CMVendorNutri
   entities:
-  - uid: 79080
-    components:
-    - type: Transform
-      pos: -20.5,3.5
-      parent: 1
-  - uid: 79081
-    components:
-    - type: Transform
-      pos: -20.5,-10.5
-      parent: 1
-  - uid: 79082
-    components:
-    - type: Transform
-      pos: -25.5,-10.5
-      parent: 1
-  - uid: 79083
-    components:
-    - type: Transform
-      pos: -25.5,3.5
-      parent: 1
-  - uid: 79084
-    components:
-    - type: Transform
-      anchored: True
-      pos: 148.5,-94.5
-      parent: 1
   - uid: 79085
     components:
     - type: Transform
@@ -541627,32 +541359,6 @@ entities:
       parent: 1
 - proto: CMVendorSeeds
   entities:
-  - uid: 79087
-    components:
-    - type: Transform
-      pos: -19.5,-10.5
-      parent: 1
-  - uid: 79088
-    components:
-    - type: Transform
-      pos: -26.5,-10.5
-      parent: 1
-  - uid: 79089
-    components:
-    - type: Transform
-      pos: -26.5,3.5
-      parent: 1
-  - uid: 79090
-    components:
-    - type: Transform
-      pos: -19.5,3.5
-      parent: 1
-  - uid: 79091
-    components:
-    - type: Transform
-      anchored: True
-      pos: 149.5,-94.5
-      parent: 1
   - uid: 79092
     components:
     - type: Transform
@@ -541672,27 +541378,6 @@ entities:
       parent: 1
 - proto: CMVendorTool
   entities:
-  - uid: 79095
-    components:
-    - type: Transform
-      pos: 52.5,-9.5
-      parent: 1
-    - type: AccessReader
-      access:
-      - - CMAccessColonyLogistics
-  - uid: 79096
-    components:
-    - type: Transform
-      pos: -55.5,5.5
-      parent: 1
-    - type: AccessReader
-      access:
-      - - CMAccessColonyEngineering
-  - uid: 79097
-    components:
-    - type: Transform
-      pos: 144.5,-72.5
-      parent: 1
   - uid: 79098
     components:
     - type: Transform
@@ -557594,13 +557279,6 @@ entities:
     components:
     - type: Transform
       pos: -175.5,-24.5
-      parent: 1
-- proto: ColMarTechWardrobeCorp
-  entities:
-  - uid: 82263
-    components:
-    - type: Transform
-      pos: 158.5,-103.5
       parent: 1
 - proto: colonysiren
   entities:
@@ -578286,16 +577964,6 @@ entities:
       parent: 1
 - proto: RMCNutriCoVendor
   entities:
-  - uid: 85871
-    components:
-    - type: Transform
-      pos: 19.5,67.5
-      parent: 1
-  - uid: 85872
-    components:
-    - type: Transform
-      pos: 150.5,-69.5
-      parent: 1
   - uid: 85873
     components:
     - type: Transform
@@ -582341,96 +582009,6 @@ entities:
       parent: 1
 - proto: RMCRandomVendor
   entities:
-  - uid: 86382
-    components:
-    - type: Transform
-      pos: -11.5,-22.5
-      parent: 1
-  - uid: 86383
-    components:
-    - type: Transform
-      pos: -4.5,2.5
-      parent: 1
-  - uid: 86384
-    components:
-    - type: Transform
-      pos: 40.5,-9.5
-      parent: 1
-  - uid: 86385
-    components:
-    - type: Transform
-      pos: 47.5,-24.5
-      parent: 1
-  - uid: 86386
-    components:
-    - type: Transform
-      pos: 67.5,-19.5
-      parent: 1
-  - uid: 86387
-    components:
-    - type: Transform
-      pos: 67.5,-18.5
-      parent: 1
-  - uid: 86388
-    components:
-    - type: Transform
-      pos: 67.5,-9.5
-      parent: 1
-  - uid: 86389
-    components:
-    - type: Transform
-      pos: 50.5,-9.5
-      parent: 1
-  - uid: 86390
-    components:
-    - type: Transform
-      pos: 47.5,-9.5
-      parent: 1
-  - uid: 86391
-    components:
-    - type: Transform
-      pos: -41.5,-26.5
-      parent: 1
-  - uid: 86392
-    components:
-    - type: Transform
-      pos: -53.5,-6.5
-      parent: 1
-  - uid: 86393
-    components:
-    - type: Transform
-      pos: -54.5,-6.5
-      parent: 1
-  - uid: 86394
-    components:
-    - type: Transform
-      pos: -49.5,-8.5
-      parent: 1
-  - uid: 86395
-    components:
-    - type: Transform
-      pos: -47.5,-8.5
-      parent: 1
-  - uid: 86396
-    components:
-    - type: Transform
-      pos: -45.5,-8.5
-      parent: 1
-  - uid: 86397
-    components:
-    - type: Transform
-      pos: -51.5,-8.5
-      parent: 1
-  - uid: 86398
-    components:
-    - type: Transform
-      pos: -43.5,-8.5
-      parent: 1
-  - uid: 86399
-    components:
-    - type: Transform
-      pos: -42.5,-6.5
-      parent: 1
   - uid: 86400
     components:
     - type: Transform
@@ -587068,31 +586646,8 @@ entities:
       parent: 1
     - type: RMCTeleporter
       adjust: -55,0
-- proto: RMCVendorCigsElectro
-  entities:
-  - uid: 87029
-    components:
-    - type: Transform
-      pos: -41.5,-8.5
-      parent: 1
-  - uid: 87030
-    components:
-    - type: Transform
-      pos: 46.5,-9.5
-      parent: 1
 - proto: RMCVendorNutriCoDrink
   entities:
-  - uid: 87031
-    components:
-    - type: Transform
-      pos: 18.5,67.5
-      parent: 1
-  - uid: 87032
-    components:
-    - type: Transform
-      anchored: True
-      pos: 151.5,-69.5
-      parent: 1
   - uid: 87033
     components:
     - type: Transform

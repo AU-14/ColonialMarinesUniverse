@@ -64,4 +64,32 @@ public sealed partial class HardpointSystem
         new("VehicleServicing", 6f, "Jack the hardpoint clear of the damaged mount."),
         new("Anchoring", 6f, "Re-seat and tighten the mount locking hardware."),
     };
+
+    private static readonly VehicleHardpointFailureRepairStep[] TireBlowoutRepairSteps =
+    {
+        new("Prying", 5f, "Pry the shredded tire casing clear of the rim."),
+        new("VehicleServicing", 6f, "Jack the hub up and seat a replacement wheel assembly."),
+        new("Anchoring", 5f, "Torque the wheel lugs down in sequence."),
+    };
+
+    private static readonly VehicleHardpointFailureRepairStep[] ThrownTreadRepairSteps =
+    {
+        new("VehicleServicing", 8f, "Jack the running gear up and take tension off the tread."),
+        new("Prying", 6f, "Pry the thrown tread links back onto the road wheels."),
+        new("Anchoring", 8f, "Lock the tensioner and torque the tread pins."),
+    };
+
+    private static readonly VehicleHardpointFailureRepairStep[] EngineOverheatRepairSteps =
+    {
+        new("Screwing", 4f, "Open the engine shroud and vent trapped heat."),
+        new("Prying", 5f, "Pry the warped fan guard away from the radiator."),
+        new("Pulsing", 6f, "Pulse the coolant pump controller until flow stabilizes."),
+    };
+
+    private static readonly VehicleHardpointFailureRepairStep[] ElectricalShortRepairSteps =
+    {
+        new("Cutting", 5f, "Cut away the burned wiring from the hardpoint harness."),
+        new("Pulsing", 6f, "Trace and reset the control circuit with a multitool."),
+        new("Screwing", 4f, "Close the access panel and secure the replacement harness."),
+    };
 }

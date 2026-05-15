@@ -24,7 +24,7 @@
       - Civilian
     - type: IntelRescueSurvivorObjective
     - type: RMCAllowSuitStorage
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetLV624Archeologist
   useLoadoutOfJob: CMSurvivorScientist # for inheritance
 

@@ -15,7 +15,8 @@
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCLFMachineGunner
-  icon: "CMJobIconEmpty"
+  icon: "RMCJobIconCLFSpecialist"
+  hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-clflrs

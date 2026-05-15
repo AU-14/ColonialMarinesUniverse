@@ -29,7 +29,7 @@
             - SquadPara
       - type: JobPrefix
         prefix: rmc-job-prefix-paramarine
-      - type: EquipSurvivorPreset
+      - type: EquipEntityPreset
         preset: RMCGearSurvivorPresetPara
   hidden: true
 

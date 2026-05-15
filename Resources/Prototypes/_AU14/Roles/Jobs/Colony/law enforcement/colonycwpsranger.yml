@@ -27,6 +27,8 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
+  access:
+  - AU14AccessColonyMarshall
   accessGroups:
   - aucmb
   - Colonist

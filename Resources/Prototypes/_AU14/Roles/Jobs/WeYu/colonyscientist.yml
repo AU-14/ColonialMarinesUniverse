@@ -30,6 +30,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: WY Scientist (CMU)
   accessGroups:
   - Colonist
   - auwy

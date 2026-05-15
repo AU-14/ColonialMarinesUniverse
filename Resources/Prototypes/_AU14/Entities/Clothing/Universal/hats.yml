@@ -56,9 +56,19 @@
     sprite: _AU14/Clothing/Civilian/Hats/beanieclava.rsi
   - type: Appearance
   - type: Foldable
+    foldVerbText: cmu-beanieclava-fold
+    unfoldVerbText: cmu-beanieclava-unfold
     canFoldInsideContainer: true
+  - type: IdentityBlocker
   - type: FoldableClothing
     foldedEquippedPrefix: folded
+    foldedHideLayers:
+    - HeadTop
+    - HeadSide
+    unfoldedHideLayers:
+    - HeadTop
+    - HeadSide
+    - Hair
   - type: Sprite
     sprite: _AU14/Clothing/Civilian/Hats/beanieclava.rsi
     layers:

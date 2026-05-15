@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: CMBaseWeaponSMG
   name: FN FP9000 rifle
   id: RMCWeaponSMGFP9000
@@ -73,6 +73,7 @@
           - RMCAttachmentExtendedBarrel
           - RMCAttachmentExtendedCompensator
           - RMCAttachmentRecoilCompensator
+          - RMCM5Bayonet
       rmc-aslot-rail:
         locked: true
         startingAttachable: RMCAttachmentFP9000Scope

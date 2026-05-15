@@ -1,0 +1,166 @@
+- type: soundCollection
+  id: CMUYautjaSpeechClicks
+  files:
+  - /Audio/_CMU14/Yautja/pred_click1.wav
+  - /Audio/_CMU14/Yautja/pred_click2.wav
+  - /Audio/_CMU14/Yautja/pred_click3.wav
+  - /Audio/_CMU14/Yautja/pred_click4.wav
+  - /Audio/_CMU14/Yautja/pred_click5.wav
+
+- type: soundCollection
+  id: CMUYautjaTranslator
+  files:
+  - /Audio/_CMU14/Yautja/pred_translator.ogg
+
+- type: soundCollection
+  id: CMUYautjaRoars
+  files:
+  - /Audio/_CMU14/Yautja/pred_roar1.wav
+  - /Audio/_CMU14/Yautja/pred_roar2.wav
+  - /Audio/_CMU14/Yautja/pred_roar3.wav
+  - /Audio/_CMU14/Yautja/pred_roar4.wav
+  - /Audio/_CMU14/Yautja/pred_roar5.wav
+  - /Audio/_CMU14/Yautja/pred_roar6.wav
+
+- type: soundCollection
+  id: CMUYautjaLaughs
+  files:
+  - /Audio/_CMU14/Yautja/pred_laugh1.wav
+  - /Audio/_CMU14/Yautja/pred_laugh2.wav
+  - /Audio/_CMU14/Yautja/pred_laugh3.wav
+  - /Audio/_CMU14/Yautja/pred_laugh4.wav
+  - /Audio/_CMU14/Yautja/pred_laugh5.wav
+  - /Audio/_CMU14/Yautja/pred_laugh6.wav
+
+- type: soundCollection
+  id: CMUYautjaPain
+  files:
+  - /Audio/_CMU14/Yautja/pred_pain1.wav
+  - /Audio/_CMU14/Yautja/pred_pain2.wav
+  - /Audio/_CMU14/Yautja/pred_pain3.wav
+  - /Audio/_CMU14/Yautja/pred_pain4.wav
+  - /Audio/_CMU14/Yautja/pred_pain5.wav
+  - /Audio/_CMU14/Yautja/pred_pain_rare1.wav
+
+- type: soundCollection
+  id: CMUYautjaDeath
+  files:
+  - /Audio/_CMU14/Yautja/pred_death1.wav
+  - /Audio/_CMU14/Yautja/pred_death2.wav
+  - /Audio/_CMU14/Yautja/pred_deathlaugh.wav
+
+- type: soundCollection
+  id: CMUYautjaDeathCries
+  files:
+  - /Audio/_CMU14/Yautja/pred_death1.wav
+  - /Audio/_CMU14/Yautja/pred_death2.wav
+
+- type: soundCollection
+  id: CMUYautjaChainGauntletHit
+  files:
+  - /Audio/Weapons/punch1.ogg
+  - /Audio/Weapons/punch2.ogg
+  - /Audio/Weapons/punch3.ogg
+  - /Audio/Weapons/punch4.ogg
+  - /Audio/Effects/hit_kick.ogg
+  - /Audio/_CMU14/Yautja/hit_punch.wav
+  - /Audio/_CMU14/Yautja/chain_whip.wav
+
+- type: soundCollection
+  id: CMUYautjaClanSwordHit
+  files:
+  - /Audio/_CMU14/Yautja/clan_sword_hit_1.wav
+  - /Audio/_CMU14/Yautja/clan_sword_hit_2.wav
+
+- type: soundCollection
+  id: CMUYautjaChainWhipHit
+  files:
+  - /Audio/_CMU14/Yautja/chain_whip.wav
+
+- type: soundCollection
+  id: CMUYautjaSlam
+  files:
+  - /Audio/_CMU14/Yautja/slam1.wav
+  - /Audio/_CMU14/Yautja/slam2.wav
+  - /Audio/_CMU14/Yautja/slam3.wav
+  - /Audio/_CMU14/Yautja/slam_rare_1.wav
+
+- type: soundCollection
+  id: CMUPredalienSpeechClicks
+  files:
+  - /Audio/_CMU14/Yautja/predalien_click.ogg
+
+- type: soundCollection
+  id: CMUPredalienRoar
+  files:
+  - /Audio/_CMU14/Yautja/predalien_roar.ogg
+
+- type: speechSounds
+  id: CMUPredalienSpeech
+  saySound:
+    collection: CMUPredalienSpeechClicks
+  askSound:
+    collection: CMUPredalienSpeechClicks
+  exclaimSound:
+    collection: CMUPredalienSpeechClicks
+
+- type: emoteSounds
+  id: CMUPredalien
+  params:
+    variation: 0.125
+  sounds:
+    Growl:
+      collection: XenoGrowl
+    Hiss:
+      collection: XenoHiss
+    XenoRoar:
+      collection: CMUPredalienRoar
+    XenoHelp:
+      collection: XenoHelp
+    XenoTailSwipe:
+      collection: XenoTailSwipe
+
+- type: speechSounds
+  id: CMUYautjaSpeech
+  saySound:
+    collection: CMUYautjaSpeechClicks
+  askSound:
+    collection: CMUYautjaSpeechClicks
+  exclaimSound:
+    collection: CMUYautjaSpeechClicks
+
+- type: emoteSounds
+  id: CMUBaseYautja
+  sounds:
+    CMUYautjaClick:
+      collection: CMUYautjaSpeechClicks
+    CMUYautjaRoar:
+      collection: CMUYautjaRoars
+    CMUYautjaLaugh:
+      collection: CMUYautjaLaughs
+    CMUYautjaGrowl:
+      path: /Audio/_CMU14/Yautja/predgrowl.wav
+    CMUYautjaPain:
+      collection: CMUYautjaPain
+    CMUYautjaDeathCry:
+      collection: CMUYautjaDeathCries
+    CMUYautjaDeathLaugh:
+      path: /Audio/_CMU14/Yautja/pred_deathlaugh.wav
+    Scream:
+      collection: CMUYautjaRoars
+    Laugh:
+      collection: CMUYautjaLaughs
+    Growl:
+      path: /Audio/_CMU14/Yautja/predgrowl.wav
+    Warcry:
+      collection: CMUYautjaRoars
+    DefaultDeathgasp:
+      collection: CMUYautjaDeath
+
+- type: emoteSounds
+  parent: [ CMUBaseYautja, RMCBaseMaleSounds ]
+  id: CMUMaleYautja
+
+- type: emoteSounds
+  parent: [ CMUBaseYautja, RMCBaseFemaleSounds ]
+  id: CMUFemaleYautja

@@ -1,0 +1,57 @@
+# Flesh Nest: stationary spawner that periodically births a non-mimic
+# abomination (spider, grunt, or skitter). Mimics are NOT spawned because
+# they're meant to be created exclusively through assimilation.
+- type: entity
+  parent: BaseStructure
+  id: AU14AbominationFleshNest
+  name: flesh nest
+  description: A throbbing, fleshy mass that births new horrors at irregular intervals.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/hive_structures.rsi
+    state: eggmorph
+    drawdepth: Mobs
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 100
+        mask:
+        - Impassable
+        - MidImpassable
+        layer:
+        - WallLayer
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 500
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          AU14AbominationFleshKudzuSource:
+            min: 1
+            max: 1
+  - type: TimedSpawner
+    intervalSeconds: 90
+    chance: 1.0
+    prototypes:
+    - AU14AbominationSpider
+    - AU14AbominationGrunt
+    - AU14AbominationSkitter
+  - type: UserIFF
+    factions:
+    - FactionAbomination
+  - type: NpcFactionMember
+    factions:
+    - Abomination

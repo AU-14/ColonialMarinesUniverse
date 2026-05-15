@@ -18,7 +18,7 @@
         RMCSkillVehicles: 1
         RMCSkillMeleeWeapons: 1
         RMCSkillCqc: 2
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetBeachBum
     - type: RMCSurvivor
     - type: MotionDetectorTracked

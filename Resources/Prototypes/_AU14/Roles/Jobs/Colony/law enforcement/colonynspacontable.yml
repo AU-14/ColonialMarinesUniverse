@@ -27,6 +27,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: NSPA Constable (CMU)
   accessGroups:
   - aucmb
   - Colonist

@@ -571,14 +571,21 @@ public sealed class UserAHelpUIHandler : IAHelpUIHandler
         _chatPanel.RelayedToDiscordLabel.Visible = relayActive;
         _window = new DefaultWindow()
         {
-            TitleClass="windowTitleAlert",
-            HeaderClass="windowHeaderAlert",
             Title=Loc.GetString("bwoink-user-title"),
             MinSize = new Vector2(500, 300),
         };
+        _window.Stylesheet = IoCManager.Resolve<IStylesheetManager>().SheetNano;
         _window.OnClose += () => { OnClose?.Invoke(); };
         _window.OnOpen += () => { OnOpen?.Invoke(); };
-        _window.Contents.AddChild(_chatPanel);
+        var rootPanel = new PanelContainer
+        {
+            HorizontalExpand = true,
+            VerticalExpand = true,
+            StyleClasses = { StyleNano.StyleClassCrtPanel }
+        };
+        rootPanel.AddChild(_chatPanel);
+        _window.Contents.AddChild(rootPanel);
+        CrtLobbyTheme.ApplyWindow(_window, includeChat: true, useCrtTypography: false);
 
         var introText = Loc.GetString("bwoink-system-introductory-message");
         var introMessage = new SharedBwoinkSystem.BwoinkTextMessage( _ownerId, SharedBwoinkSystem.SystemUserId, introText);

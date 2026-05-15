@@ -20,7 +20,7 @@
       - Civilian
     - type: IntelRescueSurvivorObjective
     - type: RMCAllowSuitStorage
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetKutjevoCMBDeputy
     - type: TacticalMapIcon
       icon:

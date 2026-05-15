@@ -44,3 +44,48 @@
       map: ["enum.EffectLayers.Unshaded"]
       sprite: _CMU14/Effects/blood_impact.rsi
       state: cmubloodsplatter2
+
+- type: entity
+  parent: CMUBloodImpactEffect
+  id: CMUYautjaBloodImpactEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    scale: 0.75, 0.75
+    color: "#2cf274"
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Effects/blood_impact.rsi
+      state: cm_bloodsplatter
+
+- type: entity
+  parent: CMUYautjaBloodImpactEffect
+  id: CMUYautjaBloodImpactEffect1
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    scale: 0.75, 0.75
+    color: "#2cf274"
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Effects/blood_impact.rsi
+      state: cmubloodsplatter1
+
+- type: entity
+  parent: CMUYautjaBloodImpactEffect
+  id: CMUYautjaBloodImpactEffect2
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    scale: 0.75, 0.75
+    color: "#2cf274"
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Effects/blood_impact.rsi
+      state: cmubloodsplatter2

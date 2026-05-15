@@ -74,7 +74,7 @@ public sealed partial class AimedShotComponent : Component
     ///     The base aiming duration.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float AimDuration = 1.25f;
+    public float AimDuration = 5.0f;
 
     /// <summary>
     ///     The amount of time in seconds to be added to the aim duration for every tile of distance to the target.

@@ -1,0 +1,14 @@
+# Sound collections used by abomination ambience.
+# HumanCry pulls the upstream cry voice clips (male + female mixed) so the
+# flesh kudzu has matching audio for its Crying emote.
+- type: soundCollection
+  id: HumanCry
+  files:
+  - /Audio/Voice/Human/cry_female_1.ogg
+  - /Audio/Voice/Human/cry_female_2.ogg
+  - /Audio/Voice/Human/cry_female_3.ogg
+  - /Audio/Voice/Human/cry_female_4.ogg
+  - /Audio/Voice/Human/cry_male_1.ogg
+  - /Audio/Voice/Human/cry_male_2.ogg
+  - /Audio/Voice/Human/cry_male_3.ogg
+  - /Audio/Voice/Human/cry_male_4.ogg

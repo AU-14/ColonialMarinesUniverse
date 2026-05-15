@@ -6,7 +6,8 @@
   setPreference: true
   playTimeTracker: AU14JobMobBoss
   startingGear: AU14GearMobBoss
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconColonyMobBoss"
+  hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-mobboss

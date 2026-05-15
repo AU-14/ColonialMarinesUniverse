@@ -1,0 +1,14 @@
+- type: damageModifierSet
+  id: CMUYautja
+  coefficients:
+    Blunt: 0.75
+    Slash: 0.75
+    Piercing: 0.8
+    Heat: 0.8
+    Shock: 0.75
+    Cold: 0.75
+    Caustic: 0.75
+    Poison: 0.35
+    Radiation: 0.5
+    Bloodloss: 0.6
+    Asphyxiation: 0.6

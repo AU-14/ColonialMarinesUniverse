@@ -340,17 +340,23 @@ public sealed partial class GridVehicleMoverComponent : Component
 
     /// <summary>
     /// Seconds the vehicle is rendered immobile after hitting a humanoid mob. 0 = no lockout.
-    /// Unlike wall crashes, this does NOT require <see cref="WallSmashMinSpeed"/> — any mob collision triggers.
+    /// Set <see cref="MobCrashImmobileMinSpeed"/> above 0 to keep low-speed bumps from stalling the engine.
     /// </summary>
     [DataField]
     public float MobCrashImmobileDuration;
 
+    [DataField]
+    public float MobCrashImmobileMinSpeed;
+
     /// <summary>
     /// Seconds the vehicle is rendered immobile after hitting a xeno mob. 0 = no lockout.
-    /// Typically larger than <see cref="MobCrashImmobileDuration"/> — xenos are bigger and more punishing to hit.
+    /// Typically larger than <see cref="MobCrashImmobileDuration"/> because xenos are bigger and more punishing to hit.
     /// </summary>
     [DataField]
     public float XenoMobCrashImmobileDuration;
+
+    [DataField]
+    public float XenoMobCrashImmobileMinSpeed;
 
     /// <summary>Server-tracked: vehicle cannot accelerate until this time. Not for YAML.</summary>
     [AutoNetworkedField]

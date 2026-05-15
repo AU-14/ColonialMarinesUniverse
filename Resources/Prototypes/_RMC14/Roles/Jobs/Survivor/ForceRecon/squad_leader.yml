@@ -57,7 +57,7 @@
         - RMCSquadFORECON
     - type: JobPrefix
       prefix: cm-job-prefix-squad-leader
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCSurvivorPresetForeconSquadLead
     - type: SpotterWhitelist
     - type: RMCTrackable
@@ -80,6 +80,6 @@
   name: forecon squad leader survivor preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     primaryWeapons:
     - [ WeaponShotgunM42A2, RMCBoxShotgunSlugs ]

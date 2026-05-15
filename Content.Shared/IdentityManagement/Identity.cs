@@ -1,4 +1,5 @@
 ﻿using Content.Shared._RMC14.IdentityManagement;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared.Ghost;
 using Content.Shared.IdentityManagement.Components;
 using Content.Shared.Whitelist;
@@ -25,6 +26,13 @@ public static class Identity
             return new IdentityEntity(uid, meta.EntityName); // Identity component and such will not yet have initialized and may throw NREs
 
         var uidName = meta.EntityName;
+
+        if (viewer != null &&
+            ent.HasComponent<YautjaComponent>(uid) &&
+            ent.HasComponent<YautjaComponent>(viewer.Value))
+        {
+            return new IdentityEntity(uid, uidName);
+        }
 
         var whitelistSystem = ent.System<EntityWhitelistSystem>();
         if (viewer != null &&

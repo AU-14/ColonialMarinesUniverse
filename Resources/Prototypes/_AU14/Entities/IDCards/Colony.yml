@@ -93,9 +93,6 @@
   id: AU14IDCardCLFGeneralPractitioner
   name: CLF general practitioner ID card
   components:
-  - type: Access
-    groups:
-    - Colonist
   - type: IdCard
     jobTitle: au14-job-name-civiliangeneralpractitioner
 
@@ -104,9 +101,6 @@
   id: AU14IDCardCLFPharmacist
   name: CLF pharmacist ID card
   components:
-  - type: Access
-    groups:
-    - Colonist
   - type: IdCard
     jobTitle: au14-job-name-civilianpharmacist
 
@@ -300,15 +294,20 @@
   id: AU14IDCardColonyPhysician
   name: physician ID card
   components:
-  - type: PresetIdCard
-    job: AU14JobCivilianPhysician
+  - type: Access
+    groups:
+    - Colonist
+    - aumed
+    - AUPrisonStaff
+  - type: IdCard
+    jobTitle: au14-job-name-civilianphysician
 
 - type: entity
   parent: AU14IDCardColonyPhysician
   id: AU14IDCardColonySurgeon
   name: surgeon ID card
   components:
-  - type: JobTitleChanger
+  - type: IdCard
     jobTitle: au14-job-name-civiliansurgeon
 
 - type: entity
@@ -316,7 +315,7 @@
   id: AU14IDCardColonyGeneralPractitioner
   name: general practitioner ID card
   components:
-  - type: JobTitleChanger
+  - type: IdCard
     jobTitle: au14-job-name-civiliangeneralpractitioner
 
 - type: entity
@@ -324,7 +323,7 @@
   id: AU14IDCardColonyPharmacist
   name: pharmacist ID card
   components:
-  - type: JobTitleChanger
+  - type: IdCard
     jobTitle: au14-job-name-civilianpharmacist
 
 - type: entity

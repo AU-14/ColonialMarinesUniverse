@@ -82,6 +82,8 @@
         crate: RMCCrateGrenadesAirburstStarShell
       - cost: 6000
         crate: RMCCrateExplosiveClaymoreMine
+      - cost: 3000
+        crate: RMCCrateM6HBruteRockets
     - name: Food
       entries:
       - cost: 500

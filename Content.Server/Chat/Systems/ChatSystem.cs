@@ -14,6 +14,7 @@ using Content.Server.Speech.Prototypes;
 using Content.Server.Speech.EntitySystems;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Stun;
@@ -582,14 +583,17 @@ public sealed partial class ChatSystem : SharedChatSystem
                 continue;
             listener = session.AttachedEntity.Value;
 
+            if (!CanHearYautjaLocalSpeech(source, session, data))
+                continue;
+
             if (MessageRangeCheck(session, data, range) != MessageRangeCheckResult.Full)
                 continue; // Won't get logged to chat, and ghosts are too far away to see the pop-up, so we just won't send it to them.
 
             if (data.Range <= WhisperClearRange)
-                _chatManager.ChatMessageToOne(ChatChannel.Whisper, message, wrappedMessage, source, false, session.Channel);
+                _chatManager.ChatMessageToOne(ChatChannel.Whisper, message, GetYautjaVisibleWrappedMessage(wrappedMessage, source, session), source, false, session.Channel);
             //If listener is too far, they only hear fragments of the message
             else if (_examineSystem.InRangeUnOccluded(source, listener, WhisperMuffledRange))
-                _chatManager.ChatMessageToOne(ChatChannel.Whisper, obfuscatedMessage, wrappedobfuscatedMessage, source, false, session.Channel);
+                _chatManager.ChatMessageToOne(ChatChannel.Whisper, obfuscatedMessage, GetYautjaVisibleWrappedMessage(wrappedobfuscatedMessage, source, session), source, false, session.Channel);
             //If listener is too far and has no line of sight, they can't identify the whisperer's identity
             else
                 _chatManager.ChatMessageToOne(ChatChannel.Whisper, obfuscatedMessage, wrappedUnknownMessage, source, false, session.Channel);
@@ -778,6 +782,12 @@ public sealed partial class ChatSystem : SharedChatSystem
     {
         foreach (var (session, data) in GetRecipients(source, VoiceRange))
         {
+            if ((channel == ChatChannel.Local || channel == ChatChannel.Emotes) &&
+                !CanHearYautjaLocalSpeech(source, session, data))
+            {
+                continue;
+            }
+
             var entRange = MessageRangeCheck(session, data, range);
             if (entRange == MessageRangeCheckResult.Disallowed)
                 continue;
@@ -790,10 +800,66 @@ public sealed partial class ChatSystem : SharedChatSystem
             else
                 RaiseLocalEvent(source, ref ev);
 
-            _chatManager.ChatMessageToOne(channel, ev.Message, ev.WrappedMessage, source, ev.EntHideChat, session.Channel, author: author);
+            _chatManager.ChatMessageToOne(channel, ev.Message, GetYautjaVisibleWrappedMessage(ev.WrappedMessage, source, session), source, ev.EntHideChat, session.Channel, author: author);
         }
 
         _replay.RecordServerMessage(new ChatMessage(channel, message, wrappedMessage, GetNetEntity(source), null, MessageRangeHideChatForReplay(range), speechStyleClass: CompOrNull<RMCSpeechBubbleSpecificStyleComponent>(source)?.SpeechStyleClass, repeatCheckSender: !HasComp<ChatRepeatIgnoreSenderComponent>(source)));
+    }
+
+    private string GetYautjaVisibleWrappedMessage(string wrappedMessage, EntityUid source, ICommonSession session)
+    {
+        if (!TryGetYautjaVisibleName(source, session, out var visibleName))
+            return wrappedMessage;
+
+        var hiddenName = FormattedMessage.EscapeText(Loc.GetString(Comp<YautjaComponent>(source).IdentityName));
+        return ReplaceFirst(wrappedMessage, hiddenName, visibleName);
+    }
+
+    private bool TryGetYautjaVisibleName(EntityUid source, ICommonSession session, out string visibleName)
+    {
+        visibleName = string.Empty;
+
+        if (!HasComp<YautjaComponent>(source) ||
+            session.AttachedEntity is not { Valid: true } listener ||
+            !HasComp<YautjaComponent>(listener))
+        {
+            return false;
+        }
+
+        visibleName = FormattedMessage.EscapeText(MetaData(source).EntityName);
+        return true;
+    }
+
+    private static string ReplaceFirst(string value, string search, string replacement)
+    {
+        if (string.IsNullOrEmpty(search))
+            return value;
+
+        var index = value.IndexOf(search, StringComparison.Ordinal);
+        if (index < 0)
+            index = value.IndexOf(search, StringComparison.OrdinalIgnoreCase);
+
+        if (index < 0)
+            return value;
+
+        return value[..index] + replacement + value[(index + search.Length)..];
+    }
+
+    private bool CanHearYautjaLocalSpeech(EntityUid source, ICommonSession session, ICChatRecipientData data)
+    {
+        if (!HasComp<YautjaComponent>(source))
+            return true;
+
+        if (data.Observer)
+            return true;
+
+        if (session.AttachedEntity is not { Valid: true } listener)
+            return false;
+
+        return listener == source ||
+               HasComp<YautjaComponent>(listener) ||
+               HasComp<YautjaThrallComponent>(listener) ||
+               HasComp<YautjaHivebrokenXenoComponent>(listener);
     }
 
     /// <summary>

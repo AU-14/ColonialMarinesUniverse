@@ -4,6 +4,7 @@ using Content.Shared._RMC14.UniformAccessories;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Containers;
@@ -15,9 +16,11 @@ public sealed class UniformAccessoryBui : BoundUserInterface
 {
     [Dependency] private readonly IClyde _displayManager = default!;
     [Dependency] private readonly IEyeManager _eye = default!;
+    [Dependency] private readonly IPlayerManager _player = default!;
 
     private readonly TransformSystem _transform;
     private readonly SharedContainerSystem _container;
+    private readonly UniformAccessorySystem _uniformAccessories;
 
     private UniformAccessoryMenu? _menu;
 
@@ -27,6 +30,7 @@ public sealed class UniformAccessoryBui : BoundUserInterface
 
         _transform = EntMan.System<TransformSystem>();
         _container = EntMan.System<SharedContainerSystem>();
+        _uniformAccessories = EntMan.System<UniformAccessorySystem>();
     }
 
     protected override void Open()
@@ -55,8 +59,15 @@ public sealed class UniformAccessoryBui : BoundUserInterface
 
         foreach (var accessory in container.ContainedEntities)
         {
-            if (!EntMan.TryGetComponent(accessory, out MetaDataComponent? metaData))
+            if (!EntMan.TryGetComponent(accessory, out MetaDataComponent? metaData) ||
+                !EntMan.TryGetComponent(accessory, out UniformAccessoryComponent? accessoryComp))
                 continue;
+
+            if (_player.LocalEntity is not { } viewer ||
+                !_uniformAccessories.CanViewAccessory(accessory, viewer, accessoryComp))
+            {
+                continue;
+            }
 
             var button = new RadialMenuTextureButton
             {

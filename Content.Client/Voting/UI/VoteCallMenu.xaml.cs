@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.Client.Gameplay;
+using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
@@ -15,6 +16,7 @@ using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Configuration;
 using Robust.Shared.Console;
+using Robust.Shared.Maths;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
@@ -31,6 +33,7 @@ namespace Content.Client.Voting.UI
         [Dependency] private readonly IEntityNetworkManager _entNetManager = default!;
         [Dependency] private readonly IConfigurationManager _cfg = default!;
         [Dependency] private readonly IStateManager _state = default!;
+        [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
 
         private VotingSystem _votingSystem;
 
@@ -64,7 +67,8 @@ namespace Content.Client.Voting.UI
             RobustXamlLoader.Load(this);
             _votingSystem = _entityManager.System<VotingSystem>();
 
-            Stylesheet = IoCManager.Resolve<IStylesheetManager>().SheetSpace;
+            ApplyCrtPalette();
+            CrtLobbyTheme.Apply(this);
             VoteNotTrustedLabel.Text = Loc.GetString("ui-vote-trusted-users-notice", ("timeReq", _cfg.GetCVar(CCVars.VotekickEligibleVoterDeathtime)));
 
             foreach (StandardVoteType voteType in Enum.GetValues<StandardVoteType>())
@@ -74,6 +78,7 @@ namespace Content.Client.Voting.UI
             }
 
             _state.OnStateChanged += OnStateChanged;
+            _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
             VoteTypeButton.OnItemSelected += VoteTypeSelected;
             FollowButton.OnPressed += FollowSelected;
         }
@@ -95,6 +100,86 @@ namespace Content.Client.Voting.UI
 
             _voteManager.CanCallVoteChanged -= CanCallVoteChanged;
             _votingSystem.VotePlayerListResponse -= UpdateVotePlayerList;
+        }
+
+        [Obsolete("Controls should only be removed from UI tree instead of being disposed")]
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+        }
+
+        private void OnCrtUiColorChanged(string _)
+        {
+            ApplyCrtPalette();
+        }
+
+        private void ApplyCrtPalette()
+        {
+            Stylesheet = _stylesheetManager.SheetNano;
+            RootPanel.PanelOverride = CreatePanelStyleBox();
+            OptionsPanel.PanelOverride = CreateInsetStyleBox();
+        }
+
+        private static CrtStyleBox CreatePanelStyleBox()
+        {
+            return new CrtStyleBox
+            {
+                BackgroundColor = StyleNano.CrtPanelBackground,
+                BorderColor = StyleNano.CrtGreenDim,
+                CornerColor = StyleNano.CrtGreen.WithAlpha(0.28f),
+                ScanlineColor = StyleNano.CrtGreen.WithAlpha(0.016f),
+                GridColor = StyleNano.CrtGreen.WithAlpha(0.01f),
+                NoiseColor = StyleNano.CrtGreenSoft.WithAlpha(0.045f),
+                PixelationColor = StyleNano.CrtGreen.WithAlpha(0.035f),
+                PixelationShadowColor = StyleNano.CrtBackground.WithAlpha(0.16f),
+                BorderThickness = new Thickness(1),
+                DrawPixelation = true,
+                CornerLength = 10,
+                PixelationBlockSize = 3,
+                PixelationSpacing = 150,
+                PixelationChance = 12,
+                PixelationClusterSize = 2,
+                PixelationSeed = 61,
+                NoiseSpacing = 10,
+                NoiseChance = 9,
+                NoiseSeed = 11,
+                ContentMarginLeftOverride = 10,
+                ContentMarginRightOverride = 10,
+                ContentMarginTopOverride = 8,
+                ContentMarginBottomOverride = 8
+            };
+        }
+
+        private static CrtStyleBox CreateInsetStyleBox()
+        {
+            return new CrtStyleBox
+            {
+                BackgroundColor = StyleNano.CrtInsetBackground,
+                BorderColor = StyleNano.CrtGreenDim,
+                CornerColor = StyleNano.CrtGreen.WithAlpha(0.22f),
+                ScanlineColor = StyleNano.CrtGreen.WithAlpha(0.014f),
+                GridColor = StyleNano.CrtGreen.WithAlpha(0.008f),
+                NoiseColor = StyleNano.CrtGreenSoft.WithAlpha(0.04f),
+                PixelationColor = StyleNano.CrtGreen.WithAlpha(0.03f),
+                PixelationShadowColor = StyleNano.CrtPanelBackground.WithAlpha(0.14f),
+                BorderThickness = new Thickness(1),
+                DrawPixelation = true,
+                CornerLength = 8,
+                PixelationBlockSize = 2,
+                PixelationSpacing = 140,
+                PixelationChance = 14,
+                PixelationClusterSize = 1,
+                PixelationSeed = 67,
+                NoiseSpacing = 11,
+                NoiseChance = 10,
+                NoiseSeed = 17,
+                ContentMarginLeftOverride = 8,
+                ContentMarginRightOverride = 8,
+                ContentMarginTopOverride = 6,
+                ContentMarginBottomOverride = 6
+            };
         }
 
         protected override void FrameUpdate(FrameEventArgs args)
@@ -243,7 +328,12 @@ namespace Content.Client.Voting.UI
                 int i = 0;
                 foreach (var voteDropdown in voteList)
                 {
-                    var optionButton = new OptionButton();
+                    var optionButton = new OptionButton
+                    {
+                        HorizontalExpand = true,
+                        MinWidth = 280,
+                    };
+                    CrtLobbyTheme.ApplyToOptionButton(optionButton);
                     int j = 0;
                     foreach (var (key, value) in voteDropdown)
                     {
@@ -253,7 +343,6 @@ namespace Content.Client.Voting.UI
                     VoteOptionsButtonContainer.AddChild(optionButton);
                     optionButton.Visible = true;
                     optionButton.OnItemSelected += ButtonSelected;
-                    optionButton.Margin = new Thickness(2, 1);
                     if (AvailableVoteOptions[(StandardVoteType)obj.Id].FollowDropdownId != null && AvailableVoteOptions[(StandardVoteType)obj.Id].FollowDropdownId == i)
                     {
                         _followDropdown = optionButton;

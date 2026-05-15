@@ -11,6 +11,7 @@ using Content.Shared._CMU14.Medical.Surgery;
 using Content.Shared._CMU14.Medical.Surgery.Conditions;
 using Content.Shared._CMU14.Medical.Surgery.Effects;
 using Content.Shared._CMU14.Medical.Wounds;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Conditions;
@@ -81,7 +82,7 @@ public sealed class CMUSurgeryDispatchSystem : EntitySystem
         if (!IsLayerEnabled())
             return false;
 
-        if (!HasComp<CMUHumanMedicalComponent>(patient))
+        if (!IsCmuOrganicSurgeryPatient(patient))
             return false;
 
         if (!_flowSurgery.CanOperateOnPatient(patient, surgeon, popup: true))
@@ -122,6 +123,12 @@ public sealed class CMUSurgeryDispatchSystem : EntitySystem
 
         return TryComp<CMUSurgeryInFlightComponent>(lockComp.Part, out var inFlight)
             && inFlight.Surgeon == surgeon;
+    }
+
+    private bool IsCmuOrganicSurgeryPatient(EntityUid patient)
+    {
+        return HasComp<CMUHumanMedicalComponent>(patient)
+            || HasComp<YautjaComponent>(patient);
     }
 
     private bool TryArmByToolIntent(EntityUid surgeon, EntityUid patient, EntityUid tool, List<CMUSurgeryPartEntry> parts)

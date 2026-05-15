@@ -4,7 +4,6 @@ using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.Manager;
 
 namespace Content.Server.Humanoid.Systems;
 
@@ -14,7 +13,6 @@ namespace Content.Server.Humanoid.Systems;
 public sealed class RandomHumanoidSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly ISerializationManager _serialization = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
 
     [Dependency] private readonly HumanoidAppearanceSystem _humanoid = default!;
@@ -38,7 +36,9 @@ public sealed class RandomHumanoidSystem : EntitySystem
         if (!_prototypeManager.TryIndex<RandomHumanoidSettingsPrototype>(prototypeId, out var prototype))
             throw new ArgumentException("Could not get random humanoid settings");
 
-        var profile = HumanoidCharacterProfile.Random(prototype.SpeciesBlacklist);
+        var profile = prototype.Species is { } species
+            ? HumanoidCharacterProfile.RandomWithSpecies(species)
+            : HumanoidCharacterProfile.Random(prototype.SpeciesBlacklist);
         var speciesProto = _prototypeManager.Index<SpeciesPrototype>(profile.Species);
         var humanoid = EntityManager.CreateEntityUninitialized(speciesProto.Prototype, coordinates);
 
@@ -47,17 +47,18 @@ public sealed class RandomHumanoidSystem : EntitySystem
         _humanoid.LoadProfile(humanoid, profile);
 
         if (prototype.Components != null)
-        {
-            foreach (var entry in prototype.Components.Values)
-            {
-                var comp = (Component)_serialization.CreateCopy(entry.Component, notNullableOverride: true);
-                RemComp(humanoid, comp.GetType());
-                AddComp(humanoid, comp);
-            }
-        }
+            EntityManager.AddComponents(humanoid, prototype.Components);
 
         EntityManager.InitializeAndStartEntity(humanoid);
 
+        RaiseLocalEvent(humanoid, new RandomHumanoidSpawnedEvent(prototypeId, profile.Species));
+
         return humanoid;
     }
+}
+
+public sealed class RandomHumanoidSpawnedEvent(string settingsPrototypeId, string species) : EntityEventArgs
+{
+    public readonly string SettingsPrototypeId = settingsPrototypeId;
+    public readonly string Species = species;
 }

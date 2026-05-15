@@ -1,32 +1,35 @@
 <ui:VoteCallMenu xmlns="https://spacestation14.io"
                  xmlns:ui="clr-namespace:Content.Client.Voting.UI"
                  xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-                 MouseFilter="Stop" MinSize="350 200">
-    <PanelContainer StyleClasses="AngleRect" />
-    <BoxContainer Orientation="Vertical">
-        <BoxContainer Margin="8 0" Orientation="Horizontal">
+                 MouseFilter="Stop" MinSize="420 230">
+    <PanelContainer Name="RootPanel" StyleClasses="CrtPanel" />
+    <BoxContainer Orientation="Vertical" Margin="10 8" SeparationOverride="6">
+        <BoxContainer Orientation="Horizontal">
             <Label Text="{Loc 'ui-vote-create-title'}"
-                   HorizontalExpand="True" VAlign="Center" StyleClasses="LabelHeading" />
+                   HorizontalExpand="True" VAlign="Center" StyleClasses="CrtHeading" />
             <TextureButton Name="CloseButton" StyleClasses="windowCloseButton"
                            VerticalAlignment="Center" />
         </BoxContainer>
-        <controls:HighDivider />
 
-        <BoxContainer Orientation="Vertical" Margin="8 2 8 0" VerticalExpand="True" VerticalAlignment="Top">
-            <BoxContainer Orientation="Vertical">
-                <OptionButton Margin="2 1" Name="VoteTypeButton" HorizontalExpand="False" />
-                <BoxContainer Name="VoteOptionsButtonContainer" HorizontalExpand="False" Orientation="Vertical"> 
+        <PanelContainer Name="OptionsPanel" StyleClasses="CrtInsetPanel" HorizontalExpand="True">
+            <BoxContainer Orientation="Vertical" Margin="8 6" VerticalExpand="True" VerticalAlignment="Top"
+                          SeparationOverride="5">
+                <OptionButton Name="VoteTypeButton" HorizontalExpand="True" MinWidth="280" />
+                <BoxContainer Name="VoteOptionsButtonContainer" HorizontalExpand="True" Orientation="Vertical"
+                              SeparationOverride="4">
                 </BoxContainer>
-                <Button Margin="64 4" Name="FollowButton" Text="{Loc 'ui-vote-follow-button'}" Visible="False" />
-                <Label Margin="2 2" Name="VoteNotTrustedLabel" Text="{Loc 'ui-vote-trusted-users-notice'}" Visible="False" />
-                <Label Margin="2 2" Name="VoteWarningLabel" Text="{Loc 'ui-vote-abuse-warning'}" Visible="False" HorizontalAlignment="Center"/>
+                <Button Name="FollowButton" Text="{Loc 'ui-vote-follow-button'}" Visible="False"
+                        HorizontalExpand="True" />
+                <Label Name="VoteNotTrustedLabel" Text="{Loc 'ui-vote-trusted-users-notice'}" Visible="False"
+                       StyleClasses="CrtText" />
+                <Label Name="VoteWarningLabel" Text="{Loc 'ui-vote-abuse-warning'}" Visible="False"
+                       HorizontalAlignment="Center" StyleClasses="CrtHeading" />
+                <Label Name="VoteTypeTimeoutLabel" Visible="False" StyleClasses="CrtHeading" />
             </BoxContainer>
-            <Label Margin="8 2" Name="VoteTypeTimeoutLabel" Visible="False" />
-        </BoxContainer>
+        </PanelContainer>
         
-        <Button Margin="8 32 8 2" Name="CreateButton" Text="{Loc 'ui-vote-create-button'}" />
+        <Button Name="CreateButton" Text="{Loc 'ui-vote-create-button'}" HorizontalExpand="True" />
 
-        <PanelContainer StyleClasses="LowDivider" />
-        <Label Margin="12 0 0 0" StyleClasses="LabelSubText" Text="{Loc 'ui-vote-fluff'}" />
+        <Label StyleClasses="CrtDimText" Text="{Loc 'ui-vote-fluff'}" />
     </BoxContainer>
 </ui:VoteCallMenu>

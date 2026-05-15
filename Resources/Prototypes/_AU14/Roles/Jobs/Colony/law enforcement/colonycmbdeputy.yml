@@ -27,6 +27,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: CMB Deputy (CMU)
   accessGroups:
   - aucmb
   - Colonist

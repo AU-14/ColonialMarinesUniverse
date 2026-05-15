@@ -13,7 +13,7 @@
     components:
     - type: Skills
       preset: RMCSkillPresetSurvivorWeYaManager
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCSurvivorPresetCorporate
     - type: RMCSurvivor
     - type: MotionDetectorTracked

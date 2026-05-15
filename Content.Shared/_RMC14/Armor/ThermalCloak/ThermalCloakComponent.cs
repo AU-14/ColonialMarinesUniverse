@@ -52,6 +52,9 @@ public sealed partial class ThermalCloakComponent : Component
     public TimeSpan UncloakWeaponLock = TimeSpan.FromSeconds(1);
 
     [DataField, AutoNetworkedField]
+    public bool GrantAction = true;
+
+    [DataField, AutoNetworkedField]
     public EntProtoId ActionId = "RMCActionToggleCloak";
 
     [DataField, AutoNetworkedField]

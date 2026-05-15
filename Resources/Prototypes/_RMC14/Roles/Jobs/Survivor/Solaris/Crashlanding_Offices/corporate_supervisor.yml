@@ -33,7 +33,7 @@
     - type: RMCPointing
     - type: CommandAccent
     - type: InnateCommandSpeech
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetPMCGun # TODO RMC14: CL Survivor Loot preset
     - type: RMCSurvivor
     - type: MotionDetectorTracked

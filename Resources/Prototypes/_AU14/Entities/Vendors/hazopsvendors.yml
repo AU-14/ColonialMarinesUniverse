@@ -532,6 +532,8 @@
         amount: 8
       - id: RMCWeaponLauncherDisposableFolded
         amount: 2
+      - id: RMCRocketM5510Brute
+        amount: 12
     - name: Barrel Attachments
       entries:
       - id: RMCAttachmentExtendedBarrel

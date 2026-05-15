@@ -20,8 +20,11 @@
     RMCRankSyntheticColonist: []
   startingGear: AU14GearCivilianColonySynthetic
   icon: "AU14JobIconColonySynth"
+  hasIcon: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
+  whitelisted: true
+  whitelistParent: AU14JobGeneralWhitelist
   accessGroups:
   - Colonist
   - auadmin

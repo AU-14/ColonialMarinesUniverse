@@ -1,0 +1,2050 @@
+# CMSS13 Yautja mask variants.
+# Generated from source DMI states; behavior is inherited from CMUYautjaMask.
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskAncient
+  name: ancient bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_ancient.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_ancient.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskAncientRedGlow
+  name: ancient redglow bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_ancient_redglow.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_ancient_redglow.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskAncientWhite
+  name: ancient white bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_ancient_white.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_ancient_white.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskBadBloodBane
+  name: bad blood bane bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_bane.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_bane.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskBadBloodCommando
+  name: bad blood commando bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_commando.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_commando.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskBadBloodCommandoAlt
+  name: bad blood commando alternate bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_commandoalt.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_commandoalt.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskBadBloodEmissaryClassic
+  name: bad blood emissary classic bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_classic.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_classic.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskBadBloodEmissaryDesert
+  name: bad blood emissary desert bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_desert.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_desert.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskBadBloodEmissaryJungle
+  name: bad blood emissary jungle bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_jungle.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_jungle.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskBadBloodEmissarySnow
+  name: bad blood emissary snow bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_snow.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_snow.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskBadBloodEmissaryUrban
+  name: bad blood emissary urban bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_urban.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_urban.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskBadBloodLunatic
+  name: bad blood lunatic bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_lunatic.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_lunatic.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskBadBloodPatchwork
+  name: bad blood patchwork bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_patchwork.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_patchwork.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskBadBloodPatchworkAlt
+  name: bad blood patchwork alternate bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_patchworkalt.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_patchworkalt.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskBadBloodScav
+  name: bad blood scav bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_scav.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_scav.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskBadBloodScavAlt
+  name: bad blood scav alternate bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_scavalt.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_scavalt.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskBadBloodVenator
+  name: bad blood venator bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_venator.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_venator.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskEliteCleopatra
+  name: elite cleopatra bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_elite_cleopatra.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_elite_cleopatra.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskElitePlated
+  name: elite plated bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_elite_plated.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_elite_plated.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskLegacyCollector
+  name: legacy collector bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_legacy_collector.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_legacy_collector.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskLegacyDragon
+  name: legacy dragon bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_legacy_dragon.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_legacy_dragon.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskLegacyEnforcer
+  name: legacy enforcer bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_legacy_enforcer.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_legacy_enforcer.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskLegacySwamp
+  name: legacy swamp bio-mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask_legacy_swamp.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask_legacy_swamp.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred01Bone
+  name: bone clan bio-mask 1
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask1_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask1_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred01Bronze
+  name: bronze clan bio-mask 1
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask1_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask1_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred01Crimson
+  name: crimson clan bio-mask 1
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask1_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask1_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred01Ebony
+  name: ebony clan bio-mask 1
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask1_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask1_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred01Silver
+  name: silver clan bio-mask 1
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask1_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask1_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred02Bone
+  name: bone clan bio-mask 2
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask2_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask2_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred02Bronze
+  name: bronze clan bio-mask 2
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask2_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask2_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred02Crimson
+  name: crimson clan bio-mask 2
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask2_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask2_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred02Ebony
+  name: ebony clan bio-mask 2
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask2_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask2_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred02Silver
+  name: silver clan bio-mask 2
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask2_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask2_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred03Bone
+  name: bone clan bio-mask 3
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask3_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask3_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred03Bronze
+  name: bronze clan bio-mask 3
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask3_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask3_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred03Crimson
+  name: crimson clan bio-mask 3
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask3_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask3_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred03Ebony
+  name: ebony clan bio-mask 3
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask3_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask3_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred03Silver
+  name: silver clan bio-mask 3
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask3_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask3_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred04Bone
+  name: bone clan bio-mask 4
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask4_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask4_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred04Bronze
+  name: bronze clan bio-mask 4
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask4_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask4_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred04Crimson
+  name: crimson clan bio-mask 4
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask4_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask4_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred04Ebony
+  name: ebony clan bio-mask 4
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask4_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask4_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred04Silver
+  name: silver clan bio-mask 4
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask4_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask4_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred05Bone
+  name: bone clan bio-mask 5
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask5_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask5_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred05Bronze
+  name: bronze clan bio-mask 5
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask5_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask5_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred05Crimson
+  name: crimson clan bio-mask 5
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask5_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask5_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred05Ebony
+  name: ebony clan bio-mask 5
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask5_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask5_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred05Silver
+  name: silver clan bio-mask 5
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask5_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask5_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred06Bone
+  name: bone clan bio-mask 6
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask6_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask6_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred06Bronze
+  name: bronze clan bio-mask 6
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask6_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask6_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred06Crimson
+  name: crimson clan bio-mask 6
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask6_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask6_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred06Ebony
+  name: ebony clan bio-mask 6
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask6_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask6_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred06Silver
+  name: silver clan bio-mask 6
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask6_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask6_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred07Bone
+  name: bone clan bio-mask 7
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask7_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask7_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred07Bronze
+  name: bronze clan bio-mask 7
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask7_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask7_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred07Crimson
+  name: crimson clan bio-mask 7
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask7_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask7_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred07Ebony
+  name: ebony clan bio-mask 7
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask7_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask7_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred07Silver
+  name: silver clan bio-mask 7
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask7_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask7_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred08Bone
+  name: bone clan bio-mask 8
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask8_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask8_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred08Bronze
+  name: bronze clan bio-mask 8
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask8_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask8_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred08Crimson
+  name: crimson clan bio-mask 8
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask8_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask8_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred08Ebony
+  name: ebony clan bio-mask 8
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask8_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask8_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred08Silver
+  name: silver clan bio-mask 8
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask8_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask8_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred09Bone
+  name: bone clan bio-mask 9
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask9_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask9_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred09Bronze
+  name: bronze clan bio-mask 9
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask9_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask9_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred09Crimson
+  name: crimson clan bio-mask 9
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask9_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask9_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred09Ebony
+  name: ebony clan bio-mask 9
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask9_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask9_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred09Silver
+  name: silver clan bio-mask 9
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask9_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask9_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred10Bone
+  name: bone clan bio-mask 10
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask10_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask10_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred10Bronze
+  name: bronze clan bio-mask 10
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask10_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask10_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred10Crimson
+  name: crimson clan bio-mask 10
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask10_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask10_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred10Ebony
+  name: ebony clan bio-mask 10
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask10_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask10_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred10Silver
+  name: silver clan bio-mask 10
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask10_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask10_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred11Bone
+  name: bone clan bio-mask 11
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask11_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask11_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred11Bronze
+  name: bronze clan bio-mask 11
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask11_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask11_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred11Crimson
+  name: crimson clan bio-mask 11
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask11_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask11_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred11Ebony
+  name: ebony clan bio-mask 11
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask11_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask11_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred11Silver
+  name: silver clan bio-mask 11
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask11_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask11_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred12Bone
+  name: bone clan bio-mask 12
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask12_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask12_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred12Bronze
+  name: bronze clan bio-mask 12
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask12_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask12_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred12Crimson
+  name: crimson clan bio-mask 12
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask12_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask12_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred12Ebony
+  name: ebony clan bio-mask 12
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask12_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask12_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred12Silver
+  name: silver clan bio-mask 12
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask12_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask12_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred13Bone
+  name: bone clan bio-mask 13
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask13_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask13_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred13Bronze
+  name: bronze clan bio-mask 13
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask13_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask13_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred13Crimson
+  name: crimson clan bio-mask 13
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask13_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask13_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred13Ebony
+  name: ebony clan bio-mask 13
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask13_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask13_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred13Silver
+  name: silver clan bio-mask 13
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask13_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask13_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred14Bone
+  name: bone clan bio-mask 14
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask14_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask14_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred14Bronze
+  name: bronze clan bio-mask 14
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask14_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask14_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred14Crimson
+  name: crimson clan bio-mask 14
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask14_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask14_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred14Ebony
+  name: ebony clan bio-mask 14
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask14_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask14_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred14Silver
+  name: silver clan bio-mask 14
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask14_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask14_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred15Bone
+  name: bone clan bio-mask 15
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask15_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask15_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred15Bronze
+  name: bronze clan bio-mask 15
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask15_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask15_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred15Crimson
+  name: crimson clan bio-mask 15
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask15_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask15_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred15Ebony
+  name: ebony clan bio-mask 15
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask15_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask15_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred15Silver
+  name: silver clan bio-mask 15
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask15_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask15_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred16Bone
+  name: bone clan bio-mask 16
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask16_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask16_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred16Bronze
+  name: bronze clan bio-mask 16
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask16_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask16_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred16Crimson
+  name: crimson clan bio-mask 16
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask16_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask16_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred16Ebony
+  name: ebony clan bio-mask 16
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask16_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask16_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred16Silver
+  name: silver clan bio-mask 16
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask16_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask16_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred17Bone
+  name: bone clan bio-mask 17
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask17_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask17_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred17Bronze
+  name: bronze clan bio-mask 17
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask17_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask17_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred17Crimson
+  name: crimson clan bio-mask 17
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask17_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask17_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred17Ebony
+  name: ebony clan bio-mask 17
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask17_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask17_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred17Silver
+  name: silver clan bio-mask 17
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask17_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask17_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred18Bone
+  name: bone clan bio-mask 18
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask18_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask18_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred18Bronze
+  name: bronze clan bio-mask 18
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask18_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask18_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred18Crimson
+  name: crimson clan bio-mask 18
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask18_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask18_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred18Ebony
+  name: ebony clan bio-mask 18
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask18_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask18_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred18Silver
+  name: silver clan bio-mask 18
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask18_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask18_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred19Bone
+  name: bone clan bio-mask 19
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask19_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask19_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred19Bronze
+  name: bronze clan bio-mask 19
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask19_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask19_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred19Crimson
+  name: crimson clan bio-mask 19
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask19_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask19_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred19Ebony
+  name: ebony clan bio-mask 19
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask19_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask19_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred19Silver
+  name: silver clan bio-mask 19
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask19_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask19_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred20Bone
+  name: bone clan bio-mask 20
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask20_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask20_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred20Bronze
+  name: bronze clan bio-mask 20
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask20_bronze.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask20_bronze.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred20Crimson
+  name: crimson clan bio-mask 20
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask20_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask20_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred20Ebony
+  name: ebony clan bio-mask 20
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask20_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask20_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskPred20Silver
+  name: silver clan bio-mask 20
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/pred_mask20_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/pred_mask20_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskThrallBone
+  name: bone thrall mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/thrallmask_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/thrallmask_bone.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskThrallCrimson
+  name: crimson thrall mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/thrallmask_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/thrallmask_crimson.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskThrallEbony
+  name: ebony thrall mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/thrallmask_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/thrallmask_ebony.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskThrallGold
+  name: gold thrall mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/thrallmask_gold.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/thrallmask_gold.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskThrallSilver
+  name: silver thrall mask
+  description: A beautifully designed alien hunting mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/masks/thrallmask_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/masks/thrallmask_silver.rsi
+    slots:
+    - Mask
+    - Suitstorage

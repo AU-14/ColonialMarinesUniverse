@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.AU14.Round;
 using Content.Server.AU14.ThirdParty;
 using Content.Server.Chat.Systems;
+using Content.Server.Popups;
 using Content.Server.Radio;
 using Content.Server.Radio.EntitySystems;
 using Content.Server.Stack;
@@ -34,6 +35,7 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ColonyEconomy.AdminConsoleSystem _adminConsole = default!;
     [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private readonly PopupSystem _popup = default!;
 
     private static readonly SoundSpecifier MarineAnnouncementSound =
         new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");
@@ -380,9 +382,14 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
         if (!_proto.TryIndex<AuThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto)) return;
         if (!_auRound.IsThirdPartyAllowedForCurrentContext(partyProto)) return;
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto)) return;
+        if (!_thirdParty.SpawnThirdParty(partyProto, spawnProto, false))
+        {
+            _popup.PopupEntity("Unable to dispatch support at this time.", uid, msg.Actor);
+            return;
+        }
+
         comp.Budget -= cost;
         comp.CalledParties.Add(msg.ThirdPartyId);
-        _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
         UpdateAllFactionUi(comp);
     }
 

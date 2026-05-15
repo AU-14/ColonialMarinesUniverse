@@ -630,19 +630,6 @@
             sprite: _RMC14/Interface/tech_tree.rsi
             state: upgrade
       -
-        - name: RMC Rapid Reaction Troop
-          description: Summon a Royal Marines Commando Rapid Reaction Troop.
-          cost: 70
-          repurchasable: false
-          events:
-          - !type:TechPartySpawnEvent
-            thirdPartyId: RMCRRT
-          - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A Royal Marines Commando Rapid Reaction Troop has been dispatched to aid with the operation.
-          icon:
-            sprite: _RMC14/Interface/tech_tree.rsi
-            state: beacon
         - name: US Army 32nd ArmDiv reinforcements
           description: Summon a squad from US Army 32nd Armored Division.
           cost: 80

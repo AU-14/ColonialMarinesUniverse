@@ -828,7 +828,7 @@ public sealed class DropshipSystem : SharedDropshipSystem
                 destinations.Add(destination);
             }
 
-            var canTacticalLand = IsStrictThirdPartyFaction(whitelistedFaction);
+            var canTacticalLand = computer.Comp.CanTacticalLand || IsStrictThirdPartyFaction(whitelistedFaction);
             var state = new DropshipNavigationDestinationsBuiState(flyBy, destinations, doorLockStatus, computer.Comp.RemoteControl, canTacticalLand, computer.Comp.LaunchAlarmStatus);
             _ui.SetUiState(computer.Owner, DropshipNavigationUiKey.Key, state);
             return;

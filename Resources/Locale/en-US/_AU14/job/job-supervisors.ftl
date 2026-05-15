@@ -14,3 +14,5 @@ au14-job-supervisors-workingjoe-colony = the Colony Administrator, colony AI cor
 
 au14-job-supervisors-orbital = Orbital Manager
 au14-job-supervisors-orbitalmanager = Solar System Manager
+
+au14-job-supervisors-tribal = the tribe elder

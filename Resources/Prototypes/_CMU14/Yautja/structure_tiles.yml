@@ -1,0 +1,217 @@
+﻿# Original upstream reference: https://github.com/cmss13-devs/cmss13
+
+- type: tile
+  abstract: true
+  parent: CMTileBaseUnpryable
+  id: CMUYautjaHunterFloorBase
+  name: yautja hunter floor
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsFloor
+  name: yautja floor floor
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/floor.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsOuterhull
+  name: yautja floor outerhull
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/outerhull.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsDamaged1
+  name: yautja floor damaged1
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/damaged1.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsDamaged2
+  name: yautja floor damaged2
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/damaged2.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsDamaged3
+  name: yautja floor damaged3
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/damaged3.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsDamaged4
+  name: yautja floor damaged4
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/damaged4.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsDamaged5
+  name: yautja floor damaged5
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/damaged5.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsOuterhullAlt
+  name: yautja floor outerhull alt
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/outerhull_alt.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterGlow
+  name: yautja floor hunter glow
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/hunter_glow.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterBridge
+  name: yautja floor hunter bridge
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/hunter_bridge.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterCatwalkAlpha
+  name: yautja floor hunter catwalk alpha
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/hunter_catwalk_alpha.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterCatwalk
+  name: yautja floor hunter catwalk
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/hunter_catwalk.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterCatwalkAltAlpha
+  name: yautja floor hunter catwalk alt alpha
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/hunter_catwalk_alt_alpha.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterCatwalkAlt
+  name: yautja floor hunter catwalk alt
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/hunter_catwalk_alt.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterCatwalkNewAlpha
+  name: yautja floor hunter catwalk new alpha
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/hunter_catwalk_new_alpha.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterCatwalkNew
+  name: yautja floor hunter catwalk new
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/hunter_catwalk_new.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterGrille
+  name: yautja floor hunter grille
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/hunter_grille.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterGrilleAlpha
+  name: yautja floor hunter grille alpha
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/hunter_grille_alpha.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsN611
+  name: yautja floor 6,11
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/6,11.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsN612
+  name: yautja floor 6,12
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/6,12.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsCorner1
+  name: yautja floor corner 1
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/corner_1.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsCorner2
+  name: yautja floor corner 2
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/corner_2.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsCorner3
+  name: yautja floor corner 3
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/corner_3.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsCorner4
+  name: yautja floor corner 4
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/corner_4.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsCorner6
+  name: yautja floor corner 6
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/corner_6.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsCorner7
+  name: yautja floor corner 7
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/corner_7.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsCorner8
+  name: yautja floor corner 8
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/corner_8.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterRed
+  name: yautja floor hunter red
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/hunter_red.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterRed2
+  name: yautja floor hunter red 2
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/hunter_red_2.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterRed3
+  name: yautja floor hunter red 3
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/hunter_red_3.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterRed4
+  name: yautja floor hunter red 4
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/hunter_red_4.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterRed5
+  name: yautja floor hunter red 5
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/hunter_red_5.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsHunterRed6
+  name: yautja floor hunter red 6
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/hunter_red_6.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsBorderlessV
+  name: yautja floor borderless v
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/borderless_v.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileHunterFloorsBorderlessH
+  name: yautja floor borderless h
+  sprite: "/Textures/_CMU14/Yautja/Structures/hunter_floors.rsi/borderless_h.png"

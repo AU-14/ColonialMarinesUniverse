@@ -1,0 +1,194 @@
+# NPC + IFF faction for abominations.
+# Hostile to everything except itself; kept separate from RMCXeno so the
+# two threats can coexist without friendly-firing each other.
+- type: npcFaction
+  id: Abomination
+  hostile:
+  - UNMC
+  - NanoTrasen
+  - SPP
+  - GOVFOR
+  - OPFOR
+  - Halcyon
+  - WeYa
+  - Civilian
+  - CLF
+  - TSE
+  - AUColonist
+  - CMUAPE
+  - RMCXeno
+
+- type: entity
+  id: FactionAbomination
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IFFFaction
+
+# Abstract base for every abomination mob. Built from the core mob mixins
+# (BaseMob / MobDamageable / MobCombat / MobBloodstream / MobFlammable),
+# NOT from anything xeno-related. Abominations are a separate threat and
+# do not share any xeno systems (no plasma, no hive, no evolution).
+- type: entity
+  abstract: true
+  save: false
+  parent:
+  - BaseMob
+  - MobDamageable
+  - MobCombat
+  - MobBloodstream
+  - MobFlammable
+  id: AU14AbominationBase
+  name: abomination
+  components:
+  - type: Abomination
+  # No crit state — abominations go straight from Alive to Dead. Stops them
+  # from being permanently dragged off and field-executed; if the threshold
+  # is hit, the flesh just dies. Per-caste health lives in MobThresholds on
+  # each subtype.
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Dead
+  # Abominations have no hands (skitter overrides this with real ones), but
+  # they still need to drag downed prey back to nests. NeedsHands: false
+  # lets them pull/drag bodies in their mouth/limbs without an inventory.
+  - type: Puller
+    needsHands: false
+  # Weak to fire (Heat x2). Tendons + flesh forms catch and burn fast — fire
+  # is the intended counter to abomination area denial.
+  - type: Damageable
+    damageContainer: Biological
+    damageModifierSet: AbominationFireWeak
+  # Bloodstream is inherited from MobBloodstream so it can be examined as a
+  # mob, but we kill bleed entirely — abominations don't have circulating
+  # blood, they ARE the blood. No bleed-out, no bleed damage.
+  - type: Bloodstream
+    bloodMaxVolume: 0
+    maxBleedAmount: 0
+    bleedReductionAmount: 0
+    bloodRefreshAmount: 0
+    bloodlossDamage:
+      types:
+        Bloodloss: 0
+    bloodlossHealDamage:
+      types:
+        Bloodloss: 0
+  - type: NoSlip
+  - type: Climbing
+  - type: ComplexInteraction
+  - type: Emoting
+  - type: TypingIndicator
+    proto: alien
+  - type: MobCollision
+  - type: RMCMobCollision
+  - type: StatusEffects
+    allowed:
+    - Stun
+    - KnockedDown
+    - SlowedDown
+    - Muted
+    - Dazed
+    - Blinded
+    - Unconscious
+    - TemporaryBlindness
+    - Deaf
+  # Only the skitter has hands (added in skitter.yml). Spider, grunt and the
+  # combat-form mimic intentionally have no fingers.
+  - type: Body
+    prototype: Primate
+    requiredLegs: 1
+  - type: NpcFactionMember
+    factions:
+    - Abomination
+  - type: UserIFF
+    factions:
+    - FactionAbomination
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    name: Abomination
+    description: A twisted mass of flesh hungry for prey.
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    raffle:
+      settings: short
+  # Heavy slash melee — Slash damage routes through the CMU bodypart system's
+  # BruteGroup -> SeveranceDamage path, so all abominations have a high
+  # built-in limb-sever chance. Individual mobs override the damage value.
+  # soundHit / soundSwing pull from the xeno emote pool — abominations
+  # growl/hiss/roar on attack instead of using clean weapon SFX.
+  - type: MeleeWeapon
+    soundHit:
+      collection: XenoGrowl
+      params:
+        variation: 0.15
+    soundSwing:
+      collection: XenoHiss
+      params:
+        variation: 0.15
+        volume: -3
+    angle: 0
+    animation: RMCWeaponArcXenoClaw
+    # Big base value — guarantees a strong sever push on every hit, since
+    # severance scales with Brute (Slash) damage in CMUBodyPartHealthSystem.
+    damage:
+      types:
+        Slash: 48
+  # Heavy footsteps for every caste (skitter/grunt/mimic/spider). Reuses the
+  # xeno large-footstep collection.
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: XenoFootstepLarge
+      params:
+        volume: -2
+  - type: Speech
+    speechVerb: Abomination
+    speechSounds: Bass
+  # No ReplacementAccent — abominations speak cleanly on their radio
+  # (replacement accents fire on AccentGetEvent, which runs through the
+  # radio chat path; an accent here would garble their hivemind comms).
+  # Abomination radio channel — see abominationRoles.yml.
+  - type: IntrinsicRadioReceiver
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Abomination
+  - type: ActiveRadio
+    channels:
+    - Abomination
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: warrior
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3
+    baseSprintSpeed: 4
+  # Fixture override on top of BaseMob — adds XenoProjectileImpassable to the
+  # collision layer so xeno-style projectiles (including abomination spit)
+  # actually register hits on abominations. Without this the projectile
+  # passes straight through MobLayer-only fixtures.
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 50
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+        - XenoProjectileImpassable
+  - type: NameIdentifier
+    group: Abomination
+
+- type: nameIdentifierGroup
+  id: Abomination
+  maxValue: 999
+  prefix: Abomination
+
+# Heat x3.5 = burns down 3.5x as fast. Fire is the hard counter to the
+# threat's area denial; flamers should melt them in seconds.
+- type: damageModifierSet
+  id: AbominationFireWeak
+  coefficients:
+    Heat: 3.5

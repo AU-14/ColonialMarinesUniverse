@@ -1,0 +1,37 @@
+- type: partySpawn
+  id: CLFReinforcementsSpawnIntel
+  leadersToSpawn:
+    AU14IntelThirdPartyCLFInsurgentReinforcements: 1
+  gruntsToSpawn:
+    AU14IntelThirdPartyCLFInsurgentReinforcements: 4
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: CLFCellReinforcementsIntel
+  partyspawn: CLFReinforcementsSpawnIntel
+  entrymethod: ground
+  weight: 1
+  minplayers: 0
+  maxplayers: 600
+  GhostsNeeded: 600
+  roundstart: false
+
+
+
+- type: partySpawn
+  id: CLFReinforcementsSpawnIntelMachineGunner
+  leadersToSpawn:
+    AU14IntelThirdPartyCLFInsurgentReinforcementsMachineGunner: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: CLFCellReinforcementsIntelMachineGunner
+  partyspawn: CLFReinforcementsSpawnIntelMachineGunner
+  entrymethod: ground
+  weight: 1
+  minplayers: 0
+  maxplayers: 600
+  GhostsNeeded: 600
+  roundstart: false

@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Client.Chemistry.EntitySystems;
 using Content.Client.Guidebook.Richtext;
+using Content.Client.Lobby.UI;
 using Content.Client.Message;
 using Content.Client.UserInterface.ControlExtensions;
 using Content.Shared._RMC14.Atmos;
@@ -44,6 +45,7 @@ public sealed partial class GuideReagentEmbed : BoxContainer, IDocumentTag, ISea
         _sawmill = _logManager.GetSawmill("guidebook.reagent");
         _chemistryGuideData = _systemManager.GetEntitySystem<ChemistryGuideDataSystem>();
         MouseFilter = MouseFilterMode.Stop;
+        CrtLobbyTheme.Apply(this, useCrtTypography: false);
     }
 
     public GuideReagentEmbed(string reagent) : this()
@@ -246,6 +248,7 @@ public sealed partial class GuideReagentEmbed : BoxContainer, IDocumentTag, ISea
         description.AddMarkupOrThrow(Loc.GetString("guidebook-reagent-physical-description",
             ("description", reagent.LocalizedPhysicalDescription)));
         ReagentDescription.SetMessage(description);
+        CrtLobbyTheme.Apply(this, useCrtTypography: false);
     }
 
     private void GenerateSources(ReagentPrototype reagent)

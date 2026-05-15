@@ -19,26 +19,38 @@
     xenoPushMinimumSize: Immobile
     canSmashWalls: true
     wallSmashMinSpeed: 5
-    wallSmashWheelDamage: 3
-    wallSmashHullDamage: 150
-    wallSmashSlowdownMultiplier: 0.6
-    wallSmashSlowdownDuration: 0.35
-    mobCollisionHullDamage: 20
-    speedAtZeroIntegrity: 0
-    crashImmobileDuration: 90
-    mobCrashImmobileDuration: 20
-    xenoMobCrashImmobileDuration: 60
+    wallSmashWheelDamage: 0.8
+    wallSmashHullDamage: 45
+    wallSmashSlowdownMultiplier: 0.75
+    wallSmashSlowdownDuration: 0.25
+    mobCollisionHullDamage: 8
+    speedAtZeroIntegrity: 0.35
+    crashImmobileDuration: 8
+    crashImmobileMinSpeed: 7.25
+    mobCrashImmobileDuration: 4
+    mobCrashImmobileMinSpeed: 5.5
+    xenoMobCrashImmobileDuration: 8
+    xenoMobCrashImmobileMinSpeed: 5.5
   - type: VehicleOvercharge
-    speedMultiplier: 1.6
-    duration: 3
-    cooldown: 15
-    overchargeSound: /Audio/_RMC14/Vehicle/overdrive_activate.ogg
+    speedMultiplier: 1.35
+    duration: 2.5
+    cooldown: 14
+    overchargeSound:
+      path: /Audio/_RMC14/Vehicle/box_van_overdrive.ogg
+      params:
+        volume: -2
   - type: VehicleSound
-    runningSound: /Audio/Effects/Vehicle/vehicleengineidle.ogg
-    runningSoundCooldown: 2
-    hornSound: /Audio/Effects/Vehicle/carhorn.ogg
+    runningSound:
+      path: /Audio/_RMC14/Vehicle/box_van_driving.ogg
+      params:
+        volume: -4
+    runningSoundCooldown: 2.25
+    hornSound: /Audio/_RMC14/Vehicle/honk_4_light.ogg
     hornCooldown: 1
-    collisionSound: /Audio/_RMC14/Effects/metal_crash.ogg
+    collisionSound:
+      path: /Audio/Effects/metal_thud1.ogg
+      params:
+        volume: -2
     collisionSoundCooldown: 1.5
     collisionSoundMinSpeed: 6
     mobCollisionSound: /Audio/_RMC14/Xeno/alien_claw_block.ogg
@@ -223,26 +235,41 @@
     xenoPushMinimumSize: Immobile
     canSmashWalls: true
     wallSmashMinSpeed: 5
-    wallSmashWheelDamage: 3
-    wallSmashHullDamage: 150
-    wallSmashSlowdownMultiplier: 0.6
-    wallSmashSlowdownDuration: 0.35
-    mobCollisionHullDamage: 20
-    speedAtZeroIntegrity: 0
-    crashImmobileDuration: 90
-    mobCrashImmobileDuration: 20
-    xenoMobCrashImmobileDuration: 60
+    wallSmashWheelDamage: 0.8
+    wallSmashHullDamage: 45
+    wallSmashSlowdownMultiplier: 0.75
+    wallSmashSlowdownDuration: 0.25
+    mobCollisionHullDamage: 8
+    speedAtZeroIntegrity: 0.35
+    crashImmobileDuration: 8
+    crashImmobileMinSpeed: 7.25
+    mobCrashImmobileDuration: 4
+    mobCrashImmobileMinSpeed: 5.5
+    xenoMobCrashImmobileDuration: 8
+    xenoMobCrashImmobileMinSpeed: 5.5
   - type: VehicleOvercharge
-    speedMultiplier: 1.6
-    duration: 3
-    cooldown: 15
-    overchargeSound: /Audio/_RMC14/Vehicle/overdrive_activate.ogg
+    speedMultiplier: 1.3
+    duration: 2.75
+    cooldown: 16
+    overchargeSound:
+      path: /Audio/_RMC14/Vehicle/box_van_overdrive.ogg
+      params:
+        volume: -3
   - type: VehicleSound
-    runningSound: /Audio/Effects/Vehicle/vehicleengineidle.ogg
-    runningSoundCooldown: 2
-    hornSound: /Audio/Effects/Vehicle/carhorn.ogg
+    runningSound:
+      path: /Audio/_RMC14/Vehicle/box_van_driving.ogg
+      params:
+        volume: -5
+        pitch: 0.92
+    runningSoundCooldown: 2.25
+    hornSound: /Audio/_RMC14/Vehicle/box_van_horn.ogg
     hornCooldown: 1
+    collisionSound:
+      path: /Audio/Effects/metal_slam1.ogg
+      params:
+        volume: -3
     collisionSoundCooldown: 1.5
+    collisionSoundMinSpeed: 6
     mobCollisionSound: /Audio/_RMC14/Xeno/alien_claw_block.ogg
   - type: VehicleSpotlight
     radius: 6

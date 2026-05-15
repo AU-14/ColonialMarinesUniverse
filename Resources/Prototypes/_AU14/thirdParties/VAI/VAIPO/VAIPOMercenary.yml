@@ -18,7 +18,7 @@
   id: AU14VAIMercenary
   name: VAIPO Mercenary
   components:
-  - type: EquipSurvivorPreset
+  - type: EquipEntityPreset
     preset: AU14VAIPreset
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial

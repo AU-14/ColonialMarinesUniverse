@@ -39,6 +39,17 @@ public sealed partial class GraphicsTab : Control
                 new OptionDropDownCVar<float>.ValueOption(2.00f, Loc.GetString("ui-options-scale-200")),
             ]);
 
+        Control.AddOptionDropDown(
+            CCVars.CrtUiColor,
+            CrtUiColorDropDown,
+            [
+                new OptionDropDownCVar<string>.ValueOption(CCVars.CrtUiColorGreen, Loc.GetString("ui-options-crt-ui-color-green")),
+                new OptionDropDownCVar<string>.ValueOption(CCVars.CrtUiColorBlue, Loc.GetString("ui-options-crt-ui-color-blue")),
+                new OptionDropDownCVar<string>.ValueOption(CCVars.CrtUiColorOrange, Loc.GetString("ui-options-crt-ui-color-orange")),
+                new OptionDropDownCVar<string>.ValueOption(CCVars.CrtUiColorRed, Loc.GetString("ui-options-crt-ui-color-red")),
+                new OptionDropDownCVar<string>.ValueOption(CCVars.CrtUiColorPurple, Loc.GetString("ui-options-crt-ui-color-purple")),
+            ]);
+
         var vpStretch = Control.AddOptionCheckBox(CCVars.ViewportStretch, ViewportStretchCheckBox);
         var vpVertFit = Control.AddOptionCheckBox(CCVars.ViewportVerticalFit, ViewportVerticalFitCheckBox);
         Control.AddOptionSlider(

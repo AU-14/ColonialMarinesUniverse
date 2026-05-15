@@ -15,7 +15,7 @@
         RMCSkillFireman: 2
         RMCSkillFirearms: 2
         RMCSkillLeadership: 1
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetKutjevoChaplain
     - type: MarineOrders
       moveOrderSoundMale:

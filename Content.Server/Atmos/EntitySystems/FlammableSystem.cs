@@ -515,7 +515,9 @@ namespace Content.Server.Atmos.EntitySystems
                         _inventory.RelayEvent((uid, inv), ref ev);
 
                     DamageSpecifier? damage;
-                    if (HasComp<XenoComponent>(uid))
+                    if (HasComp<XenoComponent>(uid) &&
+                        flammable.Intensity > 0 &&
+                        flammable.Duration > 0)
                     {
                         damage = flammable.Intensity * (flammable.FireStacks / flammable.Duration * 0.2 + 0.8) * ev.Multiplier * flammable.Damage / 2;
                     }

@@ -15,6 +15,7 @@ using Content.Shared.ParaDrop;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 using static Content.Shared._RMC14.Dropship.Weapon.DropshipTerminalWeaponsComponent;
 using static Content.Shared._RMC14.Dropship.Weapon.DropshipTerminalWeaponsScreen;
@@ -605,16 +606,73 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         wrapper.UpdateBlips(blips);
 
         wrapper.Map.Lines.Clear();
+        var faction = computer.Faction?.ToUpperInvariant();
+        bool WantsMarines() => string.IsNullOrEmpty(faction) || faction == "MARINES" || faction == "UNMC";
+        bool WantsXenos() => string.IsNullOrEmpty(faction) || faction == "XENONIDS" || faction == "XENONID";
+        bool WantsOpfor() => string.IsNullOrEmpty(faction) || faction == "OPFOR";
+        bool WantsGovfor() => string.IsNullOrEmpty(faction) || faction == "GOVFOR";
+        bool WantsClf() => string.IsNullOrEmpty(faction) || faction == "CLF";
+
         var lines = EntMan.GetComponentOrNull<TacticalMapLinesComponent>(Owner);
         if (lines != null)
         {
-            wrapper.Map.Lines.AddRange(lines.MarineLines);
+            if (WantsMarines())
+                wrapper.Map.Lines.AddRange(lines.MarineLines);
+            if (WantsXenos())
+                wrapper.Map.Lines.AddRange(lines.XenoLines);
+            if (WantsOpfor())
+                wrapper.Map.Lines.AddRange(lines.OpforLines);
+            if (WantsGovfor())
+                wrapper.Map.Lines.AddRange(lines.GovforLines);
+            if (WantsClf())
+                wrapper.Map.Lines.AddRange(lines.ClfLines);
         }
 
         var labels = EntMan.GetComponentOrNull<TacticalMapLabelsComponent>(Owner);
         if (labels != null)
         {
-            wrapper.UpdateTacticalLabels(labels.MarineLabels);
+            var allLabels = new Dictionary<Vector2i, string>();
+            if (WantsMarines())
+            {
+                foreach (var label in labels.MarineLabels)
+                {
+                    allLabels[label.Key] = label.Value;
+                }
+            }
+            if (WantsXenos())
+            {
+                foreach (var label in labels.XenoLabels)
+                {
+                    allLabels[label.Key] = label.Value;
+                }
+            }
+            if (WantsOpfor())
+            {
+                foreach (var label in labels.OpforLabels)
+                {
+                    allLabels[label.Key] = label.Value;
+                }
+            }
+            if (WantsGovfor())
+            {
+                foreach (var label in labels.GovforLabels)
+                {
+                    allLabels[label.Key] = label.Value;
+                }
+            }
+            if (WantsClf())
+            {
+                foreach (var label in labels.ClfLabels)
+                {
+                    allLabels[label.Key] = label.Value;
+                }
+            }
+
+            wrapper.UpdateTacticalLabels(allLabels);
+        }
+        else
+        {
+            wrapper.UpdateTacticalLabels(new Dictionary<Vector2i, string>());
         }
 
         wrapper.LastUpdateAt = computer.LastAnnounceAt;

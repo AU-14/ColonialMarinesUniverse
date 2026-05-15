@@ -5,6 +5,8 @@
   description: au14-job-description-govforauxsupportsynth
   playTimeTracker: AU14JobGOVFORAuxSupportSynth
   basePlaytimeTracker: true
+  whitelisted: true
+  whitelistParent: AU14JobGeneralWhitelist
   hidden: true
 
 - type: playTimeTracker

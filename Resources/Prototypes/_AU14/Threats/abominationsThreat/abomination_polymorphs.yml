@@ -1,0 +1,60 @@
+# Mimic chooses a profile -> polymorphs into a real MobHuman. The server-side
+# AbominationMimicSystem then patches that human's appearance / factions /
+# skills onto it from the snapshot.
+- type: polymorph
+  id: AbominationMimicDisguise
+  configuration:
+    entity: CMMobHuman
+    forced: true
+    inventory: Drop
+    transferName: false
+    transferDamage: true
+    # Critical: mimics that were spawned via AbominationAssimilationToMimic
+    # already carry PolymorphedEntityComponent (pointing back to the victim).
+    # Without this flag the second polymorph (mimic -> disguise) is rejected
+    # outright and the picker silently does nothing.
+    allowRepeatedMorphs: true
+    # We handle crit/death/expiry ourselves so we can run the shake-and-scream
+    # revert sequence; the polymorph layer must not auto-revert.
+    revertOnCrit: false
+    revertOnDeath: false
+
+# Assimilation completes -> the victim is polymorphed into an abomination mimic.
+# One-way: they don't auto-revert when they die or get crit, they just stay a mimic.
+- type: polymorph
+  id: AbominationAssimilationToMimic
+  configuration:
+    entity: AU14AbominationMimic
+    forced: true
+    inventory: Drop
+    transferName: false
+    transferDamage: false
+    revertOnCrit: false
+    revertOnDeath: false
+
+# Non-humanoid (animal) assimilation/turn-on-death — they become a spider
+# instead of a humanoid mimic. Same one-way semantics.
+- type: polymorph
+  id: AbominationAssimilationToSpider
+  configuration:
+    entity: AU14AbominationSpider
+    forced: true
+    inventory: Drop
+    transferName: false
+    transferDamage: false
+    revertOnCrit: false
+    revertOnDeath: false
+
+# Infected death sometimes spawns a skitter instead of a mimic — see the
+# 50/50 roll in AbominationInfectionSystem.
+- type: polymorph
+  id: AbominationAssimilationToSkitter
+  configuration:
+    entity: AU14AbominationSkitter
+    forced: true
+    inventory: Drop
+    transferName: false
+    transferDamage: false
+    revertOnCrit: false
+    revertOnDeath: false
+

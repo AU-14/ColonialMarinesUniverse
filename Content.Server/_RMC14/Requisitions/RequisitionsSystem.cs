@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using Content.Server.Administration.Logs;
 using Content.Server.AU14.Round;
 using Content.Server.Cargo.Components;
+using Content.Server.Cargo.Systems;
 using Content.Server.Chat.Systems;
 using Content.Server.Storage.EntitySystems;
 using Content.Shared.Access;
@@ -56,6 +57,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly PhysicsSystem _physics = default!;
+    [Dependency] private readonly PricingSystem _pricing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly XenoSystem _xeno = default!;
@@ -502,13 +504,21 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
              if (HasComp<CargoSellBlacklistComponent>(entity))
                  continue;
 
-             rewards += SubmitInvoices(entity);
+             var entityRewards = SubmitInvoices(entity);
 
              if (TryComp(entity, out RequisitionsCrateComponent? crate))
              {
-                 rewards += crate.Reward;
-                 soldAny = true;
+                 entityRewards += crate.Reward;
              }
+             else
+             {
+                 entityRewards += (int) Math.Round(_pricing.GetPrice(entity));
+             }
+
+             if (entityRewards > 0)
+                 soldAny = true;
+
+             rewards += entityRewards;
 
              QueueDel(entity);
          }

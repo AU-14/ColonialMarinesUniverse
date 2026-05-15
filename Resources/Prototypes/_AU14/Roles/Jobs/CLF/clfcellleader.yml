@@ -17,10 +17,12 @@
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCLFCellLeader
-  icon: CMJobIconEmpty
+  icon: RMCJobIconCLFCellCommander
+  hasIcon: false
   requireAdminNotify: true
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-clfcellleader
+  spawnMenuRoleName: CLF Cell Leader (CMU)
   accessGroups:
   - Colonist
   roleWeight: 0.25
@@ -72,10 +74,8 @@
     id: AU14IDCardCLFCellLeader
     eyes: RMCGlassesAviators
   inhand:
-  - RMCWeaponRifleType71
-  storage:
-    back:
-    - AU14CLFHeadset
+  - AU14CLFCellKit
+  - AU14CLFHeadset
 
 - type: entity
   parent: CMSpawnPointJobBase

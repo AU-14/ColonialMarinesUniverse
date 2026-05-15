@@ -870,6 +870,18 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("gender");
 
+                    b.Property<string>("GamemodeAntagPreferences")
+                        .HasColumnType("text")
+                        .HasColumnName("gamemode_antag_preferences");
+
+                    b.Property<string>("GamemodeJobPriorities")
+                        .HasColumnType("text")
+                        .HasColumnName("gamemode_job_priorities");
+
+                    b.Property<string>("GamemodeThreatPreferences")
+                        .HasColumnType("text")
+                        .HasColumnName("gamemode_threat_preferences");
+
                     b.Property<string>("HairColor")
                         .IsRequired()
                         .HasColumnType("text")
@@ -887,6 +899,10 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.Property<string>("Origin")
                         .HasColumnType("text")
                         .HasColumnName("origin");
+
+                    b.Property<string>("ThreatPreference")
+                        .HasColumnType("text")
+                        .HasColumnName("threat_preference");
 
                     b.Property<bool>("PlaytimePerks")
                         .ValueGeneratedOnAdd()

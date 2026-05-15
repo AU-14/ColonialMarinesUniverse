@@ -23,7 +23,7 @@
       - Civilian
     - type: IntelRescueSurvivorObjective
     - type: RMCAllowSuitStorage
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCSurvivorPresetRiotInProgressCMBRCTL
     - type: TacticalMapIcon
       icon:
@@ -64,7 +64,7 @@
   name: riot in progress CMB RCTL preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     primaryWeapons:
     - [ RMCPouchShotgunFilledPolicing, RMCWeaponShotgunHG3712 ]
     - [ RMCPouchShotgunFilledPolicing, RMCWeaponShotgunHG3712 ]

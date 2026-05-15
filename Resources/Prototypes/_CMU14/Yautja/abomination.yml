@@ -1,0 +1,346 @@
+- type: entity
+  id: CMUActionYautjaAbominationRush
+  parent: ActionXenoBase
+  name: cmu-yautja-abomination-action-rush
+  description: cmu-yautja-abomination-action-rush-desc
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: charge
+    useDelay: 12
+  - type: InstantAction
+    event: !type:YautjaAbominationRushActionEvent
+
+- type: entity
+  id: CMUActionYautjaAbominationRoar
+  parent: ActionXenoBase
+  name: cmu-yautja-abomination-action-roar
+  description: cmu-yautja-abomination-action-roar-desc
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: screech
+    useDelay: 25
+  - type: InstantAction
+    event: !type:YautjaAbominationRoarActionEvent
+
+- type: entity
+  id: CMUActionYautjaAbominationSmash
+  parent: ActionXenoBase
+  name: cmu-yautja-abomination-action-smash
+  description: cmu-yautja-abomination-action-smash-desc
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: stomp
+    useDelay: 20
+  - type: TargetAction
+    range: 4
+    checkCanAccess: false
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+    event: !type:YautjaAbominationSmashActionEvent
+  - type: ActionInRangeUnobstructed
+    range: 4
+
+- type: entity
+  id: CMUActionYautjaAbominationFrenzy
+  parent: ActionXenoBase
+  name: cmu-yautja-abomination-action-frenzy
+  description: cmu-yautja-abomination-action-frenzy-desc
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: rav_eviscerate
+    useDelay: 15
+  - type: TargetAction
+    range: 2
+    checkCanAccess: false
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+    event: !type:YautjaAbominationFrenzyActionEvent
+  - type: ActionInRangeUnobstructed
+    range: 2
+
+- type: entity
+  id: CMUActionYautjaAbominationToggleFrenzy
+  parent: ActionXenoBase
+  name: cmu-yautja-abomination-action-toggle-frenzy
+  description: cmu-yautja-abomination-action-toggle-frenzy-desc
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: gut
+    useDelay: 0.5
+  - type: InstantAction
+    event: !type:YautjaAbominationToggleFrenzyModeActionEvent
+
+- type: entity
+  parent:
+  - CMXenoUndeveloped
+  - CMXenoFlammable
+  - RMCXenoVentCrawler
+  id: CMUXenoPredalienLarva
+  name: Predalien Larva
+  components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleDrone
+  - type: GhostRole
+    name: cmu-xeno-predalien-larva-name
+  - type: Sprite
+    sprite: _CMU14/Yautja/predalien_larva.rsi
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      35: Critical
+      70: Dead
+  - type: Xeno
+    role: CMUXenoPredalienLarva
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoWatch
+    - ActionXenoHide
+    hudOffset: -0.1,0.25
+    tier: 0
+    unlockAt: 0
+    countedInSlots: false
+    bypassTierCount: true
+    emoteSounds: Larva
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoLight
+  - type: XenoPlasma
+    plasma: 10
+    maxPlasma: 10
+    plasmaRegenOnWeeds: 0.1
+  - type: RMCGibOnDeath
+    gibChance: 0.25
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - RMCGibEffectXenoSmall
+  - type: XenoEvolution
+    canEvolveWithoutGranter: true
+    requiresGranter: false
+    max: 0
+    evolvesToWithoutPoints:
+    - CMUXenoAbomination
+  - type: XenoHide
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 185
+        mask:
+        - SmallMobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - SmallMobLayer
+  - type: Flammable
+    canResistFire: false
+  - type: IgnoreBlockPullingDead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.7
+    baseSprintSpeed: 6.7
+  - type: Speech
+    speechSounds: XenonidLarva
+    allowedEmotes: [ "XenoRoar" ]
+  - type: RMCSize
+    size: Small
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: predalien_larva
+  - type: Tag
+    tags:
+    - RMCXenoLarva
+    - RMCSynthGrabbable
+  - type: RMCBuckleOffset
+    offset: 0, 0
+  - type: XenoRankNames
+    rankNames:
+      0: cmu-xeno-predalien-larva-name
+  - type: FixedIdentity
+    name: cmu-xeno-predalien-larva-name
+  - type: VentCrawler
+    ventCrawlIcon: larva
+  - type: RMCActionOrder
+    id: CMUXenoPredalienLarva
+  - type: YautjaAbominationLarva
+
+- type: entity
+  parent:
+  - CMXenoDeveloped
+  - CMXenoTail
+  - CMXenoFlammable
+  - RMCXenoCommendationReceiver
+  - RMCXenoMobCollision
+  id: CMUXenoAbomination
+  name: Abomination
+  description: A towering hybrid xenomorph born from dishonored Yautja blood.
+  components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleRavager
+  - type: GhostRole
+    name: cmu-xeno-abomination-name
+    description: cmu-xeno-abomination-description
+  - type: Sprite
+    sprite: _CMU14/Yautja/abomination.rsi
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      650: Critical
+      750: Dead
+  - type: Xeno
+    role: CMUXenoAbomination
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - CMUActionYautjaAbominationRush
+    - CMUActionYautjaAbominationRoar
+    - CMUActionYautjaAbominationSmash
+    - CMUActionYautjaAbominationFrenzy
+    - CMUActionYautjaAbominationToggleFrenzy
+    tier: 1
+    unlockAt: 0
+    countedInSlots: false
+    bypassTierCount: true
+    hudOffset: -0.15,0.25
+    emoteSounds: CMUPredalien
+  - type: YautjaAbomination
+  - type: XenoRegen
+    standHealingMultiplier: 0.66
+  - type: XenoHeavy
+  - type: XenoDevour
+  - type: XenoLight
+  - type: XenoPlasma
+    plasma: 0
+    maxPlasma: 0
+    plasmaRegenOnWeeds: 0
+  - type: CMArmor
+    xenoArmor: 30
+    explosionArmor: 100
+  - type: ExplosionResistance
+    damageCoefficient: 0.25
+  - type: XenoClaws
+    clawType: VerySharp
+  - type: MeleeWeapon
+    attackRate: 1.15
+    damage:
+      groups:
+        Brute: 38
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 48
+  - type: Tackle
+    max: 5
+    chance: 0.35
+    stunMin: 4
+    stunMax: 5
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 185
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.50
+        density: 185
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3
+    baseSprintSpeed: 5.2
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.6125
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 0.6675
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 0.445
+      whitelist:
+        components:
+        - XenoHeavy
+  - type: RMCSize
+    size: Big
+  - type: RMCXenoDamageVisuals
+    prefix: predalien
+  - type: RMCFireArmorDebuffModifier
+    debuffModifier: 1.2
+  - type: RMCImmuneToFireTileDamage
+  - type: Speech
+    speechSounds: CMUPredalienSpeech
+    allowedEmotes: [ "Growl", "Hiss", "XenoRoar", "XenoHelp", "XenoTailSwipe" ]
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: predalien
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_xeno
+  - type: FixedIdentity
+    name: cmu-xeno-abomination-name
+  - type: RMCActionOrder
+    id: CMUXenoAbomination
+  - type: RMCSurgeryXenoHeart
+    item: RMCOrganXenoHeartT3
+
+- type: job
+  parent: CMJobXenoBase
+  id: CMUXenoPredalienLarva
+  name: cmu-xeno-predalien-larva-name
+  playTimeTracker: CMUJobXenoPredalienLarva
+
+- type: playTimeTracker
+  id: CMUJobXenoPredalienLarva
+  isXeno: true
+
+- type: job
+  parent: CMJobXenoBase
+  id: CMUXenoAbomination
+  name: cmu-xeno-abomination-name
+  playTimeTracker: CMUJobXenoAbomination
+
+- type: playTimeTracker
+  id: CMUJobXenoAbomination
+  isXeno: true

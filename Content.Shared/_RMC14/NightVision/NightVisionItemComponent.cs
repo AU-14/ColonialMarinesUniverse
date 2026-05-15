@@ -38,6 +38,12 @@ public sealed partial class NightVisionItemComponent : Component
     public bool Toggleable = true;
 
     /// <summary>
+    /// Whether this item should apply night vision as soon as it is equipped.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool EnableOnEquip = true;
+
+    /// <summary>
     /// Slot that must contain the item for its action to be available.
     /// </summary>
     // TODO RMC14 only supports one flag because inventory callers mix string slots and SlotFlags.

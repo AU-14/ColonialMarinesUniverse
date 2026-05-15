@@ -1,5 +1,5 @@
 - type: entity
-  parent: RMCOverwatchConsoleSPP
+  parent: RMCOverwatchConsoleGovfor
   id: RMCOverwatchConsoleSPPTOC
   name: SPP tactical operations console
   description: A tactical operations console configured for SPP overwatch duties.

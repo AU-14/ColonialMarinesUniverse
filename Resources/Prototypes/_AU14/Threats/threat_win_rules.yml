@@ -35,6 +35,15 @@
       percent: 100
 
 - type: entity
+  id: KillAllTribeRule
+  parent: BaseGameRule
+  name: Kill All Tribals
+  description: Threat wins when all Tribals are dead (or when specified percent are dead).
+  components:
+    - type: KillAllTribeRule
+      percent: 100
+
+- type: entity
   id: KillAllXenoRule
   parent: BaseGameRule
   name: Kill All Xenos/Cultists

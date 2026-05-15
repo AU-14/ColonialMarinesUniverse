@@ -9,6 +9,7 @@
   playTimeTracker: AU14VAIEngi
   spawnMenuRoleName: VAI Engineer (Base)
   joinNotifyCrew: false
+  hasIcon: false
   supervisors: au14-job-name-vai-teamleader
   special:
   - !type:AddComponentSpecial
@@ -31,7 +32,7 @@
         RMCSkillVehicles: 2
         RMCSkillJtac: 3
         RMCSkillEndurance: 1
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: AU14VAIBasePreset
     - type: JobPrefix
       prefix: au14-job-prefix-vai-engi

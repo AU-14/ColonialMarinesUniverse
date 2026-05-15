@@ -424,14 +424,14 @@ public sealed class MedalsPanelBui(EntityUid owner, Enum uiKey) : BoundUserInter
         }
     }
 
-    private bool TryGetMedalInfo(string? prototypeId, string? name, [NotNullWhen(true)] out MedalInfo? info)
+    private bool TryGetMedalInfo(EntProtoId? prototypeId, string? name, [NotNullWhen(true)] out MedalInfo? info)
     {
         info = null;
 
         // First try to get by prototype ID
-        if (!string.IsNullOrWhiteSpace(prototypeId))
+        if (prototypeId is { } protoId)
         {
-            if (_prototype.TryIndex(prototypeId, out var proto))
+            if (_prototype.TryIndex(protoId, out var proto))
             {
                 var medalName = proto.Name;
                 if (!string.IsNullOrWhiteSpace(medalName) && _medalsInfo.TryGetValue(medalName, out info))

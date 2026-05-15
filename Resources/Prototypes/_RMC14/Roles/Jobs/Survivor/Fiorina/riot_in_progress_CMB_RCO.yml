@@ -21,7 +21,7 @@
       - Civilian
     - type: IntelRescueSurvivorObjective
     - type: RMCAllowSuitStorage
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCSurvivorPresetRiotInProgressCMBRCO
     - type: JobPrefix
       prefix: cm-job-prefix-survivor-riot-officer
@@ -63,7 +63,7 @@
   name: riot in progress CMB RCO preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     primaryWeapons:
     - [ RMCJumpsuitRiotControlB92FS, RMCPouchMagazineFilledM16, WeaponRifleM16, ArmorHelmetPMCRiotShield ]
     - [ RMCJumpsuitRiotControlB92FS, RMCPouchMagazineFilledM16, WeaponRifleM16, ArmorHelmetPMCRiotShield ]

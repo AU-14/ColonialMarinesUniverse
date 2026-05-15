@@ -93,6 +93,8 @@
         crate: RMCCrateGrenadesBatonSlug
       - cost: 3000
         crate: RMCCrateExplosiveClaymoreMine
+      - cost: 3000
+        crate: RMCCrateM6HBruteRockets
     - name: Food and Drinks
       entries:
       - cost: 380

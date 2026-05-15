@@ -1,12 +1,15 @@
 using System.Numerics;
 using Content.Client.Chat.Managers;
 using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Xenonids.HiveLeader;
 using Content.Shared._RMC14.Chat;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Speech;
+using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
@@ -21,6 +24,7 @@ namespace Content.Client.Chat.UI
         [Dependency] private readonly IGameTiming _timing = default!;
         [Dependency] private readonly IEyeManager _eyeManager = default!;
         [Dependency] private readonly IEntityManager _entityManager = default!;
+        [Dependency] private readonly IPlayerManager _player = default!;
         [Dependency] protected readonly IConfigurationManager ConfigManager = default!;
         private readonly SharedTransformSystem _transformSystem;
 
@@ -140,15 +144,17 @@ namespace Content.Client.Chat.UI
                 return;
             }
 
+            var alpha = GetSenderVisibilityAlpha();
+
             if (timeLeft <= FadeTime.TotalSeconds)
             {
                 // Update alpha if we're fading.
-                Modulate = Color.White.WithAlpha(timeLeft / (float)FadeTime.TotalSeconds);
+                Modulate = Color.White.WithAlpha(timeLeft / (float)FadeTime.TotalSeconds * alpha);
             }
             else
             {
                 // Make opaque otherwise, because it might have been hidden before
-                Modulate = Color.White;
+                Modulate = Color.White.WithAlpha(alpha);
             }
 
             var baseOffset = 0f;
@@ -167,6 +173,20 @@ namespace Content.Client.Chat.UI
 
             var height = MathF.Ceiling(MathHelper.Clamp(lowerCenter.Y - screenPos.Y, 0, ContentSize.Y));
             SetHeight = height;
+        }
+
+        private float GetSenderVisibilityAlpha()
+        {
+            if (!_entityManager.TryGetComponent<SpriteComponent>(_senderEntity, out var sprite))
+                return 1f;
+
+            if (!sprite.Visible && _senderEntity != _player.LocalEntity)
+                return 0f;
+
+            if (_entityManager.TryGetComponent<EntityActiveInvisibleComponent>(_senderEntity, out var invisible))
+                return invisible.Opacity;
+
+            return sprite.Color.A;
         }
 
         private void Die()

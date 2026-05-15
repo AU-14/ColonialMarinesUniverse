@@ -123,7 +123,7 @@
 - type: entity
   parent: [CMBaseDefibrillator, RMCPowerCellSlotUnremovable]
   id: RMCSynthResetKey
-  name: WeYa synthetic reset key
+  name: We-Yu synthetic reset key
   description: This device can fix major glitches or programming errors of synthetic units, as well as being able to restart a synthetic that has suffered critical failure. It must be recharged after use.
   components:
   - type: Sprite
@@ -180,7 +180,7 @@
 - type: entity
   parent: RMCSynthResetKey
   id: RMCSynthResetKeySMART
-  name: SMART WeYa synthetic reset key
+  name: SMART We-Yu synthetic reset key
   description: This device can fix major glitches or programming errors of synthetic units, as well as being able to restart a synthetic that has suffered critical failure. It must be recharged after use. This one has a microfunction AI and can be operated by anyone.
   components:
   - type: Sprite
@@ -249,13 +249,13 @@
   parent: RMCSynthResetKey
   id: RMCSynthResetKeyNovaris
   name: Novaris synthetic reset key
-  description: An independent Novaris design, based on a previous collaboration with Weston-Yamada. This device can fix major glitches or programming errors of synthetic units, as well as being able to restart a synthetic that has suffered critical failure. It must be recharged after use.
+  description: An independent Novaris design, based on a previous collaboration with Weyland-Yutani. This device can fix major glitches or programming errors of synthetic units, as well as being able to restart a synthetic that has suffered critical failure. It must be recharged after use.
 
 - type: entity
   parent: RMCSynthResetKey
   id: RMCSynthResetKeyNovarisSMART
   name: SMART Novaris synthetic reset key
-  description: An independent Novaris design, based on a previous collaboration with Weston-Yamada. This device can fix major glitches or programming errors of synthetic units, as well as being able to restart a synthetic that has suffered critical failure. It must be recharged after use. This one has a micro-function AI and can be operated by anyone.
+  description: An independent Novaris design, based on a previous collaboration with Weyland-Yutani. This device can fix major glitches or programming errors of synthetic units, as well as being able to restart a synthetic that has suffered critical failure. It must be recharged after use. This one has a micro-function AI and can be operated by anyone.
   components:
   - type: RequiresSkill
     skills:

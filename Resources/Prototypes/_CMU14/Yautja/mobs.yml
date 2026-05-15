@@ -1,0 +1,100 @@
+- type: entity
+  save: false
+  parent: CMMobHuman
+  id: CMUMobYautja
+  name: Yautja Hunter
+  suffix: Yautja, Event
+  components:
+  - type: Yautja
+  - type: IgnoreXenoWeedsSlowdown
+  - type: Skills
+    skills:
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+  - type: Loadout
+    prototypes:
+    - CMUYautjaHunterGear
+    - CMUYautjaHunterGearBronze
+    - CMUYautjaHunterGearSilver
+    - CMUYautjaHunterGearCrimson
+    - CMUYautjaHunterGearBone
+  - type: HumanoidAppearance
+    species: Yautja
+    hideLayersOnEquip:
+    - UndergarmentTop
+    - Hair
+  - type: Icon
+    sprite: _CMU14/Yautja/body.rsi
+    state: full
+  - type: FixedIdentity
+    name: species-name-yautja
+  - type: Speech
+    speechSounds: CMUYautjaSpeech
+    allowedEmotes:
+    - Scream
+    - Laugh
+    - Growl
+    - Warcry
+    - CMUYautjaClick
+    - CMUYautjaRoar
+    - CMUYautjaLaugh
+    - CMUYautjaGrowl
+    - CMUYautjaPain
+    - CMUYautjaDeathCry
+    - CMUYautjaDeathLaugh
+  - type: Vocal
+    sounds:
+      Male: CMUMaleYautja
+      Female: CMUFemaleYautja
+      Unsexed: CMUMaleYautja
+  - type: MeleeWeapon
+    soundHit:
+      collection: Punch
+    angle: 0
+    animation: WeaponArcFist
+    attackRate: 1.15
+    damage:
+      types:
+        Blunt: 12
+        Structural: 3
+  - type: Damageable
+    damageContainer: Biological
+    damageModifierSet: CMUYautja
+    healthBarThreshold: 5
+  - type: Bloodstream
+    bloodReagent: CMUYautjaBlood
+    bloodMaxVolume: 650
+    maxBleedAmount: 35
+    bleedReductionAmount: 0
+    bloodRefreshAmount: 0.2
+    bloodlossDamage:
+      types:
+        Bloodloss: 0.35
+    bloodlossHealDamage:
+      types:
+        Bloodloss: -1
+    damageBleedModifiers: CMBloodlossHuman
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.4
+    baseSprintSpeed: 8.4
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      240: Critical
+      340: Dead
+  - type: MaxDamage
+    max: 900
+  - type: EmoteOnDamage
+    emotes:
+    - CMUYautjaPain
+    emoteCooldown: 8
+    hiddenFromChatWindow: true
+
+- type: entity
+  parent: BaseSpeciesDummy
+  id: CMUMobYautjaDummy
+  name: Yautja Dummy
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HumanoidAppearance
+    species: Yautja

@@ -401,6 +401,18 @@ public sealed partial class XenoSystem : EntitySystem
         EnsureComp<XenoComponent>(xeno);
     }
 
+    public void SetHealOffWeeds(Entity<XenoRegenComponent?> xeno, bool healOffWeeds)
+    {
+        if (!Resolve(xeno, ref xeno.Comp, false) ||
+            xeno.Comp.HealOffWeeds == healOffWeeds)
+        {
+            return;
+        }
+
+        xeno.Comp.HealOffWeeds = healOffWeeds;
+        DirtyField(xeno.Owner, xeno.Comp, nameof(XenoRegenComponent.HealOffWeeds));
+    }
+
     private FixedPoint2 GetWeedsHealAmount(Entity<XenoRegenComponent> xeno)
     {
         if (!_mobThresholdsQuery.TryComp(xeno, out var thresholds) ||

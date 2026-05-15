@@ -9,6 +9,7 @@ using Content.Client.Silicons.Laws.SiliconLawEditUi;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Controls.FancyTree;
 using Content.Client.Verbs.UI;
+using Content.Shared.CCVar;
 using Content.Shared.Verbs;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
@@ -84,6 +85,31 @@ namespace Content.Client.Stylesheets
         public const string StyleClassLabelBig = "LabelBig";
         public const string StyleClassLabelSmall = "LabelSmall";
         public const string StyleClassButtonBig = "ButtonBig";
+        public const string StyleClassCrtWindow = "CrtWindow";
+        public const string StyleClassCrtWindowHeader = "CrtWindowHeader";
+        public const string StyleClassCrtWindowTitle = "CrtWindowTitle";
+        public const string StyleClassCrtPanel = "CrtPanel";
+        public const string StyleClassCrtInsetPanel = "CrtInsetPanel";
+        public const string StyleClassCrtQuietPanel = "CrtQuietPanel";
+        public const string StyleClassCrtHeaderPanel = "CrtHeaderPanel";
+        public const string StyleClassCrtButton = "CrtButton";
+        public const string StyleClassCrtAttentionButton = "CrtAttentionButton";
+        public const string StyleClassCrtButtonLabel = "CrtButtonLabel";
+        public const string StyleClassCrtNativeButtonLabel = "CrtNativeButtonLabel";
+        public const string StyleClassCrtText = "CrtText";
+        public const string StyleClassCrtDimText = "CrtDimText";
+        public const string StyleClassCrtHeading = "CrtHeading";
+        public const string StyleClassCrtHeadingBig = "CrtHeadingBig";
+        public const string StyleClassCrtRichText = "CrtRichText";
+        public const string StyleClassCrtLineEdit = "CrtLineEdit";
+        public const string StyleClassCrtNativeLineEdit = "CrtNativeLineEdit";
+        public const string StyleClassCrtSlider = "CrtSlider";
+        public const string StyleClassCrtProgressBar = "CrtProgressBar";
+        public const string StyleClassCrtTabContainer = "CrtTabContainer";
+        public const string StyleClassCrtStripeBack = "CrtStripeBack";
+        public const string StyleClassCrtIconButton = "CrtIconButton";
+        public const string StyleClassCrtItemList = "CrtItemList";
+        public const string StyleClassCrtScrollBar = "CrtScrollBar";
 
         public const string StyleClassButtonHelp = "HelpButton";
 
@@ -97,6 +123,26 @@ namespace Content.Client.Stylesheets
         public static readonly Color PanelDark = Color.FromHex("#1E1E22");
 
         public static readonly Color NanoGold = Color.FromHex("#A88B5E");
+        private static CrtPalette _crtPalette = CrtPalette.Green;
+
+        public static Color CrtBackground => _crtPalette.Background;
+        public static Color CrtPanelBackground => _crtPalette.PanelBackground;
+        public static Color CrtPanelBackgroundAlt => _crtPalette.PanelBackgroundAlt;
+        public static Color CrtInsetBackground => _crtPalette.InsetBackground;
+        public static Color CrtHeaderBackground => _crtPalette.HeaderBackground;
+        public static Color CrtButtonBackground => _crtPalette.ButtonBackground;
+        public static Color CrtButtonHoverBackground => _crtPalette.ButtonHoverBackground;
+        public static Color CrtButtonPressedBackground => _crtPalette.ButtonPressedBackground;
+        public static Color CrtButtonDisabledBackground => _crtPalette.ButtonDisabledBackground;
+        public static Color CrtSliderForeground => _crtPalette.SliderForeground;
+        public static Color CrtProgressForeground => _crtPalette.ProgressForeground;
+        public static Color CrtItemBackground => _crtPalette.ItemBackground;
+        public static Color CrtItemSelectedBackground => _crtPalette.ItemSelectedBackground;
+        public static Color CrtItemDisabledBackground => _crtPalette.ItemDisabledBackground;
+        public static Color CrtGreen => _crtPalette.Accent;
+        public static Color CrtGreenDim => _crtPalette.AccentDim;
+        public static Color CrtGreenSoft => _crtPalette.AccentSoft;
+        public static Color CrtGreenDisabled => _crtPalette.AccentDisabled;
         public static readonly Color GoodGreenFore = Color.FromHex("#31843E");
         public static readonly Color ConcerningOrangeFore = Color.FromHex("#A5762F");
         public static readonly Color DangerousRedFore = Color.FromHex("#BB3232");
@@ -163,8 +209,182 @@ namespace Content.Client.Stylesheets
         public const string StyleClassPinButtonPinned = "pinButtonPinned";
         public const string StyleClassPinButtonUnpinned = "pinButtonUnpinned";
 
+        private sealed class CrtPalette
+        {
+            public static readonly CrtPalette Green = new(
+                "#000906",
+                "#02130B",
+                "#032314",
+                "#000E08",
+                "#003B1C",
+                "#001D0E",
+                "#003B1C",
+                "#075E2D",
+                "#041109",
+                "#002412",
+                "#0A4B28",
+                "#00130A",
+                "#0A3B20",
+                "#020805",
+                "#46FF8E",
+                "#0D7E43",
+                "#B0FFC8",
+                "#12351F");
+
+            public static readonly CrtPalette Blue = new(
+                "#00070D",
+                "#061221",
+                "#0A1D32",
+                "#020C15",
+                "#073251",
+                "#041A2A",
+                "#073A5C",
+                "#0E5D8E",
+                "#05111A",
+                "#061F30",
+                "#0B4567",
+                "#061728",
+                "#0C3551",
+                "#02070B",
+                "#58CCFF",
+                "#126A91",
+                "#B9ECFF",
+                "#123042");
+
+            public static readonly CrtPalette Orange = new(
+                "#0B0500",
+                "#160B02",
+                "#281404",
+                "#130800",
+                "#4A2605",
+                "#241000",
+                "#54300A",
+                "#895018",
+                "#140A02",
+                "#2D1402",
+                "#70420E",
+                "#1A0B00",
+                "#4B2A08",
+                "#090400",
+                "#FFB454",
+                "#9B5A12",
+                "#FFD8A6",
+                "#3C2410");
+
+            public static readonly CrtPalette Red = new(
+                "#0B0000",
+                "#170303",
+                "#2A0607",
+                "#120101",
+                "#4A070A",
+                "#230203",
+                "#560B0F",
+                "#8E1820",
+                "#140303",
+                "#2C0508",
+                "#6B1017",
+                "#1A0203",
+                "#4C0B10",
+                "#080101",
+                "#FF4E5E",
+                "#9A1723",
+                "#FFC3CA",
+                "#3A1115");
+
+            public static readonly CrtPalette Purple = new(
+                "#07000D",
+                "#12041F",
+                "#210832",
+                "#0C0214",
+                "#310750",
+                "#190326",
+                "#3A0B5E",
+                "#5F1790",
+                "#100318",
+                "#200730",
+                "#4B0F6D",
+                "#150320",
+                "#350B4F",
+                "#050109",
+                "#C45BFF",
+                "#6F1D99",
+                "#E8C5FF",
+                "#2E143F");
+
+            public readonly Color Background;
+            public readonly Color PanelBackground;
+            public readonly Color PanelBackgroundAlt;
+            public readonly Color InsetBackground;
+            public readonly Color HeaderBackground;
+            public readonly Color ButtonBackground;
+            public readonly Color ButtonHoverBackground;
+            public readonly Color ButtonPressedBackground;
+            public readonly Color ButtonDisabledBackground;
+            public readonly Color SliderForeground;
+            public readonly Color ProgressForeground;
+            public readonly Color ItemBackground;
+            public readonly Color ItemSelectedBackground;
+            public readonly Color ItemDisabledBackground;
+            public readonly Color Accent;
+            public readonly Color AccentDim;
+            public readonly Color AccentSoft;
+            public readonly Color AccentDisabled;
+
+            private CrtPalette(
+                string background,
+                string panelBackground,
+                string panelBackgroundAlt,
+                string insetBackground,
+                string headerBackground,
+                string buttonBackground,
+                string buttonHoverBackground,
+                string buttonPressedBackground,
+                string buttonDisabledBackground,
+                string sliderForeground,
+                string progressForeground,
+                string itemBackground,
+                string itemSelectedBackground,
+                string itemDisabledBackground,
+                string accent,
+                string accentDim,
+                string accentSoft,
+                string accentDisabled)
+            {
+                Background = Color.FromHex(background);
+                PanelBackground = Color.FromHex(panelBackground);
+                PanelBackgroundAlt = Color.FromHex(panelBackgroundAlt);
+                InsetBackground = Color.FromHex(insetBackground);
+                HeaderBackground = Color.FromHex(headerBackground);
+                ButtonBackground = Color.FromHex(buttonBackground);
+                ButtonHoverBackground = Color.FromHex(buttonHoverBackground);
+                ButtonPressedBackground = Color.FromHex(buttonPressedBackground);
+                ButtonDisabledBackground = Color.FromHex(buttonDisabledBackground);
+                SliderForeground = Color.FromHex(sliderForeground);
+                ProgressForeground = Color.FromHex(progressForeground);
+                ItemBackground = Color.FromHex(itemBackground);
+                ItemSelectedBackground = Color.FromHex(itemSelectedBackground);
+                ItemDisabledBackground = Color.FromHex(itemDisabledBackground);
+                Accent = Color.FromHex(accent);
+                AccentDim = Color.FromHex(accentDim);
+                AccentSoft = Color.FromHex(accentSoft);
+                AccentDisabled = Color.FromHex(accentDisabled);
+            }
+        }
+
 
         public override Stylesheet Stylesheet { get; }
+
+        public static void SetCrtPalette(string palette)
+        {
+            _crtPalette = palette switch
+            {
+                CCVars.CrtUiColorBlue => CrtPalette.Blue,
+                CCVars.CrtUiColorOrange => CrtPalette.Orange,
+                CCVars.CrtUiColorRed => CrtPalette.Red,
+                CCVars.CrtUiColorPurple => CrtPalette.Purple,
+                _ => CrtPalette.Green,
+            };
+        }
 
         public StyleNano(IResourceCache resCache) : base(resCache)
         {
@@ -185,6 +405,37 @@ namespace Content.Client.Stylesheets
             var notoSansBold18 = resCache.NotoStack(variation: "Bold", size: 18);
             var notoSansBold20 = resCache.NotoStack(variation: "Bold", size: 20);
             var notoSansMono = resCache.GetFont("/EngineFonts/NotoSans/NotoSansMono-Regular.ttf", size: 12);
+            var uavOsdStack = new[]
+            {
+                "/Fonts/UAVOSD/UAV-OSD-Sans-Mono.ttf",
+                "/Fonts/NotoSans/NotoSansSymbols-Regular.ttf",
+                "/Fonts/NotoSans/NotoSansSymbols2-Regular.ttf"
+            };
+            var uavOsd13 = resCache.GetFont
+            (
+                uavOsdStack,
+                size: 8
+            );
+            var uavOsd14 = resCache.GetFont
+            (
+                uavOsdStack,
+                size: 8
+            );
+            var uavOsdBold14 = resCache.GetFont
+            (
+                uavOsdStack,
+                size: 8
+            );
+            var uavOsdBold16 = resCache.GetFont
+            (
+                uavOsdStack,
+                size: 10
+            );
+            var uavOsdBold18 = resCache.GetFont
+            (
+                uavOsdStack,
+                size: 12
+            );
             var robotoMonoBold11 = resCache.GetFont("/Fonts/RobotoMono/RobotoMono-Bold.ttf", size: 11);
             var robotoMonoBold12 = resCache.GetFont("/Fonts/RobotoMono/RobotoMono-Bold.ttf", size: 12);
             var robotoMonoBold14 = resCache.GetFont("/Fonts/RobotoMono/RobotoMono-Bold.ttf", size: 14);
@@ -379,6 +630,458 @@ namespace Content.Client.Stylesheets
             };
             lineEdit.SetPatchMargin(StyleBox.Margin.All, 3);
             lineEdit.SetContentMarginOverride(StyleBox.Margin.Horizontal, 5);
+
+            var crtWindowPanel = new CrtStyleBox
+            {
+                BackgroundColor = CrtPanelBackground,
+                BorderColor = CrtGreenDim.WithAlpha(0.72f),
+                ScanlineColor = CrtGreen.WithAlpha(0.01f),
+                BorderThickness = new Thickness(1),
+                DrawCornerTicks = false,
+                DrawPixelation = false,
+                MaxScanlines = 1
+            };
+
+            var crtWindowHeader = new CrtStyleBox
+            {
+                BackgroundColor = CrtHeaderBackground,
+                BorderColor = CrtGreenDim.WithAlpha(0.85f),
+                ScanlineColor = CrtGreen.WithAlpha(0.012f),
+                BorderThickness = new Thickness(0, 0, 0, 1),
+                DrawCornerTicks = false,
+                DrawPixelation = false,
+                MaxScanlines = 1,
+                ContentMarginLeftOverride = 4,
+                ContentMarginRightOverride = 4
+            };
+
+            var crtPanel = new CrtStyleBox
+            {
+                BackgroundColor = CrtPanelBackground,
+                BorderColor = CrtGreenDim,
+                CornerColor = CrtGreen.WithAlpha(0.28f),
+                ScanlineColor = CrtGreen.WithAlpha(0.016f),
+                GridColor = CrtGreen.WithAlpha(0.01f),
+                NoiseColor = CrtGreenSoft.WithAlpha(0.045f),
+                PixelationColor = CrtGreen.WithAlpha(0.035f),
+                PixelationShadowColor = CrtBackground.WithAlpha(0.16f),
+                BorderThickness = new Thickness(1),
+                DrawGrid = false,
+                DrawPixelation = true,
+                CornerLength = 10,
+                PixelationBlockSize = 3,
+                PixelationSpacing = 150,
+                PixelationChance = 12,
+                PixelationClusterSize = 2,
+                PixelationSeed = 61,
+                NoiseSpacing = 10,
+                NoiseChance = 9,
+                NoiseSeed = 11,
+                ContentMarginLeftOverride = 10,
+                ContentMarginRightOverride = 10,
+                ContentMarginTopOverride = 8,
+                ContentMarginBottomOverride = 8
+            };
+
+            var crtInsetPanel = new CrtStyleBox
+            {
+                BackgroundColor = CrtInsetBackground,
+                BorderColor = CrtGreenDim,
+                CornerColor = CrtGreen.WithAlpha(0.22f),
+                ScanlineColor = CrtGreen.WithAlpha(0.014f),
+                GridColor = CrtGreen.WithAlpha(0.008f),
+                NoiseColor = CrtGreenSoft.WithAlpha(0.04f),
+                PixelationColor = CrtGreen.WithAlpha(0.03f),
+                PixelationShadowColor = CrtPanelBackground.WithAlpha(0.14f),
+                BorderThickness = new Thickness(1),
+                DrawGrid = false,
+                DrawPixelation = true,
+                CornerLength = 8,
+                PixelationBlockSize = 2,
+                PixelationSpacing = 140,
+                PixelationChance = 14,
+                PixelationClusterSize = 1,
+                PixelationSeed = 67,
+                NoiseSpacing = 11,
+                NoiseChance = 10,
+                NoiseSeed = 17,
+                ContentMarginLeftOverride = 8,
+                ContentMarginRightOverride = 8,
+                ContentMarginTopOverride = 6,
+                ContentMarginBottomOverride = 6
+            };
+
+            var crtQuietPanel = new CrtStyleBox
+            {
+                BackgroundColor = CrtInsetBackground,
+                BorderColor = CrtGreenDim.WithAlpha(0.28f),
+                ScanlineColor = CrtGreen.WithAlpha(0.008f),
+                BorderThickness = new Thickness(0),
+                DrawCornerTicks = false,
+                DrawPixelation = false,
+                MaxScanlines = 1,
+                ContentMarginLeftOverride = 5,
+                ContentMarginRightOverride = 5,
+                ContentMarginTopOverride = 4,
+                ContentMarginBottomOverride = 4
+            };
+
+            var crtHeaderPanel = new CrtStyleBox
+            {
+                BackgroundColor = CrtHeaderBackground,
+                BorderColor = CrtGreen,
+                CornerColor = CrtGreenSoft.WithAlpha(0.24f),
+                ScanlineColor = CrtBackground.WithAlpha(0.06f),
+                DrawNoise = false,
+                DrawPixelation = true,
+                PixelationColor = CrtGreenSoft.WithAlpha(0.035f),
+                PixelationShadowColor = CrtBackground.WithAlpha(0.12f),
+                PixelationBlockSize = 2,
+                PixelationSpacing = 120,
+                PixelationChance = 14,
+                PixelationClusterSize = 1,
+                PixelationSeed = 71,
+                MaxScanlines = 1,
+                DrawCornerTicks = false,
+                BorderThickness = new Thickness(0, 0, 0, 1),
+                ContentMarginLeftOverride = 6,
+                ContentMarginRightOverride = 6,
+                ContentMarginTopOverride = 2,
+                ContentMarginBottomOverride = 2
+            };
+
+            var crtButton = new CrtStyleBox
+            {
+                BackgroundColor = CrtButtonBackground,
+                BorderColor = CrtGreenDim,
+                CornerColor = CrtGreen.WithAlpha(0.24f),
+                ScanlineColor = CrtGreen.WithAlpha(0.012f),
+                NoiseColor = CrtGreenSoft.WithAlpha(0.035f),
+                PixelationColor = CrtGreen.WithAlpha(0.02f),
+                PixelationShadowColor = CrtBackground.WithAlpha(0.1f),
+                BorderThickness = new Thickness(1),
+                DrawPixelation = true,
+                CornerLength = 6,
+                PixelationBlockSize = 2,
+                PixelationSpacing = 118,
+                PixelationChance = 18,
+                PixelationClusterSize = 1,
+                PixelationSeed = 73,
+                NoiseSpacing = 12,
+                NoiseChance = 12,
+                NoiseSeed = 23,
+                MaxScanlines = 1,
+                ContentMarginLeftOverride = 12,
+                ContentMarginRightOverride = 12,
+                ContentMarginTopOverride = 3,
+                ContentMarginBottomOverride = 3
+            };
+
+            var crtButtonHover = new CrtStyleBox(crtButton)
+            {
+                BackgroundColor = CrtButtonHoverBackground,
+                BorderColor = CrtGreen,
+                CornerColor = CrtGreenSoft.WithAlpha(0.34f),
+                ScanlineColor = CrtGreen.WithAlpha(0.02f),
+                NoiseColor = CrtGreenSoft.WithAlpha(0.055f),
+                PixelationColor = CrtGreenSoft.WithAlpha(0.03f)
+            };
+
+            var crtButtonPressed = new CrtStyleBox(crtButton)
+            {
+                BackgroundColor = CrtButtonPressedBackground,
+                BorderColor = CrtGreen,
+                CornerColor = CrtGreenSoft.WithAlpha(0.42f)
+            };
+
+            var crtButtonDisabled = new CrtStyleBox(crtButton)
+            {
+                BackgroundColor = CrtButtonDisabledBackground,
+                BorderColor = CrtGreenDisabled,
+                CornerColor = CrtGreenDisabled.WithAlpha(0.24f),
+                ScanlineColor = CrtGreenDisabled.WithAlpha(0.012f),
+                NoiseColor = CrtGreenDisabled.WithAlpha(0.035f)
+            };
+
+            var crtAttentionButton = new CrtStyleBox(crtButton)
+            {
+                BackgroundColor = CrtButtonHoverBackground,
+                BorderColor = CrtGreen,
+                CornerColor = CrtGreenSoft.WithAlpha(0.38f),
+                ScanlineColor = CrtGreen.WithAlpha(0.02f),
+                NoiseColor = CrtGreenSoft.WithAlpha(0.055f),
+                PixelationColor = CrtGreenSoft.WithAlpha(0.03f)
+            };
+
+            var crtAttentionButtonHover = new CrtStyleBox(crtAttentionButton)
+            {
+                BackgroundColor = CrtButtonPressedBackground,
+                CornerColor = CrtGreenSoft.WithAlpha(0.46f)
+            };
+
+            var crtAttentionButtonPressed = new CrtStyleBox(crtAttentionButton)
+            {
+                BackgroundColor = CrtButtonPressedBackground,
+                BorderColor = CrtGreenSoft,
+                CornerColor = CrtGreenSoft.WithAlpha(0.52f)
+            };
+
+            var crtLineEdit = new CrtStyleBox
+            {
+                BackgroundColor = CrtBackground,
+                BorderColor = CrtGreenDim,
+                CornerColor = CrtGreen.WithAlpha(0.2f),
+                ScanlineColor = CrtGreen.WithAlpha(0.012f),
+                NoiseColor = CrtGreenSoft.WithAlpha(0.035f),
+                PixelationColor = CrtGreen.WithAlpha(0.018f),
+                PixelationShadowColor = CrtPanelBackground.WithAlpha(0.11f),
+                BorderThickness = new Thickness(1),
+                DrawPixelation = true,
+                DrawCornerTicks = false,
+                PixelationBlockSize = 2,
+                PixelationSpacing = 116,
+                PixelationChance = 18,
+                PixelationClusterSize = 1,
+                PixelationSeed = 79,
+                NoiseSpacing = 12,
+                NoiseChance = 12,
+                NoiseSeed = 31,
+                MaxScanlines = 1,
+                ContentMarginLeftOverride = 5,
+                ContentMarginRightOverride = 5,
+                ContentMarginTopOverride = 2,
+                ContentMarginBottomOverride = 2
+            };
+
+            var crtNativeLineEdit = new CrtStyleBox
+            {
+                BackgroundColor = CrtBackground,
+                BorderColor = CrtGreenDim.WithAlpha(0.55f),
+                ScanlineColor = CrtGreen.WithAlpha(0.008f),
+                BorderThickness = new Thickness(0, 0, 0, 1),
+                DrawCornerTicks = false,
+                DrawPixelation = false,
+                MaxScanlines = 1,
+                ContentMarginLeftOverride = 5,
+                ContentMarginRightOverride = 5,
+                ContentMarginTopOverride = 2,
+                ContentMarginBottomOverride = 3
+            };
+
+            var crtTabActive = new CrtStyleBox
+            {
+                BackgroundColor = CrtHeaderBackground,
+                BorderColor = CrtGreen,
+                CornerColor = CrtGreenSoft.WithAlpha(0.24f),
+                ScanlineColor = CrtGreen.WithAlpha(0.016f),
+                NoiseColor = CrtGreenSoft.WithAlpha(0.04f),
+                PixelationColor = CrtGreenSoft.WithAlpha(0.025f),
+                PixelationShadowColor = CrtBackground.WithAlpha(0.1f),
+                BorderThickness = new Thickness(1, 1, 1, 0),
+                DrawPixelation = true,
+                CornerLength = 8,
+                PixelationBlockSize = 2,
+                PixelationSpacing = 112,
+                PixelationChance = 18,
+                PixelationClusterSize = 1,
+                PixelationSeed = 83,
+                NoiseSpacing = 12,
+                NoiseChance = 12,
+                NoiseSeed = 37,
+                MaxScanlines = 1,
+                ContentMarginLeftOverride = 8,
+                ContentMarginRightOverride = 8,
+                ContentMarginTopOverride = 2,
+                ContentMarginBottomOverride = 2
+            };
+
+            var crtTabInactive = new CrtStyleBox
+            {
+                BackgroundColor = CrtInsetBackground,
+                BorderColor = CrtGreenDim,
+                CornerColor = CrtGreenDim.WithAlpha(0.2f),
+                ScanlineColor = CrtGreen.WithAlpha(0.01f),
+                NoiseColor = CrtGreenSoft.WithAlpha(0.03f),
+                BorderThickness = new Thickness(1, 1, 1, 0),
+                DrawCornerTicks = false,
+                NoiseSpacing = 13,
+                NoiseChance = 13,
+                NoiseSeed = 41,
+                MaxScanlines = 1,
+                ContentMarginLeftOverride = 8,
+                ContentMarginRightOverride = 8,
+                ContentMarginTopOverride = 2,
+                ContentMarginBottomOverride = 2
+            };
+
+            var crtSliderBackground = new CrtStyleBox
+            {
+                BackgroundColor = CrtBackground,
+                BorderColor = CrtGreenDim,
+                CornerColor = CrtGreen.WithAlpha(0.16f),
+                ScanlineColor = CrtGreen.WithAlpha(0.01f),
+                NoiseColor = CrtGreenSoft.WithAlpha(0.035f),
+                BorderThickness = new Thickness(1),
+                DrawCornerTicks = false,
+                NoiseSpacing = 12,
+                NoiseChance = 13,
+                NoiseSeed = 43,
+                MaxScanlines = 1,
+                ContentMarginTopOverride = 8,
+                ContentMarginBottomOverride = 8
+            };
+
+            var crtSliderForeground = new StyleBoxFlat
+            {
+                BackgroundColor = CrtSliderForeground,
+            };
+            crtSliderForeground.SetContentMarginOverride(StyleBox.Margin.Vertical, 8);
+
+            var crtSliderFill = new StyleBoxFlat
+            {
+                BackgroundColor = CrtGreenDim,
+            };
+            crtSliderFill.SetContentMarginOverride(StyleBox.Margin.Vertical, 8);
+
+            var crtSliderGrabber = new StyleBoxFlat
+            {
+                BackgroundColor = CrtGreen,
+                BorderColor = Color.White,
+                BorderThickness = new Thickness(1),
+            };
+            crtSliderGrabber.SetContentMarginOverride(StyleBox.Margin.Horizontal, 5);
+
+            var crtProgressBackground = new CrtStyleBox
+            {
+                BackgroundColor = CrtBackground,
+                BorderColor = CrtGreenDim,
+                CornerColor = CrtGreen.WithAlpha(0.15f),
+                ScanlineColor = CrtGreen.WithAlpha(0.012f),
+                NoiseColor = CrtGreenSoft.WithAlpha(0.035f),
+                PixelationColor = CrtGreen.WithAlpha(0.02f),
+                PixelationShadowColor = CrtPanelBackground.WithAlpha(0.12f),
+                BorderThickness = new Thickness(1),
+                DrawCornerTicks = false,
+                DrawPixelation = true,
+                PixelationBlockSize = 2,
+                PixelationSpacing = 116,
+                PixelationChance = 18,
+                PixelationClusterSize = 1,
+                PixelationSeed = 107,
+                NoiseSpacing = 12,
+                NoiseChance = 12,
+                NoiseSeed = 109,
+                MaxScanlines = 1,
+            };
+            crtProgressBackground.SetContentMarginOverride(StyleBox.Margin.Vertical, 10);
+
+            var crtProgressForeground = new CrtStyleBox
+            {
+                BackgroundColor = CrtProgressForeground,
+                BorderColor = CrtGreen,
+                CornerColor = CrtGreenSoft.WithAlpha(0.2f),
+                ScanlineColor = CrtBackground.WithAlpha(0.04f),
+                NoiseColor = CrtGreenSoft.WithAlpha(0.035f),
+                PixelationColor = CrtGreenSoft.WithAlpha(0.025f),
+                PixelationShadowColor = CrtBackground.WithAlpha(0.1f),
+                BorderThickness = new Thickness(1),
+                DrawCornerTicks = false,
+                DrawPixelation = true,
+                PixelationBlockSize = 2,
+                PixelationSpacing = 108,
+                PixelationChance = 18,
+                PixelationClusterSize = 1,
+                PixelationSeed = 113,
+                NoiseSpacing = 12,
+                NoiseChance = 12,
+                NoiseSeed = 127,
+                MaxScanlines = 1,
+            };
+            crtProgressForeground.SetContentMarginOverride(StyleBox.Margin.Vertical, 10);
+
+            var crtItemListBackground = new CrtStyleBox
+            {
+                BackgroundColor = CrtInsetBackground,
+                BorderColor = CrtGreenDim,
+                CornerColor = CrtGreen.WithAlpha(0.14f),
+                ScanlineColor = CrtGreen.WithAlpha(0.012f),
+                GridColor = CrtGreen.WithAlpha(0.008f),
+                NoiseColor = CrtGreenSoft.WithAlpha(0.035f),
+                PixelationColor = CrtGreen.WithAlpha(0.02f),
+                PixelationShadowColor = CrtPanelBackground.WithAlpha(0.12f),
+                BorderThickness = new Thickness(1),
+                DrawGrid = false,
+                DrawPixelation = true,
+                DrawCornerTicks = false,
+                PixelationBlockSize = 2,
+                PixelationSpacing = 150,
+                PixelationChance = 16,
+                PixelationClusterSize = 1,
+                PixelationSeed = 97,
+                NoiseSpacing = 11,
+                NoiseChance = 11,
+                NoiseSeed = 101,
+                ContentMarginLeftOverride = 4,
+                ContentMarginRightOverride = 4,
+                ContentMarginTopOverride = 3,
+                ContentMarginBottomOverride = 3
+            };
+
+            var crtItemBackground = new StyleBoxFlat
+            {
+                BackgroundColor = CrtItemBackground.WithAlpha(0.42f),
+                BorderColor = CrtGreenDisabled.WithAlpha(0.45f),
+                BorderThickness = new Thickness(0, 0, 0, 1),
+                ContentMarginLeftOverride = 4,
+                ContentMarginRightOverride = 4,
+                ContentMarginTopOverride = 3,
+                ContentMarginBottomOverride = 3
+            };
+
+            var crtItemSelectedBackground = new StyleBoxFlat
+            {
+                BackgroundColor = CrtItemSelectedBackground.WithAlpha(0.72f),
+                BorderColor = CrtGreen.WithAlpha(0.48f),
+                BorderThickness = new Thickness(1, 0, 1, 1),
+                ContentMarginLeftOverride = 4,
+                ContentMarginRightOverride = 4,
+                ContentMarginTopOverride = 3,
+                ContentMarginBottomOverride = 3
+            };
+
+            var crtItemDisabledBackground = new StyleBoxFlat
+            {
+                BackgroundColor = CrtItemDisabledBackground.WithAlpha(0.64f),
+                BorderColor = CrtGreenDisabled.WithAlpha(0.25f),
+                BorderThickness = new Thickness(0, 0, 0, 1),
+                ContentMarginLeftOverride = 4,
+                ContentMarginRightOverride = 4,
+                ContentMarginTopOverride = 3,
+                ContentMarginBottomOverride = 3
+            };
+
+            var crtScrollGrabber = new StyleBoxFlat
+            {
+                BackgroundColor = CrtGreenDim.WithAlpha(0.78f),
+                BorderColor = CrtGreen.WithAlpha(0.42f),
+                BorderThickness = new Thickness(1),
+                ContentMarginLeftOverride = 8,
+                ContentMarginRightOverride = 8,
+                ContentMarginTopOverride = 8,
+                ContentMarginBottomOverride = 8
+            };
+
+            var crtScrollGrabberHover = new StyleBoxFlat(crtScrollGrabber)
+            {
+                BackgroundColor = CrtGreen.WithAlpha(0.5f),
+                BorderColor = CrtGreenSoft.WithAlpha(0.58f)
+            };
+
+            var crtScrollGrabberPressed = new StyleBoxFlat(crtScrollGrabber)
+            {
+                BackgroundColor = CrtGreen.WithAlpha(0.72f),
+                BorderColor = CrtGreenSoft.WithAlpha(0.8f)
+            };
 
             var chatBg = new StyleBoxFlat
             {
@@ -690,6 +1393,17 @@ namespace Content.Client.Stylesheets
                     {
                         new StyleProperty(PanelContainer.StylePropertyPanel, windowHeaderAlert),
                     }),
+
+                Child().Parent(Element<DefaultWindow>().Class(StyleClassCrtWindow))
+                    .Child(Element<PanelContainer>().Class(DefaultWindow.StyleClassWindowPanel))
+                    .Prop(PanelContainer.StylePropertyPanel, crtWindowPanel),
+
+                Element<PanelContainer>().Class(StyleClassCrtWindowHeader)
+                    .Prop(PanelContainer.StylePropertyPanel, crtWindowHeader),
+
+                Element<Label>().Class(StyleClassCrtWindowTitle)
+                    .Prop(Label.StylePropertyFontColor, CrtGreenSoft)
+                    .Prop(Label.StylePropertyFont, notoSansDisplayBold14),
 
                 // Shapes for the buttons.
                 Element<ContainerButton>().Class(ContainerButton.StyleClassButton)
@@ -1574,7 +2288,7 @@ namespace Content.Client.Stylesheets
                 }),
 
                 Element<PanelContainer>().Class(OptionButton.StyleClassOptionsBackground)
-                    .Prop(PanelContainer.StylePropertyPanel, new StyleBoxFlat(Color.FromHex("#25252A"))),
+                    .Prop(PanelContainer.StylePropertyPanel, crtInsetPanel),
 
                 new StyleRule(new SelectorElement(typeof(PanelContainer), new []{ ClassHighDivider}, null, null), new []
                 {
@@ -1774,6 +2488,172 @@ namespace Content.Client.Stylesheets
                     .Pseudo(TextureButton.StylePseudoClassHover)
                     .Prop(TextureButton.StylePropertyTexture, resCache.GetTexture("/Textures/Interface/Radial/back_hover.png")),
 
+                // CRT lobby/preferences theme.
+                Element<PanelContainer>().Class(StyleClassCrtPanel)
+                    .Prop(PanelContainer.StylePropertyPanel, crtPanel)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<PanelContainer>().Class(StyleClassCrtInsetPanel)
+                    .Prop(PanelContainer.StylePropertyPanel, crtInsetPanel)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<PanelContainer>().Class(StyleClassCrtQuietPanel)
+                    .Prop(PanelContainer.StylePropertyPanel, crtQuietPanel)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<PanelContainer>().Class(StyleClassCrtHeaderPanel)
+                    .Prop(PanelContainer.StylePropertyPanel, crtHeaderPanel)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<ContainerButton>().Class(StyleClassCrtButton)
+                    .Prop(ContainerButton.StylePropertyStyleBox, crtButton)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<ContainerButton>().Class(StyleClassCrtButton)
+                    .Pseudo(ContainerButton.StylePseudoClassNormal)
+                    .Prop(ContainerButton.StylePropertyStyleBox, crtButton)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<ContainerButton>().Class(StyleClassCrtButton)
+                    .Pseudo(ContainerButton.StylePseudoClassHover)
+                    .Prop(ContainerButton.StylePropertyStyleBox, crtButtonHover)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<ContainerButton>().Class(StyleClassCrtButton)
+                    .Pseudo(ContainerButton.StylePseudoClassPressed)
+                    .Prop(ContainerButton.StylePropertyStyleBox, crtButtonPressed)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<ContainerButton>().Class(StyleClassCrtButton)
+                    .Pseudo(ContainerButton.StylePseudoClassDisabled)
+                    .Prop(ContainerButton.StylePropertyStyleBox, crtButtonDisabled)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<ContainerButton>().Class(StyleClassCrtAttentionButton)
+                    .Prop(ContainerButton.StylePropertyStyleBox, crtAttentionButton)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<ContainerButton>().Class(StyleClassCrtAttentionButton)
+                    .Pseudo(ContainerButton.StylePseudoClassNormal)
+                    .Prop(ContainerButton.StylePropertyStyleBox, crtAttentionButton)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<ContainerButton>().Class(StyleClassCrtAttentionButton)
+                    .Pseudo(ContainerButton.StylePseudoClassHover)
+                    .Prop(ContainerButton.StylePropertyStyleBox, crtAttentionButtonHover)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<ContainerButton>().Class(StyleClassCrtAttentionButton)
+                    .Pseudo(ContainerButton.StylePseudoClassPressed)
+                    .Prop(ContainerButton.StylePropertyStyleBox, crtAttentionButtonPressed)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<ContainerButton>().Class(StyleClassCrtAttentionButton)
+                    .Pseudo(ContainerButton.StylePseudoClassDisabled)
+                    .Prop(ContainerButton.StylePropertyStyleBox, crtButtonDisabled)
+                    .Prop(Control.StylePropertyModulateSelf, Color.White),
+
+                Element<Label>().Class(StyleClassCrtText)
+                    .Prop(Label.StylePropertyFont, uavOsdBold14)
+                    .Prop(Label.StylePropertyFontColor, CrtGreenSoft),
+
+                Element<Label>().Class(StyleClassCrtDimText)
+                    .Prop(Label.StylePropertyFont, uavOsd13)
+                    .Prop(Label.StylePropertyFontColor, CrtGreenDim),
+
+                Element<Label>().Class(StyleClassCrtHeading)
+                    .Prop(Label.StylePropertyFont, uavOsdBold16)
+                    .Prop(Label.StylePropertyFontColor, CrtGreen),
+
+                Element<Label>().Class(StyleClassCrtHeadingBig)
+                    .Prop(Label.StylePropertyFont, uavOsdBold18)
+                    .Prop(Label.StylePropertyFontColor, CrtGreen),
+
+                Element<Label>().Class(StyleClassCrtButtonLabel)
+                    .Prop(Label.StylePropertyFont, uavOsdBold14)
+                    .Prop(Label.StylePropertyFontColor, CrtGreenSoft)
+                    .Prop(Label.StylePropertyAlignMode, Label.AlignMode.Center),
+
+                Child().Parent(Element<Button>().Class(StyleClassCrtButton))
+                    .Child(Element<Label>())
+                    .Prop(Label.StylePropertyFont, uavOsdBold14)
+                    .Prop(Label.StylePropertyFontColor, CrtGreenSoft),
+
+                Element<Label>().Class(StyleClassCrtNativeButtonLabel)
+                    .Prop(Label.StylePropertyFont, notoSans12)
+                    .Prop(Label.StylePropertyFontColor, CrtGreenSoft)
+                    .Prop(Label.StylePropertyAlignMode, Label.AlignMode.Center),
+
+                Element<RichTextLabel>().Class(StyleClassCrtRichText)
+                    .Prop("font", uavOsd14),
+
+                Element<ItemList>().Class(StyleClassCrtItemList)
+                    .Prop(ItemList.StylePropertyBackground, crtItemListBackground)
+                    .Prop(ItemList.StylePropertyItemBackground, crtItemBackground)
+                    .Prop(ItemList.StylePropertySelectedItemBackground, crtItemSelectedBackground)
+                    .Prop(ItemList.StylePropertyDisabledItemBackground, crtItemDisabledBackground)
+                    .Prop("font", uavOsd14)
+                    .Prop("font-color", CrtGreenSoft),
+
+                Element<VScrollBar>().Class(StyleClassCrtScrollBar)
+                    .Prop(ScrollBar.StylePropertyGrabber, crtScrollGrabber),
+
+                Element<VScrollBar>().Class(StyleClassCrtScrollBar)
+                    .Pseudo(ScrollBar.StylePseudoClassHover)
+                    .Prop(ScrollBar.StylePropertyGrabber, crtScrollGrabberHover),
+
+                Element<VScrollBar>().Class(StyleClassCrtScrollBar)
+                    .Pseudo(ScrollBar.StylePseudoClassGrabbed)
+                    .Prop(ScrollBar.StylePropertyGrabber, crtScrollGrabberPressed),
+
+                Element<HScrollBar>().Class(StyleClassCrtScrollBar)
+                    .Prop(ScrollBar.StylePropertyGrabber, crtScrollGrabber),
+
+                Element<HScrollBar>().Class(StyleClassCrtScrollBar)
+                    .Pseudo(ScrollBar.StylePseudoClassHover)
+                    .Prop(ScrollBar.StylePropertyGrabber, crtScrollGrabberHover),
+
+                Element<HScrollBar>().Class(StyleClassCrtScrollBar)
+                    .Pseudo(ScrollBar.StylePseudoClassGrabbed)
+                    .Prop(ScrollBar.StylePropertyGrabber, crtScrollGrabberPressed),
+
+                Element<LineEdit>().Class(StyleClassCrtLineEdit)
+                    .Prop(LineEdit.StylePropertyStyleBox, crtLineEdit)
+                    .Prop("font", uavOsd14)
+                    .Prop("font-color", CrtGreenSoft)
+                    .Prop(LineEdit.StylePropertyCursorColor, CrtGreen)
+                    .Prop(LineEdit.StylePropertySelectionColor, CrtGreen.WithAlpha(0.33f)),
+
+                Element<LineEdit>().Class(StyleClassCrtNativeLineEdit)
+                    .Prop(LineEdit.StylePropertyStyleBox, crtNativeLineEdit)
+                    .Prop("font", notoSans12)
+                    .Prop("font-color", CrtGreenSoft)
+                    .Prop(LineEdit.StylePropertyCursorColor, CrtGreen)
+                    .Prop(LineEdit.StylePropertySelectionColor, CrtGreen.WithAlpha(0.33f)),
+
+                Element<Slider>().Class(StyleClassCrtSlider)
+                    .Prop(Slider.StylePropertyBackground, crtSliderBackground)
+                    .Prop(Slider.StylePropertyForeground, crtSliderForeground)
+                    .Prop(Slider.StylePropertyFill, crtSliderFill)
+                    .Prop(Slider.StylePropertyGrabber, crtSliderGrabber),
+
+                Element<ProgressBar>().Class(StyleClassCrtProgressBar)
+                    .Prop(ProgressBar.StylePropertyBackground, crtProgressBackground)
+                    .Prop(ProgressBar.StylePropertyForeground, crtProgressForeground),
+
+                Element<TabContainer>().Class(StyleClassCrtTabContainer)
+                    .Prop(TabContainer.StylePropertyPanelStyleBox, crtInsetPanel)
+                    .Prop(TabContainer.StylePropertyTabStyleBox, crtTabActive)
+                    .Prop(TabContainer.StylePropertyTabStyleBoxInactive, crtTabInactive)
+                    .Prop(TabContainer.stylePropertyTabFontColor, CrtGreen)
+                    .Prop(TabContainer.StylePropertyTabFontColorInactive, CrtGreenDim),
+
+                Element<StripeBack>().Class(StyleClassCrtStripeBack)
+                    .Prop(StripeBack.StylePropertyBackground, crtInsetPanel),
+
+                Element<TextureButton>().Class(StyleClassCrtIconButton)
+                    .Prop(Control.StylePropertyModulateSelf, CrtGreenSoft),
+
                 //PDA - Backgrounds
                 Element<PanelContainer>().Class("PdaContentBackground")
                     .Prop(PanelContainer.StylePropertyPanel, BaseButtonOpenBoth)
@@ -1833,28 +2713,36 @@ namespace Content.Client.Stylesheets
                     .Class(TreeItem.StyleClassEvenRow)
                     .Prop(ContainerButton.StylePropertyStyleBox, new StyleBoxFlat
                     {
-                        BackgroundColor = FancyTreeEvenRowColor,
+                        BackgroundColor = CrtItemBackground.WithAlpha(0.42f),
+                        BorderColor = CrtGreenDisabled.WithAlpha(0.18f),
+                        BorderThickness = new Thickness(0, 0, 0, 1),
                     }),
 
                 Element<ContainerButton>().Identifier(TreeItem.StyleIdentifierTreeButton)
                     .Class(TreeItem.StyleClassOddRow)
                     .Prop(ContainerButton.StylePropertyStyleBox, new StyleBoxFlat
                     {
-                        BackgroundColor = FancyTreeOddRowColor,
+                        BackgroundColor = CrtPanelBackgroundAlt.WithAlpha(0.38f),
+                        BorderColor = CrtGreenDisabled.WithAlpha(0.14f),
+                        BorderThickness = new Thickness(0, 0, 0, 1),
                     }),
 
                 Element<ContainerButton>().Identifier(TreeItem.StyleIdentifierTreeButton)
                     .Class(TreeItem.StyleClassSelected)
                     .Prop(ContainerButton.StylePropertyStyleBox, new StyleBoxFlat
                     {
-                        BackgroundColor = FancyTreeSelectedRowColor,
+                        BackgroundColor = CrtItemSelectedBackground.WithAlpha(0.65f),
+                        BorderColor = CrtGreen.WithAlpha(0.42f),
+                        BorderThickness = new Thickness(1),
                     }),
 
                 Element<ContainerButton>().Identifier(TreeItem.StyleIdentifierTreeButton)
                     .Pseudo(ContainerButton.StylePseudoClassHover)
                     .Prop(ContainerButton.StylePropertyStyleBox, new StyleBoxFlat
                     {
-                        BackgroundColor = FancyTreeSelectedRowColor,
+                        BackgroundColor = CrtItemSelectedBackground.WithAlpha(0.48f),
+                        BorderColor = CrtGreen.WithAlpha(0.32f),
+                        BorderThickness = new Thickness(1),
                     }),
 
                 // Silicon law edit ui

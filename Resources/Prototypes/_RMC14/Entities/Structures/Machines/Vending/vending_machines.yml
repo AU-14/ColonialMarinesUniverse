@@ -594,14 +594,14 @@
     ChemistryBottleRobustHarvest: 15
     PestSpray: 20
     Syringe: 5
-    RMCStoragePlantBag: 12
-    RMCToolSpade: 5
-    RMCToolHatchet: 5
+    RMCStoragePlantBag: 14
+    RMCToolSpade: 7
+    RMCToolHatchet: 7
+    RMCToolMiniHoe: 7
     # AmmoniaBottle: 10 #Premium
     # DiethylamineBottle: 5 #Premium
-    HydroponicsToolSpade: 3
-    HydroponicsToolHatchet: 3
-    HydroponicsToolScythe: 5
+    BoxMouthSwab: 1
+    HydroponicsToolScythe: 3
 
 
 # Seeds

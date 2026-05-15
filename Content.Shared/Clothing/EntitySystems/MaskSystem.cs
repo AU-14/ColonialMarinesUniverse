@@ -28,7 +28,7 @@ public sealed class MaskSystem : EntitySystem
 
     private void OnGetActions(EntityUid uid, MaskComponent component, GetItemActionsEvent args)
     {
-        if (_inventorySystem.InSlotWithFlags(uid, SlotFlags.MASK))
+        if (component.IsToggleable && _inventorySystem.InSlotWithFlags(uid, SlotFlags.MASK))
         {
             args.AddAction(ref component.ToggleActionEntity, component.ToggleAction);
             Dirty(uid, component);

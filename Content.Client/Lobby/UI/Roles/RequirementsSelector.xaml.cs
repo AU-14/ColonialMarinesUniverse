@@ -50,7 +50,7 @@ public sealed partial class RequirementsSelector : BoxContainer
             Text = Loc.GetString("role-timer-locked"),
             Visible = true,
             HorizontalAlignment = HAlignment.Center,
-            StyleClasses = {StyleBase.StyleClassLabelSubText},
+            StyleClasses = { StyleBase.StyleClassLabelSubText, StyleNano.StyleClassCrtDimText },
         };
 
         _lockStripe = new StripeBack()
@@ -59,6 +59,7 @@ public sealed partial class RequirementsSelector : BoxContainer
             HorizontalExpand = true,
             HasMargins = false,
             MouseFilter = MouseFilterMode.Stop,
+            StyleClasses = { StyleNano.StyleClassCrtStripeBack },
             Children =
             {
                 requirementsLabel
@@ -93,7 +94,10 @@ public sealed partial class RequirementsSelector : BoxContainer
 
         TitleLabel.Text = title;
         TitleLabel.MinSize = new Vector2(titleSize, 0f);
+        TitleContainer.MinSize = new Vector2(titleSize + 32, 0f);
         TitleLabel.ToolTip = description;
+        TitleLabel.AddStyleClass(StyleNano.StyleClassCrtText);
+        Help.AddStyleClass(StyleNano.StyleClassCrtIconButton);
 
         if (icon != null)
         {
@@ -125,8 +129,9 @@ public sealed partial class RequirementsSelector : BoxContainer
         return new Button
         {
             Text = text,
-            MinWidth = 90,
+            MinWidth = 72,
             HorizontalExpand = true,
+            StyleClasses = { StyleNano.StyleClassCrtButton },
         };
     }
 

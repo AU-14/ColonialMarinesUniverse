@@ -53,7 +53,7 @@
       factions:
       - Bureau
       - Civilian
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCSurvivorPresetNoGun
     - type: TacticalMapIcon
       icon:

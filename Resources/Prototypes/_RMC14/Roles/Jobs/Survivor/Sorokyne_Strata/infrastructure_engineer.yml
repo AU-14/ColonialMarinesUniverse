@@ -20,7 +20,7 @@
         RMCSkillConstruction: 2
         RMCSkillPowerLoader: 2
         RMCSkillVehicles: 1
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetInfrastructureEngineer
     - type: RMCSurvivor
     - type: MotionDetectorTracked
@@ -64,7 +64,7 @@
   name: infrastructure engineer preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomOutfits:
     - [ RMCJumpsuitCivilian ]
     - [ RMCJumpsuitCivilianBrown ]

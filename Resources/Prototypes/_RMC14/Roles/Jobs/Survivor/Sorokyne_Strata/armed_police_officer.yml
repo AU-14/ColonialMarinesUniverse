@@ -23,7 +23,7 @@
     components:
     - type: Skills
       preset: RMCSkillPresetSurvivorMarshal
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetArmedPoliceOfficer
     - type: RMCSurvivor
     - type: MotionDetectorTracked

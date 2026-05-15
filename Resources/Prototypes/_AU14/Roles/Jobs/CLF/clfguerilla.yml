@@ -12,7 +12,8 @@
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCLFGuerilla
-  icon: "CMJobIconEmpty"
+  icon: "RMCJobIconCLFSoldier"
+  hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-clflrs
@@ -51,9 +52,8 @@
   equipment:
     id: AU14IDCardCLFCivilian
    # neck: RMCCLFArmband
-  storage:
-    back:
-    - AU14CLFHeadset
+  inhand:
+  - AU14CLFHeadset
 
 - type: entity
   parent: CMSpawnPointJobBase

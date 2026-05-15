@@ -16,7 +16,7 @@
   - AUPlanetLV327
   - AUPlanetCorsatStation
   - AUPlanetSorokyne
- # - AUPlanetStableGarrison
+  - AUPlanetStableGarrison
   - AUPlanetTrijent
   - CMUPlanetLament
   rules:

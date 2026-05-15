@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Linq;
 using Content.Client.Humanoid;
+using Content.Client.Stylesheets;
 using Content.Shared.Clothing;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
@@ -11,6 +13,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Client.Lobby.UI;
 
@@ -20,9 +23,16 @@ namespace Content.Client.Lobby.UI;
 [GenerateTypedNameReferences]
 public sealed partial class CharacterPickerButton : ContainerButton
 {
-    private IEntityManager _entManager;
+    private const float JobPreviewScrollDelay = 2.75f;
+
+    private readonly IEntityManager _entManager;
+    private readonly LobbyUIController _lobbyController;
+    private readonly HumanoidCharacterProfile? _humanoid;
+    private readonly List<LobbyHighJobPreviewEntry> _highPriorityJobs = new();
 
     private EntityUid _previewDummy;
+    private int _jobPreviewIndex;
+    private float _jobPreviewTimer;
 
     /// <summary>
     /// Invoked if we should delete the attached character
@@ -38,33 +48,30 @@ public sealed partial class CharacterPickerButton : ContainerButton
     {
         RobustXamlLoader.Load(this);
         _entManager = entityManager;
+        _lobbyController = UserInterfaceManager.GetUIController<LobbyUIController>();
         AddStyleClass(StyleClassButton);
+        AddStyleClass(StyleNano.StyleClassCrtButton);
         ToggleMode = true;
         Group = group;
-        var description = profile.Name;
 
         if (profile is not HumanoidCharacterProfile humanoid)
         {
             _previewDummy = entityManager.SpawnEntity(prototypeManager.Index<SpeciesPrototype>(SharedHumanoidAppearanceSystem.DefaultSpecies).DollPrototype, MapCoordinates.Nullspace);
+            NameLabel.Text = profile.Name;
+            JobLabel.Visible = false;
         }
         else
         {
-            _previewDummy = UserInterfaceManager.GetUIController<LobbyUIController>()
-                .LoadProfileEntity(humanoid, null, true);
-
-            var highPriorityJob = humanoid.JobPriorities.SingleOrDefault(p => p.Value == JobPriority.High).Key;
-            if (highPriorityJob != default)
-            {
-                var jobName = prototypeManager.Index(highPriorityJob).LocalizedName;
-                description = $"{description}\n{jobName}";
-            }
+            _humanoid = humanoid;
+            _highPriorityJobs = LobbyHighJobPreview.GetHighPriorityJobs(humanoid, prototypeManager);
+            _previewDummy = LoadPreviewDummy();
+            UpdateDescription();
         }
 
         Pressed = isSelected;
         DeleteButton.Visible = !isSelected;
 
         View.SetEntity(_previewDummy);
-        DescriptionLabel.Text = description;
 
         ConfirmDeleteButton.OnPressed += _ =>
         {
@@ -78,6 +85,50 @@ public sealed partial class CharacterPickerButton : ContainerButton
             DeleteButton.Visible = false;
             ConfirmDeleteButton.Visible = true;
         };
+
+        CrtLobbyTheme.Apply(this);
+    }
+
+    protected override void FrameUpdate(FrameEventArgs args)
+    {
+        base.FrameUpdate(args);
+
+        if (_humanoid == null || _highPriorityJobs.Count <= 1)
+            return;
+
+        _jobPreviewTimer += args.DeltaSeconds;
+        if (_jobPreviewTimer < JobPreviewScrollDelay)
+            return;
+
+        _jobPreviewTimer -= JobPreviewScrollDelay;
+        _jobPreviewIndex = (_jobPreviewIndex + 1) % _highPriorityJobs.Count;
+        UpdateDescription();
+    }
+
+    private EntityUid LoadPreviewDummy()
+    {
+        if (_humanoid == null)
+            return EntityUid.Invalid;
+
+        var job = _highPriorityJobs.Count == 0
+            ? null
+            : _highPriorityJobs[_jobPreviewIndex].Job;
+
+        return _lobbyController.LoadProfileEntity(_humanoid, job, true);
+    }
+
+    private void UpdateDescription()
+    {
+        if (_humanoid == null)
+            return;
+
+        var entry = _highPriorityJobs.Count == 0
+            ? null
+            : _highPriorityJobs[_jobPreviewIndex];
+
+        NameLabel.Text = _humanoid.Name;
+        JobLabel.Text = entry?.DisplayName ?? string.Empty;
+        JobLabel.Visible = entry != null;
     }
 
     protected override void Dispose(bool disposing)

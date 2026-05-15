@@ -15,7 +15,7 @@
         RMCSkillEndurance: 2
         RMCSkillFireman: 1
         RMCSkillFirearms: 2
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetFireProtectionSpecialist
     - type: RMCSurvivor
     - type: MotionDetectorTracked
@@ -63,7 +63,7 @@
   name: fire protection specialist preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomOutfits:
     - [ RMCFireAxe ]
     - [ CMFireExtinguisherPortable ]

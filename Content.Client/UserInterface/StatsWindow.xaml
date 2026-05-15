@@ -1,11 +1,11 @@
 ﻿<DefaultWindow xmlns="https://spacestation14.io"
             Title="Stats window"
             MinSize="600 400">
-    <BoxContainer Orientation="Vertical">
+    <PanelContainer StyleClasses="CrtPanel" VerticalExpand="True" HorizontalExpand="True">
         <ScrollContainer HorizontalExpand="True"
                          VerticalExpand="True"
                          SizeFlagsStretchRatio="6">
             <GridContainer Name="Values"/>
         </ScrollContainer>
-    </BoxContainer>
+    </PanelContainer>
 </DefaultWindow>

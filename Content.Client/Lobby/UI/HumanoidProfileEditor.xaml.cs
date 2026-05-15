@@ -17,6 +17,7 @@ using Content.Shared._RMC14.NamedItems;
 using Content.Shared._RMC14.Prototypes;
 using Content.Shared.AU14.Allegiance;
 using Content.Shared.AU14.Origin;
+using Content.Shared.AU14.Threats;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
 using Content.Shared.GameTicking;
@@ -40,6 +41,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Direction = Robust.Shared.Maths.Direction;
 
@@ -105,11 +107,23 @@ namespace Content.Client.Lobby.UI
 
         private List<OriginPrototype> _origins = new();
 
-        private List<(string, RequirementsSelector)> _jobPriorities = new();
+        private List<(string Gamemode, string JobId, RequirementsSelector Selector)> _jobPriorities = new();
+        private readonly List<(string Gamemode, string Id, RequirementsSelector Selector)> _antagPreferences = new();
+        private readonly List<(string Gamemode, string Id, Button Yes, Button No)> _threatPreferenceButtons = new();
 
         private readonly Dictionary<string, BoxContainer> _jobCategories;
+        private const float HighJobPreviewScrollDelay = 2.75f;
+        private const string InsurgencyDepartmentId = "AU14DepartmentColonialLiberationFront";
+        private const string GamemodeInsurgency = "Insurgency";
+        private const string GamemodeColonyFall = "ColonyFall";
+        private const string GamemodeDistressSignal = "DistressSignal";
 
         private Direction _previewRotation = Direction.North;
+        private int _previewJobIndex;
+        private float _previewJobTimer;
+        private string _previewJobSignature = string.Empty;
+        private readonly List<LobbyHighJobPreviewEntry> _previewJobs = new();
+        private bool _previewJobsDirty = true;
 
         private ColorSelectorSliders _rgbSkinColorSelector;
 
@@ -134,6 +148,7 @@ namespace Content.Client.Lobby.UI
             MarkingManager markings)
         {
             RobustXamlLoader.Load(this);
+            CrtLobbyTheme.Apply(this);
             _sawmill = logManager.GetSawmill("profile.editor");
             _cfgManager = configurationManager;
             _entManager = entManager;
@@ -502,9 +517,10 @@ namespace Content.Client.Lobby.UI
 
             #region Jobs
 
-            TabContainer.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-military-jobs-tab"));
-            TabContainer.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-threat-jobs-tab"));
-            TabContainer.SetTabTitle(3, Loc.GetString("humanoid-profile-editor-civilian-jobs-tab"));
+            TabContainer.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-insurgency-tab"));
+            TabContainer.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-colony-fall-tab"));
+            TabContainer.SetTabTitle(3, Loc.GetString("humanoid-profile-editor-distress-signal-tab"));
+            SetupGamemodeTabTitles();
 
             PreferenceUnavailableButton.AddItem(
                 Loc.GetString("humanoid-profile-editor-preference-unavailable-stay-in-lobby-button"),
@@ -523,19 +539,17 @@ namespace Content.Client.Lobby.UI
 
             _jobCategories = new Dictionary<string, BoxContainer>();
 
+            RefreshThreatPreferences();
             RefreshAntags();
             RefreshJobs();
 
             #endregion Jobs
 
-            TabContainer.SetTabTitle(4, Loc.GetString("humanoid-profile-editor-antags-tab"));
-            TabContainer.SetTabVisible(4, true);
-
             RefreshTraits();
 
             #region Markings
 
-            TabContainer.SetTabTitle(6, Loc.GetString("humanoid-profile-editor-markings-tab"));
+            TabContainer.SetTabTitle(5, Loc.GetString("humanoid-profile-editor-markings-tab"));
 
             Markings.OnMarkingAdded += OnMarkingChange;
             Markings.OnMarkingRemoved += OnMarkingChange;
@@ -585,8 +599,8 @@ namespace Content.Client.Lobby.UI
             }
 
             var namedItems = UserInterfaceManager.GetUIController<NamedItemsUIController>();
-            TabContainer.SetTabTitle(7, Loc.GetString("rmc-ui-named-items"));
-            TabContainer.SetTabVisible(7, namedItems.Available);
+            TabContainer.SetTabTitle(6, Loc.GetString("rmc-ui-named-items"));
+            TabContainer.SetTabVisible(6, namedItems.Available);
             NamedItems.PrimaryGun.OnTextChanged += args => SetItemName(RMCNamedItemType.PrimaryGun, args.Text);
             NamedItems.Sidearm.OnTextChanged += args => SetItemName(RMCNamedItemType.Sidearm, args.Text);
             NamedItems.Helmet.OnTextChanged += args => SetItemName(RMCNamedItemType.Helmet, args.Text);
@@ -594,6 +608,7 @@ namespace Content.Client.Lobby.UI
             NamedItems.Sentry.OnTextChanged += args => SetItemName(RMCNamedItemType.Sentry, args.Text);
 
             UpdateSpeciesGuidebookIcon();
+            CrtLobbyTheme.Apply(this);
             IsDirty = false;
         }
 
@@ -628,6 +643,22 @@ namespace Content.Client.Lobby.UI
             }
         }
 
+        private void SetupGamemodeTabTitles()
+        {
+            InsurgencyTabs.SetTabTitle(0, Loc.GetString("humanoid-profile-editor-government-jobs-tab"));
+            InsurgencyTabs.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-insurgency-jobs-tab"));
+            InsurgencyTabs.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-civilian-jobs-tab"));
+            InsurgencyTabs.SetTabTitle(3, Loc.GetString("humanoid-profile-editor-antags-tab"));
+
+            ColonyFallTabs.SetTabTitle(0, Loc.GetString("humanoid-profile-editor-civilian-jobs-tab"));
+            ColonyFallTabs.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-threat-roles-tab"));
+            ColonyFallTabs.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-antags-tab"));
+
+            DistressSignalTabs.SetTabTitle(0, Loc.GetString("humanoid-profile-editor-government-jobs-tab"));
+            DistressSignalTabs.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-threat-roles-tab"));
+            DistressSignalTabs.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-antags-tab"));
+        }
+
         /// <summary>
         /// Refreshes traits selector
         /// </summary>
@@ -636,7 +667,7 @@ namespace Content.Client.Lobby.UI
             TraitsList.DisposeAllChildren();
 
             var traits = _prototypeManager.EnumeratePrototypes<TraitPrototype>().OrderBy(t => Loc.GetString(t.Name)).ToList();
-            TabContainer.SetTabTitle(5, Loc.GetString("humanoid-profile-editor-traits-tab"));
+            TabContainer.SetTabTitle(4, Loc.GetString("humanoid-profile-editor-traits-tab"));
 
             if (traits.Count < 1)
             {
@@ -774,7 +805,18 @@ namespace Content.Client.Lobby.UI
 
         public void RefreshAntags()
         {
-            AntagList.DisposeAllChildren();
+            InsurgencyAntagList.DisposeAllChildren();
+            ColonyAntagList.DisposeAllChildren();
+            DistressAntagList.DisposeAllChildren();
+            _antagPreferences.Clear();
+
+            PopulateAntagList(InsurgencyAntagList, GamemodeInsurgency);
+            PopulateAntagList(ColonyAntagList, GamemodeColonyFall);
+            PopulateAntagList(DistressAntagList, GamemodeDistressSignal);
+        }
+
+        private void PopulateAntagList(BoxContainer targetList, string gamemode)
+        {
             var items = new[]
             {
                 ("humanoid-profile-editor-antag-preference-yes-button", 0),
@@ -816,13 +858,13 @@ namespace Content.Client.Lobby.UI
                     var title = Loc.GetString(antag.Name);
                     var description = Loc.GetString(antag.Objective);
                     selector.Setup(items, title, 250, description, guides: antag.Guides);
-                    selector.Select(Profile?.AntagPreferences.Contains(antag.ID) == true ? 0 : 1);
+                    selector.Select(Profile?.GetAntagPreferencesForGamemode(gamemode).Contains(antag.ID) == true ? 0 : 1);
 
                     var requirements = _entManager.System<SharedRoleSystem>().GetAntagRequirement(antag);
                     if (!_requirements.CheckRoleRequirements(requirements, (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter, out var reason))
                     {
                         selector.LockRequirements(reason);
-                        Profile = Profile?.WithAntagPreference(antag.ID, false);
+                        Profile = Profile?.WithGamemodeAntagPreference(gamemode, antag.ID, false);
                         SetDirty();
                     }
                     else
@@ -832,10 +874,17 @@ namespace Content.Client.Lobby.UI
 
                     selector.OnSelected += preference =>
                     {
-                        Profile = Profile?.WithAntagPreference(antag.ID, preference == 0);
+                        Profile = Profile?.WithGamemodeAntagPreference(gamemode, antag.ID, preference == 0);
+                        foreach (var (otherGamemode, antagId, other) in _antagPreferences)
+                        {
+                            if (otherGamemode == gamemode && antagId == antag.ID)
+                                other.Select(preference);
+                        }
+
                         SetDirty();
                     };
 
+                    _antagPreferences.Add((gamemode, antag.ID, selector));
                     antagContainer.AddChild(selector);
 
                     antagContainer.AddChild(new Button()
@@ -849,12 +898,16 @@ namespace Content.Client.Lobby.UI
                     categoryContainer.AddChild(antagContainer);
                 }
 
-                AntagList.AddChild(categoryContainer);
+                targetList.AddChild(categoryContainer);
             }
+
+            CrtLobbyTheme.Apply(targetList);
         }
 
         private void SetDirty()
         {
+            MarkPreviewJobsDirty();
+
             // If it equals default then reset the button.
             if (Profile == null || _preferencesManager.Preferences?.SelectedCharacter.MemberwiseEquals(Profile) == true)
             {
@@ -876,7 +929,7 @@ namespace Content.Client.Lobby.UI
 
         public void RefreshRMC(SharedRMCPatronTier? tier)
         {
-            TabContainer.SetTabVisible(7, tier is { NamedItems: true });
+            TabContainer.SetTabVisible(6, tier is { NamedItems: true });
         }
 
         /// <summary>
@@ -885,20 +938,152 @@ namespace Content.Client.Lobby.UI
         /// <remarks>
         /// This is expensive so not recommended to run if you have a slider.
         /// </remarks>
-        private void ReloadPreview()
+        private void ReloadPreview(bool updateDirty = true)
         {
             _entManager.DeleteEntity(PreviewDummy);
             PreviewDummy = EntityUid.Invalid;
 
             if (Profile == null || !_prototypeManager.HasIndex(Profile.Species))
+            {
+                UpdatePreviewJobLabel(null);
                 return;
+            }
 
-            PreviewDummy = _controller.LoadProfileEntity(Profile, JobOverride, ShowClothes.Pressed);
+            var previewEntry = GetCurrentPreviewJob();
+            var previewJob = JobOverride ?? previewEntry?.Job;
+            PreviewDummy = _controller.LoadProfileEntity(Profile, previewJob, ShowClothes.Pressed);
             SpriteView.SetEntity(PreviewDummy);
             _entManager.System<MetaDataSystem>().SetEntityName(PreviewDummy, Profile.Name);
+            UpdatePreviewJobLabel(previewEntry);
 
             // Check and set the dirty flag to enable the save/reset buttons as appropriate.
-            SetDirty();
+            if (updateDirty)
+                SetDirty();
+        }
+
+        protected override void FrameUpdate(FrameEventArgs args)
+        {
+            base.FrameUpdate(args);
+            UpdatePreviewJobRotation(args.DeltaSeconds);
+        }
+
+        private void UpdatePreviewJobRotation(float deltaSeconds)
+        {
+            if (Profile == null ||
+                JobOverride != null ||
+                !ShowClothes.Pressed)
+            {
+                ResetPreviewJobRotation();
+                UpdatePreviewJobLabel(null);
+                return;
+            }
+
+            if (_previewJobsDirty && RefreshPreviewJobs())
+            {
+                ReloadPreview(false);
+                return;
+            }
+
+            var entries = _previewJobs;
+            if (entries.Count <= 1)
+            {
+                if (entries.Count == 1)
+                    UpdatePreviewJobLabel(entries[0]);
+
+                return;
+            }
+
+            _previewJobTimer += deltaSeconds;
+            if (_previewJobTimer < HighJobPreviewScrollDelay)
+                return;
+
+            _previewJobTimer -= HighJobPreviewScrollDelay;
+            _previewJobIndex = (_previewJobIndex + 1) % entries.Count;
+            ReloadPreview(false);
+        }
+
+        private LobbyHighJobPreviewEntry? GetCurrentPreviewJob()
+        {
+            if (Profile == null ||
+                JobOverride != null ||
+                !ShowClothes.Pressed)
+            {
+                return null;
+            }
+
+            var entries = GetPreviewJobs();
+
+            if (entries.Count == 0)
+            {
+                _previewJobIndex = 0;
+                return null;
+            }
+
+            _previewJobIndex %= entries.Count;
+            return entries[_previewJobIndex];
+        }
+
+        private void ResetPreviewJobRotation()
+        {
+            _previewJobIndex = 0;
+            _previewJobTimer = 0;
+            _previewJobSignature = string.Empty;
+            _previewJobs.Clear();
+            _previewJobsDirty = true;
+        }
+
+        private IReadOnlyList<LobbyHighJobPreviewEntry> GetPreviewJobs()
+        {
+            if (_previewJobsDirty)
+                RefreshPreviewJobs();
+
+            return _previewJobs;
+        }
+
+        private bool RefreshPreviewJobs()
+        {
+            var previousSignature = _previewJobSignature;
+
+            _previewJobs.Clear();
+            if (Profile != null)
+                _previewJobs.AddRange(LobbyHighJobPreview.GetHighPriorityJobs(Profile, _prototypeManager));
+
+            _previewJobSignature = LobbyHighJobPreview.GetSignature(_previewJobs);
+            _previewJobsDirty = false;
+
+            var changed = previousSignature != _previewJobSignature;
+            if (changed)
+            {
+                _previewJobIndex = 0;
+                _previewJobTimer = 0;
+            }
+
+            return changed;
+        }
+
+        private void MarkPreviewJobsDirty()
+        {
+            _previewJobsDirty = true;
+        }
+
+        private void UpdatePreviewJobLabel(LobbyHighJobPreviewEntry? entry)
+        {
+            if (!ShowClothes.Pressed)
+            {
+                PreviewJobLabel.Visible = false;
+                PreviewJobLabel.Text = string.Empty;
+                return;
+            }
+
+            if (JobOverride != null)
+            {
+                PreviewJobLabel.Text = GetJobDisplayName(JobOverride);
+                PreviewJobLabel.Visible = true;
+                return;
+            }
+
+            PreviewJobLabel.Text = entry?.DisplayName ?? string.Empty;
+            PreviewJobLabel.Visible = entry != null;
         }
 
         /// <summary>
@@ -920,6 +1105,7 @@ namespace Content.Client.Lobby.UI
             CharacterSlot = slot;
             IsDirty = false;
             JobOverride = null;
+            ResetPreviewJobRotation();
 
             UpdateNameEdit();
             UpdateFlavorTextEdit();
@@ -942,6 +1128,7 @@ namespace Content.Client.Lobby.UI
             UpdateXenoPostfix();
             UpdateAllegianceControls();
             UpdateOriginControls();
+            RefreshThreatPreferences();
 
             RefreshAntags();
             RefreshJobs();
@@ -1000,14 +1187,15 @@ namespace Content.Client.Lobby.UI
         /// </summary>
         public void RefreshJobs()
         {
-            MilitaryJobList.DisposeAllChildren();
-            ThreatJobList.DisposeAllChildren();
-            CivilianJobList.DisposeAllChildren();
+            InsurgencyGovernmentJobList.DisposeAllChildren();
+            InsurgencyInsurgentJobList.DisposeAllChildren();
+            InsurgencyCivilianJobList.DisposeAllChildren();
+            ColonyCivilianJobList.DisposeAllChildren();
+            ColonyThreatJobList.DisposeAllChildren();
+            DistressGovernmentJobList.DisposeAllChildren();
+            DistressThreatJobList.DisposeAllChildren();
             _jobCategories.Clear();
             _jobPriorities.Clear();
-            var firstMilitary = true;
-            var firstThreat = true;
-            var firstCivilian = true;
 
             // Get all displayed departments
             var departments = new List<DepartmentPrototype>();
@@ -1019,7 +1207,7 @@ namespace Content.Client.Lobby.UI
                 departments.Add(department);
             }
 
-            departments.Sort(DepartmentUIComparer.Instance);
+            departments.Sort(CompareDepartmentsForCharacterSetup);
 
             var items = new[]
             {
@@ -1033,180 +1221,384 @@ namespace Content.Client.Lobby.UI
             {
                 var departmentName = Loc.GetString(department.Name);
 
-                // Determine which tab this department goes into
-                BoxContainer targetList;
-                ref var firstFlag = ref firstMilitary;
-
-                if (department.Faction is "govfor" or "opfor")
-                {
-                    targetList = MilitaryJobList;
-                    firstFlag = ref firstMilitary;
-                }
-                else if (department.Faction == "colonist")
-                {
-                    targetList = CivilianJobList;
-                    firstFlag = ref firstCivilian;
-                }
-                else
-                {
-                    // Threat / Third Party (no faction or unknown faction)
-                    targetList = ThreatJobList;
-                    firstFlag = ref firstThreat;
-                }
-
-                if (!_jobCategories.TryGetValue(department.ID, out var category))
-                {
-                    category = new BoxContainer
-                    {
-                        Orientation = LayoutOrientation.Vertical,
-                        Name = department.ID,
-                        ToolTip = Loc.GetString("humanoid-profile-editor-jobs-amount-in-department-tooltip",
-                            ("departmentName", departmentName))
-                    };
-
-                    category.Visible = department.IsCM && !department.Hidden;
-
-                    if (firstFlag && category.Visible)
-                    {
-                        firstFlag = false;
-                    }
-                    else
-                    {
-                        category.AddChild(new Control
-                        {
-                            MinSize = new Vector2(0, 23),
-                        });
-                    }
-
-                    category.AddChild(new PanelContainer
-                    {
-                        PanelOverride = new StyleBoxFlat {BackgroundColor = Color.FromHex("#464966")},
-                        Children =
-                        {
-                            new Label
-                            {
-                                Text = department.CustomName ?? Loc.GetString("humanoid-profile-editor-department-jobs-label", ("departmentName", departmentName)),
-                                Margin = new Thickness(5f, 0, 0, 0)
-                            }
-                        }
-                    });
-
-                    _jobCategories[department.ID] = category;
-                    targetList.AddChild(category);
-                }
-
                 var jobs = department.Roles.Select(jobId => _prototypeManager.Index(jobId))
                     .Where(job => job.SetPreference)
                     .Where(job => !job.Hidden)
                     .ToArray();
 
-                Array.Sort(jobs, JobUIComparer.Instance);
+                Array.Sort(jobs, (a, b) =>
+                {
+                    var group = GetJobSortGroup(department, a).CompareTo(GetJobSortGroup(department, b));
+                    return group != 0 ? group : JobUIComparer.Instance.Compare(a, b);
+                });
 
                 foreach (var job in jobs)
                 {
-                    var jobContainer = new BoxContainer()
+                    foreach (var (targetList, gamemode, sectionKey, sectionTitle) in GetJobSections(department, job, departmentName))
                     {
-                        Orientation = LayoutOrientation.Horizontal,
-                    };
-
-                    var selector = new RequirementsSelector()
-                    {
-                        Margin = new Thickness(3f, 3f, 3f, 0f),
-                    };
-                    selector.OnOpenGuidebook += OnOpenGuidebook;
-
-                    var icon = new TextureRect
-                    {
-                        TextureScale = new Vector2(2, 2),
-                        VerticalAlignment = VAlignment.Center
-                    };
-                    var jobIcon = _prototypeManager.Index(job.Icon);
-                    icon.Texture = _sprite.Frame0(jobIcon.Icon);
-                    selector.Setup(items, job.LocalizedName, 200, job.LocalizedDescription, icon, job.Guides);
-
-                    if (!_requirements.IsAllowed(job, (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter, out var reason))
-                    {
-                        selector.LockRequirements(reason);
+                        AddJobSelector(
+                            targetList,
+                            gamemode,
+                            sectionKey,
+                            sectionTitle,
+                            department.IsCM && !department.Hidden,
+                            departmentName,
+                            items,
+                            job);
                     }
-                    else
-                    {
-                        selector.UnlockRequirements();
-                    }
-
-                    selector.OnSelected += selectedPrio =>
-                    {
-                        var selectedJobPrio = (JobPriority) selectedPrio;
-                        Profile = Profile?.WithJobPriority(job.ID, selectedJobPrio);
-
-                        foreach (var (jobId, other) in _jobPriorities)
-                        {
-                            // Sync other selectors with the same job in case of multiple department jobs
-                            if (jobId == job.ID)
-                            {
-                                other.Select(selectedPrio);
-                                continue;
-                            }
-
-                            if (selectedJobPrio != JobPriority.High || (JobPriority) other.Selected != JobPriority.High)
-                                continue;
-
-                            // Lower any other high priorities to medium.
-                            other.Select((int)JobPriority.Medium);
-                            Profile = Profile?.WithJobPriority(jobId, JobPriority.Medium);
-                        }
-
-                        // TODO: Only reload on high change (either to or from).
-                        ReloadPreview();
-
-                        UpdateJobPriorities();
-                        SetDirty();
-                    };
-
-                    var loadoutWindowBtn = new Button()
-                    {
-                        Text = Loc.GetString("loadout-window"),
-                        HorizontalAlignment = HAlignment.Right,
-                        VerticalAlignment = VAlignment.Center,
-                        Margin = new Thickness(3f, 3f, 0f, 0f),
-                    };
-
-                    var collection = IoCManager.Instance!;
-                    var protoManager = collection.Resolve<IPrototypeManager>();
-
-                    // If no loadout found then disabled button
-                    if (!protoManager.TryIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(job.ID), out var roleLoadoutProto))
-                    {
-                        loadoutWindowBtn.Disabled = true;
-                    }
-                    // else
-                    else
-                    {
-                        loadoutWindowBtn.OnPressed += args =>
-                        {
-                            RoleLoadout? loadout = null;
-
-                            // Clone so we don't modify the underlying loadout.
-                            Profile?.Loadouts.TryGetValue(LoadoutSystem.GetJobPrototype(job.ID), out loadout);
-                            loadout = loadout?.Clone();
-
-                            if (loadout == null)
-                            {
-                                loadout = new RoleLoadout(roleLoadoutProto.ID);
-                                loadout.SetDefault(Profile, _playerManager.LocalSession, _prototypeManager);
-                            }
-
-                            OpenLoadout(job, loadout, roleLoadoutProto);
-                        };
-                    }
-
-                    _jobPriorities.Add((job.ID, selector));
-                    jobContainer.AddChild(selector);
-                    jobContainer.AddChild(loadoutWindowBtn);
-                    category.AddChild(jobContainer);
                 }
             }
 
+            foreach (var list in GetGamemodeJobLists())
+            {
+                CrtLobbyTheme.Apply(list);
+            }
+
             UpdateJobPriorities();
+        }
+
+        private void AddJobSelector(
+            BoxContainer targetList,
+            string gamemode,
+            string sectionKey,
+            string sectionTitle,
+            bool visible,
+            string departmentName,
+            (string, int)[] items,
+            JobPrototype job)
+        {
+            var category = GetOrCreateJobCategory(
+                sectionKey,
+                targetList,
+                sectionTitle,
+                visible,
+                departmentName);
+
+            var jobContainer = new BoxContainer()
+            {
+                Orientation = LayoutOrientation.Horizontal,
+                HorizontalExpand = true,
+            };
+
+            var selector = new RequirementsSelector()
+            {
+                Margin = new Thickness(3f, 3f, 3f, 0f),
+                HorizontalExpand = true,
+            };
+            selector.OnOpenGuidebook += OnOpenGuidebook;
+
+            var icon = new TextureRect
+            {
+                TextureScale = new Vector2(2, 2),
+                VerticalAlignment = VAlignment.Center
+            };
+            var jobIcon = _prototypeManager.Index(job.Icon);
+            icon.Texture = _sprite.Frame0(jobIcon.Icon);
+            selector.Setup(items, GetJobDisplayName(job), 220, job.LocalizedDescription, icon, job.Guides);
+
+            if (!_requirements.IsAllowed(job, (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter, out var reason))
+            {
+                selector.LockRequirements(reason);
+            }
+            else
+            {
+                selector.UnlockRequirements();
+            }
+
+            selector.OnSelected += selectedPrio =>
+            {
+                var selectedJobPrio = (JobPriority) selectedPrio;
+                Profile = Profile?.WithGamemodeJobPriority(gamemode, job.ID, selectedJobPrio);
+
+                foreach (var (otherGamemode, jobId, other) in _jobPriorities)
+                {
+                    if (otherGamemode != gamemode)
+                        continue;
+
+                    // Sync other selectors with the same job in case of multiple department jobs
+                    if (jobId == job.ID)
+                    {
+                        other.Select(selectedPrio);
+                        continue;
+                    }
+
+                    if (selectedJobPrio != JobPriority.High || (JobPriority) other.Selected != JobPriority.High)
+                        continue;
+
+                    // Lower any other high priorities to medium.
+                    other.Select((int)JobPriority.Medium);
+                    Profile = Profile?.WithGamemodeJobPriority(gamemode, jobId, JobPriority.Medium);
+                }
+
+                // TODO: Only reload on high change (either to or from).
+                ReloadPreview();
+
+                UpdateJobPriorities();
+                SetDirty();
+            };
+
+            var loadoutWindowBtn = new Button()
+            {
+                Text = Loc.GetString("loadout-window"),
+                HorizontalAlignment = HAlignment.Right,
+                VerticalAlignment = VAlignment.Center,
+                Margin = new Thickness(3f, 3f, 0f, 0f),
+                MinWidth = 110,
+                StyleClasses = { StyleNano.StyleClassCrtButton }
+            };
+
+            var collection = IoCManager.Instance!;
+            var protoManager = collection.Resolve<IPrototypeManager>();
+
+            // If no loadout found then disabled button
+            if (!protoManager.TryIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(job.ID), out var roleLoadoutProto))
+            {
+                loadoutWindowBtn.Disabled = true;
+            }
+            // else
+            else
+            {
+                loadoutWindowBtn.OnPressed += args =>
+                {
+                    RoleLoadout? loadout = null;
+
+                    // Clone so we don't modify the underlying loadout.
+                    Profile?.Loadouts.TryGetValue(LoadoutSystem.GetJobPrototype(job.ID), out loadout);
+                    loadout = loadout?.Clone();
+
+                    if (loadout == null)
+                    {
+                        loadout = new RoleLoadout(roleLoadoutProto.ID);
+                        loadout.SetDefault(Profile, _playerManager.LocalSession, _prototypeManager);
+                    }
+
+                    OpenLoadout(job, loadout, roleLoadoutProto);
+                };
+            }
+
+            _jobPriorities.Add((gamemode, job.ID, selector));
+            jobContainer.AddChild(selector);
+            jobContainer.AddChild(loadoutWindowBtn);
+            CrtLobbyTheme.Apply(jobContainer);
+            category.AddChild(jobContainer);
+        }
+
+        private IEnumerable<BoxContainer> GetGamemodeJobLists()
+        {
+            yield return InsurgencyGovernmentJobList;
+            yield return InsurgencyInsurgentJobList;
+            yield return InsurgencyCivilianJobList;
+            yield return ColonyCivilianJobList;
+            yield return ColonyThreatJobList;
+            yield return DistressGovernmentJobList;
+            yield return DistressThreatJobList;
+        }
+
+        private BoxContainer GetOrCreateJobCategory(
+            string key,
+            BoxContainer targetList,
+            string title,
+            bool visible,
+            string departmentName)
+        {
+            if (_jobCategories.TryGetValue(key, out var category))
+                return category;
+
+            category = new BoxContainer
+            {
+                Orientation = LayoutOrientation.Vertical,
+                Name = key,
+                ToolTip = Loc.GetString("humanoid-profile-editor-jobs-amount-in-department-tooltip",
+                    ("departmentName", departmentName)),
+                Visible = visible,
+            };
+
+            if (targetList.Children.Any(child => child.Visible) && visible)
+            {
+                category.AddChild(new Control
+                {
+                    MinSize = new Vector2(0, 14),
+                });
+            }
+
+            category.AddChild(new PanelContainer
+            {
+                PanelOverride = new StyleBoxFlat
+                {
+                    BackgroundColor = StyleNano.CrtPanelBackgroundAlt,
+                    BorderColor = StyleNano.CrtGreenDim,
+                    BorderThickness = new Thickness(0, 0, 0, 1),
+                    ContentMarginTopOverride = 3,
+                    ContentMarginBottomOverride = 3
+                },
+                Children =
+                {
+                    new Label
+                    {
+                        Text = title,
+                        Margin = new Thickness(6f, 0, 0, 0),
+                        StyleClasses = { StyleNano.StyleClassCrtHeading }
+                    }
+                }
+            });
+
+            _jobCategories[key] = category;
+            targetList.AddChild(category);
+            return category;
+        }
+
+        private IEnumerable<(BoxContainer Target, string Gamemode, string Key, string Title)> GetJobSections(
+            DepartmentPrototype department,
+            JobPrototype job,
+            string departmentName)
+        {
+            if (department.Faction == "govfor")
+            {
+                var (segmentKey, segmentTitle) = GetMilitaryJobSegment(job);
+                yield return (InsurgencyGovernmentJobList,
+                    GamemodeInsurgency,
+                    $"insurgency-govfor-{segmentKey}",
+                    $"Government Forces / {segmentTitle}");
+                yield return (DistressGovernmentJobList,
+                    GamemodeDistressSignal,
+                    $"distress-govfor-{segmentKey}",
+                    $"Government Forces / {segmentTitle}");
+                yield break;
+            }
+
+            if (department.Faction == "opfor")
+            {
+                yield break;
+            }
+
+            if (IsInsurgencyDepartment(department))
+            {
+                yield return (InsurgencyInsurgentJobList,
+                    GamemodeInsurgency,
+                    $"insurgency-jobs-{department.ID}",
+                    department.CustomName ?? Loc.GetString("humanoid-profile-editor-department-jobs-label", ("departmentName", departmentName)));
+                yield break;
+            }
+
+            if (department.Faction == "colonist")
+            {
+                var title = department.CustomName ?? Loc.GetString("humanoid-profile-editor-department-jobs-label", ("departmentName", departmentName));
+                yield return (InsurgencyCivilianJobList,
+                    GamemodeInsurgency,
+                    $"insurgency-civilian-{department.ID}",
+                    title);
+                yield return (ColonyCivilianJobList,
+                    GamemodeColonyFall,
+                    $"colony-civilian-{department.ID}",
+                    title);
+                yield break;
+            }
+
+            if (!IsRoundStartThreatAssignmentJob(job))
+                yield break;
+
+            yield return (ColonyThreatJobList,
+                GamemodeColonyFall,
+                "colony-threat",
+                "Threat Jobs");
+            yield return (DistressThreatJobList,
+                GamemodeDistressSignal,
+                "distress-threat",
+                "Threat Jobs");
+        }
+
+        private static int CompareDepartmentsForCharacterSetup(DepartmentPrototype? x, DepartmentPrototype? y)
+        {
+            if (ReferenceEquals(x, y))
+                return 0;
+
+            if (ReferenceEquals(null, y))
+                return 1;
+
+            if (ReferenceEquals(null, x))
+                return -1;
+
+            var colonyGroup = GetColonyDepartmentSortGroup(x).CompareTo(GetColonyDepartmentSortGroup(y));
+            return colonyGroup != 0 ? colonyGroup : DepartmentUIComparer.Instance.Compare(x, y);
+        }
+
+        private static int GetColonyDepartmentSortGroup(DepartmentPrototype department)
+        {
+            return department.ID switch
+            {
+                "AU14DepartmentColonyCommand" => 0,
+                "AU14DepartmentColonySecurity" => 1,
+                "AU14DepartmentColonyMedical" => 2,
+                "AU14DepartmentEngineering" => 3,
+                "AU14DepartmentCivilian" => 4,
+                "AU14DepartmentCriminal" => 5,
+                "AU14DepartmentCorporate" => 6,
+                "AU14DepartmentOrbital" => 7,
+                _ => 100,
+            };
+        }
+
+        private static bool IsInsurgencyDepartment(DepartmentPrototype department)
+        {
+            return department.ID == InsurgencyDepartmentId;
+        }
+
+        private static bool IsRoundStartThreatAssignmentJob(JobPrototype job)
+        {
+            return job.ID is "AU14JobThreatLeader" or "AU14JobThreatMember";
+        }
+
+        private static (string Key, string Title) GetMilitaryJobSegment(JobPrototype job)
+        {
+            var id = job.ID;
+            var name = job.LocalizedName;
+
+            if (job.MarineAuthorityLevel > 0 ||
+                ContainsAny(id, name, "PlatCo", "PlatOp", "Commander", "Command", "Officer", "Leader", "Sergeant", "Advisor"))
+            {
+                return ("command", "Command");
+            }
+
+            if (ContainsAny(id, name, "Pilot", "Dropship", "Crew Chief", "DCC"))
+                return ("flight", "Flight");
+
+            if (ContainsAny(id, name, "Doctor", "Corpsman", "Medic", "Technician", "Tech", "Police", "Synth", "Working Joe", "Auxiliary"))
+                return ("support", "Support");
+
+            return ("line", "Line Infantry");
+        }
+
+        private static int GetJobSortGroup(DepartmentPrototype department, JobPrototype job)
+        {
+            if (department.Faction != "govfor" && department.Faction != "opfor")
+                return 0;
+
+            return GetMilitaryJobSegment(job).Key switch
+            {
+                "command" => 0,
+                "flight" => 1,
+                "support" => 2,
+                _ => 3,
+            };
+        }
+
+        private static string GetJobDisplayName(JobPrototype job)
+        {
+            return LobbyHighJobPreview.GetDisplayJobName(job);
+        }
+
+        private static bool ContainsAny(string id, string name, params string[] needles)
+        {
+            foreach (var needle in needles)
+            {
+                if (id.Contains(needle, StringComparison.OrdinalIgnoreCase) ||
+                    name.Contains(needle, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void OpenLoadout(JobPrototype? jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto)
@@ -1483,6 +1875,12 @@ namespace Content.Client.Lobby.UI
             SetDirty();
         }
 
+        private void SetThreatPreference(string gamemode, string threat, bool pref)
+        {
+            Profile = Profile?.WithGamemodeThreatPreference(gamemode, new ProtoId<ThreatPrototype>(threat), pref);
+            SetDirty();
+        }
+
         /// <summary>
         /// Refreshes the allegiance selector.
         /// </summary>
@@ -1583,6 +1981,161 @@ namespace Content.Client.Lobby.UI
             OriginButton.SelectId(0);
         }
 
+        public void RefreshThreatPreferences()
+        {
+            ColonyThreatPreferenceList.DisposeAllChildren();
+            DistressThreatPreferenceList.DisposeAllChildren();
+            _threatPreferenceButtons.Clear();
+
+            PopulateThreatPreferenceList(ColonyThreatPreferenceList, GamemodeColonyFall);
+            PopulateThreatPreferenceList(DistressThreatPreferenceList, GamemodeDistressSignal);
+            SyncThreatPreferenceButtons();
+            CrtLobbyTheme.Apply(ColonyThreatPreferenceList);
+            CrtLobbyTheme.Apply(DistressThreatPreferenceList);
+        }
+
+        private void PopulateThreatPreferenceList(BoxContainer targetList, string gamemode)
+        {
+            targetList.AddChild(new Label
+            {
+                Text = "THREATS",
+                Margin = new Thickness(6f, 4f, 0f, 6f),
+                StyleClasses = { StyleNano.StyleClassCrtHeading }
+            });
+
+            foreach (var threat in _prototypeManager.EnumeratePrototypes<ThreatPrototype>()
+                         .Where(threat => IsThreatVisibleForGamemode(threat, gamemode))
+                         .OrderBy(GetThreatDisplayName))
+            {
+                var row = new BoxContainer
+                {
+                    Orientation = LayoutOrientation.Horizontal,
+                    HorizontalExpand = true,
+                    Margin = new Thickness(6f, 0f, 6f, 4f),
+                    SeparationOverride = 4
+                };
+
+                row.AddChild(new Label
+                {
+                    Text = GetThreatDisplayName(threat),
+                    HorizontalExpand = true,
+                    ClipText = true,
+                    VerticalAlignment = VAlignment.Center,
+                    ToolTip = threat.ID,
+                    StyleClasses = { StyleNano.StyleClassCrtText }
+                });
+
+                var yes = MakeThreatPreferenceButton(Loc.GetString("humanoid-profile-editor-antag-preference-yes-button"));
+                var no = MakeThreatPreferenceButton(Loc.GetString("humanoid-profile-editor-antag-preference-no-button"));
+                var threatId = threat.ID;
+
+                yes.OnPressed += _ =>
+                {
+                    SetThreatPreference(gamemode, threatId, true);
+                    SyncThreatPreferenceButtons();
+                };
+                no.OnPressed += _ =>
+                {
+                    SetThreatPreference(gamemode, threatId, false);
+                    SyncThreatPreferenceButtons();
+                };
+
+                _threatPreferenceButtons.Add((gamemode, threatId, yes, no));
+                row.AddChild(yes);
+                row.AddChild(no);
+                targetList.AddChild(row);
+            }
+        }
+
+        private Button MakeThreatPreferenceButton(string text)
+        {
+            return new Button
+            {
+                Text = text,
+                ToggleMode = true,
+                MinWidth = 54,
+                StyleClasses = { StyleNano.StyleClassCrtButton }
+            };
+        }
+
+        private void SyncThreatPreferenceButtons()
+        {
+            foreach (var (gamemode, threatId, yes, no) in _threatPreferenceButtons)
+            {
+                var selected = Profile?.GetThreatPreferencesForGamemode(gamemode).Any(id => id.Id == threatId) == true;
+                yes.Pressed = selected;
+                no.Pressed = !selected;
+            }
+        }
+
+        private static string GetThreatDisplayName(ThreatPrototype threat)
+        {
+            var id = threat.ID;
+            var markerSuffix = "";
+
+            if (id.EndsWith("OnMarker", StringComparison.OrdinalIgnoreCase))
+            {
+                id = id.Substring(0, id.Length - "OnMarker".Length);
+                markerSuffix = " (Marker)";
+            }
+
+            if (id.EndsWith("CF", StringComparison.OrdinalIgnoreCase))
+                id = id.Substring(0, id.Length - 2);
+
+            if (id.EndsWith("Threat", StringComparison.OrdinalIgnoreCase))
+                id = id.Substring(0, id.Length - "Threat".Length);
+
+            if (id.Equals("xeno", StringComparison.OrdinalIgnoreCase))
+                return "Xenomorph" + markerSuffix;
+
+            if (id.Equals("ape", StringComparison.OrdinalIgnoreCase))
+                return "Apes" + markerSuffix;
+
+            if (id.Equals("cultist", StringComparison.OrdinalIgnoreCase))
+                return "Cultists" + markerSuffix;
+
+            if (id.Equals("wendigo", StringComparison.OrdinalIgnoreCase))
+                return "Wendigo" + markerSuffix;
+
+            return HumanizePrototypeId(id) + markerSuffix;
+        }
+
+        private static bool IsThreatVisibleForGamemode(ThreatPrototype threat, string gamemode)
+        {
+            if (threat.BlacklistedGamemodes.Any(mode => mode.Equals(gamemode, StringComparison.OrdinalIgnoreCase)))
+                return false;
+
+            return threat.whitelistedgamemodes.Count == 0 ||
+                   threat.whitelistedgamemodes.Any(mode => mode.Equals(gamemode, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private static string HumanizePrototypeId(string id)
+        {
+            var builder = new System.Text.StringBuilder(id.Length + 8);
+
+            for (var i = 0; i < id.Length; i++)
+            {
+                var current = id[i];
+                if (i > 0)
+                {
+                    var previous = id[i - 1];
+                    var nextIsLower = i + 1 < id.Length && char.IsLower(id[i + 1]);
+                    if ((char.IsUpper(current) && (char.IsLower(previous) || nextIsLower)) ||
+                        (char.IsDigit(current) && !char.IsDigit(previous)))
+                    {
+                        builder.Append(' ');
+                    }
+                }
+
+                builder.Append(current);
+            }
+
+            var text = builder.ToString().Trim();
+            return text.Length == 0
+                ? id
+                : text;
+        }
+
         public bool IsDirty
         {
             get => _isDirty;
@@ -1619,9 +2172,9 @@ namespace Content.Client.Lobby.UI
         /// </summary>
         private void UpdateJobPriorities()
         {
-            foreach (var (jobId, prioritySelector) in _jobPriorities)
+            foreach (var (gamemode, jobId, prioritySelector) in _jobPriorities)
             {
-                var priority = Profile?.JobPriorities.GetValueOrDefault(jobId, JobPriority.Never) ?? JobPriority.Never;
+                var priority = Profile?.GetJobPriorityForGamemode(gamemode, jobId) ?? JobPriority.Never;
                 prioritySelector.Select((int) priority);
             }
         }

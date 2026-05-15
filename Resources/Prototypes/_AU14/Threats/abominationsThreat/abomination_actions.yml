@@ -1,0 +1,227 @@
+# Abstract base — all abomination actions parent this so they get the
+# cooldown-sweep background visual (matches the xeno action chrome).
+- type: entity
+  abstract: true
+  id: ActionAbominationBase
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    backgroundOn:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: template_active_big
+
+# --- Spider ---
+
+- type: entity
+  parent: ActionAbominationBase
+  id: ActionAbominationSpiderLeap
+  name: Pounce
+  description: Pounce onto a target, knocking them down briefly.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+    useDelay: 5
+  - type: TargetAction
+    range: 6
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared._AU14.Abominations.Abilities.AbominationLeapActionEvent
+
+- type: entity
+  parent: ActionAbominationBase
+  id: ActionAbominationSpiderSpit
+  name: Acid Spit
+  description: Spit a glob of acid at a target.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+    useDelay: 3
+  - type: TargetAction
+    range: 10
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared._AU14.Abominations.Abilities.AbominationSpitActionEvent
+
+# --- Grunt ---
+
+- type: entity
+  parent: ActionAbominationBase
+  id: ActionAbominationGruntSlam
+  name: Slam
+  description: Leap to a position and slam down, knocking enemies prone.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+    useDelay: 8
+  - type: TargetAction
+    range: 6
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared._AU14.Abominations.Abilities.AbominationLeapActionEvent
+
+- type: entity
+  parent: ActionAbominationBase
+  id: ActionAbominationGruntCharge
+  name: Charge
+  description: Wind up and barrel forward, smashing through anything in your path.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: ready_charge
+    useDelay: 18
+  - type: TargetAction
+    range: 8
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared._AU14.Abominations.Abilities.AbominationChargeActionEvent
+
+- type: entity
+  parent: ActionAbominationBase
+  id: ActionAbominationGruntSpit
+  name: Acid Spit
+  description: Hawk up a glob of corrosive acid at the target.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+    useDelay: 4
+  - type: TargetAction
+    range: 10
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared._AU14.Abominations.Abilities.AbominationSpitActionEvent
+
+- type: entity
+  parent: ActionAbominationBase
+  id: ActionAbominationGruntAcidSpray
+  name: Acid Spray
+  description: Vomit a cone of corrosive acid in the target direction.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: spray_acid
+    useDelay: 22
+  - type: TargetAction
+    range: 7
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared._AU14.Abominations.Abilities.AbominationAcidSprayActionEvent
+
+# --- Skitter ---
+
+- type: entity
+  parent: ActionAbominationBase
+  id: ActionAbominationPlantKudzu
+  name: Spread Kudzu
+  description: Vomit out a fast-spreading kudzu source under yourself.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: plant_weeds
+    useDelay: 30
+  - type: InstantAction
+    event: !type:Content.Shared._AU14.Abominations.AbominationPlantKudzuActionEvent
+
+- type: entity
+  parent: ActionAbominationBase
+  id: ActionAbominationChooseStructure
+  name: Choose Flesh Structure
+  description: Pick which structure you'll secrete with the Secrete Flesh action.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: place_resin
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._AU14.Abominations.Abilities.AbominationConstructionChooseActionEvent
+
+- type: entity
+  parent: ActionAbominationBase
+  id: ActionAbominationSecreteStructure
+  name: Secrete Flesh
+  description: Secrete the chosen flesh structure on the targeted tile.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: secrete_resin
+    useDelay: 10
+  - type: TargetAction
+    range: 1
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared._AU14.Abominations.Abilities.AbominationConstructionSecreteActionEvent
+
+# --- Mimic ---
+
+- type: entity
+  parent: ActionAbominationBase
+  id: ActionAbominationAssimilate
+  name: Assimilate
+  description: Begin assimilating an incapacitated humanoid. They will become a mimic too.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: headbite
+    useDelay: 2
+  - type: TargetAction
+    range: 1.5
+    checkCanAccess: true
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    event: !type:Content.Shared._AU14.Abominations.AbominationAssimilateActionEvent
+
+- type: entity
+  parent: ActionAbominationBase
+  id: ActionAbominationMimicTransform
+  name: Mimic
+  description: Take the shape of one of your assimilated victims for a limited time.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: place_resin
+    # useDelay is just a debounce on the picker — the real 5-minute cooldown
+    # is stamped onto this specific action entity in FinishRevert, so it's
+    # per-mimic by construction.
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._AU14.Abominations.AbominationMimicTransformActionEvent
+
+- type: entity
+  parent: ActionAbominationBase
+  id: ActionAbominationMimicRevert
+  name: Drop Disguise
+  description: Burst out of your current form and return to your combat shape.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: headbite
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._AU14.Abominations.AbominationMimicRevertActionEvent

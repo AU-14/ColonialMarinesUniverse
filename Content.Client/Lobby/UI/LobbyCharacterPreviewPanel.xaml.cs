@@ -37,6 +37,12 @@ public sealed partial class LobbyCharacterPreviewPanel : Control
         Summary.Text = value;
     }
 
+    public void SetJobText(string value)
+    {
+        JobSummary.Text = value;
+        JobSummary.Visible = !string.IsNullOrWhiteSpace(value);
+    }
+
     public void SetSprite(EntityUid uid)
     {
         if (_previewDummy != null)

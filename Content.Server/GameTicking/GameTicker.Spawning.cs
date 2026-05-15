@@ -184,6 +184,18 @@ namespace Content.Server.GameTicking
             return spawnableStations;
         }
 
+        private static Dictionary<NetUserId, HumanoidCharacterProfile> GetGamemodeAssignmentProfiles(
+            Dictionary<NetUserId, HumanoidCharacterProfile> profiles,
+            string? presetId)
+        {
+            if (string.IsNullOrWhiteSpace(presetId))
+                return profiles.ShallowClone();
+
+            return profiles.ToDictionary(
+                pair => pair.Key,
+                pair => pair.Value.WithJobPriorities(pair.Value.GetJobPrioritiesForGamemode(presetId)));
+        }
+
         private void SpawnPlayers(List<ICommonSession> readyPlayers,
             Dictionary<NetUserId, HumanoidCharacterProfile> profiles,
             bool force)
@@ -222,10 +234,13 @@ namespace Content.Server.GameTicking
                 }
             }
 
-            _auJobSelectionSystem.AssignThreatAndThirdPartyJobs(profiles);
+            var presetId = CurrentPreset?.ID ?? Preset?.ID ?? _auRoundSystem.SelectedPreset?.ID;
+            var assignmentProfiles = GetGamemodeAssignmentProfiles(profiles, presetId);
+
+            _auJobSelectionSystem.AssignThreatAndThirdPartyJobs(assignmentProfiles);
 
             var spawnableStations = GetSpawnableStations();
-            var assignedJobs = _stationJobs.AssignJobs(profiles, spawnableStations);
+            var assignedJobs = _stationJobs.AssignJobs(assignmentProfiles, spawnableStations);
 
             // Defensive: any exception inside SpawnPlayers propagates to StartRound's
             // EXCEPTION_TOLERANCE catch (only enabled in Release/Tools builds), which calls
@@ -246,7 +261,7 @@ namespace Content.Server.GameTicking
                 Log.Debug("SpawnThreatAtRoundStart debug — no threat selected, skipping threat spawn.");
             }
 
-            _stationJobs.AssignOverflowJobs(ref assignedJobs, playerNetIds, profiles, spawnableStations);
+            _stationJobs.AssignOverflowJobs(ref assignedJobs, playerNetIds, assignmentProfiles, spawnableStations);
 
             // Calculate extended access for stations.
             var stationJobCounts = spawnableStations.ToDictionary(e => e, _ => 0);
@@ -441,8 +456,9 @@ namespace Content.Server.GameTicking
                 restrictedRoles.UnionWith(jobBans);
 
             // Pick best job best on prefs.
+            var presetId = CurrentPreset?.ID ?? Preset?.ID;
             jobId ??= _stationJobs.PickBestAvailableJobWithPriority(station,
-                character.JobPriorities,
+                character.GetJobPrioritiesForGamemode(presetId),
                 true,
                 restrictedRoles);
             // If no job available, stay in lobby, or if no lobby spawn as observer

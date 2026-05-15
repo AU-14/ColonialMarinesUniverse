@@ -1,14 +1,15 @@
-<Control xmlns="https://spacestation14.io" MinWidth="300" MaxWidth="600">
-    <PanelContainer StyleClasses="AngleRect" />
-    <BoxContainer Margin="4" Orientation="Vertical">
-        <Label Name="VoteCaller" />
-        <RichTextLabel Name="VoteTitle" />
-        <Button Margin="4 4" Name="FollowVoteTarget" Text="{Loc 'ui-vote-follow-button-popup'}" Visible="False"></Button>
+<Control xmlns="https://spacestation14.io" MinWidth="560" MaxWidth="1280" RectClipContent="True">
+    <PanelContainer Name="VotePanel" StyleClasses="CrtPanel" />
+    <BoxContainer Margin="10 8" Orientation="Vertical" SeparationOverride="6">
+        <Label Name="VoteCaller" StyleClasses="CrtHeading" />
+        <RichTextLabel Name="VoteTitle" StyleClasses="CrtRichText" />
+        <Button Margin="0 2" Name="FollowVoteTarget" Text="{Loc 'ui-vote-follow-button-popup'}" Visible="False" />
 
-        <GridContainer Columns="3" Name="VoteOptionsContainer"/>
-        <BoxContainer Orientation="Horizontal">
-            <ProgressBar Margin="4" HorizontalExpand="True" Name="TimeLeftBar" MinValue="0" MaxValue="1" />
-            <Label Name="TimeLeftText" />
+        <GridContainer Columns="3" Name="VoteOptionsContainer" HorizontalExpand="True"
+                       HSeparationOverride="8" VSeparationOverride="6" />
+        <BoxContainer Orientation="Horizontal" Margin="0 2 0 0">
+            <ProgressBar Margin="0 0 8 0" HorizontalExpand="True" Name="TimeLeftBar" MinValue="0" MaxValue="1" MinSize="0 20" StyleClasses="CrtProgressBar" />
+            <Label Name="TimeLeftText" StyleClasses="CrtHeading" MinWidth="42" HorizontalAlignment="Right" />
         </BoxContainer>
     </BoxContainer>
 </Control>

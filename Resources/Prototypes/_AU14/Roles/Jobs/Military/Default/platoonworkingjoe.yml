@@ -12,111 +12,32 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
-  startingGear: AU14GearGOVFORWorkingJoe
-  dummyStartingGear: AU14GearGOVFORWorkingJoeDummy
   icon: "AU14JobIconGovWorkingJoe"
   spawnMenuRoleName: Working Joe (GOVFOR)
   supervisors: au14-job-supervisors-workingjoe-military
-  setPreference: false
   accessGroups:
   - AU14GovforCommand
   special:
   - !type:AddComponentSpecial
     components:
-    - type: Skills
-      preset: AU14SkillPresetPlatoonWorkingJoe
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-    - type: MeleeWeapon
-      soundHit:
-        path: /Audio/_RMC14/Weapons/synthpunch1.ogg
-        params:
-          variation: 0.15
-          volume: -1
-      angle: 30
-      animation: WeaponArcFist
-      attackRate: 1
-      damage:
-        types:
-          Blunt: 60
-    - type: MovementSpeedModifier
-      baseWalkSpeed: 2.85
-      baseSprintSpeed: 3.25
-    - type: Synth
-      generation: "species-name-workingjoe"
-      critThreshold: 300
-    - type: MobThresholds
-      thresholds:
-        0: Alive
-        300: Critical # doesnt do anything
-        500: Dead
-    - type: NameModifier
-      baseName: "Working Joe"
-    - type: AssignXenoName
-    - type: HumanoidAppearance
-      species: WorkingJoe
-      hideLayersOnEquip:
-      - UndergarmentTop
-      - HeadTop
-    - type: Icon
-      sprite: _AU14/Mobs/WorkingJoe/parts.rsi
-      state: full
     - type: UserIFF
       factions:
       - GOVFOR
-    - type: WorkingJoeVoice
-    - type: UserInterface
-      interfaces:
-        enum.WorkingJoeVoiceUiKey.Key:
-          type: WorkingJoeVoiceBui
-        enum.VoiceMaskUIKey.Key:
-          type: VoiceMaskBoundUserInterface
-        enum.HumanoidMarkingModifierKey.Key:
-          type: HumanoidMarkingModifierBoundUserInterface
-        enum.StrippingUiKey.Key:
-          type: StrippableBoundUserInterface
-        enum.CMSurgeryUIKey.Key:
-          type: CMSurgeryBui
-        enum.HolocardChangeUIKey.Key:
-          type: HolocardChangeBoundUserInterface
-          interactionRange: 0
-          requireInputValidation: false
-        enum.CMMobStateActionsUI.Key:
-          type: CMGhostActionBui
-          requireInputValidation: false
-        enum.TacticalMapUserUi.Key:
-          type: TacticalMapUserBui
-        enum.SquadLeaderTrackerUI.Key:
-          type: SquadInfoBui
-        enum.DialogUiKey.Key:
-          type: DialogBui
-        enum.ViewIntelObjectivesUI.Key:
-          type: ViewIntelObjectivesBui
-    - type: Vocal
-      sounds:
-        Male: AU14WorkingJoeSounds
-        Female: AU14WorkingJoeSounds
-        Unsexed: AU14WorkingJoeSounds
-    - type: TypingIndicator
-      proto: joe
-    - type: IntrinsicRadioReceiver
     - type: IntrinsicRadioTransmitter
       channels:
       - AI
-      - MarineCommand
-      - MarineJTAC
-      - MarineAlpha
+      - GovforCommand
+      - GovforJTAC
+      - GovforAlpha
       - GovforCharlie
       - GovforBravo
       - GovforIntel
     - type: ActiveRadio
       channels:
       - AI
-      - MarineCommand
-      - MarineJTAC
-      - MarineAlpha
+      - GovforCommand
+      - GovforJTAC
+      - GovforAlpha
       - GovforCharlie
       - GovforBravo
       - GovforIntel
@@ -125,12 +46,9 @@
       - AU14GovforCommand
       - AUPrisonStaff
       - auwy
-    - type: Tag
-      tags:
-      - WorkingJoe
-      - CanPilot
-      - FootstepSound
-      - DoorBumpOpener
+    - type: Loadout
+      prototypes: [ AU14GearGOVFORWorkingJoe ]
+  dummyStartingGear: AU14GearGOVFORWorkingJoe
   hidden: false
 
 - type: startingGear
@@ -151,7 +69,3 @@
     job_id: AU14JobGOVFORWorkingJoe
   - type: Sprite
     state: syn_spawn
-
-- type: startingGear
-  parent: AU14GearGOVFORWorkingJoe
-  id: AU14GearGOVFORWorkingJoeDummy

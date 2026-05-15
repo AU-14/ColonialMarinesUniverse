@@ -1,6 +1,7 @@
 ﻿using Content.Shared._RMC14.Marines.Skills;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
+using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Dropship;
@@ -32,6 +33,12 @@ public sealed partial class DropshipNavigationComputerComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool RemoteControl = false;
+
+    [DataField, AutoNetworkedField]
+    public bool CanTacticalLand;
+
+    [DataField, AutoNetworkedField]
+    public Vector2i TacticalLandFootprintOverride = Vector2i.Zero;
 
     [DataField, AutoNetworkedField]
     public TimeSpan LockoutDuration = TimeSpan.FromMinutes(10);

@@ -1,0 +1,46 @@
+- files:
+  - box_van_driving.ogg
+  - box_van_horn.ogg
+  - box_van_overdrive.ogg
+  - honk_1_truck.ogg
+  - honk_2_truck.ogg
+  - honk_3_ambulence.ogg
+  - honk_4_light.ogg
+  - overdrive_activate.ogg
+  - sound_vehicles_humvee_driving.ogg
+  - sound_vehicles_humvee_horn.ogg
+  - tank_driving.ogg
+  license: "MIT"
+  copyright: "RMC-14 contributors"
+  source: "https://github.com/RMC-14/RMC-14/pull/8791"
+
+- files:
+  - tank_boost_rev.wav
+  license: "CC0-1.0"
+  copyright: "loop_2.wav and loop_0.wav by domasx2, remade from a public domain source"
+  source: "https://opengameart.org/content/racing-car-engine-sound-loops"
+
+- files:
+  - tank_engine_loop.wav
+  license: "Custom"
+  copyright: "Sonniss.com - GDC 2020 - Game Audio Bundle / Pole Position - Tankietka TKS 1936 by Pole Position Production, loop extracted from user-provided source"
+  source: "https://sonniss.com/gdc-bundle-license/"
+
+- files:
+  - weapons/autocannon_fire.ogg
+  - weapons/autocannon_fire_old.ogg
+  - weapons/cannon_distant1.ogg
+  - weapons/cannon_distant2.ogg
+  - weapons/cannon_fire1.ogg
+  - weapons/cannon_fire2.ogg
+  - weapons/dual_autocannon_fire.ogg
+  - weapons/flamethrower.ogg
+  - weapons/minigun_loop.ogg
+  - weapons/minigun_select.ogg
+  - weapons/minigun_start.ogg
+  - weapons/minigun_stop.ogg
+  - weapons/smokelauncher_fire.ogg
+  - weapons/sound_weapons_humvee_cannon.ogg
+  license: "MIT"
+  copyright: "RMC-14 contributors"
+  source: "https://github.com/RMC-14/RMC-14/pull/8791"

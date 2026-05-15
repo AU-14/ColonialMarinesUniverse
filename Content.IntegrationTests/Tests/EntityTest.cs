@@ -72,10 +72,14 @@ namespace Content.IntegrationTests.Tests
                     .Where(p => !pair.IsTestPrototype(p))
                     .Where(p => !p.Components.ContainsKey("MapGrid")) // This will smash stuff otherwise.
                     .Where(p => !p.Components.ContainsKey("RoomFill")) // This comp can delete all entities, and spawn others
+                    .Where(p => !p.Components.ContainsKey("ConditionalSpawner")) // Spawns arbitrary prototypes as a side effect.
+                    .Where(p => !p.Components.ContainsKey("RandomSpawner")) // Spawns arbitrary prototypes as a side effect.
+                    .Where(p => !p.Components.ContainsKey("EntityTableSpawner")) // Spawns arbitrary prototypes as a side effect.
                     .Where(p => !p.Components.ContainsKey("GhostRole")) // Ghost role entities can spawn squads/loadouts as side effects.
                     .Where(p => !p.Components.ContainsKey("GhostRoleApplySpecial")) // Spawns special-role setup on direct entity spawn.
                     .Where(p => !p.Components.ContainsKey("HiveKingCocoon")) // Spawns an (audio) announcement.
                     .Where(p => !p.Components.ContainsKey("HivePylon")) // Spawn an (audio) announcement on deletion.
+                    .Where(p => p.Categories.All(x => x.ID != SpawnerCategory))
                     .Select(p => p.ID)
                     .ToList();
             });
@@ -281,21 +285,14 @@ namespace Content.IntegrationTests.Tests
             var server = pair.Server;
             var client = pair.Client;
 
-            var excluded = new[]
+            var excluded = new[] // supports Components and Prototypes
             {
                 "MapGrid",
                 "StationEvent",
                 "TimedDespawn",
-
-                // makes an announcement on mapInit.
-                "AnnounceOnSpawn",
-
-                // Spreads weeds
-                "HiveCore",
-
-                // Creates requisitions account
-                "RequisitionsComputer",
-
+                "AnnounceOnSpawn", // makes an announcement on mapInit.
+                "HiveCore", // Spreads weeds
+                "RequisitionsComputer", // Creates requisitions account
                 "EvenSmoke",
                 "SpawnOnTerminate",
                 "DropshipFabricator",
@@ -314,14 +311,17 @@ namespace Content.IntegrationTests.Tests
                 "AU14CrateCASNapalm", // StorageFill leaves its large dropship ammo detached from the crate in this generic test.
                 "VehicleLTBCannonImpact", // Shrapnel lingers longer than test case
                 "VehicleTankRocketLauncher", // Smoke lingers (failed to delete itself)
+                "VehicleProjectileDragonFlame",
+                "VehicleProjectileDragonFlameShard",
                 "VehicleTankFlamerImpact",
+                "VehicleProjectileTankFlamer",
                 "VehicleDragonFlameImpact", // Flames linger
-                "VehicleHumveeMedicalBackDoor1",
-                "VehiclePeekAnchor",
                 "VehiclePizzaVan",
                 "VehiclePizzaVanBack1",
                 "VehiclePizzaVanBack3",
-                "VehiclePizzaVanBackground1"
+                "VehiclePizzaVanBackground1",
+                "VehicleHumveeMedicalBackDoor1", // Backdoor not cleaned up
+                "VehiclePeekAnchor",
                 // CMU14
             };
 
@@ -331,7 +331,9 @@ namespace Content.IntegrationTests.Tests
                 .EnumeratePrototypes<EntityPrototype>()
                 .Where(p => !p.Abstract)
                 .Where(p => !pair.IsTestPrototype(p))
-                .Where(p => !excluded.Any(p.Components.ContainsKey))
+                // .Where(p => !excluded.Contains(p.Components.ContainsKey))
+                .Where(p => !excluded.Any(c => p.Components.ContainsKey(c))) // components excluded
+                .Where(p => !excluded.Contains(p.ID)) // prototypes excluded from cleanup test
                 .Where(p => p.Categories.All(x => x.ID != SpawnerCategory))
                 .Select(p => p.ID)
                 .ToList();

@@ -63,7 +63,7 @@ public sealed class ThermalCloakSystem : EntitySystem
     {
         var comp = ent.Comp;
 
-        if (args.InHands || !_inventory.InSlotWithFlags((ent, null, null), SlotFlags.BACK))
+        if (!comp.GrantAction || args.InHands || !_inventory.InSlotWithFlags((ent, null, null), SlotFlags.BACK))
             return;
 
         args.AddAction(ref comp.Action, comp.ActionId);

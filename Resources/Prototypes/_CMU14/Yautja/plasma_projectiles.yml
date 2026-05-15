@@ -1,0 +1,375 @@
+- type: entity
+  parent: MuzzleFlashEffect
+  id: CMUYautjaPlasmaMuzzleFlash
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    offset: 0.25, 0
+    scale: 1.45, 1.45
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Yautja/plasma_projectiles.rsi
+      state: muzzle_flash_blue
+  - type: PointLight
+    enabled: true
+    color: "#4fdcff"
+    radius: 3.25
+    energy: 2.2
+
+- type: entity
+  id: CMUYautjaPlasmaImpactEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.55
+  - type: Sprite
+    drawdepth: Effects
+    scale: 1.45, 1.45
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Yautja/plasma_projectiles.rsi
+      state: muzzle_energy
+  - type: PointLight
+    enabled: true
+    color: "#4fdcff"
+    radius: 4.25
+    energy: 2.8
+  - type: RMCExplosionShockWave
+    falloffPower: 48
+    sharpness: 8
+    width: 0.45
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: CMUYautjaPlasmaHeavyImpactEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.75
+  - type: Sprite
+    drawdepth: Effects
+    scale: 1.9, 1.9
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Yautja/plasma_projectiles.rsi
+      state: muzzle_energy
+  - type: PointLight
+    enabled: true
+    color: "#55c7ff"
+    radius: 5.5
+    energy: 3.6
+  - type: RMCExplosionShockWave
+    falloffPower: 34
+    sharpness: 12
+    width: 0.8
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: CMUYautjaPlasmaEradicatorImpactEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 1.15
+  - type: Sprite
+    drawdepth: Effects
+    scale: 2.35, 2.35
+    layers:
+    - shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+      sprite: _CMU14/Yautja/plasma_projectiles.rsi
+      state: bluespace
+  - type: PointLight
+    enabled: true
+    color: "#2da4ff"
+    radius: 7
+    energy: 4.5
+  - type: RMCExplosionShockWave
+    falloffPower: 24
+    sharpness: 16
+    width: 1.15
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: CMUYautjaPlasmaSmallShockWave
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.45
+  - type: RMCExplosionShockWave
+    falloffPower: 38
+    sharpness: 10
+    width: 0.65
+
+- type: entity
+  id: CMUYautjaPlasmaHeavyShockWave
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.6
+  - type: RMCExplosionShockWave
+    falloffPower: 28
+    sharpness: 14
+    width: 0.95
+
+- type: entity
+  id: CMUYautjaPlasmaEradicatorShockWave
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.8
+  - type: RMCExplosionShockWave
+    falloffPower: 18
+    sharpness: 18
+    width: 1.35
+
+- type: entity
+  parent: BaseBullet
+  id: CMUYautjaPlasmaBoltBase
+  abstract: true
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+    blockShoot: false
+  - type: Reflective
+    reflective:
+    - Energy
+  - type: FlyBySound
+    sound:
+      collection: EnergyMiss
+      params:
+        volume: 5
+  - type: Sprite
+    noRot: false
+    sprite: _CMU14/Yautja/plasma_projectiles.rsi
+    scale: 1.15, 1.15
+    layers:
+    - state: ion
+      shader: unshaded
+  - type: Ammo
+    muzzleFlash: CMUYautjaPlasmaMuzzleFlash
+  - type: Projectile
+    impactEffect: CMUYautjaPlasmaImpactEffect
+    soundHit:
+      collection: WeakHit
+    forceSound: true
+    damage:
+      types:
+        Heat: 0
+  - type: PointLight
+    enabled: true
+    color: "#50d9ff"
+    radius: 3.25
+    energy: 2.1
+  - type: TimedDespawn
+    lifetime: 4
+
+- type: entity
+  parent: CMUYautjaPlasmaBoltBase
+  id: CMUYautjaPlasmaPistolBolt
+  name: plasma pistol bolt
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    impactEffect: CMUYautjaPlasmaImpactEffect
+    damage:
+      types:
+        Heat: 18
+  - type: TriggerOnCollide
+    fixtureID: projectile
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 8
+    intensitySlope: 5
+    totalIntensity: 24
+    maxTileBreak: 0
+  - type: CMExplosionEffect
+    explosion: CMUYautjaPlasmaImpactEffect
+    shockWave: CMUYautjaPlasmaSmallShockWave
+    minShrapnel: 0
+    maxShrapnel: 0
+  - type: RMCScorchEffect
+    count: 1
+    scatterRadius: 0.5
+    radius: 0
+
+- type: entity
+  parent: CMUYautjaPlasmaBoltBase
+  id: CMUYautjaPlasmaRifleBolt
+  name: plasma rifle bolt
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    impactEffect: CMUYautjaPlasmaHeavyImpactEffect
+    damage:
+      types:
+        Heat: 32
+        Structural: 8
+  - type: IgniteOnCollide
+    fireStacks: 0.35
+  - type: TriggerOnCollide
+    fixtureID: projectile
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 18
+    intensitySlope: 6
+    totalIntensity: 70
+    maxTileBreak: 1
+  - type: CMExplosionEffect
+    explosion: CMUYautjaPlasmaHeavyImpactEffect
+    shockWave: CMUYautjaPlasmaHeavyShockWave
+    minShrapnel: 3
+    maxShrapnel: 6
+    shrapnelSpeed: 5
+  - type: RMCScorchEffect
+    count: 2
+    scatterRadius: 1
+    radius: 1
+  - type: PointLight
+    color: "#55c7ff"
+    radius: 4.25
+    energy: 2.9
+
+- type: entity
+  parent: CMUYautjaPlasmaBoltBase
+  id: CMUYautjaCasterStunBolt
+  name: stun bolt
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StaminaDamageOnCollide
+    damage: 105
+  - type: StunOnCollide
+    stunAmount: 3
+    knockdownAmount: 3
+  - type: Projectile
+    impactEffect: CMUYautjaPlasmaImpactEffect
+    damage:
+      types:
+        Heat: 0
+
+- type: entity
+  parent: CMUYautjaPlasmaBoltBase
+  id: CMUYautjaCasterImmobilizerBolt
+  name: plasma immobilizer
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - state: bluespace
+      shader: unshaded
+  - type: StaminaDamageOnCollide
+    damage: 142.5
+  - type: StunOnCollide
+    stunAmount: 4
+    knockdownAmount: 4
+    slowdownAmount: 3
+    walkSpeedMultiplier: 0.45
+    runSpeedMultiplier: 0.45
+  - type: Projectile
+    impactEffect: CMUYautjaPlasmaEradicatorImpactEffect
+    damage:
+      types:
+        Heat: 0
+  - type: PointLight
+    color: "#2da4ff"
+    radius: 3
+    energy: 1.5
+
+- type: entity
+  parent: CMUYautjaPlasmaBoltBase
+  id: CMUYautjaCasterLethalBolt
+  name: plasma bolt
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - state: pulse1
+      shader: unshaded
+  - type: Projectile
+    impactEffect: CMUYautjaPlasmaHeavyImpactEffect
+    damage:
+      types:
+        Heat: 38
+        Structural: 12
+  - type: TriggerOnCollide
+    fixtureID: projectile
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 30
+    intensitySlope: 6
+    totalIntensity: 120
+    maxTileBreak: 2
+  - type: CMExplosionEffect
+    explosion: CMUYautjaPlasmaHeavyImpactEffect
+    shockWave: CMUYautjaPlasmaHeavyShockWave
+    minShrapnel: 7
+    maxShrapnel: 12
+    shrapnelSpeed: 6
+  - type: RMCScorchEffect
+    count: 3
+    scatterRadius: 1.5
+    radius: 1
+  - type: PointLight
+    color: "#55b8ff"
+    radius: 4.75
+    energy: 3.2
+
+- type: entity
+  parent: CMUYautjaPlasmaBoltBase
+  id: CMUYautjaCasterEradicatorBolt
+  name: plasma eradicator
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - state: bluespace
+      shader: unshaded
+  - type: Projectile
+    impactEffect: CMUYautjaPlasmaEradicatorImpactEffect
+    damage:
+      types:
+        Heat: 70
+        Structural: 24
+  - type: TriggerOnCollide
+    fixtureID: projectile
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 60
+    intensitySlope: 6
+    totalIntensity: 320
+    maxTileBreak: 2
+  - type: CMExplosionEffect
+    explosion: CMUYautjaPlasmaEradicatorImpactEffect
+    shockWave: CMUYautjaPlasmaEradicatorShockWave
+    minShrapnel: 10
+    maxShrapnel: 16
+    shrapnelSpeed: 7
+  - type: RMCScorchEffect
+    count: 5
+    scatterRadius: 2
+    radius: 2
+    centerRadius: 1
+  - type: PointLight
+    color: "#2da4ff"
+    radius: 6.5
+    energy: 4.2
