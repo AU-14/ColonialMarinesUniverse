@@ -452,7 +452,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         comp.Budget -= comp.BroadcastCost;
         var sender = $"{comp.FactionName} Embassy";
         _chat.DispatchGlobalAnnouncement(msg.Message, sender, playSound: true, announcementSound: MarineAnnouncementSound);
-        _radio.SendRadioMessage(uid, msg.Message, "colonyalert", uid);
+        _radio.SendRadioMessage(uid, msg.Message, "colonyAlert", uid);
         UpdateAllFactionUi(comp);
     }
 

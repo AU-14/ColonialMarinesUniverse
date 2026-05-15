@@ -563126,7 +563126,7 @@ entities:
     - type: Transform
       pos: -8.5,-10.5
       parent: 1
-- proto: RMCCommunicationsTowerOn
+- proto: AU14CommunicationsTowerColony
   entities:
   - uid: 82937
     components:
@@ -586428,14 +586428,14 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: RMCSpawnerCommunicationsTowerOne
+- proto: AU14SpawnerCommunicationsTowerOne
   entities:
   - uid: 86663
     components:
     - type: Transform
       pos: 40.5,51.5
       parent: 1
-- proto: RMCSpawnerCommunicationsTowerTwo
+- proto: AU14SpawnerCommunicationsTowerTwo
   entities:
   - uid: 86664
     components:
