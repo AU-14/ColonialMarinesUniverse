@@ -67,7 +67,7 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
                 if (protoMgr.TryIndex<JobPrototype>(jobId, out var proto))
                     jobsToAdd[proto.ID] = slotCount;
                 else
-                    Logger.Warning($"[AddJobsRuleSystem] Could not find job prototype: {jobId}");
+                    Logger.GetSawmill("content").Warning($"[AddJobsRuleSystem] Could not find job prototype: {jobId}");
             }
             component.Jobs = jobsToAdd;
         }
@@ -128,7 +128,7 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
                         var scaledSlots = JobScaling.CalculateScaledSlots(playerCount, existingSlots, entry);
 
                         component.Jobs[jobProtoId] = scaledSlots;
-                        Logger.Info($"[AddJobsRuleSystem] Job scaling (component): {jobId} => {scaledSlots} slots " +
+                        Logger.GetSawmill("content").Info($"[AddJobsRuleSystem] Job scaling (component): {jobId} => {scaledSlots} slots " +
                                     $"(base={baseSlots}, extra={extra}, players={playerCount}, " +
                                     $"benchmark={entry.Benchmark?.ToString() ?? "null"}, " +
                                     $"maximum={entry.Maximum?.ToString() ?? "null"}, " +
@@ -140,7 +140,7 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
                         var extra = JobScaling.CalculateExtraSlots(playerCount, entry);
                         stationOnlyScaling[jobProtoId] = entry;
 
-                        Logger.Info($"[AddJobsRuleSystem] Job scaling (station): {jobId} => " +
+                        Logger.GetSawmill("content").Info($"[AddJobsRuleSystem] Job scaling (station): {jobId} => " +
                                     $"(extra={extra}, players={playerCount}, benchmark={entry.Benchmark?.ToString() ?? "null"}, " +
                                     $"maximum={entry.Maximum?.ToString() ?? "null"}, " +
                                     $"scale={entry.Scale}, threshold={entry.WhenToBeginScaling})");

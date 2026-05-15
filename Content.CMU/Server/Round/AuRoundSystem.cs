@@ -32,14 +32,14 @@ namespace Content.Server.AU14.Round
     /// </summary>
     public sealed partial class AuRoundSystem : EntitySystem
     {
-        [Dependency] private readonly IVoteManager _voteManager = default!;
-        [Dependency] private readonly IConfigurationManager _cfg = default!;
-        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-        [Dependency] private readonly IEntityManager _entityManager = default!;
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
-        [Dependency] private readonly IRobustRandom _random = default!;
-        [Dependency] private readonly ItemCamouflageSystem _camo = default!;
+        [Dependency] private IVoteManager _voteManager = default!;
+        [Dependency] private IConfigurationManager _cfg = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
+        [Dependency] private IEntityManager _entityManager = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private IServerPreferencesManager _prefsManager = default!;
+        [Dependency] private IRobustRandom _random = default!;
+        [Dependency] private ItemCamouflageSystem _camo = default!;
 
         [ViewVariables]
         public string? SelectedPlanetMapName => SelectedPlanetMap?.Announcement;
@@ -86,14 +86,14 @@ namespace Content.Server.AU14.Round
                 {
                     vote.OnFinished += (_, __) =>
                     {
-                        Logger.Debug("[PlatoonVoteManagerSystem] Preset vote finished.");
+                        Logger.GetSawmill("content").Debug("[PlatoonVoteManagerSystem] Preset vote finished.");
                         onFinished();
                     };
                     return vote;
                 }
             }
 
-            Logger.Debug("[PlatoonVoteManagerSystem] Preset vote finished (no active vote found).\n");
+            Logger.GetSawmill("content").Debug("[PlatoonVoteManagerSystem] Preset vote finished (no active vote found).\n");
             onFinished();
             return null;
         }
@@ -156,7 +156,7 @@ namespace Content.Server.AU14.Round
                             }
                             else
                             {
-                                Logger.Warning(
+                                Logger.GetSawmill("content").Warning(
                                     $"[AuRoundSystem] Could not find RMCPlanetMapPrototypeComponent for planet ID: {pid}");
                             }
                         }
@@ -299,7 +299,7 @@ namespace Content.Server.AU14.Round
                     if (_prototypeManager.TryIndex(protoId, out AuThirdPartyPrototype? proto))
                         allThirdParties.Add(proto);
                     else
-                        Logger.Warning($"[AuRoundSystem] Could not find AuThirdPartyPrototype for ID: {protoId}");
+                        Logger.GetSawmill("content").Warning($"[AuRoundSystem] Could not find AuThirdPartyPrototype for ID: {protoId}");
                 }
             }
             else
@@ -630,7 +630,7 @@ namespace Content.Server.AU14.Round
             if (_selectedPreset != null && noThreatPresets.Any(s => s.Equals(_selectedPreset.ID, StringComparison.OrdinalIgnoreCase)))
             {
                 _selectedthreat = null!;
-                Logger.Debug($"[AuRoundSystem] Skipping threat selection for preset: {_selectedPreset.ID}");
+                Logger.GetSawmill("content").Debug($"[AuRoundSystem] Skipping threat selection for preset: {_selectedPreset.ID}");
                 return;
             }
 
@@ -662,7 +662,7 @@ namespace Content.Server.AU14.Round
 
             if (threats.Count == 0)
             {
-                Logger.Debug(
+                Logger.GetSawmill("content").Debug(
                     $"[AuRoundSystem] No valid threats found for planet {planet.MapId} with preset {presetId}, govfor {govforId}, opfor {opforId}");
                 return;
             }
@@ -689,7 +689,7 @@ namespace Content.Server.AU14.Round
                 return;
 
             var threatSelectedId = _random.Pick(weightedThreats);
-            Logger.Debug($"[AuRoundSystem] Selected threat: {threatSelectedId}");
+            Logger.GetSawmill("content").Debug($"[AuRoundSystem] Selected threat: {threatSelectedId}");
             _selectedthreat = _prototypeManager.TryIndex(threatSelectedId, out ThreatPrototype? threatSelected)
                 ? threatSelected
                 : null!;
@@ -740,7 +740,7 @@ namespace Content.Server.AU14.Round
             foreach (var ruleId in threat.WinConditions)
             {
                 ticker.StartGameRule(ruleId);
-                Logger.Debug($"[AuRoundSystem] Started wincondition rule from threat: {ruleId}");
+                Logger.GetSawmill("content").Debug($"[AuRoundSystem] Started wincondition rule from threat: {ruleId}");
             }
         }
 

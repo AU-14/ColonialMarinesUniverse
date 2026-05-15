@@ -33,7 +33,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Server._CMU14.Yautja;
 
-public sealed class YautjaBracerUtilitySystem : EntitySystem
+public sealed partial class YautjaBracerUtilitySystem : EntitySystem
 {
     private const string IdSlot = "id";
     private const int TranslatorMaxMessageLength = 160;
@@ -46,24 +46,24 @@ public sealed class YautjaBracerUtilitySystem : EntitySystem
         },
     };
 
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly YautjaCloakSystem _cloak = default!;
-    [Dependency] private readonly YautjaPowerSystem _power = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private YautjaCloakSystem _cloak = default!;
+    [Dependency] private YautjaPowerSystem _power = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

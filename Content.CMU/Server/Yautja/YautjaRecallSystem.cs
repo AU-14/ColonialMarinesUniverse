@@ -7,15 +7,15 @@ using Robust.Shared.Audio.Systems;
 
 namespace Content.Server._CMU14.Yautja;
 
-public sealed class YautjaRecallSystem : EntitySystem
+public sealed partial class YautjaRecallSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly YautjaPowerSystem _power = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private YautjaPowerSystem _power = default!;
 
     public override void Initialize()
     {

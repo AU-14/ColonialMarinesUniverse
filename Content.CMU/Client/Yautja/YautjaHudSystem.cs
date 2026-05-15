@@ -6,10 +6,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._CMU14.Yautja;
 
-public sealed class YautjaHudSystem : EntitySystem
+public sealed partial class YautjaHudSystem : EntitySystem
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     private readonly Dictionary<YautjaMarkKind, StatusIconData> _icons = new();
     private bool _cached;

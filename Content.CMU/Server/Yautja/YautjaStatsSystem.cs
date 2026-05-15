@@ -26,16 +26,16 @@ using Robust.Shared.Random;
 
 namespace Content.Server._CMU14.Yautja;
 
-public sealed class YautjaStatsSystem : EntitySystem
+public sealed partial class YautjaStatsSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly HumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly NamingSystem _naming = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly RMCStatusEffectSystem _rmcStatusEffects = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private HumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private NamingSystem _naming = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private RMCStatusEffectSystem _rmcStatusEffects = default!;
+    [Dependency] private SkillsSystem _skills = default!;
 
     private const string YautjaSpecies = "Yautja";
     private const string DreadlocksMarking = "CMUYautjaDreadlocksStandard";

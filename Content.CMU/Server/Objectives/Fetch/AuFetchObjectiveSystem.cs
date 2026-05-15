@@ -87,7 +87,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         if (registered > 0)
         {
             component.ItemsSpawned = true;
-            Logger.Info($"[FETCH] Registered {registered} preplaced fetch entities for objective {objectiveUid}");
+            Logger.GetSawmill("content").Info($"[FETCH] Registered {registered} preplaced fetch entities for objective {objectiveUid}");
         }
 
         return registered;
@@ -212,32 +212,32 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
 
     private void TryHandleFetchItemDropOrUndrag(EntityUid uid, AuFetchItemComponent comp)
     {
-        Logger.Info($"[FETCH DEBUG] TryHandleFetchItemDropOrUndrag called for {uid}");
+        Logger.GetSawmill("content").Info($"[FETCH DEBUG] TryHandleFetchItemDropOrUndrag called for {uid}");
         var xform = Comp<TransformComponent>(uid);
         var tile = xform.Coordinates;
         var gridId = _xformSys.GetGrid(tile);
         var tilePos = _xformSys.GetWorldPosition(xform);
-        Logger.Info($"[FETCH DEBUG] Item {uid} at grid {gridId}, pos {tilePos}");
+        Logger.GetSawmill("content").Info($"[FETCH DEBUG] Item {uid} at grid {gridId}, pos {tilePos}");
         FetchObjectiveReturnPointComponent? usedReturnPoint = null;
         foreach (var ent in _lookup.GetEntitiesInRange(tile, 10f))
         {
-            Logger.Info($"[FETCH DEBUG] Checking entity {ent} in range");
+            Logger.GetSawmill("content").Info($"[FETCH DEBUG] Checking entity {ent} in range");
             if (!TryComp(ent, out FetchObjectiveReturnPointComponent? returnPoint))
                 continue;
             var returnXform = Comp<TransformComponent>(ent);
             var returnCoords = returnXform.Coordinates;
             var returnGridId = _xformSys.GetGrid(returnCoords);
             var returnTilePos = _xformSys.GetWorldPosition(returnXform);
-            Logger.Info($"[FETCH DEBUG] Return point {ent} at grid {returnGridId}, pos {returnTilePos}, generic={returnPoint.Generic}, fetchid={returnPoint.FetchId}, faction={returnPoint.ReturnPointFaction}");
+            Logger.GetSawmill("content").Info($"[FETCH DEBUG] Return point {ent} at grid {returnGridId}, pos {returnTilePos}, generic={returnPoint.Generic}, fetchid={returnPoint.FetchId}, faction={returnPoint.ReturnPointFaction}");
             // Check if on same grid and tile (rounded to int)
             if (gridId != returnGridId)
             {
-                Logger.Info($"[FETCH DEBUG] Grid mismatch: item {gridId}, return {returnGridId}");
+                Logger.GetSawmill("content").Info($"[FETCH DEBUG] Grid mismatch: item {gridId}, return {returnGridId}");
                 continue;
             }
             if ((int)tilePos.X != (int)returnTilePos.X || (int)tilePos.Y != (int)returnTilePos.Y)
             {
-                Logger.Info($"[FETCH DEBUG] Tile mismatch: item ({(int)tilePos.X},{(int)tilePos.Y}), return ({(int)returnTilePos.X},{(int)returnTilePos.Y})");
+                Logger.GetSawmill("content").Info($"[FETCH DEBUG] Tile mismatch: item ({(int)tilePos.X},{(int)tilePos.Y}), return ({(int)returnTilePos.X},{(int)returnTilePos.Y})");
                 continue;
             }
             var returnId = comp.FetchObjective.CustomReturnPointId;
@@ -245,28 +245,28 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
             {
                 if (returnPoint.FetchId == returnId || (string.IsNullOrEmpty(returnPoint.FetchId) && returnPoint.Generic))
                 {
-                    Logger.Info($"[FETCH DEBUG] Matched specific returnId {returnId}");
+                    Logger.GetSawmill("content").Info($"[FETCH DEBUG] Matched specific returnId {returnId}");
                     usedReturnPoint = returnPoint;
                     break;
                 }
             }
             else if (returnPoint.Generic)
             {
-                Logger.Info($"[FETCH DEBUG] Matched generic return point");
+                Logger.GetSawmill("content").Info($"[FETCH DEBUG] Matched generic return point");
                 usedReturnPoint = returnPoint;
                 break;
             }
         }
         if (usedReturnPoint == null)
         {
-            Logger.Info($"[FETCH DEBUG] No valid return point found for fetch item {uid} at {tile} (grid {gridId}, pos {tilePos})");
+            Logger.GetSawmill("content").Info($"[FETCH DEBUG] No valid return point found for fetch item {uid} at {tile} (grid {gridId}, pos {tilePos})");
             return;
         }
-        Logger.Info($"[FETCH DEBUG] Found valid return point {usedReturnPoint.Owner} for fetch item {uid} at {tile} (grid {gridId}, pos {tilePos})");
+        Logger.GetSawmill("content").Info($"[FETCH DEBUG] Found valid return point {usedReturnPoint.Owner} for fetch item {uid} at {tile} (grid {gridId}, pos {tilePos})");
         var returnPointFaction = usedReturnPoint.ReturnPointFaction.ToLowerInvariant();
         if (string.IsNullOrEmpty(returnPointFaction))
         {
-            Logger.Info($"[FETCH DEBUG] Return point faction is empty");
+            Logger.GetSawmill("content").Info($"[FETCH DEBUG] Return point faction is empty");
             return;
         }
         var fetchObj = comp.FetchObjective;
@@ -278,14 +278,14 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         {
             fetchObj.AmountFetchedPerFaction[returnPointFaction]++;
             comp.Fetched = true;
-            Logger.Info($"[FETCH DEBUG] Fetch item {uid} counted for faction {returnPointFaction}. Total: {fetchObj.AmountFetchedPerFaction[returnPointFaction]}/{fetchObj.AmountToFetch}");
+            Logger.GetSawmill("content").Info($"[FETCH DEBUG] Fetch item {uid} counted for faction {returnPointFaction}. Total: {fetchObj.AmountFetchedPerFaction[returnPointFaction]}/{fetchObj.AmountToFetch}");
         }
         var objComp = EnsureComp<AuObjectiveComponent>(comp.ObjectiveUid);
         if (objComp.FactionNeutral)
         {
             if (fetchObj.AmountFetchedPerFaction[returnPointFaction] >= fetchObj.AmountToFetch)
             {
-                Logger.Info($"[FETCH DEBUG] Objective {comp.ObjectiveUid} completed for faction {returnPointFaction}!");
+                Logger.GetSawmill("content").Info($"[FETCH DEBUG] Objective {comp.ObjectiveUid} completed for faction {returnPointFaction}!");
                 _objectiveSystem.CompleteObjectiveForFaction(comp.ObjectiveUid, objComp, returnPointFaction);
             }
         }
@@ -295,7 +295,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
             {
                 if (fetchObj.AmountFetchedPerFaction[returnPointFaction] >= fetchObj.AmountToFetch)
                 {
-                    Logger.Info($"[FETCH DEBUG] Objective {comp.ObjectiveUid} completed for faction {returnPointFaction}!");
+                    Logger.GetSawmill("content").Info($"[FETCH DEBUG] Objective {comp.ObjectiveUid} completed for faction {returnPointFaction}!");
                     _objectiveSystem.CompleteObjectiveForFaction(comp.ObjectiveUid, objComp, returnPointFaction);
                 }
             }
@@ -389,7 +389,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
                 totalFetched++;
                 fetchedThisObjective++;
 
-                Logger.Info($"[FETCH SCAN] Item {ent} ({proto}) fetched for faction {creditFaction}, objective {objUid}. " +
+                Logger.GetSawmill("content").Info($"[FETCH SCAN] Item {ent} ({proto}) fetched for faction {creditFaction}, objective {objUid}. " +
                             $"Total: {fetchComp.AmountFetchedPerFaction[creditFaction]}/{fetchComp.AmountToFetch}");
             }
 
@@ -402,7 +402,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
             {
                 if (totalForFaction >= fetchComp.AmountToFetch)
                 {
-                    Logger.Info($"[FETCH SCAN] Objective {objUid} completed for faction {creditFaction}!");
+                    Logger.GetSawmill("content").Info($"[FETCH SCAN] Objective {objUid} completed for faction {creditFaction}!");
                     _objectiveSystem.CompleteObjectiveForFaction(objUid, auComp, creditFaction);
                 }
             }
@@ -410,7 +410,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
             {
                 if (creditFaction == auComp.Faction.ToLowerInvariant() && totalForFaction >= fetchComp.AmountToFetch)
                 {
-                    Logger.Info($"[FETCH SCAN] Objective {objUid} completed for faction {creditFaction}!");
+                    Logger.GetSawmill("content").Info($"[FETCH SCAN] Objective {objUid} completed for faction {creditFaction}!");
                     _objectiveSystem.CompleteObjectiveForFaction(objUid, auComp, creditFaction);
                 }
             }
@@ -472,7 +472,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
                 if (objComp.FactionStatuses.TryGetValue(factionKey, out var status) && status == AuObjectiveComponent.ObjectiveStatus.Incomplete)
                 {
                     objComp.FactionStatuses[factionKey] = AuObjectiveComponent.ObjectiveStatus.Failed;
-                    Logger.Info($"[FETCH FAIL] Objective {comp.ObjectiveUid} failed for faction {factionKey} due to destroyed fetch items");
+                    Logger.GetSawmill("content").Info($"[FETCH FAIL] Objective {comp.ObjectiveUid} failed for faction {factionKey} due to destroyed fetch items");
                     // Optionally, refresh consoles or notify
                     _objectiveSystem?.AwardPointsToFaction(factionKey, objComp); // Optionally award 0 points to trigger UI update
                 }
