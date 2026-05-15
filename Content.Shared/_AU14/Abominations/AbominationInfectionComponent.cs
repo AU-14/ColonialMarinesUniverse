@@ -53,13 +53,14 @@ public sealed partial class AbominationInfectionComponent : Component
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan NextJitterAt;
 
-    /// <summary>Jitter interval at severity 0 — effectively no jitter, kept long.</summary>
+    /// <summary>Jitter interval at severity 0 — early infection.
+    /// Aggressive cadence so the seizures land within seconds of infection.</summary>
     [DataField, AutoNetworkedField]
-    public TimeSpan JitterIntervalEarly = TimeSpan.FromSeconds(60);
+    public TimeSpan JitterIntervalEarly = TimeSpan.FromSeconds(8);
 
-    /// <summary>Jitter interval at peak severity — near-constant.</summary>
+    /// <summary>Jitter interval at peak severity — basically constant.</summary>
     [DataField, AutoNetworkedField]
-    public TimeSpan JitterIntervalLate = TimeSpan.FromSeconds(2);
+    public TimeSpan JitterIntervalLate = TimeSpan.FromSeconds(0.5);
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan NextVomitAt;

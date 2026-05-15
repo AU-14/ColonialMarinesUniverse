@@ -20,6 +20,7 @@
   gruntsToSpawn:
     AU14MobTribalSpear: 4
     AU14MobTribalBowman: 3
+    AU14MobTribalShaman: 1
   scaling:
     AU14MobTribalSpear:
       scale: 0.1
@@ -27,6 +28,9 @@
     AU14MobTribalBowman:
       scale: 0.1
       whenToBeginScaling: 45
+    AU14MobTribalShaman:
+      scale: 0.04
+      whenToBeginScaling: 60
   spawnTogether: false
 
 - type: lorePrimer

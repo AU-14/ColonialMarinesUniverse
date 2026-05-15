@@ -17,7 +17,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      180: Dead
+      90: Dead
   - type: MobStateActions
     actions:
       Alive:
@@ -26,7 +26,7 @@
   - type: MeleeWeapon
     damage:
       types:
-        Slash: 48
+        Slash: 29
   # Doubled sprint speed — spider is the chase caste, it should run people
   # down at xeno-runner pace.
   - type: MovementSpeedModifier

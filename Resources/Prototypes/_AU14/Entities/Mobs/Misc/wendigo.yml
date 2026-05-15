@@ -7,7 +7,7 @@
   - RMCXenoMobCollision
   id: AU14Wendigo
   name: Wendigo
-  description: A large, menacing creature with a skull for head and sharp claws. Terrifying.
+  description: A large, menacing creature with a skull for head and sharp claws. Its back is branded "Weyland-Yutani".
   components:
   - type: GhostRole
     name: Wendigo

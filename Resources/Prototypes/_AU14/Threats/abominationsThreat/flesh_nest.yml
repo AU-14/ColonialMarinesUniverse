@@ -42,13 +42,11 @@
           AU14AbominationFleshKudzuSource:
             min: 1
             max: 1
-  - type: TimedSpawner
-    intervalSeconds: 90
-    chance: 1.0
-    prototypes:
-    - AU14AbominationSpider
-    - AU14AbominationGrunt
-    - AU14AbominationSkitter
+  # Spawning is GLOBAL — see AbominationNestSpawnSystem. Every tick the
+  # server picks one random nest in the world and spawns one non-mimic
+  # caste at it. Base cadence is 360s with one nest; each extra placed
+  # nest speeds the global rate by 5%.
+  - type: AbominationFleshNest
   - type: UserIFF
     factions:
     - FactionAbomination

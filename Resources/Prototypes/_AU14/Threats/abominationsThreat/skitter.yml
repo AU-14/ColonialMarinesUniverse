@@ -18,7 +18,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      495: Dead
+      247: Dead
   - type: MobStateActions
     actions:
       Alive:
@@ -35,28 +35,13 @@
     interfaces:
       enum.AbominationConstructionUiKey.Key:
         type: AbominationConstructionBui
-  # Only abomination caste that can hold tools. Skill 1 is the floor — they
-  # know what a gun is but they fumble it. Vendors/computers are locked out
-  # to keep the skitter from being a one-stop human-form replacement.
-  - type: Hands
-  - type: GiveHands
-    hands:
-    - name: Right Hand
-      location: Right
-    - name: Left Hand
-      location: Left
-  - type: Skills
-    skills:
-      RMCSkillFirearms: 1
-  - type: UserBlacklistActivatableUI
-    keys:
-    - enum.VendingMachineUiKey.Key
-    - enum.PaperUiKey.Key
-    - enum.RMCCameraUiKey.Key
+  # Skitter has no hands — same as the other abominations. They drag prey,
+  # secrete structures, and otherwise stay tool-less; nothing in their kit
+  # requires a held item.
   - type: MeleeWeapon
     damage:
       types:
-        Slash: 56
+        Slash: 34
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.4
     baseSprintSpeed: 4.2

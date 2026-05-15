@@ -116,6 +116,31 @@
     - type: JobPrefix
       prefix: au14-job-prefix-tribal-bowman
 
+- type: job
+  parent: CMJobBase
+  id: AU14JobTribalShaman
+  name: au14-job-name-tribal-shaman
+  description: au14-job-description-tribal-shaman
+  setPreference: false
+  playTimeTracker: AU14JobTribal
+  startingGear: AU14GearTribalShaman
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-tribal
+  roleWeight: 0.25
+  hidden: true
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillMedical: 3
+        RMCSkillSurgery: 2
+        RMCSkillCqc: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-tribal-shaman
+
 - type: playTimeTracker
   id: AU14JobTribal
   isHumanoid: true
@@ -180,6 +205,25 @@
     rules: au14-job-description-tribal-bowman
 
 - type: entity
+  parent: CMUMobTribal
+  id: AU14MobTribalShaman
+  suffix: CMU14, Shaman
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tribal-shaman
+    description: au14-job-description-tribal-shaman
+    reregister: false
+    job: AU14JobTribalShaman
+    raffle:
+      settings: short
+    rules: au14-job-description-tribal-shaman
+
+- type: entity
   save: false
   parent: CMMobSlimePerson
   id: TribalSlime
@@ -202,12 +246,16 @@
     - tribe
   - type: Sprite
     sprite: Objects/Weapons/Melee/bone_spear.rsi
-  # Stab — 50 piercing.
+  # Base 100, light click halved to 50 via clickDamageModifier. Heavy
+  # wide swing keeps the full 100 (engine quirk: light damage pipes
+  # through ClickDamageModifier, heavy path bypasses it), so wide swing
+  # is exactly double the stab.
   - type: MeleeWeapon
     wideAnimationRotation: -135
     damage:
       types:
-        Piercing: 50
+        Piercing: 100
+    clickDamageModifier: 0.5
     angle: 0
     animation: WeaponArcThrust
     soundHit:
@@ -217,6 +265,17 @@
     damage:
       types:
         Piercing: 140
+  # Infinite durability — base Spear has a Destructible threshold at 30
+  # damage that shatters the haft. Override it with an absurdly high cap
+  # so the bone spear never breaks no matter what hits it.
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 99999999
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
 
 # Tribal arrow — 130 piercing on hit. Goes in the quiver, fired from
 # TribalBow / BowImprovised.
@@ -390,3 +449,25 @@
     - TribalArrow
     - TribalArrow
     - TribalArrow
+
+# Shaman — tribal medic. Drops the bow/quiver and rolls with a satchel
+# stuffed with field medicine instead. Spear is in-hand so they can still
+# defend themselves; the belt slot carries the splints/gauze/ointment
+# survivor pouch every tribal medic role uses.
+- type: startingGear
+  id: AU14GearTribalShaman
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    shoes: RMCShoesSandals
+    back: ClothingBackpackSatchelLeather
+    belt: RMCPouchFirstAidSplintsGauzeOintment
+  inhand:
+  - TribalSpear
+  storage:
+    back:
+    - CMGauze10
+    - CMOintment10
+    - CMGauze10
+    - CMOintment10
+    - CMHealthAnalyzer
+    - CMFirstAidKitFilledRobust

@@ -18,7 +18,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      1125: Dead
+      562: Dead
   - type: MobStateActions
     actions:
       Alive:
@@ -38,7 +38,7 @@
     range: 2
     damage:
       types:
-        Slash: 136
+        Slash: 82
   - type: MovementSpeedModifier
     baseWalkSpeed: 1.8
     baseSprintSpeed: 2.8

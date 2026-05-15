@@ -1,13 +1,15 @@
-# Abomination threat — Colony Fall only. Starts with a small core
-# (mimics + skitter + a flesh nest) and scales upward with pop count.
-# Map availability is gated by each planet's threats: list — see
-# planets.yml.
+# Abomination threat — available on Colony Fall AND Distress Signal.
+# Reuses the xenocf markers so it shares the colony-fall spawn points;
+# in DistressSignal the threat is now technically a second xeno-style
+# spawn pile against the marines. Map availability is still gated by
+# each planet's threats: list — see planets.yml.
 - type: threat
   id: abominationsThreat
   lorePrimer: AU14PrimerThreatAbomination
   roundstartspawns: abominationsParty
   whitelistedgamemodes:
   - ColonyFall
+  - DistressSignal
   winconditions:
   - KillAllColonistRule
   minplayers: 0
@@ -31,6 +33,13 @@
     AU14AbominationSkitter:
       scale: 0.04
       whenToBeginScaling: 45
+  # Use the xenocf colony-fall markers — abominations + xenos share spawn
+  # points so DistressSignal maps that already have xenocf markers get
+  # automatic support for the abomination threat with no map edits.
+  Markers:
+    Member: xenocf
+    Leader: xenocf
+    Entity: xenocf
   spawnTogether: true
 
 # Small abomination party — drawn as a third party. One mimic + one

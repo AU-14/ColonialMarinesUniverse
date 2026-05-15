@@ -1,0 +1,12 @@
+# Tags a disguised mimic with a visible faction icon ONLY for viewers
+# that have an Abomination component (the rest of the threat). Lets
+# the flesh-hivemind recognise its own kind even while wearing a face.
+- type: factionIcon
+  id: AbominationFaction
+  priority: 11
+  showTo:
+    components:
+    - Abomination
+  icon:
+    sprite: /Textures/Interface/Misc/job_icons.rsi
+    state: Zombie

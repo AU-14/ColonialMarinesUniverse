@@ -49,6 +49,9 @@
     allowedStates:
     - Alive
     - Dead
+  # Innate night vision on every caste — the flesh sees without eyes.
+  - type: NightVision
+    innate: true
   # Abominations have no hands (skitter overrides this with real ones), but
   # they still need to drag downed prey back to nests. NeedsHands: false
   # lets them pull/drag bodies in their mouth/limbs without an inventory.
@@ -133,7 +136,7 @@
     # severance scales with Brute (Slash) damage in CMUBodyPartHealthSystem.
     damage:
       types:
-        Slash: 48
+        Slash: 29
   # Heavy footsteps for every caste (skitter/grunt/mimic/spider). Reuses the
   # xeno large-footstep collection.
   - type: FootstepModifier

@@ -18,14 +18,14 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      600: Dead
+      300: Dead
   - type: MobStateActions
     actions:
       Alive:
       - ActionAbominationAssimilate
       - ActionAbominationMimicTransform
   - type: AbominationMimic
-    transformDuration: 360
+    transformDuration: 960
   - type: AbominationAssimilate
     doAfter: 8
   - type: UserInterface
@@ -35,7 +35,7 @@
   - type: MeleeWeapon
     damage:
       types:
-        Slash: 104
+        Slash: 62
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.6
     baseSprintSpeed: 4.4

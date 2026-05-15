@@ -87,6 +87,11 @@ public sealed class AbominationInfectionSystem : EntitySystem
     {
         if (HasComp<AbominationComponent>(target) || HasComp<AbominationInfectionComponent>(target))
             return false;
+        // Disguised mimics ARE flesh underneath, but they shouldn't trigger
+        // the infection ramp on themselves and get re-polymorphed into a
+        // mimic that's already a mimic. Block them at the disguise marker.
+        if (HasComp<AbominationMimicTransformedComponent>(target))
+            return false;
         if (HasComp<SynthComponent>(target))
             return false;
         // Dead targets can't be infected — the corpse has nothing left to host.

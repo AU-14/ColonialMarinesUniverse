@@ -8,6 +8,8 @@ using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Actions;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared._RMC14.Xenonids.Parasite;
+using Content.Shared.Damage;
+using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Jittering;
@@ -46,6 +48,7 @@ public sealed class AbominationMimicSystem : EntitySystem
 
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly NpcFactionSystem _faction = default!;
     [Dependency] private readonly GunIFFSystem _gunIff = default!;
     [Dependency] private readonly SharedJitteringSystem _jitter = default!;
@@ -195,8 +198,18 @@ public sealed class AbominationMimicSystem : EntitySystem
         // the flesh underneath isn't compatible host material.
         RemComp<InfectableComponent>(disguisedUid);
 
+        // Every transform resets damage on the new body — mimics spawn
+        // fresh into the disguise no matter how chewed-up they were.
+        HealToFull(disguisedUid);
+
         _actions.AddAction(disguisedUid, RevertAction);
         return disguisedUid;
+    }
+
+    private void HealToFull(EntityUid uid)
+    {
+        if (TryComp<DamageableComponent>(uid, out var damageable))
+            _damageable.SetAllDamage(uid, damageable, FixedPoint2.Zero);
     }
 
     private void OnRevertAction(Entity<AbominationMimicTransformedComponent> ent, ref AbominationMimicRevertActionEvent args)
@@ -284,6 +297,11 @@ public sealed class AbominationMimicSystem : EntitySystem
             if (foundAction is { } actionEnt)
                 _actions.SetCooldown(actionEnt, disguisedMimic.TransformCooldown);
         }
+
+        // Heal the restored mimic back to full — every transform (in or out)
+        // resets the body. Done before Revert so polymorph's transferDamage
+        // doesn't pull the disguise's accumulated damage back onto it.
+        HealToFull(polymorphed.Parent);
 
         _polymorph.Revert((disguisedUid, null));
     }

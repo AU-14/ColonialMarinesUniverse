@@ -93,12 +93,12 @@ public sealed class AbominationFleshKudzuSystem : EntitySystem
                 // emit the chat + sound.
                 if (_random.Prob(kudzu.CryChance))
                 {
-                    _chat.TryEmoteWithChat(uid, kudzu.CryEmote, ignoreActionBlocker: true, forceEmote: true);
+                    _chat.TryEmoteWithoutChat(uid, kudzu.CryEmote, ignoreActionBlocker: true);
                     _audio.PlayPvs(kudzu.CrySound, uid, audioParams);
                 }
                 else if (kudzu.Emotes.Count > 0)
                 {
-                    _chat.TryEmoteWithChat(uid, _random.Pick(kudzu.Emotes), ignoreActionBlocker: true, forceEmote: true);
+                    _chat.TryEmoteWithoutChat(uid, _random.Pick(kudzu.Emotes), ignoreActionBlocker: true);
                     if (kudzu.EmoteSounds.Count > 0)
                         _audio.PlayPvs(_random.Pick(kudzu.EmoteSounds), uid, audioParams);
                 }

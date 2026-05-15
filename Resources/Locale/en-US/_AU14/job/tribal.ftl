@@ -9,3 +9,7 @@ au14-job-prefix-tribal-spear = WARRIOR
 au14-job-name-tribal-bowman = Tribal Bowman
 au14-job-description-tribal-bowman = A skilled archer of the tribe. Strike the invaders from afar.
 au14-job-prefix-tribal-bowman = HUNTER
+
+au14-job-name-tribal-shaman = Tribal Shaman
+au14-job-description-tribal-shaman = Healer and spiritual guide of the tribe. Patch wounded warriors and keep the band alive.
+au14-job-prefix-tribal-shaman = SHAMAN
