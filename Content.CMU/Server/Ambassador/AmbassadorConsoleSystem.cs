@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Server.AU14.Round;
 using Content.Server.AU14.ThirdParty;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
@@ -29,7 +28,6 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
     [Dependency] private readonly StackSystem _stack = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly AuThirdPartySystem _thirdParty = default!;
-    [Dependency] private readonly AuRoundSystem _auRound = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly RadioSystem _radio = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -336,8 +334,7 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
         var thirdParties = new Dictionary<string, (string DisplayName, float Cost)>();
         foreach (var (id, cost) in comp.CallableParties)
         {
-            if (_proto.TryIndex<AuThirdPartyPrototype>(id, out var proto) &&
-                _auRound.IsThirdPartyAllowedForCurrentContext(proto))
+            if (_proto.TryIndex<AuThirdPartyPrototype>(id, out var proto))
             {
                 var displayName = proto.DisplayName ?? proto.ID;
                 thirdParties[id] = (displayName, cost);
@@ -380,7 +377,6 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
         if (comp.CalledParties.Contains(msg.ThirdPartyId)) return;
         if (comp.Budget < cost) return;
         if (!_proto.TryIndex<AuThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto)) return;
-        if (!_auRound.IsThirdPartyAllowedForCurrentContext(partyProto)) return;
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto)) return;
         if (!_thirdParty.SpawnThirdParty(partyProto, spawnProto, false))
         {
