@@ -28,7 +28,6 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     [Dependency] private StackSystem _stack = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private AuThirdPartySystem _thirdParty = default!;
-    [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private RadioSystem _radio = default!;
     [Dependency] private IRobustRandom _random = default!;
