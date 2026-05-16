@@ -15,7 +15,7 @@ namespace Content.Shared.AU14.util;
 /// <para>When Benchmark is null: finalSlots = existingSlots + floor(max(0, playerCount - WhenToBeginScaling) * Scale)</para>
 /// </summary>
 [DataRecord]
-public readonly record struct JobScaleEntry(float Scale, int WhenToBeginScaling, int? Benchmark = null, int? Maximum = null);
+public readonly partial record struct JobScaleEntry(float Scale, int WhenToBeginScaling, int? Benchmark = null, int? Maximum = null);
 
 public static class JobScaling
 {

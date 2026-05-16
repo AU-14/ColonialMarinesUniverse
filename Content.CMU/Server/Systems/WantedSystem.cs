@@ -7,10 +7,10 @@ using Robust.Shared.Map;
 
 namespace Content.Server.AU14.Systems;
 
-public sealed class WantedSystem : EntitySystem
+public sealed partial class WantedSystem : EntitySystem
 {
-    [Dependency] private readonly EntityManager _entManager = default!;
-    [Dependency] private readonly FaxSystem _faxSystem = default!;
+    [Dependency] private EntityManager _entManager = default!;
+    [Dependency] private FaxSystem _faxSystem = default!;
 
     private readonly List<FugitiveInfo> _fugitives = new();
 
