@@ -14,10 +14,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._CMU14.Fishing;
 
-public sealed class FishingSystem : SharedFishingSystem
+public sealed partial class FishingSystem : SharedFishingSystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     public override void Initialize()
     {

@@ -1,4 +1,5 @@
 using Content.Server.GameTicking;
+using Content.Server.Preferences.Managers;
 using Content.Server.Voting.Managers;
 using Content.Shared.Voting;
 using Robust.Shared.Prototypes;
@@ -14,6 +15,7 @@ using Content.Shared.AU14;
 using Content.Shared.AU14.Threats;
 using Content.Shared.AU14.util;
 using Content.Shared.CCVar;
+using Content.Shared.Preferences;
 using Content.Shared.Storage;
 using Robust.Server.Player;
 using Robust.Server.GameObjects;
@@ -28,15 +30,16 @@ namespace Content.Server.AU14.Round
     /// <summary>
     /// Persistent system that manages the full sequence of votes (preset, planet, platoon, etc.)
     /// </summary>
-    public sealed class AuRoundSystem : EntitySystem
+    public sealed partial class AuRoundSystem : EntitySystem
     {
-        [Dependency] private readonly IVoteManager _voteManager = default!;
-        [Dependency] private readonly IConfigurationManager _cfg = default!;
-        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-        [Dependency] private readonly IEntityManager _entityManager = default!;
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly IRobustRandom _random = default!;
-        [Dependency] private readonly ItemCamouflageSystem _camo = default!;
+        [Dependency] private IVoteManager _voteManager = default!;
+        [Dependency] private IConfigurationManager _cfg = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
+        [Dependency] private IEntityManager _entityManager = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private IServerPreferencesManager _prefsManager = default!;
+        [Dependency] private IRobustRandom _random = default!;
+        [Dependency] private ItemCamouflageSystem _camo = default!;
 
         [ViewVariables]
         public string? SelectedPlanetMapName => SelectedPlanetMap?.Announcement;
@@ -83,14 +86,14 @@ namespace Content.Server.AU14.Round
                 {
                     vote.OnFinished += (_, __) =>
                     {
-                        Logger.Debug("[PlatoonVoteManagerSystem] Preset vote finished.");
+                        Logger.GetSawmill("content").Debug("[PlatoonVoteManagerSystem] Preset vote finished.");
                         onFinished();
                     };
                     return vote;
                 }
             }
 
-            Logger.Debug("[PlatoonVoteManagerSystem] Preset vote finished (no active vote found).\n");
+            Logger.GetSawmill("content").Debug("[PlatoonVoteManagerSystem] Preset vote finished (no active vote found).\n");
             onFinished();
             return null;
         }
@@ -153,7 +156,7 @@ namespace Content.Server.AU14.Round
                             }
                             else
                             {
-                                Logger.Warning(
+                                Logger.GetSawmill("content").Warning(
                                     $"[AuRoundSystem] Could not find RMCPlanetMapPrototypeComponent for planet ID: {pid}");
                             }
                         }
@@ -296,7 +299,7 @@ namespace Content.Server.AU14.Round
                     if (_prototypeManager.TryIndex(protoId, out AuThirdPartyPrototype? proto))
                         allThirdParties.Add(proto);
                     else
-                        Logger.Warning($"[AuRoundSystem] Could not find AuThirdPartyPrototype for ID: {protoId}");
+                        Logger.GetSawmill("content").Warning($"[AuRoundSystem] Could not find AuThirdPartyPrototype for ID: {protoId}");
                 }
             }
             else
@@ -624,151 +627,151 @@ namespace Content.Server.AU14.Round
                 return;
 
             var noThreatPresets = new HashSet<string> { "ForceOnForce", "Insurgency" };
-
-            if (_selectedPreset != null && noThreatPresets.Any(s => s.Equals(_selectedPreset.ID, System.StringComparison.OrdinalIgnoreCase)))
+            if (_selectedPreset != null && noThreatPresets.Any(s => s.Equals(_selectedPreset.ID, StringComparison.OrdinalIgnoreCase)))
             {
                 _selectedthreat = null!;
-                Logger.Debug($"[AuRoundSystem] Skipping threat selection for preset: {_selectedPreset.ID}");
+                Logger.GetSawmill("content").Debug($"[AuRoundSystem] Skipping threat selection for preset: {_selectedPreset.ID}");
                 return;
             }
 
+            var presetId = _selectedPreset?.ID;
+            var allowedPresets = new[] { "Prometheus", "ColonyFall", "DistressSignal", "Jailbreak" };
+            if (string.IsNullOrEmpty(presetId) ||
+                !allowedPresets.Any(p => p.Equals(presetId, StringComparison.InvariantCultureIgnoreCase)) ||
+                planet is not { AllowedThreats.Count: >= 1 })
             {
-                var presetId = _selectedPreset?.ID;
-                var allowedPresets = new[] { "Prometheus", "ColonyFall", "DistressSignal", "Jailbreak" };
-                if (string.IsNullOrEmpty(presetId) ||
-                    !allowedPresets.Any(p => p.Equals(presetId, StringComparison.InvariantCultureIgnoreCase)))
+                return;
+            }
+
+            var platoonSpawnRuleSystem = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
+            var playerCount = _playerManager.PlayerCount;
+            var govforId = platoonSpawnRuleSystem?.SelectedGovforPlatoon?.ID;
+            var opforId = platoonSpawnRuleSystem?.SelectedOpforPlatoon?.ID;
+            var threats = new List<ProtoId<ThreatPrototype>>();
+
+            foreach (var threatId in planet.AllowedThreats)
+            {
+                if (!_prototypeManager.TryIndex(threatId, out ThreatPrototype? threatProto) ||
+                    !IsThreatAllowed(threatProto, presetId, govforId, opforId, playerCount))
                 {
-                    return;
+                    continue;
                 }
 
-                Logger.Debug($"[AuRoundSystem]  ffddgffgfht threat:");
+                threats.Add(threatId);
+            }
 
+            if (threats.Count == 0)
+            {
+                Logger.GetSawmill("content").Debug(
+                    $"[AuRoundSystem] No valid threats found for planet {planet.MapId} with preset {presetId}, govfor {govforId}, opfor {opforId}");
+                return;
+            }
 
-                var platoonSpawnRuleSystem = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
+            var preferredThreats = GetThreatPreferenceWeights(threats);
+            var weightedThreats = new List<ProtoId<ThreatPrototype>>();
 
-                if (planet is { AllowedThreats.Count: >= 1 })
+            foreach (var threatId in threats)
+            {
+                if (!_prototypeManager.TryIndex(threatId, out ThreatPrototype? threatProto))
+                    continue;
+
+                var weight = Math.Max(1, threatProto.ThreatWeight);
+                if (preferredThreats.TryGetValue(threatProto.ID, out var preferenceCount))
+                    weight += preferenceCount * Math.Max(3, threatProto.ThreatWeight);
+
+                for (var i = 0; i < weight; i++)
                 {
-                    Logger.Debug($"[AuRoundSystem]  ffddgffgfht tt2 threat:");
-
-                    var threats = planet.AllowedThreats.ToList();
-
-                    string preset = "";
-                    if (_selectedPreset == null)
-                        return;
-
-                    else
-                    {
-                        Logger.Debug($"[AuRoundSystem]454535   ffddgffgfht threat:");
-
-                        preset = _selectedPreset.ID;
-                    }
-
-                    Logger.Debug($"[AuRoundSystem] 4354156890332 ffddgffgfht threat:");
-
-                    // Filter allowed threats properly. The previous code attempted to call
-                    // RemoveAll inside the loop which used the prototype for the current
-                    // iteration across the whole list, causing incorrect removals. Build a
-                    // filtered list by checking each threat prototype individually.
-                    var playercount = _playerManager.PlayerCount;
-                    var govforid = platoonSpawnRuleSystem?.SelectedGovforPlatoon?.ID;
-                    var opforid = platoonSpawnRuleSystem?.SelectedOpforPlatoon?.ID;
-
-                    var allowed = new List<ProtoId<ThreatPrototype>>();
-                    foreach (var threatId in threats)
-                    {
-                        if (!_prototypeManager.TryIndex(threatId, out ThreatPrototype? threatProto))
-                        {
-                            // If the prototype can't be found, skip it.
-                            continue;
-                        }
-
-                        // Blacklist check: if the current preset is blacklisted, skip.
-                        if (threatProto.BlacklistedGamemodes.Any(s => s.Equals(preset, System.StringComparison.OrdinalIgnoreCase)))
-                        {
-                            continue;
-                        }
-
-                        // Whitelist check: if a whitelist exists, only allow those presets.
-                        if (threatProto.whitelistedgamemodes.Count > 0 &&
-                            !threatProto.whitelistedgamemodes.Any(s => s.Equals(preset, System.StringComparison.OrdinalIgnoreCase)))
-                        {
-                            continue;
-                        }
-
-                        // Player count limits
-                        if (threatProto.MaxPlayers < playercount) continue;
-                        if (threatProto.MinPlayers > playercount) continue;
-
-                        // Platoon blacklist checks
-                        if (govforid != null && threatProto.BlacklistedPlatoons.Any(p => p.Equals(govforid, System.StringComparison.OrdinalIgnoreCase)))
-                            continue;
-                        if (opforid != null && threatProto.BlacklistedPlatoons.Any(p => p.Equals(opforid, System.StringComparison.OrdinalIgnoreCase)))
-                            continue;
-
-                        // Platoon whitelist: if present, require the govfor/opfor to be present in the whitelist
-                        if (threatProto.WhitelistedPlatoons.Any())
-                        {
-                            if ((govforid != null && !threatProto.WhitelistedPlatoons.Any(p => p.Equals(govforid, System.StringComparison.OrdinalIgnoreCase))) ||
-                                (opforid != null && !threatProto.WhitelistedPlatoons.Any(p => p.Equals(opforid, System.StringComparison.OrdinalIgnoreCase))))
-                            {
-                                continue;
-                            }
-                        }
-
-                        allowed.Add(threatId);
-                    }
-
-                    // Replace threats (List<ProtoId<ThreatPrototype>>) with allowed list
-                    threats = allowed.ToList();
-
-                    if (threats.Count > 0)
-                    {
-                            // Build a weighted list for random selection
-                            var weightedThreats = new List<ProtoId<ThreatPrototype>>();
-                            foreach (var threatId in threats)
-                            {
-                                if (_prototypeManager.TryIndex(threatId, out ThreatPrototype? threatProto))
-                                {
-                                    int weight = Math.Max(1, threatProto.ThreatWeight);
-                                    for (int i = 0; i < weight; i++)
-                                    {
-                                        weightedThreats.Add(threatId);
-                                    }
-                                }
-                            }
-
-                            if (weightedThreats.Count > 0)
-                            {
-                                var random = new Random();
-                                var threatSelectedId = weightedThreats[random.Next(weightedThreats.Count)];
-                                Logger.Debug($"[AuRoundSystem]  selected threat: {threatSelectedId}");
-                                _selectedthreat =
-                                    _prototypeManager.TryIndex(threatSelectedId, out ThreatPrototype? threatSelected)
-                                        ? threatSelected
-                                        : null!;
-                                if (_selectedthreat.WinConditions.Count > 0)
-                                {
-                                    var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
-                                    foreach (var ruleId in _selectedthreat.WinConditions)
-                                    {
-                                        ticker.StartGameRule(ruleId);
-                                        Logger.Debug(
-                                            $"[AuRoundSystem] Started wincondition rule from threat: {ruleId}");
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                Logger.Debug(
-                                    $"[AuRoundSystem]  No valid threats found for planet {planet.MapId} with preset {preset}, govfor {govforid}, opfor {opforid}");
-                            }
-                        }
-
-                    }
+                    weightedThreats.Add(threatId);
                 }
+            }
 
+            if (weightedThreats.Count == 0)
+                return;
+
+            var threatSelectedId = _random.Pick(weightedThreats);
+            Logger.GetSawmill("content").Debug($"[AuRoundSystem] Selected threat: {threatSelectedId}");
+            _selectedthreat = _prototypeManager.TryIndex(threatSelectedId, out ThreatPrototype? threatSelected)
+                ? threatSelected
+                : null!;
+
+            if (_selectedthreat != null)
+                StartThreatWinConditions(_selectedthreat);
+        }
+
+        private static bool IsThreatAllowed(
+            ThreatPrototype threat,
+            string preset,
+            string? govforId,
+            string? opforId,
+            int playerCount)
+        {
+            if (threat.BlacklistedGamemodes.Any(s => s.Equals(preset, StringComparison.OrdinalIgnoreCase)))
+                return false;
+
+            if (threat.whitelistedgamemodes.Count > 0 &&
+                !threat.whitelistedgamemodes.Any(s => s.Equals(preset, StringComparison.OrdinalIgnoreCase)))
+                return false;
+
+            if (threat.MaxPlayers < playerCount || threat.MinPlayers > playerCount)
+                return false;
+
+            if (govforId != null && threat.BlacklistedPlatoons.Any(p => p.Equals(govforId, StringComparison.OrdinalIgnoreCase)))
+                return false;
+
+            if (opforId != null && threat.BlacklistedPlatoons.Any(p => p.Equals(opforId, StringComparison.OrdinalIgnoreCase)))
+                return false;
+
+            if (threat.WhitelistedPlatoons.Any() &&
+                ((govforId != null && !threat.WhitelistedPlatoons.Any(p => p.Equals(govforId, StringComparison.OrdinalIgnoreCase))) ||
+                 (opforId != null && !threat.WhitelistedPlatoons.Any(p => p.Equals(opforId, StringComparison.OrdinalIgnoreCase)))))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private void StartThreatWinConditions(ThreatPrototype threat)
+        {
+            if (threat.WinConditions.Count == 0)
+                return;
+
+            var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
+            foreach (var ruleId in threat.WinConditions)
+            {
+                ticker.StartGameRule(ruleId);
+                Logger.GetSawmill("content").Debug($"[AuRoundSystem] Started wincondition rule from threat: {ruleId}");
             }
         }
+
+        private Dictionary<string, int> GetThreatPreferenceWeights(IEnumerable<ProtoId<ThreatPrototype>> allowedThreats)
+        {
+            var allowed = allowedThreats.Select(id => id.Id).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var weights = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var session in _playerManager.Sessions)
+            {
+                if (!_prefsManager.TryGetCachedPreferences(session.UserId, out var preferences) ||
+                    preferences.SelectedCharacter is not HumanoidCharacterProfile profile)
+                {
+                    continue;
+                }
+
+                var threatPreferences = profile.GetThreatPreferencesForGamemode(_selectedPreset?.ID);
+                if (threatPreferences.Count == 0)
+                    continue;
+
+                foreach (var preference in threatPreferences)
+                {
+                    if (!allowed.Contains(preference.Id))
+                        continue;
+
+                    weights.TryGetValue(preference.Id, out var current);
+                    weights[preference.Id] = current + 1;
+                }
+            }
+
+            return weights;
+        }
     }
-
-
+}

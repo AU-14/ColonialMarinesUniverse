@@ -14,18 +14,18 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.AU14.ColonyEconomy;
 
-public sealed class CorporateConsoleSystem : EntitySystem
+public sealed partial class CorporateConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly AuThirdPartySystem _thirdParty = default!;
-    [Dependency] private readonly AuRoundSystem _auRound = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly AdminConsoleSystem _adminConsole = default!;
-    [Dependency] private readonly ColonyBudgetSystem _colonyBudget = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private AuThirdPartySystem _thirdParty = default!;
+    [Dependency] private AuRoundSystem _auRound = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private StackSystem _stack = default!;
+    [Dependency] private AdminConsoleSystem _adminConsole = default!;
+    [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private PopupSystem _popup = default!;
 
     public override void Initialize()
     {
@@ -184,7 +184,7 @@ public sealed class CorporateConsoleSystem : EntitySystem
         while (q.MoveNext(out _, out var c))
             c.CorporateBudget += stackCount;
 
-        EntityManager.QueueDeleteEntity(args.Entity);
+        QueueDel(args.Entity);
         UpdateAllUi();
     }
 
@@ -209,7 +209,7 @@ public sealed class CorporateConsoleSystem : EntitySystem
         while (q.MoveNext(out _, out var c))
             c.CorporateBudget += stackCount;
 
-        EntityManager.QueueDeleteEntity(args.Used);
+        QueueDel(args.Used);
         UpdateAllUi();
     }
 

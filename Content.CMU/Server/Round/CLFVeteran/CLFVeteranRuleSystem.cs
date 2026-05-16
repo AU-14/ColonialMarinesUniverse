@@ -14,16 +14,16 @@ using Robust.Shared.Maths;
 
 namespace Content.Server.AU14.Round.CLFVeteran;
 
-public sealed class CLFVeteranRuleSystem : GameRuleSystem<CLFVeteranRuleComponent>
+public sealed partial class CLFVeteranRuleSystem : GameRuleSystem<CLFVeteranRuleComponent>
 {
-    [Dependency] private readonly StationRecordsSystem _stationRecords = default!;
-    [Dependency] private readonly Content.Server.CriminalRecords.Systems.CriminalRecordsSystem _criminalRecords = default!;
-    [Dependency] private readonly Content.Server.CriminalRecords.Systems.CriminalRecordsConsoleSystem _criminalRecordsConsole = default!;
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
-    [Dependency] private readonly WantedSystem _wantedSystem = default!;
-    [Dependency] private readonly ColonyBudgetSystem _colonyBudget = default!;
+    [Dependency] private StationRecordsSystem _stationRecords = default!;
+    [Dependency] private Content.Server.CriminalRecords.Systems.CriminalRecordsSystem _criminalRecords = default!;
+    [Dependency] private Content.Server.CriminalRecords.Systems.CriminalRecordsConsoleSystem _criminalRecordsConsole = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IEntitySystemManager _entitySystemManager = default!;
+    [Dependency] private WantedSystem _wantedSystem = default!;
+    [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
 
     private EntityUid? _veteranUid = null;
     private bool _veteranCaptured = false;

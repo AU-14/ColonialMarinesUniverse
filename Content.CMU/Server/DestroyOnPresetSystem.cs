@@ -24,7 +24,7 @@ public sealed class DestroyOnPresetSystem : EntitySystem
             // If inverted is true, delete when it does NOT match. Otherwise delete when it matches.
             if ((matches && !component.Inverted) || (!matches && component.Inverted))
             {
-                EntityManager.QueueDeleteEntity(uid);
+                QueueDel(uid);
             }
         }
     }

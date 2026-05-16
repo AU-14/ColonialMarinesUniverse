@@ -46,7 +46,7 @@ public sealed class ObjectivesConsoleBoundUserInterface : BoundUserInterface
     public void RequestIntel(string objectiveId)
     {
         // Send request to server and wait for it to respond with the intel state.
-        Logger.Info($"[ObjectivesConsoleBUI] Sending RequestIntel for objective={objectiveId} owner={Owner}");
+        Logger.GetSawmill("content").Info($"[ObjectivesConsoleBUI] Sending RequestIntel for objective={objectiveId} owner={Owner}");
         SendMessage(new ObjectivesConsoleRequestIntelMessage(objectiveId));
     }
 
@@ -55,7 +55,7 @@ public sealed class ObjectivesConsoleBoundUserInterface : BoundUserInterface
         base.UpdateState(state);
         if (state is ObjectivesConsoleBoundUserInterfaceState cast)
         {
-            Logger.Info($"[ObjectivesConsoleBUI] Received Objectives state: objectives={cast.Objectives.Count} win={cast.CurrentWinPoints}/{cast.RequiredWinPoints}");
+            Logger.GetSawmill("content").Info($"[ObjectivesConsoleBUI] Received Objectives state: objectives={cast.Objectives.Count} win={cast.CurrentWinPoints}/{cast.RequiredWinPoints}");
             if (_window == null)
             {
                 _window = this.CreateWindow<ObjectivesConsoleWindow>();
@@ -70,10 +70,10 @@ public sealed class ObjectivesConsoleBoundUserInterface : BoundUserInterface
         if (state is ObjectiveIntelBoundUserInterfaceState intelState)
         {
 
-                Logger.Info("[ObjectivesConsoleBUI] Creating intel window and populating");
+                Logger.GetSawmill("content").Info("[ObjectivesConsoleBUI] Creating intel window and populating");
                 _intelWindow = new ObjectiveIntelWindow();
                 _intelWindow.OpenCentered();
-                Logger.Info($"[ObjectivesConsoleBUI] After OpenCentered: IsOpen={_intelWindow.IsOpen} Disposed={_intelWindow.Disposed} Parent={( _intelWindow.Parent == null ? "null" : _intelWindow.Parent.GetType().FullName)}");
+                Logger.GetSawmill("content").Info($"[ObjectivesConsoleBUI] After OpenCentered: IsOpen={_intelWindow.IsOpen} Disposed={_intelWindow.Disposed} Parent={( _intelWindow.Parent == null ? "null" : _intelWindow.Parent.GetType().FullName)}");
                 _intelWindow.Populate(
                     intelState.ObjectiveId,
                     intelState.ObjectiveDefaultTitle,
@@ -81,11 +81,11 @@ public sealed class ObjectivesConsoleBoundUserInterface : BoundUserInterface
                     intelState.UnlockedTier,
                     intelState.FactionPoints,
                     idx => {
-                        Logger.Info($"[ObjectivesConsoleBUI] Sending Unlock request objective={intelState.ObjectiveId} tier={idx}");
+                        Logger.GetSawmill("content").Info($"[ObjectivesConsoleBUI] Sending Unlock request objective={intelState.ObjectiveId} tier={idx}");
                         SendMessage(new ObjectivesConsoleUnlockIntelMessage(intelState.ObjectiveId, idx));
                     }
                 );
-                Logger.Info($"[ObjectivesConsoleBUI] After Populate: IsOpen={_intelWindow.IsOpen} Disposed={_intelWindow.Disposed} Parent={( _intelWindow.Parent == null ? "null" : _intelWindow.Parent.GetType().FullName)}");
+                Logger.GetSawmill("content").Info($"[ObjectivesConsoleBUI] After Populate: IsOpen={_intelWindow.IsOpen} Disposed={_intelWindow.Disposed} Parent={( _intelWindow.Parent == null ? "null" : _intelWindow.Parent.GetType().FullName)}");
                 _intelWindow.OnClose += () => _intelWindow = null;
 
         }
