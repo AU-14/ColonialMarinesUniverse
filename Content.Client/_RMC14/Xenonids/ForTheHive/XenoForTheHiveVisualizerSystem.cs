@@ -1,11 +1,11 @@
-﻿using Content.Shared._RMC14.Xenonids.ForTheHive;
+using Content.Shared._RMC14.Xenonids.ForTheHive;
 using Robust.Client.GameObjects;
 
 namespace Content.Client._RMC14.Xenonids.ForTheHive;
 
-public sealed class XenoForTheHiveVisualizerSystem : VisualizerSystem<ForTheHiveComponent>
+public sealed partial class XenoForTheHiveVisualizerSystem : VisualizerSystem<ForTheHiveComponent>
 {
-    [Dependency] private readonly AnimationPlayerSystem _animation = default!;
+    [Dependency] private AnimationPlayerSystem _animation = default!;
     public override void Initialize()
     {
         base.Initialize();

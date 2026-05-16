@@ -74,7 +74,7 @@
   parent: RMCVeteranUniformBase
   id: RMCJumpsuitVeteranPMCEngineerNoWebbing
   name: PMC engineer fatigues
-  description: A black set of fatigues, designed for private security engineers. The symbol of the Weston-Yamada corporation is emblazed on the suit.
+  description: A black set of fatigues, designed for private security engineers. The symbol of the Weyland-Yutani corporation is emblazed on the suit.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Uniforms/PMC/engineer.rsi
@@ -98,7 +98,7 @@
   parent: RMCVeteranUniformBase
   id: RMCJumpsuitVeteranPMCLeaderNoWebbing
   name: PMC command fatigues
-  description: A white set of fatigues, designed for private security operators. The symbol of the Weston-Yamada corporation is emblazed on the suit. This particular suit looks like it belongs to a high-ranking officer.
+  description: A white set of fatigues, designed for private security operators. The symbol of the Weyland-Yutani corporation is emblazed on the suit. This particular suit looks like it belongs to a high-ranking officer.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Uniforms/PMC/officer.rsi

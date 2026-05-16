@@ -1,0 +1,654 @@
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaTrophyBase
+  abstract: true
+  components:
+  - type: Item
+    size: Small
+  - type: YautjaTrophy
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanSkullTrophy
+  name: skull trophy
+  description: A cleaned skull taken as a Yautja hunting trophy.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: skull2
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanSkull
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanLeftArmBoneTrophy
+  name: left arm bone trophy
+  description: A cleaned arm bone taken as a Yautja hunting trophy.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: l_arm
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanLeftArmBone
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanRightArmBoneTrophy
+  name: right arm bone trophy
+  description: A cleaned arm bone taken as a Yautja hunting trophy.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: r_arm
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanRightArmBone
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanLeftHandBoneTrophy
+  name: left hand bone trophy
+  description: A cleaned hand bone taken as a Yautja hunting trophy.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: l_hand
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanLeftHandBone
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanRightHandBoneTrophy
+  name: right hand bone trophy
+  description: A cleaned hand bone taken as a Yautja hunting trophy.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: r_hand
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanRightHandBone
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanLeftLegBoneTrophy
+  name: left leg bone trophy
+  description: A cleaned leg bone taken as a Yautja hunting trophy.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: l_leg
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanLeftLegBone
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanRightLegBoneTrophy
+  name: right leg bone trophy
+  description: A cleaned leg bone taken as a Yautja hunting trophy.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: r_leg
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanRightLegBone
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanLeftFootBoneTrophy
+  name: left foot bone trophy
+  description: A cleaned foot bone taken as a Yautja hunting trophy.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: l_foot
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanLeftFootBone
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanRightFootBoneTrophy
+  name: right foot bone trophy
+  description: A cleaned foot bone taken as a Yautja hunting trophy.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: r_foot
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanRightFootBone
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaHumanRibcageTrophy
+  name: ribcage trophy
+  description: A cleaned ribcage taken as a Yautja hunting trophy.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: torso
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: HumanRibcage
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaXenoSkullTrophy
+  name: xeno skull trophy
+  description: A resin-scarred alien skull taken from a fallen serpent.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: warrior_skull
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: XenoSkull
+
+- type: entity
+  parent: CMUYautjaTrophyBase
+  id: CMUYautjaXenoPeltTrophy
+  name: xeno pelt trophy
+  description: A strip of alien hide cured as a hunter's trophy.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: warrior_pelt
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+  - type: YautjaTrophy
+    kind: XenoPelt
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaQueenSkullTrophy
+  name: queen skull trophy
+  components:
+  - type: Sprite
+    state: queen_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaKingSkullTrophy
+  name: king skull trophy
+  components:
+  - type: Sprite
+    state: king_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaCrusherSkullTrophy
+  name: crusher skull trophy
+  components:
+  - type: Sprite
+    state: crusher_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaPraetorianSkullTrophy
+  name: praetorian skull trophy
+  components:
+  - type: Sprite
+    state: praetorian_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaCorroderSkullTrophy
+  name: corroder skull trophy
+  components:
+  - type: Sprite
+    state: corroder_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaDespoilerSkullTrophy
+  name: despoiler skull trophy
+  components:
+  - type: Sprite
+    state: despoiler_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaDeaconSkullTrophy
+  name: deacon skull trophy
+  components:
+  - type: Sprite
+    state: deacon_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaRavagerSkullTrophy
+  name: ravager skull trophy
+  components:
+  - type: Sprite
+    state: ravager_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaBoilerSkullTrophy
+  name: boiler skull trophy
+  components:
+  - type: Sprite
+    state: boiler_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaDefenderSkullTrophy
+  name: defender skull trophy
+  components:
+  - type: Sprite
+    state: defender_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaWarriorSkullTrophy
+  name: warrior skull trophy
+  components:
+  - type: Sprite
+    state: warrior_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaCarrierSkullTrophy
+  name: carrier skull trophy
+  components:
+  - type: Sprite
+    state: carrier_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaHivelordSkullTrophy
+  name: hivelord skull trophy
+  components:
+  - type: Sprite
+    state: hivelord_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaBurrowerSkullTrophy
+  name: burrower skull trophy
+  components:
+  - type: Sprite
+    state: burrower_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaHunterSkullTrophy
+  name: hunter skull trophy
+  components:
+  - type: Sprite
+    state: hunter_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaLurkerSkullTrophy
+  name: lurker skull trophy
+  components:
+  - type: Sprite
+    state: lurker_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaSentinelSkullTrophy
+  name: sentinel skull trophy
+  components:
+  - type: Sprite
+    state: sentinel_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaSpitterSkullTrophy
+  name: spitter skull trophy
+  components:
+  - type: Sprite
+    state: spitter_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaRunnerSkullTrophy
+  name: runner skull trophy
+  components:
+  - type: Sprite
+    state: runner_skull
+
+- type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaDroneSkullTrophy
+  name: drone skull trophy
+  components:
+  - type: Sprite
+    state: drone_skull
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaQueenPeltTrophy
+  name: queen pelt trophy
+  components:
+  - type: Sprite
+    state: queen_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaKingPeltTrophy
+  name: king pelt trophy
+  components:
+  - type: Sprite
+    state: king_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaCrusherPeltTrophy
+  name: crusher pelt trophy
+  components:
+  - type: Sprite
+    state: crusher_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaPraetorianPeltTrophy
+  name: praetorian pelt trophy
+  components:
+  - type: Sprite
+    state: praetorian_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaCorroderPeltTrophy
+  name: corroder pelt trophy
+  components:
+  - type: Sprite
+    state: corroder_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaDespoilerPeltTrophy
+  name: despoiler pelt trophy
+  components:
+  - type: Sprite
+    state: despoiler_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaDeaconPeltTrophy
+  name: deacon pelt trophy
+  components:
+  - type: Sprite
+    state: deacon_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaRavagerPeltTrophy
+  name: ravager pelt trophy
+  components:
+  - type: Sprite
+    state: ravager_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaBoilerPeltTrophy
+  name: boiler pelt trophy
+  components:
+  - type: Sprite
+    state: boiler_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaDefenderPeltTrophy
+  name: defender pelt trophy
+  components:
+  - type: Sprite
+    state: defender_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaWarriorPeltTrophy
+  name: warrior pelt trophy
+  components:
+  - type: Sprite
+    state: warrior_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaCarrierPeltTrophy
+  name: carrier pelt trophy
+  components:
+  - type: Sprite
+    state: carrier_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaHivelordPeltTrophy
+  name: hivelord pelt trophy
+  components:
+  - type: Sprite
+    state: hivelord_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaBurrowerPeltTrophy
+  name: burrower pelt trophy
+  components:
+  - type: Sprite
+    state: burrower_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaHunterPeltTrophy
+  name: hunter pelt trophy
+  components:
+  - type: Sprite
+    state: hunter_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaLurkerPeltTrophy
+  name: lurker pelt trophy
+  components:
+  - type: Sprite
+    state: lurker_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaSentinelPeltTrophy
+  name: sentinel pelt trophy
+  components:
+  - type: Sprite
+    state: sentinel_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaSpitterPeltTrophy
+  name: spitter pelt trophy
+  components:
+  - type: Sprite
+    state: spitter_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaRunnerPeltTrophy
+  name: runner pelt trophy
+  components:
+  - type: Sprite
+    state: runner_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaDronePeltTrophy
+  name: drone pelt trophy
+  components:
+  - type: Sprite
+    state: drone_pelt
+
+- type: entity
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaLarvaPeltTrophy
+  name: larva pelt trophy
+  components:
+  - type: Sprite
+    state: larva_pelt
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaHumanHide
+  name: flayed hide
+  description: A grisly sheet of skin removed during Yautja butchery.
+  components:
+  - type: Sprite
+    sprite: Objects/Consumable/Food/meat.rsi
+    state: clump
+    color: "#d19a8a"
+  - type: Item
+    size: Small
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaHumanSpine
+  name: spine
+  description: A stripped spine taken from a butchered body.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: spine
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    size: Small
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaHumanButcheredRemains
+  name: butchered remains
+  description: A heap of remains left by ritual Yautja butchery.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: torso
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    size: Normal
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaXenoButcheredRemains
+  name: butchered xeno remains
+  description: A heap of acid-stained remains left by ritual Yautja butchery.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: drone_pelt
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    size: Normal
+
+- type: entity
+  parent: CMBeltBaseStorage
+  id: CMUYautjaTrophyBelt
+  name: trophy belt
+  description: A ceremonial Yautja belt for displaying claimed trophies and ritual victories.
+  suffix: Yautja
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Belt/marine/jungle-classic.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Belt/marine/jungle-classic.rsi
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,15,2
+    whitelist:
+      components:
+      - YautjaTrophy
+  - type: YautjaTechItem
+  - type: YautjaTrophyDisplay
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaPolishingRag
+  name: polishing rag
+  description: A finely woven cloth used by Yautja to clean and polish bone trophies.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: polishing_rag
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    size: Tiny
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+  - type: YautjaPolishingRag
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaHuntingTrap
+  name: hunting trap
+  description: A compact alien snare that clamps onto living prey when armed.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    drawdepth: Items
+    layers:
+    - state: yauttrap0
+      map: [ "base" ]
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    size: Small
+  - type: YautjaTechItem
+    blockPickup: false
+  - type: YautjaTrap
+    damage:
+      types:
+        Piercing: 20
+        Slash: 15
+    paralyzeTime: 4
+  - type: StepTrigger
+    active: false
+    intersectRatio: 0.15
+    requiredTriggeredSpeed: 0.5
+    ignoreWeightless: true
+    stepOn: true
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        base:
+          True: { state: yauttrap1 }
+          False: { state: yauttrap0 }
+  - type: Physics
+    bodyType: Dynamic
+    fixedRotation: true
+  - type: CollisionWake
+    enabled: false
+  - type: Fixtures
+    fixtures:
+      slips:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        hard: false
+        layer:
+        - LowImpassable
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        density: 30
+        mask:
+        - ItemMask

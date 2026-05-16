@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Client._RMC14.UserInterface;
 using Content.Client.Message;
 using Content.Shared._RMC14.Marines.Squads;
@@ -19,10 +19,10 @@ using static Robust.Client.UserInterface.Controls.BoxContainer;
 namespace Content.Client._RMC14.Overwatch;
 
 [UsedImplicitly]
-public sealed class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleWindow>
+public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleWindow>
 {
-    [Dependency] private readonly ILocalizationManager _localization = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private ILocalizationManager _localization = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     private const string GreenColor = "#229132";
     private const string RedColor = "#A42625";

@@ -95,6 +95,9 @@ public sealed partial class PlayerListControl : BoxContainer
 
     private void FilterList()
     {
+        if (Disposed || PlayerListContainer.Disposed)
+            return;
+
         _sortedPlayerList.Clear();
         foreach (var info in _playerList)
         {
@@ -118,6 +121,9 @@ public sealed partial class PlayerListControl : BoxContainer
 
     public void PopulateList(IReadOnlyList<PlayerInfo>? players = null)
     {
+        if (Disposed || PlayerListContainer.Disposed)
+            return;
+
         // Maintain existing pin statuses
         var pinnedPlayers = _playerList.Where(p => p.IsPinned).ToDictionary(p => p.SessionId);
 
@@ -163,6 +169,15 @@ public sealed partial class PlayerListControl : BoxContainer
 
         button.AddChild(entry);
         button.AddStyleClass(ListContainer.StyleClassListContainerButton);
+    }
+
+    [Obsolete("Controls should only be removed from UI tree instead of being disposed")]
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+
+        if (disposing)
+            _adminSystem.PlayerListChanged -= PopulateList;
     }
 }
 

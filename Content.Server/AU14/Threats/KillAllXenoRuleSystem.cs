@@ -11,11 +11,11 @@ using Content.Shared._RMC14.Xenonids;
 
 namespace Content.Server.AU14.Threats;
 
-public sealed class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRuleComponent>
+public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRuleComponent>
 {
-	[Dependency] private readonly IEntityManager _entityManager = default!;
-	[Dependency] private readonly GameTicker _gameTicker = default!;
-	[Dependency] private readonly Round.AuRoundSystem _auRoundSystem = default!;
+	[Dependency] private IEntityManager _entityManager = default!;
+	[Dependency] private GameTicker _gameTicker = default!;
+	[Dependency] private Round.AuRoundSystem _auRoundSystem = default!;
 
 	private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
 

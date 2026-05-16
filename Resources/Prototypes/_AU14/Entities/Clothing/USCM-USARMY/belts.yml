@@ -2,7 +2,7 @@
   parent: RMCBeltHolsterPistol
   id: AU14BeltPostelPistolM48A5
   suffix: Filled, M48A5
-  description: 
+  description:
   components:
   - type: StorageFill
     contents:
@@ -14,7 +14,7 @@
   parent: RMCBeltHolsterPistol
   id: AU14BeltPostelPistolM48A5Surv
   suffix: Filled, Surv, M48A5
-  description: 
+  description:
   components:
   - type: StorageFill
     contents:
@@ -26,10 +26,22 @@
   parent: RMCBeltHolsterPistol
   id: AU14BeltPostelPistolM48A4
   suffix: Filled, M48A4
-  description: 
+  description:
   components:
   - type: StorageFill
     contents:
     - id: AU14WeaponPistolM48A4
+    - id: AU14MagazinePistolM48A4
+      amount: 6
+
+- type: entity
+  parent: RMCBeltHolsterPistol
+  id: AU14BeltPostelPistolM48A5NoSuper
+  suffix: Filled, M48A5, No Suprt
+  description:
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponPistolM48A5CO
     - id: AU14MagazinePistolM48A4
       amount: 6

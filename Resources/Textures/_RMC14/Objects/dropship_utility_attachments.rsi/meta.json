@@ -108,6 +108,10 @@
     },
     {
       "name": "bofors_cannon_interior_unloaded"
+      "name": "launch_bay"
+    },
+    {
+      "name": "launch_bay_deployed"
     }
   ]
 }

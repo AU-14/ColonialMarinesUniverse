@@ -33,21 +33,21 @@ namespace Content.Client.Weapons.Ranged.Systems;
 
 public sealed partial class GunSystem : SharedGunSystem
 {
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly IInputManager _inputManager = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IStateManager _state = default!;
-    [Dependency] private readonly AnimationPlayerSystem _animPlayer = default!;
-    [Dependency] private readonly InputSystem _inputSystem = default!;
-    [Dependency] private readonly SharedMapSystem _maps = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private IEyeManager _eyeManager = default!;
+    [Dependency] private IInputManager _inputManager = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IStateManager _state = default!;
+    [Dependency] private AnimationPlayerSystem _animPlayer = default!;
+    [Dependency] private InputSystem _inputSystem = default!;
+    [Dependency] private SharedMapSystem _maps = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     // RMC14
-    [Dependency] private readonly ItemPickupSystem _itemPickup = default!;
-    [Dependency] private readonly GunPredictionSystem _gunPrediction = default!;
-    [Dependency] private readonly RMCLagCompensationSystem _rmcLagCompensation = default!;
-    [Dependency] private readonly VehicleTurretMuzzleOffsetSystem _vehicleTurretMuzzleOffset = default!;
+    [Dependency] private ItemPickupSystem _itemPickup = default!;
+    [Dependency] private GunPredictionSystem _gunPrediction = default!;
+    [Dependency] private RMCLagCompensationSystem _rmcLagCompensation = default!;
+    [Dependency] private VehicleTurretMuzzleOffsetSystem _vehicleTurretMuzzleOffset = default!;
 
     public static readonly EntProtoId HitscanProto = "HitscanEffect";
 

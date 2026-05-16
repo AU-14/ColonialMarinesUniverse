@@ -1,4 +1,4 @@
-﻿- type: jobIcon
+- type: jobIcon
   parent: CMJobIconBase
   id: AU14JobIconOPFORAFN
   icon:
@@ -91,14 +91,14 @@
 
 - type: jobIcon
   parent: CMJobIconBase
-  id: AU14JobIconOPFORK9Handler
-  icon:
-    sprite: _AU14/Interface/au14opforjobicons.rsi
-    state: k9handler
-
-- type: jobIcon
-  parent: CMJobIconBase
   id: AU14JobIconOPFORWorkingJoe
   icon:
     sprite: _AU14/Interface/au14opforjobicons.rsi
     state: working_joe
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORRifleman
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: rifleman

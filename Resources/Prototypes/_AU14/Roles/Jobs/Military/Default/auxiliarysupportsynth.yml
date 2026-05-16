@@ -19,7 +19,7 @@
     RMCRankChiefWarrantOfficer5:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORAuxSupportSynth
-      time: 252000 #70 hours
+      time: 270000 #75 hours
     RMCRankChiefWarrantOfficer4:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORAuxSupportSynth
@@ -27,7 +27,7 @@
     RMCRankChiefWarrantOfficer3:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORAuxSupportSynth
-      time: 72000 #20 hours
+      time: 86400 #24 hours
     RMCRankChiefWarrantOfficer:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORAuxSupportSynth

@@ -1,4 +1,4 @@
-﻿using Content.Server.Destructible;
+using Content.Server.Destructible;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Xenonids.Construction.DeployedTraps;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -11,14 +11,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._RMC14.Xenonids.Construction.DeployedTraps;
 
-public sealed class XenoDeployedTrapsSystem : EntitySystem
+public sealed partial class XenoDeployedTrapsSystem : EntitySystem
 {
-    [Dependency] private readonly RMCSlowSystem _root = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly DestructibleSystem _destructible = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private RMCSlowSystem _root = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private DestructibleSystem _destructible = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     public override void Initialize()
     {

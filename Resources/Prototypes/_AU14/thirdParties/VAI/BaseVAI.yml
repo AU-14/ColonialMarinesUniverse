@@ -107,7 +107,7 @@
   name: vai base preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomGearOther:
     -
       - [ AU14GlassesBiMex ] # glasses
@@ -127,7 +127,7 @@
   name: vaiso base preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomGearOther:
     -
       - [ AU14PVEHandsFingerlessBlackGloves ] # gloves

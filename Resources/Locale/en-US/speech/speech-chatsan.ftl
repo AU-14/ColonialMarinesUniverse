@@ -134,8 +134,8 @@ chatsan-replacement-47 = see ya
 chatsan-word-48 = rn
 chatsan-replacement-48 = right now
 
-chatsan-word-49 = atm
-chatsan-replacement-49 = at the moment
+chatsan-word-49 = reqs
+chatsan-replacement-49 = requisitions
 
 chatsan-word-50 = istg
 chatsan-replacement-50 = I swear to god

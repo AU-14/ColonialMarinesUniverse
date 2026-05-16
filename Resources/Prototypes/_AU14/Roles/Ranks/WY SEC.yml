@@ -1,5 +1,29 @@
 - type: rank
+  id: AU14RankWYSecurityOfficerChief
+  name: Chief Corporate Security Officer
+  prefix: CCSO.
+  paygrade: CORP-SEC5
+
+- type: rank
+  id: AU14RankWYSecurityOfficerMaster
+  name: Master Corporate Security Officer
+  prefix: MCSO.
+  paygrade: CORP-SEC4
+
+- type: rank
+  id: AU14RankWYSecurityOfficerSenior
+  name: Senior Corporate Security Officer
+  prefix: SCSO.
+  paygrade: CORP-SEC3
+
+- type: rank
   id: AU14RankWYSecurityOfficer
   name: Corporate Security Officer
   prefix: CSO.
+  paygrade: CORP-SEC2
+
+- type: rank
+  id: AU14RankWYSecurityOfficerJunior
+  name: Junior Corporate Security Officer
+  prefix: JCSO.
   paygrade: CORP-SEC1

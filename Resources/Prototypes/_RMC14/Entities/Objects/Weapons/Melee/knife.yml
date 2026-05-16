@@ -219,12 +219,12 @@
   - type: MeleeWeapon
     damage:
       types:
-        Slash: 55
+        Slash: 25
   - type: LandAtCursor
   - type: DamageOtherOnHit
     damage:
       types:
-        Slash: 50
+        Slash: 25
   - type: UsableWhileDevoured
   - type: Item
     size: Small

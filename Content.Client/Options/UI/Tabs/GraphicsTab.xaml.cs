@@ -12,7 +12,7 @@ namespace Content.Client.Options.UI.Tabs;
 [GenerateTypedNameReferences]
 public sealed partial class GraphicsTab : Control
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     public GraphicsTab()
     {
@@ -37,6 +37,17 @@ public sealed partial class GraphicsTab : Control
                 new OptionDropDownCVar<float>.ValueOption(1.50f, Loc.GetString("ui-options-scale-150")),
                 new OptionDropDownCVar<float>.ValueOption(1.75f, Loc.GetString("ui-options-scale-175")),
                 new OptionDropDownCVar<float>.ValueOption(2.00f, Loc.GetString("ui-options-scale-200")),
+            ]);
+
+        Control.AddOptionDropDown(
+            CCVars.CrtUiColor,
+            CrtUiColorDropDown,
+            [
+                new OptionDropDownCVar<string>.ValueOption(CCVars.CrtUiColorGreen, Loc.GetString("ui-options-crt-ui-color-green")),
+                new OptionDropDownCVar<string>.ValueOption(CCVars.CrtUiColorBlue, Loc.GetString("ui-options-crt-ui-color-blue")),
+                new OptionDropDownCVar<string>.ValueOption(CCVars.CrtUiColorOrange, Loc.GetString("ui-options-crt-ui-color-orange")),
+                new OptionDropDownCVar<string>.ValueOption(CCVars.CrtUiColorRed, Loc.GetString("ui-options-crt-ui-color-red")),
+                new OptionDropDownCVar<string>.ValueOption(CCVars.CrtUiColorPurple, Loc.GetString("ui-options-crt-ui-color-purple")),
             ]);
 
         var vpStretch = Control.AddOptionCheckBox(CCVars.ViewportStretch, ViewportStretchCheckBox);
@@ -88,7 +99,7 @@ public sealed partial class GraphicsTab : Control
         ViewportWidthSlider.Slider.MaxValue = max;
     }
 
-    private sealed class OptionLightingQuality : BaseOption
+    private sealed partial class OptionLightingQuality : BaseOption
     {
         private readonly IConfigurationManager _cfg;
         private readonly OptionDropDown _dropDown;
@@ -182,7 +193,7 @@ public sealed partial class GraphicsTab : Control
         }
     }
 
-    private sealed class OptionFullscreen : BaseOptionCVar<int>
+    private sealed partial class OptionFullscreen : BaseOptionCVar<int>
     {
         private readonly CheckBox _checkBox;
 
@@ -206,7 +217,7 @@ public sealed partial class GraphicsTab : Control
         }
     }
 
-    private sealed class OptionIntegerScaling : BaseOptionCVar<int>
+    private sealed partial class OptionIntegerScaling : BaseOptionCVar<int>
     {
         private readonly CheckBox _checkBox;
 

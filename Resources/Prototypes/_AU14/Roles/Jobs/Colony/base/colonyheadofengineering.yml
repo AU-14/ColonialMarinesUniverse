@@ -7,6 +7,9 @@
   canBeAntag: false
   playTimeTracker: AU14JobCivilianHeadOfEngineering
   requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentEngineering
+    time: 72000 # 20 hours
   - !type:OverallPlaytimeRequirement
     time: 18000 # 5 hours
   - !type:AgeRequirement
@@ -18,7 +21,8 @@
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianHeadOfEngineering
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconColonyHeadOfEngi"
+  hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonyadministrator
@@ -26,8 +30,10 @@
   - Colonist
   - auengi
   - CMCargoTech
+  - auheadsofcolony
   access:
-  - AU14AccessColonyHeadEngineer
+# - AU14AccessColonyHeadEngineer # implicit
+  - AU14AccessColonyAdministrator
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

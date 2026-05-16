@@ -23,7 +23,7 @@
     - type: MotionDetectorTracked
     - type: RMCAllowSuitStorage
     - type: IntelRescueSurvivorObjective
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetPMCGunner
     - type: NpcFactionMember
       factions:
@@ -69,7 +69,7 @@
   name: pmc standard survivor preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomStartingGear:
       jumpsuit:
       - RMCJumpsuitVeteranPMCNoWebbingPatch

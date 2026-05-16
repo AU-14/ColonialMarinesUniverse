@@ -32,7 +32,7 @@
         RMCSkillVehicles: 2
         RMCSkillJtac: 1
         RMCSkillEndurance: 1
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: AU14VAISOPreset
     - type: JobPrefix
       prefix: au14-job-prefix-vai-mercenary
@@ -43,7 +43,7 @@
   id: AU14VAISOMercenary
   name: VAISO Mercenary
   components:
-  - type: EquipSurvivorPreset
+  - type: EquipEntityPreset
     preset: AU14VAISOPreset
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
@@ -63,7 +63,7 @@
   name: vaiso mercenary preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomGearOther:
     -
       - [ AU14PVEHandsFingerlessBlackGloves ] # gloves

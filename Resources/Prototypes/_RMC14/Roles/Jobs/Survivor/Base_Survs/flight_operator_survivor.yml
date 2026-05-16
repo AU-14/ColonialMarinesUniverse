@@ -20,7 +20,7 @@
         RMCSkillVehicles: 3
         RMCSkillEndurance: 2
         RMCSkillFirearms: 2
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetFlightOperator
     - type: RMCSurvivor
     - type: MotionDetectorTracked

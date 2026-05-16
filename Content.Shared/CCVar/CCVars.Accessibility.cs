@@ -39,6 +39,15 @@ public sealed partial class CCVars
     public static readonly CVarDef<bool> AccessibilityColorblindFriendly =
         CVarDef.Create("accessibility.colorblind_friendly", false, CVar.CLIENTONLY | CVar.ARCHIVE);
 
+    public const string CrtUiColorGreen = "green";
+    public const string CrtUiColorBlue = "blue";
+    public const string CrtUiColorOrange = "orange";
+    public const string CrtUiColorRed = "red";
+    public const string CrtUiColorPurple = "purple";
+
+    public static readonly CVarDef<string> CrtUiColor =
+        CVarDef.Create("accessibility.crt_ui_color", CrtUiColorGreen, CVar.CLIENTONLY | CVar.ARCHIVE);
+
     /// <summary>
     ///     Speech bubble text opacity slider, controlling the alpha of speech bubble's text.
     ///     Goes from to 0 (completely transparent) to 1 (completely opaque)

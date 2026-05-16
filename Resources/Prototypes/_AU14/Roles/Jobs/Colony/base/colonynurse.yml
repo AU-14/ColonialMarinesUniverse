@@ -8,7 +8,8 @@
   ranks:
     RMCRankCivilianNurse: []
   startingGear: AU14GearCivilianNurse
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconColonyNurse"
+  hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian

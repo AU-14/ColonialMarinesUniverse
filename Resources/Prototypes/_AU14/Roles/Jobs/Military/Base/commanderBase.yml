@@ -5,7 +5,15 @@
   description: au14-job-description-govforplatco
   playTimeTracker: AU14JobGOVFORPlatCo
   basePlaytimeTracker: true
+  abstract: true
   hidden: true
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentGovernmentForces
+    time: 144000 # 40 hours
+  - !type:RoleTimeRequirement
+    role: AU14JobGOVFORPlatOp
+    time: 72000 # 20 hours
 
 - type: playTimeTracker
   id: AU14JobGOVFORPlatCo

@@ -14,6 +14,7 @@ using Content.Server.Speech.Prototypes;
 using Content.Server.Speech.EntitySystems;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Stun;
@@ -52,28 +53,28 @@ namespace Content.Server.Chat.Systems;
 /// </summary>
 public sealed partial class ChatSystem : SharedChatSystem
 {
-    [Dependency] private readonly IReplayRecordingManager _replay = default!;
-    [Dependency] private readonly IConfigurationManager _configurationManager = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly IChatSanitizationManager _sanitizer = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ReplacementAccentSystem _wordreplacement = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
-    [Dependency] private readonly ExamineSystemShared _examineSystem = default!;
-    [Dependency] private readonly CMChatSystem _cmChat = default!;
-    [Dependency] private readonly RMCEmoteSystem _rmcEmote = default!;
-    [Dependency] private readonly INetConfigurationManager _netConfigManager = default!;
+    [Dependency] private IReplayRecordingManager _replay = default!;
+    [Dependency] private IConfigurationManager _configurationManager = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private IChatSanitizationManager _sanitizer = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private MobStateSystem _mobStateSystem = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private ReplacementAccentSystem _wordreplacement = default!;
+    [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
+    [Dependency] private ExamineSystemShared _examineSystem = default!;
+    [Dependency] private CMChatSystem _cmChat = default!;
+    [Dependency] private RMCEmoteSystem _rmcEmote = default!;
+    [Dependency] private INetConfigurationManager _netConfigManager = default!;
 
     // RMC14
-    [Dependency] private readonly RMCChatBansManager _rmcChatBans = default!;
+    [Dependency] private RMCChatBansManager _rmcChatBans = default!;
 
     public const int VoiceRange = 10; // how far voice goes in world units
     public const int WhisperClearRange = 2; // how far whisper goes while still being understandable, in world units
@@ -582,14 +583,17 @@ public sealed partial class ChatSystem : SharedChatSystem
                 continue;
             listener = session.AttachedEntity.Value;
 
+            if (!CanHearYautjaLocalSpeech(source, session, data))
+                continue;
+
             if (MessageRangeCheck(session, data, range) != MessageRangeCheckResult.Full)
                 continue; // Won't get logged to chat, and ghosts are too far away to see the pop-up, so we just won't send it to them.
 
             if (data.Range <= WhisperClearRange)
-                _chatManager.ChatMessageToOne(ChatChannel.Whisper, message, wrappedMessage, source, false, session.Channel);
+                _chatManager.ChatMessageToOne(ChatChannel.Whisper, message, GetYautjaVisibleWrappedMessage(wrappedMessage, source, session), source, false, session.Channel);
             //If listener is too far, they only hear fragments of the message
             else if (_examineSystem.InRangeUnOccluded(source, listener, WhisperMuffledRange))
-                _chatManager.ChatMessageToOne(ChatChannel.Whisper, obfuscatedMessage, wrappedobfuscatedMessage, source, false, session.Channel);
+                _chatManager.ChatMessageToOne(ChatChannel.Whisper, obfuscatedMessage, GetYautjaVisibleWrappedMessage(wrappedobfuscatedMessage, source, session), source, false, session.Channel);
             //If listener is too far and has no line of sight, they can't identify the whisperer's identity
             else
                 _chatManager.ChatMessageToOne(ChatChannel.Whisper, obfuscatedMessage, wrappedUnknownMessage, source, false, session.Channel);
@@ -778,6 +782,12 @@ public sealed partial class ChatSystem : SharedChatSystem
     {
         foreach (var (session, data) in GetRecipients(source, VoiceRange))
         {
+            if ((channel == ChatChannel.Local || channel == ChatChannel.Emotes) &&
+                !CanHearYautjaLocalSpeech(source, session, data))
+            {
+                continue;
+            }
+
             var entRange = MessageRangeCheck(session, data, range);
             if (entRange == MessageRangeCheckResult.Disallowed)
                 continue;
@@ -790,10 +800,66 @@ public sealed partial class ChatSystem : SharedChatSystem
             else
                 RaiseLocalEvent(source, ref ev);
 
-            _chatManager.ChatMessageToOne(channel, ev.Message, ev.WrappedMessage, source, ev.EntHideChat, session.Channel, author: author);
+            _chatManager.ChatMessageToOne(channel, ev.Message, GetYautjaVisibleWrappedMessage(ev.WrappedMessage, source, session), source, ev.EntHideChat, session.Channel, author: author);
         }
 
         _replay.RecordServerMessage(new ChatMessage(channel, message, wrappedMessage, GetNetEntity(source), null, MessageRangeHideChatForReplay(range), speechStyleClass: CompOrNull<RMCSpeechBubbleSpecificStyleComponent>(source)?.SpeechStyleClass, repeatCheckSender: !HasComp<ChatRepeatIgnoreSenderComponent>(source)));
+    }
+
+    private string GetYautjaVisibleWrappedMessage(string wrappedMessage, EntityUid source, ICommonSession session)
+    {
+        if (!TryGetYautjaVisibleName(source, session, out var visibleName))
+            return wrappedMessage;
+
+        var hiddenName = FormattedMessage.EscapeText(Loc.GetString(Comp<YautjaComponent>(source).IdentityName));
+        return ReplaceFirst(wrappedMessage, hiddenName, visibleName);
+    }
+
+    private bool TryGetYautjaVisibleName(EntityUid source, ICommonSession session, out string visibleName)
+    {
+        visibleName = string.Empty;
+
+        if (!HasComp<YautjaComponent>(source) ||
+            session.AttachedEntity is not { Valid: true } listener ||
+            !HasComp<YautjaComponent>(listener))
+        {
+            return false;
+        }
+
+        visibleName = FormattedMessage.EscapeText(MetaData(source).EntityName);
+        return true;
+    }
+
+    private static string ReplaceFirst(string value, string search, string replacement)
+    {
+        if (string.IsNullOrEmpty(search))
+            return value;
+
+        var index = value.IndexOf(search, StringComparison.Ordinal);
+        if (index < 0)
+            index = value.IndexOf(search, StringComparison.OrdinalIgnoreCase);
+
+        if (index < 0)
+            return value;
+
+        return value[..index] + replacement + value[(index + search.Length)..];
+    }
+
+    private bool CanHearYautjaLocalSpeech(EntityUid source, ICommonSession session, ICChatRecipientData data)
+    {
+        if (!HasComp<YautjaComponent>(source))
+            return true;
+
+        if (data.Observer)
+            return true;
+
+        if (session.AttachedEntity is not { Valid: true } listener)
+            return false;
+
+        return listener == source ||
+               HasComp<YautjaComponent>(listener) ||
+               HasComp<YautjaThrallComponent>(listener) ||
+               HasComp<YautjaHivebrokenXenoComponent>(listener);
     }
 
     /// <summary>
@@ -1005,7 +1071,7 @@ public record ExpandICChatRecipientsEvent(EntityUid Source, float VoiceRange, Di
 /// <summary>
 ///     Raised broadcast in order to transform speech.transmit
 /// </summary>
-public sealed class TransformSpeechEvent : EntityEventArgs
+public sealed partial class TransformSpeechEvent : EntityEventArgs
 {
     public EntityUid Sender;
     public string Message;
@@ -1017,7 +1083,7 @@ public sealed class TransformSpeechEvent : EntityEventArgs
     }
 }
 
-public sealed class CheckIgnoreSpeechBlockerEvent : EntityEventArgs
+public sealed partial class CheckIgnoreSpeechBlockerEvent : EntityEventArgs
 {
     public EntityUid Sender;
     public bool IgnoreBlocker;
@@ -1032,7 +1098,7 @@ public sealed class CheckIgnoreSpeechBlockerEvent : EntityEventArgs
 /// <summary>
 ///     Raised on an entity when it speaks, either through 'say' or 'whisper'.
 /// </summary>
-public sealed class EntitySpokeEvent : EntityEventArgs
+public sealed partial class EntitySpokeEvent : EntityEventArgs
 {
     public readonly EntityUid Source;
     public readonly string Message;

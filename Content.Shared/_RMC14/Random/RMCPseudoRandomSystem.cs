@@ -1,11 +1,11 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Random;
 
 public sealed partial class RMCPseudoRandomSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public Xoroshiro64S GetXoroshiro64S(EntityUid ent)
     {

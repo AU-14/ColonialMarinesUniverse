@@ -25,17 +25,17 @@ namespace Content.Server._CMU14.CLFSubvertedSynth;
 
 //bashed together from the revolutionary stuff
 
-public sealed class CLFSubvertedSynthRuleSystem : GameRuleSystem<CLFSubvertedSynthRuleComponent>
+public sealed partial class CLFSubvertedSynthRuleSystem : GameRuleSystem<CLFSubvertedSynthRuleComponent>
 {
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogManager = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly RoleSystem _role = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly SharedSynthSystem _synth = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private IAdminLogManager _adminLogManager = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private NpcFactionSystem _npcFaction = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private RoleSystem _role = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private SharedSynthSystem _synth = default!;
 
 
 

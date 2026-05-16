@@ -11,8 +11,8 @@ namespace Content.Client.Ghost;
 
 public sealed partial class GhostRoleRadioMenu : RadialMenu
 {
-    [Dependency] private readonly EntityManager _entityManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private EntityManager _entityManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     public event Action<ProtoId<GhostRolePrototype>>? SendGhostRoleRadioMessageAction;
 
@@ -99,7 +99,7 @@ public sealed partial class GhostRoleRadioMenu : RadialMenu
     }
 }
 
-public sealed class GhostRoleRadioMenuButton : RadialMenuTextureButtonWithSector
+public sealed partial class GhostRoleRadioMenuButton : RadialMenuTextureButtonWithSector
 {
     public ProtoId<GhostRolePrototype> ProtoId { get; set; }
 }

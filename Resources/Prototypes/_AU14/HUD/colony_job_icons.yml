@@ -123,3 +123,108 @@
   icon:
     sprite: _AU14/Interface/au14colonyjobicons.rsi
     state: icrc_nurse
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyColonist
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: colonist
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyEngineer
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: engineer
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyERO
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: ero
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyFSW
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: fsw
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyHeadOfEngi
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: head_of_engineering
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyHeadPhysician
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: head_physician
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyJournalist
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: journalist
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyKellandWarden
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: kelland_warden
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyMobBoss
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: mob_boss
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyMobGoon
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: mob_goon
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyNurse
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: nurse
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyPhysician
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: physician
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyPrisoner
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: prisoner
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyShopkeep
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: shopkeep
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconColonyWMS
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: wms

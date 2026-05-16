@@ -11,11 +11,11 @@ using Content.Shared.Humanoid;
 
 namespace Content.Server._RMC14.Synth;
 
-public sealed class SynthSystem : SharedSynthSystem
+public sealed partial class SynthSystem : SharedSynthSystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private SharedBodySystem _body = default!;
 
     protected override void MakeSynth(Entity<SynthComponent> ent)
     {
@@ -59,10 +59,10 @@ public sealed class SynthSystem : SharedSynthSystem
             };
         }
 
-        if (!HasComp<BodyComponent>(ent.Owner))
+        if (!TryComp<BodyComponent>(ent.Owner, out var body))
             return;
 
-        var organComps = _body.GetBodyOrganEntityComps<OrganComponent>(ent.Owner);
+        var organComps = _body.GetBodyOrganEntityComps<OrganComponent>((ent.Owner, body));
 
         foreach (var organ in organComps)
         {
@@ -77,6 +77,7 @@ public sealed class SynthSystem : SharedSynthSystem
                 return;
             var newBrain = SpawnNextToOrDrop(ent.Comp.NewBrain, ent);
             _body.AddOrganToFirstValidSlot(part.Id, newBrain);
+            break;
         }
     }
 }

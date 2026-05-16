@@ -12,9 +12,9 @@ namespace Content.Server.AU14.Threats;
 /// Shared system for handling handcuff events for KillAllClf, KillAllGovfor, and KillAllHuman rules.
 /// Prevents duplicate subscription errors.
 /// </summary>
-public sealed class KillAllRulesHandcuffSystem : EntitySystem
+public sealed partial class KillAllRulesHandcuffSystem : EntitySystem
 {
-    [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
 
     public override void Initialize()
     {

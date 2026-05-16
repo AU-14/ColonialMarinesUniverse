@@ -15,18 +15,18 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.Humanoid;
 
-public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
+public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly MarkingManager _markingManager = default!;
-    [Dependency] private readonly IConfigurationManager _configurationManager = default!;
-    [Dependency] private readonly DisplacementMapSystem _displacement = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private MarkingManager _markingManager = default!;
+    [Dependency] private IConfigurationManager _configurationManager = default!;
+    [Dependency] private DisplacementMapSystem _displacement = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     // RMC14
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly ItemSystem _item = default!;
-    [Dependency] private readonly RMCHumanoidAppearanceSystem _rmcHumanoid = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private ItemSystem _item = default!;
+    [Dependency] private RMCHumanoidAppearanceSystem _rmcHumanoid = default!;
 
     public override void Initialize()
     {

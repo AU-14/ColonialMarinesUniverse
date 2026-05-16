@@ -9,11 +9,11 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Server._RMC14.Tracker
 {
-    public sealed class BattleBuddySystem : EntitySystem
+    public sealed partial class BattleBuddySystem : EntitySystem
     {
-        [Dependency] private readonly SquadLeaderTrackerSystem _trackerSys = default!;
-        [Dependency] private readonly ILogManager _log = default!;
-        [Dependency] private readonly DialogSystem _dialog = default!;
+        [Dependency] private SquadLeaderTrackerSystem _trackerSys = default!;
+        [Dependency] private ILogManager _log = default!;
+        [Dependency] private DialogSystem _dialog = default!;
 
         private ISawmill _sawmill = default!;
 

@@ -12,7 +12,7 @@ using static Robust.Shared.Utility.SpriteSpecifier;
 
 namespace Content.Scripts;
 
-public class AreaImporter
+public sealed partial class AreaImporter
 {
     private static readonly Regex IdRegex = new("/(\\w)", RegexOptions.Compiled);
     private static readonly Regex UnderscoreRegex = new("_(\\w)", RegexOptions.Compiled);
@@ -409,7 +409,7 @@ public class AreaImporter
     }
 
     [DataRecord]
-    public readonly record struct Area(
+    public readonly partial record struct Area(
         List<string> Parents,
         string Id,
         string? Name,

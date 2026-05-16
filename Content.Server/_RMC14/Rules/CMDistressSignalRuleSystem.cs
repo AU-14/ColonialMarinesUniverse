@@ -107,63 +107,63 @@ using Robust.Shared.Utility;
 
 namespace Content.Server._RMC14.Rules;
 
-public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignalRuleComponent>
+public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignalRuleComponent>
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly ARESSystem _ares = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly IBanManager _bans = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly ContainerSystem _containers = default!;
-    [Dependency] private readonly DropshipSystem _dropship = default!;
-    [Dependency] private readonly FaxSystem _fax = default!;
-    [Dependency] private readonly GunIFFSystem _gunIFF = default!;
-    [Dependency] private readonly XenoHiveSystem _hive = default!;
-    [Dependency] private readonly HungerSystem _hunger = default!;
-    [Dependency] private readonly ItemCamouflageSystem _camo = default!;
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly MapSystem _mapSystem = default!;
-    [Dependency] private readonly MarineAnnounceSystem _marineAnnounce = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly PlayTimeTrackingSystem _playTime = default!;
-    [Dependency] private readonly IServerPreferencesManager _prefsManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
-    [Dependency] private readonly RMCPlanetSystem _rmcPlanet = default!;
-    [Dependency] private readonly RMCStationJobsSystem _rmcStationJobs = default!;
-    [Dependency] private readonly RoleSystem _roles = default!;
-    [Dependency] private readonly RoundEndSystem _roundEnd = default!;
-    [Dependency] private readonly ScalingSystem _scaling = default!;
-    [Dependency] private readonly StationJobsSystem _stationJobs = default!;
-    [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
-    [Dependency] private readonly SquadSystem _squad = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly IVoteManager _voteManager = default!;
-    [Dependency] private readonly XenoSystem _xeno = default!;
-    [Dependency] private readonly XenoEvolutionSystem _xenoEvolution = default!;
-    [Dependency] private readonly XenoTunnelSystem _xenoTunnel = default!;
-    [Dependency] private readonly StunSystem _stuns = default!;
-    [Dependency] private readonly RMCCameraShakeSystem _rmcCameraShake = default!;
-    [Dependency] private readonly ThermalCloakSystem _thermalCloak = default!;
-    [Dependency] private readonly SharedGhillieSuitSystem _ghillieSuit = default!;
-    [Dependency] private readonly MapInsertSystem _mapInsert = default!;
-    [Dependency] private readonly SharedDestructibleSystem _destruction = default!;
-    [Dependency] private readonly IntelSystem _intel = default!;
-    [Dependency] private readonly SharedXenoParasiteSystem _parasite = default!;
-    [Dependency] private readonly RMCAmbientLightSystem _rmcAmbientLight = default!;
-    [Dependency] private readonly RMCPowerSystem _rmcPower = default!;
-    [Dependency] private readonly RMCGameRuleExtrasSystem _gameRulesExtras = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly GhostSystem _ghost = default!;
-    [Dependency] private readonly ISerializationManager _serialization = default!;
-    [Dependency] private readonly XenoMaturingSystem _maturing = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private ARESSystem _ares = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private IBanManager _bans = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private ContainerSystem _containers = default!;
+    [Dependency] private DropshipSystem _dropship = default!;
+    [Dependency] private FaxSystem _fax = default!;
+    [Dependency] private GunIFFSystem _gunIFF = default!;
+    [Dependency] private XenoHiveSystem _hive = default!;
+    [Dependency] private HungerSystem _hunger = default!;
+    [Dependency] private ItemCamouflageSystem _camo = default!;
+    [Dependency] private MapLoaderSystem _mapLoader = default!;
+    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private MapSystem _mapSystem = default!;
+    [Dependency] private MarineAnnounceSystem _marineAnnounce = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private PlayTimeTrackingSystem _playTime = default!;
+    [Dependency] private IServerPreferencesManager _prefsManager = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private RMCStationJobsSystem _rmcStationJobs = default!;
+    [Dependency] private RoleSystem _roles = default!;
+    [Dependency] private RoundEndSystem _roundEnd = default!;
+    [Dependency] private ScalingSystem _scaling = default!;
+    [Dependency] private StationJobsSystem _stationJobs = default!;
+    [Dependency] private StationSpawningSystem _stationSpawning = default!;
+    [Dependency] private SquadSystem _squad = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private IVoteManager _voteManager = default!;
+    [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private XenoEvolutionSystem _xenoEvolution = default!;
+    [Dependency] private XenoTunnelSystem _xenoTunnel = default!;
+    [Dependency] private StunSystem _stuns = default!;
+    [Dependency] private RMCCameraShakeSystem _rmcCameraShake = default!;
+    [Dependency] private ThermalCloakSystem _thermalCloak = default!;
+    [Dependency] private SharedGhillieSuitSystem _ghillieSuit = default!;
+    [Dependency] private MapInsertSystem _mapInsert = default!;
+    [Dependency] private SharedDestructibleSystem _destruction = default!;
+    [Dependency] private IntelSystem _intel = default!;
+    [Dependency] private SharedXenoParasiteSystem _parasite = default!;
+    [Dependency] private RMCAmbientLightSystem _rmcAmbientLight = default!;
+    [Dependency] private RMCPowerSystem _rmcPower = default!;
+    [Dependency] private RMCGameRuleExtrasSystem _gameRulesExtras = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private GhostSystem _ghost = default!;
+    [Dependency] private ISerializationManager _serialization = default!;
+    [Dependency] private XenoMaturingSystem _maturing = default!;
 
     private readonly HashSet<string> _operationNames = new();
     private readonly HashSet<string> _operationPrefixes = new();
@@ -480,7 +480,8 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
                 if (!IsAllowed(id, comp.QueenJob))
                     continue;
 
-                if (profile.JobPriorities.TryGetValue(comp.QueenJob, out var priority) &&
+                var jobPriorities = profile.GetJobPrioritiesForGamemode("DistressSignal");
+                if (jobPriorities.TryGetValue(comp.QueenJob, out var priority) &&
                     priority > JobPriority.Never)
                 {
                     xenoCandidates[(int) priority].Add(id);
@@ -520,7 +521,8 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
                     if (!IsAllowed(id, comp.XenoSelectableJob))
                         continue;
 
-                    if (profile.JobPriorities.TryGetValue(comp.XenoSelectableJob, out var priority) &&
+                    var jobPriorities = profile.GetJobPrioritiesForGamemode("DistressSignal");
+                    if (jobPriorities.TryGetValue(comp.XenoSelectableJob, out var priority) &&
                         priority > JobPriority.Never)
                     {
                         xenoCandidates[(int) priority].Add(id);
@@ -591,7 +593,8 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
                         { // Override the job
                             foreach (var (originalJob, overrideJob) in comp.ColonyJobOverrides)
                             {
-                                if (profile.JobPriorities.TryGetValue(originalJob, out var originalPriority) &&
+                                var jobPriorities = profile.GetJobPrioritiesForGamemode("DistressSignal");
+                                if (jobPriorities.TryGetValue(originalJob, out var originalPriority) &&
                                     originalPriority > JobPriority.Never && overrideJob == job)
                                 {
                                     players[(int)originalPriority].Add(id);
@@ -604,7 +607,8 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
                         if (overriden)
                             continue;
 
-                        if (profile.JobPriorities.TryGetValue(job, out var priority) &&
+                        var effectiveJobPriorities = profile.GetJobPrioritiesForGamemode("DistressSignal");
+                        if (effectiveJobPriorities.TryGetValue(job, out var priority) &&
                             priority > JobPriority.Never)
                         {
                             players[(int)priority].Add(id);
@@ -1120,12 +1124,13 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
                 if (_prefsManager.TryGetCachedPreferences(player.UserId, out var preferences))
                 {
                     var profile = (HumanoidCharacterProfile) preferences.GetProfile(preferences.SelectedCharacterIndex);
-                    if (profile.JobPriorities.TryGetValue(distress.XenoSelectableJob, out var xenoPriority) &&
+                    var jobPriorities = profile.GetJobPrioritiesForGamemode("DistressSignal");
+                    if (jobPriorities.TryGetValue(distress.XenoSelectableJob, out var xenoPriority) &&
                         xenoPriority > JobPriority.Never)
                     {
                         xenoCandidates++;
                     }
-                    else if (profile.JobPriorities.TryGetValue(distress.QueenJob, out var queenPriority) &&
+                    else if (jobPriorities.TryGetValue(distress.QueenJob, out var queenPriority) &&
                         queenPriority > JobPriority.Never)
                     {
                         xenoCandidates++;
@@ -2074,7 +2079,7 @@ public sealed class CMDistressSignalRuleSystem : GameRuleSystem<CMDistressSignal
     }
 }
 
-public sealed class Spawners
+public sealed partial class Spawners
 {
     public readonly Dictionary<EntProtoId, Dictionary<ProtoId<JobPrototype>, List<EntityUid>>> Squad = new();
     public readonly Dictionary<EntProtoId, List<EntityUid>> SquadAny = new();

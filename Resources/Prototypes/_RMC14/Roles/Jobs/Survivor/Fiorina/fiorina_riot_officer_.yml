@@ -23,7 +23,7 @@
       - Civilian
     - type: IntelRescueSurvivorObjective
     - type: RMCAllowSuitStorage
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetCMBDeputy
     - type: JobPrefix
       prefix: cm-job-prefix-survivor-riot-officer

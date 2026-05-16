@@ -14,9 +14,9 @@ namespace Content.Server.AU14.Allegiance;
 /// Server-side system that tracks ignore-allegiance state per player
 /// and provides helpers for allegiance-aware character selection at spawn time.
 /// </summary>
-public sealed class AllegianceSystem : EntitySystem
+public sealed partial class AllegianceSystem : EntitySystem
 {
-    [Dependency] private readonly IServerNetManager _netManager = default!;
+    [Dependency] private IServerNetManager _netManager = default!;
 
     /// <summary>
     /// Tracks which players have toggled "Ignore Allegiance".

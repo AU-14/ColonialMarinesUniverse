@@ -21,7 +21,7 @@
     RMCRankPrivate: []
   startingGear: AU14GearopforSquadRifleman
   dummyStartingGear: AU14GearopforRiflemanDummy
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconOPFORRifleman"
   requireAdminNotify: false
   spawnMenuRoleName: Rifleman (OPFOR)
   joinNotifyCrew: false

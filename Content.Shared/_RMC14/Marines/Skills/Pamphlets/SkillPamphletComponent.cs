@@ -45,11 +45,11 @@ public sealed partial class SkillPamphletComponent : Component
 
     [DataRecord]
     [Serializable, NetSerializable]
-    public readonly record struct PamphletWhitelist(string Popup, EntityWhitelist Restrictions);
+    public readonly partial record struct PamphletWhitelist(string Popup, EntityWhitelist Restrictions);
 
     [DataRecord]
     [Serializable, NetSerializable]
-    public readonly record struct JobWhitelist(LocId Popup, ProtoId<JobPrototype> JobProto);
+    public readonly partial record struct JobWhitelist(LocId Popup, ProtoId<JobPrototype> JobProto);
 
     public bool GaveSkill;
 

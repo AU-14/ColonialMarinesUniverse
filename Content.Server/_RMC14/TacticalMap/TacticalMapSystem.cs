@@ -5,6 +5,7 @@ using Content.Server._RMC14.Marines;
 using Content.Server._RMC14.Rules;
 using Content.Server.Administration.Logs;
 using Content.Server.GameTicking.Events;
+using Content.Shared._RMC14.Announce;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Communications;
 using Content.Shared._RMC14.Dropship.Weapon;
@@ -42,28 +43,30 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Server._RMC14.TacticalMap;
 
-public sealed class TacticalMapSystem : SharedTacticalMapSystem
+public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly CMDistressSignalRuleSystem _distressSignal = default!;
-    [Dependency] private readonly XenoEvolutionSystem _evolution = default!;
-    [Dependency] private readonly MarineAnnounceSystem _marineAnnounce = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly SquadSystem _squad = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly XenoAnnounceSystem _xenoAnnounce = default!;
-    [Dependency] private readonly RMCUnrevivableSystem _unrevivableSystem = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private CMDistressSignalRuleSystem _distressSignal = default!;
+    [Dependency] private XenoEvolutionSystem _evolution = default!;
+    [Dependency] private GeneralAnnounceSystem _generalAnnounce = default!;
+    [Dependency] private MarineAnnounceSystem _marineAnnounce = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SquadSystem _squad = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private XenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private RMCUnrevivableSystem _unrevivableSystem = default!;
 
     private EntityQuery<ActiveTacticalMapTrackedComponent> _activeTacticalMapTrackedQuery;
     private EntityQuery<MarineMapTrackedComponent> _marineMapTrackedQuery;
@@ -1930,7 +1933,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
                 if (TeamHasActiveSensors("MARINES"))
                     ReduceHumanBlipsToEnemy(map.LastUpdateMarineBlips, "MARINES");
 
-                _marineAnnounce.AnnounceARESStaging(user, "The tactical map has been updated.", sound, null, "MARINES");
+                AnnounceHumanTacticalMapUpdated(user, sound, "MARINES");
                 _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the marine tactical map for {ToPrettyString(mapId)}");
             }
 
@@ -1966,7 +1969,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
                 // Convert others to enemy blips for opfor updates
                 if (TeamHasActiveSensors("OPFOR"))
                     ReduceHumanBlipsToEnemy(map.LastUpdateOpforBlips, "OPFOR");
-                _marineAnnounce.AnnounceARESStaging(user, "The tactical map has been updated.", sound, null, "OPFOR");
+                AnnounceHumanTacticalMapUpdated(user, sound, "OPFOR");
                 _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the opfor tactical map for {ToPrettyString(mapId)}");
             }
 
@@ -1990,7 +1993,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
                 }
                 if (TeamHasActiveSensors("GOVFOR"))
                     ReduceHumanBlipsToEnemy(map.LastUpdateGovforBlips, "GOVFOR");
-                _marineAnnounce.AnnounceARESStaging(user, "The tactical map has been updated.", sound, null, "GOVFOR");
+                AnnounceHumanTacticalMapUpdated(user, sound, "GOVFOR");
                 _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the govfor tactical map for {ToPrettyString(mapId)}");
             }
 
@@ -2014,7 +2017,7 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
                 }
                 if (TeamHasActiveSensors("CLF"))
                     ReduceHumanBlipsToEnemy(map.LastUpdateClfBlips, "CLF");
-                _marineAnnounce.AnnounceARESStaging(user, "The tactical map has been updated.", sound, null, "CLF");
+                AnnounceHumanTacticalMapUpdated(user, sound, "CLF");
                 _adminLog.Add(LogType.RMCTacticalMapUpdated, $"{ToPrettyString(user)} updated the clf tactical map for {ToPrettyString(mapId)}");
             }
 
@@ -2034,8 +2037,36 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
         }
     }
 
+    private void AnnounceHumanTacticalMapUpdated(EntityUid user, SoundSpecifier? sound, string faction)
+    {
+        const string message = "The tactical map has been updated.";
+        _marineAnnounce.AnnounceARESStaging(user, message, sound, null, faction);
+
+        var request = new AnnouncementRequest
+        {
+            Message = message,
+            Preset = "MarineCommand",
+            Target = AnnouncementTarget.Marines,
+            ShowSprite = false
+        };
+
+        _generalAnnounce.AnnounceAdvanced(request, BuildFactionAnnouncementFilter(faction));
+    }
+
+    private Filter BuildFactionAnnouncementFilter(string faction)
+    {
+        return Filter.Empty().AddWhereAttachedEntity(e =>
+        {
+            if (TryComp<MarineComponent>(e, out var marine))
+                return !string.IsNullOrWhiteSpace(marine.Faction) &&
+                       string.Equals(marine.Faction, faction, StringComparison.OrdinalIgnoreCase);
+
+            return HasComp<GhostComponent>(e);
+        });
+    }
+
     // Use the shared implementation (it knows about faction filtering)
-    protected new void UpdateMapData(Entity<TacticalMapComputerComponent> computer, TacticalMapComponent map)
+    private new void UpdateMapData(Entity<TacticalMapComputerComponent> computer, TacticalMapComponent map)
     {
         // First let shared logic populate computer.Blips
         base.UpdateMapData(computer, map);
@@ -2301,7 +2332,8 @@ public sealed class TacticalMapSystem : SharedTacticalMapSystem
      private void OnSensorTowerStateChanged(EntityUid towerUid, SensorTowerStateChangedEvent ev)
      {
         // When a sensor changes state, update the tactical map computers (canvas) on the map and mark it dirty.
-        if (!TryComp<TransformComponent>(towerUid, out var xform) || xform.GridUid is not { } gridId)
+        var xform = Transform(towerUid);
+        if (xform.GridUid is not { } gridId)
         {
             var maps = EntityQueryEnumerator<TacticalMapComponent>();
             while (maps.MoveNext(out var map))

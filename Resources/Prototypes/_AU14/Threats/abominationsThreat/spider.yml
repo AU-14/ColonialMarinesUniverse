@@ -1,0 +1,45 @@
+# Spider: a skittering severed-head abomination.
+# - AbominationSpit = ranged acid projectile
+- type: entity
+  parent: AU14AbominationBase
+  id: AU14AbominationSpider
+  name: spider abomination
+  description: A skittering, multi-legged head crowned with too many teeth. It wants on your face.
+  components:
+  - type: Sprite
+    sprite: _AU14/Mobs/Abominations/spider.rsi
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: alive
+  - type: GhostRole
+    name: Spider Abomination
+    description: A skittering severed head. Run prey down and bury them in acid.
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      90: Dead
+  - type: MobStateActions
+    actions:
+      Alive:
+      - ActionAbominationSpiderSpit
+  - type: AbominationSpit
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 29
+  # Doubled sprint speed — spider is the chase caste, it should run people
+  # down at xeno-runner pace.
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.2
+    baseSprintSpeed: 11.0
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 100
+        mask:
+        - SmallMobMask
+        layer:
+        - SmallMobLayer

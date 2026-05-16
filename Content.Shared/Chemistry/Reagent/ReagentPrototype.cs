@@ -9,7 +9,6 @@ using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Database;
 using Content.Shared.EntityEffects;
-using Content.Shared.FixedPoint;
 using Content.Shared.Nutrition;
 using Content.Shared.Prototypes;
 using Content.Shared.Slippery;

@@ -12,13 +12,13 @@ using Robust.Shared.Random;
 
 namespace Content.Server._RMC14.Intel.Tech;
 
-public sealed class ServerTechSystem : EntitySystem
+public sealed partial class ServerTechSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly Content.Server.AU14.ThirdParty.AuThirdPartySystem _thirdParty = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private Content.Server.AU14.ThirdParty.AuThirdPartySystem _thirdParty = default!;
     private static readonly EntProtoId CombatTechProto = "RMCRandomHumanoidFoxtrotCombatTech";
     private static readonly EntProtoId FireteamLeaderProto = "RMCRandomHumanoidFoxtrotFireteamLeader";
     private static readonly EntProtoId HospitalCorpsmanProto = "RMCRandomHumanoidFoxtrotHospitalCorpsman";
@@ -63,14 +63,14 @@ public sealed class ServerTechSystem : EntitySystem
     {
         if (string.IsNullOrEmpty(ev.ThirdPartyId))
         {
-            Logger.Warning("[ServerTechSystem] Received TechPartySpawnEvent with null/empty ThirdPartyId; ignoring.");
+            Logger.GetSawmill("content").Warning("[ServerTechSystem] Received TechPartySpawnEvent with null/empty ThirdPartyId; ignoring.");
             return;
         }
         TechSystem.ExecuteTechPartySpawn(_proto, ev.ThirdPartyId, proto =>
         {
             if (!_proto.TryIndex(proto.PartySpawn, out var spawnProto))
             {
-                Logger.Warning($"[ServerTechSystem] PartySpawn prototype '{proto.PartySpawn}' not found for third party '{proto.ID}'.");
+                Logger.GetSawmill("content").Warning($"[ServerTechSystem] PartySpawn prototype '{proto.PartySpawn}' not found for third party '{proto.ID}'.");
                 return;
             }
 

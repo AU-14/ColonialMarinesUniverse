@@ -13,12 +13,12 @@ using AudioComponent = Robust.Shared.Audio.Components.AudioComponent;
 
 namespace Content.Client.Weather;
 
-public sealed class WeatherSystem : SharedWeatherSystem
+public sealed partial class WeatherSystem : SharedWeatherSystem
 {
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly MapSystem _mapSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private MapSystem _mapSystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {
@@ -129,6 +129,17 @@ public sealed class WeatherSystem : SharedWeatherSystem
 
         if (!Timing.IsFirstTimePredicted)
             return true;
+
+        // RMC14
+        if (_playerManager.LocalEntity is not { } localPlayer)
+            return true;
+
+        if (Transform(localPlayer).MapUid != uid)
+        {
+            weather.Stream = _audio.Stop(weather.Stream);
+            return true;
+        }
+        //
 
         // TODO: Fades (properly)
         weather.Stream = _audio.Stop(weather.Stream);

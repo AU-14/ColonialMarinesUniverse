@@ -154,6 +154,26 @@
     enableOverrideDir: false
 
 - type: entity
+  parent: RMCOverwatchConsoleTOCShuttle
+  id: RMCOverwatchConsoleGovforTOCShuttle
+  suffix: Govfor
+  components:
+  - type: OverwatchConsole
+    canOrbitalBombardment: false
+    group: GOVFOR
+  - type: TacticalMapComputer
+    faction: govfor
+
+- type: entity
+  parent: RMCOverwatchConsoleGovforTOCShuttle
+  id: RMCOverwatchConsoleGovforTOCShuttleRotating
+  suffix: Govfor, Rotating
+  components:
+  - type: Sprite
+    overrideDir: South
+    enableOverrideDir: false
+
+- type: entity
   parent: RMCPropComputerBase
   id: RMCPropComputerTOCShuttle0
   name: shuttle tactical operations console
@@ -186,6 +206,26 @@
   parent: RMCOverwatchConsoleTOCMap
   id: RMCOverwatchConsoleTOCMapRotating
   suffix: Rotating
+  components:
+  - type: Sprite
+    overrideDir: South
+    enableOverrideDir: false
+
+- type: entity
+  parent: RMCOverwatchConsoleTOCMap
+  id: RMCOverwatchConsoleGovforTOCMap
+  suffix: Govfor
+  components:
+  - type: OverwatchConsole
+    canOrbitalBombardment: false
+    group: GOVFOR
+  - type: TacticalMapComputer
+    faction: govfor
+
+- type: entity
+  parent: RMCOverwatchConsoleGovforTOCMap
+  id: RMCOverwatchConsoleGovforTOCMapRotating
+  suffix: Govfor, Rotating
   components:
   - type: Sprite
     overrideDir: South

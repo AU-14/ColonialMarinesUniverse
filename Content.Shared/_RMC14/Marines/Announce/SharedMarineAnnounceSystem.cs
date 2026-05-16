@@ -1,10 +1,11 @@
-﻿﻿using Content.Shared._RMC14.Dialog;
+using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Marines.ControlComputer;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.TacticalMap;
+using Content.Shared._RMC14.AlertLevel;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
@@ -18,22 +19,23 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using Robust.Shared.Maths;
 
 namespace Content.Shared._RMC14.Marines.Announce;
 
-public abstract class SharedMarineAnnounceSystem : EntitySystem
+public abstract partial class SharedMarineAnnounceSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly DialogSystem _dialog = default!;
-    [Dependency] private readonly SharedMarineControlComputerSystem _marineControlComputer = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRankSystem _rankSystem = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly SquadSystem _squad = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private DialogSystem _dialog = default!;
+    [Dependency] private SharedMarineControlComputerSystem _marineControlComputer = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRankSystem _rankSystem = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SquadSystem _squad = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     public static readonly SoundSpecifier DefaultAnnouncementSound = new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");
     public static readonly SoundSpecifier DefaultSquadSound = new SoundPathSpecifier("/Audio/_RMC14/Effects/tech_notification.ogg");
@@ -109,7 +111,7 @@ public abstract class SharedMarineAnnounceSystem : EntitySystem
         var time = _timing.CurTime;
         if (_timing.CurTime < ent.Comp.LastAnnouncement + ent.Comp.Cooldown)
         {
-            var cooldownMessage = Loc.GetString("rmc-announcement-cooldown", (("seconds", (int) ent.Comp.Cooldown.TotalSeconds)));
+            var cooldownMessage = Loc.GetString("rmc-announcement-cooldown", ("seconds", (int) ent.Comp.Cooldown.TotalSeconds));
             _popup.PopupClient(cooldownMessage, args.Actor, PopupType.SmallCaution);
             return;
         }
@@ -206,6 +208,20 @@ public abstract class SharedMarineAnnounceSystem : EntitySystem
     {
     }
 
+    public virtual void AnnounceOverwatchSquad(
+        EntityUid sender,
+        string message,
+        EntityUid squad,
+        Color squadColor,
+        string squadName,
+        SoundSpecifier? sound = null)
+    {
+    }
+
+    public virtual void AnnounceAlertLevel(RMCAlertLevels level, string message, Filter? filter = null)
+    {
+    }
+
     /// <summary>
     ///     Dispatches already wrapped announcement to Marines.
     /// </summary>
@@ -264,7 +280,20 @@ public abstract class SharedMarineAnnounceSystem : EntitySystem
         var wrappedMessage = Loc.GetString("rmc-announcement-message-signed", ("author", author), ("message", message), ("name", name));
 
         AnnounceToMarines(wrappedMessage, sound, filter, excludeSurvivors, faction);
+        AnnounceSignedUi(sender, message, author, name, sound, filter, excludeSurvivors, faction);
         _adminLog.Add(LogType.RMCMarineAnnounce, $"{ToPrettyString(sender):source} marine announced message: {message}");
+    }
+
+    protected virtual void AnnounceSignedUi(
+        EntityUid sender,
+        string message,
+        string author,
+        string name,
+        SoundSpecifier? sound,
+        Filter? filter,
+        bool excludeSurvivors,
+        string? faction)
+    {
     }
 
     public string FormatHighCommand(string? author, string message)

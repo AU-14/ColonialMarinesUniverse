@@ -1,15 +1,15 @@
-﻿using Content.Shared._RMC14.Emote;
+using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Xenonids.DeployTraps;
 using Content.Shared.Actions;
 using Content.Shared.Popups;
 
 namespace Content.Shared._RMC14.Xenonids.Insight;
 
-public sealed class XenoInsightSystem : EntitySystem
+public sealed partial class XenoInsightSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRMCEmoteSystem _emote = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCEmoteSystem _emote = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
 
     public override void Initialize()
     {

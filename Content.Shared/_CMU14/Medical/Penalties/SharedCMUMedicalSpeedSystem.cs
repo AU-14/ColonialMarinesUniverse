@@ -20,15 +20,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Penalties;
 
-public abstract class SharedCMUMedicalSpeedSystem : EntitySystem
+public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly SharedBodySystem Body = default!;
-    [Dependency] protected readonly SharedFractureSystem Fracture = default!;
-    [Dependency] protected readonly MovementSpeedModifierSystem Movement = default!;
-    [Dependency] protected readonly SharedPainShockSystem Pain = default!;
-    [Dependency] protected readonly INetManager Net = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected SharedFractureSystem Fracture = default!;
+    [Dependency] protected MovementSpeedModifierSystem Movement = default!;
+    [Dependency] protected SharedPainShockSystem Pain = default!;
+    [Dependency] protected INetManager Net = default!;
 
     private bool _medicalEnabled;
     private bool _statusEffectsEnabled;

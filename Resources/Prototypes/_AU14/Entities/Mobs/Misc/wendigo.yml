@@ -7,12 +7,15 @@
   - RMCXenoMobCollision
   id: AU14Wendigo
   name: Wendigo
-  description: A large, menacing creature with a skull for head and sharp claws. Terrifying.
+  description: A large, menacing creature with a skull for head and sharp claws. Its back is branded "Weyland-Yutani".
   components:
   - type: GhostRole
     name: Wendigo
   - type: Sprite
     sprite: _AU14/Mobs/MiscMob/wendigo.rsi
+  - type: Speech
+    speechVerb: AU14WendigoSpeech
+    allowedEmotes: [ "Growl", "Hiss", "XenoRoar", "XenoHelp", "WendigoBreathing" ]
   - type: MobState
     allowedStates:
     - Alive
@@ -24,11 +27,13 @@
   - type: Xeno
     unlockAt: 99999 #never unlock naturally
     role: CMXenoWendigo
+    emoteSounds: Wendigo
     actionIds:
     - ActionXenoWatch
     - ActionXenoPunch
     - ActionXenoPounce
     - ActionXenoHeadbite
+    - ActionWendigoDoom
     tier: 99
     hudOffset: -0.15,0.25
   - type: XenoRegen
@@ -45,6 +50,8 @@
     knockdownTime: 3
     knockdownRequiresInvisibility: false
     unrootOnMelee: true
+    leapSound:
+      collection: WendigoLeap
   - type: XenoPlasma
     plasma: 0
     maxPlasma: 0
@@ -62,6 +69,17 @@
     damage:
       groups:
         Brute: 60
+    emoteCooldown: 99999
+  - type: WendigoHeadbiteAudio
+    closeSound:
+      collection: WendigoHeadbiteClose
+    globalSound:
+      collection: WendigoHeadbiteGlobal
+    globalCooldown: 60
+  - type: XenoDoom
+    sound:
+      collection: WendigoDoom
+    slowTime: 0
   - type: MovementSpeedModifier
     baseWalkSpeed: 6
     baseSprintSpeed: 7
@@ -88,8 +106,22 @@
       state: warrior
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.2
+  - type: SoundOnDeath
+    sound:
+      collection: WendigoDeath
+      params:
+        volume: -4
   - type: RMCSize
     size: Big
+
+- type: entity
+  parent: ActionXenoDoom
+  id: ActionWendigoDoom
+  name: Screech
+  description: A terrifying screech that turns off lights, slows and dazes nearby hostiles.
+  components:
+  - type: XenoActionPlasma
+    cost: 0
 
 - type: speechVerb
   id: AU14WendigoSpeech

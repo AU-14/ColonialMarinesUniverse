@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Prototypes;
+using Content.Shared._RMC14.Prototypes;
 
 // ReSharper disable CheckNamespace
 namespace Content.Shared.Roles;
@@ -6,5 +6,5 @@ namespace Content.Shared.Roles;
 public sealed partial class AntagPrototype : ICMSpecific
 {
     [DataField]
-    public bool IsCM { get; }
+    public bool IsCM { get; private set; }
 }

@@ -2,20 +2,100 @@
     xmlns="https://spacestation14.io"
     xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Systems.Chat.Controls">
-    <PanelContainer Name="FilterPopupPanel" StyleClasses="BorderedWindowPanel">
-        <BoxContainer Orientation="Horizontal" SeparationOverride="8" Margin="10 0">
-            <BoxContainer Name="FilterVBox" MinWidth="105" Margin="0 10" Orientation="Vertical" SeparationOverride="4"/>
-            <BoxContainer Name="HighlightsVBox" MinWidth="120" Margin="0 10" Orientation="Vertical" SeparationOverride="4">
-                <Label Text="{Loc 'hud-chatbox-highlights'}"/>
+    <PanelContainer Name="FilterPopupPanel">
+        <PanelContainer.PanelOverride>
+            <gfx:StyleBoxFlat BackgroundColor="#07090B" BorderColor="#263039" BorderThickness="1" ContentMarginLeftOverride="10" ContentMarginRightOverride="10" ContentMarginTopOverride="9" ContentMarginBottomOverride="9"/>
+        </PanelContainer.PanelOverride>
+        <BoxContainer Orientation="Horizontal" SeparationOverride="10">
+            <PanelContainer MinWidth="112">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#101317" BorderColor="#2F3941" BorderThickness="1" ContentMarginLeftOverride="6" ContentMarginRightOverride="6" ContentMarginTopOverride="6" ContentMarginBottomOverride="6"/>
+                </PanelContainer.PanelOverride>
+                <BoxContainer Name="SettingsNav" Orientation="Vertical" SeparationOverride="5">
+                    <Button Name="FiltersPageButton" Text="{Loc 'hud-chatbox-settings-filters'}"/>
+                    <Button Name="TabsPageButton" Text="{Loc 'hud-chatbox-settings-tabs'}"/>
+                    <Button Name="StylesPageButton" Text="{Loc 'hud-chatbox-settings-fonts'}"/>
+                    <Button Name="DisplayPageButton" Text="{Loc 'hud-chatbox-settings-display'}"/>
+                </BoxContainer>
+            </PanelContainer>
+            <BoxContainer Name="FiltersPage" Orientation="Horizontal" SeparationOverride="10">
+                <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                    <Label Text="{Loc 'hud-chatbox-filter-channels'}"/>
+                    <PanelContainer>
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#101317" BorderColor="#2F3941" BorderThickness="1" ContentMarginLeftOverride="7" ContentMarginRightOverride="7" ContentMarginTopOverride="6" ContentMarginBottomOverride="6"/>
+                        </PanelContainer.PanelOverride>
+                        <ScrollContainer MinWidth="160" MinHeight="230" MaxHeight="230" HScrollEnabled="False" VScrollEnabled="True">
+                            <BoxContainer Name="FilterVBox" Orientation="Vertical" SeparationOverride="3"/>
+                        </ScrollContainer>
+                    </PanelContainer>
+                </BoxContainer>
+                <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                    <Label Text="{Loc 'hud-chatbox-filter-radios'}"/>
+                    <PanelContainer>
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#101915" BorderColor="#2A4938" BorderThickness="1" ContentMarginLeftOverride="7" ContentMarginRightOverride="7" ContentMarginTopOverride="6" ContentMarginBottomOverride="6"/>
+                        </PanelContainer.PanelOverride>
+                        <ScrollContainer MinWidth="170" MinHeight="230" MaxHeight="230" HScrollEnabled="False" VScrollEnabled="True">
+                            <BoxContainer Name="RadioFilterVBox" Orientation="Vertical" SeparationOverride="3"/>
+                        </ScrollContainer>
+                    </PanelContainer>
+                </BoxContainer>
+                <BoxContainer Name="HighlightsVBox" MinWidth="175" Orientation="Vertical" SeparationOverride="6">
+                    <Label Text="{Loc 'hud-chatbox-highlights'}"/>
+                    <PanelContainer>
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#101317" BorderColor="#2F3941" BorderThickness="1" ContentMarginLeftOverride="5" ContentMarginRightOverride="5" ContentMarginTopOverride="5" ContentMarginBottomOverride="5"/>
+                        </PanelContainer.PanelOverride>
+                        <TextEdit Name="HighlightEdit" MinHeight="195" Margin="2 2"/>
+                    </PanelContainer>
+                    <Button Name="HighlightButton" Text="{Loc 'hud-chatbox-highlights-button'}" ToolTip="{Loc 'hud-chatbox-highlights-tooltip'}"/>
+                </BoxContainer>
+            </BoxContainer>
+            <BoxContainer Name="TabsPage" Visible="False" MinWidth="430" Orientation="Vertical" SeparationOverride="7">
+                <Label Text="{Loc 'hud-chatbox-tabs'}"/>
                 <PanelContainer>
-                    <!-- Begin custom background for TextEdit -->
                     <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#323446"/>
+                        <gfx:StyleBoxFlat BackgroundColor="#101317" BorderColor="#2F3941" BorderThickness="1" ContentMarginLeftOverride="7" ContentMarginRightOverride="7" ContentMarginTopOverride="7" ContentMarginBottomOverride="7"/>
                     </PanelContainer.PanelOverride>
-                    <!-- End custom background -->
-                    <TextEdit Name="HighlightEdit" MinHeight="150" Margin="5 5"/>
+                    <ScrollContainer MinHeight="220" MaxHeight="220" HScrollEnabled="False" VScrollEnabled="True">
+                        <BoxContainer Name="TabsList" Orientation="Vertical" SeparationOverride="4"/>
+                    </ScrollContainer>
                 </PanelContainer>
-                <Button Name="HighlightButton" Text="{Loc 'hud-chatbox-highlights-button'}" ToolTip="{Loc 'hud-chatbox-highlights-tooltip'}"/>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                    <LineEdit Name="NewTabNameEdit" PlaceHolder="{Loc 'hud-chatbox-tabs-new-placeholder'}" HorizontalExpand="True"/>
+                    <Button Name="AddTabButton" Text="{Loc 'hud-chatbox-tabs-add'}"/>
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                    <LineEdit Name="RenameTabNameEdit" PlaceHolder="{Loc 'hud-chatbox-tabs-rename-placeholder'}" HorizontalExpand="True"/>
+                    <Button Name="RenameTabButton" Text="{Loc 'hud-chatbox-tabs-rename'}"/>
+                </BoxContainer>
+                <Button Name="RemoveTabButton" Text="{Loc 'hud-chatbox-tabs-remove'}"/>
+            </BoxContainer>
+            <BoxContainer Name="StylesPage" Visible="False" MinWidth="650" Orientation="Vertical" SeparationOverride="7">
+                <Label Text="{Loc 'hud-chatbox-styles'}"/>
+                <PanelContainer>
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat BackgroundColor="#101317" BorderColor="#2F3941" BorderThickness="1" ContentMarginLeftOverride="7" ContentMarginRightOverride="7" ContentMarginTopOverride="7" ContentMarginBottomOverride="7"/>
+                    </PanelContainer.PanelOverride>
+                    <ScrollContainer MinHeight="310" MaxHeight="310" HScrollEnabled="False" VScrollEnabled="True">
+                        <BoxContainer Name="StyleRows" Orientation="Vertical" SeparationOverride="5"/>
+                    </ScrollContainer>
+                </PanelContainer>
+            </BoxContainer>
+            <BoxContainer Name="DisplayPage" Visible="False" MinWidth="430" Orientation="Vertical" SeparationOverride="7">
+                <Label Text="{Loc 'hud-chatbox-display'}"/>
+                <PanelContainer>
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat BackgroundColor="#101317" BorderColor="#2F3941" BorderThickness="1" ContentMarginLeftOverride="9" ContentMarginRightOverride="9" ContentMarginTopOverride="8" ContentMarginBottomOverride="8"/>
+                    </PanelContainer.PanelOverride>
+                    <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                        <CheckBox Name="ColorWholeMessageCheckBox" Text="{Loc 'hud-chatbox-display-color-whole-message'}"/>
+                        <Label Text="{Loc 'hud-chatbox-display-color-whole-message-help'}" Modulate="#7F8792"/>
+                        <CheckBox Name="LegacyChatCheckBox" Text="{Loc 'hud-chatbox-display-legacy'}"/>
+                        <Label Text="{Loc 'hud-chatbox-display-legacy-help'}" Modulate="#7F8792"/>
+                    </BoxContainer>
+                </PanelContainer>
             </BoxContainer>
         </BoxContainer>
     </PanelContainer>

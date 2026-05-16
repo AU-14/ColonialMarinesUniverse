@@ -3,6 +3,8 @@ using Content.Shared._RMC14.Repairable;
 using Content.Shared._RMC14.Smokeables;
 using Content.Shared.Examine;
 using Content.Shared.Explosion.Components;
+using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item.ItemToggle.Components;
@@ -16,11 +18,12 @@ namespace Content.Server.Explosion.EntitySystems;
 
 public sealed partial class TriggerSystem
 {
-    [Dependency] private readonly TagSystem _tags = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private TagSystem _tags = default!;
 
     public void InitializeOnLight()
     {
-        SubscribeLocalEvent<CMUOnLightTimerTriggerComponent, InteractUsingEvent>(OnLightUse);
+        SubscribeLocalEvent<CMUOnLightTimerTriggerComponent, UseInHandEvent>(OnLightUse);
         SubscribeLocalEvent<CMUOnLightTimerTriggerComponent, ExaminedEvent>(OnLightExamined);
         SubscribeLocalEvent<CMUOnLightTimerTriggerComponent, MapInitEvent>(RandomTimerGeneration);
     }
@@ -41,15 +44,40 @@ public sealed partial class TriggerSystem
         timerTriggerComp.Delay = _random.NextFloat(comp.Randmin, comp.Randmax);
     }
 
-    private void OnLightUse(EntityUid uid, CMUOnLightTimerTriggerComponent component, ref InteractUsingEvent args)
+    private void OnLightUse(EntityUid uid, CMUOnLightTimerTriggerComponent component, ref UseInHandEvent args)
     {
-        float randomroll = 0f;
-        var used = args.Used;
-
-        if (!HasComp<RMCLighterComponent>(used) && !HasComp<BlowtorchComponent>(used))
+        if (!TryComp<HandsComponent>(args.User, out var handsComponent))
             return;
 
-        if (!TryComp<ItemToggleComponent>(used, out var toggle) || !toggle.Activated)
+        float randomroll = 0f;
+        var used = args.User;
+        var checkedHands = 0;
+        var passCheck = false;
+
+        foreach (var hand in _hands.EnumerateHands((used, handsComponent)))
+        {
+            if (!_hands.TryGetHeldItem((used, handsComponent), hand, out var hold))
+                continue;
+
+            if (_hands.TryGetHeldItem((used, handsComponent), hand, out var held))
+            {
+                checkedHands++;
+                if (!HasComp<RMCLighterComponent>(held) && !HasComp<BlowtorchComponent>(held))
+                    continue;
+
+                if (TryComp<ItemToggleComponent>(held, out var toggle) && toggle.Activated)
+                {
+                    passCheck = true;
+                    break;
+                }
+                else if (checkedHands>=2)
+                {
+                    return;
+                }
+            }
+        }
+
+        if (passCheck == false)
             return;
 
         if (args.Handled || HasComp<AutomatedTimerComponent>(uid))

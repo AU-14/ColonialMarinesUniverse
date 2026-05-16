@@ -132,7 +132,7 @@
 - type: loadout
   id: CivilianBoilerSuitDarkBlueSynthAU14
   equipment:
-    back: AU14CivilianBoilerSuitDarkBlueSynth
+    jumpsuit: AU14CivilianBoilerSuitDarkBlueSynth
 
 # pouches
 

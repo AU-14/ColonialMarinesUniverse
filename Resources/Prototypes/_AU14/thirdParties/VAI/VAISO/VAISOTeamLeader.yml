@@ -35,7 +35,7 @@
         RMCSkillJtac: 4
         RMCSkillEndurance: 3
         RMCSkillLeadership: 4
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: AU14VAISOBasePreset
     - type: JobPrefix
       prefix: au14-job-prefix-vai-teamleader

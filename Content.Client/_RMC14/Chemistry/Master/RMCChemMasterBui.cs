@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Client._RMC14.UserInterface;
 using Content.Client.Chemistry.Containers.EntitySystems;
 using Content.Shared._RMC14.Chemistry.ChemMaster;
@@ -21,10 +21,10 @@ using Robust.Shared.Utility;
 namespace Content.Client._RMC14.Chemistry.Master;
 
 [UsedImplicitly]
-public sealed class RMCChemMasterBui : BoundUserInterface, IRefreshableBui
+public sealed partial class RMCChemMasterBui : BoundUserInterface, IRefreshableBui
 {
-    [Dependency] private readonly ILocalizationManager _localization = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private ILocalizationManager _localization = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly ContainerSystem _container;
     private readonly ItemSlotsSystem _itemSlots;

@@ -1,13 +1,13 @@
-﻿using Content.Shared.Popups;
+using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Weapons.Ranged.Battery;
 
-public sealed class RMCGunBatterySystem : EntitySystem
+public sealed partial class RMCGunBatterySystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private EntityQuery<GunDrainBatteryOnShootComponent> _gunDrainBatteryQuery;
 

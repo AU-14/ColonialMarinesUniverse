@@ -11,11 +11,23 @@
     - NonResuscitable
     - Epilepsy
   ranks:
+    RMCRankStaffSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORAuxTech
+      time: 270000 # 75 hours
     RMCRankSergeant:
     - !type:RoleTimeRequirement
-      role: AU14JobGOVFORMilitaryPoliceMan
-      time: 216000 # 60 hours
-    RMCRankCorporal: []
+      role: AU14JobGOVFORAuxTech
+      time: 180000 # 50 hours
+    RMCRankCorporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORAuxTech
+      time: 72000 # 24 hours 
+    RMCRankLanceCorporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORAuxTech
+      time: 36000 # 10 hours
+    RMCRankPrivateFirstClass: []
   startingGear: AU14GearGOVFORAuxTech
   dummyStartingGear: AU14GearGOVFORAuxTechDummy
   icon: "AU14JobIconRTO"
@@ -71,6 +83,9 @@
     ears: AU14HeadsetGOVFORAux
     ears2: RMCM5CameraGear
     id: AU14JobIDCardGOVFORAuxTech
+  storage:
+    back:
+    - CMStampApproved
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -87,3 +102,6 @@
   equipment:
     shoes: CMBootsBlackFilled
     back: CMSatchelMarine
+  storage:
+    back:
+    - CMStampApproved

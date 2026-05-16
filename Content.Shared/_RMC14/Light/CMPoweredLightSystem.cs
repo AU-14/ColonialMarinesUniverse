@@ -1,13 +1,13 @@
-﻿using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 
 namespace Content.Shared._RMC14.Light;
 
-public sealed class CMPoweredLightSystem : EntitySystem
+public sealed partial class CMPoweredLightSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPointLightSystem _pointLight = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPointLightSystem _pointLight = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

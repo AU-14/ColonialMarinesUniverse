@@ -26,18 +26,18 @@ namespace Content.Server._CMU14.Medical.BodyPart;
 ///     re-check those CCVars to be correct. The redundant check below is a
 ///     defence-in-depth guard against future callers.
 /// </summary>
-public sealed class BodyPartSeveranceSystem : EntitySystem
+public sealed partial class BodyPartSeveranceSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private IRobustRandom _random = default!;
     private ISawmill _sawmill = default!;
 
     private static readonly ProtoId<DamageTypePrototype> Bloodloss = "Bloodloss";
@@ -97,10 +97,7 @@ public sealed class BodyPartSeveranceSystem : EntitySystem
         // compensateFriction:true so the part lands at the target instead
         // of sliding indefinitely off-grid (prior speed-8 fling was
         // overshooting the visible map).
-        if (!TryComp<TransformComponent>(body, out var bodyXform))
-            return;
-
-        _transform.SetCoordinates(part, bodyXform.Coordinates);
+        _transform.SetCoordinates(part, Transform(body).Coordinates);
         _transform.AttachToGridOrMap(part);
 
         var angle = _random.NextFloat(0f, MathF.Tau);

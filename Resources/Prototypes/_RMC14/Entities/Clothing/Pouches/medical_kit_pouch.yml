@@ -34,6 +34,7 @@
         - BodyBag
         #       - TODO RMC14 fixovein
         - Hypospray
+        - CMUCastItem
         components:
         - Hypospray
       skills:

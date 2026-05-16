@@ -6,9 +6,9 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.Shuttles.Systems
 {
-    public abstract class SharedShuttleConsoleSystem : EntitySystem
+    public abstract partial class SharedShuttleConsoleSystem : EntitySystem
     {
-        [Dependency] protected readonly ActionBlockerSystem ActionBlockerSystem = default!;
+        [Dependency] protected ActionBlockerSystem ActionBlockerSystem = default!;
 
         public override void Initialize()
         {
@@ -19,7 +19,7 @@ namespace Content.Shared.Shuttles.Systems
         }
 
         [Serializable, NetSerializable]
-        protected sealed class PilotComponentState : ComponentState
+        protected sealed partial class PilotComponentState : ComponentState
         {
             public NetEntity? Console { get; }
 

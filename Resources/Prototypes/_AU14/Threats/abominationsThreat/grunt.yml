@@ -1,0 +1,44 @@
+# Grunt: hulking front-line abomination.
+# - Long melee range so it can swing across multiple tiles
+# - AbominationSpit + AbominationAcidSpray for ranged area-denial
+- type: entity
+  parent: AU14AbominationBase
+  id: AU14AbominationGrunt
+  name: grunt abomination
+  description: A bloated, lumbering brute. Each fist is the size of a man's torso.
+  components:
+  - type: Sprite
+    sprite: _AU14/Mobs/Abominations/grunt.rsi
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: alive
+  - type: GhostRole
+    name: Grunt Abomination
+    description: A heavy slam-melee abomination. Crush colonists with overwhelming reach.
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      562: Dead
+  - type: MobStateActions
+    actions:
+      Alive:
+      - ActionAbominationGruntSpit
+      - ActionAbominationGruntAcidSpray
+  # Acid spit + cone spray. Same projectile as the spider, but the grunt
+  # gets the boiler-style fan to lay down area denial.
+  - type: AbominationSpit
+    speed: 14
+    range: 10
+  - type: AbominationAcidSpray
+    shots: 7
+    spreadDegrees: 50
+    speed: 14
+    range: 7
+  - type: MeleeWeapon
+    range: 2
+    damage:
+      types:
+        Slash: 82
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1.8
+    baseSprintSpeed: 2.8

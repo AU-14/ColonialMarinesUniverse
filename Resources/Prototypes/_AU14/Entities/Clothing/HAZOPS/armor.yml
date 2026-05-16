@@ -14,3 +14,20 @@
   - type: ClothingSpeedModifier
     walkModifier: .75
     sprintModifier: .75
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14ArmorHAZOPSCBRN
+  name: M5-CBRN
+  description: Before the PWA, this was the standard issue vest of HAZOPS. You think it would pair nicely with your M17A4.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/HAZOPS/cbrnarmor.rsi
+  - type: CMArmor
+    bio: 35
+    bullet: 10
+    explosionArmor: 10
+    melee: 18
+  - type: ClothingSpeedModifier
+    walkModifier: .75
+    sprintModifier: .75

@@ -1,0 +1,65 @@
+- type: partySpawn
+  id: ReturningCivsSpawn
+  leadersToSpawn:
+    AU14JobReturningDoctor: 1
+  gruntsToSpawn:
+    AU14JobReturningColonist: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: ReturningCivs
+  partyspawn: ReturningCivsSpawn
+  entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
+  weight: 30
+  minplayers: 3
+  maxplayers: 49
+  GhostsNeeded: 5
+  roundstart: false
+  whitelistedgamemodes:
+    - insurgency
+    - colonyfall
+
+- type: partySpawn
+  id: ReturningCivsMediumSpawn
+  leadersToSpawn:
+    AU14JobReturningDoctor: 1
+  gruntsToSpawn:
+    AU14JobReturningColonist: 4
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: ReturningCivsMedium
+  partyspawn: ReturningCivsMediumSpawn
+  entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
+  weight: 30
+  minplayers: 50
+  maxplayers: 100
+  GhostsNeeded: 7
+  roundstart: false
+  whitelistedgamemodes:
+    - insurgency
+    - colonyfall
+
+- type: partySpawn
+  id: ReturningCivsLargeSpawn
+  leadersToSpawn:
+    AU14JobReturningDoctor: 1
+  gruntsToSpawn:
+    AU14JobReturningColonist: 6
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: ReturningCivsLarge
+  partyspawn: ReturningCivsLargeSpawn
+  entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
+  weight: 30
+  minplayers: 101
+  maxplayers: 400
+  GhostsNeeded: 9
+  roundstart: false
+  whitelistedgamemodes:
+    - insurgency
+    - colonyfall

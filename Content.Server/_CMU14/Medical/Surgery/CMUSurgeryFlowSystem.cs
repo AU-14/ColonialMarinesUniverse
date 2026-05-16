@@ -22,15 +22,15 @@ using Robust.Shared.Random;
 
 namespace Content.Server._CMU14.Medical.Surgery;
 
-public sealed class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
+public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
 {
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
-    [Dependency] private readonly CMUSurgeryDispatchSystem _dispatch = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly CMUBodyScannerSystem _bodyScanner = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private CMUSurgeryDispatchSystem _dispatch = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private CMUBodyScannerSystem _bodyScanner = default!;
 
     private const float StepDoAfterSeconds = 2f;
     private const float PostOpCastWindowMinutes = 5f;

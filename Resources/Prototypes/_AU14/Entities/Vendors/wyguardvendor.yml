@@ -1,0 +1,94 @@
+- type: entity
+  parent: ColMarTechBase
+  id: CMUWYGuardequipmentvendor
+  name: We-Yu Guard equipment vendor
+  description: >-
+    An automated dispenser rack, hooked up to a small storage of Weyland-Yutani Security Guard apparel and equipment.
+    Stocked with field gear for rapid deployment following cryogenic hypersleep or emergency mobilization.
+    The interface is intentionally simple, even someone with tunnel-vision and frostbite can operate it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Clothes
+      takeAll: CMUCMBEssentialEquipmentClothes
+      entries:
+      - id: RMCJumpsuitVeteranPMCHybrisaLead
+      - id: RMCOuterClothingExternalWebbingBlack
+      - id: RMCBootsPMCFilled
+    - name: Headwear
+      choices: { CMUCMBDutyHeadgear: 1 }
+      entries:
+      - id: ArmorHelmetPMCCorporate
+      - id: RMCArmorHelmetPMCCorporateHybrisa
+      - id: RMCArmorHelmetPMCKutjevoSecurity
+      - id: AU14CivBallCapBlack
+      - id: RMCHeadCapWestonYamadaDark
+      - id: AU14HeadCommandoBeanie
+    - name: Uniform
+      choices: { CMUCMBDutyJacket: 1 }
+      entries:
+      - id: AU14JumpsuitVeteranPMCCorporateLead
+      - id: AU14JumpsuitVeteranPMCCorporate
+      - id: AU14WYGuardFatigues
+      - id: RMCJumpsuitMPCorporate
+      - id: RMCJumpsuitVeteranPMCKutjevo
+    - name: Belt
+      choices: { CMUCMBDutyBelt: 1 }
+      entries:
+      - id: RMCBeltSecurityWeYa
+      - id: AU14BeltUtilityGeneralBlack
+    - name: Pistol Belt
+      choices: { CMUCMBDutyeltPistol: 1 }
+      entries:
+      - id: RMCBeltHolsterPistolTSE
+    - name: Bag
+      choices: { CMUCMBDutyStorageBag: 1 }
+      entries:
+      - id: RMCSatchelLightpackBlack
+    - name: Webbing
+      choices: { CMUCMBDutyStorageWebbing: 1 }
+      entries:
+      - id: RMCWebbingBlackSmall
+      - id: CMWebbingBlack
+      - id: RMCWebbingHolsterBlack
+      - id: RMCWebbingDropPouchBlack
+      - id: RMCWebbingLegPouchBlack
+    - name: Pouches
+      choices: { CMUCMBDutyPouches: 2 }
+      entries:
+      - id: AU14PouchIFAKFill
+      - id: RMCPouchFlareFilled
+      - id: RMCPouchGeneralMedium
+      - id: RMCPouchPistol
+      - id: RMCPouchMagazinePistol
+#     - id: RMCPouchRadio
+    - name: Equipment
+      takeAll: CMUCMBEssentialEquipment
+      entries:
+      - id: RMCBinocularsCivPVE
+      - id: RMCHandcuffs
+      - id: CMStunbaton
+      - id: RMCWeaponTaser
+#     - id: RMCRadioHandheldColonyOff
+    - name: Duty Weapons
+      choices: { CMUCMBDutyWeapons: 1 }
+      entries:
+      - id: RMCGunCasePistolM77
+    - name: Non-lethal Ammunition
+      entries:
+      - id: CMMagazinePistolM88Rubber
+        amount: 25
+    - name: Restraining Gear
+      entries:
+      - id: RMCHandcuffs
+        amount: 10
+      - id: RMCZipties
+        amount: 30
+    - name: Inmate Clothing
+      entries:
+      - id: AU14CivilianPrisonJumpsuit
+        amount: 40
+      - id: RMCShoesBlack
+        amount: 40

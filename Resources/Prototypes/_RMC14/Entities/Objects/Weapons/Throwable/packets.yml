@@ -303,6 +303,52 @@
 
 - type: entity
   parent: CMPacketBase
+  id: RMCPacketGrenadeWhitePhosphorus
+  name: WPDP grenade packet
+  description: It contains three WPDP white phosphorus grenades.
+  components:
+  - type: Sprite
+    layers:
+    - state: wpdp_packet
+      map: [ "closedLayer" ]
+    - state: wpdp_packet_e
+      map: [ "openLayer", "emptyLayer"]
+
+- type: entity
+  parent: RMCPacketGrenadeWhitePhosphorus
+  id: RMCPacketGrenadeWhitePhosphorusFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCGrenadeWhitePhosphorus
+      amount: 3
+
+- type: entity
+  parent: CMPacketBase
+  id: RMCPacketGrenadeWhitePhosphorusCompound
+  name: CCDP grenade packet
+  description: It contains three CCDP chemical compound grenades.
+  components:
+  - type: Sprite
+    layers:
+    - state: ccdp_packet
+      map: [ "closedLayer" ]
+    - state: ccdp_packet_e
+      map: [ "openLayer", "emptyLayer"]
+
+- type: entity
+  parent: RMCPacketGrenadeWhitePhosphorusCompound
+  id: RMCPacketGrenadeWhitePhosphorusCompoundFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCGrenadeWhitePhosphorusCompound
+      amount: 3
+
+- type: entity
+  parent: CMPacketBase
   id: CMPacketGrenadeFragOld
   name: M15 frag grenade packet
   description: It contains three M15 fragmentation grenades. Handle with care.
@@ -444,6 +490,52 @@
   - type: StorageFill
     contents:
     - id: RMC40MMGrenadeM74AGMI
+      amount: 25
+
+- type: entity
+  parent: RMCBoxBase
+  id: RMCBoxWPDP
+  name: 30mm WPDP grenade box
+  description: A secure box holding 25 30mm WPDP White Phosphorus grenades. Highly flammable, don't store near the flamer fuel.
+  components:
+  - type: Sprite
+    layers:
+    - state: d_nade_placeholder
+      map: [ "closedLayer" ]
+    - state: model_m40
+    - state: ccdp
+    - state: d_nade_placeholder_e
+      map: [ "openLayer", "emptyLayer" ]
+  - type: Storage
+    whitelist:
+      tags:
+      - RMCGrenadeM40
+  - type: StorageFill
+    contents:
+    - id: RMCGrenadeWhitePhosphorus
+      amount: 25
+
+- type: entity
+  parent: RMCBoxBase
+  id: RMCBoxCCDP
+  name: 30mm CCDP grenade box
+  description: A secure box holding 25 30mm CCDP Chemical Compound grenades. Highly flammable, don't store near the flamer fuel.
+  components:
+  - type: Sprite
+    layers:
+    - state: d_nade_placeholder
+      map: [ "closedLayer" ]
+    - state: model_m40
+    - state: ccdp
+    - state: d_nade_placeholder_e
+      map: [ "openLayer", "emptyLayer" ]
+  - type: Storage
+    whitelist:
+      tags:
+      - RMCGrenadeM40
+  - type: StorageFill
+    contents:
+    - id: RMCGrenadeWhitePhosphorusCompound
       amount: 25
 
 - type: entity

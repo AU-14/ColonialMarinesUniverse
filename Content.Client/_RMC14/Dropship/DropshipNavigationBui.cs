@@ -1,4 +1,4 @@
-﻿using Content.Client.Message;
+using Content.Client.Message;
 using Content.Shared._CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared.Doors.Components;
@@ -10,10 +10,10 @@ using Robust.Shared.Timing;
 namespace Content.Client._RMC14.Dropship;
 
 [UsedImplicitly]
-public sealed class DropshipNavigationBui : BoundUserInterface
+public sealed partial class DropshipNavigationBui : BoundUserInterface
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     [ViewVariables]
     private DropshipNavigationWindow? _window;
@@ -61,6 +61,7 @@ public sealed class DropshipNavigationBui : BoundUserInterface
         SetFlightHeader("Flight Controls");
         SetDoorHeader("Door Controls");
         SetRemoteControlHeader("Remote Control:");
+        SetLaunchAlarmHeader("Launch Announcement Alarm");
 
         if (_entities.TryGetComponent(Owner, out TransformComponent? transform) &&
             _entities.TryGetComponent(transform.ParentUid, out MetaDataComponent? metaData))
@@ -104,6 +105,7 @@ public sealed class DropshipNavigationBui : BoundUserInterface
         _window.LockdownButtonPort.Button.OnPressed += _ => SendPredictedMessage(new DropshipLockdownMsg(DoorLocation.Port));
         _window.LockdownButtonStarboard.Button.OnPressed += _ => SendPredictedMessage(new DropshipLockdownMsg(DoorLocation.Starboard));
         _window.RemoteControlButton.Button.OnPressed += _ => SendPredictedMessage(new DropshipRemoteControlToggleMsg());
+        _window.LaunchAlarmButton.Button.OnPressed += _ => SendPredictedMessage(new DropshipLaunchAlarmToggleMsg());
         _entities.System<DropshipSystem>().Uis.Add(this);
     }
 
@@ -189,6 +191,7 @@ public sealed class DropshipNavigationBui : BoundUserInterface
 
         RefreshDoorLockStatus(destinations.DoorLockStatus);
         SetRemoteControl(destinations.RemoteControlStatus);
+        RefreshLaunchAlarmStatus(destinations.LaunchAlarmStatus);
     }
 
     private void Set(DropshipNavigationTacticalLandBuiState tactical)
@@ -279,6 +282,7 @@ public sealed class DropshipNavigationBui : BoundUserInterface
 
         RefreshDoorLockStatus(travelling.DoorLockStatus);
         SetRemoteControl(travelling.RemoteControlStatus);
+        RefreshLaunchAlarmStatus(travelling.LaunchAlarmStatus);
 
         var startEndTime = travelling.Time;
         _window.ProgressBar.MinValue = 0;
@@ -299,6 +303,11 @@ public sealed class DropshipNavigationBui : BoundUserInterface
     private void SetRemoteControlHeader(string label)
     {
         _window?.RemoteControlHeader.SetMarkup($"[color=#0BDC49][font size=16][bold]{label}[/bold][/font][/color]");
+    }
+
+    private void SetLaunchAlarmHeader(string label)
+    {
+        _window?.LaunchAlarmHeader.SetMarkup($"[color=#0BDC49][font size=16][bold]{label}[/bold][/font][/color]");
     }
 
     private void SetLaunchDisabled(bool disabled)
@@ -377,7 +386,15 @@ public sealed class DropshipNavigationBui : BoundUserInterface
         _window.LockdownButtonStarboard.Text = starboardStatus ? "Unlock Starboard" : "Lock Starboard";
     }
 
-    public void Update()
+    private void RefreshLaunchAlarmStatus(bool launchAlarmStatus)
+    {
+        if (_window == null)
+            return;
+
+        _window.LaunchAlarmButton.Text = launchAlarmStatus ? "Stop Alarm" : "Start Alarm";
+    }
+
+    public override void Update()
     {
         if (_window == null || _window.Disposed)
             return;

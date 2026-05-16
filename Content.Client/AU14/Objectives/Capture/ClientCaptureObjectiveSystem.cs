@@ -10,11 +10,11 @@ using Robust.Shared.Log;
 
 namespace Content.Client.AU14.Objectives.Capture;
 
-public sealed class ClientCaptureObjectiveSystem : EntitySystem
+public sealed partial class ClientCaptureObjectiveSystem : EntitySystem
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly AppearanceSystem _appearanceSystem = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private AppearanceSystem _appearanceSystem = default!;
+    [Dependency] private ILogManager _logManager = default!;
 
     private ISawmill _sawmill = default!;
 

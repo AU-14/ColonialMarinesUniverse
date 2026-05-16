@@ -18,6 +18,10 @@
       - id: RMCHeadCapBureau
       - id: RMCBootsPMCFilled
       - id: CMGlassesSecurity
+    - name: Headgear
+      choices: { CMUCMBDutyHeadgear: 1 }
+      entries:
+      - id: AU14HeadCommandoBeanie
     - name: Outerwear
       choices: { CMUCMBDutyJacket: 1 }
       entries:
@@ -97,6 +101,7 @@
       entries:
       - id: AU14CWPSCampaignHat
       - id: AU14CWPSCap
+      - id: AU14HeadCommandoBeanie
     - name: Belt
       takeAll: CMUCMBEssentialEquipmentBelt
       entries:
@@ -179,6 +184,7 @@
         name: peaked NSPA cap (gold and silver)
       - id: RMCHeadCapTSEPAPeaked
         name: peaked NSPA cap (red and gold)
+      - id: AU14HeadCommandoBeanie
     - name: Outerwear
       choices: { CMUCMBDutyJacket: 1 }
       entries:
@@ -255,6 +261,10 @@
       - id: CMHeadCapSPPPeakedPolice
       - id: RMCBootsPMCFilled
       - id: CMGlassesSecurity
+    - name: Headgear
+      choices: { CMUCMBDutyHeadgear: 1 }
+      entries:
+      - id: AU14HeadCommandoBeanie
     - name: Belt
       takeAll: CMUCMBEssentialEquipmentBelt
       entries:

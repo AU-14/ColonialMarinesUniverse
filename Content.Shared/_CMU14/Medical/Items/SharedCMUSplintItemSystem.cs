@@ -20,17 +20,17 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Items;
 
-public abstract class SharedCMUSplintItemSystem : EntitySystem
+public abstract partial class SharedCMUSplintItemSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly INetManager Net = default!;
-    [Dependency] protected readonly SharedAudioSystem Audio = default!;
-    [Dependency] protected readonly SharedBodySystem Body = default!;
-    [Dependency] protected readonly SharedDoAfterSystem DoAfter = default!;
-    [Dependency] protected readonly SharedFractureSystem Fracture = default!;
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] protected readonly IRobustRandom Random = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected INetManager Net = default!;
+    [Dependency] protected SharedAudioSystem Audio = default!;
+    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected SharedDoAfterSystem DoAfter = default!;
+    [Dependency] protected SharedFractureSystem Fracture = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] protected IRobustRandom Random = default!;
 
     private const float CastScanInterval = 1f;
     private const float CastRemovePromptSeconds = 30f;

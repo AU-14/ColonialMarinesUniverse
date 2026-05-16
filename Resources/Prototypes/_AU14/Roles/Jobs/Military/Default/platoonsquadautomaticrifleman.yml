@@ -11,18 +11,22 @@
     - Epilepsy
     - NonResuscitable
   ranks:
-    RMCRankCorporal:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadAutomaticRifleman
-      time: 216000 # 60 hours
+    #RMCRankSergeant:
+    #- !type:RoleTimeRequirement
+    #  role: AU14JobGOVFORSquadAutomaticRifleman
+    #  time: 360000 # 100 hours
+    #RMCRankCorporal:
+    #- !type:RoleTimeRequirement
+    #  role: AU14JobGOVFORSquadAutomaticRifleman
+    #  time: 180000 # 50 hours
     RMCRankLanceCorporal:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORSquadAutomaticRifleman
-      time: 108000 # 30 hours
+      time: 86400 # 24 hours
     RMCRankPrivateFirstClass:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORSquadAutomaticRifleman
-      time: 54000 # 15 hours
+      time: 36000 # 10 hours
     RMCRankPrivate: []
   startingGear: AU14GearGOVFORSquadAutomaticRifleman
   dummyStartingGear: AU14GearGOVFORAutoRiflemanDummy

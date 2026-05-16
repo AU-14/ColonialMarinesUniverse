@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Communications;
 using Content.Shared._RMC14.Sensor;
@@ -9,11 +9,11 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared._RMC14.TacticalMap;
 
-public abstract class SharedTacticalMapSystem : EntitySystem
+public abstract partial class SharedTacticalMapSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SensorTowerSystem _sensorTowers = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SensorTowerSystem _sensorTowers = default!;
 
     public int LineLimit { get; private set; }
 

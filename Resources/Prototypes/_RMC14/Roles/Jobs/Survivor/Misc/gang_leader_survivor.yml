@@ -18,7 +18,7 @@
         RMCSkillCqc: 2
         RMCSkillFirearms: 2
         RMCSkillLeadership: 1
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetGangLeader
     - type: MarineOrders
       moveOrderSoundMale:
@@ -69,7 +69,7 @@
   name: gang leader survivor preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomOutfits:
     - [ ArmorHelmetRiot ]
     - [ RMCArmorVestCivilian ]

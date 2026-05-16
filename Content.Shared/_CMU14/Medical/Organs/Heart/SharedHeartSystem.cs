@@ -16,16 +16,16 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Organs.Heart;
 
-public abstract class SharedHeartSystem : EntitySystem
+public abstract partial class SharedHeartSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly INetManager Net = default!;
-    [Dependency] protected readonly IPrototypeManager Proto = default!;
-    [Dependency] protected readonly IRobustRandom Random = default!;
-    [Dependency] protected readonly SharedBodySystem Body = default!;
-    [Dependency] protected readonly SharedRMCBloodstreamSystem Bloodstream = default!;
-    [Dependency] protected readonly SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected INetManager Net = default!;
+    [Dependency] protected IPrototypeManager Proto = default!;
+    [Dependency] protected IRobustRandom Random = default!;
+    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected SharedRMCBloodstreamSystem Bloodstream = default!;
+    [Dependency] protected SharedStatusEffectsSystem Status = default!;
 
     private static readonly EntProtoId Tachycardia = "StatusEffectCMUTachycardia";
     private static readonly EntProtoId Arrhythmia = "StatusEffectCMUArrhythmia";

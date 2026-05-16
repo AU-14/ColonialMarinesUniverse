@@ -22,10 +22,10 @@ using Robust.Shared.Timing;
 namespace Content.Client._CMU14.Medical.Surgery;
 
 [UsedImplicitly]
-public sealed class CMUBodyScannerBui : BoundUserInterface
+public sealed partial class CMUBodyScannerBui : BoundUserInterface
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IPlayerManager _players = default!;
 
     private static readonly SoundPathSpecifier CorrectSound = new("/Audio/Machines/quickbeep.ogg");
     private static readonly SoundPathSpecifier WrongTimingSound = new("/Audio/Machines/warning_buzzer.ogg");
@@ -1436,7 +1436,7 @@ public sealed class CMUBodyScannerBui : BoundUserInterface
     }
 }
 
-public sealed class CMUUprightSpriteView : SpriteView
+public sealed partial class CMUUprightSpriteView : SpriteView
 {
     protected override void Draw(IRenderHandle renderHandle)
     {
@@ -1467,12 +1467,12 @@ public sealed class CMUUprightSpriteView : SpriteView
     }
 }
 
-public sealed class CMUScannerSweepControl : Control
+public sealed partial class CMUScannerSweepControl : Control
 {
     private const float SpriteScanWidthRatio = 0.58f;
     private const float SpriteScanHeightRatio = 0.70f;
 
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private TimeSpan? _pulseStartedAt;
     private TimeSpan? _calibrationEndsAt;
@@ -1695,7 +1695,7 @@ public sealed class CMUScannerSweepControl : Control
     }
 }
 
-public sealed class CMUBodyScannerWindow : FancyWindow
+public sealed partial class CMUBodyScannerWindow : FancyWindow
 {
     private const string RememberedSizeKey = "cmu-body-scanner";
     private static readonly Vector2 PreferredWindowSize = new(1040f, 680f);
@@ -1706,7 +1706,7 @@ public sealed class CMUBodyScannerWindow : FancyWindow
     private static readonly Vector2 ScanPatientPreviewSize = new(92f, 106f);
     private static readonly Vector2 ScanPatientPreviewScale = new(2.15f, 2.15f);
 
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     private readonly CMUMedicalUniformScaler _uniformScaler = new();
     private readonly PanelContainer _scaleRoot;

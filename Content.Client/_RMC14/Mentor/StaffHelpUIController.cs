@@ -1,6 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Content.Client.Administration.Systems;
+using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Bwoink;
 using Content.Shared._RMC14.CCVar;
@@ -24,15 +25,15 @@ using Timer = Robust.Shared.Timing.Timer;
 
 namespace Content.Client._RMC14.Mentor;
 
-public sealed class StaffHelpUIController : UIController, IOnSystemChanged<BwoinkSystem>
+public sealed partial class StaffHelpUIController : UIController, IOnSystemChanged<BwoinkSystem>
 {
-    [Dependency] private readonly AHelpUIController _aHelp = default!;
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [UISystemDependency] private readonly AudioSystem? _audio = default!;
+    [Dependency] private AHelpUIController _aHelp = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [UISystemDependency] private AudioSystem? _audio = default!;
 
     private readonly Dictionary<NetUserId, List<MentorMessage>> _messages = new();
     private readonly Dictionary<NetUserId, string> _destinationNames = new();
@@ -245,6 +246,7 @@ public sealed class StaffHelpUIController : UIController, IOnSystemChanged<Bwoin
 
         SetAHelpButtonPressed(true);
         _staffHelpWindow = new StaffHelpWindow();
+        ApplyCrtChrome(_staffHelpWindow);
         _staffHelpWindow.OnClose += () => _staffHelpWindow = null;
         _staffHelpWindow.OpenCentered();
         UIManager.ClickSound();
@@ -302,6 +304,7 @@ public sealed class StaffHelpUIController : UIController, IOnSystemChanged<Bwoin
     private MentorHelpWindow CreateMentorHelpWindow()
     {
         var window = new MentorHelpWindow();
+        ApplyCrtChrome(window);
         window.ReMentorButton.OnPressed += _ => _net.ClientSendMessage(new ReMentorMsg());
         window.ReMentorButton.Visible = _canReMentor;
         window.Chat.OnTextEntered += args =>
@@ -329,6 +332,7 @@ public sealed class StaffHelpUIController : UIController, IOnSystemChanged<Bwoin
     private MentorWindow CreateMentorWindow()
     {
         var window = new MentorWindow();
+        ApplyCrtChrome(window);
         window.DeMentorButton.OnPressed += _ => _net.ClientSendMessage(new DeMentorMsg());
         window.Chat.OnTextEntered += args =>
         {
@@ -374,8 +378,8 @@ public sealed class StaffHelpUIController : UIController, IOnSystemChanged<Bwoin
         var playerButton = new Button
         {
             Text = playerName,
-            StyleClasses = { "OpenBoth" },
         };
+        CrtLobbyTheme.Apply(playerButton, useCrtTypography: false);
         playerButton.OnPressed += _ =>
         {
             if (_mentorWindow is not { IsOpen: true })
@@ -399,6 +403,12 @@ public sealed class StaffHelpUIController : UIController, IOnSystemChanged<Bwoin
         _mentorWindow.Players.AddChild(playerButton);
         playerButton.SetPositionFirst();
         _mentorWindow.PlayerDict[player] = playerButton;
+    }
+
+    private static void ApplyCrtChrome(DefaultWindow window)
+    {
+        window.Stylesheet = IoCManager.Resolve<IStylesheetManager>().SheetNano;
+        CrtLobbyTheme.ApplyWindow(window, useCrtTypography: false);
     }
 
     private bool OpenWindow<T>(

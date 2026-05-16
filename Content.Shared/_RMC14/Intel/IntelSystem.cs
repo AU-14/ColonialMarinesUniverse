@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.ARES;
@@ -39,29 +39,29 @@ using static Content.Shared._RMC14.Intel.IntelSpawnerType;
 
 namespace Content.Shared._RMC14.Intel;
 
-public sealed class IntelSystem : EntitySystem
+public sealed partial class IntelSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly ARESSystem _ares = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly SharedEntityStorageSystem _entityStorage = default!;
-    [Dependency] private readonly SharedMarineAnnounceSystem _marineAnnounce = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly NameModifierSystem _nameModifier = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedCMChatSystem _rmcChat = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly SharedStorageSystem _storage = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private ARESSystem _ares = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private SharedEntityStorageSystem _entityStorage = default!;
+    [Dependency] private SharedMarineAnnounceSystem _marineAnnounce = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private NameModifierSystem _nameModifier = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedCMChatSystem _rmcChat = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SharedStorageSystem _storage = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     // Runtime overrides set by server systems when an active platoon declares a TechTree.
     // Key is normalized team string (lowercase), value is prototype id string.
@@ -619,7 +619,7 @@ public sealed class IntelSystem : EntitySystem
             }
 
             // Feedback to the user for debugging/verification: which team got credited.
-            Logger.Debug($"[IntelSystem] AddPoints: credited  to team='{teamKey}");
+            Logger.GetSawmill("content").Debug($"[IntelSystem] AddPoints: credited  to team='{teamKey}");
         }
     }
 
@@ -714,7 +714,7 @@ public sealed class IntelSystem : EntitySystem
         }
 
         // Log which prototype id we're about to spawn for visibility during testing.
-        Logger.Info($"[IntelSystem] Spawning tech tree for team='{team}' using prototype='{(string)protoId}'");
+        Logger.GetSawmill("content").Info($"[IntelSystem] Spawning tech tree for team='{team}' using prototype='{(string)protoId}'");
 
         var treeId = Spawn(protoId);
         var treeComp = EnsureComp<IntelTechTreeComponent>(treeId);
@@ -980,7 +980,7 @@ public sealed class IntelSystem : EntitySystem
         tree.Comp.Tree.TotalEarned += points;
         var after = tree.Comp.Tree.Points;
         // Log every credit so uploads from consoles or any code path are visible in server logs.
-        Logger.Debug($"[IntelSystem] AddPoints: credited {points.Double()} to team='{teamkey}' before={before.Double()} after={after.Double()}");
+        Logger.GetSawmill("content").Debug($"[IntelSystem] AddPoints: credited {points.Double()} to team='{teamkey}' before={before.Double()} after={after.Double()}");
         Dirty(tree);
         UpdateTree(tree);
     }

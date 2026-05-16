@@ -8,17 +8,16 @@ using Content.Shared.Interaction;
 using Content.Shared.Pinpointer;
 using Content.Shared.Popups;
 using Robust.Client.GameObjects;
-using Robust.Client.GameObjects;
 
 namespace Content.Server.AU14.Objectives.Capture;
 
-public sealed class CaptureObjectiveSystem : EntitySystem
+public sealed partial class CaptureObjectiveSystem : EntitySystem
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly Content.Server.AU14.Objectives.AuObjectiveSystem _objectiveSystem = default!;
-    [Dependency] private readonly Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private Content.Server.AU14.Objectives.AuObjectiveSystem _objectiveSystem = default!;
+    [Dependency] private Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
+    [Dependency] private ILogManager _logManager = default!;
 
     // Tracks ongoing hoists to prevent multiple simultaneous hoists per structure
     private readonly HashSet<EntityUid> _hoisting = new();

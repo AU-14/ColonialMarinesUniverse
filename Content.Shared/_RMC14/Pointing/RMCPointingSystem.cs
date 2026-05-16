@@ -1,11 +1,11 @@
-﻿using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Sprite;
 
 namespace Content.Shared._RMC14.Pointing;
 
-public sealed class RMCPointingSystem : EntitySystem
+public sealed partial class RMCPointingSystem : EntitySystem
 {
-    [Dependency] private readonly SharedRMCSpriteSystem _rmcSprite = default!;
+    [Dependency] private SharedRMCSpriteSystem _rmcSprite = default!;
 
     public override void Initialize()
     {

@@ -7,6 +7,9 @@
   ignoreAllegiance: true
   playTimeTracker: AU14JobCLFPhysician
   requirements:
+  - !type:RoleTimeRequirement
+    role: AU14JobCLFGuerilla
+    time: 7200 # 2 hours
   - !type:OverallPlaytimeRequirement
     time: 14400 # 4 hours
   - !type:TraitsRequirement
@@ -17,7 +20,8 @@
   ranks:
     RMCRankCivilianDoctor: []
   startingGear: AU14GearCLFPhysician
-  icon: "CMJobIconEmpty"
+  icon: "RMCJobIconCLFMedic"
+  hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-clflrs
@@ -32,6 +36,7 @@
       factions:
       - CLF
     - type: CLFMember
+      statusIcon: CLFFactionMedic
     - type: Skills
       skills:
         RMCSkillFireman: 1
@@ -60,9 +65,8 @@
     suitstorage: RMCFlashlight
     id: AU14IDCardCLFPhysician
     neck: RMCCLFArmband
-  storage:
-    back:
-    - AU14CLFHeadset
+  inhand:
+  - AU14CLFHeadset
 
 - type: entity
   parent: CMSpawnPointJobBase

@@ -1,10 +1,10 @@
-﻿using Robust.Shared.Timing;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Vendors;
 
 public sealed partial class RMCVendorUserRechargeSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
 
     public override void Initialize()
     {

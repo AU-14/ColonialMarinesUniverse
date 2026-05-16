@@ -9,12 +9,12 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.AU14.Threats;
 
-public sealed class ThreatSurviveRuleSystem : GameRuleSystem<ThreatSurviveRuleComponent>
+public sealed partial class ThreatSurviveRuleSystem : GameRuleSystem<ThreatSurviveRuleComponent>
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly Content.Server.AU14.Round.AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private readonly RoundEndSystem _roundEnd = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private Content.Server.AU14.Round.AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private RoundEndSystem _roundEnd = default!;
 
     private TimeSpan? _endTime;
     private float _minutes = 0f;

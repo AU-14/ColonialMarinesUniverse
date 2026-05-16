@@ -1,0 +1,84 @@
+# One job + playTimeTracker per abomination caste. Deliberately NOT
+# inheriting CMJobXenoBase (and isXeno: false on the tracker) so the
+# role/playtime systems don't register abominations as xenomorphs.
+
+- type: job
+  parent: CMJobBase
+  id: AU14AbominationSpider
+  name: au14-job-name-abomination-spider
+  playTimeTracker: AU14JobAbominationSpider
+  joinNotifyCrew: false
+  hidden: true
+  hasIcon: false
+
+- type: playTimeTracker
+  id: AU14JobAbominationSpider
+  isXeno: false
+
+- type: job
+  parent: CMJobBase
+  id: AU14AbominationGrunt
+  name: au14-job-name-abomination-grunt
+  playTimeTracker: AU14JobAbominationGrunt
+  joinNotifyCrew: false
+  hidden: true
+  hasIcon: false
+
+- type: playTimeTracker
+  id: AU14JobAbominationGrunt
+  isXeno: false
+
+- type: job
+  parent: CMJobBase
+  id: AU14AbominationSkitter
+  name: au14-job-name-abomination-skitter
+  playTimeTracker: AU14JobAbominationSkitter
+  joinNotifyCrew: false
+  hidden: true
+  hasIcon: false
+
+- type: playTimeTracker
+  id: AU14JobAbominationSkitter
+  isXeno: false
+
+- type: job
+  parent: CMJobBase
+  id: AU14AbominationMimic
+  name: au14-job-name-abomination-mimic
+  playTimeTracker: AU14JobAbominationMimic
+  joinNotifyCrew: false
+  hidden: true
+  hasIcon: false
+
+- type: playTimeTracker
+  id: AU14JobAbominationMimic
+  isXeno: false
+
+# Generic abomination speech verb used by AU14AbominationBase.
+- type: speechVerb
+  id: Abomination
+  name: chat-speech-verb-name-default
+  speechVerbStrings:
+  - chat-speech-verb-robotic-1
+  - chat-speech-verb-robotic-2
+
+# General abomination radio channel, the hive-equivalent for the threat.
+# Spider / Grunt / Skitter / Mimic all share this band.
+- type: radioChannel
+  id: Abomination
+  name: chat-radio-abomination
+  keycode: "f"
+  frequency: 428
+  color: "#6b8f3a"
+  longRange: true
+
+# Mimic-only radio channel, modelled on Hivemind.
+# Private side-channel mimics also have so disguised mimics can coordinate
+# without breaking cover on local chat.
+- type: radioChannel
+  id: AbominationMimic
+  name: chat-radio-abomination-mimic
+  keycode: "i"
+  frequency: 427
+  color: "#a63636"
+  longRange: true

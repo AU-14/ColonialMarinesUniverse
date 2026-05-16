@@ -16,13 +16,13 @@ using Content.Shared.SSDIndicator;
 
 namespace Content.Server.AU14.Threats;
 
-public sealed class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRuleComponent>
+public sealed partial class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRuleComponent>
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly Round.AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private Round.AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
 
     private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
 
@@ -113,7 +113,7 @@ public sealed class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRuleComponen
                 if (IsExcludedFromKillCount(uid))
                     continue;
 
-                if (crashedDropship && TryComp<TransformComponent>(uid, out var xform) && _rmcPlanet.IsOnPlanet(xform))
+                if (crashedDropship && _rmcPlanet.IsOnPlanet(Transform(uid)))
                     continue;
 
                 // Skip evacuated entities entirely

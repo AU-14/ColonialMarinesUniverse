@@ -1,0 +1,27 @@
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconThreatLeader
+  icon:
+    sprite: _AU14/Interface/job_icons.rsi
+    state: threat_leader
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconThreatMember
+  icon:
+    sprite: _AU14/Interface/job_icons.rsi
+    state: threat_member
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconThirdPartyLeader
+  icon:
+    sprite: _AU14/Interface/job_icons.rsi
+    state: third_party_leader
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconThirdPartyMember
+  icon:
+    sprite: _AU14/Interface/job_icons.rsi
+    state: third_party_member

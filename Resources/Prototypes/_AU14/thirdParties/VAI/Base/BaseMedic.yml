@@ -9,6 +9,7 @@
   playTimeTracker: AU14VAIMedic
   spawnMenuRoleName: VAI Medic (Base)
   joinNotifyCrew: false
+  hasIcon: false
   supervisors: au14-job-name-vai-teamleader
   special:
   - !type:AddComponentSpecial
@@ -32,7 +33,7 @@
         RMCSkillVehicles: 2
         RMCSkillJtac: 1
         RMCSkillEndurance: 1
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: AU14VAIBasePreset
     - type: JobPrefix
       prefix: au14-job-prefix-vai-medic

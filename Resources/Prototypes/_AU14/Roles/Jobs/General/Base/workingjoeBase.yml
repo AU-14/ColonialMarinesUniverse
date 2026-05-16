@@ -11,7 +11,11 @@
   canBeAntag: false
   joinNotifyCrew: false
   roleWeight: 0.25
-  hidden: true
+  whitelisted: true
+  whitelistParent: AU14JobGeneralWhitelist
+  jobEntity: AU14MobWorkingJoe
+  jobPreviewEntity: AU14MobWorkingJoeDummy
+  hidden: false
 
 - type: startingGear
   id: AU14GearWorkingJoeBase

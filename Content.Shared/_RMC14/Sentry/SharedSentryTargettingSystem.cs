@@ -11,12 +11,12 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Sentry;
 
-public abstract class SharedSentryTargetingSystem : EntitySystem
+public abstract partial class SharedSentryTargetingSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly GunIFFSystem _iff = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private GunIFFSystem _iff = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
 
     private const string SentryExcludedFaction = "RMCDumb";
 

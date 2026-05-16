@@ -91,7 +91,7 @@ entities:
       data:
         chunkSize: 4
     - type: GasTileOverlay
-- proto: CMSeatPassenger
+- proto: RMCSeatVehiclePassenger
   entities:
   - uid: 10
     components:
@@ -165,14 +165,14 @@ entities:
     - type: Transform
       pos: 2,2
       parent: 3
-- proto: RMCOverwatchConsoleTOCMapRotating
+- proto: RMCOverwatchConsoleGovforTOCMapRotating
   entities:
   - uid: 4
     components:
     - type: Transform
       pos: 2.282627,1.969359
       parent: 3
-- proto: RMCOverwatchConsoleTOCShuttle
+- proto: RMCOverwatchConsoleGovforTOCShuttle
   entities:
   - uid: 9
     components:

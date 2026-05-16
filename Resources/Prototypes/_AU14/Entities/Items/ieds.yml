@@ -90,7 +90,7 @@
 - type: entity
   name: improvised explosive vest
   description: A worn suicide explosive vest designed to cripple foot soldiers. Those who use it will never return...
-  parent: [BasePlasticExplosive, BaseSyndicateContraband]
+  parent: [RMCBaseJacket, BasePlasticExplosive, BaseSyndicateContraband]
   id: AU14IEDVest
   components:
   - type: Sprite
@@ -106,6 +106,10 @@
     quickEquip: false
     equipDelay: 10
     unequipDelay: 6
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+      cluster-payload: !type:Container
   - type: OnUseTimerTrigger
     delay: 0.1
     delayOptions: [3, 4]

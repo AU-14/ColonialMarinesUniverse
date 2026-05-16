@@ -1,9 +1,9 @@
-﻿using Robust.Shared.Prototypes;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.RMCCustomHoliday;
 
 [Prototype]
-public sealed class CustomHolidayPrototype : IPrototype
+public sealed partial class CustomHolidayPrototype : IPrototype
 {
     [IdDataField] 
     public string ID { get; private set; } = default!;

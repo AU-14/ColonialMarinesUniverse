@@ -45,38 +45,38 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared._RMC14.Emplacements;
 
-public abstract class SharedWeaponMountSystem : EntitySystem
+public abstract partial class SharedWeaponMountSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedXenoAcidSystem XenoAcid = default!;
+    [Dependency] protected SharedXenoAcidSystem XenoAcid = default!;
 
-    [Dependency] private readonly ActionBlockerSystem _actionBlockerSystem = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly BarricadeSystem _barricade = default!;
-    [Dependency] private readonly SharedBuckleSystem _buckle = default!;
-    [Dependency] private readonly CollisionWakeSystem _collisionWake = default!;
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly FoldableSystem _foldable = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedItemSystem _item = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly RMCFoldableSystem _rmcFoldable = default!;
-    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
-    [Dependency] private readonly SharedScopeSystem _scope = default!;
-    [Dependency] private readonly ItemSlotsSystem _slots = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedToolSystem _tool = default!;
-    [Dependency] private readonly RMCSharedWeaponControllerSystem _weaponController = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private ActionBlockerSystem _actionBlockerSystem = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private BarricadeSystem _barricade = default!;
+    [Dependency] private SharedBuckleSystem _buckle = default!;
+    [Dependency] private CollisionWakeSystem _collisionWake = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedCombatModeSystem _combatMode = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private FoldableSystem _foldable = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedItemSystem _item = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private RMCFoldableSystem _rmcFoldable = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private SharedScopeSystem _scope = default!;
+    [Dependency] private ItemSlotsSystem _slots = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] private RMCSharedWeaponControllerSystem _weaponController = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
     private const string AmmoExamineColor = "yellow";
     private const string FireRateExamineColor = "yellow";

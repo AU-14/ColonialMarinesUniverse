@@ -1,24 +1,13 @@
 using System.Linq;
 using Content.Shared.Atmos;
-using Content.Shared.EntityEffects;
 using Content.Shared.Random;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
 namespace Content.Server.Botany;
 
-public sealed class MutationSystem : EntitySystem
+public sealed partial class MutationSystem : EntitySystem
 {
-    private static ProtoId<RandomPlantMutationListPrototype> RandomPlantMutations = "RandomPlantMutations";
-
-    [Dependency] private readonly IRobustRandom _robustRandom = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    private RandomPlantMutationListPrototype _randomMutations = default!;
-
-    public override void Initialize()
-    {
-        _randomMutations = _prototypeManager.Index(RandomPlantMutations);
-    }
+    [Dependency] private IRobustRandom _robustRandom = default!;
 
     /// <summary>
     /// For each random mutation, see if it occurs on this plant this check.
@@ -27,21 +16,7 @@ public sealed class MutationSystem : EntitySystem
     /// <param name="severity"></param>
     public void CheckRandomMutations(EntityUid plantHolder, ref SeedData seed, float severity)
     {
-        return; // RMC14 no seed mutationsD
-        foreach (var mutation in _randomMutations.mutations)
-        {
-            if (Random(Math.Min(mutation.BaseOdds * severity, 1.0f)))
-            {
-                if (mutation.AppliesToPlant)
-                {
-                    var args = new EntityEffectBaseArgs(plantHolder, EntityManager);
-                    mutation.Effect.Effect(args);
-                }
-                // Stat adjustments do not persist by being an attached effect, they just change the stat.
-                if (mutation.Persists && !seed.Mutations.Any(m => m.Name == mutation.Name))
-                    seed.Mutations.Add(mutation);
-            }
-        }
+        // RMC14 disables random seed mutations.
     }
 
     /// <summary>

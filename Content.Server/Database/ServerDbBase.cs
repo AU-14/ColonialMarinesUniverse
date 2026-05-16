@@ -14,6 +14,7 @@ using Content.Shared._RMC14.NamedItems;
 using Content.Shared.Administration.Logs;
 using Content.Shared.AU14.Allegiance;
 using Content.Shared.AU14.Origin;
+using Content.Shared.AU14.Threats;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Database;
 using Content.Shared.Humanoid;
@@ -238,6 +239,10 @@ namespace Content.Server.Database
             ProtoId<OriginPrototype>? origin = profile.Origin is { } originId
                 ? new ProtoId<OriginPrototype>(originId)
                 : (ProtoId<OriginPrototype>?)null;
+            var threatPreferences = ConvertThreatPreferences(profile.ThreatPreference);
+            var gamemodeJobPriorities = ConvertGamemodeJobPriorities(profile.GamemodeJobPriorities);
+            var gamemodeAntagPreferences = ConvertGamemodeAntagPreferences(profile.GamemodeAntagPreferences);
+            var gamemodeThreatPreferences = ConvertGamemodeThreatPreferences(profile.GamemodeThreatPreferences);
 
             var gender = sex == Sex.Male ? Gender.Male : Gender.Female;
             if (Enum.TryParse<Gender>(profile.Gender, true, out var genderVal))
@@ -320,8 +325,181 @@ namespace Content.Server.Database
                 profile.XenoPrefix,
                 profile.XenoPostfix,
                 allegiance,
-                origin
+                origin,
+                threatPreferences,
+                gamemodeJobPriorities,
+                gamemodeAntagPreferences,
+                gamemodeThreatPreferences
             );
+        }
+
+        private static HashSet<ProtoId<ThreatPrototype>> ConvertThreatPreferences(string? raw)
+        {
+            var preferences = new HashSet<ProtoId<ThreatPrototype>>();
+            if (string.IsNullOrWhiteSpace(raw))
+                return preferences;
+
+            try
+            {
+                var values = JsonSerializer.Deserialize<List<string>>(raw);
+                if (values != null)
+                {
+                    foreach (var value in values)
+                    {
+                        if (!string.IsNullOrWhiteSpace(value))
+                            preferences.Add(new ProtoId<ThreatPrototype>(value));
+                    }
+
+                    return preferences;
+                }
+            }
+            catch (JsonException)
+            {
+                try
+                {
+                    var value = JsonSerializer.Deserialize<string>(raw);
+                    if (!string.IsNullOrWhiteSpace(value))
+                    {
+                        preferences.Add(new ProtoId<ThreatPrototype>(value));
+                        return preferences;
+                    }
+                }
+                catch (JsonException)
+                {
+                    // Older development builds stored a single prototype id in this column.
+                }
+            }
+
+            foreach (var value in raw.Split(new[] { ',', ';', '|' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            {
+                preferences.Add(new ProtoId<ThreatPrototype>(value));
+            }
+
+            return preferences;
+        }
+
+        private static Dictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>> ConvertGamemodeJobPriorities(string? raw)
+        {
+            var preferences = new Dictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>>();
+            if (string.IsNullOrWhiteSpace(raw))
+                return preferences;
+
+            try
+            {
+                var values = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, int>>>(raw);
+                if (values == null)
+                    return preferences;
+
+                foreach (var (gamemode, jobs) in values)
+                {
+                    if (string.IsNullOrWhiteSpace(gamemode))
+                        continue;
+
+                    var mappedJobs = new Dictionary<ProtoId<JobPrototype>, JobPriority>();
+                    foreach (var (job, priority) in jobs)
+                    {
+                        if (string.IsNullOrWhiteSpace(job) ||
+                            !Enum.IsDefined(typeof(JobPriority), priority))
+                        {
+                            continue;
+                        }
+
+                        mappedJobs[new ProtoId<JobPrototype>(job)] = (JobPriority) priority;
+                    }
+
+                    preferences[gamemode] = mappedJobs;
+                }
+            }
+            catch (JsonException)
+            {
+                // Ignore malformed development data.
+            }
+
+            return preferences;
+        }
+
+        private static Dictionary<string, HashSet<ProtoId<AntagPrototype>>> ConvertGamemodeAntagPreferences(string? raw)
+        {
+            var preferences = new Dictionary<string, HashSet<ProtoId<AntagPrototype>>>();
+            foreach (var (gamemode, antags) in ConvertGamemodePrototypeSetPreferences(raw))
+            {
+                preferences[gamemode] = antags
+                    .Select(antag => new ProtoId<AntagPrototype>(antag))
+                    .ToHashSet();
+            }
+
+            return preferences;
+        }
+
+        private static Dictionary<string, HashSet<ProtoId<ThreatPrototype>>> ConvertGamemodeThreatPreferences(string? raw)
+        {
+            var preferences = new Dictionary<string, HashSet<ProtoId<ThreatPrototype>>>();
+            foreach (var (gamemode, threats) in ConvertGamemodePrototypeSetPreferences(raw))
+            {
+                preferences[gamemode] = threats
+                    .Select(threat => new ProtoId<ThreatPrototype>(threat))
+                    .ToHashSet();
+            }
+
+            return preferences;
+        }
+
+        private static Dictionary<string, List<string>> ConvertGamemodePrototypeSetPreferences(string? raw)
+        {
+            var preferences = new Dictionary<string, List<string>>();
+            if (string.IsNullOrWhiteSpace(raw))
+                return preferences;
+
+            try
+            {
+                var values = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(raw);
+                if (values == null)
+                    return preferences;
+
+                foreach (var (gamemode, prototypes) in values)
+                {
+                    if (string.IsNullOrWhiteSpace(gamemode))
+                        continue;
+
+                    preferences[gamemode] = prototypes
+                        .Where(prototype => !string.IsNullOrWhiteSpace(prototype))
+                        .Distinct(StringComparer.Ordinal)
+                        .ToList();
+                }
+            }
+            catch (JsonException)
+            {
+                // Ignore malformed development data.
+            }
+
+            return preferences;
+        }
+
+        private static string? SerializeGamemodeJobPriorities(
+            IReadOnlyDictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>> priorities)
+        {
+            var payload = priorities
+                .Where(pair => pair.Value.Count > 0)
+                .ToDictionary(
+                    pair => pair.Key,
+                    pair => pair.Value.ToDictionary(
+                        job => job.Key.Id,
+                        job => (int) job.Value));
+
+            return payload.Count == 0 ? null : JsonSerializer.Serialize(payload);
+        }
+
+        private static string? SerializeGamemodeSetPreferences<T>(
+            IReadOnlyDictionary<string, HashSet<ProtoId<T>>> preferences)
+            where T : class, IPrototype
+        {
+            var payload = preferences
+                .Where(pair => pair.Value.Count > 0)
+                .ToDictionary(
+                    pair => pair.Key,
+                    pair => pair.Value.Select(value => value.Id).OrderBy(id => id).ToList());
+
+            return payload.Count == 0 ? null : JsonSerializer.Serialize(payload);
         }
 
         private static Profile ConvertProfiles(HumanoidCharacterProfile humanoid, int slot, Profile? profile = null)
@@ -418,6 +596,12 @@ namespace Content.Server.Database
             profile.XenoPostfix = humanoid.XenoPostfix;
             profile.Allegiance = humanoid.Allegiance?.Id;
             profile.Origin = humanoid.Origin?.Id;
+            profile.ThreatPreference = humanoid.ThreatPreferences.Count == 0
+                ? null
+                : JsonSerializer.Serialize(humanoid.ThreatPreferences.Select(t => t.Id).OrderBy(id => id));
+            profile.GamemodeJobPriorities = SerializeGamemodeJobPriorities(humanoid.GamemodeJobPriorities);
+            profile.GamemodeAntagPreferences = SerializeGamemodeSetPreferences(humanoid.GamemodeAntagPreferences);
+            profile.GamemodeThreatPreferences = SerializeGamemodeSetPreferences(humanoid.GamemodeThreatPreferences);
 
             return profile;
         }

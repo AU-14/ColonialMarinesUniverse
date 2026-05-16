@@ -10,8 +10,8 @@ namespace Content.Shared._RMC14.Armor;
 
 public sealed partial class RMCAdjustableArmorValueSystem : EntitySystem
 {
-    [Dependency] private readonly ActivatableUISystem _activatableUI = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _uiSystem = default!;
+    [Dependency] private ActivatableUISystem _activatableUI = default!;
+    [Dependency] private SharedUserInterfaceSystem _uiSystem = default!;
 
     public override void Initialize()
     {
@@ -124,7 +124,7 @@ public enum AdjustableArmorUiKey : byte
 
 
 [Serializable, NetSerializable]
-public sealed class AdjustableArmorBoundUserInterfaceState : BoundUserInterfaceState
+public sealed partial class AdjustableArmorBoundUserInterfaceState : BoundUserInterfaceState
 {
     public string MeleeArmor { get; }
     public string BulletArmor { get; }
@@ -145,7 +145,7 @@ public sealed class AdjustableArmorBoundUserInterfaceState : BoundUserInterfaceS
 }
 
 [Serializable, NetSerializable]
-public sealed class AdjustableArmorSetValueMessage : BoundUserInterfaceMessage
+public sealed partial class AdjustableArmorSetValueMessage : BoundUserInterfaceMessage
 {
     public ArmorType Type { get; }
     public string Value { get; }

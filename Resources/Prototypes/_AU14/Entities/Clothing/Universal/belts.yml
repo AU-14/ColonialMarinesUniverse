@@ -589,3 +589,27 @@
   - type: FixedItemSizeStorage
   - type: ItemCamouflage
     camouflageVariations: { }
+
+- type: entity
+  parent: RMCMatebaBelt
+  id: AU14MatebaCustomBeltFilledAmmo
+  name: M276 pattern Mateba Custom holster rig
+  suffix: AU14, Mateba Custom, Filled, No Stun
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpeedLoaderMateba
+      amount: 6
+    - id: RMCWeaponRevolverMatebaNoStun
+
+- type: entity
+  parent: RMCMatebaBelt
+  id: AU14MatebaSpecialBeltFilledAmmo
+  name: M276 pattern Mateba Special holster rig
+  suffix: AU14, Mateba Special, Filled, No Stun
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpeedLoaderMateba
+      amount: 6
+    - id: RMCWeaponRevolverMatebaSpecialNoStun

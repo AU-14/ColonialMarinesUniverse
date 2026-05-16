@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Content.Server.Administration.Logs;
 using Content.Server.AU14.Round;
 using Content.Server.Cargo.Components;
+using Content.Server.Cargo.Systems;
 using Content.Server.Chat.Systems;
 using Content.Server.Storage.EntitySystems;
 using Content.Shared.Access;
@@ -46,20 +47,21 @@ namespace Content.Server._RMC14.Requisitions;
 
 public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLogs = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly ChasmSystem _chasm = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly EntityStorageSystem _entityStorage = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly PhysicsSystem _physics = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly XenoSystem _xeno = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IAdminLogManager _adminLogs = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private ChasmSystem _chasm = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private EntityStorageSystem _entityStorage = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private PhysicsSystem _physics = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private PricingSystem _pricing = default!;
 
     private static readonly EntProtoId AccountId = "RMCASRSAccount";
     private static readonly EntProtoId PaperRequisitionInvoice = "RMCPaperRequisitionInvoice";
@@ -502,13 +504,21 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
              if (HasComp<CargoSellBlacklistComponent>(entity))
                  continue;
 
-             rewards += SubmitInvoices(entity);
+             var entityRewards = SubmitInvoices(entity);
 
              if (TryComp(entity, out RequisitionsCrateComponent? crate))
              {
-                 rewards += crate.Reward;
-                 soldAny = true;
+                 entityRewards += crate.Reward;
              }
+             else
+             {
+                 entityRewards += (int) Math.Round(_pricing.GetPrice(entity));
+             }
+
+             if (entityRewards > 0)
+                 soldAny = true;
+
+             rewards += entityRewards;
 
              QueueDel(entity);
          }
@@ -800,7 +810,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         reqAccount.Comp.Balance += stackCount;
         Dirty(reqAccount);
 
-        EntityManager.QueueDeleteEntity(args.Entity);
+        QueueDel(args.Entity);
         SendUIStateAll();
     }
 

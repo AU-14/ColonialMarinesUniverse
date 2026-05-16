@@ -6,6 +6,7 @@
   playTimeTracker: AUJobThirdPartyLeader
   hidden: false
   supervisors: nobody
+  icon: "AU14JobIconThirdPartyLeader"
   jobPreviewEntity: RMCPlayerXenoQueenPreview
   accessGroups:
   - CMAccessXeno

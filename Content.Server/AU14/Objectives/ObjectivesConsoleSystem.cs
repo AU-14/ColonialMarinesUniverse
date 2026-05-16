@@ -11,10 +11,10 @@ using Content.Shared._RMC14.Marines;
 
 namespace Content.Server.AU14.Objectives;
 
-public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
+public sealed partial class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly Content.Shared._RMC14.Intel.IntelSystem _intel = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private Content.Shared._RMC14.Intel.IntelSystem _intel = default!;
 
     public override void Initialize()
     {
@@ -43,13 +43,13 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
 
     private void SendObjectives(EntityUid uid, ObjectivesConsoleComponent comp)
     {
-        Logger.Debug($"[ObjectivesConsole] SendObjectives called for console={ToPrettyString(uid)} faction={comp.Faction}");
+        Logger.GetSawmill("content").Debug($"[ObjectivesConsole] SendObjectives called for console={ToPrettyString(uid)} faction={comp.Faction}");
         var objectives = new List<ObjectiveEntry>();
-        var query = EntityManager.EntityQueryEnumerator<AuObjectiveComponent>();
+        var query = EntityQueryEnumerator<AuObjectiveComponent>();
         int currentWinPoints = 0;
         int requiredWinPoints = 0;
         // Find the ObjectiveMaster for this faction
-        foreach (var master in EntityManager.EntityQuery<ObjectiveMasterComponent>())
+        foreach (var master in EntityQuery<ObjectiveMasterComponent>())
         {
             switch (comp.Faction.ToLowerInvariant())
             {
@@ -98,7 +98,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
             var showObjective = objComp.Active;
 
             // Try get capture component once and reuse it below to avoid duplicate lookups.
-            var hasCapture = EntityManager.TryGetComponent(objUid, out CaptureObjectiveComponent? captureComp);
+            var hasCapture = TryComp(objUid, out CaptureObjectiveComponent? captureComp);
 
             if (!showObjective)
             {
@@ -190,7 +190,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
                     objComp.Repeating ? objComp.TimesCompleted : (int?)null,
                     objComp.MaxRepeatable,
                     objComp.CustomPoints != 0 ? objComp.CustomPoints : (objComp.ObjectiveLevel == 1 ? 5 : 20)));
-                Logger.Debug($"[ObjectivesConsole] Added objective to list: id={objComp.ID} displayDesc={displayDesc} status={statusDisplay}");
+                Logger.GetSawmill("content").Debug($"[ObjectivesConsole] Added objective to list: id={objComp.ID} displayDesc={displayDesc} status={statusDisplay}");
                 continue;
             }
             else if (objComp.FactionStatuses.TryGetValue(consoleFaction, out var status))
@@ -222,7 +222,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
 
             // Fetch progress logic
             string? fetchProgress = null;
-            if (EntityManager.TryGetComponent(objUid, out FetchObjectiveComponent? fetchComp))
+            if (TryComp(objUid, out FetchObjectiveComponent? fetchComp))
             {
                 int fetched = 0;
                 int toFetch = fetchComp.AmountToFetch;
@@ -237,7 +237,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
                 fetchProgress = $"{fetched}/{toFetch}";
             }
             // Add logic to display kill progress for KillObjectiveComponent
-            if (EntityManager.TryGetComponent(objUid, out KillObjectiveComponent? killComp))
+            if (TryComp(objUid, out KillObjectiveComponent? killComp))
             {
                 int killed = 0;
                 int toKill = killComp.AmountToKill;
@@ -273,20 +273,20 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
             int? maxRepeatable2 = objComp.MaxRepeatable;
             int points2 = objComp.CustomPoints != 0 ? objComp.CustomPoints : (objComp.ObjectiveLevel == 1 ? 5 : 20);
             objectives.Add(new ObjectiveEntry(objComp.ID, displayDesc2, statusDisplay, typeDisplay, fetchProgress, objComp.Repeating, repeatsCompleted2, maxRepeatable2, points2));
-            Logger.Debug($"[ObjectivesConsole] Added objective to list: id={objComp.ID} displayDesc={displayDesc2} status={statusDisplay}");
+            Logger.GetSawmill("content").Debug($"[ObjectivesConsole] Added objective to list: id={objComp.ID} displayDesc={displayDesc2} status={statusDisplay}");
         }
         var state = new ObjectivesConsoleBoundUserInterfaceState(objectives, currentWinPoints, requiredWinPoints);
-        Logger.Debug($"[ObjectivesConsole] Sending Objectives state: count={objectives.Count} win={currentWinPoints}/{requiredWinPoints}");
+        Logger.GetSawmill("content").Debug($"[ObjectivesConsole] Sending Objectives state: count={objectives.Count} win={currentWinPoints}/{requiredWinPoints}");
         _ui.SetUiState(uid, ObjectivesConsoleKey.Key, state);
     }
 
     private void OnRequestIntel(EntityUid uid, ObjectivesConsoleComponent comp, ObjectivesConsoleRequestIntelMessage msg)
     {
         // Debug: log request arrival
-        Logger.Debug($"[ObjectivesConsole] OnRequestIntel called for objective={msg.ObjectiveId} console={ToPrettyString(uid)} actor={msg.Actor} consoleFaction={comp.Faction}");
+        Logger.GetSawmill("content").Debug($"[ObjectivesConsole] OnRequestIntel called for objective={msg.ObjectiveId} console={ToPrettyString(uid)} actor={msg.Actor} consoleFaction={comp.Faction}");
 
         // Find the objective by ID
-        var query = EntityManager.EntityQueryEnumerator<AuObjectiveComponent>();
+        var query = EntityQueryEnumerator<AuObjectiveComponent>();
         while (query.MoveNext(out var objUid, out var objComp))
         {
             if (objComp.ID != msg.ObjectiveId)
@@ -304,7 +304,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
                 // Tier 0 is always unlocked by default, so report unlocked count as 1
                 var stateFull = new ObjectiveIntelBoundUserInterfaceState(objComp.ID, objComp.objectiveDescription, tiers, 1, _intel.GetIntelPoints(teamKeyDefault));
 
-                Logger.Debug($"[ObjectivesConsole] Sending intel UI state: objective={objComp.ID} team={teamKeyDefault} tiers={tiers.Count} unlocked=1 points={_intel.GetIntelPoints(teamKeyDefault)}");
+                Logger.GetSawmill("content").Debug($"[ObjectivesConsole] Sending intel UI state: objective={objComp.ID} team={teamKeyDefault} tiers={tiers.Count} unlocked=1 points={_intel.GetIntelPoints(teamKeyDefault)}");
                 _ui.SetUiState(uid, ObjectivesConsoleKey.Key, stateFull);
                 return;
             }
@@ -316,7 +316,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
                 if (!protoMan.TryIndex<ObjectiveIntelTierPrototype>(protoId, out var proto))
                 {
                     // skip invalid prototype
-                    Logger.Debug($"[ObjectivesConsole] Missing ObjectiveIntelTierPrototype protoId={protoId} for objective={objComp.ID}");
+                    Logger.GetSawmill("content").Debug($"[ObjectivesConsole] Missing ObjectiveIntelTierPrototype protoId={protoId} for objective={objComp.ID}");
                     continue;
                 }
 
@@ -335,7 +335,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
                 // Tier 0 is always unlocked by default, so initialize to 1 (count of unlocked tiers)
                 objComp.IntelTierPerFaction[team] = 1;
                 Dirty(objUid, objComp);
-                Logger.Debug($"[ObjectivesConsole] Initialized IntelTierPerFaction for objective={objComp.ID} team={team}");
+                Logger.GetSawmill("content").Debug($"[ObjectivesConsole] Initialized IntelTierPerFaction for objective={objComp.ID} team={team}");
             }
 
             // Treat missing entry as tier0 unlocked (count == 1)
@@ -345,7 +345,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
                 unlocked = factionTier;
             }
 
-            Logger.Debug($"[ObjectivesConsole] Sending intel UI state: objective={objComp.ID} team={team} tiers={tiers.Count} unlocked={unlocked} points={_intel.GetIntelPoints(team)}");
+            Logger.GetSawmill("content").Debug($"[ObjectivesConsole] Sending intel UI state: objective={objComp.ID} team={team} tiers={tiers.Count} unlocked={unlocked} points={_intel.GetIntelPoints(team)}");
 
             var state2 = new ObjectiveIntelBoundUserInterfaceState(objComp.ID, objComp.objectiveDescription, tiers, unlocked, _intel.GetIntelPoints(team));
             _ui.SetUiState(uid, ObjectivesConsoleKey.Key, state2);
@@ -356,7 +356,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
     private void OnUnlockIntel(EntityUid uid, ObjectivesConsoleComponent comp, ObjectivesConsoleUnlockIntelMessage msg)
     {
         // Server-side: validate objective exists and tier index
-        var objQuery = EntityManager.EntityQueryEnumerator<AuObjectiveComponent>();
+        var objQuery = EntityQueryEnumerator<AuObjectiveComponent>();
         while (objQuery.MoveNext(out var objUid, out var objComp))
         {
             if (objComp.ID != msg.ObjectiveId)
@@ -388,7 +388,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
             var protoId = objComp.IntelTiers[msg.TierIndex];
             if (!protoMan.TryIndex<ObjectiveIntelTierPrototype>(protoId, out var proto))
             {
-                Logger.Debug($"[ObjectivesConsole] Unlock failed - missing proto for protoId={protoId} objective={objComp.ID}");
+                Logger.GetSawmill("content").Debug($"[ObjectivesConsole] Unlock failed - missing proto for protoId={protoId} objective={objComp.ID}");
                 return;
             }
 
@@ -399,7 +399,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
             if (!spent)
             {
                 // Not enough intel points; just refresh UI so client sees current points
-                Logger.Debug($"[ObjectivesConsole] Unlock failed - insufficient intel for team={teamKey} cost={costDouble} objective={objComp.ID}");
+                Logger.GetSawmill("content").Debug($"[ObjectivesConsole] Unlock failed - insufficient intel for team={teamKey} cost={costDouble} objective={objComp.ID}");
                 RefreshConsolesForFaction(teamKey);
                 return;
             }
@@ -407,7 +407,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
             // Apply the unlock for this faction and mark component dirty (store count of unlocked tiers)
             objComp.IntelTierPerFaction[teamKey] = currentUnlocked + 1;
             Dirty(objUid, objComp);
-            Logger.Debug($"[ObjectivesConsole] Unlock applied for objective={objComp.ID} team={teamKey} newUnlockedCount={objComp.IntelTierPerFaction[teamKey]}");
+            Logger.GetSawmill("content").Debug($"[ObjectivesConsole] Unlock applied for objective={objComp.ID} team={teamKey} newUnlockedCount={objComp.IntelTierPerFaction[teamKey]}");
 
             // Refresh the console UI for this faction
             RefreshConsolesForFaction(teamKey);
@@ -417,7 +417,7 @@ public sealed class ObjectivesConsoleSystem : SharedObjectivesConsoleSystem
 
     public void RefreshConsolesForFaction(string faction)
     {
-        var query = EntityManager.EntityQueryEnumerator<ObjectivesConsoleComponent>();
+        var query = EntityQueryEnumerator<ObjectivesConsoleComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
             if (string.Equals(comp.Faction, faction, StringComparison.OrdinalIgnoreCase))

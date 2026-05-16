@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Content.Client.Guidebook.Richtext;
+using Content.Client.Lobby.UI;
 using Content.Client.Message;
 using Content.Client.Research;
 using Content.Client.UserInterface.ControlExtensions;
@@ -21,9 +22,9 @@ namespace Content.Client.Guidebook.Controls;
 [UsedImplicitly, GenerateTypedNameReferences]
 public sealed partial class GuideTechnologyEmbed : BoxContainer, IDocumentTag, ISearchableControl
 {
-    [Dependency] private readonly IEntitySystemManager _systemManager = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IEntitySystemManager _systemManager = default!;
+    [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly ResearchSystem _research;
     private readonly SpriteSystem _sprite;
@@ -37,6 +38,7 @@ public sealed partial class GuideTechnologyEmbed : BoxContainer, IDocumentTag, I
         _sprite = _systemManager.GetEntitySystem<SpriteSystem>();
         _sawmill = _logManager.GetSawmill("guidebook.technology");
         MouseFilter = MouseFilterMode.Stop;
+        CrtLobbyTheme.Apply(this, useCrtTypography: false);
     }
 
     public GuideTechnologyEmbed(string technology) : this()
@@ -92,5 +94,6 @@ public sealed partial class GuideTechnologyEmbed : BoxContainer, IDocumentTag, I
         {
             BackgroundColor = discipline.Color
         };
+        CrtLobbyTheme.Apply(this, useCrtTypography: false);
     }
 }

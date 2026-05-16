@@ -11,12 +11,12 @@ using Robust.Shared.Network;
 
 namespace Content.Server._RMC14.Vehicle.Viewport;
 
-public sealed class VehicleViewportSystem : EntitySystem
+public sealed partial class VehicleViewportSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly VehicleSystem _vehicles = default!;
-    [Dependency] private readonly VehicleViewToggleSystem _viewToggle = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private VehicleSystem _vehicles = default!;
+    [Dependency] private VehicleViewToggleSystem _viewToggle = default!;
 
     public override void Initialize()
     {

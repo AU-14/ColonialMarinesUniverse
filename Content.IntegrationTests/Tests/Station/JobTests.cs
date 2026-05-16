@@ -11,7 +11,7 @@ public sealed class JobTest
 {
     /// <summary>
     /// Ensures that every job belongs to at most 1 primary department.
-    /// Having no primary department is ok.
+    /// Having no primary or multiple EditorHidden departments is ok.
     /// </summary>
     [Test]
     public async Task PrimaryDepartmentsTest()
@@ -25,7 +25,7 @@ public sealed class JobTest
         {
             // only checking primary departments so don't bother with others
             var departments = prototypeManager.EnumeratePrototypes<DepartmentPrototype>()
-                .Where(department => department.Primary)
+                .Where(department => department.Primary && !department.EditorHidden)
                 .ToList();
             var jobs = prototypeManager.EnumeratePrototypes<JobPrototype>();
             foreach (var job in jobs)

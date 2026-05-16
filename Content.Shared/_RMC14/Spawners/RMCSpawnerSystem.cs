@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Evacuation;
+using Content.Shared._RMC14.Evacuation;
 using Content.Shared.Coordinates;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
@@ -8,13 +8,13 @@ using Robust.Shared.Network;
 
 namespace Content.Shared._RMC14.Spawners;
 
-public sealed class RMCSpawnerSystem : EntitySystem
+public sealed partial class RMCSpawnerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly EntityWhitelistSystem _entityWhitelist = default!;
-    [Dependency] private readonly SharedEvacuationSystem _evacuation = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
+    [Dependency] private SharedEvacuationSystem _evacuation = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

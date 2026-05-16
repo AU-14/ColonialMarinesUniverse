@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Overwatch;
+using Content.Shared._RMC14.Overwatch;
 using Robust.Client.Audio;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
@@ -8,12 +8,12 @@ using Robust.Shared.Map;
 
 namespace Content.Client._RMC14.Overwatch;
 
-public sealed class OverwatchConsoleSystem : SharedOverwatchConsoleSystem
+public sealed partial class OverwatchConsoleSystem : SharedOverwatchConsoleSystem
 {
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private readonly List<(Entity<AudioComponent, OverwatchRelayedSoundComponent> Audio, EntityCoordinates Position)> _toRelay = new();
 

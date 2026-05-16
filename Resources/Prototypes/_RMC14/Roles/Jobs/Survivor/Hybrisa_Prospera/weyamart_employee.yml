@@ -14,8 +14,6 @@
         RMCSkillEndurance: 2
         RMCSkillFireman: 1
         RMCSkillFirearms: 2
-    - type: EquipSurvivorPreset
-      preset: RMCGearSurvivorPresetHybrisaWeyamartEmployee
     - type: RMCSurvivor
     - type: MotionDetectorTracked
     - type: NpcFactionMember
@@ -45,15 +43,3 @@
     layers:
     - sprite: _RMC14/Markers/landmarks.rsi
       state: surv
-
-- type: entity
-  parent: [RMCSurvivorPresetCivilianRareItem, RMCSurvivorPresetCivilian]
-  id: RMCGearSurvivorPresetHybrisaWeyamartEmployee
-  name: hybrisa weyamart employee preset
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: SurvivorPreset
-    rareItems:
-      RMCExplosivePlastic:
-        45: 50 # 10%
-    rareItemCoefficent: 50

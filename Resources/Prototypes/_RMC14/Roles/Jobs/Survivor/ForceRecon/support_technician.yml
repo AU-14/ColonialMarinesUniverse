@@ -41,7 +41,7 @@
       whitelist:
         tags:
         - RMCSquadFORECON
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCSurvivorPresetForeconSupportTech
     - type: JobPrefix
       prefix: rmc-job-prefix-forecon-support-tech
@@ -73,6 +73,6 @@
   name: forecon support technician survivor preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomGear:
     - [ CMAdvFirstAidKitFilled ]

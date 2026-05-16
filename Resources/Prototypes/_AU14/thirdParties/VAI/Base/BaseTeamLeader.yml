@@ -9,6 +9,7 @@
   playTimeTracker: AU14VAITeamLeader
   spawnMenuRoleName: VAI Team Leader (Base)
   joinNotifyCrew: false
+  hasIcon: false
   supervisors: au14-job-supervisors-loner
   special:
   - !type:AddComponentSpecial
@@ -34,7 +35,7 @@
         RMCSkillJtac: 4
         RMCSkillEndurance: 3
         RMCSkillLeadership: 4
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: AU14VAIBasePreset
     - type: JobPrefix
       prefix: au14-job-prefix-vai-teamleader

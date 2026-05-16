@@ -7,9 +7,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Medical.Organs.Lungs;
 
-public sealed class LungsSystem : SharedLungsSystem
+public sealed partial class LungsSystem : SharedLungsSystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     private static readonly ProtoId<DamageTypePrototype> Asphyxiation = "Asphyxiation";
 

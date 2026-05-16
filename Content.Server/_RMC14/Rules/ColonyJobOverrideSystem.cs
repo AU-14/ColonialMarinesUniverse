@@ -15,9 +15,10 @@ namespace Content.Server._RMC14.Rules
     /// who selected the override job will have their profile updated to select the
     /// overridden job instead. This ensures assignment consumes the overridden job's slots.
     /// </summary>
-    public sealed class ColonyJobOverrideSystem : EntitySystem
+    public sealed partial class ColonyJobOverrideSystem : EntitySystem
     {
-        [Dependency] private readonly RMCPlanetSystem _planetSystem = default!;
+        [Dependency] private RMCPlanetSystem _planetSystem = default!;
+        [Dependency] private GameTicker _gameTicker = default!;
 
         public override void Initialize()
         {
@@ -42,6 +43,8 @@ namespace Content.Server._RMC14.Rules
             if (planetComp.ColonyJobOverrides == null)
                 return;
 
+            var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
+
             // The mapping is override -> overriden (key -> value).
             foreach (var (overrideJob, overridenJob) in planetComp.ColonyJobOverrides)
             {
@@ -51,27 +54,17 @@ namespace Content.Server._RMC14.Rules
                 {
                     var profile = profiles[user];
 
-                    // Make a mutable copy of job priorities and apply the remap.
-                    var current = new Dictionary<ProtoId<JobPrototype>, JobPriority>(profile.JobPriorities);
-                    if (!current.TryGetValue(overrideJob, out var priority))
-                        continue;
-
+                    var priority = profile.GetJobPriorityForGamemode(presetId, overrideJob);
                     if (priority <= JobPriority.Never)
                         continue;
 
-                    if (current.TryGetValue(overridenJob, out var existing))
-                    {
-                        current[overridenJob] = (JobPriority)Math.Max((int)existing, (int)priority);
-                    }
-                    else
-                    {
-                        current[overridenJob] = priority;
-                    }
-
-                    current.Remove(overrideJob);
+                    var existing = profile.GetJobPriorityForGamemode(presetId, overridenJob);
+                    var overridenPriority = (JobPriority)Math.Max((int)existing, (int)priority);
 
                     // Replace the profile with a copy that has updated priorities.
-                    profiles[user] = profile.WithJobPriorities(current);
+                    profiles[user] = profile
+                        .WithGamemodeJobPriority(presetId, overridenJob, overridenPriority)
+                        .WithGamemodeJobPriority(presetId, overrideJob, JobPriority.Never);
                 }
             }
         }

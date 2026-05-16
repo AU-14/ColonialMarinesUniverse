@@ -14,7 +14,7 @@
         RMCSkillEndurance: 2
         RMCSkillFireman: 1
         RMCSkillFirearms: 2
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetHybrisaPizzaGalaxy
     - type: RMCSurvivor
     - type: MotionDetectorTracked
@@ -47,7 +47,7 @@
   name: hybrisa pizza galaxy delivery driver preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomOutfits:
     - [ RMCHeadCapPizzaGalaxy, RMCJumpsuitPizzaGalaxy, RMCSatchelNorm, RMCShoesRed, RMCBoxPizzaGalaxyMystery]
     - [ RMCHeadCapPizzaGalaxy, RMCJumpsuitPizzaGalaxy, RMCSatchelNorm, RMCShoesRed, RMCBoxPizzaGalaxyMystery]

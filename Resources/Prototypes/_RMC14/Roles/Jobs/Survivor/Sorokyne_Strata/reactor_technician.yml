@@ -20,7 +20,7 @@
         RMCSkillConstruction: 2
         RMCSkillPowerLoader: 2
         RMCSkillVehicles: 1
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetReactorTechnician
     - type: RMCSurvivor
     - type: MotionDetectorTracked
@@ -60,7 +60,7 @@
   name: reactor technician preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomOutfits:
     - [ RMCHeadCapSPPCivilianPlantWorker, RMCLabcoatShort, RMCShoesWhite ]
     - [ RMCLabcoatShort, RMCShoesLaceupBrown ]

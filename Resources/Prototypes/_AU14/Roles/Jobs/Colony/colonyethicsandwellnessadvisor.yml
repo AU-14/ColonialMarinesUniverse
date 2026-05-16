@@ -8,7 +8,8 @@
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianEthicsAndWellnessAdvisor
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconColonyAdvisor"
+  hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian

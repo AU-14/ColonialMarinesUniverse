@@ -54,6 +54,8 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
+    - abominationThirdParty
+    - tribalThirdParty
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
@@ -107,10 +109,13 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
+    - abominationThirdParty
+    - tribalThirdParty
     threats:
     - cultistThreat
     - XenoThreat
     - wendigoThreat
+    - abominationsThreat
     # Shepherds' Pride exposes CWPS Ranger as its map-specific LEO role.
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCWPSRanger
@@ -163,6 +168,10 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
+    - abominationThirdParty
+    - tribalThirdParty
+    threats:
+    - abominationsThreat
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
@@ -216,6 +225,8 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
+    - abominationThirdParty
+    - tribalThirdParty
     threats:
     - cultistThreat
     - XenoThreat
@@ -288,6 +299,8 @@
     - USArmyAlt
     - USArmyAlt2
    # - cultistThirdParty
+    - abominationThirdParty
+    - tribalThirdParty
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
@@ -341,6 +354,8 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
+    - abominationThirdParty
+    - tribalThirdParty
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCiviliannspaConstable
       AU14JobLEOBase: AU14JobCiviliannspaConstable
@@ -397,6 +412,8 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
+    - abominationThirdParty
+    - tribalThirdParty
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
@@ -442,6 +459,8 @@
     - ApeThirdParty
     - WYPMCParty
     - WYPMCPartyAlt
+    - abominationThirdParty
+    - tribalThirdParty
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
@@ -489,9 +508,12 @@
     - ICRCReliefParty
     - UACGLostTeam
     - USArmy
+    - abominationThirdParty
+    - tribalThirdParty
     threats:
     - cultistThreatOnMarker
     - XenoThreat
+    - abominationsThreat
     joboverrides:
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
@@ -540,6 +562,8 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
+    - abominationThirdParty
+    - tribalThirdParty
     threats:
     - cultistThreat
     - XenoThreat
@@ -590,6 +614,8 @@
     - FORECONFirstRecon
     - WYPMCParty
     - WYPMCPartyAlt
+    - abominationThirdParty
+    - tribalThirdParty
     threats:
     - XenoThreat
     jobScalingFof: DefaultGovforOpforScale
@@ -638,6 +664,8 @@
     - ProfessorVonBandolier
     - WYPMCParty
     - WYPMCPartyAlt
+    - abominationThirdParty
+    - tribalThirdParty
     threats:
     - XenoThreat
     jobScalingFof: DefaultGovforOpforScale
@@ -686,6 +714,8 @@
     - ProfessorVonBandolier
     - WYPMCParty
     - WYPMCPartyAlt
+    - abominationThirdParty
+    - tribalThirdParty
     threats:
     - XenoThreat
     jobScalingFof: DefaultGovforOpforScale
@@ -735,6 +765,8 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
+    - abominationThirdParty
+    - tribalThirdParty
     threats:
     - XenoThreat
     jobScalingFof: DefaultGovforOpforScale

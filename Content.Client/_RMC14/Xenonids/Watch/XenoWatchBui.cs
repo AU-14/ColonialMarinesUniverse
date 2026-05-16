@@ -1,4 +1,4 @@
-﻿using Content.Client._RMC14.Xenonids.UI;
+using Content.Client._RMC14.Xenonids.UI;
 using Content.Shared._RMC14.Xenonids.Watch;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
@@ -10,9 +10,9 @@ using static Robust.Client.UserInterface.Controls.LineEdit;
 namespace Content.Client._RMC14.Xenonids.Watch;
 
 [UsedImplicitly]
-public sealed class XenoWatchBui : BoundUserInterface
+public sealed partial class XenoWatchBui : BoundUserInterface
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     [ViewVariables]
     private XenoWatchWindow? _window;

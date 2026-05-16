@@ -21,7 +21,7 @@
         RMCSkillFirearms: 2
         RMCSkillMedical: 3
         RMCSkillSurgery: 2
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetMoHDoctor
     - type: RMCSurvivor
     - type: MotionDetectorTracked
@@ -57,7 +57,7 @@
   name: ministry of health doctor preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomGearOther:
     -
       - [ RMCPouchFirstAidSplintsGauzeOintment ]

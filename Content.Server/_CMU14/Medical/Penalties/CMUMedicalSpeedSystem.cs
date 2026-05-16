@@ -10,10 +10,10 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Server._CMU14.Medical.Penalties;
 
-public sealed class CMUMedicalSpeedSystem : SharedCMUMedicalSpeedSystem
+public sealed partial class CMUMedicalSpeedSystem : SharedCMUMedicalSpeedSystem
 {
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
 
     public override void Initialize()
     {

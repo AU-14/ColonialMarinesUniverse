@@ -15,17 +15,17 @@ using Robust.Shared.Serialization;
 
 namespace Content.Server._CMU14.Medical.Cosmetic;
 
-public sealed class CMUSeveranceCosmeticSystem : EntitySystem
+public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
 {
-    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly CMUMedicalVisibilitySystem _medicalVisibility = default!;
+    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private CMUMedicalVisibilitySystem _medicalVisibility = default!;
 
     /// <summary>
-    ///     Bodies queued for next-tick hand-removal / shoe-drop / force-down.
+    ///     Bodies queued for next-tick hand-removal / glove-drop / shoe-drop / force-down.
     ///     Doing it inline races with FlingPartFromBody's reparent of the
     ///     severed limb — RemoveHand's TryDrop + ShutdownContainer mutations
     ///     occurring mid-arm-reparent suppressed the dropped-arm spawn when
@@ -53,6 +53,10 @@ public sealed class CMUSeveranceCosmeticSystem : EntitySystem
         {
             if (Deleted(d.Body) || !HasComp<HandsComponent>(d.Body))
                 continue;
+
+            if (_inventory.TryGetSlotEntity(d.Body, "gloves", out _))
+                _inventory.TryUnequip(d.Body, "gloves", force: true);
+
             _hands.RemoveHand(d.Body, d.HandId);
         }
 

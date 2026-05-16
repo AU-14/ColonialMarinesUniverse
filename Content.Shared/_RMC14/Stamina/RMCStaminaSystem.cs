@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.BlurredVision;
 using Content.Shared._RMC14.Movement;
 using Content.Shared._RMC14.Stun;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
 using Content.Shared.Database;
@@ -10,6 +11,7 @@ using Content.Shared.Projectiles;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Speech.EntitySystems;
 using Content.Shared.StatusEffect;
+using Content.Shared.Tag;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Wieldable.Components;
@@ -20,24 +22,28 @@ using Robust.Shared.Timing;
 using System.Linq;
 using Content.Shared.Jittering;
 using Content.Shared.Item.ItemToggle;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Stamina;
 
 public sealed partial class RMCStaminaSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly SharedStutteringSystem _stutter = default!;
-    [Dependency] private readonly RMCDazedSystem _daze = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _speed = default!;
-    [Dependency] private readonly TemporarySpeedModifiersSystem _temporarySpeed = default!;
-    [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
-    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly ItemToggleSystem _itemToggle = default!;
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly RMCSizeStunSystem _sizeStun = default!;
+    private static readonly ProtoId<TagPrototype> TaserTag = "Taser";
+
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private SharedStutteringSystem _stutter = default!;
+    [Dependency] private RMCDazedSystem _daze = default!;
+    [Dependency] private MovementSpeedModifierSystem _speed = default!;
+    [Dependency] private TemporarySpeedModifiersSystem _temporarySpeed = default!;
+    [Dependency] private SharedColorFlashEffectSystem _color = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private ItemToggleSystem _itemToggle = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private RMCSizeStunSystem _sizeStun = default!;
+    [Dependency] private TagSystem _tag = default!;
 
     public override void Initialize()
     {
@@ -179,6 +185,9 @@ public sealed partial class RMCStaminaSystem : EntitySystem
         // Split stamina damage between all eligible targets.
         foreach (var hit in args.HitEntities)
         {
+            if (IsYautjaTaserImmune(ent.Owner, hit))
+                continue;
+
             if (!stamQuery.TryGetComponent(hit, out var stam))
                 continue;
 
@@ -208,6 +217,9 @@ public sealed partial class RMCStaminaSystem : EntitySystem
 
     private void OnCollide(Entity<RMCStaminaDamageOnCollideComponent> ent, EntityUid target)
     {
+        if (IsYautjaTaserImmune(ent.Owner, target))
+            return;
+
         if (!TryComp<RMCStaminaComponent>(target, out var stam))
             return;
 
@@ -215,6 +227,11 @@ public sealed partial class RMCStaminaSystem : EntitySystem
             return;
 
         DoStaminaDamage((target, stam), ent.Comp.Damage, true);
+    }
+
+    private bool IsYautjaTaserImmune(EntityUid source, EntityUid target)
+    {
+        return HasComp<YautjaComponent>(target) && _tag.HasTag(source, TaserTag);
     }
 
     private void SetStaminaAlert(Entity<RMCStaminaComponent> ent)

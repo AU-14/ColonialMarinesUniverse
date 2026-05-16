@@ -15,8 +15,8 @@ namespace Content.Client.Administration.UI.Notes;
 [GenerateTypedNameReferences]
 public sealed partial class AdminNotesControl : Control
 {
-    [Dependency] private readonly IEntitySystemManager _entitySystem = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IEntitySystemManager _entitySystem = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     public event Action<int, NoteType, string, NoteSeverity?, bool, DateTime?>? NoteChanged;
     public event Action<NoteType, string, NoteSeverity?, bool, DateTime?>? NewNoteEntered;
@@ -208,6 +208,7 @@ public sealed partial class AdminNotesControl : Control
         NewNoteButton.Disabled = !create;
     }
 
+    [System.Obsolete]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

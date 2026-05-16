@@ -1,0 +1,1316 @@
+- type: entity
+  parent: RMCBaseArmorNoAccessory
+  id: CMUYautjaArmorBase
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan.rsi
+    equipDelay: 1
+    unequipDelay: 1
+  - type: AllowSuitStorage
+    whitelist:
+      components:
+      - Gun
+      - MeleeWeapon
+      tags:
+      - Flashlight
+      - Knife
+      - RMCMacheteScabbard
+      - RMCScabbardKatana
+  - type: RMCArmorSpeedTier
+    speedTier: very light
+  - type: CMArmor
+    melee: 35
+    bullet: 40
+    bio: 45
+    explosionArmor: 40
+  - type: CMHardArmor
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: CMUYautjaArmorBase
+  id: CMUYautjaAncientAlienArmor
+  name: ancient alien armor
+  description: Ancient armor made from a strange alloy. It feels cold with an alien weight.
+  components:
+  - type: CMArmor
+    melee: 35
+    bullet: 40
+    bio: 45
+    explosionArmor: 40
+
+- type: entity
+  parent: CMUYautjaHeavyClanArmor
+  id: CMUYautjaStoneArmor
+  name: alien stone armor
+  description: A suit of armor made entirely out of stone. It looks incredibly heavy.
+  suffix: Yautja, Flavor
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_heavy_clan.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_heavy_clan.rsi
+  - type: CMArmor
+    melee: 35
+    bullet: 40
+    bio: 50
+    explosionArmor: 45
+
+- type: entity
+  parent: CMUYautjaArmorBase
+  id: CMUYautjaClanArmor
+  name: clan armor
+  description: A suit of armor with light padding. It looks old, yet functional.
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorBronze
+  suffix: Bronze
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_bronze.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_bronze.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorSilver
+  suffix: Silver
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_silver.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_silver.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorCrimson
+  suffix: Crimson
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_crimson.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_crimson.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorBone
+  suffix: Bone
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_bone.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_bone.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmor2
+  suffix: Ebony, Pattern 2
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_2.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_2.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmor3
+  suffix: Ebony, Pattern 3
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_3.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_3.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmor4
+  suffix: Ebony, Pattern 4
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_4.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_4.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmor5
+  suffix: Ebony, Pattern 5
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_5.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_5.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmor6
+  suffix: Ebony, Pattern 6
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_6.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_6.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmor7
+  suffix: Ebony, Pattern 7
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_7.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_7.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmor8
+  suffix: Ebony, Pattern 8
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_8.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_8.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorBronze2
+  suffix: Bronze, Pattern 2
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_bronze_2.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_bronze_2.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorBronze3
+  suffix: Bronze, Pattern 3
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_bronze_3.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_bronze_3.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorBronze4
+  suffix: Bronze, Pattern 4
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_bronze_4.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_bronze_4.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorBronze5
+  suffix: Bronze, Pattern 5
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_bronze_5.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_bronze_5.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorBronze6
+  suffix: Bronze, Pattern 6
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_bronze_6.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_bronze_6.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorBronze7
+  suffix: Bronze, Pattern 7
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_bronze_7.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_bronze_7.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorBronze8
+  suffix: Bronze, Pattern 8
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_bronze_8.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_bronze_8.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorSilver2
+  suffix: Silver, Pattern 2
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_silver_2.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_silver_2.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorSilver3
+  suffix: Silver, Pattern 3
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_silver_3.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_silver_3.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorSilver4
+  suffix: Silver, Pattern 4
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_silver_4.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_silver_4.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorSilver5
+  suffix: Silver, Pattern 5
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_silver_5.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_silver_5.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorSilver6
+  suffix: Silver, Pattern 6
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_silver_6.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_silver_6.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorSilver7
+  suffix: Silver, Pattern 7
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_silver_7.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_silver_7.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorSilver8
+  suffix: Silver, Pattern 8
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_silver_8.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_silver_8.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorCrimson2
+  suffix: Crimson, Pattern 2
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_crimson_2.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_crimson_2.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorCrimson3
+  suffix: Crimson, Pattern 3
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_crimson_3.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_crimson_3.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorCrimson4
+  suffix: Crimson, Pattern 4
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_crimson_4.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_crimson_4.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorCrimson5
+  suffix: Crimson, Pattern 5
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_crimson_5.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_crimson_5.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorCrimson6
+  suffix: Crimson, Pattern 6
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_crimson_6.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_crimson_6.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorCrimson7
+  suffix: Crimson, Pattern 7
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_crimson_7.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_crimson_7.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorCrimson8
+  suffix: Crimson, Pattern 8
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_crimson_8.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_crimson_8.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorBone2
+  suffix: Bone, Pattern 2
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_bone_2.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_bone_2.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorBone3
+  suffix: Bone, Pattern 3
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_bone_3.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_bone_3.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorBone4
+  suffix: Bone, Pattern 4
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_bone_4.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_bone_4.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorBone5
+  suffix: Bone, Pattern 5
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_bone_5.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_bone_5.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorBone6
+  suffix: Bone, Pattern 6
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_bone_6.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_bone_6.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorBone7
+  suffix: Bone, Pattern 7
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_bone_7.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_bone_7.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaClanArmorBone8
+  suffix: Bone, Pattern 8
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_clan_bone_8.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_clan_bone_8.rsi
+
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaThrallArmorEbony
+  name: ebony thrall armor
+  description: A human-sized suit of alien thrall armor.
+  suffix: Thrall, Ebony
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_thrall_ebony.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_thrall_ebony.rsi
+  - type: CMArmor
+    melee: 35
+    bullet: 40
+    bio: 40
+    explosionArmor: 35
+
+- type: entity
+  parent: CMUYautjaThrallArmorEbony
+  id: CMUYautjaThrallArmorSilver
+  suffix: Thrall, Silver
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_thrall_silver.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_thrall_silver.rsi
+
+- type: entity
+  parent: CMUYautjaThrallArmorEbony
+  id: CMUYautjaThrallArmorGold
+  suffix: Thrall, Gold
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_thrall_gold.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_thrall_gold.rsi
+
+- type: entity
+  parent: CMUYautjaThrallArmorEbony
+  id: CMUYautjaThrallArmorCrimson
+  suffix: Thrall, Crimson
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_thrall_crimson.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_thrall_crimson.rsi
+
+- type: entity
+  parent: CMUYautjaThrallArmorEbony
+  id: CMUYautjaThrallArmorBone
+  suffix: Thrall, Bone
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_thrall_bone.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_thrall_bone.rsi
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaHeavyClanArmor
+  name: heavy clan armor
+  description: A suit of armor with heavy padding. It looks old, yet functional.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_heavy_clan.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_heavy_clan.rsi
+    equipDelay: 2
+    unequipDelay: 2
+  - type: RMCArmorSpeedTier
+    speedTier: very light
+  - type: ClothingSpeedModifier
+    walkModifier: 1
+    sprintModifier: 1
+  - type: HeldSpeedModifier
+  - type: CMArmor
+    melee: 35
+    bullet: 40
+    bio: 50
+    explosionArmor: 50
+
+- type: entity
+  parent: CMUYautjaHeavyClanArmor
+  id: CMUYautjaHeavyClanArmorBronze
+  suffix: Bronze
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_heavy_clan_bronze.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_heavy_clan_bronze.rsi
+
+- type: entity
+  parent: CMUYautjaHeavyClanArmor
+  id: CMUYautjaHeavyClanArmorSilver
+  suffix: Silver
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_heavy_clan_silver.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_heavy_clan_silver.rsi
+
+- type: entity
+  parent: CMUYautjaHeavyClanArmor
+  id: CMUYautjaHeavyClanArmorCrimson
+  suffix: Crimson
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_heavy_clan_crimson.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_heavy_clan_crimson.rsi
+
+- type: entity
+  parent: CMUYautjaHeavyClanArmor
+  id: CMUYautjaHeavyClanArmorBone
+  suffix: Bone
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_heavy_clan_bone.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_heavy_clan_bone.rsi
+
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaBadBloodArmorPatchwork
+  name: patchwork clan armor
+  description: A suit of Yautja armor rebuilt from scavenged and mismatched plates.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_patchwork.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_badblood_patchwork.rsi
+  - type: CMArmor
+    melee: 35
+    bullet: 40
+    bio: 45
+    explosionArmor: 40
+
+- type: entity
+  parent: CMUYautjaBadBloodArmorPatchwork
+  id: CMUYautjaBadBloodArmorLunatic
+  name: lunatic clan armor
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_lunatic.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_badblood_lunatic.rsi
+
+- type: entity
+  parent: CMUYautjaBadBloodArmorPatchwork
+  id: CMUYautjaBadBloodArmorScavenger
+  name: scavenger clan armor
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_scavenger.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_badblood_scavenger.rsi
+
+- type: entity
+  parent: CMUYautjaBadBloodArmorPatchwork
+  id: CMUYautjaBadBloodArmorVenator
+  name: venator clan armor
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_venator.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_badblood_venator.rsi
+
+- type: entity
+  parent: CMUYautjaBadBloodArmorPatchwork
+  id: CMUYautjaBadBloodArmorCommando
+  name: commando clan armor
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_commando.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_badblood_commando.rsi
+
+- type: entity
+  parent: CMUYautjaBadBloodArmorPatchwork
+  id: CMUYautjaBadBloodArmorBane
+  name: bane clan armor
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_bane.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_badblood_bane.rsi
+
+- type: entity
+  parent: CMUYautjaBadBloodArmorPatchwork
+  id: CMUYautjaBadBloodArmorPatchworkAlt
+  name: alternate patchwork clan armor
+  suffix: Alternate
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_patchwork_alt.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_badblood_patchwork_alt.rsi
+
+- type: entity
+  parent: CMUYautjaBadBloodArmorPatchwork
+  id: CMUYautjaBadBloodArmorScavengerAlt
+  name: alternate scavenger clan armor
+  suffix: Alternate
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_scavenger_alt.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_badblood_scavenger_alt.rsi
+
+- type: entity
+  parent: CMUYautjaBadBloodArmorPatchwork
+  id: CMUYautjaBadBloodArmorCommandoAlt
+  name: alternate commando clan armor
+  suffix: Alternate
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_badblood_commando_alt.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_badblood_commando_alt.rsi
+
+
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUYautjaEmissaryArmorClassic
+  name: YM4 pattern clan armor
+  suffix: Classic
+  description: A suit of oversized armor built from M3 pattern plating and smart-gunner mesh, built for something larger than any normal man.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_emissary_classic.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_emissary_classic.rsi
+  - type: CMArmor
+    melee: 35
+    bullet: 40
+    bio: 50
+    explosionArmor: 45
+
+- type: entity
+  parent: CMUYautjaEmissaryArmorClassic
+  id: CMUYautjaEmissaryArmorDesert
+  suffix: Desert
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_emissary_desert.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_emissary_desert.rsi
+
+- type: entity
+  parent: CMUYautjaEmissaryArmorClassic
+  id: CMUYautjaEmissaryArmorJungle
+  suffix: Jungle
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_emissary_jungle.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_emissary_jungle.rsi
+
+- type: entity
+  parent: CMUYautjaEmissaryArmorClassic
+  id: CMUYautjaEmissaryArmorSnow
+  suffix: Snow
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_emissary_snow.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_emissary_snow.rsi
+
+- type: entity
+  parent: CMUYautjaEmissaryArmorClassic
+  id: CMUYautjaEmissaryArmorUrban
+  suffix: Urban
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/armor_emissary_urban.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/armor_emissary_urban.rsi
+
+- type: entity
+  parent: RMCUniformBase
+  id: CMUYautjaBodyMesh
+  name: body mesh
+  description: A set of very fine chainlink in a meshwork for comfort and utility.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/body_mesh.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/body_mesh.rsi
+  - type: CMArmor
+    melee: 10
+    bullet: 10
+    bio: 10
+    explosionArmor: 10
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: CMUYautjaBodyMesh
+  id: CMUYautjaAncientAlienMesh
+  name: ancient alien mesh suit
+  description: A strange alloy weave in the form of a vest. It feels cold with an alien weight.
+
+- type: entity
+  parent: CMUYautjaBodyMesh
+  id: CMUYautjaThrallChainshirt
+  name: thrall chainshirt
+  description: A light alien mesh undersuit sized for a human thrall.
+  suffix: Yautja, Thrall
+  components:
+  - type: CMArmor
+    melee: 10
+    bullet: 10
+    bio: 10
+    explosionArmor: 10
+
+- type: entity
+  parent: ClothingShoesBase
+  id: CMUYautjaGreavesBase
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_clan.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_clan.rsi
+    unequipSound:
+      collection: RMCEquipArmor
+  - type: EmitSoundOnDrop
+    sound:
+      collection: RMCEquipArmor
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      collection: RMCEquipArmor
+      params:
+        volume: -4
+  - type: CMArmor
+    melee: 10
+    bullet: 10
+    bio: 10
+    explosionArmor: 10
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: CMUYautjaGreavesBase
+  id: CMUYautjaAncientAlienGreaves
+  name: ancient alien greaves
+  description: Greaves made from scraps of cloth and a strange alloy. They feel cold with an alien weight.
+
+- type: entity
+  parent: CMUYautjaClanGreaves2
+  id: CMUYautjaStoneGreaves
+  name: alien stone greaves
+  description: Heavy stone greaves balanced for hunters who can carry the impossible.
+  suffix: Yautja, Flavor
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_clan_2.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_clan_2.rsi
+  - type: CMArmor
+    melee: 10
+    bullet: 10
+    bio: 10
+    explosionArmor: 10
+
+- type: entity
+  parent: CMUYautjaGreavesBase
+  id: CMUYautjaClanGreaves
+  name: clan greaves
+  description: A pair of armored, perfectly balanced boots. Ideal for running through the jungle.
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesBronze
+  suffix: Bronze
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_bronze.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_bronze.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesSilver
+  suffix: Silver
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_silver.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_silver.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesCrimson
+  suffix: Crimson
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_crimson.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_crimson.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesBone
+  suffix: Bone
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_bone.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_bone.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreaves2
+  suffix: Ebony, Pattern 2
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_clan_2.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_clan_2.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreaves3
+  suffix: Ebony, Pattern 3
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_clan_3.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_clan_3.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreaves4
+  suffix: Ebony, Pattern 4
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_clan_4.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_clan_4.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesBronze2
+  suffix: Bronze, Pattern 2
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_bronze_2.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_bronze_2.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesBronze3
+  suffix: Bronze, Pattern 3
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_bronze_3.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_bronze_3.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesBronze4
+  suffix: Bronze, Pattern 4
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_bronze_4.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_bronze_4.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesSilver2
+  suffix: Silver, Pattern 2
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_silver_2.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_silver_2.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesSilver3
+  suffix: Silver, Pattern 3
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_silver_3.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_silver_3.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesSilver4
+  suffix: Silver, Pattern 4
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_silver_4.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_silver_4.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesCrimson2
+  suffix: Crimson, Pattern 2
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_crimson_2.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_crimson_2.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesCrimson3
+  suffix: Crimson, Pattern 3
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_crimson_3.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_crimson_3.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesCrimson4
+  suffix: Crimson, Pattern 4
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_crimson_4.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_crimson_4.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesBone2
+  suffix: Bone, Pattern 2
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_bone_2.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_bone_2.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesBone3
+  suffix: Bone, Pattern 3
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_bone_3.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_bone_3.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaClanGreavesBone4
+  suffix: Bone, Pattern 4
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_bone_4.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_bone_4.rsi
+
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaThrallGreavesEbony
+  name: ebony thrall greaves
+  description: Human-sized alien greaves for a Yautja thrall.
+  suffix: Thrall, Ebony
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_thrall_ebony.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_thrall_ebony.rsi
+  - type: CMArmor
+    melee: 10
+    bullet: 10
+    bio: 10
+    explosionArmor: 10
+
+- type: entity
+  parent: CMUYautjaThrallGreavesEbony
+  id: CMUYautjaThrallGreavesSilver
+  suffix: Thrall, Silver
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_thrall_silver.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_thrall_silver.rsi
+
+- type: entity
+  parent: CMUYautjaThrallGreavesEbony
+  id: CMUYautjaThrallGreavesGold
+  suffix: Thrall, Gold
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_thrall_gold.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_thrall_gold.rsi
+
+- type: entity
+  parent: CMUYautjaThrallGreavesEbony
+  id: CMUYautjaThrallGreavesCrimson
+  suffix: Thrall, Crimson
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_thrall_crimson.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_thrall_crimson.rsi
+
+- type: entity
+  parent: CMUYautjaThrallGreavesEbony
+  id: CMUYautjaThrallGreavesBone
+  suffix: Thrall, Bone
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_thrall_bone.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_thrall_bone.rsi
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaBadBloodGreavesPatchwork
+  name: patchwork clan greaves
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_badblood_patchwork.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_badblood_patchwork.rsi
+
+- type: entity
+  parent: CMUYautjaBadBloodGreavesPatchwork
+  id: CMUYautjaBadBloodGreavesLunatic
+  name: lunatic clan greaves
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_badblood_lunatic.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_badblood_lunatic.rsi
+
+- type: entity
+  parent: CMUYautjaBadBloodGreavesPatchwork
+  id: CMUYautjaBadBloodGreavesScavenger
+  name: scavenger clan greaves
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_badblood_scavenger.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_badblood_scavenger.rsi
+
+- type: entity
+  parent: CMUYautjaBadBloodGreavesPatchwork
+  id: CMUYautjaBadBloodGreavesVenator
+  name: venator clan greaves
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_badblood_venator.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_badblood_venator.rsi
+
+- type: entity
+  parent: CMUYautjaBadBloodGreavesPatchwork
+  id: CMUYautjaBadBloodGreavesCommando
+  name: commando clan greaves
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_badblood_commando.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_badblood_commando.rsi
+
+- type: entity
+  parent: CMUYautjaBadBloodGreavesPatchwork
+  id: CMUYautjaBadBloodGreavesBane
+  name: bane clan greaves
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_badblood_bane.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_badblood_bane.rsi
+
+- type: entity
+  parent: CMUYautjaBadBloodGreavesPatchwork
+  id: CMUYautjaBadBloodGreavesPatchworkAlt
+  name: alternate patchwork clan greaves
+  suffix: Alternate
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_badblood_patchwork_alt.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_badblood_patchwork_alt.rsi
+
+- type: entity
+  parent: CMUYautjaBadBloodGreavesPatchwork
+  id: CMUYautjaBadBloodGreavesScavengerAlt
+  name: alternate scavenger clan greaves
+  suffix: Alternate
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_badblood_scavenger_alt.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_badblood_scavenger_alt.rsi
+
+- type: entity
+  parent: CMUYautjaBadBloodGreavesPatchwork
+  id: CMUYautjaBadBloodGreavesCommandoAlt
+  name: alternate commando clan greaves
+  suffix: Alternate
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_badblood_commando_alt.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_badblood_commando_alt.rsi
+
+
+- type: entity
+  parent: CMUYautjaClanGreaves
+  id: CMUYautjaEmissaryGreavesClassic
+  name: YM4 pattern clan greaves
+  suffix: Classic
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_emissary_classic.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_emissary_classic.rsi
+
+- type: entity
+  parent: CMUYautjaEmissaryGreavesClassic
+  id: CMUYautjaEmissaryGreavesDesert
+  suffix: Desert
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_emissary_desert.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_emissary_desert.rsi
+
+- type: entity
+  parent: CMUYautjaEmissaryGreavesClassic
+  id: CMUYautjaEmissaryGreavesJungle
+  suffix: Jungle
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_emissary_jungle.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_emissary_jungle.rsi
+
+- type: entity
+  parent: CMUYautjaEmissaryGreavesClassic
+  id: CMUYautjaEmissaryGreavesSnow
+  suffix: Snow
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_emissary_snow.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_emissary_snow.rsi
+
+- type: entity
+  parent: CMUYautjaEmissaryGreavesClassic
+  id: CMUYautjaEmissaryGreavesUrban
+  suffix: Urban
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/greaves_emissary_urban.rsi
+  - type: Clothing
+    sprite: _CMU14/Yautja/greaves_emissary_urban.rsi
+
+- type: entity
+  parent: Clothing
+  id: CMUYautjaCapeBase
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/cape_full.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Clothing
+    sprite: _CMU14/Yautja/cape_full.rsi
+    quickEquip: false
+    slots:
+    - back
+    equipSound:
+      collection: storageRustle
+    unequipSound:
+      collection: RMCEquipArmor
+
+- type: entity
+  parent: CMUYautjaCapeBase
+  id: CMUYautjaCapeFull
+  name: battle-worn cape
+  description: A battle-worn cape passed down by elder Yautja.
+
+- type: entity
+  parent: CMUYautjaCapeFull
+  id: CMUYautjaCapeCeremonial
+  suffix: Ceremonial
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/cape_ceremonial.rsi
+    state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/cape_ceremonial.rsi
+
+- type: entity
+  parent: CMUYautjaCapeFull
+  id: CMUYautjaCapeThird
+  suffix: Third
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/cape_third.rsi
+    state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/cape_third.rsi
+
+- type: entity
+  parent: CMUYautjaCapeFull
+  id: CMUYautjaCapeHalf
+  suffix: Half
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/cape_half.rsi
+    state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/cape_half.rsi
+
+- type: entity
+  parent: CMUYautjaCapeFull
+  id: CMUYautjaCapeQuarter
+  suffix: Quarter
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/cape_quarter.rsi
+    state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/cape_quarter.rsi
+
+- type: entity
+  parent: CMUYautjaCapeFull
+  id: CMUYautjaCapePoncho
+  name: councilor poncho
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/cape_poncho.rsi
+    state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/cape_poncho.rsi
+
+- type: entity
+  parent: CMUYautjaCapeFull
+  id: CMUYautjaCapeDamaged
+  suffix: Damaged
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/cape_damaged.rsi
+    state: icon
+  - type: Clothing
+    sprite: _CMU14/Yautja/cape_damaged.rsi

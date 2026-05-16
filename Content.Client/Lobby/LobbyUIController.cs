@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Content.Client._RMC14.LinkAccount;
 using Content.Client.Guidebook;
@@ -9,6 +10,7 @@ using Content.Client.Station;
 using Content.Shared._RMC14.Armor;
 using Content.Shared.AU14.Allegiance;
 using Content.Shared.AU14.Origin;
+using Content.Shared.AU14.Threats;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
 using Content.Shared.GameTicking;
@@ -27,31 +29,40 @@ using Robust.Client.UserInterface.Controllers;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Client.Lobby;
 
-public sealed class LobbyUIController : UIController, IOnStateEntered<LobbyState>, IOnStateExited<LobbyState>
+public sealed partial class LobbyUIController : UIController, IOnStateEntered<LobbyState>, IOnStateExited<LobbyState>
 {
-    [Dependency] private readonly IClientPreferencesManager _preferencesManager = default!;
-    [Dependency] private readonly IConfigurationManager _configurationManager = default!;
-    [Dependency] private readonly IFileDialogManager _dialogManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
-    [Dependency] private readonly IStateManager _stateManager = default!;
-    [Dependency] private readonly JobRequirementsManager _requirements = default!;
-    [Dependency] private readonly MarkingManager _markings = default!;
-    [Dependency] private readonly LinkAccountManager _linkAccount = default!;
-    [UISystemDependency] private readonly HumanoidAppearanceSystem _humanoid = default!;
-    [UISystemDependency] private readonly ClientInventorySystem _inventory = default!;
-    [UISystemDependency] private readonly StationSpawningSystem _spawn = default!;
-    [UISystemDependency] private readonly GuidebookSystem _guide = default!;
-    [UISystemDependency] private readonly CMArmorSystem _armorSystem = default!;
+    private const float HighJobPreviewScrollDelay = 2.75f;
+
+    [Dependency] private IClientPreferencesManager _preferencesManager = default!;
+    [Dependency] private IConfigurationManager _configurationManager = default!;
+    [Dependency] private IFileDialogManager _dialogManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
+    [Dependency] private IStateManager _stateManager = default!;
+    [Dependency] private JobRequirementsManager _requirements = default!;
+    [Dependency] private MarkingManager _markings = default!;
+    [Dependency] private LinkAccountManager _linkAccount = default!;
+    [UISystemDependency] private HumanoidAppearanceSystem _humanoid = default!;
+    [UISystemDependency] private ClientInventorySystem _inventory = default!;
+    [UISystemDependency] private StationSpawningSystem _spawn = default!;
+    [UISystemDependency] private GuidebookSystem _guide = default!;
+    [UISystemDependency] private CMArmorSystem _armorSystem = default!;
 
     private CharacterSetupGui? _characterSetup;
     private HumanoidProfileEditor? _profileEditor;
     private CharacterSetupGuiSavePanel? _savePanel;
+    private int _lobbyPreviewJobIndex;
+    private float _lobbyPreviewJobTimer;
+    private string _lobbyPreviewJobSignature = string.Empty;
+    private readonly List<LobbyHighJobPreviewEntry> _lobbyPreviewJobs = new();
+    private HumanoidCharacterProfile? _lobbyPreviewJobsProfile;
+    private bool _lobbyPreviewJobsDirty = true;
 
     /// <summary>
     /// This is the characher preview panel in the chat. This should only update if their character updates.
@@ -140,6 +151,12 @@ public sealed class LobbyUIController : UIController, IOnStateEntered<LobbyState
                 _profileEditor.RefreshOrigins();
             }
 
+            if (obj.WasModified<ThreatPrototype>())
+            {
+                _profileEditor.RefreshThreatPreferences();
+                _profileEditor.RefreshJobs();
+            }
+
             if (obj.WasModified<TraitPrototype>())
             {
                 _profileEditor.RefreshTraits();
@@ -171,6 +188,18 @@ public sealed class LobbyUIController : UIController, IOnStateEntered<LobbyState
 
         _characterSetup = null;
         _profileEditor = null;
+        _lobbyPreviewJobIndex = 0;
+        _lobbyPreviewJobTimer = 0;
+        _lobbyPreviewJobSignature = string.Empty;
+        _lobbyPreviewJobs.Clear();
+        _lobbyPreviewJobsProfile = null;
+        _lobbyPreviewJobsDirty = true;
+    }
+
+    public override void FrameUpdate(FrameEventArgs args)
+    {
+        base.FrameUpdate(args);
+        UpdateLobbyPreviewJobRotation(args.DeltaSeconds);
     }
 
     /// <summary>
@@ -201,12 +230,87 @@ public sealed class LobbyUIController : UIController, IOnStateEntered<LobbyState
         {
             PreviewPanel.SetSprite(EntityUid.Invalid);
             PreviewPanel.SetSummaryText(string.Empty);
+            PreviewPanel.SetJobText(string.Empty);
+            _lobbyPreviewJobIndex = 0;
+            _lobbyPreviewJobTimer = 0;
+            _lobbyPreviewJobSignature = string.Empty;
+            _lobbyPreviewJobs.Clear();
+            _lobbyPreviewJobsProfile = null;
+            _lobbyPreviewJobsDirty = true;
             return;
         }
 
-        var dummy = LoadProfileEntity(humanoid, null, true);
+        var entry = GetCurrentLobbyPreviewJob(humanoid);
+        var dummy = LoadProfileEntity(humanoid, entry?.Job, true);
         PreviewPanel.SetSprite(dummy);
         PreviewPanel.SetSummaryText(humanoid.Summary);
+        PreviewPanel.SetJobText(entry?.DisplayName ?? string.Empty);
+    }
+
+    private void UpdateLobbyPreviewJobRotation(float deltaSeconds)
+    {
+        if (PreviewPanel == null ||
+            _stateManager.CurrentState is not LobbyState ||
+            _preferencesManager.Preferences?.SelectedCharacter is not HumanoidCharacterProfile humanoid)
+        {
+            return;
+        }
+
+        if (RefreshLobbyPreviewJobs(humanoid))
+        {
+            RefreshLobbyPreview();
+            return;
+        }
+
+        var entries = _lobbyPreviewJobs;
+        if (entries.Count <= 1)
+            return;
+
+        _lobbyPreviewJobTimer += deltaSeconds;
+        if (_lobbyPreviewJobTimer < HighJobPreviewScrollDelay)
+            return;
+
+        _lobbyPreviewJobTimer -= HighJobPreviewScrollDelay;
+        _lobbyPreviewJobIndex = (_lobbyPreviewJobIndex + 1) % entries.Count;
+        RefreshLobbyPreview();
+    }
+
+    private LobbyHighJobPreviewEntry? GetCurrentLobbyPreviewJob(HumanoidCharacterProfile profile)
+    {
+        RefreshLobbyPreviewJobs(profile);
+        var entries = _lobbyPreviewJobs;
+
+        if (entries.Count == 0)
+            return null;
+
+        _lobbyPreviewJobIndex %= entries.Count;
+        return entries[_lobbyPreviewJobIndex];
+    }
+
+    private bool RefreshLobbyPreviewJobs(HumanoidCharacterProfile profile)
+    {
+        if (!_lobbyPreviewJobsDirty &&
+            ReferenceEquals(_lobbyPreviewJobsProfile, profile))
+        {
+            return false;
+        }
+
+        var previousSignature = _lobbyPreviewJobSignature;
+
+        _lobbyPreviewJobs.Clear();
+        _lobbyPreviewJobs.AddRange(LobbyHighJobPreview.GetHighPriorityJobs(profile, _prototypeManager));
+        _lobbyPreviewJobsProfile = profile;
+        _lobbyPreviewJobsDirty = false;
+        _lobbyPreviewJobSignature = LobbyHighJobPreview.GetSignature(_lobbyPreviewJobs);
+
+        var changed = previousSignature != _lobbyPreviewJobSignature;
+        if (changed)
+        {
+            _lobbyPreviewJobIndex = 0;
+            _lobbyPreviewJobTimer = 0;
+        }
+
+        return changed;
     }
 
     private void RefreshProfileEditor()
@@ -366,6 +470,10 @@ public sealed class LobbyUIController : UIController, IOnStateEntered<LobbyState
     /// </summary>
     public JobPrototype GetPreferredJob(HumanoidCharacterProfile profile)
     {
+        var highPriorityJobs = LobbyHighJobPreview.GetHighPriorityJobs(profile, _prototypeManager);
+        if (highPriorityJobs.Count > 0)
+            return highPriorityJobs[0].Job;
+
         var highPriorityJob = profile.JobPriorities.FirstOrDefault(p => p.Value == JobPriority.High).Key;
         // ReSharper disable once NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract (what is resharper smoking?)
         return _prototypeManager.Index<JobPrototype>(highPriorityJob.Id ?? SharedGameTicker.FallbackOverflowJob);

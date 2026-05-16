@@ -40,6 +40,7 @@
     slots:
       gun_magazine:
         name: Magazine
+        startingItem: CMMagazineSniperM96S
         insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_reload.ogg
         ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_unload.ogg
         priority: 2
@@ -59,7 +60,10 @@
         whitelist:
           tags:
           - RMCAttachmentMagneticHarness
+          - RMCAttachmentS84xTelescopicScope
   - type: AttachableHolderVisuals
     offsets:
       rmc-aslot-underbarrel: 0.21875, -0.343
       rmc-aslot-rail: -0.37, 0.1
+  - type: RMCGunChamber
+    enabled: false

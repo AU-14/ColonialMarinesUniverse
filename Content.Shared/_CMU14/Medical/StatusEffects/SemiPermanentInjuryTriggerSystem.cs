@@ -10,10 +10,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CMU14.Medical.StatusEffects;
 
-public sealed class SemiPermanentInjuryTriggerSystem : EntitySystem
+public sealed partial class SemiPermanentInjuryTriggerSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly SharedStatusEffectsSystem _status = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private SharedStatusEffectsSystem _status = default!;
 
     private static readonly EntProtoId Whiplash = "StatusEffectCMUWhiplash";
 

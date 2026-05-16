@@ -27,6 +27,8 @@
         recommended: true
       - id: RMCTesla
       - id: RMCSentryFire
+      - id: RMCM271A2BruteLauncherRigFilled
+        name: M6H-BRUTE Breaching Launcher
     - name: Handheld Defense Upgrade
       choices: { CMHandheldDefenseUpgrade: 1 }
       entries:
@@ -69,8 +71,8 @@
         points: 18
       - id: RMCPacketGrenadeIncendiaryFilled
         points: 18
-    #- id: CMM40HPDPPhosphorusPacket3
-    #  points: 18
+      - id: RMCPacketGrenadeWhitePhosphorusFilled
+        points: 18
       - id: RMCPacketGrenadeSmokeFilled
         points: 9
       - id: RMCPacketGrenadeM74AGMFFilled

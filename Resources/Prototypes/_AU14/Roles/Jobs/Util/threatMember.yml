@@ -6,6 +6,7 @@
   playTimeTracker: AUJobThreatMember
   hidden: false
   supervisors: nobody
+  icon: "AU14JobIconThreatMember"
   jobPreviewEntity: RMCPlayerXenoQueenPreview
   accessGroups:
   - CMAccessXeno
@@ -21,7 +22,7 @@
   id: AUThreatJobBase
   description: null
   joinNotifyCrew: false
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconThreatMember"
   supervisors: au-job-name-threat-leader
   accessGroups:
   - CMAccessXeno

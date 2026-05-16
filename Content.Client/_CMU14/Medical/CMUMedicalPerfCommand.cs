@@ -9,9 +9,9 @@ using Robust.Shared.Map;
 
 namespace Content.Client._CMU14.Medical;
 
-public sealed class CMUMedicalPerfCommand : IConsoleCommand
+public sealed partial class CMUMedicalPerfCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private IEntityManager _entities = default!;
 
     private readonly HashSet<EntityUid> _nearby = new();
     private readonly HashSet<Entity<StatusIconComponent>> _statusIcons = new();

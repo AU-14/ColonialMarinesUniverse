@@ -582,21 +582,21 @@
             sprite: _RMC14/Interface/tech_tree.rsi
             state: budget_req
         - name: Search and Rescue K9 Team
-          description: Summon a Search and Rescue K9 Team.
+          description: Hail a nearby Search and Rescue K9 Team.
           cost: 15
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent
-            thirdPartyId: AU14IntelThirdPartyK9GOVFOR
+            thirdPartyId: AU14IntelThirdPartyK9
           - !type:TechAnnounceEvent
             author: INTEL OPERATIONS
-            message: A Search and Rescue K9 Team has been awoken to aid with the operation.
+            message: A Search and Rescue K9 Team flying nearby has indicated they will touch down.
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: cryotroops
         - name: LACN Commandos Scout Team
           description: Summon an LACN Commandos Scout Team.
-          cost: 25
+          cost: 30
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent
@@ -620,19 +620,6 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: cryotroops
-        - name: FORECON Marksman Team
-          description: Summon a FORECON Sniper Team.
-          cost: 25
-          repurchasable: false
-          events:
-          - !type:TechPartySpawnEvent
-            thirdPartyId: AU14IntelThirdPartySniperGOVFOR
-          - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A FORECON Sniper Team has been dispatched to aid with the operation.
-          icon:
-            sprite: _RMC14/Interface/tech_tree.rsi
-            state: cryotroops
         - name: Unlock Tier 3
           description: Transitions the tree to another tier.
           cost: 1
@@ -643,22 +630,9 @@
             sprite: _RMC14/Interface/tech_tree.rsi
             state: upgrade
       -
-        - name: RMC Rapid Reaction Troop
-          description: Summon a Royal Marines Commando Rapid Reaction Troop.
-          cost: 50
-          repurchasable: false
-          events:
-          - !type:TechPartySpawnEvent
-            thirdPartyId: RMCRRT
-          - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A Royal Marines Commando Rapid Reaction Troop has been dispatched to aid with the operation.
-          icon:
-            sprite: _RMC14/Interface/tech_tree.rsi
-            state: beacon
         - name: US Army 32nd ArmDiv reinforcements
           description: Summon a squad from US Army 32nd Armored Division.
-          cost: 60
+          cost: 80
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent

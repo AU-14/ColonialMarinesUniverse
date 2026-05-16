@@ -8,10 +8,12 @@
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianColonist
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconColonyColonist"
+  hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: Colonist (CMU)
   accessGroups:
   - Colonist
   roleWeight: 0.25

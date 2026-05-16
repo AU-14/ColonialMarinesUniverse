@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Attachable.Components;
+using Content.Shared._RMC14.Attachable.Components;
 using Content.Shared._RMC14.Attachable.Events;
 using Content.Shared.Prying.Components;
 using Content.Shared.Tools.Components;
@@ -8,10 +8,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Attachable.Systems;
 
-public sealed class AttachablePryingSystem : EntitySystem
+public sealed partial class AttachablePryingSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

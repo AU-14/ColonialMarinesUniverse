@@ -1,0 +1,135 @@
+- type: job
+  parent: CMJobBase
+  id: CMUYautjaHunter
+  name: cmu-yautja-job-name-hunter
+  description: cmu-yautja-job-description-hunter
+  playTimeTracker: CMUYautjaHunter
+  icon: CMJobIconEmpty
+  joinNotifyCrew: false
+  hidden: true
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Yautja
+    - type: IgnoreXenoWeedsSlowdown
+    - type: Skills
+      skills:
+        RMCSkillMedical: 3
+        RMCSkillSurgery: 2
+
+- type: startingGear
+  id: CMUYautjaHunterGear
+  equipment:
+    ears: CMUYautjaCommunicator
+    mask: CMUYautjaMask
+    gloves: CMUYautjaBracer
+    back: CMUYautjaCloakPack
+    outerClothing: CMUYautjaClanArmor
+    jumpsuit: CMUYautjaBodyMesh
+    shoes: CMUYautjaClanGreaves
+    belt: CMUYautjaTrophyBelt
+    pocket1: CMUYautjaSmartDisc
+    pocket2: CMUYautjaMedicomp
+  storage:
+    back:
+    - CMUYautjaHuntingTrap
+    - CMUYautjaHuntingTrap
+    - CMUYautjaPolishingRag
+    - CMUYautjaCleanserGelVial
+    - CMUYautjaRelayBeacon
+    - CMUYautjaHuntingPouch
+    - CMUYautjaToolbeltFilled
+    - CMUYautjaHoundObservationPad
+
+- type: startingGear
+  parent: CMUYautjaHunterGear
+  id: CMUYautjaHunterGearBronze
+  equipment:
+    outerClothing: CMUYautjaClanArmorBronze
+
+- type: startingGear
+  parent: CMUYautjaHunterGear
+  id: CMUYautjaHunterGearSilver
+  equipment:
+    outerClothing: CMUYautjaClanArmorSilver
+
+- type: startingGear
+  parent: CMUYautjaHunterGear
+  id: CMUYautjaHunterGearCrimson
+  equipment:
+    outerClothing: CMUYautjaClanArmorCrimson
+
+- type: startingGear
+  parent: CMUYautjaHunterGear
+  id: CMUYautjaHunterGearBone
+  equipment:
+    outerClothing: CMUYautjaClanArmorBone
+
+- type: entity
+  id: CMURandomHumanoidYautjaHunter
+  name: yautja hunter spawner
+  suffix: Spawner, Player, Event
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/mask.rsi
+    state: icon
+  - type: RandomHumanoidSpawner
+    settings: CMUYautjaHunter
+
+- type: randomHumanoidSettings
+  id: CMUYautjaHunter
+  species: Yautja
+  randomizeName: true
+  components:
+  - type: Yautja
+  - type: IgnoreXenoWeedsSlowdown
+  - type: Skills
+    skills:
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.4
+    baseSprintSpeed: 8.4
+  - type: Damageable
+    damageContainer: Biological
+    damageModifierSet: CMUYautja
+    healthBarThreshold: 5
+  - type: MeleeWeapon
+    soundHit:
+      collection: Punch
+    angle: 0
+    animation: WeaponArcFist
+    attackRate: 1.15
+    damage:
+      types:
+        Blunt: 12
+        Structural: 3
+  - type: Speech
+    speechSounds: CMUYautjaSpeech
+    allowedEmotes:
+    - Scream
+    - Laugh
+    - Growl
+    - Warcry
+    - CMUYautjaClick
+    - CMUYautjaRoar
+    - CMUYautjaLaugh
+    - CMUYautjaGrowl
+    - CMUYautjaPain
+    - CMUYautjaDeathCry
+    - CMUYautjaDeathLaugh
+  - type: Vocal
+    sounds:
+      Male: CMUMaleYautja
+      Female: CMUFemaleYautja
+      Unsexed: CMUMaleYautja
+
+- type: playTimeTracker
+  id: CMUYautjaHunter
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: CMUYautjaJobIcon
+  icon:
+    sprite: _CMU14/Yautja/mask.rsi
+    state: icon

@@ -11,6 +11,7 @@ using Content.Shared._CMU14.Medical.Surgery;
 using Content.Shared._CMU14.Medical.Surgery.Conditions;
 using Content.Shared._CMU14.Medical.Surgery.Effects;
 using Content.Shared._CMU14.Medical.Wounds;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Conditions;
@@ -31,18 +32,18 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Medical.Surgery;
 
-public sealed class CMUSurgeryDispatchSystem : EntitySystem
+public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly CMSurgerySystem _rmcSurgery = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedCMUSurgeryFlowSystem _flowSurgery = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private CMSurgerySystem _rmcSurgery = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private SharedCMUSurgeryFlowSystem _flowSurgery = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
 
@@ -81,7 +82,7 @@ public sealed class CMUSurgeryDispatchSystem : EntitySystem
         if (!IsLayerEnabled())
             return false;
 
-        if (!HasComp<CMUHumanMedicalComponent>(patient))
+        if (!IsCmuOrganicSurgeryPatient(patient))
             return false;
 
         if (!_flowSurgery.CanOperateOnPatient(patient, surgeon, popup: true))
@@ -122,6 +123,12 @@ public sealed class CMUSurgeryDispatchSystem : EntitySystem
 
         return TryComp<CMUSurgeryInFlightComponent>(lockComp.Part, out var inFlight)
             && inFlight.Surgeon == surgeon;
+    }
+
+    private bool IsCmuOrganicSurgeryPatient(EntityUid patient)
+    {
+        return HasComp<CMUHumanMedicalComponent>(patient)
+            || HasComp<YautjaComponent>(patient);
     }
 
     private bool TryArmByToolIntent(EntityUid surgeon, EntityUid patient, EntityUid tool, List<CMUSurgeryPartEntry> parts)

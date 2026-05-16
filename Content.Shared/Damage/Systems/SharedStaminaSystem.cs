@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
 using Content.Shared.CCVar;
@@ -12,6 +13,7 @@ using Content.Shared.Projectiles;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Rounding;
 using Content.Shared.Stunnable;
+using Content.Shared.Tag;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee.Events;
 using JetBrains.Annotations;
@@ -20,21 +22,25 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.Damage.Systems;
 
 public abstract partial class SharedStaminaSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly MetaDataSystem _metadata = default!;
-    [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
-    [Dependency] private readonly SharedStunSystem _stunSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
+    private static readonly ProtoId<TagPrototype> TaserTag = "Taser";
+
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
+    [Dependency] private SharedColorFlashEffectSystem _color = default!;
+    [Dependency] private SharedStunSystem _stunSystem = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private TagSystem _tag = default!;
 
     /// <summary>
     /// How much of a buffer is there between the stun duration and when stuns can be re-applied.
@@ -155,6 +161,9 @@ public abstract partial class SharedStaminaSystem : EntitySystem
         // Split stamina damage between all eligible targets.
         foreach (var ent in args.HitEntities)
         {
+            if (IsYautjaTaserImmune(uid, ent))
+                continue;
+
             if (!stamQuery.TryGetComponent(ent, out var stam))
                 continue;
 
@@ -199,6 +208,9 @@ public abstract partial class SharedStaminaSystem : EntitySystem
 
     private void OnCollide(EntityUid uid, StaminaDamageOnCollideComponent component, EntityUid target)
     {
+        if (IsYautjaTaserImmune(uid, target))
+            return;
+
         // you can't inflict stamina damage on things with no stamina component
         // this prevents stun batons from using up charges when throwing it at lockers or lights
         if (!HasComp<StaminaComponent>(target))
@@ -210,6 +222,11 @@ public abstract partial class SharedStaminaSystem : EntitySystem
             return;
 
         TakeStaminaDamage(target, component.Damage, source: uid, sound: component.Sound);
+    }
+
+    private bool IsYautjaTaserImmune(EntityUid source, EntityUid target)
+    {
+        return HasComp<YautjaComponent>(target) && _tag.HasTag(source, TaserTag);
     }
 
     private void SetStaminaAlert(EntityUid uid, StaminaComponent? component = null)

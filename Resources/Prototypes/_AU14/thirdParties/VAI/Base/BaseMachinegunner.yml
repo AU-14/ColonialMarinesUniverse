@@ -9,6 +9,7 @@
   playTimeTracker: AU14VAIMachinegunner
   spawnMenuRoleName: VAI Machinegunner (Base)
   joinNotifyCrew: false
+  hasIcon: false
   supervisors: au14-job-name-vai-teamleader
   special:
   - !type:AddComponentSpecial
@@ -32,7 +33,7 @@
         RMCSkillJtac: 1
         RMCSkillEndurance: 1
         RMCSkillSmartGun: 1
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: AU14VAIMGPreset
     - type: JobPrefix
       prefix: au14-job-prefix-vai-machinegunner
@@ -43,7 +44,7 @@
   name: vai mg preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomGearOther:
     -
       - [ AU14GlassesBiMex ] # glasses

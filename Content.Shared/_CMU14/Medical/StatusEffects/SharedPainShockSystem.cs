@@ -25,15 +25,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.StatusEffects;
 
-public abstract class SharedPainShockSystem : EntitySystem
+public abstract partial class SharedPainShockSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly INetManager Net = default!;
-    [Dependency] protected readonly IRobustRandom Random = default!;
-    [Dependency] protected readonly SharedBodySystem Body = default!;
-    [Dependency] protected readonly SharedFractureSystem Fracture = default!;
-    [Dependency] protected readonly SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected INetManager Net = default!;
+    [Dependency] protected IRobustRandom Random = default!;
+    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected SharedFractureSystem Fracture = default!;
+    [Dependency] protected SharedStatusEffectsSystem Status = default!;
 
     private const float PainScanInterval = 0.5f;
     private const float SourceStackMultiplier = 0.30f;

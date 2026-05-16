@@ -36,11 +36,11 @@ namespace Content.Server.GameTicking
 {
     public sealed partial class GameTicker
     {
-        [Dependency] private readonly DiscordWebhook _discord = default!;
-        [Dependency] private readonly RoleSystem _role = default!;
-        [Dependency] private readonly ITaskManager _taskManager = default!;
-        [Dependency] private readonly SharedRMCPowerSystem _power = default!;
-        [Dependency] private readonly RoundEndSystem _roundEndSystem = default!;
+        [Dependency] private DiscordWebhook _discord = default!;
+        [Dependency] private RoleSystem _role = default!;
+        [Dependency] private ITaskManager _taskManager = default!;
+        [Dependency] private SharedRMCPowerSystem _power = default!;
+        [Dependency] private RoundEndSystem _roundEndSystem = default!;
 
         private static readonly Counter RoundNumberMetric = Metrics.CreateCounter(
             "ss14_round_number",
@@ -175,10 +175,10 @@ namespace Content.Server.GameTicking
                     {
                         // Get the map entity from the MapId
                         var mapEntity = _mapManager.GetMapEntityId(mapId);
-                        if (!EntityManager.HasComponent<Content.Shared._RMC14.Rules.RMCPlanetComponent>(mapEntity))
-                            EntityManager.AddComponent<Content.Shared._RMC14.Rules.RMCPlanetComponent>(mapEntity);
-                        if (!EntityManager.HasComponent<TacticalMapComponent>((EntityUid)mapEntity))
-                            EntityManager.AddComponent<TacticalMapComponent>(mapEntity);
+                        if (!HasComp<Content.Shared._RMC14.Rules.RMCPlanetComponent>(mapEntity))
+                            AddComp<Content.Shared._RMC14.Rules.RMCPlanetComponent>(mapEntity);
+                        if (!HasComp<TacticalMapComponent>((EntityUid)mapEntity))
+                            AddComp<TacticalMapComponent>(mapEntity);
                     }
                 }
             }
@@ -193,14 +193,14 @@ namespace Content.Server.GameTicking
                     var govforGrids = LoadGameMap(govforShipProto, out var _, new DeserializationOptions { InitializeMaps = true });
                     foreach (var grid in govforGrids)
                     {
-                        if (!EntityManager.HasComponent<ShipFactionComponent>(grid))
+                        if (!HasComp<ShipFactionComponent>(grid))
                         {
-                            var comp = EntityManager.AddComponent<ShipFactionComponent>(grid);
+                            var comp = AddComp<ShipFactionComponent>(grid);
                             comp.Faction = "govfor";
                         }
-                        if (!EntityManager.HasComponent<Content.Server.Station.Components.BecomesStationComponent>(grid))
+                        if (!HasComp<Content.Server.Station.Components.BecomesStationComponent>(grid))
                         {
-                            EntityManager.AddComponent<Content.Server.Station.Components.BecomesStationComponent>(grid);
+                            AddComp<Content.Server.Station.Components.BecomesStationComponent>(grid);
                         }
                     }
                 }
@@ -210,14 +210,14 @@ namespace Content.Server.GameTicking
                     var opforGrids = LoadGameMap(opforShipProto, out var _, new DeserializationOptions { InitializeMaps = true });
                     foreach (var grid in opforGrids)
                     {
-                        if (!EntityManager.HasComponent<ShipFactionComponent>(grid))
+                        if (!HasComp<ShipFactionComponent>(grid))
                         {
-                            var comp = EntityManager.AddComponent<ShipFactionComponent>(grid);
+                            var comp = AddComp<ShipFactionComponent>(grid);
                             comp.Faction = "opfor";
                         }
-                        if (!EntityManager.HasComponent<Content.Server.Station.Components.BecomesStationComponent>(grid))
+                        if (!HasComp<Content.Server.Station.Components.BecomesStationComponent>(grid))
                         {
-                            EntityManager.AddComponent<Content.Server.Station.Components.BecomesStationComponent>(grid);
+                            AddComp<Content.Server.Station.Components.BecomesStationComponent>(grid);
                         }
                     }
                 }
@@ -955,7 +955,7 @@ namespace Content.Server.GameTicking
         PostRound = 2
     }
 
-    public sealed class GameRunLevelChangedEvent
+    public sealed partial class GameRunLevelChangedEvent
     {
         public GameRunLevel Old { get; }
         public GameRunLevel New { get; }
@@ -973,7 +973,7 @@ namespace Content.Server.GameTicking
     ///     for example as part of a game rule.
     /// </summary>
     [PublicAPI]
-    public sealed class LoadingMapsEvent : EntityEventArgs
+    public sealed partial class LoadingMapsEvent : EntityEventArgs
     {
         public List<GameMapPrototype> Maps;
 
@@ -991,7 +991,7 @@ namespace Content.Server.GameTicking
     ///     You likely want to subscribe to this after StationSystem.
     /// </remarks>
     [PublicAPI]
-    public sealed class PreGameMapLoad(GameMapPrototype gameMap, DeserializationOptions options, Vector2 offset, Angle rotation) : EntityEventArgs
+    public sealed partial class PreGameMapLoad(GameMapPrototype gameMap, DeserializationOptions options, Vector2 offset, Angle rotation) : EntityEventArgs
     {
         public readonly GameMapPrototype GameMap = gameMap;
         public DeserializationOptions Options = options;
@@ -1006,7 +1006,7 @@ namespace Content.Server.GameTicking
     ///     You likely want to subscribe to this after StationSystem.
     /// </remarks>
     [PublicAPI]
-    public sealed class PostGameMapLoad : EntityEventArgs
+    public sealed partial class PostGameMapLoad : EntityEventArgs
     {
         public readonly GameMapPrototype GameMap;
         public readonly MapId Map;
@@ -1026,7 +1026,7 @@ namespace Content.Server.GameTicking
     ///     Event raised to refresh the late join status.
     ///     If you want to disallow late joins, listen to this and call Disallow.
     /// </summary>
-    public sealed class RefreshLateJoinAllowedEvent
+    public sealed partial class RefreshLateJoinAllowedEvent
     {
         public bool DisallowLateJoin { get; private set; } = false;
 
@@ -1040,7 +1040,7 @@ namespace Content.Server.GameTicking
     ///     Attempt event raised on round start.
     ///     This can be listened to by GameRule systems to cancel round start if some condition is not met, like player count.
     /// </summary>
-    public sealed class RoundStartAttemptEvent : CancellableEntityEventArgs
+    public sealed partial class RoundStartAttemptEvent : CancellableEntityEventArgs
     {
         public ICommonSession[] Players { get; }
         public bool Forced { get; }
@@ -1057,7 +1057,7 @@ namespace Content.Server.GameTicking
     ///     You can use this to spawn people off-station, like in the case of nuke ops or wizard.
     ///     Remove the players you spawned from the PlayerPool and call <see cref="GameTicker.PlayerJoinGame"/> on them.
     /// </summary>
-    public sealed class RulePlayerSpawningEvent
+    public sealed partial class RulePlayerSpawningEvent
     {
         /// <summary>
         ///     Pool of players to be spawned.
@@ -1080,7 +1080,7 @@ namespace Content.Server.GameTicking
     ///     Event raised after players were assigned jobs by the GameTicker and have been spawned in.
     ///     You can give on-station people special roles by listening to this event.
     /// </summary>
-    public sealed class RulePlayerJobsAssignedEvent
+    public sealed partial class RulePlayerJobsAssignedEvent
     {
         public ICommonSession[] Players { get; }
         public IReadOnlyDictionary<NetUserId, HumanoidCharacterProfile> Profiles { get; }
@@ -1097,7 +1097,7 @@ namespace Content.Server.GameTicking
     /// <summary>
     ///     Event raised to allow subscribers to add text to the round end summary screen.
     /// </summary>
-    public sealed class RoundEndTextAppendEvent
+    public sealed partial class RoundEndTextAppendEvent
     {
         private bool _doNewLine;
 

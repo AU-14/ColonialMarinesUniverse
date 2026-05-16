@@ -19,6 +19,7 @@
   requireAdminNotify: true
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: CMB Marshal (CMU)
   accessGroups:
   - auadmin
   - aucmb

@@ -1,13 +1,13 @@
-﻿using Content.Shared._RMC14.Chemistry;
+using Content.Shared._RMC14.Chemistry;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
 
 namespace Content.Client._RMC14.Chemistry;
 
-public sealed class RMCChemistryUISystem : SharedRMCChemistrySystem
+public sealed partial class RMCChemistryUISystem : SharedRMCChemistrySystem
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

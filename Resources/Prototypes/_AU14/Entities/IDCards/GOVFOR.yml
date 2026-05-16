@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: CMIDCardBase
   id: AU14IDCardGOVFORPlatCo
   name: platoon commander ID card
@@ -230,17 +230,6 @@
   components:
   - type: JobTitleChanger
     jobTitle: Mortician
-
-- type: entity
-  parent: CMIDCardBase
-  id: AU14IDCardSquadK9HandlerGOVFOR
-  name: k9 handler ID card
-  components:
-  - type: PresetIdCard
-    job: AU14JobGOVFORk9handler
-  - type: ItemIFF
-    factions:
-    - GOVFOR
 
 - type: entity
   parent: CMIDCardBase

@@ -16,15 +16,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.BodyPart;
 
-public abstract class SharedBodyPartHealthSystem : EntitySystem
+public abstract partial class SharedBodyPartHealthSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly INetManager Net = default!;
-    [Dependency] protected readonly SharedBodySystem Body = default!;
-    [Dependency] protected readonly SharedHitLocationSystem HitLocation = default!;
-    [Dependency] protected readonly RMCUnrevivableSystem Unrevivable = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected INetManager Net = default!;
+    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected SharedHitLocationSystem HitLocation = default!;
+    [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     private const float HealScanInterval = 1f;
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";

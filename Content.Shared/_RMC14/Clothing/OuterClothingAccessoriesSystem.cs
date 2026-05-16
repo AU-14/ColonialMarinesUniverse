@@ -1,4 +1,4 @@
-﻿using Content.Shared.Clothing;
+using Content.Shared.Clothing;
 using Content.Shared.Clothing.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Item;
@@ -9,11 +9,11 @@ using Robust.Shared.Containers;
 
 namespace Content.Shared._RMC14.Clothing;
 
-public sealed class OuterClothingAccessoriesSystem : EntitySystem
+public sealed partial class OuterClothingAccessoriesSystem : EntitySystem
 {
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedItemSystem _item = default!;
-    [Dependency] private readonly ItemToggleSystem _itemToggle = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedItemSystem _item = default!;
+    [Dependency] private ItemToggleSystem _itemToggle = default!;
 
     private EntityQuery<StorageComponent> _storageQuery;
     private EntityQuery<OuterClothingAccessoryComponent> _accessoryQuery;

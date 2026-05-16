@@ -50,7 +50,7 @@
     contents:
     - id: CMSheetMetal20
     - id: RMCHandcuffs
-      
+
 - type: entity
   parent: RMCSatchelBlack
   id: RMCSatchelBlackFillParaCO
@@ -586,7 +586,8 @@
     - id: CMFolderWhite
     - id: CMPenClicky
     - id: RMCRadioHandheldColonyOff
-    - id: CMClipboard # TODO RMC14 tape recorder
+    - id: CMClipboard
+    - id: RMCUniversalRecorder
     - id: CMCrowbar
 
 - type: entity
@@ -656,8 +657,8 @@
 - type: entity
   parent: CMSatchel
   id: RMCBackpackRTOPMCBroken
-  name: broken We-Ya radio telephone pack
-  description: A heavy-duty extended-pack, used for telecommunications between central command. Commonly carried by RTOs. This one bears the logo of Weston-Yamada and internal systems seem to be completely fried and broken.
+  name: broken We-Yu radio telephone pack
+  description: A heavy-duty extended-pack, used for telecommunications between central command. Commonly carried by RTOs. This one bears the logo of Weyland-Yutani and internal systems seem to be completely fried and broken.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/PMC/rto.rsi
@@ -670,19 +671,19 @@
       map: [ "closedLayer" ]
   - type: Storage
     grid:
-    - 0,0,19,1 # 20
+    - 0,0,14,1 # 1
 
 - type: entity
   parent: RMCBackpackRTO
   id: RMCBackpackRTOPMC
-  name: We-Ya radio telephone pack
+  name: We-Yu radio telephone pack
   description: A heavy-duty extended-pack, used for telecommunications between central command. Commonly carried by RTOs. This one bears the logo of Weyland-Yutani.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/PMC/rto.rsi
   - type: Storage
     grid:
-    - 0,0,19,1 # 20
+    - 0,0,14,1 # 1
   - type: RotaryPhone
     category: Weston-Yamada
   - type: ItemCamouflage
@@ -698,7 +699,7 @@
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/SPP/rto.rsi
   - type: Storage
     grid:
-    - 0,0,19,1 # 20
+    - 0,0,14,1 # 1
   - type: RotaryPhone
     category: Socialist Progressive People
   - type: ItemCamouflage
@@ -879,7 +880,7 @@
       contents:
         - id: CMSheetMetal20
         - id: RMCRadioHandheldColony
-          
+
 - type: entity
   parent: RMCSatchelLightpack5Slot
   id: RMCSatchelLightpackFilledParaSynth

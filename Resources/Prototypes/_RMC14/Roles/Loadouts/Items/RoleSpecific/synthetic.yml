@@ -12,8 +12,8 @@
     - !type:JobRequirementLoadoutEffect
       requirement:
         !type:RoleTimeRequirement
-        role: RMCJobSynthetic
-        time: 630000 # 175 hrs
+        role: AU14JobGOVFORAuxSupportSynth
+        time: 252000 # 70 hrs
   equipment:
     jumpsuit: CMJumpsuitSyntheticPristine
 
@@ -203,51 +203,43 @@
 # Shoes
 - type: loadout
   id: BootsBlackRMCSynth
-  storage:
-    back:
-    - CMBootsBlack
+  equipment:
+    shoes: CMBootsBlack
 
 - type: loadout
   id: ShoesBlackRMCSynth
-  storage:
-    back:
-    - RMCShoesBlack
+  equipment:
+    shoes: RMCShoesBlack
 
 - type: loadout
   id: ShoesBrownRMCSynth
-  storage:
-    back:
-    - RMCShoesBrown
+  equipment:
+    shoes: RMCShoesBrown
 
 - type: loadout
   id: ShoesRedRMCSynth
-  storage:
-    back:
-    - RMCShoesRed
+  equipment:
+    shoes: RMCShoesRed
 
 - type: loadout
   id: ShoesGreenRMCSynth
-  storage:
-    back:
-    - RMCShoesGreen
+  equipment:
+    shoes: RMCShoesGreen
 
 - type: loadout
   id: ShoesPurpleRMCSynth
-  storage:
-    back:
-    - RMCShoesPurple
+  equipment:
+    shoes: RMCShoesPurple
 
 - type: loadout
   id: ShoeWhiteRMCSynth
-  storage:
-    back:
-    - RMCShoesWhite
+  equipment:
+    shoes: RMCShoesWhite
 
 - type: loadout
   id: ShoeYellowRMCSynth
-  storage:
-    back:
-    - RMCShoesYellow
+  equipment:
+    shoes: RMCShoesYellow
 
 # Headwear
 - type: loadout

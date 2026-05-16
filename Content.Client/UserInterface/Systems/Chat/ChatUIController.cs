@@ -50,27 +50,27 @@ namespace Content.Client.UserInterface.Systems.Chat;
 
 public sealed partial class ChatUIController : UIController
 {
-    [Dependency] private readonly IClientAdminManager _admin = default!;
-    [Dependency] private readonly IChatManager _manager = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IEntityManager _ent = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IClientNetManager _net = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IStateManager _state = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IReplayRecordingManager _replayRecording = default!;
-    [Dependency] private readonly StaffHelpUIController _staffHelpUI = default!;
+    [Dependency] private IClientAdminManager _admin = default!;
+    [Dependency] private IChatManager _manager = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IEntityManager _ent = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IClientNetManager _net = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IStateManager _state = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IReplayRecordingManager _replayRecording = default!;
+    [Dependency] private StaffHelpUIController _staffHelpUI = default!;
 
-    [UISystemDependency] private readonly ExamineSystem? _examine = default;
-    [UISystemDependency] private readonly GhostSystem? _ghost = default;
-    [UISystemDependency] private readonly TypingIndicatorSystem? _typingIndicator = default;
-    [UISystemDependency] private readonly ChatSystem? _chatSys = default;
-    [UISystemDependency] private readonly TransformSystem? _transform = default;
-    [UISystemDependency] private readonly MindSystem? _mindSystem = default!;
-    [UISystemDependency] private readonly RoleCodewordSystem? _roleCodewordSystem = default!;
+    [UISystemDependency] private ExamineSystem? _examine = default;
+    [UISystemDependency] private GhostSystem? _ghost = default;
+    [UISystemDependency] private TypingIndicatorSystem? _typingIndicator = default;
+    [UISystemDependency] private ChatSystem? _chatSys = default;
+    [UISystemDependency] private TransformSystem? _transform = default;
+    [UISystemDependency] private MindSystem? _mindSystem = default!;
+    [UISystemDependency] private RoleCodewordSystem? _roleCodewordSystem = default!;
 
     private static readonly ProtoId<ColorPalettePrototype> ChatNamePalette = "ChatNames";
     private string[] _chatNameColors = default!;
@@ -126,6 +126,8 @@ public sealed partial class ChatUIController : UIController
     ///     The max amount of speech bubbles over a single entity at once.
     /// </summary>
     private const int SpeechBubbleCap = 4;
+
+    private const int MaxChatHistory = 2500;
 
     private LayoutContainer _speechBubbleRoot = default!;
 
@@ -539,6 +541,10 @@ public sealed partial class ChatUIController : UIController
 
     private void UpdateChannelPermissions()
     {
+        var oldCanSendChannels = CanSendChannels;
+        var oldFilterableChannels = FilterableChannels;
+        var oldSelectableChannels = SelectableChannels;
+
         CanSendChannels = default;
         FilterableChannels = default;
 
@@ -562,6 +568,8 @@ public sealed partial class ChatUIController : UIController
             FilterableChannels |= ChatChannel.Radio;
             FilterableChannels |= ChatChannel.Emotes;
             FilterableChannels |= ChatChannel.Notifications;
+            FilterableChannels |= ChatChannel.Damage;
+            FilterableChannels |= ChatChannel.Visual;
 
             // Can only send local / radio / emote when attached to a non-ghost entity.
             // TODO: this logic is iffy (checking if controlling something that's NOT a ghost), is there a better way to check this?
@@ -603,10 +611,17 @@ public sealed partial class ChatUIController : UIController
         DebugTools.Assert((FilterableChannels & ChatChannel.OOC) != 0, "OOC must always be available");
         DebugTools.Assert((SelectableChannels & ChatSelectChannel.OOC) != 0, "OOC must always be available");
 
-        // let our chatbox know all the new settings
-        CanSendChannelsChanged?.Invoke(CanSendChannels);
-        FilterableChannelsChanged?.Invoke(FilterableChannels);
-        SelectableChannelsChanged?.Invoke(SelectableChannels);
+        // Let chatboxes know only when something actually changed. Attaching to a
+        // new entity during xeno evolution keeps the same xeno chat permissions,
+        // so rebuilding the full chat history here is unnecessary and hitches.
+        if (oldCanSendChannels != CanSendChannels)
+            CanSendChannelsChanged?.Invoke(CanSendChannels);
+
+        if (oldFilterableChannels != FilterableChannels)
+            FilterableChannelsChanged?.Invoke(FilterableChannels);
+
+        if (oldSelectableChannels != SelectableChannels)
+            SelectableChannelsChanged?.Invoke(SelectableChannels);
     }
 
     public void ClearUnfilteredUnreads(ChatChannel channels)
@@ -657,7 +672,7 @@ public sealed partial class ChatUIController : UIController
         }
         catch (Exception e)
         {
-            Logger.Error($"Error deleting chat history:\n{e}");
+            Logger.GetSawmill("content").Error($"Error deleting chat history:\n{e}");
         }
     }
 
@@ -935,6 +950,9 @@ public sealed partial class ChatUIController : UIController
         if (!msg.HideChat)
         {
             History.Add((_timing.CurTick, msg));
+            if (History.Count > MaxChatHistory)
+                History.RemoveRange(0, History.Count - MaxChatHistory);
+
             MessageAdded?.Invoke(msg);
 
             if (!msg.Read)
@@ -1033,7 +1051,7 @@ public sealed partial class ChatUIController : UIController
 
     private readonly record struct SpeechBubbleData(ChatMessage Message, SpeechBubble.SpeechType Type);
 
-    private sealed class SpeechBubbleQueueData
+    private sealed partial class SpeechBubbleQueueData
     {
         /// <summary>
         ///     Time left until the next speech bubble can appear.

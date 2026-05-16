@@ -23,18 +23,18 @@ using Robust.Shared.EntitySerialization;
 
 namespace Content.Server.AU14.ThirdParty;
 
-public sealed class AuThirdPartySystem : EntitySystem
+public sealed partial class AuThirdPartySystem : EntitySystem
 {
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private MapLoaderSystem _mapLoader = default!;
     private readonly ISawmill _sawmill = Logger.GetSawmill("thirdparty");
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly SharedDropshipSystem _sharedDropshipSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private SharedDropshipSystem _sharedDropshipSystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     // --- State for round third party spawning ---
     private ThreatPrototype? _currentThreat;

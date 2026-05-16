@@ -70,7 +70,7 @@
   Allegiance: UPP
   reqlist: UPPCargoCatalog
   VendorToMarker:
-    Rifleman: AU14USCMequipmentvendor
+    Rifleman: AU14UPPequipmentvendor # unique
     Clothing: AU14UPPclothingapparelvendor
     Weapons: AU14UPPWeaponsVendor
     SWeapons: AU14UPPSpecialWeaponsVendor
@@ -328,7 +328,7 @@
   Allegiance: TWE
   reqlist: RMCCargoCatalog
   VendorToMarker:
-    Rifleman: AU14RMCequipmentvendor
+    Rifleman: AU14RMCequipmentvendor # unique
     Clothing: AU14RMCclothingequipmentvendor
     Weapons: AU14RMCWeaponsVendor
     SWeapons: AU14RMCSpecialWeaponsVendor

@@ -17,7 +17,7 @@ public sealed partial class CMUSurgeryWindow : FancyWindow
     private static readonly Vector2 PreferredWindowSize = new(980f, 660f);
     private static readonly Vector2 MinimumWindowSize = new(560f, 420f);
 
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
     private readonly CMUMedicalUniformScaler _uniformScaler = new();
 
     public float LayoutScale { get; private set; } = 1f;

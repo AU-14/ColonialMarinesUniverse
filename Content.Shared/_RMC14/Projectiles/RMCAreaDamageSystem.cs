@@ -11,15 +11,15 @@ using Robust.Shared.Player;
 
 namespace Content.Shared._RMC14.Projectiles;
 
-public sealed class RMCAreaDamageSystem : EntitySystem
+public sealed partial class RMCAreaDamageSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly RMCSizeStunSystem _sizeStun = default!;
-    [Dependency] private readonly SharedColorFlashEffectSystem _colorFlash = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedHitLocationSystem _hitLocation = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private RMCSizeStunSystem _sizeStun = default!;
+    [Dependency] private SharedColorFlashEffectSystem _colorFlash = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedHitLocationSystem _hitLocation = default!;
 
     public override void Initialize()
     {
@@ -78,9 +78,8 @@ public sealed class RMCAreaDamageSystem : EntitySystem
             if (TryComp(uid, out CMArmorPiercingComponent? piercing))
                 armorPiercing = piercing.Amount;
 
-            // Xenos take double area damage in CM13 compared to humans, I tried finding out why without success so here's a 2x multiplier.
             if (size >= RMCSizes.SmallXeno)
-                newDamage *= 2;
+                newDamage *= areaDamage.XenoDamageMultiplier;
 
             var damageDealt = _damage.TryChangeDamage(entity, newDamage, origin: shooter, armorPiercing: armorPiercing);
 

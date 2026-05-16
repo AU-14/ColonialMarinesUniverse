@@ -7,6 +7,9 @@
   canBeAntag: false
   playTimeTracker: AU14JobCivilianHeadOfService
   requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentServices
+    time: 72000 # 20 hours
   - !type:OverallPlaytimeRequirement
     time: 10800 # 3 hours
   - !type:AgeRequirement
@@ -24,8 +27,10 @@
   supervisors: au14-job-supervisors-colonyadministrator
   accessGroups:
   - Colonist
+  - auheadsofcolony
   access:
-  - AU14AccessColonyHeadOfService
+# - AU14AccessColonyHeadOfService # implicit
+  - AU14AccessColonyAdministrator
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

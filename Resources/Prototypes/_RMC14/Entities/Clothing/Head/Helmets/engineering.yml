@@ -38,6 +38,8 @@
   - type: CMArmor
     melee: 10 # CLOTHING_ARMOR_LOW
     bio: 10 # CLOTHING_ARMOR_LOW
+  - type: IngestionBlocker
+    enabled: false
 
 - type: Tag
   id: RMCHelmetWelding

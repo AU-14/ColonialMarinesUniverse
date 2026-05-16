@@ -8,7 +8,8 @@
   ranks:
     RMCRankCivilian: [ ]
   startingGear: AU14GearCivilianKellandWarden
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconColonyKellandWarden"
+  hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-civiliankellandwarden

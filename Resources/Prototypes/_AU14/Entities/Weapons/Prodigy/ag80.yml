@@ -61,6 +61,13 @@
     multiplier: 1.25
   - type: AttachableHolder
     slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
       rmc-aslot-underbarrel:
         whitelist:
           tags:
@@ -77,6 +84,7 @@
           - RMCAttachmentS84xTelescopicScope
   - type: AttachableHolderVisuals
     offsets:
+      rmc-aslot-barrel: 0.56, 0.063
       rmc-aslot-rail: -0.32, 0.22
       rmc-aslot-underbarrel: 0.10875, -0.30
 

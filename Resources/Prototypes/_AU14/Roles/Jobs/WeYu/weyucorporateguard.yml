@@ -14,7 +14,23 @@
   description: au14-job-description-wyguard
   setPreference: true
   ranks:
-    AU14RankWYSecurityOfficer: []
+    AU14RankWYSecurityOfficerChief:
+    - !type:RoleTimeRequirement
+      role: AU14JobWYGuard
+      time: 360000 # 100 hours
+    AU14RankWYSecurityOfficerMaster:
+    - !type:RoleTimeRequirement
+      role: AU14JobWYGuard
+      time: 180000 # 50 hours
+    AU14RankWYSecurityOfficerSenior:
+    - !type:RoleTimeRequirement
+      role: AU14JobWYGuard
+      time: 86400 # 24 hours
+    AU14RankWYSecurityOfficer:
+    - !type:RoleTimeRequirement
+      role: AU14JobWYGuard
+      time: 36000 # 10 hours
+    AU14RankWYSecurityOfficerJunior: []
   startingGear: AU14GearWYGuard
   icon: "RMCJobIconPMCGoonStandard"
   requireAdminNotify: false
@@ -27,6 +43,7 @@
     - Epilepsy
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
+  spawnMenuRoleName: WY Corporate Goon (CMU)
   accessGroups:
   - auwy
   - AUPrisonStaff

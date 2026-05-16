@@ -13,7 +13,7 @@ public sealed class EntProtoIdTTypeParser<T> : TypeParser<EntProtoId<T>> where T
     public override bool TryParse(ParserContext ctx, out EntProtoId<T> result)
     {
         result = default;
-        if (!Toolshed.TryParse(ctx, out ProtoId<EntityPrototype> proto))
+        if (!Toolshed.TryParse(ctx, out EntProtoId proto))
             return false;
 
         result = new EntProtoId<T>(proto.Id);

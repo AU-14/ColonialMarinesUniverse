@@ -222,6 +222,9 @@
           - Impassable
           - BulletImpassable
   - type: Ammo
+  - type: Tag
+    tags:
+    - Taser
   - type: Projectile
     damage:
       types:

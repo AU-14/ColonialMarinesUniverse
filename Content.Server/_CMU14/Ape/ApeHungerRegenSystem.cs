@@ -15,14 +15,14 @@ namespace Content.Server._CMU14.Ape;
 /// Heals 10% of max health per minute while hunger is >= 50%.
 /// Runs server-side only.
 /// </summary>
-public sealed class ApeHungerRegenSystem : EntitySystem
+public sealed partial class ApeHungerRegenSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly HungerSystem _hunger = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly MobStateSystem _mob = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
-    [Dependency] private readonly SharedRMCDamageableSystem _rmcDamageable = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private HungerSystem _hunger = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private MobStateSystem _mob = default!;
+    [Dependency] private MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
 
     // Heal rate: 10% of max health per minute -> 0.1 per 60s
     private const float HealFractionPerSecond = 0.1f / 60f;

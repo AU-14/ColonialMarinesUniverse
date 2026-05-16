@@ -2,12 +2,17 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.CCVar;
+using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Tackle;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions.Events;
 using Content.Shared.Administration.Components;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Body.Components;
+using Content.Shared.Body.Part;
+using Content.Shared.Body.Systems;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -16,6 +21,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
@@ -46,35 +52,39 @@ using ItemToggleMeleeWeaponComponent = Content.Shared.Item.ItemToggle.Components
 
 namespace Content.Shared.Weapons.Melee;
 
-public abstract class SharedMeleeWeaponSystem : EntitySystem
+public abstract partial class SharedMeleeWeaponSystem : EntitySystem
 {
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly IMapManager MapManager = default!;
-    [Dependency] private   readonly INetManager _netMan = default!;
-    [Dependency] private   readonly IPrototypeManager _protoManager = default!;
-    [Dependency] private   readonly IRobustRandom _random = default!;
-    [Dependency] protected readonly ISharedAdminLogManager AdminLogger = default!;
-    [Dependency] protected readonly ActionBlockerSystem Blocker = default!;
-    [Dependency] protected readonly DamageableSystem Damageable = default!;
-    [Dependency] private   readonly SharedHandsSystem _hands = default!;
-    [Dependency] private   readonly InventorySystem _inventory = default!;
-    [Dependency] private   readonly MeleeSoundSystem _meleeSound = default!;
-    [Dependency] protected readonly MobStateSystem MobState = default!;
-    [Dependency] private   readonly SharedAudioSystem _audio = default!;
-    [Dependency] protected readonly SharedCombatModeSystem CombatMode = default!;
-    [Dependency] protected readonly SharedInteractionSystem Interaction = default!;
-    [Dependency] private   readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] protected readonly SharedPopupSystem PopupSystem = default!;
-    [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
-    [Dependency] private   readonly SharedStaminaSystem _stamina = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected IMapManager MapManager = default!;
+    [Dependency] private   INetManager _netMan = default!;
+    [Dependency] private   IPrototypeManager _protoManager = default!;
+    [Dependency] private   IRobustRandom _random = default!;
+    [Dependency] protected ISharedAdminLogManager AdminLogger = default!;
+    [Dependency] protected ActionBlockerSystem Blocker = default!;
+    [Dependency] private   SharedBodySystem _body = default!;
+    [Dependency] protected DamageableSystem Damageable = default!;
+    [Dependency] private   SharedHandsSystem _hands = default!;
+    [Dependency] private   InventorySystem _inventory = default!;
+    [Dependency] private   MeleeSoundSystem _meleeSound = default!;
+    [Dependency] protected MobStateSystem MobState = default!;
+    [Dependency] private   SharedAudioSystem _audio = default!;
+    [Dependency] protected SharedCombatModeSystem CombatMode = default!;
+    [Dependency] protected SharedInteractionSystem Interaction = default!;
+    [Dependency] private   SharedPhysicsSystem _physics = default!;
+    [Dependency] protected SharedPopupSystem PopupSystem = default!;
+    [Dependency] protected SharedTransformSystem TransformSystem = default!;
+    [Dependency] private   SharedStaminaSystem _stamina = default!;
 
     // RMC14
-    [Dependency] private readonly IConfigurationManager _configuration = default!;
-    [Dependency] private readonly SharedRMCMeleeWeaponSystem _rmcMelee = default!;
+    [Dependency] private IConfigurationManager _configuration = default!;
+    [Dependency] private SharedRMCMeleeWeaponSystem _rmcMelee = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
 
+    private static readonly ProtoId<ReagentPrototype> YautjaBloodReagent = "CMUYautjaBlood";
     private const int AttackMask = (int) (CollisionGroup.MobMask | CollisionGroup.Opaque);
 
     private static readonly EntProtoId DisarmEffect = "RMCWeaponArcDisarm"; // RMC14
+    private static readonly EntProtoId HeadbuttEffect = "WeaponArcSmash"; // CMU14
     private const float ArtificialMeleeDelay = 0.1f; //RMC14
 
     /// <summary>
@@ -478,7 +488,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
             {
                 case LightAttackEvent light:
                     DoLightAttack(user, light, weaponUid, weapon, session);
-                    animation = weapon.Animation;
+                    animation = GetLightAttackAnimation(user, weaponUid, weapon);
                     range = _rmcMelee.GetUserLightAttackRange(user, target, weapon); // RMC14
                     break;
                 case DisarmAttackEvent disarm:
@@ -533,7 +543,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
             {
                 AdminLogger.Add(LogType.MeleeHit,
                     LogImpact.Low,
-                    $"{ToPrettyString(user):actor} melee attacked (light) using their hands and missed");
+                    $"{ToPrettyString(user):actor} melee attacked (light) using {GetBodyAttackLogPart(user)} and missed");
             }
             else
             {
@@ -589,7 +599,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
             {
                 AdminLogger.Add(LogType.MeleeHit,
                     LogImpact.Medium,
-                    $"{ToPrettyString(user):actor} melee attacked (light) {ToPrettyString(target.Value):subject} using their hands and dealt {damageResult.GetTotal():damage} damage");
+                    $"{ToPrettyString(user):actor} melee attacked (light) {ToPrettyString(target.Value):subject} using {GetBodyAttackLogPart(user)} and dealt {damageResult.GetTotal():damage} damage");
             }
             else
             {
@@ -609,7 +619,47 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         }
     }
 
+    private EntProtoId GetLightAttackAnimation(EntityUid user, EntityUid meleeUid, MeleeWeaponComponent component)
+    {
+        if (ShouldHeadbuttUnarmed(user, meleeUid))
+            return HeadbuttEffect;
+
+        return component.Animation;
+    }
+
+    private string GetBodyAttackLogPart(EntityUid user)
+    {
+        return ShouldHeadbuttUnarmed(user, user) ? "their head" : "their hands";
+    }
+
+    private bool ShouldHeadbuttUnarmed(EntityUid user, EntityUid meleeUid)
+    {
+        if (meleeUid != user ||
+            !HasComp<HumanoidAppearanceComponent>(user) ||
+            !TryComp(user, out BodyComponent? body))
+        {
+            return false;
+        }
+
+        // If the mob has no attached hands, the normal unarmed attack should
+        // still work, but it should be represented as a headbutt instead of a punch.
+        return _body.BodyHasPartType(user, BodyPartType.Head, body) &&
+               !_body.BodyHasPartType(user, BodyPartType.Hand, body);
+    }
+
     protected abstract void DoDamageEffect(List<EntityUid> targets, EntityUid? user,  TransformComponent targetXform);
+
+    protected Color GetDamageEffectColor(EntityUid target)
+    {
+        if (TryComp(target, out BloodstreamComponent? bloodstream) &&
+            bloodstream.BloodReagent == YautjaBloodReagent &&
+            _reagent.TryIndex(bloodstream.BloodReagent, out var reagent))
+        {
+            return reagent.SubstanceColor;
+        }
+
+        return Color.Red;
+    }
 
     private bool DoHeavyAttack(EntityUid user, HeavyAttackEvent ev, EntityUid meleeUid, MeleeWeaponComponent component, ICommonSession? session)
     {

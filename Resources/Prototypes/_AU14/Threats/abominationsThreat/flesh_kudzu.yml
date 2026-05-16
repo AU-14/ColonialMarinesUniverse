@@ -1,0 +1,110 @@
+# Flesh kudzu (tendons) for abominations. Adapted from upstream FleshKudzu
+# but without the atmos sensitivities (no Temperature, no Barotrauma, no
+# Flammable) so it survives in space / vacuum / fires.
+#
+# - Heals abominations on contact, damages everyone else (DamageContacts).
+# - Periodically sobs / gasps via AbominationFleshKudzuSystem.
+- type: entity
+  parent: BaseKudzu
+  id: AU14AbominationFleshKudzu
+  name: tendons
+  description: A pulsing carpet of fused sinew. It sounds like it's sobbing.
+  placement:
+    mode: SnapgridCenter
+    snap:
+      - Wall
+  components:
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        path: "/Audio/Weapons/slash.ogg"
+  - type: Sprite
+    sprite: Objects/Misc/fleshkudzu.rsi
+    state: kudzu_11
+    drawdepth: HighFloorObjects
+  - type: KudzuVisuals
+  - type: Clickable
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        density: 7
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        layer:
+        - MidImpassable
+  - type: Damageable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 30
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Kudzu
+    growthTickChance: 0.1
+    spreadChance: 0.4
+    damageRecovery:
+      types:
+        Slash: -0.5
+        Blunt: -0.5
+  # Tendons go up easily. Anti-flesh-kudzu countermeasure is fire.
+  - type: Flammable
+    fireSpread: true
+    canResistFire: false
+    damage:
+      types:
+        Heat: 8
+  - type: Reactive
+    groups:
+      Flammable: [ Touch ]
+      Extinguish: [ Touch ]
+  - type: Temperature
+    heatDamageThreshold: 320
+    heatDamage:
+      types:
+        Heat: 15
+  # Slashes/pierces anyone standing on it - except abominations.
+  - type: DamageContacts
+    damage:
+      types:
+        Slash: 1.5
+        Piercing: 1.5
+        Toxin: 1
+    ignoreWhitelist:
+      components:
+      - Abomination
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.7
+    sprintSpeedModifier: 0.7
+    ignoreWhitelist:
+      components:
+      - IgnoreKudzu
+      - Abomination
+  # Periodic sob/gasp + heal-abominations-in-contact tick. Server-side.
+  # Heal values doubled from the original tuning so tendons are a real
+  # rally point for the threat to retreat to.
+  - type: AbominationFleshKudzu
+    heal:
+      types:
+        Blunt: -6
+        Slash: -6
+        Piercing: -6
+  - type: UserIFF
+    factions:
+    - FactionAbomination
+
+# Spawner for the flesh kudzu. Used by skitter's Spread Kudzu action and
+# by abomination death-on-gib.
+- type: entity
+  id: AU14AbominationFleshKudzuSource
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomSpawner
+    deleteSpawnerAfterSpawn: true
+    offset: 0
+    chance: 1
+    prototypes:
+    - AU14AbominationFleshKudzu

@@ -15,13 +15,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Organs.Kidneys;
 
-public abstract class SharedKidneysSystem : EntitySystem
+public abstract partial class SharedKidneysSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly INetManager Net = default!;
-    [Dependency] protected readonly SharedBodySystem Body = default!;
-    [Dependency] protected readonly SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected INetManager Net = default!;
+    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected SharedStatusEffectsSystem Status = default!;
 
     private static readonly EntProtoId RenalFailure = "StatusEffectCMURenalFailure";
     private const float SelfDamageScanInterval = 1f;

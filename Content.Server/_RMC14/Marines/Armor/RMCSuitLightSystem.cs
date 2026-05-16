@@ -1,4 +1,4 @@
-﻿using Content.Server.Light.EntitySystems;
+using Content.Server.Light.EntitySystems;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Armor;
 using Content.Shared._RMC14.Xenonids;
@@ -12,11 +12,11 @@ using Content.Shared.Popups;
 
 namespace Content.Server._RMC14.Marines.Armor;
 
-public sealed class RMCSuitLightSystem : EntitySystem
+public sealed partial class RMCSuitLightSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly HandheldLightSystem _lights = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private HandheldLightSystem _lights = default!;
 
     public override void Initialize()
     {

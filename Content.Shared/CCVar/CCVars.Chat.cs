@@ -83,4 +83,34 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<string> ChatHighlightsColor =
         CVarDef.Create("chat.highlights_color", "#17FFC1FF", CVar.CLIENTONLY | CVar.ARCHIVE, "The color in which the highlights will be displayed.");
+
+    /// <summary>
+    /// Client-side chat tab definitions, saved between sessions.
+    /// </summary>
+    public static readonly CVarDef<string> ChatTabs =
+        CVarDef.Create("chat.tabs", "", CVar.CLIENTONLY | CVar.ARCHIVE, "Client-side chat tab definitions.");
+
+    /// <summary>
+    /// Client-side channel and radio-label font/color overrides.
+    /// </summary>
+    public static readonly CVarDef<string> ChatChannelStyles =
+        CVarDef.Create("chat.channel_styles", "", CVar.CLIENTONLY | CVar.ARCHIVE, "Client-side chat channel font and color overrides.");
+
+    /// <summary>
+    /// Client-side split chat pane state, saved between sessions.
+    /// </summary>
+    public static readonly CVarDef<string> ChatSplitPane =
+        CVarDef.Create("chat.split_pane", "", CVar.CLIENTONLY | CVar.ARCHIVE, "Client-side split chat pane state.");
+
+    /// <summary>
+    /// Use the pre-rework chat presentation.
+    /// </summary>
+    public static readonly CVarDef<bool> ChatLegacyMode =
+        CVarDef.Create("chat.legacy_mode", false, CVar.CLIENTONLY | CVar.ARCHIVE, "Use the legacy chat presentation.");
+
+    /// <summary>
+    /// Color the full text of each structured chat row instead of only channel accents and inline highlight markup.
+    /// </summary>
+    public static readonly CVarDef<bool> ChatColorWholeMessage =
+        CVarDef.Create("chat.color_whole_message", true, CVar.CLIENTONLY | CVar.ARCHIVE, "Color the full text of each structured chat row.");
 }

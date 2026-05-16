@@ -232,41 +232,16 @@
     sections:
     - name: Food
       entries:
-      - id: RMCMRESPP
-        name: MRE
-        amount: 30
+      - id: AU14MREUPP
+        amount: 60
       - id: AU14BoxMREUPP
-        amount: 5
-    - name: Tools
-      entries:
-      - id: RMCCombatUtilityKnifeA
-        amount: 15
-      - id: CMScrewdriver
-        amount: 5
-      - id: CMWirecutter
-        amount: 5
-      - id: CMCrowbar
-        amount: 5
-      - id: CMWrench
-        amount: 5
-      - id: CMMultitool
-        amount: 5
-      - id: CMWelder
-        amount: 5
-    - name: Flares and lights
-      entries:
-      - id: RMCFlashlight # Combat Flashlight
-        amount: 15
-#      #- id: RMCBoxFlashlights
-#      #  amount: 1
-      - id: RMCBoxPackFlare
-        amount: 5
-      - id: CMPackFlare
-        amount: 5
-      - id: RMCPackFlareCAS
-        amount: 2
+        amount: 10
     - name: Medical Supplies
       entries:
+      - id: AU14PouchIFAKFill
+        name: infantry first aid kit (Full)
+        recommended: true
+        amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 40
       - id: AU14Tourniquet
@@ -274,35 +249,106 @@
       - id: CMOintment10
         amount: 40
       - id: CMPacketPillsTricordrazine
-        amount: 12
+        amount: 40
       - id: AU14NaloxoneAutoInjector
-        amount: 2
-    - name: Miscellaneous
+        amount: 9
+    - name: Tools
       entries:
-      - id: RMCEngineerKit
-        amount: 1
-      #- id: CMMap
-      #  amount: 5
+      - id: CMEntrenchingTool
+        recommended: true
+        amount: 30
+      - id: RMCCombatUtilityKnifeA
+        recommended: true
+        amount: 25
+      - id: RMCCombatUtilityKnifeB
+        recommended: true
+        name: "'Druzhina' combat utility knife (ceremony)"
+        amount: 5
+      - id: CMM11Knife
+        amount: 15
+      - id: RMCScabbardMacheteFilled
+        name: machete scabbard (Full)
+        amount: 6
+      - id: RMCHelmetGarbGunOil
+        amount: 30
       - id: CMFireExtinguisher
-        amount: 2
+        amount: 10
       - id: CMFireExtinguisherPortable
         amount: 5
-      - id: CMRollerBedSpawnFolded
+      - id: RMCLightReplacer
+        amount: 10
+      - id: CMScrewdriver
+        amount: 10
+      - id: CMWirecutter
+        amount: 10
+      - id: CMCrowbar
+        amount: 10
+      - id: CMWrench
+        amount: 10
+      - id: CMMultitool
+        amount: 10
+      - id: CMWelderSmall
+        amount: 10
+      - id: CMWelder
+        amount: 4
+      - id: RMCWelderPVE
         amount: 1
-      - id: RMCBinoculars
-        amount: 2
-      #- id: CMFoldingBarricadesMB6x3
-      #  amount: 2
-      #- id: CMSparePDTLBattleBuddyKit
-      #  amount: 3
+    - name: Engineering Supplies
+      entries:
       - id: CMSandbagEmpty25
-        amount: 30
+        recommended: true
+        amount: 60
+      - id: BarbedWire15
+        amount: 6
+      - id: CMSheetMetal50
+        amount: 3
+      - id: CMSheetPlasteel50
+        amount: 1
+      - id: RMCBoxMagazinePowerCellsHighFilled
+        amount: 2
+      - id: RMCEngineerKit
+        amount: 1
       - id: RMCPowerCellHigh
         amount: 5
+      - id: RMCCableCoil
+        amount: 15
+    - name: Flares and lights
+      entries:
+      - id: RMCBoxFlashlights
+        amount: 4
+      - id: RMCFlashlight
+        amount: 20
+      - id: RMCWeaponPistolM82F
+        amount: 4
+      - id: RMCBoxPackFlare
+        amount: 5
+      - id: CMPackFlare
+        amount: 12
+      - id: RMCBoxPackFlareCAS
+        amount: 1
+      - id: RMCPackFlareCAS
+        amount: 7
+    - name: Optics
+      entries:
+      - id: RMCLaserDesignatorPVE
+        amount: 2
+      - id: RMCBinocularsPVE
+        amount: 5
+    - name: Miscellaneous
+      entries:
+      - id: RMCZipties
+        recommended: true
+        amount: 60
+      - id: RMCPVECaseMotionDetector
+        amount: 1
+      - id: CMRollerBedSpawnFolded
+        amount: 8
       - id: BedrollFolded
         amount: 20
-      - id: RMCZipties
-        amount: 30
+      - id: RMCGuidebookLawMarine
+        amount: 3
+      - id: RMCGuidebookSOP
+        amount: 3
 
 - type: entity
   parent: ColMarTechBase
@@ -380,8 +426,22 @@
         amount: 20
       - id: RMCPillCanisterIron
         amount: 20
-    #      - id: CMPillCanisterPeridaxon
-    #      - id: CMPillCanisterTramadol
+      - id: AU14PillCanisterParacetamol
+        amount: 20
+      - id: AU14PillCanisterTramadol
+        amount: 20
+      - id: AU14PillCanisterOxycodone
+        amount: 20
+      - id: AU14PillCanisterCardiocaine
+        amount: 20
+      - id: AU14PillCanisterHepatocytin
+        amount: 20
+      - id: AU14PillCanisterNephronate
+        amount: 20
+      - id: AU14PillCanisterOsteoCalc
+        amount: 20
+      - id: AU14PillCanisterPulmovine
+        amount: 20
     - name: Injectors
       entries:
       - id: CMEpinephrineAutoInjector
@@ -546,8 +606,24 @@
         amount: 15
       - id: CMPillCanisterTricordrazine
         amount: 15
-#      - id: CMPillCanisterPeridaxon
-#      - id: CMPillCanisterTramadol
+      - id: RMCPillCanisterIron
+        amount: 15
+      - id: AU14PillCanisterParacetamol
+        amount: 15
+      - id: AU14PillCanisterTramadol
+        amount: 15
+      - id: AU14PillCanisterOxycodone
+        amount: 15
+      - id: AU14PillCanisterCardiocaine
+        amount: 15
+      - id: AU14PillCanisterHepatocytin
+        amount: 15
+      - id: AU14PillCanisterNephronate
+        amount: 15
+      - id: AU14PillCanisterOsteoCalc
+        amount: 15
+      - id: AU14PillCanisterPulmovine
+        amount: 15
     - name: Injectors
       entries:
       - id: CMEpinephrineAutoInjector
@@ -559,6 +635,16 @@
       - id: CMDexalinPlusAutoInjector
         amount: 15
       - id: CMTricordrazineAutoInjector
+        amount: 15
+      - id: CMBicaridineAutoInjector
+        amount: 15
+      - id: CMKelotaneAutoInjector
+        amount: 15
+      - id: AU14ParacetamolAutoInjector
+        amount: 15
+      - id: AU14TramadolAutoInjector
+        amount: 15
+      - id: AU14OxycodoneAutoInjector
         amount: 15
     - name: Medical Gloves
       choices: { CMUPlatoonMedicalGloves: 1 }
@@ -620,7 +706,7 @@
         amount: 2
     - name: Backpack
       entries:
-      - id: RMCBackpackRTO
+      - id: RMCBackpackRTOSPP
         amount: 5
     - name: Pouches
       entries:
@@ -791,8 +877,8 @@
         amount: 7
       - id: RMCRocketHJRA12Incen
         amount: 3
-      - id: RMCPouchExplosive
-        amount: 1
+      - id: AU14BackpackRockets
+        amount: 2
     - name: LPO80 Pyrotechnician kit
       entries:
       - id: AU14KitUPPPyroLPO80
@@ -862,12 +948,13 @@
       takeAll: CMEngineerSet
       entries:
       - id: AU14VendorBundleCombatTechnicianEssentials
-    - name: Automated Sentry Gun
+    - name: Support Equipment
       choices:  { CMHandheldDefense : 1 }
       entries:
       - id: AU14CaseSentry
       - id: AU14CaseSentryMini
       - id: AU14CaseSentrySniper
+      - id: RMCM271A2BruteLauncherRigFilled
     - name: Engineer Uniform
       choices: { CMUPlatoonMedicalUniform: 1 }
       entries:
@@ -1075,6 +1162,8 @@
         amount: 8
       - id: RMCWeaponLauncherDisposableFolded
         amount: 2
+      - id: RMCRocketM5510Brute
+        amount: 12
     - name: Barrel Attachments
       entries:
       - id: RMCAttachmentExtendedBarrel

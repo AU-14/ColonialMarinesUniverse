@@ -19,19 +19,22 @@
     xenoPushMinimumSize: Immobile
     canSmashWalls: true
     wallSmashMinSpeed: 7
-    wallSmashWheelDamage: 3
-    wallSmashHullDamage: 150
-    wallSmashSlowdownMultiplier: 0.6
-    wallSmashSlowdownDuration: 0.35
-    mobCollisionHullDamage: 20
-    speedAtZeroIntegrity: 0
-    crashImmobileDuration: 90
-    mobCrashImmobileDuration: 20
-    xenoMobCrashImmobileDuration: 60
+    wallSmashWheelDamage: 0.9
+    wallSmashHullDamage: 45
+    wallSmashSlowdownMultiplier: 0.75
+    wallSmashSlowdownDuration: 0.25
+    mobCollisionHullDamage: 8
+    speedAtZeroIntegrity: 0.35
+    crashImmobileDuration: 8
+    crashImmobileMinSpeed: 8
+    mobCrashImmobileDuration: 4
+    mobCrashImmobileMinSpeed: 5
+    xenoMobCrashImmobileDuration: 8
+    xenoMobCrashImmobileMinSpeed: 5
   - type: VehicleOvercharge
-    speedMultiplier: 1.5
+    speedMultiplier: 1.55
     duration: 3
-    cooldown: 15
+    cooldown: 14
     overchargeSound: /Audio/_RMC14/Vehicle/overdrive_activate.ogg
   - type: VehicleSound
     runningSound: /Audio/Effects/Vehicle/vehicleengineidle.ogg

@@ -8,9 +8,9 @@ using Robust.Shared.Graphics;
 
 namespace Content.Client.SprayPainter;
 
-public sealed class SprayPainterSystem : SharedSprayPainterSystem
+public sealed partial class SprayPainterSystem : SharedSprayPainterSystem
 {
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     public List<SprayPainterEntry> Entries { get; private set; } = new();
 
@@ -43,7 +43,7 @@ public sealed class SprayPainterSystem : SharedSprayPainterSystem
     }
 }
 
-public sealed class SprayPainterEntry
+public sealed partial class SprayPainterEntry
 {
     public string Name;
     public Texture? Icon;

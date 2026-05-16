@@ -6,6 +6,7 @@
   components:
   - type: Sprite
     sprite: _AU14/Weapons/Guns/CCAF/C10A6BR.rsi
+    state: base
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -18,7 +19,7 @@
       gun_magazine: !type:ContainerSlot
       gun_chamber: !type:ContainerSlot
   - type: Gun
-    selectedMode: FullAuto
+    selectedMode: Burst
     availableModes:
     - Burst
     soundGunshot:

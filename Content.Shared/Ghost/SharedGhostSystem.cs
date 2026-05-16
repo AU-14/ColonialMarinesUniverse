@@ -13,9 +13,9 @@ namespace Content.Shared.Ghost
     /// System for the <see cref="GhostComponent"/>.
     /// Prevents ghosts from interacting when <see cref="GhostComponent.CanGhostInteract"/> is false.
     /// </summary>
-    public abstract class SharedGhostSystem : EntitySystem
+    public abstract partial class SharedGhostSystem : EntitySystem
     {
-        [Dependency] protected readonly SharedPopupSystem Popup = default!;
+        [Dependency] protected SharedPopupSystem Popup = default!;
 
         public override void Initialize()
         {
@@ -109,7 +109,7 @@ namespace Content.Shared.Ghost
     /// Response is sent via <see cref="GhostWarpsResponseEvent"/>
     /// </summary>
     [Serializable, NetSerializable]
-    public sealed class GhostWarpsRequestEvent : EntityEventArgs
+    public sealed partial class GhostWarpsRequestEvent : EntityEventArgs
     {
     }
 
@@ -215,7 +215,7 @@ namespace Content.Shared.Ghost
     /// Contains players, and locations a ghost can warp to
     /// </summary>
     [Serializable, NetSerializable]
-    public sealed class GhostWarpsResponseEvent : EntityEventArgs
+    public sealed partial class GhostWarpsResponseEvent : EntityEventArgs
     {
         public GhostWarpsResponseEvent(List<GhostWarp> warps)
         {
@@ -232,7 +232,7 @@ namespace Content.Shared.Ghost
     ///  A client to server request for their ghost to be warped to an entity
     /// </summary>
     [Serializable, NetSerializable]
-    public sealed class GhostWarpToTargetRequestEvent : EntityEventArgs
+    public sealed partial class GhostWarpToTargetRequestEvent : EntityEventArgs
     {
         public NetEntity Target { get; }
 
@@ -246,13 +246,13 @@ namespace Content.Shared.Ghost
     /// A client to server request for their ghost to be warped to the most followed entity.
     /// </summary>
     [Serializable, NetSerializable]
-    public sealed class GhostnadoRequestEvent : EntityEventArgs;
+    public sealed partial class GhostnadoRequestEvent : EntityEventArgs;
 
     /// <summary>
     /// A client to server request for their ghost to return to body
     /// </summary>
     [Serializable, NetSerializable]
-    public sealed class GhostReturnToBodyRequest : EntityEventArgs
+    public sealed partial class GhostReturnToBodyRequest : EntityEventArgs
     {
     }
 
@@ -260,7 +260,7 @@ namespace Content.Shared.Ghost
     /// A server to client update with the available ghost role count
     /// </summary>
     [Serializable, NetSerializable]
-    public sealed class GhostUpdateGhostRoleCountEvent : EntityEventArgs
+    public sealed partial class GhostUpdateGhostRoleCountEvent : EntityEventArgs
     {
         public int AvailableGhostRoles { get; }
 
@@ -270,7 +270,7 @@ namespace Content.Shared.Ghost
         }
     }
 
-    public sealed class GhostAttemptHandleEvent(MindComponent mind, bool canReturnGlobal) : HandledEntityEventArgs
+    public sealed partial class GhostAttemptHandleEvent(MindComponent mind, bool canReturnGlobal) : HandledEntityEventArgs
     {
         public MindComponent Mind { get; } = mind;
         public bool CanReturnGlobal { get; } = canReturnGlobal;

@@ -8,10 +8,12 @@
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianJournalist
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconColonyJournalist"
+  hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: Journalist (CMU)
   accessGroups:
   - Colonist
   - aunews

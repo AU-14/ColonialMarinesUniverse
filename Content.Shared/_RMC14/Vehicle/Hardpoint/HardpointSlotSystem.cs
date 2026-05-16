@@ -3,21 +3,25 @@ using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
+using Content.Shared.Tools;
 using Content.Shared.Tools.Systems;
 using Content.Shared.UserInterface;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Vehicle;
 
-public sealed class HardpointSlotSystem : EntitySystem
+public sealed partial class HardpointSlotSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly HardpointSystem _hardpoints = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedToolSystem _tool = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    private static readonly ProtoId<ToolQualityPrototype> VanRemoveToolQuality = "Prying";
+
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private HardpointSystem _hardpoints = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {
@@ -107,7 +111,10 @@ public sealed class HardpointSlotSystem : EntitySystem
 
     private void OnSlotsInteractUsing(Entity<HardpointSlotsComponent> ent, ref InteractUsingEvent args)
     {
-        if (args.Handled || args.User == null)
+        if (args.Handled)
+            return;
+
+        if (_hardpoints.TryStartFailureRepairInTree(ent.Owner, ent.Comp, args))
             return;
 
         if (TryStartHardpointInsert(ent, args.User, args.Used))
@@ -124,7 +131,10 @@ public sealed class HardpointSlotSystem : EntitySystem
             return;
         }
 
-        if (!_tool.HasQuality(args.Used, ent.Comp.RemoveToolQuality))
+        if (!HasHardpointRemovalQuality(args.Used, ent.Comp))
+            return;
+
+        if (_hardpoints.HasMatchingFailureRepairStepInTree(ent.Owner, ent.Comp, args.Used))
             return;
 
         if (_ui.TryOpenUi(ent.Owner, HardpointUiKey.Key, args.User))
@@ -154,7 +164,7 @@ public sealed class HardpointSlotSystem : EntitySystem
             return true;
         }
 
-        if (EntityManager.IsClientSide(ent.Owner))
+        if (IsClientSide(ent.Owner))
             return true;
 
         if (targetLocation.State.PendingInsertUsers.Contains(user))
@@ -346,7 +356,7 @@ public sealed class HardpointSlotSystem : EntitySystem
             return;
         }
 
-        if (!_hardpoints.TryGetPryingTool(user, location.Slots.RemoveToolQuality, out var tool))
+        if (!TryGetHardpointRemovalTool(user, location.Slots, out var tool))
         {
             const string error = "You need a prying tool to remove this hardpoint.";
             _popup.PopupEntity(error, user, user);
@@ -387,4 +397,32 @@ public sealed class HardpointSlotSystem : EntitySystem
         RefreshUi();
     }
 
+    private bool HasHardpointRemovalQuality(EntityUid used, HardpointSlotsComponent slots)
+    {
+        if (_tool.HasQuality(used, slots.RemoveToolQuality))
+            return true;
+
+        return IsVanHardpointFamily(slots) &&
+               _tool.HasQuality(used, VanRemoveToolQuality);
+    }
+
+    private bool TryGetHardpointRemovalTool(EntityUid user, HardpointSlotsComponent slots, out EntityUid tool)
+    {
+        if (_hardpoints.TryGetPryingTool(user, slots.RemoveToolQuality, out tool))
+            return true;
+
+        if (IsVanHardpointFamily(slots) &&
+            _hardpoints.TryGetPryingTool(user, VanRemoveToolQuality, out tool))
+        {
+            return true;
+        }
+
+        tool = default;
+        return false;
+    }
+
+    private static bool IsVanHardpointFamily(HardpointSlotsComponent slots)
+    {
+        return slots.VehicleFamily == "Van";
+    }
 }

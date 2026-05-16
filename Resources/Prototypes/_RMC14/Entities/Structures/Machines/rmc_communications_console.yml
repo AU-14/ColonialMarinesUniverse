@@ -73,6 +73,17 @@
   - type: TacticalMapComputer
 
 - type: entity
+  parent: RMCGroundsideOperationsConsole
+  id: RMCGroundsideOperationsConsoleGovfor
+  suffix: Govfor
+  components:
+  - type: OverwatchConsole
+    canMessageSquad: false
+    group: GOVFOR
+  - type: TacticalMapComputer
+    faction: govfor
+
+- type: entity
   parent: RMCCommunicationsConsoleBase
   id: RMCWarshipControlConsole
   name: almayer control console
@@ -202,6 +213,22 @@
         - MidImpassable
         - LowImpassable
   - type: PlaceableSurface
+
+- type: entity
+  parent: RMCTacticalMapTable
+  id: RMCTacticalMapTableGovfor
+  suffix: Govfor
+  components:
+  - type: TacticalMapComputer
+    faction: govfor
+
+- type: entity
+  parent: RMCTacticalMapTableLarge
+  id: RMCTacticalMapTableLargeGovfor
+  suffix: Govfor, Large
+  components:
+  - type: TacticalMapComputer
+    faction: govfor
 
 - type: entity
   parent: RMCTacticalMapTableLarge

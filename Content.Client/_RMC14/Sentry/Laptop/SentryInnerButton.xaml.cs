@@ -67,7 +67,7 @@ public sealed partial class SentryInnerButton : Button
         if (NameScope != null)
         {
             var color = Disabled ? DisabledTextColor : TextColor;
-            Label.SetMarkup($"[color={color.ToHex()}][bold]{LabelText ?? string.Empty}[/bold][/color]");
+            TextLabel.SetMarkup($"[color={color.ToHex()}][bold]{LabelText ?? string.Empty}[/bold][/color]");
         }
     }
 

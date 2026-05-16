@@ -24,6 +24,9 @@
     state: cmb_headset
   - type: UniformAccessory
     hidden: true
+    viewerWhitelist:
+      components:
+      - CLFMember
     category: Utility
     limit: 1
     playerSprite:

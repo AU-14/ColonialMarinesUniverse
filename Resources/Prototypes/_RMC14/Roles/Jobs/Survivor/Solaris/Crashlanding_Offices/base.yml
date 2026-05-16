@@ -25,7 +25,7 @@
     - type: MotionDetectorTracked
     - type: RMCAllowSuitStorage
     - type: IntelRescueSurvivorObjective
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetPMCBase
     - type: NpcFactionMember
       factions:
@@ -46,7 +46,7 @@
   name: pmc survivor weapons preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomWeapon:
     - [ RMCWeaponRifleM54CWhiteNoLock, CMMagazineRifleM54C, CMMagazineRifleM54C]
     - [ RMCWeaponRifleSSG45NoLockStripped, RMCMagazineRifleSSG45, RMCMagazineRifleSSG45 ]

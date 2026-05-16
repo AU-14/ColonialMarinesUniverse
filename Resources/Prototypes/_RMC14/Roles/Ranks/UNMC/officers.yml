@@ -46,6 +46,8 @@
   prefix: 2ndLt.
   paygrade: O1
 
+# AU-14 TO-DO Change these to WO1-WO5 instead of W1-W5
+
 - type: rank
   id: RMCRankChiefWarrantOfficer5
   name: Chief Warrant Officer 5

@@ -13,15 +13,15 @@ using Robust.Shared.Physics.Systems;
 
 namespace Content.Shared._RMC14.Movement;
 
-public sealed class RMCMovementSystem : EntitySystem
+public sealed partial class RMCMovementSystem : EntitySystem
 {
-    [Dependency] private readonly FixtureSystem _fixture = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private FixtureSystem _fixture = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private INetManager _net = default!;
 
     private HashSet<EntityUid> _intersectedEntities = new();
     public override void Initialize()

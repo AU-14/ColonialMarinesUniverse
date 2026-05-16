@@ -1,0 +1,11 @@
+- type: localizedDataset
+  id: NamesTribalFirst
+  values:
+    prefix: names-tribal-first-dataset-
+    count: 20
+
+- type: localizedDataset
+  id: NamesTribalClan
+  values:
+    prefix: names-tribal-clan-dataset-
+    count: 12

@@ -20,22 +20,22 @@ using Content.Server._RMC14.Commendations;
 namespace Content.Server._RMC14.Admin.Commendations;
 
 [AdminCommand(AdminFlags.Commendations)]
-public sealed class RMCGiveCommendationCommand : LocalizedCommands
+public sealed partial class RMCGiveCommendationCommand : LocalizedCommands
 {
-    [Dependency] private readonly IPlayerLocator _locator = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IEntitySystemManager _systems = default!;
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly CommendationManager _commendation = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private IPlayerLocator _locator = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IEntitySystemManager _systems = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private CommendationManager _commendation = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private IEntityManager _entities = default!;
 
     private LocalizedDatasetPrototype? _jelliesDataset;
     private LocalizedDatasetPrototype? _jelliesSpecialDataset;
-    private IReadOnlyList<ProtoId<EntityPrototype>>? _medalIds;
-    private IReadOnlyList<ProtoId<EntityPrototype>>? _specialMedalIds;
+    private IReadOnlyList<EntProtoId>? _medalIds;
+    private IReadOnlyList<EntProtoId>? _specialMedalIds;
 
     public override string Command => "rmcgivecommendation";
 
@@ -202,7 +202,7 @@ public sealed class RMCGiveCommendationCommand : LocalizedCommands
         }
         catch (Exception e)
         {
-            Logger.Error($"Error saving commendation: {e}");
+            Logger.GetSawmill("content").Error($"Error saving commendation: {e}");
         }
     }
 
@@ -366,8 +366,8 @@ public sealed class RMCGiveCommendationCommand : LocalizedCommands
 
     private string GetMedalAwardName(int awardNum)
     {
-        var medalIds = _medalIds ?? Array.Empty<ProtoId<EntityPrototype>>();
-        var specialMedalIds = _specialMedalIds ?? Array.Empty<ProtoId<EntityPrototype>>();
+        var medalIds = _medalIds ?? Array.Empty<EntProtoId>();
+        var specialMedalIds = _specialMedalIds ?? Array.Empty<EntProtoId>();
 
         if (awardNum <= medalIds.Count)
         {
@@ -383,8 +383,8 @@ public sealed class RMCGiveCommendationCommand : LocalizedCommands
     private CompletionOption[] GetMedalCompletionOptions()
     {
         var options = new List<CompletionOption>();
-        var medalIds = _medalIds ?? Array.Empty<ProtoId<EntityPrototype>>();
-        var specialMedalIds = _specialMedalIds ?? Array.Empty<ProtoId<EntityPrototype>>();
+        var medalIds = _medalIds ?? Array.Empty<EntProtoId>();
+        var specialMedalIds = _specialMedalIds ?? Array.Empty<EntProtoId>();
 
         for (var i = 0; i < medalIds.Count; i++)
         {
@@ -402,10 +402,10 @@ public sealed class RMCGiveCommendationCommand : LocalizedCommands
         return options.ToArray();
     }
 
-    private ProtoId<EntityPrototype>? GetMedalPrototypeId(int awardNum)
+    private EntProtoId? GetMedalPrototypeId(int awardNum)
     {
-        var medalIds = _medalIds ?? Array.Empty<ProtoId<EntityPrototype>>();
-        var specialMedalIds = _specialMedalIds ?? Array.Empty<ProtoId<EntityPrototype>>();
+        var medalIds = _medalIds ?? Array.Empty<EntProtoId>();
+        var specialMedalIds = _specialMedalIds ?? Array.Empty<EntProtoId>();
 
         if (awardNum <= medalIds.Count)
             return medalIds[awardNum - 1];

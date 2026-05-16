@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Inventory;
+using Content.Shared._RMC14.Inventory;
 using Content.Shared._RMC14.Weapons.Ranged.Ammo.BulletBox;
 using Content.Shared.Database;
 using Content.Shared.Popups;
@@ -9,12 +9,12 @@ using Robust.Shared.Network;
 
 namespace Content.Shared._RMC14.Construction;
 
-public sealed class RMCUnfoldCardboardSystem : EntitySystem
+public sealed partial class RMCUnfoldCardboardSystem : EntitySystem
 {
-    [Dependency] private readonly SharedCMInventorySystem _cmInventory = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private SharedCMInventorySystem _cmInventory = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private INetManager _net = default!;
 
     public override void Initialize()
     {

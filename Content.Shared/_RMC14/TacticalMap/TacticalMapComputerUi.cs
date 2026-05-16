@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Serialization;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.TacticalMap;
 
@@ -50,4 +50,4 @@ public sealed class TacticalMapMoveLabelMsg(Vector2i oldPosition, Vector2i newPo
 
 [DataRecord]
 [Serializable, NetSerializable]
-public readonly record struct TacticalMapLine(Vector2i Start, Vector2i End, Color Color, float Thickness = 2.0f);
+public readonly partial record struct TacticalMapLine(Vector2i Start, Vector2i End, Color Color, float Thickness = 2.0f);

@@ -34,16 +34,16 @@ namespace Content.Shared._CMU14.Medical.Wounds;
 ///     <see cref="SharedOrganHealthSystem"/> so integrity / fracture-severity
 ///     / organ-stage are already updated when the wound layer reads them.
 /// </summary>
-public abstract class SharedCMUWoundsSystem : EntitySystem
+public abstract partial class SharedCMUWoundsSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly IPrototypeManager Proto = default!;
-    [Dependency] protected readonly SharedBodySystem Body = default!;
-    [Dependency] protected readonly DamageableSystem Damageable = default!;
-    [Dependency] protected readonly SharedContainerSystem Containers = default!;
-    [Dependency] protected readonly INetManager Net = default!;
-    [Dependency] protected readonly RMCUnrevivableSystem Unrevivable = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected IPrototypeManager Proto = default!;
+    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected DamageableSystem Damageable = default!;
+    [Dependency] protected SharedContainerSystem Containers = default!;
+    [Dependency] protected INetManager Net = default!;
+    [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";

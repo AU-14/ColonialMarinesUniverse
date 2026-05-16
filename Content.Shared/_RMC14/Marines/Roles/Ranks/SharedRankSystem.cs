@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Dataset;
 using Content.Shared.Examine;
@@ -8,10 +8,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Marines.Roles.Ranks;
 
-public abstract class SharedRankSystem : EntitySystem
+public abstract partial class SharedRankSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IEntityManager _entMan = default!;
 
     public override void Initialize()
     {
@@ -156,7 +156,7 @@ public abstract class SharedRankSystem : EntitySystem
         if (rankOrder.Count == 0)
         {
             // The dataset cannot be empty, the person forgot to add values ​​to it
-            Logger.Error($"The rank hierarchy dataset '{rankHierarchyId}' has an invalid value: empty. The highest rank cannot be determined.");
+            Logger.GetSawmill("content").Error($"The rank hierarchy dataset '{rankHierarchyId}' has an invalid value: empty. The highest rank cannot be determined.");
             return null;
         }
 

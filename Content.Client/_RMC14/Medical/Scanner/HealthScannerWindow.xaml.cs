@@ -18,8 +18,8 @@ public sealed partial class HealthScannerWindow : DefaultWindow
     private static readonly Vector2 MinimumWindowSize = new(520f, 420f);
     private static readonly TimeSpan ServerLoadingPulse = TimeSpan.FromSeconds(0.4);
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
     private readonly CMUMedicalUniformScaler _uniformScaler = new();
 
     private TimeSpan _loadingStart;

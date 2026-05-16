@@ -13,6 +13,17 @@
     state: base
 
 - type: entity
+  parent: CMSeatPassenger
+  id: RMCSeatVehiclePassenger
+  description: A sturdy chair with a brace that lowers over your body. Prevents being flung around in vehicle during crash being injured as a result. Fasten your seatbelts, kids!
+  components:
+  - type: RemoveComponents
+    components:
+    - type: Damageable
+    - type: Destructible
+    - type: Corrodible
+
+- type: entity
   parent: CMSeatBase
   id: CMSeatPilot
   name: pilot's chair

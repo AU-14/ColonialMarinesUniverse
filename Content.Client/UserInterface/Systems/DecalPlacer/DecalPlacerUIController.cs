@@ -1,4 +1,4 @@
-﻿using Content.Client.Decals.UI;
+using Content.Client.Decals.UI;
 using Content.Client.Gameplay;
 using Content.Client.Sandbox;
 using Content.Shared.Decals;
@@ -10,10 +10,10 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.UserInterface.Systems.DecalPlacer;
 
-public sealed class DecalPlacerUIController : UIController, IOnStateExited<GameplayState>, IOnSystemChanged<SandboxSystem>
+public sealed partial class DecalPlacerUIController : UIController, IOnStateExited<GameplayState>, IOnSystemChanged<SandboxSystem>
 {
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [UISystemDependency] private readonly SandboxSystem _sandbox = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [UISystemDependency] private SandboxSystem _sandbox = default!;
 
     private DecalPlacerWindow? _window;
 

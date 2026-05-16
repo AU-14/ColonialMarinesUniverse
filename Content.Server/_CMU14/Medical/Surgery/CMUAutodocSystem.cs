@@ -33,26 +33,26 @@ namespace Content.Server._CMU14.Medical.Surgery;
 
 using RMCSurgerySystem = Content.Server._RMC14.Medical.Surgery.CMSurgerySystem;
 
-public sealed class CMUAutodocSystem : EntitySystem
+public sealed partial class CMUAutodocSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly CMUSurgeryDispatchSystem _dispatch = default!;
-    [Dependency] private readonly SharedCMUSurgeryFlowSystem _flow = default!;
-    [Dependency] private readonly SharedBodyPartHealthSystem _partHealth = default!;
-    [Dependency] private readonly SharedRMCDamageableSystem _rmcDamageable = default!;
-    [Dependency] private readonly RMCSurgerySystem _rmcSurgery = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedCMUWoundsSystem _wounds = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private CMUSurgeryDispatchSystem _dispatch = default!;
+    [Dependency] private SharedCMUSurgeryFlowSystem _flow = default!;
+    [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
+    [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
+    [Dependency] private RMCSurgerySystem _rmcSurgery = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private SharedCMUWoundsSystem _wounds = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
     private const string AutodocWoundRepairId = "CMUAutodocRepairWounds";

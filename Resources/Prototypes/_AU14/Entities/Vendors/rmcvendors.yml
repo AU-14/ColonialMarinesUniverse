@@ -267,18 +267,17 @@
     sections:
     - name: Food
       entries:
-      - id: CMMRE
-        name: MRE
+      - id: AU14MRETWERMC
         recommended: true
         amount: 60
-      - id: RMCBoxMRE
+      - id: AU14BoxMRETWERMC
         amount: 10
     - name: Medical Supplies
       entries:
       - id: AU14PouchIFAKFill
         name: infantry first aid kit (Full)
         recommended: true
-        amount: 40
+        amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 40
       - id: AU14Tourniquet
@@ -288,7 +287,7 @@
       - id: CMPacketPillsTricordrazine
         amount: 40
       - id: AU14NaloxoneAutoInjector
-        amount: 5
+        amount: 9
     - name: Tools
       entries:
       - id: CMEntrenchingTool
@@ -299,12 +298,13 @@
         amount: 15
       - id: RMCTantoB
         recommended: true
+        name: MK3 infantry service tanto (camo)
         amount: 15
       - id: CMM11Knife
         amount: 15
       - id: RMCScabbardMacheteFilled
         name: machete scabbard (Full)
-        amount: 5
+        amount: 6
       - id: RMCHelmetGarbGunOil
         amount: 30
       - id: CMFireExtinguisher
@@ -325,21 +325,25 @@
         amount: 10
       - id: CMWelderSmall
         amount: 10
+      - id: CMWelder
+        amount: 4
       - id: RMCWelderPVE
-        amount: 5
+        amount: 1
     - name: Engineering Supplies
       entries:
       - id: CMSandbagEmpty25
         recommended: true
         amount: 60
       - id: BarbedWire15
-        amount: 4
+        amount: 6
       - id: CMSheetMetal50
-        amount: 2
+        amount: 3
       - id: CMSheetPlasteel50
         amount: 1
       - id: RMCBoxMagazinePowerCellsHighFilled
         amount: 2
+      - id: RMCEngineerKit
+        amount: 1
       - id: RMCPowerCellHigh
         amount: 5
       - id: RMCCableCoil
@@ -347,25 +351,25 @@
     - name: Flares and lights
       entries:
       - id: RMCBoxFlashlights
-        amount: 5
+        amount: 4
       - id: RMCFlashlight
-        amount: 5
+        amount: 20
       - id: RMCWeaponPistolM82F
-        amount: 2
+        amount: 4
       - id: AU14BoxPackFlareRMC
         amount: 5
       - id: AU14PackFlareRMC
-        amount: 5
+        amount: 12
       - id: RMCBoxPackFlareCAS
         amount: 1
       - id: RMCPackFlareCAS
-        amount: 2
+        amount: 7
     - name: Optics
       entries:
       - id: RMCLaserDesignatorPVE
-        amount: 3
+        amount: 2
       - id: RMCBinocularsPVE
-        amount: 4
+        amount: 5
     - name: Miscellaneous
       entries:
       - id: RMCZipties
@@ -373,16 +377,14 @@
         amount: 60
       - id: AU14CaseMotionDetectorRMC
         amount: 1
-      #- id: CMMap
-      #  amount: 5
       - id: CMRollerBedSpawnFolded
-        amount: 4
-      #- id: CMFoldingBarricadesMB6x3
-      #  amount: 2
-      #- id: CMSparePDTLBattleBuddyKit
-      #  amount: 3
+        amount: 8
       - id: BedrollFolded
         amount: 20
+      - id: RMCGuidebookSOP
+        amount: 3
+      - id: RMCGuidebookLawMarine
+        amount: 3
 
 #corpsman
 - type: entity
@@ -651,8 +653,24 @@
         amount: 15
       - id: CMPillCanisterTricordrazine
         amount: 15
-#      - id: CMPillCanisterPeridaxon
-#      - id: CMPillCanisterTramadol
+      - id: RMCPillCanisterIron
+        amount: 15
+      - id: AU14PillCanisterParacetamol
+        amount: 15
+      - id: AU14PillCanisterTramadol
+        amount: 15
+      - id: AU14PillCanisterOxycodone
+        amount: 15
+      - id: AU14PillCanisterCardiocaine
+        amount: 15
+      - id: AU14PillCanisterHepatocytin
+        amount: 15
+      - id: AU14PillCanisterNephronate
+        amount: 15
+      - id: AU14PillCanisterOsteoCalc
+        amount: 15
+      - id: AU14PillCanisterPulmovine
+        amount: 15
     - name: Injectors
       entries:
       - id: CMEpinephrineAutoInjector
@@ -664,6 +682,16 @@
       - id: CMDexalinPlusAutoInjector
         amount: 15
       - id: CMTricordrazineAutoInjector
+        amount: 15
+      - id: CMBicaridineAutoInjector
+        amount: 15
+      - id: CMKelotaneAutoInjector
+        amount: 15
+      - id: AU14ParacetamolAutoInjector
+        amount: 15
+      - id: AU14TramadolAutoInjector
+        amount: 15
+      - id: AU14OxycodoneAutoInjector
         amount: 15
     - name: Medical Gloves
       choices: { CMUPlatoonMedicalGloves: 1 }
@@ -995,8 +1023,8 @@
         amount: 15
       - id: RMCRocket84mm
         amount: 7
-      - id: RMCPouchExplosive
-        amount: 1
+      - id: AU14BackpackRockets
+        amount: 2
 
 # AirCrew Weapons
 - type: entity
@@ -1223,6 +1251,8 @@
         amount: 8
       - id: RMCWeaponLauncherDisposableFolded
         amount: 2
+      - id: RMCRocketM5510Brute
+        amount: 12
     - name: Barrel Attachments
       entries:
       - id: RMCAttachmentExtendedBarrel

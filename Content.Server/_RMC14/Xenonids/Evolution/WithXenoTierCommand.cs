@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Server.Administration;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Administration;
@@ -8,9 +8,9 @@ using Robust.Shared.Toolshed;
 namespace Content.Server._RMC14.Xenonids.Evolution;
 
 [ToolshedCommand, AdminCommand(AdminFlags.Query)]
-public sealed class WithXenoTierCommand : ToolshedCommand
+public sealed partial class WithXenoTierCommand : ToolshedCommand
 {
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
 
     [CommandImplementation]
     public IEnumerable<EntityUid> With(

@@ -540,6 +540,7 @@ public sealed partial class HardpointMenu : FancyWindow
         _previewOverlays.Clear();
     }
 
+    [System.Obsolete]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

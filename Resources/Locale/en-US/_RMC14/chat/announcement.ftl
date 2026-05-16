@@ -42,22 +42,13 @@ rmc-announcement-dropship-message = [color=#CECECE][font size=16][bold]Dropship 
 rmc-announcement-emergency-dropship-crash = [font size=14][bold][color=#CECECE]EMERGENCY[/color][/bold][/font][font size=16][color=red]
   DROPSHIP ON COLLISION COURSE. CRASH IMMINENT.[/color][/font]
 
-rmc-announcement-delta = [color=#CECECE][font size=16][bold]SELF-DESTRUCT SYSTEMS ACTIVE[/bold][/font][/color][color=red][font size=16][bold]
-
-     DANGER, THE EMERGENCY DESTRUCT SYSTEM IS NOW ACTIVATED. PROCEED TO THE SELF-DESTRUCT CHAMBER FOR CONTROL ROD INSERTION.[/bold][/font][/color]
+rmc-announcement-delta = [color=#CECECE][font size=16][bold]SELF-DESTRUCT SYSTEMS ACTIVE[/bold][/font][/color]\n[color=red][font size=16][bold]DANGER, THE EMERGENCY DESTRUCT SYSTEM IS NOW ACTIVATED.[/bold][/font][/color]\n[color=red][font size=16][bold]PROCEED TO THE SELF-DESTRUCT CHAMBER FOR CONTROL ROD INSERTION.[/bold][/font][/color]
 
 rmc-announcement-general-quarters = ATTENTION! GENERAL QUARTERS. ALL HANDS, MAN YOUR BATTLESTATIONS.
 
 rmc-announcement-dropship-hijack = Unscheduled dropship departure detected from operational area. Hijack likely. Shutting down autopilot.
 
-rmc-announcement-dropship-hijack-human = Unauthorized dropship launch detected. Navigation systems have been overridden by hostile forces. All hands to battle stations.
-
 rmc-announcement-dropship-hijack-hive = The Queen has commanded the metal bird to depart for the metal hive in the sky! Rejoice!
-
-rmc-announcement-dropship-hijack-landed-hive = Our forces have breached the metal hive in the sky! Slaughter the talls!
-
-rmc-announcement-dropship-crashed = [font size=14][bold][color=#CECECE]EMERGENCY[/color][/bold][/font][font size=16][color=red]
-  THE DROPSHIP HAS CRASHED INTO THE SHIP. ALL HANDS BRACE FOR IMPACT.[/color][/font]
 
 rmc-announcement-ares-command = [color=#CECECE][font size=16][bold]ARES v3.2[/bold][/font][/color][color=red][font size=16]
 

@@ -345,6 +345,68 @@
       map: ["enum.PaperLabelVisuals.Layer"]
   - type: Icon
     sprite: _RMC14/Structures/Storage/Crates/hydro.rsi
+  - type: StorageFill
+    contents:
+    - id: ChemistryBottleEZNutrient
+      amount: 1
+    - id: ChemistryBottleRobustHarvest
+      amount: 1
+    - id: ChemistryBottleLeft4Zed
+      amount: 1
+    - id: RMCBucket
+      amount: 1
+    - id: RMCToolSpade
+      amount: 1
+    - id: RMCToolHatchet
+      amount: 1
+    - id: RMCToolMiniHoe
+      amount: 1
+    - id: BananaSeeds
+      amount: 1
+    - id: BerrySeeds
+      amount: 1
+    - id: ChiliSeeds
+      amount: 1
+    - id: CornSeeds
+      amount: 1
+    - id: PotatoSeeds
+      amount: 1
+    - id: TomatoSeeds
+      amount: 1
+    - id: WheatSeeds
+      amount: 1
+    - id: AppleSeeds
+      amount: 1
+    - id: PoppySeeds
+      amount: 1
+    - id: SugarcaneSeeds
+      amount: 1
+    - id: WatermelonSeeds
+      amount: 1
+    - id: LimeSeeds
+      amount: 1
+    - id: LemonSeeds
+      amount: 1
+    - id: OrangeSeeds
+      amount: 1
+    - id: PineappleSeeds
+      amount: 1
+    - id: CocoaSeeds
+      amount: 1
+    - id: CabbageSeeds
+      amount: 1
+    - id: GrapeSeeds
+      amount: 1
+    - id: CherrySeeds
+      amount: 1
+    - id: RiceSeeds
+      amount: 1
+    - id: GarlicSeeds
+      amount: 1
+    - id: OnionRedSeeds
+      amount: 1
+    - id: BoxMouthSwab
+      amount: 1
 
 - type: entity
   parent: RMCCrateBase
@@ -599,7 +661,7 @@
   description: A secure gear crate.
 
 - type: entity
-  parent: RMCCrateSecure
+  parent: RMCCrateHydro
   id: RMCCrateSecureHydro
   name: secure hydroponics crate
   description: A crate with a lock on it, painted in the scheme of the station's botanists.

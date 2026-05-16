@@ -25,20 +25,20 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Medical.Wounds;
 
-public sealed class CMUBandageInterceptionSystem : EntitySystem
+public sealed partial class CMUBandageInterceptionSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedBodyZoneTargetingSystem _zoneTargeting = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly SharedStackSystem _stacks = default!;
-    [Dependency] private readonly SharedCMUSurgeryFlowSystem _surgery = default!;
-    [Dependency] private readonly CMUWoundsSystem _wounds = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedBodyZoneTargetingSystem _zoneTargeting = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SharedStackSystem _stacks = default!;
+    [Dependency] private SharedCMUSurgeryFlowSystem _surgery = default!;
+    [Dependency] private CMUWoundsSystem _wounds = default!;
 
     private static readonly TimeSpan TreatDelay = TimeSpan.FromSeconds(1);
 
@@ -54,7 +54,7 @@ public sealed class CMUBandageInterceptionSystem : EntitySystem
             && _cfg.GetCVar(CMUMedicalCCVars.WoundsEnabled);
     }
 
-    public void HandleAfterInteract(Entity<CMUHumanMedicalComponent> medic, ref AfterInteractEvent args)
+    public void HandleAfterInteract(EntityUid medic, ref AfterInteractEvent args)
     {
         if (args.Handled || !args.CanReach || args.Target is not { } patient)
             return;

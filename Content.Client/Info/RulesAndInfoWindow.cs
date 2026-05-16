@@ -1,23 +1,42 @@
 using System.Numerics;
+using Content.Client.Lobby.UI;
+using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.EscapeMenu;
+using Content.Shared.CCVar;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.ContentPack;
+using Robust.Shared.Configuration;
 
 namespace Content.Client.Info
 {
-    public sealed class RulesAndInfoWindow : DefaultWindow
+    public sealed partial class RulesAndInfoWindow : DefaultWindow
     {
-        [Dependency] private readonly IResourceManager _resourceManager = default!;
+        [Dependency] private IResourceManager _resourceManager = default!;
+        [Dependency] private IConfigurationManager _cfg = default!;
+        [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
         public RulesAndInfoWindow()
         {
             IoCManager.InjectDependencies(this);
+            ApplyCrtPalette();
 
             Title = Loc.GetString("ui-info-title");
 
-            var rootContainer = new TabContainer();
+            var panel = new PanelContainer
+            {
+                HorizontalExpand = true,
+                VerticalExpand = true,
+                StyleClasses = { StyleNano.StyleClassCrtPanel }
+            };
+
+            var rootContainer = new TabContainer
+            {
+                HorizontalExpand = true,
+                VerticalExpand = true,
+                StyleClasses = { StyleNano.StyleClassCrtTabContainer }
+            };
 
             var rulesList = new RulesControl
             {
@@ -36,9 +55,30 @@ namespace Content.Client.Info
 
             PopulateTutorial(tutorialList);
 
-            Contents.AddChild(rootContainer);
+            panel.AddChild(rootContainer);
+            Contents.AddChild(panel);
+            CrtLobbyTheme.Apply(this, useCrtTypography: false);
+            _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
 
             SetSize = new Vector2(650, 650);
+        }
+
+        [Obsolete("Controls should only be removed from UI tree instead of being disposed")]
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+        }
+
+        private void OnCrtUiColorChanged(string _)
+        {
+            ApplyCrtPalette();
+        }
+
+        private void ApplyCrtPalette()
+        {
+            Stylesheet = _stylesheetManager.SheetNano;
         }
 
         private void PopulateTutorial(Info tutorialList)

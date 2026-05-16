@@ -13,12 +13,7 @@
 
 - type: auThirdParty
   id: VAIPO
-  displayName: VAIPO Mercenaries squad
   partyspawn: VAIPOSpawn
-  blacklistedgamemodes:
-    - insurgency
-    - forceonforce
-    - colonyfall
   entrymethod: shuttle
   weight: 20
   minplayers: 100
@@ -38,12 +33,7 @@
 
 - type: auThirdParty
   id: VAISP
-  displayName: VAISP Mercenaries squad
   partyspawn: VAISPSpawn
-  blacklistedgamemodes:
-    - insurgency
-    - forceonforce
-    - colonyfall
   entrymethod: shuttle
   weight: 20
   minplayers: 100

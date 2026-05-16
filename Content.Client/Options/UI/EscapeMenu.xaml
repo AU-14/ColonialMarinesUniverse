@@ -1,11 +1,46 @@
 ﻿<ui1:EscapeMenu xmlns="https://spacestation14.io"
             xmlns:changelog="clr-namespace:Content.Client.Changelog"
+            xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
             xmlns:ui="clr-namespace:Content.Client.Voting.UI"
             xmlns:ui1="clr-namespace:Content.Client.Options.UI"
             Title="{Loc 'ui-escape-title'}"
             Resizable="False">
 
-    <BoxContainer Orientation="Vertical" SeparationOverride="4" MinWidth="150">
+    <BoxContainer Orientation="Vertical" SeparationOverride="5" MinWidth="310">
+        <PanelContainer Name="RoundStatusPanel" Access="Public">
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#11161C" BorderColor="#3E4A58" BorderThickness="1" ContentMarginLeftOverride="10" ContentMarginRightOverride="10" ContentMarginTopOverride="8" ContentMarginBottomOverride="8"/>
+            </PanelContainer.PanelOverride>
+            <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                    <Label Text="{Loc 'ui-escape-status-title'}" Modulate="#D2B171"/>
+                    <Control HorizontalExpand="True"/>
+                    <Label Access="Public" Name="RoundTimeValue" Modulate="#FFFFFF"/>
+                </BoxContainer>
+                <PanelContainer StyleClasses="LowDivider" />
+                <BoxContainer Orientation="Vertical" SeparationOverride="3">
+                    <BoxContainer Orientation="Horizontal" SeparationOverride="10">
+                        <Label Text="{Loc 'ui-escape-status-map'}" Modulate="#8C96A3" MinSize="96 0"/>
+                        <Label Access="Public" Name="MapValue" Text="{Loc 'ui-escape-status-unknown'}" ClipText="True" HorizontalExpand="True" MinWidth="220" Modulate="#FFFFFF"/>
+                    </BoxContainer>
+                    <BoxContainer Orientation="Horizontal" SeparationOverride="10">
+                        <Label Text="{Loc 'ui-escape-status-ship-map'}" Modulate="#8C96A3" MinSize="96 0"/>
+                        <Label Access="Public" Name="ShipMapValue" Text="{Loc 'ui-escape-status-no-ship'}" ClipText="True" HorizontalExpand="True" MinWidth="220" Modulate="#FFFFFF"/>
+                    </BoxContainer>
+                    <BoxContainer Orientation="Horizontal" SeparationOverride="10">
+                        <Label Text="{Loc 'ui-escape-status-gamemode'}" Modulate="#8C96A3" MinSize="96 0"/>
+                        <Label Access="Public" Name="GamemodeValue" Text="{Loc 'ui-escape-status-unknown'}" ClipText="True" HorizontalExpand="True" MinWidth="220" Modulate="#FFFFFF"/>
+                    </BoxContainer>
+                    <BoxContainer Orientation="Horizontal" SeparationOverride="10">
+                        <Label Text="{Loc 'ui-escape-status-round'}" Modulate="#8C96A3" MinSize="96 0"/>
+                        <Label Access="Public" Name="RoundValue" HorizontalExpand="True" Align="Right" Modulate="#FFFFFF"/>
+                        <Label Text="{Loc 'ui-escape-status-players'}" Modulate="#8C96A3" MinSize="70 0"/>
+                        <Label Access="Public" Name="PlayersValue" Align="Right" Modulate="#FFFFFF"/>
+                    </BoxContainer>
+                </BoxContainer>
+            </BoxContainer>
+        </PanelContainer>
+        <PanelContainer StyleClasses="LowDivider" Margin="0 2.5 0 2.5" />
         <Button Access="Public" Name="CreditsButton" Text="{Loc 'server-info-credits-button'}" StyleClasses="Caution" />
         <Button Access="Public" Name="PatronPerksButton" Text="{Loc 'rmc-ui-patron-perks'}" StyleClasses="Caution" Visible="False" />
         <Button Access="Public" Name="RoadmapButton" Text="{Loc 'cm-ui-roadmap'}" StyleClasses="Caution" Visible="False" />

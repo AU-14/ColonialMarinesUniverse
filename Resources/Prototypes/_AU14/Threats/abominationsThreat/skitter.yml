@@ -1,0 +1,47 @@
+# Skitter: 4-legged support abomination.
+# - AbominationPlantKudzu spawns a kudzu source under itself.
+# - AbominationSecreteStructure plants a flesh nest (only build option).
+- type: entity
+  parent: AU14AbominationBase
+  id: AU14AbominationSkitter
+  name: skitter abomination
+  description: A four-legged crawling abomination, its underside trailing wet sinew.
+  components:
+  - type: Sprite
+    sprite: _AU14/Mobs/Abominations/skitter.rsi
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: alive
+  - type: GhostRole
+    name: Skitter Abomination
+    description: A support abomination. Spread kudzu and plant flesh nests to grow the threat.
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      247: Dead
+  - type: MobStateActions
+    actions:
+      Alive:
+      - ActionAbominationPlantKudzu
+      - ActionAbominationSecreteStructure
+  # Nest is the only build option now. BuildChoice is pre-set so the skitter
+  # doesn't need to open the picker. Cooldown is 2 minutes per skitter.
+  - type: AbominationConstruction
+    canBuild:
+    - AU14AbominationFleshNest
+    buildChoice: AU14AbominationFleshNest
+    nestCooldown: 120
+  - type: UserInterface
+    interfaces:
+      enum.AbominationConstructionUiKey.Key:
+        type: AbominationConstructionBui
+  # Skitter has no hands — same as the other abominations. They drag prey,
+  # secrete structures, and otherwise stay tool-less; nothing in their kit
+  # requires a held item.
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 34
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.4
+    baseSprintSpeed: 4.2

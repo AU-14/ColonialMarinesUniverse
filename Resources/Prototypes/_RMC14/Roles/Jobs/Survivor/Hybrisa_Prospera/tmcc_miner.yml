@@ -10,7 +10,7 @@
     components:
     - type: Skills
       preset: RMCSkillPresetSurvivorMiner
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetHybrisaTMCCMiner
     - type: RMCSurvivor
     - type: MotionDetectorTracked
@@ -44,7 +44,7 @@
   name: tmcc miner preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomOutfits:
     - [ RMCHardhatRedTMCC, RMCJumpsuitTMCC, CMSatchelEngineer, RMCArmorTMCCAlt, RMCShoesJackboots, RMCPouchToolsFill, RMCHandsCombat ]
     - [ RMCHardhatRedTMCC, RMCJumpsuitTMCC, CMSatchelEngineer, RMCArmorTMCCAlt, RMCShoesJackboots, RMCPouchToolsFill, RMCHandsCombat ]

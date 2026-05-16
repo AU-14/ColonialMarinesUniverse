@@ -12,15 +12,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Organs.Brain;
 
-public abstract class SharedBrainSystem : EntitySystem
+public abstract partial class SharedBrainSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly INetManager Net = default!;
-    [Dependency] protected readonly IRobustRandom Rng = default!;
-    [Dependency] protected readonly SharedBodySystem Body = default!;
-    [Dependency] protected readonly SharedStatusEffectsSystem Status = default!;
-    [Dependency] protected readonly RMCUnrevivableSystem Unrevivable = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected INetManager Net = default!;
+    [Dependency] protected IRobustRandom Rng = default!;
+    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
 
     private static readonly EntProtoId Concussed = "StatusEffectCMUConcussed";
     private static readonly EntProtoId TraumaticBrainInjury = "StatusEffectCMUTraumaticBrainInjury";

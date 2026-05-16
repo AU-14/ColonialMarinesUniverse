@@ -11,7 +11,7 @@
     components:
     - type: Skills
       preset: RMCSkillPresetSurvivor
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetSoroCivilian
     - type: RMCSurvivor
     - type: MotionDetectorTracked
@@ -47,7 +47,7 @@
   name: sorokyne civilian preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomStartingGear:
       back:
       - CMSatchel

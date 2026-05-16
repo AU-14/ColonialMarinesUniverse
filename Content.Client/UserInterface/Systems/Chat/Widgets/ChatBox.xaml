@@ -9,9 +9,21 @@
     MinSize="465 225">
     <PanelContainer Name="ChatWindowPanel" Access="Public" HorizontalExpand="True" VerticalExpand="True"
                     StyleClasses="StyleNano.StyleClassChatPanel">
-        <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True" VerticalExpand="True">
-            <OutputPanel Name="Contents" HorizontalExpand="True" VerticalExpand="True" Margin="8 8 8 4" ShowScrollDownButton="True" />
-            <controls:ChatInputBox HorizontalExpand="True" Name="ChatInput" Access="Public" Margin="2"/>
+        <BoxContainer Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True" VerticalExpand="True">
+            <BoxContainer Name="TabHeader" Access="Public" Orientation="Horizontal" SeparationOverride="3" HorizontalExpand="True" Margin="4 3 4 0">
+                <BoxContainer Name="TabBar" Access="Public" Orientation="Horizontal" SeparationOverride="2" HorizontalExpand="True"/>
+                <controls:ChatTabOverflowButton Name="TabOverflowButton" Access="Public"/>
+                <controls:SplitChatButton Name="SplitButton" Access="Public"/>
+            </BoxContainer>
+            <BoxContainer Name="ChatPanes" Access="Public" Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True" VerticalExpand="True" Margin="4 0 4 1">
+                <widgets:ChatLogPanel Name="Contents" Access="Public" HorizontalExpand="True" VerticalExpand="True" />
+                <BoxContainer Name="SecondaryPane" Access="Public" Visible="False" Orientation="Vertical" SeparationOverride="0" HorizontalExpand="True" VerticalExpand="True">
+                    <widgets:ChatSplitResizeHandle Name="SecondaryResizeHandle" Access="Public" HorizontalExpand="True" MinHeight="4"/>
+                    <widgets:ChatLogPanel Name="SecondaryContents" Access="Public" HorizontalExpand="True" VerticalExpand="True" />
+                </BoxContainer>
+            </BoxContainer>
+            <OutputPanel Name="LegacyContents" Access="Public" Visible="False" HorizontalExpand="True" VerticalExpand="True" Margin="8 8 8 4" ShowScrollDownButton="True" />
+            <controls:ChatInputBox HorizontalExpand="True" Name="ChatInput" Access="Public" Margin="2 0 2 2"/>
         </BoxContainer>
     </PanelContainer>
 </widgets:ChatBox>

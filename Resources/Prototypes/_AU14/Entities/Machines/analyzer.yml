@@ -1,5 +1,5 @@
 - type: entity
-  parent: BaseMachinePowered
+  parent: CMBaseStructure
   id: AU14AnalyzerMachine
   name: Analyzer Machine
   description:  An intel analyzer
@@ -9,6 +9,11 @@
     noRot: true
   - type: Physics
     bodyType: Dynamic
+  - type: InteractionOutline
+  - type: Corrodible
+    isCorrodible: false
+  - type: Anchorable
+    delay: 2
   - type: AmbientOnPowered
   - type: AmbientSound
     volume: -9
@@ -50,50 +55,11 @@
 
 
 - type: entity
-  parent: BaseMachinePowered
+  parent: AU14AnalyzerMachine
   id: AU14AnalyzerMachineCLF
   name: Analyzer Machine (CLF)
   description:  An intel analyzer
   components:
-  - type: Transform
-    anchored: false
-    noRot: true
-  - type: Physics
-    bodyType: Dynamic
-  - type: AmbientOnPowered
-  - type: AmbientSound
-    volume: -9
-    range: 3
-    enabled: false
-    sound:
-      path: /Audio/Ambience/Objects/vending_machine_hum.ogg
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.95,-0.45,0.90,0.45"
-        mask:
-        - MachineMask
-        layer:
-        - MachineLayer
-        density: 200
-  - type: Electrified
-    enabled: false
-    usesApcPower: true
-  - type: PointLight
-    enabled: false
-    castShadows: false
-    radius: 1.5
-    color: "#39a1ff"
-  - type: LitOnPowered
-  - type: ApcPowerReceiver
-    needsPower: false # TODO RMC14
-    powerLoad: 0
-  - type: Appearance
-  - type: Sprite
-    sprite: _AU14/Structures/analyzermachine.rsi
-    state: analyzer_idle
   - type: Analyzer
     faction: clf
   - type: ItemSlots
@@ -256,49 +222,10 @@
 
 
 - type: entity
-  parent: BaseMachinePowered
+  parent: AU14AnalyzerMachine
   id: AU14AnalyzerMachineOpfor
   name: Analyzer Machine (Opfor)
   description:  An intel analyzer
   components:
-  - type: Transform
-    anchored: false
-    noRot: true
-  - type: Physics
-    bodyType: Static
-  - type: AmbientOnPowered
-  - type: AmbientSound
-    volume: -9
-    range: 3
-    enabled: false
-    sound:
-      path: /Audio/Ambience/Objects/vending_machine_hum.ogg
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.95,-0.45,0.90,0.45"
-        mask:
-        - MachineMask
-        layer:
-        - MachineLayer
-        density: 200
-  - type: Electrified
-    enabled: false
-    usesApcPower: true
-  - type: PointLight
-    enabled: false
-    castShadows: false
-    radius: 1.5
-    color: "#39a1ff"
-  - type: LitOnPowered
-  - type: ApcPowerReceiver
-    needsPower: false # TODO RMC14
-    powerLoad: 0
-  - type: Appearance
-  - type: Sprite
-    sprite: _AU14/Structures/analyzermachine.rsi
-    state: analyzer_idle
   - type: Analyzer
     faction: opfor

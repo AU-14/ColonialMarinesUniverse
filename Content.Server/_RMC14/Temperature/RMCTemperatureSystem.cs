@@ -1,12 +1,12 @@
-﻿using Content.Server.Temperature.Components;
+using Content.Server.Temperature.Components;
 using Content.Server.Temperature.Systems;
 using Content.Shared._RMC14.Temperature;
 
 namespace Content.Server._RMC14.Temperature;
 
-public sealed class RMCTemperatureSystem : SharedRMCTemperatureSystem
+public sealed partial class RMCTemperatureSystem : SharedRMCTemperatureSystem
 {
-    [Dependency] private readonly TemperatureSystem _temperature = default!;
+    [Dependency] private TemperatureSystem _temperature = default!;
 
     public override float GetTemperature(EntityUid entity)
     {

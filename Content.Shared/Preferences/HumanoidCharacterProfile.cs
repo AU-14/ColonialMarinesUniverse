@@ -5,6 +5,7 @@ using Content.Shared._RMC14.NamedItems;
 using Content.Shared._RMC14.Xenonids.Name;
 using Content.Shared.AU14.Allegiance;
 using Content.Shared.AU14.Origin;
+using Content.Shared.AU14.Threats;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
@@ -45,16 +46,40 @@ namespace Content.Shared.Preferences
         };
 
         /// <summary>
+        /// Job preferences scoped by gamemode/preset. Falls back to <see cref="_jobPriorities"/> when absent.
+        /// </summary>
+        [DataField]
+        private Dictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>> _gamemodeJobPriorities = new();
+
+        /// <summary>
         /// Antags we have opted in to.
         /// </summary>
         [DataField]
         private HashSet<ProtoId<AntagPrototype>> _antagPreferences = new();
 
         /// <summary>
+        /// Antag preferences scoped by gamemode/preset. Falls back to <see cref="_antagPreferences"/> when absent.
+        /// </summary>
+        [DataField]
+        private Dictionary<string, HashSet<ProtoId<AntagPrototype>>> _gamemodeAntagPreferences = new();
+
+        /// <summary>
         /// Enabled traits.
         /// </summary>
         [DataField]
         private HashSet<ProtoId<TraitPrototype>> _traitPreferences = new();
+
+        /// <summary>
+        /// AU threats we have opted in to bias toward.
+        /// </summary>
+        [DataField]
+        private HashSet<ProtoId<ThreatPrototype>> _threatPreferences = new();
+
+        /// <summary>
+        /// AU threat preferences scoped by gamemode/preset. Falls back to <see cref="_threatPreferences"/> when absent.
+        /// </summary>
+        [DataField]
+        private Dictionary<string, HashSet<ProtoId<ThreatPrototype>>> _gamemodeThreatPreferences = new();
 
         /// <summary>
         /// <see cref="_loadouts"/>
@@ -123,14 +148,34 @@ namespace Content.Shared.Preferences
         public IReadOnlyDictionary<ProtoId<JobPrototype>, JobPriority> JobPriorities => _jobPriorities;
 
         /// <summary>
+        /// <see cref="_gamemodeJobPriorities"/>
+        /// </summary>
+        public IReadOnlyDictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>> GamemodeJobPriorities => _gamemodeJobPriorities;
+
+        /// <summary>
         /// <see cref="_antagPreferences"/>
         /// </summary>
         public IReadOnlySet<ProtoId<AntagPrototype>> AntagPreferences => _antagPreferences;
 
         /// <summary>
+        /// <see cref="_gamemodeAntagPreferences"/>
+        /// </summary>
+        public IReadOnlyDictionary<string, HashSet<ProtoId<AntagPrototype>>> GamemodeAntagPreferences => _gamemodeAntagPreferences;
+
+        /// <summary>
         /// <see cref="_traitPreferences"/>
         /// </summary>
         public IReadOnlySet<ProtoId<TraitPrototype>> TraitPreferences => _traitPreferences;
+
+        /// <summary>
+        /// <see cref="_threatPreferences"/>
+        /// </summary>
+        public IReadOnlySet<ProtoId<ThreatPrototype>> ThreatPreferences => _threatPreferences;
+
+        /// <summary>
+        /// <see cref="_gamemodeThreatPreferences"/>
+        /// </summary>
+        public IReadOnlyDictionary<string, HashSet<ProtoId<ThreatPrototype>>> GamemodeThreatPreferences => _gamemodeThreatPreferences;
 
         /// <summary>
         /// If we're unable to get one of our preferred jobs do we spawn as a fallback job or do we stay in lobby.
@@ -184,7 +229,11 @@ namespace Content.Shared.Preferences
             string xenoPrefix,
             string xenoPostfix,
             ProtoId<AllegiancePrototype>? allegiance = null,
-            ProtoId<OriginPrototype>? origin = null)
+            ProtoId<OriginPrototype>? origin = null,
+            HashSet<ProtoId<ThreatPrototype>>? threatPreferences = null,
+            Dictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>>? gamemodeJobPriorities = null,
+            Dictionary<string, HashSet<ProtoId<AntagPrototype>>>? gamemodeAntagPreferences = null,
+            Dictionary<string, HashSet<ProtoId<ThreatPrototype>>>? gamemodeThreatPreferences = null)
         {
             Name = name;
             FlavorText = flavortext;
@@ -196,25 +245,11 @@ namespace Content.Shared.Preferences
             SpawnPriority = spawnPriority;
             ArmorPreference = armorPreference;
             SquadPreference = squadPreference;
-            _jobPriorities = jobPriorities;
+            _jobPriorities = NormalizeJobPriorities(jobPriorities);
             PreferenceUnavailable = preferenceUnavailable;
             _antagPreferences = antagPreferences;
             _traitPreferences = traitPreferences;
             _loadouts = loadouts;
-
-            var hasHighPrority = false;
-            foreach (var (key, value) in _jobPriorities)
-            {
-                if (value == JobPriority.Never)
-                    _jobPriorities.Remove(key);
-                else if (value != JobPriority.High)
-                    continue;
-
-                if (hasHighPrority)
-                    _jobPriorities[key] = JobPriority.Medium;
-
-                hasHighPrority = true;
-            }
 
             NamedItems = namedItems;
             PlaytimePerks = playtimePerks;
@@ -222,6 +257,100 @@ namespace Content.Shared.Preferences
             XenoPostfix = xenoPostfix;
             Allegiance = allegiance;
             Origin = origin;
+            _threatPreferences = threatPreferences ?? new();
+            _gamemodeJobPriorities = NormalizeGamemodeJobPriorities(gamemodeJobPriorities);
+            _gamemodeAntagPreferences = NormalizeGamemodeSetPreferences(gamemodeAntagPreferences);
+            _gamemodeThreatPreferences = NormalizeGamemodeSetPreferences(gamemodeThreatPreferences);
+        }
+
+        private static string NormalizePreferenceGamemode(string? gamemode)
+        {
+            if (string.IsNullOrWhiteSpace(gamemode))
+                return string.Empty;
+
+            return gamemode.ToLowerInvariant() switch
+            {
+                "insurgency" => "Insurgency",
+                "colonyfall" => "ColonyFall",
+                "distresssignal" => "DistressSignal",
+                _ => gamemode.Trim()
+            };
+        }
+
+        private static Dictionary<ProtoId<JobPrototype>, JobPriority> NormalizeJobPriorities(
+            IEnumerable<KeyValuePair<ProtoId<JobPrototype>, JobPriority>> priorities,
+            bool keepNever = false)
+        {
+            var output = new Dictionary<ProtoId<JobPrototype>, JobPriority>();
+            var hasHighPriority = false;
+
+            foreach (var (key, value) in priorities)
+            {
+                if (value == JobPriority.Never)
+                {
+                    if (keepNever)
+                        output[key] = value;
+
+                    continue;
+                }
+
+                if (value is not (JobPriority.Low or JobPriority.Medium or JobPriority.High))
+                    continue;
+
+                if (value == JobPriority.High)
+                {
+                    if (hasHighPriority)
+                    {
+                        output[key] = JobPriority.Medium;
+                        continue;
+                    }
+
+                    hasHighPriority = true;
+                }
+
+                output[key] = value;
+            }
+
+            return output;
+        }
+
+        private static Dictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>> NormalizeGamemodeJobPriorities(
+            Dictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>>? priorities)
+        {
+            var output = new Dictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>>();
+            if (priorities == null)
+                return output;
+
+            foreach (var (gamemode, jobs) in priorities)
+            {
+                var key = NormalizePreferenceGamemode(gamemode);
+                if (string.IsNullOrEmpty(key))
+                    continue;
+
+                output[key] = NormalizeJobPriorities(jobs, true);
+            }
+
+            return output;
+        }
+
+        private static Dictionary<string, HashSet<T>> NormalizeGamemodeSetPreferences<T>(
+            Dictionary<string, HashSet<T>>? preferences)
+            where T : notnull
+        {
+            var output = new Dictionary<string, HashSet<T>>();
+            if (preferences == null)
+                return output;
+
+            foreach (var (gamemode, values) in preferences)
+            {
+                var key = NormalizePreferenceGamemode(gamemode);
+                if (string.IsNullOrEmpty(key))
+                    continue;
+
+                output[key] = new HashSet<T>(values);
+            }
+
+            return output;
         }
 
         /// <summary>Copy constructor</summary>
@@ -246,7 +375,17 @@ namespace Content.Shared.Preferences
                 other.XenoPrefix,
                 other.XenoPostfix,
                 other.Allegiance,
-                other.Origin)
+                other.Origin,
+                new HashSet<ProtoId<ThreatPrototype>>(other.ThreatPreferences),
+                other.GamemodeJobPriorities.ToDictionary(
+                    pair => pair.Key,
+                    pair => new Dictionary<ProtoId<JobPrototype>, JobPriority>(pair.Value)),
+                other.GamemodeAntagPreferences.ToDictionary(
+                    pair => pair.Key,
+                    pair => new HashSet<ProtoId<AntagPrototype>>(pair.Value)),
+                other.GamemodeThreatPreferences.ToDictionary(
+                    pair => pair.Key,
+                    pair => new HashSet<ProtoId<ThreatPrototype>>(pair.Value)))
         {
         }
 
@@ -405,27 +544,29 @@ namespace Content.Shared.Preferences
             return new(this) { Origin = origin };
         }
 
-        public HumanoidCharacterProfile WithJobPriorities(IEnumerable<KeyValuePair<ProtoId<JobPrototype>, JobPriority>> jobPriorities)
+        public HumanoidCharacterProfile WithThreatPreference(ProtoId<ThreatPrototype> threat, bool pref)
         {
-            var dictionary = new Dictionary<ProtoId<JobPrototype>, JobPriority>(jobPriorities);
-            var hasHighPrority = false;
-
-            foreach (var (key, value) in dictionary)
+            var list = new HashSet<ProtoId<ThreatPrototype>>(_threatPreferences);
+            if (pref)
             {
-                if (value == JobPriority.Never)
-                    dictionary.Remove(key);
-                else if (value != JobPriority.High)
-                    continue;
-
-                if (hasHighPrority)
-                    dictionary[key] = JobPriority.Medium;
-
-                hasHighPrority = true;
+                list.Add(threat);
+            }
+            else
+            {
+                list.Remove(threat);
             }
 
             return new(this)
             {
-                _jobPriorities = dictionary
+                _threatPreferences = list,
+            };
+        }
+
+        public HumanoidCharacterProfile WithJobPriorities(IEnumerable<KeyValuePair<ProtoId<JobPrototype>, JobPriority>> jobPriorities)
+        {
+            return new(this)
+            {
+                _jobPriorities = NormalizeJobPriorities(jobPriorities)
             };
         }
 
@@ -439,7 +580,7 @@ namespace Content.Shared.Preferences
             else if (priority == JobPriority.High)
             {
                 // There can only ever be one high priority job.
-                foreach (var (job, value) in dictionary)
+                foreach (var (job, value) in dictionary.ToArray())
                 {
                     if (value == JobPriority.High)
                         dictionary[job] = JobPriority.Medium;
@@ -455,6 +596,96 @@ namespace Content.Shared.Preferences
             return new(this)
             {
                 _jobPriorities = dictionary,
+            };
+        }
+
+        public JobPriority GetJobPriorityForGamemode(string? gamemode, ProtoId<JobPrototype> jobId)
+        {
+            var key = NormalizePreferenceGamemode(gamemode);
+            if (!string.IsNullOrEmpty(key) &&
+                _gamemodeJobPriorities.TryGetValue(key, out var priorities) &&
+                priorities.TryGetValue(jobId, out var priority))
+            {
+                return priority;
+            }
+
+            return _jobPriorities.GetValueOrDefault(jobId, JobPriority.Never);
+        }
+
+        public IReadOnlyDictionary<ProtoId<JobPrototype>, JobPriority> GetJobPrioritiesForGamemode(string? gamemode)
+        {
+            var key = NormalizePreferenceGamemode(gamemode);
+            if (string.IsNullOrEmpty(key) ||
+                !_gamemodeJobPriorities.TryGetValue(key, out var priorities))
+            {
+                return _jobPriorities;
+            }
+
+            var output = new Dictionary<ProtoId<JobPrototype>, JobPriority>(_jobPriorities);
+            var gamemodeHighPriorities = priorities
+                .Where(pair => pair.Value == JobPriority.High)
+                .Select(pair => pair.Key)
+                .ToHashSet();
+
+            if (gamemodeHighPriorities.Count > 0)
+            {
+                foreach (var (job, priority) in output.ToArray())
+                {
+                    if (priority == JobPriority.High && !gamemodeHighPriorities.Contains(job))
+                        output[job] = JobPriority.Medium;
+                }
+            }
+
+            foreach (var (job, priority) in priorities)
+            {
+                if (priority == JobPriority.Never)
+                    output.Remove(job);
+                else
+                    output[job] = priority;
+            }
+
+            return NormalizeJobPriorities(output);
+        }
+
+        public HumanoidCharacterProfile WithGamemodeJobPriority(string? gamemode, ProtoId<JobPrototype> jobId, JobPriority priority)
+        {
+            var key = NormalizePreferenceGamemode(gamemode);
+            if (string.IsNullOrEmpty(key))
+                return WithJobPriority(jobId, priority);
+
+            var gamemodePriorities = _gamemodeJobPriorities.ToDictionary(
+                pair => pair.Key,
+                pair => new Dictionary<ProtoId<JobPrototype>, JobPriority>(pair.Value));
+
+            if (!gamemodePriorities.TryGetValue(key, out var priorities))
+                gamemodePriorities[key] = priorities = new Dictionary<ProtoId<JobPrototype>, JobPriority>();
+
+            if (priority == JobPriority.High)
+            {
+                foreach (var (job, value) in _jobPriorities)
+                {
+                    if (job != jobId && value == JobPriority.High)
+                        priorities[job] = JobPriority.Medium;
+                }
+
+                foreach (var (job, value) in priorities.ToArray())
+                {
+                    if (job != jobId && value == JobPriority.High)
+                        priorities[job] = JobPriority.Medium;
+                }
+
+                priorities[jobId] = JobPriority.High;
+            }
+            else
+            {
+                priorities[jobId] = priority;
+            }
+
+            gamemodePriorities[key] = NormalizeJobPriorities(priorities, true);
+
+            return new(this)
+            {
+                _gamemodeJobPriorities = gamemodePriorities,
             };
         }
 
@@ -486,6 +717,78 @@ namespace Content.Shared.Preferences
             return new(this)
             {
                 _antagPreferences = list,
+            };
+        }
+
+        public IReadOnlySet<ProtoId<AntagPrototype>> GetAntagPreferencesForGamemode(string? gamemode)
+        {
+            var key = NormalizePreferenceGamemode(gamemode);
+            if (!string.IsNullOrEmpty(key) &&
+                _gamemodeAntagPreferences.TryGetValue(key, out var preferences))
+            {
+                return preferences;
+            }
+
+            return _antagPreferences;
+        }
+
+        public HumanoidCharacterProfile WithGamemodeAntagPreference(string? gamemode, ProtoId<AntagPrototype> antagId, bool pref)
+        {
+            var key = NormalizePreferenceGamemode(gamemode);
+            if (string.IsNullOrEmpty(key))
+                return WithAntagPreference(antagId, pref);
+
+            var gamemodePreferences = _gamemodeAntagPreferences.ToDictionary(
+                pair => pair.Key,
+                pair => new HashSet<ProtoId<AntagPrototype>>(pair.Value));
+
+            if (!gamemodePreferences.TryGetValue(key, out var preferences))
+                gamemodePreferences[key] = preferences = new HashSet<ProtoId<AntagPrototype>>(_antagPreferences);
+
+            if (pref)
+                preferences.Add(antagId);
+            else
+                preferences.Remove(antagId);
+
+            return new(this)
+            {
+                _gamemodeAntagPreferences = gamemodePreferences,
+            };
+        }
+
+        public IReadOnlySet<ProtoId<ThreatPrototype>> GetThreatPreferencesForGamemode(string? gamemode)
+        {
+            var key = NormalizePreferenceGamemode(gamemode);
+            if (!string.IsNullOrEmpty(key) &&
+                _gamemodeThreatPreferences.TryGetValue(key, out var preferences))
+            {
+                return preferences;
+            }
+
+            return _threatPreferences;
+        }
+
+        public HumanoidCharacterProfile WithGamemodeThreatPreference(string? gamemode, ProtoId<ThreatPrototype> threatId, bool pref)
+        {
+            var key = NormalizePreferenceGamemode(gamemode);
+            if (string.IsNullOrEmpty(key))
+                return WithThreatPreference(threatId, pref);
+
+            var gamemodePreferences = _gamemodeThreatPreferences.ToDictionary(
+                pair => pair.Key,
+                pair => new HashSet<ProtoId<ThreatPrototype>>(pair.Value));
+
+            if (!gamemodePreferences.TryGetValue(key, out var preferences))
+                gamemodePreferences[key] = preferences = new HashSet<ProtoId<ThreatPrototype>>(_threatPreferences);
+
+            if (pref)
+                preferences.Add(threatId);
+            else
+                preferences.Remove(threatId);
+
+            return new(this)
+            {
+                _gamemodeThreatPreferences = gamemodePreferences,
             };
         }
 
@@ -568,7 +871,9 @@ namespace Content.Shared.Preferences
             if (SpawnPriority != other.SpawnPriority) return false;
             if (SquadPreference != other.SquadPreference) return false;
             if (!_jobPriorities.SequenceEqual(other._jobPriorities)) return false;
+            if (!GamemodeJobPrioritiesEqual(_gamemodeJobPriorities, other._gamemodeJobPriorities)) return false;
             if (!_antagPreferences.SequenceEqual(other._antagPreferences)) return false;
+            if (!GamemodeSetPreferencesEqual(_gamemodeAntagPreferences, other._gamemodeAntagPreferences)) return false;
             if (!_traitPreferences.SequenceEqual(other._traitPreferences)) return false;
             if (!Loadouts.SequenceEqual(other.Loadouts)) return false;
             if (FlavorText != other.FlavorText) return false;
@@ -579,7 +884,48 @@ namespace Content.Shared.Preferences
             if (XenoPostfix != other.XenoPostfix) return false;
             if (Allegiance != other.Allegiance) return false;
             if (Origin != other.Origin) return false;
+            if (!_threatPreferences.SetEquals(other._threatPreferences)) return false;
+            if (!GamemodeSetPreferencesEqual(_gamemodeThreatPreferences, other._gamemodeThreatPreferences)) return false;
             return Appearance.MemberwiseEquals(other.Appearance);
+        }
+
+        private static bool GamemodeJobPrioritiesEqual(
+            IReadOnlyDictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>> left,
+            IReadOnlyDictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>> right)
+        {
+            if (left.Count != right.Count)
+                return false;
+
+            foreach (var (gamemode, leftJobs) in left)
+            {
+                if (!right.TryGetValue(gamemode, out var rightJobs) ||
+                    !leftJobs.SequenceEqual(rightJobs))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool GamemodeSetPreferencesEqual<T>(
+            IReadOnlyDictionary<string, HashSet<T>> left,
+            IReadOnlyDictionary<string, HashSet<T>> right)
+            where T : notnull
+        {
+            if (left.Count != right.Count)
+                return false;
+
+            foreach (var (gamemode, leftValues) in left)
+            {
+                if (!right.TryGetValue(gamemode, out var rightValues) ||
+                    !leftValues.SetEquals(rightValues))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public void EnsureValid(ICommonSession session, IDependencyCollection collection)
@@ -678,7 +1024,7 @@ namespace Content.Shared.Preferences
                 _ => SpawnPriorityPreference.None // Invalid enum values.
             };
 
-            var priorities = new Dictionary<ProtoId<JobPrototype>, JobPriority>(JobPriorities
+            var priorities = NormalizeJobPriorities(JobPriorities
                 .Where(p => prototypeManager.TryIndex<JobPrototype>(p.Key, out var job) && job.SetPreference && p.Value switch
                 {
                     JobPriority.Never => false, // Drop never since that's assumed default.
@@ -688,17 +1034,6 @@ namespace Content.Shared.Preferences
                     _ => false
                 }));
 
-            var hasHighPrio = false;
-            foreach (var (key, value) in priorities)
-            {
-                if (value != JobPriority.High)
-                    continue;
-
-                if (hasHighPrio)
-                    priorities[key] = JobPriority.Medium;
-                hasHighPrio = true;
-            }
-
             var antags = AntagPreferences
                 .Where(id => prototypeManager.TryIndex(id, out var antag) && antag.SetPreference)
                 .ToList();
@@ -706,6 +1041,41 @@ namespace Content.Shared.Preferences
             var traits = TraitPreferences
                          .Where(prototypeManager.HasIndex)
                          .ToList();
+
+            var threats = ThreatPreferences
+                .Where(prototypeManager.HasIndex)
+                .ToList();
+
+            var gamemodeJobPriorities = new Dictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>>();
+            foreach (var (gamemode, jobs) in _gamemodeJobPriorities)
+            {
+                var validJobs = jobs.Where(p => prototypeManager.TryIndex<JobPrototype>(p.Key, out var job) && job.SetPreference && p.Value switch
+                {
+                    JobPriority.Never => true,
+                    JobPriority.Low => true,
+                    JobPriority.Medium => true,
+                    JobPriority.High => true,
+                    _ => false
+                });
+
+                gamemodeJobPriorities[gamemode] = NormalizeJobPriorities(validJobs, true);
+            }
+
+            var gamemodeAntagPreferences = new Dictionary<string, HashSet<ProtoId<AntagPrototype>>>();
+            foreach (var (gamemode, preferences) in _gamemodeAntagPreferences)
+            {
+                gamemodeAntagPreferences[gamemode] = preferences
+                    .Where(id => prototypeManager.TryIndex(id, out var antag) && antag.SetPreference)
+                    .ToHashSet();
+            }
+
+            var gamemodeThreatPreferences = new Dictionary<string, HashSet<ProtoId<ThreatPrototype>>>();
+            foreach (var (gamemode, preferences) in _gamemodeThreatPreferences)
+            {
+                gamemodeThreatPreferences[gamemode] = preferences
+                    .Where(prototypeManager.HasIndex)
+                    .ToHashSet();
+            }
 
             Name = name;
             FlavorText = flavortext;
@@ -755,13 +1125,20 @@ namespace Content.Shared.Preferences
                 _jobPriorities.Add(job, priority);
             }
 
+            _gamemodeJobPriorities = gamemodeJobPriorities;
+
             PreferenceUnavailable = prefsUnavailableMode;
 
             _antagPreferences.Clear();
             _antagPreferences.UnionWith(antags);
+            _gamemodeAntagPreferences = gamemodeAntagPreferences;
 
             _traitPreferences.Clear();
             _traitPreferences.UnionWith(GetValidTraits(traits, prototypeManager));
+
+            _threatPreferences.Clear();
+            _threatPreferences.UnionWith(threats);
+            _gamemodeThreatPreferences = gamemodeThreatPreferences;
 
             // Checks prototypes exist for all loadouts and dump / set to default if not.
             var toRemove = new ValueList<string>();
@@ -919,6 +1296,11 @@ namespace Content.Shared.Preferences
             hashCode.Add(XenoPostfix);
             hashCode.Add(Allegiance);
             hashCode.Add(Origin);
+            foreach (var threatPreference in _threatPreferences.Select(threat => threat.Id).OrderBy(id => id))
+            {
+                hashCode.Add(threatPreference);
+            }
+
             return hashCode.ToHashCode();
         }
 

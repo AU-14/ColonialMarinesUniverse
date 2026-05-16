@@ -8,8 +8,13 @@
   icon: "RMCJobIconBureauMarshal"
   basePlaytimeTracker: true
   hidden: false
-  access:
+  access: # accessGroups in use by inheritors
   - AU14AccessColonyMarshall
+  - AU14AccessColonyAdministrator
+  - AU14AccessColonyHeadPhysician
+  - AU14AccessColonyForeman
+  - AU14AccessColonyHeadEngineer
+  - AU14AccessColonyHeadOfService
 
 - type: playTimeTracker
   id: AU14JobCivilianCMBMarshal

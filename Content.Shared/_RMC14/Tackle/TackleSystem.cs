@@ -1,3 +1,4 @@
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Pulling;
@@ -24,22 +25,22 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Tackle;
 
-public sealed class TackleSystem : EntitySystem
+public sealed partial class TackleSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedColorFlashEffectSystem _colorFlash = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly RMCPullingSystem _rmcPulling = default!;
-    [Dependency] private readonly RMCHandsSystem _rmcHands = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedGunSystem _gunSystem = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedColorFlashEffectSystem _colorFlash = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private RMCPullingSystem _rmcPulling = default!;
+    [Dependency] private RMCHandsSystem _rmcHands = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedGunSystem _gunSystem = default!;
 
     private readonly List<EntityUid> _trackersToRemove = new();
 
@@ -84,7 +85,8 @@ public sealed class TackleSystem : EntitySystem
 
         var random = _random.NextFloat(0, 1);
 
-        if ((tracker.Count < tackle.Min || tackle.Chance < random) &&
+        var tackleChance = Math.Clamp(tackle.Chance + GetYautjaShoveChanceBonus(user), 0f, 1f);
+        if ((tracker.Count < tackle.Min || tackleChance < random) &&
             tracker.Count < tackle.Max)
         {
             _adminLog.Add(LogType.RMCTackle, $"{ToPrettyString(user)} tried to tackle {ToPrettyString(target)}.");
@@ -200,6 +202,7 @@ public sealed class TackleSystem : EntitySystem
         var attackerSkill = _skills.GetSkill(user, disarm.Skill);
         var defenderSkill = _skills.GetSkill(target.Owner, disarm.Skill);
         disarmChance -= 5 * attackerSkill;
+        disarmChance -= GetYautjaShoveChanceBonus(user) * 100f;
         disarmChance += 5 * defenderSkill;
 
         if (disarmChance <= 25)
@@ -296,6 +299,13 @@ public sealed class TackleSystem : EntitySystem
         _colorFlash.RaiseEffect(Color.Aqua, new List<EntityUid> { target }, Filter.PvsExcept(user));
     }
 
+    private float GetYautjaShoveChanceBonus(EntityUid user)
+    {
+        return TryComp(user, out YautjaComponent? yautja)
+            ? yautja.ShoveChanceBonus
+            : 0f;
+    }
+
     private void DoPvsPopups(EntityUid user, EntityUid target, string selfPopup, string targetPopup, Func<EntityUid, string> othersPopup, PopupType selfPopupType = PopupType.Small)
     {
         _popup.PopupEntity(selfPopup, user, user, selfPopupType);
@@ -326,8 +336,16 @@ public sealed class TackleSystem : EntitySystem
 
     private void OnDowned(Entity<TackledRecentlyByComponent> ent, ref DownedEvent args)
     {
-        if (!HasComp<VictimInfectedComponent>(ent) && (!TryComp<BuckleComponent>(ent, out var buckle) || !buckle.Buckled))
-            RemCompDeferred<TackledRecentlyByComponent>(ent);
+        if (HasComp<VictimInfectedComponent>(ent))
+            return;
+
+        if (TryComp<BuckleComponent>(ent, out var buckle) && buckle.Buckled)
+            return;
+
+        if (ent == args.DownedBy)
+            return;
+
+        RemCompDeferred<TackledRecentlyByComponent>(ent);
     }
 
     private void OnRemove<T>(Entity<TackledRecentlyComponent> ent, ref T args)

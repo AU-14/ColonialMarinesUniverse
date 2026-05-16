@@ -23,20 +23,20 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared._RMC14.Xenonids.Hive;
 
-public abstract class SharedXenoHiveSystem : EntitySystem
+public abstract partial class SharedXenoHiveSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedNightVisionSystem _nightVision = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly XenoSystem _xeno = default!;
-    [Dependency] private readonly SharedXenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedNightVisionSystem _nightVision = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
 
     private EntityQuery<HiveComponent> _query;
     private EntityQuery<HiveMemberComponent> _memberQuery;
@@ -398,7 +398,7 @@ public abstract class SharedXenoHiveSystem : EntitySystem
         SetHive(larva.Value, hive);
 
         var newMind = _mind.CreateMind(session.UserId,
-            EntityManager.GetComponent<MetaDataComponent>(larva.Value).EntityName);
+            Comp<MetaDataComponent>(larva.Value).EntityName);
         _mind.TransferTo(newMind, larva, ghostCheckOverride: true);
         _adminLog.Add(LogType.RMCBurrowedLarva,
             $"{session.Name:player} took a burrowed larva from hive {ToPrettyString(hive):hive}.");

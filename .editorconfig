@@ -357,7 +357,7 @@ resharper_csharp_prefer_qualified_reference = false
 resharper_csharp_allow_alias = false
 
 # Data/config formatted files can be compacter
-[*.{csproj,xml,yml,yaml,toml,json,msbuildproj,targets,props}]
+[*.{csproj,xml,yml,yaml,toml,json,msbuildproj,targets,props,slnx}]
 indent_size = 2
 
 # Legacy

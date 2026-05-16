@@ -173,8 +173,37 @@
   name: camera controls
   description: A computer to monitor cameras linked to the dropship.
   components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleCAS
   - type: Sprite
     state: consoleleft
+  - type: UserInterface
+    interfaces:
+      enum.RMCCameraUiKey.Key:
+        type: RMCCameraBui
+  - type: RMCCameraComputer
+    protoIds:
+    - RMCMonitorCameraAlamo
+    - RMCFlareCAS
+    - RMCAirFlareCAS
+    - RMCLaserDesignatorTarget
+  - type: ActivatableUI
+    key: enum.RMCCameraUiKey.Key
+
+- type: entity
+  parent: CMComputerDropshipCamerasAlamo
+  id: RMCComputerDropshipCamerasNormandy
+  name: camera controls
+  description: A computer to monitor cameras linked to the dropship.
+  suffix: Normandy
+  components:
+  - type: RMCCameraComputer
+    protoIds:
+    - RMCMonitorCameraNormandy
+    - RMCFlareCAS
+    - RMCAirFlareCAS
+    - RMCLaserDesignatorTarget
 
 - type: entity
   parent: CMComputerDropship
@@ -237,6 +266,11 @@
       enum.DropshipTerminalWeaponsUi.Key:
         type: DropshipWeaponsBui
   - type: DropshipTerminalWeapons
+  - type: WhitelistedShuttle
+    faction: govfor
+    ShuttleType: Dropship
+  - type: TacticalMapComputer
+    faction: govfor
   - type: RequiresSkill
     skills:
       RMCSkillPilot: 1
@@ -269,6 +303,11 @@
       enum.DropshipTerminalWeaponsUi.Key:
         type: DropshipWeaponsBui
   - type: DropshipTerminalWeapons
+  - type: WhitelistedShuttle
+    faction: govfor
+    ShuttleType: Dropship
+  - type: TacticalMapComputer
+    faction: govfor
   - type: RequiresSkill
     skills:
       RMCSkillPilot: 1
@@ -293,6 +332,11 @@
       enum.DropshipTerminalWeaponsUi.Key:
         type: DropshipWeaponsBui
   - type: DropshipTerminalWeapons
+  - type: WhitelistedShuttle
+    faction: opfor
+    ShuttleType: Dropship
+  - type: TacticalMapComputer
+    faction: opfor
   - type: RequiresSkill
     skills:
       RMCSkillPilot: 1
@@ -411,9 +455,9 @@
 - type: entity
   parent: CMComputerDropshipNavigation
   id: AU14GovforComputerDropshipPilotSmall
-  name: dropship weapons computer
+  name: dropship navigation computer
   suffix: Govfor, small
-  description: A compact computer that can manage equipment, weapons and simulations installed on the dropship.
+  description: A compact computer that can pilot the dropship and designate tactical landings.
   components:
   - type: Transform
     anchored: false
@@ -429,12 +473,11 @@
   - type: Corrodible
     isCorrodible: false
   - type: InteractionOutline
-  - type: InteractedBlacklist
-    blacklist:
-      components:
-      - Xeno
   - type: WallMount
     arc: 360
+  - type: DropshipNavigationComputer
+    canTacticalLand: true
+    tacticalLandFootprintOverride: 7, 13
   - type: RequiresSkill
     skills:
       RMCSkillPilot: 1

@@ -26,15 +26,15 @@ namespace Content.Shared._CMU14.Medical.Surgery;
 ///     hooks the sealed server subclass overrides; the shared default no-ops
 ///     so prediction rollback can't re-apply state on the client.
 /// </summary>
-public abstract class SharedCMUSurgerySystem : EntitySystem
+public abstract partial class SharedCMUSurgerySystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly SharedBodySystem Body = default!;
-    [Dependency] protected readonly SharedBoneSystem Bone = default!;
-    [Dependency] protected readonly SharedContainerSystem Containers = default!;
-    [Dependency] protected readonly SharedFractureSystem Fracture = default!;
-    [Dependency] protected readonly SharedOrganHealthSystem OrganHealth = default!;
-    [Dependency] protected readonly SharedCMUWoundsSystem Wounds = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected SharedBoneSystem Bone = default!;
+    [Dependency] protected SharedContainerSystem Containers = default!;
+    [Dependency] protected SharedFractureSystem Fracture = default!;
+    [Dependency] protected SharedOrganHealthSystem OrganHealth = default!;
+    [Dependency] protected SharedCMUWoundsSystem Wounds = default!;
 
     private bool _medicalEnabled;
     private bool _surgeryEnabled;

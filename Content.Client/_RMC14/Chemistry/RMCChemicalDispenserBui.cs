@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Content.Client.Chemistry.Containers.EntitySystems;
 using Content.Client.UserInterface.ControlExtensions;
 using Content.Shared._RMC14.Chemistry;
@@ -15,9 +15,9 @@ using Robust.Shared.Utility;
 namespace Content.Client._RMC14.Chemistry;
 
 [UsedImplicitly]
-public sealed class RMCChemicalDispenserBui : BoundUserInterface
+public sealed partial class RMCChemicalDispenserBui : BoundUserInterface
 {
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     private RMCChemicalDispenserWindow? _window;
 

@@ -7,6 +7,9 @@
   canBeAntag: false
   playTimeTracker: AU14JobCivilianHeadPhysician
   requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentColonyMedical
+    time: 72000 # 20 hours
   - !type:OverallPlaytimeRequirement
     time: 14400 # 4 hours
   - !type:AgeRequirement
@@ -18,7 +21,8 @@
   ranks:
     RMCRankCivilianDoctor: []
   startingGear: AU14GearCivilianHeadPhysician
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconColonyHeadPhysician"
+  hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonyadministrator
@@ -26,8 +30,10 @@
   - Colonist
   - aumed
   - AUPrisonStaff
+  - auheadsofcolony
   access:
-  - AU14AccessColonyHeadPhysician
+# - AU14AccessColonyHeadPhysician # implicit
+  - AU14AccessColonyAdministrator
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

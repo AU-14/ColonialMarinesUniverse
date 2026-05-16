@@ -15,18 +15,19 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Line;
 
-public sealed class LineSystem : EntitySystem
+public sealed partial class LineSystem : EntitySystem
 {
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedDirectionalAttackBlockSystem _directionalBlock = default!;
+    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedDirectionalAttackBlockSystem _directionalBlock = default!;
 
     private static readonly ProtoId<TagPrototype> StructureTag = "Structure";
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
+    private static readonly ProtoId<TagPrototype> WindowFrameTag = "WindowFrame";
     private static readonly float MaxBeamDistance = 500;
 
     private EntityQuery<BarricadeComponent> _barricadeQuery;
@@ -146,8 +147,11 @@ public sealed class LineSystem : EntitySystem
         var anchored = _mapSystem.GetAnchoredEntitiesEnumerator(grid.Value, grid, indices);
         while (anchored.MoveNext(out var uid))
         {
-            if (!ignoreBarricades && _barricadeQuery.HasComp(uid))
+            if (_barricadeQuery.HasComp(uid))
             {
+                if (ignoreBarricades)
+                    continue;
+
                 if (_doorQuery.TryComp(uid, out var door) && door.State != DoorState.Closed)
                     continue;
 
@@ -173,6 +177,9 @@ public sealed class LineSystem : EntitySystem
             }
             else if (_tag.HasAnyTag(uid.Value, StructureTag, WallTag))
             {
+                if (ignoreBarricades && _tag.HasTag(uid.Value, WindowFrameTag))
+                    continue;
+
                 blocker = uid.Value;
                 return true;
             }

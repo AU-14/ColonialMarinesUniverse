@@ -20,12 +20,12 @@ using System.Diagnostics.CodeAnalysis;
 namespace Content.Client._RMC14.Marines.ControlComputer;
 
 [UsedImplicitly]
-public sealed class MedalsPanelBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
+public sealed partial class MedalsPanelBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
-    [Dependency] private readonly IClipboardManager _clipboard = default!;
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IEntitySystemManager _systems = default!;
+    [Dependency] private IClipboardManager _clipboard = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IEntitySystemManager _systems = default!;
 
     [ViewVariables]
     private MedalsPanelWindow? _window;
@@ -89,7 +89,11 @@ public sealed class MedalsPanelBui(EntityUid owner, Enum uiKey) : BoundUserInter
 
         // Recommender: Rank and Name
         var recommenderLabelText = Loc.GetString("rmc-medal-panel-recommender-label");
-        var recommenderText = $"{recommenderLabelText} {string.Join(" ", recommendation.RecommenderRank, recommendation.RecommenderName)}";
+        var recommenderText = $"{recommenderLabelText} {string.Join(" ", new[]
+        {
+            recommendation.RecommenderRank,
+            recommendation.RecommenderName,
+        })}";
         var recommenderLabel = new RichTextLabel
         {
             HorizontalExpand = true
@@ -100,7 +104,11 @@ public sealed class MedalsPanelBui(EntityUid owner, Enum uiKey) : BoundUserInter
         // Job: Squad (if exists) and Job
         var jobLabelText = Loc.GetString("rmc-medal-panel-job-label");
         var squadPart = string.IsNullOrEmpty(recommendation.RecommenderSquad) ? null : $"({recommendation.RecommenderSquad})";
-        var jobText = $"{jobLabelText} {string.Join(" ", squadPart, recommendation.RecommenderJob)}";
+        var jobText = $"{jobLabelText} {string.Join(" ", new[]
+        {
+            squadPart,
+            recommendation.RecommenderJob,
+        })}";
         var jobLabel = new RichTextLabel
         {
             HorizontalExpand = true
@@ -256,7 +264,13 @@ public sealed class MedalsPanelBui(EntityUid owner, Enum uiKey) : BoundUserInter
             return null;
 
         var squadPart = string.IsNullOrEmpty(firstRec.RecommendedSquad) ? null : $"({firstRec.RecommendedSquad})";
-        var headerText = string.Join(" ", firstRec.RecommendedRank, squadPart, firstRec.RecommendedJob, firstRec.RecommendedName);
+        var headerText = string.Join(" ", new[]
+        {
+            firstRec.RecommendedRank,
+            squadPart,
+            firstRec.RecommendedJob,
+            firstRec.RecommendedName,
+        });
         var headerLabel = new RichTextLabel
         {
             HorizontalExpand = true
@@ -424,14 +438,14 @@ public sealed class MedalsPanelBui(EntityUid owner, Enum uiKey) : BoundUserInter
         }
     }
 
-    private bool TryGetMedalInfo(string? prototypeId, string? name, [NotNullWhen(true)] out MedalInfo? info)
+    private bool TryGetMedalInfo(EntProtoId? prototypeId, string? name, [NotNullWhen(true)] out MedalInfo? info)
     {
         info = null;
 
         // First try to get by prototype ID
-        if (!string.IsNullOrWhiteSpace(prototypeId))
+        if (prototypeId is { } protoId)
         {
-            if (_prototype.TryIndex(prototypeId, out var proto))
+            if (_prototype.TryIndex(protoId, out var proto))
             {
                 var medalName = proto.Name;
                 if (!string.IsNullOrWhiteSpace(medalName) && _medalsInfo.TryGetValue(medalName, out info))

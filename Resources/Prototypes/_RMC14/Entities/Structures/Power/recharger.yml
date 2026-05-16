@@ -60,6 +60,8 @@
         whitelist:
           components:
             - Stunbaton
+  - type: Machine
+    board: CMUCircuitboardRecharger
 
 - type: entity
   parent: RMCRecharger
@@ -70,3 +72,12 @@
     anchored: true
   - type: Anchorable
     flags: None
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUCircuitboardRecharger
+  name: circuit board (recharger)
+  description: A machine printed circuit board for a recharger.
+  components:
+  - type: MachineBoard
+    prototype: RMCRecharger

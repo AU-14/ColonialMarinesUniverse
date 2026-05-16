@@ -1,17 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <Import Project="../MSBuild/Content.props" />
 
-    <ItemGroup>
-      <ProjectReference Include="..\Content.Shared\Content.Shared.csproj" />
-      <ProjectReference Include="..\Content.Tools\Content.Tools.csproj" />
-      <ProjectReference Include="..\RobustToolbox\Robust.UnitTesting\Robust.UnitTesting.csproj" />
-      <ProjectReference Include="..\RSI.NET\SpaceWizards.RsiLib\SpaceWizards.RsiLib.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Content.Shared\Content.Shared.csproj" />
+    <ProjectReference Include="..\Content.Tools\Content.Tools.csproj" />
+    <ProjectReference Include="..\RSI.NET\SpaceWizards.RsiLib\SpaceWizards.RsiLib.csproj" />
+  </ItemGroup>
 
+  <Import Project="..\RobustToolbox\Imports\Shared.props" />
+  <Import Project="..\RobustToolbox\Imports\Testing.props" />
+  <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />
 </Project>

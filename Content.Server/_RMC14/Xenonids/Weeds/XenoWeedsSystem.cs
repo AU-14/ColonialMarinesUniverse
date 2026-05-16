@@ -23,19 +23,19 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._RMC14.Xenonids.Weeds;
 
-public sealed class XenoWeedsSystem : SharedXenoWeedsSystem
+public sealed partial class XenoWeedsSystem : SharedXenoWeedsSystem
 {
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly MapSystem _map = default!;
-    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly AppearanceSystem _appearance = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly PhysicsSystem _physics = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private MapSystem _map = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private AppearanceSystem _appearance = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private PhysicsSystem _physics = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
 
     private static readonly ProtoId<TagPrototype> IgnoredTag = "SpreaderIgnore";
 

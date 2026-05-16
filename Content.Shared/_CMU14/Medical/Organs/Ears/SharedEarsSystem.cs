@@ -6,10 +6,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CMU14.Medical.Organs.Ears;
 
-public abstract class SharedEarsSystem : EntitySystem
+public abstract partial class SharedEarsSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedBodySystem Body = default!;
-    [Dependency] protected readonly SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected SharedStatusEffectsSystem Status = default!;
 
     private static readonly EntProtoId Tinnitus = "StatusEffectCMUTinnitus";
     private static readonly EntProtoId Deafened = "StatusEffectCMUDeafened";

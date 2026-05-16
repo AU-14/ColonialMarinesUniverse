@@ -3,9 +3,9 @@ using Content.Shared._RMC14.Chemistry;
 
 namespace Content.Server._RMC14.Chemistry;
 
-public sealed class RMCVomitSystem : EntitySystem
+public sealed partial class RMCVomitSystem : EntitySystem
 {
-    [Dependency] private readonly VomitSystem _vomitSystem = default!;
+    [Dependency] private VomitSystem _vomitSystem = default!;
 
     public override void Initialize()
     {

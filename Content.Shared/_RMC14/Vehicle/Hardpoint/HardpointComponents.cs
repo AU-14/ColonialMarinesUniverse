@@ -260,6 +260,10 @@ public enum VehicleHardpointFailure : byte
     TransmissionSlip,
     WarpedFrame,
     DamagedMount,
+    TireBlowout,
+    ThrownTread,
+    EngineOverheat,
+    ElectricalShort,
 }
 
 [Serializable, NetSerializable]

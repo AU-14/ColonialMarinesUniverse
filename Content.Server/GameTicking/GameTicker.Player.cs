@@ -17,7 +17,7 @@ namespace Content.Server.GameTicking
     [UsedImplicitly]
     public sealed partial class GameTicker
     {
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
 
         private void InitializePlayer()
         {
@@ -199,6 +199,7 @@ namespace Content.Server.GameTicking
             }
 
             RaiseNetworkEvent(new TickerJoinGameEvent(), session.Channel);
+            RaiseNetworkEvent(GetRoundStatusMsg(), session.Channel);
         }
 
         private void PlayerJoinLobby(ICommonSession session)
@@ -210,6 +211,7 @@ namespace Content.Server.GameTicking
             RaiseNetworkEvent(new TickerJoinLobbyEvent(), client);
             RaiseNetworkEvent(GetStatusMsg(session), client);
             RaiseNetworkEvent(GetInfoMsg(), client);
+            RaiseNetworkEvent(GetRoundStatusMsg(), client);
             RaiseLocalEvent(new PlayerJoinedLobbyEvent(session));
         }
 
@@ -219,7 +221,7 @@ namespace Content.Server.GameTicking
         }
     }
 
-    public sealed class PlayerJoinedLobbyEvent : EntityEventArgs
+    public sealed partial class PlayerJoinedLobbyEvent : EntityEventArgs
     {
         public readonly ICommonSession PlayerSession;
 

@@ -15,15 +15,19 @@
     - NonResuscitable
     - Epilepsy
   ranks:
-    RMCRankMasterSergeant:
+    #RMCRankMasterSergeant:
+    #- !type:RoleTimeRequirement
+    #  role: AU14JobGOVFORSectionSergeant
+    #  time: 360000 # 100 hours
+    #RMCRankGunnerySergeant:
+    #- !type:RoleTimeRequirement
+    #  role: AU14JobGOVFORSectionSergeant
+    #  time: 180000 # 50 hours
+    RMCRankStaffSergeant:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORSectionSergeant
-      time: 360000 # 100 hours
-    RMCRankGunnerySergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSectionSergeant
-      time: 216000 # 60 hours
-    RMCRankStaffSergeant: []
+      time: 36000 # 10 hours
+    RMCRankSergeant: []
   startingGear: AU14GearGOVFORSectionSergeant
   dummyStartingGear: AU14GearGOVFORPlatoonSergantDummy
   icon: "AU14JobIconPlatoonSarge"

@@ -5,10 +5,10 @@ using Robust.Shared.Random;
 
 namespace Content.Client.FootPrint;
 
-public sealed class FootPrintsVisualizerSystem : VisualizerSystem<FootPrintComponent>
+public sealed partial class FootPrintsVisualizerSystem : VisualizerSystem<FootPrintComponent>
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

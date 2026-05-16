@@ -9,11 +9,11 @@ using Robust.Shared.Maths;
 
 namespace Content.Client._RMC14.Vehicle;
 
-public sealed class VehicleTurretMuzzleOffsetSystem : EntitySystem
+public sealed partial class VehicleTurretMuzzleOffsetSystem : EntitySystem
 {
-    [Dependency] private readonly GunMuzzleOffsetSystem _gunMuzzleOffset = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly VehicleTurretMuzzleSystem _turretMuzzle = default!;
+    [Dependency] private GunMuzzleOffsetSystem _gunMuzzleOffset = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private VehicleTurretMuzzleSystem _turretMuzzle = default!;
 
     public override void Initialize()
     {

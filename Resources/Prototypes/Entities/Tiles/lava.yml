@@ -21,6 +21,11 @@
       multiplier: 3.75
       multiplierOnExisting: 0.75
     - !type:Ignite
+  - type: FishingSpot
+    fishList: !type:NestedSelector
+      tableId: LavaFishingLootTable
+    fishDefaultTimer: 25.0
+    fishTimerVariety: 15.0
   - type: Transform
     anchored: true
   - type: SyncSprite
@@ -51,6 +56,16 @@
           - SlipLayer
         mask:
           - ItemMask
+        density: 1000
+        hard: false
+      fishing:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        layer:
+        - ItemMask
+        mask:
+        - HighImpassable
         density: 1000
         hard: false
   - type: Tag
