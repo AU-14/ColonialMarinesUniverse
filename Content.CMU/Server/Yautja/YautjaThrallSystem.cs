@@ -36,36 +36,36 @@ using Robust.Shared.Utility;
 
 namespace Content.Server._CMU14.Yautja;
 
-public sealed class YautjaThrallSystem : EntitySystem
+public sealed partial class YautjaThrallSystem : EntitySystem
 {
     private const int MaxMessageLength = 160;
     private static readonly TimeSpan WarningEvery = TimeSpan.FromSeconds(2);
     private static readonly Color MessageColor = Color.FromHex("#b85440");
 
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly ElectrocutionSystem _electrocution = default!;
-    [Dependency] private readonly NpcFactionSystem _faction = default!;
-    [Dependency] private readonly GunIFFSystem _iff = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly SharedXenoAnnounceSystem _xenoAnnounce = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly YautjaMarkSystem _marks = default!;
-    [Dependency] private readonly MobStateSystem _mob = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly NameModifierSystem _nameModifier = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRMCExplosionSystem _rmcExplosion = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly XenoSystem _xeno = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private ElectrocutionSystem _electrocution = default!;
+    [Dependency] private NpcFactionSystem _faction = default!;
+    [Dependency] private GunIFFSystem _iff = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private YautjaMarkSystem _marks = default!;
+    [Dependency] private MobStateSystem _mob = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private NameModifierSystem _nameModifier = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCExplosionSystem _rmcExplosion = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private XenoSystem _xeno = default!;
 
     public override void Initialize()
     {

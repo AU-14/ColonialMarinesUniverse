@@ -7,11 +7,11 @@ using Robust.Shared.Containers;
 
 namespace Content.Server._CMU14.Yautja;
 
-public sealed class YautjaMaskAccessorySystem : EntitySystem
+public sealed partial class YautjaMaskAccessorySystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

@@ -21,19 +21,20 @@ using Robust.Shared.Random;
 
 namespace Content.Server.AU14.Ambassador;
 
-public sealed class AmbassadorConsoleSystem : EntitySystem
+public sealed partial class AmbassadorConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly AuThirdPartySystem _thirdParty = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly RadioSystem _radio = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ColonyEconomy.AdminConsoleSystem _adminConsole = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private StackSystem _stack = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private AuThirdPartySystem _thirdParty = default!;
+    [Dependency] private AuRoundSystem _auRound = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private RadioSystem _radio = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ColonyEconomy.AdminConsoleSystem _adminConsole = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private PopupSystem _popup = default!;
 
     private static readonly SoundSpecifier MarineAnnouncementSound =
         new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");
@@ -290,7 +291,7 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
             stackCount = stack.Count;
 
         comp.Budget += stackCount;
-        EntityManager.QueueDeleteEntity(args.Entity);
+        QueueDel(args.Entity);
         UpdateAllFactionUi(comp);
     }
 
@@ -309,7 +310,7 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
             stackCount = stack.Count;
 
         comp.Budget += stackCount;
-        EntityManager.QueueDeleteEntity(args.Used);
+        QueueDel(args.Used);
         UpdateAllFactionUi(comp);
     }
 

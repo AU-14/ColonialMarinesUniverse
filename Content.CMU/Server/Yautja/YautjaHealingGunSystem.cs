@@ -17,19 +17,19 @@ using Robust.Shared.Audio.Systems;
 
 namespace Content.Server._CMU14.Yautja;
 
-public sealed class YautjaHealingGunSystem : EntitySystem
+public sealed partial class YautjaHealingGunSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly SharedBloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedBoneSystem _bone = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedFractureSystem _fracture = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
-    [Dependency] private readonly SharedCMUWoundsSystem _wounds = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedBoneSystem _bone = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedFractureSystem _fracture = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
+    [Dependency] private SharedCMUWoundsSystem _wounds = default!;
 
     public override void Initialize()
     {

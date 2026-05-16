@@ -5,11 +5,11 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Server.AU14.Round.DrugDealer;
 
-public sealed class DrugDealerRuleSystem : GameRuleSystem<DrugDealerRuleComponent>
+public sealed partial class DrugDealerRuleSystem : GameRuleSystem<DrugDealerRuleComponent>
 {
-    [Dependency] private readonly WantedSystem _wantedSystem = default!;
-    [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private WantedSystem _wantedSystem = default!;
+    [Dependency] private IEntitySystemManager _entitySystemManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     // Add any special logic for the Drug Dealer antagonist here if needed
 

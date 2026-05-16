@@ -14,11 +14,11 @@ using Content.Shared.Popups;
 
 namespace Content.Shared.AU14.Objectives.Capture;
 
-public sealed class SharedCaptureObjectiveSystem : EntitySystem
+public sealed partial class SharedCaptureObjectiveSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly Content.Shared._RMC14.Dropship.SharedDropshipSystem _dropshipSystem = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private Content.Shared._RMC14.Dropship.SharedDropshipSystem _dropshipSystem = default!;
     private static readonly ISawmill Sawmill = Logger.GetSawmill("capture-obj");
 
     public override void Initialize()

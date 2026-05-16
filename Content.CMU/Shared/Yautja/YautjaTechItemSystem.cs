@@ -12,9 +12,9 @@ using Content.Shared.Weapons.Ranged.Systems;
 
 namespace Content.Shared._CMU14.Yautja;
 
-public sealed class YautjaTechItemSystem : EntitySystem
+public sealed partial class YautjaTechItemSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

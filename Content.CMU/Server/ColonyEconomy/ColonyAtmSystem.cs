@@ -7,13 +7,13 @@ using Robust.Server.GameObjects;
 
 namespace Content.Server.AU14.ColonyEconomy;
 
-public sealed class ColonyAtmSystem : EntitySystem
+public sealed partial class ColonyAtmSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly AdminConsoleSystem _adminConsole = default!;
-    [Dependency] private readonly ColonyBudgetSystem _colonyBudget = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private StackSystem _stack = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private AdminConsoleSystem _adminConsole = default!;
+    [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
 
     public override void Initialize()
     {

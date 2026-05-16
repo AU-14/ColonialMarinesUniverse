@@ -10,7 +10,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._CMU14.Yautja;
 
-public sealed class YautjaBracerMenuSystem : EntitySystem
+public sealed partial class YautjaBracerMenuSystem : EntitySystem
 {
     private const int TrackerDirections = 6;
     private const int MaxTrackedGear = 12;
@@ -18,17 +18,17 @@ public sealed class YautjaBracerMenuSystem : EntitySystem
     private const float FullCircle = MathF.PI * 2f;
     private static readonly TimeSpan TrackerRefreshEvery = TimeSpan.FromSeconds(1);
 
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly YautjaMarkSystem _marks = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly YautjaBracerUtilitySystem _utility = default!;
-    [Dependency] private readonly YautjaPowerSystem _power = default!;
-    [Dependency] private readonly YautjaSelfDestructSystem _selfDestruct = default!;
-    [Dependency] private readonly YautjaThrallSystem _thralls = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private YautjaMarkSystem _marks = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private YautjaBracerUtilitySystem _utility = default!;
+    [Dependency] private YautjaPowerSystem _power = default!;
+    [Dependency] private YautjaSelfDestructSystem _selfDestruct = default!;
+    [Dependency] private YautjaThrallSystem _thralls = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     private TimeSpan _nextTrackerRefresh;
 
@@ -337,7 +337,7 @@ public sealed class YautjaBracerMenuSystem : EntitySystem
         return false;
     }
 
-    private sealed class TrackerSignalGroup(byte direction, int distance, int bearing)
+    private sealed partial class TrackerSignalGroup(byte direction, int distance, int bearing)
     {
         public readonly List<string> Names = new();
         public byte Direction { get; private set; } = direction;
