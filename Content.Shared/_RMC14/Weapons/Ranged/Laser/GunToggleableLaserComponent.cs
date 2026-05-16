@@ -43,13 +43,13 @@ public sealed partial class GunToggleableLaserComponent : Component
     ///     The duration multiplier to apply during aimed shot, while the laser is active.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float AimDurationMultiplier = 0.6f;
+    public float AimDurationMultiplier = 0.25f;
 
     /// <summary>
     ///     The value to subtract from the duration multiplier if the laser is active and the target is spotted.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float SpottedAimDurationMultiplierSubtraction = 0.15f;
+    public float SpottedAimDurationMultiplierSubtraction = 0.10f;
 }
 
 [DataRecord]
