@@ -12,11 +12,11 @@ namespace Content.Shared.AU14.Objectives.Interact;
 /// Shared system for Interact objectives. Handles InteractHandEvent and InteractUsingEvent
 /// on tracked entities, validates requirements, and starts DoAfters.
 /// </summary>
-public sealed class SharedInteractObjectiveSystem : EntitySystem
+public sealed partial class SharedInteractObjectiveSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

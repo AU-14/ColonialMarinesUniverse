@@ -3,10 +3,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._CMU14.Dropship.TacticalLand;
 
-public sealed class HolographicWarningSignSystem : EntitySystem
+public sealed partial class HolographicWarningSignSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

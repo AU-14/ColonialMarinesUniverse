@@ -14,17 +14,17 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Yautja;
 
-public sealed class YautjaMaskSystem : EntitySystem
+public sealed partial class YautjaMaskSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedContentEyeSystem _contentEye = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedNightVisionSystem _nightVision = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly YautjaPowerSystem _power = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedContentEyeSystem _contentEye = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedNightVisionSystem _nightVision = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private YautjaPowerSystem _power = default!;
 
     public override void Initialize()
     {

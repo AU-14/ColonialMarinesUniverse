@@ -6,9 +6,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._CMU14.Yautja;
 
-public sealed class YautjaDamageVisualsSystem : EntitySystem
+public sealed partial class YautjaDamageVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly DamageVisualsSystem _damageVisuals = default!;
+    [Dependency] private DamageVisualsSystem _damageVisuals = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private const string YautjaBloodColor = "#2cf274";

@@ -9,11 +9,11 @@ using JetBrains.Annotations;
 namespace Content.Server.AU14.Round;
 
 [UsedImplicitly]
-public sealed class RemoveJobsRuleSystem : GameRuleSystem<RemoveJobsRuleComponent>
+public sealed partial class RemoveJobsRuleSystem : GameRuleSystem<RemoveJobsRuleComponent>
 {
-    [Dependency] private readonly StationJobsSystem _stationJobs = default!;
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private StationJobsSystem _stationJobs = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
 
     protected override void Started(EntityUid uid, RemoveJobsRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
@@ -21,7 +21,7 @@ public sealed class RemoveJobsRuleSystem : GameRuleSystem<RemoveJobsRuleComponen
 
         var mapId = _gameTicker.DefaultMap;
         var stationUid = _stationSystem.GetStationInMap(mapId);
-        if (stationUid == null || !EntityManager.EntityExists(stationUid.Value))
+        if (stationUid == null || !Exists(stationUid.Value))
             return;
 
         var stationJobs = EntityManager.GetComponentOrNull<StationJobsComponent>(stationUid.Value);

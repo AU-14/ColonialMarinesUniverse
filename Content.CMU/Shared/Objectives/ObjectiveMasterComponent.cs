@@ -65,7 +65,7 @@ public sealed partial class ObjectiveMasterComponent : Component
     public List<CompletedObjectiveRecord> CompletedObjectives = new();
 
     [Serializable]
-    public class CompletedObjectiveRecord
+    public sealed class CompletedObjectiveRecord
     {
         public EntityUid ObjectiveUid;
     }

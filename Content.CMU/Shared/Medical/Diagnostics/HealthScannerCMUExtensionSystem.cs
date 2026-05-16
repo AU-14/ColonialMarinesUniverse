@@ -20,15 +20,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Diagnostics;
 
-public sealed class HealthScannerCMUExtensionSystem : EntitySystem
+public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedPainShockSystem _pain = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedPainShockSystem _pain = default!;
+    [Dependency] private SkillsSystem _skills = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
 

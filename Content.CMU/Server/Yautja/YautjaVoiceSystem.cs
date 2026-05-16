@@ -8,11 +8,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Yautja;
 
-public sealed class YautjaVoiceSystem : EntitySystem
+public sealed partial class YautjaVoiceSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly RMCEmoteSystem _emote = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private RMCEmoteSystem _emote = default!;
 
     private static readonly ProtoId<EmotePrototype> ClickEmote = "CMUYautjaClick";
     private static readonly ProtoId<EmotePrototype> RoarEmote = "CMUYautjaRoar";

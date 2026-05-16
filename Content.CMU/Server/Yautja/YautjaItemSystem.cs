@@ -19,17 +19,17 @@ using Robust.Shared.Utility;
 
 namespace Content.Server._CMU14.Yautja;
 
-public sealed class YautjaItemSystem : EntitySystem
+public sealed partial class YautjaItemSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedXenoAcidSystem _acid = default!;
-    [Dependency] private readonly YautjaThrallSystem _thralls = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedXenoAcidSystem _acid = default!;
+    [Dependency] private YautjaThrallSystem _thralls = default!;
 
     public override void Initialize()
     {

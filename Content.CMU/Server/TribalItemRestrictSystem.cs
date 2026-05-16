@@ -7,10 +7,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.AU14;
 
-public sealed class TribalItemRestrictSystem : EntitySystem
+public sealed partial class TribalItemRestrictSystem : EntitySystem
 {
-	[Dependency] private readonly TagSystem _tagSystem = default!;
-	[Dependency] private readonly SharedPopupSystem _popupSystem = default!;
+	[Dependency] private TagSystem _tagSystem = default!;
+	[Dependency] private SharedPopupSystem _popupSystem = default!;
     private static readonly ProtoId<TagPrototype> tribaltag = "tribe";
 
 

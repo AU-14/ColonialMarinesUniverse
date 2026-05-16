@@ -3,10 +3,10 @@ using Content.Shared.AU14.ColonyEconomy;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
 namespace Content.Client.AU14.ColonyEconomy;
-public sealed class AU14ShopkeeperVendorBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
+public sealed partial class AU14ShopkeeperVendorBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IEntityManager _entMan = default!;
 
     private AU14ShopkeeperVendorWindow? _window;
     protected override void Open()
