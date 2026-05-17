@@ -11,7 +11,9 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+
 namespace Content.Server.AU14.ColonyEconomy;
+
 public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
 {
     [Dependency] private UserInterfaceSystem _ui = default!;
@@ -23,6 +25,9 @@ public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
     [Dependency] private AccessReaderSystem _accessReader = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private TagSystem _tag = default!;
+
+    private static readonly ProtoId<TagPrototype> CurrencyTag = "Currency";
+
     public override void Initialize()
     {
         base.Initialize();
@@ -52,7 +57,7 @@ public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
         if (args.Handled)
             return;
         // Currency items go to the cash slot via ItemSlots - let them pass
-        if (_tag.HasTag(args.Used, "Currency"))
+        if (_tag.HasTag(args.Used, CurrencyTag))
             return;
         if (!_accessReader.IsAllowed(args.User, uid))
             return;

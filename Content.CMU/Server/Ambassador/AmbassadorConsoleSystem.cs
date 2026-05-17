@@ -38,6 +38,8 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     private static readonly SoundSpecifier MarineAnnouncementSound =
         new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");
 
+    private static readonly ProtoId<TagPrototype> CurrencyTag = "Currency";
+
     public override void Initialize()
     {
         base.Initialize();
@@ -299,7 +301,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         if (args.Handled)
             return;
 
-        if (!_tag.HasTag(args.Used, "Currency"))
+        if (!_tag.HasTag(args.Used, CurrencyTag))
             return;
 
         args.Handled = true;
