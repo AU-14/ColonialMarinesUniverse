@@ -10,13 +10,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._CMU14.Dropship.TacticalLand;
 
-public sealed class DropshipTacticalLandSystem : SharedDropshipTacticalLandSystem
+public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalLandSystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ContentEyeSystem _contentEye = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ContentEyeSystem _contentEye = default!;
 
     private static readonly Vector2 TacticalLandZoom = new(2.25f, 2.25f);
 

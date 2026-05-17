@@ -1,8 +1,8 @@
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.AU14.util;
-[Prototype("lorePrimer")]
-public sealed class LorePrimerPrototype : IPrototype
+[Prototype]
+public sealed partial class LorePrimerPrototype : IPrototype
 {
     [IdDataField]
     public string ID { get; private set; } = default!;

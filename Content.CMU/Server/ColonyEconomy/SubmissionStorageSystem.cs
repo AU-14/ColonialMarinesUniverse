@@ -8,11 +8,11 @@ using Robust.Shared.Containers;
 
 namespace Content.Server.AU14.ColonyEconomy;
 
-public sealed class SubmissionStorageSystem : EntitySystem
+public sealed partial class SubmissionStorageSystem : EntitySystem
 {
-    [Dependency] private readonly ColonyBudgetSystem _colonyBudget = default!;
-    [Dependency] private readonly AmbassadorConsoleSystem _ambassador = default!;
-    [Dependency] private readonly CorporateConsoleSystem _corporateConsole = default!;
+    [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
+    [Dependency] private AmbassadorConsoleSystem _ambassador = default!;
+    [Dependency] private CorporateConsoleSystem _corporateConsole = default!;
  
     public override void Initialize()
     {
@@ -26,7 +26,7 @@ public sealed class SubmissionStorageSystem : EntitySystem
         SubmissionStorageComponent storage,
         EntInsertedIntoContainerMessage args)
     {
-        if (!EntityManager.TryGetComponent(uid, out SubmissionStorageComponent? submission))
+        if (!TryComp(uid, out SubmissionStorageComponent? submission))
             return;
 
         if (!TryComp<TagComponent>(args.Entity, out var tags))
@@ -56,12 +56,12 @@ public sealed class SubmissionStorageSystem : EntitySystem
         //var amount = submission.Rewards.TryGetValue()
 
         float reward;
-        if (EntityManager.TryGetComponent<StackComponent>(args.Entity, out var stack))
+        if (TryComp<StackComponent>(args.Entity, out var stack))
             reward = amount * stack.Count * mult;
         else
             reward = amount * mult;
 
-        EntityManager.PredictedQueueDeleteEntity(args.Entity);
+        PredictedQueueDel(args.Entity);
 
         // Split: tariff % goes to corporate budget, remainder to colony budget
         var tariffAmount = reward * tariff;

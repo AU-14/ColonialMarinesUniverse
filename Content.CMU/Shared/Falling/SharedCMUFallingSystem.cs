@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Dropship;
+using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
 using Content.Shared.Damage;
 using Content.Shared.Movement.Pulling.Components;
@@ -10,12 +10,12 @@ using Robust.Shared.Player;
 
 namespace Content.Shared._CMU14.Falling;
 
-public abstract class SharedCMUFallingSystem : EntitySystem
+public abstract partial class SharedCMUFallingSystem : EntitySystem
 {
-    [Dependency] private readonly PullingSystem _pulling = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly DamageableSystem _damageableSystem = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private PullingSystem _pulling = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private DamageableSystem _damageableSystem = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     private EntityQuery<ActorComponent> _actorQuery;
     private EntityQuery<AlmayerComponent> _almayerQuery;

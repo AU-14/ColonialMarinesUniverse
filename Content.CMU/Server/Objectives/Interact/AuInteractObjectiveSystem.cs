@@ -13,12 +13,12 @@ namespace Content.Server.AU14.Objectives.Interact;
 /// Server-side system for Interact objectives.
 /// Handles spawning interactable entities, DoAfter completion, progress tracking, and objective completion.
 /// </summary>
-public sealed class AuInteractObjectiveSystem : EntitySystem
+public sealed partial class AuInteractObjectiveSystem : EntitySystem
 {
-    [Robust.Shared.IoC.Dependency] private readonly IEntityManager _entManager = default!;
-    [Robust.Shared.IoC.Dependency] private readonly AuObjectiveSystem _objectiveSystem = default!;
-    [Robust.Shared.IoC.Dependency] private readonly PopupSystem _popup = default!;
-    [Robust.Shared.IoC.Dependency] private readonly ILogManager _logManager = default!;
+    [Robust.Shared.IoC.Dependency] private IEntityManager _entManager = default!;
+    [Robust.Shared.IoC.Dependency] private AuObjectiveSystem _objectiveSystem = default!;
+    [Robust.Shared.IoC.Dependency] private PopupSystem _popup = default!;
+    [Robust.Shared.IoC.Dependency] private ILogManager _logManager = default!;
 
     private ISawmill _sawmill = default!;
 
@@ -77,7 +77,7 @@ public sealed class AuInteractObjectiveSystem : EntitySystem
 
         var markers = new List<EntityUid>();
         var genericMarkers = new List<EntityUid>();
-        var markerQuery = EntityManager.AllEntityQueryEnumerator<FetchObjectiveMarkerComponent, TransformComponent>();
+        var markerQuery = AllEntityQuery<FetchObjectiveMarkerComponent, TransformComponent>();
         while (markerQuery.MoveNext(out var markerUid, out var markerComp, out _))
         {
             if (markerComp.Used)
@@ -114,12 +114,12 @@ public sealed class AuInteractObjectiveSystem : EntitySystem
         for (var i = 0; i < toSpawn; i++)
         {
             var markerUid = markers[i];
-            var markerComp = EntityManager.GetComponent<FetchObjectiveMarkerComponent>(markerUid);
+            var markerComp = Comp<FetchObjectiveMarkerComponent>(markerUid);
             if (markerComp.Used)
                 continue;
 
-            var xform = EntityManager.GetComponent<TransformComponent>(markerUid);
-            var ent = EntityManager.SpawnEntity(entityToSpawn, xform.Coordinates);
+            var xform = Comp<TransformComponent>(markerUid);
+            var ent = Spawn(entityToSpawn, xform.Coordinates);
             var tracker = _entManager.EnsureComponent<InteractObjectiveTrackerComponent>(ent);
             tracker.ObjectiveUid = uid;
             markerComp.Used = true;
@@ -141,13 +141,13 @@ public sealed class AuInteractObjectiveSystem : EntitySystem
         var interactableSet = component.Interactables.ToHashSet(StringComparer.OrdinalIgnoreCase);
         var registered = 0;
 
-        var query = EntityManager.AllEntityQueryEnumerator<MetaDataComponent>();
+        var query = AllEntityQuery<MetaDataComponent>();
         while (query.MoveNext(out var ent, out var meta))
         {
             if (ent == objectiveUid)
                 continue;
 
-            if (EntityManager.HasComponent<InteractObjectiveTrackerComponent>(ent))
+            if (HasComp<InteractObjectiveTrackerComponent>(ent))
                 continue;
 
             var proto = meta.EntityPrototype?.ID;
@@ -265,7 +265,7 @@ public sealed class AuInteractObjectiveSystem : EntitySystem
         component.EntitiesSpawned = false;
 
         // Reset all trackers linked to this objective
-        var query = EntityManager.EntityQueryEnumerator<InteractObjectiveTrackerComponent>();
+        var query = EntityQueryEnumerator<InteractObjectiveTrackerComponent>();
         while (query.MoveNext(out _, out var tracker))
         {
             if (tracker.ObjectiveUid != uid)
