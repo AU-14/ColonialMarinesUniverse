@@ -87,6 +87,7 @@
     - HiveClusterXenoConstructionNode
     - HiveRecoveryNodeXenoConstructionNode
     - HivePlasmaTreeXenoConstructionNode
+    - CMUXenoResinSupportBeamConstructionNode
   - type: XenoEvolution
     canEvolveWithoutGranter: true
     max: 200

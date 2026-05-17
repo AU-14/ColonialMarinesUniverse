@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
+using Content.Shared._CMU14.Underground;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Entrenching;
 using Content.Shared._RMC14.CCVar;
@@ -1449,6 +1450,24 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
 
                 return false;
             }
+
+            if (_prototype.TryIndex(buildChoice.Value, out var buildProto) &&
+                buildProto.TryGetComponent(out HiveConstructionLimitedComponent? hiveLimit, _compFactory) &&
+                !CanPlaceLimitedHiveStructure(xeno.Owner, hiveLimit, out _, out _))
+            {
+                if (popup)
+                {
+                    _popup.PopupClient(
+                        Loc.GetString("rmc-xeno-construction-hive-limit-met",
+                            ("choice", buildProto.Name)),
+                        target,
+                        xeno,
+                        PopupType.MediumCaution
+                    );
+                }
+
+                return false;
+            }
         }
 
         return _area.CanResinPopup((gridId, grid, null), tile, xeno);
@@ -1543,6 +1562,17 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
                 {
                     return false;
                 }
+            }
+
+            if (choiceProto.TryGetComponent(out HiveConstructionNodeComponent? nodeComp, _compFactory) &&
+                _prototype.TryIndex(nodeComp.Spawn, out var spawnProto) &&
+                spawnProto.HasComponent<UndergroundSupportBeamComponent>(_compFactory) &&
+                !HasComp<UndergroundMapComponent>(gridId))
+            {
+                if (_net.IsServer && popup)
+                    _popup.PopupEntity(Loc.GetString("cmu-underground-beam-surface"), xeno, xeno, PopupType.SmallCaution);
+
+                return false;
             }
 
             if (choiceProto.TryGetComponent(out HiveConstructionLimitedComponent? limited, _compFactory) &&

@@ -42,7 +42,7 @@
     - ActionXenoTailStab
     - ActionXenoAcidNormal
     - ActionXenoOrderConstruction
-    - ActionXenoDigTunnel
+    - ActionCMUBurrowerChooseTunnel
     - ActionXenoPlantWeeds
     - ActionXenoResinHole
     - ActionXenoBurrow
@@ -74,6 +74,7 @@
     slows: false
     sound: /Audio/_RMC14/Xeno/alien_footstep_charge1.ogg
     debuffsHurtXenosMore: false
+  - type: BurrowerTunnelChoice
   - type: XenoBurrow
   - type: MeleeWeapon
     damage:
@@ -123,6 +124,7 @@
     - HiveClusterXenoConstructionNode
     - HiveRecoveryNodeXenoConstructionNode
     - HivePlasmaTreeXenoConstructionNode
+    - CMUXenoResinSupportBeamConstructionNode
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.2
   - type: FixedIdentity

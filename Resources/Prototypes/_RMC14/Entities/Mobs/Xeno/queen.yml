@@ -89,6 +89,7 @@
     - HiveClusterXenoConstructionNode
     - HiveRecoveryNodeXenoConstructionNode
     - HivePlasmaTreeXenoConstructionNode
+    - CMUXenoResinSupportBeamConstructionNode
   - type: XenoDevour
   - type: XenoPheromones
     pheromonesMultiplier: 4

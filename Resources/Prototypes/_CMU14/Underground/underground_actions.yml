@@ -1,0 +1,14 @@
+# Burrower tunnel menu: one action, opens menu, pick type, dig starts immediately
+- type: entity
+  parent: ActionXenoBase
+  id: ActionCMUBurrowerChooseTunnel
+  name: Dig Tunnel
+  description: Choose a tunnel type and dig it at your current position.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: build_tunnel
+  - type: InstantAction
+    event: !type:BurrowerChooseTunnelActionEvent

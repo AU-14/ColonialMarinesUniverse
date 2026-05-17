@@ -1,0 +1,58 @@
+# Mapping tools for the underground tunnel system.
+# Place these markers on the SURFACE map in the map editor.
+# When the round starts and the underground grid is created,
+# the system reads these markers and modifies the matching underground tiles.
+
+# Pre-dig marker: clears the underground tile (no rock, dug marker placed).
+# Use these to carve out starter caverns, corridors, or mine shafts.
+- type: entity
+  parent: MarkerBase
+  id: CMUUndergroundPreDigMarker
+  name: underground pre-dig marker
+  suffix: Underground
+  components:
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    state: green
+  - type: UndergroundPreDigMarker
+
+# Entrance marker: spawns a paired tunnel entrance (surface + underground) at this tile.
+# The underground tile is also pre-dug. Players start the round with this entrance available.
+- type: entity
+  parent: MarkerBase
+  id: CMUUndergroundEntranceMarker
+  name: underground entrance marker
+  suffix: Underground
+  components:
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    state: blue
+  - type: UndergroundEntranceMarker
+
+# Indestructible rock marker: places a permanent, unmineable rock on the underground tile.
+# Use these to create permanent walls, pillars, or blocked-off areas underground.
+- type: entity
+  parent: MarkerBase
+  id: CMUUndergroundIndestructibleRockMarker
+  name: underground indestructible rock marker
+  suffix: Underground
+  components:
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    state: red
+  - type: UndergroundIndestructibleRockMarker
+
+# Loot marker: pre-digs the underground tile and spawns an entity there.
+# Use these to place loot crates, resource nodes, or points of interest underground.
+# Set the "spawn" field to the entity prototype ID you want spawned.
+- type: entity
+  parent: MarkerBase
+  id: CMUUndergroundLootMarker
+  name: underground loot marker
+  suffix: Underground
+  components:
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    state: pink
+  - type: UndergroundLootMarker
+    spawn: CMSurvivorCrate

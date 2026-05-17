@@ -41,6 +41,9 @@ public sealed partial class AreaComponent : Component
     public bool NoTunnel;
 
     [DataField, AutoNetworkedField]
+    public bool NoUnderground;
+
+    [DataField, AutoNetworkedField]
     public bool Unweedable;
 
     [DataField, AutoNetworkedField]

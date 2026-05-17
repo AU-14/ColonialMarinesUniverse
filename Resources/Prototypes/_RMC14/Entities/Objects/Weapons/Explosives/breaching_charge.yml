@@ -88,6 +88,7 @@
       components:
       - RMCWallExplosionDeletable
       - XenoTunnel
+      - UndergroundEntrance
   - type: RMCExplosiveDelete
     delay: 10
     beepSound:
@@ -99,6 +100,7 @@
     whitelist:
       components:
       - XenoTunnel
+      - UndergroundEntrance
 
 - type: Tag
   id: RMCExplosiveBreachingCharge

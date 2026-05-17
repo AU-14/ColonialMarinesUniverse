@@ -140,6 +140,7 @@
     - HiveClusterXenoConstructionNode
     - HiveRecoveryNodeXenoConstructionNode
     - HivePlasmaTreeXenoConstructionNode
+    - CMUXenoResinSupportBeamConstructionNode
     canUpgrade: true
   - type: XenoPlasma
     plasma: 1000
@@ -192,6 +193,7 @@
     - HiveClusterXenoConstructionNode
     - HiveRecoveryNodeXenoConstructionNode
     - HivePlasmaTreeXenoConstructionNode
+    - CMUXenoResinSupportBeamConstructionNode
   - type: XenoPlasma
     plasma: 800
     maxPlasma: 800
@@ -278,6 +280,7 @@
     - HiveClusterXenoConstructionNode
     - HiveRecoveryNodeXenoConstructionNode
     - HivePlasmaTreeXenoConstructionNode
+    - CMUXenoResinSupportBeamConstructionNode
   - type: XenoPlasma
     plasma: 700
     maxPlasma: 700

@@ -1,0 +1,5 @@
+- type: tile
+  parent: FloorPlanetDirt
+  id: CMUFloorUndergroundDirt
+  name: underground dirt
+  canDig: true

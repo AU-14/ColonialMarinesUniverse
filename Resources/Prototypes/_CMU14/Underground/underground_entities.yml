@@ -1,0 +1,289 @@
+# Underground Mirror Map entities
+
+# Surface tunnel entrance (placed on the planet surface)
+- type: entity
+  id: CMUUndergroundEntranceSurface
+  name: tunnel entrance
+  description: A hand-dug tunnel entrance leading underground.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_tunnel.rsi
+    state: hole
+    noRot: true
+    drawdepth: FloorObjects
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Clickable
+  - type: InteractionOutline
+  - type: UndergroundEntrance
+    isUnderground: false
+
+# Underground tunnel entrance (placed on the underground map, leads back up)
+- type: entity
+  id: CMUUndergroundEntranceBelow
+  name: tunnel exit
+  description: A passage back to the surface.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_tunnel.rsi
+    state: hole
+    noRot: true
+    drawdepth: FloorObjects
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Clickable
+  - type: InteractionOutline
+  - type: UndergroundEntrance
+    isUnderground: true
+  - type: UndergroundSupportBeam
+    radius: 2
+
+# Underground rock (mineable wall)
+- type: entity
+  parent: CMBaseWall
+  id: CMUUndergroundRock
+  name: rock
+  description: Compacted earth and stone. Can be dug through with the right tools.
+  components:
+  - type: Transform
+    noRot: true
+  - type: Sprite
+    sprite: _RMC14/Structures/Walls/kutjevo_rock.rsi
+    state: rock_border
+  - type: Icon
+    sprite: _RMC14/Structures/Walls/kutjevo_rock.rsi
+    state: rock_border
+  - type: IconSmooth
+    key: walls
+    additionalKeys:
+    - windows
+    - doors
+    base: rock_border
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/break_stone.ogg
+          params:
+            volume: -6
+  - type: UndergroundRock
+
+# Indestructible border rock (prevents players from walking off the underground edge)
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUUndergroundBorderRock
+  name: solid rock
+  description: Impossibly dense rock. There is no way through.
+  components:
+  - type: Transform
+    noRot: true
+  - type: Sprite
+    sprite: _RMC14/Structures/Walls/kutjevo_rock.rsi
+    state: rock_border
+  - type: Icon
+    sprite: _RMC14/Structures/Walls/kutjevo_rock.rsi
+    state: rock_border
+  - type: IconSmooth
+    key: walls
+    additionalKeys:
+    - windows
+    - doors
+    base: rock_border
+
+# Wooden support beam (prevents cave-ins in a 5x5 radius)
+- type: entity
+  parent: WoodenSupportBeam
+  id: CMUUndergroundSupportBeam
+  name: wooden support beam
+  description: A sturdy wooden beam that prevents tunnel cave-ins.
+  components:
+  - type: UndergroundSupportBeam
+    radius: 2
+  - type: Construction
+    graph: CMUSupportBeam
+    node: SupportBeam
+  - type: Flammable
+    fireSpread: false
+    damage:
+      types:
+        Heat: 10
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          RMCPlankWood:
+            min: 5
+            max: 10
+
+# Xeno surface tunnel entrance (placed on surface by burrower, visible on sensor tower)
+- type: entity
+  id: CMUXenoUndergroundEntranceSurface
+  name: xeno tunnel entrance
+  description: A tunnel dug by a burrower leading underground.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_tunnel.rsi
+    state: hole
+    noRot: true
+    drawdepth: FloorObjects
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Clickable
+  - type: InteractionOutline
+  - type: UndergroundEntrance
+    isUnderground: false
+  - type: XenoConstruct
+  - type: TacticalMapTracked
+  - type: MarineMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: xenotunnel
+
+# Xeno underground tunnel entrance (placed underground by burrower)
+- type: entity
+  id: CMUXenoUndergroundEntranceBelow
+  name: xeno tunnel exit
+  description: A passage back to the surface, dug by a burrower.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_tunnel.rsi
+    state: hole
+    noRot: true
+    drawdepth: FloorObjects
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Clickable
+  - type: InteractionOutline
+  - type: UndergroundEntrance
+    isUnderground: true
+  - type: UndergroundSupportBeam
+    radius: 2
+  - type: XenoConstruct
+
+# Xeno resin support beam construction node (ordered construction placeholder)
+- type: entity
+  id: CMUXenoResinSupportBeamConstructionNode
+  parent: BaseHiveStructureNode
+  name: resin support beam
+  description: A construction node for a resin support beam.
+  components:
+  - type: Sprite
+    color: '#FFFFFFAA'
+    sprite: _RMC14/Structures/Xenos/xeno_acid_pillar.rsi
+    layers:
+    - state: idle
+    - sprite: _RMC14/Interface/xeno_hud.rsi
+      state: xeno_structure_node_indicator
+      scale: 0.8, 0.8
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: HiveConstructionNode
+    initialPlasmaCost: 100
+    plasmaCost: 100
+    spawn: CMUXenoResinSupportBeam
+
+# Xeno resin support beam (prevents cave-ins, max 8 per hive)
+- type: entity
+  id: CMUXenoResinSupportBeam
+  name: resin support beam
+  description: A hardened resin column that prevents tunnel cave-ins.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        layer:
+        - BulletImpassable
+        density: 200
+  - type: InteractionOutline
+  - type: Clickable
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_acid_pillar.rsi
+    layers:
+    - state: idle
+      map: [ "rmc_flick_animation" ]
+  - type: Damageable
+    damageContainer: StructuralXeno
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: UndergroundSupportBeam
+    radius: 2
+  - type: XenoConstruct
+  - type: HiveConstructionLimited
+    id: CMUXenoResinSupportBeam
+  - type: RMCNightVisionVisible
+    priority: -1
+    transparency: 0.2
+  - type: DeletedByWeedKiller
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        collection: XenoMove
+
+# Dug marker (invisible, anchored entity marking a cleared tile)
+- type: entity
+  id: CMUUndergroundDugMarker
+  noSpawn: true
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: UndergroundDugMarker

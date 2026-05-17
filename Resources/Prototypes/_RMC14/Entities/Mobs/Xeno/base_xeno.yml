@@ -197,6 +197,8 @@
         type: XenoPheromonesBui
       enum.XenoOrderConstructionUI.Key:
         type: XenoOrderConstructionBui
+      enum.BurrowerTunnelUI.Key:
+        type: BurrowerTunnelBui
       enum.XenoFruitChooseUI.Key:
         type: XenoFruitChooseBui
       enum.XenoWordQueenUI.Key:

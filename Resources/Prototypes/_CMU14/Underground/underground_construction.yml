@@ -1,0 +1,7 @@
+- type: rmcConstruction
+  id: CMUSupportBeamBuild
+  name: wooden support beam
+  prototype: CMUUndergroundSupportBeam
+  noRotate: true
+  doAfterTime: 2
+  materialCost: 15

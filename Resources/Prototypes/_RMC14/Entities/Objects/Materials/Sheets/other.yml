@@ -148,6 +148,7 @@
     # wooden chair
     - RMCWoodenBarricadeBuild
     - RMCWoodenCrateBuild
+    - CMUSupportBeamBuild
     # wooden door
     # coffin
     # baseball bat

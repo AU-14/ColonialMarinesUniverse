@@ -1,0 +1,7 @@
+<cc:BurrowerTunnelWindow
+    xmlns="https://spacestation14.io"
+    xmlns:cc="clr-namespace:Content.Client._CMU14.Underground.BurrowerTunnel"
+    Title="{Loc cmu-underground-tunnel-menu-title}"
+    MinSize="280 100">
+    <BoxContainer Orientation="Vertical" Name="TunnelContainer" Access="Public" />
+</cc:BurrowerTunnelWindow>
