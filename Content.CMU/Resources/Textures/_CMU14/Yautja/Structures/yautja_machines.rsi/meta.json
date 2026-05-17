@@ -802,7 +802,7 @@
                        "name":  "nutri_deny"
                    },
                    {
-                       "name":  ""
+                       "name":  "default"
                    },
                    {
                        "name":  "t_20"
