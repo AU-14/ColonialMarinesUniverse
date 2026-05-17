@@ -16,19 +16,19 @@ chat-radio-opforintel =  INTL
 chat-radio-opforjtac = ORBT
 chat-radio-opformp = CSTD
 
-chat-radio-colony = Colony
-chat-radio-alert = Colony Alerts
+chat-radio-colony = CLNY
+chat-radio-alert = ALRT
 chat-radio-WEYU = WEYU
 chat-radio-CMB = CMB
 chat-radio-CLF = CLF
-chat-radio-mob = Family
+chat-radio-mob = FAMLY
 
-chat-radio-hivemind = Hivemind
+chat-radio-hivemind = HIVE
 chat-radio-ai = AI
-chat-radio-colony-softwave = Softwave
+chat-radio-colony-softwave = SWAVE
 
-chat-radio-uppsof = UPP SOF
-chat-radio-uasof = UA SOF
-chat-radio-twe = TWE SOF
-chat-radio-icsc = ICSC SOF
+chat-radio-uppsof = UPP
+chat-radio-uasof = UA
+chat-radio-twe = TWE
+chat-radio-icsc = ICSC
 chat-radio-vai = VAI
