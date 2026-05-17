@@ -78,19 +78,6 @@ public partial class ReagentPropertyPrototype : IPrototype, IInheritingPrototype
     [ViewVariables(VVAccess.ReadOnly), DataField(required: true)]
     public ReagentPropertyHintEnum Hint = ReagentPropertyHintEnum.Disabled;
 
-    // VVLOW 0.1
-    // VLOW 0.25
-    // LOW 0.5
-    // MEDIUMLOW 1.5
-    // MEDIUM 2
-    // HIGH 3
-    // VHIGH 5
-    // VVHIGH 6
-    // HIGHEXTREMEINTER 7.5
-    // EXTREME 10
-    [ViewVariables(VVAccess.ReadOnly), DataField(required: true)]
-    public float Potency = 1f;
-
     [ViewVariables(VVAccess.ReadOnly), DataField]
     public int Level = 1;
 
@@ -104,7 +91,7 @@ public partial class ReagentPropertyPrototype : IPrototype, IInheritingPrototype
     [AbstractDataField]
     public bool Abstract { get; private set; }
 
-    [DataField("desc", required: true)]
+    [DataField(required: true)]
     private LocId Description { get; set; }
 
     [ViewVariables(VVAccess.ReadOnly)]
