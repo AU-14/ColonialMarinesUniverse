@@ -19,7 +19,7 @@
             AU14JobCivilianJournalist: [2, 2]
             AU14JobCivilianScientist: [6, 6]
             AU14JobCivilianColonySynthetic: [2, 2]
-
+            AU14JobCivilianShopkeep: [2, 2]
             # Colony Command (non department)
             AU14JobCivilianCorporateLiaison: [1, 1]
             AU14JobCivilianColonyAdministrator: [1, 1]
