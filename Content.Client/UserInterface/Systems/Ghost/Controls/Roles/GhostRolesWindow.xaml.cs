@@ -29,6 +29,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
         private int _availableRoleCount;
         private int _previousAvailableRoleCount;
         private bool _updatingEntries;
+        private Vector2 _entryUpdateScrollValue;
 
         public GhostRolesWindow()
         {
@@ -36,6 +37,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
             IoCManager.InjectDependencies(this);
             ApplyCrtPalette();
             SearchBar.OnTextChanged += OnSearchTextChanged;
+            _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
         }
 
@@ -44,7 +46,13 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
         {
             base.Dispose(disposing);
 
+            _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+        }
+
+        private void OnCrtUiEnabledChanged(bool _)
+        {
+            ApplyCrtPalette();
         }
 
         private void OnCrtUiColorChanged(string _)
@@ -104,6 +112,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
         public void BeginEntryUpdate()
         {
             _previousAvailableRoleCount = _availableRoleCount;
+            _entryUpdateScrollValue = RoleScroll.GetScrollValue(ignoreVisible: true);
             _updatingEntries = true;
             ClearEntries();
         }
@@ -113,8 +122,9 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
             _updatingEntries = false;
             UpdateVisibleEntries();
 
-            if (_availableRoleCount != _previousAvailableRoleCount)
-                RoleScroll.SetScrollValue(Vector2.Zero);
+            RoleScroll.SetScrollValue(_entryUpdateScrollValue);
+            RoleScroll.HScrollTarget = _entryUpdateScrollValue.X;
+            RoleScroll.VScrollTarget = _entryUpdateScrollValue.Y;
         }
 
         private void UpdateVisibleEntries()

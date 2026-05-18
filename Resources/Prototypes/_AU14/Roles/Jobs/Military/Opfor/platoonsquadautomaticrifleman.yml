@@ -63,7 +63,7 @@
   id: AU14GearopforSquadAutomaticRifleman
   equipment:
     id: AU14IDCardopforSquadAutomaticRifleman
-    ears: AU14HeadsetSectionOpfor
+    ears: AU14HeadsetOpforMarine
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -82,4 +82,4 @@
     shoes: AU14BootsJungle
     head: AU14JungleM10Helmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetSectionOpfor
+    ears: AU14HeadsetOpforMarine

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Content.Server._RMC14.Medical.Surgery;
 using Content.Server.Popups;
 using Content.Shared._CMU14.Medical;
@@ -158,25 +157,39 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
 
         if (!hasSelectedPart)
         {
-            var openCandidates = candidates
-                .Where(candidate => candidate.Part.IsInFlightHere || IsOpenPart(candidate.Part.Part))
-                .ToList();
+            List<ToolIntentCandidate>? openCandidates = null;
+            NetEntity? openPart = null;
+            BodyPartType openType = default;
+            BodyPartSymmetry openSymmetry = default;
 
-            if (openCandidates.Count > 0)
+            foreach (var candidate in candidates)
             {
-                var openParts = openCandidates
-                    .Select(candidate => (candidate.Part.Part, candidate.Part.Type, candidate.Part.Symmetry))
-                    .Distinct()
-                    .Count();
-                if (openParts != 1)
+                if (!candidate.Part.IsInFlightHere && !IsOpenPart(candidate.Part.Part))
+                    continue;
+
+                openCandidates ??= new List<ToolIntentCandidate>();
+                openCandidates.Add(candidate);
+
+                if (openPart is null)
+                {
+                    openPart = candidate.Part.Part;
+                    openType = candidate.Part.Type;
+                    openSymmetry = candidate.Part.Symmetry;
+                    continue;
+                }
+
+                if (!openPart.Value.Equals(candidate.Part.Part)
+                    || openType != candidate.Part.Type
+                    || openSymmetry != candidate.Part.Symmetry)
+                {
                     return false;
+                }
+            }
 
+            if (openCandidates is not null)
                 candidates = openCandidates;
-            }
             else if (candidates.Count != 1)
-            {
                 return false;
-            }
         }
 
         candidates.Sort((a, b) => b.Score.CompareTo(a.Score));

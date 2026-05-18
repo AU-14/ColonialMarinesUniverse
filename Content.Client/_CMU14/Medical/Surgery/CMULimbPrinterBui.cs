@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Numerics;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._CMU14.Medical.Surgery;
@@ -68,10 +67,13 @@ public sealed class CMULimbPrinterBui : BoundUserInterface
 
         _window.LeftList.RemoveAllChildren();
         _window.RightList.RemoveAllChildren();
-        foreach (var option in state.Options.Where(o => o.Symmetry == BodyPartSymmetry.Left))
-            _window.LeftList.AddChild(BuildOption(option));
-        foreach (var option in state.Options.Where(o => o.Symmetry == BodyPartSymmetry.Right))
-            _window.RightList.AddChild(BuildOption(option));
+        foreach (var option in state.Options)
+        {
+            if (option.Symmetry == BodyPartSymmetry.Left)
+                _window.LeftList.AddChild(BuildOption(option));
+            else if (option.Symmetry == BodyPartSymmetry.Right)
+                _window.RightList.AddChild(BuildOption(option));
+        }
     }
 
     private Control BuildOption(CMULimbPrinterOption option)

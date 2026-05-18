@@ -39,4 +39,10 @@ public sealed partial class WendigoHeadbiteAudioComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public float GlobalIndoorVolume = -12f;
+
+    /// <summary>
+    ///     Tracks whether the global screech cooldown has expired. Used for the popup notification.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool ScreechReady = true;
 }

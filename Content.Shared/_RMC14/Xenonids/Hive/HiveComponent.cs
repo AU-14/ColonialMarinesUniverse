@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared._RMC14.Xenonids.Construction.Tunnel;
 using Content.Shared.FixedPoint;
+using Content.Shared.NPC.Prototypes;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -33,6 +34,27 @@ public sealed partial class HiveComponent : Component
 
     [DataField, AutoNetworkedField]
     public List<TimeSpan> AnnouncementsLeft = [];
+
+    [DataField, AutoNetworkedField, ViewVariables]
+    public Color HiveColor = Color.White;
+
+    [DataField, AutoNetworkedField, ViewVariables]
+    public Color HiveUIColor = Color.FromHex("#921992");
+
+    //lets them understand humans
+    [DataField, AutoNetworkedField, ViewVariables]
+    public bool Corrupted = false;
+
+    //whether or not the queen can make alliances
+    [DataField, AutoNetworkedField, ViewVariables]
+    public bool CanMakeAlliances = false;
+
+    [AutoNetworkedField, ViewVariables]
+    public HashSet<ProtoId<NpcFactionPrototype>> Allies = [];
+
+    //for specific people
+    [AutoNetworkedField, ViewVariables]
+    public HashSet<EntityUid> IndividualAllies = [];
 
     [DataField, AutoNetworkedField]
     public bool AnnouncedQueenDeathCooldownOver;

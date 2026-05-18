@@ -54,11 +54,13 @@ namespace Content.Shared.Doors
         /// </summary>
         public bool Partial;
         public bool PerformCollisionCheck;
+        public EntityUid? User;
 
-        public BeforeDoorClosedEvent(bool performCollisionCheck, bool partial = false)
+        public BeforeDoorClosedEvent(bool performCollisionCheck, bool partial = false, EntityUid? user = null)
         {
             Partial = partial;
             PerformCollisionCheck = performCollisionCheck;
+            User = user;
         }
     }
 

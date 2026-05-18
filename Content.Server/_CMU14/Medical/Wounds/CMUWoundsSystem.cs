@@ -78,7 +78,8 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
         EntityUid user,
         EntityUid tool,
         ProtoId<DamageGroupPrototype> group,
-        FixedPoint2 damage)
+        FixedPoint2 damage,
+        EntityUid? origin = null)
     {
         if (damage == FixedPoint2.Zero)
             return false;
@@ -95,7 +96,7 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
             ignoreResistances: true,
             interruptsDoAfters: false,
             damageable: damageable,
-            origin: user,
+            origin: origin ?? user,
             tool: tool) is not null;
     }
 }

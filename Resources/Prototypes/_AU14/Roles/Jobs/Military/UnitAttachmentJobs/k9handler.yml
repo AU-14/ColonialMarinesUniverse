@@ -38,7 +38,7 @@
   equipment:
     jumpsuit: AU14UniversalBlackFatigues
     id: AU14IDCardSquadK9Handler
-    ears: AU14HeadsetSectionLeader
+    ears: AU14HeadsetGovforCommand
     eyes: RMCGlassesMedicalHUDGlasses
     outerClothing: AU14WYPPOArmor
     shoes: CMBootsBlack

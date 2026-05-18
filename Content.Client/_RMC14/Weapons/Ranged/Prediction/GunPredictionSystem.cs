@@ -85,7 +85,7 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 
     private void OnClientProjectileStartCollide(Entity<PredictedProjectileClientComponent> ent, ref StartCollideEvent args)
     {
-        if (ent.Comp.Hit)
+        if (_timing.ApplyingState || ent.Comp.Hit)
             return;
 
         if (!TryComp(ent, out ProjectileComponent? projectile) ||

@@ -1,199 +1,176 @@
+# ├──[ ENCRYPTIONKEYS ]──────────────────────────────────────────────┤
 - type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyGOVFOR
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyGovfor # blank key, channel set by SquadSystem.cs
   name: GOVFOR encryption key
-  description: An encryption key used to communicate on the GOVFOR channel.
+  description: An encryption key used to communicate on the GOVFOR channel, it is automatically assigned the right channel.
   components:
-  - type: GrantSquadLeaderTracker
+  - type: GrantSquadLeaderTracker # only keys give tracker (not headsets)
     defaultMode: SquadLeader
     trackerModes:
     - SquadLeader
     - FireteamLeader
     - BattleBuddy
-  - type: EncryptionKey
-  - type: Sprite
-    state: we_ya_key
 
 - type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyGOVFORCommand
-  name: GOVFOR command encryption key
-  description: An encryption key used to communicate on all GOVFOR channels.
-  components:
-  - type: GrantSquadLeaderTracker
-    defaultMode: SquadLeader
-    trackerModes:
-    - SquadLeader
-    - FireteamLeader
-    - BattleBuddy
-  - type: EncryptionKey
-    channels:
-    - GovforCommand
-    - GovforJTAC
-    - GovforAlpha
-    - GovforCharlie
-    - GovforBravo
-    - GovforIntel
-    defaultChannel: GovforCommand
-  - type: Sprite
-    state: we_ya_key
-
-- type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyGOVFORauxiliarysupport
-  name: GOVFOR auxiliary support encryption key
-  description: An encryption key used to communicate on auxiliary support channels.
-  components:
-  - type: GrantSquadLeaderTracker
-    defaultMode: SquadLeader
-    trackerModes:
-    - SquadLeader
-    - FireteamLeader
-    - BattleBuddy
-  - type: EncryptionKey
-    channels:
-    - GovforCommand
-    - GovforIntel
-    defaultChannel: GovforCommand
-  - type: Sprite
-    state: we_ya_key
-
-- type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyGOVFORBravo
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyGovforBravo
   name: GOVFOR Bravo encryption key
   description: An encryption key used to communicate on the GOVFOR Bravo channel.
   components:
-  - type: GrantSquadLeaderTracker
-    defaultMode: SquadLeader
-    trackerModes:
-    - SquadLeader
-    - FireteamLeader
-    - BattleBuddy
   - type: EncryptionKey
     channels:
-    - GovforBravo
-    defaultChannel: GovforBravo
-  - type: Sprite
-    state: we_ya_key
+    - radioGovforBravo
+    defaultChannel: radioGovforBravo
 
 - type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyGOVFORCharlie
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyGovforCharlie
   name: GOVFOR Charlie encryption key
   description: An encryption key used to communicate on the GOVFOR Charlie channel.
   components:
-  - type: GrantSquadLeaderTracker
-    defaultMode: SquadLeader
-    trackerModes:
-    - SquadLeader
-    - FireteamLeader
-    - BattleBuddy
   - type: EncryptionKey
     channels:
-    - GovforCharlie
-    defaultChannel: GovforCharlie
-  - type: Sprite
-    state: we_ya_key
+    - radioGovforCharlie
+    defaultChannel: radioGovforCharlie
 
 - type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyGOVFORIntel
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyGovforCommand
+  name: GOVFOR Command encryption key
+  description: An encryption key used to communicate on all available GOVFOR channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+    - radioGovforCommand
+    - radioGovforIntel
+    - radioGovforJTAC
+    - radioGovforMILP
+    defaultChannel: radioGovforCommand
+
+- type: entity
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyGovforCommandOnly
+  name: GOVFOR Command-only encryption key
+  description: An encryption key used to communicate on the GOVFOR Command channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioGovforCommand
+    defaultChannel: radioGovforCommand
+
+- type: entity
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyGovforIntel
   name: GOVFOR Intel encryption key
   description: An encryption key used to communicate on the GOVFOR Intel channel.
   components:
-  - type: GrantSquadLeaderTracker
-    defaultMode: SquadLeader
-    trackerModes:
-    - SquadLeader
-    - FireteamLeader
-    - BattleBuddy
   - type: EncryptionKey
     channels:
-    - GovforIntel
-    defaultChannel: GovforIntel
-  - type: Sprite
-    state: we_ya_key
+    - radioGovforIntel
+    defaultChannel: radioGovforIntel
 
 - type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyMarineJTAC
-  name: JTAC encryption key
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyGovforJTAC
+  name: GOVFOR JTAC encryption key
+  description: An encryption key used to communicate on the GOVFOR ATC channel.
   components:
   - type: EncryptionKey
     channels:
-    - GovforJTAC
-    defaultChannel: GovforJTAC
+    - radioGovforJTAC
 
+- type: entity
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyGovforMILP
+  name: GOVFOR MP encryption key
+  description: An encryption key used to communicate on the GOVFOR MP channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioGovforMILP
+
+# ├──[ HEADSETS ]────────────────────────────────────────────────────┤
 - type: entity
   parent: RMCHeadsetShip
-  id: AU14HeadsetSectionMarine
-  name: GOVFOR radio headset
+  id: AU14HeadsetGovforMarine
+  name: GOVFOR section radio headset
   description: This is used by GOVFOR personnel to communicate on the radio.
   components:
-  - type: GrantSquadLeaderTracker
-    defaultMode: SquadLeader
-    trackerModes:
-    - SquadLeader
-    - FireteamLeader
-    - BattleBuddy
   - type: Sprite
     state: generic_headset
   - type: ContainerFill
     containers:
       key_slots:
-      - CMEncryptionKeyCommon
+      - AU14EncryptionKeyGovfor
 
 - type: entity
-  parent: AU14HeadsetSectionMarine
-  id: AU14HeadsetSectionMarineFTL
+  parent: AU14HeadsetGovforMarine
+  id: AU14HeadsetGovforCommand
+  name: GOVFOR Command radio headset
+  description: This is used by GOVFOR command members to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots: # give all usable keys for emergencies/promotions
+      - AU14EncryptionKeyGovforCommand
+      - AU14EncryptionKeyGovforBravo
+      - AU14EncryptionKeyGovforCharlie
+      - AU14EncryptionKeyGovforIntel
+      - AU14EncryptionKeyGovforJTAC
+      - AU14EncryptionKeyGovforMILP
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: AU14HeadsetGovforMarineSL
+  name: GOVFOR SL radio headset
+  description: This is used by GOVFOR section leaders to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGovfor
+      - AU14EncryptionKeyGovforCommandOnly
+      - AU14EncryptionKeyGovforJTAC
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: AU14HeadsetGovforMarineFTL
   name: GOVFOR FTL radio headset
   description: This is used by GOVFOR fireteam leaders to communicate on the radio.
   components:
   - type: ContainerFill
     containers:
       key_slots:
-      - CMEncryptionKeyCommon
-      - AU14EncryptionKeyMarineJTAC
+      - AU14EncryptionKeyGovfor
+      - AU14EncryptionKeyGovforJTAC
 
 - type: entity
   parent: RMCHeadsetShip
-  id: AU14HeadsetSectionLeader
-  name: GOVFOR command radio headset
-  description: This is used by GOVFOR command members to communicate on the radio.
-  components:
-  - type: GrantSquadLeaderTracker
-    defaultMode: SquadLeader
-    trackerModes:
-    - SquadLeader
-    - FireteamLeader
-    - BattleBuddy
-  - type: Sprite
-    state: generic_headset
-  - type: ContainerFill
-    containers:
-      key_slots:
-      - AU14EncryptionKeyGOVFORCommand
-      - AU14EncryptionKeyGOVFOR
-      - AU14EncryptionKeyGOVFORBravo
-      - AU14EncryptionKeyGOVFORCharlie
-      - AU14EncryptionKeyGOVFORIntel
-
-- type: entity
-  parent: RMCHeadsetShip
-  id: AU14HeadsetGOVFORAux
-  name: GOVFOR auxiliary support headset
+  id: AU14HeadsetGovforAuxiliary
+  name: GOVFOR Auxiliary support headset
   description: This is used by GOVFOR auxiliary support members to communicate on the radio.
   components:
-  - type: GrantSquadLeaderTracker
-    defaultMode: SquadLeader
-    trackerModes:
-    - SquadLeader
-    - FireteamLeader
-    - BattleBuddy
-  - type: Sprite
-    state: generic_headset
   - type: ContainerFill
     containers:
       key_slots:
-      - AU14EncryptionKeyGOVFORauxiliarysupport
+      - AU14EncryptionKeyGovfor
+      - AU14EncryptionKeyGovforCommandOnly
+      - AU14EncryptionKeyGovforIntel
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: AU14HeadsetGovforMarineMP
+  name: GOVFOR MP radio headset
+  description: This is used by GOVFOR military police to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGovfor
+      - AU14EncryptionKeyGovforCommand
+#     - AU14EncryptionKeyGovforCommandOnly
+      - AU14EncryptionKeyGovforMILP

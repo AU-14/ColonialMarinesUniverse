@@ -19,7 +19,10 @@
                 <!-- Interface -->
                 <Label Text="{Loc 'ui-options-interface-label'}" StyleClasses="LabelKeyText"/>
                 <ui:OptionDropDown Name="DropDownUIScale" Title="{Loc 'ui-options-scale-label'}" />
-                <ui:OptionDropDown Name="CrtUiColorDropDown" Title="{Loc 'ui-options-crt-ui-color'}" />
+                <CheckBox Name="CrtUiEnabledCheckBox" Text="{Loc 'ui-options-crt-ui-enabled'}" />
+                <ui:OptionColorSlider Name="CrtUiColorSlider"
+                                      Title="{Loc 'ui-options-crt-ui-color'}"
+                                      Example="{Loc 'ui-options-crt-ui-color-example'}" />
                 <CheckBox Name="ViewportStretchCheckBox" Text="{Loc 'ui-options-vp-stretch'}" />
                 <ui:OptionSlider Name="ViewportScaleSlider" Title="{Loc ui-options-vp-scale}" />
                 <ui:OptionSlider Name="ViewportWidthSlider" Title="{Loc ui-options-vp-width}" />

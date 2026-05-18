@@ -32,6 +32,7 @@
     - XenoThreat
     - XenoThreatCF
     - wendigoThreat
+    - abominationsThreatDistress
     thirdparties:
     - FORECON
     - FORECONAlt
@@ -116,6 +117,7 @@
     - XenoThreat
     - wendigoThreat
     - abominationsThreat
+    - abominationsThreatDistress
     # Shepherds' Pride exposes CWPS Ranger as its map-specific LEO role.
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCWPSRanger
@@ -172,6 +174,7 @@
     - tribalThirdParty
     threats:
     - abominationsThreat
+    - abominationsThreatDistress
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
@@ -231,6 +234,7 @@
     - cultistThreat
     - XenoThreat
     - wendigoThreat
+    - abominationsThreatDistress
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
@@ -294,6 +298,7 @@
     daycycleenabled: true
     threats:
     - XenoThreat
+    - abominationsThreatDistress
     thirdparties:
     - USArmy
     - USArmyAlt
@@ -337,6 +342,7 @@
     - XenoThreat
     - XenoThreatCF
     - wendigoThreat
+    - abominationsThreatDistress
     thirdparties:
     - USArmy
     - USArmyAlt
@@ -394,6 +400,7 @@
     - XenoThreat
     - XenoThreatCF
     - wendigoThreat
+    - abominationsThreatDistress
     thirdparties:
     - FORECON
     - FORECONAlt
@@ -451,6 +458,7 @@
     - cultistThreat
     - XenoThreat
     - XenoThreatCF
+    - abominationsThreatDistress
     thirdparties:
     - NSPAInvestigationParty
     - UPPGROMAlt
@@ -514,6 +522,7 @@
     - cultistThreatOnMarker
     - XenoThreat
     - abominationsThreat
+    - abominationsThreatDistress
     joboverrides:
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
@@ -568,6 +577,7 @@
     - cultistThreat
     - XenoThreat
     - wendigoThreat
+    - abominationsThreatDistress
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
@@ -618,6 +628,7 @@
     - tribalThirdParty
     threats:
     - XenoThreat
+    - abominationsThreatDistress
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
@@ -668,6 +679,7 @@
     - tribalThirdParty
     threats:
     - XenoThreat
+    - abominationsThreatDistress
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
@@ -718,6 +730,7 @@
     - tribalThirdParty
     threats:
     - XenoThreat
+    - abominationsThreatDistress
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
@@ -769,6 +782,7 @@
     - tribalThirdParty
     threats:
     - XenoThreat
+    - abominationsThreatDistress
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 

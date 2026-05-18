@@ -2,7 +2,7 @@
   parent: AU14JobRadioTelephoneOperatorBase
   id: AU14JobGOVFORRadioTelephoneOperator
   name: au14-job-name-radiotelephoneoperator
-  description: au14-job-description-radiotelephoneooerator
+  description: au14-job-description-radiotelephoneoperator
   setPreference: true
   requirements:
   - !type:TraitsRequirement
@@ -78,7 +78,7 @@
   id: AU14GearGOVFORRadioTelephoneOperator
   equipment:
     id: AU14JobIDCardGOVFORRadioTelephoneOperator
-    ears: AU14HeadsetSectionMarineFTL
+    ears: AU14HeadsetGovforMarineFTL
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORRadioTelephoneOperator
@@ -96,4 +96,4 @@
     shoes: CMBootsBrown
     head: AU14JungleBoonieHat
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetSectionMarineFTL
+    ears: AU14HeadsetGovforMarineFTL

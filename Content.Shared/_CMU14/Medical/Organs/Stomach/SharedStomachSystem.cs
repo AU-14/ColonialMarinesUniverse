@@ -74,7 +74,6 @@ public abstract partial class SharedStomachSystem : EntitySystem
             if (stomach.NextVomitCheck > now)
                 continue;
             stomach.NextVomitCheck = now + stomach.VomitCheckInterval;
-            Dirty(uid, stomach);
 
             if (!stomach.VomitChance.TryGetValue(oh.Stage, out var chance) || chance <= 0f)
                 continue;

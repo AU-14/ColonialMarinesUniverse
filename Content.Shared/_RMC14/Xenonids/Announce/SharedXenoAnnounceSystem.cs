@@ -34,12 +34,12 @@ public abstract partial class SharedXenoAnnounceSystem : EntitySystem
             AnnounceSameHive(ent.Owner, Loc.GetString("rmc-xeno-parasite-announce-infect", ("xeno", ent.Owner), ("location", locationName)), color: ent.Comp.Color);
         else
         {
-            if (HasComp<XenoEvolutionGranterComponent>(ent) || _xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1))
+            if (HasComp<XenoEvolutionGranterComponent>(ent) || _xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1, null, Hive.GetHive(ent.Owner)))
                 AnnounceSameHive(ent.Owner, Loc.GetString(ent.Comp.Message, ("xeno", ent.Owner), ("location", locationName)), color: ent.Comp.Color);
         }
     }
 
-    public string WrapHive(string message, Color? color = null)
+    public string WrapHive(string message, Color? color = null, EntityUid? hive = null)
     {
         color ??= Color.FromHex("#921992");
         return $"[color={color.Value.ToHex()}][font size=16][bold]{message}[/bold][/font][/color]\n\n";
@@ -73,6 +73,8 @@ public abstract partial class SharedXenoAnnounceSystem : EntitySystem
         Color? color = null,
         bool needsQueen = false)
     {
+        if (TryComp<HiveComponent>(hive, out var comp))
+            color ??= comp.HiveUIColor;
         var filter = Filter.Empty().AddWhereAttachedEntity(e => Hive.IsMember(e, hive));
         Announce(source, filter, message, WrapHive(message, color), sound, popup, needsQueen);
     }

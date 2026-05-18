@@ -75,8 +75,6 @@
   - type: IconSmooth
     key: walls
     mode: NoSprite
-  - type: AccessReader
-    access: [["CMAccessXeno"]]
   - type: Airlock
     emergencyAccessLayer: false
     animatePanel: false

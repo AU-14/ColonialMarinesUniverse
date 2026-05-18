@@ -79,7 +79,7 @@
   id: AU14GearGOVFORSectionSergeant
   equipment:
     id: AU14IDCardSecSergeant
-    ears: AU14HeadsetSectionMarine
+    ears: AU14HeadsetGovforMarine
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORSectionSergeant
@@ -97,4 +97,4 @@
     shoes: CMBootsBrown
     head: AU14JunglePatrolCap
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetSectionMarine
+    ears: AU14HeadsetGovforMarine

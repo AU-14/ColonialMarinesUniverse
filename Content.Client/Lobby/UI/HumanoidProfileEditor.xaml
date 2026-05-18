@@ -18,7 +18,7 @@
                                 <BoxContainer Orientation="Vertical">
                                     <BoxContainer Orientation="Horizontal" VerticalExpand="True">
                                         <Label Text="{Loc 'humanoid-profile-editor-name-label'}" />
-                                        <LineEdit Name="NameEdit" MinSize="270 0" VerticalAlignment="Center" Margin="5 0 0 0" />
+                                        <LineEdit Name="NameEdit" StyleClasses="CharacterNameInput" MinSize="270 0" VerticalAlignment="Center" Margin="5 0 0 0" />
                                         <Button Name="NameRandomize" Text="{Loc 'humanoid-profile-editor-name-random-button'}" />
                                     </BoxContainer>
                                     <Button Name="RandomizeEverythingButton" HorizontalAlignment="Center"
@@ -49,7 +49,7 @@
             <Control MinHeight="10" />
             <PanelContainer Name="RoundPreferencePanel" StyleClasses="CrtInsetPanel" Margin="0 0 0 6">
                 <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="8 4" SeparationOverride="14">
-                    <Label Text="JOB FALLBACK"
+                    <Label Text="{Loc 'humanoid-profile-editor-job-fallback-label'}"
                            StyleClasses="CrtHeading"
                            VerticalAlignment="Center" />
                     <OptionButton Name="PreferenceUnavailableButton"

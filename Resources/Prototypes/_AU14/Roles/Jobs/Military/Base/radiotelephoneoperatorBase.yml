@@ -2,7 +2,7 @@
   parent: CMJobBase
   id: AU14JobRadioTelephoneOperatorBase
   name: au14-job-name-radiotelephoneoperator
-  description: au14-job-description-radiotelephoneooerator
+  description: au14-job-description-radiotelephoneoperator
   playTimeTracker: AU14JobGOVFORRadioTelephoneOperator
   basePlaytimeTracker: true
   hidden: true

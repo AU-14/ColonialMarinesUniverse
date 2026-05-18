@@ -76,6 +76,23 @@
 
 - type: entity
   parent: SquadBase
+  id: SquadEcho
+  name: Echo
+  components:
+  - type: SquadTeam
+    color: "#67D692"
+    radio: MarineEcho
+    accessLevels:
+    - CMAccessAlpha
+    - CMAccessBravo
+    - CMAccessCharlie
+    - CMAccessDelta
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_echo
+
+- type: entity
+  parent: SquadBase
   id: SquadFoxtrot
   name: Foxtrot
   components:
@@ -94,28 +111,10 @@
 
 - type: entity
   parent: SquadBase
-  id: SquadEcho
-  name: Echo
-  components:
-  - type: SquadTeam
-    color: "#67D692"
-    radio: MarineEcho
-    accessLevels:
-    - CMAccessAlpha
-    - CMAccessBravo
-    - CMAccessCharlie
-    - CMAccessDelta
-    minimapBackground:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: background_echo
-
-- type: entity
-  parent: SquadBase
   id: SquadIntel
   name: Auxiliary
   components:
   - type: SquadTeam
-
     color: "#053818"
     blacklistedSquadArmor:
     - Helmet
@@ -154,7 +153,7 @@
     - Goggles
     - Armor
     - Gloves
-    radio: WEYA
+    radio: radioWEYU
     minimapBackground:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: background_pmc
@@ -320,165 +319,3 @@
     leaderIcon:
       sprite: _RMC14/Interface/cm_job_icons.rsi
       state: hudsquad_soctl
-
-- type: entity
-  parent: SquadBase
-  id: SquadCLF
-  name: CLF
-  components:
-  - type: SquadTeam
-    color: "#3aeb34"
-    background:
-      sprite: _RMC14/Interface/cm_job_icons.rsi
-      state: empty
-    blacklistedSquadArmor:
-    - Helmet
-    - Goggles
-    - Armor
-    - Gloves
-    radio: Colony
-    minimapBackground:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: background_spp
-    canSupplyDrop: false
-    group: CLF
-    leaderIcon:
-      sprite: _RMC14/Interface/cm_job_icons.rsi
-      state: clf_sl
-
-# --- OPFOR Squads ---
-- type: entity
-  parent: SquadBase
-  id: SquadOpforIntel
-  name: Auxiliary
-  components:
-  - type: SquadTeam
-    roundStart: true
-    color: "#1E90FF"
-    group: OPFOR
-    radio: OpforIntel
-    accessLevels:
-    - AU14AccessOpfor
-    - AU14AccessGovfor
-    minimapBackground:
-     sprite: /Textures/_RMC14/Interface/map_blips.rsi
-     state: background_intel
-
-- type: entity
-  parent: SquadBase
-  id: SquadOpfor
-  name: Sierra
-  components:
-  - type: SquadTeam
-    color: "#bb91d8"
-    radio: opfor
-    group: OPFOR
-    minimapBackground:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: background_sierra
-    leaderIcon:
-      sprite: _RMC14/Interface/cm_job_icons.rsi
-      state: hudsquad_leader_a
-
-- type: entity
-  parent: SquadBase
-  id: SquadOpforBravo
-  name: Tango
-  components:
-  - type: SquadTeam
-    roundStart: true
-    color: "#c6c1a8"
-    group: OPFOR
-    radio: OpforBravo
-    accessLevels:
-    - AU14AccessOpfor
-    - AU14AccessGovfor
-    minimapBackground:
-     sprite: /Textures/_RMC14/Interface/map_blips.rsi
-     state: background_tango
-
-- type: entity
-  parent: SquadBase
-  id: SquadOpforCharlie
-  name:  Uniform
-  components:
-  - type: SquadTeam
-    roundStart: true
-    color: "#7A967E"
-    radio: OpforCharlie
-    group: OPFOR
-    accessLevels:
-    - AU14AccessOpfor
-    - AU14AccessGovfor
-    minimapBackground:
-     sprite: /Textures/_RMC14/Interface/map_blips.rsi
-     state: background_uniform
-
-# --- GOVFOR Squads ---
-- type: entity
-  parent: SquadBase
-  id: SquadGovforIntel
-  name: Auxiliary
-  components:
-  - type: SquadTeam
-    group: GOVFOR
-    roundStart: true
-    color: "#228B22"
-    radio: GovforIntel
-    accessLevels:
-    - AU14AccessGovforSquad
-    - AU14AccessOpfor
-    minimapBackground:
-     sprite: /Textures/_RMC14/Interface/map_blips.rsi
-     state: background_intel
-
-- type: entity
-  parent: SquadBase
-  id: SquadGovfor
-  name: Alpha
-  components:
-  - type: SquadTeam
-    color: "#F0433E"
-    radio: GovforAlpha
-    group: GOVFOR
-    roundStart: true
-    minimapBackground:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: background_alpha
-    leaderIcon:
-      sprite: _RMC14/Interface/cm_job_icons.rsi
-      state: hudsquad_leader_a
-
-- type: entity
-  parent: SquadBase
-  id: SquadGovforBravo
-  name: Bravo
-  components:
-  - type: SquadTeam
-    roundStart: true
-    color: "#c7b646"
-    group: GOVFOR
-    radio: GovforBravo
-    accessLevels:
-    - AU14AccessGovforSquad
-    - AU14AccessOpfor
-    minimapBackground:
-     sprite: /Textures/_RMC14/Interface/map_blips.rsi
-     state: background_bravo
-
-- type: entity
-  parent: SquadBase
-  id: SquadGovforCharlie
-  name: Charlie
-  components:
-  - type: SquadTeam
-    roundStart: true
-    group: GOVFOR
-    color: "#9D3EF0"
-    radio: GovforCharlie
-    accessLevels:
-    - AU14AccessGovforSquad
-    - AU14AccessOpfor
-    minimapBackground:
-     sprite: /Textures/_RMC14/Interface/map_blips.rsi
-     state: background_charlie

@@ -32,7 +32,10 @@ namespace Content.Client.Options.UI
             Tabs.SetTabTitle(5, Loc.GetString("ui-options-tab-accessibility"));
             Tabs.SetTabTitle(6, Loc.GetString("ui-options-tab-admin"));
 
+            GraphicsTab.CrtUiPreviewChanged += OnCrtUiPreviewChanged;
+            OnClose += ResetCrtUiPreview;
             UpdateTabs();
+            _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
         }
 
@@ -41,12 +44,32 @@ namespace Content.Client.Options.UI
         {
             base.Dispose(disposing);
 
+            _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+            GraphicsTab.CrtUiPreviewChanged -= OnCrtUiPreviewChanged;
+            OnClose -= ResetCrtUiPreview;
+            ResetCrtUiPreview();
+        }
+
+        private void OnCrtUiEnabledChanged(bool _)
+        {
+            ApplyCrtPalette();
         }
 
         private void OnCrtUiColorChanged(string _)
         {
             ApplyCrtPalette();
+        }
+
+        private void OnCrtUiPreviewChanged(bool enabled, string color)
+        {
+            _stylesheetManager.PreviewCrtUi(enabled, color);
+            ApplyCrtPalette();
+        }
+
+        private void ResetCrtUiPreview()
+        {
+            _stylesheetManager.ResetCrtUiPreview();
         }
 
         private void ApplyCrtPalette()

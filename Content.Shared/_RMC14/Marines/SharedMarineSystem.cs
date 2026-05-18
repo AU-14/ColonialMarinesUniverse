@@ -1,4 +1,6 @@
+using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.NPC.Prototypes;
@@ -14,6 +16,7 @@ public abstract partial class SharedMarineSystem : EntitySystem
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private ISerializationManager _serialization = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
 
     public override void Initialize()
     {
@@ -23,6 +26,19 @@ public abstract partial class SharedMarineSystem : EntitySystem
 
         SubscribeLocalEvent<GrantMarineIconsComponent, GotEquippedEvent>(OnGotEquipped);
         SubscribeLocalEvent<GrantMarineIconsComponent, GotUnequippedEvent>(OnGotUnequipped);
+
+        SubscribeLocalEvent<MarineComponent, RMCGetFixedIdentityEvent>(OnIdentificationAttempt);
+    }
+
+    private void OnIdentificationAttempt(Entity<MarineComponent> ent, ref RMCGetFixedIdentityEvent args)
+    {
+        var hive = _hive.GetHive(args.Identified);
+        if (hive is null)
+            return;
+        if (hive.Value.Comp.Corrupted || _hive.IsAllyOfHive(ent, hive))
+        {
+            args.Cancelled = true;
+        }
     }
 
     private void OnGotEquipped(Entity<GrantMarineIconsComponent> ent, ref GotEquippedEvent args)

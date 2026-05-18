@@ -1,23 +1,19 @@
- #section
-
 - type: entity
-  parent: CMEncryptionKey
+  parent: AU14EncryptionKey
   id: AU14EncryptionKeyMob
-  name: Mob encryption key
+  name: Mob Family encryption key
   description: An encryption key used to communicate on the Family channel.
   components:
   - type: EncryptionKey
     channels:
-    - mob
-    defaultChannel: mob
-  - type: Sprite
-    state: we_ya_key
+    - radioMobFamily
+    defaultChannel: radioMobFamily
 
 - type: entity
   parent: RMCHeadsetMarine
   id: AU14HeadsetMob
-  name: Mob headset
-  description: A common colony headset with a custom channel
+  name: Mob Family headset
+  description: A common colony headset that has been modified to work on a custom frequency.
   components:
   - type: Sprite
     state: generic_headset
@@ -25,12 +21,3 @@
     containers:
       key_slots:
       - AU14EncryptionKeyMob
-
-- type: entity
-  parent: RMCHeadsetMarine
-  id: AU14HeadsetWorkingJoe
-  name: Working Joe headset
-  description: A common headset used by Working Joes.
-  components:
-  - type: Sprite
-    state: generic_headset

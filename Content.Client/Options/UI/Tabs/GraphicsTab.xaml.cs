@@ -14,6 +14,8 @@ public sealed partial class GraphicsTab : Control
 {
     [Dependency] private IConfigurationManager _cfg = default!;
 
+    public event Action<bool, string>? CrtUiPreviewChanged;
+
     public GraphicsTab()
     {
         IoCManager.InjectDependencies(this);
@@ -39,16 +41,11 @@ public sealed partial class GraphicsTab : Control
                 new OptionDropDownCVar<float>.ValueOption(2.00f, Loc.GetString("ui-options-scale-200")),
             ]);
 
-        Control.AddOptionDropDown(
-            CCVars.CrtUiColor,
-            CrtUiColorDropDown,
-            [
-                new OptionDropDownCVar<string>.ValueOption(CCVars.CrtUiColorGreen, Loc.GetString("ui-options-crt-ui-color-green")),
-                new OptionDropDownCVar<string>.ValueOption(CCVars.CrtUiColorBlue, Loc.GetString("ui-options-crt-ui-color-blue")),
-                new OptionDropDownCVar<string>.ValueOption(CCVars.CrtUiColorOrange, Loc.GetString("ui-options-crt-ui-color-orange")),
-                new OptionDropDownCVar<string>.ValueOption(CCVars.CrtUiColorRed, Loc.GetString("ui-options-crt-ui-color-red")),
-                new OptionDropDownCVar<string>.ValueOption(CCVars.CrtUiColorPurple, Loc.GetString("ui-options-crt-ui-color-purple")),
-            ]);
+        var crtUiEnabled = Control.AddOption(new OptionCrtUiEnabled(Control, _cfg, CrtUiEnabledCheckBox));
+        CrtUiColorSlider.Slider.SelectorType = ColorSelectorSliders.ColorSelectorType.Hsv;
+        var crtUiColor = Control.AddOption(new OptionCrtUiColor(Control, _cfg, CrtUiColorSlider));
+        crtUiEnabled.PreviewValueChanged += UpdateCrtUiOptionsPreview;
+        crtUiColor.PreviewValueChanged += UpdateCrtUiOptionsPreview;
 
         var vpStretch = Control.AddOptionCheckBox(CCVars.ViewportStretch, ViewportStretchCheckBox);
         var vpVertFit = Control.AddOptionCheckBox(CCVars.ViewportVerticalFit, ViewportVerticalFitCheckBox);
@@ -80,6 +77,7 @@ public sealed partial class GraphicsTab : Control
 
         UpdateViewportWidthRange();
         UpdateViewportSettingsVisibility();
+        UpdateCrtUiOptionsVisibility();
     }
 
     private void UpdateViewportSettingsVisibility()
@@ -99,7 +97,18 @@ public sealed partial class GraphicsTab : Control
         ViewportWidthSlider.Slider.MaxValue = max;
     }
 
-    private sealed partial class OptionLightingQuality : BaseOption
+    private void UpdateCrtUiOptionsVisibility()
+    {
+        CrtUiColorSlider.Visible = CrtUiEnabledCheckBox.Pressed;
+    }
+
+    private void UpdateCrtUiOptionsPreview()
+    {
+        UpdateCrtUiOptionsVisibility();
+        CrtUiPreviewChanged?.Invoke(CrtUiEnabledCheckBox.Pressed, CrtUiColorSlider.Slider.Color.ToHex());
+    }
+
+    private sealed class OptionLightingQuality : BaseOption
     {
         private readonly IConfigurationManager _cfg;
         private readonly OptionDropDown _dropDown;
@@ -217,7 +226,180 @@ public sealed partial class GraphicsTab : Control
         }
     }
 
-    private sealed partial class OptionIntegerScaling : BaseOptionCVar<int>
+    private sealed class OptionCrtUiEnabled : BaseOptionCVar<bool>
+    {
+        private readonly CheckBox _checkBox;
+        private bool _suppressToggle;
+
+        public event Action? PreviewValueChanged;
+
+        protected override bool Value
+        {
+            get => _checkBox.Pressed;
+            set
+            {
+                _suppressToggle = true;
+                try
+                {
+                    _checkBox.Pressed = value;
+                }
+                finally
+                {
+                    _suppressToggle = false;
+                }
+            }
+        }
+
+        public OptionCrtUiEnabled(
+            OptionsTabControlRow controller,
+            IConfigurationManager cfg,
+            CheckBox checkBox)
+            : base(controller, cfg, CCVars.CrtUiEnabled)
+        {
+            _checkBox = checkBox;
+            _checkBox.OnToggled += _ =>
+            {
+                if (_suppressToggle)
+                    return;
+
+                ValueChanged();
+            };
+        }
+
+        public override void LoadValue()
+        {
+            base.LoadValue();
+            NotifyPreviewValueChanged();
+        }
+
+        public override void SaveValue()
+        {
+            base.SaveValue();
+            NotifyPreviewValueChanged();
+        }
+
+        public override void ResetToDefault()
+        {
+            base.ResetToDefault();
+            NotifyPreviewValueChanged();
+        }
+
+        protected override void ValueChanged()
+        {
+            base.ValueChanged();
+            NotifyPreviewValueChanged();
+        }
+
+        private void NotifyPreviewValueChanged()
+        {
+            PreviewValueChanged?.Invoke();
+        }
+    }
+
+    private sealed class OptionCrtUiColor : BaseOptionCVar<string>
+    {
+        private readonly OptionColorSlider _slider;
+        private bool _suppressColorChanged;
+
+        public event Action? PreviewValueChanged;
+
+        protected override string Value
+        {
+            get => _slider.Slider.Color.ToHex();
+            set
+            {
+                _suppressColorChanged = true;
+                try
+                {
+                    _slider.Slider.Color = ResolveCrtColor(value);
+                }
+                finally
+                {
+                    _suppressColorChanged = false;
+                }
+
+                UpdateLabelColor();
+            }
+        }
+
+        public OptionCrtUiColor(
+            OptionsTabControlRow controller,
+            IConfigurationManager cfg,
+            OptionColorSlider slider)
+            : base(controller, cfg, CCVars.CrtUiColor)
+        {
+            _slider = slider;
+
+            slider.Slider.OnColorChanged += _ =>
+            {
+                if (_suppressColorChanged)
+                {
+                    UpdateLabelColor();
+                    return;
+                }
+
+                ValueChanged();
+            };
+        }
+
+        public override void LoadValue()
+        {
+            base.LoadValue();
+            NotifyPreviewValueChanged();
+        }
+
+        public override void SaveValue()
+        {
+            base.SaveValue();
+            NotifyPreviewValueChanged();
+        }
+
+        public override void ResetToDefault()
+        {
+            base.ResetToDefault();
+            NotifyPreviewValueChanged();
+        }
+
+        protected override void ValueChanged()
+        {
+            base.ValueChanged();
+            UpdateLabelColor();
+            NotifyPreviewValueChanged();
+        }
+
+        protected override bool IsValueEqual(string a, string b)
+        {
+            return ResolveCrtColor(a).ToHex() == ResolveCrtColor(b).ToHex();
+        }
+
+        private void UpdateLabelColor()
+        {
+            _slider.ExampleLabel.FontColorOverride = _slider.Slider.Color;
+        }
+
+        private void NotifyPreviewValueChanged()
+        {
+            PreviewValueChanged?.Invoke();
+        }
+
+        private static Color ResolveCrtColor(string value)
+        {
+            var color = Color.TryFromHex(value);
+            if (color != null)
+                return color.Value;
+
+            return value switch
+            {
+                CCVars.CrtUiColorBlue => Color.FromHex("#58CCFF"),
+                CCVars.CrtUiColorOrange => Color.FromHex("#FFB454"),
+                CCVars.CrtUiColorRed => Color.FromHex("#FF4E5E"),
+                CCVars.CrtUiColorPurple => Color.FromHex("#C45BFF"),
+                _ => Color.FromHex(CCVars.CrtUiColorDefault),
+            };
+        }
+    }
+
+    private sealed class OptionIntegerScaling : BaseOptionCVar<int>
     {
         private readonly CheckBox _checkBox;
 

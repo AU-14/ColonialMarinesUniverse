@@ -39,6 +39,7 @@
     - type: Access
       tags:
       - CMAccessXeno
+    - type: HasKnowledgeOfXenoLanguage
     - type: RemoveComponents
       components:
       - type: Infectable

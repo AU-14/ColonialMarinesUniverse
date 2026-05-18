@@ -61,7 +61,7 @@
   id: AU14GearopforDCC
   equipment:
     id: AU14IDCardopforDCC
-    ears: AU14HeadsetSectionLeaderopfor
+    ears: AU14HeadsetOpforCommand
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -80,4 +80,4 @@
     shoes: CMBootsBrown
     head: AU14USASFAirCrewHelmet
     jumpsuit: AU14USASFPilotJumpsuit
-    ears: AU14HeadsetSectionOpfor
+    ears: AU14HeadsetOpforMarine

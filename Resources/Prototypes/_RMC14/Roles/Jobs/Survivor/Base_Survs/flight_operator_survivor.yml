@@ -7,7 +7,7 @@
   spawnMenuRoleName: Flight Control Operator (Survivor)
   access:
   - CMAccessColonyPublic
-  - RMCAccessWeYaFlight
+  - AU14AccessCorporateWEYUFlight
   - CMAccessColonyLogistics
   special:
   - !type:AddComponentSpecial

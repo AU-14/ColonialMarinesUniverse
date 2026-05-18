@@ -18,7 +18,11 @@ internal static class CMUMedicalWindowSizing
             : preferredSize;
     }
 
-    public static void FitToScreen(BaseWindow window, Vector2 preferredSize, Vector2 minimumSize)
+    public static void FitToScreen(
+        BaseWindow window,
+        Vector2 preferredSize,
+        Vector2 minimumSize,
+        bool clampPosition = true)
     {
         var rootSize = window.UserInterfaceManager.WindowRoot.Size;
         if (rootSize.X <= 0f || rootSize.Y <= 0f)
@@ -36,7 +40,7 @@ internal static class CMUMedicalWindowSizing
         if (window.SetSize != target)
             window.SetSize = target;
 
-        if (window.Parent is not { } parent)
+        if (!clampPosition || window.Parent is not { } parent)
             return;
 
         var maxPosition = Vector2.Max(Vector2.Zero, parent.Size - target);

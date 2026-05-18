@@ -28,7 +28,7 @@
     slots:
     - OUTERCLOTHING
     - back
-    quickEquip: true
+    quickEquip: false
   - type: Speech
     speechVerb: Robotic
   - type: ItemToggle

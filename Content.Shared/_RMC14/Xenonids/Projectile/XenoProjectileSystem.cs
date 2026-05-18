@@ -146,7 +146,7 @@ public sealed partial class XenoProjectileSystem : EntitySystem
 
     private void OnShotCollide(Entity<XenoClientProjectileShotComponent> ent, ref StartCollideEvent args)
     {
-        if (_net.IsServer || !IsClientSide(ent))
+        if (_net.IsServer || _timing.ApplyingState || !IsClientSide(ent))
             return;
 
         if (!TryComp(ent, out XenoProjectileShotComponent? shot))

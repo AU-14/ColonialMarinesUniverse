@@ -49,9 +49,12 @@
     allowedStates:
     - Alive
     - Dead
-  # Innate night vision on every caste — the flesh sees without eyes.
+  # Half-strength innate night vision (synth-equivalent) on every
+  # caste — the flesh sees in the dark, but not perfectly.
   - type: NightVision
     innate: true
+    state: half
+    onlyHalf: true
   # Abominations have no hands (skitter overrides this with real ones), but
   # they still need to drag downed prey back to nests. NeedsHands: false
   # lets them pull/drag bodies in their mouth/limbs without an inventory.

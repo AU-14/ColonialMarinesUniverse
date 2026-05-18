@@ -598,7 +598,9 @@ public sealed partial class SquadSystem : EntitySystem
             foreach (var keyEnt in holder.KeyContainer.ContainedEntities)
             {
                 var protoId = CompOrNull<MetaDataComponent>(keyEnt)?.EntityPrototype?.ID;
-                if (protoId != "CMEncryptionKeyCommon")
+                if (protoId != "AU14EncryptionKeyGovfor"
+                    && protoId != "AU14EncryptionKeyOpfor"
+                    && protoId != "CMEncryptionKeyCommon")
                     continue;
 
                 if (!TryComp(keyEnt, out Content.Shared.Radio.Components.EncryptionKeyComponent? keyComp))
@@ -643,7 +645,7 @@ public sealed partial class SquadSystem : EntitySystem
             return;
 
         var oldSquadId = member.Squad;
-        // Determine old squad radio to remove from common key
+        // Determine old squad radio to remove from the common keys
         ProtoId<RadioChannelPrototype>? oldRadio = null;
         if (_squadTeamQuery.TryComp(oldSquadId, out var oldSquadComp))
             oldRadio = oldSquadComp.Radio;
@@ -665,7 +667,7 @@ public sealed partial class SquadSystem : EntitySystem
 
         RemComp<SquadMemberComponent>(marine);
 
-        // Remove the old squad radio from CMEncryptionKeyCommon
+        // Remove the old squad radio key from the common keys
         if (oldRadio != null)
             AdjustCommonKeyForMember(marine, oldRadio, null);
 

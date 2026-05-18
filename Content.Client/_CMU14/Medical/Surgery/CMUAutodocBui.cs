@@ -506,6 +506,7 @@ public sealed partial class CMUAutodocWindow : FancyWindow
     public CMUAutodocWindow()
     {
         IoCManager.InjectDependencies(this);
+        AllowDraggingOutsideParentBounds = true;
 
         SetSize = CMUMedicalWindowSizing.GetInitialSize(RememberedSizeKey, PreferredWindowSize);
         MinSize = MinimumWindowSize;
@@ -754,7 +755,7 @@ public sealed partial class CMUAutodocWindow : FancyWindow
         };
         scroll.AddChild(SurgeryList);
 
-        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize);
+        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize, clampPosition: false);
         ApplyUniformScale(true);
     }
 
@@ -789,7 +790,7 @@ public sealed partial class CMUAutodocWindow : FancyWindow
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
-        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize);
+        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize, clampPosition: false);
         ApplyUniformScale();
         CMUMedicalWindowSizing.RememberSize(RememberedSizeKey, this);
     }

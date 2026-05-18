@@ -1,62 +1,9 @@
- #section
-
+# ├──[ ENCRYPTIONKEYS ]──────────────────────────────────────────────┤
 - type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyopfor
-  name: opfor encryption key
-  description: An encryption key used to communicate on the opfor channel.
-  components:
-  - type: EncryptionKey
-  - type: Sprite
-    state: we_ya_key
-
-- type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyopforcommand
-  name: opfor command encryption key
-  description: An encryption key used to communicate on all opfor channels.
-  components:
-  - type: EncryptionKey
-    channels:
-    - opfor
-    - opforcommand
-    - OpforCharlie
-    - OpforBravo
-    - OpforIntel
-    - opforjtac
-    defaultChannel: opfor
-  - type: Sprite
-    state: we_ya_key
-
-- type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyopforaux
-  name: opfor auxiliary support encryption key
-  description: An encryption key used to communicate on auxiliary support channels.
-  components:
-  - type: EncryptionKey
-    channels:
-    - opforcommand
-    - OpforIntel
-    defaultChannel: OpforIntel
-  - type: Sprite
-    state: we_ya_key
-
-- type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyopforJTAC
-  name: JTAC encryption key
-  components:
-  - type: EncryptionKey
-    channels:
-    - opforjtac
-    defaultChannel: opforjtac
-
-- type: entity
-  parent: RMCHeadsetShip
-  id: AU14HeadsetSectionOpforAux
-  name: opfor auxiliary support radio headset
-  description: This is used by auxiliary support personnel to communicate on the radio.
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyOpfor
+  name: OPFOR encryption key
+  description: An encryption key used to communicate on the OPFOR channel, it is automatically assigned the right channel.
   components:
   - type: GrantSquadLeaderTracker
     defaultMode: SquadLeader
@@ -64,122 +11,165 @@
     - SquadLeader
     - FireteamLeader
     - BattleBuddy
-  - type: Sprite
-    state: generic_headset
-  - type: ContainerFill
-    containers:
-      key_slots:
-      - AU14EncryptionKeyopforaux
 
 - type: entity
+  parent: AU14EncryptionKeyOpfor
+  id: AU14EncryptionKeyOpforBravo
+  name: OPFOR Bravo encryption key
+  description: An encryption key used to communicate on the OPFOR Bravo channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioOpforBravo
+    defaultChannel: radioOpforBravo
+
+- type: entity
+  parent: AU14EncryptionKeyOpfor
+  id: AU14EncryptionKeyOpforCharlie
+  name: OPFOR Charlie encryption key
+  description: An encryption key used to communicate on the OPFOR Charlie channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioOpforCharlie
+    defaultChannel: radioOpforCharlie
+
+- type: entity
+  parent: AU14EncryptionKeyOpfor
+  id: AU14EncryptionKeyOpforCommand
+  name: OPFOR Command encryption key
+  description: An encryption key used to communicate on all available OPFOR channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioOpforAlpha
+    - radioOpforCharlie
+    - radioOpforBravo
+    - radioOpforCommand
+    - radioOpforIntel
+    - radioOpforJTAC
+    - radioOpforMILP
+    defaultChannel: radioOpforCommand
+
+- type: entity
+  parent: AU14EncryptionKeyOpfor
+  id: AU14EncryptionKeyOpforCommandOnly
+  name: OPFOR Command-only encryption key
+  description: An encryption key used to communicate on the OPFOR Command channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioOpforCommand
+    defaultChannel: radioOpforCommand
+
+- type: entity
+  parent: AU14EncryptionKeyOpfor
+  id: AU14EncryptionKeyOpforIntel
+  name: OPFOR Intel encryption key
+  description: An encryption key used to communicate on the OPFOR Intel channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioOpforIntel
+    defaultChannel: radioOpforIntel
+
+- type: entity
+  parent: AU14EncryptionKeyOpfor
+  id: AU14EncryptionKeyOpforJTAC
+  name: OPFOR JTAC encryption key
+  description: An encryption key used to communicate on the OPFOR ATC channel.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioOpforJTAC
+
+- type: entity
+  parent: AU14EncryptionKeyOpfor
+  id: AU14EncryptionKeyOpforMILP
+  name: OPFOR MP encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioOpforMILP
+
+# ├──[ HEADSETS ]────────────────────────────────────────────────────┤
+- type: entity
   parent: RMCHeadsetShip
-  id: AU14HeadsetSectionOpfor
-  name: opfor section radio headset
+  id: AU14HeadsetOpforMarine
+  name: OPFOR section radio headset
   description: This is used by OPFOR personnel to communicate on the radio.
   components:
-  - type: GrantSquadLeaderTracker
-    defaultMode: SquadLeader
-    trackerModes:
-    - SquadLeader
-    - FireteamLeader
-    - BattleBuddy
   - type: Sprite
     state: generic_headset
   - type: ContainerFill
     containers:
       key_slots:
-      - CMEncryptionKeyCommon
+      - AU14EncryptionKeyOpfor
 
 - type: entity
-  parent: AU14HeadsetSectionOpfor
-  id: AU14HeadsetSectionOpforFTL
+  parent: AU14HeadsetOpforMarine
+  id: AU14HeadsetOpforCommand
+  name: OPFOR Command radio headset
+  description: This is used by OPFOR command members to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOpforCommand
+      - AU14EncryptionKeyOpforBravo
+      - AU14EncryptionKeyOpforCharlie
+      - AU14EncryptionKeyOpforIntel
+      - AU14EncryptionKeyOpforJTAC
+      - AU14EncryptionKeyOpforMILP
+
+- type: entity
+  parent: AU14HeadsetOpforMarine
+  id: AU14HeadsetOpforMarineSL
+  name: OPFOR SL radio headset
+  description: This is used by OPFOR section leaders to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOpfor
+      - AU14EncryptionKeyOpforCommandOnly
+      - AU14EncryptionKeyOpforJTAC
+
+- type: entity
+  parent: AU14HeadsetOpforMarine
+  id: AU14HeadsetOpforMarineFTL
   name: OPFOR FTL radio headset
   description: This is used by OPFOR fireteam leaders to communicate on the radio.
   components:
   - type: ContainerFill
     containers:
       key_slots:
-      - CMEncryptionKeyCommon
-      - AU14EncryptionKeyopforJTAC
+      - AU14EncryptionKeyOpfor
+      - AU14EncryptionKeyOpforJTAC
 
 - type: entity
-  parent: RMCHeadsetShip
-  id: AU14HeadsetSectionLeaderopfor
-  name: OPFOR command radio headset
-  description: This is used by OPFOR command members to communicate on the radio.
+  parent: AU14HeadsetOpforMarine
+  id: AU14HeadsetOpforAuxiliary
+  name: OPFOR Auxiliary support radio headset
+  description: This is used by OPFOR auxiliary support personnel to communicate on the radio.
   components:
-  - type: GrantSquadLeaderTracker
-    defaultMode: SquadLeader
-    trackerModes:
-    - SquadLeader
-    - FireteamLeader
-    - BattleBuddy
-  - type: Sprite
-    state: generic_headset
   - type: ContainerFill
     containers:
       key_slots:
-      - AU14EncryptionKeyopforcommand
-      - AU14EncryptionKeyopfor
-      - AU14EncryptionKeyopforBravo
-      - AU14EncryptionKeyopforCharlie
-      - AU14EncryptionKeyopforIntel
-      - AU14EncryptionKeyopforjtac
+      - AU14EncryptionKeyOpfor
+      - AU14EncryptionKeyOpforCommandOnly
+      - AU14EncryptionKeyOpforIntel
 
 - type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyopforjtac
-  name: OPFOR ATC encryption key
-  description: An encryption key used to communicate on OPFOR ATC channels.
+  parent: AU14HeadsetOpforMarine
+  id: AU14HeadsetOpforMarineMP
+  name: OPFOR MP radio headset
+  description: This is used by OPFOR military police to communicate on the radio.
   components:
-  - type: GrantSquadLeaderTracker
-    defaultMode: SquadLeader
-    trackerModes:
-    - SquadLeader
-    - FireteamLeader
-    - BattleBuddy
-  - type: EncryptionKey
-    channels:
-    - opforjtac
-    defaultChannel: opforjtac
-  - type: Sprite
-    state: we_ya_key
-
-- type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyopforBravo
-  name: OPFOR Bravo encryption key
-  description: An encryption key used to communicate on the OPFOR Bravo channel.
-  components:
-  - type: EncryptionKey
-    channels:
-    - OpforBravo
-    defaultChannel: OpforBravo
-  - type: Sprite
-    state: we_ya_key
-
-- type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyopforCharlie
-  name: OPFOR Charlie encryption key
-  description: An encryption key used to communicate on the OPFOR Charlie channel.
-  components:
-  - type: EncryptionKey
-    channels:
-    - OpforCharlie
-    defaultChannel: OpforCharlie
-  - type: Sprite
-    state: we_ya_key
-
-- type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyopforIntel
-  name: OPFOR Intel encryption key
-  description: An encryption key used to communicate on the OPFOR Intel channel.
-  components:
-  - type: EncryptionKey
-    channels:
-    - OpforIntel
-    defaultChannel: OpforIntel
-  - type: Sprite
-    state: we_ya_key
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOpfor
+      - AU14EncryptionKeyOpforCommand
+#     - AU14EncryptionKeyOpforCommandOnly
+      - AU14EncryptionKeyOpforMILP

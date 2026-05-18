@@ -9,6 +9,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Configuration;
+using Robust.Shared.Timing;
 
 namespace Content.Client.StatusIcon;
 
@@ -21,9 +22,21 @@ public sealed partial class StatusIconSystem : SharedStatusIconSystem
     [Dependency] private IOverlayManager _overlay = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private bool _globalEnabled;
     private bool _localEnabled;
+
+    private static readonly TimeSpan IconCacheLifetime = TimeSpan.FromSeconds(0.25);
+    private const int MaxCachedIconEntities = 512;
+
+    private readonly Dictionary<EntityUid, CachedStatusIcons> _iconCache = new();
+
+    private sealed class CachedStatusIcons
+    {
+        public readonly List<StatusIconData> Icons = new();
+        public TimeSpan Expires;
+    }
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -46,11 +59,15 @@ public sealed partial class StatusIconSystem : SharedStatusIconSystem
 
     private void UpdateOverlayVisible()
     {
-        if (_overlay.RemoveOverlay<StatusIconOverlay>())
-            return;
-
         if (_globalEnabled && _localEnabled)
-            _overlay.AddOverlay(new StatusIconOverlay());
+        {
+            if (!_overlay.HasOverlay<StatusIconOverlay>())
+                _overlay.AddOverlay(new StatusIconOverlay());
+
+            return;
+        }
+
+        _overlay.RemoveOverlay<StatusIconOverlay>();
     }
 
     public List<StatusIconData> GetStatusIcons(EntityUid uid, MetaDataComponent? meta = null)
@@ -69,8 +86,32 @@ public sealed partial class StatusIconSystem : SharedStatusIconSystem
         if (meta.EntityLifeStage >= EntityLifeStage.Terminating)
             return;
 
-        var ev = new GetStatusIconsEvent(list);
+        var now = _timing.RealTime;
+        if (_iconCache.TryGetValue(uid, out var cached) && cached.Expires > now)
+        {
+            list.AddRange(cached.Icons);
+            return;
+        }
+
+        if (cached is null)
+        {
+            if (_iconCache.Count > MaxCachedIconEntities)
+                _iconCache.Clear();
+
+            cached = new CachedStatusIcons();
+            _iconCache[uid] = cached;
+        }
+
+        cached.Icons.Clear();
+        cached.Expires = now + IconCacheLifetime;
+
+        var ev = new GetStatusIconsEvent(cached.Icons);
         RaiseLocalEvent(uid, ref ev);
+
+        if (cached.Icons.Count > 1)
+            cached.Icons.Sort();
+
+        list.AddRange(cached.Icons);
     }
 
     /// <summary>

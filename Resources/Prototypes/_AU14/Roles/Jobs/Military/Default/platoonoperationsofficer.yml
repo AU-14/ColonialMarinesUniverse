@@ -73,7 +73,7 @@
   id: AU14GearGOVFORPlatOp
   equipment:
     id: AU14IDCardGOVFORPlatOp
-    ears: AU14HeadsetSectionLeader
+    ears: AU14HeadsetGovforCommand
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORPlatOp
@@ -90,4 +90,4 @@
     shoes: CMBootsBlack
     head: AU14JunglePatrolCap
     jumpsuit: CMJumpsuitXOFormal
-    ears: AU14HeadsetSectionLeader
+    ears: AU14HeadsetGovforCommand

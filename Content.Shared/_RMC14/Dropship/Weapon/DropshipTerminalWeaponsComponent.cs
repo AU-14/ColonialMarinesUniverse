@@ -20,7 +20,7 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
     public Vector2i Offset;
 
     [DataField, AutoNetworkedField]
-    public Vector2i OffsetLimit = new(12, 12);
+    public Vector2i OffsetLimit = new(5, 5);
 
     [DataField, AutoNetworkedField]
     public List<TargetEnt> Targets = new();

@@ -11,6 +11,7 @@
     anchored: true
   - type: Physics
     bodyType: Static
+  - type: Appearance
   - type: Fixtures
     fixtures:
       fix1:
@@ -362,6 +363,7 @@
     snap:
     - Wall
   components:
+  - type: Appearance
   - type: Transform
     anchored: true
   - type: Physics
@@ -387,6 +389,7 @@
     base: weedwall
     mode: Corners
   - type: XenoNestSurface
+  - type: HiveMember
   - type: XenoFriendly
   - type: Damageable
     damageContainer: StructuralXeno

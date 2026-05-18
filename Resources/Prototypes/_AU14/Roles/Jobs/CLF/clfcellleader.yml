@@ -34,7 +34,7 @@
     components:
     - type: NpcFactionMember
       factions:
-       - CLF
+      - CLF
     - type: CLFMember
       statusIcon: CLFFactionLeader
     - type: Skills

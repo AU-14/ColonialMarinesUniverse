@@ -68,7 +68,7 @@
     pocket1: RMCPouchToolsSocMarineRaiderFill
     pocket2: AU14PouchIFAKFill
     back: AU14LACNBackpackSniper
-    ears: AU14HeadsetSectionMarine
+    ears: AU14HeadsetGovforMarine
     suitstorage: AU14WeaponSniperRifleM42A2
 
 - type: playTimeTracker

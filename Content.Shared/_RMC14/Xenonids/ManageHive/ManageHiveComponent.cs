@@ -1,4 +1,4 @@
-﻿using Content.Shared.FixedPoint;
+using Content.Shared.FixedPoint;
 using Content.Shared.Players.PlayTimeTracking;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -14,6 +14,9 @@ public sealed partial class ManageHiveComponent : Component
 
     [DataField, AutoNetworkedField]
     public FixedPoint2 JellyPlasmaCost = 500;
+
+    [DataField, AutoNetworkedField]
+    public float AllyRange = 11.2838f;
 
     [DataField, AutoNetworkedField]
     public FixedPoint2 SacrificeBurrowedLarvaForEvolutionCost = 100;

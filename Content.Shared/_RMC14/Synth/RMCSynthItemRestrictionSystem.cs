@@ -8,6 +8,7 @@ namespace Content.Shared._RMC14.Synth;
 
 /// <summary>
 /// Centralizes synthetic item restrictions so item prototypes do not need custom role checks.
+/// FIXME: Item can be equipped in non-synth hands by synths.
 /// </summary>
 public sealed partial class RMCSynthItemRestrictionSystem : EntitySystem
 {

@@ -9,6 +9,8 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.NPC.Components;
+using Content.Shared.NPC.Prototypes;
 using Content.Shared.Popups;
 using Content.Shared.Prototypes;
 using Content.Shared.Weapons.Ranged.Events;
@@ -50,6 +52,8 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
 
         SubscribeLocalEvent<HiveComponent, MapInitEvent>(OnMapInit);
 
+        SubscribeLocalEvent<HiveMemberComponent, ComponentStartup>(OnHiveStartup);
+
         SubscribeLocalEvent<XenoEvolutionGranterComponent, MobStateChangedEvent>(OnGranterMobStateChanged);
 
         SubscribeLocalEvent<AutoAssignHiveComponent, ComponentStartup>(OnAutoAssignHiveAdded);
@@ -80,6 +84,16 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
             EnsureComp<TimedDespawnComponent>(boost).Lifetime = 180;
             break;
         }
+    }
+
+    public void OnHiveStartup(Entity<HiveMemberComponent> ent, ref ComponentStartup args)
+    {
+
+        if (!TryComp<HiveComponent>(ent.Comp.Hive, out _))
+            return;
+
+
+        Dirty(ent);
     }
 
     private void OnGranterMobStateChanged(Entity<XenoEvolutionGranterComponent> ent, ref MobStateChangedEvent args)
@@ -153,6 +167,87 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         }
 
         return null;
+    }
+
+    public bool HasFaction(EntityUid hiveEnt, ProtoId<NpcFactionPrototype> faction)
+    {
+        TryComp<HiveComponent>(hiveEnt, out var hive);
+        if (hive is null)
+            return false;
+        return hive.Allies.Contains(faction);
+    }
+
+    public void SetHiveFactionAlly(ProtoId<NpcFactionPrototype> faction, EntityUid hiveEnt, bool alliance)
+    {
+        if (!TryComp<HiveComponent>(hiveEnt, out var hive))
+            return;
+        if (alliance)
+        {
+            hive.Allies.Add(faction);
+        }
+        else
+        {
+            hive.Allies.Remove(faction);
+        }
+    }
+    public void SetHiveIndividualAlly(EntityUid ent, EntityUid hiveEnt, bool alliance)
+    {
+        if (!TryComp<HiveComponent>(hiveEnt, out var hive))
+            return;
+        if (alliance)
+        {
+            hive.IndividualAllies.Add(ent);
+        }
+        else
+        {
+            hive.IndividualAllies.Remove(ent);
+        }
+    }
+    public void ClearHiveIndividualAllies(EntityUid hiveEnt)
+    {
+        if (!TryComp<HiveComponent>(hiveEnt, out var hive))
+            return;
+        hive.IndividualAllies.Clear();
+    }
+
+
+    /// <summary>
+    /// Returns true if the entity uid is at all in any way shape or form considered an "ally" of the hive.
+    /// Be it part of the hive, some rando who became besties 4 lyfe with the queen, or the entire CLF faction after
+    /// making a diplomatic alliance.
+    /// </summary>
+    /// <param name="ent"></param>
+    /// <returns></returns>
+    public bool IsAllyOfHive(EntityUid ent, EntityUid? hiveEnt)
+    {
+        if (hiveEnt is null)
+            return false;
+        // if there's no hive comp then just return false
+        if (!TryComp<HiveComponent>(hiveEnt, out var hive))
+            return false;
+
+        if (TryComp<HiveMemberComponent>(ent, out var hc) && hc.Hive is not null && hc.Hive == hiveEnt)
+            return true;
+
+        if (hive.IndividualAllies.Contains(ent))
+            return true;
+
+        if (TryComp<NpcFactionMemberComponent>(ent, out var factionComp))
+        {
+            bool hit = false;
+            // O(n) at best i think
+            foreach (var fac in factionComp.Factions)
+            {
+                if (hive.Allies.Contains(fac))
+                {
+                    hit = true;
+                    break;
+                }
+            }
+            return hit;
+        }
+
+        return false;
     }
 
     /// <summary>

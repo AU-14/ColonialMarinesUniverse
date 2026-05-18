@@ -638,7 +638,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return;
         }
 
-        var coordinates = _transform.GetMoverCoordinates(target).SnapToGrid(EntityManager, _mapManager);
+        var offset = ClampOffset(ent);
+        var coordinates = _transform.GetMoverCoordinates(target).SnapToGrid(EntityManager, _mapManager).Offset(offset);
         if (!CasDebug && !_area.CanCAS(coordinates))
         {
             var msg = Loc.GetString("rmc-laser-designator-not-cas");
@@ -822,14 +823,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return;
 
         var adjust = args.Direction.ToIntVec();
-        var newOffset = ent.Comp.Offset + adjust;
-        var limit = ent.Comp.OffsetLimit;
-        newOffset = new Vector2i(
-            Math.Clamp(newOffset.X, -limit.X, limit.X),
-            Math.Clamp(newOffset.Y, -limit.Y, limit.Y)
-        );
-
-        ent.Comp.Offset = newOffset;
+        ent.Comp.Offset = ClampOffset(ent, ent.Comp.Offset + adjust);
 
         if (EnsureTargetEye(ent, ent.Comp.Target) is { } target)
             _eye.SetOffset(target, ent.Comp.Offset);
@@ -1199,6 +1193,31 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         }
 
         return false;
+    }
+
+    private Vector2i ClampOffset(Entity<DropshipTerminalWeaponsComponent> terminal)
+    {
+        var offset = ClampOffset(terminal, terminal.Comp.Offset);
+        if (terminal.Comp.Offset == offset)
+            return offset;
+
+        terminal.Comp.Offset = offset;
+        Dirty(terminal);
+
+        if (EnsureTargetEye(terminal, terminal.Comp.Target) is { } target)
+            _eye.SetOffset(target, terminal.Comp.Offset);
+
+        RefreshWeaponsUI(terminal);
+        return offset;
+    }
+
+    private static Vector2i ClampOffset(Entity<DropshipTerminalWeaponsComponent> terminal, Vector2i offset)
+    {
+        var limit = terminal.Comp.OffsetLimit;
+        return new Vector2i(
+            Math.Clamp(offset.X, -limit.X, limit.X),
+            Math.Clamp(offset.Y, -limit.Y, limit.Y)
+        );
     }
 
     public int GetWeaponRounds(Entity<DropshipWeaponComponent?> weapon)

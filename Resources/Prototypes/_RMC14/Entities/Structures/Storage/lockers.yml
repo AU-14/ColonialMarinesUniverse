@@ -97,7 +97,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Storage/Lockers/safe.rsi
   - type: AccessReader
-    access: [["RMCAccessWeYa"]]
+    access: [["AU14AccessCorporateWEYU"]]
 
 - type: entity
   parent: CMLockerBase

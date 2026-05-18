@@ -60,7 +60,7 @@
   id: AU14GearGOVFORSquadRifleman
   equipment:
     id: AU14IDCardSquadRifleman
-    ears: AU14HeadsetSectionMarine
+    ears: AU14HeadsetGovforMarine
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORSquadRifleman
@@ -80,4 +80,4 @@
     shoes: AU14BootsJungle
     head: AU14JungleM10Helmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetSectionMarine
+    ears: AU14HeadsetGovforMarine

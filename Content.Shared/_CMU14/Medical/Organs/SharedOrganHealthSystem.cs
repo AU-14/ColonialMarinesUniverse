@@ -397,10 +397,6 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
         var query = EntityQueryEnumerator<OrganHealthComponent, OrganComponent>();
         while (query.MoveNext(out var uid, out var oh, out var organ))
         {
-            if (oh.NextRegenTick > now)
-                continue;
-            oh.NextRegenTick = now + TimeSpan.FromSeconds(10);
-
             if (organ.Body is not { } body || Unrevivable.IsUnrevivable(body))
                 continue;
 
@@ -408,7 +404,7 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
                 continue;
             if (HasComp<OrganStasisComponent>(uid))
                 continue;
-            if (oh.NativeRegenPerTick <= FixedPoint2.Zero)
+            if (oh.NativeRegenPerTick <= FixedPoint2.Zero || globalMult <= FixedPoint2.Zero)
                 continue;
 
             // Per-organ override beats the CCVar when stricter.
@@ -416,6 +412,10 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
             var ceiling = oh.Max * capFraction;
             if (oh.Current >= ceiling)
                 continue;
+
+            if (oh.NextRegenTick > now)
+                continue;
+            oh.NextRegenTick = now + TimeSpan.FromSeconds(10);
 
             oh.Current = FixedPoint2.Min(ceiling, oh.Current + oh.NativeRegenPerTick * globalMult);
             Dirty(uid, oh);

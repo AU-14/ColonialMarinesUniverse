@@ -1735,6 +1735,7 @@ public sealed partial class CMUBodyScannerWindow : FancyWindow
     public CMUBodyScannerWindow()
     {
         IoCManager.InjectDependencies(this);
+        AllowDraggingOutsideParentBounds = true;
 
         SetSize = CMUMedicalWindowSizing.GetInitialSize(RememberedSizeKey, PreferredWindowSize);
         MinSize = MinimumWindowSize;
@@ -2030,7 +2031,7 @@ public sealed partial class CMUBodyScannerWindow : FancyWindow
         TermList = CMUMedicalMachineStyle.MakeTitledList(puzzleColumns, Loc.GetString("cmu-body-scanner-terms-heading"), 230, true);
         TargetList = CMUMedicalMachineStyle.MakeTitledList(puzzleColumns, Loc.GetString("cmu-body-scanner-targets-heading"), 340, true);
 
-        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize);
+        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize, clampPosition: false);
         ApplyUniformScale(true);
     }
 
@@ -2115,7 +2116,7 @@ public sealed partial class CMUBodyScannerWindow : FancyWindow
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
-        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize);
+        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize, clampPosition: false);
         ApplyUniformScale();
         CMUMedicalWindowSizing.RememberSize(RememberedSizeKey, this);
     }

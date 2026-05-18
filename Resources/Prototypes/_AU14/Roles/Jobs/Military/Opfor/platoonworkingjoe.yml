@@ -22,22 +22,22 @@
     components:
     - type: IntrinsicRadioTransmitter
       channels:
-      - AI
-      - opfor
-      - opforcommand
-      - OpforCharlie
-      - OpforBravo
-      - OpforIntel
-      - opforjtac
+      - radioAI
+      - radioOpforAlpha
+      - radioOpforCommand
+      - radioOpforCharlie
+      - radioOpforBravo
+      - radioOpforIntel
+      - radioOpforJTAC
     - type: ActiveRadio
       channels:
-      - AI
-      - opfor
-      - opforcommand
-      - OpforCharlie
-      - OpforBravo
-      - OpforIntel
-      - opforjtac
+      - radioAI
+      - radioOpforAlpha
+      - radioOpforCommand
+      - radioOpforCharlie
+      - radioOpforBravo
+      - radioOpforIntel
+      - radioOpforJTAC
     - type: Access
       groups:
       - AU14OpforCommand

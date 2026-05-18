@@ -502,7 +502,8 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
                && parasite.Comp.InfectedVictim == null
                && !infected.BeingInfected
                && !HasComp<ParasiteSpentComponent>(parasite)
-               && !HasComp<VictimInfectedComponent>(victim);
+               && !HasComp<VictimInfectedComponent>(victim)
+               && !_hive.IsAllyOfHive(victim, _hive.GetHive(parasite.Owner));
     }
 
     private bool CanInfectPopup(Entity<XenoParasiteComponent> parasite, EntityUid victim, EntityUid user, bool popup = true, bool force = false)

@@ -97,9 +97,6 @@ public sealed partial class StatusIconOverlay : Overlay
             var fitHeightPx = bounds.Height * EyeManager.PixelsPerMeter;
             var crashOrParaDrop = _entity.HasComponent<CrashLandingComponent>(uid)
                 || _entity.HasComponent<ParaDroppingComponent>(uid);
-            if (_icons.Count > 1)
-                _icons.Sort();
-
             foreach (var proto in _icons)
             {
                 if (!_statusIcon.IsVisible((uid, meta), proto))

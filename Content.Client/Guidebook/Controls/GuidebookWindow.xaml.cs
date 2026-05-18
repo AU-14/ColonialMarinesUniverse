@@ -48,6 +48,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         };
 
         _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+        _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
     }
 
     [Obsolete("Controls should only be removed from UI tree instead of being disposed")]
@@ -56,11 +57,19 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         base.Dispose(disposing);
 
         _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+        _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
     }
 
     private void OnCrtUiColorChanged(string _)
     {
         ApplyCrtPalette();
+    }
+
+    private void OnCrtUiEnabledChanged(bool _)
+    {
+        ApplyCrtPalette();
+        CrtLobbyTheme.Apply(EntryContainer, useCrtTypography: false);
+        CrtLobbyTheme.Apply(Tree, useCrtTypography: false);
     }
 
     private void ApplyCrtPalette()

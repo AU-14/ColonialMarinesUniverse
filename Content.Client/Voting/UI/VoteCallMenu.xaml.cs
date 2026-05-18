@@ -78,6 +78,7 @@ namespace Content.Client.Voting.UI
             }
 
             _state.OnStateChanged += OnStateChanged;
+            _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
             VoteTypeButton.OnItemSelected += VoteTypeSelected;
             FollowButton.OnPressed += FollowSelected;
@@ -107,12 +108,20 @@ namespace Content.Client.Voting.UI
         {
             base.Dispose(disposing);
 
+            _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+        }
+
+        private void OnCrtUiEnabledChanged(bool _)
+        {
+            ApplyCrtPalette();
+            CrtLobbyTheme.Apply(this);
         }
 
         private void OnCrtUiColorChanged(string _)
         {
             ApplyCrtPalette();
+            CrtLobbyTheme.Apply(this);
         }
 
         private void ApplyCrtPalette()

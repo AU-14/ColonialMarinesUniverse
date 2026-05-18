@@ -13,6 +13,19 @@
     name: Wendigo
   - type: Sprite
     sprite: _AU14/Mobs/MiscMob/wendigo.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: alive
+    - map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
+      state: wendigo_glowmask
+      shader: unshaded
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: alive
+        BaseUnshaded: wendigo_glowmask
+      Dead:
+        Base: dead
   - type: Speech
     speechVerb: AU14WendigoSpeech
     allowedEmotes: [ "Growl", "Hiss", "XenoRoar", "XenoHelp", "WendigoBreathing" ]
