@@ -32,7 +32,7 @@ public sealed partial class ColonyCommsConsoleSystem : EntitySystem
 
 
         // Send to radio channel (for intercoms)
-        _radioSystem.SendRadioMessage(uid, args.Message, "colonyalert", uid);
+        _radioSystem.SendRadioMessage(uid, args.Message, "colonyAlert", uid);
 
         // Send global announcement to everyone
         var sender = Loc.GetString("colony-comms-console-announcement-title");

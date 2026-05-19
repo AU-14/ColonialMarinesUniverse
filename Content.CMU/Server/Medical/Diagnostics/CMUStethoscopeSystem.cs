@@ -1,4 +1,3 @@
-using System.Linq;
 using Content.Shared._CMU14.Medical;
 using Content.Shared._CMU14.Medical.Diagnostics;
 using Content.Shared._CMU14.Medical.Organs;
@@ -11,7 +10,6 @@ using Content.Shared.Body.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
-using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;

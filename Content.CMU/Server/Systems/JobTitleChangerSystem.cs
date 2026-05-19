@@ -4,10 +4,10 @@ using Content.Server.Roles.Jobs;
 using Content.Shared.Inventory;
 using Content.Shared.Access.Components;
 using Content.Shared._RMC14.UniformAccessories;
-using Content.Shared.Au14.Util;
+using Content.Shared.AU14.Util;
 using Robust.Shared.Containers;
 
-namespace Content.Server.au14.Systems;
+namespace Content.Server.AU14.Systems;
 
 public sealed partial class JobTitleChangerSystem : EntitySystem
 {

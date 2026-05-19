@@ -15,27 +15,31 @@ public sealed partial class AdminConsoleThirdPartyWindow : DefaultWindow
     private List<string> _thirdPartyIds = new();
     private Dictionary<string, (string DisplayName, float Cost)> _thirdParties = new();
     private HashSet<string> _calledParties = new();
+    private string? _selectedThirdPartyId;
 
     public AdminConsoleThirdPartyWindow()
     {
         RobustXamlLoader.Load(this);
 
-        ThirdPartySelect.OnItemSelected += args =>
+        ThirdPartyList.OnItemSelected += args =>
         {
-            ThirdPartySelect.SelectId(args.Id);
-            if (args.Id >= 0 && args.Id < _thirdPartyIds.Count)
-            {
-                var id = _thirdPartyIds[args.Id];
-                if (_thirdParties.TryGetValue(id, out var info))
-                    CostLabel.Text = $"Cost: ${info.Cost:F0}";
-            }
+            if (args.ItemList[args.ItemIndex].Metadata is string id)
+                SelectThirdParty(id);
+        };
+
+        ThirdPartyList.OnItemDeselected += args =>
+        {
+            if (args.ItemList[args.ItemIndex].Metadata is string id && id == _selectedThirdPartyId)
+                SelectThirdParty(null);
         };
 
         CallBtn.OnPressed += _ =>
         {
-            if (ThirdPartySelect.SelectedId >= 0 && ThirdPartySelect.SelectedId < _thirdPartyIds.Count)
+            if (_selectedThirdPartyId is { } id &&
+                _thirdParties.ContainsKey(id) &&
+                !_calledParties.Contains(id))
             {
-                OnCallThirdParty?.Invoke(_thirdPartyIds[ThirdPartySelect.SelectedId]);
+                OnCallThirdParty?.Invoke(id);
                 StatusLabel.Text = "Requesting support...";
             }
         };
@@ -46,67 +50,69 @@ public sealed partial class AdminConsoleThirdPartyWindow : DefaultWindow
         BudgetLabel.Text = $"Colony Budget: ${s.Budget:F0}";
 
         var newIds = s.CallableParties.Keys.ToList();
-        var changed = !_thirdPartyIds.SequenceEqual(newIds);
+        var changed = !_thirdPartyIds.SequenceEqual(newIds) || !_calledParties.SetEquals(s.CalledParties);
 
         _thirdParties = s.CallableParties;
         _calledParties = s.CalledParties;
 
         if (changed)
         {
-            var previousSelectedId = ThirdPartySelect.SelectedId;
-            string? previousSelectedKey = null;
-            if (previousSelectedId >= 0 && previousSelectedId < _thirdPartyIds.Count)
-                previousSelectedKey = _thirdPartyIds[previousSelectedId];
+            var previousSelectedKey = _selectedThirdPartyId;
 
             _thirdPartyIds = newIds;
-            ThirdPartySelect.Clear();
+            ThirdPartyList.Clear();
 
             if (_thirdPartyIds.Count == 0)
             {
                 StatusLabel.Text = "No third parties available.";
-                CallBtn.Disabled = true;
+                SelectThirdParty(null);
                 CostLabel.Text = "Cost: N/A";
                 return;
             }
 
-            CallBtn.Disabled = false;
             StatusLabel.Text = "";
 
             for (int i = 0; i < _thirdPartyIds.Count; i++)
             {
                 var id = _thirdPartyIds[i];
                 var info = s.CallableParties[id];
-                var label = _calledParties.Contains(id) ? $"{info.DisplayName} [CALLED]" : info.DisplayName;
-                ThirdPartySelect.AddItem(label, i);
-                ThirdPartySelect.SetItemDisabled(ThirdPartySelect.GetIdx(i), _calledParties.Contains(id));
+                var label = _calledParties.Contains(id)
+                    ? $"{info.DisplayName} - ${info.Cost:F0} [CALLED]"
+                    : $"{info.DisplayName} - ${info.Cost:F0}";
+
+                ThirdPartyList.Add(new ItemList.Item(ThirdPartyList)
+                {
+                    Text = label,
+                    Metadata = id,
+                });
             }
 
             var restoreIdx = previousSelectedKey != null ? _thirdPartyIds.IndexOf(previousSelectedKey) : -1;
-            var selectIdx = restoreIdx >= 0 ? restoreIdx : 0;
-            ThirdPartySelect.SelectId(selectIdx);
-            if (_thirdParties.TryGetValue(_thirdPartyIds[selectIdx], out var selectedInfo))
-                CostLabel.Text = $"Cost: ${selectedInfo.Cost:F0}";
+            var selectIdx = restoreIdx >= 0 ? restoreIdx : _thirdPartyIds.FindIndex(id => !_calledParties.Contains(id));
+            if (selectIdx < 0)
+                selectIdx = 0;
+
+            ThirdPartyList[selectIdx].Selected = true;
+            SelectThirdParty(_thirdPartyIds[selectIdx]);
         }
         else
         {
-            for (int i = 0; i < _thirdPartyIds.Count; i++)
-            {
-                var id = _thirdPartyIds[i];
-                ThirdPartySelect.SetItemDisabled(ThirdPartySelect.GetIdx(i), _calledParties.Contains(id));
-            }
-
-            if (ThirdPartySelect.SelectedId >= 0 && ThirdPartySelect.SelectedId < _thirdPartyIds.Count)
-            {
-                var id = _thirdPartyIds[ThirdPartySelect.SelectedId];
-                if (_thirdParties.TryGetValue(id, out var info))
-                    CostLabel.Text = $"Cost: ${info.Cost:F0}";
-            }
+            SelectThirdParty(_selectedThirdPartyId);
         }
+    }
 
-        if (ThirdPartySelect.SelectedId >= 0 && ThirdPartySelect.SelectedId < _thirdPartyIds.Count)
+    private void SelectThirdParty(string? id)
+    {
+        _selectedThirdPartyId = id;
+
+        if (id == null || !_thirdParties.TryGetValue(id, out var info))
         {
-            var selectedId = _thirdPartyIds[ThirdPartySelect.SelectedId];
-            CallBtn.Disabled = _calledParties.Contains(selectedId);
+            CostLabel.Text = _thirdPartyIds.Count == 0 ? "Cost: N/A" : "Cost: $0";
+            CallBtn.Disabled = true;
+            return;
         }
+
+        CostLabel.Text = $"Cost: ${info.Cost:F0}";
+        CallBtn.Disabled = _calledParties.Contains(id);
     }
 }
