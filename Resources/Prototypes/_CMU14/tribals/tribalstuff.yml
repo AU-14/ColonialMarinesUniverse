@@ -245,7 +245,7 @@
     - Spear
     - tribe
   - type: Sprite
-    sprite: Objects/Weapons/Melee/bone_spear.rsi
+    sprite: _AU14\Weapons\Melee\Tribals\tribalspear.rsi
   # Base 100, light click halved to 50 via clickDamageModifier. Heavy
   # wide swing keeps the full 100 (engine quirk: light damage pipes
   # through ClickDamageModifier, heavy path bypasses it), so wide swing
@@ -276,6 +276,31 @@
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+
+- type: entity
+  name: stone hatchet
+  parent: HydroponicsToolHatchet
+  id: StoneHatchet
+  description: A crude hatchet made of stone and wood. Not very effective, but better than nothing.
+  components:
+  - type: Tag
+    tags:
+    - tribe
+  - type: Sprite
+    sprite: _AU14\Weapons\Melee\Tribals\stonehatchet.rsi
+  - type: MeleeWeapon
+    wideAnimationRotation: 135
+    damage:
+      types:
+        Slash: 40
+    soundHit:
+      collection: MetalThud
+  - type: Item
+    sprite: _AU14\Weapons\Melee\Tribals\stonehatchet.rsi
+  - type: PhysicalComposition
+    materialComposition:
+      Stone: 70
+      Wood: 30
 
 # Tribal arrow — 130 piercing on hit. Goes in the quiver, fired from
 # TribalBow / BowImprovised.
@@ -348,6 +373,73 @@
           True: { state: wielded }
           False: { state: unwielded }
 
+#Tribal Clothes
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: ArcherMantle
+  name: archer's mantle
+  description: A light mantle adorning the shoulders of bow-wielding fighters.
+  components:
+  - type: Sprite
+    sprite: _AU14\Clothing\Tribals\Robes\archer.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.9
+  - type: Tag
+    tags:
+    - tribe
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: WarriorCloak
+  name: warrior's cloak
+  description: A sturdy cloak worn by tribal warriors. Its tightly woven cloth offers increased protection in close combat.
+  components:
+  - type: Sprite
+    sprite: _AU14\Clothing\Tribals\Robes\archer.rsi
+  - type: CMArmor
+    melee: 20
+    bullet: 20
+    bio: 20
+  - type: Tag
+    tags:
+    - tribe
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: ShamanDress
+  name: shaman's dress
+  description: A long dress worn by shamans. The green of the drapes matches those of the herbs they carry.
+  components:
+  - type: Sprite
+    sprite: _AU14\Clothing\Tribals\Robes\shaman.rsi
+  - type: CMArmor
+    melee: 20
+    bullet: 20
+    bio: 20
+  - type: Tag
+    tags:
+    - tribe
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: LeaderRobes
+  name: leader's robes
+  description: A tall, regal dress worn by the tribe's leader. Its distinct purple is painstakingly sourced from rare and difficult materials.
+  components:
+  - type: Sprite
+    sprite: _AU14\Clothing\Tribals\Robes\leader.rsi
+  - type: CMArmor
+    melee: 20
+    bullet: 20
+    bio: 20
+  - type: Tag
+    tags:
+    - tribe
 
 - type: Tag
   id: tribe
@@ -381,7 +473,7 @@
 - type: startingGear
   id: AU14GearTribalLeader
   equipment:
-    jumpsuit: ClothingUniformJumpsuitColorBrown
+    jumpsuit: LeaderRobes
     shoes: RMCShoesSandals
     back: ClothingBackpackSatchelLeather
     belt: ClothingBeltQuiver
@@ -406,12 +498,12 @@
     - Torch
     - Torch
     - Torch
-    - RMCToolHatchet
+    - StoneHatchet
 
 - type: startingGear
   id: AU14GearTribalSpear
   equipment:
-    jumpsuit: ClothingUniformJumpsuitColorBrown
+    jumpsuit: WarriorCloak
     shoes: RMCShoesSandals
     back: ClothingBackpackSatchelLeather
     belt: ClothingBeltQuiver
@@ -436,12 +528,12 @@
     - Torch
     - Torch
     - Torch
-    - RMCToolHatchet
+    - StoneHatchet
 
 - type: startingGear
   id: AU14GearTribalBowman
   equipment:
-    jumpsuit: ClothingUniformJumpsuitColorBrown
+    jumpsuit: ArcherMantle
     shoes: RMCShoesSandals
     back: ClothingBackpackSatchelLeather
     belt: ClothingBeltQuiver
@@ -466,7 +558,7 @@
     - Torch
     - Torch
     - Torch
-    - RMCToolHatchet
+    - StoneHatchet
 
 # Shaman — tribal medic. Drops the bow/quiver and rolls with a satchel
 # stuffed with field medicine instead. Spear is in-hand so they can still
@@ -475,7 +567,7 @@
 - type: startingGear
   id: AU14GearTribalShaman
   equipment:
-    jumpsuit: ClothingUniformJumpsuitColorBrown
+    jumpsuit: ShamanDress
     shoes: RMCShoesSandals
     back: ClothingBackpackSatchelLeather
     belt: RMCPouchFirstAidSplintsGauzeOintment
@@ -493,4 +585,4 @@
     - Torch
     - Torch
     - Torch
-    - RMCToolHatchet
+    - StoneHatchet
