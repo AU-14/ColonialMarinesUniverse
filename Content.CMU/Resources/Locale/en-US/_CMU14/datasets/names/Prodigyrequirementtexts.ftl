@@ -6,12 +6,12 @@ au14-storage-limit-max-mags-prodigy = The pouch cant hold anymore magazines!
 
 au14-storage-limit-max-shells-prodigy = The pouch cant hold anymore shells!
 
-rmc-job-name-part-synth = PART Synthetic
+au14-job-name-part-synth = PART Synthetic
 
-rmc-job-description-part-synth = No description!
+au14-job-description-part-synth = No description!
 
-rmc-job-name-part-combat-synth = PART Combat Synthetic
+au14-job-name-part-combat-synth = PART Combat Synthetic
 
-rmc-job-description-part-synth = No description!
+au14-job-description-part-combat-synth = No description!
 
 au14-job-supervisors-psc = No Supervisor!
