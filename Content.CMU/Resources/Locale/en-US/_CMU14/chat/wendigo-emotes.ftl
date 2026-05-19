@@ -12,3 +12,5 @@ rmc-emote-wendigo-roar = roars!
 
 rmc-emote-name-wendigo-help = Call for Help
 rmc-emote-wendigo-help = needs help!
+
+rmc-wendigo-screech-ready = Our next headbite will make us loudly screech!
