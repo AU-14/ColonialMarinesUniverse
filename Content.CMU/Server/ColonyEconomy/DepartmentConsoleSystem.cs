@@ -22,20 +22,20 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.AU14.ColonyEconomy;
 
-public sealed class DepartmentConsoleSystem : EntitySystem
+public sealed partial class DepartmentConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedIdCardSystem _idCard = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly ColonyBudgetSystem _budget = default!;
-    [Dependency] private readonly AdminConsoleSystem _adminConsole = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly AccessReaderSystem _accessReader = default!;
-    [Dependency] private readonly SharedAccessSystem _accessSystem = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private ColonyBudgetSystem _budget = default!;
+    [Dependency] private AdminConsoleSystem _adminConsole = default!;
+    [Dependency] private StackSystem _stack = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private SharedAccessSystem _accessSystem = default!;
 
     public override void Initialize()
     {
@@ -444,7 +444,7 @@ public sealed class DepartmentConsoleSystem : EntitySystem
             stackCount = stack.Count;
 
         comp.DepartmentBudget += stackCount;
-        EntityManager.QueueDeleteEntity(args.Entity);
+        QueueDel(args.Entity);
         UpdateAllUiForDepartment(uid, comp);
     }
 

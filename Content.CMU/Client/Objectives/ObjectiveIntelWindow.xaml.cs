@@ -19,7 +19,7 @@ public sealed partial class ObjectiveIntelWindow : FancyWindow
     {
         base.Opened();
 
-            Logger.Info($"[ObjectiveIntelWindow] Opened: Parent={(Parent == null ? "null" : Parent.GetType().FullName)} IsOpen={IsOpen} Disposed={Disposed}");
+            Logger.GetSawmill("content").Info($"[ObjectiveIntelWindow] Opened: Parent={(Parent == null ? "null" : Parent.GetType().FullName)} IsOpen={IsOpen} Disposed={Disposed}");
 
     }
 
@@ -28,7 +28,7 @@ public sealed partial class ObjectiveIntelWindow : FancyWindow
     public void Populate(string objectiveId, string defaultTitle, List<ObjectiveIntelTierEntry> tiers, int unlockedTier, int factionPoints, Action<int>? unlockCallback = null)
     {
         Title = "Intel Window";
-        Logger.Info($"[ObjectiveIntelWindow] Populate start objective={objectiveId} tiers={(tiers?.Count ?? 0)} unlocked={unlockedTier} points={factionPoints}");
+        Logger.GetSawmill("content").Info($"[ObjectiveIntelWindow] Populate start objective={objectiveId} tiers={(tiers?.Count ?? 0)} unlocked={unlockedTier} points={factionPoints}");
 
         tiers ??= new List<ObjectiveIntelTierEntry>();
         if (unlockedTier < 0) unlockedTier = 0;
@@ -80,6 +80,6 @@ public sealed partial class ObjectiveIntelWindow : FancyWindow
             NextBox.AddChild(container);
         }
 
-        Logger.Info($"[ObjectiveIntelWindow] Populate complete objective={objectiveId}");
+        Logger.GetSawmill("content").Info($"[ObjectiveIntelWindow] Populate complete objective={objectiveId}");
     }
 }

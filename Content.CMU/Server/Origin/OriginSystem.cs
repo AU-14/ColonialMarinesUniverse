@@ -8,11 +8,11 @@ namespace Content.Server.AU14.Origin;
 /// <summary>
 /// Applies origin effects (components, accents, starting items, traits) to a spawned character entity.
 /// </summary>
-public sealed class OriginSystem : EntitySystem
+public sealed partial class OriginSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly ISerializationManager _serializationManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private ISerializationManager _serializationManager = default!;
 
     /// <summary>
     /// Apply origin effects to the given mob entity based on the character profile's selected origin.
@@ -35,7 +35,7 @@ public sealed class OriginSystem : EntitySystem
             var comp = _componentFactory.GetComponent(name);
             var temp = (object) comp;
             _serializationManager.CopyTo(entry.Component, ref temp);
-            EntityManager.AddComponent(mob, (Component) temp!);
+            AddComp(mob, (Component) temp!);
         }
 
         // Add accent components
@@ -48,7 +48,7 @@ public sealed class OriginSystem : EntitySystem
                 continue;
 
             var comp = _componentFactory.GetComponent(reg);
-            EntityManager.AddComponent(mob, comp);
+            AddComp(mob, comp);
         }
 
         // Spawn starting items and try to put them in the entity's hands/inventory

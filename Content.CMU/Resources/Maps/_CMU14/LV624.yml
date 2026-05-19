@@ -232384,7 +232384,7 @@ entities:
         - 0
         - 0
         - 0
-- proto: RMCCommunicationsTowerOn
+- proto: AU14CommunicationsTowerColony
   entities:
   - uid: 28238
     components:

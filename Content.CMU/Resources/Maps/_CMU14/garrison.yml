@@ -129881,7 +129881,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: RMCCommunicationsTower
+- proto: AU14CommunicationsTower
   entities:
   - uid: 10159
     components:

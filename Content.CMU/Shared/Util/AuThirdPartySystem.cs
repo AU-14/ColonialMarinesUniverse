@@ -12,11 +12,11 @@ namespace Content.Shared.AU14.Util;
 /// <summary>
 /// This handles...
 /// </summary>
-public abstract class AuThirdPartySystem : EntitySystem
+public abstract partial class AuThirdPartySystem : EntitySystem
 {
-    [Dependency] protected readonly IPrototypeManager PrototypeManager = default!;
-    [Dependency] protected readonly IPlayerManager PlayerManager = default!;
-    [Dependency] protected readonly IRobustRandom _random = default!;
+    [Dependency] protected IPrototypeManager PrototypeManager = default!;
+    [Dependency] protected IPlayerManager PlayerManager = default!;
+    [Dependency] protected IRobustRandom _random = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -45,7 +45,7 @@ public abstract class AuThirdPartySystem : EntitySystem
 
         if (filtered.Count == 0)
         {
-            Logger.Debug("[AuThirdPartySystem] No valid third parties found for current context.");
+            Logger.GetSawmill("content").Debug("[AuThirdPartySystem] No valid third parties found for current context.");
             return;
         }
 
@@ -59,18 +59,18 @@ public abstract class AuThirdPartySystem : EntitySystem
         }
         if (weighted.Count == 0)
         {
-            Logger.Debug("[AuThirdPartySystem] No weighted third parties available after filtering.");
+            Logger.GetSawmill("content").Debug("[AuThirdPartySystem] No weighted third parties available after filtering.");
             return;
         }
         var selected = _random.Pick(weighted);
-        Logger.Debug($"[AuThirdPartySystem] Selected third party: {selected.ID}");
+        Logger.GetSawmill("content").Debug($"[AuThirdPartySystem] Selected third party: {selected.ID}");
         SpawnThirdParty(selected);
     }
 
     public void SpawnThirdParty(AuThirdPartyPrototype party)
     {
 
-        Logger.Debug($"[AuThirdPartySystem] Spawning third party: {party.ID}");
+        Logger.GetSawmill("content").Debug($"[AuThirdPartySystem] Spawning third party: {party.ID}");
     }
 }
 
