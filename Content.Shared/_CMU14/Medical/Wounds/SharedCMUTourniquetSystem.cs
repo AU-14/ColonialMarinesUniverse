@@ -21,20 +21,20 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Wounds;
 
-public abstract class SharedCMUTourniquetSystem : EntitySystem
+public abstract partial class SharedCMUTourniquetSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly INetManager Net = default!;
-    [Dependency] protected readonly SharedAudioSystem Audio = default!;
-    [Dependency] protected readonly SharedBodySystem Body = default!;
-    [Dependency] protected readonly SharedDoAfterSystem DoAfter = default!;
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] protected readonly SkillsSystem Skills = default!;
-    [Dependency] protected readonly SharedCMUWoundsSystem Wounds = default!;
-    [Dependency] protected readonly SharedHandsSystem Hands = default!;
-    [Dependency] protected readonly RMCUnrevivableSystem Unrevivable = default!;
-    [Dependency] protected readonly SharedCMUSplintItemSystem Splints = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected INetManager Net = default!;
+    [Dependency] protected SharedAudioSystem Audio = default!;
+    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected SharedDoAfterSystem DoAfter = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] protected SkillsSystem Skills = default!;
+    [Dependency] protected SharedCMUWoundsSystem Wounds = default!;
+    [Dependency] protected SharedHandsSystem Hands = default!;
+    [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
+    [Dependency] protected SharedCMUSplintItemSystem Splints = default!;
     private const float TourniquetScanInterval = 0.5f;
     private float _tourniquetScanAccumulator;
 

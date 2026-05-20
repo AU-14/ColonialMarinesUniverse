@@ -25,22 +25,22 @@
       - GOVFOR
     - type: IntrinsicRadioTransmitter
       channels:
-      - AI
-      - GovforCommand
-      - GovforJTAC
-      - GovforAlpha
-      - GovforCharlie
-      - GovforBravo
-      - GovforIntel
+      - radioAI
+      - radioGovforCommand
+      - radioGovforJTAC
+      - radioGovforAlpha
+      - radioGovforCharlie
+      - radioGovforBravo
+      - radioGovforIntel
     - type: ActiveRadio
       channels:
-      - AI
-      - GovforCommand
-      - GovforJTAC
-      - GovforAlpha
-      - GovforCharlie
-      - GovforBravo
-      - GovforIntel
+      - radioAI
+      - radioGovforCommand
+      - radioGovforJTAC
+      - radioGovforAlpha
+      - radioGovforCharlie
+      - radioGovforBravo
+      - radioGovforIntel
     - type: Access
       groups:
       - AU14GovforCommand

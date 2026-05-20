@@ -1,0 +1,46 @@
+- type: entity
+  parent: [RMCSatchelPMC, RMCSatchelWelder]
+  id: RMCSatchelWelderRU
+  name: Prodigy response unit technician welderpack
+  description: Ergonomic, protected, high capacity backpack, designed for Prodigy Armed Repair Teams. Features a small fueltank for quick blowtorch refueling.
+  components:
+  - type: Storage
+    grid:
+    - 0,0,20,1 # 21
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/PMC/welder.rsi
+
+- type: entity
+  parent: RMCSatchelWelderRU
+  id: RMCSatchelWelderRUCloak
+  name: Prodigy response unit technician welder stealth pack
+  description: Ergonomic, protected, high capacity backpack, designed for Prodigy Armed Repair Teams. Features a small fueltank for quick blowtorch refueling. Also has a cloaking module for synthetic units
+  components:
+  - type: ClothingRequireEquipped
+    autoUnequip: true
+    whitelist:
+      tags:
+      - ProdigyUniformSynth
+    denyReason: rmc-wear-scout-armor-required
+  - type: ThermalCloak
+    opacity: 0.15 # Put to 0.03 for orignal invisibility
+    restrictWeapons: true
+    cloakedHideLayers:
+    - Hair
+    - HeadTop
+    - HeadSide
+    - Tail
+    - Snout # I don't know if this is hugely problematic but better safe than sorry
+    whitelist:
+      components:
+      - ScoutWhitelist
+    cloakSound:
+      path: /Audio/_RMC14/Effects/Cloak/cloak_scout_on.ogg
+      params:
+        variation: 0.09
+    uncloakSound:
+      path: /Audio/_RMC14/Effects/Cloak/cloak_scout_off.ogg
+      params:
+        variation: 0.09
+  - type: Corrodible
+    isCorrodible: false

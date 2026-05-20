@@ -83,7 +83,7 @@ public sealed class RMCCameraBui : RMCPopOutBui<RMCCameraWindow>
                 Window.CamerasContainer.AddChild(button);
             }
 
-            button.Label.SetMarkupPermissive($"[font size=11][color=white]{name}[/color][/font]");
+            button.TextLabel.SetMarkupPermissive($"[font size=11][color=white]{name}[/color][/font]");
             button.Pressed = id == currentNetCamera;
         }
 

@@ -15,10 +15,10 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
     [GenerateTypedNameReferences]
     public sealed partial class GhostRoleInfoBox : BoxContainer
     {
-        [Dependency] private readonly IEntityManager _entityManager = default!;
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-        [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
+        [Dependency] private IEntityManager _entityManager = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
+        [Dependency] private IUserInterfaceManager _uiManager = default!;
 
         private EntityUid? _previewDummy;
 
@@ -98,6 +98,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
             return preview;
         }
 
+        [System.Obsolete]
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);

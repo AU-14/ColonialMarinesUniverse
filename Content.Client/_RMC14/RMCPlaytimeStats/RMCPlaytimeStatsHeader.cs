@@ -73,6 +73,7 @@ public sealed partial class RMCPlaytimeStatsHeader : Control
         HeaderClicked(args, Header.Playtime);
     }
 
+    [System.Obsolete]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

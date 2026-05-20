@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Server.Damage.Components;
 using Content.Server.Destructible;
 using Content.Server.Destructible.Thresholds.Triggers;
@@ -10,9 +10,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Damage.Systems;
 
-public sealed class ExaminableDamageSystem : EntitySystem
+public sealed partial class ExaminableDamageSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

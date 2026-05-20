@@ -12,9 +12,9 @@ using Robust.Shared.Timing;
 namespace Content.Client._RMC14.Intel;
 
 [UsedImplicitly]
-public sealed class TechControlConsoleBui : BoundUserInterface
+public sealed partial class TechControlConsoleBui : BoundUserInterface
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private IEntityManager _entities = default!;
 
     private TechControlConsoleWindow? _window;
     private TechControlConsoleOptionWindow? _optionWindow;

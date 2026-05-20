@@ -18,11 +18,11 @@ public sealed partial class AnnouncementWidget : UIWidget
 {
     private static readonly Vector2 FallbackScreenSize = new(1920f, 1080f);
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IResourceCache _resCache = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IResourceCache _resCache = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     public event Action? OnAnnouncementFinished;
 

@@ -8,18 +8,18 @@ using Robust.Shared.Network;
 using Robust.Shared.Timing;
 namespace Content.Shared._RMC14.Shields;
 
-public sealed class KingShieldSystem : EntitySystem
+public sealed partial class KingShieldSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly XenoShieldSystem _shield = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly MobStateSystem _mob = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly LineSystem _line = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly MobThresholdSystem _threshold = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private XenoShieldSystem _shield = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private MobStateSystem _mob = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private LineSystem _line = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private MobThresholdSystem _threshold = default!;
     public override void Initialize()
     {
         SubscribeLocalEvent<KingShieldComponent, DamageModifyAfterResistEvent>(OnShieldDamage, before: [typeof(XenoShieldSystem)]);

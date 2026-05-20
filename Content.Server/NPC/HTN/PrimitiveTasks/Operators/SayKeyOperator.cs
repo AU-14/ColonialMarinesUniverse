@@ -1,10 +1,10 @@
-﻿using Content.Server.Chat.Systems;
+using Content.Server.Chat.Systems;
 
 namespace Content.Server.NPC.HTN.PrimitiveTasks.Operators;
 
 public sealed partial class SayKeyOperator : HTNOperator
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
 
     private ChatSystem _chat = default!;
 

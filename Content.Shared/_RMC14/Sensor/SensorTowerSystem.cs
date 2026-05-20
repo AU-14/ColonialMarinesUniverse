@@ -19,18 +19,18 @@ using Content.Shared._RMC14.Weapons.Ranged.IFF;
 
 namespace Content.Shared._RMC14.Sensor;
 
-public sealed class SensorTowerSystem : EntitySystem
+public sealed partial class SensorTowerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedToolSystem _tool = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly GunIFFSystem _gunIFF = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private GunIFFSystem _gunIFF = default!;
 
     public override void Initialize()
     {
@@ -463,7 +463,7 @@ public sealed partial class SensorTowerWipeDoAfterEvent : SimpleDoAfterEvent;
 public sealed partial class SensorTowerAddDoAfterEvent : SimpleDoAfterEvent;
 
 // Local event for sensor tower state changes. Not net-serializable to avoid serializing Entity<T>.
-public sealed class SensorTowerStateChangedEvent : EntityEventArgs
+public sealed partial class SensorTowerStateChangedEvent : EntityEventArgs
 {
     public EntityUid TowerUid;
     public SensorTowerStateChangedEvent(EntityUid towerUid) { TowerUid = towerUid; }

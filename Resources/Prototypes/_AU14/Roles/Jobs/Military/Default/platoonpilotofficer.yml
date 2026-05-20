@@ -86,7 +86,7 @@
   id: AU14GearGOVFORDSPilot
   equipment:
     id: AU14IDCardGOVFORDSPilot
-    ears: AU14HeadsetSectionLeader
+    ears: AU14HeadsetGovforCommand
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORDSPilot
@@ -105,4 +105,4 @@
     mask: AU14MaskUSASFPilotOxygen
     head: AU14USASFAirCrewHelmet
     jumpsuit: AU14USASFPilotJumpsuit
-    ears: AU14HeadsetSectionLeader
+    ears: AU14HeadsetGovforCommand

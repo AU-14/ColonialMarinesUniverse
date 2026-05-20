@@ -1,0 +1,23 @@
+# ├──[ GENERIC SENSORS ]─────────────────────────────────────────────┤
+- type: entity
+  parent: RMCSensorTower
+  id: AU14SensorTower
+  name: SA-2X experimental sensor-array tower
+# TODO: Govfor/Opfor ownership
+
+- type: entity
+  parent: AU14SensorTower
+  id: AU14SensorTowerOn
+  suffix: "On, Indestructible"
+  components:
+  - type: SensorTower
+    state: On
+    breakChance: 0
+
+- type: entity
+  parent: AU14SensorTower
+  id: AU14SensorTowerOffset
+  suffix: Offset
+  components:
+  - type: Sprite
+    offset: 0.25,2

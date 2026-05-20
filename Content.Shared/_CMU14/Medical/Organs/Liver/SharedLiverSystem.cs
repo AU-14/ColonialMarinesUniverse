@@ -15,14 +15,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Organs.Liver;
 
-public abstract class SharedLiverSystem : EntitySystem
+public abstract partial class SharedLiverSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly INetManager Net = default!;
-    [Dependency] protected readonly SharedBodySystem Body = default!;
-    [Dependency] protected readonly DamageableSystem Damageable = default!;
-    [Dependency] protected readonly SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected INetManager Net = default!;
+    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected DamageableSystem Damageable = default!;
+    [Dependency] protected SharedStatusEffectsSystem Status = default!;
 
     private static readonly EntProtoId HepaticFailure = "StatusEffectCMUHepaticFailure";
 

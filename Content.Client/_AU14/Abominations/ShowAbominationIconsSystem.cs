@@ -11,11 +11,11 @@ namespace Content.Client._AU14.Abominations;
 /// gates it to viewers that have AbominationComponent, so the icon is
 /// only ever rendered for other abominations.
 /// </summary>
-public sealed class ShowAbominationIconsSystem : EntitySystem
+public sealed partial class ShowAbominationIconsSystem : EntitySystem
 {
     public static readonly ProtoId<FactionIconPrototype> AbominationFactionIcon = "AbominationFaction";
 
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

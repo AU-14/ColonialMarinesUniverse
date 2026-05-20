@@ -5,9 +5,9 @@ using Content.Shared.Eye.Blinding.Systems;
 
 namespace Content.Server._CMU14.Medical.Organs.Eyes;
 
-public sealed class EyesSystem : SharedEyesSystem
+public sealed partial class EyesSystem : SharedEyesSystem
 {
-    [Dependency] private readonly BlindableSystem _blindable = default!;
+    [Dependency] private BlindableSystem _blindable = default!;
 
     protected override void UpdateVisionStatus(EntityUid body, OrganDamageStage stage)
     {

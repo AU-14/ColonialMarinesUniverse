@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Client.Resources;
 using Content.Shared.Chat;
 using Robust.Client.ResourceManagement;
@@ -123,6 +123,7 @@ public sealed class ChannelFilterButton : ChatPopupButton<ChannelFilterPopup>
         UpdateChildColors();
     }
 
+    [System.Obsolete]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

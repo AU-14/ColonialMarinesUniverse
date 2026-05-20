@@ -8,9 +8,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Medical.Organs.Liver;
 
-public sealed class LiverSystem : SharedLiverSystem
+public sealed partial class LiverSystem : SharedLiverSystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     private static readonly ProtoId<DamageTypePrototype> Poison = "Poison";
 

@@ -11,13 +11,13 @@ namespace Content.Shared._AU14.Abominations.Abilities;
 /// Spawns a fan of acid spit projectiles in a cone toward the target.
 /// Sibling of AbominationSpitSystem but throws a whole spread.
 /// </summary>
-public sealed class AbominationAcidSpraySystem : EntitySystem
+public sealed partial class AbominationAcidSpraySystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

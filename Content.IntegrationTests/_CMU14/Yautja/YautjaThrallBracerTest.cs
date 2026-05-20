@@ -34,7 +34,7 @@ public sealed class YautjaThrallBracerTest
                 var hunterBracerComp = entMan.GetComponent<YautjaBracerComponent>(hunterBracer);
                 Assert.That(marks.TryMark((hunterBracer, hunterBracerComp), hunter, thrall, YautjaMarkKind.Thrall, "test"), Is.True);
 
-                Assert.That(entMan.TryGetComponent(thrall, out YautjaThrallComponent? thrallComp), Is.True);
+                Assert.That(entMan.TryGetComponent(thrall, out YautjaThrallComponent thrallComp), Is.True);
                 Assert.That(thrallComp!.Master, Is.EqualTo(hunter));
                 Assert.That(thrallComp.Blooded, Is.False);
 
@@ -96,7 +96,7 @@ public sealed class YautjaThrallBracerTest
 
                 entMan.EventBus.RaiseLocalEvent(hunterBracer, link);
 
-                Assert.That(entMan.TryGetComponent(thrall, out YautjaThrallComponent? thrallComp), Is.True);
+                Assert.That(entMan.TryGetComponent(thrall, out YautjaThrallComponent thrallComp), Is.True);
                 Assert.That(thrallComp!.Master, Is.EqualTo(hunter));
                 Assert.That(thrallComp.Blooded, Is.True);
                 Assert.That(thrallComp.TechAuthorized, Is.True);

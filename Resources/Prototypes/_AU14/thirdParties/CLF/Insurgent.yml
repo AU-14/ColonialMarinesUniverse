@@ -56,7 +56,7 @@
   components:
   - type: EntityPreset
     randomGearOther:
-    - 
+    -
       - [ CMJumpsuitColonist ]
       - [ RMCJumpsuitCivilian ]
       - [ CMJumpsuitTShirtWhite ]

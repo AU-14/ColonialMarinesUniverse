@@ -15,9 +15,11 @@ namespace Content.Client.Info
         public ServerInfo()
         {
             Orientation = LayoutOrientation.Vertical;
+            HorizontalExpand = true;
 
             _richTextLabel = new RichTextLabel
             {
+                HorizontalExpand = true,
                 VerticalExpand = true
             };
             AddChild(_richTextLabel);

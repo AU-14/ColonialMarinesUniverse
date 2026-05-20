@@ -1,4 +1,4 @@
-﻿# Original upstream reference: https://github.com/cmss13-devs/cmss13
+# Original upstream reference: https://github.com/cmss13-devs/cmss13
 
 - type: entity
   parent: BaseStructure
@@ -4732,4 +4732,3 @@
     - type: Icon
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "console_shuttle"
-

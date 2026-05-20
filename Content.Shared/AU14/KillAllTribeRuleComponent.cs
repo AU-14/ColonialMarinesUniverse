@@ -10,4 +10,3 @@ public sealed partial class KillAllTribeRuleComponent : Component
     [DataField("percent")]
     public int Percent = 100;
 }
-

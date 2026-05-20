@@ -15,8 +15,8 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
     [GenerateTypedNameReferences]
     public sealed partial class GhostRoleRulesWindow : DefaultWindow
     {
-        [Dependency] private readonly IConfigurationManager _cfg = IoCManager.Resolve<IConfigurationManager>();
-        [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
+        [Dependency] private IConfigurationManager _cfg = IoCManager.Resolve<IConfigurationManager>();
+        [Dependency] private IStylesheetManager _stylesheetManager = default!;
         private float _timer;
         private readonly GhostRoleKind _ghostRoleKind;
 
@@ -43,6 +43,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
             }
 
             RequestButton.OnPressed += requestAction;
+            _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
         }
 
@@ -51,7 +52,13 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
         {
             base.Dispose(disposing);
 
+            _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+        }
+
+        private void OnCrtUiEnabledChanged(bool _)
+        {
+            ApplyCrtPalette();
         }
 
         private void OnCrtUiColorChanged(string _)

@@ -9,11 +9,11 @@ namespace Content.Server._RMC14.Synth;
 /// <summary>
 /// Applies synth breaching bonuses on top of normal melee damage.
 /// </summary>
-public sealed class RMCStructuralBreacherSystem : EntitySystem
+public sealed partial class RMCStructuralBreacherSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
     public override void Initialize()
     {

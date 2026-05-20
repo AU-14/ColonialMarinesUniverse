@@ -1,9 +1,9 @@
-﻿using Content.Server.Chat.Systems;
+using Content.Server.Chat.Systems;
 using Content.Shared._RMC14.Xenonids.Neurotoxin;
 
 namespace Content.Server._RMC14.Xenonids;
 
-public sealed class NeurotoxinSystem : SharedNeurotoxinSystem
+public sealed partial class NeurotoxinSystem : SharedNeurotoxinSystem
 {
     [Dependency] ChatSystem _chat = default!;
     public override void Initialize()

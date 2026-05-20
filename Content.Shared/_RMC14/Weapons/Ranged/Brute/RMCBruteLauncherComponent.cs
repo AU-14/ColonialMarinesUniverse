@@ -54,7 +54,7 @@ public sealed partial class RMCBruteLockOnDoAfterEvent : DoAfterEvent
     public uint LockId;
 
     [DataField(required: true)]
-    public NetEntity Target;
+    public NetEntity LockTarget;
 
     [DataField(required: true)]
     public NetCoordinates Coordinates;
@@ -62,7 +62,7 @@ public sealed partial class RMCBruteLockOnDoAfterEvent : DoAfterEvent
     public RMCBruteLockOnDoAfterEvent(uint lockId, NetEntity target, NetCoordinates coordinates)
     {
         LockId = lockId;
-        Target = target;
+        LockTarget = target;
         Coordinates = coordinates;
     }
 
@@ -72,6 +72,6 @@ public sealed partial class RMCBruteLockOnDoAfterEvent : DoAfterEvent
 
     public override DoAfterEvent Clone()
     {
-        return new RMCBruteLockOnDoAfterEvent(LockId, Target, Coordinates);
+        return new RMCBruteLockOnDoAfterEvent(LockId, LockTarget, Coordinates);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Frozen;
+using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Chemistry.Reagent;
 using Robust.Shared.Prototypes;
@@ -6,10 +6,10 @@ using Robust.Shared.Serialization.Manager;
 
 namespace Content.Shared._RMC14.Chemistry.Reagent;
 
-public sealed class RMCReagentSystem : EntitySystem
+public sealed partial class RMCReagentSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly ISerializationManager _serialization = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private ISerializationManager _serialization = default!;
 
     private FrozenDictionary<string, Reagent> _reagents = FrozenDictionary<string, Reagent>.Empty;
 

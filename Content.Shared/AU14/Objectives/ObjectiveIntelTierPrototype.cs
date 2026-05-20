@@ -8,7 +8,7 @@ public sealed partial class ObjectiveIntelTierPrototype : IPrototype
 {
     /// <inheritdoc/>
     [IdDataField]
-    public string ID { get; } = default!;
+    public string ID { get; private set; } = default!;
 
 
 

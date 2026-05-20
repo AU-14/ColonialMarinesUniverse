@@ -13,13 +13,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Organs.Stomach;
 
-public abstract class SharedStomachSystem : EntitySystem
+public abstract partial class SharedStomachSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly INetManager Net = default!;
-    [Dependency] protected readonly IRobustRandom Random = default!;
-    [Dependency] protected readonly SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected INetManager Net = default!;
+    [Dependency] protected IRobustRandom Random = default!;
+    [Dependency] protected SharedStatusEffectsSystem Status = default!;
 
     private static readonly EntProtoId Nausea = "StatusEffectCMUNausea";
     private const float StomachScanInterval = 1f;
@@ -74,7 +74,6 @@ public abstract class SharedStomachSystem : EntitySystem
             if (stomach.NextVomitCheck > now)
                 continue;
             stomach.NextVomitCheck = now + stomach.VomitCheckInterval;
-            Dirty(uid, stomach);
 
             if (!stomach.VomitChance.TryGetValue(oh.Stage, out var chance) || chance <= 0f)
                 continue;

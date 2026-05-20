@@ -1,116 +1,8 @@
-# High Command
-- type: radioChannel #UNMC High Command, for events and such, basically CentComm channel
-  id: mob
-  name: chat-radio-mob
-  keycode: "l" #z in cm13
-  frequency: 1431
-  color: "#318779"
-  longRange: true
-  tower: true
-
-# High Command
+# ├──[ GOVFOR CHANNELS ]─────────────────────────────────────────────┤
 - type: radioChannel
-  id: colonyalert
-  name: chat-radio-alert
-  keycode: "2" #z in cm13
-  frequency: 1431
-  color: "#318779"
-  longRange: true
-
-- type: radioChannel
-  id: opfor
-  name: chat-radio-opfor
-  keycode: "s"
-  frequency: 1601
-  color: "#bb91d8"
-  longRange: true
-  tower: true
-  faction: "opfor"
-
-- type: radioChannel
-  id: opforcommand
-  name: chat-radio-opforcommand
-  keycode: "e" #z in cm13
-  frequency: 1479
-  color: "#5b96d4"
-  longRange: true
-  tower: true
-  faction: "opfor"
-
-- type: radioChannel
-  id: opforjtac
-  name: chat-radio-opforjtac
-  keycode: "d" #z in cm13
-  frequency: 1474
-  color: "#ad3b98"
-  longRange: true
-  tower: true
-  faction: "opfor"
-
-- type: radioChannel
-  id: OpforIntel
-  name: chat-radio-opforintel
-  keycode: "k"
-  frequency: 1602
-  color: "#e4860c"
-  longRange: true
-  tower: true
-  faction: "opfor"
-
-- type: radioChannel
-  id: OpforBravo
-  name: chat-radio-opforbravo
-  keycode: "t"
-  frequency: 1603
-  color: "#c6c1a8"
-  longRange: true
-  tower: true
-  faction: "opfor"
-
-- type: radioChannel
-  id: OpforCharlie
-  name: chat-radio-opforcharlie
-  keycode: "u"
-  frequency: 1604
-  color: "#bb44bd"
-  longRange: true
-  tower: true
-  faction: "opfor"
-
-- type: radioChannel
-  id: GovforCommand
-  name: chat-radio-marine-command
-  keycode: "v" #v in cm13
-  frequency: 2592
-  color: "#5b96d4"
-  longRange: true
-  tower: true
-  faction: "govfor"
-
-- type: radioChannel
-  id: GovforJTAC
-  name: chat-radio-marine-jtac
-  keycode: "j" #j in CM13
-  frequency: 2598
-  color: "#ad3b98"
-  longRange: true
-  tower: true
-  faction: "govfor"
-
-- type: radioChannel
-  id: GovforIntel
-  name: chat-radio-govforintel
-  keycode: "y"
-  frequency: 1605
-  color: "#e4860c"
-  longRange: true
-  tower: true
-  faction: "govfor"
-
-- type: radioChannel
-  id: GovforAlpha
-  name: chat-radio-marine-alpha
-  keycode: "a" #a in cm13
+  id: radioGovforAlpha
+  name: chat-radio-govforalpha
+  keycode: "a"
   frequency: 2502
   color: "#F0433E"
   longRange: true
@@ -118,7 +10,7 @@
   faction: "govfor"
 
 - type: radioChannel
-  id: GovforBravo
+  id: radioGovforBravo
   name: chat-radio-govforbravo
   keycode: "b"
   frequency: 1606
@@ -128,7 +20,7 @@
   faction: "govfor"
 
 - type: radioChannel
-  id: GovforCharlie
+  id: radioGovforCharlie
   name: chat-radio-govforcharlie
   keycode: "c"
   frequency: 1607
@@ -138,14 +30,214 @@
   faction: "govfor"
 
 - type: radioChannel
-  id: CLF
-  name: chat-radio-clf
-  keycode: "6"
+  id: radioGovforCommand
+  name: chat-radio-govforcommand
+  keycode: "v"
+  frequency: 2592
+  color: "#5b96d4"
+  longRange: true
+  tower: true
+  faction: "govfor"
+
+- type: radioChannel
+  id: radioGovforIntel
+  name: chat-radio-govforintel
+  keycode: "y"
+  frequency: 1605
+  color: "#e4860c"
+  longRange: true
+  tower: true
+  faction: "govfor"
+
+- type: radioChannel
+  id: radioGovforJTAC
+  name: chat-radio-govforjtac
+  keycode: "j"
+  frequency: 2598
+  color: "#ad3b98"
+  longRange: true
+  tower: true
+  faction: "govfor"
+
+- type: radioChannel
+  id: radioGovforMILP
+  name: chat-radio-govformp
+  keycode: "p"
+  frequency: 2595
+  color: "#E92211"
+  longRange: true
+  tower: true
+  faction: "govfor"
+
+# ├──[ OPFOR CHANNELS ]──────────────────────────────────────────────┤
+- type: radioChannel
+  id: radioOpforAlpha
+  name: chat-radio-opforalpha
+  keycode: "s"
+  frequency: 1601
+  color: "#bb91d8"
+  longRange: true
+  tower: true
+  faction: "opfor"
+
+- type: radioChannel
+  id: radioOpforBravo
+  name: chat-radio-opforbravo
+  keycode: "t"
+  frequency: 1603
+  color: "#c6c1a8"
+  longRange: true
+  tower: true
+  faction: "opfor"
+
+- type: radioChannel
+  id: radioOpforCharlie
+  name: chat-radio-opforcharlie
+  keycode: "u"
+  frequency: 1604
+  color: "#bb44bd"
+  longRange: true
+  tower: true
+  faction: "opfor"
+
+- type: radioChannel
+  id: radioOpforCommand
+  name: chat-radio-opforcommand
+  keycode: "k"
+  frequency: 1479
+  color: "#5b96d4"
+  longRange: true
+  tower: true
+  faction: "opfor"
+
+- type: radioChannel
+  id: radioOpforIntel
+  name: chat-radio-opforintel
+  keycode: "i"
+  frequency: 1602
+  color: "#e4860c"
+  longRange: true
+  tower: true
+  faction: "opfor"
+
+- type: radioChannel
+  id: radioOpforJTAC
+  name: chat-radio-opforjtac
+  keycode: "d"
+  frequency: 1474
+  color: "#ad3b98"
+  longRange: true
+  tower: true
+  faction: "opfor"
+
+- type: radioChannel
+  id: radioOpforMILP
+  name: chat-radio-opformp
+  keycode: "l"
+  frequency: 1477
+  color: "#DD0055"
+  longRange: true
+  tower: true
+  faction: "opfor"
+
+# ├──[ COLONY ]──────────────────────────────────────────────────────┤
+- type: radioChannel
+  id: Colony
+  name: chat-radio-colony
+  keycode: "o"
+  frequency: 1469
+  color: "#cf40a6"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: colonyAlert
+  name: chat-radio-alert
+  keycode: "2"
+  frequency: 1431
+  color: "#318779"
+  longRange: true
+
+- type: radioChannel
+  id: radioWEYU
+  name: chat-radio-WEYU
+  keycode: "w"
+  frequency: 1231
+  color: "#fe9b24"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: radioCMB
+  name: chat-radio-CMB
+  keycode: "3"
+  frequency: 1220
+  color: "#1b748c"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: radioCLF
+  name: chat-radio-CLF
+  keycode: "q"
   frequency: 1886
-  color: "#059705" #more closely matches the green on the flag
+  color: "#059705"
   longRange: true
   tower: true
   faction: "clf"
+
+- type: radioChannel
+  id: radioMobFamily
+  name: chat-radio-mob
+  keycode: "f"
+  frequency: 1431
+  color: "#318779"
+  longRange: true
+  # tower: true
+
+- type: radioChannel
+  id: radioAI
+  name: chat-radio-ai
+  keycode: "$"
+  frequency: 7676
+  color: "#d39d22"
+  longRange: true
+
+# ├──[ THIRD PARTY ]─────────────────────────────────────────────────┤
+- type: radioChannel
+  id: Hivemind
+  name: chat-radio-hivemind
+  keycode: "h"
+  frequency: 426
+  color: "#8b36a6"
+  longRange: true
+
+- type: radioChannel
+  id: ICSCSOF
+  name: chat-radio-icsc
+  keycode: "4"
+  frequency: 1558
+  color: "#0b93b9"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: UASOF
+  name: chat-radio-uasof
+  keycode: "5"
+  frequency: 1553
+  color: "#2e4f68"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: TWESOF
+  name: chat-radio-twe
+  keycode: "6"
+  frequency: 1557
+  color: "#701ba7"
+  longRange: true
+  tower: true
 
 - type: radioChannel
   id: UPPSOF
@@ -157,41 +249,19 @@
   tower: true
 
 - type: radioChannel
-  id: UASOF
-  name: chat-radio-uasof
-  keycode: "5"
-  frequency: 1553
-  color: "#2e4f68"
-  longRange: true
-
-- type: radioChannel
-  id: AI
-  name: chat-radio-ai
-  keycode: "$"
-  frequency: 7676
-  color: "#d39d22"
-  longRange: true
-
-- type: radioChannel
-  id: TWESOF
-  name: chat-radio-twe
-  keycode: "q"
-  frequency: 1557
-  color: "#701ba7"
-  longRange: true
-
-- type: radioChannel
-  id: ICSCSOF
-  name: chat-radio-icsc
-  keycode: "g"
-  frequency: 1558
-  color: "#0b93b9"
-  longRange: true
-
-- type: radioChannel
   id: VAI
   name: chat-radio-vai
   keycode: "z"
   frequency: 1559
   color: "#e3580e"
   longRange: true
+  tower: true
+
+- type: radioChannel
+  id: PART
+  name: chat-radio-part
+  keycode: "1"
+  frequency: 5571
+  color: "#92969A"
+  longRange: true
+  tower: true

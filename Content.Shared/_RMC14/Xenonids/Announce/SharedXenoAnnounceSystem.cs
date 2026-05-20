@@ -10,12 +10,12 @@ using Robust.Shared.Player;
 
 namespace Content.Shared._RMC14.Xenonids.Announce;
 
-public abstract class SharedXenoAnnounceSystem : EntitySystem
+public abstract partial class SharedXenoAnnounceSystem : EntitySystem
 {
-    [Dependency] private readonly AreaSystem _areas = default!;
-    [Dependency] private readonly XenoEvolutionSystem _xenoEvolution = default!;
+    [Dependency] private AreaSystem _areas = default!;
+    [Dependency] private XenoEvolutionSystem _xenoEvolution = default!;
 
-    [Dependency] protected readonly SharedXenoHiveSystem Hive = default!;
+    [Dependency] protected SharedXenoHiveSystem Hive = default!;
     public override void Initialize()
     {
         SubscribeLocalEvent<XenoAnnounceDeathComponent, MobStateChangedEvent>(OnAnnounceDeathMobStateChanged);
@@ -34,12 +34,12 @@ public abstract class SharedXenoAnnounceSystem : EntitySystem
             AnnounceSameHive(ent.Owner, Loc.GetString("rmc-xeno-parasite-announce-infect", ("xeno", ent.Owner), ("location", locationName)), color: ent.Comp.Color);
         else
         {
-            if (HasComp<XenoEvolutionGranterComponent>(ent) || _xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1))
+            if (HasComp<XenoEvolutionGranterComponent>(ent) || _xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1, null, Hive.GetHive(ent.Owner)))
                 AnnounceSameHive(ent.Owner, Loc.GetString(ent.Comp.Message, ("xeno", ent.Owner), ("location", locationName)), color: ent.Comp.Color);
         }
     }
 
-    public string WrapHive(string message, Color? color = null)
+    public string WrapHive(string message, Color? color = null, EntityUid? hive = null)
     {
         color ??= Color.FromHex("#921992");
         return $"[color={color.Value.ToHex()}][font size=16][bold]{message}[/bold][/font][/color]\n\n";
@@ -73,6 +73,8 @@ public abstract class SharedXenoAnnounceSystem : EntitySystem
         Color? color = null,
         bool needsQueen = false)
     {
+        if (TryComp<HiveComponent>(hive, out var comp))
+            color ??= comp.HiveUIColor;
         var filter = Filter.Empty().AddWhereAttachedEntity(e => Hive.IsMember(e, hive));
         Announce(source, filter, message, WrapHive(message, color), sound, popup, needsQueen);
     }

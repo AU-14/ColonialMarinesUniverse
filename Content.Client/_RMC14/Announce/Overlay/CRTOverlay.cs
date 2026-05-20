@@ -9,9 +9,9 @@ using Content.Shared._RMC14.Announce;
 
 namespace Content.Client._RMC14.Announce;
 
-public sealed class CRTOverlay : Control
+public sealed partial class CRTOverlay : Control
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public CRTSettings Settings { get; set; } = new();
 

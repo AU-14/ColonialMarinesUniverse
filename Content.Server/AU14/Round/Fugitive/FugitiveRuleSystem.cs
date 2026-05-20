@@ -23,18 +23,18 @@ using Robust.Shared.Random;
 
 namespace Content.Server.AU14.round.Fugitive;
 
-public sealed class FugitiveRuleSystem : GameRuleSystem<FugitiveRuleComponent>
+public sealed partial class FugitiveRuleSystem : GameRuleSystem<FugitiveRuleComponent>
 {
-    [Dependency] private readonly StationRecordsSystem _stationRecords = default!;
-    [Dependency] private readonly Content.Server.CriminalRecords.Systems.CriminalRecordsSystem _criminalRecords = default!;
-    [Dependency] private readonly Content.Server.CriminalRecords.Systems.CriminalRecordsConsoleSystem _criminalRecordsConsole = default!;
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly Content.Server.AU14.Systems.WantedSystem _wantedSystem = default!;
-    [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
-    [Dependency] private readonly ColonyBudgetSystem _colonyBudget = default!;
+    [Dependency] private StationRecordsSystem _stationRecords = default!;
+    [Dependency] private Content.Server.CriminalRecords.Systems.CriminalRecordsSystem _criminalRecords = default!;
+    [Dependency] private Content.Server.CriminalRecords.Systems.CriminalRecordsConsoleSystem _criminalRecordsConsole = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private Content.Server.AU14.Systems.WantedSystem _wantedSystem = default!;
+    [Dependency] private IEntitySystemManager _entitySystemManager = default!;
+    [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
 
     private EntityUid? _fugitiveUid = null;
     private bool _fugitiveCaptured = false;

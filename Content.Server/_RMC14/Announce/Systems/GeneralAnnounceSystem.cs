@@ -18,11 +18,11 @@ namespace Content.Server._RMC14.Announce;
 
 public sealed partial class GeneralAnnounceSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLogs = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly PvsOverrideSystem _pvsOverride = default!;
+    [Dependency] private IAdminLogManager _adminLogs = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private PvsOverrideSystem _pvsOverride = default!;
 
     private AnnouncementValidator _validator = default!;
     private AnnouncementPresetResolver _presetResolver = default!;
@@ -116,7 +116,7 @@ public sealed partial class GeneralAnnounceSystem : EntitySystem
             CanInterrupt = request.CanInterrupt ?? preset.CanInterrupt,
             CanBeInterrupted = request.CanBeInterrupted ?? preset.CanBeInterrupted,
             Style = style,
-            SpeakerEntity = EntityManager.GetNetEntity(request.Speaker),
+            SpeakerEntity = GetNetEntity(request.Speaker),
             SpeakerName = speakerName,
             ShowSprite = request.ShowSprite && preset.ShowSprite,
             SpriteScale = request.SpriteScale,
@@ -140,7 +140,7 @@ public sealed partial class GeneralAnnounceSystem : EntitySystem
             return;
 
         var speaker = request.Speaker.Value;
-        if (!EntityManager.EntityExists(speaker))
+        if (!Exists(speaker))
             return;
 
         _pvsOverride.AddSessionOverrides(speaker, filter);
@@ -151,7 +151,7 @@ public sealed partial class GeneralAnnounceSystem : EntitySystem
 
     private void RemoveSpeakerOverrides(EntityUid speaker, Filter filter)
     {
-        if (!EntityManager.EntityExists(speaker))
+        if (!Exists(speaker))
             return;
 
         foreach (var session in filter.Recipients)

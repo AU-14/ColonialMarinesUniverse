@@ -8,10 +8,11 @@ namespace Content.Shared._RMC14.Synth;
 
 /// <summary>
 /// Centralizes synthetic item restrictions so item prototypes do not need custom role checks.
+/// FIXME: Item can be equipped in non-synth hands by synths.
 /// </summary>
-public sealed class RMCSynthItemRestrictionSystem : EntitySystem
+public sealed partial class RMCSynthItemRestrictionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

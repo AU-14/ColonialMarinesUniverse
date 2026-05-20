@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Client._RMC14.Xenonids.UI;
 using Content.Client.Message;
 using Content.Shared._RMC14.Xenonids.Evolution;
@@ -12,10 +12,10 @@ using Robust.Shared.Prototypes;
 namespace Content.Client._RMC14.Xenonids.Evolution;
 
 [UsedImplicitly]
-public sealed class XenoEvolutionBui : BoundUserInterface
+public sealed partial class XenoEvolutionBui : BoundUserInterface
 {
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly SpriteSystem _sprite;
 

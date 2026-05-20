@@ -7,6 +7,9 @@
   ignoreAllegiance: true
   playTimeTracker: AU14JobCLFCellLeader
   requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentColonialLiberationFront
+    time: 36000 # 10 hours
   - !type:OverallPlaytimeRequirement
     time: 36000 # 10 hours
   - !type:TraitsRequirement
@@ -31,7 +34,7 @@
     components:
     - type: NpcFactionMember
       factions:
-       - CLF
+      - CLF
     - type: CLFMember
       statusIcon: CLFFactionLeader
     - type: Skills
@@ -54,6 +57,8 @@
         RMCSkillVehicles: 1
     - type: JobPrefix
       prefix: au14-job-prefix-clfcellleader
+    - type: StartingMindRole
+      mindRole: MindRoleCLFLeader
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi

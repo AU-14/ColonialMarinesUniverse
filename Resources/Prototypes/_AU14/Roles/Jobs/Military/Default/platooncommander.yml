@@ -81,7 +81,7 @@
   id: AU14GearGOVFORPlatCo
   equipment:
     id: AU14IDCardGOVFORPlatCo
-    ears: AU14HeadsetSectionLeader
+    ears: AU14HeadsetGovforCommand
   inhand:
     -  RMCTabletGovfor
 - type: entity
@@ -101,4 +101,4 @@
     shoes: CMBootsBlack
     head: CMHeadCapPeakedFormal
     jumpsuit: CMJumpsuitXOFormal
-    ears: AU14HeadsetSectionLeader
+    ears: AU14HeadsetGovforCommand

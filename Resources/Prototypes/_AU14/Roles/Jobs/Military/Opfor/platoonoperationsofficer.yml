@@ -65,7 +65,7 @@
   id: AU14GearopforPlatOp
   equipment:
     id: AU14IDCardopforPlatOp
-    ears: AU14HeadsetSectionLeaderopfor
+    ears: AU14HeadsetOpforCommand
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -83,4 +83,4 @@
     shoes: CMBootsBlack
     head: AU14JunglePatrolCap
     jumpsuit: CMJumpsuitXOFormal
-    ears: AU14HeadsetSectionLeaderopfor
+    ears: AU14HeadsetOpforCommand

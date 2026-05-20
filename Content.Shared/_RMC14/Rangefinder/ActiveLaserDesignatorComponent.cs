@@ -14,5 +14,8 @@ public sealed partial class ActiveLaserDesignatorComponent : Component
     public EntityUid? Target;
 
     [DataField, AutoNetworkedField]
+    public EntityUid? User;
+
+    [DataField, AutoNetworkedField]
     public float BreakRange = 0.5f;
 }

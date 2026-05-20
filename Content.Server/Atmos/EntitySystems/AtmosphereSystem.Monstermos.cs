@@ -14,7 +14,7 @@ namespace Content.Server.Atmos.EntitySystems
 {
     public sealed partial class AtmosphereSystem
     {
-        [Dependency] private readonly FirelockSystem _firelockSystem = default!;
+        [Dependency] private FirelockSystem _firelockSystem = default!;
 
         private readonly TileAtmosphereComparer _monstermosComparer = new();
 
@@ -696,7 +696,7 @@ namespace Content.Server.Atmos.EntitySystems
                 PryTile(mapGrid, tile.GridIndices);
         }
 
-        private sealed class TileAtmosphereComparer : IComparer<TileAtmosphere?>
+        private sealed partial class TileAtmosphereComparer : IComparer<TileAtmosphere?>
         {
             public int Compare(TileAtmosphere? a, TileAtmosphere? b)
             {

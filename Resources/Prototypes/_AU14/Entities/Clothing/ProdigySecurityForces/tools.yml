@@ -1,0 +1,6 @@
+- type: entity
+  parent: RMCSentryLaptop
+  id: AU14ProdigyLaptop
+  name: Prodigy Advance Networking Device (PAND)
+  description: A ruggedized military laptop used for remote control and programming made by Prodigy Security Corp. Can be placed on tables for easier access, it can also be used to link to sentries if need be.
+

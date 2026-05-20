@@ -8,13 +8,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.AU14.ColonyEconomy;
 
-public sealed class AU14CashVendorSystem : EntitySystem
+public sealed partial class AU14CashVendorSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly ColonyBudgetSystem _colonyBudget = default!;
-    [Dependency] private readonly AdminConsoleSystem _adminConsole = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
+    [Dependency] private AdminConsoleSystem _adminConsole = default!;
+    [Dependency] private StackSystem _stack = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {
@@ -37,7 +37,7 @@ public sealed class AU14CashVendorSystem : EntitySystem
             count = stack.Count;
 
         comp.InsertedCash += count;
-        EntityManager.QueueDeleteEntity(args.Entity);
+        QueueDel(args.Entity);
         UpdateUi(uid, comp);
     }
 
@@ -61,7 +61,7 @@ public sealed class AU14CashVendorSystem : EntitySystem
             _colonyBudget.AddToBudget(taxRevenue);
 
         var coords = Transform(uid).Coordinates;
-        EntityManager.SpawnEntity(item.ItemId, coords);
+        Spawn(item.ItemId, coords);
         UpdateUi(uid, comp);
     }
 

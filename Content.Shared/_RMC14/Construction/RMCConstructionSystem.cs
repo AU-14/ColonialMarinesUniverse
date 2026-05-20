@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Construction.Prototypes;
+using Content.Shared._RMC14.Construction.Prototypes;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Emplacements;
 using Content.Shared._RMC14.Entrenching;
@@ -26,23 +26,23 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Construction;
 
-public sealed class RMCConstructionSystem : EntitySystem
+public sealed partial class RMCConstructionSystem : EntitySystem
 {
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly FixtureSystem _fixture = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly SharedWeaponMountSystem _weaponMount = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private FixtureSystem _fixture = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private SharedWeaponMountSystem _weaponMount = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
 
     private static readonly EntProtoId Blocker = "RMCDropshipDoorBlocker";
 
@@ -160,7 +160,7 @@ public sealed class RMCConstructionSystem : EntitySystem
         // TODO add the ability to combine materials
 
         var ev = new RMCConstructionBuildDoAfterEvent(
-            proto,
+            proto.ID,
             amount,
             GetNetCoordinates(coordinates),
             direction
@@ -222,7 +222,8 @@ public sealed class RMCConstructionSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        var entry = args.Prototype;
+        if (!_prototype.TryIndex(args.Prototype, out var entry))
+            return;
 
         var coordinates = GetCoordinates(args.Coordinates);
         args.Handled = true;

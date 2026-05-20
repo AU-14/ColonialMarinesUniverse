@@ -16,6 +16,7 @@
                       MinWidth="145"
                       MaxWidth="145">
             <Label Name="NameLabel"
+                   StyleClasses="CharacterName"
                    ClipText="True"
                    MinWidth="145"
                    MaxWidth="145"

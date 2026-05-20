@@ -10,7 +10,7 @@ namespace Content.Shared._AU14.Abominations.Abilities;
 /// Crusher-style charge ability. Bigger / longer than AbominationLeap and
 /// also damages structures it ploughs into. Used by the grunt.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class AbominationChargeComponent : Component
 {
     [DataField, AutoNetworkedField]

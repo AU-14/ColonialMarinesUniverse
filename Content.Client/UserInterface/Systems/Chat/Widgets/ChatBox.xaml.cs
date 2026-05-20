@@ -28,10 +28,10 @@ namespace Content.Client.UserInterface.Systems.Chat.Widgets;
 [Virtual]
 public partial class ChatBox : UIWidget
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly ILogManager _log = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private ILogManager _log = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly ISawmill _sawmill;
     private readonly ChatUIController _controller;
@@ -1361,6 +1361,7 @@ public partial class ChatBox : UIWidget
         _controller.NotifyChatFocus(false);
     }
 
+    [System.Obsolete]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

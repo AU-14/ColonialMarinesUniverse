@@ -36,32 +36,32 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Xenonids.Evolution;
 
-public sealed class XenoEvolutionSystem : EntitySystem
+public sealed partial class XenoEvolutionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _action = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ClimbSystem _climb = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly SharedGameTicker _gameTicker = default!;
-    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedXenoAnnounceSystem _xenoAnnounce = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _xenoHive = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedXenoWeedsSystem _xenoWeeds = default!;
-    [Dependency] private readonly IMapManager _map = default!;
+    [Dependency] private SharedActionsSystem _action = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private ClimbSystem _climb = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private SharedGameTicker _gameTicker = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private SharedXenoHiveSystem _xenoHive = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedXenoWeedsSystem _xenoWeeds = default!;
+    [Dependency] private IMapManager _map = default!;
 
     private TimeSpan _evolutionPointsRequireOvipositorAfter;
     private TimeSpan _evolutionAccumulatePointsBefore;
@@ -371,9 +371,11 @@ public sealed class XenoEvolutionSystem : EntitySystem
         if (!ContainedCheckPopup(xeno, doPopup))
             return false;
 
+        EntityUid? hive = _xenoHive.GetHive(xeno.Owner);
+
         // TODO RMC14 revive jelly when added should not bring back dead queens
         if (prototype.TryGetComponent(out XenoEvolutionCappedComponent? capped, _compFactory) &&
-            HasLiving<XenoEvolutionCappedComponent>(capped.Max, e => e.Comp.Id == capped.Id))
+            HasLiving<XenoEvolutionCappedComponent>(capped.Max, e => e.Comp.Id == capped.Id, hive))
         {
             if (doPopup)
                 _popup.PopupEntity(Loc.GetString("cm-xeno-evolution-failed-already-have", ("prototype", prototype.Name)), xeno, xeno, PopupType.MediumCaution);
@@ -518,8 +520,8 @@ public sealed class XenoEvolutionSystem : EntitySystem
     }
 
     // TODO RMC14 make this a property of the hive component
-    // TODO RMC14 per-hive
-    public int GetLiving<T>(Predicate<Entity<T>>? predicate = null) where T : IComponent
+    // TODO RMC14 per-hive | Done-ish? - 5/13/2026
+    public int GetLiving<T>(Predicate<Entity<T>>? predicate = null, EntityUid? hive = null) where T : IComponent
     {
         var total = 0;
         var query = EntityQueryEnumerator<T>();
@@ -531,6 +533,9 @@ public sealed class XenoEvolutionSystem : EntitySystem
                 continue;
             }
 
+            if (hive is not null && !_xenoHive.IsMember(uid, hive))
+                continue;
+
             if (predicate != null && !predicate((uid, comp)))
                 continue;
 
@@ -541,8 +546,8 @@ public sealed class XenoEvolutionSystem : EntitySystem
     }
 
     // TODO RMC14 make this a property of the hive component
-    // TODO RMC14 per-hive
-    public bool HasLiving<T>(int count, Predicate<Entity<T>>? predicate = null) where T : IComponent
+    // TODO RMC14 per-hive | done-ish? - 5/13/2026
+    public bool HasLiving<T>(int count, Predicate<Entity<T>>? predicate = null, EntityUid? hive = null) where T : IComponent
     {
         if (count <= 0)
             return true;
@@ -556,6 +561,9 @@ public sealed class XenoEvolutionSystem : EntitySystem
             {
                 continue;
             }
+
+            if (hive is not null && !_xenoHive.IsMember(uid, hive))
+                continue;
 
             if (predicate != null && !predicate((uid, comp)))
                 continue;

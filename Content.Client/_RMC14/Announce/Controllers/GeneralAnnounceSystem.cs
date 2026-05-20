@@ -8,10 +8,10 @@ using System.Collections.Generic;
 
 namespace Content.Client._RMC14.Announce;
 
-public sealed class GeneralAnnounceSystem : EntitySystem
+public sealed partial class GeneralAnnounceSystem : EntitySystem
 {
-    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IUserInterfaceManager _uiManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     private AnnouncementDisplayPreference _preference;
     private Dictionary<string, AnnouncementDisplayPreference> _overrides = new();

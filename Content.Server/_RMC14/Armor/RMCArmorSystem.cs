@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Server.Preferences.Managers;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Marines;
@@ -9,12 +9,12 @@ using Robust.Shared.Player;
 
 namespace Content.Server._RMC14.Armor;
 
-public sealed class RMCArmorSystem : EntitySystem
+public sealed partial class RMCArmorSystem : EntitySystem
 {
-    [Dependency] private readonly IServerPreferencesManager _prefs = default!;
-    [Dependency] protected readonly InventorySystem InventorySystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly CMArmorSystem _armorSystem = default!;
+    [Dependency] private IServerPreferencesManager _prefs = default!;
+    [Dependency] private InventorySystem InventorySystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private CMArmorSystem _armorSystem = default!;
 
     private EntityQuery<RMCArmorVariantComponent> _armorVariantQuery;
 

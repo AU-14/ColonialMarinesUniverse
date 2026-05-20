@@ -21,7 +21,7 @@ public sealed partial class ObjectivesConsoleWindow : FancyWindow
 
     public void UpdateObjectives(List<ObjectiveEntry> objectives, int currentWinPoints, int requiredWinPoints)
     {
-        Logger.Info($"[ObjectivesConsoleWindow] UpdateObjectives called; RequestIntelCallback is {(RequestIntelCallback == null ? "null" : "set")}");
+        Logger.GetSawmill("content").Info($"[ObjectivesConsoleWindow] UpdateObjectives called; RequestIntelCallback is {(RequestIntelCallback == null ? "null" : "set")}");
         CurrentWinPointsLabel.Text = $"Current Win Points: {currentWinPoints}";
         RequiredWinPointsLabel.Text = $"Points to Final Objective: {requiredWinPoints}";
         ObjectivesList.DisposeAllChildren();
@@ -57,9 +57,9 @@ public sealed partial class ObjectivesConsoleWindow : FancyWindow
             // Add Intel button
             var intelButton = new Button { Text = "Intel", Margin = new Thickness(8, 0, 0, 0) };
             intelButton.OnPressed += _ => {
-                Logger.Info($"[ObjectivesConsoleWindow] Intel button pressed for objective={obj.Id}");
+                Logger.GetSawmill("content").Info($"[ObjectivesConsoleWindow] Intel button pressed for objective={obj.Id}");
                 RequestIntelCallback?.Invoke(obj.Id);
-                Logger.Info($"[ObjectivesConsoleWindow] RequestIntelCallback invoked for objective={obj.Id}");
+                Logger.GetSawmill("content").Info($"[ObjectivesConsoleWindow] RequestIntelCallback invoked for objective={obj.Id}");
             };
 
             string statusText;

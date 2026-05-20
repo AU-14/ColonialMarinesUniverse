@@ -12,12 +12,12 @@ using Robust.Client.Physics;
 
 namespace Content.Client.Vehicle;
 
-public sealed class GridVehicleMoverSystem : EntitySystem
+public sealed partial class GridVehicleMoverSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly ClientPhysicsSystem _physics = default!;
-    [Dependency] private readonly IOverlayManager _overlayManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private ClientPhysicsSystem _physics = default!;
+    [Dependency] private IOverlayManager _overlayManager = default!;
 
     public static readonly List<Vector2> DebugCollisionPositions = new();
 

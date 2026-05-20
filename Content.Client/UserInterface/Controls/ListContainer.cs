@@ -113,6 +113,7 @@ public class ListContainer : Control
 
         _data = data.ToList();
         _updateChildren = true;
+        InvalidateMeasure();
         InvalidateArrange();
 
         if (_selected != null && !data.Contains(_selected))
@@ -125,6 +126,7 @@ public class ListContainer : Control
     public void DirtyList()
     {
         _updateChildren = true;
+        InvalidateMeasure();
         InvalidateArrange();
     }
 

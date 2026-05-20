@@ -19,9 +19,9 @@ namespace Content.Server.AU14.Round;
 
 
 
-public sealed class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponent>
+public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponent>
 {
-        [Dependency] private readonly IEntityManager _entityManager = default!;
+        [Dependency] private IEntityManager _entityManager = default!;
 
     // Only keep the persistent system trigger and dependency injection
     public override void Initialize()

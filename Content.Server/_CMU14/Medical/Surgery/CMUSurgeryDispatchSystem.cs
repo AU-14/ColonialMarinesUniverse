@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Content.Server._RMC14.Medical.Surgery;
 using Content.Server.Popups;
 using Content.Shared._CMU14.Medical;
@@ -32,18 +31,18 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Medical.Surgery;
 
-public sealed class CMUSurgeryDispatchSystem : EntitySystem
+public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly CMSurgerySystem _rmcSurgery = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedCMUSurgeryFlowSystem _flowSurgery = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private CMSurgerySystem _rmcSurgery = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private SharedCMUSurgeryFlowSystem _flowSurgery = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
 
@@ -158,25 +157,39 @@ public sealed class CMUSurgeryDispatchSystem : EntitySystem
 
         if (!hasSelectedPart)
         {
-            var openCandidates = candidates
-                .Where(candidate => candidate.Part.IsInFlightHere || IsOpenPart(candidate.Part.Part))
-                .ToList();
+            List<ToolIntentCandidate>? openCandidates = null;
+            NetEntity? openPart = null;
+            BodyPartType openType = default;
+            BodyPartSymmetry openSymmetry = default;
 
-            if (openCandidates.Count > 0)
+            foreach (var candidate in candidates)
             {
-                var openParts = openCandidates
-                    .Select(candidate => (candidate.Part.Part, candidate.Part.Type, candidate.Part.Symmetry))
-                    .Distinct()
-                    .Count();
-                if (openParts != 1)
+                if (!candidate.Part.IsInFlightHere && !IsOpenPart(candidate.Part.Part))
+                    continue;
+
+                openCandidates ??= new List<ToolIntentCandidate>();
+                openCandidates.Add(candidate);
+
+                if (openPart is null)
+                {
+                    openPart = candidate.Part.Part;
+                    openType = candidate.Part.Type;
+                    openSymmetry = candidate.Part.Symmetry;
+                    continue;
+                }
+
+                if (!openPart.Value.Equals(candidate.Part.Part)
+                    || openType != candidate.Part.Type
+                    || openSymmetry != candidate.Part.Symmetry)
+                {
                     return false;
+                }
+            }
 
+            if (openCandidates is not null)
                 candidates = openCandidates;
-            }
             else if (candidates.Count != 1)
-            {
                 return false;
-            }
         }
 
         candidates.Sort((a, b) => b.Score.CompareTo(a.Score));

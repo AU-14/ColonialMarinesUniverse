@@ -29,14 +29,5 @@ public sealed partial class CMUCastComponent : Component
     public TimeSpan NextRemovePrompt;
 }
 
-public sealed class CMUCastChangedEvent : EntityEventArgs
-{
-    public CMUCastChangedEvent(EntityUid part, bool removed)
-    {
-        Part = part;
-        Removed = removed;
-    }
-
-    public EntityUid Part { get; }
-    public bool Removed { get; }
-}
+[ByRefEvent]
+public readonly record struct CMUCastChangedEvent(EntityUid Part, bool Removed);

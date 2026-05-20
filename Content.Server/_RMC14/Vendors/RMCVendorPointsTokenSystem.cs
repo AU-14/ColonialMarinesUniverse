@@ -7,11 +7,11 @@ namespace Content.Server._RMC14.Vendors;
 /// <summary>
 /// Redeems vendor point tokens into the user's point account for a matching automated vendor.
 /// </summary>
-public sealed class RMCVendorPointsTokenSystem : EntitySystem
+public sealed partial class RMCVendorPointsTokenSystem : EntitySystem
 {
-    [Dependency] private readonly CMAutomatedVendorSystem _vendor = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private CMAutomatedVendorSystem _vendor = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

@@ -10,12 +10,12 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._RMC14.PlayingCards;
 
-public sealed class PlayingCardSystem : SharedPlayingCardSystem
+public sealed partial class PlayingCardSystem : SharedPlayingCardSystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     // Maximum number of card sprites to show in hand
     private const int MaxVisibleCards = 5;

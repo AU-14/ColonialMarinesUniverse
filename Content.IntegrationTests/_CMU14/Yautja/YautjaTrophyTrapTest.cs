@@ -315,7 +315,7 @@ public sealed class YautjaTrophyTrapTest
             {
                 var entMan = server.EntMan;
 
-                Assert.That(entMan.TryGetComponent(xeno, out YautjaThrallComponent? thrall), Is.True);
+                Assert.That(entMan.TryGetComponent(xeno, out YautjaThrallComponent thrall), Is.True);
                 Assert.That(thrall!.Master, Is.EqualTo(human));
                 Assert.That(thrall.Hivebroken, Is.True);
                 Assert.That(thrall.Blooded, Is.True);

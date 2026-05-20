@@ -10,11 +10,11 @@ using Content.Shared._RMC14.Evacuation;
 
 namespace Content.Server.AU14.Threats;
 
-public sealed class KillAllApeRuleSystem : GameRuleSystem<KillAllApeRuleComponent>
+public sealed partial class KillAllApeRuleSystem : GameRuleSystem<KillAllApeRuleComponent>
 {
-	[Dependency] private readonly IEntityManager _entityManager = default!;
-	[Dependency] private readonly GameTicker _gameTicker = default!;
-	[Dependency] private readonly Round.AuRoundSystem _auRoundSystem = default!;
+	[Dependency] private IEntityManager _entityManager = default!;
+	[Dependency] private GameTicker _gameTicker = default!;
+	[Dependency] private Round.AuRoundSystem _auRoundSystem = default!;
 
 	private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
 

@@ -7,10 +7,10 @@ namespace Content.Shared._RMC14.Synth;
 /// <summary>
 /// Runs fixed-interval solution refills for tools such as experimental welders.
 /// </summary>
-public sealed class RMCSelfRechargingSolutionSystem : EntitySystem
+public sealed partial class RMCSelfRechargingSolutionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedSolutionContainerSystem _solution = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

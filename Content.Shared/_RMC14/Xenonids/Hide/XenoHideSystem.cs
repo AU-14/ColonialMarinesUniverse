@@ -1,13 +1,13 @@
-﻿using Content.Shared._RMC14.Actions;
+using Content.Shared._RMC14.Actions;
 using Content.Shared.Actions;
 
 namespace Content.Shared._RMC14.Xenonids.Hide;
 
-public sealed class XenoHideSystem : EntitySystem
+public sealed partial class XenoHideSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
 
     public override void Initialize()
     {

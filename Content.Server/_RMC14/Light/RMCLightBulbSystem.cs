@@ -1,14 +1,14 @@
-﻿using Content.Server.Light.EntitySystems;
+using Content.Server.Light.EntitySystems;
 using Content.Shared.Light.Components;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Server.Audio;
 
 namespace Content.Server._RMC14.Light;
 
-public sealed class RMCLightBulbSystem : EntitySystem
+public sealed partial class RMCLightBulbSystem : EntitySystem
 {
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly LightBulbSystem _lightBulb = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private LightBulbSystem _lightBulb = default!;
 
     public override void Initialize()
     {

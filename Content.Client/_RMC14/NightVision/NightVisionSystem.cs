@@ -8,12 +8,12 @@ namespace Content.Client._RMC14.NightVision;
 /// <summary>
 /// Applies client-side lighting, overlay, and FoV effects for RMC night vision.
 /// </summary>
-public sealed class NightVisionSystem : SharedNightVisionSystem
+public sealed partial class NightVisionSystem : SharedNightVisionSystem
 {
-    [Dependency] private readonly ILightManager _light = default!;
-    [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
+    [Dependency] private ILightManager _light = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
 
     public override void Initialize()
     {

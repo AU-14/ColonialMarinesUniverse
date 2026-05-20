@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.ARES;
+using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.Doors;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
@@ -17,17 +17,17 @@ using Robust.Shared.Player;
 
 namespace Content.Shared._RMC14.AlertLevel;
 
-public sealed class RMCAlertLevelSystem : EntitySystem
+public sealed partial class RMCAlertLevelSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly ARESSystem _ares = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedDoorSystem _door = default!;
-    [Dependency] private readonly SharedEntityStorageSystem _entityStorage = default!;
-    [Dependency] private readonly LockSystem _lock = default!;
-    [Dependency] private readonly SharedMarineAnnounceSystem _marineAnnounce = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private ARESSystem _ares = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDoorSystem _door = default!;
+    [Dependency] private SharedEntityStorageSystem _entityStorage = default!;
+    [Dependency] private LockSystem _lock = default!;
+    [Dependency] private SharedMarineAnnounceSystem _marineAnnounce = default!;
+    [Dependency] private INetManager _net = default!;
 
     private EntityQuery<GhostComponent> _ghostQuery;
 

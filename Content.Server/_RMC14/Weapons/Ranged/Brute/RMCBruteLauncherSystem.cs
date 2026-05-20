@@ -41,7 +41,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._RMC14.Weapons.Ranged.Brute;
 
-public sealed class RMCBruteLauncherSystem : EntitySystem
+public sealed partial class RMCBruteLauncherSystem : EntitySystem
 {
     private static readonly ProtoId<TagPrototype> StructureTag = "Structure";
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
@@ -52,29 +52,29 @@ public sealed class RMCBruteLauncherSystem : EntitySystem
     private static readonly LocId TargetObscured = "rmc-brute-launcher-target-obscured";
     private static readonly LocId Unskilled = "cm-gun-unskilled";
 
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedDeafnessSystem _deafness = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly RMCDazedSystem _dazed = default!;
-    [Dependency] private readonly RMCDamageableSystem _rmcDamageable = default!;
-    [Dependency] private readonly RMCSizeStunSystem _size = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly RMCTargetingSystem _targeting = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedDeafnessSystem _deafness = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private RMCDazedSystem _dazed = default!;
+    [Dependency] private RMCDamageableSystem _rmcDamageable = default!;
+    [Dependency] private RMCSizeStunSystem _size = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private RMCTargetingSystem _targeting = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
-    private sealed class BruteWaveState
+    private sealed partial class BruteWaveState
     {
         public BruteWaveState(int structureDamage)
         {
@@ -202,7 +202,7 @@ public sealed class RMCBruteLauncherSystem : EntitySystem
             return;
         }
 
-        var target = GetEntity(args.Target);
+        var target = GetEntity(args.LockTarget);
         if (TerminatingOrDeleted(target))
             return;
 
@@ -229,7 +229,7 @@ public sealed class RMCBruteLauncherSystem : EntitySystem
 
     private void OnLockOnDoAfterAttempt(Entity<RMCBruteLauncherComponent> launcher, ref DoAfterAttemptEvent<RMCBruteLockOnDoAfterEvent> args)
     {
-        var target = GetEntity(args.Event.Target);
+        var target = GetEntity(args.Event.LockTarget);
         if (args.Event.LockId != launcher.Comp.LockId ||
             launcher.Comp.LockTarget != target ||
             TerminatingOrDeleted(target) ||

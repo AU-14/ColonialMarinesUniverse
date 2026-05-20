@@ -401,6 +401,12 @@
     - TribalArrow
     - TribalArrow
     - TribalArrow
+    back:
+    - Torch
+    - Torch
+    - Torch
+    - Torch
+    - RMCToolHatchet
 
 - type: startingGear
   id: AU14GearTribalSpear
@@ -425,6 +431,12 @@
     - TribalArrow
     - TribalArrow
     - TribalArrow
+    back:
+    - Torch
+    - Torch
+    - Torch
+    - Torch
+    - RMCToolHatchet
 
 - type: startingGear
   id: AU14GearTribalBowman
@@ -449,6 +461,12 @@
     - TribalArrow
     - TribalArrow
     - TribalArrow
+    back:
+    - Torch
+    - Torch
+    - Torch
+    - Torch
+    - RMCToolHatchet
 
 # Shaman — tribal medic. Drops the bow/quiver and rolls with a satchel
 # stuffed with field medicine instead. Spear is in-hand so they can still
@@ -471,3 +489,8 @@
     - CMOintment10
     - CMHealthAnalyzer
     - CMFirstAidKitFilledRobust
+    - Torch
+    - Torch
+    - Torch
+    - Torch
+    - RMCToolHatchet

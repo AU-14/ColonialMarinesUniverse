@@ -27,7 +27,7 @@ namespace Content.Server.Explosion.EntitySystems;
 
 public sealed partial class ExplosionSystem
 {
-    [Dependency] private readonly FlammableSystem _flammableSystem = default!;
+    [Dependency] private FlammableSystem _flammableSystem = default!;
 
     /// <summary>
     ///     Used to limit explosion processing time. See <see cref="MaxProcessingTime"/>.
@@ -928,7 +928,7 @@ sealed class Explosion
 /// <summary>
 /// Data needed to spawn an explosion with <see cref="ExplosionSystem.SpawnExplosion"/>.
 /// </summary>
-public sealed class QueuedExplosion(ExplosionPrototype proto)
+public sealed partial class QueuedExplosion(ExplosionPrototype proto)
 {
     public MapCoordinates Epicenter;
     public ExplosionPrototype Proto = proto;

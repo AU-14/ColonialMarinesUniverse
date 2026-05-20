@@ -75,6 +75,12 @@ public sealed class CrtStyleBox : StyleBox
 
         handle.DrawRect(inner, BackgroundColor);
 
+        if (!StyleNano.CrtUiEnabled)
+        {
+            DrawBorder(handle, box, thickness);
+            return;
+        }
+
         if (DrawPixelation)
             DrawPixelatedBreakup(handle, inner, uiScale);
 

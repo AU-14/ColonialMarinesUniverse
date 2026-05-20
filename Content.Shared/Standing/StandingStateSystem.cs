@@ -8,11 +8,11 @@ using Robust.Shared.Physics.Systems;
 
 namespace Content.Shared.Standing;
 
-public sealed class StandingStateSystem : EntitySystem
+public sealed partial class StandingStateSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
 
     // If StandingCollisionLayer value is ever changed to more than one layer, the logic needs to be edited.
     private const int StandingCollisionLayer = (int) CollisionGroup.MidImpassable;
@@ -170,28 +170,28 @@ public record struct DropHandItemsEvent();
 /// <summary>
 /// Subscribe if you can potentially block a down attempt.
 /// </summary>
-public sealed class DownAttemptEvent : CancellableEntityEventArgs
+public sealed partial class DownAttemptEvent : CancellableEntityEventArgs
 {
 }
 
 /// <summary>
 /// Subscribe if you can potentially block a stand attempt.
 /// </summary>
-public sealed class StandAttemptEvent : CancellableEntityEventArgs
+public sealed partial class StandAttemptEvent : CancellableEntityEventArgs
 {
 }
 
 /// <summary>
 /// Raised when an entity becomes standing
 /// </summary>
-public sealed class StoodEvent : EntityEventArgs
+public sealed partial class StoodEvent : EntityEventArgs
 {
 }
 
 /// <summary>
 /// Raised when an entity is not standing
 /// </summary>
-public sealed class DownedEvent(EntityUid? downedBy = null) : EntityEventArgs // RMC14 Added downedBy param
+public sealed partial class DownedEvent(EntityUid? downedBy = null) : EntityEventArgs // RMC14 Added downedBy param
 {
     public EntityUid? DownedBy = downedBy;
 }
@@ -199,7 +199,7 @@ public sealed class DownedEvent(EntityUid? downedBy = null) : EntityEventArgs //
 /// <summary>
 /// Raised after an entity falls down.
 /// </summary>
-public sealed class FellDownEvent : EntityEventArgs
+public sealed partial class FellDownEvent : EntityEventArgs
 {
     public EntityUid Uid { get; }
 

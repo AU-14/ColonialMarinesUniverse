@@ -10,9 +10,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Medical.Organs.Brain;
 
-public sealed class BrainSystem : SharedBrainSystem
+public sealed partial class BrainSystem : SharedBrainSystem
 {
-    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
 
     private static readonly EntProtoId ForcedSleeping = "StatusEffectForcedSleeping";
 

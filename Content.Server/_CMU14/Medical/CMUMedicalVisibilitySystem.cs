@@ -8,10 +8,10 @@ using Robust.Shared.Configuration;
 
 namespace Content.Server._CMU14.Medical;
 
-public sealed class CMUMedicalVisibilitySystem : EntitySystem
+public sealed partial class CMUMedicalVisibilitySystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly VisibilitySystem _visibility = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private VisibilitySystem _visibility = default!;
 
     private EntityQuery<BodyPartComponent> _partQuery;
     private EntityQuery<OrganComponent> _organQuery;

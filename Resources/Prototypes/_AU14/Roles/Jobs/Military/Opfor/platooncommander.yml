@@ -73,7 +73,7 @@
   id: AU14GearopforPlatCo
   equipment:
     id: AU14IDCardopforPlatCo
-    ears: AU14HeadsetSectionLeaderopfor
+    ears: AU14HeadsetOpforCommand
   inhand:
    -  RMCTabletOpfor
 - type: entity
@@ -92,4 +92,4 @@
     shoes: CMBootsBlack
     head: CMHeadCapPeakedFormal
     jumpsuit: CMJumpsuitXOFormal
-    ears: AU14HeadsetSectionLeaderopfor
+    ears: AU14HeadsetOpforCommand

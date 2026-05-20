@@ -120,7 +120,7 @@ namespace Content.Server.EUI
             }
             catch (Exception e)
             {
-                Logger.Error($"Error updating EUI {GetType()}:\n{e}");
+                Logger.GetSawmill("content").Error($"Error updating EUI {GetType()}:\n{e}");
             }
         }
 

@@ -6,12 +6,12 @@ using Robust.Shared.Audio;
 
 namespace Content.Server.AU14.Comms;
 
-public sealed class ColonyCommsConsoleSystem : EntitySystem
+public sealed partial class ColonyCommsConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly RadioSystem _radioSystem = default!;
-    [Dependency] private readonly SharedAmbientSoundSystem _ambientSound = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
+    [Dependency] private RadioSystem _radioSystem = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambientSound = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
 
     public override void Initialize()
     {
@@ -32,7 +32,7 @@ public sealed class ColonyCommsConsoleSystem : EntitySystem
 
 
         // Send to radio channel (for intercoms)
-        _radioSystem.SendRadioMessage(uid, args.Message, "colonyalert", uid);
+        _radioSystem.SendRadioMessage(uid, args.Message, "colonyAlert", uid);
 
         // Send global announcement to everyone
         var sender = Loc.GetString("colony-comms-console-announcement-title");
@@ -50,12 +50,12 @@ public sealed class ColonyCommsConsoleSystem : EntitySystem
         // Toggle siren sound on or off
         if (!component.SirenActive)
         {
-            foreach (var sirenComp in EntityManager.EntityQuery<ColonySirenComponent>())
+            foreach (var sirenComp in EntityQuery<ColonySirenComponent>())
             {
                 var sirenUid = sirenComp.Owner;
-                if (!EntityManager.HasComponent<AmbientSoundComponent>(sirenUid))
+                if (!HasComp<AmbientSoundComponent>(sirenUid))
                 {
-                    var ambient = EntityManager.AddComponent<AmbientSoundComponent>(sirenUid);
+                    var ambient = AddComp<AmbientSoundComponent>(sirenUid);
                     _ambientSound.SetSound(sirenUid, new SoundPathSpecifier("/Audio/Effects/Vehicle/ambulancesiren.ogg"), ambient);
                     _ambientSound.SetRange(sirenUid, 48f, ambient);
                     _ambientSound.SetVolume(sirenUid, -1f, ambient);
@@ -63,7 +63,7 @@ public sealed class ColonyCommsConsoleSystem : EntitySystem
                 }
                 else
                 {
-                    if (EntityManager.TryGetComponent<AmbientSoundComponent>(sirenUid, out var ambient))
+                    if (TryComp<AmbientSoundComponent>(sirenUid, out var ambient))
                     {
                         _ambientSound.SetVolume(sirenUid, -2f, ambient);
                     }
@@ -73,10 +73,10 @@ public sealed class ColonyCommsConsoleSystem : EntitySystem
         }
         else
         {
-            foreach (var sirenComp in EntityManager.EntityQuery<ColonySirenComponent>())
+            foreach (var sirenComp in EntityQuery<ColonySirenComponent>())
             {
                 var sirenUid = sirenComp.Owner;
-                if (EntityManager.TryGetComponent<AmbientSoundComponent>(sirenUid, out var ambient))
+                if (TryComp<AmbientSoundComponent>(sirenUid, out var ambient))
                 {
                     _ambientSound.SetVolume(sirenUid, -999f, ambient);
                 }

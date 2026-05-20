@@ -27,13 +27,13 @@ public sealed partial class JobCondition : EntityEffectCondition
 
             if (!args.EntityManager.TryGetComponent<MindRoleComponent>(roleId, out var mindRole))
             {
-                Logger.Error($"Encountered job mind role entity {roleId} without a {nameof(MindRoleComponent)}");
+                Logger.GetSawmill("content").Error($"Encountered job mind role entity {roleId} without a {nameof(MindRoleComponent)}");
                 continue;
             }
 
             if (mindRole.JobPrototype == null)
             {
-                Logger.Error($"Encountered job mind role entity {roleId} without a {nameof(JobPrototype)}");
+                Logger.GetSawmill("content").Error($"Encountered job mind role entity {roleId} without a {nameof(JobPrototype)}");
                 continue;
             }
 

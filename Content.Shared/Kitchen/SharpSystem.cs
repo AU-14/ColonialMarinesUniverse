@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Medical.Surgery;
+using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Tools;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Body.Components;
@@ -23,20 +23,20 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Kitchen;
 
-public sealed class SharpSystem : EntitySystem
+public sealed partial class SharpSystem : EntitySystem
 {
-    [Dependency] private readonly SharedBodySystem _bodySystem = default!;
-    [Dependency] private readonly SharedDestructibleSystem _destructibleSystem = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
-    [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
-    [Dependency] private readonly MobStateSystem _mobStateSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IRobustRandom _robustRandom = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedBodySystem _bodySystem = default!;
+    [Dependency] private SharedDestructibleSystem _destructibleSystem = default!;
+    [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private SharedPopupSystem _popupSystem = default!;
+    [Dependency] private SharedContainerSystem _containerSystem = default!;
+    [Dependency] private MobStateSystem _mobStateSystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IRobustRandom _robustRandom = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
 
     // RMC14
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private INetManager _net = default!;
 
     public override void Initialize()
     {
@@ -48,7 +48,7 @@ public sealed class SharpSystem : EntitySystem
         SubscribeLocalEvent<ButcherableComponent, GetVerbsEvent<InteractionVerb>>(OnGetInteractionVerbs);
     }
 
-    [Dependency] private readonly Content.Shared._RMC14.Medical.Unrevivable.RMCUnrevivableSystem _unrevivable = default!;
+    [Dependency] private Content.Shared._RMC14.Medical.Unrevivable.RMCUnrevivableSystem _unrevivable = default!;
 
     private void OnAfterInteract(EntityUid uid, SharpComponent component, AfterInteractEvent args)
     {

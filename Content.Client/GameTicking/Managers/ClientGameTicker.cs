@@ -16,13 +16,13 @@ using Robust.Shared.Timing;
 namespace Content.Client.GameTicking.Managers
 {
     [UsedImplicitly]
-    public sealed class ClientGameTicker : SharedGameTicker
+    public sealed partial class ClientGameTicker : SharedGameTicker
     {
-        [Dependency] private readonly IStateManager _stateManager = default!;
-        [Dependency] private readonly IClientAdminManager _admin = default!;
-        [Dependency] private readonly IClyde _clyde = default!;
-        [Dependency] private readonly IGameTiming _timing = default!;
-        [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
+        [Dependency] private IStateManager _stateManager = default!;
+        [Dependency] private IClientAdminManager _admin = default!;
+        [Dependency] private IClyde _clyde = default!;
+        [Dependency] private IGameTiming _timing = default!;
+        [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
 
         private Dictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>>  _jobsAvailable = new();
         private Dictionary<NetEntity, string> _stationNames = new();

@@ -1,4 +1,4 @@
-﻿using Content.Server.Chat.Systems;
+using Content.Server.Chat.Systems;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared.Inventory;
 using Robust.Server.GameObjects;
@@ -7,12 +7,12 @@ using static Content.Server.Chat.Systems.ChatSystem;
 
 namespace Content.Server._RMC14.Overwatch;
 
-public sealed class OverwatchConsoleSystem : SharedOverwatchConsoleSystem
+public sealed partial class OverwatchConsoleSystem : SharedOverwatchConsoleSystem
 {
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly ViewSubscriberSystem _viewSubscriber = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private ViewSubscriberSystem _viewSubscriber = default!;
 
     private EntityQuery<ActorComponent> _actorQuery;
     private EntityQuery<OverwatchCameraComponent> _cameraQuery;

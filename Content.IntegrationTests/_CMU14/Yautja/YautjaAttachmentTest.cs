@@ -825,7 +825,7 @@ public sealed class YautjaAttachmentTest
                     var melee = entMan.GetComponent<MeleeWeaponComponent>(weapon);
                     var damage = BruteDamage(melee.Damage);
 
-                    if (entMan.TryGetComponent(weapon, out IncreaseDamageOnWieldComponent? wieldDamage))
+                    if (entMan.TryGetComponent(weapon, out IncreaseDamageOnWieldComponent wieldDamage))
                         damage += BruteDamage(wieldDamage.BonusDamage);
 
                     var multiplier = entMan.GetComponent<MeleeDamageMultiplierComponent>(weapon);

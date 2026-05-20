@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
@@ -9,9 +9,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Commendations;
 
-public abstract class SharedCommendationSystem : EntitySystem
+public abstract partial class SharedCommendationSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _config = default!;
+    [Dependency] private IConfigurationManager _config = default!;
 
     protected readonly List<RoundCommendationEntry> RoundCommendations = new();
 

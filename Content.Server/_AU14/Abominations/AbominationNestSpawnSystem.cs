@@ -13,7 +13,7 @@ namespace Content.Server._AU14.Abominations;
 /// rate (360s instead of 90s), and each additional nest in the world makes
 /// the global cadence 5% faster (linear).
 /// </summary>
-public sealed class AbominationNestSpawnSystem : EntitySystem
+public sealed partial class AbominationNestSpawnSystem : EntitySystem
 {
     /// <summary>Base interval with one nest placed.</summary>
     public static readonly TimeSpan BaseInterval = TimeSpan.FromSeconds(360);
@@ -28,9 +28,9 @@ public sealed class AbominationNestSpawnSystem : EntitySystem
         "AU14AbominationSkitter",
     };
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private TimeSpan _nextSpawnAt;
 

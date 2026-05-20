@@ -410,7 +410,7 @@ public sealed class YautjaSpeciesTest
     {
         Assert.That(entMan.HasComponent<StatusIconComponent>(hunter), Is.False);
 
-        if (entMan.TryGetComponent(hunter, out MarineComponent? marine))
+        if (entMan.TryGetComponent(hunter, out MarineComponent marine))
             Assert.That(marine.Icon, Is.Null);
     }
 

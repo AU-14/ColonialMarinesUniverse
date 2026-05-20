@@ -15,10 +15,10 @@ namespace Content.Client.Lobby.UI;
 [UsedImplicitly]
 public sealed partial class ObserveWarningWindow : DefaultWindow
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly ISharedAdminManager _adminManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private ISharedAdminManager _adminManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
     public ObserveWarningWindow()
     {
@@ -37,6 +37,7 @@ public sealed partial class ObserveWarningWindow : DefaultWindow
 
         ObserveButton.OnPressed += _ => { this.Close(); };
         NevermindButton.OnPressed += _ => { this.Close(); };
+        _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
         _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
     }
 
@@ -45,7 +46,13 @@ public sealed partial class ObserveWarningWindow : DefaultWindow
     {
         base.Dispose(disposing);
 
+        _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
         _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+    }
+
+    private void OnCrtUiEnabledChanged(bool _)
+    {
+        ApplyCrtPalette();
     }
 
     private void OnCrtUiColorChanged(string _)

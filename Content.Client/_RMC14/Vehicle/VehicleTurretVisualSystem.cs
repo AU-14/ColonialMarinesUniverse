@@ -12,13 +12,13 @@ using Robust.Shared.Maths;
 
 namespace Content.Client._RMC14.Vehicle;
 
-public sealed class VehicleTurretVisualSystem : EntitySystem
+public sealed partial class VehicleTurretVisualSystem : EntitySystem
 {
     private const float PixelsPerMeter = 32f;
 
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

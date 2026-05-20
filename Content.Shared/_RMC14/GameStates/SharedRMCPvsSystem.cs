@@ -1,11 +1,11 @@
-﻿using Robust.Shared.Network;
+using Robust.Shared.Network;
 using Robust.Shared.Player;
 
 namespace Content.Shared._RMC14.GameStates;
 
-public abstract class SharedRMCPvsSystem : EntitySystem
+public abstract partial class SharedRMCPvsSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
 
     public virtual void AddGlobalOverride(EntityUid ent)
     {

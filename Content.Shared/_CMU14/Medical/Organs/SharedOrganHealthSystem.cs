@@ -20,14 +20,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Organs;
 
-public abstract class SharedOrganHealthSystem : EntitySystem
+public abstract partial class SharedOrganHealthSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly INetManager Net = default!;
-    [Dependency] protected readonly IPrototypeManager Proto = default!;
-    [Dependency] protected readonly IRobustRandom Random = default!;
-    [Dependency] protected readonly RMCUnrevivableSystem Unrevivable = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected INetManager Net = default!;
+    [Dependency] protected IPrototypeManager Proto = default!;
+    [Dependency] protected IRobustRandom Random = default!;
+    [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
 
     private const float RegenScanInterval = 1f;
     private const float CompoundOrganPassThrough = 0.30f;
@@ -397,10 +397,6 @@ public abstract class SharedOrganHealthSystem : EntitySystem
         var query = EntityQueryEnumerator<OrganHealthComponent, OrganComponent>();
         while (query.MoveNext(out var uid, out var oh, out var organ))
         {
-            if (oh.NextRegenTick > now)
-                continue;
-            oh.NextRegenTick = now + TimeSpan.FromSeconds(10);
-
             if (organ.Body is not { } body || Unrevivable.IsUnrevivable(body))
                 continue;
 
@@ -408,7 +404,7 @@ public abstract class SharedOrganHealthSystem : EntitySystem
                 continue;
             if (HasComp<OrganStasisComponent>(uid))
                 continue;
-            if (oh.NativeRegenPerTick <= FixedPoint2.Zero)
+            if (oh.NativeRegenPerTick <= FixedPoint2.Zero || globalMult <= FixedPoint2.Zero)
                 continue;
 
             // Per-organ override beats the CCVar when stricter.
@@ -416,6 +412,10 @@ public abstract class SharedOrganHealthSystem : EntitySystem
             var ceiling = oh.Max * capFraction;
             if (oh.Current >= ceiling)
                 continue;
+
+            if (oh.NextRegenTick > now)
+                continue;
+            oh.NextRegenTick = now + TimeSpan.FromSeconds(10);
 
             oh.Current = FixedPoint2.Min(ceiling, oh.Current + oh.NativeRegenPerTick * globalMult);
             Dirty(uid, oh);

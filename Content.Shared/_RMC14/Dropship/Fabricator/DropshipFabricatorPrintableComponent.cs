@@ -4,7 +4,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Dropship.Fabricator;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(DropshipFabricatorSystem))]
 public sealed partial class DropshipFabricatorPrintableComponent : Component
 {

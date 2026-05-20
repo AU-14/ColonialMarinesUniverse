@@ -77,7 +77,7 @@
   id: AU14GearGOVFORMilitaryDoctor
   equipment:
     shoes: CMBootsBlackFilled
-    ears: AU14HeadsetGOVFORAux
+    ears: AU14HeadsetGovforAuxiliary
     ears2: RMCM5CameraGear
 
 - type: entity

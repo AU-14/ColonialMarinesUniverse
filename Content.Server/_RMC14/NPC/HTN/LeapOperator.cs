@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 using Content.Server._RMC14.NPC.Components;
 using Content.Server.NPC;
@@ -9,7 +9,7 @@ namespace Content.Server._RMC14.NPC.HTN;
 
 public sealed partial class LeapOperator : HTNOperator, IHtnConditionalShutdown
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
 
     [DataField("shutdownState")]
     public HTNPlanState ShutdownState { get; private set; } = HTNPlanState.TaskFinished;

@@ -167,7 +167,7 @@ public sealed partial class SynthComponent : Component
     ///     later ComponentStartup (the AddComponentSpecial path).
     /// </summary>
     [DataField, AutoNetworkedField]
-    public bool Initialized;
+    public new bool Initialized;
 }
 
 public sealed partial class RMCToggleSynthHudActionEvent : InstantActionEvent;

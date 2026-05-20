@@ -1,4 +1,4 @@
-﻿using Content.Server.AU14.Round;
+using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.Spawners.Components;
 using Content.Server.Station.Systems;
@@ -8,13 +8,13 @@ using Robust.Shared.Random;
 
 namespace Content.Server.Spawners.EntitySystems;
 
-public sealed class SpawnPointSystem : EntitySystem
+public sealed partial class SpawnPointSystem : EntitySystem
 {
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
-    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private StationSpawningSystem _stationSpawning = default!;
+    [Dependency] private AuRoundSystem _auRoundSystem = default!;
 
     public override void Initialize()
     {
@@ -46,7 +46,7 @@ public sealed class SpawnPointSystem : EntitySystem
             // of any entity that lives on that ship.
             var factionShipGrids = new HashSet<EntityUid>(); // grids belonging to THIS faction's ships
             var allShipGrids     = new HashSet<EntityUid>(); // grids belonging to ANY faction ship
-            var shipQuery = EntityManager.EntityQueryEnumerator<ShipFactionComponent>();
+            var shipQuery = EntityQueryEnumerator<ShipFactionComponent>();
             while (shipQuery.MoveNext(out var shipUid, out var shipFaction))
             {
                 if (string.IsNullOrEmpty(shipFaction.Faction)) continue;

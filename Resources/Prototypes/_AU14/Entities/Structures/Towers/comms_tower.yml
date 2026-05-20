@@ -1,0 +1,163 @@
+- type: entity
+  parent: RMCCommunicationsTower
+  id: AU14CommunicationsTower
+  suffix: "Default, Empty"
+  name: TC-5F static telecommunications tower
+  description: A static heavy-duty TC-5F telecom-frequency tower. Used to set up subspace communications lines between planetary and extra-planetary locations. Will need to have extra communication frequencies programmed into it by multitool.
+  components:
+  - type: RMCRepairable
+    heal: 150
+    skillRequired: 1
+    delay: 5
+    fuelUsed: 0
+  - type: MaxDamage
+    max: 500
+  - type: MarineMapTracked
+  - type: XenoMapTracked
+  - type: TacticalMapTracked
+  - type: ActiveTacticalMapTracked
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: supply
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: supply
+  - type: ApcPowerReceiver
+  - type: RMCPowerReceiver
+    idleLoad: 0
+    activeLoad: 10000
+    channel: Equipment
+
+# ├──[ SHARED COMMS ]────────────────────────────────────────────────┤
+# Admin/event/map specific use case
+- type: entity
+  parent: AU14CommunicationsTower
+  id: AU14CommunicationsTowerOn
+  suffix: "On, Global Comms"
+  components:
+  - type: CommunicationsTower
+    state: On
+    channels:
+    - Colony
+    - radioWEYU
+    - radioCMB
+    - radioCLF
+    - radioMobFamily
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+    - radioGovforCommand
+    - radioGovforIntel
+    - radioGovforJTAC
+    - radioGovforMILP
+    - radioOpforAlpha
+    - radioOpforBravo
+    - radioOpforCharlie
+    - radioOpforCommand
+    - radioOpforIntel
+    - radioOpforJTAC
+    - radioOpforMILP
+    - ICSCSOF
+    - UASOF
+    - TWESOF
+    - UPPSOF
+    - VAI
+
+# ├──[ GOVFOR COMMS ]────────────────────────────────────────────────┤
+- type: entity
+  parent: AU14CommunicationsTower
+  id: AU14CommunicationsTowerGovfor
+  suffix: "Off, GOVFOR Comms"
+  components:
+  - type: CommunicationsTower
+    state: Off
+    channels:
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+    - radioGovforCommand
+    - radioGovforIntel
+    - radioGovforJTAC
+    - radioGovforMILP
+
+# ├──[ OPFOR COMMS ]─────────────────────────────────────────────────┤
+- type: entity
+  parent: AU14CommunicationsTower
+  id: AU14CommunicationsTowerOpfor
+  suffix: "Off, OPFOR Comms"
+  components:
+  - type: CommunicationsTower
+    state: Off
+    channels:
+    - radioOpforAlpha
+    - radioOpforBravo
+    - radioOpforCharlie
+    - radioOpforCommand
+    - radioOpforIntel
+    - radioOpforJTAC
+    - radioOpforMILP
+
+# ├──[ THIRD PARTY COMMS ]───────────────────────────────────────────┤
+- type: entity
+  parent: AU14CommunicationsTower
+  id: AU14CommunicationsTowerThirdParty
+  suffix: "Off, 3rd Party Comms"
+  components:
+  - type: CommunicationsTower
+    state: Off
+    channels:
+    - ICSCSOF
+    - UASOF
+    - TWESOF
+    - UPPSOF
+    - VAI
+
+# ├──[ COLONY COMMS ]────────────────────────────────────────────────┤
+- type: entity
+  parent: AU14CommunicationsTower
+  id: AU14CommunicationsTowerColony
+  suffix: "Off, Colony Comms"
+  components:
+  - type: CommunicationsTower
+    state: Off
+    channels:
+    - Colony
+    - radioWEYU
+    - radioCMB
+    - radioCLF
+    - radioMobFamily
+
+# ├──[ MAP SPAWNS ]──────────────────────────────────────────────────┤
+- type: entity
+  abstract: true
+  parent: MarkerBase
+  id: AU14SpawnerCommunicationsTowerBase
+  name: static comms
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/communications_tower.rsi
+    layers: []
+    offset: 0.5, 1.5
+  - type: CommunicationsTowerSpawner
+    spawn: AU14CommunicationsTower
+
+- type: entity
+  parent: AU14SpawnerCommunicationsTowerBase
+  id: AU14SpawnerCommunicationsTowerOne
+  suffix: One
+  components:
+  - type: Sprite
+    state: comms_landmark_1
+  - type: CommunicationsTowerSpawner
+    group: AU14SpawnerCommunicationsTowerOne
+
+- type: entity
+  parent: AU14SpawnerCommunicationsTowerBase
+  id: AU14SpawnerCommunicationsTowerTwo
+  suffix: Two
+  components:
+  - type: Sprite
+    state: comms_landmark_2
+  - type: CommunicationsTowerSpawner
+    group: AU14SpawnerCommunicationsTowerTwo

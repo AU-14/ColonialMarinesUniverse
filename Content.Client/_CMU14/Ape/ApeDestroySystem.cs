@@ -8,8 +8,8 @@ namespace Content.Client._CMU14.Ape;
 
 public sealed partial class ApeDestroySystem : SharedApeDestroySystem
 {
-    [Dependency] private readonly AnimationPlayerSystem _animPlayer = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private AnimationPlayerSystem _animPlayer = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private const float JumpHeight = 10;
 

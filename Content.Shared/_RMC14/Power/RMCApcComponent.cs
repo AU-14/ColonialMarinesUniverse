@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Access;
 using Content.Shared.PowerCell;
 using Content.Shared.Tools;
@@ -108,7 +108,7 @@ public enum RMCApcUiKey
 
 [DataRecord]
 [Serializable, NetSerializable]
-public record struct RMCApcChannel(RMCApcButtonState Button, int Watts, bool On);
+public partial record struct RMCApcChannel(RMCApcButtonState Button, int Watts, bool On);
 
 [Serializable, NetSerializable]
 public sealed class RMCApcSetChannelBuiMsg(RMCPowerChannel channel, RMCApcButtonState state) : BoundUserInterfaceMessage

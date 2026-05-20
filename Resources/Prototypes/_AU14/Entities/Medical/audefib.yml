@@ -28,7 +28,7 @@
     slots:
     - OUTERCLOTHING
     - back
-    quickEquip: true
+    quickEquip: false
   - type: Speech
     speechVerb: Robotic
   - type: ItemToggle
@@ -71,7 +71,7 @@
     price: 100
   - type: GuideHelp
     guides:
-    - Medical Doctor
+    - MedicalDoctor
   - type: RequiresSkill
     skills:
       RMCSkillMedical: 2

@@ -1,13 +1,13 @@
-﻿using Content.Shared._RMC14.Stealth;
+using Content.Shared._RMC14.Stealth;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client._RMC14.Stealth;
 
-public sealed class EntityInvisibilityVisualsSystem : EntitySystem
+public sealed partial class EntityInvisibilityVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     public override void Initialize()
     {

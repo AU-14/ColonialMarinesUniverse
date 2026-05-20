@@ -27,10 +27,10 @@ namespace Content.Client._RMC14.RMCPlaytimeStats;
 [GenerateTypedNameReferences]
 public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
 {
-    [Dependency] private readonly JobRequirementsManager _jobRequirementsManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
+    [Dependency] private JobRequirementsManager _jobRequirementsManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
     private bool _useAltColor;
     private Button? _selectedButton;

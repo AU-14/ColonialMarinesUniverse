@@ -16,18 +16,18 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._CMU14.Medical.Surgery;
 
-public sealed class CMULimbPrinterSystem : EntitySystem
+public sealed partial class CMULimbPrinterSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly RMCReagentSystem _reagents = default!;
-    [Dependency] private readonly ItemSlotsSystem _slots = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private RMCReagentSystem _reagents = default!;
+    [Dependency] private ItemSlotsSystem _slots = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     private const string BloodReagent = "Blood";
     private const string SyringeSolutionName = "injector";

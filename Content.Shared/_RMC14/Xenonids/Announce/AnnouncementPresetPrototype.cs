@@ -7,7 +7,7 @@ using System.Numerics;
 namespace Content.Shared._RMC14.Announce;
 
 [Prototype]
-[DataDefinition, NetSerializable, Serializable]
+[DataDefinition]
 public sealed partial class AnnouncementPresetPrototype : IPrototype
 {
     [IdDataField]

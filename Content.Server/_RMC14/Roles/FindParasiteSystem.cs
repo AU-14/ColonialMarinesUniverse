@@ -15,11 +15,11 @@ namespace Content.Server._RMC14.Roles;
 
 public sealed partial class FindParasiteSystem : EntitySystem
 {
-    [Dependency] private readonly EntityManager _entities = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly AreaSystem _areas = default!;
-    [Dependency] private readonly XenoEggRoleSystem _parasiteRole = default!;
-    [Dependency] private readonly MobStateSystem _mob = default!;
+    [Dependency] private EntityManager _entities = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private AreaSystem _areas = default!;
+    [Dependency] private XenoEggRoleSystem _parasiteRole = default!;
+    [Dependency] private MobStateSystem _mob = default!;
     public override void Initialize()
     {
         base.Initialize();

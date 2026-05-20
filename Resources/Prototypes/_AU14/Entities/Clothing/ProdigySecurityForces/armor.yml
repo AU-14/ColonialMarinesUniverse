@@ -32,3 +32,73 @@
   components:
   - type: Sprite
     sprite: _AU14/Clothing/ProdigySecurityForces/flakvestmedical.rsi
+
+- type: entity
+  parent: CMArmorM4
+  id: AU14ArmorProdigyXAS23
+  name: PRU-XAS-23 pattern battle armor
+  description: Tougher than steel, quieter than whispers, the PRU-XAS-23 Pattern Battle Armor provides capable protection combined with an experimental integrated motion tracker. It took an R&D team a weekend to develop and costs more than the Romulus Station... probably. When worn, uniform accessories such as webbing cannot be attached due to the motion sensors occupying the clips, although the expanded storage on the physical armor makes up for it. Due to its awkardness it requires the clips on the Prodigy Response Unit uniform to wear.
+  components:
+  - type: ClothingSpeedModifier
+    walkModifier: 1.05
+    sprintModifier: 1.05
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/Armor/io/urban.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,9,1 # 5 slots.
+  - type: ClothingRequireEquipped
+    autoUnequip: true
+    denyReason: au14-xas23-not-prodigy-ru-jumpsuit
+    whitelist:
+      tags:
+      - ProdigyUniform
+      - ProdigyUniformSynth
+  - type: MotionDetector
+    handToggleable: false
+  - type: ToggleableMotionDetector
+    slots:
+    - OUTERCLOTHING
+    batteryDrain: 0
+  #- type: ItemCamouflage
+    #camouflageVariations:
+      #Jungle: _RMC14/Objects/Clothing/OuterClothing/Armor/io/jungle.rsi
+      #Desert: _RMC14/Objects/Clothing/OuterClothing/Armor/io/desert.rsi
+      #Snow: _RMC14/Objects/Clothing/OuterClothing/Armor/io/snow.rsi
+      #Classic: _RMC14/Objects/Clothing/OuterClothing/Armor/io/classic.rsi
+      #Urban: _RMC14/Objects/Clothing/OuterClothing/Armor/io/urban.rsi
+  - type: RMCLoreExaminable
+    content: au14-lore-examinable-armor-PRU-XAS-23-PBA-new
+
+- type: entity
+  parent: AU14ArmorProdigyXAS23
+  id: AU14ArmorProdigyXAS23G
+  name: PRU-XAS-23-G pattern battle armor
+  description: Tougher than steel, quieter than whispers, the PRU-XAS-23-G Pattern Battle Armor provides capable protection for smart gunners, ditching the built in motion detector for SG rigs. When worn, uniform accessories such as webbing cannot be attached due to the gunner rig occupying the clips, although the expanded storage on the physical armor makes up for it. Due to its awkwardness and increased armor from the normal model it requires the clips on the Prodigy Response Unit uniform to wear.
+  components:
+  - type: MotionDetector
+    handToggleable: false
+  - type: ClothingSpeedModifier
+    walkModifier: .5
+    sprintModifier: .5
+  - type: SmartGunArmor
+  - type: CMArmor
+    melee: 30 # CLOTHING_ARMOR_HIGH (melee)
+    bullet: 40 # CLOTHING_ARMOR_ULTRAHIGH (bullets)
+
+- type: entity
+  parent: AU14ArmorProdigyXAS23
+  id: AU14ArmorProdigyXAS23S
+  name: PRU-XAS-23-S pattern battle armor
+  description: Tougher than kevlar, quieter than whispers, the PRU-XAS-23-S Pattern Battle Armor provides capable protection for synthetics, combined with an experimental integrated motion trackers. When worn, uniform accessories such as webbing cannot be attached due to the motion detector occupying the clips, although the expanded storage on the physical armor makes up for it. Due to its awkwardness and lighter armor from the normal model it requires the clips on the Prodigy Response Unit uniform to wear.
+  components:
+  - type: ClothingSpeedModifier
+    walkModifier: 1.2
+    sprintModifier: 1.2
+  - type: SmartGunArmor
+  - type: CMArmor
+    melee: 10 # CLOTHING_ARMOR_HIGH (melee)
+    bullet: 10 # CLOTHING_ARMOR_ULTRAHIGH (bullets)
+    bio: 5 # CLOTHING_ARMOR_MEDIUM
+    explosionArmor: 5 # CLOTHING_ARMOR_VERYHIGH

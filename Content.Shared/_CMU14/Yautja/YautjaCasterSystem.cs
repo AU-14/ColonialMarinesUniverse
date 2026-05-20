@@ -10,12 +10,12 @@ using Robust.Shared.Network;
 
 namespace Content.Shared._CMU14.Yautja;
 
-public sealed class YautjaCasterSystem : EntitySystem
+public sealed partial class YautjaCasterSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly YautjaPowerSystem _power = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private YautjaPowerSystem _power = default!;
 
     public override void Initialize()
     {

@@ -1,0 +1,95 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobProdigyPartyRUBase
+  name: Prodigy Contractor Base
+  description: au14-prodigyparty-description
+  playTimeTracker: AU14JobProdigyPartyRU
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: job
+  parent: AU14JobProdigyPartyRUBase
+  id: AU14JobProdigyPartyRU #m41a/2
+  name: Prodigy Yankee Party Rifleman (3rd Party, M41A/2)
+  description: au14-prodigyparty-description
+  ranks:
+    AU14RankWeYuRecruit: []
+  spawnMenuRoleName: Prodigy PARTY Rifleman (3rd party, M41A/2)
+  startingGear: AU14GearPARTYPartyRifleman
+  greeting: au14-prodigyparty-greeting
+  icon: "RMCJobIconPMCStandard"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-psc
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 1
+        RMCSkillFirearms: 2
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadRiflemanWYPMC
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearPARTYPartyRifleman
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14ArmorProdigyXAS23
+    jumpsuit: AU14ProdigyFatiguesRU
+    shoes: RMCBootsSPPBlackFilled
+    mask: RMCMaskCoifPMC
+    eyes: RMCGlassesMedicalHUDGlasses
+    head: AU14ProdigyBallisticHelmet
+    gloves: AU14HandsProdigyRU
+    belt: AU14BeltUtilityCombatProdigyRUFilled
+    pocket1: RMCPouchMagazineLargePMC
+    pocket2: AU14PouchIFAKProdigyFill
+    back: RMCSatchelWelderRU #21 slots
+    ears: RMCM5CameraGear
+    ears2: AU14HeadsetPART
+    suitstorage: RMCWeaponRifleM54C2
+  storage:
+    pocket1:
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    #pocket2:
+    #- AU14Tourniquet
+    # no need, pouch already has 6 slots and is filled with med supplies
+    back:
+    - CMMRE
+    - RMCBinocularsPVE
+    - AU14PacketGrenadeFragM12Filled
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    jumpsuit:
+    - AU14SynthResetKeyProdigy
+    - AU14SynthResetKeyProdigy
+    - AU14ProdigyLaptop
+    - RMCHandcuffs
+    # 1 empty slots
+    outerClothing:
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    # 2 empty slots
+
+- type: playTimeTracker
+  id: AU14JobProdigyPartyRU

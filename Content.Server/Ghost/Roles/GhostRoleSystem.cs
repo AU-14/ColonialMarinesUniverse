@@ -1,12 +1,16 @@
 using System.Linq;
 using Content.Server._RMC14.Ghost.Roles;
+using Content.Server.Access.Systems;
+using Content.Server.IdentityManagement;
 using Content.Server.Administration.Logs;
+using Content.Server.Preferences.Managers;
 using Content.Server.EUI;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost.Roles.Events;
 using Content.Server.Ghost.Roles.UI;
 using Content.Server.Mind.Commands;
 using Content.Server.Popups;
+using Content.Shared.Access.Systems;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
@@ -16,10 +20,12 @@ using Content.Shared.Ghost;
 using Content.Shared.Ghost.Roles;
 using Content.Shared.Ghost.Roles.Components;
 using Content.Shared.Ghost.Roles.Raffles;
+using Content.Shared.Humanoid;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Players;
+using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Content.Shared.Verbs;
 using JetBrains.Annotations;
@@ -38,21 +44,25 @@ using Robust.Shared.Utility;
 namespace Content.Server.Ghost.Roles;
 
 [UsedImplicitly]
-public sealed class GhostRoleSystem : EntitySystem
+public sealed partial class GhostRoleSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly EuiManager _euiManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly FollowerSystem _followerSystem = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly SharedMindSystem _mindSystem = default!;
-    [Dependency] private readonly SharedRoleSystem _roleSystem = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly Content.Server.GameTicking.GameTicker _gameTicker = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private EuiManager _euiManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private FollowerSystem _followerSystem = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private SharedMindSystem _mindSystem = default!;
+    [Dependency] private SharedRoleSystem _roleSystem = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private Content.Server.GameTicking.GameTicker _gameTicker = default!;
+    [Dependency] private IServerPreferencesManager _preferences = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private IdCardSystem _idCard = default!;
+    [Dependency] private IdentitySystem _identity = default!;
 
     private uint _nextRoleIdentifier;
     private bool _needsUpdateGhostRoleCount = true;
@@ -214,6 +224,9 @@ public sealed class GhostRoleSystem : EntitySystem
             if (meta.EntityPaused)
                 continue;
 
+            if (raffle.CurrentMembers.RemoveWhere(session => !CanRequestGhostRole(session)) > 0)
+                UpdateAllEui();
+
             // if all participants leave/were removed from the raffle, the raffle is canceled.
             if (raffle.CurrentMembers.Count == 0)
             {
@@ -266,6 +279,17 @@ public sealed class GhostRoleSystem : EntitySystem
     }
 
 
+
+    private bool CanRequestGhostRole(ICommonSession player)
+    {
+        if (player.Status is SessionStatus.Disconnected or SessionStatus.Zombie)
+            return false;
+
+        // Lobby/preview sessions are intentionally allowed to enter ghost-role raffles.
+        // If a player has spawned into a normal body, purge stale raffle membership so
+        // the raffle cannot pull them out of the round later.
+        return player.AttachedEntity is not { } entity || HasComp<GhostComponent>(entity);
+    }
 
     private bool TryTakeover(ICommonSession player, uint identifier)
     {
@@ -466,7 +490,12 @@ public sealed class GhostRoleSystem : EntitySystem
     /// <param name="identifier">ID of the ghost role.</param>
     public void Request(ICommonSession player, uint identifier)
     {
-        // Allow any connected session (including lobby/preview) to request or join raffles.
+        if (!CanRequestGhostRole(player))
+        {
+            LeaveAllRaffles(player);
+            return;
+        }
+
         if (!_ghostRoles.TryGetValue(identifier, out var roleEnt))
             return;
 
@@ -486,6 +515,9 @@ public sealed class GhostRoleSystem : EntitySystem
     /// <returns>True if takeover was successful, otherwise false.</returns>
     public bool Takeover(ICommonSession player, uint identifier)
     {
+        if (!CanRequestGhostRole(player))
+            return false;
+
         if (!_ghostRoles.TryGetValue(identifier, out var role))
             return false;
 
@@ -567,8 +599,8 @@ public sealed class GhostRoleSystem : EntitySystem
         if (_mindSystem.TryGetMind(player.UserId, out _, out var mind) && !mind.IsVisitingEntity)
             _mindSystem.WipeMind(player);
 
-        var newMind = _mindSystem.CreateMind(player.UserId,
-            Comp<MetaDataComponent>(mob).EntityName);
+        var characterName = GetGhostRoleCharacterName(player, mob);
+        var newMind = _mindSystem.CreateMind(player.UserId, characterName);
 
         Log.Debug($"GhostRoleInternalCreateMindAndTransfer: created mind {newMind.Owner} for player {player.Name} (user {player.UserId}) targeting mob {mob}");
 
@@ -584,6 +616,37 @@ public sealed class GhostRoleSystem : EntitySystem
 
         if (_roleSystem.MindHasRole<GhostRoleMarkerRoleComponent>(newMind!, out var markerRole))
             markerRole.Value.Comp2.Name = role.RoleName;
+    }
+
+    private string GetGhostRoleCharacterName(ICommonSession player, EntityUid mob)
+    {
+        if (TryApplyPlayerProfileName(player, mob, out var characterName))
+            return characterName;
+
+        return Comp<MetaDataComponent>(mob).EntityName;
+    }
+
+    private bool TryApplyPlayerProfileName(ICommonSession player, EntityUid mob, out string characterName)
+    {
+        characterName = string.Empty;
+
+        if (!HasComp<HumanoidAppearanceComponent>(mob))
+            return false;
+
+        if (_preferences.GetPreferencesOrNull(player.UserId)?.SelectedCharacter is not HumanoidCharacterProfile profile)
+            return false;
+
+        if (string.IsNullOrWhiteSpace(profile.Name))
+            return false;
+
+        characterName = profile.Name;
+        _metaData.SetEntityName(mob, characterName);
+
+        if (_idCard.TryFindIdCard(mob, out var idCard))
+            _idCard.TryChangeFullName(idCard.Owner, characterName, idCard.Comp);
+
+        _identity.QueueIdentityUpdate(mob);
+        return true;
     }
 
     /// <summary>
@@ -946,9 +1009,9 @@ public sealed class GhostRoleSystem : EntitySystem
 }
 
 [AnyCommand]
-public sealed class GhostRoles : IConsoleCommand
+public sealed partial class GhostRoles : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _e = default!;
+    [Dependency] private IEntityManager _e = default!;
 
     public string Command => "ghostroles";
     public string Description => "Opens the ghost role request window.";

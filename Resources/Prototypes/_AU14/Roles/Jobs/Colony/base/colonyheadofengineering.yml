@@ -7,6 +7,9 @@
   canBeAntag: false
   playTimeTracker: AU14JobCivilianHeadOfEngineering
   requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentEngineering
+    time: 72000 # 20 hours
   - !type:OverallPlaytimeRequirement
     time: 18000 # 5 hours
   - !type:AgeRequirement

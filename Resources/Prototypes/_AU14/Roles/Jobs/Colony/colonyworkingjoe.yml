@@ -26,16 +26,16 @@
     components:
     - type: IntrinsicRadioTransmitter
       channels:
-      - AI
+      - radioAI
       - Colony
-      - WEYA
-      - CMB
+      - radioWEYU
+      - radioCMB
     - type: ActiveRadio
       channels:
-      - AI
+      - radioAI
       - Colony
-      - WEYA
-      - CMB
+      - radioWEYU
+      - radioCMB
     - type: Access
       groups:
       - auadmin

@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Client.Examine;
 using Content.Shared._RMC14.NightVision;
 using Content.Shared._RMC14.Xenonids;
@@ -11,11 +11,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._RMC14.NightVision;
 
-public sealed class NightVisionOverlay : Overlay
+public sealed partial class NightVisionOverlay : Overlay
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly ContainerSystem _container;
     private readonly ExamineSystem _examine;

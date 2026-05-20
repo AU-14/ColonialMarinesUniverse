@@ -14,7 +14,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._AU14.Abominations;
 
-public sealed class AbominationAssimilateSystem : EntitySystem
+public sealed partial class AbominationAssimilateSystem : EntitySystem
 {
     /// <summary>Polymorph used when a humanoid victim turns.</summary>
     public static readonly ProtoId<PolymorphPrototype> HumanoidTurnPolymorph = "AbominationAssimilationToMimic";
@@ -22,11 +22,11 @@ public sealed class AbominationAssimilateSystem : EntitySystem
     /// <summary>Polymorph used when an animal victim turns — they become a spider, not a mimic.</summary>
     public static readonly ProtoId<PolymorphPrototype> AnimalTurnPolymorph = "AbominationAssimilationToSpider";
 
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly PolymorphSystem _polymorph = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private PolymorphSystem _polymorph = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {

@@ -1,6 +1,5 @@
 using Content.Shared.Body.Part;
 using Content.Shared.DoAfter;
-using Content.Shared.Body.Part;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._CMU14.Medical.Surgery;

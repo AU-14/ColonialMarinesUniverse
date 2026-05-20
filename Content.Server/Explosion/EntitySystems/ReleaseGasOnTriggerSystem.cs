@@ -1,4 +1,4 @@
-﻿using Content.Server.Atmos.EntitySystems;
+using Content.Server.Atmos.EntitySystems;
 using Content.Shared.Explosion.Components.OnTrigger;
 using Content.Shared.Explosion.EntitySystems;
 using Robust.Shared.Timing;
@@ -12,9 +12,9 @@ namespace Content.Server.Explosion.EntitySystems;
 /// </summary>
 public sealed partial class ReleaseGasOnTriggerSystem : SharedReleaseGasOnTriggerSystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly AtmosphereSystem _atmosphereSystem = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

@@ -29,7 +29,7 @@ namespace Content.Server._AU14.Abominations;
 /// minutes. Any infected death polymorphs the body into a mimic and seeds
 /// flesh kudzu at the corpse.
 /// </summary>
-public sealed class AbominationInfectionSystem : EntitySystem
+public sealed partial class AbominationInfectionSystem : EntitySystem
 {
     public static readonly EntProtoId FleshKudzuSource = "AU14AbominationFleshKudzuSource";
     public static readonly ProtoId<PolymorphPrototype> TurnIntoMimic = "AbominationAssimilationToMimic";
@@ -38,18 +38,18 @@ public sealed class AbominationInfectionSystem : EntitySystem
     public static readonly ProtoId<EmotePrototype> CoughEmote = "Cough";
     public static readonly ProtoId<EmotePrototype> ScreamEmote = "Scream";
 
-    [Dependency] private readonly AbominationAssimilateSystem _assimilate = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedDrunkSystem _drunk = default!;
-    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly PolymorphSystem _polymorph = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly VomitSystem _vomit = default!;
+    [Dependency] private AbominationAssimilateSystem _assimilate = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedDrunkSystem _drunk = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private PolymorphSystem _polymorph = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private VomitSystem _vomit = default!;
 
     public override void Initialize()
     {

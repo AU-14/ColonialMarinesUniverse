@@ -32,10 +32,6 @@ using Robust.Shared.Utility;
 using Content.Shared.AU14.util;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
-using Content.Server.PDA;
-using Content.Shared._RMC14.Marines;
-using Content.Shared._RMC14.Marines.Squads;
-using Content.Shared._RMC14.Weapons.Ranged.IFF;
 
 namespace Content.Server.Station.Systems;
 
@@ -44,20 +40,20 @@ namespace Content.Server.Station.Systems;
 /// Also provides helpers for spawning in the player's mob.
 /// </summary>
 [PublicAPI]
-public sealed class StationSpawningSystem : SharedStationSpawningSystem
+public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 {
-    [Dependency] private readonly SharedAccessSystem _accessSystem = default!;
-    [Dependency] private readonly ActorSystem _actors = default!;
-    [Dependency] private readonly IdCardSystem _cardSystem = default!;
-    [Dependency] private readonly IConfigurationManager _configurationManager = default!;
-    [Dependency] private readonly HumanoidAppearanceSystem _humanoidSystem = default!;
-    [Dependency] private readonly IdentitySystem _identity = default!;
-    [Dependency] private readonly MetaDataSystem _metaSystem = default!;
-    [Dependency] private readonly PdaSystem _pdaSystem = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
-    [Dependency] private readonly SquadSystem _squadSystem = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
+    [Dependency] private SharedAccessSystem _accessSystem = default!;
+    [Dependency] private ActorSystem _actors = default!;
+    [Dependency] private IdCardSystem _cardSystem = default!;
+    [Dependency] private IConfigurationManager _configurationManager = default!;
+    [Dependency] private HumanoidAppearanceSystem _humanoidSystem = default!;
+    [Dependency] private IdentitySystem _identity = default!;
+    [Dependency] private MetaDataSystem _metaSystem = default!;
+    [Dependency] private PdaSystem _pdaSystem = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
+    [Dependency] private SquadSystem _squadSystem = default!;
+    [Dependency] private NpcFactionSystem _npcFaction = default!;
 
     // Round-robin rotation indices for squads per side
     private readonly string[] _govforSquads = { "SquadGovfor", "SquadGovforBravo", "SquadGovforCharlie" };
@@ -240,13 +236,13 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
             // Remove current headset (if any)
             if (InventorySystem.TryGetSlotEntity(entity.Value, "ears", out var currentHeadset))
             {
-                EntityManager.DeleteEntity(currentHeadset.Value);
+                Del(currentHeadset.Value);
             }
             // Always check if the ears slot is empty after equipping new starting gear
             var hasHeadset = InventorySystem.TryGetSlotEntity(entity.Value, "ears", out var _);
             if (!hasHeadset && origGear.Equipment.TryGetValue("ears", out var headsetId))
             {
-                var headset = EntityManager.SpawnEntity(headsetId, EntityManager.GetComponent<TransformComponent>(entity.Value).Coordinates);
+                var headset = Spawn(headsetId, Comp<TransformComponent>(entity.Value).Coordinates);
                 InventorySystem.TryEquip(entity.Value, headset, "ears");
             }
 
@@ -263,13 +259,13 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
                     var origGear = _prototypeManager.Index<StartingGearPrototype>(originalPrototype.StartingGear);
                     if (origGear.Equipment.TryGetValue("id", out var origIdCardProto))
                     {
-                        var origIdCard = EntityManager.SpawnEntity(origIdCardProto, EntityManager.GetComponent<TransformComponent>(entity.Value).Coordinates);
+                        var origIdCard = Spawn(origIdCardProto, Comp<TransformComponent>(entity.Value).Coordinates);
                         if (TryComp<ItemIFFComponent>(origIdCard, out var origIff))
                         {
                             // Copy the component from the original card
                             CopyComp(origIdCard, idUid.Value, origIff);
                         }
-                        EntityManager.DeleteEntity(origIdCard);
+                        Del(origIdCard);
                     }
                 }
                 var cardId = idUid.Value;
@@ -476,7 +472,7 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
                          if (!_squadSystem.TryEnsureSquad(protoId, out ensured))
                          {
                              // Fallback: spawn a new entity with SquadTeamComponent
-                             var squadEnt = EntityManager.SpawnEntity(protoId, coordinates);
+                             var squadEnt = Spawn(protoId, coordinates);
                              var squadComp = EnsureComp<SquadTeamComponent>(squadEnt);
                              ensured = (squadEnt, squadComp);
                          }
@@ -621,7 +617,7 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
 /// This event is designed to use ordered handling. You probably want SpawnPointSystem to be the last handler.
 /// </summary>
 [PublicAPI]
-public sealed class PlayerSpawningEvent : EntityEventArgs
+public sealed partial class PlayerSpawningEvent : EntityEventArgs
 {
     /// <summary>
     /// The entity spawned, if any. You should set this if you succeed at spawning the character, and leave it alone if it's not null.

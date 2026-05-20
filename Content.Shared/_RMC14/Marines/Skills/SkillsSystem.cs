@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Content.Shared._RMC14.Chemistry.Reagent;
@@ -14,6 +14,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Item.ItemToggle.Components;
+using Content.Shared.Lobby;
 using Content.Shared.Popups;
 using Content.Shared.Prototypes;
 using Content.Shared.Throwing;
@@ -27,17 +28,17 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared._RMC14.Marines.Skills;
 
-public sealed class SkillsSystem : EntitySystem
+public sealed partial class SkillsSystem : EntitySystem
 {
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly ItemToggleSystem _toggle = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly RMCReagentSystem _reagent = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private ItemToggleSystem _toggle = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> MeleeSkill = "RMCSkillMeleeWeapons";
 
@@ -242,6 +243,12 @@ public sealed class SkillsSystem : EntitySystem
 
     private void OnItemToggleDeactivateUnskilled(Entity<ItemToggleDeactivateUnskilledComponent> ent, ref GotEquippedEvent args)
     {
+        if (HasComp<LobbyPreviewEntityComponent>(args.Equipee) ||
+            HasComp<LobbyPreviewEntityComponent>(args.Equipment))
+        {
+            return;
+        }
+
         if (!HasAllSkills(args.Equipee, ent.Comp.Skills))
         {
             if (_toggle.IsActivated(ent.Owner) && _toggle.TryDeactivate(ent.Owner, args.Equipee) && ent.Comp.Popup != null)

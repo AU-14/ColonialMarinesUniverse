@@ -5,11 +5,11 @@ using Robust.Shared.Player;
 
 namespace Content.Client._RMC14.Stun;
 
-public sealed class DazedUiController : EntitySystem
+public sealed partial class DazedUiController : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlayManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IOverlayManager _overlayManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     private DazedOverlay _overlay = default!;
 

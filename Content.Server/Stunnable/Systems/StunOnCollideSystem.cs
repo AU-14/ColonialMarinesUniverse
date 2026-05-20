@@ -12,12 +12,12 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.Stunnable
 {
     [UsedImplicitly]
-    internal sealed class StunOnCollideSystem : EntitySystem
+    internal sealed partial class StunOnCollideSystem : EntitySystem
     {
         private static readonly ProtoId<TagPrototype> TaserTag = "Taser";
 
-        [Dependency] private readonly StunSystem _stunSystem = default!;
-        [Dependency] private readonly TagSystem _tag = default!;
+        [Dependency] private StunSystem _stunSystem = default!;
+        [Dependency] private TagSystem _tag = default!;
 
         public override void Initialize()
         {

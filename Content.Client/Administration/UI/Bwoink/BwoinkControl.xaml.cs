@@ -2,8 +2,6 @@ using System.Linq;
 using System.Text;
 using Content.Client.Administration.Managers;
 using Content.Client.Administration.UI.CustomControls;
-using Content.Client.Lobby.UI;
-using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Bwoink;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
@@ -24,11 +22,10 @@ namespace Content.Client.Administration.UI.Bwoink
     [GenerateTypedNameReferences]
     public sealed partial class BwoinkControl : Control
     {
-        [Dependency] private readonly IClientAdminManager _adminManager = default!;
-        [Dependency] private readonly IClientConsoleHost _console = default!;
-        [Dependency] private readonly IUserInterfaceManager _ui = default!;
-        [Dependency] private readonly IConfigurationManager _cfg = default!;
-        [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
+        [Dependency] private IClientAdminManager _adminManager = default!;
+        [Dependency] private IClientConsoleHost _console = default!;
+        [Dependency] private IUserInterfaceManager _ui = default!;
+        [Dependency] private IConfigurationManager _cfg = default!;
         public AdminAHelpUIHandler AHelpHelper = default!;
 
         private PlayerInfo? _currentPlayer;
@@ -38,11 +35,8 @@ namespace Content.Client.Administration.UI.Bwoink
             RobustXamlLoader.Load(this);
             IoCManager.InjectDependencies(this);
 
-            ApplyCrtPalette();
-
             var newPlayerThreshold = 0;
             _cfg.OnValueChanged(CCVars.NewPlayerThreshold, (val) => { newPlayerThreshold = val; }, true);
-            _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
 
             var uiController = _ui.GetUIController<AHelpUIController>();
             if (uiController.UIHelper is not AdminAHelpUIHandler helper)
@@ -215,18 +209,6 @@ namespace Content.Client.Administration.UI.Bwoink
                 return;
 
             _adminManager.AdminStatusUpdated -= UpdateButtons;
-            _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
-        }
-
-        private void OnCrtUiColorChanged(string _)
-        {
-            ApplyCrtPalette();
-        }
-
-        private void ApplyCrtPalette()
-        {
-            Stylesheet = _stylesheetManager.SheetNano;
-            CrtLobbyTheme.Apply(this, includeChat: true, useCrtTypography: false);
         }
 
         public void OnBwoink(NetUserId channel)
@@ -237,6 +219,8 @@ namespace Content.Client.Administration.UI.Bwoink
 
         public void SelectChannel(NetUserId channel)
         {
+            ChannelSelector.PopulateList();
+
             if (!ChannelSelector.PlayerInfo.TryFirstOrDefault(
                 i => i.SessionId == channel, out var info))
                 return;

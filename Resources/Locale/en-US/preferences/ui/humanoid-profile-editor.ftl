@@ -22,6 +22,7 @@ humanoid-profile-editor-export-image-button = Export image
 humanoid-profile-editor-open-image-button = Open images
 humanoid-profile-editor-save-button = Save
 humanoid-profile-editor-reset-button = Reset
+humanoid-profile-editor-job-fallback-label = Job fallback
 humanoid-profile-editor-spawn-priority-label = Spawn priority:
 humanoid-profile-editor-preferred-squad-label = Preferred squad:
 humanoid-profile-editor-preferred-armor-label = Preferred armor:

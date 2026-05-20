@@ -12,18 +12,18 @@ using Robust.Shared.Random;
 
 namespace Content.Server.FootPrint;
 
-public sealed class FootPrintsSystem : EntitySystem
+public sealed partial class FootPrintsSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly IMapManager _map = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedXenoWeedsSystem _weeds = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private IMapManager _map = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedXenoWeedsSystem _weeds = default!;
 
-    [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedSolutionContainerSystem _solution = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private EntityQuery<TransformComponent> _transformQuery;
     private EntityQuery<MobThresholdsComponent> _mobThresholdQuery;

@@ -80,9 +80,9 @@ public sealed partial class GeneralAnnounceSystem
         if (!string.IsNullOrWhiteSpace(request.SpeakerNameOverride))
             return request.SpeakerNameOverride;
 
-        if (request.Speaker.HasValue && EntityManager.EntityExists(request.Speaker.Value))
+        if (request.Speaker.HasValue && Exists(request.Speaker.Value))
         {
-            if (EntityManager.TryGetComponent(request.Speaker.Value, out MetaDataComponent? meta))
+            if (TryComp(request.Speaker.Value, out MetaDataComponent? meta))
                 return meta.EntityName;
         }
 

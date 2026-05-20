@@ -16,17 +16,17 @@ using ClientBodyZoneTargetingSystem = Content.Client._CMU14.Medical.BodyPart.Bod
 
 namespace Content.Client._CMU14.Medical.HUD;
 
-public sealed class BodyZoneTargetWidgetController :
+public sealed partial class BodyZoneTargetWidgetController :
     UIController,
     IOnStateEntered<GameplayState>,
     IOnStateExited<GameplayState>
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IEntityNetworkManager _net = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [UISystemDependency] private readonly ClientBodyZoneTargetingSystem _bodyZone = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IEntityNetworkManager _net = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [UISystemDependency] private ClientBodyZoneTargetingSystem _bodyZone = default!;
 
     private BodyZoneTargetWidget? _widget;
 

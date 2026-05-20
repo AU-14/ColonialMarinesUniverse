@@ -1,0 +1,23 @@
+- type: partySpawn
+  id: ProdigyPARTYSpawn
+  leadersToSpawn:
+    AU14JobProdigyPartyLeader: 1
+  gruntsToSpawn:
+    AU14JobPARTPartyEngineer: 1
+    AU14JobProdigyPARTYPartyMedic: 1
+    AU14JobProdigyPartySmartgunner: 1
+    AU14JobProdigyPartyRU: 4
+    AU14JobProdigyPARTSynth: 2 # default is 1, increased to 2 due to combat synth disable
+    #AU14JobProdigyPARTCombatSynth: 1 - If PART goes well in testing ill enable it
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: ProdigyPARTYParty
+  partyspawn: ProdigyPARTYSpawn
+  entrymethod: shuttle
+  weight: 20
+  minplayers: 30
+  maxplayers: 400
+  GhostsNeeded: 10
+  roundstart: false

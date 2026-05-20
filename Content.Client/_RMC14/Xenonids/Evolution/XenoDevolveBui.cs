@@ -1,4 +1,4 @@
-﻿using Content.Client._RMC14.Xenonids.UI;
+using Content.Client._RMC14.Xenonids.UI;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
@@ -8,9 +8,9 @@ using Robust.Shared.Prototypes;
 namespace Content.Client._RMC14.Xenonids.Evolution;
 
 [UsedImplicitly]
-public sealed class XenoDevolveBui : BoundUserInterface
+public sealed partial class XenoDevolveBui : BoundUserInterface
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly SpriteSystem _sprite;
 

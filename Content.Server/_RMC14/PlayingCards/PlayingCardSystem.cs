@@ -7,14 +7,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._RMC14.PlayingCards;
 
-public sealed class PlayingCardSystem : SharedPlayingCardSystem
+public sealed partial class PlayingCardSystem : SharedPlayingCardSystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly MetaDataSystem _meta = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private MetaDataSystem _meta = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private const int StackThreshold = 5;
 

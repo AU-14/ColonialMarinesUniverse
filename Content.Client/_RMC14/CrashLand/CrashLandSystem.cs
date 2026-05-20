@@ -7,12 +7,12 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client._RMC14.CrashLand;
 
-public sealed class CrashLandSystem : SharedCrashLandSystem
+public sealed partial class CrashLandSystem : SharedCrashLandSystem
 {
-    [Dependency] private readonly AnimationPlayerSystem _animPlayer = default!;
-    [Dependency] private readonly ParaDropSystem _paraDrop = default!;
-    [Dependency] private readonly RMCSpriteSystem _rmcSprite = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private AnimationPlayerSystem _animPlayer = default!;
+    [Dependency] private ParaDropSystem _paraDrop = default!;
+    [Dependency] private RMCSpriteSystem _rmcSprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private const string CrashingAnimationKey = "crashing-animation";
 

@@ -22,10 +22,10 @@ namespace Content.Client.Guidebook.Controls;
 [GenerateTypedNameReferences]
 public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IAnchorClickHandler
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly DocumentParsingManager _parsingMan = default!;
-    [Dependency] private readonly IResourceManager _resourceManager = default!;
-    [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private DocumentParsingManager _parsingMan = default!;
+    [Dependency] private IResourceManager _resourceManager = default!;
+    [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
     private Dictionary<ProtoId<GuideEntryPrototype>, GuideEntry> _entries = new();
 
@@ -48,6 +48,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         };
 
         _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+        _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
     }
 
     [Obsolete("Controls should only be removed from UI tree instead of being disposed")]
@@ -56,11 +57,19 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         base.Dispose(disposing);
 
         _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+        _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
     }
 
     private void OnCrtUiColorChanged(string _)
     {
         ApplyCrtPalette();
+    }
+
+    private void OnCrtUiEnabledChanged(bool _)
+    {
+        ApplyCrtPalette();
+        CrtLobbyTheme.Apply(EntryContainer, useCrtTypography: false);
+        CrtLobbyTheme.Apply(Tree, useCrtTypography: false);
     }
 
     private void ApplyCrtPalette()

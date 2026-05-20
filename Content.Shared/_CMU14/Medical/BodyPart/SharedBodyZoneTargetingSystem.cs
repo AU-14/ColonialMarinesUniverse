@@ -6,10 +6,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.BodyPart;
 
-public abstract class SharedBodyZoneTargetingSystem : EntitySystem
+public abstract partial class SharedBodyZoneTargetingSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IGameTiming Timing = default!;
 
     private bool _medicalEnabled;
     private bool _hitLocationEnabled;

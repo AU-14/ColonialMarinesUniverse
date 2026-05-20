@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Prototypes;
+using Content.Shared._RMC14.Prototypes;
 using Content.Shared.Radio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
@@ -10,14 +10,14 @@ namespace Content.Shared.Roles;
 public sealed partial class DepartmentPrototype : IInheritingPrototype, ICMSpecific
 {
     [ParentDataField(typeof(AbstractPrototypeIdArraySerializer<DepartmentPrototype>))]
-    public string[]? Parents { get; }
+    public string[]? Parents { get; private set; }
 
     [NeverPushInheritance]
     [AbstractDataField]
-    public bool Abstract { get; }
+    public bool Abstract { get; private set; }
 
     [DataField]
-    public bool IsCM { get; }
+    public bool IsCM { get; private set; }
 
     [DataField]
     public string? CustomName;

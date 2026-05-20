@@ -27,30 +27,30 @@ using Robust.Shared.Utility;
 
 namespace Content.Server._CMU14.Yautja;
 
-public sealed class YautjaAbominationSystem : EntitySystem
+public sealed partial class YautjaAbominationSystem : EntitySystem
 {
     private static readonly TimeSpan GestationCheckEvery = TimeSpan.FromSeconds(1);
     private static readonly SpriteSpecifier.Rsi FrenzySingleIcon = new(new ResPath("_RMC14/Actions/xeno_actions.rsi"), "rav_eviscerate");
     private static readonly SpriteSpecifier.Rsi FrenzyAreaIcon = new(new ResPath("_RMC14/Actions/xeno_actions.rsi"), "spin_slash");
 
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly XenoParasiteSystem _parasite = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly ISharedPlayerManager _players = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly YautjaCloakSystem _cloak = default!;
-    [Dependency] private readonly YautjaMarkSystem _marks = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly XenoSystem _xeno = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private XenoParasiteSystem _parasite = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private ISharedPlayerManager _players = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private YautjaCloakSystem _cloak = default!;
+    [Dependency] private YautjaMarkSystem _marks = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private XenoSystem _xeno = default!;
 
     private TimeSpan _nextGestationCheck;
 

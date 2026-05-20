@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Components;
@@ -11,9 +11,9 @@ using Robust.Shared.Random;
 namespace Content.Server.GameTicking.Rules;
 
 /// <inheritdoc cref="RoundstartStationVariationRuleComponent"/>
-public sealed class RoundstartStationVariationRuleSystem : GameRuleSystem<RoundstartStationVariationRuleComponent>
+public sealed partial class RoundstartStationVariationRuleSystem : GameRuleSystem<RoundstartStationVariationRuleComponent>
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

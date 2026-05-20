@@ -19,11 +19,11 @@ namespace Content.Server.Station.Systems;
 // Contains code for round-start spawning.
 public sealed partial class StationJobsSystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IBanManager _banManager = default!;
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly AuJobSelectionSystem _auJobSelectionSystem = default!;
-    [Dependency] private readonly StationSystem _stationSystem = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IBanManager _banManager = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private AuJobSelectionSystem _auJobSelectionSystem = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
 
     private Dictionary<int, HashSet<string>> _jobsByWeight = default!;
     private List<int> _orderedWeights = default!;

@@ -7,10 +7,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Medical.Organs.Heart;
 
-public sealed class HeartSystem : SharedHeartSystem
+public sealed partial class HeartSystem : SharedHeartSystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     private static readonly ProtoId<DamageTypePrototype> Asphyxiation = "Asphyxiation";
 

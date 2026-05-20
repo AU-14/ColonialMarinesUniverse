@@ -1,0 +1,11 @@
+- type: entity
+  parent: CMEncryptionKey
+  id: CMEncryptionKeyPART
+  name: PART encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - PART
+    defaultChannel: PART
+  - type: Sprite
+    state: stripped_key

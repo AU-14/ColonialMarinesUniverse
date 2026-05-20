@@ -404,7 +404,7 @@ namespace Content.Shared.Movement.Systems
                 walk += curDir;
             }
 
-            // Logger.Info($"{curDir}{walk}{sprint}");
+            // Logger.GetSawmill("content").Info($"{curDir}{walk}{sprint}");
             return (walk, sprint);
         }
 
@@ -415,7 +415,7 @@ namespace Content.Shared.Movement.Systems
         /// </summary>
         public void SetVelocityDirection(Entity<InputMoverComponent> entity, Direction direction, ushort subTick, bool enabled)
         {
-            // Logger.Info($"[{_gameTiming.CurTick}/{subTick}] {direction}: {enabled}");
+            // Logger.GetSawmill("content").Info($"[{_gameTiming.CurTick}/{subTick}] {direction}: {enabled}");
 
             var bit = direction switch
             {
@@ -471,7 +471,7 @@ namespace Content.Shared.Movement.Systems
 
         public virtual void SetSprinting(Entity<InputMoverComponent> entity, ushort subTick, bool walking)
         {
-            // Logger.Info($"[{_gameTiming.CurTick}/{subTick}] Sprint: {enabled}");
+            // Logger.GetSawmill("content").Info($"[{_gameTiming.CurTick}/{subTick}] Sprint: {enabled}");
 
             SetMoveInput(entity, subTick, walking, MoveButtons.Walk);
         }

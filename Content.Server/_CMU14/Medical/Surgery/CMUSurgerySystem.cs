@@ -20,15 +20,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._CMU14.Medical.Surgery;
 
-public sealed class CMUSurgerySystem : SharedCMUSurgerySystem
+public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedStatusEffectsSystem _status = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedBodyPartHealthSystem _partHealth = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedStatusEffectsSystem _status = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     protected override void ApplyOrganRemovalSideEffects(EntityUid user, EntityUid body, EntityUid organ, string slot)
     {
@@ -132,8 +132,7 @@ public sealed class CMUSurgerySystem : SharedCMUSurgerySystem
         if (limbPart.PartType is not (BodyPartType.Arm or BodyPartType.Leg))
             return;
 
-        if (TryComp<TransformComponent>(body, out var bodyXform))
-            _transform.SetCoordinates(part, bodyXform.Coordinates);
+        _transform.SetCoordinates(part, Transform(body).Coordinates);
 
         _transform.AttachToGridOrMap(part);
 

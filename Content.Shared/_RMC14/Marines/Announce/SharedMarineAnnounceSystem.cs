@@ -1,4 +1,4 @@
-﻿﻿using Content.Shared._RMC14.Dialog;
+using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Marines.ControlComputer;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Marines.Skills;
@@ -23,19 +23,19 @@ using Robust.Shared.Maths;
 
 namespace Content.Shared._RMC14.Marines.Announce;
 
-public abstract class SharedMarineAnnounceSystem : EntitySystem
+public abstract partial class SharedMarineAnnounceSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly DialogSystem _dialog = default!;
-    [Dependency] private readonly SharedMarineControlComputerSystem _marineControlComputer = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRankSystem _rankSystem = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly SquadSystem _squad = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private DialogSystem _dialog = default!;
+    [Dependency] private SharedMarineControlComputerSystem _marineControlComputer = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRankSystem _rankSystem = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SquadSystem _squad = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     public static readonly SoundSpecifier DefaultAnnouncementSound = new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");
     public static readonly SoundSpecifier DefaultSquadSound = new SoundPathSpecifier("/Audio/_RMC14/Effects/tech_notification.ogg");

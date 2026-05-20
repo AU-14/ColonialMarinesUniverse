@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.CCVar;
@@ -40,29 +40,29 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared._RMC14.Overwatch;
 
-public abstract class SharedOverwatchConsoleSystem : EntitySystem
+public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly DialogSystem _dialog = default!;
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedMarineAnnounceSystem _marineAnnounce = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly OrbitalCannonSystem _orbitalCannon = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly SharedCMChatSystem _rmcChat = default!;
-    [Dependency] private readonly SquadSystem _squad = default!;
-    [Dependency] private readonly SharedSupplyDropSystem _supplyDrop = default!;
-    [Dependency] private readonly SharedTacticalMapSystem _tacticalMap = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private DialogSystem _dialog = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedMarineAnnounceSystem _marineAnnounce = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private OrbitalCannonSystem _orbitalCannon = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SharedCMChatSystem _rmcChat = default!;
+    [Dependency] private SquadSystem _squad = default!;
+    [Dependency] private SharedSupplyDropSystem _supplyDrop = default!;
+    [Dependency] private SharedTacticalMapSystem _tacticalMap = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     private EntityQuery<ActorComponent> _actor;
     private EntityQuery<MobStateComponent> _mobStateQuery;
@@ -367,7 +367,8 @@ public abstract class SharedOverwatchConsoleSystem : EntitySystem
         var options = new List<DialogOption>();
         if (state.Marines.TryGetValue(selectedSquad, out var marines))
         {
-            foreach (var marine in marines)
+            var sortedMarines = marines.OrderBy(m => m.Name.ToLowerInvariant());
+            foreach (var marine in sortedMarines) // alphabetical sort
             {
                 var option = new DialogOption
                 {

@@ -1,28 +1,30 @@
 using System.Linq;
+using Content.Shared.Cuffs.Components;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
-using Content.Shared.AU14;
+using Content.Shared.GameTicking.Components;
+using Content.Shared.Inventory;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs;
 using Content.Shared.NPC.Components;
-using Content.Shared.GameTicking.Components;
+using Content.Shared.SSDIndicator;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship;
-using Content.Shared.Cuffs.Components;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
-using Content.Shared.SSDIndicator;
+using Content.Shared.AU14;
 
 namespace Content.Server.AU14.Threats;
 
-public sealed class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRuleComponent>
+public sealed partial class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRuleComponent>
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly Round.AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private Round.AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
 
@@ -65,6 +67,12 @@ public sealed class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRuleComponen
     public void OnHandcuffEvent(EntityUid uid)
     {
         CheckVictoryCondition();
+    }
+
+    private bool HasPrisonJumpsuit(EntityUid uid)
+    {
+        return _inventory.TryGetSlotEntity(uid, "jumpsuit", out var suit)
+            && Prototype(suit!.Value)?.ID == "AU14CivilianPrisonJumpsuit";
     }
 
     private bool IsInArrestArea(EntityUid uid)
@@ -113,7 +121,7 @@ public sealed class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRuleComponen
                 if (IsExcludedFromKillCount(uid))
                     continue;
 
-                if (crashedDropship && TryComp<TransformComponent>(uid, out var xform) && _rmcPlanet.IsOnPlanet(xform))
+                if (crashedDropship && _rmcPlanet.IsOnPlanet(Transform(uid)))
                     continue;
 
                 // Skip evacuated entities entirely
@@ -122,15 +130,14 @@ public sealed class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRuleComponen
 
                 total++;
 
-                // Count as eliminated if dead
                 if (mobState.CurrentState == MobState.Dead)
                 {
                     eliminated++;
                 }
-                // Or if arrested flag is set and they're cuffed
-                else if (countArrests &&
-                         ((TryComp<CuffableComponent>(uid, out var cuffable) && cuffable.CuffedHandCount > 0) ||
-                          IsInArrestArea(uid)))
+                // Wearing jumpsuit, or arrested flag is set and they're cuffed, or in the mapped brig areas
+                else if (HasPrisonJumpsuit(uid)
+                    || countArrests && ((TryComp<CuffableComponent>(uid, out var cuffable) && cuffable.CuffedHandCount > 0)
+                    || IsInArrestArea(uid)))
                 {
                     eliminated++;
                 }

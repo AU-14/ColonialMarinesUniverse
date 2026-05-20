@@ -20,13 +20,13 @@ namespace Content.Server.AU14.Threats;
 /// Kill-all rule that targets all humanoid mobs (any entity with HumanoidAppearanceComponent),
 /// excluding xenos. Evacuated entities are excluded from the count entirely.
 /// </summary>
-public sealed class KillAllHumanRuleSystem : GameRuleSystem<KillAllHumanRuleComponent>
+public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHumanRuleComponent>
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly Round.AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private Round.AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
 
     private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
 

@@ -8,9 +8,9 @@ using Robust.Shared.Player;
 
 namespace Content.Client._RMC14.Announce;
 
-public sealed class GeneralAnnounceUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
+public sealed partial class GeneralAnnounceUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
 {
-    [UISystemDependency] private readonly AudioSystem _audio = default!;
+    [UISystemDependency] private AudioSystem _audio = default!;
 
     private const int MaxQueuedAnnouncements = 32;
     private readonly List<QueuedAnnouncement> _queuedAnnouncements = new();

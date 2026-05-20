@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Coordinates;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
@@ -12,14 +12,14 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Tools;
 
-public sealed class RMCToolSystem : EntitySystem
+public sealed partial class RMCToolSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly SharedToolSystem _tool = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] private SkillsSystem _skills = default!;
 
     public override void Initialize()
     {

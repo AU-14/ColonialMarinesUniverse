@@ -50,27 +50,27 @@ namespace Content.Client.UserInterface.Systems.Chat;
 
 public sealed partial class ChatUIController : UIController
 {
-    [Dependency] private readonly IClientAdminManager _admin = default!;
-    [Dependency] private readonly IChatManager _manager = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IEntityManager _ent = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IClientNetManager _net = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IStateManager _state = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IReplayRecordingManager _replayRecording = default!;
-    [Dependency] private readonly StaffHelpUIController _staffHelpUI = default!;
+    [Dependency] private IClientAdminManager _admin = default!;
+    [Dependency] private IChatManager _manager = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IEntityManager _ent = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IClientNetManager _net = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IStateManager _state = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IReplayRecordingManager _replayRecording = default!;
+    [Dependency] private StaffHelpUIController _staffHelpUI = default!;
 
-    [UISystemDependency] private readonly ExamineSystem? _examine = default;
-    [UISystemDependency] private readonly GhostSystem? _ghost = default;
-    [UISystemDependency] private readonly TypingIndicatorSystem? _typingIndicator = default;
-    [UISystemDependency] private readonly ChatSystem? _chatSys = default;
-    [UISystemDependency] private readonly TransformSystem? _transform = default;
-    [UISystemDependency] private readonly MindSystem? _mindSystem = default!;
-    [UISystemDependency] private readonly RoleCodewordSystem? _roleCodewordSystem = default!;
+    [UISystemDependency] private ExamineSystem? _examine = default;
+    [UISystemDependency] private GhostSystem? _ghost = default;
+    [UISystemDependency] private TypingIndicatorSystem? _typingIndicator = default;
+    [UISystemDependency] private ChatSystem? _chatSys = default;
+    [UISystemDependency] private TransformSystem? _transform = default;
+    [UISystemDependency] private MindSystem? _mindSystem = default!;
+    [UISystemDependency] private RoleCodewordSystem? _roleCodewordSystem = default!;
 
     private static readonly ProtoId<ColorPalettePrototype> ChatNamePalette = "ChatNames";
     private string[] _chatNameColors = default!;
@@ -672,7 +672,7 @@ public sealed partial class ChatUIController : UIController
         }
         catch (Exception e)
         {
-            Logger.Error($"Error deleting chat history:\n{e}");
+            Logger.GetSawmill("content").Error($"Error deleting chat history:\n{e}");
         }
     }
 
@@ -1051,7 +1051,7 @@ public sealed partial class ChatUIController : UIController
 
     private readonly record struct SpeechBubbleData(ChatMessage Message, SpeechBubble.SpeechType Type);
 
-    private sealed class SpeechBubbleQueueData
+    private sealed partial class SpeechBubbleQueueData
     {
         /// <summary>
         ///     Time left until the next speech bubble can appear.

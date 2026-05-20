@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Whitelist;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
@@ -14,5 +14,5 @@ public sealed partial class StorageStoreSkillRequiredComponent : Component
 
     [DataRecord]
     [Serializable, NetSerializable]
-    public readonly record struct Entry(EntityWhitelist Whitelist, SkillWhitelist Skills);
+    public readonly partial record struct Entry(EntityWhitelist Whitelist, SkillWhitelist Skills);
 }

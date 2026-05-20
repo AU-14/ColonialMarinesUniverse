@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Content.Client.Administration.Systems;
 using Content.Client.Lobby.UI;
@@ -25,15 +25,15 @@ using Timer = Robust.Shared.Timing.Timer;
 
 namespace Content.Client._RMC14.Mentor;
 
-public sealed class StaffHelpUIController : UIController, IOnSystemChanged<BwoinkSystem>
+public sealed partial class StaffHelpUIController : UIController, IOnSystemChanged<BwoinkSystem>
 {
-    [Dependency] private readonly AHelpUIController _aHelp = default!;
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [UISystemDependency] private readonly AudioSystem? _audio = default!;
+    [Dependency] private AHelpUIController _aHelp = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [UISystemDependency] private AudioSystem? _audio = default!;
 
     private readonly Dictionary<NetUserId, List<MentorMessage>> _messages = new();
     private readonly Dictionary<NetUserId, string> _destinationNames = new();

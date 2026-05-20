@@ -15,10 +15,10 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Server.Physics.Controllers;
 
-public sealed class MoverController : SharedMoverController
+public sealed partial class MoverController : SharedMoverController
 {
-    [Dependency] private readonly ThrusterSystem _thruster = default!;
-    [Dependency] private readonly SharedTransformSystem _xformSystem = default!;
+    [Dependency] private ThrusterSystem _thruster = default!;
+    [Dependency] private SharedTransformSystem _xformSystem = default!;
 
     private Dictionary<EntityUid, (ShuttleComponent, List<(EntityUid, PilotComponent, InputMoverComponent, TransformComponent)>)> _shuttlePilots = new();
 
@@ -128,7 +128,7 @@ public sealed class MoverController : SharedMoverController
 
         ApplyTick(component, remainingFraction);
 
-        // Logger.Info($"{curDir}{walk}{sprint}");
+        // Logger.GetSawmill("content").Info($"{curDir}{walk}{sprint}");
         return (component.CurTickStrafeMovement, component.CurTickRotationMovement, component.CurTickBraking);
     }
 

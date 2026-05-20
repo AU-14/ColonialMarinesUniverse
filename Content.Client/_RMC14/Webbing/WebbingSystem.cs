@@ -1,4 +1,4 @@
-﻿using Content.Client.Clothing;
+using Content.Client.Clothing;
 using Content.Client.Items.Systems;
 using Content.Shared._RMC14.Webbing;
 using Content.Shared.Clothing;
@@ -12,10 +12,10 @@ using static Robust.Shared.Utility.SpriteSpecifier;
 
 namespace Content.Client._RMC14.Webbing;
 
-public sealed class WebbingSystem : SharedWebbingSystem
+public sealed partial class WebbingSystem : SharedWebbingSystem
 {
-    [Dependency] private readonly ItemSystem _item = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private ItemSystem _item = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     public event Action? PlayerWebbingUpdated;
 

@@ -22,17 +22,17 @@ namespace Content.Server._RMC14.Synth;
 /// <summary>
 /// Server-side behavior for synthetic maintenance station insertion, repair, charge, and ejection.
 /// </summary>
-public sealed class RMCSyntheticMaintenanceStationSystem : EntitySystem
+public sealed partial class RMCSyntheticMaintenanceStationSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedBloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly ClimbSystem _climb = default!;
-    [Dependency] private readonly ContainerSystem _container = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private ClimbSystem _climb = default!;
+    [Dependency] private ContainerSystem _container = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
 
     public override void Initialize()
     {

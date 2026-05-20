@@ -1,4 +1,4 @@
-﻿using Content.Client.Message;
+using Content.Client.Message;
 using Content.Shared._RMC14.Dropship.Fabricator;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
@@ -10,10 +10,10 @@ using static Robust.Client.UserInterface.Controls.BoxContainer;
 namespace Content.Client._RMC14.Dropship.Fabricator;
 
 [UsedImplicitly]
-public sealed class DropshipFabricatorBui : BoundUserInterface
+public sealed partial class DropshipFabricatorBui : BoundUserInterface
 {
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     [ViewVariables]
     private DropshipFabricatorWindow? _window;

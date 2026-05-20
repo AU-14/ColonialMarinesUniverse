@@ -1,4 +1,4 @@
-﻿using Content.Client._RMC14.Xenonids.UI;
+using Content.Client._RMC14.Xenonids.UI;
 using Content.Client.Administration.UI.CustomControls;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared.Body.Part;
@@ -13,10 +13,10 @@ using static Robust.Client.UserInterface.Control;
 namespace Content.Client._RMC14.Medical.Surgery;
 
 [UsedImplicitly]
-public sealed class CMSurgeryBui : BoundUserInterface
+public sealed partial class CMSurgeryBui : BoundUserInterface
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     private readonly CMSurgerySystem _system;
 

@@ -9,9 +9,9 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.UserInterface.Systems.Chat.Widgets;
 
-public sealed class ChatMessageRow : PanelContainer
+public sealed partial class ChatMessageRow : PanelContainer
 {
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     private readonly Label _repeatBadge;
     private readonly RichTextLabel _messageLabel;

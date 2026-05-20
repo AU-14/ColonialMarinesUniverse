@@ -10,7 +10,7 @@ namespace Content.Shared._RMC14.Construction;
 public sealed partial class RMCConstructionBuildDoAfterEvent : SimpleDoAfterEvent
 {
     [DataField(required: true)]
-    public RMCConstructionPrototype Prototype;
+    public ProtoId<RMCConstructionPrototype> Prototype;
 
     [DataField(required: true)]
     public int Amount;
@@ -20,7 +20,7 @@ public sealed partial class RMCConstructionBuildDoAfterEvent : SimpleDoAfterEven
 
     [DataField(required: true)]
     public Direction Direction;
-    public RMCConstructionBuildDoAfterEvent(RMCConstructionPrototype prototype, int amount, NetCoordinates coordinates, Direction direction)
+    public RMCConstructionBuildDoAfterEvent(ProtoId<RMCConstructionPrototype> prototype, int amount, NetCoordinates coordinates, Direction direction)
     {
         Prototype = prototype;
         Amount = amount;

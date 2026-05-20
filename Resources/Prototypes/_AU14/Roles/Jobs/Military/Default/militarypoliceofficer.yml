@@ -67,7 +67,7 @@
   equipment:
     id: AU14IDCardGOVFORMilitaryPoliceMan
     ears: RMCM5CameraGear
-    ears2: AU14HeadsetSectionLeader
+    ears2: AU14HeadsetGovforMarineMP
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -87,5 +87,5 @@
     belt: CMBeltSecurityMPFilled
     head: CMHeadBeretRed
     ears: RMCM5CameraGear
-    ears2: AU14HeadsetSectionLeader
+    ears2: AU14HeadsetGovforMarineMP
     outerClothing: AU14ArmorM3JungleThree

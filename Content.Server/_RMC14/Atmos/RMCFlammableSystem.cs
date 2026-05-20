@@ -6,10 +6,10 @@ using Robust.Shared.Player;
 
 namespace Content.Server._RMC14.Atmos;
 
-public sealed class RMCFlammableSystem : SharedRMCFlammableSystem
+public sealed partial class RMCFlammableSystem : SharedRMCFlammableSystem
 {
-    [Dependency] private readonly FlammableSystem _flammable = default!;
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private FlammableSystem _flammable = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
 
     public override void Initialize()
     {

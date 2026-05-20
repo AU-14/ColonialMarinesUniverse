@@ -13,12 +13,12 @@ namespace Content.Server.AU14.Tribals;
 /// Subscribes "after" the random humanoid system so it overwrites the
 /// random species / skin pick.
 /// </summary>
-public sealed class TribalAppearanceSystem : EntitySystem
+public sealed partial class TribalAppearanceSystem : EntitySystem
 {
     public static readonly Color TribalSkin = Color.FromHex("#4F7A82");
     public static readonly ProtoId<SpeciesPrototype> TribalSpecies = "Tribal";
 
-    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
 
     public override void Initialize()
     {

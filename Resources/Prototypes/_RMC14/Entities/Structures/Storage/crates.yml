@@ -664,6 +664,7 @@
   parent: RMCCrateHydro
   id: RMCCrateSecureHydro
   name: secure hydroponics crate
+  suffix: Secure
   description: A crate with a lock on it, painted in the scheme of the station's botanists.
   components:
   - type: Sprite
@@ -683,8 +684,12 @@
       offset: "0.28125,0.0"
       visible: false
       map: ["enum.PaperLabelVisuals.Layer"]
+  - type: LockVisuals
+  - type: Lock
   - type: Icon
     sprite: _RMC14/Structures/Storage/Crates/secure_hydro.rsi
+  - type: AccessReader
+    access: [["CMAccessColonyPublic"]]
 
 - type: entity
   parent: RMCCrateSecure
@@ -767,7 +772,7 @@
   - type: Icon
     sprite: _RMC14/Structures/Storage/Crates/secure_we_ya.rsi
   - type: AccessReader
-    access: [["RMCAccessWeYa"]]
+    access: [["AU14AccessCorporateWEYU"]]
 
 - type: entity
   parent: RMCCrateSecure

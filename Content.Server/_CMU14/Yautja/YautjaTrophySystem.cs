@@ -27,7 +27,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Yautja;
 
-public sealed class YautjaTrophySystem : EntitySystem
+public sealed partial class YautjaTrophySystem : EntitySystem
 {
     private static readonly EntProtoId HumanSkullPrototype = "CMUYautjaHumanSkullTrophy";
     private static readonly EntProtoId HumanLeftArmBonePrototype = "CMUYautjaHumanLeftArmBoneTrophy";
@@ -48,19 +48,19 @@ public sealed class YautjaTrophySystem : EntitySystem
     private static readonly EntProtoId HumanRemainsPrototype = "CMUYautjaHumanButcheredRemains";
     private static readonly EntProtoId XenoRemainsPrototype = "CMUYautjaXenoButcheredRemains";
 
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly MetaDataSystem _meta = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly RMCUnrevivableSystem _unrevivable = default!;
-    [Dependency] private readonly YautjaMarkSystem _marks = default!;
-    [Dependency] private readonly YautjaRitualSystem _ritual = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private MetaDataSystem _meta = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private RMCUnrevivableSystem _unrevivable = default!;
+    [Dependency] private YautjaMarkSystem _marks = default!;
+    [Dependency] private YautjaRitualSystem _ritual = default!;
 
     public override void Initialize()
     {

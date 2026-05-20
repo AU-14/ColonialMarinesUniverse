@@ -11,7 +11,7 @@ namespace Content.Client.Info;
 [GenerateTypedNameReferences]
 public sealed partial class RulesPopup : Control
 {
-    [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
+    [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
     private float _timer;
 

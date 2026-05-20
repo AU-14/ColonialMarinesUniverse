@@ -21,22 +21,23 @@ using Robust.Shared.Timing;
 using System.Data;
 using Content.Server.AU14.Round;
 using IConfigurationManager = Robust.Shared.Configuration.IConfigurationManager;
+using Content.Server.Radio;
 
 namespace Content.Server._RMC14.Xenonids.Hive;
 
-public sealed class XenoHiveSystem : SharedXenoHiveSystem
+public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
 {
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly XenoAnnounceSystem _xenoAnnounce = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly SharedCMChatSystem _rmcChat = default!;
-    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private XenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private SharedCMChatSystem _rmcChat = default!;
+    [Dependency] private AuRoundSystem _auRoundSystem = default!;
 
     private readonly List<string> _announce = [];
     private readonly EntProtoId _defaultHive = "CMXenoHive";
@@ -52,6 +53,7 @@ public sealed class XenoHiveSystem : SharedXenoHiveSystem
 
         SubscribeLocalEvent<HijackBurrowedSurgeComponent, ComponentStartup>(OnBurrowedSurgeStartup);
         SubscribeLocalEvent<HijackBurrowedSurgeComponent, ComponentShutdown>(OnBurrowedSurgeShutdown);
+        SubscribeLocalEvent<RadioReceiveAttemptEvent>(OnRadioReceiveAttempt);
 
         Subs.CVar(_config,
             RMCCVars.RMCLateJoinsPerBurrowedLarvaEarlyThresholdMinutes,
@@ -59,6 +61,14 @@ public sealed class XenoHiveSystem : SharedXenoHiveSystem
             true);
         Subs.CVar(_config, RMCCVars.RMCLateJoinsPerBurrowedLarvaEarly, v => _lateJoinsPerBurrowedLarvaEarly = v, true);
         Subs.CVar(_config, RMCCVars.RMCLateJoinsPerBurrowedLarva, v => _lateJoinsPerBurrowedLarva = v, true);
+    }
+
+    private void OnRadioReceiveAttempt(ref RadioReceiveAttemptEvent args)
+    {
+        //since hivemind is an intrinsic channel, we can probably just access it directly
+        if (TryComp<HiveMemberComponent>(args.RadioSource, out var hivea) && IsMember(args.RadioReceiver, hivea.Hive))
+            return;
+        else args.Cancelled = true;
     }
 
     private void OnPlayerSpawnComplete(PlayerSpawnCompleteEvent ev)

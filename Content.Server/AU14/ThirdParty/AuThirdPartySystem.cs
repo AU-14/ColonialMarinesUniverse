@@ -1,6 +1,10 @@
 using System.Linq;
+using Content.Server.Access.Systems;
+using Content.Server.IdentityManagement;
+using Content.Server.Preferences.Managers;
 using Content.Server.AU14.Round;
 using Content.Shared.AU14.Threats;
+using Content.Shared.Access.Systems;
 using Robust.Shared.Map;
 using Content.Shared.Roles;
 using Content.Shared.Mind;
@@ -8,13 +12,17 @@ using Content.Server.GameTicking;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared.AU14.util;
 using Content.Shared.Players;
+using Content.Shared.Preferences;
 using Robust.Shared.Random;
 using Robust.Server.Player;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Server.GameObjects;
 using Content.Server.AU14.VendorMarker;
 using Content.Shared.Ghost;
+using Content.Shared.Humanoid;
 using Content.Shared.ParaDrop;
 using Content.Shared._RMC14.CrashLand;
 using Content.Server.Chat.Systems;
@@ -23,18 +31,22 @@ using Robust.Shared.EntitySerialization;
 
 namespace Content.Server.AU14.ThirdParty;
 
-public sealed class AuThirdPartySystem : EntitySystem
+public sealed partial class AuThirdPartySystem : EntitySystem
 {
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private MapLoaderSystem _mapLoader = default!;
     private readonly ISawmill _sawmill = Logger.GetSawmill("thirdparty");
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly SharedDropshipSystem _sharedDropshipSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private SharedDropshipSystem _sharedDropshipSystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IServerPreferencesManager _preferences = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private IdCardSystem _idCard = default!;
+    [Dependency] private IdentitySystem _identity = default!;
 
     // --- State for round third party spawning ---
     private ThreatPrototype? _currentThreat;
@@ -611,10 +623,13 @@ public sealed class AuThirdPartySystem : EntitySystem
                 var ticker = _entityManager.System<GameTicker>();
                 ticker.PlayerJoinGame(session, silent: true);
                 var data = session.ContentData();
-                var mind = mindSystem.GetMind(playerNetId) ?? mindSystem.CreateMind(playerNetId, data?.Name ?? "Third Party Player");
-                mindSystem.SetUserId(mind, playerNetId);
-                mindSystem.TransferTo(mind, entity);
-                roleSystem.MindAddJobRole(mind, silent: true, jobPrototype: "AU14JobThirdPartyLeader");
+                var mind = mindSystem.GetMind(playerNetId);
+                var characterName = GetPlayerCharacterName(session, mind, data?.Name ?? "Third Party Player");
+                ApplyPlayerCharacterName(entity, characterName);
+                mind ??= mindSystem.CreateMind(playerNetId, characterName);
+                mindSystem.SetUserId(mind.Value, playerNetId);
+                mindSystem.TransferTo(mind.Value, entity);
+                roleSystem.MindAddJobRole(mind.Value, silent: true, jobPrototype: "AU14JobThirdPartyLeader");
             }
             for (int i = 0; i < memberPlayers.Count && i < spawnedGrunts.Count; i++)
             {
@@ -625,10 +640,13 @@ public sealed class AuThirdPartySystem : EntitySystem
                 var ticker = _entityManager.System<GameTicker>();
                 ticker.PlayerJoinGame(session, silent: true);
                 var data = session.ContentData();
-                var mind = mindSystem.GetMind(playerNetId) ?? mindSystem.CreateMind(playerNetId, data?.Name ?? "Third Party Player");
-                mindSystem.SetUserId(mind, playerNetId);
-                mindSystem.TransferTo(mind, entity);
-                roleSystem.MindAddJobRole(mind, silent: true, jobPrototype: "AU14JobThirdPartyMember");
+                var mind = mindSystem.GetMind(playerNetId);
+                var characterName = GetPlayerCharacterName(session, mind, data?.Name ?? "Third Party Player");
+                ApplyPlayerCharacterName(entity, characterName);
+                mind ??= mindSystem.CreateMind(playerNetId, characterName);
+                mindSystem.SetUserId(mind.Value, playerNetId);
+                mindSystem.TransferTo(mind.Value, entity);
+                roleSystem.MindAddJobRole(mind.Value, silent: true, jobPrototype: "AU14JobThirdPartyMember");
             }
         }
         if (!string.IsNullOrWhiteSpace(party.AnnounceArrival))
@@ -638,6 +656,40 @@ public sealed class AuThirdPartySystem : EntitySystem
         }
 
         return true;
+    }
+
+    private string GetPlayerCharacterName(ICommonSession player, EntityUid? mind, string fallback)
+    {
+        if (mind != null &&
+            TryComp<MindComponent>(mind.Value, out var mindComp) &&
+            !string.IsNullOrWhiteSpace(mindComp.CharacterName))
+        {
+            return mindComp.CharacterName;
+        }
+
+        if (_preferences.GetPreferencesOrNull(player.UserId)?.SelectedCharacter is HumanoidCharacterProfile profile &&
+            !string.IsNullOrWhiteSpace(profile.Name))
+        {
+            return profile.Name;
+        }
+
+        return fallback;
+    }
+
+    private void ApplyPlayerCharacterName(EntityUid mob, string characterName)
+    {
+        if (!HasComp<HumanoidAppearanceComponent>(mob))
+            return;
+
+        if (string.IsNullOrWhiteSpace(characterName))
+            return;
+
+        _metaData.SetEntityName(mob, characterName);
+
+        if (_idCard.TryFindIdCard(mob, out var idCard))
+            _idCard.TryChangeFullName(idCard.Owner, characterName, idCard.Comp);
+
+        _identity.QueueIdentityUpdate(mob);
     }
 
     public override void Update(float frameTime)

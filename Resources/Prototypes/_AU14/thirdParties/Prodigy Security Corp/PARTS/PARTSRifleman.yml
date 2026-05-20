@@ -1,0 +1,112 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobPARTSPartyContractorBase
+  name: PMC Contractor Base
+  description: au14-prodigyparty-description
+  playTimeTracker: AU14JobPARTSPartyContractor
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: job
+  parent: AU14JobPARTSPartyContractorBase
+  id: AU14JobPARTSPartyContractor
+  name: PARTS Response Unit (M41A/2)
+  description: au14-prodigyparty-description
+  ranks:
+    AU14RankWeYuRecruit: []
+  spawnMenuRoleName: Prodigy Sierra Contractor (3rd party, M41A/2)
+  startingGear: AU14GearPARTSPartyContractor
+  greeting: au14-prodigyparty-greeting
+  icon: "RMCJobIconPMCStandard"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-psc
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 1
+        RMCSkillFirearms: 2
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadRiflemanWYPMC
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: AU14JobPARTSPartyRifleman
+  name: Prodigy Sierra Party Rifleman (3rd party, M41A/2)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPARTS
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Prodigy Rifleman
+    description: au14-prodigyparty-description
+    reregister: false
+    job: AU14JobPARTSPartyContractor
+    raffle:
+      settings: short
+    rules: au14-prodigyparty-description
+
+- type: startingGear
+  id: AU14GearPARTSPartyContractor
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14ArmorProdigyXAS23
+    jumpsuit: AU14ProdigyFatiguesRU
+    shoes: RMCBootsSPPBlackFilled
+    mask: RMCMaskCoifPMC
+    eyes: RMCGlassesMedicalHUDGlasses
+    head: AU14ProdigyBallisticHelmet
+    gloves: AU14HandsProdigyRU
+    belt: AU14BeltUtilityCombatProdigyRUFilled
+    pocket1: RMCPouchMagazineLargePMC
+    pocket2: AU14PouchIFAKProdigyFill
+    back: RMCSatchelWelderRU #21 slots
+    ears: RMCM5CameraGear
+    ears2: AU14HeadsetPART
+    suitstorage: RMCWeaponRifleM54C2
+  storage:
+    pocket1:
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    back:
+    - CMMRE
+    - RMCBinocularsPVE
+    - AU14PacketGrenadeFragM12Filled
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    jumpsuit:
+    - AU14SynthResetKeyProdigy
+    - AU14SynthResetKeyProdigy
+    - AU14ProdigyLaptop
+    - RMCHandcuffs
+    # 1 empty slots
+    outerClothing:
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    # 2 empty slots
+
+- type: playTimeTracker
+  id: AU14JobPARTSPartyContractor

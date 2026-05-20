@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Shared.Gibbing.Components;
 using Content.Shared.Gibbing.Events;
@@ -11,13 +11,13 @@ using Robust.Shared.Random;
 
 namespace Content.Shared.Gibbing.Systems;
 
-public sealed class GibbingSystem : EntitySystem
+public sealed partial class GibbingSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physicsSystem = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private SharedContainerSystem _containerSystem = default!;
+    [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private SharedAudioSystem _audioSystem = default!;
+    [Dependency] private SharedPhysicsSystem _physicsSystem = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     //TODO: (future optimization) implement a system that "caps" giblet entities by deleting the oldest ones once we reach a certain limit, customizable via CVAR
 

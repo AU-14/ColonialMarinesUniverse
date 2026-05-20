@@ -15,9 +15,9 @@ public sealed partial class SimpleRadialMenu : RadialMenu
 {
     private EntityUid? _attachMenuToEntity;
 
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IInputManager _inputManager = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IInputManager _inputManager = default!;
 
     public SimpleRadialMenu()
     {
@@ -229,7 +229,7 @@ public sealed partial class SimpleRadialMenu : RadialMenu
 }
 
 
-public abstract class RadialMenuOption
+public abstract partial class RadialMenuOption
 {
     public string? ToolTip { get; init; }
 
@@ -238,15 +238,15 @@ public abstract class RadialMenuOption
     public Color? HoverBackgroundColor { get; set; }
 }
 
-public abstract class RadialMenuActionOption(Action onPressed) : RadialMenuOption
+public abstract partial class RadialMenuActionOption(Action onPressed) : RadialMenuOption
 {
     public Action OnPressed { get; } = onPressed;
 }
 
-public sealed class RadialMenuActionOption<T>(Action<T> onPressed, T data)
+public sealed partial class RadialMenuActionOption<T>(Action<T> onPressed, T data)
     : RadialMenuActionOption(onPressed: () => onPressed(data));
 
-public sealed class RadialMenuNestedLayerOption(IReadOnlyCollection<RadialMenuOption> nested, float containerRadius = 100)
+public sealed partial class RadialMenuNestedLayerOption(IReadOnlyCollection<RadialMenuOption> nested, float containerRadius = 100)
     : RadialMenuOption
 {
     public float? ContainerRadius { get; } = containerRadius;
@@ -254,7 +254,7 @@ public sealed class RadialMenuNestedLayerOption(IReadOnlyCollection<RadialMenuOp
     public IReadOnlyCollection<RadialMenuOption> Nested { get; } = nested;
 }
 
-public sealed class SimpleRadialMenuSettings
+public sealed partial class SimpleRadialMenuSettings
 {
     /// <summary>
     /// Default container draw radius. Is going to be further affected by per sector increment.

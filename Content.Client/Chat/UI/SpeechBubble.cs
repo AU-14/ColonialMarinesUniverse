@@ -19,13 +19,13 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.Chat.UI
 {
-    public abstract class SpeechBubble : Control
+    public abstract partial class SpeechBubble : Control
     {
-        [Dependency] private readonly IGameTiming _timing = default!;
-        [Dependency] private readonly IEyeManager _eyeManager = default!;
-        [Dependency] private readonly IEntityManager _entityManager = default!;
-        [Dependency] private readonly IPlayerManager _player = default!;
-        [Dependency] protected readonly IConfigurationManager ConfigManager = default!;
+        [Dependency] private IGameTiming _timing = default!;
+        [Dependency] private IEyeManager _eyeManager = default!;
+        [Dependency] private IEntityManager _entityManager = default!;
+        [Dependency] private IPlayerManager _player = default!;
+        [Dependency] protected IConfigurationManager ConfigManager = default!;
         private readonly SharedTransformSystem _transformSystem;
 
         public enum SpeechType : byte
@@ -226,7 +226,7 @@ namespace Content.Client.Chat.UI
 
     }
 
-    public sealed class TextSpeechBubble : SpeechBubble
+    public sealed partial class TextSpeechBubble : SpeechBubble
     {
         public TextSpeechBubble(ChatMessage message, EntityUid senderEntity, string speechStyleClass, Color? fontColor = null)
             : base(message, senderEntity, speechStyleClass, fontColor)
@@ -253,7 +253,7 @@ namespace Content.Client.Chat.UI
         }
     }
 
-    public sealed class FancyTextSpeechBubble : SpeechBubble
+    public sealed partial class FancyTextSpeechBubble : SpeechBubble
     {
 
         public FancyTextSpeechBubble(ChatMessage message, EntityUid senderEntity, string speechStyleClass, Color? fontColor = null)

@@ -1,4 +1,4 @@
-﻿using Content.Server.Chat.Systems;
+using Content.Server.Chat.Systems;
 using Content.Server.Speech.EntitySystems;
 using Content.Shared._RMC14.Emote;
 using Content.Shared.Chat.Prototypes;
@@ -8,10 +8,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._RMC14.Emote;
 
-public sealed class RMCEmoteSystem : SharedRMCEmoteSystem
+public sealed partial class RMCEmoteSystem : SharedRMCEmoteSystem
 {
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
 
     public override void Initialize()

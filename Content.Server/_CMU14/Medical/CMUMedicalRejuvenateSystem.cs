@@ -17,18 +17,18 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Medical;
 
-public sealed class CMUMedicalRejuvenateSystem : EntitySystem
+public sealed partial class CMUMedicalRejuvenateSystem : EntitySystem
 {
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedBodyPartHealthSystem _partHealth = default!;
-    [Dependency] private readonly SharedBoneSystem _bone = default!;
-    [Dependency] private readonly SharedFractureSystem _fracture = default!;
-    [Dependency] private readonly SharedOrganHealthSystem _organHealth = default!;
-    [Dependency] private readonly SharedHeartSystem _heart = default!;
-    [Dependency] private readonly SharedCMUWoundsSystem _wounds = default!;
-    [Dependency] private readonly SharedStatusEffectsSystem _status = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly IPrototypeManager _protoMgr = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
+    [Dependency] private SharedBoneSystem _bone = default!;
+    [Dependency] private SharedFractureSystem _fracture = default!;
+    [Dependency] private SharedOrganHealthSystem _organHealth = default!;
+    [Dependency] private SharedHeartSystem _heart = default!;
+    [Dependency] private SharedCMUWoundsSystem _wounds = default!;
+    [Dependency] private SharedStatusEffectsSystem _status = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private IPrototypeManager _protoMgr = default!;
 
     private static readonly EntProtoId[] CmuStatusEffects =
     {

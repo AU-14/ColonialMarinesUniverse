@@ -192,7 +192,7 @@
   suffix: Liaison, Locked
   components:
   - type: AccessReader
-    access: [ [ "RMCAccessWeYa" ] ]
+    access: [ [ "AU14AccessCorporateWEYU" ] ]
 
 - type: entity
   parent: CMAirlockMaint
@@ -200,7 +200,7 @@
   suffix: Liaison, Locked, Maint
   components:
   - type: AccessReader
-    access: [ [ "RMCAccessWeYa" ] ]
+    access: [ [ "AU14AccessCorporateWEYU" ] ]
 
 
 - type: entity

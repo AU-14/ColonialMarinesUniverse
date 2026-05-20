@@ -6,10 +6,10 @@ using Content.Shared.FixedPoint;
 
 namespace Content.Shared._CMU14.Medical.BodyPart;
 
-public sealed class CMUExplosionMedicalTraumaSystem : EntitySystem
+public sealed partial class CMUExplosionMedicalTraumaSystem : EntitySystem
 {
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedBodyPartHealthSystem _partHealth = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
 
     public override void Initialize()
     {

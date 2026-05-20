@@ -9,11 +9,11 @@ namespace Content.Server._RMC14.Synth;
 /// <summary>
 /// Handles the synthetic K9 name changer dialog and applies the chosen name to the user.
 /// </summary>
-public sealed class RMCK9NameChangerSystem : EntitySystem
+public sealed partial class RMCK9NameChangerSystem : EntitySystem
 {
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly QuickDialogSystem _quickDialog = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private QuickDialogSystem _quickDialog = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

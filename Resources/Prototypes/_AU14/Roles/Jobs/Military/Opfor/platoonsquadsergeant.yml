@@ -64,7 +64,7 @@
   id: AU14GearopforSquadSergeant
   equipment:
     id: AU14IDCardopforSquadSergeant
-    ears: AU14HeadsetSectionLeaderopfor
+    ears: AU14HeadsetOpforCommand
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -83,4 +83,4 @@
     shoes: CMBootsBrown
     head: AU14JungleBoonieHat
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetSectionLeaderopfor
+    ears: AU14HeadsetOpforCommand

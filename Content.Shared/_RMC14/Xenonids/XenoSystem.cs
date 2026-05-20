@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Entrenching;
+using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Medical.Scanner;
 using Content.Shared._RMC14.NightVision;
@@ -60,29 +61,29 @@ namespace Content.Shared._RMC14.Xenonids;
 
 public sealed partial class XenoSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _action = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedEntityStorageSystem _entityStorage = default!;
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly HiveLeaderSystem _hiveLeader = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThresholds = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private readonly SharedNightVisionSystem _nightVision = default!;
-    [Dependency] private readonly SharedRMCDamageableSystem _rmcDamageable = default!;
-    [Dependency] private readonly SharedRMCFlammableSystem _rmcFlammable = default!;
-    [Dependency] private readonly RMCPlanetSystem _rmcPlanet = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly WeldableSystem _weldable = default!;
-    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
-    [Dependency] private readonly SharedXenoWeedsSystem _weeds = default!;
+    [Dependency] private SharedActionsSystem _action = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedEntityStorageSystem _entityStorage = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private HiveLeaderSystem _hiveLeader = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MobThresholdSystem _mobThresholds = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private SharedNightVisionSystem _nightVision = default!;
+    [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
+    [Dependency] private SharedRMCFlammableSystem _rmcFlammable = default!;
+    [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private WeldableSystem _weldable = default!;
+    [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private SharedXenoWeedsSystem _weeds = default!;
 
     private static readonly ProtoId<DamageTypePrototype> HeatDamage = "Heat";
 
@@ -142,6 +143,8 @@ public sealed partial class XenoSystem : EntitySystem
         SubscribeLocalEvent<XenoRegenComponent, MapInitEvent>(OnXenoRegenMapInit, before: [typeof(SharedXenoPheromonesSystem)]);
         SubscribeLocalEvent<XenoRegenComponent, DamageStateCritBeforeDamageEvent>(OnXenoRegenBeforeCritDamage, before: [typeof(SharedXenoPheromonesSystem)]);
 
+        SubscribeLocalEvent<XenoComponent, RMCGetFixedIdentityEvent>(OnIdentificationAttempt);
+
         //In XenoSystem.Visuals
         SubscribeLocalEvent<XenoStateVisualsComponent, MobStateChangedEvent>(OnVisualsMobStateChanged);
         SubscribeLocalEvent<XenoStateVisualsComponent, XenoFortifiedEvent>(OnVisualsFortified);
@@ -182,6 +185,17 @@ public sealed partial class XenoSystem : EntitySystem
     private void OnXenoGetAdditionalAccess(Entity<XenoComponent> xeno, ref GetAccessTagsEvent args)
     {
         args.Tags.UnionWith(xeno.Comp.AccessLevels);
+    }
+
+    private void OnIdentificationAttempt(Entity<XenoComponent> ent, ref RMCGetFixedIdentityEvent args)
+    {
+        var hive = _hive.GetHive(ent.Owner);
+        if (hive is null)
+            return;
+        if (hive.Value.Comp.Corrupted || _hive.IsAllyOfHive(args.Identified, hive))
+        {
+            args.Cancelled = true;
+        }
     }
 
     private void OnNewXenoEvolved(Entity<XenoComponent> newXeno, ref NewXenoEvolvedEvent args)

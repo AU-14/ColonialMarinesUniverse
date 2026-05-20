@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Shared._RMC14.Xenonids.Animation;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
@@ -8,10 +8,10 @@ using static Robust.Client.Animations.AnimationTrackProperty;
 
 namespace Content.Client._RMC14.Xenonids.Animations;
 
-public sealed class XenoAnimationsSystem : EntitySystem
+public sealed partial class XenoAnimationsSystem : EntitySystem
 {
-    [Dependency] private readonly AnimationPlayerSystem _animation = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private AnimationPlayerSystem _animation = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     private const string MeleeLungeKey = "melee-lunge";
 

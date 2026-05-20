@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Inventory;
+using Content.Shared._RMC14.Inventory;
 using Content.Shared._RMC14.MotionDetector;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Coordinates;
@@ -17,18 +17,18 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Intel.Detector;
 
-public sealed class IntelDetectorSystem : EntitySystem
+public sealed partial class IntelDetectorSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedCMInventorySystem _rmcInventory = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedCMInventorySystem _rmcInventory = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     private EntityQuery<IntelDetectorComponent> _detectorQuery;
     private EntityQuery<StorageComponent> _storageQuery;

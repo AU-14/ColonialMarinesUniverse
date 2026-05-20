@@ -15,12 +15,12 @@ using Content.Shared.SSDIndicator;
 
 namespace Content.Server.AU14.Threats;
 
-public sealed class KillAllColonistRuleSystem : GameRuleSystem<KillAllColonistRuleComponent>
+public sealed partial class KillAllColonistRuleSystem : GameRuleSystem<KillAllColonistRuleComponent>
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly Round.AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private readonly RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private Round.AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
 
     private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
 

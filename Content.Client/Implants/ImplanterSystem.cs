@@ -1,4 +1,4 @@
-﻿using Content.Client.Implants.UI;
+using Content.Client.Implants.UI;
 using Content.Client.Items;
 using Content.Shared.Implants;
 using Content.Shared.Implants.Components;
@@ -6,10 +6,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.Implants;
 
-public sealed class ImplanterSystem : SharedImplanterSystem
+public sealed partial class ImplanterSystem : SharedImplanterSystem
 {
-    [Dependency] private readonly SharedUserInterfaceSystem _uiSystem = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private SharedUserInterfaceSystem _uiSystem = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {

@@ -131,6 +131,7 @@ public sealed partial class CharacterPickerButton : ContainerButton
         JobLabel.Visible = entry != null;
     }
 
+    [System.Obsolete]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

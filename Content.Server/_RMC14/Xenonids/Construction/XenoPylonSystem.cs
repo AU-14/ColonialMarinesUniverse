@@ -13,26 +13,29 @@ using Content.Shared.Destructible;
 using Content.Shared.FixedPoint;
 using Content.Shared.Ghost.Roles.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.StepTrigger.Systems;
+using Content.Shared.Tag;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using Content.Shared.StepTrigger.Systems;
-using Content.Shared.Tag;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server._RMC14.Xenonids.Construction;
 
-public sealed class XenoPylonSystem : SharedXenoPylonSystem
+public sealed partial class XenoPylonSystem : SharedXenoPylonSystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly XenoEvolutionSystem _evolution = default!;
-    [Dependency] private readonly GhostRoleSystem _ghostRole = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly RMCDamageableSystem _rmcDamageable = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly TagSystem _tagSystem = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private XenoEvolutionSystem _evolution = default!;
+    [Dependency] private GhostRoleSystem _ghostRole = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private RMCDamageableSystem _rmcDamageable = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private TagSystem _tagSystem = default!;
+
+    private static readonly ProtoId<TagPrototype> XenoLarvaTag = "RMCXenoLarva";
 
     public override void Initialize()
     {
@@ -92,24 +95,24 @@ public sealed class XenoPylonSystem : SharedXenoPylonSystem
                 core.CurrentLesserDrones = Math.Max(0, core.CurrentLesserDrones - 1);
             }
         }
-
+        Entity<HiveComponent>? hive = _hive.GetHive(coreEnt.Owner);
         _ghostRole.SetCurrent((uid, spawner), core.LiveLesserDrones.Count);
 
-        if (!_evolution.HasLiving<XenoComponent>(1) &&
-            !_evolution.HasLiving<XenoEvolutionGranterComponent>(1))
+        if (!_evolution.HasLiving<XenoComponent>(1, null, hive) &&
+            !_evolution.HasLiving<XenoEvolutionGranterComponent>(1, null, hive))
         {
             _ghostRole.SetAvailable((uid, spawner), 0);
             return;
         }
 
-        var living = _evolution.GetLiving<XenoComponent>(x => x.Comp.CountedInSlots);
+        var living = _evolution.GetLiving<XenoComponent>(x => x.Comp.CountedInSlots, hive);
         var available = Math.Max(core.MinimumLesserDrones, living / core.XenosPerLesserDrone);
         core.MaxLesserDrones = available;
 
         var time = _timing.CurTime;
         if (time > core.NextLesserDroneAt)
         {
-            var hasOvipositor = _evolution.HasLiving<XenoAttachedOvipositorComponent>(1);
+            var hasOvipositor = _evolution.HasLiving<XenoAttachedOvipositorComponent>(1, null, hive);
             core.NextLesserDroneAt = time + (hasOvipositor ? core.NextLesserDroneOviCooldown : core.NextLesserDroneCooldown * 2);
             core.CurrentLesserDrones = Math.Min(core.MaxLesserDrones, core.CurrentLesserDrones + 1);
         }
@@ -153,7 +156,7 @@ public sealed class XenoPylonSystem : SharedXenoPylonSystem
 
     private bool CanTrigger(EntityUid user)
     {
-        return _tagSystem.HasTag(user, "RMCXenoLarva") && _mobState.IsDead(user);
+        return _tagSystem.HasTag(user, XenoLarvaTag) && _mobState.IsDead(user);
     }
 
     private void OnHiveCoreStepTriggered(Entity<HiveCoreComponent> core, ref StepTriggeredOffEvent args)

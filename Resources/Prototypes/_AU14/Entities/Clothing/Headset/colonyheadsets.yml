@@ -1,19 +1,26 @@
+# ├──[ ENCRYPTIONKEYS ]──────────────────────────────────────────────┤
 - type: entity
+  abstract: true
   parent: CMEncryptionKey
-  id: AU14EncryptionKeyCMB
-  name: CMB encryption key
+  id: AU14EncryptionKey
+  components:
+  - type: Sprite
+    state: we_ya_key
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyAdmin
+  name: colony admin encryption key
   description: An encryption key used to communicate on colony and CMB radio channels.
   components:
   - type: EncryptionKey
     channels:
     - Colony
-    - CMB
+    - radioCMB
     defaultChannel: Colony
-  - type: Sprite
-    state: we_ya_key
 
 - type: entity
-  parent: CMEncryptionKey
+  parent: AU14EncryptionKey
   id: AU14EncryptionKeyWEYU
   name: Weyland colonial encryption key
   description: An encryption key used to communicate on colony and weyland radio channels.
@@ -21,37 +28,57 @@
   - type: EncryptionKey
     channels:
     - Colony
-    - WEYA
+    - radioWEYU
     defaultChannel: Colony
-  - type: Sprite
-    state: we_ya_key
 
 - type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyCMBOnly
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyCMB
   name: CMB encryption key
+  suffix: Colony, CMB
   description: An encryption key used to communicate on colony and CMB radio channels.
   components:
   - type: EncryptionKey
     channels:
-    - CMB
+    - Colony
+    - radioCMB
     defaultChannel: Colony
-  - type: Sprite
-    state: we_ya_key
 
 - type: entity
-  parent: CMEncryptionKey
-  id: AU14EncryptionKeyAdmin
-  name: colony admin encryption key
-  description: An encryption key used to communicate on colony, weyu and CMB radio channels.
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyCMBOnly
+  name: CMB encryption key
+  description: An encryption key used to communicate the CMB radio channel.
   components:
   - type: EncryptionKey
     channels:
-    - Colony
-    - CMB
+    - radioCMB
     defaultChannel: Colony
-  - type: Sprite
-    state: we_ya_key
+
+# ├─[ HEADSETS ]────────────────────────────────────────────────────┤
+- type: entity
+  parent: RMCHeadsetLiaison
+  id: AU14ColonyAdminHeadset
+  name: colony administration headset
+  description: A headset used by the colony administration to communicate.
+  suffix: CMB, Colony
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyAdmin
+
+- type: entity
+  parent: RMCHeadsetLiaison
+  id: AU14ColonyWeylandHeadset
+  name: colony weyland yutani headset
+  description: A headset used by weyland yutani to communicate.
+  suffix: Colony, WEYU
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyWEYU
 
 - type: entity
   parent: RMCHeadsetMarine
@@ -81,29 +108,15 @@
     state: cmb_headset
 
 - type: entity
-  parent: RMCHeadsetLiaison
-  id: AU14ColonyAdminHeadset
-  name: colony administration headset
-  description: A headset used by the colony administration to communicate.
-  suffix: CMB, Colony
+  parent: RMCHeadsetMarine
+  id: AU14HeadsetWorkingJoe
+  name: Working Joe headset
+  description: A common headset used by Working Joes.
   components:
-  - type: ContainerFill
-    containers:
-      key_slots:
-      - AU14EncryptionKeyAdmin
+  - type: Sprite
+    state: generic_headset
 
-- type: entity
-  parent: RMCHeadsetLiaison
-  id: AU14ColonyWeylandHeadset
-  name: colony weyland yutani headset
-  description: A headset used by weyland yutani to communicate.
-  suffix: Colony
-  components:
-  - type: ContainerFill
-    containers:
-      key_slots:
-      - AU14EncryptionKeyWEYU
-
+# ├──[ AMBASSADORHEADSETS ]──────────────────────────────────────────┤
 - type: entity
   parent: AU14ColonyAdminHeadset
   id: AU14ColonyAmbassadorTWEHeadset

@@ -32,6 +32,7 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Shared.BarricadeBlock;
 using Robust.Shared.Random;
@@ -57,21 +58,22 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         "CMUYautjaBloodImpactEffect2",
     };
 
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedDestructibleSystem _destructible = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
-    [Dependency] private readonly DamageableSystem _damageableSystem = default!;
-    [Dependency] private readonly SharedGunSystem _guns = default!;
-    [Dependency] private readonly SharedCameraRecoilSystem _sharedCameraRecoil = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly RMCReagentSystem _reagent = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDestructibleSystem _destructible = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedColorFlashEffectSystem _color = default!;
+    [Dependency] private DamageableSystem _damageableSystem = default!;
+    [Dependency] private SharedGunSystem _guns = default!;
+    [Dependency] private SharedCameraRecoilSystem _sharedCameraRecoil = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -90,6 +92,14 @@ public abstract partial class SharedProjectileSystem : EntitySystem
 
     private void OnStartCollide(EntityUid uid, ProjectileComponent component, ref StartCollideEvent args)
     {
+        if (_net.IsClient &&
+            _timing.ApplyingState &&
+            (HasComp<PredictedProjectileClientComponent>(uid) ||
+             HasComp<XenoClientProjectileShotComponent>(uid)))
+        {
+            return;
+        }
+
         // This is so entities that shouldn't get a collision are ignored.
         if (args.OurFixtureId != ProjectileFixture || !args.OtherFixture.Hard
             || component.ProjectileSpent || component is { Weapon: null, OnlyCollideWhenShot: true })
@@ -164,14 +174,14 @@ public abstract partial class SharedProjectileSystem : EntitySystem
             }
         }
 
-        if (modifiedDamage is not null && (EntityManager.EntityExists(component.Shooter) || EntityManager.EntityExists(component.Weapon)))
+        if (modifiedDamage is not null && (Exists(component.Shooter) || Exists(component.Weapon)))
         {
             if (modifiedDamage.AnyPositive() && !deleted)
             {
                 _color.RaiseEffect(GetDamageEffectColor(target), new List<EntityUid> { target }, filter);
             }
 
-            var shooterOrWeapon = EntityManager.EntityExists(component.Shooter) ? component.Shooter!.Value : component.Weapon!.Value;
+            var shooterOrWeapon = Exists(component.Shooter) ? component.Shooter!.Value : component.Weapon!.Value;
 
             _adminLogger.Add(LogType.BulletHit,
                 HasComp<ActorComponent>(target) ? LogImpact.Medium : LogImpact.Low,
@@ -561,7 +571,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
 }
 
 [Serializable, NetSerializable]
-public sealed class ImpactEffectEvent : EntityEventArgs
+public sealed partial class ImpactEffectEvent : EntityEventArgs
 {
     public string Prototype;
     public NetCoordinates Coordinates;

@@ -13,16 +13,16 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Clothing.EntitySystems;
 
-public abstract class SharedChameleonClothingSystem : EntitySystem
+public abstract partial class SharedChameleonClothingSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly ClothingSystem _clothingSystem = default!;
-    [Dependency] private readonly ContrabandSystem _contraband = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly SharedItemSystem _itemSystem = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] protected readonly IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private ClothingSystem _clothingSystem = default!;
+    [Dependency] private ContrabandSystem _contraband = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private SharedItemSystem _itemSystem = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] protected IGameTiming _timing = default!;
 
     private static readonly SlotFlags[] IgnoredSlots =
     {
@@ -35,7 +35,7 @@ public abstract class SharedChameleonClothingSystem : EntitySystem
     private readonly Dictionary<SlotFlags, List<EntProtoId>> _data = new();
 
     public readonly Dictionary<SlotFlags, List<string>> ValidVariants = new();
-    [Dependency] protected readonly SharedUserInterfaceSystem UI = default!;
+    [Dependency] protected SharedUserInterfaceSystem UI = default!;
 
     private static readonly ProtoId<TagPrototype> WhitelistChameleonTag = "WhitelistChameleon";
 

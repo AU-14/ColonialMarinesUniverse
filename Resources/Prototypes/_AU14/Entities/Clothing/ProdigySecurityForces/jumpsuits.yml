@@ -6,3 +6,38 @@
   components:
   - type: Sprite
     sprite: _AU14/Clothing/ProdigySecurityForces/fatigues.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14ProdigyFatiguesRU
+  name: Prodigy Armed Repair Team specialized fatigues
+  description: Standard-issue Prodigy Armed Repair Team fatigues. The PART-SF is a specialized uniform designed for Prodigy Security Corp's Armed Repair Teams, who are responsible for maintaining and repairing equipment in high-risk environments. The uniform features reinforced padding on the knees and elbows, as well as multiple pockets for carrying tools and supplies. It also includes a built-in harness system for attaching additional gear and equipment.  
+  components:
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,7,1   # up to 4 small or 8 tiny items
+  - type: Sprite
+    sprite: _AU14/Clothing/ProdigySecurityForces/fatigues.rsi
+  - type: Tag
+    tags:
+    - ProdigyUniform
+
+- type: entity
+  parent: AU14ProdigyFatiguesRU
+  id: AU14ProdigyFatiguesRUSynth
+  name: Prodigy Armed Repair Team Synthetic fatigues
+  description: Standard-issue Prodigy Armed Repair Team fatigues for Synthetics. The PART-SF is a specialized uniform designed for Prodigy Security Corp's Armed Repair Teams, who are responsible for maintaining and repairing equipment in high-risk environments. The uniform features reinforced padding on the knees and elbows, as well as multiple pockets for carrying tools and supplies. It also includes a built-in harness system for attaching additional gear and equipment.  
+  components:
+  - type: Tag
+    tags:
+    - ProdigyUniformSynth
+
+
+# TAGS
+
+- type: Tag
+  id: ProdigyUniformSynth
+
+- type: Tag
+  id: ProdigyUniform

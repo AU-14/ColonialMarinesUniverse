@@ -25,15 +25,15 @@ namespace Content.Client.Voting.UI
     [GenerateTypedNameReferences]
     public sealed partial class VoteCallMenu : BaseWindow
     {
-        [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
-        [Dependency] private readonly IVoteManager _voteManager = default!;
-        [Dependency] private readonly IGameTiming _gameTiming = default!;
-        [Dependency] private readonly IClientNetManager _netManager = default!;
-        [Dependency] private readonly IEntityManager _entityManager = default!;
-        [Dependency] private readonly IEntityNetworkManager _entNetManager = default!;
-        [Dependency] private readonly IConfigurationManager _cfg = default!;
-        [Dependency] private readonly IStateManager _state = default!;
-        [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
+        [Dependency] private IClientConsoleHost _consoleHost = default!;
+        [Dependency] private IVoteManager _voteManager = default!;
+        [Dependency] private IGameTiming _gameTiming = default!;
+        [Dependency] private IClientNetManager _netManager = default!;
+        [Dependency] private IEntityManager _entityManager = default!;
+        [Dependency] private IEntityNetworkManager _entNetManager = default!;
+        [Dependency] private IConfigurationManager _cfg = default!;
+        [Dependency] private IStateManager _state = default!;
+        [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
         private VotingSystem _votingSystem;
 
@@ -78,6 +78,7 @@ namespace Content.Client.Voting.UI
             }
 
             _state.OnStateChanged += OnStateChanged;
+            _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
             VoteTypeButton.OnItemSelected += VoteTypeSelected;
             FollowButton.OnPressed += FollowSelected;
@@ -107,12 +108,20 @@ namespace Content.Client.Voting.UI
         {
             base.Dispose(disposing);
 
+            _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+        }
+
+        private void OnCrtUiEnabledChanged(bool _)
+        {
+            ApplyCrtPalette();
+            CrtLobbyTheme.Apply(this);
         }
 
         private void OnCrtUiColorChanged(string _)
         {
             ApplyCrtPalette();
+            CrtLobbyTheme.Apply(this);
         }
 
         private void ApplyCrtPalette()
@@ -360,7 +369,7 @@ namespace Content.Client.Voting.UI
     }
 
     [UsedImplicitly, AnyCommand]
-    public sealed class VoteMenuCommand : LocalizedCommands
+    public sealed partial class VoteMenuCommand : LocalizedCommands
     {
         public override string Command => "votemenu";
 

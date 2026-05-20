@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: CMBaseStructure
   abstract: true
   id: CMComputerDropship
@@ -216,7 +216,7 @@
   - type: ActivatableUI
     key: enum.DropshipTerminalWeaponsUi.Key
   - type: AccessReader
-    #access: [ [ "CMAccessPilot" ], [ "CMAccessSquadLeaderPrep" ], [ "RMCAccessWeYaFlight" ] ]
+    #access: [ [ "CMAccessPilot" ], [ "CMAccessSquadLeaderPrep" ], [ "AU14AccessCorporateWEYUFlight" ] ]
     access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
   - type: ActivatableUIRequiresAccess
   - type: UserInterface
@@ -258,7 +258,7 @@
   - type: ActivatableUI
     key: enum.DropshipTerminalWeaponsUi.Key
   - type: AccessReader
-    #access: [ [ "CMAccessPilot" ], [ "CMAccessSquadLeaderPrep" ], [ "RMCAccessWeYaFlight" ] ]
+    #access: [ [ "CMAccessPilot" ], [ "CMAccessSquadLeaderPrep" ], [ "AU14AccessCorporateWEYUFlight" ] ]
     access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
   - type: ActivatableUIRequiresAccess
   - type: UserInterface
@@ -295,7 +295,7 @@
   - type: ActivatableUI
     key: enum.DropshipTerminalWeaponsUi.Key
   - type: AccessReader
-    #access: [ [ "CMAccessPilot" ], [ "CMAccessSquadLeaderPrep" ], [ "RMCAccessWeYaFlight" ] ]
+    #access: [ [ "CMAccessPilot" ], [ "CMAccessSquadLeaderPrep" ], [ "AU14AccessCorporateWEYUFlight" ] ]
     access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
   - type: ActivatableUIRequiresAccess
   - type: UserInterface
@@ -324,7 +324,7 @@
   - type: ActivatableUI
     key: enum.DropshipTerminalWeaponsUi.Key
   - type: AccessReader
-    #access: [ [ "CMAccessPilot" ], [ "CMAccessSquadLeaderPrep" ], [ "RMCAccessWeYaFlight" ] ]
+    #access: [ [ "CMAccessPilot" ], [ "CMAccessSquadLeaderPrep" ], [ "AU14AccessCorporateWEYUFlight" ] ]
     access: [ [ "AU14AccessOpforFTL" ], [ "AU14AccessOpforPilot" ] ]
   - type: ActivatableUIRequiresAccess
   - type: UserInterface

@@ -3,11 +3,11 @@ using Robust.Shared.Random;
 
 namespace Content.Shared._RMC14.Random.Names;
 
-public sealed class RMCRandomNameSystem : EntitySystem
+public sealed partial class RMCRandomNameSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private INetManager _net = default!;
 
     public override void Initialize()
     {

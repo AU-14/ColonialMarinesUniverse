@@ -36,22 +36,22 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Dropship;
 
-public abstract class SharedDropshipSystem : EntitySystem
+public abstract partial class SharedDropshipSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedAudioSystem Audio = default!;
+    [Dependency] protected SharedAudioSystem Audio = default!;
 
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedGameTicker _gameTicker = default!;
-    [Dependency] private readonly SharedMarineAnnounceSystem _marineAnnounce = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedGameTicker _gameTicker = default!;
+    [Dependency] private SharedMarineAnnounceSystem _marineAnnounce = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
 
     private TimeSpan _dropshipInitialDelay;
     private TimeSpan _hijackInitialDelay;
@@ -941,7 +941,7 @@ public abstract class SharedDropshipSystem : EntitySystem
 
     protected bool IsPrimaryForFaction(EntityUid destination, string? faction)
     {
-        if (!EntityManager.TryGetComponent<PrimaryLandingZoneComponent>(destination, out var comp))
+        if (!TryComp<PrimaryLandingZoneComponent>(destination, out var comp))
             return false;
         var compFaction = string.IsNullOrWhiteSpace(comp.Faction) ? null : comp.Faction.ToLowerInvariant();
         var normalized = string.IsNullOrWhiteSpace(faction) ? null : faction.ToLowerInvariant();
@@ -1028,7 +1028,7 @@ public abstract class SharedDropshipSystem : EntitySystem
 
         // Determine desired faction from the DropshipDestination's FactionController (if any).
         string? desiredFaction = null;
-        if (EntityManager.TryGetComponent<DropshipDestinationComponent>(lz, out var lzComp) && !string.IsNullOrWhiteSpace(lzComp.FactionController))
+        if (TryComp<DropshipDestinationComponent>(lz, out var lzComp) && !string.IsNullOrWhiteSpace(lzComp.FactionController))
             desiredFaction = lzComp.FactionController.ToLowerInvariant();
 
         // Prevent duplicate primary for the same faction
@@ -1055,21 +1055,19 @@ public abstract class SharedDropshipSystem : EntitySystem
 
         var primary = EnsureComp<PrimaryLandingZoneComponent>(lz);
         primary.Faction = desiredFaction;
-        EntityManager.Dirty(lz, primary);
+        Dirty(lz, primary);
         EnsureComp<RMCTrackableComponent>(lz);
 
         // Auto-set faction on all DropshipTerminal entities on the same map as the LZ
-        if (TryComp<TransformComponent>(lz, out var lzXform))
+        var lzXform = Transform(lz);
+        var terminalQuery = EntityQueryEnumerator<DropshipTerminalComponent, TransformComponent>();
+        while (terminalQuery.MoveNext(out var termUid, out var termComp, out var termXform))
         {
-            var terminalQuery = EntityQueryEnumerator<DropshipTerminalComponent, TransformComponent>();
-            while (terminalQuery.MoveNext(out var termUid, out var termComp, out var termXform))
-            {
-                if (termXform.MapID != lzXform.MapID)
-                    continue;
+            if (termXform.MapID != lzXform.MapID)
+                continue;
 
-                termComp.Faction = desiredFaction;
-                Dirty(termUid, termComp);
-            }
+            termComp.Faction = desiredFaction;
+            Dirty(termUid, termComp);
         }
 
         RefreshUI();
@@ -1211,48 +1209,48 @@ public abstract class SharedDropshipSystem : EntitySystem
     /// </summary>
     public void SetFactionController(EntityUid uid, string faction)
     {
-        if (EntityManager.TryGetComponent<DropshipDestinationComponent>(uid, out var comp))
+        if (TryComp<DropshipDestinationComponent>(uid, out var comp))
         {
             comp.FactionController = faction;
-            EntityManager.Dirty(uid, comp);
+            Dirty(uid, comp);
         }
     }
 
 
     public void SetDestinationType(EntityUid uid, string destinationtype)
     {
-        if (EntityManager.TryGetComponent<DropshipDestinationComponent>(uid, out var comp))
+        if (TryComp<DropshipDestinationComponent>(uid, out var comp))
         {
             if (Enum.TryParse<DropshipDestinationComponent.DestinationType>(destinationtype, out var parsed))
                 comp.Destinationtype = parsed;
-            EntityManager.Dirty(uid, comp);
+            Dirty(uid, comp);
         }
     }
 
     public void SetDestinationShip(EntityUid uid, EntityUid? ship)
     {
-        if (EntityManager.TryGetComponent<DropshipDestinationComponent>(uid, out var comp))
+        if (TryComp<DropshipDestinationComponent>(uid, out var comp))
         {
             comp.Ship = ship;
-            EntityManager.Dirty(uid, comp);
+            Dirty(uid, comp);
         }
     }
 
     public void SetDestinationHome(EntityUid uid, bool home)
     {
-        if (EntityManager.TryGetComponent<DropshipDestinationComponent>(uid, out var comp))
+        if (TryComp<DropshipDestinationComponent>(uid, out var comp))
         {
             comp.Home = home;
-            EntityManager.Dirty(uid, comp);
+            Dirty(uid, comp);
         }
     }
 
     public void SetDropshipDestination(EntityUid uid, EntityUid? destination)
     {
-        if (EntityManager.TryGetComponent<DropshipComponent>(uid, out var comp))
+        if (TryComp<DropshipComponent>(uid, out var comp))
         {
             comp.Destination = destination;
-            EntityManager.Dirty(uid, comp);
+            Dirty(uid, comp);
         }
     }
 }

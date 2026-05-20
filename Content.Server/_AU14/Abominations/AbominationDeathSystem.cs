@@ -9,12 +9,12 @@ namespace Content.Server._AU14.Abominations;
 /// When any abomination dies, gib them and seed a patch of flesh kudzu at
 /// their feet.
 /// </summary>
-public sealed class AbominationDeathSystem : EntitySystem
+public sealed partial class AbominationDeathSystem : EntitySystem
 {
     public static readonly EntProtoId FleshKudzuSource = "AU14AbominationFleshKudzuSource";
 
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

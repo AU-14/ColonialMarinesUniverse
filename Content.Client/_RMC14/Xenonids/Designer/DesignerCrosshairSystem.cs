@@ -14,16 +14,16 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Content.Client._RMC14.Xenonids.Designer;
 
-public sealed class DesignerCrosshairSystem : EntitySystem
+public sealed partial class DesignerCrosshairSystem : EntitySystem
 {
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
 
     private ICursor? _transparentCursor;
 
@@ -53,7 +53,7 @@ public sealed class DesignerCrosshairSystem : EntitySystem
         }
 
         // Hide the OS cursor so the overlay can draw the designer crosshair instead.
-        _transparentCursor ??= _clyde.CreateCursor(new Image<Rgba32>(1, 1), Vector2i.One);
+        _transparentCursor ??= _clyde.CreateCursor(new Image<Rgba32>(16, 16), new Vector2i(8, 8));
         _ui.CurrentlyHovered.CustomCursorShape = _transparentCursor;
     }
 

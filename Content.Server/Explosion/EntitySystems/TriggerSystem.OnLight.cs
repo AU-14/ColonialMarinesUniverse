@@ -12,16 +12,14 @@ using Content.Shared.Popups;
 using Content.Shared.Sticky;
 using Content.Shared.Tag;
 using Content.Shared.Verbs;
-using Discord;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Explosion.EntitySystems;
 
 public sealed partial class TriggerSystem
 {
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
-    private ISawmill _sawmill = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private TagSystem _tags = default!;
 
     public void InitializeOnLight()
     {

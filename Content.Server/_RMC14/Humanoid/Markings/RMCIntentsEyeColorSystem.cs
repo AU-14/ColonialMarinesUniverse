@@ -9,10 +9,10 @@ using Robust.Shared.Random;
 
 namespace Content.Server._RMC14.Humanoid.Markings;
 
-public sealed class RMCIntentsEyeColorSystem : EntitySystem
+public sealed partial class RMCIntentsEyeColorSystem : EntitySystem
 {
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedCombatModeSystem _combatMode = default!;
 
     public override void Initialize()
     {

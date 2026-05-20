@@ -4,4 +4,3 @@ namespace Content.Shared.AU14;
 public sealed partial class TribalComponent : Component
 {
 }
-

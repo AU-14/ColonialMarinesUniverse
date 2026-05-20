@@ -1,0 +1,73 @@
+- type: body
+  id: CMUYautjaBody
+  name: "yautja"
+  root: torso
+  slots:
+    head:
+      part: HeadHuman
+      connections:
+      - torso
+      organs:
+        brain: OrganHumanBrain
+        eyes: OrganHumanEyes
+    torso:
+      part: TorsoHuman
+      connections:
+      - right_arm
+      - left_arm
+      - right_leg
+      - left_leg
+      organs:
+        heart: OrganHumanHeart
+        lungs: OrganHumanLungs
+        stomach: OrganHumanStomach
+        liver: OrganHumanLiver
+        kidneys: OrganHumanKidneys
+    right_arm:
+      part: RightArmHuman
+      connections:
+      - right_hand
+    left_arm:
+      part: LeftArmHuman
+      connections:
+      - left_hand
+    right_hand:
+      part: RightHandHuman
+    left_hand:
+      part: LeftHandHuman
+    right_leg:
+      part: RightLegYautja
+      connections:
+      - right_foot
+    left_leg:
+      part: LeftLegYautja
+      connections:
+      - left_foot
+    right_foot:
+      part: RightFootHuman
+    left_foot:
+      part: LeftFootHuman
+
+- type: entity
+  id: LeftLegYautja
+  name: "left yautja leg"
+  parent: CMUPartHumanLeftLeg
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/body.rsi
+    state: "l_leg"
+  - type: MovementBodyPart
+    walkSpeed: 4.4
+    sprintSpeed: 8.4
+
+- type: entity
+  id: RightLegYautja
+  name: "right yautja leg"
+  parent: CMUPartHumanRightLeg
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/body.rsi
+    state: "r_leg"
+  - type: MovementBodyPart
+    walkSpeed: 4.4
+    sprintSpeed: 8.4

@@ -17,10 +17,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._CMU14.Medical.Telemetry;
 
-public sealed class CMUMedicalTelemetrySystem : EntitySystem
+public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ILogManager _log = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ILogManager _log = default!;
 
     private ISawmill _sawmill = default!;
 
@@ -51,7 +51,6 @@ public sealed class CMUMedicalTelemetrySystem : EntitySystem
     {
         _hitCounts.TryGetValue(args.ResolvedPart, out var prior);
         _hitCounts[args.ResolvedPart] = prior + 1;
-        _sawmill.Debug($"hit body={ent.Owner} part={args.ResolvedPart} attacker={args.Attacker}");
     }
 
     private void OnFractureSpawn(Entity<Content.Shared._CMU14.Medical.BodyPart.BodyPartHealthComponent> ent, ref BoneFracturedEvent args)
@@ -60,42 +59,31 @@ public sealed class CMUMedicalTelemetrySystem : EntitySystem
             return;
         _fractureCounts.TryGetValue(args.New, out var prior);
         _fractureCounts[args.New] = prior + 1;
-        _sawmill.Info($"fracture body={args.Body} part={args.Part} {args.Old}->{args.New}");
     }
 
     private void OnOrganStage(ref OrganStageChangedEvent args)
     {
         _organStageTransitions.TryGetValue(args.Body, out var prior);
         _organStageTransitions[args.Body] = prior + 1;
-        _sawmill.Info($"organStage body={args.Body} organ={args.Organ} {args.Old}->{args.New}");
     }
 
     private void OnSurgeryDone(ref CMSurgeryCompleteEvent args)
     {
         _surgeriesPerMarine.TryGetValue(args.Patient, out var prior);
         _surgeriesPerMarine[args.Patient] = prior + 1;
-        _sawmill.Info($"surgeryComplete patient={args.Patient} surgeon={args.Surgeon} surgery={args.Surgery}");
     }
 
     private void OnDefibAttempt(RMCDefibrillatorAttemptEvent ev)
     {
         _defibAttempts++;
         if (ev.Cancelled)
-        {
             _defibCancels++;
-            _sawmill.Info($"defibCancelled target={ev.Target} reason={ev.CancelReason ?? "unspecified"}");
-        }
-        else
-        {
-            _sawmill.Info($"defibAllowed target={ev.Target}");
-        }
     }
 
     private void OnPainShockEntered(Entity<CMUPainShockStatusComponent> ent, ref ComponentStartup args)
     {
         _painShockEntries.TryGetValue(ent.Owner, out var prior);
         _painShockEntries[ent.Owner] = prior + 1;
-        _sawmill.Info($"painShockEntered statusEntity={ent.Owner} t={_timing.CurTime}");
     }
 
     private void OnRoundEnd(RoundRestartCleanupEvent ev)

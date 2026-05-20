@@ -1,13 +1,13 @@
-﻿using Content.Server.Storage.Components;
+using Content.Server.Storage.Components;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
 namespace Content.Server.Administration.Commands;
 
 [AdminCommand(AdminFlags.Fun)]
-public sealed class LinkBluespaceLocker : IConsoleCommand
+public sealed partial class LinkBluespaceLocker : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
 
     public string Command => "linkbluespacelocker";
     public string Description => "Links an entity, the target, to another as a bluespace locker target.";

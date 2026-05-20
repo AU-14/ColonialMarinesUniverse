@@ -5,7 +5,7 @@
   description: Helps those with injuries related to immobility to move freely.
   components:
   - type: Item
-    size: Huge
+    size: Large
     sprite: _AU14/Structures/wheelchair.rsi
   - type: MeleeWeapon
     wideAnimationRotation: -110

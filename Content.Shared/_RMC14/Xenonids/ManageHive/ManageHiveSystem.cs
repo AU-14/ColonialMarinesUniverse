@@ -1,20 +1,28 @@
-﻿using System.Linq;
+using System.Linq;
+using Content.Shared._AU14.Xeno;
+using Content.Shared._AU14.Xeno.ManageHive;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Commendations;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Rules;
+using Content.Shared._RMC14.Xenonids.Announce;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.ManageHive.Boons;
 using Content.Shared._RMC14.Xenonids.Plasma;
+using Content.Shared._RMC14.Xenonids.Screech;
 using Content.Shared._RMC14.Xenonids.Watch;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.Dataset;
 using Content.Shared.GameTicking;
+using Content.Shared.Ghost;
+using Content.Shared.IdentityManagement.Components;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.NPC.Prototypes;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Popups;
 using Robust.Shared.Configuration;
@@ -26,24 +34,26 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Xenonids.ManageHive;
 
-public sealed class ManageHiveSystem : EntitySystem
+public sealed partial class ManageHiveSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly SharedCommendationSystem _commendation = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly DialogSystem _dialog = default!;
-    [Dependency] private readonly SharedGameTicker _gameTicker = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly HiveBoonSystem _hiveBoon = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly ISharedPlaytimeManager _playtime = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedCMChatSystem _rmcChat = default!;
-    [Dependency] private readonly SharedXenoWatchSystem _xenoWatch = default!;
-    [Dependency] private readonly XenoEvolutionSystem _xenoEvolution = default!;
-    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private SharedCommendationSystem _commendation = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private DialogSystem _dialog = default!;
+    [Dependency] private SharedGameTicker _gameTicker = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private HiveBoonSystem _hiveBoon = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private ISharedPlaytimeManager _playtime = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedCMChatSystem _rmcChat = default!;
+    [Dependency] private SharedXenoWatchSystem _xenoWatch = default!;
+    [Dependency] private XenoEvolutionSystem _xenoEvolution = default!;
+    [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private EntityLookupSystem _lookupSystem = default!;
+    [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
 
     private LocalizedDatasetPrototype _jelliesDataset = default!;
 
@@ -65,6 +75,15 @@ public sealed class ManageHiveSystem : EntitySystem
         SubscribeLocalEvent<ManageHiveComponent, ManageHiveJellyMessageEvent>(OnManageHiveJellyMessage);
         SubscribeLocalEvent<ManageHiveComponent, ManageHiveDevolveConfirmEvent>(OnManageHiveDevolveConfirm);
         SubscribeLocalEvent<ManageHiveComponent, ManageHiveDevolveMessageEvent>(OnManageHiveDevolveMessage);
+        SubscribeLocalEvent<ManageHiveComponent, ManageHiveMakePersonalAllyEvent>(OnManageHiveMakePersonalAlly);
+        SubscribeLocalEvent<ManageHiveComponent, ManageHiveBreakPersonalAllyEvent>(OnManageHiveBreakPersonalAlly);
+        SubscribeLocalEvent<ManageHiveComponent,
+            ManageHiveBreakAllPersonalAlliancesEvent>(OnManageHiveBreakAllIndividualAlliances);
+        SubscribeLocalEvent<ManageHiveComponent, ConfirmBreakAllAlliancesEvent>(OnManageHiveBreakAlliancesConfirm);
+        SubscribeLocalEvent<ManageHiveComponent, ManageHiveMakeFactionAllyEvent>(OnManageHiveMakeFactionAlly);
+
+        SubscribeLocalEvent<ManageHiveComponent, HiveSetAllyStatusIndividualEvent>(OnHiveSetAllyStatusIndividual);
+        SubscribeLocalEvent<ManageHiveComponent, HiveSetFactionAllyStatusEvent>(OnHiveSetFactionAllyStatus);
 
         Subs.CVar(_config, RMCCVars.RMCJelliesPerQueen, v => _jelliesPerQueen = v, true);
         Subs.CVar(_config, RMCCVars.RMCBurrowedLarvaSacrificeTimeMinutes, v => _burrowedLarvaSacrificeTime = TimeSpan.FromMinutes(v), true);
@@ -90,9 +109,45 @@ public sealed class ManageHiveSystem : EntitySystem
         options.Add(new DialogOption(Loc.GetString("rmc-hivemanagement-exchange-larva"), new ManageHiveSacrificeBurrowedEvent()));
         options.Add(new DialogOption(Loc.GetString("rmc-boon-activate"), new ManageHiveActivateBoonsEvent()));
 
+        if (TryComp<HiveMemberComponent>(manage.Owner, out var h) && TryComp<HiveComponent>(h.Hive, out var hi) &&
+            hi.CanMakeAlliances)
+        {
+            var val = GetNetEntity(h.Hive.Value);
+            options.Add(new DialogOption(Loc.GetString("xeno-manage-hive-allies-individuals"),
+                new ManageHiveMakePersonalAllyEvent(val)));
+            if (hi.IndividualAllies.Count > 0)
+            {
+                options.Add(new DialogOption(Loc.GetString("xeno-manage-hive-allies-remove-individuals"),
+                    new ManageHiveBreakPersonalAllyEvent(val)));
+                options.Add(new DialogOption(Loc.GetString("xeno-manage-hive-allies-remove-all-individuals"),
+                    new ManageHiveBreakAllPersonalAlliancesEvent(val)));
+            }
+            options.Add(new DialogOption(Loc.GetString("xeno-manage-hive-allies-factions"),
+                new ManageHiveMakeFactionAllyEvent(val)));
+        }
+
         _dialog.OpenOptions(manage, Loc.GetString("rmc-hivemanagement-hive-management"), options, Loc.GetString("rmc-hivemanagement-manage-the-hive"));
     }
 
+    private List<EntityUid>? GetEveryoneNearQueen(EntityUid queen)
+    {
+        if (!TryComp<ManageHiveComponent>(queen, out var xcomp))
+            return null;
+        if (!TryComp(queen, out TransformComponent? tcomp))
+            return null;
+        HashSet<Entity<MobStateComponent>> mobs = [];
+        List<EntityUid> toReturn = [];
+        _lookupSystem.GetEntitiesInRange(tcomp.Coordinates, xcomp.AllyRange, mobs);
+        foreach (var mob in mobs)
+        {
+            if (TryComp<GhostComponent>(mob, out _) || TryComp<XenoComponent>(mob, out _))
+                continue;
+            toReturn.Add(mob.Owner);
+        }
+        if (toReturn.Count <= 0)
+            return null;
+        return toReturn;
+    }
     private void OnManageHiveDevolve(Entity<ManageHiveComponent> manage, ref ManageHiveDevolveEvent args)
     {
         if (_net.IsClient)
@@ -259,6 +314,168 @@ public sealed class ManageHiveSystem : EntitySystem
             resin = _hiveBoon.EnsureBoons(hive).Comp.RoyalResin;
 
         _dialog.OpenOptions(ent, Loc.GetString("rmc-boon-activate"), choices, Loc.GetString("rmc-boon-message", ("current", resin)));
+    }
+
+    private void OnManageHiveMakeFactionAlly(Entity<ManageHiveComponent> ent, ref ManageHiveMakeFactionAllyEvent args)
+    {
+        if (!TryComp<HiveMemberComponent>(ent.Owner, out var hivem))
+            return;
+        if (hivem is null)
+            return;
+        var check = GetEntity(args.Hive);
+        if (hivem.Hive != check)
+            return;
+        if (!TryComp<HiveComponent>(hivem.Hive, out var hcomp))
+            return;
+
+        var factions = _prototype.EnumeratePrototypes<NpcFactionPrototype>().ToList();
+
+        if (factions is null)
+            return;
+        var choices = new List<DialogOption>();
+        foreach (var item in factions)
+        {
+            if (item.Name is null)
+                continue;
+
+            string text = item.Name;
+            ProtoId<NpcFactionPrototype> facId = item.ID;
+            bool state;
+            if (_hive.HasFaction(hivem.Hive.Value, facId))
+            {
+                text += " (+)";
+                state = false;
+            }
+            else
+            {
+                text += " ( )";
+                state = true;
+            }
+            var ev = new HiveSetFactionAllyStatusEvent(facId, item.Name, state);
+            choices.Add(new DialogOption(text, ev));
+        }
+        _dialog.OpenOptions(ent, Loc.GetString("xeno-manage-hive-allies-factions-window-name"), choices);
+    }
+
+    private void OnHiveSetFactionAllyStatus(Entity<ManageHiveComponent> ent, ref HiveSetFactionAllyStatusEvent args)
+    {
+        var hive = _hive.GetHive(ent.Owner);
+        if (hive is null)
+            return;
+        _hive.SetHiveFactionAlly(args.Fac, hive.Value, args.State);
+
+        if (args.State)
+        {
+            _xenoAnnounce.AnnounceToHive(default, hive.Value, Loc.GetString("announce-xeno-ally-status-gain",
+                ("faction", args.FacName)));
+        }
+        else
+        {
+            _xenoAnnounce.AnnounceToHive(default, hive.Value, Loc.GetString("announce-xeno-ally-status-loss",
+                ("faction", args.FacName)));
+        }
+    }
+
+    private void OnManageHiveMakePersonalAlly(Entity<ManageHiveComponent> ent, ref ManageHiveMakePersonalAllyEvent args)
+    {
+        if (!TryComp<HiveMemberComponent>(ent.Owner, out var hivem))
+            return;
+        if (hivem is null)
+            return;
+        var check = GetEntity(args.Hive);
+        if (hivem.Hive != check)
+            return;
+        if (!TryComp<HiveComponent>(hivem.Hive, out _))
+            return;
+
+        var individuals = GetEveryoneNearQueen(ent.Owner);
+        if (individuals is null)
+        {
+            _popup.PopupClient(Loc.GetString("xeno-manage-hive-allies-individuals-alone"), ent.Owner);
+            return;
+        }
+        var choices = new List<DialogOption>();
+        foreach (var item in individuals)
+        {
+            if (_hive.IsAllyOfHive(item, hivem.Hive))
+                continue;
+            TryComp(item, out MetaDataComponent? meta);
+            string text;
+            if (meta is not null)
+                text = meta.EntityName;
+            else text = ToPrettyString(item);
+            var netent = GetNetEntity(item);
+            var ev = new HiveSetAllyStatusIndividualEvent(netent, true);
+            choices.Add(new DialogOption(text, ev));
+        }
+        _dialog.OpenOptions(ent, Loc.GetString("xeno-allies-window-name"), choices);
+    }
+
+    private void OnManageHiveBreakPersonalAlly(Entity<ManageHiveComponent> ent, ref ManageHiveBreakPersonalAllyEvent args)
+    {
+        if (!TryComp<HiveMemberComponent>(ent.Owner, out var hivem))
+            return;
+        if (hivem is null)
+            return;
+        var check = GetEntity(args.Hive);
+        if (hivem.Hive != check)
+            return;
+        if (!TryComp<HiveComponent>(hivem.Hive, out var hive))
+            return;
+        var choices = new List<DialogOption>();
+        foreach (var item in hive.IndividualAllies)
+        {
+            TryComp(item, out MetaDataComponent? meta);
+            string text;
+            if (meta is not null)
+                text = meta.EntityName;
+            else text = ToPrettyString(item);
+            var netent = GetNetEntity(item);
+            var ev = new HiveSetAllyStatusIndividualEvent(netent, false);
+            choices.Add(new DialogOption(text, ev));
+        }
+        _dialog.OpenOptions(ent, Loc.GetString("xeno-allies-break-window-name"), choices);
+    }
+
+    private void OnManageHiveBreakAllIndividualAlliances(Entity<ManageHiveComponent> ent,
+        ref ManageHiveBreakAllPersonalAlliancesEvent args)
+    {
+        ConfirmBreakAllAlliancesEvent yesno = new(args.Hive);
+        _dialog.OpenConfirmation(ent, Loc.GetString("xeno-allies-break-all-individuals-window-name"),
+            Loc.GetString("xeno-allies-break-all-individuals-subtext"), yesno);
+    }
+
+    private void OnManageHiveBreakAlliancesConfirm(Entity<ManageHiveComponent> ent,
+        ref ConfirmBreakAllAlliancesEvent args)
+    {
+        var hive = _hive.GetHive(ent.Owner);
+        if (hive is null)
+            return; //New achievement! "How did we get here?" unlocked!
+        _hive.ClearHiveIndividualAllies(hive.Value);
+        _xenoAnnounce.AnnounceToHive(default, hive.Value, Loc.GetString("announce-xeno-allies-people-status-loss"));
+    }
+
+    private void OnHiveSetAllyStatusIndividual(Entity<ManageHiveComponent> ent, ref HiveSetAllyStatusIndividualEvent args)
+    {
+        var hive = _hive.GetHive(ent.Owner);
+        if (hive is null)
+            return;
+        var ally = GetEntity(args.Ent);
+        _hive.SetHiveIndividualAlly(ally, hive.Value, args.State);
+
+        string name;
+        EnsureComp(ally, out MetaDataComponent meta);
+        name = meta.EntityName;
+        if (args.State)
+        {
+            _xenoAnnounce.AnnounceToHive(default, hive.Value, Loc.GetString("announce-xeno-ally-person-status-gain",
+                ("name", name)));
+        }
+        else
+        {
+            _xenoAnnounce.AnnounceToHive(default, hive.Value, Loc.GetString("announce-xeno-ally-person-status-loss",
+                ("name", name)));
+        }
     }
 
     private void OnPurchaseBoonsChosen(Entity<ManageHiveComponent> ent, ref ManageHiveActivateBoonsChosenEvent args)

@@ -9,10 +9,10 @@ using Robust.Shared.Utility;
 
 namespace Content.Server._RMC14.Megaphone;
 
-public sealed class RMCServerMegaphoneSystem : EntitySystem
+public sealed partial class RMCServerMegaphoneSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IServerConsoleHost _console = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IServerConsoleHost _console = default!;
 
     public override void Initialize()
     {

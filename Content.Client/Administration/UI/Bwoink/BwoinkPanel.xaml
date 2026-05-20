@@ -5,7 +5,7 @@
     HorizontalExpand="True">
     <OutputPanel Name="TextOutput" VerticalExpand="true" />
     <RichTextLabel Name="TypingIndicator" Access="Public" />
-    <PanelContainer StyleClasses="CrtHeaderPanel" Margin="0 3 0 0" HorizontalExpand="True">
+    <PanelContainer Margin="0 3 0 0" HorizontalExpand="True">
         <HistoryLineEdit Name="SenderLineEdit"
                          PlaceHolder="Type admin help message..."
                          HorizontalExpand="True"

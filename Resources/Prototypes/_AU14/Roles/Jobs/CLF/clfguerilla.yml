@@ -7,6 +7,9 @@
   ignoreAllegiance: true
   playTimeTracker: AU14JobCLFGuerilla
   requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentCivilian
+    time: 18000 # 5 hours
   - !type:OverallPlaytimeRequirement
     time: 7200 # 2 hours
   ranks:
@@ -38,6 +41,8 @@
         RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-clfguerilla
+    - type: StartingMindRole
+      mindRole: MindRoleCLFGuerrilla
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi

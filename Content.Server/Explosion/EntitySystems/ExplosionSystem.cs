@@ -33,25 +33,25 @@ namespace Content.Server.Explosion.EntitySystems;
 
 public sealed partial class ExplosionSystem : SharedExplosionSystem
 {
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly IRobustRandom _robustRandom = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefinitionManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private IRobustRandom _robustRandom = default!;
+    [Dependency] private ITileDefinitionManager _tileDefinitionManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
-    [Dependency] private readonly MapSystem _mapSystem = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly DamageableSystem _damageableSystem = default!;
-    [Dependency] private readonly NodeGroupSystem _nodeGroupSystem = default!;
-    [Dependency] private readonly PathfindingSystem _pathfindingSystem = default!;
-    [Dependency] private readonly SharedCameraRecoilSystem _recoilSystem = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly ThrowingSystem _throwingSystem = default!;
-    [Dependency] private readonly PvsOverrideSystem _pvsSys = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
+    [Dependency] private MapSystem _mapSystem = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private DamageableSystem _damageableSystem = default!;
+    [Dependency] private NodeGroupSystem _nodeGroupSystem = default!;
+    [Dependency] private PathfindingSystem _pathfindingSystem = default!;
+    [Dependency] private SharedCameraRecoilSystem _recoilSystem = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private ThrowingSystem _throwingSystem = default!;
+    [Dependency] private PvsOverrideSystem _pvsSys = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private SharedMapSystem _map = default!;
 
     private EntityQuery<FlammableComponent> _flammableQuery;
     private EntityQuery<PhysicsComponent> _physicsQuery;
@@ -402,25 +402,6 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
 
     private void CameraShake(float range, MapCoordinates epicenter, float totalIntensity)
     {
-        return;
-        var players = Filter.Empty();
-        players.AddInRange(epicenter, range, _playerManager, EntityManager);
-
-        foreach (var player in players.Recipients)
-        {
-            if (player.AttachedEntity is not EntityUid uid)
-                continue;
-
-            var playerPos = _transformSystem.GetWorldPosition(player.AttachedEntity!.Value);
-            var delta = epicenter.Position - playerPos;
-
-            if (delta.EqualsApprox(Vector2.Zero))
-                delta = new(0.01f, 0);
-
-            var distance = delta.Length();
-            var effect = 5 * MathF.Pow(totalIntensity, 0.5f) * (1 - distance / range);
-            if (effect > 0.01f)
-                _recoilSystem.KickCamera(uid, -delta.Normalized() * effect);
-        }
+        // RMC14 disables explosion camera shake.
     }
 }

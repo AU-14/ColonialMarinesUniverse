@@ -17,17 +17,17 @@ using Content.Shared._RMC14.Webbing;
 
 namespace Content.Shared._RMC14.UniformAccessories;
 
-public abstract class SharedUniformAccessorySystem : EntitySystem
+public abstract partial class SharedUniformAccessorySystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedItemSystem _item = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedWebbingSystem _webbing = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedItemSystem _item = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedWebbingSystem _webbing = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
     public override void Initialize()
     {

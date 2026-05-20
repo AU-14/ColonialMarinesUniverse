@@ -8,10 +8,10 @@ using Robust.Shared.Containers;
 
 namespace Content.Server._RMC14.Visor;
 
-public sealed class ServerVisorSystem : EntitySystem
+public sealed partial class ServerVisorSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly PowerCellSystem _powerCell = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
 
     public override void Initialize()
     {
@@ -38,7 +38,7 @@ public sealed class ServerVisorSystem : EntitySystem
                 args.PushMarkup(Loc.GetString("rmc-visor-down", ("visor", visorEntity)));
 
                 // Show power cell charge if the visor has one
-                if (visorEntity != null && HasComp<PowerCellSlotComponent>(visorEntity))
+                if (visorEntity != EntityUid.Invalid && HasComp<PowerCellSlotComponent>(visorEntity))
                 {
                     if (_powerCell.TryGetBatteryFromSlot(visorEntity, out var battery))
                     {

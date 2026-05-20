@@ -58,45 +58,45 @@ namespace Content.Shared.Weapons.Ranged.Systems;
 
 public abstract partial class SharedGunSystem : EntitySystem
 {
-    [Dependency] private   readonly ActionBlockerSystem _actionBlockerSystem = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly IMapManager MapManager = default!;
-    [Dependency] private   readonly INetManager _netManager = default!;
-    [Dependency] protected readonly IPrototypeManager ProtoManager = default!;
-    [Dependency] protected readonly IRobustRandom Random = default!;
-    [Dependency] protected readonly ISharedAdminLogManager Logs = default!;
-    [Dependency] protected readonly DamageableSystem Damageable = default!;
-    [Dependency] protected readonly ExamineSystemShared Examine = default!;
-    [Dependency] private   readonly SharedHandsSystem _hands = default!;
-    [Dependency] private   readonly ItemSlotsSystem _slots = default!;
-    [Dependency] private   readonly RechargeBasicEntityAmmoSystem _recharge = default!;
-    [Dependency] protected readonly SharedActionsSystem Actions = default!;
-    [Dependency] protected readonly SharedAppearanceSystem Appearance = default!;
-    [Dependency] protected readonly SharedAudioSystem Audio = default!;
-    [Dependency] private   readonly SharedCombatModeSystem _combatMode = default!;
-    [Dependency] protected readonly SharedContainerSystem Containers = default!;
-    [Dependency] private   readonly SharedGravitySystem _gravity = default!;
-    [Dependency] protected readonly SharedPointLightSystem Lights = default!;
-    [Dependency] protected readonly SharedPopupSystem PopupSystem = default!;
-    [Dependency] protected readonly SharedPhysicsSystem Physics = default!;
-    [Dependency] protected readonly SharedProjectileSystem Projectiles = default!;
-    [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
-    [Dependency] protected readonly TagSystem TagSystem = default!;
-    [Dependency] protected readonly ThrowingSystem ThrowingSystem = default!;
-    [Dependency] private   readonly UseDelaySystem _useDelay = default!;
-    [Dependency] private   readonly EntityWhitelistSystem _whitelistSystem = default!;
-    [Dependency] private   readonly SharedStaminaSystem _stamina = default!;
-    [Dependency] private   readonly SharedStunSystem _stun = default!;
-    [Dependency] private   readonly SharedColorFlashEffectSystem _color = default!;
-    [Dependency] private   readonly SharedCameraRecoilSystem _recoil = default!;
-    [Dependency] private   readonly IConfigurationManager _config = default!;
-    [Dependency] private   readonly INetConfigurationManager _netConfig = default!;
+    [Dependency] private   ActionBlockerSystem _actionBlockerSystem = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected IMapManager MapManager = default!;
+    [Dependency] private   INetManager _netManager = default!;
+    [Dependency] protected IPrototypeManager ProtoManager = default!;
+    [Dependency] protected IRobustRandom Random = default!;
+    [Dependency] protected ISharedAdminLogManager Logs = default!;
+    [Dependency] protected DamageableSystem Damageable = default!;
+    [Dependency] protected ExamineSystemShared Examine = default!;
+    [Dependency] private   SharedHandsSystem _hands = default!;
+    [Dependency] private   ItemSlotsSystem _slots = default!;
+    [Dependency] private   RechargeBasicEntityAmmoSystem _recharge = default!;
+    [Dependency] protected SharedActionsSystem Actions = default!;
+    [Dependency] protected SharedAppearanceSystem Appearance = default!;
+    [Dependency] protected SharedAudioSystem Audio = default!;
+    [Dependency] private   SharedCombatModeSystem _combatMode = default!;
+    [Dependency] protected SharedContainerSystem Containers = default!;
+    [Dependency] private   SharedGravitySystem _gravity = default!;
+    [Dependency] protected SharedPointLightSystem Lights = default!;
+    [Dependency] protected SharedPopupSystem PopupSystem = default!;
+    [Dependency] protected SharedPhysicsSystem Physics = default!;
+    [Dependency] protected SharedProjectileSystem Projectiles = default!;
+    [Dependency] protected SharedTransformSystem TransformSystem = default!;
+    [Dependency] protected TagSystem TagSystem = default!;
+    [Dependency] protected ThrowingSystem ThrowingSystem = default!;
+    [Dependency] private   UseDelaySystem _useDelay = default!;
+    [Dependency] private   EntityWhitelistSystem _whitelistSystem = default!;
+    [Dependency] private   SharedStaminaSystem _stamina = default!;
+    [Dependency] private   SharedStunSystem _stun = default!;
+    [Dependency] private   SharedColorFlashEffectSystem _color = default!;
+    [Dependency] private   SharedCameraRecoilSystem _recoil = default!;
+    [Dependency] private   IConfigurationManager _config = default!;
+    [Dependency] private   INetConfigurationManager _netConfig = default!;
 
     // RMC14
-    [Dependency] private readonly AttachableHolderSystem _attachableHolder = default!;
-    [Dependency] private readonly SharedRMCFlamerSystem _flamer = default!;
-    [Dependency] private readonly VehicleWeaponsSystem _rmcVehicleWeapons = default!;
-    [Dependency] private readonly RMCSharedWeaponControllerSystem _rmcSharedWeaponController = default!;
+    [Dependency] private AttachableHolderSystem _attachableHolder = default!;
+    [Dependency] private SharedRMCFlamerSystem _flamer = default!;
+    [Dependency] private VehicleWeaponsSystem _rmcVehicleWeapons = default!;
+    [Dependency] private RMCSharedWeaponControllerSystem _rmcSharedWeaponController = default!;
 
     private const float InteractNextFire = 0.3f;
     private const double SafetyNextFire = 0.5;
@@ -272,7 +272,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         ent.Comp.ShootCoordinates = coordinates;
         var projectiles = AttemptShoot(user, ent, ent);
         ent.Comp.ShotCounter = 0;
-        EntityManager.DirtyField(ent.Owner, ent.Comp, nameof(GunComponent.ShotCounter));
+        DirtyField(ent.Owner, ent.Comp, nameof(GunComponent.ShotCounter));
 
         return projectiles;
     }
@@ -1191,7 +1191,7 @@ public abstract partial class SharedGunSystem : EntitySystem
     /// Used for animated effects on the client.
     /// </summary>
     [Serializable, NetSerializable]
-    public sealed class HitscanEvent : EntityEventArgs
+    public sealed partial class HitscanEvent : EntityEventArgs
     {
         public List<(NetCoordinates coordinates, Angle angle, SpriteSpecifier Sprite, float Distance)> Sprites = new();
     }

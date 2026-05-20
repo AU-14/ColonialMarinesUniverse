@@ -2,7 +2,7 @@
   parent: AU14JobRadioTelephoneOperatorBase
   id: AU14JobGOVFORRadioTelephoneOperatorUPP
   name: Radio Telephone Operator
-  description: au14-job-description-radiotelephoneooerator
+  description: au14-job-description-radiotelephoneoperator
   setPreference: false
   ranks:
     UPP_SeniorGefreiter:

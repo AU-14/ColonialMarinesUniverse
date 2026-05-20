@@ -6,10 +6,10 @@ using Robust.Shared.Network;
 
 namespace Content.Shared._RMC14.Vehicle;
 
-public sealed class VehicleHardpointVisualsSystem : EntitySystem
+public sealed partial class VehicleHardpointVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private INetManager _net = default!;
 
     public override void Initialize()
     {

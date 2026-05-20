@@ -3,6 +3,8 @@
   id: CMUYautjaWeaponBase
   abstract: true
   components:
+  - type: Corrodible
+    isCorrodible: false
   - type: YautjaTechItem
   - type: Sprite
     sprite: _CMU14/Yautja/weapons.rsi
@@ -27,6 +29,9 @@
     amount: 0
   - type: DisarmMalus
     malus: 0.2
+  - type: Clothing
+    slots:
+    - suitStorage
 
 - type: entity
   parent: CMUYautjaWeaponBase

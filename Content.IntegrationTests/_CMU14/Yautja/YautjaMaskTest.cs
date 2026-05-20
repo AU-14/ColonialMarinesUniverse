@@ -202,7 +202,7 @@ public sealed class YautjaMaskTest
 
                 Assert.That(maskComp.Zoomed, Is.True);
                 Assert.That(entMan.GetComponent<ContentEyeComponent>(hunter).TargetZoom.X, Is.EqualTo(maskComp.ZoomLevel));
-                Assert.That(entMan.TryGetComponent(hunter, out YautjaMaskZoomComponent? zoom), Is.True);
+                Assert.That(entMan.TryGetComponent(hunter, out YautjaMaskZoomComponent zoom), Is.True);
                 Assert.That(Math.Abs(zoom!.Offset.X) + Math.Abs(zoom.Offset.Y), Is.GreaterThan(0));
 
                 toggle = new YautjaToggleMaskZoomActionEvent

@@ -12,8 +12,8 @@ namespace Content.Shared.Gravity
 {
     public abstract partial class SharedGravitySystem : EntitySystem
     {
-        [Dependency] protected readonly IGameTiming Timing = default!;
-        [Dependency] private readonly AlertsSystem _alerts = default!;
+        [Dependency] protected IGameTiming Timing = default!;
+        [Dependency] private AlertsSystem _alerts = default!;
 
         public static readonly ProtoId<AlertPrototype> WeightlessAlert = "Weightless";
 
@@ -152,7 +152,7 @@ namespace Content.Shared.Gravity
         }
 
         [Serializable, NetSerializable]
-        private sealed class GravityComponentState : ComponentState
+        private sealed partial class GravityComponentState : ComponentState
         {
             public bool Enabled { get; }
 

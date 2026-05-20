@@ -1,4 +1,4 @@
-﻿using Content.Shared.Hands.Components;
+using Content.Shared.Hands.Components;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._RMC14.Hands;
@@ -11,4 +11,4 @@ public sealed partial class GiveHandsComponent : Component
 }
 
 [DataRecord]
-public record struct GivenHand(string Name, HandLocation Location);
+public partial record struct GivenHand(string Name, HandLocation Location);

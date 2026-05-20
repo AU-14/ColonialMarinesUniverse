@@ -10,13 +10,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.AU14.Objectives.Destroy;
 
-public sealed class AuDestroyObjectiveSystem : EntitySystem
+public sealed partial class AuDestroyObjectiveSystem : EntitySystem
 {
-    [Robust.Shared.IoC.Dependency] private readonly IEntityManager _entManager = default!;
-    [Robust.Shared.IoC.Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Robust.Shared.IoC.Dependency] private readonly AuObjectiveSystem _objectiveSystem = default!;
-    [Robust.Shared.IoC.Dependency] private readonly SharedTransformSystem _xformSys = default!;
-    [Robust.Shared.IoC.Dependency] private readonly ILogManager _logManager = default!;
+    [Robust.Shared.IoC.Dependency] private IEntityManager _entManager = default!;
+    [Robust.Shared.IoC.Dependency] private EntityLookupSystem _lookup = default!;
+    [Robust.Shared.IoC.Dependency] private AuObjectiveSystem _objectiveSystem = default!;
+    [Robust.Shared.IoC.Dependency] private SharedTransformSystem _xformSys = default!;
+    [Robust.Shared.IoC.Dependency] private ILogManager _logManager = default!;
 
     private ISawmill _sawmill = default!;
 
@@ -68,7 +68,7 @@ public sealed class AuDestroyObjectiveSystem : EntitySystem
 
         var markers = new List<EntityUid>();
         var genericMarkers = new List<EntityUid>();
-        var markerQuery = EntityManager.AllEntityQueryEnumerator<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveMarkerComponent, TransformComponent>();
+        var markerQuery = AllEntityQuery<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveMarkerComponent, TransformComponent>();
         while (markerQuery.MoveNext(out var markerUid, out var markerComp, out _))
         {
             if (markerComp.Used)
@@ -89,11 +89,11 @@ public sealed class AuDestroyObjectiveSystem : EntitySystem
         for (var i = 0; i < toSpawn; i++)
         {
             var markerUid = markers[i];
-            var markerComp = EntityManager.GetComponent<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveMarkerComponent>(markerUid);
+            var markerComp = Comp<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveMarkerComponent>(markerUid);
             if (markerComp.Used)
                 continue;
-            var xform = EntityManager.GetComponent<TransformComponent>(markerUid);
-            var ent = EntityManager.SpawnEntity(entityToSpawn, xform.Coordinates);
+            var xform = Comp<TransformComponent>(markerUid);
+            var ent = Spawn(entityToSpawn, xform.Coordinates);
             var tracker = _entManager.EnsureComponent<DestroyObjectiveTrackerComponent>(ent);
             tracker.ObjectiveUid = uid;
             markerComp.Used = true;
@@ -105,10 +105,10 @@ public sealed class AuDestroyObjectiveSystem : EntitySystem
         RegisterObjectiveInterest(uid, component, objcomp);
 
         // Initial scan: only check entities of the protos we're interested in OR wildcard ones
-        var objXform = EntityManager.GetComponent<TransformComponent>(uid);
+        var objXform = Comp<TransformComponent>(uid);
         var objMap = objXform.MapID;
 
-        var metaQuery = EntityManager.AllEntityQueryEnumerator<MetaDataComponent, TransformComponent>();
+        var metaQuery = AllEntityQuery<MetaDataComponent, TransformComponent>();
         while (metaQuery.MoveNext(out var entUid, out var meta, out var entXform))
         {
             if (entUid == uid)
@@ -212,7 +212,7 @@ public sealed class AuDestroyObjectiveSystem : EntitySystem
     {
         Timer.Spawn(TimeSpan.FromMilliseconds(200), () =>
         {
-            if (!EntityManager.EntityExists(uid))
+            if (!Exists(uid))
                 return;
             TryMarkForDestroyDelayed(uid);
         });
@@ -265,7 +265,7 @@ public sealed class AuDestroyObjectiveSystem : EntitySystem
             var objectiveUid = kv.Key;
             var factionToCredit = kv.Value;
 
-            if (!EntityManager.TryGetComponent(objectiveUid, out DestroyObjectiveComponent? destroyComp))
+            if (!TryComp(objectiveUid, out DestroyObjectiveComponent? destroyComp))
                 continue;
             var auObj = EnsureComp<AuObjectiveComponent>(objectiveUid);
             var factionKey = factionToCredit.ToLowerInvariant();

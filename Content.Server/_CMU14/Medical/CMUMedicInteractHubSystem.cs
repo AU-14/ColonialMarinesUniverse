@@ -7,10 +7,10 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Server._CMU14.Medical;
 
-public sealed class CMUMedicInteractHubSystem : EntitySystem
+public sealed partial class CMUMedicInteractHubSystem : EntitySystem
 {
-    [Dependency] private readonly Wounds.CMUBandageInterceptionSystem _bandage = default!;
-    [Dependency] private readonly Diagnostics.CMUStethoscopeSystem _stethoscope = default!;
+    [Dependency] private Wounds.CMUBandageInterceptionSystem _bandage = default!;
+    [Dependency] private Diagnostics.CMUStethoscopeSystem _stethoscope = default!;
 
     public override void Initialize()
     {
@@ -21,13 +21,11 @@ public sealed class CMUMedicInteractHubSystem : EntitySystem
 
     private void OnWoundTreaterIntercept(ref CMUWoundTreaterInterceptEvent args)
     {
-        Logger.GetSawmill("cmu.medical.bandage").Debug($"WoundTreaterIntercept: user={args.User} treater={args.Treater} patient={args.Patient} alreadyHandled={args.Handled}");
         if (args.Handled)
             return;
         if (!HasComp<CMUHumanMedicalComponent>(args.User) &&
             !HasComp<YautjaMedicalItemComponent>(args.Treater))
         {
-            Logger.GetSawmill("cmu.medical.bandage").Debug("  -> bailed: user lacks CMUHumanMedicalComponent and treater is not Yautja medical");
             return;
         }
 
@@ -35,7 +33,6 @@ public sealed class CMUMedicInteractHubSystem : EntitySystem
         _bandage.HandleAfterInteract(args.User, ref fakeArgs);
         if (fakeArgs.Handled)
             args.Handled = true;
-        Logger.GetSawmill("cmu.medical.bandage").Debug($"  → fakeArgs.Handled={fakeArgs.Handled}");
     }
 
     private void OnMedicAfterInteract(Entity<CMUHumanMedicalComponent> medic, ref AfterInteractEvent args)

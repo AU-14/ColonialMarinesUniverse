@@ -11,7 +11,7 @@ namespace Content.Client.UserInterface
     [GenerateTypedNameReferences]
     public sealed partial class StatsWindow : DefaultWindow
     {
-        [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
+        [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
         public StatsWindow()
         {

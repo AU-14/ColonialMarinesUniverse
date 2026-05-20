@@ -10,13 +10,13 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Vehicle;
 
-public sealed class VehicleSpotlightSystem : EntitySystem
+public sealed partial class VehicleSpotlightSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly VehicleSystem _rmcVehicles = default!;
-    [Dependency] private readonly SharedPointLightSystem _lights = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly HardpointSystem _hardpoints = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private VehicleSystem _rmcVehicles = default!;
+    [Dependency] private SharedPointLightSystem _lights = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private HardpointSystem _hardpoints = default!;
 
     public override void Initialize()
     {

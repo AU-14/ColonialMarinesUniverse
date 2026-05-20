@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Administration.Managers;
@@ -19,17 +19,17 @@ using Robust.Shared.Utility;
 
 namespace Content.Server._RMC14.Mentor;
 
-public sealed class MentorManager : IPostInjectInit
+public sealed partial class MentorManager : IPostInjectInit
 {
-    [Dependency] private readonly IAdminManager _admin = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly ILogManager _log = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly PlayerRateLimitManager _rateLimit = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly UserDbDataManager _userDb = default!;
+    [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private ILogManager _log = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private PlayerRateLimitManager _rateLimit = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private UserDbDataManager _userDb = default!;
 
     private const string RateLimitKey = "MentorHelp";
     private static readonly ProtoId<JobPrototype> MentorJob = "CMSeniorEnlistedAdvisor";
@@ -336,7 +336,7 @@ public sealed class MentorManager : IPostInjectInit
             return;
 
         var recipients = new HashSet<INetChannel>();
-        if (destinationChannel != null)
+        if (destinationChannel != null && destinationChannel.IsConnected)
             recipients.Add(destinationChannel);
 
         var isMentor = false;

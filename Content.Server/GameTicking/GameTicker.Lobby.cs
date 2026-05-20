@@ -10,8 +10,8 @@ namespace Content.Server.GameTicking
 {
     public sealed partial class GameTicker
     {
-        [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
-        [Dependency] private readonly PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
+        [Dependency] private AuRoundSystem _auRoundSystem = default!;
+        [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
 
         [ViewVariables]
         private readonly Dictionary<NetUserId, PlayerGameStatus> _playerGameStatuses = new();

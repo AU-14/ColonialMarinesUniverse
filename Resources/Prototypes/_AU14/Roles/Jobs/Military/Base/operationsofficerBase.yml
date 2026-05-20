@@ -6,6 +6,14 @@
   playTimeTracker: AU14JobGOVFORPlatOp
   basePlaytimeTracker: true
   hidden: true
+  abstract: true
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentGovernmentForces
+    time: 72000 # 20 hours
+  - !type:RoleTimeRequirement
+    role: AU14JobGOVFORSectionSergeant
+    time: 36000 # 20 hours
 
 - type: playTimeTracker
   id: AU14JobGOVFORPlatOp

@@ -1,10 +1,10 @@
-﻿using Content.Shared.Actions.Events;
+using Content.Shared.Actions.Events;
 
 namespace Content.Shared._RMC14.Xenonids.Actions;
 
-public sealed class XenoActionsSystem : EntitySystem
+public sealed partial class XenoActionsSystem : EntitySystem
 {
-    [Dependency] private readonly XenoSystem _xeno = default!;
+    [Dependency] private XenoSystem _xeno = default!;
 
     public override void Initialize()
     {

@@ -9,10 +9,10 @@ using Robust.Shared.Maths;
 
 namespace Content.Server._CMU14.Medical.Penalties;
 
-public sealed class CMUAccuracyEventSubscriber : EntitySystem
+public sealed partial class CMUAccuracyEventSubscriber : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly CMGunSystem _gun = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private CMGunSystem _gun = default!;
 
     private bool _medicalEnabled;
     private bool _statusEffectsEnabled;

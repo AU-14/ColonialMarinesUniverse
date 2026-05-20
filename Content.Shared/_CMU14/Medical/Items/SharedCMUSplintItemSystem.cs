@@ -1,4 +1,3 @@
-using System.Linq;
 using Content.Shared._CMU14.Medical;
 using Content.Shared._CMU14.Medical.Bones;
 using Content.Shared._CMU14.Medical.Bones.Events;
@@ -20,17 +19,17 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Items;
 
-public abstract class SharedCMUSplintItemSystem : EntitySystem
+public abstract partial class SharedCMUSplintItemSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly INetManager Net = default!;
-    [Dependency] protected readonly SharedAudioSystem Audio = default!;
-    [Dependency] protected readonly SharedBodySystem Body = default!;
-    [Dependency] protected readonly SharedDoAfterSystem DoAfter = default!;
-    [Dependency] protected readonly SharedFractureSystem Fracture = default!;
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] protected readonly IRobustRandom Random = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected INetManager Net = default!;
+    [Dependency] protected SharedAudioSystem Audio = default!;
+    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected SharedDoAfterSystem DoAfter = default!;
+    [Dependency] protected SharedFractureSystem Fracture = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] protected IRobustRandom Random = default!;
 
     private const float CastScanInterval = 1f;
     private const float CastRemovePromptSeconds = 30f;
@@ -135,7 +134,8 @@ public abstract class SharedCMUSplintItemSystem : EntitySystem
         splinted.BreakOnDamage = ent.Comp.BreakOnDamage;
         splinted.BreakDamageThreshold = ent.Comp.BreakDamageThreshold;
         Dirty(part, splinted);
-        RaiseLocalEvent(new CMUSplintChangedEvent(part, false));
+        var ev = new CMUSplintChangedEvent(part, false);
+        RaiseLocalEvent(ref ev);
 
         if (ent.Comp.ApplySound is not null)
             Audio.PlayPredicted(ent.Comp.ApplySound, part, null);
@@ -209,7 +209,8 @@ public abstract class SharedCMUSplintItemSystem : EntitySystem
         if ((byte)ent.Comp.MaxSuppressed > (byte)cast.MaxSuppressed)
             cast.MaxSuppressed = ent.Comp.MaxSuppressed;
         Dirty(part, cast);
-        RaiseLocalEvent(new CMUCastChangedEvent(part, false));
+        var ev = new CMUCastChangedEvent(part, false);
+        RaiseLocalEvent(ref ev);
         if (HasComp<CMUSplintedComponent>(part))
             RemComp<CMUSplintedComponent>(part);
 
@@ -287,7 +288,8 @@ public abstract class SharedCMUSplintItemSystem : EntitySystem
             return;
 
         RemComp<CMUCastComponent>(part);
-        RaiseLocalEvent(new CMUCastChangedEvent(part, true));
+        var ev = new CMUCastChangedEvent(part, true);
+        RaiseLocalEvent(ref ev);
         Popup.PopupPredicted(Loc.GetString("cmu-medical-cast-removed"), patient.Owner, args.User);
     }
 
@@ -432,7 +434,8 @@ public abstract class SharedCMUSplintItemSystem : EntitySystem
         RemComp<CMUCastComponent>(ent.Owner);
         if (HasComp<CMUPostOpBoneSetComponent>(ent.Owner))
             RemComp<CMUPostOpBoneSetComponent>(ent.Owner);
-        RaiseLocalEvent(new CMUCastChangedEvent(ent.Owner, true));
+        var ev = new CMUCastChangedEvent(ent.Owner, true);
+        RaiseLocalEvent(ref ev);
     }
 
     public override void Update(float frameTime)
@@ -478,7 +481,8 @@ public abstract class SharedCMUSplintItemSystem : EntitySystem
             cast.ReadyToRemove = true;
             cast.NextRemovePrompt = now;
             Dirty(partUid, cast);
-            RaiseLocalEvent(new CMUCastChangedEvent(partUid, false));
+            var ev = new CMUCastChangedEvent(partUid, false);
+            RaiseLocalEvent(ref ev);
         }
 
         var postOpQuery = EntityQueryEnumerator<CMUPostOpBoneSetComponent, BodyPartComponent>();

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Content.Shared._CMU14.Medical.Items;
 using Content.Shared._CMU14.Medical.Surgery.Markers;
 using Content.Shared._CMU14.Medical.StatusEffects;
@@ -32,21 +31,21 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Surgery;
 
-public abstract class SharedCMUSurgeryFlowSystem : EntitySystem
+public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly INetManager Net = default!;
-    [Dependency] protected readonly IPrototypeManager Prototypes = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly SharedBodySystem Body = default!;
-    [Dependency] protected readonly SharedDoAfterSystem DoAfter = default!;
-    [Dependency] protected readonly SharedHandsSystem Hands = default!;
-    [Dependency] protected readonly ItemToggleSystem ItemToggle = default!;
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] protected readonly SharedPainShockSystem Pain = default!;
-    [Dependency] protected readonly SharedStatusEffectsSystem Status = default!;
-    [Dependency] protected readonly SharedUserInterfaceSystem UserInterface = default!;
-    [Dependency] protected readonly SharedCMSurgerySystem RmcSurgery = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected INetManager Net = default!;
+    [Dependency] protected IPrototypeManager Prototypes = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected SharedDoAfterSystem DoAfter = default!;
+    [Dependency] protected SharedHandsSystem Hands = default!;
+    [Dependency] protected ItemToggleSystem ItemToggle = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] protected SharedPainShockSystem Pain = default!;
+    [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected SharedUserInterfaceSystem UserInterface = default!;
+    [Dependency] protected SharedCMSurgerySystem RmcSurgery = default!;
 
     private readonly Dictionary<string, CMUSurgeryStepMetadataPrototype> _bySurgery = new();
 

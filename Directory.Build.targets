@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);NU1510</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(ManagePackageVersionsCentrally)' != 'true' and '$(ManagePackageVersionsCentrally)' != 'True'">
+    <PackageReference Update="SixLabors.ImageSharp" Version="3.1.12" />
+  </ItemGroup>
+</Project>

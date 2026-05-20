@@ -11,11 +11,11 @@ using Content.Shared.Humanoid;
 
 namespace Content.Server._RMC14.Synth;
 
-public sealed class SynthSystem : SharedSynthSystem
+public sealed partial class SynthSystem : SharedSynthSystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private SharedBodySystem _body = default!;
 
     protected override void MakeSynth(Entity<SynthComponent> ent)
     {

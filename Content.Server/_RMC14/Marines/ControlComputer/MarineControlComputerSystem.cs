@@ -20,15 +20,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._RMC14.Marines.ControlComputer;
 
-public sealed class MarineControlComputerSystem : SharedMarineControlComputerSystem
+public sealed partial class MarineControlComputerSystem : SharedMarineControlComputerSystem
 {
-    [Dependency] private readonly SharedRankSystem _rank = default!;
-    [Dependency] private readonly SharedJobSystem _jobs = default!;
-    [Dependency] private readonly SquadSystem _squads = default!;
-    [Dependency] private readonly SharedCommendationSystem _commendation = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private SharedRankSystem _rank = default!;
+    [Dependency] private SharedJobSystem _jobs = default!;
+    [Dependency] private SquadSystem _squads = default!;
+    [Dependency] private SharedCommendationSystem _commendation = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     public override void Initialize()
     {

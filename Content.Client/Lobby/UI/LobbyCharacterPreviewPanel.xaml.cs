@@ -11,7 +11,7 @@ namespace Content.Client.Lobby.UI;
 [GenerateTypedNameReferences]
 public sealed partial class LobbyCharacterPreviewPanel : Control
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
 
     public Button CharacterSetupButton => CharacterSetup;
     public Button PrevCharacterButton => PrevCharButton;
@@ -64,6 +64,7 @@ public sealed partial class LobbyCharacterPreviewPanel : Control
         ViewBox.AddChild(spriteView);
     }
 
+    [System.Obsolete]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

@@ -7,10 +7,10 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.MagicMirror;
 
-public abstract class SharedMagicMirrorSystem : EntitySystem
+public abstract partial class SharedMagicMirrorSystem : EntitySystem
 {
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] protected readonly SharedUserInterfaceSystem UISystem = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] protected SharedUserInterfaceSystem UISystem = default!;
 
     public override void Initialize()
     {
@@ -102,7 +102,7 @@ public enum MagicMirrorCategory : byte
 }
 
 [Serializable, NetSerializable]
-public sealed class MagicMirrorSelectMessage : BoundUserInterfaceMessage
+public sealed partial class MagicMirrorSelectMessage : BoundUserInterfaceMessage
 {
     public MagicMirrorSelectMessage(MagicMirrorCategory category, string marking, int slot)
     {
@@ -117,7 +117,7 @@ public sealed class MagicMirrorSelectMessage : BoundUserInterfaceMessage
 }
 
 [Serializable, NetSerializable]
-public sealed class MagicMirrorChangeColorMessage : BoundUserInterfaceMessage
+public sealed partial class MagicMirrorChangeColorMessage : BoundUserInterfaceMessage
 {
     public MagicMirrorChangeColorMessage(MagicMirrorCategory category, List<Color> colors, int slot)
     {
@@ -132,7 +132,7 @@ public sealed class MagicMirrorChangeColorMessage : BoundUserInterfaceMessage
 }
 
 [Serializable, NetSerializable]
-public sealed class MagicMirrorRemoveSlotMessage : BoundUserInterfaceMessage
+public sealed partial class MagicMirrorRemoveSlotMessage : BoundUserInterfaceMessage
 {
     public MagicMirrorRemoveSlotMessage(MagicMirrorCategory category, int slot)
     {
@@ -145,7 +145,7 @@ public sealed class MagicMirrorRemoveSlotMessage : BoundUserInterfaceMessage
 }
 
 [Serializable, NetSerializable]
-public sealed class MagicMirrorSelectSlotMessage : BoundUserInterfaceMessage
+public sealed partial class MagicMirrorSelectSlotMessage : BoundUserInterfaceMessage
 {
     public MagicMirrorSelectSlotMessage(MagicMirrorCategory category, int slot)
     {
@@ -158,7 +158,7 @@ public sealed class MagicMirrorSelectSlotMessage : BoundUserInterfaceMessage
 }
 
 [Serializable, NetSerializable]
-public sealed class MagicMirrorAddSlotMessage : BoundUserInterfaceMessage
+public sealed partial class MagicMirrorAddSlotMessage : BoundUserInterfaceMessage
 {
     public MagicMirrorAddSlotMessage(MagicMirrorCategory category)
     {
@@ -169,7 +169,7 @@ public sealed class MagicMirrorAddSlotMessage : BoundUserInterfaceMessage
 }
 
 [Serializable, NetSerializable]
-public sealed class MagicMirrorUiState : BoundUserInterfaceState
+public sealed partial class MagicMirrorUiState : BoundUserInterfaceState
 {
     public MagicMirrorUiState(string species, List<Marking> hair, int hairSlotTotal, List<Marking> facialHair, int facialHairSlotTotal)
     {

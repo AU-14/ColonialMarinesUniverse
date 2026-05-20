@@ -1,4 +1,4 @@
-﻿using Content.Client.Message;
+using Content.Client.Message;
 using Content.Shared._CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared.Doors.Components;
@@ -10,10 +10,10 @@ using Robust.Shared.Timing;
 namespace Content.Client._RMC14.Dropship;
 
 [UsedImplicitly]
-public sealed class DropshipNavigationBui : BoundUserInterface
+public sealed partial class DropshipNavigationBui : BoundUserInterface
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     [ViewVariables]
     private DropshipNavigationWindow? _window;
@@ -394,7 +394,7 @@ public sealed class DropshipNavigationBui : BoundUserInterface
         _window.LaunchAlarmButton.Text = launchAlarmStatus ? "Stop Alarm" : "Start Alarm";
     }
 
-    public void Update()
+    public override void Update()
     {
         if (_window == null || _window.Disposed)
             return;

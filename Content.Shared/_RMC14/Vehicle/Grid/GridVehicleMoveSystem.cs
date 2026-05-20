@@ -32,26 +32,26 @@ namespace Content.Shared.Vehicle;
 
 public sealed partial class GridVehicleMoverSystem : EntitySystem
 {
-    [Dependency] private readonly SharedTransformSystem transform = default!;
-    [Dependency] private readonly SharedMapSystem map = default!;
-    [Dependency] private readonly SharedPhysicsSystem physics = default!;
-    [Dependency] private readonly EntityLookupSystem lookup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedDoorSystem _door = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly RMCSizeStunSystem _size = default!;
-    [Dependency] private readonly VehicleWheelSystem _wheels = default!;
-    [Dependency] private readonly SharedDestructibleSystem _destructible = default!;
-    [Dependency] private readonly SharedRMCPowerSystem _rmcPower = default!;
-    [Dependency] private readonly HardpointSystem _hardpoints = default!;
-    [Dependency] private readonly Content.Shared.Tag.TagSystem _tag = default!;
-    [Dependency] private readonly Content.Shared.Popups.SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem transform = default!;
+    [Dependency] private SharedMapSystem map = default!;
+    [Dependency] private SharedPhysicsSystem physics = default!;
+    [Dependency] private EntityLookupSystem lookup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedDoorSystem _door = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private RMCSizeStunSystem _size = default!;
+    [Dependency] private VehicleWheelSystem _wheels = default!;
+    [Dependency] private SharedDestructibleSystem _destructible = default!;
+    [Dependency] private SharedRMCPowerSystem _rmcPower = default!;
+    [Dependency] private HardpointSystem _hardpoints = default!;
+    [Dependency] private Content.Shared.Tag.TagSystem _tag = default!;
+    [Dependency] private Content.Shared.Popups.SharedPopupSystem _popup = default!;
 
     private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Tag.TagPrototype> SmashIgnoreTag = "VehicleSmashIgnore";
     private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Tag.TagPrototype> PlowTag = "VehiclePlow";

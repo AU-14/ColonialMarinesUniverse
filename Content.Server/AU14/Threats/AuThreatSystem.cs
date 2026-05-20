@@ -9,7 +9,6 @@ using Content.Shared.Roles;
 using Content.Shared.Mind;
 using Content.Server.GameTicking;
 using Robust.Shared.Network;
-using Content.Shared.AU14.Threats;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Players;
@@ -20,16 +19,16 @@ using Robust.Shared.Random;
 
 namespace Content.Server.AU14.Threats;
 
-public sealed class AuThreatSystem : EntitySystem
+public sealed partial class AuThreatSystem : EntitySystem
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly SharedMindSystem _mindSystem = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private SharedMindSystem _mindSystem = default!;
+    [Dependency] private NpcFactionSystem _npcFaction = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
     public readonly ProtoId<NpcFactionPrototype> threatnpcfaction = "THREAT";
-    [Dependency] private readonly SharedRoleSystem _roles = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private SharedRoleSystem _roles = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     /// <summary>
     /// Spawns the chosen threat's leaders, members, and entities at their correct markers at round start.
@@ -41,20 +40,20 @@ public sealed class AuThreatSystem : EntitySystem
     {
         if (threat == null)
         {
-            Logger.DebugS("au14.threat", "[AuThreatSystem] No threat selected for round start, skipping threat spawn.");
+            Logger.GetSawmill("au14.threat").Debug( "[AuThreatSystem] No threat selected for round start, skipping threat spawn.");
             return;
         }
 
         var partySpawn = threat.RoundStartSpawn;
         if (string.IsNullOrWhiteSpace(partySpawn))
         {
-            Logger.DebugS("au14.threat", $"[DEBUG] Threat '{threat.ID}' has no RoundStartSpawn configured, skipping spawn.");
+            Logger.GetSawmill("au14.threat").Debug( $"[DEBUG] Threat '{threat.ID}' has no RoundStartSpawn configured, skipping spawn.");
             return;
         }
         var newpartySpawn = _prototypeManager.TryIndex(partySpawn, out var spawn) ? spawn : null;
         if (newpartySpawn == null)
         {
-            Logger.ErrorS("au14.threat", $"[ERROR] Could not find RoundStartSpawn prototype '{partySpawn}' for threat '{threat.ID}'. Skipping threat spawn.");
+            Logger.GetSawmill("au14.threat").Error( $"[ERROR] Could not find RoundStartSpawn prototype '{partySpawn}' for threat '{threat.ID}'. Skipping threat spawn.");
             return;
         }
 
@@ -72,7 +71,7 @@ public sealed class AuThreatSystem : EntitySystem
                         markers.Add(uid);
                 }
             }
-            Logger.DebugS("au14.threat",
+            Logger.GetSawmill("au14.threat").Debug(
                 $"[DEBUG] GetMarkers({markerType}): Found {markers.Count} markers with markerId '{markerId}' on map {mapId}");
             return markers;
         }
@@ -80,7 +79,7 @@ public sealed class AuThreatSystem : EntitySystem
         // --- Spawn entities and collect them for mind assignment ---
         var spawnedLeaders = new List<EntityUid>();
         var spawnedMembers = new List<EntityUid>();
-        Logger.DebugS("au14.threat", $"[DEBUG] Begin spawning threat entities for threat: {threat?.ID ?? "null"}");
+        Logger.GetSawmill("au14.threat").Debug( $"[DEBUG] Begin spawning threat entities for threat: {threat?.ID ?? "null"}");
 
         // --- Spawn Together logic ---
         bool spawnTogether = newpartySpawn?.SpawnTogether == true;
@@ -142,7 +141,7 @@ public sealed class AuThreatSystem : EntitySystem
             {
                 var count = GetScaledCount(protoId, staticCount);
                 var markers = GetSpawnMarkers(ThreatMarkerType.Leader);
-                Logger.DebugS("au14.threat",
+                Logger.GetSawmill("au14.threat").Debug(
                     $"[DEBUG] Spawning {count} leaders of protoId {protoId} at {markers.Count} markers (static={staticCount})");
                 for (int i = 0; i < count; i++)
                 {
@@ -152,7 +151,7 @@ public sealed class AuThreatSystem : EntitySystem
                         var ent = _entityManager.SpawnEntity(protoId,
                             _entityManager.GetComponent<TransformComponent>(marker).Coordinates);
                         spawnedLeaders.Add(ent);
-                        Logger.DebugS("au14.threat", $"[DEBUG] Spawned leader entity {ent} at marker {marker}");
+                        Logger.GetSawmill("au14.threat").Debug( $"[DEBUG] Spawned leader entity {ent} at marker {marker}");
                     }
                 }
             }
@@ -162,7 +161,7 @@ public sealed class AuThreatSystem : EntitySystem
             {
                 var count = GetScaledCount(protoId, staticCount);
                 var markers = GetSpawnMarkers(ThreatMarkerType.Member);
-                Logger.DebugS("au14.threat",
+                Logger.GetSawmill("au14.threat").Debug(
                     $"[DEBUG] Spawning {count} members of protoId {protoId} at {markers.Count} markers (static={staticCount})");
                 for (int i = 0; i < count; i++)
                 {
@@ -172,19 +171,19 @@ public sealed class AuThreatSystem : EntitySystem
                         var ent = _entityManager.SpawnEntity(protoId,
                             _entityManager.GetComponent<TransformComponent>(marker).Coordinates);
                         spawnedMembers.Add(ent);
-                        Logger.DebugS("au14.threat", $"[DEBUG] Spawned member entity {ent} at marker {marker}");
+                        Logger.GetSawmill("au14.threat").Debug( $"[DEBUG] Spawned member entity {ent} at marker {marker}");
                     }
                 }
             }
 
-            Logger.DebugS("au14.threat", $"[DEBUG] Spawned {spawnedMembers.Count} threat members.");
+            Logger.GetSawmill("au14.threat").Debug( $"[DEBUG] Spawned {spawnedMembers.Count} threat members.");
 
             // Spawn other entities
             var spawnedEntities = 0;
             foreach (var (protoId, count) in newpartySpawn.entitiestospawn)
             {
                 var markers = GetSpawnMarkers(ThreatMarkerType.Entity);
-                Logger.DebugS("au14.threat",
+                Logger.GetSawmill("au14.threat").Debug(
                     $"[DEBUG] Spawning {count} other entities of protoId {protoId} at {markers.Count} markers");
                 for (int i = 0; i < count; i++)
                 {
@@ -194,13 +193,13 @@ public sealed class AuThreatSystem : EntitySystem
                         _entityManager.SpawnEntity(protoId,
                             _entityManager.GetComponent<TransformComponent>(marker).Coordinates);
                         spawnedEntities++;
-                        Logger.DebugS("au14.threat",
+                        Logger.GetSawmill("au14.threat").Debug(
                             $"[DEBUG] Spawned other entity of protoId {protoId} at marker {marker}");
                     }
                 }
             }
 
-            Logger.DebugS("au14.threat", $"[DEBUG] Spawned {spawnedEntities} other threat entities.");
+            Logger.GetSawmill("au14.threat").Debug( $"[DEBUG] Spawned {spawnedEntities} other threat entities.");
 
             // Assign jobs and minds
             var threatLeaderJobId = new ProtoId<JobPrototype>("AU14JobThreatLeader");
@@ -216,7 +215,7 @@ public sealed class AuThreatSystem : EntitySystem
                 // Get session
                 if (!_playerManager.TryGetSessionById(playerNetId, out var session))
                 {
-                    Logger.Error($"[THREAT SPAWN] Could not find session for leader player {playerNetId}");
+                    Logger.GetSawmill("content").Error($"[THREAT SPAWN] Could not find session for leader player {playerNetId}");
                     continue;
                 }
 
@@ -230,12 +229,12 @@ public sealed class AuThreatSystem : EntitySystem
                 {
                     mind = _mindSystem.CreateMind(playerNetId, data?.Name ?? "Threat Player");
                     _mindSystem.SetUserId(mind.Value, playerNetId);
-                    Logger.DebugS("au14.threat", $"[DEBUG] Created mind for leader player {playerNetId}");
+                    Logger.GetSawmill("au14.threat").Debug( $"[DEBUG] Created mind for leader player {playerNetId}");
                 }
 
                 // Transfer mind to threat entity
                 _mindSystem.TransferTo(mind.Value, entity);
-                Logger.DebugS("au14.threat",
+                Logger.GetSawmill("au14.threat").Debug(
                     $"[DEBUG] Assigned leader mind {mind.Value} to entity {entity} for player {playerNetId}");
                 // Assign job role
                 _roles.MindAddJobRole(mind.Value, silent: true, jobPrototype: "AU14JobThreatLeader");
@@ -248,7 +247,7 @@ public sealed class AuThreatSystem : EntitySystem
                     threatnpcfaction);
             }
 
-            Logger.DebugS("au14.threat",
+            Logger.GetSawmill("au14.threat").Debug(
                 $"[DEBUG] Assigned {Math.Min(leaderPlayers.Count, spawnedLeaders.Count)} leader minds");
             // Assign member minds
             for (int i = 0; i < memberPlayers.Count && i < spawnedMembers.Count; i++)
@@ -257,7 +256,7 @@ public sealed class AuThreatSystem : EntitySystem
                 var entity = spawnedMembers[i];
                 if (!_playerManager.TryGetSessionById(playerNetId, out var session))
                 {
-                    Logger.Error($"[THREAT SPAWN] Could not find session for member player {playerNetId}");
+                    Logger.GetSawmill("content").Error($"[THREAT SPAWN] Could not find session for member player {playerNetId}");
                     continue;
                 }
                 // Ensure player is joined to the round
@@ -270,12 +269,12 @@ public sealed class AuThreatSystem : EntitySystem
                 {
                     mind = _mindSystem.CreateMind(playerNetId, data?.Name ?? "Threat Player");
                     _mindSystem.SetUserId(mind.Value, playerNetId);
-                    Logger.DebugS("au14.threat", $"[DEBUG] Created mind for member player {playerNetId}");
+                    Logger.GetSawmill("au14.threat").Debug( $"[DEBUG] Created mind for member player {playerNetId}");
                 }
 
                 // Transfer mind to threat entity
                 _mindSystem.TransferTo(mind.Value, entity);
-                Logger.DebugS("au14.threat",
+                Logger.GetSawmill("au14.threat").Debug(
                     $"[DEBUG] Assigned member mind {mind.Value} to entity {entity} for player {playerNetId}");
                 // Assign job role
                 _roles.MindAddJobRole(mind.Value, silent: true, jobPrototype: "AU14JobThreatMember");
@@ -288,7 +287,7 @@ public sealed class AuThreatSystem : EntitySystem
                     threatnpcfaction);
             }
 
-            Logger.DebugS("au14.threat",
+            Logger.GetSawmill("au14.threat").Debug(
                 $"[DEBUG] Assigned {Math.Min(memberPlayers.Count, spawnedMembers.Count)} member minds");
         }
     }

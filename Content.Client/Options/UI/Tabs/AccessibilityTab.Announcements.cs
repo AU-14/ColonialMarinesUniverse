@@ -12,7 +12,7 @@ namespace Content.Client.Options.UI.Tabs;
 
 public sealed partial class AccessibilityTab
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private void RegisterAnnouncementOptions()
     {
@@ -101,7 +101,7 @@ public sealed partial class AccessibilityTab
         return list;
     }
 
-    private sealed class AnnouncementPresetOverrideOption : BaseOption
+    private sealed partial class AnnouncementPresetOverrideOption : BaseOption
     {
         private readonly IConfigurationManager _cfg;
         private readonly OptionDropDown _dropDown;

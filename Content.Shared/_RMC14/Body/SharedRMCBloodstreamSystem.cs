@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
@@ -8,10 +8,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Body;
 
-public abstract class SharedRMCBloodstreamSystem : EntitySystem
+public abstract partial class SharedRMCBloodstreamSystem : EntitySystem
 {
-    [Dependency] private readonly RMCReagentSystem _rmcReagent = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
+    [Dependency] private RMCReagentSystem _rmcReagent = default!;
+    [Dependency] private SharedSolutionContainerSystem _solution = default!;
 
     private readonly List<ReagentId> _reagentsToRemove = new();
 

@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Inventory;
 using Content.Shared._RMC14.Marines;
@@ -21,24 +21,24 @@ using static Content.Shared._RMC14.Rangefinder.RangefinderMode;
 
 namespace Content.Shared._RMC14.Rangefinder;
 
-public sealed class RangefinderSystem : EntitySystem
+public sealed partial class RangefinderSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedDropshipWeaponSystem _dropshipWeapon = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly RMCPlanetSystem _rmcPlanet = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly SquadSystem _squad = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedDropshipWeaponSystem _dropshipWeapon = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SquadSystem _squad = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
 
     public override void Initialize()
     {
@@ -56,6 +56,25 @@ public sealed class RangefinderSystem : EntitySystem
 
         SubscribeLocalEvent<LaserDesignatorTargetComponent, ComponentRemove>(OnLaserDesignatorTargetRemove);
         SubscribeLocalEvent<LaserDesignatorTargetComponent, EntityTerminatingEvent>(OnLaserDesignatorTargetRemove);
+    }
+
+    public override void Update(float frameTime)
+    {
+        if (_net.IsClient)
+            return;
+
+        var activeDesignators = EntityQueryEnumerator<ActiveLaserDesignatorComponent, RangefinderComponent>();
+        while (activeDesignators.MoveNext(out var uid, out var active, out var rangefinder))
+        {
+            if (active.User is not { } user ||
+                active.Target is not { } target ||
+                TerminatingOrDeleted(user) ||
+                TerminatingOrDeleted(target) ||
+                !HasLineOfSight(user, _transform.GetMoverCoordinates(target), rangefinder.Range))
+            {
+                RemCompDeferred<ActiveLaserDesignatorComponent>(uid);
+            }
+        }
     }
 
     private void OnRangefinderMapInit(Entity<RangefinderComponent> rangefinder, ref MapInitEvent args)
@@ -158,6 +177,9 @@ public sealed class RangefinderSystem : EntitySystem
         if (!coords.IsValid(EntityManager))
             return;
 
+        if (!HasLineOfSight(user, coords, rangefinder.Comp.Range))
+            return;
+
         if (rangefinder.Comp.Mode == Designator)
         {
             var msg = Loc.GetString("rmc-laser-designator-acquired");
@@ -171,6 +193,7 @@ public sealed class RangefinderSystem : EntitySystem
 
         var active = EnsureComp<ActiveLaserDesignatorComponent>(rangefinder);
         active.BreakRange = rangefinder.Comp.BreakRange;
+        active.User = user;
         QueueDel(active.Target);
 
         var modeLaser = rangefinder.Comp.Mode == Designator
@@ -202,6 +225,7 @@ public sealed class RangefinderSystem : EntitySystem
         var target = EnsureComp<LaserDesignatorTargetComponent>(targetEnt);
         var id = EnsureId(rangefinder);
         target.Id = id;
+        target.LaserDesignator = rangefinder;
         Dirty(targetEnt, target);
 
         var name = Loc.GetString("rmc-laser-designator-target-name", ("id", id));
@@ -324,6 +348,12 @@ public sealed class RangefinderSystem : EntitySystem
     {
         rangefinder.Comp.Id ??= _dropshipWeapon.ComputeNextId();
         return rangefinder.Comp.Id.Value;
+    }
+
+    private bool HasLineOfSight(EntityUid user, EntityCoordinates coordinates, int range)
+    {
+        return coordinates.IsValid(EntityManager) &&
+               _examine.InRangeUnOccluded(user, coordinates, range);
     }
 
     private void TryTarget(Entity<RangefinderComponent> rangefinder, EntityUid user, TimeSpan delay, EntityCoordinates coordinates)

@@ -9,6 +9,7 @@
 
 - type: npcFaction
   id: RMCXeno
+  name: Prime Hive
   hostile:
   - UNMC
   - NanoTrasen
@@ -26,6 +27,7 @@
 
 - type: npcFaction
   id: CMUAPE
+  name: Apes
   hostile:
   - UNMC
   - NanoTrasen

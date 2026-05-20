@@ -10,18 +10,18 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Xenonids.Dodge;
 
-public sealed class XenoDodgeSystem : EntitySystem
+public sealed partial class XenoDodgeSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly XenoPlasmaSystem _plasma = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _speed = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly XenoSystem _xeno = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private XenoPlasmaSystem _plasma = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MovementSpeedModifierSystem _speed = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private XenoSystem _xeno = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _crowd = new();
     public override void Initialize()

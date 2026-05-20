@@ -1,4 +1,4 @@
-﻿using Content.Server.Mind;
+using Content.Server.Mind;
 using Content.Shared._RMC14.Connection;
 using Content.Shared.Ghost;
 using Content.Shared.Mind.Components;
@@ -10,12 +10,12 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._RMC14.Connection;
 
-public sealed class MindCheckSystem : EntitySystem
+public sealed partial class MindCheckSystem : EntitySystem
 {
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IGameTiming _timing = default!;
     public override void Initialize()
     {
         SubscribeLocalEvent<MindCheckComponent, MindAddedMessage>(OnMindChanged);

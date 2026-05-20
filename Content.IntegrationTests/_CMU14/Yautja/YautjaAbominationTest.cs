@@ -328,7 +328,7 @@ public sealed class YautjaAbominationTest
         await pair.CleanReturnAsync();
     }
 
-    private static void AssertRsiState(SpriteSpecifier? icon, string state)
+    private static void AssertRsiState(SpriteSpecifier icon, string state)
     {
         Assert.That(icon, Is.TypeOf<SpriteSpecifier.Rsi>());
         Assert.That(((SpriteSpecifier.Rsi) icon!).RsiState, Is.EqualTo(state));

@@ -114,6 +114,7 @@ public sealed class ChannelSelectorPopup : Popup
         Selected?.Invoke(channel);
     }
 
+    [System.Obsolete]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

@@ -12,12 +12,12 @@ using Content.Shared._RMC14.Evacuation;
 
 namespace Content.Server.AU14.Threats;
 
-public sealed class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovforRuleComponent>
+public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovforRuleComponent>
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly Round.AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private readonly AreaSystem _area = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private Round.AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private AreaSystem _area = default!;
 
     private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
 

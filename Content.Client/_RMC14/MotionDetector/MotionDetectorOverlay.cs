@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Shared._RMC14.MotionDetector;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -8,10 +8,10 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._RMC14.MotionDetector;
 
-public sealed class MotionDetectorOverlay : Overlay
+public sealed partial class MotionDetectorOverlay : Overlay
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 

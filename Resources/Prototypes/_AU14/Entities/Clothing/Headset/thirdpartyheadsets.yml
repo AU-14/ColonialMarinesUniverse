@@ -22,7 +22,7 @@
     - USArmyCommandingOfficer
 
 - type: entity
-  parent: AU14HeadsetSectionLeader
+  parent: AU14HeadsetGovforCommand
   id: AU14HeadsetUSArmyERT
   name: US Army ERT radio headset
   description: Issued to US Army units.
@@ -38,7 +38,7 @@
   description: Issued exclusively to Marine Raiders and members of the UNMC's Force Reconnaissance.
 
 - type: entity
-  parent: AU14HeadsetSectionLeader
+  parent: AU14HeadsetGovforCommand
   id: AU14HeadsetRMCRRT
   name: RMC RRT radio headset
   description: Issued to Royal Commandos units.
@@ -67,7 +67,7 @@
     - SquadLeader
 
 - type: entity
-  parent: AU14HeadsetSectionLeader
+  parent: AU14HeadsetGovforCommand
   id: AU14HeadsetVAIERT
   name: vanguard's arrow headset
   suffix: VAI, GOVFOR
@@ -87,3 +87,24 @@
   - type: RMCHeadset
     channels:
     - VAI
+
+- type: entity
+  parent: RMCHeadsetMarine
+  id: AU14HeadsetPART
+  name: Prodigy Armed Repair Team headset
+  description: A special headset used by Prodigy Armed Repair Team, features a unique brace.
+  suffix: PART, 3rd Party
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMEncryptionKeyColony
+  - type: RMCHeadset
+    channels:
+    - PART
+    - radioCMB
+    - colonyAlert
+  - type: GrantSquadLeaderTracker
+    defaultMode: SquadLeader
+    trackerModes:
+    - SquadLeader

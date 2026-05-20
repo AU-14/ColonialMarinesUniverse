@@ -10,14 +10,14 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Stun;
 
-public sealed class RMCDazedSystem : EntitySystem
+public sealed partial class RMCDazedSystem : EntitySystem
 {
-    [Dependency] private readonly SharedChargesSystem _charges = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
-    [Dependency] private readonly SharedStutteringSystem _stutter = default!;
+    [Dependency] private SharedChargesSystem _charges = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private StatusEffectsSystem _statusEffect = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private ISharedPlayerManager _playerManager = default!;
+    [Dependency] private SharedStutteringSystem _stutter = default!;
 
     public override void Initialize()
     {
@@ -93,4 +93,4 @@ public sealed class RMCDazedSystem : EntitySystem
 public record struct DazedEvent(TimeSpan Duration);
 
 [NetSerializable, Serializable]
-public sealed class DazedComponentShutdownEvent: EntityEventArgs;
+public sealed partial class DazedComponentShutdownEvent: EntityEventArgs;

@@ -11,7 +11,7 @@ namespace Content.Client.MassMedia.Ui;
 [GenerateTypedNameReferences]
 public sealed partial class NewsWriterMenu : FancyWindow
 {
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
 
     private TimeSpan? _nextPublish;
 
@@ -87,6 +87,7 @@ public sealed partial class NewsWriterMenu : FancyWindow
         ArticleEditorPanel.Margin =  new Thickness(Width - 1, margin.Top, margin.Right, margin.Bottom);
     }
 
+    [System.Obsolete]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

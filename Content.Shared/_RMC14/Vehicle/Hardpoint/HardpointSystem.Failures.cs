@@ -6,7 +6,7 @@ namespace Content.Shared._RMC14.Vehicle;
 
 public sealed partial class HardpointSystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private readonly record struct VehicleHardpointFailureRepairStep(
         ProtoId<ToolQualityPrototype> Tool,

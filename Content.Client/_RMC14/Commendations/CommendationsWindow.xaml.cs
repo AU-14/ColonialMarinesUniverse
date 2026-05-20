@@ -17,8 +17,8 @@ namespace Content.Client._RMC14.Commendations;
 [GenerateTypedNameReferences]
 public sealed partial class CommendationsWindow : DefaultWindow
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
     private readonly Dictionary<CommendationType, ScrollContainer> _tabContainers = new();
 

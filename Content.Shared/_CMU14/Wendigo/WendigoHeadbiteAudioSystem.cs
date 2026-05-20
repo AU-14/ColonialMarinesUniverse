@@ -1,24 +1,25 @@
 using Content.Shared._RMC14.Xenonids.Headbite;
 using Content.Shared.Light.Components;
 using Content.Shared.Light.EntitySystems;
+using Content.Shared.Popups;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map.Components;
-using Robust.Shared.Map.Enumerators;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Wendigo;
 
-public sealed class WendigoHeadbiteAudioSystem : EntitySystem
+public sealed partial class WendigoHeadbiteAudioSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedRoofSystem _roof = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedRoofSystem _roof = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {
@@ -37,24 +38,13 @@ public sealed class WendigoHeadbiteAudioSystem : EntitySystem
         if (!_net.IsServer)
             return;
 
-        // Always play close sound for nearby players.
-        if (ent.Comp.CloseSound != null)
-            _audio.PlayPvs(ent.Comp.CloseSound, ent);
+        var globalReady = IsGlobalReady(ent);
 
-        // Play directional global sound for distant players if cooldown has expired.
-        if (ent.Comp.GlobalSound != null)
+        // Play global directional screech if off cooldown; otherwise play close sound.
+        if (globalReady && ent.Comp.GlobalSound != null)
         {
-            var now = _timing.CurTime;
-            if (ent.Comp.LastGlobalPlayed != null &&
-                now < ent.Comp.LastGlobalPlayed.Value + ent.Comp.GlobalCooldown)
-            {
-                return;
-            }
-
-            var pvsPlayers = new HashSet<ICommonSession>(Filter.Pvs(ent).Recipients);
             var wendigoCoords = _transform.GetMoverCoordinates(ent);
 
-            // No distance attenuation so everyone hears it, but positioned for directionality.
             var outdoorParams = AudioParams.Default
                 .WithMaxDistance(float.MaxValue)
                 .WithRolloffFactor(0)
@@ -70,9 +60,6 @@ public sealed class WendigoHeadbiteAudioSystem : EntitySystem
 
             foreach (var session in Filter.Broadcast().Recipients)
             {
-                if (pvsPlayers.Contains(session))
-                    continue;
-
                 if (session.AttachedEntity is not { } player)
                     continue;
 
@@ -88,8 +75,44 @@ public sealed class WendigoHeadbiteAudioSystem : EntitySystem
             if (indoorFilter.Count > 0)
                 _audio.PlayStatic(ent.Comp.GlobalSound, indoorFilter, wendigoCoords, true, indoorParams);
 
-            ent.Comp.LastGlobalPlayed = now;
+            ent.Comp.LastGlobalPlayed = _timing.CurTime;
+            ent.Comp.ScreechReady = false;
             Dirty(ent);
+        }
+        else if (ent.Comp.CloseSound != null)
+        {
+            _audio.PlayPvs(ent.Comp.CloseSound, ent);
+        }
+    }
+
+    private bool IsGlobalReady(Entity<WendigoHeadbiteAudioComponent> ent)
+    {
+        if (ent.Comp.LastGlobalPlayed == null)
+            return true;
+
+        return _timing.CurTime >= ent.Comp.LastGlobalPlayed.Value + ent.Comp.GlobalCooldown;
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        if (!_net.IsServer)
+            return;
+
+        var query = EntityQueryEnumerator<WendigoHeadbiteAudioComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (comp.ScreechReady)
+                continue;
+
+            if (comp.LastGlobalPlayed == null ||
+                _timing.CurTime >= comp.LastGlobalPlayed.Value + comp.GlobalCooldown)
+            {
+                comp.ScreechReady = true;
+                Dirty(uid, comp);
+                _popup.PopupEntity(Loc.GetString("rmc-wendigo-screech-ready"), uid, uid, PopupType.Medium);
+            }
         }
     }
 

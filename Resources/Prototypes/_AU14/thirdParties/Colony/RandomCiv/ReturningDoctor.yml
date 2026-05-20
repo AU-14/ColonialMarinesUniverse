@@ -70,12 +70,12 @@
   components:
   - type: EntityPreset
     randomGearOther:
-    - 
+    -
       - [ AU14IDCardColonyPhysician ]
       - [ AU14IDCardColonySurgeon ]
       - [ AU14IDCardColonyPharmacist ]
       - [ AU14IDCardColonyGeneralPractitioner ]
-    - 
+    -
       - [ CMJumpsuitColonist ]
       - [ RMCJumpsuitCivilian ]
       - [ CMJumpsuitTShirtWhite ]

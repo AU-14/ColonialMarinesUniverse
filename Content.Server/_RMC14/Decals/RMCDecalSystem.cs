@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Numerics;
 using Content.Server.Decals;
 using Content.Shared.Decals;
@@ -6,9 +6,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._RMC14.Decals;
 
-public sealed class RMCDecalSystem : EntitySystem
+public sealed partial class RMCDecalSystem : EntitySystem
 {
-    [Dependency] private readonly DecalSystem _decal = default!;
+    [Dependency] private DecalSystem _decal = default!;
 
     public int GetDecalsInTile(EntityUid ent, IReadOnlyCollection<ProtoId<DecalPrototype>> decals)
     {

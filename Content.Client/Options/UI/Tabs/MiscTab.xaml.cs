@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Client._RMC14.LinkAccount;
 using Content.Client.UserInterface.Screens;
 using Content.Shared._RMC14.CCVar;
@@ -17,9 +17,9 @@ namespace Content.Client.Options.UI.Tabs;
 [GenerateTypedNameReferences]
 public sealed partial class MiscTab : Control
 {
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly LinkAccountManager _linkAccount = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private LinkAccountManager _linkAccount = default!;
 
     public MiscTab()
     {

@@ -62,40 +62,40 @@ using static Content.Shared._RMC14.Dropship.Weapon.DropshipTerminalWeaponsScreen
 
 namespace Content.Shared._RMC14.Dropship.Weapon;
 
-public abstract class SharedDropshipWeaponSystem : EntitySystem
+public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedDoorSystem _door = default!;
-    [Dependency] private readonly SharedDropshipSystem _dropship = default!;
-    [Dependency] private readonly SharedRMCEquipmentDeployerSystem _equipmentDeployer = default!;
-    [Dependency] private readonly DropshipUtilitySystem _dropshipUtility = default!;
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly NameModifierSystem _name = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedOnCollideSystem _onCollide = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedPointLightSystem _pointLight = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly PowerLoaderSystem _powerloader = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedRMCCameraSystem _rmcCamera = default!;
-    [Dependency] private readonly SharedRMCFlammableSystem _rmcFlammable = default!;
-    [Dependency] private readonly SharedRMCExplosionSystem _rmcExplosion = default!;
-    [Dependency] private readonly RMCImplosionSystem _rmcImplosion = default!;
-    [Dependency] private readonly SharedRMCOrbitalDeployerSystem _rmcOrbitalDeployable = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly SquadSystem _squad = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedDoorSystem _door = default!;
+    [Dependency] private SharedDropshipSystem _dropship = default!;
+    [Dependency] private SharedRMCEquipmentDeployerSystem _equipmentDeployer = default!;
+    [Dependency] private DropshipUtilitySystem _dropshipUtility = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private NameModifierSystem _name = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedOnCollideSystem _onCollide = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPointLightSystem _pointLight = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private PowerLoaderSystem _powerloader = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedRMCCameraSystem _rmcCamera = default!;
+    [Dependency] private SharedRMCFlammableSystem _rmcFlammable = default!;
+    [Dependency] private SharedRMCExplosionSystem _rmcExplosion = default!;
+    [Dependency] private RMCImplosionSystem _rmcImplosion = default!;
+    [Dependency] private SharedRMCOrbitalDeployerSystem _rmcOrbitalDeployable = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SquadSystem _squad = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     private static readonly EntProtoId DropshipTargetMarker = "RMCLaserDropshipTarget";
     private const string SpotlightState = "spotlights_";
@@ -638,7 +638,8 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
             return;
         }
 
-        var coordinates = _transform.GetMoverCoordinates(target).SnapToGrid(EntityManager, _mapManager);
+        var offset = ClampOffset(ent);
+        var coordinates = _transform.GetMoverCoordinates(target).SnapToGrid(EntityManager, _mapManager).Offset(offset);
         if (!CasDebug && !_area.CanCAS(coordinates))
         {
             var msg = Loc.GetString("rmc-laser-designator-not-cas");
@@ -822,14 +823,7 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
             return;
 
         var adjust = args.Direction.ToIntVec();
-        var newOffset = ent.Comp.Offset + adjust;
-        var limit = ent.Comp.OffsetLimit;
-        newOffset = new Vector2i(
-            Math.Clamp(newOffset.X, -limit.X, limit.X),
-            Math.Clamp(newOffset.Y, -limit.Y, limit.Y)
-        );
-
-        ent.Comp.Offset = newOffset;
+        ent.Comp.Offset = ClampOffset(ent, ent.Comp.Offset + adjust);
 
         if (EnsureTargetEye(ent, ent.Comp.Target) is { } target)
             _eye.SetOffset(target, ent.Comp.Offset);
@@ -1199,6 +1193,31 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
         }
 
         return false;
+    }
+
+    private Vector2i ClampOffset(Entity<DropshipTerminalWeaponsComponent> terminal)
+    {
+        var offset = ClampOffset(terminal, terminal.Comp.Offset);
+        if (terminal.Comp.Offset == offset)
+            return offset;
+
+        terminal.Comp.Offset = offset;
+        Dirty(terminal);
+
+        if (EnsureTargetEye(terminal, terminal.Comp.Target) is { } target)
+            _eye.SetOffset(target, terminal.Comp.Offset);
+
+        RefreshWeaponsUI(terminal);
+        return offset;
+    }
+
+    private static Vector2i ClampOffset(Entity<DropshipTerminalWeaponsComponent> terminal, Vector2i offset)
+    {
+        var limit = terminal.Comp.OffsetLimit;
+        return new Vector2i(
+            Math.Clamp(offset.X, -limit.X, limit.X),
+            Math.Clamp(offset.Y, -limit.Y, limit.Y)
+        );
     }
 
     public int GetWeaponRounds(Entity<DropshipWeaponComponent?> weapon)

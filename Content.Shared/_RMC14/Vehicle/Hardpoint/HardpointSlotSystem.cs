@@ -12,16 +12,16 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Vehicle;
 
-public sealed class HardpointSlotSystem : EntitySystem
+public sealed partial class HardpointSlotSystem : EntitySystem
 {
     private static readonly ProtoId<ToolQualityPrototype> VanRemoveToolQuality = "Prying";
 
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly HardpointSystem _hardpoints = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedToolSystem _tool = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private HardpointSystem _hardpoints = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {
@@ -111,7 +111,7 @@ public sealed class HardpointSlotSystem : EntitySystem
 
     private void OnSlotsInteractUsing(Entity<HardpointSlotsComponent> ent, ref InteractUsingEvent args)
     {
-        if (args.Handled || args.User == null)
+        if (args.Handled)
             return;
 
         if (_hardpoints.TryStartFailureRepairInTree(ent.Owner, ent.Comp, args))
@@ -164,7 +164,7 @@ public sealed class HardpointSlotSystem : EntitySystem
             return true;
         }
 
-        if (EntityManager.IsClientSide(ent.Owner))
+        if (IsClientSide(ent.Owner))
             return true;
 
         if (targetLocation.State.PendingInsertUsers.Contains(user))

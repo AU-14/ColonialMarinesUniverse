@@ -13,11 +13,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Examine;
 
-public sealed class CMUMedicalExamineSystem : EntitySystem
+public sealed partial class CMUMedicalExamineSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedBodySystem _body = default!;
 
     private const string UntreatedWoundColor = "#ff4d4d";
     private const string TreatedWoundColor = "#7bd88f";

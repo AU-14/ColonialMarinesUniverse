@@ -42,32 +42,32 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Xenonids.Weeds;
 
-public abstract class SharedXenoWeedsSystem : EntitySystem
+public abstract partial class SharedXenoWeedsSystem : EntitySystem
 {
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly EntityWhitelistSystem _entityWhitelist = default!;
-    [Dependency] private readonly SharedGameTicker _gameTicker = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly IMapManager _map = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly ITileDefinitionManager _tile = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly EntityManager _entities = default!;
-    [Dependency] private readonly SharedXenoAnnounceSystem _xenoAnnounce = default!;
-    [Dependency] private readonly WeedboundWallSystem _weedboundWall = default!;
-    [Dependency] private readonly DesignerNodeBindingSystem _designerBinding = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
+    [Dependency] private SharedGameTicker _gameTicker = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private IMapManager _map = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private ITileDefinitionManager _tile = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private EntityManager _entities = default!;
+    [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private WeedboundWallSystem _weedboundWall = default!;
+    [Dependency] private DesignerNodeBindingSystem _designerBinding = default!;
 
     private readonly HashSet<EntityUid> _toUpdate = new();
     private readonly HashSet<EntityUid> _intersecting = new();
@@ -277,7 +277,7 @@ public abstract class SharedXenoWeedsSystem : EntitySystem
         //Checks hive for applying slows now
         //Weed speedup only effects xenos, but slowdown does not hurt hive mems
         //Fast resin speedup only effect xenos, but sticky also doesn't hurt hive mems
-        _hiveMemberQuery.TryComp(ent, out var hive);
+        _hiveMemberQuery.TryComp(ent, out var stepperHive);
 
         var anyWeeds = false;
         var anySlowResin = false;
@@ -298,12 +298,13 @@ public abstract class SharedXenoWeedsSystem : EntitySystem
                 _intersecting.Add(anchored);
             }
         }
-
+        Entity<HiveComponent>? contactHive;
         foreach (var contacting in _intersecting)
         {
+            contactHive = _hive.GetHive(contacting);
             if (_slowResinQuery.TryComp(contacting, out var slowResin))
             {
-                if (!ignoreWeedSlowdown && (hive == null || !_hive.IsMember(contacting, hive.Hive)))
+                if (!ignoreWeedSlowdown && (stepperHive == null || !_hive.IsMember(contacting, stepperHive.Hive)) && !_hive.IsAllyOfHive(ent, contactHive))
                 {
                     if (HasComp<RMCArmorSpeedTierUserComponent>(contacting))
                         speedResin += slowResin.OutsiderSpeedModifierArmor;
@@ -318,7 +319,8 @@ public abstract class SharedXenoWeedsSystem : EntitySystem
 
             if (_fastResinQuery.TryComp(contacting, out var fastResin))
             {
-                if (isXeno && hive != null && _hive.IsMember(contacting, hive.Hive))
+                if (isXeno && stepperHive != null && (_hive.IsMember(contacting, stepperHive.Hive) | _hive.IsAllyOfHive(ent,
+                    contactHive)))
                 {
                     speedResin += fastResin.HiveSpeedModifier;
                     entriesResin++;
@@ -332,13 +334,13 @@ public abstract class SharedXenoWeedsSystem : EntitySystem
 
             anyWeeds = true;
 
-            if (isXeno && hive != null && _hive.IsMember(contacting, hive.Hive))
+            if (isXeno && stepperHive != null && _hive.IsMember(contacting, stepperHive.Hive))
             {
                 speedWeeds += weeds.SpeedMultiplierXeno;
                 friendlyWeeds = true;
                 entriesWeeds++;
             }
-            else if (hive == null || !_hive.IsMember(contacting, hive.Hive))
+            else if ((stepperHive == null || !_hive.IsMember(contacting, stepperHive.Hive)) && !_hive.IsAllyOfHive(ent, contactHive))
             {
                 if (!ignoreWeedSlowdown)
                 {
