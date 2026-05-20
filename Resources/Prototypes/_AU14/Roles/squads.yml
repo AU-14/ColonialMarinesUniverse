@@ -277,6 +277,68 @@
     tags:
     - AU14SquadVAISP
 
+- type: entity
+  parent: SquadBase
+  id: SquadPARTY
+  name: Prodigy Armed Repair Team Yankee
+  components:
+  - type: SquadTeam
+    color: "#92969A"
+    background:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: empty
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: PART
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_pmc
+    canSupplyDrop: false
+    group: PSC
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_lead
+  - type: Tag
+    tags:
+    - SquadPARTY
+
+- type: entity
+  parent: SquadBase
+  id: SquadPARTS
+  name: Prodigy Armed Repair Team Sierra
+  components:
+  - type: SquadTeam
+    color: "#92969A"
+    background:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: empty
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: PART
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_pmc
+    canSupplyDrop: false
+    group: PSC
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_lead
+  - type: Tag
+    tags:
+    - SquadPARTS
+
+- type: Tag
+  id: SquadPARTY
+
+- type: Tag
+  id: SquadPARTS
+
 - type: Tag
   id: AU14SquadUACG
 
@@ -306,3 +368,4 @@
 
 - type: Tag
   id: AU14SquadVAISP
+

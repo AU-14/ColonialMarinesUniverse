@@ -51,6 +51,8 @@
     - type: ActiveRadio
       channels:
       - Hivemind
+    - type: StartingMindRole
+      mindRole: MindRoleCultist
     - type: CMVendorUser
       id: AU14JobCultist
       points: 70

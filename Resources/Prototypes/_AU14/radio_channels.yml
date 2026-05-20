@@ -256,3 +256,12 @@
   color: "#e3580e"
   longRange: true
   tower: true
+
+- type: radioChannel
+  id: PART
+  name: chat-radio-part
+  keycode: "1"
+  frequency: 5571
+  color: "#92969A"
+  longRange: true
+  tower: true

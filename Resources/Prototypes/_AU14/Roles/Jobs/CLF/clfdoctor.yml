@@ -49,6 +49,8 @@
         RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-clfphysician
+    - type: StartingMindRole
+      mindRole: MindRoleCLFPhysician
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi

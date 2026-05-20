@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.StatusIcon;
 using Robust.Shared.GameStates;
@@ -19,6 +20,6 @@ public sealed partial class CLFMemberComponent : Component
     public ProtoId<NpcFactionPrototype> Faction = "CLF";
 
     [DataField]
-    public EntProtoId IFF = "FactionCLF";
+    public EntProtoId<IFFFactionComponent> IFF = "FactionCLF";
 }
 

@@ -32,3 +32,4 @@ chat-radio-uasof = UA
 chat-radio-twe = TWE
 chat-radio-icsc = ICSC
 chat-radio-vai = VAI
+chat-radio-part = Prodigy

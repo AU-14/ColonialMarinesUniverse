@@ -91,6 +91,92 @@
   objective: roles-antag-clf-recruit-objective
   isCM: true
 
+## CLF guerrilla
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCLFGuerrilla
+  name: CLF Guerrilla Role
+  components:
+  - type: MindRole
+    antagPrototype: CLFGuerrillaRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  id: CLFGuerrillaRole
+  name: roles-antag-clf-guerrilla-name
+  setPreference: false #already done by the job thing
+  objective: roles-antag-clf-guerrilla-objective
+  isCM: true
+
+## CLF Physician
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCLFPhysician
+  components:
+  - type: MindRole
+    antagPrototype: CLFPhysicianRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  id: CLFPhysicianRole
+  name: roles-antag-clf-physician-name
+  setPreference: false #already done by the job thing
+  objective: roles-antag-clf-doctor-objective
+  isCM: true
+
+## CLF Surgeon
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCLFSurgeon
+  components:
+  - type: MindRole
+    antagPrototype: CLFSurgeonRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  id: CLFSurgeonRole
+  name: roles-antag-clf-surgeon-name
+  setPreference: false #yada yada job thing
+  objective: roles-antag-clf-doctor-objective
+  isCM: true
+
+## CLF Leader
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCLFLeader
+  components:
+  - type: MindRole
+    antagPrototype: CLFLeaderRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  id: CLFLeaderRole
+  name: roles-antag-clf-leader-name
+  setPreference: false #job thing
+  objective: roles-antag-clf-leader-objective
+  isCM: true
+
+## cultist
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCultist
+  components:
+  - type: MindRole
+    antagPrototype: CultistRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  id: CultistRole
+  name: roles-antag-cultist-name
+  setPreference: false
+  objective: roles-antag-cultist-objective
+  isCM: true
+
 ## fugitive
 - type: entity
   id: Fugitive

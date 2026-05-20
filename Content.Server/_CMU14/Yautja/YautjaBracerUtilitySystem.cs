@@ -76,6 +76,7 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateStabilisingCrystalActionEvent>(OnCreateStabilisingCrystal);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateHumanStabilisingCrystalActionEvent>(OnCreateHumanStabilisingCrystal);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateHealingCapsuleActionEvent>(OnCreateHealingCapsule);
+        SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateHuntingTrapActionEvent>(OnCreateHuntingTrap);
         SubscribeLocalEvent<YautjaTechItemComponent, YautjaTechMisusedEvent>(OnTechMisused);
 
         Subs.BuiEvents<YautjaBracerComponent>(YautjaTranslatorUIKey.Key, subs =>
@@ -216,6 +217,18 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         TryCreateHealingCapsule(ent, args.Performer);
     }
 
+    private void OnCreateHuntingTrap(Entity<YautjaBracerComponent> ent, ref YautjaCreateHuntingTrapActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (!_rmcActions.TryUseAction(args))
+            return;
+
+        args.Handled = true;
+        TryCreateHuntingTrap(ent, args.Performer);
+    }
+
     public bool TryOpenTranslator(Entity<YautjaBracerComponent> bracer, EntityUid user)
     {
         if (!TryResolveBracerUse(bracer, user, out var randomFunction))
@@ -288,6 +301,19 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         return TryCreateItem(bracer, user, bracer.Comp.HealingCapsulePrototype, bracer.Comp.HealingCapsuleCost, bracer.Comp.HealingCapsuleCooldown, ref bracer.Comp.NextHealingCapsule, "cmu-yautja-bracer-healing-capsule-created");
     }
 
+    public bool TryCreateHuntingTrap(Entity<YautjaBracerComponent> bracer, EntityUid user)
+    {
+        if (!TryResolveBracerUse(bracer, user, out var randomFunction))
+            return false;
+
+        if (randomFunction)
+        {
+            RunRandomBracerFunction(bracer, user);
+            return true;
+        }
+
+        return TryCreateItem(bracer, user, bracer.Comp.HuntingTrapPrototype, bracer.Comp.HuntingTrapCost, bracer.Comp.HuntingTrapCooldown, ref bracer.Comp.NextHuntingTrap, "cmu-yautja-bracer-hunting-trap-created");
+    }
     private void OnTechMisused(Entity<YautjaTechItemComponent> ent, ref YautjaTechMisusedEvent args)
     {
         if (HasComp<YautjaComponent>(args.User))
@@ -635,6 +661,9 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
                 break;
             case 3:
                 TryCreateItem(bracer, user, bracer.Comp.HumanStabilisingCrystalPrototype, bracer.Comp.HumanStabilisingCrystalCost, bracer.Comp.StabilisingCrystalCooldown, ref bracer.Comp.NextStabilisingCrystal, "cmu-yautja-bracer-human-crystal-created");
+                break;
+            case 4:
+                TryCreateItem(bracer, user, bracer.Comp.HuntingTrapPrototype, bracer.Comp.HuntingTrapCost, bracer.Comp.HuntingTrapCooldown, ref bracer.Comp.NextHuntingTrap, "cmu-yautja-bracer-hunting-trap-created");
                 break;
             default:
                 TryCreateItem(bracer, user, bracer.Comp.HealingCapsulePrototype, bracer.Comp.HealingCapsuleCost, bracer.Comp.HealingCapsuleCooldown, ref bracer.Comp.NextHealingCapsule, "cmu-yautja-bracer-healing-capsule-created");

@@ -1,0 +1,23 @@
+- type: partySpawn
+  id: ProdigyPARTSSpawn
+  leadersToSpawn:
+    AU14JobPARTSPartyLeader: 1
+  gruntsToSpawn:
+    AU14JobPARTSPartyEngineer: 3
+    AU14JobPARTSPartyMedic: 2
+    #AU14JobPARTSPartySmartgunner: 1 - YANKEE TEAM ONLY
+    AU14JobPARTSPartyContractor: 3
+    AU14JobPARTSPartySynthetic: 1
+    #AU14JobPARTSPartyCombatSynthetic: 1 - YANKEE TEAM ONLY
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: ProdigyPARTSParty
+  partyspawn: ProdigyPARTSSpawn
+  entrymethod: shuttle
+  weight: 45
+  minplayers: 30
+  maxplayers: 400
+  GhostsNeeded: 10
+  roundstart: false

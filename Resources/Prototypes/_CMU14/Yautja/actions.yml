@@ -170,6 +170,22 @@
 
 - type: entity
   parent: CMUYautjaActionBase
+  id: CMUActionYautjaCreateHuntingTrap
+  name: cmu-yautja-action-create-hunting-trap
+  description: cmu-yautja-action-create-hunting-trap-desc
+  components:
+  - type: Action
+    icon:
+      sprite: _RMC14/Objects/Medical/emergency_auto_injector.rsi
+      state: autoinjector
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaCreateHuntingTrapActionEvent
+  - type: YautjaPowerAction
+    cost: 0
+
+- type: entity
+  parent: CMUYautjaActionBase
   id: CMUActionYautjaOpenMarkPanel
   name: cmu-yautja-action-mark-panel
   description: cmu-yautja-action-mark-panel-desc
