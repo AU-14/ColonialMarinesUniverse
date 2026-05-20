@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "license": "AGPL 3",
-  "copyright": "Colonial Marines Universe",
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Colonial Marines Universe AGPL-3",
   "size": {
     "x": 32,
     "y": 32
@@ -19,9 +19,9 @@
 	{
 	  "name": "caves_southwest"
 	},
-	{
-	  "name": "fb_barracks_mess"
-	},
+    {
+      "name": "fb_barracks_messhall"
+    },
 	{
 	  "name": "fb_barracks"
 	},
@@ -98,7 +98,7 @@
 	  "name": "hr_admin_embassy"
 	},
 	{
-	  "name": "hr_admin_serverrom"
+	  "name": "hr_admin_serverroom"
 	},
 	{
 	  "name": "hr_clinic"
@@ -145,9 +145,9 @@
 	{
 	  "name": "hr_miningprefabs_north"
 	},
-	{
-	  "name": "hr_miningprefabs_northminingoff"
-	},
+    {
+      "name": "hr_miningprefabs_northminingoffice"
+    },
 	{
 	  "name": "hr_miningprefabs_south"
 	},
