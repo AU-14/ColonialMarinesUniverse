@@ -275,11 +275,11 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             // Set faction-specific starting balance
             if (faction == "govfor" || faction == "opfor")
             {
-                newAccountComp.Balance = 20000;
+                newAccountComp.Balance = 30000;
             }
             else if (faction == "colony")
             {
-                newAccountComp.Balance = 450;
+                newAccountComp.Balance = 1250;
                 // Colony accounts should not receive random military deliveries (flares, batteries, etc.)
                 newAccountComp.RandomCrates.Clear();
             }
