@@ -29,8 +29,6 @@ public sealed partial class ColonyCommsConsoleSystem : EntitySystem
 
     private void OnMessageSent(EntityUid uid, ColonyCommsConsoleComponent component, ColonyCommsConsoleMessage args)
     {
-
-
         // Send to radio channel (for intercoms)
         _radioSystem.SendRadioMessage(uid, args.Message, "colonyAlert", uid);
 
@@ -47,12 +45,12 @@ public sealed partial class ColonyCommsConsoleSystem : EntitySystem
 
     private void OnSirenBuiMsg(EntityUid uid, ColonyCommsConsoleComponent component, ColonyCommsConsoleSirenBuiMsg args)
     {
-        // Toggle siren sound on or off
-        if (!component.SirenActive)
+        var sirenActive = !component.SirenActive;
+        var sirenQuery = AllEntityQuery<ColonySirenComponent>();
+        while (sirenQuery.MoveNext(out var sirenUid, out _))
         {
-            foreach (var sirenComp in EntityQuery<ColonySirenComponent>())
+            if (sirenActive)
             {
-                var sirenUid = sirenComp.Owner;
                 if (!HasComp<AmbientSoundComponent>(sirenUid))
                 {
                     var ambient = AddComp<AmbientSoundComponent>(sirenUid);
@@ -61,27 +59,13 @@ public sealed partial class ColonyCommsConsoleSystem : EntitySystem
                     _ambientSound.SetVolume(sirenUid, -1f, ambient);
                     _ambientSound.SetAmbience(sirenUid, true, ambient);
                 }
-                else
-                {
-                    if (TryComp<AmbientSoundComponent>(sirenUid, out var ambient))
-                    {
-                        _ambientSound.SetVolume(sirenUid, -2f, ambient);
-                    }
-                }
+                else if (TryComp<AmbientSoundComponent>(sirenUid, out var ambient))
+                    _ambientSound.SetVolume(sirenUid, -2f, ambient);
             }
-            component.SirenActive = true;
+            else if (TryComp<AmbientSoundComponent>(sirenUid, out var ambient))
+                _ambientSound.SetVolume(sirenUid, -999f, ambient); // mute
         }
-        else
-        {
-            foreach (var sirenComp in EntityQuery<ColonySirenComponent>())
-            {
-                var sirenUid = sirenComp.Owner;
-                if (TryComp<AmbientSoundComponent>(sirenUid, out var ambient))
-                {
-                    _ambientSound.SetVolume(sirenUid, -999f, ambient);
-                }
-            }
-            component.SirenActive = false;
-        }
+        // Persist state on console (even when there's no siren comps)
+        component.SirenActive = sirenActive;
     }
 }

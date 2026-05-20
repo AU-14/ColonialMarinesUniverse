@@ -1,0 +1,305 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Colonial Marines Universe AGPL-3",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+	{
+	  "name": "oob"
+	},
+	{
+	  "name": "caves_north"
+	},
+	{
+	  "name": "caves_southeast"
+	},
+	{
+	  "name": "caves_southwest"
+	},
+    {
+      "name": "fb_barracks_messhall"
+    },
+	{
+	  "name": "fb_barracks"
+	},
+	{
+	  "name": "fb_brig"
+	},
+	{
+	  "name": "fb_brig_cell"
+	},
+	{
+	  "name": "fb_brig_longtermconfinement"
+	},
+	{
+	  "name": "fb_brig_processing"
+	},
+	{
+	  "name": "fb_cm_cc"
+	},
+	{
+	  "name": "fb_cm_inteloffice"
+	},
+	{
+	  "name": "fb_engi_maint"
+	},
+	{
+	  "name": "fb_exterior_east"
+	},
+	{
+	  "name": "fb_exterior_lzalpha"
+	},
+	{
+	  "name": "fb_exterior_lzbravo"
+	},
+	{
+	  "name": "fb_exterior_north"
+	},
+	{
+	  "name": "fb_exterior_south"
+	},
+	{
+	  "name": "fb_exterior_west"
+	},
+	{
+	  "name": "fb_hospital_breakroom"
+	},
+	{
+	  "name": "fb_hospital_chemistry"
+	},
+	{
+	  "name": "fb_hospital_morgue"
+	},
+	{
+	  "name": "fb_hospital_operatingrooms"
+	},
+	{
+	  "name": "fb_hospital_treatment"
+	},
+	{
+	  "name": "fb_hospital_triage"
+	},
+	{
+	  "name": "fb_misc_briefing"
+	},
+	{
+	  "name": "fb_misc_vehiclepool"
+	},
+	{
+	  "name": "fb_req"
+	},
+	{
+	  "name": "hr_admin"
+	},
+	{
+	  "name": "hr_admin_embassy"
+	},
+	{
+	  "name": "hr_admin_serverroom"
+	},
+	{
+	  "name": "hr_clinic"
+	},
+	{
+	  "name": "hr_clinic_operatingroom"
+	},
+	{
+	  "name": "hr_dorms_admin"
+	},
+	{
+	  "name": "hr_dorms_cafeteria"
+	},
+	{
+	  "name": "hr_dorms_commissary"
+	},
+	{
+	  "name": "hr_dorms_hydro"
+	},
+	{
+	  "name": "hr_dorms_livingspace"
+	},
+	{
+	  "name": "hr_dorms_recreationcenter"
+	},
+	{
+	  "name": "hr_dorms_sanitation"
+	},
+	{
+	  "name": "hr_engi_construction"
+	},
+	{
+	  "name": "hr_engi_foundation"
+	},
+	{
+	  "name": "hr_engi_treatment"
+	},
+	{
+	  "name": "hr_engi_turbine"
+	},
+	{
+	  "name": "hr_engi_upper"
+	},
+	{
+	  "name": "hr_miningprefabs_north"
+	},
+    {
+      "name": "hr_miningprefabs_northminingoffice"
+    },
+	{
+	  "name": "hr_miningprefabs_south"
+	},
+	{
+	  "name": "hr_misc_motorpool"
+	},
+	{
+	  "name": "hr_misc_motorpoolstorage"
+	},
+	{
+	  "name": "hr_misc_southerndorms"
+	},
+	{
+	  "name": "hr_misc_wastemanagement"
+	},
+	{
+	  "name": "hr_outdoor_c"
+	},
+	{
+	  "name": "hr_outdoor_e"
+	},
+	{
+	  "name": "hr_outdoor_lz1"
+	},
+	{
+	  "name": "hr_outdoor_n"
+	},
+	{
+	  "name": "hr_outdoor_ne"
+	},
+	{
+	  "name": "hr_outdoor_nw"
+	},
+	{
+	  "name": "hr_outdoor_s"
+	},
+	{
+	  "name": "hr_outdoor_se"
+	},
+	{
+	  "name": "hr_outdoor_sw"
+	},
+	{
+	  "name": "hr_outdoor_w"
+	},
+	{
+	  "name": "hr_security_jail"
+	},
+	{
+	  "name": "hr_security_office"
+	},
+	{
+	  "name": "hr_security_prep"
+	},
+	{
+	  "name": "hr_shipping_controloffice"
+	},
+	{
+	  "name": "hr_shipping_foreman"
+	},
+	{
+	  "name": "hr_shipping_office"
+	},
+	{
+	  "name": "hr_shipping_servicebay"
+	},
+	{
+	  "name": "oc_admin_adminoffice"
+	},
+	{
+	  "name": "oc_admin_aicore"
+	},
+	{
+	  "name": "oc_admin_embassy"
+	},
+	{
+	  "name": "oc_admin_logi"
+	},
+	{
+	  "name": "oc_admin_panicroom"
+	},
+	{
+	  "name": "oc_cavern_central"
+	},
+	{
+	  "name": "oc_cavern_east"
+	},
+	{
+	  "name": "oc_cavern_north"
+	},
+	{
+	  "name": "oc_engi_office"
+	},
+	{
+	  "name": "oc_engi_storage"
+	},
+	{
+	  "name": "oc_engi_turbine"
+	},
+	{
+	  "name": "oc_hab_atrium"
+	},
+	{
+	  "name": "oc_hab_cafeteria"
+	},
+	{
+	  "name": "oc_hab_medbay"
+	},
+	{
+	  "name": "oc_hab_northdorms"
+	},
+	{
+	  "name": "oc_hab_securitypost"
+	},
+	{
+	  "name": "oc_hab_southdorms"
+	},
+	{
+	  "name": "oc_research_east"
+	},
+	{
+	  "name": "oc_research_sterilelab"
+	},
+	{
+	  "name": "oc_secpost_north"
+	},
+	{
+	  "name": "oc_secpost_south"
+	},
+	{
+	  "name": "oc_starport_lz2"
+	},
+	{
+	  "name": "oc_starport_north"
+	},
+	{
+	  "name": "oc_starport_servicearea"
+	},
+	{
+	  "name": "oc_starport_servicebuilding"
+	},
+	{
+	  "name": "oc_starport_south"
+	},
+	{
+	  "name": "oc_starport_tcomms"
+	},
+	{
+	  "name": "oc_starport_terminal"
+	},
+	{
+	  "name": "oc_starport_warehouses"
+	}
+  ]
+}
