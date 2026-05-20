@@ -241,6 +241,12 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public EntityUid? CreateHealingCapsuleAction;
 
     [DataField]
+    public EntProtoId CreateHuntingTrapActionId = "CMUActionYautjaCreateHuntingTrap";
+
+    [ViewVariables]
+    public EntityUid? CreateHuntingTrapAction;
+
+    [DataField]
     public EntProtoId LinkThrallBracerActionId = "CMUActionYautjaLinkThrallBracer";
 
     [ViewVariables]
@@ -289,6 +295,9 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public EntProtoId HealingCapsulePrototype = "CMUYautjaHealingCapsule";
 
     [DataField]
+    public EntProtoId HuntingTrapPrototype = "CMUYautjaHuntingTrap";
+
+    [DataField]
     public FixedPoint2 StabilisingCrystalCost = 400;
 
     [DataField]
@@ -297,6 +306,9 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     [DataField]
     public FixedPoint2 HealingCapsuleCost = 600;
 
+     [DataField]
+    public FixedPoint2 HuntingTrapCost = 300;
+
     [DataField]
     public TimeSpan StabilisingCrystalCooldown = TimeSpan.FromMinutes(2);
 
@@ -304,10 +316,17 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public TimeSpan HealingCapsuleCooldown = TimeSpan.FromMinutes(4);
 
     [DataField]
+    public TimeSpan HuntingTrapCooldown = TimeSpan.FromMinutes(4);
+
+    [DataField]
     public TimeSpan NextStabilisingCrystal;
 
     [DataField]
     public TimeSpan NextHealingCapsule;
+
+    [DataField]
+
+    public TimeSpan NextHuntingTrap;
 
     [DataField, AutoNetworkedField]
     public bool SelfDestructArmed;
