@@ -253,7 +253,7 @@
           repurchasable: true
           events:
           - !type:TechRequisitionsBudgetEvent
-            amount: 5000
+            amount: 15000
           - !type:TechAnnounceEvent
             author:  SPECIAL ASSETS AUTHORIZED
             message: Additional supply budget has been authorised for this operation.
@@ -526,7 +526,7 @@
           repurchasable: true
           events:
           - !type:TechRequisitionsBudgetEvent
-            amount: 5000
+            amount: 15000
           - !type:TechAnnounceEvent
             author:  SPECIAL ASSETS AUTHORIZED
             message: Additional supply budget has been authorised for this operation.
@@ -561,7 +561,7 @@
           repurchasable: true
           events:
           - !type:TechRequisitionsBudgetEvent
-            amount: 5000
+            amount: 15000
           - !type:TechAnnounceEvent
             author: SPECIAL ASSETS AUTHORIZED
             message: Additional supply budget has been authorised for this operation.
@@ -671,7 +671,7 @@
           repurchasable: true
           events:
           - !type:TechRequisitionsBudgetEvent
-            amount: 5000
+            amount: 15000
           - !type:TechAnnounceEvent
             author:  SPECIAL ASSETS AUTHORIZED
             message: Additional supply budget has been authorised for this operation.
@@ -719,7 +719,7 @@
           repurchasable: true
           events:
           - !type:TechRequisitionsBudgetEvent
-            amount: 5000
+            amount: 7500
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: budget_req
