@@ -218,7 +218,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         var gridId = _xformSys.GetGrid(tile);
         var tilePos = _xformSys.GetWorldPosition(xform);
         Logger.GetSawmill("content").Info($"[FETCH DEBUG] Item {uid} at grid {gridId}, pos {tilePos}");
-        FetchObjectiveReturnPointComponent? usedReturnPoint = null;
+        (FetchObjectiveReturnPointComponent rpComp, EntityUid rpUid)? usedReturnPoint = null;
         foreach (var ent in _lookup.GetEntitiesInRange(tile, 10f))
         {
             Logger.GetSawmill("content").Info($"[FETCH DEBUG] Checking entity {ent} in range");
@@ -246,14 +246,14 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
                 if (returnPoint.FetchId == returnId || (string.IsNullOrEmpty(returnPoint.FetchId) && returnPoint.Generic))
                 {
                     Logger.GetSawmill("content").Info($"[FETCH DEBUG] Matched specific returnId {returnId}");
-                    usedReturnPoint = returnPoint;
+                    usedReturnPoint = (returnPoint, ent);
                     break;
                 }
             }
             else if (returnPoint.Generic)
             {
                 Logger.GetSawmill("content").Info($"[FETCH DEBUG] Matched generic return point");
-                usedReturnPoint = returnPoint;
+                usedReturnPoint = (returnPoint, ent);
                 break;
             }
         }
@@ -262,8 +262,8 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
             Logger.GetSawmill("content").Info($"[FETCH DEBUG] No valid return point found for fetch item {uid} at {tile} (grid {gridId}, pos {tilePos})");
             return;
         }
-        Logger.GetSawmill("content").Info($"[FETCH DEBUG] Found valid return point {usedReturnPoint.Owner} for fetch item {uid} at {tile} (grid {gridId}, pos {tilePos})");
-        var returnPointFaction = usedReturnPoint.ReturnPointFaction.ToLowerInvariant();
+        Logger.GetSawmill("content").Info($"[FETCH DEBUG] Found valid return point {usedReturnPoint.Value.rpUid} for fetch item {uid} at {tile} (grid {gridId}, pos {tilePos})");
+        var returnPointFaction = usedReturnPoint.Value.rpComp.ReturnPointFaction.ToLowerInvariant();
         if (string.IsNullOrEmpty(returnPointFaction))
         {
             Logger.GetSawmill("content").Info($"[FETCH DEBUG] Return point faction is empty");
