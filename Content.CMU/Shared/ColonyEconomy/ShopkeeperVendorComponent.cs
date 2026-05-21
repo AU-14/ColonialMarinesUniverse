@@ -19,6 +19,9 @@ public sealed class AU14ShopkeeperListing
 
     /// <summary>Prototype ID of the stored entity, used for sprite display and stacking.</summary>
     public string? ProtoId;
+
+    /// <summary>ID card that should receive the base sale price when this listing sells.</summary>
+    public EntityUid? SellerIdCard;
 }
 
 /// <summary>
@@ -39,4 +42,3 @@ public sealed partial class AU14ShopkeeperVendorComponent : Component
     public const string StockContainerName = "shopkeeper_stock";
     public const string CashSlotName = "shopkeeper_cash";
 }
-
