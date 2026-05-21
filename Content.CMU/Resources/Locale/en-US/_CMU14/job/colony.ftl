@@ -47,10 +47,6 @@ au14-job-name-civilianfoodserviceworker = Food Service Worker
 au14-job-description-civilianfoodserviceworker = Run the kitchens, stock the bar, and keep the workforce fed.
 au14-job-prefix-civilianfoodserviceworker = FSW
 
-au14-job-name-civilianentertainmentserviceworker = Entertainment Service Worker
-au14-job-description-civilianentertainmentserviceworker = Keep the colonists entertained. Ensure smiles all around.
-au14-job-prefix-civilianentertainmentserviceworker = ESW
-
 au14-job-name-civilianshopkeep = Shopkeep
 au14-job-description-civilianshopkeep = Keep the colony shop stocked, handle trade, and provide daily essentials.
 au14-job-prefix-civilianshopkeep = SHOP

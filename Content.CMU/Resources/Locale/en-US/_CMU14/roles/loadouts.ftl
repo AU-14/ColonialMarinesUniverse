@@ -23,13 +23,6 @@ au14-loadout-group-civilian-pouch = Civilian pouches (left)
 au14-loadout-group-civilian-pouch-right = Civilian pouches (right)
 au14-loadout-group-civilian-masks = Civilian masks
 
-cmu-loadout-group-entertainment-foot = Entertainment service footwear
-cmu-loadout-group-entertainment-clothes = Entertainment service uniforms
-cmu-loadout-group-entertainment-mask = Entertainment service masks
-cmu-loadout-group-entertainment-backpack = Entertainment service storage
-
-cmu-loadout-group-entertainment-toys = Entertainment service equipment
-
 au14-loadout-group-military-hats = Military hats
 au14-loadout-group-military-jumpsuit = Military fatigues
 au14-loadout-group-military-patches = Military patches
