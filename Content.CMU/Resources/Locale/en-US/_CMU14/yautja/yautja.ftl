@@ -271,6 +271,7 @@ cmu-yautja-ritual-examine-duel = Bound in an active ritual duel with {$hunter}.
 cmu-yautja-self-destruct-armed = Bracer self-destruct armed. Detonation in {$seconds} seconds.
 cmu-yautja-self-destruct-warning = Bracer self-destruct: {$seconds} seconds.
 cmu-yautja-self-destruct-cancelled = Bracer self-destruct cancelled.
+cmu-yautja-self-destruct-critical = The bracer does not answer a dying hunter.
 cmu-yautja-self-destruct-dead = The bracer does not answer a dead hunter.
 cmu-yautja-trap-arm-failed = You cannot set the trap here.
 cmu-yautja-trap-armed = You arm the hunting trap.
