@@ -1,13 +1,13 @@
 - type: job
   parent: CMJobBase
-  id: AU14JobWYProdigyPartyMedic #m41a/2
-  name: PMC Combat Lifesaver
+  id: AU14JobProdigyPARTYPartyMedic #m41a/2
+  name: Prodigy Yankee Combat Lifesaver
   description: au14-prodigyparty-description
   playTimeTracker: AU14JobWYProdigyPartyMedic
   ranks:
     AU14RankWeYuOperator: []
-  spawnMenuRoleName: WY PMC Combat Lifesaver (3rd party, M41A/2)
-  startingGear: AU14GearWYPMCPartyMedic
+  spawnMenuRoleName: Prodigy Yankee Combat Lifesaver (3rd party, M37-17)
+  startingGear: AU14GearPARTYPartyMedic
   greeting: au14-prodigyparty-greeting
   icon: "RMCJobIconPMCMedic"
   joinNotifyCrew: false
@@ -40,8 +40,8 @@
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu
-  id: AU14JobWYProdigyPartyMedic
-  name: WY PMC Party Combat Lifesaver (3rd party, M41A/2)
+  id: AU14ProdigyPARTYPartyMedic
+  name: Prodigy Yankee Combat Lifesaver (3rd party, M37-17)
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
@@ -53,13 +53,13 @@
     name: PMC Combat Lifesaver
     description: au14-prodigyparty-description
     reregister: false
-    job: AU14JobWYProdigyPartyMedic
+    job: AU14JobProdigyPARTYPartyMedic
     raffle:
       settings: short
     rules: au14-prodigyparty-description
 
 - type: startingGear
-  id: AU14GearPARTPartyMedic
+  id: AU14GearPARTYPartyMedic
   equipment:
     id: AU14IDCardColonyCorporateLiaison
     outerClothing: AU14ArmorProdigyXAS23
@@ -67,7 +67,7 @@
     shoes: RMCBootsSPPBlackFilled
     mask: RMCMaskCoifPMC
     eyes: RMCGlassesMedicalHUDGlasses
-    head: AU14ProdigyBeret
+    head: AU14PARTOperatorHelmetHeavy
     gloves: AU14HandsProdigyRU
     belt: AU14BeltMedicBagProdigyFilled
     pocket1: RMCPouchShotgunLargeBuckshot

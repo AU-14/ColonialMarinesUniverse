@@ -9,6 +9,29 @@
   - type: Storage
     grid:
     - 0,0,25,1 #13 slots
+    whitelist:
+      tags:
+      - DiscreteHealthAnalyzer
+      - Dropper
+      - Pill
+      - Bottle
+      - Syringe
+      - PillCanister
+      - CMTraumaKit
+      - CMBurnKit
+      - CMOintment
+      - Brutepack
+      - CMBloodPack
+      - CMUSplintItem
+      - RMCPenlight
+      - CMAutoInjector
+      - CMFireExtinguisherPortable
+      - RMCSyringeCase
+      - CMSurgicalLine
+      - CMSynthGraft
+      - PillPacket
+      - Hypospray
+      - CMUSplintItem
 
 - type: entity
   parent: AU14PouchMedicalProdigy
@@ -112,10 +135,7 @@
       - CMSynthGraft
       - PillPacket
       - Hypospray
-      components:
-      - Hypospray
       - CMUSplintItem
-      - SpawnItemsOnUse
 
 - type: entity
   parent: AU14PouchIFAKProdigy

@@ -620,6 +620,21 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: cryotroops
+
+        - name: PRODIGY Armed Repair Team Sierra
+          description: Summon a PRODIGY Armed Repair Team.
+          cost: 30
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: ProdigyPARTSParty
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: A PRODIGY Armed Repair Team has been dispatched to aid with the operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: cryotroops
+
         - name: Unlock Tier 3
           description: Transitions the tree to another tier.
           cost: 1
@@ -640,6 +655,20 @@
           - !type:TechAnnounceEvent
             author: INTEL OPERATIONS
             message: A US Army 32nd Armored Division squad has been dispatched to aid with the operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+
+        - name: Prodigy Armed Repair Team Yankee
+          description: Summon a PRODIGY Contractor team.
+          cost: 80
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: ProdigyPARTYParty
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: A PRODIGY Armed Repair Team has been dispatched to aid with the operation.
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
@@ -751,6 +780,17 @@
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: VAISO
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+
+        - name: Prodigy Armed Repair Team Sierra
+          description: Send intel on local WY facility to Prodigy, summoning them for a raid. They are not hostile to CLF but not required to help directly!
+          cost: 85
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: ProdigyPARTSParty
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon

@@ -76,6 +76,7 @@
   id: AU14BeltMedicBagProdigy
   name: PSC-TM626 pattern medical bag
   description: The PSC-TM626 is the standard load-bearing equipment of the Prodigy security forces. This configuration mounts a duffel bag filled with a range of injectors and light medical supplies, and is common among medics, sources say its just a W-Y TM625 bag, but Prodigy denies this claim.
+  suffix: Prodigy
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Belt/medicbag/snow-urban.rsi

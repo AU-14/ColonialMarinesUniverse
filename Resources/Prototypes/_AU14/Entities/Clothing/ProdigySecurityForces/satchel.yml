@@ -23,7 +23,7 @@
       - ProdigyUniformSynth
     denyReason: rmc-wear-scout-armor-required
   - type: ThermalCloak
-    opacity: 0.03 # Put to 0.03 for testing
+    opacity: 0.15 # Put to 0.03 for orignal invisibility
     restrictWeapons: true
     cloakedHideLayers:
     - Hair

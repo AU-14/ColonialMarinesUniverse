@@ -79,13 +79,13 @@
     back: RMCSatchelWelderRU #21 slots
     ears: RMCM5CameraGear
     ears2: AU14HeadsetPART
-    suitstorage: RMCWeaponRifleM54C2
+    suitstorage: AU14WeaponRifleprodigyrifleAR
   storage:
     pocket1:
-    - CMMagazineRifleM54CAP
-    - CMMagazineRifleM54CAP
-    - CMMagazineRifleM54CAP
-    - CMMagazineRifleM54CAP
+    - AU14WeaponRifleprodigyrifleMagazineAP
+    - AU14WeaponRifleprodigyrifleMagazineAP
+    - AU14WeaponRifleprodigyrifleMagazineAP
+    - AU14WeaponRifleprodigyrifleMagazineAP
     #pocket2:
     #- AU14Tourniquet
     # no need, pouch already has 6 slots and is filled with med supplies
@@ -107,7 +107,9 @@
     - CMMagazinePistolMK80
     - CMMagazinePistolMK80
     - CMMagazinePistolMK80
-    # 2 empty slots
+    - AU14WeaponRifleprodigyrifleMagazineAP
+    - AU14WeaponRifleprodigyrifleMagazineAP
+    # 0 empty slots
 
 - type: playTimeTracker
   id: AU14JobProdigyPartyLeader

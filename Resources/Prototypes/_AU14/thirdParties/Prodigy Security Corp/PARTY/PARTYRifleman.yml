@@ -1,7 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobProdigyPartyRUBase
-  name: PMC Contractor Base
+  name: Prodigy Contractor Base
   description: au14-prodigyparty-description
   playTimeTracker: AU14JobProdigyPartyRU
   basePlaytimeTracker: true
@@ -10,11 +10,11 @@
 - type: job
   parent: AU14JobProdigyPartyRUBase
   id: AU14JobProdigyPartyRU #m41a/2
-  name: PART Response Unit (M41A/2)
+  name: Prodigy Yankee Party Rifleman (3rd Party, M41A/2)
   description: au14-prodigyparty-description
   ranks:
     AU14RankWeYuRecruit: []
-  spawnMenuRoleName: Prodigy PART (3rd party, M41A/2)
+  spawnMenuRoleName: Prodigy PARTY Rifleman (3rd party, M41A/2)
   startingGear: AU14GearPARTYPartyRifleman
   greeting: au14-prodigyparty-greeting
   icon: "RMCJobIconPMCStandard"
@@ -52,7 +52,7 @@
     shoes: RMCBootsSPPBlackFilled
     mask: RMCMaskCoifPMC
     eyes: RMCGlassesMedicalHUDGlasses
-    head: AU14ProdigyBeret
+    head: AU14ProdigyBallisticHelmet
     gloves: AU14HandsProdigyRU
     belt: AU14BeltUtilityCombatProdigyRUFilled
     pocket1: RMCPouchMagazineLargePMC

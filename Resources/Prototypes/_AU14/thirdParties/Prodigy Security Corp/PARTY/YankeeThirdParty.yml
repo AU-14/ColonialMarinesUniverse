@@ -1,19 +1,19 @@
 - type: partySpawn
   id: ProdigyPARTYSpawn
   leadersToSpawn:
-    AU14JobPARTYPartyLeader: 1
+    AU14JobProdigyPartyLeader: 1
   gruntsToSpawn:
-    AU14JobPARTYPartyEngineer: 1
-    AU14JobPARTYPartyMedic: 1
-    AU14JobPARTYPartySmartgunner: 1
-    AU14JobPARTYPartyContractor: 4
-    AU14JobPARTYPartySynthetic: 1
-    AU14JobPARTYPartyCombatSynthetic: 1
+    AU14JobPARTPartyEngineer: 1
+    AU14JobProdigyPARTYPartyMedic: 1
+    AU14JobProdigyPartySmartgunner: 1
+    AU14JobProdigyPartyRU: 4
+    AU14JobProdigyPARTSynth: 2 # default is 1, increased to 2 due to combat synth disable
+    #AU14JobProdigyPARTCombatSynth: 1 - If PART goes well in testing ill enable it
   scalewithpop: false
   spawnTogether: true
 
 - type: auThirdParty
-  id: ProdigyPARTY
+  id: ProdigyPARTYParty
   partyspawn: ProdigyPARTYSpawn
   entrymethod: shuttle
   weight: 20
