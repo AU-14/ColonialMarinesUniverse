@@ -419,7 +419,7 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         if (!TryComp<HumanoidAppearanceComponent>(disguised, out var humanoid))
             return;
 
-        _humanoid.SetSpecies(disguised, snapshot.Species, sync: false, humanoid);
+        _humanoid.SetSpecies(disguised, snapshot.Species.Id == "Human" ? "AUMimicHuman" : snapshot.Species, sync: false, humanoid);
         _humanoid.SetSex(disguised, snapshot.Sex, sync: false, humanoid);
         humanoid.SkinColor = snapshot.SkinColor;
         humanoid.EyeColor = snapshot.EyeColor;

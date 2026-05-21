@@ -4,7 +4,7 @@
 - type: polymorph
   id: AbominationMimicDisguise
   configuration:
-    entity: CMMobHuman
+    entity: AUFakeHuman
     forced: true
     inventory: Drop
     transferName: false

@@ -1,0 +1,67 @@
+- type: species
+  id: AUMimicHuman
+  name: species-name-human
+  roundStart: false
+  prototype: AUFakeHuman
+  sprites: MobHumanSprites
+  markingLimits: MobHumanMarkingLimits
+  dollPrototype: MobHumanDummy
+  skinColoration: HumanToned
+
+- type: entity
+  save: false
+  parent: CMMobHuman
+  id: AUFakeHuman
+  name: Fake Urist C.M. McHands
+  suffix: AU14
+  components:
+  - type: Vocal
+    sounds:
+      Male: RMCMaleHuman
+      Unsexed: RMCMaleHuman #sorry fem-leaning enbies
+      Female: RMCFemaleHuman
+  - type: FixedIdentity
+    name: cm-chatsan-replacement-human
+  - type: CMUHumanMedical
+  - type: YautjaTrophySource
+  - type: HitLocation
+  - type: PainShock
+  - type: BodyZoneTargeting
+  - type: Body
+    prototype: CMUHumanBody
+    requiredLegs: 2
+  - type: Bloodstream
+    bloodReagent: FakeBlood
+    bloodMaxVolume: 650
+    maxBleedAmount: 35
+    bleedReductionAmount: 0
+    bloodRefreshAmount: 0.2
+    bloodlossDamage:
+      types:
+        Bloodloss: 0.35
+    bloodlossHealDamage:
+      types:
+        Bloodloss: -1
+    damageBleedModifiers: CMBloodlossHuman
+
+- type: reagent
+  parent: AbominationVenom
+  id: FakeBlood
+  name: reagent-name-blood
+  group: Biological
+  desc: reagent-desc-blood
+  physicalDesc: reagent-physical-desc-ferrous
+  flavor: bitter
+  color: "#800000"
+
+- type: reaction
+  id: FakeBloodReaction
+  impact: High
+  priority: 20
+  reactants:
+    Blood:
+      amount: 1
+    FakeBlood:
+      amount: 1
+  products:
+    FakeBlood: 2
