@@ -10,6 +10,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 
@@ -36,6 +37,7 @@ public abstract partial class CMUSharedZLevelsSystem
     /// The minimum speed required to trigger LandEvent events.
     /// </summary>
     private const float ImpactVelocityLimit = 4.0f;
+    private static readonly ProtoId<DamageTypePrototype> BluntDamageType = "Blunt";
 
     private EntityQuery<CMUZLevelHighGroundComponent> _highgroundQuery;
 
@@ -52,7 +54,7 @@ public abstract partial class CMUSharedZLevelsSystem
         var knockdownTime = MathF.Min(args.ImpactPower * 0.25f, 5f);
         _stun.TryKnockdown(ent.Owner, TimeSpan.FromSeconds(knockdownTime), true);
 
-        var damageType = _proto.Index<DamageTypePrototype>("Blunt");
+        var damageType = _proto.Index(BluntDamageType);
         var damageAmount = MathF.Pow(args.ImpactPower, 2);
 
         _damage.TryChangeDamage(ent.Owner, new DamageSpecifier(damageType, damageAmount));
@@ -73,7 +75,7 @@ public abstract partial class CMUSharedZLevelsSystem
             var knockdownTime = MathF.Min(args.ImpactPower * ent.Comp.Mass * 0.1f, 10f);
             _stun.TryKnockdown(victim, TimeSpan.FromSeconds(knockdownTime), true);
 
-            var damageType = _proto.Index<DamageTypePrototype>("Blunt");
+            var damageType = _proto.Index(BluntDamageType);
             var damageAmount = args.ImpactPower * ent.Comp.Mass * 0.25f;
 
             _damage.TryChangeDamage(victim, new DamageSpecifier(damageType, damageAmount));
