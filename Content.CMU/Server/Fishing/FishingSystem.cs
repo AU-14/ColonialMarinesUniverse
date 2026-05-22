@@ -113,7 +113,14 @@ public sealed partial class FishingSystem : SharedFishingSystem
         Entity<FishingRodComponent> fishingRod,
         EntityUid? fisher)
     {
-        QueueDel(fishingRod.Comp.FishingLure);
+        if (fishingRod.Comp.FishingLure is { } lure &&
+            lure.IsValid() &&
+            Exists(lure) &&
+            !TerminatingOrDeleted(lure))
+        {
+            QueueDel(lure);
+        }
+
         base.StopFishing(fishingRod, fisher);
     }
 
