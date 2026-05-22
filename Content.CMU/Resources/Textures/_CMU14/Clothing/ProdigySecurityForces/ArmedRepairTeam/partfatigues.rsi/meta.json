@@ -8,15 +8,19 @@
   },
   "states": [
     {
-      "name": "uniform",
+      "name": "equipped-INNERCLOTHING",
       "directions": 4
     },
     {
-      "name": "no-jacket",
+      "name": "jacket-equipped-INNERCLOTHING",
       "directions": 4
     },
     {
-      "name": "folded",
+      "name": "sleeveless-equipped-INNERCLOTHING",
+      "directions": 4
+    },
+    {
+      "name": "sleeves-equipped-INNERCLOTHING.png",
       "directions": 4
     },
     {
