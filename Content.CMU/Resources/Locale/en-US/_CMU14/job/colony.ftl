@@ -38,9 +38,8 @@ au14-department-colony-security-description = Enforces law, conducts arrests, pr
 au14-job-supervisors-colonycivilian = Colony Administrator
 au14-job-supervisors-colonyadministrator = The Colonial Administration
 
-au14-id-job-title-colony-civilian = Colony Civilian
-
 au14-job-name-civiliancolonist = Colonist
+au14-id-job-title-colony-civilian = Colony Civilian
 au14-job-description-civiliancolonist = A resident of the colony.
 au14-job-prefix-civiliancolonist = CIV
 

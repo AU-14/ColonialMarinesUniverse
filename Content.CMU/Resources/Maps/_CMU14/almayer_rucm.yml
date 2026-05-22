@@ -61580,7 +61580,7 @@ entities:
       whitelist: null
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
     missingComponents:
     - RMCEntityStorageWhitelist
 - proto: CMLockerCMDCabinetFilled
@@ -61638,7 +61638,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 7344
     components:
     - type: Transform

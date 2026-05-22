@@ -1,4 +1,4 @@
-﻿{
+{
     "version":  1,
     "size":  {
                  "x":  32,
@@ -800,9 +800,6 @@
                    },
                    {
                        "name":  "nutri_deny"
-                   },
-                   {
-                       "name":  "default"
                    },
                    {
                        "name":  "t_20"
