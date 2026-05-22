@@ -4,8 +4,8 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 05/22/2026 03:01:54
-  entityCount: 90799
+  time: 05/22/2026 09:01:16
+  entityCount: 90804
 maps:
 - 1
 grids:
@@ -149447,6 +149447,27 @@ entities:
       rot: 3.141592653589793 rad
       pos: -27.5,-93.5
       parent: 1
+- proto: AUSubmissionPointBase
+  entities:
+  - uid: 89405
+    components:
+    - type: Transform
+      pos: 49.5,-17.5
+      parent: 1
+- proto: AUSubmissionPointFruit
+  entities:
+  - uid: 89437
+    components:
+    - type: Transform
+      pos: 50.5,-9.5
+      parent: 1
+- proto: AUSubmissionPointSteel
+  entities:
+  - uid: 89436
+    components:
+    - type: Transform
+      pos: 49.5,-9.5
+      parent: 1
 - proto: AUSubmissionPointVegetables
   entities:
   - uid: 1079
@@ -149464,6 +149485,18 @@ entities:
           showEnts: False
           occludes: True
           ents: []
+  - uid: 89435
+    components:
+    - type: Transform
+      pos: 49.5,-16.5
+      parent: 1
+- proto: AUSubmissionPointWood
+  entities:
+  - uid: 89434
+    components:
+    - type: Transform
+      pos: 49.5,-18.5
+      parent: 1
 - proto: Basketball
   entities:
   - uid: 1081
@@ -150627,14 +150660,12 @@ entities:
       rot: 3.141592653589793 rad
       pos: -16.5,-22.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1201
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -3.5,-16.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1205
     components:
     - type: Transform
@@ -150643,21 +150674,18 @@ entities:
     - type: AccessReader
       access:
       - - CMAccessColonyEngineering
-    - type: SpriteSetRenderOrder
   - uid: 1206
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 147.5,-104.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1207
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -116.5,32.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1208
     components:
     - type: Transform
@@ -150667,21 +150695,18 @@ entities:
     - type: AccessReader
       access:
       - - CMAccessColonyEngineering
-    - type: SpriteSetRenderOrder
   - uid: 1209
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -142.5,-100.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1210
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -172.5,-28.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1212
     components:
     - type: Transform
@@ -150691,21 +150716,18 @@ entities:
     - type: AccessReader
       access:
       - - CMAccessColonyEngineering
-    - type: SpriteSetRenderOrder
   - uid: 1213
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 21.5,74.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1214
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 168.5,-59.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1215
     components:
     - type: Transform
@@ -150715,7 +150737,6 @@ entities:
       access:
       - - CMAccessEngineering
       - - AU14AccessCorporateWEYU
-    - type: SpriteSetRenderOrder
   - uid: 1216
     components:
     - type: Transform
@@ -150726,221 +150747,189 @@ entities:
       access:
       - - CMAccessEngineering
       - - AU14AccessCorporateWEYU
-    - type: SpriteSetRenderOrder
   - uid: 1217
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 163.5,-76.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1218
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 145.5,-75.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1219
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 49.5,-15.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1225
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -62.5,-24.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1226
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 165.5,-65.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1227
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 142.5,-57.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1228
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 177.5,-58.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1229
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 166.5,-90.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1230
     components:
     - type: Transform
       pos: 149.5,-79.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1231
     components:
     - type: Transform
       pos: 147.5,-88.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1232
     components:
     - type: Transform
       pos: 147.5,-97.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1233
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 141.5,-88.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1234
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -120.5,-86.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1235
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 141.5,-92.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1236
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 141.5,-96.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1237
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 129.5,-74.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1238
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -204.5,-44.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1239
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -190.5,-52.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1240
     components:
     - type: Transform
       rot: 4.71238898038469 rad
       pos: -152.5,-47.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1241
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -206.5,-35.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1242
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -186.5,-39.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1243
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -146.5,-106.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1244
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -153.5,-103.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1245
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -151.5,-96.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1246
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -177.5,-81.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1247
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -173.5,-91.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1248
     components:
     - type: Transform
       rot: 4.71238898038469 rad
       pos: -149.5,-97.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1249
     components:
     - type: Transform
       rot: 4.71238898038469 rad
       pos: -152.5,-45.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1328
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -53.5,-22.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 79042
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 54.5,2.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 89839
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -11.5,-29.5
       parent: 1
-    - type: SpriteSetRenderOrder
 - proto: CMApcLowCapacity
   entities:
   - uid: 1250
@@ -150949,34 +150938,29 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -2.5,-41.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1251
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 61.5,-121.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1252
     components:
     - type: Transform
       pos: 39.5,74.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1253
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 26.5,65.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1254
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 39.5,66.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1255
     components:
     - type: Transform
@@ -150987,7 +150971,6 @@ entities:
       access:
       - - CMAccessColonyEngineering
       - - CMAccessEngineering
-    - type: SpriteSetRenderOrder
   - uid: 1256
     components:
     - type: Transform
@@ -150998,14 +150981,12 @@ entities:
       access:
       - - CMAccessColonyEngineering
       - - CMAccessEngineering
-    - type: SpriteSetRenderOrder
   - uid: 1257
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 42.5,-32.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1258
     components:
     - type: Transform
@@ -151015,14 +150996,12 @@ entities:
     - type: AccessReader
       access:
       - - CMAccessColonyEngineering
-    - type: SpriteSetRenderOrder
   - uid: 1259
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -30.5,-23.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1261
     components:
     - type: Transform
@@ -151032,7 +151011,6 @@ entities:
     - type: AccessReader
       access:
       - - CMAccessColonyEngineering
-    - type: SpriteSetRenderOrder
   - uid: 1262
     components:
     - type: Transform
@@ -151042,14 +151020,12 @@ entities:
     - type: AccessReader
       access:
       - - CMAccessColonyEngineering
-    - type: SpriteSetRenderOrder
   - uid: 1263
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -63.5,5.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1264
     components:
     - type: Transform
@@ -151059,7 +151035,6 @@ entities:
     - type: AccessReader
       access:
       - - CMAccessColonyEngineering
-    - type: SpriteSetRenderOrder
   - uid: 1265
     components:
     - type: Transform
@@ -151069,151 +151044,129 @@ entities:
     - type: AccessReader
       access:
       - - CMAccessColonyEngineering
-    - type: SpriteSetRenderOrder
   - uid: 1266
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 16.5,-15.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1267
     components:
     - type: Transform
       pos: -72.5,-8.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1269
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 115.5,-13.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1270
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 8.5,-15.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1271
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 42.5,-85.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1272
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 45.5,-90.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1273
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 41.5,-7.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1274
     components:
     - type: Transform
       pos: 36.5,4.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1275
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 9.5,-3.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1276
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -11.5,-10.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1279
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -59.5,-9.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1280
     components:
     - type: Transform
       pos: -55.5,-35.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1281
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -29.5,-29.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1284
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -189.5,-42.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1285
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -160.5,-52.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1286
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -176.5,-34.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1287
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -189.5,-85.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1288
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -178.5,-94.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 90566
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -2.5,5.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 90601
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 8.5,6.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 90613
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -6.5,3.5
       parent: 1
-    - type: SpriteSetRenderOrder
 - proto: CMApcMediumCapacity
   entities:
   - uid: 1289
@@ -151225,7 +151178,6 @@ entities:
     - type: AccessReader
       access:
       - - AU14AccessGovforEngineering
-    - type: SpriteSetRenderOrder
   - uid: 1290
     components:
     - type: Transform
@@ -151234,28 +151186,24 @@ entities:
     - type: AccessReader
       access:
       - - AU14AccessGovforEngineering
-    - type: SpriteSetRenderOrder
   - uid: 1291
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -112.5,-94.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1292
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 78.5,-101.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1293
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 85.5,-104.5
       parent: 1
-    - type: SpriteSetRenderOrder
   - uid: 1294
     components:
     - type: Transform
@@ -151266,7 +151214,6 @@ entities:
       access:
       - - CMAccessEngineering
       - - AU14AccessCorporateWEYU
-    - type: SpriteSetRenderOrder
   - uid: 1295
     components:
     - type: Transform
@@ -151277,7 +151224,6 @@ entities:
       access:
       - - CMAccessColonyEngineering
       - - CMAccessEngineering
-    - type: SpriteSetRenderOrder
   - uid: 1296
     components:
     - type: Transform
@@ -151287,7 +151233,6 @@ entities:
     - type: AccessReader
       access:
       - - AU14AccessGovforEngineering
-    - type: SpriteSetRenderOrder
   - uid: 1297
     components:
     - type: Transform
@@ -151296,7 +151241,6 @@ entities:
     - type: AccessReader
       access:
       - - AU14AccessGovforEngineering
-    - type: SpriteSetRenderOrder
   - uid: 1298
     components:
     - type: Transform
@@ -151306,7 +151250,6 @@ entities:
     - type: AccessReader
       access:
       - - AU14AccessGovforEngineering
-    - type: SpriteSetRenderOrder
 - proto: CMASRSConsoleColony
   entities:
   - uid: 91760
@@ -156244,9 +156187,6 @@ entities:
       parent: 89927
     - type: Physics
       canCollide: False
-    - type: ContainerContainer
-      containers:
-        filter: !type:ContainerSlot {}
     - type: InsideEntityStorage
   - uid: 89937
     components:
@@ -156254,9 +156194,6 @@ entities:
       parent: 89928
     - type: Physics
       canCollide: False
-    - type: ContainerContainer
-      containers:
-        filter: !type:ContainerSlot {}
     - type: InsideEntityStorage
   - uid: 89938
     components:
@@ -156264,9 +156201,6 @@ entities:
       parent: 89929
     - type: Physics
       canCollide: False
-    - type: ContainerContainer
-      containers:
-        filter: !type:ContainerSlot {}
     - type: InsideEntityStorage
 - proto: CMMaskGasMedical
   entities:
