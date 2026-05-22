@@ -162296,13 +162296,6 @@ entities:
     - type: Transform
       pos: 38.5,-20.5
       parent: 1
-- proto: RMCTabletCO
-  entities:
-  - uid: 15375
-    components:
-    - type: Transform
-      pos: -0.61441624,-2.475876
-      parent: 1
 - proto: RMCTacticalMapTableLarge
   entities:
   - uid: 15376
