@@ -75,8 +75,7 @@ public sealed partial class RadioSystem : EntitySystem
     {
         if (args.Channel != null && ent.Comp.Channels.Contains(args.Channel.ID))
         {
-            var language = _prototype.TryIndex(args.Language, out var languageProto) ? languageProto : null;
-            SendRadioMessage(ent.Owner, args.Message, args.Channel, ent.Owner, language);
+            SendRadioMessage(ent.Owner, args.Message, args.Channel, ent.Owner, args.Language);
             args.Channel = null; // prevent duplicate messages from other listeners.
         }
     }
@@ -106,7 +105,13 @@ public sealed partial class RadioSystem : EntitySystem
     /// Send radio message to all active radio listeners
     /// </summary>
     // RMC14
-    public void SendRadioMessage(EntityUid messageSource, string message, ProtoId<RadioChannelPrototype> channel, EntityUid radioSource, LanguagePrototype? language = null, bool escapeMarkup = true)
+    public void SendRadioMessage(
+        EntityUid messageSource,
+        string message,
+        ProtoId<RadioChannelPrototype> channel,
+        EntityUid radioSource,
+        ProtoId<LanguagePrototype>? language = null,
+        bool escapeMarkup = true)
     {
         SendRadioMessage(messageSource, message, _prototype.Index(channel), radioSource, language, escapeMarkup);
     }
@@ -118,7 +123,13 @@ public sealed partial class RadioSystem : EntitySystem
     /// <param name="messageSource">Entity that spoke the message</param>
     /// <param name="radioSource">Entity that picked up the message and will send it, e.g. headset</param>
     // RMC14
-    public void SendRadioMessage(EntityUid messageSource, string message, RadioChannelPrototype channel, EntityUid radioSource, LanguagePrototype? language = null, bool escapeMarkup = true)
+    public void SendRadioMessage(
+        EntityUid messageSource,
+        string message,
+        RadioChannelPrototype channel,
+        EntityUid radioSource,
+        ProtoId<LanguagePrototype>? language = null,
+        bool escapeMarkup = true)
     {
         // TODO if radios ever garble / modify messages, feedback-prevention needs to be handled better than this.
         if (!_messages.Add(message))
@@ -127,15 +138,14 @@ public sealed partial class RadioSystem : EntitySystem
         try
         {
             // RMC14
-            var currentLanguage = language?.ID ?? _language.GetCurrentLanguage(messageSource);
-            if (language == null)
-                _prototype.TryIndex(currentLanguage, out language);
+            var currentLanguage = language ?? _language.GetCurrentLanguage(messageSource);
+            _prototype.TryIndex(currentLanguage, out LanguagePrototype? languagePrototype);
 
-            if (language != null && !language.CanUseRadio)
+            if (languagePrototype != null && !languagePrototype.CanUseRadio)
                 return;
 
-            var showLanguageName = language?.ShowLanguageName ?? false;
-            var languageIcon = showLanguageName ? language?.DisplayedLanguageIcon : null;
+            var showLanguageName = languagePrototype?.ShowLanguageName ?? false;
+            var languageIcon = showLanguageName ? languagePrototype?.DisplayedLanguageIcon : null;
             // RMC14
 
             var evt = new TransformSpeakerNameEvent(messageSource, MetaData(messageSource).EntityName);
@@ -182,7 +192,7 @@ public sealed partial class RadioSystem : EntitySystem
 
             // RMC14
             var radioFontSize = speech.FontSize;
-            var radioFontId = language?.TypefaceId ?? speech.FontId;
+            var radioFontId = languagePrototype?.TypefaceId ?? speech.FontId;
             // RMC14
             if (TryComp<WearingHeadsetComponent>(messageSource, out var wearingHeadset) &&
                 TryComp<RMCHeadsetComponent>(wearingHeadset.Headset, out var headsetComp))
@@ -245,23 +255,7 @@ public sealed partial class RadioSystem : EntitySystem
                 var actualWrappedMessage = wrappedMessage;
                 string? actualLanguageIcon = languageIcon;
 
-                EntityUid? listenerEntity = null;
-                if (TryComp<IntrinsicRadioReceiverComponent>(receiver, out _))
-                {
-                    listenerEntity = receiver;
-                }
-                else
-                {
-                    var query = EntityQueryEnumerator<WearingHeadsetComponent>();
-                    while (query.MoveNext(out var wearer, out var wearing))
-                    {
-                        if (wearing.Headset == receiver)
-                        {
-                            listenerEntity = wearer;
-                            break;
-                        }
-                    }
-                }
+                var listenerEntity = ResolveRadioListener(receiver);
 
                 if (listenerEntity.HasValue && !_language.CanUnderstand(listenerEntity.Value, currentLanguage))
                 {
@@ -336,130 +330,20 @@ public sealed partial class RadioSystem : EntitySystem
     }
     // RMC14
 
-    private void SendHivemindToGhosts(MsgChatMessage chatMsg)
+    private EntityUid? ResolveRadioListener(EntityUid receiver)
     {
-        foreach (var session in Filter.Empty().AddWhereAttachedEntity(HasComp<GhostHearingComponent>).Recipients)
-        {
-            _netMan.ServerSendMessage(chatMsg, session.Channel);
-        }
-    }
+        if (HasComp<IntrinsicRadioReceiverComponent>(receiver))
+            return receiver;
 
-    private string GetRadioSpeakerName(EntityUid messageSource, RadioChannelPrototype channel, string voiceName)
-    {
-        var name = FormattedMessage.EscapeText(voiceName);
-
-        if (TryComp(messageSource, out JobPrefixComponent? prefix))
+        var wearer = Transform(receiver).ParentUid;
+        if (wearer.IsValid() &&
+            TryComp<WearingHeadsetComponent>(wearer, out var wearing) &&
+            wearing.Headset == receiver)
         {
-            var prefixText = (prefix.AdditionalPrefix != null ? $"{Loc.GetString(prefix.AdditionalPrefix.Value)} " : "") + Loc.GetString(prefix.Prefix);
-            if (TryComp(messageSource, out SquadMemberComponent? member) &&
-                TryComp(member.Squad, out SquadTeamComponent? team) &&
-                team.Radio != null &&
-                team.Radio != channel.ID)
-            {
-                name = $"({Name(member.Squad.Value)} {prefixText}) {name}";
-            }
-            else
-            {
-                if (TryComp(messageSource, out FireteamMemberComponent? fireteamMember) && fireteamMember.Fireteam >= 0)
-                {
-                    prefixText += $" FT{fireteamMember.Fireteam + 1}" + (TryComp(messageSource, out FireteamLeaderComponent? fireteamLeader) ? " TL" : "");
-                }
-
-                name = $"({prefixText}) {name}";
-            }
-        }
-        else if (TryComp(messageSource, out RMCRadioPrefixComponent? radioPrefix))
-        {
-            var prefixText = Loc.GetString(radioPrefix.Prefix);
-            name = $"{prefixText} {name}";
+            return wearer;
         }
 
-        return name;
-    }
-
-    private MsgChatMessage GetRadioChatMessageForReceiver(
-        EntityUid receiver,
-        EntityUid messageSource,
-        string message,
-        RadioChannelPrototype channel,
-        EntityUid radioSource,
-        SpeechVerbPrototype speech,
-        int radioFontSize,
-        string verb,
-        string defaultName,
-        string content,
-        MsgChatMessage defaultChatMsg)
-    {
-        if (!TryGetYautjaRadioName(receiver, messageSource, channel, defaultName, out var name))
-            return defaultChatMsg;
-
-        return CreateRadioChatMessage(messageSource, message, channel, radioSource, speech, radioFontSize, verb, name, content);
-    }
-
-    private bool TryGetYautjaRadioName(
-        EntityUid receiver,
-        EntityUid messageSource,
-        RadioChannelPrototype channel,
-        string defaultName,
-        out string name)
-    {
-        name = defaultName;
-
-        if (!HasComp<YautjaComponent>(messageSource))
-            return false;
-
-        var listener = receiver;
-        if (HasComp<HeadsetComponent>(receiver))
-        {
-            var parent = Transform(receiver).ParentUid;
-            if (parent.IsValid())
-                listener = parent;
-        }
-
-        if (!HasComp<YautjaComponent>(listener))
-            return false;
-
-        name = GetRadioSpeakerName(messageSource, channel, MetaData(messageSource).EntityName);
-        return name != defaultName;
-    }
-
-    private MsgChatMessage CreateRadioChatMessage(
-        EntityUid messageSource,
-        string message,
-        RadioChannelPrototype channel,
-        EntityUid radioSource,
-        SpeechVerbPrototype speech,
-        int radioFontSize,
-        string verb,
-        string name,
-        string content)
-    {
-        var wrappedMessage = Loc.GetString(speech.Bold ? "chat-radio-message-wrap-bold" : "chat-radio-message-wrap",
-            ("color", channel.Color),
-            ("fontType", speech.FontId),
-            ("fontSize", radioFontSize), // RMC14
-            ("verb", verb),
-            ("channel", $"\\[{channel.LocalizedName}\\]"),
-            ("name", name),
-            ("message", content));
-
-        // most radios are relayed to chat, so lets parse the chat message beforehand
-        var chat = new ChatMessage(
-            ChatChannel.Radio,
-            message,
-            wrappedMessage,
-            GetNetEntity(messageSource),
-            _chatManager.EnsurePlayer(CompOrNull<ActorComponent>(messageSource)?.PlayerSession.UserId)?.Key,
-            repeatCheckSender: !HasComp<ChatRepeatIgnoreSenderComponent>(radioSource),
-            display: new ChatDisplayMetadata(
-                ChatDisplayKind.Radio,
-                senderName: name,
-                verb: verb,
-                channelLabel: channel.LocalizedName,
-                quoteBody: true,
-                accentColor: channel.Color));
-
-        return new MsgChatMessage { Message = chat };
+        return null;
     }
 
     /// <inheritdoc cref="TelecomServerComponent"/>
