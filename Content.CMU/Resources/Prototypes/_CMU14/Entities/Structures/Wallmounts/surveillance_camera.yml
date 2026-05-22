@@ -80,8 +80,8 @@
   components:
   - type: RMCCameraComputer
     protoIds:
-  - CMUSurveillanceCameraColonyCMB
-  - CMUSurveillanceCameraColonyGOVFOR
+    - CMUSurveillanceCameraColonyCMB
+    - CMUSurveillanceCameraColonyGOVFOR
 
 - type: entity
   parent: RMCMonitorCameraAlmayer
