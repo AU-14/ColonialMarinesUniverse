@@ -26,6 +26,7 @@ public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
     [Dependency] private AccessReaderSystem _accessReader = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TagSystem _tag = default!;
 
     private static readonly ProtoId<TagPrototype> CurrencyTag = "Currency";
@@ -143,7 +144,7 @@ public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
         // Remove from stock container and place at vendor's location
         if (_containers.TryGetContainer(uid, AU14ShopkeeperVendorComponent.StockContainerName, out var container))
             _containers.Remove(itemEntity, container);
-        Transform(itemEntity).Coordinates = Transform(uid).Coordinates;
+        _transform.SetCoordinates(itemEntity, Transform(itemEntity), Transform(uid).Coordinates);
         comp.Listings.RemoveAt(msg.Index);
         UpdateShopUi(uid, comp);
     }
@@ -179,7 +180,7 @@ public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
         {
             if (_containers.TryGetContainer(uid, AU14ShopkeeperVendorComponent.StockContainerName, out var container))
                 _containers.Remove(itemEntity, container);
-            Transform(itemEntity).Coordinates = Transform(uid).Coordinates;
+            _transform.SetCoordinates(itemEntity, Transform(itemEntity), Transform(uid).Coordinates);
         }
         comp.Listings.RemoveAt(msg.Index);
         UpdateShopUi(uid, comp);
