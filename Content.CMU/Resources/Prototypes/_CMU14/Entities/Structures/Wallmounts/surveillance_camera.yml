@@ -79,7 +79,7 @@
   suffix: Colony, Govfor, Spy
   components:
   - type: RMCCameraComputer
-  protoIds:
+    protoIds:
   - CMUSurveillanceCameraColonyCMB
   - CMUSurveillanceCameraColonyGOVFOR
 
