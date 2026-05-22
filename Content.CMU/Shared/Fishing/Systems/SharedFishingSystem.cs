@@ -10,10 +10,12 @@ using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Popups;
 using Content.Shared.Throwing;
+using Content.Shared.Actions.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared.Actions;
+using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
@@ -30,12 +32,16 @@ public abstract partial class SharedFishingSystem : EntitySystem
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
 
     protected EntityQuery<ActiveFisherComponent> FisherQuery;
     protected EntityQuery<ActiveFishingSpotComponent> ActiveFishSpotQuery;
     protected EntityQuery<FishingSpotComponent> FishSpotQuery;
     protected EntityQuery<FishingRodComponent> FishRodQuery;
     protected EntityQuery<FishingLureComponent> FishLureQuery;
+    protected EntityQuery<ActionComponent> ActionQuery;
+    protected EntityQuery<ActionsContainerComponent> ActionsContainerQuery;
+    protected EntityQuery<TransformComponent> XformQuery;
 
     public override void Initialize()
     {
@@ -46,6 +52,9 @@ public abstract partial class SharedFishingSystem : EntitySystem
         FishSpotQuery = GetEntityQuery<FishingSpotComponent>();
         FishRodQuery = GetEntityQuery<FishingRodComponent>();
         FishLureQuery = GetEntityQuery<FishingLureComponent>();
+        ActionQuery = GetEntityQuery<ActionComponent>();
+        ActionsContainerQuery = GetEntityQuery<ActionsContainerComponent>();
+        XformQuery = GetEntityQuery<TransformComponent>();
 
         SubscribeLocalEvent<FishingRodComponent, MapInitEvent>(OnFishingRodInit);
         SubscribeLocalEvent<FishingRodComponent, GetItemActionsEvent>(OnGetActions);
@@ -170,12 +179,39 @@ public abstract partial class SharedFishingSystem : EntitySystem
         if (addPulling)
         {
             _actions.RemoveAction(ent.Comp.ThrowLureActionEntity);
+            ResetFishingActionIfMoved(ent, ref ent.Comp.PullLureActionEntity);
             _actions.AddAction(fisher, ref ent.Comp.PullLureActionEntity, ent.Comp.PullLureActionId, ent);
         }
         else
         {
             _actions.RemoveAction(ent.Comp.PullLureActionEntity);
+            ResetFishingActionIfMoved(ent, ref ent.Comp.ThrowLureActionEntity);
             _actions.AddAction(fisher, ref ent.Comp.ThrowLureActionEntity, ent.Comp.ThrowLureActionId, ent);
+        }
+    }
+
+    private void ResetFishingActionIfMoved(Entity<FishingRodComponent> rod, ref EntityUid? actionId)
+    {
+        if (actionId is not { } action)
+            return;
+
+        if (!action.IsValid() ||
+            !Exists(action) ||
+            !ActionQuery.TryComp(action, out var actionComp) ||
+            !ActionsContainerQuery.TryComp(rod.Owner, out var containerComp) ||
+            actionComp.Container != rod.Owner ||
+            !XformQuery.TryComp(action, out var actionXform))
+        {
+            actionId = null;
+            return;
+        }
+
+        var container = containerComp.Container;
+        if (!container.Contains(action) ||
+            !_container.IsEntityInContainer(action) ||
+            actionXform.ParentUid != rod.Owner)
+        {
+            actionId = null;
         }
     }
 
@@ -380,6 +416,7 @@ public abstract partial class SharedFishingSystem : EntitySystem
 
     private void OnFishingRodInit(Entity<FishingRodComponent> ent, ref MapInitEvent args)
     {
+        ResetFishingActionIfMoved(ent, ref ent.Comp.ThrowLureActionEntity);
         _actions.AddAction(ent, ref ent.Comp.ThrowLureActionEntity, ent.Comp.ThrowLureActionId);
     }
 
@@ -395,17 +432,29 @@ public abstract partial class SharedFishingSystem : EntitySystem
     private void OnGetActions(Entity<FishingRodComponent> ent, ref GetItemActionsEvent args)
     {
         if (ent.Comp.FishingLure == null)
+        {
+            ResetFishingActionIfMoved(ent, ref ent.Comp.ThrowLureActionEntity);
             args.AddAction(ref ent.Comp.ThrowLureActionEntity, ent.Comp.ThrowLureActionId);
+        }
         else
+        {
+            ResetFishingActionIfMoved(ent, ref ent.Comp.PullLureActionEntity);
             args.AddAction(ref ent.Comp.PullLureActionEntity, ent.Comp.PullLureActionId);
+        }
     }
 
     private void OnRodEquippedHand(Entity<FishingRodComponent> ent, ref GotEquippedHandEvent args)
     {
         if (ent.Comp.FishingLure == null)
+        {
+            ResetFishingActionIfMoved(ent, ref ent.Comp.ThrowLureActionEntity);
             _actions.AddAction(args.User, ref ent.Comp.ThrowLureActionEntity, ent.Comp.ThrowLureActionId, ent);
+        }
         else
+        {
+            ResetFishingActionIfMoved(ent, ref ent.Comp.PullLureActionEntity);
             _actions.AddAction(args.User, ref ent.Comp.PullLureActionEntity, ent.Comp.PullLureActionId, ent);
+        }
     }
 
     private void OnRodUnequippedHand(Entity<FishingRodComponent> ent, ref GotUnequippedHandEvent args)

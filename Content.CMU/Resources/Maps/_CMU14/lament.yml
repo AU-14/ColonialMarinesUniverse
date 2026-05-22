@@ -564061,7 +564061,7 @@ entities:
     - type: Transform
       pos: -8.5,-10.5
       parent: 1
-- proto: RMCCommunicationsTowerOn
+- proto: AU14CommunicationsTowerColony
   entities:
   - uid: 82937
     components:
