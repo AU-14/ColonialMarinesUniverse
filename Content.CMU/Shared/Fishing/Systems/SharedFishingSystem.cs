@@ -401,10 +401,12 @@ public abstract partial class SharedFishingSystem : EntitySystem
             // Also we should probably PVS override the lure if the rod is in PVS, and vice versa to stop the joint visuals from popping in/out
             var targetCoords = Xform.GetMapCoordinates(Transform(attachedEnt));
             var playerCoords = Xform.GetMapCoordinates(Transform(player));
-            var rand = new System.Random((int) Timing.CurTick.Value); // evil random prediction hack
+            var rand = new RobustRandom(); // evil random prediction hack
+            rand.SetSeed((int) Timing.CurTick.Value);
 
             // Calculate throw direction
-            var direction = (playerCoords.Position - targetCoords.Position) * rand.NextFloat(0.2f, 0.85f);
+            var multiplier = 0.2f + rand.NextFloat() * (0.85f - 0.2f);
+            var direction = (playerCoords.Position - targetCoords.Position) * multiplier;
 
             // Yeet
             Throwing.TryThrow(attachedEnt, direction, 4f, player);

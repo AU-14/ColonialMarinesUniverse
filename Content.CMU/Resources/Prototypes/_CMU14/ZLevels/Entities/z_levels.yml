@@ -1,0 +1,4 @@
+- type: entity
+  id: CMUZLevelEye
+  save: false
+  categories: [ HideSpawnMenu ]
