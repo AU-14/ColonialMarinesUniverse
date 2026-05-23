@@ -85,11 +85,12 @@ public sealed partial class CMUZLevelsSystem
             SyncViewerProbes((uid, viewer), xform);
 
             var globalPos = _transform.GetWorldPosition(xform);
+            var eyeOffset = GetViewerProbeOffset(uid);
             if (_viewerProbeEyes.TryGetValue(uid, out var probes))
             {
                 foreach (var (depth, eye) in probes)
                 {
-                    _transform.SetWorldPosition(eye, GetProbeWorldPosition(viewer, depth, globalPos));
+                    _transform.SetWorldPosition(eye, GetProbeWorldPosition(viewer, depth, globalPos, eyeOffset));
                     SyncZLevelEye(uid, eye);
                 }
             }
@@ -122,9 +123,10 @@ public sealed partial class CMUZLevelsSystem
         if (!_viewerProbeEyes.TryGetValue(ent, out var probes))
             return;
 
+        var eyeOffset = GetViewerProbeOffset(ent);
         foreach (var (depth, eye) in probes)
         {
-            _transform.SetWorldPosition(eye, GetProbeWorldPosition(ent.Comp, depth, globalPos));
+            _transform.SetWorldPosition(eye, GetProbeWorldPosition(ent.Comp, depth, globalPos, eyeOffset));
         }
     }
 
@@ -191,9 +193,11 @@ public sealed partial class CMUZLevelsSystem
         }
 
         var globalPos = _transform.GetWorldPosition(xform);
+        var eyeOffset = GetViewerProbeOffset(ent);
+        var probeGlobalPos = globalPos + eyeOffset;
         var stairPreviewUp = CanPreviewUpperZFromStair((ent.Owner, ent.Comp), xform, map.Value, globalPos, _stairPreviewPositions);
         SetStairPreviewUp(ent, stairPreviewUp, _stairPreviewPositions);
-        BuildWantedProbeDepths(map.Value, globalPos, _wantedProbeDepths, stairPreviewUp);
+        BuildWantedProbeDepths(map.Value, probeGlobalPos, _wantedProbeDepths, stairPreviewUp);
 
         if (!_viewerProbeEyes.TryGetValue(ent.Owner, out var probes))
         {
@@ -228,7 +232,7 @@ public sealed partial class CMUZLevelsSystem
             if (!TryMapOffset(map.Value, depth, out var probeMap))
                 continue;
 
-            var probePosition = GetProbeWorldPosition(ent.Comp, depth, globalPos);
+            var probePosition = GetProbeWorldPosition(ent.Comp, depth, globalPos, eyeOffset);
             var newEye = SpawnAtPosition(_zEyeProto, new EntityCoordinates(probeMap.Value, probePosition));
 
             Transform(newEye).GridTraversal = false;
@@ -391,7 +395,14 @@ public sealed partial class CMUZLevelsSystem
             Dirty(viewer.Owner, viewer.Comp);
     }
 
-    private static Vector2 GetProbeWorldPosition(CMUZLevelViewerComponent viewer, int depth, Vector2 globalPos)
+    private Vector2 GetViewerProbeOffset(EntityUid viewer)
+    {
+        return TryComp<EyeComponent>(viewer, out var eye)
+            ? eye.Offset
+            : Vector2.Zero;
+    }
+
+    private static Vector2 GetProbeWorldPosition(CMUZLevelViewerComponent viewer, int depth, Vector2 globalPos, Vector2 eyeOffset)
     {
         if (depth == 1 &&
             viewer.StairPreviewUp &&
@@ -401,7 +412,7 @@ public sealed partial class CMUZLevelsSystem
             return viewer.StairPreviewPosition;
         }
 
-        return globalPos;
+        return globalPos + eyeOffset;
     }
 
     private bool HasZOpeningPath(EntityUid map, Vector2 globalPos, int targetDepth)
