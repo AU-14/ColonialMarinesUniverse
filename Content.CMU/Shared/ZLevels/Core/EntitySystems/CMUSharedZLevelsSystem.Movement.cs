@@ -561,6 +561,49 @@ public abstract partial class CMUSharedZLevelsSystem
         return false;
     }
 
+    [PublicAPI]
+    public bool TryProjectToGround(EntityCoordinates coordinates, out EntityCoordinates projected, int maxFloors = MaxZLevelsBelowRendering)
+    {
+        projected = coordinates;
+
+        var mapCoordinates = _transform.ToMapCoordinates(coordinates);
+        if (!_map.TryGetMap(mapCoordinates.MapId, out var mapUid) ||
+            mapUid is not { } resolvedMapUid ||
+            !_zMapQuery.TryComp(resolvedMapUid, out var zMap) ||
+            !_gridQuery.TryComp(resolvedMapUid, out var grid))
+        {
+            return true;
+        }
+
+        var worldPosition = mapCoordinates.Position;
+        Entity<CMUZLevelMapComponent?> checkingMap = (resolvedMapUid, zMap);
+        var checkingGrid = grid;
+
+        for (var floor = 0; floor <= maxFloors; floor++)
+        {
+            var tile = _map.WorldToTile(checkingMap, checkingGrid, worldPosition);
+            if (_map.TryGetTileRef(checkingMap, checkingGrid, tile, out var tileRef) &&
+                !tileRef.Tile.IsEmpty)
+            {
+                if (!_mapQuery.TryComp(checkingMap.Owner, out var map))
+                    return false;
+
+                projected = _transform.ToCoordinates(new MapCoordinates(worldPosition, map.MapId));
+                return true;
+            }
+
+            if (!TryMapDown(checkingMap, out var belowMap) ||
+                !_gridQuery.TryComp(belowMap.Value, out checkingGrid))
+            {
+                break;
+            }
+
+            checkingMap = (belowMap.Value.Owner, belowMap.Value.Comp);
+        }
+
+        return false;
+    }
+
     /// <summary>
     /// Sets the vertical velocity for the entity. Positive values make the entity fly upward. Negative values make it fly downward.
     /// </summary>

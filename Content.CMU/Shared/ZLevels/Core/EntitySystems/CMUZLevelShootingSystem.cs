@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared._CMU14.Input;
 using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -63,8 +64,11 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private void ToggleShootDown(EntityUid user)
     {
-        if (!TryGetReadyGun(user, "cmu-zlevel-shoot-down-no-gun", "cmu-zlevel-shoot-down-requires-wield"))
+        if (!CanAimAcrossZWithoutGun(user) &&
+            !TryGetReadyGun(user, "cmu-zlevel-shoot-down-no-gun", "cmu-zlevel-shoot-down-requires-wield"))
+        {
             return;
+        }
 
         var shooter = EnsureComp<CMUZLevelShooterComponent>(user);
         shooter.ShootDown = !shooter.ShootDown;
@@ -112,6 +116,11 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         return !TryComp<WieldableComponent>(gunUid, out var wieldable) || wieldable.Wielded;
     }
 
+    private bool CanAimAcrossZWithoutGun(EntityUid user)
+    {
+        return HasComp<XenoComponent>(user);
+    }
+
     private bool TryDisableShootDown(EntityUid user)
     {
         if (!TryComp<CMUZLevelShooterComponent>(user, out var shooter) ||
@@ -130,12 +139,13 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         EntityCoordinates fromCoordinates,
         EntityCoordinates toCoordinates,
         out EntityCoordinates adjustedFromCoordinates,
-        out EntityCoordinates adjustedToCoordinates)
+        out EntityCoordinates adjustedToCoordinates,
+        bool requireReadyGunForLookUp = true)
     {
         adjustedFromCoordinates = fromCoordinates;
         adjustedToCoordinates = toCoordinates;
 
-        var offset = GetRequestedShotOffset(shooter, requireReadyGunForLookUp: true);
+        var offset = GetRequestedShotOffset(shooter, requireReadyGunForLookUp);
         if (offset == 0)
             return true;
 
