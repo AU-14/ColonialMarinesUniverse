@@ -144,7 +144,9 @@ public abstract partial class CMUSharedZLevelsSystem
         int offset,
         Vector2 from,
         Vector2 to,
-        out Vector2 opening)
+        out Vector2 opening,
+        bool preferOpeningAwayFromSource = false,
+        float maxSourceDistanceFromOpeningEdgeTiles = float.PositiveInfinity)
     {
         opening = default;
         if (offset == 0)
@@ -157,14 +159,54 @@ public abstract partial class CMUSharedZLevelsSystem
         var delta = to - from;
         var distance = delta.Length();
         var steps = Math.Max(1, (int) MathF.Ceiling(distance / ZShotOpeningStep));
+        var sourceTile = preferOpeningAwayFromSource
+            ? _map.WorldToTile(openingMap, grid, from)
+            : default;
+        var fallbackOpening = Vector2.Zero;
+        var hasFallbackOpening = false;
+        var maxSourceDistanceFromOpeningCenter = float.IsPositiveInfinity(maxSourceDistanceFromOpeningEdgeTiles)
+            ? float.PositiveInfinity
+            : grid.TileSize * (0.5f + Math.Max(0f, maxSourceDistanceFromOpeningEdgeTiles));
+        var maxSourceDistanceSquared = maxSourceDistanceFromOpeningCenter * maxSourceDistanceFromOpeningCenter;
 
         for (var i = 0; i <= steps; i++)
         {
             var position = from + delta * (i / (float) steps);
-            if (!IsZShotOpening(openingMap, grid, position))
+            var tile = _map.WorldToTile(openingMap, grid, position);
+            if (_map.TryGetTileRef(openingMap, grid, position, out var tileRef))
+            {
+                if (!CMUZLevelOpeningCache.IsOpeningTile(tileRef.Tile, TilDefMan))
+                    continue;
+
+                tile = tileRef.GridIndices;
+            }
+
+            var openingCenter = _map.ToCenterCoordinates(openingMap, tile, grid).Position;
+            if (!IsZShotOpening(openingMap, grid, openingCenter))
                 continue;
 
-            opening = position;
+            if (Vector2.DistanceSquared(from, openingCenter) > maxSourceDistanceSquared)
+                continue;
+
+            if (preferOpeningAwayFromSource &&
+                tile == sourceTile)
+            {
+                if (!hasFallbackOpening)
+                {
+                    fallbackOpening = openingCenter;
+                    hasFallbackOpening = true;
+                }
+
+                continue;
+            }
+
+            opening = openingCenter;
+            return true;
+        }
+
+        if (hasFallbackOpening)
+        {
+            opening = fallbackOpening;
             return true;
         }
 

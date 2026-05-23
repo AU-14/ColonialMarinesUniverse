@@ -16,8 +16,9 @@ public sealed partial class CMUZLevelBlurOverlay : Overlay
     [Dependency] private IEntityManager _entity = default!;
     [Dependency] private IConfigurationManager _config = default!;
     private readonly ShaderInstance? _blurShader;
+    private const float MaxBlurStrength = 2.0f;
 
-    public override bool RequestScreenTexture => _config.GetCVar(CMUZLevelsCVars.BlurEnabled);
+    public override bool RequestScreenTexture => IsBlurEnabled();
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
     private readonly ProtoId<ShaderPrototype> _zBlurShader = "CMUZBlur";
@@ -30,7 +31,7 @@ public sealed partial class CMUZLevelBlurOverlay : Overlay
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
-        if (!_config.GetCVar(CMUZLevelsCVars.BlurEnabled))
+        if (!IsBlurEnabled())
             return false;
 
         if (args.Viewport.Eye is not ScalingViewport.ZEye zeye)
@@ -43,6 +44,12 @@ public sealed partial class CMUZLevelBlurOverlay : Overlay
             return false;
 
         return true;
+    }
+
+    private bool IsBlurEnabled()
+    {
+        return _config.GetCVar(CMUZLevelsCVars.BlurEnabled) &&
+               _config.GetCVar(CMUZLevelsCVars.BlurStrength) > 0f;
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -62,6 +69,7 @@ public sealed partial class CMUZLevelBlurOverlay : Overlay
 
         _blurShader?.SetParameter("SCREEN_TEXTURE", ScreenTexture);
         _blurShader?.SetParameter("BLUR_COLOR", ambientColor);
+        _blurShader?.SetParameter("BLUR_RADIUS", Math.Clamp(_config.GetCVar(CMUZLevelsCVars.BlurStrength), 0f, MaxBlurStrength));
 
         var worldHandle = args.WorldHandle;
         worldHandle.UseShader(_blurShader);

@@ -8,7 +8,7 @@ using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Maps;
 using Robust.Client.Graphics;
-using Robust.Client.Player;
+using Robust.Shared.Containers;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Graphics;
@@ -23,7 +23,6 @@ namespace Content.Client.Viewport;
 public sealed partial class ScalingViewport
 {
     [Dependency] private IMapManager _mapManager = default!;
-    [Dependency] private IPlayerManager _player = default!;
     [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private ProfManager _prof = default!;
@@ -38,6 +37,7 @@ public sealed partial class ScalingViewport
     private SharedTransformSystem? _transform;
     private EntityLookupSystem? _lookup;
     private ExamineSystem? _examine;
+    private SharedContainerSystem? _containers;
 
     private EntityQuery<TransformComponent>? _xformQuery;
 
@@ -133,26 +133,10 @@ public sealed partial class ScalingViewport
         _transform ??= _entityManager.System<SharedTransformSystem>();
         _lookup ??= _entityManager.System<EntityLookupSystem>();
         _examine ??= _entityManager.System<ExamineSystem>();
+        _containers ??= _entityManager.System<SharedContainerSystem>();
 
-        if (_player.LocalEntity is null)
-        {
-            viewport.Render();
-            return;
-        }
-
-        if (!_entityManager.TryGetComponent<CMUZLevelViewerComponent>(_player.LocalEntity.Value, out var zLevelViewer))
-        {
-            viewport.Render();
-            return;
-        }
-
-        if (!_xformQuery.Value.TryComp(_player.LocalEntity, out var playerXform))
-        {
-            viewport.Render();
-            return;
-        }
-
-        if (playerXform.MapUid is null)
+        if (!TryGetZLevelViewEntity(fallbackEye, out _, out var zLevelViewer, out var viewXform) ||
+            viewXform.MapUid is null)
         {
             viewport.Render();
             return;
@@ -165,17 +149,17 @@ public sealed partial class ScalingViewport
             CMUSharedZLevelsSystem.MaxZLevelsBelowRendering);
         var maxOpeningRects = Math.Max(0, _config.GetCVar(CMUZLevelsCVars.MaxOpeningRectsPerPass));
         var lowestDepth = 0;
-        var weatherSourceMapId = GetWeatherSourceMapId(playerXform.MapUid.Value, playerXform.MapID);
+        var weatherSourceMapId = GetWeatherSourceMapId(viewXform.MapUid.Value, viewXform.MapID);
         _zOpeningBounds.Clear();
         using (var openingProfile = _prof.Group("CMU Z Opening Query"))
         {
             for (var i = 0; i >= -maxDepth; i--)
             {
-                var checkingMap = playerXform.MapUid.Value;
+                var checkingMap = viewXform.MapUid.Value;
 
                 if (i != 0)
                 {
-                    if (!_zLevels.TryMapOffset(playerXform.MapUid.Value, i, out var mapUidBelow))
+                    if (!_zLevels.TryMapOffset(viewXform.MapUid.Value, i, out var mapUidBelow))
                         continue;
 
                     checkingMap = mapUidBelow.Value;
@@ -208,7 +192,7 @@ public sealed partial class ScalingViewport
                 }
                 else
                 {
-                    if (!_zLevels.TryMapOffset(playerXform.MapUid.Value, depth, out _, out var mapComp))
+                    if (!_zLevels.TryMapOffset(viewXform.MapUid.Value, depth, out _, out var mapComp))
                         continue;
 
                     Angle rotation = fallbackEye.Rotation * -1;
@@ -233,7 +217,7 @@ public sealed partial class ScalingViewport
                     _zEye.LowestDepth = lowestDepth;
                     _zEye.Depth = depth;
                     _zEye.HighestDepth = lookUp;
-                    _zEye.BaseMapId = playerXform.MapID;
+                    _zEye.BaseMapId = viewXform.MapID;
                     _zEye.WeatherSourceMapId = weatherSourceMapId;
                     _zEye.Position = new MapCoordinates(fovPosition, mapComp.MapId);
                     _zEye.DrawFov = fallbackEye.DrawFov && depth >= 0;
@@ -262,6 +246,74 @@ public sealed partial class ScalingViewport
         // Restore the Eye
         Eye = fallbackEye;
         viewport.Eye = Eye;
+    }
+
+    private bool TryGetZLevelViewEntity(
+        IEye fallbackEye,
+        out EntityUid viewEntity,
+        out CMUZLevelViewerComponent viewer,
+        out TransformComponent xform)
+    {
+        viewEntity = default;
+        viewer = default!;
+        xform = default!;
+
+        var query = _entityManager.EntityQueryEnumerator<EyeComponent>();
+        while (query.MoveNext(out var uid, out var eye))
+        {
+            if (!ReferenceEquals(eye.Eye, fallbackEye))
+                continue;
+
+            var candidate = eye.Target ?? uid;
+            if (TryResolveZLevelViewer(candidate, out viewEntity, out viewer, out xform))
+                return true;
+
+            if (candidate != uid &&
+                TryResolveZLevelViewer(uid, out viewEntity, out viewer, out xform))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        return false;
+    }
+
+    private bool TryResolveZLevelViewer(
+        EntityUid candidate,
+        out EntityUid viewEntity,
+        out CMUZLevelViewerComponent viewer,
+        out TransformComponent xform)
+    {
+        viewEntity = default;
+        viewer = default!;
+        xform = default!;
+
+        var current = candidate;
+        for (var i = 0; i < 8; i++)
+        {
+            if (_entityManager.TryGetComponent<CMUZLevelViewerComponent>(current, out var currentViewer) &&
+                _xformQuery is not null &&
+                _xformQuery.Value.TryComp(current, out var currentXform) &&
+                currentXform.MapUid is not null)
+            {
+                viewEntity = current;
+                viewer = currentViewer;
+                xform = currentXform;
+                return true;
+            }
+
+            if (_containers is null ||
+                !_containers.TryGetContainingContainer((current, null, null), out var container))
+            {
+                break;
+            }
+
+            current = container.Owner;
+        }
+
+        return false;
     }
 
     private MapId GetWeatherSourceMapId(EntityUid baseMap, MapId fallback)

@@ -8,6 +8,7 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Movement.Components;
 using Content.Shared.Popups;
 using Robust.Server.GameObjects;
+using Robust.Shared.Containers;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -25,6 +26,7 @@ public sealed partial class CMUZLevelsSystem
     [Dependency] private SharedEyeSystem _eye = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
 
     private readonly EntProtoId _zEyeProto = "CMUZLevelEye";
     private const int ZProbeOpeningTileRadius = 24;
@@ -37,6 +39,8 @@ public sealed partial class CMUZLevelsSystem
     private TimeSpan _zLevelViewerUpdateRate = TimeSpan.FromSeconds(0.25f);
     private TimeSpan _nextZLevelViewerUpdate = TimeSpan.Zero;
     private readonly Dictionary<EntityUid, Dictionary<int, EntityUid>> _viewerProbeEyes = new();
+    private readonly Dictionary<EntityUid, Dictionary<ICommonSession, int>> _extraViewerProbeSubscribers = new();
+    private readonly HashSet<EntityUid> _viewSubscriptionViewers = new();
     private readonly CMUZLevelOpeningCache _zOpeningCache = new();
     private readonly List<int> _wantedProbeDepths = new();
     private readonly List<int> _probeDepthsToRemove = new();
@@ -65,6 +69,8 @@ public sealed partial class CMUZLevelsSystem
         SubscribeLocalEvent<CMUZPhysicsComponent, CMUZLevelFallEvent>(OnZLevelFall);
         SubscribeLocalEvent<GridRemovalEvent>(OnGridShutdown);
         SubscribeLocalEvent<TileChangedEvent>(OnTileChanged);
+        SubscribeLocalEvent<ViewSubscriberAddedEvent>(OnViewSubscriberAdded);
+        SubscribeLocalEvent<ViewSubscriberRemovedEvent>(OnViewSubscriberRemoved);
     }
 
     private void UpdateView(float frameTime)
@@ -85,11 +91,12 @@ public sealed partial class CMUZLevelsSystem
             SyncViewerProbes((uid, viewer), xform);
 
             var globalPos = _transform.GetWorldPosition(xform);
+            var eyeOffset = GetViewerProbeOffset(uid);
             if (_viewerProbeEyes.TryGetValue(uid, out var probes))
             {
                 foreach (var (depth, eye) in probes)
                 {
-                    _transform.SetWorldPosition(eye, GetProbeWorldPosition(viewer, depth, globalPos));
+                    _transform.SetWorldPosition(eye, GetProbeWorldPosition(viewer, depth, globalPos, eyeOffset));
                     SyncZLevelEye(uid, eye);
                 }
             }
@@ -112,6 +119,8 @@ public sealed partial class CMUZLevelsSystem
 
         ent.Comp.Eyes.Clear();
         _viewerProbeEyes.Remove(ent);
+        _extraViewerProbeSubscribers.Remove(ent);
+        _viewSubscriptionViewers.Remove(ent);
     }
 
     protected override void OnViewerMove(Entity<CMUZLevelViewerComponent> ent, ref MoveEvent args)
@@ -122,9 +131,10 @@ public sealed partial class CMUZLevelsSystem
         if (!_viewerProbeEyes.TryGetValue(ent, out var probes))
             return;
 
+        var eyeOffset = GetViewerProbeOffset(ent);
         foreach (var (depth, eye) in probes)
         {
-            _transform.SetWorldPosition(eye, GetProbeWorldPosition(ent.Comp, depth, globalPos));
+            _transform.SetWorldPosition(eye, GetProbeWorldPosition(ent.Comp, depth, globalPos, eyeOffset));
         }
     }
 
@@ -171,11 +181,20 @@ public sealed partial class CMUZLevelsSystem
         _viewerProbeEyes.Remove(ent.Owner);
     }
 
+    private bool HasViewerProbeSubscribers(EntityUid viewer)
+    {
+        if (HasComp<ActorComponent>(viewer))
+            return true;
+
+        return _extraViewerProbeSubscribers.TryGetValue(viewer, out var subscribers) &&
+            subscribers.Count > 0;
+    }
+
     private void SyncViewerProbes(Entity<CMUZLevelViewerComponent> ent, TransformComponent? xform = null)
     {
         if (!_zLevelsEnabled ||
             _maxViewProbesPerPlayer <= 0 ||
-            !TryComp<ActorComponent>(ent, out var actor))
+            !HasViewerProbeSubscribers(ent))
         {
             ClearViewerProbes(ent);
             return;
@@ -191,9 +210,11 @@ public sealed partial class CMUZLevelsSystem
         }
 
         var globalPos = _transform.GetWorldPosition(xform);
+        var eyeOffset = GetViewerProbeOffset(ent);
+        var probeGlobalPos = globalPos + eyeOffset;
         var stairPreviewUp = CanPreviewUpperZFromStair((ent.Owner, ent.Comp), xform, map.Value, globalPos, _stairPreviewPositions);
         SetStairPreviewUp(ent, stairPreviewUp, _stairPreviewPositions);
-        BuildWantedProbeDepths(map.Value, globalPos, _wantedProbeDepths, stairPreviewUp);
+        BuildWantedProbeDepths(map.Value, probeGlobalPos, _wantedProbeDepths, stairPreviewUp);
 
         if (!_viewerProbeEyes.TryGetValue(ent.Owner, out var probes))
         {
@@ -228,18 +249,177 @@ public sealed partial class CMUZLevelsSystem
             if (!TryMapOffset(map.Value, depth, out var probeMap))
                 continue;
 
-            var probePosition = GetProbeWorldPosition(ent.Comp, depth, globalPos);
+            var probePosition = GetProbeWorldPosition(ent.Comp, depth, globalPos, eyeOffset);
             var newEye = SpawnAtPosition(_zEyeProto, new EntityCoordinates(probeMap.Value, probePosition));
 
             Transform(newEye).GridTraversal = false;
             SyncZLevelEye(ent, newEye);
-            _viewSubscriber.AddViewSubscriber(newEye, actor.PlayerSession);
             probes[depth] = newEye;
             ent.Comp.Eyes.Add(newEye);
+            AddViewerProbeSubscribers(ent, newEye);
         }
 
         _wantedProbeDepths.Clear();
         _probeDepthsToRemove.Clear();
+    }
+
+    private void AddViewerProbeSubscribers(EntityUid viewer, EntityUid zEye)
+    {
+        if (TryComp<ActorComponent>(viewer, out var actor))
+            _viewSubscriber.AddViewSubscriber(zEye, actor.PlayerSession);
+
+        if (!_extraViewerProbeSubscribers.TryGetValue(viewer, out var subscribers))
+            return;
+
+        foreach (var session in subscribers.Keys)
+        {
+            _viewSubscriber.AddViewSubscriber(zEye, session);
+        }
+    }
+
+    private void AddExtraViewerProbeSubscriber(EntityUid viewer, ICommonSession session)
+    {
+        if (!_zLevelsEnabled)
+            return;
+
+        var hadViewer = HasComp<CMUZLevelViewerComponent>(viewer);
+        var viewerComp = EnsureComp<CMUZLevelViewerComponent>(viewer);
+        if (!hadViewer)
+            _viewSubscriptionViewers.Add(viewer);
+
+        if (!_extraViewerProbeSubscribers.TryGetValue(viewer, out var subscribers))
+        {
+            subscribers = new Dictionary<ICommonSession, int>();
+            _extraViewerProbeSubscribers[viewer] = subscribers;
+        }
+
+        if (subscribers.TryGetValue(session, out var count))
+        {
+            subscribers[session] = count + 1;
+            return;
+        }
+
+        subscribers[session] = 1;
+
+        SyncViewerProbes((viewer, viewerComp));
+
+        foreach (var eye in viewerComp.Eyes)
+        {
+            _viewSubscriber.AddViewSubscriber(eye, session);
+        }
+    }
+
+    private void RemoveExtraViewerProbeSubscriber(EntityUid viewer, ICommonSession session)
+    {
+        if (!_extraViewerProbeSubscribers.TryGetValue(viewer, out var subscribers) ||
+            !subscribers.TryGetValue(session, out var count))
+        {
+            return;
+        }
+
+        if (count > 1)
+        {
+            subscribers[session] = count - 1;
+            return;
+        }
+
+        subscribers.Remove(session);
+
+        if (TryComp<CMUZLevelViewerComponent>(viewer, out var viewerComp))
+        {
+            foreach (var eye in viewerComp.Eyes)
+            {
+                _viewSubscriber.RemoveViewSubscriber(eye, session);
+            }
+        }
+
+        if (subscribers.Count != 0)
+            return;
+
+        _extraViewerProbeSubscribers.Remove(viewer);
+
+        if (!_viewSubscriptionViewers.Remove(viewer) ||
+            HasComp<ActorComponent>(viewer))
+        {
+            return;
+        }
+
+        RemCompDeferred<CMUZLevelViewerComponent>(viewer);
+    }
+
+    private void OnViewSubscriberAdded(ViewSubscriberAddedEvent ev)
+    {
+        if (IsZLevelProbe(ev.View) ||
+            !TryResolveZLevelViewOrigin(ev.View, out var viewer))
+        {
+            return;
+        }
+
+        AddExtraViewerProbeSubscriber(viewer, ev.Subscriber);
+    }
+
+    private void OnViewSubscriberRemoved(ViewSubscriberRemovedEvent ev)
+    {
+        if (IsZLevelProbe(ev.View) ||
+            !TryResolveZLevelViewOrigin(ev.View, out var viewer))
+        {
+            return;
+        }
+
+        RemoveExtraViewerProbeSubscriber(viewer, ev.Subscriber);
+    }
+
+    private bool TryResolveZLevelViewOrigin(EntityUid view, out EntityUid viewer)
+    {
+        viewer = default;
+
+        if (CanUseZLevelViewOrigin(view))
+        {
+            viewer = view;
+            return true;
+        }
+
+        var current = view;
+        for (var i = 0; i < 8; i++)
+        {
+            if (!_containers.TryGetContainingContainer((current, null, null), out var container))
+                return false;
+
+            current = container.Owner;
+            if (!CanUseZLevelViewOrigin(current))
+                continue;
+
+            viewer = current;
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool CanUseZLevelViewOrigin(EntityUid uid)
+    {
+        if (TerminatingOrDeleted(uid))
+            return false;
+
+        if (Transform(uid).MapUid is null)
+        {
+            return false;
+        }
+
+        return HasComp<CMUZLevelViewerComponent>(uid) ||
+            HasComp<EyeComponent>(uid) ||
+            HasComp<ActorComponent>(uid);
+    }
+
+    private bool IsZLevelProbe(EntityUid uid)
+    {
+        foreach (var probes in _viewerProbeEyes.Values)
+        {
+            if (probes.ContainsValue(uid))
+                return true;
+        }
+
+        return false;
     }
 
     private void BuildWantedProbeDepths(EntityUid map, Vector2 globalPos, List<int> depths, bool forceUpperPreview)
@@ -391,7 +571,14 @@ public sealed partial class CMUZLevelsSystem
             Dirty(viewer.Owner, viewer.Comp);
     }
 
-    private static Vector2 GetProbeWorldPosition(CMUZLevelViewerComponent viewer, int depth, Vector2 globalPos)
+    private Vector2 GetViewerProbeOffset(EntityUid viewer)
+    {
+        return TryComp<EyeComponent>(viewer, out var eye)
+            ? eye.Offset
+            : Vector2.Zero;
+    }
+
+    private static Vector2 GetProbeWorldPosition(CMUZLevelViewerComponent viewer, int depth, Vector2 globalPos, Vector2 eyeOffset)
     {
         if (depth == 1 &&
             viewer.StairPreviewUp &&
@@ -401,7 +588,7 @@ public sealed partial class CMUZLevelsSystem
             return viewer.StairPreviewPosition;
         }
 
-        return globalPos;
+        return globalPos + eyeOffset;
     }
 
     private bool HasZOpeningPath(EntityUid map, Vector2 globalPos, int targetDepth)
