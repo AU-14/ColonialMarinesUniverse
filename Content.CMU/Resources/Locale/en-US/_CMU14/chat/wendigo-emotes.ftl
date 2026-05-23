@@ -18,8 +18,8 @@ rmc-wendigo-screech-ready = Our next headbite will make us loudly screech!
 
 ## Wendigo voice lines
 
-emote-name-wendigo-all-your-fault = All Your Fault
-emote-wendigo-all-your-fault = All your fault!
+emote-name-wendigo-all-your-fault = All Your Fault (x2)
+emote-wendigo-all-your-fault = All your fault! ALL YOUR FAULT!!
 
 emote-name-wendigo-closer = Closer
 emote-wendigo-closer = Closer...
@@ -63,8 +63,8 @@ emote-wendigo-let-me-in = LET ME IN!!
 emote-name-wendigo-little-light-1 = Little Light (1)
 emote-wendigo-little-light-1 = Little light...
 
-emote-name-wendigo-little-light-2 = Little Light (2)
-emote-wendigo-little-light-2 = Little light...
+emote-name-wendigo-little-light-2 = Little Light (x2)
+emote-wendigo-little-light-2 = Little light... Little light...
 
 emote-name-wendigo-no-no = No No
 emote-wendigo-no-no = No, no...
