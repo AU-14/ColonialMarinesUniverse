@@ -16,6 +16,7 @@ namespace Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 public sealed partial class CMUZLevelShootingSystem : EntitySystem
 {
     private const float CrossZShotRange = 4f;
+    private const float CrossZRenderOffset = 0.7f;
     private const float CrossZOpeningSourceEdgeRangeTiles = 2f;
     private const float CrossZOpeningSourceNudge = 0.30f;
 
@@ -184,6 +185,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             toMap.Position,
             clampedTo,
             opening,
+            offset,
             out var projectileFrom,
             out var projectileTo);
 
@@ -241,6 +243,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             toCoordinates.Position,
             clampedTo,
             opening,
+            offset,
             out var projectileFrom,
             out var projectileTo);
 
@@ -249,11 +252,55 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         return true;
     }
 
+    public bool TryGetProjectileVisualOffset(
+        EntityUid shooter,
+        EntityCoordinates sourceFromCoordinates,
+        EntityCoordinates projectileFromCoordinates,
+        out Vector2 visualOffset,
+        bool requireReadyGunForLookUp = true)
+    {
+        visualOffset = default;
+
+        var offset = GetRequestedShotOffset(shooter, requireReadyGunForLookUp);
+        if (offset == 0)
+            return false;
+
+        var sourceFromMap = _transform.ToMapCoordinates(sourceFromCoordinates);
+        var projectileFromMap = _transform.ToMapCoordinates(projectileFromCoordinates);
+        if (sourceFromMap.MapId == MapId.Nullspace ||
+            projectileFromMap.MapId == MapId.Nullspace)
+        {
+            return false;
+        }
+
+        // Keep the projectile physics on the opening path, but shift its sprite to
+        // the barrel position in the compensated Z render pass.
+        visualOffset = sourceFromMap.Position - GetCrossZRenderOffset(offset) - projectileFromMap.Position;
+        return visualOffset.LengthSquared() > 0.001f;
+    }
+
+    public void ApplyProjectileVisualOffset(List<EntityUid>? projectiles, Vector2 visualOffset)
+    {
+        if (projectiles == null ||
+            visualOffset.LengthSquared() <= 0.001f)
+        {
+            return;
+        }
+
+        foreach (var projectile in projectiles)
+        {
+            var visual = EnsureComp<CMUZLevelProjectileVisualOffsetComponent>(projectile);
+            visual.Offset = visualOffset;
+            Dirty(projectile, visual);
+        }
+    }
+
     private static void GetCrossZProjectilePath(
         Vector2 from,
         Vector2 to,
         Vector2 clampedTo,
         Vector2 opening,
+        int offset,
         out Vector2 projectileFrom,
         out Vector2 projectileTo)
     {
@@ -270,6 +317,11 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         var distance = Math.Max(1f, Vector2.Distance(projectileFrom, clampedTo));
         projectileTo = projectileFrom + Vector2.Normalize(direction) * distance;
+    }
+
+    private static Vector2 GetCrossZRenderOffset(int offset)
+    {
+        return new Vector2(0f, CrossZRenderOffset * offset);
     }
 
     private static Vector2 NudgeOpeningTowardSource(Vector2 opening, Vector2 source)
