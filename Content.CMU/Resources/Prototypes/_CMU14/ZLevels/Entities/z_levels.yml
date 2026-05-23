@@ -1,0 +1,25 @@
+- type: entity
+  id: CMUZLevelEye
+  save: false
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  id: CMUMultiZStairs
+  name: multi-Z stairs
+  description: A stairway that connects Z-levels.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: Sprite
+    sprite: _RMC14/Structures/stairs.rsi
+    state: p_stair_full
+    drawdepth: FloorTiles
+  - type: CMUZLevelHighGround
+    heightCurve:
+    - 1.05
+    - 1.05
+    - 0.1
+    stick: true

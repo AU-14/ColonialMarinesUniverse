@@ -67175,6 +67175,14 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 134.5,182.5
       parent: 1
+- proto: AUDepartmentConsoleCivilian
+  entities:
+  - uid: 39063
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 65.75,173.5
+      parent: 1
 - proto: AUDepartmentConsoleCommand
   entities:
   - uid: 341
@@ -67224,6 +67232,14 @@ entities:
     components:
     - type: Transform
       pos: 58.5,154.5
+      parent: 1
+- proto: AUDepartmentConsoleLabor
+  entities:
+  - uid: 39064
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 65.25,173.5
       parent: 1
 - proto: AUDepartmentConsoleMedical
   entities:
