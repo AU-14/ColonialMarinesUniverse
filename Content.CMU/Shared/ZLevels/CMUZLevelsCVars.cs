@@ -18,6 +18,9 @@ public sealed partial class CMUZLevelsCVars : CVars
     public static readonly CVarDef<bool> BlurEnabled =
         CVarDef.Create("cmu.zlevels.blur_enabled", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
+    public static readonly CVarDef<float> BlurStrength =
+        CVarDef.Create("cmu.zlevels.blur_strength", 1.0f, CVar.CLIENTONLY | CVar.ARCHIVE);
+
     public static readonly CVarDef<bool> WeatherLowerLayers =
         CVarDef.Create("cmu.zlevels.weather_lower_layers", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 

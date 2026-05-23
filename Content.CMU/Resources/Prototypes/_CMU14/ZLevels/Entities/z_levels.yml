@@ -23,3 +23,11 @@
     - 1.05
     - 0.1
     stick: true
+
+- type: entity
+  parent: CMUMultiZStairs
+  id: CMUMultiZStairsNoPreview
+  suffix: No preview
+  components:
+  - type: CMUZLevelHighGround
+    previewUpLevel: false
