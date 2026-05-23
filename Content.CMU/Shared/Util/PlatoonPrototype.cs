@@ -4,6 +4,7 @@ using Robust.Shared.Prototypes;
 using System.Collections.Generic;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
+using Content.Shared.NPC.Prototypes;
 using Content.Shared.Roles;
 using Robust.Shared.Utility;
 
@@ -16,6 +17,13 @@ namespace Content.Shared.AU14.util;
 
         [DataField("factions", required: false)]
         public List<string> Factions { get; private set; } = new();
+
+        /// <summary>
+        /// The primary NPC faction assigned to members of this platoon when they spawn.
+        /// Overrides the generic GOVFOR/OPFOR faction for more specific platoon identity.
+        /// </summary>
+        [DataField("npcFaction")]
+        public ProtoId<NpcFactionPrototype>? NpcFaction { get; private set; }
 
         /// <summary>
         /// The allegiance associated with this platoon.
