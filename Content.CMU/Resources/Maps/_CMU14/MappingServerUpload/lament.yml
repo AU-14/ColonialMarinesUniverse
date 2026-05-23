@@ -148752,7 +148752,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 994
     components:
     - type: Transform
@@ -148832,7 +148832,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1008
     components:
     - type: Transform
@@ -148841,7 +148841,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: CMAirlockEngineerGovforLocked
   entities:
   - uid: 1011
@@ -148957,7 +148957,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1022
     components:
     - type: Transform
@@ -148965,7 +148965,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1023
     components:
     - type: Transform
@@ -148974,7 +148974,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1024
     components:
     - type: Transform
@@ -148983,7 +148983,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1025
     components:
     - type: Transform
@@ -148991,7 +148991,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1026
     components:
     - type: Transform
@@ -148999,7 +148999,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1027
     components:
     - type: Transform
@@ -149007,7 +149007,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1028
     components:
     - type: Transform
@@ -149015,7 +149015,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1029
     components:
     - type: Transform
@@ -149023,7 +149023,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1030
     components:
     - type: Transform
@@ -149032,7 +149032,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1031
     components:
     - type: Transform
@@ -149041,7 +149041,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1032
     components:
     - type: Transform
@@ -149050,7 +149050,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1033
     components:
     - type: Transform
@@ -149059,7 +149059,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: CMAirlockGlassEngineerLockedColony
   entities:
   - uid: 1034
@@ -149127,7 +149127,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: CMAirlockGlassMedicalLocked
   entities:
   - uid: 1045
@@ -149138,7 +149138,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1046
     components:
     - type: Transform
@@ -149147,7 +149147,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1047
     components:
     - type: Transform
@@ -149156,7 +149156,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1048
     components:
     - type: Transform
@@ -149165,7 +149165,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1049
     components:
     - type: Transform
@@ -149175,7 +149175,7 @@ entities:
     - type: AccessReader
       access:
       - - CMAccessMedical
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1050
     components:
     - type: Transform
@@ -149184,7 +149184,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: CMAirlockGlassSecurityLockedColony
   entities:
   - uid: 1051
@@ -149287,7 +149287,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1073
     components:
     - type: Transform
@@ -149295,7 +149295,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: CMAirlockMedicalGovforLocked
   entities:
   - uid: 1075
@@ -149328,7 +149328,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: CMAirlockSecurityGovforLocked
   entities:
   - uid: 1087
@@ -149361,7 +149361,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1089
     components:
     - type: Transform
@@ -149370,7 +149370,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1090
     components:
     - type: Transform
@@ -149379,7 +149379,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1091
     components:
     - type: Transform
@@ -149388,7 +149388,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1092
     components:
     - type: Transform
@@ -149397,7 +149397,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1093
     components:
     - type: Transform
@@ -149406,7 +149406,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1094
     components:
     - type: Transform
@@ -149415,7 +149415,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: CMAirlockSecurityLockedColony
   entities:
   - uid: 1095
@@ -149532,7 +149532,7 @@ entities:
     - type: AccessReader
       access:
       - - CMAccessEngineering
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
     - type: SpriteSetRenderOrder
   - uid: 1119
     components:
@@ -149543,7 +149543,7 @@ entities:
     - type: AccessReader
       access:
       - - CMAccessEngineering
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
     - type: SpriteSetRenderOrder
   - uid: 1120
     components:
@@ -150039,7 +150039,7 @@ entities:
     - type: AccessReader
       access:
       - - CMAccessEngineering
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
     - type: SpriteSetRenderOrder
   - uid: 1152
     components:
@@ -151188,7 +151188,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1340
     components:
     - type: Transform
@@ -151197,7 +151197,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: CMDoubleDoorColonyEngineerGlassLocked
   entities:
   - uid: 1341
@@ -151345,7 +151345,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 5891
     components:
     - type: Transform
@@ -151354,7 +151354,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: CMDoubleDoorEngineerGlass
   entities:
   - uid: 1367
@@ -151428,7 +151428,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1408
     components:
     - type: Transform
@@ -151437,7 +151437,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: CMDoubleDoorMedicalSolidLocked
   entities:
   - uid: 1415
@@ -151447,7 +151447,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1416
     components:
     - type: Transform
@@ -151455,7 +151455,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: CMDoubleDoorSecurityGlass
   entities:
   - uid: 1417
@@ -553371,7 +553371,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 81521
     components:
     - type: Transform
@@ -555001,7 +555001,7 @@ entities:
     - type: Transform
       pos: -85.5,-0.5
       parent: 1
-- proto: RMCCommunicationsTowerOn
+- proto: AU14CommunicationsTowerColony
   entities:
   - uid: 87731
     components:
@@ -555276,7 +555276,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 81732
     components:
     - type: Transform
@@ -555285,7 +555285,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 87775
     components:
     - type: Transform
@@ -555314,7 +555314,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: RMCDoubleDoorGlassHybrisa
   entities:
   - uid: 81734
@@ -555567,7 +555567,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: RMCDrill
   entities:
   - uid: 81769
@@ -569416,7 +569416,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
     - type: ContainerContainer
       containers:
         entity_storage: !type:Container
@@ -569438,7 +569438,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
     - type: ContainerContainer
       containers:
         entity_storage: !type:Container
@@ -569460,7 +569460,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
     - type: ContainerContainer
       containers:
         entity_storage: !type:Container
@@ -569509,7 +569509,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
     - type: EntityStorage
       air:
         volume: 200
@@ -569551,7 +569551,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
     - type: EntityStorage
       air:
         volume: 200
@@ -569593,7 +569593,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
     - type: EntityStorage
       air:
         volume: 200
@@ -569635,7 +569635,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
     - type: EntityStorage
       air:
         volume: 200
@@ -569677,7 +569677,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
     - type: EntityStorage
       air:
         volume: 200
@@ -569719,7 +569719,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
     - type: EntityStorage
       air:
         volume: 200
@@ -569761,7 +569761,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
     - type: EntityStorage
       air:
         volume: 200
@@ -573225,7 +573225,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 59984
     components:
@@ -573240,7 +573240,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 59985
     components:
@@ -573256,7 +573256,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 59986
     components:
@@ -573271,7 +573271,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 84671
     components:
@@ -573329,7 +573329,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 84676
     components:
@@ -573345,7 +573345,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 84677
     components:
@@ -573361,7 +573361,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 84678
     components:
@@ -573376,7 +573376,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 84679
     components:
@@ -573391,7 +573391,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 84680
     components:
@@ -573406,7 +573406,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 84681
     components:
@@ -573421,7 +573421,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 84682
     components:
@@ -573436,7 +573436,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 84683
     components:
@@ -573451,7 +573451,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 84684
     components:
@@ -573466,7 +573466,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 84685
     components:
@@ -573482,7 +573482,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 84686
     components:
@@ -573498,7 +573498,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 84687
     components:
@@ -573513,7 +573513,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 84688
     components:
@@ -573529,7 +573529,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 84689
     components:
@@ -573545,7 +573545,7 @@ entities:
       accessLog: []
       accessKeys: []
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
       denyTags: []
   - uid: 84690
     components:

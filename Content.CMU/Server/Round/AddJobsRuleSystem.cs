@@ -198,7 +198,6 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
         if (isColonyFallPreset && !string.IsNullOrEmpty(component.ShipFaction) && component.ShipFaction.Equals("govfor", StringComparison.InvariantCultureIgnoreCase))
             return;
 
-
         if (planet != null && !string.IsNullOrEmpty(component.ShipFaction))
         {
             var faction = component.ShipFaction.ToLower();
@@ -219,7 +218,8 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
             if (addToShip && component.AddToShip)
             {
                 // Find the ship entity with ShipFactionComponent matching the faction
-                foreach (var (shipUid, shipFaction) in EntityQuery<ShipFactionComponent>(true).Select(s => (s.Owner, s)))
+                var query = AllEntityQuery<ShipFactionComponent>();
+                while (query.MoveNext(out var shipUid, out var shipFaction))
                 {
                     if (string.IsNullOrEmpty(shipFaction.Faction) || shipFaction.Faction.ToLower() != faction)
                         continue;

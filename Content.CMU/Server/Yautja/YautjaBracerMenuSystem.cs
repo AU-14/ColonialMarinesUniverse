@@ -128,6 +128,9 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             case YautjaBracerPanelCommand.CreateHealingCapsule:
                 _utility.TryCreateHealingCapsule(ent, args.Actor);
                 break;
+            case YautjaBracerPanelCommand.CreateHuntingTrap:
+                _utility.TryCreateHuntingTrap(ent, args.Actor);
+                break;
             case YautjaBracerPanelCommand.ToggleSelfDestruct:
                 if (ent.Comp.SelfDestructArmed)
                     _selfDestruct.TryCancelSelfDestruct(ent, args.Actor);

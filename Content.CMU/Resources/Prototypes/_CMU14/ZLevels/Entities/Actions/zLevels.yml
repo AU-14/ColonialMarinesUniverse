@@ -1,0 +1,38 @@
+- type: entity
+  id: CMUActionZLevelUp
+  name: Move up
+  description: Move up one Z-Level
+  components:
+  - type: Action
+    checkCanInteract: false
+    icon:
+      sprite: _CMU14/ZLevels/Actions/misc.rsi
+      state: up
+  - type: InstantAction
+    event: !type:CMUZLevelActionUp
+
+- type: entity
+  id: CMUActionZLevelDown
+  name: Move down
+  description: Move down one Z-Level
+  components:
+  - type: Action
+    checkCanInteract: false
+    icon:
+      sprite: _CMU14/ZLevels/Actions/misc.rsi
+      state: down
+  - type: InstantAction
+    event: !type:CMUZLevelActionDown
+
+- type: entity
+  id: CMUActionToggleLookUp
+  name: Look up
+  description: You lift your head and look up at the sky.
+  components:
+  - type: Action
+    checkCanInteract: false
+    icon:
+      sprite: _CMU14/ZLevels/Actions/misc.rsi
+      state: eye
+  - type: InstantAction
+    event: !type:CMUToggleZLevelLookUpAction
