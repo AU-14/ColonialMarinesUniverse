@@ -148,6 +148,7 @@
   - type: Spottable
   - type: Physics
     bodyType: KinematicController
+  - type: CMUZPhysics
   - type: Fixtures
     fixtures:
       fix1:

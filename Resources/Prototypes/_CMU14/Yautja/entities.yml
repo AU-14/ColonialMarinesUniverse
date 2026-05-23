@@ -18,6 +18,8 @@
     healingCapsuleCost: 350
     stabilisingCrystalCooldown: 60
     healingCapsuleCooldown: 90
+    huntingTrapCost: 200
+    huntingTrapCooldown: 60
   - type: YautjaGearContainer
   - type: UserInterface
     interfaces:
@@ -261,6 +263,7 @@
     state: icon
   - type: Item
     sprite: _CMU14/Yautja/cape_full.rsi
+    size: Large
   - type: Clothing
     sprite: _CMU14/Yautja/cape_full.rsi
     quickEquip: false
@@ -281,9 +284,13 @@
     uncloakSound:
       path: /Audio/_CMU14/Yautja/pred_cloakoff.wav
   - type: Storage
-    maxItemSize: Ginormous
+    maxItemSize: Large
     grid:
     - 0,0,15,5
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - CMUYautjaToolbelt
 
 - type: entity
   parent: BaseItem
@@ -326,6 +333,8 @@
     hitDelay: 0.45
     activeTime: 10
     retargetDelay: 0.35
+  - type: Corrodible
+    isCorrodible: False
   - type: Fixtures
     fixtures:
       fix1:
@@ -833,9 +842,13 @@
     size: Small
     sprite: _CMU14/Yautja/yautja_items.rsi
   - type: Storage
-    maxItemSize: Normal
+    maxItemSize: Small
     grid:
-    - 0,0,11,3
+    - 0,0,15,3
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - CMSurgicalCase
   - type: FixedItemSizeStorage
   - type: GenericVisualizer
     visuals:
@@ -1271,58 +1284,6 @@
         replaceSlot: MASK
       - id: CMUYautjaMaskPred20Silver
         amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskThrallBone
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskThrallCrimson
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskThrallEbony
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskThrallGold
-        amount: 1
-        replaceSlot: MASK
-      - id: CMUYautjaMaskThrallSilver
-        amount: 1
-        replaceSlot: MASK
-    - name: Thrall Gear
-      entries:
-      - id: CMUYautjaThrallBracer
-        amount: 3
-      - id: CMUYautjaThrallChainshirt
-        amount: 3
-      - id: CMUYautjaThrallArmorEbony
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaThrallArmorSilver
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaThrallArmorGold
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaThrallArmorCrimson
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaThrallArmorBone
-        amount: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaThrallGreavesEbony
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaThrallGreavesSilver
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaThrallGreavesGold
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaThrallGreavesCrimson
-        amount: 1
-        replaceSlot: FEET
-      - id: CMUYautjaThrallGreavesBone
-        amount: 1
-        replaceSlot: FEET
     - name: Hunting Armor
       choices: { CMUYautjaArmor: 1 }
       entries:
@@ -1632,6 +1593,52 @@
       - id: CMUYautjaEmissaryGreavesUrban
         amount: 1
         replaceSlot: FEET
+    - name: Thrall Gear
+      entries:
+      - id: CMUYautjaThrallBracer
+        amount: 3
+      - id: CMUYautjaThrallChainshirt
+        amount: 3
+      - id: CMUYautjaMaskThrallBone
+        amount: 1
+      - id: CMUYautjaMaskThrallCrimson
+        amount: 1
+      - id: CMUYautjaMaskThrallEbony
+        amount: 1
+      - id: CMUYautjaMaskThrallGold
+        amount: 1
+      - id: CMUYautjaMaskThrallSilver
+        amount: 1
+      - id: CMUYautjaThrallArmorEbony
+        amount: 1
+        replaceSlot: OUTERCLOTHING
+      - id: CMUYautjaThrallArmorSilver
+        amount: 1
+        replaceSlot: OUTERCLOTHING
+      - id: CMUYautjaThrallArmorGold
+        amount: 1
+        replaceSlot: OUTERCLOTHING
+      - id: CMUYautjaThrallArmorCrimson
+        amount: 1
+        replaceSlot: OUTERCLOTHING
+      - id: CMUYautjaThrallArmorBone
+        amount: 1
+        replaceSlot: OUTERCLOTHING
+      - id: CMUYautjaThrallGreavesEbony
+        amount: 1
+        replaceSlot: FEET
+      - id: CMUYautjaThrallGreavesSilver
+        amount: 1
+        replaceSlot: FEET
+      - id: CMUYautjaThrallGreavesGold
+        amount: 1
+        replaceSlot: FEET
+      - id: CMUYautjaThrallGreavesCrimson
+        amount: 1
+        replaceSlot: FEET
+      - id: CMUYautjaThrallGreavesBone
+        amount: 1
+        replaceSlot: FEET
     - name: Capes
       choices: { CMUYautjaCape: 1 }
       entries:
@@ -1697,17 +1704,17 @@
       choices: { CMUYautjaSidearm: 2 }
       entries:
       - id: CMUYautjaHarpoon
-        amount: 1
+        amount: 2
       - id: CMUYautjaCeremonialDagger
-        amount: 1
+        amount: 2
       - id: CMUYautjaDuellingBlade
-        amount: 1
+        amount: 2
       - id: CMUYautjaDuellingClub
-        amount: 1
+        amount: 2
       - id: CMUYautjaDuellingHatchet
-        amount: 1
+        amount: 2
       - id: CMUYautjaDuellingKnife
-        amount: 1
+        amount: 2
       - id: CMUYautjaClanShield
         amount: 1
       - id: CMUYautjaAncientShield

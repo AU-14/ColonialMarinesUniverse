@@ -25,6 +25,8 @@ namespace Content.Client.Voting.UI
     [GenerateTypedNameReferences]
     public sealed partial class VoteCallMenu : BaseWindow
     {
+        private const bool CallVoteCreationEnabled = false;
+
         [Dependency] private IClientConsoleHost _consoleHost = default!;
         [Dependency] private IVoteManager _voteManager = default!;
         [Dependency] private IGameTiming _gameTiming = default!;
@@ -80,8 +82,12 @@ namespace Content.Client.Voting.UI
             _state.OnStateChanged += OnStateChanged;
             _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+            CloseButton.OnPressed += _ => Close();
+            CreateButton.OnPressed += CreatePressed;
             VoteTypeButton.OnItemSelected += VoteTypeSelected;
             FollowButton.OnPressed += FollowSelected;
+
+            SetCallVoteCreationEnabled(CallVoteCreationEnabled);
         }
 
         protected override void Opened()
@@ -129,6 +135,15 @@ namespace Content.Client.Voting.UI
             Stylesheet = _stylesheetManager.SheetNano;
             RootPanel.PanelOverride = CreatePanelStyleBox();
             OptionsPanel.PanelOverride = CreateInsetStyleBox();
+        }
+
+        private void SetCallVoteCreationEnabled(bool enabled)
+        {
+            CallVoteDisabledLabel.Visible = !enabled;
+            VoteTypeButton.Disabled = !enabled;
+            VoteOptionsButtonContainer.Visible = enabled;
+            FollowButton.Disabled = !enabled;
+            CreateButton.Disabled = !enabled;
         }
 
         private static CrtStyleBox CreatePanelStyleBox()

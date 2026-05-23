@@ -83,7 +83,7 @@
   suffix: Research, Glass, Locked
   components:
   - type: AccessReader
-    access: [ [ "CMAccessResearch" ], [ "RMCAccessWeYa" ] ]
+    access: [ [ "CMAccessResearch" ], [ "AU14AccessCorporateWEYU" ] ]
 
 - type: entity
   parent: CMDoubleDoorMedicalSolid
@@ -91,7 +91,7 @@
   suffix: Research, Solid, Locked
   components:
   - type: AccessReader
-    access: [ [ "CMAccessResearch" ], [ "RMCAccessWeYa" ] ]
+    access: [ [ "CMAccessResearch" ], [ "AU14AccessCorporateWEYU" ] ]
 
 # Pilots
 - type: entity

@@ -100,7 +100,7 @@ public sealed partial class DungeonJob
             }
 
             // Iterate every pack
-            random.Shuffle(availablePacks);
+            Shuffle(random, availablePacks);
             Matrix3x2 packTransform = default!;
             var found = false;
             DungeonRoomPackPrototype pack = default!;

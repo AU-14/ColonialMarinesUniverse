@@ -28,7 +28,7 @@ public sealed partial class XenoAidSystem : EntitySystem
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
-    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private XenoEnergySystem _xenoEnergy = default!;
     [Dependency] private XenoStrainSystem _xenoStrain = default!;

@@ -13,13 +13,20 @@ namespace Content.Shared._RMC14.Humanoid;
 [Serializable, NetSerializable]
 public sealed partial class RMCHumanoidAppearance : IRMCHumanoidAppearance
 {
+    [NonSerialized]
+    private Dictionary<HumanoidVisualLayers, HumanoidSpeciesSpriteLayer>? _baseLayers = new();
+
     public MarkingSet ClientOldMarkings { get; set; } = new();
 
     [DataField]
     public MarkingSet MarkingSet { get; set; } = new();
 
     [DataField]
-    public Dictionary<HumanoidVisualLayers, HumanoidSpeciesSpriteLayer> BaseLayers { get; set; } = new();
+    public Dictionary<HumanoidVisualLayers, HumanoidSpeciesSpriteLayer> BaseLayers
+    {
+        get => _baseLayers ??= new();
+        set => _baseLayers = value;
+    }
 
     [DataField]
     public HashSet<HumanoidVisualLayers> PermanentlyHidden { get; set; } = new();

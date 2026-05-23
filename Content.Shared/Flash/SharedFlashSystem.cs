@@ -34,7 +34,7 @@ public abstract partial class SharedFlashSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private TagSystem _tag = default!;
-    [Dependency] private StatusEffectsSystem _statusEffectsSystem = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffectsSystem = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private UseDelaySystem _useDelay = default!;
 
@@ -202,7 +202,8 @@ public abstract partial class SharedFlashSystem : EntitySystem
         foreach (var entity in _entSet)
         {
             // TODO: Use RandomPredicted https://github.com/space-wizards/RobustToolbox/pull/5849
-            var rand = new System.Random((int)_timing.CurTick.Value + GetNetEntity(entity).Id);
+            var rand = new RobustRandom();
+            rand.SetSeed((int)_timing.CurTick.Value + GetNetEntity(entity).Id);
             if (!rand.Prob(probability))
                 continue;
 

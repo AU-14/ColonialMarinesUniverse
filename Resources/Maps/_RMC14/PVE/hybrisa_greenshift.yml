@@ -224277,7 +224277,7 @@ entities:
     - type: Transform
       pos: -178.5,-80.5
       parent: 1
-- proto: RMCSpawnerCommunicationsTowerOne
+- proto: AU14SpawnerCommunicationsTowerOne
   entities:
   - uid: 26360
     components:
@@ -224289,7 +224289,7 @@ entities:
     - type: Transform
       pos: -48.5,-121.5
       parent: 1
-- proto: RMCSpawnerCommunicationsTowerTwo
+- proto: AU14SpawnerCommunicationsTowerTwo
   entities:
   - uid: 26362
     components:

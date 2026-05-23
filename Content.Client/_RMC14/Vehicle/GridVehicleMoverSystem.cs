@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Numerics;
+using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared.Vehicle.Components;
 using ClientPhysicsSystem = Robust.Client.Physics.PhysicsSystem;
@@ -18,6 +19,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private ClientPhysicsSystem _physics = default!;
     [Dependency] private IOverlayManager _overlayManager = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
 
     public static readonly List<Vector2> DebugCollisionPositions = new();
 
@@ -133,6 +135,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return;
         }
 
+        RefreshOutsideViewTarget(local);
+
         if (TryComp(local, out VehicleOperatorComponent? op) && op.Vehicle is { } vehicle)
         {
             if (_lastPredictedVehicle != vehicle)
@@ -151,5 +155,19 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             _physics.UpdateIsPredicted(oldPredicted);
             _lastPredictedVehicle = null;
         }
+    }
+
+    private void RefreshOutsideViewTarget(EntityUid local)
+    {
+        if (!TryComp(local, out VehicleViewToggleComponent? toggle) ||
+            !toggle.IsOutside ||
+            toggle.OutsideTarget is not { } outsideTarget ||
+            !TryComp(local, out EyeComponent? eye) ||
+            eye.Target == outsideTarget)
+        {
+            return;
+        }
+
+        _eye.SetTarget(local, outsideTarget, eye);
     }
 }

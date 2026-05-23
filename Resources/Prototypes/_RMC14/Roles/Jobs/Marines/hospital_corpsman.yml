@@ -17,7 +17,7 @@
   accessGroups:
   - HospitalCorpsman
   #overwatchSortPriority: -2
-  #overwatchRoleName: Hospital Corpsmen
+  #overwatchRoleName: au14-job-name-govforplatooncorpsman-plural
   roleWeight: 1
   displayWeight: 2
   special:

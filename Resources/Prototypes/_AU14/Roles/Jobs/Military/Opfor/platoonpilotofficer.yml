@@ -75,7 +75,7 @@
   id: AU14GearopforDSPilot
   equipment:
     id: AU14IDCardopforDSPilot
-    ears: AU14HeadsetSectionLeaderopfor
+    ears: AU14HeadsetOpforCommand
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -95,4 +95,4 @@
     mask: AU14MaskUSASFPilotOxygen
     head: AU14USASFAirCrewHelmet
     jumpsuit: AU14USASFPilotJumpsuit
-    ears: AU14HeadsetSectionLeaderopfor
+    ears: AU14HeadsetOpforCommand

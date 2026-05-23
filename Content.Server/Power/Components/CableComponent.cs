@@ -41,8 +41,8 @@ public sealed partial class CableComponent : Component
 [ByRefEvent]
 public readonly struct CableAnchorStateChangedEvent
 {
+    public readonly EntityUid Entity;
     public readonly TransformComponent Transform;
-    public EntityUid Entity => Transform.Owner;
     public bool Anchored => Transform.Anchored;
 
     /// <summary>
@@ -50,8 +50,9 @@ public readonly struct CableAnchorStateChangedEvent
     /// </summary>
     public readonly bool Detaching;
 
-    public CableAnchorStateChangedEvent(TransformComponent transform, bool detaching = false)
+    public CableAnchorStateChangedEvent(EntityUid entity, TransformComponent transform, bool detaching = false)
     {
+        Entity = entity;
         Detaching = detaching;
         Transform = transform;
     }

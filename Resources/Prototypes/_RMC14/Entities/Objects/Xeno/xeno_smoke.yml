@@ -22,6 +22,8 @@
     sprite: _RMC14/Effects/smoke.rsi
     state: smoke2
     color: "#62821D"
+  - type: SpriteColor
+    color: "#62821D"
   - type: TimedDespawn
     lifetime: 12
   - type: Tag
@@ -77,6 +79,8 @@
   - type: Sprite
     sprite: _RMC14/Effects/smoke.rsi
     state: smoke2
+    color: "#FFBF58"
+  - type: SpriteColor
     color: "#FFBF58"
   - type: TimedDespawn
     lifetime: 12

@@ -46,7 +46,7 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private PolymorphSystem _polymorph = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private VomitSystem _vomit = default!;

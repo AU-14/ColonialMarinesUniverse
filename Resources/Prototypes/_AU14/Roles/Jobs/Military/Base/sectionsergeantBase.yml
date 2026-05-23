@@ -5,12 +5,7 @@
   description: au14-job-description-govforSSG
   playTimeTracker: AU14JobGOVFORSectionSergeant
   basePlaytimeTracker: true
-  hidden: true
   abstract: true
-  requirements:
-  - !type:DepartmentTimeRequirement
-    department: AU14DepartmentGovernmentForces
-    time: 36000 # 20 hours
 
 - type: playTimeTracker
   id: AU14JobGOVFORSectionSergeant

@@ -2,6 +2,7 @@
   parent: CMJobXenoBase
   id: AU14JobThreatMember
   name: au-job-name-threat-member
+  description: au-job-description-threat-member
   setPreference: true
   playTimeTracker: AUJobThreatMember
   hidden: false

@@ -723,14 +723,14 @@ public sealed partial class DamageVisualsSystem : VisualizerSystem<DamageVisuals
     }
 
     /// RMC14
-    public void ChangeDamageGroupColor(SpriteComponent spriteComponent, DamageVisualsComponent damageVisuals, string group, string color)
+    public void ChangeDamageGroupColor(Entity<SpriteComponent> spriteEnt, DamageVisualsComponent damageVisuals, string group, string color)
     {
         if (damageVisuals.TargetLayers != null && damageVisuals.DamageOverlayGroups != null)
         {
             foreach (var layerMapKey in damageVisuals.TargetLayerMapKeys)
             {
-                if (spriteComponent.LayerMapTryGet($"{layerMapKey}{group}", out var spriteLayer))
-                    spriteComponent.LayerSetColor(spriteLayer, Color.FromHex(color));
+                if (SpriteSystem.LayerMapTryGet(spriteEnt.AsNullable(), $"{layerMapKey}{group}", out var spriteLayer, false))
+                    SpriteSystem.LayerSetColor(spriteEnt.AsNullable(), spriteLayer, Color.FromHex(color));
             }
 
             damageVisuals.DamageOverlayGroups[group].Color = color;

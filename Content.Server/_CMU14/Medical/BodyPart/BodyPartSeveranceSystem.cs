@@ -38,8 +38,6 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
     [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private IRobustRandom _random = default!;
-    private ISawmill _sawmill = default!;
-
     private static readonly ProtoId<DamageTypePrototype> Bloodloss = "Bloodloss";
     private const float StumpBleedDamage = 30f;
     private static readonly SoundSpecifier SeveranceSound =

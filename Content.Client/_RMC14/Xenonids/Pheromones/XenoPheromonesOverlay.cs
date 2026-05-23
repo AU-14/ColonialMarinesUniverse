@@ -17,6 +17,8 @@ namespace Content.Client._RMC14.Xenonids.Pheromones;
 
 public sealed partial class XenoPheromonesOverlay : Overlay
 {
+    private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
+
     [Dependency] private IEntityManager _entity = default!;
     [Dependency] private IPlayerManager _players = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
@@ -45,7 +47,7 @@ public sealed partial class XenoPheromonesOverlay : Overlay
 
         _xformQuery = _entity.GetEntityQuery<TransformComponent>();
 
-        _shader = _prototype.Index<ShaderPrototype>("unshaded").Instance();
+        _shader = _prototype.Index(UnshadedShader).Instance();
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -115,11 +117,11 @@ public sealed partial class XenoPheromonesOverlay : Overlay
         Matrix3x2 scaleMatrix,
         Matrix3x2 rotationMatrix)
     {
-        var (_, sprite, xform) = ent;
+        var (uid, sprite, xform) = ent;
         if (xform.MapID != args.MapId)
             return;
 
-        var bounds = sprite.Bounds;
+        var bounds = _sprite.GetLocalBounds((uid, sprite));
 
         var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
 

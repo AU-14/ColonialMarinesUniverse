@@ -74,19 +74,6 @@ public sealed partial class HideLayerClothingSystem : EntitySystem
                 _humanoid.SetLayerVisibility(user!, layer, !hideLayers, inSlot, ref dirty);
         }
 
-        // Fallback for obsolete field: assume we want to hide **all** layers, as long as we are equipped to any
-        // relevant clothing slot
-#pragma warning disable CS0618 // Type or member is obsolete
-        if (clothing.Comp1.Slots is { } slots && clothing.Comp2.Slots.HasFlag(inSlot))
-#pragma warning restore CS0618 // Type or member is obsolete
-        {
-            foreach (var layer in slots)
-            {
-                if (hideable.Contains(layer))
-                    _humanoid.SetLayerVisibility(user!, layer, !hideLayers, inSlot, ref dirty);
-            }
-        }
-
         if (dirty)
             Dirty(user!);
     }

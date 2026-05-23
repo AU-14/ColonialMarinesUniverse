@@ -131,7 +131,7 @@ namespace Content.Client.Construction.UI
         /// <inheritdoc />
         public void Dispose()
         {
-            _constructionView.Dispose();
+            _constructionView.Close();
 
             SystemBindingChanged(null);
             _systemManager.SystemLoaded -= OnSystemLoaded;
@@ -515,7 +515,7 @@ namespace Content.Client.Construction.UI
 
             foreach (var id in favorites)
             {
-                if (_prototypeManager.TryIndex(id, out ConstructionPrototype? recipe, logError: false))
+                if (_prototypeManager.TryIndex(id, out ConstructionPrototype? recipe))
                     _favoritedRecipes.Add(recipe);
             }
 

@@ -29,6 +29,7 @@ public sealed partial class AuThreatSystem : EntitySystem
     [Dependency] private SharedRoleSystem _roles = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     /// <summary>
     /// Spawns the chosen threat's leaders, members, and entities at their correct markers at round start.
@@ -104,7 +105,7 @@ public sealed partial class AuThreatSystem : EntitySystem
                     var filtered = markers.Where(m =>
                     {
                         var coords = _entityManager.GetComponent<TransformComponent>(m).Coordinates;
-                        return coords.InRange(_entityManager, centerCoords, 50f);
+                        return _transform.InRange(coords, centerCoords, 50f);
                     }).ToList();
                     // Fallback to all markers if none are in range
                     markerCache[type] = filtered.Count > 0 ? filtered : markers;

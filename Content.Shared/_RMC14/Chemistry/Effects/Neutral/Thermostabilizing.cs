@@ -41,7 +41,7 @@ public sealed partial class Thermostabilizing : RMCChemicalEffect
 
     protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
     {
-        var status = args.EntityManager.System<StatusEffectsSystem>();
+        var status = args.EntityManager.System<StatusEffectQuerySystem>();
         status.TryAddStatusEffect<RMCUnconsciousComponent>(
             args.TargetEntity,
             Unconscious,
@@ -57,7 +57,7 @@ public sealed partial class Thermostabilizing : RMCChemicalEffect
         if (!random.Prob(0.05f))
             return;
 
-        var status = args.EntityManager.System<StatusEffectsSystem>();
+        var status = args.EntityManager.System<StatusEffectQuerySystem>();
         status.TryAddStatusEffect<RMCUnconsciousComponent>(
             args.TargetEntity,
             Unconscious,

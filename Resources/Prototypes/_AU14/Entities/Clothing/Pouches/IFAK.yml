@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: [RMCPouchOpenClosed, RMCPouchStorage]
   id: AU14PouchIFAK
   name: infantry first aid kit pouch
@@ -9,7 +9,7 @@
   - type: Storage
     maxItemSize: Large
     grid:
-    - 0,0,13,1 #4 slots
+    - 0,0,13,1 #7 slots
     whitelist:
       tags:
       - DiscreteHealthAnalyzer

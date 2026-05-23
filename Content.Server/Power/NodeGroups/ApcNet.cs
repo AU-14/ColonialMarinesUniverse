@@ -15,9 +15,9 @@ namespace Content.Server.Power.NodeGroups
 
         void RemoveApc(EntityUid uid, ApcComponent apc);
 
-        void AddPowerProvider(ApcPowerProviderComponent provider);
+        void AddPowerProvider(EntityUid uid, ApcPowerProviderComponent provider);
 
-        void RemovePowerProvider(ApcPowerProviderComponent provider);
+        void RemovePowerProvider(EntityUid uid, ApcPowerProviderComponent provider);
 
         void QueueNetworkReconnect();
     }
@@ -26,15 +26,15 @@ namespace Content.Server.Power.NodeGroups
     [UsedImplicitly]
     public sealed partial class ApcNet : BasePowerNet<IApcNet>, IApcNet
     {
-        [ViewVariables] public readonly List<ApcComponent> Apcs = new();
-        [ViewVariables] public readonly List<ApcPowerProviderComponent> Providers = new();
+        [ViewVariables] public readonly List<Entity<ApcComponent>> Apcs = new();
+        [ViewVariables] public readonly List<Entity<ApcPowerProviderComponent>> Providers = new();
 
         //Debug property
-        [ViewVariables] private int TotalReceivers => Providers.Sum(provider => provider.LinkedReceivers.Count);
+        [ViewVariables] private int TotalReceivers => Providers.Sum(provider => provider.Comp.LinkedReceivers.Count);
 
         [ViewVariables]
         private IEnumerable<ApcPowerReceiverComponent> AllReceivers =>
-            Providers.SelectMany(provider => provider.LinkedReceivers);
+            Providers.SelectMany(provider => provider.Comp.LinkedReceivers);
 
         public override void Initialize(Node sourceNode, IEntityManager entMan)
         {
@@ -55,7 +55,7 @@ namespace Content.Server.Power.NodeGroups
                 netBattery.NetworkBattery.LinkedNetworkDischarging = default;
 
             QueueNetworkReconnect();
-            Apcs.Add(apc);
+            Apcs.Add((uid, apc));
         }
 
         public void RemoveApc(EntityUid uid, ApcComponent apc)
@@ -64,19 +64,19 @@ namespace Content.Server.Power.NodeGroups
                 netBattery.NetworkBattery.LinkedNetworkDischarging = default;
 
             QueueNetworkReconnect();
-            Apcs.Remove(apc);
+            Apcs.Remove((uid, apc));
         }
 
-        public void AddPowerProvider(ApcPowerProviderComponent provider)
+        public void AddPowerProvider(EntityUid uid, ApcPowerProviderComponent provider)
         {
-            Providers.Add(provider);
+            Providers.Add((uid, provider));
 
             QueueNetworkReconnect();
         }
 
-        public void RemovePowerProvider(ApcPowerProviderComponent provider)
+        public void RemovePowerProvider(EntityUid uid, ApcPowerProviderComponent provider)
         {
-            Providers.Remove(provider);
+            Providers.Remove((uid, provider));
 
             QueueNetworkReconnect();
         }

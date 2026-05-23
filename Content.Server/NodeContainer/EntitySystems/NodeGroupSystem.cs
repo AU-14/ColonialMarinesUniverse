@@ -350,7 +350,9 @@ namespace Content.Server.NodeContainer.EntitySystems
         private IEnumerable<Node> GetCompatibleNodes(Node node, EntityQuery<TransformComponent> xformQuery, EntityQuery<NodeContainerComponent> nodeQuery)
         {
             var xform = xformQuery.GetComponent(node.Owner);
-            TryComp<MapGridComponent>(xform.GridUid, out var grid);
+            Entity<MapGridComponent>? grid = null;
+            if (xform.GridUid is { } gridUid && TryComp<MapGridComponent>(gridUid, out var gridComp))
+                grid = (gridUid, gridComp);
 
             if (!node.Connectable(EntityManager, xform))
                 yield break;

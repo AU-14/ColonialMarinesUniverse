@@ -25,6 +25,7 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private SharedSolutionContainerSystem _solution = default!;
     [Dependency] private IGameTiming _timing = default!;
 
@@ -88,7 +89,7 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
                 foreach (var reagent in solution.Contents)
                 {
                     var name = reagent.Reagent.Prototype;
-                    if (_prototypes.TryIndexReagent(reagent.Reagent.Prototype, out ReagentPrototype? reagentProto))
+                    if (_reagent.TryIndex(reagent.Reagent.Prototype, out var reagentProto))
                         name = reagentProto.LocalizedName;
 
                     args.PushText($"{reagent.Quantity.Float():F2} units of {name}");

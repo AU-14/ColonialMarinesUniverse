@@ -31,7 +31,7 @@
   - AU14GovforGunner
   overwatchSortPriority: -3
   overwatchShowName: true
-  overwatchRoleName: Automatic Rifleman
+  overwatchRoleName: au14-job-name-govforsquadautomaticrifleman-plural
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

@@ -700,6 +700,9 @@
   - HardHatWhiteRMC
   - HardHatBlueRMC
   - HeadCapOfficerRMC
+  - BeretIOAU14
+  - BeretSOAU14
+  - BeretADJAU14
 
 - type: loadoutGroup
   id: SynthBackpackAU14
@@ -780,6 +783,7 @@
   - GogglesPolarizedOrangeRMC
   - GogglesM1A1BlueRMC
   - GlassesSecurityRMC
+  - RMCGlassesExperimentalMeson
 
 - type: loadoutGroup
   id: SynthUniformAU14

@@ -57,7 +57,7 @@ public sealed partial class AdminLogManager
                 EntityUid id => id,
                 EntityStringRepresentation rep => rep.Uid,
                 ICommonSession {AttachedEntity: {Valid: true}} session => session.AttachedEntity,
-                IComponent component => component.Owner,
+                IComponent component => GetComponentOwner(component),
                 _ => null
             };
 
@@ -72,5 +72,17 @@ public sealed partial class AdminLogManager
         }
 
         return (JsonSerializer.SerializeToDocument(parsed, _jsonOptions), players);
+    }
+
+    private EntityUid? GetComponentOwner(IComponent component)
+    {
+        var query = _entityManager.AllEntityQueryEnumerator(component.GetType());
+        while (query.MoveNext(out var uid, out var other))
+        {
+            if (ReferenceEquals(component, other))
+                return uid;
+        }
+
+        return null;
     }
 }

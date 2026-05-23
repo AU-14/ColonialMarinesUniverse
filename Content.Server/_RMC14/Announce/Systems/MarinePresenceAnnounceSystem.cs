@@ -24,8 +24,7 @@ namespace Content.Server._RMC14.Announce
         [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private StationRecordsSystem _stationRecords = default!;
 
-        [ValidatePrototypeId<RadioChannelPrototype>]
-        public readonly ProtoId<RadioChannelPrototype> CommonChannel = "MarineCommon";
+        public static readonly ProtoId<RadioChannelPrototype> CommonChannel = "MarineCommon";
 
         public void AnnounceLateJoin(bool lateJoin, bool silent, EntityUid mob, string jobId, string jobName, JobPrototype jobPrototype)
         {

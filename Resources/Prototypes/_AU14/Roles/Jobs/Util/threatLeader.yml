@@ -2,6 +2,7 @@
   parent: AUThreatJobBase
   id: AU14JobThreatLeader
   name: au-job-name-threat-leader
+  description: au-job-description-threat-leader
   setPreference: true
   playTimeTracker: AUJobThreatLeader
   hidden: false
@@ -14,5 +15,4 @@
 
 - type: playTimeTracker
   id: AUJobThreatLeader
-
 

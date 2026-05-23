@@ -37,6 +37,8 @@ namespace Content.Shared._RMC14.OrbitalCannon;
 
 public sealed partial class OrbitalCannonSystem : EntitySystem
 {
+    private static readonly ProtoId<TagPrototype> WallTag = "Wall";
+
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedRMCAnimationSystem _animation = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
@@ -590,7 +592,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
         {
             // This part is shitty because there might be a wall that just... doesn't exactly go with this logic. Hope it works.
             if (HasComp<TagComponent>(entity) &&
-                _tags.HasTag(entity, "Wall") &&
+                _tags.HasTag(entity, WallTag) &&
                 !HasComp<DamageableComponent>(entity))
             {
                 return true;

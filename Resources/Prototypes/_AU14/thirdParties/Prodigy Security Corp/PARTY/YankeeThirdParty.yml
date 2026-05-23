@@ -1,0 +1,23 @@
+- type: partySpawn
+  id: ProdigyPARTYSpawn
+  leadersToSpawn:
+    AU14JobPARTYPartyLeader: 1
+  gruntsToSpawn:
+    AU14JobPARTYPartyEngineer: 1
+    AU14JobPARTYPartyMedic: 1
+    AU14JobPARTYPartySmartgunner: 1
+    AU14JobPARTYPartyContractor: 4
+    AU14JobPARTYPartySynthetic: 1
+    AU14JobPARTYPartyCombatSynthetic: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: ProdigyPARTY
+  partyspawn: ProdigyPARTYSpawn
+  entrymethod: shuttle
+  weight: 20
+  minplayers: 30
+  maxplayers: 400
+  GhostsNeeded: 10
+  roundstart: false

@@ -8,7 +8,7 @@ namespace Content.Shared.Eye.Blinding.Systems
 {
     public sealed partial class EyeProtectionSystem : EntitySystem
     {
-        [Dependency] private StatusEffectsSystem _statusEffectsSystem = default!;
+        [Dependency] private StatusEffectQuerySystem _statusEffectsSystem = default!;
         [Dependency] private BlindableSystem _blindingSystem = default!;
 
         public override void Initialize()

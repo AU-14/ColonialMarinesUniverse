@@ -54,7 +54,7 @@
       entries:
       - id: RMCM5CameraGear
         amount: 30
-      - id: AU14HeadsetSectionMarine
+      - id: AU14HeadsetGovforMarine
         name: empty headset
         amount: 20
     - name: Heads Up Display
@@ -602,7 +602,9 @@
         amount: 5
     - name: Headsets
       entries:
-      - id: AU14HeadsetSectionLeader
+      - id: AU14HeadsetGovforCommand
+        amount: 2
+      - id: AU14HeadsetGovforAuxiliary
         amount: 2
     - name: Backpack
       entries:

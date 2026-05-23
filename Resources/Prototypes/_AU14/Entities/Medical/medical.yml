@@ -1022,7 +1022,7 @@
     doAfter: 2.5
   - type: Stack
     stackType: CMGauze
-    count: 6
+    count: 10
   - type: StackPrice
     price: 6
 

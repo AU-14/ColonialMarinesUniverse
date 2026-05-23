@@ -77,7 +77,7 @@ public sealed partial class XenoSystem : EntitySystem
     [Dependency] private SharedRMCFlammableSystem _rmcFlammable = default!;
     [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
     [Dependency] private StandingStateSystem _standing = default!;
-    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;

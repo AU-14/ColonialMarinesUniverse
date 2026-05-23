@@ -1,8 +1,6 @@
 - type: entity
   id: CMUActionYautjaAbominationRush
   parent: ActionXenoBase
-  name: cmu-yautja-abomination-action-rush
-  description: cmu-yautja-abomination-action-rush-desc
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -16,8 +14,6 @@
 - type: entity
   id: CMUActionYautjaAbominationRoar
   parent: ActionXenoBase
-  name: cmu-yautja-abomination-action-roar
-  description: cmu-yautja-abomination-action-roar-desc
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -31,8 +27,6 @@
 - type: entity
   id: CMUActionYautjaAbominationSmash
   parent: ActionXenoBase
-  name: cmu-yautja-abomination-action-smash
-  description: cmu-yautja-abomination-action-smash-desc
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -52,8 +46,6 @@
 - type: entity
   id: CMUActionYautjaAbominationFrenzy
   parent: ActionXenoBase
-  name: cmu-yautja-abomination-action-frenzy
-  description: cmu-yautja-abomination-action-frenzy-desc
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -73,8 +65,6 @@
 - type: entity
   id: CMUActionYautjaAbominationToggleFrenzy
   parent: ActionXenoBase
-  name: cmu-yautja-abomination-action-toggle-frenzy
-  description: cmu-yautja-abomination-action-toggle-frenzy-desc
   components:
   - type: Action
     itemIconStyle: NoItem

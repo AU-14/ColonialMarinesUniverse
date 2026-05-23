@@ -1,15 +1,15 @@
 - type: job
   parent: AU14Jobk9handlerBase
   id: AU14JobThirdPartyK9Handler
-  name: K9 Handler
-  description: K9 Handler
+  name: au14-job-name-govfork9handler
+  description: au14-job-name-govfork9handler
   setPreference: false
   ranks:
     RMCRankStaffSergeant: []
   startingGear: AU14GearThirdPartyK9Handler
   icon: "AU14JobIconGovK9Handler"
   requireAdminNotify: false
-  spawnMenuRoleName: K9 Handler
+  spawnMenuRoleName: au14-job-name-govfork9handler
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-govfor
   accessGroups:
@@ -18,7 +18,7 @@
   # - AU14GovforCorpsman
   # - AU14GovforSquad
   overwatchSortPriority: -2
-  overwatchRoleName: K9 Handler#
+  overwatchRoleName: au14-job-name-govfork9handler
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
@@ -38,7 +38,7 @@
   equipment:
     jumpsuit: AU14UniversalBlackFatigues
     id: AU14IDCardSquadK9Handler
-    ears: AU14HeadsetSectionLeader
+    ears: AU14HeadsetGovforCommand
     eyes: RMCGlassesMedicalHUDGlasses
     outerClothing: AU14WYPPOArmor
     shoes: CMBootsBlack

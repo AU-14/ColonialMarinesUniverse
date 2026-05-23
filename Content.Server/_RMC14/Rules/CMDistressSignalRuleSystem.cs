@@ -624,7 +624,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
             // don't open shitcode inside
             spawnedDropships = true;
-            var dropshipMap = _mapManager.CreateMap();
+            _mapSystem.CreateMap(out var dropshipMap);
             var dropshipPoints = EntityQueryEnumerator<DropshipDestinationComponent, TransformComponent>();
             var ships = new[] { new ResPath("/Maps/_RMC14/alamo.yml"), new ResPath("/Maps/_RMC14/normandy.yml") };
             var shipIndex = 0;
@@ -694,7 +694,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                     if (!paper.TryGet(out var paperComponent, _prototypes, _compFactory))
                         continue;
 
-                    if (!_prototypes.TryIndex(paper.Id, out var entProto, logError: false))
+                    if (!_prototypes.Resolve(paper.Id, out var entProto))
                         continue;
 
                     var content = Loc.GetString(paperComponent.Content);
@@ -800,7 +800,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             };
 
             if (audio != null)
-                _audio.PlayGlobal(_audio.GetSound(audio), Filter.Broadcast(), true, AudioParams.Default.WithVolume(-8));
+                _audio.PlayGlobal(_audio.ResolveSound(audio), Filter.Broadcast(), true, AudioParams.Default.WithVolume(-8));
         }
     }
 

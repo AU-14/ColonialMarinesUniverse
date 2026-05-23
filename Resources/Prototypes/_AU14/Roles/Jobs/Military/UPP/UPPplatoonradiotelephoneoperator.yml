@@ -2,7 +2,7 @@
   parent: AU14JobRadioTelephoneOperatorBase
   id: AU14JobGOVFORRadioTelephoneOperatorUPP
   name: Radio Telephone Operator
-  description: au14-job-description-radiotelephoneooerator
+  description: au14-job-description-radiotelephoneoperator
   setPreference: false
   ranks:
     UPP_SeniorGefreiter:
@@ -20,7 +20,7 @@
   accessGroups:
   - AU14GovforFTL
   overwatchSortPriority: -5
-  overwatchRoleName: Radio Telephone Operator
+  overwatchRoleName: au14-job-name-radiotelephoneoperator-alt
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

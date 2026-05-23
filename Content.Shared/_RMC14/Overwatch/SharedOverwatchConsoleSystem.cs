@@ -367,7 +367,8 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
         var options = new List<DialogOption>();
         if (state.Marines.TryGetValue(selectedSquad, out var marines))
         {
-            foreach (var marine in marines)
+            var sortedMarines = marines.OrderBy(m => m.Name.ToLowerInvariant());
+            foreach (var marine in sortedMarines) // alphabetical sort
             {
                 var option = new DialogOption
                 {

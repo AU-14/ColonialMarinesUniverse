@@ -1,4 +1,4 @@
-﻿- type: accessGroup
+- type: accessGroup
   id: Colony
   tags:
   - CMAccessColonyPublic # any public doors that would be locked for outsiders but not your common civilian
@@ -82,12 +82,12 @@
   tags:
   - CMAccessColonyPublic
   - CMAccessColonyCommand
-  - RMCAccessWeYa # TODO RMC14 weya colonial, weya exec
+  - AU14AccessCorporateWEYU # TODO RMC14 weya colonial, weya exec
 
 - type: accessGroup
   id: ColonistPMC
   tags:
-  - RMCAccessWeYa # TODO RMC14 weya general, colonial, medical, security, research, armory
+  - AU14AccessCorporateWEYU # TODO RMC14 weya general, colonial, medical, security, research, armory
   - CMAccessColonyPublic
   - CMAccessColonyResearch
   - CMAccessColonyEngineering

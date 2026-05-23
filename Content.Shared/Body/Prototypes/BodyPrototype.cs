@@ -12,7 +12,8 @@ public sealed partial class BodyPrototype : IPrototype
 
     [DataField("root")] public string Root { get; private set; } = string.Empty;
 
-    [DataField("slots")] public Dictionary<string, BodyPrototypeSlot> Slots { get; private set; } = new();
+    [DataField("slots", customTypeSerializer: typeof(BodyPrototypeSlotsSerializer))]
+    public Dictionary<string, BodyPrototypeSlot> Slots { get; private set; } = new();
 
     private BodyPrototype() { }
 

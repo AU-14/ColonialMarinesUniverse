@@ -8,9 +8,9 @@ using System;
 
 namespace Content.Shared._AU14.Xeno.Construction;
 
-public sealed class ResinDoorSystem : EntitySystem
+public sealed partial class ResinDoorSystem : EntitySystem
 {
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
     public override void Initialize()
     {
         base.Initialize();

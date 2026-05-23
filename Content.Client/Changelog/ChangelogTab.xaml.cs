@@ -161,6 +161,9 @@ public sealed partial class ChangelogTab : Control
             ChangelogLineType.Remove => ("minus.svg.192dpi.png", "#D16E6E"),
             ChangelogLineType.Fix => ("bug.svg.192dpi.png", "#D1BA6E"),
             ChangelogLineType.Tweak => ("wrench.svg.192dpi.png", "#6E96D1"),
+            ChangelogLineType.Map => ("plus.svg.192dpi.png", "#8AC7D1"),
+            ChangelogLineType.Code => ("wrench.svg.192dpi.png", "#A98AD1"),
+            ChangelogLineType.Admin => ("wrench.svg.192dpi.png", "#D18AB8"),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 

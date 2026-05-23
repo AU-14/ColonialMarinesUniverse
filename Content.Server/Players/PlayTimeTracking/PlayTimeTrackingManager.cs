@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using Content.Server.Database;
 using Content.Shared.CCVar;
 using Content.Shared.Players.PlayTimeTracking;
+using Content.Shared.Roles;
 using Robust.Shared.Asynchronous;
 using Robust.Shared.Collections;
 using Robust.Shared.Configuration;
 using Robust.Shared.Exceptions;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -63,8 +65,18 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
     [Dependency] private ITaskManager _task = default!;
     [Dependency] private IRuntimeLog _runtimeLog = default!;
     [Dependency] private UserDbDataManager _userDb = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     private ISawmill _sawmill = default!;
+
+    private static readonly Dictionary<string, string> LegacyPlayTimeTrackerAliases = new()
+    {
+        // AU14 tracker IDs that were renamed before the role prototypes were consolidated.
+        ["AU14JobMilitaryPolice"] = "AU14JobGOVFORMilitaryPoliceMan",
+        ["AU14JobMilitaryPoliceTracker"] = "AU14JobGOVFORMilitaryPoliceMan",
+        ["AU14JobGOVFORk9handler"] = "AU14JobThirdPartyK9Handler",
+        ["AU14JobOPFORk9handler"] = "AU14JobThirdPartyK9Handler",
+    };
 
     // List of players that need some kind of update (refresh timers or resend).
     private ValueList<ICommonSession> _playersDirty;
@@ -318,7 +330,17 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
 
         foreach (var timer in playTimes)
         {
-            data.TrackerTimes.Add(timer.Tracker, timer.TimeSpent);
+            var tracker = GetCanonicalTracker(timer.Tracker);
+
+            ref var canonicalTime = ref CollectionsMarshal.GetValueRefOrAddDefault(data.TrackerTimes, tracker, out _);
+            canonicalTime += timer.TimeSpent;
+
+            if (tracker == timer.Tracker || timer.TimeSpent == TimeSpan.Zero)
+                continue;
+
+            data.TrackerTimes[timer.Tracker] = TimeSpan.Zero;
+            data.DbTrackersDirty.Add(timer.Tracker);
+            data.DbTrackersDirty.Add(tracker);
         }
 
         data.Initialized = true;
@@ -339,6 +361,7 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
         if (!_playTimeData.TryGetValue(id, out var data) || !data.Initialized)
             throw new InvalidOperationException("Play time info is not yet loaded for this player!");
 
+        tracker = GetCanonicalTracker(tracker);
         AddTimeToTracker(data, tracker, time);
     }
 
@@ -379,6 +402,7 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
         if (!TryGetTrackerTimes(id, out var times))
             return false;
 
+        tracker = GetCanonicalTracker(tracker);
         if (!times.TryGetValue(tracker, out var t))
             return false;
 
@@ -399,7 +423,22 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
         if (!_playTimeData.TryGetValue(id, out var data) || !data.Initialized)
             throw new InvalidOperationException("Play time info is not yet loaded for this player!");
 
+        tracker = GetCanonicalTracker(tracker);
         return data.TrackerTimes.GetValueOrDefault(tracker);
+    }
+
+    private string GetCanonicalTracker(string tracker)
+    {
+        if (LegacyPlayTimeTrackerAliases.TryGetValue(tracker, out var alias))
+            return alias;
+
+        if (_prototypes.TryIndex<JobPrototype>(tracker, out var job) &&
+            job.PlayTimeTracker != tracker)
+        {
+            return job.PlayTimeTracker;
+        }
+
+        return tracker;
     }
 
     /// <summary>

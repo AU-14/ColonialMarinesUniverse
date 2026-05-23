@@ -1,0 +1,92 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobPARTSPartyEngineer
+  name: Prodigy Sierra Combat Engineer
+  description: au14-prodigyparty-description
+  playTimeTracker: AU14JobPARTSPartyEngineer
+  ranks:
+    AU14RankWeYuOperator: []
+  spawnMenuRoleName: Prodigy Sierra Combat Engineer (3rd party, M41A/2)
+  startingGear: AU14GearPARTSPartyEngineer
+  greeting: au14-prodigyparty-greeting
+  icon: "RMCJobIconPMCEngineer"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-psc
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      preset: AU14SkillPresetPlatoonCombatTechnician
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforsquadcombattech
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: AU14JobPARTSPartyEngineer
+  name: Prodigy Sierra Party Combat Engineer (3rd party, M41A/2)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPARTS
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: PMC Combat Engineer
+    description: au14-prodigyparty-description
+    reregister: false
+    job: AU14JobPARTSPartyEngineer
+    raffle:
+      settings: short
+    rules: au14-prodigyparty-description
+
+- type: startingGear
+  id: AU14GearPARTSPartyEngineer
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14ArmorProdigyXAS23
+    jumpsuit: AU14ProdigyFatiguesRU
+    shoes: RMCBootsSPPBlackFilled
+    mask: RMCMaskCoifPMC
+    eyes: RMCGlassesMedicalHUDGlasses
+    head: AU14ProdigyBeret
+    gloves: AU14HandsProdigyRU
+    belt: RMCBeltSmartGunOperatorPistolPMCFilled
+    pocket1: RMCPouchDrumPMCFill
+    pocket2: AU14PouchIFAKProdigyFill
+    back: RMCSatchelWelderRU #21 slots
+    ears: RMCM5CameraGear
+    ears2: AU14HeadsetPART
+    suitstorage: RMCSmartGunPMC
+  storage:
+    back:
+    - CMMRE
+    - RMCBinocularsPVE
+    - AU14PacketGrenadeFragM12Filled
+    - RMCMagazineSmartGunirradiated
+    - RMCMagazineSmartGunirradiated
+    - RMCMagazineSmartGunirradiated
+    - RMCMagazineSmartGunirradiated
+    - RMCMagazineSmartGunirradiated
+    jumpsuit:
+    - AU14SynthResetKeyProdigy
+    - AU14SynthResetKeyProdigy
+    - AU14ProdigyLaptop
+    # 2 empty slots
+    outerClothing:
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    - RMCVisorMedical
+    # 1 empty slots
+
+- type: playTimeTracker
+  id: AU14JobPARTSPartyEngineer

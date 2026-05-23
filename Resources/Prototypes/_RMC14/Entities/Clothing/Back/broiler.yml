@@ -58,3 +58,11 @@
     camouflageVariations: {}
   - type: RMCMagneticItemReceiver
   - type: RMCBroiler
+
+- type: entity
+  parent: RMCBackpackBroiler
+  id: RMCBackpackBroilerEmpty
+  suffix: empty 
+  components:
+  - type: CMItemSlots
+    startingItems: []

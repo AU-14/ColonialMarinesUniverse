@@ -104,34 +104,36 @@
     modifiers:
     - conditions:
         inactiveOnly: true
-      fireDelayFlat: 0.03
+      fireDelayFlat: 0.12
     - conditions:
         wieldedOnly: true
         inactiveOnly: true
       accuracyAddMult: -0.25
-      scatterFlat: 4
+      scatterFlat: 2
       recoilFlat: 1
+      fireDelayFlat: 0.06
     - conditions:
         wieldedOnly: true
         activeOnly: true
-      accuracyAddMult: 0.25
-      scatterFlat: -2
+      scatterFlat: -1
       recoilFlat: -2
     - conditions:
         activeOnly: true
+      accuracyAddMult: 0.25
       burstScatterAddMult: -3
+      fireDelayFlat: -0.09
     - conditions:
         activeOnly: true
         whitelist:
           tags:
           - CMM96SSniperRifle
-      fireDelayFlat: -0.5
+      fireDelayFlat: -0.4
     - conditions:
         activeOnly: true
         whitelist:
           tags:
           - RMCWeaponLMGM60
-      fireDelayFlat: -0.1
+      fireDelayFlat: -0.060
 
 - type: entity
   parent: RMCUnderAttachmentBase

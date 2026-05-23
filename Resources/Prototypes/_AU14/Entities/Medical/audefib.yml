@@ -88,7 +88,7 @@
 
 - type: entity
   id: AUCMDefibrillatorEmpty
-  parent: AU14BaseDefibrillator
+  parent: AU14CMDefibrillator
   suffix: AU14, Empty
   components:
   - type: ItemSlots

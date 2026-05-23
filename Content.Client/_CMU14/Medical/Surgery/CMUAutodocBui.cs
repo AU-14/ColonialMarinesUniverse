@@ -13,6 +13,7 @@ using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
+using Robust.Shared.Localization;
 using Robust.Shared.Timing;
 
 namespace Content.Client._CMU14.Medical.Surgery;
@@ -21,6 +22,7 @@ namespace Content.Client._CMU14.Medical.Surgery;
 public sealed partial class CMUAutodocBui : BoundUserInterface
 {
     [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private ILocalizationManager _localization = default!;
     [Dependency] private IPlayerManager _players = default!;
 
     private CMUAutodocWindow? _window;
@@ -465,12 +467,12 @@ public sealed partial class CMUAutodocBui : BoundUserInterface
         return $"{Math.Ceiling(remaining.TotalSeconds)}s";
     }
 
-    private static string ResolveLabel(string? text)
+    private string ResolveLabel(string? text)
     {
         if (string.IsNullOrEmpty(text))
             return "-";
 
-        return Loc.TryGetString(text, out var localized) ? localized : text;
+        return _localization.TryGetString(text, out var localized) ? localized : text;
     }
 }
 

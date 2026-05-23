@@ -7,8 +7,8 @@ namespace Content.Shared._RMC14.DoAfter;
 
 public sealed partial class RMCDoAfterSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
 
 
 

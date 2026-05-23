@@ -10,7 +10,7 @@ namespace Content.Server.Electrocution;
 public sealed partial class ElectrocuteCommand : LocalizedEntityCommands
 {
     [Dependency] private ElectrocutionSystem _electrocution = default!;
-    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
 
     public override string Command => "electrocute";
 

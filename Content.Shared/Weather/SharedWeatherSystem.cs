@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Weather;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Light.Components;
 using Content.Shared.Light.EntitySystems;
 using Content.Shared.Maps;
@@ -23,6 +24,7 @@ public abstract partial class SharedWeatherSystem : EntitySystem
     [Dependency] private SharedRoofSystem _roof = default!;
     [Dependency] private AreaSystem _area = default!;
     [Dependency] private RMCWeatherSystem _rmcWeather = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevel = default!; //CMU
 
     private EntityQuery<BlockWeatherComponent> _blockQuery;
 
@@ -50,10 +52,13 @@ public abstract partial class SharedWeatherSystem : EntitySystem
         if (TryComp<AreaGridComponent>(uid, out _))
             return _rmcWeather.CanWeatherAffectArea(uid, grid, tileRef, roofComp);
 
-        if (tileRef.Tile.IsEmpty)
-            return true;
+        //if (tileRef.Tile.IsEmpty) //CMU - we can have space tiles under roofs on zLevel above
+        //    return true;
 
         if (Resolve(uid, ref roofComp, false) && _roof.IsRooved((uid, grid, roofComp), tileRef.GridIndices))
+            return false;
+
+        if (_zLevel.HasTileAbove(tileRef.GridIndices, uid)) //CMU - we need also custom check for zLevel roofs above empty (unrooved by roofSystem) tiles
             return false;
 
         var tileDef = (ContentTileDefinition) _tileDefManager[tileRef.Tile.TypeId];

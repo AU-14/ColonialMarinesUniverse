@@ -47,7 +47,7 @@
   - AUPrisonStaff
   - auwy
   access:
-  - AU14AccessColonyCorporateLiaison
+  - AU14AccessCorporateWEYULiaison
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
@@ -76,7 +76,9 @@
   requirements:
   - !type:DepartmentTimeRequirement
     department: AU14DepartmentCorporate
-    time: 72000 # 20 hours
+    time: 36000 # 10 hours
+  - !type:OverallPlaytimeRequirement
+    time: 86400 # 24 hours
   hidden: false
 
 - type: startingGear

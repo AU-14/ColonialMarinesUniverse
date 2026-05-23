@@ -17,11 +17,11 @@ namespace Content.Server.AU14.Threats;
 /// paused map are skipped (the disguise on top is the live one); without
 /// that filter the rule would double-count every disguised player.
 /// </summary>
-public sealed class KillAllAbominationsRuleSystem : GameRuleSystem<KillAllAbominationsRuleComponent>
+public sealed partial class KillAllAbominationsRuleSystem : GameRuleSystem<KillAllAbominationsRuleComponent>
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly Round.AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private Round.AuRoundSystem _auRoundSystem = default!;
 
     private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
     private EntityQuery<MetaDataComponent> _metaQuery;

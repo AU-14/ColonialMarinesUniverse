@@ -66,7 +66,7 @@ public sealed partial class CLFSubvertedSynthRuleSystem : GameRuleSystem<CLFSubv
         var subvertedComp = EnsureComp<CLFSubvertedSynthComponent>(args.Target);
         subvertedComp.Faction = comp.Faction;
         subvertedComp.AdditionalComponents = comp.AdditionalComponents;
-        EntityManager.AddComponents(args.Target, comp.AdditionalComponents); // this is missing
+        EntityManager.AddComponents(args.Target, comp.AdditionalComponents);
         EnsureComp<CLFMemberComponent>(args.Target);
         _adminLogManager.Add(LogType.Mind,
             LogImpact.Medium,

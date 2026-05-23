@@ -42,7 +42,7 @@ public sealed partial class XenoAbductSystem : EntitySystem
     [Dependency] private RMCSizeStunSystem _size = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private StandingStateSystem _standing = default!;
-    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private XenoSystem _xeno = default!;

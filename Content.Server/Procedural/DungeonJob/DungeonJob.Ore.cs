@@ -94,7 +94,7 @@ public sealed partial class DungeonJob
                 // While we have remaining tiles keep iterating
                 while (groupSize > 0 && availableTiles.Count > 0)
                 {
-                    var startNode = random.PickAndTake(availableTiles);
+                    var startNode = PickAndTake(random, availableTiles);
                     frontier.Clear();
                     frontier.Add(startNode);
 

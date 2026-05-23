@@ -17,6 +17,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
 using Content.Shared.Popups;
 using Content.Shared.Tag;
+using Content.Shared.Tools;
 using Content.Shared.Tools.Systems;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Components;
@@ -34,6 +35,8 @@ namespace Content.Shared._RMC14.Sentry;
 
 public sealed partial class SentrySystem : EntitySystem
 {
+    private static readonly ProtoId<ToolQualityPrototype> ScrewingQuality = "Screwing";
+
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedContainerSystem _container = default!;
@@ -205,7 +208,7 @@ public sealed partial class SentrySystem : EntitySystem
             return;
         }
 
-        if (_tools.HasQuality(used, "Screwing"))
+        if (_tools.HasQuality(used, ScrewingQuality))
         {
             if (sentry.Comp.Mode == SentryMode.Off)
             {

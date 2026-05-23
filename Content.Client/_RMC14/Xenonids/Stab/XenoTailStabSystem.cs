@@ -19,6 +19,7 @@ public sealed partial class XenoTailStabSystem : SharedXenoTailStabSystem
     [Dependency] private InteractionSystem _interaction = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private TransformSystem _transform = default!;
 
     private const string TailAnimationKey = "cm-xeno-tail";
@@ -71,7 +72,8 @@ public sealed partial class XenoTailStabSystem : SharedXenoTailStabSystem
 
         var sprite = EnsureComp<SpriteComponent>(animationEnt);
         sprite.NoRotation = true;
-        sprite.Rotation = localPos.ToWorldAngle();
+        var rotation = localPos.ToWorldAngle();
+        _sprite.SetRotation((animationEnt, sprite), rotation);
 
         // lie by 20% so the player feels less bad about missing
         var distance = localPos.Length() * 0.80f;
@@ -81,8 +83,8 @@ public sealed partial class XenoTailStabSystem : SharedXenoTailStabSystem
         if (distance > unobstructedDistance)
             distance = unobstructedDistance;
 
-        var startOffset = sprite.Rotation.RotateVec(new Vector2(0, -distance / 5f));
-        var endOffset = sprite.Rotation.RotateVec(new Vector2(0, -distance));
+        var startOffset = rotation.RotateVec(new Vector2(0, -distance / 5f));
+        var endOffset = rotation.RotateVec(new Vector2(0, -distance));
 
         const float length = 0.10f;
 

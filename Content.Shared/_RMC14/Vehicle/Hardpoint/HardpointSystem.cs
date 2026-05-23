@@ -41,6 +41,7 @@ namespace Content.Shared._RMC14.Vehicle;
 public sealed partial class HardpointSystem : EntitySystem
 {
     private static readonly EntProtoId<SkillDefinitionComponent> EngineerSkill = "RMCSkillEngineer";
+    private static readonly ProtoId<DamageModifierSetPrototype> TankFrameDamageModifier = "VehicleFrameTank";
     private const string FailureHeaderColor = "#ffb347";
     private const string FailureNameColor = "#ffd27f";
     private const string FailureEffectColor = "#c7b7ff";
@@ -1808,7 +1809,7 @@ public sealed partial class HardpointSystem : EntitySystem
 
         if (TryComp(uid, out HardpointItemComponent? item) &&
             item.VehicleFamily == "Tank" &&
-            _prototypeManager.TryIndex<DamageModifierSetPrototype>("VehicleFrameTank", out var tankBase))
+            _prototypeManager.TryIndex(TankFrameDamageModifier, out var tankBase))
         {
             ApplyDamageModifierCoefficients(tankBase, ref acid, ref slash, ref bullet, ref explosive, ref blunt);
         }

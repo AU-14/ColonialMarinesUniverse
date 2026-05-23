@@ -1,18 +1,19 @@
 using System.Linq;
+using Content.Shared.Cuffs.Components;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
-using Content.Shared.AU14;
+using Content.Shared.GameTicking.Components;
+using Content.Shared.Inventory;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs;
 using Content.Shared.NPC.Components;
-using Content.Shared.GameTicking.Components;
+using Content.Shared.SSDIndicator;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship;
-using Content.Shared.Cuffs.Components;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
-using Content.Shared.SSDIndicator;
+using Content.Shared.AU14;
 
 namespace Content.Server.AU14.Threats;
 
@@ -23,6 +24,7 @@ public sealed partial class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRule
     [Dependency] private Round.AuRoundSystem _auRoundSystem = default!;
     [Dependency] private AreaSystem _area = default!;
     [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
 
@@ -65,6 +67,12 @@ public sealed partial class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRule
     public void OnHandcuffEvent(EntityUid uid)
     {
         CheckVictoryCondition();
+    }
+
+    private bool HasPrisonJumpsuit(EntityUid uid)
+    {
+        return _inventory.TryGetSlotEntity(uid, "jumpsuit", out var suit)
+            && Prototype(suit!.Value)?.ID == "AU14CivilianPrisonJumpsuit";
     }
 
     private bool IsInArrestArea(EntityUid uid)
@@ -122,15 +130,14 @@ public sealed partial class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRule
 
                 total++;
 
-                // Count as eliminated if dead
                 if (mobState.CurrentState == MobState.Dead)
                 {
                     eliminated++;
                 }
-                // Or if arrested flag is set and they're cuffed
-                else if (countArrests &&
-                         ((TryComp<CuffableComponent>(uid, out var cuffable) && cuffable.CuffedHandCount > 0) ||
-                          IsInArrestArea(uid)))
+                // Wearing jumpsuit, or arrested flag is set and they're cuffed, or in the mapped brig areas
+                else if (HasPrisonJumpsuit(uid)
+                    || countArrests && ((TryComp<CuffableComponent>(uid, out var cuffable) && cuffable.CuffedHandCount > 0)
+                    || IsInArrestArea(uid)))
                 {
                     eliminated++;
                 }

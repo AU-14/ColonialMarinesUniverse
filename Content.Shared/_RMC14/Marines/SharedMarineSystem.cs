@@ -13,10 +13,10 @@ namespace Content.Shared._RMC14.Marines;
 
 public abstract partial class SharedMarineSystem : EntitySystem
 {
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly ISerializationManager _serialization = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private ISerializationManager _serialization = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
 
     public override void Initialize()
     {

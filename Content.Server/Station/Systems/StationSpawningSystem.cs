@@ -140,9 +140,9 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         }
         // --- Platoon job override logic end ---
 
-        _prototypeManager.TryIndex(job ?? string.Empty, out var prototype, false);
+        _prototypeManager.Resolve(job, out var prototype);
         // Get the original job prototype for access/faction/ID
-        _prototypeManager.TryIndex(originalJob ?? string.Empty, out var originalPrototype, false);
+        _prototypeManager.Resolve(originalJob, out var originalPrototype);
         RoleLoadout? loadout = null;
 
         // Need to get the loadout up-front to handle names if we use an entity spawn override.
@@ -161,7 +161,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         }
 
         // RMC14 UseLoadoutOfJob
-        if (prototype?.UseLoadoutOfJob != null && _prototypeManager.TryIndex(prototype.UseLoadoutOfJob, out var usedPrototype, false))
+        if (prototype?.UseLoadoutOfJob != null && _prototypeManager.Resolve(prototype.UseLoadoutOfJob, out var usedPrototype))
         {
             var newJobLoadout = LoadoutSystem.GetJobPrototype(usedPrototype.ID);
 
@@ -181,6 +181,17 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             DebugTools.Assert(entity is null);
             var jobEntity = Spawn(prototype.JobEntity, coordinates);
             MakeSentientCommand.MakeSentient(jobEntity, EntityManager);
+
+            if (profile != null && TryComp(jobEntity, out HumanoidAppearanceComponent? humanoid))
+            {
+                _humanoidSystem.LoadProfile(jobEntity, profile.WithSpecies(humanoid.Species), humanoid);
+                _metaSystem.SetEntityName(jobEntity, profile.Name);
+
+                if (profile.FlavorText != "" && _configurationManager.GetCVar(CCVars.FlavorText))
+                {
+                    AddComp<DetailExaminableComponent>(jobEntity).Content = profile.FlavorText;
+                }
+            }
 
             // Make sure custom names get handled, what is gameticker control flow whoopy.
             if (loadout != null)
@@ -516,7 +527,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
     private void DoJobSpecials(ProtoId<JobPrototype>? job, EntityUid entity)
     {
-        if (!_prototypeManager.TryIndex(job ?? string.Empty, out JobPrototype? prototype, false))
+        if (!_prototypeManager.Resolve(job, out JobPrototype? prototype))
             return;
 
         foreach (var jobSpecial in prototype.Special)
@@ -597,11 +608,20 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
                 _cardSystem.TryChangeJobIcon(cardId, jobIcon, card);
         }
 
-        // Set access from the old job
-        if (station != null)
+        // Normal spawns need access applied from their actual job. Split-job spawns
+        // already merge access before this helper, so avoid overwriting that union.
+        if (titleJobPrototype.ID == accessJobPrototype.ID)
         {
-            var data = Comp<StationJobsComponent>(station.Value);
+            var extendedAccess = false;
+            if (station != null)
+            {
+                var data = Comp<StationJobsComponent>(station.Value);
+                extendedAccess = data.ExtendedAccess;
+            }
+
+            _accessSystem.SetAccessToJob(cardId, accessJobPrototype, extendedAccess);
         }
+
         if (pdaComponent != null)
             _pdaSystem.SetOwner(idUid.Value, pdaComponent, entity, characterName);
     }

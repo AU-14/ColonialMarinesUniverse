@@ -44,7 +44,7 @@ public sealed partial class RMCPullingSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private PullingSystem _pulling = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -344,9 +344,6 @@ public sealed partial class RMCPullingSystem : EntitySystem
     {
         if (args.PullerUid != ent.Owner)
             return;
-
-        if (ent.Comp.NextAttack > _timing.CurTime)
-            args.Cancelled = true;
 
         var pulledUid = args.PulledUid;
         var attackEvent = new LightAttackEvent(GetNetEntity(pulledUid), GetNetEntity(ent), GetNetCoordinates(pulledUid.ToCoordinates()));

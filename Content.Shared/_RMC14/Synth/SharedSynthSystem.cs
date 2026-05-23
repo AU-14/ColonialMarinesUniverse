@@ -50,7 +50,6 @@ public abstract partial class SharedSynthSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<SynthComponent, MapInitEvent>(OnMapInit, after: [typeof(SharedBloodstreamSystem)]);
         SubscribeLocalEvent<SynthComponent, ComponentStartup>(OnSynthStartup);
         SubscribeLocalEvent<SynthComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<SynthComponent, RMCToggleSynthHudActionEvent>(OnToggleSynthHud);
@@ -63,16 +62,7 @@ public abstract partial class SharedSynthSystem : EntitySystem
         SubscribeLocalEvent<UseOnSynthBlockedComponent, BeforeRangedInteractEvent>(OnSynthBlockedBeforeRangedInteract);
     }
 
-    private void OnMapInit(Entity<SynthComponent> ent, ref MapInitEvent args)
-    {
-        MakeSynth(ent);
-    }
-
-    // Survivor synth jobs (colony, recon, paramarines, etc.) add SynthComponent
-    // through AddComponentSpecial after the mob is already map-initialized, so
-    // MapInitEvent never fires for the new component. ComponentStartup catches
-    // that path and ensures MakeSynth runs (and re-runs are no-ops because the
-    // adds/removes are idempotent).
+    // Change any mob to a synth, even after it has already been map-initialized
     private void OnSynthStartup(Entity<SynthComponent> ent, ref ComponentStartup args)
     {
         MakeSynth(ent);
@@ -100,7 +90,7 @@ public abstract partial class SharedSynthSystem : EntitySystem
     {
         if (ent.Comp.Initialized)
             return;
-        ent.Comp.Initialized = true;
+        ent.Comp.Initialized = true; // execute one time
         Dirty(ent);
 
         if (_prototypes.TryIndex(ent.Comp.AddComponents, out var addComponents))

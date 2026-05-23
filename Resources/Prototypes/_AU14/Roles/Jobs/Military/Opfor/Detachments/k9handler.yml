@@ -16,7 +16,7 @@
   - AU14OpforCorpsman
   - AU14OpforSquad
   overwatchSortPriority: -2
-  overwatchRoleName: K9 Handler
+  overwatchRoleName: au14-job-name-govfork9handler
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

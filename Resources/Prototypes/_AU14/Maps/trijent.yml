@@ -2,6 +2,10 @@
   id: AUTrijentMap
   mapName: Trijent
   mapPath: /Maps/_AU14/trijent.yml
+  mapsBelow:
+  - /Maps/_AU14/trijent_below.yml
+  mapsAbove:
+  - /Maps/_AU14/trijent_above.yml
   minPlayers: 0
   maxPlayers: 500
   maxRandomOffset: 0

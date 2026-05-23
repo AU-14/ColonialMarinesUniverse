@@ -24,6 +24,8 @@ namespace Content.Client._RMC14.Marines;
 
 public sealed partial class MarineOverlay : Overlay
 {
+    private static readonly ProtoId<ShaderPrototype> ShadedShader = "shaded";
+
     [Dependency] private IEntityManager _entity = default!;
     [Dependency] private IPlayerManager _players = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
@@ -83,7 +85,7 @@ public sealed partial class MarineOverlay : Overlay
         _paraDroppingQuery = _entity.GetEntityQuery<ParaDroppingComponent>();
         _crashLandingQuery = _entity.GetEntityQuery<CrashLandingComponent>();
 
-        _shader = _prototype.Index<ShaderPrototype>("shaded").Instance();
+        _shader = _prototype.Index(ShadedShader).Instance();
         _fireteamOneIcon = GetTexture(FireteamOneRsi);
         _fireteamTwoIcon = GetTexture(FireteamTwoRsi);
         _fireteamThreeIcon = GetTexture(FireteamThreeRsi);
@@ -141,7 +143,7 @@ public sealed partial class MarineOverlay : Overlay
             if (xform.MapID != args.MapId)
                 continue;
 
-            var bounds = status.Bounds ?? sprite.Bounds;
+            var bounds = status.Bounds ?? _sprite.GetLocalBounds((uid, sprite));
 
             var worldPos = _transform.GetWorldPosition(xform, xformQuery);
 

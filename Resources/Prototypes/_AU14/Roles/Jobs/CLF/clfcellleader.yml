@@ -11,7 +11,7 @@
     department: AU14DepartmentColonialLiberationFront
     time: 36000 # 10 hours
   - !type:OverallPlaytimeRequirement
-    time: 36000 # 10 hours
+    time: 72000 # 20 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -34,7 +34,7 @@
     components:
     - type: NpcFactionMember
       factions:
-       - CLF
+      - CLF
     - type: CLFMember
       statusIcon: CLFFactionLeader
     - type: Skills
@@ -57,6 +57,8 @@
         RMCSkillVehicles: 1
     - type: JobPrefix
       prefix: au14-job-prefix-clfcellleader
+    - type: StartingMindRole
+      mindRole: MindRoleCLFLeader
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi

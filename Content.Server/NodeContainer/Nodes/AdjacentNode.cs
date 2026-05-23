@@ -13,15 +13,15 @@ namespace Content.Server.NodeContainer.Nodes
         public override IEnumerable<Node> GetReachableNodes(TransformComponent xform,
             EntityQuery<NodeContainerComponent> nodeQuery,
             EntityQuery<TransformComponent> xformQuery,
-            MapGridComponent? grid,
+            Entity<MapGridComponent>? grid,
             IEntityManager entMan)
         {
             if (!xform.Anchored || grid == null)
                 yield break;
 
-            var gridIndex = grid.TileIndicesFor(xform.Coordinates);
+            var gridIndex = NodeHelpers.TileIndicesFor(entMan, grid.Value, xform.Coordinates);
 
-            foreach (var (_, node) in NodeHelpers.GetCardinalNeighborNodes(nodeQuery, grid, gridIndex))
+            foreach (var (_, node) in NodeHelpers.GetCardinalNeighborNodes(nodeQuery, entMan, grid.Value, gridIndex))
             {
                 if (node != this)
                     yield return node;

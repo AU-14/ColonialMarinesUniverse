@@ -62,6 +62,7 @@ public partial record struct SolutionAccessAttemptEvent(string SolutionName)
 public abstract partial class SharedSolutionContainerSystem : EntitySystem
 {
     [Dependency] protected IPrototypeManager PrototypeManager = default!;
+    [Dependency] protected RMCReagentSystem Reagent = default!;
     [Dependency] protected ChemicalReactionSystem ChemicalReactionSystem = default!;
     [Dependency] protected ExamineSystemShared ExamineSystem = default!;
     [Dependency] protected SharedAppearanceSystem AppearanceSystem = default!;
@@ -442,7 +443,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         }
         else
         {
-            var proto = PrototypeManager.IndexReagent<ReagentPrototype>(reagentQuantity.Reagent.Prototype);
+            var proto = Reagent.Index(reagentQuantity.Reagent.Prototype);
             solution.AddReagent(proto, acceptedQuantity, temperature.Value, PrototypeManager);
         }
 
@@ -795,7 +796,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
             return;
         }
 
-        if (!PrototypeManager.TryIndexReagent(primaryReagent.Value.Prototype, out ReagentPrototype? primary))
+        if (!Reagent.TryIndex(primaryReagent.Value.Prototype, out var primary))
         {
             Log.Error($"{nameof(Solution)} could not find the prototype associated with {primaryReagent}.");
             return;

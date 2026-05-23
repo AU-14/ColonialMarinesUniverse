@@ -12,7 +12,6 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using static Robust.Client.UserInterface.Controls.BoxContainer;
 
@@ -24,9 +23,9 @@ namespace Content.Client.Chemistry.UI
     [GenerateTypedNameReferences]
     public sealed partial class ChemMasterWindow : FancyWindow
     {
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private IEntityManager _entityManager = default!;
 
+        private readonly RMCReagentSystem _reagent;
         private readonly SpriteSystem _sprite;
 
         public event Action<BaseButton.ButtonEventArgs, ReagentButton>? OnReagentButtonPressed;
@@ -43,6 +42,7 @@ namespace Content.Client.Chemistry.UI
             RobustXamlLoader.Load(this);
             IoCManager.InjectDependencies(this);
 
+            _reagent = _entityManager.System<RMCReagentSystem>();
             _sprite = _entityManager.System<SpriteSystem>();
 
             // Pill type selection buttons, in total there are 20 pills.
@@ -206,7 +206,7 @@ namespace Content.Client.Chemistry.UI
                 return "";
 
             var reagent = state.BufferReagents.OrderBy(r => r.Quantity).First().Reagent;
-            _prototypeManager.TryIndexReagent(reagent.Prototype, out ReagentPrototype? proto);
+            _reagent.TryIndex(reagent, out var proto);
             return proto?.LocalizedName ?? "";
         }
 
@@ -264,7 +264,7 @@ namespace Content.Client.Chemistry.UI
             foreach (var (reagent, quantity) in state.BufferReagents)
             {
                 var reagentId = reagent;
-                _prototypeManager.TryIndexReagent(reagentId.Prototype, out ReagentPrototype? proto);
+                _reagent.TryIndex(reagentId, out var proto);
                 var name = proto?.LocalizedName ?? Loc.GetString("chem-master-window-unknown-reagent-text");
                 var reagentColor = proto?.SubstanceColor ?? default(Color);
                 reagentList.Add(new (reagentId, name, reagentColor, quantity));
@@ -343,7 +343,7 @@ namespace Content.Client.Chemistry.UI
             {
                 foreach (var reagent in info.Reagents)
                 {
-                    _prototypeManager.TryIndexReagent(reagent.Reagent.Prototype, out ReagentPrototype? proto);
+                    _reagent.TryIndex(reagent.Reagent, out var proto);
                     var name = proto?.LocalizedName ?? Loc.GetString("chem-master-window-unknown-reagent-text");
                     var reagentColor = proto?.SubstanceColor ?? default(Color);
 

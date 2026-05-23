@@ -18,6 +18,7 @@ namespace Content.Client._RMC14.Commendations;
 public sealed partial class CommendationsWindow : DefaultWindow
 {
     [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
     [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
     private readonly Dictionary<CommendationType, ScrollContainer> _tabContainers = new();
@@ -94,11 +95,11 @@ public sealed partial class CommendationsWindow : DefaultWindow
         }
     }
 
-    private static string GetCommendationTypeName(CommendationType type)
+    private string GetCommendationTypeName(CommendationType type)
     {
         // Try to get localized name, fallback to enum name
         var locKey = $"rmc-commendation-type-{type.ToString().ToLower()}";
-        var localized = Loc.TryGetString(locKey, out var result) ? result : type.ToString();
+        var localized = _loc.TryGetString(locKey, out var result) ? result : type.ToString();
         return localized;
     }
 }

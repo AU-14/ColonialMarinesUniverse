@@ -2,7 +2,6 @@ using System.Linq;
 using Content.Shared.Construction.Prototypes;
 using Robust.Client.GameObjects;
 using Robust.Client.Placement;
-using Robust.Client.ResourceManagement;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
@@ -39,7 +38,8 @@ namespace Content.Client.Construction
         /// <inheritdoc />
         public override bool HijackDeletion(EntityUid entity)
         {
-            if (IoCManager.Resolve<IEntityManager>().HasComponent<ConstructionGhostComponent>(entity))
+            var entityManager = IoCManager.Resolve<IEntityManager>();
+            if (entityManager.HasComponent<ConstructionGhostComponent>(entity))
             {
                 _constructionSystem.ClearGhost(entity.GetHashCode());
             }
@@ -57,7 +57,7 @@ namespace Content.Client.Construction
             if (!IoCManager.Resolve<IPrototypeManager>().TryIndex(targetProtoId, out EntityPrototype? proto))
                 return;
 
-            manager.CurrentTextures = SpriteComponent.GetPrototypeTextures(proto, IoCManager.Resolve<IResourceCache>()).ToList();
+            manager.CurrentTextures = IoCManager.Resolve<IEntityManager>().System<SpriteSystem>().GetPrototypeTextures(proto).ToList();
         }
     }
 }

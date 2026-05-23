@@ -51,7 +51,7 @@ public sealed partial class RMCSizeStunSystem : EntitySystem
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private readonly HashSet<Entity<MarineComponent>> _marines = new();

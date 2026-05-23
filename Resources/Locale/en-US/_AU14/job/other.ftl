@@ -304,3 +304,15 @@ au14-vaisp-greeting = You are part of Vanguard's Arrow Incorporated.
     Ensure their safety at all cost.
 
     You are FRIENDLY to all UA units.
+
+au14-prodigyparty-description = You are a part of "Prodigy Armed Repair Team" (PART)! You were called for a special mission in the area, follow your orders.
+
+au14-prodigyparty-greeting = You are a part of "Prodigy Armed Repair Team" (PART) party!
+
+    You were called for a special mission in the area, follow your orders.
+
+    Protecting your hiring member is a top priority along with your mission.
+
+    Prodigy Security - Repairing Our World
+
+    You are HOSTILE to all WeYu units

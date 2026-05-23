@@ -7,16 +7,18 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client._AU14.Xeno;
 
-public sealed class XenoHiveColorVisualizerSystem : VisualizerSystem<HiveMemberComponent>
+public sealed partial class XenoHiveColorVisualizerSystem : VisualizerSystem<HiveMemberComponent>
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
     protected override void OnAppearanceChange(EntityUid uid, HiveMemberComponent component, ref AppearanceChangeEvent args)
     {
         base.OnAppearanceChange(uid, component, ref args);
-        if (TryComp<HiveComponent>(component.Hive, out var hive))
-        {
-            Color col = hive.HiveColor;
-            _sprite.SetColor(uid, col);
-        }
+
+        if (args.Sprite == null)
+            return;
+
+        if (!AppearanceSystem.TryGetData<Color>(uid, XenoHiveVisuals.Color, out var color, args.Component))
+            return;
+
+        SpriteSystem.SetColor((uid, args.Sprite), color);
     }
 }

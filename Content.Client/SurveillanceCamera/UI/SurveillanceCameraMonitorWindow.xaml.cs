@@ -58,6 +58,7 @@ public sealed partial class SurveillanceCameraMonitorWindow : DefaultWindow
         var shader = _prototypeManager.Index(CameraStaticShader).Instance().Duplicate();
 
         CameraView.ViewportSize = new Vector2i(500, 500);
+        CameraView.RenderZLevels = true;
         CameraView.Eye = _defaultEye; // sure
         CameraViewBackground.Stretch = TextureRect.StretchMode.Scale;
         CameraViewBackground.Texture = texture;

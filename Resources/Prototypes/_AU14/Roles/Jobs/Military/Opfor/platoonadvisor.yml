@@ -70,7 +70,7 @@
   id: AU14GearOPFORadvisor
   equipment:
     id: AU14IDCardOPFORAdvisor
-    ears: AU14HeadsetSectionLeaderopfor
+    ears: AU14HeadsetOpforCommand
     back: AU14SatchelMarineAdvisorMilitary
 
 - type: entity
@@ -89,4 +89,4 @@
     shoes: CMBootsBrownFilled
     head: CMHeadCapDrill
     jumpsuit: CMJumpsuitBO
-    ears: AU14HeadsetSectionLeaderopfor
+    ears: AU14HeadsetOpforCommand

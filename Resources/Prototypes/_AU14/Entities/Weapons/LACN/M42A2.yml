@@ -1,8 +1,8 @@
 - type: entity
   parent: RMCBaseWeaponSniperRifle
   id: AU14WeaponSniperRifleM42A2
-  name: M42A2 Scout Rifle
-  description: The M42A2 Scout Rifle is a designated marksman currently used by the LACN landing forces, originally supposed to be mass produced for the USCM until it lost his place against the M4RA due to its superior magazine capacity, longer barrel and superior modularity. the M42A2 still was a pretty decent option due to its lower production cost and more compact figure that lead to it getting adopted by both the LACN Landing Forces and Naval Commandos. the Commandos specially using it in larger numbers due to how reliable and easy to maintain it was during deep infiltration operations. This rifle takes M42A magazines.
+  name: M42A2 designated marksman rifle
+  description: The M42A2 designated marksman rifle is currently used by the LACN landing forces, originally supposed to be mass produced for the USCM until it lost his place against the M4RA due to its superior magazine capacity, longer barrel and superior modularity. the M42A2 still was a pretty decent option due to its lower production cost and more compact figure that lead to it getting adopted by both the LACN Landing Forces and Naval Commandos. the Commandos specially using it in larger numbers due to how reliable and easy to maintain it was during deep infiltration operations. This rifle takes M42A magazines.
   components:
   - type: Sprite
     sprite: _AU14/Weapons/Guns/LACN/M42A2-64x32.rsi

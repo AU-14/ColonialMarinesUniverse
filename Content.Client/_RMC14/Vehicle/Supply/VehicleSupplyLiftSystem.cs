@@ -9,6 +9,7 @@ namespace Content.Client._RMC14.Vehicle.Supply;
 public sealed partial class VehicleSupplyLiftSystem : EntitySystem
 {
     [Dependency] private AnimationPlayerSystem _animation = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private const string AnimationKey = "rmc_vehicle_supply_lift";
     private const string BaseLayerKey = "rmc-vehicle-supply-lift-base";
@@ -22,7 +23,7 @@ public sealed partial class VehicleSupplyLiftSystem : EntitySystem
     private void OnLiftHandleState(Entity<VehicleSupplyLiftComponent> lift, ref AfterAutoHandleStateEvent args)
     {
         if (!TryComp(lift, out SpriteComponent? sprite) ||
-            !sprite.LayerMapTryGet(BaseLayerKey, out var layer))
+            !_sprite.LayerMapTryGet((lift.Owner, sprite), BaseLayerKey, out var layer, false))
         {
             return;
         }
@@ -33,10 +34,10 @@ public sealed partial class VehicleSupplyLiftSystem : EntitySystem
         switch (lift.Comp.Mode)
         {
             case VehicleSupplyLiftMode.Lowered:
-                sprite.LayerSetState(layer, lift.Comp.LoweredState);
+                _sprite.LayerSetRsiState((lift.Owner, sprite), layer, lift.Comp.LoweredState);
                 break;
             case VehicleSupplyLiftMode.Raised:
-                sprite.LayerSetState(layer, lift.Comp.RaisedState);
+                _sprite.LayerSetRsiState((lift.Owner, sprite), layer, lift.Comp.RaisedState);
                 break;
             case VehicleSupplyLiftMode.Lowering:
                 lift.Comp.LoweringAnimation ??= new Animation

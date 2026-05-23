@@ -83,7 +83,7 @@
       entries:
       - id: RMCM5CameraGear
         amount: 30
-      - id: AU14HeadsetSectionMarine
+      - id: AU14HeadsetGovforMarine
         name: empty headset
         amount: 20
     - name: Heads Up Display
@@ -629,7 +629,9 @@
         amount: 5
     - name: Headsets
       entries:
-      - id: AU14HeadsetSectionLeader
+      - id: AU14HeadsetGovforCommand
+        amount: 2
+      - id: AU14HeadsetGovforAuxiliary
         amount: 2
     - name: Backpack
       entries:
@@ -867,6 +869,8 @@
       - id: AU14HemostaticGauzePacket
         amount: 40
       - id: AU14Tourniquet
+        amount: 40
+      - id: CMUSplintItem
         amount: 40
       - id: CMOintment10
         amount: 40
@@ -1195,6 +1199,7 @@
       - id: RMCBoxZiptie
       - id: RMCGuidebookLawMarine
       - id: RMCGuidebookSOP
+      - id: AU14Scissors
     - name: Uniform
       choices: { AU14Uniform: 1 }
       entries:
@@ -1437,4 +1442,8 @@
       - id: AU14TentBigFoldedSurgical
         amount: 1
       - id: RMCTentUNMCExtendedMessFolded
+        amount: 1
+    - name: Flag
+      entries:
+      - id: AU14FlagCarriableUA
         amount: 1

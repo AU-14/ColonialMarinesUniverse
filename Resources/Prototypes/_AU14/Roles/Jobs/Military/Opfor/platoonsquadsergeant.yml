@@ -3,29 +3,13 @@
   id: AU14JobOpforSquadSergeant
   name: au14-job-name-opforsquadsergeant
   description: au14-job-description-opforsquadsergeant
-  setPreference: false
-  requirements:
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - SocialAnxietyHeavy
-    - FrontalLisp
-    - NonResuscitable
-    - Epilepsy
-  ranks:
-    RMCRankSergeant: []
-  startingGear: AU14GearopforSquadSergeant
-  dummyStartingGear: AU14GearopforSquadSergantDummy
   icon: "AU14JobIconOPFORPlatoonSarge"
-  requireAdminNotify: false
   spawnMenuRoleName: Squad Sergeant (OPFOR)
-  joinNotifyCrew: false
   supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearOpforSquadSergeant
+  dummyStartingGear: AU14GearOpforSquadSergeantDummy
   accessGroups:
   - AU14OpforFTL
-  overwatchSortPriority: -5
-  overwatchRoleName: Squad Leader
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
@@ -34,37 +18,26 @@
       - OPFOR
     - type: Marine
       Faction: opfor
-    - type: Skills
-      preset: AU14SkillPresetPlatoonSergeant
-    - type: JobPrefix
-      prefix: au14-job-prefix-opforsquadsergeant
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: leader
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
     - type: UserIFF
       factions:
       - OPFOR
-  hidden: false
+    - type: JobPrefix
+      prefix: au14-job-prefix-opforsquadsergeant
 
 - type: startingGear
-  id: AU14GearopforSquadSergeant
+  id: AU14GearOpforSquadSergeant
   equipment:
     id: AU14IDCardopforSquadSergeant
-    ears: AU14HeadsetSectionLeaderopfor
+    ears: AU14HeadsetOpforCommand
+
+- type: startingGear
+  id: AU14GearOpforSquadSergeantDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleOne
+    shoes: CMBootsBrown
+    head: AU14JungleBoonieHat
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetOpforCommand
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -75,12 +48,3 @@
     job_id: AU14JobOpforSquadSergeant
   - type: Sprite
     state: syn_spawn
-
-- type: startingGear
-  id: AU14GearopforSquadSergantDummy
-  equipment:
-    outerClothing: AU14ArmorM3JungleOne
-    shoes: CMBootsBrown
-    head: AU14JungleBoonieHat
-    jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetSectionLeaderopfor

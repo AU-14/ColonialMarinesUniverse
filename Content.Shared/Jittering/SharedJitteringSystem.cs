@@ -10,7 +10,7 @@ namespace Content.Shared.Jittering
     public abstract partial class SharedJitteringSystem : EntitySystem
     {
         [Dependency] protected IGameTiming GameTiming = default!;
-        [Dependency] protected StatusEffectsSystem StatusEffects = default!;
+        [Dependency] protected StatusEffectQuerySystem StatusEffects = default!;
 
         public float MaxAmplitude = 300f;
         public float MinAmplitude = 1f;

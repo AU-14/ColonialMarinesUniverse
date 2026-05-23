@@ -29,6 +29,7 @@ namespace Content.Server.Body.Systems
     {
         [Dependency] private IGameTiming _gameTiming = default!;
         [Dependency] private IPrototypeManager _prototypeManager = default!;
+        [Dependency] private RMCReagentSystem _reagent = default!;
         [Dependency] private IRobustRandom _random = default!;
         [Dependency] private ISharedAdminLogManager _adminLogger = default!;
         [Dependency] private MobStateSystem _mobStateSystem = default!;
@@ -160,7 +161,7 @@ namespace Content.Server.Body.Systems
             int reagents = 0;
             foreach (var (reagent, quantity) in list)
             {
-                if (!_prototypeManager.TryIndexReagent<ReagentPrototype>(reagent.Prototype, out var proto))
+                if (!_reagent.TryIndex(reagent.Prototype, out var proto))
                     continue;
 
                 var mostToRemove = FixedPoint2.Zero;

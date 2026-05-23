@@ -5,12 +5,30 @@
   description: au14-job-description-civiliancolonyadministrator
   setPreference: true
   playTimeTracker: AU14JobCivilianColonyAdministrator
-  requirements:
+  requirements: # TWEAK: rely primarily on overall playtime based on feedback
   - !type:DepartmentTimeRequirement
     department: AU14DepartmentCivilian
-    time: 108000 # 30 hours
+    time: 7200   # 2 hours
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentColonySecurity
+    time: 7200   # 2 hours
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentColonyMedical
+    time: 7200   # 2 hours
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentLabor
+    time: 14400  # 4 hours
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentCorporate
+    time: 7200   # 2 hours
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentServices
+    time: 1800   # ~1 round (30min)
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentEngineering
+    time: 1800   # ~1 round (30min)
   - !type:OverallPlaytimeRequirement
-    time: 18000 # 5 hours
+    time: 108000 # 30 hours
   - !type:AgeRequirement
     requiredAge: 21
   - !type:TraitsRequirement

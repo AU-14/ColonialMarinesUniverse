@@ -93,9 +93,9 @@ public sealed partial class VehicleWheelVisualizerSystem : VisualizerSystem<Vehi
 
         var targetState = destroyed ? "wheels_1" : "wheels_0";
 
-        if (sprite.LayerGetState(layer) != targetState)
+        if (_sprite.LayerGetRsiState((uid, sprite), layer) != targetState)
         {
-            sprite.LayerSetState(layer, targetState);
+            _sprite.LayerSetRsiState((uid, sprite), layer, targetState);
 
             if (isMoving && !destroyed)
                 _sprite.LayerSetAnimationTime((uid, sprite), layer, 0f);

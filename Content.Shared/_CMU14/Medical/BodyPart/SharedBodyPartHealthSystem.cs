@@ -67,14 +67,14 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         var positive = DamageSpecifier.GetPositive(delta);
         var localizable = ExtractLocalizableDamage(positive);
         if (!localizable.Empty)
-            ApplyPartDamage(ent, localizable);
+            ApplyPartDamage(ent, localizable, args.Tool);
 
         var healing = GetHealingInGroup(delta, BruteGroup) + GetHealingInGroup(delta, BurnGroup);
         if (healing > FixedPoint2.Zero)
             HealDamagedParts(ent.Owner, healing * (FixedPoint2)_bodyPartDamagePropagation, args.Origin);
     }
 
-    private void ApplyPartDamage(Entity<HitLocationComponent> ent, DamageSpecifier damage)
+    private void ApplyPartDamage(Entity<HitLocationComponent> ent, DamageSpecifier damage, EntityUid? tool)
     {
         // No mob-state gate: dead bodies still take new wounds, fractures, organ
         // damage, and severance from external hits (overkill, desecration). The
@@ -86,10 +86,10 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         if (resolved.ResolvedPartEntity is not { } partUid)
             return;
 
-        TryApplyPartDamage(ent.Owner, partUid, damage);
+        TryApplyPartDamage(ent.Owner, partUid, damage, tool: tool);
     }
 
-    public bool TryApplyPartDamage(EntityUid body, EntityUid partUid, DamageSpecifier damage, float scale = 1f)
+    public bool TryApplyPartDamage(EntityUid body, EntityUid partUid, DamageSpecifier damage, float scale = 1f, EntityUid? tool = null)
     {
         if (!_medicalEnabled || !_bodyPartEnabled)
             return false;
@@ -104,10 +104,10 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         if (scale != 1f)
             localizable *= scale;
 
-        return TryApplyPartDamageToPart(body, partUid, localizable);
+        return TryApplyPartDamageToPart(body, partUid, localizable, tool);
     }
 
-    private bool TryApplyPartDamageToPart(EntityUid body, EntityUid partUid, DamageSpecifier damage)
+    private bool TryApplyPartDamageToPart(EntityUid body, EntityUid partUid, DamageSpecifier damage, EntityUid? tool)
     {
         if (!TryComp<BodyPartHealthComponent>(partUid, out var health))
             return false;
@@ -127,7 +127,7 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
 
         var organs = CollectOrgans(partUid);
         var partType = TryComp<BodyPartComponent>(partUid, out var partComp) ? partComp.PartType : BodyPartType.Other;
-        var damaged = new BodyPartDamagedEvent(body, partUid, partType, modified, health.Current, organs);
+        var damaged = new BodyPartDamagedEvent(body, partUid, partType, modified, health.Current, organs, tool);
         RaiseLocalEvent(partUid, ref damaged);
 
         if (health.SeveranceDamage >= health.Max + health.SeveranceThreshold && !IsSeveranceLocked(partType))

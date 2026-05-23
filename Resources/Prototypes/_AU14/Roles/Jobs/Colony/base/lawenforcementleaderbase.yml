@@ -15,6 +15,18 @@
   - AU14AccessColonyForeman
   - AU14AccessColonyHeadEngineer
   - AU14AccessColonyHeadOfService
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentColonySecurity
+    time: 36000 # 10 hours
+  - !type:OverallPlaytimeRequirement
+    time: 86400 # 24 hours
+  - !type:AgeRequirement
+    requiredAge: 25
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
 
 - type: playTimeTracker
   id: AU14JobCivilianCMBMarshal

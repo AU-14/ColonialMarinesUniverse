@@ -173,6 +173,9 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(CMUKeyFunctions.CMUCycleBodyZoneTarget);
             AddButton(CMUKeyFunctions.CMUCycleBodyZoneTargetReverse);
 
+            AddHeader("ui-options-header-cmu-zlevels");
+            AddButton(CMUKeyFunctions.CMUToggleShootDownZLevel);
+
             AddHeader("ui-options-header-rmc-xeno");
             AddButton(CMKeyFunctions.CMXenoWideSwing);
             AddButton(CMKeyFunctions.RMCXenoRest);

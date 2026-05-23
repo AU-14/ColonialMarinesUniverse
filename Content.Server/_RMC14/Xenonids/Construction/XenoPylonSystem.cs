@@ -13,11 +13,12 @@ using Content.Shared.Destructible;
 using Content.Shared.FixedPoint;
 using Content.Shared.Ghost.Roles.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.StepTrigger.Systems;
+using Content.Shared.Tag;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using Content.Shared.StepTrigger.Systems;
-using Content.Shared.Tag;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server._RMC14.Xenonids.Construction;
 
@@ -33,6 +34,8 @@ public sealed partial class XenoPylonSystem : SharedXenoPylonSystem
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private TagSystem _tagSystem = default!;
+
+    private static readonly ProtoId<TagPrototype> XenoLarvaTag = "RMCXenoLarva";
 
     public override void Initialize()
     {
@@ -153,7 +156,7 @@ public sealed partial class XenoPylonSystem : SharedXenoPylonSystem
 
     private bool CanTrigger(EntityUid user)
     {
-        return _tagSystem.HasTag(user, "RMCXenoLarva") && _mobState.IsDead(user);
+        return _tagSystem.HasTag(user, XenoLarvaTag) && _mobState.IsDead(user);
     }
 
     private void OnHiveCoreStepTriggered(Entity<HiveCoreComponent> core, ref StepTriggeredOffEvent args)

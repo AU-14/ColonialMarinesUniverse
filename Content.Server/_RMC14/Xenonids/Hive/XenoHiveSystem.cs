@@ -65,6 +65,9 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
 
     private void OnRadioReceiveAttempt(ref RadioReceiveAttemptEvent args)
     {
+        if (args.Channel.ID != SharedChatSystem.HivemindChannel.Id)
+            return;
+
         //since hivemind is an intrinsic channel, we can probably just access it directly
         if (TryComp<HiveMemberComponent>(args.RadioSource, out var hivea) && IsMember(args.RadioReceiver, hivea.Hive))
             return;

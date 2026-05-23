@@ -1,0 +1,31 @@
+name: Changelog (Discord)
+
+concurrency:
+  group: update-changelog-discord
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Update Changelog"]
+    types: [completed]
+
+jobs:
+  discord-webhook:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install dependencies
+        run: pip install requests pyyaml
+
+      - name: Run Discord changelog script
+        run: Tools/actions_changelogs_since_last_run.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.CHANGELOG_DISCORD_WEBHOOK }}

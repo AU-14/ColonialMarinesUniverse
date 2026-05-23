@@ -1,0 +1,1090 @@
+- type: entity
+  parent: RMCAreaBase
+  id: CMUAreaRetreat
+  name: JE-1758 Ascanius
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _CMU14/Areas/areas_retreat.rsi
+    state: oob
+  - type: Area
+    buildSpecial: true
+    powerNet: ground
+    minimapColor: '#97A0A6CC'
+
+### Abstract types
+
+# Outdoors
+- type: entity
+  parent: CMUAreaRetreat
+  id: CMUAreaRetreatOutdoors
+  name: JE-1758 Ascanius - Surface
+  abstract: true
+  components:
+  - type: Area
+    CAS: true
+    fulton: true
+    mortarPlacement: true
+    mortarFire: true
+    lasing: true
+    medevac: true
+    paradropping: true
+    OB: true
+    supplyDrop: true
+    weatherEnabled: true
+
+# Indoors
+- type: entity
+  parent: CMUAreaRetreat
+  id: CMUAreaRetreatIndoors
+  name: JE-1758 Ascanius - Interiors
+  abstract: true
+  components:
+  - type: Area
+    CAS: true
+    fulton: false
+    mortarPlacement: false
+    mortarFire: true
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: true
+    supplyDrop: false
+    weatherEnabled: false
+
+# Caves
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatCaves
+  name: JE-1758 Ascanius - Caves
+  abstract: true
+  components:
+  - type: Area
+    CAS: false
+    fulton: false
+    mortarPlacement: false
+    mortarFire: false
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: true
+    supplyDrop: false
+    weatherEnabled: false
+
+# Safe zone
+- type: entity
+  parent: CMUAreaRetreat
+  id: CMUAreaRetreatFullProtection
+  name: JE-1758 Ascanius - Safe Zone
+  abstract: true
+  components:
+  - type: Area
+    CAS: false
+    fulton: false
+    mortarPlacement: false
+    mortarFire: false
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: false
+    supplyDrop: false
+    weatherEnabled: false
+
+### Entities
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatOutofBounds
+  name: Out of Bounds
+  components:
+  - type: Sprite
+    state: oob
+  - type: Area
+    minimapColor: '#573e19'
+
+## Fort Beauregard
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBRequisitions
+  name: Fort Beauregard - Requisitions
+  components:
+  - type: Sprite
+    state: fb_req
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBCommandIntelOffice
+  name: Fort Beauregard - Intelligence Office
+  components:
+  - type: Sprite
+    state: fb_cm_inteloffice
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBCommandCommandCenter
+  name: Fort Beauregard - Command Center
+  components:
+  - type: Sprite
+    state: fb_cm_cc
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBBarracks
+  name: Fort Beauregard - Barracks
+  components:
+  - type: Sprite
+    state: fb_barracks
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBBarracksMessHall
+  name: Fort Beauregard - Mess Hall
+  components:
+  - type: Sprite
+    state: fb_barracks_messhall
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBEngineeringMaintenanceBay
+  name: Fort Beauregard - Maintenace Bay
+  components:
+  - type: Sprite
+    state: fb_engi_maint
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBBrigProcessing
+  name: Fort Beauregard - Brig Processing
+  components:
+  - type: Sprite
+    state: fb_brig_processing
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBBrig
+  name: Fort Beauregard - Brig
+  components:
+  - type: Sprite
+    state: fb_brig
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBBrigHoldingCells
+  name: Fort Beauregard - Holding Cells
+  components:
+  - type: Sprite
+    state: fb_brig_cell
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBBrigLongTermConfinement
+  name: Fort Beauregard - Long Term Confinement
+  components:
+  - type: Sprite
+    state: fb_brig_longtermconfinement
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBHospitalTriage
+  name: Fort Beauregard - Hospital Triage
+  components:
+  - type: Sprite
+    state: fb_hospital_triage
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBHospitalTreatment
+  name: Fort Beauregard - Hospital Treatment
+  components:
+  - type: Sprite
+    state: fb_hospital_treatment
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBHospitalOperatingRooms
+  name: Fort Beauregard - Operating Rooms
+  components:
+  - type: Sprite
+    state: fb_hospital_operatingrooms
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBHospitalChemistry
+  name: Fort Beauregard - Chemistry
+  components:
+  - type: Sprite
+    state: fb_hospital_chemistry
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBHospitalMorgue
+  name: Fort Beauregard - Morgue
+  components:
+  - type: Sprite
+    state: fb_hospital_morgue
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBHospitalBreakroom
+  name: Fort Beauregard - Hospital Breakroom
+  components:
+  - type: Sprite
+    state: fb_hospital_breakroom
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBExteriorNorth
+  name: Fort Beauregard - North
+  components:
+  - type: Sprite
+    state: fb_exterior_north
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBExteriorSouth
+  name: Fort Beauregard - South
+  components:
+  - type: Sprite
+    state: fb_exterior_south
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBExteriorEast
+  name: Fort Beauregard - East
+  components:
+  - type: Sprite
+    state: fb_exterior_east
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBExteriorWest
+  name: Fort Beauregard - West
+  components:
+  - type: Sprite
+    state: fb_exterior_west
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBExteriorLZAlpha
+  name: Fort Beauregard - LZ Alpha (North Pad)
+  components:
+  - type: Sprite
+    state: fb_exterior_lzalpha
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBExteriorLZBravo
+  name: Fort Beauregard - LZ Bravo (South Pad)
+  components:
+  - type: Sprite
+    state: fb_exterior_lzbravo
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBMiscBriefingArea
+  name: Fort Beauregard - Briefing Area
+  components:
+  - type: Sprite
+    state: fb_misc_briefing
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatFBMiscVehiclePool
+  name: Fort Beauregard - Vehicle Pool
+  components:
+  - type: Sprite
+    state: fb_misc_vehiclepool
+  - type: Area
+    minimapColor: '#573e19'
+
+## Octanis Complex
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCCavernNorth
+  name: Octanis Complex - Northern Cavern
+  components:
+  - type: Sprite
+    state: oc_cavern_north
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCCavernCentral
+  name: Octanis Complex - Central Cavern
+  components:
+  - type: Sprite
+    state: oc_cavern_central
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCCavernEast
+  name: Octanis Complex - Eastern Cavern
+  components:
+  - type: Sprite
+    state: oc_cavern_east
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCSecPostNorth
+  name: Octanis Complex - Northern Gate House
+  components:
+  - type: Sprite
+    state: oc_secpost_north
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCSecPostSouth
+  name: Octanis Complex - Southern Gate House
+  components:
+  - type: Sprite
+    state: oc_secpost_south
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCResearchEast
+  name: Octanis Complex Research - East
+  components:
+  - type: Sprite
+    state: oc_research_east
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCResearchSterileLab
+  name: Octanis Complex Research - Sterile Lab
+  components:
+  - type: Sprite
+    state: oc_research_sterilelab
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCHabitationSecurityPost
+  name: Octanis Complex Habitation - Security Post
+  components:
+  - type: Sprite
+    state: oc_hab_securitypost
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCHabitationNorthDorms
+  name: Octanis Complex Habitation - Northern Dormitories
+  components:
+  - type: Sprite
+    state: oc_hab_northdorms
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCHabitationSouthDorms
+  name: Octanis Complex Habitation - Southern Dormitories
+  components:
+  - type: Sprite
+    state: oc_hab_southdorms
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCHabitationAtrium
+  name: Octanis Complex Habitation - Atrium
+  components:
+  - type: Sprite
+    state: oc_hab_atrium
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCHabitationCafeteria
+  name: Octanis Complex Habitation - Cafeteria
+  components:
+  - type: Sprite
+    state: oc_hab_cafeteria
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCHabitationMedbay
+  name: Octanis Complex Habitation - Medbay
+  components:
+  - type: Sprite
+    state: oc_hab_medbay
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCPowerplantOffice
+  name: Octanis Complex Powerplant - Office
+  components:
+  - type: Sprite
+    state: oc_engi_office
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCPowerplantTurbineRoom
+  name: Octanis Complex Powerplant - Turbine Room
+  components:
+  - type: Sprite
+    state: oc_engi_turbine
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCPowerplantStorageRoom
+  name: Octanis Complex Powerplant - Storage Room
+  components:
+  - type: Sprite
+    state: oc_engi_storage
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCAdminLiaisonOffices
+  name: Octanis Complex Administration - Liaison Offices
+  components:
+  - type: Sprite
+    state: oc_admin_embassy
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCAdminPanicRoom
+  name: Octanis Complex Administration - Panic Room
+  components:
+  - type: Sprite
+    state: oc_admin_panicroom
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCAdminAdminOffices
+  name: Octanis Complex Administration - Administrative Offices
+  components:
+  - type: Sprite
+    state: oc_admin_adminoffice
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCAdminAICore
+  name: Octanis Complex Administration - AI Core
+  components:
+  - type: Sprite
+    state: oc_admin_aicore
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatOCAdminLogistics
+  name: Octanis Complex Administration - Logistics
+  components:
+  - type: Sprite
+    state: oc_admin_logi
+  - type: Area
+    minimapColor: '#573e19'
+
+# Octanis Complex - "Indoor" Areas
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatOCStarportServiceBay
+  name: Octanis Complex Starport - Service Bay
+  components:
+  - type: Sprite
+    state: oc_starport_servicebuilding
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatOCStarportWarehouses
+  name: Octanis Complex Starport - Warehouses
+  components:
+  - type: Sprite
+    state: oc_starport_warehouses
+  - type: Area
+    minimapColor: '#573e19'
+
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatOCStarportTelecomms
+  name: Octanis Complex Starport - Telecomms
+  components:
+  - type: Sprite
+    state: oc_starport_tcomms
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatOCStarportTerminal
+  name: Octanis Complex Starport - Terminal
+  components:
+  - type: Sprite
+    state: oc_starport_terminal
+  - type: Area
+    minimapColor: '#573e19'
+
+# Octanis Complex - "Outdoor" Areas
+
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatOCStarportExteriorNorth
+  name: Octanis Complex Starport - North
+  components:
+  - type: Sprite
+    state: oc_starport_north
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatOCStarportExteriorSouth
+  name: Octanis Complex Starport - South
+  components:
+  - type: Sprite
+    state: oc_starport_south
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatOCStarportExteriorLZ2
+  name: Octanis Complex Starport - Landing Pad (LZ2)
+  components:
+  - type: Sprite
+    state: oc_starport_lz2
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatOCStarportExteriorServiceArea
+  name: Octanis Complex Starport - Service Area
+  components:
+  - type: Sprite
+    state: oc_starport_servicearea
+  - type: Area
+    minimapColor: '#573e19'
+
+## Caves
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatCavesNorth
+  name: Northern Caves
+  components:
+  - type: Sprite
+    state: caves_north
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: CMUAreaRetreatCaves
+  id: CMUAreaRetreatCavesSouthEast
+  name: South Eastern Caves
+  components:
+  - type: Sprite
+    state: caves_southeast
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: CMUAreaRetreatFullProtection
+  id: CMUAreaRetreatCavesSouthWest
+  name: South Western Caves
+  components:
+  - type: Sprite
+    state: caves_southwest
+  - type: Area
+    minimapColor: '#714401CC'
+
+## Hope's Retreat
+
+# Hope's Retreat - "Indoor" Areas
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRMiningPrefabsNorth
+  name: Hope's Retreat - Northern Mining Prefabs
+  components:
+  - type: Sprite
+    state: hr_miningprefabs_north
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRMiningPrefabsSouth
+  name: Hope's Retreat - Southern Mining Prefabs
+  components:
+  - type: Sprite
+    state: hr_miningprefabs_south
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRMiningOfficeNorth
+  name: Hope's Retreat - Northern Mining Office
+  components:
+  - type: Sprite
+    state: hr_miningprefabs_northminingoffice
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRShippingAndReceiving
+  name: Hope's Retreat - Shipping and Receiving
+  components:
+  - type: Sprite
+    state: hr_shipping_office
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRShippingAndReceivingForemansOffice
+  name: Hope's Retreat - Foreman's Office
+  components:
+  - type: Sprite
+    state: hr_shipping_foreman
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRShippingAndReceivingLZServiceBay
+  name: Hope's Retreat - Landing Zone Service Bay
+  components:
+  - type: Sprite
+    state: hr_shipping_servicebay
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRShippingAndReceivingLZControlOffice
+  name: Hope's Retreat - Landing Zone Control Office
+  components:
+  - type: Sprite
+    state: hr_shipping_controloffice
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRDormsColonyRecreationCenter
+  name: Hope's Retreat - Colony Recreation Center
+  components:
+  - type: Sprite
+    state: hr_dorms_recreationcenter
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRDormsDormitories
+  name: Hope's Retreat - Dormitories
+  components:
+  - type: Sprite
+    state: hr_dorms_livingspace
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRDormsCafeteria
+  name: Hope's Retreat - Cafeteria
+  components:
+  - type: Sprite
+    state: hr_dorms_cafeteria
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRDormsHydroponics
+  name: Hope's Retreat - Hydroponics
+  components:
+  - type: Sprite
+    state: hr_dorms_hydro
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRDormsCommissary
+  name: Hope's Retreat - Commissary
+  components:
+  - type: Sprite
+    state: hr_dorms_commissary
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRDormsSanitation
+  name: Hope's Retreat - Sanitation
+  components:
+  - type: Sprite
+    state: hr_dorms_sanitation
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRDormsAdministrationQuarters
+  name: Hope's Retreat - Administration Quarters
+  components:
+  - type: Sprite
+    state: hr_dorms_admin
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRClinic
+  name: Hope's Retreat - Medical Clinic
+  components:
+  - type: Sprite
+    state: hr_clinic
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRClinicOperatingRoom
+  name: Hope's Retreat - Operating Room
+  components:
+  - type: Sprite
+    state: hr_clinic_operatingroom
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRAdminColonyAdministration
+  name: Hope's Retreat - Colony Administration
+  components:
+  - type: Sprite
+    state: hr_admin
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRAdminUPPEmbassy
+  name: Hope's Retreat - UPP Embassy
+  components:
+  - type: Sprite
+    state: hr_admin_embassy
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRAdminServerRoom
+  name: Hope's Retreat - Server Room
+  components:
+  - type: Sprite
+    state: hr_admin_serverroom
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRSecurityOffice
+  name: Hope's Retreat - Security Office
+  components:
+  - type: Sprite
+    state: hr_security_office
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRSecurityPrepRoom
+  name: Hope's Retreat - Prep Room
+  components:
+  - type: Sprite
+    state: hr_security_prep
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRSecurityJail
+  name: Hope's Retreat - Jail
+  components:
+  - type: Sprite
+    state: hr_security_jail
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHREngineeringUpper
+  name: Hope's Retreat - Upper Engineering
+  components:
+  - type: Sprite
+    state: hr_engi_upper
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHREngineeringTurbineRoom
+  name: Hope's Retreat - Turbine Room
+  components:
+  - type: Sprite
+    state: hr_engi_turbine
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHREngineeringTreatment
+  name: Hope's Retreat - Water Treatment Plant
+  components:
+  - type: Sprite
+    state: hr_engi_treatment
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHREngineeringConstruction
+  name: Hope's Retreat - Construction Office
+  components:
+  - type: Sprite
+    state: hr_engi_construction
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHREngineeringFoundation
+  name: Hope's Retreat - Incomplete Building
+  components:
+  - type: Sprite
+    state: hr_engi_foundation
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRMiscMotorPoolGarage
+  name: Hope's Retreat - Motor Pool Garage
+  components:
+  - type: Sprite
+    state: hr_misc_motorpool
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRMiscMotorPoolStorage
+  name: Hope's Retreat - Motor Pool Storage
+  components:
+  - type: Sprite
+    state: hr_misc_motorpoolstorage
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRMiscSouthernDorms
+  name: Hope's Retreat - Ad-hoc Living Quarters
+  components:
+  - type: Sprite
+    state: hr_misc_southerndorms
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatHRMiscWasteManagement
+  name: Hope's Retreat - Waste Management
+  components:
+  - type: Sprite
+    state: hr_misc_wastemanagement
+  - type: Area
+    minimapColor: '#573e19'
+
+# Hope's Retreat - "Outdoor" Areas
+
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatHRExteriorNorthWest
+  name: Hope's Retreat - Northwestern Colony
+  components:
+  - type: Sprite
+    state: hr_outdoor_nw
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatHRExteriorWest
+  name: Hope's Retreat - Western Colony
+  components:
+  - type: Sprite
+    state: hr_outdoor_w
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatHRExteriorNorth
+  name: Hope's Retreat - Northern Colony
+  components:
+  - type: Sprite
+    state: hr_outdoor_n
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatHRExteriorCentral
+  name: Hope's Retreat - Central Colony
+  components:
+  - type: Sprite
+    state: hr_outdoor_c
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatHRExteriorNorthEastern
+  name: Hope's Retreat - Northeastern Colony
+  components:
+  - type: Sprite
+    state: hr_outdoor_ne
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatHRExteriorEastern
+  name: Hope's Retreat - Eastern Colony
+  components:
+  - type: Sprite
+    state: hr_outdoor_e
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatHRExteriorSouthEastern
+  name: Hope's Retreat - Southeastern Colony
+  components:
+  - type: Sprite
+    state: hr_outdoor_se
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatHRExteriorSouthWestern
+  name: Hope's Retreat - Southwestern Colony
+  components:
+  - type: Sprite
+    state: hr_outdoor_sw
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatHRExteriorSouthern
+  name: Hope's Retreat - Southern Colony
+  components:
+  - type: Sprite
+    state: hr_outdoor_s
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatHRExteriorLZ1
+  name: Hope's Retreat - Landing Zone (LZ1)
+  components:
+  - type: Sprite
+    state: hr_outdoor_lz1
+  - type: Area
+    minimapColor: '#016f6f'

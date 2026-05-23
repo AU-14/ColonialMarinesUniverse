@@ -1,0 +1,133 @@
+- type: entity
+  parent: RMCPouchMedical
+  id: AU14PouchMedicalProdigy
+  name: Prodigy tactical medical pouch
+  description: A heavy pouch containing everything one needs to get themselves back on their feet. Quite the selection.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Pouches/socmed.rsi
+  - type: Storage
+    grid:
+    - 0,0,25,1 #13 slots
+
+- type: entity
+  parent: AU14PouchMedicalProdigy
+  id: AU14PouchMedicalProdigyFilled
+  name: Prodigy tactical medical pouch
+  description: A heavy pouch containing everything one needs to get themselves back on their feet. Quite the selection.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMHealthAnalyzer
+    - id: CMTraumaKit10
+    - id: CMBurnKit10
+    - id: CMBloodPackFull
+    - id: CMSynthGraft
+    - id: CMSurgicalLine
+    - id: CMSurgicalCaseFilled
+    - id: AU14CMDefibrillator
+    - id: CMPortableSurgicalBedSpawnFolded
+    - id: AU14Tourniquet
+    - id: CMUCastItem
+    - id: CMUSplintItem
+    - id: CMUSplintItem
+      # splint
+
+- type: entity
+  parent: RMCPouchMagazineLargePMC
+  id: AU14PouchMagazineLargePARTDual
+  name: Prodigy dual large magazine pouch
+  description: A large pouch designed to hold four large magazines, and 4 handfulls of shotgun shells. The pouch is designed for the Prodigy Armed Repair Teams, and is often used by their engineers and medics to hold extra magazines and shotgun shells.
+  suffix: PART
+  components:
+  - type: Storage
+    grid:
+    - 0,0,11,1 #8 slots
+  - type: LimitedStorage
+    limits:
+    - popup: au14-storage-limit-max-mags-prodigy
+      count: 4
+      whitelist:
+        tags:
+        - CMMagazineRifle
+        - AU14MagazineRifleM20A
+        - CMMagazinePistol
+        - CMMagazinePistolMK80
+    - popup: au14-storage-limit-max-shells-prodigy
+      count: 4
+      whitelist:
+        tags:
+        - RMCHandful
+        - Cartridge
+        - CMMagazinePistol
+        - RMCShellShotgun
+
+- type: entity
+  parent: AU14PouchMagazineLargePARTDual
+  id: AU14PouchMagazineLargePARTDualFilled
+  name: Prodigy dual large magazine pouch
+  description: A large pouch designed to hold four large magazines, and 4 handfulls of shotgun shells. The pouch is designed for the Prodigy Armed Repair Teams, and is often used by their engineers and medics to hold extra magazines and shotgun shells.
+  suffix: PART
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineRifleM20A
+    - id: AU14MagazineRifleM20A
+    - id: AU14MagazineRifleM20A
+    - id: AU14MagazineRifleM20A
+    - id: CMShellShotgunBuckshot
+    - id: CMShellShotgunBuckshot
+    - id: CMShellShotgunBuckshot
+    - id: CMShellShotgunBuckshot
+
+- type: entity
+  parent: RMCPouchFirstAidPMC
+  id: AU14PouchIFAKProdigy
+  name: Prodigy first-aid pouch
+  suffix: Filled
+  components:
+  - type: Storage
+    maxItemSize: Large
+    grid:
+    - 0,0,13,1 #7 slots
+    whitelist:
+      tags:
+      - DiscreteHealthAnalyzer
+      - Dropper
+      - Pill
+      - Bottle
+      - Syringe
+      - PillCanister
+      - CMTraumaKit
+      - CMBurnKit
+      - CMOintment
+      - Brutepack
+      - CMBloodPack
+      - CMUSplintItem
+      - RMCPenlight
+      - CMAutoInjector
+      - CMFireExtinguisherPortable
+      - RMCSyringeCase
+      - CMSurgicalLine
+      - CMSynthGraft
+      - PillPacket
+      - Hypospray
+      components:
+      - Hypospray
+      - CMUSplintItem
+      - SpawnItemsOnUse
+
+- type: entity
+  parent: AU14PouchIFAKProdigy
+  id: AU14PouchIFAKProdigyFill
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14HemostaticGauzePacket
+    - id: AU14Tourniquet
+    - id: CMPacketPillsTricordrazine
+    - id: AU14PacketPillsTramadol
+    - id: CMUSplintItem
+    - id: CMBicaridineAutoInjector
+    - id: CMKelotaneAutoInjector

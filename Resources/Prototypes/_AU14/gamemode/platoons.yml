@@ -1,35 +1,4 @@
 - type: platoon
-  id: LACN
-  name: LACN Landing Forces
-  lorePrimer: AU14PrimerPlatoonLACN
-  Allegiance: UA
-  reqlist: USCMCargoCatalog
-  VendorToMarker:
-    Rifleman: AU14USCMequipmentvendor
-    Clothing: AU14LACNclothingequipmentvendor
-    Weapons: AU14LACNWeaponsVendor
-    SWeapons: AU14LACNSpecialWeaponsVendor
-    Corpsman: AU14LACNcorpsmanvendor
-    Arifleman: AU14LACNMGequipmentvendor
-    Dcc: AU14LACNaircrewvendor
-    OperationsOfficer: AU14LACNcommandequipmentvendor
-    Rto: AU14RTOVendor
-    SectionSergeant: AU14USCMsectionleaderequipmentvendor
-    Pilot: AU14AircrewWeaponsVendor
-    combattech: AU14ComtechGearVendor
-    JuniorOfficer: AU14JOGenericVendor
-    MilitaryPolice: AU14MilitaryPolicemanVendorLACN
-    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
-    ReqVend: AU14LACNRequisitionVendor
-  possibleships:
-    - USSBush
-  #platoonflag: uaflag
-  CompatibleDropships:
-  - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
-  techTree: RMCIntelTechTree_ua
-
-- type: platoon
   id: USCM
   name: US Colonial Marines
   lorePrimer: AU14PrimerPlatoonUSCM
@@ -60,6 +29,37 @@
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml
   possibleships:
       - USSBush
+  techTree: RMCIntelTechTree_ua
+
+- type: platoon
+  id: LACN
+  name: LACN Landing Forces
+  lorePrimer: AU14PrimerPlatoonLACN
+  Allegiance: UA
+  reqlist: USCMCargoCatalog
+  VendorToMarker:
+    Rifleman: AU14USCMequipmentvendor
+    Clothing: AU14LACNclothingequipmentvendor
+    Weapons: AU14LACNWeaponsVendor
+    SWeapons: AU14LACNSpecialWeaponsVendor
+    Corpsman: AU14LACNcorpsmanvendor
+    Arifleman: AU14LACNMGequipmentvendor
+    Dcc: AU14LACNaircrewvendor
+    OperationsOfficer: AU14LACNcommandequipmentvendor
+    Rto: AU14RTOVendor
+    SectionSergeant: AU14USCMsectionleaderequipmentvendor
+    Pilot: AU14AircrewWeaponsVendor
+    combattech: AU14ComtechGearVendor
+    JuniorOfficer: AU14JOGenericVendor
+    MilitaryPolice: AU14MilitaryPolicemanVendorLACN
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14LACNRequisitionVendor
+  possibleships:
+    - USSBush
+  #platoonflag: uaflag
+  CompatibleDropships:
+  - /Maps/_CMU14/Shuttles/alamo.yml
+  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   techTree: RMCIntelTechTree_ua
 
 - type: platoon

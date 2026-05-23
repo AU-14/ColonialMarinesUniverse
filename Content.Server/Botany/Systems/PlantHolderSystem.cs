@@ -37,6 +37,7 @@ public sealed partial class PlantHolderSystem : EntitySystem
     [Dependency] private AtmosphereSystem _atmosphere = default!;
     [Dependency] private BotanySystem _botany = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private MutationSystem _mutation = default!;
     [Dependency] private AppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -887,7 +888,7 @@ public sealed partial class PlantHolderSystem : EntitySystem
             var amt = FixedPoint2.New(1);
             foreach (var entry in _solutionContainerSystem.RemoveEachReagent(component.SoilSolution.Value, amt))
             {
-                var reagentProto = _prototype.IndexReagent<ReagentPrototype>(entry.Reagent.Prototype);
+                var reagentProto = _reagent.Index(entry.Reagent.Prototype);
                 reagentProto.ReactionPlant(uid, entry, solution);
             }
         }

@@ -11,7 +11,7 @@ namespace Content.Server.Speech.EntitySystems;
 
 public sealed partial class SlurredSystem : SharedSlurredSystem
 {
-    [Dependency] private StatusEffectsSystem _statusEffectsSystem = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffectsSystem = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
 

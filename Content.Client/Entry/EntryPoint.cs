@@ -37,6 +37,7 @@ using Robust.Client.UserInterface;
 using Robust.Shared;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
+using Robust.Shared.Log;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Replays;
 using Robust.Shared.Timing;
@@ -91,6 +92,8 @@ namespace Content.Client.Entry
 
             IoCManager.BuildGraph();
             IoCManager.InjectDependencies(this);
+
+            _logManager.GetSawmill("loc").Level = LogLevel.Error;
 
             _contentLoc.Initialize();
             _componentFactory.DoAutoRegistrations();

@@ -15,6 +15,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Configuration;
+using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client.Guidebook.Controls;
@@ -24,6 +25,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 {
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private DocumentParsingManager _parsingMan = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
     [Dependency] private IResourceManager _resourceManager = default!;
     [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
@@ -234,7 +236,14 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
         return rootEntries
             .Select(rootEntryId => _entries[rootEntryId])
             .OrderBy(rootEntry => rootEntry.Priority)
-            .ThenBy(rootEntry => Loc.GetString(rootEntry.Name));
+            .ThenBy(GetDisplayName);
+    }
+
+    private string GetDisplayName(GuideEntry entry)
+    {
+        return _loc.TryGetString(entry.Name, out var name)
+            ? name
+            : entry.Name;
     }
 
     private void RepopulateTree(List<ProtoId<GuideEntryPrototype>>? roots = null,
@@ -275,8 +284,7 @@ public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IA
 
         var item = Tree.AddItem(parent);
         item.Metadata = entry;
-        var name = Loc.GetString(entry.Name);
-        item.Label.Text = name;
+        item.Label.Text = GetDisplayName(entry);
 
         foreach (var child in entry.Children)
         {

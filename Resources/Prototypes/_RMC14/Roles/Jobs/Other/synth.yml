@@ -107,6 +107,7 @@
     onlyHalf: true
     alert: SynthNightVision
   - type: EyeProtection
+  - type: FlashImmunity
   - type: Insulated
   - type: RMCLeapProtection
     inherentStunDuration: 3

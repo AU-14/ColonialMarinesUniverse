@@ -1,6 +1,8 @@
 using Content.Shared._RMC14.Deafness;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.CameraShake;
+using Content.Shared._RMC14.Slow;
+using Content.Shared._RMC14.Xenonids.Doom;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Coordinates;
@@ -10,6 +12,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Stunnable;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
+using Robust.Shared.Timing;
 using System.Linq;
 
 namespace Content.Shared._RMC14.Xenonids.Screech;
@@ -26,6 +29,8 @@ public sealed partial class XenoScreechSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private RMCCameraShakeSystem _cameraShake = default!;
+    [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _mobs = new();
     private readonly HashSet<Entity<MobStateComponent>> _closeMobs = new();
@@ -68,7 +73,7 @@ public sealed partial class XenoScreechSystem : EntitySystem
             if (!_xeno.CanAbilityAttackTarget(xeno, receiver))
                 continue;
 
-            if (!Stun(xeno, receiver, xeno.Comp.ParalyzeTime, false))
+            if (!ApplyScreechEffects(xeno, receiver, xeno.Comp.SlowTime, xeno.Comp.BlindTime))
                 continue;
 
             _cameraShake.ShakeCamera(receiver, xeno.Comp.CloseScreenShakeShakes, xeno.Comp.CloseScreenShakeStrength);
@@ -86,7 +91,7 @@ public sealed partial class XenoScreechSystem : EntitySystem
             if (_closeMobs.Contains(receiver))
                 continue;
 
-            if (!Stun(xeno, receiver, xeno.Comp.StunTime, true))
+            if (!ApplyScreechEffects(xeno, receiver, xeno.Comp.SlowTime, xeno.Comp.BlindTime))
                 continue;
 
             _cameraShake.ShakeCamera(receiver, xeno.Comp.FarScreenShakeShakes, xeno.Comp.FarScreenShakeStrength);
@@ -103,6 +108,21 @@ public sealed partial class XenoScreechSystem : EntitySystem
 
         if (_net.IsServer)
             SpawnAttachedTo(xeno.Comp.Effect, xeno.Owner.ToCoordinates());
+    }
+
+    private bool ApplyScreechEffects(EntityUid xeno, EntityUid receiver, TimeSpan slowTime, TimeSpan blindTime)
+    {
+        if (_mobState.IsDead(receiver))
+            return false;
+
+        if (!_examineSystem.InRangeUnOccluded(xeno, receiver))
+            return false;
+
+        _slow.TrySuperSlowdown(receiver, slowTime, ignoreDurationModifier: true);
+        var doom = EnsureComp<MobDoomedComponent>(receiver);
+        doom.EndsAt = _timing.CurTime + blindTime;
+        Dirty(receiver, doom);
+        return true;
     }
 
     private bool Stun(EntityUid xeno, EntityUid receiver, TimeSpan time, bool stun, bool occlusionCheck = true)

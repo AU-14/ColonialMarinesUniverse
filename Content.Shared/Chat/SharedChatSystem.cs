@@ -38,10 +38,10 @@ public abstract partial class SharedChatSystem : EntitySystem
     public static readonly string DefaultChannelPrefix = $"{RadioChannelPrefix}{DefaultChannelKey}";
     public static readonly ProtoId<SpeechVerbPrototype> DefaultSpeechVerb = "Default";
 
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly XenoEvolutionSystem _xenoEvolution = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private XenoEvolutionSystem _xenoEvolution = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
 
     /// <summary>
     /// Cache of the keycodes for faster lookup.

@@ -41,7 +41,6 @@
   departmentRadio: null
   headOfDepartment: AU14JobCivilianForeman
   faction: colonist
-  editorHidden: true
 
 - type: department
   parent: CMDepartmentBase

@@ -1,4 +1,4 @@
-﻿using Content.Shared.Atmos.Components;
+using Content.Shared.Atmos.Components;
 using Content.Shared.Atmos.Piping.Binary.Components;
 using Content.Shared.Atmos.Piping.Unary.Components;
 using Content.Shared.IdentityManagement;
@@ -81,7 +81,7 @@ namespace Content.Client.Atmos.UI
         {
             base.Dispose(disposing);
             if (!disposing) return;
-            _window?.Dispose();
+            _window?.Close();
         }
     }
 }

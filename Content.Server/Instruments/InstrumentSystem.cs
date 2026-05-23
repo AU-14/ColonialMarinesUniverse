@@ -65,9 +65,15 @@ public sealed partial class InstrumentSystem : SharedInstrumentSystem
             subs.Event<InstrumentBandRequestBuiMessage>(OnBoundUIRequestBands);
         });
 
+        SubscribeLocalEvent<InstrumentComponent, ComponentInit>(OnInstrumentInit);
         SubscribeLocalEvent<InstrumentComponent, ComponentGetState>(OnStrumentGetState);
 
         _conHost.RegisterCommand("addtoband", AddToBandCommand);
+    }
+
+    private static void OnInstrumentInit(EntityUid uid, InstrumentComponent component, ComponentInit args)
+    {
+        component.OwnerEntity = uid;
     }
 
     private void OnStrumentGetState(EntityUid uid, InstrumentComponent component, ref ComponentGetState args)

@@ -38,7 +38,7 @@ public sealed partial class SleepingSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popupSystem = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedEmitSoundSystem _emitSound = default!;
-    [Dependency] private StatusEffectsSystem _statusEffectOld = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffectOld = default!;
     [Dependency] private SharedStatusEffectsSystem _statusEffectNew = default!;
 
     public static readonly EntProtoId SleepActionId = "ActionSleep";

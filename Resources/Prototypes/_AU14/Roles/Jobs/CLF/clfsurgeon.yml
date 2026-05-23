@@ -7,8 +7,12 @@
   ignoreAllegiance: true
   playTimeTracker: AU14JobCLFSurgeon
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 14400 # 4 hours
+  - !type:RoleTimeRequirement
+    role: AU14JobCLFGuerilla
+    time: 18000 # 5 hours
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentColonyMedical
+    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -46,6 +50,8 @@
         RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-clfsurgeon
+    - type: StartingMindRole
+      mindRole: MindRoleCLFSurgeon
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi

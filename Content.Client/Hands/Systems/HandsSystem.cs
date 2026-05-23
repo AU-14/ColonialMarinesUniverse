@@ -59,8 +59,12 @@ namespace Content.Client.Hands.Systems
             if (args.Current is not HandsComponentState state)
                 return;
 
-            var newHands = state.Hands.Keys.Except(ent.Comp.Hands.Keys); // hands that were added between states
-            var oldHands = ent.Comp.Hands.Keys.Except(state.Hands.Keys); // hands that were removed between states
+            var reloadPlayerHands = _playerManager.LocalEntity == ent.Owner &&
+                                    (HandStateChanged(ent.Comp, state) ||
+                                     !state.SortedHands.SequenceEqual(ent.Comp.SortedHands));
+
+            var newHands = state.Hands.Keys.Except(ent.Comp.Hands.Keys).ToHashSet(); // hands that were added between states
+            var oldHands = ent.Comp.Hands.Keys.Except(state.Hands.Keys).ToArray(); // hands that were removed between states
 
             foreach (var handId in oldHands)
             {
@@ -71,11 +75,40 @@ namespace Content.Client.Hands.Systems
             {
                 AddHand(ent.AsNullable(), handId, state.Hands[handId]);
             }
+
+            foreach (var (handId, hand) in state.Hands)
+            {
+                if (newHands.Contains(handId))
+                    continue;
+
+                ent.Comp.Hands[handId] = hand;
+            }
+
             ent.Comp.SortedHands = new (state.SortedHands);
 
             SetActiveHand(ent.AsNullable(), state.ActiveHandId);
 
+            if (reloadPlayerHands)
+            {
+                OnPlayerHandsRemoved?.Invoke();
+                OnPlayerHandsAdded?.Invoke(ent);
+            }
+
             _stripSys.UpdateUi(ent);
+        }
+
+        private static bool HandStateChanged(HandsComponent hands, HandsComponentState state)
+        {
+            if (hands.Hands.Count != state.Hands.Count)
+                return true;
+
+            foreach (var (handId, hand) in state.Hands)
+            {
+                if (!hands.Hands.TryGetValue(handId, out var existing) || existing != hand)
+                    return true;
+            }
+
+            return false;
         }
         #endregion
 

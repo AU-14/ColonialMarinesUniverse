@@ -2,6 +2,10 @@
   id: stablegarrison
   mapName: Stable Garrison
   mapPath: /Maps/_AU14/garrison.yml
+  mapsBelow:
+  - /Maps/_AU14/garrison_below.yml
+  mapsAbove:
+  - /Maps/_AU14/garrison_above.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

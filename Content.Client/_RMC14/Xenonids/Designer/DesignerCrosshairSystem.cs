@@ -53,7 +53,7 @@ public sealed partial class DesignerCrosshairSystem : EntitySystem
         }
 
         // Hide the OS cursor so the overlay can draw the designer crosshair instead.
-        _transparentCursor ??= _clyde.CreateCursor(new Image<Rgba32>(16, 16), new Vector2i(8, 8));
+        _transparentCursor ??= _clyde.CreateCursor(new Image<Rgba32>(1, 1), Vector2i.Zero);
         _ui.CurrentlyHovered.CustomCursorShape = _transparentCursor;
     }
 

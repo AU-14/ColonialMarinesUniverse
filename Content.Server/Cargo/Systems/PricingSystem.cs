@@ -29,6 +29,7 @@ public sealed partial class PricingSystem : EntitySystem
 {
     [Dependency] private IConsoleHost _consoleHost = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private BodySystem _bodySystem = default!;
     [Dependency] private MobStateSystem _mobStateSystem = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
@@ -120,7 +121,7 @@ public sealed partial class PricingSystem : EntitySystem
             var solution = soln.Comp.Solution;
             foreach (var (reagent, quantity) in solution.Contents)
             {
-                if (!_prototypeManager.TryIndexReagent<ReagentPrototype>(reagent.Prototype, out var reagentProto))
+                if (!_reagent.TryIndex(reagent.Prototype, out var reagentProto))
                     continue;
 
                 // TODO check ReagentData for price information?
@@ -139,7 +140,7 @@ public sealed partial class PricingSystem : EntitySystem
         {
             foreach (var (reagent, quantity) in prototype.Contents)
             {
-                if (!_prototypeManager.TryIndexReagent<ReagentPrototype>(reagent.Prototype, out var reagentProto))
+                if (!_reagent.TryIndex(reagent.Prototype, out var reagentProto))
                     continue;
 
                 // TODO check ReagentData for price information?
@@ -173,7 +174,7 @@ public sealed partial class PricingSystem : EntitySystem
         {
             foreach (var (reagent, amount) in resultReagents)
             {
-                price += (_prototypeManager.IndexReagent(reagent).PricePerUnit * amount).Double();
+                price += (_reagent.Index(reagent).PricePerUnit * amount).Double();
             }
         }
 

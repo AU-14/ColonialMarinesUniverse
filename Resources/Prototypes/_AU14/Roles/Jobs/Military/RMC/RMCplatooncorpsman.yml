@@ -27,7 +27,7 @@
   - AU14GovforCorpsman
   - AU14GovforSquad
   overwatchSortPriority: -2
-  overwatchRoleName: Hospital Corpsmen
+  overwatchRoleName: au14-job-name-govforplatooncorpsman-plural
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial

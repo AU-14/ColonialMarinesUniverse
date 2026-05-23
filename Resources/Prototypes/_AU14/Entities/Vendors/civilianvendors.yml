@@ -33,6 +33,7 @@
       choices: { CMUcivilianworkwear: 1 }
       entries:
       - id: AU14CivilianWorkwearYellow
+      - id: RMCJumpsuitLiaisonGreyWorkwear
       - id: AU14CivilianWorkwearPink
       - id: AU14CivilianWorkwearBlue
       - id: AU14CivilianWorkwearGreen
@@ -49,6 +50,18 @@
       - id: CMJumpsuitLiaison
       - id: CMJumpsuitLiaisonBlazer
       - id: CMJumpsuitLiaisonCharcoal
+    - name: Flannels
+      choices: { CMUcivilianflannel: 1 }
+      entries:
+      - id: AU14CivilianFlannelWhite
+      - id: AU14CivilianFlannelRed
+      - id: AU14CivilianFlannelPurple
+    - name: Floral Shirts
+      choices: { CMUcivilianfloral: 1 }
+      entries:
+      - id: AU14CivilianFloralRed
+      - id: AU14CivilianFloralBlue
+      - id: AU14CivilianFloralYellow
     - name: Miscellaneous Clothes
       choices: { CMUcivilianclothesmisc: 1 }
       entries:

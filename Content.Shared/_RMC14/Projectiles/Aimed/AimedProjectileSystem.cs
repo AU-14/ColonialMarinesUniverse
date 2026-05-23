@@ -21,7 +21,7 @@ public sealed partial class AimedProjectileSystem : EntitySystem
     [Dependency] private RMCSizeStunSystem _sizeStun = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
     [Dependency] private MobThresholdSystem _mobThresholds = default!;
     [Dependency] private RMCDazedSystem _dazed = default!;
 

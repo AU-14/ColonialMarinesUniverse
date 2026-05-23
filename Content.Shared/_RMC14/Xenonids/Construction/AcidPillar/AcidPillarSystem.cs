@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Spray;
 using Content.Shared.Atmos.Components;
 using Content.Shared.AU14;
+using Content.Shared.Interaction;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Standing;
 using Content.Shared.Stunnable;
@@ -18,6 +19,7 @@ public sealed partial class AcidPillarSystem : EntitySystem
 {
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedRMCAnimationSystem _rmcAnimation = default!;
@@ -61,6 +63,9 @@ public sealed partial class AcidPillarSystem : EntitySystem
         {
             return;
         }
+
+        if (!_interaction.InRangeUnobstructed(pillar, targetCoords, distance + 0.1f))
+            return;
 
         closest = (target, distance);
     }

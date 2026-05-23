@@ -34,6 +34,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedNightVisionSystem _nightVision = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -88,11 +89,12 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
 
     public void OnHiveStartup(Entity<HiveMemberComponent> ent, ref ComponentStartup args)
     {
-
-        if (!TryComp<HiveComponent>(ent.Comp.Hive, out _))
+        var hiveUid = ent.Comp.Hive;
+        if (hiveUid == null ||
+            !TryComp<HiveComponent>(hiveUid.Value, out var hive))
             return;
 
-
+        UpdateHiveAppearance(ent.Owner, (hiveUid.Value, hive));
         Dirty(ent);
     }
 
@@ -283,6 +285,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
 
         comp.Hive = hive;
         Dirty(member, comp);
+        UpdateHiveAppearance(member.Owner, hiveEnt);
 
         if (HasComp<XenoEvolutionGranterComponent>(member) && hiveEnt.HasValue)
             SetHiveQueen(member, hiveEnt.Value);
@@ -526,6 +529,11 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
     {
         // TODO RMC14
         return FromSameHive(a, b);
+    }
+
+    private void UpdateHiveAppearance(EntityUid member, Entity<HiveComponent>? hive)
+    {
+        _appearance.SetData(member, XenoHiveVisuals.Color, hive?.Comp.HiveColor ?? Color.White);
     }
 }
 

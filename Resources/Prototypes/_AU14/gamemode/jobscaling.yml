@@ -29,12 +29,17 @@
     AU14JobGOVFORPlatoonCorpsman:
       scale: 0.2
       whenToBeginScaling: 50
-    AU14JobGOVFORSquadSergeant:
-      scale: 0.1
-      whenToBeginScaling: 50
     AU14JobGOVFORSquadCombatTech:
       scale: 0.15
       whenToBeginScaling: 50
+    AU14JobGOVFORMilitaryPoliceMan:
+      scale: 0.05
+      whenToBeginScaling: 50
+      maximum: 6
+    AU14JobGOVFORAuxTech:
+      scale: 0.03
+      whenToBeginScaling: 50
+      benchmark: 2
     # --- OPFOR ---
     AU14JobOpforSquadRifleman:
       scale: 0.5
@@ -42,30 +47,32 @@
     AU14JobOpforPlatoonCorpsman:
       scale: 0.2
       whenToBeginScaling: 50
-    AU14JobOpforSquadSergeant:
-      scale: 0.1
-      whenToBeginScaling: 50
     AU14JobOPFORSquadCombatTech:
       scale: 0.15
       whenToBeginScaling: 50
+    # NOTE: MP/AuxTech
 
 - type: jobScale
   id: DefaultDistressScale
   jobs:
     # --- GOVFOR ---
     AU14JobGOVFORSquadRifleman:
-      scale: 100
-      whenToBeginScaling: 0
+      scale: 1
+      whenToBeginScaling: 1
     AU14JobGOVFORPlatoonCorpsman:
       scale: 0.2
-      whenToBeginScaling: 30
-    AU14JobGOVFORSquadSergeant:
-      scale: 0.05
       whenToBeginScaling: 30
     AU14JobGOVFORSquadCombatTech:
       scale: 0.2
       whenToBeginScaling: 30
-
+    AU14JobGOVFORMilitaryPoliceMan:
+      scale: 0.05
+      whenToBeginScaling: 40
+      maximum: 5
+    AU14JobGOVFORAuxTech:
+      scale: 0.03
+      whenToBeginScaling: 60
+      benchmark: 2
 
 - type: jobScale
   id: DefaultInsurgencyScale
@@ -76,6 +83,7 @@
     AU14JobLEOLeaderBase:
       scale: 0.01
       whenToBeginScaling: 40
+      maximum: 2
     AU14JobCLFGuerilla:
       scale: 0.025
       whenToBeginScaling: 40
@@ -104,6 +112,12 @@
         whenToBeginScaling: 40
         benchmark: 2
         maximum: 7
-
-
-
+    AU14JobGOVFORMilitaryPoliceMan:
+        scale: 0.04
+        whenToBeginScaling: 40
+        maximum: 6
+    AU14JobGOVFORAuxTech:
+        scale: 0.025
+        whenToBeginScaling: 50
+        benchmark: 2
+        maximum: 4

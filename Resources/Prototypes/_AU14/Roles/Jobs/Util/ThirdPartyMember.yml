@@ -2,6 +2,7 @@
   parent: CMJobXenoBase
   id: AU14JobThirdPartyMember
   name: au-job-name-third-party-member
+  description: au-job-description-third-party-member
   setPreference: true
   playTimeTracker: AUThirdPartyMember
   hidden: false

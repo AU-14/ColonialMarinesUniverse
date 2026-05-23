@@ -10,8 +10,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleVisor
-  name: cmu-yautja-action-toggle-visor
-  description: cmu-yautja-action-toggle-visor-desc
   components:
   - type: Action
     icon:
@@ -26,8 +24,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleMaskZoom
-  name: cmu-yautja-action-toggle-mask-zoom
-  description: cmu-yautja-action-toggle-mask-zoom-desc
   components:
   - type: Action
     icon:
@@ -43,8 +39,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleCloak
-  name: cmu-yautja-action-toggle-cloak
-  description: cmu-yautja-action-toggle-cloak-desc
   components:
   - type: Action
     icon:
@@ -59,8 +53,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaOpenBracerMenu
-  name: cmu-yautja-action-bracer-menu
-  description: cmu-yautja-action-bracer-menu-desc
   components:
   - type: Action
     icon:
@@ -75,8 +67,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleBracerLock
-  name: cmu-yautja-action-toggle-bracer-lock
-  description: cmu-yautja-action-toggle-bracer-lock-desc
   components:
   - type: Action
     icon:
@@ -91,8 +81,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleBracerIdChip
-  name: cmu-yautja-action-toggle-bracer-id
-  description: cmu-yautja-action-toggle-bracer-id-desc
   components:
   - type: Action
     icon:
@@ -107,8 +95,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaTranslator
-  name: cmu-yautja-action-translator
-  description: cmu-yautja-action-translator-desc
   components:
   - type: Action
     icon:
@@ -123,8 +109,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaCreateStabilisingCrystal
-  name: cmu-yautja-action-create-crystal
-  description: cmu-yautja-action-create-crystal-desc
   components:
   - type: Action
     icon:
@@ -139,8 +123,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaCreateHumanStabilisingCrystal
-  name: cmu-yautja-action-create-human-crystal
-  description: cmu-yautja-action-create-human-crystal-desc
   components:
   - type: Action
     icon:
@@ -155,8 +137,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaCreateHealingCapsule
-  name: cmu-yautja-action-create-healing-capsule
-  description: cmu-yautja-action-create-healing-capsule-desc
   components:
   - type: Action
     icon:
@@ -170,9 +150,21 @@
 
 - type: entity
   parent: CMUYautjaActionBase
+  id: CMUActionYautjaCreateHuntingTrap
+  components:
+  - type: Action
+    icon:
+      sprite: _RMC14/Objects/Medical/emergency_auto_injector.rsi
+      state: autoinjector
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._CMU14.Yautja.YautjaCreateHuntingTrapActionEvent
+  - type: YautjaPowerAction
+    cost: 0
+
+- type: entity
+  parent: CMUYautjaActionBase
   id: CMUActionYautjaOpenMarkPanel
-  name: cmu-yautja-action-mark-panel
-  description: cmu-yautja-action-mark-panel-desc
   components:
   - type: Action
     icon:
@@ -188,8 +180,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaLinkThrallBracer
-  name: cmu-yautja-action-link-thrall-bracer
-  description: cmu-yautja-action-link-thrall-bracer-desc
   components:
   - type: Action
     icon:
@@ -204,8 +194,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaTransmitThrallMessage
-  name: cmu-yautja-action-transmit-thrall-message
-  description: cmu-yautja-action-transmit-thrall-message-desc
   components:
   - type: Action
     icon:
@@ -221,8 +209,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleThrallBracerLock
-  name: cmu-yautja-action-toggle-thrall-bracer-lock
-  description: cmu-yautja-action-toggle-thrall-bracer-lock-desc
   components:
   - type: Action
     icon:
@@ -238,8 +224,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaStunThrall
-  name: cmu-yautja-action-stun-thrall
-  description: cmu-yautja-action-stun-thrall-desc
   components:
   - type: Action
     icon:
@@ -254,8 +238,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaSelfDestructThrall
-  name: cmu-yautja-action-self-destruct-thrall
-  description: cmu-yautja-action-self-destruct-thrall-desc
   components:
   - type: Action
     icon:
@@ -270,8 +252,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaRecall
-  name: cmu-yautja-action-recall
-  description: cmu-yautja-action-recall-desc
   components:
   - type: Action
     icon:
@@ -286,8 +266,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaSelfDestruct
-  name: cmu-yautja-action-self-destruct
-  description: cmu-yautja-action-self-destruct-desc
   components:
   - type: Action
     icon:
@@ -304,8 +282,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleCaster
-  name: cmu-yautja-action-toggle-caster
-  description: cmu-yautja-action-toggle-caster-desc
   components:
   - type: Action
     icon:
@@ -320,8 +296,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleWristBlades
-  name: cmu-yautja-action-toggle-wrist-blades
-  description: cmu-yautja-action-toggle-wrist-blades-desc
   components:
   - type: Action
     icon:
@@ -336,8 +310,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleScimitar
-  name: cmu-yautja-action-toggle-scimitar
-  description: cmu-yautja-action-toggle-scimitar-desc
   components:
   - type: Action
     icon:
@@ -352,8 +324,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleShield
-  name: cmu-yautja-action-toggle-shield
-  description: cmu-yautja-action-toggle-shield-desc
   components:
   - type: Action
     icon:
@@ -368,8 +338,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleChainGauntlet
-  name: cmu-yautja-action-toggle-chain-gauntlet
-  description: cmu-yautja-action-toggle-chain-gauntlet-desc
   components:
   - type: Action
     icon:
@@ -384,8 +352,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaVoiceClick
-  name: cmu-yautja-action-voice-click
-  description: cmu-yautja-action-voice-click-desc
   components:
   - type: Action
     icon: Interface/Emotes/click.png
@@ -396,8 +362,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaVoiceRoar
-  name: cmu-yautja-action-voice-roar
-  description: cmu-yautja-action-voice-roar-desc
   components:
   - type: Action
     icon: Interface/Actions/scream.png
@@ -408,8 +372,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaVoiceLaugh
-  name: cmu-yautja-action-voice-laugh
-  description: cmu-yautja-action-voice-laugh-desc
   components:
   - type: Action
     icon: Interface/Emotes/laugh.png
@@ -420,8 +382,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaVoiceGrowl
-  name: cmu-yautja-action-voice-growl
-  description: cmu-yautja-action-voice-growl-desc
   components:
   - type: Action
     icon: Interface/Emotes/chitter.png
@@ -432,8 +392,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaVoicePain
-  name: cmu-yautja-action-voice-pain
-  description: cmu-yautja-action-voice-pain-desc
   components:
   - type: Action
     icon: Interface/Emotes/cry.png
@@ -444,8 +402,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaVoiceDeathCry
-  name: cmu-yautja-action-voice-death-cry
-  description: cmu-yautja-action-voice-death-cry-desc
   components:
   - type: Action
     icon: Interface/Emotes/deathgasp.png
@@ -456,8 +412,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaVoiceDeathLaugh
-  name: cmu-yautja-action-voice-death-laugh
-  description: cmu-yautja-action-voice-death-laugh-desc
   components:
   - type: Action
     icon: Interface/Emotes/deathgasp.png

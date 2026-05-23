@@ -41,6 +41,9 @@
   name: abomination
   components:
   - type: Abomination
+  - type: Spottable
+  - type: RMCSize
+    size: Xeno
   # No crit state — abominations go straight from Alive to Dead. Stops them
   # from being permanently dragged off and field-executed; if the threshold
   # is hit, the flesh just dies. Per-caste health lives in MobThresholds on

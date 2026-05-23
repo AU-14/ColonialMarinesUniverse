@@ -164,6 +164,8 @@
         crate: AU14CrateAssortedKnives
       - cost: 4500
         crate: AU14CrateM5A1SLAW
+      - cost: 6000
+        crate: AU14CrateFlamerSpec
       - cost: 9500
         crate: AU14CrateM7SLAW
       - cost: 8000

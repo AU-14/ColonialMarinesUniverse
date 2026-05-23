@@ -1,5 +1,5 @@
-﻿discord-round-notifications-new = A new round is starting!
-discord-round-notifications-started = Round #{$id} on map "{$map}" started.
-discord-round-notifications-end = Round #{$id} has ended. It lasted for {$hours} hours, {$minutes} minutes, and {$seconds} seconds.
-discord-round-notifications-end-ping = <@&{$roleId}>, the server will reboot shortly!
-discord-round-notifications-unknown-map = Unknown
+discord-round-notifications-started = Round #{$id} on map "{$map}" has started.
+discord-round-notifications-end = Round #{$id} ({$map}) has ended. The round lasted for {$hours} hours and {$minutes} minutes.
+discord-round-notifications-end-ping-restart = <@&{$roleId}> A new round will be starting shortly!
+discord-round-notifications-end-ping-reboot = <@&{$roleId}> The server will be rebooting shortly for an automatic update.
+discord-round-notifications-unknown-map = unknown

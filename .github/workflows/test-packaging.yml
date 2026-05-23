@@ -1,22 +1,19 @@
-﻿name: Test Packaging
-
+name: Test Packaging
 on:
   push:
-    branches: [ master, staging, stable ]
+    branches: [master, staging, stable]
     paths:
       - '**.cs'
       - '**.csproj'
       - '**.sln'
       - '**.git**'
       - '**.yml'
-      # no docs on which one of these is supposed to work, so
-      # why not just do both
       - 'RobustToolbox'
       - 'RobustToolbox/**'
   merge_group:
   pull_request:
-    types: [ opened, reopened, synchronize, ready_for_review ]
-    branches: [ master, staging, stable ]
+    types: [opened, reopened, synchronize, ready_for_review]
+    branches: [master, staging, stable]
     paths:
       - '**.cs'
       - '**.csproj'
@@ -25,35 +22,25 @@ on:
       - '**.yml'
       - 'RobustToolbox'
       - 'RobustToolbox/**'
-
 jobs:
   build:
     name: Test Packaging
-    if: github.actor != 'PJBot' && github.event.pull_request.draft == false
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Master
-        uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
 
-      - name: Setup Submodule
-        run: |
-          git submodule update --init --recursive
+      - name: Update engine submodules
+        run: cd RobustToolbox && git submodule update --init --recursive
 
-      - name: Pull engine updates
-        uses: space-wizards/submodule-dependency@v0.1.5
-
-      - name: Update Engine Submodules
-        run: |
-          cd RobustToolbox/
-          git submodule update --init --recursive
-
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v4.1.0
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
 
-      - name: Install dependencies
+      - name: Restore dependencies
         run: dotnet restore
 
       - name: Build Packaging

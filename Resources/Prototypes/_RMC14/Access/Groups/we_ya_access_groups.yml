@@ -1,7 +1,7 @@
-﻿- type: accessGroup
+- type: accessGroup
   id: RMCWeYa
   tags:
-  - RMCAccessWeYa
+  - AU14AccessCorporateWEYU
 
 
 - type: accessGroup
@@ -9,7 +9,7 @@
   parent: RMCBaseMiscellaneousJob
   name: Corporate Liaison
   tags:
-  - RMCAccessWeYa
+  - AU14AccessCorporateWEYU
   - RMCAccessCommand
   - CMAccessResearch
   - CMAccessMedical
@@ -18,7 +18,7 @@
 - type: accessGroup
   id: RMCWeYaExecColony
   tags:
-  - RMCAccessWeYa
+  - AU14AccessCorporateWEYU
   - RMCAccessCommand
   - CMAccessResearch
   - CMAccessMedical
@@ -29,5 +29,5 @@
   - CMAccessColonyLogistics
   - CMAccessColonyBrig
   - CMAccessColonyMedbay
-  - RMCAccessWeYaFlight
+  - AU14AccessCorporateWEYUFlight
   - CMAccessColonyCommand

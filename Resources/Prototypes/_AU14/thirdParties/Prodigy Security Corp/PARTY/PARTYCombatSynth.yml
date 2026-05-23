@@ -1,0 +1,152 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobProdigyPARTCombatSynth
+  name: au14-job-name-part-synth
+  description: au14-prodigyparty-description
+  playTimeTracker: AU14JobProdigyPARTCombatSynth
+  ranks:
+    AU14RankPrDSynth5:
+    - !type:RoleTimeRequirement
+      role: AU14JobProdigyPARTCombatSynth
+      time: 252000 #70 hours
+    AU14RankPrDSynth4:
+    - !type:RoleTimeRequirement
+      role: AU14JobProdigyPARTCombatSynth
+      time: 180000 #50 hours
+    AU14RankPrDSynth3:
+    - !type:RoleTimeRequirement
+      role: AU14JobProdigyPARTCombatSynth
+      time: 36000 #10 hours
+    AU14RankPrDSynth2:
+    - !type:RoleTimeRequirement
+      role: AU14JobProdigyPARTCombatSynth
+      time: 18000 #5 hours
+    AU14RankPrDSynth1: []
+  spawnMenuRoleName: Prodigy Combat Synthetic (AU14, 3rd Party)
+  startingGear: AU14GearPARTYPartyCombatSynth
+  greeting: au14-prodigyparty-greeting
+  icon: "RMCJobIconReconSynthetic"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-psc
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: forecon_synth
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Skills
+      skills:
+        RMCSkillCqc: 5
+        RMCSkillEngineer: 4
+        RMCSkillConstruction: 3
+        RMCSkillFirearms: 2
+        RMCSkillOverwatch: 1
+        RMCSkillMedical: 4
+        RMCSkillSurgery: 3
+        RMCSkillResearch: 1
+        RMCSkillMeleeWeapons: 2
+        RMCSkillPilot: 2
+        RMCSkillPolice: 2
+        RMCSkillFireman: 5
+        RMCSkillPowerLoader: 2
+        RMCSkillVehicles: 2
+        RMCSkillJtac: 3
+        RMCSkillIntel: 2
+        RMCSkillDomestics: 2
+        RMCSkillNavigations: 1
+    - type: DemoSpecWhitelist
+    - type: GrenadeSpecWhitelist
+    - type: ScoutWhitelist
+    - type: SniperWhitelist
+    - type: PyroWhitelist
+    - type: JobPrefix
+      prefix: rmc-job-prefix-synth
+    - type: MeleeWeapon
+      soundHit:
+        path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+        params:
+          variation: 0.15
+          volume: -1
+      angle: 30
+      animation: WeaponArcFist
+      attackRate: 1
+      damage:
+        types:
+          Blunt: 35
+    - type: Synth
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesSyntheticProdigy
+  id: AU14JobProdigyPARTCombatSynth
+  name: Prodigy Synthetic (AU14, 3rd Party)
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPARTY
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-part-combat-synth
+    description: au14-prodigyparty-description
+    reregister: false
+    job: AU14JobProdigyPARTCombatSynth
+    raffle:
+      settings: short
+    rules: au14-prodigyparty-description
+
+- type: startingGear
+  id: AU14GearPARTYPartyCombatSynth
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14ArmorProdigyXAS23S
+    jumpsuit: AU14ProdigyFatiguesRUSynth
+    shoes: RMCBootsSPPBlackFilled
+    gloves: AU14HandsProdigyRU
+    belt: AU14BeltMedicBagProdigyFilled
+    pocket1: AU14PouchToolsFilledSupportSynthetic
+    pocket2: AU14PouchMagazineLargePARTDualFilled
+    back: RMCSatchelWelderRUCloak #21 slots
+    ears: RMCM5CameraGear
+    ears2: AU14HeadsetPART
+    suitstorage: AUWeaponRifleM20A
+  storage:
+    #pocket1:
+    #- comes opre-filled with tools
+    #pocket2:
+    #- AU14Tourniquet
+    # no need, pouch already has 13 slots and is filled with med supplies
+    back:
+    - AU14PacketGrenadeFragM12Filled
+    - AU14PacketGrenadeFragM12Filled
+    - AU14MagazineRifleM20A
+    - CMShellShotgunBuckshot
+    - AU14MagazineRifleM20A
+    - CMShellShotgunBuckshot
+    - AU14MagazineRifleM20A
+    - CMShellShotgunBuckshot
+    jumpsuit:
+    - AU14SynthResetKeyProdigy
+    - AU14SynthResetKeyProdigy
+    - AU14ProdigyLaptop
+    - RMCHandcuffs
+    - RMCHandcuffs
+    # 0 empty slots
+    outerClothing:
+    - CMOintment10
+    - CMSyringe
+    - AU14Tourniquet
+    - AU14Tourniquet
+    # 0 empty slots
+
+- type: playTimeTracker
+  id: AU14JobProdigyPARTCombatSynth

@@ -36,7 +36,7 @@ public sealed partial class VehicleSystem : EntitySystem
     [Dependency] private SharedEyeSystem _eye = default!;
     [Dependency] private VehicleViewToggleSystem _viewToggle = default!;
     [Dependency] private INetManager _net = default!;
-    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -178,7 +178,7 @@ public sealed partial class VehicleSystem : EntitySystem
     {
         if (TryComp(ent.Owner, out interior) &&
             interior.MapId != MapId.Nullspace &&
-            _mapManager.MapExists(interior.MapId))
+            _mapSystem.MapExists(interior.MapId))
         {
             return true;
         }
@@ -326,9 +326,9 @@ public sealed partial class VehicleSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        if (interior.MapId != MapId.Nullspace && _mapManager.MapExists(interior.MapId))
+        if (interior.MapId != MapId.Nullspace && _mapSystem.MapExists(interior.MapId))
         {
-            _mapManager.DeleteMap(interior.MapId);
+            _mapSystem.DeleteMap(interior.MapId);
         }
         else if (interior.Map.IsValid() && Exists(interior.Map))
         {
@@ -894,10 +894,10 @@ public sealed partial class VehicleSystem : EntitySystem
     {
         vehicle = null;
         var mapId = _transform.GetMapId(interiorEntity);
-        if (mapId == MapId.Nullspace || !_mapManager.MapExists(mapId))
+        if (mapId == MapId.Nullspace || !_mapSystem.MapExists(mapId))
             return false;
 
-        var mapUid = _mapManager.GetMapEntityId(mapId);
+        var mapUid = _mapSystem.GetMap(mapId);
         if (!TryComp(mapUid, out VehicleInteriorLinkComponent? link) ||
             Deleted(link.Vehicle))
         {

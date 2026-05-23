@@ -15,19 +15,34 @@
         color: CornflowerBlue
         sound: "/Audio/Ambience/Antag/headrev_start.ogg"
       components:
-      - type: NightVision
-        innate: true
       - type: RunawaySynth
-      - type: EyeProtection
-      - type: Insulated
-      - type: RMCLeapProtection
       - type: Synth
         changeBrain: false
         canUseGuns: true
         hideGeneration: true
         useHumanHealthIcons: true
-  #    mindRoles:
-   #   - MindRoleRunawaySynth
+      - type: Skills
+        skills:
+          RMCSkillCqc: 4
+          RMCSkillEngineer: 4
+          RMCSkillConstruction: 3
+          RMCSkillOverwatch: 1
+          RMCSkillMedical: 4
+          RMCSkillSurgery: 3
+          RMCSkillResearch: 1
+          RMCSkillMeleeWeapons: 2
+          RMCSkillPilot: 2
+          RMCSkillPolice: 2
+          RMCSkillFireman: 5
+          RMCSkillFirearms: 2
+          RMCSkillPowerLoader: 2
+          RMCSkillVehicles: 2
+          RMCSkillJtac: 3
+          RMCSkillIntel: 2
+          RMCSkillDomestics: 2
+          RMCSkillNavigations: 1
+#     mindRoles:
+#     - MindRoleRunawaySynth
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -39,18 +54,16 @@
     exclusiveAntag: true
     roleType: TeamAntagonist
 
-
 - type: antag
   id: RunawaySynthRole
   name: roles-antag-runaway-synth-name
   antagonist: true
-  category: Colony Antags
+  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-synth-objective
   isCM: true
 
 ## CLF subverted synth
-
 - type: entity
   id: CLFSubvertedSynth
   parent: BaseGameRule
@@ -60,7 +73,6 @@
     selectionTime: PostPlayerSpawn
     definitions:
     - prefRoles: [ CLFSubvertedSynthRole ]
-
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -99,8 +111,93 @@
   objective: roles-antag-clf-recruit-objective
   isCM: true
 
-## fugitive
+## CLF guerrilla
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCLFGuerrilla
+  name: CLF Guerrilla Role
+  components:
+  - type: MindRole
+    antagPrototype: CLFGuerrillaRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
 
+- type: antag
+  id: CLFGuerrillaRole
+  name: roles-antag-clf-guerrilla-name
+  setPreference: false #already done by the job thing
+  objective: roles-antag-clf-guerrilla-objective
+  isCM: true
+
+## CLF Physician
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCLFPhysician
+  components:
+  - type: MindRole
+    antagPrototype: CLFPhysicianRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  id: CLFPhysicianRole
+  name: roles-antag-clf-physician-name
+  setPreference: false #already done by the job thing
+  objective: roles-antag-clf-doctor-objective
+  isCM: true
+
+## CLF Surgeon
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCLFSurgeon
+  components:
+  - type: MindRole
+    antagPrototype: CLFSurgeonRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  id: CLFSurgeonRole
+  name: roles-antag-clf-surgeon-name
+  setPreference: false #yada yada job thing
+  objective: roles-antag-clf-doctor-objective
+  isCM: true
+
+## CLF Leader
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCLFLeader
+  components:
+  - type: MindRole
+    antagPrototype: CLFLeaderRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  id: CLFLeaderRole
+  name: roles-antag-clf-leader-name
+  setPreference: false #job thing
+  objective: roles-antag-clf-leader-objective
+  isCM: true
+
+## cultist
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCultist
+  components:
+  - type: MindRole
+    antagPrototype: CultistRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  id: CultistRole
+  name: roles-antag-cultist-name
+  setPreference: false
+  objective: roles-antag-cultist-objective
+  isCM: true
+
+## fugitive
 - type: entity
   id: Fugitive
   parent: BaseGameRule
@@ -128,7 +225,6 @@
   equipment:
     pocket1: AU14ObjectiveItemWYLaptop
 
-
 - type: entity
   parent: BaseMindRoleAntag
   id: MindRoleFugitive
@@ -143,7 +239,7 @@
   id: FugitiveRole
   name: roles-antag-fugitive-name
   antagonist: true
-  category: Colony Antags
+  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-fugitive-objective
   isCM: true
@@ -152,7 +248,7 @@
   id: ExpedTrailerRole
   name: roles-antag-exped-traitor-name
   antagonist: true
-  category: Prometheus Antags
+  category: roles-antag-category-prometheus
   setPreference: true
   objective: roles-antag-exped-traitor-objective
   isCM: true
@@ -161,11 +257,12 @@
   id: MonsterRole
   name: monster-traitor-name
   antagonist: true
-  category: Prometheus Antags
+  category: roles-antag-category-prometheus
   setPreference: true
   objective: monster-traitor-objective
   isCM: true
 
+## Druggo
 - type: entity
   id: DrugDealer
   parent: BaseGameRule
@@ -202,17 +299,36 @@
   id: DrugDealerRole
   name: roles-antag-dealer-name
   antagonist: true
-  category: Colony Antags
+  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-dealer-objective
   isCM: true
-
 
 - type: startingGear
   id: AU14GearDrugDealer
   equipment:
     back: AU14DrugDealerDrugBackpack
 
+- type: entity
+  parent: RMCSatchelBlack
+  id: AU14DrugDealerDrugBackpack
+  name: drug dealer's satchel
+  description: A black satchel filled with illicit substances.
+  components:
+  - type: StorageFill
+    contents:
+    - id: Joint
+      amount: 3
+    - id: AU14DrugDealerDrugBottle
+      amount: 4
+    - id: AU14PillBottleSpaceDrugs
+      amount: 3
+    - id: RMCSyringeDrugs
+      amount: 2
+    - id: AU14PillBottleRMCPsilocybin
+      amount: 2
+
+## Spy
 - type: entity
   id: CorporateSpy
   parent: BaseGameRule
@@ -248,7 +364,7 @@
   id: CorporateSpyRole
   name: roles-antag-spy-name
   antagonist: true
-  category: Colony Antags
+  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-spy-objective
   isCM: True
@@ -258,27 +374,7 @@
   equipment:
     pocket1: AU14IDCardCorporateSpy
 
-- type: entity
-  parent: RMCSatchelBlack
-  id: AU14DrugDealerDrugBackpack
-  name: drug dealer's satchel
-  description: A black satchel filled with illicit substances.
-  components:
-  - type: StorageFill
-    contents:
-    - id: Joint
-      amount: 3
-    - id: AU14DrugDealerDrugBottle
-      amount: 4
-    - id: AU14PillBottleSpaceDrugs
-      amount: 3
-    - id: RMCSyringeDrugs
-      amount: 2
-    - id: AU14PillBottleRMCPsilocybin
-      amount: 2
-
 ## CLF Veteran
-
 - type: entity
   id: CLFVeteran
   parent: BaseGameRule
@@ -329,8 +425,6 @@
           RMCSkillMedical: 3
           RMCSkillPolice: 1
           RMCSkillSurgery: 3
-
-
       mindRoles:
       - MindRoleCLFVeteran
 
@@ -348,7 +442,7 @@
   id: CLFVeteranRole
   name: roles-antag-clfveteran-name
   antagonist: true
-  category: Colony Antags
+  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-clfveteran-objective
   isCM: true
@@ -359,7 +453,6 @@
     suitstorage: AU14WeaponRevolverM44Inscribed
 
 ## Strike Organizer
-
 - type: entity
   id: StrikeOrganizer
   parent: BaseGameRule
@@ -396,7 +489,7 @@
   id: StrikeOrganizerRole
   name: roles-antag-strikeorganizer-name
   antagonist: true
-  category: Colony Antags
+  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-strikeorganizer-objective
   isCM: true
@@ -419,7 +512,6 @@
       amount: 2
 
 ## Cannibal
-
 - type: entity
   id: Cannibal
   parent: BaseGameRule
@@ -457,13 +549,12 @@
   id: CannibalRole
   name: roles-antag-cannibal-name
   antagonist: true
-  category: Colony Antags
+  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-cannibal-objective
   isCM: true
 
 ## Serial Killer
-
 - type: entity
   id: SerialKiller
   parent: BaseGameRule
@@ -499,8 +590,7 @@
   id: SerialKillerRole
   name: roles-antag-serialkiller-name
   antagonist: true
-  category: Colony Antags
+  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-serialkiller-objective
   isCM: true
-

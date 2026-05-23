@@ -31,7 +31,7 @@
 - type: radioChannel
   id: MarineMedical
   name: chat-radio-marine-medical
-  keycode: "m" #m in cm13
+  keycode: "ň" #m in cm13
   frequency: 1482
   color: "#009771"
   longRange: true
@@ -40,7 +40,7 @@
 - type: radioChannel
   id: MarineEngineer
   name: chat-radio-marine-engineer
-  keycode: "n" #n in cm13
+  keycode: "ě" #n in cm13
   frequency: 1483
   color: "#e4860c"
   longRange: true
@@ -49,7 +49,7 @@
 - type: radioChannel
   id: MarineMilitaryPolice
   name: chat-radio-marine-military-police
-  keycode: "p" #p in cm13
+  keycode: "Þ" #p in cm13
   frequency: 1484
   color: "#be324f"
   longRange: true
@@ -131,24 +131,13 @@
 - type: radioChannel
   id: MarineFoxtrot
   name: chat-radio-marine-foxtrot
-  keycode: "0" #f in cm13
+  keycode: "ƒ" #f in cm13
   frequency: 1496
   color: "#c23c07"
   longRange: true
   tower: true
 
-
-
 # Non Marine
-- type: radioChannel
-  id: Colony
-  name: chat-radio-colony
-  keycode: "o" #o in cm13
-  frequency: 1469
-  color: "#cf40a6" #todo rmc14
-  longRange: true
-  tower: true
-
 - type: radioChannel
   id: ColonyHandheld
   name: chat-radio-colony-softwave
@@ -157,28 +146,10 @@
   color: "#a6cf40" #todo rmc14
   longRange: true
 
-- type: radioChannel # Only used by Corporate Liason to hand out to bodyguards / command.
-  id: WEYA
-  name: chat-radio-WY
-  keycode: "w" #w in CM13
-  frequency: 1231
-  color: "#fe9b24"
-  longRange: true
-  tower: true
-
-- type: radioChannel
-  id: CMB
-  name: chat-radio-CMB
-  keycode: "4"
-  frequency: 1220
-  color: "#1b748c"
-  longRange: true
-  tower: true
-
 - type: radioChannel
   id: Provost
   name: chat-radio-provost
-  keycode: "r"
+  keycode: "ř"
   frequency: 1473
   color: "#9b0612"
   longRange: true
@@ -192,11 +163,3 @@
 #  color: "#e1580e"
 #  longRange: true
 #  tower: true
-
-- type: radioChannel
-  id: Hivemind
-  name: chat-radio-hivemind
-  keycode: "h"
-  frequency: 426
-  color: "#8b36a6"
-  longRange: true

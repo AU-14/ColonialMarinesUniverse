@@ -15,6 +15,8 @@ namespace Content.Client._RMC14.Xenonids.HiveLeader;
 
 public sealed partial class HiveLeaderOverlay : Overlay
 {
+    private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
+
     [Dependency] private IEntityManager _entity = default!;
     [Dependency] private IOverlayManager _overlay = default!;
     [Dependency] private IPlayerManager _players = default!;
@@ -41,7 +43,7 @@ public sealed partial class HiveLeaderOverlay : Overlay
 
         _xformQuery = _entity.GetEntityQuery<TransformComponent>();
 
-        _shader = _prototype.Index<ShaderPrototype>("unshaded").Instance();
+        _shader = _prototype.Index(UnshadedShader).Instance();
 
         ZIndex = 1;
     }
@@ -63,12 +65,12 @@ public sealed partial class HiveLeaderOverlay : Overlay
         handle.UseShader(_shader);
 
         var leaders = _entity.EntityQueryEnumerator<HiveLeaderComponent, SpriteComponent, TransformComponent>();
-        while (leaders.MoveNext(out _, out var sprite, out var xform))
+        while (leaders.MoveNext(out var uid, out _, out var sprite, out var xform))
         {
             if (xform.MapID != args.MapId)
                 continue;
 
-            var bounds = sprite.Bounds;
+            var bounds = _sprite.GetLocalBounds((uid, sprite));
             var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
 
             if (!bounds.Translated(worldPos).Intersects(args.WorldAABB))

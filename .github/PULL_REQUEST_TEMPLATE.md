@@ -11,7 +11,7 @@
 
 ## Media
 <!-- Attach media if the PR makes ingame changes (clothing, items, features, etc).
-Small fixes/refactors are exempt. Media may be used in RMC14 progress reports with credit. -->
+Small fixes/refactors are exempt. Media may be used in progress reports with credit. -->
 
 ## Requirements
 <!-- Confirm the following by placing an X in the brackets [X]: -->
@@ -25,11 +25,12 @@ Small fixes/refactors are exempt. Media may be used in RMC14 progress reports wi
 Admin changes may be listed for admins to see with admin:
 Coding changes with no changes visible in-game may be listed for other contributors with code:
 Make sure to read the guidelines.
-Changelog must have a :cl: symbol, so the bot recognizes the changes and adds them to the game's changelog. -->
+Changelog must have a singular :cl: symbol at the top, so the bot recognizes the changes and adds them to the game's changelog. -->
 :cl:
 - add: Added fun!
 - remove: Removed fun!
 - tweak: Changed fun!
 - fix: Fixed fun!
+- map: Mapped fun!
 - admin: Admin related change!
 - code: Code related change for contributors!

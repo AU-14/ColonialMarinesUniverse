@@ -94,7 +94,8 @@
     mayTransfer: True
     whitelist:
       tags:
-      - AU14MagazineRifleM20A
+      - AU14CartridgeRifleM20A
+      - CMCartridgeRifle10x24mm
     proto: AU14CartridgeRifleM20A
     capacity: 40
   - type: Sprite

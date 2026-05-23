@@ -1,12 +1,27 @@
 - type: job
+  abstract: true
   parent: CMJobBase
-  id: AU14JobPlatCoBase
+  id: AU14JobPlatCoBaseAbstract
   name: au14-job-name-govforplatco
   description: au14-job-description-govforplatco
+  icon: "AU14JobIconPlatCo"
+  spawnMenuRoleName: Platoon Commander (GOVFOR)
+  supervisors: au14-job-supervisors-govforplatco
+  startingGear: AU14GearGOVFORPlatCo
+  dummyStartingGear: AU14GearGOVFORPlatCoDummy
   playTimeTracker: AU14JobGOVFORPlatCo
-  basePlaytimeTracker: true
+  requireAdminNotify: true
+  joinNotifyCrew: true
+  setPreference: false
+  canBeAntag: false
+  accessGroups:
+  - AU14GovforCommand
+  roleWeight: 0.25
+
+- type: job
   abstract: true
-  hidden: true
+  parent: AU14JobPlatCoBaseAbstract
+  id: AU14JobPlatCoBase
   requirements:
   - !type:DepartmentTimeRequirement
     department: AU14DepartmentGovernmentForces
@@ -14,7 +29,83 @@
   - !type:RoleTimeRequirement
     role: AU14JobGOVFORPlatOp
     time: 72000 # 20 hours
+  - !type:AgeRequirement
+    requiredAge: 30
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxiety
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankMajor:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatCo
+      time: 180000 # 50 hours
+    RMCRankCaptain: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: CommendationGiver
+    - type: InnateCommandSpeech
+    - type: Marine
+      Faction: govfor
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: UserIFF
+      factions:
+      - GOVFOR
+    - type: Skills
+      preset: AU14SkillPresetPlatoonCommander
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforplatco
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: co
+    - type: MarineOrders
+      moveOrderSoundMale:
+        collection: AU14MaleMoveOrder
+      moveOrderSoundFemale:
+        collection: AU14FemaleMoveOrder
+      focusOrderSoundMale:
+        collection: AU14MaleFocusOrder
+      focusOrderSoundFemale:
+        collection: AU14FemaleFocusOrder
+      holdOrderSoundMale:
+        collection: AU14MaleHoldOrder
+      holdOrderSoundFemale:
+        collection: AU14FemaleHoldOrder
 
 - type: playTimeTracker
   id: AU14JobGOVFORPlatCo
   isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORPlatCo
+  equipment:
+    id: AU14IDCardGOVFORPlatCo
+    ears: AU14HeadsetGovforCommand
+  inhand:
+    -  AU14TabletGovfor
+
+- type: startingGear
+  id: AU14GearGOVFORPlatCoDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: CMHeadCapPeakedFormal
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetGovforCommand
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORPlatCo
+  name: Spawn Point GOVFOR Platoon Commander
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORPlatCo
+  - type: Sprite
+    state: syn_spawn

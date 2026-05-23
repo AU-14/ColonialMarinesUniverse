@@ -129,6 +129,24 @@ public sealed partial class ConstructionInteractDoAfterEvent : DoAfterEvent
 }
 
 [Serializable, NetSerializable]
+public sealed partial class InitialConstructionDoAfterEvent : DoAfterEvent
+{
+    [DataField]
+    public int Token;
+
+    private InitialConstructionDoAfterEvent()
+    {
+    }
+
+    public InitialConstructionDoAfterEvent(int token)
+    {
+        Token = token;
+    }
+
+    public override DoAfterEvent Clone() => new InitialConstructionDoAfterEvent(Token);
+}
+
+[Serializable, NetSerializable]
 public sealed partial class WelderRefineDoAfterEvent : SimpleDoAfterEvent
 {
 }

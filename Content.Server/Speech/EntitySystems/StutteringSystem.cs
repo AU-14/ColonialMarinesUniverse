@@ -9,7 +9,7 @@ namespace Content.Server.Speech.EntitySystems
 {
     public sealed partial class StutteringSystem : SharedStutteringSystem
     {
-        [Dependency] private StatusEffectsSystem _statusEffectsSystem = default!;
+        [Dependency] private StatusEffectQuerySystem _statusEffectsSystem = default!;
         [Dependency] private IRobustRandom _random = default!;
 
         // Regex of characters to stutter.

@@ -6,7 +6,6 @@ using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Database;
 using Content.Shared.EntityEffects;
 using JetBrains.Annotations;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
 namespace Content.Shared.Chemistry;
@@ -14,7 +13,7 @@ namespace Content.Shared.Chemistry;
 [UsedImplicitly]
 public sealed partial class ReactiveSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private IRobustRandom _robustRandom = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
 
@@ -29,7 +28,7 @@ public sealed partial class ReactiveSystem : EntitySystem
     public void ReactionEntity(EntityUid uid, ReactionMethod method, ReagentQuantity reagentQuantity, Solution? source)
     {
         // We throw if the reagent specified doesn't exist.
-        var proto = _prototypeManager.IndexReagent<ReagentPrototype>(reagentQuantity.Reagent.Prototype);
+        var proto = _reagent.Index(reagentQuantity.Reagent.Prototype);
         ReactionEntity(uid, method, proto, reagentQuantity, source);
     }
 

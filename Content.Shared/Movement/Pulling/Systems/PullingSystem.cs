@@ -551,7 +551,8 @@ public sealed partial class PullingSystem : EntitySystem
         _interaction.DoContactInteraction(pullableUid, pullerUid);
 
         // Use net entity so it's consistent across client and server.
-        pullableComp.PullJointId = $"pull-joint-{GetNetEntity(pullableUid)}";
+        var pullJointId = $"pull-joint-{GetNetEntity(pullableUid)}";
+        pullableComp.PullJointId = pullJointId;
 
         EnsureComp<ActivePullerComponent>(pullerUid);
         pullerComp.Pulling = pullableUid;
@@ -563,9 +564,14 @@ public sealed partial class PullingSystem : EntitySystem
         // joint state handling will manage its own state
         if (!_timing.ApplyingState)
         {
+            // Pull joint IDs are deterministic per pulled entity. If stale joint state
+            // survived a previous pull, clear it before creating the replacement.
+            _joints.RemoveJoint(pullableUid, pullJointId);
+            _joints.RemoveJoint(pullerUid, pullJointId);
+
             var joint = _joints.CreateDistanceJoint(pullableUid, pullerUid,
                     pullablePhysics.LocalCenter, pullerPhysics.LocalCenter,
-                    id: pullableComp.PullJointId, minimumDistance: 1);
+                    id: pullJointId, minimumDistance: 1);
             joint.CollideConnected = false;
             // This maximum has to be there because if the object is constrained too closely, the clamping goes backwards and asserts.
             // Internally, the joint length has been set to the distance between the pivots.

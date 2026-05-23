@@ -15,7 +15,7 @@ namespace Content.Client.Info
         public ServerInfo()
         {
             Orientation = LayoutOrientation.Vertical;
-            HorizontalExpand = true;
+            HorizontalExpand = false;
 
             _richTextLabel = new RichTextLabel
             {

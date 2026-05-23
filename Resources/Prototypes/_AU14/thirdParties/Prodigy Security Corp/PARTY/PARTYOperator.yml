@@ -1,0 +1,107 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobWYProdigyPartySmartgunner
+  name: PMC Smartgun Operator
+  description: au14-prodigyparty-description
+  playTimeTracker: AU14JobWYProdigyPartySmartgunner
+  ranks:
+    AU14RankWeYuSeniorOperator: []
+  spawnMenuRoleName: WY PMC Smartgun Operator (3rd party)
+  startingGear: AU14GearWYPMCPartySmartgunner
+  greeting: au14-prodigyparty-greeting
+  icon: "RMCJobIconPMCGunner"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-psc
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 2
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillJtac: 1
+        RMCSkillSmartGun: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillPolice: 1
+    - type: SquadArmorWearer
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: smartgunner
+  hidden: false
+
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: AU14JobWYProdigyPartySmartgunner
+  name: WY PMC Party Smartgun Operator (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: PMC Smartgun Operator
+    description: au14-prodigyparty-description
+    reregister: false
+    job: AU14JobWYProdigyPartySmartgunner
+    raffle:
+      settings: short
+    rules: au14-prodigyparty-description
+
+- type: startingGear
+  id: AU14GearPARTPartyOperator
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14ArmorProdigyXAS23G
+    jumpsuit: AU14ProdigyFatiguesRU
+    shoes: RMCBootsSPPBlackFilled
+    mask: RMCMaskCoifPMC
+    eyes: RMCGlassesSmartGunSight
+    head: AU14ProdigyBeret
+    gloves: AU14HandsProdigyRU
+    belt: RMCBeltSmartGunOperatorPistolPMCFilled
+    pocket1: RMCPouchDrumPMCFill
+    pocket2: AU14PouchIFAKProdigyFill
+    back: RMCSatchelWelderRU #21 slots
+    ears: RMCM5CameraGear
+    ears2: AU14HeadsetPART
+    suitstorage: RMCSmartGunPMC
+  storage:
+    #pocket1:
+    #- no need to fill, already comes pre-filled with 3 magazines
+    #pocket2:
+    #- AU14Tourniquet
+    # no need, pouch already has 6 slots and is filled with med supplies
+    back:
+    - CMMRE
+    - RMCBinocularsPVE
+    - AU14PacketGrenadeFragM12Filled
+    - RMCMagazineSmartGunirradiated
+    - RMCMagazineSmartGunirradiated
+    - RMCMagazineSmartGunirradiated
+    - RMCMagazineSmartGunirradiated
+    - RMCMagazineSmartGunirradiated
+    jumpsuit:
+    - AU14SynthResetKeyProdigy
+    - AU14SynthResetKeyProdigy
+    - AU14ProdigyLaptop
+    # 2 empty slots
+    outerClothing:
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    - RMCVisorMedical
+    # 1 empty slots
+
+- type: playTimeTracker
+  id: AU14JobWYProdigyPartySmartgunner

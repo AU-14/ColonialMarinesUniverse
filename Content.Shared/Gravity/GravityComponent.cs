@@ -11,21 +11,6 @@ namespace Content.Shared.Gravity
         [DataField("gravityShakeSound")]
         public SoundSpecifier GravityShakeSound { get; set; } = new SoundPathSpecifier("/Audio/Effects/alert.ogg");
 
-        [ViewVariables(VVAccess.ReadWrite)]
-        public bool EnabledVV
-        {
-            get => Enabled;
-            set
-            {
-                if (Enabled == value) return;
-                Enabled = value;
-                var ev = new GravityChangedEvent(Owner, value);
-                var entityManager = IoCManager.Resolve<IEntityManager>();
-                entityManager.EventBus.RaiseLocalEvent(Owner, ref ev);
-                entityManager.Dirty(Owner, this);
-            }
-        }
-
         [DataField("enabled")]
         public bool Enabled;
 

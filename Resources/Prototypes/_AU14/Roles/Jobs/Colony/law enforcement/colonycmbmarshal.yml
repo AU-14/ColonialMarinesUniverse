@@ -5,13 +5,6 @@
   description: au14-job-description-civiliancmbmarshal
   setPreference: true
   canBeAntag: false
-  requirements:
-  - !type:AgeRequirement
-    requiredAge: 25
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
   ranks:
     AU14RankCMBMarshal: []
   startingGear: AU14GearCivilianCMBMarshal

@@ -142,18 +142,19 @@
     - Sheet
   - type: RMCConstructionItem
     buildable:
-    # - RMCSandalsBuild
     - RMCFloorTileWoodBuild
     - RMCCampfireBuild
-    # wooden chair
+    - AU14TorchBuild
+    - AU14BaseballBatBuild
+    - AU14FishingRodBuild
+    - AU14WoodenChairBuild
     - RMCWoodenBarricadeBuild
     - RMCWoodenCrateBuild
+    - AU14WoodenCrossBuild
+    - AU14WoodenSandalsBuild
     # wooden door
     # coffin
-    # baseball bat
-    # wooden cross
     # wooden pole
-    # fishing pole
   - type: UserInterface
     interfaces:
       enum.RMCConstructionUiKey.Key:

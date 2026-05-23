@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Linq;
 using Content.Client.Actions;
 using Content.Shared._RMC14.Actions;
@@ -15,16 +16,52 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
     [Dependency] private IPlayerManager _player = default!;
 
     private EntityUid? _sortEnt;
+    private EntProtoId? _localOrderId;
+    private ImmutableArray<EntProtoId>? _localOrder;
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeNetworkEvent<RMCActionOrderLoadedEvent>(OnActionOrderLoaded);
+        SubscribeLocalEvent<RMCActionOrderComponent, AfterAutoHandleStateEvent>(OnActionOrderState);
+
+        _actions.OnActionAdded += OnClientActionChanged;
+        _actions.OnActionRemoved += OnClientActionChanged;
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+
+        _actions.OnActionAdded -= OnClientActionChanged;
+        _actions.OnActionRemoved -= OnClientActionChanged;
     }
 
     private void OnActionOrderLoaded(RMCActionOrderLoadedEvent ev)
     {
+        if (_player.LocalEntity is { } player &&
+            TryComp(player, out RMCActionOrderComponent? order))
+        {
+            _localOrderId = order.Id;
+            _localOrder = ev.Actions.ToImmutableArray();
+        }
+
         // Re-trigger reordering
+        _sortEnt = null;
+    }
+
+    private void OnActionOrderState(Entity<RMCActionOrderComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        if (_player.LocalEntity != ent.Owner)
+            return;
+
+        _localOrderId = ent.Comp.Id;
+        _localOrder = ent.Comp.Order;
+        _sortEnt = null;
+    }
+
+    private void OnClientActionChanged(EntityUid action)
+    {
         _sortEnt = null;
     }
 
@@ -43,6 +80,14 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
             }
 
             actionPrototypes.Add(prototype.ID);
+        }
+
+        if (_player.LocalEntity is { } player &&
+            TryComp(player, out RMCActionOrderComponent? order))
+        {
+            _localOrderId = order.Id;
+            _localOrder = actionPrototypes.ToImmutableArray();
+            _sortEnt = player;
         }
 
         var ev = new RMCActionOrderChangeEvent(actionPrototypes);
@@ -94,7 +139,7 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
         _sortEnt = null;
 
         if (!TryComp(player, out RMCActionOrderComponent? orderComp) ||
-            orderComp.Order is not { Length: > 0 } order)
+            !TryGetOrder(orderComp, out var order))
         {
             SortDefault(player);
             return;
@@ -138,5 +183,24 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
         }
 
         _actions.SetAssignments(assignments);
+    }
+
+    private bool TryGetOrder(RMCActionOrderComponent orderComp, out ImmutableArray<EntProtoId> order)
+    {
+        if (_localOrderId == orderComp.Id &&
+            _localOrder is { Length: > 0 } localOrder)
+        {
+            order = localOrder;
+            return true;
+        }
+
+        if (orderComp.Order is { Length: > 0 } componentOrder)
+        {
+            order = componentOrder;
+            return true;
+        }
+
+        order = default;
+        return false;
     }
 }

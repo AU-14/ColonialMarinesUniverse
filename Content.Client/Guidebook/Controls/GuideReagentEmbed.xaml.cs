@@ -34,6 +34,7 @@ public sealed partial class GuideReagentEmbed : BoxContainer, IDocumentTag, ISea
     [Dependency] private IComponentFactory _componentFactory = default!;
 
     private readonly ChemistryGuideDataSystem _chemistryGuideData;
+    private readonly RMCReagentSystem _reagent;
     private readonly ISawmill _sawmill;
 
     public IPrototype? RepresentedPrototype { get; private set; }
@@ -44,13 +45,14 @@ public sealed partial class GuideReagentEmbed : BoxContainer, IDocumentTag, ISea
         IoCManager.InjectDependencies(this);
         _sawmill = _logManager.GetSawmill("guidebook.reagent");
         _chemistryGuideData = _systemManager.GetEntitySystem<ChemistryGuideDataSystem>();
+        _reagent = _systemManager.GetEntitySystem<RMCReagentSystem>();
         MouseFilter = MouseFilterMode.Stop;
         CrtLobbyTheme.Apply(this, useCrtTypography: false);
     }
 
     public GuideReagentEmbed(string reagent) : this()
     {
-        GenerateControl(_prototype.IndexReagent<ReagentPrototype>(reagent));
+        GenerateControl(_reagent.Index(reagent));
     }
 
     public GuideReagentEmbed(ReagentPrototype reagent) : this()
@@ -77,7 +79,7 @@ public sealed partial class GuideReagentEmbed : BoxContainer, IDocumentTag, ISea
             return false;
         }
 
-        if (!_prototype.TryIndexReagent<ReagentPrototype>(id, out var reagent))
+        if (!_reagent.TryIndex(id, out var reagent))
         {
             _sawmill.Error($"Specified reagent prototype \"{id}\" is not a valid reagent prototype");
             return false;

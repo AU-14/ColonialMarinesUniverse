@@ -35,6 +35,9 @@
         crate: RMCCrateInflatableBarriers
       - cost: 1500
         crate: RMCCrateEmptySandbags
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["AU14AccessCorporateWEYULiaison"], ["AU14AccessCorporateWEYU"]]
 
 
 # Corporate ASRS Elevator

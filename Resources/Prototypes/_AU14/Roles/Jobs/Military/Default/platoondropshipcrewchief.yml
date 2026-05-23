@@ -62,7 +62,7 @@
   id: AU14GearGOVFORDCC
   equipment:
     id: AU14IDCardGOVFORDCC
-    ears: AU14HeadsetSectionLeader
+    ears: AU14HeadsetGovforCommand
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORDCC
@@ -81,4 +81,4 @@
     shoes: CMBootsBrown
     head: AU14USASFAirCrewHelmet
     jumpsuit: AU14USASFPilotJumpsuit
-    ears: AU14HeadsetSectionMarine
+    ears: AU14HeadsetGovforMarine

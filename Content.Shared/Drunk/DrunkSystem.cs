@@ -9,7 +9,7 @@ public abstract partial class SharedDrunkSystem : EntitySystem
 {
     public static readonly ProtoId<StatusEffectPrototype> DrunkKey = "Drunk";
 
-    [Dependency] private StatusEffectsSystem _statusEffectsSystem = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffectsSystem = default!;
     [Dependency] private SharedSlurredSystem _slurredSystem = default!;
 
     public void TryApplyDrunkenness(EntityUid uid, float boozePower, bool applySlur = true,

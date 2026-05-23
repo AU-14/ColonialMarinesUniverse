@@ -14,6 +14,8 @@
         <PanelContainer Name="OptionsPanel" StyleClasses="CrtInsetPanel" HorizontalExpand="True">
             <BoxContainer Orientation="Vertical" Margin="8 6" VerticalExpand="True" VerticalAlignment="Top"
                           SeparationOverride="5">
+                <Label Name="CallVoteDisabledLabel" Text="{Loc 'ui-vote-call-disabled'}" Visible="False"
+                       HorizontalAlignment="Center" StyleClasses="CrtHeading" />
                 <OptionButton Name="VoteTypeButton" HorizontalExpand="True" MinWidth="280" />
                 <BoxContainer Name="VoteOptionsButtonContainer" HorizontalExpand="True" Orientation="Vertical"
                               SeparationOverride="4">

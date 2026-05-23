@@ -336,7 +336,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         {
             // Per-terminal faction check
             string? consoleFaction = null;
-            if (TryComp(terminal.Owner, out WhitelistedShuttleComponent? whitelist))
+            if (TryComp(uid, out WhitelistedShuttleComponent? whitelist))
                 consoleFaction = string.IsNullOrWhiteSpace(whitelist.Faction) ? null : whitelist.Faction;
 
             var targets = terminal.Targets;

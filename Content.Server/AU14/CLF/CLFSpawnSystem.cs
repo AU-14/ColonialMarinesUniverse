@@ -17,6 +17,8 @@ namespace Content.Server.AU14.CLF;
 /// </summary>
 public sealed partial class ClfSpawnSystem : EntitySystem
 {
+    private static readonly ProtoId<CLFSpawnConfigPrototype> ClfSpawnConfig = "CLFSpawnConfig";
+
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private StationSpawningSystem _stationSpawning = default!;
@@ -184,7 +186,7 @@ public sealed partial class ClfSpawnSystem : EntitySystem
             return;
 
         // Get CLF spawn config
-        if (!_prototypeManager.TryIndex<CLFSpawnConfigPrototype>("CLFSpawnConfig", out var config))
+        if (!_prototypeManager.TryIndex(ClfSpawnConfig, out var config))
         {
             Log.Info("CLF Spawn System: No CLFSpawnConfig found, skipping additional entity spawning");
             return;
@@ -210,6 +212,5 @@ public sealed partial class ClfSpawnSystem : EntitySystem
     /// </summary>
     public EntityCoordinates? GetChosenSafehouse() => _chosenSafehouseLocation;
 }
-
 
 

@@ -647,6 +647,11 @@ binds:
   type: State
   key: Space
   mod1: Control
+- function: CMUToggleShootDownZLevel
+  type: State
+  key: Space
+  mod1: Shift
+  mod2: Control
 - function: CMUniqueAction
   type: State
   key: Space

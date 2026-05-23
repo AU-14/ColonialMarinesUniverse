@@ -54,6 +54,7 @@ namespace Content.Client.Lobby.UI
         private readonly IConfigurationManager _cfgManager;
         private readonly IEntityManager _entManager;
         private readonly IFileDialogManager _dialogManager;
+        private readonly IComponentFactory _componentFactory;
         private readonly IPlayerManager _playerManager;
         private readonly IPrototypeManager _prototypeManager;
         private readonly IResourceManager _resManager;
@@ -151,6 +152,7 @@ namespace Content.Client.Lobby.UI
             CrtLobbyTheme.Apply(this);
             _sawmill = logManager.GetSawmill("profile.editor");
             _cfgManager = configurationManager;
+            _componentFactory = IoCManager.Resolve<IComponentFactory>();
             _entManager = entManager;
             _dialogManager = dialogManager;
             _playerManager = playerManager;
@@ -447,7 +449,7 @@ namespace Content.Client.Lobby.UI
             for (var i = 0; i < squad.SquadPrototypes.Length; i++)
             {
                 var squadProto = squad.SquadPrototypes[i];
-                if (!squadProto.TryGetComponent(out SquadTeamComponent? team) ||
+                if (!squadProto.TryGetComponent(out SquadTeamComponent? team, _componentFactory) ||
                     !team.RoundStart)
                 {
                     continue;
@@ -636,8 +638,8 @@ namespace Content.Client.Lobby.UI
 
                 TabContainer.RemoveChild(_flavorText);
                 _flavorText.OnFlavorTextChanged -= OnFlavorTextChange;
-                _flavorText.Dispose();
-                _flavorTextEdit?.Dispose();
+                _flavorText.Orphan();
+                _flavorTextEdit?.Orphan();
                 _flavorTextEdit = null;
                 _flavorText = null;
             }
@@ -924,7 +926,7 @@ namespace Content.Client.Lobby.UI
         /// </summary>
         public void RefreshLoadouts()
         {
-            _loadoutWindow?.Dispose();
+            _loadoutWindow?.Close();
         }
 
         public void RefreshRMC(SharedRMCPatronTier? tier)
@@ -1545,7 +1547,11 @@ namespace Content.Client.Lobby.UI
 
         private static bool IsRoundStartThreatAssignmentJob(JobPrototype job)
         {
-            return job.ID is "AU14JobThreatLeader" or "AU14JobThreatMember";
+            return job.ID is
+                "AU14JobThreatLeader" or
+                "AU14JobThreatMember" or
+                "AU14JobThirdPartyLeader" or
+                "AU14JobThirdPartyMember";
         }
 
         private static (string Key, string Title) GetMilitaryJobSegment(JobPrototype job)
@@ -1603,7 +1609,7 @@ namespace Content.Client.Lobby.UI
 
         private void OpenLoadout(JobPrototype? jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto)
         {
-            _loadoutWindow?.Dispose();
+            _loadoutWindow?.Close();
             _loadoutWindow = null;
             var collection = IoCManager.Instance;
 
@@ -1752,7 +1758,7 @@ namespace Content.Client.Lobby.UI
             if (!disposing)
                 return;
 
-            _loadoutWindow?.Dispose();
+            _loadoutWindow?.Close();
             _loadoutWindow = null;
         }
 

@@ -22,7 +22,7 @@ public sealed partial class StunShakeableSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private RMCStandingSystem _rmcStanding = default!;
-    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private static readonly ProtoId<StatusEffectPrototype> Stun = "Stun";

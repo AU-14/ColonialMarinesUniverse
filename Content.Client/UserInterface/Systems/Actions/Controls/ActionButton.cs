@@ -12,6 +12,8 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input;
+using Robust.Shared.IoC;
+using Robust.Shared.Localization;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using static Robust.Client.UserInterface.Controls.BoxContainer;
@@ -26,6 +28,7 @@ public sealed class ActionButton : Control, IEntityControl
     private SpriteSystem? _spriteSys;
     private ActionUIController? _controller;
     private SharedChargesSystem _sharedChargesSys;
+    private ILocalizationManager _localization;
     private bool _beingHovered;
     private bool _depressed;
     private bool _toggled;
@@ -69,6 +72,7 @@ public sealed class ActionButton : Control, IEntityControl
         _entities = entities;
         _spriteSys = spriteSys;
         _sharedChargesSys = _entities.System<SharedChargesSystem>();
+        _localization = IoCManager.Resolve<ILocalizationManager>();
         _controller = controller;
 
         MouseFilter = MouseFilterMode.Pass;
@@ -196,24 +200,35 @@ public sealed class ActionButton : Control, IEntityControl
         if (!_entities.TryGetComponent(Action, out MetaDataComponent? metadata))
             return null;
 
-        var name = FormattedMessage.FromMarkupPermissive(Loc.GetString(metadata.EntityName));
-        var decr = FormattedMessage.FromMarkupPermissive(Loc.GetString(metadata.EntityDescription));
+        var name = FormattedMessage.FromMarkupPermissive(LocalizeOrRaw(metadata.EntityName));
+        var decr = FormattedMessage.FromMarkupPermissive(LocalizeOrRaw(metadata.EntityDescription));
         FormattedMessage? chargesText = null;
 
         // TODO: Don't touch this use an event make callers able to add their own shit for actions or I kill you.
         if (_entities.TryGetComponent(Action, out LimitedChargesComponent? actionCharges))
         {
             var charges = _sharedChargesSys.GetCurrentCharges((Action.Value, actionCharges, null));
-            chargesText = FormattedMessage.FromMarkupPermissive(Loc.GetString($"Charges: {charges.ToString()}/{actionCharges.MaxCharges}"));
+            chargesText = new FormattedMessage();
+            chargesText.AddText($"Charges: {charges}/{actionCharges.MaxCharges}");
 
             if (_entities.TryGetComponent(Action, out AutoRechargeComponent? autoRecharge))
             {
                 var chargeTimeRemaining = _sharedChargesSys.GetNextRechargeTime((Action.Value, actionCharges, autoRecharge));
-                chargesText.AddText(Loc.GetString($"{Environment.NewLine}Time Til Recharge: {chargeTimeRemaining}"));
+                chargesText.AddText($"{Environment.NewLine}Time Til Recharge: {chargeTimeRemaining}");
             }
         }
 
         return new ActionAlertTooltip(name, decr, charges: chargesText);
+    }
+
+    private string LocalizeOrRaw(string message)
+    {
+        if (string.IsNullOrEmpty(message))
+            return string.Empty;
+
+        return _localization.TryGetString(message, out var localized)
+            ? localized
+            : message;
     }
 
     protected override void ControlFocusExited()

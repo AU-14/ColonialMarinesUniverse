@@ -77,7 +77,7 @@ public abstract partial class SharedSalvageSystem : EntitySystem
     {
         var mods = _proto.EnumeratePrototypes<T>().ToList();
         mods.Sort((x, y) => string.Compare(x.ID, y.ID, StringComparison.Ordinal));
-        rand.Shuffle(mods);
+        Shuffle(mods, rand);
 
         foreach (var mod in mods)
         {
@@ -96,7 +96,7 @@ public abstract partial class SharedSalvageSystem : EntitySystem
     {
         var mods = _proto.EnumeratePrototypes<T>().ToList();
         mods.Sort((x, y) => string.Compare(x.ID, y.ID, StringComparison.Ordinal));
-        rand.Shuffle(mods);
+        Shuffle(mods, rand);
 
         foreach (var mod in mods)
         {
@@ -110,5 +110,15 @@ public abstract partial class SharedSalvageSystem : EntitySystem
 
         throw new InvalidOperationException();
     }
-}
 
+    private static void Shuffle<T>(IList<T> list, System.Random random)
+    {
+        var n = list.Count;
+        while (n > 1)
+        {
+            n -= 1;
+            var k = random.Next(n + 1);
+            (list[k], list[n]) = (list[n], list[k]);
+        }
+    }
+}

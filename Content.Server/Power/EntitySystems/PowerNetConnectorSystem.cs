@@ -31,31 +31,33 @@ public sealed class PowerNetConnectorSystem : EntitySystem
 
     private void OnPowerSupplierInit(EntityUid uid, PowerSupplierComponent component, ComponentInit args)
     {
-        BaseNetConnectorInit(component);
+        BaseNetConnectorInit(uid, component);
     }
 
     private void OnBatteryDischargerInit(EntityUid uid, BatteryDischargerComponent component, ComponentInit args)
     {
-        BaseNetConnectorInit(component);
+        BaseNetConnectorInit(uid, component);
     }
 
     private void OnBatteryChargerInit(EntityUid uid, BatteryChargerComponent component, ComponentInit args)
     {
-        BaseNetConnectorInit(component);
+        BaseNetConnectorInit(uid, component);
     }
 
     private void OnApcPowerProviderInit(EntityUid uid, ApcPowerProviderComponent component, ComponentInit args)
     {
-        BaseNetConnectorInit(component);
+        BaseNetConnectorInit(uid, component);
     }
 
     private void OnApcInit(EntityUid uid, ApcComponent component, ComponentInit args)
     {
-        BaseNetConnectorInit(component);
+        BaseNetConnectorInit(uid, component);
     }
 
-    public void BaseNetConnectorInit<T>(BaseNetConnectorComponent<T> component) where T : class
+    public void BaseNetConnectorInit<T>(EntityUid uid, BaseNetConnectorComponent<T> component) where T : class
     {
+        component.SetOwner(uid);
+
         if (component.NeedsNet)
         {
             component.TryFindAndSetNet();

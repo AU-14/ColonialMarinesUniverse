@@ -115,10 +115,12 @@
     delayOptions: [3, 4]
     initialBeepDelay: 0
     beepSound: /Audio/_AU14/IED/vestbeep.ogg
+    requiredWornSlots: OUTERCLOTHING
     startOnStick: true
     canToggleStartOnStick: true
   - type: PreventThrowWhenArmed
   - type: TimerStartOnSignal
+    requiredWornSlots: OUTERCLOTHING
   - type: DeviceLinkSink
     ports:
     - Timer

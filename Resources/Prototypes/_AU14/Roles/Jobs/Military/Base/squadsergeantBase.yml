@@ -1,12 +1,104 @@
 - type: job
+  abstract: true
   parent: CMJobBase
-  id: AU14JobSquadSergeantBase
+  id: AU14JobSquadSergeantBaseAbstract # Squad Leader Abstraction
   name: au14-job-name-govforsquadsergeant
   description: au14-job-description-govforsquadsergeant
+  icon: "AU14JobIconSarge"
+  #icon: "AU14JobIconPlatoonSarge" # unused
+  spawnMenuRoleName: Squad Sergeant (GOVFOR)
+  supervisors: au14-job-supervisors-govfor
+  startingGear: AU14GearGOVFORSquadSergeant
+  dummyStartingGear: AU14GearGOVFORSquadSergeantDummy
   playTimeTracker: AU14JobGOVFORSquadSergeant
-  basePlaytimeTracker: true
-  hidden: true
+  overwatchRoleName: Squad Lead
+  overwatchShowName: true
+  overwatchSortPriority: -5
+  setPreference: false
+  canBeAntag: false
+  accessGroups:
+  - AU14GovforFTL
+  roleWeight: 0.25
+
+- type: job
+  abstract: true
+  parent: AU14JobSquadSergeantBaseAbstract
+  id: AU14JobSquadSergeantBase # Squad Leader Base
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentGovernmentForces
+    time: 36000 # 10 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankStaffSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadSergeant
+      time: 36000 # 10 hours
+    RMCRankSergeant: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Marine
+      Faction: govfor
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: UserIFF
+      factions:
+      - GOVFOR
+    - type: Skills
+      preset: AU14SkillPresetPlatoonSergeant
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforsquadsergeant
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: leader
+    - type: MarineOrders
+      moveOrderSoundMale:
+        collection: AU14MaleMoveOrder
+      moveOrderSoundFemale:
+        collection: AU14FemaleMoveOrder
+      focusOrderSoundMale:
+        collection: AU14MaleFocusOrder
+      focusOrderSoundFemale:
+        collection: AU14FemaleFocusOrder
+      holdOrderSoundMale:
+        collection: AU14MaleHoldOrder
+      holdOrderSoundFemale:
+        collection: AU14FemaleHoldOrder
 
 - type: playTimeTracker
   id: AU14JobGOVFORSquadSergeant
   isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORSquadSergeant
+  equipment:
+    id: AU14IDCardSquadSergeant
+    ears: AU14HeadsetGovforCommand
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORSquadSergeant
+  name: Spawn Point GOVFOR Squad Sergeant
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORSquadSergeant
+  - type: Sprite
+    state: syn_spawn
+
+- type: startingGear
+  id: AU14GearGOVFORSquadSergeantDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleOne
+    shoes: CMBootsBrown
+    head: AU14JungleBoonieHat
+    jumpsuit: AU14JungleFatigues
+    earss: AU14HeadsetGovforCommand

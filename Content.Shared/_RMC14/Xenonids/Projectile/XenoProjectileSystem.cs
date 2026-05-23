@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Projectiles;
 using Content.Shared._RMC14.Random;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Plasma;
@@ -48,6 +49,7 @@ public sealed partial class XenoProjectileSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private CMUZLevelShootingSystem _zLevelShooting = default!;
 
     private EntityQuery<ProjectileComponent> _projectileQuery;
     private EntityQuery<PreventAttackLightOffComponent> _preventAttackLightOffQuery;
@@ -233,6 +235,9 @@ public sealed partial class XenoProjectileSystem : EntitySystem
 
         var origin = _transform.GetMapCoordinates(xeno);
         var targetMap = _transform.ToMapCoordinates(targetCoords);
+        if (!_zLevelShooting.TryAdjustShotMapCoordinates(xeno, origin, targetMap, out origin, out targetMap))
+            return false;
+
         if (origin.MapId != targetMap.MapId ||
             origin.Position == targetMap.Position)
         {

@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
+"""
+Assembles the changelog .yml parts into a changelog file.
+Each part includes: author (required), changes (required), time, url, category
+Prunes the oldest past 500 entries.
+usage: update_changelog.py <changelog-file> <parts-dir> --category "Main"
+"""
 
-import sys
 import os
 from typing import List, Any
 import yaml
@@ -14,21 +19,24 @@ ENTRY_RE = r"^ *[*-]? *(\S[^\n\r]+)\r?$"
 
 CATEGORY_MAIN = "Main"
 
+
 # From https://stackoverflow.com/a/37958106/4678631
 class NoDatesSafeLoader(yaml.SafeLoader):
     @classmethod
     def remove_implicit_resolver(cls, tag_to_remove):
-        if not 'yaml_implicit_resolvers' in cls.__dict__:
+        if not "yaml_implicit_resolvers" in cls.__dict__:
             cls.yaml_implicit_resolvers = cls.yaml_implicit_resolvers.copy()
 
         for first_letter, mappings in cls.yaml_implicit_resolvers.items():
-            cls.yaml_implicit_resolvers[first_letter] = [(tag, regexp)
-                                                         for tag, regexp in mappings
-                                                         if tag != tag_to_remove]
+            cls.yaml_implicit_resolvers[first_letter] = [
+                (tag, regexp) for tag, regexp in mappings if tag != tag_to_remove
+            ]
+
 
 # Hrm yes let's make the fucking default of our serialization library to PARSE ISO-8601
 # but then output garbage when re-serializing.
-NoDatesSafeLoader.remove_implicit_resolver('tag:yaml.org,2002:timestamp')
+NoDatesSafeLoader.remove_implicit_resolver("tag:yaml.org,2002:timestamp")
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -82,14 +90,20 @@ def main():
             new_id = max_id
 
             entries_list.append(
-                {"author": author, "time": time, "changes": changes, "id": new_id, "url": url}
+                {
+                    "author": author,
+                    "time": time,
+                    "changes": changes,
+                    "id": new_id,
+                    "url": url,
+                }
             )
 
         os.remove(partpath)
 
     print(f"Have {len(entries_list)} changelog entries")
 
-    entries_list.sort(key=lambda e: e["id"])
+    entries_list.sort(key=lambda e: e["time"])
 
     overflow = len(entries_list) - MAX_ENTRIES
     if overflow > 0:
@@ -105,4 +119,5 @@ def main():
         yaml.safe_dump(new_data, f)
 
 
-main()
+if __name__ == "__main__":
+    main()
