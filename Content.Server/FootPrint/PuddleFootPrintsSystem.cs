@@ -8,10 +8,10 @@ using Robust.Shared.Physics.Events;
 
 namespace Content.Server.FootPrint;
 
-public sealed class PuddleFootPrintsSystem : EntitySystem
+public sealed partial class PuddleFootPrintsSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
 
     public override void Initialize()
     {

@@ -66,6 +66,7 @@
   - type: ContainerContainer
     containers:
       submission: !type:Container
+      disposals: !type:Container
   - type: DisposalUnit
     whitelist:
       tags:
@@ -172,11 +173,11 @@
   - type: Speech
   - type: ActiveRadio
     channels:
-    - colonyalert
+    - colonyAlert
   - type: RadioSpeaker
     enabled: true
     channels:
-    - colonyalert
+    - colonyAlert
   - type: Sprite
     noRot: false
     drawdepth: SmallObjects
@@ -398,7 +399,7 @@
     colonyManaged: false
     asrsFaction: corporate
   - type: AccessReader
-    access: [["AU14AccessColonyCorporateLiaison"]]
+    access: [["AU14AccessCorporateWEYULiaison"]]
 
 - type: entity
   parent: AUDepartmentConsoleBase

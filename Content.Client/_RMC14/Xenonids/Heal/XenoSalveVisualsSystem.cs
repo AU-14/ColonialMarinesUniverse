@@ -5,8 +5,10 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client._RMC14.Xenonids.Heal;
 
-public sealed class XenoSalveVisualsSystem : VisualizerSystem<XenoSalveVisualsComponent>
+public sealed partial class XenoSalveVisualsSystem : VisualizerSystem<XenoSalveVisualsComponent>
 {
+    [Dependency] private SpriteSystem _sprite = default!;
+
     protected override void OnAppearanceChange(EntityUid uid, XenoSalveVisualsComponent component, ref AppearanceChangeEvent args)
     {
         var sprite = args.Sprite;
@@ -14,16 +16,16 @@ public sealed class XenoSalveVisualsSystem : VisualizerSystem<XenoSalveVisualsCo
         if (sprite == null || !AppearanceSystem.TryGetData(uid, XenoHealerVisuals.Gooped, out bool goop))
             return;
 
-        if (!sprite.LayerMapTryGet(XenoHealerVisualLayers.Goop, out var layer))
+        if (!_sprite.LayerMapTryGet((uid, sprite), XenoHealerVisualLayers.Goop, out var layer, false))
             return;
 
         if (!goop)
         {
-            sprite.LayerSetVisible(layer, false);
+            _sprite.LayerSetVisible((uid, sprite), layer, false);
             return;
         }
 
-        sprite.LayerSetVisible(layer, true);
+        _sprite.LayerSetVisible((uid, sprite), layer, true);
 
         string layerState = "salved";
 
@@ -32,6 +34,6 @@ public sealed class XenoSalveVisualsSystem : VisualizerSystem<XenoSalveVisualsCo
         else if (AppearanceSystem.TryGetData(uid, RMCXenoStateVisuals.Resting, out bool resting) && resting)
             layerState += "_rest";
 
-        sprite.LayerSetState(layer, layerState);
+        _sprite.LayerSetRsiState((uid, sprite), layer, layerState);
     }
 }

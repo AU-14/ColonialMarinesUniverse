@@ -1,12 +1,12 @@
-﻿using Content.Shared.UserInterface;
+using Content.Shared.UserInterface;
 using Content.Shared.Whitelist;
 using JetBrains.Annotations;
 
 namespace Content.Shared._RMC14.UserInterface;
 
-public sealed class RMCUserInterfaceSystem : EntitySystem
+public sealed partial class RMCUserInterfaceSystem : EntitySystem
 {
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
     private readonly List<(Entity<UserInterfaceComponent?> Ent, Action<Entity<UserInterfaceComponent?>, RMCUserInterfaceSystem> Act)> _toRefresh = new();
 

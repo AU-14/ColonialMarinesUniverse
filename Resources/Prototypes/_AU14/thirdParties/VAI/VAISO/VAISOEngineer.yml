@@ -32,7 +32,7 @@
         RMCSkillVehicles: 2
         RMCSkillJtac: 3
         RMCSkillEndurance: 1
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: AU14VAISOBasePreset
     - type: JobPrefix
       prefix: au14-job-prefix-vai-engi
@@ -43,7 +43,7 @@
   id: AU14VAISOEngi
   name: VAISO Engineering Specialist
   components:
-  - type: EquipSurvivorPreset
+  - type: EquipEntityPreset
     preset: AU14VAISOBasePreset
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial

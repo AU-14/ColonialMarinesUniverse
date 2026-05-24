@@ -22,6 +22,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
+using Robust.Shared.Audio;
 using Robust.Shared.Configuration;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Network;
@@ -31,15 +32,15 @@ using Robust.Shared.Utility;
 namespace Content.Client.UserInterface.Systems.Bwoink;
 
 [UsedImplicitly]
-public sealed class AHelpUIController: UIController, IOnSystemChanged<BwoinkSystem>, IOnStateChanged<GameplayState>, IOnStateChanged<LobbyState>
+public sealed partial class AHelpUIController: UIController, IOnSystemChanged<BwoinkSystem>, IOnStateChanged<GameplayState>, IOnStateChanged<LobbyState>
 {
-    [Dependency] private readonly IClientAdminManager _adminManager = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
-    [Dependency] private readonly StaffHelpUIController _staffHelp = default!;
-    [UISystemDependency] private readonly AudioSystem _audio = default!;
+    [Dependency] private IClientAdminManager _adminManager = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IUserInterfaceManager _uiManager = default!;
+    [Dependency] private StaffHelpUIController _staffHelp = default!;
+    [UISystemDependency] private AudioSystem _audio = default!;
 
     private BwoinkSystem? _bwoinkSystem;
     public MenuButton? GameAHelpButton => UIManager.GetActiveUIWidgetOrNull<GameTopMenuBar>()?.AHelpButton;
@@ -143,7 +144,7 @@ public sealed class AHelpUIController: UIController, IOnSystemChanged<BwoinkSyst
         if (message.PlaySound && localPlayer.UserId != message.TrueSender)
         {
             if (_aHelpSound != null && (_bwoinkSoundEnabled || !_adminManager.IsActive()))
-                _audio.PlayGlobal(_aHelpSound, Filter.Local(), false);
+                _audio.PlayGlobal(new ResolvedPathSpecifier(_aHelpSound), Filter.Local(), false);
             _clyde.RequestWindowAttention();
         }
 
@@ -226,7 +227,7 @@ public sealed class AHelpUIController: UIController, IOnSystemChanged<BwoinkSyst
         }
 
         helper.Control.Orphan();
-        helper.Window.Dispose();
+        helper.Window.Orphan();
         helper.Window = null;
         helper.EverOpened = false;
 
@@ -332,7 +333,7 @@ public interface IAHelpUIHandler : IDisposable
     public Action<NetUserId, string, bool, bool>? SendMessageAction { get; set; }
     public event Action<NetUserId, string>? InputTextChanged;
 }
-public sealed class AdminAHelpUIHandler : IAHelpUIHandler
+public sealed partial class AdminAHelpUIHandler : IAHelpUIHandler
 {
     private readonly NetUserId _ownerId;
     public AdminAHelpUIHandler(NetUserId owner)
@@ -376,7 +377,7 @@ public sealed class AdminAHelpUIHandler : IAHelpUIHandler
         {
             ClydeWindow.RequestClosed -= OnRequestClosed;
             ClydeWindow.Dispose();
-            // need to dispose control cause we cant reattach it directly back to the window
+            // Need to detach controls because we can't reattach them directly back to the window.
             // but orphan panels first so -they- can get readded when the window is opened again
             if (Control != null)
             {
@@ -384,7 +385,7 @@ public sealed class AdminAHelpUIHandler : IAHelpUIHandler
                 {
                     panel.Orphan();
                 }
-                Control?.Dispose();
+                Control?.Orphan();
             }
             // window wont be closed here so we will invoke ourselves
             OnClose?.Invoke();
@@ -485,7 +486,7 @@ public sealed class AdminAHelpUIHandler : IAHelpUIHandler
 
     public void Dispose()
     {
-        Window?.Dispose();
+        Window?.Close();
         Window = null;
         Control = null;
         _activePanelMap.Clear();
@@ -493,7 +494,7 @@ public sealed class AdminAHelpUIHandler : IAHelpUIHandler
     }
 }
 
-public sealed class UserAHelpUIHandler : IAHelpUIHandler
+public sealed partial class UserAHelpUIHandler : IAHelpUIHandler
 {
     private readonly NetUserId _ownerId;
     public UserAHelpUIHandler(NetUserId owner)
@@ -571,14 +572,21 @@ public sealed class UserAHelpUIHandler : IAHelpUIHandler
         _chatPanel.RelayedToDiscordLabel.Visible = relayActive;
         _window = new DefaultWindow()
         {
-            TitleClass="windowTitleAlert",
-            HeaderClass="windowHeaderAlert",
             Title=Loc.GetString("bwoink-user-title"),
             MinSize = new Vector2(500, 300),
         };
+        _window.Stylesheet = IoCManager.Resolve<IStylesheetManager>().SheetNano;
         _window.OnClose += () => { OnClose?.Invoke(); };
         _window.OnOpen += () => { OnOpen?.Invoke(); };
-        _window.Contents.AddChild(_chatPanel);
+        var rootPanel = new PanelContainer
+        {
+            HorizontalExpand = true,
+            VerticalExpand = true,
+            StyleClasses = { StyleNano.StyleClassCrtPanel }
+        };
+        rootPanel.AddChild(_chatPanel);
+        _window.Contents.AddChild(rootPanel);
+        CrtLobbyTheme.ApplyWindow(_window, includeChat: true, useCrtTypography: false);
 
         var introText = Loc.GetString("bwoink-system-introductory-message");
         var introMessage = new SharedBwoinkSystem.BwoinkTextMessage( _ownerId, SharedBwoinkSystem.SystemUserId, introText);
@@ -587,7 +595,7 @@ public sealed class UserAHelpUIHandler : IAHelpUIHandler
 
     public void Dispose()
     {
-        _window?.Dispose();
+        _window?.Close();
         _window = null;
         _chatPanel = null;
     }

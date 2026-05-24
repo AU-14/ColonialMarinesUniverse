@@ -17,6 +17,9 @@
   special:
   - !type:AddComponentSpecial
     components:
+    - type: NpcFactionMember
+      factions:
+      - AUWeYu
     - type: Skills
       skills:
         RMCSkillCqc: 1

@@ -7,10 +7,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._AU14.WorkingJoe;
 
-public sealed class WorkingJoeVoiceBui : BoundUserInterface
+public sealed partial class WorkingJoeVoiceBui : BoundUserInterface
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
 
     private WorkingJoeVoiceWindow? _window;
 
@@ -57,6 +57,6 @@ public sealed class WorkingJoeVoiceBui : BoundUserInterface
     {
         base.Dispose(disposing);
         if (disposing)
-            _window?.Dispose();
+            _window?.Close();
     }
 }

@@ -17,16 +17,16 @@ using Robust.Shared.Containers;
 
 namespace Content.Shared._RMC14.Vehicle;
 
-public sealed class VehiclePortGunSystem : EntitySystem
+public sealed partial class VehiclePortGunSystem : EntitySystem
 {
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly VehicleSystem _vehicleSystem = default!;
-    [Dependency] private readonly VehicleViewToggleSystem _viewToggle = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private VehicleSystem _vehicleSystem = default!;
+    [Dependency] private VehicleViewToggleSystem _viewToggle = default!;
+    [Dependency] private INetManager _net = default!;
 
     public override void Initialize()
     {
@@ -125,13 +125,10 @@ public sealed class VehiclePortGunSystem : EntitySystem
             return;
         }
 
-        var ejected = false;
         if (magSlot.HasItem)
         {
             if (!_itemSlots.TryEjectToHands(gunUid, magSlot, args.User))
                 return;
-
-            ejected = true;
         }
 
         if (!_itemSlots.CanInsert(gunUid, args.Used, args.User, magSlot))

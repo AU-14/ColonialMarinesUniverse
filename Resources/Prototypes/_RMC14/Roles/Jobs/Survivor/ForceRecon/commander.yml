@@ -49,7 +49,7 @@
       whitelist:
         tags:
         - RMCSquadFORECON
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCSurvivorPresetForeconNoPistol
     - type: SpotterWhitelist
     - type: RMCAwardRecommendation

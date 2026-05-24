@@ -6,7 +6,7 @@ using Content.Server.AU14.Round;
 using Content.Shared.Mind;
 using Content.Server.GameTicking;
 using Content.Shared._RMC14.Rules;
-using Content.Shared.Au14.Util;
+using Content.Shared.AU14.Util;
 using Content.Shared.AU14.Threats;
 using Content.Shared.AU14.util;
 using Content.Shared.CharacterInfo;
@@ -20,17 +20,17 @@ using Robust.Shared.Random;
 
 namespace Content.Server.CharacterInfo;
 
-public sealed class CharacterInfoSystem : EntitySystem
+public sealed partial class CharacterInfoSystem : EntitySystem
 {
-    [Dependency] private readonly JobSystem _jobs = default!;
-    [Dependency] private readonly MindSystem _minds = default!;
-    [Dependency] private readonly RoleSystem _roles = default!;
-    [Dependency] private readonly SharedObjectivesSystem _objectives = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly AuRoundSystem _auRound = default!;
-    [Dependency] private readonly PlatoonSpawnRuleSystem _platoons = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private JobSystem _jobs = default!;
+    [Dependency] private MindSystem _minds = default!;
+    [Dependency] private RoleSystem _roles = default!;
+    [Dependency] private SharedObjectivesSystem _objectives = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private AuRoundSystem _auRound = default!;
+    [Dependency] private PlatoonSpawnRuleSystem _platoons = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private int _knowledgeRoundId = -1;
     private string? _roundKnowledgeLine;
@@ -85,12 +85,12 @@ public sealed class CharacterInfoSystem : EntitySystem
         PopulateLorePrimerLines(lorePrimerLines, jobId, isThreatRole);
 
         // Check inventory and hands for JobTitleChangerComponent
-        if (EntityManager.TryGetComponent(entity, out InventoryComponent? _))
+        if (TryComp(entity, out InventoryComponent? _))
         {
             var invSys = EntityManager.System<InventorySystem>();
             foreach (var item in invSys.GetHandOrInventoryEntities(entity))
             {
-                if (EntityManager.TryGetComponent<JobTitleChangerComponent>(item, out var changer) && !string.IsNullOrWhiteSpace(changer.JobTitle))
+                if (TryComp<JobTitleChangerComponent>(item, out var changer) && !string.IsNullOrWhiteSpace(changer.JobTitle))
                 {
                     jobTitle = changer.JobTitle;
                     break;
@@ -99,14 +99,14 @@ public sealed class CharacterInfoSystem : EntitySystem
         }
 
         // Check uniform accessories (e.g., armbands) for JobTitleChangerComponent
-        if (EntityManager.TryGetComponent(entity, out Content.Shared._RMC14.UniformAccessories.UniformAccessoryHolderComponent? accessoryHolder))
+        if (TryComp(entity, out Content.Shared._RMC14.UniformAccessories.UniformAccessoryHolderComponent? accessoryHolder))
         {
             var containerSys = EntityManager.EntitySysManager.GetEntitySystem<Robust.Shared.Containers.SharedContainerSystem>();
             if (containerSys.TryGetContainer(entity, accessoryHolder.ContainerId, out var container))
             {
                 foreach (var accessory in container.ContainedEntities)
                 {
-                    if (EntityManager.TryGetComponent<JobTitleChangerComponent>(accessory, out var changer) && !string.IsNullOrWhiteSpace(changer.JobTitle))
+                    if (TryComp<JobTitleChangerComponent>(accessory, out var changer) && !string.IsNullOrWhiteSpace(changer.JobTitle))
                     {
                         jobTitle = changer.JobTitle;
                         break;

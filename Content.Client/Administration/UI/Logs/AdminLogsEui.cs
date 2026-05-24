@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Linq;
 using Content.Client.Administration.UI.CustomControls;
 using Content.Client.Eui;
@@ -13,12 +13,12 @@ using static Content.Shared.Administration.Logs.AdminLogsEuiMsg;
 namespace Content.Client.Administration.UI.Logs;
 
 [UsedImplicitly]
-public sealed class AdminLogsEui : BaseEui
+public sealed partial class AdminLogsEui : BaseEui
 {
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
-    [Dependency] private readonly IFileDialogManager _dialogManager = default!;
-    [Dependency] private readonly ILogManager _log = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IUserInterfaceManager _uiManager = default!;
+    [Dependency] private IFileDialogManager _dialogManager = default!;
+    [Dependency] private ILogManager _log = default!;
 
     private const char CsvSeparator = ',';
     private const string CsvQuote = "\"";
@@ -173,7 +173,7 @@ public sealed class AdminLogsEui : BaseEui
         });
 
         LogsControl.Orphan();
-        LogsWindow.Dispose();
+        LogsWindow.Close();
         LogsWindow = null;
 
         ClydeWindow.RequestClosed += OnRequestClosed;
@@ -255,9 +255,9 @@ public sealed class AdminLogsEui : BaseEui
             ClydeWindow.RequestClosed -= OnRequestClosed;
         }
 
-        LogsControl.Dispose();
-        LogsWindow?.Dispose();
-        Root?.Dispose();
+        LogsControl.Orphan();
+        LogsWindow?.Close();
+        Root?.Orphan();
         ClydeWindow?.Dispose();
     }
 }

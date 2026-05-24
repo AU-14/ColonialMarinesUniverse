@@ -10,7 +10,7 @@
     components:
     - type: Skills
       preset: RMCSkillPresetSurvivorMiner
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCSurvivorPresetMiner
     - type: RMCSurvivor
     - type: MotionDetectorTracked

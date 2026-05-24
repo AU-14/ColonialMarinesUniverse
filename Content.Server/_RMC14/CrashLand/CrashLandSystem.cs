@@ -4,9 +4,9 @@ using Content.Shared._RMC14.CrashLand;
 
 namespace Content.Server._RMC14.CrashLand;
 
-public sealed class CrashLandSystem : SharedCrashLandSystem
+public sealed partial class CrashLandSystem : SharedCrashLandSystem
 {
-    [Dependency] private readonly EntityStorageSystem _entityStorage = default!;
+    [Dependency] private EntityStorageSystem _entityStorage = default!;
 
     public override void Initialize()
     {
@@ -24,6 +24,9 @@ public sealed class CrashLandSystem : SharedCrashLandSystem
 
     private void OnCrashLanded(Entity<EntityStorageComponent> ent, ref CrashLandedEvent args)
     {
+        ent.Comp.OpenOnMove = true;
+        Dirty(ent);
+
         if (!args.ShouldDamage)
             return;
 
@@ -31,9 +34,6 @@ public sealed class CrashLandSystem : SharedCrashLandSystem
         {
             ApplyFallingDamage(entity);
         }
-
-        ent.Comp.OpenOnMove = true;
-        Dirty(ent);
 
         _entityStorage.OpenStorage(ent);
     }

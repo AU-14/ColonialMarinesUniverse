@@ -20,7 +20,7 @@
         RMCSkillConstruction: 2
         RMCSkillPowerLoader: 2
         RMCSkillVehicles: 1
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCSurvivorPresetEngineer
     - type: RMCSurvivor
     - type: MotionDetectorTracked
@@ -68,7 +68,7 @@
   name: engineer colonist preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomGearOther:
     -
       - [ CMBeltUtilityFilled ]

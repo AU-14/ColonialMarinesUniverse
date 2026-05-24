@@ -81,6 +81,7 @@
         Blunt: 150
   - type: RMCMesonsNonviewable
   - type: DamageReceivedModifierWhenUnanchored
+  - type: CMUZPhysics
   - type: Flammable
     fireSpread: false
     maximumFireStacks: 0.5

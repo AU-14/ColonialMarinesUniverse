@@ -54,4 +54,10 @@ public sealed partial class XenoScreechComponent : Component
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_queen_screech.ogg", AudioParams.Default.WithVolume(-7));
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan SlowTime = TimeSpan.FromSeconds(8);
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan BlindTime = TimeSpan.FromSeconds(2);
 }

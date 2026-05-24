@@ -14,12 +14,12 @@ namespace Content.Server.Xenoarchaeology.Artifact.XAE;
 /// <summary>
 /// System for xeno artifact effect that starts Foam chemical reaction with random-ish reagents inside.
 /// </summary>
-public sealed class XAEFoamSystem : BaseXAESystem<XAEFoamComponent>
+public sealed partial class XAEFoamSystem : BaseXAESystem<XAEFoamComponent>
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SmokeSystem _smoke = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager= default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SmokeSystem _smoke = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
 
     /// <inheritdoc />
     public override void Initialize()
@@ -41,7 +41,7 @@ public sealed class XAEFoamSystem : BaseXAESystem<XAEFoamComponent>
 
         if (component.ReplaceDescription)
         {
-            var reagent = _prototypeManager.IndexReagent<ReagentPrototype>(component.SelectedReagent);
+            var reagent = _reagent.Index(component.SelectedReagent);
             var newEntityDescription = Loc.GetString("xenoarch-effect-foam", ("reagent", reagent.LocalizedName));
             _metaData.SetEntityDescription(uid, newEntityDescription);
         }

@@ -21,15 +21,5 @@ public sealed partial class CMUSplintedComponent : Component
     public FixedPoint2 BreakDamageThreshold = FixedPoint2.Zero;
 }
 
-public sealed class CMUSplintChangedEvent : EntityEventArgs
-{
-    public CMUSplintChangedEvent(EntityUid part, bool removed)
-    {
-        Part = part;
-        Removed = removed;
-    }
-
-    public EntityUid Part { get; }
-
-    public bool Removed { get; }
-}
+[ByRefEvent]
+public readonly record struct CMUSplintChangedEvent(EntityUid Part, bool Removed);

@@ -1,0 +1,175 @@
+# SPDX-FileCopyrightText: 2025 GoobBot <uristmchands@proton.me>
+# SPDX-FileCopyrightText: 2025 Roudenn <romabond091@gmail.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# This should be on every other fishing table
+- type: entityTable
+  id: BasicFishingLootTable
+  table: !type:GroupSelector
+    children:
+    # 75% chance of scrap of some kind
+    - !type:GroupSelector
+      weight: 75
+      children:
+      - !type:NestedSelector
+        tableId: SalvageScrapLowValue
+        weight: 65
+      - !type:NestedSelector
+        tableId: SalvageScrapHighValue
+        weight: 35
+    # 15% chance of some trash
+    - !type:NestedSelector
+      tableId: GenericTrashItems
+      weight: 15
+    # 10% chance of low-value treasure or maintenance tools
+    - !type:GroupSelector
+      weight: 10
+      children:
+      - !type:NestedSelector
+        tableId: SalvageTreasureCommon
+      - !type:NestedSelector
+        tableId: MaintToolsTable
+
+# All types of the rare and unique fishes
+- type: entityTable
+  id: RareFishTable
+  table: !type:GroupSelector
+    children:
+    - id: FishAlien
+    - id: FishBingle
+    - id: FishBoyFisher
+    - id: FishNukeDisk
+    - id: FishGib
+    - id: FishMutant
+    - id: FishNuker
+    - id: FishToxic
+    - id: FishIan
+
+# Extra-rare oddities dredged up from fishing spots
+- type: entityTable
+  id: UltraRareFishingLootTable
+  table: !type:GroupSelector
+    children:
+    - id: RMCCrayonBox
+    - id: CMUPipeBomb
+      weight: 0.35
+    - id: PlushieXeno
+    - !type:NestedSelector
+      tableId: FishingCashTable
+    - id: RMCGrenadeIED
+      weight: 0.25
+    - !type:NestedSelector
+      tableId: FishingWeaponMagazineTable
+    - !type:NestedSelector
+      tableId: RandomDeliveryLetterBasic
+      weight: 2
+
+- type: entityTable
+  id: FishingCashTable
+  table: !type:GroupSelector
+    children:
+    - id: SpaceCash100
+      amount: !type:RangeNumberSelector
+        range: 1, 4
+    - id: SpaceCash500
+      amount: !type:RangeNumberSelector
+        range: 1, 3
+    - id: SpaceCash1000
+      weight: 0.5
+      amount: !type:RangeNumberSelector
+        range: 1, 2
+    - id: SpaceCash2500
+      weight: 0.15
+
+- type: entityTable
+  id: FishingWeaponMagazineTable
+  table: !type:GroupSelector
+    children:
+    - id: CMMagazinePistolM1984
+    - id: RMCMagazinePistolM1984AP
+    - id: CMMagazineSMGM63
+    - id: CMMagazineSMGM63AP
+    - id: CMMagazineRifleM54C
+    - id: CMMagazineRifleM54CAP
+    - id: CMMagazineRifleM54CExt
+    - id: RMCMagazineShotgunXM51
+    - id: RMCMagazineRifleM16
+    - id: RMCMagazineRifleType71
+    - id: RMCMagazineRifleL42A
+
+# Fish from water
+- type: entityTable
+  id: WaterFishTable
+  table: !type:GroupSelector
+    children:
+    - id: FishAngler
+    - id: FishBass
+    - id: FishBlob
+    - id: FishBlueFintuna
+    - id: FishCat
+    - id: FishTropicalClown
+    - id: FishPuffer
+    - id: FishSilver
+    - id: FishTropicalSun
+    - id: FishTropical
+
+# Items from Water
+- type: entityTable
+  id: WaterFishingLootTable
+  table: !type:GroupSelector
+    children:
+      - !type:NestedSelector
+        tableId: BasicFishingLootTable
+        weight: 70
+      - !type:NestedSelector
+        tableId: WaterFishTable
+        weight: 20
+      - !type:NestedSelector
+        tableId: RareFishTable
+        weight: 10
+      - !type:NestedSelector
+        tableId: UltraRareFishingLootTable
+        weight: 1
+
+# Items from Lava
+- type: entityTable
+  id: LavaFishingLootTable
+  table: !type:GroupSelector
+    children:
+      # TODO: lava/plasma fish
+      - !type:NestedSelector
+        tableId: BasicFishingLootTable
+        weight: 99
+      - !type:NestedSelector
+        tableId: UltraRareFishingLootTable
+        weight: 1
+
+# Items from Plasma
+- type: entityTable
+  id: PlasmaFishingLootTable
+  table: !type:GroupSelector
+    children:
+    # TODO: lava/plasma fish
+      - !type:NestedSelector
+        tableId: BasicFishingLootTable
+        weight: 99
+      - !type:NestedSelector
+        tableId: UltraRareFishingLootTable
+        weight: 1
+
+# Items from Toilets
+- type: entityTable
+  id: ToiletFishingLootTable
+  table: !type:GroupSelector
+    children:
+      # like water but no rare fishes
+      - !type:NestedSelector
+        tableId: BasicFishingLootTable
+        weight: 80
+      - !type:NestedSelector
+        tableId: WaterFishTable
+        weight: 20
+      - !type:NestedSelector
+        tableId: UltraRareFishingLootTable
+        weight: 1

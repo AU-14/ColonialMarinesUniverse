@@ -6,10 +6,10 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Clothing.EntitySystems;
 
-public sealed class HideLayerClothingSystem : EntitySystem
+public sealed partial class HideLayerClothingSystem : EntitySystem
 {
-    [Dependency] private readonly SharedHumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -72,19 +72,6 @@ public sealed class HideLayerClothingSystem : EntitySystem
             // Only update this layer if we are currently equipped to the relevant slot.
             if (validSlots.HasFlag(inSlot))
                 _humanoid.SetLayerVisibility(user!, layer, !hideLayers, inSlot, ref dirty);
-        }
-
-        // Fallback for obsolete field: assume we want to hide **all** layers, as long as we are equipped to any
-        // relevant clothing slot
-#pragma warning disable CS0618 // Type or member is obsolete
-        if (clothing.Comp1.Slots is { } slots && clothing.Comp2.Slots.HasFlag(inSlot))
-#pragma warning restore CS0618 // Type or member is obsolete
-        {
-            foreach (var layer in slots)
-            {
-                if (hideable.Contains(layer))
-                    _humanoid.SetLayerVisibility(user!, layer, !hideLayers, inSlot, ref dirty);
-            }
         }
 
         if (dirty)

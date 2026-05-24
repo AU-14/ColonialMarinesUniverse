@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Weather;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Light.Components;
 using Content.Shared.Light.EntitySystems;
 using Content.Shared.Maps;
@@ -12,17 +13,18 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.Weather;
 
-public abstract class SharedWeatherSystem : EntitySystem
+public abstract partial class SharedWeatherSystem : EntitySystem
 {
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly IPrototypeManager ProtoMan = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefManager = default!;
-    [Dependency] private readonly MetaDataSystem _metadata = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly SharedRoofSystem _roof = default!;
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly RMCWeatherSystem _rmcWeather = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected IPrototypeManager ProtoMan = default!;
+    [Dependency] private ITileDefinitionManager _tileDefManager = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private SharedRoofSystem _roof = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private RMCWeatherSystem _rmcWeather = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevel = default!; //CMU
 
     private EntityQuery<BlockWeatherComponent> _blockQuery;
 
@@ -50,10 +52,13 @@ public abstract class SharedWeatherSystem : EntitySystem
         if (TryComp<AreaGridComponent>(uid, out _))
             return _rmcWeather.CanWeatherAffectArea(uid, grid, tileRef, roofComp);
 
-        if (tileRef.Tile.IsEmpty)
-            return true;
+        //if (tileRef.Tile.IsEmpty) //CMU - we can have space tiles under roofs on zLevel above
+        //    return true;
 
         if (Resolve(uid, ref roofComp, false) && _roof.IsRooved((uid, grid, roofComp), tileRef.GridIndices))
+            return false;
+
+        if (_zLevel.HasTileAbove(tileRef.GridIndices, uid)) //CMU - we need also custom check for zLevel roofs above empty (unrooved by roofSystem) tiles
             return false;
 
         var tileDef = (ContentTileDefinition) _tileDefManager[tileRef.Tile.TypeId];
@@ -240,7 +245,7 @@ public abstract class SharedWeatherSystem : EntitySystem
     }
 
     [Serializable, NetSerializable]
-    protected sealed class WeatherComponentState : ComponentState
+    protected sealed partial class WeatherComponentState : ComponentState
     {
         public Dictionary<ProtoId<WeatherPrototype>, WeatherData> Weather;
 

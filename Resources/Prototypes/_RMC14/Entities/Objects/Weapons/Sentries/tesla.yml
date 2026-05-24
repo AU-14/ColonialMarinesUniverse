@@ -128,12 +128,6 @@
   - type: Icon
     sprite: _RMC14/Objects/Weapons/Sentries/tesla.rsi
     state: normal_tesla_coil_handheld
-  - type: NpcFactionMember
-    factions:
-    - UNMC
-  - type: UserIFF
-    factions:
-    - FactionMarine
 
 - type: entity
   parent: RMCTesla
@@ -184,12 +178,6 @@
         layer:
         - BulletImpassable
         hard: false
-  - type: NpcFactionMember
-    factions:
-    - UNMC
-  - type: UserIFF
-    factions:
-    - FactionMarine
   - type: Sentry
     deployDelay: 0.75
     undeployDelay: 0.75
@@ -228,12 +216,6 @@
           Item: { state: stun_tesla_coil_handheld }
           Off: { state: stun_tesla_coil }
           On: { state: stun_tesla_coil_on }
-  - type: NpcFactionMember
-    factions:
-    - UNMC
-  - type: UserIFF
-    factions:
-    - FactionMarine
   - type: Sentry
     upgrades: null
   - type: RMCTeslaCoil

@@ -5,14 +5,14 @@
   components:
   - type: SkillPreset
     skills:
-        RMCSkillConstruction: 1
-        RMCSkillCqc: 1
-        RMCSkillEndurance: 1
-        RMCSkillEngineer: 1
-        RMCSkillFirearms: 1
-        RMCSkillFireman: 2
-        RMCSkillVehicles: 1
-        RMCSkillJtac: 1
+      RMCSkillConstruction: 1
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 1
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+      RMCSkillJtac: 1
 
 - type: entity
   id: AU14SkillPresetPlatoonRTO
@@ -21,14 +21,14 @@
   components:
   - type: SkillPreset
     skills:
-        RMCSkillConstruction: 1
-        RMCSkillCqc: 1
-        RMCSkillEndurance: 1
-        RMCSkillEngineer: 1
-        RMCSkillFirearms: 1
-        RMCSkillFireman: 2
-        RMCSkillVehicles: 1
-        RMCSkillJtac: 4
+      RMCSkillConstruction: 1
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 1
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+      RMCSkillJtac: 4
 
 - type: entity
   id: AU14SkillPresetPlatoonAutomaticRifleman
@@ -37,15 +37,15 @@
   components:
   - type: SkillPreset
     skills:
-        RMCSkillConstruction: 1
-        RMCSkillCqc: 1
-        RMCSkillEndurance: 2
-        RMCSkillEngineer: 1
-        RMCSkillFirearms: 1
-        RMCSkillFireman: 2
-        RMCSkillVehicles: 1
-        RMCSkillSmartGun: 1
-        RMCSkillJtac: 1
+      RMCSkillConstruction: 1
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 2
+      RMCSkillEngineer: 1
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+      RMCSkillSmartGun: 1
+      RMCSkillJtac: 1
 
 - type: entity
   id: AU14SkillPresetPlatoonHospitalCorpsman
@@ -54,16 +54,16 @@
   components:
   - type: SkillPreset
     skills:
-        RMCSkillConstruction: 1
-        RMCSkillCqc: 1
-        RMCSkillEndurance: 1
-        RMCSkillEngineer: 1
-        RMCSkillFirearms: 1
-        RMCSkillFireman: 3
-        RMCSkillVehicles: 1
-        RMCSkillMedical: 2
-        RMCSkillSurgery: 1
-        RMCSkillJtac: 1
+      RMCSkillConstruction: 1
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 1
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 3
+      RMCSkillVehicles: 1
+      RMCSkillMedical: 2
+      RMCSkillSurgery: 1
+      RMCSkillJtac: 1
 
 - type: entity
   id: AU14SkillPresetPlatoonCombatTechnician
@@ -72,15 +72,15 @@
   components:
   - type: SkillPreset
     skills:
-        RMCSkillConstruction: 4
-        RMCSkillCqc: 1
-        RMCSkillEndurance: 1
-        RMCSkillEngineer: 4
-        RMCSkillFirearms: 1
-        RMCSkillFireman: 2
-        RMCSkillVehicles: 1
-        RMCSkillJtac: 2
-        RMCSkillPowerLoader: 2
+      RMCSkillConstruction: 4
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 4
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+      RMCSkillJtac: 2
+      RMCSkillPowerLoader: 2
 
 - type: entity
   id: AU14SkillPresetPlatoonSergeant
@@ -89,15 +89,16 @@
   components:
   - type: SkillPreset
     skills:
-        RMCSkillConstruction: 1
-        RMCSkillCqc: 1
-        RMCSkillEndurance: 2
-        RMCSkillEngineer: 1
-        RMCSkillFirearms: 1
-        RMCSkillFireman: 2
-        RMCSkillVehicles: 1
-        RMCSkillLeadership: 2
-        RMCSkillJtac: 3
+      RMCSkillLeadership: 2
+      RMCSkillJtac: 3
+      RMCSkillCqc: 1
+      RMCSkillFirearms: 2
+      RMCSkillEndurance: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 3
+      RMCSkillFireman: 2
+      RMCSkillPolice: 1
+      RMCSkillVehicles: 1
 
 - type: entity
   id: AU14SkillPresetPlatoonSeniorSergeant
@@ -106,23 +107,23 @@
   components:
   - type: SkillPreset
     skills:
-        RMCSkillConstruction: 2
-        RMCSkillCqc: 2
-        RMCSkillEndurance: 3
-        RMCSkillEngineer: 2
-        RMCSkillFirearms: 2 #gunny has more time on the range than the entire platoon, rumour is he rucks 20 miles a day just to get a weyburger
-        RMCSkillFireman: 2
-        RMCSkillVehicles: 1
-        RMCSkillOverwatch: 1
-        RMCSkillPilot: 1
-        RMCSkillLeadership: 3
-        RMCSkillIntel: 1
-        RMCSkillPowerLoader: 1
-        RMCSkillMedical: 1
-        RMCSkillSurgery: 1
-        RMCSkillNavigations: 1
-        RMCSkillPolice: 1
-        RMCSkillJtac: 4
+      RMCSkillConstruction: 2
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 3
+      RMCSkillEngineer: 2
+      RMCSkillFirearms: 2 #gunny has more time on the range than the entire platoon, rumour is he rucks 20 miles a day just to get a weyburger
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+      RMCSkillOverwatch: 1
+      RMCSkillPilot: 1
+      RMCSkillLeadership: 3
+      RMCSkillIntel: 1
+      RMCSkillPowerLoader: 1
+      RMCSkillMedical: 1
+      RMCSkillSurgery: 1
+      RMCSkillNavigations: 1
+      RMCSkillPolice: 1
+      RMCSkillJtac: 4
 
 - type: entity
   id: AU14SkillPresetPlatoonJuniorOfficer
@@ -131,23 +132,23 @@
   components:
   - type: SkillPreset
     skills:
-        RMCSkillConstruction: 2
-        RMCSkillCqc: 1
-        RMCSkillEndurance: 1
-        RMCSkillEngineer: 2
-        RMCSkillFirearms: 1
-        RMCSkillFireman: 1 #fat second el-tee
-        RMCSkillVehicles: 1
-        RMCSkillOverwatch: 1
-        RMCSkillPilot: 1
-        RMCSkillLeadership: 3
-        RMCSkillIntel: 2
-        RMCSkillPowerLoader: 1
-        RMCSkillMedical: 1
-        RMCSkillSurgery: 1
-        RMCSkillNavigations: 1
-        RMCSkillPolice: 2
-        RMCSkillJtac: 3
+      RMCSkillLeadership: 3
+      RMCSkillJtac: 3
+      RMCSkillNavigations: 1
+      RMCSkillOverwatch: 1
+      RMCSkillIntel: 2
+      RMCSkillCqc: 2
+      RMCSkillFirearms: 1
+      RMCSkillEndurance: 1
+      RMCSkillPilot: 1
+      RMCSkillEngineer: 2
+      RMCSkillConstruction: 2
+      RMCSkillPowerLoader: 1
+      RMCSkillVehicles: 1
+      RMCSkillFireman: 1 #fat second el-tee
+      RMCSkillMedical: 1
+      RMCSkillSurgery: 1
+      RMCSkillPolice: 2
 
 - type: entity
   id: AU14SkillPresetPlatoonCommander
@@ -156,23 +157,23 @@
   components:
   - type: SkillPreset
     skills:
-        RMCSkillConstruction: 3
-        RMCSkillCqc: 2
-        RMCSkillEndurance: 3
-        RMCSkillEngineer: 3
-        RMCSkillFirearms: 2
-        RMCSkillFireman: 2
-        RMCSkillVehicles: 1
-        RMCSkillOverwatch: 1
-        RMCSkillPilot: 1
-        RMCSkillLeadership: 4
-        RMCSkillIntel: 2
-        RMCSkillPowerLoader: 1
-        RMCSkillMedical: 1
-        RMCSkillSurgery: 1
-        RMCSkillNavigations: 1
-        RMCSkillPolice: 2
-        RMCSkillJtac: 3
+      RMCSkillLeadership: 4
+      RMCSkillJtac: 4
+      RMCSkillNavigations: 1
+      RMCSkillOverwatch: 1
+      RMCSkillIntel: 2
+      RMCSkillCqc: 2
+      RMCSkillFirearms: 2
+      RMCSkillEndurance: 3
+      RMCSkillPilot: 1
+      RMCSkillEngineer: 3
+      RMCSkillConstruction: 3
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 1
+      RMCSkillFireman: 2
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 1
+      RMCSkillPolice: 2
 
 - type: entity
   id: AU14SkillPresetPlatoonAdvisor
@@ -181,23 +182,23 @@
   components:
   - type: SkillPreset
     skills:
-        RMCSkillConstruction: 4
-        RMCSkillCqc: 4
-        RMCSkillEndurance: 4
-        RMCSkillEngineer: 4
-        RMCSkillFirearms: 2
-        RMCSkillFireman: 3
-        RMCSkillVehicles: 2
-        RMCSkillOverwatch: 1
-        RMCSkillPilot: 2
-        RMCSkillLeadership: 2
-        RMCSkillIntel: 2
-        RMCSkillPowerLoader: 2
-        RMCSkillMedical: 4
-        RMCSkillSurgery: 4
-        RMCSkillNavigations: 1
-        RMCSkillPolice: 2
-        RMCSkillJtac: 4
+      RMCSkillConstruction: 4
+      RMCSkillCqc: 4
+      RMCSkillEndurance: 4
+      RMCSkillEngineer: 4
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 3
+      RMCSkillVehicles: 2
+      RMCSkillOverwatch: 1
+      RMCSkillPilot: 2
+      RMCSkillLeadership: 2
+      RMCSkillIntel: 2
+      RMCSkillPowerLoader: 2
+      RMCSkillMedical: 4
+      RMCSkillSurgery: 4
+      RMCSkillNavigations: 1
+      RMCSkillPolice: 2
+      RMCSkillJtac: 4
 
 - type: entity
   id: AU14SkillPresetPlatoonDP
@@ -206,23 +207,23 @@
   components:
   - type: SkillPreset
     skills:
-        RMCSkillConstruction: 2
-        RMCSkillCqc: 1
-        RMCSkillEndurance: 1
-        RMCSkillEngineer: 2
-        RMCSkillFirearms: 1
-        RMCSkillFireman: 2
-        RMCSkillVehicles: 2
-        RMCSkillOverwatch: 1
-        RMCSkillPilot: 2
-        RMCSkillLeadership: 3
-        RMCSkillIntel: 2
-        RMCSkillPowerLoader: 2
-        RMCSkillMedical: 2
-        RMCSkillSurgery: 1
-        RMCSkillNavigations: 1
-        RMCSkillPolice: 1
-        RMCSkillJtac: 3
+      RMCSkillConstruction: 2
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 2
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 2
+      RMCSkillOverwatch: 1
+      RMCSkillPilot: 2
+      RMCSkillLeadership: 3
+      RMCSkillIntel: 2
+      RMCSkillPowerLoader: 2
+      RMCSkillMedical: 2
+      RMCSkillSurgery: 1
+      RMCSkillNavigations: 1
+      RMCSkillPolice: 1
+      RMCSkillJtac: 3
 
 - type: entity
   id: AU14SkillPresetPlatoonDCC
@@ -231,21 +232,21 @@
   components:
   - type: SkillPreset
     skills:
-        RMCSkillConstruction: 1
-        RMCSkillCqc: 1
-        RMCSkillEndurance: 1
-        RMCSkillEngineer: 1
-        RMCSkillFirearms: 1
-        RMCSkillFireman: 2
-        RMCSkillVehicles: 2
-        RMCSkillPilot: 2
-        RMCSkillIntel: 1
-        RMCSkillPowerLoader: 2
-        RMCSkillMedical: 2
-        RMCSkillSurgery: 1
-        RMCSkillNavigations: 1
-        RMCSkillPolice: 1
-        RMCSkillJtac: 4
+      RMCSkillConstruction: 1
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 1
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 2
+      RMCSkillPilot: 2
+      RMCSkillIntel: 1
+      RMCSkillPowerLoader: 2
+      RMCSkillMedical: 2
+      RMCSkillSurgery: 1
+      RMCSkillNavigations: 1
+      RMCSkillPolice: 1
+      RMCSkillJtac: 4
 
 - type: entity
   id: AU14SkillPresetPlatoonAuxiliarySupportSynth
@@ -254,25 +255,25 @@
   components:
   - type: SkillPreset
     skills:
-        RMCSkillCqc: 5
-        RMCSkillEndurance: 1
-        RMCSkillEngineer: 4
-        RMCSkillConstruction: 3
-        RMCSkillFirearms: 2
-        RMCSkillOverwatch: 1
-        RMCSkillMedical: 4
-        RMCSkillSurgery: 3
-        RMCSkillResearch: 1
-        RMCSkillMeleeWeapons: 2
-        RMCSkillPilot: 2
-        RMCSkillPolice: 2
-        RMCSkillFireman: 5
-        RMCSkillPowerLoader: 2
-        RMCSkillVehicles: 2
-        RMCSkillJtac: 3
-        RMCSkillIntel: 2
-        RMCSkillDomestics: 2
-        RMCSkillNavigations: 1
+      RMCSkillCqc: 5
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 3
+      RMCSkillFirearms: 2
+      RMCSkillOverwatch: 1
+      RMCSkillMedical: 4
+      RMCSkillSurgery: 3
+      RMCSkillResearch: 1
+      RMCSkillMeleeWeapons: 2
+      RMCSkillPilot: 2
+      RMCSkillPolice: 2
+      RMCSkillFireman: 5
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 2
+      RMCSkillJtac: 3
+      RMCSkillIntel: 2
+      RMCSkillDomestics: 2
+      RMCSkillNavigations: 1
 
 - type: entity
   id: AU14SkillPresetMilitaryDoctor
@@ -298,17 +299,17 @@
   components:
   - type: SkillPreset
     skills:
-        RMCSkillCqc: 5
-        RMCSkillEndurance: 1
-        RMCSkillEngineer: 4
-        RMCSkillConstruction: 4
-        RMCSkillFirearms: 1
-        RMCSkillMeleeWeapons: 2
-        RMCSkillPolice: 2
-        RMCSkillFireman: 5
-        RMCSkillPowerLoader: 2
-        RMCSkillVehicles: 2
-        RMCSkillDomestics: 2
+      RMCSkillCqc: 5
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 4
+      RMCSkillFirearms: 1
+      RMCSkillMeleeWeapons: 2
+      RMCSkillPolice: 2
+      RMCSkillFireman: 5
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 2
+      RMCSkillDomestics: 2
 
 - type: entity
   id: AU14SkillPresetMilitaryPolice
@@ -317,16 +318,16 @@
   components:
   - type: SkillPreset
     skills:
-        RMCSkillConstruction: 1
-        RMCSkillCqc: 3
-        RMCSkillEndurance: 2
-        RMCSkillEngineer: 1
-        RMCSkillOverwatch: 1
-        RMCSkillFirearms: 1
-        RMCSkillFireman: 3
-        RMCSkillVehicles: 1
-        RMCSkillJtac: 1
-        RMCSkillPolice: 2
+      RMCSkillConstruction: 1
+      RMCSkillCqc: 3
+      RMCSkillEndurance: 2
+      RMCSkillEngineer: 1
+      RMCSkillOverwatch: 1
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 3
+      RMCSkillVehicles: 1
+      RMCSkillJtac: 1
+      RMCSkillPolice: 2
 
 - type: entity
   id: AU14SkillPresetPlatoonAuxTech
@@ -335,14 +336,14 @@
   components:
   - type: SkillPreset
     skills:
-        RMCSkillConstruction: 4
-        RMCSkillCqc: 1
-        RMCSkillEndurance: 1
-        RMCSkillEngineer: 4
-        RMCSkillFirearms: 1
-        RMCSkillFireman: 2
-        RMCSkillVehicles: 1
-        RMCSkillJtac: 2
-        RMCSkillPowerLoader: 2
-        RMCSkillIntel: 1
-        RMCSkillDomestics: 2
+      RMCSkillConstruction: 4
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 4
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+      RMCSkillJtac: 2
+      RMCSkillPowerLoader: 2
+      RMCSkillIntel: 1
+      RMCSkillDomestics: 2

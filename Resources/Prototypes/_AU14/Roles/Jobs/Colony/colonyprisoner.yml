@@ -8,10 +8,12 @@
   startingGear: AU14GearCivilianPrisoner
   ranks:
     RMCRankCivilian: []
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconColonyPrisoner"
+  hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-loner
+  spawnMenuRoleName: Colony Prisoner (CMU)
   roleWeight: 0.6
   special:
   - !type:AddComponentSpecial

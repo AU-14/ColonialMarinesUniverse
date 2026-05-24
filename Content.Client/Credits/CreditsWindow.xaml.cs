@@ -26,15 +26,15 @@ namespace Content.Client.Credits;
 [GenerateTypedNameReferences]
 public sealed partial class CreditsWindow : DefaultWindow
 {
-    [Dependency] private readonly IResourceManager _resourceManager = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly ISerializationManager _serialization = default!;
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
-    [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private IResourceManager _resourceManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private ISerializationManager _serialization = default!;
+    [Dependency] private IPrototypeManager _protoManager = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
 
     // RMC14
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly LinkAccountManager _linkAccount = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private LinkAccountManager _linkAccount = default!;
 
     // RMC14
     private static readonly Dictionary<string, int> PatronTierPriority = new()
@@ -328,12 +328,6 @@ public sealed partial class CreditsWindow : DefaultWindow
     private IEnumerable<PatronEntry> LoadPatrons()
     {
         return _linkAccount.GetPatrons().Select(p => new PatronEntry(p.Name, p.Tier));
-        var yamlStream = _resourceManager.ContentFileReadYaml(new ResPath("/Credits/Patrons.yml"));
-        var sequence = (YamlSequenceNode) yamlStream.Documents[0].RootNode;
-
-        return sequence
-            .Cast<YamlMappingNode>()
-            .Select(m => new PatronEntry(m["Name"].AsString(), m["Tier"].AsString()));
     }
 
     private void PopulateContributors(BoxContainer ss14ContributorsContainer)
@@ -388,7 +382,7 @@ public sealed partial class CreditsWindow : DefaultWindow
             contributeButton.Visible = false;
     }
 
-    private sealed class PatronEntry
+    private sealed partial class PatronEntry
     {
         public string Name { get; }
         public string Tier { get; }

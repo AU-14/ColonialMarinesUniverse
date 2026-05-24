@@ -32,9 +32,9 @@ public sealed partial class DungeonJob
 
                     Tile tile;
 
-                    if (random.Prob(gen.VariantWeight))
+                    if (Prob(random, gen.VariantWeight))
                     {
-                        tile = _tileDefManager.GetVariantTile(_prototype.Index(layer.Tile), random);
+                        tile = GetVariantTile(_prototype.Index(layer.Tile), random);
                     }
                     else
                     {

@@ -79,7 +79,7 @@
   id: AU14GearGOVFORadvisor
   equipment:
     id: AU14IDCardSquadAdvisor
-    ears: AU14HeadsetSectionLeader
+    ears: AU14HeadsetGovforCommand
     back: AU14SatchelMarineAdvisorMilitary
 
 - type: entity
@@ -98,4 +98,4 @@
     shoes: CMBootsBrownFilled
     head: CMHeadCapDrill
     jumpsuit: CMJumpsuitBO
-    ears: AU14HeadsetSectionLeader
+    ears: AU14HeadsetGovforCommand

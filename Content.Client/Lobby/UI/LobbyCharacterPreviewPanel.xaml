@@ -9,16 +9,17 @@
         <BoxContainer Name="Loaded" Orientation="Vertical"
                       Visible="False">
             <Label Name="Summary" HorizontalAlignment="Center" Margin="3 3"/>
+            <Label Name="JobSummary" HorizontalAlignment="Center" Margin="3 0 3 3" StyleClasses="CrtHeading" Visible="False"/>
             <BoxContainer Name="ViewBox" Orientation="Horizontal" HorizontalAlignment="Center">
 
             </BoxContainer>
             <controls:VSpacer/>
             <BoxContainer Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Name="PrevCharButton" Text="◀" ToolTip="{Loc 'lobby-character-preview-prev-char-tooltip'}" Margin="0 5 5 0" />
+                <Button Name="PrevCharButton" Text="&lt;" ToolTip="{Loc 'lobby-character-preview-prev-char-tooltip'}" Margin="0 5 5 0" />
                 <Button Name="CharacterSetup" Text="{Loc 'lobby-character-preview-panel-character-setup-button'}"
                         HorizontalAlignment="Center"
                         Margin="0 5 0 0" />
-                <Button Name="NextCharButton" Text="▶" ToolTip="{Loc 'lobby-character-preview-next-char-tooltip'}" Margin="5 5 0 0" />
+                <Button Name="NextCharButton" Text="&gt;" ToolTip="{Loc 'lobby-character-preview-next-char-tooltip'}" Margin="5 5 0 0" />
                 <Button Name="PatronPerks" Access="Public" Text="{Loc 'rmc-ui-patron-perks'}"
                         Margin="5 5 0 0" Visible="False" />
             </BoxContainer>

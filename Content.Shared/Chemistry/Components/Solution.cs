@@ -93,16 +93,17 @@ namespace Content.Shared.Chemistry.Components
         // This value is arbitrary btw.
         private const int HeatCapacityUpdateInterval = 15;
 
+        private static RMCReagentSystem ReagentSystem => IoCManager.Resolve<IEntityManager>().System<RMCReagentSystem>();
+
         public void UpdateHeatCapacity(IPrototypeManager? protoMan)
         {
-            IoCManager.Resolve(ref protoMan);
             DebugTools.Assert(_heatCapacityDirty);
             _heatCapacityDirty = false;
             _heatCapacity = 0;
             foreach (var (reagent, quantity) in Contents)
             {
                 _heatCapacity += (float) quantity *
-                                    protoMan.IndexReagent<ReagentPrototype>(reagent.Prototype).SpecificHeat;
+                                    ReagentSystem.Index(reagent.Prototype).SpecificHeat;
             }
 
             _heatCapacityUpdateCounter = 0;
@@ -816,7 +817,7 @@ namespace Content.Shared.Chemistry.Components
                 return Color.Transparent;
             }
 
-            IoCManager.Resolve(ref protoMan);
+            var reagentSystem = ReagentSystem;
 
             Color mixColor = default;
             var runningTotalQuantity = FixedPoint2.New(0);
@@ -829,7 +830,7 @@ namespace Content.Shared.Chemistry.Components
 
                 runningTotalQuantity += quantity;
 
-                if (!protoMan.TryIndexReagent(reagent.Prototype, out ReagentPrototype? proto))
+                if (!reagentSystem.TryIndex(reagent.Prototype, out var proto))
                 {
                     continue;
                 }
@@ -859,7 +860,7 @@ namespace Content.Shared.Chemistry.Components
                 return Color.Transparent;
             }
 
-            IoCManager.Resolve(ref protoMan);
+            var reagentSystem = ReagentSystem;
 
             Color mixColor = default;
             var runningTotalQuantity = FixedPoint2.New(0);
@@ -872,7 +873,7 @@ namespace Content.Shared.Chemistry.Components
 
                 runningTotalQuantity += quantity;
 
-                if (!protoMan.TryIndexReagent(reagent.Prototype, out ReagentPrototype? proto))
+                if (!reagentSystem.TryIndex(reagent.Prototype, out var proto))
                 {
                     continue;
                 }
@@ -925,7 +926,7 @@ namespace Content.Shared.Chemistry.Components
             var dict = new Dictionary<ReagentPrototype, FixedPoint2>(Contents.Count);
             foreach (var (reagent, quantity) in Contents)
             {
-                var proto = protoMan.IndexReagent<ReagentPrototype>(reagent.Prototype);
+                var proto = ReagentSystem.Index(reagent.Prototype);
                 dict[proto] = quantity + dict.GetValueOrDefault(proto);
             }
             return dict;

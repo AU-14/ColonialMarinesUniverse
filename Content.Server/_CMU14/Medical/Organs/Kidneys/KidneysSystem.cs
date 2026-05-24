@@ -7,10 +7,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Medical.Organs.Kidneys;
 
-public sealed class KidneysSystem : SharedKidneysSystem
+public sealed partial class KidneysSystem : SharedKidneysSystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     private static readonly ProtoId<DamageTypePrototype> Poison = "Poison";
 

@@ -1,12 +1,12 @@
-﻿using Content.Shared._RMC14.Teleporter;
+using Content.Shared._RMC14.Teleporter;
 using Robust.Server.GameObjects;
 using Robust.Shared.Player;
 
 namespace Content.Server._RMC14.Teleporter;
 
-public sealed class RMCTeleporterSystem : SharedRMCTeleporterSystem
+public sealed partial class RMCTeleporterSystem : SharedRMCTeleporterSystem
 {
-    [Dependency] private readonly ViewSubscriberSystem _viewSubscriber = default!;
+    [Dependency] private ViewSubscriberSystem _viewSubscriber = default!;
 
     protected override void AddViewer(Entity<RMCTeleporterViewerComponent> viewer, ICommonSession player)
     {

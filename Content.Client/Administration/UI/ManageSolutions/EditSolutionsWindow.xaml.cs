@@ -17,9 +17,9 @@ namespace Content.Client.Administration.UI.ManageSolutions
     [GenerateTypedNameReferences]
     public sealed partial class EditSolutionsWindow : DefaultWindow
     {
-        [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
-        [Dependency] private readonly IEntityManager _entityManager = default!;
-        [Dependency] private readonly IClientGameTiming _timing = default!;
+        [Dependency] private IClientConsoleHost _consoleHost = default!;
+        [Dependency] private IEntityManager _entityManager = default!;
+        [Dependency] private IClientGameTiming _timing = default!;
 
         private NetEntity _target = NetEntity.Invalid;
         private string? _selectedSolution;
@@ -40,7 +40,6 @@ namespace Content.Client.Administration.UI.ManageSolutions
         {
             base.Close();
             _addReagentWindow?.Close();
-            _addReagentWindow?.Dispose();
         }
 
         public void SetTargetEntity(NetEntity target)
@@ -265,7 +264,6 @@ namespace Content.Client.Administration.UI.ManageSolutions
                 return;
 
             _addReagentWindow?.Close();
-            _addReagentWindow?.Dispose();
 
             _addReagentWindow = new AddReagentWindow(_target, _selectedSolution);
             _addReagentWindow.OpenCentered();
@@ -325,7 +323,6 @@ namespace Content.Client.Administration.UI.ManageSolutions
             {
                 // No applicable solutions
                 Close();
-                Dispose();
                 return;
             }
 

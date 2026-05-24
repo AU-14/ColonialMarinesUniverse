@@ -21,6 +21,9 @@
   special:
   - !type:AddComponentSpecial
     components:
+    - type: NpcFactionMember
+      factions:
+      - AUWeYu
     - type: Skills
       skills:
         RMCSkillFireman: 1

@@ -1,16 +1,22 @@
 using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Rules;
+using Content.Shared._RMC14.Xenonids.Neurotoxin;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Maps;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Pulling.Components;
+using Content.Shared.Movement.Systems;
 using Content.Shared.ParaDrop;
 using Content.Shared.Physics;
 using Content.Shared.Shuttles.Components;
+using Content.Shared.Throwing;
+using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
@@ -28,18 +34,18 @@ namespace Content.Shared._RMC14.CrashLand;
 
 public abstract partial class SharedCrashLandSystem : EntitySystem
 {
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] protected readonly ActionBlockerSystem Blocker = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] protected readonly DamageableSystem Damageable = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly RMCPullingSystem _rmcPulling = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] protected ActionBlockerSystem Blocker = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] protected DamageableSystem Damageable = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private RMCPullingSystem _rmcPulling = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     protected static readonly ProtoId<DamageTypePrototype> CrashLandDamageType = "Blunt";
     protected const int CrashLandDamageAmount = 10000;
@@ -59,6 +65,13 @@ public abstract partial class SharedCrashLandSystem : EntitySystem
         SubscribeLocalEvent<DeleteCrashLandableOnTouchComponent, StartCollideEvent>(OnDeleteCrashLandableOnTouchStartCollide);
 
         SubscribeLocalEvent<CrashLandingComponent, UpdateCanMoveEvent>(OnUpdateCanMove);
+        SubscribeLocalEvent<CrashLandingComponent, RMCIgniteAttemptEvent>(OnIgniteAttempt);
+        SubscribeLocalEvent<CrashLandingComponent, GettingAttackedAttemptEvent>(OnGettingAttacked);
+        SubscribeLocalEvent<CrashLandingComponent, AttemptMobCollideEvent>(OnAttemptMobCollide);
+        SubscribeLocalEvent<CrashLandingComponent, AttemptMobTargetCollideEvent>(OnAttemptMobTargetCollide);
+        SubscribeLocalEvent<CrashLandingComponent, ThrowPushbackAttemptEvent>(OnThrowPushbackAttempt);
+        SubscribeLocalEvent<CrashLandingComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
+        SubscribeLocalEvent<CrashLandingComponent, NeurotoxinInjectAttemptEvent>(OnNeurotoxinInjectAttempt);
 
         Subs.CVar(_config, RMCCVars.RMCFTLCrashLand, v => _crashLandEnabled = v, true);
     }
@@ -114,6 +127,41 @@ public abstract partial class SharedCrashLandSystem : EntitySystem
     private void OnUpdateCanMove(Entity<CrashLandingComponent> ent, ref UpdateCanMoveEvent args)
     {
         args.Cancel();
+    }
+
+    private void OnIgniteAttempt(Entity<CrashLandingComponent> ent, ref RMCIgniteAttemptEvent args)
+    {
+        args.Cancel();
+    }
+
+    private void OnAttemptMobCollide(Entity<CrashLandingComponent> ent, ref AttemptMobCollideEvent args)
+    {
+        args.Cancelled = true;
+    }
+
+    private void OnAttemptMobTargetCollide(Entity<CrashLandingComponent> ent, ref AttemptMobTargetCollideEvent args)
+    {
+        args.Cancelled = true;
+    }
+
+    private void OnGettingAttacked(Entity<CrashLandingComponent> ent, ref GettingAttackedAttemptEvent args)
+    {
+        args.Cancelled = true;
+    }
+
+    private void OnThrowPushbackAttempt(Entity<CrashLandingComponent> ent, ref ThrowPushbackAttemptEvent args)
+    {
+        args.Cancel();
+    }
+
+    private void OnBeforeDamageChanged(Entity<CrashLandingComponent> ent, ref BeforeDamageChangedEvent args)
+    {
+        args.Cancelled = true;
+    }
+
+    private void OnNeurotoxinInjectAttempt(Entity<CrashLandingComponent> ent, ref NeurotoxinInjectAttemptEvent args)
+    {
+        args.Cancelled = true;
     }
 
     private bool ShouldCrash(EntityUid crashing, EntityUid oldParent)
@@ -234,7 +282,9 @@ public abstract partial class SharedCrashLandSystem : EntitySystem
             return;
 
         var skyFalling = EnsureComp<SkyFallingComponent>(crashLandable);
+        skyFalling.RemainingTime = crashLandable.Comp.SkyFallDuration;
         skyFalling.TargetCoordinates = location;
+        skyFalling.DropSound = crashLandable.Comp.DropSound;
         Dirty(crashLandable, skyFalling);
 
         var crashLanding = EnsureComp<CrashLandingComponent>(crashLandable);
@@ -251,6 +301,18 @@ public abstract partial class SharedCrashLandSystem : EntitySystem
 
         var ev = new CrashLandStartedEvent();
         RaiseLocalEvent(crashLandable, ref ev);
+    }
+
+    public void DoCrashLand(EntityUid crashing, EntityCoordinates crashLocation, float skyFallDuration = 1.5f, float crashDuration = 0.75f, bool doDamage = true, SoundSpecifier? dropSound = null, SoundSpecifier? crashSound = null)
+    {
+        var crashLandable = EnsureComp<CrashLandableComponent>(crashing);
+        crashLandable.CrashSound = crashSound;
+        crashLandable.SkyFallDuration = skyFallDuration;
+        crashLandable.CrashDuration = crashDuration;
+        crashLandable.DropSound = dropSound;
+        Dirty(crashing, crashLandable);
+
+        TryCrashLand(crashing, doDamage, crashLocation);
     }
 
     public override void Update(float frameTime)
@@ -284,7 +346,7 @@ public abstract partial class SharedCrashLandSystem : EntitySystem
 }
 
 [ByRefEvent]
-public record struct AttemptCrashLandEvent(EntityUid Crashing, bool Cancelled = false);
+public record struct AttemptCrashLandEvent(EntityUid Crashing, EntityCoordinates? Target = null, bool Cancelled = false);
 
 [ByRefEvent]
 public record struct CrashLandStartedEvent;
@@ -293,7 +355,7 @@ public record struct CrashLandStartedEvent;
 public record struct CrashLandedEvent(bool ShouldDamage);
 
 [Serializable, NetSerializable]
-public abstract class FallAnimationEventArgs : EntityEventArgs
+public abstract partial class FallAnimationEventArgs : EntityEventArgs
 {
     public NetEntity Entity;
     public NetCoordinates Coordinates;
@@ -301,7 +363,7 @@ public abstract class FallAnimationEventArgs : EntityEventArgs
 }
 
 [Serializable, NetSerializable]
-public abstract class CrashAnimationMsg : FallAnimationEventArgs
+public abstract partial class CrashAnimationMsg : FallAnimationEventArgs
 {
 
 }

@@ -32,20 +32,21 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Attachable.Systems;
 
-public sealed class AttachableToggleableSystem : EntitySystem
+public sealed partial class AttachableToggleableSystem : EntitySystem
 {
-    [Dependency] private readonly ActionContainerSystem _actionContainerSystem = default!;
-    [Dependency] private readonly EntityWhitelistSystem _entityWhitelistSystem = default!;
-    [Dependency] private readonly MetaDataSystem _metaDataSystem = default!;
-    [Dependency] private readonly SharedActionsSystem _actionsSystem = default!;
-    [Dependency] private readonly AttachableHolderSystem _attachableHolderSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audioSystem = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
-    [Dependency] private readonly UseDelaySystem _useDelaySystem = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private ActionContainerSystem _actionContainerSystem = default!;
+    [Dependency] private EntityWhitelistSystem _entityWhitelistSystem = default!;
+    [Dependency] private MetaDataSystem _metaDataSystem = default!;
+    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private AttachableHolderSystem _attachableHolderSystem = default!;
+    [Dependency] private SharedAudioSystem _audioSystem = default!;
+    [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private SharedHandsSystem _handsSystem = default!;
+    [Dependency] private SharedPopupSystem _popupSystem = default!;
+    [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private UseDelaySystem _useDelaySystem = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
 
     private const string AttachableToggleUseDelayId = "RMCAttachableToggle";
 
@@ -198,6 +199,9 @@ public sealed class AttachableToggleableSystem : EntitySystem
 
     private void OnGotEquippedHand(Entity<AttachableToggleableComponent> attachable, ref AttachableRelayedEvent<GotEquippedHandEvent> args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         if (!attachable.Comp.Attached)
             return;
 
@@ -294,6 +298,9 @@ public sealed class AttachableToggleableSystem : EntitySystem
 
     private void OnGotUnequippedHand(Entity<AttachableToggleableComponent> attachable, ref AttachableRelayedEvent<GotUnequippedHandEvent> args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         if (!attachable.Comp.Attached)
             return;
 
@@ -732,6 +739,9 @@ public sealed class AttachableToggleableSystem : EntitySystem
 #region Actions
     private void OnGrantAttachableActions(Entity<AttachableToggleableComponent> ent, ref GrantAttachableActionsEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         GrantAttachableActions(ent, args.User);
         RelayAttachableActions(ent, args.User);
     }
@@ -795,6 +805,9 @@ public sealed class AttachableToggleableSystem : EntitySystem
 
     private void OnRemoveAttachableActions(Entity<AttachableToggleableComponent> ent, ref RemoveAttachableActionsEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         RemoveAttachableActions(ent, args.User);
         RemoveRelayedActions(ent, args.User);
     }

@@ -2,6 +2,10 @@
   id: auShivas
   mapName: Shivas Snowball
   mapPath: /Maps/_AU14/shivas.yml
+  mapsBelow:
+  - /Maps/_AU14/shivas_below.yml
+  mapsAbove:
+  - /Maps/_AU14/shivas_above.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0

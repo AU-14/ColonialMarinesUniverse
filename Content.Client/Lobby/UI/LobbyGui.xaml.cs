@@ -10,7 +10,7 @@ namespace Content.Client.Lobby.UI
     [GenerateTypedNameReferences]
     public sealed partial class LobbyGui : UIScreen
     {
-        [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
+        [Dependency] private IClientConsoleHost _consoleHost = default!;
 
         public LobbyGui()
         {
@@ -18,6 +18,7 @@ namespace Content.Client.Lobby.UI
             IoCManager.InjectDependencies(this);
             SetAnchorPreset(MainContainer, LayoutPreset.Wide);
             SetAnchorPreset(Background, LayoutPreset.Wide);
+            CrtLobbyTheme.Apply(MainContainer);
 
             LobbySong.SetMarkup(Loc.GetString("lobby-state-song-no-song-text"));
 

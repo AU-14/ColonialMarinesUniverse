@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Decals;
@@ -59,6 +60,66 @@ public sealed partial class DungeonJob : Job<List<Dungeon>>
     private readonly EntityCoordinates? _targetCoordinates;
 
     private readonly ISawmill _sawmill;
+
+    private static float NextFloat(Random random, float min, float max)
+    {
+        return min + (float) random.NextDouble() * (max - min);
+    }
+
+    private static Angle NextAngle(Random random)
+    {
+        return new Angle(random.NextDouble() * Math.Tau);
+    }
+
+    private static Angle NextAngle(Random random, Angle min, Angle max)
+    {
+        return new Angle(min.Theta + random.NextDouble() * (max.Theta - min.Theta));
+    }
+
+    private static Vector2 NextPolarVector2(Random random, float minMagnitude, float maxMagnitude)
+    {
+        return NextAngle(random).RotateVec(new Vector2(NextFloat(random, minMagnitude, maxMagnitude), 0));
+    }
+
+    private static bool Prob(Random random, double prob)
+    {
+        return random.NextDouble() < prob;
+    }
+
+    private static T Pick<T>(Random random, ICollection<T> collection)
+    {
+        var index = random.Next(collection.Count);
+        return collection.ElementAt(index);
+    }
+
+    private static T PickAndTake<T>(Random random, ICollection<T> collection)
+    {
+        var value = Pick(random, collection);
+        collection.Remove(value);
+        return value;
+    }
+
+    private static void Shuffle<T>(Random random, IList<T> list)
+    {
+        for (var i = list.Count - 1; i > 0; i--)
+        {
+            var j = random.Next(i + 1);
+            (list[i], list[j]) = (list[j], list[i]);
+        }
+    }
+
+    private static double NextGaussian(Random random, double mean, double stdDev)
+    {
+        var u1 = 1.0 - random.NextDouble();
+        var u2 = 1.0 - random.NextDouble();
+        var randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(Math.Tau * u2);
+        return mean + stdDev * randStdNormal;
+    }
+
+    private static Tile GetVariantTile(ITileDefinition tileDef, Random random)
+    {
+        return new Tile(tileDef.TileId, variant: (byte) random.Next(tileDef.Variants));
+    }
 
     public DungeonJob(
         ISawmill sawmill,
@@ -133,7 +194,7 @@ public sealed partial class DungeonJob : Job<List<Dungeon>>
 
         for (var i = 0; i < count; i++)
         {
-            position += random.NextPolarVector2(config.MinOffset, config.MaxOffset).Floored();
+            position += NextPolarVector2(random, config.MinOffset, config.MaxOffset).Floored();
 
             foreach (var layer in layers)
             {
@@ -164,7 +225,7 @@ public sealed partial class DungeonJob : Job<List<Dungeon>>
         _sawmill.Info($"Generating dungeon {_gen} with seed {_seed} on {_entManager.ToPrettyString(_gridUid)}");
         _grid.CanSplit = false;
         var random = new Random(_seed);
-        var position = (_position + random.NextPolarVector2(_gen.MinOffset, _gen.MaxOffset)).Floored();
+        var position = (_position + NextPolarVector2(random, _gen.MinOffset, _gen.MaxOffset)).Floored();
 
         // Tiles we can no longer generate on due to being reserved elsewhere.
         var reservedTiles = new HashSet<Vector2i>();
@@ -284,7 +345,7 @@ public sealed partial class DungeonJob : Job<List<Dungeon>>
                 break;
             case PrototypeDunGen prototypo:
                 var groupConfig = _prototype.Index(prototypo.Proto);
-                position = (position + random.NextPolarVector2(groupConfig.MinOffset, groupConfig.MaxOffset)).Floored();
+                position = (position + NextPolarVector2(random, groupConfig.MinOffset, groupConfig.MaxOffset)).Floored();
 
                 switch (prototypo.InheritDungeons)
                 {

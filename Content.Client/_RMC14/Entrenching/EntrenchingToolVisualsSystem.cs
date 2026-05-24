@@ -1,13 +1,14 @@
-﻿using Content.Shared._RMC14.Entrenching;
+using Content.Shared._RMC14.Entrenching;
 using Content.Shared.Toggleable;
 using Robust.Client.GameObjects;
 using static Content.Shared._RMC14.Entrenching.EntrenchingToolComponentVisualLayers;
 
 namespace Content.Client._RMC14.Entrenching;
 
-public sealed class EntrenchingToolVisualsSystem : EntitySystem
+public sealed partial class EntrenchingToolVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly AppearanceSystem _appearance = default!;
+    [Dependency] private AppearanceSystem _appearance = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {
@@ -32,43 +33,43 @@ public sealed class EntrenchingToolVisualsSystem : EntitySystem
 
         if (_appearance.TryGetData(tool, ToggleableVisuals.Enabled, out bool toggled) && toggled)
         {
-            if (sprite.LayerMapTryGet(Base, out var baseLayer))
-                sprite.LayerSetVisible(baseLayer, true);
+            if (_sprite.LayerMapTryGet((tool.Owner, sprite), Base, out var baseLayer, false))
+                _sprite.LayerSetVisible((tool.Owner, sprite), baseLayer, true);
 
-            if (sprite.LayerMapTryGet(Folded, out var foldedLayer))
-                sprite.LayerSetVisible(foldedLayer, false);
+            if (_sprite.LayerMapTryGet((tool.Owner, sprite), Folded, out var foldedLayer, false))
+                _sprite.LayerSetVisible((tool.Owner, sprite), foldedLayer, false);
 
             if (tool.Comp.TotalLayers > 0)
             {
-                if (sprite.LayerMapTryGet(Dirt, out var dirtLayer))
+                if (_sprite.LayerMapTryGet((tool.Owner, sprite), Dirt, out var dirtLayer, false))
                 {
-                    sprite.LayerSetVisible(dirtLayer, true);
+                    _sprite.LayerSetVisible((tool.Owner, sprite), dirtLayer, true);
 
                     // TODO RMC14 color per dirt type
-                    sprite.LayerSetColor(dirtLayer, Color.FromHex("#C04000"));
+                    _sprite.LayerSetColor((tool.Owner, sprite), dirtLayer, Color.FromHex("#C04000"));
                 }
                 else
                 {
-                    sprite.LayerSetVisible(dirtLayer, false);
+                    _sprite.LayerSetVisible((tool.Owner, sprite), dirtLayer, false);
                 }
             }
             else
             {
-                if (sprite.LayerMapTryGet(Dirt, out var dirtLayer))
-                    sprite.LayerSetVisible(dirtLayer, false);
+                if (_sprite.LayerMapTryGet((tool.Owner, sprite), Dirt, out var dirtLayer, false))
+                    _sprite.LayerSetVisible((tool.Owner, sprite), dirtLayer, false);
             }
         }
         else
         {
-            if (sprite.LayerMapTryGet(Base, out var baseLayer))
-                sprite.LayerSetVisible(baseLayer, false);
+            if (_sprite.LayerMapTryGet((tool.Owner, sprite), Base, out var baseLayer, false))
+                _sprite.LayerSetVisible((tool.Owner, sprite), baseLayer, false);
 
-            if (sprite.LayerMapTryGet(Folded, out var foldedLayer))
-                sprite.LayerSetVisible(foldedLayer, true);
+            if (_sprite.LayerMapTryGet((tool.Owner, sprite), Folded, out var foldedLayer, false))
+                _sprite.LayerSetVisible((tool.Owner, sprite), foldedLayer, true);
 
-            if (sprite.LayerMapTryGet(Dirt, out var dirtLayer))
+            if (_sprite.LayerMapTryGet((tool.Owner, sprite), Dirt, out var dirtLayer, false))
             {
-                sprite.LayerSetVisible(dirtLayer, false);
+                _sprite.LayerSetVisible((tool.Owner, sprite), dirtLayer, false);
             }
         }
     }

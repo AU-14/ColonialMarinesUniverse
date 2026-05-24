@@ -19,7 +19,7 @@
         RMCSkillFirearms: 2
         RMCSkillMeleeWeapons: 1
         RMCSkillVehicles: 1
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetPrisoner
     - type: RMCSurvivor
     - type: MotionDetectorTracked
@@ -57,7 +57,7 @@
   name: prisoner survivor preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomOutfits:
     - [ ArmorHelmetRiot ]
     - [ RMCArmorVestCivilian ]

@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.OnCollide;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Plasma;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Actions;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
@@ -21,23 +22,25 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Xenonids.Spray;
 
-public sealed class XenoSprayAcidSystem : EntitySystem
+public sealed partial class XenoSprayAcidSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly LineSystem _line = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedOnCollideSystem _onCollide = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private LineSystem _line = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedOnCollideSystem _onCollide = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private CMUZLevelShootingSystem _zLevelShooting = default!;
 
     private static readonly ProtoId<ReagentPrototype> AcidRemovedBy = "Water";
 
@@ -64,9 +67,18 @@ public sealed class XenoSprayAcidSystem : EntitySystem
         if (!_xenoPlasma.HasPlasmaPopup(xeno.Owner, xeno.Comp.PlasmaCost))
             return;
 
-        var target = GetNetCoordinates(args.Target);
-
+        var target = args.Target;
         var xenoCoords = _transform.GetMoverCoordinates(xeno);
+        if (!_zLevelShooting.TryAdjustShotCoordinates(
+                xeno,
+                xenoCoords,
+                target,
+                out xenoCoords,
+                out target,
+                requireReadyGunForLookUp: false))
+        {
+            return;
+        }
 
         var length = (target.Position - xenoCoords.Position).Length();
 
@@ -74,10 +86,10 @@ public sealed class XenoSprayAcidSystem : EntitySystem
         {
             var direction = (target.Position - xenoCoords.Position).Normalized();
             var newTile = direction * xeno.Comp.Range;
-            target = new NetCoordinates(GetNetEntity(args.Target.EntityId), xenoCoords.Position + newTile);
+            target = new EntityCoordinates(xenoCoords.EntityId, xenoCoords.Position + newTile);
         }
 
-        var ev = new XenoSprayAcidDoAfter(target);
+        var ev = new XenoSprayAcidDoAfter(GetNetCoordinates(xenoCoords), GetNetCoordinates(target));
         var doAfter = new DoAfterArgs(EntityManager, xeno, xeno.Comp.DoAfter, ev, xeno) { BreakOnMove = true };
         _doAfter.TryStartDoAfter(doAfter);
     }
@@ -103,7 +115,7 @@ public sealed class XenoSprayAcidSystem : EntitySystem
 
         CreateLine(
             xeno,
-            xeno.Owner.ToCoordinates(),
+            GetCoordinates(args.StartCoordinates),
             GetCoordinates(args.Coordinates),
             xeno.Comp.Delay,
             xeno.Comp.Range,
@@ -191,7 +203,13 @@ public sealed class XenoSprayAcidSystem : EntitySystem
                 if (time < acid.At)
                     continue;
 
-                var spawned = Spawn(active.Acid, acid.Coordinates);
+                if (!_zLevels.TryProjectToGround(_transform.ToCoordinates(acid.Coordinates), out var acidCoordinates))
+                {
+                    active.Spawn.RemoveAt(i);
+                    continue;
+                }
+
+                var spawned = Spawn(active.Acid, acidCoordinates);
                 var splatter = EnsureComp<XenoAcidSplatterComponent>(spawned);
                 _hive.SetSameHive(uid, spawned);
                 splatter.Xeno = uid;

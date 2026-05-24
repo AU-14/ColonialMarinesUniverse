@@ -15,15 +15,16 @@ using static Robust.Shared.GameObjects.LookupFlags;
 
 namespace Content.Client._RMC14.Teleporter;
 
-public sealed class RMCTeleporterViewerOverlay : Overlay
+public sealed partial class RMCTeleporterViewerOverlay : Overlay
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IOverlayManager _overlay = default!;
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
 
     private readonly SharedContainerSystem _container;
     private readonly EntityLookupSystem _entityLookup;
     private readonly SharedPhysicsSystem _physics;
+    private readonly SpriteSystem _sprite;
     private readonly SharedRMCTeleporterSystem _teleporter;
     private readonly SharedTransformSystem _transform;
 
@@ -46,6 +47,7 @@ public sealed class RMCTeleporterViewerOverlay : Overlay
         _container = _entity.System<SharedContainerSystem>();
         _entityLookup = _entity.System<EntityLookupSystem>();
         _physics = _entity.System<SharedPhysicsSystem>();
+        _sprite = _entity.System<SpriteSystem>();
         _teleporter = _entity.System<SharedRMCTeleporterSystem>();
         _transform = _entity.System<SharedTransformSystem>();
 
@@ -108,7 +110,7 @@ public sealed class RMCTeleporterViewerOverlay : Overlay
                 foreach (ref var draw in CollectionsMarshal.AsSpan(_toDraw))
                 {
                     draw.Position -= viewerPositionDiff;
-                    draw.Ent.Comp.Render(handle, eyeRot, draw.Rotation, position: draw.Position);
+                    _sprite.RenderSprite(draw.Ent, handle, eyeRot, draw.Rotation, draw.Position);
                 }
             }
         }

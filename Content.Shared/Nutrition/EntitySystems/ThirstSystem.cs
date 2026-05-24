@@ -13,14 +13,14 @@ using Robust.Shared.Timing;
 namespace Content.Shared.Nutrition.EntitySystems;
 
 [UsedImplicitly]
-public sealed class ThirstSystem : EntitySystem
+public sealed partial class ThirstSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly SharedJetpackSystem _jetpack = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private SharedJetpackSystem _jetpack = default!;
 
     private static readonly ProtoId<SatiationIconPrototype> ThirstIconOverhydratedId = "ThirstIconOverhydrated";
     private static readonly ProtoId<SatiationIconPrototype> ThirstIconThirstyId = "ThirstIconThirsty";
@@ -60,13 +60,7 @@ public sealed class ThirstSystem : EntitySystem
 
     private void OnRefreshMovespeed(EntityUid uid, ThirstComponent component, RefreshMovementSpeedModifiersEvent args)
     {
-        return; // RMC14 no thirst in 13, so no slowdown from it here
-        // TODO: This should really be taken care of somewhere else
-        if (_jetpack.IsUserFlying(uid))
-            return;
-
-        var mod = component.CurrentThirstThreshold <= ThirstThreshold.Parched ? 0.75f : 1.0f;
-        args.ModifySpeed(mod, mod);
+        // RMC14 has no thirst slowdown.
     }
 
     private void OnRejuvenate(EntityUid uid, ThirstComponent component, RejuvenateEvent args)

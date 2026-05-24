@@ -17,7 +17,7 @@ public sealed partial class CMUSurgeryWindow : FancyWindow
     private static readonly Vector2 PreferredWindowSize = new(980f, 660f);
     private static readonly Vector2 MinimumWindowSize = new(560f, 420f);
 
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
     private readonly CMUMedicalUniformScaler _uniformScaler = new();
 
     public float LayoutScale { get; private set; } = 1f;
@@ -26,15 +26,16 @@ public sealed partial class CMUSurgeryWindow : FancyWindow
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
+        AllowDraggingOutsideParentBounds = true;
         SetSize = CMUMedicalWindowSizing.GetInitialSize(RememberedSizeKey, PreferredWindowSize);
-        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize);
+        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize, clampPosition: false);
         ApplyUniformScale(true);
     }
 
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
-        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize);
+        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize, clampPosition: false);
         ApplyUniformScale();
         CMUMedicalWindowSizing.RememberSize(RememberedSizeKey, this);
     }

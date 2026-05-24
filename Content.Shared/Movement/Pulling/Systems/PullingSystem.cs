@@ -39,24 +39,24 @@ namespace Content.Shared.Movement.Pulling.Systems;
 /// <summary>
 /// Allows one entity to pull another behind them via a physics distance joint.
 /// </summary>
-public sealed class PullingSystem : EntitySystem
+public sealed partial class PullingSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
-    [Dependency] private readonly AlertsSystem _alertsSystem = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _modifierSystem = default!;
-    [Dependency] private readonly SharedJointSystem _joints = default!;
-    [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
-    [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly HeldSpeedModifierSystem _clothingMoveSpeed = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedVirtualItemSystem _virtual = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private AlertsSystem _alertsSystem = default!;
+    [Dependency] private MovementSpeedModifierSystem _modifierSystem = default!;
+    [Dependency] private SharedJointSystem _joints = default!;
+    [Dependency] private SharedContainerSystem _containerSystem = default!;
+    [Dependency] private SharedHandsSystem _handsSystem = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private HeldSpeedModifierSystem _clothingMoveSpeed = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedVirtualItemSystem _virtual = default!;
 
     // RMC14
-    [Dependency] private readonly RMCPullingSystem _rmcPulling = default!;
+    [Dependency] private RMCPullingSystem _rmcPulling = default!;
 
     public override void Initialize()
     {
@@ -551,7 +551,8 @@ public sealed class PullingSystem : EntitySystem
         _interaction.DoContactInteraction(pullableUid, pullerUid);
 
         // Use net entity so it's consistent across client and server.
-        pullableComp.PullJointId = $"pull-joint-{GetNetEntity(pullableUid)}";
+        var pullJointId = $"pull-joint-{GetNetEntity(pullableUid)}";
+        pullableComp.PullJointId = pullJointId;
 
         EnsureComp<ActivePullerComponent>(pullerUid);
         pullerComp.Pulling = pullableUid;
@@ -563,9 +564,14 @@ public sealed class PullingSystem : EntitySystem
         // joint state handling will manage its own state
         if (!_timing.ApplyingState)
         {
+            // Pull joint IDs are deterministic per pulled entity. If stale joint state
+            // survived a previous pull, clear it before creating the replacement.
+            _joints.RemoveJoint(pullableUid, pullJointId);
+            _joints.RemoveJoint(pullerUid, pullJointId);
+
             var joint = _joints.CreateDistanceJoint(pullableUid, pullerUid,
                     pullablePhysics.LocalCenter, pullerPhysics.LocalCenter,
-                    id: pullableComp.PullJointId, minimumDistance: 1);
+                    id: pullJointId, minimumDistance: 1);
             joint.CollideConnected = false;
             // This maximum has to be there because if the object is constrained too closely, the clamping goes backwards and asserts.
             // Internally, the joint length has been set to the distance between the pivots.

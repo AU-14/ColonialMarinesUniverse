@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Configuration;
+using Robust.Shared.Configuration;
 using Content.Server.Administration;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared.Administration;
@@ -7,10 +7,10 @@ using Robust.Shared.Console;
 namespace Content.Server.GameTicking.Commands
 {
     [AdminCommand(AdminFlags.Round)]
-    sealed class EndRoundCommand : IConsoleCommand
+    sealed partial class EndRoundCommand : IConsoleCommand
     {
-        [Dependency] private readonly IEntityManager _e = default!;
-        [Dependency] private readonly IConfigurationManager _cfg = default!;
+        [Dependency] private IEntityManager _e = default!;
+        [Dependency] private IConfigurationManager _cfg = default!;
 
 
         public string Command => "endround";

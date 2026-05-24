@@ -6,10 +6,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._RMC14.Xenonids.Acid;
 
-public sealed class AcidExtinguisherCleanupSystem : EntitySystem
+public sealed partial class AcidExtinguisherCleanupSystem : EntitySystem
 {
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainer = default!;
-    [Dependency] private readonly SharedXenoAcidSystem _xenoAcid = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private SharedXenoAcidSystem _xenoAcid = default!;
 
     private static readonly ProtoId<ReagentPrototype> AcidRemovedBy = "Water";
 

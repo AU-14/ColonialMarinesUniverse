@@ -150,7 +150,7 @@
     - name: Blood Packs
       entries:
       - id: CMBloodPackFull
-        amount: 35
+        amount: 45
     - name: Empty Packs
       entries:
       - id: CMBloodPack

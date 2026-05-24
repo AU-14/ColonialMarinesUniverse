@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Linq;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship.Weapon;
@@ -17,18 +17,18 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Dropship.Fabricator;
 
-public sealed class DropshipFabricatorSystem : EntitySystem
+public sealed partial class DropshipFabricatorSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly PowerLoaderSystem _powerLoader = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private PowerLoaderSystem _powerLoader = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private int _startingPoints;
     private TimeSpan _gainEvery;

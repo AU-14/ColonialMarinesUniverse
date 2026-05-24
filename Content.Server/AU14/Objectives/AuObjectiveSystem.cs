@@ -23,25 +23,25 @@ using Content.Shared._RMC14.Vendors;
 
 namespace Content.Server.AU14.Objectives;
 // should probably consolidate some of these methods and make it 90% less shitcode but I am incredibly lazy and will do it another day - eg
-public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
+public sealed partial class AuObjectiveSystem : AuSharedObjectiveSystem
 {
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
 
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
-    [Dependency] private readonly ObjectivesConsoleSystem _objectivesConsoleSystem = default!;
+    [Dependency] private ObjectivesConsoleSystem _objectivesConsoleSystem = default!;
 
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly RoundEnd.RoundEndSystem _roundEnd = default!;
-    [Dependency] private readonly Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
-    [Dependency] private readonly AuFetchObjectiveSystem _fetchObjectiveSystem = default!;
-    [Dependency] private readonly AuKillObjectiveSystem _killObjectiveSystem = default!;
-    [Dependency] private readonly Content.Server.AU14.Objectives.Arrest.AuArrestObjectiveSystem _arrestObjectiveSystem = default!;
-    [Dependency] private readonly Content.Server.AU14.Objectives.Destroy.AuDestroyObjectiveSystem _destroyObjectiveSystem = default!;
-    [Dependency] private readonly AuInteractObjectiveSystem _interactObjectiveSystem = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private RoundEnd.RoundEndSystem _roundEnd = default!;
+    [Dependency] private Content.Server.AU14.Round.PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
+    [Dependency] private AuFetchObjectiveSystem _fetchObjectiveSystem = default!;
+    [Dependency] private AuKillObjectiveSystem _killObjectiveSystem = default!;
+    [Dependency] private Content.Server.AU14.Objectives.Arrest.AuArrestObjectiveSystem _arrestObjectiveSystem = default!;
+    [Dependency] private Content.Server.AU14.Objectives.Destroy.AuDestroyObjectiveSystem _destroyObjectiveSystem = default!;
+    [Dependency] private AuInteractObjectiveSystem _interactObjectiveSystem = default!;
 
-    [Dependency] private readonly IPrototypeManager _proto = default!; // for spawning by prototype
+    [Dependency] private IPrototypeManager _proto = default!; // for spawning by prototype
     public bool iswinactive = false;
     private ObjectiveMasterComponent? _objectiveMaster = null;
 
@@ -50,7 +50,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
     public (int govforMinor, int govforMajor, int opforMinor, int opforMajor, int clfMinor, int clfMajor, int
         scientistMinor, int scientistMajor) ObjectivesAmount()
     {
-        foreach (var comp in EntityManager.EntityQuery<ObjectiveMasterComponent>())
+        foreach (var comp in EntityQuery<ObjectiveMasterComponent>())
         {
             return (
                 comp.GovforMinorObjectives,
@@ -114,13 +114,13 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
 
     private void OnObjectiveMasterStartup(EntityUid uid, ObjectiveMasterComponent component, ref ComponentStartup args)
     {
-        Logger.Info($"[OBJ SYSTEM DEBUG] ObjectiveMasterComponent startup on entity {uid}, calling Main()");
+        Logger.GetSawmill("content").Info($"[OBJ SYSTEM DEBUG] ObjectiveMasterComponent startup on entity {uid}, calling Main()");
         Main();
     }
 
     private void OnObjectiveStartup(EntityUid uid, AuObjectiveComponent component, ref ComponentStartup args)
     {
-        Logger.Info(
+        Logger.GetSawmill("content").Info(
             $"[OBJ STARTUP DEBUG] AuObjectiveComponent started on entity {uid} ({component.objectiveDescription})");
         InitializeObjectiveStatuses(component);
     }
@@ -152,21 +152,21 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         }
     }
 
-    private List<AuObjectiveComponent> GetObjectives()
+    private List<(EntityUid Uid, AuObjectiveComponent Comp)> GetObjectives()
     {
-        var objectives = new List<AuObjectiveComponent>();
+        var objectives = new List<(EntityUid Uid, AuObjectiveComponent Comp)>();
         var query = EntityQueryEnumerator<AuObjectiveComponent>();
         int count = 0;
         while (query.MoveNext(out var uid, out var comp))
         {
-            Logger.Info(
+            Logger.GetSawmill("content").Info(
                 $"[OBJ GET DEBUG] Found objective entity {uid} ({comp.objectiveDescription}), Active={comp.Active}");
             if (!comp.Active)
-                objectives.Add(comp);
+                objectives.Add((uid, comp));
             count++;
         }
 
-        Logger.Info($"[OBJ GET DEBUG] Total objectives found: {count}, eligible (inactive): {objectives.Count}");
+        Logger.GetSawmill("content").Info($"[OBJ GET DEBUG] Total objectives found: {count}, eligible (inactive): {objectives.Count}");
         return objectives;
     }
 
@@ -178,17 +178,17 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
 
         var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
         var presetId = ticker.Preset?.ID?.ToLowerInvariant();
-        var govforMinor = new List<AuObjectiveComponent>();
-        var govforMajor = new List<AuObjectiveComponent>();
-        var opforMinor = new List<AuObjectiveComponent>();
-        var opforMajor = new List<AuObjectiveComponent>();
-        var clfMinor = new List<AuObjectiveComponent>();
-        var clfMajor = new List<AuObjectiveComponent>();
-        var scientistMinor = new List<AuObjectiveComponent>();
-        var scientistMajor = new List<AuObjectiveComponent>();
+        var govforMinor = new List<(EntityUid Uid, AuObjectiveComponent Comp)>();
+        var govforMajor = new List<(EntityUid Uid, AuObjectiveComponent Comp)>();
+        var opforMinor = new List<(EntityUid Uid, AuObjectiveComponent Comp)>();
+        var opforMajor = new List<(EntityUid Uid, AuObjectiveComponent Comp)>();
+        var clfMinor = new List<(EntityUid Uid, AuObjectiveComponent Comp)>();
+        var clfMajor = new List<(EntityUid Uid, AuObjectiveComponent Comp)>();
+        var scientistMinor = new List<(EntityUid Uid, AuObjectiveComponent Comp)>();
+        var scientistMajor = new List<(EntityUid Uid, AuObjectiveComponent Comp)>();
 
         var allMasters = new List<ObjectiveMasterComponent>();
-        foreach (var comp in EntityManager.EntityQuery<ObjectiveMasterComponent>())
+        foreach (var comp in EntityQuery<ObjectiveMasterComponent>())
         {
             allMasters.Add(comp);
         }
@@ -206,8 +206,6 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             _objectiveMaster = allMasters.FirstOrDefault(m => m.Mode.ToLowerInvariant() == presetId) ??
                                allMasters[0];
         }
-
-
 
         if (presetId == "insurgency")
         {
@@ -232,72 +230,72 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         scientistMinor = SelectObjectives("scientist", 1, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.ScientistMinorObjectives, _objectiveMaster.MinScientistMinorObjectives));
         scientistMajor = SelectObjectives("scientist", 2, _objectiveMaster, GetRandomObjectiveCount(_objectiveMaster.ScientistMajorObjectives, _objectiveMaster.MinScientistMajorObjectives));
 
-        foreach (var obj in govforMinor)
+        foreach (var (objUid, obj) in govforMinor)
         {
             obj.Active = true;
-            RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
+            RaiseLocalEvent(objUid, new ObjectiveActivatedEvent());
             obj.Faction = "govfor";
-            Logger.Info($"[OBJ DEBUG] Set govforMinor objective '{obj.objectiveDescription}' active");
+            Logger.GetSawmill("content").Info($"[OBJ DEBUG] Set govforMinor objective '{obj.objectiveDescription}' active");
         }
 
-        foreach (var obj in govforMajor)
+        foreach (var (objUid, obj) in govforMajor)
         {
             obj.Active = true;
-            RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
+            RaiseLocalEvent(objUid, new ObjectiveActivatedEvent());
             obj.Faction = "govfor";
-            Logger.Info($"[OBJ DEBUG] Set govforMajor objective '{obj.objectiveDescription}' active");
+            Logger.GetSawmill("content").Info($"[OBJ DEBUG] Set govforMajor objective '{obj.objectiveDescription}' active");
         }
 
-        foreach (var obj in opforMinor)
+        foreach (var (objUid, obj) in opforMinor)
         {
             obj.Active = true;
-            RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
+            RaiseLocalEvent(objUid, new ObjectiveActivatedEvent());
             obj.Faction = "opfor";
-            Logger.Info($"[OBJ DEBUG] Set opforMinor objective '{obj.objectiveDescription}' active");
+            Logger.GetSawmill("content").Info($"[OBJ DEBUG] Set opforMinor objective '{obj.objectiveDescription}' active");
         }
 
-        foreach (var obj in opforMajor)
+        foreach (var (objUid, obj) in opforMajor)
         {
             obj.Active = true;
-            RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
+            RaiseLocalEvent(objUid, new ObjectiveActivatedEvent());
             obj.Faction = "opfor";
-            Logger.Info($"[OBJ DEBUG] Set opforMajor objective '{obj.objectiveDescription}' active");
+            Logger.GetSawmill("content").Info($"[OBJ DEBUG] Set opforMajor objective '{obj.objectiveDescription}' active");
         }
 
-        foreach (var obj in clfMinor)
+        foreach (var (objUid, obj) in clfMinor)
         {
             obj.Active = true;
-            RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
+            RaiseLocalEvent(objUid, new ObjectiveActivatedEvent());
             obj.Faction = "clf";
-            Logger.Info($"[OBJ DEBUG] Set clfMinor objective '{obj.objectiveDescription}' active");
+            Logger.GetSawmill("content").Info($"[OBJ DEBUG] Set clfMinor objective '{obj.objectiveDescription}' active");
         }
 
-        foreach (var obj in clfMajor)
+        foreach (var (objUid, obj) in clfMajor)
         {
             obj.Active = true;
-            RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
+            RaiseLocalEvent(objUid, new ObjectiveActivatedEvent());
             obj.Faction = "clf";
-            Logger.Info($"[OBJ DEBUG] Set clfMajor objective '{obj.objectiveDescription}' active");
+            Logger.GetSawmill("content").Info($"[OBJ DEBUG] Set clfMajor objective '{obj.objectiveDescription}' active");
         }
 
-        foreach (var obj in scientistMinor)
+        foreach (var (objUid, obj) in scientistMinor)
         {
             obj.Active = true;
-            RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
+            RaiseLocalEvent(objUid, new ObjectiveActivatedEvent());
             obj.Faction = "scientist";
-            Logger.Info($"[OBJ DEBUG] Set scientistMinor objective '{obj.objectiveDescription}' active");
+            Logger.GetSawmill("content").Info($"[OBJ DEBUG] Set scientistMinor objective '{obj.objectiveDescription}' active");
         }
 
-        foreach (var obj in scientistMajor)
+        foreach (var (objUid, obj) in scientistMajor)
         {
             obj.Active = true;
-            RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
+            RaiseLocalEvent(objUid, new ObjectiveActivatedEvent());
             obj.Faction = "scientist";
-            Logger.Info($"[OBJ DEBUG] Set scientistMajor objective '{obj.objectiveDescription}' active");
+            Logger.GetSawmill("content").Info($"[OBJ DEBUG] Set scientistMajor objective '{obj.objectiveDescription}' active");
         }
 
 
-        foreach (var obj in GetObjectives())
+        foreach (var (_, obj) in GetObjectives())
         {
             obj.FactionStatuses.Clear();
             InitializeObjectiveStatuses(obj);
@@ -308,7 +306,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         }
 
         var allObjectives = GetObjectives();
-        foreach (var obj in allObjectives)
+        foreach (var (objUid, obj) in allObjectives)
         {
             if (obj.FactionNeutral && !obj.Active)
             {
@@ -317,18 +315,16 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                     if (obj.Factions.Count > 0)
                     {
                         obj.Active = true;
-                        RaiseLocalEvent(obj.Owner, new ObjectiveActivatedEvent());
-                        Logger.Info($"[OBJ DEBUG] Set neutral objective '{obj.objectiveDescription}' active");
+                        RaiseLocalEvent(objUid, new ObjectiveActivatedEvent());
+                        Logger.GetSawmill("content").Info($"[OBJ DEBUG] Set neutral objective '{obj.objectiveDescription}' active");
                     }
                 }
             }
         }
     }
 
-    private List<AuObjectiveComponent> SelectObjectives(string faction,
-        int? objectiveLevel = null,
-        ObjectiveMasterComponent? objectiveMaster = null,
-        int maxCount = int.MaxValue)
+    private List<(EntityUid Uid, AuObjectiveComponent Comp)> SelectObjectives(string faction,
+        int? objectiveLevel = null, ObjectiveMasterComponent? objectiveMaster = null, int maxCount = int.MaxValue)
     {
         var playercount = _playerManager.PlayerCount;
         var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
@@ -336,7 +332,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         var presetIdLower = presetId.ToLowerInvariant();
         var factionLower = faction.ToLowerInvariant();
         var allObjectives = GetObjectives();
-        var selected = new List<AuObjectiveComponent>();
+        var selected = new List<(EntityUid Uid, AuObjectiveComponent Comp)>();
         string? selectedPlatoonId = null;
         // Get the current threat prototype if available
         ThreatPrototype? currentThreat = null;
@@ -353,7 +349,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                 break;
             // Add more cases if other factions can have platoons
         }
-        foreach (var objective in allObjectives)
+        foreach (var (objUid, objective) in allObjectives)
         {
             // Exclude win/final objectives (ObjectiveLevel == 3) from roundstart unless RollAnyway is true
             if (objective.ObjectiveLevel == 3 && !objective.RollAnyway)
@@ -393,26 +389,26 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                 if (selectedPlatoonId == null || !objective.WhitelistedPlatoons.Contains(selectedPlatoonId))
                     continue;
             }
-            selected.Add(objective);
+            selected.Add((objUid, objective));
         }
         // Randomly select up to maxCount objectives if more are available
         if (selected.Count > maxCount)
         {
             // Weighted random selection without replacement
             var rng = new Random();
-            var weighted = selected.Select(obj => (obj, weight: Math.Max(1, obj.ObjectiveWeight))).ToList();
-            var chosen = new List<AuObjectiveComponent>();
+            var weighted = selected.Select(obj => (obj.Uid, obj.Comp, Weight: Math.Max(1, obj.Comp.ObjectiveWeight))).ToList();
+            var chosen = new List<(EntityUid Uid, AuObjectiveComponent Comp)>();
             for (int i = 0; i < maxCount && weighted.Count > 0; i++)
             {
-                int totalWeight = weighted.Sum(x => x.weight);
+                int totalWeight = weighted.Sum(x => x.Weight);
                 int pick = rng.Next(0, totalWeight);
                 int cumulative = 0;
                 for (int j = 0; j < weighted.Count; j++)
                 {
-                    cumulative += weighted[j].weight;
+                    cumulative += weighted[j].Weight;
                     if (pick < cumulative)
                     {
-                        chosen.Add(weighted[j].obj);
+                        chosen.Add((weighted[j].Uid, weighted[j].Comp));
                         weighted.RemoveAt(j);
                         break;
                     }
@@ -457,7 +453,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                 return;
 
             objective.FactionStatuses[factionKey] = AuObjectiveComponent.ObjectiveStatus.Completed;
-            Logger.Info($"[OBJ COMPLETE DEBUG] Set FactionStatuses['{factionKey}'] = Completed");
+            Logger.GetSawmill("content").Info($"[OBJ COMPLETE DEBUG] Set FactionStatuses['{factionKey}'] = Completed");
 
             // Only mark other factions as Failed if NOT repeating
             if (!objective.Repeating)
@@ -468,7 +464,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                         objective.FactionStatuses[key] == AuObjectiveComponent.ObjectiveStatus.Incomplete)
                     {
                         objective.FactionStatuses[key] = AuObjectiveComponent.ObjectiveStatus.Failed;
-                        Logger.Info($"[OBJ COMPLETE DEBUG] Set FactionStatuses['{key}'] = Failed");
+                        Logger.GetSawmill("content").Info($"[OBJ COMPLETE DEBUG] Set FactionStatuses['{key}'] = Failed");
                     }
                 }
                 var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
@@ -497,7 +493,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         {
             if (!objective.FactionStatuses.TryAdd(factionKey, AuObjectiveComponent.ObjectiveStatus.Completed))
                 objective.FactionStatuses[factionKey] = AuObjectiveComponent.ObjectiveStatus.Completed;
-            Logger.Info($"[OBJ COMPLETE DEBUG] Set FactionStatuses['{factionKey}'] = Completed");
+            Logger.GetSawmill("content").Info($"[OBJ COMPLETE DEBUG] Set FactionStatuses['{factionKey}'] = Completed");
             AwardPointsToFaction(completingFaction, objective);
             _objectivesConsoleSystem.RefreshConsolesForFaction(completingFaction);
         }
@@ -511,7 +507,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             }
             else
             {
-                Logger.Info($"[OBJ FINAL DEBUG] Final objective '{objective.objectiveDescription}' completed for faction '{completingFaction}' as Boon; not ending the round.");
+                Logger.GetSawmill("content").Info($"[OBJ FINAL DEBUG] Final objective '{objective.objectiveDescription}' completed for faction '{completingFaction}' as Boon; not ending the round.");
             }
         }
 
@@ -534,7 +530,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                 {
                     objective.FactionStatuses[factionKey] = AuObjectiveComponent.ObjectiveStatus.Completed;
                 }
-                Logger.Info($"[OBJ REPEAT DEBUG] Objective '{objective.objectiveDescription}' reached max repeats ({maxRepeat}), marking as completed.");
+                Logger.GetSawmill("content").Info($"[OBJ REPEAT DEBUG] Objective '{objective.objectiveDescription}' reached max repeats ({maxRepeat}), marking as completed.");
                 _objectivesConsoleSystem.RefreshConsolesForFaction(completingFaction);
                 return;
             }
@@ -567,7 +563,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             // Reactivate the objective
             objective.Active = true;
             RaiseLocalEvent(uid, new ObjectiveActivatedEvent());
-            Logger.Info($"[OBJ REPEAT DEBUG] Restarted repeating objective '{objective.objectiveDescription}'");
+            Logger.GetSawmill("content").Info($"[OBJ REPEAT DEBUG] Restarted repeating objective '{objective.objectiveDescription}'");
             // Refresh consoles for all relevant factions
             if (objective.FactionNeutral)
             {
@@ -580,7 +576,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             }
         }
 
-        Logger.Info(
+        Logger.GetSawmill("content").Info(
             $"[OBJ REPEAT DEBUG] Objective '{objective.objectiveDescription}' Repeating property: {objective.Repeating}");
         if (objective.Repeating)
         {
@@ -606,7 +602,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
             // Reactivate the objective
             objective.Active = true;
             RaiseLocalEvent(uid, new ObjectiveActivatedEvent());
-            Logger.Info($"[OBJ REPEAT DEBUG] Restarted repeating objective '{objective.objectiveDescription}'");
+            Logger.GetSawmill("content").Info($"[OBJ REPEAT DEBUG] Restarted repeating objective '{objective.objectiveDescription}'");
             // Refresh consoles for all relevant factions
             if (objective.FactionNeutral)
             {
@@ -624,7 +620,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
 
     private void TryUnlockOrSpawnNextTier(EntityUid completedUid, AuObjectiveComponent completedObjective, string completingFaction)
     {
-            Logger.Info($"[OBJ NEXT DEBUG] Attempting to spawn next-tier for prototype='{completedObjective.NextTier}' for faction {completingFaction}");
+            Logger.GetSawmill("content").Info($"[OBJ NEXT DEBUG] Attempting to spawn next-tier for prototype='{completedObjective.NextTier}' for faction {completingFaction}");
 
         // Nothing to do if NextTier is empty
         var nextTier = completedObjective.NextTier;
@@ -642,25 +638,25 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         // Ensure the referenced prototype actually contains an AuObjectiveComponent
         if (!nextTier.Value.TryGet(out AuObjectiveComponent? _ , _proto, EntityManager.ComponentFactory))
         {
-            Logger.Warning($"[OBJ NEXT DEBUG] Next tier prototype '{protoIdStr}' does not contain an AuObjectiveComponent or is missing");
+            Logger.GetSawmill("content").Warning($"[OBJ NEXT DEBUG] Next tier prototype '{protoIdStr}' does not contain an AuObjectiveComponent or is missing");
             return;
         }
 
 
         // Always spawn a new entity from the prototype (do not try to find and reuse an existing inactive objective)
-        var newEnt = EntityManager.SpawnEntity(protoIdStr, completedXform.Coordinates);
-        if (EntityManager.TryGetComponent(newEnt, out AuObjectiveComponent? newObjComp))
+        var newEnt = Spawn(protoIdStr, completedXform.Coordinates);
+        if (TryComp(newEnt, out AuObjectiveComponent? newObjComp))
         {
             newObjComp.Faction = completingFaction.ToLowerInvariant();
             newObjComp.Active = true;
             InitializeObjectiveStatuses(newObjComp);
             RaiseLocalEvent(newEnt, new ObjectiveActivatedEvent());
             _objectivesConsoleSystem.RefreshConsolesForFaction(newObjComp.Faction);
-            Logger.Info($"[OBJ NEXT DEBUG] Spawned and activated next-tier objective '{newObjComp.objectiveDescription}' for faction {newObjComp.Faction}");
+            Logger.GetSawmill("content").Info($"[OBJ NEXT DEBUG] Spawned and activated next-tier objective '{newObjComp.objectiveDescription}' for faction {newObjComp.Faction}");
         }
         else
         {
-            Logger.Warning($"[OBJ NEXT DEBUG] Spawned prototype {protoIdStr} but it does not contain an AuObjectiveComponent");
+            Logger.GetSawmill("content").Warning($"[OBJ NEXT DEBUG] Spawned prototype {protoIdStr} but it does not contain an AuObjectiveComponent");
         }
     }
 
@@ -676,10 +672,10 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
     }
 
     // Checks if a Kill objective is completable: at least one entity is marked for this objective
-    private bool IsKillObjectiveCompletable(AuObjectiveComponent obj)
+    private bool IsKillObjectiveCompletable(EntityUid uid, AuObjectiveComponent obj)
     {
         // Only care about objectives with a KillObjectiveComponent
-        if (!_entityManager.TryGetComponent(obj.Owner, out KillObjectiveComponent? killObj))
+        if (!_entityManager.TryGetComponent(uid, out KillObjectiveComponent? killObj))
             return false;
         // If the objective will spawn a mob and hasn't yet, it will be completable after activation
         if (killObj.SpawnMob && !killObj.MobsSpawned)
@@ -687,7 +683,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         var query = _entityManager.EntityQueryEnumerator<MarkedForKillComponent>();
         while (query.MoveNext(out var ent, out var markComp))
         {
-            if (markComp.AssociatedObjectives.ContainsKey(obj.Owner))
+            if (markComp.AssociatedObjectives.ContainsKey(uid))
                 return true;
         }
         return false;
@@ -753,44 +749,52 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         if (!_objectiveMaster.FinalObjectiveGivenFactions.Contains(factionKey) && newPoints >= requiredPoints)
         {
             // Only activate a final objective if it is completable
-            var finalObjectives = EntityManager.EntityQuery<AuObjectiveComponent>()
-                .Where(obj =>
-                    !obj.Active && obj.Factions.Any(f => f.ToLowerInvariant() == factionKey) &&
-                    obj.ObjectiveLevel == 3)
-                .ToList();
+            var finalObjectives = new List<(EntityUid Uid, AuObjectiveComponent Comp)>();
+            var finalObjQuery = AllEntityQuery<AuObjectiveComponent>();
+            while (finalObjQuery.MoveNext(out var uid, out var comp))
+            {
+                if (!comp.Active
+                    && comp.ObjectiveLevel == 3
+                    && comp.Factions.Any(f => f.ToLowerInvariant() == factionKey))
+                {
+                    finalObjectives.Add((uid, comp));
+                }
+            }
             // Try to find a completable final objective
             AuObjectiveComponent? selected = null;
+            EntityUid selectedUid = EntityUid.Invalid;
             var random = new Random();
             var shuffled = finalObjectives.OrderBy(_ => random.Next()).ToList();
-            foreach (var obj in shuffled)
+            foreach (var (uid, comp) in shuffled)
             {
-                if (_entityManager.TryGetComponent(obj.Owner, out KillObjectiveComponent? killObj))
+                if (_entityManager.TryGetComponent(uid, out KillObjectiveComponent? killObj))
                 {
-                    if (!IsKillObjectiveCompletable(obj))
+                    if (!IsKillObjectiveCompletable(uid, comp))
                         continue;
                 }
-                selected = obj;
+                selected = comp;
+                selectedUid = uid;
                 break;
             }
             if (selected != null)
             {
                 selected.Active = true;
-                RaiseLocalEvent(selected.Owner, new ObjectiveActivatedEvent());
+                RaiseLocalEvent(selectedUid, new ObjectiveActivatedEvent());
                 selected.Faction = factionKey;
-                Logger.Info(
+                Logger.GetSawmill("content").Info(
                     $"[OBJ FINAL DEBUG] Activated final objective '{selected.objectiveDescription}' for faction '{factionKey}'");
                 _objectiveMaster.FinalObjectiveGivenFactions.Add(factionKey);
                 iswinactive = true;
-                if (selected.Owner != EntityUid.Invalid && EntityManager.HasComponent<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveComponent>(selected.Owner))
+                if (selectedUid != EntityUid.Invalid && HasComp<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveComponent>(selectedUid))
                 {
                     var fetchSystem = EntityManager.EntitySysManager.GetEntitySystem<Content.Server.AU14.Objectives.Fetch.AuFetchObjectiveSystem>();
-                    var fetchComp = EntityManager.GetComponent<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveComponent>(selected.Owner);
-                    fetchSystem.TryActivateFetchObjective(selected.Owner, fetchComp);
+                    var fetchComp = Comp<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveComponent>(selectedUid);
+                    fetchSystem.TryActivateFetchObjective(selectedUid, fetchComp);
                 }
             }
             else
             {
-                Logger.Warning($"[OBJ FINAL DEBUG] No completable final objective found for faction '{factionKey}'. None activated.");
+                Logger.GetSawmill("content").Warning($"[OBJ FINAL DEBUG] No completable final objective found for faction '{factionKey}'. None activated.");
             }
         }
     }
@@ -842,8 +846,11 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
                 return true;
         }
         // Calculate max possible points from remaining incomplete objectives
-        var remainingObjectives = GetObjectives().Where(obj => obj.Factions.Any(f => f.ToLowerInvariant() == factionKey) && obj.FactionStatuses.TryGetValue(factionKey, out var status) && status == AuObjectiveComponent.ObjectiveStatus.Incomplete);
-        int possiblePoints = remainingObjectives.Sum(obj => obj.CustomPoints == 0 ? (obj.ObjectiveLevel == 1 ? 5 : 20) : obj.CustomPoints);
+        var remainingObjectives = GetObjectives()
+            .Where(obj => obj.Comp.Factions.Any(f => f.ToLowerInvariant() == factionKey)
+            && obj.Comp.FactionStatuses.TryGetValue(factionKey, out var status)
+            && status == AuObjectiveComponent.ObjectiveStatus.Incomplete);
+        int possiblePoints = remainingObjectives.Sum(obj => obj.Comp.CustomPoints == 0 ? (obj.Comp.ObjectiveLevel == 1 ? 5 : 20) : obj.Comp.CustomPoints);
         return (currentPoints + possiblePoints) >= requiredPoints;
     }
 
@@ -879,7 +886,7 @@ public sealed class AuObjectiveSystem : AuSharedObjectiveSystem
         }
 
         // No need to call Dirty on the component reference directly; find the entity to mark dirty for replication
-        var query = EntityManager.EntityQueryEnumerator<ObjectiveMasterComponent>();
+        var query = EntityQueryEnumerator<ObjectiveMasterComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
             // Update the concrete component instance on the entity to match the authoritative copy

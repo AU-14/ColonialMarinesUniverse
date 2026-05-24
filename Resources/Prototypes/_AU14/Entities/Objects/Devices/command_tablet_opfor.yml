@@ -1,0 +1,15 @@
+- type: entity
+  parent: RMCTabletCO
+  id: AU14TabletOpfor
+  name: opfor command tablet
+  description: A portable command interface for Opfor command, linked to their faction's systems.
+  components:
+  - type: AccessReader
+    access: [[ "AU14AccessOpforCommand" ]]
+  - type: MarineCommunicationsComputer
+    canCreateEcho: false
+    canGiveMedals: true
+    canInitiateEvac: true
+    faction: opfor
+  - type: TacticalMapComputer
+    faction: opfor

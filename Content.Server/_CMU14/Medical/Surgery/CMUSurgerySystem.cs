@@ -4,11 +4,13 @@ using Content.Shared._CMU14.Medical.Bones;
 using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared._CMU14.Medical.Organs;
 using Content.Shared._CMU14.Medical.Surgery;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.FixedPoint;
+using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffectNew;
@@ -19,15 +21,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._CMU14.Medical.Surgery;
 
-public sealed class CMUSurgerySystem : SharedCMUSurgerySystem
+public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedStatusEffectsSystem _status = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedBodyPartHealthSystem _partHealth = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedStatusEffectsSystem _status = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     protected override void ApplyOrganRemovalSideEffects(EntityUid user, EntityUid body, EntityUid organ, string slot)
     {
@@ -95,13 +97,20 @@ public sealed class CMUSurgerySystem : SharedCMUSurgerySystem
             return;
         }
 
+        RestoreUsableHands(body);
+
         var hpFraction = (float)_cfg.GetCVar(CMUMedicalCCVars.SurgeryLimbReattachStartingHpFraction);
         if (TryComp<BodyPartHealthComponent>(limb, out var bph))
             _partHealth.SetCurrent((limb, bph), bph.Max * (FixedPoint2)hpFraction);
 
         // forceUpgrade:false — if the limb already carries a higher severity
         // (Comminuted) from prior trauma, leave it.
-        if (HasComp<BoneComponent>(limb))
+        if (HasComp<SynthComponent>(body))
+        {
+            if (TryComp<FractureComponent>(limb, out var existingFracture))
+                Fracture.SetSeverity((limb, existingFracture), FractureSeverity.None, forceUpgrade: false);
+        }
+        else if (HasComp<BoneComponent>(limb))
         {
             var fracture = EnsureComp<FractureComponent>(limb);
             Fracture.SetSeverity((limb, fracture), startingFracture, forceUpgrade: false);
@@ -110,6 +119,99 @@ public sealed class CMUSurgerySystem : SharedCMUSurgerySystem
         TryClearMissingLimbStatus(body, limbPart.PartType, limbPart.Symmetry);
 
         _popup.PopupEntity(Loc.GetString("cmu-medical-reattach-success"), body, user, PopupType.Medium);
+    }
+
+    private void RestoreUsableHands(EntityUid body)
+    {
+        if (!TryComp<HandsComponent>(body, out var hands))
+            return;
+
+        foreach (var (partId, part) in Body.GetBodyChildren(body))
+        {
+            if (part.PartType != BodyPartType.Hand)
+                continue;
+
+            var location = part.Symmetry switch
+            {
+                BodyPartSymmetry.Left => HandLocation.Left,
+                BodyPartSymmetry.Right => HandLocation.Right,
+                _ => HandLocation.Middle,
+            };
+
+            string? handId = null;
+            if (Body.GetParentPartAndSlotOrNull(partId) is { } parentSlot)
+                handId = SharedBodySystem.GetPartSlotContainerId(parentSlot.Slot);
+            else if (part.Symmetry is BodyPartSymmetry.Left or BodyPartSymmetry.Right)
+                handId = SharedBodySystem.GetPartSlotContainerId(part.Symmetry == BodyPartSymmetry.Left
+                    ? "left_hand"
+                    : "right_hand");
+
+            if (handId == null)
+                continue;
+
+            if (!_hands.TrySetHandLocation((body, hands), handId, location))
+                _hands.AddHand((body, hands), handId, location);
+        }
+
+        if (NormalizeBodyHandOrder(hands))
+            Dirty(body, hands);
+
+        if (hands.ActiveHandId == null && hands.SortedHands.Count > 0)
+            _hands.SetActiveHand((body, hands), hands.SortedHands[0]);
+    }
+
+    private static bool NormalizeBodyHandOrder(HandsComponent hands)
+    {
+        var sortedHands = hands.SortedHands;
+        if (sortedHands.Count < 2)
+            return false;
+
+        var ordered = new List<string>(sortedHands.Count);
+        AddCanonicalHand(sortedHands, ordered, "right_hand");
+        AddCanonicalHand(sortedHands, ordered, "left_hand");
+
+        foreach (var hand in sortedHands)
+        {
+            if (!ordered.Contains(hand))
+                ordered.Add(hand);
+        }
+
+        var changed = false;
+        for (var i = 0; i < sortedHands.Count; i++)
+        {
+            if (sortedHands[i] == ordered[i])
+                continue;
+
+            changed = true;
+            break;
+        }
+
+        if (!changed)
+            return false;
+
+        sortedHands.Clear();
+        sortedHands.AddRange(ordered);
+        return true;
+    }
+
+    private static void AddCanonicalHand(IReadOnlyList<string> sortedHands, List<string> ordered, string canonicalSlot)
+    {
+        foreach (var hand in sortedHands)
+        {
+            if (BarePartSlot(hand) != canonicalSlot || ordered.Contains(hand))
+                continue;
+
+            ordered.Add(hand);
+            return;
+        }
+    }
+
+    private static string BarePartSlot(string slot)
+    {
+        const string prefix = SharedBodySystem.PartSlotContainerIdPrefix;
+        return slot.StartsWith(prefix, StringComparison.Ordinal)
+            ? slot.Substring(prefix.Length)
+            : slot;
     }
 
     protected override void ApplyLimbRemoval(EntityUid user, EntityUid body, EntityUid part)
@@ -126,8 +228,7 @@ public sealed class CMUSurgerySystem : SharedCMUSurgerySystem
         if (limbPart.PartType is not (BodyPartType.Arm or BodyPartType.Leg))
             return;
 
-        if (TryComp<TransformComponent>(body, out var bodyXform))
-            _transform.SetCoordinates(part, bodyXform.Coordinates);
+        _transform.SetCoordinates(part, Transform(body).Coordinates);
 
         _transform.AttachToGridOrMap(part);
 

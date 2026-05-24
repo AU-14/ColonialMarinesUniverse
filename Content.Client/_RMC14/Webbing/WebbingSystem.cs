@@ -1,4 +1,4 @@
-﻿using Content.Client.Clothing;
+using Content.Client.Clothing;
 using Content.Client.Items.Systems;
 using Content.Shared._RMC14.Webbing;
 using Content.Shared.Clothing;
@@ -12,10 +12,11 @@ using static Robust.Shared.Utility.SpriteSpecifier;
 
 namespace Content.Client._RMC14.Webbing;
 
-public sealed class WebbingSystem : SharedWebbingSystem
+public sealed partial class WebbingSystem : SharedWebbingSystem
 {
-    [Dependency] private readonly ItemSystem _item = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private ItemSystem _item = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public event Action? PlayerWebbingUpdated;
 
@@ -50,11 +51,11 @@ public sealed class WebbingSystem : SharedWebbingSystem
         }
 
         if (TryComp(ent, out SpriteComponent? clothingSprite) &&
-                clothingSprite.LayerMapTryGet(WebbingVisualLayers.Base, out var clothingLayer))
+                _sprite.LayerMapTryGet((ent.Owner, clothingSprite), WebbingVisualLayers.Base, out var clothingLayer, false))
             {
-                clothingSprite.LayerSetVisible(clothingLayer, true);
-                clothingSprite.LayerSetRSI(clothingLayer, sprite.RsiPath);
-                clothingSprite.LayerSetState(clothingLayer, sprite.RsiState);
+                _sprite.LayerSetVisible((ent.Owner, clothingSprite), clothingLayer, true);
+                _sprite.LayerSetRsi((ent.Owner, clothingSprite), clothingLayer, sprite.RsiPath);
+                _sprite.LayerSetRsiState((ent.Owner, clothingSprite), clothingLayer, sprite.RsiState);
             }
 
         args.Layers.Add(($"enum.{nameof(WebbingVisualLayers)}.{nameof(WebbingVisualLayers.Base)}", new PrototypeLayerData
@@ -67,18 +68,18 @@ public sealed class WebbingSystem : SharedWebbingSystem
     private void OnClothingState(Entity<WebbingClothingComponent> clothing, ref AfterAutoHandleStateEvent args)
     {
         if (TryComp(clothing, out SpriteComponent? clothingSprite) &&
-            clothingSprite.LayerMapTryGet(WebbingVisualLayers.Base, out var clothingLayer))
+            _sprite.LayerMapTryGet((clothing.Owner, clothingSprite), WebbingVisualLayers.Base, out var clothingLayer, false))
         {
             if (TryComp(clothing.Comp.Webbing, out WebbingComponent? webbing) &&
                 webbing.PlayerSprite is { } rsi)
             {
-                clothingSprite.LayerSetVisible(clothingLayer, true);
-                clothingSprite.LayerSetRSI(clothingLayer, rsi.RsiPath);
-                clothingSprite.LayerSetState(clothingLayer, rsi.RsiState);
+                _sprite.LayerSetVisible((clothing.Owner, clothingSprite), clothingLayer, true);
+                _sprite.LayerSetRsi((clothing.Owner, clothingSprite), clothingLayer, rsi.RsiPath);
+                _sprite.LayerSetRsiState((clothing.Owner, clothingSprite), clothingLayer, rsi.RsiState);
             }
             else
             {
-                clothingSprite.LayerSetVisible(clothingLayer, false);
+                _sprite.LayerSetVisible((clothing.Owner, clothingSprite), clothingLayer, false);
             }
         }
 

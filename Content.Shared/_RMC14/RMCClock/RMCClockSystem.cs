@@ -1,13 +1,13 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Shared.Clock;
 using Content.Shared.Examine;
 using Content.Shared.GameTicking;
 
 namespace Content.Shared._RMC14.RMCClock;
 
-public sealed class RMCClockSystem : EntitySystem
+public sealed partial class RMCClockSystem : EntitySystem
 {
-    [Dependency] private readonly SharedGameTicker _ticker = default!;
+    [Dependency] private SharedGameTicker _ticker = default!;
 
     public override void Initialize()
     {

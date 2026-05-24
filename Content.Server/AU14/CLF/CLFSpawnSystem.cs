@@ -15,12 +15,14 @@ namespace Content.Server.AU14.CLF;
 /// Command roles (Cell Leader, Physician, Surgeon) always spawn at the safehouse.
 /// Guerilla roles have a 66% chance to spawn at colony civilian spawn points and 34% at the safehouse.
 /// </summary>
-public sealed class ClfSpawnSystem : EntitySystem
+public sealed partial class ClfSpawnSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    private static readonly ProtoId<CLFSpawnConfigPrototype> ClfSpawnConfig = "CLFSpawnConfig";
+
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private StationSpawningSystem _stationSpawning = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     private EntityCoordinates? _chosenSafehouseLocation;
     private bool _hasSpawnedAdditionalEntities;
@@ -184,7 +186,7 @@ public sealed class ClfSpawnSystem : EntitySystem
             return;
 
         // Get CLF spawn config
-        if (!_prototypeManager.TryIndex<CLFSpawnConfigPrototype>("CLFSpawnConfig", out var config))
+        if (!_prototypeManager.TryIndex(ClfSpawnConfig, out var config))
         {
             Log.Info("CLF Spawn System: No CLFSpawnConfig found, skipping additional entity spawning");
             return;
@@ -210,6 +212,5 @@ public sealed class ClfSpawnSystem : EntitySystem
     /// </summary>
     public EntityCoordinates? GetChosenSafehouse() => _chosenSafehouseLocation;
 }
-
 
 

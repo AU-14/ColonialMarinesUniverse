@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared.Guidebook;
+using Content.Shared.Inventory;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 
@@ -31,6 +32,11 @@ namespace Content.Shared.Explosion.Components
         ///     Whether the timer should instead be activated through a verb in the right-click menu
         /// </summary>
         [DataField] public bool UseVerbInstead = false;
+
+        /// <summary>
+        ///     If set, the timer can only be started while this entity is equipped in one of these slots.
+        /// </summary>
+        [DataField] public SlotFlags RequiredWornSlots = SlotFlags.NONE;
 
         /// <summary>
         ///     Should timer be started when it was stuck to another entity.

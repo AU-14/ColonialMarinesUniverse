@@ -6,9 +6,9 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Medical.Bones;
 
-public abstract class SharedFractureSystem : EntitySystem
+public abstract partial class SharedFractureSystem : EntitySystem
 {
-    [Dependency] protected readonly IGameTiming Timing = default!;
+    [Dependency] protected IGameTiming Timing = default!;
 
     /// <summary>
     ///     Pass <see cref="FractureSeverity.None"/> to clear the fracture entirely.

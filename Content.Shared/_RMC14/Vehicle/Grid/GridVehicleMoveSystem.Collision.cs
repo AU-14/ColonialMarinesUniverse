@@ -71,7 +71,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return true;
 
         var coords = new EntityCoordinates(grid, gridPos);
-        var world = coords.ToMap(EntityManager, transform);
+        var world = transform.ToMapCoordinates(coords);
 
         var debugEnabled = debug && CollisionDebugEnabled;
         if (debugEnabled)
@@ -1212,13 +1212,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
         if (TryComp(vehicle, out GridVehicleMoverComponent? vehicleMover))
         {
+            var impactSpeed = MathF.Abs(vehicleMover.CurrentSpeed);
             if (vehicleMover.MobCollisionHullDamage > 0f)
                 ApplyMobCollisionHullDamage(vehicle, vehicleMover);
 
             var isXeno = HasComp<XenoComponent>(target);
-            var mobImmobility = isXeno
-                ? vehicleMover.XenoMobCrashImmobileDuration
-                : vehicleMover.MobCrashImmobileDuration;
+            var mobImmobility = GetMobCrashImmobilityDuration(vehicleMover, isXeno, impactSpeed);
             if (mobImmobility > 0f)
                 ApplyMobCrashImmobility(vehicle, vehicleMover, mobImmobility);
         }
@@ -1250,6 +1249,23 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         }
     }
 
+    private static float GetMobCrashImmobilityDuration(GridVehicleMoverComponent mover, bool isXeno, float impactSpeed)
+    {
+        var duration = isXeno
+            ? mover.XenoMobCrashImmobileDuration
+            : mover.MobCrashImmobileDuration;
+        if (duration <= 0f)
+            return 0f;
+
+        var minSpeed = isXeno
+            ? mover.XenoMobCrashImmobileMinSpeed
+            : mover.MobCrashImmobileMinSpeed;
+        if (minSpeed <= 0f || impactSpeed >= minSpeed)
+            return duration;
+
+        return 0f;
+    }
+
     private Vector2 GetVehicleMoveDelta(
         EntityUid grid,
         Vector2 worldPos,
@@ -1257,7 +1273,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         GridVehicleMoverComponent mover)
     {
         var currentCoords = new EntityCoordinates(grid, mover.Position);
-        var currentWorld = currentCoords.ToMap(EntityManager, transform);
+        var currentWorld = transform.ToMapCoordinates(currentCoords);
         if (currentWorld.MapId != mapId)
             return Vector2.Zero;
 

@@ -8,9 +8,9 @@ using Robust.Shared.Maths;
 
 namespace Content.Shared._RMC14.Vehicle;
 
-public sealed class VehicleTurretMuzzleSystem : EntitySystem
+public sealed partial class VehicleTurretMuzzleSystem : EntitySystem
 {
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

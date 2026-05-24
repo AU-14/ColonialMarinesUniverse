@@ -1,4 +1,4 @@
-﻿using Content.Server.Roles;
+using Content.Server.Roles;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Mind.Components;
 using Content.Shared.Roles;
@@ -11,7 +11,7 @@ namespace Content.Server.Silicons.Borgs;
 public sealed partial class BorgSystem
 {
 
-    [Dependency] private readonly SharedRoleSystem _roles = default!;
+    [Dependency] private SharedRoleSystem _roles = default!;
 
     public void InitializeMMI()
     {

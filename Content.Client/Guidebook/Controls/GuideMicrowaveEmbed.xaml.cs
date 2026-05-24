@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Client.Guidebook.Richtext;
+using Content.Client.Lobby.UI;
 using Content.Client.Message;
 using Content.Client.UserInterface.ControlExtensions;
 using Content.Shared._RMC14.Chemistry.Reagent;
@@ -22,9 +23,11 @@ namespace Content.Client.Guidebook.Controls;
 [UsedImplicitly, GenerateTypedNameReferences]
 public sealed partial class GuideMicrowaveEmbed : PanelContainer, IDocumentTag, ISearchableControl, IPrototypeRepresentationControl
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IEntitySystemManager _systemManager = default!;
+    [Dependency] private ILogManager _logManager = default!;
 
+    private RMCReagentSystem _reagent = default!;
     private readonly ISawmill _sawmill = default!;
 
     public IPrototype? RepresentedPrototype { get; private set; }
@@ -35,7 +38,9 @@ public sealed partial class GuideMicrowaveEmbed : PanelContainer, IDocumentTag, 
         IoCManager.InjectDependencies(this);
         MouseFilter = MouseFilterMode.Stop;
 
+        _reagent = _systemManager.GetEntitySystem<RMCReagentSystem>();
         _sawmill = _logManager.GetSawmill("guidebook.microwave");
+        CrtLobbyTheme.Apply(this, useCrtTypography: false);
     }
 
     public GuideMicrowaveEmbed(string recipe) : this()
@@ -127,7 +132,7 @@ public sealed partial class GuideMicrowaveEmbed : PanelContainer, IDocumentTag, 
     {
         foreach (var (product, amount) in recipe.IngredientsReagents.OrderByDescending(p => p.Value))
         {
-            var reagent = _prototype.IndexReagent<ReagentPrototype>(product);
+            var reagent = _reagent.Index(product);
 
             // liquid color
 
@@ -187,5 +192,6 @@ public sealed partial class GuideMicrowaveEmbed : PanelContainer, IDocumentTag, 
         GenerateHeader(recipe);
         GenerateIngredients(recipe);
         GenerateCookTime(recipe);
+        CrtLobbyTheme.Apply(this, useCrtTypography: false);
     }
 }

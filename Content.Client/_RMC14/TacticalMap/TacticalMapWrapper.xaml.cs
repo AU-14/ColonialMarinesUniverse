@@ -33,8 +33,8 @@ public enum DrawingMode
 [GenerateTypedNameReferences]
 public sealed partial class TacticalMapWrapper : Control
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     public TimeSpan LastUpdateAt;
     public TimeSpan NextUpdateAt;
@@ -158,17 +158,17 @@ public sealed partial class TacticalMapWrapper : Control
             {
                 _settingsManager = new TacticalMapSettingsManager();
                 IoCManager.RegisterInstance<TacticalMapSettingsManager>(_settingsManager);
-                Logger.Warning("not registered in IoC, creating fallback instance");
+                Logger.GetSawmill("content").Warning("not registered in IoC, creating fallback instance");
             }
             catch (Exception ex)
             {
-                Logger.Error($"failed to create fallback settings manager: {ex}");
+                Logger.GetSawmill("content").Error($"failed to create fallback settings manager: {ex}");
                 _settingsManager = null;
             }
         }
         catch (Exception ex)
         {
-            Logger.Error($"failed to initialize settings manager: {ex}");
+            Logger.GetSawmill("content").Error($"failed to initialize settings manager: {ex}");
             _settingsManager = null;
         }
     }
@@ -186,7 +186,7 @@ public sealed partial class TacticalMapWrapper : Control
         }
         catch (Exception ex)
         {
-            Logger.Error($"TacticalMapWrapper: Failed to load settings: {ex}");
+            Logger.GetSawmill("content").Error($"TacticalMapWrapper: Failed to load settings: {ex}");
             _settingsLoaded = true;
         }
     }
@@ -226,7 +226,7 @@ public sealed partial class TacticalMapWrapper : Control
         }
         catch (Exception ex)
         {
-            Logger.Error($"failed to apply settings: {ex}");
+            Logger.GetSawmill("content").Error($"failed to apply settings: {ex}");
         }
     }
 

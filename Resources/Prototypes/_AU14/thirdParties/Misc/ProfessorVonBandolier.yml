@@ -50,7 +50,7 @@
   - type: GhostTakeoverAvailable
   - type: RandomHumanoidAppearanceWhitelisted #civilian type
     allowedMaleHairStyles:
-    - RMCHumanHairBaldingHair
+    - RMCHumanHairBalding
     - RMCHumanHairCrew
     - RMCHumanHairLtRasczak
     allowedFemaleHairStyles:

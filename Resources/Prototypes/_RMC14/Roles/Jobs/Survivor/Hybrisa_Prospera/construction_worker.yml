@@ -24,7 +24,7 @@
       - Civilian
     - type: IntelRescueSurvivorObjective
     - type: RMCAllowSuitStorage
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetHybrisaConstructionWorker
   useLoadoutOfJob: CMSurvivorEngineer # for inheritance
 
@@ -47,7 +47,7 @@
   name: hybrisa construction worker colonist preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomOutfits:
     - [ RMCHandsVeteranInsulated, RMCHardhatOrange, RMCHazardVest ]
     - [ RMCHandsVeteranInsulated, RMCHardhatOrange, RMCHazardVest ]

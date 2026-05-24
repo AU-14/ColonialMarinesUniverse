@@ -15,18 +15,18 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.Humanoid;
 
-public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
+public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly MarkingManager _markingManager = default!;
-    [Dependency] private readonly IConfigurationManager _configurationManager = default!;
-    [Dependency] private readonly DisplacementMapSystem _displacement = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private MarkingManager _markingManager = default!;
+    [Dependency] private IConfigurationManager _configurationManager = default!;
+    [Dependency] private DisplacementMapSystem _displacement = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     // RMC14
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly ItemSystem _item = default!;
-    [Dependency] private readonly RMCHumanoidAppearanceSystem _rmcHumanoid = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private ItemSystem _item = default!;
+    [Dependency] private RMCHumanoidAppearanceSystem _rmcHumanoid = default!;
 
     public override void Initialize()
     {
@@ -60,10 +60,10 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
     private void UpdateSprite(EntityUid entity, IRMCHumanoidAppearance humanoid, SpriteComponent sprite)
     {
         ClearAllMarkings(entity, humanoid, sprite);
-        foreach (var key in humanoid.BaseLayers)
+        foreach (var (key, _) in humanoid.BaseLayers)
         {
-            if (sprite.LayerMapTryGet(key, out var index))
-                sprite[index].Visible = false;
+            if (_sprite.LayerMapTryGet((entity, sprite), key, out var index, false))
+                _sprite.LayerSetVisible((entity, sprite), index, false);
         }
 
         IRMCHumanoidAppearance appearance = humanoid;
@@ -73,17 +73,17 @@ public sealed class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
         if (hidden != null)
         {
             ClearAllMarkings(entity, hidden, sprite);
-            foreach (var key in hidden.BaseLayers)
+            foreach (var (key, _) in hidden.BaseLayers)
             {
-                if (sprite.LayerMapTryGet(key, out var index))
-                    sprite[index].Visible = false;
+                if (_sprite.LayerMapTryGet((entity, sprite), key, out var index, false))
+                    _sprite.LayerSetVisible((entity, sprite), index, false);
             }
         }
 
         UpdateLayers(entity, appearance, sprite);
         ApplyMarkingSet(entity, appearance, sprite);
 
-        sprite[_sprite.LayerMapReserve((entity, sprite), HumanoidVisualLayers.Eyes)].Color = appearance.EyeColor;
+        _sprite.LayerSetColor((entity, sprite), _sprite.LayerMapReserve((entity, sprite), HumanoidVisualLayers.Eyes), appearance.EyeColor);
     }
 
     private static bool IsHidden(IRMCHumanoidAppearance humanoid, HumanoidVisualLayers layer)

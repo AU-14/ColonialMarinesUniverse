@@ -24,6 +24,8 @@ namespace Content.Shared.DeviceNetwork.Components
 
         public int DeviceNetId => (int) NetIdEnum;
 
+        public EntityUid? OwnerEntity;
+
         /// <summary>
         ///     The frequency that this device is listening on.
         /// </summary>

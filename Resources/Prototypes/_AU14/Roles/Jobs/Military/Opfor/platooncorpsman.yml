@@ -28,7 +28,7 @@
   - AU14OpforCorpsman
   - AU14OpforSquad
   overwatchSortPriority: -2
-  overwatchRoleName: Hospital Corpsmen
+  overwatchRoleName: au14-job-name-govforplatooncorpsman-plural
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
@@ -50,7 +50,7 @@
   id: AU14GearopforPlatoonCorpsman
   equipment:
     id: AU14JobIDCardopforPlatoonCorpsman
-    ears: AU14HeadsetSectionOpfor
+    ears: AU14HeadsetOpforMarine
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -70,4 +70,4 @@
     shoes: CMBootsBlack
     head: AU14JungleM10CorpsmanHelmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetSectionOpfor
+    ears: AU14HeadsetOpforMarine

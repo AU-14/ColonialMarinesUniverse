@@ -1,13 +1,13 @@
-﻿using Content.Server.Anomaly;
+using Content.Server.Anomaly;
 using Content.Server.Station.Components;
 using Content.Server.StationEvents.Components;
 ﻿using Content.Shared.GameTicking.Components;
 
 namespace Content.Server.StationEvents.Events;
 
-public sealed class AnomalySpawnRule : StationEventSystem<AnomalySpawnRuleComponent>
+public sealed partial class AnomalySpawnRule : StationEventSystem<AnomalySpawnRuleComponent>
 {
-    [Dependency] private readonly AnomalySystem _anomaly = default!;
+    [Dependency] private AnomalySystem _anomaly = default!;
 
     protected override void Added(EntityUid uid, AnomalySpawnRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)
     {

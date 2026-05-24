@@ -1,7 +1,7 @@
 using System.Linq;
-using Content.Server.AU14.Round;
 using Content.Server.AU14.ThirdParty;
 using Content.Server.Chat.Systems;
+using Content.Server.Popups;
 using Content.Server.Radio;
 using Content.Server.Radio.EntitySystems;
 using Content.Server.Stack;
@@ -21,22 +21,24 @@ using Robust.Shared.Random;
 
 namespace Content.Server.AU14.Ambassador;
 
-public sealed class AmbassadorConsoleSystem : EntitySystem
+public sealed partial class AmbassadorConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly AuThirdPartySystem _thirdParty = default!;
-    [Dependency] private readonly AuRoundSystem _auRound = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly RadioSystem _radio = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ColonyEconomy.AdminConsoleSystem _adminConsole = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private StackSystem _stack = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private AuThirdPartySystem _thirdParty = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private RadioSystem _radio = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ColonyEconomy.AdminConsoleSystem _adminConsole = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private PopupSystem _popup = default!;
 
     private static readonly SoundSpecifier MarineAnnouncementSound =
         new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");
+
+    private static readonly ProtoId<TagPrototype> CurrencyTag = "Currency";
 
     public override void Initialize()
     {
@@ -290,7 +292,7 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
             stackCount = stack.Count;
 
         comp.Budget += stackCount;
-        EntityManager.QueueDeleteEntity(args.Entity);
+        QueueDel(args.Entity);
         UpdateAllFactionUi(comp);
     }
 
@@ -299,7 +301,7 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
         if (args.Handled)
             return;
 
-        if (!_tag.HasTag(args.Used, "Currency"))
+        if (!_tag.HasTag(args.Used, CurrencyTag))
             return;
 
         args.Handled = true;
@@ -309,7 +311,7 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
             stackCount = stack.Count;
 
         comp.Budget += stackCount;
-        EntityManager.QueueDeleteEntity(args.Used);
+        QueueDel(args.Used);
         UpdateAllFactionUi(comp);
     }
 
@@ -334,8 +336,7 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
         var thirdParties = new Dictionary<string, (string DisplayName, float Cost)>();
         foreach (var (id, cost) in comp.CallableParties)
         {
-            if (_proto.TryIndex<AuThirdPartyPrototype>(id, out var proto) &&
-                _auRound.IsThirdPartyAllowedForCurrentContext(proto))
+            if (_proto.TryIndex<AuThirdPartyPrototype>(id, out var proto))
             {
                 var displayName = proto.DisplayName ?? proto.ID;
                 thirdParties[id] = (displayName, cost);
@@ -378,11 +379,15 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
         if (comp.CalledParties.Contains(msg.ThirdPartyId)) return;
         if (comp.Budget < cost) return;
         if (!_proto.TryIndex<AuThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto)) return;
-        if (!_auRound.IsThirdPartyAllowedForCurrentContext(partyProto)) return;
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto)) return;
+        if (!_thirdParty.SpawnThirdParty(partyProto, spawnProto, false))
+        {
+            _popup.PopupEntity("Unable to dispatch support at this time.", uid, msg.Actor);
+            return;
+        }
+
         comp.Budget -= cost;
         comp.CalledParties.Add(msg.ThirdPartyId);
-        _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
         UpdateAllFactionUi(comp);
     }
 
@@ -449,7 +454,7 @@ public sealed class AmbassadorConsoleSystem : EntitySystem
         comp.Budget -= comp.BroadcastCost;
         var sender = $"{comp.FactionName} Embassy";
         _chat.DispatchGlobalAnnouncement(msg.Message, sender, playSound: true, announcementSound: MarineAnnouncementSound);
-        _radio.SendRadioMessage(uid, msg.Message, "colonyalert", uid);
+        _radio.SendRadioMessage(uid, msg.Message, "colonyAlert", uid);
         UpdateAllFactionUi(comp);
     }
 

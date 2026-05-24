@@ -1,5 +1,5 @@
 - type: entity
-  parent: CMEncryptionKey
+  parent: AU14EncryptionKey
   id: AU14EncryptionKeyCLF
   name: modified colony encryption key
   description: An encryption key used to communicate on colony and CLF radio channels.
@@ -7,10 +7,8 @@
   - type: EncryptionKey
     channels:
     - Colony
-    - CLF
-    defaultChannel: CLF
-  - type: Sprite
-    state: we_ya_key
+    - radioCLF
+    defaultChannel: radioCLF
 
 - type: entity
   parent: RMCBaseUniformAccessory
@@ -24,6 +22,9 @@
     state: cmb_headset
   - type: UniformAccessory
     hidden: true
+    viewerWhitelist:
+      components:
+      - CLFMember
     category: Utility
     limit: 1
     playerSprite:
@@ -32,5 +33,5 @@
   - type: AccessoryHeadset
     channels:
     - Colony
-    - CLF
-    defaultChannel: CLF
+    - radioCLF
+    defaultChannel: radioCLF

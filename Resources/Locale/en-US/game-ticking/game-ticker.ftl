@@ -28,6 +28,7 @@ game-ticker-get-info-preround-text = Hi and welcome to [color=white]Colonial Mar
                             The current gamemode is: [color=white]{$gmTitle}[/color]
 
 game-ticker-no-map-selected = [color=#FFB500]Map not yet selected![/color]
+game-ticker-no-map-selected-plain = Map not yet selected!
 game-ticker-player-no-jobs-available-when-joining = When attempting to join to the game, no jobs were available.
 
 # Displayed in chat to admins when a player joins

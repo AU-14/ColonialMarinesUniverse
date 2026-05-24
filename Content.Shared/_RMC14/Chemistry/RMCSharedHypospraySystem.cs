@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Refill;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chemistry;
@@ -26,25 +26,25 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Chemistry;
 
-public abstract class RMCSharedHypospraySystem : EntitySystem
+public abstract partial class RMCSharedHypospraySystem : EntitySystem
 {
-    [Dependency] protected readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] protected readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] protected readonly SharedAudioSystem _audio = default!;
-    [Dependency] protected readonly SharedContainerSystem _container = default!;
-    [Dependency] protected readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] protected readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] protected readonly HypospraySystem _hypospray = default!;
-    [Dependency] protected readonly IPrototypeManager _prototype = default!;
-    [Dependency] protected readonly ReactiveSystem _reactive = default!;
-    [Dependency] protected readonly SharedSolutionContainerSystem _solution = default!;
-    [Dependency] protected readonly INetManager _net = default!;
-    [Dependency] protected readonly SharedPopupSystem _popup = default!;
-    [Dependency] protected readonly SkillsSystem _skills = default!;
-    [Dependency] protected readonly ItemSlotsSystem _slots = default!;
-    [Dependency] protected readonly EntityWhitelistSystem _whitelist = default!;
-    [Dependency] protected readonly UseDelaySystem _useDelay = default!;
-    [Dependency] protected readonly SolutionTransferSystem _transfer = default!;
+    [Dependency] protected ISharedAdminLogManager _adminLog = default!;
+    [Dependency] protected SharedAppearanceSystem _appearance = default!;
+    [Dependency] protected SharedAudioSystem _audio = default!;
+    [Dependency] protected SharedContainerSystem _container = default!;
+    [Dependency] protected SharedDoAfterSystem _doAfter = default!;
+    [Dependency] protected SharedInteractionSystem _interaction = default!;
+    [Dependency] protected HypospraySystem _hypospray = default!;
+    [Dependency] protected IPrototypeManager _prototype = default!;
+    [Dependency] protected ReactiveSystem _reactive = default!;
+    [Dependency] protected SharedSolutionContainerSystem _solution = default!;
+    [Dependency] protected INetManager _net = default!;
+    [Dependency] protected SharedPopupSystem _popup = default!;
+    [Dependency] protected SkillsSystem _skills = default!;
+    [Dependency] protected ItemSlotsSystem _slots = default!;
+    [Dependency] protected EntityWhitelistSystem _whitelist = default!;
+    [Dependency] protected UseDelaySystem _useDelay = default!;
+    [Dependency] protected SolutionTransferSystem _transfer = default!;
 
     public override void Initialize()
     {
@@ -358,7 +358,7 @@ public abstract class RMCSharedHypospraySystem : EntitySystem
         RaiseLocalEvent(target, ref ev);
 
         // same LogType as syringes...
-        _adminLog.Add(LogType.ForceFeed, $"{EntityManager.ToPrettyString(args.User):user} injected {EntityManager.ToPrettyString(target):target} with a solution {SharedSolutionContainerSystem.ToPrettyString(removedSolution):removedSolution} using a {EntityManager.ToPrettyString(ent):using}");
+        _adminLog.Add(LogType.ForceFeed, $"{ToPrettyString(args.User):user} injected {ToPrettyString(target):target} with a solution {SharedSolutionContainerSystem.ToPrettyString(removedSolution):removedSolution} using a {ToPrettyString(ent):using}");
         UpdateAppearance(ent);
     }
 

@@ -1,11 +1,13 @@
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Actions;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Audio;
 using Content.Shared.Database;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Content.Shared.UserInterface;
@@ -17,21 +19,21 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Telephone;
 
-public abstract class SharedRMCTelephoneSystem : EntitySystem
+public abstract partial class SharedRMCTelephoneSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly SharedAmbientSoundSystem _ambientSound = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SquadSystem _squad = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambientSound = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SquadSystem _squad = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private IEntityManager _entManager = default!;
 
     private static readonly SoundSpecifier RemotePickupSound = new SoundPathSpecifier("/Audio/_RMC14/Phone/remote_pickup.ogg");
     private static readonly SoundSpecifier RemoteHangupSound = new SoundPathSpecifier("/Audio/_RMC14/Phone/remote_hangup.ogg");
@@ -43,6 +45,7 @@ public abstract class SharedRMCTelephoneSystem : EntitySystem
         SubscribeLocalEvent<RotaryPhoneComponent, BeforeActivatableUIOpenEvent>(OnRotaryPhoneBeforeOpen);
         SubscribeLocalEvent<RotaryPhoneComponent, ComponentShutdown>(OnRotaryPhoneTerminating);
         SubscribeLocalEvent<RotaryPhoneComponent, EntityTerminatingEvent>(OnRotaryPhoneTerminating);
+        SubscribeLocalEvent<RotaryPhoneComponent, GettingAttackedAttemptEvent>(OnRotaryPhoneGettingAttacked);
 
         SubscribeLocalEvent<RotaryPhoneDialingComponent, InteractUsingEvent>(OnRotaryPhoneDialingInteractUsing);
 
@@ -129,6 +132,17 @@ public abstract class SharedRMCTelephoneSystem : EntitySystem
             phone.RotaryPhone = null;
             Dirty(ent.Comp.Phone.Value, phone);
         }
+    }
+
+    private void OnRotaryPhoneGettingAttacked(Entity<RotaryPhoneComponent> ent, ref GettingAttackedAttemptEvent args)
+    {
+        if (!HasComp<XenoComponent>(args.Attacker))
+            return;
+
+        StopSound(ent);
+
+        _audio.PlayPredicted(RemoteHangupSound, ent, args.Attacker);
+        _popup.PopupClient(Loc.GetString("rmc-dropship-launch-alarm-xeno-shutdown", ("console", ent)), args.Attacker, args.Attacker);
     }
 
     private void OnRotaryPhoneDialingInteractUsing(Entity<RotaryPhoneDialingComponent> ent, ref InteractUsingEvent args)

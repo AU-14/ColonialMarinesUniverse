@@ -95,3 +95,10 @@
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
     state: working_joe
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconGovRifleman
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: rifleman

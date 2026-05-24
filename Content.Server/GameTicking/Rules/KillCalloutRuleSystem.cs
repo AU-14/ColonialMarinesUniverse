@@ -1,4 +1,4 @@
-﻿using Content.Server.Chat.Managers;
+using Content.Server.Chat.Managers;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.KillTracking;
 using Content.Shared.Chat;
@@ -12,11 +12,11 @@ namespace Content.Server.GameTicking.Rules;
 /// <summary>
 /// This handles calling out kills from <see cref="KillTrackingSystem"/>
 /// </summary>
-public sealed class KillCalloutRuleSystem : GameRuleSystem<KillCalloutRuleComponent>
+public sealed partial class KillCalloutRuleSystem : GameRuleSystem<KillCalloutRuleComponent>
 {
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     /// <inheritdoc/>
     public override void Initialize()

@@ -23,16 +23,16 @@
   - type: IntrinsicRadioReceiver
   - type: IntrinsicRadioTransmitter
     channels:
-    - AI
+    - radioAI
     - Colony
-    - WEYA
-    - CMB
+    - radioWEYU
+    - radioCMB
   - type: ActiveRadio
     channels:
-    - AI
+    - radioAI
     - Colony
-    - WEYA
-    - CMB
+    - radioWEYU
+    - radioCMB
   - type: UserInterface
     interfaces:
       enum.VoiceMaskUIKey.Key:
@@ -63,22 +63,22 @@
   components:
   - type: IntrinsicRadioTransmitter
     channels:
-    - AI
-    - GovforCommand
-    - GovforJTAC
-    - GovforAlpha
-    - GovforCharlie
-    - GovforBravo
-    - GovforIntel
+    - radioAI
+    - radioGovforCommand
+    - radioGovforJTAC
+    - radioGovforAlpha
+    - radioGovforCharlie
+    - radioGovforBravo
+    - radioGovforIntel
   - type: ActiveRadio
     channels:
-    - AI
-    - GovforCommand
-    - GovforJTAC
-    - GovforAlpha
-    - GovforCharlie
-    - GovforBravo
-    - GovforIntel
+    - radioAI
+    - radioGovforCommand
+    - radioGovforJTAC
+    - radioGovforAlpha
+    - radioGovforCharlie
+    - radioGovforBravo
+    - radioGovforIntel
 
 - type: entity
   id: AU14AICoreApolloOPFOR
@@ -88,22 +88,22 @@
   components:
   - type: IntrinsicRadioTransmitter
     channels:
-    - AI
-    - opfor
-    - opforcommand
-    - OpforCharlie
-    - OpforBravo
-    - OpforIntel
-    - opforjtac
+    - radioAI
+    - radioOpforAlpha
+    - radioOpforCommand
+    - radioOpforCharlie
+    - radioOpforBravo
+    - radioOpforIntel
+    - radioOpforJTAC
   - type: ActiveRadio
     channels:
-    - AI
-    - opfor
-    - opforcommand
-    - OpforCharlie
-    - OpforBravo
-    - OpforIntel
-    - opforjtac
+    - radioAI
+    - radioOpforAlpha
+    - radioOpforCommand
+    - radioOpforCharlie
+    - radioOpforBravo
+    - radioOpforIntel
+    - radioOpforJTAC
 
 - type: entity
   id: AU14AICoreCPU

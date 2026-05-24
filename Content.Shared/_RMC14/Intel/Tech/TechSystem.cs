@@ -16,19 +16,19 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Intel.Tech;
 
-public sealed class TechSystem : EntitySystem
+public sealed partial class TechSystem : EntitySystem
 {
-    [Dependency] private readonly DropshipFabricatorSystem _dropshipFabricator = default!;
-    [Dependency] private readonly SharedGameTicker _ticker = default!;
-    [Dependency] private readonly IntelSystem _intel = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedMarineAnnounceSystem _marineAnnounce = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedRequisitionsSystem _requisitions = default!;
-    [Dependency] private readonly ScalingSystem _scaling = default!;
+    [Dependency] private DropshipFabricatorSystem _dropshipFabricator = default!;
+    [Dependency] private SharedGameTicker _ticker = default!;
+    [Dependency] private IntelSystem _intel = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedMarineAnnounceSystem _marineAnnounce = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedRequisitionsSystem _requisitions = default!;
+    [Dependency] private ScalingSystem _scaling = default!;
     // NOTE: Do not depend on platform-specific AuThirdPartySystem here (shared) — use ExecuteTechPartySpawn helper
     // to let server code call the server-side spawn implementation.
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
     public override void Initialize()
     {
         SubscribeLocalEvent<TechAnnounceEvent>(OnTechAnnounce);
@@ -165,7 +165,7 @@ public sealed class TechSystem : EntitySystem
             {
                 if (string.IsNullOrEmpty(partySpawnEv.ThirdPartyId))
                 {
-                    Logger.Warning($"[TechSystem] TechPartySpawnEvent in tech option has empty ThirdPartyId; skipping (team={team}).");
+                    Logger.GetSawmill("content").Warning($"[TechSystem] TechPartySpawnEvent in tech option has empty ThirdPartyId; skipping (team={team}).");
                 }
                 else
                 {
@@ -191,13 +191,13 @@ public sealed class TechSystem : EntitySystem
     {
         if (string.IsNullOrEmpty(thirdPartyId))
         {
-            Logger.Warning("[TechSystem] ExecuteTechPartySpawn called with null/empty thirdPartyId.");
+            Logger.GetSawmill("content").Warning("[TechSystem] ExecuteTechPartySpawn called with null/empty thirdPartyId.");
             return false;
         }
         if (!proto.TryIndex<AuThirdPartyPrototype>(thirdPartyId, out var partyProto))
         {
             proto.TryIndex(thirdPartyId, out var _); // keep for debug if needed
-            Logger.Warning($"[TechSystem] Requested third party id '{thirdPartyId}' not found in prototypes.");
+            Logger.GetSawmill("content").Warning($"[TechSystem] Requested third party id '{thirdPartyId}' not found in prototypes.");
             return false;
         }
 

@@ -32,7 +32,7 @@ public sealed partial class DungeonJob
         var allExterior = new HashSet<Vector2i>(dungeon.CorridorExteriorTiles);
         allExterior.UnionWith(dungeon.RoomExteriorTiles);
         var validTiles = allExterior.ToList();
-        random.Shuffle(validTiles);
+        Shuffle(random, validTiles);
 
         var tiles = new List<(Vector2i, Tile)>();
         var tileDef = _tileDefManager[gen.Tile];

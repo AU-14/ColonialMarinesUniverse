@@ -1,7 +1,11 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Weapons.Ranged.Systems;
+using Content.Shared._CMU14.Yautja;
+using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Camera;
+using Content.Shared.Body.Components;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Events;
@@ -10,20 +14,25 @@ using Content.Shared.Database;
 using Content.Shared.Effects;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Throwing;
+using Content.Shared.Humanoid;
 using Content.Shared.Wires;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.Damage.Systems
 {
-    public sealed class DamageOtherOnHitSystem : SharedDamageOtherOnHitSystem
+    public sealed partial class DamageOtherOnHitSystem : SharedDamageOtherOnHitSystem
     {
-        [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-        [Dependency] private readonly GunSystem _guns = default!;
-        [Dependency] private readonly DamageableSystem _damageable = default!;
-        [Dependency] private readonly DamageExamineSystem _damageExamine = default!;
-        [Dependency] private readonly SharedCameraRecoilSystem _sharedCameraRecoil = default!;
-        [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
+        private static readonly ProtoId<ReagentPrototype> YautjaBloodReagent = "CMUYautjaBlood";
+
+        [Dependency] private IAdminLogManager _adminLogger = default!;
+        [Dependency] private GunSystem _guns = default!;
+        [Dependency] private DamageableSystem _damageable = default!;
+        [Dependency] private DamageExamineSystem _damageExamine = default!;
+        [Dependency] private RMCReagentSystem _reagent = default!;
+        [Dependency] private SharedCameraRecoilSystem _sharedCameraRecoil = default!;
+        [Dependency] private SharedColorFlashEffectSystem _color = default!;
 
         public override void Initialize()
         {
@@ -37,7 +46,8 @@ namespace Content.Server.Damage.Systems
             if (TerminatingOrDeleted(args.Target))
                 return;
 
-            var dmg = _damageable.TryChangeDamage(args.Target, component.Damage * _damageable.UniversalThrownDamageModifier, component.IgnoreResistances, origin: args.Component.Thrower);
+            var damage = GetThrownHitDamage(uid, args.Target, component.Damage);
+            var dmg = _damageable.TryChangeDamage(args.Target, damage * _damageable.UniversalThrownDamageModifier, component.IgnoreResistances, origin: args.Component.Thrower, tool: uid);
 
             // Log damage only for mobs. Useful for when people throw spears at each other, but also avoids log-spam when explosions send glass shards flying.
             if (dmg != null && HasComp<MobStateComponent>(args.Target))
@@ -45,7 +55,7 @@ namespace Content.Server.Damage.Systems
 
             if (dmg is { Empty: false })
             {
-                _color.RaiseEffect(Color.Red, new List<EntityUid>() { args.Target }, Filter.Pvs(args.Target, entityManager: EntityManager));
+                _color.RaiseEffect(GetDamageEffectColor(args.Target), new List<EntityUid>() { args.Target }, Filter.Pvs(args.Target, entityManager: EntityManager));
             }
 
             _guns.PlayImpactSound(args.Target, dmg, null, false);
@@ -58,7 +68,11 @@ namespace Content.Server.Damage.Systems
 
         private void OnDamageExamine(EntityUid uid, DamageOtherOnHitComponent component, ref DamageExamineEvent args)
         {
-            _damageExamine.AddDamageExamine(args.Message, _damageable.ApplyUniversalAllModifiers(component.Damage * _damageable.UniversalThrownDamageModifier), Loc.GetString("damage-throw"));
+            var damage = component.Damage;
+            if (TryComp(uid, out YautjaTechItemComponent? tech))
+                damage *= tech.DamageMultiplier;
+
+            _damageExamine.AddDamageExamine(args.Message, _damageable.ApplyUniversalAllModifiers(damage * _damageable.UniversalThrownDamageModifier), Loc.GetString("damage-throw"));
         }
 
         /// <summary>
@@ -67,6 +81,30 @@ namespace Content.Server.Damage.Systems
         private void OnAttemptPacifiedThrow(Entity<DamageOtherOnHitComponent> ent, ref AttemptPacifiedThrowEvent args)
         {
             args.Cancel("pacified-cannot-throw");
+        }
+
+        private DamageSpecifier GetThrownHitDamage(EntityUid uid, EntityUid target, DamageSpecifier damage)
+        {
+            if (TryComp(uid, out YautjaSmartDiscComponent? disc) &&
+                HasComp<HumanoidAppearanceComponent>(target) &&
+                !HasComp<YautjaComponent>(target))
+            {
+                return damage * disc.HumanDamageMultiplier;
+            }
+
+            return damage;
+        }
+
+        private Color GetDamageEffectColor(EntityUid target)
+        {
+            if (TryComp(target, out BloodstreamComponent? bloodstream) &&
+                bloodstream.BloodReagent == YautjaBloodReagent &&
+                _reagent.TryIndex(bloodstream.BloodReagent, out var reagent))
+            {
+                return reagent.SubstanceColor;
+            }
+
+            return Color.Red;
         }
     }
 }

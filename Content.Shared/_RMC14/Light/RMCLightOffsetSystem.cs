@@ -1,15 +1,20 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Shared._RMC14.Sprite;
 using Robust.Shared.Network;
 
 namespace Content.Shared._RMC14.Light;
 
-public sealed class RMCLightOffsetSystem : EntitySystem
+public sealed partial class RMCLightOffsetSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedRMCSpriteSystem _sprite = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPointLightSystem _pointLight = default!;
+    [Dependency] private SharedRMCSpriteSystem _sprite = default!;
 
-    protected readonly HashSet<EntityUid> ToUpdate = new();
+    private static readonly Vector2 OffsetLightSouth = new(0f, -0.5f);
+    private static readonly Vector2 OffsetLightEastWest = new(0f, -0.75f);
+    private static readonly Vector2 OffsetLightNorth = new(0f, -1f);
+
+    private readonly HashSet<EntityUid> ToUpdate = new();
 
 
     public override void Initialize()
@@ -35,8 +40,10 @@ public sealed class RMCLightOffsetSystem : EntitySystem
             return;
 
         var sprite = EnsureComp<SpriteSetRenderOrderComponent>(ent);
+        var direction = Transform(ent).LocalRotation.GetDir();
+        ApplyPointLightOffset(ent, direction);
         /*
-        switch (Transform(ent).LocalRotation.GetDir())
+        switch (direction)
         {
             case Direction.South:
                 _sprite.SetOffset(ent, new Vector2(0.45f, -0.32f));
@@ -56,4 +63,22 @@ public sealed class RMCLightOffsetSystem : EntitySystem
         Dirty(ent, sprite);
     }
 
+    private void ApplyPointLightOffset(EntityUid uid, Direction direction)
+    {
+        if (!_pointLight.TryGetLight(uid, out var light))
+            return;
+
+        var offset = direction switch
+        {
+            Direction.North => OffsetLightNorth,
+            Direction.East or Direction.West => OffsetLightEastWest,
+            _ => OffsetLightSouth,
+        };
+
+        if (light.Offset == offset)
+            return;
+
+        light.Offset = offset;
+        Dirty(uid, light);
+    }
 }

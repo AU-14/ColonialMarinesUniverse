@@ -24,9 +24,9 @@ namespace Content.Client.Damage;
 ///     of the sprite layer, and then passing in a bool value
 ///     (true to enable, false to disable).
 /// </summary>
-public sealed class DamageVisualsSystem : VisualizerSystem<DamageVisualsComponent>
+public sealed partial class DamageVisualsSystem : VisualizerSystem<DamageVisualsComponent>
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     public override void Initialize()
     {
@@ -723,14 +723,14 @@ public sealed class DamageVisualsSystem : VisualizerSystem<DamageVisualsComponen
     }
 
     /// RMC14
-    public void ChangeDamageGroupColor(SpriteComponent spriteComponent, DamageVisualsComponent damageVisuals, string group, string color)
+    public void ChangeDamageGroupColor(Entity<SpriteComponent> spriteEnt, DamageVisualsComponent damageVisuals, string group, string color)
     {
         if (damageVisuals.TargetLayers != null && damageVisuals.DamageOverlayGroups != null)
         {
             foreach (var layerMapKey in damageVisuals.TargetLayerMapKeys)
             {
-                if (spriteComponent.LayerMapTryGet($"{layerMapKey}{group}", out var spriteLayer))
-                    spriteComponent.LayerSetColor(spriteLayer, Color.FromHex(color));
+                if (SpriteSystem.LayerMapTryGet(spriteEnt.AsNullable(), $"{layerMapKey}{group}", out var spriteLayer, false))
+                    SpriteSystem.LayerSetColor(spriteEnt.AsNullable(), spriteLayer, Color.FromHex(color));
             }
 
             damageVisuals.DamageOverlayGroups[group].Color = color;

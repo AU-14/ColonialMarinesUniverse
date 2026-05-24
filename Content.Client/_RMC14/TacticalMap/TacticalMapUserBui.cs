@@ -9,9 +9,9 @@ using JetBrains.Annotations;
 namespace Content.Client._RMC14.TacticalMap;
 
 [UsedImplicitly]
-public sealed class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<TacticalMapWindow>(owner, uiKey)
+public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<TacticalMapWindow>(owner, uiKey)
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IPlayerManager _player = default!;
     private static readonly ISawmill _logger = Logger.GetSawmill("tactical_map_settings");
 
     protected override TacticalMapWindow? Window { get; set; }
@@ -61,7 +61,7 @@ public sealed class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RMCPopOutB
         }
         catch (Exception ex)
         {
-            Logger.Error($"Failed to load tactical map user settings for map '{_currentMapName}': {ex}");
+            Logger.GetSawmill("content").Error($"Failed to load tactical map user settings for map '{_currentMapName}': {ex}");
         }
 
         Refresh();
@@ -97,7 +97,7 @@ public sealed class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RMCPopOutB
             }
             catch (Exception ex)
             {
-                Logger.Error($"Failed to save tactical map user settings during disposal for map '{_currentMapName}': {ex}");
+                Logger.GetSawmill("content").Error($"Failed to save tactical map user settings during disposal for map '{_currentMapName}': {ex}");
             }
         }
 

@@ -5,7 +5,7 @@
   description: au14-job-description-opforsquadcombattech
   setPreference: false
   overwatchSortPriority: -5
-  overwatchRoleName: Combat Technician
+  overwatchRoleName: au14-job-name-govforsquadcombattech
   requirements:
   - !type:TraitsRequirement
     inverted: true
@@ -65,7 +65,7 @@
   id: AU14GearOPFORSquadCombatTech
   equipment:
     id: AU14IDCardOPFORCT
-    ears: AU14HeadsetSectionOpfor
+    ears: AU14HeadsetOpforMarine
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -84,4 +84,4 @@
     shoes: AU14BootsJungle
     head: AU14JungleM10Helmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetSectionOpfor
+    ears: AU14HeadsetOpforMarine

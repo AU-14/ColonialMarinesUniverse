@@ -8,7 +8,7 @@
   playTimeTracker: AU14JobCivilianColonySynthetic
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 18000 # 5 hours
+    time: 108000 # 30 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -20,8 +20,11 @@
     RMCRankSyntheticColonist: []
   startingGear: AU14GearCivilianColonySynthetic
   icon: "AU14JobIconColonySynth"
+  hasIcon: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
+  whitelisted: true
+  whitelistParent: AU14JobGeneralWhitelist
   accessGroups:
   - Colonist
   - auadmin

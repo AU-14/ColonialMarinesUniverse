@@ -28,23 +28,24 @@ using Robust.Shared.Timing;
 namespace Content.Server.Body.Systems;
 
 [UsedImplicitly]
-public sealed class RespiratorSystem : EntitySystem
+public sealed partial class RespiratorSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly AlertsSystem _alertsSystem = default!;
-    [Dependency] private readonly AtmosphereSystem _atmosSys = default!;
-    [Dependency] private readonly BodySystem _bodySystem = default!;
-    [Dependency] private readonly DamageableSystem _damageableSys = default!;
-    [Dependency] private readonly LungSystem _lungSystem = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IPrototypeManager _protoMan = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly EntityEffectSystem _entityEffect = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private AlertsSystem _alertsSystem = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
+    [Dependency] private AtmosphereSystem _atmosSys = default!;
+    [Dependency] private BodySystem _bodySystem = default!;
+    [Dependency] private DamageableSystem _damageableSys = default!;
+    [Dependency] private LungSystem _lungSystem = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private IPrototypeManager _protoMan = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private EntityEffectSystem _entityEffect = default!;
 
     // RMC14
-    [Dependency] private readonly CMStasisBagSystem _cmStasisBag = default!;
+    [Dependency] private CMStasisBagSystem _cmStasisBag = default!;
 
     private static readonly ProtoId<MetabolismGroupPrototype> GasId = new("Gas");
 
@@ -330,7 +331,7 @@ public sealed class RespiratorSystem : EntitySystem
         float saturation = 0;
         foreach (var (id, quantity) in solution.Contents)
         {
-            var reagent = _protoMan.IndexReagent<ReagentPrototype>(id.Prototype);
+            var reagent = _reagent.Index(id.Prototype);
             if (reagent.Metabolisms == null)
                 continue;
 

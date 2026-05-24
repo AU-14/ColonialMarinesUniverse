@@ -19,17 +19,17 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Vehicle;
 
-public sealed class VehicleAmmoLoaderSystem : EntitySystem
+public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
 {
-    [Dependency] private readonly BulletBoxSystem _bulletBox = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly VehicleHardpointAmmoSystem _hardpointAmmo = default!;
-    [Dependency] private readonly VehicleSystem _vehicleSystem = default!;
-    [Dependency] private readonly VehicleTopologySystem _topology = default!;
+    [Dependency] private BulletBoxSystem _bulletBox = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private VehicleHardpointAmmoSystem _hardpointAmmo = default!;
+    [Dependency] private VehicleSystem _vehicleSystem = default!;
+    [Dependency] private VehicleTopologySystem _topology = default!;
 
     private readonly Dictionary<EntityUid, Dictionary<EntityUid, EntityUid>> _activeAmmoBoxes = new();
     private readonly Dictionary<EntityUid, HashSet<EntityUid>> _openLoadersByUser = new();
@@ -252,7 +252,7 @@ public sealed class VehicleAmmoLoaderSystem : EntitySystem
             GetLoadAmount(box, ammo, hardpointAmmo, args.AmmoSlot) <= 0)
         {
             var popup = box.Amount <= 0
-                ? Loc.GetString("rmc-vehicle-ammo-loader-empty", ("box", box.Owner))
+                ? Loc.GetString("rmc-vehicle-ammo-loader-empty", ("box", activeBox))
                 : Loc.GetString("rmc-vehicle-ammo-loader-full", ("target", ammoUid));
             _popup.PopupClient(popup, ent, args.Actor);
             return;

@@ -9,7 +9,6 @@ using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
-using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Prototypes;
@@ -20,11 +19,10 @@ using static Robust.Client.UserInterface.Controls.LineEdit;
 namespace Content.Client._RMC14.Vendors;
 
 [UsedImplicitly]
-public sealed class CMAutomatedVendorBui : BoundUserInterface
+public sealed partial class CMAutomatedVendorBui : BoundUserInterface
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IResourceCache _resource = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly SharedJobSystem _job;
     private readonly SharedMindSystem _mind;
@@ -96,13 +94,16 @@ public sealed class CMAutomatedVendorBui : BoundUserInterface
 
                 if (_prototype.TryIndex(entry.Id, out var entity))
                 {
-                    uiEntry.Texture.Textures = SpriteComponent.GetPrototypeTextures(entity, _resource)
+                    uiEntry.Texture.Textures = EntMan.System<SpriteSystem>().GetPrototypeTextures(entity)
                         .Select(o => o.Default)
                         .ToList();
-                    if (entity.TryGetComponent<SpriteComponent>("Sprite", out var entitySprites))
-                        uiEntry.Texture.Modulate = entitySprites.AllLayers.First().Color;
+                    if (entity.TryGetComponent<SpriteComponent>("Sprite", out var entitySprites) &&
+                        entitySprites.AllLayers.FirstOrDefault() is { } firstLayer)
+                    {
+                        uiEntry.Texture.Modulate = firstLayer.Color;
+                    }
 
-                    uiEntry.Panel.Button.Label.Text = entry.Name?.Replace("\\n", "\n") ?? entity.Name;
+                    uiEntry.Panel.Button.TextLabel.Text = entry.Name?.Replace("\\n", "\n") ?? entity.Name;
 
                     var name = entity.Name;
                     var color = CMAutomatedVendorPanel.DefaultColor;
@@ -117,7 +118,7 @@ public sealed class CMAutomatedVendorBui : BoundUserInterface
                     }
                     else if (entry.Recommended)
                     {
-                        uiEntry.Panel.Button.Label.Text = $"★ {uiEntry.Panel.Button.Label.Text}";
+                        uiEntry.Panel.Button.TextLabel.Text = $"★ {uiEntry.Panel.Button.TextLabel.Text}";
                         name = $"Recommended: {name}";
                         color = Color.FromHex("#102919");
                         borderColor = Color.FromHex("#3A9B52");
@@ -241,7 +242,7 @@ public sealed class CMAutomatedVendorBui : BoundUserInterface
                 if (string.IsNullOrWhiteSpace(text))
                     entry.Visible = true;
                 else
-                    entry.Visible = entry.Panel.Button.Label.Text?.Contains(text, OrdinalIgnoreCase) ?? false;
+                    entry.Visible = entry.Panel.Button.TextLabel.Text?.Contains(text, OrdinalIgnoreCase) ?? false;
 
                 if (entry.Visible)
                     any = true;

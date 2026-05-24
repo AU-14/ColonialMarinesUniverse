@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using Content.Client._CMU14.ZLevels.Core;
 using Content.Client._RMC14.Mentor;
 using Content.Client.Administration.Managers;
 using Content.Client.Chat;
@@ -50,27 +51,28 @@ namespace Content.Client.UserInterface.Systems.Chat;
 
 public sealed partial class ChatUIController : UIController
 {
-    [Dependency] private readonly IClientAdminManager _admin = default!;
-    [Dependency] private readonly IChatManager _manager = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IEntityManager _ent = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IClientNetManager _net = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IStateManager _state = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IReplayRecordingManager _replayRecording = default!;
-    [Dependency] private readonly StaffHelpUIController _staffHelpUI = default!;
+    [Dependency] private IClientAdminManager _admin = default!;
+    [Dependency] private IChatManager _manager = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IEntityManager _ent = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IClientNetManager _net = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IStateManager _state = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IReplayRecordingManager _replayRecording = default!;
+    [Dependency] private StaffHelpUIController _staffHelpUI = default!;
 
-    [UISystemDependency] private readonly ExamineSystem? _examine = default;
-    [UISystemDependency] private readonly GhostSystem? _ghost = default;
-    [UISystemDependency] private readonly TypingIndicatorSystem? _typingIndicator = default;
-    [UISystemDependency] private readonly ChatSystem? _chatSys = default;
-    [UISystemDependency] private readonly TransformSystem? _transform = default;
-    [UISystemDependency] private readonly MindSystem? _mindSystem = default!;
-    [UISystemDependency] private readonly RoleCodewordSystem? _roleCodewordSystem = default!;
+    [UISystemDependency] private ExamineSystem? _examine = default;
+    [UISystemDependency] private GhostSystem? _ghost = default;
+    [UISystemDependency] private TypingIndicatorSystem? _typingIndicator = default;
+    [UISystemDependency] private ChatSystem? _chatSys = default;
+    [UISystemDependency] private CMUClientZLevelsSystem? _zLevels = default;
+    [UISystemDependency] private TransformSystem? _transform = default;
+    [UISystemDependency] private MindSystem? _mindSystem = default!;
+    [UISystemDependency] private RoleCodewordSystem? _roleCodewordSystem = default!;
 
     private static readonly ProtoId<ColorPalettePrototype> ChatNamePalette = "ChatNames";
     private string[] _chatNameColors = default!;
@@ -513,8 +515,7 @@ public sealed partial class ChatUIController : UIController
 
     private void EnqueueSpeechBubble(EntityUid entity, ChatMessage message, SpeechBubble.SpeechType speechType)
     {
-        // Don't enqueue speech bubbles for other maps. TODO: Support multiple viewports/maps?
-        if (EntityManager.GetComponent<TransformComponent>(entity).MapID != _eye.CurrentEye.Position.MapId)
+        if (!CanShowSpeechBubble(entity, out _))
             return;
 
         if (!_queuedSpeechBubbles.TryGetValue(entity, out var queueData))
@@ -526,12 +527,32 @@ public sealed partial class ChatUIController : UIController
         queueData.MessageQueue.Enqueue(new SpeechBubbleData(message, speechType));
     }
 
+    private bool CanShowSpeechBubble(EntityUid entity, out bool sameMap)
+    {
+        sameMap = false;
+
+        if (!_ent.TryGetComponent<TransformComponent>(entity, out var xform))
+            return false;
+
+        if (xform.MapID == _eye.CurrentEye.Position.MapId)
+        {
+            sameMap = true;
+            return true;
+        }
+
+        return _zLevels?.TryGetSpeechBubbleZOffset(entity, out _, xform) == true;
+    }
+
     public void RemoveSpeechBubble(EntityUid entityUid, SpeechBubble bubble)
     {
-        bubble.Dispose();
+        bubble.OnDied -= SpeechBubbleDied;
+        bubble.Orphan();
 
-        var list = _activeSpeechBubbles[entityUid];
-        list.Remove(bubble);
+        if (!_activeSpeechBubbles.TryGetValue(entityUid, out var list))
+            return;
+
+        if (!list.Remove(bubble))
+            return;
 
         if (list.Count == 0)
         {
@@ -541,6 +562,10 @@ public sealed partial class ChatUIController : UIController
 
     private void UpdateChannelPermissions()
     {
+        var oldCanSendChannels = CanSendChannels;
+        var oldFilterableChannels = FilterableChannels;
+        var oldSelectableChannels = SelectableChannels;
+
         CanSendChannels = default;
         FilterableChannels = default;
 
@@ -607,10 +632,17 @@ public sealed partial class ChatUIController : UIController
         DebugTools.Assert((FilterableChannels & ChatChannel.OOC) != 0, "OOC must always be available");
         DebugTools.Assert((SelectableChannels & ChatSelectChannel.OOC) != 0, "OOC must always be available");
 
-        // let our chatbox know all the new settings
-        CanSendChannelsChanged?.Invoke(CanSendChannels);
-        FilterableChannelsChanged?.Invoke(FilterableChannels);
-        SelectableChannelsChanged?.Invoke(SelectableChannels);
+        // Let chatboxes know only when something actually changed. Attaching to a
+        // new entity during xeno evolution keeps the same xeno chat permissions,
+        // so rebuilding the full chat history here is unnecessary and hitches.
+        if (oldCanSendChannels != CanSendChannels)
+            CanSendChannelsChanged?.Invoke(CanSendChannels);
+
+        if (oldFilterableChannels != FilterableChannels)
+            FilterableChannelsChanged?.Invoke(FilterableChannels);
+
+        if (oldSelectableChannels != SelectableChannels)
+            SelectableChannelsChanged?.Invoke(SelectableChannels);
     }
 
     public void ClearUnfilteredUnreads(ChatChannel channels)
@@ -661,7 +693,7 @@ public sealed partial class ChatUIController : UIController
         }
         catch (Exception e)
         {
-            Logger.Error($"Error deleting chat history:\n{e}");
+            Logger.GetSawmill("content").Error($"Error deleting chat history:\n{e}");
         }
     }
 
@@ -725,9 +757,15 @@ public sealed partial class ChatUIController : UIController
                 continue;
             }
 
+            if (!CanShowSpeechBubble(ent, out var sameMap))
+            {
+                SetBubbles(bubs, false);
+                continue;
+            }
+
             var otherPos = _transform?.GetMapCoordinates(ent) ?? MapCoordinates.Nullspace;
 
-            if (occluded && !_examine.InRangeUnOccluded(
+            if (sameMap && occluded && !_examine.InRangeUnOccluded(
                     playerPos,
                     otherPos, 0f,
                     (ent, player), predicate))
@@ -1040,7 +1078,7 @@ public sealed partial class ChatUIController : UIController
 
     private readonly record struct SpeechBubbleData(ChatMessage Message, SpeechBubble.SpeechType Type);
 
-    private sealed class SpeechBubbleQueueData
+    private sealed partial class SpeechBubbleQueueData
     {
         /// <summary>
         ///     Time left until the next speech bubble can appear.

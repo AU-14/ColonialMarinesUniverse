@@ -3,10 +3,10 @@ name: Check Merge Conflicts
 on:
   pull_request_target:
     types:
-    - opened
-    - synchronize
-    - reopened
-    - ready_for_review
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
 
 jobs:
   label:
@@ -17,8 +17,9 @@ jobs:
       issues: write
     steps:
       - name: Check for Merge Conflicts
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const label = 'S: Merge Conflict';
             const repo = {

@@ -1,4 +1,4 @@
-﻿using Content.Server.Players.PlayTimeTracking;
+using Content.Server.Players.PlayTimeTracking;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared.Chat;
 using Content.Shared.GameTicking;
@@ -7,11 +7,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._RMC14.Marines.Roles.Ranks;
 
-public sealed class RankSystem : SharedRankSystem
+public sealed partial class RankSystem : SharedRankSystem
 {
-    [Dependency] private readonly PlayTimeTrackingManager _tracking = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private PlayTimeTrackingManager _tracking = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     public override void Initialize()
     {

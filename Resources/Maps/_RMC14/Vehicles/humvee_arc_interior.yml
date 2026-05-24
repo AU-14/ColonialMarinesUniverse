@@ -124,7 +124,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 1.4560254,-1.1508527
       parent: 2
-- proto: RMCGroundsideOperationsConsole
+- proto: RMCGroundsideOperationsConsoleGovfor
   entities:
   - uid: 14
     components:

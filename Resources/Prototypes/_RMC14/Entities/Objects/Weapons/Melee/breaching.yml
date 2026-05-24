@@ -15,13 +15,14 @@
     damage:
       types:
         Blunt: 45
-        Structural: 45
+        Structural: 50
     soundHit:
       collection: GenericHit
     wideAnimationRotation: 90
   - type: MeleeRequiresWield
+  - type: RMCStructuralBreacher
   - type: WhitelistPickupBy
     whitelist:
       components:
         - Synth
-# TODO RMC14: This hammer needs to be ONLY picked up by Synths, It should be impossible for a regular person to pick it up. Ideally there should be an error message saying "This is too heavy for you to pick up!" or something like that.
+  - type: RMCSynthItemRestriction

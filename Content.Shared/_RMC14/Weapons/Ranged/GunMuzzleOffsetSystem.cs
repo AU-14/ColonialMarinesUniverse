@@ -10,10 +10,10 @@ using Robust.Shared.Maths;
 
 namespace Content.Shared._RMC14.Weapons.Ranged;
 
-public sealed class GunMuzzleOffsetSystem : EntitySystem
+public sealed partial class GunMuzzleOffsetSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

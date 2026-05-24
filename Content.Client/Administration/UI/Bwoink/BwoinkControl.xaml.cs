@@ -22,10 +22,10 @@ namespace Content.Client.Administration.UI.Bwoink
     [GenerateTypedNameReferences]
     public sealed partial class BwoinkControl : Control
     {
-        [Dependency] private readonly IClientAdminManager _adminManager = default!;
-        [Dependency] private readonly IClientConsoleHost _console = default!;
-        [Dependency] private readonly IUserInterfaceManager _ui = default!;
-        [Dependency] private readonly IConfigurationManager _cfg = default!;
+        [Dependency] private IClientAdminManager _adminManager = default!;
+        [Dependency] private IClientConsoleHost _console = default!;
+        [Dependency] private IUserInterfaceManager _ui = default!;
+        [Dependency] private IConfigurationManager _cfg = default!;
         public AdminAHelpUIHandler AHelpHelper = default!;
 
         private PlayerInfo? _currentPlayer;
@@ -200,6 +200,17 @@ namespace Content.Client.Administration.UI.Bwoink
             };
         }
 
+        [Obsolete("Controls should only be removed from UI tree instead of being disposed")]
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (!disposing)
+                return;
+
+            _adminManager.AdminStatusUpdated -= UpdateButtons;
+        }
+
         public void OnBwoink(NetUserId channel)
         {
             ChannelSelector.PopulateList();
@@ -208,6 +219,8 @@ namespace Content.Client.Administration.UI.Bwoink
 
         public void SelectChannel(NetUserId channel)
         {
+            ChannelSelector.PopulateList();
+
             if (!ChannelSelector.PlayerInfo.TryFirstOrDefault(
                 i => i.SessionId == channel, out var info))
                 return;

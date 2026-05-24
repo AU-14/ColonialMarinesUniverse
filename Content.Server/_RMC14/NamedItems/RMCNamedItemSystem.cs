@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Server._RMC14.LinkAccount;
 using Content.Server.Administration.Logs;
 using Content.Shared._RMC14.Armor;
@@ -12,11 +12,11 @@ using Content.Shared.Storage;
 
 namespace Content.Server._RMC14.NamedItems;
 
-public sealed class RMCNamedItemSystem : SharedRMCNamedItemSystem
+public sealed partial class RMCNamedItemSystem : SharedRMCNamedItemSystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLogs = default!;
-    [Dependency] private readonly LinkAccountManager _linkAccount = default!;
-    [Dependency] private readonly NameModifierSystem _nameModifier = default!;
+    [Dependency] private IAdminLogManager _adminLogs = default!;
+    [Dependency] private LinkAccountManager _linkAccount = default!;
+    [Dependency] private NameModifierSystem _nameModifier = default!;
 
     private EntityQuery<RMCNameItemOnVendComponent> _nameItemOnVendQuery;
 

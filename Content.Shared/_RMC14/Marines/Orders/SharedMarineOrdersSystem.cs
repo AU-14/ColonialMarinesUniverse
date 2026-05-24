@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Evasion;
 using Content.Shared._CMU14.Medical.StatusEffects;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Actions;
 using Content.Shared.Damage;
@@ -15,19 +16,19 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Marines.Orders;
 
-public abstract class SharedMarineOrdersSystem : EntitySystem
+public abstract partial class SharedMarineOrdersSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly EvasionSystem _evasionSystem = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPainShockSystem _pain = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private EvasionSystem _evasionSystem = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPainShockSystem _pain = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly HashSet<Entity<MarineComponent>> _receivers = new();
 
@@ -181,6 +182,9 @@ public abstract class SharedMarineOrdersSystem : EntitySystem
         foreach (var receiver in _receivers)
         {
             if (_mobState.IsDead(receiver))
+                continue;
+
+            if (HasComp<YautjaComponent>(receiver.Owner))
                 continue;
 
             AddOrder<T>(receiver, level, duration);

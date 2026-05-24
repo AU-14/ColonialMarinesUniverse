@@ -1,12 +1,12 @@
-﻿using Content.Shared._RMC14.Vendors;
+using Content.Shared._RMC14.Vendors;
 using Content.Shared.AU14.Objectives;
 using Robust.Server.GameObjects;
 
 namespace Content.Server._RMC14.Vendors;
 
-public sealed class CMAutomatedVendorSystem : SharedCMAutomatedVendorSystem
+public sealed partial class CMAutomatedVendorSystem : SharedCMAutomatedVendorSystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

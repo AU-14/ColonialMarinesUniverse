@@ -6,9 +6,9 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Server._CMU14.Medical.Bones;
 
-public sealed class BoneSystem : SharedBoneSystem
+public sealed partial class BoneSystem : SharedBoneSystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     private static readonly SoundSpecifier BoneBreakSound =
         new SoundCollectionSpecifier("CMUBoneBreakSounds");

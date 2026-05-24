@@ -1,0 +1,52 @@
+- type: threat
+  id: TribalsThreat
+  lorePrimer: AU14PrimerThreatTribals
+  roundstartspawns: tribalsParty
+  whitelistedgamemodes:
+  - DistressSignal
+  blacklistedgamemodes:
+  - DistressSignal
+  winconditions:
+  - KillAllColonistRule
+  - KillAllTribeRule
+  minplayers: 400 # off
+
+
+
+- type: partySpawn
+  id: tribalsParty
+  leadersToSpawn:
+    AU14MobTribalLeader: 1
+  gruntsToSpawn:
+    AU14MobTribalSpear: 4
+    AU14MobTribalBowman: 3
+    AU14MobTribalShaman: 1
+  scaling:
+    AU14MobTribalSpear:
+      scale: 0.1
+      whenToBeginScaling: 45
+    AU14MobTribalBowman:
+      scale: 0.1
+      whenToBeginScaling: 45
+    AU14MobTribalShaman:
+      scale: 0.04
+      whenToBeginScaling: 60
+  spawnTogether: false
+
+- type: lorePrimer
+  id: AU14PrimerThreatTribals
+  threattext: "Protect your home and repel the invaders"
+  KnowledgeLevelsGovforThreat:
+    "Intelligent stone age society dedicated to protecting its homeworld, secure those crystals at all costs": 1
+
+# Tribal third-party — drops a roundstart party of natives onto the map.
+- type: auThirdParty
+  id: tribalThirdParty
+  partyspawn: tribalsParty
+  entrymethod: ground
+  weight: 5
+  minplayers: 0
+  maxplayers: 200
+  GhostsNeeded: 0
+  roundstart: true
+  announcearrival: "Native warriors have been spotted in the area of operation."

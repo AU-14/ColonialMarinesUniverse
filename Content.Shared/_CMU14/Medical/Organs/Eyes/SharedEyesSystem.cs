@@ -5,9 +5,9 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Shared._CMU14.Medical.Organs.Eyes;
 
-public abstract class SharedEyesSystem : EntitySystem
+public abstract partial class SharedEyesSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedBodySystem Body = default!;
+    [Dependency] protected SharedBodySystem Body = default!;
 
     public override void Initialize()
     {

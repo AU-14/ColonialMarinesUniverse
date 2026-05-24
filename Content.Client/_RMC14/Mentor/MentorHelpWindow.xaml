@@ -1,15 +1,25 @@
-﻿<controls:MentorHelpWindow
+<controls:MentorHelpWindow
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Mentor"
     SetSize="500 300"
     Title="Mentor Help">
-    <BoxContainer Orientation="Vertical">
-        <OutputPanel Name="Messages" Access="Public" HorizontalExpand="True"
-                     VerticalExpand="True" />
-        <BoxContainer Orientation="Horizontal">
-            <LineEdit Name="Chat" Access="Public" HorizontalExpand="True" />
-            <Button Name="ReMentorButton" Access="Public" Text="Re-mentor" Visible="False"
-                    StyleClasses="OpenBoth" />
+    <PanelContainer StyleClasses="CrtPanel" HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="8">
+            <PanelContainer StyleClasses="CrtQuietPanel" HorizontalExpand="True" VerticalExpand="True">
+                <OutputPanel Name="Messages" Access="Public" HorizontalExpand="True"
+                             VerticalExpand="True" />
+            </PanelContainer>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="5">
+                <PanelContainer StyleClasses="CrtHeaderPanel" HorizontalExpand="True">
+                    <LineEdit Name="Chat"
+                              Access="Public"
+                              PlaceHolder="Type mentor help message..."
+                              HorizontalExpand="True"
+                              MinHeight="34"
+                              SetHeight="34" />
+                </PanelContainer>
+                <Button Name="ReMentorButton" Access="Public" Text="Re-mentor" Visible="False" />
+            </BoxContainer>
         </BoxContainer>
-    </BoxContainer>
+    </PanelContainer>
 </controls:MentorHelpWindow>

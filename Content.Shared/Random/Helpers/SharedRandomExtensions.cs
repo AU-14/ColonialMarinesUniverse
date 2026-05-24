@@ -28,7 +28,7 @@ namespace Content.Shared.Random.Helpers
             var sum = picks.Values.Sum();
             var accumulated = 0f;
 
-            var rand = random.NextFloat() * sum;
+            var rand = (float) random.NextDouble() * sum;
 
             foreach (var (key, weight) in picks)
             {
@@ -51,7 +51,7 @@ namespace Content.Shared.Random.Helpers
             var sum = picks.Values.Sum();
             var accumulated = 0f;
 
-            var rand = random.NextFloat() * sum;
+            var rand = (float) random.NextDouble() * sum;
 
             foreach (var (key, weight) in picks)
             {
@@ -73,7 +73,7 @@ namespace Content.Shared.Random.Helpers
             var sum = weights.Values.Sum();
             var accumulated = 0f;
 
-            var rand = random.NextFloat() * sum;
+            var rand = (float) random.NextDouble() * sum;
 
             foreach (var (key, weight) in weights)
             {
@@ -114,7 +114,7 @@ namespace Content.Shared.Random.Helpers
             var sum = weights.Values.Sum();
             var accumulated = 0f;
 
-            var rand = random.NextFloat() * sum;
+            var rand = (float) random.NextDouble() * sum;
 
             foreach (var (key, weight) in weights)
             {

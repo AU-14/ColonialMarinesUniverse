@@ -6,10 +6,10 @@ using Robust.Shared.Random;
 
 namespace Content.Shared.EntityTable;
 
-public sealed class EntityTableSystem : EntitySystem
+public sealed partial class EntityTableSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public IEnumerable<EntProtoId> GetSpawns(EntityTablePrototype entTableProto, System.Random? rand = null, EntityTableContext? ctx = null)
     {
@@ -22,7 +22,7 @@ public sealed class EntityTableSystem : EntitySystem
         if (table == null)
             return new List<EntProtoId>();
 
-        rand ??= _random.GetRandom();
+        rand ??= new System.Random(_random.Next());
         ctx ??= new EntityTableContext();
         return table.GetSpawns(rand, EntityManager, _prototypeManager, ctx);
     }
@@ -31,7 +31,7 @@ public sealed class EntityTableSystem : EntitySystem
 /// <summary>
 /// Context used by selectors and conditions to evaluate in generic gamestate information.
 /// </summary>
-public sealed class EntityTableContext
+public sealed partial class EntityTableContext
 {
     private readonly Dictionary<string, object> _data = new();
 

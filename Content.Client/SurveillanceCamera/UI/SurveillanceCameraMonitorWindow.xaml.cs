@@ -19,8 +19,8 @@ public sealed partial class SurveillanceCameraMonitorWindow : DefaultWindow
 {
     private static readonly ProtoId<ShaderPrototype> CameraStaticShader = "CameraStatic";
 
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     public event Action<string>? CameraSelected;
     public event Action<string>? SubnetOpened;
@@ -58,6 +58,7 @@ public sealed partial class SurveillanceCameraMonitorWindow : DefaultWindow
         var shader = _prototypeManager.Index(CameraStaticShader).Instance().Duplicate();
 
         CameraView.ViewportSize = new Vector2i(500, 500);
+        CameraView.RenderZLevels = true;
         CameraView.Eye = _defaultEye; // sure
         CameraViewBackground.Stretch = TextureRect.StretchMode.Scale;
         CameraViewBackground.Texture = texture;

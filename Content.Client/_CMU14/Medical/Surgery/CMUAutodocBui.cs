@@ -13,15 +13,17 @@ using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
+using Robust.Shared.Localization;
 using Robust.Shared.Timing;
 
 namespace Content.Client._CMU14.Medical.Surgery;
 
 [UsedImplicitly]
-public sealed class CMUAutodocBui : BoundUserInterface
+public sealed partial class CMUAutodocBui : BoundUserInterface
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private ILocalizationManager _localization = default!;
+    [Dependency] private IPlayerManager _players = default!;
 
     private CMUAutodocWindow? _window;
     private (NetEntity Part, BodyPartType Type, BodyPartSymmetry Symmetry)? _selectedPart;
@@ -465,22 +467,22 @@ public sealed class CMUAutodocBui : BoundUserInterface
         return $"{Math.Ceiling(remaining.TotalSeconds)}s";
     }
 
-    private static string ResolveLabel(string? text)
+    private string ResolveLabel(string? text)
     {
         if (string.IsNullOrEmpty(text))
             return "-";
 
-        return Loc.TryGetString(text, out var localized) ? localized : text;
+        return _localization.TryGetString(text, out var localized) ? localized : text;
     }
 }
 
-public sealed class CMUAutodocWindow : FancyWindow
+public sealed partial class CMUAutodocWindow : FancyWindow
 {
     private const string RememberedSizeKey = "cmu-autodoc";
     private static readonly Vector2 PreferredWindowSize = new(1080f, 690f);
     private static readonly Vector2 MinimumWindowSize = new(700f, 460f);
 
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     private readonly CMUMedicalUniformScaler _uniformScaler = new();
     private readonly PanelContainer _scaleRoot;
@@ -506,6 +508,7 @@ public sealed class CMUAutodocWindow : FancyWindow
     public CMUAutodocWindow()
     {
         IoCManager.InjectDependencies(this);
+        AllowDraggingOutsideParentBounds = true;
 
         SetSize = CMUMedicalWindowSizing.GetInitialSize(RememberedSizeKey, PreferredWindowSize);
         MinSize = MinimumWindowSize;
@@ -754,7 +757,7 @@ public sealed class CMUAutodocWindow : FancyWindow
         };
         scroll.AddChild(SurgeryList);
 
-        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize);
+        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize, clampPosition: false);
         ApplyUniformScale(true);
     }
 
@@ -789,7 +792,7 @@ public sealed class CMUAutodocWindow : FancyWindow
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
-        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize);
+        CMUMedicalWindowSizing.FitToScreen(this, PreferredWindowSize, MinimumWindowSize, clampPosition: false);
         ApplyUniformScale();
         CMUMedicalWindowSizing.RememberSize(RememberedSizeKey, this);
     }

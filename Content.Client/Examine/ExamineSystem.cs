@@ -24,13 +24,13 @@ using Direction = Robust.Shared.Maths.Direction;
 namespace Content.Client.Examine
 {
     [UsedImplicitly]
-    public sealed class ExamineSystem : ExamineSystemShared
+    public sealed partial class ExamineSystem : ExamineSystemShared
     {
-        [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly IEyeManager _eyeManager = default!;
-        [Dependency] private readonly VerbSystem _verbSystem = default!;
-        [Dependency] private readonly SpriteSystem _sprite = default!;
+        [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private IEyeManager _eyeManager = default!;
+        [Dependency] private VerbSystem _verbSystem = default!;
+        [Dependency] private SpriteSystem _sprite = default!;
 
         private List<Verb> _verbList = new();
 
@@ -370,7 +370,7 @@ namespace Content.Client.Examine
             var vbox = _examineTooltipOpen?.GetChild(0).GetChild(0);
             if (vbox == null)
             {
-                buttonsHBox.Dispose();
+                buttonsHBox.Orphan();
                 return;
             }
 
@@ -436,7 +436,7 @@ namespace Content.Client.Examine
                         button.OnPressed -= VerbButtonPressed;
                     }
                 }
-                _examineTooltipOpen.Dispose();
+                _examineTooltipOpen.Orphan();
                 _examineTooltipOpen = null;
             }
 
@@ -451,7 +451,7 @@ namespace Content.Client.Examine
     /// <summary>
     /// An entity was examined on the client.
     /// </summary>
-    public sealed class ClientExaminedEvent : EntityEventArgs
+    public sealed partial class ClientExaminedEvent : EntityEventArgs
     {
         /// <summary>
         ///     The entity performing the examining.

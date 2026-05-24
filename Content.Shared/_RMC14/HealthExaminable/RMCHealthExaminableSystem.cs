@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using Content.Shared._CMU14.Medical;
 using Content.Shared._CMU14.Medical.Bones;
 using Content.Shared._CMU14.Medical.Wounds;
@@ -14,10 +14,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.HealthExaminable;
 
-public sealed class RMCHealthExaminableSystem : EntitySystem
+public sealed partial class RMCHealthExaminableSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private SharedBodySystem _body = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";

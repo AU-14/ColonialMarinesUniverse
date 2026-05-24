@@ -13,4 +13,5 @@ public readonly record struct BodyPartDamagedEvent(
     BodyPartType Type,
     DamageSpecifier Delta,
     FixedPoint2 NewCurrent,
-    IReadOnlyList<EntityUid> ContainedOrgans);
+    IReadOnlyList<EntityUid> ContainedOrgans,
+    EntityUid? Tool);

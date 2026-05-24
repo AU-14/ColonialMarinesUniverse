@@ -14,8 +14,8 @@ namespace Content.Client.Administration.UI.Notes;
 [GenerateTypedNameReferences]
 public sealed partial class NoteEdit : FancyWindow
 {
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly IClientConsoleHost _console = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private IClientConsoleHost _console = default!;
 
     private enum Multipliers
     {
@@ -322,6 +322,7 @@ public sealed partial class NoteEdit : FancyWindow
         return true;
     }
 
+    [System.Obsolete]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

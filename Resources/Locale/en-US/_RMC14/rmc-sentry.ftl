@@ -9,13 +9,23 @@ rmc-sentry-magazine-swap-finish-user = You swap a new {$magazine} into {THE($sen
 rmc-sentry-magazine-swap-finish-others = {$user} swaps a new {$magazine} into {THE($sentry)}.
 rmc-sentry-limited-rotation = [color=red]It can only turn a maximum of {$degrees} degrees when firing.[/color]
 rmc-sentry-disassembled-with-multitool = It can be disassembled with a [color=cyan]multitool[/color].
+rmc-sentry-disassembled-with-wrench = It can be disassembled with a [color=cyan]wrench[/color].
+rmc-sentry-faction-set-with-multitool = Use a [color=cyan]multitool[/color] to assign or clear its faction.
+
+rmc-sentry-faction-dialog-title = Sentry Configuration
+rmc-sentry-faction-assign = Assign to my faction
+rmc-sentry-faction-clear = Clear faction assignment
+
+rmc-sentry-faction-assigned = {CAPITALIZE(THE($sentry))} is now assigned to your faction.
+rmc-sentry-faction-cleared = {CAPITALIZE(THE($sentry))} faction assignment cleared — it will not fire until reassigned.
 rmc-sentry-rotate-with-screwdriver = It can be rotated with a [color=cyan]screwdriver[/color].
+rmc-sentry-no-faction-set = {CAPITALIZE(THE($sentry))} has no faction assigned — use a [color=cyan]multitool[/color] to configure it first.
 rmc-sentry-too-close = This is too close to {INDEFINITE($defense)} {$defense}!
 rmc-sentry-active-norot = {CAPITALIZE(THE($sentry))} is currently active. The motors will prevent you from rotating it safely.
 rmc-sentry-item-norot = You can't rotate it like this!
 rmc-sentry-magazine-does-not-fit = {CAPITALIZE(THE($magazine))} doesn't fit into {THE($sentry)}!
 
-rmc-sentry-upgrade-not-item = You need to disassemble {THE($sentry)} with a multitool before upgrading it!
+rmc-sentry-upgrade-not-item = You need to disassemble {THE($sentry)} with a wrench before upgrading it!
 rmc-sentry-upgrade-not-holding = You need to be holding an upgrade kit in your active hand to upgrade {THE($sentry)}!
 rmc-sentry-upgrade-not-upgradeable = You can't upgrade {THE($sentry)}!
 

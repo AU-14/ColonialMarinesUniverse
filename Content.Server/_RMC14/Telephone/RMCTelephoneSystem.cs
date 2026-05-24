@@ -14,21 +14,22 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Chat;
 using Content.Shared.Coordinates;
 using Robust.Server.Audio;
+using Robust.Shared.Audio;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
 
 namespace Content.Server._RMC14.Telephone;
 
-public sealed class RMCTelephoneSystem : SharedRMCTelephoneSystem
+public sealed partial class RMCTelephoneSystem : SharedRMCTelephoneSystem
 {
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly CommunicationsTowerSystem _communicationsTower = default!;
-    [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly RMCHandsSystem _rmcHands = default!;
-    [Dependency] private readonly RMCPlanetSystem _rmcPlanet = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private IChatManager _chatManager = default!;
+    [Dependency] private CommunicationsTowerSystem _communicationsTower = default!;
+    [Dependency] private HandsSystem _hands = default!;
+    [Dependency] private RMCHandsSystem _rmcHands = default!;
+    [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private ChatSystem _chat = default!;
 
     public override void Initialize()
     {
@@ -135,7 +136,7 @@ public sealed class RMCTelephoneSystem : SharedRMCTelephoneSystem
 
         var name = GetPhoneName(rotary);
         message = $"{name} says, \"{FormattedMessage.EscapeText(message)}\"";
-        var sound = _audio.GetSound(ent.Comp.SpeakSound);
+        var sound = _audio.GetAudioPath(_audio.ResolveSound(ent.Comp.SpeakSound));
         _chatManager.ChatMessageToOne(ChatChannel.Local, message, message, otherPhone, false, actor.PlayerSession.Channel, Color.FromHex("#9956D3"), true, sound, -12, hidePopup: true);
     }
 }

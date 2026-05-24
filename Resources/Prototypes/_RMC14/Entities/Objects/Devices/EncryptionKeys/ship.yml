@@ -52,8 +52,8 @@
   components:
   - type: EncryptionKey
     channels:
-    - WEYA
-    defaultChannel: WEYA
+    - radioWEYU
+    defaultChannel: radioWEYU
   - type: Sprite
     state: we_ya_key
 
@@ -64,9 +64,9 @@
   components:
   - type: EncryptionKey
     channels:
-    - WEYA
+    - radioWEYU
     - Colony
-    defaultChannel: WEYA
+    defaultChannel: radioWEYU
   - type: Sprite
     state: we_ya_key
 
@@ -77,13 +77,13 @@
   components:
   - type: EncryptionKey
     channels:
-    - CMB
+    - radioCMB
     - MarineCommand
     - MarineMedical
     - MarineIntel
     - MarineCommon
     - Colony
-    defaultChannel: CMB
+    defaultChannel: radioCMB
   - type: Sprite
     state: we_ya_key
 
@@ -421,12 +421,12 @@
     - MarineRequisition
     - MarineJTAC
     - MarineIntel
-    - WEYA
+    - radioWEYU
     readOnlyChannels:
     - MarineCommand
     - MarineJTAC
     - MarineIntel
-    defaultChannel: WEYA
+    defaultChannel: radioWEYU
   - type: Sprite
     state: cap_key
 

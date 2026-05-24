@@ -77,8 +77,7 @@ public sealed partial class MinSolution : IGraphCondition
 
     private string Name()
     {
-        var protoMan = IoCManager.Resolve<IPrototypeManager>();
-        var proto = protoMan.IndexReagent<ReagentPrototype>(Reagent.Prototype);
+        var proto = IoCManager.Resolve<IEntityManager>().System<RMCReagentSystem>().Index(Reagent.Prototype);
         return proto.LocalizedName;
     }
 }

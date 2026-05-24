@@ -107,4 +107,10 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<bool> ChatLegacyMode =
         CVarDef.Create("chat.legacy_mode", false, CVar.CLIENTONLY | CVar.ARCHIVE, "Use the legacy chat presentation.");
+
+    /// <summary>
+    /// Color the full text of each structured chat row instead of only channel accents and inline highlight markup.
+    /// </summary>
+    public static readonly CVarDef<bool> ChatColorWholeMessage =
+        CVarDef.Create("chat.color_whole_message", true, CVar.CLIENTONLY | CVar.ARCHIVE, "Color the full text of each structured chat row.");
 }

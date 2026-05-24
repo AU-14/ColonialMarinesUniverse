@@ -1,0 +1,17 @@
+- type: entity
+  parent: AU14MobWorkingJoe
+  id: AU14MobWorkingJoeColony
+  suffix: AU14, civilian
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    reregister: false
+    name: au14-job-name-workingjoe
+    description: au14-job-description-workingjoe
+    job: AU14JobColonyWorkingJoe
+    raffle:
+      settings: short

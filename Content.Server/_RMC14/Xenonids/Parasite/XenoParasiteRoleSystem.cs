@@ -14,21 +14,21 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._RMC14.Xenonids.Parasite;
 
-public sealed class XenoEggRoleSystem : EntitySystem
+public sealed partial class XenoEggRoleSystem : EntitySystem
 {
     private TimeSpan _parasiteSpawnDelay;
 
-    [Dependency] private readonly ActorSystem _actor = default!;
-    [Dependency] private readonly XenoEggSystem _eggSystem = default!;
-    [Dependency] private readonly XenoParasiteThrowerSystem _throwerSystem = default!;
-    [Dependency] private readonly EggMorpherSystem _eggMorpherSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly GhostRoleSystem _ghostRole = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
+    [Dependency] private ActorSystem _actor = default!;
+    [Dependency] private XenoEggSystem _eggSystem = default!;
+    [Dependency] private XenoParasiteThrowerSystem _throwerSystem = default!;
+    [Dependency] private EggMorpherSystem _eggMorpherSystem = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private GhostRoleSystem _ghostRole = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private IConfigurationManager _config = default!;
 
     public override void Initialize()
     {

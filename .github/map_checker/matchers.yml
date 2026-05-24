@@ -1,3 +1,7 @@
+# Blacklist is for throwing error when found on maps
+# Whitelist is for overriding the blacklisted regex
+# on_paths allows us to execute a type on specific files
+# entityMatchers has full regex support
 - id: "GeneralBlacklist"
   type: "Blacklist"
   entityMatchers:

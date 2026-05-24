@@ -80,6 +80,8 @@
         crate: RMCCrateGrenadesBatonSlug
       - cost: 6000
         crate: RMCCrateExplosiveClaymoreMine
+      - cost: 3000
+        crate: RMCCrateM6HBruteRockets
     - name: Food
       entries:
       - cost: 500
@@ -158,6 +160,8 @@
         crate: RMCCrateM85A1
       - cost: 500
         crate: AU14CrateAssortedKnives
+      - cost: 6000
+        crate: AU14CrateFlamerSpec
       - cost: 9500
         crate: AU14CrateHJRA12
       - cost: 9500

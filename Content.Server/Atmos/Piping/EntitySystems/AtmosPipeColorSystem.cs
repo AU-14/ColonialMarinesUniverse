@@ -4,9 +4,9 @@ using Robust.Server.GameObjects;
 
 namespace Content.Server.Atmos.Piping.EntitySystems
 {
-    public sealed class AtmosPipeColorSystem : EntitySystem
+    public sealed partial class AtmosPipeColorSystem : EntitySystem
     {
-        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+        [Dependency] private SharedAppearanceSystem _appearance = default!;
 
         public override void Initialize()
         {
@@ -16,10 +16,12 @@ namespace Content.Server.Atmos.Piping.EntitySystems
             SubscribeLocalEvent<AtmosPipeColorComponent, ComponentShutdown>(OnShutdown);
         }
 
-        private void OnStartup(EntityUid uid, AtmosPipeColorComponent component, ComponentStartup args)
-        {
-            if (!TryComp(uid, out AppearanceComponent? appearance))
-                return;
+    private void OnStartup(EntityUid uid, AtmosPipeColorComponent component, ComponentStartup args)
+    {
+        component.OwnerEntity = uid;
+
+        if (!TryComp(uid, out AppearanceComponent? appearance))
+            return;
 
             _appearance.SetData(uid, PipeColorVisuals.Color, component.Color, appearance);
         }

@@ -8,19 +8,19 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.Drunk;
 
-public sealed class DrunkOverlay : Overlay
+public sealed partial class DrunkOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> Shader = "Drunk";
 
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IEntitySystemManager _sysMan = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;
     private readonly ShaderInstance _drunkShader;
+    private readonly StatusEffectQuerySystem _statusEffectQuery;
 
     public float CurrentBoozePower = 0.0f;
 
@@ -33,6 +33,7 @@ public sealed class DrunkOverlay : Overlay
     {
         IoCManager.InjectDependencies(this);
         _drunkShader = _prototypeManager.Index(Shader).InstanceUnique();
+        _statusEffectQuery = _entityManager.System<StatusEffectQuerySystem>();
     }
 
     protected override void FrameUpdate(FrameEventArgs args)
@@ -47,8 +48,7 @@ public sealed class DrunkOverlay : Overlay
             || !_entityManager.TryGetComponent<StatusEffectsComponent>(playerEntity, out var status))
             return;
 
-        var statusSys = _sysMan.GetEntitySystem<StatusEffectsSystem>();
-        if (!statusSys.TryGetTime(playerEntity.Value, SharedDrunkSystem.DrunkKey, out var time, status))
+        if (!_statusEffectQuery.TryGetTime(playerEntity.Value, SharedDrunkSystem.DrunkKey, out var time, status))
             return;
 
         var curTime = _timing.CurTime;

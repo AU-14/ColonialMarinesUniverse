@@ -1,13 +1,13 @@
-﻿using Content.Server.Administration;
+using Content.Server.Administration;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
 namespace Content.Server.GameTicking.Commands
 {
     [AdminCommand(AdminFlags.Round)]
-    sealed class DelayStartCommand : IConsoleCommand
+    sealed partial class DelayStartCommand : IConsoleCommand
     {
-        [Dependency] private readonly IEntityManager _e = default!;
+        [Dependency] private IEntityManager _e = default!;
 
         public string Command => "delaystart";
         public string Description => "Delays the round start.";

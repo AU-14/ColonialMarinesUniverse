@@ -38,31 +38,31 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Xenonids.Construction.Tunnel;
 
-public sealed class XenoTunnelSystem : EntitySystem
+public sealed partial class XenoTunnelSystem : EntitySystem
 {
     private const string TunnelPrototypeId = "XenoTunnel";
 
-    [Dependency] private readonly SharedActionsSystem _action = default!;
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly SharedTacticalMapSystem _tacticalMap = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
-    [Dependency] private readonly SharedXenoWeedsSystem _xenoWeeds = default!;
-    [Dependency] private readonly SharedXenoConstructionSystem _xenoConstruct = default!;
+    [Dependency] private SharedActionsSystem _action = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private SharedTacticalMapSystem _tacticalMap = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private SharedXenoWeedsSystem _xenoWeeds = default!;
+    [Dependency] private SharedXenoConstructionSystem _xenoConstruct = default!;
 
     private readonly List<string> _greekLetters = new()
     {
@@ -894,19 +894,19 @@ public sealed partial class XenoPlaceResinTunnelDestroyWeedSourceDoAfterEvent : 
 public sealed partial class XenoCollapseTunnelDoAfterEvent : SimpleDoAfterEvent;
 
 [Serializable, NetSerializable]
-public sealed class TraverseXenoTunnelMessage(NetEntity destinationTunnel) : BoundUserInterfaceMessage
+public sealed partial class TraverseXenoTunnelMessage(NetEntity destinationTunnel) : BoundUserInterfaceMessage
 {
     public NetEntity DestinationTunnel = destinationTunnel;
 }
 
 [Serializable, NetSerializable]
-public sealed class NameTunnelMessage(string tunnelName) : BoundUserInterfaceMessage
+public sealed partial class NameTunnelMessage(string tunnelName) : BoundUserInterfaceMessage
 {
     public string TunnelName = tunnelName;
 }
 
 [Serializable, NetSerializable]
-public sealed class SelectDestinationTunnelInterfaceState(Dictionary<string, NetEntity> hiveTunnels) : BoundUserInterfaceState
+public sealed partial class SelectDestinationTunnelInterfaceState(Dictionary<string, NetEntity> hiveTunnels) : BoundUserInterfaceState
 {
     public Dictionary<string, NetEntity> HiveTunnels = hiveTunnels;
 }

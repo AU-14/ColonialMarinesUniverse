@@ -1,4 +1,4 @@
-﻿using Content.Server.GameTicking;
+using Content.Server.GameTicking;
 using Content.Shared.Administration;
 using Content.Shared.GameTicking;
 using Robust.Shared.Console;
@@ -6,9 +6,9 @@ using Robust.Shared.Console;
 namespace Content.Server.Administration.Commands
 {
     [AdminCommand(AdminFlags.Round)]
-    public sealed class ReadyAll : IConsoleCommand
+    public sealed partial class ReadyAll : IConsoleCommand
     {
-        [Dependency] private readonly IEntityManager _e = default!;
+        [Dependency] private IEntityManager _e = default!;
 
         public string Command => "readyall";
         public string Description => "Readies up all players in the lobby, except for observers.";

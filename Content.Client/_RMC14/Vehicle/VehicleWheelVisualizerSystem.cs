@@ -7,10 +7,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._RMC14.Vehicle;
 
-public sealed class VehicleWheelVisualizerSystem : VisualizerSystem<VehicleWheelSlotsComponent>
+public sealed partial class VehicleWheelVisualizerSystem : VisualizerSystem<VehicleWheelSlotsComponent>
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -93,9 +93,9 @@ public sealed class VehicleWheelVisualizerSystem : VisualizerSystem<VehicleWheel
 
         var targetState = destroyed ? "wheels_1" : "wheels_0";
 
-        if (sprite.LayerGetState(layer) != targetState)
+        if (_sprite.LayerGetRsiState((uid, sprite), layer) != targetState)
         {
-            sprite.LayerSetState(layer, targetState);
+            _sprite.LayerSetRsiState((uid, sprite), layer, targetState);
 
             if (isMoving && !destroyed)
                 _sprite.LayerSetAnimationTime((uid, sprite), layer, 0f);

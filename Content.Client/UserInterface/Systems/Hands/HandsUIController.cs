@@ -17,13 +17,13 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.UserInterface.Systems.Hands;
 
-public sealed class HandsUIController : UIController, IOnStateEntered<GameplayState>, IOnSystemChanged<HandsSystem>
+public sealed partial class HandsUIController : UIController, IOnStateEntered<GameplayState>, IOnSystemChanged<HandsSystem>
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
-    [UISystemDependency] private readonly HandsSystem _handsSystem = default!;
-    [UISystemDependency] private readonly UseDelaySystem _useDelay = default!;
+    [UISystemDependency] private HandsSystem _handsSystem = default!;
+    [UISystemDependency] private UseDelaySystem _useDelay = default!;
 
     private readonly List<HandsContainer> _handsContainers = new();
     private readonly Dictionary<string, int> _handContainerIndices = new();
@@ -123,6 +123,9 @@ public sealed class HandsUIController : UIController, IOnStateEntered<GameplaySt
         _handContainerIndices.Clear();
         _handLookup.Clear();
         _playerHandsComponent = null;
+        _activeHand = null;
+        _statusHandLeft = null;
+        _statusHandRight = null;
 
         foreach (var container in _handsContainers)
         {
@@ -137,7 +140,7 @@ public sealed class HandsUIController : UIController, IOnStateEntered<GameplaySt
             HandsGui.Visible = true;
 
         _playerHandsComponent = handsComp;
-        foreach (var (name, hand) in handsComp.Comp.Hands)
+        foreach (var (name, hand) in _handsSystem.EnumerateHandsInSortedOrder(handsComp))
         {
             var handButton = AddHand(name, hand.Location);
 

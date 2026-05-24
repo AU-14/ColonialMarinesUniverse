@@ -1,17 +1,17 @@
+using System.Collections.Generic;
 using System.Linq;
+using Content.Server.Maps;
 using Content.Shared.GameTicking;
-using Content.Server.Station.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
-using System.Text;
 using Content.Server.AU14.Round;
 
 namespace Content.Server.GameTicking
 {
     public sealed partial class GameTicker
     {
-        [Dependency] private readonly AuRoundSystem _auRoundSystem = default!;
-        [Dependency] private readonly PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
+        [Dependency] private AuRoundSystem _auRoundSystem = default!;
+        [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
 
         [ViewVariables]
         private readonly Dictionary<NetUserId, PlayerGameStatus> _playerGameStatuses = new();
@@ -41,7 +41,63 @@ namespace Content.Server.GameTicking
 
         public void UpdateInfoText()
         {
-            RaiseNetworkEvent(GetInfoMsg(), Filter.Empty().AddPlayers(_playerManager.NetworkedSessions));
+            var filter = Filter.Empty().AddPlayers(_playerManager.NetworkedSessions);
+            RaiseNetworkEvent(GetInfoMsg(), filter);
+            RaiseNetworkEvent(GetRoundStatusMsg(), filter);
+        }
+
+        private string GetPlanetMapName()
+        {
+            var selectedPlanet = _auRoundSystem.GetSelectedPlanet();
+            if (!string.IsNullOrWhiteSpace(selectedPlanet?.VoteName))
+                return selectedPlanet.VoteName;
+
+            if (!string.IsNullOrWhiteSpace(selectedPlanet?.MapId) &&
+                _prototypeManager.TryIndex<GameMapPrototype>(selectedPlanet.MapId, out var selectedPlanetMap))
+            {
+                return selectedPlanetMap.MapName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(_distressSignal.SelectedPlanetMapName))
+                return _distressSignal.SelectedPlanetMapName;
+
+            return Loc.GetString("game-ticker-no-map-selected-plain");
+        }
+
+        private string GetShipMapName()
+        {
+            var shipNames = new List<string>();
+            AddShipMapName(_auRoundSystem.GetSelectedGovforShip(), shipNames);
+            AddShipMapName(_auRoundSystem.GetSelectedOpforShip(), shipNames);
+
+            if (shipNames.Count > 0)
+                return string.Join(" / ", shipNames.Distinct());
+
+            return Loc.GetString("ui-escape-status-no-ship");
+        }
+
+        private void AddShipMapName(string? mapId, List<string> shipNames)
+        {
+            if (string.IsNullOrWhiteSpace(mapId))
+                return;
+
+            if (_prototypeManager.TryIndex<GameMapPrototype>(mapId, out var shipMap))
+            {
+                shipNames.Add(shipMap.MapName);
+                return;
+            }
+
+            shipNames.Add(mapId);
+        }
+
+        private string LocalizeOrRaw(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return string.Empty;
+
+            return Loc.TryGetString(text, out var localized)
+                ? localized
+                : text;
         }
 
         private string GetInfoText()
@@ -54,39 +110,15 @@ namespace Content.Server.GameTicking
 
             var playerCount = $"{_playerManager.PlayerCount}";
             var readyCount = _playerGameStatuses.Values.Count(x => x == PlayerGameStatus.ReadyToPlay);
-
-            var stationNames = new StringBuilder();
-            var query =
-                EntityQueryEnumerator<StationJobsComponent, StationSpawningComponent, MetaDataComponent>();
-
-            var foundOne = false;
-
-            while (query.MoveNext(out _, out _, out var meta))
-            {
-                foundOne = true;
-                if (stationNames.Length > 0)
-                        stationNames.Append('\n');
-
-                stationNames.Append(meta.EntityName);
-            }
-
-            if (!foundOne)
-            {
-                stationNames.Append(_gameMapManager.GetSelectedMap()?.MapName ??
-                                    Loc.GetString("game-ticker-no-map-selected"));
-            }
-
-
-            var selectedPlanet = _auRoundSystem.GetSelectedPlanet();
-            var planetName = selectedPlanet?.VoteName ?? Loc.GetString("game-ticker-no-map-selected");
+            var planetName = GetPlanetMapName();
 
             var govforShip = _auRoundSystem.GetSelectedGovforShip();
             var opforShip = _auRoundSystem.GetSelectedOpforShip();
             var govforShipDisplay = !string.IsNullOrWhiteSpace(govforShip) ? govforShip : "None";
             var opforShipDisplay = !string.IsNullOrWhiteSpace(opforShip) ? opforShip : "None";
 
-            var gmTitle = Loc.GetString(preset.ModeTitle);
-            var desc = Loc.GetString(preset.Description);
+            var gmTitle = LocalizeOrRaw(preset.ModeTitle);
+            var desc = LocalizeOrRaw(preset.Description);
             var govforPlatoon = _platoonSpawnRuleSystem.SelectedGovforPlatoon?.Name;
             var opforPlatoon = _platoonSpawnRuleSystem.SelectedOpforPlatoon?.Name;
             var govforPlatoonDisplay = !string.IsNullOrWhiteSpace(govforPlatoon) ? govforPlatoon : "None";
@@ -103,7 +135,7 @@ namespace Content.Server.GameTicking
                 ("opforShip", opforShipDisplay),
                 ("govforPlatoon", govforPlatoonDisplay),
                 ("opforPlatoon", opforPlatoonDisplay),
-                ("mapName", stationNames.ToString()),
+                ("mapName", GetPlanetMapName()),
                 ("gmTitle", gmTitle),
                 ("desc", desc));
         }
@@ -130,6 +162,33 @@ namespace Content.Server.GameTicking
         private TickerLobbyInfoEvent GetInfoMsg()
         {
             return new (GetInfoText());
+        }
+
+        private TickerRoundStatusEvent GetRoundStatusMsg()
+        {
+            var preset = CurrentPreset ?? Preset;
+            var gamemodeTitle = preset != null
+                ? LocalizeOrRaw(preset.ModeTitle)
+                : Loc.GetString("ui-escape-status-unknown");
+
+            return new TickerRoundStatusEvent(
+                GetPlanetMapName(),
+                GetShipMapName(),
+                RoundId,
+                _playerManager.PlayerCount,
+                gamemodeTitle,
+                RoundStartTimeSpan,
+                RealRoundDuration(),
+                RunLevel != GameRunLevel.PreRoundLobby);
+        }
+
+        private TimeSpan RealRoundDuration()
+        {
+            if (RunLevel == GameRunLevel.PreRoundLobby || _roundStartDateTime == default)
+                return TimeSpan.Zero;
+
+            var elapsed = DateTime.UtcNow - _roundStartDateTime;
+            return elapsed < TimeSpan.Zero ? TimeSpan.Zero : elapsed;
         }
 
         private void UpdateLateJoinStatus()

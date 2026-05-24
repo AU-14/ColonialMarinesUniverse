@@ -12,15 +12,15 @@ namespace Content.Server.Power.Nodes
         public override IEnumerable<Node> GetReachableNodes(TransformComponent xform,
             EntityQuery<NodeContainerComponent> nodeQuery,
             EntityQuery<TransformComponent> xformQuery,
-            MapGridComponent? grid,
+            Entity<MapGridComponent>? grid,
             IEntityManager entMan)
         {
             if (!xform.Anchored || grid == null)
                 yield break;
 
-            var gridIndex = grid.TileIndicesFor(xform.Coordinates);
+            var gridIndex = NodeHelpers.TileIndicesFor(entMan, grid.Value, xform.Coordinates);
 
-            var nodes = NodeHelpers.GetCardinalNeighborNodes(nodeQuery, grid, gridIndex, includeSameTile: false);
+            var nodes = NodeHelpers.GetCardinalNeighborNodes(nodeQuery, entMan, grid.Value, gridIndex, includeSameTile: false);
             foreach (var (dir, node) in nodes)
             {
                 if (node is CableTerminalNode

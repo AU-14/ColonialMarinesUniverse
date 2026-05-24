@@ -93,7 +93,7 @@ public sealed partial class HardpointButton : Button
             text = $"{_text}{dots}";
         }
 
-        Label.SetMarkup($"[color={color.ToHex()}][bold]{text}[/bold][/color]");
+        TextLabel.SetMarkup($"[color={color.ToHex()}][bold]{text}[/bold][/color]");
     }
 
     protected override void FrameUpdate(FrameEventArgs args)

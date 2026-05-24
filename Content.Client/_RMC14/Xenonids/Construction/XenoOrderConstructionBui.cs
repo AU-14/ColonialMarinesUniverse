@@ -1,4 +1,4 @@
-﻿using Content.Client._RMC14.Xenonids.UI;
+using Content.Client._RMC14.Xenonids.UI;
 using Content.Shared._RMC14.Xenonids.Construction;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
@@ -9,9 +9,9 @@ using Robust.Shared.Prototypes;
 namespace Content.Client._RMC14.Xenonids.Construction;
 
 [UsedImplicitly]
-public sealed class XenoOrderConstructionBui : BoundUserInterface
+public sealed partial class XenoOrderConstructionBui : BoundUserInterface
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly SpriteSystem _sprite;
 

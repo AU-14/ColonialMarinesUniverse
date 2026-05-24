@@ -1040,6 +1040,96 @@
     - id: CMSynthGraft
     - id: CMUCastItem
 - type: entity
+  parent: RMCWebbingDropPouch
+  id: RMCToolDropPouchFilled
+  name: tool drop pouch
+  description: A drop pouch loaded with essential field repair tools.
+  components:
+  - type: Storage
+    grid:
+    - 0,0,13,1
+    whitelist:
+      tags:
+      - Crowbar
+      - Screwdriver
+      - Wirecutter
+      - Wrench
+      - CableCoil
+      - Multitool
+      - PowerCell
+      components:
+      - Welder
+      - PowerCell
+      - EntrenchingTool
+  - type: StorageFill
+    contents:
+    - id: CMScrewdriver
+    - id: CMWrench
+    - id: CMWelder
+    - id: CMCrowbar
+    - id: CMWirecutter
+    - id: RMCCableCoil30
+    - id: CMMultitool
+
+- type: entity
+  parent: CMWebbingBase
+  id: RMCWebbingSurgicalRCM
+  name: MOLS medical carry harness
+  suffix: Royal
+  description: The L1 pattern Modular Operational Load-Bearing System designates the standard issue set of lightweight load-carrying equipment for the RCM. This configuration features a harness and webbing capable of fitting a wide variety of surgical equipment.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Webbing/webbing_surgical_blue.rsi
+    state: webbing
+  - type: Webbing
+    components:
+    - type: Storage
+      maxItemSize: Small
+      grid:
+      - 0,0,13,3 # 14 slots
+      whitelist:
+        tags:
+        - CMTraumaKit
+        - CMSurgicalLine
+        - CMSynthGraft
+        components:
+        - CMSurgeryTool
+    - type: FixedItemSizeStorage
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,13,3 # 14 slots
+    whitelist:
+      tags:
+      - CMTraumaKit
+      - CMSurgicalLine
+      - CMSynthGraft
+      components:
+      - CMSurgeryTool
+  - type: FixedItemSizeStorage
+
+- type: entity
+  parent: RMCWebbingSurgicalRCM
+  id: RMCWebbingSurgicalRCMFilled
+  suffix: Filled, Royal
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMScalpel
+    - id: CMHemostat
+    - id: CMRetractor
+    - id: CMTraumaKit10
+    - id: CMCautery
+    - id: CMCircularSaw
+    - id: CMSurgicalDrill
+    - id: CMBoneGel
+    - id: CMBonesetter
+    - id: CMUBoneGraftItem
+    - id: CMUOrganClampItem
+    - id: CMSurgicalLine
+    - id: CMSynthGraft
+
+- type: entity
   parent: CMWebbing
   id: RMCWebbingSPPCommandFilled
   suffix: Filled

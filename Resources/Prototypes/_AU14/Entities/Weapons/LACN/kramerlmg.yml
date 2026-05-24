@@ -58,13 +58,11 @@
     - type: AttachableHolder
       slots:
         rmc-aslot-underbarrel:
-          startingAttachable: RMCAttachmentBipod
           whitelist:
             tags:
               - RMCAttachmentAngledGrip
               - RMCAttachmentVerticalGrip
               - RMCAttachmentFlashlightGrip
-              - RMCAttachmentBipod
               - RMCAttachmentBurstFireAssembly
     - type: GunRequiresWield
 

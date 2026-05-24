@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Sound;
+using Content.Shared._RMC14.Sound;
 using Content.Shared.Popups;
 using Content.Shared.Sound.Components;
 using Content.Shared.Verbs;
@@ -6,9 +6,9 @@ using Robust.Shared.Collections;
 
 namespace Content.Shared._RMC14.SelectableSounds;
 
-public sealed class RMCSelectableSoundsSystem : EntitySystem
+public sealed partial class RMCSelectableSoundsSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

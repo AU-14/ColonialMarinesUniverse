@@ -1,12 +1,12 @@
-﻿using Robust.Shared.Containers;
+using Robust.Shared.Containers;
 namespace Content.Shared.Containers;
 
 /// <summary>
 /// This handles deleting an entity when it's empty
 /// </summary>
-public sealed class DeleteOnContainerEmptySystem : EntitySystem
+public sealed partial class DeleteOnContainerEmptySystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
     public override void Initialize()
     {
         SubscribeLocalEvent<DeleteOnContainerEmptyComponent, EntRemovedFromContainerMessage>(OnEntRemoved);

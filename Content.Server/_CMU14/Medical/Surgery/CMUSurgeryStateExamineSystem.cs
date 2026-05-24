@@ -8,9 +8,9 @@ using Content.Shared.Examine;
 
 namespace Content.Server._CMU14.Medical.Surgery;
 
-public sealed class CMUSurgeryStateExamineSystem : EntitySystem
+public sealed partial class CMUSurgeryStateExamineSystem : EntitySystem
 {
-    [Dependency] private readonly SharedCMSurgerySystem _rmcSurgery = default!;
+    [Dependency] private SharedCMSurgerySystem _rmcSurgery = default!;
 
     public override void Initialize()
     {

@@ -8,5 +8,7 @@ namespace Content.Client.Stylesheets
         Stylesheet SheetSpace { get; }
 
         void Initialize();
+        void PreviewCrtUi(bool enabled, string color);
+        void ResetCrtUiPreview();
     }
 }

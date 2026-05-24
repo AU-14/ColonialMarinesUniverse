@@ -9,6 +9,7 @@ using Content.Shared.Item;
 using Content.Shared.Popups;
 using Content.Shared.Roles;
 using Content.Shared.Verbs;
+using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Utility;
@@ -16,16 +17,17 @@ using Content.Shared._RMC14.Webbing;
 
 namespace Content.Shared._RMC14.UniformAccessories;
 
-public abstract class SharedUniformAccessorySystem : EntitySystem
+public abstract partial class SharedUniformAccessorySystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedItemSystem _item = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedWebbingSystem _webbing = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedItemSystem _item = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedWebbingSystem _webbing = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
     public override void Initialize()
     {
@@ -99,11 +101,18 @@ public abstract class SharedUniformAccessorySystem : EntitySystem
         if (!args.CanAccess || !args.CanInteract || HasComp<XenoComponent>(args.User))
             return;
 
-        if (!_container.TryGetContainer(ent, ent.Comp.ContainerId, out var container) ||
-            !container.ContainedEntities.TryFirstOrNull(out var firstAccessory))
-        {
+        if (!_container.TryGetContainer(ent, ent.Comp.ContainerId, out var container))
             return;
+
+        var visibleAccessories = new List<EntityUid>();
+        foreach (var accessory in container.ContainedEntities)
+        {
+            if (CanViewAccessory(accessory, args.User))
+                visibleAccessories.Add(accessory);
         }
+
+        if (!visibleAccessories.TryFirstOrNull(out var firstAccessory))
+            return;
 
         var user = args.User;
         args.Verbs.Add(new EquipmentVerb
@@ -112,7 +121,7 @@ public abstract class SharedUniformAccessorySystem : EntitySystem
             Act = () =>
             {
                 // only one accessory, don't bother with the UI
-                if (container.ContainedEntities.Count == 1 && firstAccessory != null)
+                if (visibleAccessories.Count == 1 && firstAccessory != null)
                 {
                     _container.Remove(firstAccessory.Value, container);
                     _hands.TryPickupAnyHand(user, firstAccessory.Value);
@@ -133,6 +142,9 @@ public abstract class SharedUniformAccessorySystem : EntitySystem
         var toRemove = GetEntity(args.ToRemove);
 
         if (!_container.TryGetContainer(ent, ent.Comp.ContainerId, out var container))
+            return;
+
+        if (!CanViewAccessory(toRemove, user))
             return;
 
         if (_container.Remove(toRemove, container))
@@ -260,6 +272,15 @@ public abstract class SharedUniformAccessorySystem : EntitySystem
     public bool BelongsToUser(NetEntity user, EntityUid target)
     {
         return user == GetNetEntity(target);
+    }
+
+    public bool CanViewAccessory(EntityUid accessory, EntityUid viewer, UniformAccessoryComponent? accessoryComp = null)
+    {
+        if (!Resolve(accessory, ref accessoryComp, false))
+            return false;
+
+        return accessoryComp.ViewerWhitelist == null ||
+               _whitelist.IsValid(accessoryComp.ViewerWhitelist, viewer);
     }
 
     public void SetAccessoriesHidden(EntityUid accessoryHolder, bool hideAccessories)

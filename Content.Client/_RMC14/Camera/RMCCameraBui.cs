@@ -4,6 +4,7 @@ using Content.Client.Eye;
 using Content.Client.Message;
 using Content.Client.UserInterface.ControlExtensions;
 using Content.Shared._RMC14.Camera;
+using Robust.Client.Graphics;
 using Robust.Client.UserInterface.Controls;
 
 namespace Content.Client._RMC14.Camera;
@@ -56,6 +57,9 @@ public sealed class RMCCameraBui : RMCPopOutBui<RMCCameraWindow>
             if (i >= names.Length)
                 continue;
 
+            var id = ids[i];
+            var name = names[i];
+
             RMCCameraButton button;
             if (i < Window.CamerasContainer.ChildCount)
             {
@@ -67,21 +71,21 @@ public sealed class RMCCameraBui : RMCPopOutBui<RMCCameraWindow>
             else
             {
                 button = new RMCCameraButton();
+
+                button.OnPressed += _ =>
+                {
+                    if (_currentCameraButton != null)
+                        _currentCameraButton.Pressed = false;
+
+                    _currentCameraButton = button;
+                    SendPredictedMessage(new RMCCameraWatchBuiMsg(id));
+                };
+
                 Window.CamerasContainer.AddChild(button);
             }
 
-            var id = ids[i];
-            var name = names[i];
-            button.Label.SetMarkupPermissive($"[font size=11][color=white]{name}[/color][/font]");
+            button.TextLabel.SetMarkupPermissive($"[font size=11][color=white]{name}[/color][/font]");
             button.Pressed = id == currentNetCamera;
-            button.OnPressed += _ =>
-            {
-                if (_currentCameraButton != null)
-                    _currentCameraButton.Pressed = false;
-
-                _currentCameraButton = button;
-                SendPredictedMessage(new RMCCameraWatchBuiMsg(id));
-            };
         }
 
         for (var i = Window.CamerasContainer.ChildCount - 1; i >= ids.Length; i--)
@@ -118,15 +122,27 @@ public sealed class RMCCameraBui : RMCPopOutBui<RMCCameraWindow>
         if (_currentCamera is { } oldCamera)
             _eyeLerping.RemoveEye(oldCamera);
 
+        _currentCamera = null;
+
         if (computer.CurrentCamera is not { } camera)
+        {
+            Window.Viewport.Eye = new FixedEye();
+            Window.CameraName.Text = string.Empty;
             return;
+        }
 
-        _eyeLerping.AddEye(camera);
+        if (!camera.IsValid() ||
+            !EntMan.EntityExists(camera) ||
+            !EntMan.TryGetComponent(camera, out EyeComponent? eye))
+        {
+            Window.Viewport.Eye = new FixedEye();
+            Window.CameraName.Text = string.Empty;
+            return;
+        }
+
+        _eyeLerping.AddEye(camera, eye);
+        Window.Viewport.Eye = eye.Eye;
         _currentCamera = camera;
-
-        if (EntMan.TryGetComponent(camera, out EyeComponent? eye))
-            Window.Viewport.Eye = eye.Eye;
-
         if (_system.GetComputerCameraName((Owner, computer), camera, out var name))
             Window.CameraName.Text = name;
     }

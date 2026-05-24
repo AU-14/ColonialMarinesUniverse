@@ -9,6 +9,7 @@
 
 - type: npcFaction
   id: RMCXeno
+  name: Prime Hive
   hostile:
   - UNMC
   - NanoTrasen
@@ -22,9 +23,11 @@
   - TSE
   - AUColonist
   - CMUAPE
+  - CMUYautja
 
 - type: npcFaction
   id: CMUAPE
+  name: Apes
   hostile:
   - UNMC
   - NanoTrasen

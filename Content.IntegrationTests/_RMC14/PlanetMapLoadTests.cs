@@ -73,7 +73,7 @@ public sealed class PlanetMapLoadTests
         await server.WaitPost(() =>
         {
             config.SetCVar(CCVars.GameLobbyEnabled, false);
-            ticker.SetGamePreset((GamePresetPrototype?) null);
+            ticker.SetGamePreset((GamePresetPrototype) null!);
             ticker.StartRound();
         });
 

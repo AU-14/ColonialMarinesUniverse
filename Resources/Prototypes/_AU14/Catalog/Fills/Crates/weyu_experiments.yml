@@ -22,6 +22,7 @@
     contents:
       - id: RMCBottleMindbreaker
         amount: 7
+      - id: CMUYautjaHivebreaker
       - id: RMCTentUNMCStandardMedicalFolded
       - id: AU14TentBigFoldedSurgical
 
@@ -50,5 +51,21 @@
         amount: 1
       - id: DeathAcidifierImplanter
         amount: 1
+      - id: RMCTentUNMCStandardMedicalFolded
+      - id: AU14TentBigFoldedSurgical
+
+# Dedicated clotted-syringe crate — six pre-filled syringes for a WYHT
+# squad to use on captured colonists. Folded medical tents come along
+# for set dressing like the other WY secure crates.
+- type: entity
+  id: AU14CrateSecureWeYuClottedSyringes
+  parent: AU14CrateSecureWeYuXenoEggs
+  name: secure We-Yu crate
+  suffix: AU14, Clotted Syringes
+  components:
+  - type: StorageFill
+    contents:
+      - id: AU14AbominationVenomSyringe
+        amount: 6
       - id: RMCTentUNMCStandardMedicalFolded
       - id: AU14TentBigFoldedSurgical

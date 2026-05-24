@@ -17,8 +17,8 @@ namespace Content.Client.VendingMachines.UI
     [GenerateTypedNameReferences]
     public sealed partial class VendingMachineMenu : FancyWindow
     {
-        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-        [Dependency] private readonly IEntityManager _entityManager = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
+        [Dependency] private IEntityManager _entityManager = default!;
 
         private readonly Dictionary<EntProtoId, EntityUid> _dummies = [];
         private readonly Dictionary<EntProtoId, (ListContainerButton Button, VendingMachineItem Item)> _listItems = new();
@@ -43,6 +43,7 @@ namespace Content.Client.VendingMachines.UI
             VendingContents.ItemKeyBindDown += (args, data) => OnItemSelected?.Invoke(args, data);
         }
 
+        [System.Obsolete]
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);

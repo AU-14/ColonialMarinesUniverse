@@ -33,7 +33,7 @@
         RMCSkillJtac: 1
         RMCSkillEndurance: 1
         RMCSkillSmartGun: 1
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: AU14VAISOMGPreset
     - type: JobPrefix
       prefix: au14-job-prefix-vai-machinegunner
@@ -44,7 +44,7 @@
   id: AU14VAISOMachinegunner
   name: VAISO Machinegunner
   components:
-  - type: EquipSurvivorPreset
+  - type: EquipEntityPreset
     preset: AU14VAISOMGPreset
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
@@ -64,7 +64,7 @@
   name: vaiso mg preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomGearOther:
     -
       - [ AU14PVEHandsFingerlessBlackGloves ] # gloves

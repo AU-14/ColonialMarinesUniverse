@@ -12,6 +12,7 @@
   requireAdminNotify: true
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: NSPA Inspector (CMU)
   accessGroups:
   - auadmin
   - aucmb

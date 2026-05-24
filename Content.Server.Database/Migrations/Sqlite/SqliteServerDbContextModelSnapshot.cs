@@ -821,6 +821,18 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("gender");
 
+                    b.Property<string>("GamemodeAntagPreferences")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("gamemode_antag_preferences");
+
+                    b.Property<string>("GamemodeJobPriorities")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("gamemode_job_priorities");
+
+                    b.Property<string>("GamemodeThreatPreferences")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("gamemode_threat_preferences");
+
                     b.Property<string>("HairColor")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -838,6 +850,10 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Property<string>("Origin")
                         .HasColumnType("TEXT")
                         .HasColumnName("origin");
+
+                    b.Property<string>("ThreatPreference")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("threat_preference");
 
                     b.Property<bool>("PlaytimePerks")
                         .ValueGeneratedOnAdd()

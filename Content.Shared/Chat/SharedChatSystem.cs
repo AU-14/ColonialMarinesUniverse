@@ -1,5 +1,7 @@
 using System.Collections.Frozen;
 using System.Text.RegularExpressions;
+using Content.Shared._AU14.Abominations;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Chat;
 using Content.Shared.AU14;
 using Content.Shared._RMC14.Xenonids;
@@ -9,10 +11,11 @@ using Content.Shared.Radio;
 using Content.Shared.Speech;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.Shared._RMC14.Xenonids.Hive;
 
 namespace Content.Shared.Chat;
 
-public abstract class SharedChatSystem : EntitySystem
+public abstract partial class SharedChatSystem : EntitySystem
 {
     public const char RadioCommonPrefix = ';';
     public const char RadioChannelPrefix = ':';
@@ -35,9 +38,10 @@ public abstract class SharedChatSystem : EntitySystem
     public static readonly string DefaultChannelPrefix = $"{RadioChannelPrefix}{DefaultChannelKey}";
     public static readonly ProtoId<SpeechVerbPrototype> DefaultSpeechVerb = "Default";
 
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly XenoEvolutionSystem _xenoEvolution = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private XenoEvolutionSystem _xenoEvolution = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
 
     /// <summary>
     /// Cache of the keycodes for faster lookup.
@@ -140,16 +144,18 @@ public abstract class SharedChatSystem : EntitySystem
         if (input.Length == 0)
             return false;
 
+        var hive = _hive.GetHive(source);
         // TODO RMC14 replace all of this with something else when chat code isnt a joke
         if (input.StartsWith(RadioCommonPrefix))
         {
             output = SanitizeMessageCapital(input[1..].TrimStart());
-            channel = (HasComp<XenoComponent>(source) || HasComp<CultistComponent>(source))
+            channel = ((HasComp<XenoComponent>(source) && !IsHivebrokenXeno(source)) || HasComp<CultistComponent>(source))
                 ? _prototypeManager.Index<RadioChannelPrototype>(HivemindChannel)
                 : _prototypeManager.Index<RadioChannelPrototype>(CommonChannel);
 
+
             if (channel.ID == HivemindChannel &&
-                !_xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1))
+                !_xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1, null, hive))
             {
                 if (!quiet)
                     _popup.PopupEntity(Loc.GetString("rmc-no-queen-hivemind-chat"), source, source, PopupType.LargeCaution);
@@ -167,7 +173,7 @@ public abstract class SharedChatSystem : EntitySystem
         if (input.Length < 2 || char.IsWhiteSpace(input[1]))
         {
             output = SanitizeMessageCapital(input[1..].TrimStart());
-            if (HasComp<XenoComponent>(source))
+            if (HasComp<XenoComponent>(source) && !IsHivebrokenXeno(source))
                 return false;
 
             if (!quiet)
@@ -185,7 +191,7 @@ public abstract class SharedChatSystem : EntitySystem
             RaiseLocalEvent(source, ev);
 
             if (ev.Channel == HivemindChannel.Id &&
-                !_xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1))
+                !_xenoEvolution.HasLiving<XenoEvolutionGranterComponent>(1, null, hive))
             {
                 if (!quiet)
                     _popup.PopupEntity(Loc.GetString("rmc-no-queen-hivemind-chat"), source, source, PopupType.LargeCaution);
@@ -209,10 +215,15 @@ public abstract class SharedChatSystem : EntitySystem
         RaiseLocalEvent(source, ref prefixEv);
         channel = prefixEv.Channel;
 
-        if (HasComp<XenoComponent>(source) && channel == null)
+        if (HasComp<XenoComponent>(source) && !IsHivebrokenXeno(source) && channel == null)
             return false;
 
         return true;
+    }
+
+    private bool IsHivebrokenXeno(EntityUid uid)
+    {
+        return TryComp(uid, out YautjaThrallComponent? thrall) && thrall.Hivebroken;
     }
 
     public string SanitizeMessageCapital(string message)
@@ -313,7 +324,8 @@ public abstract class SharedChatSystem : EntitySystem
     public static string InjectTagAroundString(ChatMessage message, string targetString, string tag, string? tagParameter)
     {
         var rawmsg = message.WrappedMessage;
-        rawmsg = Regex.Replace(rawmsg, "(?i)(" + targetString + ")(?-i)(?![^[]*])", $"[{tag}={tagParameter}]$1[/{tag}]");
+        var regex = new Regex("(?i)(" + Regex.Escape(targetString) + ")(?-i)(?![^[]*])");
+        rawmsg = regex.Replace(rawmsg, $"[{tag}={tagParameter}]$1[/{tag}]");
         return rawmsg;
     }
 

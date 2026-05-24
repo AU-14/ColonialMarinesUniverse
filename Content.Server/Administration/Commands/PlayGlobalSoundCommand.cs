@@ -7,16 +7,17 @@ using Robust.Shared.Console;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Server.Administration.Commands;
 
 [AdminCommand(AdminFlags.Fun)]
-public sealed class PlayGlobalSoundCommand : IConsoleCommand
+public sealed partial class PlayGlobalSoundCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
-    [Dependency] private readonly IResourceManager _res = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _protoManager = default!;
+    [Dependency] private IResourceManager _res = default!;
 
     public string Command => "playglobalsound";
     public string Description => Loc.GetString("play-global-sound-command-description");
@@ -88,7 +89,7 @@ public sealed class PlayGlobalSoundCommand : IConsoleCommand
         }
 
         audio = audio.AddVolume(-8);
-        _entManager.System<ServerGlobalSoundSystem>().PlayAdminGlobal(filter, args[0], audio, replay);
+        _entManager.System<ServerGlobalSoundSystem>().PlayAdminGlobal(filter, new ResolvedPathSpecifier(new ResPath(args[0])), audio, replay);
     }
 
     public CompletionResult GetCompletion(IConsoleShell shell, string[] args)

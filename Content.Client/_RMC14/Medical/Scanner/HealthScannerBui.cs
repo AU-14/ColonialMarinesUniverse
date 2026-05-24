@@ -27,11 +27,10 @@ using static Robust.Client.UserInterface.Controls.BoxContainer;
 namespace Content.Client._RMC14.Medical.Scanner;
 
 [UsedImplicitly]
-public sealed class HealthScannerBui : BoundUserInterface
+public sealed partial class HealthScannerBui : BoundUserInterface
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     [ViewVariables]
     private HealthScannerWindow? _window;
@@ -39,6 +38,7 @@ public sealed class HealthScannerBui : BoundUserInterface
     private bool _hasLastTarget;
 
     private readonly ShowHolocardIconsSystem _holocardIcons;
+    private readonly RMCReagentSystem _reagent;
     private readonly SkillsSystem _skills;
 
     private Dictionary<EntProtoId<SkillDefinitionComponent>, int> BloodPackSkill = new() { ["RMCSkillSurgery"] = 1 };
@@ -50,6 +50,7 @@ public sealed class HealthScannerBui : BoundUserInterface
     public HealthScannerBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
         _holocardIcons = _entities.System<ShowHolocardIconsSystem>();
+        _reagent = _entities.System<RMCReagentSystem>();
         _skills = _entities.System<SkillsSystem>();
     }
 
@@ -180,7 +181,7 @@ public sealed class HealthScannerBui : BoundUserInterface
         {
             foreach (var reagent in uiState.Chemicals.Contents)
             {
-                if (!_prototype.TryIndexReagent(reagent.Reagent.Prototype, out ReagentPrototype? prototype))
+                if (!_reagent.TryIndex(reagent.Reagent, out var prototype))
                     continue;
 
                 if (prototype.Unknown)

@@ -13,7 +13,7 @@
   sound:
     collection: CMExplosion # TODO RMC14 bigboom
     params:
-      volume: 1000
+      volume: 385
   smallSound:
     collection: CMExplosion
     params:

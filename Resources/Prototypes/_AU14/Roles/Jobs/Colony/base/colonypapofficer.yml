@@ -24,6 +24,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: PaP Officer (CMU)
   accessGroups:
   - aucmb
   - Colonist

@@ -270,15 +270,15 @@ namespace Content.Shared.Movement.Systems
             var mapId = args.Transform.MapUid;
 
             // If we change maps then reset eye rotation entirely.
-            if (oldMapId != mapId)
-            {
-                entity.Comp.RelativeEntity = relative;
-                entity.Comp.TargetRelativeRotation = Angle.Zero;
-                entity.Comp.RelativeRotation = Angle.Zero;
-                entity.Comp.LerpTarget = TimeSpan.Zero;
-                Dirty(entity.Owner, entity.Comp);
-                return;
-            }
+            //if (oldMapId != mapId) //CrystallEdge: No, we dont! Our zLevels is different maps, and we dont wanna reset rotation each time when we move through zLevels
+            //{
+            //    entity.Comp.RelativeEntity = relative;
+            //    entity.Comp.TargetRelativeRotation = Angle.Zero;
+            //    entity.Comp.RelativeRotation = Angle.Zero;
+            //    entity.Comp.LerpTarget = TimeSpan.Zero;
+            //    Dirty(entity.Owner, entity.Comp);
+            //    return;
+            //}
 
             // If we go on a grid and back off then just reset the accumulator.
             if (relative == entity.Comp.RelativeEntity)
@@ -404,7 +404,7 @@ namespace Content.Shared.Movement.Systems
                 walk += curDir;
             }
 
-            // Logger.Info($"{curDir}{walk}{sprint}");
+            // Logger.GetSawmill("content").Info($"{curDir}{walk}{sprint}");
             return (walk, sprint);
         }
 
@@ -415,7 +415,7 @@ namespace Content.Shared.Movement.Systems
         /// </summary>
         public void SetVelocityDirection(Entity<InputMoverComponent> entity, Direction direction, ushort subTick, bool enabled)
         {
-            // Logger.Info($"[{_gameTiming.CurTick}/{subTick}] {direction}: {enabled}");
+            // Logger.GetSawmill("content").Info($"[{_gameTiming.CurTick}/{subTick}] {direction}: {enabled}");
 
             var bit = direction switch
             {
@@ -471,7 +471,7 @@ namespace Content.Shared.Movement.Systems
 
         public virtual void SetSprinting(Entity<InputMoverComponent> entity, ushort subTick, bool walking)
         {
-            // Logger.Info($"[{_gameTiming.CurTick}/{subTick}] Sprint: {enabled}");
+            // Logger.GetSawmill("content").Info($"[{_gameTiming.CurTick}/{subTick}] Sprint: {enabled}");
 
             SetMoveInput(entity, subTick, walking, MoveButtons.Walk);
         }

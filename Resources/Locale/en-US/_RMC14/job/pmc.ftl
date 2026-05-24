@@ -1,4 +1,4 @@
-﻿# PMCs
+# PMCs
 rmc-ghost-role-information-pmc-rules = You are a [color=orange][bold]PMC member[/bold][/color]. You may or may not be hostile to the marines, depending on admin instructions.
                                              You don't remember any of your previous life, and you don't remember anything you learned as a ghost.
                                              You are allowed to remember knowledge about the game in general, such as how to cook, how to use objects, etc.
@@ -11,70 +11,70 @@ rmc-ghost-role-information-pmc-whiteout-rules = You are a [color=orange][bold]PM
 
 rmc-ghost-role-information-pmc-description = Ensure no damage is incurred against Weston-Yamada. Make sure the Corporate Liaison is safe. Deny the Weston-Yamada's involvement and do not trust the UNMC forces. Only fire if fired upon, or ordered to.
 
-rmc-ghost-name-pmc-standard = We-Ya PMC Operator (Neutral)
+rmc-ghost-name-pmc-standard = We-Yu PMC Operator (Neutral)
 rmc-job-name-pmc-standard = Operator
 rmc-job-prefix-pmc-standard = OP
 
 rmc-job-description-pmc-pve-standard = Serve as the rank and file members of the PMC force.
 
-rmc-ghost-name-pmc-engineer = We-Ya PMC Corporate Technician (Neutral)
+rmc-ghost-name-pmc-engineer = We-Yu PMC Corporate Technician (Neutral)
 rmc-job-name-pmc-engineer = Corporate Technician
 rmc-job-prefix-pmc-engineer = TEC
 
-rmc-ghost-name-pmc-medic = We-Ya PMC Corporate Medic (Neutral)
+rmc-ghost-name-pmc-medic = We-Yu PMC Corporate Medic (Neutral)
 rmc-job-name-pmc-medic = Corporate Medic
 rmc-job-prefix-pmc-medic = CM
 
 rmc-job-description-pmc-pve-medic = Ensure all members of the PMC team get home safely and as intact as possible.
 
-rmc-ghost-name-pmc-doctor = We-Ya PMC Trauma Surgeon (Neutral)
+rmc-ghost-name-pmc-doctor = We-Yu PMC Trauma Surgeon (Neutral)
 rmc-job-name-pmc-doctor = Trauma Surgeon
 rmc-job-prefix-pmc-doctor = SGN
 
-rmc-ghost-name-pmc-investigator = We-Ya PMC Medical Investigator (Neutral)
+rmc-ghost-name-pmc-investigator = We-Yu PMC Medical Investigator (Neutral)
 rmc-job-name-pmc-investigator = Medical Investigator
 rmc-job-prefix-pmc-investigator = MI
 
-rmc-ghost-name-pmc-detainer = We-Ya PMC Detainer (Neutral)
+rmc-ghost-name-pmc-detainer = We-Yu PMC Detainer (Neutral)
 rmc-job-name-pmc-detainer = Security Enforcer
 rmc-job-prefix-pmc-detainer = ENF
 
-rmc-ghost-name-pmc-gunner = We-Ya PMC Gunner (Neutral)
+rmc-ghost-name-pmc-gunner = We-Yu PMC Gunner (Neutral)
 rmc-job-name-pmc-gunner = Support Weapons Specialist
 rmc-job-prefix-pmc-gunner = SG
 
 rmc-job-description-pmc-pve-gunner = Use your heavy weapons system to lay down fire and support the rest of the team.
 
-rmc-ghost-name-pmc-sniper = We-Ya PMC Sniper (Neutral)
+rmc-ghost-name-pmc-sniper = We-Yu PMC Sniper (Neutral)
 rmc-job-name-pmc-sniper = Weapons Specialist
 rmc-job-prefix-pmc-sniper = Spc
 
-rmc-ghost-name-pmc-crewman = We-Ya PMC Crewman (Neutral)
+rmc-ghost-name-pmc-crewman = We-Yu PMC Crewman (Neutral)
 rmc-job-name-pmc-crewman = Vehicle Crewman
 rmc-job-prefix-pmc-crewman = VC
 
-rmc-ghost-name-pmc-xeno-handler = We-Ya PMC Xeno Handler (Neutral)
+rmc-ghost-name-pmc-xeno-handler = We-Yu PMC Xeno Handler (Neutral)
 rmc-job-name-pmc-xeno-handler = Xeno Handler
 rmc-job-prefix-pmc-xeno-handler = XH
 
-rmc-ghost-name-pmc-leader = We-Ya PMC Leader (Neutral)
+rmc-ghost-name-pmc-leader = We-Yu PMC Leader (Neutral)
 rmc-job-name-pmc-leader = Leader
 rmc-job-prefix-pmc-leader = SL
 
 rmc-job-name-pmc-field-operations-leader = Field Operations Leader
 rmc-job-prefix-pmc-field-operations-leader = FOL
 
-rmc-ghost-name-pmc-lead-investigator = We-Ya PMC Lead Investigator (Neutral)
+rmc-ghost-name-pmc-lead-investigator = We-Yu PMC Lead Investigator (Neutral)
 rmc-job-name-pmc-lead-investigator = Lead Investigator
 rmc-job-prefix-pmc-lead-investigator = SL
 
-rmc-ghost-name-pmc-director = We-Ya PMC Site Director (Neutral)
+rmc-ghost-name-pmc-director = We-Yu PMC Site Director (Neutral)
 rmc-job-name-pmc-director = Site Director
 rmc-job-prefix-pmc-director = DIR
 
-rmc-ghost-name-pmc-synth = We-Ya PMC Support Synthetic (Neutral)
+rmc-ghost-name-pmc-synth = We-Yu PMC Support Synthetic (Neutral)
 rmc-job-name-pmc-synth = Support Synthetic
-rmc-job-prefix-pmc-synth = WeYa Syn
+rmc-job-prefix-pmc-synth = WeYu-Syn
 
 rmc-job-name-pmc-bodyguard = Bodyguard
 rmc-ghost-name-pmc-bodyguard = Weston-Yamada Goon (Executive Bodyguard Detail)
@@ -82,11 +82,11 @@ rmc-ghost-name-pmc-bodyguard = Weston-Yamada Goon (Executive Bodyguard Detail)
 rmc-job-name-pmc-bodyguard-lead = Security Lead
 rmc-ghost-name-pmc-bodyguard-lead = Weston-Yamada Goon Leader (Executive Bodyguard Detail)
 
-rmc-job-name-pmc-corporate-goon = We-Ya Corporate Security
-rmc-job-name-pmc-corporate-goon-engi = We-Ya Corporate Security Technician
-rmc-job-name-pmc-corporate-goon-medic = We-Ya Corporate Security Medic
-rmc-job-name-pmc-corporate-goon-leader = We-Ya Corporate Security Lead
-rmc-job-name-pmc-corporate-goon-secguard = We-Ya Security Guard
+rmc-job-name-pmc-corporate-goon = We-Yu Corporate Security
+rmc-job-name-pmc-corporate-goon-engi = We-Yu Corporate Security Technician
+rmc-job-name-pmc-corporate-goon-medic = We-Yu Corporate Security Medic
+rmc-job-name-pmc-corporate-goon-leader = We-Yu Corporate Security Lead
+rmc-job-name-pmc-corporate-goon-secguard = We-Yu Security Guard
 
 rmc-job-name-pmc-pve-team-leader = Team Leader
 rmc-job-prefix-pmc-pve-team-leader = TL
@@ -100,16 +100,15 @@ rmc-job-name-pmc-pve-force-command = Force Command
 rmc-job-prefix-pmc-pve-force-command = FCO
 rmc-job-description-pmc-pve-force-command = Coordinate with both the Force Leader and Team Leaders to ensure your instructions are carried out and your team earns their pay.
 
-rmc-ghost-name-pmc-whiteout = We-Ya PMC Whiteout Combat Unit (!DEATHSQUAD!)
+rmc-ghost-name-pmc-whiteout = We-Yu PMC Whiteout Combat Unit (!DEATHSQUAD!)
 rmc-job-name-pmc-whiteout = Whiteout Team Combat Unit
 
-rmc-ghost-name-pmc-whiteout-gunner = We-Ya PMC Whiteout Combat Gunner Unit (!DEATHSQUAD!)
+rmc-ghost-name-pmc-whiteout-gunner = We-Yu PMC Whiteout Combat Gunner Unit (!DEATHSQUAD!)
 rmc-job-name-pmc-whiteout-gunner = Whiteout Team Combat Gunner Unit
 
 rmc-job-prefix-pmc-whiteout = WO
 
 # Executives
-
 rmc-ghost-role-information-corp-exec-description = You are an employee of the Weston-Yamada Corporation. You are to support and maintain Weston-Yamada's interests.
 
 rmc-ghost-name-corp-exec-supervisor = Corporate Executive Supervisor (Neutral)

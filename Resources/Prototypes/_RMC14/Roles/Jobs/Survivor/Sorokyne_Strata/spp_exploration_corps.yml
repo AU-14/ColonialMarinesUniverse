@@ -22,7 +22,7 @@
         RMCSkillMedical: 3
         RMCSkillSurgery: 2
         RMCSkillResearch: 1
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetCECResearcher
     - type: RMCSurvivor
     - type: MotionDetectorTracked
@@ -61,7 +61,7 @@
   name: exploration corps researcher preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomStartingGear:
       back:
       - CMSatchel

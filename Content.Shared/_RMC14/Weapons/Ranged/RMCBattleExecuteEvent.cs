@@ -7,8 +7,8 @@ namespace Content.Shared._RMC14.Weapons.Ranged;
 [Serializable, NetSerializable]
 public sealed partial class RMCBattleExecuteEvent : SimpleDoAfterEvent
 {
-    public NetEntity User;
-    public NetEntity Target;
+    public new NetEntity User;
+    public new NetEntity Target;
     public DamageSpecifier BattleExecuteDamage;
 
     public RMCBattleExecuteEvent(NetEntity user, NetEntity target, DamageSpecifier battleExecuteDamage)

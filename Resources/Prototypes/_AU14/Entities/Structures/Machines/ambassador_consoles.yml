@@ -3,9 +3,9 @@
 
 # Base Ambassador Console
 - type: entity
-  id: AU14AmbassadorConsoleBase
   abstract: true
   parent: RMCCommunicationsConsoleBase
+  id: AU14AmbassadorConsoleBase
   name: ambassador console
   description: A console for diplomatic functions and third party communication.
   components:
@@ -37,6 +37,7 @@
   - type: ContainerContainer
     containers:
       CashSlot: !type:ContainerSlot {}
+  - type: ActivatableUIRequiresAccess
   - type: AccessReader
     access: [["AU14AccessColonyAmbassador"]]
 
@@ -78,7 +79,6 @@
     replenishAmount: 25
     replenishInterval: 60
     callableParties:
-      USArmyArmored: 10000
       VAISP: 4500
       VAIPO: 6000
 

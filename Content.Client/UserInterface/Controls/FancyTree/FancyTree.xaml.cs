@@ -18,7 +18,7 @@ namespace Content.Client.UserInterface.Controls.FancyTree;
 [GenerateTypedNameReferences]
 public sealed partial class FancyTree : Control
 {
-    [Dependency] private readonly IResourceCache _resCache = default!;
+    [Dependency] private IResourceCache _resCache = default!;
 
     public const string StylePropertyLineWidth = "LineWidth";
     public const string StylePropertyLineColor = "LineColor";
@@ -233,7 +233,7 @@ public sealed partial class FancyTree : Control
     {
         foreach (var item in Items)
         {
-            item.Dispose();
+            item.Orphan();
         }
 
         Items.Clear();

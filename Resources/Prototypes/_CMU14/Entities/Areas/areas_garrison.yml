@@ -707,7 +707,7 @@
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonNorthDesert
-  name: Northern Desert
+  name: Northern Jungle
   components:
   - type: Sprite
     state: construction3
@@ -717,7 +717,7 @@
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonSouthDesert
-  name: Southern Desert
+  name: Southern Jungle
   components:
   - type: Sprite
     state: colony_int
@@ -737,7 +737,7 @@
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonSouthDesertTunnel
-  name: Southern Desert Tunnel
+  name: Southern Jungle Tunnel
   components:
   - type: Sprite
     state: colony_int
@@ -773,3 +773,63 @@
     state: colony_int
   - type: Area
     minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonSewers
+  name: Stable Garrison - Sewers West
+  components:
+  - type: Sprite
+    state: colony_caves_1
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonSewer1
+  name: Stable Garrison - Sewer Canal
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonSewer2
+  name: Stable Garrison - Sewer Northeast
+  components:
+  - type: Sprite
+    state: colony_caves_2
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonSewer3
+  name: Stable Garrison - Sewer Southeast
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonWeyland
+  name: Stable Garrison - Weyland-Yutani Bioweapons Lab
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaStableGarrisonWeyland1
+  name: Stable Garrison - Weyland-Yutani Facility Enterance
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#016f6f'

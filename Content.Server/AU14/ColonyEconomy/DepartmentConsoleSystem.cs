@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Server.Chat.Systems;
 using Content.Server.Stack;
 using Content.Shared.Access.Components;
@@ -10,6 +11,7 @@ using Content.Shared.Roles;
 using Content.Shared.Stacks;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Access;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
@@ -21,20 +23,42 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.AU14.ColonyEconomy;
 
-public sealed class DepartmentConsoleSystem : EntitySystem
+public sealed partial class DepartmentConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedIdCardSystem _idCard = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly ColonyBudgetSystem _budget = default!;
-    [Dependency] private readonly AdminConsoleSystem _adminConsole = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly AccessReaderSystem _accessReader = default!;
-    [Dependency] private readonly SharedAccessSystem _accessSystem = default!;
+    private const int MaxRegistrationAttempts = 300;
+
+    private static readonly Dictionary<string, string[]> DepartmentFallbacks = new()
+    {
+        ["AU14DepartmentCivilian"] = new[] { "AU14DepartmentServices" },
+        ["AU14DepartmentLabor"] = new[] { "AU14DepartmentLumbermill" },
+        ["AU14DepartmentServices"] = new[] { "AU14DepartmentHydroponics" },
+    };
+
+    private readonly Dictionary<EntityUid, PendingDepartmentRegistration> _pendingRegistrations = new();
+
+    private sealed class PendingDepartmentRegistration
+    {
+        public readonly string JobId;
+        public int Attempts;
+
+        public PendingDepartmentRegistration(string jobId)
+        {
+            JobId = jobId;
+        }
+    }
+
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private ColonyBudgetSystem _budget = default!;
+    [Dependency] private AdminConsoleSystem _adminConsole = default!;
+    [Dependency] private StackSystem _stack = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private SharedAccessSystem _accessSystem = default!;
 
     public override void Initialize()
     {
@@ -51,6 +75,27 @@ public sealed class DepartmentConsoleSystem : EntitySystem
         SubscribeLocalEvent<DepartmentConsoleComponent, DepartmentConsoleOrderBuiMsg>(OnOrder);
         SubscribeLocalEvent<DepartmentConsoleComponent, EntInsertedIntoContainerMessage>(OnCashInserted);
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawnComplete);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        if (_pendingRegistrations.Count == 0)
+            return;
+
+        foreach (var (mob, pending) in _pendingRegistrations.ToArray())
+        {
+            if (!Exists(mob) || TryRegisterMobDepartments(mob, pending.JobId))
+            {
+                _pendingRegistrations.Remove(mob);
+                continue;
+            }
+
+            pending.Attempts++;
+            if (pending.Attempts >= MaxRegistrationAttempts)
+                _pendingRegistrations.Remove(mob);
+        }
     }
 
     /// <summary>
@@ -91,43 +136,87 @@ public sealed class DepartmentConsoleSystem : EntitySystem
         if (ev.JobId == null)
             return;
 
-        if (!_idCard.TryFindIdCard(ev.Mob, out var idCard))
-            return;
+        if (!TryRegisterMobDepartments(ev.Mob, ev.JobId))
+            _pendingRegistrations[ev.Mob] = new PendingDepartmentRegistration(ev.JobId);
+    }
+
+    private bool TryRegisterMobDepartments(EntityUid mob, string jobId)
+    {
+        if (!_idCard.TryFindIdCard(mob, out var idCard))
+            return false;
 
         var idCardUid = idCard.Owner;
 
         // Determine which department prototype IDs this job belongs to.
-        var jobDepartments = new HashSet<string>();
+        var jobDepartments = new Dictionary<string, bool>();
         foreach (var dept in _prototypeManager.EnumeratePrototypes<DepartmentPrototype>())
         {
-            if (dept.Roles.Contains(ev.JobId))
-                jobDepartments.Add(dept.ID);
+            if (dept.Roles.Contains(jobId))
+                jobDepartments[dept.ID] = dept.HeadOfDepartment == jobId;
         }
 
         // Special case: CLF guerillas get added to the Labor department console
         // without being in the department prototype itself.
-        if (ev.JobId == "AU14JobCLFGuerilla")
-            jobDepartments.Add("AU14DepartmentLabor");
+        if (jobId == "AU14JobCLFGuerilla")
+            jobDepartments["AU14DepartmentLabor"] = false;
 
         if (jobDepartments.Count == 0)
-            return;
+            return true;
 
         // Add the ID card to every matching department console.
+        var registeredDepartments = new HashSet<string>();
         var query = EntityQueryEnumerator<DepartmentConsoleComponent>();
         while (query.MoveNext(out var consoleUid, out var console))
         {
             if (console.DepartmentId == null)
                 continue;
 
-            if (!jobDepartments.Contains(console.DepartmentId))
+            var departmentId = console.DepartmentId.Value.Id;
+            if (!jobDepartments.TryGetValue(departmentId, out var isDepartmentHead))
                 continue;
 
-            if (console.Members.Add(idCardUid))
+            RegisterWithConsole(consoleUid, console, idCardUid, isDepartmentHead);
+            registeredDepartments.Add(departmentId);
+        }
+
+        foreach (var (departmentId, isDepartmentHead) in jobDepartments)
+        {
+            if (registeredDepartments.Contains(departmentId) ||
+                !DepartmentFallbacks.TryGetValue(departmentId, out var fallbackDepartments))
+                continue;
+
+            var fallbackQuery = EntityQueryEnumerator<DepartmentConsoleComponent>();
+            while (fallbackQuery.MoveNext(out var consoleUid, out var console))
             {
-                GrantDepartmentAccess(idCardUid, console);
-                UpdateUiState(consoleUid, console);
+                if (console.DepartmentId == null)
+                    continue;
+
+                var consoleDepartmentId = console.DepartmentId.Value.Id;
+                if (!fallbackDepartments.Contains(consoleDepartmentId))
+                    continue;
+
+                RegisterWithConsole(consoleUid, console, idCardUid, isDepartmentHead);
+                registeredDepartments.Add(departmentId);
             }
         }
+
+        return registeredDepartments.Count > 0;
+    }
+
+    private void RegisterWithConsole(
+        EntityUid consoleUid,
+        DepartmentConsoleComponent console,
+        EntityUid idCardUid,
+        bool isDepartmentHead)
+    {
+        var added = console.Members.Add(idCardUid);
+        GrantDepartmentAccess(idCardUid, console);
+
+        if (isDepartmentHead)
+            GrantConsoleAccess(idCardUid, consoleUid);
+
+        if (added)
+            UpdateUiState(consoleUid, console);
     }
 
     /// <summary>
@@ -138,16 +227,37 @@ public sealed class DepartmentConsoleSystem : EntitySystem
         if (dept.DepartmentAccessLevel == null)
             return;
 
+        GrantAccessTags(idCardUid, new[] { dept.DepartmentAccessLevel.Value });
+    }
+
+    private void GrantConsoleAccess(EntityUid idCardUid, EntityUid consoleUid)
+    {
+        if (!TryComp<AccessReaderComponent>(consoleUid, out var accessReader))
+            return;
+
+        var tags = new HashSet<ProtoId<AccessLevelPrototype>>();
+        foreach (var accessList in accessReader.AccessLists)
+        {
+            foreach (var tag in accessList)
+                tags.Add(tag);
+        }
+
+        GrantAccessTags(idCardUid, tags);
+    }
+
+    private void GrantAccessTags(EntityUid idCardUid, IEnumerable<ProtoId<AccessLevelPrototype>> tags)
+    {
         if (!TryComp<AccessComponent>(idCardUid, out var access))
             return;
 
-        if (access.Tags.Contains(dept.DepartmentAccessLevel.Value))
+        var newTags = new HashSet<ProtoId<AccessLevelPrototype>>(access.Tags);
+        var changed = false;
+        foreach (var tag in tags)
+            changed |= newTags.Add(tag);
+
+        if (!changed)
             return;
 
-        var newTags = new HashSet<ProtoId<AccessLevelPrototype>>(access.Tags)
-        {
-            dept.DepartmentAccessLevel.Value
-        };
         _accessSystem.TrySetTags(idCardUid, newTags, access);
     }
 
@@ -443,7 +553,7 @@ public sealed class DepartmentConsoleSystem : EntitySystem
             stackCount = stack.Count;
 
         comp.DepartmentBudget += stackCount;
-        EntityManager.QueueDeleteEntity(args.Entity);
+        QueueDel(args.Entity);
         UpdateAllUiForDepartment(uid, comp);
     }
 
@@ -554,7 +664,8 @@ public sealed class DepartmentConsoleSystem : EntitySystem
             var deptCost = 0f;
             foreach (var idCardUid in dept.Members)
             {
-                if (!TryComp<IdCardComponent>(idCardUid, out _))
+                if (!TryComp<IdCardComponent>(idCardUid, out var idCard)
+                    || (idCard.OriginalOwner != null && HasComp<SynthComponent>(idCard.OriginalOwner)))
                     continue;
 
                 var salary = dept.SalaryOverrides.TryGetValue(idCardUid, out var overrideSalary)
@@ -575,7 +686,8 @@ public sealed class DepartmentConsoleSystem : EntitySystem
             var totalTaxCollected = 0f;
             foreach (var idCardUid in dept.Members)
             {
-                if (!TryComp<IdCardComponent>(idCardUid, out var idCard))
+                if (!TryComp<IdCardComponent>(idCardUid, out var idCard)
+                    || (idCard.OriginalOwner != null && HasComp<SynthComponent>(idCard.OriginalOwner)))
                     continue;
 
                 var salary = dept.SalaryOverrides.TryGetValue(idCardUid, out var overrideSalary)
@@ -671,4 +783,3 @@ public sealed class DepartmentConsoleSystem : EntitySystem
         return result;
     }
 }
-

@@ -28,8 +28,8 @@ namespace Content.Client.Options.UI.Tabs
             EngineKeyFunctions.HideUI,
         };
 
-        [Dependency] private readonly IInputManager _inputManager = default!;
-        [Dependency] private readonly IConfigurationManager _cfg = default!;
+        [Dependency] private IInputManager _inputManager = default!;
+        [Dependency] private IConfigurationManager _cfg = default!;
 
         private BindButton? _currentlyRebinding;
 
@@ -172,6 +172,9 @@ namespace Content.Client.Options.UI.Tabs
             AddHeader("ui-options-header-cmu-medical");
             AddButton(CMUKeyFunctions.CMUCycleBodyZoneTarget);
             AddButton(CMUKeyFunctions.CMUCycleBodyZoneTargetReverse);
+
+            AddHeader("ui-options-header-cmu-zlevels");
+            AddButton(CMUKeyFunctions.CMUToggleShootDownZLevel);
 
             AddHeader("ui-options-header-rmc-xeno");
             AddButton(CMKeyFunctions.CMXenoWideSwing);
@@ -532,7 +535,7 @@ namespace Content.Client.Options.UI.Tabs
             _deferCommands.Clear();
         }
 
-        private sealed class KeyControl : Control
+        private sealed partial class KeyControl : Control
         {
             public readonly BoundKeyFunction Function;
             public readonly BindButton BindButton1;
@@ -581,7 +584,7 @@ namespace Content.Client.Options.UI.Tabs
             }
         }
 
-        private sealed class BindButton : Control
+        private sealed partial class BindButton : Control
         {
             private readonly KeyRebindTab _tab;
             public readonly KeyControl KeyControl;

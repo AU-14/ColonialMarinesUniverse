@@ -5,6 +5,9 @@
   suffix: AU14, TD, UPP
   components:
   - type: GhostTakeoverAvailable
+  - type: NpcFactionMember
+    factions:
+    - AUUpp
   - type: RandomHumanoidAppearance
   - type: RandomHumanoidAppearanceWhitelisted
     allowedMaleHairStyles:

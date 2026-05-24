@@ -92,14 +92,13 @@
       mode: Reactive
       offset: -1, -1.5
     - prototype: RMCTableBrown
-      neverRedeployableSetup: true
+      mode: Reactive
       anchor: false
       offset: 1, 0.5
     - prototype: CMSurgicalCaseFilled
-      neverRedeployableSetup: true
+      anchor: false
       offset: 1, 0.5
     - prototype: CMPortableSurgicalBed
-      neverRedeployableSetup: true
       anchor: false
       offset: 1, -0.5
 

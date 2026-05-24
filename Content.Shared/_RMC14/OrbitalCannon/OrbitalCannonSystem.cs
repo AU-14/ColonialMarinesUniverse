@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Shared._RMC14.Animations;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Atmos;
@@ -35,31 +35,33 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared._RMC14.OrbitalCannon;
 
-public sealed class OrbitalCannonSystem : EntitySystem
+public sealed partial class OrbitalCannonSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly SharedRMCAnimationSystem _animation = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly IntelSystem _intel = default!;
-    [Dependency] private readonly SharedMarineAnnounceSystem _marineAnnounce = default!;
-    [Dependency] private readonly SharedMortarSystem _mortar = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly PowerLoaderSystem _powerLoader = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly RMCCameraShakeSystem _rmcCameraShake = default!;
-    [Dependency] private readonly SharedCMChatSystem _rmcChat = default!;
-    [Dependency] private readonly SharedRMCFlammableSystem _rmcFlammable = default!;
-    [Dependency] private readonly SharedRMCExplosionSystem _rmcExplosion = default!;
-    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
-    [Dependency] private readonly RMCPlanetSystem _rmcPlanet = default!;
-    [Dependency] private readonly SharedRMCPvsSystem _rmcPvs = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    private static readonly ProtoId<TagPrototype> WallTag = "Wall";
+
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private SharedRMCAnimationSystem _animation = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private IntelSystem _intel = default!;
+    [Dependency] private SharedMarineAnnounceSystem _marineAnnounce = default!;
+    [Dependency] private SharedMortarSystem _mortar = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private PowerLoaderSystem _powerLoader = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private RMCCameraShakeSystem _rmcCameraShake = default!;
+    [Dependency] private SharedCMChatSystem _rmcChat = default!;
+    [Dependency] private SharedRMCFlammableSystem _rmcFlammable = default!;
+    [Dependency] private SharedRMCExplosionSystem _rmcExplosion = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private SharedRMCPvsSystem _rmcPvs = default!;
+    [Dependency] private TagSystem _tags = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly EntProtoId OrbitalTargetMarker = "RMCLaserDropshipTarget";
 
@@ -590,7 +592,7 @@ public sealed class OrbitalCannonSystem : EntitySystem
         {
             // This part is shitty because there might be a wall that just... doesn't exactly go with this logic. Hope it works.
             if (HasComp<TagComponent>(entity) &&
-                _tags.HasTag(entity, "Wall") &&
+                _tags.HasTag(entity, WallTag) &&
                 !HasComp<DamageableComponent>(entity))
             {
                 return true;

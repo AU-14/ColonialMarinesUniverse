@@ -31,25 +31,25 @@ using Content.Shared._RMC14.Map;
 
 namespace Content.Shared._RMC14.Vehicle;
 
-public sealed class VehicleSystem : EntitySystem
+public sealed partial class VehicleSystem : EntitySystem
 {
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly VehicleViewToggleSystem _viewToggle = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRMCTeleporterSystem _rmcTeleporter = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly MetaDataSystem _meta = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly Content.Shared.Vehicle.VehicleSystem _vehicles = default!;
-    [Dependency] private readonly VehicleLockSystem _vehicleLock = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private VehicleViewToggleSystem _viewToggle = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private MapLoaderSystem _mapLoader = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCTeleporterSystem _rmcTeleporter = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private MetaDataSystem _meta = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private Content.Shared.Vehicle.VehicleSystem _vehicles = default!;
+    [Dependency] private VehicleLockSystem _vehicleLock = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     public override void Initialize()
     {
@@ -178,7 +178,7 @@ public sealed class VehicleSystem : EntitySystem
     {
         if (TryComp(ent.Owner, out interior) &&
             interior.MapId != MapId.Nullspace &&
-            _mapManager.MapExists(interior.MapId))
+            _mapSystem.MapExists(interior.MapId))
         {
             return true;
         }
@@ -314,7 +314,7 @@ public sealed class VehicleSystem : EntitySystem
         }
 
         if (interior.Map.IsValid() &&
-            EntityManager.EntityExists(interior.Map) &&
+            Exists(interior.Map) &&
             TryComp(interior.Map, out VehicleInteriorLinkComponent? link) &&
             link.Vehicle == vehicle)
         {
@@ -326,11 +326,11 @@ public sealed class VehicleSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        if (interior.MapId != MapId.Nullspace && _mapManager.MapExists(interior.MapId))
+        if (interior.MapId != MapId.Nullspace && _mapSystem.MapExists(interior.MapId))
         {
-            _mapManager.DeleteMap(interior.MapId);
+            _mapSystem.DeleteMap(interior.MapId);
         }
-        else if (interior.Map.IsValid() && EntityManager.EntityExists(interior.Map))
+        else if (interior.Map.IsValid() && Exists(interior.Map))
         {
             Del(interior.Map);
         }
@@ -894,10 +894,10 @@ public sealed class VehicleSystem : EntitySystem
     {
         vehicle = null;
         var mapId = _transform.GetMapId(interiorEntity);
-        if (mapId == MapId.Nullspace || !_mapManager.MapExists(mapId))
+        if (mapId == MapId.Nullspace || !_mapSystem.MapExists(mapId))
             return false;
 
-        var mapUid = _mapManager.GetMapEntityId(mapId);
+        var mapUid = _mapSystem.GetMap(mapId);
         if (!TryComp(mapUid, out VehicleInteriorLinkComponent? link) ||
             Deleted(link.Vehicle))
         {
@@ -914,7 +914,7 @@ public sealed class VehicleSystem : EntitySystem
 
         if (TryComp<VehicleOperatorComponent>(user, out var op) &&
             op.Vehicle is { } operatedVehicle &&
-            EntityManager.EntityExists(operatedVehicle))
+            Exists(operatedVehicle))
         {
             vehicle = operatedVehicle;
             return true;
@@ -922,7 +922,7 @@ public sealed class VehicleSystem : EntitySystem
 
         if (!TryGetVehicleFromInterior(user, out var interiorVehicle) ||
             interiorVehicle is not { } interiorVehicleUid ||
-            !EntityManager.EntityExists(interiorVehicleUid))
+            !Exists(interiorVehicleUid))
         {
             return false;
         }

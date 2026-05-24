@@ -21,6 +21,12 @@ public sealed partial class WoundTreaterComponent : Component
     [DataField(required: true), AutoNetworkedField]
     public bool Consumable;
 
+    [DataField, AutoNetworkedField]
+    public bool InstantWoundTreatment;
+
+    [DataField, AutoNetworkedField]
+    public int WoundsTreatedPerUse = 1;
+
     [DataField(required: true), AutoNetworkedField]
     public ProtoId<DamageGroupPrototype> Group;
 

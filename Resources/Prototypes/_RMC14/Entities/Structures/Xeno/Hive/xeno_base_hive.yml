@@ -8,6 +8,7 @@
   - type: Transform
     anchored: true
   - type: Physics
+  - type: Appearance
   - type: Fixtures
     fixtures:
       fix1:

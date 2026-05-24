@@ -28,9 +28,9 @@
     wallSmashSlowdownDuration: 1.5
     speedAtZeroIntegrity: 0.5
   - type: VehicleOvercharge
-    speedMultiplier: 1.4
-    duration: 3
-    cooldown: 15
+    speedMultiplier: 1.25
+    duration: 4
+    cooldown: 18
     overchargeSound: /Audio/_RMC14/Vehicle/overdrive_activate.ogg
   - type: VehicleSound
     runningSound: /Audio/Effects/Vehicle/vehicleengineidle.ogg
@@ -324,11 +324,13 @@
         startingItem: null
       primary:
         startingItem: VehicleSPPAPCTurret
+        disableEject: true
         whitelist:
           components:
           - HardpointItem
       wheel-1:
         startingItem: VehicleSPPAPCWheel
+        disableEject: true
         whitelist:
           components:
           - VehicleWheelItem

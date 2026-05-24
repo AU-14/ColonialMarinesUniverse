@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Shared._RMC14.Xenonids.Eye;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
@@ -10,13 +10,16 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._RMC14.Xenonids.Eye;
 
-public sealed class QueenEyeOverlay : Overlay
+public sealed partial class QueenEyeOverlay : Overlay
 {
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    private static readonly ProtoId<ShaderPrototype> StencilMaskShader = "StencilMask";
+    private static readonly ProtoId<ShaderPrototype> StencilDrawShader = "StencilDraw";
+
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
@@ -118,11 +121,11 @@ public sealed class QueenEyeOverlay : Overlay
         }
 
         // Use the lighting as a mask
-        worldHandle.UseShader(_proto.Index<ShaderPrototype>("StencilMask").Instance());
+        worldHandle.UseShader(_proto.Index(StencilMaskShader).Instance());
         worldHandle.DrawTextureRect(_stencilTexture!.Texture, worldBounds);
 
         // Draw the static
-        worldHandle.UseShader(_proto.Index<ShaderPrototype>("StencilDraw").Instance());
+        worldHandle.UseShader(_proto.Index(StencilDrawShader).Instance());
         worldHandle.DrawTextureRect(_staticTexture!.Texture, worldBounds);
 
         worldHandle.SetTransform(Matrix3x2.Identity);

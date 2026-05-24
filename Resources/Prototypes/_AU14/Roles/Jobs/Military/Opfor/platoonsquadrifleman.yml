@@ -21,7 +21,7 @@
     RMCRankPrivate: []
   startingGear: AU14GearopforSquadRifleman
   dummyStartingGear: AU14GearopforRiflemanDummy
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconOPFORRifleman"
   requireAdminNotify: false
   spawnMenuRoleName: Rifleman (OPFOR)
   joinNotifyCrew: false
@@ -55,7 +55,7 @@
   id: AU14GearopforSquadRifleman
   equipment:
     id: AU14IDCardopforSquadRifleman
-    ears: AU14HeadsetSectionOpfor
+    ears: AU14HeadsetOpforMarine
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -74,4 +74,4 @@
     shoes: AU14BootsJungle
     head: AU14JungleM10Helmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetSectionOpfor
+    ears: AU14HeadsetOpforMarine

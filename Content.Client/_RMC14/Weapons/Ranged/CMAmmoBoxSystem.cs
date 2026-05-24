@@ -1,12 +1,13 @@
-﻿using Content.Shared._RMC14.Weapons.Ranged;
+using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Client.GameObjects;
 
 namespace Content.Client._RMC14.Weapons.Ranged;
 
-public sealed class CMAmmoBoxSystem : EntitySystem
+public sealed partial class CMAmmoBoxSystem : EntitySystem
 {
-    [Dependency] private readonly AppearanceSystem _appearance = default!;
+    [Dependency] private AppearanceSystem _appearance = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {
@@ -38,6 +39,6 @@ public sealed class CMAmmoBoxSystem : EntitySystem
     private void UpdateAppearance(Entity<CMAmmoBoxComponent, SpriteComponent, AppearanceComponent> box)
     {
         _appearance.TryGetData(box, AmmoVisuals.AmmoCount, out int count, box);
-        box.Comp2.LayerSetVisible(box.Comp1.AmmoLayer, count > 0);
+        _sprite.LayerSetVisible((box.Owner, box.Comp2), box.Comp1.AmmoLayer, count > 0);
     }
 }

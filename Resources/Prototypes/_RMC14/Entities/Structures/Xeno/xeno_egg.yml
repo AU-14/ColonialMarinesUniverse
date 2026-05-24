@@ -8,6 +8,7 @@
     snap:
     - Wall
   components:
+  - type: Appearance
   - type: Item
     size: Ginormous
   - type: Fixtures

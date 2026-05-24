@@ -18,6 +18,7 @@ RELEASE_DIR = "release"
 ROBUST_CDN_URL = "https://cmu-cdn.cm-ss13.com/"
 FORK_ID = "cmu"
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--fork-id", default=FORK_ID)
@@ -26,20 +27,29 @@ def main():
     fork_id = args.fork_id
 
     session = requests.Session()
-    session.headers = {
-        "Authorization": f"Bearer {PUBLISH_TOKEN}",
-    }
-
+    session.headers.update(
+        {
+            "Authorization": f"Bearer {PUBLISH_TOKEN}",
+        }
+    )
     print(f"Starting publish on Robust.Cdn for version {VERSION}")
 
     data = {
         "version": VERSION,
         "engineVersion": get_engine_version(),
     }
-    headers = {
-        "Content-Type": "application/json"
-    }
-    resp = session.post(f"{ROBUST_CDN_URL}fork/{fork_id}/publish/start", json=data, headers=headers)
+    headers = {"Content-Type": "application/json"}
+
+    resp = session.post(
+        f"{ROBUST_CDN_URL}fork/{fork_id}/publish/start", json=data, headers=headers
+    )
+    if resp.status_code == 409:
+        try:
+            msg = resp.json()
+        except Exception:
+            msg = resp.text
+        print(f"Version {VERSION} already published (CDN: {msg}), skipping...")
+        return
     resp.raise_for_status()
     print("Publish successfully started, adding files...")
 
@@ -49,37 +59,42 @@ def main():
             headers = {
                 "Content-Type": "application/octet-stream",
                 "Robust-Cdn-Publish-File": os.path.basename(file),
-                "Robust-Cdn-Publish-Version": VERSION
+                "Robust-Cdn-Publish-Version": VERSION,
             }
-            resp = session.post(f"{ROBUST_CDN_URL}fork/{fork_id}/publish/file", data=f, headers=headers)
-
+            resp = session.post(
+                f"{ROBUST_CDN_URL}fork/{fork_id}/publish/file", data=f, headers=headers
+            )
         resp.raise_for_status()
-
     print("Successfully pushed files, finishing publish...")
 
-    data = {
-        "version": VERSION
-    }
-    headers = {
-        "Content-Type": "application/json"
-    }
-    resp = session.post(f"{ROBUST_CDN_URL}fork/{fork_id}/publish/finish", json=data, headers=headers)
+    data = {"version": VERSION}
+    headers = {"Content-Type": "application/json"}
+    resp = session.post(
+        f"{ROBUST_CDN_URL}fork/{fork_id}/publish/finish", json=data, headers=headers
+    )
     resp.raise_for_status()
-
     print("SUCCESS!")
 
 
 def get_files_to_publish() -> Iterable[str]:
-    for file in os.listdir(RELEASE_DIR):
-        yield os.path.join(RELEASE_DIR, file)
+    for file in sorted(os.listdir(RELEASE_DIR)):  # Consistent ordering
+        path = os.path.join(RELEASE_DIR, file)
+        if os.path.isfile(path):
+            yield path
 
 
 def get_engine_version() -> str:
-    proc = subprocess.run(["git", "describe","--tags", "--abbrev=0"], stdout=subprocess.PIPE, cwd="RobustToolbox", check=True, encoding="UTF-8")
+    proc = subprocess.run(
+        ["git", "describe", "--tags", "--abbrev=0"],
+        stdout=subprocess.PIPE,
+        cwd="RobustToolbox",
+        check=True,
+        encoding="UTF-8",
+    )
     tag = proc.stdout.strip()
     assert tag.startswith("v")
-    return tag[1:] # Cut off v prefix.
+    return tag[1:]  # Cut off v prefix.
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

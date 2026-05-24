@@ -13,12 +13,12 @@ namespace Content.Shared._CMU14.Medical.Metabolism;
 ///     subscription on the body and dispatches to the per-organ subsystems.
 ///     Centralising the body-level handler avoids duplicate-event subscription conflicts.
 /// </summary>
-public abstract class SharedMetabolismHubSystem : EntitySystem
+public abstract partial class SharedMetabolismHubSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly SharedLiverSystem Liver = default!;
-    [Dependency] protected readonly SharedKidneysSystem Kidneys = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected SharedLiverSystem Liver = default!;
+    [Dependency] protected SharedKidneysSystem Kidneys = default!;
 
     private readonly Dictionary<EntityUid, float> _clearanceCache = new();
     private TimeSpan _clearanceCacheTime;

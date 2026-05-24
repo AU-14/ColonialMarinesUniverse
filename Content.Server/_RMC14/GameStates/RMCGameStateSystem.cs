@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Server.Administration;
 using Content.Shared._RMC14.GameStates;
 using Content.Shared.Administration;
@@ -7,10 +7,10 @@ using Robust.Shared.Console;
 
 namespace Content.Server._RMC14.GameStates;
 
-public sealed class RMCGameStateSystem : EntitySystem
+public sealed partial class RMCGameStateSystem : EntitySystem
 {
-    [Dependency] private readonly IConsoleHost _console = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IConsoleHost _console = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     public override void Initialize()
     {

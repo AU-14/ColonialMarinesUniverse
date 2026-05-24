@@ -7,6 +7,9 @@
   roles:
     - AU14JobCivilianColonyAdministrator
     - AU14JobCivilianColonyAdminAssistant
+    - AU14JobCivilianHeadOfService
+    - AU14JobCivilianHeadOfEngineering
+    - AU14JobLEOLeaderBase
   departmentRadio: null
   headOfDepartment: AU14JobCivilianColonyAdministrator
   faction: colonist
@@ -18,15 +21,11 @@
   description: au14-department-colony-description
   color: "#e3ce94"
   roles:
-    - AU14JobCivilianColonist
     - AU14JobCivilianJournalist
     - AU14JobCivilianUSASFRecruiter
     - AU14JobCivilianColonySynthetic
-    - AU14JobCivilianFoodServiceWorker
-    - AU14JobCivilianShopkeep
-    - AU14JobCivilianWasteManagementSpecialist
   departmentRadio: null
-  headOfDepartment: null
+  headOfDepartment: AU14JobCivilianColonyAdministrator
   faction: colonist
 
 - type: department
@@ -36,13 +35,13 @@
   description: au14-department-colony-labor-description
   color: "#e3ce94"
   roles:
-    - AU14JobCivilianJournalist
-    - AU14JobCivilianColonySynthetic
-    - AU14JobCivilianUSASFRecruiter
+    - AU14JobCivilianForeman
+    - AU14JobCivilianColonist
+
   departmentRadio: null
-  headOfDepartment: null
+  headOfDepartment: AU14JobCivilianForeman
   faction: colonist
-  editorHidden: true
+  editorHidden: false
 
 - type: department
   parent: CMDepartmentBase
@@ -58,7 +57,7 @@
   departmentRadio: null
   headOfDepartment: AU14JobCivilianHeadOfService
   faction: colonist
-  editorHidden: true
+  editorHidden: false
 
 - type: department
   parent: CMDepartmentBase
@@ -90,7 +89,7 @@
     - AU14JobCivilianCMBMarshal
     - AU14JobCivilianCMBDeputy
   departmentRadio: null
-  headOfDepartment: null
+  headOfDepartment: AU14JobCivilianCMBMarshal
   faction: colonist
 
 - type: department
@@ -101,11 +100,10 @@
   color: "#e3ce94"
   roles:
     - AU14JobCivilianHeadOfEngineering
-    - AU14JobCivilianForeman
     - AU14JobCivilianEngineer
     - AU14JobCivilianFreightSystemsSpecialist
   departmentRadio: null
-  headOfDepartment: AU14JobCivilianCorporateLiaison
+  headOfDepartment: AU14JobCivilianHeadOfEngineering
   faction: colonist
 
 - type: department
@@ -122,7 +120,7 @@
     - AU14JobCivilianCorporateAssistant
     - AU14JobColonyWorkingJoe
   departmentRadio: null
-  headOfDepartment: null
+  headOfDepartment: AU14JobCivilianCorporateLiaison
   faction: colonist
 
 - type: department
@@ -160,7 +158,7 @@
   abstract: true
   id: AU14DepartmentHydroponics
   departmentRadio: null
-  headOfDepartment: null
+  headOfDepartment: AU14JobCivilianHeadOfService
   faction: colonist
 
 - type: department
@@ -168,5 +166,5 @@
   abstract: true
   id: AU14DepartmentLumbermill
   departmentRadio: null
-  headOfDepartment: null
+  headOfDepartment: AU14JobCivilianForeman
   faction: colonist

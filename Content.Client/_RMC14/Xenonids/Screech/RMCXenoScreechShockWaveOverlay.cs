@@ -6,10 +6,12 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._RMC14.Xenonids.Screech;
 
-public sealed class RMCXenoScreechShockWaveOverlay : Overlay, IEntityEventSubscriber
+public sealed partial class RMCXenoScreechShockWaveOverlay : Overlay, IEntityEventSubscriber
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    private static readonly ProtoId<ShaderPrototype> ScreechShockWaveShader = "RMCXenoScreechShockWave";
+
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private SharedTransformSystem? _xformSystem;
 
@@ -21,7 +23,7 @@ public sealed class RMCXenoScreechShockWaveOverlay : Overlay, IEntityEventSubscr
     public RMCXenoScreechShockWaveOverlay()
     {
         IoCManager.InjectDependencies(this);
-        _shader = _prototypeManager.Index<ShaderPrototype>("RMCXenoScreechShockWave").Instance().Duplicate();
+        _shader = _prototypeManager.Index(ScreechShockWaveShader).Instance().Duplicate();
     }
 
     private Vector2 _position;

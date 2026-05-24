@@ -1,0 +1,97 @@
+- type: emote
+  id: CMUYautjaClick
+  name: cmu-yautja-emote-name-click
+  category: Vocal
+  icon: Interface/Emotes/click.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-click"]
+  chatTriggers:
+  - yautjaclick
+  - predclick
+
+- type: emote
+  id: CMUYautjaRoar
+  name: cmu-yautja-emote-name-roar
+  category: Vocal
+  icon: Interface/Actions/scream.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-roar"]
+  chatTriggers:
+  - yautjaroar
+  - predroar
+
+- type: emote
+  id: CMUYautjaLaugh
+  name: cmu-yautja-emote-name-laugh
+  category: Vocal
+  icon: Interface/Emotes/laugh.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-laugh"]
+  chatTriggers:
+  - yautjalaugh
+  - predlaugh
+
+- type: emote
+  id: CMUYautjaGrowl
+  name: cmu-yautja-emote-name-growl
+  category: Vocal
+  icon: Interface/Emotes/chitter.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-growl"]
+  chatTriggers:
+  - yautjagrowl
+  - predgrowl
+
+- type: emote
+  id: CMUYautjaPain
+  name: cmu-yautja-emote-name-pain
+  category: Vocal
+  icon: Interface/Emotes/cry.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-pain"]
+  chatTriggers:
+  - yautjapain
+  - predpain
+
+- type: emote
+  id: CMUYautjaDeathCry
+  name: cmu-yautja-emote-name-death-cry
+  category: Vocal
+  icon: Interface/Emotes/deathgasp.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-death-cry"]
+  chatTriggers:
+  - yautjadeathcry
+  - preddeathcry
+
+- type: emote
+  id: CMUYautjaDeathLaugh
+  name: cmu-yautja-emote-name-death-laugh
+  category: Vocal
+  icon: Interface/Emotes/deathgasp.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-death-laugh"]
+  chatTriggers:
+  - yautjadeathlaugh
+  - preddeathlaugh

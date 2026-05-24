@@ -99970,7 +99970,7 @@ entities:
     - type: Transform
       pos: -19.5,65.5
       parent: 1
-- proto: RMCSpawnerCommunicationsTowerOne
+- proto: AU14SpawnerCommunicationsTowerOne
   entities:
   - uid: 11436
     components:
@@ -99982,7 +99982,7 @@ entities:
     - type: Transform
       pos: -35.5,-77.5
       parent: 1
-- proto: RMCSpawnerCommunicationsTowerTwo
+- proto: AU14SpawnerCommunicationsTowerTwo
   entities:
   - uid: 11438
     components:

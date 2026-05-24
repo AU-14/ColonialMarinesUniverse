@@ -18,8 +18,8 @@ namespace Content.Server.ParticleAccelerator.EntitySystems;
 
 public sealed partial class ParticleAcceleratorSystem
 {
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     private void InitializeControlBoxSystem()
     {
@@ -187,7 +187,7 @@ public sealed partial class ParticleAcceleratorSystem
                         ("machine", ToPrettyString(uid)),
                         ("powerState", GetPANumericalLevel(strength)),
                         ("coordinates", pos.Coordinates)));
-                    _audio.PlayGlobal("/Audio/Misc/adminlarm.ogg",
+                    _audio.PlayGlobal(new SoundPathSpecifier("/Audio/Misc/adminlarm.ogg"),
                         Filter.Empty().AddPlayers(_adminManager.ActiveAdmins),
                         false,
                         AudioParams.Default.WithVolume(-8f));

@@ -1,3 +1,4 @@
+using System;
 using Content.Client.Resources;
 using Content.Shared.Chat;
 using Robust.Client.Graphics;
@@ -8,9 +9,9 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.UserInterface.Systems.Chat.Widgets;
 
-public sealed class ChatMessageRow : PanelContainer
+public sealed partial class ChatMessageRow : PanelContainer
 {
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     private readonly Label _repeatBadge;
     private readonly RichTextLabel _messageLabel;
@@ -89,6 +90,18 @@ public sealed class ChatMessageRow : PanelContainer
         _repeatBadge.Text = $"x{count}";
     }
 
+    public void RefreshLayout()
+    {
+        _messageLabel.InvalidateMeasure();
+        foreach (var control in _messageLabel.Controls)
+        {
+            control.InvalidateMeasure();
+        }
+
+        _repeatBadge.InvalidateMeasure();
+        InvalidateMeasure();
+    }
+
     private static string? BuildPrefix(ChatMessage message)
     {
         return GetChannelLabel(message);
@@ -113,6 +126,9 @@ public sealed class ChatMessageRow : PanelContainer
         if (message.Channel is ChatChannel.Local or ChatChannel.Whisper or ChatChannel.Emotes)
             return null;
 
+        if (IsUnlabeledRadioSystemMessage(message))
+            return null;
+
         if (!string.IsNullOrWhiteSpace(message.Display?.ChannelLabel))
             return message.Display.ChannelLabel.ToUpperInvariant();
 
@@ -132,6 +148,18 @@ public sealed class ChatMessageRow : PanelContainer
             ChatChannel.Visual => "VIS",
             _ => "CHAT"
         };
+    }
+
+    private static bool IsUnlabeledRadioSystemMessage(ChatMessage message)
+    {
+        if (message.Channel != ChatChannel.Radio || message.Display is not { } display)
+            return false;
+
+        return display.Kind == ChatDisplayKind.Radio
+            && string.IsNullOrWhiteSpace(display.SenderName)
+            && string.IsNullOrWhiteSpace(display.SenderPrefix)
+            && string.IsNullOrWhiteSpace(display.Verb)
+            && string.Equals(display.ChannelLabel, "RAD", StringComparison.OrdinalIgnoreCase);
     }
 
     private static Color GetBackground(ChatChannel channel)

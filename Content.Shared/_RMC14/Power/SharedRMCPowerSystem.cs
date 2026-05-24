@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Sprite;
 using Content.Shared._RMC14.Tools;
@@ -30,24 +30,25 @@ using static Content.Shared.Popups.PopupType;
 
 namespace Content.Shared._RMC14.Power;
 
-public abstract class SharedRMCPowerSystem : EntitySystem
+public abstract partial class SharedRMCPowerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPointLightSystem _pointLight = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedPowerReceiverSystem _powerReceiver = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly SharedRMCSpriteSystem _sprite = default!;
-    [Dependency] private readonly SharedToolSystem _tool = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] protected SharedPointLightSystem Pointlight = default!;
+
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPowerReceiverSystem _powerReceiver = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SharedRMCSpriteSystem _sprite = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     protected readonly HashSet<EntityUid> ToUpdate = new();
     private readonly Dictionary<MapId, List<EntityUid>> _reactorPoweredLights = new();
@@ -629,13 +630,7 @@ public abstract class SharedRMCPowerSystem : EntitySystem
 
     private void OnApcSetChannelBuiMsg(Entity<RMCApcComponent> ent, ref RMCApcSetChannelBuiMsg args)
     {
-        return;
-        var channel = (int) args.Channel;
-        if (args.Channel < 0 || channel >= ent.Comp.Channels.Length)
-            return;
-
-        ent.Comp.Channels[channel].Button = args.State;
-        Dirty(ent);
+        // Channel toggling is disabled in RMC14.
     }
 
     private void OnApcCover(Entity<RMCApcComponent> ent, ref RMCApcCoverBuiMsg args)
@@ -909,12 +904,14 @@ public abstract class SharedRMCPowerSystem : EntitySystem
             {
                 var powered = AnyReactorsOn(map);
                 var lights = EntityQueryEnumerator<RMCReactorPoweredLightComponent, TransformComponent>();
-                while (lights.MoveNext(out var uid, out _, out var xform))
+                while (lights.MoveNext(out var uid, out var poweredLight, out var xform))
                 {
                     if (xform.MapID == map)
                     {
+                        poweredLight.Enabled = powered;
+                        Dirty(uid, poweredLight);
                         _appearance.SetData(uid, ToggleableVisuals.Enabled, powered);
-                        _pointLight.SetEnabled(uid, powered);
+                        Pointlight.SetEnabled(uid, powered);
                     }
                 }
             }

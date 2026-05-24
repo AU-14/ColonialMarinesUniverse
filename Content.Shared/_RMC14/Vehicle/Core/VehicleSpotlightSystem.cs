@@ -1,3 +1,4 @@
+using System;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Input;
 using Content.Shared.Vehicle.Components;
@@ -9,12 +10,13 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Vehicle;
 
-public sealed class VehicleSpotlightSystem : EntitySystem
+public sealed partial class VehicleSpotlightSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly VehicleSystem _rmcVehicles = default!;
-    [Dependency] private readonly SharedPointLightSystem _lights = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private VehicleSystem _rmcVehicles = default!;
+    [Dependency] private SharedPointLightSystem _lights = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private HardpointSystem _hardpoints = default!;
 
     public override void Initialize()
     {
@@ -141,15 +143,28 @@ public sealed class VehicleSpotlightSystem : EntitySystem
                 if (!TryComp(item, out VehicleSpotlightModifierComponent? modifier))
                     continue;
 
-                radius = radius * modifier.RadiusMultiplier + modifier.RadiusAdd;
-                energy = energy * modifier.EnergyMultiplier + modifier.EnergyAdd;
-                softness = softness * modifier.SoftnessMultiplier + modifier.SoftnessAdd;
+                var performance = _hardpoints.GetHardpointPerformanceMultiplier(item);
+                if (performance <= 0f)
+                    continue;
+
+                radius = radius * ScaleMultiplierTowardNeutral(modifier.RadiusMultiplier, performance) +
+                         modifier.RadiusAdd * performance;
+                energy = energy * ScaleMultiplierTowardNeutral(modifier.EnergyMultiplier, performance) +
+                         modifier.EnergyAdd * performance;
+                softness = softness * ScaleMultiplierTowardNeutral(modifier.SoftnessMultiplier, performance) +
+                           modifier.SoftnessAdd * performance;
             }
         }
 
         spotlight.Radius = radius;
         spotlight.Energy = energy;
         spotlight.Softness = softness;
+    }
+
+    private static float ScaleMultiplierTowardNeutral(float multiplier, float performance)
+    {
+        var clamped = Math.Clamp(performance, 0f, 1f);
+        return 1f + (multiplier - 1f) * clamped;
     }
 }
 

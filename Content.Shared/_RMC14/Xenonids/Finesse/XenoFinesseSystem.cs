@@ -1,14 +1,14 @@
-﻿using Content.Shared.Weapons.Melee.Events;
+using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Xenonids.Finesse;
 
-public sealed class XenoFinesseSystem : EntitySystem
+public sealed partial class XenoFinesseSystem : EntitySystem
 {
-    [Dependency] private readonly XenoSystem _xeno = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _net = default!;
     public override void Initialize()
     {
         base.Initialize();

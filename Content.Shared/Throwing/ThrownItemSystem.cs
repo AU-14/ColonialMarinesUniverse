@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Throwing;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
@@ -19,17 +20,18 @@ namespace Content.Shared.Throwing
     /// <summary>
     ///     Handles throwing landing and collisions.
     /// </summary>
-    public sealed class ThrownItemSystem : EntitySystem
+    public sealed partial class ThrownItemSystem : EntitySystem
     {
-        [Dependency] private readonly IGameTiming _gameTiming = default!;
-        [Dependency] private readonly INetManager _netMan = default!;
-        [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-        [Dependency] private readonly FixtureSystem _fixtures = default!;
-        [Dependency] private readonly SharedBroadphaseSystem _broadphase = default!;
-        [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-        [Dependency] private readonly SharedGravitySystem _gravity = default!;
-        [Dependency] private readonly IRobustRandom _random = default!;
-        [Dependency] private readonly SharedTransformSystem _transform = default!; private const string ThrowingFixture = "throw-fixture";
+        [Dependency] private IGameTiming _gameTiming = default!;
+        [Dependency] private INetManager _netMan = default!;
+        [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+        [Dependency] private FixtureSystem _fixtures = default!;
+        [Dependency] private SharedBroadphaseSystem _broadphase = default!;
+        [Dependency] private SharedPhysicsSystem _physics = default!;
+        [Dependency] private SharedGravitySystem _gravity = default!;
+        [Dependency] private IRobustRandom _random = default!;
+        [Dependency] private CMUSharedZLevelsSystem _zLevels = default!; //CMU
+        [Dependency] private SharedTransformSystem _transform = default!; private const string ThrowingFixture = "throw-fixture";
 
 
         public override void Initialize()
@@ -197,6 +199,15 @@ namespace Content.Shared.Throwing
                 _adminLogger.Add(LogType.Landed, LogImpact.Low, $"{ToPrettyString(uid):entity} thrown by {ToPrettyString(thrownItem.Thrower.Value):thrower} landed.");
 
             _broadphase.RegenerateContacts((uid, physics));
+
+            //CMU dont call LandEvent if we dont have ground
+            if (_zLevels.DistanceToGround(uid, out _) > 0)
+            {
+                _zLevels.WakeZPhysics(uid);
+                return;
+            }
+            //CMU end
+
             var landEvent = new LandEvent(thrownItem.Thrower, playSound);
             RaiseLocalEvent(uid, ref landEvent);
         }

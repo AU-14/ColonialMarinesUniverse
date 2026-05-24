@@ -12,8 +12,8 @@ namespace Content.Shared.Gravity
 {
     public abstract partial class SharedGravitySystem : EntitySystem
     {
-        [Dependency] protected readonly IGameTiming Timing = default!;
-        [Dependency] private readonly AlertsSystem _alerts = default!;
+        [Dependency] protected IGameTiming Timing = default!;
+        [Dependency] private AlertsSystem _alerts = default!;
 
         public static readonly ProtoId<AlertPrototype> WeightlessAlert = "Weightless";
 
@@ -91,16 +91,16 @@ namespace Content.Shared.Gravity
             if (args.Current is not GravityComponentState state)
                 return;
 
-            if (component.EnabledVV == state.Enabled)
+            if (component.Enabled == state.Enabled)
                 return;
-            component.EnabledVV = state.Enabled;
-            var ev = new GravityChangedEvent(uid, component.EnabledVV);
+            component.Enabled = state.Enabled;
+            var ev = new GravityChangedEvent(uid, component.Enabled);
             RaiseLocalEvent(uid, ref ev, true);
         }
 
         private void OnGetState(EntityUid uid, GravityComponent component, ref ComponentGetState args)
         {
-            args.State = new GravityComponentState(component.EnabledVV);
+            args.State = new GravityComponentState(component.Enabled);
         }
 
         private void OnGravityChange(ref GravityChangedEvent ev)
@@ -152,7 +152,7 @@ namespace Content.Shared.Gravity
         }
 
         [Serializable, NetSerializable]
-        private sealed class GravityComponentState : ComponentState
+        private sealed partial class GravityComponentState : ComponentState
         {
             public bool Enabled { get; }
 

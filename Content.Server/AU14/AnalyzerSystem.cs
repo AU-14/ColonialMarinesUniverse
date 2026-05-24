@@ -14,11 +14,11 @@ namespace Content.Server.AU14;
 /// - All factions: "Scan" context-menu action that credits nearby items to active fetch objectives.
 /// - CLF only: cash can be inserted; every 100 credits awards 1 win point directly to CLF.
 /// </summary>
-public sealed class AnalyzerSystem : EntitySystem
+public sealed partial class AnalyzerSystem : EntitySystem
 {
-    [Dependency] private readonly AuFetchObjectiveSystem _fetchSystem = default!;
-    [Dependency] private readonly AuObjectiveSystem _objectiveSystem = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
+    [Dependency] private AuFetchObjectiveSystem _fetchSystem = default!;
+    [Dependency] private AuObjectiveSystem _objectiveSystem = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
 
     private const string ClfFaction = "clf";
     private const int CashPerPoint = 30;
@@ -70,7 +70,7 @@ public sealed class AnalyzerSystem : EntitySystem
         int points = component.CashStored / CashPerPoint;
         component.CashStored -= points * CashPerPoint;
 
-        EntityManager.QueueDeleteEntity(args.Entity);
+        QueueDel(args.Entity);
 
         if (points > 0)
             _objectiveSystem.AwardRawPointsToFaction(ClfFaction, points);

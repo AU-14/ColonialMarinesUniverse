@@ -7,12 +7,16 @@
   ignoreAllegiance: true
   playTimeTracker: AU14JobCLFGuerilla
   requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentCivilian
+    time: 18000 # 5 hours
   - !type:OverallPlaytimeRequirement
-    time: 7200 # 2 hours
+    time: 36000 # 10 hours
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCLFGuerilla
-  icon: "CMJobIconEmpty"
+  icon: "RMCJobIconCLFSoldier"
+  hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-clflrs
@@ -37,6 +41,8 @@
         RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-clfguerilla
+    - type: StartingMindRole
+      mindRole: MindRoleCLFGuerrilla
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
@@ -51,9 +57,8 @@
   equipment:
     id: AU14IDCardCLFCivilian
    # neck: RMCCLFArmband
-  storage:
-    back:
-    - AU14CLFHeadset
+  inhand:
+  - AU14CLFHeadset
 
 - type: entity
   parent: CMSpawnPointJobBase

@@ -24,21 +24,25 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Follower;
 
-public sealed class FollowerSystem : EntitySystem
+public sealed partial class FollowerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TagSystem _tagSystem = default!;
-    [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
-    [Dependency] private readonly SharedJointSystem _jointSystem = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physicsSystem = default!;
-    [Dependency] private readonly INetManager _netMan = default!;
-    [Dependency] private readonly ISharedAdminManager _adminManager = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TagSystem _tagSystem = default!;
+    [Dependency] private SharedContainerSystem _containerSystem = default!;
+    [Dependency] private SharedJointSystem _jointSystem = default!;
+    [Dependency] private SharedPhysicsSystem _physicsSystem = default!;
+    [Dependency] private INetManager _netMan = default!;
+    [Dependency] private ISharedAdminManager _adminManager = default!;
+
+    private EntityQuery<TransformComponent> _xformQuery;
 
     private static readonly ProtoId<TagPrototype> ForceableFollowTag = "ForceableFollow";
 
     public override void Initialize()
     {
         base.Initialize();
+
+        _xformQuery = GetEntityQuery<TransformComponent>();
 
         SubscribeLocalEvent<GetVerbsEvent<AlternativeVerb>>(OnGetAlternativeVerbs);
         SubscribeLocalEvent<FollowerComponent, MoveInputEvent>(OnFollowerMove);
@@ -189,14 +193,21 @@ public sealed class FollowerSystem : EntitySystem
     /// <param name="entity">The entity to be followed</param>
     public void StartFollowingEntity(EntityUid follower, EntityUid entity)
     {
+        if (!CanFollow(follower, out _) ||
+            !CanFollow(entity, out var targetXform) ||
+            follower == entity)
+        {
+            return;
+        }
+
         // No recursion for you
-        var targetXform = Transform(entity);
         while (targetXform.ParentUid.IsValid())
         {
             if (targetXform.ParentUid == follower)
                 return;
 
-            targetXform = Transform(targetXform.ParentUid);
+            if (!CanFollow(targetXform.ParentUid, out targetXform))
+                return;
         }
 
         // Cleanup old following.
@@ -227,7 +238,8 @@ public sealed class FollowerSystem : EntitySystem
         _containerSystem.AttachParentToContainerOrGrid((follower, xform));
 
         // If we didn't get to parent's container.
-        if (xform.ParentUid != Transform(xform.ParentUid).ParentUid)
+        if (!CanFollow(xform.ParentUid, out var parentXform) ||
+            xform.ParentUid != parentXform.ParentUid)
         {
             _transform.SetCoordinates(follower, xform, new EntityCoordinates(entity, Vector2.Zero), rotation: Angle.Zero);
         }
@@ -251,6 +263,14 @@ public sealed class FollowerSystem : EntitySystem
     /// <param name="deparent">Should the entity deparent itself</param>
     public void StopFollowingEntity(EntityUid uid, EntityUid target, FollowedComponent? followed = null, bool deparent = true, bool removeComp = true)
     {
+        if (!uid.IsValid() ||
+            !Exists(uid) ||
+            !target.IsValid() ||
+            !Exists(target))
+        {
+            return;
+        }
+
         if (!Resolve(target, ref followed, false))
             return;
 
@@ -341,9 +361,26 @@ public sealed class FollowerSystem : EntitySystem
 
         return picked;
     }
+
+    private bool CanFollow(EntityUid uid, out TransformComponent xform)
+    {
+        xform = default!;
+
+        if (!uid.IsValid() ||
+            !Exists(uid) ||
+            TerminatingOrDeleted(uid) ||
+            !_xformQuery.TryComp(uid, out var foundXform) ||
+            foundXform == null)
+        {
+            return false;
+        }
+
+        xform = foundXform;
+        return true;
+    }
 }
 
-public abstract class FollowEvent : EntityEventArgs
+public abstract partial class FollowEvent : EntityEventArgs
 {
     public EntityUid Following;
     public EntityUid Follower;
@@ -358,7 +395,7 @@ public abstract class FollowEvent : EntityEventArgs
 /// <summary>
 ///     Raised on an entity when it start following another entity.
 /// </summary>
-public sealed class StartedFollowingEntityEvent : FollowEvent
+public sealed partial class StartedFollowingEntityEvent : FollowEvent
 {
     public StartedFollowingEntityEvent(EntityUid following, EntityUid follower) : base(following, follower)
     {
@@ -368,7 +405,7 @@ public sealed class StartedFollowingEntityEvent : FollowEvent
 /// <summary>
 ///     Raised on an entity when it stops following another entity.
 /// </summary>
-public sealed class StoppedFollowingEntityEvent : FollowEvent
+public sealed partial class StoppedFollowingEntityEvent : FollowEvent
 {
     public StoppedFollowingEntityEvent(EntityUid following, EntityUid follower) : base(following, follower)
     {
@@ -378,7 +415,7 @@ public sealed class StoppedFollowingEntityEvent : FollowEvent
 /// <summary>
 ///     Raised on an entity when it start following another entity.
 /// </summary>
-public sealed class EntityStartedFollowingEvent : FollowEvent
+public sealed partial class EntityStartedFollowingEvent : FollowEvent
 {
     public EntityStartedFollowingEvent(EntityUid following, EntityUid follower) : base(following, follower)
     {
@@ -388,7 +425,7 @@ public sealed class EntityStartedFollowingEvent : FollowEvent
 /// <summary>
 ///     Raised on an entity when it starts being followed by another entity.
 /// </summary>
-public sealed class EntityStoppedFollowingEvent : FollowEvent
+public sealed partial class EntityStoppedFollowingEvent : FollowEvent
 {
     public EntityStoppedFollowingEvent(EntityUid following, EntityUid follower) : base(following, follower)
     {

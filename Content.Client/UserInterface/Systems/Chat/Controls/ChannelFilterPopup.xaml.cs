@@ -40,8 +40,10 @@ public sealed partial class ChannelFilterPopup : Popup
     };
 
     private readonly Dictionary<ChatChannel, ChannelFilterCheckbox> _filterStates = new();
-    private readonly Dictionary<string, Button> _tabButtons = new();
+    private readonly Dictionary<string, ChatTabButton> _tabButtons = new();
     private readonly Dictionary<string, CheckBox> _radioFilterStates = new();
+    private string? _draggingTabId;
+    private string? _dragTargetTabId;
     private bool _filtersReadOnly;
 
     public event Action<ChatChannel, bool>? OnChannelFilter;
@@ -50,9 +52,12 @@ public sealed partial class ChannelFilterPopup : Popup
     public event Action<string>? OnTabSelected;
     public event Action<string>? OnTabAdded;
     public event Action<string>? OnTabRemoved;
+    public event Action<string, string>? OnTabRenamed;
+    public event Action<string, string>? OnTabMoved;
     public event Action<string, string?, string?>? OnStyleChanged;
     public event Action<string>? OnStyleReset;
     public event Action<bool>? OnLegacyModeChanged;
+    public event Action<bool>? OnColorWholeMessageChanged;
 
     public ChannelFilterPopup()
     {
@@ -74,7 +79,10 @@ public sealed partial class ChannelFilterPopup : Popup
 
         HighlightButton.OnPressed += HighlightsEntered;
         AddTabButton.OnPressed += AddTabPressed;
+        RenameTabButton.OnPressed += RenameTabPressed;
+        RenameTabNameEdit.OnTextEntered += RenameTabEntered;
         RemoveTabButton.OnPressed += RemoveTabPressed;
+        ColorWholeMessageCheckBox.OnPressed += ColorWholeMessagePressed;
         LegacyChatCheckBox.OnPressed += LegacyModePressed;
 
         // Add a placeholder text to the highlights TextEdit.
@@ -174,29 +182,46 @@ public sealed partial class ChannelFilterPopup : Popup
 
     public void ConfigureTabs(IReadOnlyList<ChatTabSettings> tabs, string activeTabId)
     {
+        _draggingTabId = null;
+        _dragTargetTabId = null;
+
         while (TabsList.ChildCount > 0)
         {
             TabsList.RemoveChild(0);
         }
 
         _tabButtons.Clear();
+        var activeTab = tabs.FirstOrDefault(tab => string.Equals(tab.Id, activeTabId, StringComparison.OrdinalIgnoreCase));
+        var activeIsAll = activeTab != null &&
+                          string.Equals(activeTab.Id, ChatUserSettings.AllTabId, StringComparison.OrdinalIgnoreCase);
 
         foreach (var tab in tabs)
         {
             var capturedId = tab.Id;
-            var button = new Button
+            var isAll = string.Equals(tab.Id, ChatUserSettings.AllTabId, StringComparison.OrdinalIgnoreCase);
+            var button = new ChatTabButton(tab.Id)
             {
                 Text = tab.Title,
                 ToggleMode = true,
+                Mode = BaseButton.ActionMode.Release,
                 Pressed = tab.Id == activeTabId,
                 HorizontalExpand = true,
-                MinHeight = 28
+                MinHeight = 28,
+                CanDrag = !isAll
             };
             button.OnPressed += _ => OnTabSelected?.Invoke(capturedId);
+            button.DragStarted += OnTabDragStarted;
+            button.DragEntered += OnTabDragEntered;
+            button.DragExited += OnTabDragExited;
+            button.DragEnded += OnTabDragEnded;
             TabsList.AddChild(button);
             _tabButtons[capturedId] = button;
         }
 
+        UpdateTabDragVisuals();
+        RenameTabNameEdit.Text = activeTab?.Title ?? string.Empty;
+        RenameTabNameEdit.Editable = activeTab != null && !activeIsAll;
+        RenameTabButton.Disabled = activeTab == null || activeIsAll;
         RemoveTabButton.Disabled = tabs.Count <= 1 ||
                                    string.Equals(activeTabId, ChatUserSettings.AllTabId, StringComparison.OrdinalIgnoreCase);
     }
@@ -374,6 +399,11 @@ public sealed partial class ChannelFilterPopup : Popup
         LegacyChatCheckBox.Pressed = enabled;
     }
 
+    public void SetColorWholeMessage(bool enabled)
+    {
+        ColorWholeMessageCheckBox.Pressed = enabled;
+    }
+
     public void UpdateHighlights(string highlights)
     {
         HighlightEdit.TextRope = new Rope.Leaf(highlights);
@@ -396,6 +426,93 @@ public sealed partial class ChannelFilterPopup : Popup
         NewTabNameEdit.Text = string.Empty;
     }
 
+    private void RenameTabEntered(LineEdit.LineEditEventArgs args)
+    {
+        RenameSelectedTab();
+    }
+
+    private void RenameTabPressed(ButtonEventArgs _args)
+    {
+        RenameSelectedTab();
+    }
+
+    private void RenameSelectedTab()
+    {
+        foreach (var (id, button) in _tabButtons)
+        {
+            if (!button.Pressed ||
+                string.Equals(id, ChatUserSettings.AllTabId, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            OnTabRenamed?.Invoke(id, RenameTabNameEdit.Text);
+            return;
+        }
+    }
+
+    private void OnTabDragStarted(string tabId)
+    {
+        if (string.Equals(tabId, ChatUserSettings.AllTabId, StringComparison.OrdinalIgnoreCase))
+            return;
+
+        _draggingTabId = tabId;
+        _dragTargetTabId = null;
+        UpdateTabDragVisuals();
+    }
+
+    private void OnTabDragEntered(string targetTabId)
+    {
+        if (_draggingTabId == null)
+            return;
+
+        if (string.Equals(_draggingTabId, targetTabId, StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(targetTabId, ChatUserSettings.AllTabId, StringComparison.OrdinalIgnoreCase))
+        {
+            _dragTargetTabId = null;
+            UpdateTabDragVisuals();
+            return;
+        }
+
+        _dragTargetTabId = targetTabId;
+        UpdateTabDragVisuals();
+    }
+
+    private void OnTabDragExited(string targetTabId)
+    {
+        if (_draggingTabId == null ||
+            !string.Equals(_dragTargetTabId, targetTabId, StringComparison.OrdinalIgnoreCase))
+            return;
+
+        _dragTargetTabId = null;
+        UpdateTabDragVisuals();
+    }
+
+    private void OnTabDragEnded(string tabId)
+    {
+        var draggingTabId = _draggingTabId;
+        if (draggingTabId == null)
+            return;
+
+        var targetTabId = _dragTargetTabId;
+
+        _draggingTabId = null;
+        _dragTargetTabId = null;
+
+        UpdateTabDragVisuals();
+
+        if (targetTabId != null)
+            OnTabMoved?.Invoke(draggingTabId, targetTabId);
+    }
+
+    private void UpdateTabDragVisuals()
+    {
+        foreach (var (tabId, button) in _tabButtons)
+        {
+            var dragging = string.Equals(tabId, _draggingTabId, StringComparison.OrdinalIgnoreCase);
+            var dropTarget = string.Equals(tabId, _dragTargetTabId, StringComparison.OrdinalIgnoreCase);
+            button.SetDragVisualState(dragging, dropTarget);
+        }
+    }
+
     private void RemoveTabPressed(ButtonEventArgs _args)
     {
         foreach (var (id, button) in _tabButtons)
@@ -411,6 +528,11 @@ public sealed partial class ChannelFilterPopup : Popup
     private void LegacyModePressed(ButtonEventArgs args)
     {
         OnLegacyModeChanged?.Invoke(((CheckBox) args.Button).Pressed);
+    }
+
+    private void ColorWholeMessagePressed(ButtonEventArgs args)
+    {
+        OnColorWholeMessageChanged?.Invoke(((CheckBox) args.Button).Pressed);
     }
 
     private void ShowSettingsPage(Control page)

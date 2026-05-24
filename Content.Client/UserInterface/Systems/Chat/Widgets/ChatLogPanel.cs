@@ -1,5 +1,6 @@
 using Content.Shared.Chat;
 using Robust.Client.Graphics;
+using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -9,12 +10,18 @@ namespace Content.Client.UserInterface.Systems.Chat.Widgets;
 public sealed class ChatLogPanel : PanelContainer
 {
     public const int MaxEntries = 2500;
+    private const float BottomTolerance = 12f;
+    private const float ScrollDirectionTolerance = 1f;
 
-    private readonly ScrollContainer _scroll;
+    private readonly ChatScrollContainer _scroll;
     private readonly BoxContainer _rows;
     private readonly Button _scrollToLatest;
     private bool _isAtBottom = true;
+    private bool _followingBottom = true;
     private int _pendingScrollToBottomFrames;
+    private int _pendingLayoutRefreshFrames;
+    private float _lastLayoutWidth = -1f;
+    private float _lastScrollTarget;
 
     public int EntryCount => _rows.ChildCount;
 
@@ -22,14 +29,7 @@ public sealed class ChatLogPanel : PanelContainer
     {
         HorizontalExpand = true;
         VerticalExpand = true;
-        PanelOverride = new StyleBoxFlat
-        {
-            BackgroundColor = Color.FromHex("#07090b"),
-            ContentMarginLeftOverride = 3,
-            ContentMarginRightOverride = 3,
-            ContentMarginTopOverride = 3,
-            ContentMarginBottomOverride = 3
-        };
+        PanelOverride = new StyleBoxEmpty();
 
         var root = new BoxContainer
         {
@@ -40,7 +40,7 @@ public sealed class ChatLogPanel : PanelContainer
         };
         AddChild(root);
 
-        _scroll = new ScrollContainer
+        _scroll = new ChatScrollContainer
         {
             HorizontalExpand = true,
             VerticalExpand = true,
@@ -48,6 +48,7 @@ public sealed class ChatLogPanel : PanelContainer
             VScrollEnabled = true,
             ReserveScrollbarSpace = true
         };
+        _scroll.OnUserMouseWheel += OnUserMouseWheel;
         _scroll.OnScrolled += UpdateScrollState;
         root.AddChild(_scroll);
 
@@ -82,8 +83,10 @@ public sealed class ChatLogPanel : PanelContainer
             _rows.RemoveChild(0);
         }
 
-        if (_isAtBottom)
+        if (_followingBottom || _isAtBottom)
             QueueScrollToBottom();
+        else
+            _scrollToLatest.Visible = true;
 
         return row;
     }
@@ -98,11 +101,13 @@ public sealed class ChatLogPanel : PanelContainer
         _isAtBottom = true;
         _scrollToLatest.Visible = false;
         QueueScrollToBottom();
+        QueueLayoutRefresh();
     }
 
     public void ScrollToBottom()
     {
         _isAtBottom = true;
+        _followingBottom = true;
         _scrollToLatest.Visible = false;
         QueueScrollToBottom();
     }
@@ -111,13 +116,17 @@ public sealed class ChatLogPanel : PanelContainer
     {
         foreach (var child in _rows.Children)
         {
-            child.InvalidateMeasure();
+            if (child is ChatMessageRow row)
+                row.RefreshLayout();
+            else
+                child.InvalidateMeasure();
         }
 
         _rows.InvalidateMeasure();
         _scroll.InvalidateMeasure();
+        InvalidateMeasure();
 
-        if (forceScrollToBottom || _isAtBottom)
+        if (forceScrollToBottom || _followingBottom || _isAtBottom)
             ScrollToBottom();
         else
             UpdateScrollState();
@@ -126,34 +135,105 @@ public sealed class ChatLogPanel : PanelContainer
     protected override void Resized()
     {
         base.Resized();
-        RefreshLayout();
+        QueueLayoutRefresh();
     }
 
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
 
+        if (Width > 0 && MathF.Abs(Width - _lastLayoutWidth) > 0.5f)
+        {
+            _lastLayoutWidth = Width;
+            QueueLayoutRefresh();
+        }
+
+        if (_pendingLayoutRefreshFrames > 0)
+        {
+            RefreshLayout();
+            _pendingLayoutRefreshFrames--;
+        }
+
         if (_pendingScrollToBottomFrames <= 0)
             return;
 
         _scroll.VScrollTarget = float.MaxValue;
-        _scroll.VScroll = float.MaxValue;
+        _lastScrollTarget = _scroll.VScrollTarget;
         _scrollToLatest.Visible = false;
         _pendingScrollToBottomFrames--;
     }
 
+    private void OnUserMouseWheel(float deltaY)
+    {
+        if (deltaY <= 0)
+            return;
+
+        _followingBottom = false;
+        _pendingScrollToBottomFrames = 0;
+    }
+
     private void QueueScrollToBottom()
     {
+        _isAtBottom = true;
+        _followingBottom = true;
+        _scroll.VScrollTarget = float.MaxValue;
+        _lastScrollTarget = _scroll.VScrollTarget;
+        _scrollToLatest.Visible = false;
+
         // Rebuilt tab contents can take multiple layout passes before ScrollContainer
         // knows its final max value, so keep snapping for a few frames.
         _pendingScrollToBottomFrames = 4;
     }
 
+    private void QueueLayoutRefresh()
+    {
+        // RichTextLabel caches line breaks during measure. On startup, chat rows
+        // can be created before the separated chat panel reaches its final width,
+        // so keep refreshing briefly until the real width has settled.
+        _pendingLayoutRefreshFrames = 8;
+    }
+
     private void UpdateScrollState()
     {
-        var scrollBottom = _scroll.VScrollTarget + Height + 12;
+        var scrollTarget = _scroll.VScrollTarget;
+        var scrolledUp = scrollTarget < _lastScrollTarget - ScrollDirectionTolerance;
+        _lastScrollTarget = scrollTarget;
+
+        if (scrolledUp && _pendingScrollToBottomFrames <= 0 && _pendingLayoutRefreshFrames <= 0)
+            _followingBottom = false;
+
+        var scrollBottom = scrollTarget + _scroll.Height + BottomTolerance;
         var contentHeight = _rows.DesiredSize.Y;
         _isAtBottom = scrollBottom >= contentHeight;
-        _scrollToLatest.Visible = !_isAtBottom;
+
+        if (_isAtBottom)
+        {
+            _followingBottom = true;
+            _scrollToLatest.Visible = false;
+            return;
+        }
+
+        if (_followingBottom)
+        {
+            if (_pendingScrollToBottomFrames <= 0)
+                QueueScrollToBottom();
+
+            _scrollToLatest.Visible = false;
+            return;
+        }
+
+        _pendingScrollToBottomFrames = 0;
+        _scrollToLatest.Visible = true;
+    }
+
+    private sealed class ChatScrollContainer : ScrollContainer
+    {
+        public event Action<float>? OnUserMouseWheel;
+
+        protected override void MouseWheel(GUIMouseWheelEventArgs args)
+        {
+            OnUserMouseWheel?.Invoke(args.Delta.Y);
+            base.MouseWheel(args);
+        }
     }
 }

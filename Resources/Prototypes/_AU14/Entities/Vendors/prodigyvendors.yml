@@ -54,7 +54,7 @@
       entries:
       - id: RMCM5CameraGear
         amount: 30
-      - id: AU14HeadsetSectionMarine
+      - id: AU14HeadsetGovforMarine
         name: empty headset
         amount: 20
     - name: Heads Up Display
@@ -296,17 +296,6 @@
       takeAll: CMUEssentialEquipment
       entries:
       - id: AU14VendorBundleCorpsmanEssentials
-    - name: Medical Pouches
-      choices: { CMUPlatoonMedicalPouch: 2 }
-      entries:
-      - id: RMCPouchAutoinjector
-      - id: RMCPouchFirstResponder
-      - id: RMCPouchMedical
-      - id: RMCPouchSyringeFill
-      - id: RMCPouchFirstAidSplintsGauzeOintment
-        name: first-aid pouch (gauze, ointment) # TODO RMC14 splints
-      - id: RMCPouchFirstAidPills
-        name: first-aid pouch (pills)
     - name: Medical Pouches
       choices: { CMUPlatoonMedicalPouch: 2 }
       entries:
@@ -613,7 +602,9 @@
         amount: 5
     - name: Headsets
       entries:
-      - id: AU14HeadsetSectionLeader
+      - id: AU14HeadsetGovforCommand
+        amount: 2
+      - id: AU14HeadsetGovforAuxiliary
         amount: 2
     - name: Backpack
       entries:
@@ -904,6 +895,8 @@
         amount: 8
       - id: RMCWeaponLauncherDisposableFolded
         amount: 2
+      - id: RMCRocketM5510Brute
+        amount: 12
     - name: Barrel Attachments
       entries:
       - id: RMCAttachmentExtendedBarrel

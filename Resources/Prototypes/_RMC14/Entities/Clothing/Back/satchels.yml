@@ -304,7 +304,6 @@
   - type: StorageFill
     contents:
     - id: RMCArmorProvostMarshal # TODO RMC14 provost office handheld beacon
-    - id: RMCTabletCO
 
 - type: entity
   parent: CMSatchelSecurity
@@ -314,7 +313,6 @@
   - type: StorageFill
     contents:
     - id: RMCArmorProvostMarshal # TODO RMC14 provost office handheld beacon
-    - id: RMCTabletCO
 
 - type: entity
   parent: CMSatchelSecurity
@@ -586,7 +584,8 @@
     - id: CMFolderWhite
     - id: CMPenClicky
     - id: RMCRadioHandheldColonyOff
-    - id: CMClipboard # TODO RMC14 tape recorder
+    - id: CMClipboard
+    - id: RMCUniversalRecorder
     - id: CMCrowbar
 
 - type: entity
@@ -904,7 +903,6 @@
     contents:
     # M40 CCDP Greande #RMC14 TODO
     - id: RMCGrenadeFlashBang
-    - id: RMCTabletCO
     - id: RMCLaserDesignator
     - id: RMCArmorM3General
     - id: CMArmorHelmetM11CGeneral

@@ -32,7 +32,7 @@
         RMCSkillFirearms: 2
         RMCSkillFireman: 2
         RMCSkillJtac: 1
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetArmyReservist
     - type: RMCSurvivor
     - type: MotionDetectorTracked
@@ -81,7 +81,7 @@
   name: people's armed police officer preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomGear:
     - [ RMCGrenadeMolotov ]
     - [ CMPackFlare ]

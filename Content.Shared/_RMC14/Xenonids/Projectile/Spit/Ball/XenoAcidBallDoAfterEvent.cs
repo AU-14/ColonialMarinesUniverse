@@ -14,4 +14,9 @@ public sealed partial class XenoAcidBallDoAfterEvent : SimpleDoAfterEvent
     {
         Coordinates = coordinates;
     }
+
+    public override DoAfterEvent Clone()
+    {
+        return new XenoAcidBallDoAfterEvent(Coordinates);
+    }
 }

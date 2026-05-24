@@ -1,4 +1,5 @@
 ﻿using Content.Shared._RMC14.Medical.HUD.Components;
+using Content.Shared.Actions;
 using Content.Shared.Body.Organ;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
@@ -21,6 +22,18 @@ public sealed partial class SynthComponent : Component
 
     [DataField]
     public EntProtoId RemoveComponents = "RMCSynthRemoveComponents";
+
+    [DataField]
+    public EntProtoId HudComponents = "RMCSynthHudComponents";
+
+    [DataField]
+    public EntProtoId ToggleHudAction = "RMCActionToggleSynthHud";
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? ToggleHudActionEntity;
+
+    [DataField, AutoNetworkedField]
+    public bool HudActive = true;
 
     /// <summary>
     /// The final stun duration (after endurance skill) is divided by this number.
@@ -95,7 +108,10 @@ public sealed partial class SynthComponent : Component
     public TimeSpan SelfRepairTime = TimeSpan.FromSeconds(30);
 
     [DataField, AutoNetworkedField]
-    public FixedPoint2 CritThreshold = FixedPoint2.New(199);
+    public FixedPoint2 CritThreshold = FixedPoint2.New(149);
+
+    [DataField, AutoNetworkedField]
+    public FixedPoint2 DeadThreshold = FixedPoint2.New(150);
 
     /// <summary>
     /// The tool quality needed to repair the synth brute damage.
@@ -133,6 +149,8 @@ public sealed partial class SynthComponent : Component
     [DataField, AutoNetworkedField]
     public string DamageVisualsColor = "#EEEEEE";
 
+    [DataField]
+    public TimeSpan NextUnableUsePopup;
 
     [DataField, AutoNetworkedField]
     public bool HideGeneration = false;
@@ -149,5 +167,7 @@ public sealed partial class SynthComponent : Component
     ///     later ComponentStartup (the AddComponentSpecial path).
     /// </summary>
     [DataField, AutoNetworkedField]
-    public bool Initialized;
+    public new bool Initialized;
 }
+
+public sealed partial class RMCToggleSynthHudActionEvent : InstantActionEvent;

@@ -18,18 +18,19 @@ using Robust.Shared.Prototypes;
 namespace Content.Client._RMC14.Xenonids.Construction;
 
 [UsedImplicitly]
-public sealed class XenoConstructionGhostSystem : EntitySystem
+public sealed partial class XenoConstructionGhostSystem : EntitySystem
 {
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly IInputManager _inputManager = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
-    [Dependency] private readonly SharedXenoConstructionSystem _xenoConstruction = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private IEyeManager _eyeManager = default!;
+    [Dependency] private IInputManager _inputManager = default!;
+    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private IUserInterfaceManager _uiManager = default!;
+    [Dependency] private SharedXenoConstructionSystem _xenoConstruction = default!;
 
     private EntityUid? _currentGhost;
     private string? _currentGhostStructure;
@@ -215,31 +216,35 @@ public sealed class XenoConstructionGhostSystem : EntitySystem
         if (!TryComp(ghost, out SpriteComponent? sprite))
             return;
 
-        sprite.Color = new Color(48, 255, 48, 128);
-        sprite.DrawDepth = 9;
-        sprite.Visible = true;
+        _sprite.SetColor((ghost, sprite), new Color(48, 255, 48, 128));
+        _sprite.SetDrawDepth((ghost, sprite), 9);
+        _sprite.SetVisible((ghost, sprite), true);
 
         if (!_prototypeManager.TryIndex<EntityPrototype>(structurePrototype, out var prototype))
             return;
 
-        if (TryConfigureIconSmoothSprite(sprite, prototype))
+        if (TryConfigureIconSmoothSprite((ghost, sprite), prototype))
             return;
 
-        if (prototype.TryGetComponent<SpriteComponent>(out var prototypeSprite, _compFactory))
+        if (prototype.TryGetComponent<SpriteComponent>(out _, _compFactory))
         {
-            sprite.CopyFrom(prototypeSprite);
-            sprite.Color = new Color(48, 255, 48, 128);
-            sprite.DrawDepth = 9;
+            var dummy = Spawn(prototype.ID, MapCoordinates.Nullspace);
+            if (TryComp(dummy, out SpriteComponent? prototypeSprite))
+                _sprite.CopySprite((dummy, prototypeSprite), (ghost, sprite));
+            Del(dummy);
+
+            _sprite.SetColor((ghost, sprite), new Color(48, 255, 48, 128));
+            _sprite.SetDrawDepth((ghost, sprite), 9);
 
             for (int i = 0; i < sprite.AllLayers.Count(); i++)
             {
                 sprite.LayerSetShader(i, "unshaded");
-                sprite.LayerSetVisible(i, true);
+                _sprite.LayerSetVisible((ghost, sprite), i, true);
             }
         }
     }
 
-    private bool TryConfigureIconSmoothSprite(SpriteComponent sprite, EntityPrototype prototype)
+    private bool TryConfigureIconSmoothSprite(Entity<SpriteComponent?> sprite, EntityPrototype prototype)
     {
         if (!prototype.TryGetComponent(out IconSmoothComponent? iconSmooth, _compFactory) ||
             !prototype.TryGetComponent(out SpriteComponent? prototypeSprite, _compFactory) ||
@@ -250,15 +255,15 @@ public sealed class XenoConstructionGhostSystem : EntitySystem
 
         try
         {
-            sprite.LayerMapReserveBlank(0);
-            sprite.LayerSetRSI(0, prototypeSprite.BaseRSI);
+            _sprite.LayerMapReserve(sprite, "0");
+            _sprite.LayerSetRsi(sprite, 0, prototypeSprite.BaseRSI);
 
             if (prototypeSprite.BaseRSI?.TryGetState(iconSmooth.StateBase, out _) == true)
             {
-                sprite.LayerSetState(0, iconSmooth.StateBase);
-                sprite.LayerSetShader(0, "unshaded");
-                sprite.LayerSetVisible(0, true);
-                sprite.Color = new Color(48, 255, 48, 128);
+                _sprite.LayerSetRsiState(sprite, 0, iconSmooth.StateBase);
+                sprite.Comp!.LayerSetShader(0, "unshaded");
+                _sprite.LayerSetVisible(sprite, 0, true);
+                _sprite.SetColor(sprite, new Color(48, 255, 48, 128));
                 return true;
             }
             else
@@ -294,9 +299,9 @@ public sealed class XenoConstructionGhostSystem : EntitySystem
 
         if (TryComp(_currentGhost.Value, out SpriteComponent? sprite))
         {
-            sprite.Color = IsValidConstructionLocation(player.Value, coords)
+            _sprite.SetColor((_currentGhost.Value, sprite), IsValidConstructionLocation(player.Value, coords)
                 ? new Color(48, 255, 48, 128)
-                : new Color(255, 48, 48, 128);
+                : new Color(255, 48, 48, 128));
         }
     }
 

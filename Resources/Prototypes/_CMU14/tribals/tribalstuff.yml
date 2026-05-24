@@ -1,0 +1,496 @@
+# Abstract base for every tribal mob variant. The three concrete variants
+# (leader / spear / bowman) parent this and slot a job + starting-gear.
+- type: entity
+  save: false
+  abstract: true
+  parent: RMCBaseMobSpeciesOrganic
+  id: CMUMobTribal
+  name: Tribal
+  suffix: CMU14
+  components:
+  - type: Tribal
+  # RandomHumanoidAppearance rolls a fresh humanoid profile on map-init; we
+  # tell it not to set the entity name because RandomMetadata is responsible
+  # for the Na'vi-flavoured first-name + clan name combo. Skin is applied
+  # after the roll by TribalAppearanceSystem.
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: RandomMetadata
+    nameSegments:
+    - NamesTribalFirst
+    - NamesTribalClan
+    nameFormat: name-format-tribal
+  # Override the base species faction — tribals defend the homeworld, they
+  # aren't on the AUColonist team. Their own Tribe faction is hostile to
+  # everyone else so they fight invaders on sight.
+  - type: NpcFactionMember
+    factions:
+    - Tribe
+  # Doubled health from the human baseline (200/275 -> 400/550). Stone-age
+  # warriors are tough; you don't drop them with a sidearm.
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      400: Critical
+      550: Dead
+  # 1.5x speed from the human baseline (2.7/5 -> 4.05/7.5). Tribals
+  # outrun invaders so they can close the gap with spears/bows.
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.05
+    baseSprintSpeed: 7.5
+
+# --- Job + role prototypes -----------------------------------------------
+# Three tribal jobs, each parented directly to CMJobBase like the cultist
+# and WYHT roles. No abstract intermediary — every field is inline so the
+# standard GhostRoleApplySpecial pipe finds everything it needs.
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobTribalLeader
+  name: au14-job-name-tribal-leader
+  description: au14-job-description-tribal-leader
+  setPreference: false
+  playTimeTracker: AU14JobTribal
+  startingGear: AU14GearTribalLeader
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-tribal
+  roleWeight: 0.25
+  hidden: true
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillCqc: 2
+        RMCSkillFireman: 1
+        RMCSkillEndurance: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-tribal-leader
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobTribalSpear
+  name: au14-job-name-tribal-spear
+  description: au14-job-description-tribal-spear
+  setPreference: false
+  playTimeTracker: AU14JobTribal
+  startingGear: AU14GearTribalSpear
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-tribal
+  roleWeight: 0.25
+  hidden: true
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillCqc: 1
+        RMCSkillFireman: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-tribal-spear
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobTribalBowman
+  name: au14-job-name-tribal-bowman
+  description: au14-job-description-tribal-bowman
+  setPreference: false
+  playTimeTracker: AU14JobTribal
+  startingGear: AU14GearTribalBowman
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-tribal
+  roleWeight: 0.25
+  hidden: true
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-tribal-bowman
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobTribalShaman
+  name: au14-job-name-tribal-shaman
+  description: au14-job-description-tribal-shaman
+  setPreference: false
+  playTimeTracker: AU14JobTribal
+  startingGear: AU14GearTribalShaman
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-tribal
+  roleWeight: 0.25
+  hidden: true
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillMedical: 3
+        RMCSkillSurgery: 2
+        RMCSkillCqc: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-tribal-shaman
+
+- type: playTimeTracker
+  id: AU14JobTribal
+  isHumanoid: true
+
+# --- Mob variants --------------------------------------------------------
+
+- type: entity
+  parent: CMUMobTribal
+  id: AU14MobTribalLeader
+  suffix: CMU14, Leader
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tribal-leader
+    description: au14-job-description-tribal-leader
+    reregister: false
+    job: AU14JobTribalLeader
+    raffle:
+      settings: short
+    rules: au14-job-description-tribal-leader
+
+- type: entity
+  parent: CMUMobTribal
+  id: AU14MobTribalSpear
+  suffix: CMU14, Spear
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tribal-spear
+    description: au14-job-description-tribal-spear
+    reregister: false
+    job: AU14JobTribalSpear
+    raffle:
+      settings: short
+    rules: au14-job-description-tribal-spear
+
+- type: entity
+  parent: CMUMobTribal
+  id: AU14MobTribalBowman
+  suffix: CMU14, Bowman
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tribal-bowman
+    description: au14-job-description-tribal-bowman
+    reregister: false
+    job: AU14JobTribalBowman
+    raffle:
+      settings: short
+    rules: au14-job-description-tribal-bowman
+
+- type: entity
+  parent: CMUMobTribal
+  id: AU14MobTribalShaman
+  suffix: CMU14, Shaman
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tribal-shaman
+    description: au14-job-description-tribal-shaman
+    reregister: false
+    job: AU14JobTribalShaman
+    raffle:
+      settings: short
+    rules: au14-job-description-tribal-shaman
+
+- type: entity
+  save: false
+  parent: CMMobSlimePerson
+  id: TribalSlime
+  name: Urist C.M McSlime
+  suffix: RMC14
+  components:
+  - type: Tribal
+
+# Tribal Weapons
+
+- type: entity
+  name: tribal spear
+  parent: Spear
+  id: TribalSpear
+  description: A spear crafted by tribal warriors. Vicious when stabbed, lethal when thrown.
+  components:
+  - type: Tag
+    tags:
+    - Spear
+    - tribe
+  - type: Sprite
+    sprite: Objects/Weapons/Melee/bone_spear.rsi
+  # Base 100, light click halved to 50 via clickDamageModifier. Heavy
+  # wide swing keeps the full 100 (engine quirk: light damage pipes
+  # through ClickDamageModifier, heavy path bypasses it), so wide swing
+  # is exactly double the stab.
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Piercing: 100
+    clickDamageModifier: 0.5
+    angle: 0
+    animation: WeaponArcThrust
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+  # Throw — 140 piercing on impact via DamageOtherOnHit.
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Piercing: 140
+  # Infinite durability — base Spear has a Destructible threshold at 30
+  # damage that shatters the haft. Override it with an absurdly high cap
+  # so the bone spear never breaks no matter what hits it.
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 99999999
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+# Tribal arrow — 130 piercing on hit. Goes in the quiver, fired from
+# TribalBow / BowImprovised.
+- type: entity
+  parent: ArrowImprovised
+  id: TribalArrow
+  name: bone arrow
+  description: A barbed bone-tipped shaft fletched with feathers. Hits like a bus.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+    layers:
+    - state: tail
+      color: tan
+    - state: rod
+      color: brown
+    - state: tip
+      color: ivory
+    - state: solution1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 130
+
+- type: entity
+  name: tribal bow
+  parent: BaseBow
+  id: TribalBow
+  description: A crude bow made by tribal warriors. Only usable by tribals.
+  components:
+  - type: Tag
+    tags:
+    - tribe
+  - type: Sprite
+    layers:
+    - state: unwielded
+      map: [ base ]
+    - state: unwielded-arrow
+      map: [ arrow ]
+      visible: false
+    - state: unwielded-plunger
+      map: [ plunger ]
+      visible: false
+  - type: Appearance
+  - type: ItemMapper
+    spriteLayers:
+    - arrow
+    - plunger
+    mapLayers:
+      arrow:
+        whitelist:
+          tags:
+          - Arrow
+      plunger:
+        whitelist:
+          tags:
+          - Plunger
+  - type: GenericVisualizer
+    visuals:
+      enum.WieldableVisuals.Wielded:
+        arrow:
+          True: { state: wielded-arrow }
+          False: { state: unwielded-arrow }
+        plunger:
+          True: { state: wielded-plunger }
+          False: { state: unwielded-plunger }
+        base:
+          True: { state: wielded }
+          False: { state: unwielded }
+
+
+- type: Tag
+  id: tribe
+
+# Tribal faction — hostile to colony, marines, xenos, abominations, etc.
+# Mirrors the threat lists used by CMUAPE / RMCXeno.
+- type: npcFaction
+  id: Tribe
+  hostile:
+  - UNMC
+  - NanoTrasen
+  - SPP
+  - GOVFOR
+  - OPFOR
+  - Halcyon
+  - WeYa
+  - Civilian
+  - CLF
+  - TSE
+  - AUColonist
+  - CMUAPE
+  - RMCXeno
+  - Abomination
+
+# --- Starting gear ------------------------------------------------------
+# Inline per-variant — no abstract parent, matches the cultist/WYHT
+# starting-gear pattern. Every tribal slots a brown jumpsuit (their
+# rough leather wrap), sandals, leather satchel, and a quiver of 12
+# tribal arrows; the weapon in-hand is the only per-variant difference.
+
+- type: startingGear
+  id: AU14GearTribalLeader
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    shoes: RMCShoesSandals
+    back: ClothingBackpackSatchelLeather
+    belt: ClothingBeltQuiver
+  inhand:
+  - TribalSpear
+  storage:
+    belt:
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    back:
+    - Torch
+    - Torch
+    - Torch
+    - Torch
+    - RMCToolHatchet
+
+- type: startingGear
+  id: AU14GearTribalSpear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    shoes: RMCShoesSandals
+    back: ClothingBackpackSatchelLeather
+    belt: ClothingBeltQuiver
+  inhand:
+  - TribalSpear
+  storage:
+    belt:
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    back:
+    - Torch
+    - Torch
+    - Torch
+    - Torch
+    - RMCToolHatchet
+
+- type: startingGear
+  id: AU14GearTribalBowman
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    shoes: RMCShoesSandals
+    back: ClothingBackpackSatchelLeather
+    belt: ClothingBeltQuiver
+  inhand:
+  - TribalBow
+  storage:
+    belt:
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    back:
+    - Torch
+    - Torch
+    - Torch
+    - Torch
+    - RMCToolHatchet
+
+# Shaman — tribal medic. Drops the bow/quiver and rolls with a satchel
+# stuffed with field medicine instead. Spear is in-hand so they can still
+# defend themselves; the belt slot carries the splints/gauze/ointment
+# survivor pouch every tribal medic role uses.
+- type: startingGear
+  id: AU14GearTribalShaman
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    shoes: RMCShoesSandals
+    back: ClothingBackpackSatchelLeather
+    belt: RMCPouchFirstAidSplintsGauzeOintment
+  inhand:
+  - TribalSpear
+  storage:
+    back:
+    - CMGauze10
+    - CMOintment10
+    - CMGauze10
+    - CMOintment10
+    - CMHealthAnalyzer
+    - CMFirstAidKitFilledRobust
+    - Torch
+    - Torch
+    - Torch
+    - Torch
+    - RMCToolHatchet

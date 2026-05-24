@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Content.Client.Chemistry.Containers.EntitySystems;
 using Content.Client.UserInterface.ControlExtensions;
 using Content.Shared._RMC14.Chemistry;
@@ -15,19 +15,19 @@ using Robust.Shared.Utility;
 namespace Content.Client._RMC14.Chemistry;
 
 [UsedImplicitly]
-public sealed class RMCChemicalDispenserBui : BoundUserInterface
+public sealed partial class RMCChemicalDispenserBui : BoundUserInterface
 {
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-
     private RMCChemicalDispenserWindow? _window;
 
     private readonly ContainerSystem _container;
+    private readonly RMCReagentSystem _reagent;
     private readonly SolutionContainerSystem _solution;
     private readonly List<(Button Button, FixedPoint2 Amount)> _dispenseButtons = new();
 
     public RMCChemicalDispenserBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
         _container = EntMan.System<ContainerSystem>();
+        _reagent = EntMan.System<RMCReagentSystem>();
         _solution = EntMan.System<SolutionContainerSystem>();
     }
 
@@ -44,7 +44,7 @@ public sealed class RMCChemicalDispenserBui : BoundUserInterface
                 var row = new BoxContainer();
                 void AddButton(ProtoId<ReagentPrototype> reagentId)
                 {
-                    if (_prototypes.TryIndexReagent(reagentId, out var reagentProto))
+                    if (_reagent.TryIndex(reagentId, out var reagentProto))
                     {
                         var reagentButton = new Button
                         {
@@ -152,7 +152,7 @@ public sealed class RMCChemicalDispenserBui : BoundUserInterface
                 foreach (var reagent in solution.Contents)
                 {
                     var reagentName = reagent.Reagent.Prototype;
-                    if (_prototypes.TryIndexReagent(reagentName, out ReagentPrototype? reagentProto))
+                    if (_reagent.TryIndex(reagent.Reagent, out var reagentProto))
                     {
                         reagentName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(reagentProto.LocalizedName);
                     }

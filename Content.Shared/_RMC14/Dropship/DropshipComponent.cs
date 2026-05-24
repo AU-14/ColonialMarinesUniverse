@@ -87,8 +87,17 @@ public sealed partial class DropshipComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan CancelFlightTime = TimeSpan.FromSeconds(10);
 
+    [DataField, AutoNetworkedField]
+    public EntityUid? LaunchAlarmEntity;
+
     [DataField]
     public SoundSpecifier ArrivalSound = new SoundPathSpecifier("/Audio/_RMC14/Machines/Shuttle/engine_landing.ogg");
+
+    [DataField]
+    public SoundSpecifier? LaunchAlarmSound = new SoundPathSpecifier("/Audio/_RMC14/Machines/Shuttle/dropship_launch_alarm.ogg")
+    {
+        Params = AudioParams.Default.WithVolume(2f).WithReferenceDistance(10).WithMaxDistance(30).WithLoop(true),
+    };
 
     /// <summary>
     ///     The faction of the hijacker, if any. Set during FlyTo when hijack=true.
@@ -114,4 +123,8 @@ public sealed partial class DropshipComponent : Component
 
     [DataField, AutoNetworkedField]
     public Vector2i TacticalLandFootprint = new(11, 21);
+
+    /// <summary>Withdrawal evacuation is in flight — cannot be cancelled.</summary>
+    [DataField, AutoNetworkedField]
+    public bool WithdrawEvacuating;
 }

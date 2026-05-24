@@ -26588,7 +26588,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 3552
           - 3551
         paper_label: !type:ContainerSlot
           showEnts: False
@@ -43674,15 +43673,6 @@ entities:
     - type: Transform
       pos: -91.5,-89.5
       parent: 1
-- proto: RMCTabletCO
-  entities:
-  - uid: 3552
-    components:
-    - type: Transform
-      parent: 3550
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: RMCTacticalMapTableLargeRotated
   entities:
   - uid: 6165

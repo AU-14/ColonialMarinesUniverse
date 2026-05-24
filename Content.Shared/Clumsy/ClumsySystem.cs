@@ -19,15 +19,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.Clumsy;
 
-public sealed class ClumsySystem : EntitySystem
+public sealed partial class ClumsySystem : EntitySystem
 {
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private INetManager _net = default!;
 
     public override void Initialize()
     {
@@ -50,7 +50,7 @@ public sealed class ClumsySystem : EntitySystem
 
         // TODO: Replace with RandomPredicted once the engine PR is merged
         var seed = SharedRandomExtensions.HashCodeCombine(new() { (int)_timing.CurTick.Value, GetNetEntity(ent).Id });
-        var rand = new System.Random(seed);
+        var rand = GetSeededRandom(seed);
         if (!rand.Prob(ent.Comp.ClumsyDefaultCheck))
             return;
 
@@ -69,7 +69,7 @@ public sealed class ClumsySystem : EntitySystem
 
         // TODO: Replace with RandomPredicted once the engine PR is merged
         var seed = SharedRandomExtensions.HashCodeCombine(new() { (int)_timing.CurTick.Value, GetNetEntity(ent).Id });
-        var rand = new System.Random(seed);
+        var rand = GetSeededRandom(seed);
         if (!rand.Prob(ent.Comp.ClumsyDefaultCheck))
             return;
 
@@ -88,7 +88,7 @@ public sealed class ClumsySystem : EntitySystem
 
         // TODO: Replace with RandomPredicted once the engine PR is merged
         var seed = SharedRandomExtensions.HashCodeCombine(new() { (int)_timing.CurTick.Value, GetNetEntity(args.Item).Id });
-        var rand = new System.Random(seed);
+        var rand = GetSeededRandom(seed);
         if (!rand.Prob(ent.Comp.ClumsyDefaultCheck))
             return;
 
@@ -122,7 +122,7 @@ public sealed class ClumsySystem : EntitySystem
 
         // TODO: Replace with RandomPredicted once the engine PR is merged
         var seed = SharedRandomExtensions.HashCodeCombine(new() { (int)_timing.CurTick.Value, GetNetEntity(args.Gun).Id });
-        var rand = new System.Random(seed);
+        var rand = GetSeededRandom(seed);
         if (!rand.Prob(ent.Comp.ClumsyDefaultCheck))
             return;
 
@@ -147,7 +147,7 @@ public sealed class ClumsySystem : EntitySystem
 
         // TODO: Replace with RandomPredicted once the engine PR is merged
         var seed = SharedRandomExtensions.HashCodeCombine(new() { (int)_timing.CurTick.Value, GetNetEntity(ent).Id });
-        var rand = new System.Random(seed);
+        var rand = GetSeededRandom(seed);
         if (!_cfg.GetCVar(CCVars.GameTableBonk) && !rand.Prob(ent.Comp.ClumsyDefaultCheck))
             return;
 
@@ -203,6 +203,13 @@ public sealed class ClumsySystem : EntitySystem
         }
 
         _stun.TryParalyze(target, stunTime, true);
+    }
+
+    private static RobustRandom GetSeededRandom(int seed)
+    {
+        var random = new RobustRandom();
+        random.SetSeed(seed);
+        return random;
     }
     #endregion
 }

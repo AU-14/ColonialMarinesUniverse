@@ -31,7 +31,7 @@
         - RMCSquadFORECON
     - type: JobPrefix
       prefix: cm-job-prefix-rifleman
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCSurvivorPresetForecon
     - type: SpotterWhitelist
   hidden: true

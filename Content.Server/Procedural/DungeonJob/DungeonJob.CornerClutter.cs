@@ -39,7 +39,7 @@ public sealed partial class DungeonJob
                 if (!blocked)
                     continue;
 
-                if (random.Prob(gen.Chance))
+                if (Prob(random, gen.Chance))
                 {
                     var coords = _maps.GridTileToLocal(_gridUid, _grid, tile);
                     var protos = _entTable.GetSpawns(contentsTable, random);

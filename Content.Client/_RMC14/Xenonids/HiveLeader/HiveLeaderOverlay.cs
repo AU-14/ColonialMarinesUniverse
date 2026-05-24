@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Client._RMC14.NightVision;
 using Content.Shared._RMC14.Mobs;
 using Content.Shared._RMC14.Xenonids;
@@ -13,13 +13,15 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._RMC14.Xenonids.HiveLeader;
 
-public sealed class HiveLeaderOverlay : Overlay
+public sealed partial class HiveLeaderOverlay : Overlay
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
+
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly SpriteSystem _sprite;
     private readonly TransformSystem _transform;
@@ -41,7 +43,7 @@ public sealed class HiveLeaderOverlay : Overlay
 
         _xformQuery = _entity.GetEntityQuery<TransformComponent>();
 
-        _shader = _prototype.Index<ShaderPrototype>("unshaded").Instance();
+        _shader = _prototype.Index(UnshadedShader).Instance();
 
         ZIndex = 1;
     }
@@ -63,12 +65,12 @@ public sealed class HiveLeaderOverlay : Overlay
         handle.UseShader(_shader);
 
         var leaders = _entity.EntityQueryEnumerator<HiveLeaderComponent, SpriteComponent, TransformComponent>();
-        while (leaders.MoveNext(out _, out var sprite, out var xform))
+        while (leaders.MoveNext(out var uid, out _, out var sprite, out var xform))
         {
             if (xform.MapID != args.MapId)
                 continue;
 
-            var bounds = sprite.Bounds;
+            var bounds = _sprite.GetLocalBounds((uid, sprite));
             var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
 
             if (!bounds.Translated(worldPos).Intersects(args.WorldAABB))

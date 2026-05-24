@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Linq;
 using Content.Shared._RMC14.Marines.Skills;
 using Robust.Shared.Console;
@@ -10,9 +10,9 @@ using Robust.Shared.Utility;
 
 namespace Content.Server._RMC14.SkillsCommand;
 
-public sealed class SkillTypeParser : TypeParser<SkillType>
+public sealed partial class SkillTypeParser : TypeParser<SkillType>
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private IEntityManager _entities = default!;
 
     public override bool TryParse(ParserContext ctx, out SkillType result)
     {

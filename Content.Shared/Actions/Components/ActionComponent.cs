@@ -169,7 +169,6 @@ public sealed partial class ActionComponent : Component
     ///     Takes priority over RaiseOnUser.
     /// </summary>
     [DataField]
-    [Obsolete("This datafield will be reworked in an upcoming action refactor")]
     public bool RaiseOnAction;
 
     /// <summary>
@@ -198,7 +197,7 @@ public sealed partial class ActionComponent : Component
 }
 
 [DataRecord, Serializable, NetSerializable]
-public record struct ActionCooldown
+public partial record struct ActionCooldown
 {
     [DataField(required: true, customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan Start;

@@ -49,7 +49,7 @@ public sealed partial class DungeonJob
             return;
 
         var startNodes = new List<Vector2i>(cableTiles);
-        random.Shuffle(startNodes);
+        Shuffle(random, startNodes);
         var start = startNodes[0];
         var remaining = new HashSet<Vector2i>(startNodes);
         var frontier = new PriorityQueue<Vector2i, float>();

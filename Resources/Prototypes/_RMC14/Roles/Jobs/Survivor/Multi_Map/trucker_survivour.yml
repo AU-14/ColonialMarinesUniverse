@@ -10,7 +10,7 @@
     components:
     - type: Skills
       preset: RMCSkillPresetSurvivorTrucker
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCSurvivorPresetTrucker
     - type: RMCSurvivor
     - type: MotionDetectorTracked

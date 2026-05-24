@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   id: RMCPodDoorButton
   name: button
   description: A remote control-switch for a door.
@@ -446,7 +446,7 @@
   suffix: Locked, We-Ya
   components:
   - type: AccessReader
-    access: [ [ "RMCAccessWeYa" ] ]
+    access: [ [ "AU14AccessCorporateWEYU" ] ]
 
 - type: entity
   parent: RMCPodDoorButtonWeYa

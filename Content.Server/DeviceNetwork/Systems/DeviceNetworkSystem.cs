@@ -16,13 +16,13 @@ namespace Content.Server.DeviceNetwork.Systems
     ///     Device networking allows machines and devices to communicate with each other while adhering to restrictions like range or being connected to the same powernet.
     /// </summary>
     [UsedImplicitly]
-    public sealed class DeviceNetworkSystem : SharedDeviceNetworkSystem
+    public sealed partial class DeviceNetworkSystem : SharedDeviceNetworkSystem
     {
-        [Dependency] private readonly IRobustRandom _random = default!;
-        [Dependency] private readonly IPrototypeManager _protoMan = default!;
-        [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
-        [Dependency] private readonly DeviceListSystem _deviceLists = default!;
-        [Dependency] private readonly NetworkConfiguratorSystem _configurator = default!;
+        [Dependency] private IRobustRandom _random = default!;
+        [Dependency] private IPrototypeManager _protoMan = default!;
+        [Dependency] private SharedTransformSystem _transformSystem = default!;
+        [Dependency] private DeviceListSystem _deviceLists = default!;
+        [Dependency] private NetworkConfiguratorSystem _configurator = default!;
 
         private readonly Dictionary<int, DeviceNet> _networks = new(4);
         private readonly Queue<DeviceNetworkPacketEvent> _queueA = new();
@@ -105,6 +105,8 @@ namespace Content.Server.DeviceNetwork.Systems
         /// </summary>
         private void OnMapInit(EntityUid uid, DeviceNetworkComponent device, MapInitEvent args)
         {
+            device.OwnerEntity = uid;
+
             if (device.ReceiveFrequency == null
                 && device.ReceiveFrequencyId != null
                 && _protoMan.TryIndex<DeviceFrequencyPrototype>(device.ReceiveFrequencyId, out var receive))
@@ -159,6 +161,7 @@ namespace Content.Server.DeviceNetwork.Systems
             if (!Resolve(uid, ref device, false))
                 return false;
 
+            device.OwnerEntity = uid;
             return GetNetwork(device.DeviceNetId).Add(device);
         }
 
@@ -346,14 +349,17 @@ namespace Content.Server.DeviceNetwork.Systems
 
             foreach (var connection in connections)
             {
-                if (connection.Owner == packet.Sender)
+                if (connection.OwnerEntity is not { } connectionUid)
+                    continue;
+
+                if (connectionUid == packet.Sender)
                     continue;
 
                 BeforePacketSentEvent beforeEv = new(packet.Sender, xform, senderPos, connection.NetIdEnum.ToString());
-                RaiseLocalEvent(connection.Owner, beforeEv, false);
+                RaiseLocalEvent(connectionUid, beforeEv, false);
 
                 if (!beforeEv.Cancelled)
-                    RaiseLocalEvent(connection.Owner, packet, false);
+                    RaiseLocalEvent(connectionUid, packet, false);
                 else
                     beforeEv.Uncancel();
             }

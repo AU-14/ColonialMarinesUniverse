@@ -6,13 +6,13 @@ using Robust.Shared.Containers;
 
 namespace Content.Server.AU14.ColonyEconomy;
 
-public sealed class BudgetConsoleSystem : EntitySystem
+public sealed partial class BudgetConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly ColonyBudgetSystem _budget = default!;
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly DepartmentConsoleSystem _department = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private ColonyBudgetSystem _budget = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private StackSystem _stack = default!;
+    [Dependency] private DepartmentConsoleSystem _department = default!;
 
     public override void Initialize()
     {

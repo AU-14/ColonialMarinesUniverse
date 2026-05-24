@@ -1,0 +1,54 @@
+- type: entity
+  abstract: true
+  parent: RMCCommunicationsConsoleBase
+  id: AU14WithdrawConsoleBase
+  name: withdraw console
+  description: A secured command terminal used to formally initiate a faction's withdrawal from the operation.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: InteractionOutline
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: ActivatableUI
+    key: enum.WithdrawConsoleUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.WithdrawConsoleUiKey.Key:
+        type: WithdrawConsoleBui
+
+- type: entity
+  parent: AU14WithdrawConsoleBase
+  id: AU14WithdrawConsoleGovFor
+  name: withdraw console (GovFor)
+  suffix: GovFor
+  description: A secured GovFor command terminal for initiating a formal withdrawal. Requires two authorized IDs to unlock.
+  components:
+  - type: WithdrawConsole
+    faction: govfor
+
+- type: entity
+  parent: AU14WithdrawConsoleBase
+  id: AU14WithdrawConsoleOpFor
+  name: withdraw console (OpFor)
+  suffix: OpFor
+  description: A secured OpFor command terminal for initiating a formal withdrawal. Requires two authorized IDs to unlock.
+  components:
+  - type: WithdrawConsole
+    faction: opfor
+
+- type: entity
+  parent: AU14WithdrawConsoleBase
+  id: AU14WithdrawConsoleColony
+  name: withdraw console (Colony)
+  suffix: Colony
+  description: A secured colony administration terminal for initiating a formal withdrawal. Requires one authorized colony administrator keycard to unlock.
+  components:
+  - type: WithdrawConsole
+    faction: colony
+    requiredIdCount: 1
+    useAccessCheck: true
+  - type: AccessReader
+    access: [ [ "AU14AccessColonyAdministrator" ] ]

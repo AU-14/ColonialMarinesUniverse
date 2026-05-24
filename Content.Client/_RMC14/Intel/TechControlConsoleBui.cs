@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Intel.Tech;
 using Content.Shared.FixedPoint;
 using Content.Shared.GameTicking;
 using JetBrains.Annotations;
+using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.Utility;
@@ -12,16 +13,18 @@ using Robust.Shared.Timing;
 namespace Content.Client._RMC14.Intel;
 
 [UsedImplicitly]
-public sealed class TechControlConsoleBui : BoundUserInterface
+public sealed partial class TechControlConsoleBui : BoundUserInterface
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private IEntityManager _entities = default!;
 
     private TechControlConsoleWindow? _window;
     private TechControlConsoleOptionWindow? _optionWindow;
 
     private readonly SharedGameTicker _ticker;
+    private readonly SpriteSystem _sprite;
     public TechControlConsoleBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
+        _sprite = _entities.System<SpriteSystem>();
         _ticker = _entities.System<SharedGameTicker>();
     }
 
@@ -66,7 +69,7 @@ public sealed class TechControlConsoleBui : BoundUserInterface
             {
                 var option = options[j];
                 var optionControl = new Control();
-                var texture = option.Icon.DirFrame0().TextureFor(Direction.South);
+                var texture = _sprite.RsiStateLike(option.Icon).TextureFor(Direction.South);
                 optionControl.AddChild(new TextureButton
                 {
                     TextureNormal = texture,
@@ -76,7 +79,7 @@ public sealed class TechControlConsoleBui : BoundUserInterface
                 var overlay = option.Purchased ? console.UnlockedRsi : console.LockedRsi;
                 var optionButton = new TextureButton
                 {
-                    TextureNormal = overlay.DirFrame0().TextureFor(Direction.South),
+                    TextureNormal = _sprite.RsiStateLike(overlay).TextureFor(Direction.South),
                     Scale = new Vector2(2, 2),
                 };
                 optionControl.AddChild(optionButton);

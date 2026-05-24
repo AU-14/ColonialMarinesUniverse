@@ -47,6 +47,8 @@
   - type: MovementSpeedModifier
   - type: RequireProjectileTarget
     active: False
+  #CMU
+  - type: CMUZPhysics
 
 - type: entity
   save: false

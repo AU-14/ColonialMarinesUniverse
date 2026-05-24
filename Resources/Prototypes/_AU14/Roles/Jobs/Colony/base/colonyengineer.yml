@@ -8,10 +8,12 @@
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianEngineer
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconColonyEngineer"
+  hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonyadministrator
+  spawnMenuRoleName: Colony Engineer (CMU)
   accessGroups:
   - Colonist
   - auengi

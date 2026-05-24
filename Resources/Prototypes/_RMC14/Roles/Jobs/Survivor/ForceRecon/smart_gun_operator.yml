@@ -35,7 +35,7 @@
       whitelist:
         tags:
         - RMCSquadFORECON
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCSurvivorPresetForeconNoPistol
     - type: JobPrefix
       prefix: cm-job-prefix-gun-operator

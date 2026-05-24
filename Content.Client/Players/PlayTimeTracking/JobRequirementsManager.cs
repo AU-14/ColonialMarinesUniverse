@@ -19,15 +19,15 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.Players.PlayTimeTracking;
 
-public sealed class JobRequirementsManager : ISharedPlaytimeManager
+public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
 {
-    [Dependency] private readonly IBaseClient _client = default!;
-    [Dependency] private readonly IClientNetManager _net = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly RMCPlayTimeManager _rmcPlayTime = default!;
+    [Dependency] private IBaseClient _client = default!;
+    [Dependency] private IClientNetManager _net = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private RMCPlayTimeManager _rmcPlayTime = default!;
 
     private readonly Dictionary<string, TimeSpan> _roles = new();
     private readonly List<string> _roleBans = new();
@@ -244,25 +244,22 @@ public sealed class JobRequirementsManager : ISharedPlaytimeManager
     public IEnumerable<KeyValuePair<string, TimeSpan>> FetchPlaytimeJobIdByRoles()
     {
         // RMC14
-        var jobsToMap = _prototypes.EnumeratePrototypes<JobPrototype>().ToArray();
-        var trackers = new HashSet<ProtoId<PlayTimeTrackerPrototype>>();
-        var duplicateTrackers = new HashSet<ProtoId<PlayTimeTrackerPrototype>>();
+        var jobsByTracker = _prototypes.EnumeratePrototypes<JobPrototype>()
+            .GroupBy(job => job.PlayTimeTracker);
 
-        foreach (var job in jobsToMap)
+        foreach (var jobs in jobsByTracker)
         {
-            if (!trackers.Add(job.PlayTimeTracker))
-                duplicateTrackers.Add(job.PlayTimeTracker);
-        }
-
-        foreach (var job in jobsToMap)
-        {
-            if (duplicateTrackers.Contains(job.PlayTimeTracker) && !job.BasePlaytimeTracker)
+            if (!_roles.TryGetValue(jobs.Key, out var locJobName))
                 continue;
 
-            if (_roles.TryGetValue(job.PlayTimeTracker, out var locJobName))
-            {
-                yield return new KeyValuePair<string, TimeSpan>(job.ID, locJobName);
-            }
+            var displayJob = jobs
+                .OrderByDescending(job => job.BasePlaytimeTracker)
+                .ThenByDescending(job => job.ID == job.PlayTimeTracker)
+                .ThenBy(job => job.Hidden)
+                .ThenBy(job => job.ID)
+                .First();
+
+            yield return new KeyValuePair<string, TimeSpan>(displayJob.ID, locJobName);
         }
     }
 

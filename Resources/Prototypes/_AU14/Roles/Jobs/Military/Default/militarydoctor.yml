@@ -41,7 +41,7 @@
   - CMAccessChemistry
   overwatchSortPriority: -6
   overwatchShowName: true
-  overwatchRoleName: Doctor
+  overwatchRoleName: au14-job-name-govforMilitaryDoctor
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
@@ -81,7 +81,7 @@
   id: AU14GearGOVFORMilitaryDoctor
   equipment:
     shoes: CMBootsBlackFilled
-    ears: AU14HeadsetGOVFORAux
+    ears: AU14HeadsetGovforAuxiliary
     ears2: RMCM5CameraGear
 
 - type: entity

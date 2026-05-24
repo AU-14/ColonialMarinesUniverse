@@ -83,7 +83,7 @@
       entries:
       - id: RMCM5CameraGear
         amount: 30
-      - id: AU14HeadsetSectionMarine
+      - id: AU14HeadsetGovforMarine
         name: empty headset
         amount: 20
     - name: Heads Up Display
@@ -532,8 +532,24 @@
         amount: 15
       - id: CMPillCanisterTricordrazine
         amount: 15
-#      - id: CMPillCanisterPeridaxon
-#      - id: CMPillCanisterTramadol
+      - id: RMCPillCanisterIron
+        amount: 15
+      - id: AU14PillCanisterParacetamol
+        amount: 15
+      - id: AU14PillCanisterTramadol
+        amount: 15
+      - id: AU14PillCanisterOxycodone
+        amount: 15
+      - id: AU14PillCanisterCardiocaine
+        amount: 15
+      - id: AU14PillCanisterHepatocytin
+        amount: 15
+      - id: AU14PillCanisterNephronate
+        amount: 15
+      - id: AU14PillCanisterOsteoCalc
+        amount: 15
+      - id: AU14PillCanisterPulmovine
+        amount: 15
     - name: Injectors
       entries:
       - id: CMEpinephrineAutoInjector
@@ -545,6 +561,16 @@
       - id: CMDexalinPlusAutoInjector
         amount: 15
       - id: CMTricordrazineAutoInjector
+        amount: 15
+      - id: CMBicaridineAutoInjector
+        amount: 15
+      - id: CMKelotaneAutoInjector
+        amount: 15
+      - id: AU14ParacetamolAutoInjector
+        amount: 15
+      - id: AU14TramadolAutoInjector
+        amount: 15
+      - id: AU14OxycodoneAutoInjector
         amount: 15
     - name: Medical Gloves
       choices: { CMUPlatoonMedicalGloves: 1 }
@@ -603,7 +629,9 @@
         amount: 5
     - name: Headsets
       entries:
-      - id: AU14HeadsetSectionLeader
+      - id: AU14HeadsetGovforCommand
+        amount: 2
+      - id: AU14HeadsetGovforAuxiliary
         amount: 2
     - name: Backpack
       entries:
@@ -842,6 +870,8 @@
         amount: 40
       - id: AU14Tourniquet
         amount: 40
+      - id: CMUSplintItem
+        amount: 40
       - id: CMOintment10
         amount: 40
       - id: CMPacketPillsTricordrazine
@@ -1037,12 +1067,13 @@
       takeAll: CMEngineerSet
       entries:
       - id: AU14VendorBundleCombatTechnicianEssentials
-    - name: Automated Sentry Gun
+    - name: Support Equipment
       choices:  { CMHandheldDefense : 1 }
       entries:
       - id: AU14CaseSentry
       - id: AU14CaseSentryMini
       - id: AU14CaseSentrySniper
+      - id: RMCM271A2BruteLauncherRigFilled
     - name: Tool Storage
       choices: { CMUCTToolStorage: 1 }
       entries:
@@ -1168,6 +1199,7 @@
       - id: RMCBoxZiptie
       - id: RMCGuidebookLawMarine
       - id: RMCGuidebookSOP
+      - id: AU14Scissors
     - name: Uniform
       choices: { AU14Uniform: 1 }
       entries:
@@ -1333,6 +1365,8 @@
         amount: 8
       - id: RMCWeaponLauncherDisposableFolded
         amount: 2
+      - id: RMCRocketM5510Brute
+        amount: 12
     - name: Barrel Attachments
       entries:
       - id: RMCAttachmentExtendedBarrel
@@ -1408,4 +1442,8 @@
       - id: AU14TentBigFoldedSurgical
         amount: 1
       - id: RMCTentUNMCExtendedMessFolded
+        amount: 1
+    - name: Flag
+      entries:
+      - id: AU14FlagCarriableUA
         amount: 1

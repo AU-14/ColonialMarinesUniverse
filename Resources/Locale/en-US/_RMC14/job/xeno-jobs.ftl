@@ -73,8 +73,11 @@ role-timer-xeno-tier-three = tier three castes
 
 au-job-name-threat-leader = Threat Leader
 au-job-name-threat-member = Threat Member
+au-job-description-threat-leader = Generic leader slot for the selected round threat. Depending on the threat, this can spawn as a xeno queen, wendigo, ape, tribal leader, cultist queen, or abomination mimic.
+au-job-description-threat-member = Generic member slot for the selected round threat. Only threats with grunt/member spawns use this; examples include larva, cultists, tribal warriors, and abominations.
 
 
 au-job-name-third-party-leader = Third Party Leader
 au-job-name-third-party-member = Third Party Member
-
+au-job-description-third-party-leader = Generic leader slot for the selected third party. The actual faction and role depend on the third party that spawns.
+au-job-description-third-party-member = Generic member slot for the selected third party. The actual faction and role depend on the third party that spawns.

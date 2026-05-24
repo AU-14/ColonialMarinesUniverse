@@ -1,7 +1,7 @@
 - type: entity
   parent: BaseStorageItem
   id: CMMRE
-  name: MRE
+  name: UNMC MRE
   description: A Meal, Ready-to-Eat. A single-meal combat ration designed to provide a soldier with enough nutrients for a day of strenuous work. Its expiration date is at least 20 years ahead of your combat life expectancy.
   components:
   - type: Tag
@@ -22,6 +22,7 @@
   - type: Openable
     sound:
       collection: CMFoodRip
+  - type: MRERequireOpenBeforeStorage
   - type: Appearance
   - type: GenericVisualizer
     visuals:
@@ -158,7 +159,7 @@
 - type: entity
   parent: RMCBoxMREEmpty
   id: RMCBoxMRE
-  suffix: Filled
+  suffix: Filled, UN
   components:
   - type: CMItemSlots
     startingItem: CMMRE
@@ -169,7 +170,7 @@
 - type: entity
   parent: CMMRE
   id: RMCMRESPP # TODO RMC14 - Custom Contents
-  name: UPP IRP ration pack
+  name: SPP IRP ration pack
   description: An Individual Meal Ration, mainly composed of a selection of canned food, despite being heavier, it has proven to be a lot more reliable.
   components:
   - type: Sprite
@@ -177,17 +178,67 @@
 
 - type: entity
   parent: CMMRE
-  id: RMCMREWeYa # TODO RMC14 - Custom Contents
-  name: PMC CFR ration
-  description: A Combat Field Ration. Uses similar to USCMC MRE format, but utilizes expensive preserving materials and methods and not less expensive foods, not much different from going to a restaurant. Feeding better worlds.
+  id: RMCMREWeYa
+  name: We-Ya brand ration pack
+  description: "A more or less cohesive ration, intended for colonist and corporate security, packed with a medium quality foods with a long shelf life. On the box is the Weston-Yamada logo, with a slogan surrounding it: WESTON-YAMADA. FEEDING THE FUTURE."
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/mre_weya.rsi
+  - type: GenericVisualizer
+    visuals:
+      enum.OpenableVisuals.Opened:
+        enum.OpenableVisuals.Layer:
+          True: { state: "open" }
+          False: { state: "closed" }
+  - type: Storage
+    grid:
+    - 0,0,9,1 #5 slots min
+    whitelist: null
+  - type: StorageFill
+    contents:
+    - id: RMCMREComponentBonelessPorkRibsWeya
+      orGroup: main
+    - id: RMCMREComponentGrilledChickenWeya
+      orGroup: main
+    - id: RMCMREComponentChickenTenderWeya
+      orGroup: main
+    - id: RMCMREComponentSpaghettiChunksWeya
+      orGroup: main
+    - id: RMCFoodSnackCheeseburgerPackaged
+      orGroup: side
+    - id: RMCFoodSnackBurritoPackaged
+      orGroup: side
+    - id: RMCFoodSnackHotdogPackaged
+    - id: RMCFoodSnackEATBar
+      orGroup: dessert
+    - id: RMCFoodSnackBoonie
+      orGroup: dessert
+    - id: RMCFoodSnackBarcaridine
+      orGroup: dessert
+    - id: RMCFoodSnackCHUNK
+      orGroup: dessert
+    - id: RMCDrinkWEYABugJuice
+      orGroup: drink
+    - id: RMCDrinkWEYACocoMilk
+      orGroup: drink
+    - id: RMCDrinkWEYASoylent
+      orGroup: drink
+    - id: CMDrinkWEYAWaterBottle30
+      orGroup: drink
+
+- type: entity
+  parent: CMMRE
+  id: RMCMREWeYaPMC # TODO RMC14 - Custom Contents
+  name: PMC CFR ration
+  description: A Combat Field Ration. Uses similar to UNMC MRE format, but utilizes expensive preserving materials and methods and not less expensive foods, not much different from going to a restaurant. Eating better worlds.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Consumable/Food/mre_weya_pmc.rsi
 
 - type: entity
   parent: CMMRE
   id: RMCMRETSE # TODO RMC14 - Custom Contents
-  name: TWE ORP ration
+  name: TSE ORP ration
   description: An Operation Ration Pack. Uses similar to UNMC MRE format, but utilizes expensive preserving materials and methods and not less expensive meals from TSE cuisine.
   components:
   - type: Sprite
@@ -227,7 +278,7 @@
 - type: entity
   parent: BaseItem
   id: RMCSurvivalRationSPP
-  name: UPP survival ration
+  name: SPP survival ration
   description: A small compressed package containing a single portion of food you cannot distinguish.
   components:
   - type: RMCLoreExaminable
@@ -252,3 +303,37 @@
     blacklist:
       components:
       - Xeno
+
+# TSE Rations
+- type: entity
+  parent: RMCBoxMREEmpty
+  id: RMCBoxMRETSEEmpty
+  name: box of ORPs (x12)
+  suffix: TSE
+  description: A box of ORPs. Scrummy!
+  components:
+  - type: CMItemSlots
+    count: 12
+    slot:
+      name: ORP
+      whitelist:
+        tags:
+        - MRE
+
+- type: entity
+  parent: RMCBoxMRETSEEmpty
+  id: RMCBoxMRETSE
+  suffix: Filled, TSE
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMRETSE
+
+- type: entity
+  parent: RMCBoxMREEmpty
+  name: box of WEYA-brand Ration Packs (x12)
+  description: A box of Weston-Yamada Ration Packs. Often found on Company-owned colonies.
+  id: RMCBoxMREWEYA
+  suffix: Filled, WEYA
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMREWeYa

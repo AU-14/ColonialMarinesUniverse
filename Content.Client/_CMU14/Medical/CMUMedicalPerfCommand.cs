@@ -1,17 +1,22 @@
 using Content.Shared._CMU14.Medical;
+using Content.Shared._RMC14.CCVar;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
+using Content.Shared.CCVar;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Overlays;
 using Content.Shared.StatusIcon.Components;
 using Content.Shared._RMC14.Marines;
+using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 using Robust.Shared.Map;
 
 namespace Content.Client._CMU14.Medical;
 
-public sealed class CMUMedicalPerfCommand : IConsoleCommand
+public sealed partial class CMUMedicalPerfCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IConfigurationManager _configuration = default!;
 
     private readonly HashSet<EntityUid> _nearby = new();
     private readonly HashSet<Entity<StatusIconComponent>> _statusIcons = new();
@@ -69,6 +74,8 @@ public sealed class CMUMedicalPerfCommand : IConsoleCommand
         lookup.GetEntitiesInRange(origin, range, _marineIcons, flags);
 
         shell.WriteLine($"CMU medical perf around {range:F1}m:");
+        shell.WriteLine($"  local toggles: statusIcons={_configuration.GetCVar(CCVars.LocalStatusIconsEnabled)}, marineOverlay={_configuration.GetCVar(RMCCVars.RMCMarineOverlayEnabled)}");
+        shell.WriteLine($"  local HUD comps: healthBars={_entities.HasComponent<ShowHealthBarsComponent>(player)}, healthIcons={_entities.HasComponent<ShowHealthIconsComponent>(player)}, marineIcons={_entities.HasComponent<ShowMarineIconsComponent>(player)}");
         shell.WriteLine($"  nearby visible entities: {_nearby.Count}");
         shell.WriteLine($"  nearby CMU bodies: {cmuBodies}");
         shell.WriteLine($"  visible attached CMU internals: {attachedInternals}");

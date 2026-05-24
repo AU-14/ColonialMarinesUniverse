@@ -126,7 +126,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -0.5,1.5
       parent: 2
-- proto: CMSeatPassenger
+- proto: RMCSeatVehiclePassenger
   entities:
   - uid: 42
     components:
@@ -174,7 +174,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 0.5,2.5
       parent: 2
-- proto: RMCGroundsideOperationsConsole
+- proto: RMCGroundsideOperationsConsoleGovfor
   entities:
   - uid: 51
     components:
@@ -182,7 +182,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -1.6881897,1.7278763
       parent: 2
-- proto: RMCOverwatchConsole
+- proto: RMCOverwatchConsoleGovfor
   entities:
   - uid: 30
     components:
@@ -231,7 +231,7 @@ entities:
     - type: Transform
       pos: -1.5,1.5
       parent: 2
-- proto: RMCTacticalMapTable
+- proto: RMCTacticalMapTableGovfor
   entities:
   - uid: 54
     components:

@@ -1,4 +1,4 @@
-﻿- type: job
+- type: job
   parent: CMSurvivorCorporate
   id: RMCSurvivorHybrisaCommercialPilot
   name: rmc-job-name-survivor-commercial-pilot
@@ -9,7 +9,7 @@
   accessGroups:
   - ColonistCorporate
   access:
-  - RMCAccessWeYaFlight
+  - AU14AccessCorporateWEYUFlight
   - CMAccessColonyLogistics
   ranks:
     RMCRankWeYaPilotOfficer: []
@@ -24,7 +24,7 @@
         RMCSkillFirearms: 2
         RMCSkillPilot: 2
         RMCSkillLeadership: 1
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCSurvivorPresetHybrisaCommercialPilot
     - type: RMCSurvivor
     - type: MotionDetectorTracked
@@ -67,7 +67,7 @@
   name: hybrisa corporate liaison preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomOutfits:
     - [ RMCGlassesAviators ]
     - [ RMCGlassesAviatorsSilver ]

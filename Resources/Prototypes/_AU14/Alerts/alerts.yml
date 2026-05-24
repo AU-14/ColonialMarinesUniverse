@@ -1,6 +1,6 @@
 - type: alert
   parent: SquadTracker
-  id: SquadTrackerUS Army # dont ask me why this works
+  id: SquadTrackerUSArmy
   category: SquadTracker
   icons:
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
@@ -27,7 +27,7 @@
 
 - type: alert
   parent: SquadTracker
-  id: SquadTracker32nd Arm # dont ask me why this works
+  id: SquadTracker32ndArm
   category: SquadTracker
   icons:
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
@@ -109,7 +109,7 @@
 
 - type: alert
   parent: SquadTracker
-  id: SquadTrackerFirst Recon # dont ask me why this works
+  id: SquadTrackerFirstRecon
   category: SquadTracker
   icons:
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
@@ -136,7 +136,7 @@
 
 - type: alert
   parent: SquadTracker
-  id: SquadTrackerColonial Guard
+  id: SquadTrackerColonialGuard
   category: SquadTracker
   icons:
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
@@ -163,7 +163,7 @@
 
 - type: alert
   parent: SquadTracker
-  id: SquadTrackerTerritorial Defense
+  id: SquadTrackerTerritorialDefense
   category: SquadTracker
   icons:
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
@@ -190,7 +190,7 @@
 
 - type: alert
   parent: SquadTracker
-  id: SquadTrackerLACN Commando
+  id: SquadTrackerLACNCommando
   category: SquadTracker
   icons:
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi

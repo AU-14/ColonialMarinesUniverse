@@ -16,7 +16,7 @@
   - AUPlanetLV327
   - AUPlanetCorsatStation
   - AUPlanetSorokyne
- # - AUPlanetStableGarrison
+  - AUPlanetStableGarrison
   - AUPlanetTrijent
   - CMUPlanetLament
   rules:
@@ -42,7 +42,7 @@
     - AUPlanetStableGarrison
     #- AUPlanetLV747
     #- AUPlanetSorokyne
-    #- AUPlanetLV759 removed pending rework
+    #- AUPlanetLV759
   rules:
   - AuVoteRule
   - PlatoonSpawn
@@ -58,18 +58,14 @@
   description: Investigate a mysterious distress signal as government forces.
   requiresGovforVote: true
   supportedPlanets:
-#  - AUPlanetShepherdsPride
 #  - AUPlanetLV747
-  #- AUPlanetFlight
-  - AUPlanetLV327
-   - AUPlanetSorokyne
+  - AUPlanetFlight
+  - AUPlanetSorokyne
   - AUPlanetCorsatStation
-#  - AUPlanetStableGarrison
   - AUPlanetTrijent
 #  - AuPlanetFiorina -removed due to load errors
   - AuPlanetKutjevo
   - AuPlanetShivasSnowball
-#  - CMUPlanetLament
   rules:
   - AuVoteRule
   - PlatoonSpawn
@@ -88,11 +84,8 @@
     - AuVoteRule
     - ColonyAntags
   supportedPlanets:
-    #- AUPlanetLV747
     - AUPlanetShepherdsPride
    # - AUPlanetLV624
-   # - AUPlanetLV327
-   # - AUPlanetSorokyne
     - AUPlanetStableGarrison
     - CMUPlanetLament
 
@@ -212,6 +205,7 @@
   description: If you want your mode to load planets and platoons automatically
   components:
   - type: AuVoteRule
+  - type: Bioscan
 
 
 

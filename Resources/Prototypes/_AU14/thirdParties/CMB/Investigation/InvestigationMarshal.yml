@@ -5,13 +5,6 @@
   description: au14-job-description-civiliancmbmarshal
   setPreference: false
   canBeAntag: false
-  requirements:
-  - !type:AgeRequirement
-    requiredAge: 25
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
   ranks:
     AU14RankCMBMarshal: []
   startingGear: AU14GearCMBMarshalInvestigation
@@ -71,7 +64,7 @@
   parent: AU14BaseMobSpeciesOrganicCMB
   id: CMBInvestigationPartyJobMarshal
   name: CMB Marshal
-  components:  
+  components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole

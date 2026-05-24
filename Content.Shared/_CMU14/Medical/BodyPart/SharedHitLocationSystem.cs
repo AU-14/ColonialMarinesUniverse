@@ -21,15 +21,15 @@ namespace Content.Shared._CMU14.Medical.BodyPart;
 ///     deduct from the right part on the post-application
 ///     <see cref="DamageChangedEvent"/>.
 /// </summary>
-public abstract class SharedHitLocationSystem : EntitySystem
+public abstract partial class SharedHitLocationSystem : EntitySystem
 {
-    [Dependency] protected readonly IConfigurationManager Cfg = default!;
-    [Dependency] protected readonly IRobustRandom Random = default!;
-    [Dependency] protected readonly SharedBodySystem Body = default!;
-    [Dependency] protected readonly SharedBodyZoneTargetingSystem ZoneTargeting = default!;
-    [Dependency] protected readonly SharedTransformSystem Transform = default!;
-    [Dependency] protected readonly SkillsSystem Skills = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] protected IRobustRandom Random = default!;
+    [Dependency] protected SharedBodySystem Body = default!;
+    [Dependency] protected SharedBodyZoneTargetingSystem ZoneTargeting = default!;
+    [Dependency] protected SharedTransformSystem _transform = default!;
+    [Dependency] protected SkillsSystem Skills = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
@@ -214,7 +214,7 @@ public abstract class SharedHitLocationSystem : EntitySystem
         var tgtXform = Transform(target);
         if (atkXform.MapID == tgtXform.MapID && atkXform.MapID != Robust.Shared.Map.MapId.Nullspace)
         {
-            var distance = (Transform.GetWorldPosition(atkXform) - Transform.GetWorldPosition(tgtXform)).Length();
+            var distance = (_transform.GetWorldPosition(atkXform) - _transform.GetWorldPosition(tgtXform)).Length();
             if (distance > aim.MeleeRangeTiles)
             {
                 var skill = Skills.GetSkill(a, aim.RangedSkill);

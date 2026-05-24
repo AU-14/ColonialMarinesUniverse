@@ -7,11 +7,11 @@ using Robust.Shared.Maths;
 
 namespace Content.Server.Humanoid.Systems;
 
-public sealed class RandomHumanoidAppearanceSystem : EntitySystem
+public sealed partial class RandomHumanoidAppearanceSystem : EntitySystem
 {
-    [Dependency] private readonly HumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private HumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

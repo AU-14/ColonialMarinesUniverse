@@ -17,16 +17,16 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.CrawlState;
 
-public sealed class SharedCrawlWhileCritSystem : EntitySystem
+public sealed partial class SharedCrawlWhileCritSystem : EntitySystem
 {
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
-    [Dependency] private readonly MobThresholdSystem _thresholds = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _speed = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private MobThresholdSystem _thresholds = default!;
+    [Dependency] private MovementSpeedModifierSystem _speed = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IPrototypeManager _protoManager = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
 
     public override void Initialize()
     {
@@ -40,6 +40,9 @@ public sealed class SharedCrawlWhileCritSystem : EntitySystem
 
     private void OnMobStateChanged(Entity<CrawlWhileCritComponent> ent, ref MobStateChangedEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         if (args.NewMobState == MobState.Critical)
         {
             if (IsWithinCrawlWindow(ent))
@@ -54,6 +57,9 @@ public sealed class SharedCrawlWhileCritSystem : EntitySystem
 
     private void OnBeforeDamage(Entity<CrawlWhileCritComponent> ent, ref BeforeDamageChangedEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         if (args.Cancelled)
             return;
 

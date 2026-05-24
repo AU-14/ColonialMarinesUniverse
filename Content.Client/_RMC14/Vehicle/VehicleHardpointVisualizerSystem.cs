@@ -6,8 +6,10 @@ using Robust.Shared.GameStates;
 
 namespace Content.Client._RMC14.Vehicle;
 
-public sealed class VehicleHardpointVisualizerSystem : EntitySystem
+public sealed partial class VehicleHardpointVisualizerSystem : EntitySystem
 {
+    [Dependency] private SpriteSystem _sprite = default!;
+
     public override void Initialize()
     {
         SubscribeLocalEvent<VehicleHardpointVisualsComponent, ComponentStartup>(OnStartup);
@@ -35,24 +37,24 @@ public sealed class VehicleHardpointVisualizerSystem : EntitySystem
 
         foreach (var entry in component.Layers)
         {
-            UpdateLayer(sprite, entry.Layer, entry.State);
+            UpdateLayer(uid, sprite, entry.Layer, entry.State);
         }
     }
 
-    private void UpdateLayer(SpriteComponent sprite, string layerMap, string state)
+    private void UpdateLayer(EntityUid uid, SpriteComponent sprite, string layerMap, string state)
     {
-        if (!sprite.LayerMapTryGet(layerMap, out var layer))
+        if (!_sprite.LayerMapTryGet((uid, sprite), layerMap, out var layer, false))
         {
             return;
         }
 
         if (string.IsNullOrWhiteSpace(state))
         {
-            sprite.LayerSetVisible(layer, false);
+            _sprite.LayerSetVisible((uid, sprite), layer, false);
             return;
         }
 
-        sprite.LayerSetState(layer, state);
-        sprite.LayerSetVisible(layer, true);
+        _sprite.LayerSetRsiState((uid, sprite), layer, state);
+        _sprite.LayerSetVisible((uid, sprite), layer, true);
     }
 }

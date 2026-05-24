@@ -26,19 +26,19 @@ rmc-bioscan-ares = Bioscan complete.
   }
 
 rmc-bioscan-xeno-announcement = [color=#318850][font size=14][bold]The Queen Mother reaches into your mind from worlds away.
-  {$message}[/bold][/font][/color]
+   {$message}[/bold][/font][/color]
 
 rmc-bioscan-xeno = To my children and their Queen: I sense { $onShip ->
-  [0] no hosts
-  [1] approximately 1 host
-  *[other] approximately {$onShip} hosts
-} in the metal hive{ $shipLocation ->
-  [none] {""}
-  *[other], including one in {$shipLocation},
-} and {$onPlanet ->
-  [0] none
-  *[other] {$onPlanet}
-} scattered elsewhere{$planetLocation ->
-  [none].
-  *[other], including one in {$planetLocation}
-}
+    [0] no hosts
+    [1] approximately 1 host
+    *[other] approximately {$onShip} hosts
+  } in the metal hive{ $shipLocation ->
+    [none] {""}
+    *[other], including one in {$shipLocation},
+  } and {$onPlanet ->
+    [0] none
+    *[other] {$onPlanet}
+  } scattered elsewhere{$planetLocation ->
+    [none].
+    *[other], including one in {$planetLocation}
+  }

@@ -42,6 +42,7 @@
     repairRate: 0.008
   - type: HardpointIntegrity
     maxIntegrity: 100
+    integrity: 100
   - type: VehicleTurret
     rotateToCursor: true
     stabilizedRotation: false
@@ -66,6 +67,11 @@
         whitelist:
           components:
           - HardpointItem
+  - type: ContainerContainer
+    containers:
+      turret-cannon: !type:ContainerSlot
+      turret-launcher: !type:ContainerSlot
+  - type: HardpointState
   - type: HardpointSlots
     vehicleFamily: Humvee
     slots:
@@ -304,4 +310,3 @@
     maxIntegrity: 100
   - type: HardpointVisual
     vehicleState: humveehatch_0
-

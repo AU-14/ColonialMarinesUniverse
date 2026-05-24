@@ -1,4 +1,4 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Dropship.Weapon;
@@ -20,7 +20,7 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
     public Vector2i Offset;
 
     [DataField, AutoNetworkedField]
-    public Vector2i OffsetLimit = new(12, 12);
+    public Vector2i OffsetLimit = new(5, 5);
 
     [DataField, AutoNetworkedField]
     public List<TargetEnt> Targets = new();
@@ -43,19 +43,17 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
     [DataField, AutoNetworkedField]
     public bool NightVision;
 
-    [DataField, AutoNetworkedField]
-    public NetEntity? SelectedSystem;
-
     [DataRecord]
     [Serializable, NetSerializable]
-    public record struct Screen(
+    public partial record struct Screen(
         DropshipTerminalWeaponsScreen State,
-        NetEntity? Weapon
+        NetEntity? Weapon,
+        NetEntity? System
     );
 
     [DataRecord]
     [Serializable, NetSerializable]
-    public readonly record struct TargetEnt(
+    public readonly partial record struct TargetEnt(
         NetEntity Id,
         string Name
     );

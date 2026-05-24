@@ -35,26 +35,26 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
     private const float RunawayFireMaxDelay = 30f;
     private const float RunawayFireDistance = 30f;
 
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly VehicleTopologySystem _topology = default!;
-    [Dependency] private readonly VehicleHardpointAmmoSystem _hardpointAmmo = default!;
-    [Dependency] private readonly VehicleSystem _vehicleSystem = default!;
-    [Dependency] private readonly VehicleTurretSystem _turretSystem = default!;
-    [Dependency] private readonly VehicleViewToggleSystem _viewToggle = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedContentEyeSystem _eyeSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly HardpointSystem _hardpoints = default!;
-    [Dependency] private readonly SharedGunSystem _guns = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private VehicleTopologySystem _topology = default!;
+    [Dependency] private VehicleHardpointAmmoSystem _hardpointAmmo = default!;
+    [Dependency] private VehicleSystem _vehicleSystem = default!;
+    [Dependency] private VehicleTurretSystem _turretSystem = default!;
+    [Dependency] private VehicleViewToggleSystem _viewToggle = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedContentEyeSystem _eyeSystem = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private HardpointSystem _hardpoints = default!;
+    [Dependency] private SharedGunSystem _guns = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

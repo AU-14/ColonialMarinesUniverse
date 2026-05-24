@@ -1,0 +1,517 @@
+#spawns
+
+# Example CLF objective-point vendor.
+# Mirrors the CLF weapons rack but costs are paid from the CLF faction win-point pool.
+# Each entry's "points" value is the win-point cost to purchase it.
+- type: entity
+  parent: ColMarTechBase
+  id: AU14CLFObjectiveWeaponsVendor
+  name: CLF Requisitions Rack
+  description: A high-value weapons cache accessible only with CLF operational funds.
+  suffix: CLF, Objective Points
+  components:
+  - type: Pullable
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/genericweaponrack.rsi
+    layers:
+    - state: "base"
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
+  - type: CMAutomatedVendor
+    useObjectivePoints: true
+    faction: clf
+    sections:
+    - name: Rifles
+      entries:
+      - id: RMCWeaponBoltActionRifle
+        amount: 3
+        points: 2
+      - id: AU14WeaponRifleAR10
+        amount: 3
+        points: 4
+      - id: RMCWeaponRifleL42A
+        amount: 2
+        points: 5
+      - id: AUWeaponRifleM20A
+        amount: 4
+        points: 6
+      - id: WeaponRifleMAR40
+        amount: 2
+        points: 7
+      - id: RMCWeaponRifleType71C
+        amount: 1
+        points: 9
+      - id: RMCWeaponRifleType73
+        amount: 1
+        points: 12
+    - name: Shotguns
+      entries:
+      - id: RMCWeaponShotgunHG3712
+        amount: 1
+        points: 7
+      - id: RMCWeaponShotgunM3717
+        amount: 1
+        points: 9
+      - id: WeaponShotgunM357Sawn
+        amount: 2
+        points: 4
+      - id: WeaponShotgunM357
+        amount: 3
+        points: 5
+    - name: Handguns
+      entries:
+      - id: AU14WeaponPistolTPR23BEmpty
+        amount: 1
+        points: 3
+      - id: CMWeaponPistolM1984Empty
+        amount: 5
+        points: 3
+      - id: RMCWeaponRevolverM44
+        amount: 3
+        points: 4
+      - id: RMCWeaponPistolHoldout
+        amount: 10
+        points: 1
+      - id: RMCWeaponPistolNP92Empty
+        amount: 4
+        points: 2
+      - id: RMCWeaponSMGUZI
+        amount: 4
+        points: 5
+    - name: Special Weapons
+      entries:
+      - id: RMCWeaponLauncherHJRA12
+        amount: 1
+        points: 10
+      - id: RMCWeaponLauncherDisposableFolded
+        amount: 1
+        points: 8
+      - id: RMCWeaponMar50LMG
+        amount: 1
+        points: 13
+      - id: RMCWeaponLMGM60
+        amount: 1
+        points: 15
+      - id: RMCM2CMount
+        amount: 1
+        points: 19
+    - name: Rifle Ammunition
+      entries:
+      - id: RMCMagazineRifleM16
+        amount: 85
+        points: 1
+      - id: RMCMagazineRifleL42A
+        amount: 45
+        points: 1
+      - id: RMCMagazineRifleL42AExtended
+        amount: 4
+        points: 2
+      - id: AU14MagazineRifleM20A
+        amount: 85
+        points: 1
+      - id: RMCMagazineRifleHunting
+        amount: 25
+        points: 1
+      - id: RMCMagazineRifleMAR40
+        amount: 35
+        points: 1
+      - id: RMCMagazineRifleType71
+        amount: 9
+        points: 2
+      - id: RMCMagazineRifleType71AP
+        amount: 9
+        points: 6
+    - name: Shotgun Ammunition
+      entries:
+      - id: RMCBoxShotgunFlechette
+        amount: 7
+        points: 1
+      - id: RMCBoxShotgunBuckshot
+        amount: 6
+        points: 1
+      - id: RMCBoxShotgunSlugs
+        amount: 6
+        points: 1
+    - name: Handgun Ammunition
+      entries:
+      - id: CMMagazinePistolM1984
+        amount: 30
+        points: 1
+      - id: RMCMagazinePistolM1984AP
+        amount: 4
+        points: 3
+      - id: RMCMagazinePistolM1984HP
+        amount: 2
+        points: 3
+      - id: RMCSpeedLoaderM44
+        amount: 30
+        points: 1
+      - id: RMCSpeedLoader44Marksman
+        amount: 4
+        points: 2
+      - id: RMCMagazinePistolHoldout
+        amount: 30
+        points: 1
+      - id: RMCMagazinePistolNP92
+        amount: 20
+        points: 1
+      - id: RMCMagazineSMGUZI
+        amount: 8
+        points: 1
+    - name: Special Ammunition
+      entries:
+      - id: RMCMagazineMar50LMG
+        amount: 5
+        points: 2
+      - id: RMCMagazineLMGM60
+        amount: 5
+        points: 2
+      - id: RMCMagazineM2C
+        amount: 5
+        points: 4
+      - id: RMCRocketHJRA12HE
+        amount: 4
+        points: 9
+      - id: RMCRocketHJRA12AT
+        amount: 5
+        points: 11
+      - id: RMCRocketHJRA12Incen
+        amount: 1
+        points: 12
+    - name: Explosives
+      entries:
+      - id: RMCGrenadeMolotov
+        amount: 10
+        points: 2
+      - id: CMUPipeBomb
+        amount: 10
+        points: 2
+      - id: CMGrenadeSmoke
+        amount: 5
+        points: 2
+      - id: AU14GrenadeNeuroRMC
+        amount: 2
+        points: 9
+      - id: RMCGrenadeIED
+        amount: 4
+        points: 5
+      - id: RMCExplosivePlastic
+        amount: 2
+        points: 8
+    - name: Improvised Explosive Devices
+      entries:
+      - id: CMMultitool
+        amount: 10
+        points: 1
+      - id: AU14RemoteSignallerAdvanced
+        amount: 10
+        points: 1
+      - id: AU14IED
+        amount: 6
+        points: 6
+      - id: AU14IEDVest
+        amount: 2
+        points: 10
+      - id: AU14IEDLarge
+        amount: 3
+        points: 15
+    - name: Protective Equipment
+      entries:
+      - id: ArmorHelmetPMCRiot
+        amount: 5
+        points: 3
+      - id: AU14UACGHelmet
+        amount: 5
+        points: 3
+      - id: RMCCoatMilitiaVest
+        amount: 5
+        points: 7
+      - id: CMMaskGas
+        amount: 5
+        points: 3
+      - id: CMUGasMaskFilter
+        amount: 5
+        points: 2
+      - id: CMUGasMaskFilterHAZOPS
+        amount: 3
+        points: 5
+    - name: Special Equipment
+      entries:
+      - id: CMUCLFSynthSubversionKey
+        amount: 1
+        points: 20
+      - id: AU14TattooInkCartridge
+        amount: 15
+        points: 6
+      - id: AU14TattooGun
+        amount: 3
+        points: 12
+      - id: AU14CLFHeadset
+        amount: 10
+        points: 8
+      - id: AU14FlagCarriableCLF
+        amount: 4
+        points: 5
+      - id: RMCMegaphone
+        amount: 2
+        points: 3
+    - name: Mortar
+      entries:
+      - id: RMCRangefinder
+        amount: 5
+        points: 3
+      - id: RMCMortarKit
+        amount: 1
+        points: 20
+      - id: RMCMortarShellFlare
+        amount: 8
+        points: 3
+      - id: RMCMortarShellHE
+        amount: 7
+        points: 4
+      - id: AU14MortarShellHEATMP
+        amount: 6
+        points: 5
+      - id: RMCMortarShellIncendiary
+        amount: 5
+        points: 12
+  - type: Transform
+    anchored: false
+    noRot: true
+  - type: Physics
+    bodyType: Dynamic
+
+
+
+- type: clfSpawnConfig
+  id: CLFSpawnConfig
+  # Safehouse markers are fallback CLF spawn points; operational gear is deployed from the Cell Leader's kit.
+  additionalItems: []
+
+- type: entity
+  parent: RMCBaseEquipmentCase
+  id: AU14CLFCellKit
+  name: heavy CLF cell kit
+  description: A heavy, low-profile field case used to establish a CLF cell hideout.
+  components:
+  - type: Sprite
+    layers:
+    - state: closed
+      map: [ base ]
+    - state: mortar
+      map: [ label ]
+  - type: RMCDeployable
+    deployTime: 12
+    deployArea:
+      !type:PhysShapeAabb
+      bounds: "-2.4,-2.4,2.4,2.4"
+    areaBlockedCheck: false
+    failIfNotSurface: false
+    deploySetups:
+    - prototype: RMCComputerIntelCLF
+      mode: ReactiveParental
+      offset: -1.5, 2
+    - prototype: ComputerObjectivesCLF
+      offset: -0.5, 2
+    - prototype: RMCTechTreeConsoleCLF
+      offset: 0.5, 2
+    - prototype: CMFaxCLF
+      offset: 1.5, 2
+    - prototype: AU14AnalyzerMachineCLF
+      offset: -1.5, 0
+    - prototype: AU14CLFObjectiveWeaponsVendor
+      anchor: false
+      offset: -0.5, 0
+    - prototype: RMCLampTripod
+      offset: 0.5, 0
+    - prototype: RMCCrateMedicalFirstAid
+      offset: 1.5, 0
+    - prototype: AU14CrateCivilianClothingRandom
+      offset: -1.5, -2
+    - prototype: AU14CrateCivilianClothingRandom
+      offset: -0.5, -2
+    - prototype: AU14CrateCLFinitalTools
+      offset: 0.5, -2
+    - prototype: AU14CrateCLFRecruitmentKit
+      offset: 1.5, -2
+
+- type: entity
+  name: Generic Safhouse Marker
+  parent: MarkerBase
+  id: safehousemarker
+  components:
+  - type: Sprite
+    state: green
+  - type: SafehouseMarker
+
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateCLFinitalTools
+  name: CLF tool cache
+  description: A field cache of weapons, utilities, and repair tools for a newly established CLF cell.
+  components:
+  - type: Sprite
+    state: crate
+  - type: StorageFill
+    contents:
+    - id: RMCM54CMK1Case
+      amount: 1
+    - id: RMCM54CMK1CaseAP
+      amount: 1
+    - id: RMCGunCasePistolZHNK72
+      amount: 1
+    - id: RMCGunCasePistolMK80
+      amount: 1
+    - id: RMCGunCasePistolM44
+      amount: 1
+    - id: CMPackFlare
+      amount: 3
+    - id: AU14CMDefibrillator
+      amount: 1
+    - id: RMCRangefinder
+      amount: 2
+    - id: AU14BeltUtilityFilled
+      amount: 2
+    - id: RMCBoxFlashlights
+      amount: 2
+
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateCLFRecruitmentKit
+  name: CLF recruitment cache
+  description: A compact cache for inducting new CLF members and handing out covert cell comms.
+  components:
+  - type: Sprite
+    state: crate
+  - type: StorageFill
+    contents:
+    - id: AU14CLFHeadset
+      amount: 5
+    - id: RMCCLFArmband
+      amount: 5
+    - id: AU14TattooInkCartridge
+      amount: 6
+    - id: AU14TattooGun
+      amount: 1
+
+- type: entity
+  parent: CMFax
+  id: CMFaxCLF
+  suffix: CLF
+  components:
+  - type: FaxMachine
+    name: "Colony Liberation Front"
+    notifyAdmins: true
+# Inscribed M44 - Unique CLF Veteran sidearm
+- type: entity
+  parent: RMCWeaponRevolverM44Custom
+  id: AU14WeaponRevolverM44Inscribed
+  name: inscribed M44 combat revolver
+  description: A well-worn M44 combat revolver with crude inscriptions scratched into the barrel and grip. The words 'FREEDOM OR DEATH' are etched along the side. This weapon has clearly seen many battles.
+  components:
+  - type: RevolverAmmoProvider
+    proto: RMCCartridgeRevolver44
+    capacity: 10
+    chambers: [ True, True, True, True, True, True, True ]
+    ammoSlots: [ null, null, null, null, null, null, null ]
+  - type: RMCSelectiveFire
+    baseFireRate: 6
+
+- type: entity
+  name: Tattoo Gun
+  parent: BaseStorageItem
+  id: AU14TattooGun
+  description: Used to induct people into the CLF.
+  components:
+  - type: TattooGun
+  - type: Sprite
+    sprite: _AU14/Objects/Misc/TattooGun/tattoogun.rsi
+    layers:
+    - state: inkgon
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,1,1
+    whitelist:
+      tags:
+      - TattooInk
+  - type: ContainerAmmoProvider
+    container: storagebase
+  - type: Item
+    size: Normal
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+
+# Ink cartridge for the tattoo gun
+- type: Tag
+  id: TattooInk
+
+- type: entity
+  parent: BaseItem
+  id: AU14TattooInkCartridge
+  name: tattoo ink cartridge
+  description: A small cartridge of dark ink for use with a tattoo gun.
+  components:
+  - type: Sprite
+    sprite: _AU14/Objects/Misc/TattooGun/tattoogunmag.rsi
+    layers:
+    - state: inkmag
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: true
+    - state: inkmag
+
+  - type: Item
+    size: Tiny
+  - type: Tag
+    tags:
+    - TattooInk
+
+
+
+- type: entity
+  parent: CMJumpsuitColonist
+  id: AU14CMJumpsuitColonistCLF
+  name: colonist uniform
+  description: A stylish gray-green jumpsuit - standard issue for colonists. This one has a small earpiece clipped to the collar.
+  suffix: CLF
+  components:
+  - type: UniformAccessoryHolder
+    allowedCategories:
+    - Tie
+    - Patch
+    - Medal
+    - Armband
+    - PridePin
+    - Rank
+    - Decor
+    - Poncho
+    - Mask
+    - Utility
+    startingAccessories:
+    - AU14CLFHeadset
+
+- type: entity
+  parent: RMCJumpsuitCivilian
+  id: AU14RMCJumpsuitCivilianCLF
+  name: gray utility uniform
+  description: A stylish gray jumpsuit, popularly issued to UN contract workers on the frontier. This one has a small earpiece clipped to the collar.
+  suffix: CLF
+  components:
+  - type: UniformAccessoryHolder
+    allowedCategories:
+    - Tie
+    - Patch
+    - Medal
+    - Armband
+    - PridePin
+    - Rank
+    - Decor
+    - Poncho
+    - Mask
+    - Utility
+    startingAccessories:
+    - AU14CLFHeadset
+
+

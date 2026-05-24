@@ -147,7 +147,7 @@ entities:
     - type: Transform
       pos: 1.4713006,0.57458115
       parent: 3
-- proto: CMSeatPassenger
+- proto: RMCSeatVehiclePassenger
   entities:
   - uid: 43
     components:

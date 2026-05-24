@@ -18,7 +18,7 @@
         RMCSkillEndurance: 2
         RMCSkillFireman: 1
         RMCSkillFirearms: 2
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCGearSurvivorPresetHalcyonDynamicsLiaison
     - type: RMCSurvivor
     - type: MotionDetectorTracked
@@ -64,7 +64,7 @@
   name: halcyon dynamics liaison preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     randomOutfits:
     - [ RMCCoatBureauTrenchCoatBrown ]
     - [ RMCCoatBureauTrenchCoatGrey ]

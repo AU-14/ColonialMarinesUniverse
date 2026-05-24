@@ -18,7 +18,7 @@
                                 <BoxContainer Orientation="Vertical">
                                     <BoxContainer Orientation="Horizontal" VerticalExpand="True">
                                         <Label Text="{Loc 'humanoid-profile-editor-name-label'}" />
-                                        <LineEdit Name="NameEdit" MinSize="270 0" VerticalAlignment="Center" Margin="5 0 0 0" />
+                                        <LineEdit Name="NameEdit" StyleClasses="CharacterNameInput" MinSize="270 0" VerticalAlignment="Center" Margin="5 0 0 0" />
                                         <Button Name="NameRandomize" Text="{Loc 'humanoid-profile-editor-name-random-button'}" />
                                     </BoxContainer>
                                     <Button Name="RandomizeEverythingButton" HorizontalAlignment="Center"
@@ -47,8 +47,18 @@
                 </BoxContainer>
             </BoxContainer>
             <Control MinHeight="10" />
+            <PanelContainer Name="RoundPreferencePanel" StyleClasses="CrtInsetPanel" Margin="0 0 0 6">
+                <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="8 4" SeparationOverride="14">
+                    <Label Text="{Loc 'humanoid-profile-editor-job-fallback-label'}"
+                           StyleClasses="CrtHeading"
+                           VerticalAlignment="Center" />
+                    <OptionButton Name="PreferenceUnavailableButton"
+                                  MinWidth="330"
+                                  HorizontalExpand="True" />
+                </BoxContainer>
+            </PanelContainer>
             <!-- tabContainer -->
-            <TabContainer Name="TabContainer" VerticalExpand="True">
+            <TabContainer Name="TabContainer" VerticalExpand="True" StyleClasses="CrtTabContainer">
                 <BoxContainer Orientation="Vertical">
                     <ScrollContainer VerticalExpand="True">
                         <!-- appearanceList -->
@@ -91,7 +101,7 @@
                                                    StyleClasses="SpeciesInfoDefault" />
                                     <LineEdit Name="XenoPostfix" HorizontalAlignment="Right" MinWidth="100" />
                                 </BoxContainer>
-                                <userInterface:BlueHorizontalSeparator Margin="0 5" />
+                                <cc:HSeparator Color="#16823E" Margin="0 5" />
                                 <!-- Species -->
                                 <BoxContainer HorizontalExpand="True">
                                     <Label Text="{Loc 'humanoid-profile-editor-species-label'}" />
@@ -164,29 +174,76 @@
                     </ScrollContainer>
                 </BoxContainer>
                 <BoxContainer Orientation="Vertical">
-                    <!-- Military Jobs -->
-                    <OptionButton Name="PreferenceUnavailableButton" />
-                    <ScrollContainer VerticalExpand="True">
-                        <BoxContainer Name="MilitaryJobList" Orientation="Vertical" />
-                    </ScrollContainer>
+                    <TabContainer Name="InsurgencyTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="InsurgencyGovernmentJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="InsurgencyInsurgentJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="InsurgencyCivilianJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" Margin="10">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="InsurgencyAntagList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                    </TabContainer>
                 </BoxContainer>
                 <BoxContainer Orientation="Vertical">
-                    <!-- Threat / Third Party Jobs -->
-                    <ScrollContainer VerticalExpand="True">
-                        <BoxContainer Name="ThreatJobList" Orientation="Vertical" />
-                    </ScrollContainer>
+                    <TabContainer Name="ColonyFallTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="ColonyCivilianJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Horizontal" VerticalExpand="True" SeparationOverride="6">
+                            <PanelContainer StyleClasses="CrtInsetPanel" MinWidth="330" Margin="3 3 0 3">
+                                <ScrollContainer VerticalExpand="True">
+                                    <BoxContainer Name="ColonyThreatPreferenceList" Orientation="Vertical" />
+                                </ScrollContainer>
+                            </PanelContainer>
+                            <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
+                                <BoxContainer Name="ColonyThreatJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" Margin="10">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="ColonyAntagList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                    </TabContainer>
                 </BoxContainer>
                 <BoxContainer Orientation="Vertical">
-                    <!-- Civilian Jobs -->
-                    <ScrollContainer VerticalExpand="True">
-                        <BoxContainer Name="CivilianJobList" Orientation="Vertical" />
-                    </ScrollContainer>
-                </BoxContainer>
-                <BoxContainer Orientation="Vertical" Margin="10">
-                    <!-- Antags -->
-                    <ScrollContainer VerticalExpand="True">
-                        <BoxContainer Name="AntagList" Orientation="Vertical" />
-                    </ScrollContainer>
+                    <TabContainer Name="DistressSignalTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="DistressGovernmentJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Horizontal" VerticalExpand="True" SeparationOverride="6">
+                            <PanelContainer StyleClasses="CrtInsetPanel" MinWidth="330" Margin="3 3 0 3">
+                                <ScrollContainer VerticalExpand="True">
+                                    <BoxContainer Name="DistressThreatPreferenceList" Orientation="Vertical" />
+                                </ScrollContainer>
+                            </PanelContainer>
+                            <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
+                                <BoxContainer Name="DistressThreatJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" Margin="10">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="DistressAntagList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                    </TabContainer>
                 </BoxContainer>
                 <BoxContainer Orientation="Vertical" Margin="10">
                     <!-- Traits -->
@@ -207,12 +264,23 @@
             </TabContainer>
         </BoxContainer>
         <!-- Right side -->
-        <BoxContainer Orientation="Vertical" VerticalExpand="True" VerticalAlignment="Center">
+        <BoxContainer Orientation="Vertical"
+                      VerticalExpand="True"
+                      VerticalAlignment="Center"
+                      MinWidth="300"
+                      MaxWidth="300">
             <SpriteView Name="SpriteView" Scale="8 8" Margin="4" SizeFlagsStretchRatio="1" />
+            <Label Name="PreviewJobLabel"
+                   HorizontalAlignment="Center"
+                   ClipText="True"
+                   MinWidth="286"
+                   MaxWidth="286"
+                   StyleClasses="CrtHeading"
+                   Visible="False" />
             <BoxContainer Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5">
-                <Button Name="SpriteRotateLeft" Text="◀" StyleClasses="OpenRight" />
+                <Button Name="SpriteRotateLeft" Text="&lt;" StyleClasses="OpenRight" />
                 <cc:VSeparator Margin="2 0 3 0" />
-                <Button Name="SpriteRotateRight" Text="▶" StyleClasses="OpenLeft" />
+                <Button Name="SpriteRotateRight" Text="&gt;" StyleClasses="OpenLeft" />
             </BoxContainer>
         </BoxContainer>
 </BoxContainer>

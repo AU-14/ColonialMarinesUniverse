@@ -13,14 +13,14 @@ using Robust.Shared.Physics.Events;
 
 namespace Content.Shared._RMC14.Wheelchair;
 
-public sealed class WheelchairSystem : EntitySystem
+public sealed partial class WheelchairSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedBuckleSystem _buckle = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private readonly SharedMoverController _mover = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedBuckleSystem _buckle = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private SharedMoverController _mover = default!;
+    [Dependency] private INetManager _net = default!;
     
     private readonly HashSet<EntityUid> _processingUnbuckle = new();
 

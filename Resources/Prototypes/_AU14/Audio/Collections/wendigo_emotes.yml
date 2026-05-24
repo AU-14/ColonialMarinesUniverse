@@ -1,0 +1,17 @@
+- type: emote
+  id: WendigoBreathing
+  name: rmc-emote-name-wendigo-breathing
+  category: Vocal
+  whitelist:
+    components:
+    - Xeno
+  blacklist:
+    components:
+    - BorgChassis
+  available: false
+  icon: Interface/Emotes/sigh.png
+  chatMessages: ["rmc-emote-wendigo-breathing"]
+  chatTriggers:
+    - breathe
+    - breathes
+    - breathing

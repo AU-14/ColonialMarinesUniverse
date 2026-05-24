@@ -32,19 +32,19 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._CMU14.Medical.Surgery;
 
-public sealed class CMUBodyScannerSystem : EntitySystem
+public sealed partial class CMUBodyScannerSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedRMCBloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedRMCBloodstreamSystem _bloodstream = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
     private const int MaxPuzzleSignals = 8;

@@ -52,8 +52,8 @@ public sealed partial class TacticalMapControl : TextureRect
     private const float PingRingThickness = 1.5f;
 
 
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     private readonly Font _font;
     private readonly Label? _tunnelInfoLabel;
@@ -84,7 +84,6 @@ public sealed partial class TacticalMapControl : TextureRect
     private Vector2i? _labelDragStart;
     private Vector2? _currentDragPosition;
 
-    private TacticalMapSettingsManager? _settingsManager;
     private EntityUid? _currentMapEntity;
     private string? _currentMapName;
 

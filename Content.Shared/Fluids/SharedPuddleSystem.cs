@@ -18,10 +18,11 @@ namespace Content.Shared.Fluids;
 
 public abstract partial class SharedPuddleSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
 
     private static readonly ProtoId<ReagentPrototype> Blood = "Blood";
     private static readonly ProtoId<ReagentPrototype> Slime = "Slime";
@@ -100,7 +101,7 @@ public abstract partial class SharedPuddleSystem : EntitySystem
 
         var reagentId = solution.GetPrimaryReagentId();
         if (!string.IsNullOrWhiteSpace(reagentId?.Prototype)
-            && _prototypeManager.TryIndexReagent(reagentId.Value.Prototype, out ReagentPrototype? proto))
+            && _reagent.TryIndex(reagentId.Value.Prototype, out var proto))
         {
             args.Sound = proto.FootstepSound;
         }
@@ -170,7 +171,7 @@ public abstract partial class SharedPuddleSystem : EntitySystem
 
                 var interpolateValue = quantity.Float() / solution.Volume.Float();
                 color = Color.InterpolateBetween(color,
-                    _prototypeManager.IndexReagent<ReagentPrototype>(standout).SubstanceColor,
+                    _reagent.Index(standout).SubstanceColor,
                     interpolateValue);
             }
         }
@@ -184,7 +185,7 @@ public abstract partial class SharedPuddleSystem : EntitySystem
         for (var i = solution.Contents.Count - 1; i >= 0; i--)
         {
             var (reagent, quantity) = solution.Contents[i];
-            var proto = _prototypeManager.IndexReagent<ReagentPrototype>(reagent.Prototype);
+            var proto = _reagent.Index(reagent.Prototype);
             var removed = proto.ReactionTile(tileRef, quantity, EntityManager, reagent.Data);
             if (removed <= FixedPoint2.Zero)
                 continue;

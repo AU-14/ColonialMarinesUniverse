@@ -1,0 +1,128 @@
+# Abomination threat (Colony Fall variant) — the colony's already lost,
+# the threat is small and entrenched. Win condition is wiping the
+# remaining colonists; threat is wiped if every abomination dies
+# (KillAllAbominationsRule, counts disguised mimics).
+- type: threat
+  id: abominationsThreat
+  lorePrimer: AU14PrimerThreatAbomination
+  roundstartspawns: abominationsParty
+  whitelistedgamemodes:
+  - ColonyFall
+  blacklistedgamemodes:
+  - DistressSignal
+  winconditions:
+  - KillAllColonistRule
+  - KillAllAbominationsRule
+  minplayers: 0
+
+- type: partySpawn
+  id: abominationsParty
+  leadersToSpawn:
+    AU14AbominationMimic: 1
+  gruntsToSpawn:
+    AU14AbominationMimic: 1
+    AU14AbominationSkitter: 1
+  # PartySpawnPrototype field name in YAML is `entsToSpsawn` (sic).
+  # Drops the seed flesh nest at the spawn point so the threat has somewhere
+  # to retreat to from the very start.
+  entsToSpsawn:
+    AU14AbominationFleshNest: 1
+  scaling:
+    AU14AbominationMimic:
+      scale: 0.05
+      whenToBeginScaling: 30
+    AU14AbominationSkitter:
+      scale: 0.04
+      whenToBeginScaling: 45
+  # Use the xenocf colony-fall markers — abominations + xenos share spawn
+  # points so DistressSignal maps that already have xenocf markers get
+  # automatic support for the abomination threat with no map edits.
+  Markers:
+    Member: xenocf
+    Leader: xenocf
+    Entity: xenocf
+  spawnTogether: true
+
+# Abomination threat (Distress Signal variant) — the threat goes up
+# against a real military response. Bigger starting pop (10 abominations
+# at base), broader caste mix, and a pop-scale rate a hair above xeno
+# larva to keep up with marine reinforcements. Win condition is killing
+# Govfor; threat loses when all abominations die (mimic disguises
+# counted via KillAllAbominationsRule).
+- type: threat
+  id: abominationsThreatDistress
+  lorePrimer: AU14PrimerThreatAbomination
+  roundstartspawns: abominationsPartyDistress
+  whitelistedgamemodes:
+  - DistressSignal
+  blacklistedgamemodes:
+  - ColonyFall
+  winconditions:
+  - KillAllGovforRule
+  - KillAllAbominationsRule
+  minplayers: 0
+
+# 10 abominations at base pop: 2 mimic leaders, 4 mimic grunts, 2
+# spiders, 2 skitters. Grunts join the rotation only via scaling so
+# the pop ramp gets meaningfully scarier rather than uniformly tougher.
+- type: partySpawn
+  id: abominationsPartyDistress
+  leadersToSpawn:
+    AU14AbominationMimic: 2
+  gruntsToSpawn:
+    AU14AbominationMimic: 4
+    AU14AbominationSpider: 2
+    AU14AbominationSkitter: 2
+    AU14AbominationGrunt: 0
+  entsToSpsawn:
+    AU14AbominationFleshNest: 1
+  # Total scaling rate ~0.20 / player (xeno larva is 0.16) — a bit
+  # heavier than the xeno ramp because abom castes are individually
+  # weaker, and the mix favours mimics so the picker pool keeps growing.
+  scaling:
+    AU14AbominationMimic:
+      scale: 0.10
+      whenToBeginScaling: 25
+    AU14AbominationSpider:
+      scale: 0.05
+      whenToBeginScaling: 30
+    AU14AbominationSkitter:
+      scale: 0.03
+      whenToBeginScaling: 35
+    AU14AbominationGrunt:
+      scale: 0.02
+      whenToBeginScaling: 45
+  Markers:
+    Member: xenocf
+    Leader: xenocf
+    Entity: xenocf
+  spawnTogether: true
+
+# Small abomination party — drawn as a third party. One mimic + one
+# skitter, no nest seed. Available on every planet/mode.
+- type: partySpawn
+  id: abominationSmallParty
+  leadersToSpawn:
+    AU14AbominationMimic: 1
+  gruntsToSpawn:
+    AU14AbominationSkitter: 1
+  spawnTogether: true
+
+- type: auThirdParty
+  id: abominationThirdParty
+  partyspawn: abominationSmallParty
+  entrymethod: ground
+  weight: 4
+  minplayers: 0
+  maxplayers: 250
+  GhostsNeeded: 2
+  roundstart: false
+  announcearrival: "Anomalous biological signatures detected in the area of operation."
+
+- type: lorePrimer
+  id: AU14PrimerThreatAbomination
+  threattext: "You are an abomination. Spread the flesh, drag the prey, wear their faces."
+  KnowledgeLevelsGovforThreat:
+    "Threat Unknown": 1
+    "Reports of colonists turning on their own and bodies vanishing from the morgue.": 2
+    "Pulsing 'tendons' growing through colony infrastructure. Burn everything.": 3

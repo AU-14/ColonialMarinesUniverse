@@ -1,0 +1,15 @@
+- type: entity
+  parent: RMCTabletCO
+  id: AU14TabletGovfor
+  name: govfor command tablet
+  description: A portable command interface for Govfor command, linked to their faction's systems.
+  components:
+  - type: AccessReader
+    access: [[ "AU14AccessGovforCommand" ]]
+  - type: MarineCommunicationsComputer
+    canCreateEcho: false
+    canGiveMedals: true
+    canInitiateEvac: true
+    faction: govfor
+  - type: TacticalMapComputer
+    faction: govfor

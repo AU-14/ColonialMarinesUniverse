@@ -6,10 +6,10 @@
     AU14JobUSArmySynthArmored: 1
     AU14JobUSArmyCETArmored: 1
     AU14JobUSArmyCMTArmored: 1
-    AU14JobUSArmyHeavyGunnerArmored: 1
-    AU14JobUSArmyMarksmanArmored: 1
+    AU14JobUSArmyHeavyGunnerArmored: 0
+    AU14JobUSArmyMarksmanArmored: 0
     AU14JobUSArmyTrooperArmored: 2
-    AU14JobUSArmyTrooperArmoredLAT: 1
+    AU14JobUSArmyTrooperArmoredLAT: 0
   scalewithpop: false
   spawnTogether: true
 

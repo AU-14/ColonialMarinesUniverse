@@ -28,14 +28,14 @@ namespace Content.Client.UserInterface.Systems.Chat.Widgets;
 [Virtual]
 public partial class ChatBox : UIWidget
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly ILogManager _log = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private ILogManager _log = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly ISawmill _sawmill;
     private readonly ChatUIController _controller;
-    private readonly Dictionary<string, Button> _tabButtons = new();
+    private readonly Dictionary<string, ChatTabButton> _tabButtons = new();
     private readonly Dictionary<string, int> _tabUnread = new();
     private readonly List<ChatTabSettings> _overflowTabs = new();
     private List<ChatTabSettings> _tabs = new();
@@ -44,14 +44,18 @@ public partial class ChatBox : UIWidget
     private IReadOnlyList<ChatRadioTarget> _radioTargets = Array.Empty<ChatRadioTarget>();
     private string _activeTabId = ChatUserSettings.AllTabId;
     private string _secondaryTabId = ChatUserSettings.RadioTabId;
+    private string? _draggingTabId;
+    private string? _dragTargetTabId;
     private bool _splitChatEnabled;
     private bool _splitAvailable = true;
     private bool _legacyChatEnabled;
     private bool _forceLegacyPresentation;
+    private bool _colorWholeMessage;
     private ChatChannel _legacyChannelMask = (ChatChannel) ushort.MaxValue;
     private int _secondaryRatioPercent = ChatUserSettings.DefaultSplitSecondaryRatioPercent;
     private bool _syncingFilter;
     private bool LegacyPresentation => _forceLegacyPresentation || _legacyChatEnabled;
+    private static readonly Color StructuredMessageTextColor = Color.FromHex("#D6DCE0");
 
     public bool Main { get; set; }
 
@@ -107,9 +111,12 @@ public partial class ChatBox : UIWidget
         ChatInput.FilterButton.Popup.OnTabSelected += OnSettingsTabSelected;
         ChatInput.FilterButton.Popup.OnTabAdded += OnSettingsTabAdded;
         ChatInput.FilterButton.Popup.OnTabRemoved += OnSettingsTabRemoved;
+        ChatInput.FilterButton.Popup.OnTabRenamed += OnSettingsTabRenamed;
+        ChatInput.FilterButton.Popup.OnTabMoved += OnSettingsTabMoved;
         ChatInput.FilterButton.Popup.OnRadioFilter += OnSettingsRadioFilter;
         ChatInput.FilterButton.Popup.OnStyleChanged += OnSettingsStyleChanged;
         ChatInput.FilterButton.Popup.OnStyleReset += OnSettingsStyleReset;
+        ChatInput.FilterButton.Popup.OnColorWholeMessageChanged += OnSettingsColorWholeMessageChanged;
         ChatInput.FilterButton.Popup.OnLegacyModeChanged += OnSettingsLegacyModeChanged;
         SplitButton.Popup.OnTabSelected += OnSplitTabSelected;
         TabOverflowButton.Popup.OnTabSelected += OnOverflowTabSelected;
@@ -121,6 +128,7 @@ public partial class ChatBox : UIWidget
         _controller.FilterableChannelsChanged += OnFilterableChannelsChanged;
         _controller.RegisterChat(this);
         _config.OnValueChanged(CCVars.ChatLegacyMode, OnLegacyModeCvarChanged);
+        _config.OnValueChanged(CCVars.ChatColorWholeMessage, OnColorWholeMessageCvarChanged);
 
         _tabs = ChatUserSettings.LoadTabs(_config.GetCVar(CCVars.ChatTabs));
         _styles = ChatUserSettings.LoadStyles(_config.GetCVar(CCVars.ChatChannelStyles));
@@ -129,6 +137,7 @@ public partial class ChatBox : UIWidget
         _secondaryTabId = split.SecondaryTabId;
         _secondaryRatioPercent = split.SecondaryRatioPercent;
         _legacyChatEnabled = _config.GetCVar(CCVars.ChatLegacyMode);
+        _colorWholeMessage = _config.GetCVar(CCVars.ChatColorWholeMessage);
         var radioChannels = _prototype.EnumeratePrototypes<RadioChannelPrototype>().ToList();
         _styleTargets = ChatUserSettings.CreateStyleTargets(radioChannels);
         _radioTargets = ChatUserSettings.CreateRadioTargets(radioChannels);
@@ -170,7 +179,7 @@ public partial class ChatBox : UIWidget
                 return;
 
             if (msg is { Read: false, AudioPath: { } })
-                _entManager.System<AudioSystem>().PlayGlobal(msg.AudioPath, Filter.Local(), false, AudioParams.Default.WithVolume(msg.AudioVolume));
+                _entManager.System<AudioSystem>().PlayGlobal(new ResolvedPathSpecifier(msg.AudioPath), Filter.Local(), false, AudioParams.Default.WithVolume(msg.AudioVolume));
 
             msg.Read = true;
             return;
@@ -191,7 +200,7 @@ public partial class ChatBox : UIWidget
             return;
 
         if (msg is { Read: false, AudioPath: { } })
-            _entManager.System<AudioSystem>().PlayGlobal(msg.AudioPath, Filter.Local(), false, AudioParams.Default.WithVolume(msg.AudioVolume));
+            _entManager.System<AudioSystem>().PlayGlobal(new ResolvedPathSpecifier(msg.AudioPath), Filter.Local(), false, AudioParams.Default.WithVolume(msg.AudioVolume));
 
         msg.Read = true;
 
@@ -294,6 +303,9 @@ public partial class ChatBox : UIWidget
 
     private void RebuildTabs()
     {
+        _draggingTabId = null;
+        _dragTargetTabId = null;
+
         foreach (var button in _tabButtons.Values)
         {
             TabBar.RemoveChild(button);
@@ -307,13 +319,20 @@ public partial class ChatBox : UIWidget
                 continue;
 
             var capturedTabId = tab.Id;
-            var button = new Button
+            var isAll = IsAllTab(tab);
+            var button = new ChatTabButton(tab.Id)
             {
                 ToggleMode = true,
+                Mode = BaseButton.ActionMode.Release,
                 MinWidth = Math.Max(58, tab.Title.Length * 9),
-                StyleClasses = { StyleNano.StyleClassChatChannelSelectorButton }
+                StyleClasses = { StyleNano.StyleClassChatChannelSelectorButton },
+                CanDrag = !isAll
             };
             button.OnPressed += _ => SetActiveTab(capturedTabId);
+            button.DragStarted += OnTabDragStarted;
+            button.DragEntered += OnTabDragEntered;
+            button.DragExited += OnTabDragExited;
+            button.DragEnded += OnTabDragEnded;
             TabBar.AddChild(button);
             _tabButtons[capturedTabId] = button;
         }
@@ -408,6 +427,70 @@ public partial class ChatBox : UIWidget
         SetActiveTab(tabId);
     }
 
+    private void OnTabDragStarted(string tabId)
+    {
+        if (string.Equals(tabId, ChatUserSettings.AllTabId, StringComparison.OrdinalIgnoreCase))
+            return;
+
+        _draggingTabId = tabId;
+        _dragTargetTabId = null;
+        UpdateTabDragVisuals();
+    }
+
+    private void OnTabDragEntered(string targetTabId)
+    {
+        if (_draggingTabId == null)
+            return;
+
+        if (string.Equals(_draggingTabId, targetTabId, StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(targetTabId, ChatUserSettings.AllTabId, StringComparison.OrdinalIgnoreCase))
+        {
+            _dragTargetTabId = null;
+            UpdateTabDragVisuals();
+            return;
+        }
+
+        _dragTargetTabId = targetTabId;
+        UpdateTabDragVisuals();
+    }
+
+    private void OnTabDragExited(string targetTabId)
+    {
+        if (_draggingTabId == null ||
+            !string.Equals(_dragTargetTabId, targetTabId, StringComparison.OrdinalIgnoreCase))
+            return;
+
+        _dragTargetTabId = null;
+        UpdateTabDragVisuals();
+    }
+
+    private void OnTabDragEnded(string tabId)
+    {
+        var draggingTabId = _draggingTabId;
+        if (draggingTabId == null)
+            return;
+
+        var targetTabId = _dragTargetTabId;
+
+        _draggingTabId = null;
+        _dragTargetTabId = null;
+
+        UpdateTabDragVisuals();
+
+        if (targetTabId != null)
+            MoveTabByDrag(draggingTabId, targetTabId);
+    }
+
+    private void UpdateTabDragVisuals()
+    {
+        foreach (var (tabId, button) in _tabButtons)
+        {
+            var dragging = string.Equals(tabId, _draggingTabId, StringComparison.OrdinalIgnoreCase);
+            var dropTarget = string.Equals(tabId, _dragTargetTabId, StringComparison.OrdinalIgnoreCase);
+            button.SetDragVisualState(dragging, dropTarget);
+        }
+    }
+
     private void OnSplitResizeDragged(GUIMouseMoveEventArgs args)
     {
         if (!_splitChatEnabled || ChatPanes.Height <= 0)
@@ -487,6 +570,7 @@ public partial class ChatBox : UIWidget
                 : Color.FromHex("#737987");
         }
 
+        UpdateTabDragVisuals();
         UpdateTabOverflowControls();
     }
 
@@ -610,6 +694,7 @@ public partial class ChatBox : UIWidget
             !LegacyPresentation && !IsAllTab(activeTab) && (activeTab.ChannelMask & ChatChannel.Radio) != 0);
         ChatInput.FilterButton.Popup.ConfigureTabs(_tabs.Where(IsTabVisible).ToList(), _activeTabId);
         ChatInput.FilterButton.Popup.ConfigureStyles(_styles, _styleTargets);
+        ChatInput.FilterButton.Popup.SetColorWholeMessage(_colorWholeMessage);
         ChatInput.FilterButton.Popup.SetLegacyMode(LegacyPresentation);
         _syncingFilter = false;
     }
@@ -774,6 +859,54 @@ public partial class ChatBox : UIWidget
         SetActiveTab(_activeTabId);
     }
 
+    private void OnSettingsTabRenamed(string tabId, string title)
+    {
+        if (string.Equals(tabId, ChatUserSettings.AllTabId, StringComparison.OrdinalIgnoreCase))
+            return;
+
+        var tab = _tabs.FirstOrDefault(entry => string.Equals(entry.Id, tabId, StringComparison.OrdinalIgnoreCase));
+        if (tab == null)
+            return;
+
+        var sanitized = ChatUserSettings.SanitizeTabTitle(title);
+        if (tab.Title == sanitized)
+            return;
+
+        tab.Title = sanitized;
+        SaveTabs();
+        RebuildTabs();
+        SyncFilterPopup();
+        RefreshVisibleChatLayout();
+    }
+
+    private void OnSettingsTabMoved(string tabId, string targetTabId)
+    {
+        MoveTabByDrag(tabId, targetTabId);
+    }
+
+    private void MoveTabByDrag(string tabId, string targetTabId)
+    {
+        if (string.Equals(tabId, targetTabId, StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(tabId, ChatUserSettings.AllTabId, StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(targetTabId, ChatUserSettings.AllTabId, StringComparison.OrdinalIgnoreCase))
+            return;
+
+        var from = _tabs.FindIndex(tab => string.Equals(tab.Id, tabId, StringComparison.OrdinalIgnoreCase));
+        var to = _tabs.FindIndex(tab => string.Equals(tab.Id, targetTabId, StringComparison.OrdinalIgnoreCase));
+        if (from <= 0 || to <= 0 || from == to)
+            return;
+
+        var moving = _tabs[from];
+        _tabs.RemoveAt(from);
+        var insertIndex = Math.Clamp(to, 1, _tabs.Count);
+        _tabs.Insert(insertIndex, moving);
+
+        SaveTabs();
+        RebuildTabs();
+        SyncFilterPopup();
+        RefreshVisibleChatLayout();
+    }
+
     private void OnSettingsRadioFilter(string label, bool active)
     {
         if (_syncingFilter)
@@ -867,6 +1000,15 @@ public partial class ChatBox : UIWidget
         _config.SaveToFile();
     }
 
+    private void OnSettingsColorWholeMessageChanged(bool enabled)
+    {
+        if (_colorWholeMessage == enabled)
+            return;
+
+        _config.SetCVar(CCVars.ChatColorWholeMessage, enabled);
+        _config.SaveToFile();
+    }
+
     private void OnLegacyModeCvarChanged(bool enabled)
     {
         var wasLegacy = LegacyPresentation;
@@ -881,6 +1023,19 @@ public partial class ChatBox : UIWidget
             ResetLegacyChannelMask();
 
         ApplyChatMode();
+        Repopulate();
+    }
+
+    private void OnColorWholeMessageCvarChanged(bool enabled)
+    {
+        if (_colorWholeMessage == enabled)
+        {
+            SyncFilterPopup();
+            return;
+        }
+
+        _colorWholeMessage = enabled;
+        SyncFilterPopup();
         Repopulate();
     }
 
@@ -963,14 +1118,15 @@ public partial class ChatBox : UIWidget
         var styleColor = ChatUserSettings.ResolveColor(style);
         var fontSize = ChatUserSettings.ResolveFontSize(style) ?? ChatUserSettings.DefaultFontSize;
         var accentColor = styleColor ?? msg.Display?.AccentColor;
-        var color = styleColor ?? msg.MessageColorOverride ?? msg.Display?.AccentColor ?? msg.Channel.TextColor();
-        var formatted = CreateFormattedMessage(msg, color, style);
+        var messageColor = styleColor ?? msg.MessageColorOverride ?? msg.Display?.AccentColor ?? msg.Channel.TextColor();
+        var bodyColor = _colorWholeMessage ? messageColor : StructuredMessageTextColor;
+        var formatted = CreateFormattedMessage(msg, messageColor, style);
 
         var cmChat = _entManager.SystemOrNull<CMChatSystem>();
         if (cmChat?.TryRepetition(repeatQueue, msg.SenderEntity, msg.Message, msg.Channel, msg.RepeatCheckSender) ?? false)
             return;
 
-        var row = contents.AddMessage(msg, formatted, color, accentColor, fontSize);
+        var row = contents.AddMessage(msg, formatted, bodyColor, accentColor, fontSize);
         cmChat?.TrackRepetition(repeatQueue, row, formatted, msg.SenderEntity, msg.Message, msg.Channel);
     }
 
@@ -1005,12 +1161,35 @@ public partial class ChatBox : UIWidget
     private FormattedMessage CreateFormattedMessage(ChatMessage message, Color color, ChatStyleSettings? style = null)
     {
         var markup = StripDuplicateChannelPrefix(message.WrappedMessage, message);
+        markup = _colorWholeMessage
+            ? ChatUserSettings.ApplyStyleMarkup(markup, style, ChatUserSettings.DefaultFontSize)
+            : ChatUserSettings.ApplyFontMarkup(RemoveOuterColorMarkup(markup), style, ChatUserSettings.DefaultFontSize);
+
         var formatted = new FormattedMessage(3);
-        formatted.PushColor(color);
-        formatted.AddMarkupOrThrow(ChatUserSettings.ApplyStyleMarkup(markup, style, ChatUserSettings.DefaultFontSize));
-        formatted.Pop();
+        if (_colorWholeMessage)
+            formatted.PushColor(color);
+
+        formatted.AddMarkupOrThrow(markup);
+
+        if (_colorWholeMessage)
+            formatted.Pop();
 
         return FilterProblematicTags(formatted);
+    }
+
+    private static string RemoveOuterColorMarkup(string markup)
+    {
+        if (!markup.StartsWith("[color=", StringComparison.OrdinalIgnoreCase) ||
+            !markup.EndsWith("[/color]", StringComparison.OrdinalIgnoreCase))
+        {
+            return markup;
+        }
+
+        var openEnd = markup.IndexOf(']');
+        if (openEnd < 0)
+            return markup;
+
+        return markup.Substring(openEnd + 1, markup.Length - openEnd - "[/color]".Length - 1);
     }
 
     private FormattedMessage CreateLegacyFormattedMessage(ChatMessage message, Color color)
@@ -1182,6 +1361,7 @@ public partial class ChatBox : UIWidget
         _controller.NotifyChatFocus(false);
     }
 
+    [System.Obsolete]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
@@ -1192,6 +1372,7 @@ public partial class ChatBox : UIWidget
         _controller.HighlightsUpdated -= OnHighlightsUpdated;
         _controller.FilterableChannelsChanged -= OnFilterableChannelsChanged;
         _config.UnsubValueChanged(CCVars.ChatLegacyMode, OnLegacyModeCvarChanged);
+        _config.UnsubValueChanged(CCVars.ChatColorWholeMessage, OnColorWholeMessageCvarChanged);
         ChatInput.Input.OnTextEntered -= OnTextEntered;
         ChatInput.Input.OnKeyBindDown -= OnInputKeyBindDown;
         ChatInput.Input.OnTextChanged -= OnTextChanged;
@@ -1203,9 +1384,12 @@ public partial class ChatBox : UIWidget
         ChatInput.FilterButton.Popup.OnTabSelected -= OnSettingsTabSelected;
         ChatInput.FilterButton.Popup.OnTabAdded -= OnSettingsTabAdded;
         ChatInput.FilterButton.Popup.OnTabRemoved -= OnSettingsTabRemoved;
+        ChatInput.FilterButton.Popup.OnTabRenamed -= OnSettingsTabRenamed;
+        ChatInput.FilterButton.Popup.OnTabMoved -= OnSettingsTabMoved;
         ChatInput.FilterButton.Popup.OnRadioFilter -= OnSettingsRadioFilter;
         ChatInput.FilterButton.Popup.OnStyleChanged -= OnSettingsStyleChanged;
         ChatInput.FilterButton.Popup.OnStyleReset -= OnSettingsStyleReset;
+        ChatInput.FilterButton.Popup.OnColorWholeMessageChanged -= OnSettingsColorWholeMessageChanged;
         ChatInput.FilterButton.Popup.OnLegacyModeChanged -= OnSettingsLegacyModeChanged;
         SplitButton.Popup.OnTabSelected -= OnSplitTabSelected;
         TabOverflowButton.Popup.OnTabSelected -= OnOverflowTabSelected;

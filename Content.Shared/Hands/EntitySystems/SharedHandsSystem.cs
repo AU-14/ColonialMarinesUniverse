@@ -15,14 +15,14 @@ namespace Content.Shared.Hands.EntitySystems;
 
 public abstract partial class SharedHandsSystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] protected readonly SharedContainerSystem ContainerSystem = default!;
-    [Dependency] private readonly SharedInteractionSystem _interactionSystem = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedStorageSystem _storage = default!;
-    [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
-    [Dependency] private readonly SharedVirtualItemSystem _virtualSystem = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] protected SharedContainerSystem ContainerSystem = default!;
+    [Dependency] private SharedInteractionSystem _interactionSystem = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedStorageSystem _storage = default!;
+    [Dependency] protected SharedTransformSystem TransformSystem = default!;
+    [Dependency] private SharedVirtualItemSystem _virtualSystem = default!;
 
     public event Action<Entity<HandsComponent>, string, HandLocation>? OnPlayerAddHand;
     public event Action<Entity<HandsComponent>, string>? OnPlayerRemoveHand;
@@ -68,6 +68,34 @@ public abstract partial class SharedHandsSystem
     public void AddHand(Entity<HandsComponent?> ent, string handName, HandLocation handLocation)
     {
         AddHand(ent, handName, new Hand(handLocation));
+    }
+
+    public bool TrySetHandLocation(Entity<HandsComponent?> ent, string handName, HandLocation handLocation)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return false;
+
+        if (!ent.Comp.Hands.TryGetValue(handName, out var hand))
+            return false;
+
+        if (hand.Location == handLocation)
+            return true;
+
+        hand.Location = handLocation;
+        ent.Comp.Hands[handName] = hand;
+        Dirty(ent);
+        return true;
+    }
+
+    public IEnumerable<(string Id, Hand Hand)> EnumerateHandsInSortedOrder(Entity<HandsComponent> ent)
+    {
+        foreach (var handId in ent.Comp.SortedHands)
+        {
+            if (!ent.Comp.Hands.TryGetValue(handId, out var hand))
+                continue;
+
+            yield return (handId, hand);
+        }
     }
 
     /// <summary>

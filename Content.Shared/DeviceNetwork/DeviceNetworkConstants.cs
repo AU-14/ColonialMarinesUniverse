@@ -1,5 +1,6 @@
 using Robust.Shared.Utility;
 using Content.Shared.DeviceNetwork.Components;
+using Robust.Shared.Localization;
 
 namespace Content.Shared.DeviceNetwork
 {
@@ -71,7 +72,7 @@ namespace Content.Shared.DeviceNetwork
             var result = ((DeviceNetworkComponent.DeviceNetIdDefaults) id).ToString();
             var resultKebab = "device-net-id-" + CaseConversion.PascalToKebab(result);
 
-            return !Loc.TryGetString(resultKebab, out var name) ? result : name;
+            return !IoCManager.Resolve<ILocalizationManager>().TryGetString(resultKebab, out var name) ? result : name;
         }
 
         #endregion

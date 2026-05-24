@@ -5,10 +5,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Medical.Unrevivable;
 
-public sealed class RMCUnrevivableSystem : EntitySystem
+public sealed partial class RMCUnrevivableSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _net = default!;
 
     private const float UnrevivableScanInterval = 1f;
     private float _scanAccumulator;

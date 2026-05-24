@@ -6,8 +6,8 @@ namespace Content.Client._RMC14.Tether;
 
 public sealed partial class RMCTetherSystem : SharedRMCTetherSystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     public override void Initialize()
     {

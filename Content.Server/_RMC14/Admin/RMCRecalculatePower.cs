@@ -6,9 +6,9 @@ using Robust.Shared.Console;
 namespace Content.Server._RMC14.Admin;
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed class RMCRecalculatePower : LocalizedEntityCommands
+public sealed partial class RMCRecalculatePower : LocalizedEntityCommands
 {
-    [Dependency] private readonly SharedRMCPowerSystem _power = default!;
+    [Dependency] private SharedRMCPowerSystem _power = default!;
 
     public override string Command => "rmcrecalcualtepower";
 

@@ -1,11 +1,16 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Speech.EntitySystems;
 using Content.Server.Speech.Prototypes;
+using Content.Shared._AU14.Xeno;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Hive;
+using Content.Shared._RMC14.Xenonids.ManageHive;
+using Content.Shared.AU14;
 using Content.Shared.Chat;
 using Content.Shared.Inventory;
 using Content.Shared.Popups;
@@ -17,14 +22,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._RMC14.Chat.Chat;
 
-public sealed class CMChatSystem : SharedCMChatSystem
+public sealed partial class CMChatSystem : SharedCMChatSystem
 {
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ReplacementAccentSystem _wordreplacement = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ReplacementAccentSystem _wordreplacement = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
 
     private static readonly ProtoId<ReplacementAccentPrototype> ChatSanitize = "CMChatSanitize";
     private static readonly ProtoId<ReplacementAccentPrototype> MarineChatSanitize = "CMChatSanitizeMarine";
@@ -44,13 +50,24 @@ public sealed class CMChatSystem : SharedCMChatSystem
     {
         _toRemove.Clear();
 
+        if (HasComp<CultistComponent>(ent.Owner))
+            return;
+
         foreach (var (session, data) in args.Recipients)
         {
             if (data.Observer)
                 continue;
 
-            if (HasComp<XenoComponent>(session.AttachedEntity))
+            if (session.AttachedEntity is { } attached &&
+                HasComp<XenoComponent>(attached) &&
+                !IsHivebrokenXeno(attached))
+            {
+                if ((TryComp<HiveMemberComponent>(session.AttachedEntity, out var hivem) &&
+                    TryComp<HiveComponent>(hivem.Hive, out var hive) && hive.Corrupted == true))
+                    continue;
                 _toRemove.Add(session);
+            }
+
         }
 
         foreach (var session in _toRemove)
@@ -62,16 +79,19 @@ public sealed class CMChatSystem : SharedCMChatSystem
     private void OnXenoAfterGetRecipients(Entity<XenoComponent> ent, ref ChatMessageAfterGetRecipients args)
     {
         _toRemove.Clear();
-
-        foreach (var (session, data) in args.Recipients)
+        var hive = _hive.GetHive(ent.Owner);
+        if (!IsHivebrokenXeno(ent.Owner))
         {
-            if (data.Observer)
-                continue;
-
-            if (!HasComp<XenoComponent>(session.AttachedEntity))
-                _toRemove.Add(session);
+            foreach (var (session, data) in args.Recipients)
+            {
+                if (data.Observer)
+                    continue;
+                if (!HasComp<XenoComponent>(session.AttachedEntity) &&
+                    !HasComp<HasKnowledgeOfXenoLanguageComponent>(session.AttachedEntity) &&
+                    !(HasComp<ManageHiveComponent>(ent) && hive is not null && hive.Value.Comp.Corrupted))
+                    _toRemove.Add(session);
+            }
         }
-
         foreach (var session in _toRemove)
         {
             args.Recipients.Remove(session);
@@ -82,7 +102,9 @@ public sealed class CMChatSystem : SharedCMChatSystem
     {
         msg = _wordreplacement.ApplyReplacements(msg, ChatSanitize);
 
-        var factionSanitize = HasComp<XenoComponent>(source) ? XenoChatSanitize : MarineChatSanitize;
+        var factionSanitize = HasComp<XenoComponent>(source) && !IsHivebrokenXeno(source)
+            ? XenoChatSanitize
+            : MarineChatSanitize;
         msg = _wordreplacement.ApplyReplacements(msg, factionSanitize);
 
         return msg;

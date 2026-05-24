@@ -17,10 +17,6 @@ chat-radio-marine-echo = CLF
 chat-radio-marine-foxtrot = Foxtrot
 
 chat-radio-forecon = FORECON
-
-chat-radio-colony = Colony
-chat-radio-WY = WY
-chat-radio-CMB = CMB
 chat-radio-provost = Provost
 
 chat-radio-spp-command = UPP Command
@@ -31,5 +27,3 @@ chat-radio-spp-cct = UPP CCT
 
 chat-radio-royal-marine = Royal Marine
 chat-radio-tse = Three Suns Empire
-
-chat-radio-hivemind = Hivemind

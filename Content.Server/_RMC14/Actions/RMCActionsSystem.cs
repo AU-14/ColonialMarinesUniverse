@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Linq;
 using Content.Server.Actions;
 using Content.Shared._RMC14.Actions;
@@ -9,10 +9,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._RMC14.Actions;
 
-public sealed class RMCActionsSystem : SharedRMCActionsSystem
+public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
 {
-    [Dependency] private readonly ActionsSystem _actions = default!;
-    [Dependency] private readonly RMCActionsManager _manager = default!;
+    [Dependency] private ActionsSystem _actions = default!;
+    [Dependency] private RMCActionsManager _manager = default!;
 
     private readonly HashSet<EntProtoId> _actionsPresent = new();
     private readonly Dictionary<(NetUserId User, EntProtoId Id), List<EntProtoId>> _toUpdate = new();

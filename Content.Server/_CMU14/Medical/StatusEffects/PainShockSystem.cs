@@ -5,10 +5,10 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Server._CMU14.Medical.StatusEffects;
 
-public sealed class PainShockSystem : SharedPainShockSystem
+public sealed partial class PainShockSystem : SharedPainShockSystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
 
     private static readonly string[] MildPainReflections =
     {

@@ -1,0 +1,9 @@
+- type: entity
+  parent: BarberScissors
+  id: AU14Scissors
+  name: Barber's Scissors
+  description: A pair of scissors used for cutting hair. They have a sharp blade and a comfortable grip, making them ideal for precise cutting. They are commonly used by barbers and hairstylists to create clean and stylish haircuts.
+  components:
+  - type: Sprite
+    sprite: _AU14/Objects/Tools/newscissors.rsi
+    state: icon

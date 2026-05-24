@@ -6,10 +6,11 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations;
 
 namespace Content.Client._RMC14.Xenonids.Egg;
 
-public sealed class XenoEggVisualizerSystem : EntitySystem
+public sealed partial class XenoEggVisualizerSystem : EntitySystem
 {
-    [Dependency] private readonly AnimationPlayerSystem _animation = default!;
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private AnimationPlayerSystem _animation = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private const string AnimationKey = "rmc_egg_destroying";
 
@@ -35,7 +36,7 @@ public sealed class XenoEggVisualizerSystem : EntitySystem
 
         if (sprite.BaseRSI != res.RSI)
         {
-            sprite.BaseRSI = res.RSI;
+            _sprite.SetBaseRsi((ent.Owner, sprite), res.RSI);
         }
 
         var state = ent.Comp.State switch
@@ -51,8 +52,8 @@ public sealed class XenoEggVisualizerSystem : EntitySystem
         if (string.IsNullOrWhiteSpace(state))
             return;
 
-        if (sprite.LayerMapTryGet(XenoEggLayers.Base, out var layer))
-            sprite.LayerSetState(layer, state);
+        if (_sprite.LayerMapTryGet((ent.Owner, sprite), XenoEggLayers.Base, out var layer, false))
+            _sprite.LayerSetRsiState((ent.Owner, sprite), layer, state);
     }
 
     private void OnStartup(Entity<DestroyedXenoEggComponent> ent, ref ComponentStartup args)

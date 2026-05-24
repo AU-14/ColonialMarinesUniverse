@@ -1,0 +1,10 @@
+- type: npcFaction
+  id: CMUYautja
+  hostile:
+  - RMCXeno
+
+- type: entity
+  id: FactionYautja
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IFFFaction

@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Content.Server.Administration.Logs;
 using Content.Server.AU14.Round;
 using Content.Server.Cargo.Components;
+using Content.Server.Cargo.Systems;
 using Content.Server.Chat.Systems;
 using Content.Server.Storage.EntitySystems;
 using Content.Shared.Access;
@@ -46,20 +47,21 @@ namespace Content.Server._RMC14.Requisitions;
 
 public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLogs = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly ChasmSystem _chasm = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly EntityStorageSystem _entityStorage = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly PhysicsSystem _physics = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly XenoSystem _xeno = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IAdminLogManager _adminLogs = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private ChasmSystem _chasm = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private EntityStorageSystem _entityStorage = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private PhysicsSystem _physics = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private PricingSystem _pricing = default!;
 
     private static readonly EntProtoId AccountId = "RMCASRSAccount";
     private static readonly EntProtoId PaperRequisitionInvoice = "RMCPaperRequisitionInvoice";
@@ -187,13 +189,12 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         }
 
         var order = category.Entries[args.Order];
-        // Ensure we check the correct faction account for balance
-        var accountEnt = computer.Comp.Account ?? GetAccount(computer.Comp.Faction);
-        if (!TryComp(accountEnt, out RequisitionsAccountComponent? account) ||
-            account.Balance < order.Cost)
-        {
+        // Ensure we check the correct faction account for balance and cache it
+        computer.Comp.Account ??= GetAccount(computer.Comp.Faction);
+        var accountEnt = computer.Comp.Account.Value;
+        if (!TryComp(accountEnt, out RequisitionsAccountComponent? account)
+            || account.Balance < order.Cost)
             return;
-        }
 
         if (GetElevator(computer) is not { } elevator)
             return;
@@ -252,49 +253,44 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     }
 
     // Returns the first existing account matching faction, or creates a new one.
-    // If faction is null or "none", behaves like the original GetAccount (single global account).
+    // The original (no faction param) used a single global account, we replicate this.
     private Entity<RequisitionsAccountComponent> GetAccount(string? faction = null)
      {
+        var factionKey = string.IsNullOrEmpty(faction) || faction == "none"
+            ? "unassigned" // use the shared global account so we're not stealing from a faction
+            : faction;
         var query = EntityQueryEnumerator<RequisitionsAccountComponent>();
-
-        // Prefer an account matching faction if provided
-        if (!string.IsNullOrEmpty(faction) && faction != "none")
+        while (query.MoveNext(out var uid, out var account))
         {
-            while (query.MoveNext(out var uid, out var account))
-            {
-                if (account.Faction == faction)
-                    return (uid, account);
-            }
-            // No matching account found, spawn a new faction account
-            var newAccount = Spawn(AccountId, MapCoordinates.Nullspace);
-            var newAccountComp = EnsureComp<RequisitionsAccountComponent>(newAccount);
-            newAccountComp.Faction = faction;
-
-            // Set faction-specific starting balance
-            if (faction == "govfor" || faction == "opfor")
-            {
-                newAccountComp.Balance = 20000;
-            }
-            else if (faction == "colony")
-            {
-                newAccountComp.Balance = 450;
-                // Colony accounts should not receive random military deliveries (flares, batteries, etc.)
-                newAccountComp.RandomCrates.Clear();
-            }
-
-            return (newAccount, newAccountComp);
+            if (account.Faction == factionKey)
+                return (uid, account);
         }
 
-        // Fallback to the old behavior: return any existing account or create one
-        while (query.MoveNext(out var anyUid, out var anyAccount))
-        {
-            return (anyUid, anyAccount);
-        }
-
-        var created = Spawn(AccountId, MapCoordinates.Nullspace);
-        var createdComp = EnsureComp<RequisitionsAccountComponent>(created);
-        return (created, createdComp);
+        return CreateAccount(factionKey);
      }
+
+    private Entity<RequisitionsAccountComponent> CreateAccount(string faction)
+    {
+        var newAccount = Spawn(AccountId, MapCoordinates.Nullspace);
+        var comp = EnsureComp<RequisitionsAccountComponent>(newAccount);
+        comp.Faction = faction;
+
+        // Faction specific starting balance
+        switch (faction)
+        {
+            case "govfor":
+            case "opfor":
+                comp.Balance = 8000;
+                break;
+            case "colony":
+                comp.Balance = 450;
+                // Colony accounts should not receive random military deliveries (flares, batteries, etc.)
+                comp.RandomCrates.Clear();
+                break;
+        }
+
+        return (newAccount, comp);
+    }
 
     private void UpdateRailings(Entity<RequisitionsElevatorComponent> elevator, RequisitionsRailingMode mode)
     {
@@ -502,13 +498,21 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
              if (HasComp<CargoSellBlacklistComponent>(entity))
                  continue;
 
-             rewards += SubmitInvoices(entity);
+             var entityRewards = SubmitInvoices(entity);
 
              if (TryComp(entity, out RequisitionsCrateComponent? crate))
              {
-                 rewards += crate.Reward;
-                 soldAny = true;
+                 entityRewards += crate.Reward;
              }
+             else
+             {
+                 entityRewards += (int) Math.Round(_pricing.GetPrice(entity));
+             }
+
+             if (entityRewards > 0)
+                 soldAny = true;
+
+             rewards += entityRewards;
 
              QueueDel(entity);
          }
@@ -795,12 +799,15 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         if (!string.IsNullOrEmpty(faction) && faction != "none")
             reqAccount = GetAccount(faction);
         else
+        {
+            Log.Debug($"[Requisitions] No faction specified for GetAccount, faction: {faction}, using \"unassigned\" account.");
             reqAccount = GetAccount();
+        }
 
         reqAccount.Comp.Balance += stackCount;
         Dirty(reqAccount);
 
-        EntityManager.QueueDeleteEntity(args.Entity);
+        QueueDel(args.Entity);
         SendUIStateAll();
     }
 

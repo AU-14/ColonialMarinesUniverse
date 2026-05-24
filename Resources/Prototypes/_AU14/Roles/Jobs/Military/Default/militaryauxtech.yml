@@ -40,7 +40,7 @@
   - CMCargoTech
   overwatchSortPriority: -6
   overwatchShowName: true
-  overwatchRoleName: Auxiliary Technician
+  overwatchRoleName: au14-job-name-govforAuxTech
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
@@ -80,7 +80,7 @@
   id: AU14GearGOVFORAuxTech
   equipment:
     shoes: CMBootsBlackFilled
-    ears: AU14HeadsetGOVFORAux
+    ears: AU14HeadsetGovforAuxiliary
     ears2: RMCM5CameraGear
     id: AU14JobIDCardGOVFORAuxTech
   storage:

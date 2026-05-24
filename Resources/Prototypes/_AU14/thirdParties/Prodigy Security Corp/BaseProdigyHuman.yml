@@ -1,0 +1,69 @@
+- type: entity
+  parent: CMMobHuman
+  id: AU14BaseMobSpeciesOrganicProdigy
+  abstract: true
+  suffix: AU14, Prodigy
+  components:
+  - type: GhostTakeoverAvailable
+  - type: RandomHumanoidAppearance
+  - type: RandomHumanoidAppearanceWhitelisted
+    allowedMaleHairStyles:
+    - RMCHumanHairCrew
+    - RMCHumanHairAviator
+    - RMCHumanHairJensen
+    - RMCHumanHairAverageJoe
+    - AU14HumanHairCIA5
+    - RMCHumanHairCombover
+    - RMCHumanHairCombover2
+    - RMCHumanHairCplDietrich
+    - RMCHumanHairCut
+    - RMCHumanHairHeadStubble
+    - RMCHumanHairHighAndTight
+    - RMCHumanHairHighfade
+    - RMCHumanHairHighlight
+    - AU14HumanHairIRS
+    - RMCHumanHairLtRasczak
+    - RMCHumanHairMarineFade
+    - RMCHumanHairMarineFlatTop
+    - RMCHumanHairMedfade
+    - RMCHumanHairNofade
+    - RMCHumanHairShavedpart
+    - RMCHumanHairShavedHead
+    - RMCHumanHairShort
+    - RMCHumanHairSideUndercutHang
+    - RMCHumanHairSkinhead
+    - RMCHumanHairTaper
+    - RMCHumanHairWardaddy
+    - RMCHumanHairUndercut
+    - RMCHumanHairUndercutTop
+    allowedFemaleHairStyles:
+    - RMCHumanHairShortbangs
+    - RMCHumanHairBobcurl
+    - RMCHumanHairMarineBun
+    - RMCHumanHairBun
+    - RMCHumanHairFringetail
+    - AU14HumanHairLowBun
+    - AU14HumanHairLowPonyTail
+    - AU14HumanHairLowPonyTailAlt
+    - RMCHumanHairPonytail1
+    - RMCHumanHairPonytail7
+    - RMCHumanHairPvtRedding
+    - RMCHumanHairPvtVasquez
+    - RMCHumanHairLong
+    - RMCHumanHairPixieCutLeft
+    - RMCHumanHairPixieCutRight
+    allowedHairColorsHex:
+    - "#0B0B0B"
+    - "#1A1A1A"
+    - "#222222"
+    - "#2B1B0F"
+    - "#3B2314"
+    - "#4A2E1A"
+    - "#5A3A22"
+    - "#6B4A2F"
+    - "#9C8651"
+    - "#B79A5A"
+    - "#4A1F12"
+    - "#7A5E42"
+    allowedEyeColorsHex: [ "#000000" ]
+    beardChance: 0.1

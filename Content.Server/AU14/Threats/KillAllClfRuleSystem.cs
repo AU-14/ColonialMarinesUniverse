@@ -1,28 +1,34 @@
 using System.Linq;
+using Content.Shared.Cuffs.Components;
 using Content.Server.GameTicking;
-using Content.Server.GameTicking.Rules;
-using Content.Shared.AU14;
-using Content.Shared.Mobs.Components;
-using Content.Shared.Mobs;
-using Content.Shared.NPC.Components;
 using Content.Shared.GameTicking.Components;
+using Content.Server.GameTicking.Rules;
+using Content.Shared.Inventory;
+using Content.Shared.Inventory.Events;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Content.Shared.NPC.Components;
+using Content.Shared.SSDIndicator;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship;
-using Content.Shared.Cuffs.Components;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
-using Content.Shared.SSDIndicator;
+using Content.Shared.AU14;
 
 namespace Content.Server.AU14.Threats;
 
-public sealed class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRuleComponent>
+/// <summary>
+/// Kill-all rule that targets all CLF faction members, excludes SSD and evacuated.
+/// CLF wearing a prisoner jumpsuit, or handcuffed, or inside brig, or dead are eliminated.
+/// </summary>
+public sealed partial class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRuleComponent>
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly Round.AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private Round.AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
 
@@ -32,44 +38,22 @@ public sealed class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRuleComponen
         _evacuatedQuery = GetEntityQuery<EvacuatedGridComponent>();
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<EvacuationLaunchedEvent>(OnEvacuationLaunched);
+        SubscribeLocalEvent<GotEquippedEvent>(OnGotEquipped);
+        SubscribeLocalEvent<GotUnequippedEvent>(OnGotUnequipped);
     }
+
+    private void OnGotEquipped(GotEquippedEvent ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
+    private void OnGotUnequipped(GotUnequippedEvent ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
 
     private bool IsEvacuated(EntityUid uid)
     {
-        var xform = Transform(uid);
-        return xform.GridUid is { } grid && _evacuatedQuery.HasComp(grid);
+        return Transform(uid).GridUid is { } grid && _evacuatedQuery.HasComp(grid);
     }
 
     private void OnEvacuationLaunched(ref EvacuationLaunchedEvent ev)
     {
         if (_gameTicker.IsGameRuleActive<KillAllClfRuleComponent>())
             CheckVictoryCondition();
-    }
-
-    private void OnMobStateChanged(MobStateChangedEvent ev)
-    {
-        // Only run this logic when the KillAllClf rule is active
-        if (!_gameTicker.IsGameRuleActive<KillAllClfRuleComponent>())
-            return;
-
-        // Only care about dead mobs
-        if (ev.NewMobState != MobState.Dead)
-            return;
-
-        CheckVictoryCondition();
-    }
-
-    /// <summary>
-    /// Called by KillAllRulesHandcuffSystem when a CLF entity is handcuffed.
-    /// </summary>
-    public void OnHandcuffEvent(EntityUid uid)
-    {
-        CheckVictoryCondition();
-    }
-
-    private bool IsInArrestArea(EntityUid uid)
-    {
-        return _area.TryGetArea(uid, out var area, out _) && area.Value.Comp.CountAsArrestedForEndConditions;
     }
 
     private bool HasCrashedDropship()
@@ -84,17 +68,64 @@ public sealed class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRuleComponen
         return false;
     }
 
-    private bool IsExcludedFromKillCount(EntityUid uid)
+    private void OnMobStateChanged(MobStateChangedEvent ev)
     {
-        return (TryComp<SSDIndicatorComponent>(uid, out var ssd) && ssd.IsSSD) ||
-               HasComp<XenoNestedComponent>(uid);
+        if (!IsActiveRuleAndCLF(ev.Target) || ev.NewMobState != MobState.Dead)
+            return;
+
+        CheckVictoryCondition();
+    }
+
+    /// <summary>
+    /// Called by KillAllRulesHandcuffSystem when a CLF entity is handcuffed.
+    /// </summary>
+    public void OnHandcuffEvent(EntityUid _) => CheckVictoryCondition();
+
+    private bool IsInArrestArea(EntityUid uid)
+    {
+        return _area.TryGetArea(uid, out var area, out _) && area.Value.Comp.CountAsArrestedForEndConditions;
+    }
+
+    private void OnJumpsuitChanged(EntityUid wearer, string slot, EntityUid equipment)
+    {
+        if (slot != "jumpsuit" || Prototype(equipment)?.ID != "AU14CivilianPrisonJumpsuit")
+            return;
+
+        if (!IsActiveRuleAndCLF(wearer))
+            return;
+
+        CheckVictoryCondition();
+    }
+
+    private bool HasPrisonJumpsuit(EntityUid uid)
+    {
+        return _inventory.TryGetSlotEntity(uid, "jumpsuit", out var suit)
+            && Prototype(suit!.Value)?.ID == "AU14CivilianPrisonJumpsuit";
+    }
+
+    private bool IsActiveRuleAndCLF(EntityUid uid)
+    {
+        if (!_gameTicker.IsGameRuleActive<KillAllClfRuleComponent>())
+            return false;
+
+        return TryComp<NpcFactionMemberComponent>(uid, out var faction)
+            && faction.Factions.Any(f => f.ToString().ToLowerInvariant() == "clf");
+    }
+
+    private bool IsExcludedFromKillCount(EntityUid uid, MobStateComponent mobState)
+    {
+        // Don't exclude the dead (ghosts), we tally them as eliminated instead
+        if (mobState.CurrentState == MobState.Dead)
+            return false;
+
+        return HasComp<XenoNestedComponent>(uid)
+            || (TryComp<SSDIndicatorComponent>(uid, out var ssd) && ssd.IsSSD);
     }
 
     private void CheckVictoryCondition()
     {
-        // Get the active rule entity and its component to read Percent
         var queryRule = EntityQueryEnumerator<KillAllClfRuleComponent, GameRuleComponent>();
-        if (!queryRule.MoveNext(out var ruleEnt, out var ruleComp, out var gameRuleComp) || !GameTicker.IsGameRuleActive(ruleEnt, gameRuleComp))
+        if (!queryRule.MoveNext(out var ruleEnt, out var ruleComp, out var gameRuleComp) || !_gameTicker.IsGameRuleActive(ruleEnt, gameRuleComp))
             return;
 
         var requiredPercent = Math.Clamp(ruleComp.Percent, 1, 100);
@@ -105,15 +136,15 @@ public sealed class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRuleComponen
         var total = 0;
         var eliminated = 0;
 
-        var query = _entityManager.EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent>();
+        var query = EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent>();
         while (query.MoveNext(out var uid, out var mobState, out var faction))
         {
             if (faction.Factions.Any(f => f.ToString().ToLowerInvariant() == "clf"))
             {
-                if (IsExcludedFromKillCount(uid))
+                if (IsExcludedFromKillCount(uid, mobState))
                     continue;
 
-                if (crashedDropship && TryComp<TransformComponent>(uid, out var xform) && _rmcPlanet.IsOnPlanet(xform))
+                if (crashedDropship && _rmcPlanet.IsOnPlanet(Transform(uid)))
                     continue;
 
                 // Skip evacuated entities entirely
@@ -122,15 +153,12 @@ public sealed class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRuleComponen
 
                 total++;
 
-                // Count as eliminated if dead
                 if (mobState.CurrentState == MobState.Dead)
-                {
                     eliminated++;
-                }
-                // Or if arrested flag is set and they're cuffed
-                else if (countArrests &&
-                         ((TryComp<CuffableComponent>(uid, out var cuffable) && cuffable.CuffedHandCount > 0) ||
-                          IsInArrestArea(uid)))
+                // Wearing jumpsuit, or arrested flag is set and they're cuffed, or in the mapped brig areas
+                else if (HasPrisonJumpsuit(uid)
+                    || countArrests && ((TryComp<CuffableComponent>(uid, out var cuffable) && cuffable.CuffedHandCount > 0)
+                    || IsInArrestArea(uid)))
                 {
                     eliminated++;
                 }
@@ -138,9 +166,9 @@ public sealed class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRuleComponen
         }
 
         if (total == 0)
-            return; // nothing to count
+            return;
 
-        var percentEliminated = (int) ((double)eliminated / total * 100.0);
+        var percentEliminated = (int)((double)eliminated / total * 100.0);
 
         if (percentEliminated >= requiredPercent)
         {

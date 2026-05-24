@@ -5,7 +5,9 @@ using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines.Announce;
+using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared.Coordinates;
+using Content.Shared.Destructible;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
@@ -17,18 +19,19 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.WeedKiller;
 
-public sealed class WeedKillerSystem : EntitySystem
+public sealed partial class WeedKillerSystem : EntitySystem
 {
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedMarineAnnounceSystem _marineAnnounce = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly RMCCameraShakeSystem _rmcCameraShake = default!;
-    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDestructibleSystem _destructible = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedMarineAnnounceSystem _marineAnnounce = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private RMCCameraShakeSystem _rmcCameraShake = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private EntityQuery<DeletedByWeedKillerComponent> _deletedByWeedKillerQuery;
 
@@ -142,7 +145,10 @@ public sealed class WeedKillerSystem : EntitySystem
                 if (!_deletedByWeedKillerQuery.HasComp(anchoredId))
                     continue;
 
-                QueueDel(anchoredId);
+                if (TryComp(anchoredId, out HiveCoreComponent? _))
+                    _destructible.DestroyEntity(anchoredId);
+                else
+                    QueueDel(anchoredId);
             }
         }
     }

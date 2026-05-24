@@ -3,13 +3,15 @@
             xmlns:options="clr-namespace:Content.Client._RMC14.UserInterface.Options"
             Title="{Loc 'ui-options-title'}"
             MinSize="800 450">
-    <TabContainer Name="Tabs" Access="Public">
-        <tabs:MiscTab Name="MiscTab" />
-        <tabs:GraphicsTab Name="GraphicsTab" />
-        <tabs:KeyRebindTab Name="KeyRebindTab" />
-        <tabs:AudioTab Name="AudioTab" />
-        <options:VoicelinesTab Name="VoicelinesTab" />
-        <tabs:AccessibilityTab Name="AccessibilityTab" />
-        <tabs:AdminOptionsTab Name="AdminOptionsTab" />
-    </TabContainer>
+    <PanelContainer StyleClasses="CrtPanel" VerticalExpand="True" HorizontalExpand="True">
+        <TabContainer Name="Tabs" Access="Public" StyleClasses="CrtTabContainer" VerticalExpand="True" HorizontalExpand="True">
+            <tabs:MiscTab Name="MiscTab" />
+            <tabs:GraphicsTab Name="GraphicsTab" />
+            <tabs:KeyRebindTab Name="KeyRebindTab" />
+            <tabs:AudioTab Name="AudioTab" />
+            <options:VoicelinesTab Name="VoicelinesTab" />
+            <tabs:AccessibilityTab Name="AccessibilityTab" />
+            <tabs:AdminOptionsTab Name="AdminOptionsTab" />
+        </TabContainer>
+    </PanelContainer>
 </DefaultWindow>

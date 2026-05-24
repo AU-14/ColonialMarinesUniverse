@@ -15,28 +15,27 @@ using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
-using Robust.Shared.Physics.Systems;
 
 namespace Content.Shared._RMC14.Xenonids.Tail_Lash;
 
-public sealed class XenoTailLashSystem : EntitySystem
+public sealed partial class XenoTailLashSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly XenoPlasmaSystem _plasma = default!;
-    [Dependency] private readonly XenoSystem _xeno = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly RMCSizeStunSystem _size = default!;
-    [Dependency] private readonly RMCSlowSystem _slow = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly RMCPullingSystem _pulling = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private XenoPlasmaSystem _plasma = default!;
+    [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private RMCSizeStunSystem _size = default!;
+    [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private RMCPullingSystem _pulling = default!;
 
     public override void Initialize()
     {
@@ -118,12 +117,12 @@ public sealed class XenoTailLashSystem : EntitySystem
 
         args.Handled = true;
 
-        foreach (var ent in _physics.GetCollidingEntities(Transform(xeno).MapID, xeno.Comp.Area.Value))
+        foreach (var ent in _lookup.GetEntitiesIntersecting(Transform(xeno).MapID, xeno.Comp.Area.Value, LookupFlags.Dynamic | LookupFlags.Static))
         {
             if (!_xeno.CanAbilityAttackTarget(xeno, ent))
                 continue;
 
-            if (!_interaction.InRangeUnobstructed(xeno.Owner, ent.Owner, xeno.Comp.Width * xeno.Comp.Height, collisionMask: CollisionGroup.MobMask)) //Ditto
+            if (!_interaction.InRangeUnobstructed(xeno.Owner, ent, xeno.Comp.Width * xeno.Comp.Height, collisionMask: CollisionGroup.MobMask)) //Ditto
                 continue;
 
             if (_size.TryGetSize(ent, out var size) && size >= RMCSizes.Big)

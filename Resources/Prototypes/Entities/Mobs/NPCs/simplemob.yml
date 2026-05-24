@@ -75,6 +75,10 @@
   suffix: AI
   abstract: true
   components:
+  # AU14: every air-breathing simple mob (rats, monkeys, cats, dogs, etc.)
+  # can be infected / assimilated by abominations. Adds rats/monkeys/etc.
+  # to the mimic pool under their entity-prototype name.
+  - type: AbominationInfectable
   - type: Hunger
     thresholds: # only animals and rats are derived from this prototype so let's override it here and in rats' proto
       Overfed: 100

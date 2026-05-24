@@ -5,9 +5,9 @@
   gruntsToSpawn:
     AU14JobRMCRRTRifleman: 2
     AU14JobRMCRRTCorpsman: 1
-    AU14JobRMCRRTBreacher: 1
+    AU14JobRMCRRTBreacher: 0
     AU14JobRMCRRTMarksman: 1
-    AU14JobRMCRRTSmartgunner: 1
+    AU14JobRMCRRTSmartgunner: 0
   scalewithpop: false
   spawnTogether: true
 

@@ -20,11 +20,11 @@ using static Robust.Client.UserInterface.Controls.BoxContainer;
 namespace Content.Client.Administration.UI
 {
     [UsedImplicitly]
-    public sealed class PermissionsEui : BaseEui
+    public sealed partial class PermissionsEui : BaseEui
     {
         private const int NoRank = -1;
 
-        [Dependency] private readonly IClientAdminManager _adminManager = default!;
+        [Dependency] private IClientAdminManager _adminManager = default!;
 
         private readonly Menu _menu;
         private readonly List<DefaultWindow> _subWindows = new();
@@ -294,7 +294,7 @@ namespace Content.Client.Administration.UI
             OpenRankEditWindow(rank);
         }
 
-        private sealed class Menu : DefaultWindow
+        private sealed partial class Menu : DefaultWindow
         {
             private readonly PermissionsEui _ui;
             public readonly GridContainer AdminsList;
@@ -346,7 +346,7 @@ namespace Content.Client.Administration.UI
             protected override Vector2 ContentsMinimumSize => new Vector2(600, 400);
         }
 
-        private sealed class EditAdminWindow : DefaultWindow
+        private sealed partial class EditAdminWindow : DefaultWindow
         {
             public readonly PermissionsEuiState.AdminData? SourceData;
             public readonly LineEdit? NameEdit;
@@ -535,7 +535,7 @@ namespace Content.Client.Administration.UI
             }
         }
 
-        private sealed class EditAdminRankWindow : DefaultWindow
+        private sealed partial class EditAdminRankWindow : DefaultWindow
         {
             public readonly int? SourceId;
             public readonly LineEdit NameEdit;

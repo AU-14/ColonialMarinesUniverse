@@ -1,4 +1,4 @@
-﻿using Content.Server.Administration;
+using Content.Server.Administration;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Administration;
 using Content.Shared.Chemistry.Reagent;
@@ -8,9 +8,10 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.Chemistry.Commands;
 
 [AdminCommand(AdminFlags.Debug)]
-public sealed class DumpReagentGuideText : LocalizedEntityCommands
+public sealed partial class DumpReagentGuideText : LocalizedEntityCommands
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
 
     public override string Command => "dumpreagentguidetext";
 
@@ -22,7 +23,7 @@ public sealed class DumpReagentGuideText : LocalizedEntityCommands
             return;
         }
 
-        if (!_prototype.TryIndexReagent<ReagentPrototype>(args[0], out var reagent))
+        if (!_reagent.TryIndex(args[0], out var reagent))
         {
             shell.WriteError(Loc.GetString($"shell-argument-must-be-prototype",
                 ("index", args[0]),

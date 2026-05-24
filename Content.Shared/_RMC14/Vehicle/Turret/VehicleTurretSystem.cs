@@ -14,16 +14,16 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Vehicle;
 
-public sealed class VehicleTurretSystem : EntitySystem
+public sealed partial class VehicleTurretSystem : EntitySystem
 {
     private const float PixelsPerMeter = 32f;
     private const float FireAlignmentToleranceDegrees = 2f;
 
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly HardpointSystem _hardpoints = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private HardpointSystem _hardpoints = default!;
 
     public override void Initialize()
     {
@@ -816,7 +816,7 @@ public sealed class VehicleTurretSystem : EntitySystem
 }
 
 [Serializable, NetSerializable]
-public sealed class VehicleTurretRotateEvent : EntityEventArgs
+public sealed partial class VehicleTurretRotateEvent : EntityEventArgs
 {
     public NetEntity Turret;
     public NetCoordinates Coordinates;

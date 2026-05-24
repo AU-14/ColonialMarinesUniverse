@@ -443,6 +443,16 @@ public static class ChatUserSettings
             if (normalized.Count > MaxTabs)
                 normalized.RemoveAt(normalized.Count - 1);
         }
+        else
+        {
+            var allIndex = normalized.FindIndex(tab => string.Equals(tab.Id, AllTabId, StringComparison.OrdinalIgnoreCase));
+            if (allIndex > 0)
+            {
+                var allTab = normalized[allIndex];
+                normalized.RemoveAt(allIndex);
+                normalized.Insert(0, allTab);
+            }
+        }
 
         return normalized.Count == 0 ? CreateDefaultTabs() : normalized;
     }

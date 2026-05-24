@@ -1,0 +1,28 @@
+# Wall spawned by the skitter's Secrete Flesh Wall ability.
+# Generic structural wall — does NOT parent any xeno wall base.
+- type: entity
+  parent: BaseWall
+  id: AU14AbominationFleshWall
+  name: flesh wall
+  description: A pulsing wall of fused sinew and bone. It twitches.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_resin_wall.rsi # TODO: replace with flesh wall sprite
+  - type: Icon
+    sprite: _RMC14/Structures/Xenos/xeno_resin_wall.rsi
+    state: resin
+  - type: IconSmooth
+    key: walls
+    base: resin
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 600
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]

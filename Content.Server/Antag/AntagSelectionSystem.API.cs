@@ -172,7 +172,8 @@ public sealed partial class AntagSelectionSystem
             return false;
 
         var pref = (HumanoidCharacterProfile) _pref.GetPreferences(session.UserId).SelectedCharacter;
-        return pref.AntagPreferences.Any(p => def.PrefRoles.Contains(p));
+        var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
+        return pref.GetAntagPreferencesForGamemode(presetId).Any(p => def.PrefRoles.Contains(p));
     }
 
     /// <summary>
@@ -187,7 +188,8 @@ public sealed partial class AntagSelectionSystem
             return false;
 
         var pref = (HumanoidCharacterProfile) _pref.GetPreferences(session.UserId).SelectedCharacter;
-        return pref.AntagPreferences.Any(p => def.FallbackRoles.Contains(p));
+        var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
+        return pref.GetAntagPreferencesForGamemode(presetId).Any(p => def.FallbackRoles.Contains(p));
     }
 
     /// <summary>

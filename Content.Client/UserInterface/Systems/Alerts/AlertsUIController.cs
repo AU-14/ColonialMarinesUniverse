@@ -11,11 +11,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.UserInterface.Systems.Alerts;
 
-public sealed class AlertsUIController : UIController, IOnStateEntered<GameplayState>, IOnSystemChanged<ClientAlertsSystem>
+public sealed partial class AlertsUIController : UIController, IOnStateEntered<GameplayState>, IOnSystemChanged<ClientAlertsSystem>
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
-    [UISystemDependency] private readonly ClientAlertsSystem? _alertsSystem = default;
+    [UISystemDependency] private ClientAlertsSystem? _alertsSystem = default;
 
     private AlertsUI? UI => UIManager.GetActiveUIWidgetOrNull<AlertsUI>();
 

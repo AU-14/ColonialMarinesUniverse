@@ -4,9 +4,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.AU14.CLF;
 
-public sealed class CLFTeamIconSystem : EntitySystem
+public sealed partial class CLFTeamIconSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

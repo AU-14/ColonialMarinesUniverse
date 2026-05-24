@@ -8,13 +8,13 @@ using Robust.Shared.Network;
 
 namespace Content.Shared._RMC14.Deafness;
 
-public abstract class SharedDeafnessSystem : EntitySystem
+public abstract partial class SharedDeafnessSystem : EntitySystem
 {
-    [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffect = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private INetManager _net = default!;
 
     public ProtoId<StatusEffectPrototype> DeafKey = "Deaf";
 
@@ -38,6 +38,9 @@ public abstract class SharedDeafnessSystem : EntitySystem
 
     private void OnDeafenWhileCritMobState(Entity<DeafenWhileCritComponent> ent, ref MobStateChangedEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         if (args.NewMobState != MobState.Critical)
             return;
 
@@ -46,6 +49,9 @@ public abstract class SharedDeafnessSystem : EntitySystem
 
     private void OnActiveDeafenWhileCritMobState(Entity<ActiveDeafenWhileCritComponent> ent, ref MobStateChangedEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         if (args.NewMobState != MobState.Critical)
             RemCompDeferred<ActiveDeafenWhileCritComponent>(ent);
     }

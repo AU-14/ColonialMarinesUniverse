@@ -1,0 +1,68 @@
+# ├──[ OPFOR Squads ]────────────────────────────────────────────────┤
+- type: entity
+  parent: SquadBase
+  id: SquadOpfor
+  name: Sierra
+  components:
+  - type: SquadTeam
+    roundStart: true
+    color: "#bb91d8"
+    radio: radioOpforAlpha
+    group: OPFOR
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_sierra
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: hudsquad_leader_a
+
+- type: entity
+  parent: SquadBase
+  id: SquadOpforBravo
+  name: Tango
+  components:
+  - type: SquadTeam
+    roundStart: true
+    color: "#c6c1a8"
+    group: OPFOR
+    radio: radioOpforBravo
+    accessLevels:
+    - AU14AccessOpfor
+    - AU14AccessGovfor
+    minimapBackground:
+     sprite: /Textures/_RMC14/Interface/map_blips.rsi
+     state: background_tango
+
+- type: entity
+  parent: SquadBase
+  id: SquadOpforCharlie
+  name:  Uniform
+  components:
+  - type: SquadTeam
+    roundStart: true
+    color: "#7A967E"
+    radio: radioOpforCharlie
+    group: OPFOR
+    accessLevels:
+    - AU14AccessOpfor
+    - AU14AccessGovfor
+    minimapBackground:
+     sprite: /Textures/_RMC14/Interface/map_blips.rsi
+     state: background_uniform
+
+- type: entity
+  parent: SquadBase
+  id: SquadOpforIntel
+  name: Intel # this will cause confusion, but better than x2 Auxiliary
+  components:
+  - type: SquadTeam
+    roundStart: true
+    color: "#1E90FF"
+    group: OPFOR
+    radio: radioOpforIntel
+    accessLevels:
+    - AU14AccessOpfor
+    - AU14AccessGovfor
+    minimapBackground:
+     sprite: /Textures/_RMC14/Interface/map_blips.rsi
+     state: background_intel

@@ -24,6 +24,7 @@
     - DoorBumpOpener
   - type: Physics
     bodyType: KinematicController
+  - type: CMUZPhysics
   - type: Clickable
   - type: Fixtures
     fixtures:

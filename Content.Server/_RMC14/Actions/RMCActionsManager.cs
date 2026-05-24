@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,12 +12,12 @@ using Serilog;
 
 namespace Content.Server._RMC14.Actions;
 
-public sealed class RMCActionsManager : IPostInjectInit
+public sealed partial class RMCActionsManager : IPostInjectInit
 {
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
-    [Dependency] private readonly UserDbDataManager _userDb = default!;
-    [Dependency] private readonly ITaskManager _task = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private UserDbDataManager _userDb = default!;
+    [Dependency] private ITaskManager _task = default!;
 
     public event Action<ICommonSession, Dictionary<EntProtoId, ImmutableArray<EntProtoId>>?>? OnLoaded;
 

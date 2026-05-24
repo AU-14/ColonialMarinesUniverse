@@ -11,13 +11,13 @@ using System.Linq;
 
 namespace Content.Shared._RMC14.Slow;
 
-public sealed class RMCSlowSystem : EntitySystem
+public sealed partial class RMCSlowSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _speed = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly TemporarySpeedModifiersSystem _temporarySpeed = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private MovementSpeedModifierSystem _speed = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private TemporarySpeedModifiersSystem _temporarySpeed = default!;
 
     public override void Initialize()
     {
@@ -42,6 +42,7 @@ public sealed class RMCSlowSystem : EntitySystem
         SubscribeLocalEvent<RMCSlowdownComponent, RefreshMovementSpeedModifiersEvent>(OnSlowdownRefresh);
         SubscribeLocalEvent<RMCSuperSlowdownComponent, RefreshMovementSpeedModifiersEvent>(OnSuperSlowdownRefresh);
         SubscribeLocalEvent<RMCRootedComponent, RefreshMovementSpeedModifiersEvent>(OnRootRefresh);
+        SubscribeLocalEvent<RMCInnateSlowdownComponent, RefreshMovementSpeedModifiersEvent>(OnInnateSlowdownRefresh);
 
         SubscribeLocalEvent<RMCSpeciesSlowdownModifierComponent, StunnedEvent>(OnModifierStun);
         SubscribeLocalEvent<RMCSpeciesSlowdownModifierComponent, KnockedDownEvent>(OnModifierKnockdown);
@@ -143,7 +144,7 @@ public sealed class RMCSlowSystem : EntitySystem
 
         var multiplier = _temporarySpeed.CalculateSpeedModifier(ent, slow.SlowModifier);
 
-        if(multiplier == null)
+        if (multiplier == null)
             return;
 
         //Don't apply slow when superslow is in effect
@@ -158,7 +159,7 @@ public sealed class RMCSlowSystem : EntitySystem
 
         var multiplier = _temporarySpeed.CalculateSpeedModifier(ent, slow.SuperSlowModifier);
 
-        if(multiplier == null)
+        if (multiplier == null)
             return;
 
         args.ModifySpeed(multiplier.Value, multiplier.Value);
@@ -170,6 +171,16 @@ public sealed class RMCSlowSystem : EntitySystem
             return;
 
         args.ModifySpeed(0, 0);
+    }
+
+    private void OnInnateSlowdownRefresh(Entity<RMCInnateSlowdownComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
+    {
+        var multiplier = _temporarySpeed.CalculateSpeedModifier(ent, ent.Comp.Slowdown);
+
+        if (multiplier == null)
+            return;
+
+        args.ModifySpeed(multiplier.Value, multiplier.Value);
     }
 
     private void MaybeRemoveSlowVisuals(EntityUid ent)

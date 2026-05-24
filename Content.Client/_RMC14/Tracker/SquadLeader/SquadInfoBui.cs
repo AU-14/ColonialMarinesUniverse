@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Tracker.SquadLeader;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
@@ -12,9 +12,9 @@ using Content.Client._RMC14.Overwatch;
 namespace Content.Client._RMC14.Tracker.SquadLeader;
 
 [UsedImplicitly]
-public sealed class SquadInfoBui : BoundUserInterface
+public sealed partial class SquadInfoBui : BoundUserInterface
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     private SquadInfoWindow? _window;
 

@@ -23,18 +23,18 @@ namespace Content.Shared.Execution;
 /// <summary>
 ///     Verb for violently murdering cuffed creatures.
 /// </summary>
-public sealed class SharedExecutionSystem : EntitySystem
+public sealed partial class SharedExecutionSystem : EntitySystem
 {
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedSuicideSystem _suicide = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combat = default!;
-    [Dependency] private readonly SharedExecutionSystem _execution = default!;
-    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedSuicideSystem _suicide = default!;
+    [Dependency] private SharedCombatModeSystem _combat = default!;
+    [Dependency] private SharedExecutionSystem _execution = default!;
+    [Dependency] private SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private IConfigurationManager _config = default!;
 
     private bool _canSuicide;
 
@@ -106,34 +106,6 @@ public sealed class SharedExecutionSystem : EntitySystem
     {
         // RMC-14 doesn't use this
         return false;
-        if (victim == attacker && !_canSuicide)
-            return false;
-
-        if (HasComp<XenoComponent>(victim))
-            return false;
-
-        // No point executing someone if they can't take damage
-        if (!HasComp<DamageableComponent>(victim))
-            return false;
-
-        // You can't execute something that cannot die
-        if (!TryComp<MobStateComponent>(victim, out var mobState))
-            return false;
-
-        // You're not allowed to execute dead people (no fun allowed)
-        if (_mobState.IsDead(victim, mobState))
-            return false;
-
-        // You must be able to attack people to execute
-        if (!_actionBlocker.CanAttack(attacker, victim))
-            return false;
-
-        // The victim must be incapacitated to be executed
-        if (victim != attacker && _actionBlocker.CanInteract(victim, null))
-            return false;
-
-        // All checks passed
-        return true;
     }
 
     private void OnGetMeleeDamage(Entity<ExecutionComponent> entity, ref GetMeleeDamageEvent args)

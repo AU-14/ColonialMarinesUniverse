@@ -6,11 +6,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._RMC14.Blind;
 
-public sealed class RMCBlurOverlay : Overlay
+public sealed partial class RMCBlurOverlay : Overlay
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    private static readonly ProtoId<ShaderPrototype> BlurShader = "RMCBlurryVisionX";
+
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
     public override bool RequestScreenTexture => true;
@@ -21,7 +23,7 @@ public sealed class RMCBlurOverlay : Overlay
     public RMCBlurOverlay(IEntityManager entManager)
     {
         IoCManager.InjectDependencies(this);
-        _blurShader = _prototypeManager.Index<ShaderPrototype>("RMCBlurryVisionX").InstanceUnique();
+        _blurShader = _prototypeManager.Index(BlurShader).InstanceUnique();
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)

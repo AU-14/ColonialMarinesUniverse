@@ -63,7 +63,7 @@ public sealed partial class Ketogenic : RMCChemicalEffect
 
     protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
     {
-        var status = args.EntityManager.System<StatusEffectsSystem>();
+        var status = args.EntityManager.System<StatusEffectQuerySystem>();
         status.TryAddStatusEffect<RMCUnconsciousComponent>(
             args.TargetEntity,
             Unconscious,

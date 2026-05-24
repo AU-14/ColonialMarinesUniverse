@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   abstract: true
   parent: CMBaseStructure
   id: RMCCommunicationsConsoleBase
@@ -71,6 +71,17 @@
   - type: OverwatchConsole
     canMessageSquad: false
   - type: TacticalMapComputer
+
+- type: entity
+  parent: RMCGroundsideOperationsConsole
+  id: RMCGroundsideOperationsConsoleGovfor
+  suffix: Govfor
+  components:
+  - type: OverwatchConsole
+    canMessageSquad: false
+    group: GOVFOR
+  - type: TacticalMapComputer
+    faction: govfor
 
 - type: entity
   parent: RMCCommunicationsConsoleBase
@@ -204,6 +215,22 @@
   - type: PlaceableSurface
 
 - type: entity
+  parent: RMCTacticalMapTable
+  id: RMCTacticalMapTableGovfor
+  suffix: Govfor
+  components:
+  - type: TacticalMapComputer
+    faction: govfor
+
+- type: entity
+  parent: RMCTacticalMapTableLarge
+  id: RMCTacticalMapTableLargeGovfor
+  suffix: Govfor, Large
+  components:
+  - type: TacticalMapComputer
+    faction: govfor
+
+- type: entity
   parent: RMCTacticalMapTableLarge
   id: RMCTacticalMapTableLargeSquare
   suffix: Square
@@ -259,7 +286,7 @@
   - type: EvacuationComputer
     earlyCrashChance: 0
   - type: AccessReader
-    access: [ [ "RMCAccessWeYa" ] ]
+    access: [ [ "AU14AccessCorporateWEYU" ] ]
 
 - type: entity
   parent: RMCCommunicationsConsoleBase
@@ -279,7 +306,7 @@
         type: LifeboatComputerBui
   - type: LifeboatComputer
   - type: AccessReader
-    access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessGovforCommand" ] ] # replace Command with Senior access
+    access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessGovforCommand" ], [ "AU14AccessColonyAdministrator" ] ] # replace Command with Senior access
   - type: ActivatableUIBlacklist
     blacklist:
       components:

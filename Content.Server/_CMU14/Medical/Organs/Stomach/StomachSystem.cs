@@ -4,9 +4,9 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Server._CMU14.Medical.Organs.Stomach;
 
-public sealed class StomachSystem : SharedStomachSystem
+public sealed partial class StomachSystem : SharedStomachSystem
 {
-    [Dependency] private readonly VomitSystem _vomit = default!;
+    [Dependency] private VomitSystem _vomit = default!;
 
     protected override void ApplyVomit(EntityUid body)
     {

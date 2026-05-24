@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Medical.IV;
+using Content.Shared._RMC14.Medical.IV;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
@@ -6,9 +6,9 @@ using Robust.Shared.Map;
 
 namespace Content.Client._RMC14.Medical.IV;
 
-public sealed class IVDripOverlay : Overlay
+public sealed partial class IVDripOverlay : Overlay
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
+    [Dependency] private IEntityManager _entity = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowEntities;
 
@@ -19,6 +19,9 @@ public sealed class IVDripOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
+        if (args.MapId == MapId.Nullspace)
+            return;
+
         var transformSystem = _entity.System<TransformSystem>();
         var handle = args.WorldHandle;
 
@@ -33,7 +36,7 @@ public sealed class IVDripOverlay : Overlay
             var ivDripPosition = transformSystem.GetMapCoordinates(ivDripId);
             var attachedPosition = transformSystem.GetMapCoordinates(attachedTo);
 
-            if (ivDripPosition.MapId == MapId.Nullspace || attachedPosition.MapId == MapId.Nullspace)
+            if (!ShouldDrawCord(ivDripPosition, attachedPosition, args.MapId))
                 continue;
 
             handle.DrawLine(ivDripPosition.Position, attachedPosition.Position, Color.White);
@@ -48,7 +51,7 @@ public sealed class IVDripOverlay : Overlay
             var packPosition = transformSystem.GetMapCoordinates(packId);
             var attachedPosition = transformSystem.GetMapCoordinates(attachedTo);
 
-            if (packPosition.MapId == MapId.Nullspace || attachedPosition.MapId == MapId.Nullspace)
+            if (!ShouldDrawCord(packPosition, attachedPosition, args.MapId))
                 continue;
 
             handle.DrawLine(packPosition.Position, attachedPosition.Position, Color.White);
@@ -63,10 +66,15 @@ public sealed class IVDripOverlay : Overlay
             var dialysisPosition = transformSystem.GetMapCoordinates(dialysisId);
             var attachedPosition = transformSystem.GetMapCoordinates(attachedTo);
 
-            if (dialysisPosition.MapId == MapId.Nullspace || attachedPosition.MapId == MapId.Nullspace)
+            if (!ShouldDrawCord(dialysisPosition, attachedPosition, args.MapId))
                 continue;
 
             handle.DrawLine(dialysisPosition.Position, attachedPosition.Position, Color.White);
         }
+    }
+
+    private static bool ShouldDrawCord(MapCoordinates from, MapCoordinates to, MapId drawMap)
+    {
+        return from.MapId == drawMap && to.MapId == drawMap;
     }
 }

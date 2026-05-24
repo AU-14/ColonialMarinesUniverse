@@ -11,7 +11,7 @@
     components:
     - type: Skills
       preset: RMCSkillPresetSurvivorGoon
-    - type: EquipSurvivorPreset
+    - type: EquipEntityPreset
       preset: RMCSurvivorPresetHybrisaCorporateSecurity
     - type: RMCSurvivor
     - type: MotionDetectorTracked
@@ -46,7 +46,7 @@
   name: hybrisa corporate security colonist preset
   categories: [ HideSpawnMenu ]
   components:
-  - type: SurvivorPreset
+  - type: EntityPreset
     primaryWeapons:
     - [ RMCWeaponSMGPDW90, RMCPouchMagazineFilledPDW90 ]
     primaryWeaponChance: 1

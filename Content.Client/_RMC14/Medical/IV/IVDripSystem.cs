@@ -1,14 +1,14 @@
-﻿using Content.Shared._RMC14.Medical.IV;
+using Content.Shared._RMC14.Medical.IV;
 using Content.Shared.Rounding;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 
 namespace Content.Client._RMC14.Medical.IV;
 
-public sealed class IVDripSystem : SharedIVDripSystem
+public sealed partial class IVDripSystem : SharedIVDripSystem
 {
-    [Dependency] private readonly SpriteSystem _spriteSystem = default!;
-    [Dependency] private readonly IOverlayManager _overlay = default!;
+    [Dependency] private SpriteSystem _spriteSystem = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
 
     public override void Initialize()
     {

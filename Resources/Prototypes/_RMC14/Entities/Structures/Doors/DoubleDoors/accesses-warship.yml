@@ -275,7 +275,7 @@
   suffix: Medical, Glass, Locked, Research
   components:
   - type: AccessReader
-    access: [ [ "CMAccessResearch" ], [ "RMCAccessWeYa" ] ]
+    access: [ [ "CMAccessResearch" ], [ "AU14AccessCorporateWEYU" ] ]
 
 - type: entity
   parent: RMCDoubleDoorMedicalSolid
@@ -283,7 +283,7 @@
   suffix: Medical, Solid, Locked, Research
   components:
   - type: AccessReader
-    access: [ [ "CMAccessResearch" ], [ "RMCAccessWeYa" ] ]
+    access: [ [ "CMAccessResearch" ], [ "AU14AccessCorporateWEYU" ] ]
 
 ##
 

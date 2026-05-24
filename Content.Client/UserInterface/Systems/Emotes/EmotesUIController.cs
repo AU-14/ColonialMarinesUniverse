@@ -16,11 +16,11 @@ using Robust.Shared.Utility;
 namespace Content.Client.UserInterface.Systems.Emotes;
 
 [UsedImplicitly]
-public sealed class EmotesUIController : UIController, IOnStateChanged<GameplayState>
+public sealed partial class EmotesUIController : UIController, IOnStateChanged<GameplayState>
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
     
     private MenuButton? EmotesButton => UIManager.GetActiveUIWidgetOrNull<MenuBar.Widgets.GameTopMenuBar>()?.EmotesButton;
     private SimpleRadialMenu? _menu;
@@ -28,8 +28,8 @@ public sealed class EmotesUIController : UIController, IOnStateChanged<GameplayS
     private static readonly Dictionary<EmoteCategory, (string Tooltip, SpriteSpecifier Sprite)> EmoteGroupingInfo
         = new Dictionary<EmoteCategory, (string Tooltip, SpriteSpecifier Sprite)>
     {
-        [EmoteCategory.General] = ("emote-menu-category-general", new SpriteSpecifier.Texture(new ResPath("/Textures/Clothing/Head/Soft/mimesoft.rsi/icon.png"))),
-        [EmoteCategory.Hands] = ("emote-menu-category-hands", new SpriteSpecifier.Texture(new ResPath("/Textures/Clothing/Hands/Gloves/latex.rsi/icon.png"))),
+        [EmoteCategory.General] = ("emote-menu-category-general", new SpriteSpecifier.Rsi(new ResPath("/Textures/Clothing/Head/Soft/mimesoft.rsi"), "icon")),
+        [EmoteCategory.Hands] = ("emote-menu-category-hands", new SpriteSpecifier.Rsi(new ResPath("/Textures/Clothing/Hands/Gloves/latex.rsi"), "icon")),
         [EmoteCategory.Vocal] = ("emote-menu-category-vocal", new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Emotes/vocal.png"))),
         [EmoteCategory.Farewell] = ("emote-menu-category-farefell", new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Emotes/vocal.png"))),
         [EmoteCategory.Greeting] = ("emote-menu-category-greeting", new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Emotes/vocal.png"))),
@@ -132,7 +132,7 @@ public sealed class EmotesUIController : UIController, IOnStateChanged<GameplayS
         if (_menu == null)
             return;
 
-        _menu.Dispose();
+        _menu.Close();
         _menu = null;
     }
 

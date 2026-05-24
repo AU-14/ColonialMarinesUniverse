@@ -11,7 +11,7 @@ namespace Content.Client.Lobby.UI;
 [GenerateTypedNameReferences]
 public sealed partial class LobbyCharacterPreviewPanel : Control
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
 
     public Button CharacterSetupButton => CharacterSetup;
     public Button PrevCharacterButton => PrevCharButton;
@@ -37,6 +37,12 @@ public sealed partial class LobbyCharacterPreviewPanel : Control
         Summary.Text = value;
     }
 
+    public void SetJobText(string value)
+    {
+        JobSummary.Text = value;
+        JobSummary.Visible = !string.IsNullOrWhiteSpace(value);
+    }
+
     public void SetSprite(EntityUid uid)
     {
         if (_previewDummy != null)
@@ -58,6 +64,7 @@ public sealed partial class LobbyCharacterPreviewPanel : Control
         ViewBox.AddChild(spriteView);
     }
 
+    [System.Obsolete]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

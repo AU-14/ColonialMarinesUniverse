@@ -1,4 +1,4 @@
-﻿using Content.Client.Gameplay;
+using Content.Client.Gameplay;
 using Content.Client.Ghost;
 using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Client.UserInterface.Systems.Ghost.Widgets;
@@ -10,12 +10,12 @@ using Robust.Client.UserInterface.Controllers;
 namespace Content.Client.UserInterface.Systems.Ghost;
 
 // TODO hud refactor BEFORE MERGE fix ghost gui being too far up
-public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSystem>
+public sealed partial class GhostUIController : UIController, IOnSystemChanged<GhostSystem>
 {
-    [Dependency] private readonly IEntityNetworkManager _net = default!;
-    [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
+    [Dependency] private IEntityNetworkManager _net = default!;
+    [Dependency] private IClientConsoleHost _consoleHost = default!;
 
-    [UISystemDependency] private readonly GhostSystem? _system = default;
+    [UISystemDependency] private GhostSystem? _system = default;
 
     private GhostGui? Gui => UIManager.GetActiveUIWidgetOrNull<GhostGui>();
 

@@ -1,12 +1,12 @@
-﻿using Content.Server.Radiation.Components;
+using Content.Server.Radiation.Components;
 using Content.Shared.Damage.Components;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Radiation.EntitySystems;
 
-public sealed class RadiationProtectionSystem : EntitySystem
+public sealed partial class RadiationProtectionSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     public override void Initialize()
     {

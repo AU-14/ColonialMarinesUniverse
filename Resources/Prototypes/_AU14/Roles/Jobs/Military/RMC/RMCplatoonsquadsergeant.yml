@@ -2,68 +2,10 @@
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantRMC
   name: au14-job-name-govforsquadsergeantRMC
-  description: au14-job-description-govforsquadsergeant
-  setPreference: true
-  canBeAntag: false
-  requirements:
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - SocialAnxietyHeavy
-    - FrontalLisp
-    - NonResuscitable
-    - Epilepsy
-  ranks:
-    RMC_Sergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadSergeant
-      time: 54000 # 15 hours
-    RMC_Corporal: []
-  startingGear: AU14GearGOVFORSquadSergeant
-  dummyStartingGear: AU14GearGOVFORSquadSergantDummy
-  icon: "AU14JobIconSarge"
-  requireAdminNotify: false
   spawnMenuRoleName: Squad Sergeant (TWE RMC)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforFTL
-  overwatchSortPriority: -5
   overwatchRoleName: Team Leader
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: Marine
-      Faction: govfor
-    - type: Skills
-      skills:
-        RMCSkillConstruction: 2
-        RMCSkillEngineer: 3
-        RMCSkillFirearms: 2
-        RMCSkillFireman: 1
-        RMCSkillJtac: 3
-        RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-govforsquadsergeantRMC
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
-  hidden: true

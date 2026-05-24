@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Actions;
+using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Xenonids.Devour;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -16,18 +16,18 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Xenonids.Invisibility;
 
-public sealed class XenoInvisibilitySystem : EntitySystem
+public sealed partial class XenoInvisibilitySystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly XenoSystem _xeno = default!;
-    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
 
     private readonly HashSet<EntityUid> _contacts = new();
 
@@ -52,8 +52,13 @@ public sealed class XenoInvisibilitySystem : EntitySystem
 
     private void OnXenoTurnInvisibleAction(Entity<XenoTurnInvisibleComponent> xeno, ref XenoTurnInvisibleActionEvent args)
     {
+        if (args.Handled)
+            return;
+
         if (!_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, xeno.Comp.PlasmaCost))
             return;
+
+        args.Handled = true;
 
         if (TryComp<XenoActiveInvisibleComponent>(xeno, out var invis))
         {
@@ -66,6 +71,7 @@ public sealed class XenoInvisibilitySystem : EntitySystem
             active.ExpiresAt = _timing.CurTime + xeno.Comp.Duration;
             active.FullCooldown = xeno.Comp.FullCooldown;
             active.SpeedMultiplier = xeno.Comp.SpeedMultiplier;
+            Dirty(xeno, active);
 
             //Half a second cooldown to prevent double clicks
             StartCooldown((xeno, active), xeno.Comp.ToggleLockoutTime, true);

@@ -6,10 +6,6 @@
   components:
   - type: Corrodible
     isCorrodible: false
-  - type: GunUserWhitelist
-    whitelist:
-      components:
-      - PyroWhitelist
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Flamethrower/m34t.rsi
   - type: Item

@@ -12,7 +12,8 @@
       time: 72000 # 20 hours
     RMCRankCivilianOfficer: []
   startingGear: AU14GearCivilianEmergencyResponseOfficer
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconColonyERO"
+  hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian

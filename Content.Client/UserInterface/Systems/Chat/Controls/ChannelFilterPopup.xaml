@@ -66,6 +66,10 @@
                     <LineEdit Name="NewTabNameEdit" PlaceHolder="{Loc 'hud-chatbox-tabs-new-placeholder'}" HorizontalExpand="True"/>
                     <Button Name="AddTabButton" Text="{Loc 'hud-chatbox-tabs-add'}"/>
                 </BoxContainer>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                    <LineEdit Name="RenameTabNameEdit" PlaceHolder="{Loc 'hud-chatbox-tabs-rename-placeholder'}" HorizontalExpand="True"/>
+                    <Button Name="RenameTabButton" Text="{Loc 'hud-chatbox-tabs-rename'}"/>
+                </BoxContainer>
                 <Button Name="RemoveTabButton" Text="{Loc 'hud-chatbox-tabs-remove'}"/>
             </BoxContainer>
             <BoxContainer Name="StylesPage" Visible="False" MinWidth="650" Orientation="Vertical" SeparationOverride="7">
@@ -86,6 +90,8 @@
                         <gfx:StyleBoxFlat BackgroundColor="#101317" BorderColor="#2F3941" BorderThickness="1" ContentMarginLeftOverride="9" ContentMarginRightOverride="9" ContentMarginTopOverride="8" ContentMarginBottomOverride="8"/>
                     </PanelContainer.PanelOverride>
                     <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                        <CheckBox Name="ColorWholeMessageCheckBox" Text="{Loc 'hud-chatbox-display-color-whole-message'}"/>
+                        <Label Text="{Loc 'hud-chatbox-display-color-whole-message-help'}" Modulate="#7F8792"/>
                         <CheckBox Name="LegacyChatCheckBox" Text="{Loc 'hud-chatbox-display-legacy'}"/>
                         <Label Text="{Loc 'hud-chatbox-display-legacy-help'}" Modulate="#7F8792"/>
                     </BoxContainer>

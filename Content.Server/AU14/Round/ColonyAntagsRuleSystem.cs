@@ -8,10 +8,10 @@ using Content.Server.GameTicking.Rules;
 
 namespace Content.Server.AU14.round;
 
-public sealed class ColonyAntagsRuleSystem : GameRuleSystem<ColonyAntagsRuleComponent>
+public sealed partial class ColonyAntagsRuleSystem : GameRuleSystem<ColonyAntagsRuleComponent>
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private static readonly Dictionary<string, float> AntagRulePrototypes = new()
     {

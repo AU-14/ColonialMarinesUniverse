@@ -1,9 +1,11 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Numerics;
 using Content.Server._CMU14.Dropship.TacticalLand;
+using Content.Server._RMC14.GameStates;
 using Content.Server._RMC14.Marines;
 using Content.Server.AU14.Round;
 using Content.Server.AU14.ThirdParty;
+using Content.Server._RMC14.Shuttles;
 using Content.Server.Doors.Systems;
 using Content.Server.GameTicking;
 using Content.Server.Shuttles.Components;
@@ -26,8 +28,10 @@ using Content.Shared._RMC14.Telephone;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Announce;
 using Content.Shared.Administration.Logs;
+using Content.Server.AU14.WithdrawConsole;
 using Content.Shared.AU14;
 using Content.Shared.AU14.Round;
+using Content.Shared.AU14.WithdrawConsole;
 using Content.Shared.CCVar;
 using Content.Shared.Coordinates;
 using Content.Shared.Database;
@@ -51,32 +55,33 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._RMC14.Dropship;
 
-public sealed class DropshipSystem : SharedDropshipSystem
+public sealed partial class DropshipSystem : SharedDropshipSystem
 {
-    [Dependency] private readonly DropshipTacticalLandSystem _tacticalLand = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly AppearanceSystem _appearance = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly ContainerSystem _container = default!;
-    [Dependency] private readonly DoorSystem _door = default!;
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly MarineAnnounceSystem _marineAnnounce = default!;
-    [Dependency] private readonly PhysicsSystem _physics = default!;
-    [Dependency] private readonly PointLightSystem _pointLight = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly ShuttleSystem _shuttle = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedXenoAnnounceSystem _xenoAnnounce = default!;
-    [Dependency] private readonly SharedRMCFlammableSystem _rmcFlammable = default!;
-    [Dependency] private readonly SharedRMCExplosionSystem _rmcExplosion = default!;
-    [Dependency] private readonly RMCAlertLevelSystem _alertLevelSystem = default!;
-    [Dependency] private readonly AreaSystem _area = default!;
-    [Dependency] private readonly IntelSystem _intel = default!;
+    [Dependency] private DropshipTacticalLandSystem _tacticalLand = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private AppearanceSystem _appearance = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private ContainerSystem _container = default!;
+    [Dependency] private DoorSystem _door = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private MarineAnnounceSystem _marineAnnounce = default!;
+    [Dependency] private PhysicsSystem _physics = default!;
+    [Dependency] private PointLightSystem _pointLight = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private ShuttleSystem _shuttle = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private SharedRMCFlammableSystem _rmcFlammable = default!;
+    [Dependency] private SharedRMCExplosionSystem _rmcExplosion = default!;
+    [Dependency] private RMCPvsSystem _rmcPvs = default!;
+    [Dependency] private RMCAlertLevelSystem _alertLevelSystem = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private IntelSystem _intel = default!;
+    [Dependency] private WithdrawConsoleSystem _withdrawConsole = default!;
 
     private EntityQuery<DockingComponent> _dockingQuery;
     private EntityQuery<DoorComponent> _doorQuery;
@@ -106,6 +111,7 @@ public sealed class DropshipSystem : SharedDropshipSystem
         SubscribeLocalEvent<DropshipComponent, FTLStartedEvent>(OnFTLStarted);
         SubscribeLocalEvent<DropshipComponent, FTLCompletedEvent>(OnFTLCompleted);
         SubscribeLocalEvent<DropshipComponent, FTLUpdatedEvent>(OnFTLUpdated);
+        SubscribeLocalEvent<DropshipComponent, BeforeFTLStartedEvent>(OnBeforeFTLStarted);
 
         SubscribeLocalEvent<DropshipInFlyByComponent, FTLCompletedEvent>(OnInFlyByFTLCompleted);
         SubscribeLocalEvent<ThirdPartyDropshipDeactivatedConsoleComponent, InteractHandEvent>(OnDeactivatedThirdPartyConsoleInteract);
@@ -119,7 +125,11 @@ public sealed class DropshipSystem : SharedDropshipSystem
             {
                 subs.Event<DropshipLockdownMsg>(OnDropshipNavigationLockdownMsg);
                 subs.Event<DropshipRemoteControlToggleMsg>(OnDropshipRemoteControlToggleMsg);
+                subs.Event<DropshipLaunchAlarmToggleMsg>(OnDropshipLaunchAlarmToggleMsg);
+                subs.Event<DropshipWithdrawReturnMsg>(OnDropshipWithdrawReturn);
             });
+
+        SubscribeLocalEvent<WithdrawFactionHijackLockEvent>(OnWithdrawHijackLock);
 
         Subs.CVar(_config, RMCCVars.RMCLandingZonePrimaryAutoMinutes, v => _lzPrimaryAutoDelay = TimeSpan.FromMinutes(v), true);
         Subs.CVar(_config, RMCCVars.RMCDropshipFlyByTimeSeconds, v => _flyByTime = TimeSpan.FromSeconds(v), true);
@@ -242,9 +252,17 @@ public sealed class DropshipSystem : SharedDropshipSystem
         {
             ent.Comp.State = ftl.State;
             Dirty(ent);
+
+            if (ftl.State == FTLState.Starting && ent.Comp.LaunchAlarmEntity != null)
+                TryStopLaunchAlarm(ent);
         }
 
         RefreshUI();
+    }
+
+    private void OnBeforeFTLStarted(Entity<DropshipComponent> ent, ref BeforeFTLStartedEvent args)
+    {
+        RelayToMountedEntities(ent, args);
     }
 
     private void OnRefreshUI<T>(Entity<DropshipComponent> ent, ref T args)
@@ -319,6 +337,36 @@ public sealed class DropshipSystem : SharedDropshipSystem
             return;
 
         RecordThirdPartyAutoReturnActivity(grid);
+    }
+
+    private void OnDropshipLaunchAlarmToggleMsg(Entity<DropshipNavigationComputerComponent> ent, ref DropshipLaunchAlarmToggleMsg args)
+    {
+        if (!TryGetGridDropship(ent, out var dropship))
+            return;
+
+        if (TryComp(dropship, out FTLComponent? ftl) &&
+            ftl.State is FTLState.Travelling or FTLState.Arriving or FTLState.Starting)
+        {
+            return;
+        }
+
+        if (dropship.Comp.LaunchAlarmEntity != null)
+        {
+            TryStopLaunchAlarm(dropship, ent.Comp);
+        }
+        else
+        {
+            var sound = Audio.PlayPvs(dropship.Comp.LaunchAlarmSound, dropship);
+            if (sound == null)
+                return;
+
+            _rmcPvs.AddGlobalOverride(sound.Value.Entity);
+            dropship.Comp.LaunchAlarmEntity = sound.Value.Entity;
+            ent.Comp.LaunchAlarmStatus = true;
+            Dirty(ent);
+        }
+
+        RefreshUI();
     }
 
     private void OnNavigationLockout(Entity<DropshipNavigationComputerComponent> ent, ref DropshipLockoutDoAfterEvent args)
@@ -414,7 +462,7 @@ public sealed class DropshipSystem : SharedDropshipSystem
             ftl.State == FTLState.Arriving &&
             dropship.Destination is { } destination)
         {
-            var audio = _audio.PlayPvs(dropship.ArrivalSound, destination);
+            var audio = Audio.PlayPvs(dropship.ArrivalSound, destination);
             if (audio != null)
             {
                 ent.Comp.ArrivalSoundEntity = audio.Value.Entity;
@@ -467,6 +515,21 @@ public sealed class DropshipSystem : SharedDropshipSystem
 
             Log.Warning($"{ToPrettyString(user)} tried to launch thirdparty whitelisted shuttle {ToPrettyString(computer.Owner)} to non-thirdparty destination {ToPrettyString(destination)}");
             return false;
+        }
+
+        // Block cycle-down at 5-minute withdraw mark: faction may not send dropships to planet
+        if (!hijack &&
+            TryComp(computer.Owner, out WhitelistedShuttleComponent? withdrawFactionComp) &&
+            !string.IsNullOrEmpty(withdrawFactionComp.Faction) &&
+            _withdrawConsole.IsDropdownBlocked(withdrawFactionComp.Faction))
+        {
+            var destMap = Transform(destination).MapUid;
+            if (destMap != null && (HasComp<RMCPlanetComponent>(destMap.Value) || HasComp<RMCPlanetComponent>(Transform(destination).GridUid)))
+            {
+                if (user != null)
+                    _popup.PopupEntity(Loc.GetString("withdraw-console-dropdown-blocked"), computer.Owner, user.Value, PopupType.MediumCaution);
+                return false;
+            }
         }
 
         _hijack = hijack;
@@ -673,16 +736,18 @@ public sealed class DropshipSystem : SharedDropshipSystem
                     // Human faction hijack announcements
                     var marineText = Loc.GetString("rmc-announcement-dropship-hijack-human");
                     _marineAnnounce.AnnounceARESStaging(dropshipId.Value, marineText, dropship.MarineHijackSound, new LocId("rmc-announcement-dropship-message"), victimFaction);
+                    _marineAnnounce.AnnounceAlertLevel(RMCAlertLevels.Red, marineText);
                 }
                 else
                 {
                     // Xeno hijack announcements
                     var xenoText = Loc.GetString("rmc-announcement-dropship-hijack-hive");
                     _xenoAnnounce.AnnounceSameHive(user.Value, xenoText);
-                    _audio.PlayPvs(dropship.LocalHijackSound, dropshipId.Value);
+                    Audio.PlayPvs(dropship.LocalHijackSound, dropshipId.Value);
 
                     var marineText = Loc.GetString("rmc-announcement-dropship-hijack");
                     _marineAnnounce.AnnounceARESStaging(dropshipId.Value, marineText, dropship.MarineHijackSound, new LocId("rmc-announcement-dropship-message"), victimFaction);
+                    _marineAnnounce.AnnounceAlertLevel(RMCAlertLevels.Red, marineText);
                 }
 
                 var generalQuartersText = Loc.GetString("rmc-announcement-general-quarters");
@@ -784,8 +849,17 @@ public sealed class DropshipSystem : SharedDropshipSystem
                 destinations.Add(destination);
             }
 
-            var canTacticalLand = IsStrictThirdPartyFaction(whitelistedFaction);
-            var state = new DropshipNavigationDestinationsBuiState(flyBy, destinations, doorLockStatus, computer.Comp.RemoteControl, canTacticalLand);
+            var canTacticalLand = computer.Comp.CanTacticalLand || IsStrictThirdPartyFaction(whitelistedFaction);
+
+            var canWithdrawReturn = false;
+            if (whitelistedFaction != null && _withdrawConsole.IsWithdrawReturnUnlocked(whitelistedFaction))
+            {
+                var gridXform = Transform(grid);
+                canWithdrawReturn = gridXform.MapUid != null &&
+                                    (HasComp<RMCPlanetComponent>(gridXform.MapUid.Value) || HasComp<RMCPlanetComponent>(grid));
+            }
+
+            var state = new DropshipNavigationDestinationsBuiState(flyBy, destinations, doorLockStatus, computer.Comp.RemoteControl, canTacticalLand, computer.Comp.LaunchAlarmStatus, canWithdrawReturn);
             _ui.SetUiState(computer.Owner, DropshipNavigationUiKey.Key, state);
             return;
         }
@@ -803,7 +877,7 @@ public sealed class DropshipSystem : SharedDropshipSystem
                 departureName = Name(departureUid);
         }
 
-        var travelState = new DropshipNavigationTravellingBuiState(ftl.State, ftl.StateTime, destinationName, departureName, doorLockStatus, computer.Comp.RemoteControl);
+        var travelState = new DropshipNavigationTravellingBuiState(ftl.State, ftl.StateTime, destinationName, departureName, doorLockStatus, computer.Comp.RemoteControl, computer.Comp.LaunchAlarmStatus);
         _ui.SetUiState(computer.Owner, DropshipNavigationUiKey.Key, travelState);
     }
 
@@ -1265,7 +1339,9 @@ public sealed class DropshipSystem : SharedDropshipSystem
                     }
                 }
 
-                _marineAnnounce.AnnounceToMarines(Loc.GetString("rmc-announcement-emergency-dropship-crash"), dropship.CrashWarningSound, faction: crashFaction);
+                var crashAnnouncement = Loc.GetString("rmc-announcement-emergency-dropship-crash");
+                _marineAnnounce.AnnounceToMarines(crashAnnouncement, dropship.CrashWarningSound, faction: crashFaction);
+                _marineAnnounce.AnnounceAlertLevel(RMCAlertLevels.Delta, crashAnnouncement);
                 continue;
             }
 
@@ -1274,7 +1350,7 @@ public sealed class DropshipSystem : SharedDropshipSystem
                 dropship.DidIncomingSound = true;
                 Dirty(uid, dropship);
 
-                _audio.PlayGlobal(dropship.IncomingSound, destinationFilter, true);
+                Audio.PlayGlobal(dropship.IncomingSound, destinationFilter, true);
                 continue;
             }
 
@@ -1283,7 +1359,7 @@ public sealed class DropshipSystem : SharedDropshipSystem
                 dropship.DidExplosion = true;
                 Dirty(uid, dropship);
 
-                _audio.PlayGlobal(dropship.CrashSound, destinationFilter, true);
+                Audio.PlayGlobal(dropship.CrashSound, destinationFilter, true);
                 _rmcFlammable.SpawnFireDiamond(dropship.FireId, destinationEntityCoords, dropship.FireRange, 11);
                 _rmcExplosion.QueueExplosion(destinationCoords, "RMCOB", 50000, 1500, 90, uid);
 
@@ -1380,4 +1456,45 @@ public sealed class DropshipSystem : SharedDropshipSystem
 
         return null;
     }
+
+    private void OnWithdrawHijackLock(ref WithdrawFactionHijackLockEvent ev)
+    {
+        var query = EntityQueryEnumerator<DropshipNavigationComputerComponent, WhitelistedShuttleComponent>();
+        while (query.MoveNext(out var uid, out var nav, out var ws))
+        {
+            if (!string.Equals(ws.Faction, ev.Faction, StringComparison.OrdinalIgnoreCase))
+                continue;
+            nav.Hijackable = false;
+            Dirty(uid, nav);
+        }
+    }
+
+    private void OnDropshipWithdrawReturn(Entity<DropshipNavigationComputerComponent> ent, ref DropshipWithdrawReturnMsg args)
+    {
+        if (Transform(ent).GridUid is not { } grid)
+            return;
+
+        if (!TryComp(grid, out DropshipComponent? dropship) || dropship.Crashed)
+            return;
+
+        if (!TryComp(ent.Owner, out WhitelistedShuttleComponent? ws) || string.IsNullOrEmpty(ws.Faction))
+            return;
+
+        if (!_withdrawConsole.IsWithdrawReturnUnlocked(ws.Faction))
+            return;
+
+        var gridXform = Transform(grid);
+        var isOnPlanet = gridXform.MapUid != null &&
+                         (HasComp<RMCPlanetComponent>(gridXform.MapUid.Value) || HasComp<RMCPlanetComponent>(grid));
+        if (!isOnPlanet)
+            return;
+
+        dropship.WithdrawEvacuating = true;
+        Dirty(grid, dropship);
+
+        var shuttle = EnsureComp<ShuttleComponent>(grid);
+        _shuttle.FTLToCoordinates(grid, shuttle, grid.ToCoordinates(), Angle.Zero, hyperspaceTime: 1_000_000);
+        RefreshUI();
+    }
+
 }

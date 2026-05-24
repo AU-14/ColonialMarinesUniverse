@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using Content.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.Controls;
 
@@ -11,7 +11,6 @@ public interface IItemslotUIContainer
     public bool TryAddButton(SlotControl control);
 }
 
-[Virtual]
 public abstract class ItemSlotUIContainer<T> : GridContainer, IItemslotUIContainer where T : SlotControl
 {
     protected readonly Dictionary<string, T> Buttons = new();
@@ -41,7 +40,7 @@ public abstract class ItemSlotUIContainer<T> : GridContainer, IItemslotUIContain
     {
         foreach (var button in Buttons.Values)
         {
-            button.Dispose();
+            button.Orphan();
         }
 
         Buttons.Clear();
@@ -84,7 +83,7 @@ public abstract class ItemSlotUIContainer<T> : GridContainer, IItemslotUIContain
     {
         if (newButton.SlotName == "")
         {
-            Logger.Warning("Could not add button " + newButton.Name + "No slotname");
+            Logger.GetSawmill("content").Warning("Could not add button " + newButton.Name + "No slotname");
         }
 
         return !Buttons.TryAdd(newButton.SlotName, newButton) ? null : newButton;
@@ -123,7 +122,7 @@ public abstract class ItemSlotUIContainer<T> : GridContainer, IItemslotUIContain
     {
         RemoveButtonFromDict(button);
         Children.Remove(button);
-        button.Dispose();
+        button.Orphan();
     }
 
     public virtual T? GetButton(string slotName)

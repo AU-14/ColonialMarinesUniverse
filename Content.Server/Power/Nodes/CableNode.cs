@@ -12,20 +12,20 @@ namespace Content.Server.Power.Nodes
         public override IEnumerable<Node> GetReachableNodes(TransformComponent xform,
             EntityQuery<NodeContainerComponent> nodeQuery,
             EntityQuery<TransformComponent> xformQuery,
-            MapGridComponent? grid,
+            Entity<MapGridComponent>? grid,
             IEntityManager entMan)
         {
             if (!xform.Anchored || grid == null)
                 yield break;
 
-            var gridIndex = grid.TileIndicesFor(xform.Coordinates);
+            var gridIndex = NodeHelpers.TileIndicesFor(entMan, grid.Value, xform.Coordinates);
 
             // While we go over adjacent nodes, we build a list of blocked directions due to
             // incoming or outgoing wire terminals.
             var terminalDirs = 0;
             List<(Direction, Node)> nodeDirs = new();
 
-            foreach (var (dir, node) in NodeHelpers.GetCardinalNeighborNodes(nodeQuery, grid, gridIndex))
+            foreach (var (dir, node) in NodeHelpers.GetCardinalNeighborNodes(nodeQuery, entMan, grid.Value, gridIndex))
             {
                 if (node is CableNode && node != this)
                 {

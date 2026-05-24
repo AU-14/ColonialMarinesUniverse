@@ -14,6 +14,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 using static Robust.Shared.Maths.Color;
 
 namespace Content.Client.Overlays;
@@ -33,20 +34,25 @@ public sealed class EntityHealthBarOverlay : Overlay
     private readonly SpriteSystem _spriteSystem;
     private readonly ProgressColorSystem _progressColor;
     private readonly EntityLookupSystem _lookup;
+    private readonly IGameTiming _timing;
 
     private readonly EntityQuery<CrashLandingComponent> _crashLandingQuery;
     private readonly EntityQuery<ParaDroppingComponent> _paraDroppingQuery;
     private readonly HashSet<Entity<MobThresholdsComponent>> _healthCandidates = new();
+    private readonly Dictionary<EntityUid, CachedHealthProgress> _progressCache = new();
 
+    private static readonly TimeSpan HealthProgressCacheLifetime = TimeSpan.FromSeconds(0.25);
+    private const int MaxCachedHealthEntities = 512;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
     public HashSet<string> DamageContainers = new();
     public ProtoId<HealthIconPrototype>? StatusIcon;
 
-    public EntityHealthBarOverlay(IEntityManager entManager, IPrototypeManager prototype)
+    public EntityHealthBarOverlay(IEntityManager entManager, IPrototypeManager prototype, IGameTiming timing)
     {
         _entManager = entManager;
         _prototype = prototype;
+        _timing = timing;
         _transform = _entManager.System<SharedTransformSystem>();
         _mobStateSystem = _entManager.System<MobStateSystem>();
         _mobThresholdSystem = _entManager.System<MobThresholdSystem>();
@@ -117,7 +123,7 @@ public sealed class EntityHealthBarOverlay : Overlay
                 continue;
 
             // we are all progressing towards death every day
-            if (CalcProgress(uid, mobStateComponent, damageableComponent, mobThresholdsComponent) is not { } deathProgress)
+            if (GetCachedProgress(uid, mobStateComponent, damageableComponent, mobThresholdsComponent) is not { } deathProgress)
                 continue;
 
             var worldMatrix = Matrix3Helpers.CreateTranslation(worldPos);
@@ -164,6 +170,37 @@ public sealed class EntityHealthBarOverlay : Overlay
         handle.SetTransform(Matrix3x2.Identity);
     }
 
+    private (float ratio, bool inCrit)? GetCachedProgress(
+        EntityUid uid,
+        MobStateComponent mobState,
+        DamageableComponent damageable,
+        MobThresholdsComponent thresholds)
+    {
+        var now = _timing.RealTime;
+        if (_progressCache.TryGetValue(uid, out var cached)
+            && cached.Expires > now
+            && cached.State == mobState.CurrentState
+            && cached.TotalDamage == damageable.TotalDamage)
+        {
+            return cached.Progress;
+        }
+
+        if (cached is null)
+        {
+            if (_progressCache.Count > MaxCachedHealthEntities)
+                _progressCache.Clear();
+
+            cached = new CachedHealthProgress();
+            _progressCache[uid] = cached;
+        }
+
+        cached.Expires = now + HealthProgressCacheLifetime;
+        cached.State = mobState.CurrentState;
+        cached.TotalDamage = damageable.TotalDamage;
+        cached.Progress = CalcProgress(uid, mobState, damageable, thresholds);
+        return cached.Progress;
+    }
+
     /// <summary>
     /// Returns a ratio between 0 and 1, and whether the entity is in crit.
     /// </summary>
@@ -204,5 +241,13 @@ public sealed class EntityHealthBarOverlay : Overlay
             progress = 0;
 
         return _progressColor.GetProgressColor(progress);
+    }
+
+    private sealed class CachedHealthProgress
+    {
+        public TimeSpan Expires;
+        public FixedPoint2 TotalDamage;
+        public MobState State;
+        public (float ratio, bool inCrit)? Progress;
     }
 }

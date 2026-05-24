@@ -3,9 +3,10 @@ using System.Numerics;
 using Content.Client.CrewManifest;
 using Content.Client.GameTicking.Managers;
 using Content.Client.Lobby;
+using Content.Client.Lobby.UI;
 using Content.Client.UserInterface.Controls;
 using Content.Client.Players.PlayTimeTracking;
-using Content.Client.UserInterface.Controls;
+using Content.Client.Stylesheets;
 using Content.Shared._RMC14.Prototypes;
 using Content.Shared.CCVar;
 using Content.Shared.Preferences;
@@ -23,15 +24,16 @@ using static Robust.Client.UserInterface.Controls.BoxContainer;
 
 namespace Content.Client.LateJoin
 {
-    public sealed class LateJoinGui : DefaultWindow
+    public sealed partial class LateJoinGui : DefaultWindow
     {
-        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-        [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
-        [Dependency] private readonly IConfigurationManager _configManager = default!;
-        [Dependency] private readonly IEntitySystemManager _entitySystem = default!;
-        [Dependency] private readonly JobRequirementsManager _jobRequirements = default!;
-        [Dependency] private readonly IClientPreferencesManager _preferencesManager = default!;
-        [Dependency] private readonly ILogManager _logManager = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
+        [Dependency] private IClientConsoleHost _consoleHost = default!;
+        [Dependency] private IConfigurationManager _configManager = default!;
+        [Dependency] private IEntitySystemManager _entitySystem = default!;
+        [Dependency] private JobRequirementsManager _jobRequirements = default!;
+        [Dependency] private IClientPreferencesManager _preferencesManager = default!;
+        [Dependency] private IStylesheetManager _stylesheetManager = default!;
+        [Dependency] private ILogManager _logManager = default!;
 
         public event Action<(NetEntity, string)> SelectedId;
 
@@ -52,7 +54,8 @@ namespace Content.Client.LateJoin
         public LateJoinGui(string? factionFilter = null)
         {
             _factionFilter = factionFilter?.ToLowerInvariant();
-            MinSize = SetSize = new Vector2(360, 560);
+            MinSize = new Vector2(460, 560);
+            SetSize = new Vector2(560, 560);
             IoCManager.InjectDependencies(this);
             _sprites = _entitySystem.GetEntitySystem<SpriteSystem>();
             _crewManifest = _entitySystem.GetEntitySystem<CrewManifestSystem>();
@@ -64,10 +67,19 @@ namespace Content.Client.LateJoin
             _base = new BoxContainer()
             {
                 Orientation = LayoutOrientation.Vertical,
+                HorizontalExpand = true,
                 VerticalExpand = true,
+                Margin = new Thickness(8),
             };
 
-            Contents.AddChild(_base);
+            Contents.AddChild(new PanelContainer
+            {
+                HorizontalExpand = true,
+                VerticalExpand = true,
+                StyleClasses = { StyleNano.StyleClassCrtPanel },
+                Children = { _base }
+            });
+            ApplyCrtPalette();
 
             _jobRequirements.Updated += RebuildUI;
             RebuildUI();
@@ -81,6 +93,18 @@ namespace Content.Client.LateJoin
             };
 
             _gameTicker.LobbyJobsAvailableUpdated += JobsAvailableUpdated;
+            _configManager.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+        }
+
+        private void OnCrtUiColorChanged(string _)
+        {
+            ApplyCrtPalette();
+        }
+
+        private void ApplyCrtPalette()
+        {
+            Stylesheet = _stylesheetManager.SheetNano;
+            CrtLobbyTheme.Apply(this);
         }
 
         private bool DepartmentMatchesFilter(DepartmentPrototype department)
@@ -155,10 +179,12 @@ namespace Content.Client.LateJoin
 
                 _base.AddChild(new StripeBack()
                 {
+                    StyleClasses = { StyleNano.StyleClassCrtStripeBack },
                     Children =
                     {
                         new PanelContainer()
                         {
+                            StyleClasses = { StyleNano.StyleClassCrtHeaderPanel },
                             Children =
                             {
                                 new Label()
@@ -178,6 +204,7 @@ namespace Content.Client.LateJoin
                 var jobListScroll = new ScrollContainer()
                 {
                     VerticalExpand = true,
+                    HorizontalExpand = true,
                     Children = { jobList },
                     Visible = true,
                 };
@@ -246,6 +273,7 @@ namespace Content.Client.LateJoin
 
                     category.AddChild(new PanelContainer
                     {
+                        StyleClasses = { StyleNano.StyleClassCrtHeaderPanel },
                         Children =
                         {
                             new Label
@@ -331,6 +359,8 @@ namespace Content.Client.LateJoin
                     jobList.AddChild(new Label { Text = Loc.GetString("late-join-gui-no-departments-available") });
                 }
             }
+
+            CrtLobbyTheme.Apply(_base);
         }
 
         private void JobsAvailableUpdated(IReadOnlyDictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>> updatedJobs)
@@ -361,6 +391,7 @@ namespace Content.Client.LateJoin
             }
         }
 
+        [Obsolete("Controls should only be removed from UI tree instead of being disposed")]
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
@@ -369,6 +400,7 @@ namespace Content.Client.LateJoin
             {
                 _jobRequirements.Updated -= RebuildUI;
                 _gameTicker.LobbyJobsAvailableUpdated -= JobsAvailableUpdated;
+                _configManager.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
                 _jobButtons.Clear();
                 _jobCategories.Clear();
             }
@@ -389,7 +421,8 @@ namespace Content.Client.LateJoin
             JobId = jobId;
             JobLocalisedName = jobLocalisedName;
             RefreshLabel(amount);
-            AddStyleClass(StyleClassButton);
+            AddStyleClass(StyleNano.StyleClassCrtButton);
+            CrtLobbyTheme.Apply(this);
             _initialised = true;
         }
 

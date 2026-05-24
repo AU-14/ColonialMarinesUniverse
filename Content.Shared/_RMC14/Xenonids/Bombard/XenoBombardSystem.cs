@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Projectiles;
 using Content.Shared._RMC14.Xenonids.GasToggle;
@@ -14,18 +15,19 @@ using Robust.Shared.Player;
 
 namespace Content.Shared._RMC14.Xenonids.Bombard;
 
-public sealed class XenoBombardSystem : EntitySystem
+public sealed partial class XenoBombardSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly RMCProjectileSystem _rmcProjectile = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private RMCProjectileSystem _rmcProjectile = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private CMUZLevelShootingSystem _zLevelShooting = default!;
 
     public override void Initialize()
     {
@@ -39,21 +41,28 @@ public sealed class XenoBombardSystem : EntitySystem
     {
         var source = _transform.GetMapCoordinates(ent);
         var target = _transform.ToMapCoordinates(args.Target);
-        if (source.MapId != target.MapId)
+        if (!_zLevelShooting.TryAdjustShotMapCoordinates(ent, source, target, out var adjustedSource, out var adjustedTarget) ||
+            adjustedSource.MapId != adjustedTarget.MapId)
+        {
             return;
+        }
 
         args.Handled = true;
 
         if (!_xenoPlasma.HasPlasmaPopup(ent.Owner, ent.Comp.PlasmaCost))
             return;
 
-        var direction = target.Position - source.Position;
+        var direction = adjustedTarget.Position - adjustedSource.Position;
         if (direction.Length() > ent.Comp.Range)
-            target = source.Offset(direction.Normalized() * ent.Comp.Range);
+            adjustedTarget = adjustedSource.Offset(direction.Normalized() * ent.Comp.Range);
 
         _audio.PlayPredicted(ent.Comp.PrepareSound, ent, ent);
 
-        var ev = new XenoBombardDoAfterEvent { Coordinates = target, };
+        var ev = new XenoBombardDoAfterEvent
+        {
+            SourceCoordinates = adjustedSource,
+            Coordinates = adjustedTarget,
+        };
         var doAfter = new DoAfterArgs(EntityManager, ent, ent.Comp.Delay, ev, ent, args.Action) { BreakOnMove = true, RootEntity = true };
         if (_doAfter.TryStartDoAfter(doAfter))
         {
@@ -94,7 +103,7 @@ public sealed class XenoBombardSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        var source = _transform.GetMapCoordinates(ent);
+        var source = args.SourceCoordinates;
         if (source.MapId != args.Coordinates.MapId)
             return;
 

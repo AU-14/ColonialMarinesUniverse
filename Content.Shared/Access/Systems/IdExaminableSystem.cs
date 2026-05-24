@@ -1,7 +1,7 @@
 using Content.Shared.Access.Components;
 using Content.Shared.Examine;
 using Content.Shared.Inventory;
-using Content.Shared.Au14.Util;
+using Content.Shared.AU14.Util;
 using Content.Shared.PDA;
 using Content.Shared.Verbs;
 using Content.Shared._RMC14.UniformAccessories;
@@ -10,11 +10,11 @@ using Robust.Shared.Containers;
 
 namespace Content.Shared.Access.Systems;
 
-public sealed class IdExaminableSystem : EntitySystem
+public sealed partial class IdExaminableSystem : EntitySystem
 {
-    [Dependency] private readonly ExamineSystemShared _examineSystem = default!;
-    [Dependency] private readonly InventorySystem _inventorySystem = default!;
-    [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
+    [Dependency] private ExamineSystemShared _examineSystem = default!;
+    [Dependency] private InventorySystem _inventorySystem = default!;
+    [Dependency] private SharedContainerSystem _containerSystem = default!;
 
     public override void Initialize()
     {

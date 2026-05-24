@@ -1,6 +1,5 @@
 ﻿using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
-using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
@@ -43,42 +42,6 @@ public sealed partial class BodyPartComponent : Component
     [DataField, AutoNetworkedField]
     public Dictionary<string, OrganSlot> Organs = new();
 
-    /// <summary>
-    /// These are only for VV/Debug do not use these for gameplay/systems
-    /// </summary>
-    [ViewVariables]
-    private List<ContainerSlot> BodyPartSlotsVV
-    {
-        get
-        {
-            List<ContainerSlot> temp = new();
-            var containerSystem = IoCManager.Resolve<IEntityManager>().System<SharedContainerSystem>();
-
-            foreach (var slotId in Children.Keys)
-            {
-                temp.Add((ContainerSlot) containerSystem.GetContainer(Owner, SharedBodySystem.PartSlotContainerIdPrefix+slotId));
-            }
-
-            return temp;
-        }
-    }
-
-    [ViewVariables]
-    private List<ContainerSlot> OrganSlotsVV
-    {
-        get
-        {
-            List<ContainerSlot> temp = new();
-            var containerSystem = IoCManager.Resolve<IEntityManager>().System<SharedContainerSystem>();
-
-            foreach (var slotId in Organs.Keys)
-            {
-                temp.Add((ContainerSlot) containerSystem.GetContainer(Owner, SharedBodySystem.OrganSlotContainerIdPrefix+slotId));
-            }
-
-            return temp;
-        }
-    }
 }
 
 /// <summary>

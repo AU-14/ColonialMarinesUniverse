@@ -8,5 +8,17 @@ namespace Content.Shared._RMC14.Xenonids.Bombard;
 public sealed partial class XenoBombardDoAfterEvent : SimpleDoAfterEvent
 {
     [DataField]
+    public MapCoordinates SourceCoordinates;
+
+    [DataField]
     public MapCoordinates Coordinates;
+
+    public override DoAfterEvent Clone()
+    {
+        return new XenoBombardDoAfterEvent
+        {
+            SourceCoordinates = SourceCoordinates,
+            Coordinates = Coordinates,
+        };
+    }
 }

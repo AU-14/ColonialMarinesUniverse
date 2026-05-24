@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared.Access.Components;
 using Content.Server.Stack;
 using Content.Shared.Access.Systems;
 using Content.Shared.AU14.ColonyEconomy;
@@ -11,18 +12,26 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+
 namespace Content.Server.AU14.ColonyEconomy;
-public sealed class AU14ShopkeeperVendorSystem : EntitySystem
+
+public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly AdminConsoleSystem _adminConsole = default!;
-    [Dependency] private readonly ColonyBudgetSystem _colonyBudget = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly AccessReaderSystem _accessReader = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private AdminConsoleSystem _adminConsole = default!;
+    [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
+    [Dependency] private StackSystem _stack = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private TagSystem _tag = default!;
+
+    private static readonly ProtoId<TagPrototype> CurrencyTag = "Currency";
+    private readonly Dictionary<EntityUid, EntityUid> _pendingStockSellers = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -52,17 +61,27 @@ public sealed class AU14ShopkeeperVendorSystem : EntitySystem
         if (args.Handled)
             return;
         // Currency items go to the cash slot via ItemSlots - let them pass
-        if (_tag.HasTag(args.Used, "Currency"))
+        if (_tag.HasTag(args.Used, CurrencyTag))
             return;
         if (!_accessReader.IsAllowed(args.User, uid))
             return;
         if (!_containers.TryGetContainer(uid, AU14ShopkeeperVendorComponent.StockContainerName, out var stockContainer))
             return;
         args.Handled = true;
+        if (_idCard.TryFindIdCard(args.User, out var sellerId))
+            _pendingStockSellers[args.Used] = sellerId.Owner;
+
         if (!_hands.TryDrop(args.User, args.Used, checkActionBlocker: false))
+        {
+            _pendingStockSellers.Remove(args.Used);
             return;
+        }
+
         if (!_containers.Insert(args.Used, stockContainer))
+        {
+            _pendingStockSellers.Remove(args.Used);
             _hands.TryPickupAnyHand(args.User, args.Used);
+        }
     }
     private void OnItemInserted(EntityUid uid, AU14ShopkeeperVendorComponent comp, EntInsertedIntoContainerMessage args)
     {
@@ -71,7 +90,7 @@ public sealed class AU14ShopkeeperVendorSystem : EntitySystem
         {
             var count = TryComp<StackComponent>(args.Entity, out var stack) ? stack.Count : 1;
             comp.InsertedCash += count;
-            EntityManager.QueueDeleteEntity(args.Entity);
+            QueueDel(args.Entity);
             UpdateShopUi(uid, comp);
             return;
         }
@@ -81,12 +100,14 @@ public sealed class AU14ShopkeeperVendorSystem : EntitySystem
             var meta = MetaData(args.Entity);
             var displayName = meta.EntityName;
             var protoId = meta.EntityPrototype?.ID;
+            _pendingStockSellers.Remove(args.Entity, out var sellerIdCard);
             comp.Listings.Add(new AU14ShopkeeperListing
             {
                 ItemNet = GetNetEntity(args.Entity),
                 DisplayName = displayName,
                 Price = 10,
                 ProtoId = protoId,
+                SellerIdCard = sellerIdCard.Valid ? sellerIdCard : null,
             });
             UpdateShopUi(uid, comp);
         }
@@ -101,7 +122,7 @@ public sealed class AU14ShopkeeperVendorSystem : EntitySystem
         if (comp.InsertedCash < effectivePrice)
             return;
         var itemEntity = GetEntity(listing.ItemNet);
-        if (!EntityManager.EntityExists(itemEntity))
+        if (!Exists(itemEntity))
         {
             comp.Listings.RemoveAt(msg.Index);
             UpdateShopUi(uid, comp);
@@ -112,10 +133,18 @@ public sealed class AU14ShopkeeperVendorSystem : EntitySystem
         var taxRevenue = effectivePrice - listing.Price;
         if (taxRevenue > 0)
             _colonyBudget.AddToBudget(taxRevenue);
+
+        if (listing.SellerIdCard is { } sellerIdCard &&
+            TryComp<IdCardComponent>(sellerIdCard, out var idCard))
+        {
+            idCard.AccountBalance += listing.Price;
+            Dirty(sellerIdCard, idCard);
+        }
+
         // Remove from stock container and place at vendor's location
         if (_containers.TryGetContainer(uid, AU14ShopkeeperVendorComponent.StockContainerName, out var container))
             _containers.Remove(itemEntity, container);
-        Transform(itemEntity).Coordinates = Transform(uid).Coordinates;
+        _transform.SetCoordinates(itemEntity, Transform(itemEntity), Transform(uid).Coordinates);
         comp.Listings.RemoveAt(msg.Index);
         UpdateShopUi(uid, comp);
     }
@@ -147,11 +176,11 @@ public sealed class AU14ShopkeeperVendorSystem : EntitySystem
             return;
         var listing = comp.Listings[msg.Index];
         var itemEntity = GetEntity(listing.ItemNet);
-        if (EntityManager.EntityExists(itemEntity))
+        if (Exists(itemEntity))
         {
             if (_containers.TryGetContainer(uid, AU14ShopkeeperVendorComponent.StockContainerName, out var container))
                 _containers.Remove(itemEntity, container);
-            Transform(itemEntity).Coordinates = Transform(uid).Coordinates;
+            _transform.SetCoordinates(itemEntity, Transform(itemEntity), Transform(uid).Coordinates);
         }
         comp.Listings.RemoveAt(msg.Index);
         UpdateShopUi(uid, comp);

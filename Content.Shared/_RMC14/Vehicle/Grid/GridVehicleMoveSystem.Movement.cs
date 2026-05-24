@@ -1141,7 +1141,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return;
 
         var coords = new EntityCoordinates(grid, gridPos);
-        var local = coords.WithEntityId(xform.ParentUid, transform, EntityManager).Position;
+        var local = transform.WithEntityId(coords, xform.ParentUid).Position;
 
         transform.SetLocalPosition(uid, local, xform);
     }

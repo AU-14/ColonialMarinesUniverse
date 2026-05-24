@@ -6,11 +6,11 @@ using Robust.Shared.Maths;
 
 namespace Content.Server.AU14.Round.StrikeOrganizer;
 
-public sealed class StrikeOrganizerRuleSystem : GameRuleSystem<StrikeOrganizerRuleComponent>
+public sealed partial class StrikeOrganizerRuleSystem : GameRuleSystem<StrikeOrganizerRuleComponent>
 {
-    [Dependency] private readonly WantedSystem _wantedSystem = default!;
-    [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private WantedSystem _wantedSystem = default!;
+    [Dependency] private IEntitySystemManager _entitySystemManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     public override void Initialize()
     {

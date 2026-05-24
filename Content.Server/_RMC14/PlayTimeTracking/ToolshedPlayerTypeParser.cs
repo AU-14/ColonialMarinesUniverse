@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
@@ -12,9 +12,9 @@ using Robust.Shared.Utility;
 
 namespace Content.Server._RMC14.PlayTimeTracking;
 
-public sealed class ToolshedPlayerTypeParser : TypeParser<ToolshedPlayer>
+public sealed partial class ToolshedPlayerTypeParser : TypeParser<ToolshedPlayer>
 {
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     public override bool TryParse(ParserContext ctx, [NotNullWhen(true)] out ToolshedPlayer? result)
     {

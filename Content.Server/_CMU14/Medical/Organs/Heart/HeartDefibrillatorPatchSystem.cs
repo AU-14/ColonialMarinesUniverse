@@ -9,11 +9,11 @@ using Robust.Shared.IoC;
 
 namespace Content.Server._CMU14.Medical.Organs.Heart;
 
-public sealed class HeartDefibrillatorPatchSystem : EntitySystem
+public sealed partial class HeartDefibrillatorPatchSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedHeartSystem _heart = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedHeartSystem _heart = default!;
 
     public override void Initialize()
     {

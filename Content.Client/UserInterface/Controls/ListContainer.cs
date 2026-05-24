@@ -107,12 +107,13 @@ public class ListContainer : Control
         // Ensure buttons are re-generated.
         foreach (var button in _buttons.Values)
         {
-            button.Dispose();
+            button.Orphan();
         }
         _buttons.Clear();
 
         _data = data.ToList();
         _updateChildren = true;
+        InvalidateMeasure();
         InvalidateArrange();
 
         if (_selected != null && !data.Contains(_selected))
@@ -125,6 +126,7 @@ public class ListContainer : Control
     public void DirtyList()
     {
         _updateChildren = true;
+        InvalidateMeasure();
         InvalidateArrange();
     }
 
@@ -296,7 +298,7 @@ public class ListContainer : Control
             foreach (var (data, button) in toRemove)
             {
                 _buttons.Remove(data);
-                button.Dispose();
+                button.Orphan();
             }
 
             _vScrollBar.SetPositionLast();

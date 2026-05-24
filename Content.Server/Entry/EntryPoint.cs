@@ -190,7 +190,7 @@ namespace Content.Server.Entry
             _dbManager?.Shutdown();
             IoCManager.Resolve<ServerApi>().Shutdown();
 
-            IoCManager.Resolve<DiscordLink>().Shutdown();
+            _ = IoCManager.Resolve<DiscordLink>().Shutdown();
             IoCManager.Resolve<DiscordChatLink>().Shutdown();
         }
 

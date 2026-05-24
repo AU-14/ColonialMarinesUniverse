@@ -15,7 +15,7 @@ public sealed class RandomSystem : EntitySystem
         // - Pick an entry
         // - Remove the cost from budget
         // - If our remaining budget is under maxCost then start pruning unavailable entries.
-        random.Shuffle(entries);
+        Shuffle(entries, random);
         var budgetEntry = (IBudgetEntry) GetProbEntry(entries, probSum, random);
 
         budget -= budgetEntry.Cost;
@@ -41,7 +41,7 @@ public sealed class RandomSystem : EntitySystem
     /// </summary>
     public IProbEntry GetProbEntry(IEnumerable<IProbEntry> entries, float probSum, System.Random random)
     {
-        var value = random.NextFloat() * probSum;
+        var value = (float) random.NextDouble() * probSum;
 
         foreach (var entry in entries)
         {
@@ -54,5 +54,16 @@ public sealed class RandomSystem : EntitySystem
         }
 
         throw new InvalidOperationException();
+    }
+
+    private static void Shuffle<T>(IList<T> list, System.Random random)
+    {
+        var n = list.Count;
+        while (n > 1)
+        {
+            n -= 1;
+            var k = random.Next(n + 1);
+            (list[k], list[n]) = (list[n], list[k]);
+        }
     }
 }

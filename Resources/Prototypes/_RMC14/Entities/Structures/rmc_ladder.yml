@@ -65,3 +65,52 @@
   components:
     - type: Sprite
       drawdepth: SmallObjects
+
+- type: entity
+  id: CMUZLevelLadderBase
+  abstract: true
+  name: z-level ladder
+  description: A sturdy metal ladder that passes between Z-levels.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _RMC14/Structures/ladder.rsi
+    drawdepth: WallTops
+    state: ladder11
+  - type: PlacementReplacement
+    key: ladders
+  - type: BlockXenoConstruction
+  - type: RMCMesonsNonviewable
+  - type: RMCIgnoreGhostInteractionLimits
+
+- type: entity
+  parent: CMUZLevelLadderBase
+  id: CMUZLevelLadderThrough
+  suffix: Z-Level, Up
+  components:
+  - type: CMUZLevelLadder
+    offset: 1
+    landingLocalPosition: 0.05
+  - type: CMUZLevelHighGround
+    heightCurve:
+    - 1.05
+    - 1.05
+    stick: true
+    supportOnlyFromAbove: true
+
+- type: entity
+  parent: CMUZLevelLadderBase
+  id: CMUZLevelLadderThroughDown
+  suffix: Z-Level, Down
+  components:
+  - type: CMUZLevelLadder
+    offset: -1
+    landingLocalPosition: 0

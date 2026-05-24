@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Xenonids.Acid;
 using Content.Shared.Damage;
 using Content.Shared.Hands.EntitySystems;
@@ -11,20 +11,20 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Construction.Upgrades;
 
-public sealed class RMCUpgradeSystem : EntitySystem
+public sealed partial class RMCUpgradeSystem : EntitySystem
 {
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
-    [Dependency] private readonly SharedXenoAcidSystem _xenoAcid = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private SharedXenoAcidSystem _xenoAcid = default!;
 
     private readonly Dictionary<EntProtoId, RMCConstructionUpgradeComponent> _upgradePrototypes = new();
     private EntityQuery<RMCConstructionUpgradeItemComponent> _upgradeItemQuery;
@@ -171,7 +171,7 @@ public sealed class RMCUpgradeSystem : EntitySystem
 /// <summary>
 ///     This event that is raised when an entity is ugraded
 /// </summary>
-public sealed class RMCConstructionUpgradedEvent : EntityEventArgs
+public sealed partial class RMCConstructionUpgradedEvent : EntityEventArgs
 {
     public readonly EntityUid New;
     public readonly EntityUid Old;

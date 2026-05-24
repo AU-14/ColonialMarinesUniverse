@@ -9,10 +9,10 @@ using Robust.Shared.Input.Binding;
 
 namespace Content.Client.UserInterface.Systems.Info;
 
-public sealed class CloseRecentWindowUIController : UIController
+public sealed partial class CloseRecentWindowUIController : UIController
 {
-    [Dependency] private readonly IInputManager _inputManager = default!;
-    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
+    [Dependency] private IInputManager _inputManager = default!;
+    [Dependency] private IUserInterfaceManager _uiManager = default!;
 
     /// <summary>
     /// A list of windows that have been interacted with recently.  Windows should only
@@ -64,7 +64,7 @@ public sealed class CloseRecentWindowUIController : UIController
         if (window != null)
         {
             // And move to top of recent stack
-            //Logger.Debug("Most recent window is " + window.Name);
+            //Logger.GetSawmill("content").Debug("Most recent window is " + window.Name);
             SetMostRecentlyInteractedWindow(window);
         }
     }

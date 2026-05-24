@@ -70,6 +70,7 @@
     collection: FootstepCatwalk
   friction: 0.2
   isSpace: true
+  transparent: true
   itemDrop: PartRodMetal1
   heatCapacity: 10000
   mass: 200
@@ -86,6 +87,7 @@
     collection: FootstepPlating
   friction: 0.2
   isSpace: true
+  transparent: true
   itemDrop: PartRodMetal1
   heatCapacity: 10000
   mass: 200

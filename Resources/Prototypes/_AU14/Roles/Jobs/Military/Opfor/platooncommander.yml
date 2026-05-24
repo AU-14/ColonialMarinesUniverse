@@ -3,79 +3,43 @@
   id: AU14JobOpforPlatCo
   name: au14-job-name-opforplatco
   description: au14-job-description-opforplatco
-  setPreference: false
-  canBeAntag: false
-  requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 18000 # 5 hours
-  - !type:AgeRequirement
-    requiredAge: 30
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - SocialAnxiety
-    - SocialAnxietyHeavy
-    - FrontalLisp
-    - NonResuscitable
-    - Epilepsy
-  ranks:
-    RMCRankCaptain:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORPlatCo
-      time: 360000 # 100 hours
-    RMCRankFirstLT: []
-  startingGear: AU14GearopforPlatCo
-  dummyStartingGear: AU14GearopforPlatCoDummy
   icon: "AU14JobIconOPFORPlatCo"
-  requireAdminNotify: true
   spawnMenuRoleName: Platoon Commander (OPFOR)
-  joinNotifyCrew: false
   supervisors: au14-job-supervisors-opforplatco
+  startingGear: AU14GearOPFORPlatCo
+  dummyStartingGear: AU14GearOPFORPlatCoDummy
   accessGroups:
   - AU14OpforCommand
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: CommendationGiver
     - type: NpcFactionMember
       factions:
       - OPFOR
     - type: Marine
       Faction: opfor
-    - type: Skills
-      preset: AU14SkillPresetPlatoonCommander
-    - type: JobPrefix
-      prefix: au14-job-prefix-opforplatco
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: co
     - type: UserIFF
       factions:
       - OPFOR
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
-  hidden: false
+    - type: JobPrefix
+      prefix: au14-job-prefix-opforplatco
 
 - type: startingGear
-  id: AU14GearopforPlatCo
+  id: AU14GearOPFORPlatCo
   equipment:
     id: AU14IDCardopforPlatCo
-    ears: AU14HeadsetSectionLeaderopfor
+    ears: AU14HeadsetOpforCommand
   inhand:
-   -  RMCTabletOpfor
+   -  AU14TabletOpfor
+
+- type: startingGear
+  id: AU14GearOPFORPlatCoDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: CMHeadCapPeakedFormal
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetOpforCommand
+
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointopforPlatCo
@@ -85,11 +49,3 @@
     job_id: AU14JobOpforPlatCo
   - type: Sprite
     state: syn_spawn
-
-- type: startingGear
-  id: AU14GearopforPlatCoDummy
-  equipment:
-    shoes: CMBootsBlack
-    head: CMHeadCapPeakedFormal
-    jumpsuit: CMJumpsuitXOFormal
-    ears: AU14HeadsetSectionLeaderopfor

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Client._RMC14.Attachable.Components;
 using Content.Client._RMC14.Attachable.Systems;
 using Content.Client.Clothing;
@@ -18,12 +18,13 @@ using Robust.Client.Graphics;
 
 namespace Content.Client._RMC14.Item;
 
-public sealed class ItemCamouflageVisualizerSystem : VisualizerSystem<ItemCamouflageComponent>
+public sealed partial class ItemCamouflageVisualizerSystem : VisualizerSystem<ItemCamouflageComponent>
 {
-    [Dependency] private readonly AttachableHolderVisualsSystem _attachableHolderVisuals = default!;
-    [Dependency] private readonly ContainerSystem _container = default!;
-    [Dependency] private readonly ItemSystem _item = default!;
-    [Dependency] private readonly IResourceCache _resource = default!;
+    [Dependency] private AttachableHolderVisualsSystem _attachableHolderVisuals = default!;
+    [Dependency] private ContainerSystem _container = default!;
+    [Dependency] private ItemSystem _item = default!;
+    [Dependency] private IResourceCache _resource = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {
@@ -122,14 +123,14 @@ public sealed class ItemCamouflageVisualizerSystem : VisualizerSystem<ItemCamouf
         {
             if (args.Sprite != null)
             {
-                if (args.Sprite.LayerMapTryGet(ItemCamouflageLayers.Layer, out var layer))
+                if (_sprite.LayerMapTryGet((uid, args.Sprite), ItemCamouflageLayers.Layer, out var layer, false))
                 {
-                    args.Sprite.LayerSetRSI(layer, rsi);
+                    _sprite.LayerSetRsi((uid, args.Sprite), layer, rsi);
                 }
                 else if (args.Sprite.BaseRSI != null &&
                          _resource.TryGetResource(SpriteSpecifierSerializer.TextureRoot / rsi, out RSIResource? baseRsi))
                 {
-                    args.Sprite.BaseRSI = baseRsi.RSI;
+                    _sprite.SetBaseRsi((uid, args.Sprite), baseRsi.RSI);
                 }
             }
 
@@ -175,7 +176,8 @@ public sealed class ItemCamouflageVisualizerSystem : VisualizerSystem<ItemCamouf
 
         if (component.States != null && component.States.TryGetValue(camo, out var state))
         {
-            args.Sprite?.LayerSetState(0, state);
+            if (args.Sprite != null)
+                _sprite.LayerSetRsiState((uid, args.Sprite), 0, state);
 
             if (TryComp(uid, out AttachableToggleableComponent? toggleable))
             {
@@ -195,11 +197,11 @@ public sealed class ItemCamouflageVisualizerSystem : VisualizerSystem<ItemCamouf
         {
             if (args.Sprite != null)
             {
-                foreach (var camoLayer in Enum.GetValues(typeof(ItemCamouflageLayers)))
+                foreach (var camoLayer in Enum.GetValues<ItemCamouflageLayers>())
                 {
-                    if (args.Sprite.LayerMapTryGet(camoLayer, out var layer))
+                    if (_sprite.LayerMapTryGet((uid, args.Sprite), camoLayer, out var layer, false))
                     {
-                        args.Sprite.LayerSetColor(layer, color);
+                        _sprite.LayerSetColor((uid, args.Sprite), layer, color);
                     }
                 }
             }
@@ -210,9 +212,9 @@ public sealed class ItemCamouflageVisualizerSystem : VisualizerSystem<ItemCamouf
             foreach (var (key, layerCamos) in component.Layers)
             {
                 if (layerCamos.TryGetValue(camo, out var layerState) &&
-                    args.Sprite.LayerMapTryGet(key, out var layer))
+                    _sprite.LayerMapTryGet((uid, args.Sprite), key, out var layer, false))
                 {
-                    args.Sprite.LayerSetState(layer, layerState);
+                    _sprite.LayerSetRsiState((uid, args.Sprite), layer, layerState);
                 }
             }
         }

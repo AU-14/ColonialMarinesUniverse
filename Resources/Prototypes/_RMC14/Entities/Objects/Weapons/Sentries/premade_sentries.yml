@@ -129,6 +129,7 @@
   - type: RequireProjectileTarget
   - type: RMCWeaponAccuracy
   - type: HomingShots
+  - type: Turret
 
 - type: entity
   parent: RMCBaseTurret
@@ -149,7 +150,7 @@
   - type: BallisticAmmoProvider
     cycleable: false
     proto: RMCCartridgeSentry
-    capacity: 500
+    capacity: 600
   - type: HTN
     rootTask:
       task: RMCTurretCompound
@@ -160,13 +161,6 @@
         5.5
       AggroVisionRadius: !type:Single
         5.5
-  - type: NpcFactionMember
-    factions:
-    - UNMC
-  - type: MarineIFF
-  - type: UserIFF
-    factions:
-    - FactionMarine
   - type: Damageable
     damageContainer: Inorganic
   - type: Destructible
@@ -184,3 +178,4 @@
     angleTolerance: 5
     rotationSpeed: 180
     simple4DirMode: false
+  - type: Turret

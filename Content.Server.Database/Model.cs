@@ -602,6 +602,10 @@ namespace Content.Server.Database
         public string XenoPostfix { get; set; } = string.Empty;
         public string? Allegiance { get; set; }
         public string? Origin { get; set; }
+        public string? ThreatPreference { get; set; }
+        public string? GamemodeJobPriorities { get; set; }
+        public string? GamemodeAntagPreferences { get; set; }
+        public string? GamemodeThreatPreferences { get; set; }
     }
 
     public class Job

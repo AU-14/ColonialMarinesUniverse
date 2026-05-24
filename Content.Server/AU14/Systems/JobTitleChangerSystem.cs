@@ -4,16 +4,16 @@ using Content.Server.Roles.Jobs;
 using Content.Shared.Inventory;
 using Content.Shared.Access.Components;
 using Content.Shared._RMC14.UniformAccessories;
-using Content.Shared.Au14.Util;
+using Content.Shared.AU14.Util;
 using Robust.Shared.Containers;
 
-namespace Content.Server.au14.Systems;
+namespace Content.Server.AU14.Systems;
 
-public sealed class JobTitleChangerSystem : EntitySystem
+public sealed partial class JobTitleChangerSystem : EntitySystem
 {
-    [Dependency] private readonly MindSystem _minds = default!;
-    [Dependency] private readonly JobSystem _jobs = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
+    [Dependency] private MindSystem _minds = default!;
+    [Dependency] private JobSystem _jobs = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
 
     public override void Initialize()
     {
@@ -32,7 +32,7 @@ public sealed class JobTitleChangerSystem : EntitySystem
         if (_containers.TryGetContainingContainer(uid, out var container))
         {
             var owner = container.Owner;
-            if (owner != EntityUid.Invalid && EntityManager.EntityExists(owner) && EntityManager.TryGetComponent(owner, out IdCardComponent? idCard))
+            if (owner != EntityUid.Invalid && Exists(owner) && TryComp(owner, out IdCardComponent? idCard))
             {
                 if (!string.IsNullOrWhiteSpace(comp.JobTitle) && idCard._jobTitle == comp.JobTitle)
                 {
@@ -53,13 +53,13 @@ public sealed class JobTitleChangerSystem : EntitySystem
     private void OnEquipped(EntityUid uid, JobTitleChangerComponent comp, GotEquippedEvent args)
     {
         // Only apply if equipped to a humanoid
-        if (!EntityManager.TryGetComponent(args.Equipee, out InventoryComponent? _))
+        if (!TryComp(args.Equipee, out InventoryComponent? _))
             return;
 
         // Set the temporary job title
         if (!string.IsNullOrWhiteSpace(comp.JobTitle))
         {
-            if (EntityManager.TryGetComponent(args.Equipee, out IdCardComponent? idCard))
+            if (TryComp(args.Equipee, out IdCardComponent? idCard))
             {
                 idCard._jobTitle = comp.JobTitle;
                 Dirty(args.Equipee, idCard);
@@ -70,11 +70,11 @@ public sealed class JobTitleChangerSystem : EntitySystem
     private void OnUnequipped(EntityUid uid, JobTitleChangerComponent comp, GotUnequippedEvent args)
     {
         // Only apply if unequipped from a humanoid
-        if (!EntityManager.TryGetComponent(args.Equipee, out InventoryComponent? _))
+        if (!TryComp(args.Equipee, out InventoryComponent? _))
             return;
 
         // Revert to original job title
-        if (EntityManager.TryGetComponent(args.Equipee, out IdCardComponent? idCard))
+        if (TryComp(args.Equipee, out IdCardComponent? idCard))
         {
             // Try to get the mind's job name
             if (_minds.TryGetMind(args.Equipee, out var mindId, out _) &&
@@ -97,11 +97,11 @@ public sealed class JobTitleChangerSystem : EntitySystem
             return;
 
         // If the inserted entity has a JobTitleChangerComponent, set the job title
-        if (EntityManager.TryGetComponent<JobTitleChangerComponent>(args.Entity, out var changer))
+        if (TryComp<JobTitleChangerComponent>(args.Entity, out var changer))
         {
             if (!string.IsNullOrWhiteSpace(changer.JobTitle))
             {
-                if (EntityManager.TryGetComponent(uid, out IdCardComponent? idCard))
+                if (TryComp(uid, out IdCardComponent? idCard))
                 {
                     idCard._jobTitle = changer.JobTitle;
                     Dirty(uid, idCard);
@@ -116,10 +116,10 @@ public sealed class JobTitleChangerSystem : EntitySystem
             return;
 
         // Only revert if the removed entity had a JobTitleChangerComponent and it matches the current override
-        if (EntityManager.TryGetComponent(uid, out IdCardComponent? idCard))
+        if (TryComp(uid, out IdCardComponent? idCard))
         {
             // Check if the removed entity had a JobTitleChangerComponent
-            if (EntityManager.TryGetComponent(args.Entity, out JobTitleChangerComponent? changer) &&
+            if (TryComp(args.Entity, out JobTitleChangerComponent? changer) &&
                 idCard._jobTitle == changer.JobTitle)
             {
                 // Try to get the mind's job name

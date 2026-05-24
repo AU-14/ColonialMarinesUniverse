@@ -24,11 +24,11 @@ namespace Content.Server._CMU14.Medical.HUD;
 ///     Stable / Trauma / OrganFailure above manual statuses on the byte
 ///     axis, so we can't naively pick the higher byte — see <see cref="Priority"/>.
 /// </summary>
-public sealed class AutoHolocardSystem : EntitySystem
+public sealed partial class AutoHolocardSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
 
     private bool _medicalEnabled;
     private bool _diagnosticsEnabled;

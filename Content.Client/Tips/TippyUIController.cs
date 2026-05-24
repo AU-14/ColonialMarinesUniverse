@@ -17,12 +17,12 @@ using static Content.Client.Tips.TippyUI;
 
 namespace Content.Client.Tips;
 
-public sealed class TippyUIController : UIController
+public sealed partial class TippyUIController : UIController
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IResourceCache _resCache = default!;
-    [UISystemDependency] private readonly AudioSystem _audio = default!;
-    [UISystemDependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IResourceCache _resCache = default!;
+    [UISystemDependency] private AudioSystem _audio = default!;
+    [UISystemDependency] private SpriteSystem _sprite = default!;
 
     public const float Padding = 50;
     public static Angle WaddleRotation = Angle.FromDegrees(10);

@@ -13,8 +13,6 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 
@@ -22,15 +20,15 @@ namespace Content.Server.Botany.Systems;
 
 public sealed partial class BotanySystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _robustRandom = default!;
-    [Dependency] private readonly AppearanceSystem _appearance = default!;
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly RandomHelperSystem _randomHelper = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _robustRandom = default!;
+    [Dependency] private AppearanceSystem _appearance = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private RandomHelperSystem _randomHelper = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
 
     public override void Initialize()
     {
