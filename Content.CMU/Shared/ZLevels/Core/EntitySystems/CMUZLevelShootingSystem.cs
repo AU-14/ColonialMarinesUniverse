@@ -72,14 +72,10 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             return;
         }
 
-        var shooter = EnsureComp<CMUZLevelShooterComponent>(user);
-        shooter.ShootDown = !shooter.ShootDown;
-        DirtyField(user, shooter, nameof(CMUZLevelShooterComponent.ShootDown));
+        var shootDown = !IsShootDownEnabled(user);
+        SetShootDown(user, shootDown);
 
-        if (shooter.ShootDown)
-            _zLevels.TryDisableLookUp(user);
-
-        var message = shooter.ShootDown
+        var message = shootDown
             ? "cmu-zlevel-shoot-down-enabled"
             : "cmu-zlevel-shoot-down-disabled";
 
@@ -125,15 +121,41 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private bool TryDisableShootDown(EntityUid user)
     {
-        if (!TryComp<CMUZLevelShooterComponent>(user, out var shooter) ||
-            !shooter.ShootDown)
-        {
+        if (!IsShootDownEnabled(user))
             return false;
+
+        SetShootDown(user, false);
+        return true;
+    }
+
+    public bool IsShootDownEnabled(EntityUid user)
+    {
+        return TryComp<CMUZLevelShooterComponent>(user, out var shooter) && shooter.ShootDown;
+    }
+
+    public void SetShootDown(EntityUid user, bool enabled)
+    {
+        CMUZLevelShooterComponent shooter;
+        if (TryComp<CMUZLevelShooterComponent>(user, out var existing))
+        {
+            shooter = existing;
+        }
+        else
+        {
+            if (!enabled)
+                return;
+
+            shooter = EnsureComp<CMUZLevelShooterComponent>(user);
         }
 
-        shooter.ShootDown = false;
+        if (shooter.ShootDown == enabled)
+            return;
+
+        shooter.ShootDown = enabled;
         DirtyField(user, shooter, nameof(CMUZLevelShooterComponent.ShootDown));
-        return true;
+
+        if (enabled)
+            _zLevels.TryDisableLookUp(user);
     }
 
     public bool TryAdjustShotCoordinates(

@@ -134,10 +134,13 @@
 	  "name": "hr_engi_foundation"
 	},
 	{
+	  "name": "hr_engi_tcomms"
+	},
+	{
 	  "name": "hr_engi_treatment"
 	},
 	{
-	  "name": "hr_engi_turbine"
+	  "name": "hr_engi_turbineroom"
 	},
 	{
 	  "name": "hr_engi_upper"
@@ -159,6 +162,9 @@
 	},
 	{
 	  "name": "hr_misc_southerndorms"
+	},
+	{
+	  "name": "hr_misc_northernwarehouse"
 	},
 	{
 	  "name": "hr_misc_wastemanagement"
@@ -245,7 +251,7 @@
 	  "name": "oc_engi_storage"
 	},
 	{
-	  "name": "oc_engi_turbine"
+	  "name": "oc_engi_turbineroom"
 	},
 	{
 	  "name": "oc_hab_atrium"

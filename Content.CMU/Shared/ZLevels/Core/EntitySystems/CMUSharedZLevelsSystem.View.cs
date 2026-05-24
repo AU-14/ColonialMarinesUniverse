@@ -70,6 +70,11 @@ public abstract partial class CMUSharedZLevelsSystem
         return true;
     }
 
+    public Entity<CMUZLevelViewerComponent> EnsureZLevelViewer(EntityUid uid)
+    {
+        return (uid, EnsureComp<CMUZLevelViewerComponent>(uid));
+    }
+
     public bool HasOpaqueAbove(EntityUid ent, Entity<CMUZLevelMapComponent?>? currentMapUid = null)
     {
         currentMapUid ??= Transform(ent).MapUid;
