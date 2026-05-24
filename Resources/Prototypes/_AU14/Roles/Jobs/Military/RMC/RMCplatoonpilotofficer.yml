@@ -16,19 +16,27 @@
     - NonResuscitable
     - Epilepsy
   ranks:
-    RMC_Lieutenant:
+    RMCRankNavyCaptain:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDSPilot
       time: 360000 # 100 hours
-    RMC_2Lieutenant:
+    RMCRankNavyCommander:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDSPilot
-      time: 216000 # 60 hours
-    RMC_WarrantOfficer1:
+      time: 270000 # 75 hours
+    RMCRankNavyLieutenantCommander:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDSPilot
-      time: 108000 # 30 hours
-    RMC_WarrantOfficer2: []
+      time: 180000 # 50 hours
+    RMCRankNavyLieutenant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDSPilot
+      time: 86400 # 24 hours
+    RMCRankNavyLieutenantJuniorGrade:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDSPilot
+      time: 36000 # 10 hours
+    RMCRankNavyEnsign: []
   startingGear: AU14GearGOVFORDSPilot
   dummyStartingGear: AU14GearGOVFORDSPilotDummy
   icon: "AU14JobIconPilotOfficer"

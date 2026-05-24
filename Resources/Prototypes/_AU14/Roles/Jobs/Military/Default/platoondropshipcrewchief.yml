@@ -12,27 +12,27 @@
     - Epilepsy
     - NonResuscitable
   ranks:
-    RMCRankSecondLT:
+    RMCRankNavySeniorChiefPettyOfficer:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDCC
       time: 540000 # 150 hours
-    RMCRankChiefWarrantOfficer5:
+    RMCRankNavyChiefPettyOfficer:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDCC
       time: 360000 # 100 hours
-    RMCRankChiefWarrantOfficer4:
+    RMCRankNavyPettyOfficer1stClass:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDCC
       time: 180000 # 50 hours
-    RMCRankChiefWarrantOfficer3:
+    RMCRankNavyPettyOfficer2ndClass:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDCC
       time: 86400 # 24 hours
-    RMCRankChiefWarrantOfficer:
+    RMCRankNavyPettyOfficer3rdClass:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDCC
       time: 36000 # 10 hours
-    RMCRankWarrantOfficer: []
+    RMCRankNavySeaman: []
   startingGear: AU14GearGOVFORDCC
   dummyStartingGear: AU14GearGOVFORDCCDummy
   icon: "AU14JobIconDCC"

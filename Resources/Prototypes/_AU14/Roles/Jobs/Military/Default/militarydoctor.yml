@@ -17,15 +17,15 @@
     #- !type:RoleTimeRequirement
     #  role: AU14JobGOVFORMilitaryDoctor
     #  time: 270000 #75 hours
-    RMCRankFirstLT:
+    RMCRankNavyLieutenant:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORMilitaryDoctor
       time: 86400 #24 hours
-    RMCRankSecondLT:
+    RMCRankNavyLieutenantJuniorGrade:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORMilitaryDoctor
       time: 36000 #10 hours
-    RMCRankChiefWarrantOfficer5: []
+    RMCRankNavyEnsign: []
   startingGear: AU14GearGOVFORMilitaryDoctor
   dummyStartingGear: AU14GearGOVFORMilitaryDoctorDummy
   icon: "AU14JobIconCorpsman"
