@@ -180943,7 +180943,7 @@ entities:
   - uid: 19588
     components:
     - type: MetaData
-      name: We-Ya Advanced Bio-Genomic Research Lab
+      name: We-Yu Advanced Bio-Genomic Research Lab
     - type: Transform
       pos: -190.5,-176.5
       parent: 1
@@ -180964,14 +180964,14 @@ entities:
   - uid: 19591
     components:
     - type: MetaData
-      name: We-Ya Celestia Gateway
+      name: We-Yu Celestia Gateway
     - type: Transform
       pos: -195.5,-30.5
       parent: 1
   - uid: 19592
     components:
     - type: MetaData
-      name: We-Ya Offices
+      name: We-Yu Offices
     - type: Transform
       pos: -151.5,-42.5
       parent: 1
@@ -181020,7 +181020,7 @@ entities:
   - uid: 19599
     components:
     - type: MetaData
-      name: We-Ya Dynagrid
+      name: We-Yu Dynagrid
     - type: Transform
       pos: -82.5,-79.5
       parent: 1
@@ -209604,7 +209604,7 @@ entities:
   - uid: 24376
     components:
     - type: MetaData
-      name: We-Ya Research Cargo Podlocks
+      name: We-Yu Research Cargo Podlocks
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -188.5,-141.5
@@ -210460,21 +210460,21 @@ entities:
   - uid: 24477
     components:
     - type: MetaData
-      name: We-Ya Research Cargo Podlocks
+      name: We-Yu Research Cargo Podlocks
     - type: Transform
       pos: -191.5,-141.5
       parent: 1
   - uid: 24478
     components:
     - type: MetaData
-      name: We-Ya Research Cargo Podlocks
+      name: We-Yu Research Cargo Podlocks
     - type: Transform
       pos: -189.5,-141.5
       parent: 1
   - uid: 24479
     components:
     - type: MetaData
-      name: We-Ya Research Cargo Podlocks
+      name: We-Yu Research Cargo Podlocks
     - type: Transform
       pos: -190.5,-141.5
       parent: 1

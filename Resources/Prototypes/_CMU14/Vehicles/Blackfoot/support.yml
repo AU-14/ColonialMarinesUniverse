@@ -1,0 +1,212 @@
+- type: entity
+  parent: CMBaseStructureCorrodible
+  id: CMUBlackfootFuelPump
+  name: Blackfoot fuel pump
+  description: A fuel service pump for AD-71E Blackfoot landing pads.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_structures.rsi
+    state: fuel-pump
+  - type: Clickable
+  - type: InteractionOutline
+  - type: BlackfootFuelPump
+  - type: BlackfootPackableSupport
+    packedPrototype: CMUBlackfootFuelPumpCrate
+    initialPopup: The fuel pump anchor bolts are loosened.
+    panelPopup: The fuel pump service panel is opened.
+    packedPopup: The Blackfoot fuel pump is packed into its case.
+  - type: RemoveComponents
+    components:
+    - type: Pullable
+
+- type: entity
+  parent: BaseStructureDynamic
+  id: CMUBlackfootLandingPadFoldedProp
+  name: folded Blackfoot landing pad
+  description: A folded landing pad ready for Blackfoot support operations.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_structures.rsi
+    state: landing-pad-folded
+  - type: Clickable
+  - type: InteractionOutline
+  - type: BlackfootDeployableSupport
+    prototype: CMUBlackfootLandingPad
+    toolPopup: Use a wrench to unfold the Blackfoot landing pad.
+    deployPopup: The folded Blackfoot landing pad is set in place.
+    requireClearFootprint: true
+    clearFootprint: 3,3
+    useFixedDeployRotation: true
+    fixedDeployRotation: 0
+  - type: RemoveComponents
+    components:
+    - type: Anchorable
+
+- type: entity
+  id: CMUBlackfootLandingPadLight
+  name: Blackfoot landing pad light
+  description: A low-profile landing pad guide light.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: SmallObjects
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_peripherals.rsi
+    state: landing-pad-light
+  - type: Clickable
+  - type: InteractionOutline
+  - type: PointLight
+    enabled: false
+    radius: 3
+    energy: 0.8
+    color: "#79b7ff"
+  - type: BlackfootLandingPadLight
+
+- type: entity
+  parent: CMUBlackfootLandingPadLight
+  id: CMUBlackfootLandingPadLightOn
+  suffix: on
+  components:
+  - type: Sprite
+    state: landing-pad-light-on
+  - type: PointLight
+    enabled: true
+  - type: BlackfootLandingPadLight
+    state: Servicing
+
+- type: entity
+  parent: BaseStructureDynamic
+  id: CMUBlackfootFuelPumpCrate
+  name: Blackfoot fuel pump case
+  description: A packed Blackfoot fuel pump assembly.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_peripherals.rsi
+    state: fuelpump-crate
+  - type: Clickable
+  - type: InteractionOutline
+  - type: BlackfootDeployableSupport
+    prototype: CMUBlackfootFuelPump
+    toolPopup: Place this case on a deployed Blackfoot landing pad, then wrench it into the fuel pump mount.
+    deployPopup: The Blackfoot fuel pump is mounted to the landing pad.
+    requireClearFootprint: true
+    clearFootprint: 1,1
+    requireLandingPad: true
+    landingPadAttachment: FuelPump
+  - type: RemoveComponents
+    components:
+    - type: Anchorable
+
+- type: entity
+  parent: BaseStructureDynamic
+  id: CMUBlackfootFlightComputerCrate
+  name: Blackfoot flight computer case
+  description: A packed Blackfoot flight computer assembly.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_peripherals.rsi
+    state: flightcpu-crate
+  - type: Clickable
+  - type: InteractionOutline
+  - type: BlackfootDeployableSupport
+    prototype: CMUBlackfootFlightComputer
+    toolPopup: Place this case on a deployed Blackfoot landing pad, then wrench it into the flight computer mount.
+    deployPopup: The Blackfoot flight computer is mounted to the landing pad.
+    requireClearFootprint: true
+    clearFootprint: 1,1
+    requireLandingPad: true
+    landingPadAttachment: FlightComputer
+  - type: RemoveComponents
+    components:
+    - type: Anchorable
+
+- type: entity
+  parent: VehicleAmmoBoxFlareLauncher
+  id: CMUBlackfootAmmoBoxFlareLauncher
+  name: Blackfoot flare launcher ammo box
+  description: Ammunition for Blackfoot flare launcher pods.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_peripherals.rsi
+    layers:
+    - state: blackfoot-ammo
+      map: [ "enum.BulletBoxLayers.Fill" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.BulletBoxLayers.Fill:
+        enum.BulletBoxLayers.Fill:
+          Empty: { state: blackfoot-ammo, visible: true }
+          Low: { state: blackfoot-ammo, visible: true }
+          Medium: { state: blackfoot-ammo, visible: true }
+          High: { state: blackfoot-ammo, visible: true }
+          Full: { state: blackfoot-ammo, visible: true }
+  - type: BulletBox
+    amount: 10
+    max: 10
+    bulletType: VehicleAmmoBoxFlareLauncher
+    usedIn: Blackfoot flare launcher
+
+- type: entity
+  parent: VehicleAmmoBoxGrenadeLauncher
+  id: CMUBlackfootAmmoBoxDoorGun
+  name: Blackfoot door gun ammo box
+  description: Ammunition for Blackfoot M866 automatic grenade launchers.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_peripherals.rsi
+    layers:
+    - state: doorgun-ammo
+      map: [ "enum.BulletBoxLayers.Fill" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.BulletBoxLayers.Fill:
+        enum.BulletBoxLayers.Fill:
+          Empty: { state: doorgun-ammo, visible: true }
+          Low: { state: doorgun-ammo, visible: true }
+          Medium: { state: doorgun-ammo, visible: true }
+          High: { state: doorgun-ammo, visible: true }
+          Full: { state: doorgun-ammo, visible: true }
+  - type: BulletBox
+    amount: 10
+    max: 10
+    bulletType: VehicleAmmoBoxGrenadeLauncher
+    usedIn: Blackfoot M866 automatic grenade launcher
+
+- type: entity
+  parent: BaseStructureDynamic
+  id: CMUBlackfootAerospaceTug
+  name: Blackfoot aerospace tug
+  description: A compact tow unit carried under the Blackfoot cockpit for moving the aircraft around a prepared landing area.
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_tug.rsi
+    state: aerospace-tug
+  - type: InteractionOutline
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.32,-0.32,0.32,0.32"
+        density: 180
+        mask:
+        - MachineMask
+        layer:
+        - LowImpassable
+  - type: BlackfootTow
+    canTow: true
+    canBeTowed: false
+    allowAirborneTowing: false
+    allowStowedTowing: true
+    allowCrashedTowing: true
+    towHardpointId: tow-hitch
+    attachRange: 1.55
+    attachOffset: -0.03125,-1.6
+    attachRotationDegrees: 0
+    taxiSpeedMultiplier: 0.45
+    taxiAccelerationMultiplier: 0.55

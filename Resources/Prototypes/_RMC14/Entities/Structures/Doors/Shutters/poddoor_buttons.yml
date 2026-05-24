@@ -443,7 +443,7 @@
 - type: entity
   parent: RMCPodDoorButton
   id: RMCPodDoorButtonWeYa
-  suffix: Locked, We-Ya
+  suffix: Locked, We-Yu
   components:
   - type: AccessReader
     access: [ [ "AU14AccessCorporateWEYU" ] ]

@@ -177,7 +177,7 @@
 - type: entity
   parent: CMStampLiaison
   id: CMStampWeYa
-  name: Weston-Yamada rubber stamp
+  name: Weyland-Yutani rubber stamp
   suffix: Admin
   components:
   - type: Stamp

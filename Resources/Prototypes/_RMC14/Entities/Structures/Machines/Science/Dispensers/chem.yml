@@ -52,7 +52,7 @@
   parent: RMCDispenserBase
   id: RMCChemDispenserBase
   name: chemical dispenser
-  description: A complex machine for mixing elements into chemicals. A We-Ya product.
+  description: A complex machine for mixing elements into chemicals. A We-Yu product.
   placement:
     mode: SnapgridCenter
   components:
@@ -183,7 +183,7 @@
   parent: RMCChemDispenserBase
   id: RMCChemDispenserCorpsmanBase
   name: pressurized chemical dispenser
-  description: A more basic chemical dispenser, designed for use with pressurized reagent canisters. A We-Ya product.
+  description: A more basic chemical dispenser, designed for use with pressurized reagent canisters. A We-Yu product.
   abstract: true
   components:
     - type: RequiresSkill

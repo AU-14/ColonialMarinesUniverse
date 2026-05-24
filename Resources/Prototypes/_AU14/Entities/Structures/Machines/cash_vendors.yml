@@ -82,8 +82,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/coffee.rsi
     layers:
-    - state: "normal-unshaded"
-
+    - state: "off"
 
 # Corporate snack machine — sells food for cash
 - type: entity
@@ -96,7 +95,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/coffee.rsi
     layers:
-    - state: "normal-unshaded"
+    - state: "off"
   - type: AU14CashVendor
     items:
     - id: RMCFoodSnackBarcaridine
@@ -114,4 +113,3 @@
     - id: CMMRE
       name: MRE (Mil-Spec)
       price: 8
-

@@ -126,18 +126,21 @@ public sealed partial class VehicleSystem : EntitySystem
                 RemCompDeferred<MovementRelayTargetComponent>(entity);
             }
 
+            var setEvent = new VehicleOperatorSetEvent(uid, oldOperator);
+            RaiseLocalEvent(entity, ref setEvent);
+
             var enterEvent = new OnVehicleEnteredEvent(entity, uid.Value);
             RaiseLocalEvent(uid.Value, ref enterEvent);
         }
         else
         {
             RemCompDeferred<MovementRelayTargetComponent>(entity);
+
+            var setEvent = new VehicleOperatorSetEvent(uid, oldOperator);
+            RaiseLocalEvent(entity, ref setEvent);
         }
 
         RefreshCanRun((entity, entity.Comp));
-
-        var setEvent = new VehicleOperatorSetEvent(uid, oldOperator);
-        RaiseLocalEvent(entity, ref setEvent);
 
         Dirty(entity);
         return true;

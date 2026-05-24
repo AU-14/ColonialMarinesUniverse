@@ -80,7 +80,7 @@
     pocket1: RMCPouchMagazineLargePMC
     pocket2: RMCPouchFirstAidPMCFill
     back: RMCSatchelPMC
-    ears2: RMCHeadsetDistressWeYa
+    ears: RMCHeadsetDistressWeYa
     suitstorage: RMCWeaponRifleM54C2
   storage:
     pocket1:

@@ -34,6 +34,9 @@ public sealed partial class VehicleWeaponsOperatorComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? SelectedWeapon;
 
+    [DataField, AutoNetworkedField]
+    public bool AllowActionsInsideView;
+
     [NonSerialized]
     public Dictionary<EntityUid, EntityUid> HardpointActions = new();
 

@@ -317,7 +317,7 @@
   parent: CMVendor
   id: RMCVendorSoda
   name: Cold Drinks machine
-  description: A vending machine that contains cold drinks. This one appears to be produced by Tsumetai-Umi, a subsidairy of Neterai Foods International, which itself is subsidiary of Weston-Yamada.
+  description: A vending machine that contains cold drinks. This one appears to be produced by Tsumetai-Umi, a subsidairy of Neterai Foods International, which itself is subsidiary of Weyland-Yutani.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/sodavend.rsi
@@ -425,8 +425,8 @@
 - type: entity
   parent: CMVendorCigs
   id: RMCVendorCigsWeYa
-  name: Weston-Yamada Brand Cigarette Machine
-  description: A Weston-Yamada Brand cigarette vending machine, looks like a We-Ya Gold pack. Comes with Emerald Greens, We-Ya Golds of course, Arcturian Aces, and some Three Suns Empire brand you've barely heard of. Executive Selects are still out of stock due to shipping issues...
+  name: Weyland-Yutani Brand Cigarette Machine
+  description: A Weyland-Yutani Brand cigarette vending machine, looks like a We-Yu Gold pack. Comes with Emerald Greens, We-Yu Golds of course, Arcturian Aces, and some Three Suns Empire brand you've barely heard of. Executive Selects are still out of stock due to shipping issues...
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/weya_cigs.rsi

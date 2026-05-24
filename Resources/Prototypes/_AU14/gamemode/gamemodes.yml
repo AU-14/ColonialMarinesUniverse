@@ -59,7 +59,6 @@
   requiresGovforVote: true
   supportedPlanets:
 #  - AUPlanetLV747
-  - AUPlanetFlight
   - AUPlanetSorokyne
   - AUPlanetCorsatStation
   - AUPlanetTrijent
@@ -154,6 +153,7 @@
       AU14JobGOVFORMilitaryDoctor: 3
       AU14JobGOVFORMilitaryPoliceMan: 2
       AU14JobGOVFORAuxTech: 1
+      AU14JobGOVFORWorkingJoe: 1
 
 - type: entity
   id: AddOpfor
@@ -176,6 +176,7 @@
       AU14JobOPFORAuxSupportSynth: 2
       AU14JobOPFORadvisor: 1
       AU14JobOPFORMilitaryDoctor: 1
+      AU14JobOPFORWorkingJoe: 1
 
 - type: entity
   id: AddClf

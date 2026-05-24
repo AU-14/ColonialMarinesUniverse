@@ -21374,7 +21374,7 @@ entities:
   - uid: 4337
     components:
     - type: MetaData
-      desc: This is the artificial intelligence system for the Golden Arrow. Like many other military-grade AI systems, this one was manufactured by We-Ya.
+      desc: This is the artificial intelligence system for the Golden Arrow. Like many other military-grade AI systems, this one was manufactured by We-Yu.
       name: HERMES v3.2.
     - type: Transform
       pos: 27.5,105.5

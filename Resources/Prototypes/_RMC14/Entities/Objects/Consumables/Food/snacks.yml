@@ -234,7 +234,7 @@
   parent: RMCFoodSnackBase
   id: RMCFoodSnackKeplarFlamehotCrisps
   name: Keplar Flamehot crisps
-  description: They're disturbingly good! Due to an exceptionally well-timed ad campaign with the release of Kepler Flamehot in 2165, the Kepler brand was able to overtake other confectionary Weston products by quarter three of that year. Contains 0% trans fat.
+  description: They're disturbingly good! Due to an exceptionally well-timed ad campaign with the release of Kepler Flamehot in 2165, the Kepler brand was able to overtake other confectionary Weyland-Yutani products by quarter three of that year. Contains 0% trans fat.
   components:
   - type: FlavorProfile
     flavors:
@@ -263,7 +263,7 @@
   parent: RMCFoodSnackBase
   id: RMCFoodSnackChipsPepper
   name: pepper chips
-  description: Premium high-quality chips, now with 0% trans fat. Now with added black pepper! Packaged by We-Ya.
+  description: Premium high-quality chips, now with 0% trans fat. Now with added black pepper! Packaged by We-Yu.
   components:
   - type: FlavorProfile
     flavors:
@@ -291,7 +291,7 @@
   parent: RMCFoodSnackBase
   id: RMCFoodSnackCheeseburgerPackaged
   name: packaged cheeseburger
-  description: A soggy microwavable cheeseburger. There's no time given for how long to cook it. Packaged by We-Ya.
+  description: A soggy microwavable cheeseburger. There's no time given for how long to cook it. Packaged by We-Yu.
   components:
   - type: Sprite
     state: burger
@@ -307,7 +307,7 @@
   parent: RMCFoodSnackBase
   id: RMCFoodSnackCheeseburger
   name: packaged cheeseburger
-  description: A soggy microwavable cheeseburger. There's no time given for how long to cook it. Packaged by We-Ya.
+  description: A soggy microwavable cheeseburger. There's no time given for how long to cook it. Packaged by We-Yu.
   components:
   - type: FlavorProfile
     flavors:
@@ -333,7 +333,7 @@
   parent: RMCFoodSnackBase
   id: RMCFoodSnackBurritoPackaged
   name: packaged burrito
-  description: A hard microwavable burrito. There's no time given on how long to cook it. Packaged by We-Ya.
+  description: A hard microwavable burrito. There's no time given on how long to cook it. Packaged by We-Yu.
   components:
   - type: Sprite
     state: packaged-burrito
@@ -350,7 +350,7 @@
   parent: RMCFoodSnackBase
   id: RMCFoodSnackBurrito
   name: packaged burrito
-  description: A hard microwavable burrito. There's no time given on how long to cook it. Packaged by We-Ya.
+  description: A hard microwavable burrito. There's no time given on how long to cook it. Packaged by We-Yu.
   components:
   - type: FlavorProfile
     flavors:
@@ -373,7 +373,7 @@
   parent: RMCFoodSnackBase
   id: RMCFoodSnackHotdogPackaged
   name: packaged hotdog
-  description: A singular, squishy, room temperature hot dog. There's no time given for how long to cook it, so you assume its probably good to go. Packaged by We-Ya.
+  description: A singular, squishy, room temperature hot dog. There's no time given for how long to cook it, so you assume its probably good to go. Packaged by We-Yu.
   components:
   - type: Sprite
     state: packaged-hotdog
@@ -389,7 +389,7 @@
   parent: RMCFoodSnackBase
   id: RMCFoodSnackHotdog
   name: packaged hotdog
-  description: A singular, squishy, room temperature hot dog. There's no time given for how long to cook it, so you assume its probably good to go. Packaged by We-Ya.
+  description: A singular, squishy, room temperature hot dog. There's no time given for how long to cook it, so you assume its probably good to go. Packaged by We-Yu.
   components:
   - type: FlavorProfile
     flavors:
@@ -531,7 +531,7 @@
   parent: RMCFoodPacketTrash
   id: RMCFoodPacketCheeseburgerTrash
   name: burger wrapper
-  description: A greasy plastic film that once held a Cheeseburger. Packaged by We-Ya.
+  description: A greasy plastic film that once held a Cheeseburger. Packaged by We-Yu.
   components:
   - type: Sprite
     state: burger_trash
@@ -541,7 +541,7 @@
   parent: RMCFoodPacketTrash
   id: RMCFoodPacketBurritoTrash
   name: burrito wrapper
-  description: A foul-smelling plastic film that once held a microwave burrito. Packaged by We-Ya.
+  description: A foul-smelling plastic film that once held a microwave burrito. Packaged by We-Yu.
   components:
   - type: Sprite
     state: burrito_trash
@@ -551,7 +551,7 @@
   parent: RMCFoodPacketTrash
   id: RMCFoodPacketHotdogTrash
   name: hotdog wrapper
-  description: A musty plastic film that once held a hotdog. Packaged by We-Ya.
+  description: A musty plastic film that once held a hotdog. Packaged by We-Yu.
   components:
   - type: Sprite
     state: hotdog_trash

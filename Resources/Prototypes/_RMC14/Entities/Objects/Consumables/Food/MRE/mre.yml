@@ -180,7 +180,7 @@
   parent: CMMRE
   id: RMCMREWeYa
   name: We-Ya brand ration pack
-  description: "A more or less cohesive ration, intended for colonist and corporate security, packed with a medium quality foods with a long shelf life. On the box is the Weston-Yamada logo, with a slogan surrounding it: WESTON-YAMADA. FEEDING THE FUTURE."
+  description: "A more or less cohesive ration, intended for colonist and corporate security, packed with a medium quality foods with a long shelf life. On the box is the Weyland-Yutani logo, with a slogan surrounding it: WEYLAND-YUTANI. FEEDING THE FUTURE."
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/mre_weya.rsi
@@ -331,7 +331,7 @@
 - type: entity
   parent: RMCBoxMREEmpty
   name: box of WEYA-brand Ration Packs (x12)
-  description: A box of Weston-Yamada Ration Packs. Often found on Company-owned colonies.
+  description: A box of Weyland-Yutani Ration Packs. Often found on Company-owned colonies.
   id: RMCBoxMREWEYA
   suffix: Filled, WEYA
   components:

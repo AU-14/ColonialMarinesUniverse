@@ -3,7 +3,7 @@
   parent: ColMarTechBaseAnchorable
   id: CMVendorCassettes
   name: Rec-Vend
-  description: Contains We-Ya approved recreational items, like Cassette Players and Cards.
+  description: Contains We-Yu approved recreational items, like Cassette Players and Cards.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/cassette_player.rsi

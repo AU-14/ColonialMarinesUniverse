@@ -449,7 +449,7 @@
   parent: RMCMedalSilverNametag
   id: RMCMedalSilverNametagService
   name: executive name badge
-  description: An engraved bright silver badge, containing the wearer's name, rank, and department. This one is given to those who have proven their worth to Weston-Yamada as a valuable employee.
+  description: An engraved bright silver badge, containing the wearer's name, rank, and department. This one is given to those who have proven their worth to Weyland-Yutani as a valuable employee.
 
 - type: entity
   parent: RMCMedalBase
@@ -489,6 +489,6 @@
   parent: RMCMedalPlatinumNametag
   id: RMCMedalPlatinumNametagService
   name: executive specialist name badge
-  description: An engraved gold-and-black badge, containing the wearer's name, rank, and department. The highest rank most executives can reach within their lifetimes, it signifies ones influence, skill, and importance to the Weston-Yamada Corporation.
+  description: An engraved gold-and-black badge, containing the wearer's name, rank, and department. The highest rank most executives can reach within their lifetimes, it signifies ones influence, skill, and importance to the Weyland-Yutani Corporation.
 
 

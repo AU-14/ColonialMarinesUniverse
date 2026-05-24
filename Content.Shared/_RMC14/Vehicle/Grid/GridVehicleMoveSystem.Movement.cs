@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Content.Shared._CMU14.Blackfoot;
 using Content.Shared.Vehicle.Components;
 using Content.Shared._RMC14.Vehicle;
+using Robust.Shared.Audio;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
+using Robust.Shared.Player;
 
 namespace Content.Shared.Vehicle;
 
@@ -999,6 +1002,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             maxSpeed *= speedMod.SpeedMultiplier;
         if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failureMod))
             maxSpeed *= failureMod.SpeedMultiplier;
+        if (TryGetBlackfootTowTaxiMultiplier(uid, out var taxiMultiplier))
+            maxSpeed *= taxiMultiplier.Speed;
         if (HasXenoOccupant(uid))
             maxSpeed *= XenoOnboardSpeedMultiplier;
 
@@ -1018,6 +1023,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             maxSpeed *= speedMod.SpeedMultiplier;
         if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failureMod))
             maxSpeed *= failureMod.ReverseSpeedMultiplier;
+        if (TryGetBlackfootTowTaxiMultiplier(uid, out var taxiMultiplier))
+            maxSpeed *= taxiMultiplier.Speed;
         if (HasXenoOccupant(uid))
             maxSpeed *= XenoOnboardSpeedMultiplier;
 
@@ -1027,6 +1034,29 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     private bool HasXenoOccupant(EntityUid vehicle)
     {
         return TryComp(vehicle, out VehicleInteriorComponent? interior) && interior.Xenos.Count > 0;
+    }
+
+    private (float Speed, float Acceleration)? GetBlackfootTowTaxiMultiplier(EntityUid uid)
+    {
+        if (!TryComp(uid, out BlackfootTowComponent? tow) ||
+            tow.TowVehicle == null)
+        {
+            return null;
+        }
+
+        return (MathF.Max(0f, tow.TaxiSpeedMultiplier), MathF.Max(0f, tow.TaxiAccelerationMultiplier));
+    }
+
+    private bool TryGetBlackfootTowTaxiMultiplier(EntityUid uid, out (float Speed, float Acceleration) multiplier)
+    {
+        if (GetBlackfootTowTaxiMultiplier(uid) is { } value)
+        {
+            multiplier = value;
+            return true;
+        }
+
+        multiplier = default;
+        return false;
     }
 
     private float GetIntegritySpeedMultiplier(EntityUid uid, GridVehicleMoverComponent mover)
@@ -1048,6 +1078,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             multiplier = MathF.Max(0.05f, accelMod.AccelerationMultiplier);
         if (TryComp<VehicleMechanicalFailureModifierComponent>(uid, out var failureMod))
             multiplier *= MathF.Max(0.05f, failureMod.AccelerationMultiplier);
+        if (TryGetBlackfootTowTaxiMultiplier(uid, out var taxiMultiplier))
+            multiplier *= taxiMultiplier.Acceleration;
 
         if (HasXenoOccupant(uid))
             multiplier *= XenoOnboardAccelerationMultiplier;
@@ -1168,8 +1200,47 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return;
 
         _audio.PlayPvs(sound.RunningSound, uid);
+        PlayBlackfootInteriorRunningSound(uid, sound.RunningSound);
         sound.NextRunningSound = now + TimeSpan.FromSeconds(sound.RunningSoundCooldown);
         Dirty(uid, sound);
+    }
+
+    private void PlayBlackfootInteriorRunningSound(EntityUid uid, SoundSpecifier runningSound)
+    {
+        if (!HasComp<BlackfootFlightComponent>(uid))
+            return;
+
+        var filter = GetBlackfootInteriorSoundFilter(uid);
+        if (filter.Count > 0)
+            _audio.PlayGlobal(runningSound, filter, true);
+    }
+
+    private Filter GetBlackfootInteriorSoundFilter(EntityUid vehicle)
+    {
+        var filter = Filter.Empty();
+        if (!TryComp(vehicle, out VehicleInteriorComponent? interior))
+            return filter;
+
+        foreach (var passenger in interior.Passengers)
+        {
+            AddBlackfootInteriorSoundRecipient(filter, passenger);
+        }
+
+        foreach (var xeno in interior.Xenos)
+        {
+            AddBlackfootInteriorSoundRecipient(filter, xeno);
+        }
+
+        return filter;
+    }
+
+    private void AddBlackfootInteriorSoundRecipient(Filter filter, EntityUid recipient)
+    {
+        if (TerminatingOrDeleted(recipient))
+            return;
+
+        if (TryComp(recipient, out ActorComponent? actor))
+            filter.AddPlayer(actor.PlayerSession);
     }
 
     private float GetSmashSlowdownMultiplier(GridVehicleMoverComponent mover)

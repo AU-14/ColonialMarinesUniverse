@@ -76,7 +76,7 @@
     pocket2: RMCPouchFirstAidPMCFill
     back: RMCSatchelLightpackWeYa
     eyes: CMGlassesSecurity
-    ears2: RMCHeadsetDistressWeYa
+    ears: RMCHeadsetDistressWeYa
     suitstorage: AU14WeaponRifleF44AALock
   storage:
     pocket1:

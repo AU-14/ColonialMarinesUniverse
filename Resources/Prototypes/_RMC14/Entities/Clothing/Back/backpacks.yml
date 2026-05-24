@@ -327,7 +327,7 @@
   parent: RMCSatchelPMC
   id: RMCSatchelPMCCommando
   name: We-Ya Commando combat backpack
-  description: Ergonomic, protected, high capacity backpack, designed for Weston-Yamada Commandos.
+  description: Ergonomic, protected, high capacity backpack, designed for Weyland-Yutani Commandos.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/PMC/commando.rsi

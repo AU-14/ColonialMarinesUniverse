@@ -218,7 +218,7 @@
 - type: entity
   parent: ColMarTechBaseAnchorable
   id: CMVendorScience
-  name: We-Ya SciVend
+  name: We-Yu SciVend
   description: Vendor containing basic equipment for your experiments.
   components:
   - type: Sprite

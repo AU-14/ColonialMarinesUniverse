@@ -116,8 +116,8 @@
     pocket1: AU14PouchToolsFilledSupportSynthetic
     pocket2: AU14PouchMedicalProdigyFilled
     back: RMCSatchelWelderRU #21 slots
-    ears: RMCM5CameraGear
-    ears2: AU14HeadsetPART
+    ears: AU14HeadsetPART
+    ears2: RMCM5CameraGear
     suitstorage: RMCSynthBreachingHammer
   storage:
     #pocket1:

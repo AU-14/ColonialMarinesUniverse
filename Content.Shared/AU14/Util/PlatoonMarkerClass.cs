@@ -35,6 +35,8 @@ namespace Content.Shared.AU14.util
         Deco4,
         Deco5,
         Deco6,
+        LockedFTLDoor,
+        LockedFTLGlassDoor,
         LockedCommandDoor,
         LockedSecurityDoor,
         LockedSecurityDoorGlass,

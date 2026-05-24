@@ -86,7 +86,7 @@
     shoes: RMCShoesFancyLeather
     back: CMSatchel
     eyes: CMGlassesSecurity
-    ears2: RMCHeadsetDistressWeYa
+    ears: RMCHeadsetDistressWeYa
   inhand:
   - RMCPortableVendorCorporate
   storage:

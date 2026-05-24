@@ -424,7 +424,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
 
         var raffle = ent.Comp;
         raffle.Identifier = ghostRole.Identifier;
-        var countdown = _cfg.GetCVar(CCVars.GhostQuickLottery)? 1 : settings.InitialDuration;
+        var countdown = _cfg.GetCVar(CCVars.GhostQuickLottery) ? 1 : settings.InitialDuration;
         raffle.Countdown = TimeSpan.FromSeconds(countdown);
         raffle.CumulativeTime = TimeSpan.FromSeconds(settings.InitialDuration);
         // we copy these settings into the component because they would be cumbersome to access otherwise
@@ -476,8 +476,8 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (raffle.AllMembers.Add(player) && raffle.AllMembers.Count > 1
             && raffle.CumulativeTime.Add(raffle.JoinExtendsDurationBy) <= raffle.MaxDuration)
         {
-                raffle.Countdown += raffle.JoinExtendsDurationBy;
-                raffle.CumulativeTime += raffle.JoinExtendsDurationBy;
+            raffle.Countdown += raffle.JoinExtendsDurationBy;
+            raffle.CumulativeTime += raffle.JoinExtendsDurationBy;
         }
 
         UpdateAllEui();
@@ -564,26 +564,42 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (!CanRequestGhostRole(player, role.Comp))
             return false;
 
+        var playerNotInGame = _gameTicker.PlayerGameStatuses.TryGetValue(player.UserId, out var status)
+            && status != PlayerGameStatus.JoinedGame;
+
         var ev = new TakeGhostRoleEvent(player);
         RaiseLocalEvent(role, ref ev);
-
         if (!ev.TookRole)
             return false;
 
         if (player.AttachedEntity != null)
             _adminLogger.Add(LogType.GhostRoleTaken, LogImpact.Low, $"{player:player} took the {role.Comp.RoleName:roleName} ghost role {ToPrettyString(player.AttachedEntity.Value):entity}");
 
-        // Lobby player has SessionStatus.InGame, but also PlayerGameStatus.NotReadyToPlay
-        if (_gameTicker.PlayerGameStatuses.TryGetValue(player.UserId, out var status)
-                && status != PlayerGameStatus.JoinedGame) // skip ghosts
+        if (playerNotInGame)
         {
-            try
+            if (_mindSystem.TryGetMind(player.UserId, out _, out var mindComp)
+                && mindComp?.CurrentEntity != null)
             {
-                _gameTicker.PlayerJoinGame(player);
+                var entity = mindComp.CurrentEntity.Value;
+                if (player.Status != SessionStatus.Disconnected && player.Status != SessionStatus.Zombie)
+                {
+                    try { _playerManager.SetStatus(player, SessionStatus.InGame); }
+                    catch (Exception e) { Log.Error($"[GHOST] Failed to SetStatus as InGame for {player.Name}: {e}"); }
+                }
+                try
+                {
+                    if (_playerManager.SetAttachedEntity(player, entity, true))
+                    {
+                        try { _gameTicker.PlayerJoinGame(player); }
+                        catch (Exception e) { Log.Warning($"[GHOST] Failed PlayerJoinGame for {player.Name}: {e}"); }
+                    }
+                }
+                catch (Exception e) { Log.Warning($"[GHOST] Failed SetAttachedEntity for {player.Name}: {e}"); }
             }
-            catch (Exception e)
+            else
             {
-                Log.Warning($"Failed to call GameTicker.PlayerJoinGame for takeover winner {player.Name}: {e}");
+                try { _gameTicker.PlayerJoinGame(player); }
+                catch (Exception e) { Log.Warning($"[GHOST] Failed PlayerJoinGame for {player.Name}: {e}"); }
             }
         }
 
@@ -725,7 +741,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
                 }
             }
 
-            var rafflePlayerCount = (uint?) raffle?.CurrentMembers.Count ?? 0;
+            var rafflePlayerCount = (uint?)raffle?.CurrentMembers.Count ?? 0;
             var raffleEndTime = raffle is not null
                 ? _timing.CurTime.Add(raffle.Countdown)
                 : TimeSpan.MinValue;
@@ -789,7 +805,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
 
         if (ghostRole.JobProto != null)
         {
-            _roleSystem.MindAddJobRole(args.Mind, args.Mind, silent:false,ghostRole.JobProto);
+            _roleSystem.MindAddJobRole(args.Mind, args.Mind, silent: false, ghostRole.JobProto);
         }
 
         ghostRole.Taken = true;

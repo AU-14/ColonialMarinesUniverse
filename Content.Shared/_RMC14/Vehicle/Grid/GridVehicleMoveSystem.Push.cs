@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using Content.Shared._CMU14.Blackfoot;
 using Content.Shared.Movement.Components;
 using Content.Shared.Vehicle.Components;
 using Content.Shared._RMC14.Xenonids;
@@ -41,7 +42,10 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (vehicle.Operator is { } op && TryComp<InputMoverComponent>(op, out var inputComp))
         {
             _activeXenoPushers.Remove(uid);
-            return GetInputDirection(inputComp);
+            var inputDir = GetInputDirection(inputComp);
+            return TryGetBlackfootFlightInput(uid, mover, inputDir, out var blackfootDir)
+                ? blackfootDir
+                : inputDir;
         }
 
         if (vehicle.Operator != null)
@@ -80,6 +84,33 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
         _activeXenoPushers[uid] = pusher;
         return pushDir;
+    }
+
+    private bool TryGetBlackfootFlightInput(
+        EntityUid uid,
+        GridVehicleMoverComponent mover,
+        Vector2i inputDir,
+        out Vector2i outputDir)
+    {
+        outputDir = Vector2i.Zero;
+
+        if (!TryComp(uid, out BlackfootFlightComponent? flight) ||
+            flight.State != BlackfootFlightState.Flight)
+        {
+            return false;
+        }
+
+        var facing = mover.CurrentDirection != Vector2i.Zero
+            ? mover.CurrentDirection
+            : inputDir != Vector2i.Zero
+                ? inputDir
+                : new Vector2i(0, 1);
+
+        outputDir = inputDir != Vector2i.Zero && inputDir != -facing
+            ? inputDir
+            : facing;
+
+        return true;
     }
 
     private bool TryGetActivePusher(EntityUid uid, GridVehicleMoverComponent mover, out EntityUid pusher)

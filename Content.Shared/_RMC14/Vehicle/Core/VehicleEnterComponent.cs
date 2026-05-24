@@ -76,6 +76,18 @@ public sealed partial class VehicleEnterDoAfterEvent : SimpleDoAfterEvent
 [Serializable, NetSerializable]
 public sealed partial class VehicleExitDoAfterEvent : SimpleDoAfterEvent;
 
+[ByRefEvent]
+public record struct VehicleEntryAttemptEvent(EntityUid User, int EntryIndex)
+{
+    public bool Cancelled;
+}
+
+[ByRefEvent]
+public record struct VehicleExitAttemptEvent(EntityUid User, EntityUid Exit)
+{
+    public bool Cancelled;
+}
+
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(VehicleSystem))]
 public sealed partial class VehicleDriverSeatComponent : Component

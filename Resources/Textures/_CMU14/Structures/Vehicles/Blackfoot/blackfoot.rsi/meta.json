@@ -1,0 +1,220 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CM13 PR #10291 at https://github.com/cmss13-devs/cmss13/blob/040a7c240f53d077c67edc92e2e57a927a477a4a/icons/obj/vehicles/blackfoot.dmi",
+  "size": {
+    "x": 160,
+    "y": 160
+  },
+  "states": [
+    {
+      "name": "stowed_lights",
+      "directions": 4
+    },
+    {
+      "name": "flight_lights",
+      "directions": 4
+    },
+    {
+      "name": "vtol_lights",
+      "directions": 4
+    },
+    {
+      "name": "stowed_shadow",
+      "directions": 4
+    },
+    {
+      "name": "flight_shadow",
+      "directions": 4
+    },
+    {
+      "name": "vtol_shadow",
+      "directions": 4
+    },
+    {
+      "name": "damage",
+      "directions": 4
+    },
+    {
+      "name": "flight_thrust",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "vtol_thrust",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "fan-overlay",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "tug_underlay",
+      "directions": 4
+    },
+    {
+      "name": "downwash",
+      "delays": [
+        [
+          0.15,
+          0.15,
+          0.15,
+          0.15
+        ]
+      ]
+    },
+    {
+      "name": "vtol",
+      "directions": 4
+    },
+    {
+      "name": "flight",
+      "directions": 4
+    },
+    {
+      "name": "stowed",
+      "directions": 4
+    },
+    {
+      "name": "engines_vtol",
+      "directions": 4
+    },
+    {
+      "name": "engines_flight",
+      "directions": 4
+    },
+    {
+      "name": "engines_stowed",
+      "directions": 4
+    },
+    {
+      "name": "radar_vtol",
+      "directions": 4
+    },
+    {
+      "name": "radar_flight",
+      "directions": 4
+    },
+    {
+      "name": "radar_stowed",
+      "directions": 4
+    },
+    {
+      "name": "launchers_vtol",
+      "directions": 4
+    },
+    {
+      "name": "launchers_flight",
+      "directions": 4
+    },
+    {
+      "name": "launchers_stowed",
+      "directions": 4
+    },
+    {
+      "name": "doorgun_vtol",
+      "directions": 4
+    },
+    {
+      "name": "doorgun_flight",
+      "directions": 4
+    },
+    {
+      "name": "doorgun_stowed",
+      "directions": 4
+    },
+    {
+      "name": "para_vtol",
+      "directions": 4
+    },
+    {
+      "name": "para_flight",
+      "directions": 4
+    },
+    {
+      "name": "para_stowed",
+      "directions": 4
+    },
+    {
+      "name": "recon_vtol",
+      "directions": 4
+    },
+    {
+      "name": "recon_flight",
+      "directions": 4
+    },
+    {
+      "name": "recon_stowed",
+      "directions": 4
+    }
+  ]
+}

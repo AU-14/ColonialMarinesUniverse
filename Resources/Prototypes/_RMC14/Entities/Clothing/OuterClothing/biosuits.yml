@@ -91,7 +91,7 @@
   parent: RMCBaseBioSuit
   id: RMCSuitBioWeYa
   name: WeYu-TSS MK I - bio suit
-  description: The 'Weyland-Yutani TerraScientia bio-suit MK I'. An advanced light-weight bio-suit developed in-house by Weston-Yamada. It's a suit that protects against biological contamination.
+  description: The 'Weyland-Yutani TerraScientia bio-suit MK I'. An advanced light-weight bio-suit developed in-house by Weyland-Yutani. It's a suit that protects against biological contamination.
   suffix: Generic, WeYu
   components:
   - type: Sprite

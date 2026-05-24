@@ -64,6 +64,19 @@
     access: [["AU14AccessGovfor"]]
 
 - type: entity
+  parent: CMAirlockGovforLocked
+  id: CMAirlockGovforLockedFTL
+  suffix: FTL, Govfor, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovforFTL"]]
+
+- type: entity
+  parent: CMAirlockGovforLockedFTL
+  id: CMAirlockGovforGlassLockedFTL
+  suffix: FTL, Govfor, Glass, Locked
+
+- type: entity
   parent: CMAirlockGovfor
   id: CMAirlockCommandGovfor
   suffix: Command, Govfor

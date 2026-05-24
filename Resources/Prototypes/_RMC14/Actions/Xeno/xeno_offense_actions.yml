@@ -675,7 +675,7 @@
   id: ActionXenoScreech
   parent: ActionXenoBase
   name: Screech (250)
-  description: A wide area of effect stun, screeches upon activation. [color=red]This will also stun parasites, and is blocked by solid walls, smoke, and boiler gas, but not windows![/color]
+  description: An ear-splitting screech that debilitates nearby enemies within 7 tiles. [color=red]Severely slows, deafens, restricts vision, and disrupts aim for 8 seconds. Blocked by solid walls, but not windows.[/color]
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -1095,6 +1095,30 @@
   parent: ActionXenoSpit
   name: Xeno Spit (50/25)
   description: Launches a projectile that will either paralyze the first enemy it hits or damage them and cover them in acid.
+
+- type: entity
+  id: ActionXenoQueenSpit
+  parent: ActionXenoBase
+  name: Acid Volley (40)
+  description: Launches three acid projectiles in a narrow cone. Each target can only be hit once.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+    useDelay: 5
+  - type: TargetAction
+    repeat: true
+    range: 30
+    checkCanAccess: false
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+  - type: WorldTargetAction
+    event: !type:XenoQueenSpitActionEvent
+  - type: ActionBlockIfResting
+  - type: XenoActionPlasma
+    cost: 40
 
 - type: entity
   parent: ActionXenoBase

@@ -83,8 +83,8 @@
   id: AU14GearOPFORAuxSupportSynth
   equipment:
     id: AU14IDCardOPFORAuxSupportSynth
-    ears: RMCM5CameraGear
-    ears2: AU14HeadsetOpforCommand
+    ears: AU14HeadsetOpforCommand
+    ears2: RMCM5CameraGear
     gloves: CMHandsInsulated
     shoes: CMBootsBlackFilled
     jumpsuit: AU14CivilianBoilerSuitDarkBlueSynth

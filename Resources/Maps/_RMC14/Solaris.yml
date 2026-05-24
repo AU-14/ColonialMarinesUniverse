@@ -207627,8 +207627,8 @@ entities:
   - uid: 29009
     components:
     - type: MetaData
-      desc: An old We-Ya systems control computer that manages the air enviorment for a large area. Commonly used in mining operations in order to control O2 levels, alert of any dangerous gases and make the heat slightly more bearable.
-      name: We-Ya Enviorment Control System Control Panel
+      desc: An old We-Yu systems control computer that manages the air enviorment for a large area. Commonly used in mining operations in order to control O2 levels, alert of any dangerous gases and make the heat slightly more bearable.
+      name: We-Yu Enviorment Control System Control Panel
     - type: Transform
       pos: 50.5,-173.5
       parent: 1

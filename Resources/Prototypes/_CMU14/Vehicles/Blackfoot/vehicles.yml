@@ -1,0 +1,378 @@
+- type: entity
+  id: VehicleBlackfootBase
+  abstract: true
+  name: AD-71E Blackfoot
+  description: A compact VTOL aircraft intended for multi-Z operations.
+  components:
+  - type: Vehicle
+    movementKind: Grid
+  - type: Clickable
+  - type: RMCIgnoreGhostInteractionLimits
+  - type: RequireProjectileTarget
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      main:
+        shape:
+          !type:PhysShapeAabb
+          bounds: -1.5,-0.5,1.5,1.5
+        density: 1000
+        mask:
+        - MidImpassable
+        - BarricadeImpassable
+        - LargeMobLayer
+        layer:
+        - LargeMobLayer
+      cockpit:
+        shape:
+          !type:PhysShapeAabb
+          bounds: -0.5,-1.5,0.5,-0.5
+        density: 1000
+        mask:
+        - MidImpassable
+        - BarricadeImpassable
+        - LargeMobLayer
+        layer:
+        - LargeMobLayer
+  - type: InteractionOutline
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot.rsi
+    layers:
+    - map: [ base ]
+      state: stowed
+    - map: [ lights ]
+      state: stowed_lights
+    - map: [ thrust ]
+      state: vtol_thrust
+      visible: false
+    - map: [ fans ]
+      state: fan-overlay
+      visible: false
+    - map: [ downwash ]
+      state: downwash
+      visible: false
+    - map: [ thrusters ]
+      state: engines_stowed
+      visible: false
+    - map: [ launchers ]
+      state: launchers_stowed
+      visible: false
+    - map: [ door-gun ]
+      state: doorgun_stowed
+      visible: false
+    - map: [ support ]
+      state: recon_stowed
+      visible: false
+    - map: [ sensors ]
+      state: radar_stowed
+      visible: false
+    - map: [ damage ]
+      state: damage
+      visible: false
+  - type: Corrodible
+    isCorrodible: false
+  - type: BlackfootVisuals
+    takeoffLiftStartFraction: 0.415
+  - type: BlackfootSound
+  - type: VehicleSound
+    collisionSound: /Audio/_RMC14/Effects/metal_crash.ogg
+    collisionSoundCooldown: 1.5
+    collisionSoundMinSpeed: 5
+    hornSound: /Audio/_CMU14/Blackfoot/buttonpress.ogg
+    hornCooldown: 1
+  - type: AmbientSound
+    enabled: false
+    range: 18
+    volume: -2
+    sound:
+      path: /Audio/_CMU14/Blackfoot/engineidle.ogg
+  - type: Damageable
+    damageContainer: StructuralMarine
+    damageModifierSet: VehicleFrameHumvee
+  - type: DoAfter
+  - type: UserInterface
+    interfaces:
+      enum.HardpointUiKey.Key:
+        type: HardpointBoundUserInterface
+      enum.VehicleWeaponsUiKey.Key:
+        type: VehicleWeaponsBoundUserInterface
+  - type: VehicleWeapons
+  - type: VehicleHardpointVisuals
+  - type: InputMover
+  - type: GridVehicleMover
+    maxSpeed: 4
+    acceleration: 3
+    deceleration: 8
+    maxReverseSpeed: 2
+    reverseAcceleration: 2
+    turnDelay: 0.25
+    turnInPlace: true
+    xenoBlockMinimumSize: Immobile
+    canXenosPush: false
+    speedAtZeroIntegrity: 0.25
+  - type: BlackfootFlight
+    state: Stowed
+    movementMode: VTOL
+    footprint: 3,3
+    footprintOffsets:
+    - -1,1
+    - 0,1
+    - 1,1
+    - -1,0
+    - 0,0
+    - 1,0
+    - 0,-1
+    takeoffDuration: 23.66
+    landingDuration: 19
+  - type: BlackfootFuelPower
+    fuel: 600
+    maxFuel: 600
+    battery: 600
+    maxBattery: 600
+    idleFuelDrain: 0.5
+    vtolFuelDrain: 3
+    flightFuelDrain: 1
+    sensorBatteryDrain: 1
+    minimumTakeoffFuel: 30
+  - type: BlackfootTow
+    canTow: false
+    canBeTowed: true
+    allowAirborneTowing: false
+    allowStowedTowing: true
+    allowCrashedTowing: true
+    towHardpointId: tow-hitch
+  - type: BlackfootRearDoor
+    open: false
+    rearEntryIndex: 0
+  - type: ItemSlots
+    slots:
+      thrusters:
+        startingItem: VehicleBlackfootThrusters
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      launchers:
+        startingItem: VehicleBlackfootLaunchers
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      support:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+  - type: HardpointSlots
+    vehicleFamily: Blackfoot
+    slots:
+    - id: thrusters
+      disableEject: true
+      hardpointType: Thruster
+      slotType: Thruster
+      visualLayer: thrusters
+      insertDelay: 2
+      required: true
+    - id: launchers
+      disableEject: true
+      hardpointType: Launcher
+      slotType: Launcher
+      visualLayer: launchers
+      insertDelay: 2
+      required: false
+    - id: support
+      disableEject: true
+      hardpointType: SupportAttachment
+      slotType: SupportAttachment
+      visualLayer: support
+      insertDelay: 2
+      required: false
+  - type: HardpointIntegrity
+    maxIntegrity: 500
+    repairFuelCost: 12
+    bypassEntryOnZero: true
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicles/Blackfoot/blackfoot.yml
+    enterDoAfter: 1
+    exitDoAfter: 1
+    maxPassengers: 9
+    maxXenos: 5
+    entryPoints:
+    - offset: 0,2
+      radius: 0.75
+      interiorCoords: 8,9.5
+    - offset: -1,-1
+      radius: 0.75
+      interiorCoords: 7.25,8.75
+    - offset: 1,-1
+      radius: 0.75
+      interiorCoords: 8.75,8.75
+
+- type: entity
+  parent: VehicleBlackfootBase
+  id: VehicleBlackfootDoorGunBase
+  abstract: true
+  components:
+  - type: ItemSlots
+    slots:
+      thrusters:
+        startingItem: VehicleBlackfootThrusters
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      launchers:
+        startingItem: VehicleBlackfootLaunchers
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      door-gun:
+        startingItem: VehicleBlackfootDoorGun
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      support:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+  - type: HardpointSlots
+    vehicleFamily: Blackfoot
+    slots:
+    - id: thrusters
+      disableEject: true
+      hardpointType: Thruster
+      slotType: Thruster
+      visualLayer: thrusters
+      insertDelay: 2
+      required: true
+    - id: launchers
+      disableEject: true
+      hardpointType: Launcher
+      slotType: Launcher
+      visualLayer: launchers
+      insertDelay: 2
+      required: false
+    - id: door-gun
+      disableEject: true
+      hardpointType: DoorGun
+      slotType: DoorGun
+      visualLayer: door-gun
+      insertDelay: 2
+      required: false
+    - id: support
+      disableEject: true
+      hardpointType: SupportAttachment
+      slotType: SupportAttachment
+      visualLayer: support
+      insertDelay: 2
+      required: false
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicles/Blackfoot/blackfoot_doorgun.yml
+
+- type: entity
+  parent: VehicleBlackfootDoorGunBase
+  id: VehicleBlackfootReconBase
+  abstract: true
+  components:
+  - type: BlackfootStealth
+  - type: ItemSlots
+    slots:
+      thrusters:
+        startingItem: VehicleBlackfootThrusters
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      launchers:
+        startingItem: VehicleBlackfootLaunchers
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      door-gun:
+        startingItem: VehicleBlackfootDoorGun
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      recon:
+        startingItem: VehicleBlackfootReconSystem
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      sensors:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+  - type: HardpointSlots
+    vehicleFamily: Blackfoot
+    slots:
+    - id: thrusters
+      disableEject: true
+      hardpointType: Thruster
+      slotType: Thruster
+      visualLayer: thrusters
+      insertDelay: 2
+      required: true
+    - id: launchers
+      disableEject: true
+      hardpointType: Launcher
+      slotType: Launcher
+      visualLayer: launchers
+      insertDelay: 2
+      required: false
+    - id: door-gun
+      disableEject: true
+      hardpointType: DoorGun
+      slotType: DoorGun
+      visualLayer: door-gun
+      insertDelay: 2
+      required: false
+    - id: recon
+      disableEject: true
+      hardpointType: SupportAttachment
+      slotType: SupportAttachment
+      visualLayer: support
+      insertDelay: 2
+      required: false
+    - id: sensors
+      disableEject: true
+      hardpointType: SensorArray
+      slotType: SensorArray
+      visualLayer: sensors
+      insertDelay: 2
+      required: false
+
+- type: entity
+  parent: VehicleBlackfootBase
+  id: VehicleBlackfootTransportBase
+  abstract: true
+  components:
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicles/Blackfoot/blackfoot.yml
+
+- type: entity
+  parent: VehicleBlackfootBase
+  id: VehicleBlackfoot
+
+- type: entity
+  parent: VehicleBlackfootDoorGunBase
+  id: VehicleBlackfootDoorGunVariant
+  suffix: Door Gun
+
+- type: entity
+  parent: VehicleBlackfootReconBase
+  id: VehicleBlackfootRecon
+  suffix: Recon
+
+- type: entity
+  parent: VehicleBlackfootTransportBase
+  id: VehicleBlackfootTransport
+  suffix: Transport

@@ -296,8 +296,8 @@
 - type: entity
   parent: [RMCAllowSuitStorageClothingChefApron, ClothingOuterBase]
   id: RMCOuterEngineeringUtilityOversuit
-  name: Weston-Yamada engineer utility oversuit
-  description: A Weston-Yamada engineer utility uniform. Used as a general purpose utility oversuit by Weston-Yamada colony engineers.
+  name: Weyland-Yutani engineer utility oversuit
+  description: A Weyland-Yutani engineer utility uniform. Used as a general purpose utility oversuit by Weyland-Yutani colony engineers.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Misc/weya_engineer_jacket.rsi

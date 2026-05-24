@@ -6,10 +6,28 @@
   setPreference: true
   ignoreAllegiance: true
   playTimeTracker: AU14JobCLFGuerilla
-  requirements:
+  requirements: # TWEAK: since departments are subject to change, little bit of everything
   - !type:DepartmentTimeRequirement
     department: AU14DepartmentCivilian
-    time: 18000 # 5 hours
+    time: 1800 # ~1 round (30mins)
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentLabor
+    time: 1800 # ~1 round (30mins)
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentServices
+    time: 1800 # ~1 round (30mins)
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentColonyMedical
+    time: 3200 # 1 hour
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentColonySecurity
+    time: 3200 # 1 hour
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentEngineering
+    time: 3200 # 1 hour
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentCriminal
+    time: 1800 # ~1 round (30mins)
   - !type:OverallPlaytimeRequirement
     time: 36000 # 10 hours
   ranks:

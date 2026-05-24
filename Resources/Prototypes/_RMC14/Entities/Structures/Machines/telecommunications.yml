@@ -135,8 +135,8 @@
 - type: entity
   id: RMCTelecomOSServerBox
   parent: RMCTelecomBusMainframe
-  name: We-Ya OS server box
-  description: We-Ya OS is a proprietary operating system used by the Company to run most all of their servers, banking, and management systems. A code leak in 2144 led some amateur hackers to believe that We-Ya OS is loosely based on the 2017 release of TempleOS. But the Company has refuted these claims.
+  name: We-Yu OS server box
+  description: We-Yu OS is a proprietary operating system used by the Company to run most all of their servers, banking, and management systems. A code leak in 2144 led some amateur hackers to believe that We-Yu OS is loosely based on the 2017 release of TempleOS. But the Company has refuted these claims.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/AIStuff/telecommunication.rsi

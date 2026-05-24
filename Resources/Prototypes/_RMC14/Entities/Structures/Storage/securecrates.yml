@@ -364,8 +364,8 @@
 - type: entity
   parent: RMCSecureCaseMedicalBig #Medical Vendor Crate
   id: RMCCrateMedicalVendor
-  name: We-Ya-Med Plus crate
-  description: A crate containing one We-Ya-Med Plus vendor.
+  name: We-Yu-Med Plus crate
+  description: A crate containing one We-Yu-Med Plus vendor.
   components:
   - type: SpawnOnTerminate
     spawn: CMVendorMedicalAllAccess
@@ -418,8 +418,8 @@
 - type: entity
   parent: RMCSecureCaseStrapped #Water Bottles
   id: RMCCrateBottledWaterX50
-  name: We-Ya Bottled Water crate (x50)
-  description: A crate containing fifty We-Ya Bottled Spring Water bottles.
+  name: We-Yu Bottled Water crate (x50)
+  description: A crate containing fifty We-Yu Bottled Spring Water bottles.
   components:
   - type: CrateOpenable
     spawn:

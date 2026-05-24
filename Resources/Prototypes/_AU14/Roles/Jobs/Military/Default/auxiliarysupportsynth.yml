@@ -81,8 +81,8 @@
 - type: startingGear
   id: AU14GearGOVFORAuxSupportSynth
   equipment:
-    ears: RMCM5CameraGear
-    ears2: AU14HeadsetGovforCommand
+    ears: AU14HeadsetGovforCommand
+    ears2: RMCM5CameraGear
 
 - type: entity
   parent: CMSpawnPointJobBase

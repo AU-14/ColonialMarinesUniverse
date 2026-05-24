@@ -357,7 +357,7 @@
   parent: RMCUniformBase
   id: RMCJumpsuitWeyamart
   name: Weyamart uniform
-  description: A pair of dark-grey slacks and an orange button-down shirt; a standard uniform for the Weston-Yamada branded supermarket 'Weyamart'.
+  description: A pair of dark-grey slacks and an orange button-down shirt; a standard uniform for the Weyland-Yutani branded supermarket 'Weyamart'.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Uniforms/Civilian/weyamart.rsi
@@ -367,8 +367,8 @@
 - type: entity
   parent: RMCUniformBase
   id: RMCJumpsuitSanitation
-  name: Weston-Yamada RFF - sanitation uniform
-  description: A set of Weston-Yamada RFF - Sanitation fatigues, a green pair of work slacks and a grey polo-shirt with green reflecting stripes.
+  name: Weyland-Yutani RFF - sanitation uniform
+  description: A set of Weyland-Yutani RFF - Sanitation fatigues, a green pair of work slacks and a grey polo-shirt with green reflecting stripes.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Uniforms/Civilian/sanitation.rsi
@@ -541,8 +541,8 @@
 - type: entity
   parent: RMCUniformBase
   id: RMCJumpsuitCivilianEngineerWorker
-  name: Weston-Yamada engineering utility uniform
-  description: A set of Weston-Yamada engineering utility workers uniform, a orange pair of work slacks and a grey polo-shirt with orange reflecting stripes.
+  name: Weyland-Yutani engineering utility uniform
+  description: A set of Weyland-Yutani engineering utility workers uniform, a orange pair of work slacks and a grey polo-shirt with orange reflecting stripes.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Uniforms/Survivor/engineer_worker.rsi
@@ -552,7 +552,7 @@
 - type: entity
   parent: RMCJumpsuitCivilianEngineerWorker
   id: RMCJumpsuitCivilianEngineerWorkerAlt
-  description: A set of Weston-Yamada engineering utility workers uniform, a blue pair of work slacks and a grey polo-shirt with yellow reflecting stripes.
+  description: A set of Weyland-Yutani engineering utility workers uniform, a blue pair of work slacks and a grey polo-shirt with yellow reflecting stripes.
   suffix: Alternative
   components:
   - type: Sprite

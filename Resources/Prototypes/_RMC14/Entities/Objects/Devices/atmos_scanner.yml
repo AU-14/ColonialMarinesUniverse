@@ -2,7 +2,7 @@
   parent: BaseItem
   name: ACS-930 atmospheric composition scanner
   id: RMCAtmosScanner
-  description: A bulky, awkward device produced by the Weston-Yamada Corporation. Gives a readout of the local atmospheric composition.
+  description: A bulky, awkward device produced by the Weyland-Yutani Corporation. Gives a readout of the local atmospheric composition.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Devices/atmos_scanner.rsi

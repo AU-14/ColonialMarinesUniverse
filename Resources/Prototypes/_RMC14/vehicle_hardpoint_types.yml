@@ -10,6 +10,9 @@
 - type: hardpointVehicleFamily
   id: Tank
 
+- type: hardpointVehicleFamily
+  id: Blackfoot
+
 - type: hardpointSlotType
   id: Wheel
 
@@ -39,3 +42,12 @@
 
 - type: hardpointSlotType
   id: Tires
+
+- type: hardpointSlotType
+  id: Thruster
+
+- type: hardpointSlotType
+  id: DoorGun
+
+- type: hardpointSlotType
+  id: SensorArray

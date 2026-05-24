@@ -205,8 +205,10 @@
     deadThreshold: 1100
     addComponents:
     - type: XenoScreech
+    - type: XenoQueenSpit
     addActions:
     - ActionXenoScreech
+    - ActionXenoQueenSpit
   - type: RMCSize
     size: Immobile
   - type: RMCXenoDamageVisuals

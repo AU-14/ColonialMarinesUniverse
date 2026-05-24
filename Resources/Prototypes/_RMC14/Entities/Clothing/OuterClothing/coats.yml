@@ -1124,7 +1124,7 @@
   parent: RMCCoatSnow
   id: RMCCoatSnowLiaison
   name: liaison's wintercoat
-  description: A Weston-Yamada winter coat. Only the best comfort for the liaison in a cold environment.
+  description: A Weyland-Yutani winter coat. Only the best comfort for the liaison in a cold environment.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Snowsuits/liaison.rsi

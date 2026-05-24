@@ -69,13 +69,88 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
 
     private ISawmill _sawmill = default!;
 
+    // AU14 tracker IDs that were renamed before the role prototypes were consolidated.
+    // The length of this is not great, it would be nice if we could migrate the trackers in the DB.
     private static readonly Dictionary<string, string> LegacyPlayTimeTrackerAliases = new()
     {
-        // AU14 tracker IDs that were renamed before the role prototypes were consolidated.
         ["AU14JobMilitaryPolice"] = "AU14JobGOVFORMilitaryPoliceMan",
         ["AU14JobMilitaryPoliceTracker"] = "AU14JobGOVFORMilitaryPoliceMan",
         ["AU14JobGOVFORk9handler"] = "AU14JobThirdPartyK9Handler",
         ["AU14JobOPFORk9handler"] = "AU14JobThirdPartyK9Handler",
+
+        // Typos
+        ["AU14JobOpforRadioTelephoneOoperator"] = "AU14JobGOVFORRadioTelephoneOperator",
+        ["AU14JobGOVFORRadioTelephoneOoperator"] = "AU14JobGOVFORRadioTelephoneOperator",
+
+        // Casing
+        ["AU14Jobmobboss"] = "AU14JobMobBoss",
+        ["AU14Jobmobgoon"] = "AU14JobMobGoon",
+        ["AU14Jobwyguard"] = "AU14JobWYGuard",
+        ["au14JobcivilianKellandWarden"] = "AU14JobCivilianKellandWarden",
+        ["AU14Jobcivilianprisoner"] = "AU14JobCivilianPrisoner",
+        ["AU14JobCiviliannspaConstable"] = "AU14JobCivilianCMBDeputy",
+        ["AU14JobCivilianEcologist"] = "AU14JobCivilianScientist",
+        ["AU14JobCivilianscientist"] = "AU14JobCivilianScientist",
+        ["AU14JobPlatoonCommander"] = "AU14JobGOVFORPlatCo",
+        ["AU14JobPlatoonOperationsOfficer"] = "AU14JobGOVFORPlatOp",
+
+        // OPFOR -> GOVFOR
+        ["AU14JobOPFORAuxSupportSynth"] = "AU14JobGOVFORAuxSupportSynth",
+        ["AU14JobOPFORadvisor"] = "AU14JobGOVFORadvisor",
+        ["AU14JobOpforPlatCo"] = "AU14JobGOVFORPlatCo",
+        ["AU14JobOpforPlatoonCorpsman"] = "AU14JobGOVFORPlatoonCorpsman",
+        ["AU14JobOpforDCC"] = "AU14JobGOVFORDCC",
+        ["AU14JobOpforPlatOp"] = "AU14JobGOVFORPlatOp",
+        ["AU14JobOpforDSPilot"] = "AU14JobGOVFORDSPilot",
+        ["AU14JobOpforSectionSergeant"] = "AU14JobGOVFORSectionSergeant",
+        ["AU14JobOpforSquadAutomaticRifleman"] = "AU14JobGOVFORSquadAutomaticRifleman",
+        ["AU14JobOPFORSquadCombatTech"] = "AU14JobGOVFORSquadCombatTech",
+        ["AU14JobOpforSquadRifleman"] = "AU14JobGOVFORSquadRifleman",
+        ["AU14JobOpforSquadSergeant"] = "AU14JobGOVFORSquadSergeant",
+
+        // CMBCIU
+        ["AU14JobGOVFORPlatCoCMBCIU"] = "AU14JobGOVFORPlatCo",
+        ["AU14JobGOVFORPlatoonCorpsmanCMBCIU"] = "AU14JobGOVFORPlatoonCorpsman",
+        ["AU14JobGOVFORSectionSergeantCMBCIU"] = "AU14JobGOVFORSectionSergeant",
+        ["AU14JobGOVFORSquadRiflemanCMBCIU"] = "AU14JobGOVFORSquadRifleman",
+        ["AU14JobGOVFORSquadSergeantCMBCIU"] = "AU14JobGOVFORSquadSergeant",
+
+        // RMC
+        ["AU14JobGOVFORAuxSupportSynthRMC"] = "AU14JobGOVFORAuxSupportSynth",
+        ["AU14JobGOVFORPlatCoRMC"] = "AU14JobGOVFORPlatCo",
+        ["AU14JobGOVFORPlatoonCorpsmanRMC"] = "AU14JobGOVFORPlatoonCorpsman",
+        ["AU14JobGOVFORDCCRMC"] = "AU14JobGOVFORDCC",
+        ["AU14JobGOVFORPlatOpRMC"] = "AU14JobGOVFORPlatOp",
+        ["AU14JobGOVFORDSPilotRMC"] = "AU14JobGOVFORDSPilot",
+        ["AU14JobGOVFORRadioTelephoneOperatorRMC"] = "AU14JobGOVFORRadioTelephoneOperator",
+        ["AU14JobGOVFORSectionSergeantRMC"] = "AU14JobGOVFORSectionSergeant",
+        ["AU14JobGOVFORSquadAutomaticRiflemanRMC"] = "AU14JobGOVFORSquadAutomaticRifleman",
+        ["AU14JobGOVFORSquadRiflemanRMC"] = "AU14JobGOVFORSquadRifleman",
+        ["AU14JobGOVFORSquadSergeantRMC"] = "AU14JobGOVFORSquadSergeant",
+
+        // UPP
+        ["AU14JobGOVFORPlatCoUPP"] = "AU14JobGOVFORPlatCo",
+        ["AU14JobGOVFORPlatoonCorpsmanUPP"] = "AU14JobGOVFORPlatoonCorpsman",
+        ["AU14JobGOVFORDCCUPP"] = "AU14JobGOVFORDCC",
+        ["AU14JobGOVFORPlatOpUPP"] = "AU14JobGOVFORPlatOp",
+        ["AU14JobGOVFORDSPilotUPP"] = "AU14JobGOVFORDSPilot",
+        ["AU14JobGOVFORRadioTelephoneOperatorUPP"] = "AU14JobGOVFORRadioTelephoneOperator",
+        ["AU14JobGOVFORSectionSergeantUPP"] = "AU14JobGOVFORSectionSergeant",
+        ["AU14JobGOVFORSquadAutomaticRiflemanUPP"] = "AU14JobGOVFORSquadAutomaticRifleman",
+        ["AU14JobGOVFORSquadRiflemanUPP"] = "AU14JobGOVFORSquadRifleman",
+        ["AU14JobGOVFORSquadSergeantUPP"] = "AU14JobGOVFORSquadSergeant",
+
+        // WYPMC
+        ["AU14JobGOVFORPlatCoWYPMC"] = "AU14JobGOVFORPlatCo",
+        ["AU14JobGOVFORPlatoonCorpsmanWYPMC"] = "AU14JobGOVFORPlatoonCorpsman",
+        ["AU14JobGOVFORDCCWYPMC"] = "AU14JobGOVFORDCC",
+        ["AU14JobGOVFORPlatOpWYPMC"] = "AU14JobGOVFORPlatOp",
+        ["AU14JobGOVFORDSPilotWYPMC"] = "AU14JobGOVFORDSPilot",
+        ["AU14JobGOVFORRadioTelephoneOperatorWYPMC"] = "AU14JobGOVFORRadioTelephoneOperator",
+        ["AU14JobGOVFORSectionSergeantWYPMC"] = "AU14JobGOVFORSectionSergeant",
+        ["AU14JobGOVFORSquadAutomaticRiflemanWYPMC"] = "AU14JobGOVFORSquadAutomaticRifleman",
+        ["AU14JobGOVFORSquadRiflemanWYPMC"] = "AU14JobGOVFORSquadRifleman",
+        ["AU14JobGOVFORSquadSergeantWYPMC"] = "AU14JobGOVFORSquadSergeant",
     };
 
     // List of players that need some kind of update (refresh timers or resend).

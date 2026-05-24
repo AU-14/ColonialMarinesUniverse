@@ -734,6 +734,36 @@
     state: base
 
 - type: entity
+  name: Ship FTL door marker
+  id: VMarkerShipLockedFTLDoor
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      govfor: false
+      opfor: false
+      class: LockedFTLDoor
+    - type: Sprite
+      drawdepth: Overdoors
+      sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+      state: com
+
+- type: entity
+  name: Ship FTL glass door marker
+  id: VMarkerShipLockedFTLDoorGlass
+  parent: VmarkerShip
+  components:
+    - type: VendorMarker
+      ship: true
+      govfor: false
+      opfor: false
+      class: LockedFTLGlassDoor
+    - type: Sprite
+      drawdepth: Overdoors
+      sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+      state: comglass
+
+- type: entity
   name: Ship command door marker
   id: VMarkerShipLockedCommandDoor
   parent: VmarkerShip

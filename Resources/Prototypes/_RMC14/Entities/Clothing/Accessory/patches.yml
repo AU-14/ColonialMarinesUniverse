@@ -344,7 +344,7 @@
 - type: entity
   parent: RMCPatchBase
   id: RMCPatchWeYaFury161
-  name: Weston-Yamada Fury '161' patch
+  name: Weyland-Yutani Fury '161' patch
   description: A fire-resistant shoulder patch. Was worn by workers and then later prisoners on the Fiorina 'Fury' 161 facility, a rare relic, after the facility went dark in 2079.
   components:
   - type: Sprite

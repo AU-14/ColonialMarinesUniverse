@@ -5,6 +5,7 @@
   description: au14-job-description-govformilitarypoliceman
   setPreference: true
   canBeAntag: false
+  hasSquad: false
   requirements:
   - !type:AgeRequirement
     requiredAge: 21
@@ -66,8 +67,8 @@
   id: AU14GearGOVFORMilitaryPoliceMan
   equipment:
     id: AU14IDCardGOVFORMilitaryPoliceMan
-    ears: RMCM5CameraGear
-    ears2: AU14HeadsetGovforMarineMP
+    ears: AU14HeadsetGovforMarineMP
+    ears2: RMCM5CameraGear
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -86,6 +87,6 @@
     jumpsuit: AU14JungleFatigues
     belt: CMBeltSecurityMPFilled
     head: CMHeadBeretRed
-    ears: RMCM5CameraGear
-    ears2: AU14HeadsetGovforMarineMP
+    ears: AU14HeadsetGovforMarineMP
+    ears2: RMCM5CameraGear
     outerClothing: AU14ArmorM3JungleThree

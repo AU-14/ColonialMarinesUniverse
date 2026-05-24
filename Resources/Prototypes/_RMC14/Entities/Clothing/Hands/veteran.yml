@@ -54,7 +54,7 @@
   parent: RMCHandsVeteranPMC
   id: RMCHandsVeteranPMCCommandoSurvivor
   name: We-Ya Commando gloves
-  description: Standard issue kevlon fiber gloves manufactured for and by Weston-Yamada Commandos. They are insulated against electrical shock.
+  description: Standard issue kevlon fiber gloves manufactured for and by Weyland-Yutani Commandos. They are insulated against electrical shock.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Hands/Gloves/gauntlets.rsi

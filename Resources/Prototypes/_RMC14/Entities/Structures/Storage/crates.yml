@@ -748,9 +748,9 @@
 - type: entity
   parent: RMCCrateSecure
   id: RMCCrateSecureWeYa
-  name: secure We-Ya crate
-  description: A secure crate with a We-Ya insignia on it.
-  suffix: We-Ya, Req, Locked
+  name: secure We-Yu crate
+  description: A secure crate with a We-Yu insignia on it.
+  suffix: We-Yu, Req, Locked
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Storage/Crates/secure_we_ya.rsi

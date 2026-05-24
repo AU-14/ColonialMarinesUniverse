@@ -116,8 +116,8 @@
 - type: entity
   parent: RMCWallPropBase
   id: RMCWallPropDeadPilot
-  name: decapitated Weston-Yamada Pilot
-  description: What remains of a Weston-Yamada Pilot. Their entire head is missing. Where'd it roll off to?...
+  name: decapitated Weyland-Yutani Pilot
+  description: What remains of a Weyland-Yutani Pilot. Their entire head is missing. Where'd it roll off to?...
   suffix: RMC14
   components:
   - type: Sprite

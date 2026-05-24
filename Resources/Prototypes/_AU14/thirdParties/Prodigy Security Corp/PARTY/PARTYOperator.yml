@@ -73,8 +73,8 @@
     pocket1: RMCPouchDrumPMCFill
     pocket2: AU14PouchIFAKProdigyFill
     back: RMCSatchelWelderRU #21 slots
-    ears: RMCM5CameraGear
-    ears2: AU14HeadsetPART
+    ears: AU14HeadsetPART
+    ears2: RMCM5CameraGear
     suitstorage: RMCSmartGunPMC
   storage:
     #pocket1:

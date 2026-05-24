@@ -72,7 +72,7 @@
     pocket2: RMCPouchFirstAidPMCFill
     back: RMCScabbardMacheteSGFilled
     eyes: RMCGlassesSmartGunSight
-    ears2: RMCHeadsetDistressWeYa
+    ears: RMCHeadsetDistressWeYa
     suitstorage: RMCSmartGunPMC
   storage:
     pocket2:

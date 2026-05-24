@@ -1,5 +1,5 @@
 cl-briefing-kutjevo =
-    {"[bold]Weston-Yamada Corporation[/bold]"}
+    {"[bold]Weyland-Yutani Corporation[/bold]"}
     "The future is now."
 
     {"[color=#25b266][bold]Special Services Division[/bold][/color]"}
@@ -9,21 +9,21 @@ cl-briefing-kutjevo =
     ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     {"[bold]Planet:[/bold]"} LV-686
     {"[bold]Facility:[/bold]"} Kutjevo Refinery
-    {"[bold]Operator:[/bold]"} Weston-Yamada
+    {"[bold]Operator:[/bold]"} Weyland-Yutani
     ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     {"[bold][head=3]History and Purpose[/head][/bold]"}
     ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     Discovered in 2097, the planet Dykuma I, also known as LV-686, was originally marked by geological survey as a potentially terraformable desert planet, was later found to be abundantly rich in underground aquifers of exceptionally high purity, and as such an independent core colony began colonization efforts in the 2100s.
 
-    Shortly after the colonization efforts began, a hostile takeover by the Canadian Space Affairs Ministry in 2105 brought the colony under new ownership, soon sold to the Weston-Yamada Corporation, where in 2107 it began operations as a bottling plant under the [italic]Weston Spring[/italic] brand.
+    Shortly after the colonization efforts began, a hostile takeover by the Canadian Space Affairs Ministry in 2105 brought the colony under new ownership, soon sold to the Weyland-Yutani Corporation, where in 2107 it began operations as a bottling plant under the [italic]Weyland-Yutani Spring[/italic] brand.
 
     As the demand for spring water and the size of the colony's operations both have grown, the deposits of drinking water at the original site for the colony have dried up, and as such the sprawl has continued to expand outwards, ever in search of more deposits to tap.
 
-    With an estimated 2500 colonists, the refinery has become a bustling town, and the number one provider of drinkable water in the Zephyron Sector and surrounding space, as well as a significant supplier for the [italic]Weston Spring[/italic] brand.
+    With an estimated 2500 colonists, the refinery has become a bustling town, and the number one provider of drinkable water in the Zephyron Sector and surrounding space, as well as a significant supplier for the [italic]Weyland-Yutani Spring[/italic] brand.
 
     {"[bold][head=3]Company Priorities[/head][/bold]"}
     ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-    The number one priority is that any operation on the site of Weston Spring Bottling Center No. 8 does not employ chemical weapons or otherwise risk contaminating the groundwater supply and aquifers below. The use of lead and depleted uranium bullets should be avoided.
+    The number one priority is that any operation on the site of Weyland-Yutani Spring Bottling Center No. 8 does not employ chemical weapons or otherwise risk contaminating the groundwater supply and aquifers below. The use of lead and depleted uranium bullets should be avoided.
 
     Additionally, the colony’s water treatment plant contains large stockpiles of chemicals that may be hazardous in unapproved amounts. Damage to the tanks storing these chemicals must be mitigated.
 
@@ -38,30 +38,30 @@ cl-briefing-kutjevo =
     • A solar flare from the Dykuma star causing electrical failures
 
 cl-briefing-solaris =
-    {"[bold]Weston-Yamada Corporation[/bold]"}
+    {"[bold]Weyland-Yutani Corporation[/bold]"}
     "The future is now."
 
     {"[color=#25b266][bold]Special Services Division[/bold][/color]"}
     {"[bold]Liaison Colony Briefing[/bold]"}
     ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-    {"[italic]    The Weston-Yamada Crisis Management and Prevention Office has indicated that the colony on LV-1413 has experienced a critical communications blackout, and that a mission is being prepared to investigate the disturbance. As such, the Special Services Division has prepared a briefing on the nature of the colony, and known potential threats to it's operation. Classified materials are excluded from this briefing and should be requested separately, and as such, the contents of this document may be shared or withheld at your discretion, unless otherwise specified.[/italic]"}
+    {"[italic]    The Weyland-Yutani Crisis Management and Prevention Office has indicated that the colony on LV-1413 has experienced a critical communications blackout, and that a mission is being prepared to investigate the disturbance. As such, the Special Services Division has prepared a briefing on the nature of the colony, and known potential threats to it's operation. Classified materials are excluded from this briefing and should be requested separately, and as such, the contents of this document may be shared or withheld at your discretion, unless otherwise specified.[/italic]"}
     ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     {"[bold]Planet: [/bold]LV-1413 (Routerra I)"}
     {"[bold]Facility: [/bold]Solaris Ridge Biological Storage Depot"}
-    {"[bold]Operator: [/bold]Weston-Yamada"}
+    {"[bold]Operator: [/bold]Weyland-Yutani"}
     ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     {"[bold][head=3]History and Purpose[/head][/bold]"}
     ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     Solaris Ridge initially started operations as an Independent Colony, which was attempting to terraform Routerra I utilizing lichens. Lichen-based terraforming is generally cheaper, but unproven and difficult. The two research labs on Solaris, Eta and Lambda, were established in order to test this technology.
 
-    However, with subsequent growth batches failing to meet growth estimates, as well as technical failures and sandstorms would result in the maintenance costs being deemed untenable, resulting in the facility being sold to Weston-Yamada.
+    However, with subsequent growth batches failing to meet growth estimates, as well as technical failures and sandstorms would result in the maintenance costs being deemed untenable, resulting in the facility being sold to Weyland-Yutani.
 
-    When Weston-Yamada gained control of the Colony, both the Eta & Lambda labs were converted into a site for storage and research of biological materials. Furthermore, a mining facility was established to mine veins of Iron, Cobalt, and Copper. The colony currently holds ~120 Employees, including CMB Officers.
+    When Weyland-Yutani gained control of the Colony, both the Eta & Lambda labs were converted into a site for storage and research of biological materials. Furthermore, a mining facility was established to mine veins of Iron, Cobalt, and Copper. The colony currently holds ~120 Employees, including CMB Officers.
 
     {"[bold][head=3]Company Priorities[/head][/bold]"}
     ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
     Any operations on Routerra I should ensure that damage to critical infrastructure, such as filtration, mining, and medical, are minimized to damages deemed necessary for operational success.
-    Weston-Yamada assets, including blackbox recordings, lichen & biological samples, as well as any personnel should be recovered by military personnel in the case of a critical loss of infrastructure or disaster.
+    Weyland-Yutani assets, including blackbox recordings, lichen & biological samples, as well as any personnel should be recovered by military personnel in the case of a critical loss of infrastructure or disaster.
 
     {"[bold][head=3]Potential Threats[/head][/bold]"}
     ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾

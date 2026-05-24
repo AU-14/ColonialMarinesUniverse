@@ -45,7 +45,7 @@
   parent: RMCArmorVest
   id: RMCArmorVestWeYa
   name: We-Ya security armor vest
-  description: An armored vest that protects against some damage. This one has a Weston-Yamada corporate badge.
+  description: An armored vest that protects against some damage. This one has a Weyland-Yutani corporate badge.
 
 - type: entity
   parent: RMCArmorVestWeYa

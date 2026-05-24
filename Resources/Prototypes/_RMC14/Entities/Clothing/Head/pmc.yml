@@ -31,7 +31,7 @@
   parent: [ArmorHelmetPMC, RMCMarineHelmetWithLightBase]
   id: RMCArmorHelmetPMCTactical
   name: tactical helmet
-  description: A contender for service with the Royal Crown Marines, it is presently, exclusively, field tested by Weston-Yamada mercenaries. Features a ballistic mask and integrated display connected to the visor.
+  description: A contender for service with the Royal Crown Marines, it is presently, exclusively, field tested by Weyland-Yutani mercenaries. Features a ballistic mask and integrated display connected to the visor.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Head/PMC/helmet.rsi
@@ -104,7 +104,7 @@
   parent: ArmorHelmetM10
   id: ArmorHelmetPMCCommandoSurvivor
   name: damaged We-Ya Commando helmet
-  description: A standard enclosed helmet utilized by Weston-Yamada Commandos. Has been through a lot of wear and tear.
+  description: A standard enclosed helmet utilized by Weyland-Yutani Commandos. Has been through a lot of wear and tear.
   components:
   - type: ItemCamouflage
     camouflageVariations: { }
@@ -328,7 +328,7 @@
 - type: entity
   parent: CMHeadBeret
   id: RMCHeadBeretWeYa
-  name: Weston-Yamada beret
+  name: Weyland-Yutani beret
   description: Show off your megacorp pride with this stylish beret!
   components:
   - type: Sprite

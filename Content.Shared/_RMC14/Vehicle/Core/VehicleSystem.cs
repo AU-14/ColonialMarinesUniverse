@@ -96,6 +96,12 @@ public sealed partial class VehicleSystem : EntitySystem
             return;
         }
 
+        if (!HasComp<GhostComponent>(args.User) && !CanEnterVehicle(ent.Owner, args.User, entryIndex))
+        {
+            args.Handled = true;
+            return;
+        }
+
         if (HasComp<GhostComponent>(args.User))
         {
             args.Handled = TryEnter(ent, args.User, entryIndex);
@@ -133,6 +139,9 @@ public sealed partial class VehicleSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("rmc-vehicle-enter-locked"), user, user, PopupType.SmallCaution);
             return false;
         }
+
+        if (!HasComp<GhostComponent>(user) && !CanEnterVehicle(ent.Owner, user, entryIndex))
+            return false;
 
         if (!EnsureInterior(ent, out var interior))
             return false;
@@ -366,6 +375,12 @@ public sealed partial class VehicleSystem : EntitySystem
             return;
         }
 
+        if (!HasComp<GhostComponent>(args.User) && !CanExitVehicle(vehicleUid, ent.Owner, args.User))
+        {
+            args.Handled = true;
+            return;
+        }
+
         if (HasComp<GhostComponent>(args.User))
         {
             args.Handled = TryExit(ent, args.User);
@@ -475,6 +490,9 @@ public sealed partial class VehicleSystem : EntitySystem
             return false;
         }
 
+        if (!HasComp<GhostComponent>(user) && !CanExitVehicle(vehicleUid, ent.Owner, user))
+            return false;
+
         if (!TryGetExitCoordinates(ent, enter, vehicleUid, out var exitCoords, out var exitMapCoords))
             return false;
 
@@ -487,6 +505,20 @@ public sealed partial class VehicleSystem : EntitySystem
         _rmcTeleporter.HandlePulling(user, exitMapCoords);
         UntrackOccupant(user, vehicleUid);
         return true;
+    }
+
+    private bool CanEnterVehicle(EntityUid vehicle, EntityUid user, int entryIndex)
+    {
+        var ev = new VehicleEntryAttemptEvent(user, entryIndex);
+        RaiseLocalEvent(vehicle, ref ev);
+        return !ev.Cancelled;
+    }
+
+    private bool CanExitVehicle(EntityUid vehicle, EntityUid exit, EntityUid user)
+    {
+        var ev = new VehicleExitAttemptEvent(user, exit);
+        RaiseLocalEvent(vehicle, ref ev);
+        return !ev.Cancelled;
     }
 
     private bool TryGetExitCoordinates(
@@ -805,8 +837,26 @@ public sealed partial class VehicleSystem : EntitySystem
         if (!HasComp<VehicleEnterComponent>(args.Vehicle.Owner))
             return;
 
+        var insideTarget = GetVehicleInsideEyeTarget(ent.Owner, args.Vehicle.Owner);
         _eye.SetTarget(ent.Owner, args.Vehicle.Owner);
-        _viewToggle.EnableViewToggle(ent.Owner, args.Vehicle.Owner, args.Vehicle.Owner, insideTarget: null, isOutside: true);
+        _viewToggle.EnableViewToggle(ent.Owner, args.Vehicle.Owner, args.Vehicle.Owner, insideTarget, isOutside: true);
+    }
+
+    private EntityUid? GetVehicleInsideEyeTarget(EntityUid user, EntityUid vehicle)
+    {
+        if (Transform(user).MapID != MapId.Nullspace)
+            return user;
+
+        if (!TryComp(vehicle, out VehicleInteriorComponent? interior))
+            return null;
+
+        if (interior.Grid.IsValid() && Exists(interior.Grid))
+            return interior.Grid;
+
+        if (interior.Map.IsValid() && Exists(interior.Map))
+            return interior.Map;
+
+        return null;
     }
 
     private void OnVehicleOperatorExited(Entity<VehicleOperatorComponent> ent, ref OnVehicleExitedEvent args)

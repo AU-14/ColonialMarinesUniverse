@@ -4,6 +4,7 @@
   name: au14-job-name-govforMilitaryDoctor
   description: au14-job-description-govforMilitaryDoctor
   setPreference: true
+  hasSquad: false
   requirements:
   - !type:AgeRequirement
     requiredAge: 25
