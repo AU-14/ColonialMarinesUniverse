@@ -8,7 +8,7 @@ using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Maps;
 using Robust.Client.Graphics;
-using Robust.Client.Player;
+using Robust.Shared.Containers;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Graphics;
@@ -23,7 +23,6 @@ namespace Content.Client.Viewport;
 public sealed partial class ScalingViewport
 {
     [Dependency] private IMapManager _mapManager = default!;
-    [Dependency] private IPlayerManager _player = default!;
     [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private ProfManager _prof = default!;
@@ -38,6 +37,7 @@ public sealed partial class ScalingViewport
     private SharedTransformSystem? _transform;
     private EntityLookupSystem? _lookup;
     private ExamineSystem? _examine;
+    private SharedContainerSystem? _containers;
 
     private EntityQuery<TransformComponent>? _xformQuery;
 
@@ -133,26 +133,10 @@ public sealed partial class ScalingViewport
         _transform ??= _entityManager.System<SharedTransformSystem>();
         _lookup ??= _entityManager.System<EntityLookupSystem>();
         _examine ??= _entityManager.System<ExamineSystem>();
+        _containers ??= _entityManager.System<SharedContainerSystem>();
 
-        if (_player.LocalEntity is null)
-        {
-            viewport.Render();
-            return;
-        }
-
-        if (!_entityManager.TryGetComponent<CMUZLevelViewerComponent>(_player.LocalEntity.Value, out var zLevelViewer))
-        {
-            viewport.Render();
-            return;
-        }
-
-        if (!_xformQuery.Value.TryComp(_player.LocalEntity, out var playerXform))
-        {
-            viewport.Render();
-            return;
-        }
-
-        if (!TryGetZRenderOrigin(fallbackEye, playerXform, out var renderMapUid, out var renderMapId, out var renderGlobalPosition))
+        if (!TryGetZLevelViewEntity(fallbackEye, out _, out var zLevelViewer, out var viewXform) ||
+            !TryGetZRenderOrigin(fallbackEye, viewXform, out var renderMapUid, out var renderMapId, out var renderGlobalPosition))
         {
             viewport.Render();
             return;
@@ -266,7 +250,7 @@ public sealed partial class ScalingViewport
 
     private bool TryGetZRenderOrigin(
         IEye eye,
-        TransformComponent playerXform,
+        TransformComponent viewXform,
         out EntityUid mapUid,
         out MapId mapId,
         out Vector2 worldPosition)
@@ -285,17 +269,85 @@ public sealed partial class ScalingViewport
             return true;
         }
 
-        if (playerXform.MapUid is { } playerMapUid)
+        if (viewXform.MapUid is { } viewMapUid)
         {
-            mapUid = playerMapUid;
-            mapId = playerXform.MapID;
-            worldPosition = _transform?.GetWorldPosition(playerXform) ?? eyePosition.Position;
+            mapUid = viewMapUid;
+            mapId = viewXform.MapID;
+            worldPosition = _transform?.GetWorldPosition(viewXform) ?? eyePosition.Position;
             return true;
         }
 
         mapUid = default;
         mapId = MapId.Nullspace;
         worldPosition = default;
+        return false;
+    }
+
+    private bool TryGetZLevelViewEntity(
+        IEye fallbackEye,
+        out EntityUid viewEntity,
+        out CMUZLevelViewerComponent viewer,
+        out TransformComponent xform)
+    {
+        viewEntity = default;
+        viewer = default!;
+        xform = default!;
+
+        var query = _entityManager.EntityQueryEnumerator<EyeComponent>();
+        while (query.MoveNext(out var uid, out var eye))
+        {
+            if (!ReferenceEquals(eye.Eye, fallbackEye))
+                continue;
+
+            var candidate = eye.Target ?? uid;
+            if (TryResolveZLevelViewer(candidate, out viewEntity, out viewer, out xform))
+                return true;
+
+            if (candidate != uid &&
+                TryResolveZLevelViewer(uid, out viewEntity, out viewer, out xform))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        return false;
+    }
+
+    private bool TryResolveZLevelViewer(
+        EntityUid candidate,
+        out EntityUid viewEntity,
+        out CMUZLevelViewerComponent viewer,
+        out TransformComponent xform)
+    {
+        viewEntity = default;
+        viewer = default!;
+        xform = default!;
+
+        var current = candidate;
+        for (var i = 0; i < 8; i++)
+        {
+            if (_entityManager.TryGetComponent<CMUZLevelViewerComponent>(current, out var currentViewer) &&
+                _xformQuery is not null &&
+                _xformQuery.Value.TryComp(current, out var currentXform) &&
+                currentXform.MapUid is not null)
+            {
+                viewEntity = current;
+                viewer = currentViewer;
+                xform = currentXform;
+                return true;
+            }
+
+            if (_containers is null ||
+                !_containers.TryGetContainingContainer((current, null, null), out var container))
+            {
+                break;
+            }
+
+            current = container.Owner;
+        }
+
         return false;
     }
 

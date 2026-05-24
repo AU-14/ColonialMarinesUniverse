@@ -144,7 +144,9 @@ public abstract partial class CMUSharedZLevelsSystem
         int offset,
         Vector2 from,
         Vector2 to,
-        out Vector2 opening)
+        out Vector2 opening,
+        bool preferOpeningAwayFromSource = false,
+        float maxSourceDistanceFromOpeningEdgeTiles = float.PositiveInfinity)
     {
         opening = default;
         if (offset == 0)
@@ -157,6 +159,9 @@ public abstract partial class CMUSharedZLevelsSystem
         var delta = to - from;
         var distance = delta.Length();
         var steps = Math.Max(1, (int) MathF.Ceiling(distance / ZShotOpeningStep));
+        var maxSourceDistance = maxSourceDistanceFromOpeningEdgeTiles * grid.TileSize;
+        var bestSourceDistance = preferOpeningAwayFromSource ? float.MinValue : float.MaxValue;
+        var found = false;
 
         for (var i = 0; i <= steps; i++)
         {
@@ -164,11 +169,27 @@ public abstract partial class CMUSharedZLevelsSystem
             if (!IsZShotOpening(openingMap, grid, position))
                 continue;
 
+            var sourceDistance = Vector2.Distance(from, position);
+            if (sourceDistance > maxSourceDistance)
+                continue;
+
+            if (!preferOpeningAwayFromSource)
+            {
+                opening = position;
+                return true;
+            }
+
+            if (sourceDistance <= bestSourceDistance)
+            {
+                continue;
+            }
+
+            bestSourceDistance = sourceDistance;
             opening = position;
-            return true;
+            found = true;
         }
 
-        return false;
+        return found;
     }
 
     private bool IsZShotOpening(EntityUid mapUid, MapGridComponent grid, Vector2 position)
