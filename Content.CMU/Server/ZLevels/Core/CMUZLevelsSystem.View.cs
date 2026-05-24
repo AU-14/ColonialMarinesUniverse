@@ -90,9 +90,7 @@ public sealed partial class CMUZLevelsSystem
         {
             SyncViewerProbes((uid, viewer), xform);
 
-            if (!TryGetViewerRenderOrigin((uid, viewer), xform, out _, out _, out var globalPos))
-                continue;
-
+            var globalPos = _transform.GetWorldPosition(xform);
             var eyeOffset = GetViewerProbeOffset(uid);
             if (_viewerProbeEyes.TryGetValue(uid, out var probes))
             {
@@ -129,10 +127,7 @@ public sealed partial class CMUZLevelsSystem
     {
         base.OnViewerMove(ent, ref args);
 
-        var xform = Transform(ent);
-        if (!TryGetViewerRenderOrigin(ent, xform, out _, out _, out var globalPos))
-            return;
-
+        var globalPos = _transform.GetWorldPosition(ent);
         if (!_viewerProbeEyes.TryGetValue(ent, out var probes))
             return;
 
@@ -206,17 +201,20 @@ public sealed partial class CMUZLevelsSystem
         }
 
         xform ??= Transform(ent);
-        if (!TryGetViewerRenderOrigin(ent, xform, out var originXform, out var map, out var globalPos))
+        var map = xform.MapUid;
+
+        if (map is null)
         {
             ClearViewerProbes(ent);
             return;
         }
 
-        var stairPreviewUp = CanPreviewUpperZFromStair((ent.Owner, ent.Comp), originXform, map, globalPos, _stairPreviewPositions);
-        SetStairPreviewUp(ent, stairPreviewUp, _stairPreviewPositions);
+        var globalPos = _transform.GetWorldPosition(xform);
         var eyeOffset = GetViewerProbeOffset(ent);
         var probeGlobalPos = globalPos + eyeOffset;
-        BuildWantedProbeDepths(map, probeGlobalPos, _wantedProbeDepths, stairPreviewUp);
+        var stairPreviewUp = CanPreviewUpperZFromStair((ent.Owner, ent.Comp), xform, map.Value, globalPos, _stairPreviewPositions);
+        SetStairPreviewUp(ent, stairPreviewUp, _stairPreviewPositions);
+        BuildWantedProbeDepths(map.Value, probeGlobalPos, _wantedProbeDepths, stairPreviewUp);
 
         if (!_viewerProbeEyes.TryGetValue(ent.Owner, out var probes))
         {
@@ -248,7 +246,7 @@ public sealed partial class CMUZLevelsSystem
             if (probes.ContainsKey(depth))
                 continue;
 
-            if (!TryMapOffset(map, depth, out var probeMap))
+            if (!TryMapOffset(map.Value, depth, out var probeMap))
                 continue;
 
             var probePosition = GetProbeWorldPosition(ent.Comp, depth, globalPos, eyeOffset);
@@ -263,34 +261,6 @@ public sealed partial class CMUZLevelsSystem
 
         _wantedProbeDepths.Clear();
         _probeDepthsToRemove.Clear();
-    }
-
-    private bool TryGetViewerRenderOrigin(
-        Entity<CMUZLevelViewerComponent> viewer,
-        TransformComponent viewerXform,
-        out TransformComponent originXform,
-        out EntityUid map,
-        out Vector2 globalPos)
-    {
-        originXform = viewerXform;
-        map = default;
-        globalPos = default;
-
-        if (TryComp(viewer.Owner, out EyeComponent? eye) &&
-            eye.Target is { } target &&
-            TryComp(target, out TransformComponent? targetXform) &&
-            targetXform.MapUid is { } targetMap &&
-            HasComp<CMUZLevelMapComponent>(targetMap))
-        {
-            originXform = targetXform;
-        }
-
-        if (originXform.MapUid is not { } originMap)
-            return false;
-
-        map = originMap;
-        globalPos = _transform.GetWorldPosition(originXform);
-        return true;
     }
 
     private void AddViewerProbeSubscribers(EntityUid viewer, EntityUid zEye)

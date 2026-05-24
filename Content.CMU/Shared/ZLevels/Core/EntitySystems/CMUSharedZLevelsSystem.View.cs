@@ -159,37 +159,58 @@ public abstract partial class CMUSharedZLevelsSystem
         var delta = to - from;
         var distance = delta.Length();
         var steps = Math.Max(1, (int) MathF.Ceiling(distance / ZShotOpeningStep));
-        var maxSourceDistance = maxSourceDistanceFromOpeningEdgeTiles * grid.TileSize;
-        var bestSourceDistance = preferOpeningAwayFromSource ? float.MinValue : float.MaxValue;
-        var found = false;
+        var sourceTile = preferOpeningAwayFromSource
+            ? _map.WorldToTile(openingMap, grid, from)
+            : default;
+        var fallbackOpening = Vector2.Zero;
+        var hasFallbackOpening = false;
+        var maxSourceDistanceFromOpeningCenter = float.IsPositiveInfinity(maxSourceDistanceFromOpeningEdgeTiles)
+            ? float.PositiveInfinity
+            : grid.TileSize * (0.5f + Math.Max(0f, maxSourceDistanceFromOpeningEdgeTiles));
+        var maxSourceDistanceSquared = maxSourceDistanceFromOpeningCenter * maxSourceDistanceFromOpeningCenter;
 
         for (var i = 0; i <= steps; i++)
         {
             var position = from + delta * (i / (float) steps);
-            if (!IsZShotOpening(openingMap, grid, position))
-                continue;
-
-            var sourceDistance = Vector2.Distance(from, position);
-            if (sourceDistance > maxSourceDistance)
-                continue;
-
-            if (!preferOpeningAwayFromSource)
+            var tile = _map.WorldToTile(openingMap, grid, position);
+            if (_map.TryGetTileRef(openingMap, grid, position, out var tileRef))
             {
-                opening = position;
-                return true;
+                if (!CMUZLevelOpeningCache.IsOpeningTile(tileRef.Tile, TilDefMan))
+                    continue;
+
+                tile = tileRef.GridIndices;
             }
 
-            if (sourceDistance <= bestSourceDistance)
+            var openingCenter = _map.ToCenterCoordinates(openingMap, tile, grid).Position;
+            if (!IsZShotOpening(openingMap, grid, openingCenter))
+                continue;
+
+            if (Vector2.DistanceSquared(from, openingCenter) > maxSourceDistanceSquared)
+                continue;
+
+            if (preferOpeningAwayFromSource &&
+                tile == sourceTile)
             {
+                if (!hasFallbackOpening)
+                {
+                    fallbackOpening = openingCenter;
+                    hasFallbackOpening = true;
+                }
+
                 continue;
             }
 
-            bestSourceDistance = sourceDistance;
-            opening = position;
-            found = true;
+            opening = openingCenter;
+            return true;
         }
 
-        return found;
+        if (hasFallbackOpening)
+        {
+            opening = fallbackOpening;
+            return true;
+        }
+
+        return false;
     }
 
     private bool IsZShotOpening(EntityUid mapUid, MapGridComponent grid, Vector2 position)
