@@ -565151,7 +565151,7 @@ entities:
     - type: Transform
       pos: 76.5,-44.5
       parent: 1
-- proto: RMCCommunicationsTowerOn
+- proto: AU14CommunicationsTowerColony
   entities:
   - uid: 82937
     components:
@@ -589893,7 +589893,7 @@ entities:
   - uid: 1573
     components:
     - type: MetaData
-      desc: The 'Weyland-Yutani TerraScientia bio-suit MK II'. An advanced light-weight bio-suit developed in-house by Weston-Yamada. It's a hood that protects the head and face from biological contaminants, synthetic compliant. Offers no real protection.
+      desc: The 'Weyland-Yutani TerraScientia bio-suit MK II'. An advanced light-weight bio-suit developed in-house by Weyland-Yutani. It's a hood that protects the head and face from biological contaminants, synthetic compliant. Offers no real protection.
       name: WeYu-TSS MK II - bio suit
     - type: Transform
       parent: 1571
