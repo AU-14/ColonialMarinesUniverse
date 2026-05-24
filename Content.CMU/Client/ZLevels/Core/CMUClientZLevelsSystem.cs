@@ -41,6 +41,7 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         SubscribeLocalEvent<CMUZPhysicsComponent, ComponentStartup>(OnStartup);
         SubscribeLocalEvent<CMUZPhysicsComponent, GetEyeOffsetEvent>(OnEyeOffset);
         SubscribeLocalEvent<CMUZFallingComponent, ComponentShutdown>(OnFallingShutdown);
+        SubscribeLocalEvent<CMUZLevelProjectileVisualOffsetComponent, ComponentShutdown>(OnProjectileVisualOffsetShutdown);
         SubscribeLocalEvent<GridRemovalEvent>(OnGridShutdown);
         SubscribeLocalEvent<TileChangedEvent>(OnTileChanged);
     }
@@ -76,6 +77,17 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         sprite.NoRotation = zPhys.NoRotDefault;
         _sprite.SetOffset((ent.Owner, sprite), zPhys.SpriteOffsetDefault);
         _sprite.SetDrawDepth((ent.Owner, sprite), zPhys.DrawDepthDefault);
+    }
+
+    private void OnProjectileVisualOffsetShutdown(Entity<CMUZLevelProjectileVisualOffsetComponent> ent, ref ComponentShutdown args)
+    {
+        if (ent.Comp.OriginalOffset is not { } original ||
+            !TryComp<SpriteComponent>(ent, out var sprite))
+        {
+            return;
+        }
+
+        _sprite.SetOffset((ent.Owner, sprite), original);
     }
 
     private void OnStartup(Entity<CMUZPhysicsComponent> ent, ref ComponentStartup args)
@@ -173,6 +185,22 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
             _sprite.SetOffset((uid, sprite), zPhys.SpriteOffsetDefault + new Vector2(0, zPhys.LocalPosition * ZLevelOffset));
             _sprite.SetDrawDepth((uid, sprite), zPhys.LocalPosition > 0 ? (int)Shared.DrawDepth.DrawDepth.OverMobs : zPhys.DrawDepthDefault);
         }
+
+        var projectileQuery = EntityQueryEnumerator<CMUZLevelProjectileVisualOffsetComponent, SpriteComponent>();
+        while (projectileQuery.MoveNext(out var uid, out var visual, out var sprite))
+        {
+            ApplyProjectileVisualOffset(uid, visual, sprite);
+        }
+    }
+
+    private void ApplyProjectileVisualOffset(EntityUid uid, CMUZLevelProjectileVisualOffsetComponent visual, SpriteComponent sprite)
+    {
+        visual.OriginalOffset ??= sprite.Offset - visual.AppliedOffset;
+        if (visual.AppliedOffset == visual.Offset)
+            return;
+
+        _sprite.SetOffset((uid, sprite), visual.OriginalOffset.Value + visual.Offset);
+        visual.AppliedOffset = visual.Offset;
     }
 
     public override void Shutdown()

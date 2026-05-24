@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared._CMU14.Input;
 using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -16,6 +17,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 {
     private const float CrossZShotRange = 4f;
     private const float CrossZRenderOffset = 0.7f;
+    private const float CrossZOpeningSourceEdgeRangeTiles = 2f;
+    private const float CrossZOpeningSourceNudge = 0.30f;
 
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private SharedGunSystem _gun = default!;
@@ -63,8 +66,11 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private void ToggleShootDown(EntityUid user)
     {
-        if (!TryGetReadyGun(user, "cmu-zlevel-shoot-down-no-gun", "cmu-zlevel-shoot-down-requires-wield"))
+        if (!CanAimAcrossZWithoutGun(user) &&
+            !TryGetReadyGun(user, "cmu-zlevel-shoot-down-no-gun", "cmu-zlevel-shoot-down-requires-wield"))
+        {
             return;
+        }
 
         var shooter = EnsureComp<CMUZLevelShooterComponent>(user);
         shooter.ShootDown = !shooter.ShootDown;
@@ -112,6 +118,11 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         return !TryComp<WieldableComponent>(gunUid, out var wieldable) || wieldable.Wielded;
     }
 
+    private bool CanAimAcrossZWithoutGun(EntityUid user)
+    {
+        return HasComp<XenoComponent>(user);
+    }
+
     private bool TryDisableShootDown(EntityUid user)
     {
         if (!TryComp<CMUZLevelShooterComponent>(user, out var shooter) ||
@@ -130,12 +141,13 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         EntityCoordinates fromCoordinates,
         EntityCoordinates toCoordinates,
         out EntityCoordinates adjustedFromCoordinates,
-        out EntityCoordinates adjustedToCoordinates)
+        out EntityCoordinates adjustedToCoordinates,
+        bool requireReadyGunForLookUp = true)
     {
         adjustedFromCoordinates = fromCoordinates;
         adjustedToCoordinates = toCoordinates;
 
-        var offset = GetRequestedShotOffset(shooter, requireReadyGunForLookUp: true);
+        var offset = GetRequestedShotOffset(shooter, requireReadyGunForLookUp);
         if (offset == 0)
             return true;
 
@@ -152,7 +164,15 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         var fromMap = _transform.ToMapCoordinates(fromCoordinates);
         var toMap = _transform.ToMapCoordinates(toCoordinates);
         var clampedTo = ClampCrossZShotTarget(fromMap.Position, toMap.Position);
-        if (!_zLevels.TryFindZShotOpening(shooterMap.Value, targetMap.Value, offset, fromMap.Position, clampedTo, out _))
+        if (!_zLevels.TryFindZShotOpening(
+                shooterMap.Value,
+                targetMap.Value,
+                offset,
+                fromMap.Position,
+                clampedTo,
+                out var opening,
+                preferOpeningAwayFromSource: true,
+                maxSourceDistanceFromOpeningEdgeTiles: CrossZOpeningSourceEdgeRangeTiles))
         {
             PopupSelf(shooter, offset > 0
                 ? "cmu-zlevel-shoot-up-blocked-floor"
@@ -160,9 +180,17 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             return false;
         }
 
-        var renderOffset = GetCrossZRenderOffset(offset);
-        var targetFrom = new MapCoordinates(fromMap.Position - renderOffset, map.MapId);
-        var targetTo = new MapCoordinates(clampedTo - renderOffset, map.MapId);
+        GetCrossZProjectilePath(
+            fromMap.Position,
+            toMap.Position,
+            clampedTo,
+            opening,
+            offset,
+            out var projectileFrom,
+            out var projectileTo);
+
+        var targetFrom = new MapCoordinates(projectileFrom, map.MapId);
+        var targetTo = new MapCoordinates(projectileTo, map.MapId);
 
         adjustedFromCoordinates = _transform.ToCoordinates(targetFrom);
         adjustedToCoordinates = _transform.ToCoordinates(targetTo);
@@ -194,7 +222,15 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         }
 
         var clampedTo = ClampCrossZShotTarget(fromCoordinates.Position, toCoordinates.Position);
-        if (!_zLevels.TryFindZShotOpening(shooterMap.Value, targetMap.Value, offset, fromCoordinates.Position, clampedTo, out _))
+        if (!_zLevels.TryFindZShotOpening(
+                shooterMap.Value,
+                targetMap.Value,
+                offset,
+                fromCoordinates.Position,
+                clampedTo,
+                out var opening,
+                preferOpeningAwayFromSource: true,
+                maxSourceDistanceFromOpeningEdgeTiles: CrossZOpeningSourceEdgeRangeTiles))
         {
             PopupSelf(shooter, offset > 0
                 ? "cmu-zlevel-shoot-up-blocked-floor"
@@ -202,15 +238,99 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             return false;
         }
 
-        var renderOffset = GetCrossZRenderOffset(offset);
-        adjustedFromCoordinates = new MapCoordinates(fromCoordinates.Position - renderOffset, map.MapId);
-        adjustedToCoordinates = new MapCoordinates(clampedTo - renderOffset, map.MapId);
+        GetCrossZProjectilePath(
+            fromCoordinates.Position,
+            toCoordinates.Position,
+            clampedTo,
+            opening,
+            offset,
+            out var projectileFrom,
+            out var projectileTo);
+
+        adjustedFromCoordinates = new MapCoordinates(projectileFrom, map.MapId);
+        adjustedToCoordinates = new MapCoordinates(projectileTo, map.MapId);
         return true;
+    }
+
+    public bool TryGetProjectileVisualOffset(
+        EntityUid shooter,
+        EntityCoordinates sourceFromCoordinates,
+        EntityCoordinates projectileFromCoordinates,
+        out Vector2 visualOffset,
+        bool requireReadyGunForLookUp = true)
+    {
+        visualOffset = default;
+
+        var offset = GetRequestedShotOffset(shooter, requireReadyGunForLookUp);
+        if (offset == 0)
+            return false;
+
+        var sourceFromMap = _transform.ToMapCoordinates(sourceFromCoordinates);
+        var projectileFromMap = _transform.ToMapCoordinates(projectileFromCoordinates);
+        if (sourceFromMap.MapId == MapId.Nullspace ||
+            projectileFromMap.MapId == MapId.Nullspace)
+        {
+            return false;
+        }
+
+        // Keep the projectile physics on the opening path, but shift its sprite to
+        // the barrel position in the compensated Z render pass.
+        visualOffset = sourceFromMap.Position - GetCrossZRenderOffset(offset) - projectileFromMap.Position;
+        return visualOffset.LengthSquared() > 0.001f;
+    }
+
+    public void ApplyProjectileVisualOffset(List<EntityUid>? projectiles, Vector2 visualOffset)
+    {
+        if (projectiles == null ||
+            visualOffset.LengthSquared() <= 0.001f)
+        {
+            return;
+        }
+
+        foreach (var projectile in projectiles)
+        {
+            var visual = EnsureComp<CMUZLevelProjectileVisualOffsetComponent>(projectile);
+            visual.Offset = visualOffset;
+            Dirty(projectile, visual);
+        }
+    }
+
+    private static void GetCrossZProjectilePath(
+        Vector2 from,
+        Vector2 to,
+        Vector2 clampedTo,
+        Vector2 opening,
+        int offset,
+        out Vector2 projectileFrom,
+        out Vector2 projectileTo)
+    {
+        projectileFrom = NudgeOpeningTowardSource(opening, from);
+        var direction = to - from;
+        if (direction.LengthSquared() <= 0.001f)
+            direction = clampedTo - projectileFrom;
+
+        if (direction.LengthSquared() <= 0.001f)
+        {
+            projectileTo = clampedTo;
+            return;
+        }
+
+        var distance = Math.Max(1f, Vector2.Distance(projectileFrom, clampedTo));
+        projectileTo = projectileFrom + Vector2.Normalize(direction) * distance;
     }
 
     private static Vector2 GetCrossZRenderOffset(int offset)
     {
         return new Vector2(0f, CrossZRenderOffset * offset);
+    }
+
+    private static Vector2 NudgeOpeningTowardSource(Vector2 opening, Vector2 source)
+    {
+        var sourceDirection = source - opening;
+        if (sourceDirection.LengthSquared() <= 0.001f)
+            return opening;
+
+        return opening + Vector2.Normalize(sourceDirection) * CrossZOpeningSourceNudge;
     }
 
     private static Vector2 ClampCrossZShotTarget(Vector2 from, Vector2 to)
