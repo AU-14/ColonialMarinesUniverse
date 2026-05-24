@@ -8,7 +8,7 @@
   },
   "states": [
     {
-      "name": "equipped",
+      "name": "equipped-HELMET",
       "directions": 4
     },
     {

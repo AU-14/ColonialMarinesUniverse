@@ -8,7 +8,7 @@
   },
   "states": [
     {
-      "name": "armor",
+      "name": "equipped-OUTERCLOTHING",
       "directions": 4
     },
     {
