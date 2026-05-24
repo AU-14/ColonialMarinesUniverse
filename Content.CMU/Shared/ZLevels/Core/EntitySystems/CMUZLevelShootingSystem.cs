@@ -1,6 +1,10 @@
 using System.Numerics;
+using System;
+using Content.Shared._CMU14.Blackfoot;
 using Content.Shared._CMU14.Input;
 using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared._RMC14.Vehicle;
+using Content.Shared.Actions;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -16,8 +20,10 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 {
     private const float CrossZShotRange = 4f;
     private const float CrossZRenderOffset = 0.7f;
+    private const string BlackfootDoorGunHardpointType = "DoorGun";
 
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedGunSystem _gun = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -63,21 +69,70 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private void ToggleShootDown(EntityUid user)
     {
+        if (TryToggleBlackfootDoorGunShootDown(user))
+            return;
+
         if (!TryGetReadyGun(user, "cmu-zlevel-shoot-down-no-gun", "cmu-zlevel-shoot-down-requires-wield"))
             return;
 
-        var shooter = EnsureComp<CMUZLevelShooterComponent>(user);
-        shooter.ShootDown = !shooter.ShootDown;
-        DirtyField(user, shooter, nameof(CMUZLevelShooterComponent.ShootDown));
+        var shootDown = !IsShootDownEnabled(user);
+        SetShootDown(user, shootDown);
 
-        if (shooter.ShootDown)
-            _zLevels.TryDisableLookUp(user);
-
-        var message = shooter.ShootDown
+        var message = shootDown
             ? "cmu-zlevel-shoot-down-enabled"
             : "cmu-zlevel-shoot-down-disabled";
 
         PopupSelf(user, message);
+    }
+
+    private bool TryToggleBlackfootDoorGunShootDown(EntityUid user)
+    {
+        if (!TryComp(user, out BlackfootDoorGunActionComponent? actions) ||
+            actions.Vehicle is not { } vehicle ||
+            !HasComp<BlackfootFlightComponent>(vehicle))
+        {
+            return false;
+        }
+
+        if (!IsUsingBlackfootDoorGun(user, vehicle))
+        {
+            PopupSelfPlain(user, "Select the M866 automatic grenade launcher first.", PopupType.SmallCaution);
+            UpdateBlackfootDoorGunAction(user, actions, false);
+            return true;
+        }
+
+        var shootDown = !IsShootDownEnabled(user);
+        SetShootDown(user, shootDown);
+        UpdateBlackfootDoorGunAction(user, actions, true);
+
+        var message = shootDown
+            ? "M866 set to fire one Z-level below."
+            : "M866 set to fire on the current Z-level.";
+
+        PopupSelfPlain(user, message);
+        return true;
+    }
+
+    private bool IsUsingBlackfootDoorGun(EntityUid user, EntityUid vehicle)
+    {
+        if (!TryComp(user, out VehicleWeaponsOperatorComponent? weaponsOperator) ||
+            weaponsOperator.Vehicle != vehicle ||
+            weaponsOperator.SelectedWeapon is not { } selected ||
+            !TryComp(selected, out HardpointItemComponent? hardpoint))
+        {
+            return false;
+        }
+
+        return string.Equals(hardpoint.HardpointType, BlackfootDoorGunHardpointType, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void UpdateBlackfootDoorGunAction(EntityUid user, BlackfootDoorGunActionComponent actions, bool enabled)
+    {
+        if (actions.ZModeToggleAction is not { } action)
+            return;
+
+        _actions.SetEnabled(action, enabled);
+        _actions.SetToggled(action, IsShootDownEnabled(user));
     }
 
     private bool TryGetReadyGun(EntityUid user, string noGunMessage, string requiresWieldMessage)
@@ -114,15 +169,43 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private bool TryDisableShootDown(EntityUid user)
     {
-        if (!TryComp<CMUZLevelShooterComponent>(user, out var shooter) ||
-            !shooter.ShootDown)
+        if (!IsShootDownEnabled(user))
         {
             return false;
         }
 
-        shooter.ShootDown = false;
-        DirtyField(user, shooter, nameof(CMUZLevelShooterComponent.ShootDown));
+        SetShootDown(user, false);
         return true;
+    }
+
+    public bool IsShootDownEnabled(EntityUid user)
+    {
+        return TryComp<CMUZLevelShooterComponent>(user, out var shooter) && shooter.ShootDown;
+    }
+
+    public void SetShootDown(EntityUid user, bool enabled)
+    {
+        CMUZLevelShooterComponent shooter;
+        if (TryComp<CMUZLevelShooterComponent>(user, out var existing))
+        {
+            shooter = existing;
+        }
+        else
+        {
+            if (!enabled)
+                return;
+
+            shooter = EnsureComp<CMUZLevelShooterComponent>(user);
+        }
+
+        if (shooter.ShootDown == enabled)
+            return;
+
+        shooter.ShootDown = enabled;
+        DirtyField(user, shooter, nameof(CMUZLevelShooterComponent.ShootDown));
+
+        if (enabled)
+            _zLevels.TryDisableLookUp(user);
     }
 
     public bool TryAdjustShotCoordinates(
@@ -227,6 +310,11 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
     private void PopupSelf(EntityUid user, string message)
     {
         _popup.PopupClient(Loc.GetString(message), user, user, PopupType.SmallCaution);
+    }
+
+    private void PopupSelfPlain(EntityUid user, string message, PopupType type = PopupType.Small)
+    {
+        _popup.PopupCursor(message, user, type);
     }
 
     private int GetRequestedShotOffset(EntityUid shooter, bool requireReadyGunForLookUp = false)

@@ -1,0 +1,298 @@
+- type: entity
+  abstract: true
+  parent: VehicleInteriorGeneralBase
+  id: CMUBlackfootInteriorBase
+  name: Blackfoot interior fixture
+  description: A fixture inside an AD-71E Blackfoot.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot.rsi
+
+- type: entity
+  parent: CMUBlackfootInteriorBase
+  id: CMUBlackfootSideExit
+  name: Blackfoot side door
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    state: door left
+  - type: Physics
+    bodyType: Static
+    canCollide: true
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        density: 20000
+        hard: true
+        mask:
+        - FullTileMask
+        layer:
+        - HighImpassable
+        - MidImpassable
+        - LowImpassable
+        - InteractImpassable
+  - type: VehicleExit
+    entryIndex: 2
+  - type: RMCIgnoreGhostInteractionLimits
+
+- type: entity
+  parent: CMUBlackfootSideExit
+  id: CMUBlackfootSideExitRight
+  name: Blackfoot side door
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    state: door right
+  - type: VehicleExit
+    entryIndex: 1
+
+- type: entity
+  parent: CMUBlackfootSideExit
+  id: CMUBlackfootRearExit
+  name: Blackfoot rear door
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    drawdepth: Doors
+    layers:
+    - map: [ door ]
+      state: rear door closed
+  - type: VehicleExit
+    entryIndex: 0
+  - type: BlackfootRearDoorVisuals
+
+- type: entity
+  parent: VehicleAmmoLoader
+  id: CMUBlackfootAmmoLoader
+  name: Blackfoot weapon access port
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_peripherals.rsi
+    state: blackfoot-ammo-interior-left
+
+- type: entity
+  parent: CMUBlackfootAmmoLoader
+  id: CMUBlackfootAmmoLoaderRight
+  name: Blackfoot weapon access port
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_peripherals.rsi
+    state: blackfoot-ammo-interior-right
+
+- type: entity
+  parent: CMUBlackfootInteriorBase
+  id: CMUBlackfootRearDoorButton
+  name: Blackfoot rear door control
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_door_button.rsi
+    state: blackfoot
+  - type: Clickable
+  - type: InteractionOutline
+  - type: BlackfootRearDoorControl
+  - type: RemoveComponents
+    components:
+    - type: InteractionTransparency
+
+- type: entity
+  parent: RMCSeatArmored
+  id: CMUSeatBlackfootPassenger
+  name: Blackfoot passenger seat
+  placement:
+    mode: PlaceFree
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot.rsi
+    state: seat
+
+- type: entity
+  parent: RMCSeatArmoredDriver
+  id: CMUSeatBlackfootPilot
+  name: Blackfoot pilot seat
+  placement:
+    mode: PlaceFree
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot.rsi
+    state: pilot-chair
+  - type: VehicleWeaponsSeat
+    skills:
+      all: {}
+    isPrimaryOperatorSeat: true
+    allowUiSelection: true
+    allowHotbarSelection: true
+    allowedHardpointTypes:
+    - Launcher
+  - type: UserInterface
+    interfaces:
+      enum.VehicleWeaponsUiKey.Key:
+        type: VehicleWeaponsBoundUserInterface
+
+- type: entity
+  parent: RMCSeatArmoredBase
+  id: CMUSeatBlackfootDoorGunner
+  name: M866 automatic grenade launcher
+  description: A belt-fed automatic grenade launcher mounted to the aft end of a Blackfoot.
+  placement:
+    mode: PlaceFree
+  components:
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot_64x64.rsi
+    state: doorgun
+  - type: VehicleWeaponsSeat
+    skills:
+      all: {}
+    isPrimaryOperatorSeat: false
+    allowUiSelection: true
+    allowHotbarSelection: true
+    baseViewPvsScale: 0.35
+    baseViewCursorMaxOffset: 5
+    baseViewCursorPvsIncrease: 0.5
+    allowedHardpointTypes:
+    - DoorGun
+  - type: BlackfootDoorGunSeat
+  - type: UserInterface
+    interfaces:
+      enum.VehicleWeaponsUiKey.Key:
+        type: VehicleWeaponsBoundUserInterface
+
+- type: entity
+  parent: CMUBlackfootInteriorBase
+  id: CMUBlackfootChassis
+  name: Blackfoot chassis
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot_chassis.rsi
+    state: chassis
+    drawdepth: FloorTiles
+  - type: Physics
+    bodyType: Static
+    canCollide: true
+  - type: Fixtures
+    fixtures:
+      leftLowerHull:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.5,-1.55,-1.05,0.25"
+        density: 20000
+        hard: true
+        mask:
+        - FullTileMask
+        layer:
+        - HighImpassable
+        - MidImpassable
+        - LowImpassable
+        - InteractImpassable
+      leftUpperHull:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.5,1.45,-1.05,2.55"
+        density: 20000
+        hard: true
+        mask:
+        - FullTileMask
+        layer:
+        - HighImpassable
+        - MidImpassable
+        - LowImpassable
+        - InteractImpassable
+      rightLowerHull:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "1.05,-1.55,1.5,0.25"
+        density: 20000
+        hard: true
+        mask:
+        - FullTileMask
+        layer:
+        - HighImpassable
+        - MidImpassable
+        - LowImpassable
+        - InteractImpassable
+      rightUpperHull:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "1.05,1.45,1.5,2.55"
+        density: 20000
+        hard: true
+        mask:
+        - FullTileMask
+        layer:
+        - HighImpassable
+        - MidImpassable
+        - LowImpassable
+        - InteractImpassable
+      nose:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.75,-2.55,0.75,-1.65"
+        density: 20000
+        hard: true
+        mask:
+        - FullTileMask
+        layer:
+        - HighImpassable
+        - MidImpassable
+        - LowImpassable
+        - InteractImpassable
+  - type: PointLight
+    energy: 2
+    radius: 10
+
+- type: entity
+  parent: VehicleViewport
+  id: CMUBlackfootViewport
+  name: Blackfoot viewport
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot.rsi
+    state: vehicle_bars
+    drawdepth: Overdoors
+
+- type: entity
+  parent: CMUBlackfootInteriorBase
+  id: CMUBlackfootCassettePlayer
+  name: integrated cassette player
+  description: A jury-rigged cassette player forcibly installed in place of a short-wave communications uplink.
+  placement:
+    mode: PlaceFree
+  components:
+  - type: Sprite
+    state: cassette-player-open
+  - type: Clickable
+  - type: InteractionOutline
+
+- type: entity
+  parent: VehicleInteriorExtinguisherClosed
+  id: CMUBlackfootExtinguisherCabinet
+  name: Blackfoot extinguisher cabinet
+  placement:
+    mode: PlaceFree
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot.rsi
+    drawdepth: Overdoors
+    layers:
+    - state: fire-cab
+    - state: fire-cab_full
+      map: ["enum.ItemCabinetVisuals.Layer"]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.ItemCabinetVisuals.ContainsItem:
+        enum.ItemCabinetVisuals.Layer:
+          True: { state: fire-cab_full }
+          False: { state: fire-cab_empty }
+      enum.OpenableVisuals.Opened:
+        enum.ItemCabinetVisuals.Layer:
+          True: { visible: true }
+          False: { visible: false }

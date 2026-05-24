@@ -152,7 +152,7 @@ public sealed partial class ScalingViewport
             return;
         }
 
-        if (playerXform.MapUid is null)
+        if (!TryGetZRenderOrigin(fallbackEye, playerXform, out var renderMapUid, out var renderMapId, out var renderGlobalPosition))
         {
             viewport.Render();
             return;
@@ -165,17 +165,17 @@ public sealed partial class ScalingViewport
             CMUSharedZLevelsSystem.MaxZLevelsBelowRendering);
         var maxOpeningRects = Math.Max(0, _config.GetCVar(CMUZLevelsCVars.MaxOpeningRectsPerPass));
         var lowestDepth = 0;
-        var weatherSourceMapId = GetWeatherSourceMapId(playerXform.MapUid.Value, playerXform.MapID);
+        var weatherSourceMapId = GetWeatherSourceMapId(renderMapUid, renderMapId);
         _zOpeningBounds.Clear();
         using (var openingProfile = _prof.Group("CMU Z Opening Query"))
         {
             for (var i = 0; i >= -maxDepth; i--)
             {
-                var checkingMap = playerXform.MapUid.Value;
+                var checkingMap = renderMapUid;
 
                 if (i != 0)
                 {
-                    if (!_zLevels.TryMapOffset(playerXform.MapUid.Value, i, out var mapUidBelow))
+                    if (!_zLevels.TryMapOffset(renderMapUid, i, out var mapUidBelow))
                         continue;
 
                     checkingMap = mapUidBelow.Value;
@@ -208,12 +208,12 @@ public sealed partial class ScalingViewport
                 }
                 else
                 {
-                    if (!_zLevels.TryMapOffset(playerXform.MapUid.Value, depth, out _, out var mapComp))
+                    if (!_zLevels.TryMapOffset(renderMapUid, depth, out _, out var mapComp))
                         continue;
 
                     Angle rotation = fallbackEye.Rotation * -1;
                     var offset = rotation.ToWorldVec() * CMUClientZLevelsSystem.ZLevelOffset * depth;
-                    var renderPosition = fallbackEye.Position.Position;
+                    var renderPosition = renderGlobalPosition;
                     var fovPosition = renderPosition;
                     var eyeOffset = fallbackEye.Offset + offset;
                     var separateStairPreview = depth == 1 &&
@@ -233,7 +233,7 @@ public sealed partial class ScalingViewport
                     _zEye.LowestDepth = lowestDepth;
                     _zEye.Depth = depth;
                     _zEye.HighestDepth = lookUp;
-                    _zEye.BaseMapId = playerXform.MapID;
+                    _zEye.BaseMapId = renderMapId;
                     _zEye.WeatherSourceMapId = weatherSourceMapId;
                     _zEye.Position = new MapCoordinates(fovPosition, mapComp.MapId);
                     _zEye.DrawFov = fallbackEye.DrawFov && depth >= 0;
@@ -262,6 +262,41 @@ public sealed partial class ScalingViewport
         // Restore the Eye
         Eye = fallbackEye;
         viewport.Eye = Eye;
+    }
+
+    private bool TryGetZRenderOrigin(
+        IEye eye,
+        TransformComponent playerXform,
+        out EntityUid mapUid,
+        out MapId mapId,
+        out Vector2 worldPosition)
+    {
+        var eyePosition = eye.Position;
+        if (eyePosition.MapId != MapId.Nullspace &&
+            _mapSystem != null &&
+            _mapSystem.TryGetMap(eyePosition.MapId, out var eyeMapUid) &&
+            eyeMapUid is { } eyeMap &&
+            eyeMap.IsValid() &&
+            _entityManager.HasComponent<CMUZLevelMapComponent>(eyeMap))
+        {
+            mapUid = eyeMap;
+            mapId = eyePosition.MapId;
+            worldPosition = eyePosition.Position;
+            return true;
+        }
+
+        if (playerXform.MapUid is { } playerMapUid)
+        {
+            mapUid = playerMapUid;
+            mapId = playerXform.MapID;
+            worldPosition = _transform?.GetWorldPosition(playerXform) ?? eyePosition.Position;
+            return true;
+        }
+
+        mapUid = default;
+        mapId = MapId.Nullspace;
+        worldPosition = default;
+        return false;
     }
 
     private MapId GetWeatherSourceMapId(EntityUid baseMap, MapId fallback)

@@ -1,0 +1,58 @@
+- type: entity
+  id: CMUBlackfootLandingPad
+  name: Blackfoot landing pad
+  description: A deployable pad for parking, refueling, and recharging Blackfoots.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: FloorTiles
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_landing_pad.rsi
+    state: pad
+  - type: Clickable
+  - type: InteractionOutline
+  - type: BlackfootLandingPad
+    state: Deployed
+    fuelPumpOffset: -1.15625,0
+    flightComputerOffset: -1.5,-1
+    lightOffsets:
+    - -1.5,-1.5
+    - -1.5,1.5
+    - 1.5,-1.5
+    - 1.5,1.5
+  - type: BlackfootPackableSupport
+    packedPrototype: CMUBlackfootLandingPadFoldedProp
+    initialPopup: The landing pad anchor bolts are loosened.
+    panelPopup: The landing pad service panel is opened.
+    packedPopup: The Blackfoot landing pad is folded and packed.
+
+- type: entity
+  parent: CMBaseStructureCorrodible
+  id: CMUBlackfootFlightComputer
+  name: Blackfoot flight computer
+  description: A compact control terminal for a nearby Blackfoot landing pad.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_structures.rsi
+    state: flight-cpu
+  - type: Clickable
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.BlackfootFlightComputerUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.BlackfootFlightComputerUiKey.Key:
+        type: BlackfootFlightComputerBui
+  - type: BlackfootFlightComputer
+  - type: BlackfootPackableSupport
+    packedPrototype: CMUBlackfootFlightComputerCrate
+    initialPopup: The flight computer anchor bolts are loosened.
+    panelPopup: The flight computer service panel is opened.
+    packedPopup: The Blackfoot flight computer is packed into its case.
+  - type: RemoveComponents
+    components:
+    - type: Pullable

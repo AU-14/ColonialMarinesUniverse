@@ -1,0 +1,26 @@
+- type: entity
+  id: CMUBlackfootShadow
+  name: Blackfoot shadow
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot.rsi
+    state: vtol_shadow
+  - type: BlackfootShadow
+
+- type: entity
+  id: CMUBlackfootDownwash
+  name: Blackfoot downwash
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot.rsi
+    state: downwash
+  - type: AmbientSound
+    range: 18
+    volume: -5
+    sound:
+      path: /Audio/_CMU14/Blackfoot/exteriorflight.wav
+  - type: BlackfootDownwash
