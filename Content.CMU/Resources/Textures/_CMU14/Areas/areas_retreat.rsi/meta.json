@@ -140,7 +140,7 @@
 	  "name": "hr_engi_treatment"
 	},
 	{
-	  "name": "hr_engi_turbine"
+	  "name": "hr_engi_turbineroom"
 	},
 	{
 	  "name": "hr_engi_upper"
@@ -251,7 +251,7 @@
 	  "name": "oc_engi_storage"
 	},
 	{
-	  "name": "oc_engi_turbine"
+	  "name": "oc_engi_turbineroom"
 	},
 	{
 	  "name": "oc_hab_atrium"
