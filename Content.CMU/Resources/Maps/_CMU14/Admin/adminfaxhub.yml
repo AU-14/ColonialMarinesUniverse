@@ -10801,7 +10801,7 @@ entities:
       pos: 40.5,-32.5
       parent: 2
     - type: Ladder
-      id: Fax_WeYa
+      id: Fax_WeYu
     - type: Fixtures
       fixtures: {}
   - uid: 1464
@@ -10829,12 +10829,12 @@ entities:
   - uid: 1466
     components:
     - type: MetaData
-      name: We-Ya
+      name: We-Yu
     - type: Transform
       pos: 25.5,-21.5
       parent: 2
     - type: Ladder
-      id: Fax_WeYa
+      id: Fax_WeYu
     - type: Fixtures
       fixtures: {}
   - uid: 1467
