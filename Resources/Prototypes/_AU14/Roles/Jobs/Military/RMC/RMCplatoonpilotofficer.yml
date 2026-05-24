@@ -19,15 +19,15 @@
     RMCRankNavyCommodore:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDSPilot
-      time: 720000 # 200 hours
+      time: 450000 # 125 hours
     RMCRankNavyCaptain:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDSPilot
-      time: 540000 # 150 hours
+      time: 360000 # 100 hours
     RMCRankNavyCommander:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDSPilot
-      time: 360000 # 100 hours
+      time: 270000 # 75 hours
     RMCRankNavyLieutenantCommander:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDSPilot
