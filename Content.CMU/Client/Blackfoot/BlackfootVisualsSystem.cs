@@ -93,7 +93,7 @@ public sealed partial class BlackfootVisualsSystem : EntitySystem
     private void ApplyPadLightVisuals(EntityUid uid, BlackfootLandingPadLightComponent light, SpriteComponent sprite)
     {
         var on = light.State != BlackfootLandingPadLightState.Off;
-        SetLayerState(uid, sprite, 0, on ? "landing pad light on" : "landing pad light", true);
+        SetLayerState(uid, sprite, 0, on ? "landing-pad-light-on" : "landing-pad-light", true);
 
         if (!TryComp(uid, out PointLightComponent? pointLight))
             return;

@@ -8,16 +8,16 @@
   },
   "states": [
     {
-      "name": "door left"
+      "name": "door-left"
     },
     {
-      "name": "door right"
+      "name": "door-right"
     },
     {
-      "name": "rear door open"
+      "name": "rear-door-open"
     },
     {
-      "name": "rear door closed"
+      "name": "rear-door-closed"
     },
     {
       "name": "vehicle_bars",
@@ -36,7 +36,7 @@
       "directions": 4
     },
     {
-      "name": "door opening",
+      "name": "door-opening",
       "delays": [
         [
           0.1,
@@ -52,7 +52,7 @@
       ]
     },
     {
-      "name": "door closing",
+      "name": "door-closing",
       "delays": [
         [
           0.1,

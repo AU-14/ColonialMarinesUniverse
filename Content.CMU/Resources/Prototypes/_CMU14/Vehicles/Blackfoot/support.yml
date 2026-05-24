@@ -8,7 +8,7 @@
     anchored: false
   - type: Sprite
     sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_structures.rsi
-    state: fuel pump
+    state: fuel-pump
   - type: Clickable
   - type: InteractionOutline
   - type: BlackfootFuelPump
@@ -54,7 +54,7 @@
   - type: Sprite
     drawdepth: SmallObjects
     sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_peripherals.rsi
-    state: landing pad light
+    state: landing-pad-light
   - type: Clickable
   - type: InteractionOutline
   - type: PointLight
@@ -70,7 +70,7 @@
   suffix: on
   components:
   - type: Sprite
-    state: landing pad light on
+    state: landing-pad-light-on
   - type: PointLight
     enabled: true
   - type: BlackfootLandingPadLight

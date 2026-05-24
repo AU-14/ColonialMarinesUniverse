@@ -16,7 +16,7 @@
   - type: Transform
     anchored: false
   - type: Sprite
-    state: door left
+    state: door-left
   - type: Physics
     bodyType: Static
     canCollide: true
@@ -47,7 +47,7 @@
   - type: Transform
     anchored: false
   - type: Sprite
-    state: door right
+    state: door-right
   - type: VehicleExit
     entryIndex: 1
 
@@ -62,7 +62,7 @@
     drawdepth: Doors
     layers:
     - map: [ door ]
-      state: rear door closed
+      state: rear-door-closed
   - type: VehicleExit
     entryIndex: 0
   - type: BlackfootRearDoorVisuals

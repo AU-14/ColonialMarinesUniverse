@@ -354,10 +354,10 @@ public sealed partial class BlackfootRearDoorVisualsComponent : Component
     public string OverlayLayer = string.Empty;
 
     [DataField, AutoNetworkedField]
-    public string OpenState = "rear door open";
+    public string OpenState = "rear-door-open";
 
     [DataField, AutoNetworkedField]
-    public string ClosedState = "rear door closed";
+    public string ClosedState = "rear-door-closed";
 
     [DataField, AutoNetworkedField]
     public bool ShowOverlay;
