@@ -315,4 +315,16 @@ au14-prodigyparty-greeting = You are a part of "Prodigy Armed Repair Team" (PART
 
     Prodigy Security - Repairing Our World
 
-    You are HOSTILE to all WeYu units
+    You are neutral to all WeYu units
+
+au14-prodigyextract-description = You are a Extraction Ship team called in by a Prodigy 3rd Party! Use your ship to get your Contractors out of there!
+
+au14-prodigyextract-greeting = You are a part of "Prodigy Insert and Extraction Team (PIET)
+
+    You were called for an extraction mission in the area, follow your orders.
+
+    Protecting your calling team and extracting them is your top priority
+
+    Prodigy Security - Repairing Our World
+
+    You are neutral to all WeYu units
