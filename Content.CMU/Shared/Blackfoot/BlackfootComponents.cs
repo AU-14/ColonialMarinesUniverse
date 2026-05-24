@@ -78,7 +78,7 @@ public sealed partial class BlackfootFlightComponent : Component
     public TimeSpan StateStartedAt;
 
     [DataField, AutoNetworkedField]
-    public TimeSpan TakeoffDuration = TimeSpan.FromSeconds(27.66);
+    public TimeSpan TakeoffDuration = TimeSpan.FromSeconds(23.66);
 
     [DataField, AutoNetworkedField]
     public TimeSpan LandingDuration = TimeSpan.FromSeconds(18);
@@ -154,7 +154,7 @@ public sealed partial class BlackfootVisualsComponent : Component
     public float DamageVisibleIntegrityFraction = 0.5f;
 
     [DataField]
-    public float TakeoffLiftStartFraction = 0.5f;
+    public float TakeoffLiftStartFraction = 0.415f;
 
     [DataField]
     public float TakeoffLiftOffset = 0.75f;
@@ -164,31 +164,31 @@ public sealed partial class BlackfootVisualsComponent : Component
 public sealed partial class BlackfootSoundComponent : Component
 {
     [DataField]
-    public SoundSpecifier? EngineIdleLoopSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/engineidle.wav");
+    public SoundSpecifier? EngineIdleLoopSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/engineidle.ogg");
 
     [DataField]
-    public SoundSpecifier? ExteriorFlightLoopSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/exteriorflight.wav");
+    public SoundSpecifier? ExteriorFlightLoopSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/exteriorflight.ogg");
 
     [DataField]
-    public SoundSpecifier? InteriorFlightLoopSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/interior.wav");
+    public SoundSpecifier? InteriorFlightLoopSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/interior.ogg");
 
     [DataField]
-    public SoundSpecifier? EngineStartupSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/enginestartup.wav");
+    public SoundSpecifier? EngineStartupSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/enginestartup.ogg");
 
     [DataField]
-    public SoundSpecifier? EngineShutdownSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/engineshutdown.wav");
+    public SoundSpecifier? EngineShutdownSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/engineshutdown.ogg");
 
     [DataField]
-    public SoundSpecifier? TakeoffSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/takeoff.wav");
+    public SoundSpecifier? TakeoffSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/takeoff.ogg");
 
     [DataField]
-    public SoundSpecifier? LandingSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/landing.wav");
+    public SoundSpecifier? LandingSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/landing.ogg");
 
     [DataField]
-    public SoundSpecifier? FlightTransitionSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/flight_transition.wav");
+    public SoundSpecifier? FlightTransitionSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/flight_transition.ogg");
 
     [DataField]
-    public SoundSpecifier? MechanicalSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/mechanical.wav");
+    public SoundSpecifier? MechanicalSound = new SoundPathSpecifier("/Audio/_CMU14/Blackfoot/mechanical.ogg");
 
     public EntityUid? InteriorEngineLoopStream;
 
@@ -536,6 +536,12 @@ public sealed partial class BlackfootDeployableSupportComponent : Component
     public Vector2 LandingPadOffset;
 
     [DataField]
+    public bool UseFixedDeployRotation;
+
+    [DataField]
+    public Angle FixedDeployRotation = Angle.Zero;
+
+    [DataField]
     public BlackfootLandingPadAttachment LandingPadAttachment;
 }
 
@@ -603,6 +609,9 @@ public sealed partial class BlackfootStealthComponent : Component
     [DataField, AutoNetworkedField]
     public bool DisableWeapons = true;
 }
+
+[RegisterComponent, NetworkedComponent]
+public sealed partial class BlackfootLookOutsideComponent : Component;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class BlackfootSensorArrayComponent : Component

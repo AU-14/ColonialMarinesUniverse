@@ -74,6 +74,7 @@
   - type: Corrodible
     isCorrodible: false
   - type: BlackfootVisuals
+    takeoffLiftStartFraction: 0.415
   - type: BlackfootSound
   - type: VehicleSound
     collisionSound: /Audio/_RMC14/Effects/metal_crash.ogg
@@ -84,9 +85,9 @@
   - type: AmbientSound
     enabled: false
     range: 18
-    volume: -7
+    volume: -2
     sound:
-      path: /Audio/_CMU14/Blackfoot/engineidle.wav
+      path: /Audio/_CMU14/Blackfoot/engineidle.ogg
   - type: Damageable
     damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameHumvee
@@ -123,7 +124,7 @@
     - 0,0
     - 1,0
     - 0,-1
-    takeoffDuration: 27.66
+    takeoffDuration: 23.66
     landingDuration: 19
   - type: BlackfootFuelPower
     fuel: 600

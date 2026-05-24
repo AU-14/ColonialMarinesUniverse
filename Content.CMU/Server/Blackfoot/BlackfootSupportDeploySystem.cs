@@ -257,7 +257,7 @@ public sealed partial class BlackfootSupportDeploySystem : EntitySystem
 
         var xform = Transform(ent.Owner);
         coordinates = xform.Coordinates.Offset(ent.Comp.Offset);
-        rotation = xform.LocalRotation;
+        rotation = GetDeployRotation(ent.Comp, xform.LocalRotation);
 
         if (!ent.Comp.RequireLandingPad)
             return true;
@@ -269,8 +269,15 @@ public sealed partial class BlackfootSupportDeploySystem : EntitySystem
         var padXform = Transform(pad.Owner);
         var offset = GetLandingPadAttachmentOffset(ent.Comp, pad.Comp);
         coordinates = padXform.Coordinates.Offset(padXform.LocalRotation.RotateVec(offset));
-        rotation = padXform.LocalRotation;
+        rotation = GetDeployRotation(ent.Comp, padXform.LocalRotation);
         return true;
+    }
+
+    private static Angle GetDeployRotation(BlackfootDeployableSupportComponent deploy, Angle inheritedRotation)
+    {
+        return deploy.UseFixedDeployRotation
+            ? deploy.FixedDeployRotation
+            : inheritedRotation;
     }
 
     private static Vector2 GetLandingPadAttachmentOffset(

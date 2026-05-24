@@ -1,4 +1,5 @@
 using System;
+using Content.Server._CMU14.ZLevels.Core;
 using Content.Shared._CMU14.Blackfoot;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Vehicle;
@@ -18,6 +19,7 @@ public sealed partial class BlackfootDoorGunSystem : EntitySystem
     [Dependency] private VehicleSystem _vehicle = default!;
     [Dependency] private VehicleViewToggleSystem _viewToggle = default!;
     [Dependency] private CMUZLevelShootingSystem _zShooting = default!;
+    [Dependency] private CMUZLevelsSystem _zLevels = default!;
 
     public override void Initialize()
     {
@@ -43,7 +45,7 @@ public sealed partial class BlackfootDoorGunSystem : EntitySystem
         Dirty(user, actions);
 
         if (vehicle is { } vehicleUid)
-            _viewToggle.SetOutsideView(user, vehicleUid);
+            SetOutsideView(user, vehicleUid);
     }
 
     private void OnWeaponSeatUnstrapped(Entity<BlackfootDoorGunSeatComponent> ent, ref UnstrappedEvent args)
@@ -66,7 +68,7 @@ public sealed partial class BlackfootDoorGunSystem : EntitySystem
             return;
 
         if (ent.Comp.Vehicle is { } vehicle && IsUsingDoorGun(ent.Owner, vehicle))
-            _viewToggle.SetOutsideView(ent.Owner, vehicle);
+            SetOutsideView(ent.Owner, vehicle);
         else
             _zShooting.SetShootDown(ent.Owner, false);
 
@@ -110,7 +112,7 @@ public sealed partial class BlackfootDoorGunSystem : EntitySystem
             return;
         }
 
-        _viewToggle.SetOutsideView(ent.Owner, vehicle);
+        SetOutsideView(ent.Owner, vehicle);
 
         var shootDown = !_zShooting.IsShootDownEnabled(ent.Owner);
         _zShooting.SetShootDown(ent.Owner, shootDown);
@@ -150,6 +152,12 @@ public sealed partial class BlackfootDoorGunSystem : EntitySystem
         }
 
         return string.Equals(hardpoint.HardpointType, DoorGunHardpointType, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void SetOutsideView(EntityUid user, EntityUid vehicle)
+    {
+        _zLevels.EnsureZLevelViewer(vehicle);
+        _viewToggle.SetOutsideView(user, vehicle);
     }
 
     private void UpdateZModeAction(EntityUid user, BlackfootDoorGunActionComponent actions)

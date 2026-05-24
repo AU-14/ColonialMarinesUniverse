@@ -20,7 +20,7 @@
     state: downwash
   - type: AmbientSound
     range: 18
-    volume: -5
+    volume: -2
     sound:
-      path: /Audio/_CMU14/Blackfoot/exteriorflight.wav
+      path: /Audio/_CMU14/Blackfoot/exteriorflight.ogg
   - type: BlackfootDownwash

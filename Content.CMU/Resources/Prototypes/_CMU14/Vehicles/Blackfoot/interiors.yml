@@ -37,6 +37,7 @@
         - InteractImpassable
   - type: VehicleExit
     entryIndex: 2
+  - type: BlackfootLookOutside
   - type: RMCIgnoreGhostInteractionLimits
 
 - type: entity

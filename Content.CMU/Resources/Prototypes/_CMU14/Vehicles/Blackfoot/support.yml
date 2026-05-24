@@ -38,6 +38,8 @@
     deployPopup: The folded Blackfoot landing pad is set in place.
     requireClearFootprint: true
     clearFootprint: 3,3
+    useFixedDeployRotation: true
+    fixedDeployRotation: 0
   - type: RemoveComponents
     components:
     - type: Anchorable

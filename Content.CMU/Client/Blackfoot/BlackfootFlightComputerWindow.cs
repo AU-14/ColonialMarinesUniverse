@@ -47,7 +47,8 @@ public sealed class BlackfootFlightComputerWindow : DefaultWindow
         CloseButton.ModulateSelfOverride = Text;
 
         var rootPanel = Panel(Surface, Border);
-        AddChild(rootPanel);
+        rootPanel.VerticalExpand = true;
+        Contents.AddChild(rootPanel);
 
         var root = new BoxContainer
         {

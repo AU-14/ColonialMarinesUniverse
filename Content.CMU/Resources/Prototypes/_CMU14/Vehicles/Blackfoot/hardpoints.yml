@@ -70,7 +70,7 @@
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
-    soundGunshot: /Audio/_CMU14/Blackfoot/launcher.wav
+    soundGunshot: /Audio/_CMU14/Blackfoot/launcher.ogg
     cameraRecoilScalar: 0
   - type: ShootAtFixedPoint
   - type: RMCWeaponAccuracy
@@ -134,7 +134,7 @@
     selectedMode: FullAuto
     availableModes:
     - FullAuto
-    soundGunshot: /Audio/_CMU14/Blackfoot/doorgun.wav
+    soundGunshot: /Audio/_CMU14/Blackfoot/doorgun.ogg
     cameraRecoilScalar: 0
   - type: ShootAtFixedPoint
     shootArcProj: true

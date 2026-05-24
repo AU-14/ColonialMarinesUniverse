@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 05/24/2026 10:35:34
-  entityCount: 19
+  entityCount: 20
 maps:
 - 1
 grids:
@@ -119,6 +119,17 @@ entities:
     - type: Transform
       pos: 7.98368,7.908943
       parent: 2
+- proto: CMUBlackfootExtinguisherCabinet
+  entities:
+  - uid: 20
+    components:
+    - type: Transform
+      pos: 8.646091,6.5324683
+      parent: 2
+    - type: Physics
+      canCollide: False
+    - type: Fixtures
+      fixtures: {}
 - proto: CMUBlackfootRearDoorButton
   entities:
   - uid: 17

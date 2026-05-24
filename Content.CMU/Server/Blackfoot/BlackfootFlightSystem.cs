@@ -28,7 +28,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
     private const string ThrustersSlotId = "thrusters";
     private static readonly AudioParams InteriorEngineLoopParams = AudioParams.Default
         .WithLoop(true)
-        .WithVolume(-7f);
+        .WithVolume(-2f);
 
     private const CollisionGroup FootprintBlockMask =
         CollisionGroup.Impassable |
@@ -64,6 +64,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         SubscribeLocalEvent<BlackfootPilotActionComponent, BlackfootStowToggleActionEvent>(OnStowToggle);
         SubscribeLocalEvent<BlackfootPilotActionComponent, BlackfootAscendZLevelActionEvent>(OnAscendZLevel);
         SubscribeLocalEvent<BlackfootPilotActionComponent, BlackfootDescendZLevelActionEvent>(OnDescendZLevel);
+        SubscribeLocalEvent<BlackfootFlightComponent, MapInitEvent>(OnBlackfootMapInit);
         SubscribeLocalEvent<BlackfootFlightComponent, ComponentShutdown>(OnBlackfootShutdown);
     }
 
@@ -104,6 +105,11 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
 
         if (args.NewOperator is { } newOperator)
             EnablePilotActions(newOperator, ent.Owner, flight);
+    }
+
+    private void OnBlackfootMapInit(Entity<BlackfootFlightComponent> ent, ref MapInitEvent args)
+    {
+        _zLevels.EnsureZLevelViewer(ent.Owner);
     }
 
     private void EnablePilotActions(EntityUid pilot, EntityUid vehicle, BlackfootFlightComponent flight)
