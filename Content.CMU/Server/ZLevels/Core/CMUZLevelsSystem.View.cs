@@ -401,7 +401,8 @@ public sealed partial class CMUZLevelsSystem
         if (TerminatingOrDeleted(uid))
             return false;
 
-        if (Transform(uid).MapUid is null)
+        if (Transform(uid).MapUid is not { } map ||
+            !HasComp<CMUZLevelMapComponent>(map))
         {
             return false;
         }
