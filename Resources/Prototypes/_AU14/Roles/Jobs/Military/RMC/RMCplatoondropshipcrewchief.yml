@@ -15,11 +15,11 @@
     RMCRankNavySeniorChiefPettyOfficer:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDCC
-      time: 540000 # 150 hours
+      time: 360000 # 100 hours
     RMCRankNavyChiefPettyOfficer:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDCC
-      time: 360000 # 100 hours
+      time: 270000 # 75 hours
     RMCRankNavyPettyOfficer1stClass:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDCC
