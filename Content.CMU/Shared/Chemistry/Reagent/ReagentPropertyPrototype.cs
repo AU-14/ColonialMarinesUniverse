@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Prototypes;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 using Content.Shared._RMC14.Chemistry.Effects;
+using Content.Shared.FixedPoint;
 
 namespace Content.Shared._CMU14.Chemistry.Reagent;
 
@@ -86,6 +87,34 @@ public partial class ReagentPropertyPrototype : IPrototype, IInheritingPrototype
 
     [ViewVariables(VVAccess.ReadOnly), DataField]
     public bool CostPenalty = true;
+
+    [ViewVariables(VVAccess.ReadOnly), DataField]
+    public int MaxLevel = 999;
+
+    [ViewVariables(VVAccess.ReadOnly), DataField]
+    public bool Volatile = false;
+
+    [ViewVariables(VVAccess.ReadOnly), DataField]
+    public bool UpdatesStats = false;
+
+    [ViewVariables(VVAccess.ReadOnly), DataField]
+    public FixedPoint2 IntensityModPerLevel = 0f;
+
+    [ViewVariables(VVAccess.ReadOnly), DataField]
+    public FixedPoint2 RadiusModPerLevel = 0f;
+
+    [ViewVariables(VVAccess.ReadOnly), DataField]
+    public FixedPoint2 DurationModPerLevel = 0f;
+
+    [ViewVariables(VVAccess.ReadOnly), DataField]
+    public FixedPoint2 IntensityPerLevel = 0f;
+
+    [ViewVariables(VVAccess.ReadOnly), DataField]
+    public FixedPoint2 RangePerLevel = 0f;
+
+    [ViewVariables(VVAccess.ReadOnly), DataField]
+    public FixedPoint2 DurationPerLevel = 0f;
+
 
     [NeverPushInheritance]
     [AbstractDataField]
