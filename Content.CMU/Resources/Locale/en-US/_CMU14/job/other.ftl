@@ -319,11 +319,35 @@ au14-prodigyparty-greeting = You are a part of "Prodigy Armed Repair Team" (PART
 
 au14-prodigyextract-description = You are a Extraction Ship team called in by a Prodigy 3rd Party! Use your ship to get your Contractors out of there!
 
-au14-prodigyextract-greeting = You are a part of "Prodigy Insert and Extraction Team (PIET)
+au14-prodigyextract-greeting = You are a part of "Prodigy Extraction Team" (PET)
 
     You were called for an extraction mission in the area, follow your orders.
 
     Protecting your calling team and extracting them is your top priority
+
+    Prodigy Security - Repairing Our World
+
+    You are neutral to all WeYu units
+
+au14-prodigyhazard-description = You are a Hazard Response Team called in for a special mission involving a Chemical, Biological, Ultraviolet, Radiological, and Nuclear tasking.
+
+au14-prodigyhazard-greeting = You are a part of "Prodigy Hazard Response Team" (HRT)
+
+    You were called for special mission involving a Chemical, Biological, Ultraviolet, Radiological, and Nuclear tasking.
+
+    Completing your mission is your top priority.
+
+    Prodigy Security - Repairing Our World
+
+    You are neutral to all WeYu units
+
+au14-prodigyrescue-description = You are a Search and Rescue team in the local area that responded to a distress signal in the local area, find out who needs help.
+
+au14-prodigyrescue-greeting = You are a part of "Prodigy Tactical Advanced Search Squad" (TARS)
+
+    You are a Search and Rescue team in the local area that responded to a distress signal in the local area, find out who needs help.
+
+    Completing your mission is your top priority.
 
     Prodigy Security - Repairing Our World
 
