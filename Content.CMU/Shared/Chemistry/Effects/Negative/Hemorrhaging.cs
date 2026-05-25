@@ -3,6 +3,7 @@
 /// free software and would prefer this code be shared freely without restrictions.
 
 using Content.Shared._CMU14.Medical.Organs;
+using Content.Shared._CMU14.Medical.Organs.Events;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared.Atmos.Components;
@@ -56,7 +57,6 @@ public sealed partial class Hemorrhaging : RMCChemicalEffect
     {
         var entman = args.EntityManager;
         var bodSys = entman.System<SharedBodySystem>();
-        var orgSys = entman.System<SharedOrganHealthSystem>();
         var targ = args.TargetEntity;
         List<EntityUid> orgs = [];
         foreach (var item in bodSys.GetBodyOrgans(targ))
@@ -65,24 +65,21 @@ public sealed partial class Hemorrhaging : RMCChemicalEffect
         }
         var random = IoCManager.Resolve<IRobustRandom>();
         var org = random.Pick(orgs);
-        IReadOnlyList<EntityUid> organtodamage = [org];
         var damage = new DamageSpecifier();
         damage.DamageDict[BluntType] = potency * 0.5;
-        //forced to do it this way, can't raise local event.
-        orgSys.DistributeOrganDamage(targ, damage, organtodamage);
+        var ev = new OrganDamagedEvent(targ, org, damage, OrganDamageSource.Reagent);
+        entman.EventBus.RaiseLocalEvent(org, ref ev);
     }
 
     protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
     {
         var entman = args.EntityManager;
         var bodSys = entman.System<SharedBodySystem>();
-        var orgSys = entman.System<SharedOrganHealthSystem>();
         var woundSys = entman.System<SharedCMUWoundsSystem>();
         var targ = args.TargetEntity;
         var random = IoCManager.Resolve<IRobustRandom>();
         if (random.Prob((10f * (float)potency) / 100f))
         {
-            List<EntityUid> bparts = [];
             foreach (var item in bodSys.GetBodyChildren(targ))
             {
                 woundSys.SeedInternalBleed(item.Id, "Chemical", 0.3f);
