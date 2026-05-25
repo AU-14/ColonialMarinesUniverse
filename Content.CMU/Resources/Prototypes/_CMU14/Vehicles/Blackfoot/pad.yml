@@ -29,7 +29,7 @@
     packedPopup: The Blackfoot landing pad is folded and packed.
 
 - type: entity
-  parent: CMBaseStructureCorrodible
+  parent: CMUBlackfootMountedSupportBase
   id: CMUBlackfootFlightComputer
   name: Blackfoot flight computer
   description: A compact control terminal for a nearby Blackfoot landing pad.
@@ -53,6 +53,3 @@
     initialPopup: The flight computer anchor bolts are loosened.
     panelPopup: The flight computer service panel is opened.
     packedPopup: The Blackfoot flight computer is packed into its case.
-  - type: RemoveComponents
-    components:
-    - type: Pullable
