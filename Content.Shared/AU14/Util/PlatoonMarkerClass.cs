@@ -54,6 +54,11 @@ namespace Content.Shared.AU14.util
         TacticalMap,
         ReqVend,
         Analyzer,
+        VehicleTier1,
+        VehicleTier2,
+        VehicleTier3,
+        VehicleTier4,
+        Blackfoot,
         AICore
     }
 }

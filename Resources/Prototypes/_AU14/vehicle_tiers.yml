@@ -1,0 +1,25 @@
+---
+- type: VehicleTierMappingPrototype
+  id: vt_vehiclevan
+  entity: 
+  tier: 1
+
+- type: VehicleTierMappingPrototype
+  id: vt_vehiclehumvee
+  entity: 
+  tier: 2
+
+- type: VehicleTierMappingPrototype
+  id: vt_vehicleapc
+  entity: 
+  tier: 3
+
+- type: VehicleTierMappingPrototype
+  id: vt_vehicleblackfoot
+  entity: 
+  tier: 2
+
+- type: VehicleTierMappingPrototype
+  id: vt_vehicleblackfoottransport
+  entity: 
+  tier: 2

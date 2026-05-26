@@ -14,6 +14,7 @@ using Content.Server._RMC14.Requisitions;
 using Content.Shared._RMC14.Telephone;
 using Content.Shared._RMC14.Ladder;
 using Content.Shared.AU14;
+using Robust.Server.Player;
 
 namespace Content.Server.AU14.Round;
 
@@ -21,11 +22,14 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
 {
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
     [Dependency] private SharedDropshipSystem _sharedDropshipSystem = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
+    // Map of entity prototype ID -> allowed spawn tier (1..4)
+    private Dictionary<string, int> _vehicleTierMap = new();
 
     // Store selected platoons in the system
     private PlatoonPrototype? _selectedGovforPlatoon;
@@ -53,6 +57,50 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         }
     }
 
+    // Vehicle spawn gating helpers
+    private bool IsVehicleClass(PlatoonMarkerClass cls)
+    {
+        return cls == PlatoonMarkerClass.VehicleTier1 || cls == PlatoonMarkerClass.VehicleTier2 || cls == PlatoonMarkerClass.VehicleTier3 || cls == PlatoonMarkerClass.VehicleTier4 || cls == PlatoonMarkerClass.Blackfoot;
+    }
+
+    private int MarkerClassToTier(PlatoonMarkerClass cls)
+    {
+        return cls switch
+        {
+            PlatoonMarkerClass.VehicleTier1 => 1,
+            PlatoonMarkerClass.VehicleTier2 => 2,
+            PlatoonMarkerClass.VehicleTier3 => 3,
+            PlatoonMarkerClass.VehicleTier4 => 4,
+            PlatoonMarkerClass.Blackfoot => 2,
+            _ => 1,
+        };
+    }
+
+    private void PopulateVehicleTierMap()
+    {
+        _vehicleTierMap.Clear();
+        foreach (var proto in _prototypeManager.EnumeratePrototypes<Content.Shared.AU14.Prototypes.VehicleTierMappingPrototype>())
+        {
+            if (string.IsNullOrEmpty(proto.Entity))
+                continue;
+            _vehicleTierMap[proto.Entity] = proto.Tier;
+        }
+    }
+
+    private bool ShouldSpawnForMarkerClass(PlatoonMarkerClass cls)
+    {
+        var count = _playerManager.PlayerCount;
+        return cls switch
+        {
+            PlatoonMarkerClass.VehicleTier1 => true,
+            PlatoonMarkerClass.VehicleTier2 => count >= 75,
+            PlatoonMarkerClass.VehicleTier3 => count >= 150,
+            PlatoonMarkerClass.VehicleTier4 => count >= 200,
+            PlatoonMarkerClass.Blackfoot => count >= 75,
+            _ => true,
+        };
+    }
+
     protected override void Started(EntityUid uid, PlatoonSpawnRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         base.Started(uid, component, gameRule, args);
@@ -67,6 +115,9 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         {
             return;
         }
+
+        // Load vehicle -> tier mappings
+        PopulateVehicleTierMap();
 
         // Fallback to default platoon if none selected, using planet component
         if (govPlatoon == null && !string.IsNullOrEmpty(planetComp.DefaultGovforPlatoon))
@@ -361,6 +412,19 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     // Ignore markerComp.Govfor/Opfor, use shipPlatoon and markerComp.Class
                     if (shipPlatoon != null && shipPlatoon.VendorMarkersByClass.TryGetValue(markerComp.Class, out var vendorProtoId))
                     {
+                        // Gate vehicle spawns by player count thresholds
+                        if (IsVehicleClass(markerComp.Class) && !ShouldSpawnForMarkerClass(markerComp.Class))
+                            continue;
+
+                        // Gate by per-vehicle tier mapping (optional). If a mapping exists and the
+                        // vehicle's allowed tier is higher than the marker tier, skip spawning.
+                        if (IsVehicleClass(markerComp.Class))
+                        {
+                            var markerTier = MarkerClassToTier(markerComp.Class);
+                            if (_vehicleTierMap.TryGetValue(vendorProtoId, out var vendorTier) && vendorTier > markerTier)
+                                continue;
+                        }
+
                         if (_prototypeManager.TryIndex<EntityPrototype>(vendorProtoId, out var vendorProto))
                         {
                             var spawned = _entityManager.SpawnEntity(vendorProto.ID, transform.Coordinates);
@@ -495,6 +559,20 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
             // --- VENDOR MARKER LOGIC ---
             if (!platoon.VendorMarkersByClass.TryGetValue(markerComp.Class, out var vendorProtoId))
                 continue;
+
+            // Gate vehicle spawns by player count thresholds
+            if (IsVehicleClass(markerComp.Class) && !ShouldSpawnForMarkerClass(markerComp.Class))
+                continue;
+
+            // Gate by per-vehicle tier mapping (optional). If mapped and vehicle requires a higher
+            // tier than this marker, skip spawn.
+            if (IsVehicleClass(markerComp.Class))
+            {
+                var markerTier = MarkerClassToTier(markerComp.Class);
+                if (_vehicleTierMap.TryGetValue(vendorProtoId, out var vendorTier) && vendorTier > markerTier)
+                    continue;
+            }
+
             if (!_prototypeManager.TryIndex<EntityPrototype>(vendorProtoId, out var vendorProto))
                 continue;
             var spawnedEnt = _entityManager.SpawnEntity(vendorProto.ID, transform.Coordinates);

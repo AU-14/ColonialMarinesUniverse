@@ -235,6 +235,119 @@
     sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
     state: base
 
+# Vehicle tier markers (ground/ship/opfor/govfor)
+- type: entity
+  name: Opfor vehicle tier 1 marker
+  id: VMarkerOpforVehicleTier1
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: VehicleTier1
+
+- type: entity
+  name: Opfor vehicle tier 2 marker
+  id: VMarkerOpforVehicleTier2
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: VehicleTier2
+
+- type: entity
+  name: Opfor vehicle tier 3 marker
+  id: VMarkerOpforVehicleTier3
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: VehicleTier3
+
+- type: entity
+  name: Opfor vehicle tier 4 marker
+  id: VMarkerOpforVehicleTier4
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: VehicleTier4
+
+- type: entity
+  name: Govfor vehicle tier 1 marker
+  id: VMarkerGovforVehicleTier1
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: VehicleTier1
+
+- type: entity
+  name: Govfor vehicle tier 2 marker
+  id: VMarkerGovforVehicleTier2
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: VehicleTier2
+
+- type: entity
+  name: Govfor vehicle tier 3 marker
+  id: VMarkerGovforVehicleTier3
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: VehicleTier3
+
+- type: entity
+  name: Govfor vehicle tier 4 marker
+  id: VMarkerGovforVehicleTier4
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: VehicleTier4
+
+# Blackfoot markers (spawn Blackfoot VTOL at tier 2 threshold)
+- type: entity
+  name: Opfor Blackfoot marker
+  id: VMarkerOpforBlackfoot
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      opfor: true
+      govfor: false
+      class: Blackfoot
+
+- type: entity
+  name: Govfor Blackfoot marker
+  id: VMarkerGovforBlackfoot
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: true
+      opfor: false
+      class: Blackfoot
+
+- type: entity
+  name: Ship Blackfoot marker
+  id: VMarkershipBlackfoot
+  parent: Vmarker
+  components:
+    - type: VendorMarker
+      govfor: false
+      opfor: false
+      class: Blackfoot
+      ship: true
+
 - type: entity
   name: Ship requisitions vendor marker
   id: VMarkershiprequisitionsvendor
