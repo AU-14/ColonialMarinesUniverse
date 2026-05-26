@@ -205,10 +205,10 @@
       interiorCoords: 8,9.5
     - offset: -1,-1
       radius: 0.75
-      interiorCoords: 7.25,8.75
+      interiorCoords: 6.75,8.75
     - offset: 1,-1
       radius: 0.75
-      interiorCoords: 8.75,8.75
+      interiorCoords: 9.25,8.75
 
 - type: entity
   parent: VehicleBlackfootBase
