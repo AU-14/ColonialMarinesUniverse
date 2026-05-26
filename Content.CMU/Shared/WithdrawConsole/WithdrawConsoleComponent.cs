@@ -80,4 +80,8 @@ public sealed partial class WithdrawConsoleComponent : Component
     /// </summary>
     [DataField]
     public TimeSpan? DropdownLockRemainingOverride;
+
+    /// <summary>Total time from withdrawal initiation to round end.</summary>
+    [DataField]
+    public TimeSpan WithdrawDuration = TimeSpan.FromMinutes(30);
 }
