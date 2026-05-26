@@ -52,11 +52,13 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
 
     private void OnGridShutdown(GridRemovalEvent args)
     {
+        InvalidateSharedOpeningCache(args.EntityUid);
         OpeningCache.RemoveGrid(args.EntityUid);
     }
 
     private void OnTileChanged(ref TileChangedEvent args)
     {
+        InvalidateSharedOpeningCache(ref args);
         OpeningCache.InvalidateTiles(args.Entity, args.Changes);
     }
 
@@ -207,13 +209,17 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         var query = EntityQueryEnumerator<CMUZFallingComponent, CMUZPhysicsComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out var _, out var zPhys, out var sprite))
         {
-            if (zPhys.LocalPosition != 0)
-                sprite.NoRotation = true;
-            else
-                sprite.NoRotation = zPhys.NoRotDefault;
+            var targetNoRotation = zPhys.LocalPosition != 0 || zPhys.NoRotDefault;
+            if (sprite.NoRotation != targetNoRotation)
+                sprite.NoRotation = targetNoRotation;
 
-            _sprite.SetOffset((uid, sprite), zPhys.SpriteOffsetDefault + new Vector2(0, zPhys.LocalPosition * ZLevelOffset));
-            _sprite.SetDrawDepth((uid, sprite), zPhys.LocalPosition > 0 ? (int)Shared.DrawDepth.DrawDepth.OverMobs : zPhys.DrawDepthDefault);
+            var targetOffset = zPhys.SpriteOffsetDefault + new Vector2(0, zPhys.LocalPosition * ZLevelOffset);
+            if (sprite.Offset != targetOffset)
+                _sprite.SetOffset((uid, sprite), targetOffset);
+
+            var targetDrawDepth = zPhys.LocalPosition > 0 ? (int)Shared.DrawDepth.DrawDepth.OverMobs : zPhys.DrawDepthDefault;
+            if (sprite.DrawDepth != targetDrawDepth)
+                _sprite.SetDrawDepth((uid, sprite), targetDrawDepth);
         }
 
         var projectileQuery = EntityQueryEnumerator<CMUZLevelProjectileVisualOffsetComponent, SpriteComponent, TransformComponent>();

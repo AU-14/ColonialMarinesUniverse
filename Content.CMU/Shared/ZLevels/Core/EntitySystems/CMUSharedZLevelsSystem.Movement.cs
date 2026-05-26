@@ -272,18 +272,19 @@ public abstract partial class CMUSharedZLevelsSystem
 
         //Select current map by default
         Entity<CMUZLevelMapComponent> checkingMap = (xform.MapUid.Value, zMapComp);
-        var checkingGrid = mapGrid;
+        MapGridComponent checkingGrid = mapGrid;
 
         for (var floor = 0; floor <= maxFloors; floor++)
         {
             if (floor != 0) //Select map below
             {
-                if (!TryMapOffset((checkingMap.Owner, checkingMap.Comp), -floor, out var tempCheckingMap))
+                if (!TryMapDown((checkingMap.Owner, checkingMap.Comp), out var tempCheckingMap))
                     break;
-                if (!_gridQuery.TryComp(tempCheckingMap, out var tempCheckingGrid))
-                    continue;
 
                 checkingMap = tempCheckingMap.Value;
+                if (!_gridQuery.TryComp(checkingMap.Owner, out var tempCheckingGrid))
+                    continue;
+
                 checkingGrid = tempCheckingGrid;
             }
 
