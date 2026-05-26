@@ -16,10 +16,9 @@
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup
-          mapNameTemplate: 'Hope's Retreat'
+          mapNameTemplate: 'Hopes Retreat'
         - type: StationJobs
           availableJobs:
-          
             # Colony Service
             AU14JobCivilianHeadOfService: [1, 1]
             AU14JobCivilianFoodServiceWorker: [3, 3]
