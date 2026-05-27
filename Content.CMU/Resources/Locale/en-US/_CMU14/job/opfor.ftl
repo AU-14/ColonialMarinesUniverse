@@ -74,4 +74,12 @@ au14-job-name-opforMilitaryDoctor = Doctor
 au14-job-description-opforMilitaryDoctor = Provide your faction with high level medical care.
 au14-job-prefix-opforMilitaryDoctor = DOC
 
+au14-job-name-opformilitarypoliceman = Military Policeman
+au14-job-description-opformilitarypoliceman = Provide your faction with police support.
+au14-job-prefix-opformilitarypoliceman = MP
+
+au14-job-name-opforAuxTech = Technician
+au14-job-description-opforAuxTech = Run requisitions, keep the ship running and tidy. Provide your faction with shipside logistics and engineering support.
+au14-job-prefix-opforAuxTech = AXT
+
 au14-job-prefix-opfork9handler = K9
