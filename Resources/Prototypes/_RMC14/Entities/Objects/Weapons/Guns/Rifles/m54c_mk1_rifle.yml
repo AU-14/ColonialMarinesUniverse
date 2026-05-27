@@ -38,11 +38,11 @@
     burstScatterMult: 1
     modifiers:
       Burst:
-        fireDelay: 0.04
+        fireDelay: 0.0375
         maxScatterModifier: 8
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 9
+        shotsToMaxScatter: 6
       FullAuto:
         fireDelay: 0
         maxScatterModifier: 13
