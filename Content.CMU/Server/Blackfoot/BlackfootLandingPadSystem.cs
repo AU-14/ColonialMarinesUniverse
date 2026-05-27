@@ -353,7 +353,7 @@ public sealed partial class BlackfootLandingPadSystem : EntitySystem
         while (aircraftQuery.MoveNext(out var aircraft, out var flight, out var aircraftXform))
         {
             if (aircraftXform.MapUid != mapUid ||
-                flight.State is not (BlackfootFlightState.Grounded or BlackfootFlightState.Idling or BlackfootFlightState.Stowed))
+                !CanParkAircraftState(flight.State))
             {
                 continue;
             }
@@ -368,6 +368,15 @@ public sealed partial class BlackfootLandingPadSystem : EntitySystem
         }
 
         return null;
+    }
+
+    internal static bool CanParkAircraftState(BlackfootFlightState state)
+    {
+        return state is
+            BlackfootFlightState.Grounded or
+            BlackfootFlightState.Idling or
+            BlackfootFlightState.Stowed or
+            BlackfootFlightState.Crashed;
     }
 
     private bool TryGetFuelPump(

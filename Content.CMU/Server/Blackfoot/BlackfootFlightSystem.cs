@@ -9,6 +9,7 @@ using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Actions;
 using Content.Shared.Audio;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Damage;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
@@ -40,6 +41,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private AreaSystem _area = default!;
     [Dependency] private SharedAmbientSoundSystem _ambient = default!;
+    [Dependency] private HardpointSystem _hardpoints = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -66,6 +68,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         SubscribeLocalEvent<BlackfootPilotActionComponent, BlackfootDescendZLevelActionEvent>(OnDescendZLevel);
         SubscribeLocalEvent<BlackfootFlightComponent, MapInitEvent>(OnBlackfootMapInit);
         SubscribeLocalEvent<BlackfootFlightComponent, ComponentShutdown>(OnBlackfootShutdown);
+        SubscribeLocalEvent<BlackfootFlightComponent, DamageChangedEvent>(OnBlackfootDamageChanged);
     }
 
     public override void Update(float frameTime)
@@ -77,6 +80,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         {
             ProcessFuel((uid, flight), frameTime);
             ProcessThrusters((uid, flight));
+            TryRecoverFromCrash((uid, flight));
             ProcessTransition((uid, flight));
             UpdateProjectedDownwashState((uid, flight));
             UpdateEngineAudio((uid, flight));
@@ -345,7 +349,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         if (!TryComp(flight, out BlackfootFuelPowerComponent? fuel))
             return;
 
-        var drain = GetFuelDrain(flight.Comp, fuel);
+        var drain = GetFuelDrain(flight.Comp, fuel) + GetFuelLeakDrain(flight, fuel);
         if (drain <= 0f)
             return;
 
@@ -369,6 +373,30 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         Crash(flight);
     }
 
+    private void TryRecoverFromCrash(Entity<BlackfootFlightComponent> flight)
+    {
+        if (flight.Comp.State != BlackfootFlightState.Crashed)
+            return;
+
+        TryComp(flight, out BlackfootFuelPowerComponent? fuel);
+        if (!ShouldRecoverFromCrash(flight.Comp, fuel, HasFunctionalThrusters(flight.Owner)))
+            return;
+
+        SetState(flight.Owner, flight, BlackfootFlightState.Grounded);
+        PopupPilot(flight.Owner, "Blackfoot systems restored. The aircraft is grounded.");
+    }
+
+    internal static bool ShouldRecoverFromCrash(
+        BlackfootFlightComponent flight,
+        BlackfootFuelPowerComponent? fuel,
+        bool hasFunctionalThrusters)
+    {
+        if (flight.State != BlackfootFlightState.Crashed || !hasFunctionalThrusters)
+            return false;
+
+        return fuel == null || !fuel.CrashOnZeroFuel || fuel.Fuel > 0f;
+    }
+
     private float GetFuelDrain(BlackfootFlightComponent flight, BlackfootFuelPowerComponent fuel)
     {
         return flight.State switch
@@ -378,6 +406,19 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
             BlackfootFlightState.Flight => fuel.FlightFuelDrain,
             _ => 0f,
         };
+    }
+
+    private float GetFuelLeakDrain(Entity<BlackfootFlightComponent> flight, BlackfootFuelPowerComponent fuel)
+    {
+        if (fuel.FuelLeakDrain <= 0f ||
+            fuel.Fuel <= 0f ||
+            !TryComp(flight.Owner, out VehicleHardpointFailureComponent? failures) ||
+            !_hardpoints.HasHardpointFailure(flight.Owner, VehicleHardpointFailure.FuelLeak, failures))
+        {
+            return 0f;
+        }
+
+        return fuel.FuelLeakDrain;
     }
 
     private bool CanStartTakeoff(Entity<BlackfootFlightComponent> flight, EntityUid pilot)
@@ -612,6 +653,14 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
 
         _transform.SetMapCoordinates(shadow.Owner, coords);
         _transform.SetWorldRotation(shadow.Owner, rotation);
+    }
+
+    private void OnBlackfootDamageChanged(Entity<BlackfootFlightComponent> ent, ref DamageChangedEvent args)
+    {
+        if (!args.DamageIncreased || args.DamageDelta?.AnyPositive() != true)
+            return;
+
+        Spawn(ent.Comp.HitEffect, Transform(ent.Owner).Coordinates);
     }
 
     private void DeleteShadow(Entity<BlackfootFlightComponent> flight)

@@ -112,6 +112,15 @@ public sealed partial class BlackfootFlightComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntProtoId DownwashPrototype = "CMUBlackfootDownwash";
+
+    [DataField("vtolSpeedMultiplier"), AutoNetworkedField]
+    public float VTOLSpeedMultiplier = 1.25f;
+
+    [DataField, AutoNetworkedField]
+    public float FlightSpeedMultiplier = 1.6f;
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId HitEffect = "RMCBruteSparks";
 }
 
 [RegisterComponent]
@@ -226,6 +235,9 @@ public sealed partial class BlackfootFuelPowerComponent : Component
 
     [DataField, AutoNetworkedField]
     public float MinimumTakeoffFuel = 30f;
+
+    [DataField, AutoNetworkedField]
+    public float FuelLeakDrain = 2.5f;
 
     [DataField, AutoNetworkedField]
     public bool CrashOnZeroFuel = true;
