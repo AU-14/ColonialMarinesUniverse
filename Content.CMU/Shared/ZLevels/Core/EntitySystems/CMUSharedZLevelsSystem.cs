@@ -17,6 +17,11 @@ namespace Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 
 public abstract partial class CMUSharedZLevelsSystem : EntitySystem
 {
+    /// <summary>
+    /// World-space sprite displacement used when projecting adjacent z-levels into the active view.
+    /// </summary>
+    public const float ZLevelVisualOffset = 0.7f;
+
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedStunSystem _stun = default!;
@@ -24,6 +29,7 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private ActionBlockerSystem _blocker = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedPopupSystem _popup = default!;

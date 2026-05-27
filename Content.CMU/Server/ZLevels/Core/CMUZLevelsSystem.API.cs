@@ -21,28 +21,10 @@ public sealed partial class CMUZLevelsSystem
     }
 
     /// <summary>
-    /// Attempts to add the specified map to the zNetwork network at the specified depth
+    /// Adds the specified map to the zNetwork network at the specified depth after batch validation.
     /// </summary>
-    private bool TryAddMapIntoZNetwork(Entity<CMUZLevelsNetworkComponent> network, EntityUid mapUid, int depth)
+    private void AddMapIntoZNetwork(Entity<CMUZLevelsNetworkComponent> network, EntityUid mapUid, int depth)
     {
-        if (network.Comp.ZLevels.ContainsKey(depth))
-        {
-            Log.Error($"Failed to add map {mapUid} to ZLevelNetwork {network}: This depth is already occupied.");
-            return false;
-        }
-
-        if (TryGetZNetwork(mapUid, out var otherNetwork))
-        {
-            Log.Error($"Failed attempt to add map {mapUid} to ZLevelNetwork {network}: This map is already in another network {otherNetwork}.");
-            return false;
-        }
-
-        if (network.Comp.ZLevelByEntity.ContainsKey(mapUid))
-        {
-            Log.Error($"Failed attempt to add map {mapUid} to ZLevelNetwork {network} at depth {depth}: This map is already in this network.");
-            return false;
-        }
-
         network.Comp.ZLevels[depth] = mapUid;
         network.Comp.ZLevelByEntity[mapUid] = depth;
 
@@ -76,22 +58,69 @@ public sealed partial class CMUZLevelsSystem
 
         Dirty(mapUid, levelMapComponent);
         Dirty(network);
-
-        return true;
     }
 
     public bool TryAddMapsIntoZNetwork(Entity<CMUZLevelsNetworkComponent> network, Dictionary<EntityUid, int> maps)
     {
-        var success = true;
+        if (!CanAddMapsIntoZNetwork(network, maps))
+            return false;
+
         foreach (var (ent, depth) in maps)
         {
-            if (!TryAddMapIntoZNetwork(network, ent, depth))
-                success = false;
+            AddMapIntoZNetwork(network, ent, depth);
         }
 
-        RaiseLocalEvent(network, new CMUZLevelNetworkUpdatedEvent());
+        if (maps.Count > 0)
+            RaiseLocalEvent(network, new CMUZLevelNetworkUpdatedEvent());
 
-        return success;
+        return true;
+    }
+
+    private bool CanAddMapsIntoZNetwork(Entity<CMUZLevelsNetworkComponent> network, Dictionary<EntityUid, int> maps)
+    {
+        var seenMaps = new HashSet<EntityUid>();
+        var seenDepths = new HashSet<int>();
+
+        foreach (var (mapUid, depth) in maps)
+        {
+            if (!seenMaps.Add(mapUid))
+            {
+                Log.Warning($"Failed attempt to add maps to ZLevelNetwork {network}: Map {mapUid} appears more than once in the request.");
+                return false;
+            }
+
+            if (!seenDepths.Add(depth))
+            {
+                Log.Warning($"Failed attempt to add maps to ZLevelNetwork {network}: Depth {depth} appears more than once in the request.");
+                return false;
+            }
+
+            if (network.Comp.ZLevels.ContainsKey(depth))
+            {
+                Log.Warning($"Failed to add map {mapUid} to ZLevelNetwork {network}: This depth is already occupied.");
+                return false;
+            }
+
+            if (network.Comp.ZLevelByEntity.ContainsKey(mapUid))
+            {
+                Log.Warning($"Failed attempt to add map {mapUid} to ZLevelNetwork {network} at depth {depth}: This map is already in this network.");
+                return false;
+            }
+
+            if (!TryGetZNetwork(mapUid, out var otherNetwork))
+                continue;
+
+            if (otherNetwork.Value.Owner == network.Owner)
+            {
+                Log.Warning($"Failed attempt to add map {mapUid} to ZLevelNetwork {network} at depth {depth}: This map is already in this network.");
+                return false;
+            }
+
+            Log.Warning($"Failed attempt to add map {mapUid} to ZLevelNetwork {network}: This map is already in another network {otherNetwork}.");
+            return false;
+        }
+
+        return true;
     }
 }
 

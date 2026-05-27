@@ -39,6 +39,7 @@ public sealed partial class CMUZLevelsSystem
     private TimeSpan _zLevelViewerUpdateRate = TimeSpan.FromSeconds(0.25f);
     private TimeSpan _nextZLevelViewerUpdate = TimeSpan.Zero;
     private readonly Dictionary<EntityUid, Dictionary<int, EntityUid>> _viewerProbeEyes = new();
+    private readonly Dictionary<EntityUid, (EntityUid Viewer, int Depth)> _probeEyeIndex = new();
     private readonly Dictionary<EntityUid, Dictionary<ICommonSession, int>> _extraViewerProbeSubscribers = new();
     private readonly HashSet<EntityUid> _viewSubscriptionViewers = new();
     private readonly CMUZLevelOpeningCache _zOpeningCache = new();
@@ -64,8 +65,10 @@ public sealed partial class CMUZLevelsSystem
 
         SubscribeLocalEvent<CMUZLevelViewerComponent, ComponentStartup>(OnViewerStartup);
         SubscribeLocalEvent<CMUZLevelViewerComponent, ComponentShutdown>(OnViewerShutdown);
+        SubscribeLocalEvent<CMUZLevelViewerComponent, MetaFlagRemoveAttemptEvent>(OnViewerMetaFlagRemoveAttempt);
         SubscribeLocalEvent<CMUZLevelViewerComponent, MapUidChangedEvent>(OnViewerMapUidChanged);
         SubscribeLocalEvent<CMUZLevelViewerComponent, EntParentChangedMessage>(OnViewerParentChange);
+        SubscribeLocalEvent<EyeComponent, EntityTerminatingEvent>(OnEyeTerminating);
         SubscribeLocalEvent<CMUZPhysicsComponent, CMUZLevelFallEvent>(OnZLevelFall);
         SubscribeLocalEvent<GridRemovalEvent>(OnGridShutdown);
         SubscribeLocalEvent<TileChangedEvent>(OnTileChanged);
@@ -112,15 +115,18 @@ public sealed partial class CMUZLevelsSystem
     {
         _meta.RemoveFlag(ent, MetaDataFlags.ExtraTransformEvents);
 
-        foreach (var eye in ent.Comp.Eyes)
-        {
-            QueueDel(eye);
-        }
-
-        ent.Comp.Eyes.Clear();
-        _viewerProbeEyes.Remove(ent);
+        QueueDeleteViewerProbeEyes(ent);
         _extraViewerProbeSubscribers.Remove(ent);
         _viewSubscriptionViewers.Remove(ent);
+    }
+
+    private void OnViewerMetaFlagRemoveAttempt(Entity<CMUZLevelViewerComponent> ent, ref MetaFlagRemoveAttemptEvent args)
+    {
+        if ((args.ToRemove & MetaDataFlags.ExtraTransformEvents) != 0 &&
+            ent.Comp.LifeStage <= ComponentLifeStage.Running)
+        {
+            args.ToRemove &= ~MetaDataFlags.ExtraTransformEvents;
+        }
     }
 
     protected override void OnViewerMove(Entity<CMUZLevelViewerComponent> ent, ref MoveEvent args)
@@ -172,13 +178,7 @@ public sealed partial class CMUZLevelsSystem
     {
         SetStairPreviewUp(ent, false);
 
-        foreach (var eye in ent.Comp.Eyes)
-        {
-            QueueDel(eye);
-        }
-
-        ent.Comp.Eyes.Clear();
-        _viewerProbeEyes.Remove(ent.Owner);
+        QueueDeleteViewerProbeEyes(ent);
     }
 
     private bool HasViewerProbeSubscribers(EntityUid viewer)
@@ -238,7 +238,7 @@ public sealed partial class CMUZLevelsSystem
                 continue;
 
             ent.Comp.Eyes.Remove(eye);
-            QueueDel(eye);
+            QueueDeleteProbeEye(eye);
         }
 
         foreach (var depth in _wantedProbeDepths)
@@ -255,6 +255,7 @@ public sealed partial class CMUZLevelsSystem
             Transform(newEye).GridTraversal = false;
             SyncZLevelEye(ent, newEye);
             probes[depth] = newEye;
+            _probeEyeIndex[newEye] = (ent.Owner, depth);
             ent.Comp.Eyes.Add(newEye);
             AddViewerProbeSubscribers(ent, newEye);
         }
@@ -301,10 +302,20 @@ public sealed partial class CMUZLevelsSystem
 
         subscribers[session] = 1;
 
+        var existingEyes = viewerComp.Eyes.Count == 0
+            ? null
+            : new HashSet<EntityUid>(viewerComp.Eyes);
+
         SyncViewerProbes((viewer, viewerComp));
 
-        foreach (var eye in viewerComp.Eyes)
+        if (existingEyes == null)
+            return;
+
+        foreach (var eye in existingEyes)
         {
+            if (!viewerComp.Eyes.Contains(eye))
+                continue;
+
             _viewSubscriber.AddViewSubscriber(eye, session);
         }
     }
@@ -414,13 +425,54 @@ public sealed partial class CMUZLevelsSystem
 
     private bool IsZLevelProbe(EntityUid uid)
     {
-        foreach (var probes in _viewerProbeEyes.Values)
+        return _probeEyeIndex.ContainsKey(uid);
+    }
+
+    private void QueueDeleteViewerProbeEyes(Entity<CMUZLevelViewerComponent> ent)
+    {
+        if (_viewerProbeEyes.TryGetValue(ent.Owner, out var probes))
         {
-            if (probes.ContainsValue(uid))
-                return true;
+            foreach (var eye in probes.Values)
+            {
+                _probeEyeIndex.Remove(eye);
+
+                if (!ent.Comp.Eyes.Contains(eye))
+                    QueueDel(eye);
+            }
         }
 
-        return false;
+        foreach (var eye in ent.Comp.Eyes)
+        {
+            QueueDeleteProbeEye(eye);
+        }
+
+        ent.Comp.Eyes.Clear();
+        _viewerProbeEyes.Remove(ent.Owner);
+    }
+
+    private void QueueDeleteProbeEye(EntityUid eye)
+    {
+        _probeEyeIndex.Remove(eye);
+        QueueDel(eye);
+    }
+
+    private void OnEyeTerminating(Entity<EyeComponent> ent, ref EntityTerminatingEvent args)
+    {
+        if (!_probeEyeIndex.Remove(ent.Owner, out var probe))
+            return;
+
+        if (_viewerProbeEyes.TryGetValue(probe.Viewer, out var probes) &&
+            probes.TryGetValue(probe.Depth, out var indexedEye) &&
+            indexedEye == ent.Owner)
+        {
+            probes.Remove(probe.Depth);
+
+            if (probes.Count == 0)
+                _viewerProbeEyes.Remove(probe.Viewer);
+        }
+
+        if (TryComp<CMUZLevelViewerComponent>(probe.Viewer, out var viewer))
+            viewer.Eyes.Remove(ent.Owner);
     }
 
     private void BuildWantedProbeDepths(EntityUid map, Vector2 globalPos, List<int> depths, bool forceUpperPreview)
@@ -644,11 +696,13 @@ public sealed partial class CMUZLevelsSystem
 
     private void OnGridShutdown(GridRemovalEvent args)
     {
+        InvalidateSharedOpeningCache(args.EntityUid);
         _zOpeningCache.RemoveGrid(args.EntityUid);
     }
 
     private void OnTileChanged(ref TileChangedEvent args)
     {
+        InvalidateSharedOpeningCache(ref args);
         _zOpeningCache.InvalidateTiles(args.Entity, args.Changes);
         OnZPhysicsTileChanged(ref args);
     }
