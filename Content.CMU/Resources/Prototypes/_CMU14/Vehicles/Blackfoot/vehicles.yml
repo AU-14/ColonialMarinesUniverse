@@ -24,6 +24,7 @@
         - LargeMobLayer
         layer:
         - LargeMobLayer
+        - XenoProjectileImpassable
       cockpit:
         shape:
           !type:PhysShapeAabb
@@ -35,6 +36,7 @@
         - LargeMobLayer
         layer:
         - LargeMobLayer
+        - XenoProjectileImpassable
   - type: InteractionOutline
   - type: Sprite
     drawdepth: Mobs
