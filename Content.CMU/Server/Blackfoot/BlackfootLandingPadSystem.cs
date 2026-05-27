@@ -29,6 +29,7 @@ public sealed partial class BlackfootLandingPadSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<BlackfootLandingPadComponent, ActivateInWorldEvent>(OnPadActivate, after: [typeof(ActivatableUISystem)]);
+        SubscribeLocalEvent<BlackfootLandingPadComponent, ComponentShutdown>(OnPadShutdown);
         SubscribeLocalEvent<BlackfootFlightComputerComponent, ActivateInWorldEvent>(OnComputerActivate, after: [typeof(ActivatableUISystem)]);
 
         Subs.BuiEvents<BlackfootFlightComputerComponent>(BlackfootFlightComputerUiKey.Key, subs =>
@@ -63,6 +64,11 @@ public sealed partial class BlackfootLandingPadSystem : EntitySystem
 
         args.Handled = true;
         _popup.PopupEntity("Use tools to pack the Blackfoot landing pad.", ent, args.User, PopupType.SmallCaution);
+    }
+
+    private void OnPadShutdown(Entity<BlackfootLandingPadComponent> ent, ref ComponentShutdown args)
+    {
+        DeletePadLights(ent, dirty: false);
     }
 
     private void OnComputerActivate(Entity<BlackfootFlightComputerComponent> ent, ref ActivateInWorldEvent args)
@@ -505,7 +511,7 @@ public sealed partial class BlackfootLandingPadSystem : EntitySystem
             Dirty(pad);
     }
 
-    private void DeletePadLights(Entity<BlackfootLandingPadComponent> pad)
+    private void DeletePadLights(Entity<BlackfootLandingPadComponent> pad, bool dirty = true)
     {
         if (pad.Comp.Lights.Count == 0)
             return;
@@ -517,7 +523,9 @@ public sealed partial class BlackfootLandingPadSystem : EntitySystem
         }
 
         pad.Comp.Lights.Clear();
-        Dirty(pad);
+
+        if (dirty)
+            Dirty(pad);
     }
 
     private void PushComputerState(

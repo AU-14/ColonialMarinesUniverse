@@ -1,5 +1,36 @@
 - type: entity
-  parent: CMBaseStructureCorrodible
+  abstract: true
+  id: CMUBlackfootMountedSupportBase
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: Tag
+    tags:
+    - Structure
+  - type: Corrodible
+    timeToApply: 4
+    structure: true
+  - type: XenoCrusherChargable
+    setDamage:
+      types:
+        Structural: 750
+
+- type: entity
+  parent: CMUBlackfootMountedSupportBase
   id: CMUBlackfootFuelPump
   name: Blackfoot fuel pump
   description: A fuel service pump for AD-71E Blackfoot landing pads.
@@ -17,9 +48,6 @@
     initialPopup: The fuel pump anchor bolts are loosened.
     panelPopup: The fuel pump service panel is opened.
     packedPopup: The Blackfoot fuel pump is packed into its case.
-  - type: RemoveComponents
-    components:
-    - type: Pullable
 
 - type: entity
   parent: BaseStructureDynamic
@@ -205,8 +233,8 @@
     allowStowedTowing: true
     allowCrashedTowing: true
     towHardpointId: tow-hitch
-    attachRange: 1.55
-    attachOffset: -0.03125,-1.6
+    attachRange: 1.25
+    attachOffset: 0,-1
     attachRotationDegrees: 0
     taxiSpeedMultiplier: 0.45
     taxiAccelerationMultiplier: 0.55

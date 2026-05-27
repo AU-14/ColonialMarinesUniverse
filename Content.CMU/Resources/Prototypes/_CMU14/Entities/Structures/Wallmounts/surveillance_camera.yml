@@ -61,6 +61,30 @@
 
 - type: entity
   parent: RMCMonitorCameraAlmayer
+  id: CMUMonitorCameraColonyWEYUSpy
+  name: security cameras
+  description: Used to access the various cameras in the facility and the colony.
+  suffix: Colony, We-Yu, Spy
+  components:
+  - type: RMCCameraComputer
+    protoIds:
+    - CMUSurveillanceCameraColonyCMB
+    - CMUSurveillanceCameraColonyWEYU
+
+- type: entity
+  parent: RMCMonitorCameraAlmayer
+  id: CMUMonitorCameraColonyGovforSpy
+  name: security cameras
+  description: Used to access the various cameras in the base and the colony.
+  suffix: Colony, Govfor, Spy
+  components:
+  - type: RMCCameraComputer
+    protoIds:
+    - CMUSurveillanceCameraColonyCMB
+    - CMUSurveillanceCameraColonyGOVFOR
+
+- type: entity
+  parent: RMCMonitorCameraAlmayer
   id: CMUMonitorCameraColonyCMB
   name: colony security cameras
   description: Used to access the various cameras on the colony.

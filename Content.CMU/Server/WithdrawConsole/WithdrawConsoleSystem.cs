@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Server.GameTicking;
-using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Marines;
 using Content.Server._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Announce;
@@ -14,7 +13,6 @@ using Content.Shared.Popups;
 using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
-using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 
 namespace Content.Server.AU14.WithdrawConsole;
@@ -22,14 +20,11 @@ namespace Content.Server.AU14.WithdrawConsole;
 public sealed class WithdrawConsoleSystem : EntitySystem
 {
     [Dependency] private AccessReaderSystem _accessReader = default!;
-    [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private MarineAnnounceSystem _marineAnnounce = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private GameTicker _gameTicker = default!;
-
-    private TimeSpan _withdrawDuration;
 
     public bool IsDropdownBlocked(string faction)
     {
@@ -67,22 +62,20 @@ public sealed class WithdrawConsoleSystem : EntitySystem
     }
 
     private TimeSpan GetCancelWindow(WithdrawConsoleComponent console) =>
-        console.CancelWindowOverride ?? _withdrawDuration * 0.5;
+        console.CancelWindowOverride ?? console.WithdrawDuration * 0.5;
 
     private TimeSpan GetAnnouncementElapsed(WithdrawConsoleComponent console) =>
-        console.AnnouncementElapsedOverride ?? _withdrawDuration * 0.5;
+        console.AnnouncementElapsedOverride ?? console.WithdrawDuration * 0.5;
 
     private TimeSpan GetHijackLockRemaining(WithdrawConsoleComponent console) =>
-        console.HijackLockRemainingOverride ?? _withdrawDuration / 3.0;
+        console.HijackLockRemainingOverride ?? console.WithdrawDuration / 3.0;
 
     private TimeSpan GetDropdownLockRemaining(WithdrawConsoleComponent console) =>
-        console.DropdownLockRemainingOverride ?? _withdrawDuration / 6.0;
+        console.DropdownLockRemainingOverride ?? console.WithdrawDuration / 6.0;
 
     public override void Initialize()
     {
         base.Initialize();
-
-        Subs.CVar(_config, RMCCVars.RMCWithdrawTimerMinutes, v => _withdrawDuration = TimeSpan.FromMinutes(v), true);
 
         SubscribeLocalEvent<WithdrawConsoleComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<WithdrawConsoleComponent, ActivatableUIOpenAttemptEvent>(OnOpenAttempt);
@@ -106,7 +99,7 @@ public sealed class WithdrawConsoleSystem : EntitySystem
                 continue;
 
             var elapsed = now - console.WithdrawStartTime.Value;
-            var remaining = _withdrawDuration - elapsed;
+            var remaining = console.WithdrawDuration - elapsed;
             var dirty = false;
 
             if (!console.AnnouncementSent && elapsed >= GetAnnouncementElapsed(console))
@@ -398,7 +391,7 @@ public sealed class WithdrawConsoleSystem : EntitySystem
         if (console.WithdrawActive && console.WithdrawStartTime != null)
         {
             var elapsed = _timing.CurTime - console.WithdrawStartTime.Value;
-            var remaining = _withdrawDuration - elapsed;
+            var remaining = console.WithdrawDuration - elapsed;
             secondsRemaining = Math.Max(0, remaining.TotalSeconds);
             canCancel = elapsed < GetCancelWindow(console);
         }
