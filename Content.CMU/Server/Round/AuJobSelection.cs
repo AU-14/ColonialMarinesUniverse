@@ -108,24 +108,28 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
         int toAssignThreatLeaders = Math.Max(0, numThreatLeaders - alreadyThreatLeaders);
         int toAssignThreatMembers = Math.Max(0, numThreatMembers - alreadyThreatMembers);
         Logger.GetSawmill("au14.jobs").Debug( $"[DEBUG] To assign: ThreatLeaders={toAssignThreatLeaders}, ThreatMembers={toAssignThreatMembers}");
+        if (toAssignThreatLeaders == 0 && toAssignThreatMembers == 0)
+        {
+            Logger.GetSawmill("au14.jobs").Debug("[DEBUG] No threat jobs to assign.");
+            return;
+        }
 
         // Only assign to players who do not already have a forced assignment
         var unassignedPlayers = shuffledPlayers.Where(p => !ForcedJobAssignments.ContainsKey(p)).ToList();
 
-        // Filter players who have queued for threat jobs (have them in job priorities with priority != Never)
+        // Filter players who queued for the generic threat jobs and opted into the selected threat.
         var threatLeaderJobId = new ProtoId<JobPrototype>("AU14JobThreatLeader");
         var threatMemberJobId = new ProtoId<JobPrototype>("AU14JobThreatMember");
+        var selectedThreatId = new ProtoId<ThreatPrototype>(threat!.ID);
 
         var playersQueuedForThreatLeader = unassignedPlayers
             .Where(p => profiles.TryGetValue(p, out var profile) &&
-                       profile.GetJobPrioritiesForGamemode(presetId).TryGetValue(threatLeaderJobId, out var priority) &&
-                       priority != JobPriority.Never)
+                       CanAssignThreatJob(profile, presetId, threatLeaderJobId, selectedThreatId))
             .ToList();
 
         var playersQueuedForThreatMember = unassignedPlayers
             .Where(p => profiles.TryGetValue(p, out var profile) &&
-                       profile.GetJobPrioritiesForGamemode(presetId).TryGetValue(threatMemberJobId, out var priority) &&
-                       priority != JobPriority.Never)
+                       CanAssignThreatJob(profile, presetId, threatMemberJobId, selectedThreatId))
             .ToList();
 
         Logger.GetSawmill("au14.jobs").Debug( $"[DEBUG] Players queued for ThreatLeader: {playersQueuedForThreatLeader.Count}, ThreatMember: {playersQueuedForThreatMember.Count}");
@@ -167,5 +171,25 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
         }
         // The rest will be assigned normally
         Logger.GetSawmill("au14.jobs").Debug( $"[DEBUG] ForcedJobAssignments: {string.Join(", ", ForcedJobAssignments.Select(kv => $"{kv.Key}:{kv.Value}"))}");
+    }
+
+    internal static bool CanAssignThreatJob(
+        HumanoidCharacterProfile profile,
+        string? presetId,
+        ProtoId<JobPrototype> threatJobId,
+        ProtoId<ThreatPrototype> selectedThreatId)
+    {
+        if (!profile.GetJobPrioritiesForGamemode(presetId).TryGetValue(threatJobId, out var priority) ||
+            priority == JobPriority.Never)
+        {
+            return false;
+        }
+
+        var threatPreferences = profile.GetThreatPreferencesForGamemode(presetId);
+        if (threatPreferences.Count == 0)
+            return true;
+
+        return threatPreferences.Any(preference =>
+            preference.Id.Equals(selectedThreatId.Id, StringComparison.OrdinalIgnoreCase));
     }
 }
