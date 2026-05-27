@@ -80,6 +80,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         {
             ProcessFuel((uid, flight), frameTime);
             ProcessThrusters((uid, flight));
+            TryRecoverFromCrash((uid, flight));
             ProcessTransition((uid, flight));
             UpdateProjectedDownwashState((uid, flight));
             UpdateEngineAudio((uid, flight));
@@ -370,6 +371,30 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         }
 
         Crash(flight);
+    }
+
+    private void TryRecoverFromCrash(Entity<BlackfootFlightComponent> flight)
+    {
+        if (flight.Comp.State != BlackfootFlightState.Crashed)
+            return;
+
+        TryComp(flight, out BlackfootFuelPowerComponent? fuel);
+        if (!ShouldRecoverFromCrash(flight.Comp, fuel, HasFunctionalThrusters(flight.Owner)))
+            return;
+
+        SetState(flight.Owner, flight, BlackfootFlightState.Grounded);
+        PopupPilot(flight.Owner, "Blackfoot systems restored. The aircraft is grounded.");
+    }
+
+    internal static bool ShouldRecoverFromCrash(
+        BlackfootFlightComponent flight,
+        BlackfootFuelPowerComponent? fuel,
+        bool hasFunctionalThrusters)
+    {
+        if (flight.State != BlackfootFlightState.Crashed || !hasFunctionalThrusters)
+            return false;
+
+        return fuel == null || !fuel.CrashOnZeroFuel || fuel.Fuel > 0f;
     }
 
     private float GetFuelDrain(BlackfootFlightComponent flight, BlackfootFuelPowerComponent fuel)

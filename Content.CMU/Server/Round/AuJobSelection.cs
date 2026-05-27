@@ -185,7 +185,11 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
             return false;
         }
 
-        return profile.GetThreatPreferencesForGamemode(presetId)
+        var threatPreferences = profile.GetThreatPreferencesForGamemode(presetId);
+        if (threatPreferences.Count == 0)
+            return true;
+
+        return threatPreferences
             .Any(preference => preference.Id.Equals(selectedThreatId.Id, StringComparison.OrdinalIgnoreCase));
     }
 }
