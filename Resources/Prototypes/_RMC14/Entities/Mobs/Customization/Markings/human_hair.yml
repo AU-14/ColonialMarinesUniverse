@@ -167,6 +167,30 @@
       state: hair_cleancut
 
 - type: marking
+  id: RMCHumanHairBedhead
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
+      state: hair_bedhead
+
+- type: marking
+  id: RMCHumanHairBedhead2
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
+      state: hair_bedhead2
+
+- type: marking
+  id: RMCHumanHairBedhead3
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
+      state: hair_bedhead3
+
+- type: marking
   id: RMCHumanHairBeehive
   bodyPart: Hair
   markingCategory: Hair

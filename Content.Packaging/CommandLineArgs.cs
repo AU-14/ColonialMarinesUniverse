@@ -17,6 +17,11 @@ public sealed class CommandLineArgs
     public bool SkipBuild { get; set; }
 
     /// <summary>
+    /// Should package-time builds skip restore.
+    /// </summary>
+    public bool NoRestore { get; set; }
+
+    /// <summary>
     /// Should we wipe the release folder or ignore it.
     /// </summary>
     public bool WipeRelease { get; set; }
@@ -42,6 +47,7 @@ public sealed class CommandLineArgs
         parsed = null;
         bool? client = null;
         var skipBuild = false;
+        var noRestore = false;
         var wipeRelease = true;
         var hybridAcz = false;
         var configuration = "Release";
@@ -75,6 +81,10 @@ public sealed class CommandLineArgs
             if (arg == "--skip-build")
             {
                 skipBuild = true;
+            }
+            else if (arg == "--no-restore")
+            {
+                noRestore = true;
             }
             else if (arg == "--no-wipe-release")
             {
@@ -122,7 +132,7 @@ public sealed class CommandLineArgs
             return false;
         }
 
-        parsed = new CommandLineArgs(client.Value, skipBuild, wipeRelease, hybridAcz, platforms, configuration);
+        parsed = new CommandLineArgs(client.Value, skipBuild, noRestore, wipeRelease, hybridAcz, platforms, configuration);
         return true;
     }
 
@@ -133,6 +143,7 @@ Usage: Content.Packaging [client/server] [options]
 
 Options:
   --skip-build          Should we skip building the project and use what's already there.
+  --no-restore          Don't restore during package-time builds.
   --no-wipe-release     Don't wipe the release folder before creating files.
   --hybrid-acz          Use HybridACZ for server builds.
   --platform            Platform for server builds. Default will output several x64 targets.
@@ -143,6 +154,7 @@ Options:
     private CommandLineArgs(
         bool client,
         bool skipBuild,
+        bool noRestore,
         bool wipeRelease,
         bool hybridAcz,
         List<string>? platforms,
@@ -150,6 +162,7 @@ Options:
     {
         Client = client;
         SkipBuild = skipBuild;
+        NoRestore = noRestore;
         WipeRelease = wipeRelease;
         HybridAcz = hybridAcz;
         Platforms = platforms;

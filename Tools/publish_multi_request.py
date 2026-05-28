@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import concurrent.futures
 import requests
 import os
 import subprocess
@@ -10,6 +11,7 @@ PUBLISH_TOKEN = os.environ["PUBLISH_TOKEN"]
 VERSION = os.environ["GITHUB_SHA"]
 
 RELEASE_DIR = "release"
+DEFAULT_UPLOAD_WORKERS = 4
 
 #
 # CONFIGURATION PARAMETERS
@@ -22,9 +24,16 @@ FORK_ID = "cmu"
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--fork-id", default=FORK_ID)
+    parser.add_argument(
+        "--upload-workers",
+        type=int,
+        default=int(os.environ.get("PUBLISH_UPLOAD_WORKERS", DEFAULT_UPLOAD_WORKERS)),
+        help="Maximum number of release files to upload concurrently.",
+    )
 
     args = parser.parse_args()
     fork_id = args.fork_id
+    upload_workers = max(1, args.upload_workers)
 
     session = requests.Session()
     session.headers.update(
@@ -53,18 +62,20 @@ def main():
     resp.raise_for_status()
     print("Publish successfully started, adding files...")
 
-    for file in get_files_to_publish():
-        print(f"Publishing {file}")
-        with open(file, "rb") as f:
-            headers = {
-                "Content-Type": "application/octet-stream",
-                "Robust-Cdn-Publish-File": os.path.basename(file),
-                "Robust-Cdn-Publish-Version": VERSION,
-            }
-            resp = session.post(
-                f"{ROBUST_CDN_URL}fork/{fork_id}/publish/file", data=f, headers=headers
-            )
-        resp.raise_for_status()
+    files = list(get_files_to_publish())
+    if not files:
+        raise RuntimeError(f"No release files found in {RELEASE_DIR}")
+
+    with concurrent.futures.ThreadPoolExecutor(
+        max_workers=min(upload_workers, len(files))
+    ) as executor:
+        futures = {
+            executor.submit(publish_file, file, fork_id): file
+            for file in files
+        }
+        for future in concurrent.futures.as_completed(futures):
+            future.result()
+
     print("Successfully pushed files, finishing publish...")
 
     data = {"version": VERSION}
@@ -81,6 +92,26 @@ def get_files_to_publish() -> Iterable[str]:
         path = os.path.join(RELEASE_DIR, file)
         if os.path.isfile(path):
             yield path
+
+
+def publish_file(file: str, fork_id: str):
+    print(f"Publishing {file}")
+    with requests.Session() as session:
+        session.headers.update(
+            {
+                "Authorization": f"Bearer {PUBLISH_TOKEN}",
+            }
+        )
+        with open(file, "rb") as f:
+            headers = {
+                "Content-Type": "application/octet-stream",
+                "Robust-Cdn-Publish-File": os.path.basename(file),
+                "Robust-Cdn-Publish-Version": VERSION,
+            }
+            resp = session.post(
+                f"{ROBUST_CDN_URL}fork/{fork_id}/publish/file", data=f, headers=headers
+            )
+        resp.raise_for_status()
 
 
 def get_engine_version() -> str:

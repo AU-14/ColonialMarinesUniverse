@@ -11,25 +11,8 @@ jobs:
     name: Run Benchmarks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-        with:
-          persist-credentials: true
-          submodules: false
-
-      - name: Setup submodule
-        run: |
-          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
-          git submodule update --init --recursive --depth=1
-
-      - name: Get Engine version
-        id: engine_version
-        run: |
-          cd RobustToolbox
-          git fetch --depth=1
-          echo "::set-output name=out::$(git rev-parse HEAD)"
-
       - name: Run script on centcomm
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: centcomm.spacestation14.io
           username: robust-benchmark-runner

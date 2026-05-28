@@ -26,8 +26,8 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      700: Critical
-      800: Dead
+      800: Critical
+      900: Dead
   - type: Xeno
     role: CMXenoCrusher
     actionIds:
@@ -35,7 +35,7 @@
     - ActionXenoRegurgitate
     - ActionXenoWatch
     - ActionXenoTailStab
-    - ActionXenoStomp
+    - ActionXenoDirectionalStomp
     - ActionXenoDevolve
     tier: 3
     hudOffset: -0.15,0.1
@@ -48,9 +48,17 @@
     - CMXenoWarrior
   - type: XenoDevour
   - type: XenoStomp
+    directional: true
+    directionalRange: 4
+    directionalAngle: 90
+    paralyzeTime: 1
+    slowTime: 2.5
+    knockBackDistance: 2
+    screenShakeStrength: 4
+    directionalTileEffect: RMCEffectXenoTelegraphRed
     damage:
       types:
-        Blunt: 65
+        Blunt: 80
     selfEffect: CMEffectSelfStomp
   - type: XenoAnimateMovement
   - type: XenoPlasma
@@ -58,11 +66,15 @@
     maxPlasma: 400
     plasmaRegenOnWeeds: 4
   - type: CMArmor
-    xenoArmor: 30
+    xenoArmor: 25
+    frontalArmor: 20
+    sideArmor: 5
     explosionArmor: 100
   - type: XenoClaws
     clawType: VerySharp
   - type: MeleeWeapon
+    angle: 60
+    maxTargets: 2
     damage:
       groups:
         Brute: 40
@@ -94,7 +106,8 @@
   - type: XenoBrutalize
     damage:
       types:
-        Blunt: 16
+        Blunt: 20
+    armorPiercing: 10
   - type: RMCSize
     size: Immobile
   - type: RMCXenoDamageVisuals
@@ -124,14 +137,18 @@
     - ActionXenoWatch
     - ActionXenoTailStab
     - ActionXenoCharge
-    - ActionXenoStomp
+    - ActionXenoDirectionalStomp
+    - ActionXenoCrusherSoak
     - ActionXenoDefensiveShield
     - ActionXenoDevolve
+  - type: XenoSoak
+    damageGoal: 240
+    heal: 120
   - type: CrusherShield
   - type: XenoCharge
     damage:
       types:
-        Blunt: 60
+        Blunt: 90
         Structural: 750
   - type: XenoShield
   - type: XenoEvolution

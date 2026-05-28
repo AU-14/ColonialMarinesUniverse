@@ -1,13 +1,20 @@
 using Content.Shared._RMC14.Actions;
+using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Damage;
+using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared._RMC14.Xenonids.Plasma;
+using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared.Actions;
 using Content.Shared.Coordinates;
 using Content.Shared.Explosion;
 using Content.Shared.Popups;
+using Content.Shared.Projectiles;
 using Robust.Shared.Network;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Shields;
@@ -21,6 +28,9 @@ public sealed partial class CrusherShieldSystem : EntitySystem
     [Dependency] private XenoShieldSystem _shield = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {
@@ -30,6 +40,7 @@ public sealed partial class CrusherShieldSystem : EntitySystem
         SubscribeLocalEvent<CrusherShieldComponent, GetExplosionResistanceEvent>(OnGetExplosionResistance);
         SubscribeLocalEvent<CrusherShieldComponent, RemovedShieldEvent>(OnShieldRemove);
         SubscribeLocalEvent<CrusherShieldComponent, XenoDefensiveShieldActionEvent>(OnXenoDefensiveShieldAction);
+        SubscribeLocalEvent<CrusherShieldComponent, ProjectileReflectAttemptEvent>(OnReflectAttempt);
     }
 
     private void OnXenoDefensiveShieldAction(Entity<CrusherShieldComponent> xeno, ref XenoDefensiveShieldActionEvent args)
@@ -80,6 +91,69 @@ public sealed partial class CrusherShieldSystem : EntitySystem
                 _actions.SetToggled(action.Owner, false);
             }
         }
+    }
+
+    private void OnReflectAttempt(Entity<CrusherShieldComponent> xeno, ref ProjectileReflectAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        // Only reflect while shield is active.
+        if (!TryComp<XenoShieldComponent>(xeno, out var shield) ||
+            !shield.Active ||
+            shield.Shield != XenoShieldSystem.ShieldType.Crusher)
+            return;
+
+        // Don't reflect xeno projectiles.
+        if (HasComp<XenoProjectileComponent>(args.ProjUid))
+            return;
+
+        var chance = GetDirectionalReflectChance(xeno, args.ProjUid);
+        if (!_random.Prob(chance))
+            return;
+
+        args.Cancelled = true;
+        if (TryComp(args.ProjUid, out PhysicsComponent? physics))
+        {
+            var velocity = _physics.GetMapLinearVelocity(args.ProjUid, component: physics);
+            var rotation = _random.NextAngle(-Angle.FromDegrees(90), Angle.FromDegrees(90)).Opposite();
+            var reflected = rotation.RotateVec(velocity);
+            _physics.SetLinearVelocity(args.ProjUid, reflected, body: physics);
+            _transform.SetWorldRotationNoLerp(args.ProjUid, reflected.ToWorldAngle() + args.Component.Angle);
+        }
+
+        if (_net.IsServer)
+        {
+            RemComp<PredictedProjectileServerComponent>(args.ProjUid);
+        }
+        else if (TryComp(args.ProjUid, out PredictedProjectileClientComponent? predicted))
+        {
+            predicted.Hit = false;
+        }
+
+        args.Component.Shooter = xeno.Owner;
+        args.Component.Weapon = xeno.Owner;
+        Dirty(args.ProjUid, args.Component);
+    }
+
+    private float GetDirectionalReflectChance(Entity<CrusherShieldComponent> xeno, EntityUid projectile)
+    {
+        var projectileCoords = _transform.GetMapCoordinates(projectile);
+        var defenderCoords = _transform.GetMapCoordinates(xeno);
+        if (projectileCoords.MapId != defenderCoords.MapId)
+            return xeno.Comp.ReflectChanceBack;
+
+        var diff = (projectileCoords.Position - defenderCoords.Position).ToWorldAngle().GetCardinalDir();
+        var dir = _transform.GetWorldRotation(xeno).GetCardinalDir();
+
+        if (dir == diff)
+            return xeno.Comp.ReflectChanceFront;
+
+        var perpendiculars = diff.GetPerpendiculars();
+        if (dir == perpendiculars.First || dir == perpendiculars.Second)
+            return xeno.Comp.ReflectChanceSide;
+
+        return xeno.Comp.ReflectChanceBack;
     }
 
     public override void Update(float frameTime)

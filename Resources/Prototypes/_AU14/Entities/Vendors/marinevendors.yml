@@ -1188,9 +1188,9 @@
   components:
   - type: Sprite
     sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+  - type: AccessReader
+    access: [["AU14AccessGovforSecurity" ], [ "AU14AccessOpforSecurity" ]]
   - type: CMAutomatedVendor
-    jobs:
-    - AU14JobMilitaryPoliceBase
     sections:
     - name: Standard Equipment
       takeAll: CMStandard

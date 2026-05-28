@@ -23,13 +23,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
 
       - name: Setup Rust
         run: rustup update stable && rustup default stable
 
       - name: Cache Cargo registry
-        uses: actions/cache@v5
+        uses: actions/cache@v5.0.5
         with:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.toml') }}
@@ -37,7 +37,7 @@ jobs:
             ${{ runner.os }}-cargo-registry-
 
       - name: Cache Cargo build
-        uses: actions/cache@v5
+        uses: actions/cache@v5.0.5
         with:
           path: .github/map_checker/target
           key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.toml') }}

@@ -29,7 +29,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
 
       - name: Parse PRs into Parts
         run: Tools/update_changelog_parts.py Resources/Changelog/Parts --category ${{inputs.category || 'CMU' }}
@@ -43,7 +43,7 @@ jobs:
         run: Tools/update_changelog.py Resources/Changelog/CMU.yml
           Resources/Changelog/Parts --category ${{ inputs.category || 'CMU' }}
 
-      - uses: stefanzweifel/git-auto-commit-action@v7
+      - uses: stefanzweifel/git-auto-commit-action@v7.1.0
         with:
           commit_message: "Auto-update changelog [skip ci]"
           commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"

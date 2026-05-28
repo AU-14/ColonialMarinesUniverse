@@ -144,6 +144,7 @@
     head: AU14DesertM10Helmet
     back: RMCSatchelLightpackBlack
     pocket1: AU14PouchIFAKFill
+    ears: AU14HeadsetVAI
 
 - type: startingGear
   id: AU14GearVAISOBase
@@ -156,6 +157,7 @@
     eyes: CMGlassesSecurity
     head: AU14ArmorHelmetCovert
     mask: RMCMaskCoifPMC
+    ears: AU14HeadsetVAI
   storage:
     head:
     - RMCHelmetGarbNightVision

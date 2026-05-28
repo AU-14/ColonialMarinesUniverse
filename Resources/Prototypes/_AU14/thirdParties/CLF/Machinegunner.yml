@@ -35,12 +35,14 @@
     - type: Skills
       skills:
         RMCSkillEndurance: 2
-        RMCSkillFirearms: 2
-        RMCSkillConstruction: 2
-        RMCSkillEngineer: 3
-        RMCSkillFireman: 2
+        RMCSkillCqc: 1
+        RMCSkillMedical: 1
+        RMCSkillFirearms: 1
+        RMCSkillEngineer: 1
         RMCSkillVehicles: 1
-        RMCSkillPolice: 1
+        RMCSkillPolice: 2
+        RMCSkillJtac: 2
+        RMCSkillSmartGun: 1
     - type: JobPrefix
       prefix: au14-job-prefix-clfmachinegunner
     - type: TacticalMapIcon

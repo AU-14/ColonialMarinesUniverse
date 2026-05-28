@@ -27,6 +27,13 @@
     - sprite: Mobs/Customization/human_hair.rsi
       state: e
 - type: marking
+  id: HumanHairPulato
+  bodyPart: Hair
+  markingCategory: Hair
+  sprites:
+    - sprite: Mobs/Customization/human_hair.rsi
+      state: pulato
+- type: marking
   id: HumanHairBeehive
   bodyPart: Hair
   markingCategory: Hair

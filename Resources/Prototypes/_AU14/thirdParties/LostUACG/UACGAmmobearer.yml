@@ -27,7 +27,10 @@
     - type: Skills
       skills:
         RMCSkillFirearms: 2
-        RMCSkillFireman: 1
+        RMCSkillMeleeWeapons: 1
+        RMCSkillEndurance: 1
+        RMCSkillCqc: 1
+        RMCSkillFireman: 2
         RMCSkillVehicles: 1
     - type: JobPrefix
       prefix: au-14-job-prefix-uacg-rifleman

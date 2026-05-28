@@ -38,6 +38,8 @@
         RMCSkillPolice: 2
         RMCSkillLeadership: 1
         RMCSkillVehicles: 1
+        RMCSkillEngineer: 1
+        RMCSkillConstruction: 1
     - type: JobPrefix
       prefix: au14-job-prefix-civiliannspainspector
     - type: TacticalMapIcon
@@ -65,7 +67,7 @@
   parent: AU14BaseMobSpeciesOrganicNSPA
   id: NSPAInvestigationPartyJobInspectorArmored
   name: NSPA Inspector Armor
-  components:  
+  components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole

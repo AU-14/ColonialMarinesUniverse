@@ -258,7 +258,7 @@
   id: ActionXenoDefensiveShield
   parent: ActionXenoBase
   name: Defensive Shield (50)
-  description: Gain a temporary shield that blocks the next 200 damage (and is immune to explosive damage) that lasts 7 seconds. Any damage that impacts the shield is reduced by 10 before processing. [color=green]Cooldown is partially refunded upon attacking an enemy.[/color]
+  description: Encase yourself in a protective shield that absorbs 100 damage for 7 seconds. Reduces incoming damage by 8 per hit. Reflects enemy projectiles while active. [color=red]Grants brief explosion immunity on activation.[/color]
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -430,6 +430,12 @@
   - type: InstantAction
     event: !type:XenoSoakActionEvent
   - type: ActionBlockIfResting
+
+- type: entity
+  parent: ActionXenoSoak
+  id: ActionXenoCrusherSoak
+  name: Soak (20)
+  description: Brace yourself for incoming damage. If you absorb 240 damage within 6 seconds, heal 120 health and reset your tail stab cooldown. [color=red]If the threshold is not reached, the effect expires with no reward.[/color]
 
 - type: entity
   parent: ActionXenoBase

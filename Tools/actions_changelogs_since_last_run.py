@@ -105,8 +105,8 @@ def get_last_changelog() -> str:
     most_recent = get_most_recent_workflow(session, github_repository, github_run)
     if most_recent is None:
         print("No previous successful run found.")
-        #   exit(0)  # use this check if we want to send new changes only
-        return yaml.dump({"Entries": []})
+        # return yaml.dump({"Entries": []}) # use this to seed (send all changelogs)
+        exit(0)  # use this if we want to send new changes only
 
     last_sha = most_recent["head_commit"]["id"]
     print(f"Last successful publish job was {most_recent['id']}: {last_sha}")
