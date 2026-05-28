@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   abstract: true
   parent: [ CMBaseWeaponGun, BaseItem, RMCBaseAttachableHolder ]
   id: RMCBaseWeaponRifleNoDualWieldPenaltyNoMagazineProvider
@@ -94,9 +94,9 @@
     zeroVisible: true
 
 - type: entity
+  abstract: true
   parent: BaseItem
   id: CMMagazineRifleBase
-  abstract: true
   components:
   - type: Tag
     tags:
@@ -128,6 +128,7 @@
   - type: Clothing
     slots:
     - suitStorage
+  - type: CargoSellBlacklist
 
 - type: entity
   parent: BaseCartridgeRifle

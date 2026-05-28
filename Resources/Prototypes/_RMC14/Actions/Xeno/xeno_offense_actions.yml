@@ -719,6 +719,25 @@
     event: !type:XenoStompActionEvent
 
 - type: entity
+  id: ActionXenoDirectionalStomp
+  parent: ActionXenoBase
+  name: Stomp (30)
+  description: Slam the ground in a cone in front of you, dealing heavy damage and knocking back all enemies caught in the blast.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: stomp
+    useDelay: 18
+  - type: TargetAction
+    range: 15
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:XenoDirectionalStompActionEvent
+  - type: ActionBlockIfResting
+
+- type: entity
   parent: CMGuidebookActionXenoBase
   id: RMCGuidebookActionXenoStomp
   categories: [ HideSpawnMenu ]

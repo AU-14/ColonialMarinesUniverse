@@ -40,3 +40,4 @@
         volume: -1
   - type: StaticPrice
     price: 1
+  - type: CargoSellBlacklist

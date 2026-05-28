@@ -703,9 +703,10 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         }
 
         // Naughty input
-        if (entities.Count > MaxTargets)
+        var maxTargets = component.MaxTargets ?? MaxTargets;
+        if (entities.Count > maxTargets)
         {
-            entities.RemoveRange(MaxTargets, entities.Count - MaxTargets);
+            entities.RemoveRange(maxTargets, entities.Count - maxTargets);
         }
 
         // Validate client

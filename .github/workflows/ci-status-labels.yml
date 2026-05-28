@@ -1,0 +1,159 @@
+name: CI Status Labels
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+  pull-requests: read
+
+jobs:
+  label:
+    name: Label PR CI Status
+    if: github.event.workflow_run.event == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply CI status labels
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const run = context.payload.workflow_run;
+
+            const labels = {
+              requiredPassed: 'S: Required Checks Passed',
+              requiredFailed: 'S: Required Checks Failed',
+              integrationPassed: 'S: Integration Tests Passed',
+              integrationFailed: 'S: Integration Tests Failed',
+            };
+
+            const labelDefinitions = {
+              [labels.requiredPassed]: {
+                color: '0e8a16',
+                description: 'Required CI checks passed for the current pull request head.',
+              },
+              [labels.requiredFailed]: {
+                color: 'd93f0b',
+                description: 'Required CI checks failed for the current pull request head.',
+              },
+              [labels.integrationPassed]: {
+                color: '0e8a16',
+                description: 'Integration tests passed for the current pull request head.',
+              },
+              [labels.integrationFailed]: {
+                color: 'd93f0b',
+                description: 'Integration tests failed for the current pull request head.',
+              },
+            };
+
+            async function ensureLabels() {
+              const existing = new Map((await github.paginate(github.rest.issues.listLabelsForRepo, {
+                owner,
+                repo,
+                per_page: 100,
+              })).map(label => [label.name, label]));
+
+              for (const [name, config] of Object.entries(labelDefinitions)) {
+                const current = existing.get(name);
+                if (!current) {
+                  await github.rest.issues.createLabel({ owner, repo, name, ...config });
+                  continue;
+                }
+
+                if (current.color.toLowerCase() !== config.color || (current.description || '') !== config.description) {
+                  await github.rest.issues.updateLabel({ owner, repo, name, new_name: name, ...config });
+                }
+              }
+            }
+
+            async function getPullRequests() {
+              if (run.pull_requests?.length > 0) {
+                return run.pull_requests;
+              }
+
+              const response = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                owner,
+                repo,
+                commit_sha: run.head_sha,
+              });
+              return response.data;
+            }
+
+            async function setExclusiveLabels(issueNumber, addName, removeNames) {
+              const current = await github.paginate(github.rest.issues.listLabelsOnIssue, {
+                owner,
+                repo,
+                issue_number: issueNumber,
+                per_page: 100,
+              });
+              const currentNames = new Set(current.map(label => label.name));
+
+              for (const name of removeNames) {
+                if (currentNames.has(name)) {
+                  await github.rest.issues.removeLabel({ owner, repo, issue_number: issueNumber, name });
+                }
+              }
+
+              if (!currentNames.has(addName)) {
+                await github.rest.issues.addLabels({ owner, repo, issue_number: issueNumber, labels: [addName] });
+              }
+            }
+
+            const pullRequests = await getPullRequests();
+            if (pullRequests.length === 0) {
+              core.info(`No pull request found for CI run ${run.id}.`);
+              return;
+            }
+
+            const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRun, {
+              owner,
+              repo,
+              run_id: run.id,
+              per_page: 100,
+            });
+
+            const requiredJob = jobs.find(job => job.name === 'Required Checks');
+            const integrationJobs = jobs.filter(job => job.name.startsWith('Testcases / '));
+
+            await ensureLabels();
+
+            for (const pullRequest of pullRequests) {
+              const pullNumber = pullRequest.number;
+              const { data: latest } = await github.rest.pulls.get({
+                owner,
+                repo,
+                pull_number: pullNumber,
+              });
+
+              if (latest.head.sha !== run.head_sha) {
+                core.info(`Skipping PR #${pullNumber}: head moved from ${run.head_sha} to ${latest.head.sha}.`);
+                continue;
+              }
+
+              if (requiredJob) {
+                const requiredPassed = requiredJob.conclusion === 'success';
+                await setExclusiveLabels(
+                  pullNumber,
+                  requiredPassed ? labels.requiredPassed : labels.requiredFailed,
+                  requiredPassed
+                    ? [labels.requiredFailed]
+                    : [labels.requiredPassed],
+                );
+              }
+
+              if (integrationJobs.length > 0) {
+                const integrationPassed = integrationJobs.every(job => job.conclusion === 'success');
+                await setExclusiveLabels(
+                  pullNumber,
+                  integrationPassed ? labels.integrationPassed : labels.integrationFailed,
+                  integrationPassed
+                    ? [labels.integrationFailed]
+                    : [labels.integrationPassed],
+                );
+              }
+            }

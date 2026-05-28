@@ -12,7 +12,7 @@ jobs:
   docfx:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
         with:
           persist-credentials: true
           submodules: false
@@ -28,7 +28,7 @@ jobs:
       #     git submodule update --init --recursive
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v5.2.0
         with:
           dotnet-version: 10.0.x
 
@@ -44,7 +44,7 @@ jobs:
           args: Content.Docfx/docfx.json
 
       - name: Publish Docfx Documentation on GitHub Pages
-        uses: maxheld83/ghpages@master
+        uses: maxheld83/ghpages@v0.3.0
         env:
           BUILD_DIR: Content.Docfx/_content-site
           GH_PAT: ${{ secrets.GH_PAT }}

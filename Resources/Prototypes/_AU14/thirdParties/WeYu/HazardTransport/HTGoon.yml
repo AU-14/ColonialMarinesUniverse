@@ -22,10 +22,10 @@
       - AUWeYu
     - type: Skills
       skills:
-        RMCSkillCqc: 1
-        RMCSkillEndurance: 1
+        RMCSkillCqc: 2
+        RMCSkillEndurance: 2
         RMCSkillFirearms: 1
-        RMCSkillFireman: 1
+        RMCSkillFireman: 2
         RMCSkillIntel: 1
         RMCSkillOverwatch: 1
         RMCSkillPolice: 2

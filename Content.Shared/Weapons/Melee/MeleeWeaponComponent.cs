@@ -106,6 +106,13 @@ public sealed partial class MeleeWeaponComponent : Component
     [DataField, AutoNetworkedField]
     public Angle Angle = Angle.FromDegrees(60);
 
+    /// <summary>
+    /// Per-weapon override for maximum wide attack targets.
+    /// If null, uses the global CVar value.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int? MaxTargets;
+
     [DataField, AutoNetworkedField]
     public EntProtoId Animation = "WeaponArcPunch";
 

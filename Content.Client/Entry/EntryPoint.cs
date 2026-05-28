@@ -95,6 +95,8 @@ namespace Content.Client.Entry
 
             _logManager.GetSawmill("loc").Level = LogLevel.Error;
 
+            _configManager.OverrideDefault(CVars.DisplayVSync, false);
+
             _contentLoc.Initialize();
             _componentFactory.DoAutoRegistrations();
             _componentFactory.IgnoreMissingComponents();

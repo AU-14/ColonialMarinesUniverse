@@ -13,13 +13,13 @@ public static class ClientPackaging
     /// <summary>
     /// Be advised this can be called from server packaging during a HybridACZ build.
     /// </summary>
-    public static async Task PackageClient(bool skipBuild, string configuration, IPackageLogger logger)
+    public static async Task PackageClient(bool skipBuild, bool noRestore, string configuration, IPackageLogger logger)
     {
         logger.Info("Building client...");
 
         if (!skipBuild)
         {
-            await ProcessHelpers.RunCheck(new ProcessStartInfo
+            var startInfo = new ProcessStartInfo
             {
                 FileName = "dotnet",
                 ArgumentList =
@@ -29,11 +29,15 @@ public static class ClientPackaging
                     "-c", configuration,
                     "--nologo",
                     "/v:m",
-                    "/t:Rebuild",
                     "/p:FullRelease=true",
                     "/m"
                 }
-            });
+            };
+
+            if (noRestore)
+                startInfo.ArgumentList.Add("--no-restore");
+
+            await ProcessHelpers.RunCheck(startInfo);
         }
 
         logger.Info("Packaging client...");

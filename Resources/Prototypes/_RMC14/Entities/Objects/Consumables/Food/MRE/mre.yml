@@ -94,6 +94,7 @@
     blacklist:
       components:
       - Xeno
+  - type: CargoSellBlacklist
 
 - type: entity
   abstract: true
