@@ -18,16 +18,13 @@
     components:
     - type: Skills
       skills:
-          RMCSkillEndurance: 2
+          RMCSkillEndurance: 1
           RMCSkillFirearms: 2
-          RMCSkillConstruction: 1
-          RMCSkillEngineer: 1
-          RMCSkillFireman: 2
+          RMCSkillConstruction: 2
+          RMCSkillEngineer: 3
+          RMCSkillFireman: 1
           RMCSkillVehicles: 1
-          RMCSkillPolice: 2
-          RMCSkillCqc: 2
-          RMCSkillMedical: 1
-          RMCSkillMeleeWeapons: 1
+          RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-govforspecialist-pointmanRMC
   hidden: false

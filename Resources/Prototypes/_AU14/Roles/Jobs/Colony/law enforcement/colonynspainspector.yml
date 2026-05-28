@@ -27,19 +27,17 @@
       - AUBureau
     - type: Skills
       skills:
-        RMCSkillCqc: 3
-        RMCSkillEndurance: 3
-        RMCSkillFirearms: 1
+        RMCSkillCqc: 2
+        RMCSkillEndurance: 2
+        RMCSkillFirearms: 2
         RMCSkillFireman: 2
         RMCSkillIntel: 1
         RMCSkillMedical: 1
         RMCSkillMeleeWeapons: 1
         RMCSkillOverwatch: 1
         RMCSkillPolice: 2
-        RMCSkillLeadership: 3
+        RMCSkillLeadership: 1
         RMCSkillVehicles: 1
-        RMCSkillEngineer: 1
-        RMCSkillConstruction: 1
     - type: JobPrefix
       prefix: au14-job-prefix-civiliannspainspector
     - type: TacticalMapIcon

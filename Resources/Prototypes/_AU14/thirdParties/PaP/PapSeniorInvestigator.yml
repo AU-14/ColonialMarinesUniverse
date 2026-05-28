@@ -28,16 +28,16 @@
         state: spp_sec
     - type: Skills
       skills:
-        RMCSkillCqc: 3
+        RMCSkillCqc: 2
         RMCSkillMeleeWeapons: 2
         RMCSkillFirearms: 2
         RMCSkillPolice: 2
         RMCSkillEndurance: 3
-        RMCSkillFireman: 3
+        RMCSkillFireman: 2
         RMCSkillMedical: 2
         RMCSkillJtac: 1
         RMCSkillIntel: 2
-        RMCSkillLeadership: 3
+        RMCSkillLeadership: 2
         RMCSkillVehicles: 1
     - type: JobPrefix
       prefix: au-14-job-prefix-papthirdparty-captain

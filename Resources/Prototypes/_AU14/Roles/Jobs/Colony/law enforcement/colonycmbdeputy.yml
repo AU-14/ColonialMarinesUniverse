@@ -38,9 +38,9 @@
     components:
     - type: Skills
       skills:
-        RMCSkillCqc: 3
-        RMCSkillEndurance: 3
-        RMCSkillFirearms: 1
+        RMCSkillCqc: 2
+        RMCSkillEndurance: 2
+        RMCSkillFirearms: 2
         RMCSkillFireman: 2
         RMCSkillIntel: 1
         RMCSkillMedical: 1

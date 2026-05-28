@@ -27,19 +27,16 @@
       - AUBureau
     - type: Skills
       skills:
-        RMCSkillCqc: 3
-        RMCSkillEndurance: 3
+        RMCSkillCqc: 2
+        RMCSkillEndurance: 2
         RMCSkillFirearms: 2
-        RMCSkillFireman: 5
+        RMCSkillFireman: 2
         RMCSkillIntel: 1
-        RMCSkillMedical: 2
+        RMCSkillMedical: 1
         RMCSkillMeleeWeapons: 1
         RMCSkillOverwatch: 1
         RMCSkillPolice: 2
-        RMCSkillLeadership: 3
-        RMCSkillJtac: 3
-        RMCSkillEngineer: 2
-        RMCSkillConstruction: 2
+        RMCSkillLeadership: 1
         RMCSkillVehicles: 1
     - type: JobPrefix
       prefix: au14-job-prefix-cmbmarshal

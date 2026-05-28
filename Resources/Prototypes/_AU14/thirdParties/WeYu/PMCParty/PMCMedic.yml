@@ -23,14 +23,15 @@
       - AUWeYu
     - type: Skills
       skills:
-        RMCSkillEndurance: 3
+        RMCSkillEndurance: 1
         RMCSkillFirearms: 2
-        RMCSkillFireman: 2
+        RMCSkillFireman: 1
+        RMCSkillJtac: 1
         RMCSkillMedical: 2
-        RMCSkillSurgery: 1 #not parity, but makes sense
+        RMCSkillSurgery: 1
         RMCSkillConstruction: 2
-        RMCSkillEngineer: 2
-        RMCSkillPolice: 2
+        RMCSkillEngineer: 3
+        RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanWYPMC
     - type: TacticalMapIcon

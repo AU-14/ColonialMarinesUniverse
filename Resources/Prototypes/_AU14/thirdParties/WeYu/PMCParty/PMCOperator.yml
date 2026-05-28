@@ -28,12 +28,13 @@
     components:
     - type: Skills
       skills:
-        RMCSkillEndurance: 3
+        RMCSkillEndurance: 1
         RMCSkillFirearms: 2
         RMCSkillConstruction: 2
-        RMCSkillEngineer: 2
-        RMCSkillFireman: 2
-        RMCSkillPolice: 2
+        RMCSkillEngineer: 3
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORSquadRiflemanWYPMC
     - type: TacticalMapIcon
