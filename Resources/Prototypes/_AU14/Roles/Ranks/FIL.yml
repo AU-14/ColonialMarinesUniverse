@@ -1,0 +1,90 @@
+# privates
+- type: rank
+  id: AU14RankFILLegionnaire
+  name: Legionnaire
+  prefix: Lgn.
+  paygrade: FA1
+
+- type: rank
+  id: AU14RankFILLegionnaireFirstClass
+  name: Legionnaire First Class
+  prefix: LFC.
+  paygrade: FA2
+
+- type: rank
+  id: AU14RankFILCorporal
+  name: Corporal
+  prefix: Cpl
+  paygrade: FA3
+
+- type: rank
+  id: AU14RankFILChiefCorporal
+  name: Chief Corporal
+  prefix: C-Cpl
+  paygrade: FA4
+
+# NCOs
+
+- type: rank
+  id: AU14RankFILSergeant
+  name: Sergeant
+  prefix: Sgt.
+  paygrade: FA5
+
+- type: rank
+  id: AU14RankFILChiefSergeant
+  name: Chief Sergeant
+  prefix: C-Sgt
+  paygrade: FA6
+
+# WOs
+
+- type: rank
+  id: AU14RankFILAdjutant
+  name: Adjutant
+  prefix: Adj.
+  paygrade: FA8
+
+- type: rank
+  id: AU14RankFILChiefAdjutant
+  name: Chief Adjutant
+  prefix: C-Adj.
+  paygrade: FA9
+
+- type: rank
+  id: AU14RankFILMajor
+  name: Major # yes in FFL major is NCO
+  prefix: Adj.
+  paygrade: FA9
+
+# officers
+
+- type: rank
+  id: AU14RankFILAspirant
+  name: Aspirant
+  prefix: Asp.
+  paygrade: FO-D
+
+- type: rank
+  id: AU14RankFILSecondLieutenant
+  name: Second Lieutenant
+  prefix: SLt.
+  paygrade: FO1
+
+- type: rank
+  id: AU14RankFILLieutenant
+  name: Lieutenant
+  prefix: LT.
+  paygrade: FO2
+
+- type: rank
+  id: AU14RankFILCaptain
+  name: Captain
+  prefix: Cpt.
+  paygrade: FO3
+
+- type: rank
+  id: AU14RankFILCommandant
+  name: Commandant
+  prefix: Cmd.
+  paygrade: FO4

@@ -1,0 +1,5 @@
+- type: entity
+  parent: RMCBeltHolsterPistol
+  id: AU14BeltHolsterPistolFIL
+  name: french general pistol holster rig
+  description: This pistol rig seems to be exact the same as M276 counterpart, except that this one is French.

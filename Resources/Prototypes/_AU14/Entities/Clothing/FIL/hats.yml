@@ -1,0 +1,21 @@
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14HeadKepiParade
+  name: french kepi
+  description: An old traditional cap made by from the French military since the 19th century and still used by current French officers as a high old tradition and significance to the French military.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/FIL/hats/kepi_parade.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/FIL/hats/kepi_parade.rsi
+  
+- type: entity
+  parent: ClothingHeadBase
+  id: AU14HeadKepiField
+  name: french expeditionary kepi
+  description: The more comfortable and long range Kepi use either for the desert or jungle. Among favorite for foreign legionaires and other groups in France.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/FIL/hats/kepi_field.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/FIL/hats/kepi_field.rsi

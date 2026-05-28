@@ -285,3 +285,17 @@
     playerSprite:
       sprite: _AU14/Clothing/Patches/grom_patch.rsi
       state: patch
+
+- type: entity
+  parent: RMCPatchBase
+  id: AU14FrenchPatch
+  name: french insignia patch
+  description: A fire-resistant shoulder patch with the flag of France, an independant nation found on Earth and their minor interstellar colonies.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Patches/french_patch.rsi
+    state: icon
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Patches/french_patch.rsi
+      state: patch

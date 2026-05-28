@@ -1,0 +1,21 @@
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14HeadHelmetFIL
+  name: Burgonet-Ri
+  suffix: AU14
+  description: Modeled after the burgonet pattern helmet, the new standard French armed forces helmet provides improved shrapnel protection with a splinter-proof aventail. An imported heads up display unit is integrated for battlefield awareness, and a low-profile high gain antenna complex is mounted along the top of the head. Shock impact protection is provided by gel padding which also serve to maintain comfort.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/FIL/helmets/fil_helmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/FIL/helmets/fil_helmet.rsi
+
+- type: entity
+  parent: AU14HeadHelmetFIL
+  id: AU14HeadHelmetFILFire
+  name: Burgonet-Ri Incinerator Variant
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/FIL/helmets/fil_helmet_fire.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/FIL/helmets/fil_helmet_fire.rsi

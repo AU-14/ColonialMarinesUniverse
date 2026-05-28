@@ -1,0 +1,538 @@
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseAttachableHolder, RMCBaseWeaponMagazineVisuals ]
+  name: FR F20 bolt action marksman rifle
+  id: AU14WeaponFR2
+  description: Fusil à Répétition modèle F20 or repeating rifle model F20 is a bolt-action marksman rifle a very hardened old model of the French Military. Originally made by FAN in 2149 to give military and private arsenals. Used to take out targets in the old fashioned way by having more traditional mechanism and a variable zoom scope to land their target. Loaded with 10x50mm caseful caliber.
+  suffix: Filled
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/FIL/fr2.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - sprite: _AU14/Weapons/Guns/Attachments/fil_attachments.rsi
+      state: fr2_scope
+      offset: 0.275, 0.22
+    - sprite: _AU14/Weapons/Guns/Attachments/fil_attachments.rsi
+      state: fr2_bipod
+      offset: 0.8, -0.075
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/FIL/fr2.rsi
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_sniper.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilWielded: 1
+    recoilUnwielded: 4
+    scatterWielded: 0
+    scatterUnwielded: 20
+    baseFireRate: 1.25
+    burstScatterMult: 5
+  - type: WieldableSpeedModifiers
+    base: 0.5
+    light: 0.69
+    medium: 0.75
+    heavy: 0.806
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 4
+  - type: GunDualWielding
+    weaponGroup: Rifle
+  - type: GunRequiresWield
+  - type: UniqueAction
+  - type: BreechLoaded
+    needOpenClose: true
+    openSound:
+      path: "/Audio/_RMC14/Weapons/Guns/Breech/pkd_open_chamber.ogg"
+    closeSound:
+      path: "/Audio/_RMC14/Weapons/Guns/Breech/pkd_close_chamber.ogg"
+  - type: MagazineAmmoProvider
+    autoEject: false
+    soundAutoEject: null
+  - type: GenericVisualizer
+    visuals:
+      enum.BreechVisuals.Open:
+        enum.BreechVisuals.Open:
+          True: { state: bolt-open }
+          False: { state: base }
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineRifleFR2
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleFR2
+          - AU14MagazineRifleFR2HP
+          - AU14MagazineRifleFR2WP
+          - AU14MagazineRifleFR2AP
+  - type: GunDamageModifier
+    multiplier: 1.4
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        startingAttachable: AU14AttachmentBarrelFR2
+        locked: true
+        whitelist:
+          tags:
+          - AU14AttachmentBarrelFR2
+      rmc-aslot-rail:
+        locked: true
+        startingAttachable: AU14IntegratedScopeFR2
+        whitelist:
+          tags:
+          - AU14IntegratedScopeFR2
+      rmc-aslot-underbarrel:
+        startingAttachable: AU14AttachmentBipodFR2
+        whitelist:
+          tags:
+          - AU14AttachmentBipodFR2
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.80, 0.06
+      rmc-aslot-rail: -0.28, 0.06
+      rmc-aslot-stock: -0.74, -0.14
+  - type: ItemCamouflage
+    camouflageVariations: {}
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14MagazineRifleFR2
+  name: "FR F20 magazine (10x55mm)"
+  description: A magazine for the FR F20 marksman rifle.
+  components:
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleFR2
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - AU14Cartridge10x55mm
+    proto: AU14Cartridge10x55mm
+    capacity: 10
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/fr2.rsi
+    layers:
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14MagazineRifleFR2WP
+  name: "FR F20 wall-penetration magazine (10x55mm)"
+  description: A wall-penetration magazine for the FR F20 marksman rifle.
+  components:
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleFR2WP
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - AU14Cartridge10x55mmWP
+    proto: AU14Cartridge10x55mmWP
+    capacity: 10
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/fr2.rsi
+    layers:
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: band
+      color: "#2d9c75"
+  - type: Appearance
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14MagazineRifleFR2AP
+  name: "FR F20 armor-piercing magazine (10x55mm)"
+  description: An armor-piercing magazine for the FR F20 marksman rifle.
+  components:
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleFR2AP
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - AU14Cartridge10x55mmAP
+    proto: AU14Cartridge10x55mmAP
+    capacity: 10
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/fr2.rsi
+    layers:
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: band
+      color: "#1F951F"
+  - type: Appearance
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14MagazineRifleFR2HP
+  name: "FR F20 hollow-point magazine (10x55mm)"
+  description: An hollow-point magazine for the FR F20 marksman rifle.
+  components:
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleFR2HP
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - AU14Cartridge10x55mmHP
+    proto: AU14Cartridge10x55mmHP
+    capacity: 10
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/fr2.rsi
+    layers:
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: band
+      color: "#BA5D00"
+  - type: Appearance
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: AU14Cartridge10x55mm
+  name: cartridge (10x55mm)
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14Cartridge10x55mm
+  - type: CartridgeAmmo
+    proto: AU14Bullet10x55mm
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: AU14Cartridge10x55mmAP
+  name: AP cartridge (10x55mm)
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14Cartridge10x55mmAP
+  - type: CartridgeAmmo
+    proto: AU14Bullet10x55mmAP
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: AU14Cartridge10x55mmWP
+  name: WP cartridge (10x55mm)
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14Cartridge10x55mmWP
+  - type: CartridgeAmmo
+    proto: AU14Bullet10x55mmWP
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: AU14Cartridge10x55mmHP
+  name: HP cartridge (10x55mm)
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14Cartridge10x55mmHP
+  - type: CartridgeAmmo
+    proto: AU14Bullet10x55mmHP
+
+- type: entity
+  parent: BulletRifle10x24mm
+  id: AU14Bullet10x55mm
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 75
+  - type: CMArmorPiercing
+    amount: 18
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 30
+      falloff: 0
+      ignoreModifiers: true
+    - range: 7
+      falloff: 0
+
+- type: entity
+  parent: BulletRifle10x24mm
+  id: AU14Bullet10x55mmAP
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 65
+  - type: CMArmorPiercing
+    amount: 75
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 30
+      falloff: 0
+      ignoreModifiers: true
+    - range: 7
+      falloff: 0
+
+- type: entity
+  parent: RMCBaseBullet
+  id: AU14Bullet10x55mmWP
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 55
+  - type: CMArmorPiercing
+    amount: 35
+  - type: RMCProjectileAccuracy
+    accuracy: 105
+    thresholds:
+    - range: 16
+      falloff: 10
+    - range: 4
+      falloff: 10
+      buildup: true
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 30
+      falloff: 0
+      ignoreModifiers: true
+    - range: 7
+      falloff: 0
+  - type: RMCPenetratingProjectile
+    rangeLossPerHit: 1
+
+
+- type: entity
+  parent: BulletRifle10x24mm
+  id: AU14Bullet10x55mmHP
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 110
+  - type: CMArmorPiercing
+    amount: 10
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 30
+      falloff: 0
+      ignoreModifiers: true
+    - range: 7
+      falloff: 0
+
+
+- type: entity
+  parent: RMCBarrelAttachmentBase
+  id: AU14AttachmentBarrelFR2
+  name: FR2 barrel
+  description: A heavy barrel.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Attachments/fil_attachments.rsi
+    state: fr_barrel
+  - type: Tag
+    tags:
+    - RMCAttachmentBarrel
+    - AU14AttachmentBarrelFR2
+  - type: AttachableVisuals
+  - type: AttachableWeaponRangedMods
+    modifiers:
+    - accuracyAddMult: 0.15
+    - scatterFlat: -6
+
+- type: entity
+  parent: RMCM96SIntegratedScope
+  id: AU14IntegratedScopeFR2
+  name: FR2 integrated scope
+  description: This isn't supposed to come off the gun. How did you get it?
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Attachments/fil_attachments.rsi
+    state: fr2_scope
+  - type: Tag
+    tags:
+    - RMCAttachmentRail
+    - AU14IntegratedScopeFR2
+  - type: AttachableToggleable
+    breakOnMove: false
+    actionsToRelayWhitelist:
+      tags:
+      - RMCActionCycleZoomLevel
+    icon:
+      sprite: _AU14/Weapons/Guns/Attachments/fil_attachments.rsi
+      state: fr2_scope
+    actionName: Look through FR2 Integrated Scope
+    actionDesc: Lets you see further.
+
+- type: entity
+  parent: [ RMCUnderAttachmentBase, RMCAttachableToggleableBase ]
+  id: AU14AttachmentBipodFR2
+  name: FR2 bipod
+  description: An integrated bipod for the FR2 AMR.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Attachments/fil_attachments.rsi
+    state: fr2_bipod
+  - type: Tag
+    tags:
+    - RMCAttachmentUnderbarrel
+    - AU14AttachmentBipodFR2
+  - type: AttachableToggleable
+    activateOnMove: false
+    heldOnlyActivate: true
+    userOnly: true
+    doInterrupt: true
+    attachedOnly: true
+    breakOnMove: true
+    breakOnFullRotate: true
+    breakOnDrop: true
+    slowOnBreak: true
+    doAfter: 1.5
+    deactivateDoAfter: 0
+    doAfterNeedHand: false
+    instantToggle: Brace
+    useDelay: 0.5
+    activatePopupText: attachable-popup-activate-deploy-on-ground
+    deactivatePopupText: attachable-popup-deactivate-retract
+    activateSound:
+      path: /Audio/_RMC14/Attachable/bipod_toggle.ogg
+      params:
+        volume: -3
+    deactivateSound:
+      path: /Audio/_RMC14/Attachable/bipod_toggle.ogg
+      params:
+        volume: -3
+    icon:
+      sprite: _AU14/Weapons/Guns/Attachments/fil_attachments.rsi
+      state: fr2_bipod
+    iconActive:
+      sprite: _AU14/Weapons/Guns/Attachments/fil_attachments.rsi
+      state: fr2_bipod-on
+    actionName: Deploy Bipod
+    actionDesc: Deploy the bipod and get into a firing position.
+  - type: AttachableVisuals
+    showActive: true
+  - type: AttachableTemporarySpeedMods
+    alteration: Interrupted
+  - type: AttachableSizeMods
+    modifiers:
+    - size: 2
+  - type: AttachableWieldDelayMods
+    modifiers:
+    - delay: 0.4
+  - type: AttachableWeaponMeleeMods
+    modifiers:
+    - bonusDamage:
+        types:
+          Blunt: -10
+  - type: AttachableWeaponRangedMods
+    fireModeMods:
+    - conditions:
+        activeOnly: true
+        whitelist:
+          tags:
+          - RMCGunBipodFullAuto
+      extraFireModes: FullAuto
+      setFireMode: FullAuto
+    modifiers:
+    - conditions:
+        inactiveOnly: true
+      fireDelayFlat: 0.12
+    - conditions:
+        wieldedOnly: true
+        inactiveOnly: true
+      accuracyAddMult: -0.25
+      scatterFlat: 2
+      recoilFlat: 1
+      fireDelayFlat: 0.06
+    - conditions:
+        wieldedOnly: true
+        activeOnly: true
+      scatterFlat: -1
+      recoilFlat: -2
+    - conditions:
+        activeOnly: true
+      accuracyAddMult: 0.25
+      burstScatterAddMult: -3
+      fireDelayFlat: -0.09
+    - conditions:
+        activeOnly: true
+        whitelist:
+          tags:
+          - AU14WeaponFR2
+      fireDelayFlat: -0.4
+
+- type: Tag
+  id: AU14MagazineRifleFR2
+
+- type: Tag
+  id: AU14MagazineRifleFR2HP
+
+- type: Tag
+  id: AU14MagazineRifleFR2AP
+
+- type: Tag
+  id: AU14MagazineRifleFR2WP
+
+- type: Tag
+  id: AU14Cartridge10x55mm
+
+- type: Tag
+  id: AU14Cartridge10x55mmWP
+
+- type: Tag
+  id: AU14Cartridge10x55mmAP
+
+- type: Tag
+  id: AU14Cartridge10x55mmHP
+
+- type: Tag
+  id: AU14WeaponFR2
+
+- type: Tag
+  id: AU14IntegratedScopeFR2
+
+- type: Tag
+  id: AU14AttachmentBarrelFR2
+
+- type: Tag
+  id: AU14AttachmentBipodFR2

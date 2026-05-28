@@ -1,0 +1,10 @@
+- type: entity
+  parent: RMCPouchMachete
+  id: AU14PouchCSAMMacheteFilled
+  name: french machete pouch
+  suffix: Filled, FIL
+  components:
+  - type: ContainerFill
+    containers:
+      item:
+      - AU14CSAMMachete

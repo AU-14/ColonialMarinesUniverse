@@ -1,0 +1,25 @@
+- type: entity
+  parent: RMCBackpackFlamer
+  id: AU14BackpackFlamerFIL
+  name: D60-HI Heavy Fueltank
+  description: A large fueltank used by French heavy incinerator units for their D60 flamethrowers.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/FIL/back/fil_flamer.rsi
+    layers:
+    - state: icon
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,8,1
+    whitelist:
+      components:
+      - AU14TankFlamerD60
+  - type: FixedItemSizeStorage
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 750
+        reagents:
+        - ReagentId: RMCNapalmUT
+          Quantity: 750

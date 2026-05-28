@@ -1,0 +1,308 @@
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  name: CAMAS61/78 pulse carbine
+  id: AU14WeaponRifleFN107
+  description: To facilitate newer French military development, the CAMAS61/78 was created by Saint etienne in 2159. This was later modified in 2178 for privatized use. It is quite a well known pulse carbine within military circles, commonly being used by many different mercenary and security groups.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/FIL/famas.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/FIL/famas.rsi
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: Gun
+    selectedMode: FullAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    soundGunshot:
+      collection: AU14M41FireSound
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilUnwielded: 4
+    scatterWielded: 6
+    scatterUnwielded: 18
+    baseFireRate: 4
+    burstScatterMult: 1
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.35
+    accuracyMultiplierUnwielded: 0.75
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleFN107
+          - AU14MagazineRifleFN107AP
+  - type: GunDamageModifier
+    multiplier: 1.25
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-stock:
+        startingAttachable: AU14AttachmentFN107Stock
+        whitelist:
+          tags:
+          - AU14AttachmentFN107Stock
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.84, 0.085
+      rmc-aslot-rail: -0.07, 0.16
+      rmc-aslot-stock: -0.376, 0
+  - type: ItemCamouflage
+    camouflageVariations: {}
+  - type: Tag
+    tags:
+    - AU14WeaponRifleFN107
+
+- type: entity
+  parent: AU14WeaponRifleFN107
+  id: AU14WeaponRifleFN107Filled
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineRifleFN107
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleFN107
+          - AU14MagazineRifleFN107AP
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-stock:
+        startingAttachable: AU14AttachmentFN107Stock
+        whitelist:
+          tags:
+          - AU14AttachmentFN107Stock
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14MagazineRifleFN107
+  name: "CAMAS61/78 magazine (7.5x28mm)"
+  description: "An 7.5mm magazine for the CAMAS61/78 Carbine, commonly used by FIL."
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleFN107
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - AU14CartridgeRifle75x28mm
+    proto: AU14CartridgeRifle75x28mm
+    capacity: 100
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/fn107.rsi
+    layers:
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifle # TODO: Box is 10x24mm
+
+- type: entity
+  parent: CMMagazineRifleM54C
+  id: AU14MagazineRifleFN107AP
+  name: "CAMAS61/78 AP Tracer magazine (7.5x28mm)"
+  description: "An 7.5mm AP Tracer magazine for the CAMAS61/78 Carbine, commonly used by FIL."
+  suffix: AP
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleFN107AP
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - AU14CartridgeRifle75x28mmAP
+    proto: AU14CartridgeRifle75x28mmAP
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/fn107.rsi
+    layers:
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: band
+      color: "#1F951F"
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifleAP
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: AU14CartridgeRifle75x28mm
+  name: cartridge (7.5x28mm)
+  description: "A 7.5x28mm cartridge for the CAMAS61/78 rifle."
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14CartridgeRifle75x28mm
+  - type: CartridgeAmmo
+    proto: BulletRifle75x28mm
+
+- type: entity
+  parent: AU14CartridgeRifle97x16mm
+  id: AU14CartridgeRifle75x28mmAP
+  name: AP cartridge (7.5x28mm)
+  description: "A 7.5x28mm armor-piercing tracer cartridge for the CAMAS61/78 rifle."
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14CartridgeRifle75x28mmAP
+  - type: CartridgeAmmo
+    proto: BulletRifle75x28mmAP
+
+- type: entity
+  parent: RMCBaseBullet
+  id: BulletRifle75x28mm
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 35
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 24
+      falloff: 9999
+      ignoreModifiers: true
+    - range: 7
+      falloff: 4
+  - type: CMArmorPiercing
+    amount: 5
+  - type: RMCProjectileAccuracy
+    accuracy: 105
+    thresholds:
+    - range: 16
+      falloff: 10
+
+- type: entity
+  parent: BulletRifle75x28mm
+  id: BulletRifle75x28mmAP
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 30
+  - type: CMArmorPiercing
+    amount: 55
+
+- type: entity
+  parent: RMCStockAttachmentBase
+  id: AU14AttachmentFN107Stock
+  name: FN107 Carbine Stock
+  description: This isn't supposed to be separated from the gun, how'd this happen?
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Attachments/fil_attachments.rsi
+    state: famas_stock
+  - type: Tag
+    tags:
+    - RMCAttachmentStock
+    - AU14AttachmentFN107Stock
+  - type: AttachableVisuals
+  - type: AttachableSpeedMods
+    modifiers:
+    - conditions:
+        wieldedOnly: true
+      walk: -0.059
+      sprint: -0.101
+  - type: AttachableWieldDelayMods
+    modifiers:
+    - delay: 0.4
+  - type: AttachableWeaponMeleeMods
+    modifiers:
+    - bonusDamage:
+        types:
+          Blunt: 10
+  - type: AttachableWeaponRangedMods
+    modifiers:
+    - conditions:
+        wieldedOnly: true
+      accuracyAddMult: 0.25
+      recoilFlat: -3
+      scatterFlat: -8
+    - conditions:
+        unwieldedOnly: true
+      accuracyAddMult: -0.15
+      recoilFlat: 2
+      scatterFlat: 6
+  - type: Appearance
+  - type: ItemCamouflage
+    camouflageVariations: {}
+
+- type: Tag
+  id: AU14WeaponRifleFN107
+
+- type: Tag
+  id: AU14MagazineRifleFN107
+
+- type: Tag
+  id: AU14MagazineRifleFN107AP
+
+- type: Tag
+  id: AU14AttachmentFN107Stock
+
+- type: Tag
+  id: AU14CartridgeRifle75x28mm
+
+- type: Tag
+  id: AU14CartridgeRifle75x28mmAP

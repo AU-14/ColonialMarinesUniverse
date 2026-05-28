@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken/modified from cm-ss13 at https://github.com/CactusMouth/PvE-CMSS13/blob/52b70ce5671ee19f3f7660e99c65c5a7de540820/icons/obj/items/clothing/uniforms.dmi, https://github.com/CactusMouth/PvE-CMSS13/blob/52b70ce5671ee19f3f7660e99c65c5a7de540820/icons/mob/humans/onmob/uniform_0.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "equipped-INNERCLOTHING",
+      "directions": 4
+    },
+    {
+      "name": "sleeves-equipped-INNERCLOTHING",
+      "directions": 4
+    },
+    {
+      "name": "jacket-equipped-INNERCLOTHING",
+      "directions": 4
+    }
+  ]
+}
