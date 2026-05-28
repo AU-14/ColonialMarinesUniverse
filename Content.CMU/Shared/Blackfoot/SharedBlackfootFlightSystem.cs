@@ -16,9 +16,14 @@ public sealed partial class SharedBlackfootFlightSystem : EntitySystem
         if (!args.CanRun)
             return;
 
-        args.CanRun = ent.Comp.State switch
+        args.CanRun = CanRunInState(ent.Comp.State, HasTowConnection(ent.Owner));
+    }
+
+    public static bool CanRunInState(BlackfootFlightState state, bool hasTowConnection)
+    {
+        return state switch
         {
-            BlackfootFlightState.Stowed or BlackfootFlightState.Grounded => HasTowConnection(ent.Owner),
+            BlackfootFlightState.Stowed or BlackfootFlightState.Grounded or BlackfootFlightState.Crashed => hasTowConnection,
             BlackfootFlightState.VTOL or BlackfootFlightState.Flight => true,
             _ => false,
         };
