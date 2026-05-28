@@ -9,7 +9,7 @@
   - RMCXenoVentCrawler
   id: CMXenoBurrower
   name: Burrower
-  description: A beefy alien with sharp claws.
+  description: A hefty alien with sharp claws.
   components:
   - type: CanBuildThickFromConstructNode
   - type: GuideHelp
@@ -55,6 +55,8 @@
   - type: XenoDevolve
     devolvesTo:
     - CMXenoDrone
+  - type: XenoPheromones
+    pheromonesMultiplier: 2
   - type: XenoPlasma
     plasma: 600
     maxPlasma: 600
