@@ -1,10 +1,7 @@
 - type: job
   parent: AU14JobPlatCoBase
   id: AU14JobGOVFORPlatCoCMBCIU
-  requirements: []
   name: Platoon Commander
-  description: au14-job-description-govforplatco
-  icon: "AU14JobIconPlatCo"
   spawnMenuRoleName: Platoon Commander (CMBCIU)
   ranks:
     AU14RankCMBMarshal: []

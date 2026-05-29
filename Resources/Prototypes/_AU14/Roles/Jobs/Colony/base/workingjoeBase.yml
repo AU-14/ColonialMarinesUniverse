@@ -1,21 +1,21 @@
 - type: job
+  abstract: true
   parent: CMJobBase
   id: AU14JobWorkingJoeBase
   name: au14-job-name-workingjoe
   description: au14-job-description-workingjoe
-  abstract: true
   playTimeTracker: AU14JobWorkingJoe
   basePlaytimeTracker: true
-  requireAdminNotify: false
   setPreference: true
   canBeAntag: false
-  joinNotifyCrew: false
-  roleWeight: 0.25
   whitelisted: true
   whitelistParent: AU14JobGeneralWhitelist
   jobEntity: AU14MobWorkingJoe
   jobPreviewEntity: AU14MobWorkingJoeDummy
-  hidden: false
+
+- type: playTimeTracker
+  id: AU14JobWorkingJoe
+  isHumanoid: true
 
 - type: startingGear
   id: AU14GearWorkingJoeBase
@@ -39,7 +39,3 @@
       - CMFireExtinguisher
   inhand:
   - TrashBag
-
-- type: playTimeTracker
-  id: AU14JobWorkingJoe
-  isHumanoid: true

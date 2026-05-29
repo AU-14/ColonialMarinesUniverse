@@ -1,10 +1,10 @@
-# TARS Third Party
+# Tactical Advanced Rescue Squad (TARS)
 - type: partySpawn
   id: ProdigyTARSSpawn
   leadersToSpawn:
     AU14JobProdigyTARSPartyLeader: 1
   gruntsToSpawn:
-    AU14JobTARSPartyContractor: 1
+    AU14JobTARSPartyRifleman: 1
     AU14JobTARSPartyMedic: 1
     AU14JobProdigyTARSPartySynth: 1
   scalewithpop: false

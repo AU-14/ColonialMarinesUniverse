@@ -85,4 +85,11 @@ public sealed partial class XenoStompComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public EntProtoId? DirectionalTileEffect;
+
+    /// <summary>
+    ///     If set, directional stomp damage falls off with distance.
+    ///     Full Damage at close range, this value at max range.
+    /// </summary>
+    [DataField]
+    public DamageSpecifier? DirectionalMinDamage;
 }

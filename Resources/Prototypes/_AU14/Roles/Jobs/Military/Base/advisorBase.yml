@@ -1,12 +1,81 @@
 - type: job
-  parent: CMJobBase
-  id: AU14JobadvisorBase
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobadvisorBaseAbstract
   name: au14-job-name-govforadvisor
   description: au14-job-description-govforadvisor
+  icon: "AU14JobIconGovAdvisor"
+  spawnMenuRoleName: Platoon Advisor (GOVFOR)
+  startingGear: AU14GearGOVFORadvisor
+  dummyStartingGear: AU14GearGOVFORadvisorDummy
   playTimeTracker: AU14JobGOVFORadvisor
-  basePlaytimeTracker: true
-  hidden: true
+  requireAdminNotify: true
+  whitelisted: true
+  canBeAntag: false
+  accessGroups:
+  - AU14GovforCommand
+
+- type: job
+  abstract: true
+  parent: AU14JobadvisorBaseAbstract
+  id: AU14JobadvisorBase
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 3600
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+  ranks:
+    RMCRankSergeantMajor:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORadvisor
+      time: 360000 # 100 hours
+    RMCRankMasterGunnerySergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORadvisor
+      time: 86400 # 24 hours
+    RMCRankFirstSergeant: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: SeeNewPlayers
+    - type: Skills
+      preset: AU14SkillPresetPlatoonAdvisor
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforadvisor
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14govforhud.rsi
+        state: govfor_advisor
 
 - type: playTimeTracker
   id: AU14JobGOVFORadvisor
   isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORadvisor
+  equipment:
+    id: AU14IDCardSquadAdvisor
+    ears: AU14HeadsetGovforCommand
+    back: AU14SatchelMarineAdvisorMilitary
+
+- type: startingGear
+  id: AU14GearGOVFORadvisorDummy
+  equipment:
+    shoes: CMBootsBrownFilled
+    head: CMHeadCapDrill
+    jumpsuit: CMJumpsuitBO
+    ears: AU14HeadsetGovforCommand
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORadvisor
+  name: Spawn Point GOVFOR Advisor
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORadvisor
+  - type: Sprite
+    state: syn_spawn

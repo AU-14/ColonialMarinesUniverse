@@ -21,7 +21,7 @@
       time: 216000 # 60 hours
     RMC_Sergeant: []
   startingGear: AU14GearGOVFORSectionSergeant
-  dummyStartingGear: AU14GearGOVFORPlatoonSergantDummy
+  dummyStartingGear: AU14GearGOVFORPlatoonSergeantDummy
   icon: "AU14JobIconPlatoonSarge"
   requireAdminNotify: true
   spawnMenuRoleName: Platoon Sergeant (TWE RMC)

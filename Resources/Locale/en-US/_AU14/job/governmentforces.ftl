@@ -123,9 +123,6 @@ au14-job-prefix-govforspecialist-pointmanRMC = PNM
 au14-job-name-govforspecialist-grenadierRMC = Grenadier
 au14-job-prefix-govforspecialist-grenadierRMC = GNR
 
-au14-job-name-govfork9handler = K9 Handler
-au14-job-prefix-govfork9handler = K9
-
 au-14-job-name-rmcrrt-commander = Commander
 au-14-job-prefix-rmcrrt-commander = CMD
 

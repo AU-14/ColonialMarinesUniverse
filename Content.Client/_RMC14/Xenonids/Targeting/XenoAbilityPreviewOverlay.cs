@@ -19,6 +19,7 @@ using Content.Shared._RMC14.Xenonids.Stomp;
 using Content.Shared.Actions.Components;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
+using Robust.Shared.Physics;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
@@ -198,7 +199,7 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
             case XenoDirectionalStompActionEvent:
                 if (!_stompQ.TryComp(player.Value, out var stomp) || !stomp.Directional)
                     return;
-                DrawDirectionalStomp(args, originMap, mousePos, stomp);
+                DrawDirectionalStomp(args, player.Value, originMap, mousePos, stomp);
                 break;
         }
     }
@@ -332,6 +333,7 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
 
     private void DrawDirectionalStomp(
         in OverlayDrawArgs args,
+        EntityUid player,
         MapCoordinates originMap,
         MapCoordinates mousePos,
         XenoStompComponent stomp)
@@ -360,6 +362,18 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
 
                 var angleDiff = Angle.ShortestDistance(direction, diff.ToWorldAngle());
                 if (Math.Abs(angleDiff.Theta) > halfAngle.Theta)
+                    continue;
+
+                // Raycast for barricade blocking.
+                var ray = new CollisionRay(originMap.Position, diff.Normalized(), (int) CollisionGroup.BarricadeImpassable);
+                var blocked = false;
+                foreach (var _ in _physics.IntersectRay(originMap.MapId, ray, diff.Length(), player, returnOnFirstHit: true))
+                {
+                    blocked = true;
+                    break;
+                }
+
+                if (blocked)
                     continue;
 
                 tiles.Add(tilePos);

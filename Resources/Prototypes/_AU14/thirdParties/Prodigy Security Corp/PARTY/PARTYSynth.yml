@@ -1,10 +1,11 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobPARTYPartyContractorBase
   id: AU14JobProdigyPARTYSynth
   name: Prodigy Yankee Support Synthetic
   description: au14-prodigyparty-description
   playTimeTracker: AU14JobProdigyPARTYSynth
   whitelisted: true
+  whitelistParent: AU14JobGeneralWhitelist
   ranks:
     AU14RankPrDSynth5:
     - !type:RoleTimeRequirement
@@ -82,7 +83,6 @@
         types:
           Blunt: 35
     - type: Synth
-  hidden: false
 
 - type: entity
   parent: AU14BaseMobSpeciesSyntheticProdigy

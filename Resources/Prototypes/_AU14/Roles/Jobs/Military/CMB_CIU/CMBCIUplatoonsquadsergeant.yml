@@ -1,7 +1,6 @@
 - type: job
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantCMBCIU
-  requirements: []
   name: Team Leader
   spawnMenuRoleName: Squad Sergeant (CMBCIU)
   overwatchRoleName: Squad Sergeant

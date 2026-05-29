@@ -1,44 +1,50 @@
 - type: job
-  parent: AU14Jobk9handlerBase
-  id: AU14JobThirdPartyK9Handler
-  name: au14-job-name-govfork9handler
-  description: au14-job-name-govfork9handler
-  setPreference: false
-  ranks:
-    RMCRankStaffSergeant: []
-  startingGear: AU14GearThirdPartyK9Handler
+  abstract: true
+  parent: CMJobBase
+  id: AU14Jobk9handlerBase
+  name: au14-job-name-3rdparty9handler
+  description: au14-job-description-3rdpartyk9handler
   icon: "AU14JobIconGovK9Handler"
-  requireAdminNotify: false
-  spawnMenuRoleName: au14-job-name-govfork9handler
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
+  startingGear: AU14GearThirdPartyK9Handler
+  playTimeTracker: AU14JobThirdPartyK9Handler
+  basePlaytimeTracker: true
+  supervisors: au14-job-supervisors-loner-k9
+  spawnMenuRoleName: au14-job-name-3rdparty9handler
+  overwatchRoleName: au14-job-prefix-3rdpartyk9handler
+  overwatchSortPriority: -2
   accessGroups:
     - Colonist
     - aumed
-  # - AU14GovforCorpsman
-  # - AU14GovforSquad
-  overwatchSortPriority: -2
-  overwatchRoleName: au14-job-name-govfork9handler
-  roleWeight: 0.25
+  setPreference: false
+  hidden: true
+
+- type: job
+  parent: AU14Jobk9handlerBase
+  id: AU14JobThirdPartyK9Handler
+  ranks:
+    RMCRankStaffSergeant: []
   special:
   - !type:AddComponentSpecial
     components:
     - type: Skills
-      preset: AU14SkillPresetPlatoonHospitalCorpsman
+      preset: AU14SkillPresetThirdPartyK9Handler
     - type: JobPrefix
-      prefix: au14-job-prefix-govfork9handler
+      prefix: au14-job-prefix-3rdpartyk9handler
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: true
+
+- type: playTimeTracker
+  id: AU14JobThirdPartyK9Handler
+  isHumanoid: true
 
 - type: startingGear
   id: AU14GearThirdPartyK9Handler
   equipment:
     jumpsuit: AU14UniversalBlackFatigues
     id: AU14IDCardSquadK9Handler
-    ears: AU14HeadsetGovforCommand
+    ears: AU14ColonyAdminHeadset
     eyes: RMCGlassesMedicalHUDGlasses
     outerClothing: AU14WYPPOArmor
     shoes: CMBootsBlack
@@ -71,6 +77,34 @@
   - RMCZippo
 
 - type: entity
+  id: AU14SkillPresetThirdPartyK9Handler
+  name: Hospital Corpsman
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillJtac: 1
+      RMCSkillFirearms: 1
+      RMCSkillCqc: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillEndurance: 1
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 3
+      RMCSkillEngineer: 2
+      RMCSkillConstruction: 3
+      RMCSkillVehicles: 1
+      RMCSkillPilot: 1
+      RMCSkillNavigations: 1
+      RMCSkillFireman: 4
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconGovK9Handler
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: govfor_k9handler
+
+- type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORK9Handler
   name: (DO NOT MAP) Spawn Point GOVFOR K9 Handler
@@ -80,9 +114,3 @@
   - type: Sprite
     state: syn_spawn
 
-- type: jobIcon
-  parent: CMJobIconBase
-  id: AU14JobIconGovK9Handler
-  icon:
-    sprite: _AU14/Interface/au14govforjobicons.rsi
-    state: govfor_k9handler

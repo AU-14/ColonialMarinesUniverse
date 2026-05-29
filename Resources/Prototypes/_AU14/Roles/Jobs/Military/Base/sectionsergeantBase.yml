@@ -1,12 +1,80 @@
 - type: job
-  parent: CMJobBase
-  id: AU14JobSectionSergeantBase
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobSectionSergeantBaseAbstract
   name: au14-job-name-govforSSG
   description: au14-job-description-govforSSG
+  icon: "AU14JobIconPlatoonSarge"
+  spawnMenuRoleName: Platoon Sergeant (GOVFOR)
+  startingGear: AU14GearGOVFORSectionSergeant
+  dummyStartingGear: AU14GearGOVFORPlatoonSergeantDummy
   playTimeTracker: AU14JobGOVFORSectionSergeant
-  basePlaytimeTracker: true
+  requireAdminNotify: true
+  overwatchRoleName: Platoon Sergeant
+  overwatchSortPriority: -6
+  overwatchShowName: true
+  accessGroups:
+  - AU14GovforCommand
+  setPreference: false  # don't show in loadout menu
+  hidden: true          # plt sgt is disabled
+
+- type: job
   abstract: true
+  parent: AU14JobSectionSergeantBaseAbstract
+  id: AU14JobSectionSergeantBase
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankStaffSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSectionSergeant
+      time: 36000 # 10 hours
+    RMCRankSergeant: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      preset: AU14SkillPresetPlatoonSeniorSergeant
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforSSG
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: xo
 
 - type: playTimeTracker
   id: AU14JobGOVFORSectionSergeant
   isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORSectionSergeant
+  equipment:
+    id: AU14IDCardSecSergeant
+    ears: AU14HeadsetGovforMarine
+
+- type: startingGear
+  id: AU14GearGOVFORPlatoonSergeantDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleTwo
+    shoes: CMBootsBrown
+    head: AU14JunglePatrolCap
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORSectionSergeant
+  name: Spawn Point GOVFOR Section Sergeant
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORSectionSergeant
+  - type: Sprite
+    state: syn_spawn

@@ -15,7 +15,7 @@
       time: 108000 # 30 hours
     UPP_Sergeant: []
   startingGear: AU14GearGOVFORSectionSergeant
-  dummyStartingGear: AU14GearGOVFORPlatoonSergantDummy
+  dummyStartingGear: AU14GearGOVFORPlatoonSergeantDummy
   icon: "AU14JobIconPlatoonSarge"
   requireAdminNotify: true
   spawnMenuRoleName: Platoon Sergeant (UPP)

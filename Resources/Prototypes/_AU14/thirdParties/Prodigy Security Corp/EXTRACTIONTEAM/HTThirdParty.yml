@@ -1,11 +1,11 @@
-# Sierra Third Party
+# Prodigy Extraction Team (PET Sierra)
 - type: partySpawn
   id: ProdigyExtractionSpawn
   leadersToSpawn:
     AU14JobPARTPilot: 1
   gruntsToSpawn:
     AU14JobPARTDCC: 2
-    AU14JobPARTExtractionContractor: 1
+    AU14JobPARTExtractionRifleman: 1
   scalewithpop: false
   spawnTogether: true
 

@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobPARTYPartyContractorBase
   id: AU14JobProdigyPartySpecialist
   name: Prodigy Yankee Weapon Specialist
   description: au14-prodigyparty-description
@@ -39,8 +39,6 @@
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: smartgunner
-  hidden: false
-
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu

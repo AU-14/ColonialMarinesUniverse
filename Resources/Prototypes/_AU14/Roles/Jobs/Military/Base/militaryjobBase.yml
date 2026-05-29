@@ -1,0 +1,30 @@
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: AU14JobMilitaryBase
+  supervisors: au14-job-supervisors-govfor
+  setPreference: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: MarineOrders
+      moveOrderSoundMale:
+        collection: AU14MaleMoveOrder
+      moveOrderSoundFemale:
+        collection: AU14FemaleMoveOrder
+      focusOrderSoundMale:
+        collection: AU14MaleFocusOrder
+      focusOrderSoundFemale:
+        collection: AU14FemaleFocusOrder
+      holdOrderSoundMale:
+        collection: AU14MaleHoldOrder
+      holdOrderSoundFemale:
+        collection: AU14FemaleHoldOrder
+    - type: Marine
+      Faction: govfor
+    - type: UserIFF
+      factions:
+      - GOVFOR
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR

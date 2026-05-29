@@ -1,4 +1,4 @@
-# Sierra Third Party
+# Prodigy Armed Repair Team (PART Sierra)
 - type: partySpawn
   id: ProdigyPARTSSpawn
   leadersToSpawn:
@@ -6,10 +6,10 @@
   gruntsToSpawn:
     AU14JobPARTSPartyEngineer: 1
     AU14JobPARTSPartyMedic: 1
-    #AU14JobPARTSPartySmartgunner: 0 - YANKEE TEAM ONLY
-    AU14JobPARTSPartyContractor: 1
+    #AU14JobProdigyPartySmartgunner: 0 - YANKEE TEAM ONLY
+    AU14JobPARTSPartyRifleman: 1
     AU14JobPARTSPartySynthetic: 1
-    #AU14JobPARTSPartyCombatSynthetic: 0 - YANKEE TEAM ONLY
+    #AU14JobProdigyPARTCombatSynth: 0 - YANKEE TEAM ONLY
   scalewithpop: false
   spawnTogether: true
 

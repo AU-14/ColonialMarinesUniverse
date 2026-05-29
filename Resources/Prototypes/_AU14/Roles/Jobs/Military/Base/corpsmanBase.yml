@@ -1,12 +1,74 @@
 - type: job
-  parent: CMJobBase
-  id: AU14JobPlatoonCorpsmanBase
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobPlatoonCorpsmanBaseAbstract
   name: au14-job-name-govforplatooncorpsman
   description: au14-job-description-govforplatooncorpsman
+  icon: "AU14JobIconCorpsman"
+  spawnMenuRoleName: Hospital Corpsman (GOVFOR)
+  startingGear: AU14GearGOVFORPlatoonCorpsman
+  dummyStartingGear: AU14GearGOVFORCorpsmanDummy
   playTimeTracker: AU14JobGOVFORPlatoonCorpsman
-  basePlaytimeTracker: true
-  hidden: true
-  
+  overwatchRoleName: au14-job-name-govforplatooncorpsman-plural
+  overwatchSortPriority: -2
+  accessGroups:
+  - AU14GovforCorpsman
+  - AU14GovforSquad
+
+- type: job
+  abstract: true
+  parent: AU14JobPlatoonCorpsmanBaseAbstract
+  id: AU14JobPlatoonCorpsmanBase
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NonResuscitable
+  ranks:
+    RMCRankLanceCorporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatoonCorpsman
+      time: 36000 # 10 hours
+    RMCRankPrivateFirstClass: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      preset: AU14SkillPresetPlatoonHospitalCorpsman
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforplatooncorpsman
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: medic
+
 - type: playTimeTracker
   id: AU14JobGOVFORPlatoonCorpsman
   isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORPlatoonCorpsman
+  equipment:
+    id: AU14JobIDCardGOVFORPlatoonCorpsman
+    ears: AU14HeadsetGovforMarine
+
+- type: startingGear
+  id: AU14GearGOVFORCorpsmanDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleOne
+    gloves: CMHandsLatex
+    shoes: CMBootsBlack
+    head: AU14JungleM10CorpsmanHelmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORPlatoonCorpsman
+  name: Spawn Point GOVFOR Squad Sergeant
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORPlatoonCorpsman
+  - type: Sprite
+    state: syn_spawn

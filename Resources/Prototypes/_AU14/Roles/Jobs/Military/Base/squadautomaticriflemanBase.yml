@@ -1,12 +1,78 @@
 - type: job
-  parent: CMJobBase
-  id: AU14JobSquadAutomaticRiflemanBase
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobSquadAutomaticRiflemanBaseAbstract
   name: au14-job-name-govforsquadautomaticrifleman
   description: au14-job-description-govforsquadautomaticrifleman
+  icon: "AU14JobIconAFN"
+  spawnMenuRoleName: Automatic Rifleman (GOVFOR)
+  startingGear: AU14GearGOVFORSquadAutomaticRifleman
+  dummyStartingGear: AU14GearGOVFORAutoRiflemanDummy
   playTimeTracker: AU14JobGOVFORSquadAutomaticRifleman
-  basePlaytimeTracker: true
-  hidden: true
+  overwatchRoleName: au14-job-name-govforsquadautomaticrifleman-plural
+  overwatchSortPriority: -6
+  overwatchShowName: true
+  accessGroups:
+  - AU14GovforGunner
+
+- type: job
+  abstract: true
+  parent: AU14JobSquadAutomaticRiflemanBaseAbstract
+  id: AU14JobSquadAutomaticRiflemanBase
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NonResuscitable
+  ranks:
+    RMCRankLanceCorporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 86400 # 24 hours
+    RMCRankPrivateFirstClass:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 36000 # 10 hours
+    RMCRankPrivate: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: SquadArmorWearer
+    - type: Skills
+      preset: AU14SkillPresetPlatoonAutomaticRifleman
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforsquadautomaticrifleman
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: smartgunner
 
 - type: playTimeTracker
   id: AU14JobGOVFORSquadAutomaticRifleman
   isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORSquadAutomaticRifleman
+  equipment:
+    id: AU14IDCardSquadAutomaticRifleman
+    ears: AU14HeadsetGovforMarine
+
+- type: startingGear
+  id: AU14GearGOVFORAutoRiflemanDummy
+  equipment:
+    outerClothing: AU14ArmorSmartGunJungleCombatHarness
+    shoes: AU14BootsJungle
+    head: AU14JungleM10Helmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORSquadAutomaticRifleman
+  name: Spawn Point GOVFOR Squad Rifleman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORSquadAutomaticRifleman
+  - type: Sprite
+    state: syn_spawn

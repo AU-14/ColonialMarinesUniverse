@@ -59,6 +59,9 @@
     damage:
       types:
         Blunt: 80
+    directionalMinDamage:
+      types:
+        Blunt: 65
     selfEffect: CMEffectSelfStomp
   - type: XenoAnimateMovement
   - type: XenoPlasma
@@ -67,7 +70,7 @@
     plasmaRegenOnWeeds: 4
   - type: CMArmor
     xenoArmor: 25
-    frontalArmor: 20
+    frontalArmor: 10
     sideArmor: 5
     explosionArmor: 100
   - type: XenoClaws
