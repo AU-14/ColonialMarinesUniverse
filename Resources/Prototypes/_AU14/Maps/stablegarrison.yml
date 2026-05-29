@@ -1,0 +1,20 @@
+- type: gameMap
+  id: StableGarrisonRedux
+  mapName: Stable Garrison
+  mapPath: /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonFinalize0.yml
+  mapsBelow:
+  - /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonFinalize-1.yml
+  mapsAbove:
+  - /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonFinalize1.yml
+  - /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonFinalize2.yml
+  - /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonFinalize3.yml
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    USSBush:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'USS George W. Bush'
