@@ -1668,5 +1668,35 @@
   id: 156
   time: '2026-05-29T03:13:28.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1145
+- author: maertayn
+  changes:
+  - message: Added the Orbital Arbiter (judge) & Orbital Counsel (lawyer) - they're
+      part of the Colony for now. but will be on the space-station eventually.
+    type: Add
+  - message: 'There''s 2 new access levels: AU14AccessOrbitalManagement for the Judge''s
+      office & AU14AccessOrbitalLaw for counsel quarters.'
+    type: Map
+  id: 157
+  time: '2026-05-29T18:27:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1148
+- author: maertayn
+  changes:
+  - message: AddComponentSpecial can be inherited by jobs using the inheritAddComponentSpecials
+      boolean to reduce bloat
+    type: Code
+  - message: Job class overrides for WYPMC - UPP - RMC - CMBCIU
+    type: Add
+  id: 158
+  time: '2026-05-29T18:27:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1146
+- author: BadaBoomie
+  changes:
+  - message: DCC is now better at fixing things, while pilots are worse.
+    type: Tweak
+  - message: DCC has two slots instead of one.
+    type: Tweak
+  id: 159
+  time: '2026-05-29T21:47:20.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1155
 Name: CMU
 Order: -1
