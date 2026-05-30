@@ -33,5 +33,12 @@ public sealed partial class AU14CashVendorComponent : Component
 
     /// <summary>Cash currently inserted by the user (not networked — managed server-side).</summary>
     public float InsertedCash = 0f;
+
+    /// <summary>When true, the UI shows a Scan ID button allowing purchases via department budget.</summary>
+    [DataField("allowDepartmentBudget")]
+    public bool AllowDepartmentBudget = false;
+
+    /// <summary>The department console linked by a successful ID scan (server-side only).</summary>
+    public EntityUid? ScannedDepartmentConsole = null;
 }
 

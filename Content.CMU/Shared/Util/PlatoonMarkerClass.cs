@@ -52,6 +52,17 @@ namespace Content.Shared.AU14.util
         TacticalMap,
         ReqVend,
         Analyzer,
-        AICore
+        AICore,
+        AllianceConsoleGovfor,
+        AllianceConsoleOpfor,
+        OrbitalCannonGovfor,
+        OrbitalCannonOpfor,
+        WithdrawConsoleGovfor,
+        WithdrawConsoleOpfor,
+        WithdrawConsoleColony,
+        CommandTabletGovfor,
+        CommandTabletOpfor,
+        GroundsideOpsGovfor,
+        GroundsideOpsOpfor
     }
 }

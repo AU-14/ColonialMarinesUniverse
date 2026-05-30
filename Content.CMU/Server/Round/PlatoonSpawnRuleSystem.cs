@@ -295,6 +295,71 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                         continue;
                     }
 
+                    // --- GROUNDSIDE OPS SEGREGATED MARKERS ---
+                    if (markerComp.Class == PlatoonMarkerClass.GroundsideOpsGovfor)
+                    {
+                        _entityManager.SpawnEntity("RMCGroundsideOperationsConsoleGovfor", transform.Coordinates);
+                        continue;
+                    }
+                    if (markerComp.Class == PlatoonMarkerClass.GroundsideOpsOpfor)
+                    {
+                        _entityManager.SpawnEntity("RMCGroundsideOperationsConsoleOpfor", transform.Coordinates);
+                        continue;
+                    }
+
+                    // --- ALLIANCE CONSOLE MARKERS ---
+                    if (markerComp.Class == PlatoonMarkerClass.AllianceConsoleGovfor)
+                    {
+                        _entityManager.SpawnEntity("AU14AllianceConsoleGovfor", transform.Coordinates);
+                        continue;
+                    }
+                    if (markerComp.Class == PlatoonMarkerClass.AllianceConsoleOpfor)
+                    {
+                        _entityManager.SpawnEntity("AU14AllianceConsoleOpfor", transform.Coordinates);
+                        continue;
+                    }
+
+                    // --- ORBITAL CANNON MARKERS ---
+                    if (markerComp.Class == PlatoonMarkerClass.OrbitalCannonGovfor)
+                    {
+                        _entityManager.SpawnEntity("AU14OrbitalCannonGovfor", transform.Coordinates);
+                        continue;
+                    }
+                    if (markerComp.Class == PlatoonMarkerClass.OrbitalCannonOpfor)
+                    {
+                        _entityManager.SpawnEntity("AU14OrbitalCannonOpfor", transform.Coordinates);
+                        continue;
+                    }
+
+                    // --- WITHDRAW CONSOLE MARKERS ---
+                    if (markerComp.Class == PlatoonMarkerClass.WithdrawConsoleGovfor)
+                    {
+                        _entityManager.SpawnEntity("AU14WithdrawConsoleGovFor", transform.Coordinates);
+                        continue;
+                    }
+                    if (markerComp.Class == PlatoonMarkerClass.WithdrawConsoleOpfor)
+                    {
+                        _entityManager.SpawnEntity("AU14WithdrawConsoleOpFor", transform.Coordinates);
+                        continue;
+                    }
+                    if (markerComp.Class == PlatoonMarkerClass.WithdrawConsoleColony)
+                    {
+                        _entityManager.SpawnEntity("AU14WithdrawConsoleColony", transform.Coordinates);
+                        continue;
+                    }
+
+                    // --- COMMAND TABLET MARKERS ---
+                    if (markerComp.Class == PlatoonMarkerClass.CommandTabletGovfor)
+                    {
+                        _entityManager.SpawnEntity("AU14TabletGovfor", transform.Coordinates);
+                        continue;
+                    }
+                    if (markerComp.Class == PlatoonMarkerClass.CommandTabletOpfor)
+                    {
+                        _entityManager.SpawnEntity("AU14TabletOpfor", transform.Coordinates);
+                        continue;
+                    }
+
                     // --- OBJECTIVES CONSOLE MARKER LOGIC ---
                     if (markerComp.Class == PlatoonMarkerClass.ObjectivesConsole)
                     {
