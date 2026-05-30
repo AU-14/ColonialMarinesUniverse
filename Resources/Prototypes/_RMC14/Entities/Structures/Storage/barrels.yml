@@ -25,6 +25,12 @@
   - type: Clickable
   - type: DeleteOnExplosion
   - type: RMCMesonsNonviewable
+  - type: Flamability
+    chance: 0.35
+    rate: 2.0
+    spread: 1.0
+    burnDurationMin: 70
+    burnDurationMax: 620
 
 - type: entity
   parent: RMCBarrelPileBase
@@ -74,6 +80,12 @@
   - type: RMCMesonsNonviewable
   - type: SpawnOnTerminate
     spawn: RMCSpawnerRandomCrateLoot
+  - type: Flamability
+    chance: 0.25
+    rate: 1.5
+    spread: 0.8
+    burnDurationMin: 70
+    burnDurationMax: 620
 
 - type: entity
   parent: RMCBarrelBase

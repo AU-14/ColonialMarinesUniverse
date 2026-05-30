@@ -45,7 +45,7 @@
 - type: entity
   parent: CMDrinkWEYAWaterBottle30
   id: RMCDrinkWEYABugJuice
-  name: Weston-Yamada Bug Juice Protein Drink
+  name: Weyland-Yutani Bug Juice Protein Drink
   description: We-Ya brand plastic bottle full of toxic looking green goo, tastes like kiwi, but you are more than sure that there is none of it here.
   components:
   - type: SolutionContainerManager
@@ -66,8 +66,8 @@
 - type: entity
   parent: CMDrinkWEYAWaterBottle30
   id: RMCDrinkWEYACocoMilk
-  name: Weston-Yamada Bottled Coconut Milk
-  description: Rich in vitamins and (artificial) flavor, quenches thirst in a few sips. Bottled by the Weston-Yamada Corporation.
+  name: Weyland-Yutani Bottled Coconut Milk
+  description: Rich in vitamins and (artificial) flavor, quenches thirst in a few sips. Bottled by the Weyland-Yutani Corporation.
   components:
   - type: SolutionContainerManager
     solutions:
@@ -85,7 +85,7 @@
 - type: entity
   parent: CMDrinkWEYAWaterBottle30
   id: RMCDrinkWEYASoylent
-  name: Weston-Yamada Premium Choco Soylent
+  name: Weyland-Yutani Premium Choco Soylent
   description: A plastic bottle full of gooey goodness, choco flavor. One bottle has enough calories for a lunch - don't drink it all in one sitting, better not risk getting a stomachache.
   components:
   - type: SolutionContainerManager

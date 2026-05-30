@@ -20,18 +20,17 @@
         - AU14SquadVAISO
     - type: Skills
       skills:
-        RMCSkillCqc: 5
-        RMCSkillEngineer: 4
-        RMCSkillConstruction: 3
+        RMCSkillCqc: 1
+        RMCSkillEngineer: 1
+        RMCSkillConstruction: 1
         RMCSkillFirearms: 2
         RMCSkillMedical: 1
         RMCSkillMeleeWeapons: 1
         RMCSkillPolice: 2
-        RMCSkillFireman: 5
-        RMCSkillPowerLoader: 2
+        RMCSkillFireman: 3
         RMCSkillVehicles: 2
         RMCSkillJtac: 1
-        RMCSkillEndurance: 1
+        RMCSkillEndurance: 2
         RMCSkillSmartGun: 1
     - type: EquipEntityPreset
       preset: AU14VAISOMGPreset

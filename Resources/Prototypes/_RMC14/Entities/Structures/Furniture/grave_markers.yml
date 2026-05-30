@@ -12,6 +12,11 @@
     sprite: _RMC14/Structures/Furniture/cross.rsi
     state: cross1
   - type: Appearance
+  - type: Flamability
+    chance: 1.0
+    rate: 0.8
+    range: 0.7
+    spread: 1.0
   - type: Clickable
 
 - type: entity

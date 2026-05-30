@@ -8,3 +8,89 @@
   - type: StorageFill
     contents:
     - id: RMCBoxMagazinePistolMK80
+
+# M41A MK1 AP
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateBoxMagazineRifleM54CMK1AP
+  name: Magazine box (M41A MK1, 10x AP mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineRifleM54CMK1AP
+      amount: 10
+
+# Kramer AR AP (LACN)
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateBoxMagazineRifleKramerAP
+  name: Magazine box (Kramer AR, 10x AP mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponRifleKramerMagazineAP
+      amount: 10
+
+# AG80 AP (UPP)
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateBoxMagazineRifleAG80AP
+  name: Magazine box (AG80, 10x AP mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineRifleAG80AP
+      amount: 10
+
+# MCS-X/MCX AP (ProdigySF)
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateBoxMagazineRifleProdigyAP
+  name: Magazine box (MCS-X, 10x AP mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponRifleprodigyrifleMagazineAP
+      amount: 10
+
+# L23/L24 AP (RMC)
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateBoxMagazineRifleL24AP
+  name: Magazine box (L23/L24, 10x AP mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBoxMagazineRifleL24AP
+
+# L90A2 AP (RMC)
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateBoxMagazineSMGL90A2AP
+  name: Magazine box (L90A2, 12x AP mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineSMGL90A2AP
+      amount: 12
+
+# PDW90/P90 AP (CMBCIU)
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateBoxMagazineSMGPDW90AP
+  name: Magazine box (PDW90, 12x AP mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSMGPDW90AP
+      amount: 12
+
+# ABR40/L42A AP (VAIPO)
+- type: entity
+  parent: RMCCrateAmmo
+  id: AU14CrateBoxMagazineRifleL42AAP
+  name: Magazine box (ABR40/L42A, 10x AP mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBoxMagazineRifleL42AAP

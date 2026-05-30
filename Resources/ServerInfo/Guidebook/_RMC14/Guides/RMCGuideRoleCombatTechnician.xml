@@ -1,4 +1,4 @@
-﻿<Document>
+<Document>
 
   #Combat Technician
 
@@ -101,8 +101,8 @@
   The Combat Technician is among the few Marines specially trained in repairing vital equipment on the Colony. The two you will be entrusted with are the Telecommunications and Sensor tower, which you can learn more about [textlink="here" link="RMCGuideCommunicationsTowers"].
 
   <Box>
-    <GuideEntityEmbed Entity="RMCCommunicationsTower"/>
-    <GuideEntityEmbed Entity="RMCSensorTower"/>
+    <GuideEntityEmbed Entity="AU14CommunicationsTower"/>
+    <GuideEntityEmbed Entity="AU14SensorTower"/>
   </Box>
 
   ##Building Fortifications

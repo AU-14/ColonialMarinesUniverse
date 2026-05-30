@@ -5,13 +5,6 @@
   description: au14-job-description-civiliancmbmarshal
   setPreference: false
   canBeAntag: false
-  requirements:
-  - !type:AgeRequirement
-    requiredAge: 25
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
   ranks:
     AU14RankCMBMarshal: []
   startingGear: AU14GearCMBMarshalInvestigation
@@ -34,16 +27,19 @@
       - AUBureau
     - type: Skills
       skills:
-        RMCSkillCqc: 2
-        RMCSkillEndurance: 2
+        RMCSkillCqc: 3
+        RMCSkillEndurance: 3
         RMCSkillFirearms: 2
-        RMCSkillFireman: 2
+        RMCSkillFireman: 5
         RMCSkillIntel: 1
-        RMCSkillMedical: 1
+        RMCSkillMedical: 2
         RMCSkillMeleeWeapons: 1
         RMCSkillOverwatch: 1
         RMCSkillPolice: 2
-        RMCSkillLeadership: 1
+        RMCSkillLeadership: 3
+        RMCSkillJtac: 3
+        RMCSkillEngineer: 2
+        RMCSkillConstruction: 2
         RMCSkillVehicles: 1
     - type: JobPrefix
       prefix: au14-job-prefix-cmbmarshal
@@ -71,7 +67,7 @@
   parent: AU14BaseMobSpeciesOrganicCMB
   id: CMBInvestigationPartyJobMarshal
   name: CMB Marshal
-  components:  
+  components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole

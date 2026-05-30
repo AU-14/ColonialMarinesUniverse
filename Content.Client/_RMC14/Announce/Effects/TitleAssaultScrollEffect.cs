@@ -41,6 +41,7 @@ public sealed class TitleAssaultScrollEffect : IAnnouncementVisualEffect
             visible,
             fontSize,
             context.Style.TitleConfig.TitleColor,
-            context.Style.TitleConfig.TitleFont));
+            context.Style.TitleConfig.TitleFont),
+            AnnouncementStyling.AnnouncementMarkupTags);
     }
 }

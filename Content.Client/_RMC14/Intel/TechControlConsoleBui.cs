@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Intel.Tech;
 using Content.Shared.FixedPoint;
 using Content.Shared.GameTicking;
 using JetBrains.Annotations;
+using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.Utility;
@@ -20,8 +21,10 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
     private TechControlConsoleOptionWindow? _optionWindow;
 
     private readonly SharedGameTicker _ticker;
+    private readonly SpriteSystem _sprite;
     public TechControlConsoleBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
+        _sprite = _entities.System<SpriteSystem>();
         _ticker = _entities.System<SharedGameTicker>();
     }
 
@@ -66,7 +69,7 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
             {
                 var option = options[j];
                 var optionControl = new Control();
-                var texture = option.Icon.DirFrame0().TextureFor(Direction.South);
+                var texture = _sprite.RsiStateLike(option.Icon).TextureFor(Direction.South);
                 optionControl.AddChild(new TextureButton
                 {
                     TextureNormal = texture,
@@ -76,7 +79,7 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
                 var overlay = option.Purchased ? console.UnlockedRsi : console.LockedRsi;
                 var optionButton = new TextureButton
                 {
-                    TextureNormal = overlay.DirFrame0().TextureFor(Direction.South),
+                    TextureNormal = _sprite.RsiStateLike(overlay).TextureFor(Direction.South),
                     Scale = new Vector2(2, 2),
                 };
                 optionControl.AddChild(optionButton);

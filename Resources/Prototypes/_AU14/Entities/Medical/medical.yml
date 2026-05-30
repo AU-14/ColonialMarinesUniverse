@@ -961,6 +961,13 @@
     - id: AU14HemostaticGauze
     sound:
       path: /Audio/Effects/unwrap.ogg
+  - type: Tag
+    tags:
+    - HemostaticGauzePacket
+# TAGS
+
+- type: Tag
+  id: HemostaticGauzePacket
 
 - type: entity
   parent: CMBaseHealingItem
@@ -1022,7 +1029,7 @@
     doAfter: 2.5
   - type: Stack
     stackType: CMGauze
-    count: 6
+    count: 10
   - type: StackPrice
     price: 6
 

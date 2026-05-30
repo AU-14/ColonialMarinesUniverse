@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: BaseStructure
   id: RMCCommunicationsTower
   name: TC-3T static telecommunications tower
@@ -97,7 +97,7 @@
 - type: entity
   parent: RMCCommunicationsTower
   id: RMCCommunicationsTowerOn
-  suffix: "On, UNMC, Colony, WeYa"
+  suffix: "On, Colony, WeYa"
   components:
   - type: CommunicationsTower
     state: On
@@ -107,7 +107,6 @@
     - MarineMedical
     - MarineEngineer
     - MarineMilitaryPolice
-    #    - TODO RMC14 sentry
     - MarineAlpha
     - MarineBravo
     - MarineCharlie
@@ -117,8 +116,8 @@
     - MarineRequisition
     - MarineJTAC
     - MarineIntel
-    - WEYA
-    - CMB
+    - radioWEYU
+    - radioCMB
 
 - type: entity
   abstract: true

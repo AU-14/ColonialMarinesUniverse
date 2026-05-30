@@ -86,7 +86,7 @@
   - type: ItemCamouflage
     camouflageVariations: { }
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 15
     bio: 15
     explosionArmor: 10
@@ -214,7 +214,7 @@
   - type: ItemCamouflage
     camouflageVariations: { }
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 15
     bio: 100
     explosionArmor: 20

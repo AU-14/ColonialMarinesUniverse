@@ -9,7 +9,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/TSE/TSEPA/tsepa_police_vest.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 20
     bio: 20
     explosionArmor: 10
@@ -34,7 +34,7 @@
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/TSE/TSEPA/standard.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 20
     bio: 20
     explosionArmor: 15
@@ -82,12 +82,12 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/TSE/para.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 15
     bio: 10
     explosionArmor: 10
-    
-- type: entity 
+
+- type: entity
   parent: [RMCAllowSuitStorageClothingJacketMB, RMCBaseJacket]
   id: RMCJacketParaCOJacket
   name: paramarine commanding officer’s service jacket
@@ -101,7 +101,7 @@
     - type: CMArmor
       melee: 10
       bullet: 10
-      
+
 - type: entity
   parent: RMCJacketParaCOJacket
   id: RMCJacketParaCOJacketAlt
@@ -113,7 +113,7 @@
       sprite: _RMC14/Objects/Clothing/OuterClothing/TSE/para_co_alt.rsi
     - type: Clothing
       sprite: _RMC14/Objects/Clothing/OuterClothing/TSE/para_co_alt.rsi
-      
+
 - type: entity
   parent: RMCJacketParaCOJacket
   id: RMCJacketParaCOJacketFilled

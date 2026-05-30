@@ -5,6 +5,9 @@
   abstract: true
   components:
   - type: GhostTakeoverAvailable
+  - type: NpcFactionMember
+    factions:
+    - CMUTWE
   - type: RandomHumanoidAppearance
   - type: RandomHumanoidAppearanceWhitelisted
     allowedMaleHairStyles:

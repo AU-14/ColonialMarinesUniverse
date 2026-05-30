@@ -1,12 +1,89 @@
 - type: job
-  parent: CMJobBase
-  id: AU14JobMilitaryPoliceBase
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobMilitaryPoliceBaseAbstract
   name: au14-job-name-govformilitarypoliceman
   description: au14-job-description-govformilitarypoliceman
+  icon: "AU14JobIconRFN"
+  spawnMenuRoleName: Military Policeman (GOVFOR)
+  startingGear: AU14GearGOVFORMilitaryPoliceMan
+  dummyStartingGear: AU14GearGOVFORMilitaryPoliceManDummy
   playTimeTracker: AU14JobGOVFORMilitaryPoliceMan
-  basePlaytimeTracker: true
-  hidden: true
+  requireAdminNotify: true
+  canBeAntag: false
+  accessGroups:
+  - AU14GovforSecurity
+
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryPoliceBaseAbstract
+  id: AU14JobMilitaryPoliceBase
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankGunnerySergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORMilitaryPoliceMan
+      time: 360000 # 100 hours
+    RMCRankStaffSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORMilitaryPoliceMan
+      time: 180000 # 50 hours
+    RMCRankSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORMilitaryPoliceMan
+      time: 86400 # 24 hours
+    #RMCRankCorporal:
+    #- !type:RoleTimeRequirement
+    #  role: AU14JobGOVFORMilitaryPoliceMan
+    #  time: 36000 # 10 hours
+    RMCRankCorporal: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      preset: AU14SkillPresetMilitaryPolice
+    - type: JobPrefix
+      prefix: au14-job-prefix-govformilitarypoliceman
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14govforhud.rsi
+        state: govfor_rfn
 
 - type: playTimeTracker
   id: AU14JobGOVFORMilitaryPoliceMan
   isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORMilitaryPoliceMan
+  equipment:
+    id: AU14IDCardGOVFORMilitaryPoliceMan
+    ears: AU14HeadsetGovforMarineMP
+    ears2: RMCM5CameraGear
+
+- type: startingGear
+  id: AU14GearGOVFORMilitaryPoliceManDummy
+  equipment:
+    shoes: CMBootsBlackFilled
+    jumpsuit: AU14JungleFatigues
+    belt: CMBeltSecurityMPFilled
+    head: CMHeadBeretRed
+    ears: AU14HeadsetGovforMarineMP
+    ears2: RMCM5CameraGear
+    outerClothing: AU14ArmorM3JungleThree
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORMilitaryPoliceMan
+  name: Spawn Point GOVFOR Military Policeman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORMilitaryPoliceMan
+  - type: Sprite
+    state: syn_spawn

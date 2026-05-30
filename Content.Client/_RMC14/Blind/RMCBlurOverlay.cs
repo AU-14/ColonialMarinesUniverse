@@ -8,6 +8,8 @@ namespace Content.Client._RMC14.Blind;
 
 public sealed partial class RMCBlurOverlay : Overlay
 {
+    private static readonly ProtoId<ShaderPrototype> BlurShader = "RMCBlurryVisionX";
+
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IEntityManager _entityManager = default!;
@@ -21,7 +23,7 @@ public sealed partial class RMCBlurOverlay : Overlay
     public RMCBlurOverlay(IEntityManager entManager)
     {
         IoCManager.InjectDependencies(this);
-        _blurShader = _prototypeManager.Index<ShaderPrototype>("RMCBlurryVisionX").InstanceUnique();
+        _blurShader = _prototypeManager.Index(BlurShader).InstanceUnique();
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)

@@ -5,9 +5,9 @@
 #   - Announces tax changes colony-wide
 
 - type: entity
-  id: AU14AdminConsoleBase
   abstract: true
   parent: RMCCommunicationsConsoleBase
+  id: AU14AdminConsoleBase
   name: administration console
   description: A colony administration console for managing economic policy and requesting third-party support.
   components:
@@ -27,6 +27,7 @@
         type: AdminConsoleBui
       enum.AdminConsoleThirdPartyUi.Key:
         type: AdminConsoleThirdPartyBui
+  - type: ActivatableUIRequiresAccess
   - type: AccessReader
     access: [["AU14AccessColonyAdministrator"]]
 
@@ -47,3 +48,7 @@
       ICRCReliefParty: 2800
       NSPAInvestigationPartyArmored: 6000
       PAPInvestigationParty: 4500
+      ProdigyPARTY: 8500
+      ProdigyPARTSParty: 7500
+      ProdigyHazardResponseTeamParty: 3500
+      ProdigyTARSParty: 3500

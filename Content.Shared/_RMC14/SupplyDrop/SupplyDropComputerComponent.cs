@@ -31,6 +31,9 @@ public sealed partial class SupplyDropComputerComponent : Component
     public bool HasCrate;
 
     [DataField, AutoNetworkedField]
+    public int Cost = 800;
+
+    [DataField, AutoNetworkedField]
     public TimeSpan UpdateEvery = TimeSpan.FromSeconds(0.5);
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]

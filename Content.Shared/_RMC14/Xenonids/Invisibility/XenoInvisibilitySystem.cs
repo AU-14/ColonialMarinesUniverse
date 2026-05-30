@@ -52,8 +52,13 @@ public sealed partial class XenoInvisibilitySystem : EntitySystem
 
     private void OnXenoTurnInvisibleAction(Entity<XenoTurnInvisibleComponent> xeno, ref XenoTurnInvisibleActionEvent args)
     {
+        if (args.Handled)
+            return;
+
         if (!_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, xeno.Comp.PlasmaCost))
             return;
+
+        args.Handled = true;
 
         if (TryComp<XenoActiveInvisibleComponent>(xeno, out var invis))
         {
@@ -66,6 +71,7 @@ public sealed partial class XenoInvisibilitySystem : EntitySystem
             active.ExpiresAt = _timing.CurTime + xeno.Comp.Duration;
             active.FullCooldown = xeno.Comp.FullCooldown;
             active.SpeedMultiplier = xeno.Comp.SpeedMultiplier;
+            Dirty(xeno, active);
 
             //Half a second cooldown to prevent double clicks
             StartCooldown((xeno, active), xeno.Comp.ToggleLockoutTime, true);

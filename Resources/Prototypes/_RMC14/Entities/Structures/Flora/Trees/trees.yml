@@ -13,6 +13,13 @@
     sprite: Objects/Decoration/Flora/flora_trees.rsi
     drawdepth: Overdoors
     offset: 0,0.9
+
+  - type: Appearance
+  - type: Flamability
+    chance: 1.0
+    rate: 10.4
+    range: 1.5
+    spread: 1.3
   - type: Physics
     bodyType: Static
   - type: Fixtures

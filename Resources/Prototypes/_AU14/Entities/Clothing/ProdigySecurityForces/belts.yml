@@ -1,0 +1,115 @@
+- type: entity
+  parent: CMBeltUtilityCombat
+  id: AU14BeltUtilityCombatProdigyRU
+  name: L177 Prodigy pattern combat toolbelt rig
+  description: Standart-issue Royal Marines Commando rig of the Prodigy Armed Repair Teams for Response Units conducting repairs within combat zones. It consists of a modular belt with various clips and pouches for tools along with a holster for a sidearm. Due to the bulk of the sidearm and one magazine.
+  components:
+  - type: Storage
+    maxItemSize: Large
+    grid:
+    - 0,0,19,1 # 11 slots
+    whitelist:
+      tags:
+      - Crowbar
+      - Screwdriver
+      - Wirecutter
+      - Wrench
+      - CableCoil
+      - Multitool
+      - Flashlight
+      - Sidearm
+      - CMMagazinePistol
+      - RMCMagazineRevolver
+      - PowerCell
+      - CMFireExtinguisherPortable
+      - RMCShellShotgun
+      - RMCNailgunCompact
+      - RMCNailgunTactical
+      - RMCSynthResetKey
+      #      - # TODO analyzer
+      components:
+      - Welder
+      - PowerCell
+      - TrayScanner
+      - GasAnalyzer
+      - LightReplacer
+      - EntrenchingTool
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/belt/combat_utility.rsi
+    layers:
+    - state: icon
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m1984 # TODO RMC14 per-gun underlay
+      offset: -0.3125, -0.09375
+      map: [ "enum.CMHolsterLayers.Fill" ]
+      visible: false
+    - sprite: _AU14/Clothing/RMC/belt/combat_utility.rsi
+      state: icon-front
+    - state: half
+      map: [ "openLayer" ]
+    - state: full
+      map: [ "closedLayer" ]
+  - type: Clothing
+    sprite: _AU14/Clothing/RMC/belt/combat_utility.rsi
+
+- type: entity
+  parent: AU14BeltUtilityCombatRMC
+  id: AU14BeltUtilityCombatProdigyRUFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMScrewdriver
+    - id: CMWrench
+    - id: RMCWelderPVE
+    - id: CMCrowbar
+    - id: CMWirecutter
+    - id: RMCCableCoil30
+    - id: CMMultitool
+    - id: CMEntrenchingTool
+    - id: AU14SynthResetKeyProdigy
+    - id: RMCMK80
+    - id: CMMagazinePistolMK80
+
+- type: entity
+  parent: RMCBeltMedicBagSPP
+  id: AU14BeltMedicBagProdigy
+  name: PSC-TM626 pattern medical bag
+  description: The PSC-TM626 is the standard load-bearing equipment of the Prodigy security forces. This configuration mounts a duffel bag filled with a range of injectors and light medical supplies, and is common among medics, sources say its just a W-Y TM625 bag, but Prodigy denies this claim.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Belt/medicbag/snow-urban.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Belt/medicbag/snow-urban.rsi
+
+- type: entity
+  parent: AU14BeltMedicBagProdigy
+  id: AU14BeltMedicBagProdigyFilled
+  name: PSC-TM626 pattern medical bag
+  description: The PSC-TM626 is the standard load-bearing equipment of the Prodigy security forces. This configuration mounts a duffel bag filled with a range of injectors and light medical supplies, and is common among medics, sources say its just a W-Y TM625 bag, but Prodigy denies this claim.
+  suffix: Filled, Pills
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMPillCanisterDexalin
+    - id: CMPillCanisterDylovene
+    - id: CMPillCanisterInaprovaline
+    - id: CMPillCanisterKelotane
+    - id: CMPillCanisterBicaridine
+    - id: CMPillCanisterKelotane
+    - id: CMPillCanisterTricordrazine
+    - id: RMCPillCanisterIron
+    - id: AU14PillCanisterCryoxadone
+    - id: AU14PillCanisterLeporazine
+    - id: AU14PillCanisterImidazoline
+    - id: AU14PillCanisterEthylredoxrazine
+    - id: AU14PillCanisterParacetamol
+    - id: AU14PillCanisterTramadol
+    - id: AU14PillCanisterOxycodone
+    - id: AU14PillCanisterCardiocaine
+    - id: AU14PillCanisterHepatocytin
+    - id: AU14PillCanisterNephronate
+    - id: AU14PillCanisterOsteoCalc
+    - id: AU14PillCanisterPulmovine
+    - id: CMEpinephrineAutoInjector
+    - id: AU14NaloxoneAutoInjector

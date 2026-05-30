@@ -15,6 +15,7 @@ public sealed partial class ParaDropSystem : SharedParaDropSystem
 {
     [Dependency] private AnimationPlayerSystem _animPlayer = default!;
     [Dependency] private RMCSpriteSystem _rmcSprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private TransformSystem _transform = default!;
 
     private const string DroppingAnimationKey = "dropping-animation";
@@ -113,7 +114,7 @@ public sealed partial class ParaDropSystem : SharedParaDropSystem
         if (TryComp(ent, out AnimationPlayerComponent? animation))
             _animPlayer.Stop((ent, animation),SkyFallingAnimationKey);
 
-        sprite.Scale = ent.Comp.OriginalScale;
+        _sprite.SetScale((ent.Owner, sprite), ent.Comp.OriginalScale);
     }
 
     private void OnParaDroppingRemove(Entity<ParaDroppingComponent> ent, ref ComponentRemove args)
@@ -134,7 +135,7 @@ public sealed partial class ParaDropSystem : SharedParaDropSystem
         if (TryComp(ent, out ParaDroppableComponent? paraDroppable))
             offset = paraDroppable.OriginalSpriteOffset;
 
-        sprite.Offset = offset;
+        _sprite.SetOffset((ent.Owner, sprite), offset);
     }
 
     private void SpawnParachute(float fallDuration, EntityCoordinates coordinates, ParaDroppableComponent paraDroppable, float multiplier, Vector2 offset = new())

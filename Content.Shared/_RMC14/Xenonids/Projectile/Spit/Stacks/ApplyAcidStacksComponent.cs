@@ -18,5 +18,8 @@ public sealed partial class ApplyAcidStacksComponent : Component
     public DamageSpecifier? Damage;
 
     [DataField, AutoNetworkedField]
+    public bool RequireExisting;
+
+    [DataField, AutoNetworkedField]
     public EntityWhitelist? Whitelist = new() { Components = ["Marine"] };
 }

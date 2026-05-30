@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.NPC;
 using Content.Shared._RMC14.Tools;
+using Content.Shared.NPC.Systems;
 using Content.Shared._RMC14.Weapons.Ranged.Homing;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Damage;
@@ -17,6 +18,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
 using Content.Shared.Popups;
 using Content.Shared.Tag;
+using Content.Shared.Tools;
 using Content.Shared.Tools.Systems;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Components;
@@ -34,6 +36,8 @@ namespace Content.Shared._RMC14.Sentry;
 
 public sealed partial class SentrySystem : EntitySystem
 {
+    private static readonly ProtoId<ToolQualityPrototype> ScrewingQuality = "Screwing";
+
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedContainerSystem _container = default!;
@@ -56,6 +60,7 @@ public sealed partial class SentrySystem : EntitySystem
     [Dependency] private SharedSentryTargetingSystem _targeting = default!;
     [Dependency] private GunIFFSystem _gunIFF = default!;
     [Dependency] private SharedPointLightSystem _pointLight = default!;
+    [Dependency] private NpcFactionSystem _npcFaction = default!;
 
     private readonly HashSet<EntityUid> _toUpdate = new();
 
@@ -70,6 +75,8 @@ public sealed partial class SentrySystem : EntitySystem
         SubscribeLocalEvent<SentryComponent, InteractUsingEvent>(OnSentryInteractUsing);
         SubscribeLocalEvent<SentryComponent, SentryInsertMagazineDoAfterEvent>(OnSentryInsertMagazineDoAfter);
         SubscribeLocalEvent<SentryComponent, SentryDisassembleDoAfterEvent>(OnSentryDisassembleDoAfter);
+        SubscribeLocalEvent<SentryComponent, SentryAssignFactionDoAfterEvent>(OnSentryAssignFactionDoAfter);
+        SubscribeLocalEvent<SentryComponent, SentryClearFactionDoAfterEvent>(OnSentryClearFactionDoAfter);
         SubscribeLocalEvent<SentryComponent, ExaminedEvent>(OnSentryExamined);
         SubscribeLocalEvent<SentryComponent, CombatModeShouldHandInteractEvent>(OnSentryShouldInteract);
         SubscribeLocalEvent<SentrySpikesComponent, AttackedEvent>(OnSentrySpikesAttacked);
@@ -135,7 +142,7 @@ public sealed partial class SentrySystem : EntitySystem
 
         _rmcInteraction.SetMaxRotation(sentry.Owner, angle, sentry.Comp.MaxDeviation);
 
-        _targeting.ApplyDeployerFactions(sentry.Owner, args.User);
+        // Faction assignment is intentionally deferred — use a multitool to assign a team.
 
         UpdateState(sentry);
     }
@@ -153,6 +160,13 @@ public sealed partial class SentrySystem : EntitySystem
         {
             case SentryMode.Off:
             {
+                if (!TryComp<SentryTargetingComponent>(sentry, out var targeting) || targeting.FriendlyFactions.Count == 0)
+                {
+                    var noFactionMsg = Loc.GetString("rmc-sentry-no-faction-set", ("sentry", sentry));
+                    _popup.PopupClient(noFactionMsg, sentry, user);
+                    return;
+                }
+
                 foreach (var defense in _entityLookup.GetEntitiesInRange<SentryComponent>(_transform.GetMapCoordinates(sentry), sentry.Comp.DefenseCheckRange))
                 {
                     if (sentry != defense && defense.Comp.Mode == SentryMode.On)
@@ -199,13 +213,21 @@ public sealed partial class SentrySystem : EntitySystem
             return;
         }
 
-        if (HasComp<MultitoolComponent>(used))
+        if (_tools.HasQuality(used, "Anchoring"))
         {
             StartDisassemble(sentry, user);
             return;
         }
 
+        if (HasComp<MultitoolComponent>(used))
+        {
+            args.Handled = true;
+            StartAssignFaction(sentry, user);
+            return;
+        }
+
         if (_tools.HasQuality(used, "Screwing"))
+
         {
             if (sentry.Comp.Mode == SentryMode.Off)
             {
@@ -303,6 +325,65 @@ public sealed partial class SentrySystem : EntitySystem
         _popup.PopupPredicted(selfMsg, othersMsg, sentry, user);
     }
 
+    private void StartAssignFaction(Entity<SentryComponent> sentry, EntityUid user)
+    {
+        if (sentry.Comp.Mode == SentryMode.Item)
+            return;
+
+        var ev = new SentryAssignFactionDoAfterEvent();
+        var doAfter = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(1), ev, sentry)
+        {
+            BreakOnMove = true,
+        };
+        _doAfter.TryStartDoAfter(doAfter);
+    }
+
+    private void OnSentryAssignFactionDoAfter(Entity<SentryComponent> sentry, ref SentryAssignFactionDoAfterEvent args)
+    {
+        if (args.Cancelled || args.Handled)
+            return;
+
+        args.Handled = true;
+        _targeting.ApplyDeployerFactions(sentry.Owner, args.User);
+
+        if (_net.IsServer)
+            SyncNpcFactionMember(sentry.Owner);
+
+        var ev = new SentryFactionAssignedEvent(args.User);
+        RaiseLocalEvent(sentry.Owner, ref ev);
+
+        var msg = Loc.GetString("rmc-sentry-faction-assigned", ("sentry", sentry));
+        _popup.PopupPredicted(msg, msg, sentry, args.User);
+
+        UpdateState(sentry);
+    }
+
+    private void SyncNpcFactionMember(EntityUid sentry)
+    {
+        if (!TryComp<SentryTargetingComponent>(sentry, out var targeting))
+            return;
+
+        _npcFaction.ClearFactions(sentry);
+        foreach (var faction in targeting.FriendlyFactions)
+            _npcFaction.AddFaction(sentry, faction);
+    }
+
+    private void OnSentryClearFactionDoAfter(Entity<SentryComponent> sentry, ref SentryClearFactionDoAfterEvent args)
+    {
+        if (args.Cancelled || args.Handled)
+            return;
+
+        args.Handled = true;
+
+        if (TryComp<SentryTargetingComponent>(sentry, out var targeting))
+            _targeting.ClearFactionAssignment((sentry.Owner, targeting));
+
+        var msg = Loc.GetString("rmc-sentry-faction-cleared", ("sentry", sentry));
+        _popup.PopupPredicted(msg, msg, sentry, args.User);
+
+        UpdateState(sentry);
+    }
+
     private void OnSentryExamined(Entity<SentryComponent> ent, ref ExaminedEvent args)
     {
         using (args.PushGroup(nameof(SentryComponent)))
@@ -315,8 +396,10 @@ public sealed partial class SentrySystem : EntitySystem
 
             if (!ent.Comp.IsLocked)
             {
-                var msg = Loc.GetString("rmc-sentry-disassembled-with-multitool");
+                var msg = Loc.GetString("rmc-sentry-disassembled-with-wrench");
                 args.PushMarkup(msg);
+                var factionMsg = Loc.GetString("rmc-sentry-faction-set-with-multitool");
+                args.PushMarkup(factionMsg);
             }
 
             if (ent.Comp.Mode == SentryMode.Off)
@@ -387,7 +470,14 @@ public sealed partial class SentrySystem : EntitySystem
                 if (fixture != null)
                     _physics.SetHard(sentry, fixture, true);
 
-                _rmcNpc.WakeNPC(sentry);
+                // Only wake the NPC if a faction has been assigned; otherwise stay idle.
+                var hasFaction = TryComp<SentryTargetingComponent>(sentry, out var sentryTargeting) &&
+                                 sentryTargeting.FriendlyFactions.Count > 0;
+                if (hasFaction)
+                    _rmcNpc.WakeNPC(sentry);
+                else
+                    _rmcNpc.SleepNPC(sentry);
+
                 _appearance.SetData(sentry, SentryLayers.Layer, SentryMode.On);
                 _pointLight.SetEnabled(sentry, true);
                 break;

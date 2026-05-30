@@ -61,9 +61,9 @@
     - CMAccessXeno
     - CMAccessXenoQueen
     # CMU!!!!
-    - RMCAccessWeYa
+    - AU14AccessCorporateWEYU
     - CMAccessColonyArmory
-    - AU14AccessGovfor
+    - AU14AccessGovfor # govfor & govforsquad are identical
     - AU14AccessGovforSquad
     - AU14AccessGovforCommand
     - AU14AccessGovforSecurity
@@ -72,8 +72,9 @@
     - AU14AccessGovforFTL
     - AU14AccessGovforGunner
     - AU14AccessGovforPilot
-    - AU14AccessJuniorOfficer
-    #- AU14AccessOpfor #apparently unused?
+    - AU14AccessGovforJuniorOfficer
+    - AU14AccessGovforReq
+    - AU14AccessOpfor # opfor & opforsquad are identical
     - AU14AccessOpforSquad
     - AU14AccessOpforCommand
     - AU14AccessOpforSecurity
@@ -82,14 +83,18 @@
     - AU14AccessOpforFTL
     - AU14AccessOpforGunner
     - AU14AccessOpforPilot
+    - AU14AccessOpforJuniorOfficer
+    - AU14AccessOpforReq
     - AU14AccessColonyHeadPhysician
     - AU14AccessColonyHeadEngineer
     - AU14AccessColonyMarshall
     - AU14AccessColonyForeman
     - AU14AccessColonyAdministrator
     - AU14AccessColonyHeadOfService
-    - AU14AccessColonyCorporateLiaison
+    - AU14AccessCorporateWEYULiaison
     - AU14AccessColonyAmbassador
+    - AU14AccessOrbitalManagement
+    - AU14AccessOrbitalLaw
 
     privilegedIdSlot:
       name: id-card-console-privileged-id

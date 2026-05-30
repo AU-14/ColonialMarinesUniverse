@@ -19,6 +19,12 @@
 #          MaterialCloth1: # TODO RMC cloth
 #            min: 1
 #            max: 2
+  - type: Flamability
+    chance: 1.0
+    rate: 6.0
+    spread: 2.0
+    burnDurationMin: 70
+    burnDurationMax: 620
 
 - type: entity
   parent: RMCCurtainBase

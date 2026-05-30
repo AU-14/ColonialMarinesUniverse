@@ -186,13 +186,18 @@ public sealed partial class SingleMarkingPicker : BoxContainer
 
         MarkingList.Clear();
 
-        var sortedMarkings = _markingPrototypeCache.Where(m =>
-            m.Key.ToLower().Contains(filter.ToLower()) ||
-            GetMarkingName(m.Value).ToLower().Contains(filter.ToLower())
-        ).OrderBy(p => Loc.GetString($"marking-{p.Key}"));
+        var selectedMarkingId = _markings[Slot].MarkingId;
+        var sortedMarkings = _markingPrototypeCache.Values.Where(m =>
+            m.ID.ToLower().Contains(filter.ToLower()) ||
+            GetMarkingName(m).ToLower().Contains(filter.ToLower())
+        )
+            .GroupBy(GetMarkingName)
+            .Select(m => PickDisplayedMarking(m, selectedMarkingId))
+            .OrderBy(GetMarkingName);
 
-        foreach (var (id, marking) in sortedMarkings)
+        foreach (var marking in sortedMarkings)
         {
+            var id = marking.ID;
             var item = MarkingList.AddItem(Loc.GetString($"marking-{id}"), _sprite.Frame0(marking.Sprites[0]));
             item.Metadata = marking.ID;
 
@@ -301,5 +306,15 @@ public sealed partial class SingleMarkingPicker : BoxContainer
     private string GetMarkingName(MarkingPrototype marking)
     {
         return Loc.GetString($"marking-{marking.ID}");
+    }
+
+    private static MarkingPrototype PickDisplayedMarking(
+        IEnumerable<MarkingPrototype> markings,
+        string selectedMarkingId)
+    {
+        var list = markings.ToList();
+        return list.FirstOrDefault(marking => marking.ID == selectedMarkingId)
+               ?? list.FirstOrDefault(marking => marking.ID.StartsWith("HumanHair", StringComparison.Ordinal))
+               ?? list[0];
     }
 }

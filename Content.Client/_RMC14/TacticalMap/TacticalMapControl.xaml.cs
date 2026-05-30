@@ -686,6 +686,24 @@ public sealed partial class TacticalMapControl : TextureRect
                 {
                 }
             }
+
+            if (blip.FireteamNumber > 0)
+            {
+                try
+                {
+                    int fontSize = Math.Max(7, (int)(scaledBlipSize * 0.5f));
+                    VectorFont ftFont = new(_resourceCache.GetResource<FontResource>("/Fonts/NotoSans/NotoSans-Bold.ttf"), fontSize);
+                    string ftText = blip.FireteamNumber.ToString();
+                    Vector2 measured = handle.DrawString(ftFont, position, ftText, Color.Transparent);
+                    Vector2 badgeOrigin = position + new Vector2(-measured.X - 3f, (scaledBlipSize - measured.Y) * 0.5f);
+                    UIBox2 badgeRect = UIBox2.FromDimensions(badgeOrigin - new Vector2(1f, 0f), measured + new Vector2(2f, 1f));
+                    handle.DrawRect(badgeRect, Color.Black.WithAlpha(0.75f));
+                    handle.DrawString(ftFont, badgeOrigin, ftText, Color.White);
+                }
+                catch (Exception)
+                {
+                }
+            }
         }
     }
 

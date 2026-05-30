@@ -26,7 +26,7 @@ public sealed partial class DungeonJob
             if (dungeon.RoomTiles.Contains(neighbor) || checkedTiles.Contains(neighbor) || !_anchorable.TileFree((_gridUid, _grid), neighbor, DungeonSystem.CollisionLayer, DungeonSystem.CollisionMask))
                 continue;
 
-            if (!random.Prob(gen.Prob) || !checkedTiles.Add(neighbor))
+            if (!Prob(random, gen.Prob) || !checkedTiles.Add(neighbor))
                 continue;
 
             if (reservedTiles.Contains(neighbor))

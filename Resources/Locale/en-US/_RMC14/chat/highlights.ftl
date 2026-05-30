@@ -33,7 +33,7 @@ highlights-military-police = Military Police, "CMP", "MP", "MPs", "MW", "Alert",
 highlights-provost-inspector = Provost Inspector, Inspector, @"PvI", "CMP", "MP", "MPs", "MW", "Alert", Brig, "Perma", Loose, Burst, Colonist, Survivor, "SOP", "Mlaw", Marine Law, Arrest, Detain, Appeal, Execution, Executed
 
 # Other
-highlights-corporate-liaison = Corporate Liaison, "CL", Liaison, Weston-Yamada, Weston Yamada, "WeYa", We-Ya
+highlights-corporate-liaison = Corporate Liaison, "CL", Liaison, Weyland-Yutani, "WeYu", We-Yu
 highlights-correspondent = Correspondent, "CC", News
 highlights-mess-technician = Mess Technician, "MST", Mess Tech, "Mess", Kitchen, Food, Hungry
 

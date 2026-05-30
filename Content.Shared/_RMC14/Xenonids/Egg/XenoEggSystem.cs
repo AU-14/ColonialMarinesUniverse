@@ -360,9 +360,10 @@ public sealed partial class XenoEggSystem : EntitySystem
         {
             return;
         }
-
+        var hive = _hive.GetHive(egg.Owner);
         // TODO RMC14 multiple hive support
-        if (!HasComp<XenoParasiteComponent>(args.User) && (!HasComp<XenoComponent>(args.User) || !HasComp<HandsComponent>(args.User)))
+        if (!HasComp<XenoParasiteComponent>(args.User) && (!HasComp<XenoComponent>(args.User) || !HasComp<HandsComponent>(args.User)
+            || !_hive.IsMember(args.User,hive)))
             return;
 
         if (Open(egg, args.User, out _))
@@ -424,7 +425,8 @@ public sealed partial class XenoEggSystem : EntitySystem
 
     private void OnXenoEggStepTriggerAttempt(Entity<XenoEggComponent> egg, ref StepTriggerAttemptEvent args)
     {
-        if (CanTrigger(args.Tripper))
+        var hive = _hive.GetHive(egg.Owner);
+        if (CanTrigger(args.Tripper, hive))
             args.Continue = true;
     }
 
@@ -461,12 +463,13 @@ public sealed partial class XenoEggSystem : EntitySystem
         args.Verbs.Add(parasiteVerb);
     }
 
-    private bool CanTrigger(EntityUid user)
+    private bool CanTrigger(EntityUid user, EntityUid? hive)
     {
         return TryComp<InfectableComponent>(user, out var infected)
                && !infected.BeingInfected
                && !_mobState.IsDead(user)
-               && !HasComp<VictimInfectedComponent>(user);
+               && !HasComp<VictimInfectedComponent>(user)
+               && !_hive.IsAllyOfHive(user, hive);
     }
 
     public bool Open(Entity<XenoEggComponent> egg, EntityUid? user, out EntityUid? spawned)
@@ -658,8 +661,9 @@ public sealed partial class XenoEggSystem : EntitySystem
 
     private bool TryTrigger(Entity<XenoEggComponent> egg, EntityUid tripper)
     {
+        var hive = _hive.GetHive(egg.Owner);
         if (egg.Comp.State != XenoEggState.Grown ||
-            !CanTrigger(tripper))
+            !CanTrigger(tripper, hive))
         {
             return false;
         }

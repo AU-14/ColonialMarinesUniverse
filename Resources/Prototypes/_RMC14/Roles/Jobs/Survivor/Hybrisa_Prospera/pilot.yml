@@ -1,4 +1,4 @@
-﻿- type: job
+- type: job
   parent: CMSurvivorCorporate
   id: RMCSurvivorHybrisaCommercialPilot
   name: rmc-job-name-survivor-commercial-pilot
@@ -9,7 +9,7 @@
   accessGroups:
   - ColonistCorporate
   access:
-  - RMCAccessWeYaFlight
+  - AU14AccessCorporateWEYUFlight
   - CMAccessColonyLogistics
   ranks:
     RMCRankWeYaPilotOfficer: []

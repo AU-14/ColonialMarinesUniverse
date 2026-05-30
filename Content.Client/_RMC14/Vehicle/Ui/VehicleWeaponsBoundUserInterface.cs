@@ -37,7 +37,7 @@ public sealed class VehicleWeaponsBoundUserInterface : BoundUserInterface
         if (_menu != null)
             _menu.OnClose -= Close;
 
-        _menu?.Dispose();
+        _menu?.Close();
         _menu = null;
     }
 

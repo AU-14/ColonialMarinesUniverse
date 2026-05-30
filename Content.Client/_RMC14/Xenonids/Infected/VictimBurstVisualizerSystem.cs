@@ -3,8 +3,10 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client._RMC14.Xenonids.Infected;
 
-public sealed class VictimBurstVisualizerSystem : VisualizerSystem<VictimBurstComponent>
+public sealed partial class VictimBurstVisualizerSystem : VisualizerSystem<VictimBurstComponent>
 {
+    [Dependency] private SpriteSystem _sprite = default!;
+
     protected override void OnAppearanceChange(EntityUid uid, VictimBurstComponent component, ref AppearanceChangeEvent args)
     {
         base.OnAppearanceChange(uid, component, ref args);
@@ -12,7 +14,7 @@ public sealed class VictimBurstVisualizerSystem : VisualizerSystem<VictimBurstCo
         if (!AppearanceSystem.TryGetData(uid, BurstVisuals.Visuals, out VictimBurstState state, args.Component))
             return;
 
-        if (args.Sprite == null)
+        if (args.Sprite is not { } sprite)
             return;
 
         var rsiPath = component.RsiPath;
@@ -27,12 +29,12 @@ public sealed class VictimBurstVisualizerSystem : VisualizerSystem<VictimBurstCo
         if (string.IsNullOrWhiteSpace(spriteState))
             return;
 
-        if (!args.Sprite.LayerMapTryGet(BurstLayer.Base, out var layer))
+        if (!_sprite.LayerMapTryGet((uid, sprite), BurstLayer.Base, out var layer, false))
         {
-            layer = args.Sprite.LayerMapReserveBlank(BurstLayer.Base);
-            args.Sprite.LayerSetRSI(layer, rsiPath);
+            layer = _sprite.LayerMapReserve((uid, sprite), BurstLayer.Base);
+            _sprite.LayerSetRsi((uid, sprite), layer, rsiPath);
         }
 
-        args.Sprite.LayerSetState(layer, spriteState);
+        _sprite.LayerSetRsiState((uid, sprite), layer, spriteState);
     }
 }

@@ -53,7 +53,13 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
             SearchBar.OnTextChanged += OnSearchTextChanged;
 
             GhostnadoButton.OnPressed += _ => OnGhostnadoClicked?.Invoke();
+            _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+        }
+
+        private void OnCrtUiEnabledChanged(bool _)
+        {
+            OnCrtUiColorChanged(string.Empty);
         }
 
         private void OnCrtUiColorChanged(string _)
@@ -463,6 +469,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 return;
 
             _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+            _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             ClearPreviewDummies();
         }
 

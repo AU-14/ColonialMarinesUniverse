@@ -25,7 +25,7 @@ public sealed partial class SlipperySystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedStunSystem _stun = default!;
-    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SpeedModifierContactsSystem _speedModifier = default!;

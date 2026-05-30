@@ -8,6 +8,7 @@ using Content.Shared.Containers;
 using Content.Shared.Database;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Server.Construction
 {
@@ -365,7 +366,7 @@ namespace Content.Server.Construction
             var newTransform = Transform(newUid);
             TransformSystem.AttachToGridOrMap(newUid, newTransform); // in case in hands or a container
             newTransform.LocalRotation = transform.LocalRotation;
-            newTransform.Anchored = transform.Anchored;
+            SetPreInitAnchored(newTransform, transform.Anchored);
 
             // Container transferring.
             if (containerManager != null)
@@ -414,6 +415,18 @@ namespace Content.Server.Construction
             RaiseLocalEvent(newUid, ref afterChangeEv);
 
             return newUid;
+        }
+
+        private static void SetPreInitAnchored(TransformComponent transform, bool anchored)
+        {
+            DebugTools.Assert(!transform.Initialized, "Construction replacement should copy anchored state before initialization.");
+
+            // The replacement entity has not been initialized yet. The Transform.Anchored setter has a
+            // pre-init path that records the desired anchor state and lets transform initialization do
+            // the actual grid registration.
+#pragma warning disable CS0618
+            transform.Anchored = anchored;
+#pragma warning restore CS0618
         }
 
         /// <summary>

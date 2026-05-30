@@ -63,6 +63,8 @@
     evolvesTo:
     - RMCXenoCrusher
     - CMXenoPraetorian
+    strains:
+    - CMXenoWarriorBulwark
   - type: CMArmor
     xenoArmor: 20
     explosionArmor: 40

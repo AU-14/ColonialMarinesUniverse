@@ -1,0 +1,115 @@
+# ├──[ Enlisted ]────────────────────────────────────────────────────┤
+- type: rank
+  id: AU14RankLACNSeamanRecruit
+  name: Seaman Recruit
+  prefix: SR
+  paygrade: E-1
+
+- type: rank
+  id: AU14RankLACNSeamanApprentice
+  name: Seaman Apprentice
+  prefix: SA
+  paygrade: E-2
+
+- type: rank
+  id: AU14RankLACNSeaman
+  name: Seaman
+  prefix: SN
+  paygrade: E-3
+
+- type: rank
+  id: AU14RankLACNPettyOfficerThirdClass
+  name: Petty Officer Third Class
+  prefix: PO3
+  paygrade: E-4
+
+- type: rank
+  id: AU14RankLACNPettyOfficerSecondClass
+  name: Petty Officer Second Class
+  prefix: PO2
+  paygrade: E-5
+
+- type: rank
+  id: AU14RankLACNPettyOfficerFirstClass
+  name: Petty Officer First Class
+  prefix: PO1
+  paygrade: E-6
+
+- type: rank
+  id: AU14RankLACNChiefPettyOfficer
+  name: Chief Petty Officer
+  prefix: CPO
+  paygrade: E-7
+
+- type: rank
+  id: AU14RankLACNSeniorChief
+  name: Senior Chief
+  prefix: SCPO
+  paygrade: E-8
+
+- type: rank
+  id: AU14RankLACNMasterChief
+  name: Master Chief # HE WONT MISS!
+  prefix: MCPO
+  paygrade: E-9
+
+# ├──[ Officers ]────────────────────────────────────────────────────┤
+- type: rank
+  id: AU14RankLACNSubEnsign
+  name: Sub-Ensign
+  prefix: SENS
+  paygrade: O-1
+
+- type: rank
+  id: AU14RankLACNEnsign
+  name: Ensign
+  prefix: ENS
+  paygrade: O-2
+
+- type: rank
+  id: AU14RankLACNLieutenantJuniorGrade
+  name: Lieutenant Junior Grade
+  prefix: LTJG
+  paygrade: O-3
+
+- type: rank
+  id: AU14RankLACNLieutenant
+  name: Lieutenant
+  prefix: LT
+  paygrade: O-4
+
+- type: rank
+  id: AU14RankLACNLieutenantCommander
+  name: Lieutenant Commander
+  prefix: LCDR
+  paygrade: O-5
+
+- type: rank
+  id: AU14RankLACNCommander
+  name: Commander
+  prefix: CDR
+  paygrade: O-6
+
+- type: rank
+  id: AU14RankLACNCaptain
+  name: Captain
+  prefix: CAPT
+  paygrade: O-7
+
+- type: rank
+  id: AU14RankLACNRearAdmiral
+  name: Rear Admiral
+  prefix: RADM
+  paygrade: O-8
+
+- type: rank
+  id: AU14RankLACNViceAdmiral
+  name: Vice Admiral
+  prefix: VADM
+  paygrade: O-9
+
+- type: rank
+  id: AU14RankLACNAdmiral
+  name: Admiral
+  prefix: ADM
+  paygrade: O-10

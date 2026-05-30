@@ -1,9 +1,27 @@
 - type: job
+  abstract: true
+  parent: CMJobBase
+  id: AUThreatJobBase
+  description: null
+  joinNotifyCrew: false
+  icon: "AU14JobIconThreatMember"
+  supervisors: au-job-name-threat-leader
+  accessGroups:
+  - CMAccessXeno
+  hasIcon: false
+  hidden: true
+
+- type: job
   parent: AUThreatJobBase
   id: AU14JobThreatLeader
   name: au-job-name-threat-leader
+  description: au-job-description-threat-leader
   setPreference: true
   playTimeTracker: AUJobThreatLeader
+  # requirements:
+  # - !type:RoleTimeRequirement
+  #   role: AUJobThreatMember
+  #   time: 7200 # 2 hours
   hidden: false
   supervisors: nobody
   icon: "AU14JobIconThreatLeader"
@@ -14,5 +32,4 @@
 
 - type: playTimeTracker
   id: AUJobThreatLeader
-
 

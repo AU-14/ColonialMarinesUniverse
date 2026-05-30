@@ -893,6 +893,13 @@
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepWood
+  - type: Flamability
+    chance: 0.2
+    rate: 0.25
+    spread: 0.3
+    range: 0.7
+    burnDurationMin: 70
+    burnDurationMax: 620
 
 - type: entity
   id: TableCounterMetal
@@ -938,3 +945,10 @@
   - type: Construction
     graph: Table
     node: CounterMetal
+  - type: Flamability
+    chance: 0.04
+    rate: 0.15
+    spread: 0.1
+    range: 0.5
+    burnDurationMin: 70
+    burnDurationMax: 620

@@ -9,11 +9,13 @@ public sealed partial class AtmosPipeColorComponent : Component
     [DataField]
     public Color Color { get; set; } = Color.White;
 
+    public EntityUid OwnerEntity;
+
     [ViewVariables(VVAccess.ReadWrite), UsedImplicitly]
     public Color ColorVV
     {
         get => Color;
-        set => IoCManager.Resolve<IEntityManager>().System<AtmosPipeColorSystem>().SetColor(Owner, this, value);
+        set => IoCManager.Resolve<IEntityManager>().System<AtmosPipeColorSystem>().SetColor(OwnerEntity, this, value);
     }
 }
 

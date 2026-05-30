@@ -2,15 +2,7 @@
   parent: AU14JobDCCBase
   id: AU14JobGOVFORDCCRMC
   name: au14-job-name-govfordccRMC
-  description: au14-job-description-govfordcc
-  setPreference: true
-  canBeAntag: false
-  requirements:
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
-    - NonResuscitable
+  spawnMenuRoleName: Dropship Crew Chief (TWE RMC)
   ranks:
     RMC_WarrantOfficer1:
     - !type:RoleTimeRequirement
@@ -25,26 +17,9 @@
       role: AU14JobGOVFORDCC
       time: 43200 # 12 hours
     RMC_Sergeant: []
-  startingGear: AU14GearGOVFORDCC
-  dummyStartingGear: AU14GearGOVFORDCCDummy
-  icon: "AU14JobIconDCC"
-  requireAdminNotify: true
-  spawnMenuRoleName: Dropship Crew Chief (TWE RMC)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforPilot
-  - AU14GovforCorpsman
-  - AU14GovforSquad
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: Marine
-      Faction: govfor
     - type: Skills
       skills:
         RMCSkillFirearms: 2
@@ -58,10 +33,3 @@
         RMCSkillPowerLoader: 2
         RMCSkillSurgery: 1
         RMCSkillPolice: 1
-    - type: JobPrefix
-      prefix: au14-job-prefix-govfordcc
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-  hidden: true

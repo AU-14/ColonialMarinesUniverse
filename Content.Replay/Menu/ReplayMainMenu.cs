@@ -263,7 +263,7 @@ public sealed partial class ReplayMainScreen : State
         }
         catch (Exception ex)
         {
-            Logger.Error($"Failed to load replay info. Exception: {ex}");
+            Logger.GetSawmill("replay").Error($"Failed to load replay info. Exception: {ex}");
             SelectReplay(null);
             return;
         }
@@ -272,8 +272,8 @@ public sealed partial class ReplayMainScreen : State
 
     protected override void Shutdown()
     {
-        _mainMenuControl.Dispose();
-        _selectWindow?.Dispose();
+        _mainMenuControl.Orphan();
+        _selectWindow?.Close();
     }
 
     private void OptionsButtonPressed(BaseButton.ButtonEventArgs args)

@@ -1,12 +1,70 @@
 - type: job
-  parent: CMJobBase
-  id: AU14JobSquadRiflemanBase
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobSquadRiflemanBaseAbstract # Rifleman Abstraction
   name: au14-job-name-govforsquadrifleman
   description: au14-job-description-govforsquadrifleman
+  icon: "AU14JobIconGovRifleman"
+  spawnMenuRoleName: Rifleman (GOVFOR)
+  startingGear: AU14GearGOVFORSquadRifleman
+  dummyStartingGear: AU14GearGOVFORRiflemanDummy
   playTimeTracker: AU14JobGOVFORSquadRifleman
-  basePlaytimeTracker: true
-  hidden: true
+  accessGroups:
+  - AU14GovforSquad
+  hasIcon: false
+
+- type: job
+  abstract: true
+  parent: AU14JobSquadRiflemanBaseAbstract
+  id: AU14JobSquadRiflemanBase # Rifleman Base
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+  ranks:
+    RMCRankPrivateFirstClass:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadRifleman
+      time: 36000 # 10 hours
+    RMCRankPrivate: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      preset: AU14SkillPresetPlatoonRifleman
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforsquadrifleman
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: private
 
 - type: playTimeTracker
   id: AU14JobGOVFORSquadRifleman
   isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORSquadRifleman
+  equipment:
+    id: AU14IDCardSquadRifleman
+    ears: AU14HeadsetGovforMarine
+
+- type: startingGear
+  id: AU14GearGOVFORRiflemanDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleThree
+    shoes: AU14BootsJungle
+    head: AU14JungleM10Helmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORSquadRifleman
+  name: Spawn Point GOVFOR Squad Rifleman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORSquadRifleman
+  - type: Sprite
+    state: syn_spawn

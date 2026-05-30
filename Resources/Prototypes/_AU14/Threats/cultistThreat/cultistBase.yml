@@ -156,6 +156,12 @@
     - type: Access
       tags:
       - CMAccessXeno
+  - type: Sprite
+    layers:
+    - state: makeshift_key
+    - state: makeshift_key_on
+      map: [ "enum.ToggleableVisuals.Layer" ]
+      visible: false
 
 - type: entity
   parent: RMCPortableVendor

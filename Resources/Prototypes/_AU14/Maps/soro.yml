@@ -2,6 +2,10 @@
   id: au14sorokyne
   mapName: LV-976 Sorokyne Strata
   mapPath: /Maps/_AU14/sorokyne.yml
+  mapsBelow:
+  - /Maps/_AU14/sorokyne_below.yml
+  mapsAbove:
+  - /Maps/_AU14/sorokyne_above.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0

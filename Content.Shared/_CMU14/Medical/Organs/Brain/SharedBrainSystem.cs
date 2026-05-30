@@ -117,7 +117,6 @@ public abstract partial class SharedBrainSystem : EntitySystem
         if (ent.Comp.NextDisorientCheck > now)
             return;
         ent.Comp.NextDisorientCheck = now + TimeSpan.FromMinutes(1);
-        Dirty(ent);
 
         if (!Rng.Prob(ent.Comp.DisorientationChancePerMinute))
             return;
@@ -135,7 +134,6 @@ public abstract partial class SharedBrainSystem : EntitySystem
         if (ent.Comp.NextUnconsciousCheck > now)
             return;
         ent.Comp.NextUnconsciousCheck = now + TimeSpan.FromSeconds(60);
-        Dirty(ent);
 
         var body = GetBody(ent);
         if (body is null)

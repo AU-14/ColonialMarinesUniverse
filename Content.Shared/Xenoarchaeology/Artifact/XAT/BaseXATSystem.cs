@@ -51,9 +51,12 @@ public abstract partial class BaseXATSystem<T> : EntitySystem where T : Componen
         if (Timing.CurTime < artifact.Comp.NextUnlockTime)
             return false;
 
-        if (_unlockingQuery.TryComp(artifact, out var unlocking) &&
-            unlocking.TriggeredNodeIndexes.Contains(XenoArtifact.GetIndex(artifact, node)))
-            return false;
+        if (_unlockingQuery.TryComp(artifact, out var unlocking)) {
+            if (!XenoArtifact.TryGetIndex((artifact, artifact), node, out var index))
+                return false;
+            if (unlocking.TriggeredNodeIndexes.Contains(index.Value))
+                return false;
+        }
 
         if (!XenoArtifact.CanUnlockNode((node, node)))
             return false;

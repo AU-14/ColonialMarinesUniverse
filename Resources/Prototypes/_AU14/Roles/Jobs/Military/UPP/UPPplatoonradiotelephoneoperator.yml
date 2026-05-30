@@ -1,27 +1,15 @@
 - type: job
   parent: AU14JobRadioTelephoneOperatorBase
   id: AU14JobGOVFORRadioTelephoneOperatorUPP
-  name: Radio Telephone Operator
-  description: au14-job-description-radiotelephoneooerator
-  setPreference: false
+  name: au14-job-name-radiotelephoneoperator-alt
+  spawnMenuRoleName: Fireteam Leader (UPP)
+  overwatchRoleName: au14-job-name-radiotelephoneoperator-alt
   ranks:
     UPP_SeniorGefreiter:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORRadioTelephoneOperator
       time: 108000 # 30 hours
     UPP_Gefreiter: []
-  startingGear: AU14GearGOVFORRadioTelephoneOperator
-  dummyStartingGear: AU14GearGOVFORRadioTelephoneOperatorDummy
-  icon: "AU14JobIconRTO"
-  requireAdminNotify: false
-  spawnMenuRoleName: Fireteam Leader (UPP)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforFTL
-  overwatchSortPriority: -5
-  overwatchRoleName: Radio Telephone Operator
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
@@ -35,21 +23,3 @@
         RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORRadioTelephoneOperatorUPP
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
-  hidden: true

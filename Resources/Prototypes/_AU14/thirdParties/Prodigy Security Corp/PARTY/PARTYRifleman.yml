@@ -1,0 +1,110 @@
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: AU14JobPARTYPartyContractorBase
+  name: Prodigy Yankee Contractor Base
+  description: au14-prodigyparty-description
+  playTimeTracker: AU14JobPARTYPartyContractor
+
+- type: job
+  parent: AU14JobPARTYPartyContractorBase
+  id: AU14JobPARTYPartyContractor
+  name: Prodigy Yankee Contractor (M41A/2)
+  description: au14-prodigyparty-description
+  ranks:
+    AU14RankPrDAssociate: []
+  spawnMenuRoleName: Prodigy Yankee Contractor (3rd party, M41A/2)
+  startingGear: AU14GearPARTYPartyContractor
+  greeting: au14-prodigyparty-greeting
+  icon: "RMCJobIconPMCStandard"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-psc
+  basePlaytimeTracker: true
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 1
+        RMCSkillFirearms: 2
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadRiflemanWYPMC
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: AU14JobPARTYPartyRifleman
+  name: Prodigy Yankee Party Rifleman (3rd party, M41A/2)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPARTY
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Prodigy Rifleman
+    description: au14-prodigyparty-description
+    reregister: false
+    job: AU14JobPARTSPartyContractor
+    raffle:
+      settings: short
+    rules: au14-prodigyparty-description
+
+- type: startingGear
+  id: AU14GearPARTYPartyContractor
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14ArmorProdigyXAS23
+    jumpsuit: AU14ProdigyFatiguesRU
+    shoes: RMCBootsSPPBlackFilled
+    mask: RMCMaskCoifPMC
+    eyes: AU14ProdigyWeldingGoggles
+    head: AU14ProdigyBallisticHelmetPART
+    gloves: AU14HandsProdigyRU
+    belt: AU14BeltUtilityCombatProdigyRUFilled
+    pocket1: RMCPouchMagazineLargePMC
+    pocket2: AU14PouchIFAKProdigyFill
+    back: RMCSatchelWelderRU #21 slots
+    ears: AU14HeadsetPART
+    ears2: RMCM5CameraGear
+    suitstorage: AU14KitWeaponMCX
+  storage:
+    pocket1:
+    - AU14WeaponRifleprodigyrifleMagazineAP
+    - AU14WeaponRifleprodigyrifleMagazineAP
+    - AU14WeaponRifleprodigyrifleMagazineAP
+    - AU14WeaponRifleprodigyrifleMagazineAP
+    back:
+    - CMMRE
+    - RMCBinocularsPVE
+    - AU14PacketGrenadeFragM12Filled
+    - AU14WeaponRifleprodigyrifleMagazineAP
+    - AU14WeaponRifleprodigyrifleMagazineAP
+    - AU14WeaponRifleprodigyrifleMagazineAP
+    jumpsuit:
+    - AU14SynthResetKeyProdigy
+    - AU14SynthResetKeyProdigy
+    - AU14ProdigyLaptop
+    - RMCHandcuffs
+    # 1 empty slots
+    outerClothing:
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    - RMCVisorMedical
+    # 1 empty slots
+
+- type: playTimeTracker
+  id: AU14JobPARTYPartyContractor

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Shared.AU14.Threats;
 using Content.Server.AU14.Round;
+using Robust.Shared.Timing;
 using Content.Shared.AU14.util;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Map;
@@ -25,14 +26,48 @@ public sealed partial class AuThreatSystem : EntitySystem
     [Dependency] private SharedMindSystem _mindSystem = default!;
     [Dependency] private NpcFactionSystem _npcFaction = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
     public readonly ProtoId<NpcFactionPrototype> threatnpcfaction = "THREAT";
     [Dependency] private SharedRoleSystem _roles = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+
+    private sealed class PendingThreatSpawn
+    {
+        public required ThreatPrototype Threat;
+        public required MapId MapId;
+        public required Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> AssignedJobs;
+        public required TimeSpan FireAt;
+    }
+
+    private PendingThreatSpawn? _pendingSpawn;
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        if (_pendingSpawn == null || _timing.CurTime < _pendingSpawn.FireAt)
+            return;
+
+        var pending = _pendingSpawn;
+        _pendingSpawn = null;
+
+        try
+        {
+            ExecuteSpawn(pending.Threat, pending.MapId, pending.AssignedJobs);
+            var roundSystem = _entityManager.EntitySysManager.GetEntitySystem<AuRoundSystem>();
+            roundSystem.StartThreatWinConditions(pending.Threat);
+        }
+        catch (Exception ex)
+        {
+            Logger.GetSawmill("au14.threat").Error($"[AuThreatSystem] Delayed threat spawn threw: {ex}");
+        }
+    }
 
     /// <summary>
-    /// Spawns the chosen threat's leaders, members, and entities at their correct markers at round start.
-    /// Also assigns player minds to spawned threat entities for threat jobs.
+    /// In Colony Fall: schedules threat entity spawning and win condition activation after a random
+    /// delay via the game update loop. In all other presets: spawns and starts win conditions immediately.
     /// </summary>
     public void SpawnThreatAtRoundStart(ThreatPrototype threat,
         MapId mapId,
@@ -40,10 +75,36 @@ public sealed partial class AuThreatSystem : EntitySystem
     {
         if (threat == null)
         {
-            Logger.GetSawmill("au14.threat").Debug( "[AuThreatSystem] No threat selected for round start, skipping threat spawn.");
+            Logger.GetSawmill("au14.threat").Debug("[AuThreatSystem] No threat selected for round start, skipping threat spawn.");
             return;
         }
 
+        var roundSystem = _entityManager.EntitySysManager.GetEntitySystem<AuRoundSystem>();
+        var isColonyFall = string.Equals(roundSystem.SelectedPreset?.ID, "ColonyFall", StringComparison.OrdinalIgnoreCase);
+
+        if (isColonyFall)
+        {
+            var delaySeconds = _random.NextDouble() * (threat.SpawnDelayMax - threat.SpawnDelayMin) + threat.SpawnDelayMin;
+            Logger.GetSawmill("au14.threat").Debug($"[AuThreatSystem] Colony Fall threat '{threat.ID}' will spawn in {delaySeconds:F1}s.");
+            _pendingSpawn = new PendingThreatSpawn
+            {
+                Threat = threat,
+                MapId = mapId,
+                AssignedJobs = assignedJobs,
+                FireAt = _timing.CurTime + TimeSpan.FromSeconds(delaySeconds),
+            };
+        }
+        else
+        {
+            ExecuteSpawn(threat, mapId, assignedJobs);
+            roundSystem.StartThreatWinConditions(threat);
+        }
+    }
+
+    private void ExecuteSpawn(ThreatPrototype threat,
+        MapId mapId,
+        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs)
+    {
         var partySpawn = threat.RoundStartSpawn;
         if (string.IsNullOrWhiteSpace(partySpawn))
         {
@@ -104,7 +165,7 @@ public sealed partial class AuThreatSystem : EntitySystem
                     var filtered = markers.Where(m =>
                     {
                         var coords = _entityManager.GetComponent<TransformComponent>(m).Coordinates;
-                        return coords.InRange(_entityManager, centerCoords, 50f);
+                        return _transform.InRange(coords, centerCoords, 50f);
                     }).ToList();
                     // Fallback to all markers if none are in range
                     markerCache[type] = filtered.Count > 0 ? filtered : markers;

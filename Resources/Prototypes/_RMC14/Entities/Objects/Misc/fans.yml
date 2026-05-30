@@ -2,7 +2,7 @@
   parent: BaseItem
   id: RMCDeskFanTan
   name: desk fan
-  description: A large sturdy tan desk fan which looks like it won't break until the heat-death of the universe, although the warranty expired 2 years after manufacture. The Weston-Yamada logo is plastered on both sides.
+  description: A large sturdy tan desk fan which looks like it won't break until the heat-death of the universe, although the warranty expired 2 years after manufacture. The Weyland-Yutani logo is plastered on both sides.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Misc/desk_fan.rsi

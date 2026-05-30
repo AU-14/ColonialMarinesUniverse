@@ -15,7 +15,13 @@
   - AU14AccessColonyForeman
   - AU14AccessColonyHeadEngineer
   - AU14AccessColonyHeadOfService
-
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 25
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
 - type: playTimeTracker
   id: AU14JobCivilianCMBMarshal
   isHumanoid: true

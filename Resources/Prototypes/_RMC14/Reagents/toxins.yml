@@ -170,3 +170,146 @@
         time: 4
         type: Add
         refresh: false
+
+- type: reagent
+  parent: CMReagent
+  id: RMCXenoAlchBrute
+  name: reagent-name-rmc-xenoalch-brute
+  desc: reagent-desc-rmc-xenoalch-brute
+  physicalDesc: reagent-physical-desc-pungent
+  color: "#8f1914"
+  unknown: true
+  toxin: true
+  metabolisms:
+    Poison:
+      metabolismRate: 0.2
+      effects:
+      - !type:Biocidic
+        potency: 2
+      - !type:AdjustReagent
+        reagent: CMBicaridine
+        amount: -0.2
+      - !type:AdjustReagent
+        reagent: CMMeralyne
+        amount: -0.2
+
+- type: reagent
+  parent: CMReagent
+  id: RMCXenoAlchBurn
+  name: reagent-name-rmc-xenoalch-burn
+  desc: reagent-desc-rmc-xenoalch-burn
+  physicalDesc: reagent-physical-desc-acidic
+  color: "#d46a1f"
+  unknown: true
+  toxin: true
+  metabolisms:
+    Poison:
+      metabolismRate: 0.2
+      effects:
+      - !type:Corrosive
+        potency: 2
+      - !type:AdjustReagent
+        reagent: CMKelotane
+        amount: -0.2
+      - !type:AdjustReagent
+        reagent: CMDermaline
+        amount: -0.2
+
+- type: reagent
+  parent: CMReagent
+  id: RMCXenoAlchPain
+  name: reagent-name-rmc-xenoalch-pain
+  desc: reagent-desc-rmc-xenoalch-pain
+  physicalDesc: reagent-physical-desc-acrid
+  color: "#7b45b7"
+  unknown: true
+  toxin: true
+  metabolisms:
+    Poison:
+      metabolismRate: 0.2
+      effects:
+      - !type:RMCAlchemistPain
+        potency: 4
+      - !type:Jitter
+        probability: 0.1
+      - !type:AdjustReagent
+        reagent: CMUParacetamol
+        amount: -0.2
+      - !type:AdjustReagent
+        reagent: CMUTramadol
+        amount: -0.2
+      - !type:AdjustReagent
+        reagent: CMUOxycodone
+        amount: -0.2
+
+- type: reagent
+  parent: CMReagent
+  id: RMCXenoAlchFire
+  name: reagent-name-rmc-xenoalch-fire
+  desc: reagent-desc-rmc-xenoalch-fire
+  physicalDesc: reagent-physical-desc-burning
+  color: "#ff3f00"
+  unknown: true
+  toxin: true
+  metabolisms:
+    Poison:
+      metabolismRate: 0.2
+      effects:
+      - !type:Corrosive
+        potency: 2
+      - !type:AdjustTemperature
+        amount: 6000
+
+- type: reagent
+  parent: CMReagent
+  id: RMCXenoAlchBloodloss
+  name: reagent-name-rmc-xenoalch-bloodloss
+  desc: reagent-desc-rmc-xenoalch-bloodloss
+  physicalDesc: reagent-physical-desc-metallic
+  color: "#5d0000"
+  unknown: true
+  toxin: true
+  metabolisms:
+    Poison:
+      metabolismRate: 0.2
+      effects:
+      - !type:Hemolytic
+        potency: 1
+
+- type: reagent
+  parent: CMReagent
+  id: RMCXenoAlchFreeze
+  name: reagent-name-rmc-xenoalch-freeze
+  desc: reagent-desc-rmc-xenoalch-freeze
+  physicalDesc: reagent-physical-desc-cold
+  color: "#5eb7de"
+  unknown: true
+  toxin: true
+  metabolisms:
+    Poison:
+      metabolismRate: 0.2
+      effects:
+      - !type:AdjustTemperature
+        amount: -6000
+      - !type:AdjustReagent
+        reagent: CMCryoxadone
+        amount: -0.2
+      - !type:AdjustReagent
+        reagent: CMClonexadone
+        amount: -0.2
+
+- type: reagent
+  parent: CMReagent
+  id: RMCXenoAlchPurge
+  name: reagent-name-rmc-xenoalch-purge
+  desc: reagent-desc-rmc-xenoalch-purge
+  physicalDesc: reagent-physical-desc-nondescript
+  color: "#dde7c2"
+  unknown: true
+  toxin: true
+  metabolisms:
+    Poison:
+      metabolismRate: 0.2
+      effects:
+      - !type:RMCAlchemistPurgeNonToxins
+        amount: 0.2

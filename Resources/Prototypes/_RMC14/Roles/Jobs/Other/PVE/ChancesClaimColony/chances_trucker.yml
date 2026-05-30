@@ -5,7 +5,7 @@
   description: cm-job-description-survivor
   playTimeTracker: CMJobSurvivorChancesTrucker
   startingGear: RMCGearSurvivorChancesTrucker
-  spawnMenuRoleName: Weston-Yamada Heavy Vehicle Operator (Chances Colonist)
+  spawnMenuRoleName: Weyland-Yutani Heavy Vehicle Operator (Chances Colonist)
   greeting: rmc-job-greeting-chances-colonist
   special:
   - !type:AddComponentSpecial

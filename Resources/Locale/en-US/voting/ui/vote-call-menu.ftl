@@ -12,6 +12,9 @@ ui-vote-votekick-type-spamming = Spamming
 # Window title of the vote create menu
 ui-vote-create-title = Call Vote
 
+# Disabled notice in the vote create menu
+ui-vote-call-disabled = Call votes are currently disabled.
+
 # Submit button in the vote create button
 ui-vote-create-button = Call Vote
 

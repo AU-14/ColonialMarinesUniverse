@@ -22,6 +22,6 @@ public sealed partial class SynthSystem : SharedSynthSystem
         if (!TryComp<DamageVisualsComponent>(ent.Owner, out var damageVisuals))
             return;
 
-        _damageVisuals.ChangeDamageGroupColor(sprite, damageVisuals, GroupToChange, ent.Comp.DamageVisualsColor);
+        _damageVisuals.ChangeDamageGroupColor((ent.Owner, sprite), damageVisuals, GroupToChange, ent.Comp.DamageVisualsColor);
     }
 }

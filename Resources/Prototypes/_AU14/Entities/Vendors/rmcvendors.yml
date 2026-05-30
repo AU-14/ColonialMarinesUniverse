@@ -75,7 +75,7 @@
       entries:
       - id: RMCM5CameraGear
         amount: 30
-      - id: AU14HeadsetSectionMarine
+      - id: AU14HeadsetGovforMarine
         name: empty headset
         amount: 20
     - name: Heads Up Display
@@ -333,11 +333,11 @@
       entries:
       - id: CMSandbagEmpty25
         recommended: true
-        amount: 60
+        amount: 2
       - id: BarbedWire15
-        amount: 6
-      - id: CMSheetMetal50
         amount: 3
+      - id: CMSheetMetal50
+        amount: 1
       - id: CMSheetPlasteel50
         amount: 1
       - id: RMCBoxMagazinePowerCellsHighFilled
@@ -345,7 +345,7 @@
       - id: RMCEngineerKit
         amount: 1
       - id: RMCPowerCellHigh
-        amount: 5
+        amount: 2
       - id: RMCCableCoil
         amount: 15
     - name: Flares and lights
@@ -748,7 +748,9 @@
         amount: 5
     - name: Headsets
       entries:
-      - id: AU14HeadsetSectionLeader
+      - id: AU14HeadsetGovforCommand
+        amount: 2
+      - id: AU14HeadsetGovforAuxiliary
         amount: 2
     - name: Backpack
       entries:

@@ -1,0 +1,101 @@
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: AU14JobTARSPartyContractorBase
+  name: Prodigy TARS Contractor Base
+  description: au14-prodigyrescue-description
+  playTimeTracker: AU14JobTARSPartyContractorTracker
+
+- type: job
+  parent: AU14JobTARSPartyContractorBase
+  id: AU14JobTARSPartyContractor
+  name: Prodigy TARS Contractor (M41A/2)
+  description: au14-prodigyrescue-description
+  ranks:
+    AU14RankPrDAssociate: []
+  spawnMenuRoleName: Prodigy TARS Contractor (3rd party, M20a)
+  startingGear: AU14GearTARSPartyContractor
+  greeting: au14-prodigyrescue-greeting
+  icon: "RMCJobIconPMCStandard"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-psc
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 1
+        RMCSkillFirearms: 2
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadRiflemanWYPMC
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: AU14JobTARSPartyRifleman
+  name: Prodigy TARS Party Rifleman (3rd party, M20a)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadTARS
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Prodigy TARS Rifleman
+    description: au14-prodigyrescue-description
+    reregister: false
+    job: AU14JobPARTSPartyContractor
+    raffle:
+      settings: short
+    rules: au14-prodigyrescue-description
+
+- type: startingGear
+  id: AU14GearTARSPartyContractor
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14ArmorProdigyXAS23
+    jumpsuit: AU14ProdigyFatiguesRU
+    shoes: RMCBootsSPPBlackFilled
+    #mask: RMCMaskCoifPMC
+    #eyes: AU14ProdigyWeldingGoggles
+    #head: AU14ProdigyBallisticHelmetPART
+    #gloves: AU14HandsProdigyRU
+    belt: AU14BeltUtilityCombatProdigyRUFilled
+    pocket1: AU14PouchMagazineLargePARTDualFilled
+    pocket2: AU14PouchIFAKProdigyFill
+    back: RMCSatchelWelderRU #21 slots
+    ears: AU14HeadsetPART
+    ears2: RMCM5CameraGear
+    suitstorage: AUWeaponRifleM20A
+  storage:
+    #pocket1:
+    #comes filled with rifle mags, no need to fill it here
+    back:
+    - CMMRE
+    - RMCBinocularsPVE
+    - AU14PacketGrenadeFragM12Filled
+
+    jumpsuit:
+    - AU14SynthResetKeyProdigy
+    - RMCHandcuffs
+    # 3 empty slots
+    outerClothing:
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    # 1 empty slots
+
+- type: playTimeTracker
+  id: AU14JobTARSPartyContractorTracker

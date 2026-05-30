@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using Content.Server.Database;
 using Content.Shared.CCVar;
 using Content.Shared.Players.PlayTimeTracking;
+using Content.Shared.Roles;
 using Robust.Shared.Asynchronous;
 using Robust.Shared.Collections;
 using Robust.Shared.Configuration;
 using Robust.Shared.Exceptions;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -63,8 +65,93 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
     [Dependency] private ITaskManager _task = default!;
     [Dependency] private IRuntimeLog _runtimeLog = default!;
     [Dependency] private UserDbDataManager _userDb = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     private ISawmill _sawmill = default!;
+
+    // AU14 tracker IDs that were renamed before the role prototypes were consolidated.
+    // The length of this is not great, it would be nice if we could migrate the trackers in the DB.
+    private static readonly Dictionary<string, string> LegacyPlayTimeTrackerAliases = new()
+    {
+        ["AU14JobMilitaryPolice"] = "AU14JobGOVFORMilitaryPoliceMan",
+        ["AU14JobMilitaryPoliceTracker"] = "AU14JobGOVFORMilitaryPoliceMan",
+        ["AU14JobGOVFORk9handler"] = "AU14JobThirdPartyK9Handler",
+        ["AU14JobOPFORk9handler"] = "AU14JobThirdPartyK9Handler",
+
+        // Typos
+        ["AU14JobOpforRadioTelephoneOoperator"] = "AU14JobGOVFORRadioTelephoneOperator",
+        ["AU14JobGOVFORRadioTelephoneOoperator"] = "AU14JobGOVFORRadioTelephoneOperator",
+
+        // Casing
+        ["AU14Jobmobboss"] = "AU14JobMobBoss",
+        ["AU14Jobmobgoon"] = "AU14JobMobGoon",
+        ["AU14Jobwyguard"] = "AU14JobWYGuard",
+        ["au14JobcivilianKellandWarden"] = "AU14JobCivilianKellandWarden",
+        ["AU14Jobcivilianprisoner"] = "AU14JobCivilianPrisoner",
+        ["AU14JobCiviliannspaConstable"] = "AU14JobCivilianCMBDeputy",
+        ["AU14JobCivilianEcologist"] = "AU14JobCivilianScientist",
+        ["AU14JobCivilianscientist"] = "AU14JobCivilianScientist",
+        ["AU14JobPlatoonCommander"] = "AU14JobGOVFORPlatCo",
+        ["AU14JobPlatoonOperationsOfficer"] = "AU14JobGOVFORPlatOp",
+
+        // OPFOR -> GOVFOR
+        ["AU14JobOPFORAuxSupportSynth"] = "AU14JobGOVFORAuxSupportSynth",
+        ["AU14JobOPFORadvisor"] = "AU14JobGOVFORadvisor",
+        ["AU14JobOpforPlatCo"] = "AU14JobGOVFORPlatCo",
+        ["AU14JobOpforPlatoonCorpsman"] = "AU14JobGOVFORPlatoonCorpsman",
+        ["AU14JobOpforDCC"] = "AU14JobGOVFORDCC",
+        ["AU14JobOpforPlatOp"] = "AU14JobGOVFORPlatOp",
+        ["AU14JobOpforDSPilot"] = "AU14JobGOVFORDSPilot",
+        ["AU14JobOpforSectionSergeant"] = "AU14JobGOVFORSectionSergeant",
+        ["AU14JobOpforSquadAutomaticRifleman"] = "AU14JobGOVFORSquadAutomaticRifleman",
+        ["AU14JobOPFORSquadCombatTech"] = "AU14JobGOVFORSquadCombatTech",
+        ["AU14JobOpforSquadRifleman"] = "AU14JobGOVFORSquadRifleman",
+        ["AU14JobOpforSquadSergeant"] = "AU14JobGOVFORSquadSergeant",
+
+        // CMBCIU
+        ["AU14JobGOVFORPlatCoCMBCIU"] = "AU14JobGOVFORPlatCo",
+        ["AU14JobGOVFORPlatoonCorpsmanCMBCIU"] = "AU14JobGOVFORPlatoonCorpsman",
+        ["AU14JobGOVFORSectionSergeantCMBCIU"] = "AU14JobGOVFORSectionSergeant",
+        ["AU14JobGOVFORSquadRiflemanCMBCIU"] = "AU14JobGOVFORSquadRifleman",
+        ["AU14JobGOVFORSquadSergeantCMBCIU"] = "AU14JobGOVFORSquadSergeant",
+
+        // RMC
+        ["AU14JobGOVFORAuxSupportSynthRMC"] = "AU14JobGOVFORAuxSupportSynth",
+        ["AU14JobGOVFORPlatCoRMC"] = "AU14JobGOVFORPlatCo",
+        ["AU14JobGOVFORPlatoonCorpsmanRMC"] = "AU14JobGOVFORPlatoonCorpsman",
+        ["AU14JobGOVFORDCCRMC"] = "AU14JobGOVFORDCC",
+        ["AU14JobGOVFORPlatOpRMC"] = "AU14JobGOVFORPlatOp",
+        ["AU14JobGOVFORDSPilotRMC"] = "AU14JobGOVFORDSPilot",
+        ["AU14JobGOVFORRadioTelephoneOperatorRMC"] = "AU14JobGOVFORRadioTelephoneOperator",
+        ["AU14JobGOVFORSectionSergeantRMC"] = "AU14JobGOVFORSectionSergeant",
+        ["AU14JobGOVFORSquadAutomaticRiflemanRMC"] = "AU14JobGOVFORSquadAutomaticRifleman",
+        ["AU14JobGOVFORSquadRiflemanRMC"] = "AU14JobGOVFORSquadRifleman",
+        ["AU14JobGOVFORSquadSergeantRMC"] = "AU14JobGOVFORSquadSergeant",
+
+        // UPP
+        ["AU14JobGOVFORPlatCoUPP"] = "AU14JobGOVFORPlatCo",
+        ["AU14JobGOVFORPlatoonCorpsmanUPP"] = "AU14JobGOVFORPlatoonCorpsman",
+        ["AU14JobGOVFORDCCUPP"] = "AU14JobGOVFORDCC",
+        ["AU14JobGOVFORPlatOpUPP"] = "AU14JobGOVFORPlatOp",
+        ["AU14JobGOVFORDSPilotUPP"] = "AU14JobGOVFORDSPilot",
+        ["AU14JobGOVFORRadioTelephoneOperatorUPP"] = "AU14JobGOVFORRadioTelephoneOperator",
+        ["AU14JobGOVFORSectionSergeantUPP"] = "AU14JobGOVFORSectionSergeant",
+        ["AU14JobGOVFORSquadAutomaticRiflemanUPP"] = "AU14JobGOVFORSquadAutomaticRifleman",
+        ["AU14JobGOVFORSquadRiflemanUPP"] = "AU14JobGOVFORSquadRifleman",
+        ["AU14JobGOVFORSquadSergeantUPP"] = "AU14JobGOVFORSquadSergeant",
+
+        // WYPMC
+        ["AU14JobGOVFORPlatCoWYPMC"] = "AU14JobGOVFORPlatCo",
+        ["AU14JobGOVFORPlatoonCorpsmanWYPMC"] = "AU14JobGOVFORPlatoonCorpsman",
+        ["AU14JobGOVFORDCCWYPMC"] = "AU14JobGOVFORDCC",
+        ["AU14JobGOVFORPlatOpWYPMC"] = "AU14JobGOVFORPlatOp",
+        ["AU14JobGOVFORDSPilotWYPMC"] = "AU14JobGOVFORDSPilot",
+        ["AU14JobGOVFORRadioTelephoneOperatorWYPMC"] = "AU14JobGOVFORRadioTelephoneOperator",
+        ["AU14JobGOVFORSectionSergeantWYPMC"] = "AU14JobGOVFORSectionSergeant",
+        ["AU14JobGOVFORSquadAutomaticRiflemanWYPMC"] = "AU14JobGOVFORSquadAutomaticRifleman",
+        ["AU14JobGOVFORSquadRiflemanWYPMC"] = "AU14JobGOVFORSquadRifleman",
+        ["AU14JobGOVFORSquadSergeantWYPMC"] = "AU14JobGOVFORSquadSergeant",
+    };
 
     // List of players that need some kind of update (refresh timers or resend).
     private ValueList<ICommonSession> _playersDirty;
@@ -318,7 +405,17 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
 
         foreach (var timer in playTimes)
         {
-            data.TrackerTimes.Add(timer.Tracker, timer.TimeSpent);
+            var tracker = GetCanonicalTracker(timer.Tracker);
+
+            ref var canonicalTime = ref CollectionsMarshal.GetValueRefOrAddDefault(data.TrackerTimes, tracker, out _);
+            canonicalTime += timer.TimeSpent;
+
+            if (tracker == timer.Tracker || timer.TimeSpent == TimeSpan.Zero)
+                continue;
+
+            data.TrackerTimes[timer.Tracker] = TimeSpan.Zero;
+            data.DbTrackersDirty.Add(timer.Tracker);
+            data.DbTrackersDirty.Add(tracker);
         }
 
         data.Initialized = true;
@@ -339,6 +436,7 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
         if (!_playTimeData.TryGetValue(id, out var data) || !data.Initialized)
             throw new InvalidOperationException("Play time info is not yet loaded for this player!");
 
+        tracker = GetCanonicalTracker(tracker);
         AddTimeToTracker(data, tracker, time);
     }
 
@@ -379,6 +477,7 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
         if (!TryGetTrackerTimes(id, out var times))
             return false;
 
+        tracker = GetCanonicalTracker(tracker);
         if (!times.TryGetValue(tracker, out var t))
             return false;
 
@@ -399,7 +498,22 @@ public sealed partial class PlayTimeTrackingManager : ISharedPlaytimeManager, IP
         if (!_playTimeData.TryGetValue(id, out var data) || !data.Initialized)
             throw new InvalidOperationException("Play time info is not yet loaded for this player!");
 
+        tracker = GetCanonicalTracker(tracker);
         return data.TrackerTimes.GetValueOrDefault(tracker);
+    }
+
+    private string GetCanonicalTracker(string tracker)
+    {
+        if (LegacyPlayTimeTrackerAliases.TryGetValue(tracker, out var alias))
+            return alias;
+
+        if (_prototypes.TryIndex<JobPrototype>(tracker, out var job) &&
+            job.PlayTimeTracker != tracker)
+        {
+            return job.PlayTimeTracker;
+        }
+
+        return tracker;
     }
 
     /// <summary>

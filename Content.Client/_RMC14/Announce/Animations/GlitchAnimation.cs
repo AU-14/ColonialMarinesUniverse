@@ -1,3 +1,4 @@
+using Content.Client._RMC14.Announce.Styling;
 using Content.Shared._RMC14.Announce;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -126,7 +127,7 @@ public sealed class GlitchAnimation : IAnnouncementAnimation
                 }
 
                 var message = context.FormatMessage(visible, style);
-                context.Labels[i].SetMessage(message);
+                context.Labels[i].SetMessage(message, AnnouncementStyling.AnnouncementMarkupTags);
             }
             else if (textIndex == context.State.CurrentLine)
             {
@@ -137,7 +138,7 @@ public sealed class GlitchAnimation : IAnnouncementAnimation
                     partialText = CreateGlitchedText(partialText, context.Random, charGlitchChance);
 
                 var message = context.FormatMessage(partialText, style);
-                context.Labels[i].SetMessage(message);
+                context.Labels[i].SetMessage(message, AnnouncementStyling.AnnouncementMarkupTags);
             }
             else
             {

@@ -20,6 +20,7 @@ public sealed partial class UniformAccessorySystem : SharedUniformAccessorySyste
     [Dependency] private SharedItemSystem _item = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private RMCHumanoidAppearanceSystem _rmcHumanoid = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public event Action? PlayerMedalUpdated;
 
@@ -67,10 +68,10 @@ public sealed partial class UniformAccessorySystem : SharedUniformAccessorySyste
 
             if (clothingSprite != null && accessoryComp.HasIconSprite)
             {
-                var clothingSpriteLayer = clothingSprite.LayerMapReserveBlank(clothingLayer);
-                clothingSprite.LayerSetVisible(clothingSpriteLayer, !accessoryComp.Hidden);
-                clothingSprite.LayerSetRSI(clothingSpriteLayer, sprite.RsiPath);
-                clothingSprite.LayerSetState(clothingSpriteLayer, sprite.RsiState);
+                var clothingSpriteLayer = _sprite.LayerMapReserve((ent.Owner, clothingSprite), clothingLayer);
+                _sprite.LayerSetVisible((ent.Owner, clothingSprite), clothingSpriteLayer, !accessoryComp.Hidden);
+                _sprite.LayerSetRsi((ent.Owner, clothingSprite), clothingSpriteLayer, sprite.RsiPath);
+                _sprite.LayerSetRsiState((ent.Owner, clothingSprite), clothingSpriteLayer, sprite.RsiState);
             }
 
             if (args.Layers.Any(t => t.Item1 == layer))
@@ -119,8 +120,11 @@ public sealed partial class UniformAccessorySystem : SharedUniformAccessorySyste
         // For items with hasIconSprite, use the same unique key format as when adding
         var clothingLayer = accessoryComp.HasIconSprite ? $"{layer}_{index}" : layer;
 
-        if (TryComp(ent.Owner, out SpriteComponent? clothingSprite) && clothingSprite.LayerMapTryGet(clothingLayer, out var clothingSpriteLayer))
-            clothingSprite.LayerSetVisible(clothingSpriteLayer, false);
+        if (TryComp(ent.Owner, out SpriteComponent? clothingSprite) &&
+            _sprite.LayerMapTryGet((ent.Owner, clothingSprite), clothingLayer, out var clothingSpriteLayer, false))
+        {
+            _sprite.LayerSetVisible((ent.Owner, clothingSprite), clothingSpriteLayer, false);
+        }
 
         _item.VisualsChanged(ent);
     }
@@ -161,18 +165,18 @@ public sealed partial class UniformAccessorySystem : SharedUniformAccessorySyste
                 continue;
             }
 
-            if (!sprite.LayerMapTryGet(key, out var layer) ||
-                !sprite.TryGetLayer(layer, out var layerData))
+            if (!_sprite.LayerMapTryGet((args.Equipee, sprite), key, out var layer, false) ||
+                !_sprite.TryGetLayer((args.Equipee, sprite), layer, out var layerData, false))
             {
                 index++;
                 continue;
             }
 
             var data = layerData.ToPrototypeData();
-            sprite.RemoveLayer(layer);
+            _sprite.RemoveLayer((args.Equipee, sprite), layer);
 
-            layer = sprite.LayerMapReserveBlank(key);
-            sprite.LayerSetData(layer, data);
+            layer = _sprite.LayerMapReserve((args.Equipee, sprite), key);
+            _sprite.LayerSetData((args.Equipee, sprite), layer, data);
 
             index++;
         }

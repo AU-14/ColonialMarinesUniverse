@@ -10,6 +10,7 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Standing;
+using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Serialization;
 
@@ -23,6 +24,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private CMUMedicalVisibilitySystem _medicalVisibility = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
 
     /// <summary>
     ///     Bodies queued for next-tick hand-removal / glove-drop / shoe-drop / force-down.
@@ -34,7 +36,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
     private readonly Queue<DeferredHandSever> _deferredHandSever = new();
     private readonly Queue<DeferredLegSever> _deferredLegSever = new();
 
-    private readonly record struct DeferredHandSever(EntityUid Body, string HandId);
+    private readonly record struct DeferredHandSever(EntityUid Body, string ArmSlot, string HandId);
     private readonly record struct DeferredLegSever(EntityUid Body);
 
     public override void Initialize()
@@ -52,6 +54,9 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
         while (_deferredHandSever.TryDequeue(out var d))
         {
             if (Deleted(d.Body) || !HasComp<HandsComponent>(d.Body))
+                continue;
+
+            if (HasAttachedHandForArmSlot(d.Body, d.ArmSlot))
                 continue;
 
             if (_inventory.TryGetSlotEntity(d.Body, "gloves", out _))
@@ -95,10 +100,10 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
 
         // Deferred — see _deferredHandSever doc above for the race.
         if (partType == BodyPartType.Arm
-            && HandIdForSymmetry(symmetry) is { } handId
+            && HandIdForArmSlot(args.Slot) is { } handId
             && HasComp<HandsComponent>(ent.Owner))
         {
-            _deferredHandSever.Enqueue(new DeferredHandSever(ent.Owner, handId));
+            _deferredHandSever.Enqueue(new DeferredHandSever(ent.Owner, args.Slot, handId));
         }
 
         if (partType == BodyPartType.Leg)
@@ -121,13 +126,16 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
         if (partType == BodyPartType.Arm
             && HasComp<HandsComponent>(ent.Owner))
         {
-            RestoreArmHand(ent.Owner, args.Part.Owner, symmetry);
+            RestoreArmHand(ent.Owner, args.Part.Owner, args.Slot);
         }
     }
 
-    private void RestoreArmHand(EntityUid body, EntityUid arm, BodyPartSymmetry armSymmetry)
+    private void RestoreArmHand(EntityUid body, EntityUid arm, string armSlot)
     {
         if (!TryComp<BodyPartComponent>(arm, out var armComp))
+            return;
+
+        if (SymmetryForArmSlot(armSlot) is not { } slotSymmetry)
             return;
 
         foreach (var (slotId, slot) in armComp.Children)
@@ -135,17 +143,18 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
             if (slot.Type != BodyPartType.Hand)
                 continue;
 
-            var location = armSymmetry switch
+            var location = slotSymmetry switch
             {
                 BodyPartSymmetry.Left => HandLocation.Left,
                 BodyPartSymmetry.Right => HandLocation.Right,
                 _ => HandLocation.Middle,
             };
 
-            var handId = SharedBodySystem.PartSlotContainerIdPrefix + slotId;
-            _hands.AddHand((body, null), handId, location);
+            var handId = HandIdForArmSlot(armSlot) ?? SharedBodySystem.PartSlotContainerIdPrefix + slotId;
+            if (!_hands.TrySetHandLocation((body, null), handId, location))
+                _hands.AddHand((body, null), handId, location);
 
-            if (LayerForPart(BodyPartType.Hand, armSymmetry) is { } handLayer
+            if (LayerForPart(BodyPartType.Hand, slotSymmetry) is { } handLayer
                 && HasComp<HumanoidAppearanceComponent>(body))
             {
                 _humanoid.SetLayerVisibility(body, handLayer, visible: true);
@@ -189,12 +198,64 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
     ///     + slotId), not the bare slot id — we must match that for RemoveHand
     ///     to find the entry.
     /// </summary>
-    private static string? HandIdForSymmetry(BodyPartSymmetry symmetry) => symmetry switch
+    private bool HasAttachedHandForArmSlot(EntityUid body, string armSlot)
+    {
+        if (SymmetryForArmSlot(armSlot) is null
+            || !TryComp<BodyComponent>(body, out var bodyComp)
+            || bodyComp.RootContainer.ContainedEntity is not { } root)
+        {
+            return false;
+        }
+
+        var bareArmSlot = BarePartSlot(armSlot);
+        if (!_container.TryGetContainer(root, SharedBodySystem.GetPartSlotContainerId(bareArmSlot), out var armContainer))
+            return false;
+
+        foreach (var arm in armContainer.ContainedEntities)
+        {
+            if (!TryComp<BodyPartComponent>(arm, out var armComp))
+                continue;
+
+            foreach (var (slotId, slot) in armComp.Children)
+            {
+                if (slot.Type != BodyPartType.Hand)
+                    continue;
+
+                if (!_container.TryGetContainer(arm, SharedBodySystem.GetPartSlotContainerId(slotId), out var handContainer))
+                    continue;
+
+                if (handContainer.ContainedEntities.Count > 0)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static string? HandIdForArmSlot(string armSlot) => SymmetryForArmSlot(armSlot) switch
     {
         BodyPartSymmetry.Left => SharedBodySystem.PartSlotContainerIdPrefix + "left_hand",
         BodyPartSymmetry.Right => SharedBodySystem.PartSlotContainerIdPrefix + "right_hand",
         _ => null,
     };
+
+    private static BodyPartSymmetry? SymmetryForArmSlot(string armSlot)
+    {
+        return BarePartSlot(armSlot) switch
+        {
+            "left_arm" => BodyPartSymmetry.Left,
+            "right_arm" => BodyPartSymmetry.Right,
+            _ => null,
+        };
+    }
+
+    private static string BarePartSlot(string slot)
+    {
+        const string prefix = SharedBodySystem.PartSlotContainerIdPrefix;
+        return slot.StartsWith(prefix, StringComparison.Ordinal)
+            ? slot.Substring(prefix.Length)
+            : slot;
+    }
 
     private static HumanoidVisualLayers? LayerForPart(BodyPartType type, BodyPartSymmetry symmetry) =>
         (type, symmetry) switch

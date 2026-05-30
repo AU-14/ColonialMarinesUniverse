@@ -14,6 +14,7 @@ public sealed partial class RMCAltSpriteVisualizerSystem : VisualizerSystem<RMCA
 
     [Dependency] private IConfigurationManager _configuration = default!;
     [Dependency] private IResourceCache _resourceCache = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private bool _useAlternateSprites;
 
@@ -65,12 +66,12 @@ public sealed partial class RMCAltSpriteVisualizerSystem : VisualizerSystem<RMCA
 
         if (sprite.BaseRSI != res.RSI)
         {
-            sprite.BaseRSI = res.RSI;
+            _sprite.SetBaseRsi((ent.Owner, sprite), res.RSI);
 
             //Reset frames
             for (var i = 0; i < sprite.AllLayers.Count(); i++)
             {
-                sprite.LayerSetAnimationTime(i, 0);
+                _sprite.LayerSetAnimationTime((ent.Owner, sprite), i, 0);
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿Entries:
+Entries:
 - author: noctyrnal
   changes:
   - message: Removed the cyanide pill from the liaison's briefcase.
@@ -4557,4 +4557,4 @@
   time: '2026-02-27T13:37:18.0000000+00:00'
   url: https://github.com/RMC-14/RMC-14/pull/9277
 Name: RMC14
-Order: -1
+Order: 1

@@ -64,3 +64,18 @@
   id: HeadBeretGreenAU14
   equipment:
     head: RMCHeadBeretGreen
+
+- type: loadout
+  id: BeretIOAU14
+  equipment:
+    head: AU14HeadBeretIO
+
+- type: loadout
+  id: BeretSOAU14
+  equipment:
+    head: AU14HeadBeretSO
+
+- type: loadout
+  id: BeretADJAU14
+  equipment:
+    head: AU14HeadBeretADJ

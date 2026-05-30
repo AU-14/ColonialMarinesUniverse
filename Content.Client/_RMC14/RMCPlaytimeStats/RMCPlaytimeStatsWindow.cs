@@ -27,6 +27,7 @@ namespace Content.Client._RMC14.RMCPlaytimeStats;
 [GenerateTypedNameReferences]
 public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
 {
+    [Dependency] private IComponentFactory _componentFactory = default!;
     [Dependency] private JobRequirementsManager _jobRequirementsManager = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IConfigurationManager _config = default!;
@@ -211,7 +212,7 @@ public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
         {
             if (job.Medals.TryGetValue(type, out var medalId) &&
                 _prototypeManager.TryIndex(medalId, out EntityPrototype? medalProto) &&
-                medalProto.TryGetComponent<SpriteComponent>(out var sprite))
+                medalProto.TryGetComponent<SpriteComponent>(out var sprite, _componentFactory))
             {
                 foreach (var layer in sprite.AllLayers)
                 {

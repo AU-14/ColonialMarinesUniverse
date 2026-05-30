@@ -336,7 +336,7 @@ public sealed partial class MentorManager : IPostInjectInit
             return;
 
         var recipients = new HashSet<INetChannel>();
-        if (destinationChannel != null)
+        if (destinationChannel != null && destinationChannel.IsConnected)
             recipients.Add(destinationChannel);
 
         var isMentor = false;

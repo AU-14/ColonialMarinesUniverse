@@ -50,51 +50,6 @@
         crate: RMCCrateWoodenPlanks
       - cost: 350
         crate: RMCCrateSuppliesBoxes
-    - name: Explosives
-      entries:
-      - cost: 3000
-        crate: RMCCrateGrenadesHighExplosive
-      - cost: 4000
-        crate: RMCCrateGrenadesIncendiary
-      - cost: 3000
-        crate: RMCCrateGrenadesFrag
-      # leaving this commented, as it is not parity, but we might want it in the future
-      #- cost: 2000
-      #  crate: RMCCrateGrenadesSmoke
-      - cost: 3200
-        crate: RMCCrateExplosiveWhitePhosphorusCompound
-      - cost: 10800
-        crate: RMCCrateExplosiveWhitePhosphorusCompoundBox
-      - cost: 4000
-        crate: RMCCrateGrenadesFragOld
-      - cost: 3000
-        crate: RMCCratePlasticExplosives
-      - cost: 4000
-        crate: RMCCrateBreachingCharges
-      - cost: 10000
-        crate: RMCCrateGrenadesHighExplosiveBox
-      - cost: 10000
-        crate: RMCCrateGrenadesBoxHEFA
-      - cost: 10000
-        crate: RMCCrateGrenadesAirburstFragBox
-      - cost: 10000
-        crate: RMCCrateBoxAGMI
-      - cost: 4000
-        crate: RMCCrateGrenadesAirburstFrag
-      - cost: 4000
-        crate: RMCCrateGrenadesAirburstIncendiary
-      - cost: 3000
-        crate: RMCCrateGrenadesAirburstSmoke
-      - cost: 4000
-        crate: RMCCrateGrenadesAirburstHornet
-      - cost: 4000
-        crate: RMCCrateGrenadesAirburstStarShell
-      - cost: 1000
-        crate: RMCCrateGrenadesBatonSlug
-      - cost: 3000
-        crate: RMCCrateExplosiveClaymoreMine
-      - cost: 3000
-        crate: RMCCrateM6HBruteRockets
     - name: Food and Drinks
       entries:
       - cost: 380
@@ -159,34 +114,6 @@
         crate: AU14CrateCivilianClothingRandom
       - cost: 2000
         crate: RMCCrateSuppliesCrayons
-    - name: Vehicle Ammo
-      entries:
-      - cost: 3000
-        crate: RMCCrateVehicleAmmoLTBCannon
-      - cost: 3000
-        crate: RMCCrateVehicleAmmoLTAAAP
-      - cost: 3000
-        crate: RMCCrateVehicleAmmoAceAutocannon
-      - cost: 3000
-        crate: RMCCrateVehicleAmmoDragonFlamer
-      - cost: 3000
-        crate: RMCCrateVehicleAmmoBoyarsDualCannon
-      - cost: 2000
-        crate: RMCCrateVehicleAmmoGrenadeLauncher
-      - cost: 2000
-        crate: RMCCrateVehicleAmmoSmokeLauncher
-      - cost: 3000
-        crate: RMCCrateVehicleAmmoTowLauncher
-      - cost: 2000
-        crate: RMCCrateVehicleAmmoCupola
-      - cost: 2000
-        crate: RMCCrateVehicleAmmoLZRNFlamer
-      - cost: 2000
-        crate: RMCCrateVehicleAmmoFrontalCannon
-      - cost: 2000
-        crate: RMCCrateVehicleAmmoFlareLauncher
-      - cost: 2000
-        crate: RMCCrateVehicleAmmoRotaryCannon
     - name: Weapons
       entries:
       - cost: 2000
@@ -239,40 +166,7 @@
         crate: AU14CrateBoxD18Magazines
       - cost: 355
         crate: AU14CrateBoxABR40Magazines
-      - cost: 4000
-        crate: RMCCrateMagazineM96SMixed
-      - cost: 3000
-        crate: RMCCrateMagazineM96SStandard
-      - cost: 3000
-        crate: RMCCrateMagazineM96SFlak
-      - cost: 3000
-        crate: RMCCrateMagazineM96SIncendiary
-      - cost: 3000
-        crate: RMCCrateMagazineXM43E1Standard
-      - cost: 3000
-        crate: RMCCrateM5DemoSpecMixed
-      - cost: 3000
-        crate: RMCCrateM5DemoSpecHighExplosive
-      - cost: 3000
-        crate: RMCCrateM5DemoSpecAntiArmor
-      - cost: 3000
-        crate: RMCCrateM5DemoSpecWhitePhosphorus
-      - cost: 4000
-        crate: RMCCrateMagazineM4SPRCustomMixed
-      - cost: 3000
-        crate: RMCCrateMagazineM4SPRCustomStandard
-      - cost: 3000
-        crate: RMCCrateMagazineM4SPRCustomImpact
-      - cost: 3000
-        crate: RMCCrateMagazineM4SPRCustomIncendiary
-      - cost: 6000
-        crate: RMCCratePyroTankMixed
-      - cost: 3000
-        crate: RMCCratePyroTankExtended
-      - cost: 3000
-        crate: RMCCratePyroTankTypeB
-      - cost: 4000
-        crate: RMCCratePyroTankTypeX
+
     - name: Furniture
       entries:
       - cost: 320
@@ -285,33 +179,7 @@
         crate: AU14CrateBoxtanTableParts
     - name: "Machines and Vendors (Wrench Required)"
       entries:
-      - cost: 500
-        crate: CMVendorSodaSoviet
-      - cost: 750
-        crate: CMVendorBooze
-      - cost: 350
-        crate: CMVendorChess
-      - cost: 350
-        crate: CMVendorCigs
-      - cost: 800
-        crate: CMVendorIngredients
-      - cost: 350
-        crate: CMVendorSnack
-      - cost: 350
-        crate: CMVendorCoffee
-      - cost: 350
-        crate: CMVendorCassettes
-      - cost: 350
-        crate: CMVendorCola
-      - cost: 1000
-        crate: CMVendorTool
-      - cost: 670
-        crate: CMVendorComponent
-      - cost: 670
-        crate: CMVendorElectronics
+
       - cost: 350
         crate: RMCTelevision
-      - cost: 450
-        crate: CMDispenserBooze
-      - cost: 320
-        crate: CMMicrowave
+

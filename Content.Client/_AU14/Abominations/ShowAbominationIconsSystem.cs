@@ -19,10 +19,10 @@ public sealed partial class ShowAbominationIconsSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<AbominationMimicTransformedComponent, GetStatusIconsEvent>(OnGetStatusIcons);
+        SubscribeLocalEvent<AbominationMimicComponent, GetStatusIconsEvent>(OnGetStatusIcons);
     }
 
-    private void OnGetStatusIcons(Entity<AbominationMimicTransformedComponent> ent, ref GetStatusIconsEvent args)
+    private void OnGetStatusIcons(Entity<AbominationMimicComponent> ent, ref GetStatusIconsEvent args)
     {
         if (_prototype.TryIndex(AbominationFactionIcon, out var iconPrototype))
             args.StatusIcons.Add(iconPrototype);

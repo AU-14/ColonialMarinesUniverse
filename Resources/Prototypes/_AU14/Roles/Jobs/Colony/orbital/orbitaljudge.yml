@@ -1,0 +1,105 @@
+# ├──[ ORBITAL ARBITER ]─────────────────────────────────────────────┤
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianOrbitalArbiter
+  name: au14-job-name-orbitalarbiter
+  description: au14-job-description-orbitalarbiter
+  icon: "AU14JobIconOrbitalManager" # TODO: gavel/J icon
+  supervisors: au14-job-supervisors-orbitalmanager
+  startingGear: AU14GearOrbitalArbiter
+  playTimeTracker: AU14JobCivilianOrbitalArbiter
+  setPreference: true
+  canBeAntag: false
+  accessGroups:
+  - Colonist
+  - auadmin # uncertain, though they receive ColAdmin encr. key
+  - auorbitalmanagement
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 35
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+  ranks:
+    AU14RankSeniorOrbitalArbiter:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianOrbitalArbiter
+      time: 18000 # 5 hours
+    AU14RankOrbitalArbiter: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillPolice: 3
+        RMCSkillLeadership: 2
+        RMCSkillFirearms: 1
+        RMCSkillCqc: 1
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillNavigations: 1
+        RMCSkillIntel: 2
+    - type: JobPrefix
+      prefix: au14-job-prefix-orbitalarbiter
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14colonyhud.rsi
+        state: orbital_manager
+
+- type: playTimeTracker
+  id: AU14JobCivilianOrbitalArbiter
+  isHumanoid: true
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: AU14IDCardOrbitalArbiter
+  name: orbital arbiter ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianOrbitalArbiter
+
+- type: startingGear
+  id: AU14GearOrbitalArbiter
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonFormal
+    outerClothing: RMCJacketCorporateFormal
+    head: AU14CivFedoraTan
+    shoes: RMCShoesLaceup
+    id: AU14IDCardOrbitalLawyer
+    ears: AU14OrbitalHeadsetManagement
+    back: CMSatchel
+    pocket1: RMCGuidebookLawMarineProvost
+    pocket2: RMCGuidebookSOP
+  storage:
+    back:
+    - CMPaperBin30
+    - CMPenFountain
+    - CMFolderBlack
+    - CMStampApproved
+    - CMStampDenied
+    - CMClipboard
+    - RMCRadioHandheldColonyOff
+  inhand:
+  - RMCBriefcasePaperPen
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOrbitalArbiter
+  name: Spawn Point Orbital Arbiter
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianOrbitalArbiter
+  - type: Sprite
+    state: syn_spawn
+
+- type: rank
+  id: AU14RankOrbitalArbiter
+  name: Orbital Arbiter
+  prefix: Orb. Arb.
+
+- type: rank
+  id: AU14RankSeniorOrbitalArbiter
+  name: Senior Orbital Arbiter
+  prefix: Sr. Orb. Arb.

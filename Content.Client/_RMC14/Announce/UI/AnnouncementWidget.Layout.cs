@@ -141,7 +141,6 @@ public sealed partial class AnnouncementWidget
 
         AddChild(contentContainer);
         SetInitialVisibility();
-        ApplyUIScale(style.LayoutConfig.UIScale);
     }
 
     private void SetSpriteDisplayProperties(Control clipContainer, SpriteView spriteView, AnnouncementStyle style, float spriteScale, float screenScaleFactor)
@@ -249,25 +248,6 @@ public sealed partial class AnnouncementWidget
         container.AddChild(overlay);
         if (underlay)
             overlay.SetPositionFirst();
-    }
-
-    private void ApplyUIScale(float uiScale)
-    {
-        if (MathHelper.CloseTo(uiScale, 1.0f))
-            return;
-
-        var screenSize = ResolveScreenSize();
-        Measure(screenSize);
-        var desired = DesiredSize;
-        if (desired.X <= 0f || desired.Y <= 0f)
-            return;
-
-        var scaledWidth = desired.X * uiScale;
-        var scaledHeight = desired.Y * uiScale;
-        SetWidth = scaledWidth;
-        SetHeight = scaledHeight;
-        MinWidth = scaledWidth;
-        MinHeight = scaledHeight;
     }
 
     private CRTSettings GetCRTSettingsFromStyle(AnnouncementStyle style)
@@ -432,4 +412,3 @@ public sealed partial class AnnouncementWidget
         LayoutContainer.SetMarginBottom(this, position.Y + size.Y);
     }
 }
-

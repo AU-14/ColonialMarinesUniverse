@@ -789,7 +789,7 @@
   parent: RMCHeadRadiationHood
   id: RMCHeadTychoRadiationHood
   name: Tycho 4000 radiation protection hood
-  description: The burn-resistant hood for the Weston-Yamada Tycho 4000 Radiation Protection Suit. It's lined with lead, and it's recommended you wear a rebreather or gas mask under it.
+  description: The burn-resistant hood for the Weyland-Yutani Tycho 4000 Radiation Protection Suit. It's lined with lead, and it's recommended you wear a rebreather or gas mask under it.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Head/Hats/rad_hood_weya.rsi
@@ -813,7 +813,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Head/Hats/weya_pilot_cap.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 15
     bio: 10
     explosionArmor: 15
@@ -895,7 +895,7 @@
   parent: RMCHeadCapGrey
   id: RMCHeadCapWeyamart
   name: orange cap
-  description: It's a baseball style cap in the 'Weyamart' orange color, with the 'Weyamart' logo on the front.
+  description: It's a baseball style cap in the 'WeyMart' orange color, with the 'WeyMart' logo on the front.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Head/Hats/weyamart_cap.rsi
@@ -1000,7 +1000,7 @@
   - type: ItemCamouflage
     camouflageVariations: {}
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 15
     bio: 15
     explosionArmor: 10

@@ -36,7 +36,7 @@ public sealed partial class VehicleSystem : EntitySystem
     [Dependency] private SharedEyeSystem _eye = default!;
     [Dependency] private VehicleViewToggleSystem _viewToggle = default!;
     [Dependency] private INetManager _net = default!;
-    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -96,6 +96,12 @@ public sealed partial class VehicleSystem : EntitySystem
             return;
         }
 
+        if (!HasComp<GhostComponent>(args.User) && !CanEnterVehicle(ent.Owner, args.User, entryIndex))
+        {
+            args.Handled = true;
+            return;
+        }
+
         if (HasComp<GhostComponent>(args.User))
         {
             args.Handled = TryEnter(ent, args.User, entryIndex);
@@ -133,6 +139,9 @@ public sealed partial class VehicleSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("rmc-vehicle-enter-locked"), user, user, PopupType.SmallCaution);
             return false;
         }
+
+        if (!HasComp<GhostComponent>(user) && !CanEnterVehicle(ent.Owner, user, entryIndex))
+            return false;
 
         if (!EnsureInterior(ent, out var interior))
             return false;
@@ -178,7 +187,7 @@ public sealed partial class VehicleSystem : EntitySystem
     {
         if (TryComp(ent.Owner, out interior) &&
             interior.MapId != MapId.Nullspace &&
-            _mapManager.MapExists(interior.MapId))
+            _mapSystem.MapExists(interior.MapId))
         {
             return true;
         }
@@ -326,9 +335,9 @@ public sealed partial class VehicleSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        if (interior.MapId != MapId.Nullspace && _mapManager.MapExists(interior.MapId))
+        if (interior.MapId != MapId.Nullspace && _mapSystem.MapExists(interior.MapId))
         {
-            _mapManager.DeleteMap(interior.MapId);
+            _mapSystem.DeleteMap(interior.MapId);
         }
         else if (interior.Map.IsValid() && Exists(interior.Map))
         {
@@ -362,6 +371,12 @@ public sealed partial class VehicleSystem : EntitySystem
         if (IsExitBlockedByLock(vehicleUid, args.User))
         {
             _popup.PopupEntity(Loc.GetString("rmc-vehicle-enter-locked"), args.User, args.User, PopupType.SmallCaution);
+            args.Handled = true;
+            return;
+        }
+
+        if (!HasComp<GhostComponent>(args.User) && !CanExitVehicle(vehicleUid, ent.Owner, args.User))
+        {
             args.Handled = true;
             return;
         }
@@ -475,6 +490,9 @@ public sealed partial class VehicleSystem : EntitySystem
             return false;
         }
 
+        if (!HasComp<GhostComponent>(user) && !CanExitVehicle(vehicleUid, ent.Owner, user))
+            return false;
+
         if (!TryGetExitCoordinates(ent, enter, vehicleUid, out var exitCoords, out var exitMapCoords))
             return false;
 
@@ -487,6 +505,20 @@ public sealed partial class VehicleSystem : EntitySystem
         _rmcTeleporter.HandlePulling(user, exitMapCoords);
         UntrackOccupant(user, vehicleUid);
         return true;
+    }
+
+    private bool CanEnterVehicle(EntityUid vehicle, EntityUid user, int entryIndex)
+    {
+        var ev = new VehicleEntryAttemptEvent(user, entryIndex);
+        RaiseLocalEvent(vehicle, ref ev);
+        return !ev.Cancelled;
+    }
+
+    private bool CanExitVehicle(EntityUid vehicle, EntityUid exit, EntityUid user)
+    {
+        var ev = new VehicleExitAttemptEvent(user, exit);
+        RaiseLocalEvent(vehicle, ref ev);
+        return !ev.Cancelled;
     }
 
     private bool TryGetExitCoordinates(
@@ -805,8 +837,26 @@ public sealed partial class VehicleSystem : EntitySystem
         if (!HasComp<VehicleEnterComponent>(args.Vehicle.Owner))
             return;
 
+        var insideTarget = GetVehicleInsideEyeTarget(ent.Owner, args.Vehicle.Owner);
         _eye.SetTarget(ent.Owner, args.Vehicle.Owner);
-        _viewToggle.EnableViewToggle(ent.Owner, args.Vehicle.Owner, args.Vehicle.Owner, insideTarget: null, isOutside: true);
+        _viewToggle.EnableViewToggle(ent.Owner, args.Vehicle.Owner, args.Vehicle.Owner, insideTarget, isOutside: true);
+    }
+
+    private EntityUid? GetVehicleInsideEyeTarget(EntityUid user, EntityUid vehicle)
+    {
+        if (Transform(user).MapID != MapId.Nullspace)
+            return user;
+
+        if (!TryComp(vehicle, out VehicleInteriorComponent? interior))
+            return null;
+
+        if (interior.Grid.IsValid() && Exists(interior.Grid))
+            return interior.Grid;
+
+        if (interior.Map.IsValid() && Exists(interior.Map))
+            return interior.Map;
+
+        return null;
     }
 
     private void OnVehicleOperatorExited(Entity<VehicleOperatorComponent> ent, ref OnVehicleExitedEvent args)
@@ -894,10 +944,10 @@ public sealed partial class VehicleSystem : EntitySystem
     {
         vehicle = null;
         var mapId = _transform.GetMapId(interiorEntity);
-        if (mapId == MapId.Nullspace || !_mapManager.MapExists(mapId))
+        if (mapId == MapId.Nullspace || !_mapSystem.MapExists(mapId))
             return false;
 
-        var mapUid = _mapManager.GetMapEntityId(mapId);
+        var mapUid = _mapSystem.GetMap(mapId);
         if (!TryComp(mapUid, out VehicleInteriorLinkComponent? link) ||
             Deleted(link.Vehicle))
         {

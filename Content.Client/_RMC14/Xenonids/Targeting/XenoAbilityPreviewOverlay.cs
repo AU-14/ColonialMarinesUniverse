@@ -13,10 +13,13 @@ using Content.Shared._RMC14.Xenonids.Burrow;
 using Content.Shared._RMC14.Xenonids.DeployTraps;
 using Content.Shared._RMC14.Xenonids.Spray;
 using Content.Shared._RMC14.Xenonids.Abduct;
+using Content.Shared._RMC14.Xenonids.Charge;
 using Content.Shared._RMC14.Xenonids.Pierce;
+using Content.Shared._RMC14.Xenonids.Stomp;
 using Content.Shared.Actions.Components;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
+using Robust.Shared.Physics;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
@@ -74,6 +77,8 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
     private readonly EntityQuery<XenoDeployTrapsComponent> _deployTrapsQ;
     private readonly EntityQuery<XenoAbductComponent> _abductQ;
     private readonly EntityQuery<XenoPierceComponent> _pierceQ;
+    private readonly EntityQuery<XenoChargeComponent> _chargeQ;
+    private readonly EntityQuery<XenoStompComponent> _stompQ;
     private readonly EntityQuery<TransformComponent> _xformQ;
 
     public XenoAbilityPreviewOverlay(IEntityManager ents)
@@ -100,6 +105,8 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
         _deployTrapsQ = ents.GetEntityQuery<XenoDeployTrapsComponent>();
         _abductQ = ents.GetEntityQuery<XenoAbductComponent>();
         _pierceQ = ents.GetEntityQuery<XenoPierceComponent>();
+        _chargeQ = ents.GetEntityQuery<XenoChargeComponent>();
+        _stompQ = ents.GetEntityQuery<XenoStompComponent>();
         _xformQ = ents.GetEntityQuery<TransformComponent>();
     }
 
@@ -181,6 +188,18 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
                 if (!_pierceQ.TryComp(player.Value, out var pierce))
                     return;
                 DrawPierce(args, player.Value, xform, originMap, mousePos, pierce);
+                break;
+
+            case XenoChargeActionEvent:
+                if (!_chargeQ.TryComp(player.Value, out var charge))
+                    return;
+                DrawCharge(args, player.Value, xform, originMap, mousePos, charge);
+                break;
+
+            case XenoDirectionalStompActionEvent:
+                if (!_stompQ.TryComp(player.Value, out var stomp) || !stomp.Directional)
+                    return;
+                DrawDirectionalStomp(args, player.Value, originMap, mousePos, stomp);
                 break;
         }
     }
@@ -294,6 +313,74 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
 
         var color = PierceOutlineColor.WithAlpha(OutlineAlpha);
         DrawLinePreview(args, player, xform.Coordinates, mousePos, (int)pierce.Range, color);
+    }
+
+    private void DrawCharge(
+        in OverlayDrawArgs args,
+        EntityUid player,
+        TransformComponent xform,
+        MapCoordinates originMap,
+        MapCoordinates mousePos,
+        XenoChargeComponent charge)
+    {
+        var direction = mousePos.Position - originMap.Position;
+        var distance = Math.Min(direction.Length(), charge.Range);
+        mousePos = originMap.Offset(direction.Normalized() * distance);
+
+        var color = new Color(0.85f, 0.2f, 0.2f).WithAlpha(OutlineAlpha);
+        DrawLinePreview(args, player, xform.Coordinates, mousePos, distance, color);
+    }
+
+    private void DrawDirectionalStomp(
+        in OverlayDrawArgs args,
+        EntityUid player,
+        MapCoordinates originMap,
+        MapCoordinates mousePos,
+        XenoStompComponent stomp)
+    {
+        var direction = (mousePos.Position - originMap.Position).ToWorldAngle();
+        var halfAngle = new Angle(stomp.DirectionalAngle.Theta / 2);
+        var range = stomp.DirectionalRange;
+        var color = new Color(0.85f, 0.2f, 0.2f).WithAlpha(OutlineAlpha);
+
+        if (!_mapManager.TryFindGridAt(originMap, out var gridUid, out var grid))
+            return;
+
+        var center = _mapSystem.CoordinatesToTile(gridUid, grid, originMap);
+        var tileRange = (int) MathF.Ceiling(range);
+        var tiles = new HashSet<Vector2i>();
+
+        for (var x = -tileRange; x <= tileRange; x++)
+        {
+            for (var y = -tileRange; y <= tileRange; y++)
+            {
+                var tilePos = center + new Vector2i(x, y);
+                var worldPos = _mapSystem.GridTileToWorld(gridUid, grid, tilePos).Position;
+                var diff = worldPos - originMap.Position;
+                if (diff.Length() > range || diff.Length() < 0.1f)
+                    continue;
+
+                var angleDiff = Angle.ShortestDistance(direction, diff.ToWorldAngle());
+                if (Math.Abs(angleDiff.Theta) > halfAngle.Theta)
+                    continue;
+
+                // Raycast for barricade blocking.
+                var ray = new CollisionRay(originMap.Position, diff.Normalized(), (int) CollisionGroup.BarricadeImpassable);
+                var blocked = false;
+                foreach (var _ in _physics.IntersectRay(originMap.MapId, ray, diff.Length(), player, returnOnFirstHit: true))
+                {
+                    blocked = true;
+                    break;
+                }
+
+                if (blocked)
+                    continue;
+
+                tiles.Add(tilePos);
+            }
+        }
+
+        DrawTileBorder(args.WorldHandle, gridUid, grid, tiles, color);
     }
 
     private void DrawBombard(

@@ -22,7 +22,7 @@
   parent: RMCSuitRadiation
   id: RMCSuitTychoRadiationSuit
   name: Tycho 4000 radiation suit
-  description: The burn-resistant Weston-Yamada Tycho 4000 Radiation Protection Suit. Lead-lined, this heavy piece of PPE must be worn with its respective gloves, boots, and radiation hood.
+  description: The burn-resistant Weyland-Yutani Tycho 4000 Radiation Protection Suit. Lead-lined, this heavy piece of PPE must be worn with its respective gloves, boots, and radiation hood.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Misc/radsuit_weya.rsi

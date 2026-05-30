@@ -1,3 +1,4 @@
+using Content.Client._RMC14.Announce.Styling;
 using Content.Shared._RMC14.Announce;
 using Robust.Shared.Utility;
 using System;
@@ -62,7 +63,7 @@ public sealed class TypewriterAnimation : IAnnouncementAnimation
             if (textIndex < context.State.CurrentLine)
             {
                 var message = context.FormatMessage(originalText[textIndex], style);
-                context.Labels[i].SetMessage(message);
+                context.Labels[i].SetMessage(message, AnnouncementStyling.AnnouncementMarkupTags);
             }
             else if (textIndex == context.State.CurrentLine)
             {
@@ -70,7 +71,7 @@ public sealed class TypewriterAnimation : IAnnouncementAnimation
                 var maxLength = Math.Min(context.State.CurrentChar, currentLineText.Length);
                 var partialText = currentLineText.Substring(0, maxLength);
                 var message = context.FormatMessage(partialText, style);
-                context.Labels[i].SetMessage(message);
+                context.Labels[i].SetMessage(message, AnnouncementStyling.AnnouncementMarkupTags);
             }
             else
             {
@@ -79,4 +80,3 @@ public sealed class TypewriterAnimation : IAnnouncementAnimation
         }
     }
 }
-

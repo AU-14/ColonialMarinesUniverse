@@ -39,7 +39,7 @@ public sealed partial class GenericStatusEffect : EntityEffect
 
     public override void Effect(EntityEffectBaseArgs args)
     {
-        var statusSys = args.EntityManager.EntitySysManager.GetEntitySystem<StatusEffectsSystem>();
+        var statusSys = args.EntityManager.EntitySysManager.GetEntitySystem<StatusEffectQuerySystem>();
 
         var time = Time;
         if (args is EntityEffectReagentArgs reagentArgs)

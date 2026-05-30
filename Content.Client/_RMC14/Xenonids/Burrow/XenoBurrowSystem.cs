@@ -8,6 +8,7 @@ namespace Content.Client._RMC14.Xenonids.Burrow;
 public sealed partial class XenoBurrowSystem : SharedXenoBurrowSystem
 {
     [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Update(float frameTime)
     {
@@ -20,9 +21,9 @@ public sealed partial class XenoBurrowSystem : SharedXenoBurrowSystem
         while (burrowQuery.MoveNext(out var xeno, out var burrowed, out var sprite, out var nightVision))
         {
             if (localEntity != xeno)
-                sprite.Visible = !burrowed.Active;
+                _sprite.SetVisible((xeno, sprite), !burrowed.Active);
             else
-                sprite.Color = burrowed.Active ? Color.White.WithAlpha(0.4f) : Color.White;
+                _sprite.SetColor((xeno, sprite), burrowed.Active ? Color.White.WithAlpha(0.4f) : Color.White);
 
             if (burrowed.Active)
                 nightVision.Transparency = 0.4f;

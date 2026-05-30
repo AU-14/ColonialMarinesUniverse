@@ -44,6 +44,7 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
     [Dependency] private SharedHandsSystem _handsSystem = default!;
     [Dependency] private SharedPopupSystem _popupSystem = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private UseDelaySystem _useDelaySystem = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
 
@@ -198,6 +199,9 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
 
     private void OnGotEquippedHand(Entity<AttachableToggleableComponent> attachable, ref AttachableRelayedEvent<GotEquippedHandEvent> args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         if (!attachable.Comp.Attached)
             return;
 
@@ -294,6 +298,9 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
 
     private void OnGotUnequippedHand(Entity<AttachableToggleableComponent> attachable, ref AttachableRelayedEvent<GotUnequippedHandEvent> args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         if (!attachable.Comp.Attached)
             return;
 
@@ -732,6 +739,9 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
 #region Actions
     private void OnGrantAttachableActions(Entity<AttachableToggleableComponent> ent, ref GrantAttachableActionsEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         GrantAttachableActions(ent, args.User);
         RelayAttachableActions(ent, args.User);
     }
@@ -795,6 +805,9 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
 
     private void OnRemoveAttachableActions(Entity<AttachableToggleableComponent> ent, ref RemoveAttachableActionsEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         RemoveAttachableActions(ent, args.User);
         RemoveRelayedActions(ent, args.User);
     }

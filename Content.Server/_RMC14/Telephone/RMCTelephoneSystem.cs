@@ -14,6 +14,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Chat;
 using Content.Shared.Coordinates;
 using Robust.Server.Audio;
+using Robust.Shared.Audio;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
 
@@ -135,7 +136,7 @@ public sealed partial class RMCTelephoneSystem : SharedRMCTelephoneSystem
 
         var name = GetPhoneName(rotary);
         message = $"{name} says, \"{FormattedMessage.EscapeText(message)}\"";
-        var sound = _audio.GetSound(ent.Comp.SpeakSound);
+        var sound = _audio.GetAudioPath(_audio.ResolveSound(ent.Comp.SpeakSound));
         _chatManager.ChatMessageToOne(ChatChannel.Local, message, message, otherPhone, false, actor.PlayerSession.Channel, Color.FromHex("#9956D3"), true, sound, -12, hidePopup: true);
     }
 }

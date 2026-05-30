@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client._CMU14.ZLevels.Core;
 using Content.Client.Chat.Managers;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Stealth;
@@ -27,6 +28,7 @@ namespace Content.Client.Chat.UI
         [Dependency] private IPlayerManager _player = default!;
         [Dependency] protected IConfigurationManager ConfigManager = default!;
         private readonly SharedTransformSystem _transformSystem;
+        private readonly CMUClientZLevelsSystem _zLevels;
 
         public enum SpeechType : byte
         {
@@ -64,6 +66,9 @@ namespace Content.Client.Chat.UI
         /// </summary>
         private TimeSpan _deathTime;
 
+        private bool _dying;
+        private bool _dead;
+
         public float VerticalOffset { get; set; }
         private float _verticalOffsetAchieved;
 
@@ -98,6 +103,7 @@ namespace Content.Client.Chat.UI
             IoCManager.InjectDependencies(this);
             _senderEntity = senderEntity;
             _transformSystem = _entityManager.System<SharedTransformSystem>();
+            _zLevels = _entityManager.System<CMUClientZLevelsSystem>();
 
             // Use text clipping so new messages don't overlap old ones being pushed up.
             RectClipContent = true;
@@ -124,7 +130,12 @@ namespace Content.Client.Chat.UI
             if (_entityManager.Deleted(_senderEntity) || timeLeft <= 0)
             {
                 // Timer spawn to prevent concurrent modification exception.
-                Timer.Spawn(0, Die);
+                if (!_dying)
+                {
+                    _dying = true;
+                    Timer.Spawn(0, Die);
+                }
+
                 return;
             }
 
@@ -138,7 +149,15 @@ namespace Content.Client.Chat.UI
                 _verticalOffsetAchieved = MathHelper.Lerp(_verticalOffsetAchieved, VerticalOffset, 10 * args.DeltaSeconds);
             }
 
-            if (!_entityManager.TryGetComponent<TransformComponent>(_senderEntity, out var xform) || xform.MapID != _eyeManager.CurrentEye.Position.MapId)
+            if (!_entityManager.TryGetComponent<TransformComponent>(_senderEntity, out var xform))
+            {
+                Modulate = Color.White.WithAlpha(0);
+                return;
+            }
+
+            var zPassOffset = Vector2.Zero;
+            if (xform.MapID != _eyeManager.CurrentEye.Position.MapId &&
+                !_zLevels.TryGetSpeechBubbleZOffset(_senderEntity, out zPassOffset, xform))
             {
                 Modulate = Color.White.WithAlpha(0);
                 return;
@@ -163,7 +182,7 @@ namespace Content.Client.Chat.UI
                 baseOffset = speech.SpeechBubbleOffset;
 
             var offset = (-_eyeManager.CurrentEye.Rotation).ToWorldVec() * -(EntityVerticalOffset + baseOffset);
-            var worldPos = _transformSystem.GetWorldPosition(xform) + offset;
+            var worldPos = _transformSystem.GetWorldPosition(xform) + offset - zPassOffset;
 
             var lowerCenter = _eyeManager.WorldToScreen(worldPos) / UIScale;
             var screenPos = lowerCenter - new Vector2(ContentSize.X / 2, ContentSize.Y + _verticalOffsetAchieved);
@@ -191,12 +210,14 @@ namespace Content.Client.Chat.UI
 
         private void Die()
         {
-            if (Disposed)
+            if (Disposed || _dead)
             {
                 return;
             }
 
+            _dead = true;
             OnDied?.Invoke(_senderEntity, this);
+            OnDied = null;
         }
 
         /// <summary>

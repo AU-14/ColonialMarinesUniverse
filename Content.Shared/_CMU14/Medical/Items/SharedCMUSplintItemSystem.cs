@@ -1,4 +1,3 @@
-using System.Linq;
 using Content.Shared._CMU14.Medical;
 using Content.Shared._CMU14.Medical.Bones;
 using Content.Shared._CMU14.Medical.Bones.Events;
@@ -135,7 +134,8 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
         splinted.BreakOnDamage = ent.Comp.BreakOnDamage;
         splinted.BreakDamageThreshold = ent.Comp.BreakDamageThreshold;
         Dirty(part, splinted);
-        RaiseLocalEvent(new CMUSplintChangedEvent(part, false));
+        var ev = new CMUSplintChangedEvent(part, false);
+        RaiseLocalEvent(ref ev);
 
         if (ent.Comp.ApplySound is not null)
             Audio.PlayPredicted(ent.Comp.ApplySound, part, null);
@@ -209,7 +209,8 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
         if ((byte)ent.Comp.MaxSuppressed > (byte)cast.MaxSuppressed)
             cast.MaxSuppressed = ent.Comp.MaxSuppressed;
         Dirty(part, cast);
-        RaiseLocalEvent(new CMUCastChangedEvent(part, false));
+        var ev = new CMUCastChangedEvent(part, false);
+        RaiseLocalEvent(ref ev);
         if (HasComp<CMUSplintedComponent>(part))
             RemComp<CMUSplintedComponent>(part);
 
@@ -287,7 +288,8 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             return;
 
         RemComp<CMUCastComponent>(part);
-        RaiseLocalEvent(new CMUCastChangedEvent(part, true));
+        var ev = new CMUCastChangedEvent(part, true);
+        RaiseLocalEvent(ref ev);
         Popup.PopupPredicted(Loc.GetString("cmu-medical-cast-removed"), patient.Owner, args.User);
     }
 
@@ -432,7 +434,8 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
         RemComp<CMUCastComponent>(ent.Owner);
         if (HasComp<CMUPostOpBoneSetComponent>(ent.Owner))
             RemComp<CMUPostOpBoneSetComponent>(ent.Owner);
-        RaiseLocalEvent(new CMUCastChangedEvent(ent.Owner, true));
+        var ev = new CMUCastChangedEvent(ent.Owner, true);
+        RaiseLocalEvent(ref ev);
     }
 
     public override void Update(float frameTime)
@@ -478,7 +481,8 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             cast.ReadyToRemove = true;
             cast.NextRemovePrompt = now;
             Dirty(partUid, cast);
-            RaiseLocalEvent(new CMUCastChangedEvent(partUid, false));
+            var ev = new CMUCastChangedEvent(partUid, false);
+            RaiseLocalEvent(ref ev);
         }
 
         var postOpQuery = EntityQueryEnumerator<CMUPostOpBoneSetComponent, BodyPartComponent>();

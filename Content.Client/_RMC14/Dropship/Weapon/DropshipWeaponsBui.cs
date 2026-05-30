@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Text;
 using Content.Client._RMC14.TacticalMap;
 using Content.Client._RMC14.UserInterface;
@@ -840,10 +840,10 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
     {
         if (disposing)
         {
-            _embeddedTacMapWrapperScreen1?.Dispose();
+            _embeddedTacMapWrapperScreen1?.Orphan();
             _embeddedTacMapWrapperScreen1 = null;
 
-            _embeddedTacMapWrapperScreen2?.Dispose();
+            _embeddedTacMapWrapperScreen2?.Orphan();
             _embeddedTacMapWrapperScreen2 = null;
 
             if (_oldEye != null)

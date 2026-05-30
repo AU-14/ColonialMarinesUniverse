@@ -487,6 +487,23 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         return _rmcPower.IsAreaPowered(area, RMCPowerChannel.Equipment);
     }
 
+    public void TriggerColonyEvacuation(EntityUid planetMapUid)
+    {
+        if (_net.IsClient)
+            return;
+
+        var progress = EnsureComp<EvacuationProgressComponent>(planetMapUid);
+        if (progress.DropShipCrashed)
+            return;
+
+        progress.DropShipCrashed = true;
+        progress.Enabled = true;
+        Dirty(planetMapUid, progress);
+
+        var ev = new EvacuationEnabledEvent(planetMapUid);
+        RaiseLocalEvent(planetMapUid, ref ev, true);
+    }
+
     public void ToggleEvacuation(SoundSpecifier? startSound, SoundSpecifier? cancelSound, EntityUid? map)
     {
         DebugTools.Assert(map != null);

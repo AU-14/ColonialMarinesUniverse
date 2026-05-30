@@ -30,26 +30,23 @@ public sealed class UiControlTest
         var refManager = pair.Client.ResolveDependency<IReflectionManager>();
         var loader = pair.Client.ResolveDependency<IModLoader>();
 
+        var windowTypes = refManager.GetAllChildren(typeof(BaseWindow))
+            .Where(type => !type.IsAbstract && !_ignored.Contains(type))
+            .Where(loader.IsContentType)
+            .Where(type => type.GetConstructor(Type.EmptyTypes) != null)
+            .ToArray();
+
         await pair.Client.WaitAssertion(() =>
         {
-            foreach (var type in refManager.GetAllChildren(typeof(BaseWindow)))
+            foreach (var type in windowTypes)
             {
-                if (type.IsAbstract || _ignored.Contains(type))
-                    continue;
-
-                if (!loader.IsContentType(type))
-                    continue;
-
-                // If it has no empty ctor then skip it instead of figuring out what args it needs.
-                var ctor = type.GetConstructor(Type.EmptyTypes);
-
-                if (ctor == null)
-                    continue;
-
                 // Don't inject because the control themselves have to do it.
-                activator.CreateInstance(type, oneOff: true, inject: false);
+                var window = (BaseWindow) activator.CreateInstance(type, oneOff: true, inject: false);
+                window.DisposeAllChildren();
             }
         });
+
+        await pair.Client.WaitIdleAsync();
 
         await pair.CleanReturnAsync();
     }

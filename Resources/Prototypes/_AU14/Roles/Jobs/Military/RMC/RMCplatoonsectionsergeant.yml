@@ -2,45 +2,16 @@
   parent: AU14JobSectionSergeantBase
   id: AU14JobGOVFORSectionSergeantRMC
   name: au14-job-name-govforSSGRMC
-  description: au14-job-description-govforSSG
-  setPreference: true
-  requirements:
-  - !type:AgeRequirement
-    requiredAge: 25
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - SocialAnxietyHeavy
-    - FrontalLisp
-    - NonResuscitable
-    - Epilepsy
+  spawnMenuRoleName: Platoon Sergeant (TWE RMC)
   ranks:
     RMC_ColourSergeant:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORSectionSergeant
       time: 216000 # 60 hours
     RMC_Sergeant: []
-  startingGear: AU14GearGOVFORSectionSergeant
-  dummyStartingGear: AU14GearGOVFORPlatoonSergantDummy
-  icon: "AU14JobIconPlatoonSarge"
-  requireAdminNotify: true
-  spawnMenuRoleName: Platoon Sergeant (TWE RMC)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforCommand
-  overwatchSortPriority: -6
-  overwatchShowName: true
-  overwatchRoleName: Platoon Sergeant
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: Marine
-      Faction: govfor
     - type: Skills
       skills:
         RMCSkillConstruction: 2
@@ -57,21 +28,3 @@
         RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-govforSSGRMC
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
-  hidden: true

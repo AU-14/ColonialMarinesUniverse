@@ -91,10 +91,8 @@ public sealed partial class FireVisualizerSystem : VisualizerSystem<FireVisualsC
         // RMC14
         var fireColor = component.LightColor;
         if (_fireColorQuery.TryComp(uid, out var fireColorComp))
-        {
             fireColor = fireColorComp.Color;
-            SpriteSystem.LayerSetColor((uid, sprite), index, fireColor);
-        }
+        SpriteSystem.LayerSetColor((uid, sprite), index, fireColor);
         // RMC14 end
 
         component.LightEntity ??= Spawn(null, new EntityCoordinates(uid, default));

@@ -2,6 +2,10 @@
   id: portneroid
   mapName: LV-327 Port Neroid
   mapPath: /Maps/_AU14/portneroid.yml
+  mapsBelow:
+  - /Maps/_AU14/portneroid_below.yml
+  mapsAbove:
+  - /Maps/_AU14/portneroid_above.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0
@@ -38,6 +42,10 @@
             AU14JobCivilianNurse: [2, 2]
             AU14JobCivilianEthicsAndWellnessAdvisor: [1, 1]
             AU14JobCivilianEmergencyResponseOfficer: [1, 1]
+
+            # Orbital
+            AU14JobCivilianOrbitalArbiter: [1, 1]
+            AU14JobCivilianOrbitalLawyer: [2, 3]
 
             # Other
             AU14JobCivilianMiner: [8, 8]

@@ -1,6 +1,8 @@
 character-setup-gui-character-setup-label = Character setup
 character-setup-gui-character-setup-adminremarks-button = Admin Remarks
 character-setup-gui-character-setup-stats-button = Stats
+character-setup-gui-character-setup-commendations-received-button = Medals and Jellies Received
+character-setup-gui-character-setup-commendations-given-button = Medals and Jellies Given
 character-setup-gui-character-setup-rules-button = Rules
 character-setup-gui-character-setup-close-button = Close
 character-setup-gui-create-new-character-button = Create new slot...

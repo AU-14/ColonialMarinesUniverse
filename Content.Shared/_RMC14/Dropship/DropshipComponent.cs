@@ -123,4 +123,8 @@ public sealed partial class DropshipComponent : Component
 
     [DataField, AutoNetworkedField]
     public Vector2i TacticalLandFootprint = new(11, 21);
+
+    /// <summary>Withdrawal evacuation is in flight — cannot be cancelled.</summary>
+    [DataField, AutoNetworkedField]
+    public bool WithdrawEvacuating;
 }

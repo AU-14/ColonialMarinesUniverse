@@ -9,7 +9,6 @@ using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
-using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Prototypes;
@@ -24,7 +23,6 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
 {
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
-    [Dependency] private IResourceCache _resource = default!;
 
     private readonly SharedJobSystem _job;
     private readonly SharedMindSystem _mind;
@@ -96,7 +94,7 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
 
                 if (_prototype.TryIndex(entry.Id, out var entity))
                 {
-                    uiEntry.Texture.Textures = SpriteComponent.GetPrototypeTextures(entity, _resource)
+                    uiEntry.Texture.Textures = EntMan.System<SpriteSystem>().GetPrototypeTextures(entity)
                         .Select(o => o.Default)
                         .ToList();
                     if (entity.TryGetComponent<SpriteComponent>("Sprite", out var entitySprites) &&

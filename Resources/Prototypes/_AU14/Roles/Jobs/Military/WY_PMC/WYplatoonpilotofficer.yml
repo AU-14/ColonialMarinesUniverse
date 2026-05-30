@@ -2,27 +2,13 @@
   parent: AU14JobDSPilotBase
   id: AU14JobGOVFORDSPilotWYPMC
   name: PMC Pilot Officer
-  description: au14-job-description-govfordspilot
-  setPreference: false
-  canBeAntag: false
+  spawnMenuRoleName: Pilot Officer (WYPMC)
   ranks:
     AU14RankWeYuSeniorCrewChief:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDSPilot
       time: 108000 # 30 hours
     AU14RankWeYuCrewChief: []
-  startingGear: AU14GearGOVFORDSPilot
-  dummyStartingGear: AU14GearGOVFORDSPilotDummy
-  icon: "AU14JobIconPilotOfficer"
-  requireAdminNotify: false
-  spawnMenuRoleName: Pilot Officer (WYPMC)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforPilot
-  - AU14GovforCorpsman
-  - AU14GovforSquad
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
@@ -41,21 +27,3 @@
         RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORDSPilotWYPMC
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
-  hidden: true

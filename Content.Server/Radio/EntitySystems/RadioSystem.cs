@@ -12,6 +12,7 @@ using Content.Shared._RMC14.Radio;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Chat;
 using Content.Shared.Database;
+using Content.Shared.Ghost;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
 using Content.Shared.Speech;
@@ -170,6 +171,9 @@ public sealed partial class RadioSystem : EntitySystem
             RaiseLocalEvent(receiver, ref ev);
         }
 
+        if (canSend && channel.ID == SharedChatSystem.HivemindChannel.Id)
+            SendHivemindToGhosts(chatMsg);
+
         if (canSend &&
             !HasComp<XenoComponent>(messageSource) &&
             HasComp<RMCHeadsetComponent>(radioSource))
@@ -185,6 +189,14 @@ public sealed partial class RadioSystem : EntitySystem
 
         _replay.RecordServerMessage(chat);
         _messages.Remove(message);
+    }
+
+    private void SendHivemindToGhosts(MsgChatMessage chatMsg)
+    {
+        foreach (var session in Filter.Empty().AddWhereAttachedEntity(HasComp<GhostHearingComponent>).Recipients)
+        {
+            _netMan.ServerSendMessage(chatMsg, session.Channel);
+        }
     }
 
     private string GetRadioSpeakerName(EntityUid messageSource, RadioChannelPrototype channel, string voiceName)

@@ -229,7 +229,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (!force && ent.Comp.SyncedGrid == grid)
             return false;
 
-        var coords = xform.Coordinates.WithEntityId(grid, transform, EntityManager);
+        var coords = transform.WithEntityId(xform.Coordinates, grid);
         var tile = map.TileIndicesFor(grid, gridComp, coords);
 
         ent.Comp.SyncedGrid = grid;
@@ -389,7 +389,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return;
 
         var coords = new EntityCoordinates(grid, mover.Position);
-        var target = coords.WithEntityId(xform.ParentUid, transform, EntityManager).Position;
+        var target = transform.WithEntityId(coords, xform.ParentUid).Position;
         var current = xform.LocalPosition;
         var delta = target - current;
 

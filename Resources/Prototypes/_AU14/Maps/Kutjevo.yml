@@ -2,6 +2,10 @@
   id: auKutjevo
   mapName: Kutjevo Biolab
   mapPath: /Maps/_AU14/kutjevo.yml
+  mapsBelow:
+  - /Maps/_AU14/kutjevo_below.yml
+  mapsAbove:
+  - /Maps/_AU14/kutjevo_above.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0

@@ -221,7 +221,7 @@
   description: An armored coif designed to conceal both the identity of the operator and act as an air-filter.
   components:
   - type: CMArmor
-    melee: 10
+    melee: 20
     bio: 30
     explosionArmor: 10
 

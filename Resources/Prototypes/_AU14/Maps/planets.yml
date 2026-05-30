@@ -10,7 +10,7 @@
     lorePrimer: AU14PrimerPlanetLV747
     Allegiance: UA
     camouflage: Desert
-    announcement: "Weston-Yamada has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weston-Yamada."
+    announcement: "Weyland-Yutani has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weyland-Yutani."
     platoonsOpfor:
     - UPP
     - VAIPO
@@ -32,6 +32,7 @@
     - XenoThreat
     - XenoThreatCF
     - wendigoThreat
+    - abominationsThreatDistress
     thirdparties:
     - FORECON
     - FORECONAlt
@@ -55,7 +56,6 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
@@ -110,12 +110,12 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     threats:
     - cultistThreat
     - XenoThreat
     - wendigoThreat
     - abominationsThreat
+    - abominationsThreatDistress
     # Shepherds' Pride exposes CWPS Ranger as its map-specific LEO role.
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCWPSRanger
@@ -169,9 +169,9 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     threats:
     - abominationsThreat
+    - abominationsThreatDistress
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
@@ -226,11 +226,10 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     threats:
     - cultistThreat
-    - XenoThreat
     - wendigoThreat
+    - abominationsThreatDistress
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
@@ -294,13 +293,13 @@
     daycycleenabled: true
     threats:
     - XenoThreat
+    - abominationsThreatDistress
     thirdparties:
     - USArmy
     - USArmyAlt
     - USArmyAlt2
    # - cultistThirdParty
     - abominationThirdParty
-    - tribalThirdParty
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
@@ -317,7 +316,7 @@
     lorePrimer: AU14PrimerPlanetLV759
     Allegiance: TWE
     camouflage: Urban
-    announcement: "Weston-Yamada has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weston-Yamada."
+    announcement: "Weyland-Yutani has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weyland-Yutani."
     platoonsOpfor:
     - WEYU
     - VAIPO
@@ -334,9 +333,9 @@
     daycycleenabled: false
     faction: ua
     threats:
-    - XenoThreat
     - XenoThreatCF
     - wendigoThreat
+    - abominationsThreatDistress
     thirdparties:
     - USArmy
     - USArmyAlt
@@ -355,9 +354,8 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     joboverrides:
-      AU14JobLEOLeaderBase: AU14JobCiviliannspaConstable
+      AU14JobLEOLeaderBase: AU14JobCivilianNSPAInspector
       AU14JobLEOBase: AU14JobCiviliannspaConstable
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
@@ -372,7 +370,7 @@
     lorePrimer: AU14PrimerPlanetLV327
     Allegiance: UA
     camouflage: Desert
-    announcement: "Weston-Yamada has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weston-Yamada."
+    announcement: "Weyland-Yutani has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weyland-Yutani."
     platoonsOpfor:
     - WEYU
     - VAIPO
@@ -394,6 +392,7 @@
     - XenoThreat
     - XenoThreatCF
     - wendigoThreat
+    - abominationsThreatDistress
     thirdparties:
     - FORECON
     - FORECONAlt
@@ -413,7 +412,6 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
@@ -429,7 +427,7 @@
     lorePrimer: AU14PrimerPlanetCorsatStation
     Allegiance: UA
     camouflage: Desert
-    announcement: "Weston-Yamada has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weston-Yamada."
+    announcement: "Weyland-Yutani has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weyland-Yutani."
     platoonsOpfor:
     - ProdigySF
     - WEYU
@@ -451,6 +449,7 @@
     - cultistThreat
     - XenoThreat
     - XenoThreatCF
+    - abominationsThreatDistress
     thirdparties:
     - NSPAInvestigationParty
     - UPPGROMAlt
@@ -460,7 +459,6 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
@@ -509,11 +507,11 @@
     - UACGLostTeam
     - USArmy
     - abominationThirdParty
-    - tribalThirdParty
     threats:
     - cultistThreatOnMarker
     - XenoThreat
     - abominationsThreat
+    - abominationsThreatDistress
     joboverrides:
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
@@ -563,11 +561,11 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     threats:
     - cultistThreat
     - XenoThreat
     - wendigoThreat
+    - abominationsThreatDistress
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
@@ -615,9 +613,9 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     threats:
     - XenoThreat
+    - abominationsThreatDistress
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
@@ -665,9 +663,9 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     threats:
     - XenoThreat
+    - abominationsThreatDistress
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
@@ -715,9 +713,9 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     threats:
     - XenoThreat
+    - abominationsThreatDistress
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
@@ -766,9 +764,8 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     threats:
-    - XenoThreat
+    - abominationsThreatDistress
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 

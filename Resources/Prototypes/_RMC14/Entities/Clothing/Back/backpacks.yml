@@ -42,7 +42,9 @@
     maxItemSize: Normal
     grid:
     - 0,0,20,1
-    blacklist: {}
+    blacklist:
+      tags:
+        - Backpack
   - type: ContainerContainer
     containers:
       storagebase: !type:Container
@@ -327,7 +329,7 @@
   parent: RMCSatchelPMC
   id: RMCSatchelPMCCommando
   name: We-Ya Commando combat backpack
-  description: Ergonomic, protected, high capacity backpack, designed for Weston-Yamada Commandos.
+  description: Ergonomic, protected, high capacity backpack, designed for Weyland-Yutani Commandos.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/PMC/commando.rsi
@@ -391,7 +393,7 @@
     - 0,0,17,1
   - type: StorageCloseOnMove
     skipInHand: true
-    
+
 - type: entity
   parent: RMCBackpackRCMMedium
   id: RMCBackpackRCMMediumPVP
@@ -424,7 +426,7 @@
     maxItemSize: Normal
     grid:
     - 0,0,23,1
-      
+
 - type: entity
   parent: RMCBackpackRCMLarge
   id: RMCBackpackRCMLargePVP
@@ -492,7 +494,7 @@
     - 0,0,23,1 # 24 Slots
 
 - type: entity
-  parent: RMCBackpackRCMMedicPVP 
+  parent: RMCBackpackRCMMedicPVP
   id: RMCBackpackRCMMedicPVPFilledParaMedic
   suffix: Filled, Paramarine Medic
   components:

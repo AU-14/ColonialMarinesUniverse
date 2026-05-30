@@ -59,7 +59,7 @@
 - type: entity
   parent: CMClipboard
   id: RMCWeYaClipboard
-  name: Weston-Yamada clipboard
+  name: Weyland-Yutani clipboard
   description: A branded clipboard, perfect for keeping your forms in order.
   components:
   - type: Sprite

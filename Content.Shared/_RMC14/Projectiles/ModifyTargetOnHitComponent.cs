@@ -13,4 +13,7 @@ public sealed partial class ModifyTargetOnHitComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntityWhitelist? Whitelist;
+
+    [DataField, AutoNetworkedField]
+    public bool RemoveExisting = true;
 }

@@ -202806,7 +202806,7 @@ entities:
     - type: Transform
       pos: 66.5,-102.5
       parent: 1
-- proto: RMCSensorTower
+- proto: AU14SensorTower
   entities:
   - uid: 28290
     components:
@@ -205282,7 +205282,7 @@ entities:
     - type: Transform
       pos: 119.63097,-196.18254
       parent: 1
-- proto: RMCSpawnerCommunicationsTowerOne
+- proto: AU14SpawnerCommunicationsTowerOne
   entities:
   - uid: 28565
     components:
@@ -205299,7 +205299,7 @@ entities:
     - type: Transform
       pos: 86.5,-22.5
       parent: 1
-- proto: RMCSpawnerCommunicationsTowerTwo
+- proto: AU14SpawnerCommunicationsTowerTwo
   entities:
   - uid: 28568
     components:
@@ -207627,8 +207627,8 @@ entities:
   - uid: 29009
     components:
     - type: MetaData
-      desc: An old We-Ya systems control computer that manages the air enviorment for a large area. Commonly used in mining operations in order to control O2 levels, alert of any dangerous gases and make the heat slightly more bearable.
-      name: We-Ya Enviorment Control System Control Panel
+      desc: An old We-Yu systems control computer that manages the air enviorment for a large area. Commonly used in mining operations in order to control O2 levels, alert of any dangerous gases and make the heat slightly more bearable.
+      name: We-Yu Enviorment Control System Control Panel
     - type: Transform
       pos: 50.5,-173.5
       parent: 1

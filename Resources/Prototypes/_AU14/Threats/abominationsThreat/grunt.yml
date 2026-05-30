@@ -15,10 +15,12 @@
   - type: GhostRole
     name: Grunt Abomination
     description: A heavy slam-melee abomination. Crush colonists with overwhelming reach.
+  - type: RMCSize
+    size: Big
   - type: MobThresholds
     thresholds:
       0: Alive
-      562: Dead
+      703: Dead
   - type: MobStateActions
     actions:
       Alive:
@@ -40,5 +42,5 @@
       types:
         Slash: 82
   - type: MovementSpeedModifier
-    baseWalkSpeed: 1.8
-    baseSprintSpeed: 2.8
+    baseWalkSpeed: 2.07
+    baseSprintSpeed: 3.22

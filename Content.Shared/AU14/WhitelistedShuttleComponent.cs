@@ -10,8 +10,11 @@ public sealed partial class WhitelistedShuttleComponent: Component
 
     [DataField("faction", required: true)]
     public string? Faction  { get; set; } = default;
-    [DataField("ShuttleType", required: false)]
 
-   public DropshipDestinationComponent.DestinationType ShuttleType = DropshipDestinationComponent.DestinationType.Dropship;
+    [DataField("ShuttleType", required: false)]
+    public DropshipDestinationComponent.DestinationType ShuttleType = DropshipDestinationComponent.DestinationType.Dropship;
+
+    [DataField("autoReturn")]
+    public bool AutoReturn = false;
 
 }

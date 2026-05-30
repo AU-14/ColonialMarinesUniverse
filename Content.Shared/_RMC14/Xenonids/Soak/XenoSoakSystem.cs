@@ -44,6 +44,13 @@ public sealed partial class XenoSoakSystem : EntitySystem
         var soak = EnsureComp<XenoSoakingDamageComponent>(xeno);
         soak.EffectExpiresAt = _timing.CurTime + xeno.Comp.Duration;
         soak.DamageAccumulated = 0;
+
+        if (xeno.Comp.DamageGoal is { } damageGoal)
+            soak.DamageGoal = damageGoal;
+
+        if (xeno.Comp.Heal is { } heal)
+            soak.Heal = heal;
+
         Dirty(xeno.Owner, soak);
 
         _popup.PopupPredicted(Loc.GetString("rmc-xeno-soak-self"), Loc.GetString("rmc-xeno-soak-others", ("xeno", xeno)), xeno, xeno, PopupType.MediumCaution);

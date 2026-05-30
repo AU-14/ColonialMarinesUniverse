@@ -63,7 +63,7 @@ public sealed partial class XenoBrutalizeSystem : EntitySystem
 
             currHits++;
 
-            var myDamage = _damageable.TryChangeDamage(extra, _xeno.TryApplyXenoSlashDamageMultiplier(extra, damage), origin: xeno, tool: xeno);
+            var myDamage = _damageable.TryChangeDamage(extra, _xeno.TryApplyXenoSlashDamageMultiplier(extra, damage), armorPiercing: xeno.Comp.ArmorPiercing, origin: xeno, tool: xeno);
             if (myDamage?.GetTotal() > FixedPoint2.Zero)
             {
                 var filter = Filter.Pvs(extra, entityManager: EntityManager).RemoveWhereAttachedEntity(o => o == xeno.Owner);

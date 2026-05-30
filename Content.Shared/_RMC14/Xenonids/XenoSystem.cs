@@ -1,8 +1,10 @@
 using System.Linq;
+using Content.Shared._CMU14.Blackfoot;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Entrenching;
+using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Medical.Scanner;
 using Content.Shared._RMC14.NightVision;
@@ -76,7 +78,7 @@ public sealed partial class XenoSystem : EntitySystem
     [Dependency] private SharedRMCFlammableSystem _rmcFlammable = default!;
     [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
     [Dependency] private StandingStateSystem _standing = default!;
-    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -142,6 +144,8 @@ public sealed partial class XenoSystem : EntitySystem
         SubscribeLocalEvent<XenoRegenComponent, MapInitEvent>(OnXenoRegenMapInit, before: [typeof(SharedXenoPheromonesSystem)]);
         SubscribeLocalEvent<XenoRegenComponent, DamageStateCritBeforeDamageEvent>(OnXenoRegenBeforeCritDamage, before: [typeof(SharedXenoPheromonesSystem)]);
 
+        SubscribeLocalEvent<XenoComponent, RMCGetFixedIdentityEvent>(OnIdentificationAttempt);
+
         //In XenoSystem.Visuals
         SubscribeLocalEvent<XenoStateVisualsComponent, MobStateChangedEvent>(OnVisualsMobStateChanged);
         SubscribeLocalEvent<XenoStateVisualsComponent, XenoFortifiedEvent>(OnVisualsFortified);
@@ -182,6 +186,17 @@ public sealed partial class XenoSystem : EntitySystem
     private void OnXenoGetAdditionalAccess(Entity<XenoComponent> xeno, ref GetAccessTagsEvent args)
     {
         args.Tags.UnionWith(xeno.Comp.AccessLevels);
+    }
+
+    private void OnIdentificationAttempt(Entity<XenoComponent> ent, ref RMCGetFixedIdentityEvent args)
+    {
+        var hive = _hive.GetHive(ent.Owner);
+        if (hive is null)
+            return;
+        if (hive.Value.Comp.Corrupted || _hive.IsAllyOfHive(args.Identified, hive))
+        {
+            args.Cancelled = true;
+        }
     }
 
     private void OnNewXenoEvolved(Entity<XenoComponent> newXeno, ref NewXenoEvolvedEvent args)
@@ -488,6 +503,9 @@ public sealed partial class XenoSystem : EntitySystem
             return true;
 
         if (canAttackWindows && HasComp<DestroyOnXenoPierceScissorComponent>(target))
+            return true;
+
+        if (HasComp<BlackfootFlightComponent>(target))
             return true;
 
         return HasComp<MarineComponent>(target) || HasComp<XenoComponent>(target);

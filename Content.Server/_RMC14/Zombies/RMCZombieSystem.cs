@@ -3,16 +3,20 @@ using Content.Server.Speech.Components;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared.Zombies;
 using Content.Shared.NPC.Systems;
+using Content.Shared.NPC.Prototypes;
 using Content.Shared._RMC14.NightVision;
 using Content.Shared._RMC14.Marines.Orders;
 using Content.Shared._RMC14.Weapons.Ranged.Whitelist;
 using Content.Shared._RMC14.Xenonids.Parasite;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.Zombies;
 
 public sealed partial class RMCZombieSystem : EntitySystem
 {
     [Dependency] private NpcFactionSystem _faction = default!;
+    private static readonly ProtoId<NpcFactionPrototype> DumbFaction = "RMCDumb";
+
     public override void Initialize()
     {
         base.Initialize();
@@ -32,7 +36,7 @@ public sealed partial class RMCZombieSystem : EntitySystem
         RemComp<GhostTakeoverAvailableComponent>(target);
 
         EnsureComp<NightVisionComponent>(target);
-        _faction.AddFaction(target, "RMCDumb");
+        _faction.AddFaction(target, DumbFaction);
 
         if (TryComp<ZombieComponent>(target, out var zombieComponent))
         {

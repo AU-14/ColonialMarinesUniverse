@@ -7,6 +7,8 @@ namespace Content.Client._RMC14.Stealth;
 
 public sealed partial class EntityInvisibilityVisualsSystem : EntitySystem
 {
+    private static readonly ProtoId<ShaderPrototype> InvisibilityShader = "RMCInvisible";
+
     [Dependency] private IPrototypeManager _prototypes = default!;
 
     public override void Initialize()
@@ -22,7 +24,7 @@ public sealed partial class EntityInvisibilityVisualsSystem : EntitySystem
         if (!TryComp(ent, out SpriteComponent? sprite))
             return;
 
-        sprite.PostShader = _prototypes.Index<ShaderPrototype>("RMCInvisible").InstanceUnique();
+        sprite.PostShader = _prototypes.Index(InvisibilityShader).InstanceUnique();
     }
 
     private void OnShutdown(Entity<EntityTurnInvisibleComponent> ent, ref ComponentShutdown args)

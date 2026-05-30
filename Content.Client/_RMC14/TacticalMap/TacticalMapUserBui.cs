@@ -38,6 +38,7 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
 
         TabContainer.SetTabTitle(Window.Wrapper.MapTab, Loc.GetString("ui-tactical-map-tab-map"));
         TabContainer.SetTabVisible(Window.Wrapper.MapTab, true);
+        TabContainer.SetTabVisible(Window.Wrapper.SquadTab, false);
 
         if (mapEntity != null)
         {
@@ -113,6 +114,7 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
         Window.Wrapper.SetLineLimit(lineLimit);
         UpdateBlips();
         UpdateLabels();
+        UpdateSquadData();
         UpdateTimestamps();
 
         Window.Wrapper.Map.Lines.Clear();
@@ -220,6 +222,7 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
             : null;
         Window.Wrapper.Map.SetLocalPlayerEntityId(localPlayerId);
         Window.Wrapper.Canvas.SetLocalPlayerEntityId(localPlayerId);
+        Window.Wrapper.SquadMap.SetLocalPlayerEntityId(localPlayerId);
     }
 
     private void UpdateLabels()
@@ -258,6 +261,38 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
         {
             Window.Wrapper.Map.UpdateTacticalLabels(new Dictionary<Vector2i, string>());
         }
+    }
+
+    private void UpdateSquadData()
+    {
+        if (Window == null)
+            return;
+
+        if (!EntMan.TryGetComponent(Owner, out TacticalMapUserComponent? user) || !user.HasSquad)
+        {
+            TabContainer.SetTabVisible(Window.Wrapper.SquadTab, false);
+            Window.Wrapper.UpdateSquadBlips(null);
+            return;
+        }
+
+        TabContainer.SetTabTitle(Window.Wrapper.SquadTab, Loc.GetString("ui-tactical-map-tab-squad"));
+        TabContainer.SetTabVisible(Window.Wrapper.SquadTab, true);
+
+        var totalCount = user.SquadBlips.Count;
+        var blips = new TacticalMapBlip[totalCount];
+        var i = 0;
+        foreach (var (_, blip) in user.SquadBlips)
+        {
+            blips[i] = blip;
+            i++;
+        }
+
+        Window.Wrapper.UpdateSquadBlips(blips);
+
+        Window.Wrapper.SquadMap.Lines.Clear();
+        Window.Wrapper.SquadMap.Lines.AddRange(user.SquadLines);
+
+        Window.Wrapper.UpdateSquadLabels(new Dictionary<Vector2i, string>(user.SquadLabels));
     }
 
     private void UpdateTimestamps()

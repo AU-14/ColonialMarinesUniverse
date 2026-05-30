@@ -333,7 +333,7 @@ public sealed partial class IdModificationConsoleSystem : EntitySystem
         var dict = new Dictionary<string, AccessLevelPrototype>();
         foreach (var accessLevelProto in _prototype.EnumeratePrototypes<AccessLevelPrototype>())
         {
-            object? accessLevelObj = new AccessLevelPrototype();
+            object? accessLevelObj = System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(AccessLevelPrototype));
             _serialization.CopyTo(accessLevelProto, ref accessLevelObj);
             if (accessLevelObj is not AccessLevelPrototype accessLevel)
                 continue;
@@ -349,7 +349,7 @@ public sealed partial class IdModificationConsoleSystem : EntitySystem
         var dict = new Dictionary<string, AccessGroupPrototype>();
         foreach (var accessLevelProto in _prototype.EnumeratePrototypes<AccessGroupPrototype>())
         {
-            object? accessGroupObj = new AccessGroupPrototype();
+            object? accessGroupObj = System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(AccessGroupPrototype));
             _serialization.CopyTo(accessLevelProto, ref accessGroupObj);
             if (accessGroupObj is not AccessGroupPrototype accessLevel)
                 continue;

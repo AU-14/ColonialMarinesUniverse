@@ -92,6 +92,12 @@
         Blunt: -6
         Slash: -6
         Piercing: -6
+        Heat: -6
+  - type: Flamability
+    chance: 1.0
+    rate: 0.08
+    range: 1.0
+    spread: 1.5
   - type: UserIFF
     factions:
     - FactionAbomination

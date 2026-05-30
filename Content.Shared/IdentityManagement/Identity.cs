@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.IdentityManagement;
+using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared.Ghost;
 using Content.Shared.IdentityManagement.Components;
@@ -41,9 +41,10 @@ public static class Identity
             whitelistSystem.IsWhitelistPass(fixedIdentity.Whitelist, viewer.Value))
         {
             var name = Loc.GetString(nameId);
-            var ev = new RMCGetFixedIdentityEvent(name);
-            ent.EventBus.RaiseLocalEvent(uid, ref ev);
-            return new IdentityEntity(uid, ev.Name);
+            var ev = new RMCGetFixedIdentityEvent(name, uid);
+            ent.EventBus.RaiseLocalEvent(viewer.Value, ref ev);
+            if (!ev.Cancelled)
+                return new IdentityEntity(uid, ev.Name);
         }
 
         if (!ent.TryGetComponent<IdentityComponent>(uid, out var identity))

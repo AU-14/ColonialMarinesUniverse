@@ -232,9 +232,19 @@ public sealed partial class VehicleWeaponsSystem
         if (!forUi && !seatComp.AllowHotbarSelection)
             return false;
 
-        if (TryComp(user, out VehicleViewToggleComponent? viewToggle) && !viewToggle.IsOutside)
+        if (TryComp(user, out VehicleViewToggleComponent? viewToggle) &&
+            !viewToggle.IsOutside &&
+            !CanUseHardpointsInsideView(user))
+        {
             return false;
+        }
 
         return true;
+    }
+
+    private bool CanUseHardpointsInsideView(EntityUid user)
+    {
+        return TryComp(user, out VehicleWeaponsOperatorComponent? operatorComp) &&
+               operatorComp.AllowActionsInsideView;
     }
 }

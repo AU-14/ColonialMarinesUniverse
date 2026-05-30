@@ -646,7 +646,9 @@ public sealed partial class BiomeSystem : SharedBiomeSystem
             // While we have remaining tiles keep iterating
             while (groupSize > 0 && remainingTiles.Count > 0)
             {
-                var startNode = rand.PickAndTake(remainingTiles);
+                var startNodeIndex = rand.Next(remainingTiles.Count);
+                var startNode = remainingTiles.ElementAt(startNodeIndex);
+                remainingTiles.Remove(startNode);
                 frontier.Clear();
                 frontier.Add(startNode);
 

@@ -2,57 +2,11 @@
   parent: AU14JobSectionSergeantBase
   id: AU14JobGOVFORSectionSergeantCMBCIU
   name: Unit Leader
-  description: au14-job-description-govforSSG
-  setPreference: false
   ranks:
     AU14RankCMBChiefDeputy: []
-  startingGear: AU14GearGOVFORSectionSergeant
-  dummyStartingGear: AU14GearGOVFORPlatoonSergantDummy
-  icon: "AU14JobIconPlatoonSarge"
-  requireAdminNotify: true
   spawnMenuRoleName: Section Sergeant (CMBCIU)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforCommand
-  overwatchSortPriority: -6
-  overwatchShowName: true
-  overwatchRoleName: Platoon Sergeant
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: Skills
-      skills:
-        RMCSkillConstruction: 2
-        RMCSkillCqc: 1
-        RMCSkillEndurance: 2
-        RMCSkillEngineer: 3
-        RMCSkillFirearms: 2
-        RMCSkillFireman: 1
-        RMCSkillIntel: 1
-        RMCSkillJtac: 2
-        RMCSkillLeadership: 1
-        RMCSkillMedical: 1
-        RMCSkillVehicles: 1
-        RMCSkillPolice: 2
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORSectionSergeantCMBCIU
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
-  hidden: true

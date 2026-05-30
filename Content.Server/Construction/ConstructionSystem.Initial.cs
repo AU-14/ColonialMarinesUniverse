@@ -43,11 +43,41 @@ namespace Content.Server.Construction
         // --- YOU HAVE BEEN WARNED! AAAH! ---
 
         private readonly Dictionary<ICommonSession, HashSet<int>> _beingBuilt = new();
+        private readonly Dictionary<int, TaskCompletionSource<DoAfterStatus>> _initialConstructionDoAfters = new();
+        private int _nextInitialConstructionDoAfterToken;
 
         private void InitializeInitial()
         {
             SubscribeNetworkEvent<TryStartStructureConstructionMessage>(HandleStartStructureConstruction);
             SubscribeNetworkEvent<TryStartItemConstructionMessage>(HandleStartItemConstruction);
+            SubscribeLocalEvent<InitialConstructionDoAfterEvent>(OnInitialConstructionDoAfter);
+        }
+
+        private Task<DoAfterStatus> WaitInitialConstructionDoAfter(DoAfterArgs doAfterArgs)
+        {
+            int token;
+            do
+            {
+                token = unchecked(++_nextInitialConstructionDoAfterToken);
+            } while (_initialConstructionDoAfters.ContainsKey(token));
+
+            doAfterArgs.Event = new InitialConstructionDoAfterEvent(token);
+            doAfterArgs.Broadcast = true;
+
+            var tcs = new TaskCompletionSource<DoAfterStatus>();
+            _initialConstructionDoAfters[token] = tcs;
+
+            if (_doAfterSystem.TryStartDoAfter(doAfterArgs))
+                return tcs.Task;
+
+            _initialConstructionDoAfters.Remove(token);
+            return Task.FromResult(DoAfterStatus.Cancelled);
+        }
+
+        private void OnInitialConstructionDoAfter(InitialConstructionDoAfterEvent ev)
+        {
+            if (_initialConstructionDoAfters.Remove(ev.Token, out var tcs))
+                tcs.SetResult(ev.Cancelled ? DoAfterStatus.Cancelled : DoAfterStatus.Finished);
         }
 
         // LEGACY CODE. See warning at the top of the file!
@@ -260,7 +290,7 @@ namespace Content.Server.Construction
                 return null;
             }
 
-            var doAfterArgs = new DoAfterArgs(EntityManager, user, doAfterTime, new AwaitedDoAfterEvent(), null)
+            var doAfterArgs = new DoAfterArgs(EntityManager, user, doAfterTime, new InitialConstructionDoAfterEvent(0), null)
             {
                 BreakOnDamage = true,
                 BreakOnMove = true,
@@ -270,7 +300,7 @@ namespace Content.Server.Construction
                 BlockDuplicate = false,
             };
 
-            if (await _doAfterSystem.WaitDoAfter(doAfterArgs) == DoAfterStatus.Cancelled)
+            if (await WaitInitialConstructionDoAfter(doAfterArgs) == DoAfterStatus.Cancelled)
             {
                 FailCleanup();
                 return null;

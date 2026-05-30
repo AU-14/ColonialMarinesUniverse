@@ -8,6 +8,8 @@ namespace Content.Client._RMC14.Explosion;
 
 public sealed partial class RMCExplosionShockWaveOverlay : Overlay, IEntityEventSubscriber
 {
+    private static readonly ProtoId<ShaderPrototype> ShockWaveShader = "RMCShockWave";
+
     [Dependency] private IEntityManager _entMan = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
 
@@ -26,7 +28,7 @@ public sealed partial class RMCExplosionShockWaveOverlay : Overlay, IEntityEvent
     public RMCExplosionShockWaveOverlay()
     {
         IoCManager.InjectDependencies(this);
-        _shader = _prototypeManager.Index<ShaderPrototype>("RMCShockWave").Instance().Duplicate();
+        _shader = _prototypeManager.Index(ShockWaveShader).Instance().Duplicate();
     }
 
     private readonly Vector2[] _positions = new Vector2[MaxCount];

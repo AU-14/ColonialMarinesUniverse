@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Light;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Light.Components;
 using Content.Shared.Light.EntitySystems;
 using Content.Shared.Weather;
@@ -26,6 +27,7 @@ public sealed partial class RMCWeatherSystem : EntitySystem
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private RMCAmbientLightSystem _rmcLight = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private EntityQuery<BlockWeatherComponent> _blockQuery;
 
@@ -114,7 +116,7 @@ public sealed partial class RMCWeatherSystem : EntitySystem
 
                 cycle.CurrentEvent = weatherPick;
                 cycle.CurrentEvent.DurationRemaining = weatherPick.Duration;
-                _weather.SetWeather(Transform(uid).MapID, weatherProto, endTime);
+                SetWeatherForMapOrZNetwork(uid, weatherProto, endTime);
 
                 var minTimeVariance = (-cycle.MinTimeVariance * 0.5) + _random.Next(cycle.MinTimeVariance);
                 cycle.LastEventCooldown = weatherPick.Duration + cycle.MinTimeBetweenEvents + minTimeVariance;
@@ -137,6 +139,34 @@ public sealed partial class RMCWeatherSystem : EntitySystem
                     cycle.CurrentEvent.LightningCooldown = cycle.CurrentEvent.LightningCooldownDuration;
                 }
             }
+        }
+    }
+
+    private void SetWeatherForMapOrZNetwork(EntityUid uid, WeatherPrototype? weatherProto, TimeSpan? endTime)
+    {
+        var xform = Transform(uid);
+        if (xform.MapUid is not { } mapUid)
+        {
+            _weather.SetWeather(xform.MapID, weatherProto, endTime);
+            return;
+        }
+
+        if (!_zLevels.TryGetZNetwork(mapUid, out var network) ||
+            !_zLevels.TryGetDepthBounds(network.Value, out var minDepth, out var maxDepth))
+        {
+            _weather.SetWeather(xform.MapID, weatherProto, endTime);
+            return;
+        }
+
+        for (var depth = minDepth; depth <= maxDepth; depth++)
+        {
+            if (!_zLevels.TryGetMapAtDepth(network.Value, depth, out var zMap) ||
+                !TryComp<MapComponent>(zMap, out var mapComp))
+            {
+                continue;
+            }
+
+            _weather.SetWeather(mapComp.MapId, weatherProto, endTime);
         }
     }
 }

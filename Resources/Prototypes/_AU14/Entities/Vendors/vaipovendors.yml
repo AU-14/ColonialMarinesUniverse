@@ -18,11 +18,9 @@
     sections:
     - name: Fatigues
       entries:
-      - id: CMJumpsuitTShirtGray
+      - id: AU14CivilianWorkwearBlue
         amount: 40
-      - id: CMJumpsuitTShirtWhite
-        amount: 40
-      - id: CMJumpsuitTShirtRed
+      - id: RMCJumpsuitLiaisonGreyWorkwear
         amount: 40
       - id: AU14CivilianWorkwearPink
         amount: 40
@@ -31,6 +29,18 @@
       - id: RMCJumpsuitKhakiWorkwearJacketless
         amount: 40
       - id: CMJumpsuitLiaisonField
+        amount: 40
+      - id: AU14CivilianFlannelWhite
+        amount: 40
+      - id: AU14CivilianFlannelRed
+        amount: 40
+      - id: AU14CivilianFlannelPurple
+        amount: 40
+      - id: AU14CivilianFloralRed
+        amount: 40
+      - id: AU14CivilianFloralBlue
+        amount: 40
+      - id: AU14CivilianFloralYellow
         amount: 40
     - name: Footwear
       entries:
@@ -76,7 +86,7 @@
       entries:
       - id: RMCM5CameraGear
         amount: 30
-      - id: AU14HeadsetSectionMarine
+      - id: AU14HeadsetGovforMarine
         name: empty headset
         amount: 20
     - name: Heads Up Display
@@ -645,7 +655,9 @@
     sections:
     - name: Headsets
       entries:
-      - id: AU14HeadsetSectionLeader
+      - id: AU14HeadsetGovforCommand
+        amount: 2
+      - id: AU14HeadsetGovforAuxiliary
         amount: 2
     - name: Backpack
       entries:

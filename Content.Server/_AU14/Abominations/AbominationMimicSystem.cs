@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Chat.Systems;
 using Content.Server.Polymorph.Components;
 using Content.Server.Polymorph.Systems;
+using Content.Server.Radio.Components;
 using Content.Shared._AU14.Abominations;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
@@ -45,6 +46,7 @@ public sealed partial class AbominationMimicSystem : EntitySystem
     public static readonly ProtoId<PolymorphPrototype> DisguisePolymorph = "AbominationMimicDisguise";
     public static readonly EntProtoId RevertAction = "ActionAbominationMimicRevert";
     public static readonly ProtoId<EmotePrototype> ScreamEmote = "Scream";
+    public const string AbominationRadioChannel = "Abomination";
 
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private ChatSystem _chat = default!;
@@ -67,6 +69,11 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         SubscribeLocalEvent<AbominationMimicComponent, AbominationMimicTransformActionEvent>(OnTransformAction);
         SubscribeLocalEvent<AbominationMimicTransformedComponent, AbominationMimicRevertActionEvent>(OnRevertAction);
         SubscribeLocalEvent<AbominationMimicTransformedComponent, MobStateChangedEvent>(OnDisguisedMobStateChanged);
+        // Last-ditch revert if the disguise is being deleted/gibbed before
+        // MobStateChanged got the chance to fire (e.g. instant gibs). Fires
+        // before the entity is gone, so PolymorphedEntityComponent + parent
+        // are still valid for the revert call.
+        SubscribeLocalEvent<AbominationMimicTransformedComponent, EntityTerminatingEvent>(OnDisguisedTerminating);
 
         // BUI message — modern Subs.BuiEvents pattern filters by UI key so the
         // handler only fires for messages addressed to AbominationMimicUiKey.Key.
@@ -198,6 +205,15 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         // the flesh underneath isn't compatible host material.
         RemComp<InfectableComponent>(disguisedUid);
 
+        // Grant the disguise the abomination radio channel — the disguised
+        // mimic still hears + speaks to the flesh-hivemind even while
+        // wearing a face.
+        var receiver = EnsureComp<IntrinsicRadioReceiverComponent>(disguisedUid);
+        var transmitter = EnsureComp<IntrinsicRadioTransmitterComponent>(disguisedUid);
+        var activeRadio = EnsureComp<ActiveRadioComponent>(disguisedUid);
+        transmitter.Channels.Add(AbominationRadioChannel);
+        activeRadio.Channels.Add(AbominationRadioChannel);
+
         // Every transform resets damage on the new body — mimics spawn
         // fresh into the disguise no matter how chewed-up they were.
         HealToFull(disguisedUid);
@@ -223,8 +239,39 @@ public sealed partial class AbominationMimicSystem : EntitySystem
 
     private void OnDisguisedMobStateChanged(Entity<AbominationMimicTransformedComponent> ent, ref MobStateChangedEvent args)
     {
-        if (args.NewMobState is MobState.Critical or MobState.Dead)
+        // Death == instant revert at full health, no shake-and-scream wind-up
+        // (engine can gib the disguise before the 7s timer fires, leaving the
+        // parent mimic parked on PausedMap forever). Crit still uses the
+        // dramatic revert sequence.
+        if (args.NewMobState == MobState.Dead)
+        {
+            ImmediateRevert(ent.Owner);
+            return;
+        }
+
+        if (args.NewMobState == MobState.Critical)
             BeginRevert(ent.Owner);
+    }
+
+    /// <summary>
+    /// Skip the shake/scream wind-up and revert NOW. Used when the disguise
+    /// dies or is otherwise about to be lost — we have to get the parent
+    /// mimic off the paused map before its anchor entity is gone.
+    /// </summary>
+    private void ImmediateRevert(EntityUid disguisedUid)
+    {
+        if (!TryComp<PolymorphedEntityComponent>(disguisedUid, out var polymorphed))
+            return;
+
+        // Stop the slow wind-up if one was already in flight.
+        RemComp<AbominationMimicRevertingComponent>(disguisedUid);
+
+        FinishRevert(disguisedUid, polymorphed);
+    }
+
+    private void OnDisguisedTerminating(Entity<AbominationMimicTransformedComponent> ent, ref EntityTerminatingEvent args)
+    {
+        ImmediateRevert(ent.Owner);
     }
 
     /// <summary>

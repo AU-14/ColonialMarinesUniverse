@@ -12,8 +12,7 @@ using Robust.Shared.Serialization.TypeSerializers.Interfaces;
 
 namespace Content.Shared.Body.Prototypes;
 
-[TypeSerializer]
-public sealed class BodyPrototypeSerializer : ITypeReader<BodyPrototype, MappingDataNode>
+public sealed class BodyPrototypeSlotsSerializer : ITypeReader<Dictionary<string, BodyPrototypeSlot>, MappingDataNode>
 {
     private (ValidationNode Node, List<string> Connections) ValidateSlot(MappingDataNode slot, IDependencyCollection dependencies)
     {
@@ -68,55 +67,36 @@ public sealed class BodyPrototypeSerializer : ITypeReader<BodyPrototype, Mapping
     {
         var nodes = new List<ValidationNode>();
 
-        if (!node.TryGet("root", out ValueDataNode? root))
-            nodes.Add(new ErrorNode(node, $"No root value data node found"));
-
-        if (!node.TryGet("slots", out MappingDataNode? slots))
+        foreach (var (key, value) in node)
         {
-            nodes.Add(new ErrorNode(node, $"No slots mapping data node found"));
-        }
-        else if (root != null)
-        {
-            if (!slots.TryGet(root.Value, out MappingDataNode? _))
+            if (value is not MappingDataNode slot)
             {
-                nodes.Add(new ErrorNode(slots, $"No slot found with id {root.Value}"));
-                return new ValidatedSequenceNode(nodes);
+                nodes.Add(new ErrorNode(value, $"Slot is not a mapping data node"));
+                continue;
             }
 
-            foreach (var (key, value) in slots)
+            var result = ValidateSlot(slot, dependencies);
+            nodes.Add(result.Node);
+
+            foreach (var connection in result.Connections)
             {
-                if (value is not MappingDataNode slot)
-                {
-                    nodes.Add(new ErrorNode(value, $"Slot is not a mapping data node"));
-                    continue;
-                }
-
-                var result = ValidateSlot(slot, dependencies);
-                nodes.Add(result.Node);
-
-                foreach (var connection in result.Connections)
-                {
-                    if (!slots.TryGet(connection, out MappingDataNode? _))
-                        nodes.Add(new ErrorNode(slots, $"No slot found with id {connection}"));
-                }
+                if (!node.TryGet(connection, out MappingDataNode? _))
+                    nodes.Add(new ErrorNode(node, $"No slot found with id {connection}"));
             }
         }
 
         return new ValidatedSequenceNode(nodes);
     }
 
-    public BodyPrototype Read(ISerializationManager serializationManager, MappingDataNode node,
+    public Dictionary<string, BodyPrototypeSlot> Read(ISerializationManager serializationManager, MappingDataNode node,
         IDependencyCollection dependencies,
-        SerializationHookContext hookCtx, ISerializationContext? context = null,
-        ISerializationManager.InstantiationDelegate<BodyPrototype>? instanceProvider = null)
+        SerializationHookContext hookCtx,
+        ISerializationContext? context = null,
+        ISerializationManager.InstantiationDelegate<Dictionary<string, BodyPrototypeSlot>>? instanceProvider = null)
     {
-        var id = node.Get<ValueDataNode>("id").Value;
-        var name = node.Get<ValueDataNode>("name").Value;
-        var root = node.Get<ValueDataNode>("root").Value;
-        var slotNodes = node.Get<MappingDataNode>("slots");
         var allConnections = new Dictionary<string, (string? Part, HashSet<string>? Connections, Dictionary<string, string>? Organs)>();
 
-        foreach (var (slotId, valueNode) in slotNodes)
+        foreach (var (slotId, valueNode) in node)
         {
             var slot = (MappingDataNode) valueNode;
 
@@ -173,6 +153,6 @@ public sealed class BodyPrototypeSerializer : ITypeReader<BodyPrototype, Mapping
             slots.Add(slotId, slot);
         }
 
-        return new BodyPrototype(id, name, root, slots);
+        return slots;
     }
 }

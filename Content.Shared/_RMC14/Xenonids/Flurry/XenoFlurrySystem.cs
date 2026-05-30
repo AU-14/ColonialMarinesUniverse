@@ -22,7 +22,7 @@ public sealed partial class XenoFlurrySystem : EntitySystem
 {
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedColorFlashEffectSystem _colorFlash = default!;
@@ -65,7 +65,7 @@ public sealed partial class XenoFlurrySystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        foreach (var ent in _physics.GetCollidingEntities(Transform(xeno).MapID, rot))
+        foreach (var ent in _lookup.GetEntitiesIntersecting(Transform(xeno).MapID, rot, LookupFlags.Dynamic | LookupFlags.Static))
         {
             if (!_xeno.CanAbilityAttackTarget(xeno, ent))
                 continue;

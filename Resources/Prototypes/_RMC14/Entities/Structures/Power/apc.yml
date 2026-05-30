@@ -134,6 +134,10 @@
           Charging: { state: display-charging }
           FullCharge: { state: display-full }
   - type: RMCMesonsNonviewable
+  - type: ContainerContainer
+    containers:
+      rmc_apc_power_cell: !type:ContainerSlot
+  - type: SpriteSetRenderOrder
 
 # APC under construction
 - type: entity
@@ -227,4 +231,3 @@
   - type: Battery
     maxCharge: 150000
     startingCharge: 150000
-

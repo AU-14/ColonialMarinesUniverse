@@ -43,6 +43,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
             }
 
             RequestButton.OnPressed += requestAction;
+            _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
         }
 
@@ -51,7 +52,13 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
         {
             base.Dispose(disposing);
 
+            _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+        }
+
+        private void OnCrtUiEnabledChanged(bool _)
+        {
+            ApplyCrtPalette();
         }
 
         private void OnCrtUiColorChanged(string _)

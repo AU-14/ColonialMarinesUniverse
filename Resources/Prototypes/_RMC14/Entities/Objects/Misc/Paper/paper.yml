@@ -248,7 +248,7 @@
 - type: entity
   parent: CMPaper
   id: RMCPaperWeYa
-  name: weston-yamada official document
+  name: weyland-yutani official document
   components:
   - type: PaperVisuals
     headerImagePath: "/Textures/_RMC14/Interface/Paper/paper_heading_weya.svg.96dpi.png"
@@ -257,4 +257,4 @@
 - type: entity
   parent: RMCPaperWeYa
   id: RMCPaperWeYaLiaison
-  name: weston-yamada document
+  name: weyland-yutani document

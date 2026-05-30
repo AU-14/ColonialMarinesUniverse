@@ -4,6 +4,7 @@
   friction: 0
   isSubfloor: true
   isSpace: true
+  transparent: true
   sturdy: false
   thermalConductivity: 0.4
   heatCapacity: 700000

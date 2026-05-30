@@ -2,6 +2,7 @@
   parent: BaseItem
   id: RMCTabletCO
   name: command tablet
+  abstract: true # disallow mappers to use this
   description: A portable command interface used by top brass, capable of issuing commands over long ranges to their linked computer. Built to withstand a nuclear bomb.
   components:
   - type: Sprite

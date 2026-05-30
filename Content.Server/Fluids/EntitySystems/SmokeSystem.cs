@@ -36,6 +36,7 @@ public sealed partial class SmokeSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private AppearanceSystem _appearance = default!;
     [Dependency] private BloodstreamSystem _blood = default!;
@@ -272,7 +273,7 @@ public sealed partial class SmokeSystem : EntitySystem
             {
                 if (reagentQuantity.Quantity == FixedPoint2.Zero)
                     continue;
-                var reagentProto = _prototype.IndexReagent<ReagentPrototype>(reagentQuantity.Reagent.Prototype);
+                var reagentProto = _reagent.Index(reagentQuantity.Reagent.Prototype);
 
                 _reactive.ReactionEntity(entity, ReactionMethod.Touch, reagentProto, reagentQuantity, finalSolution);
             }
@@ -294,7 +295,7 @@ public sealed partial class SmokeSystem : EntitySystem
         {
             if (reagentQuantity.Quantity == FixedPoint2.Zero)
                 continue;
-            var reagentProto = _prototype.IndexReagent<ReagentPrototype>(reagentQuantity.Reagent.Prototype);
+            var reagentProto = _reagent.Index(reagentQuantity.Reagent.Prototype);
 
             _reactive.ReactionEntity(entity, ReactionMethod.Touch, reagentProto, reagentQuantity, transferSolution);
             if (!blockIngestion)
@@ -329,7 +330,7 @@ public sealed partial class SmokeSystem : EntitySystem
             if (reagentQuantity.Quantity == FixedPoint2.Zero)
                 continue;
 
-            var reagent = _prototype.IndexReagent<ReagentPrototype>(reagentQuantity.Reagent.Prototype);
+            var reagent = _reagent.Index(reagentQuantity.Reagent.Prototype);
             reagent.ReactionTile(tile, reagentQuantity.Quantity, EntityManager, reagentQuantity.Reagent.Data);
         }
     }

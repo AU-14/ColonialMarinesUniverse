@@ -15,6 +15,7 @@
   icon: "AU14JobIconColonyWorkingJoe"
   spawnMenuRoleName: Working Joe (Colony)
   supervisors: au14-job-supervisors-workingjoe-colony
+  usePlayerProfile: false
   hasIcon: false
   accessGroups:
   - auadmin
@@ -26,16 +27,16 @@
     components:
     - type: IntrinsicRadioTransmitter
       channels:
-      - AI
+      - radioAI
       - Colony
-      - WEYA
-      - CMB
+      - radioWEYU
+      - radioCMB
     - type: ActiveRadio
       channels:
-      - AI
+      - radioAI
       - Colony
-      - WEYA
-      - CMB
+      - radioWEYU
+      - radioCMB
     - type: Access
       groups:
       - auadmin

@@ -12,6 +12,9 @@ namespace Content.Client._RMC14.Xenonids.Eye;
 
 public sealed partial class QueenEyeOverlay : Overlay
 {
+    private static readonly ProtoId<ShaderPrototype> StencilMaskShader = "StencilMask";
+    private static readonly ProtoId<ShaderPrototype> StencilDrawShader = "StencilDraw";
+
     [Dependency] private IClyde _clyde = default!;
     [Dependency] private IEntityManager _entities = default!;
     [Dependency] private IPlayerManager _player = default!;
@@ -118,11 +121,11 @@ public sealed partial class QueenEyeOverlay : Overlay
         }
 
         // Use the lighting as a mask
-        worldHandle.UseShader(_proto.Index<ShaderPrototype>("StencilMask").Instance());
+        worldHandle.UseShader(_proto.Index(StencilMaskShader).Instance());
         worldHandle.DrawTextureRect(_stencilTexture!.Texture, worldBounds);
 
         // Draw the static
-        worldHandle.UseShader(_proto.Index<ShaderPrototype>("StencilDraw").Instance());
+        worldHandle.UseShader(_proto.Index(StencilDrawShader).Instance());
         worldHandle.DrawTextureRect(_staticTexture!.Texture, worldBounds);
 
         worldHandle.SetTransform(Matrix3x2.Identity);

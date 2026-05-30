@@ -7,5 +7,5 @@ namespace Content.Shared._RMC14.Xenonids.Finesse;
 public sealed partial class XenoFinesseComponent : Component
 {
     [DataField]
-    public TimeSpan MarkedTime = TimeSpan.FromSeconds(3.5);
+    public TimeSpan MarkedTime = TimeSpan.FromSeconds(6);
 }

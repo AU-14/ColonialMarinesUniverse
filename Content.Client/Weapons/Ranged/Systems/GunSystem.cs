@@ -218,8 +218,6 @@ public sealed partial class GunSystem : SharedGunSystem
         if (_itemPickup.RecentItemPickUp)
             return;
 
-        Log.Debug($"Sending shoot request tick {Timing.CurTick} / {Timing.CurTime}");
-
         var projectiles = _gunPrediction.ShootRequested(GetNetEntity(gunUid), GetNetCoordinates(coordinates), target, null, session);
 
         RaisePredictiveEvent(new RequestShootEvent()

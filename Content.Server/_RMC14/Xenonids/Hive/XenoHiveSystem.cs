@@ -21,6 +21,7 @@ using Robust.Shared.Timing;
 using System.Data;
 using Content.Server.AU14.Round;
 using IConfigurationManager = Robust.Shared.Configuration.IConfigurationManager;
+using Content.Server.Radio;
 
 namespace Content.Server._RMC14.Xenonids.Hive;
 
@@ -52,6 +53,7 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
 
         SubscribeLocalEvent<HijackBurrowedSurgeComponent, ComponentStartup>(OnBurrowedSurgeStartup);
         SubscribeLocalEvent<HijackBurrowedSurgeComponent, ComponentShutdown>(OnBurrowedSurgeShutdown);
+        SubscribeLocalEvent<RadioReceiveAttemptEvent>(OnRadioReceiveAttempt);
 
         Subs.CVar(_config,
             RMCCVars.RMCLateJoinsPerBurrowedLarvaEarlyThresholdMinutes,
@@ -59,6 +61,17 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
             true);
         Subs.CVar(_config, RMCCVars.RMCLateJoinsPerBurrowedLarvaEarly, v => _lateJoinsPerBurrowedLarvaEarly = v, true);
         Subs.CVar(_config, RMCCVars.RMCLateJoinsPerBurrowedLarva, v => _lateJoinsPerBurrowedLarva = v, true);
+    }
+
+    private void OnRadioReceiveAttempt(ref RadioReceiveAttemptEvent args)
+    {
+        if (args.Channel.ID != SharedChatSystem.HivemindChannel.Id)
+            return;
+
+        //since hivemind is an intrinsic channel, we can probably just access it directly
+        if (TryComp<HiveMemberComponent>(args.RadioSource, out var hivea) && IsMember(args.RadioReceiver, hivea.Hive))
+            return;
+        else args.Cancelled = true;
     }
 
     private void OnPlayerSpawnComplete(PlayerSpawnCompleteEvent ev)

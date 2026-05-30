@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Linq;
 using Robust.Shared.Timing;
 using Content.Server._RMC14.Marines;
+using Content.Shared._RMC14.Marines;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 using Content.Shared._RMC14.ARES;
@@ -24,8 +25,7 @@ namespace Content.Server._RMC14.Announce
         [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private StationRecordsSystem _stationRecords = default!;
 
-        [ValidatePrototypeId<RadioChannelPrototype>]
-        public readonly ProtoId<RadioChannelPrototype> CommonChannel = "MarineCommon";
+        public static readonly ProtoId<RadioChannelPrototype> CommonChannel = "MarineCommon";
 
         public void AnnounceLateJoin(bool lateJoin, bool silent, EntityUid mob, string jobId, string jobName, JobPrototype jobPrototype)
         {
@@ -37,11 +37,16 @@ namespace Content.Server._RMC14.Announce
             {
                 if (jobPrototype.JoinNotifyCrew)
                 {
+                    string? announceToFaction = TryComp<MarineComponent>(mob, out var marineComp)
+                        ? marineComp.Faction
+                        : null;
+
                     _marineAnnounce.AnnounceARESStaging(ares,
                         Loc.GetString("rmc-latejoin-arrival-announcement-special",
                         ("character", fullRankName)),
                         jobPrototype.LatejoinArrivalSound,
-                        null);
+                        null,
+                        announceToFaction);
                 }
                 else
                 {

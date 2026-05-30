@@ -1,12 +1,68 @@
 - type: job
-  parent: CMJobBase
-  id: AU14JobRadioTelephoneOperatorBase
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobRadioTelephoneOperatorBaseAbstract
   name: au14-job-name-radiotelephoneoperator
-  description: au14-job-description-radiotelephoneooerator
+  description: au14-job-description-radiotelephoneoperator
+  icon: "AU14JobIconRTO"
+  spawnMenuRoleName: Fireteam Leader (GOVFOR)
+  startingGear: AU14GearGOVFORRadioTelephoneOperator
+  dummyStartingGear: AU14GearGOVFORRadioTelephoneOperatorDummy
   playTimeTracker: AU14JobGOVFORRadioTelephoneOperator
-  basePlaytimeTracker: true
-  hidden: true
+  overwatchSortPriority: -3
+  overwatchRoleName: Fire Team Leaders
+  accessGroups:
+  - AU14GovforFTL
+
+- type: job
+  abstract: true
+  parent: AU14JobRadioTelephoneOperatorBaseAbstract
+  id: AU14JobRadioTelephoneOperatorBase
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NonResuscitable
+  ranks:
+    RMCRankCorporal: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      preset: AU14SkillPresetPlatoonRTO
+    - type: JobPrefix
+      prefix: au14-job-prefix-radiotelephoneoperator
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: tl
 
 - type: playTimeTracker
   id: AU14JobGOVFORRadioTelephoneOperator
   isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORRadioTelephoneOperator
+  equipment:
+    id: AU14JobIDCardGOVFORRadioTelephoneOperator
+    ears: AU14HeadsetGovforMarineFTL
+
+- type: startingGear
+  id: AU14GearGOVFORRadioTelephoneOperatorDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleOne
+    shoes: CMBootsBrown
+    head: AU14JungleBoonieHat
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforMarineFTL
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORRadioTelephoneOperator
+  name: Spawn Point GOVFOR Radio Telephone Operator
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORRadioTelephoneOperator
+  - type: Sprite
+    state: syn_spawn

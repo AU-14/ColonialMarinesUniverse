@@ -164,6 +164,8 @@
         crate: AU14CrateAssortedKnives
       - cost: 4500
         crate: AU14CrateM5A1SLAW
+      - cost: 6000
+        crate: AU14CrateFlamerSpec
       - cost: 9500
         crate: AU14CrateM7SLAW
       - cost: 8000
@@ -200,6 +202,12 @@
         crate: RMCCrateMagazineML66DDrum
       - cost: 2000
         crate: RMCCrateMagazineM2C
+    - name: AP Ammo
+      entries:
+      - cost: 2500
+        crate: AU14CrateBoxMagazineRifleL24AP
+      - cost: 1500
+        crate: AU14CrateBoxMagazineSMGL90A2AP
     - name: Dropship Parts
       entries:
       - cost: 100

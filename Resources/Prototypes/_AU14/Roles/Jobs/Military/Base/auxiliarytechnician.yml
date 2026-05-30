@@ -1,12 +1,90 @@
 - type: job
-  parent: CMJobBase
-  id: AU14JobAuxTechBase
-  name: au14-job-name-govforauxtech
-  description: au14-job-description-govforauxtech
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobAuxTechBaseAbstract
+  name: au14-job-name-govforAuxTech
+  description: au14-job-description-govforAuxTech
+  icon: "AU14JobIconRTO"
+  spawnMenuRoleName: Auxiliary Technician (GOVFOR)
+  startingGear: AU14GearGOVFORAuxTech
+  dummyStartingGear: AU14GearGOVFORAuxTechDummy
   playTimeTracker: AU14JobGOVFORAuxTech
-  basePlaytimeTracker: true
-  hidden: true
+  overwatchShowName: true
+  overwatchRoleName: au14-job-name-govforAuxTech
+  overwatchSortPriority: -6
+  accessGroups:
+  - AU14GovforAuxTech
+
+- type: job
+  abstract: true
+  parent: AU14JobAuxTechBaseAbstract
+  id: AU14JobAuxTechBase
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankStaffSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORAuxTech
+      time: 270000 # 75 hours
+    RMCRankSergeant:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORAuxTech
+      time: 180000 # 50 hours
+    RMCRankCorporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORAuxTech
+      time: 72000 # 24 hours
+    RMCRankLanceCorporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORAuxTech
+      time: 36000 # 10 hours
+    RMCRankPrivateFirstClass: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      preset: AU14SkillPresetPlatoonAuxTech
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforAuxTech
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14govforhud.rsi
+        state: govfor_rto
 
 - type: playTimeTracker
   id: AU14JobGOVFORAuxTech
   isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORAuxTech
+  equipment:
+    shoes: CMBootsBlackFilled
+    ears: AU14HeadsetGovforAuxiliary
+    ears2: RMCM5CameraGear
+    id: AU14JobIDCardGOVFORAuxTech
+  storage:
+    back:
+    - CMStampApproved
+
+- type: startingGear
+  id: AU14GearGOVFORAuxTechDummy
+  equipment:
+    shoes: CMBootsBlackFilled
+    back: CMSatchelMarine
+  storage:
+    back:
+    - CMStampApproved
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORAuxTech
+  name: Spawn Point GOVFOR Auxiliary Technician
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORAuxTech
+  - type: Sprite
+    state: syn_spawn

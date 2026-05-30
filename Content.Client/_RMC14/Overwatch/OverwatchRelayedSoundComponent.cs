@@ -8,4 +8,7 @@ public sealed partial class OverwatchRelayedSoundComponent : Component
 {
     [DataField]
     public EntityUid? Relay;
+
+    [DataField]
+    public bool IsRelayAudioSource;
 }

@@ -28,7 +28,7 @@
     slots:
     - OUTERCLOTHING
     - back
-    quickEquip: true
+    quickEquip: false
   - type: Speech
     speechVerb: Robotic
   - type: ItemToggle
@@ -88,7 +88,7 @@
 
 - type: entity
   id: AUCMDefibrillatorEmpty
-  parent: AU14BaseDefibrillator
+  parent: AU14CMDefibrillator
   suffix: AU14, Empty
   components:
   - type: ItemSlots

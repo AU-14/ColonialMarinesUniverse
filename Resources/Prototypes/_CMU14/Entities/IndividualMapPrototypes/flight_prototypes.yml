@@ -215,6 +215,7 @@
   id: CMUFloorEmpty
   name: tiles-cmu-empty-subfloor
   isSpace: true
+  transparent: true
   weather: true
   indestructible: true
   friction: 0

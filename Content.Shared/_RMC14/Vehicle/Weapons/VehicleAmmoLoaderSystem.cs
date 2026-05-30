@@ -252,7 +252,7 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
             GetLoadAmount(box, ammo, hardpointAmmo, args.AmmoSlot) <= 0)
         {
             var popup = box.Amount <= 0
-                ? Loc.GetString("rmc-vehicle-ammo-loader-empty", ("box", box.Owner))
+                ? Loc.GetString("rmc-vehicle-ammo-loader-empty", ("box", activeBox))
                 : Loc.GetString("rmc-vehicle-ammo-loader-full", ("target", ammoUid));
             _popup.PopupClient(popup, ent, args.Actor);
             return;

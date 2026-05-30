@@ -71,14 +71,14 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
     // results (CMUAimAccuracyComponent, MovementSpeedModifierComponent) are networked,
     // so recomputing on state-replay is pure burn — and bursts hard when several injured
     // mobs come back into view at once. Skip the recompute during state apply.
-    private void OnSplintChanged(CMUSplintChangedEvent args)
+    private void OnSplintChanged(ref CMUSplintChangedEvent args)
     {
         if (Timing.ApplyingState)
             return;
         RefreshForPart(args.Part);
     }
 
-    private void OnCastChanged(CMUCastChangedEvent args)
+    private void OnCastChanged(ref CMUCastChangedEvent args)
     {
         if (Timing.ApplyingState)
             return;

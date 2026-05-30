@@ -31,7 +31,7 @@ public abstract partial class SharedStunSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
     [Dependency] private StandingStateSystem _standingState = default!;
-    [Dependency] private StatusEffectsSystem _statusEffect = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffect = default!;
 
     /// <summary>
     /// Friction modifier for knocked down players.

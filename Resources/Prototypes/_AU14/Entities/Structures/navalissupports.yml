@@ -1,0 +1,76 @@
+﻿- type: entity
+  id: AU14NavalisSupportBeam
+  parent: BaseStructure
+  name: support beam
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: PlacementReplacement
+    key: walls
+  - type: Sprite
+    noRot: true
+    sprite: _AU14/Structures/navalis_support_beam.rsi
+    state: support_beam
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.0,-1.0,1.0,1.0"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+
+- type: entity
+  id: AU14NavalisSupportBeamAqua
+  parent: AU14NavalisSupportBeam
+  name: support beam
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: _AU14/Structures/navalis_support_beam.rsi
+    state: support_beam_aqua
+
+- type: entity
+  id: AU14NavalisSupportBeamBlue
+  parent: AU14NavalisSupportBeam
+  name: support beam
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: _AU14/Structures/navalis_support_beam.rsi
+    state: support_beam_blue
+
+- type: entity
+  id: AU14NavalisSupportBeamBrown
+  parent: AU14NavalisSupportBeam
+  name: support beam
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: _AU14/Structures/navalis_support_beam.rsi
+    state: support_beam_brown
+
+- type: entity
+  id: AU14NavalisSupportBeamGreen
+  parent: AU14NavalisSupportBeam
+  name: support beam
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: _AU14/Structures/navalis_support_beam.rsi
+    state: support_beam_green
+
+- type: entity
+  id: AU14NavalisSupportBeamRed
+  parent: AU14NavalisSupportBeam
+  name: support beam
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: _AU14/Structures/navalis_support_beam.rsi
+    state: support_beam_red

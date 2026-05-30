@@ -1,5 +1,6 @@
 using Content.Client._RMC14.Announce.Animations;
 using Content.Client._RMC14.Announce.Effects;
+using Content.Client._RMC14.Announce.Styling;
 using Content.Shared._RMC14.Announce;
 using System.Numerics;
 
@@ -88,9 +89,8 @@ public sealed partial class AnnouncementWidget
             if (textIndex < originalText.Length)
             {
                 var message = CreateFormattedMessage(originalText[textIndex], style);
-                _richTextLabels[i].SetMessage(message);
+                _richTextLabels[i].SetMessage(message, AnnouncementStyling.AnnouncementMarkupTags);
             }
         }
     }
 }
-

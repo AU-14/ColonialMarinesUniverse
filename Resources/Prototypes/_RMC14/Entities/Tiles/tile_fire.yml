@@ -67,6 +67,15 @@
 
 - type: entity
   parent: RMCTileFire
+  id: AU14TileFire
+  suffix: AU14, 15s
+  components:
+  - type: TileFire
+    id: AU14TileFire
+    duration: 145
+
+- type: entity
+  parent: RMCTileFire
   id: RMCTileFireGreen
   components:
   - type: Sprite

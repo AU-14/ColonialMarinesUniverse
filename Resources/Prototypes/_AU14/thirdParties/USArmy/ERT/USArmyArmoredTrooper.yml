@@ -3,7 +3,7 @@
   id: AU14USArmyTrooperBase
   name: au14-job-name-usarmy-trooper
   description: au14-job-description-usarmy
-  playTimeTracker: AU14JobUSArmyCMT
+  playTimeTracker: AU14JobUSArmyTrooper
   basePlaytimeTracker: true
   hidden: true
 

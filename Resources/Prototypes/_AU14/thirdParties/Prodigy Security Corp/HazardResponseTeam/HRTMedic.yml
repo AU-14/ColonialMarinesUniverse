@@ -1,0 +1,105 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobHRTPartyMedic
+  name: Prodigy Hazard Combat Lifesaver
+  description: au14-prodigyhazard-description
+  playTimeTracker: AU14JobHRTPartyMedicTracker
+  ranks:
+    AU14RankPrDOperator: []
+  spawnMenuRoleName: Prodigy Hazard Combat Lifesaver (3rd party, M41A/2)
+  startingGear: AU14GearHRTPartyMedic
+  greeting: au14-prodigyhazard-greeting
+  icon: "RMCJobIconPMCMedic"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-psc
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 1
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillJtac: 1
+        RMCSkillMedical: 2
+        RMCSkillSurgery: 3
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanWYPMC
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: AU14JobHRTPartyMedic
+  name: Prodigy Hazard Party Combat Lifesaver (3rd party, M41A/2)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPARTS
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Prodigy Hazard Party Combat Lifesaver
+    description: au14-prodigyhazard-description
+    reregister: false
+    job: AU14JobHRTPartyMedic
+    raffle:
+      settings: short
+    rules: au14-prodigyhazard-description
+
+- type: startingGear
+  id: AU14GearHRTPartyMedic
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14ArmorProdigyXAS23
+    jumpsuit: AU14ProdigyFatiguesRU
+    shoes: RMCBootsSPPBlackFilled
+    mask: RMCMaskCoifPMC
+    eyes: RMCGlassesMedicalHUDGlasses
+    head: AU14ProdigyBallisticHelmetPART
+    gloves: AU14HandsProdigyRU
+    belt: AU14BeltMedicBagProdigyFilled
+    pocket1: RMCPouchShotgunLargeBuckshot
+    pocket2: AU14PouchMedicalProdigyFilled
+    back: RMCSatchelWelderRU #21 slots
+    ears: AU14HeadsetPART
+    ears2: RMCM5CameraGear
+    suitstorage: RMCWeaponShotgunM3717
+  storage:
+    back:
+    - CMPortableSurgicalBedSpawnFolded
+    - CMSurgicalCaseFilled
+    - AU14CMDefibrillator
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    - CMShellShotgunBuckshot
+    jumpsuit:
+    - AU14SynthResetKeyProdigy
+    - AU14SynthResetKeyProdigy
+    - AU14ProdigyLaptop
+    - AU14ProdigyWeldingGoggles
+    - RMCHandsLatexMarine
+    # 0 empty slots
+    outerClothing:
+    - CMOintment10
+    - CMOintment10
+    - CMSyringe
+    - CMPortableSurgicalBedSpawnFolded
+    - CMSurgicalCaseFilled
+    # 0 empty slots
+
+- type: playTimeTracker
+  id: AU14JobHRTPartyMedicTracker

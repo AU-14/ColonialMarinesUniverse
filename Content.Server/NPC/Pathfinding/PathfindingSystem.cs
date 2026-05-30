@@ -68,6 +68,11 @@ namespace Content.Server.NPC.Pathfinding
         private int _portalIndex;
         private readonly Dictionary<int, PathPortal> _portals = new();
 
+        private static float NextFloat(Random random, float min, float max)
+        {
+            return min + (float) random.NextDouble() * (max - min);
+        }
+
         private EntityQuery<AccessReaderComponent> _accessQuery;
         private EntityQuery<DestructibleComponent> _destructibleQuery;
         private EntityQuery<DoorComponent> _doorQuery;

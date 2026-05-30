@@ -40,6 +40,12 @@ namespace Content.Client.Viewport
         public int CurrentRenderScale => _curRenderScale;
 
         /// <summary>
+        ///     Enables CMU multi-Z composition for this viewport.
+        /// </summary>
+        [ViewVariables(VVAccess.ReadWrite)]
+        public bool RenderZLevels { get; set; }
+
+        /// <summary>
         ///     The eye to render.
         /// </summary>
         public IEye? Eye
@@ -150,7 +156,13 @@ namespace Content.Client.Viewport
 
             DebugTools.AssertNotNull(_viewport);
 
-            _viewport!.Render();
+            if (RenderZLevels)
+                RenderZLevelPasses(_viewport!);
+            else
+            {
+                ClearZLevelCompositeState();
+                _viewport!.Render();
+            }
 
             if (_queuedScreenshots.Count != 0)
             {
@@ -171,6 +183,7 @@ namespace Content.Client.Viewport
             var drawBoxGlobal = drawBox.Translated(GlobalPixelPosition);
             _viewport.RenderScreenOverlaysBelow(handle, this, drawBoxGlobal);
             handle.DrawingHandleScreen.DrawTextureRect(_viewport.RenderTarget.Texture, drawBox);
+            DrawZLevelComposites(handle, drawBox);
             _viewport.RenderScreenOverlaysAbove(handle, this, drawBoxGlobal);
         }
 
@@ -268,6 +281,7 @@ namespace Content.Client.Viewport
         {
             _viewport?.Dispose();
             _viewport = null;
+            DisposeZLevelViewports();
         }
 
         public MapCoordinates ScreenToMap(Vector2 coords)

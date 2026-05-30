@@ -1,10 +1,10 @@
-rmc-job-greeting-chances-colonist = You are a colonist living on LV-522. You are tasked by your employer, the Weston-Yamada Corporation, to preform your expected duties.
+rmc-job-greeting-chances-colonist = You are a colonist living on LV-522. You are tasked by your employer, the Weyland-Yutani Corporation, to preform your expected duties.
 
   You are [bold][color=#51A16C][font size=16]NON-HOSTILE to the UNMC![/font][/color][/bold]
 
-rmc-job-name-colonist-chances-trucker = Weston-Yamada Heavy Vehicle Operator
+rmc-job-name-colonist-chances-trucker = Weyland-Yutani Heavy Vehicle Operator
 rmc-job-description-colonist-chances-trucker = Operate heavy equipment in and around the colony.
-CMSurvivorChancesTrucker = Weston-Yamada Heavy Vehicle Operator
+CMSurvivorChancesTrucker = Weyland-Yutani Heavy Vehicle Operator
 
 rmc-job-name-colonist-chances-miner = Mining Surveyor
 CMSurvivorChancesMiner = Mining Surveyor

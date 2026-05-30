@@ -20,14 +20,14 @@
     components:
     - type: Skills
       skills:
-        RMCSkillEndurance: 2
+        RMCSkillEndurance: 3
         RMCSkillFirearms: 2
-        RMCSkillFireman: 1
+        RMCSkillFireman: 2
         RMCSkillJtac: 1
         RMCSkillSmartGun: 1
         RMCSkillConstruction: 2
-        RMCSkillEngineer: 3
-        RMCSkillPolice: 1
+        RMCSkillEngineer: 2
+        RMCSkillPolice: 2
     - type: SquadArmorWearer
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORSquadAutomaticRiflemanWYPMC
@@ -72,7 +72,7 @@
     pocket2: RMCPouchFirstAidPMCFill
     back: RMCScabbardMacheteSGFilled
     eyes: RMCGlassesSmartGunSight
-    ears2: RMCHeadsetDistressWeYa
+    ears: RMCHeadsetDistressWeYa
     suitstorage: RMCSmartGunPMC
   storage:
     pocket2:

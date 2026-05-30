@@ -15,6 +15,8 @@ namespace Content.Client._RMC14.Marines.Orders;
 // TODO RMC14: Just generalize this along with the xeno system. Possibly to be reused by other stuff as well?
 public sealed partial class OrdersOverlay : Overlay
 {
+    private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
+
     [Dependency] private IEntityManager _entity = default!;
     [Dependency] private IPlayerManager _players = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
@@ -34,7 +36,7 @@ public sealed partial class OrdersOverlay : Overlay
         _sprite = _entity.System<SpriteSystem>();
         _transform = _entity.System<TransformSystem>();
 
-        _shader = _prototype.Index<ShaderPrototype>("unshaded").Instance();
+        _shader = _prototype.Index(UnshadedShader).Instance();
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -79,11 +81,11 @@ public sealed partial class OrdersOverlay : Overlay
         Matrix3x2 scaleMatrix,
         Matrix3x2 rotationMatrix)
     {
-        var (_, sprite, xform) = ent;
+        var (uid, sprite, xform) = ent;
         if (xform.MapID != args.MapId)
             return;
 
-        var bounds = sprite.Bounds;
+        var bounds = _sprite.GetLocalBounds((uid, sprite));
 
         var worldPos = _transform.GetWorldPosition(xform);
 

@@ -57,6 +57,6 @@ public sealed partial class WorkingJoeVoiceBui : BoundUserInterface
     {
         base.Dispose(disposing);
         if (disposing)
-            _window?.Dispose();
+            _window?.Close();
     }
 }

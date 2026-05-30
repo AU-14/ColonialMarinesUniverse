@@ -160,6 +160,8 @@
         crate: RMCCrateM85A1
       - cost: 500
         crate: AU14CrateAssortedKnives
+      - cost: 6000
+        crate: AU14CrateFlamerSpec
       - cost: 9500
         crate: AU14CrateHJRA12
       - cost: 9500
@@ -194,6 +196,10 @@
         crate: AU14CrateMagazineType88
       - cost: 3000
         crate: AU14CrateMagazineType23Mixed
+    - name: AP Ammo
+      entries:
+      - cost: 2000
+        crate: AU14CrateBoxMagazineRifleAG80AP
     - name: Dropship Parts
       entries:
       - cost: 100

@@ -109,7 +109,7 @@
   id: RMCPropVehicleCrawler
   suffix: Use East, West
   name: colony crawler
-  description: It is a tread bound crawler used in harsh conditions. Supplied by Orbital Blue International; 'Your friends, in the Aerospace business.' A subsidiary of We-Ya.
+  description: It is a tread bound crawler used in harsh conditions. Supplied by Orbital Blue International; 'Your friends, in the Aerospace business.' A subsidiary of We-Yu.
   components:
   - type: Sprite
     state: crawler
@@ -127,7 +127,7 @@
   parent: RMCPropVehicleCrawler
   id: RMCPropVehicleCrawlerCovered
   name: colony crawler
-  description: It is a tread bound crawler used in harsh conditions. Supplied by Orbital Blue International; 'Your friends, in the Aerospace business.' A subsidiary of We-Ya.
+  description: It is a tread bound crawler used in harsh conditions. Supplied by Orbital Blue International; 'Your friends, in the Aerospace business.' A subsidiary of We-Yu.
   components:
   - type: Sprite
     state: crawler_covered_bed
@@ -136,7 +136,7 @@
   parent: RMCPropVehicleCrawler
   id: RMCPropVehicleCrawlerCrate
   name: colony crawler
-  description: It is a tread bound crawler used in harsh conditions. Supplied by Orbital Blue International; 'Your friends, in the Aerospace business.' A subsidiary of We-Ya.
+  description: It is a tread bound crawler used in harsh conditions. Supplied by Orbital Blue International; 'Your friends, in the Aerospace business.' A subsidiary of We-Yu.
   components:
   - type: Sprite
     state: crawler_crate
@@ -145,7 +145,7 @@
   parent: RMCPropVehicleCrawler
   id: RMCPropVehicleCrawlerCrate2
   name: colony crawler
-  description: It is a tread bound crawler used in harsh conditions. Supplied by Orbital Blue International; 'Your friends, in the Aerospace business.' A subsidiary of We-Ya.
+  description: It is a tread bound crawler used in harsh conditions. Supplied by Orbital Blue International; 'Your friends, in the Aerospace business.' A subsidiary of We-Yu.
   components:
   - type: Sprite
     state: crawler_crate_alt
@@ -154,7 +154,7 @@
   parent: RMCPropVehicleCrawler
   id: RMCPropVehicleCrawlerCrate3
   name: colony crawler
-  description: It is a tread bound crawler used in harsh conditions. Supplied by Orbital Blue International; 'Your friends, in the Aerospace business.' A subsidiary of We-Ya.
+  description: It is a tread bound crawler used in harsh conditions. Supplied by Orbital Blue International; 'Your friends, in the Aerospace business.' A subsidiary of We-Yu.
   components:
   - type: Sprite
     state: crawler_crate_alt2
@@ -163,7 +163,7 @@
   parent: RMCPropVehicleCrawler
   id: RMCPropVehicleCrawlerCrateWY
   name: colony crawler
-  description: It is a tread bound crawler used in harsh conditions. Supplied by Orbital Blue International; 'Your friends, in the Aerospace business.' A subsidiary of We-Ya.
+  description: It is a tread bound crawler used in harsh conditions. Supplied by Orbital Blue International; 'Your friends, in the Aerospace business.' A subsidiary of We-Yu.
   components:
   - type: Sprite
     state: crawler_crate_wy
@@ -172,7 +172,7 @@
   parent: RMCPropVehicleCrawler
   id: RMCPropVehicleCrawlerFuel
   name: colony crawler
-  description: It is a tread bound crawler used in harsh conditions. Supplied by Orbital Blue International; 'Your friends, in the Aerospace business.' A subsidiary of We-Ya.
+  description: It is a tread bound crawler used in harsh conditions. Supplied by Orbital Blue International; 'Your friends, in the Aerospace business.' A subsidiary of We-Yu.
   components:
   - type: Sprite
     state: crawler_fuel

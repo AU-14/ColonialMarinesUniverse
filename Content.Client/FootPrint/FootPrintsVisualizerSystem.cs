@@ -9,6 +9,7 @@ public sealed partial class FootPrintsVisualizerSystem : VisualizerSystem<FootPr
 {
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {
@@ -23,36 +24,36 @@ public sealed partial class FootPrintsVisualizerSystem : VisualizerSystem<FootPr
         if (!TryComp<SpriteComponent>(uid, out var sprite))
             return;
 
-        sprite.LayerMapReserveBlank(FootPrintVisualLayers.Print);
+        _sprite.LayerMapReserve((uid, sprite), FootPrintVisualLayers.Print);
         UpdateAppearance(uid, comp, sprite);
     }
 
     private void OnShutdown(EntityUid uid, FootPrintComponent comp, ComponentShutdown args)
     {
         if (TryComp<SpriteComponent>(uid, out var sprite)
-            && sprite.LayerMapTryGet(FootPrintVisualLayers.Print, out var layer))
-            sprite.RemoveLayer(layer);
+            && _sprite.LayerMapTryGet((uid, sprite), FootPrintVisualLayers.Print, out var layer, false))
+            _sprite.RemoveLayer((uid, sprite), layer);
     }
 
     private void UpdateAppearance(EntityUid uid, FootPrintComponent component, SpriteComponent sprite)
     {
-        if (!sprite.LayerMapTryGet(FootPrintVisualLayers.Print, out var layer)
+        if (!_sprite.LayerMapTryGet((uid, sprite), FootPrintVisualLayers.Print, out var layer, false)
             || !TryComp<FootPrintsComponent>(component.PrintOwner, out var printsComponent)
             || !TryComp<AppearanceComponent>(uid, out var appearance)
             || !_appearance.TryGetData<FootPrintVisuals>(uid, FootPrintVisualState.State, out var printVisuals, appearance))
             return;
 
-        sprite.LayerSetState(layer, new RSI.StateId(printVisuals switch
+        _sprite.LayerSetRsi((uid, sprite), layer, printsComponent.RsiPath, new RSI.StateId(printVisuals switch
         {
             FootPrintVisuals.BareFootPrint => printsComponent.RightStep ? printsComponent.RightBarePrint : printsComponent.LeftBarePrint,
             FootPrintVisuals.ShoesPrint => printsComponent.ShoesPrint,
             FootPrintVisuals.SuitPrint => printsComponent.SuitPrint,
             FootPrintVisuals.Dragging => _random.Pick(printsComponent.DraggingPrint),
             _ => throw new ArgumentOutOfRangeException($"Unknown {printVisuals} parameter.")
-        }), printsComponent.RsiPath);
+        }));
 
         if (_appearance.TryGetData<Color>(uid, FootPrintVisualState.Color, out var printColor, appearance))
-            sprite.LayerSetColor(layer, printColor);
+            _sprite.LayerSetColor((uid, sprite), layer, printColor);
     }
 
     protected override void OnAppearanceChange(EntityUid uid, FootPrintComponent component, ref AppearanceChangeEvent args)

@@ -94,6 +94,13 @@
     containers:
       - entity_storage
   - type: RequireProjectileTarget
+  - type: Flamability
+    chance: 0.06
+    rate: 0.3
+    spread: 0.2
+    range: 0.5
+    burnDurationMin: 70
+    burnDurationMax: 620
 
 - type: entity
   parent: CrateGeneric

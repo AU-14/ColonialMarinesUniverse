@@ -42,7 +42,7 @@
     - AUPlanetStableGarrison
     #- AUPlanetLV747
     #- AUPlanetSorokyne
-    #- AUPlanetLV759 removed pending rework
+    #- AUPlanetLV759
   rules:
   - AuVoteRule
   - PlatoonSpawn
@@ -58,18 +58,13 @@
   description: Investigate a mysterious distress signal as government forces.
   requiresGovforVote: true
   supportedPlanets:
-#  - AUPlanetShepherdsPride
 #  - AUPlanetLV747
-  #- AUPlanetFlight
-  - AUPlanetLV327
-   - AUPlanetSorokyne
+  - AUPlanetSorokyne
   - AUPlanetCorsatStation
-#  - AUPlanetStableGarrison
   - AUPlanetTrijent
 #  - AuPlanetFiorina -removed due to load errors
   - AuPlanetKutjevo
   - AuPlanetShivasSnowball
-#  - CMUPlanetLament
   rules:
   - AuVoteRule
   - PlatoonSpawn
@@ -88,11 +83,8 @@
     - AuVoteRule
     - ColonyAntags
   supportedPlanets:
-    #- AUPlanetLV747
     - AUPlanetShepherdsPride
    # - AUPlanetLV624
-   # - AUPlanetLV327
-   # - AUPlanetSorokyne
     - AUPlanetStableGarrison
     - CMUPlanetLament
 
@@ -148,7 +140,7 @@
     jobs:
       AU14JobGOVFORPlatCo: 1
       AU14JobGOVFORPlatoonCorpsman: 9
-      AU14JobGOVFORDCC: 1
+      AU14JobGOVFORDCC: 2
       AU14JobGOVFORPlatOp: 5
       AU14JobGOVFORDSPilot: 2
       AU14JobGOVFORRadioTelephoneOperator: 4
@@ -161,6 +153,7 @@
       AU14JobGOVFORMilitaryDoctor: 3
       AU14JobGOVFORMilitaryPoliceMan: 2
       AU14JobGOVFORAuxTech: 1
+      AU14JobGOVFORWorkingJoe: 1
 
 - type: entity
   id: AddOpfor
@@ -172,17 +165,20 @@
     jobs:
       AU14JobOpforPlatCo: 1
       AU14JobOpforPlatoonCorpsman: 9
-      AU14JobOpforDCC: 1
+      AU14JobOpforDCC: 2
       AU14JobOpforPlatOp: 5
       AU14JobOpforDSPilot: 2
-      AU14JobOpforRadioTelephoneOperator: 3
+      AU14JobOpforRadioTelephoneOperator: 4
       AU14JobOpforSquadSergeant: 3
       AU14JobOpforSquadAutomaticRifleman: 3
       AU14JobOPFORSquadCombatTech: 6
       AU14JobOpforSquadRifleman: 75
       AU14JobOPFORAuxSupportSynth: 2
       AU14JobOPFORadvisor: 1
-      AU14JobOPFORMilitaryDoctor: 1
+      AU14JobOPFORMilitaryDoctor: 3
+      AU14JobOPFORWorkingJoe: 1
+      AU14JobOPFORAuxTech: 1
+#     AU14JobOPFORMilitaryPoliceMan: 2 # TODO
 
 - type: entity
   id: AddClf

@@ -24,8 +24,10 @@ namespace Content.Client.Guidebook.Controls;
 public sealed partial class GuideMicrowaveEmbed : PanelContainer, IDocumentTag, ISearchableControl, IPrototypeRepresentationControl
 {
     [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IEntitySystemManager _systemManager = default!;
     [Dependency] private ILogManager _logManager = default!;
 
+    private RMCReagentSystem _reagent = default!;
     private readonly ISawmill _sawmill = default!;
 
     public IPrototype? RepresentedPrototype { get; private set; }
@@ -36,6 +38,7 @@ public sealed partial class GuideMicrowaveEmbed : PanelContainer, IDocumentTag, 
         IoCManager.InjectDependencies(this);
         MouseFilter = MouseFilterMode.Stop;
 
+        _reagent = _systemManager.GetEntitySystem<RMCReagentSystem>();
         _sawmill = _logManager.GetSawmill("guidebook.microwave");
         CrtLobbyTheme.Apply(this, useCrtTypography: false);
     }
@@ -129,7 +132,7 @@ public sealed partial class GuideMicrowaveEmbed : PanelContainer, IDocumentTag, 
     {
         foreach (var (product, amount) in recipe.IngredientsReagents.OrderByDescending(p => p.Value))
         {
-            var reagent = _prototype.IndexReagent<ReagentPrototype>(product);
+            var reagent = _reagent.Index(product);
 
             // liquid color
 

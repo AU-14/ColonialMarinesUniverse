@@ -14,6 +14,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Item.ItemToggle.Components;
+using Content.Shared.Lobby;
 using Content.Shared.Popups;
 using Content.Shared.Prototypes;
 using Content.Shared.Throwing;
@@ -242,6 +243,12 @@ public sealed partial class SkillsSystem : EntitySystem
 
     private void OnItemToggleDeactivateUnskilled(Entity<ItemToggleDeactivateUnskilledComponent> ent, ref GotEquippedEvent args)
     {
+        if (HasComp<LobbyPreviewEntityComponent>(args.Equipee) ||
+            HasComp<LobbyPreviewEntityComponent>(args.Equipment))
+        {
+            return;
+        }
+
         if (!HasAllSkills(args.Equipee, ent.Comp.Skills))
         {
             if (_toggle.IsActivated(ent.Owner) && _toggle.TryDeactivate(ent.Owner, args.Equipee) && ent.Comp.Popup != null)

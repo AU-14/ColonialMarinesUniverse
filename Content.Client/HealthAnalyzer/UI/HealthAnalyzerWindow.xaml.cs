@@ -39,6 +39,7 @@ namespace Content.Client.HealthAnalyzer.UI
         public HealthAnalyzerWindow()
         {
             RobustXamlLoader.Load(this);
+            AllowDraggingOutsideParentBounds = true;
 
             var dependencies = IoCManager.Instance!;
             _entityManager = dependencies.Resolve<IEntityManager>();

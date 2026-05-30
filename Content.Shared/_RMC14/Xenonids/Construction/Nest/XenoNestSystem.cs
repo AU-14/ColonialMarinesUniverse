@@ -232,7 +232,7 @@ public sealed partial class XenoNestSystem : EntitySystem
         if (ent.Comp.GhostedId is { } id &&
             _player.TryGetSessionById(id, out var player) &&
             player.AttachedEntity is { } ghost &&
-            HasComp<GhostComponent>(ghost))
+            TryComp(ghost, out GhostComponent? ghostComp))
         {
             _rmcChat.ChatMessageToOne("\n[font size=24][color=red]You have been freed from your nest and may go back to your body![/color][/font]\n", ghost);
 
@@ -240,7 +240,7 @@ public sealed partial class XenoNestSystem : EntitySystem
             returnTo.Target = ent;
             Dirty(ghost, returnTo);
 
-            _ghost.SetCanReturnToBody(ghost, true);
+            _ghost.SetCanReturnToBody((ghost, ghostComp), true);
         }
     }
 

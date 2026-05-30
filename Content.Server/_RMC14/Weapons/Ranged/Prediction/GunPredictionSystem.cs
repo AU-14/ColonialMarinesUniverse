@@ -160,6 +160,15 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
             ? _transform.GetMapCoordinates(other)
             : _transform.ToMapCoordinates(otherCoordinates);
 
+        if (!IsSameMap(projectileCoordinates, otherMapCoordinates))
+            return false;
+
+        if (clientCoordinates != null &&
+            !IsSameMap(projectileCoordinates, clientCoordinates.Value))
+        {
+            return false;
+        }
+
         if (clientCoordinates != null &&
             (clientCoordinates.Value.InRange(otherMapCoordinates, _coordinateDeviation) ||
              clientCoordinates.Value.InRange(lowestCoordinate, _lowestCoordinateDeviation)))

@@ -9,6 +9,7 @@ namespace Content.Client._RMC14.Xenonids.Construction;
 public sealed partial class XenoConstructionAnimationVisualizerSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {
@@ -28,23 +29,22 @@ public sealed partial class XenoConstructionAnimationVisualizerSystem : EntitySy
         if (!TryComp<SpriteComponent>(eff, out var sprite))
             return;
 
-        sprite.LayerMapTryGet(XenoConstructionVisualLayers.Animation, out var layer);
-        var state = sprite.LayerGetState(layer);
+        var effectUid = eff.Value;
+        _sprite.LayerMapTryGet((effectUid, sprite), XenoConstructionVisualLayers.Animation, out var layer, false);
 
         timing.AnimationTime = ev.BuildTime;
         timing.AnimationTimeFinished = _timing.CurTime + ev.BuildTime;
-        if(sprite.TryGetLayer(layer, out var aLayer) && aLayer.ActualState != null)
+        if(_sprite.TryGetLayer((effectUid, sprite), layer, out var aLayer, false) && aLayer.ActualState != null)
             timing.TotalFrames = aLayer.ActualState.DelayCount;
     }
 
-    private void Animate(SpriteComponent sprite, object layerKey, int frame)
+    private void Animate(EntityUid uid, SpriteComponent sprite, XenoConstructionVisualLayers layerKey, int frame)
     {
-        if (!sprite.LayerExists(layerKey) ||
-            sprite[layerKey] is not Layer layer)
+        if (!_sprite.TryGetLayer((uid, sprite), layerKey, out var layer, false))
         {
             return;
         }
-        layer.SetAutoAnimated(layer.AnimationFrame < frame);
+        _sprite.LayerSetAutoAnimated(layer, layer.AnimationFrame < frame);
     }
 
     public override void FrameUpdate(float frameTime)
@@ -58,7 +58,7 @@ public sealed partial class XenoConstructionAnimationVisualizerSystem : EntitySy
             if (progression < 0)
                 progression = 0;
             int expectedFrame = (int) Math.Min(effect.TotalFrames * (1 - progression), effect.TotalFrames - 1);
-            Animate(sprite, XenoConstructionVisualLayers.Animation, expectedFrame);
+            Animate(uid, sprite, XenoConstructionVisualLayers.Animation, expectedFrame);
         }
 
     }

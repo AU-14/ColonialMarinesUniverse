@@ -9,6 +9,7 @@
     snap:
     - Wall
   components:
+  - type: Appearance
   - type: Fixtures
     fixtures:
       fix1:

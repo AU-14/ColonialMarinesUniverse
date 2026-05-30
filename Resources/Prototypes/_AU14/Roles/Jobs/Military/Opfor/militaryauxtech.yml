@@ -1,0 +1,60 @@
+- type: job
+  parent: AU14JobAuxTechBase
+  id: AU14JobOPFORAuxTech
+  name: au14-job-name-opforAuxTech
+  description: au14-job-description-opforAuxTech
+  icon: "AU14JobIconOPFORRTO"
+  spawnMenuRoleName: Auxiliary Technician (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearOPFORAuxTech
+  dummyStartingGear: AU14GearOPFORAuxTechDummy
+  overwatchRoleName: au14-job-name-opforAuxTech
+  accessGroups:
+  - AU14OpforAuxTech
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Marine
+      Faction: opfor
+    - type: NpcFactionMember
+      factions:
+      - OPFOR
+    - type: UserIFF
+      factions:
+      - OPFOR
+    - type: JobPrefix
+      prefix: au14-job-prefix-opforAuxTech
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforhud.rsi
+        state: rto
+
+- type: startingGear
+  id: AU14GearOPFORAuxTech
+  equipment:
+    shoes: CMBootsBlackFilled
+    ears: AU14HeadsetOpforAuxiliary
+    ears2: RMCM5CameraGear
+    id: AU14JobIDCardOPFORAuxTech
+  storage:
+    back:
+    - CMStampApproved
+
+- type: startingGear
+  id: AU14GearOPFORAuxTechDummy
+  equipment:
+    shoes: CMBootsBlackFilled
+    back: CMSatchelMarine
+  storage:
+    back:
+    - CMStampApproved
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFORAuxTech
+  name: Spawn Point OPFOR Auxiliary Technician
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORAuxTech
+  - type: Sprite
+    state: syn_spawn

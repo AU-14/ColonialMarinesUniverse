@@ -277,7 +277,7 @@
   parent: RMCDrinkAlcoholBase
   id: RMCDrinkAlcoholSake
   name: weyland-yutani sake
-  description: Sake made with ancient techniques passed down for thousands of years. Fermented in Iowa by the Weston-Yamada Corporation.
+  description: Sake made with ancient techniques passed down for thousands of years. Fermented in Iowa by the Weyland-Yutani Corporation.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/sake.rsi

@@ -6,7 +6,6 @@ using Content.Client.Humanoid;
 using Content.Client.Inventory;
 using Content.Client.Lobby.UI;
 using Content.Client.Players.PlayTimeTracking;
-using Content.Client.Station;
 using Content.Shared._RMC14.Armor;
 using Content.Shared.AU14.Allegiance;
 using Content.Shared.AU14.Origin;
@@ -17,6 +16,7 @@ using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
+using Content.Shared.Lobby;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
@@ -50,7 +50,6 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
     [Dependency] private LinkAccountManager _linkAccount = default!;
     [UISystemDependency] private HumanoidAppearanceSystem _humanoid = default!;
     [UISystemDependency] private ClientInventorySystem _inventory = default!;
-    [UISystemDependency] private StationSpawningSystem _spawn = default!;
     [UISystemDependency] private GuidebookSystem _guide = default!;
     [UISystemDependency] private CMArmorSystem _armorSystem = default!;
 
@@ -183,8 +182,8 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
     public void OnStateExited(LobbyState state)
     {
         PreviewPanel?.SetLoaded(false);
-        _profileEditor?.Dispose();
-        _characterSetup?.Dispose();
+        _profileEditor?.Orphan();
+        _characterSetup?.Orphan();
 
         _characterSetup = null;
         _profileEditor = null;
@@ -491,8 +490,38 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
                 if (!_prototypeManager.TryIndex(loadout.Prototype, out var loadoutProto))
                     continue;
 
-                _spawn.EquipStartingGear(uid, loadoutProto);
+                if (_prototypeManager.TryIndex(loadoutProto.StartingGear, out var startingGear))
+                    GiveDummyEquipmentLoadout(uid, startingGear);
+
+                GiveDummyEquipmentLoadout(uid, loadoutProto);
             }
+        }
+    }
+
+    private void GiveDummyEquipmentLoadout(EntityUid uid, IEquipmentLoadout? loadout)
+    {
+        if (loadout == null ||
+            !_inventory.TryGetSlots(uid, out var slots))
+        {
+            return;
+        }
+
+        // Preview dummies only need visible equipment. In-hand and storage loadouts can fire
+        // real pickup/fill behavior, including sounds, every time the preview refreshes.
+        foreach (var slot in slots)
+        {
+            var itemType = loadout.GetGear(slot.Name);
+            if (string.IsNullOrEmpty(itemType))
+                continue;
+
+            if (_inventory.TryUnequip(uid, slot.Name, out var unequippedItem, silent: true, force: true, reparent: false))
+            {
+                EntityManager.DeleteEntity(unequippedItem.Value);
+            }
+
+            var item = EntityManager.SpawnEntity(itemType, MapCoordinates.Nullspace);
+            MarkPreviewEntity(item);
+            _inventory.TryEquip(uid, item, slot.Name, true, true);
         }
     }
 
@@ -530,6 +559,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
                             if (itemType != string.Empty)
                             {
                                 var item = EntityManager.SpawnEntity(itemType, MapCoordinates.Nullspace);
+                                MarkPreviewEntity(item);
                                 _inventory.TryEquip(dummy, item, slot.Name, true, true);
                             }
                         }
@@ -545,6 +575,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
                             if (itemType != string.Empty)
                             {
                                 var item = EntityManager.SpawnEntity(itemType, MapCoordinates.Nullspace);
+                                MarkPreviewEntity(item);
                                 _inventory.TryEquip(dummy, item, slot.Name, true, true);
                             }
                         }
@@ -578,12 +609,14 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
                 {
                     var variantItemProtoId = _armorSystem.GetArmorVariant((item, variantComponent), profile.ArmorPreference);
                     var variantItem = EntityManager.SpawnEntity(variantItemProtoId, MapCoordinates.Nullspace);
+                    MarkPreviewEntity(variantItem);
                     _inventory.TryEquip(dummy, variantItem, slot.Name, true, true);
                     EntityManager.QueueDeleteEntity(item);
 
                     continue;
                 }
 
+                MarkPreviewEntity(item);
                 _inventory.TryEquip(dummy, item, slot.Name, true, true);
             }
         }
@@ -608,16 +641,19 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         {
             // Special type like borg or AI, do not spawn a human just spawn the entity.
             dummyEnt = EntityManager.SpawnEntity(previewEntity, MapCoordinates.Nullspace);
+            MarkPreviewEntity(dummyEnt);
             return dummyEnt;
         }
         else if (humanoid is not null)
         {
             var dummy = _prototypeManager.Index<SpeciesPrototype>(humanoid.Species).DollPrototype;
             dummyEnt = EntityManager.SpawnEntity(dummy, MapCoordinates.Nullspace);
+            MarkPreviewEntity(dummyEnt);
         }
         else
         {
             dummyEnt = EntityManager.SpawnEntity(_prototypeManager.Index<SpeciesPrototype>(SharedHumanoidAppearanceSystem.DefaultSpecies).DollPrototype, MapCoordinates.Nullspace);
+            MarkPreviewEntity(dummyEnt);
         }
 
         _humanoid.LoadProfile(dummyEnt, humanoid);
@@ -636,6 +672,11 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         }
 
         return dummyEnt;
+    }
+
+    private void MarkPreviewEntity(EntityUid uid)
+    {
+        EntityManager.EnsureComponent<LobbyPreviewEntityComponent>(uid);
     }
 
     #endregion

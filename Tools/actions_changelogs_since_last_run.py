@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-
 """
 Sends updates to a Discord webhook for new changelog entries since the last GitHub Actions publish run.
-
 Automatically figures out the last run and changelog contents with the GitHub API.
 """
 
@@ -23,9 +21,17 @@ GITHUB_API_URL = os.environ.get("GITHUB_API_URL", "https://api.github.com")
 DISCORD_SPLIT_LIMIT = 2000
 DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
 
-CHANGELOG_FILE = "Resources/Changelog/RMC14.yml"
+CHANGELOG_FILE = "Resources/Changelog/CMU.yml"
 
-TYPES_TO_EMOJI = {"Fix": "🐛", "Add": "🆕", "Remove": "❌", "Tweak": "⚒️"}
+TYPES_TO_EMOJI = {
+    "Fix": "🔧",
+    "Add": "✨",
+    "Remove": "🔥",
+    "Tweak": "🎚️",
+    "Code": "🛠️",
+    "Map": "📍",
+    "Admin": "🛡️",
+}
 
 ChangelogEntry = dict[str, Any]
 
@@ -33,7 +39,7 @@ ChangelogEntry = dict[str, Any]
 def main():
     if not DISCORD_WEBHOOK_URL:
         print("No discord webhook URL found, skipping discord send")
-        return
+        exit(1)
 
     if DEBUG:
         # to debug this script locally, you can use
@@ -62,8 +68,8 @@ def get_most_recent_workflow(
         # First past successful run that isn't our current run.
         if run["id"] == workflow_run["id"]:
             continue
-
         return run
+    return None  # no previous successful run
 
 
 def get_current_run(
@@ -97,6 +103,11 @@ def get_last_changelog() -> str:
     session.headers["X-GitHub-Api-Version"] = "2022-11-28"
 
     most_recent = get_most_recent_workflow(session, github_repository, github_run)
+    if most_recent is None:
+        print("No previous successful run found.")
+        # return yaml.dump({"Entries": []}) # use this to seed (send all changelogs)
+        exit(0)  # use this if we want to send new changes only
+
     last_sha = most_recent["head_commit"]["id"]
     print(f"Last successful publish job was {most_recent['id']}: {last_sha}")
     last_changelog_stream = get_last_changelog_by_sha(

@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Attachable.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item.ItemToggle.Components;
+using Content.Shared.Lobby;
 using Content.Shared.Popups;
 using Content.Shared.Temperature;
 using Content.Shared.Toggleable;
@@ -243,11 +244,14 @@ public sealed partial class ItemToggleSystem : EntitySystem
     private void Activate(Entity<ItemToggleComponent> ent, bool predicted, EntityUid? user = null)
     {
         var (uid, comp) = ent;
-        var soundToPlay = comp.SoundActivate;
-        if (predicted)
-            _audio.PlayPredicted(soundToPlay, uid, user);
-        else
-            _audio.PlayPvs(soundToPlay, uid);
+        if (!IsLobbyPreviewToggle(uid, user))
+        {
+            var soundToPlay = comp.SoundActivate;
+            if (predicted)
+                _audio.PlayPredicted(soundToPlay, uid, user);
+            else
+                _audio.PlayPvs(soundToPlay, uid);
+        }
 
         comp.Activated = true;
         UpdateVisuals((uid, comp));
@@ -263,11 +267,14 @@ public sealed partial class ItemToggleSystem : EntitySystem
     private void Deactivate(Entity<ItemToggleComponent> ent, bool predicted, EntityUid? user = null)
     {
         var (uid, comp) = ent;
-        var soundToPlay = comp.SoundDeactivate;
-        if (predicted)
-            _audio.PlayPredicted(soundToPlay, uid, user);
-        else
-            _audio.PlayPvs(soundToPlay, uid);
+        if (!IsLobbyPreviewToggle(uid, user))
+        {
+            var soundToPlay = comp.SoundDeactivate;
+            if (predicted)
+                _audio.PlayPredicted(soundToPlay, uid, user);
+            else
+                _audio.PlayPvs(soundToPlay, uid);
+        }
 
         comp.Activated = false;
         UpdateVisuals((uid, comp));
@@ -339,6 +346,12 @@ public sealed partial class ItemToggleSystem : EntitySystem
     private void UpdateActiveSound(Entity<ItemToggleActiveSoundComponent> ent, ref ItemToggledEvent args)
     {
         var (uid, comp) = ent;
+        if (IsLobbyPreviewToggle(uid, args.User))
+        {
+            comp.PlayingStream = _audio.Stop(comp.PlayingStream);
+            return;
+        }
+
         if (!args.Activated)
         {
             comp.PlayingStream = _audio.Stop(comp.PlayingStream);
@@ -354,5 +367,11 @@ public sealed partial class ItemToggleSystem : EntitySystem
             if (stream?.Entity is {} entity)
                 comp.PlayingStream = entity;
         }
+    }
+
+    private bool IsLobbyPreviewToggle(EntityUid uid, EntityUid? user)
+    {
+        return HasComp<LobbyPreviewEntityComponent>(uid) ||
+               user is { } userUid && HasComp<LobbyPreviewEntityComponent>(userUid);
     }
 }

@@ -355,8 +355,8 @@
 - type: entity
   parent: ColMarTechBase
   id: WeYaExperimentalToolsVendor
-  name: We-Ya Experimental Tools Vendor
-  description: A smaller vendor hooked up to a cache of specially provisioned, experimental tools and equipment provided by the We-Ya Research and Development Division(TM). Handle with care.
+  name: We-Yu Experimental Tools Vendor
+  description: A smaller vendor hooked up to a cache of specially provisioned, experimental tools and equipment provided by the We-Yu Research and Development Division(TM). Handle with care.
   components:
   - type: AccessReader
     access:

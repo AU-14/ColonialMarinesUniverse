@@ -675,7 +675,7 @@
   id: ActionXenoScreech
   parent: ActionXenoBase
   name: Screech (250)
-  description: A wide area of effect stun, screeches upon activation. [color=red]This will also stun parasites, and is blocked by solid walls, smoke, and boiler gas, but not windows![/color]
+  description: An ear-splitting screech that debilitates nearby enemies within 7 tiles. [color=red]Severely slows, deafens, restricts vision, and disrupts aim for 8 seconds. Blocked by solid walls, but not windows.[/color]
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -717,6 +717,25 @@
     useDelay: 18
   - type: InstantAction
     event: !type:XenoStompActionEvent
+
+- type: entity
+  id: ActionXenoDirectionalStomp
+  parent: ActionXenoBase
+  name: Stomp (30)
+  description: Slam the ground in a cone in front of you, dealing heavy damage and knocking back all enemies caught in the blast.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: stomp
+    useDelay: 18
+  - type: TargetAction
+    range: 15
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:XenoDirectionalStompActionEvent
+  - type: ActionBlockIfResting
 
 - type: entity
   parent: CMGuidebookActionXenoBase
@@ -926,24 +945,26 @@
   parent: ActionXenoBase
   id: ActionXenoImpale
   name: Impale (80)
-  description: Impales an adjacent enemy with your tail. Hits twice on a marked target and removes the mark. Pierces some armor.
+  description: Impales an adjacent enemy with your tail. Hits twice on a marked target and removes the mark. Pierces armor.
   components:
   - type: Action
     itemIconStyle: NoItem
     icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: prae_impale
+      sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: dancer_impale
     useDelay: 13
   - type: TargetAction
-    range: 1.5
+    range: 2
     deselectOnMiss: false
   - type: EntityTargetAction
+  - type: WorldTargetAction
     event: !type:XenoImpaleActionEvent
   - type: XenoOffensiveAction
   - type: ActionBlockIfResting
   - type: XenoActionPlasma
     cost: 80
   - type: RMCCooldownOnMiss
+    missCooldown: 0.7
 
 - type: entity
   parent: ActionXenoBase
@@ -954,8 +975,8 @@
   - type: Action
     itemIconStyle: NoItem
     icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: prae_tail_trip
+      sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: dancer_tail_trip
     useDelay: 13
   - type: TargetAction
     range: 2
@@ -967,6 +988,7 @@
     cost: 30
   - type: ActionBlockIfResting
   - type: RMCCooldownOnMiss
+    missCooldown: 0.7
 
 - type: entity
   parent: ActionXenoBase
@@ -1095,6 +1117,30 @@
   parent: ActionXenoSpit
   name: Xeno Spit (50/25)
   description: Launches a projectile that will either paralyze the first enemy it hits or damage them and cover them in acid.
+
+- type: entity
+  id: ActionXenoQueenSpit
+  parent: ActionXenoBase
+  name: Acid Volley (40)
+  description: Launches three acid projectiles in a narrow cone. Each target can only be hit once.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+    useDelay: 5
+  - type: TargetAction
+    repeat: true
+    range: 30
+    checkCanAccess: false
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+  - type: WorldTargetAction
+    event: !type:XenoQueenSpitActionEvent
+  - type: ActionBlockIfResting
+  - type: XenoActionPlasma
+    cost: 40
 
 - type: entity
   parent: ActionXenoBase
@@ -1602,5 +1648,198 @@
   - type: Sprite
     state: gas_mine
 
+- type: entity
+  id: ActionXenoTailLance
+  parent: ActionXenoTailStab
+  name: Tail Lance
+  description: Launches a fast tail thrust. The cooldown is shorter if you miss.
+  components:
+  - type: Action
+    icon:
+      sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: dancer_tail_lance
+  - type: XenoTailStabAction
+    missCooldown: 0.7
 
+- type: entity
+  id: ActionXenoVenatorCorrosiveSpit
+  parent: ActionXenoBase
+  name: Corrosive Spit (45)
+  description: Spit concentrated acid that leaves a small corrosive pool.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: venator_corrosive_spit
+    useDelay: 11
+  - type: TargetAction
+    repeat: true
+    range: 8
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Venator.XenoVenatorSpitActionEvent
+      projectile: XenoVenatorCorrosiveProjectile
+      speed: 24
+  - type: XenoActionPlasma
+    cost: 45
+  - type: ActionSharedCooldown
+    id: ActionXenoVenatorCorrosiveSpit
+    ids:
+    - ActionXenoVenatorAcidBlob
+    - ActionXenoVenatorEnzymaticBreath
+    cooldown: 11
+  - type: ActionBlockIfResting
 
+- type: entity
+  id: ActionXenoVenatorAcidBlob
+  parent: ActionXenoVenatorCorrosiveSpit
+  name: Acid Blob (65)
+  description: Lob a heavier glob of acid that knocks down a direct hit and spreads pools around impact.
+  components:
+  - type: Action
+    icon:
+      sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: venator_acid_blob
+  - type: WorldTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Venator.XenoVenatorSpitActionEvent
+      projectile: XenoVenatorAcidBlobProjectile
+      speed: 7.5
+      sound:
+        path: /Audio/_RMC14/Xeno/blobattack.ogg
+      stopAtTarget: true
+  - type: XenoActionPlasma
+    cost: 65
+  - type: ActionSharedCooldown
+    id: ActionXenoVenatorAcidBlob
+    ids:
+    - ActionXenoVenatorCorrosiveSpit
+    - ActionXenoVenatorEnzymaticBreath
+    cooldown: 11
+
+- type: entity
+  id: ActionXenoVenatorEnzymaticBreath
+  parent: ActionXenoVenatorCorrosiveSpit
+  name: Enzymatic Breath (55)
+  description: Spit a short spread of acid that marks an area with corrosive pools.
+  components:
+  - type: Action
+    icon:
+      sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: venator_enzymatic_breath
+  - type: WorldTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Venator.XenoVenatorSpitActionEvent
+      projectile: XenoVenatorBreathProjectile
+      shots: 5
+      deviation: 25
+      speed: 22
+  - type: XenoActionPlasma
+    cost: 55
+  - type: ActionSharedCooldown
+    id: ActionXenoVenatorEnzymaticBreath
+    ids:
+    - ActionXenoVenatorCorrosiveSpit
+    - ActionXenoVenatorAcidBlob
+    cooldown: 11
+
+- type: entity
+  id: ActionXenoPlateBash
+  parent: ActionXenoBase
+  name: Plate Bash
+  description: Bash a nearby enemy with your crest plates.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: bulwark_plate_bash
+    useDelay: 8
+  - type: TargetAction
+    range: 3
+  - type: EntityTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Bulwark.XenoPlateBashActionEvent
+  - type: XenoOffensiveAction
+  - type: ActionBlockIfResting
+  - type: ActionInRangeUnobstructed
+    range: 3
+
+- type: entity
+  id: ActionXenoBulwarkTailSwing
+  parent: ActionXenoBase
+  name: Tail Swing
+  description: Sweep nearby enemies with your tail.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: bulwark_tail_swing
+    useDelay: 12
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Bulwark.XenoBulwarkTailSwingActionEvent
+  - type: XenoOffensiveAction
+  - type: ActionBlockIfResting
+
+- type: entity
+  id: ActionXenoTailInjection
+  parent: ActionXenoBase
+  name: Tail Injection
+  description: Inject your stored chemical mixture into a nearby target.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: tail_attack_acid
+    useDelay: 8
+  - type: TargetAction
+    range: 2
+  - type: EntityTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Alchemist.XenoTailInjectionActionEvent
+  - type: XenoOffensiveAction
+  - type: ActionBlockIfResting
+  - type: ActionInRangeUnobstructed
+    range: 2
+
+- type: entity
+  id: ActionXenoRapture
+  parent: ActionXenoBase
+  name: Rapture
+  description: Rip flesh resin from a nearby enemy.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: reaper_rapture
+    useDelay: 15
+  - type: TargetAction
+    range: 3
+  - type: EntityTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Reaper.XenoRaptureActionEvent
+  - type: XenoOffensiveAction
+  - type: ActionBlockIfResting
+  - type: ActionInRangeUnobstructed
+    range: 3
+
+- type: entity
+  id: ActionXenoReaperRedGas
+  parent: ActionXenoBase
+  name: Red Gas
+  description: Spend flesh resin to send a widening cloud of toxic gas marching toward a target.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: gas_mine
+    useDelay: 25
+  - type: TargetAction
+    range: 7
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Reaper.XenoReaperRedGasActionEvent
+  - type: XenoOffensiveAction
+  - type: ActionBlockIfResting
+  - type: ActionInRangeUnobstructed
+    range: 7

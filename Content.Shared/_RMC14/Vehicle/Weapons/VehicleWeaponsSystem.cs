@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Content.Shared._CMU14.Blackfoot;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared._RMC14.Marines.Skills;
@@ -262,6 +263,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
         var operatorComp = EnsureComp<VehicleWeaponsOperatorComponent>(args.Buckle.Owner);
         operatorComp.Vehicle = vehicle;
         operatorComp.SelectedWeapon = null;
+        operatorComp.AllowActionsInsideView = HasComp<BlackfootFlightComponent>(vehicleUid);
         operatorComp.HardpointActions.Clear();
         Dirty(args.Buckle.Owner, operatorComp);
 
@@ -900,4 +902,3 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
                _topology.TryGetMountedSlotByItem(vehicle, mountedWeapon, out _, hardpoints, itemSlots);
     }
 }
-

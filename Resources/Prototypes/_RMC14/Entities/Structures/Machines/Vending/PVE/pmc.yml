@@ -9,7 +9,7 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/pmc.rsi
   - type: CMAutomatedVendor
     access:
-    - "RMCAccessWeYa"
+    - "AU14AccessCorporateWEYU"
     hackable: true
     sections:
     - name: Standard Equipment
@@ -127,7 +127,7 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/prep.rsi
   - type: CMAutomatedVendor
     access:
-    - "RMCAccessWeYa"
+    - "AU14AccessCorporateWEYU"
     hackable: true
     sections:
     - name: Food

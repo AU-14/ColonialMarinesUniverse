@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Content.Shared._CMU14.Blackfoot;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DoAfter;
 using Content.Shared.Whitelist;
@@ -41,6 +42,7 @@ namespace Content.Shared._RMC14.Vehicle;
 public sealed partial class HardpointSystem : EntitySystem
 {
     private static readonly EntProtoId<SkillDefinitionComponent> EngineerSkill = "RMCSkillEngineer";
+    private static readonly ProtoId<DamageModifierSetPrototype> TankFrameDamageModifier = "VehicleFrameTank";
     private const string FailureHeaderColor = "#ffb347";
     private const string FailureNameColor = "#ffd27f";
     private const string FailureEffectColor = "#c7b7ff";
@@ -588,6 +590,34 @@ public sealed partial class HardpointSystem : EntitySystem
         TryAddRandomFailure(vehicle, vehicle, candidates);
     }
 
+    private void TryTriggerBlackfootFuelLeak(EntityUid vehicle, float amount)
+    {
+        if (amount <= 0f ||
+            !TryComp(vehicle, out BlackfootFuelPowerComponent? fuel) ||
+            fuel.Fuel <= 0f ||
+            !TryComp(vehicle, out HardpointIntegrityComponent? frame) ||
+            frame.MaxIntegrity <= 0f)
+        {
+            return;
+        }
+
+        VehicleHardpointFailureComponent? failures = null;
+        if (TryComp(vehicle, out failures) &&
+            (failures.ActiveFailures.Contains(VehicleHardpointFailure.FuelLeak) ||
+             failures.ActiveFailures.Count >= failures.MaxActiveFailures))
+        {
+            return;
+        }
+
+        var frameFraction = Math.Clamp(frame.Integrity / frame.MaxIntegrity, 0f, 1f);
+        var damageFraction = amount / frame.MaxIntegrity;
+        var chance = Math.Clamp(0.0125f + damageFraction * 0.2f + (1f - frameFraction) * 0.03f, 0.005f, 0.075f);
+        if (!_random.Prob(chance))
+            return;
+
+        AddHardpointFailure(vehicle, vehicle, VehicleHardpointFailure.FuelLeak, failures);
+    }
+
     private void TryTriggerHardpointFailure(
         EntityUid vehicle,
         EntityUid hardpoint,
@@ -944,6 +974,7 @@ public sealed partial class HardpointSystem : EntitySystem
             VehicleHardpointFailure.ThrownTread => "thrown tread",
             VehicleHardpointFailure.EngineOverheat => "engine overheating",
             VehicleHardpointFailure.ElectricalShort => "electrical short",
+            VehicleHardpointFailure.FuelLeak => "fuel leak",
             _ => "hardpoint failure",
         };
     }
@@ -964,6 +995,7 @@ public sealed partial class HardpointSystem : EntitySystem
             VehicleHardpointFailure.ThrownTread => "The vehicle can barely move until the tread is re-seated.",
             VehicleHardpointFailure.EngineOverheat => "The engine bogs down and acceleration is heavily reduced.",
             VehicleHardpointFailure.ElectricalShort => "This hardpoint's electrical output is unreliable and weakened.",
+            VehicleHardpointFailure.FuelLeak => "The Blackfoot leaks fuel over time until repaired.",
             _ => "The hardpoint is malfunctioning.",
         };
     }
@@ -984,6 +1016,7 @@ public sealed partial class HardpointSystem : EntitySystem
             VehicleHardpointFailure.ThrownTread => ThrownTreadRepairSteps,
             VehicleHardpointFailure.EngineOverheat => EngineOverheatRepairSteps,
             VehicleHardpointFailure.ElectricalShort => ElectricalShortRepairSteps,
+            VehicleHardpointFailure.FuelLeak => FuelLeakRepairSteps,
             _ => DamagedMountRepairSteps,
         };
     }
@@ -1083,6 +1116,7 @@ public sealed partial class HardpointSystem : EntitySystem
             VehicleHardpointFailure.ThrownTread => "Thrown tread",
             VehicleHardpointFailure.EngineOverheat => "Engine overheating",
             VehicleHardpointFailure.ElectricalShort => "Electrical short",
+            VehicleHardpointFailure.FuelLeak => "Fuel leak",
             _ => "Hardpoint failure",
         };
     }
@@ -1497,6 +1531,8 @@ public sealed partial class HardpointSystem : EntitySystem
         if (totalDamage <= 0f)
             return;
 
+        TryTriggerBlackfootFuelLeak(ent.Owner, totalDamage);
+
         if (!TryComp(ent.Owner, out ItemSlotsComponent? itemSlots))
             return;
 
@@ -1808,7 +1844,7 @@ public sealed partial class HardpointSystem : EntitySystem
 
         if (TryComp(uid, out HardpointItemComponent? item) &&
             item.VehicleFamily == "Tank" &&
-            _prototypeManager.TryIndex<DamageModifierSetPrototype>("VehicleFrameTank", out var tankBase))
+            _prototypeManager.TryIndex(TankFrameDamageModifier, out var tankBase))
         {
             ApplyDamageModifierCoefficients(tankBase, ref acid, ref slash, ref bullet, ref explosive, ref blunt);
         }

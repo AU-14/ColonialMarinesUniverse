@@ -9,6 +9,8 @@ public sealed partial class InstrumentComponent : SharedInstrumentComponent
 {
     [Dependency] private IEntityManager _entMan = default!;
 
+    public EntityUid OwnerEntity;
+
     [ViewVariables] public float Timer = 0f;
     [ViewVariables] public int BatchesDropped = 0;
     [ViewVariables] public int LaggedBatches = 0;
@@ -17,6 +19,6 @@ public sealed partial class InstrumentComponent : SharedInstrumentComponent
 
     // TODO Instruments: Make this ECS
     public EntityUid? InstrumentPlayer =>
-        _entMan.GetComponentOrNull<ActivatableUIComponent>(Owner)?.CurrentSingleUser
-        ?? _entMan.GetComponentOrNull<ActorComponent>(Owner)?.PlayerSession.AttachedEntity;
+        _entMan.GetComponentOrNull<ActivatableUIComponent>(OwnerEntity)?.CurrentSingleUser
+        ?? _entMan.GetComponentOrNull<ActorComponent>(OwnerEntity)?.PlayerSession.AttachedEntity;
 }

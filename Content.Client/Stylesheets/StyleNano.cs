@@ -84,6 +84,8 @@ namespace Content.Client.Stylesheets
         public const string StyleClassLabelSecondaryColor = "LabelSecondaryColor";
         public const string StyleClassLabelBig = "LabelBig";
         public const string StyleClassLabelSmall = "LabelSmall";
+        public const string StyleClassCharacterName = "CharacterName";
+        public const string StyleClassCharacterNameInput = "CharacterNameInput";
         public const string StyleClassButtonBig = "ButtonBig";
         public const string StyleClassCrtWindow = "CrtWindow";
         public const string StyleClassCrtWindowHeader = "CrtWindowHeader";
@@ -124,25 +126,43 @@ namespace Content.Client.Stylesheets
 
         public static readonly Color NanoGold = Color.FromHex("#A88B5E");
         private static CrtPalette _crtPalette = CrtPalette.Green;
+        private static bool _crtUiEnabled = true;
+        private static readonly Color DefaultCrtBackground = Color.FromHex("#07090B");
+        private static readonly Color DefaultCrtPanelBackground = Color.FromHex("#25252A");
+        private static readonly Color DefaultCrtPanelBackgroundAlt = Color.FromHex("#202023");
+        private static readonly Color DefaultCrtInsetBackground = PanelDark;
+        private static readonly Color DefaultCrtHeaderBackground = Color.FromHex("#2F3035");
+        private static readonly Color DefaultCrtButtonBackground = Color.FromHex("#464966");
+        private static readonly Color DefaultCrtButtonHoverBackground = Color.FromHex("#565A78");
+        private static readonly Color DefaultCrtButtonPressedBackground = Color.FromHex("#383B52");
+        private static readonly Color DefaultCrtButtonDisabledBackground = Color.FromHex("#252734");
+        private static readonly Color DefaultCrtSliderForeground = Color.FromHex("#5B5E77");
+        private static readonly Color DefaultCrtItemBackground = Color.FromHex("#202028");
+        private static readonly Color DefaultCrtItemSelectedBackground = Color.FromHex("#373744");
+        private static readonly Color DefaultCrtItemDisabledBackground = Color.FromHex("#202024");
+        private static readonly Color DefaultCrtDim = Color.FromHex("#9A9A9A");
+        private static readonly Color DefaultCrtDisabled = Color.FromHex("#5A5A5A");
 
-        public static Color CrtBackground => _crtPalette.Background;
-        public static Color CrtPanelBackground => _crtPalette.PanelBackground;
-        public static Color CrtPanelBackgroundAlt => _crtPalette.PanelBackgroundAlt;
-        public static Color CrtInsetBackground => _crtPalette.InsetBackground;
-        public static Color CrtHeaderBackground => _crtPalette.HeaderBackground;
-        public static Color CrtButtonBackground => _crtPalette.ButtonBackground;
-        public static Color CrtButtonHoverBackground => _crtPalette.ButtonHoverBackground;
-        public static Color CrtButtonPressedBackground => _crtPalette.ButtonPressedBackground;
-        public static Color CrtButtonDisabledBackground => _crtPalette.ButtonDisabledBackground;
-        public static Color CrtSliderForeground => _crtPalette.SliderForeground;
-        public static Color CrtProgressForeground => _crtPalette.ProgressForeground;
-        public static Color CrtItemBackground => _crtPalette.ItemBackground;
-        public static Color CrtItemSelectedBackground => _crtPalette.ItemSelectedBackground;
-        public static Color CrtItemDisabledBackground => _crtPalette.ItemDisabledBackground;
-        public static Color CrtGreen => _crtPalette.Accent;
-        public static Color CrtGreenDim => _crtPalette.AccentDim;
-        public static Color CrtGreenSoft => _crtPalette.AccentSoft;
-        public static Color CrtGreenDisabled => _crtPalette.AccentDisabled;
+        public static bool CrtUiEnabled => _crtUiEnabled;
+
+        public static Color CrtBackground => _crtUiEnabled ? _crtPalette.Background : DefaultCrtBackground;
+        public static Color CrtPanelBackground => _crtUiEnabled ? _crtPalette.PanelBackground : DefaultCrtPanelBackground;
+        public static Color CrtPanelBackgroundAlt => _crtUiEnabled ? _crtPalette.PanelBackgroundAlt : DefaultCrtPanelBackgroundAlt;
+        public static Color CrtInsetBackground => _crtUiEnabled ? _crtPalette.InsetBackground : DefaultCrtInsetBackground;
+        public static Color CrtHeaderBackground => _crtUiEnabled ? _crtPalette.HeaderBackground : DefaultCrtHeaderBackground;
+        public static Color CrtButtonBackground => _crtUiEnabled ? _crtPalette.ButtonBackground : DefaultCrtButtonBackground;
+        public static Color CrtButtonHoverBackground => _crtUiEnabled ? _crtPalette.ButtonHoverBackground : DefaultCrtButtonHoverBackground;
+        public static Color CrtButtonPressedBackground => _crtUiEnabled ? _crtPalette.ButtonPressedBackground : DefaultCrtButtonPressedBackground;
+        public static Color CrtButtonDisabledBackground => _crtUiEnabled ? _crtPalette.ButtonDisabledBackground : DefaultCrtButtonDisabledBackground;
+        public static Color CrtSliderForeground => _crtUiEnabled ? _crtPalette.SliderForeground : DefaultCrtSliderForeground;
+        public static Color CrtProgressForeground => _crtUiEnabled ? _crtPalette.ProgressForeground : DefaultCrtSliderForeground;
+        public static Color CrtItemBackground => _crtUiEnabled ? _crtPalette.ItemBackground : DefaultCrtItemBackground;
+        public static Color CrtItemSelectedBackground => _crtUiEnabled ? _crtPalette.ItemSelectedBackground : DefaultCrtItemSelectedBackground;
+        public static Color CrtItemDisabledBackground => _crtUiEnabled ? _crtPalette.ItemDisabledBackground : DefaultCrtItemDisabledBackground;
+        public static Color CrtGreen => _crtUiEnabled ? _crtPalette.Accent : NanoGold;
+        public static Color CrtGreenDim => _crtUiEnabled ? _crtPalette.AccentDim : DefaultCrtDim;
+        public static Color CrtGreenSoft => _crtUiEnabled ? _crtPalette.AccentSoft : Color.White;
+        public static Color CrtGreenDisabled => _crtUiEnabled ? _crtPalette.AccentDisabled : DefaultCrtDisabled;
         public static readonly Color GoodGreenFore = Color.FromHex("#31843E");
         public static readonly Color ConcerningOrangeFore = Color.FromHex("#A5762F");
         public static readonly Color DangerousRedFore = Color.FromHex("#BB3232");
@@ -330,6 +350,44 @@ namespace Content.Client.Stylesheets
             public readonly Color AccentSoft;
             public readonly Color AccentDisabled;
 
+            public static CrtPalette FromAccent(Color accent)
+            {
+                var hsv = Color.ToHsv(accent);
+                var hue = hsv.X;
+                var saturation = Clamp(hsv.Y, 0.05f, 1f);
+                var value = Clamp(hsv.Z, 0.55f, 1f);
+                var backgroundSaturation = Clamp(saturation * 0.85f, 0.02f, 0.85f);
+
+                Color Hsv(float sat, float val)
+                {
+                    return Color.FromHsv(new Vector4(
+                        hue,
+                        Clamp(sat, 0f, 1f),
+                        Clamp(val, 0f, 1f),
+                        1f));
+                }
+
+                return new CrtPalette(
+                    Hsv(backgroundSaturation, 0.04f),
+                    Hsv(backgroundSaturation, 0.075f),
+                    Hsv(backgroundSaturation, 0.135f),
+                    Hsv(backgroundSaturation, 0.055f),
+                    Hsv(saturation, 0.23f),
+                    Hsv(saturation, 0.115f),
+                    Hsv(saturation, 0.23f),
+                    Hsv(saturation, 0.37f),
+                    Hsv(backgroundSaturation, 0.07f),
+                    Hsv(saturation, 0.14f),
+                    Hsv(saturation, 0.30f),
+                    Hsv(saturation, 0.08f),
+                    Hsv(saturation, 0.23f),
+                    Hsv(backgroundSaturation, 0.035f),
+                    Hsv(saturation, value),
+                    Hsv(saturation, value * 0.50f),
+                    Hsv(saturation * 0.30f, 1f),
+                    Hsv(saturation * 0.60f, 0.21f));
+            }
+
             private CrtPalette(
                 string background,
                 string panelBackground,
@@ -369,6 +427,51 @@ namespace Content.Client.Stylesheets
                 AccentSoft = Color.FromHex(accentSoft);
                 AccentDisabled = Color.FromHex(accentDisabled);
             }
+
+            private CrtPalette(
+                Color background,
+                Color panelBackground,
+                Color panelBackgroundAlt,
+                Color insetBackground,
+                Color headerBackground,
+                Color buttonBackground,
+                Color buttonHoverBackground,
+                Color buttonPressedBackground,
+                Color buttonDisabledBackground,
+                Color sliderForeground,
+                Color progressForeground,
+                Color itemBackground,
+                Color itemSelectedBackground,
+                Color itemDisabledBackground,
+                Color accent,
+                Color accentDim,
+                Color accentSoft,
+                Color accentDisabled)
+            {
+                Background = background;
+                PanelBackground = panelBackground;
+                PanelBackgroundAlt = panelBackgroundAlt;
+                InsetBackground = insetBackground;
+                HeaderBackground = headerBackground;
+                ButtonBackground = buttonBackground;
+                ButtonHoverBackground = buttonHoverBackground;
+                ButtonPressedBackground = buttonPressedBackground;
+                ButtonDisabledBackground = buttonDisabledBackground;
+                SliderForeground = sliderForeground;
+                ProgressForeground = progressForeground;
+                ItemBackground = itemBackground;
+                ItemSelectedBackground = itemSelectedBackground;
+                ItemDisabledBackground = itemDisabledBackground;
+                Accent = accent;
+                AccentDim = accentDim;
+                AccentSoft = accentSoft;
+                AccentDisabled = accentDisabled;
+            }
+
+            private static float Clamp(float value, float min, float max)
+            {
+                return Math.Min(Math.Max(value, min), max);
+            }
         }
 
 
@@ -378,12 +481,20 @@ namespace Content.Client.Stylesheets
         {
             _crtPalette = palette switch
             {
+                CCVars.CrtUiColorGreen => CrtPalette.Green,
                 CCVars.CrtUiColorBlue => CrtPalette.Blue,
                 CCVars.CrtUiColorOrange => CrtPalette.Orange,
                 CCVars.CrtUiColorRed => CrtPalette.Red,
                 CCVars.CrtUiColorPurple => CrtPalette.Purple,
-                _ => CrtPalette.Green,
+                _ => Color.TryFromHex(palette) is { } color
+                    ? CrtPalette.FromAccent(color)
+                    : CrtPalette.Green,
             };
+        }
+
+        public static void SetCrtUiEnabled(bool enabled)
+        {
+            _crtUiEnabled = enabled;
         }
 
         public StyleNano(IResourceCache resCache) : base(resCache)
@@ -408,7 +519,15 @@ namespace Content.Client.Stylesheets
             var uavOsdStack = new[]
             {
                 "/Fonts/UAVOSD/UAV-OSD-Sans-Mono.ttf",
+                "/Fonts/NotoSans/NotoSans-Regular.ttf",
                 "/Fonts/NotoSans/NotoSansSymbols-Regular.ttf",
+                "/Fonts/NotoSans/NotoSansSymbols2-Regular.ttf"
+            };
+            var robotoMonoBoldStack = new[]
+            {
+                "/Fonts/RobotoMono/RobotoMono-Bold.ttf",
+                "/Fonts/NotoSans/NotoSans-Bold.ttf",
+                "/Fonts/NotoSans/NotoSansSymbols-Bold.ttf",
                 "/Fonts/NotoSans/NotoSansSymbols2-Regular.ttf"
             };
             var uavOsd13 = resCache.GetFont
@@ -436,9 +555,23 @@ namespace Content.Client.Stylesheets
                 uavOsdStack,
                 size: 12
             );
-            var robotoMonoBold11 = resCache.GetFont("/Fonts/RobotoMono/RobotoMono-Bold.ttf", size: 11);
-            var robotoMonoBold12 = resCache.GetFont("/Fonts/RobotoMono/RobotoMono-Bold.ttf", size: 12);
-            var robotoMonoBold14 = resCache.GetFont("/Fonts/RobotoMono/RobotoMono-Bold.ttf", size: 14);
+            var robotoMonoBold11 = resCache.GetFont(robotoMonoBoldStack, size: 11);
+            var robotoMonoBold12 = resCache.GetFont(robotoMonoBoldStack, size: 12);
+            var robotoMonoBold14 = resCache.GetFont(robotoMonoBoldStack, size: 14);
+            var useCrtUi = CrtUiEnabled;
+            var crtTextFont = useCrtUi ? uavOsdBold14 : notoSans12;
+            var crtDimFont = useCrtUi ? uavOsd13 : notoSans10;
+            var crtHeadingFont = useCrtUi ? uavOsdBold16 : notoSansBold12;
+            var crtHeadingBigFont = useCrtUi ? uavOsdBold18 : notoSansBold18;
+            var crtRichTextFont = useCrtUi ? uavOsd14 : notoSans12;
+            var crtButtonLabelFont = useCrtUi ? uavOsdBold14 : notoSans12;
+            var crtLineEditFont = useCrtUi ? uavOsd14 : notoSans12;
+            var crtNativeLineEditFont = notoSans12;
+            var characterNameFont = useCrtUi ? robotoMonoBold12 : notoSans12;
+            var crtTextColor = useCrtUi ? CrtGreenSoft : Color.White;
+            var crtDimTextColor = useCrtUi ? CrtGreenDim : Color.FromHex("#B8B8B8");
+            var crtHeadingColor = useCrtUi ? CrtGreen : NanoGold;
+            var crtSelectionColor = (useCrtUi ? CrtGreen : NanoGold).WithAlpha(useCrtUi ? 0.33f : 0.25f);
 
             var windowHeaderTex = resCache.GetTexture("/Textures/Interface/Nano/window_header.png");
             var windowHeader = new StyleBoxTexture
@@ -1402,7 +1535,7 @@ namespace Content.Client.Stylesheets
                     .Prop(PanelContainer.StylePropertyPanel, crtWindowHeader),
 
                 Element<Label>().Class(StyleClassCrtWindowTitle)
-                    .Prop(Label.StylePropertyFontColor, CrtGreenSoft)
+                    .Prop(Label.StylePropertyFontColor, crtTextColor)
                     .Prop(Label.StylePropertyFont, notoSansDisplayBold14),
 
                 // Shapes for the buttons.
@@ -2554,46 +2687,46 @@ namespace Content.Client.Stylesheets
                     .Prop(Control.StylePropertyModulateSelf, Color.White),
 
                 Element<Label>().Class(StyleClassCrtText)
-                    .Prop(Label.StylePropertyFont, uavOsdBold14)
-                    .Prop(Label.StylePropertyFontColor, CrtGreenSoft),
+                    .Prop(Label.StylePropertyFont, crtTextFont)
+                    .Prop(Label.StylePropertyFontColor, crtTextColor),
 
                 Element<Label>().Class(StyleClassCrtDimText)
-                    .Prop(Label.StylePropertyFont, uavOsd13)
-                    .Prop(Label.StylePropertyFontColor, CrtGreenDim),
+                    .Prop(Label.StylePropertyFont, crtDimFont)
+                    .Prop(Label.StylePropertyFontColor, crtDimTextColor),
 
                 Element<Label>().Class(StyleClassCrtHeading)
-                    .Prop(Label.StylePropertyFont, uavOsdBold16)
-                    .Prop(Label.StylePropertyFontColor, CrtGreen),
+                    .Prop(Label.StylePropertyFont, crtHeadingFont)
+                    .Prop(Label.StylePropertyFontColor, crtHeadingColor),
 
                 Element<Label>().Class(StyleClassCrtHeadingBig)
-                    .Prop(Label.StylePropertyFont, uavOsdBold18)
-                    .Prop(Label.StylePropertyFontColor, CrtGreen),
+                    .Prop(Label.StylePropertyFont, crtHeadingBigFont)
+                    .Prop(Label.StylePropertyFontColor, crtHeadingColor),
 
                 Element<Label>().Class(StyleClassCrtButtonLabel)
-                    .Prop(Label.StylePropertyFont, uavOsdBold14)
-                    .Prop(Label.StylePropertyFontColor, CrtGreenSoft)
+                    .Prop(Label.StylePropertyFont, crtButtonLabelFont)
+                    .Prop(Label.StylePropertyFontColor, crtTextColor)
                     .Prop(Label.StylePropertyAlignMode, Label.AlignMode.Center),
 
                 Child().Parent(Element<Button>().Class(StyleClassCrtButton))
                     .Child(Element<Label>())
-                    .Prop(Label.StylePropertyFont, uavOsdBold14)
-                    .Prop(Label.StylePropertyFontColor, CrtGreenSoft),
+                    .Prop(Label.StylePropertyFont, crtButtonLabelFont)
+                    .Prop(Label.StylePropertyFontColor, crtTextColor),
 
                 Element<Label>().Class(StyleClassCrtNativeButtonLabel)
                     .Prop(Label.StylePropertyFont, notoSans12)
-                    .Prop(Label.StylePropertyFontColor, CrtGreenSoft)
+                    .Prop(Label.StylePropertyFontColor, crtTextColor)
                     .Prop(Label.StylePropertyAlignMode, Label.AlignMode.Center),
 
                 Element<RichTextLabel>().Class(StyleClassCrtRichText)
-                    .Prop("font", uavOsd14),
+                    .Prop("font", crtRichTextFont),
 
                 Element<ItemList>().Class(StyleClassCrtItemList)
                     .Prop(ItemList.StylePropertyBackground, crtItemListBackground)
                     .Prop(ItemList.StylePropertyItemBackground, crtItemBackground)
                     .Prop(ItemList.StylePropertySelectedItemBackground, crtItemSelectedBackground)
                     .Prop(ItemList.StylePropertyDisabledItemBackground, crtItemDisabledBackground)
-                    .Prop("font", uavOsd14)
-                    .Prop("font-color", CrtGreenSoft),
+                    .Prop("font", crtRichTextFont)
+                    .Prop("font-color", crtTextColor),
 
                 Element<VScrollBar>().Class(StyleClassCrtScrollBar)
                     .Prop(ScrollBar.StylePropertyGrabber, crtScrollGrabber),
@@ -2619,17 +2752,17 @@ namespace Content.Client.Stylesheets
 
                 Element<LineEdit>().Class(StyleClassCrtLineEdit)
                     .Prop(LineEdit.StylePropertyStyleBox, crtLineEdit)
-                    .Prop("font", uavOsd14)
-                    .Prop("font-color", CrtGreenSoft)
-                    .Prop(LineEdit.StylePropertyCursorColor, CrtGreen)
-                    .Prop(LineEdit.StylePropertySelectionColor, CrtGreen.WithAlpha(0.33f)),
+                    .Prop("font", crtLineEditFont)
+                    .Prop("font-color", crtTextColor)
+                    .Prop(LineEdit.StylePropertyCursorColor, crtHeadingColor)
+                    .Prop(LineEdit.StylePropertySelectionColor, crtSelectionColor),
 
                 Element<LineEdit>().Class(StyleClassCrtNativeLineEdit)
                     .Prop(LineEdit.StylePropertyStyleBox, crtNativeLineEdit)
-                    .Prop("font", notoSans12)
-                    .Prop("font-color", CrtGreenSoft)
-                    .Prop(LineEdit.StylePropertyCursorColor, CrtGreen)
-                    .Prop(LineEdit.StylePropertySelectionColor, CrtGreen.WithAlpha(0.33f)),
+                    .Prop("font", crtNativeLineEditFont)
+                    .Prop("font-color", crtTextColor)
+                    .Prop(LineEdit.StylePropertyCursorColor, crtHeadingColor)
+                    .Prop(LineEdit.StylePropertySelectionColor, crtSelectionColor),
 
                 Element<Slider>().Class(StyleClassCrtSlider)
                     .Prop(Slider.StylePropertyBackground, crtSliderBackground)
@@ -2645,14 +2778,14 @@ namespace Content.Client.Stylesheets
                     .Prop(TabContainer.StylePropertyPanelStyleBox, crtInsetPanel)
                     .Prop(TabContainer.StylePropertyTabStyleBox, crtTabActive)
                     .Prop(TabContainer.StylePropertyTabStyleBoxInactive, crtTabInactive)
-                    .Prop(TabContainer.stylePropertyTabFontColor, CrtGreen)
-                    .Prop(TabContainer.StylePropertyTabFontColorInactive, CrtGreenDim),
+                    .Prop(TabContainer.stylePropertyTabFontColor, crtHeadingColor)
+                    .Prop(TabContainer.StylePropertyTabFontColorInactive, crtDimTextColor),
 
                 Element<StripeBack>().Class(StyleClassCrtStripeBack)
                     .Prop(StripeBack.StylePropertyBackground, crtInsetPanel),
 
                 Element<TextureButton>().Class(StyleClassCrtIconButton)
-                    .Prop(Control.StylePropertyModulateSelf, CrtGreenSoft),
+                    .Prop(Control.StylePropertyModulateSelf, crtTextColor),
 
                 //PDA - Backgrounds
                 Element<PanelContainer>().Class("PdaContentBackground")
@@ -2767,6 +2900,12 @@ namespace Content.Client.Stylesheets
                 Element<PanelContainer>()
                     .Class(StyleClassInset)
                     .Prop(PanelContainer.StylePropertyPanel, insetBack),
+
+                Element<Label>().Class(StyleClassCharacterName)
+                    .Prop(Label.StylePropertyFont, characterNameFont),
+
+                Element<LineEdit>().Class(StyleClassCharacterNameInput)
+                    .Prop("font", characterNameFont),
 
                 // RMC14
                 new StyleRule(new SelectorElement(typeof(Label), new[] { CMStyleClasses.CMLabelAlignLeft }, null, null), new[]

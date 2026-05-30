@@ -2,6 +2,9 @@
   id: CMUBaseGasMaskFilterSlot
   abstract: true
   components:
+  - type: ContainerContainer
+    containers:
+      filter: !type:ContainerSlot
   - type: ItemSlots
     slots:
       filter:

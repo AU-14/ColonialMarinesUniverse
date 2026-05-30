@@ -35,11 +35,8 @@ public abstract partial class SharedRequisitionsSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
-
         SubscribeLocalEvent<MarineScaleChangedEvent>(OnMarineScaleChanged);
-
         SubscribeLocalEvent<RequisitionsElevatorComponent, StepTriggerAttemptEvent>(OnElevatorStepTriggerAttempt);
-
         SubscribeLocalEvent<RequisitionsRailingComponent, MapInitEvent>(OnRailingMapInit);
 
         Subs.CVar(_config, RMCCVars.RMCRequisitionsStartingBalance, v => Starting = v, true);
@@ -101,28 +98,22 @@ public abstract partial class SharedRequisitionsSystem : EntitySystem
         UpdateRailing(railing);
     }
 
-    public void ChangeBudget(int amount)
-    {
-        ChangeBudget(amount, null);
-    }
-
-    public void ChangeBudget(int amount, string? faction)
+    // ChangeBudget with a null faction, will apply to ALL factions/accounts.
+    // If you want to use the shared account, pass the "unassigned" faction.
+    public void ChangeBudget(int amount, string? faction = null)
     {
         var accountQuery = EntityQueryEnumerator<RequisitionsAccountComponent>();
         while (accountQuery.MoveNext(out var uid, out var comp))
         {
-            if (string.IsNullOrEmpty(faction) || faction == "none")
+            if (faction == null || comp.Faction == faction)
             {
-                comp.Balance += amount;
+                var oldBalance = comp.Balance;
+                comp.Balance = Math.Max(0, oldBalance + amount); // clamp so reqs don't pit fall when seeing -1 million
+#if DEBUG
+                if (oldBalance + amount < 0) // NOTE: temporary debug logging to find negative balance culprits
+                    Log.Error($"[Requisitions] Negative balance: {oldBalance} of {amount}, for faction {comp.Faction}. Trace: {Environment.StackTrace}");
+#endif
                 Dirty(uid, comp);
-            }
-            else
-            {
-                if (comp.Faction == faction)
-                {
-                    comp.Balance += amount;
-                    Dirty(uid, comp);
-                }
             }
         }
 
@@ -231,27 +222,19 @@ public abstract partial class SharedRequisitionsSystem : EntitySystem
         return closest;
     }
 
+    // ScalingSystem.TryStartScaling calls this in CMDistressSignalRuleSystem.ActiveTick
+    // StartAccount will overwrite the RequisitionsSystem.GetAccount initial value
+    // There is no pop scaling on purpose, scale & marines params are deprecated
     public void StartAccount(Entity<RequisitionsAccountComponent> account, double scale, float marines)
     {
-        if (account.Comp.Started)
-            return;
-
+        if (account.Comp.Started) return;
         account.Comp.Started = true;
 
-        // Set faction-specific starting balance
+        // Set faction-specific starting balance (for DistressSignal)
         if (account.Comp.Faction == "govfor" || account.Comp.Faction == "opfor")
-        {
-            ChangeBudget(200000,account.Comp.Faction);
-        }
-        else if (account.Comp.Faction == "colony")
-        {
-            ChangeBudget(450,account.Comp.Faction);
-        }
+            account.Comp.Balance = 200000;
         else
-        {
-            // Default/fallback - use the configured starting balance
-            account.Comp.Balance = Starting;
-        }
+            account.Comp.Balance = Starting; // fallback: RMCCVars.RMCRequisitionsStartingBalance
 
         Dirty(account);
     }

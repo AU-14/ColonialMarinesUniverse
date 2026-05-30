@@ -92,4 +92,11 @@ public sealed partial class HardpointSystem
         new("Pulsing", 6f, "Trace and reset the control circuit with a multitool."),
         new("Screwing", 4f, "Close the access panel and secure the replacement harness."),
     };
+
+    private static readonly VehicleHardpointFailureRepairStep[] FuelLeakRepairSteps =
+    {
+        new("Screwing", 4f, "Open the fuel service panel and isolate the ruptured line."),
+        new("Welding", 7f, "Patch the leaking fuel line.", true),
+        new("Anchoring", 4f, "Tighten the fuel line coupling."),
+    };
 }

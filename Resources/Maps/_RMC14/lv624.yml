@@ -155373,7 +155373,7 @@ entities:
     - type: Transform
       pos: -15.5,109.5
       parent: 1
-- proto: RMCSensorTower
+- proto: AU14SensorTower
   entities:
   - uid: 21628
     components:
@@ -155557,14 +155557,14 @@ entities:
     - type: Transform
       pos: -29.608015,-87.52291
       parent: 1
-- proto: RMCSpawnerCommunicationsTowerOne
+- proto: AU14SpawnerCommunicationsTowerOne
   entities:
   - uid: 21656
     components:
     - type: Transform
       pos: -8.5,-88.5
       parent: 1
-- proto: RMCSpawnerCommunicationsTowerTwo
+- proto: AU14SpawnerCommunicationsTowerTwo
   entities:
   - uid: 21657
     components:

@@ -42,6 +42,6 @@ public sealed partial class YautjaDamageVisualsSystem : EntitySystem
             return;
         }
 
-        _damageVisuals.ChangeDamageGroupColor(sprite, damageVisuals, BruteGroup, YautjaBloodColor);
+        _damageVisuals.ChangeDamageGroupColor((uid, sprite), damageVisuals, BruteGroup, YautjaBloodColor);
     }
 }

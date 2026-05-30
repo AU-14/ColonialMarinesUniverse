@@ -123194,7 +123194,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 61.5,35.5
       parent: 1
-- proto: RMCSensorTower
+- proto: AU14SensorTower
   entities:
   - uid: 15952
     components:
@@ -124621,7 +124621,7 @@ entities:
     - type: Transform
       pos: 61.5,153.5
       parent: 1
-- proto: RMCSpawnerCommunicationsTowerOne
+- proto: AU14SpawnerCommunicationsTowerOne
   entities:
   - uid: 16164
     components:
@@ -124633,7 +124633,7 @@ entities:
     - type: Transform
       pos: 56.5,55.5
       parent: 1
-- proto: RMCSpawnerCommunicationsTowerTwo
+- proto: AU14SpawnerCommunicationsTowerTwo
   entities:
   - uid: 16166
     components:
@@ -131417,7 +131417,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: xenocfthreatleaderspawnmarker
+- proto: threatleaderspawnmarker
   entities:
   - uid: 17388
     components:

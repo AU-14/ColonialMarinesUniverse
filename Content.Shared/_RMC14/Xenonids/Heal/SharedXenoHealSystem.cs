@@ -54,7 +54,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
     [Dependency] private XenoEnergySystem _xenoEnergy = default!;
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private XenoStrainSystem _xenoStrain = default!;
-    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private StatusEffectQuerySystem _status = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";

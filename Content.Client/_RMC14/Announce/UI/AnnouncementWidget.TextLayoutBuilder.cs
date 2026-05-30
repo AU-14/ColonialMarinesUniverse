@@ -29,17 +29,21 @@ public sealed partial class AnnouncementWidget
             Vector2 textOffset,
             Vector2 screenSize)
         {
-            var baseMaxWidth = AnnouncementStyling.CalculateMaxTextWidth(screenSize, style.LayoutConfig.Position);
-            var maxAllowedWidth = baseMaxWidth;
             var screenScaleFactor = AnnouncementStyling.CalculateScreenScaleFactor(screenSize);
+            var baseMaxWidth = AnnouncementStyling.CalculateMaxTextWidth(screenSize, style.LayoutConfig.Position);
+            var screenSafeWidth = MathF.Max(120f * screenScaleFactor, screenSize.X - 100f * screenScaleFactor);
+            var maxAllowedWidth = MathF.Min(baseMaxWidth, screenSafeWidth);
+            var hasHorizontalSprite = spriteContainer != null &&
+                (style.LayoutConfig.SpritePosition == AnnouncementSpritePosition.Left || style.LayoutConfig.SpritePosition == AnnouncementSpritePosition.Right);
 
-            if (spriteContainer != null &&
-                (style.LayoutConfig.SpritePosition == AnnouncementSpritePosition.Left || style.LayoutConfig.SpritePosition == AnnouncementSpritePosition.Right))
+            if (hasHorizontalSprite && spriteContainer != null)
             {
                 spriteContainer.Measure(screenSize);
                 var spriteWidth = spriteContainer.DesiredSize.X;
                 var spriteSpacing = style.LayoutConfig.SpriteSpacing * screenScaleFactor;
-                var horizontalTextBudget = Math.Max(baseMaxWidth * 0.45f, baseMaxWidth - spriteWidth - spriteSpacing);
+                var rowMaxWidth = MathF.Min(screenSafeWidth, baseMaxWidth);
+                var remainingRowWidth = rowMaxWidth - spriteWidth - spriteSpacing;
+                var horizontalTextBudget = Math.Max(baseMaxWidth * 0.25f, remainingRowWidth);
                 maxAllowedWidth = Math.Min(maxAllowedWidth, horizontalTextBudget);
             }
 
@@ -107,7 +111,7 @@ public sealed partial class AnnouncementWidget
                 var titleMessage = _owner.CreateFormattedTitleMessage(titleText, style, screenSize, effectiveTextWidth);
                 var enableAssaultScroll = false;
                 var titleLabel = CreateTitleLabel(textAlign, effectiveTextWidth);
-                titleLabel.SetMessage(titleMessage);
+                titleLabel.SetMessage(titleMessage, AnnouncementStyling.AnnouncementMarkupTags);
 
                 if (enableAssaultScroll)
                 {
@@ -129,7 +133,7 @@ public sealed partial class AnnouncementWidget
                     };
 
                     var duplicateTitleLabel = CreateTitleLabel(HAlignment.Left, float.PositiveInfinity);
-                    duplicateTitleLabel.SetMessage(titleMessage);
+                    duplicateTitleLabel.SetMessage(titleMessage, AnnouncementStyling.AnnouncementMarkupTags);
                     duplicateTitleLabel.Measure(marqueeMeasureSize);
 
                     var titleHeight = MathF.Max(titleLabel.DesiredSize.Y, duplicateTitleLabel.DesiredSize.Y);
@@ -400,10 +404,9 @@ public sealed partial class AnnouncementWidget
                         maxAllowedWidth,
                         screenSize,
                         style);
-                    var titleFontSize = Math.Min(responsiveTitleFont, style.TextConfig.FontSize * 0.9f);
                     titleMeasured = MeasureFormattedTextWidth(
                         plainTitle,
-                        titleFontSize,
+                        responsiveTitleFont,
                         style.TitleConfig.TitleColor,
                         style.TitleConfig.TitleFont,
                         screenSize);
@@ -448,7 +451,7 @@ public sealed partial class AnnouncementWidget
                 MaxWidth = float.MaxValue
             };
 
-            label.SetMessage(AnnouncementStyling.CreateFormattedMessage(text, fontSize, color, font));
+            label.SetMessage(AnnouncementStyling.CreateFormattedMessage(text, fontSize, color, font), AnnouncementStyling.AnnouncementMarkupTags);
             label.Measure(screenSize);
 
             return label.DesiredSize.X;
@@ -456,8 +459,7 @@ public sealed partial class AnnouncementWidget
 
         private static float CalculateTitleFontSize(AnnouncementStyle style, Vector2 screenSize, float maxAllowedWidth, string titleText)
         {
-            var responsiveFontSize = AnnouncementStyling.CalculateResponsiveFontSize(new[] { titleText }, style.TitleConfig.TitleFontSize, maxAllowedWidth, screenSize, style);
-            return Math.Min(responsiveFontSize, style.TextConfig.FontSize * 0.9f);
+            return AnnouncementStyling.CalculateResponsiveFontSize(new[] { titleText }, style.TitleConfig.TitleFontSize, maxAllowedWidth, screenSize, style);
         }
     }
 
@@ -472,4 +474,3 @@ public sealed partial class AnnouncementWidget
         float TitleScrollGap,
         float TitleRenderedFontSize);
 }
-

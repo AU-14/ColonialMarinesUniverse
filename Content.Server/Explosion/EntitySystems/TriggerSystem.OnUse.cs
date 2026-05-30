@@ -1,12 +1,16 @@
 using Content.Server.Explosion.Components;
 using Content.Shared.Examine;
 using Content.Shared.Explosion.Components;
+using Content.Shared.Inventory;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 using Content.Shared.Sticky;
 using Content.Shared.Verbs;
 
 namespace Content.Server.Explosion.EntitySystems;
+
+[ByRefEvent]
+public record struct BeforeUseTimerTriggerEvent(EntityUid Timer, EntityUid User, bool Cancelled = false);
 
 public sealed partial class TriggerSystem
 {
@@ -23,7 +27,7 @@ public sealed partial class TriggerSystem
 
     private void OnStuck(EntityUid uid, OnUseTimerTriggerComponent component, ref EntityStuckEvent args)
     {
-        if (!component.StartOnStick)
+        if (!component.StartOnStick || !CanStartTimer(uid, component))
             return;
 
         StartTimer((uid, component), args.User);
@@ -43,7 +47,7 @@ public sealed partial class TriggerSystem
         if (!args.CanInteract || !args.CanAccess || args.Hands == null)
             return;
 
-        if (component.UseVerbInstead)
+        if (component.UseVerbInstead && CanStartTimer(uid, component))
         {
             args.Verbs.Add(new AlternativeVerb()
             {
@@ -158,12 +162,32 @@ public sealed partial class TriggerSystem
         if (args.Handled || HasComp<AutomatedTimerComponent>(uid) || component.UseVerbInstead)
             return;
 
+        var attempt = new BeforeUseTimerTriggerEvent(uid, args.User);
+        RaiseLocalEvent(ref attempt);
+        if (attempt.Cancelled)
+        {
+            args.Handled = true;
+            return;
+        }
+
+        if (!CanStartTimer(uid, component))
+        {
+            args.Handled = true;
+            return;
+        }
+
         if (component.DoPopup)
             _popupSystem.PopupEntity(Loc.GetString("trigger-activated", ("device", uid)), args.User, args.User);
 
         StartTimer((uid, component), args.User);
 
         args.Handled = true;
+    }
+
+    private bool CanStartTimer(EntityUid uid, OnUseTimerTriggerComponent component)
+    {
+        return component.RequiredWornSlots == SlotFlags.NONE ||
+               _inventory.InSlotWithFlags(uid, component.RequiredWornSlots);
     }
 
     public static VerbCategory TimerOptions = new("verb-categories-timer", "/Textures/Interface/VerbIcons/clock.svg.192dpi.png");

@@ -60,10 +60,10 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
     private void UpdateSprite(EntityUid entity, IRMCHumanoidAppearance humanoid, SpriteComponent sprite)
     {
         ClearAllMarkings(entity, humanoid, sprite);
-        foreach (var key in humanoid.BaseLayers)
+        foreach (var (key, _) in humanoid.BaseLayers)
         {
-            if (sprite.LayerMapTryGet(key, out var index))
-                sprite[index].Visible = false;
+            if (_sprite.LayerMapTryGet((entity, sprite), key, out var index, false))
+                _sprite.LayerSetVisible((entity, sprite), index, false);
         }
 
         IRMCHumanoidAppearance appearance = humanoid;
@@ -73,17 +73,17 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
         if (hidden != null)
         {
             ClearAllMarkings(entity, hidden, sprite);
-            foreach (var key in hidden.BaseLayers)
+            foreach (var (key, _) in hidden.BaseLayers)
             {
-                if (sprite.LayerMapTryGet(key, out var index))
-                    sprite[index].Visible = false;
+                if (_sprite.LayerMapTryGet((entity, sprite), key, out var index, false))
+                    _sprite.LayerSetVisible((entity, sprite), index, false);
             }
         }
 
         UpdateLayers(entity, appearance, sprite);
         ApplyMarkingSet(entity, appearance, sprite);
 
-        sprite[_sprite.LayerMapReserve((entity, sprite), HumanoidVisualLayers.Eyes)].Color = appearance.EyeColor;
+        _sprite.LayerSetColor((entity, sprite), _sprite.LayerMapReserve((entity, sprite), HumanoidVisualLayers.Eyes), appearance.EyeColor);
     }
 
     private static bool IsHidden(IRMCHumanoidAppearance humanoid, HumanoidVisualLayers layer)

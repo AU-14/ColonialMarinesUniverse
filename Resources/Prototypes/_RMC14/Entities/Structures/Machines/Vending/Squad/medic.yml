@@ -409,7 +409,7 @@
 - type: entity
   parent: RMCColMarTechMedicalEquipmentPVE
   id: RMCPMCMedicalEquipmentPVE
-  name: We-Ya squad medical equipment rack
+  name: We-Yu squad medical equipment rack
   description: An automated rack hooked up to a colossal storage of corporate medic standard-issue equipment.
   suffix: PVE, PMC
   components:
@@ -575,7 +575,7 @@
   parent: ColMarTechMedicalChemicalPVE
   id: RMCRCMMedicalChemicalPVE
   suffix: PVE, RCM
-  name: We-Ya section medical chemical rack
+  name: We-Yu section medical chemical rack
   description: An automated gear rack for specialized chemicals for the medical assistants.
   components:
   - type: CMAutomatedVendor

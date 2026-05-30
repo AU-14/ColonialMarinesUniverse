@@ -123398,7 +123398,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 22.5,118.5
       parent: 1
-- proto: RMCSensorTower
+- proto: AU14SensorTower
   entities:
   - uid: 11631
     components:
@@ -123938,7 +123938,7 @@ entities:
     - type: Transform
       pos: 219.5,123.5
       parent: 1
-- proto: RMCSpawnerCommunicationsTowerOne
+- proto: AU14SpawnerCommunicationsTowerOne
   entities:
   - uid: 11727
     components:
@@ -123955,7 +123955,7 @@ entities:
     - type: Transform
       pos: 45.5,76.5
       parent: 1
-- proto: RMCSpawnerCommunicationsTowerTwo
+- proto: AU14SpawnerCommunicationsTowerTwo
   entities:
   - uid: 11730
     components:

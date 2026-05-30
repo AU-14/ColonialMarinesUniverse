@@ -32,7 +32,7 @@ public sealed partial class RoadmapUIController : UIController, IOnStateEntered<
         if (_infoUIController.RulesPopup != null)
             return;
 
-        ToggleRoadmap();
+        // ToggleRoadmap(); // CMU Disabled
     }
 
     private void OnAccepted()

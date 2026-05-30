@@ -2,27 +2,13 @@
   parent: AU14JobSquadAutomaticRiflemanBase
   id: AU14JobGOVFORSquadAutomaticRiflemanUPP
   name: Machine Gunner
-  description: au14-job-description-govforsquadautomaticrifleman
-  setPreference: false
+  spawnMenuRoleName: Automatic Rifleman (UPP)
   ranks:
     UPP_Gefreiter:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORSquadAutomaticRifleman
       time: 108000 # 30 hours
     UPP_Private: []
-  startingGear: AU14GearGOVFORSquadAutomaticRifleman
-  dummyStartingGear: AU14GearGOVFORAutoRiflemanDummy
-  icon: "AU14JobIconAFN"
-  requireAdminNotify: false
-  spawnMenuRoleName: Automatic Rifleman (UPP)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforGunner
-  overwatchSortPriority: -3
-  overwatchShowName: true
-  overwatchRoleName: Automatic Rifleman
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
@@ -35,11 +21,5 @@
         RMCSkillConstruction: 2
         RMCSkillEngineer: 3
         RMCSkillPolice: 1
-    - type: SquadArmorWearer
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORSquadAutomaticRiflemanUPP
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: smartgunner
-  hidden: true

@@ -1,3 +1,5 @@
+using Content.Shared._AU14.Fire;
+using Content.Shared.Atmos.Components;
 using Content.Shared.Destructible;
 using Content.Shared.Mining;
 using Content.Shared.Mining.Components;
@@ -27,6 +29,11 @@ public sealed partial class MiningSystem : EntitySystem
     private void OnDestruction(EntityUid uid, OreVeinComponent component, DestructionEventArgs args)
     {
         if (component.CurrentOre == null)
+            return;
+
+        if (TryComp<FlamabilityComponent>(uid, out var au14Fire) && au14Fire.OnFire)
+            return;
+        if (TryComp<FlammableComponent>(uid, out var flammable) && flammable.OnFire)
             return;
 
         var proto = _proto.Index<OrePrototype>(component.CurrentOre);

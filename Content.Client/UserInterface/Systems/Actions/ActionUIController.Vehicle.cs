@@ -1,6 +1,8 @@
 using System.Linq;
+using Content.Shared._CMU14.Blackfoot;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared.Actions.Components;
 using Content.Shared.CombatMode;
 using Robust.Shared.GameObjects;
 
@@ -65,7 +67,8 @@ public sealed partial class ActionUIController
         if (_playerManager.LocalEntity is not { } user)
             return false;
 
-        if (!EntityManager.HasComponent<VehicleWeaponsOperatorComponent>(user))
+        if (!EntityManager.HasComponent<VehicleWeaponsOperatorComponent>(user) &&
+            !EntityManager.HasComponent<BlackfootPilotActionComponent>(user))
             return false;
 
         return true;
@@ -76,7 +79,8 @@ public sealed partial class ActionUIController
         if (_playerManager.LocalEntity is not { } user)
             return false;
 
-        return EntityManager.HasComponent<VehicleWeaponsOperatorComponent>(user);
+        return EntityManager.HasComponent<VehicleWeaponsOperatorComponent>(user) ||
+               EntityManager.HasComponent<BlackfootPilotActionComponent>(user);
     }
 
     private bool RebuildVehicleActionList()
@@ -87,11 +91,14 @@ public sealed partial class ActionUIController
         var old = _vehicleActions.ToList();
         var desiredOrdered = new List<EntityUid?>();
         var includeHardpointActions = true;
+        var allowActionsInsideView = LocalVehicleActionsAllowedInsideView();
+
+        AddBlackfootPilotActions(desiredOrdered);
 
         if (_playerManager.LocalEntity is { } localUser &&
             EntityManager.TryGetComponent<VehicleViewToggleComponent>(localUser, out var viewToggle))
         {
-            includeHardpointActions = viewToggle.IsOutside;
+            includeHardpointActions = viewToggle.IsOutside || allowActionsInsideView;
         }
 
         if (!includeHardpointActions)
@@ -131,6 +138,8 @@ public sealed partial class ActionUIController
                 desiredOrdered.Add(uid);
             }
         }
+
+        AddBlackfootDoorGunActions(desiredOrdered);
 
         EntityUid? viewToggleAction = null;
         if (_playerManager.LocalEntity is { } toggleUser &&
@@ -228,5 +237,58 @@ public sealed partial class ActionUIController
         }
 
         return false;
+    }
+
+    private bool LocalVehicleActionsAllowedInsideView()
+    {
+        if (_playerManager.LocalEntity is not { } user)
+            return false;
+
+        if (EntityManager.HasComponent<BlackfootPilotActionComponent>(user))
+            return true;
+
+        return EntityManager.TryGetComponent<VehicleWeaponsOperatorComponent>(user, out var operatorComp) &&
+               operatorComp.AllowActionsInsideView;
+    }
+
+    private void AddBlackfootPilotActions(List<EntityUid?> desiredOrdered)
+    {
+        if (_playerManager.LocalEntity is not { } user ||
+            !EntityManager.TryGetComponent<BlackfootPilotActionComponent>(user, out var actions))
+        {
+            return;
+        }
+
+        AddVehicleAction(desiredOrdered, actions.EngineToggleAction);
+        AddVehicleAction(desiredOrdered, actions.TakeoffAction);
+        AddVehicleAction(desiredOrdered, actions.LandAction);
+        AddVehicleAction(desiredOrdered, actions.FlightModeToggleAction);
+        AddVehicleAction(desiredOrdered, actions.AscendZLevelAction);
+        AddVehicleAction(desiredOrdered, actions.DescendZLevelAction);
+        AddVehicleAction(desiredOrdered, actions.RearDoorToggleAction);
+        AddVehicleAction(desiredOrdered, actions.StowToggleAction);
+    }
+
+    private void AddBlackfootDoorGunActions(List<EntityUid?> desiredOrdered)
+    {
+        if (_playerManager.LocalEntity is not { } user ||
+            !EntityManager.TryGetComponent<BlackfootDoorGunActionComponent>(user, out var actions))
+        {
+            return;
+        }
+
+        AddVehicleAction(desiredOrdered, actions.ZModeToggleAction);
+    }
+
+    private void AddVehicleAction(List<EntityUid?> desiredOrdered, EntityUid? action)
+    {
+        if (action is not { } actionUid ||
+            !EntityManager.HasComponent<ActionComponent>(actionUid) ||
+            desiredOrdered.Contains(actionUid))
+        {
+            return;
+        }
+
+        desiredOrdered.Add(actionUid);
     }
 }

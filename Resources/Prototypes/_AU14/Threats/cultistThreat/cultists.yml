@@ -39,6 +39,7 @@
     - type: Access
       tags:
       - CMAccessXeno
+    - type: HasKnowledgeOfXenoLanguage
     - type: RemoveComponents
       components:
       - type: Infectable
@@ -50,6 +51,8 @@
     - type: ActiveRadio
       channels:
       - Hivemind
+    - type: StartingMindRole
+      mindRole: MindRoleCultist
     - type: CMVendorUser
       id: AU14JobCultist
       points: 70

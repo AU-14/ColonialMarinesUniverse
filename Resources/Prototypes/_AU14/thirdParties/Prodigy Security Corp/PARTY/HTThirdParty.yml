@@ -1,0 +1,25 @@
+# Prodigy Armed Repair Team (PART Yankee)
+- type: partySpawn
+  id: ProdigyPARTYSpawn
+  leadersToSpawn:
+    AU14JobProdigyPartyLeader: 1
+  gruntsToSpawn:
+    AU14JobPARTYPartyEngineer: 1
+    AU14JobWYProdigyPartyMedic: 1
+    AU14JobProdigyPartySmartgunner: 1
+    AU14JobPARTYPartyRifleman: 1
+    # AU14JobWYProdigyPartySpecialist: 1 - Weapon Spec
+    AU14JobProdigyPARTSynth: 1 # default is 1, increased to 2 due to combat synth disable
+    #AU14JobProdigyPARTCombatSynth: 1 - If PART goes well in testing ill enable it
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: ProdigyPARTY
+  partyspawn: ProdigyPARTYSpawn
+  entrymethod: shuttle
+  weight: 20
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 6
+  roundstart: false

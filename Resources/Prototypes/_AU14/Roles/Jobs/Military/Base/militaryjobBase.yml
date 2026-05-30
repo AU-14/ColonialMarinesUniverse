@@ -1,0 +1,32 @@
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: AU14JobMilitaryBase
+  supervisors: au14-job-supervisors-govfor
+  hidden: true          # abstract hides by default, but for children/factions to remain hidden
+  setPreference: false  # all faction variants are hidden in the loadout menu
+  inheritAddComponentSpecials: true
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: MarineOrders
+      moveOrderSoundMale:
+        collection: AU14MaleMoveOrder
+      moveOrderSoundFemale:
+        collection: AU14FemaleMoveOrder
+      focusOrderSoundMale:
+        collection: AU14MaleFocusOrder
+      focusOrderSoundFemale:
+        collection: AU14FemaleFocusOrder
+      holdOrderSoundMale:
+        collection: AU14MaleHoldOrder
+      holdOrderSoundFemale:
+        collection: AU14FemaleHoldOrder
+    - type: Marine
+      Faction: govfor
+    - type: UserIFF
+      factions:
+      - GOVFOR
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR

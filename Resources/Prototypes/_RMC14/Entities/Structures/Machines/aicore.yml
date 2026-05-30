@@ -1,7 +1,7 @@
 - type: entity
   id: RMCAICore
   name: ARES v3.2
-  description: This is the artificial intelligence system for the UNS Almayer. Like many other military-grade AI systems, this one was manufactured by We-Ya.
+  description: This is the artificial intelligence system for the UNS Almayer. Like many other military-grade AI systems, this one was manufactured by We-Yu.
   placement:
     mode: SnapgridCenter
   components: #has no collission in 13 they have invisible walls behind it

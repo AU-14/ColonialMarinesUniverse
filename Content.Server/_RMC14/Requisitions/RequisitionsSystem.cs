@@ -189,13 +189,12 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         }
 
         var order = category.Entries[args.Order];
-        // Ensure we check the correct faction account for balance
-        var accountEnt = computer.Comp.Account ?? GetAccount(computer.Comp.Faction);
-        if (!TryComp(accountEnt, out RequisitionsAccountComponent? account) ||
-            account.Balance < order.Cost)
-        {
+        // Ensure we check the correct faction account for balance and cache it
+        computer.Comp.Account ??= GetAccount(computer.Comp.Faction);
+        var accountEnt = computer.Comp.Account.Value;
+        if (!TryComp(accountEnt, out RequisitionsAccountComponent? account)
+            || account.Balance < order.Cost)
             return;
-        }
 
         if (GetElevator(computer) is not { } elevator)
             return;
@@ -254,49 +253,44 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     }
 
     // Returns the first existing account matching faction, or creates a new one.
-    // If faction is null or "none", behaves like the original GetAccount (single global account).
+    // The original (no faction param) used a single global account, we replicate this.
     private Entity<RequisitionsAccountComponent> GetAccount(string? faction = null)
      {
+        var factionKey = string.IsNullOrEmpty(faction) || faction == "none"
+            ? "unassigned" // use the shared global account so we're not stealing from a faction
+            : faction;
         var query = EntityQueryEnumerator<RequisitionsAccountComponent>();
-
-        // Prefer an account matching faction if provided
-        if (!string.IsNullOrEmpty(faction) && faction != "none")
+        while (query.MoveNext(out var uid, out var account))
         {
-            while (query.MoveNext(out var uid, out var account))
-            {
-                if (account.Faction == faction)
-                    return (uid, account);
-            }
-            // No matching account found, spawn a new faction account
-            var newAccount = Spawn(AccountId, MapCoordinates.Nullspace);
-            var newAccountComp = EnsureComp<RequisitionsAccountComponent>(newAccount);
-            newAccountComp.Faction = faction;
-
-            // Set faction-specific starting balance
-            if (faction == "govfor" || faction == "opfor")
-            {
-                newAccountComp.Balance = 20000;
-            }
-            else if (faction == "colony")
-            {
-                newAccountComp.Balance = 450;
-                // Colony accounts should not receive random military deliveries (flares, batteries, etc.)
-                newAccountComp.RandomCrates.Clear();
-            }
-
-            return (newAccount, newAccountComp);
+            if (account.Faction == factionKey)
+                return (uid, account);
         }
 
-        // Fallback to the old behavior: return any existing account or create one
-        while (query.MoveNext(out var anyUid, out var anyAccount))
-        {
-            return (anyUid, anyAccount);
-        }
-
-        var created = Spawn(AccountId, MapCoordinates.Nullspace);
-        var createdComp = EnsureComp<RequisitionsAccountComponent>(created);
-        return (created, createdComp);
+        return CreateAccount(factionKey);
      }
+
+    private Entity<RequisitionsAccountComponent> CreateAccount(string faction)
+    {
+        var newAccount = Spawn(AccountId, MapCoordinates.Nullspace);
+        var comp = EnsureComp<RequisitionsAccountComponent>(newAccount);
+        comp.Faction = faction;
+
+        // Faction specific starting balance
+        switch (faction)
+        {
+            case "govfor":
+            case "opfor":
+                comp.Balance = 20000;
+                break;
+            case "colony":
+                comp.Balance = 450;
+                // Colony accounts should not receive random military deliveries (flares, batteries, etc.)
+                comp.RandomCrates.Clear();
+                break;
+        }
+
+        return (newAccount, comp);
+    }
 
     private void UpdateRailings(Entity<RequisitionsElevatorComponent> elevator, RequisitionsRailingMode mode)
     {
@@ -491,11 +485,8 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
     private bool Sell(Entity<RequisitionsElevatorComponent> elevator)
     {
-        // Deposits from selling items go to the elevator's nearest account based on faction
-        var account = GetAccount(elevator.Comp.Faction);
          var entities = _lookup.GetEntitiesIntersecting(elevator);
          var soldAny = false;
-         var rewards = 0;
          foreach (var entity in entities)
          {
              if (entity == elevator.Comp.Audio)
@@ -504,36 +495,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
              if (HasComp<CargoSellBlacklistComponent>(entity))
                  continue;
 
-             var entityRewards = SubmitInvoices(entity);
-
-             if (TryComp(entity, out RequisitionsCrateComponent? crate))
-             {
-                 entityRewards += crate.Reward;
-             }
-             else
-             {
-                 entityRewards += (int) Math.Round(_pricing.GetPrice(entity));
-             }
-
-             if (entityRewards > 0)
-                 soldAny = true;
-
-             rewards += entityRewards;
-
+             soldAny = true;
              QueueDel(entity);
          }
-
-         // Colony ASRS does not receive budget or feedback for selling items
-         if (elevator.Comp.Faction != "colony")
-         {
-             if (rewards > 0)
-                 SendUIFeedback(Loc.GetString("requisition-paperwork-reward-message", ("amount", rewards)));
-
-             account.Comp.Balance += rewards;
-         }
-
-         if (soldAny)
-             Dirty(account);
 
          return soldAny;
      }
@@ -805,7 +769,10 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         if (!string.IsNullOrEmpty(faction) && faction != "none")
             reqAccount = GetAccount(faction);
         else
+        {
+            Log.Debug($"[Requisitions] No faction specified for GetAccount, faction: {faction}, using \"unassigned\" account.");
             reqAccount = GetAccount();
+        }
 
         reqAccount.Comp.Balance += stackCount;
         Dirty(reqAccount);
@@ -866,5 +833,19 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         {
             _slots.TryInsert(crate, label.LabelSlot, paper, null);
         }
+    }
+
+    /// <summary>
+    /// Attempts to deduct <paramref name="amount"/> from the specified faction's requisitions account.
+    /// Returns false if the account has insufficient funds.
+    /// </summary>
+    public bool TrySpendFunds(string faction, int amount)
+    {
+        var account = GetAccount(faction);
+        if (!TryComp(account, out RequisitionsAccountComponent? comp) || comp.Balance < amount)
+            return false;
+
+        comp.Balance -= amount;
+        return true;
     }
 }

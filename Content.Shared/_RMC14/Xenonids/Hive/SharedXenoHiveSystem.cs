@@ -9,6 +9,8 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.NPC.Components;
+using Content.Shared.NPC.Prototypes;
 using Content.Shared.Popups;
 using Content.Shared.Prototypes;
 using Content.Shared.Weapons.Ranged.Events;
@@ -32,6 +34,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedNightVisionSystem _nightVision = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -49,6 +52,8 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         SubscribeLocalEvent<DropshipHijackStartEvent>(OnDropshipHijackStart);
 
         SubscribeLocalEvent<HiveComponent, MapInitEvent>(OnMapInit);
+
+        SubscribeLocalEvent<HiveMemberComponent, ComponentStartup>(OnHiveStartup);
 
         SubscribeLocalEvent<XenoEvolutionGranterComponent, MobStateChangedEvent>(OnGranterMobStateChanged);
 
@@ -80,6 +85,17 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
             EnsureComp<TimedDespawnComponent>(boost).Lifetime = 180;
             break;
         }
+    }
+
+    public void OnHiveStartup(Entity<HiveMemberComponent> ent, ref ComponentStartup args)
+    {
+        var hiveUid = ent.Comp.Hive;
+        if (hiveUid == null ||
+            !TryComp<HiveComponent>(hiveUid.Value, out var hive))
+            return;
+
+        UpdateHiveAppearance(ent.Owner, (hiveUid.Value, hive));
+        Dirty(ent);
     }
 
     private void OnGranterMobStateChanged(Entity<XenoEvolutionGranterComponent> ent, ref MobStateChangedEvent args)
@@ -155,6 +171,87 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         return null;
     }
 
+    public bool HasFaction(EntityUid hiveEnt, ProtoId<NpcFactionPrototype> faction)
+    {
+        TryComp<HiveComponent>(hiveEnt, out var hive);
+        if (hive is null)
+            return false;
+        return hive.Allies.Contains(faction);
+    }
+
+    public void SetHiveFactionAlly(ProtoId<NpcFactionPrototype> faction, EntityUid hiveEnt, bool alliance)
+    {
+        if (!TryComp<HiveComponent>(hiveEnt, out var hive))
+            return;
+        if (alliance)
+        {
+            hive.Allies.Add(faction);
+        }
+        else
+        {
+            hive.Allies.Remove(faction);
+        }
+    }
+    public void SetHiveIndividualAlly(EntityUid ent, EntityUid hiveEnt, bool alliance)
+    {
+        if (!TryComp<HiveComponent>(hiveEnt, out var hive))
+            return;
+        if (alliance)
+        {
+            hive.IndividualAllies.Add(ent);
+        }
+        else
+        {
+            hive.IndividualAllies.Remove(ent);
+        }
+    }
+    public void ClearHiveIndividualAllies(EntityUid hiveEnt)
+    {
+        if (!TryComp<HiveComponent>(hiveEnt, out var hive))
+            return;
+        hive.IndividualAllies.Clear();
+    }
+
+
+    /// <summary>
+    /// Returns true if the entity uid is at all in any way shape or form considered an "ally" of the hive.
+    /// Be it part of the hive, some rando who became besties 4 lyfe with the queen, or the entire CLF faction after
+    /// making a diplomatic alliance.
+    /// </summary>
+    /// <param name="ent"></param>
+    /// <returns></returns>
+    public bool IsAllyOfHive(EntityUid ent, EntityUid? hiveEnt)
+    {
+        if (hiveEnt is null)
+            return false;
+        // if there's no hive comp then just return false
+        if (!TryComp<HiveComponent>(hiveEnt, out var hive))
+            return false;
+
+        if (TryComp<HiveMemberComponent>(ent, out var hc) && hc.Hive is not null && hc.Hive == hiveEnt)
+            return true;
+
+        if (hive.IndividualAllies.Contains(ent))
+            return true;
+
+        if (TryComp<NpcFactionMemberComponent>(ent, out var factionComp))
+        {
+            bool hit = false;
+            // O(n) at best i think
+            foreach (var fac in factionComp.Factions)
+            {
+                if (hive.Allies.Contains(fac))
+                {
+                    hit = true;
+                    break;
+                }
+            }
+            return hit;
+        }
+
+        return false;
+    }
+
     /// <summary>
     /// Returns true if the entity has a valid hive, i.e. it isn't a rogue xeno.
     /// Only use this if you don't need to use the hive for anything after.
@@ -188,6 +285,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
 
         comp.Hive = hive;
         Dirty(member, comp);
+        UpdateHiveAppearance(member.Owner, hiveEnt);
 
         if (HasComp<XenoEvolutionGranterComponent>(member) && hiveEnt.HasValue)
             SetHiveQueen(member, hiveEnt.Value);
@@ -431,6 +529,11 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
     {
         // TODO RMC14
         return FromSameHive(a, b);
+    }
+
+    private void UpdateHiveAppearance(EntityUid member, Entity<HiveComponent>? hive)
+    {
+        _appearance.SetData(member, XenoHiveVisuals.Color, hive?.Comp.HiveColor ?? Color.White);
     }
 }
 

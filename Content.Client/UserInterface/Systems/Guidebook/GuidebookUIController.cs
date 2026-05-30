@@ -86,7 +86,7 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
         _guideWindow.OnOpen -= OnWindowOpen;
 
         // shutdown
-        _guideWindow.Dispose();
+        _guideWindow.Close();
         _guideWindow = null;
         CommandBinds.Unregister<GuidebookUIController>();
     }

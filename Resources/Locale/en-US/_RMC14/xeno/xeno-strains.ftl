@@ -190,3 +190,74 @@ rmc-xeno-designer-description = You lose:
     - Greater Resin Surge turns design nodes into weaker reflective walls
     - Slightly stronger tackle
 rmc-xeno-designer-popup = You are hive's designer, go and expand the hive beyond its limit.
+
+rmc-xeno-heatshield-name = Heatshield
+rmc-xeno-heatshield-description = You trade headbutt, tail sweep, and fortify for fire-driven combat tools.
+  You gain:
+  - Reduced fire damage and bonus burn damage while ignited.
+  - Bile that extinguishes hivemates or primes enemies to burn.
+  - Self-immolation and thermoregulation to control your own flames.
+rmc-xeno-heatshield-popup = This one makes fire answer to the hive.
+
+rmc-xeno-venator-name = Venator
+rmc-xeno-venator-description = You trade corrosive tail stab and basic spit tricks for deliberate acid hunting tools.
+  You gain:
+  - Corrosive spit, acid blob, and enzymatic breath.
+  - Store Acid charges that lower armor until spent to hasten your next acid attack.
+rmc-xeno-venator-popup = This one stalks with venom ready.
+
+rmc-xeno-alchemist-name = Alchemist
+rmc-xeno-alchemist-description = You trade the standard spitter acid kit for chemical stockpiles and tail injections.
+  You gain:
+  - Produce, purge, and select chemical stockpiles.
+  - Tail injections that harm enemies based on the stored mixture.
+rmc-xeno-alchemist-popup = This one brews ruin in its veins.
+
+rmc-xeno-bulwark-name = Bulwark
+rmc-xeno-bulwark-description = You trade punch, lunge, and fling for plate-based area control.
+  You gain:
+  - Encased Plates for strong frontal defenses.
+  - Plate Bash, Tail Swing, and a directional Reflective Shield.
+rmc-xeno-bulwark-popup = This one becomes the wall before the wall breaks.
+
+cm-xeno-heatshield-vomit-bile-extinguish = You smother the flames with bile.
+cm-xeno-heatshield-vomit-bile-hostile = You coat the target in volatile bile.
+cm-xeno-heatshield-vomit-bile-tile = You smother the burning ground with bile.
+cm-xeno-heatshield-vomit-bile-no-fire = That hivemate is not burning.
+cm-xeno-heatshield-vomit-bile-no-target = There are no flames or valid targets there.
+cm-xeno-heatshield-self-immolate = You stoke your own flames.
+cm-xeno-heatshield-thermoregulation-not-burning = You need to be burning to thermoregulate.
+cm-xeno-venator-store-acid = You store an acid charge. Charges: {$charges}.
+cm-xeno-venator-store-acid-full = You cannot store any more acid.
+cm-xeno-venator-store-acid-locked = Your glands are still recovering from your last acid attack.
+cm-xeno-bulwark-reflective-shield-encase = You need Encased Plates active to use Reflective Shield.
+cm-xeno-bulwark-tail-swing-encased = You need to loosen your plates before swinging your tail.
+cm-xeno-bulwark-plate-bash-adjacent = You need to be next to the target to launch them with Encased Plates.
+cm-xeno-dancer-projectile-dodge = You slip past the projectile.
+cm-xeno-dancer-yellow-spread-self = Fear spreads among the prey, their weakness fuels your instincts to strike them down!
+cm-xeno-dancer-yellow-spread-target = You feel fear washing down your spine... you could be next!
+cm-xeno-alchemist-selected-sagunine = Sagunine selected.
+cm-xeno-alchemist-selected-cholinine = Cholinine selected.
+cm-xeno-alchemist-selected-noctine = Noctine selected.
+cm-xeno-alchemist-selected-none = No chemical selected.
+cm-xeno-alchemist-chemical-sagunine = Sagunine
+cm-xeno-alchemist-chemical-cholinine = Cholinine
+cm-xeno-alchemist-chemical-noctine = Noctine
+cm-xeno-alchemist-chemical-none = None
+cm-xeno-alchemist-chemical-stockpile =
+    {$chemical}: {$amount} stored
+    Total: {$total}/{$max}
+cm-xeno-alchemist-chemical-stockpile-total =
+    {$chemical}
+    Total: {$total}/{$max}
+cm-xeno-alchemist-stockpile = Stockpile: {$amount}.
+cm-xeno-alchemist-removed = You purge the selected stockpile.
+cm-xeno-alchemist-empty = You have no stored mixture to inject.
+cm-xeno-alchemist-producing = Your glands are already producing.
+cm-xeno-alchemist-no-selected = Select a chemical first.
+cm-xeno-alchemist-stockpile-full = Your chemical stockpile is full.
+cm-xeno-reaper-harvest-dead = The flesh must be dead before you can harvest it.
+cm-xeno-reaper-harvest-permadead-marine = You can only harvest a permanently dead marine.
+cm-xeno-reaper-harvest-spent = This body has already been harvested.
+cm-xeno-reaper-not-enough-flesh = You need more flesh resin.
+cm-xeno-reaper-carrion-mantle = Carrion hardens into a protective mantle.

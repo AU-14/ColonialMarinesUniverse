@@ -1,6 +1,7 @@
 using Content.Server.DeviceLinking.Systems;
 using Content.Server.Explosion.Components;
 using Content.Shared.DeviceLinking.Events;
+using Content.Shared.Inventory;
 
 namespace Content.Server.Explosion.EntitySystems
 {
@@ -33,8 +34,18 @@ namespace Content.Server.Explosion.EntitySystems
             if (args.Port != component.Port)
                 return;
 
+            if (!CanStartSignalTimer(uid, component))
+                return;
+
             StartTimer(uid, args.Trigger);
         }
+
+        private bool CanStartSignalTimer(EntityUid uid, TimerStartOnSignalComponent component)
+        {
+            return component.RequiredWornSlots == SlotFlags.NONE ||
+                   _inventory.InSlotWithFlags(uid, component.RequiredWornSlots);
+        }
+
         private void OnTimerSignalInit(EntityUid uid, TimerStartOnSignalComponent component, ComponentInit args)
         {
             _signalSystem.EnsureSinkPorts(uid, component.Port);

@@ -62,7 +62,7 @@
       entries:
       - id: RMCM5CameraGear
         amount: 30
-      - id: AU14HeadsetSectionMarine
+      - id: AU14HeadsetGovforMarine
         name: empty headset
         amount: 20
     - name: Heads Up Display
@@ -702,7 +702,9 @@
         amount: 10
     - name: Headsets
       entries:
-      - id: AU14HeadsetSectionLeader
+      - id: AU14HeadsetGovforCommand
+        amount: 2
+      - id: AU14HeadsetGovforAuxiliary
         amount: 2
     - name: Backpack
       entries:
@@ -1022,8 +1024,9 @@
   components:
   - type: Sprite
     sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+  - type: AccessReader
+    access: [["AU14AccessGovforSecurity" ], [ "AU14AccessOpforSecurity" ]]
   - type: CMAutomatedVendor
-    jobs: [ AU14JobGOVFORMilitaryPoliceMan, AU14JobMilitaryPoliceBase ]
     sections:
     - name: Standard Equipment
       takeAll: CMStandard
@@ -1033,6 +1036,7 @@
       - id: RMCBoxZiptie
       - id: RMCGuidebookLawMarine
       - id: RMCGuidebookSOP
+      - id: AU14Scissors
     - name: Uniform
       choices: { AU14Uniform: 1 }
       entries:
@@ -1221,4 +1225,8 @@
       - id: AU14TentBigFoldedSurgical
         amount: 1
       - id: RMCTentUNMCExtendedMessFolded
+        amount: 1
+    - name: Flag
+      entries:
+      - id: AU14FlagCarriableUPP
         amount: 1

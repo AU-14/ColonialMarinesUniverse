@@ -144,6 +144,12 @@
     eyes: RMCSunglasses
 
 - type: loadout
+  id: RMCGlassesExperimentalMeson
+  cost: 2
+  equipment:
+    eyes: RMCGlassesExperimentalMeson
+
+- type: loadout
   id: HippieGlassesBloodredRMC
   cost: 2
   equipment:

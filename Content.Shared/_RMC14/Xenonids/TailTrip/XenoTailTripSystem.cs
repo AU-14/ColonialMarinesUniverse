@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Stun;
+using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Finesse;
 using Content.Shared._RMC14.Xenonids.Sweep;
 using Content.Shared.Coordinates;
@@ -20,6 +21,7 @@ public sealed partial class XenoTailTripSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private SharedRMCMeleeWeaponSystem _rmcMelee = default!;
     [Dependency] private RMCSizeStunSystem _size = default!;
 
     public override void Initialize()
@@ -36,6 +38,8 @@ public sealed partial class XenoTailTripSystem : EntitySystem
             return;
 
         args.Handled = true;
+
+        _rmcMelee.DoLunge(xeno, args.Target);
 
         if (_net.IsServer)
             SpawnAttachedTo(xeno.Comp.TailEffect, args.Target.ToCoordinates());

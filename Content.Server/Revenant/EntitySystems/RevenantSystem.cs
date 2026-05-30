@@ -38,7 +38,7 @@ public sealed partial class RevenantSystem : EntitySystem
     [Dependency] private PhysicsSystem _physics = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedEyeSystem _eye = default!;
-    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
     [Dependency] private SharedInteractionSystem _interact = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedStunSystem _stun = default!;

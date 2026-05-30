@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Content.Shared._CMU14.Medical.Items;
 using Content.Shared._CMU14.Medical.Surgery.Markers;
 using Content.Shared._CMU14.Medical.StatusEffects;

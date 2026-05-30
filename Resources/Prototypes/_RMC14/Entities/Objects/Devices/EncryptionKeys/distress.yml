@@ -6,13 +6,13 @@
   components:
   - type: EncryptionKey
     channels:
-    - CMB
+    - radioCMB
     - MarineCommon
     - MarineCommand
     - MarineMedical
     - MarineIntel
     - Colony
-    defaultChannel: CMB
+    defaultChannel: radioCMB
   - type: Sprite
     state: cap_key
 
@@ -23,7 +23,7 @@
   components:
   - type: EncryptionKey
     channels:
-    - CMB
+    - radioCMB
     - Colony
     defaultChannel: Colony
   - type: Sprite

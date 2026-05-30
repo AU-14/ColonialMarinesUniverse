@@ -28,7 +28,7 @@ public sealed partial class DungeonJob
             // If none of those intersect another tile it's probably external
             // TODO: Maybe need to take top half of furthest rooms in case there's interior exits?
             roomTiles.AddRange(room.Exterior);
-            random.Shuffle(roomTiles);
+            Shuffle(random, roomTiles);
 
             foreach (var tile in roomTiles)
             {

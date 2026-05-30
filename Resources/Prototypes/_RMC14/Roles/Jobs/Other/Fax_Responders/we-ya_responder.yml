@@ -59,7 +59,7 @@
   parent: CMIDCardGold
   id: RMCIDCardWeYaResponder
   name: We-Ya Communications Executive ID card
-  description: A fancy, faux gold plated ID card. One of many given to Weston-Yamada's army of fax operators.
+  description: A fancy, faux gold plated ID card. One of many given to Weyland-Yutani's army of fax operators.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/gold_id.rsi

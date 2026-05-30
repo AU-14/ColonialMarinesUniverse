@@ -49,4 +49,47 @@ public sealed partial class XenoStompComponent : Component
     // TODO RMC14 bang.ogg
     [DataField, AutoNetworkedField]
     public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_footstep_charge1.ogg");
+
+    /// <summary>
+    ///     If true, stomp is a cone aimed at the mouse instead of a circle.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool Directional = false;
+
+    /// <summary>
+    ///     Range (radius) of the directional stomp cone.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float DirectionalRange = 4f;
+
+    /// <summary>
+    ///     Total arc width of the directional stomp cone.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public Angle DirectionalAngle = Angle.FromDegrees(90);
+
+    /// <summary>
+    ///     Knockback distance for directional stomp.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float KnockBackDistance = 0f;
+
+    /// <summary>
+    ///     Screen shake strength for directional stomp.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int ScreenShakeStrength = 0;
+
+    /// <summary>
+    ///     Effect to spawn on each tile when directional stomp lands.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public EntProtoId? DirectionalTileEffect;
+
+    /// <summary>
+    ///     If set, directional stomp damage falls off with distance.
+    ///     Full Damage at close range, this value at max range.
+    /// </summary>
+    [DataField]
+    public DamageSpecifier? DirectionalMinDamage;
 }

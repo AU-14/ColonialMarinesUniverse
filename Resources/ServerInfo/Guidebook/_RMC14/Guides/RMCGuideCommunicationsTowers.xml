@@ -1,4 +1,4 @@
-﻿<Document>
+<Document>
   Guide by Kynthos on Discord
 
   [color=#5f698a]█    █ █▄ █[/color] [head=2][bold]UNITED NATIONS MARINE CORPS[/bold][/head]\n
@@ -13,7 +13,7 @@
   Radio communication between Marines on the planet and the staff onboard the Almayer cannot be conducted until one of the two TC-3T Static Telecommunications Tower in the Colony has been repaired to boost the connection.
 
   <Box>
-    <GuideEntityEmbed Entity="RMCCommunicationsTower"/>
+    <GuideEntityEmbed Entity="AU14CommunicationsTower"/>
   </Box>
 
 The location of the Telecommunication Towers vary between Operations. The CIC will know their exact location, so ensure you communicate with Command to be informed of which towers need to be repaired.
@@ -33,7 +33,7 @@ The Experimental Sensor Tower found in each colony has been adjusted to track un
 The location of the Sensor Tower is predetermined for each AO, remaining the same between operations.
 
   <Box>
-    <GuideEntityEmbed Entity="RMCSensorTower"/>
+    <GuideEntityEmbed Entity="AU14SensorTower"/>
   </Box>
 
   If you are unsure on the next step for repairs, make sure to inspect the tower, but the steps are as follows:

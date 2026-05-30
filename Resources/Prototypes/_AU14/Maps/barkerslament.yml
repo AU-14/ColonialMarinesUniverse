@@ -2,8 +2,12 @@
   id: CMULV376BarkersLament
   mapName: LV-376 Ulixes
   mapPath: /Maps/_CMU14/lament.yml
-  minPlayers: 0
-  maxPlayers: 75
+  mapsBelow:
+  - /Maps/_CMU14/lament_below.yml
+  mapsAbove:
+  - /Maps/_CMU14/lament_above.yml
+  minPlayers: 40
+  maxPlayers: 140
   maxRandomOffset: 0
   randomRotation: false
   stations:
@@ -19,7 +23,7 @@
             AU14JobCivilianJournalist: [2, 2]
             AU14JobCivilianScientist: [6, 6]
             AU14JobCivilianColonySynthetic: [2, 2]
-
+            AU14JobCivilianShopkeep: [2, 2]
             # Colony Command (non department)
             AU14JobCivilianCorporateLiaison: [1, 1]
             AU14JobCivilianColonyAdministrator: [1, 1]
@@ -44,6 +48,10 @@
             AU14JobCivilianNurse: [3, 3]
             AU14JobCivilianEthicsAndWellnessAdvisor: [1, 1]
             AU14JobCivilianEmergencyResponseOfficer: [2, 2]
+
+            # Orbital
+            AU14JobCivilianOrbitalArbiter: [1, 1]
+            AU14JobCivilianOrbitalLawyer: [2, 3]
 
             # Other
             AU14JobCivilianMiner: [10, 10]

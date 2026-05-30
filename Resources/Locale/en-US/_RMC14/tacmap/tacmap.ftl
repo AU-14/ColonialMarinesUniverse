@@ -1,6 +1,7 @@
 ui-tactical-map-window-title = Map
 ui-tactical-map-tab-map = Map
 ui-tactical-map-tab-canvas = Canvas
+ui-tactical-map-tab-squad = Squad
 
 ui-tactical-map-label-dialog-create-title = Create Label
 ui-tactical-map-label-dialog-edit-title = Edit Label

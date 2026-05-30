@@ -23,6 +23,7 @@ public sealed partial class SentryLaptopBui : BoundUserInterface
     [Dependency] private IEntityManager _entities = default!;
 
     private SentryLaptopWindow? _window;
+    private readonly SharedTransformSystem _transform;
     private readonly Dictionary<NetEntity, SentryCard> _sentryCards = new();
     private readonly Dictionary<NetEntity, bool> _iffExpanded = new();
     private readonly Dictionary<NetEntity, SentryInfo> _currentInfos = new();
@@ -35,6 +36,7 @@ public sealed partial class SentryLaptopBui : BoundUserInterface
     public SentryLaptopBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
         IoCManager.InjectDependencies(this);
+        _transform = EntMan.System<SharedTransformSystem>();
     }
 
     protected override void Open()
@@ -667,7 +669,7 @@ public sealed partial class SentryLaptopBui : BoundUserInterface
         if (mapUid == EntityUid.Invalid)
             return;
 
-        _cameraEntity = _entities.SpawnEntity(null, new EntityCoordinates(mapUid, sentryXform.WorldPosition));
+        _cameraEntity = _entities.SpawnEntity(null, new EntityCoordinates(mapUid, _transform.GetWorldPosition(sentryXform)));
 
         if (!_entities.TryGetComponent<TransformComponent>(_cameraEntity.Value, out var camXform))
             return;
@@ -794,7 +796,7 @@ public sealed partial class SentryLaptopBui : BoundUserInterface
                 }
             }
 
-            _window?.Dispose();
+            _window?.Close();
         }
     }
 }

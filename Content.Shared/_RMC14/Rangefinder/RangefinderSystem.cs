@@ -58,6 +58,25 @@ public sealed partial class RangefinderSystem : EntitySystem
         SubscribeLocalEvent<LaserDesignatorTargetComponent, EntityTerminatingEvent>(OnLaserDesignatorTargetRemove);
     }
 
+    public override void Update(float frameTime)
+    {
+        if (_net.IsClient)
+            return;
+
+        var activeDesignators = EntityQueryEnumerator<ActiveLaserDesignatorComponent, RangefinderComponent>();
+        while (activeDesignators.MoveNext(out var uid, out var active, out var rangefinder))
+        {
+            if (active.User is not { } user ||
+                active.Target is not { } target ||
+                TerminatingOrDeleted(user) ||
+                TerminatingOrDeleted(target) ||
+                !HasLineOfSight(user, _transform.GetMoverCoordinates(target), rangefinder.Range))
+            {
+                RemCompDeferred<ActiveLaserDesignatorComponent>(uid);
+            }
+        }
+    }
+
     private void OnRangefinderMapInit(Entity<RangefinderComponent> rangefinder, ref MapInitEvent args)
     {
         if (_net.IsClient)
@@ -158,6 +177,9 @@ public sealed partial class RangefinderSystem : EntitySystem
         if (!coords.IsValid(EntityManager))
             return;
 
+        if (!HasLineOfSight(user, coords, rangefinder.Comp.Range))
+            return;
+
         if (rangefinder.Comp.Mode == Designator)
         {
             var msg = Loc.GetString("rmc-laser-designator-acquired");
@@ -171,6 +193,7 @@ public sealed partial class RangefinderSystem : EntitySystem
 
         var active = EnsureComp<ActiveLaserDesignatorComponent>(rangefinder);
         active.BreakRange = rangefinder.Comp.BreakRange;
+        active.User = user;
         QueueDel(active.Target);
 
         var modeLaser = rangefinder.Comp.Mode == Designator
@@ -202,6 +225,7 @@ public sealed partial class RangefinderSystem : EntitySystem
         var target = EnsureComp<LaserDesignatorTargetComponent>(targetEnt);
         var id = EnsureId(rangefinder);
         target.Id = id;
+        target.LaserDesignator = rangefinder;
         Dirty(targetEnt, target);
 
         var name = Loc.GetString("rmc-laser-designator-target-name", ("id", id));
@@ -324,6 +348,12 @@ public sealed partial class RangefinderSystem : EntitySystem
     {
         rangefinder.Comp.Id ??= _dropshipWeapon.ComputeNextId();
         return rangefinder.Comp.Id.Value;
+    }
+
+    private bool HasLineOfSight(EntityUid user, EntityCoordinates coordinates, int range)
+    {
+        return coordinates.IsValid(EntityManager) &&
+               _examine.InRangeUnOccluded(user, coordinates, range);
     }
 
     private void TryTarget(Entity<RangefinderComponent> rangefinder, EntityUid user, TimeSpan delay, EntityCoordinates coordinates)

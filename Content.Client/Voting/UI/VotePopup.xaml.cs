@@ -47,6 +47,7 @@ namespace Content.Client.Voting.UI
 
             ApplyCrtPalette();
             CrtLobbyTheme.Apply(this);
+            _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
 
             if (_vote.TargetEntity != null && _vote.TargetEntity != 0)
@@ -90,12 +91,20 @@ namespace Content.Client.Voting.UI
         {
             base.Dispose(disposing);
 
+            _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+        }
+
+        private void OnCrtUiEnabledChanged(bool _)
+        {
+            ApplyCrtPalette();
+            CrtLobbyTheme.Apply(this);
         }
 
         private void OnCrtUiColorChanged(string _)
         {
             ApplyCrtPalette();
+            CrtLobbyTheme.Apply(this);
         }
 
         private void ApplyCrtPalette()

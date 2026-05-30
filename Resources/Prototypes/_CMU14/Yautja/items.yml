@@ -371,6 +371,9 @@
     maxItemSize: Large
     grid:
     - 0,0,19,1
+  - type: Tag
+    tags:
+    - CMUYautjaToolbelt
   - type: YautjaTechItem
 
 - type: entity

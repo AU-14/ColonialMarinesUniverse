@@ -8,6 +8,7 @@ namespace Content.Client._RMC14.Doors;
 public sealed partial class RMCDoorVisualsSystem : EntitySystem
 {
     [Dependency] private AnimationPlayerSystem _animation = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private const string ButtonAnimationKey = "rmc_pod_door_button_animation";
     private readonly TimeSpan _buttonAnimationLength = TimeSpan.FromSeconds(1.25);
@@ -60,6 +61,6 @@ public sealed partial class RMCDoorVisualsSystem : EntitySystem
             return;
 
         if (TryComp(ent, out SpriteComponent? sprite))
-            sprite.LayerSetState(RMCPodDoorButtonLayers.Animation, ent.Comp.OffState);
+            _sprite.LayerSetRsiState((ent.Owner, sprite), RMCPodDoorButtonLayers.Animation, ent.Comp.OffState);
     }
 }

@@ -1,0 +1,52 @@
+- type: job
+  parent: AU14JobMilitaryPoliceBase
+  id: AU14JobOPFORMilitaryPolice
+  icon: "AU14JobIconOPFORRFN"
+  spawnMenuRoleName: Military Policeman (OPFOR)
+  startingGear: AU14GearOPFORMilitaryPoliceMan
+  dummyStartingGear: AU14GearOPFORMilitaryPoliceManDummy
+  accessGroups:
+  - AU14OpforSecurity
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Marine
+      Faction: opfor
+    - type: NpcFactionMember
+      factions:
+      - OPFOR
+    - type: UserIFF
+      factions:
+      - OPFOR
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforhud.rsi
+        state: rfn
+
+- type: startingGear
+  id: AU14GearOPFORMilitaryPoliceMan
+  equipment:
+    id: AU14IDCardGOVFORMilitaryPoliceMan
+    ears: AU14HeadsetOpforMarineMP
+    ears2: RMCM5CameraGear
+
+- type: startingGear
+  id: AU14GearOPFORMilitaryPoliceManDummy
+  equipment:
+    shoes: CMBootsBlackFilled
+    jumpsuit: AU14JungleFatigues
+    belt: CMBeltSecurityMPFilled
+    head: CMHeadBeretRed
+    ears: AU14HeadsetOpforMarineMP
+    ears2: RMCM5CameraGear
+    outerClothing: AU14ArmorM3JungleThree
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFORMilitaryPoliceMan
+  name: Spawn Point OPFOR Military Policeman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORMilitaryPolice
+  - type: Sprite
+    state: syn_spawn

@@ -38,7 +38,7 @@ namespace Content.Client.Voting.UI
         {
             base.ExitedTree();
 
-            _voteManager.CanCallVoteChanged += UpdateCanCall;
+            _voteManager.CanCallVoteChanged -= UpdateCanCall;
         }
 
         private void UpdateCanCall(bool canCall)

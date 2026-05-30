@@ -2,6 +2,10 @@
   id: stablegarrison
   mapName: Stable Garrison
   mapPath: /Maps/_AU14/garrison.yml
+  mapsBelow:
+  - /Maps/_AU14/garrison_below.yml
+  mapsAbove:
+  - /Maps/_AU14/garrison_above.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0
@@ -41,3 +45,7 @@
             AU14JobCivilianEthicsAndWellnessAdvisor: [2, 2]
             AU14JobCivilianEmergencyResponseOfficer: [1, 1]
             AU14JobCivilianHeadPhysician : [1, 1]
+
+            # Orbital
+            AU14JobCivilianOrbitalArbiter: [1, 1]
+            AU14JobCivilianOrbitalLawyer: [2, 3]

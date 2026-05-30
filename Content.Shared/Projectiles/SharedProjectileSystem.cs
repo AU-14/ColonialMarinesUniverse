@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Projectiles.Penetration;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
@@ -32,6 +33,7 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Shared.BarricadeBlock;
 using Robust.Shared.Random;
@@ -41,20 +43,27 @@ namespace Content.Shared.Projectiles;
 public abstract partial class SharedProjectileSystem : EntitySystem
 {
     public const string ProjectileFixture = "projectile";
-    private static readonly ProtoId<ReagentPrototype> BloodReagent = "Blood";
-    private static readonly ProtoId<ReagentPrototype> YautjaBloodReagent = "CMUYautjaBlood";
     private static readonly FixedPoint2 BloodImpactPiercingThreshold = FixedPoint2.New(45);
+    private static readonly ProtoId<ReagentPrototype> BloodReagent = "Blood";
     private static readonly string[] BloodImpactEffects =
     {
         "CMUBloodImpactEffect",
         "CMUBloodImpactEffect1",
         "CMUBloodImpactEffect2",
     };
+    private static readonly ProtoId<ReagentPrototype> YautjaBloodReagent = "CMUYautjaBlood";
     private static readonly string[] YautjaBloodImpactEffects =
     {
         "CMUYautjaBloodImpactEffect",
         "CMUYautjaBloodImpactEffect1",
         "CMUYautjaBloodImpactEffect2",
+    };
+    private static readonly ProtoId<ReagentPrototype> SynthBloodReagent = "RMCSynthBlood";
+    private static readonly string[] SynthBloodImpactEffects =
+    {
+        "CMUSynthBloodImpactEffect",
+        "CMUSynthBloodImpactEffect1",
+        "CMUSynthBloodImpactEffect2",
     };
 
     [Dependency] private INetManager _net = default!;
@@ -72,6 +81,8 @@ public abstract partial class SharedProjectileSystem : EntitySystem
     [Dependency] private SharedCameraRecoilSystem _sharedCameraRecoil = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCReagentSystem _reagent = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     public override void Initialize()
     {
@@ -90,6 +101,15 @@ public abstract partial class SharedProjectileSystem : EntitySystem
 
     private void OnStartCollide(EntityUid uid, ProjectileComponent component, ref StartCollideEvent args)
     {
+        var predictedClientProjectile = HasComp<PredictedProjectileClientComponent>(uid);
+        var xenoClientProjectile = HasComp<XenoClientProjectileShotComponent>(uid);
+        if (_net.IsClient &&
+            (predictedClientProjectile ||
+             _timing.ApplyingState && xenoClientProjectile))
+        {
+            return;
+        }
+
         // This is so entities that shouldn't get a collision are ignored.
         if (args.OurFixtureId != ProjectileFixture || !args.OtherFixture.Hard
             || component.ProjectileSpent || component is { Weapon: null, OnlyCollideWhenShot: true })
@@ -147,12 +167,15 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         //
 
         var filter = Filter.Pvs(coordinates, entityMan: EntityManager);
+        ICommonSession? predictedShooter = null;
+        ICommonSession? predictedXenoShooter = null;
         if (_guns.GunPrediction)
         {
             // TODO RMC14 clean this up once gun prediction is using new lag compensation
             if (TryComp(projectile, out PredictedProjectileServerComponent? serverProjectile) &&
                 serverProjectile.Shooter is { } shooter)
             {
+                predictedShooter = shooter;
                 filter = filter.RemovePlayer(shooter);
             }
 
@@ -160,15 +183,28 @@ public abstract partial class SharedProjectileSystem : EntitySystem
                 TryComp(projectile, out XenoProjectileShotComponent? shot) &&
                 shot.Shooter is { } xenoShooter)
             {
+                predictedXenoShooter = xenoShooter;
                 filter = filter.RemovePlayer(xenoShooter);
             }
         }
+
+        // Only widen the damage flash for multi-Z viewers. Widening impact effects here
+        // previously broke unrelated hit visuals, while predicted shooters get a local flash.
+        var damageEffectFilter = _zLevels.AddZLevelViewers(
+            filter.Clone(),
+            _transform.ToMapCoordinates(coordinates));
+
+        if (predictedShooter is { } removedShooter)
+            damageEffectFilter = damageEffectFilter.RemovePlayer(removedShooter);
+
+        if (predictedXenoShooter is { } removedXenoShooter)
+            damageEffectFilter = damageEffectFilter.RemovePlayer(removedXenoShooter);
 
         if (modifiedDamage is not null && (Exists(component.Shooter) || Exists(component.Weapon)))
         {
             if (modifiedDamage.AnyPositive() && !deleted)
             {
-                _color.RaiseEffect(GetDamageEffectColor(target), new List<EntityUid> { target }, filter);
+                _color.RaiseEffect(GetDamageEffectColor(target), new List<EntityUid> { target }, damageEffectFilter);
             }
 
             var shooterOrWeapon = Exists(component.Shooter) ? component.Shooter!.Value : component.Weapon!.Value;
@@ -281,17 +317,18 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         if (bloodstream.BloodReagent == YautjaBloodReagent)
             return _random.Pick(YautjaBloodImpactEffects);
 
+        if (bloodstream.BloodReagent == SynthBloodReagent)
+            return _random.Pick(SynthBloodImpactEffects);
+
         return fallback;
     }
 
     private Color GetDamageEffectColor(EntityUid target)
     {
-        if (TryComp(target, out BloodstreamComponent? bloodstream) &&
-            bloodstream.BloodReagent == YautjaBloodReagent &&
-            _reagent.TryIndex(bloodstream.BloodReagent, out var reagent))
-        {
+        if (TryComp(target, out BloodstreamComponent? bloodstream)
+            && bloodstream.BloodReagent != BloodReagent
+            && _reagent.TryIndex(bloodstream.BloodReagent, out var reagent))
             return reagent.SubstanceColor;
-        }
 
         return Color.Red;
     }
@@ -396,7 +433,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
                     var BarricadeBlockCoords = Transform(args.OtherEntity).Coordinates;
 
                     if (shooterCoords.TryDistance(EntityManager, BarricadeBlockCoords, out var distance) &&
-                        distance <= 1.5f)
+                        distance <= BarricadeBlock.Distance)
                     {
                         alwaysPassThrough = true;
                     }

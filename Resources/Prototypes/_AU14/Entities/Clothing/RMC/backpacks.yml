@@ -19,6 +19,8 @@
     maxItemSize: Large
     grid:
     - 0,0,22,1
+    blacklist:
+      tags: []
 
 - type: entity
   parent: CMBackpack

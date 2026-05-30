@@ -2,41 +2,16 @@
   parent: AU14JobPlatoonCorpsmanBase
   id: AU14JobGOVFORPlatoonCorpsmanRMC
   name: au14-job-name-govforplatooncorpsmanRMC
-  description: au14-job-description-govforplatooncorpsman
-  setPreference: true
-  requirements:
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
-    - NonResuscitable
+  spawnMenuRoleName: Hospital Corpsman (TWE RMC)
   ranks:
     RMC_Corporal:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORPlatoonCorpsman
       time: 72000 # 20 hours
     RMC_LanceCorporal: []
-  startingGear: AU14GearGOVFORPlatoonCorpsman
-  dummyStartingGear: AU14GearGOVFORCorpsmanDummy
-  icon: "AU14JobIconCorpsman"
-  requireAdminNotify: false
-  spawnMenuRoleName: Hospital Corpsman (TWE RMC)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforCorpsman
-  - AU14GovforSquad
-  overwatchSortPriority: -2
-  overwatchRoleName: Hospital Corpsmen
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: Marine
-      Faction: govfor
     - type: Skills
       skills:
         RMCSkillFirearms: 2
@@ -47,10 +22,3 @@
         RMCSkillConstruction: 2
         RMCSkillEngineer: 3
         RMCSkillPolice: 1
-    - type: JobPrefix
-      prefix: au14-job-prefix-govforplatooncorpsman
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-  hidden: true

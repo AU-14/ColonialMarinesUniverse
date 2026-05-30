@@ -114,6 +114,13 @@
   - type: AnimationPlayer
   - type: RMCMesonsNonviewable
   - type: EntityStorageCloseOnMapInit
+  - type: Flamability
+    chance: 0.06
+    rate: 0.3
+    spread: 0.2
+    range: 0.5
+    burnDurationMin: 70
+    burnDurationMax: 620
 
 - type: entity
   parent: RMCCrateBase
@@ -664,6 +671,7 @@
   parent: RMCCrateHydro
   id: RMCCrateSecureHydro
   name: secure hydroponics crate
+  suffix: Secure
   description: A crate with a lock on it, painted in the scheme of the station's botanists.
   components:
   - type: Sprite
@@ -683,8 +691,12 @@
       offset: "0.28125,0.0"
       visible: false
       map: ["enum.PaperLabelVisuals.Layer"]
+  - type: LockVisuals
+  - type: Lock
   - type: Icon
     sprite: _RMC14/Structures/Storage/Crates/secure_hydro.rsi
+  - type: AccessReader
+    access: [["CMAccessColonyPublic"]]
 
 - type: entity
   parent: RMCCrateSecure
@@ -743,9 +755,9 @@
 - type: entity
   parent: RMCCrateSecure
   id: RMCCrateSecureWeYa
-  name: secure We-Ya crate
-  description: A secure crate with a We-Ya insignia on it.
-  suffix: We-Ya, Req, Locked
+  name: secure We-Yu crate
+  description: A secure crate with a We-Yu insignia on it.
+  suffix: We-Yu, Req, Locked
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Storage/Crates/secure_we_ya.rsi
@@ -767,7 +779,7 @@
   - type: Icon
     sprite: _RMC14/Structures/Storage/Crates/secure_we_ya.rsi
   - type: AccessReader
-    access: [["RMCAccessWeYa"]]
+    access: [["AU14AccessCorporateWEYU"]]
 
 - type: entity
   parent: RMCCrateSecure
@@ -931,3 +943,10 @@
       map: ["enum.PaperLabelVisuals.Layer"]
   - type: Icon
     sprite: _RMC14/Structures/Storage/Crates/woodcrate.rsi
+  - type: Flamability
+    chance: 0.9
+    rate: 3.0
+    spread: 1.2
+    destroyAnyway: true
+    burnDurationMin: 70
+    burnDurationMax: 620

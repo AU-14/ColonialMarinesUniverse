@@ -244,25 +244,22 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
     public IEnumerable<KeyValuePair<string, TimeSpan>> FetchPlaytimeJobIdByRoles()
     {
         // RMC14
-        var jobsToMap = _prototypes.EnumeratePrototypes<JobPrototype>().ToArray();
-        var trackers = new HashSet<ProtoId<PlayTimeTrackerPrototype>>();
-        var duplicateTrackers = new HashSet<ProtoId<PlayTimeTrackerPrototype>>();
+        var jobsByTracker = _prototypes.EnumeratePrototypes<JobPrototype>()
+            .GroupBy(job => job.PlayTimeTracker);
 
-        foreach (var job in jobsToMap)
+        foreach (var jobs in jobsByTracker)
         {
-            if (!trackers.Add(job.PlayTimeTracker))
-                duplicateTrackers.Add(job.PlayTimeTracker);
-        }
-
-        foreach (var job in jobsToMap)
-        {
-            if (duplicateTrackers.Contains(job.PlayTimeTracker) && !job.BasePlaytimeTracker)
+            if (!_roles.TryGetValue(jobs.Key, out var locJobName))
                 continue;
 
-            if (_roles.TryGetValue(job.PlayTimeTracker, out var locJobName))
-            {
-                yield return new KeyValuePair<string, TimeSpan>(job.ID, locJobName);
-            }
+            var displayJob = jobs
+                .OrderByDescending(job => job.BasePlaytimeTracker)
+                .ThenByDescending(job => job.ID == job.PlayTimeTracker)
+                .ThenBy(job => job.Hidden)
+                .ThenBy(job => job.ID)
+                .First();
+
+            yield return new KeyValuePair<string, TimeSpan>(displayJob.ID, locJobName);
         }
     }
 

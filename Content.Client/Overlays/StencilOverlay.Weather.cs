@@ -12,18 +12,24 @@ public sealed partial class StencilOverlay
 {
     private List<Entity<MapGridComponent>> _grids = new();
 
-    private void DrawWeather(in OverlayDrawArgs args, WeatherPrototype weatherProto, float alpha, Matrix3x2 invMatrix)
+    private void DrawWeather(
+        in OverlayDrawArgs args,
+        CachedResources res,
+        WeatherPrototype weatherProto,
+        float alpha,
+        Matrix3x2 invMatrix)
     {
         var worldHandle = args.WorldHandle;
         var mapId = args.MapId;
-        var worldAABB = args.WorldAABB;
+        var worldAABB = args.WorldAABB.Enlarged(1f); //CrystallEdge: Enlarged(1), because ignoreEmpty disabled, and that cause borderscreen weather flickering
         var worldBounds = args.WorldBounds;
         var position = args.Viewport.Eye?.Position.Position ?? Vector2.Zero;
+        var eye = args.Viewport.Eye; //CrystallEdge: we need Eye for calculation of isometric wall offset direction
 
         // Cut out the irrelevant bits via stencil
         // This is why we don't just use parallax; we might want specific tiles to get drawn over
         // particularly for planet maps or stations.
-        worldHandle.RenderInRenderTarget(_blep!, () =>
+        worldHandle.RenderInRenderTarget(res.Blep!, () =>
         {
             var xformQuery = _entManager.GetEntityQuery<TransformComponent>();
             _grids.Clear();
@@ -38,7 +44,7 @@ public sealed partial class StencilOverlay
                 worldHandle.SetTransform(matty);
                 _entManager.TryGetComponent(grid.Owner, out RoofComponent? roofComp);
 
-                foreach (var tile in _map.GetTilesIntersecting(grid.Owner, grid, worldAABB))
+                foreach (var tile in _map.GetTilesIntersecting(grid.Owner, grid, worldAABB, ignoreEmpty: false)) //CrystallEdge: ignoreEmpty: false, because we can have empty tiles under zLevel roof
                 {
                     // Ignored tiles for stencil
                     if (_weather.CanWeatherAffect(grid.Owner, grid, tile, roofComp))
@@ -46,10 +52,17 @@ public sealed partial class StencilOverlay
                         continue;
                     }
 
-                    var gridTile = new Box2(tile.GridIndices * grid.Comp.TileSize,
-                        (tile.GridIndices + Vector2i.One) * grid.Comp.TileSize);
-
-                    worldHandle.DrawRect(gridTile, Color.White);
+                    //CrystallEdge offset - required for isometric walls
+                    if (eye is not null)
+                    {
+                        Angle rotation = eye.Rotation * -1f;
+                        var offset = rotation.ToWorldVec() * -0.5f;
+                        var gridTile = new Box2(
+                            tile.GridIndices * grid.Comp.TileSize + offset,
+                            (tile.GridIndices + Vector2i.One) * grid.Comp.TileSize + offset);
+                        worldHandle.DrawRect(gridTile, Color.White);
+                    }
+                    //CrystallEdge offset end
                 }
             }
 
@@ -74,7 +87,7 @@ public sealed partial class StencilOverlay
 
         worldHandle.SetTransform(Matrix3x2.Identity);
         worldHandle.UseShader(_protoManager.Index(StencilMask).Instance());
-        worldHandle.DrawTextureRect(_blep!.Texture, worldBounds);
+        worldHandle.DrawTextureRect(res.Blep!.Texture, worldBounds);
         var curTime = _timing.RealTime;
         var sprite = _sprite.GetFrame(weatherProto.Sprite, curTime);
 

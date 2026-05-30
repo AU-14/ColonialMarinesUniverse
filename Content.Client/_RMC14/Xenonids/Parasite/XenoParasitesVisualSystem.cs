@@ -4,8 +4,10 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client._RMC14.Xenonids.Parasite;
 
-public sealed class XenoParasitesVisualSystem : VisualizerSystem<XenoParasiteThrowerComponent>
+public sealed partial class XenoParasitesVisualSystem : VisualizerSystem<XenoParasiteThrowerComponent>
 {
+    [Dependency] private SpriteSystem _sprite = default!;
+
     protected override void OnAppearanceChange(EntityUid uid, XenoParasiteThrowerComponent component, ref AppearanceChangeEvent args)
     {
         var sprite = args.Sprite;
@@ -22,12 +24,12 @@ public sealed class XenoParasitesVisualSystem : VisualizerSystem<XenoParasiteThr
 
         foreach(var layer in Enum.GetValues<ParasiteOverlayLayers>())
         {
-            if (!sprite.LayerMapTryGet(layer, out var paraLayer))
+            if (!_sprite.LayerMapTryGet((uid, sprite), layer, out var paraLayer, false))
                 continue;
 
-            sprite.LayerSetVisible(layer, states[(int)layer]);
+            _sprite.LayerSetVisible((uid, sprite), layer, states[(int)layer]);
 
-            sprite.LayerSetState(layer, $"{layerState}{(int)layer}");
+            _sprite.LayerSetRsiState((uid, sprite), layer, $"{layerState}{(int)layer}");
         }
     }
 }
