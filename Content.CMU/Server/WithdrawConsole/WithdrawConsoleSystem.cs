@@ -17,7 +17,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.AU14.WithdrawConsole;
 
-public sealed class WithdrawConsoleSystem : EntitySystem
+public sealed partial class WithdrawConsoleSystem : EntitySystem
 {
     [Dependency] private AccessReaderSystem _accessReader = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -353,18 +353,18 @@ public sealed class WithdrawConsoleSystem : EntitySystem
     private void SendMilestoneAnnouncement(EntityUid uid, WithdrawConsoleComponent console, TimeSpan remaining, string locKey)
     {
         var factionName = console.Faction.ToUpperInvariant();
-        var minutes = (int) Math.Ceiling(remaining.TotalMinutes);
+        var minutes = (int)Math.Ceiling(remaining.TotalMinutes);
         var message = Loc.GetString(locKey, ("faction", factionName), ("minutes", minutes));
-        var sound =    new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");
+        var sound = new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");
         _marineAnnounce.AnnounceToMarines(message, sound, faction: console.Faction);
     }
 
     private void SendWithdrawAnnouncement(EntityUid uid, WithdrawConsoleComponent console, TimeSpan remaining)
     {
         var factionName = console.Faction.ToUpperInvariant();
-        var minutes = (int) Math.Ceiling(remaining.TotalMinutes);
+        var minutes = (int)Math.Ceiling(remaining.TotalMinutes);
         var message = Loc.GetString("withdraw-console-announcement", ("faction", factionName), ("minutes", minutes));
-        var sound =    new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");
+        var sound = new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");
 
         _marineAnnounce.AnnounceToMarines(message, sound, faction: console.Faction);
     }
