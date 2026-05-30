@@ -41,17 +41,16 @@ namespace Content.Server._AU14.Fire;
 /// Burn duration: 50–340 s (configurable). After burn-out the entity is marked
 /// <c>Burnt</c> and cannot be re-ignited.
 /// </summary>
-public sealed class AU14FireSpreadSystem : EntitySystem
+public sealed partial class AU14FireSpreadSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly RMCFlammableSystem _rmc = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private RMCFlammableSystem _rmc = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private TransformSystem _transform = default!;
 
     private const float BaseSpreadRadiusTiles = 3.35f;
     private static readonly TimeSpan BaseSpreadInterval = TimeSpan.FromSeconds(70);
@@ -137,9 +136,7 @@ public sealed class AU14FireSpreadSystem : EntitySystem
                 continue;
             }
 
-            if (!TryComp<TransformComponent>(uid, out var xform))
-                continue;
-
+            var xform = Transform(uid);
             if (now >= flam.NextDamageTime)
             {
                 flam.NextDamageTime = now + DamageInterval;
@@ -311,7 +308,7 @@ public sealed class AU14FireSpreadSystem : EntitySystem
     private void ApplyFireDamage(EntityUid uid, float rate)
     {
         var dmg = new DamageSpecifier();
-        dmg.DamageDict[HeatDamageType] = rate * (float) DamageInterval.TotalSeconds;
+        dmg.DamageDict[HeatDamageType] = rate * (float)DamageInterval.TotalSeconds;
         _damage.TryChangeDamage(uid, dmg, ignoreResistances: false, interruptsDoAfters: false);
     }
 
@@ -380,9 +377,10 @@ public sealed class AU14FireSpreadSystem : EntitySystem
 
             Ignite(candidate, candidateFlam);
 
-            if (!spreadToFlamability || !TryComp<TransformComponent>(candidate, out var candXform))
+            if (!spreadToFlamability)
                 continue;
 
+            var candXform = Transform(candidate);
             var candPos = _transform.GetWorldPosition(candXform);
             QueueIntermediateFires(worldPos, candPos, xform.MapID, now);
 
@@ -418,15 +416,15 @@ public sealed class AU14FireSpreadSystem : EntitySystem
         if (distance < 1.5f)
             return;
 
-        var steps = (int) Math.Floor(distance);
+        var steps = (int)Math.Floor(distance);
         for (var i = 1; i < steps; i++)
         {
             if (!_random.Prob(TileFireSpawnChance))
                 continue;
 
-            var t = (float) i / steps;
+            var t = (float)i / steps;
             var rawPos = sourcePos + delta * t;
-            var snapped = new Vector2((float) Math.Round(rawPos.X), (float) Math.Round(rawPos.Y));
+            var snapped = new Vector2((float)Math.Round(rawPos.X), (float)Math.Round(rawPos.Y));
             _pendingFires.Add((now + TileFireStepDelay * i, new MapCoordinates(snapped, mapId)));
         }
     }
@@ -443,7 +441,7 @@ public sealed class AU14FireSpreadSystem : EntitySystem
             var angle = _random.NextFloat() * MathF.PI * 2f;
             var dist = _random.NextFloat() * radius;
             var rawPos = origin + new Vector2(MathF.Cos(angle) * dist, MathF.Sin(angle) * dist);
-            var snapped = new Vector2((float) Math.Round(rawPos.X), (float) Math.Round(rawPos.Y));
+            var snapped = new Vector2((float)Math.Round(rawPos.X), (float)Math.Round(rawPos.Y));
             var delay = TimeSpan.FromSeconds(_random.NextDouble() * 1.0);
             _pendingFires.Add((now + delay, new MapCoordinates(snapped, mapId)));
         }

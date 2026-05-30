@@ -1,0 +1,25 @@
+<Document>
+  # OPTIONAL ADD-ON CHARGES
+
+  These charges may be added to an existing crime and are served in addition to the base sentence.
+
+  ## Resisting Arrest
+  Refusing or fleeing a lawful arrest or search.
+  - 5 min (refusing orders) | 10 min (fleeing or using force)
+
+  ## Aiding and Abetting
+  Materially assisting another person in committing a crime.
+  - Same punishment as the crime assisted.
+
+  ## Disorderly Conduct in Holding
+  Significant disruption while legally detained.
+  - 5 min
+
+  ## Possession During a Crime
+  Carrying illegal weapons, contraband, or unauthorized equipment while committing another offense.
+  - +5 min + confiscation
+
+  ## Abuse of Emergency Conditions
+  Using an emergency as cover to commit another crime (e.g. looting during evacuation, stealing weapons during lockdown, impersonating emergency personnel).
+  - +5 min | May escalate the underlying charge if colony safety is endangered.
+</Document>
