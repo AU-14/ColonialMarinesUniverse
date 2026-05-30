@@ -26,6 +26,7 @@
     soundGunshot:
       collection: AU14M41FireSound
     shotsPerBurst: 3
+    burstCooldown: 0.5
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
@@ -35,14 +36,14 @@
     scatterWielded: 4
     scatterUnwielded: 20
     baseFireRate: 4
-    burstScatterMult: 1
+    burstScatterMult: 30
     modifiers:
       Burst:
         fireDelay: 0.04
-        maxScatterModifier: 23
+        maxScatterModifier: 30
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 6
+        shotsToMaxScatter: 20
       FullAuto:
         fireDelay: 0
         maxScatterModifier: 13
