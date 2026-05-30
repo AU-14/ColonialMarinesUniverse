@@ -23,8 +23,9 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private SharedTransformSystem _transformSystem = default!;
 
-    public static float ZLevelOffset = 0.7f;
+    public static float ZLevelOffset = CMUSharedZLevelsSystem.ZLevelVisualOffset;
 
     private CMUZLevelVisibleEntityOverlay? _visibleEntityOverlay;
 
@@ -41,18 +42,23 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         SubscribeLocalEvent<CMUZPhysicsComponent, ComponentStartup>(OnStartup);
         SubscribeLocalEvent<CMUZPhysicsComponent, GetEyeOffsetEvent>(OnEyeOffset);
         SubscribeLocalEvent<CMUZFallingComponent, ComponentShutdown>(OnFallingShutdown);
+        SubscribeLocalEvent<CMUZLevelProjectileVisualOffsetComponent, ComponentStartup>(OnProjectileVisualOffsetStartup);
         SubscribeLocalEvent<CMUZLevelProjectileVisualOffsetComponent, ComponentShutdown>(OnProjectileVisualOffsetShutdown);
+        SubscribeLocalEvent<CMUZLevelPredictedProjectileVisualOffsetComponent, ComponentStartup>(OnPredictedProjectileVisualOffsetStartup);
+        SubscribeLocalEvent<CMUZLevelPredictedProjectileVisualOffsetComponent, ComponentShutdown>(OnPredictedProjectileVisualOffsetShutdown);
         SubscribeLocalEvent<GridRemovalEvent>(OnGridShutdown);
         SubscribeLocalEvent<TileChangedEvent>(OnTileChanged);
     }
 
     private void OnGridShutdown(GridRemovalEvent args)
     {
+        InvalidateSharedOpeningCache(args.EntityUid);
         OpeningCache.RemoveGrid(args.EntityUid);
     }
 
     private void OnTileChanged(ref TileChangedEvent args)
     {
+        InvalidateSharedOpeningCache(ref args);
         OpeningCache.InvalidateTiles(args.Entity, args.Changes);
     }
 
@@ -79,15 +85,41 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         _sprite.SetDrawDepth((ent.Owner, sprite), zPhys.DrawDepthDefault);
     }
 
+    private void OnProjectileVisualOffsetStartup(Entity<CMUZLevelProjectileVisualOffsetComponent> ent, ref ComponentStartup args)
+    {
+        TryApplyProjectileVisualOffset(
+            ent.Owner,
+            ent.Comp.Offset,
+            ref ent.Comp.OriginalOffset,
+            ref ent.Comp.AppliedOffset);
+    }
+
     private void OnProjectileVisualOffsetShutdown(Entity<CMUZLevelProjectileVisualOffsetComponent> ent, ref ComponentShutdown args)
     {
-        if (ent.Comp.OriginalOffset is not { } original ||
-            !TryComp<SpriteComponent>(ent, out var sprite))
-        {
-            return;
-        }
+        RestoreProjectileVisualOffset(ent.Owner, ent.Comp.OriginalOffset);
+    }
 
-        _sprite.SetOffset((ent.Owner, sprite), original);
+    private void OnPredictedProjectileVisualOffsetStartup(Entity<CMUZLevelPredictedProjectileVisualOffsetComponent> ent, ref ComponentStartup args)
+    {
+        TryApplyProjectileVisualOffset(
+            ent.Owner,
+            ent.Comp.Offset,
+            ref ent.Comp.OriginalOffset,
+            ref ent.Comp.AppliedOffset);
+    }
+
+    private void OnPredictedProjectileVisualOffsetShutdown(Entity<CMUZLevelPredictedProjectileVisualOffsetComponent> ent, ref ComponentShutdown args)
+    {
+        RestoreProjectileVisualOffset(ent.Owner, ent.Comp.OriginalOffset);
+    }
+
+    private void RestoreProjectileVisualOffset(EntityUid uid, Vector2? originalOffset)
+    {
+        if (originalOffset is { } original &&
+            TryComp<SpriteComponent>(uid, out var sprite))
+        {
+            _sprite.SetOffset((uid, sprite), original);
+        }
     }
 
     private void OnStartup(Entity<CMUZPhysicsComponent> ent, ref ComponentStartup args)
@@ -177,30 +209,92 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         var query = EntityQueryEnumerator<CMUZFallingComponent, CMUZPhysicsComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out var _, out var zPhys, out var sprite))
         {
-            if (zPhys.LocalPosition != 0)
-                sprite.NoRotation = true;
-            else
-                sprite.NoRotation = zPhys.NoRotDefault;
+            var targetNoRotation = zPhys.LocalPosition != 0 || zPhys.NoRotDefault;
+            if (sprite.NoRotation != targetNoRotation)
+                sprite.NoRotation = targetNoRotation;
 
-            _sprite.SetOffset((uid, sprite), zPhys.SpriteOffsetDefault + new Vector2(0, zPhys.LocalPosition * ZLevelOffset));
-            _sprite.SetDrawDepth((uid, sprite), zPhys.LocalPosition > 0 ? (int)Shared.DrawDepth.DrawDepth.OverMobs : zPhys.DrawDepthDefault);
+            var targetOffset = zPhys.SpriteOffsetDefault + new Vector2(0, zPhys.LocalPosition * ZLevelOffset);
+            if (sprite.Offset != targetOffset)
+                _sprite.SetOffset((uid, sprite), targetOffset);
+
+            var targetDrawDepth = zPhys.LocalPosition > 0 ? (int)Shared.DrawDepth.DrawDepth.OverMobs : zPhys.DrawDepthDefault;
+            if (sprite.DrawDepth != targetDrawDepth)
+                _sprite.SetDrawDepth((uid, sprite), targetDrawDepth);
         }
 
-        var projectileQuery = EntityQueryEnumerator<CMUZLevelProjectileVisualOffsetComponent, SpriteComponent>();
-        while (projectileQuery.MoveNext(out var uid, out var visual, out var sprite))
+        var projectileQuery = EntityQueryEnumerator<CMUZLevelProjectileVisualOffsetComponent, SpriteComponent, TransformComponent>();
+        while (projectileQuery.MoveNext(out var uid, out var visual, out var sprite, out var xform))
         {
-            ApplyProjectileVisualOffset(uid, visual, sprite);
+            if (HasComp<CMUZLevelPredictedProjectileVisualOffsetComponent>(uid))
+                continue;
+
+            ApplyProjectileVisualOffset(
+                uid,
+                visual.Offset,
+                ref visual.OriginalOffset,
+                ref visual.AppliedOffset,
+                sprite,
+                xform);
+        }
+
+        var predictedProjectileQuery = EntityQueryEnumerator<CMUZLevelPredictedProjectileVisualOffsetComponent, SpriteComponent, TransformComponent>();
+        while (predictedProjectileQuery.MoveNext(out var uid, out var visual, out var sprite, out var xform))
+        {
+            ApplyProjectileVisualOffset(
+                uid,
+                visual.Offset,
+                ref visual.OriginalOffset,
+                ref visual.AppliedOffset,
+                sprite,
+                xform);
         }
     }
 
-    private void ApplyProjectileVisualOffset(EntityUid uid, CMUZLevelProjectileVisualOffsetComponent visual, SpriteComponent sprite)
+    private bool TryApplyProjectileVisualOffset(
+        EntityUid uid,
+        Vector2 visualOffset,
+        ref Vector2? originalOffset,
+        ref Vector2 appliedOffset)
     {
-        visual.OriginalOffset ??= sprite.Offset - visual.AppliedOffset;
-        if (visual.AppliedOffset == visual.Offset)
+        if (!_config.GetCVar(CMUZLevelsCVars.Enabled) ||
+            !TryComp<SpriteComponent>(uid, out var sprite) ||
+            !TryComp(uid, out TransformComponent? xform))
+        {
+            return false;
+        }
+
+        ApplyProjectileVisualOffset(
+            uid,
+            visualOffset,
+            ref originalOffset,
+            ref appliedOffset,
+            sprite,
+            xform);
+        return true;
+    }
+
+    private void ApplyProjectileVisualOffset(
+        EntityUid uid,
+        Vector2 visualOffset,
+        ref Vector2? originalOffset,
+        ref Vector2 appliedOffset,
+        SpriteComponent sprite,
+        TransformComponent xform)
+    {
+        Angle renderRotation;
+        if (sprite.NoRotation)
+            renderRotation = _eye.CurrentEye.Rotation * -1;
+        else
+            renderRotation = _transformSystem.GetWorldRotation(xform);
+
+        var localVisualOffset = (-renderRotation).RotateVec(visualOffset);
+
+        originalOffset ??= sprite.Offset - appliedOffset;
+        if (appliedOffset == localVisualOffset)
             return;
 
-        _sprite.SetOffset((uid, sprite), visual.OriginalOffset.Value + visual.Offset);
-        visual.AppliedOffset = visual.Offset;
+        _sprite.SetOffset((uid, sprite), originalOffset.Value + localVisualOffset);
+        appliedOffset = localVisualOffset;
     }
 
     public override void Shutdown()

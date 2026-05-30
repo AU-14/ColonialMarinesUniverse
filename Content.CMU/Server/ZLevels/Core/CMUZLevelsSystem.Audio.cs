@@ -1,7 +1,6 @@
 using System.Numerics;
 using Content.Shared._CMU14.ZLevels;
 using Content.Shared._CMU14.ZLevels.Core.Components;
-using Robust.Server.Player;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Components;
 using Robust.Shared.Audio.Systems;
@@ -14,11 +13,11 @@ public sealed partial class CMUZLevelsSystem
 {
     private const float CrossZAudioOpeningRadius = 1.5f;
 
-    [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private SharedAudioSystem _audioSystem = default!;
 
     private readonly HashSet<EntityUid> _zLevelAudioProcessed = new();
     private readonly HashSet<EntityUid> _zLevelAudioProjections = new();
+    private readonly HashSet<Entity<ActorComponent>> _zAudioActorLookup = new();
     private EntityQuery<TransformComponent> _zAudioXformQuery;
     private bool _crossZAudioEnabled = true;
     private bool _creatingZLevelAudioProjection;
@@ -83,90 +82,79 @@ public sealed partial class CMUZLevelsSystem
             return;
         }
 
-        var specifier = new ResolvedPathSpecifier(source.Comp.FileName);
-        Entity<CMUZLevelMapComponent?> nullableSourceMap = (sourceMap.Owner, sourceMap.Comp);
-
-        for (var depth = -maxDepth; depth <= maxDepth; depth++)
-        {
-            if (depth == 0)
-                continue;
-
-            if (!TryMapOffset(nullableSourceMap, depth, out var targetMap))
-                continue;
-
-            if (!TryFindCrossZAudioOpening(sourceMap, depth, sourcePosition, out var projectedPosition))
-                continue;
-
-            var filter = BuildCrossZAudioFilter(source.Comp, targetMap.Value, projectedPosition);
-            if (filter.Count == 0)
-                continue;
-
-            CreateZLevelAudioProjection(source.Comp, specifier, filter, targetMap.Value, projectedPosition);
-        }
+        ResolvedSoundSpecifier? specifier = null;
+        ProjectCrossZAudioDirection(source.Comp, sourceMap, sourcePosition, ref specifier, -1, maxDepth);
+        ProjectCrossZAudioDirection(source.Comp, sourceMap, sourcePosition, ref specifier, 1, maxDepth);
     }
 
-    private bool TryFindCrossZAudioOpening(
+    private void ProjectCrossZAudioDirection(
+        AudioComponent source,
         Entity<CMUZLevelMapComponent> sourceMap,
-        int targetDepth,
         Vector2 sourcePosition,
-        out Vector2 openingPosition)
+        ref ResolvedSoundSpecifier? specifier,
+        int step,
+        int maxDepth)
     {
-        openingPosition = sourcePosition;
-        var step = Math.Sign(targetDepth);
-        if (step == 0)
-            return false;
+        Entity<CMUZLevelMapComponent?> currentMap = (sourceMap.Owner, sourceMap.Comp);
+        var projectedPosition = sourcePosition;
 
-        Entity<CMUZLevelMapComponent?> nullableSourceMap = (sourceMap.Owner, sourceMap.Comp);
-        var startDepth = step < 0 ? 0 : step;
-
-        for (var depth = startDepth;
-             step < 0 ? depth > targetDepth : depth <= targetDepth;
-             depth += step)
+        if (step < 0 &&
+            !TryFindOpeningNear(sourceMap.Owner, sourcePosition, CrossZAudioOpeningRadius, out projectedPosition))
         {
-            EntityUid openingMap;
-            if (depth == 0)
-            {
-                openingMap = sourceMap.Owner;
-            }
-            else
-            {
-                if (!TryMapOffset(nullableSourceMap, depth, out var offsetMap))
-                    return false;
-
-                openingMap = offsetMap.Value.Owner;
-            }
-
-            if (!TryFindOpeningNear(openingMap, sourcePosition, CrossZAudioOpeningRadius, out openingPosition))
-                return false;
+            return;
         }
 
-        return true;
+        for (var depth = step; Math.Abs(depth) <= maxDepth; depth += step)
+        {
+            if (!TryMapOffset(currentMap, step, out var targetMap))
+                return;
+
+            if (!TryFindOpeningNear(targetMap.Value.Owner, sourcePosition, CrossZAudioOpeningRadius, out projectedPosition))
+                return;
+
+            var filter = BuildCrossZAudioFilter(source, targetMap.Value, projectedPosition);
+            if (filter.Count == 0)
+            {
+                currentMap = (targetMap.Value.Owner, targetMap.Value.Comp);
+                continue;
+            }
+
+            specifier ??= new ResolvedPathSpecifier(source.FileName);
+            CreateZLevelAudioProjection(source, specifier, filter, targetMap.Value, projectedPosition);
+            currentMap = (targetMap.Value.Owner, targetMap.Value.Comp);
+        }
     }
 
     private Filter BuildCrossZAudioFilter(
         AudioComponent source,
-        EntityUid targetMap,
+        Entity<CMUZLevelMapComponent> targetMap,
         Vector2 sourcePosition)
     {
         var maxDistance = source.Params.MaxDistance;
         var maxDistanceSquared = maxDistance * maxDistance;
-
         var filter = Filter.Empty();
-        foreach (var session in _playerManager.NetworkedSessions)
+
+        if (!TryGetMapCoordinates(targetMap.Owner, sourcePosition, out var targetCoordinates))
+            return filter;
+
+        _zAudioActorLookup.Clear();
+        _entityLookup.GetEntitiesInRange(targetCoordinates, maxDistance, _zAudioActorLookup, LookupFlags.All);
+
+        foreach (var listener in _zAudioActorLookup)
         {
-            if (session.AttachedEntity is not { } attached ||
-                source.ExcludedEntity == attached ||
-                !_zAudioXformQuery.TryComp(attached, out var xform) ||
-                xform.MapUid != targetMap)
+            if (source.ExcludedEntity == listener.Owner ||
+                !_zAudioXformQuery.TryComp(listener.Owner, out var xform) ||
+                xform.MapUid != targetMap.Owner)
             {
                 continue;
             }
 
             var listenerPosition = _transform.GetWorldPosition(xform);
             if (Vector2.DistanceSquared(listenerPosition, sourcePosition) <= maxDistanceSquared)
-                filter.AddPlayer(session);
+                filter.AddPlayer(listener.Comp.PlayerSession);
         }
 
+        _zAudioActorLookup.Clear();
         return filter;
     }
 

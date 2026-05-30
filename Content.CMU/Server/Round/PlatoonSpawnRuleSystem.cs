@@ -107,6 +107,20 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     string? doorProtoId = null;
                     switch (markerComp.Class)
                     {
+                        case PlatoonMarkerClass.LockedFTLDoor:
+                            doorProtoId = shipFaction.Faction == "govfor"
+                                ? "CMAirlockGovforLockedFTL"
+                                : shipFaction.Faction == "opfor"
+                                    ? "CMAirlockOpforLockedFTL"
+                                    : null;
+                            break;
+                        case PlatoonMarkerClass.LockedFTLGlassDoor:
+                            doorProtoId = shipFaction.Faction == "govfor"
+                                ? "CMAirlockGovforGlassLockedFTL"
+                                : shipFaction.Faction == "opfor"
+                                    ? "CMAirlockOpforGlassLockedFTL"
+                                    : null;
+                            break;
                         case PlatoonMarkerClass.LockedCommandDoor:
                             doorProtoId = shipFaction.Faction == "govfor"
                                 ? "CMAirlockCommandGovforLocked"

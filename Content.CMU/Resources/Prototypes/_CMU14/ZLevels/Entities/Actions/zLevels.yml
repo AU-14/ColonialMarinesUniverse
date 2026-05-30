@@ -1,7 +1,7 @@
 - type: entity
   id: CMUActionZLevelUp
   name: Move up
-  description: Move up one Z-Level
+  description: Move up one Z-level
   components:
   - type: Action
     checkCanInteract: false
@@ -14,7 +14,7 @@
 - type: entity
   id: CMUActionZLevelDown
   name: Move down
-  description: Move down one Z-Level
+  description: Move down one Z-level
   components:
   - type: Action
     checkCanInteract: false

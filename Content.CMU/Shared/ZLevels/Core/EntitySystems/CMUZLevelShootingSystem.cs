@@ -10,13 +10,13 @@ using Content.Shared.Wieldable.Components;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 
 public sealed partial class CMUZLevelShootingSystem : EntitySystem
 {
     private const float CrossZShotRange = 4f;
-    private const float CrossZRenderOffset = 0.7f;
     private const float CrossZOpeningSourceEdgeRangeTiles = 2f;
     private const float CrossZOpeningSourceNudge = 0.30f;
 
@@ -24,6 +24,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
     [Dependency] private SharedGunSystem _gun = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -72,14 +73,10 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             return;
         }
 
-        var shooter = EnsureComp<CMUZLevelShooterComponent>(user);
-        shooter.ShootDown = !shooter.ShootDown;
-        DirtyField(user, shooter, nameof(CMUZLevelShooterComponent.ShootDown));
+        var shootDown = !IsShootDownEnabled(user);
+        SetShootDown(user, shootDown);
 
-        if (shooter.ShootDown)
-            _zLevels.TryDisableLookUp(user);
-
-        var message = shooter.ShootDown
+        var message = shootDown
             ? "cmu-zlevel-shoot-down-enabled"
             : "cmu-zlevel-shoot-down-disabled";
 
@@ -125,15 +122,41 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private bool TryDisableShootDown(EntityUid user)
     {
-        if (!TryComp<CMUZLevelShooterComponent>(user, out var shooter) ||
-            !shooter.ShootDown)
-        {
+        if (!IsShootDownEnabled(user))
             return false;
+
+        SetShootDown(user, false);
+        return true;
+    }
+
+    public bool IsShootDownEnabled(EntityUid user)
+    {
+        return TryComp<CMUZLevelShooterComponent>(user, out var shooter) && shooter.ShootDown;
+    }
+
+    public void SetShootDown(EntityUid user, bool enabled)
+    {
+        CMUZLevelShooterComponent shooter;
+        if (TryComp<CMUZLevelShooterComponent>(user, out var existing))
+        {
+            shooter = existing;
+        }
+        else
+        {
+            if (!enabled)
+                return;
+
+            shooter = EnsureComp<CMUZLevelShooterComponent>(user);
         }
 
-        shooter.ShootDown = false;
+        if (shooter.ShootDown == enabled)
+            return;
+
+        shooter.ShootDown = enabled;
         DirtyField(user, shooter, nameof(CMUZLevelShooterComponent.ShootDown));
-        return true;
+
+        if (enabled)
+            _zLevels.TryDisableLookUp(user);
     }
 
     public bool TryAdjustShotCoordinates(
@@ -273,9 +296,36 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             return false;
         }
 
+        return TryGetProjectileVisualOffset(
+            shooter,
+            sourceFromMap,
+            projectileFromMap,
+            out visualOffset,
+            requireReadyGunForLookUp);
+    }
+
+    public bool TryGetProjectileVisualOffset(
+        EntityUid shooter,
+        MapCoordinates sourceFromCoordinates,
+        MapCoordinates projectileFromCoordinates,
+        out Vector2 visualOffset,
+        bool requireReadyGunForLookUp = false)
+    {
+        visualOffset = default;
+
+        var offset = GetRequestedShotOffset(shooter, requireReadyGunForLookUp);
+        if (offset == 0)
+            return false;
+
+        if (sourceFromCoordinates.MapId == MapId.Nullspace ||
+            projectileFromCoordinates.MapId == MapId.Nullspace)
+        {
+            return false;
+        }
+
         // Keep the projectile physics on the opening path, but shift its sprite to
         // the barrel position in the compensated Z render pass.
-        visualOffset = sourceFromMap.Position - GetCrossZRenderOffset(offset) - projectileFromMap.Position;
+        visualOffset = sourceFromCoordinates.Position - GetCrossZRenderOffset(offset) - projectileFromCoordinates.Position;
         return visualOffset.LengthSquared() > 0.001f;
     }
 
@@ -289,10 +339,48 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         foreach (var projectile in projectiles)
         {
-            var visual = EnsureComp<CMUZLevelProjectileVisualOffsetComponent>(projectile);
-            visual.Offset = visualOffset;
-            Dirty(projectile, visual);
+            ApplyProjectileVisualOffset(projectile, visualOffset);
         }
+    }
+
+    public void ApplyProjectileVisualOffset(EntityUid projectile, Vector2 visualOffset)
+    {
+        if (visualOffset.LengthSquared() <= 0.001f)
+            return;
+
+        // Do not dirty server-owned entities during client prediction. Server state
+        // will add the synced visual offset when the shot is confirmed.
+        if (_timing.InPrediction && !IsClientSide(projectile))
+        {
+            if (!TryComp<CMUZLevelPredictedProjectileVisualOffsetComponent>(projectile, out var predictedVisual))
+            {
+                predictedVisual = new CMUZLevelPredictedProjectileVisualOffsetComponent
+                {
+                    Offset = visualOffset,
+                };
+
+                AddComp(projectile, predictedVisual);
+                return;
+            }
+
+            predictedVisual.Offset = visualOffset;
+            return;
+        }
+
+        if (!TryComp<CMUZLevelProjectileVisualOffsetComponent>(projectile, out var visual))
+        {
+            visual = new CMUZLevelProjectileVisualOffsetComponent
+            {
+                Offset = visualOffset,
+            };
+
+            AddComp(projectile, visual);
+            Dirty(projectile, visual);
+            return;
+        }
+
+        visual.Offset = visualOffset;
+        Dirty(projectile, visual);
     }
 
     private static void GetCrossZProjectilePath(
@@ -321,7 +409,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private static Vector2 GetCrossZRenderOffset(int offset)
     {
-        return new Vector2(0f, CrossZRenderOffset * offset);
+        return new Vector2(0f, CMUSharedZLevelsSystem.ZLevelVisualOffset * offset);
     }
 
     private static Vector2 NudgeOpeningTowardSource(Vector2 opening, Vector2 source)

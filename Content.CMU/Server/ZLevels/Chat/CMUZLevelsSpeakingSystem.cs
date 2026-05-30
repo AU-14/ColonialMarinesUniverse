@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Numerics;
 using Content.Server.Chat.Systems;
 using Content.Shared._CMU14.ZLevels;
@@ -5,10 +6,10 @@ using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Examine;
 using Content.Shared.Ghost;
-using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Player;
 using static Content.Server.Chat.Systems.ChatSystem;
 
 namespace Content.Server._CMU14.ZLevels.Chat;
@@ -18,11 +19,12 @@ public sealed partial class CMUZLevelsSpeakingSystem : EntitySystem
     private const float OpeningHearingRadius = 1.5f;
 
     [Dependency] private IConfigurationManager _config = default!;
-    [Dependency] private IPlayerManager _player = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevel = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
+    private readonly HashSet<Entity<ActorComponent>> _nearbyActors = new();
     private EntityQuery<CMUZLevelMapComponent> _zMapQuery;
     private EntityQuery<CMUZLevelViewerComponent> _viewerQuery;
     private EntityQuery<GhostHearingComponent> _ghostHearingQuery;
@@ -53,27 +55,52 @@ public sealed partial class CMUZLevelsSpeakingSystem : EntitySystem
         }
 
         var sourcePosition = _transform.GetWorldPosition(sourceXform, _xformQuery);
+        if (ev.VoiceRange <= 0f)
+            return;
 
-        foreach (var session in _player.Sessions)
+        Dictionary<EntityUid, (bool Found, Vector2 Position)>? openingLookupCache = null;
+        AddRecipientsOnAdjacentMap(ev, sourceXform, sourceMap, sourceZMap, sourcePosition, 1, ref openingLookupCache);
+        AddRecipientsOnAdjacentMap(ev, sourceXform, sourceMap, sourceZMap, sourcePosition, -1, ref openingLookupCache);
+    }
+
+    private void AddRecipientsOnAdjacentMap(
+        ExpandICChatRecipientsEvent ev,
+        TransformComponent sourceXform,
+        EntityUid sourceMap,
+        CMUZLevelMapComponent sourceZMap,
+        Vector2 sourcePosition,
+        int offset,
+        ref Dictionary<EntityUid, (bool Found, Vector2 Position)>? openingLookupCache)
+    {
+        Entity<CMUZLevelMapComponent?> sourceMapEnt = (sourceMap, sourceZMap);
+        if (!_zLevel.TryMapOffset(sourceMapEnt, offset, out var adjacentMap) ||
+            !_zLevel.TryGetMapCoordinates(adjacentMap.Value.Owner, sourcePosition, out var lookupCoords))
         {
+            return;
+        }
+
+        var sourceDepthOffset = sourceZMap.Depth - adjacentMap.Value.Comp.Depth;
+        if (adjacentMap.Value.Comp.NetworkUid != sourceZMap.NetworkUid ||
+            sourceDepthOffset is not 1 and not -1)
+        {
+            return;
+        }
+
+        _nearbyActors.Clear();
+        _lookup.GetEntitiesInRange(lookupCoords, ev.VoiceRange, _nearbyActors, LookupFlags.All);
+
+        foreach (var actor in _nearbyActors)
+        {
+            var session = actor.Comp.PlayerSession;
             if (ev.Recipients.ContainsKey(session))
                 continue;
 
-            if (session.AttachedEntity is not { Valid: true } listener ||
-                !_xformQuery.TryComp(listener, out var listenerXform) ||
-                listenerXform.MapUid is not { } listenerMap ||
-                listenerMap == sourceMap ||
-                !_zMapQuery.TryComp(listenerMap, out var listenerZMap))
+            var listener = actor.Owner;
+            if (!_xformQuery.TryComp(listener, out var listenerXform) ||
+                listenerXform.MapUid != adjacentMap.Value.Owner)
             {
                 continue;
             }
-
-            if (listenerZMap.NetworkUid != sourceZMap.NetworkUid)
-                continue;
-
-            var sourceDepthOffset = sourceZMap.Depth - listenerZMap.Depth;
-            if (sourceDepthOffset is not 1 and not -1)
-                continue;
 
             var listenerPosition = _transform.GetWorldPosition(listenerXform, _xformQuery);
             if (!CanHearAcrossZLevel(
@@ -83,10 +110,11 @@ public sealed partial class CMUZLevelsSpeakingSystem : EntitySystem
                     sourcePosition,
                     listener,
                     listenerXform,
-                    listenerZMap,
+                    adjacentMap.Value.Comp,
                     listenerPosition,
                     sourceDepthOffset,
                     ev.VoiceRange,
+                    ref openingLookupCache,
                     out var distance))
             {
                 continue;
@@ -94,6 +122,8 @@ public sealed partial class CMUZLevelsSpeakingSystem : EntitySystem
 
             ev.Recipients.TryAdd(session, new ICChatRecipientData(distance, _ghostHearingQuery.HasComp(listener)));
         }
+
+        _nearbyActors.Clear();
     }
 
     private bool CanHearAcrossZLevel(
@@ -107,15 +137,17 @@ public sealed partial class CMUZLevelsSpeakingSystem : EntitySystem
         Vector2 listenerPosition,
         int sourceDepthOffset,
         float voiceRange,
+        ref Dictionary<EntityUid, (bool Found, Vector2 Position)>? openingLookupCache,
         out float distance)
     {
         distance = Vector2.Distance(sourcePosition, listenerPosition);
         if (distance >= voiceRange)
             return false;
 
-        return sourceDepthOffset > 0
-            ? CanHearSourceAbove(source, sourceXform, sourcePosition, listener, listenerXform, listenerZMap, listenerPosition, voiceRange)
-            : CanHearSourceBelow(source, sourcePosition, listener, listenerXform, sourceMap, listenerPosition, voiceRange);
+        if (sourceDepthOffset > 0)
+            return CanHearSourceAbove(source, sourceXform, sourcePosition, listener, listenerXform, listenerZMap, listenerPosition, voiceRange);
+
+        return CanHearSourceBelow(source, sourcePosition, listener, listenerXform, sourceMap, listenerPosition, voiceRange, ref openingLookupCache);
     }
 
     private bool CanHearSourceAbove(
@@ -153,7 +185,8 @@ public sealed partial class CMUZLevelsSpeakingSystem : EntitySystem
         TransformComponent listenerXform,
         EntityUid sourceMap,
         Vector2 listenerPosition,
-        float voiceRange)
+        float voiceRange,
+        ref Dictionary<EntityUid, (bool Found, Vector2 Position)>? openingLookupCache)
     {
         if (!_viewerQuery.TryComp(listener, out var viewer) ||
             listenerXform.MapUid is not { } listenerMap ||
@@ -162,10 +195,29 @@ public sealed partial class CMUZLevelsSpeakingSystem : EntitySystem
             return false;
         }
 
-        if (!_zLevel.TryFindOpeningNear(listenerMap, sourcePosition, OpeningHearingRadius, out var openingPosition))
+        if (!TryFindCachedOpeningNear(listenerMap, sourcePosition, ref openingLookupCache, out var openingPosition))
             return false;
 
         return CanSeeOnMap(listenerMap, listenerPosition, openingPosition, listener, source, voiceRange);
+    }
+
+    private bool TryFindCachedOpeningNear(
+        EntityUid map,
+        Vector2 sourcePosition,
+        ref Dictionary<EntityUid, (bool Found, Vector2 Position)>? openingLookupCache,
+        out Vector2 openingPosition)
+    {
+        openingLookupCache ??= new Dictionary<EntityUid, (bool Found, Vector2 Position)>();
+
+        if (openingLookupCache.TryGetValue(map, out var cached))
+        {
+            openingPosition = cached.Position;
+            return cached.Found;
+        }
+
+        var found = _zLevel.TryFindOpeningNear(map, sourcePosition, OpeningHearingRadius, out openingPosition);
+        openingLookupCache[map] = (found, openingPosition);
+        return found;
     }
 
     private bool CanSeeOnMap(

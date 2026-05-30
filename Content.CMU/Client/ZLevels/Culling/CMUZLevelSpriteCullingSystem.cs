@@ -28,6 +28,7 @@ public sealed partial class CMUZLevelSpriteCullingSystem : EntitySystem
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
 
     private CMUClientZLevelsSystem _zLevels = default!;
 
@@ -35,6 +36,7 @@ public sealed partial class CMUZLevelSpriteCullingSystem : EntitySystem
     private List<Entity<MapGridComponent>> _openingGrids = new();
     private readonly HashSet<EntityUid> _hiddenSprites = new();
     private readonly HashSet<EntityUid> _stillHidden = new();
+    private readonly HashSet<Entity<SpriteComponent>> _spriteCandidates = new();
     private readonly Dictionary<EntityUid, bool> _hiddenSpriteOriginalVisibility = new();
     private readonly List<EntityUid> _restoreScratch = new();
 
@@ -100,19 +102,27 @@ public sealed partial class CMUZLevelSpriteCullingSystem : EntitySystem
                 continue;
             }
 
-            CullDynamicSpritesOnMap(lowerMapComp.MapId);
+            CullDynamicSpritesOnMap(lowerMapComp.MapId, viewBounds);
         }
 
         RestoreNoLongerHiddenSprites();
     }
 
-    private void CullDynamicSpritesOnMap(MapId mapId)
+    private void CullDynamicSpritesOnMap(MapId mapId, Box2 viewBounds)
     {
-        var query = EntityQueryEnumerator<SpriteComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var sprite, out var xform))
+        _spriteCandidates.Clear();
+        _lookup.GetEntitiesIntersecting(mapId, viewBounds, _spriteCandidates, LookupFlags.All);
+
+        foreach (var candidate in _spriteCandidates)
         {
-            if (xform.MapID != mapId || xform.Anchored)
+            var uid = candidate.Owner;
+            var sprite = candidate.Comp;
+            if (!_xformQuery.TryComp(uid, out var xform) ||
+                xform.MapID != mapId ||
+                xform.Anchored)
+            {
                 continue;
+            }
 
             var hiddenByUs = _hiddenSprites.Contains(uid);
             if (!sprite.Visible && !hiddenByUs)
