@@ -38,4 +38,14 @@ public sealed partial class CMUProjectedLightComponent : Component
     /// Stale projected lights are deleted during cleanup.
     /// </summary>
     public uint LastActiveFrame;
+
+    /// <summary>
+    /// The receiving map this projected light was last positioned on.
+    /// </summary>
+    public MapId LastAppliedMapId = MapId.Nullspace;
+
+    /// <summary>
+    /// The receiving-map world position last applied to the transform.
+    /// </summary>
+    public Vector2 LastAppliedCenter;
 }
