@@ -52,6 +52,7 @@ public sealed class YautjaBracerWindow : DefaultWindow
     public Button CrystalButton = default!;
     public Button HumanCrystalButton = default!;
     public Button CapsuleButton = default!;
+    public Button HuntingTrapButton = default!;
 
     public event Action<YautjaBracerPanelCommand>? OnCommand;
 
@@ -123,6 +124,7 @@ public sealed class YautjaBracerWindow : DefaultWindow
         Bind(CrystalButton, YautjaBracerPanelCommand.CreateStabilisingCrystal);
         Bind(HumanCrystalButton, YautjaBracerPanelCommand.CreateHumanStabilisingCrystal);
         Bind(CapsuleButton, YautjaBracerPanelCommand.CreateHealingCapsule);
+        Bind(HuntingTrapButton, YautjaBracerPanelCommand.CreateHuntingTrap);
     }
 
     public void UpdateState(YautjaBracerPanelState state)
@@ -372,6 +374,14 @@ public sealed class YautjaBracerWindow : DefaultWindow
             out _,
             out _);
         body.AddChild(CapsuleButton);
+
+        HuntingTrapButton = YautjaBracerUiStyle.ActionButton(
+            Loc.GetString("cmu-yautja-bracer-menu-hunting-trap"),
+             Loc.GetString("cmu-yautja-bracer-menu-hunting-trap-detail"),
+            YautjaBracerUiStyle.Purple,
+            out _,
+            out _);
+        body.AddChild(HuntingTrapButton);
 
         return panel;
     }

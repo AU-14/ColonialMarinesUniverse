@@ -339464,7 +339464,7 @@ entities:
     - type: Transform
       pos: 260.54074,23.090744
       parent: 1
-- proto: RMCCommunicationsTowerOn
+- proto: AU14CommunicationsTowerColony
   entities:
   - uid: 43069
     components:
@@ -381405,7 +381405,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: -104.33022,-73.095566
       parent: 1
-- proto: RMCSensorTower
+- proto: AU14SensorTower
   entities:
   - uid: 50195
     components:

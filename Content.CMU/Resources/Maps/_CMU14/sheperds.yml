@@ -67175,6 +67175,14 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 134.5,182.5
       parent: 1
+- proto: AUDepartmentConsoleCivilian
+  entities:
+  - uid: 39063
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 65.75,173.5
+      parent: 1
 - proto: AUDepartmentConsoleCommand
   entities:
   - uid: 341
@@ -67224,6 +67232,14 @@ entities:
     components:
     - type: Transform
       pos: 58.5,154.5
+      parent: 1
+- proto: AUDepartmentConsoleLabor
+  entities:
+  - uid: 39064
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 65.25,173.5
       parent: 1
 - proto: AUDepartmentConsoleMedical
   entities:
@@ -71843,7 +71859,7 @@ entities:
       canPry: False
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 1169
     components:
     - type: MetaData
@@ -71881,7 +71897,7 @@ entities:
           friction: 0.4
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: CMAirlockCommandGovforLocked
   entities:
   - uid: 1172
@@ -163906,7 +163922,7 @@ entities:
     - type: Transform
       pos: 17.5,17.5
       parent: 1
-- proto: RMCCommunicationsTowerOn
+- proto: AU14CommunicationsTowerColony
   entities:
   - uid: 19921
     components:
@@ -164293,7 +164309,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 19976
     components:
     - type: Transform
@@ -164301,7 +164317,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 19977
     components:
     - type: Transform
@@ -164309,7 +164325,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 19978
     components:
     - type: Transform
@@ -164317,7 +164333,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 19979
     components:
     - type: MetaData
@@ -164328,7 +164344,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 19980
     components:
     - type: Transform
@@ -164337,7 +164353,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: RMCDoubleDoorAlmayerSolid
   entities:
   - uid: 19981
@@ -164372,7 +164388,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: RMCDoubleDoorCommandGlass
   entities:
   - uid: 19986
@@ -164456,7 +164472,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: RMCDoubleDoorEngineerSolidEngineering
   entities:
   - uid: 19993
@@ -164579,7 +164595,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: RMCDoubleDoorPersonalGlass
   entities:
   - uid: 20004
@@ -164613,7 +164629,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 20007
     components:
     - type: MetaData
@@ -164623,7 +164639,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 20008
     components:
     - type: MetaData
@@ -164634,7 +164650,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 20009
     components:
     - type: Transform
@@ -248077,7 +248093,7 @@ entities:
     - type: Transform
       pos: 121.5,43.5
       parent: 1
-- proto: RMCSensorTowerOffset
+- proto: AU14SensorTowerOffset
   entities:
   - uid: 37797
     components:

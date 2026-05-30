@@ -1,0 +1,222 @@
+- type: entity
+  parent: BaseItem
+  id: VehicleBlackfootHardpointBase
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/hardpoints/blackfoot.rsi
+  - type: Item
+    size: Large
+
+- type: entity
+  parent: VehicleBlackfootHardpointBase
+  id: VehicleBlackfootThrustersBase
+  abstract: true
+  components:
+  - type: HardpointItem
+    hardpointType: Thruster
+    vehicleFamily: Blackfoot
+    slotType: Thruster
+    damageMultiplier: 0.15
+    disabledIntegrityFraction: 0.15
+    minimumPerformanceMultiplier: 0.35
+
+- type: entity
+  parent: VehicleBlackfootThrustersBase
+  id: VehicleBlackfootThrusters
+  name: Blackfoot thrusters
+  description: Reinforced VTOL thrusters for an AD-71E Blackfoot.
+  components:
+  - type: Sprite
+    state: engines
+  - type: HardpointIntegrity
+    maxIntegrity: 300
+  - type: HardpointVisual
+    vehicleState: engines_vtol
+
+- type: entity
+  parent: VehicleBlackfootHardpointBase
+  id: VehicleBlackfootLaunchersBase
+  abstract: true
+  components:
+  - type: HardpointItem
+    hardpointType: Launcher
+    vehicleFamily: Blackfoot
+    slotType: Launcher
+    damageMultiplier: 0.6
+    disabledIntegrityFraction: 0.15
+    minimumPerformanceMultiplier: 0.35
+
+- type: entity
+  parent: VehicleBlackfootLaunchersBase
+  id: VehicleBlackfootLaunchers
+  name: Blackfoot flare launcher pod
+  description: A Blackfoot pilot-operated utility flare launcher pod.
+  components:
+  - type: Sprite
+    state: launchers
+  - type: HardpointIntegrity
+    maxIntegrity: 150
+  - type: VehicleTurret
+    fireWhileRotatingGraceDegrees: 20
+    useBarrelDirectionForShots: true
+    maxShotCurvatureDegrees: 10
+  - type: GunUseGunOrigin
+  - type: GunIgnoreContainerOwnerCollision
+  - type: GunIgnorePrediction
+  - type: Gun
+    fireRate: 0.5
+    projectileSpeed: 20
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot: /Audio/_CMU14/Blackfoot/launcher.ogg
+    cameraRecoilScalar: 0
+  - type: ShootAtFixedPoint
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 5
+    accuracyMultiplierUnwielded: 5
+  - type: BallisticAmmoProvider
+    cycleable: false
+    capacity: 10
+    whitelist:
+      tags:
+      - Flare
+      - RMCFlare
+      - RMCFlareCAS
+    proto: CMFlare
+  - type: VehicleHardpointAmmo
+    magazineSize: 10
+    maxStoredMagazines: 3
+  - type: GunFireArc
+    arc: 120
+  - type: RefillableByBulletBox
+    bulletType: VehicleAmmoBoxFlareLauncher
+  - type: HardpointVisual
+    vehicleState: launchers_vtol
+
+- type: entity
+  parent: VehicleBlackfootHardpointBase
+  id: VehicleBlackfootDoorGunHardpointBase
+  abstract: true
+  components:
+  - type: HardpointItem
+    hardpointType: DoorGun
+    vehicleFamily: Blackfoot
+    slotType: DoorGun
+    damageMultiplier: 0.6
+    disabledIntegrityFraction: 0.15
+    minimumPerformanceMultiplier: 0.35
+
+- type: entity
+  parent: VehicleBlackfootDoorGunHardpointBase
+  id: VehicleBlackfootDoorGun
+  name: M866 automatic grenade launcher
+  description: A rear-door automatic grenade launcher for the AD-71E Blackfoot.
+  components:
+  - type: Sprite
+    state: doorgun-module
+  - type: HardpointIntegrity
+    maxIntegrity: 125
+  - type: VehicleTurret
+    rotateToCursor: true
+    fireWhileRotatingGraceDegrees: 30
+    useBarrelDirectionForShots: true
+    maxShotCurvatureDegrees: 15
+  - type: GunUseGunOrigin
+  - type: GunIgnoreContainerOwnerCollision
+  - type: GunIgnorePrediction
+  - type: Gun
+    fireRate: 1
+    projectileSpeed: 18
+    minAngle: 10
+    maxAngle: 10
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot: /Audio/_CMU14/Blackfoot/doorgun.ogg
+    cameraRecoilScalar: 0
+  - type: ShootAtFixedPoint
+    shootArcProj: true
+    maxFixedRange: 10
+  - type: OnShootTriggerAmmoTimer
+    delay: 1.5
+  - type: GunIFF
+    enabled: true
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 5
+    accuracyMultiplierUnwielded: 5
+  - type: BallisticAmmoProvider
+    cycleable: false
+    proto: CMGrenadeHighExplosive
+    capacity: 10
+  - type: VehicleHardpointAmmo
+    magazineSize: 10
+    maxStoredMagazines: 3
+  - type: GunFireArc
+    arc: 180
+    angleOffset: 180
+  - type: RefillableByBulletBox
+    bulletType: VehicleAmmoBoxGrenadeLauncher
+  - type: GunMuzzleOffset
+    offset: "0,0"
+    useDirectionalOffsets: true
+    offsetEast: "0,0.2"
+    muzzleOffset: "0,-1"
+    useAimDirection: true
+    useContainerOwner: false
+  - type: HardpointVisual
+    vehicleState: doorgun_vtol
+
+- type: entity
+  parent: VehicleBlackfootHardpointBase
+  id: VehicleBlackfootReconSystemBase
+  abstract: true
+  components:
+  - type: HardpointItem
+    hardpointType: SupportAttachment
+    vehicleFamily: Blackfoot
+    slotType: SupportAttachment
+    compatibilityId: BlackfootRecon
+    damageMultiplier: 0.6
+    disabledIntegrityFraction: 0.15
+    minimumPerformanceMultiplier: 0.35
+
+- type: entity
+  parent: VehicleBlackfootReconSystemBase
+  id: VehicleBlackfootReconSystem
+  name: Blackfoot recon system
+  description: A Blackfoot stealth and reconnaissance support package.
+  components:
+  - type: Sprite
+    state: radar
+  - type: HardpointIntegrity
+    maxIntegrity: 100
+  - type: HardpointVisual
+    vehicleState: recon_vtol
+
+- type: entity
+  parent: VehicleBlackfootHardpointBase
+  id: VehicleBlackfootSensorArrayBase
+  abstract: true
+  components:
+  - type: HardpointItem
+    hardpointType: SensorArray
+    vehicleFamily: Blackfoot
+    slotType: SensorArray
+    damageMultiplier: 0.6
+    disabledIntegrityFraction: 0.15
+    minimumPerformanceMultiplier: 0.35
+
+- type: entity
+  parent: VehicleBlackfootSensorArrayBase
+  id: VehicleBlackfootSensorArray
+  name: Blackfoot sensor array
+  description: A deferred sensor package for a Blackfoot recon variant.
+  components:
+  - type: Sprite
+    state: radar
+  - type: HardpointIntegrity
+    maxIntegrity: 100
+  - type: HardpointVisual
+    vehicleState: radar_vtol

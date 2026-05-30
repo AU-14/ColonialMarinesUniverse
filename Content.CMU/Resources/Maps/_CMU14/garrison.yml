@@ -129881,7 +129881,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: RMCCommunicationsTower
+- proto: AU14CommunicationsTower
   entities:
   - uid: 10159
     components:
@@ -157909,7 +157909,7 @@ entities:
     - type: Transform
       pos: 96.5,-143.5
       parent: 1
-- proto: RMCSensorTower
+- proto: AU14SensorTower
   entities:
   - uid: 14656
     components:
@@ -162295,13 +162295,6 @@ entities:
     components:
     - type: Transform
       pos: 38.5,-20.5
-      parent: 1
-- proto: RMCTabletCO
-  entities:
-  - uid: 15375
-    components:
-    - type: Transform
-      pos: -0.61441624,-2.475876
       parent: 1
 - proto: RMCTacticalMapTableLarge
   entities:

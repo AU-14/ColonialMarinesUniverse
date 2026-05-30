@@ -232384,7 +232384,7 @@ entities:
         - 0
         - 0
         - 0
-- proto: RMCCommunicationsTowerOn
+- proto: AU14CommunicationsTowerColony
   entities:
   - uid: 28238
     components:
@@ -248988,7 +248988,7 @@ entities:
     - type: Transform
       pos: 5.5,-241.5
       parent: 1
-- proto: RMCSensorTower
+- proto: AU14SensorTower
   entities:
   - uid: 30958
     components:
