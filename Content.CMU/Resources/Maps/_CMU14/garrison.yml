@@ -136558,7 +136558,7 @@ entities:
     - type: Transform
       pos: 233.50665,-113.104126
       parent: 1
-- proto: RMCGuidebookLawMarine
+- proto: AU14GuidebookLawMarine
   entities:
   - uid: 9629
     components:
@@ -136602,7 +136602,7 @@ entities:
       parent: 9671
     - type: Physics
       canCollide: False
-- proto: RMCGuidebookSOP
+- proto: AU14GuidebookSOP
   entities:
   - uid: 9624
     components:

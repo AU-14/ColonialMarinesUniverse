@@ -9,7 +9,7 @@ using Robust.Shared.Network;
 
 namespace Content.Shared.AU14.TurretFaction;
 
-public sealed class TurretFactionSystem : EntitySystem
+public sealed partial class TurretFactionSystem : EntitySystem
 {
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private INetManager _net = default!;

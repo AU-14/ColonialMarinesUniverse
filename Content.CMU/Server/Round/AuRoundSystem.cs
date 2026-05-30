@@ -44,6 +44,9 @@ namespace Content.Server.AU14.Round
         [ViewVariables]
         public string? SelectedPlanetMapName => SelectedPlanetMap?.Announcement;
 
+        /// <summary>The active planet's prototype component, used by other systems to read per-planet settings.</summary>
+        public RMCPlanetMapPrototypeComponent? ActivePlanet => SelectedPlanetMap;
+
         [ViewVariables]
         private RMCPlanetMapPrototypeComponent? SelectedPlanetMap { get; set; }
 
@@ -694,8 +697,6 @@ namespace Content.Server.AU14.Round
                 ? threatSelected
                 : null!;
 
-            if (_selectedthreat != null)
-                StartThreatWinConditions(_selectedthreat);
         }
 
         private static bool IsThreatAllowed(
@@ -731,7 +732,7 @@ namespace Content.Server.AU14.Round
             return true;
         }
 
-        private void StartThreatWinConditions(ThreatPrototype threat)
+        public void StartThreatWinConditions(ThreatPrototype threat)
         {
             if (threat.WinConditions.Count == 0)
                 return;
