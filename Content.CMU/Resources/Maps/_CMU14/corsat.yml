@@ -127761,7 +127761,7 @@ entities:
     - type: Transform
       pos: 113.5,-123.5
       parent: 1
-- proto: RMCSensorTower
+- proto: AU14SensorTower
   entities:
   - uid: 11664
     components:

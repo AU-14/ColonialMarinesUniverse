@@ -9,65 +9,61 @@ using Content.Shared.Roles;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.AU14.util;
-    [Prototype]
-    public sealed partial class PlatoonPrototype : IPrototype
-    {
-        [IdDataField]
-        public string ID { get; private set; } = default!;
 
-        [DataField("factions", required: false)]
-        public List<string> Factions { get; private set; } = new();
+[Prototype]
+public sealed partial class PlatoonPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
 
-        /// <summary>
-        /// The primary NPC faction assigned to members of this platoon when they spawn.
-        /// Overrides the generic GOVFOR/OPFOR faction for more specific platoon identity.
-        /// </summary>
-        [DataField("npcFaction")]
-        public ProtoId<NpcFactionPrototype>? NpcFaction { get; private set; }
+    [DataField("factions", required: false)]
+    public List<string> Factions { get; private set; } = new();
 
-        /// <summary>
-        /// The allegiance associated with this platoon.
-        /// Characters with a matching allegiance will preferentially spawn here.
-        /// </summary>
-        [DataField("Allegiance")]
-        public ProtoId<AllegiancePrototype>? Allegiance { get; private set; }
+    /// <summary>
+    /// The primary NPC faction assigned to members of this platoon when they spawn.
+    /// Overrides the generic GOVFOR/OPFOR faction for more specific platoon identity.
+    /// </summary>
+    [DataField("npcFaction")]
+    public ProtoId<NpcFactionPrototype>? NpcFaction { get; private set; }
 
-        [DataField("language", required: false)]
-        public string Language { get; private set; } = string.Empty;
-        [DataField("name", required: true)]
-        public string Name { get; private set; } = string.Empty;
+    /// <summary>
+    /// The allegiance associated with this platoon.
+    /// Characters with a matching allegiance will preferentially spawn here.
+    /// </summary>
+    [DataField("Allegiance")]
+    public ProtoId<AllegiancePrototype>? Allegiance { get; private set; }
 
-        [DataField("lorePrimer")]
-        public ProtoId<LorePrimerPrototype>? LorePrimer { get; private set; }
+    [DataField("language", required: false)]
+    public string Language { get; private set; } = string.Empty;
+    [DataField("name", required: true)]
+    public string Name { get; private set; } = string.Empty;
 
+    [DataField("lorePrimer")]
+    public ProtoId<LorePrimerPrototype>? LorePrimer { get; private set; }
 
-        [DataField("reqlist", required: false)]
-        public string Reqlist { get; private set; } = string.Empty;
+    [DataField("reqlist", required: false)]
+    public string Reqlist { get; private set; } = string.Empty;
 
-        [DataField("VendorToMarker")]
-        public Dictionary<PlatoonMarkerClass, EntProtoId> VendorMarkersByClass { get; private set; } = new();
+    [DataField("VendorToMarker")]
+    public Dictionary<PlatoonMarkerClass, EntProtoId> VendorMarkersByClass { get; private set; } = new();
 
+    [DataField("possibleships")]
+    public List<string> PossibleShips { get; private set; } = new();
 
-        [DataField("possibleships")]
-        public List<string> PossibleShips { get; private set; } = new();
+    [DataField("jobClassOverride")]
+    public Dictionary<PlatoonJobClass, string> JobClassOverride { get; private set; } = new();
+    [DataField("PlatoonFlag")]
+    public string PlatoonFlag { get; private set; } = string.Empty;
+    //used for capture objectives and deco, spritestate
+    [DataField("jobSlotOverride")]
+    public Dictionary<PlatoonJobClass, int> JobSlotOverride { get; private set; } = new();
 
-        [DataField("jobClassOverride")]
-        public Dictionary<PlatoonJobClass, string> JobClassOverride { get; private set; } = new();
-            [DataField("PlatoonFlag")]
-        public string PlatoonFlag { get; private set; } = string.Empty;
-        //used for capture objectives and deco, spritestate
-        [DataField("jobSlotOverride")]
-        public Dictionary<PlatoonJobClass, int> JobSlotOverride { get; private set; } = new();
+    [DataField("CompatibleDropships")]
+    public List<ResPath> CompatibleDropships { get; private set; } = new();
 
-        [DataField("CompatibleDropships")]
-        public List<ResPath> CompatibleDropships { get; private set; } = new();
+    [DataField("compatibleFighters")]
+    public List<ResPath> CompatibleFighters { get; private set; } = new();
 
-        [DataField("compatibleFighters")]
-        public List<ResPath> CompatibleFighters { get; private set; } = new();
-
-
-        [DataField("techTree", required: false)]
-        public string TechTree { get; private set; } = string.Empty;
-
-
-    }
+    [DataField("techTree", required: false)]
+    public string TechTree { get; private set; } = string.Empty;
+}

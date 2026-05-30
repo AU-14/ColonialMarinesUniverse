@@ -17,7 +17,7 @@ au14-job-description-govfordspilot = Fly the dropship. Insert troops, extract ca
 au14-job-prefix-govfordspilot = DP
 
 au14-job-name-govfordcc = Dropship Crew Chief
-au14-job-description-govfordcc = Maintain the bird. Coordinate cargo, passengers, and assist the pilot.
+au14-job-description-govfordcc = Maintain the dropships. Coordinate cargo, passengers, and assist the pilots.
 au14-job-prefix-govfordcc = DCC
 
 au14-job-name-govforSSG = Senior Sergeant
@@ -67,7 +67,7 @@ au14-job-name-govformilitarypoliceman = Military Policeman
 au14-job-description-govformilitarypoliceman = Provide your faction with police support.
 au14-job-prefix-govformilitarypoliceman = MP
 
-au14-job-name-govforAuxTech = Auxiliary Technician
+au14-job-name-govforAuxTech = Technician
 au14-job-description-govforAuxTech = Run requisitions, keep the ship running and tidy. Provide your faction with shipside logistics and engineering support.
 au14-job-prefix-govforAuxTech = AXT
 
@@ -122,9 +122,6 @@ au14-job-name-govforspecialist-pointmanRMC = Pointman
 au14-job-prefix-govforspecialist-pointmanRMC = PNM
 au14-job-name-govforspecialist-grenadierRMC = Grenadier
 au14-job-prefix-govforspecialist-grenadierRMC = GNR
-
-au14-job-name-govfork9handler = K9 Handler
-au14-job-prefix-govfork9handler = K9
 
 au-14-job-name-rmcrrt-commander = Commander
 au-14-job-prefix-rmcrrt-commander = CMD

@@ -38,6 +38,9 @@ public sealed partial class ScalingViewport
     private EntityLookupSystem? _lookup;
     private ExamineSystem? _examine;
     private SharedContainerSystem? _containers;
+    private ShaderInstance? _stencilClearShaderInstance;
+    private ShaderInstance? _stencilMaskShaderInstance;
+    private ShaderInstance? _stencilEqualDrawShaderInstance;
 
     private EntityQuery<TransformComponent>? _xformQuery;
 
@@ -49,6 +52,8 @@ public sealed partial class ScalingViewport
     private readonly ZEye _stairPreviewEye = new();
     private IClydeViewport? _stairPreviewViewport;
     private bool _drawStairPreviewComposite;
+    private EntityUid? _lastZLevelEyeEntity;
+    private EntityUid? _lastZLevelViewEntity;
 
     /// <summary>
     /// We are looking for at least one empty tile on the screen.
@@ -70,6 +75,30 @@ public sealed partial class ScalingViewport
     {
         combinedOpeningBounds = default;
 
+        if (!TryGetViewportWorldAabb(viewport, out var viewportWorldAabb))
+            return true;
+
+        var worldAabb = viewportWorldAabb.Translated(viewportToMapOffset);
+
+        return TryFindEmptyTilesInAabb(
+            mapUid,
+            worldAabb,
+            openingBounds,
+            out combinedOpeningBounds,
+            maxOpeningBounds,
+            exactOpeningBounds);
+    }
+
+    private bool TryFindEmptyTilesInAabb(
+        EntityUid mapUid,
+        Box2 worldAabb,
+        List<Box2>? openingBounds,
+        out Box2 combinedOpeningBounds,
+        int maxOpeningBounds = int.MaxValue,
+        bool exactOpeningBounds = false)
+    {
+        combinedOpeningBounds = default;
+
         if (_xformQuery is null || !_xformQuery.Value.TryComp(mapUid, out var xform))
             return true;
 
@@ -81,17 +110,6 @@ public sealed partial class ScalingViewport
         _zLevels ??= _entityManager.System<CMUClientZLevelsSystem>();
         var openingCache = _zLevels.OpeningCache;
 
-        var c0 = viewport.LocalToWorld(Vector2.Zero).Position;
-        var c1 = viewport.LocalToWorld(new Vector2(viewport.Size.X, 0)).Position;
-        var c2 = viewport.LocalToWorld(new Vector2(0, viewport.Size.Y)).Position;
-        var c3 = viewport.LocalToWorld(viewport.Size).Position;
-
-        var minX = MathF.Min(MathF.Min(c0.X, c1.X), MathF.Min(c2.X, c3.X));
-        var minY = MathF.Min(MathF.Min(c0.Y, c1.Y), MathF.Min(c2.Y, c3.Y));
-        var maxX = MathF.Max(MathF.Max(c0.X, c1.X), MathF.Max(c2.X, c3.X));
-        var maxY = MathF.Max(MathF.Max(c0.Y, c1.Y), MathF.Max(c2.Y, c3.Y));
-
-        var worldAabb = new Box2(minX, minY, maxX, maxY).Translated(viewportToMapOffset);
         var foundOpening = openingCache.TryFindOpeningBounds(
             mapId,
             worldAabb,
@@ -150,34 +168,42 @@ public sealed partial class ScalingViewport
         var maxOpeningRects = Math.Max(0, _config.GetCVar(CMUZLevelsCVars.MaxOpeningRectsPerPass));
         var lowestDepth = 0;
         var weatherSourceMapId = GetWeatherSourceMapId(viewXform.MapUid.Value, viewXform.MapID);
+        if (!TryGetViewportWorldAabb(viewport, out var viewportWorldAabb))
+        {
+            viewport.Render();
+            return;
+        }
+
         _zOpeningBounds.Clear();
         using (var openingProfile = _prof.Group("CMU Z Opening Query"))
         {
-            for (var i = 0; i >= -maxDepth; i--)
-            {
-                var checkingMap = viewXform.MapUid.Value;
+            var hasOpenings = TryFindEmptyTilesInAabb(
+                viewXform.MapUid.Value,
+                viewportWorldAabb,
+                _zOpeningBounds,
+                out _,
+                maxOpeningRects == 0 ? int.MaxValue : maxOpeningRects + 1);
 
-                if (i != 0)
+            if (hasOpenings &&
+                maxDepth > 0 &&
+                _zLevels.TryMapOffset(viewXform.MapUid.Value, -1, out _))
+            {
+                for (var i = -1; i >= -maxDepth; i--)
                 {
                     if (!_zLevels.TryMapOffset(viewXform.MapUid.Value, i, out var mapUidBelow))
                         continue;
 
-                    checkingMap = mapUidBelow.Value;
+                    lowestDepth = i;
+
+                    hasOpenings = TryFindEmptyTilesInAabb(
+                        mapUidBelow.Value,
+                        viewportWorldAabb,
+                        null,
+                        out _);
+
+                    if (!hasOpenings)
+                        break;
                 }
-
-                lowestDepth = i;
-
-                var hasOpenings = i == 0
-                    ? TryFindEmptyTiles(
-                        checkingMap,
-                        viewport,
-                        _zOpeningBounds,
-                        out _,
-                        maxOpeningRects == 0 ? int.MaxValue : maxOpeningRects + 1)
-                    : TryFindEmptyTiles(checkingMap, viewport);
-
-                if (!hasOpenings)
-                    break;
             }
         }
 
@@ -258,6 +284,9 @@ public sealed partial class ScalingViewport
         viewer = default!;
         xform = default!;
 
+        if (TryGetCachedZLevelViewEntity(fallbackEye, out viewEntity, out viewer, out xform))
+            return true;
+
         var query = _entityManager.EntityQueryEnumerator<EyeComponent>();
         while (query.MoveNext(out var uid, out var eye))
         {
@@ -266,18 +295,72 @@ public sealed partial class ScalingViewport
 
             var candidate = eye.Target ?? uid;
             if (TryResolveZLevelViewer(candidate, out viewEntity, out viewer, out xform))
+            {
+                CacheZLevelViewEntity(uid, viewEntity);
                 return true;
+            }
 
             if (candidate != uid &&
                 TryResolveZLevelViewer(uid, out viewEntity, out viewer, out xform))
             {
+                CacheZLevelViewEntity(uid, viewEntity);
                 return true;
             }
 
+            ClearZLevelViewEntityCache();
             return false;
         }
 
+        ClearZLevelViewEntityCache();
         return false;
+    }
+
+    private bool TryGetCachedZLevelViewEntity(
+        IEye fallbackEye,
+        out EntityUid viewEntity,
+        out CMUZLevelViewerComponent viewer,
+        out TransformComponent xform)
+    {
+        viewEntity = default;
+        viewer = default!;
+        xform = default!;
+
+        if (_lastZLevelEyeEntity is not { } eyeEntity ||
+            _lastZLevelViewEntity is null ||
+            !_entityManager.TryGetComponent<EyeComponent>(eyeEntity, out var eye) ||
+            !ReferenceEquals(eye.Eye, fallbackEye))
+        {
+            return false;
+        }
+
+        var candidate = eye.Target ?? eyeEntity;
+        if (TryResolveZLevelViewer(candidate, out viewEntity, out viewer, out xform))
+        {
+            CacheZLevelViewEntity(eyeEntity, viewEntity);
+            return true;
+        }
+
+        if (candidate != eyeEntity &&
+            TryResolveZLevelViewer(eyeEntity, out viewEntity, out viewer, out xform))
+        {
+            CacheZLevelViewEntity(eyeEntity, viewEntity);
+            return true;
+        }
+
+        ClearZLevelViewEntityCache();
+        return false;
+    }
+
+    private void CacheZLevelViewEntity(EntityUid eyeEntity, EntityUid viewEntity)
+    {
+        _lastZLevelEyeEntity = eyeEntity;
+        _lastZLevelViewEntity = viewEntity;
+    }
+
+    private void ClearZLevelViewEntityCache()
+    {
+        _lastZLevelEyeEntity = null;
+        _lastZLevelViewEntity = null;
     }
 
     private bool TryResolveZLevelViewer(
@@ -394,18 +477,33 @@ public sealed partial class ScalingViewport
             return;
         }
 
-        screen.UseShader(_proto.Index(StencilClearShader).Instance());
+        screen.UseShader(GetStencilClearShader());
         screen.DrawRect(drawBox, Color.White);
 
-        screen.UseShader(_proto.Index(StencilMaskShader).Instance());
+        screen.UseShader(GetStencilMaskShader());
         DrawStairPreviewFovMask(screen, drawBox);
 
-        screen.UseShader(_proto.Index(StencilEqualDrawShader).Instance());
+        screen.UseShader(GetStencilEqualDrawShader());
         screen.DrawTextureRect(_stairPreviewViewport.RenderTarget.Texture, drawBox);
 
-        screen.UseShader(_proto.Index(StencilClearShader).Instance());
+        screen.UseShader(GetStencilClearShader());
         screen.DrawRect(drawBox, Color.White);
         screen.UseShader(null);
+    }
+
+    private ShaderInstance GetStencilClearShader()
+    {
+        return _stencilClearShaderInstance ??= _proto.Index(StencilClearShader).Instance();
+    }
+
+    private ShaderInstance GetStencilMaskShader()
+    {
+        return _stencilMaskShaderInstance ??= _proto.Index(StencilMaskShader).Instance();
+    }
+
+    private ShaderInstance GetStencilEqualDrawShader()
+    {
+        return _stencilEqualDrawShaderInstance ??= _proto.Index(StencilEqualDrawShader).Instance();
     }
 
     private void DrawStairPreviewFovMask(DrawingHandleScreen screen, UIBox2 drawBox)

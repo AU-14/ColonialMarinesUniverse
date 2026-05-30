@@ -248093,7 +248093,7 @@ entities:
     - type: Transform
       pos: 121.5,43.5
       parent: 1
-- proto: RMCSensorTowerOffset
+- proto: AU14SensorTowerOffset
   entities:
   - uid: 37797
     components:

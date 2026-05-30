@@ -58,24 +58,7 @@ public sealed class CMUZLevelOpeningCache
         SharedMapSystem map,
         ITileDefinitionManager tile)
     {
-        if (!_gridCaches.TryGetValue(grid.Owner, out var cache))
-        {
-            cache = new GridOpeningCache();
-            _gridCaches[grid.Owner] = cache;
-        }
-
-        if (cache.LastTileModifiedTick != grid.Comp.LastTileModifiedTick)
-        {
-            cache.LastTileModifiedTick = grid.Comp.LastTileModifiedTick;
-            cache.Chunks.Clear();
-        }
-
-        if (cache.Chunks.TryGetValue(chunk, out var cached))
-            return cached;
-
-        var hasOpening = CalculateChunkHasOpening(grid, chunk, map, tile);
-        cache.Chunks[chunk] = hasOpening;
-        return hasOpening;
+        return GetChunkOpenings(grid, chunk, map, tile).HasOpening;
     }
 
     public bool HasOpeningInTileBounds(
@@ -97,8 +80,19 @@ public sealed class CMUZLevelOpeningCache
         {
             for (var y = startChunk.Y; y <= endChunk.Y; y++)
             {
-                if (ChunkHasOpening(grid, new Vector2i(x, y), map, tile))
+                if (ForEachOpeningTileInBounds(
+                        grid,
+                        new Vector2i(x, y),
+                        startX,
+                        endX,
+                        startY,
+                        endY,
+                        map,
+                        tile,
+                        _ => true))
+                {
                     return true;
+                }
             }
         }
 
@@ -126,6 +120,7 @@ public sealed class CMUZLevelOpeningCache
             return false;
 
         var foundOpening = false;
+        var combinedBounds = combinedOpeningBounds;
         var bottomLeft = new MapCoordinates(worldAabb.BottomLeft, mapId);
         var topRight = new MapCoordinates(worldAabb.TopRight, mapId);
 
@@ -155,9 +150,12 @@ public sealed class CMUZLevelOpeningCache
                         var localBounds = new Box2(chunkStart.X, chunkStart.Y, chunkEnd.X, chunkEnd.Y);
                         var worldBounds = gridWorldMatrix.TransformBox(localBounds);
 
-                        AddOpeningBounds(openingBounds, worldBounds, ref combinedOpeningBounds, ref foundOpening);
+                        AddOpeningBounds(openingBounds, worldBounds, ref combinedBounds, ref foundOpening);
                         if (openingBounds.Count >= maxOpeningBounds)
+                        {
+                            combinedOpeningBounds = combinedBounds;
                             return true;
+                        }
 
                         continue;
                     }
@@ -169,26 +167,36 @@ public sealed class CMUZLevelOpeningCache
                     var tileStartY = Math.Max(startY, tileStart.Y);
                     var tileEndY = Math.Min(endY, tileEnd.Y - 1);
 
-                    for (var tileX = tileStartX; tileX <= tileEndX; tileX++)
+                    if (ForEachOpeningTileInBounds(
+                            grid,
+                            chunk,
+                            tileStartX,
+                            tileEndX,
+                            tileStartY,
+                            tileEndY,
+                            map,
+                            tileDefinition,
+                            openingTile =>
+                            {
+                                var localTileBounds = new Box2(
+                                    openingTile.X,
+                                    openingTile.Y,
+                                    openingTile.X + 1,
+                                    openingTile.Y + 1);
+                                var worldTileBounds = gridWorldMatrix.TransformBox(localTileBounds);
+                                AddOpeningBounds(openingBounds, worldTileBounds, ref combinedBounds, ref foundOpening);
+
+                                return openingBounds.Count >= maxOpeningBounds;
+                            }))
                     {
-                        for (var tileY = tileStartY; tileY <= tileEndY; tileY++)
-                        {
-                            var openingTile = new Vector2i(tileX, tileY);
-                            if (!IsOpeningTile(grid, openingTile, map, tileDefinition))
-                                continue;
-
-                            var localTileBounds = new Box2(tileX, tileY, tileX + 1, tileY + 1);
-                            var worldTileBounds = gridWorldMatrix.TransformBox(localTileBounds);
-                            AddOpeningBounds(openingBounds, worldTileBounds, ref combinedOpeningBounds, ref foundOpening);
-
-                            if (openingBounds.Count >= maxOpeningBounds)
-                                return true;
-                        }
+                        combinedOpeningBounds = combinedBounds;
+                        return true;
                     }
                 }
             }
         }
 
+        combinedOpeningBounds = combinedBounds;
         return foundOpening;
     }
 
@@ -247,31 +255,117 @@ public sealed class CMUZLevelOpeningCache
                     var tileStartY = Math.Max(startY, chunkStart.Y);
                     var tileEndY = Math.Min(endY, chunkEnd.Y - 1);
 
-                    for (var tileX = tileStartX; tileX <= tileEndX; tileX++)
-                    {
-                        for (var tileY = tileStartY; tileY <= tileEndY; tileY++)
+                    ForEachOpeningTileInBounds(
+                        grid,
+                        chunk,
+                        tileStartX,
+                        tileEndX,
+                        tileStartY,
+                        tileEndY,
+                        map,
+                        tileDefinition,
+                        openingTile =>
                         {
-                            var openingTile = new Vector2i(tileX, tileY);
-                            if (!IsOpeningTile(grid, openingTile, map, tileDefinition))
-                                continue;
-
                             if (edgeOnly &&
                                 !IsOpeningEdgeTile(grid, openingTile, localSourcePosition, sourceInsideOpening, map, tileDefinition))
                             {
-                                continue;
+                                return false;
                             }
 
-                            var center = Vector2.Transform(new Vector2(tileX + 0.5f, tileY + 0.5f), gridWorldMatrix);
+                            var center = Vector2.Transform(
+                                new Vector2(openingTile.X + 0.5f, openingTile.Y + 0.5f),
+                                gridWorldMatrix);
                             var distanceSquared = Vector2.DistanceSquared(sourcePosition, center);
                             if (distanceSquared > searchRadiusSquared)
-                                continue;
+                                return false;
 
                             openings.Add((center, MathF.Sqrt(distanceSquared)));
-                        }
-                    }
+                            return false;
+                        });
                 }
             }
         }
+    }
+
+    public bool TryFindNearestOpeningCenterNear(
+        MapId mapId,
+        Vector2 sourcePosition,
+        float searchRadius,
+        out Vector2 openingCenter,
+        List<Entity<MapGridComponent>> gridScratch,
+        IMapManager mapManager,
+        SharedMapSystem map,
+        SharedTransformSystem transform,
+        ITileDefinitionManager tileDefinition,
+        bool edgeOnly = true)
+    {
+        openingCenter = default;
+
+        var searchBounds = Box2.CenteredAround(sourcePosition, new Vector2(searchRadius * 2f, searchRadius * 2f));
+        gridScratch.Clear();
+        mapManager.FindGridsIntersecting(mapId, searchBounds, ref gridScratch, approx: true, includeMap: true);
+
+        if (gridScratch.Count == 0)
+            return false;
+
+        var bottomLeft = new MapCoordinates(searchBounds.BottomLeft, mapId);
+        var topRight = new MapCoordinates(searchBounds.TopRight, mapId);
+        var searchRadiusSquared = searchRadius * searchRadius;
+        var bestDistanceSquared = float.PositiveInfinity;
+        var foundOpening = false;
+
+        foreach (var grid in gridScratch)
+        {
+            GetTileSearchBounds(grid, bottomLeft, topRight, map, out var startX, out var endX, out var startY, out var endY);
+
+            var startChunk = SharedMapSystem.GetChunkIndices(new Vector2i(startX, startY), _chunkSize);
+            var endChunk = SharedMapSystem.GetChunkIndices(new Vector2i(endX, endY), _chunkSize);
+            var gridWorldMatrix = transform.GetWorldMatrix(grid.Owner);
+            if (!Matrix3x2.Invert(gridWorldMatrix, out var gridInvWorldMatrix))
+                continue;
+
+            var localSourcePosition = Vector2.Transform(sourcePosition, gridInvWorldMatrix);
+            var sourceInsideOpening = IsExistingOpeningTile(
+                grid,
+                new Vector2i((int) MathF.Floor(localSourcePosition.X), (int) MathF.Floor(localSourcePosition.Y)),
+                map,
+                tileDefinition);
+
+            for (var chunkX = startChunk.X; chunkX <= endChunk.X; chunkX++)
+            {
+                for (var chunkY = startChunk.Y; chunkY <= endChunk.Y; chunkY++)
+                {
+                    var chunk = new Vector2i(chunkX, chunkY);
+                    var chunkStart = chunk * _chunkSize;
+                    var chunkEnd = chunkStart + new Vector2i(_chunkSize, _chunkSize);
+                    var tileStartX = Math.Max(startX, chunkStart.X);
+                    var tileEndX = Math.Min(endX, chunkEnd.X - 1);
+                    var tileStartY = Math.Max(startY, chunkStart.Y);
+                    var tileEndY = Math.Min(endY, chunkEnd.Y - 1);
+
+                    TryFindNearestOpeningCenterInChunk(
+                        grid,
+                        chunk,
+                        tileStartX,
+                        tileEndX,
+                        tileStartY,
+                        tileEndY,
+                        sourcePosition,
+                        localSourcePosition,
+                        sourceInsideOpening,
+                        gridWorldMatrix,
+                        searchRadiusSquared,
+                        edgeOnly,
+                        map,
+                        tileDefinition,
+                        ref foundOpening,
+                        ref bestDistanceSquared,
+                        ref openingCenter);
+                }
+            }
+        }
+
+        return foundOpening;
     }
 
     public static bool IsOpeningTile(
@@ -363,7 +457,221 @@ public sealed class CMUZLevelOpeningCache
                !IsOpeningTile(grid, tile + new Vector2i(0, -1), map, tileDefinition);
     }
 
-    private bool CalculateChunkHasOpening(
+    private CachedChunk GetChunkOpenings(
+        Entity<MapGridComponent> grid,
+        Vector2i chunk,
+        SharedMapSystem map,
+        ITileDefinitionManager tile)
+    {
+        if (!_gridCaches.TryGetValue(grid.Owner, out var cache))
+        {
+            cache = new GridOpeningCache();
+            _gridCaches[grid.Owner] = cache;
+        }
+
+        if (cache.LastTileModifiedTick != grid.Comp.LastTileModifiedTick)
+        {
+            cache.LastTileModifiedTick = grid.Comp.LastTileModifiedTick;
+            cache.Chunks.Clear();
+        }
+
+        if (cache.Chunks.TryGetValue(chunk, out var cached))
+            return cached;
+
+        cached = CalculateChunkOpenings(grid, chunk, map, tile);
+        cache.Chunks[chunk] = cached;
+        return cached;
+    }
+
+    private bool ForEachOpeningTileInBounds(
+        Entity<MapGridComponent> grid,
+        Vector2i chunk,
+        int startX,
+        int endX,
+        int startY,
+        int endY,
+        SharedMapSystem map,
+        ITileDefinitionManager tileDefinition,
+        Func<Vector2i, bool> visitor)
+    {
+        var cached = GetChunkOpenings(grid, chunk, map, tileDefinition);
+        if (!cached.HasOpening)
+            return false;
+
+        if (_chunkSize == DefaultChunkSize)
+        {
+            var chunkStart = chunk * DefaultChunkSize;
+            var tileStartX = Math.Max(startX, chunkStart.X);
+            var tileEndX = Math.Min(endX, chunkStart.X + DefaultChunkSize - 1);
+            var tileStartY = Math.Max(startY, chunkStart.Y);
+            var tileEndY = Math.Min(endY, chunkStart.Y + DefaultChunkSize - 1);
+
+            for (var tileY = tileStartY; tileY <= tileEndY; tileY++)
+            {
+                for (var tileX = tileStartX; tileX <= tileEndX; tileX++)
+                {
+                    var bit = OpeningMaskBit(chunkStart, tileX, tileY);
+                    if ((cached.OpeningMask & bit) == 0)
+                        continue;
+
+                    if (visitor(new Vector2i(tileX, tileY)))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        var fallbackChunkStart = chunk * _chunkSize;
+        var fallbackTileStartX = Math.Max(startX, fallbackChunkStart.X);
+        var fallbackTileEndX = Math.Min(endX, fallbackChunkStart.X + _chunkSize - 1);
+        var fallbackTileStartY = Math.Max(startY, fallbackChunkStart.Y);
+        var fallbackTileEndY = Math.Min(endY, fallbackChunkStart.Y + _chunkSize - 1);
+
+        for (var tileX = fallbackTileStartX; tileX <= fallbackTileEndX; tileX++)
+        {
+            for (var tileY = fallbackTileStartY; tileY <= fallbackTileEndY; tileY++)
+            {
+                var openingTile = new Vector2i(tileX, tileY);
+                if (!IsOpeningTile(grid, openingTile, map, tileDefinition))
+                    continue;
+
+                if (visitor(openingTile))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void TryFindNearestOpeningCenterInChunk(
+        Entity<MapGridComponent> grid,
+        Vector2i chunk,
+        int startX,
+        int endX,
+        int startY,
+        int endY,
+        Vector2 sourcePosition,
+        Vector2 localSourcePosition,
+        bool sourceInsideOpening,
+        Matrix3x2 gridWorldMatrix,
+        float searchRadiusSquared,
+        bool edgeOnly,
+        SharedMapSystem map,
+        ITileDefinitionManager tileDefinition,
+        ref bool foundOpening,
+        ref float bestDistanceSquared,
+        ref Vector2 bestOpeningCenter)
+    {
+        var cached = GetChunkOpenings(grid, chunk, map, tileDefinition);
+        if (!cached.HasOpening)
+            return;
+
+        if (_chunkSize == DefaultChunkSize)
+        {
+            var chunkStart = chunk * DefaultChunkSize;
+            var tileStartX = Math.Max(startX, chunkStart.X);
+            var tileEndX = Math.Min(endX, chunkStart.X + DefaultChunkSize - 1);
+            var tileStartY = Math.Max(startY, chunkStart.Y);
+            var tileEndY = Math.Min(endY, chunkStart.Y + DefaultChunkSize - 1);
+
+            for (var tileY = tileStartY; tileY <= tileEndY; tileY++)
+            {
+                for (var tileX = tileStartX; tileX <= tileEndX; tileX++)
+                {
+                    var bit = OpeningMaskBit(chunkStart, tileX, tileY);
+                    if ((cached.OpeningMask & bit) == 0)
+                        continue;
+
+                    TryUseNearestOpeningTile(
+                        grid,
+                        new Vector2i(tileX, tileY),
+                        sourcePosition,
+                        localSourcePosition,
+                        sourceInsideOpening,
+                        gridWorldMatrix,
+                        searchRadiusSquared,
+                        edgeOnly,
+                        map,
+                        tileDefinition,
+                        ref foundOpening,
+                        ref bestDistanceSquared,
+                        ref bestOpeningCenter);
+                }
+            }
+
+            return;
+        }
+
+        var fallbackChunkStart = chunk * _chunkSize;
+        var fallbackTileStartX = Math.Max(startX, fallbackChunkStart.X);
+        var fallbackTileEndX = Math.Min(endX, fallbackChunkStart.X + _chunkSize - 1);
+        var fallbackTileStartY = Math.Max(startY, fallbackChunkStart.Y);
+        var fallbackTileEndY = Math.Min(endY, fallbackChunkStart.Y + _chunkSize - 1);
+
+        for (var tileX = fallbackTileStartX; tileX <= fallbackTileEndX; tileX++)
+        {
+            for (var tileY = fallbackTileStartY; tileY <= fallbackTileEndY; tileY++)
+            {
+                var openingTile = new Vector2i(tileX, tileY);
+                if (!IsOpeningTile(grid, openingTile, map, tileDefinition))
+                    continue;
+
+                TryUseNearestOpeningTile(
+                    grid,
+                    openingTile,
+                    sourcePosition,
+                    localSourcePosition,
+                    sourceInsideOpening,
+                    gridWorldMatrix,
+                    searchRadiusSquared,
+                    edgeOnly,
+                    map,
+                    tileDefinition,
+                    ref foundOpening,
+                    ref bestDistanceSquared,
+                    ref bestOpeningCenter);
+            }
+        }
+    }
+
+    private static void TryUseNearestOpeningTile(
+        Entity<MapGridComponent> grid,
+        Vector2i openingTile,
+        Vector2 sourcePosition,
+        Vector2 localSourcePosition,
+        bool sourceInsideOpening,
+        Matrix3x2 gridWorldMatrix,
+        float searchRadiusSquared,
+        bool edgeOnly,
+        SharedMapSystem map,
+        ITileDefinitionManager tileDefinition,
+        ref bool foundOpening,
+        ref float bestDistanceSquared,
+        ref Vector2 bestOpeningCenter)
+    {
+        if (edgeOnly &&
+            !IsOpeningEdgeTile(grid, openingTile, localSourcePosition, sourceInsideOpening, map, tileDefinition))
+        {
+            return;
+        }
+
+        var center = Vector2.Transform(
+            new Vector2(openingTile.X + 0.5f, openingTile.Y + 0.5f),
+            gridWorldMatrix);
+        var distanceSquared = Vector2.DistanceSquared(sourcePosition, center);
+        if (distanceSquared > searchRadiusSquared ||
+            distanceSquared >= bestDistanceSquared)
+        {
+            return;
+        }
+
+        foundOpening = true;
+        bestDistanceSquared = distanceSquared;
+        bestOpeningCenter = center;
+    }
+
+    private CachedChunk CalculateChunkOpenings(
         Entity<MapGridComponent> grid,
         Vector2i chunk,
         SharedMapSystem map,
@@ -374,16 +682,32 @@ public sealed class CMUZLevelOpeningCache
         var endX = startX + _chunkSize;
         var endY = startY + _chunkSize;
 
+        var hasOpening = false;
+        var openingMask = 0UL;
+
         for (var x = startX; x < endX; x++)
         {
             for (var y = startY; y < endY; y++)
             {
                 if (IsOpeningTile(grid, new Vector2i(x, y), map, tile))
-                    return true;
+                {
+                    hasOpening = true;
+
+                    if (_chunkSize == DefaultChunkSize)
+                        openingMask |= OpeningMaskBit(new Vector2i(startX, startY), x, y);
+                }
             }
         }
 
-        return false;
+        return new CachedChunk(hasOpening, openingMask);
+    }
+
+    private static ulong OpeningMaskBit(Vector2i chunkStart, int tileX, int tileY)
+    {
+        var localX = tileX - chunkStart.X;
+        var localY = tileY - chunkStart.Y;
+        var bit = localY * DefaultChunkSize + localX;
+        return 1UL << bit;
     }
 
     private static void GetTileSearchBounds(
@@ -421,6 +745,8 @@ public sealed class CMUZLevelOpeningCache
     private sealed class GridOpeningCache
     {
         public GameTick LastTileModifiedTick;
-        public readonly Dictionary<Vector2i, bool> Chunks = new();
+        public readonly Dictionary<Vector2i, CachedChunk> Chunks = new();
     }
+
+    private readonly record struct CachedChunk(bool HasOpening, ulong OpeningMask);
 }

@@ -151820,7 +151820,7 @@ entities:
   - uid: 13349
     components:
     - type: MetaData
-      name: We-Ya Offices
+      name: We-Yu Offices
     - type: Transform
       pos: -151.5,-42.5
       parent: 1
@@ -151869,7 +151869,7 @@ entities:
   - uid: 13356
     components:
     - type: MetaData
-      name: We-Ya Dynagrid
+      name: We-Yu Dynagrid
     - type: Transform
       pos: -82.5,-79.5
       parent: 1
@@ -170088,7 +170088,7 @@ entities:
   - uid: 16481
     components:
     - type: MetaData
-      name: WeyaMart Lockdown
+      name: WeyMart Lockdown
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -159.5,-99.5
@@ -170096,7 +170096,7 @@ entities:
   - uid: 16482
     components:
     - type: MetaData
-      name: WeyaMart Lockdown
+      name: WeyMart Lockdown
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -159.5,-100.5
