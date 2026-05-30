@@ -302,7 +302,7 @@
 - type: entity
   parent: RMCWeaponRifleM54CWhite
   id: RMCWeaponRifleM54CWhiteCommando
-  description: A Weston-Yamada creation, this M54C MK2 comes equipped in corporate white. Uses 10x24mm caseless ammunition.
+  description: A Weyland-Yutani creation, this M54C MK2 comes equipped in corporate white. Uses 10x24mm caseless ammunition.
   suffix: Commando
   components:
   - type: ItemSlots

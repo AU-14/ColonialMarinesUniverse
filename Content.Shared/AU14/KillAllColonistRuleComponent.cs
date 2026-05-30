@@ -9,4 +9,15 @@ public sealed partial class KillAllColonistRuleComponent : Component
     /// </summary>
     [DataField("percent")]
     public int Percent = 100;
+
+    /// <summary>
+    /// Percentage of AUColonists that must be dead before colony evacuation is enabled.
+    /// Set to 0 to disable threshold-based evac trigger.
+    /// </summary>
+    [DataField]
+    public int ColonyEvacThreshold = 50;
+
+    /// <summary>Tracks whether colony evacuation has been triggered by the death threshold.</summary>
+    [DataField]
+    public bool ColonyEvacTriggered;
 }

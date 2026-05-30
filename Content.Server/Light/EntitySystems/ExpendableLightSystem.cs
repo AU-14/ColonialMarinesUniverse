@@ -251,6 +251,26 @@ namespace Content.Server.Light.EntitySystems
         }
         // RMC14
 
+        public void ExtinguishFlare(Entity<ExpendableLightComponent> ent)
+        {
+            var component = ent.Comp;
+            if (!component.Activated)
+                return;
+
+            component.CurrentState = ExpendableLightState.Dead;
+            Dirty(ent);
+            _nameModifier.RefreshNameModifiers(ent.Owner);
+            _tagSystem.AddTag(ent, TrashTag);
+            UpdateSounds(ent);
+            UpdateVisualizer(ent);
+
+            if (TryComp<ItemComponent>(ent, out var item))
+                _item.SetHeldPrefix(ent, "unlit", component: item);
+
+            if (HasComp<PhysicsComponent>(ent))
+                _physics.SetBodyType(ent, BodyType.Dynamic);
+        }
+
         private void OnExpLightUse(Entity<ExpendableLightComponent> ent, ref UseInHandEvent args)
         {
             if (args.Handled)

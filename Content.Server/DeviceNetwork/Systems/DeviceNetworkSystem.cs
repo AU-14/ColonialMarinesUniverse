@@ -105,6 +105,8 @@ namespace Content.Server.DeviceNetwork.Systems
         /// </summary>
         private void OnMapInit(EntityUid uid, DeviceNetworkComponent device, MapInitEvent args)
         {
+            device.OwnerEntity = uid;
+
             if (device.ReceiveFrequency == null
                 && device.ReceiveFrequencyId != null
                 && _protoMan.TryIndex<DeviceFrequencyPrototype>(device.ReceiveFrequencyId, out var receive))
@@ -159,6 +161,7 @@ namespace Content.Server.DeviceNetwork.Systems
             if (!Resolve(uid, ref device, false))
                 return false;
 
+            device.OwnerEntity = uid;
             return GetNetwork(device.DeviceNetId).Add(device);
         }
 
@@ -346,14 +349,17 @@ namespace Content.Server.DeviceNetwork.Systems
 
             foreach (var connection in connections)
             {
-                if (connection.Owner == packet.Sender)
+                if (connection.OwnerEntity is not { } connectionUid)
+                    continue;
+
+                if (connectionUid == packet.Sender)
                     continue;
 
                 BeforePacketSentEvent beforeEv = new(packet.Sender, xform, senderPos, connection.NetIdEnum.ToString());
-                RaiseLocalEvent(connection.Owner, beforeEv, false);
+                RaiseLocalEvent(connectionUid, beforeEv, false);
 
                 if (!beforeEv.Cancelled)
-                    RaiseLocalEvent(connection.Owner, packet, false);
+                    RaiseLocalEvent(connectionUid, packet, false);
                 else
                     beforeEv.Uncancel();
             }

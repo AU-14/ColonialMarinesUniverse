@@ -85,12 +85,13 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 
     private void OnClientProjectileStartCollide(Entity<PredictedProjectileClientComponent> ent, ref StartCollideEvent args)
     {
-        if (ent.Comp.Hit)
+        if (_timing.ApplyingState || ent.Comp.Hit)
             return;
 
         if (!TryComp(ent, out ProjectileComponent? projectile) ||
             !TryComp(ent, out PhysicsComponent? physics) ||
-            _ignorePredictionHitQuery.HasComp(args.OtherEntity))
+            _ignorePredictionHitQuery.HasComp(args.OtherEntity) ||
+            !IsSameMap(ent.Owner, args.OtherEntity))
         {
             return;
         }
@@ -98,10 +99,7 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
         var netEnt = GetNetEntity(args.OtherEntity);
         var pos = _transform.GetMapCoordinates(args.OtherEntity);
         var hit = new HashSet<(NetEntity, MapCoordinates)> { (netEnt, pos) };
-        var ev = new PredictedProjectileHitEvent(ent.Owner.Id, hit);
-        RaiseNetworkEvent(ev);
-
-        _projectile.ProjectileCollide((ent, projectile, physics), args.OtherEntity);
+        PredictHit(ent, projectile, physics, args.OtherEntity, hit);
     }
 
     private void OnServerProjectileStartup(Entity<PredictedProjectileServerComponent> ent, ref ComponentStartup args)
@@ -138,34 +136,36 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
                 continue;
 
             var hit = new HashSet<(NetEntity, MapCoordinates)>();
+            EntityUid? firstHit = null;
             foreach (var contact in contacts)
             {
-                if (_ignorePredictionHitQuery.HasComp(contact))
+                if (_ignorePredictionHitQuery.HasComp(contact) ||
+                    !IsSameMap(uid, contact))
+                {
                     continue;
+                }
 
                 var netEnt = GetNetEntity(contact);
                 var pos = _transform.GetMapCoordinates(contact);
                 hit.Add((netEnt, pos));
+                firstHit ??= contact;
             }
 
-            if (hit.Count == 0)
+            if (firstHit is not { } firstHitEntity)
                 continue;
 
-            var ev = new PredictedProjectileHitEvent(uid.Id, hit);
-            RaiseNetworkEvent(ev);
-
-            _projectile.ProjectileCollide((uid, projectile, physics), contacts.First());
+            PredictHit((uid, predicted), projectile, physics, firstHitEntity, hit);
         }
 
         var predictedQuery = EntityQueryEnumerator<PredictedProjectileHitComponent, SpriteComponent, TransformComponent>();
-        while (predictedQuery.MoveNext(out var hit, out var sprite, out var xform))
+        while (predictedQuery.MoveNext(out var uid, out var hit, out var sprite, out var xform))
         {
             var origin = hit.Origin;
             var coordinates = xform.Coordinates;
             if (!origin.TryDistance(EntityManager, _transform, coordinates, out var distance) ||
                 distance >= hit.Distance)
             {
-                sprite.Visible = false;
+                _sprite.SetVisible((uid, sprite), false);
             }
         }
     }
@@ -180,5 +180,25 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
         {
             xform.ActivelyLerping = false;
         }
+    }
+
+    private void PredictHit(
+        Entity<PredictedProjectileClientComponent> ent,
+        ProjectileComponent projectile,
+        PhysicsComponent physics,
+        EntityUid firstHit,
+        HashSet<(NetEntity Id, MapCoordinates Coordinates)> hit)
+    {
+        if (ent.Comp.Hit)
+            return;
+
+        ent.Comp.Hit = true;
+
+        var ev = new PredictedProjectileHitEvent(ent.Owner.Id, hit);
+        RaiseNetworkEvent(ev);
+
+        // Keep predicted hits on the normal collision path. A previous manual effect path
+        // skipped local damage flashes and made shooter feedback wait for server state.
+        _projectile.ProjectileCollide((ent, projectile, physics), firstHit);
     }
 }

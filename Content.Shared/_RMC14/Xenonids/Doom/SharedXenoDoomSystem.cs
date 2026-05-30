@@ -28,7 +28,7 @@ public abstract partial class SharedXenoDoomSystem : EntitySystem
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private RMCDazedSystem _daze = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
-    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private RMCCameraShakeSystem _cameraShake = default!;
     [Dependency] private SharedSolutionContainerSystem _solution = default!;

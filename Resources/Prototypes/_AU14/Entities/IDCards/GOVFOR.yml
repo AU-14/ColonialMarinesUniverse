@@ -1,4 +1,19 @@
 - type: entity
+  id: GOVFOR
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IFFFaction
+  - type: FactionFrequencies
+    channels:
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+    - radioGovforCommand
+    - radioGovforIntel
+    - radioGovforJTAC
+    - radioGovforMILP
+
+- type: entity
   parent: CMIDCardBase
   id: AU14IDCardGOVFORPlatCo
   name: platoon commander ID card
@@ -64,7 +79,6 @@
     factions:
     - GOVFOR
 
-
 - type: entity
   parent: CMIDCardBase
   id: AU14IDCardSquadRifleman
@@ -75,7 +89,6 @@
   - type: ItemIFF
     factions:
     - GOVFOR
-
 
 - type: entity
   parent: CMIDCardBase
@@ -88,7 +101,6 @@
     factions:
     - GOVFOR
 
-
 - type: entity
   parent: CMIDCardBase
   id: AU14JobIDCardGOVFORPlatoonCorpsman
@@ -99,7 +111,6 @@
   - type: ItemIFF
     factions:
     - GOVFOR
-
 
 - type: entity
   parent: CMIDCardBase
@@ -241,36 +252,6 @@
   - type: ItemIFF
     factions:
     - GOVFOR
-
-  #- type: ItemIFF
-  #  faction: FactionMarine
-
-- type: entity
-  id: GOVFOR
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: IFFFaction
-  - type: FactionFrequencies
-    channels:
-    - GovforCommand
-    - GovforAlpha
-    - GovforBravo
-    - GovforCharlie
-    - GovforIntel
-    - GovforJTAC
-
-- type: entity
-  id: OPFOR
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: IFFFaction
-  - type: FactionFrequencies
-    channels:
-    - opfor
-    - opforcommand
-    - opforjtac
-    - OpforBravo
-    - OpforCharlie
 
 - type: entity
   parent: CMIDCardBase

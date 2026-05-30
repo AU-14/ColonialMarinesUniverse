@@ -151,23 +151,25 @@
   - type: IntrinsicRadioReceiver
   - type: IntrinsicRadioTransmitter
     channels:
-    - AI
+    - radioAI
     - Colony
-    - WEYA
-    - CMB
+    - radioWEYU
+    - radioCMB
   - type: ActiveRadio
     channels:
-    - AI
+    - radioAI
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
-  - type: EyeProtection
   - type: Actions
   - type: GrantAreaInfo
   - type: GrantMarineIcons
     factions:
     - UNMC
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
   - type: Tag
     tags:
     - WorkingJoe

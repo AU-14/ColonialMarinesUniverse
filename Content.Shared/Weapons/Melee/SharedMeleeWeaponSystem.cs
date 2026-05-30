@@ -703,9 +703,10 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         }
 
         // Naughty input
-        if (entities.Count > MaxTargets)
+        var maxTargets = component.MaxTargets ?? MaxTargets;
+        if (entities.Count > maxTargets)
         {
-            entities.RemoveRange(MaxTargets, entities.Count - MaxTargets);
+            entities.RemoveRange(maxTargets, entities.Count - maxTargets);
         }
 
         // Validate client
@@ -1052,10 +1053,9 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         var invMatrix = TransformSystem.GetInvWorldMatrix(userXform);
         var localPos = Vector2.Transform(coordinates.Position, invMatrix);
 
-        if (localPos.LengthSquared() <= 0f)
-            return;
-
         localPos = userXform.LocalRotation.RotateVec(localPos);
+        if (localPos.LengthSquared() <= 0.001f)
+            localPos = TransformSystem.GetWorldRotation(userXform).ToWorldVec();
 
         // We'll play the effect just short visually so it doesn't look like we should be hitting but actually aren't.
         const float bufferLength = 0.2f;

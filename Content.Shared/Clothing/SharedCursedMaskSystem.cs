@@ -60,7 +60,8 @@ public abstract partial class SharedCursedMaskSystem : EntitySystem
 
     protected void RandomizeCursedMask(Entity<CursedMaskComponent> ent, EntityUid wearer)
     {
-        var random = new System.Random((int) _timing.CurTick.Value);
+        var random = new RobustRandom();
+        random.SetSeed((int) _timing.CurTick.Value);
         ent.Comp.CurrentState = random.Pick(Enum.GetValues<CursedMaskExpression>());
         _appearance.SetData(ent, CursedMaskVisuals.State, ent.Comp.CurrentState);
         _movementSpeedModifier.RefreshMovementSpeedModifiers(wearer);

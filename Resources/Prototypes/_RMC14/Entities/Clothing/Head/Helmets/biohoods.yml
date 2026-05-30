@@ -24,7 +24,7 @@
   parent: RMCHoodBioGeneral
   id: RMCHoodBioWeYa
   name: WeYu-TSS MK II - bio hood
-  description: The 'Weyland-Yutani TerraScientia bio-suit MK II'. An advanced light-weight bio-suit developed in-house by Weston-Yamada. It's a hood that protects the head and face from biological contaminants, synthetic compliant. Offers no real protection.
+  description: The 'Weyland-Yutani TerraScientia bio-suit MK II'. An advanced light-weight bio-suit developed in-house by Weyland-Yutani. It's a hood that protects the head and face from biological contaminants, synthetic compliant. Offers no real protection.
   suffix: Generic, WeYu
   components:
   - type: Sprite
@@ -36,7 +36,7 @@
   parent: RMCHoodBioWeYa
   id: RMCHoodBioWeYaAlt
   name: WeYu-TSS MK I - bio hood
-  description: The 'Weyland-Yutani TerraScientia bio-suit MK I'. An advanced light-weight bio-suit developed in-house by Weston-Yamada. It's a hood that protects the head and face from biological contaminants.
+  description: The 'Weyland-Yutani TerraScientia bio-suit MK I'. An advanced light-weight bio-suit developed in-house by Weyland-Yutani. It's a hood that protects the head and face from biological contaminants.
   suffix: Generic, WeYu, Alt
   components:
   - type: Sprite

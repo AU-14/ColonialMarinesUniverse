@@ -7,6 +7,8 @@ using Robust.Shared.Prototypes;
 namespace Content.Client._RMC14.Xenonids.Doom;
 public sealed partial class DoomOverlay : Overlay
 {
+    private static readonly ProtoId<ShaderPrototype> DoomVisionShader = "RMCDoomVision";
+
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;
 
@@ -20,7 +22,7 @@ public sealed partial class DoomOverlay : Overlay
     {
         IoCManager.InjectDependencies(this);
 
-        _shader = _prototypeManager.Index<ShaderPrototype>("RMCDoomVision").InstanceUnique();
+        _shader = _prototypeManager.Index(DoomVisionShader).InstanceUnique();
     }
 
     protected override void Draw(in OverlayDrawArgs args)

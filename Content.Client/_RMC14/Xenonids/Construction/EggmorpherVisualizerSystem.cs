@@ -3,15 +3,17 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client._RMC14.Xenonids.Construction;
 
-public sealed class EggmorpherVisualizerSystem : VisualizerSystem<EggMorpherComponent>
+public sealed partial class EggmorpherVisualizerSystem : VisualizerSystem<EggMorpherComponent>
 {
+    [Dependency] private SpriteSystem _sprite = default!;
+
     protected override void OnAppearanceChange(EntityUid uid, EggMorpherComponent component, ref AppearanceChangeEvent args)
     {
         var sprite = args.Sprite;
 
         if (sprite == null || !AppearanceSystem.TryGetData(uid, EggmorpherOverlayVisuals.Number, out int number) ||
-            !sprite.LayerMapTryGet(EggmorpherOverlayLayers.Overlay, out var layer) ||
-            !sprite.LayerMapTryGet(EggmorpherOverlayLayers.Base, out var layer2))
+            !_sprite.LayerMapTryGet((uid, sprite), EggmorpherOverlayLayers.Overlay, out var layer, false) ||
+            !_sprite.LayerMapTryGet((uid, sprite), EggmorpherOverlayLayers.Base, out var layer2, false))
             return;
 
         //Same as parasite number calc
@@ -19,26 +21,29 @@ public sealed class EggmorpherVisualizerSystem : VisualizerSystem<EggMorpherComp
 
         if (level == 0)
         {
-            sprite.LayerSetVisible(layer, false);
+            _sprite.LayerSetVisible((uid, sprite), layer, false);
             return;
         }
 
         var wasVisible = true;
 
-        if (!sprite[layer].Visible)
+        if (!_sprite.TryGetLayer((uid, sprite), layer, out var overlayLayer, false))
+            return;
+
+        if (!overlayLayer.Visible)
         {
-            sprite.LayerSetVisible(layer, true);
+            _sprite.LayerSetVisible((uid, sprite), layer, true);
             wasVisible = false;
         }
 
         string state = component.OverlayPrefix + "_" + (level - 1);
 
-        if (state != sprite.LayerGetState(layer) || !wasVisible)
+        if (state != _sprite.LayerGetRsiState((uid, sprite), layer) || !wasVisible)
         {
-            sprite.LayerSetState(layer, state);
-            var stat = sprite.LayerGetState(layer2);
-            sprite.LayerSetState(layer2, state);
-            sprite.LayerSetState(layer2, stat);
+            _sprite.LayerSetRsiState((uid, sprite), layer, state);
+            var stat = _sprite.LayerGetRsiState((uid, sprite), layer2);
+            _sprite.LayerSetRsiState((uid, sprite), layer2, state);
+            _sprite.LayerSetRsiState((uid, sprite), layer2, stat);
         }
     }
 }

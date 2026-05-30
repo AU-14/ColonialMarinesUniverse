@@ -7,12 +7,15 @@ using JetBrains.Annotations;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Localization;
 
 namespace Content.Client._CMU14.Medical.Surgery;
 
 [UsedImplicitly]
-public sealed class CMUSurgeryBui : BoundUserInterface
+public sealed partial class CMUSurgeryBui : BoundUserInterface
 {
+    [Dependency] private ILocalizationManager _localization = default!;
+
     private static readonly Color RowBackground = Color.FromHex("#1C1D23").WithAlpha(0.92f);
     private static readonly Color RowEmptyBackground = Color.FromHex("#17191E").WithAlpha(0.86f);
     private static readonly Color AccentBlue = Color.FromHex("#B8A06A");
@@ -34,6 +37,7 @@ public sealed class CMUSurgeryBui : BoundUserInterface
 
     public CMUSurgeryBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
+        IoCManager.InjectDependencies(this);
     }
 
     protected override void Open()
@@ -713,10 +717,10 @@ public sealed class CMUSurgeryBui : BoundUserInterface
             or "parasite";
     }
 
-    private static string ResolveCategoryName(string category)
+    private string ResolveCategoryName(string category)
     {
         var key = "cmu-medical-surgery-category-" + category;
-        return Loc.TryGetString(key, out var resolved) ? resolved : category;
+        return _localization.TryGetString(key, out var resolved) ? resolved : category;
     }
 
     private static (string Text, Color Color) ResolveStatusText(CMUSurgeryPartEntry part)
@@ -730,21 +734,21 @@ public sealed class CMUSurgeryBui : BoundUserInterface
         return (Loc.GetString("cmu-medical-surgery-part-condition-healthy"), Healthy);
     }
 
-    private static string ResolveLabel(string? maybeKey)
+    private string ResolveLabel(string? maybeKey)
     {
         if (string.IsNullOrEmpty(maybeKey))
             return "-";
-        if (Loc.TryGetString(maybeKey, out var resolved))
+        if (_localization.TryGetString(maybeKey, out var resolved))
             return resolved;
         return maybeKey;
     }
 
-    private static string FormatToolCategory(string? category)
+    private string FormatToolCategory(string? category)
     {
         if (string.IsNullOrEmpty(category))
             return "-";
         var key = "cmu-medical-surgery-tool-category-" + category;
-        if (Loc.TryGetString(key, out var resolved))
+        if (_localization.TryGetString(key, out var resolved))
             return resolved;
         return category;
     }

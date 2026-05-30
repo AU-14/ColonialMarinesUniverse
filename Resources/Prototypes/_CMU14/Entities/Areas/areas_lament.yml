@@ -391,6 +391,17 @@
 
 - type: entity
   parent: CMUAreaLV376Inside
+  id: CMUAreaLV376MinerCells
+  name: Kelland Mine - Cells
+  components:
+  - type: Sprite
+    state: mining_living
+  - type: Area
+#    powerNet: mine
+    countAsArrestedForEndConditions: true
+
+- type: entity
+  parent: CMUAreaLV376Inside
   id: CMUAreaLV376MinerOffice
   name: Kelland Mine - Office
   components:
@@ -451,6 +462,14 @@
   parent: CMUAreaLV376Inside
   id: CMUAreaLV376Hydroponics
   name: Barker's Lament - Hydroponics
+  components:
+  - type: Sprite
+    state: hydro
+
+- type: entity
+  parent: CMUAreaLV376Inside
+  id: CMUAreaLV376JournalistOffice
+  name: Barker's Lament - Journalist Office
   components:
   - type: Sprite
     state: hydro
@@ -715,6 +734,17 @@
   parent: CMUAreaLV376Building
   id: CMUAreaLV376WYFacade
   name: Weyland-Yutani Office
+  components:
+  - type: Sprite
+    state: red2
+  - type: Area
+    minimapColor: '#C19504E7'
+    powerNet: weylandyutani
+
+- type: entity
+  parent: CMUAreaLV376Building
+  id: CMUAreaLV376Weymart
+  name: Weymart
   components:
   - type: Sprite
     state: red2

@@ -46,8 +46,11 @@ public sealed partial class ReagentThreshold : EntityEffectCondition
     public override string GuidebookExplanation(IPrototypeManager prototype)
     {
         ReagentPrototype? reagentProto = null;
-        if (Reagent is not null)
-            prototype.TryIndexReagent(Reagent, out reagentProto);
+        if (Reagent is not null &&
+            IoCManager.Resolve<IEntityManager>().System<RMCReagentSystem>().TryIndex(Reagent, out var reagent))
+        {
+            reagentProto = reagent;
+        }
 
         return Loc.GetString("reagent-effect-condition-guidebook-reagent-threshold",
             ("reagent", reagentProto?.LocalizedName ?? Loc.GetString("reagent-effect-condition-guidebook-this-reagent")),

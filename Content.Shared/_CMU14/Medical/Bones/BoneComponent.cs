@@ -37,6 +37,6 @@ public sealed partial class BoneComponent : Component
     [DataField]
     public bool BlocksFullHeal = true;
 
-    [DataField, AutoPausedField]
+    [AutoPausedField]
     public TimeSpan NextIntegrityTick;
 }

@@ -3,7 +3,7 @@
   id: AU14USArmySquadLeaderBase
   name: cm-job-name-squad-leader
   description: au14-job-description-usarmy
-  playTimeTracker: AU14JobUSArmyCMT
+  playTimeTracker: AU14JobUSArmySquadLeader
   basePlaytimeTracker: true
   hidden: true
 

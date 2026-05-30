@@ -47,7 +47,7 @@
   - AUPrisonStaff
   - auwy
   access:
-  - AU14AccessColonyCorporateLiaison
+  - AU14AccessCorporateWEYULiaison
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
@@ -73,10 +73,6 @@
       whitelist:
         tags:
         - SquadPMC
-  requirements:
-  - !type:DepartmentTimeRequirement
-    department: AU14DepartmentCorporate
-    time: 72000 # 20 hours
   hidden: false
 
 - type: startingGear

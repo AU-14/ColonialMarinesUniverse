@@ -1,11 +1,15 @@
 using Content.Server.AU14.ColonyEconomy;
+using Content.Server.Fax;
 using Content.Server.GameTicking.Rules;
 using Content.Server.AU14.Systems;
 using Content.Server.Station.Systems;
 using Content.Server.StationRecords.Systems;
+using Content.Shared.AU14.CLF;
+using Content.Shared.Fax.Components;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs;
+using Content.Shared.Paper;
 using Content.Shared.StationRecords;
 using Content.Shared.CriminalRecords;
 using Content.Shared.Security;
@@ -24,6 +28,7 @@ public sealed partial class CLFVeteranRuleSystem : GameRuleSystem<CLFVeteranRule
     [Dependency] private IEntitySystemManager _entitySystemManager = default!;
     [Dependency] private WantedSystem _wantedSystem = default!;
     [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
+    [Dependency] private FaxSystem _fax = default!;
 
     private EntityUid? _veteranUid = null;
     private bool _veteranCaptured = false;
@@ -32,6 +37,7 @@ public sealed partial class CLFVeteranRuleSystem : GameRuleSystem<CLFVeteranRule
     {
         base.Initialize();
         SubscribeLocalEvent<CLFVeteranComponent, ComponentStartup>(OnVeteranSpawned);
+        SubscribeLocalEvent<CLFFaxReceiverComponent, ComponentInit>(OnCLFFaxReceiverInit);
     }
 
     protected override void Started(EntityUid uid, CLFVeteranRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
@@ -47,25 +53,13 @@ public sealed partial class CLFVeteranRuleSystem : GameRuleSystem<CLFVeteranRule
 
         _wantedSystem.SendFax(_entitySystemManager, _entityManager, "Colony Marshal Bureau", "AUPaperCLFVeteran");
 
-        // Send CLF fax with veteran's name
         var veteranName = _entityManager.GetComponentOrNull<MetaDataComponent>(uid)?.EntityName ?? "Unknown";
-        var clfContent = "[head=3][color=#2e5a1e]Colony Liberation Front[/color][/head]\n\n" +
-            "[color=#2e5a1e]▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[/color]\n\n" +
-            "[bold]To:[/bold] [italic]Field Operatives[/italic]\n" +
-            "[bold]From:[/bold] [bold]CLF Regional Command[/bold]\n" +
-            "[color=#2e5a1e]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]\n" +
-            "Comrades,\n" +
-            $"  A disavowed operative, [bold]{veteranName}[/bold], has been located in the colony. " +
-            "Bring them back into the fold, or deal with them accordingly.\n\n" +
-            "Freedom or death,\n" +
-            "[color=#2e5a1e][bolditalic]CLF Command[/bolditalic][/color]\n" +
-            "[color=#2e5a1e]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]";
         _wantedSystem.SendCustomFax(
             "Colony Liberation Front",
             "Encrypted Message",
-            clfContent,
+            BuildVeteranFaxContent(veteranName),
             "paper_stamp-clf",
-            new System.Collections.Generic.List<Content.Shared.Paper.StampDisplayInfo>
+            new System.Collections.Generic.List<StampDisplayInfo>
             {
                 new() { StampedColor = Color.FromHex("#2e5a1e"), StampedName = "CLF" }
             });
@@ -100,6 +94,44 @@ public sealed partial class CLFVeteranRuleSystem : GameRuleSystem<CLFVeteranRule
         _criminalRecordsConsole.AddScannedRecord(key);
     }
 
+    private void OnCLFFaxReceiverInit(EntityUid uid, CLFFaxReceiverComponent comp, ComponentInit args)
+    {
+        if (_veteranUid == null || !_entityManager.EntityExists(_veteranUid.Value))
+            return;
+
+        if (!TryComp(uid, out FaxMachineComponent? faxComp))
+            return;
+
+        var veteranName = _entityManager.GetComponentOrNull<MetaDataComponent>(_veteranUid.Value)?.EntityName ?? "Unknown";
+        var printout = new FaxPrintout(
+            BuildVeteranFaxContent(veteranName),
+            "Encrypted Message",
+            null,
+            "CMPaper",
+            "paper_stamp-clf",
+            new System.Collections.Generic.List<StampDisplayInfo>
+            {
+                new() { StampedColor = Color.FromHex("#2e5a1e"), StampedName = "CLF" }
+            });
+
+        _fax.Receive(uid, printout, null, faxComp);
+    }
+
+    private static string BuildVeteranFaxContent(string veteranName)
+    {
+        return "[head=3][color=#2e5a1e]Colony Liberation Front[/color][/head]\n\n" +
+            "[color=#2e5a1e]▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄[/color]\n\n" +
+            "[bold]To:[/bold] [italic]Field Operatives[/italic]\n" +
+            "[bold]From:[/bold] [bold]CLF Regional Command[/bold]\n" +
+            "[color=#2e5a1e]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]\n" +
+            "Comrades,\n" +
+            $"  A disavowed operative, [bold]{veteranName}[/bold], has been located in the colony. " +
+            "Bring them back into the fold, or deal with them accordingly.\n\n" +
+            "Freedom or death,\n" +
+            "[color=#2e5a1e][bolditalic]CLF Command[/bolditalic][/color]\n" +
+            "[color=#2e5a1e]‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾[/color]";
+    }
+
     protected override void ActiveTick(EntityUid uid, CLFVeteranRuleComponent component, GameRuleComponent gameRule, float frameTime)
     {
         base.ActiveTick(uid, component, gameRule, frameTime);
@@ -131,4 +163,3 @@ public sealed partial class CLFVeteranRuleSystem : GameRuleSystem<CLFVeteranRule
         return false;
     }
 }
-

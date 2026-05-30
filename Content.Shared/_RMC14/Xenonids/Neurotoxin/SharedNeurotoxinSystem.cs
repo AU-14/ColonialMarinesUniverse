@@ -52,7 +52,7 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
     [Dependency] private RMCStaminaSystem _stamina = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
     [Dependency] private SharedSlurredSystem _slurred = default!;
     [Dependency] private SharedStutteringSystem _stutter = default!;
     [Dependency] private RMCDazedSystem _daze = default!;
@@ -436,7 +436,7 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
 
     private void DoNeuroHallucination(EntityUid victim, NeurotoxinComponent neurotoxin)
     {
-        var hallucination = SharedRandomExtensions.Pick(neurotoxin.Hallucinations, _random.GetRandom());
+        var hallucination = _random.Pick(neurotoxin.Hallucinations);
         //Note event times are hardcoded for now since thers alot of them
         switch (hallucination)
         {

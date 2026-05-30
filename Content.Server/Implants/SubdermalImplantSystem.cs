@@ -152,7 +152,7 @@ public sealed partial class SubdermalImplantSystem : SharedSubdermalImplantSyste
         }
 
         if (targetGrid == null)
-            targetGrid = _random.GetRandom().PickAndTake(_targetGrids);
+            targetGrid = PickAndTake(_targetGrids);
 
         EntityCoordinates? targetCoords = null;
 
@@ -200,10 +200,25 @@ public sealed partial class SubdermalImplantSystem : SharedSubdermalImplantSyste
             if (valid || _targetGrids.Count == 0) // if we don't do the check here then PickAndTake will blow up on an empty set.
                 break;
 
-            targetGrid = _random.GetRandom().PickAndTake(_targetGrids);
+            targetGrid = PickAndTake(_targetGrids);
         } while (true);
 
         return targetCoords;
+    }
+
+    private Entity<MapGridComponent> PickAndTake(HashSet<Entity<MapGridComponent>> set)
+    {
+        var index = _random.Next(set.Count);
+        foreach (var value in set)
+        {
+            if (index-- != 0)
+                continue;
+
+            set.Remove(value);
+            return value;
+        }
+
+        throw new InvalidOperationException("Failed to pick a target grid.");
     }
 
     private void OnDnaScramblerImplant(EntityUid uid, SubdermalImplantComponent component, UseDnaScramblerImplantEvent args)

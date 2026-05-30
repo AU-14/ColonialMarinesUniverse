@@ -429,3 +429,69 @@
     event: !type:XenoDoomActionEvent
   - type: XenoActionPlasma
     cost: 50
+
+- type: entity
+  id: ActionXenoVomitBile
+  parent: ActionXenoBase
+  name: Vomit Bile (40)
+  description: Extinguishes a nearby hivemate or coats an enemy in volatile bile.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+    useDelay: 8
+  - type: TargetAction
+    range: 1.5
+    checkCanAccess: false
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Heatshield.XenoVomitBileActionEvent
+  - type: XenoActionPlasma
+    cost: 40
+  - type: ActionBlockIfResting
+
+- type: entity
+  id: ActionXenoFleshHarvest
+  parent: ActionXenoBase
+  name: Flesh Harvest
+  description: Rip apart a permanently dead marine for flesh resin.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: reaper_flesh_harvest
+    useDelay: 5
+  - type: TargetAction
+    range: 1.5
+  - type: EntityTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Reaper.XenoFleshHarvestActionEvent
+  - type: XenoActionPlasma
+    cost: 50
+  - type: ActionBlockIfResting
+  - type: ActionInRangeUnobstructed
+    range: 1.5
+
+- type: entity
+  id: ActionXenoFleshBloom
+  parent: ActionXenoBase
+  name: Flesh Bloom
+  description: Spend flesh resin to grow a telegraphed bloom that slows and poisons enemies while soothing the hive.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: reaper_flesh_bloom
+    useDelay: 25
+  - type: TargetAction
+    range: 7
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Reaper.XenoFleshBloomActionEvent
+  - type: ActionBlockIfResting
+  - type: ActionInRangeUnobstructed
+    range: 7

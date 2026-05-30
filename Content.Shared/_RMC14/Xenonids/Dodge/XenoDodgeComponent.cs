@@ -10,5 +10,5 @@ public sealed partial class XenoDodgeComponent : Component
     public int PlasmaCost = 200;
 
     [DataField, AutoNetworkedField]
-    public TimeSpan Duration = TimeSpan.FromSeconds(7);
+    public TimeSpan Duration = TimeSpan.FromSeconds(15);
 }

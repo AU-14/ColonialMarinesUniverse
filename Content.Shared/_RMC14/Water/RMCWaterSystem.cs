@@ -1,6 +1,8 @@
 using Content.Shared._RMC14.Map;
 using Content.Shared.NameModifier.EntitySystems;
+using Content.Shared.Projectiles;
 using Content.Shared.Whitelist;
+using Robust.Shared.Physics.Events;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Water;
@@ -19,6 +21,14 @@ public sealed partial class RMCWaterSystem : EntitySystem
     {
         SubscribeLocalEvent<PurifiableWaterComponent, MapInitEvent>(OnPurifiableWaterMapInit);
         SubscribeLocalEvent<PurifiableWaterComponent, RefreshNameModifiersEvent>(OnPurifiableWaterRefreshNameModifiers);
+        SubscribeLocalEvent<RMCWaterComponent, PreventCollideEvent>(OnWaterPreventCollide);
+    }
+
+    private void OnWaterPreventCollide(Entity<RMCWaterComponent> ent, ref PreventCollideEvent args)
+    {
+        // Fishing lures are thrown items, not ProjectileComponents, so they still collide and anchor.
+        if (HasComp<ProjectileComponent>(args.OtherEntity))
+            args.Cancelled = true;
     }
 
     private void OnPurifiableWaterMapInit(Entity<PurifiableWaterComponent> ent, ref MapInitEvent args)

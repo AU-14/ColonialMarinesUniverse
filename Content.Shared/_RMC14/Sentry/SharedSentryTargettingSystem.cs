@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
+using Content.Shared.AU14.AllianceConsole;
 using Content.Shared.Inventory;
 using Content.Shared.NPC.Components;
 using Content.Shared.Weapons.Ranged.Components;
@@ -36,6 +37,7 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
     private readonly HashSet<Entity<NpcFactionMemberComponent>> _factionLookupBuffer = new();
     private readonly HashSet<Entity<UserIFFComponent>> _userIffLookupBuffer = new();
     private readonly HashSet<EntityUid> _candidateLookupBuffer = new();
+    private readonly HashSet<string> _friendlyNpcFactionBuffer = new();
 
     public override void Initialize()
     {
@@ -54,9 +56,8 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
 
     private void OnTargetingStartup(Entity<SentryTargetingComponent> ent, ref ComponentStartup args)
     {
-        if (ent.Comp.FriendlyFactions.Count == 0 && !string.IsNullOrEmpty(ent.Comp.OriginalFaction))
-            ent.Comp.FriendlyFactions.Add(ent.Comp.OriginalFaction);
-
+        // Sentries begin with no faction assigned — they must be configured via multitool.
+        // Only seed FriendlyFactions if the prototype explicitly pre-populated it (non-sentry use).
         if (_net.IsServer)
             ApplyTargeting(ent);
     }
@@ -79,11 +80,14 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
                     targeting.FriendlyFactions.Add(sentryFaction);
             }
         }
-        else if (TryComp<NpcFactionMemberComponent>(deployer, out var npcFaction))
+
+        // Fallback to NPC faction when IFF yielded nothing (no IFF at all, or IFF not in the standard map).
+        if (targeting.FriendlyFactions.Count == 0 &&
+            TryComp<NpcFactionMemberComponent>(deployer, out var npcFaction))
         {
             foreach (var faction in npcFaction.Factions)
             {
-                if (faction != SentryExcludedFaction && SentryAllowedFactions.Contains(faction))
+                if (faction != SentryExcludedFaction)
                     targeting.FriendlyFactions.Add(faction);
             }
 
@@ -215,6 +219,25 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         if (!HasComp<UserIFFComponent>(target) && !HasComp<NpcFactionMemberComponent>(target))
             return false;
 
+        // Unconfigured sentry targets no one.
+        if (sentry.Comp.FriendlyFactions.Count == 0)
+            return false;
+
+        // NPC factions that should never be targeted: alliance-friendly + non-IFF-mapped FriendlyFactions
+        if (TryComp<NpcFactionMemberComponent>(target, out var targetFaction))
+        {
+            foreach (var allianceFriendly in sentry.Comp.AllianceFriendlyNpcFactions)
+            {
+                if (targetFaction.Factions.Contains(allianceFriendly))
+                    return false;
+            }
+            foreach (var faction in sentry.Comp.FriendlyFactions)
+            {
+                if (!SentryFactionToIff.ContainsKey(faction) && targetFaction.Factions.Contains(faction))
+                    return false;
+            }
+        }
+
         BuildFriendlyIff(sentry.Comp);
         var friendly = IsFriendlyByIff(target);
         _friendlyIffBuffer.Clear();
@@ -225,6 +248,18 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
     public IEnumerable<EntityUid> GetNearbyIffHostiles(Entity<SentryTargetingComponent> ent, float range)
     {
         BuildFriendlyIff(ent.Comp);
+
+        // Build a combined set of NPC factions that should never be targeted:
+        // 1) FriendlyFactions entries that have no IFF mapping (e.g. AUWeYu)
+        // 2) Alliance-friendly factions set by the alliance console
+        _friendlyNpcFactionBuffer.Clear();
+        foreach (var faction in ent.Comp.FriendlyFactions)
+        {
+            if (!SentryFactionToIff.ContainsKey(faction))
+                _friendlyNpcFactionBuffer.Add(faction);
+        }
+        foreach (var faction in ent.Comp.AllianceFriendlyNpcFactions)
+            _friendlyNpcFactionBuffer.Add(faction.Id);
 
         var coords = _xform.GetMapCoordinates(ent);
 
@@ -242,8 +277,26 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
             if (target == ent.Owner)
                 continue;
 
-            if (!IsFriendlyByIff(target))
-                yield return target;
+            if (IsFriendlyByIff(target))
+                continue;
+
+            if (_friendlyNpcFactionBuffer.Count > 0 &&
+                TryComp<NpcFactionMemberComponent>(target, out var targetNpc))
+            {
+                var isFriendly = false;
+                foreach (var f in targetNpc.Factions)
+                {
+                    if (_friendlyNpcFactionBuffer.Contains(f.Id))
+                    {
+                        isFriendly = true;
+                        break;
+                    }
+                }
+                if (isFriendly)
+                    continue;
+            }
+
+            yield return target;
         }
 
         _candidateLookupBuffer.Clear();
@@ -251,6 +304,7 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         _factionLookupBuffer.Clear();
         _friendlyIffBuffer.Clear();
         _targetIffBuffer.Clear();
+        _friendlyNpcFactionBuffer.Clear();
     }
 
     private void ApplyTargeting(Entity<SentryTargetingComponent> ent)
@@ -280,5 +334,107 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
     public bool ContainsAllNonXeno(HashSet<string> friendlyFactions)
     {
         return GetHumanoidFactions().All(friendlyFactions.Contains);
+    }
+
+    /// <summary>
+    /// Applies the provided set of alliance-friendly NPC factions to this sentry,
+    /// replacing any previously applied alliance state.
+    /// </summary>
+    public void ApplyAllianceFactions(EntityUid sentryUid, SentryTargetingComponent targeting, IEnumerable<string> friendlyNpcFactions)
+    {
+        targeting.AllianceFriendlyNpcFactions.Clear();
+        foreach (var f in friendlyNpcFactions)
+            targeting.AllianceFriendlyNpcFactions.Add(f);
+        Dirty(sentryUid, targeting);
+    }
+
+    /// <summary>
+    /// Returns whether this sentry has the given side faction (e.g. "GOVFOR" or "OPFOR") in its friendly list.
+    /// Used by the alliance console to determine which sentries belong to a given side.
+    /// </summary>
+    public bool HasSideFaction(SentryTargetingComponent targeting, string sideFaction)
+    {
+        return targeting.FriendlyFactions.Contains(sideFaction);
+    }
+
+    /// <summary>
+    /// Applies alliance-friendly NPC factions to a sentry based on the provided global state dictionary.
+    /// Only applies factions relevant to this sentry's own side.
+    /// </summary>
+    public void ApplyAllianceStateToSentry(EntityUid sentryUid, SentryTargetingComponent targeting,
+        Dictionary<string, Dictionary<string, AllianceStatus>> globalState)
+    {
+        var friendly = new HashSet<string>();
+
+        foreach (var (sideFaction, sideState) in globalState)
+        {
+            if (!targeting.FriendlyFactions.Contains(sideFaction))
+                continue;
+
+            foreach (var (npcFaction, status) in sideState)
+            {
+                if (status == AllianceStatus.Friendly)
+                    friendly.Add(npcFaction);
+            }
+        }
+
+        ApplyAllianceFactions(sentryUid, targeting, friendly);
+    }
+
+    /// <summary>
+    /// Returns true if the sentry has been assigned a team faction.
+    /// </summary>
+    public bool IsConfigured(Entity<SentryTargetingComponent> ent)
+    {
+        return ent.Comp.FriendlyFactions.Count > 0;
+    }
+
+    /// <summary>
+    /// Clears the sentry's faction assignment, returning it to idle (no-fire) state.
+    /// </summary>
+    public void ClearFactionAssignment(Entity<SentryTargetingComponent> ent)
+    {
+        ent.Comp.FriendlyFactions.Clear();
+        ent.Comp.DeployedFriendlyFactions.Clear();
+        ent.Comp.HumanoidAdded.Clear();
+
+        if (_net.IsServer)
+            ApplyTargeting(ent);
+
+        Dirty(ent.Owner, ent.Comp);
+    }
+
+    /// <summary>
+    /// Adds an alliance-friendly NPC faction to all deployed sentries matching the given side faction
+    /// (e.g. "GOVFOR" or "OPFOR").  New sentries spawned after this will pick up the state via the
+    /// <see cref="AllianceConsoleSystem"/> on their targeting component init.
+    /// </summary>
+    public void AddAllianceFriendlyFaction(string sideFaction, string npcFaction)
+    {
+        var query = AllEntityQuery<SentryTargetingComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (!comp.FriendlyFactions.Contains(sideFaction))
+                continue;
+
+            comp.AllianceFriendlyNpcFactions.Add(npcFaction);
+            Dirty(uid, comp);
+        }
+    }
+
+    /// <summary>
+    /// Removes an alliance-friendly NPC faction from all deployed sentries matching the given side.
+    /// </summary>
+    public void RemoveAllianceFriendlyFaction(string sideFaction, string npcFaction)
+    {
+        var query = AllEntityQuery<SentryTargetingComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (!comp.FriendlyFactions.Contains(sideFaction))
+                continue;
+
+            comp.AllianceFriendlyNpcFactions.Remove(npcFaction);
+            Dirty(uid, comp);
+        }
     }
 }

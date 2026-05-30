@@ -45,6 +45,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
@@ -369,7 +370,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
 
         foreach (var (reagent, quantity) in solution.Contents)
         {
-            var reagentProto = _prototypeManager.IndexReagent<ReagentPrototype>(reagent.Prototype);
+            var reagentProto = _reagent.Index(reagent.Prototype);
 
             // Calculate the minimum speed needed to slip in the puddle. Average the overall slip thresholds for all reagents
             var deltaSlipTrigger = reagentProto.SlipData?.RequiredSlipSpeed ?? entity.Comp.DefaultSlippery;
@@ -422,7 +423,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
         var maxViscosity = 0f;
         foreach (var (reagent, _) in solution.Contents)
         {
-            var reagentProto = _prototypeManager.IndexReagent<ReagentPrototype>(reagent.Prototype);
+            var reagentProto = _reagent.Index(reagent.Prototype);
             maxViscosity = Math.Max(maxViscosity, reagentProto.Viscosity);
         }
 

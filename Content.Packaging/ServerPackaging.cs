@@ -13,11 +13,11 @@ public static class ServerPackaging
     private static readonly List<PlatformReg> Platforms = new()
     {
         new PlatformReg("win-x64", "Windows", true),
-        new PlatformReg("win-arm64", "Windows", true),
-        new PlatformReg("linux-x64", "Linux", true),
-        new PlatformReg("linux-arm64", "Linux", true),
-        new PlatformReg("osx-x64", "MacOS", true),
-        new PlatformReg("osx-arm64", "MacOS", true),
+        new PlatformReg("win-arm64", "Windows", false),
+        new PlatformReg("linux-x64", "Linux", false),
+        new PlatformReg("linux-arm64", "Linux", false),
+        new PlatformReg("osx-x64", "MacOS", false),
+        new PlatformReg("osx-arm64", "MacOS", false),
         // Non-default platforms (i.e. for Watchdog Git)
         new PlatformReg("win-x86", "Windows", false),
         new PlatformReg("linux-x86", "Linux", false),
@@ -57,7 +57,7 @@ public static class ServerPackaging
         "zh-Hant"
     };
 
-    public static async Task PackageServer(bool skipBuild, bool hybridAcz, IPackageLogger logger, string configuration, List<string>? platforms = null)
+    public static async Task PackageServer(bool skipBuild, bool noRestore, bool hybridAcz, IPackageLogger logger, string configuration, List<string>? platforms = null)
     {
         if (platforms == null)
         {
@@ -70,7 +70,7 @@ public static class ServerPackaging
             // Rather than hosting the client ZIP on the watchdog or on a separate server,
             //  Hybrid ACZ uses the ACZ hosting functionality to host it as part of the status host,
             //  which means that features such as automatic UPnP forwarding still work properly.
-            await ClientPackaging.PackageClient(skipBuild, configuration, logger);
+            await ClientPackaging.PackageClient(skipBuild, noRestore, configuration, logger);
         }
 
         // Good variable naming right here.
@@ -79,17 +79,17 @@ public static class ServerPackaging
             if (!platforms.Contains(platform.Rid))
                 continue;
 
-            await BuildPlatform(platform, skipBuild, hybridAcz, configuration, logger);
+            await BuildPlatform(platform, skipBuild, noRestore, hybridAcz, configuration, logger);
         }
     }
 
-    private static async Task BuildPlatform(PlatformReg platform, bool skipBuild, bool hybridAcz, string configuration, IPackageLogger logger)
+    private static async Task BuildPlatform(PlatformReg platform, bool skipBuild, bool noRestore, bool hybridAcz, string configuration, IPackageLogger logger)
     {
         logger.Info($"Building project for {platform.TargetOs}...");
 
         if (!skipBuild)
         {
-            await ProcessHelpers.RunCheck(new ProcessStartInfo
+            var startInfo = new ProcessStartInfo
             {
                 FileName = "dotnet",
                 ArgumentList =
@@ -100,13 +100,17 @@ public static class ServerPackaging
                     "--nologo",
                     "/v:m",
                     $"/p:TargetOs={platform.TargetOs}",
-                    "/t:Rebuild",
                     "/p:FullRelease=true",
                     "/m"
                 }
-            });
+            };
 
-            await PublishClientServer(platform.Rid, platform.TargetOs, configuration);
+            if (noRestore)
+                startInfo.ArgumentList.Add("--no-restore");
+
+            await ProcessHelpers.RunCheck(startInfo);
+
+            await PublishClientServer(platform.Rid, platform.TargetOs, configuration, noRestore);
         }
 
         logger.Info($"Packaging {platform.Rid} server...");
@@ -125,23 +129,28 @@ public static class ServerPackaging
         logger.Info($"Finished packaging server in {sw.Elapsed}");
     }
 
-    private static async Task PublishClientServer(string runtime, string targetOs, string configuration)
+    private static async Task PublishClientServer(string runtime, string targetOs, string configuration, bool noRestore)
     {
-        await ProcessHelpers.RunCheck(new ProcessStartInfo
+        var startInfo = new ProcessStartInfo
         {
             FileName = "dotnet",
             ArgumentList =
             {
                 "publish",
                 "--runtime", runtime,
-                "--no-self-contained",
+                "--self-contained", "true",
                 "-c", configuration,
                 $"/p:TargetOs={targetOs}",
                 "/p:FullRelease=True",
                 "/m",
                 "RobustToolbox/Robust.Server/Robust.Server.csproj"
             }
-        });
+        };
+
+        if (noRestore)
+            startInfo.ArgumentList.Add("--no-restore");
+
+        await ProcessHelpers.RunCheck(startInfo);
     }
 
     private static async Task WriteServerResources(

@@ -1,20 +1,75 @@
 - type: job
-  parent: CMJobBase
-  id: AU14JobPlatOpBase
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobPlatOpBaseAbstract
   name: au14-job-name-govforplatop
   description: au14-job-description-govforplatop
+  icon: "AU14JobIconOpsOfc"
+  spawnMenuRoleName: Junior Officer (GOVFOR)
+  startingGear: AU14GearGOVFORPlatOp
+  dummyStartingGear: AU14GearGOVFORPlatOpDummy
   playTimeTracker: AU14JobGOVFORPlatOp
-  basePlaytimeTracker: true
-  hidden: true
+  requireAdminNotify: true
+  canBeAntag: false
+  accessGroups:
+  - AU14GovforCommand
+
+- type: job
   abstract: true
+  parent: AU14JobPlatOpBaseAbstract
+  id: AU14JobPlatOpBase
+  ranks:
+    RMCRankFirstLT:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatOp
+      time: 86400 # 24 hours
+    RMCRankSecondLT: []
   requirements:
-  - !type:DepartmentTimeRequirement
-    department: AU14DepartmentGovernmentForces
-    time: 72000 # 20 hours
-  - !type:RoleTimeRequirement
-    role: AU14JobGOVFORSectionSergeant
-    time: 36000 # 20 hours
+  - !type:AgeRequirement
+    requiredAge: 25
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      preset: AU14SkillPresetPlatoonJuniorOfficer
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforplatop
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: so
 
 - type: playTimeTracker
   id: AU14JobGOVFORPlatOp
   isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORPlatOp
+  equipment:
+    id: AU14IDCardGOVFORPlatOp
+    ears: AU14HeadsetGovforCommand
+
+- type: startingGear
+  id: AU14GearGOVFORPlatOpDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: AU14JunglePatrolCap
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetGovforCommand
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORPlatOp
+  name: Spawn Point GOVFOR Platoon Operations Officer
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORPlatOp
+  - type: Sprite
+    state: syn_spawn

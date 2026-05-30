@@ -17,7 +17,7 @@ public sealed partial class XAECreatePuddleSystem: BaseXAESystem<XAECreatePuddle
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private PuddleSystem _puddle = default!;
     [Dependency] private MetaDataSystem _metaData= default!;
-    [Dependency] private IPrototypeManager _prototypeManager= default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
 
     /// <inheritdoc />
     public override void Initialize()
@@ -50,7 +50,7 @@ public sealed partial class XAECreatePuddleSystem: BaseXAESystem<XAECreatePuddle
             var reagentNames = new HashSet<string>();
             foreach (var chemProtoId in component.SelectedChemicals)
             {
-                var reagent = _prototypeManager.IndexReagent(chemProtoId);
+                var reagent = _reagent.Index(chemProtoId);
                 reagentNames.Add(reagent.LocalizedName);
             }
 

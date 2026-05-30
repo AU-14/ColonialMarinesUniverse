@@ -8,7 +8,7 @@
   playTimeTracker: AU14JobCivilianColonySynthetic
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 108000 # 30 hours
+    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -74,6 +74,7 @@
         types:
           Blunt: 35
     - type: Synth
+      generation: "rmc-species-synth-generation-second"
 
   hidden: false
 

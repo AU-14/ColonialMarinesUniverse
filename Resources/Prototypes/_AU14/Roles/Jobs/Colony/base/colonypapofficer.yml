@@ -3,7 +3,7 @@
   id: AU14JobCivilianPaPOfficer
   name: au14-job-name-civilianpapofficer
   description: au14-job-description-civilianpapofficer
-  setPreference: true
+  setPreference: false
   canBeAntag: false
   requirements:
   - !type:AgeRequirement

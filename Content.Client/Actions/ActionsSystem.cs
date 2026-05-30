@@ -341,17 +341,18 @@ namespace Content.Client.Actions
             if (args.Handled)
                 return;
 
-            if (args.Input.EntityUid is not { Valid: true } entity)
-            {
-                RaisePredictiveEvent(new RMCMissedTargetActionEvent(GetNetEntity(ent))); // RMC14
-                return;
-            }
-
-            // let world target component handle it
+            // Let world-target actions handle entity-world targeting, including floor clicks.
             var (uid, comp) = ent;
             if (comp.Event is not {} ev)
             {
                 DebugTools.Assert(HasComp<WorldTargetActionComponent>(ent), $"Action {ToPrettyString(ent)} requires WorldTargetActionComponent for entity-world targeting");
+                return;
+            }
+
+            if (args.Input.EntityUid is not { Valid: true } entity)
+            {
+                args.Handled = true;
+                RaisePredictiveEvent(new RMCMissedTargetActionEvent(GetNetEntity(ent))); // RMC14
                 return;
             }
 

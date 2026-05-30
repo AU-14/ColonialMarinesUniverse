@@ -1,32 +1,28 @@
 - type: platoon
-  id: LACN
-  name: LACN Landing Forces
-  lorePrimer: AU14PrimerPlatoonLACN
-  Allegiance: UA
+  id: exampleplatoon
+  name: exampleplatoon
+  lorePrimer: AU14PrimerPlatoonHAZOPS
   reqlist: USCMCargoCatalog
   VendorToMarker:
     Rifleman: AU14USCMequipmentvendor
-    Clothing: AU14LACNclothingequipmentvendor
-    Weapons: AU14LACNWeaponsVendor
-    SWeapons: AU14LACNSpecialWeaponsVendor
-    Corpsman: AU14LACNcorpsmanvendor
-    Arifleman: AU14LACNMGequipmentvendor
-    Dcc: AU14LACNaircrewvendor
-    OperationsOfficer: AU14LACNcommandequipmentvendor
+    Corpsman: AU14USCMcorpsmanvendor
+    Arifleman: AU14USCMequipmentvendor
+    Dcc: AU14AircrewWeaponsVendor
+    OperationsOfficer: AU14USCMsectionleaderequipmentvendor
     Rto: AU14RTOVendor
     SectionSergeant: AU14USCMsectionleaderequipmentvendor
     Pilot: AU14AircrewWeaponsVendor
     combattech: AU14ComtechGearVendor
     JuniorOfficer: AU14JOGenericVendor
-    MilitaryPolice: AU14MilitaryPolicemanVendorLACN
+    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
-    ReqVend: AU14LACNRequisitionVendor
   possibleships:
-    - USSBush
-  #platoonflag: uaflag
-  CompatibleDropships:
-  - /Maps/_CMU14/Shuttles/alamo.yml
-  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
+      - USSBush
+  jobSlotOverride:
+    SquadRifleman: 12
+    PlatoonCorpsman: 1
+    PlatCo: 1
+    DSPilot: 1
   techTree: RMCIntelTechTree_ua
 
 - type: platoon
@@ -63,6 +59,37 @@
   techTree: RMCIntelTechTree_ua
 
 - type: platoon
+  id: LACN
+  name: LACN Landing Forces
+  lorePrimer: AU14PrimerPlatoonLACN
+  Allegiance: UA
+  reqlist: LACNCargoCatalog
+  VendorToMarker:
+    Rifleman: AU14USCMequipmentvendor
+    Clothing: AU14LACNclothingequipmentvendor
+    Weapons: AU14LACNWeaponsVendor
+    SWeapons: AU14LACNSpecialWeaponsVendor
+    Corpsman: AU14LACNcorpsmanvendor
+    Arifleman: AU14LACNMGequipmentvendor
+    Dcc: AU14LACNaircrewvendor
+    OperationsOfficer: AU14LACNcommandequipmentvendor
+    Rto: AU14RTOVendor
+    SectionSergeant: AU14USCMsectionleaderequipmentvendor
+    Pilot: AU14AircrewWeaponsVendor
+    combattech: AU14ComtechGearVendor
+    JuniorOfficer: AU14JOGenericVendor
+    MilitaryPolice: AU14MilitaryPolicemanVendorLACN
+    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
+    ReqVend: AU14LACNRequisitionVendor
+  possibleships:
+    - USSBush
+  #platoonflag: uaflag
+  CompatibleDropships:
+  - /Maps/_CMU14/Shuttles/alamo.yml
+  - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
+  techTree: RMCIntelTechTree_ua
+
+- type: platoon
   id: UPP
   language: russian
   name: UPP Naval Infantry
@@ -88,17 +115,19 @@
     ReqVend: AU14UPPRequisitionVendor
   possibleships:
       - USSBush
-#  jobClassOverride:
-#    SquadRifleman: AU14JobGOVFORSquadRiflemanUPP
-#    SectionSergeant: AU14JobGOVFORSectionSergeantUPP
-#    PlatoonCorpsman: AU14JobGOVFORPlatoonCorpsmanUPP
-#    PlatCo: AU14JobGOVFORPlatCoUPP
-#    SquadSergeant: AU14JobGOVFORSquadSergeantUPP
-#    DSPilot: AU14JobGOVFORDSPilotUPP
-#    SquadAutomaticRifleman: AU14JobGOVFORSquadAutomaticRiflemanUPP
-#    RadioTelephoneOperator: AU14JobGOVFORRadioTelephoneOperatorUPP
-#    PlatOp: AU14JobGOVFORPlatOpUPP
-#    DCC: AU14JobGOVFORDCCUPP
+  jobClassOverride:
+    SquadRifleman: AU14JobGOVFORSquadRiflemanUPP
+    PlatCo: AU14JobGOVFORPlatCoUPP
+    PlatOp: AU14JobGOVFORPlatOpUPP
+    # SectionSergeant: AU14JobGOVFORSectionSergeantUPP
+    SquadSergeant: AU14JobGOVFORSquadSergeantUPP
+    RadioTelephoneOperator: AU14JobGOVFORRadioTelephoneOperatorUPP
+    SquadCombatTech: AU14JobGOVFORSquadCombatTechUPP
+    SquadAutomaticRifleman: AU14JobGOVFORSquadAutomaticRiflemanUPP
+    PlatoonCorpsman: AU14JobGOVFORPlatoonCorpsmanUPP
+    DSPilot: AU14JobGOVFORDSPilotUPP
+    DCC: AU14JobGOVFORDCCUPP
+    SupportSynth: AU14JobGOVFORAuxSupportSynthUPP
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
@@ -108,7 +137,7 @@
   id: WEYU
   name: WY PMC
   lorePrimer: AU14PrimerPlatoonWEYU
-  reqlist: USCMCargoCatalog
+  reqlist: WEYUCargoCatalog
   VendorToMarker:
     Rifleman: AU14USCMequipmentvendor
     Clothing: AU14WYclothingequipmentvendor
@@ -126,17 +155,19 @@
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
     ReqVend: AU14WYPMCRequisitionVendor
-#  jobClassOverride:
-#    SquadRifleman: AU14JobGOVFORSquadRiflemanWYPMC
-#    SectionSergeant: AU14JobGOVFORSectionSergeantWYPMC
-#    PlatoonCorpsman: AU14JobGOVFORPlatoonCorpsmanWYPMC
-#    PlatCo: AU14JobGOVFORPlatCoWYPMC
-#    SquadSergeant: AU14JobGOVFORSquadSergeantWYPMC
-#    DSPilot: AU14JobGOVFORDSPilotWYPMC
-#    SquadAutomaticRifleman: AU14JobGOVFORSquadAutomaticRiflemanWYPMC
-#    RadioTelephoneOperator: AU14JobGOVFORRadioTelephoneOperatorWYPMC
-#    PlatOp: AU14JobGOVFORPlatOpWYPMC
-#    DCC: AU14JobGOVFORDCCWYPMC
+  jobClassOverride:
+    SquadRifleman: AU14JobGOVFORSquadRiflemanWYPMC
+    PlatCo: AU14JobGOVFORPlatCoWYPMC
+    PlatOp: AU14JobGOVFORPlatOpWYPMC
+    # SectionSergeant: AU14JobGOVFORSectionSergeantWYPMC
+    SquadSergeant: AU14JobGOVFORSquadSergeantWYPMC
+    RadioTelephoneOperator: AU14JobGOVFORRadioTelephoneOperatorWYPMC
+    SquadCombatTech: AU14JobGOVFORSquadCombatTechWYPMC
+    SquadAutomaticRifleman: AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+    PlatoonCorpsman: AU14JobGOVFORPlatoonCorpsmanWYPMC
+    DSPilot: AU14JobGOVFORDSPilotWYPMC
+    DCC: AU14JobGOVFORDCCWYPMC
+    # Synth
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
@@ -152,7 +183,7 @@
   name: CMB Crisis Intervention
   lorePrimer: AU14PrimerPlatoonCMBCIU
   Allegiance: UA
-  reqlist: USCMCargoCatalog
+  reqlist: CMBCIUCargoCatalog
   VendorToMarker:
     Rifleman: AU14USCMequipmentvendor
     Clothing: AU14CMBCIUapparelvendor
@@ -170,12 +201,12 @@
     MilitaryPolice: AU14MilitaryPolicemanGenericVendorCIU
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
     ReqVend: AU14CMBCIURequisitionVendor
-#  jobClassOverride:
-#    PlatCo: AU14JobGOVFORPlatCoCMBCIU
-#    SquadRifleman: AU14JobGOVFORSquadRiflemanCMBCIU
-#    PlatoonCorpsman: AU14JobGOVFORPlatoonCorpsmanCMBCIU
-#    SquadSergeant: AU14JobGOVFORSectionSergeantCMBCIU
-#    SectionSergeant: AU14JobGOVFORSectionSergeantCMBCIU
+  jobClassOverride:
+    SquadRifleman: AU14JobGOVFORSquadRiflemanCMBCIU
+    PlatCo: AU14JobGOVFORPlatCoCMBCIU
+    # SectionSergeant: AU14JobGOVFORSectionSergeantCMBCIU
+    SquadSergeant: AU14JobGOVFORSectionSergeantCMBCIU
+    PlatoonCorpsman: AU14JobGOVFORPlatoonCorpsmanCMBCIU
 #  jobSlotOverride:
 #    SquadRifleman: 14
 #    PlatoonCorpsman: 2
@@ -193,38 +224,11 @@
   techTree: RMCIntelTechTree_ua
 
 - type: platoon
-  id: exampleplatoon
-  name: exampleplatoon
-  lorePrimer: AU14PrimerPlatoonHAZOPS
-  reqlist: USCMCargoCatalog
-  VendorToMarker:
-    Rifleman: AU14USCMequipmentvendor
-    Corpsman: AU14USCMcorpsmanvendor
-    Arifleman: AU14USCMequipmentvendor
-    Dcc: AU14AircrewWeaponsVendor
-    OperationsOfficer: AU14USCMsectionleaderequipmentvendor
-    Rto: AU14RTOVendor
-    SectionSergeant: AU14USCMsectionleaderequipmentvendor
-    Pilot: AU14AircrewWeaponsVendor
-    combattech: AU14ComtechGearVendor
-    JuniorOfficer: AU14JOGenericVendor
-    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
-    MilitaryDoctor: AU14MilitaryDoctorGenericVendor
-  possibleships:
-      - USSBush
-  jobSlotOverride:
-    SquadRifleman: 12
-    PlatoonCorpsman: 1
-    PlatCo: 1
-    DSPilot: 1
-  techTree: RMCIntelTechTree_ua
-
-- type: platoon
   id: HAZOPS
   name: USCM Hazardous Operations Unit
   lorePrimer: AU14PrimerPlatoonHAZOPS
   Allegiance: UA
-  reqlist: USCMCargoCatalog
+  reqlist: HAZOPSCargoCatalog
   VendorToMarker:
     Rifleman: AU14USCMequipmentvendor
     Clothing: AU14HAZOPSclothingequipmentvendor
@@ -256,7 +260,7 @@
   id: ProdigySF
   name: Prodigy Security Forces
   lorePrimer: AU14PrimerPlatoonProdigySF
-  reqlist: UPPCargoCatalog
+  reqlist: ProdigyCargoCatalog
   VendorToMarker:
     Rifleman: AU14USCMequipmentvendor
     Clothing: AU14prodigyclothingequipmentvendor
@@ -291,7 +295,7 @@
   id: VAIPO
   name: VAI Primary Operations
   lorePrimer: AU14PrimerPlatoonVAIPO
-  reqlist: USCMCargoCatalog
+  reqlist: VAIPOCargoCatalog
   VendorToMarker:
     Rifleman: AU14USCMequipmentvendor
     Clothing: AU14VAIPOclothingequipmentvendor
@@ -346,18 +350,19 @@
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
     ReqVend: AU14RMCRequisitionVendor
-  #jobClassOverride:
-   # SquadRifleman: AU14JobGOVFORSquadRiflemanRMC
-   # SectionSergeant: AU14JobGOVFORSectionSergeantRMC
-   # PlatoonCorpsman: AU14JobGOVFORPlatoonCorpsmanRMC
-   # PlatCo: AU14JobGOVFORPlatCoRMC
-   # SquadSergeant: AU14JobGOVFORSquadSergeantRMC
-   # DSPilot: AU14JobGOVFORDSPilotRMC
-   # SquadAutomaticRifleman: AU14JobGOVFORSquadAutomaticRiflemanRMC
-   # RadioTelephoneOperator: AU14JobGOVFORRadioTelephoneOperatorRMC
-   # PlatOp: AU14JobGOVFORPlatOpRMC
-   # DCC: AU14JobGOVFORDCCRMC
-   # SupportSynth: AU14JobGOVFORAuxSupportSynthRMC
+  jobClassOverride:
+    SquadRifleman: AU14JobGOVFORSquadRiflemanRMC
+    PlatCo: AU14JobGOVFORPlatCoRMC
+    PlatOp: AU14JobGOVFORPlatOpRMC
+    SectionSergeant: AU14JobGOVFORSectionSergeantRMC
+    SquadSergeant: AU14JobGOVFORSquadSergeantRMC
+    RadioTelephoneOperator: AU14JobGOVFORRadioTelephoneOperatorRMC
+    SquadCombatTech: AU14JobGOVFORSquadCombatTechRMC
+    SquadAutomaticRifleman: AU14JobGOVFORSquadAutomaticRiflemanRMC
+    PlatoonCorpsman: AU14JobGOVFORPlatoonCorpsmanRMC
+    DSPilot: AU14JobGOVFORDSPilotRMC
+    DCC: AU14JobGOVFORDCCRMC
+    SupportSynth: AU14JobGOVFORAuxSupportSynthRMC
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/lexingtonsmall.yml

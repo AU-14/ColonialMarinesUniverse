@@ -123,6 +123,9 @@ public sealed partial class HandsUIController : UIController, IOnStateEntered<Ga
         _handContainerIndices.Clear();
         _handLookup.Clear();
         _playerHandsComponent = null;
+        _activeHand = null;
+        _statusHandLeft = null;
+        _statusHandRight = null;
 
         foreach (var container in _handsContainers)
         {
@@ -137,7 +140,7 @@ public sealed partial class HandsUIController : UIController, IOnStateEntered<Ga
             HandsGui.Visible = true;
 
         _playerHandsComponent = handsComp;
-        foreach (var (name, hand) in handsComp.Comp.Hands)
+        foreach (var (name, hand) in _handsSystem.EnumerateHandsInSortedOrder(handsComp))
         {
             var handButton = AddHand(name, hand.Location);
 

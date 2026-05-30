@@ -1,10 +1,8 @@
-﻿
 - type: job
   abstract: true
   id: CMJobBase
   isCM: true
-  canBeAntag: true
-  joinNotifyCrew: false
+  roleWeight: 0.25
   medals:
     Bronze: RMCMedalBronzeService
     Silver: RMCMedalSilverService

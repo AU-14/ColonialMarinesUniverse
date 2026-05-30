@@ -42123,7 +42123,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 58.522213,60.645916
       parent: 1
-- proto: RMCSensorTower
+- proto: AU14SensorTower
   entities:
   - uid: 5285
     components:

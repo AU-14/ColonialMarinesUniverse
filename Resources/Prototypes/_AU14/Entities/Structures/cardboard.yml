@@ -30,3 +30,9 @@
   - type: Sprite
     sprite: _AU14/Structures/cardboard.rsi
     state: johnnycardboard
+  - type: Flamability
+    chance: 1.0
+    rate: 8.0
+    spread: 2.0
+    burnDurationMin: 70
+    burnDurationMax: 620

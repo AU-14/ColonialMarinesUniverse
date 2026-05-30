@@ -25,7 +25,7 @@
       - AUBureau
     - type: Skills
       skills:
-        RMCSkillFireman: 1
+        RMCSkillFireman: 4
         RMCSkillVehicles: 1
         RMCSkillDomestics: 1
         RMCSkillMedical: 4

@@ -81,12 +81,13 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         // --- SHIP VENDOR MARKER LOGIC ---
         if ((planetComp.GovforInShip || planetComp.OpforInShip))
         {
-            foreach (var (shipUid, shipFaction) in _entityManager.EntityQuery<ShipFactionComponent>(true)
-                         .Select(s => (s.Owner, s)))
+            var factionShipsQuery = AllEntityQuery<ShipFactionComponent>();
+            while (factionShipsQuery.MoveNext(out var shipUid, out var shipFaction))
             {
-                    // Ensure any existing rotary phones that belong to this ship inherit the ship faction
-                    if (!string.IsNullOrEmpty(shipFaction.Faction))
-                        SetPhonesFactionForParent(shipUid, shipFaction.Faction);
+                // Ensure any existing rotary phones that belong to this ship inherit the ship faction
+                if (!string.IsNullOrEmpty(shipFaction.Faction))
+                    SetPhonesFactionForParent(shipUid, shipFaction.Faction);
+
                 PlatoonPrototype? shipPlatoon = null;
                 if (shipFaction.Faction == "govfor" && planetComp.GovforInShip && govPlatoon != null)
                     shipPlatoon = govPlatoon;
@@ -95,19 +96,31 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 else
                     continue;
 
-                var shipMarkers = _entityManager.EntityQuery<VendorMarkerComponent>(true)
-                    .Where(m => m.Ship && _entityManager.GetComponent<TransformComponent>(m.Owner).ParentUid == shipUid)
-                    .ToList();
-                foreach (var marker in shipMarkers)
+                var shipMarkers = AllEntityQuery<VendorMarkerComponent>();
+                while (shipMarkers.MoveNext(out var markerUid, out var markerComp))
                 {
-                    var markerClass = marker.Class;
-                    var markerUid = marker.Owner;
                     var transform = _entityManager.GetComponent<TransformComponent>(markerUid);
+                    if (!markerComp.Ship || transform.ParentUid != shipUid)
+                        continue;
 
                     // --- DOOR MARKER LOGIC ---
                     string? doorProtoId = null;
-                    switch (markerClass)
+                    switch (markerComp.Class)
                     {
+                        case PlatoonMarkerClass.LockedFTLDoor:
+                            doorProtoId = shipFaction.Faction == "govfor"
+                                ? "CMAirlockGovforLockedFTL"
+                                : shipFaction.Faction == "opfor"
+                                    ? "CMAirlockOpforLockedFTL"
+                                    : null;
+                            break;
+                        case PlatoonMarkerClass.LockedFTLGlassDoor:
+                            doorProtoId = shipFaction.Faction == "govfor"
+                                ? "CMAirlockGovforGlassLockedFTL"
+                                : shipFaction.Faction == "opfor"
+                                    ? "CMAirlockOpforGlassLockedFTL"
+                                    : null;
+                            break;
                         case PlatoonMarkerClass.LockedCommandDoor:
                             doorProtoId = shipFaction.Faction == "govfor"
                                 ? "CMAirlockCommandGovforLocked"
@@ -179,28 +192,23 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                                     : null;
                             break;
                     }
+
                     if (doorProtoId != null)
                     {
                         if (_prototypeManager.TryIndex(doorProtoId, out _))
-                        {
                             _entityManager.SpawnEntity(doorProtoId, transform.Coordinates);
-                        }
-                        else
-                        {
-                            continue;
-                        }
                         continue;
                     }
 
                     // --- OVERWATCH CONSOLE MARKER LOGIC ---
-                    if (markerClass == PlatoonMarkerClass.OverwatchConsole)
+                    if (markerComp.Class == PlatoonMarkerClass.OverwatchConsole)
                     {
                         string? overwatchConsoleProtoId = null;
-                        if (marker.Govfor)
+                        if (markerComp.Govfor)
                             overwatchConsoleProtoId = "RMCOverwatchConsoleGovforRotating";
-                        else if (marker.Opfor)
+                        else if (markerComp.Opfor)
                             overwatchConsoleProtoId = "RMCOverwatchConsoleOpforRotating";
-                        else if (marker.Ship)
+                        else if (markerComp.Ship)
                         {
                             // Try to determine ship faction by parent entity
                             var parentUid = transform.ParentUid;
@@ -221,14 +229,14 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     }
 
                     // --- INTEL COMPUTER MARKER LOGIC ---
-                    if (markerClass == PlatoonMarkerClass.IntelComputer)
+                    if (markerComp.Class == PlatoonMarkerClass.IntelComputer)
                     {
                         string? intelConsoleProtoId = null;
-                        if (marker.Govfor)
+                        if (markerComp.Govfor)
                             intelConsoleProtoId = "RMCComputerIntelGovfor";
-                        else if (marker.Opfor)
+                        else if (markerComp.Opfor)
                             intelConsoleProtoId = "RMCComputerIntelOpfor";
-                        else if (marker.Ship)
+                        else if (markerComp.Ship)
                         {
                             var parentUid = transform.ParentUid;
                             if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var parentShipFaction))
@@ -248,14 +256,14 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     }
 
                     // --- TECH TREE CONSOLE MARKER LOGIC ---
-                    if (markerClass == PlatoonMarkerClass.TechTree)
+                    if (markerComp.Class == PlatoonMarkerClass.TechTree)
                     {
                         string? techTreeProtoId = null;
-                        if (marker.Govfor)
+                        if (markerComp.Govfor)
                             techTreeProtoId = "RMCTechTreeConsoleGovfor";
-                        else if (marker.Opfor)
+                        else if (markerComp.Opfor)
                             techTreeProtoId = "RMCTechTreeConsoleOpfor";
-                        else if (marker.Ship)
+                        else if (markerComp.Ship)
                         {
                             var parentUid = transform.ParentUid;
                             if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var parentShipFaction))
@@ -275,14 +283,14 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     }
 
                     // --- GROUNDSIDE OPERATIONS CONSOLE MARKER LOGIC ---
-                    if (markerClass == PlatoonMarkerClass.GroundsideOps)
+                    if (markerComp.Class == PlatoonMarkerClass.GroundsideOps)
                     {
                         string? groundsideProtoId = null;
-                        if (marker.Govfor)
+                        if (markerComp.Govfor)
                             groundsideProtoId = "RMCGroundsideOperationsConsole";
-                        else if (marker.Opfor)
+                        else if (markerComp.Opfor)
                             groundsideProtoId = "RMCGroundsideOperationsConsoleOpfor";
-                        else if (marker.Ship)
+                        else if (markerComp.Ship)
                         {
                             var parentUid = transform.ParentUid;
                             if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var parentShipFaction))
@@ -301,8 +309,73 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                         continue;
                     }
 
+                    // --- GROUNDSIDE OPS SEGREGATED MARKERS ---
+                    if (markerComp.Class == PlatoonMarkerClass.GroundsideOpsGovfor)
+                    {
+                        _entityManager.SpawnEntity("RMCGroundsideOperationsConsoleGovfor", transform.Coordinates);
+                        continue;
+                    }
+                    if (markerComp.Class == PlatoonMarkerClass.GroundsideOpsOpfor)
+                    {
+                        _entityManager.SpawnEntity("RMCGroundsideOperationsConsoleOpfor", transform.Coordinates);
+                        continue;
+                    }
+
+                    // --- ALLIANCE CONSOLE MARKERS ---
+                    if (markerComp.Class == PlatoonMarkerClass.AllianceConsoleGovfor)
+                    {
+                        _entityManager.SpawnEntity("AU14AllianceConsoleGovfor", transform.Coordinates);
+                        continue;
+                    }
+                    if (markerComp.Class == PlatoonMarkerClass.AllianceConsoleOpfor)
+                    {
+                        _entityManager.SpawnEntity("AU14AllianceConsoleOpfor", transform.Coordinates);
+                        continue;
+                    }
+
+                    // --- ORBITAL CANNON MARKERS ---
+                    if (markerComp.Class == PlatoonMarkerClass.OrbitalCannonGovfor)
+                    {
+                        _entityManager.SpawnEntity("AU14OrbitalCannonGovfor", transform.Coordinates);
+                        continue;
+                    }
+                    if (markerComp.Class == PlatoonMarkerClass.OrbitalCannonOpfor)
+                    {
+                        _entityManager.SpawnEntity("AU14OrbitalCannonOpfor", transform.Coordinates);
+                        continue;
+                    }
+
+                    // --- WITHDRAW CONSOLE MARKERS ---
+                    if (markerComp.Class == PlatoonMarkerClass.WithdrawConsoleGovfor)
+                    {
+                        _entityManager.SpawnEntity("AU14WithdrawConsoleGovFor", transform.Coordinates);
+                        continue;
+                    }
+                    if (markerComp.Class == PlatoonMarkerClass.WithdrawConsoleOpfor)
+                    {
+                        _entityManager.SpawnEntity("AU14WithdrawConsoleOpFor", transform.Coordinates);
+                        continue;
+                    }
+                    if (markerComp.Class == PlatoonMarkerClass.WithdrawConsoleColony)
+                    {
+                        _entityManager.SpawnEntity("AU14WithdrawConsoleColony", transform.Coordinates);
+                        continue;
+                    }
+
+                    // --- COMMAND TABLET MARKERS ---
+                    if (markerComp.Class == PlatoonMarkerClass.CommandTabletGovfor)
+                    {
+                        _entityManager.SpawnEntity("AU14TabletGovfor", transform.Coordinates);
+                        continue;
+                    }
+                    if (markerComp.Class == PlatoonMarkerClass.CommandTabletOpfor)
+                    {
+                        _entityManager.SpawnEntity("AU14TabletOpfor", transform.Coordinates);
+                        continue;
+                    }
+
                     // --- OBJECTIVES CONSOLE MARKER LOGIC ---
-                    if (markerClass == PlatoonMarkerClass.ObjectivesConsole)
+                    if (markerComp.Class == PlatoonMarkerClass.ObjectivesConsole)
                     {
                         string? objectivesConsoleProtoId = null;
                         if (shipFaction.Faction == "govfor")
@@ -318,7 +391,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     }
 
                     // --- GENERIC FETCH RETURN POINT MARKER LOGIC ---
-                    if (markerClass == PlatoonMarkerClass.ReturnPointGeneric)
+                    if (markerComp.Class == PlatoonMarkerClass.ReturnPointGeneric)
                     {
                         string? fetchReturnProtoId = null;
                         if (shipFaction.Faction == "govfor")
@@ -333,7 +406,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                         continue;
                     }
 
-                    if (markerClass == PlatoonMarkerClass.DropshipDestination)
+                    if (markerComp.Class == PlatoonMarkerClass.DropshipDestination)
                     {
                         string dropshipDestinationProtoId = "CMDropshipDestinationHome";
                         var dropshipEntity = _entityManager.SpawnEntity(dropshipDestinationProtoId, transform.Coordinates);
@@ -350,8 +423,8 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
 
 
                     // --- VENDOR MARKER LOGIC (shipside) ---
-                    // Ignore marker.Govfor/Opfor, use shipPlatoon and markerClass
-                    if (shipPlatoon != null && shipPlatoon.VendorMarkersByClass.TryGetValue(markerClass, out var vendorProtoId))
+                    // Ignore markerComp.Govfor/Opfor, use shipPlatoon and markerComp.Class
+                    if (shipPlatoon != null && shipPlatoon.VendorMarkersByClass.TryGetValue(markerComp.Class, out var vendorProtoId))
                     {
                         if (_prototypeManager.TryIndex<EntityPrototype>(vendorProtoId, out var vendorProto))
                         {
@@ -368,7 +441,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     }
 
                     // --- REQUISITIONS CONSOLE / LIFT MARKER LOGIC (shipside) ---
-                    if (markerClass == PlatoonMarkerClass.RequisitionsConsole)
+                    if (markerComp.Class == PlatoonMarkerClass.RequisitionsConsole)
                     {
                         string? reqConsoleProto = null;
                         // Use ship faction directly for ship markers (don't rely on marker govfor/opfor flags)
@@ -384,7 +457,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                         continue;
                     }
 
-                    if (markerClass == PlatoonMarkerClass.RequisitionsLift)
+                    if (markerComp.Class == PlatoonMarkerClass.RequisitionsLift)
                     {
                         string? liftProto = null;
                         // For ships we can use the ship faction
@@ -401,7 +474,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     }
 
                     // --- ANALYZER MARKER LOGIC (shipside) ---
-                    if (markerClass == PlatoonMarkerClass.Analyzer)
+                    if (markerComp.Class == PlatoonMarkerClass.Analyzer)
                     {
                         string? analyzerProto = null;
                         // Use ship faction directly for ship markers
@@ -421,37 +494,36 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         }
 
         // Find all vendor markers in the map
-        var query = _entityManager.EntityQuery<VendorMarkerComponent>(true);
+        var vendorMarkersQuery = AllEntityQuery<VendorMarkerComponent>();
         var usedMarkers = new HashSet<EntityUid>();
-        foreach (var marker in query)
+        // foreach (var marker in query)
+        while (vendorMarkersQuery.MoveNext(out var markerUid, out var markerComp))
         {
-            var markerClass = marker.Class;
-            var markerUid = marker.Owner;
             var transform = _entityManager.GetComponent<TransformComponent>(markerUid);
 
             // Skip markers that are both or neither
-            if ((marker.Govfor && marker.Opfor) || (!marker.Govfor && !marker.Opfor))
+            if ((markerComp.Govfor && markerComp.Opfor) || (!markerComp.Govfor && !markerComp.Opfor))
                 continue;
-            if (usedMarkers.Contains(markerUid))
+            if (!usedMarkers.Add(markerUid)) // already in set so skip
                 continue;
 
             PlatoonPrototype? platoon = null;
-            if (marker.Govfor && govPlatoon != null)
+            if (markerComp.Govfor && govPlatoon != null)
                 platoon = govPlatoon;
-            else if (marker.Opfor && opPlatoon != null)
+            else if (markerComp.Opfor && opPlatoon != null)
                 platoon = opPlatoon;
             else
                 continue;
 
             // --- OVERWATCH CONSOLE MARKER LOGIC ---
-            if (markerClass == PlatoonMarkerClass.OverwatchConsole)
+            if (markerComp.Class == PlatoonMarkerClass.OverwatchConsole)
             {
                 string? overwatchConsoleProtoId = null;
-                if (marker.Govfor)
+                if (markerComp.Govfor)
                     overwatchConsoleProtoId = "RMCOverwatchConsoleGovfor";
-                else if (marker.Opfor)
+                else if (markerComp.Opfor)
                     overwatchConsoleProtoId = "RMCOverwatchConsoleOpfor";
-                else if (marker.Ship)
+                else if (markerComp.Ship)
                 {
                     // Try to determine ship faction by parent entity
                     var parentUid = transform.ParentUid;
@@ -464,42 +536,38 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                                 : null;
                     }
                 }
+
                 if (overwatchConsoleProtoId != null && _prototypeManager.TryIndex(overwatchConsoleProtoId, out _))
-                {
                     _entityManager.SpawnEntity(overwatchConsoleProtoId, transform.Coordinates);
-                }
-                usedMarkers.Add(markerUid);
                 continue;
             }
 
             // --- OBJECTIVES CONSOLE MARKER LOGIC ---
-            if (markerClass == PlatoonMarkerClass.ObjectivesConsole)
+            if (markerComp.Class == PlatoonMarkerClass.ObjectivesConsole)
             {
                 string? objectivesConsoleProtoId = null;
-                if (marker.Govfor)
+                if (markerComp.Govfor)
                     objectivesConsoleProtoId = "ComputerObjectivesGovfor";
-                else if (marker.Opfor)
+                else if (markerComp.Opfor)
                     objectivesConsoleProtoId = "ComputerObjectivesOpfor";
                 if (objectivesConsoleProtoId != null && _prototypeManager.TryIndex(objectivesConsoleProtoId, out _))
                 {
                     _entityManager.SpawnEntity(objectivesConsoleProtoId, transform.Coordinates);
                 }
-                usedMarkers.Add(markerUid);
                 continue;
             }
 
             // --- VENDOR MARKER LOGIC ---
-            if (!platoon.VendorMarkersByClass.TryGetValue(markerClass, out var vendorProtoId))
+            if (!platoon.VendorMarkersByClass.TryGetValue(markerComp.Class, out var vendorProtoId))
                 continue;
             if (!_prototypeManager.TryIndex<EntityPrototype>(vendorProtoId, out var vendorProto))
                 continue;
             var spawnedEnt = _entityManager.SpawnEntity(vendorProto.ID, transform.Coordinates);
             if (_entityManager.TryGetComponent<RotaryPhoneComponent>(spawnedEnt, out var spawnedPhone2))
             {
-                spawnedPhone2.Faction = marker.Govfor ? "govfor" : "opfor";
+                spawnedPhone2.Faction = markerComp.Govfor ? "govfor" : "opfor";
                 Dirty(spawnedEnt, spawnedPhone2);
             }
-             usedMarkers.Add(markerUid);
         }
 
         // --- DROPSHIP & FIGHTER CONSOLE SPAWNING LOGIC ---
@@ -513,12 +581,10 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         EntityUid? FindDestination(string faction, DropshipDestinationComponent.DestinationType type, EntityUid? gridUid = null)
         {
             var candidates = new List<EntityUid>();
-            foreach (var dest in _entityManager.EntityQuery<DropshipDestinationComponent>(true))
+            var dropshipsDestQuery = AllEntityQuery<DropshipDestinationComponent>();
+            while (dropshipsDestQuery.MoveNext(out var destUid, out var comp))
             {
-                var destUid = dest.Owner;
                 if (usedDestinations.Contains(destUid))
-                    continue;
-                if (!_entityManager.TryGetComponent<DropshipDestinationComponent>(destUid, out DropshipDestinationComponent? comp) || comp == null)
                     continue;
                 if (comp.FactionController != faction || comp.Destinationtype != type)
                     continue;
@@ -540,29 +606,24 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         List<EntityUid> FindMarkersOnGrid(EntityUid grid, string markerProtoId)
         {
             var result = new List<EntityUid>();
-            foreach (var ent in _entityManager.EntityQuery<VendorMarkerComponent>())
+            var vendorMarkerQuery = AllEntityQuery<VendorMarkerComponent>();
+            while (vendorMarkerQuery.MoveNext(out var entUid, out var comp))
             {
-                var entUid = ent.Owner;
-                if (_entityManager.GetComponent<TransformComponent>(entUid).GridUid == grid &&
-                    _entityManager.TryGetComponent<MetaDataComponent>(entUid, out var meta) &&
-                    meta.EntityPrototype != null &&
-                    meta.EntityPrototype.ID == markerProtoId)
-                {
+                if (_entityManager.GetComponent<TransformComponent>(entUid).GridUid == grid
+                    && _entityManager.TryGetComponent<MetaDataComponent>(entUid, out var meta)
+                    && meta.EntityPrototype != null
+                    && meta.EntityPrototype.ID == markerProtoId)
                     result.Add(entUid);
-                }
             }
             return result;
         }
 
         void SetPhonesFactionOnGrid(EntityUid grid, string faction)
         {
-            var query = _entityManager.EntityQuery<RotaryPhoneComponent>(true);
-            foreach (var phoneComp in query)
+            var query = AllEntityQuery<RotaryPhoneComponent>();
+            while (query.MoveNext(out var phoneUid, out var phoneComp))
             {
-                var phoneUid = phoneComp.Owner;
-                if (!_entityManager.TryGetComponent<TransformComponent>(phoneUid, out var phoneTransform))
-                    continue;
-                if (phoneTransform.GridUid == grid)
+                if (Transform(phoneUid).GridUid == grid)
                 {
                     phoneComp.Faction = faction;
                     Dirty(phoneUid, phoneComp);
@@ -574,12 +635,11 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         void OffsetLaddersOnGrid(EntityUid grid, int offset)
         {
             // Iterate all ladder components and adjust those on the target grid
-            foreach (var ladderComp in _entityManager.EntityQuery<LadderComponent>(true))
+            var query = AllEntityQuery<LadderComponent>();
+            while (query.MoveNext(out var ladderUid, out var ladderComp))
+            // foreach (var ladderComp in _entityManager.EntityQuery<LadderComponent>(true))
             {
-                var ladderUid = ladderComp.Owner;
-                if (!_entityManager.TryGetComponent<TransformComponent>(ladderUid, out var ladderTransform))
-                    continue;
-                if (ladderTransform.GridUid != grid)
+                if (Transform(ladderUid).GridUid != grid)
                     continue;
                 if (ladderComp.Id == null)
                     continue;
@@ -600,14 +660,10 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 return;
 
             var parentGrid = parentTransform.GridUid;
-            var query = _entityManager.EntityQuery<RotaryPhoneComponent>(true);
-            foreach (var phoneComp in query)
+            var query = AllEntityQuery<RotaryPhoneComponent>();
+            while (query.MoveNext(out var phoneUid, out var phoneComp))
             {
-                var phoneUid = phoneComp.Owner;
-                if (!_entityManager.TryGetComponent<TransformComponent>(phoneUid, out var phoneTransform))
-                    continue;
-
-                if (phoneTransform.ParentUid == parent || phoneTransform.GridUid == parentGrid)
+                if (Transform(phoneUid).ParentUid == parent || Transform(phoneUid).GridUid == parentGrid)
                 {
                     phoneComp.Faction = faction;
                     Dirty(phoneUid, phoneComp);
@@ -618,9 +674,10 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         // Helper: Find a navigation computer on a grid
         EntityUid? FindNavComputerOnGrid(EntityUid grid)
         {
-            foreach (var comp in _entityManager.EntityQuery<DropshipNavigationComputerComponent>(true))
+            // foreach (var comp in _entityManager.EntityQuery<DropshipNavigationComputerComponent>(true))
+            var query = AllEntityQuery<DropshipNavigationComputerComponent>();
+            while (query.MoveNext(out var entUid, out var comp))
             {
-                var entUid = comp.Owner;
                 if (_entityManager.GetComponent<TransformComponent>(entUid).GridUid == grid)
                     return entUid;
             }

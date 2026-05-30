@@ -27,7 +27,7 @@ public sealed partial class TotalDepartmentsTimeRequirement : JobRequirement
         reason = null;
         var playtime = TimeSpan.Zero;
         var trackers = new HashSet<string>();
-        if (!prototypes.Index(Group).TryGetComponent(out DepartmentGroupComponent? comp))
+        if (!prototypes.Index(Group).TryGetComponent(out DepartmentGroupComponent? comp, entManager.ComponentFactory))
         {
             var sawmill = Logger.GetSawmill("job.requirements");
             sawmill.Error($"No {nameof(DepartmentGroupComponent)} found on entity {Group}");

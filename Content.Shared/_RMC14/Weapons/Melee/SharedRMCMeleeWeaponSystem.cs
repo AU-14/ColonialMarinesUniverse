@@ -225,6 +225,9 @@ public abstract partial class SharedRMCMeleeWeaponSystem : EntitySystem
         var targetPos = _transform.GetWorldPosition(target);
         var localPos = Vector2.Transform(targetPos, _transform.GetInvWorldMatrix(userXform));
         localPos = userXform.LocalRotation.RotateVec(localPos);
+        if (localPos.LengthSquared() <= 0.001f)
+            localPos = _transform.GetWorldRotation(userXform).ToWorldVec();
+
         _melee.DoLunge(user, target, Angle.Zero, localPos, null);
     }
 

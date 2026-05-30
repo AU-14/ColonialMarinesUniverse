@@ -9,9 +9,6 @@
     contents:
       - id: XenoEgg
         amount: 2
-      # Single clotted syringe stashed in with the eggs — bonus content
-      # for any WY squad that opens this kit.
-      - id: AU14AbominationVenomSyringe
       - id: RMCTentUNMCStandardMedicalFolded
       - id: AU14TentBigFoldedSurgical
 
@@ -25,7 +22,6 @@
     contents:
       - id: RMCBottleMindbreaker
         amount: 7
-      - id: AU14AbominationVenomSyringe
       - id: CMUYautjaHivebreaker
       - id: RMCTentUNMCStandardMedicalFolded
       - id: AU14TentBigFoldedSurgical
@@ -40,7 +36,6 @@
     contents:
       - id: AU14DrugDealerDrugBottle
         amount: 7
-      - id: AU14AbominationVenomSyringe
       - id: RMCTentUNMCStandardMedicalFolded
       - id: AU14TentBigFoldedSurgical
 
@@ -56,7 +51,6 @@
         amount: 1
       - id: DeathAcidifierImplanter
         amount: 1
-      - id: AU14AbominationVenomSyringe
       - id: RMCTentUNMCStandardMedicalFolded
       - id: AU14TentBigFoldedSurgical
 

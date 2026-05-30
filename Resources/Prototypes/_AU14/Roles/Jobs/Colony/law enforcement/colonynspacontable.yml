@@ -46,6 +46,8 @@
         RMCSkillMeleeWeapons: 1
         RMCSkillOverwatch: 1
         RMCSkillPolice: 2
+        RMCSkillEngineer: 1
+        RMCSkillConstruction: 1
         RMCSkillVehicles: 1
     - type: JobPrefix
       prefix: au14-job-prefix-civiliannspaConstable

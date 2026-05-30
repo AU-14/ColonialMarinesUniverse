@@ -11,6 +11,22 @@ namespace Content.Shared.Humanoid;
 [Serializable, NetSerializable]
 public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, IEquatable<HumanoidCharacterAppearance>
 {
+    private const string LegacyHumanHairPrefix = "HumanHair";
+    private const string RMCHumanHairPrefix = "RMCHumanHair";
+
+    private static readonly IReadOnlyDictionary<string, string> LegacyHairStyleAliases = new Dictionary<string, string>
+    {
+        { "HumanHairPonytail", "RMCHumanHairPonytail1" },
+        { "HumanHairCrewcut", "RMCHumanHairCrew" },
+        { "HumanHairBuzzcut", "RMCHumanHairBuzz" },
+        { "HumanHairCia", "RMCHumanHairCIA" },
+        { "HumanHairDevilock", "RMCHumanHairDevillock" },
+        { "HumanHairDreads", "RMCHumanHairDreadlocks" },
+        { "HumanHairLongemo", "RMCHumanHairLongEmo" },
+        { "HumanHairLongovereye", "RMCHumanHairLongOvereye" },
+        { "HumanHairShortovereye", "RMCHumanHairShortOvereye" },
+    };
+
     [DataField("hair")]
     public string HairStyleId { get; set; } = HairStyles.DefaultHairStyle;
 
@@ -190,6 +206,8 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
         var proto = IoCManager.Resolve<IPrototypeManager>();
         var markingManager = IoCManager.Resolve<MarkingManager>();
 
+        hairStyleId = ResolveLegacyHairStyle(hairStyleId, markingManager);
+
         if (!markingManager.MarkingsByCategory(MarkingCategories.Hair).ContainsKey(hairStyleId))
         {
             hairStyleId = HairStyles.DefaultHairStyle;
@@ -224,6 +242,32 @@ public sealed partial class HumanoidCharacterAppearance : ICharacterAppearance, 
             eyeColor,
             skinColor,
             markingSet.GetForwardEnumerator().ToList());
+    }
+
+    private static string ResolveLegacyHairStyle(string hairStyleId, MarkingManager markingManager)
+    {
+        var hairMarkings = markingManager.MarkingsByCategory(MarkingCategories.Hair);
+
+        if (hairMarkings.ContainsKey(hairStyleId))
+        {
+            return hairStyleId;
+        }
+
+        if (LegacyHairStyleAliases.TryGetValue(hairStyleId, out var alias) &&
+            hairMarkings.ContainsKey(alias))
+        {
+            return alias;
+        }
+
+        if (!hairStyleId.StartsWith(LegacyHumanHairPrefix, StringComparison.Ordinal))
+        {
+            return hairStyleId;
+        }
+
+        var candidate = $"{RMCHumanHairPrefix}{hairStyleId[LegacyHumanHairPrefix.Length..]}";
+        return hairMarkings.ContainsKey(candidate)
+            ? candidate
+            : hairStyleId;
     }
 
     public bool MemberwiseEquals(ICharacterAppearance maybeOther)

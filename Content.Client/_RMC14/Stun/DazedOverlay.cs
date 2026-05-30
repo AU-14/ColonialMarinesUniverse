@@ -8,6 +8,8 @@ namespace Content.Client._RMC14.Stun;
 
 public sealed partial class DazedOverlay : Overlay
 {
+    private static readonly ProtoId<ShaderPrototype> VignetteShader = "GradientCircleMask";
+
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IGameTiming _timing = default!;
 
@@ -24,7 +26,7 @@ public sealed partial class DazedOverlay : Overlay
     public DazedOverlay()
     {
         IoCManager.InjectDependencies(this);
-        _vignetteShader = _prototypeManager.Index<ShaderPrototype>("GradientCircleMask").InstanceUnique();
+        _vignetteShader = _prototypeManager.Index(VignetteShader).InstanceUnique();
     }
 
     protected override void Draw(in OverlayDrawArgs args)

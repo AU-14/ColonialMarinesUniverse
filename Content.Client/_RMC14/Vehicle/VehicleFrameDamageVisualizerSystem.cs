@@ -4,10 +4,11 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client._RMC14.Vehicle;
 
-public sealed class VehicleFrameDamageVisualizerSystem : VisualizerSystem<HardpointIntegrityComponent>
+public sealed partial class VehicleFrameDamageVisualizerSystem : VisualizerSystem<HardpointIntegrityComponent>
 {
     private const float ShowThreshold = 0.9f;
     private const float MinAlpha = 0.1f;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     protected override void OnAppearanceChange(EntityUid uid, HardpointIntegrityComponent component, ref AppearanceChangeEvent args)
     {
@@ -15,7 +16,7 @@ public sealed class VehicleFrameDamageVisualizerSystem : VisualizerSystem<Hardpo
         if (sprite == null)
             return;
 
-        if (!sprite.LayerMapTryGet(VehicleFrameDamageLayers.DamagedFrame, out var layer))
+        if (!_sprite.LayerMapTryGet((uid, sprite), VehicleFrameDamageLayers.DamagedFrame, out var layer, false))
             return;
 
         float fraction;
@@ -27,14 +28,14 @@ public sealed class VehicleFrameDamageVisualizerSystem : VisualizerSystem<Hardpo
 
         if (fraction >= ShowThreshold)
         {
-            sprite.LayerSetVisible(layer, false);
+            _sprite.LayerSetVisible((uid, sprite), layer, false);
             return;
         }
 
         var t = fraction / ShowThreshold;
         var alpha = MinAlpha + (1f - MinAlpha) * (1f - t);
 
-        sprite.LayerSetVisible(layer, true);
-        sprite.LayerSetColor(layer, sprite.Color.WithAlpha(alpha));
+        _sprite.LayerSetVisible((uid, sprite), layer, true);
+        _sprite.LayerSetColor((uid, sprite), layer, sprite.Color.WithAlpha(alpha));
     }
 }

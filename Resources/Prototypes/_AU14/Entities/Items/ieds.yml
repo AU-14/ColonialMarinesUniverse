@@ -24,6 +24,8 @@
   parent: [BasePlasticExplosive, BaseSyndicateContraband]
   id: AU14IED
   components:
+  - type: Item
+    size: Huge
   - type: Sprite
     sprite: Objects/Weapons/Bombs/c4.rsi
     state: icon
@@ -58,6 +60,8 @@
   parent: [BasePlasticExplosive, BaseSyndicateContraband]
   id: AU14IEDLarge
   components:
+  - type: Item
+    size: Huge
   - type: Sprite
     sprite: Objects/Weapons/Bombs/c4.rsi
     state: icon
@@ -115,10 +119,12 @@
     delayOptions: [3, 4]
     initialBeepDelay: 0
     beepSound: /Audio/_AU14/IED/vestbeep.ogg
+    requiredWornSlots: OUTERCLOTHING
     startOnStick: true
     canToggleStartOnStick: true
   - type: PreventThrowWhenArmed
   - type: TimerStartOnSignal
+    requiredWornSlots: OUTERCLOTHING
   - type: DeviceLinkSink
     ports:
     - Timer

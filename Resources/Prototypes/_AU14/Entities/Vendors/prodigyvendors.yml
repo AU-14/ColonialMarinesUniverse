@@ -54,7 +54,7 @@
       entries:
       - id: RMCM5CameraGear
         amount: 30
-      - id: AU14HeadsetSectionMarine
+      - id: AU14HeadsetGovforMarine
         name: empty headset
         amount: 20
     - name: Heads Up Display
@@ -602,7 +602,9 @@
         amount: 5
     - name: Headsets
       entries:
-      - id: AU14HeadsetSectionLeader
+      - id: AU14HeadsetGovforCommand
+        amount: 2
+      - id: AU14HeadsetGovforAuxiliary
         amount: 2
     - name: Backpack
       entries:
@@ -939,8 +941,12 @@
         amount: 4
       - id: RMCFulton20
         amount: 4
-      - id: RMCSentryLaptop
-        amount: 4
+      - id: AU14ProdigyLaptop
+        amount: 10
+      - id: AU14VisorNightVisionProdigy
+        amount: 20
+      - id: AU14SynthResetKeyProdigy
+        amount: 10
     - name: RTO Packs
       entries:
       - id: AU14BackpackRTOPackGray

@@ -37,7 +37,7 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private RMCDazedSystem _dazed = default!;
-    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
     [Dependency] private SharedDeafnessSystem _deafness = default!;
     [Dependency] private INetManager _net = default!;
 

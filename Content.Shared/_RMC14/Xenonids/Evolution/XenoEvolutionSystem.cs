@@ -371,9 +371,11 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         if (!ContainedCheckPopup(xeno, doPopup))
             return false;
 
+        EntityUid? hive = _xenoHive.GetHive(xeno.Owner);
+
         // TODO RMC14 revive jelly when added should not bring back dead queens
         if (prototype.TryGetComponent(out XenoEvolutionCappedComponent? capped, _compFactory) &&
-            HasLiving<XenoEvolutionCappedComponent>(capped.Max, e => e.Comp.Id == capped.Id))
+            HasLiving<XenoEvolutionCappedComponent>(capped.Max, e => e.Comp.Id == capped.Id, hive))
         {
             if (doPopup)
                 _popup.PopupEntity(Loc.GetString("cm-xeno-evolution-failed-already-have", ("prototype", prototype.Name)), xeno, xeno, PopupType.MediumCaution);
@@ -518,8 +520,8 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     }
 
     // TODO RMC14 make this a property of the hive component
-    // TODO RMC14 per-hive
-    public int GetLiving<T>(Predicate<Entity<T>>? predicate = null) where T : IComponent
+    // TODO RMC14 per-hive | Done-ish? - 5/13/2026
+    public int GetLiving<T>(Predicate<Entity<T>>? predicate = null, EntityUid? hive = null) where T : IComponent
     {
         var total = 0;
         var query = EntityQueryEnumerator<T>();
@@ -531,6 +533,9 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
                 continue;
             }
 
+            if (hive is not null && !_xenoHive.IsMember(uid, hive))
+                continue;
+
             if (predicate != null && !predicate((uid, comp)))
                 continue;
 
@@ -541,8 +546,8 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     }
 
     // TODO RMC14 make this a property of the hive component
-    // TODO RMC14 per-hive
-    public bool HasLiving<T>(int count, Predicate<Entity<T>>? predicate = null) where T : IComponent
+    // TODO RMC14 per-hive | done-ish? - 5/13/2026
+    public bool HasLiving<T>(int count, Predicate<Entity<T>>? predicate = null, EntityUid? hive = null) where T : IComponent
     {
         if (count <= 0)
             return true;
@@ -556,6 +561,9 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
             {
                 continue;
             }
+
+            if (hive is not null && !_xenoHive.IsMember(uid, hive))
+                continue;
 
             if (predicate != null && !predicate((uid, comp)))
                 continue;

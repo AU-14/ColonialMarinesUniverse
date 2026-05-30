@@ -204,3 +204,55 @@
   components:
   - type: WebbingClothing
     startingWebbing: CMWebbingBlack
+
+# Flannels
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianFlannelPurple
+  name: purple flannel shirt
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Uniforms/flannelpurple.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianFlannelRed
+  name: red flannel shirt
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Uniforms/flannelred.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianFlannelWhite
+  name: white flannel shirt
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Uniforms/flannelwhite.rsi
+
+# Floral Shirts
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianFloralBlue
+  name: blue floral shirt
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Uniforms/floralshirtblue.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianFloralRed
+  name: red floral shirt
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Uniforms/floralshirtred.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14CivilianFloralYellow
+  name: yellow floral shirt
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Civilian/Uniforms/floralshirtyellow.rsi

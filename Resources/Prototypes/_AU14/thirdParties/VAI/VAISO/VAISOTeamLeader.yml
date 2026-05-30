@@ -20,21 +20,21 @@
         - AU14SquadVAISO
     - type: Skills
       skills:
-        RMCSkillCqc: 5
-        RMCSkillEngineer: 4
-        RMCSkillConstruction: 3
+        RMCSkillCqc: 2
+        RMCSkillEngineer: 2
+        RMCSkillConstruction: 2
         RMCSkillFirearms: 2
         RMCSkillOverwatch: 1
         RMCSkillMedical: 1
         RMCSkillMeleeWeapons: 1
         RMCSkillPilot: 1
         RMCSkillPolice: 2
-        RMCSkillFireman: 5
-        RMCSkillPowerLoader: 2
+        RMCSkillFireman: 2
+        RMCSkillPowerLoader: 1
         RMCSkillVehicles: 2
         RMCSkillJtac: 4
-        RMCSkillEndurance: 3
-        RMCSkillLeadership: 4
+        RMCSkillEndurance: 4
+        RMCSkillLeadership: 3
     - type: EquipEntityPreset
       preset: AU14VAISOBasePreset
     - type: JobPrefix

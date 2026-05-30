@@ -19,10 +19,6 @@
     cycleable: false
     proto: RMCCartridgeSentry
     capacity: 99999
-  - type: NpcFactionMember
-    factions:
-    - UNMC
-  - type: MarineIFF
   - type: Damageable
     damageContainer: Inorganic
   - type: Destructible
@@ -46,9 +42,6 @@
         5.5
       AggroVisionRadius: !type:Single
         5.5
-  - type: UserIFF
-    factions:
-    - FactionMarine
 
 - type: entity
   parent: BaseStructure

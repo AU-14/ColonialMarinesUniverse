@@ -31,6 +31,19 @@
     access: [["AU14AccessOpfor"]]
 
 - type: entity
+  parent: CMAirlockOpforLocked
+  id: CMAirlockOpforLockedFTL
+  suffix: FTL, Opfor, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpforFTL"]]
+
+- type: entity
+  parent: CMAirlockOpforLockedFTL
+  id: CMAirlockOpforGlassLockedFTL
+  suffix: FTL, Opfor, Glass, Locked
+
+- type: entity
   parent: CMAirlockCommandGovforLocked
   id: CMAirlockCommandOpforLocked
   suffix: Command, Opfor, Locked

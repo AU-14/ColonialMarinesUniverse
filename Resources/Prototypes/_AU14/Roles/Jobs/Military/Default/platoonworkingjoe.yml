@@ -1,5 +1,19 @@
 - type: job
+  abstract: true
   parent: AU14JobWorkingJoeBase
+  id: AU14JobGOVFORWorkingJoeBase
+  icon: "AU14JobIconGovWorkingJoe"
+  spawnMenuRoleName: Working Joe (GOVFOR)
+  supervisors: au14-job-supervisors-workingjoe-military
+  dummyStartingGear: AU14GearGOVFORWorkingJoe
+  usePlayerProfile: false
+  accessGroups:
+  - AU14GovforCommand
+  - AUPrisonStaff
+  - auwy
+
+- type: job
+  parent: AU14JobGOVFORWorkingJoeBase
   id: AU14JobGOVFORWorkingJoe
   requirements:
   - !type:RoleTimeRequirement
@@ -12,11 +26,6 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
-  icon: "AU14JobIconGovWorkingJoe"
-  spawnMenuRoleName: Working Joe (GOVFOR)
-  supervisors: au14-job-supervisors-workingjoe-military
-  accessGroups:
-  - AU14GovforCommand
   special:
   - !type:AddComponentSpecial
     components:
@@ -25,31 +34,26 @@
       - GOVFOR
     - type: IntrinsicRadioTransmitter
       channels:
-      - AI
-      - GovforCommand
-      - GovforJTAC
-      - GovforAlpha
-      - GovforCharlie
-      - GovforBravo
-      - GovforIntel
+      - radioAI
+      - radioGovforCommand
+      - radioGovforJTAC
+      - radioGovforAlpha
+      - radioGovforCharlie
+      - radioGovforBravo
+      - radioGovforIntel
+      - radioGovforMILP
     - type: ActiveRadio
       channels:
-      - AI
-      - GovforCommand
-      - GovforJTAC
-      - GovforAlpha
-      - GovforCharlie
-      - GovforBravo
-      - GovforIntel
-    - type: Access
-      groups:
-      - AU14GovforCommand
-      - AUPrisonStaff
-      - auwy
+      - radioAI
+      - radioGovforCommand
+      - radioGovforJTAC
+      - radioGovforAlpha
+      - radioGovforCharlie
+      - radioGovforBravo
+      - radioGovforIntel
+      - radioGovforMILP
     - type: Loadout
       prototypes: [ AU14GearGOVFORWorkingJoe ]
-  dummyStartingGear: AU14GearGOVFORWorkingJoe
-  hidden: false
 
 - type: startingGear
   parent: AU14GearWorkingJoeBase

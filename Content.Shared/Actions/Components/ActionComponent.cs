@@ -169,7 +169,6 @@ public sealed partial class ActionComponent : Component
     ///     Takes priority over RaiseOnUser.
     /// </summary>
     [DataField]
-    [Obsolete("This datafield will be reworked in an upcoming action refactor")]
     public bool RaiseOnAction;
 
     /// <summary>

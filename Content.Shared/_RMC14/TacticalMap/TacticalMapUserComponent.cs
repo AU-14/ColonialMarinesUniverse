@@ -1,5 +1,6 @@
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
+using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
@@ -64,6 +65,18 @@ public sealed partial class TacticalMapUserComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool CanDraw;
+
+    [DataField, AutoNetworkedField]
+    public bool HasSquad;
+
+    [DataField, AutoNetworkedField]
+    public Dictionary<int, TacticalMapBlip> SquadBlips = new();
+
+    [DataField, AutoNetworkedField]
+    public List<TacticalMapLine> SquadLines = new();
+
+    [DataField, AutoNetworkedField]
+    public Dictionary<Vector2i, string> SquadLabels = new();
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier Sound = new SoundCollectionSpecifier("XenoQueenCommand", AudioParams.Default.WithVolume(-6));

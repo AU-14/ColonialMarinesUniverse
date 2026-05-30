@@ -84,21 +84,12 @@
     guides:
     - RMCGuideRoleCombatTechnician
   - type: SentryTargeting
-    friendlyFactions:
-    - UNMC
-    originalFaction: UNMC
     targetedFactions:
     - RMCXeno
     - CLF
   - type: Icon
     sprite: _RMC14/Objects/Weapons/Sentries/sentry.rsi
     state: normal_uac_sentry_handheld
-  - type: NpcFactionMember
-    factions:
-    - UNMC
-  - type: UserIFF
-    factions:
-    - FactionMarine
   - type: XenoCrusherChargable
     setDamage:
       types:
@@ -188,15 +179,8 @@
   parent: RMCSentryMini
   id: RMCSentryMiniWeYa
   name: We-Ya 512-M mini sentry
-  description: A compact version of the UNMC defenses. Designed for quick deployment of the associated type in the field. This one has been modified for use by the mercenaries employed by Weston-Yamada.
+  description: A compact version of the UNMC defenses. Designed for quick deployment of the associated type in the field. This one has been modified for use by the mercenaries employed by Weyland-Yutani.
   components:
-  - type: SentryTargeting
-    friendlyFactions:
-    - WeYa
-    originalFaction: WeYa
-  - type: NpcFactionMember
-    factions:
-    - WeYa
   - type: Tag
     tags:
     - RMCSentryWeYa
@@ -206,17 +190,6 @@
   id: RMCSentryMiniSPP # TODO RMC14: Replace with the real one.
   name: UPP SDS-R8 light sentry
   description: A compact version of the UPP defense sentry SDS-R7. Designed for deployment in the field.
-  components:
-  - type: SentryTargeting
-    friendlyFactions:
-    - SPP
-    originalFaction: SPP
-  - type: NpcFactionMember
-    factions:
-    - SPP
-  - type: UserIFF
-    factions:
-    - FactionSPP
 
 - type: entity
   parent: RMCSentry
@@ -512,12 +485,6 @@
           Item: { state: normal_uac_flamer_handheld }
           Off: { state: normal_uac_flamer_noammo }
           On: { state: normal_uac_flamer_on }
-  - type: NpcFactionMember
-    factions:
-    - UNMC
-  - type: UserIFF
-    factions:
-    - FactionMarine
   - type: Sentry
     upgrades: ["RMCSentryMiniFire", "RMCSentrySniperFire"]
     startingMagazine: RMCMagazineSentryFireBlue

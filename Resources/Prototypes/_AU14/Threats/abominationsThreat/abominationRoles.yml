@@ -67,7 +67,7 @@
 - type: radioChannel
   id: Abomination
   name: chat-radio-abomination
-  keycode: "f"
+  keycode: "g"
   frequency: 428
   color: "#6b8f3a"
   longRange: true
@@ -78,7 +78,7 @@
 - type: radioChannel
   id: AbominationMimic
   name: chat-radio-abomination-mimic
-  keycode: "i"
+  keycode: "e"
   frequency: 427
   color: "#a63636"
   longRange: true

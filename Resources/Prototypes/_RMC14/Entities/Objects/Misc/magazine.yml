@@ -61,7 +61,7 @@
   parent: RMCMagazineBootsN160
   id: RMCMagazineBootsN113
   name: Boots! Issue No.113.
-  description: The only official UNMC magazine, the headline reads 'Mars, heavy fighting on the Red Frontier!'. The cover depicts a group of victorious marines on Mars, as well as a small Weston-Yamada advertisement.
+  description: The only official UNMC magazine, the headline reads 'Mars, heavy fighting on the Red Frontier!'. The cover depicts a group of victorious marines on Mars, as well as a small Weyland-Yutani advertisement.
   components:
   - type: RMCLoreExaminable
     content: rmc-lore-examinable-boots-113

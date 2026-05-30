@@ -82,6 +82,7 @@
   - type: GunUnskilledPenalty
   - type: GunIFF
     enabled: false
+  - type: GunIDLock
 
 
 - type: hitscan

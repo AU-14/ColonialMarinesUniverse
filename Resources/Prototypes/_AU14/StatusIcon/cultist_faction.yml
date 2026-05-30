@@ -8,6 +8,6 @@
     - Cultist
     - Xeno
   icon:
-    sprite: /Textures/_RMC14/Interface/map_blips.rsi
-    state: thrall
+    sprite: /Textures/_AU14/Interface/job_icons.rsi
+    state: threat_member
 

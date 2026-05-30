@@ -2,6 +2,7 @@
   parent: AUThirdPartyJobBase
   id: AU14JobThirdPartyLeader
   name: au-job-name-third-party-leader
+  description: au-job-description-third-party-leader
   setPreference: true
   playTimeTracker: AUJobThirdPartyLeader
   hidden: false
@@ -14,5 +15,4 @@
 
 - type: playTimeTracker
   id: AUJobThirdPartyLeader
-
 

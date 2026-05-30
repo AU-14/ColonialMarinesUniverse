@@ -583,7 +583,7 @@ public sealed partial class CMGunSystem : EntitySystem
         _physics.SetBodyStatus(projectile, physics, BodyStatus.OnGround);
 
         if (physics.Awake)
-            _broadphase.RegenerateContacts(projectile, physics);
+            _broadphase.RegenerateContacts((projectile.Owner, physics));
     }
 
     private void UpdateDelay(Entity<GunShowUseDelayComponent> ent)

@@ -223,9 +223,10 @@ public sealed partial class CriminalRecordsConsoleSystem : SharedCriminalRecords
         if (_scannedRecords.Add(key))
         {
             // Update all consoles (could be optimized to only update relevant ones)
-            foreach (var ent in EntityQuery<CriminalRecordsConsoleComponent>())
+            var query = AllEntityQuery<CriminalRecordsConsoleComponent>();
+            while (query.MoveNext(out var uid, out var comp))
             {
-                UpdateUserInterface((ent.Owner, ent));
+                UpdateUserInterface((uid, comp));
             }
         }
     }

@@ -3,69 +3,44 @@
   id: AU14JobOpforPlatOp
   name: au14-job-name-opforplatop
   description: au14-job-description-opforplatop
-  setPreference: false
-  canBeAntag: false
-  requirements:
-  - !type:AgeRequirement
-    requiredAge: 25
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - SocialAnxietyHeavy
-    - FrontalLisp
-    - NonResuscitable
-    - Epilepsy
-  ranks:
-    RMCRankSecondLT: []
-  startingGear: AU14GearopforPlatOp
-  dummyStartingGear: AU14GearopforPlatOpDummy
   icon: "AU14JobIconOPFOROpsOfc"
-  requireAdminNotify: true
   spawnMenuRoleName: Junior Officer (OPFOR)
-  joinNotifyCrew: false
   supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearOpforPlatOp
+  dummyStartingGear: AU14GearOpforPlatOpDummy
   accessGroups:
   - AU14OpforCommand
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
+    - type: Marine
+      Faction: opfor
     - type: NpcFactionMember
       factions:
       - OPFOR
-    - type: Marine
-      Faction: opfor
-    - type: Skills
-      preset: AU14SkillPresetPlatoonJuniorOfficer
+    - type: UserIFF
+      factions:
+      - OPFOR
     - type: JobPrefix
       prefix: au14-job-prefix-opforplatop
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: so
-    - type: UserIFF
-      factions:
-      - OPFOR
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
-  hidden: false
+        sprite: /Textures/_AU14/Interface/au14opforhud.rsi
+        state: po
 
 - type: startingGear
-  id: AU14GearopforPlatOp
+  id: AU14GearOpforPlatOp
   equipment:
     id: AU14IDCardopforPlatOp
-    ears: AU14HeadsetSectionLeaderopfor
+    ears: AU14HeadsetOpforCommand
+
+- type: startingGear
+  id: AU14GearOpforPlatOpDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: AU14JunglePatrolCap
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetOpforCommand
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -76,11 +51,3 @@
     job_id: AU14JobOpforPlatOp
   - type: Sprite
     state: syn_spawn
-
-- type: startingGear
-  id: AU14GearopforPlatOpDummy
-  equipment:
-    shoes: CMBootsBlack
-    head: AU14JunglePatrolCap
-    jumpsuit: CMJumpsuitXOFormal
-    ears: AU14HeadsetSectionLeaderopfor

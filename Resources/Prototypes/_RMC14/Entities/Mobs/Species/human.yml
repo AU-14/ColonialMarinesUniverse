@@ -5,6 +5,7 @@
   name: Urist C.M. McHands
   suffix: RMC14
   components:
+  - type: FlareStomper
   - type: Vocal
     sounds:
       Male: RMCMaleHuman

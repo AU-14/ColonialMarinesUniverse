@@ -7,19 +7,21 @@ using Robust.Shared.Timing;
 namespace Content.Server._AU14.Abominations;
 
 /// <summary>
-/// Global flesh-nest spawning. Replaces the per-nest TimedSpawner with a
-/// single server-wide timer: every tick, pick one random nest and spawn one
-/// non-mimic abomination at it. The base interval is 4x the old single-nest
-/// rate (360s instead of 90s), and each additional nest in the world makes
-/// the global cadence 5% faster (linear).
+/// Global flesh-nest spawning. Every tick picks one random nest and spawns
+/// one non-mimic abomination at it. The base interval is 5 minutes with one
+/// nest, and each additional nest reduces the interval by 3 seconds, floored
+/// at 30 seconds.
 /// </summary>
 public sealed partial class AbominationNestSpawnSystem : EntitySystem
 {
     /// <summary>Base interval with one nest placed.</summary>
-    public static readonly TimeSpan BaseInterval = TimeSpan.FromSeconds(360);
+    public static readonly TimeSpan BaseInterval = TimeSpan.FromSeconds(300);
 
-    /// <summary>Rate multiplier added per extra nest beyond the first.</summary>
-    public const float RatePerExtraNest = 0.05f;
+    /// <summary>Seconds subtracted from the interval per extra nest beyond the first.</summary>
+    public const double SecondsPerExtraNest = 3.0;
+
+    /// <summary>Minimum spawn interval regardless of nest count.</summary>
+    public static readonly TimeSpan MinInterval = TimeSpan.FromSeconds(30);
 
     public static readonly EntProtoId[] SpawnPool =
     {
@@ -53,9 +55,10 @@ public sealed partial class AbominationNestSpawnSystem : EntitySystem
             return;
         }
 
-        // Each extra nest beyond the first speeds the spawn cadence by 5%.
-        var rateMultiplier = 1f + (nests.Count - 1) * RatePerExtraNest;
-        var interval = TimeSpan.FromSeconds(BaseInterval.TotalSeconds / rateMultiplier);
+        // Each extra nest beyond the first shaves 3 seconds off the interval, floored at 30 s.
+        var extraNests = nests.Count - 1;
+        var intervalSeconds = Math.Max(MinInterval.TotalSeconds, BaseInterval.TotalSeconds - extraNests * SecondsPerExtraNest);
+        var interval = TimeSpan.FromSeconds(intervalSeconds);
 
         var chosen = _random.Pick(nests);
         var proto = _random.Pick(SpawnPool);

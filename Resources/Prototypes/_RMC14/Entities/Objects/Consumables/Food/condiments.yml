@@ -233,7 +233,7 @@
   parent: RMCCondimentHotsauce
   id: RMCCondimentHotsauceCholula
   name: Cholula bottle
-  description: A bottle of Weston-Yamada brand Cholula hot sauce.
+  description: A bottle of Weyland-Yutani brand Cholula hot sauce.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/Sauces/cholula.rsi
@@ -242,7 +242,7 @@
   parent: RMCCondimentHotsauce
   id: RMCCondimentHotsauceFranks
   name: red hot bottle
-  description: A bottle of Weston-Yamada brand Red Hot hot sauce.
+  description: A bottle of Weyland-Yutani brand Red Hot hot sauce.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/Sauces/franks.rsi
@@ -253,7 +253,7 @@
   parent: RMCCondimentHotsauce
   id: RMCCondimentHotsauceSriracha
   name: Sriracha bottle
-  description: A bottle of Weston-Yamada brand Sriracha hot sauce.
+  description: A bottle of Weyland-Yutani brand Sriracha hot sauce.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/Sauces/sriracha.rsi
@@ -262,7 +262,7 @@
   parent: RMCCondimentHotsauce
   id: RMCCondimentHotsauceTabasco
   name: Tabasco bottle
-  description: A bottle of Weston-Yamada brand Tabasco hot sauce.
+  description: A bottle of Weyland-Yutani brand Tabasco hot sauce.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/Sauces/tabasco.rsi

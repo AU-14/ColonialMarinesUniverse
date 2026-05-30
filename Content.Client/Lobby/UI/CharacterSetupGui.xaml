@@ -12,11 +12,11 @@
                        Margin="8 0 0 0" VAlign="Center"
                        StyleClasses="LabelHeadingBigger" />
                 <Button Name="CommendationsReceivedButton" HorizontalExpand="True"
-                        Text="Medals and Jellies Received"
+                        Text="{Loc 'character-setup-gui-character-setup-commendations-received-button'}"
                         StyleClasses="ButtonBig"
                         HorizontalAlignment="Right" />
                 <Button Name="CommendationsGivenButton"
-                        Text="Medals and Jellies Given"
+                        Text="{Loc 'character-setup-gui-character-setup-commendations-given-button'}"
                         StyleClasses="ButtonBig"
                         HorizontalAlignment="Right" />
                 <Button Name="StatsButton"

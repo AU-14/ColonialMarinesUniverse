@@ -7,6 +7,9 @@
   roles:
     - AU14JobCivilianColonyAdministrator
     - AU14JobCivilianColonyAdminAssistant
+    - AU14JobCivilianHeadOfService
+    - AU14JobCivilianHeadOfEngineering
+    - AU14JobLEOLeaderBase
   departmentRadio: null
   headOfDepartment: AU14JobCivilianColonyAdministrator
   faction: colonist
@@ -18,13 +21,9 @@
   description: au14-department-colony-description
   color: "#e3ce94"
   roles:
-    - AU14JobCivilianColonist
     - AU14JobCivilianJournalist
     - AU14JobCivilianUSASFRecruiter
     - AU14JobCivilianColonySynthetic
-    - AU14JobCivilianFoodServiceWorker
-    - AU14JobCivilianShopkeep
-    - AU14JobCivilianWasteManagementSpecialist
   departmentRadio: null
   headOfDepartment: AU14JobCivilianColonyAdministrator
   faction: colonist
@@ -37,11 +36,12 @@
   color: "#e3ce94"
   roles:
     - AU14JobCivilianForeman
-    - AU14JobCivilianFreightSystemsSpecialist
+    - AU14JobCivilianColonist
+
   departmentRadio: null
   headOfDepartment: AU14JobCivilianForeman
   faction: colonist
-  editorHidden: true
+  editorHidden: false
 
 - type: department
   parent: CMDepartmentBase
@@ -57,7 +57,7 @@
   departmentRadio: null
   headOfDepartment: AU14JobCivilianHeadOfService
   faction: colonist
-  editorHidden: true
+  editorHidden: false
 
 - type: department
   parent: CMDepartmentBase
@@ -101,6 +101,7 @@
   roles:
     - AU14JobCivilianHeadOfEngineering
     - AU14JobCivilianEngineer
+    - AU14JobCivilianFreightSystemsSpecialist
   departmentRadio: null
   headOfDepartment: AU14JobCivilianHeadOfEngineering
   faction: colonist
@@ -138,7 +139,7 @@
 
 - type: department
   parent: CMDepartmentBase
-  id: AU14DepartmentOrbital
+  id: AU14DepartmentAmbassadors
   name: au14-department-ambassadors
   description: au14-department-ambassadors-description
   color: "#e3ce94"
@@ -167,3 +168,16 @@
   departmentRadio: null
   headOfDepartment: AU14JobCivilianForeman
   faction: colonist
+
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentOrbital
+  name: au14-department-orbitalstation
+  description: au14-department-orbitalstation-description
+  color: "#e3ce94"
+  roles:
+    - AU14JobCivilianOrbitalArbiter
+    - AU14JobCivilianOrbitalLawyer
+  departmentRadio: null
+  headOfDepartment: AU14JobCivilianOrbitalManager
+  faction: colonist # TODO: orbital faction

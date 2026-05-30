@@ -1,0 +1,109 @@
+# ├──[ ORBITAL COUNSEL ]─────────────────────────────────────────────┤
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianOrbitalLawyer
+  name: au14-job-name-orbitallawyer
+  description: au14-job-description-orbitallawyer
+  icon: "AU14JobIconOrbitalSecurity" # TODO: book/quill/L icon
+  supervisors: au14-job-supervisors-orbital
+  startingGear: AU14GearOrbitalLawyer
+  playTimeTracker: AU14JobCivilianOrbitalLawyer
+  setPreference: true
+  accessGroups:
+  - Colonist
+  - auorbitallaw
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+  ranks:
+    AU14RankSeniorOrbitalLawyer:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianOrbitalLawyer
+      time: 18000 # 5 hours
+    AU14RankOrbitalLawyer: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillPolice: 2
+        RMCSkillCqc: 1
+        RMCSkillFirearms: 1
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillFireman: 1
+        RMCSkillMedical: 1
+        RMCSkillNavigations: 1
+        RMCSkillIntel: 3
+    - type: JobPrefix
+      prefix: au14-job-prefix-orbitallawyer
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14colonyhud.rsi
+        state: orbital_security
+
+- type: playTimeTracker
+  id: AU14JobCivilianOrbitalLawyer
+  isHumanoid: true
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: AU14IDCardOrbitalLawyer
+  name: orbital counsel ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianOrbitalLawyer
+
+- type: startingGear
+  id: AU14GearOrbitalLawyer
+  equipment:
+    jumpsuit: CMJumpsuitLiaison
+    outerClothing: RMCJacketCorporateBrown
+    head: AU14CivFedoraTan
+    shoes: RMCShoesLeather
+    id: AU14IDCardOrbitalLawyer
+    ears: AU14OrbitalHeadset
+    back: CMSatchel
+    neck: AU14MedalLawyerBadge
+  storage:
+    back:
+    - CMPaperBin30
+    - CMPenFountain
+    - RubberStampLawyer
+    - CMFolderBlack
+    - CMStampApproved
+    - CMStampDenied
+    - CMClipboard
+    - RMCRadioHandheldColonyOff
+  inhand:
+  - RMCBriefcasePaperPen
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOrbitalLawyer
+  name: Spawn Point Orbital Lawyer
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianOrbitalLawyer
+  - type: Sprite
+    state: syn_spawn
+
+- type: rank
+  id: AU14RankOrbitalLawyer
+  name: Orbital Counsel
+  prefix: Orb. Csnl.
+
+- type: rank
+  id: AU14RankSeniorOrbitalLawyer
+  name: Senior Orbital Counsel
+  prefix: Sr. Orb. Csnl.
+
+- type: entity
+  parent: ClothingNeckLawyerbadge
+  id: AU14MedalLawyerBadge
+  name: Counselor's Badge
+  description: A worn but official badge bearing the seal of the Orbital Court, issued by the Arbiter. It certifies the wearer as a qualified legal counsel, authorised to argue, defend, and prosecute.

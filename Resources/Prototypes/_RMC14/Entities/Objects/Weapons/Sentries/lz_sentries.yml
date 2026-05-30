@@ -60,6 +60,8 @@
     intrinsic: true
   - type: PointLight
   - type: HomingShots
+  - type: SentryTargeting
+  - type: SleepNPC
 
 - type: entity
   parent: RMCBaseTurret
@@ -88,9 +90,6 @@
       path: /Audio/Effects/double_beep.ogg
   - type: Corrodible
     isCorrodible: false
-  - type: NpcFactionMember
-    factions:
-    - UNMC
   - type: HTN
     rootTask:
       task: RMCTurretCompoundLZ

@@ -5,7 +5,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.Au14.Util;
+namespace Content.Shared.AU14.Util;
 
 /// <summary>
 /// When this component is equipped, it overrides the entity's job title (and optionally job icon) for display purposes.

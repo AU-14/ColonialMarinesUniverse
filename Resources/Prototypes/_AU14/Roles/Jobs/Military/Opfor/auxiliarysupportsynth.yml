@@ -31,7 +31,7 @@
     RMCRankChiefWarrantOfficer:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORAuxSupportSynth
-      time: 32000 #10 hours
+      time: 36000 #10 hours
     RMCRankWarrantOfficer: []
   startingGear: AU14GearOPFORAuxSupportSynth
   dummyStartingGear: AU14GearOPFORAuxSupportSynthDummy
@@ -83,8 +83,8 @@
   id: AU14GearOPFORAuxSupportSynth
   equipment:
     id: AU14IDCardOPFORAuxSupportSynth
-    ears: RMCM5CameraGear
-    ears2: AU14HeadsetSectionLeaderopfor
+    ears: AU14HeadsetOpforCommand
+    ears2: RMCM5CameraGear
     gloves: CMHandsInsulated
     shoes: CMBootsBlackFilled
     jumpsuit: AU14CivilianBoilerSuitDarkBlueSynth

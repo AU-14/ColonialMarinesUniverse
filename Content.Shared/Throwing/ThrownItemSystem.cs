@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Throwing;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
@@ -29,6 +30,7 @@ namespace Content.Shared.Throwing
         [Dependency] private SharedPhysicsSystem _physics = default!;
         [Dependency] private SharedGravitySystem _gravity = default!;
         [Dependency] private IRobustRandom _random = default!;
+        [Dependency] private CMUSharedZLevelsSystem _zLevels = default!; //CMU
         [Dependency] private SharedTransformSystem _transform = default!; private const string ThrowingFixture = "throw-fixture";
 
 
@@ -197,6 +199,15 @@ namespace Content.Shared.Throwing
                 _adminLogger.Add(LogType.Landed, LogImpact.Low, $"{ToPrettyString(uid):entity} thrown by {ToPrettyString(thrownItem.Thrower.Value):thrower} landed.");
 
             _broadphase.RegenerateContacts((uid, physics));
+
+            //CMU dont call LandEvent if we dont have ground
+            if (_zLevels.DistanceToGround(uid, out _) > 0)
+            {
+                _zLevels.WakeZPhysics(uid);
+                return;
+            }
+            //CMU end
+
             var landEvent = new LandEvent(thrownItem.Thrower, playSound);
             RaiseLocalEvent(uid, ref landEvent);
         }

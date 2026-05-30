@@ -277,7 +277,7 @@
   parent: RMCCigarettePackLuckySloths
   id: RMCCigarettePackEmeraldGreens
   name: emerald greens
-  description: They remind you of a gross, tar-filled version of Ireland. These cheap cigarettes are Weston-Yamada's entry into the general market.
+  description: They remind you of a gross, tar-filled version of Ireland. These cheap cigarettes are Weyland-Yutani's entry into the general market.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Smokeables/Cigarettes/emerald_greens.rsi

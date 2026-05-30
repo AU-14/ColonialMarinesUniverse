@@ -9,7 +9,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared._RMC14.OnCollide;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(SharedOnCollideSystem))]
+[Access(typeof(SharedOnCollideSystem), typeof(Xenonids.Venator.XenoVenatorSystem))]
 public sealed partial class DamageOnCollideComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -19,7 +19,7 @@ public sealed partial class DamageOnCollideComponent : Component
     public EntityUid? Chain;
 
     [DataField(required: true)]
-    [Access(typeof(SharedOnCollideSystem), typeof(SharedRMCFlammableSystem))]
+    [Access(typeof(SharedOnCollideSystem), typeof(SharedRMCFlammableSystem), typeof(Xenonids.Venator.XenoVenatorSystem))]
     public DamageSpecifier Damage = new();
 
     [DataField]

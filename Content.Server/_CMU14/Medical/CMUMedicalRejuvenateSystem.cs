@@ -7,8 +7,11 @@ using Content.Shared._CMU14.Medical.Organs.Heart;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._CMU14.Medical.Items;
 using Content.Shared.Body.Components;
+using Content.Shared.Body.Part;
 using Content.Shared.Body.Prototypes;
 using Content.Shared.Body.Systems;
+using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Rejuvenate;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Containers;
@@ -28,6 +31,7 @@ public sealed partial class CMUMedicalRejuvenateSystem : EntitySystem
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
     [Dependency] private SharedStatusEffectsSystem _status = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private IPrototypeManager _protoMgr = default!;
 
     private static readonly EntProtoId[] CmuStatusEffects =
@@ -74,6 +78,7 @@ public sealed partial class CMUMedicalRejuvenateSystem : EntitySystem
         var body = ent.Owner;
 
         RestoreMissingParts(body);
+        RestoreUsableHands(body);
 
         foreach (var (partId, partComp) in _body.GetBodyChildren(body))
         {
@@ -116,18 +121,25 @@ public sealed partial class CMUMedicalRejuvenateSystem : EntitySystem
                     continue;
 
                 var containerId = SharedBodySystem.GetPartSlotContainerId(connection);
-                if (!_containers.TryGetContainer(parentPart, containerId, out var container))
-                    continue;
-
                 EntityUid childPart;
-                if (container.ContainedEntities.Count > 0)
+                if (_containers.TryGetContainer(parentPart, containerId, out var container) &&
+                    container.ContainedEntities.Count > 0)
                 {
                     childPart = container.ContainedEntities[0];
                 }
                 else
                 {
                     childPart = Spawn(connSlot.Part, new EntityCoordinates(parentPart, default));
-                    if (!_body.AttachPart(parentPart, connection, childPart))
+                    if (!TryComp(parentPart, out BodyPartComponent? parentPartComp) ||
+                        !TryComp(childPart, out BodyPartComponent? childPartComp))
+                    {
+                        QueueDel(childPart);
+                        continue;
+                    }
+
+                    if (!_body.AttachPart(parentPart, connection, childPart, parentPartComp, childPartComp) &&
+                        (!_body.TryCreatePartSlot(parentPart, connection, childPartComp.PartType, out _, parentPartComp) ||
+                         !_body.AttachPart(parentPart, connection, childPart, parentPartComp, childPartComp)))
                     {
                         QueueDel(childPart);
                         continue;
@@ -150,6 +162,99 @@ public sealed partial class CMUMedicalRejuvenateSystem : EntitySystem
                 frontier.Enqueue(connection);
             }
         }
+    }
+
+    private void RestoreUsableHands(EntityUid body)
+    {
+        if (!TryComp<HandsComponent>(body, out var hands))
+            return;
+
+        foreach (var (partId, part) in _body.GetBodyChildren(body))
+        {
+            if (part.PartType != BodyPartType.Hand)
+                continue;
+
+            var location = part.Symmetry switch
+            {
+                BodyPartSymmetry.Left => HandLocation.Left,
+                BodyPartSymmetry.Right => HandLocation.Right,
+                _ => HandLocation.Middle,
+            };
+
+            string? handId = null;
+            if (_body.GetParentPartAndSlotOrNull(partId) is { } parentSlot)
+                handId = SharedBodySystem.GetPartSlotContainerId(parentSlot.Slot);
+            else if (part.Symmetry is BodyPartSymmetry.Left or BodyPartSymmetry.Right)
+                handId = SharedBodySystem.GetPartSlotContainerId(part.Symmetry == BodyPartSymmetry.Left
+                    ? "left_hand"
+                    : "right_hand");
+
+            if (handId == null)
+                continue;
+
+            if (!_hands.TrySetHandLocation((body, hands), handId, location))
+                _hands.AddHand((body, hands), handId, location);
+        }
+
+        if (NormalizeBodyHandOrder(hands))
+            Dirty(body, hands);
+
+        if (hands.ActiveHandId == null && hands.SortedHands.Count > 0)
+            _hands.SetActiveHand((body, hands), hands.SortedHands[0]);
+    }
+
+    private bool NormalizeBodyHandOrder(HandsComponent hands)
+    {
+        var sortedHands = hands.SortedHands;
+        if (sortedHands.Count < 2)
+            return false;
+
+        var ordered = new List<string>(sortedHands.Count);
+        AddCanonicalHand(sortedHands, ordered, "right_hand");
+        AddCanonicalHand(sortedHands, ordered, "left_hand");
+
+        foreach (var hand in sortedHands)
+        {
+            if (!ordered.Contains(hand))
+                ordered.Add(hand);
+        }
+
+        var changed = false;
+        for (var i = 0; i < sortedHands.Count; i++)
+        {
+            if (sortedHands[i] == ordered[i])
+                continue;
+
+            changed = true;
+            break;
+        }
+
+        if (!changed)
+            return false;
+
+        sortedHands.Clear();
+        sortedHands.AddRange(ordered);
+        return true;
+    }
+
+    private static void AddCanonicalHand(IReadOnlyList<string> sortedHands, List<string> ordered, string canonicalSlot)
+    {
+        foreach (var hand in sortedHands)
+        {
+            if (BarePartSlot(hand) != canonicalSlot || ordered.Contains(hand))
+                continue;
+
+            ordered.Add(hand);
+            return;
+        }
+    }
+
+    private static string BarePartSlot(string slot)
+    {
+        const string prefix = SharedBodySystem.PartSlotContainerIdPrefix;
+        return slot.StartsWith(prefix, StringComparison.Ordinal)
+            ? slot.Substring(prefix.Length)
+            : slot;
     }
 
     private void ResetPart(EntityUid body, EntityUid part)

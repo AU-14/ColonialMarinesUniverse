@@ -9,10 +9,9 @@
     - FireteamLeader
     - SeniorEnlistedAdvisor
     - PrimaryLandingZone
-
   - type: HeadsetAutoSquad
 
-# Alpha
+# ├──[ Alpha ]───────────────────────────────────────────────────────┤
 - type: entity
   parent: RMCHeadsetMarine
   id: CMHeadsetAlpha
@@ -85,8 +84,7 @@
       - CMEncryptionKeyMedical
       - CMEncryptionKeyCommon
 
-
-# Bravo
+# ├──[ Bravo ]───────────────────────────────────────────────────────┤
 - type: entity
   parent: RMCHeadsetMarine
   id: CMHeadsetBravo
@@ -115,9 +113,7 @@
     radioTextIncrease: 3
   - type: GrantSquadLeaderTracker
     defaultMode: SquadLeader
-
     trackerModes:
-
     - ExecutiveOfficer
     - SquadLeader
     - FireteamLeader
@@ -161,8 +157,7 @@
       - CMEncryptionKeyMedical
       - CMEncryptionKeyCommon
 
-
-# Charlie
+# ├──[ Charlie ]─────────────────────────────────────────────────────┤
 - type: entity
   parent: RMCHeadsetMarine
   id: CMHeadsetCharlie
@@ -191,9 +186,7 @@
     radioTextIncrease: 3
   - type: GrantSquadLeaderTracker
     defaultMode: SquadLeader
-
     trackerModes:
-
     - ExecutiveOfficer
     - SquadLeader
     - FireteamLeader
@@ -237,8 +230,7 @@
       - CMEncryptionKeyMedical
       - CMEncryptionKeyCommon
 
-
-# Delta
+# ├──[ Delta ]───────────────────────────────────────────────────────┤
 - type: entity
   parent: RMCHeadsetMarine
   id: CMHeadsetDelta
@@ -267,9 +259,7 @@
     radioTextIncrease: 3
   - type: GrantSquadLeaderTracker
     defaultMode: SquadLeader
-
     trackerModes:
-
     - ExecutiveOfficer
     - SquadLeader
     - FireteamLeader
@@ -313,8 +303,7 @@
       - CMEncryptionKeyMedical
       - CMEncryptionKeyCommon
 
-
-# Echo
+# ├──[ Echo ]────────────────────────────────────────────────────────┤
 - type: entity
   parent: RMCHeadsetMarine
   id: CMHeadsetEcho
@@ -357,9 +346,7 @@
     radioTextIncrease: 2
   - type: GrantSquadLeaderTracker
     defaultMode: SquadLeader
-
     trackerModes:
-
     - ExecutiveOfficer
     - SquadLeader
     - FireteamLeader
@@ -389,8 +376,7 @@
       - CMEncryptionKeyMedical
       - CMEncryptionKeyCommon
 
-
-# Foxtrot
+# ├──[ Foxtrot ]─────────────────────────────────────────────────────┤
 - type: entity
   parent: RMCHeadsetMarine
   id: CMHeadsetFoxtrot
@@ -433,9 +419,7 @@
     radioTextIncrease: 2
   - type: GrantSquadLeaderTracker
     defaultMode: SquadLeader
-
     trackerModes:
-
     - ExecutiveOfficer
     - SquadLeader
     - FireteamLeader
@@ -465,8 +449,7 @@
       - CMEncryptionKeyMedical
       - CMEncryptionKeyCommon
 
-# PVE
-
+# ├──[ PVE ]─────────────────────────────────────────────────────────┤
 - type: entity
   parent: RMCHeadsetShip
   id: RMCHeadsetGoldenArrow
@@ -487,5 +470,4 @@
     - SectionSergeant
     - PVESquadLeader
     - PrimaryLandingZone
-
   - type: HeadsetAutoSquad

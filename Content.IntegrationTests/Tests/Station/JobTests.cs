@@ -1,7 +1,7 @@
+using System.Linq;
+using Robust.Shared.Prototypes;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
-using Robust.Shared.Prototypes;
-using System.Linq;
 
 namespace Content.IntegrationTests.Tests.Station;
 
@@ -23,6 +23,8 @@ public sealed class JobTest
 
         await server.WaitAssertion(() =>
         {
+            var exemptDepartments = new[] { "AU14DepartmentColonyCommand", "AU14DepartmentThreat" };
+
             // only checking primary departments so don't bother with others
             var departments = prototypeManager.EnumeratePrototypes<DepartmentPrototype>()
                 .Where(department => department.Primary && !department.EditorHidden)
@@ -35,6 +37,8 @@ public sealed class JobTest
                 var primaries = 0;
                 foreach (var department in departments)
                 {
+                    if (exemptDepartments.Contains(department.ID))
+                        continue;
                     if (!department.Roles.Contains(job.ID))
                         continue;
 

@@ -1,0 +1,20 @@
+# Prodigy Extraction Team (PET Sierra)
+- type: partySpawn
+  id: ProdigyExtractionSpawn
+  leadersToSpawn:
+    AU14JobPARTPilot: 1
+  gruntsToSpawn:
+    AU14JobPARTDCC: 2
+    AU14JobPARTExtractionRifleman: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: ProdigyExtractionParty
+  partyspawn: ProdigyExtractionSpawn
+  entrymethod: shuttle
+  weight: 10
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 3
+  roundstart: false

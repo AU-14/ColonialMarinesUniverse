@@ -40,6 +40,9 @@ public sealed partial class SharedCrawlWhileCritSystem : EntitySystem
 
     private void OnMobStateChanged(Entity<CrawlWhileCritComponent> ent, ref MobStateChangedEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         if (args.NewMobState == MobState.Critical)
         {
             if (IsWithinCrawlWindow(ent))
@@ -54,6 +57,9 @@ public sealed partial class SharedCrawlWhileCritSystem : EntitySystem
 
     private void OnBeforeDamage(Entity<CrawlWhileCritComponent> ent, ref BeforeDamageChangedEvent args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         if (args.Cancelled)
             return;
 

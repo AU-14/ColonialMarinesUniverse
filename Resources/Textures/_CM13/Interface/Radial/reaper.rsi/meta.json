@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Ported from CMSS13 PR #6610 at cmss13-devs/cmss13@1e8dcab1fcb8a500232507ef8285730613b0cbd0.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "Reaper"
+    }
+  ]
+}

@@ -91,6 +91,7 @@
     solutions:
       buffer:
         maxVol: 500
+        canReact: false
   - type: RMCChemMaster
     pillBottleWhitelist:
       tags:

@@ -115,7 +115,7 @@ public abstract partial class SharedHeartSystem : EntitySystem
             return;
         }
 
-        var bpm = ComputeBpm(uid, body.Value, oh);
+        var bpm = ComputeBpm(uid, body.Value, oh, out var unstablePulse);
         var clamped = Math.Clamp(bpm, 0, heart.MaxBpm);
 
         // Threshold logic uses the stable (un-jittered) BPM so BelowThresholdSince
@@ -124,8 +124,12 @@ public abstract partial class SharedHeartSystem : EntitySystem
         // physiological state, not by display noise.
         if (clamped < heart.MinBpmBeforeStop)
         {
-            heart.BelowThresholdSince ??= now;
-            Dirty(uid, heart);
+            if (heart.BelowThresholdSince is null)
+            {
+                heart.BelowThresholdSince = now;
+                Dirty(uid, heart);
+            }
+
             if (now - heart.BelowThresholdSince.Value >= heart.StopGracePeriod)
             {
                 StopHeart((uid, heart), body.Value);
@@ -141,7 +145,7 @@ public abstract partial class SharedHeartSystem : EntitySystem
         // Floor at 1 if clamped is positive so a jittered-low marine doesn't
         // read 0 (which the UI treats as stopped).
         var displayed = clamped > 0
-            ? Math.Max(1, clamped + Random.Next(-3, 4))
+            ? (unstablePulse ? Math.Max(1, clamped + Random.Next(-3, 4)) : clamped)
             : 0;
         if (displayed != heart.BeatsPerMinute)
         {
@@ -150,8 +154,10 @@ public abstract partial class SharedHeartSystem : EntitySystem
         }
     }
 
-    protected virtual int ComputeBpm(EntityUid heartUid, EntityUid body, OrganHealthComponent oh)
+    protected virtual int ComputeBpm(EntityUid heartUid, EntityUid body, OrganHealthComponent oh, out bool unstablePulse)
     {
+        unstablePulse = oh.Stage != OrganDamageStage.Healthy;
+
         var baseBpm = oh.Stage switch
         {
             OrganDamageStage.Bruised => 95,
@@ -164,7 +170,11 @@ public abstract partial class SharedHeartSystem : EntitySystem
         if (TryGetBloodFraction(body, out var fraction))
         {
             if (fraction < 0.7f)
+            {
+                unstablePulse = true;
                 baseBpm += (int)((0.7f - fraction) * 100f);
+            }
+
             if (fraction < 0.4f)
                 baseBpm = (int)(baseBpm * 0.5f);
         }
@@ -176,7 +186,11 @@ public abstract partial class SharedHeartSystem : EntitySystem
             if (organId == heartUid)
                 continue;
             if (organHealth.Stage.IsAtLeast(OrganDamageStage.Bruised))
+            {
+                unstablePulse = true;
                 baseBpm += 5;
+            }
+
             if (organHealth.Stage.IsAtLeast(OrganDamageStage.Damaged))
                 baseBpm += 10;
         }
@@ -291,8 +305,11 @@ public abstract partial class SharedHeartSystem : EntitySystem
         if (TryComp<MobStateComponent>(body.Value, out var mob) && mob.CurrentState == MobState.Dead)
             return;
 
-        ent.Comp1.NoPulseSince ??= now;
-        Dirty(ent.Owner, ent.Comp1);
+        if (ent.Comp1.NoPulseSince is null)
+        {
+            ent.Comp1.NoPulseSince = now;
+            Dirty(ent.Owner, ent.Comp1);
+        }
 
         if (ent.Comp1.CardiacArrestAsphyxPerSecond > FixedPoint2.Zero)
             ApplyCardiacArrestAsphyx(body.Value, ent.Owner, ent.Comp1.CardiacArrestAsphyxPerSecond);

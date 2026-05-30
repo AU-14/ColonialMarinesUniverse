@@ -746,7 +746,7 @@
   - type: Clothing
     sprite: _CMU14/Yautja/body_mesh.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
     bullet: 10
     bio: 10
     explosionArmor: 10
@@ -767,7 +767,7 @@
   suffix: Yautja, Thrall
   components:
   - type: CMArmor
-    melee: 10
+    melee: 20
     bullet: 10
     bio: 10
     explosionArmor: 10
@@ -794,7 +794,7 @@
       params:
         volume: -4
   - type: CMArmor
-    melee: 10
+    melee: 20
     bullet: 10
     bio: 10
     explosionArmor: 10
@@ -819,7 +819,7 @@
   - type: Clothing
     sprite: _CMU14/Yautja/greaves_clan_2.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
     bullet: 10
     bio: 10
     explosionArmor: 10
@@ -1033,7 +1033,7 @@
   - type: Clothing
     sprite: _CMU14/Yautja/greaves_thrall_ebony.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
     bullet: 10
     bio: 10
     explosionArmor: 10

@@ -18,20 +18,23 @@
   special:
   - !type:AddComponentSpecial
     components:
+    - type: NpcFactionMember
+      factions:
+      - AUWeYu
     - type: Skills
       skills:
         RMCSkillConstruction: 2
         RMCSkillCqc: 1
-        RMCSkillEndurance: 2
-        RMCSkillEngineer: 3
+        RMCSkillEndurance: 3
+        RMCSkillEngineer: 2
         RMCSkillFirearms: 2
-        RMCSkillFireman: 1
+        RMCSkillFireman: 2
         RMCSkillIntel: 1
         RMCSkillJtac: 2
         RMCSkillLeadership: 1
         RMCSkillMedical: 1
         RMCSkillVehicles: 1
-        RMCSkillPolice: 1
+        RMCSkillPolice: 2
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORSectionSergeantWYPMC
     - type: TacticalMapIcon
@@ -77,7 +80,7 @@
     pocket1: RMCPouchMagazineLargePMC
     pocket2: RMCPouchFirstAidPMCFill
     back: RMCSatchelPMC
-    ears2: RMCHeadsetDistressWeYa
+    ears: RMCHeadsetDistressWeYa
     suitstorage: RMCWeaponRifleM54C2
   storage:
     pocket1:

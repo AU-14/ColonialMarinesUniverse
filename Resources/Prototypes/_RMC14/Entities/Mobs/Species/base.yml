@@ -385,6 +385,10 @@
     whitelist:
       tags:
       - SurvivalPouch
+  - type: TileFirePatter
+    removeDuration: 3.75
+    sound:
+      path: /Audio/_RMC14/Weapons/genhit1.ogg
   - type: HumanoidAppearance
     species: Human
     hideLayersOnEquip:

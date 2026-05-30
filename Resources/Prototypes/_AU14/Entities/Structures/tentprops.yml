@@ -33,6 +33,12 @@
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+  - type: Flamability
+    chance: 0.9
+    rate: 5.0
+    spread: 1.5
+    burnDurationMin: 70
+    burnDurationMax: 620
 
 - type: entity
   parent: AU14PropTents

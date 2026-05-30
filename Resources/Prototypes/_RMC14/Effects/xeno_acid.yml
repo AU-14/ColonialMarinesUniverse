@@ -132,6 +132,38 @@
     extinguishAmount: 13
 
 - type: entity
+  parent: XenoAcidSprayAcidStacks
+  id: XenoVenatorAcidBlobPool
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ApplyAcidStacks
+    amount: 2
+    damage:
+      types:
+        Heat: 30
+    requireExisting: true
+
+- type: entity
+  id: XenoFleshBloom
+  name: flesh bloom
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Effects/xeno_acid.rsi
+    drawdepth: Puddles
+    color: "#7A2447"
+    layers:
+    - state: acid2
+  - type: TimedDespawn
+    lifetime: 8
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: XenoFleshBloom
+
+- type: entity
   parent: XenoAcidSprayWeak
   id: XenoAcidSprayTrap
   name: splatter
@@ -211,4 +243,3 @@
   - type: Tag
     tags:
     - HideContextMenu
-

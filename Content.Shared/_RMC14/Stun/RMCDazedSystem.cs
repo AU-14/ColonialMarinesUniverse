@@ -14,7 +14,7 @@ public sealed partial class RMCDazedSystem : EntitySystem
 {
     [Dependency] private SharedChargesSystem _charges = default!;
     [Dependency] private INetManager _net = default!;
-    [Dependency] private StatusEffectsSystem _statusEffect = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffect = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private ISharedPlayerManager _playerManager = default!;
     [Dependency] private SharedStutteringSystem _stutter = default!;

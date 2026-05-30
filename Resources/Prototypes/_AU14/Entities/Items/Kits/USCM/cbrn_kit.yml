@@ -2,7 +2,6 @@
   parent: BaseStorageItem
   id: AU14CBRNKitUA
   name: UA CBRN Kit
-  description: 
   components:
   - type: Sprite
     sprite: _AU14/Objects/Tools/CBRN/uscm.rsi

@@ -50,3 +50,14 @@
   id: aunews
   tags:
   - CMAccessColonyPublic
+
+- type: accessGroup
+  id: auorbitalmanagement
+  tags:
+  - AU14AccessOrbitalManagement
+  - AU14AccessOrbitalLaw
+
+- type: accessGroup
+  id: auorbitallaw
+  tags:
+  - AU14AccessOrbitalLaw

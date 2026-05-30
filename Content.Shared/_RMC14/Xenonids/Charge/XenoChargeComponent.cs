@@ -30,7 +30,7 @@ public sealed partial class XenoChargeComponent : Component
     public TimeSpan StunTime = TimeSpan.FromSeconds(2);
 
     [DataField, AutoNetworkedField]
-    public TimeSpan ChargeDelay = TimeSpan.FromSeconds(1.2);
+    public TimeSpan ChargeDelay = TimeSpan.FromSeconds(0.6);
 
     // TODO RMC14 extra sound on impact
     [DataField, AutoNetworkedField]
@@ -40,8 +40,32 @@ public sealed partial class XenoChargeComponent : Component
     public Vector2? Charge;
 
     [DataField, AutoNetworkedField]
-    public float Strength = 20;
+    public float Strength = 30;
 
     [DataField]
     public HashSet<EntityUid> AlreadyHit = new();
+
+    /// <summary>
+    ///     The intended target of the charge. Intermediate mobs get knocked aside.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public EntityUid? PrimaryTarget;
+
+    /// <summary>
+    ///     Damage multiplier for intermediate targets knocked aside during charge.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float IntermediateDamageMult = 0.7f;
+
+    /// <summary>
+    ///     Where the charge started. Used to calculate distance traveled.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public Vector2? ChargeOrigin;
+
+    [DataField, AutoNetworkedField]
+    public float MinKnockback = 5f;
+
+    [DataField, AutoNetworkedField]
+    public float MaxKnockback = 10f;
 }

@@ -2,6 +2,7 @@ using Content.Shared.Audio;
 using Content.Shared.Hands;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Lobby;
 using Content.Shared.Maps;
 using Content.Shared.Mobs;
 using Content.Shared.Popups;
@@ -178,6 +179,12 @@ public abstract partial class SharedEmitSoundSystem : EntitySystem
 
     private void OnEmitSoundOnPickup(EntityUid uid, EmitSoundOnPickupComponent component, GotEquippedHandEvent args)
     {
+        if (HasComp<LobbyPreviewEntityComponent>(uid) ||
+            HasComp<LobbyPreviewEntityComponent>(args.User))
+        {
+            return;
+        }
+
         TryEmitSound(uid, component, args.User);
     }
 

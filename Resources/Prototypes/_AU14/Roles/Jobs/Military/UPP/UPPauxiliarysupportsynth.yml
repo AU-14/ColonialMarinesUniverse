@@ -1,10 +1,7 @@
 - type: job
   parent: AU14JobAuxSupportSynthBase
   id: AU14JobGOVFORAuxSupportSynthUPP
-  name: au14-job-name-govforauxsupportsynth
-  description: au14-job-description-govforauxsupportsynth
-  setPreference: true
-  canBeAntag: false
+  spawnMenuRoleName: Support Synth (UPP)
   requirements:
   - !type:OverallPlaytimeRequirement
     time: 7200 # 2 hours
@@ -21,25 +18,9 @@
       role: AU14JobGOVFORAuxSupportSynth
       time: 180000 # 50 hours
     UPP_WarrantOfficer: []
-  startingGear: AU14GearGOVFORAuxSupportSynth
-  dummyStartingGear: AU14GearGOVFORAuxSupportSynthDummy
-  icon: "AU14JobIconGovSynth"
-  requireAdminNotify: false
-  spawnMenuRoleName: Support Synth (UPP)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govforplatco
-  accessGroups:
-  - AU14GovforCommand
-  - CMCargoTech
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: Marine
-      Faction: govfor
     - type: Skills
       skills:
         RMCSkillCqc: 5
@@ -61,23 +42,3 @@
         RMCSkillIntel: 2
         RMCSkillDomestics: 2
         RMCSkillNavigations: 1
-    - type: JobPrefix
-      prefix: au14-job-prefix-govforauxsupportsynth
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-    - type: MeleeWeapon
-      soundHit:
-        path: /Audio/_RMC14/Weapons/synthpunch1.ogg
-        params:
-          variation: 0.15
-          volume: -1
-      angle: 30
-      animation: WeaponArcFist
-      attackRate: 1
-      damage:
-        types:
-          Blunt: 35
-    - type: Synth
-  hidden: false

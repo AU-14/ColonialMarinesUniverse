@@ -137,7 +137,7 @@ public sealed partial class AnnouncementWidget
                     style.TextConfig.SpeakerNameColor,
                     style.TextConfig.Font);
 
-                label.SetMessage(message);
+                label.SetMessage(message, AnnouncementStyling.AnnouncementMarkupTags);
 
                 if (style.LayoutConfig.SpeakerNamePosition == AnnouncementSpeakerNamePosition.Above)
                 {
@@ -201,4 +201,3 @@ public sealed partial class AnnouncementWidget
         }
     }
 }
-

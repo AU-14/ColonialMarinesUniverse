@@ -34,7 +34,7 @@ public sealed partial class XenoHeadbiteSystem : EntitySystem
     [Dependency] private SharedRMCEmoteSystem _emote = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private StatusEffectQuerySystem _status = default!;
 
     private static readonly ProtoId<DamageTypePrototype> LethalDamageType = "Asphyxiation";
     private static readonly ProtoId<StatusEffectPrototype> Unconsciousness = "Unconscious";

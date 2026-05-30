@@ -46,6 +46,8 @@
   - type: DamageExaminable
   - type: RMCItemPickup
   - type: RMCMesonsNonviewable
+  #CMU
+  - type: CMUZPhysics
 
 - type: entity
   name: "storage item"

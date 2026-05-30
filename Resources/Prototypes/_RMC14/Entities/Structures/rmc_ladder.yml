@@ -65,3 +65,164 @@
   components:
     - type: Sprite
       drawdepth: SmallObjects
+
+- type: entity
+  id: CMUZLevelLadderBase
+  abstract: true
+  name: z-level ladder
+  description: A sturdy metal ladder that passes between Z-levels.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _RMC14/Structures/ladder.rsi
+    drawdepth: WallTops
+    state: ladder11
+  - type: PlacementReplacement
+    key: ladders
+  - type: BlockXenoConstruction
+  - type: RMCMesonsNonviewable
+  - type: RMCIgnoreGhostInteractionLimits
+
+- type: entity
+  parent: CMUZLevelLadderBase
+  id: CMUZLevelLadderThrough
+  suffix: Z-Level, Up
+  components:
+  - type: CMUZLevelLadder
+    offset: 1
+    landingLocalPosition: 0.05
+  - type: CMUZLevelHighGround
+    heightCurve:
+    - 1.05
+    - 1.05
+    stick: true
+    supportOnlyFromAbove: true
+
+- type: entity
+  parent: CMUZLevelLadderBase
+  id: CMUZLevelLadderThroughDown
+  suffix: Z-Level, Down
+  components:
+  - type: CMUZLevelLadder
+    offset: -1
+    landingLocalPosition: 0
+
+
+- type: entity
+  parent: CMUZLevelLadderThrough
+  id: CMUZLevelLadderThroughUp1
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/ladder.rsi
+    drawdepth: WallTops
+    state: ladder10
+
+- type: entity
+  parent: CMUZLevelLadderThroughDown
+  id: CMUZLevelLadderThroughDown1
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/ladder.rsi
+    drawdepth: WallTops
+    state: ladder10
+
+
+- type: entity
+  parent: CMUZLevelLadderThrough
+  id: CMUZLevelLadderThroughUp2
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/ladder.rsi
+    drawdepth: WallTops
+    state: ladder00
+
+- type: entity
+  parent: CMUZLevelLadderThroughDown
+  id: CMUZLevelLadderThroughDown2
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/ladder.rsi
+    drawdepth: WallTops
+    state: ladder00
+
+- type: entity
+  parent: CMUZLevelLadderThrough
+  id: CMUZLevelLadderThroughUp3
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/ladder.rsi
+    drawdepth: WallTops
+    state: ladderup
+
+- type: entity
+  parent: CMUZLevelLadderThroughDown
+  id: CMUZLevelLadderThroughDown3
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/ladder.rsi
+    drawdepth: WallTops
+    state: ladderdown
+
+- type: entity
+  parent: CMUZLevelLadderThrough
+  id: CMUZLevelRopeThroughUp
+  name: z-level rope
+  description: A climbable rope that passes between Z-levels.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/ladder.rsi
+    drawdepth: WallTops
+    state: rope
+
+- type: entity
+  parent: CMUZLevelLadderThroughDown
+  id: CMUZLevelRopeThroughDown2
+  name: z-level rope
+  description: A climbable rope that passes between Z-levels.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/ladder.rsi
+    drawdepth: WallTops
+    state: rope
+
+- type: entity
+  parent: CMUZLevelLadderThroughDown
+  id: CMUZLevelHatchThroughDown
+  name: z-level hatch
+  description: A a hatch entrance that passes between Z-levels.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_tunnel.rsi
+    drawdepth: WallTops
+    state: maintenancehatch_alt
+    offset: 0, 0.2
+
+- type: entity
+  parent: CMUZLevelLadderThroughDown
+  id: CMUZLevelManholeThroughDown
+  name: z-level manhole entrance
+  description: A manhole entrance that passes between Z-levels.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/ladders.rsi
+    drawdepth: WallTops
+    state: wymanhole_open3
+
+- type: entity
+  parent: CMUZLevelLadderThroughDown
+  id: CMUZLevelManholeCoveredThroughDown
+  name: z-level manhole entrance
+  description: A manhole entrance that passes between Z-levels.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_tunnel.rsi
+    drawdepth: WallTops
+    state: wymanhole

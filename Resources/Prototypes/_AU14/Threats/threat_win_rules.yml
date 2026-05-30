@@ -44,6 +44,15 @@
       percent: 100
 
 - type: entity
+  id: KillAllAbominationsRule
+  parent: BaseGameRule
+  name: Kill All Abominations
+  description: Threat wins when all abominations are dead (or when specified percent are dead). Counts disguised mimics.
+  components:
+    - type: KillAllAbominationsRule
+      percent: 100
+
+- type: entity
   id: KillAllXenoRule
   parent: BaseGameRule
   name: Kill All Xenos/Cultists
@@ -70,8 +79,6 @@
     percent: 85
     arrest: true
     winMessage: The CLF have won by eliminating Government Forces!
-
   - type: KillAllClfRule
-    arrest: true
     percent: 80
-
+    winMessage: CLF combatants neutralized! The insurgency has been wiped out.

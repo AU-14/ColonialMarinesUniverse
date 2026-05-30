@@ -1,23 +1,33 @@
 using System.Linq;
+using Content.Shared.Cuffs.Components;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
-using Content.Shared.AU14;
+using Content.Shared.GameTicking.Components;
+using Content.Shared.Inventory;
+using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs;
 using Content.Shared.NPC.Components;
-using Content.Shared.GameTicking.Components;
+using Content.Shared.SSDIndicator;
 using Content.Shared._RMC14.Areas;
-using Content.Shared.Cuffs.Components;
 using Content.Shared._RMC14.Evacuation;
+using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Content.Shared._RMC14.Synth;
+using Content.Shared.AU14;
 
 namespace Content.Server.AU14.Threats;
 
+/// <summary>
+/// Kill-all rule that targets all Govfor, excludes SSD and evacuated.
+/// Govfor wearing a prisoner jumpsuit, or handcuffed, or inside brig, or dead are eliminated.
+/// </summary>
 public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovforRuleComponent>
 {
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private Round.AuRoundSystem _auRoundSystem = default!;
     [Dependency] private AreaSystem _area = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
 
@@ -27,12 +37,16 @@ public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovf
         _evacuatedQuery = GetEntityQuery<EvacuatedGridComponent>();
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<EvacuationLaunchedEvent>(OnEvacuationLaunched);
+        SubscribeLocalEvent<GotEquippedEvent>(OnGotEquipped);
+        SubscribeLocalEvent<GotUnequippedEvent>(OnGotUnequipped);
     }
+
+    private void OnGotEquipped(GotEquippedEvent ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
+    private void OnGotUnequipped(GotUnequippedEvent ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
 
     private bool IsEvacuated(EntityUid uid)
     {
-        var xform = Transform(uid);
-        return xform.GridUid is { } grid && _evacuatedQuery.HasComp(grid);
+        return Transform(uid).GridUid is { } grid && _evacuatedQuery.HasComp(grid);
     }
 
     private void OnEvacuationLaunched(ref EvacuationLaunchedEvent ev)
@@ -43,12 +57,7 @@ public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovf
 
     private void OnMobStateChanged(MobStateChangedEvent ev)
     {
-        // Only run this logic when the KillAllGovfor rule is active
-        if (!_gameTicker.IsGameRuleActive<KillAllGovforRuleComponent>())
-            return;
-
-        // Only care about dead mobs
-        if (ev.NewMobState != MobState.Dead)
+        if (!IsActiveRuleAndGovfor(ev.Target) || ev.NewMobState != MobState.Dead)
             return;
 
         CheckVictoryCondition();
@@ -57,22 +66,55 @@ public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovf
     /// <summary>
     /// Called by KillAllRulesHandcuffSystem when a Govfor entity is handcuffed.
     /// </summary>
-    public void OnHandcuffEvent(EntityUid uid)
-    {
-        CheckVictoryCondition();
-    }
+    public void OnHandcuffEvent(EntityUid _) => CheckVictoryCondition();
 
     private bool IsInArrestArea(EntityUid uid)
     {
         return _area.TryGetArea(uid, out var area, out _) && area.Value.Comp.CountAsArrestedForEndConditions;
     }
 
+    private void OnJumpsuitChanged(EntityUid wearer, string slot, EntityUid equipment)
+    {
+        if (slot != "jumpsuit" || Prototype(equipment)?.ID != "AU14CivilianPrisonJumpsuit")
+            return;
+
+        if (!IsActiveRuleAndGovfor(wearer))
+            return;
+
+        CheckVictoryCondition();
+    }
+
+    private bool HasPrisonJumpsuit(EntityUid uid)
+    {
+        return _inventory.TryGetSlotEntity(uid, "jumpsuit", out var suit)
+            && Prototype(suit!.Value)?.ID == "AU14CivilianPrisonJumpsuit";
+    }
+
+    private bool IsActiveRuleAndGovfor(EntityUid uid)
+    {
+        if (!_gameTicker.IsGameRuleActive<KillAllGovforRuleComponent>())
+            return false;
+
+        return TryComp<NpcFactionMemberComponent>(uid, out var faction)
+            && faction.Factions.Any(f => f.ToString().ToLowerInvariant() == "govfor");
+    }
+
+    private bool IsExcludedFromKillCount(EntityUid uid, MobStateComponent mobState)
+    {
+        // Don't exclude the dead (ghosts), we tally them as eliminated instead
+        if (mobState.CurrentState == MobState.Dead)
+            return false;
+
+        return (HasComp<XenoNestedComponent>(uid) || HasComp<SynthComponent>(uid)
+            || (TryComp<SSDIndicatorComponent>(uid, out var ssd) && ssd.IsSSD));
+    }
+
     private void CheckVictoryCondition()
     {
-        // Get the active rule entity and its component to read Percent
-        var queryRule = EntityQueryEnumerator<KillAllGovforRuleComponent, GameRuleComponent>();
-        if (!queryRule.MoveNext(out var ruleEnt, out var ruleComp, out var gameRuleComp) || !GameTicker.IsGameRuleActive(ruleEnt, gameRuleComp))
+        var queryRules = QueryActiveRules();
+        if (!queryRules.MoveNext(out _, out _, out var ruleComp, out _))
             return;
+        if (ruleComp == null) return;
 
         var requiredPercent = Math.Clamp(ruleComp.Percent, 1, 100);
         var countArrests = ruleComp.Arrest;
@@ -81,11 +123,14 @@ public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovf
         var total = 0;
         var eliminated = 0;
 
-        var query = _entityManager.EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent>();
+        var query = EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent>();
         while (query.MoveNext(out var uid, out var mobState, out var faction))
         {
             if (faction.Factions.Any(f => f.ToString().ToLowerInvariant() == "govfor"))
             {
+                if (IsExcludedFromKillCount(uid, mobState))
+                    continue;
+
                 // If the grid was evacuated, count them as dead (do not skip)
                 if (IsEvacuated(uid))
                 {
@@ -96,15 +141,12 @@ public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovf
 
                 total++;
 
-                // Count as eliminated if dead
                 if (mobState.CurrentState == MobState.Dead)
-                {
                     eliminated++;
-                }
-                // Or if arrested flag is set and they're cuffed
-                else if (countArrests &&
-                         ((TryComp<CuffableComponent>(uid, out var cuffable) && cuffable.CuffedHandCount > 0) ||
-                          IsInArrestArea(uid)))
+                // Wearing jumpsuit, or arrested flag is set and they're cuffed, or in the mapped brig areas
+                else if (HasPrisonJumpsuit(uid)
+                    || countArrests && ((TryComp<CuffableComponent>(uid, out var cuffable) && cuffable.CuffedHandCount > 0)
+                    || IsInArrestArea(uid)))
                 {
                     eliminated++;
                 }
@@ -112,9 +154,9 @@ public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovf
         }
 
         if (total == 0)
-            return; // nothing to count
+            return;
 
-        var percentEliminated = (int) ((double)eliminated / total * 100.0);
+        var percentEliminated = (int)((double)eliminated / total * 100.0);
 
         if (percentEliminated >= requiredPercent)
         {

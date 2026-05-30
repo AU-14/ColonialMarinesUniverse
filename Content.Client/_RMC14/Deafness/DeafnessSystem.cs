@@ -14,7 +14,7 @@ public sealed partial class DeafnessSystem : SharedDeafnessSystem
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IAudioManager _audio = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
-    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private float _originalVolume = 0.5f;
@@ -55,10 +55,13 @@ public sealed partial class DeafnessSystem : SharedDeafnessSystem
             if (player != uid)
                 continue;
 
+            if (!TryComp<StatusEffectsComponent>(player, out var status))
+                continue;
+
             (TimeSpan, TimeSpan)? time = null;
             (TimeSpan, TimeSpan)? time2 = null;
 
-            if (!_statusEffects.TryGetTime(player, DeafKey, out time) && !_statusEffects.TryGetTime(player, "Unconscious", out time2))
+            if (!_statusEffects.TryGetTime(player, DeafKey, out time, status) && !_statusEffects.TryGetTime(player, "Unconscious", out time2, status))
                 continue;
 
             if (time2 != null && (time == null || time.Value.Item2 < time2.Value.Item2))

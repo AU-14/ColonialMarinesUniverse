@@ -19,3 +19,14 @@
     sprite: _AU14/Clothing/ProdigySecurityForces/beret.rsi
   - type: Clothing
     sprite: _AU14/Clothing/ProdigySecurityForces/beret.rsi
+
+- type: entity
+  parent: AU14ProdigyBallisticHelmetPART
+  id: AU14ProdigyBeretPART
+  name: Prodigy Armed Repair Team Command Beret
+  description: A beret used by command members of the Prodigy Armed Repair Team, the elite forces of Prodigy Security Corp. The beret is a symbol of their status and is only given to those who have proven themselves in combat and repair situations. The beret is adorned with the Prodigy logo and is a source of pride for those who wear it.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/ProdigySecurityForces/beret.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/ProdigySecurityForces/beret.rsi

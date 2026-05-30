@@ -1,64 +1,10 @@
 - type: job
   parent: AU14JobadvisorBase
   id: AU14JobGOVFORadvisorRMC
-  name: au14-job-name-govforadvisor
-  description: au14-job-description-govforadvisor
-  setPreference: true
-  canBeAntag: false
-  requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 3600 # Set to 72000 once we are fully launched AU14 todo
-  - !type:AgeRequirement
-    requiredAge: 21
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
+  spawnMenuRoleName: Platoon Advisor (TWE RMC)
   ranks:
     RMC_WarrantOfficer1:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORadvisor
       time: 360000 # 100 hours
     RMC_WarrantOfficer2: []
-  startingGear: AU14GearGOVFORadvisor
-  dummyStartingGear: AU14GearGOVFORadvisorDummy
-  icon: "AU14JobIconGovAdvisor"
-  requireAdminNotify: true
-  spawnMenuRoleName: Platoon Advisor (TWE RMC)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  whitelisted: true
-  accessGroups:
-  - AU14GovforCommand
-  roleWeight: 0.25
-  special:
-  - !type:AddComponentSpecial
-    components:
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: Marine
-      Faction: govfor
-    - type: Skills
-      preset: AU14SkillPresetPlatoonAdvisor
-    - type: JobPrefix
-      prefix: au14-job-prefix-govforadvisor
-    - type: SeeNewPlayers
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
-  hidden: true

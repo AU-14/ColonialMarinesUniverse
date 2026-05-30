@@ -64,7 +64,7 @@
   - type: TacticalMapComputer
     faction: govfor
   - type: OverwatchConsole
-    canOrbitalBombardment: false
+    canOrbitalBombardment: true
     group: GOVFOR
 
 - type: entity

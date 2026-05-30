@@ -37,6 +37,13 @@
     setDamage:
       types:
         Structural: 750
+  - type: Flamability
+    chance: 0.04
+    rate: 0.2
+    spread: 0.1
+    range: 0.5
+    burnDurationMin: 70
+    burnDurationMax: 620
 
 - type: entity
   parent: CMWallMetal
@@ -190,6 +197,13 @@
     setDamage:
       types:
         Structural: 750
+  - type: Flamability
+    chance: 0.02
+    rate: 0.1
+    spread: 0.05
+    range: 0.5
+    burnDurationMin: 70
+    burnDurationMax: 620
 
 - type: entity
   parent: RMCBaseWallReinforced
@@ -596,15 +610,24 @@
     tags:
     - Wall
   - type: ReceiverXenoClaws
-    maxHealth: 3000
+    maxHealth: 1300
   - type: Destructible
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 3000
+        damage: 1300
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+  - type: Construction
+    graph: AU14WoodWallGraph
+    node: woodWall
+  - type: Appearance
+  - type: Flamability
+    chance: 1.0
+    rate: 21.6
+    range: 1.2
+    spread: 1.5
   - type: IconSmooth
     key: walls
     additionalKeys:

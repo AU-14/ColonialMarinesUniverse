@@ -18,13 +18,17 @@
     components:
     - type: Skills
       skills:
-          RMCSkillEndurance: 1
+          RMCSkillEndurance: 2
           RMCSkillFirearms: 2
-          RMCSkillConstruction: 2
-          RMCSkillEngineer: 3
-          RMCSkillFireman: 1
+          RMCSkillConstruction: 1
+          RMCSkillEngineer: 1
+          RMCSkillFireman: 2
           RMCSkillVehicles: 1
-          RMCSkillPolice: 1
+          RMCSkillPolice: 2
+          RMCSkillCqc: 1
+          RMCSkillMedical: 1
+          RMCSkillJtac: 2
+          RMCSkillMeleeWeapons: 1
     - type: JobPrefix
       prefix: au14-job-prefix-govforspecialist-marksmanRMC
   hidden: false

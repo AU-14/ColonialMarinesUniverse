@@ -61,6 +61,11 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         SubscribeLocalEvent<DropshipComponent, MapInitEvent>(OnDropshipMapInit);
 
         SubscribeLocalEvent<DropshipNavigationComputerComponent, MapInitEvent>(OnMapInit);
+        
+        //fix queenxeno ignore AccessReaderComponent
+        SubscribeLocalEvent<DropshipNavigationComputerComponent, ActivateInWorldEvent>(OnNavigationActivateInWorld, before: [typeof(ActivatableUISystem), typeof(ActivatableUIRequiresAccessSystem)]);
+        //
+        
         SubscribeLocalEvent<DropshipNavigationComputerComponent, ActivatableUIOpenAttemptEvent>(OnUIOpenAttempt);
         SubscribeLocalEvent<DropshipNavigationComputerComponent, AfterActivatableUIOpenEvent>(OnNavigationOpen);
         SubscribeLocalEvent<DropshipNavigationComputerComponent, DropshipLockoutOverrideDoAfterEvent>(OnNavigationLockoutOverride);
@@ -249,6 +254,31 @@ public abstract partial class SharedDropshipSystem : EntitySystem
 
         // Xeno hijacker: open destination menu immediately
         OpenHijackDestinationMenu(ent, args.User);
+    }
+    
+    // Fix to queenxeno ignore AccessReaderComponent
+    private void OnNavigationActivateInWorld(Entity<DropshipNavigationComputerComponent> ent,
+        ref ActivateInWorldEvent args)
+    {
+        var user = args.User;
+        var isXeno = HasComp<XenoComponent>(user);
+        var isHijacker = HasComp<DropshipHijackerComponent>(user);
+        
+        //for non xeno pass normal AccessReader and skill checks still apply.
+        if (!isXeno && !isHijacker)
+        {
+            return;
+        }
+        
+        args.Handled = true;
+        if (_net.IsClient)
+        {
+            return;
+        }
+
+        var ev = new ActivatableUIOpenAttemptEvent(user);
+        
+        OnUIOpenAttempt(ent, ref ev);
     }
 
     /// <summary>
@@ -727,6 +757,9 @@ public abstract partial class SharedDropshipSystem : EntitySystem
     {
         var grid = _transform.GetGrid((ent.Owner, Transform(ent.Owner)));
         if (!TryComp(grid, out FTLComponent? ftl) || !TryComp(grid, out DropshipComponent? dropship))
+            return;
+
+        if (dropship.WithdrawEvacuating)
             return;
 
         if (dropship.Destination != dropship.DepartureLocation ||

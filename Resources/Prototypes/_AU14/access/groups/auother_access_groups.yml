@@ -1,10 +1,7 @@
-﻿
 - type: accessGroup
   id: aumob
   tags:
   - CMAccessColonyPublic
-
-
 
 - type: accessGroup
   id: aukelland #temporary cmb access until I make a kelland door
@@ -12,17 +9,13 @@
   - CMAccessColonyPublic
   - CMAccessColonyBrig
 
-
-
 - type: accessGroup
   id: auwy
   tags:
   - CMAccessColonyPublic
-  - RMCAccessWeYa
-
+  - AU14AccessCorporateWEYU
 
 - type: accessGroup
   id: AUPrisonStaff
   tags:
   - AUAccessPrison
-

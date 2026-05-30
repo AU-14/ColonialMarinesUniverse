@@ -61,6 +61,9 @@ public sealed partial class LineSystem : EntitySystem
         var yOffset = distanceY / distance;
         var time = _timing.CurTime;
         var gridId = _transform.GetGrid(start.EntityId);
+        if (gridId == null && _mapGridQuery.HasComp(start.EntityId))
+            gridId = start.EntityId;
+
         var gridComp = gridId == null ? null : _mapGridQuery.CompOrNull(gridId.Value);
         Entity<MapGridComponent>? grid = gridComp == null ? null : new Entity<MapGridComponent>(gridId!.Value, gridComp);
         var lastCoords = start;

@@ -3,8 +3,10 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client._RMC14.Dropship.Weapon;
 
-public sealed class DropshipAmmoVisualizerSystem : VisualizerSystem<DropshipAmmoComponent>
+public sealed partial class DropshipAmmoVisualizerSystem : VisualizerSystem<DropshipAmmoComponent>
 {
+    [Dependency] private SpriteSystem _sprite = default!;
+
     protected override void OnAppearanceChange(EntityUid uid, DropshipAmmoComponent component, ref AppearanceChangeEvent args)
     {
         base.OnAppearanceChange(uid, component, ref args);
@@ -15,7 +17,7 @@ public sealed class DropshipAmmoVisualizerSystem : VisualizerSystem<DropshipAmmo
         if (!AppearanceSystem.TryGetData<int>(uid, DropshipAmmoVisuals.Fill, out var fill, args.Component))
             return;
 
-        if (!spriteComp.LayerMapTryGet(DropshipAmmoVisuals.Fill, out var layer))
+        if (!_sprite.LayerMapTryGet((uid, spriteComp), DropshipAmmoVisuals.Fill, out var layer, false))
             return;
 
         if (component.AmmoType == null)
@@ -24,6 +26,6 @@ public sealed class DropshipAmmoVisualizerSystem : VisualizerSystem<DropshipAmmo
         var fillNum = Math.Clamp(fill / component.RoundsPerShot, 0, component.MaxRounds / component.RoundsPerShot);
         var state = component.AmmoType + "_" + fillNum;
 
-        spriteComp.LayerSetState(layer, state);
+        _sprite.LayerSetRsiState((uid, spriteComp), layer, state);
     }
 }

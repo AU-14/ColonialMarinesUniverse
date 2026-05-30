@@ -3,7 +3,7 @@
                                              You are allowed to remember knowledge about the game in general, such as how to cook, how to use objects, etc.
                                              You are absolutely [color=red]NOT[/color] allowed to remember, say, the name, appearance, etc. of your previous character.
 
-rmc-ghost-role-information-corp-legal-description = You are to provide essential legal support to the Corporate Liaison and protect Weston-Yamada’s interests.
+rmc-ghost-role-information-corp-legal-description = You are to provide essential legal support to the Corporate Liaison and protect Weyland-Yutani’s interests.
 
 rmc-ghost-name-corp-exec-specialist-legal = Corporate Legal Specialist (Neutral)
 rmc-job-name-corp-exec-specialist-legal = Corporate Legal Specialist

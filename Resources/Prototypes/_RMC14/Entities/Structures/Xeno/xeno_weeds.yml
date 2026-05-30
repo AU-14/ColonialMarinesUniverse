@@ -11,6 +11,7 @@
     anchored: true
   - type: Physics
     bodyType: Static
+  - type: Appearance
   - type: Fixtures
     fixtures:
       fix1:
@@ -76,6 +77,11 @@
     - 0:
         weed15: ""
   - type: XenoFriendly
+  - type: Flamability
+    chance: 1.0
+    rate: 0.08
+    range: 1.0
+    spread: 1.5
   - type: Damageable
     damageContainer: StructuralXeno
     damageModifierSet: Weed
@@ -273,6 +279,15 @@
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+  - type: Flamability
+    chance: 0.3
+    rate: 1.0
+    spread: 0.5
+    range: 0.8
+    scatterFireChance: 0.005
+    destroyAnyway: true
+    burnDurationMin: 4
+    burnDurationMax: 8
 
 - type: entity
   parent: XenoHiveWeeds
@@ -362,6 +377,7 @@
     snap:
     - Wall
   components:
+  - type: Appearance
   - type: Transform
     anchored: true
   - type: Physics
@@ -387,6 +403,7 @@
     base: weedwall
     mode: Corners
   - type: XenoNestSurface
+  - type: HiveMember
   - type: XenoFriendly
   - type: Damageable
     damageContainer: StructuralXeno

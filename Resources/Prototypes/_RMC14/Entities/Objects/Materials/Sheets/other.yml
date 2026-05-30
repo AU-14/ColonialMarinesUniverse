@@ -137,23 +137,30 @@
     heldPrefix: wood
     size: Normal
   - type: Appearance
+  - type: Flamability
+    chance: 1.0
+    rate: 0.4
+    range: 0.8
+    spread: 0.8
+    destroyAnyway: true
   - type: Tag
     tags:
     - Sheet
   - type: RMCConstructionItem
     buildable:
-    # - RMCSandalsBuild
     - RMCFloorTileWoodBuild
     - RMCCampfireBuild
-    # wooden chair
+    - AU14TorchBuild
+    - AU14BaseballBatBuild
+    - AU14FishingRodBuild
+    - AU14WoodenChairBuild
     - RMCWoodenBarricadeBuild
     - RMCWoodenCrateBuild
+    - AU14WoodenCrossBuild
+    - AU14WoodenSandalsBuild
     # wooden door
     # coffin
-    # baseball bat
-    # wooden cross
     # wooden pole
-    # fishing pole
   - type: UserInterface
     interfaces:
       enum.RMCConstructionUiKey.Key:

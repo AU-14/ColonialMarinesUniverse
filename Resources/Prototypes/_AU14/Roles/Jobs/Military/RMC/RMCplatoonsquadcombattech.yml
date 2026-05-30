@@ -2,14 +2,7 @@
   parent: AU14JobSquadCombatTechBase
   id: AU14JobGOVFORSquadCombatTechRMC
   name: au14-job-name-govforsquadcombattechRMC
-  description: au14-job-description-govforsquadcombattech
-  setPreference: true
-  requirements:
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
-    - NonResuscitable
+  spawnMenuRoleName: Combat Tech (TWE RMC)
   ranks:
     RMC_Corporal:
     - !type:RoleTimeRequirement
@@ -20,34 +13,8 @@
       role: AU14JobGOVFORSquadAutomaticRifleman
       time: 108000 # 30 hours
     RMC_Marine: []
-  startingGear: AU14GearGOVFORSquadCombatTech
-  dummyStartingGear: AU14GearGOVFORCTDummy
-  icon: "AU14JobIconGovCT"
-  requireAdminNotify: false
-  spawnMenuRoleName: Combat Tech (TWE RMC)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforEngineer
-  hasIcon: true
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: Marine
-      Faction: govfor
-    - type: Skills
-      preset: AU14SkillPresetPlatoonCombatTechnician
     - type: JobPrefix
       prefix: au14-job-prefix-govforsquadcombattechRMC
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-    - type: CMVendorUser
-      id: AU14JobGOVFORSquadCombatTech
-      points: 50
-  hidden: true

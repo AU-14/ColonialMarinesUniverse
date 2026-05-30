@@ -31,6 +31,9 @@
   special:
   - !type:AddComponentSpecial
     components:
+    - type: NpcFactionMember
+      factions:
+      - AUWeYu
     - type: Skills
       skills:
         RMCSkillFireman: 1
@@ -83,7 +86,7 @@
     shoes: RMCShoesFancyLeather
     back: CMSatchel
     eyes: CMGlassesSecurity
-    ears2: RMCHeadsetDistressWeYa
+    ears: RMCHeadsetDistressWeYa
   inhand:
   - RMCPortableVendorCorporate
   storage:

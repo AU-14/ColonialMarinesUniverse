@@ -29,6 +29,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Standing;
+using Content.Shared.Stacks;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -129,6 +130,110 @@ public sealed class RMCHumanPrototypeRegressionTest
             finally
             {
                 entMan.DeleteEntity(treater);
+                entMan.DeleteEntity(patient);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [TestCase("CMTraumaKit10", WoundType.Brute)]
+    [TestCase("CMBurnKit10", WoundType.Burn)]
+    public async Task CmuTraumaAndBurnKitsInstantlyCleanTwoWoundsPerUse(string treaterId, WoundType woundType)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var treater = entMan.SpawnEntity(treaterId, MapCoordinates.Nullspace);
+
+            try
+            {
+                var part = GetFirstBodyPart(entMan, patient);
+                AddBodyPartWound(entMan, part, woundType);
+                AddBodyPartWound(entMan, part, woundType);
+
+                var interact = new AfterInteractEvent(patient, treater, patient, default, true);
+                entMan.EventBus.RaiseLocalEvent(treater, interact);
+
+                var wounds = entMan.GetComponent<BodyPartWoundComponent>(part);
+                var woundList = GetField<List<Wound>>(wounds, nameof(BodyPartWoundComponent.Wounds));
+                var bandages = GetField<List<int>>(wounds, nameof(BodyPartWoundComponent.Bandages));
+                var treated = 0;
+                foreach (var wound in woundList)
+                {
+                    if (wound.Type == woundType && wound.Treated)
+                        treated++;
+                }
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(interact.Handled, Is.True);
+                    Assert.That(entMan.HasComponent<CMUBandagePendingComponent>(patient), Is.False);
+                    Assert.That(treated, Is.EqualTo(2));
+                    Assert.That(bandages.Count, Is.EqualTo(2));
+                    Assert.That(bandages, Has.All.EqualTo(WoundSizeProfile.BandagesRequired(WoundSize.Deep)));
+                    Assert.That(entMan.GetComponent<StackComponent>(treater).Count, Is.EqualTo(9));
+                });
+            }
+            finally
+            {
+                entMan.DeleteEntity(treater);
+                entMan.DeleteEntity(patient);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task CmuBodyPartHealingPrefersTreatmentOriginPart()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var damageable = entMan.System<DamageableSystem>();
+            var partHealth = entMan.System<SharedBodyPartHealthSystem>();
+            var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+
+            try
+            {
+                var torso = GetBodyPart(entMan, patient, BodyPartType.Torso, BodyPartSymmetry.None);
+                var leftArm = GetBodyPart(entMan, patient, BodyPartType.Arm, BodyPartSymmetry.Left);
+
+                damageable.TryChangeDamage(patient, new DamageSpecifier
+                {
+                    DamageDict = { ["Blunt"] = FixedPoint2.New(50) },
+                }, true);
+
+                var torsoHealth = entMan.GetComponent<BodyPartHealthComponent>(torso);
+                var armHealth = entMan.GetComponent<BodyPartHealthComponent>(leftArm);
+                partHealth.SetCurrent((torso, torsoHealth), FixedPoint2.New(10));
+                partHealth.SetCurrent((leftArm, armHealth), FixedPoint2.New(20));
+
+                var torsoBefore = torsoHealth.Current;
+                var armBefore = armHealth.Current;
+
+                var damage = entMan.GetComponent<DamageableComponent>(patient);
+                damageable.TryChangeDamage(patient, new DamageSpecifier
+                {
+                    DamageDict = { ["Blunt"] = FixedPoint2.New(-10) },
+                }, true, false, damage, origin: leftArm);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(armHealth.Current, Is.GreaterThan(armBefore));
+                    Assert.That(torsoHealth.Current, Is.EqualTo(torsoBefore));
+                });
+            }
+            finally
+            {
                 entMan.DeleteEntity(patient);
             }
         });
@@ -476,7 +581,7 @@ public sealed class RMCHumanPrototypeRegressionTest
                 Assert.That(leftArm, Is.Not.EqualTo(default(EntityUid)));
 
                 var attempt = new BoneFractureAttemptEvent(leftArm, FractureSeverity.Compound);
-                entMan.EventBus.RaiseLocalEvent(leftArm, attempt);
+                entMan.EventBus.RaiseLocalEvent(leftArm, ref attempt);
 
                 Assert.Multiple(() =>
                 {
@@ -1104,6 +1209,21 @@ public sealed class RMCHumanPrototypeRegressionTest
         }
 
         Assert.Fail("Expected CMU human to have at least one body part.");
+        return EntityUid.Invalid;
+    }
+
+    private static EntityUid GetBodyPart(IEntityManager entMan, EntityUid bodyUid, BodyPartType type, BodyPartSymmetry symmetry)
+    {
+        var body = entMan.System<SharedBodySystem>();
+        foreach (var (partUid, part) in body.GetBodyChildren(bodyUid))
+        {
+            if (part.PartType != type || part.Symmetry != symmetry)
+                continue;
+
+            return partUid;
+        }
+
+        Assert.Fail($"Expected CMU human to have {symmetry} {type}.");
         return EntityUid.Invalid;
     }
 

@@ -270,8 +270,9 @@
   components:
   - type: Sprite
     sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+  - type: AccessReader
+    access: [["AU14AccessGovforSecurity" ], [ "AU14AccessOpforSecurity" ]]
   - type: CMAutomatedVendor
-    jobs: [ AU14JobGOVFORMilitaryPoliceMan, AU14JobMilitaryPoliceBase ]
     sections:
     - name: Standard Equipment
       takeAll: CMStandard
@@ -281,6 +282,7 @@
       - id: RMCBoxZiptie
       - id: RMCGuidebookLawMarine
       - id: RMCGuidebookSOP
+      - id: AU14Scissors
     - name: Hat
       choices: { CMHat: 1 }
       entries:

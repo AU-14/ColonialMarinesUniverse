@@ -25,7 +25,7 @@
     - id: CMPen
     - id: RMCGuidebookSOP
     - id: RMCGuidebookLawMarine
-    - id: BarberScissors
+    - id: AU14Scissors
     - id: RMCCPRDummy
     - id: RMCGrenadeTraining
       amount: 2

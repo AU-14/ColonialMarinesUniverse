@@ -23,7 +23,7 @@ public sealed partial class XenoImpaleComponent : Component
     public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_tail_attack.ogg");
 
     [DataField, AutoNetworkedField]
-    public int AP = 10;
+    public int AP = 30;
 
     [DataField, AutoNetworkedField]
     public ProtoId<EmotePrototype>? Emote = "XenoRoar";

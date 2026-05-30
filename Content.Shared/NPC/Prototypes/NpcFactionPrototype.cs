@@ -13,6 +13,9 @@ public sealed partial class NpcFactionPrototype : IPrototype
     [IdDataField]
     public string ID { get; private set; } = default!;
 
+    [ViewVariables(VVAccess.ReadOnly), DataField]
+    public string? Name { get; private set; }
+
     [DataField]
     public List<ProtoId<NpcFactionPrototype>> Friendly = new();
 

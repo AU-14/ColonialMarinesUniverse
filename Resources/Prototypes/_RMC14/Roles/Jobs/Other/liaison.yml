@@ -80,7 +80,7 @@
 - type: entity
   parent: CMGuidebookRole
   id: CMGuidebookRoleLiaisonYou
-  name: A Typical Weston-Yamada Liaison
+  name: A Typical Weyland-Yutani Liaison
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite

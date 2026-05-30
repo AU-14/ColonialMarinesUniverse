@@ -15,7 +15,6 @@ using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Client._RMC14.Chemistry.Master;
@@ -24,10 +23,10 @@ namespace Content.Client._RMC14.Chemistry.Master;
 public sealed partial class RMCChemMasterBui : BoundUserInterface, IRefreshableBui
 {
     [Dependency] private ILocalizationManager _localization = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly ContainerSystem _container;
     private readonly ItemSlotsSystem _itemSlots;
+    private readonly RMCReagentSystem _reagent;
     private readonly SolutionContainerSystem _solution;
     private readonly SpriteSystem _sprite;
     private readonly RMCChemMasterPresetManager _presetManager;
@@ -58,6 +57,7 @@ public sealed partial class RMCChemMasterBui : BoundUserInterface, IRefreshableB
     {
         _container = EntMan.System<ContainerSystem>();
         _itemSlots = EntMan.System<ItemSlotsSystem>();
+        _reagent = EntMan.System<RMCReagentSystem>();
         _solution = EntMan.System<SolutionContainerSystem>();
         _sprite = EntMan.System<SpriteSystem>();
         _presetManager = new RMCChemMasterPresetManager();
@@ -459,7 +459,7 @@ public sealed partial class RMCChemMasterBui : BoundUserInterface, IRefreshableB
     private void UpdateReagentRow(RMCChemMasterReagentRow row, ReagentQuantity reagent, Action<FixedPoint2> onTransfer)
     {
         var name = reagent.Reagent.Prototype;
-        if (_prototype.TryIndexReagent(name, out ReagentPrototype? reagentProto))
+        if (_reagent.TryIndex(reagent.Reagent, out var reagentProto))
             name = reagentProto.LocalizedName;
 
         row.ReagentLabel.Text = Loc.GetString("rmc-chem-master-reagent-amount", ("name", name), ("amount", reagent.Quantity));

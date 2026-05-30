@@ -21,6 +21,7 @@ namespace Content.Server.Power.Components
         where TNetType : class
     {
         [Dependency] private IEntityManager _entMan = default!;
+        private EntityUid _owner;
 
         [ViewVariables(VVAccess.ReadWrite)]
         public Voltage Voltage { get => _voltage; set => SetVoltage(value); }
@@ -35,6 +36,11 @@ namespace Content.Server.Power.Components
 
         [DataField("node")] public string? NodeId { get; set; }
 
+        public void SetOwner(EntityUid owner)
+        {
+            _owner = owner;
+        }
+
         public void TryFindAndSetNet()
         {
             if (TryFindNet(out var net))
@@ -47,18 +53,18 @@ namespace Content.Server.Power.Components
         {
             if (_net != null)
             {
-                RemoveSelfFromNet(_net);
+                RemoveSelfFromNet(_owner, _net);
                 _net = null;
             }
         }
 
-        protected abstract void AddSelfToNet(TNetType net);
+        protected abstract void AddSelfToNet(EntityUid uid, TNetType net);
 
-        protected abstract void RemoveSelfFromNet(TNetType net);
+        protected abstract void RemoveSelfFromNet(EntityUid uid, TNetType net);
 
         private bool TryFindNet([NotNullWhen(true)] out TNetType? foundNet)
         {
-            if (_entMan.TryGetComponent(Owner, out NodeContainerComponent? container))
+            if (_entMan.TryGetComponent(_owner, out NodeContainerComponent? container))
             {
                 var compatibleNet = container.Nodes.Values
                     .Where(node => (NodeId == null || NodeId == node.Name) && node.NodeGroupID == (NodeGroupID) Voltage)
@@ -79,10 +85,10 @@ namespace Content.Server.Power.Components
         private void SetNet(TNetType? newNet)
         {
             if (_net != null)
-                RemoveSelfFromNet(_net);
+                RemoveSelfFromNet(_owner, _net);
 
             if (newNet != null)
-                AddSelfToNet(newNet);
+                AddSelfToNet(_owner, newNet);
 
             _net = newNet;
         }

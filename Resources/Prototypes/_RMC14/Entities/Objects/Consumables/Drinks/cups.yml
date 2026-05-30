@@ -113,7 +113,7 @@
   parent: RMCCoffeeCup
   id: RMCWestonYamadaCup
   name: WEYA mug
-  description: A clean, stylish cup with the logo of the Weston-Yamada Corporation branded on the side. Used throughout the company hierarchy, from interns to division directors.
+  description: A clean, stylish cup with the logo of the Weyland-Yutani Corporation branded on the side. Used throughout the company hierarchy, from interns to division directors.
   components:
   - type: Sprite
     layers:

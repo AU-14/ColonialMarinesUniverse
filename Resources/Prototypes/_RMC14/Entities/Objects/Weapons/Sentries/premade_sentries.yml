@@ -161,13 +161,6 @@
         5.5
       AggroVisionRadius: !type:Single
         5.5
-  - type: NpcFactionMember
-    factions:
-    - UNMC
-  - type: MarineIFF
-  - type: UserIFF
-    factions:
-    - FactionMarine
   - type: Damageable
     damageContainer: Inorganic
   - type: Destructible

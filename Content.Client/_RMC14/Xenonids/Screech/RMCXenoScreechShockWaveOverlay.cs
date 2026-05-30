@@ -8,6 +8,8 @@ namespace Content.Client._RMC14.Xenonids.Screech;
 
 public sealed partial class RMCXenoScreechShockWaveOverlay : Overlay, IEntityEventSubscriber
 {
+    private static readonly ProtoId<ShaderPrototype> ScreechShockWaveShader = "RMCXenoScreechShockWave";
+
     [Dependency] private IEntityManager _entMan = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
 
@@ -21,7 +23,7 @@ public sealed partial class RMCXenoScreechShockWaveOverlay : Overlay, IEntityEve
     public RMCXenoScreechShockWaveOverlay()
     {
         IoCManager.InjectDependencies(this);
-        _shader = _prototypeManager.Index<ShaderPrototype>("RMCXenoScreechShockWave").Instance().Duplicate();
+        _shader = _prototypeManager.Index(ScreechShockWaveShader).Instance().Duplicate();
     }
 
     private Vector2 _position;

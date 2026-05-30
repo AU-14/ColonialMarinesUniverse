@@ -126,7 +126,7 @@
   parent: CMPosterBase
   id: CMPosterSilicon2
   name: "Silicon"
-  description: "Hey, Silicons! That's a blast from the past. They got bought out by We-Ya around the time one of their space stations de-orbited and fell into a planet's gravity well after a systems failure."
+  description: "Hey, Silicons! That's a blast from the past. They got bought out by We-Yu around the time one of their space stations de-orbited and fell into a planet's gravity well after a systems failure."
   components:
   - type: Sprite
     state: android
@@ -440,7 +440,7 @@
   parent: CMPosterBase
   id: CMPosterTartarus
   name: "Tartarus Mining co. poster"
-  description: "A simplified version of the Tartarus Mining co. logo. The Tartarus Mining Company is owned by Prospectia, a sub-division of the San Rei Corporation, which is in turn owned by the Weston-Yamada Corporation."
+  description: "A simplified version of the Tartarus Mining co. logo. The Tartarus Mining Company is owned by Prospectia, a sub-division of the San Rei Corporation, which is in turn owned by the Weyland-Yutani Corporation."
   components:
   - type: Sprite
     state: tartarus
@@ -662,12 +662,12 @@
   - type: Sprite
     state: safety_soap
 
-# Weston-Yamada
+# Weyland-Yutani
 - type: entity
   parent: CMPosterBase
   id: RMCPosterWEYA1
-  name: Weston-Yamada poster
-  description: "A Weston-Yamada logo featuring a stylized wireframe planet and the company slogan: The Future is Now."
+  name: Weyland-Yutani poster
+  description: "A Weyland-Yutani logo featuring a stylized wireframe planet and the company slogan: The Future is Now."
   components:
   - type: Sprite
     state: weya_1
@@ -675,7 +675,7 @@
 - type: entity
   parent: RMCPosterWEYA1
   id: RMCPosterWEYA2
-  name: "Weston-Yamada poster"
+  name: "Weyland-Yutani poster"
   description: "You don't have much choice in brand loyalty when there's basically only one brand."
   components:
   - type: Sprite
@@ -691,8 +691,8 @@
 - type: entity
   parent: RMCPosterWEYA1
   id: RMCPosterWEYA4
-  name: "Weston-Yamada propaganda poster"
-  description: "TOGETHER - EXTRASOLAR COLONIZATION - WEAPON - PROTECTION - HIGH TECHNOLOGY - MANUFACTURING SYNTHETICS - FUTURE - SPACE STATION. Weston-Yamada - The Future is Now."
+  name: "Weyland-Yutani propaganda poster"
+  description: "TOGETHER - EXTRASOLAR COLONIZATION - WEAPON - PROTECTION - HIGH TECHNOLOGY - MANUFACTURING SYNTHETICS - FUTURE - SPACE STATION. Weyland-Yutani - The Future is Now."
   components:
   - type: Sprite
     state: weya_4
@@ -700,7 +700,7 @@
 - type: entity
   parent: RMCPosterWEYA1
   id: RMCPosterWEYA5
-  name: "Weston-Yamada propaganda poster"
+  name: "Weyland-Yutani propaganda poster"
   description: "LET'S WORK - TOGETHER WE BUILD A BETTER FUTURE."
   components:
   - type: Sprite
@@ -728,8 +728,8 @@
 - type: entity
   parent: CMPosterDaniel1
   id: CMPosterDaniel3
-  name: "Weston-Yamada - 'Daniel' Model Synthetic poster"
-  description: "A poster depicting a child in the arms of a Weston-Yamada 'Daniel' model Synthetic, Who thought this was a good idea?"
+  name: "Weyland-Yutani - 'Daniel' Model Synthetic poster"
+  description: "A poster depicting a child in the arms of a Weyland-Yutani 'Daniel' model Synthetic, Who thought this was a good idea?"
   components:
   - type: Sprite
     state: daniel_3
@@ -755,8 +755,8 @@
 - type: entity
   parent: CMPosterDaniel1
   id: CMPosterDaniel6
-  name: "Weston-Yamada - 'Daniel' Model Synthetic poster"
-  description: "A poster depicting a child in the arms of a Weston-Yamada 'Daniel' model Synthetic, Who thought this was a good idea?"
+  name: "Weyland-Yutani - 'Daniel' Model Synthetic poster"
+  description: "A poster depicting a child in the arms of a Weyland-Yutani 'Daniel' model Synthetic, Who thought this was a good idea?"
   components:
   - type: Sprite
     state: daniel_6
@@ -764,7 +764,7 @@
 - type: entity
   parent: CMPosterDaniel1
   id: CMPosterDaniel7
-  name: "Weston-Yamada - 'Daniel' Model Synthetic poster"
+  name: "Weyland-Yutani - 'Daniel' Model Synthetic poster"
   description: "All that matters is YOUR comfort. Our Artificial Humans are watching your back."
   components:
   - type: Sprite

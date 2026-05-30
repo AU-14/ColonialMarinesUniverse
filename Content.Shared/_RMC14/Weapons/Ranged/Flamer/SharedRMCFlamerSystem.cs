@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Attachable.Components;
 using Content.Shared._RMC14.Chemistry.Reagent;
@@ -51,6 +52,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
     [Dependency] private RMCMapSystem _rmcMap = default!;
     [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     public override void Initialize()
     {
@@ -616,10 +618,13 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
                 if (time >= tile.At)
                 {
                     comp.Tiles.Remove(tile);
-                    var fire = Spawn(comp.Spawn, tile.Coordinates);
+                    if (!_zLevels.TryProjectToGround(_transform.ToCoordinates(tile.Coordinates), out var fireCoordinates))
+                        continue;
+
+                    var fire = Spawn(comp.Spawn, fireCoordinates);
 
                     // check for any fires on the same tile other than the one we just spawned, and delete them
-                    if (_rmcMap.HasAnchoredEntityEnumerator<TileFireComponent>(_transform.ToCoordinates(fire, tile.Coordinates), out var oldTileFire)
+                    if (_rmcMap.HasAnchoredEntityEnumerator<TileFireComponent>(fireCoordinates, out var oldTileFire)
                         && oldTileFire.Owner.Id != fire.Id)
                     {
                         QueueDel(oldTileFire);

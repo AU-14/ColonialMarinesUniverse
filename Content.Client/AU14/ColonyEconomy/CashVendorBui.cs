@@ -14,6 +14,7 @@ public sealed class AU14CashVendorBui(EntityUid owner, Enum uiKey) : BoundUserIn
         _window = this.CreateWindow<AU14CashVendorWindow>();
         _window.OnBuyPressed += idx => SendPredictedMessage(new AU14CashVendorBuyBuiMsg(idx));
         _window.ReturnChangeBtn.OnPressed += _ => SendPredictedMessage(new AU14CashVendorReturnChangeBuiMsg());
+        _window.OnScanIdPressed += () => SendPredictedMessage(new AU14CashVendorScanIDBuiMsg());
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

@@ -14,10 +14,12 @@
   - type: GhostRole
     name: Spider Abomination
     description: A skittering severed head. Run prey down and bury them in acid.
+  - type: RMCSize
+    size: SmallXeno
   - type: MobThresholds
     thresholds:
       0: Alive
-      90: Dead
+      113: Dead
   - type: MobStateActions
     actions:
       Alive:
@@ -30,8 +32,8 @@
   # Doubled sprint speed — spider is the chase caste, it should run people
   # down at xeno-runner pace.
   - type: MovementSpeedModifier
-    baseWalkSpeed: 3.2
-    baseSprintSpeed: 11.0
+    baseWalkSpeed: 3.68
+    baseSprintSpeed: 12.65
   - type: Fixtures
     fixtures:
       fix1:

@@ -1,20 +1,84 @@
 - type: job
-  parent: CMJobBase
-  id: AU14JobPlatCoBase
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobPlatCoBaseAbstract
   name: au14-job-name-govforplatco
   description: au14-job-description-govforplatco
+  icon: "AU14JobIconPlatCo"
+  spawnMenuRoleName: Platoon Commander (GOVFOR)
+  supervisors: au14-job-supervisors-govforplatco
+  startingGear: AU14GearGOVFORPlatCo
+  dummyStartingGear: AU14GearGOVFORPlatCoDummy
   playTimeTracker: AU14JobGOVFORPlatCo
-  basePlaytimeTracker: true
+  requireAdminNotify: true
+  joinNotifyCrew: true
+  canBeAntag: false
+  accessGroups:
+  - AU14GovforCommand
+
+- type: job
   abstract: true
-  hidden: true
+  parent: AU14JobPlatCoBaseAbstract
+  id: AU14JobPlatCoBase
   requirements:
-  - !type:DepartmentTimeRequirement
-    department: AU14DepartmentGovernmentForces
-    time: 144000 # 40 hours
-  - !type:RoleTimeRequirement
-    role: AU14JobGOVFORPlatOp
-    time: 72000 # 20 hours
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  - !type:AgeRequirement
+    requiredAge: 30
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxiety
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankMajor:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatCo
+      time: 180000 # 50 hours
+    RMCRankCaptain: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: CommendationGiver
+    - type: InnateCommandSpeech
+    - type: Skills
+      preset: AU14SkillPresetPlatoonCommander
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforplatco
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: co
 
 - type: playTimeTracker
   id: AU14JobGOVFORPlatCo
   isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORPlatCo
+  equipment:
+    id: AU14IDCardGOVFORPlatCo
+    ears: AU14HeadsetGovforCommand
+  inhand:
+    -  AU14TabletGovfor
+
+- type: startingGear
+  id: AU14GearGOVFORPlatCoDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: CMHeadCapPeakedFormal
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetGovforCommand
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORPlatCo
+  name: Spawn Point GOVFOR Platoon Commander
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORPlatCo
+  - type: Sprite
+    state: syn_spawn

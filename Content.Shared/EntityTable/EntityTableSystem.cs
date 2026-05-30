@@ -22,7 +22,7 @@ public sealed partial class EntityTableSystem : EntitySystem
         if (table == null)
             return new List<EntProtoId>();
 
-        rand ??= _random.GetRandom();
+        rand ??= new System.Random(_random.Next());
         ctx ??= new EntityTableContext();
         return table.GetSpawns(rand, EntityManager, _prototypeManager, ctx);
     }

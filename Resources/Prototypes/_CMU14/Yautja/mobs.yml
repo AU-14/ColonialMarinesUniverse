@@ -47,6 +47,9 @@
       Male: CMUMaleYautja
       Female: CMUFemaleYautja
       Unsexed: CMUMaleYautja
+  - type: Body
+    prototype: CMUYautjaBody
+    requiredLegs: 2
   - type: MeleeWeapon
     soundHit:
       collection: Punch

@@ -6,7 +6,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._RMC14.Dropship;
 
 [Serializable, NetSerializable]
-public sealed class DropshipNavigationDestinationsBuiState(NetEntity? flyBy, List<Destination> destinations, Dictionary<DoorLocation, bool> doorLockStatus, bool remoteControlStatus, bool canTacticalLand, bool launchAlarmStatus) : BoundUserInterfaceState
+public sealed class DropshipNavigationDestinationsBuiState(NetEntity? flyBy, List<Destination> destinations, Dictionary<DoorLocation, bool> doorLockStatus, bool remoteControlStatus, bool canTacticalLand, bool launchAlarmStatus, bool canWithdrawReturn = false) : BoundUserInterfaceState
 {
     public readonly NetEntity? FlyBy = flyBy;
     public readonly List<Destination> Destinations = destinations;
@@ -14,6 +14,7 @@ public sealed class DropshipNavigationDestinationsBuiState(NetEntity? flyBy, Lis
     public readonly bool RemoteControlStatus = remoteControlStatus;
     public readonly bool CanTacticalLand = canTacticalLand;
     public readonly bool LaunchAlarmStatus = launchAlarmStatus;
+    public readonly bool CanWithdrawReturn = canWithdrawReturn;
 }
 
 [Serializable, NetSerializable]
@@ -59,3 +60,6 @@ public sealed class DropshipRemoteControlToggleMsg : BoundUserInterfaceMessage;
 
 [Serializable, NetSerializable]
 public sealed class DropshipLaunchAlarmToggleMsg : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
+public sealed class DropshipWithdrawReturnMsg : BoundUserInterfaceMessage;

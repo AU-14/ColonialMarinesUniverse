@@ -294,7 +294,7 @@
 - type: entity
   parent: RMCAreaBosenmoriBashoDrowningCrow
   id: RMCAreaBosenmoriBashoCorporateDome
-  name: Weston-Yamada Corporate Dome
+  name: Weyland-Yutani Corporate Dome
   components:
   - type: Sprite
     state: bluenew

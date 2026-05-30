@@ -50,8 +50,10 @@
   - AU14AccessColonyForeman
   - AU14AccessColonyAdministrator
   - AU14AccessColonyHeadOfService
-  - AU14AccessColonyCorporateLiaison
+  - AU14AccessCorporateWEYULiaison
   - AU14AccessColonyAmbassador
+  - AU14AccessOrbitalManagement
+  - AU14AccessOrbitalLaw
 
 - type: accessGroup
   id: CO

@@ -1,8 +1,10 @@
-﻿using Content.Shared._RMC14.Tracker.SquadLeader;
+﻿using Content.Shared._RMC14.TacticalMap;
+using Content.Shared._RMC14.Tracker.SquadLeader;
 using Content.Shared.Access;
 using Content.Shared.Radio;
 using Content.Shared.Roles;
 using Robust.Shared.GameStates;
+using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
@@ -65,4 +67,10 @@ public sealed partial class SquadTeamComponent : Component
     /// </summary>
     [DataField]
     public Dictionary<SquadObjectiveType, string> Objectives = new();
+
+    [DataField]
+    public List<TacticalMapLine> TacMapLines = new();
+
+    [DataField]
+    public Dictionary<Vector2i, string> TacMapLabels = new();
 }

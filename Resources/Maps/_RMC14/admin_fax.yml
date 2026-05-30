@@ -10775,7 +10775,7 @@ entities:
       pos: 40.5,-32.5
       parent: 2
     - type: Ladder
-      id: Fax_WeYa
+      id: Fax_WeYu
     - type: Fixtures
       fixtures: {}
   - uid: 2093
@@ -10803,12 +10803,12 @@ entities:
   - uid: 772
     components:
     - type: MetaData
-      name: We-Ya
+      name: We-Yu
     - type: Transform
       pos: 25.5,-21.5
       parent: 2
     - type: Ladder
-      id: Fax_WeYa
+      id: Fax_WeYu
     - type: Fixtures
       fixtures: {}
   - uid: 948
@@ -12592,7 +12592,7 @@ entities:
   - uid: 1908
     components:
     - type: MetaData
-      name: We-Ya Communications Office
+      name: We-Yu Communications Office
     - type: Transform
       pos: 34.997738,-25.30221
       parent: 2
@@ -12607,7 +12607,7 @@ entities:
       parent: 2
     - type: Fixtures
       fixtures: {}
-- proto: RMCSensorTower
+- proto: AU14SensorTower
   entities:
   - uid: 459
     components:

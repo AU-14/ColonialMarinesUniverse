@@ -1,0 +1,111 @@
+- type: job
+  parent: AU14JobTARSPartyContractorBase
+  id: AU14JobProdigyTARSPartyLeader #m41a/2
+  name: Prodigy TARS Leader
+  description: au14-prodigyrescue-description
+  playTimeTracker: AU14JobProdigyTARSPartyLeaderTracker
+  ranks:
+    AU14RankPrDEnforcerLead: []
+  spawnMenuRoleName: Prodigy TARS Leader (3rd party, M20a)
+  startingGear: AU14GearPARTPartyLeader
+  greeting: au14-prodigyrescue-greeting
+  icon: "RMCJobIconPMCLeader"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-psc
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 2
+        RMCSkillCqc: 1
+        RMCSkillEndurance: 2
+        RMCSkillEngineer: 3
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSectionSergeantWYPMC
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: MarineOrders
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: AU14JobProdigyTARSPartyLeader
+  name: Prodigy TARS Leader (3rd party, M20a)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadTARS
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: TARS Leader
+    description: au14-prodigyrescue-description
+    reregister: false
+    job: AU14JobProdigyTARSPartyLeader
+    raffle:
+      settings: short
+    rules: au14-prodigyrescue-description
+
+- type: startingGear
+  id: AU14GearTARSPartyLeader
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14ArmorProdigyXAS23
+    jumpsuit: AU14ProdigyFatiguesRU
+    shoes: RMCBootsSPPBlackFilled
+    #mask: RMCMaskCoifPMC
+    eyes: RMCGlassesMedicalHUDGlasses
+    #head: AU14ProdigyBeretTARS
+    #gloves: AU14HandsProdigyRU
+    belt: AU14BeltUtilityCombatProdigyRUFilled
+    pocket1: AU14PouchMagazineLargePARTDualFilled
+    pocket2: AU14PouchIFAKProdigyFill
+    back: RMCSatchelWelderRU #21 slots
+    ears: AU14HeadsetPART
+    ears2: RMCM5CameraGear
+    suitstorage: AUWeaponRifleM20A
+  storage:
+    #pocket1:
+    # comes pre-filled with rifle mags, no need to fill it here
+    #pocket2:
+    #- AU14Tourniquet
+    # no need, pouch already has 6 slots and is filled with med supplies
+    back:
+    - CMSurgicalLine
+    - CMSynthGraft
+    - CMMRE
+    - RMCLaserDesignatorPVE
+    - CMStunbaton
+    - RMCHandcuffs
+    - RMCHandcuffs
+    - AU14PacketGrenadeFragM12Filled
+    jumpsuit:
+    - AU14SynthResetKeyProdigy
+    - AU14SynthResetKeyProdigy
+    - AU14ProdigyLaptop
+    - AU14ProdigyWeldingGoggles
+    - AU14VisorNightVisionProdigy
+    # 0 empty slots
+    outerClothing:
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    - AU14ExtractionTeamBeacon
+    # 1 empty slots
+
+- type: playTimeTracker
+  id: AU14JobProdigyTARSPartyLeaderTracker

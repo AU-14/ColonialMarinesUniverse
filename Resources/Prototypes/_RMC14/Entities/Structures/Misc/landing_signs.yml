@@ -116,7 +116,7 @@
   parent: RMCBaseLandingSign
   id: RMCHybrisaProsperaSign
   name: Hybrisa Prospera welcome sign
-  description: A large sign that reads 'Welcome to Hybrisa Prospera', The Weston Yamada 'Wings' and logo adorn the sign, as well as some information about the colony.
+  description: A large sign that reads 'Welcome to Hybrisa Prospera', The Weyland Yutani 'Wings' and logo adorn the sign, as well as some information about the colony.
   components:
   - type: Sprite
     state: hybrisa_sign
@@ -133,7 +133,7 @@
 - type: entity
   parent: RMCBaseLandingSign
   id: RMCHybrisaProsperaMiningSign
-  name: Hybrisa Prospera - Weston-Yamada Tartarus Mining - Landing Zone two sign
+  name: Hybrisa Prospera - Weyland-Yutani Tartarus Mining - Landing Zone two sign
   description: A large sign that reads 'WEYA - TMCC Mining - HBP - LZ - 01' The Tartarus Mining logo is adorns the sign.
   components:
   - type: Sprite
@@ -151,7 +151,7 @@
 - type: entity
   parent: RMCBaseLandingSign
   id: RMCPortNereidCargoSign
-  name: Port Nereid - Weston-Yamada Cargo Depot AC-170 - Landing Zone one sign
+  name: Port Nereid - Weyland-Yutani Cargo Depot AC-170 - Landing Zone one sign
   description: A large sign that identifies this area as "Cargo Depot AC-170". It's clearly seen many days of rain, and jungle flora has started to creep up it.
   components:
   - type: Sprite

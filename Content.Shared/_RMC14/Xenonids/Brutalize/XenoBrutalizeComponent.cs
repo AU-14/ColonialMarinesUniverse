@@ -22,6 +22,9 @@ public sealed partial class XenoBrutalizeComponent : Component
     public float Range = 1.5f;
 
     [DataField, AutoNetworkedField]
+    public int ArmorPiercing = 0;
+
+    [DataField, AutoNetworkedField]
     public TimeSpan BaseCooldownReduction = TimeSpan.FromSeconds(1.5);
 
     [DataField, AutoNetworkedField]

@@ -108,19 +108,20 @@ public sealed partial class VehicleSupplyWindow : FancyWindow
             return;
 
         var sprite = entity.Comp1;
+        var spriteSystem = _entManager.System<SpriteSystem>();
         foreach (var entry in _previewLayers)
         {
-            if (!sprite.LayerMapTryGet(entry.Layer, out var layer))
+            if (!spriteSystem.LayerMapTryGet((entity.Owner, sprite), entry.Layer, out var layer, false))
                 continue;
 
             if (string.IsNullOrWhiteSpace(entry.State))
             {
-                sprite.LayerSetVisible(layer, false);
+                spriteSystem.LayerSetVisible((entity.Owner, sprite), layer, false);
                 continue;
             }
 
-            sprite.LayerSetState(layer, entry.State);
-            sprite.LayerSetVisible(layer, true);
+            spriteSystem.LayerSetRsiState((entity.Owner, sprite), layer, entry.State);
+            spriteSystem.LayerSetVisible((entity.Owner, sprite), layer, true);
         }
 
         _previewDirty = false;
@@ -251,7 +252,7 @@ public sealed partial class VehicleSupplyWindow : FancyWindow
             if (!overlay.View.Disposed)
             {
                 overlay.View.Orphan();
-                overlay.View.Dispose();
+                overlay.View.Orphan();
             }
 
             if (!_entManager.Deleted(overlay.Entity))

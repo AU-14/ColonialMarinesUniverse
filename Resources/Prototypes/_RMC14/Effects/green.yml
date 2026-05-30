@@ -125,3 +125,19 @@
     sprite: _RMC14/Effects/xeno_telegraph_big.rsi
     state: expand_out
     color: "#A50824"
+
+- type: entity
+  id: RMCEffectReaperFleshBloomTelegraph
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 4
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: _RMC14/Structures/Xenos/xeno_deployed_trap.rsi
+    noRot: true
+    state: trap_boiler
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu

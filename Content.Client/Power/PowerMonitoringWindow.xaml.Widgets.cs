@@ -99,7 +99,7 @@ public sealed partial class PowerMonitoringWindow
         button.NameLocalized.Text = name;
 
         // Update tool tip
-        button.ToolTip = Loc.GetString(name);
+        button.ToolTip = name;
 
         // Update power value
         // Don't use SI prefixes, just give the number in W, so that it is readily apparent which consumer is using a lot of power.

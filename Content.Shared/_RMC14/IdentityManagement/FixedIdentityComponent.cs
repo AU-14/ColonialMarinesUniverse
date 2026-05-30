@@ -1,4 +1,4 @@
-﻿using Content.Shared.Whitelist;
+using Content.Shared.Whitelist;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._RMC14.IdentityManagement;
@@ -11,4 +11,7 @@ public sealed partial class FixedIdentityComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntityWhitelist? Whitelist;
+
+    [DataField, AutoNetworkedField]
+    public EntityWhitelist? Blacklist;
 }

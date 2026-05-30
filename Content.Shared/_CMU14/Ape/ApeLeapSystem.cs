@@ -352,7 +352,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
             _physics.SetBodyStatus(xeno, physics, BodyStatus.OnGround);
 
             if (physics.Awake)
-                _broadphase.RegenerateContacts(xeno, physics);
+                _broadphase.RegenerateContacts((xeno.Owner, physics));
         }
 
         if (!xeno.Comp.KnockdownRequiresInvisibility || HasComp<XenoActiveInvisibleComponent>(xeno))
@@ -463,4 +463,3 @@ public record struct ApeLeapHitAttempt(EntityUid Leaper, bool Cancelled = false)
 
 [ByRefEvent]
 public record struct ApeLeapStoppedEvent;
-

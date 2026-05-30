@@ -1,11 +1,14 @@
 using Content.Shared._RMC14.Xenonids.ForTheHive;
 using Robust.Client.GameObjects;
+using Robust.Shared.Utility;
 
 namespace Content.Client._RMC14.Xenonids.ForTheHive;
 
 public sealed partial class XenoForTheHiveVisualizerSystem : VisualizerSystem<ForTheHiveComponent>
 {
     [Dependency] private AnimationPlayerSystem _animation = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -19,13 +22,13 @@ public sealed partial class XenoForTheHiveVisualizerSystem : VisualizerSystem<Fo
         if (!TryComp<SpriteComponent>(xeno, out var sprite))
             return;
 
-        if (!sprite.LayerMapTryGet(ForTheHiveVisualLayers.Base, out var layer))
+        if (!_sprite.LayerMapTryGet((xeno.Owner, sprite), ForTheHiveVisualLayers.Base, out var layer, false))
             return;
 
         if (xeno.Comp.ActiveSprite != null)
         {
-            sprite.LayerSetAnimationTime(layer, 0);
-            sprite.LayerSetRSI(layer, xeno.Comp.ActiveSprite);
+            _sprite.LayerSetAnimationTime((xeno.Owner, sprite), layer, 0);
+            _sprite.LayerSetRsi((xeno.Owner, sprite), layer, new ResPath(xeno.Comp.ActiveSprite));
         }
     }
 
@@ -34,13 +37,13 @@ public sealed partial class XenoForTheHiveVisualizerSystem : VisualizerSystem<Fo
         if (!TryComp<SpriteComponent>(xeno, out var sprite))
             return;
 
-        if (!sprite.LayerMapTryGet(ForTheHiveVisualLayers.Base, out var layer))
+        if (!_sprite.LayerMapTryGet((xeno.Owner, sprite), ForTheHiveVisualLayers.Base, out var layer, false))
             return;
 
         if (xeno.Comp.BaseSprite != null)
         {
-            sprite.LayerSetAnimationTime(layer, 0); //Reset Frames
-            sprite.LayerSetRSI(layer, xeno.Comp.BaseSprite);
+            _sprite.LayerSetAnimationTime((xeno.Owner, sprite), layer, 0); //Reset Frames
+            _sprite.LayerSetRsi((xeno.Owner, sprite), layer, new ResPath(xeno.Comp.BaseSprite));
         }
     }
 
@@ -54,11 +57,11 @@ public sealed partial class XenoForTheHiveVisualizerSystem : VisualizerSystem<Fo
         if (sprite == null || !AppearanceSystem.TryGetData<float>(xeno, ForTheHiveVisuals.Time, out var ratio, args.Component))
             return;
 
-        if (!sprite.LayerMapTryGet(ForTheHiveVisualLayers.Base, out var layer))
+        if (!_sprite.LayerMapTryGet((xeno, sprite), ForTheHiveVisualLayers.Base, out var layer, false))
             return;
 
         if (ratio >= 0)
-            sprite.LayerSetAnimationTime(layer, (float)(component.AnimationTimeBase.TotalSeconds * ratio));
+            _sprite.LayerSetAnimationTime((xeno, sprite), layer, (float)(component.AnimationTimeBase.TotalSeconds * ratio));
 
     }
 }

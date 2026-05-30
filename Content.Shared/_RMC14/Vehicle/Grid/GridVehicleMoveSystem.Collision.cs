@@ -71,7 +71,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return true;
 
         var coords = new EntityCoordinates(grid, gridPos);
-        var world = coords.ToMap(EntityManager, transform);
+        var world = transform.ToMapCoordinates(coords);
 
         var debugEnabled = debug && CollisionDebugEnabled;
         if (debugEnabled)
@@ -1273,7 +1273,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         GridVehicleMoverComponent mover)
     {
         var currentCoords = new EntityCoordinates(grid, mover.Position);
-        var currentWorld = currentCoords.ToMap(EntityManager, transform);
+        var currentWorld = transform.ToMapCoordinates(currentCoords);
         if (currentWorld.MapId != mapId)
             return Vector2.Zero;
 

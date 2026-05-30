@@ -530,7 +530,7 @@ public sealed partial class HardpointMenu : FancyWindow
             if (!overlay.View.Disposed)
             {
                 overlay.View.Orphan();
-                overlay.View.Dispose();
+                overlay.View.Orphan();
             }
 
             if (_entManager.EntityExists(overlay.Entity))

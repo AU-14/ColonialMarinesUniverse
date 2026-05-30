@@ -1,0 +1,101 @@
+- type: job
+  parent: AU14JobPARTSPartyContractorBase
+  id: AU14JobPARTExtractionContractor
+  name: PART Extraction Response Unit (M41A/2)
+  description: au14-prodigyextract-description
+  playTimeTracker: AU14JobPARTPartyContractorTracker
+  ranks:
+    AU14RankPrDAssociate: []
+  spawnMenuRoleName: Prodigy Extraction Contractor (3rd party, M41A/2)
+  startingGear: AU14GearPARTExtractionContractor
+  greeting: au14-prodigyextract-greeting
+  icon: "RMCJobIconPMCStandard"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-psc
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 2
+        RMCSkillFirearms: 2
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFireman: 2
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+        RMCSkillSurgery: 1
+        RMCSkillMedical: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadRiflemanWYPMC
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: AU14JobPARTExtractionRifleman
+  name: Prodigy Extraction Rifleman (3rd party, M41A/2)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPET
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Prodigy Rifleman
+    description: au14-prodigyextract-description
+    reregister: false
+    job: AU14JobPARTExtractionContractor
+    raffle:
+      settings: short
+    rules: au14-prodigyextract-description
+
+- type: startingGear
+  id: AU14GearPARTExtractionContractor
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14ArmorProdigyXAS23
+    jumpsuit: AU14ProdigyFatiguesRU
+    shoes: RMCBootsSPPBlackFilled
+    mask: RMCMaskCoifPMC
+    eyes: AU14ProdigyWeldingGoggles
+    head: AU14ProdigyBallisticHelmetPART
+    gloves: AU14HandsProdigyRU
+    belt: AU14BeltUtilityCombatProdigyRUFilled
+    pocket1: RMCPouchMagazineLargePMC
+    pocket2: AU14PouchIFAKProdigyFill
+    back: RMCSatchelWelderRU #21 slots
+    ears: RMCM5CameraGear
+    ears2: AU14HeadsetPART
+    suitstorage: AU14KitWeaponMCX
+  storage:
+    pocket1:
+    - AU14WeaponRifleprodigyrifleMagazineAP
+    - AU14WeaponRifleprodigyrifleMagazineAP
+    - AU14WeaponRifleprodigyrifleMagazineAP
+    - AU14WeaponRifleprodigyrifleMagazineAP
+    back:
+    - CMMRE
+    - RMCBinocularsPVE
+    - AU14PacketGrenadeFragM12Filled
+    - CMPortableSurgicalBedSpawnFolded
+    - CMSurgicalCaseFilled
+    jumpsuit:
+    - AU14ProdigyLaptop
+    - RMCHandcuffs
+    # 6 empty slots
+    outerClothing:
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    - CMMagazinePistolMK80
+    - RMCVisorMedical
+    # 1 empty slots
+
+- type: playTimeTracker
+  id: AU14JobPARTPartyContractorTracker

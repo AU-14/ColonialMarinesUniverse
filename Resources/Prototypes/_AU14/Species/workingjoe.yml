@@ -12,6 +12,8 @@
   id: MobWorkingJoeSprites
   sprites:
     Head: MobWorkingJoeHead
+    Hair: MobHumanoidAnyMarking
+    FacialHair: MobHumanoidAnyMarking
     HeadTop: MobHumanoidAnyMarking
     HeadSide: MobHumanoidAnyMarking
     UndergarmentTop: MobHumanoidAnyMarking

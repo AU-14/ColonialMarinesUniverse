@@ -10,6 +10,7 @@ using Content.Shared.Storage.Components;
 using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Whitelist; // RMC14
 using Robust.Shared.GameObjects;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests
@@ -75,6 +76,33 @@ namespace Content.IntegrationTests.Tests
                     }
                 });
             });
+            await pair.CleanReturnAsync();
+        }
+
+        [Test]
+        public async Task TestHemostaticGauzePacketFitsProdigyIfak()
+        {
+            await using var pair = await PoolManager.GetServerClient();
+            var server = pair.Server;
+
+            var testMap = await pair.CreateTestMap();
+            var coords = testMap.GridCoords;
+            var entMan = server.EntMan;
+            var storageSystem = server.System<SharedStorageSystem>();
+            var mapSystem = server.System<SharedMapSystem>();
+
+            await server.WaitAssertion(() =>
+            {
+                var pouch = entMan.SpawnEntity("AU14PouchIFAKProdigy", coords);
+                var packet = entMan.SpawnEntity("AU14HemostaticGauzePacket", coords);
+
+                Assert.That(storageSystem.CanInsert(pouch, packet, null, out var reason), Is.True, reason);
+
+                entMan.DeleteEntity(packet);
+                entMan.DeleteEntity(pouch);
+                mapSystem.DeleteMap(testMap.MapId);
+            });
+
             await pair.CleanReturnAsync();
         }
 

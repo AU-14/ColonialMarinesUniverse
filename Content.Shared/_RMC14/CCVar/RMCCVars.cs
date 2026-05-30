@@ -26,6 +26,9 @@ public sealed partial class RMCCVars : CVars
     public static readonly CVarDef<bool> RMCShowNewPlayerIcons =
         CVarDef.Create("rmc.show_new_player_icons", true, CVar.REPLICATED | CVar.CLIENT | CVar.ARCHIVE);
 
+    public static readonly CVarDef<bool> RMCMarineOverlayEnabled =
+        CVarDef.Create("rmc.marine_overlay_enabled", true, CVar.CLIENT | CVar.ARCHIVE);
+
     public static readonly CVarDef<string> CMOocWebhook =
         CVarDef.Create("rmc.ooc_webhook", "", CVar.SERVERONLY | CVar.CONFIDENTIAL);
 
@@ -124,6 +127,9 @@ public sealed partial class RMCCVars : CVars
 
     public static readonly CVarDef<bool> RMCAtmosTileEqualize =
         CVarDef.Create("rmc.atmos_tile_equalize", false, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCWithdrawTimerMinutes =
+        CVarDef.Create("rmc.withdraw_timer_minutes", 6, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<bool> VehicleDebugOverlay =
         CVarDef.Create("rmc.vehicle.debug_overlay", false, CVar.CLIENT | CVar.ARCHIVE);

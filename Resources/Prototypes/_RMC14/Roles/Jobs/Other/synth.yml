@@ -107,6 +107,7 @@
     onlyHalf: true
     alert: SynthNightVision
   - type: EyeProtection
+# - type: FlashImmunity # "it provides protection from bright flashes" shift+click description
   - type: Insulated
   - type: RMCLeapProtection
     inherentStunDuration: 3

@@ -20,6 +20,7 @@ public sealed partial class FigurineSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IUserInterfaceManager _ui = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private readonly ContentSpriteControl _control = new();
 
@@ -53,7 +54,7 @@ public sealed partial class FigurineSystem : EntitySystem
         if (!TryComp(ent, out SpriteComponent? spriteComp))
             return;
 
-        spriteComp.Scale = Vector2.One;
+        _sprite.SetScale((ent, spriteComp), Vector2.One);
 
         // Don't want to wait for engine pr
         var size = Vector2i.Zero;

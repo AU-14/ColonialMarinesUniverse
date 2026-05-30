@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Map;
 using Robust.Shared.Network;
 
 namespace Content.Shared._RMC14.Vehicle;
@@ -29,7 +30,7 @@ public sealed partial class VehicleViewToggleSystem : EntitySystem
         toggle.Sources.Add(source);
         toggle.Source = source;
         toggle.OutsideTarget = outsideTarget;
-        toggle.InsideTarget = insideTarget;
+        toggle.InsideTarget = ResolveInsideTarget(user, outsideTarget, insideTarget);
         toggle.IsOutside = isOutside;
 
         EnsureSingleToggleAction(user, toggle);
@@ -97,14 +98,22 @@ public sealed partial class VehicleViewToggleSystem : EntitySystem
             return;
 
         var outside = ent.Comp.OutsideTarget.Value;
-        if (eye.Target == outside)
+        if (!Exists(outside) || TerminatingOrDeleted(outside))
+            return;
+
+        if (ent.Comp.IsOutside)
         {
-            _eye.SetTarget(ent.Owner, ent.Comp.InsideTarget, eye);
+            var inside = ResolveInsideTarget(ent.Owner, outside, ent.Comp.InsideTarget);
+            if (inside == null)
+                return;
+
+            ent.Comp.InsideTarget = inside;
+            _eye.SetTarget(ent.Owner, inside, eye);
             ent.Comp.IsOutside = false;
         }
         else
         {
-            ent.Comp.InsideTarget = eye.Target;
+            ent.Comp.InsideTarget = ResolveInsideTarget(ent.Owner, outside, eye.Target);
             _eye.SetTarget(ent.Owner, outside, eye);
             ent.Comp.IsOutside = true;
         }
@@ -113,6 +122,97 @@ public sealed partial class VehicleViewToggleSystem : EntitySystem
         UpdateActionState(ent.Comp);
         Dirty(ent.Owner, ent.Comp);
         RaiseLocalEvent(ent.Owner, new VehicleViewToggledEvent(ent.Comp.IsOutside));
+    }
+
+    public void RefreshOutsideViewers(EntityUid outsideTarget)
+    {
+        if (!Exists(outsideTarget) || TerminatingOrDeleted(outsideTarget))
+            return;
+
+        var query = EntityQueryEnumerator<VehicleViewToggleComponent, EyeComponent>();
+        while (query.MoveNext(out var user, out var toggle, out var eye))
+        {
+            if (!toggle.IsOutside || toggle.OutsideTarget != outsideTarget)
+                continue;
+
+            _eye.SetTarget(user, outsideTarget, eye);
+        }
+    }
+
+    public bool SetOutsideView(EntityUid user, EntityUid outsideTarget)
+    {
+        if (!TryComp(user, out VehicleViewToggleComponent? toggle) ||
+            toggle.OutsideTarget != outsideTarget ||
+            !TryComp(user, out EyeComponent? eye))
+        {
+            return false;
+        }
+
+        if (!Exists(outsideTarget) || TerminatingOrDeleted(outsideTarget))
+            return false;
+
+        toggle.InsideTarget = ResolveInsideTarget(user, outsideTarget, eye.Target);
+        _eye.SetTarget(user, outsideTarget, eye);
+        toggle.IsOutside = true;
+
+        EnsureSingleToggleAction(user, toggle);
+        UpdateActionState(toggle);
+        Dirty(user, toggle);
+        RaiseLocalEvent(user, new VehicleViewToggledEvent(true));
+        return true;
+    }
+
+    public void ReplaceOutsideTarget(EntityUid oldOutsideTarget, EntityUid newOutsideTarget)
+    {
+        if (!Exists(newOutsideTarget) || TerminatingOrDeleted(newOutsideTarget))
+            return;
+
+        var query = EntityQueryEnumerator<VehicleViewToggleComponent, EyeComponent>();
+        while (query.MoveNext(out var user, out var toggle, out var eye))
+        {
+            if (toggle.OutsideTarget != oldOutsideTarget)
+                continue;
+
+            toggle.OutsideTarget = newOutsideTarget;
+            if (toggle.IsOutside)
+                _eye.SetTarget(user, newOutsideTarget, eye);
+
+            UpdateActionState(toggle);
+            Dirty(user, toggle);
+        }
+    }
+
+    private EntityUid? ResolveInsideTarget(EntityUid user, EntityUid outsideTarget, EntityUid? proposedTarget)
+    {
+        if (IsUsableInsideTarget(user, outsideTarget, proposedTarget))
+            return proposedTarget;
+
+        if (Transform(user).MapID != MapId.Nullspace)
+            return user;
+
+        if (!TryComp(outsideTarget, out VehicleInteriorComponent? interior))
+            return null;
+
+        if (interior.Grid != EntityUid.Invalid && Exists(interior.Grid) && !TerminatingOrDeleted(interior.Grid))
+            return interior.Grid;
+
+        if (interior.Map != EntityUid.Invalid && Exists(interior.Map) && !TerminatingOrDeleted(interior.Map))
+            return interior.Map;
+
+        return null;
+    }
+
+    private bool IsUsableInsideTarget(EntityUid user, EntityUid outsideTarget, EntityUid? proposedTarget)
+    {
+        if (proposedTarget is not { } target ||
+            target == outsideTarget ||
+            !Exists(target) ||
+            TerminatingOrDeleted(target))
+        {
+            return false;
+        }
+
+        return target != user || Transform(user).MapID != MapId.Nullspace;
     }
 
     private void UpdateActionState(VehicleViewToggleComponent toggle)

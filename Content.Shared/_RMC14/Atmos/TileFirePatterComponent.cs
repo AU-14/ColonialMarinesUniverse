@@ -5,7 +5,6 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared._RMC14.Atmos;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
-[Access(typeof(SharedRMCFlammableSystem))]
 public sealed partial class TileFirePatterComponent : Component
 {
     [DataField, AutoNetworkedField]

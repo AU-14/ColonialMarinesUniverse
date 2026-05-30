@@ -16,9 +16,13 @@ public sealed partial class AbominationInfectionComponent : Component
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan InfectedAt;
 
-    /// <summary>How long until the infection reaches its peak (full seizures).</summary>
+    /// <summary>How long until the infection reaches its peak (full seizures). Used to scale shaking severity.</summary>
     [DataField, AutoNetworkedField]
     public TimeSpan CrescendoAfter = TimeSpan.FromMinutes(8);
+
+    /// <summary>How long until the infection is automatically cured if the host is still alive.</summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan CureAfter = TimeSpan.FromMinutes(15);
 
     /// <summary>Has the crescendo phase been entered? (set when severity = 1).</summary>
     [DataField, AutoNetworkedField]

@@ -41,7 +41,7 @@
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/PMC/sniper.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 20 # CLOTHING_ARMOR_MEDIUM
     bio: 20 # CLOTHING_ARMOR_MEDIUM
     explosionArmor: 15 # CLOTHING_ARMOR_MEDIUMLOW
@@ -58,7 +58,7 @@
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/PMC/bulletproof.rsi
   - type: CMArmor
-    melee: 10 # CLOTHING_ARMOR_LOW
+    melee: 20 # CLOTHING_ARMOR_LOW
     bullet: 30 # CLOTHING_ARMOR_HIGH
     bio: 10 # CLOTHING_ARMOR_LOW
   - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_SUPER_LIGHT
@@ -75,7 +75,7 @@
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/PMC/corporate.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 20 # CLOTHING_ARMOR_MEDIUM
     bio: 20 # CLOTHING_ARMOR_MEDIUM
     explosionArmor: 15 # CLOTHING_ARMOR_MEDIUMLOW
@@ -242,7 +242,7 @@
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/PMC/engineer.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 15 # CLOTHING_ARMOR_MEDIUMLOW
     bio: 20 # CLOTHING_ARMOR_MEDIUM
     explosionArmor: 20 # CLOTHING_ARMOR_MEDIUM
@@ -260,7 +260,7 @@
     sprite: _RMC14/Objects/Clothing/OuterClothing/PMC/director.rsi
   # TODO RMC14: Taser immunity?
   - type: CMArmor
-    melee: 15 # CLOTHING_ARMOR_MEDIUMLOW
+    melee: 30 # CLOTHING_ARMOR_MEDIUMLOW
     bullet: 20 # CLOTHING_ARMOR_MEDIUM
     bio: 20 # CLOTHING_ARMOR_MEDIUM
     explosionArmor: 20 # CLOTHING_ARMOR_MEDIUM

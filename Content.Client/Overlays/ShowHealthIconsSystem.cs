@@ -1,11 +1,7 @@
-using System.Linq;
 using Content.Client._RMC14.Medical.HUD;
-using Content.Shared.Atmos.Rotting;
 using Content.Shared.Damage;
 using Content.Shared.Inventory.Events;
-using Content.Shared.Mobs.Components;
 using Content.Shared.Overlays;
-using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Robust.Shared.Prototypes;
 
@@ -34,9 +30,12 @@ public sealed partial class ShowHealthIconsSystem : EquipmentHudSystem<ShowHealt
     {
         base.UpdateInternal(component);
 
-        foreach (var damageContainerId in component.Components.SelectMany(x => x.DamageContainers))
+        foreach (var comp in component.Components)
         {
-            DamageContainers.Add(damageContainerId);
+            foreach (var damageContainerId in comp.DamageContainers)
+            {
+                DamageContainers.Add(damageContainerId);
+            }
         }
     }
 
@@ -59,33 +58,5 @@ public sealed partial class ShowHealthIconsSystem : EquipmentHudSystem<ShowHealt
 
         if (_healthIcons.TryGetIcon(entity, out var healthIcon))
             args.StatusIcons.Add(healthIcon);
-    }
-
-    private IReadOnlyList<HealthIconPrototype> DecideHealthIcons(Entity<DamageableComponent> entity)
-    {
-        var damageableComponent = entity.Comp;
-
-        if (damageableComponent.DamageContainerID == null ||
-            !DamageContainers.Contains(damageableComponent.DamageContainerID))
-        {
-            return Array.Empty<HealthIconPrototype>();
-        }
-
-        var result = new List<HealthIconPrototype>();
-
-        // Here you could check health status, diseases, mind status, etc. and pick a good icon, or multiple depending on whatever.
-        if (damageableComponent?.DamageContainerID == "Biological")
-        {
-            if (TryComp<MobStateComponent>(entity, out var state))
-            {
-                // Since there is no MobState for a rotting mob, we have to deal with this case first.
-                if (HasComp<RottingComponent>(entity) && _prototypeMan.TryIndex(damageableComponent.RottingIcon, out var rottingIcon))
-                    result.Add(rottingIcon);
-                else if (damageableComponent.HealthIcons.TryGetValue(state.CurrentState, out var value) && _prototypeMan.TryIndex(value, out var icon))
-                    result.Add(icon);
-            }
-        }
-
-        return result;
     }
 }

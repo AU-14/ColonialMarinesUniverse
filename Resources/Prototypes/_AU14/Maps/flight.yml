@@ -38,3 +38,7 @@
             AU14JobCivilianNurse: [1, 1]
             AU14JobCivilianEthicsAndWellnessAdvisor: [1, 1]
             AU14JobCivilianEmergencyResponseOfficer: [1, 1]
+
+            # Orbital
+            AU14JobCivilianOrbitalArbiter: [1, 1]
+            AU14JobCivilianOrbitalLawyer: [2, 3]

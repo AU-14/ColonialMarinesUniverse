@@ -59,6 +59,11 @@ public sealed partial class OverwatchConsoleSystem : SharedOverwatchConsoleSyste
             QueueDel(relay);
     }
 
+    internal static bool IsRelayAudioSource(OverwatchRelayedSoundComponent? relayed)
+    {
+        return relayed?.IsRelayAudioSource == true;
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -84,6 +89,10 @@ public sealed partial class OverwatchConsoleSystem : SharedOverwatchConsoleSyste
         var query = AllEntityQuery<AudioComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var audio, out var xform))
         {
+            TryComp(uid, out OverwatchRelayedSoundComponent? relayed);
+            if (IsRelayAudioSource(relayed))
+                continue;
+
             var audioCoords = xform.Coordinates;
             if (!audioCoords.TryDelta(EntityManager, _transform, playerCoords, out var delta))
                 continue;
@@ -96,7 +105,7 @@ public sealed partial class OverwatchConsoleSystem : SharedOverwatchConsoleSyste
             }
 
             var position = eyePosition.Offset(delta);
-            var relayed = EnsureComp<OverwatchRelayedSoundComponent>(uid);
+            relayed ??= EnsureComp<OverwatchRelayedSoundComponent>(uid);
             if (relayed.Relay != null && !TerminatingOrDeleted(relayed.Relay))
             {
                 _transform.SetMapCoordinates(relayed.Relay.Value, position);
@@ -120,6 +129,7 @@ public sealed partial class OverwatchConsoleSystem : SharedOverwatchConsoleSyste
                 continue;
 
             _audio.SetPlaybackPosition(relayedAudioEnt, audio.Comp1.PlaybackPosition);
+            EnsureComp<OverwatchRelayedSoundComponent>(relayedAudioEnt).IsRelayAudioSource = true;
             audio.Comp2.Relay = relayedAudioEnt;
         }
     }

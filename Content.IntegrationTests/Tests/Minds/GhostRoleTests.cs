@@ -1,10 +1,14 @@
 ﻿#nullable enable
 using System.Linq;
+using Content.Server.GameTicking;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
+using Content.Server.Preferences.Managers;
 using Content.Shared.Ghost;
+using Content.Shared.GameTicking;
 using Content.Shared.Mind;
 using Content.Shared.Players;
+using Content.Shared.Preferences;
 using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
@@ -15,6 +19,8 @@ namespace Content.IntegrationTests.Tests.Minds;
 public sealed class GhostRoleTests
 {
     private const string GhostRoleProtoId = "GhostRoleTestEntity";
+    private const string HumanoidGhostRoleProtoId = "HumanoidGhostRoleTestEntity";
+    private const string RaffleGhostRoleProtoId = "GhostRoleRaffleTestEntity";
     private const string TestMobProtoId = "GhostRoleTestMob";
 
     [TestPrototypes]
@@ -28,10 +34,229 @@ public sealed class GhostRoleTests
           - type: MobState
 
         - type: entity
+          parent: MobHumanDummy
+          id: {HumanoidGhostRoleProtoId}
+          name: Ghost Role Loadout Name
+          components:
+          - type: MindContainer
+          - type: GhostRole
+          - type: GhostTakeoverAvailable
+          - type: MobState
+
+        - type: entity
+          id: {RaffleGhostRoleProtoId}
+          components:
+          - type: MindContainer
+          - type: GhostRole
+            raffle:
+              settings: short
+          - type: GhostTakeoverAvailable
+          - type: MobState
+
+        - type: entity
           id: {TestMobProtoId}
           components:
           - type: MobState # MobState is required for correct determination of if the player can return to body or not
         """;
+
+    [Test]
+    public async Task LobbyPlayerCanJoinGhostRoleRaffle()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            InLobby = true
+        });
+        var server = pair.Server;
+        var mapData = await pair.CreateTestMap();
+
+        var entMan = server.ResolveDependency<IEntityManager>();
+        var sPlayerMan = server.ResolveDependency<Robust.Server.Player.IPlayerManager>();
+        var session = sPlayerMan.Sessions.Single();
+        var ticker = entMan.System<GameTicker>();
+        var ghostRoleSystem = entMan.System<GhostRoleSystem>();
+
+        Assert.That(ticker.PlayerGameStatuses[session.UserId], Is.EqualTo(PlayerGameStatus.NotReadyToPlay));
+
+        EntityUid raffleRole = default;
+        await server.WaitPost(() => raffleRole = entMan.SpawnEntity(RaffleGhostRoleProtoId, mapData.GridCoords));
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            var raffleRoleId = entMan.GetComponent<GhostRoleComponent>(raffleRole).Identifier;
+
+            ghostRoleSystem.Request(session, raffleRoleId);
+        });
+
+        await pair.RunTicksSync(5);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(session.AttachedEntity, Is.Null);
+            Assert.That(ticker.PlayerGameStatuses[session.UserId], Is.EqualTo(PlayerGameStatus.NotReadyToPlay));
+            Assert.That(entMan.HasComponent<GhostRoleRaffleComponent>(raffleRole), Is.True);
+            Assert.That(entMan.GetComponent<GhostRoleRaffleComponent>(raffleRole).CurrentMembers, Does.Contain(session));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task LobbyPlayerCanTakeGhostRole()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Dirty = true,
+            InLobby = true
+        });
+        var server = pair.Server;
+        var mapData = await pair.CreateTestMap();
+
+        var entMan = server.ResolveDependency<IEntityManager>();
+        var sPlayerMan = server.ResolveDependency<Robust.Server.Player.IPlayerManager>();
+        var session = sPlayerMan.Sessions.Single();
+        var ticker = entMan.System<GameTicker>();
+        var ghostRoleSystem = entMan.System<GhostRoleSystem>();
+
+        Assert.That(ticker.PlayerGameStatuses[session.UserId], Is.EqualTo(PlayerGameStatus.NotReadyToPlay));
+
+        EntityUid ghostRole = default;
+        await server.WaitPost(() => ghostRole = entMan.SpawnEntity(GhostRoleProtoId, mapData.GridCoords));
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            var ghostRoleId = entMan.GetComponent<GhostRoleComponent>(ghostRole).Identifier;
+
+            Assert.That(ghostRoleSystem.Takeover(session, ghostRoleId), Is.True);
+        });
+
+        await pair.RunTicksSync(5);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(session.AttachedEntity, Is.EqualTo(ghostRole));
+            Assert.That(ticker.PlayerGameStatuses[session.UserId], Is.EqualTo(PlayerGameStatus.JoinedGame));
+            Assert.That(entMan.GetComponent<GhostRoleComponent>(ghostRole).Taken, Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task LobbyHumanoidGhostRoleUsesSelectedCharacterName()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Dirty = true,
+            InLobby = true
+        });
+        var server = pair.Server;
+        var mapData = await pair.CreateTestMap();
+
+        var entMan = server.ResolveDependency<IEntityManager>();
+        var preferences = server.ResolveDependency<IServerPreferencesManager>();
+        var sPlayerMan = server.ResolveDependency<Robust.Server.Player.IPlayerManager>();
+        var session = sPlayerMan.Sessions.Single();
+        var ghostRoleSystem = entMan.System<GhostRoleSystem>();
+        var mindSystem = entMan.System<SharedMindSystem>();
+
+        string? characterName = null;
+        await server.WaitPost(() =>
+        {
+            var profile = (HumanoidCharacterProfile) preferences.GetPreferences(session.UserId).SelectedCharacter;
+            characterName = profile.Name;
+        });
+
+        EntityUid ghostRole = default;
+        await server.WaitPost(() => ghostRole = entMan.SpawnEntity(HumanoidGhostRoleProtoId, mapData.GridCoords));
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            var ghostRoleId = entMan.GetComponent<GhostRoleComponent>(ghostRole).Identifier;
+
+            Assert.That(ghostRoleSystem.Takeover(session, ghostRoleId), Is.True);
+        });
+
+        await pair.RunTicksSync(5);
+
+        string? entityName = null;
+        string? mindName = null;
+        await server.WaitPost(() =>
+        {
+            entityName = entMan.GetComponent<MetaDataComponent>(ghostRole).EntityName;
+            Assert.That(mindSystem.TryGetMind(session.UserId, out _, out var mind), Is.True);
+            mindName = mind!.CharacterName;
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(entityName, Is.EqualTo(characterName));
+            Assert.That(mindName, Is.EqualTo(characterName));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task SpawnedPlayerLeavesGhostRoleRaffle()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Dirty = true,
+            InLobby = true
+        });
+        var server = pair.Server;
+        var mapData = await pair.CreateTestMap();
+
+        var entMan = server.ResolveDependency<IEntityManager>();
+        var sPlayerMan = server.ResolveDependency<Robust.Server.Player.IPlayerManager>();
+        var session = sPlayerMan.Sessions.Single();
+        var ticker = entMan.System<GameTicker>();
+        var ghostRoleSystem = entMan.System<GhostRoleSystem>();
+        var mindSystem = entMan.System<SharedMindSystem>();
+
+        Assert.That(ticker.PlayerGameStatuses[session.UserId], Is.EqualTo(PlayerGameStatus.NotReadyToPlay));
+
+        EntityUid raffleRole = default;
+        await server.WaitPost(() => raffleRole = entMan.SpawnEntity(RaffleGhostRoleProtoId, mapData.GridCoords));
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            var raffleRoleId = entMan.GetComponent<GhostRoleComponent>(raffleRole).Identifier;
+            ghostRoleSystem.Request(session, raffleRoleId);
+        });
+
+        await pair.RunTicksSync(5);
+
+        Assert.That(entMan.GetComponent<GhostRoleRaffleComponent>(raffleRole).CurrentMembers, Does.Contain(session));
+
+        EntityUid playerBody = default;
+        await server.WaitPost(() =>
+        {
+            playerBody = entMan.SpawnEntity(TestMobProtoId, mapData.GridCoords);
+            var mind = mindSystem.CreateMind(session.UserId, "Raffle Player");
+            mindSystem.TransferTo(mind, playerBody);
+            mindSystem.SetUserId(mind, session.UserId);
+            ticker.PlayerJoinGame(session, silent: true);
+        });
+
+        await pair.RunTicksSync(10);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(session.AttachedEntity, Is.EqualTo(playerBody));
+            Assert.That(entMan.HasComponent<GhostRoleRaffleComponent>(raffleRole), Is.False);
+        });
+
+        await pair.CleanReturnAsync();
+    }
 
     /// <summary>
     /// This is a simple test that just checks if a player can take a ghost role and then regain control of their
@@ -45,6 +270,7 @@ public sealed class GhostRoleTests
 
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
+            Fresh = true,
             Dirty = true,
             DummyTicker = false,
             Connected = true

@@ -59,6 +59,6 @@ public sealed partial class BodyPartHealthComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan HealInterval = TimeSpan.FromSeconds(5);
 
-    [DataField, AutoPausedField]
+    [AutoPausedField]
     public TimeSpan NextHealTick;
 }

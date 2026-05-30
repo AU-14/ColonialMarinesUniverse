@@ -55,7 +55,7 @@ public sealed partial class PathfindingSystem
                 }
             }
 
-            variance += random.NextFloat(-args.Variance * args.TileSkip, args.Variance * args.TileSkip);
+            variance += NextFloat(random, -args.Variance * args.TileSkip, args.Variance * args.TileSkip);
             variance = Math.Clamp(variance, args.MinWiden, args.MaxWiden);
         }
 

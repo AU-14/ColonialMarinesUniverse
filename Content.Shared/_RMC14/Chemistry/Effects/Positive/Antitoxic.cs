@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Body;
+using Content.Shared._RMC14.Body;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Stun;
 using Content.Shared.Damage;
@@ -51,7 +51,7 @@ public sealed partial class Antitoxic : RMCChemicalEffect
         if (!random.Prob(0.05f))
             return;
 
-        var status = args.EntityManager.System<StatusEffectsSystem>();
+        var status = args.EntityManager.System<StatusEffectQuerySystem>();
         status.TryAddStatusEffect<RMCUnconsciousComponent>(
             args.TargetEntity,
             Unconscious,

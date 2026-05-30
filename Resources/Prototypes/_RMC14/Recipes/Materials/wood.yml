@@ -26,6 +26,49 @@
   materialCost: 5
 
 - type: rmcConstruction
+  id: AU14TorchBuild
+  name: torch
+  prototype: Torch
+  doAfterTime: 1
+  materialCost: 2
+
+- type: rmcConstruction
+  id: AU14BaseballBatBuild
+  name: wooden baseball bat
+  prototype: RMCBaseballBat
+  doAfterTime: 3
+  materialCost: 10
+
+- type: rmcConstruction
+  id: AU14FishingRodBuild
+  name: makeshift fishing rod
+  prototype: FishingRodMakeshift
+  doAfterTime: 3
+  materialCost: 10
+
+- type: rmcConstruction
+  id: AU14WoodenCrossBuild
+  name: wooden cross
+  prototype: RMCGraveCross
+  doAfterTime: 2
+  materialCost: 2
+
+- type: rmcConstruction
+  id: AU14WoodenSandalsBuild
+  name: sandals
+  prototype: RMCShoesSandals
+  doAfterTime: 3
+  materialCost: 4
+
+- type: rmcConstruction
+  id: AU14WoodenChairBuild
+  name: wooden chair
+  prototype: CMChairWood
+  doAfterTime: 1
+  materialCost: 1
+
+
+- type: rmcConstruction
   id: RMCWoodenBarricadeBuild
   name: wooden barricade
   prototype: RMCBarricadeWood

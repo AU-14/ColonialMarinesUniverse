@@ -9,7 +9,7 @@ rmc-ghost-role-information-pmc-whiteout-rules = You are a [color=orange][bold]PM
                                              You are allowed to remember knowledge about the game in general, such as how to cook, how to use objects, etc.
                                              You are absolutely [color=red]NOT[/color] allowed to remember, say, the name, appearance, etc. of your previous character.
 
-rmc-ghost-role-information-pmc-description = Ensure no damage is incurred against Weston-Yamada. Make sure the Corporate Liaison is safe. Deny the Weston-Yamada's involvement and do not trust the UNMC forces. Only fire if fired upon, or ordered to.
+rmc-ghost-role-information-pmc-description = Ensure no damage is incurred against Weyland-Yutani. Make sure the Corporate Liaison is safe. Deny the Weyland-Yutani's involvement and do not trust the UNMC forces. Only fire if fired upon, or ordered to.
 
 rmc-ghost-name-pmc-standard = We-Yu PMC Operator (Neutral)
 rmc-job-name-pmc-standard = Operator
@@ -77,10 +77,10 @@ rmc-job-name-pmc-synth = Support Synthetic
 rmc-job-prefix-pmc-synth = WeYu-Syn
 
 rmc-job-name-pmc-bodyguard = Bodyguard
-rmc-ghost-name-pmc-bodyguard = Weston-Yamada Goon (Executive Bodyguard Detail)
+rmc-ghost-name-pmc-bodyguard = Weyland-Yutani Goon (Executive Bodyguard Detail)
 
 rmc-job-name-pmc-bodyguard-lead = Security Lead
-rmc-ghost-name-pmc-bodyguard-lead = Weston-Yamada Goon Leader (Executive Bodyguard Detail)
+rmc-ghost-name-pmc-bodyguard-lead = Weyland-Yutani Goon Leader (Executive Bodyguard Detail)
 
 rmc-job-name-pmc-corporate-goon = We-Yu Corporate Security
 rmc-job-name-pmc-corporate-goon-engi = We-Yu Corporate Security Technician
@@ -109,7 +109,7 @@ rmc-job-name-pmc-whiteout-gunner = Whiteout Team Combat Gunner Unit
 rmc-job-prefix-pmc-whiteout = WO
 
 # Executives
-rmc-ghost-role-information-corp-exec-description = You are an employee of the Weston-Yamada Corporation. You are to support and maintain Weston-Yamada's interests.
+rmc-ghost-role-information-corp-exec-description = You are an employee of the Weyland-Yutani Corporation. You are to support and maintain Weyland-Yutani's interests.
 
 rmc-ghost-name-corp-exec-supervisor = Corporate Executive Supervisor (Neutral)
 rmc-job-name-corp-exec-supervisor = Corporate Executive Supervisor
@@ -123,11 +123,11 @@ rmc-job-name-corp-exec-div-man = Corporate Division Manager
 rmc-ghost-name-corp-exec-chief = Corporate Chief Executive (Neutral)
 rmc-job-name-corp-exec-chief = Corporate Chief Executive
 
-rmc-ghost-name-corp-dep-director = WE-YA Deputy Director (Neutral)
-rmc-job-name-corp-dep-director = WE-YA Deputy Director
+rmc-ghost-name-corp-dep-director = WE-YU Deputy Director (Neutral)
+rmc-job-name-corp-dep-director = WE-YU Deputy Director
 
-rmc-ghost-name-corp-director = WE-YA Director (Neutral)
-rmc-job-name-corp-director = WE-YA Director
+rmc-ghost-name-corp-director = WE-YU Director (Neutral)
+rmc-job-name-corp-director = WE-YU Director
 
 # Corpses
 rmc-job-name-pmc-operator-corpse = PMC Operator

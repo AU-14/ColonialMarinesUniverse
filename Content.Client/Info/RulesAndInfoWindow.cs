@@ -59,6 +59,7 @@ namespace Content.Client.Info
             Contents.AddChild(panel);
             CrtLobbyTheme.Apply(this, useCrtTypography: false);
             _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+            _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
 
             SetSize = new Vector2(650, 650);
         }
@@ -69,11 +70,18 @@ namespace Content.Client.Info
             base.Dispose(disposing);
 
             _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+            _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
         }
 
         private void OnCrtUiColorChanged(string _)
         {
             ApplyCrtPalette();
+        }
+
+        private void OnCrtUiEnabledChanged(bool _)
+        {
+            ApplyCrtPalette();
+            CrtLobbyTheme.Apply(this, useCrtTypography: false);
         }
 
         private void ApplyCrtPalette()

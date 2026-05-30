@@ -73,7 +73,7 @@ public sealed partial class RMCProjectileSystem : EntitySystem
         if (!_whitelist.IsWhitelistPassOrNull(ent.Comp.Whitelist, args.Target))
             return;
         if (ent.Comp.Add is { } add)
-            EntityManager.AddComponents(args.Target, add);
+            EntityManager.AddComponents(args.Target, add, ent.Comp.RemoveExisting);
     }
 
     private void OnProjectileMaxRangeMapInit(Entity<ProjectileMaxRangeComponent> ent, ref MapInitEvent args)

@@ -45,10 +45,10 @@ namespace Content.Shared.EntityEffects.Effects
                 }
                 else if (Group != null)
                 {
-                    var prototypeMan = IoCManager.Resolve<IPrototypeManager>();
+                    var reagentSys = args.EntityManager.System<RMCReagentSystem>();
                     foreach (var quant in reagentArgs.Source.Contents.ToArray())
                     {
-                        var proto = prototypeMan.IndexReagent<ReagentPrototype>(quant.Reagent.Prototype);
+                        var proto = reagentSys.Index(quant.Reagent.Prototype);
                         if (proto.Metabolisms != null && proto.Metabolisms.ContainsKey(Group))
                         {
                             if (amount < 0)
@@ -67,7 +67,8 @@ namespace Content.Shared.EntityEffects.Effects
 
         protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
         {
-            if (Reagent is not null && prototype.TryIndexReagent(Reagent, out ReagentPrototype? reagentProto))
+            var reagentSys = entSys.GetEntitySystem<RMCReagentSystem>();
+            if (Reagent is not null && reagentSys.TryIndex(Reagent, out var reagentProto))
             {
                 return Loc.GetString("reagent-effect-guidebook-adjust-reagent-reagent",
                     ("chance", Probability),
@@ -88,4 +89,3 @@ namespace Content.Shared.EntityEffects.Effects
         }
     }
 }
-

@@ -188,7 +188,8 @@ public sealed partial class EggMorpherSystem : EntitySystem
 
     private void OnEggMorpherStepAttempt(Entity<EggMorpherComponent> eggMorpher, ref StepTriggerAttemptEvent args)
     {
-        if (CanTrigger(args.Tripper))
+        var hive = _hive.GetHive(eggMorpher.Owner);
+        if (CanTrigger(args.Tripper, hive))
             args.Continue = true;
     }
 
@@ -197,17 +198,19 @@ public sealed partial class EggMorpherSystem : EntitySystem
         TryTrigger(eggMorpher, args.Tripper);
     }
 
-    private bool CanTrigger(EntityUid user)
+    private bool CanTrigger(EntityUid user, EntityUid? hive)
     {
         return TryComp<InfectableComponent>(user, out var infected)
                && !infected.BeingInfected
                && !_mobState.IsDead(user)
-               && !HasComp<VictimInfectedComponent>(user);
+               && !HasComp<VictimInfectedComponent>(user)
+               && !_hive.IsAllyOfHive(user, hive);
     }
 
     private bool TryTrigger(Entity<EggMorpherComponent> eggMorpher, EntityUid tripper)
     {
-        if (!CanTrigger(tripper))
+        var hive = _hive.GetHive(eggMorpher.Owner);
+        if (!CanTrigger(tripper, hive))
             return false;
 
         if (!_interaction.InRangeUnobstructed(eggMorpher.Owner, tripper))

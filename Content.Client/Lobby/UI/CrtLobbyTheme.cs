@@ -12,6 +12,9 @@ internal static class CrtLobbyTheme
 {
     public static void Apply(Control root, bool includeChat = false, bool useCrtTypography = true)
     {
+        if (!StyleNano.CrtUiEnabled)
+            return;
+
         ApplyControl(root, useCrtTypography);
 
         if (!includeChat && root is ChatBox)
@@ -25,6 +28,9 @@ internal static class CrtLobbyTheme
 
     public static void ApplyWindow(DefaultWindow window, bool includeChat = false, bool useCrtTypography = false)
     {
+        if (!StyleNano.CrtUiEnabled)
+            return;
+
         AddClass(window, StyleNano.StyleClassCrtWindow);
         window.HeaderClass = StyleNano.StyleClassCrtWindowHeader;
         window.TitleClass = StyleNano.StyleClassCrtWindowTitle;
@@ -33,6 +39,9 @@ internal static class CrtLobbyTheme
 
     public static void ApplyToOptionButton(OptionButton option)
     {
+        if (!StyleNano.CrtUiEnabled)
+            return;
+
         AddClass(option, StyleNano.StyleClassCrtButton);
 
         if (!option.OptionStyleClasses.Contains(StyleNano.StyleClassCrtButton))

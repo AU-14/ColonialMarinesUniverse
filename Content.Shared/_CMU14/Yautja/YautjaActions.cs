@@ -30,6 +30,8 @@ public sealed partial class YautjaCreateHumanStabilisingCrystalActionEvent : Ins
 
 public sealed partial class YautjaCreateHealingCapsuleActionEvent : InstantActionEvent;
 
+public sealed partial class YautjaCreateHuntingTrapActionEvent : InstantActionEvent;
+
 public sealed partial class YautjaLinkThrallBracerActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaTransmitThrallMessageActionEvent : InstantActionEvent;
@@ -116,6 +118,7 @@ public enum YautjaBracerPanelCommand : byte
     CreateStabilisingCrystal,
     CreateHumanStabilisingCrystal,
     CreateHealingCapsule,
+    CreateHuntingTrap,
     ToggleSelfDestruct,
     RefreshTracker,
 }

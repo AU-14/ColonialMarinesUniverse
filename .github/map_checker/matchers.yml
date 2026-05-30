@@ -1,43 +1,83 @@
+# Blacklist is for throwing error when found on maps
+# Whitelist is for overriding the blacklisted regex
+# on_paths allows us to execute a type on specific files
+# entityMatchers has full regex support
 - id: "GeneralBlacklist"
   type: "Blacklist"
   entityMatchers:
-  - "CMStamp.*" # All stamps.
-  - "CMIdCard.*" # All ID cards.
+  - "CMStamp.*"
+  - "RMCStamp.*"
+  - "CMIdCard.*"
+  - "AU14IDCard.*"
+  - "CMUAdminAccessConfigurator"
   - "RMCAdminAccessConfigurator"
   - "RMCAdminFax"
   - "AdminPDA"
   - "AdminHypo"
-  - "RMCPillAntiZed"
-  - "RMCBottleAntiZed"
-  - "RMCBlackGooGlassFull"
-  - "RMCBlackGooGlassAntiZedFull"
-  - "RMCPlushieAlec"
-  - "RMCPlushieNyx"
-  - "RMCPlushieXippy"
-  - "RMCPlushieProvost"
-  - "RMCPlushieCrow"
-  - "RMCPlushieMotivationalMoth"
-
-- id: "AllowApprovedDeniedStamps" # These two stamps specifically are not a problem and should be left untouched.
-  type: "Whitelist"
-  entityMatchers:
-  - "CMStampApproved"
-  - "CMStampDenied"
+  - "RMCPlushie.*"
 
 - id: "AllowAllOnAdminMaps"
   type: "Whitelist"
   on_paths:
+  - "adminfaxhub.yml"
   - "admin_fax.yml"
   - "admin_fax_old.yml"
   - "dev_map.yml"
   entityMatchers:
   - ".*"
 
-- id: "AllowStampsOnWarshipMaps"
+- id: "DoNotMapSpecifiers"
+  type: "Blacklist"
+  entityMatchers:
+  - "AU14SpawnPoint.*K9Handler"
+  - "RMCDebugSoundDevice"
+  - "RMCPillAntiZed"
+  - "RMCBottleAntiZed"
+  - "RMCBlackGooGlass.*"
+
+- id: "AllowApprovedDeniedStamps"
+  type: "Whitelist"
+  entityMatchers:
+  - "CMStamp(Approved|Denied)"
+
+- id: "AllowFactionStamps"
+  type: "Whitelist"
+  entityMatchers:
+  - "CMStamp(Liaison|CO|QM)"
+  - "RMCStamp(FreePress|TSE|SPP|CLF)"
+
+- id: "USSBushWarship"
   type: "Whitelist"
   on_paths:
+  - "USSBush_above.yml"
+  - "USSBush.yml"
+  - "USSBush_below.yml"
+  entityMatchers:
+  - "CMStamp.*"
+
+- id: "AllowStampsOnWarships"
+  type: "Whitelist"
+  on_paths:
+  - "almayer_rucm.yml" # rucm
   - "almayer.yml"
   - "savannah.yml"
   entityMatchers:
-  - "CMStamp.*" # All stamps.
+  - "CMStamp.*"
 
+- id: "AllowedPlushies"
+  type: "Whitelist"
+  entityMatchers:
+  - "RMCPlushieMoth"
+  - "RMCPlushieSharkBlue"
+  - "RMCPlushieGnarpGnarp"
+
+- id: "SensorCommsTowers"
+  type: "Blacklist"
+  entityMatchers:
+  - "RMCCommunicationsTower.*"
+  - "RMCSensorTower.*"
+
+- id: "SensorCommsTowersProps"
+  type: "Whitelist"
+  entityMatchers:
+  - "RMCCommunicationsTowerProp.*"

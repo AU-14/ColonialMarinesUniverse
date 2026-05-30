@@ -100,13 +100,13 @@ public sealed partial class DungeonJob
                 allTiles.Add(node);
                 Tile tile;
 
-                if (random.Prob(0.9f))
+                if (Prob(random, 0.9f))
                 {
                     tile = new Tile(widen.TileId);
                 }
                 else
                 {
-                    tile = _tileDefManager.GetVariantTile(widen, random);
+                    tile = GetVariantTile(widen, random);
                 }
 
                 tiles.Add((node, tile));

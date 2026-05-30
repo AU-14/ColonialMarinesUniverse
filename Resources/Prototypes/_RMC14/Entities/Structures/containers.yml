@@ -178,8 +178,8 @@
 - type: entity
   parent: RMCContainerBase
   id: RMCContainerWeYaLeft
-  name: Weston-Yamada Cargo Container
-  description: "A huge industrial shipping container.\nThis one is from The Weston-Yamada Corporation, you have probably heard of them before."
+  name: Weyland-Yutani Cargo Container
+  description: "A huge industrial shipping container.\nThis one is from The Weyland-Yutani Corporation, you have probably heard of them before."
   suffix: WeYa, Left
   components:
   - type: Sprite
@@ -947,7 +947,7 @@
 - type: entity
   parent: RMCContainerTartarusLeft
   id: RMCContainerAMSLeft
-  description: A huge industrial shipping container. This one belongs to the Asian Multinational Shipping Line, a bulk-freight Weston-Yamada subsidiary.
+  description: A huge industrial shipping container. This one belongs to the Asian Multinational Shipping Line, a bulk-freight Weyland-Yutani subsidiary.
   suffix: AMS, Left
   components:
   - type: Sprite

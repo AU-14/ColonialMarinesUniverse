@@ -2,19 +2,7 @@
   parent: AU14JobDSPilotBase
   id: AU14JobGOVFORDSPilotRMC
   name: RMC Pilot Officer
-  description: au14-job-description-govfordspilot
-  setPreference: true
-  canBeAntag: false
-  requirements:
-  - !type:AgeRequirement
-    requiredAge: 25
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - SocialAnxietyHeavy
-    - FrontalLisp
-    - NonResuscitable
-    - Epilepsy
+  spawnMenuRoleName: Pilot Officer (TWE RMC)
   ranks:
     RMC_Lieutenant:
     - !type:RoleTimeRequirement
@@ -29,26 +17,9 @@
       role: AU14JobGOVFORDSPilot
       time: 108000 # 30 hours
     RMC_WarrantOfficer2: []
-  startingGear: AU14GearGOVFORDSPilot
-  dummyStartingGear: AU14GearGOVFORDSPilotDummy
-  icon: "AU14JobIconPilotOfficer"
-  requireAdminNotify: true
-  spawnMenuRoleName: Pilot Officer (TWE RMC)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforPilot
-  - AU14GovforCorpsman
-  - AU14GovforSquad
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: Marine
-      Faction: govfor
     - type: Skills
       skills:
         RMCSkillFirearms: 2
@@ -64,21 +35,3 @@
         RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-govfordspilotRMC
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
-  hidden: true

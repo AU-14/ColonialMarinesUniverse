@@ -81,7 +81,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private DamageableSystem _damage = default!;
-    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private SharedRottingSystem _rotting = default!;
     [Dependency] private TagSystem _tagSystem = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
@@ -91,6 +91,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
 
     private const CollisionGroup LeapCollisionGroup = CollisionGroup.InteractImpassable;
     private const CollisionGroup ThrownCollisionGroup = CollisionGroup.InteractImpassable | CollisionGroup.BarricadeImpassable;
+    private static readonly ProtoId<TagPrototype> RipOffOnInfectionTag = "RipOffOnInfection";
 
     protected readonly ProtoId<TagPrototype> ParasiteIsPreparingLeapProtoID = new ProtoId<TagPrototype>("RMCXenoParasitePreparingLeap");
 
@@ -502,7 +503,8 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
                && parasite.Comp.InfectedVictim == null
                && !infected.BeingInfected
                && !HasComp<ParasiteSpentComponent>(parasite)
-               && !HasComp<VictimInfectedComponent>(victim);
+               && !HasComp<VictimInfectedComponent>(victim)
+               && !_hive.IsAllyOfHive(victim, _hive.GetHive(parasite.Owner));
     }
 
     private bool CanInfectPopup(Entity<XenoParasiteComponent> parasite, EntityUid victim, EntityUid user, bool popup = true, bool force = false)
@@ -1035,7 +1037,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         EntityUid? rippedOffItem = null;
         while (slots.NextItem(out var containedEntity, out var inventorySlot))
         {
-            if ((inventorySlot.SlotFlags & slotFlags) != 0 || _tagSystem.HasTag(containedEntity, "RipOffOnInfection"))
+            if ((inventorySlot.SlotFlags & slotFlags) != 0 || _tagSystem.HasTag(containedEntity, RipOffOnInfectionTag))
             {
                 TryComp(containedEntity, out ParasiteResistanceComponent? resistance);
 

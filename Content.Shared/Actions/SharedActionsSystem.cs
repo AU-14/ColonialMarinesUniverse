@@ -837,6 +837,17 @@ public abstract partial class SharedActionsSystem : EntitySystem
 
         if (ent.Comp.AttachedEntity != performer.Owner)
         {
+            // Predicted item removal can leave a stale action id on the performer
+            // after the action's AttachedEntity has already moved or cleared.
+            if (_actionsQuery.Resolve(performer, ref performer.Comp, false) &&
+                performer.Comp.LifeStage < ComponentLifeStage.Stopping &&
+                performer.Comp.Actions.Remove(ent.Owner))
+            {
+                Dirty(performer, performer.Comp);
+                ActionRemoved((performer.Owner, performer.Comp), ent);
+                return;
+            }
+
             DebugTools.Assert(!Resolve(performer, ref performer.Comp, false)
                               || performer.Comp.LifeStage >= ComponentLifeStage.Stopping
                               || !performer.Comp.Actions.Contains(ent.Owner));

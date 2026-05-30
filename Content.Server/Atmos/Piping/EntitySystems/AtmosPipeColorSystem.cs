@@ -16,10 +16,12 @@ namespace Content.Server.Atmos.Piping.EntitySystems
             SubscribeLocalEvent<AtmosPipeColorComponent, ComponentShutdown>(OnShutdown);
         }
 
-        private void OnStartup(EntityUid uid, AtmosPipeColorComponent component, ComponentStartup args)
-        {
-            if (!TryComp(uid, out AppearanceComponent? appearance))
-                return;
+    private void OnStartup(EntityUid uid, AtmosPipeColorComponent component, ComponentStartup args)
+    {
+        component.OwnerEntity = uid;
+
+        if (!TryComp(uid, out AppearanceComponent? appearance))
+            return;
 
             _appearance.SetData(uid, PipeColorVisuals.Color, component.Color, appearance);
         }

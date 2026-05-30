@@ -1,23 +1,27 @@
 using System.Linq;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
-using Content.Shared.AU14;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs;
 using Content.Shared.NPC.Components;
-using Content.Shared.GameTicking.Components;
+using Content.Shared.SSDIndicator;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared._RMC14.Synth;
-using Content.Shared.SSDIndicator;
+using Content.Shared.AU14;
+using Content.Shared.AU14.ColonyEvacuation;
 
 namespace Content.Server.AU14.Threats;
 
+/// <summary>
+/// Kill-all rule that targets all Colonists, excludes SSD.
+/// Colonists wearing a prisoner jumpsuit, or handcuffed, or inside brig, or dead are eliminated.
+/// </summary>
 public sealed partial class KillAllColonistRuleSystem : GameRuleSystem<KillAllColonistRuleComponent>
 {
-    [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private Round.AuRoundSystem _auRoundSystem = default!;
     [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
@@ -34,14 +38,13 @@ public sealed partial class KillAllColonistRuleSystem : GameRuleSystem<KillAllCo
 
     private bool IsEvacuated(EntityUid uid)
     {
-        var xform = Transform(uid);
-        return xform.GridUid is { } grid && _evacuatedQuery.HasComp(grid);
+        return Transform(uid).GridUid is { } grid && _evacuatedQuery.HasComp(grid);
     }
 
-    private bool IsExcludedFromKillCount(EntityUid uid)
+    private void OnEvacuationLaunched(ref EvacuationLaunchedEvent ev)
     {
-        return (TryComp<SSDIndicatorComponent>(uid, out var ssd) && ssd.IsSSD) ||
-               HasComp<XenoNestedComponent>(uid) || HasComp<SynthComponent>(uid);
+        if (_gameTicker.IsGameRuleActive<KillAllColonistRuleComponent>())
+            CheckVictoryCondition();
     }
 
     private bool HasCrashedDropship()
@@ -56,31 +59,39 @@ public sealed partial class KillAllColonistRuleSystem : GameRuleSystem<KillAllCo
         return false;
     }
 
-    private void OnEvacuationLaunched(ref EvacuationLaunchedEvent ev)
-    {
-        if (_gameTicker.IsGameRuleActive<KillAllColonistRuleComponent>())
-            CheckVictoryCondition();
-    }
-
     private void OnMobStateChanged(MobStateChangedEvent ev)
     {
-        // Only run this logic when the KillAllColonist rule is active
-        if (!_gameTicker.IsGameRuleActive<KillAllColonistRuleComponent>())
-            return;
-
-        // Only care about dead mobs
-        if (ev.NewMobState != MobState.Dead)
+        if (!IsActiveRuleAndColonist(ev.Target) || ev.NewMobState != MobState.Dead)
             return;
 
         CheckVictoryCondition();
     }
 
+    private bool IsActiveRuleAndColonist(EntityUid uid)
+    {
+        if (!_gameTicker.IsGameRuleActive<KillAllColonistRuleComponent>())
+            return false;
+
+        return TryComp<NpcFactionMemberComponent>(uid, out var faction)
+            && faction.Factions.Any(f => f.ToString().ToLowerInvariant() == "aucolonist");
+    }
+
+    private bool IsExcludedFromKillCount(EntityUid uid, MobStateComponent mobState)
+    {
+        // Don't exclude the dead (ghosts), we tally them as eliminated instead
+        if (mobState.CurrentState == MobState.Dead)
+            return false;
+
+        return HasComp<XenoNestedComponent>(uid) || HasComp<SynthComponent>(uid)
+            || (TryComp<SSDIndicatorComponent>(uid, out var ssd) && ssd.IsSSD);
+    }
+
     private void CheckVictoryCondition()
     {
-        // Get the active rule entity and its component to read Percent
-        var queryRule = EntityQueryEnumerator<KillAllColonistRuleComponent, GameRuleComponent>();
-        if (!queryRule.MoveNext(out var ruleEnt, out var ruleComp, out var gameRuleComp) || !GameTicker.IsGameRuleActive(ruleEnt, gameRuleComp))
+        var queryRule = QueryActiveRules();
+        if (!queryRule.MoveNext(out _, out _, out var ruleComp, out _))
             return;
+        if (ruleComp == null) return;
 
         var requiredPercent = Math.Clamp(ruleComp.Percent, 1, 100);
         var crashedDropship = HasCrashedDropship();
@@ -89,15 +100,15 @@ public sealed partial class KillAllColonistRuleSystem : GameRuleSystem<KillAllCo
         var total = 0;
         var dead = 0;
 
-        var query = _entityManager.EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent>();
+        var query = EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent>();
         while (query.MoveNext(out var uid, out var mobState, out var faction))
         {
             if (faction.Factions.Any(f => f.ToString().ToLowerInvariant() == "aucolonist"))
             {
-                if (IsExcludedFromKillCount(uid))
+                if (IsExcludedFromKillCount(uid, mobState))
                     continue;
 
-                if (crashedDropship && TryComp(uid, out TransformComponent? xform) && _rmcPlanet.IsOnPlanet(xform))
+                if (crashedDropship && _rmcPlanet.IsOnPlanet(Transform(uid)))
                     continue;
 
                 // If the entity's grid was evacuated, count them as dead (do not skip)
@@ -115,16 +126,24 @@ public sealed partial class KillAllColonistRuleSystem : GameRuleSystem<KillAllCo
         }
 
         if (total == 0)
-            return; // nothing to count
+            return;
 
-        var percentDead = (int) ((double)dead / total * 100.0);
+        var percentDead = (int)((double)dead / total * 100.0);
+
+        if (!ruleComp.ColonyEvacTriggered &&
+            ruleComp.ColonyEvacThreshold > 0 &&
+            percentDead >= ruleComp.ColonyEvacThreshold)
+        {
+            ruleComp.ColonyEvacTriggered = true;
+            var evacEv = new ColonyWithdrawEvacEnabledEvent();
+            RaiseLocalEvent(ref evacEv);
+        }
 
         if (percentDead >= requiredPercent)
         {
             if (_gameTicker.RunLevel != GameRunLevel.InRound)
                 return;
 
-            // End round, threat wins. Prefer configured win message.
             var winMessage = _auRoundSystem._selectedthreat.WinMessage;
             if (!string.IsNullOrEmpty(winMessage))
             {

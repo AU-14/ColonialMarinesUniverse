@@ -41,6 +41,13 @@
     instantDestroy: true
     passOnDestroy: true
   - type: RMCMesonsNonviewable
+  - type: Flamability
+    chance: 0.04
+    rate: 0.15
+    spread: 0.1
+    range: 0.5
+    burnDurationMin: 70
+    burnDurationMax: 620
 
 - type: entity
   parent: CMTable
@@ -188,6 +195,12 @@
   - type: Construction
     graph: RMCTable
     node: Wood
+  - type: Appearance
+  - type: Flamability
+    chance: 1.0
+    rate: 0.83
+    range: 0.8
+    spread: 1.0
 
 # Wooden Poor
 - type: entity

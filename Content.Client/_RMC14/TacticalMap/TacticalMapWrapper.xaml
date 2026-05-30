@@ -32,6 +32,16 @@
                                            MouseFilter="Pass" HorizontalExpand="True" VerticalExpand="True" Margin="2" />
             </BoxContainer>
 
+            <BoxContainer Name="SquadTab" Access="Public" Orientation="Vertical" Visible="False"
+                          HorizontalExpand="True" VerticalExpand="True">
+                <BoxContainer Orientation="Horizontal" Margin="2" HorizontalExpand="True">
+                    <Button Name="FollowPlayerButtonSquad" Access="Public" Text="{Loc ui-tactical-map-centre-button}" StyleClasses="OpenBoth" Margin="0 0 2 0" MinWidth="50" />
+                    <Button Name="ResetViewButtonSquad" Access="Public" Text="{Loc ui-tactical-map-reset-button}" StyleClasses="OpenBoth" Margin="0 0 2 0" MinWidth="50" />
+                </BoxContainer>
+                <controls:TacticalMapControl Name="SquadMap" Access="Public" Stretch="KeepAspectCentered"
+                                             MouseFilter="Pass" HorizontalExpand="True" VerticalExpand="True" Margin="2" />
+            </BoxContainer>
+
             <BoxContainer Name="CanvasTab" Access="Public" Orientation="Vertical" Visible="False"
                           HorizontalExpand="True" VerticalExpand="True">
 

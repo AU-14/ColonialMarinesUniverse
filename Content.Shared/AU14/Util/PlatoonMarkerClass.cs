@@ -35,6 +35,8 @@ namespace Content.Shared.AU14.util
         Deco4,
         Deco5,
         Deco6,
+        LockedFTLDoor,
+        LockedFTLGlassDoor,
         LockedCommandDoor,
         LockedSecurityDoor,
         LockedSecurityDoorGlass,
@@ -52,6 +54,17 @@ namespace Content.Shared.AU14.util
         TacticalMap,
         ReqVend,
         Analyzer,
-        AICore
+        AICore,
+        AllianceConsoleGovfor,
+        AllianceConsoleOpfor,
+        OrbitalCannonGovfor,
+        OrbitalCannonOpfor,
+        WithdrawConsoleGovfor,
+        WithdrawConsoleOpfor,
+        WithdrawConsoleColony,
+        CommandTabletGovfor,
+        CommandTabletOpfor,
+        GroundsideOpsGovfor,
+        GroundsideOpsOpfor
     }
 }

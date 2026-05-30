@@ -2,6 +2,10 @@
   id: Sheperds
   mapName: LV-112 Sheperds Pride
   mapPath: /Maps/_CMU14/sheperds.yml
+  mapsBelow:
+  - /Maps/_CMU14/sheperds_below.yml
+  mapsAbove:
+  - /Maps/_CMU14/sheperds_above.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0
@@ -46,3 +50,7 @@
             AU14JobCivilianCorporateLiaison: [1, 1]
             AU14JobWYGuard: [2, 2]
             AU14JobCivilianScientist: [3, 3]
+
+            # Orbital
+            AU14JobCivilianOrbitalArbiter: [1, 1]
+            AU14JobCivilianOrbitalLawyer: [2, 3]

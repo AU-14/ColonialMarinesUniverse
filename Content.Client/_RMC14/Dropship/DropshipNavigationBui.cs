@@ -189,6 +189,21 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
             _window.DestinationsContainer.AddChild(tacticalButton);
         }
 
+        if (destinations.CanWithdrawReturn)
+        {
+            var returnButton = new DropshipButton
+            {
+                Text = "Evac to friendly system",
+                Disabled = false,
+                BackgroundColor = Color.FromHex("#4A1010"),
+                BorderColor = Color.FromHex("#CC2222"),
+                BorderThickness = new Thickness(2),
+            };
+            returnButton.Button.ToggleMode = false;
+            returnButton.Button.OnPressed += _ => SendPredictedMessage(new DropshipWithdrawReturnMsg());
+            _window.DestinationsContainer.AddChild(returnButton);
+        }
+
         RefreshDoorLockStatus(destinations.DoorLockStatus);
         SetRemoteControl(destinations.RemoteControlStatus);
         RefreshLaunchAlarmStatus(destinations.LaunchAlarmStatus);

@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Announce;
 using Robust.Client.Graphics;
+using Robust.Client.UserInterface.RichText;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.IoC;
@@ -14,6 +15,17 @@ namespace Content.Client._RMC14.Announce.Styling;
 
 public static class AnnouncementStyling
 {
+    public static readonly Type[] AnnouncementMarkupTags =
+    [
+        typeof(BoldItalicTag),
+        typeof(BoldTag),
+        typeof(BulletTag),
+        typeof(ColorTag),
+        typeof(HeadingTag),
+        typeof(ItalicTag),
+        typeof(FontTag)
+    ];
+
     public static AnnouncementStyle CreateResponsiveStyle(AnnouncementStyle baseStyle, float responsiveFontSize, Vector2 screenSize)
     {
         var scaleFactor = CalculateScreenScaleFactor(screenSize);
@@ -178,4 +190,3 @@ public static class AnnouncementStyling
         return FormattedMessage.FromMarkupPermissive(formattedText);
     }
 }
-

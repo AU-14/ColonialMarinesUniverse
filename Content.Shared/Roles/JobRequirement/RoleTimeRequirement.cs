@@ -44,13 +44,15 @@ public sealed partial class RoleTimeRequirement : JobRequirement
         var formattedRoleDiff = ContentLocalizationManager.FormatPlaytime(roleDiffSpan);
 
         var jobList = jobSystem.GetJobPrototypes(Role);
+        var displayJobs = jobList.Where(jobId => protoManager.Index(jobId).BasePlaytimeTracker).ToList();
+        if (displayJobs.Count == 0)
+            displayJobs = jobList;
 
         var departmentColor = DefaultDepartmentColor;
-
-        if (jobSystem.TryGetListHighestWeightDepartment(jobList, out var department))
+        if (jobSystem.TryGetListHighestWeightDepartment(displayJobs, out var department))
             departmentColor = department.Color;
 
-        var localizedNames = jobList.Select(jobId => protoManager.Index(jobId).LocalizedName).ToList();
+        var localizedNames = displayJobs.Select(jobId => protoManager.Index(jobId).LocalizedName).ToList();
         var names = ContentLocalizationManager.FormatListToOr(localizedNames);
 
         if (trackerPrototype.Name is { } trackerName)

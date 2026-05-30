@@ -45,7 +45,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Bureau/deputy.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 15
     bio: 10
     explosionArmor: 10
@@ -139,7 +139,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/TSE/TSEPA/jacket.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 15
     bio: 10
     explosionArmor: 10

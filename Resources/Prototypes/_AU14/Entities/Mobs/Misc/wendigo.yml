@@ -13,6 +13,19 @@
     name: Wendigo
   - type: Sprite
     sprite: _AU14/Mobs/MiscMob/wendigo.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: alive
+    - map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
+      state: wendigo_glowmask
+      shader: unshaded
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: alive
+        BaseUnshaded: wendigo_glowmask
+      Dead:
+        Base: dead
   - type: Speech
     speechVerb: AU14WendigoSpeech
     allowedEmotes: [ "Growl", "Hiss", "XenoRoar", "XenoHelp", "WendigoBreathing" ]
@@ -113,6 +126,14 @@
         volume: -4
   - type: RMCSize
     size: Big
+  - type: WendigoVoice
+  - type: UserInterface
+    interfaces:
+      enum.WendigoVoiceUiKey.Key:
+        type: WendigoVoiceBui
+  - type: Tag
+    tags:
+    - Wendigo
 
 - type: entity
   parent: ActionXenoDoom
@@ -136,3 +157,14 @@
 - type: playTimeTracker
   id: CMJobXenoWendigo
   isXeno: true
+
+- type: entity
+  id: ActionWendigoVoice
+  name: Voice Mimicry
+  parent: ActionXenoBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon: /Textures/Interface/Actions/scream.png
+  - type: InstantAction
+    event: !type:WendigoVoiceActionEvent {}

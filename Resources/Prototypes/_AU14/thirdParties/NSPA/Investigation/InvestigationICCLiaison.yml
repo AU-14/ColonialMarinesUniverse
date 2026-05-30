@@ -24,7 +24,7 @@
     components:
     - type: NpcFactionMember
       factions:
-      - AUBureau
+      - NSPA
     - type: Skills
       skills:
         RMCSkillEndurance: 2

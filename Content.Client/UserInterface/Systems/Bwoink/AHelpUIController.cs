@@ -22,6 +22,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
+using Robust.Shared.Audio;
 using Robust.Shared.Configuration;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Network;
@@ -143,7 +144,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         if (message.PlaySound && localPlayer.UserId != message.TrueSender)
         {
             if (_aHelpSound != null && (_bwoinkSoundEnabled || !_adminManager.IsActive()))
-                _audio.PlayGlobal(_aHelpSound, Filter.Local(), false);
+                _audio.PlayGlobal(new ResolvedPathSpecifier(_aHelpSound), Filter.Local(), false);
             _clyde.RequestWindowAttention();
         }
 
@@ -226,7 +227,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         }
 
         helper.Control.Orphan();
-        helper.Window.Dispose();
+        helper.Window.Orphan();
         helper.Window = null;
         helper.EverOpened = false;
 
@@ -376,7 +377,7 @@ public sealed partial class AdminAHelpUIHandler : IAHelpUIHandler
         {
             ClydeWindow.RequestClosed -= OnRequestClosed;
             ClydeWindow.Dispose();
-            // need to dispose control cause we cant reattach it directly back to the window
+            // Need to detach controls because we can't reattach them directly back to the window.
             // but orphan panels first so -they- can get readded when the window is opened again
             if (Control != null)
             {
@@ -384,7 +385,7 @@ public sealed partial class AdminAHelpUIHandler : IAHelpUIHandler
                 {
                     panel.Orphan();
                 }
-                Control?.Dispose();
+                Control?.Orphan();
             }
             // window wont be closed here so we will invoke ourselves
             OnClose?.Invoke();
@@ -485,7 +486,7 @@ public sealed partial class AdminAHelpUIHandler : IAHelpUIHandler
 
     public void Dispose()
     {
-        Window?.Dispose();
+        Window?.Close();
         Window = null;
         Control = null;
         _activePanelMap.Clear();
@@ -594,7 +595,7 @@ public sealed partial class UserAHelpUIHandler : IAHelpUIHandler
 
     public void Dispose()
     {
-        _window?.Dispose();
+        _window?.Close();
         _window = null;
         _chatPanel = null;
     }

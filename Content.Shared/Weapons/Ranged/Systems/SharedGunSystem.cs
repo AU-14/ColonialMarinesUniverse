@@ -9,6 +9,7 @@ using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared._RMC14.Weapons.Ranged.Flamer;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Administration.Logs;
@@ -61,6 +62,7 @@ public abstract partial class SharedGunSystem : EntitySystem
     [Dependency] private   ActionBlockerSystem _actionBlockerSystem = default!;
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected IMapManager MapManager = default!;
+    [Dependency] protected SharedMapSystem MapSystem = default!;
     [Dependency] private   INetManager _netManager = default!;
     [Dependency] protected IPrototypeManager ProtoManager = default!;
     [Dependency] protected IRobustRandom Random = default!;
@@ -88,6 +90,7 @@ public abstract partial class SharedGunSystem : EntitySystem
     [Dependency] private   SharedStaminaSystem _stamina = default!;
     [Dependency] private   SharedStunSystem _stun = default!;
     [Dependency] private   SharedColorFlashEffectSystem _color = default!;
+    [Dependency] private   CMUZLevelShootingSystem _zLevelShooting = default!;
     [Dependency] private   SharedCameraRecoilSystem _recoil = default!;
     [Dependency] private   IConfigurationManager _config = default!;
     [Dependency] private   INetConfigurationManager _netConfig = default!;
@@ -341,6 +344,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         // First shot
         // Previously we checked shotcounter but in some cases all the bullets got dumped at once
         // curTime - fireRate is insufficient because if you time it just right you can get a 3rd shot out slightly quicker.
+        var nextFireBeforeAttempt = gun.NextFire;
         if (gun.NextFire < curTime - fireRate || gun.ShotCounter == 0 && gun.NextFire < curTime)
             gun.NextFire = curTime;
 
@@ -400,6 +404,17 @@ public abstract partial class SharedGunSystem : EntitySystem
         toCoordinates = attemptEv.ToCoordinates;
         if (toCoordinates == null)
             return null;
+
+        var sourceFromCoordinates = fromCoordinates;
+        if (!_zLevelShooting.TryAdjustShotCoordinates(user, fromCoordinates, toCoordinates.Value, out fromCoordinates, out var adjustedToCoordinates))
+        {
+            gun.NextFire = nextFireBeforeAttempt;
+            DirtyField(gunUid, gun, nameof(GunComponent.NextFire));
+            return null;
+        }
+
+        _zLevelShooting.TryGetProjectileVisualOffset(user, sourceFromCoordinates, fromCoordinates, out var projectileVisualOffset);
+        toCoordinates = adjustedToCoordinates;
 
         // Remove ammo
         var ev = new TakeAmmoEvent(shots, new List<(EntityUid? Entity, IShootable Shootable)>(), fromCoordinates, user);
@@ -471,6 +486,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         if (Timing.IsFirstTimePredicted)
         {
             projectiles = Shoot(gunUid, gun, ev.Ammo, fromCoordinates, toCoordinates.Value, out userImpulse, user, throwItems: attemptEv.ThrowItems, predictedProjectiles, userSession);
+            _zLevelShooting.ApplyProjectileVisualOffset(projectiles, projectileVisualOffset);
         }
 
         var shotEv = new GunShotEvent(user, ev.Ammo, fromCoordinates, toCoordinates.Value);
@@ -537,16 +553,16 @@ public abstract partial class SharedGunSystem : EntitySystem
             }
         }
 
-        var fromMap = fromCoordinates.ToMap(EntityManager, TransformSystem);
-        var toMap = toCoordinates.ToMapPos(EntityManager, TransformSystem);
+        var fromMap = TransformSystem.ToMapCoordinates(fromCoordinates);
+        var toMap = TransformSystem.ToMapCoordinates(toCoordinates).Position;
         var mapDirection = toMap - fromMap.Position;
         var mapAngle = mapDirection.ToAngle();
-        var angle = GetRecoilAngle(Timing.CurTime, gun, mapDirection.ToAngle());
+        var angle = GetRecoilAngle(gunUid, Timing.CurTime, gun, mapDirection.ToAngle());
 
         // If applicable, this ensures the projectile is parented to grid on spawn, instead of the map.
         var fromEnt = MapManager.TryFindGridAt(fromMap, out var gridUid, out var grid)
-            ? fromCoordinates.WithEntityId(gridUid, EntityManager)
-            : new EntityCoordinates(MapManager.GetMapEntityId(fromMap.MapId), fromMap.Position);
+            ? TransformSystem.WithEntityId(fromCoordinates, gridUid)
+            : new EntityCoordinates(MapSystem.GetMap(fromMap.MapId), fromMap.Position);
 
         // Update shot based on the recoil
         toMap = fromMap.Position + angle.ToVec() * mapDirection.Length();
@@ -711,7 +727,7 @@ public abstract partial class SharedGunSystem : EntitySystem
                                 break;
 
                             fromEffect = Transform(hit).Coordinates;
-                            from = fromEffect.ToMap(EntityManager, TransformSystem);
+                            from = TransformSystem.ToMapCoordinates(fromEffect);
                             dir = ev.Direction;
                             lastUser = hit;
                         }
@@ -818,7 +834,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         return shotProjectiles;
     }
 
-    private Angle GetRecoilAngle(TimeSpan curTime, GunComponent component, Angle direction)
+    private Angle GetRecoilAngle(EntityUid gunUid, TimeSpan curTime, GunComponent component, Angle direction)
     {
         var timeSinceLastFire = (curTime - component.LastFire).TotalSeconds;
         var newTheta = MathHelper.Clamp(component.CurrentAngle.Theta + component.AngleIncreaseModified.Theta - component.AngleDecayModified.Theta * timeSinceLastFire, component.MinAngleModified.Theta, component.MaxAngleModified.Theta);
@@ -828,7 +844,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         // Convert it so angle can go either side.
         long tick = Timing.CurTick.Value;
         tick = tick << 32;
-        tick = tick | (uint) GetNetEntity(component.Owner).Id;
+        tick = tick | (uint) GetNetEntity(gunUid).Id;
         var random = new Xoroshiro64S(tick).NextFloat(-0.5f, 0.5f);
         var spread = component.CurrentAngle.Theta * random;
         var angle = new Angle(direction.Theta + component.CurrentAngle.Theta * random);
@@ -864,7 +880,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         // Forgive me for the shitcode I am about to do
         // Effects tempt me not
         var sprites = new List<(NetCoordinates coordinates, Angle angle, SpriteSpecifier sprite, float scale)>();
-        var gridUid = fromCoordinates.GetGridUid(EntityManager);
+        var gridUid = TransformSystem.GetGrid(fromCoordinates);
         var angle = mapDirection;
 
         // We'll get the effects relative to the grid / map of the firer
@@ -876,7 +892,7 @@ public abstract partial class SharedGunSystem : EntitySystem
             var (_, gridRot, gridInvMatrix) = TransformSystem.GetWorldPositionRotationInvMatrix(gridXform, xformQuery);
 
             fromCoordinates = new EntityCoordinates(gridUid.Value,
-                Vector2.Transform(fromCoordinates.ToMapPos(EntityManager, TransformSystem), gridInvMatrix));
+                Vector2.Transform(TransformSystem.ToMapCoordinates(fromCoordinates).Position, gridInvMatrix));
 
             // Use the fallback angle I guess?
             angle -= gridRot;

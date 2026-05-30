@@ -44,6 +44,12 @@
             max: 1
       - !type:DoActsBehavior
         acts: ["Destruction"]
+  - type: Flamability
+    chance: 0.7
+    rate: 3.0
+    spread: 1.5
+    burnDurationMin: 70
+    burnDurationMax: 620
 
 - type: entity
   parent: CMBed

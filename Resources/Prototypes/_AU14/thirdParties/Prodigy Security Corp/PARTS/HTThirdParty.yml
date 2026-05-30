@@ -1,0 +1,24 @@
+# Prodigy Armed Repair Team (PART Sierra)
+- type: partySpawn
+  id: ProdigyPARTSSpawn
+  leadersToSpawn:
+    AU14JobPARTSPartyLeader: 1
+  gruntsToSpawn:
+    AU14JobPARTSPartyEngineer: 1
+    AU14JobPARTSPartyMedic: 1
+    #AU14JobProdigyPartySmartgunner: 0 - YANKEE TEAM ONLY
+    AU14JobPARTSPartyRifleman: 1
+    AU14JobPARTSPartySynthetic: 1
+    #AU14JobProdigyPARTCombatSynth: 0 - YANKEE TEAM ONLY
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: ProdigyPARTSParty
+  partyspawn: ProdigyPARTSSpawn
+  entrymethod: shuttle
+  weight: 45
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 5
+  roundstart: false

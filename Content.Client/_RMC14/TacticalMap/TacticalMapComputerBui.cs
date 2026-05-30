@@ -2,10 +2,12 @@ using System.Numerics;
 using Content.Client._RMC14.UserInterface;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.TacticalMap;
 using JetBrains.Annotations;
 using Robust.Client.Player;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Maths;
 
 namespace Content.Client._RMC14.TacticalMap;
 
@@ -33,6 +35,7 @@ public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) 
 
         TabContainer.SetTabTitle(Window.Wrapper.MapTab, Loc.GetString("ui-tactical-map-tab-map"));
         TabContainer.SetTabVisible(Window.Wrapper.MapTab, true);
+        TabContainer.SetTabVisible(Window.Wrapper.SquadTab, false);
 
         if (computer != null &&
             _player.LocalEntity is { } player &&
@@ -118,6 +121,7 @@ public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) 
         Window.Wrapper.SetLineLimit(lineLimit);
         UpdateBlips();
         UpdateLabels();
+        UpdateSquadData();
 
         if (EntMan.TryGetComponent(Owner, out TacticalMapComputerComponent? computer))
         {
@@ -209,6 +213,44 @@ public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) 
             : null;
         Window.Wrapper.Map.SetLocalPlayerEntityId(localPlayerId);
         Window.Wrapper.Canvas.SetLocalPlayerEntityId(localPlayerId);
+        Window.Wrapper.SquadMap.SetLocalPlayerEntityId(localPlayerId);
+    }
+
+    private void UpdateSquadData()
+    {
+        if (Window == null)
+            return;
+
+        if (!EntMan.TryGetComponent(Owner, out TacticalMapComputerComponent? computer))
+            return;
+
+        // Only show the squad tab for overwatch consoles that are assigned to a squad.
+        if (!EntMan.TryGetComponent(Owner, out OverwatchConsoleComponent? overwatch) ||
+            overwatch.Squad == null)
+        {
+            TabContainer.SetTabVisible(Window.Wrapper.SquadTab, false);
+            Window.Wrapper.UpdateSquadBlips(null);
+            return;
+        }
+
+        TabContainer.SetTabTitle(Window.Wrapper.SquadTab, Loc.GetString("ui-tactical-map-tab-squad"));
+        TabContainer.SetTabVisible(Window.Wrapper.SquadTab, true);
+
+        var totalCount = computer.SquadBlips.Count;
+        var blips = new TacticalMapBlip[totalCount];
+        var i = 0;
+        foreach (var (_, blip) in computer.SquadBlips)
+        {
+            blips[i] = blip;
+            i++;
+        }
+
+        Window.Wrapper.UpdateSquadBlips(blips);
+
+        Window.Wrapper.SquadMap.Lines.Clear();
+        Window.Wrapper.SquadMap.Lines.AddRange(computer.SquadLines);
+
+        Window.Wrapper.UpdateSquadLabels(new Dictionary<Vector2i, string>(computer.SquadLabels));
     }
 
     private void UpdateLabels()

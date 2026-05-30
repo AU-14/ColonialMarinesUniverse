@@ -1,4 +1,4 @@
-﻿using Content.Server.Administration;
+using Content.Server.Administration;
 using Content.Shared.Administration;
 using Robust.Shared.Toolshed;
 
@@ -8,14 +8,14 @@ namespace Content.Server._RMC14.Requisitions;
 public sealed class RequisitionsCommand : ToolshedCommand
 {
     [CommandImplementation("addbudget")]
-    public async void AddBudget([CommandArgument] int money)
+    public async void AddBudget([CommandArgument] int money, [CommandArgument] string faction)
     {
-        Sys<RequisitionsSystem>().ChangeBudget(money);
+        Sys<RequisitionsSystem>().ChangeBudget(money, faction == "all" ? null : faction);
     }
 
     [CommandImplementation("removebudget")]
-    public async void RemoveBudget([CommandArgument] int money)
+    public async void RemoveBudget([CommandArgument] int money, [CommandArgument] string faction)
     {
-        Sys<RequisitionsSystem>().ChangeBudget(-money);
+        Sys<RequisitionsSystem>().ChangeBudget(-money, faction == "all" ? null : faction);
     }
 }

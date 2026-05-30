@@ -4,6 +4,7 @@ using Content.Client.Eye;
 using Content.Client.Message;
 using Content.Client.UserInterface.ControlExtensions;
 using Content.Shared._RMC14.Camera;
+using Robust.Client.Graphics;
 using Robust.Client.UserInterface.Controls;
 
 namespace Content.Client._RMC14.Camera;
@@ -121,15 +122,27 @@ public sealed class RMCCameraBui : RMCPopOutBui<RMCCameraWindow>
         if (_currentCamera is { } oldCamera)
             _eyeLerping.RemoveEye(oldCamera);
 
+        _currentCamera = null;
+
         if (computer.CurrentCamera is not { } camera)
+        {
+            Window.Viewport.Eye = new FixedEye();
+            Window.CameraName.Text = string.Empty;
             return;
+        }
 
-        _eyeLerping.AddEye(camera);
+        if (!camera.IsValid() ||
+            !EntMan.EntityExists(camera) ||
+            !EntMan.TryGetComponent(camera, out EyeComponent? eye))
+        {
+            Window.Viewport.Eye = new FixedEye();
+            Window.CameraName.Text = string.Empty;
+            return;
+        }
+
+        _eyeLerping.AddEye(camera, eye);
+        Window.Viewport.Eye = eye.Eye;
         _currentCamera = camera;
-
-        if (EntMan.TryGetComponent(camera, out EyeComponent? eye))
-            Window.Viewport.Eye = eye.Eye;
-
         if (_system.GetComputerCameraName((Owner, computer), camera, out var name))
             Window.CameraName.Text = name;
     }

@@ -92,6 +92,14 @@
     max: 5
 
 - type: entity
+  parent: XenoChargedSpitProjectile
+  id: XenoQueenSpitProjectile
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileMaxRange
+    max: 10
+
+- type: entity
   id: XenoSlowingSpitProjectile
   parent: XenoBaseProjectile
   name: slowing spit
@@ -405,6 +413,76 @@
         Heat: 30
 
 - type: entity
+  parent: XenoSpitProjectile
+  id: XenoVenatorCorrosiveProjectile
+  name: corrosive spit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Xeno/xeno_projectiles.rsi
+    layers:
+    - state: xeno_acid_strong
+      shader: unshaded
+  - type: Projectile
+    impactEffect: null
+    damage:
+      types:
+        Heat: 35
+  - type: ModifyTargetOnHit
+    removeExisting: false
+    add:
+    - type: UserAcided
+      armorPiercing: 30
+      damage:
+        types:
+          Heat: 1
+      duration: 12
+    whitelist:
+      components:
+      - Marine
+  - type: XenoVenatorPoolOnHit
+    pool: XenoAcidSprayWeak
+  - type: ProjectileMaxRange
+    max: 8
+
+- type: entity
+  parent: XenoVenatorCorrosiveProjectile
+  id: XenoVenatorAcidBlobProjectile
+  name: acid blob
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Xeno/xeno_projectiles.rsi
+    layers:
+    - state: acid_glob
+      shader: unshaded
+  - type: Projectile
+    impactEffect: null
+    damage:
+      types:
+        Heat: 25
+  - type: XenoVenatorPoolOnHit
+    pool: XenoVenatorAcidBlobPool
+    rings: 1
+    upgradeDirectHit: true
+    randomCrossPattern: true
+  - type: DeleteOnFixedDistanceStop
+
+- type: entity
+  parent: XenoVenatorCorrosiveProjectile
+  id: XenoVenatorBreathProjectile
+  name: enzymatic breath
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    impactEffect: null
+    damage:
+      types:
+        Heat: 12
+  - type: XenoVenatorPoolOnHit
+    pool: XenoAcidSprayWeak
+
+- type: entity
   id: XenoAcidBallProjectile
   name: acid ball
   description: A small, pulsating ball of gas.
@@ -415,6 +493,7 @@
     bodyType: Dynamic
     linearDamping: 0
     angularDamping: 0
+  - type: CMUZPhysics
   - type: Fixtures
     fixtures:
       projectile:
@@ -493,4 +572,3 @@
         - BulletImpassable
         - XenoProjectileImpassable
         - BarricadeImpassable
-

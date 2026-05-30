@@ -7,8 +7,10 @@ using static Robust.Client.GameObjects.SpriteComponent;
 
 namespace Content.Client._RMC14.Dropship.Weapon;
 
-public sealed class DropshipWeaponPointVisualizerSystem : VisualizerSystem<DropshipWeaponPointComponent>
+public sealed partial class DropshipWeaponPointVisualizerSystem : VisualizerSystem<DropshipWeaponPointComponent>
 {
+    [Dependency] private SpriteSystem _sprite = default!;
+
     protected override void OnAppearanceChange(EntityUid uid, DropshipWeaponPointComponent component, ref AppearanceChangeEvent args)
     {
         base.OnAppearanceChange(uid, component, ref args);
@@ -21,20 +23,20 @@ public sealed class DropshipWeaponPointVisualizerSystem : VisualizerSystem<Drops
             return;
         }
 
-        if (!spriteComp.LayerMapTryGet(DropshipWeaponPointLayers.Layer, out var layer))
+        if (!_sprite.LayerMapTryGet((uid, spriteComp), DropshipWeaponPointLayers.Layer, out var layer, false))
             return;
 
         if (string.IsNullOrWhiteSpace(sprite) || string.IsNullOrWhiteSpace(state))
         {
-            spriteComp.LayerSetVisible(layer, false);
+            _sprite.LayerSetVisible((uid, spriteComp), layer, false);
             return;
         }
 
-        spriteComp.LayerSetSprite(layer, new SpriteSpecifier.Rsi(new ResPath(sprite), state));
+        _sprite.LayerSetSprite((uid, spriteComp), layer, new SpriteSpecifier.Rsi(new ResPath(sprite), state));
 
         if (Enum.TryParse<DirectionOffset>(component.DirOffset, true, out var dir))
-            spriteComp.LayerSetDirOffset(layer, dir);
+            _sprite.LayerSetDirOffset((uid, spriteComp), layer, dir);
 
-        spriteComp.LayerSetVisible(layer, true);
+        _sprite.LayerSetVisible((uid, spriteComp), layer, true);
     }
 }

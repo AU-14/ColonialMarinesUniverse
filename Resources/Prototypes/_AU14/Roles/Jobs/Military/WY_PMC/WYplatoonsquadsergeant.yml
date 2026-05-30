@@ -1,56 +1,17 @@
 - type: job
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantWYPMC
+  requirements: []
   name: PMC Squad Leader
-  description: au14-job-description-govforsquadsergeant
-  setPreference: false
-  canBeAntag: false
   ranks:
     AU14RankWeYuEnforcerSenior:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORSquadSergeant
       time: 108000 # 30 hours
     AU14RankWeYuEnforcer: []
-  startingGear: AU14GearGOVFORSquadSergeant
-  dummyStartingGear: AU14GearGOVFORSquadSergantDummy
-  icon: "AU14JobIconSarge"
-  requireAdminNotify: false
   spawnMenuRoleName: Squad Sergeant (WYPMC)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforFTL
-  overwatchSortPriority: -5
-  overwatchRoleName: Squad Sergeant
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: Skills
-      skills:
-        RMCSkillConstruction: 2
-        RMCSkillEngineer: 3
-        RMCSkillFirearms: 2
-        RMCSkillFireman: 1
-        RMCSkillJtac: 3
-        RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORSquadSergeantWYPMC
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
-  hidden: true

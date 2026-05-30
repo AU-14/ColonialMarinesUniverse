@@ -7,10 +7,12 @@ using Content.Shared._CMU14.Medical.Organs.Events;
 using Content.Shared._CMU14.Medical.Organs.Heart;
 using Content.Shared._CMU14.Medical.Organs.Lungs;
 using Content.Shared._RMC14.Medical.Unrevivable;
+using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Body.Organ;
+using Content.Shared.Projectiles;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
@@ -33,6 +35,8 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
     private const float CompoundOrganPassThrough = 0.30f;
     private const float ComminutedOrganPassThrough = 0.50f;
     private const float NegativePartPassThroughBonus = 0.15f;
+    private const float BallisticOrganBypassChance = 0.02f;
+    private const float BallisticOrganBypassPassThrough = 0.12f;
     private float _regenScanAccumulator;
 
     private bool _medicalEnabled;
@@ -74,28 +78,58 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
 
         var passThrough = 1f;
         var heavyOrganHit = false;
+        var ballisticBypass = TryRollBallisticOrganBypass(args, out var bypassPassThrough);
 
         // Bone shielding: while a part's BoneShieldsOrgans flag is on, the
         // rib cage / skull / etc. limits pass-through by fracture severity and
         // part condition. Parts with no BoneComponent (V2 cybernetics, etc.)
         // skip the shielding step and route damage through unconditionally.
+        // Ballistic head / torso hits can occasionally slip past intact bone,
+        // but only with a small organ pass-through compared to fracture trauma.
         if (ent.Comp.BoneShieldsOrgans && HasComp<BoneComponent>(ent))
         {
             var severity = TryComp<FractureComponent>(ent, out var fracture)
                 ? fracture.Severity
                 : FractureSeverity.None;
             if (!severity.IsAtLeast(FractureSeverity.Compound))
-                return;
+            {
+                if (!ballisticBypass)
+                    return;
 
-            passThrough = ComputeOrganPassThrough(ent.Comp, severity, args.NewCurrent);
-            if (passThrough <= 0f)
-                return;
+                passThrough = bypassPassThrough;
+            }
+            else
+            {
+                passThrough = ComputeOrganPassThrough(ent.Comp, severity, args.NewCurrent);
+                if (passThrough <= 0f)
+                    return;
 
-            heavyOrganHit = severity.IsAtLeast(FractureSeverity.Comminuted) ||
-                            args.NewCurrent < FixedPoint2.Zero;
+                if (ballisticBypass)
+                    passThrough = MathF.Max(passThrough, bypassPassThrough);
+
+                heavyOrganHit = severity.IsAtLeast(FractureSeverity.Comminuted) ||
+                                args.NewCurrent < FixedPoint2.Zero;
+            }
         }
 
         DistributeOrganDamage(args.Body, args.Delta, args.ContainedOrgans, passThrough, heavyOrganHit);
+    }
+
+    private bool TryRollBallisticOrganBypass(BodyPartDamagedEvent args, out float passThrough)
+    {
+        passThrough = 0f;
+
+        if (args.Type is not (BodyPartType.Head or BodyPartType.Torso))
+            return false;
+
+        if (args.Tool is not { } tool || !HasComp<ProjectileComponent>(tool))
+            return false;
+
+        if (!Random.Prob(BallisticOrganBypassChance))
+            return false;
+
+        passThrough = BallisticOrganBypassPassThrough;
+        return true;
     }
 
     public void DistributeOrganDamage(
@@ -397,10 +431,6 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
         var query = EntityQueryEnumerator<OrganHealthComponent, OrganComponent>();
         while (query.MoveNext(out var uid, out var oh, out var organ))
         {
-            if (oh.NextRegenTick > now)
-                continue;
-            oh.NextRegenTick = now + TimeSpan.FromSeconds(10);
-
             if (organ.Body is not { } body || Unrevivable.IsUnrevivable(body))
                 continue;
 
@@ -408,7 +438,7 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
                 continue;
             if (HasComp<OrganStasisComponent>(uid))
                 continue;
-            if (oh.NativeRegenPerTick <= FixedPoint2.Zero)
+            if (oh.NativeRegenPerTick <= FixedPoint2.Zero || globalMult <= FixedPoint2.Zero)
                 continue;
 
             // Per-organ override beats the CCVar when stricter.
@@ -416,6 +446,10 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
             var ceiling = oh.Max * capFraction;
             if (oh.Current >= ceiling)
                 continue;
+
+            if (oh.NextRegenTick > now)
+                continue;
+            oh.NextRegenTick = now + TimeSpan.FromSeconds(10);
 
             oh.Current = FixedPoint2.Min(ceiling, oh.Current + oh.NativeRegenPerTick * globalMult);
             Dirty(uid, oh);

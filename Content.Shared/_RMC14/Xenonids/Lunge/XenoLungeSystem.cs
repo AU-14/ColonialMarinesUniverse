@@ -32,7 +32,7 @@ public sealed partial class XenoLungeSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private PullingSystem _pulling = default!;
-    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private RMCPullingSystem _rmcPulling = default!;

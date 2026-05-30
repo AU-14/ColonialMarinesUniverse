@@ -5,8 +5,10 @@ using Robust.Client.GameObjects;
 namespace Content.Client._RMC14.Xenonids.Fruit;
 
 // System for updating the appearance of the resin fruits
-public sealed class XenoFruitVisualizerSystem : EntitySystem
+public sealed partial class XenoFruitVisualizerSystem : EntitySystem
 {
+    [Dependency] private SpriteSystem _sprite = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -32,6 +34,6 @@ public sealed class XenoFruitVisualizerSystem : EntitySystem
         if (string.IsNullOrWhiteSpace(state))
             return;
 
-        sprite.LayerSetState(XenoFruitLayers.Base, state);
+        _sprite.LayerSetRsiState((ent.Owner, sprite), XenoFruitLayers.Base, state);
     }
 }

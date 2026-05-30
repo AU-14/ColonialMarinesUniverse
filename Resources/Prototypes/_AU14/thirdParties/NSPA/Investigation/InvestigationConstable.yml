@@ -24,7 +24,7 @@
     components:
     - type: NpcFactionMember
       factions:
-      - AUBureau
+      - NSPA
     - type: Skills
       skills:
         RMCSkillCqc: 2
@@ -37,6 +37,8 @@
         RMCSkillOverwatch: 1
         RMCSkillPolice: 2
         RMCSkillVehicles: 1
+        RMCSkillEngineer: 1
+        RMCSkillConstruction: 1
     - type: JobPrefix
       prefix: au14-job-prefix-civiliannspaConstable
     - type: TacticalMapIcon

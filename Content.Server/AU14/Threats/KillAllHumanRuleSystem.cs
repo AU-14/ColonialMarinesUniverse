@@ -1,18 +1,21 @@
-using Content.Server.GameTicking;
-using Content.Server.GameTicking.Rules;
-using Content.Shared.AU14;
 using Content.Shared.Cuffs.Components;
+using Content.Server.GameTicking;
+using Content.Shared.GameTicking.Components;
+using Content.Server.GameTicking.Rules;
+using Content.Shared.Inventory;
+using Content.Shared.Inventory.Events;
 using Content.Shared.Humanoid;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
-using Content.Shared.GameTicking.Components;
+using Content.Shared.SSDIndicator;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
-using Content.Shared.SSDIndicator;
+using Content.Shared._RMC14.Synth;
+using Content.Shared.AU14;
 
 namespace Content.Server.AU14.Threats;
 
@@ -27,6 +30,7 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
     [Dependency] private Round.AuRoundSystem _auRoundSystem = default!;
     [Dependency] private AreaSystem _area = default!;
     [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
 
@@ -36,48 +40,22 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
         _evacuatedQuery = GetEntityQuery<EvacuatedGridComponent>();
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<EvacuationLaunchedEvent>(OnEvacuationLaunched);
+        SubscribeLocalEvent<GotEquippedEvent>(OnGotEquipped);
+        SubscribeLocalEvent<GotUnequippedEvent>(OnGotUnequipped);
     }
+
+    private void OnGotEquipped(GotEquippedEvent ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
+    private void OnGotUnequipped(GotUnequippedEvent ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
 
     private bool IsEvacuated(EntityUid uid)
     {
-        var xform = Transform(uid);
-        return xform.GridUid is { } grid && _evacuatedQuery.HasComp(grid);
+        return Transform(uid).GridUid is { } grid && _evacuatedQuery.HasComp(grid);
     }
 
     private void OnEvacuationLaunched(ref EvacuationLaunchedEvent ev)
     {
         if (_gameTicker.IsGameRuleActive<KillAllHumanRuleComponent>())
             CheckVictoryCondition();
-    }
-
-    private void OnMobStateChanged(MobStateChangedEvent ev)
-    {
-        if (!_gameTicker.IsGameRuleActive<KillAllHumanRuleComponent>())
-            return;
-
-        if (ev.NewMobState != MobState.Dead)
-            return;
-
-        CheckVictoryCondition();
-    }
-
-    /// <summary>
-    /// Called by KillAllRulesHandcuffSystem when a human entity is handcuffed.
-    /// </summary>
-    public void OnHandcuffEvent(EntityUid uid)
-    {
-        CheckVictoryCondition();
-    }
-
-    private bool IsInArrestArea(EntityUid uid)
-    {
-        return _area.TryGetArea(uid, out var area, out _) && area.Value.Comp.CountAsArrestedForEndConditions;
-    }
-
-    private bool IsExcludedFromKillCount(EntityUid uid)
-    {
-        return (TryComp<SSDIndicatorComponent>(uid, out var ssd) && ssd.IsSSD) ||
-               HasComp<XenoNestedComponent>(uid);
     }
 
     private bool HasCrashedDropship()
@@ -92,11 +70,67 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
         return false;
     }
 
+    private void OnMobStateChanged(MobStateChangedEvent ev)
+    {
+        if (!_gameTicker.IsGameRuleActive<KillAllHumanRuleComponent>())
+            return;
+
+        if (ev.NewMobState != MobState.Dead)
+            return;
+
+        if (!HasComp<HumanoidAppearanceComponent>(ev.Target))
+            return;
+
+        CheckVictoryCondition();
+    }
+
+    /// <summary>
+    /// Called by KillAllRulesHandcuffSystem when a human entity is handcuffed.
+    /// </summary>
+    public void OnHandcuffEvent(EntityUid _) => CheckVictoryCondition();
+
+    private bool IsInArrestArea(EntityUid uid)
+    {
+        return _area.TryGetArea(uid, out var area, out _) && area.Value.Comp.CountAsArrestedForEndConditions;
+    }
+
+    private void OnJumpsuitChanged(EntityUid wearer, string slot, EntityUid equipment)
+    {
+        if (slot != "jumpsuit" || Prototype(equipment)?.ID != "AU14CivilianPrisonJumpsuit")
+            return;
+
+        if (!_gameTicker.IsGameRuleActive<KillAllHumanRuleComponent>())
+            return;
+
+        if (!HasComp<HumanoidAppearanceComponent>(wearer))
+            return;
+
+        CheckVictoryCondition();
+    }
+
+    private bool HasPrisonJumpsuit(EntityUid uid)
+    {
+        return _inventory.TryGetSlotEntity(uid, "jumpsuit", out var suit)
+            && Prototype(suit!.Value)?.ID == "AU14CivilianPrisonJumpsuit";
+    }
+
+    private bool IsExcludedFromKillCount(EntityUid uid, MobStateComponent mobState)
+    {
+        // Don't exclude the dead (ghosts), we tally them as eliminated instead
+        if (mobState.CurrentState == MobState.Dead)
+            return false;
+
+        return HasComp<XenoComponent>(uid)
+            || HasComp<XenoNestedComponent>(uid) || HasComp<SynthComponent>(uid)
+            || (TryComp<SSDIndicatorComponent>(uid, out var ssd) && ssd.IsSSD);
+    }
+
     private void CheckVictoryCondition()
     {
-        var queryRule = EntityQueryEnumerator<KillAllHumanRuleComponent, GameRuleComponent>();
-        if (!queryRule.MoveNext(out var ruleEnt, out var ruleComp, out var gameRuleComp) || !GameTicker.IsGameRuleActive(ruleEnt, gameRuleComp))
+        var queryRule = QueryActiveRules();
+        if (!queryRule.MoveNext(out _, out _, out var ruleComp, out _))
             return;
+        if (ruleComp == null) return;
 
         var requiredPercent = Math.Clamp(ruleComp.Percent, 1, 100);
         var countArrests = ruleComp.Arrest;
@@ -106,18 +140,13 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
         var total = 0;
         var eliminated = 0;
 
-        var query = _entityManager.EntityQueryEnumerator<MobStateComponent, HumanoidAppearanceComponent>();
+        var query = EntityQueryEnumerator<MobStateComponent, HumanoidAppearanceComponent>();
         while (query.MoveNext(out var uid, out var mobState, out _))
         {
-            // Xenos with humanoid appearance (e.g. cultists in human form) are still humanoid — include them.
-            // But actual xenos (XenoComponent) are not humans.
-            if (_entityManager.HasComponent<XenoComponent>(uid))
+            if (IsExcludedFromKillCount(uid, mobState))
                 continue;
 
-            if (IsExcludedFromKillCount(uid))
-                continue;
-
-            if (crashedDropship && TryComp(uid, out TransformComponent? xform) && _rmcPlanet.IsOnPlanet(xform))
+            if (crashedDropship && _rmcPlanet.IsOnPlanet(Transform(uid)))
                 continue;
 
             // If the entity's grid has been evacuated, count them as dead (do not skip)
@@ -131,12 +160,11 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
             total++;
 
             if (mobState.CurrentState == MobState.Dead)
-            {
                 eliminated++;
-            }
-            else if (countArrests &&
-                     ((_entityManager.TryGetComponent(uid, out CuffableComponent? cuffable) && cuffable.CuffedHandCount > 0) ||
-                      IsInArrestArea(uid)))
+            // Wearing jumpsuit, or arrested flag is set and they're cuffed, or in the mapped brig areas
+            else if (HasPrisonJumpsuit(uid)
+                || countArrests && ((TryComp<CuffableComponent>(uid, out var cuffable) && cuffable.CuffedHandCount > 0)
+                || IsInArrestArea(uid)))
             {
                 eliminated++;
             }
@@ -172,4 +200,3 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
         }
     }
 }
-

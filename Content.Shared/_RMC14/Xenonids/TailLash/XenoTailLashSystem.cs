@@ -15,7 +15,6 @@ using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
-using Robust.Shared.Physics.Systems;
 
 namespace Content.Shared._RMC14.Xenonids.Tail_Lash;
 
@@ -31,7 +30,7 @@ public sealed partial class XenoTailLashSystem : EntitySystem
     [Dependency] private TurfSystem _turf = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private RMCSizeStunSystem _size = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
@@ -118,12 +117,12 @@ public sealed partial class XenoTailLashSystem : EntitySystem
 
         args.Handled = true;
 
-        foreach (var ent in _physics.GetCollidingEntities(Transform(xeno).MapID, xeno.Comp.Area.Value))
+        foreach (var ent in _lookup.GetEntitiesIntersecting(Transform(xeno).MapID, xeno.Comp.Area.Value, LookupFlags.Dynamic | LookupFlags.Static))
         {
             if (!_xeno.CanAbilityAttackTarget(xeno, ent))
                 continue;
 
-            if (!_interaction.InRangeUnobstructed(xeno.Owner, ent.Owner, xeno.Comp.Width * xeno.Comp.Height, collisionMask: CollisionGroup.MobMask)) //Ditto
+            if (!_interaction.InRangeUnobstructed(xeno.Owner, ent, xeno.Comp.Width * xeno.Comp.Height, collisionMask: CollisionGroup.MobMask)) //Ditto
                 continue;
 
             if (_size.TryGetSize(ent, out var size) && size >= RMCSizes.Big)

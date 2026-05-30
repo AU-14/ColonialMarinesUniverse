@@ -104,10 +104,10 @@ public sealed partial class PowerSensorSystem : EntitySystem
 
         // update state based on the power stats retrieved from the selected power network
         var xform = _xformQuery.GetComponent(uid);
-        if (!TryComp(xform.GridUid, out MapGridComponent? grid))
+        if (xform.GridUid is not { } gridUid || !TryComp(gridUid, out MapGridComponent? grid))
             return;
 
-        var cables = deviceNode.GetReachableNodes(xform, _nodeQuery, _xformQuery, grid, EntityManager);
+        var cables = deviceNode.GetReachableNodes(xform, _nodeQuery, _xformQuery, (gridUid, grid), EntityManager);
         foreach (var node in cables)
         {
             if (node.NodeGroup == null)

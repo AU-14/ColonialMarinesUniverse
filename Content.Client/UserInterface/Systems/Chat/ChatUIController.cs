@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using Content.Client._CMU14.ZLevels.Core;
 using Content.Client._RMC14.Mentor;
 using Content.Client.Administration.Managers;
 using Content.Client.Chat;
@@ -68,6 +69,7 @@ public sealed partial class ChatUIController : UIController
     [UISystemDependency] private GhostSystem? _ghost = default;
     [UISystemDependency] private TypingIndicatorSystem? _typingIndicator = default;
     [UISystemDependency] private ChatSystem? _chatSys = default;
+    [UISystemDependency] private CMUClientZLevelsSystem? _zLevels = default;
     [UISystemDependency] private TransformSystem? _transform = default;
     [UISystemDependency] private MindSystem? _mindSystem = default!;
     [UISystemDependency] private RoleCodewordSystem? _roleCodewordSystem = default!;
@@ -513,8 +515,7 @@ public sealed partial class ChatUIController : UIController
 
     private void EnqueueSpeechBubble(EntityUid entity, ChatMessage message, SpeechBubble.SpeechType speechType)
     {
-        // Don't enqueue speech bubbles for other maps. TODO: Support multiple viewports/maps?
-        if (EntityManager.GetComponent<TransformComponent>(entity).MapID != _eye.CurrentEye.Position.MapId)
+        if (!CanShowSpeechBubble(entity, out _))
             return;
 
         if (!_queuedSpeechBubbles.TryGetValue(entity, out var queueData))
@@ -526,12 +527,32 @@ public sealed partial class ChatUIController : UIController
         queueData.MessageQueue.Enqueue(new SpeechBubbleData(message, speechType));
     }
 
+    private bool CanShowSpeechBubble(EntityUid entity, out bool sameMap)
+    {
+        sameMap = false;
+
+        if (!_ent.TryGetComponent<TransformComponent>(entity, out var xform))
+            return false;
+
+        if (xform.MapID == _eye.CurrentEye.Position.MapId)
+        {
+            sameMap = true;
+            return true;
+        }
+
+        return _zLevels?.TryGetSpeechBubbleZOffset(entity, out _, xform) == true;
+    }
+
     public void RemoveSpeechBubble(EntityUid entityUid, SpeechBubble bubble)
     {
-        bubble.Dispose();
+        bubble.OnDied -= SpeechBubbleDied;
+        bubble.Orphan();
 
-        var list = _activeSpeechBubbles[entityUid];
-        list.Remove(bubble);
+        if (!_activeSpeechBubbles.TryGetValue(entityUid, out var list))
+            return;
+
+        if (!list.Remove(bubble))
+            return;
 
         if (list.Count == 0)
         {
@@ -736,9 +757,15 @@ public sealed partial class ChatUIController : UIController
                 continue;
             }
 
+            if (!CanShowSpeechBubble(ent, out var sameMap))
+            {
+                SetBubbles(bubs, false);
+                continue;
+            }
+
             var otherPos = _transform?.GetMapCoordinates(ent) ?? MapCoordinates.Nullspace;
 
-            if (occluded && !_examine.InRangeUnOccluded(
+            if (sameMap && occluded && !_examine.InRangeUnOccluded(
                     playerPos,
                     otherPos, 0f,
                     (ent, player), predicate))

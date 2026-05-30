@@ -8,3 +8,25 @@
     sprite: _AU14/Clothing/ProdigySecurityForces/helmet.rsi
   - type: Clothing
     sprite: _AU14/Clothing/ProdigySecurityForces/helmet.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14ProdigyBallisticHelmetPART
+  name: PART ballistic helmet
+  description: A more robust ballistic helmet used by PART operatives.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/parthelmet.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/parthelmet.rsi
+
+- type: entity
+  parent: AU14WYPMCHelmetHeavy
+  id: AU14PARTOperatorHelmetHeavy
+  name: PART Gunner Operator Ballistic Helmet
+  description: A heavy ballistic helmet with mask for PART Heavy gunners, the orange tint on the eye holes protect from bullet flashes and sun glare to allow continous firing.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partsgo.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partsgo.rsi

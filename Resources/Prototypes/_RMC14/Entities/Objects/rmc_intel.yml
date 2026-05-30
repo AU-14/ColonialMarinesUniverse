@@ -556,70 +556,18 @@
       -
         - name: Requisition Budget Increase
           description: Distributes resources to requisitions for spending.
-          cost: 20
-          increase: 1
+          cost: 5
+          increase: 2
           repurchasable: true
           events:
           - !type:TechRequisitionsBudgetEvent
-            amount: 5000
+            amount: 7500
           - !type:TechAnnounceEvent
             author: SPECIAL ASSETS AUTHORIZED
             message: Additional supply budget has been authorised for this operation.
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: budget_req
-        - name: Dropship Fabricator Budget Increase
-          description: Distributes resources to requisitions for spending.
-          cost: 20
-          repurchasable: false
-          events:
-          - !type:TechDropshipBudgetEvent
-            amount: 6000
-          - !type:TechAnnounceEvent
-            author: SPECIAL ASSETS AUTHORIZED
-            message: Additional dropship fabricator budget has been authorised for this operation.
-          icon:
-            sprite: _RMC14/Interface/tech_tree.rsi
-            state: budget_req
-        - name: Search and Rescue K9 Team
-          description: Hail a nearby Search and Rescue K9 Team.
-          cost: 15
-          repurchasable: false
-          events:
-          - !type:TechPartySpawnEvent
-            thirdPartyId: AU14IntelThirdPartyK9
-          - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A Search and Rescue K9 Team flying nearby has indicated they will touch down.
-          icon:
-            sprite: _RMC14/Interface/tech_tree.rsi
-            state: cryotroops
-        - name: LACN Commandos Scout Team
-          description: Summon an LACN Commandos Scout Team.
-          cost: 30
-          repurchasable: false
-          events:
-          - !type:TechPartySpawnEvent
-            thirdPartyId: LACNSniperteamIntel
-          - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: An LACN Commandos Scout Team has been dispatched to aid with the operation.
-          icon:
-            sprite: _RMC14/Interface/tech_tree.rsi
-            state: beacon
-        - name: FORECON Marksman Team
-          description: Summon a FORECON Marksman Team.
-          cost: 30
-          repurchasable: false
-          events:
-          - !type:TechPartySpawnEvent
-            thirdPartyId: AU14IntelThirdPartyMarksmanGOVFOR
-          - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A FORECON Marksman Team has been dispatched to aid with the operation.
-          icon:
-            sprite: _RMC14/Interface/tech_tree.rsi
-            state: cryotroops
         - name: Unlock Tier 3
           description: Transitions the tree to another tier.
           cost: 1
@@ -640,6 +588,20 @@
           - !type:TechAnnounceEvent
             author: INTEL OPERATIONS
             message: A US Army 32nd Armored Division squad has been dispatched to aid with the operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+
+        - name: Prodigy Armed Repair Team Yankee
+          description: Summon a PMC team from PART, specifically Yankee Squad
+          cost: 70
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: USArmyArmored
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: A Prodigy Armed Repair Team has been dispatched to aid with the operation.
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
@@ -687,6 +649,19 @@
           - !type:TechAnnounceEvent
             author: INTEL OPERATIONS
             message: A CMB investigation party has been dispatched to investigate intel leads.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+
+        - name: Prodigy Armed Repair Team Sierra
+          description: Summon a PART Sierra Squad to the area
+          cost: 60
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: ProdigyPARTSParty
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: A Prodigy Armed Repair Team has been dispatched to aid with the operation.
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
@@ -751,6 +726,19 @@
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: VAISO
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: Call Prodigy Armed Repair Team Yankee
+          description: Summon a PMC team from PART, specifically Sierra Squad, They are not hostile to CLF but not required to help directly!
+          cost: 70
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: ProdigyPARTSParty
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: A Prodigy Armed Repair Team has been dispatched to aid with the operation.
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon

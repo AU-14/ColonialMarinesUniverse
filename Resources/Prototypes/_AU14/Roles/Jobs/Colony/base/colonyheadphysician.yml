@@ -9,9 +9,9 @@
   requirements:
   - !type:DepartmentTimeRequirement
     department: AU14DepartmentColonyMedical
-    time: 72000 # 20 hours
+    time: 36000 # 10 hours
   - !type:OverallPlaytimeRequirement
-    time: 14400 # 4 hours
+    time: 86400 # 24 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement

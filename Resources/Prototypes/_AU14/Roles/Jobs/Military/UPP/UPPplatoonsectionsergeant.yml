@@ -2,31 +2,17 @@
   parent: AU14JobSectionSergeantBase
   id: AU14JobGOVFORSectionSergeantUPP
   name: Platoon Leader
-  description: au14-job-description-govforSSG
-  setPreference: false
+  spawnMenuRoleName: Platoon Sergeant (UPP)
   ranks:
     UPP_Chotar:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORSectionSergeant
-      time: 216000 # 30 hours
+      time: 216000 # 60 hours
     UPP_StaffSergeant:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORSectionSergeant
       time: 108000 # 30 hours
     UPP_Sergeant: []
-  startingGear: AU14GearGOVFORSectionSergeant
-  dummyStartingGear: AU14GearGOVFORPlatoonSergantDummy
-  icon: "AU14JobIconPlatoonSarge"
-  requireAdminNotify: true
-  spawnMenuRoleName: Platoon Sergeant (UPP)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforCommand
-  overwatchSortPriority: -6
-  overwatchShowName: true
-  overwatchRoleName: Platoon Sergeant
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
@@ -46,21 +32,3 @@
         RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORSectionSergeantUPP
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder # No Russian/UPP voicelines yet, its gonna have to use normal english accent
-  hidden: true

@@ -1,8 +1,10 @@
+using System;
 using System.Linq;
 using Content.Client.Guidebook.Controls;
 using Pidgin;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Client.UserInterface.RichText;
 using Robust.Shared.Utility;
 using static Pidgin.Parser;
 using static Pidgin.Parser<char>;
@@ -14,6 +16,19 @@ namespace Content.Client.Guidebook;
 public sealed partial class DocumentParsingManager
 {
     private const string ListBullet = "  › ";
+
+    private static readonly Type[] GuidebookRichTextTags =
+    [
+        typeof(BoldItalicTag),
+        typeof(BoldTag),
+        typeof(BulletTag),
+        typeof(ColorTag),
+        typeof(HeadingTag),
+        typeof(ItalicTag),
+        typeof(RichText.TextLinkTag),
+        typeof(Richtext.KeyBindTag),
+        typeof(RichText.ProtodataTag),
+    ];
 
     // Parser that consumes a - and then just parses normal rich text with some prefix text (a bullet point).
     private static readonly Parser<char, char> TryEscapedChar = Try(Char('\\')
@@ -82,7 +97,7 @@ public sealed partial class DocumentParsingManager
                     }
 
                     msg.Pop();
-                    rt.SetMessage(msg);
+                    rt.SetMessage(msg, GuidebookRichTextTags);
                     return rt;
                 },
                 TextParser)

@@ -25,14 +25,20 @@ public sealed partial class GuideReagentReaction : BoxContainer, ISearchableCont
     private static readonly ProtoId<MixingCategoryPrototype> DefaultMixingCategory = "DummyMix";
 
     private readonly IPrototypeManager _protoMan;
+    private readonly RMCReagentSystem _reagent;
 
-    public GuideReagentReaction(IPrototypeManager protoMan)
+    public GuideReagentReaction(IPrototypeManager protoMan) : this(protoMan, IoCManager.Resolve<IEntitySystemManager>())
+    {
+    }
+
+    private GuideReagentReaction(IPrototypeManager protoMan, IEntitySystemManager sysMan)
     {
         RobustXamlLoader.Load(this);
         _protoMan = protoMan;
+        _reagent = sysMan.GetEntitySystem<RMCReagentSystem>();
     }
 
-    public GuideReagentReaction(ReactionPrototype prototype, IPrototypeManager protoMan, IEntitySystemManager sysMan) : this(protoMan)
+    public GuideReagentReaction(ReactionPrototype prototype, IPrototypeManager protoMan, IEntitySystemManager sysMan) : this(protoMan, sysMan)
     {
         Container container = ReactantsContainer;
         SetReagents(prototype.Reactants, ref container, protoMan);
@@ -64,7 +70,7 @@ public sealed partial class GuideReagentReaction : BoxContainer, ISearchableCont
         Solution solution,
         IReadOnlyList<ProtoId<MixingCategoryPrototype>> categories,
         IPrototypeManager protoMan,
-        IEntitySystemManager sysMan) : this(protoMan)
+        IEntitySystemManager sysMan) : this(protoMan, sysMan)
     {
         var icon = sysMan.GetEntitySystem<SpriteSystem>().GetPrototypeIcon(prototype).GetFrame(RsiDirection.South, 0);
         var entContainer = new BoxContainer
@@ -93,7 +99,7 @@ public sealed partial class GuideReagentReaction : BoxContainer, ISearchableCont
     public GuideReagentReaction(GasPrototype prototype,
         IReadOnlyList<ProtoId<MixingCategoryPrototype>> categories,
         IPrototypeManager protoMan,
-        IEntitySystemManager sysMan) : this(protoMan)
+        IEntitySystemManager sysMan) : this(protoMan, sysMan)
     {
         var label = new RichTextLabel();
         label.SetMarkup(Loc.GetString("guidebook-reagent-sources-gas-wrapper",
@@ -157,7 +163,7 @@ public sealed partial class GuideReagentReaction : BoxContainer, ISearchableCont
     {
         foreach (var (product, amount) in reagents.OrderByDescending(p => p.Value))
         {
-            var productProto = protoMan.IndexReagent<ReagentPrototype>(product);
+            var productProto = _reagent.Index(product);
             var msg = new FormattedMessage();
             msg.AddMarkupOrThrow(Loc.GetString("guidebook-reagent-recipes-reagent-display",
                 ("reagent", productProto.LocalizedName), ("ratio", amount)));

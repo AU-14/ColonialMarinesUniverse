@@ -130,7 +130,7 @@
     layers:
     - state: sentry_system
   - type: DropshipFabricatorPrintable
-    cost: 200
+    cost: 1200
   - type: DropshipUtility
   - type: DropshipAttachedSprite
     sprite:

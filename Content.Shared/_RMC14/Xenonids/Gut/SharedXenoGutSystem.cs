@@ -26,7 +26,7 @@ public sealed partial class SharedXenoGutSystem : EntitySystem
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private RMCGibSystem _rmcGib = default!;
-    [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
     [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
 
     public override void Initialize()

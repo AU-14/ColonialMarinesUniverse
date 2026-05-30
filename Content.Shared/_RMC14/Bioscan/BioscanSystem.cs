@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Thunderdome;
+using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Announce;
 using Content.Shared.Mobs.Components;
@@ -113,7 +114,7 @@ public sealed partial class BioscanSystem : EntitySystem
             var mapId = xform.MapID;
             if (_warshipMaps.Contains(mapId))
             {
-                if (!bioscanBlocked)
+                if (!bioscanBlocked && !HasComp<VehicleInteriorOccupantComponent>(uid))
                 {
                     aliveShip++;
 
@@ -187,7 +188,7 @@ public sealed partial class BioscanSystem : EntitySystem
             ("onPlanet", alivePlanet)
         );
 
-        _marineAnnounce.AnnounceARESStaging(null, message, bioscan.Comp.MarineSound, "rmc-bioscan-ares-announcement");
+        _marineAnnounce.AnnounceARESStaging(null, message, bioscan.Comp.MarineSound, "rmc-bioscan-ares-announcement", "govfor");
         Dirty(bioscan);
     }
 

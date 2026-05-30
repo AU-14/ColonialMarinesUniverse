@@ -94,7 +94,7 @@
 - type: entity
   parent: RMCShoesLaceup
   id: RMCShoesWeYaStompers
-  name: Weston-Yamada stompers
+  name: Weyland-Yutani stompers
   description: A pair of sneakers designed to elicit a morale boosting response within anyone that witnesses them.
   components:
   - type: Sprite

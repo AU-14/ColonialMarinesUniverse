@@ -33,6 +33,7 @@ public sealed partial class RespiratorSystem : EntitySystem
     [Dependency] private IAdminLogManager _adminLogger = default!;
     [Dependency] private IGameTiming _gameTiming = default!;
     [Dependency] private AlertsSystem _alertsSystem = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private AtmosphereSystem _atmosSys = default!;
     [Dependency] private BodySystem _bodySystem = default!;
     [Dependency] private DamageableSystem _damageableSys = default!;
@@ -330,7 +331,7 @@ public sealed partial class RespiratorSystem : EntitySystem
         float saturation = 0;
         foreach (var (id, quantity) in solution.Contents)
         {
-            var reagent = _protoMan.IndexReagent<ReagentPrototype>(id.Prototype);
+            var reagent = _reagent.Index(id.Prototype);
             if (reagent.Metabolisms == null)
                 continue;
 

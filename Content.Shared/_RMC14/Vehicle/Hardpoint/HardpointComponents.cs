@@ -264,6 +264,7 @@ public enum VehicleHardpointFailure : byte
     ThrownTread,
     EngineOverheat,
     ElectricalShort,
+    FuelLeak,
 }
 
 [Serializable, NetSerializable]

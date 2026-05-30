@@ -516,7 +516,7 @@ public abstract partial class SharedBuckleSystem
             var offset = strap.Comp.BuckleOffset + _rmcBuckle.GetOffset(buckle.Owner);
             if (offset != Vector2.Zero)
             {
-                buckleXform.Coordinates = buckledLocation; //RMC14
+                _transform.SetCoordinates(buckle, buckleXform, buckledLocation); //RMC14
             }
         }
 

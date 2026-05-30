@@ -134,6 +134,8 @@ public sealed partial class TacticalMapWrapper : Control
         Map.SetCurrentMapName(mapName);
         Canvas.SetCurrentMap(null);
         Canvas.SetCurrentMapName(mapName);
+        SquadMap.SetCurrentMap(null);
+        SquadMap.SetCurrentMapName(mapName);
 
         LoadSettings();
     }
@@ -238,18 +240,53 @@ public sealed partial class TacticalMapWrapper : Control
         };
     }
 
+    public void UpdateSquadBlips(TacticalMapBlip[]? blips)
+    {
+        SquadMap.UpdateBlips(blips);
+    }
+
+    public void UpdateSquadLabels(Dictionary<Vector2i, string> labels)
+    {
+        SquadMap.UpdateTacticalLabels(labels);
+    }
+
+    private void ToggleFollowPlayerSquad()
+    {
+        _followingPlayer = !_followingPlayer;
+        UpdateFollowButtonText();
+        if (_followingPlayer)
+            CenterOnSquadPlayer();
+    }
+
+    private void CenterOnSquadPlayer()
+    {
+        if (TryFindPlayerBlip(out Vector2i playerIndices))
+        {
+            SquadMap.CenterOnPosition(playerIndices);
+            _lastPlayerPosition = playerIndices;
+        }
+    }
+
+    private void ResetViewSquad()
+    {
+        SquadMap.ResetZoomAndPan();
+    }
+
     public void UpdateTexture(Entity<AreaGridComponent> grid)
     {
         Map.UpdateTexture(grid);
         Canvas.UpdateTexture(grid);
+        SquadMap.UpdateTexture(grid);
 
         SetMapEntity(_currentMapName);
 
         Map.SetCurrentMapName(_currentMapName);
         Canvas.SetCurrentMapName(_currentMapName);
+        SquadMap.SetCurrentMapName(_currentMapName);
 
         Map.ApplyViewSettings();
         Canvas.ApplyViewSettings();
+        SquadMap.ApplyViewSettings();
     }
 
     public void UpdateBlips(TacticalMapBlip[]? blips)
@@ -312,6 +349,8 @@ public sealed partial class TacticalMapWrapper : Control
         ResetViewButton.OnPressed += _ => ResetView();
         FollowPlayerButtonCanvas.OnPressed += _ => ToggleFollowPlayer();
         ResetViewButtonCanvas.OnPressed += _ => ResetView();
+        FollowPlayerButtonSquad.OnPressed += _ => ToggleFollowPlayerSquad();
+        ResetViewButtonSquad.OnPressed += _ => ResetViewSquad();
 
         Map.OnUserInteraction += OnUserInteraction;
         Canvas.OnUserInteraction += OnUserInteraction;
@@ -629,6 +668,7 @@ public sealed partial class TacticalMapWrapper : Control
 
         Map.CurrentLabelMode = newState;
         Canvas.CurrentLabelMode = newState;
+        SquadMap.CurrentLabelMode = newState;
 
         UpdateLabelsButtonAppearance();
     }

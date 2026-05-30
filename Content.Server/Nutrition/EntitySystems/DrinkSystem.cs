@@ -35,6 +35,7 @@ public sealed partial class DrinkSystem : SharedDrinkSystem
     [Dependency] private BodySystem _body = default!;
     [Dependency] private FoodSystem _food = default!;
     [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private OpenableSystem _openable = default!;
     [Dependency] private PopupSystem _popup = default!;
@@ -75,7 +76,7 @@ public sealed partial class DrinkSystem : SharedDrinkSystem
         var total = 0f;
         foreach (var quantity in solution.Contents)
         {
-            var reagent = _proto.IndexReagent<ReagentPrototype>(quantity.Reagent.Prototype);
+            var reagent = _reagent.Index(quantity.Reagent.Prototype);
             if (reagent.Metabolisms == null)
                 continue;
 

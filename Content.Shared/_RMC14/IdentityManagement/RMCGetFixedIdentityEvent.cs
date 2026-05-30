@@ -1,4 +1,4 @@
-﻿namespace Content.Shared._RMC14.IdentityManagement;
+namespace Content.Shared._RMC14.IdentityManagement;
 
 [ByRefEvent]
-public record struct RMCGetFixedIdentityEvent(string Name);
+public record struct RMCGetFixedIdentityEvent(string Name, EntityUid Identified, bool Cancelled = false);

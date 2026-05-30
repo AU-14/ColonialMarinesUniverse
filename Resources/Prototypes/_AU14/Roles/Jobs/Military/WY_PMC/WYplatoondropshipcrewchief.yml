@@ -2,27 +2,13 @@
   parent: AU14JobDCCBase
   id: AU14JobGOVFORDCCWYPMC
   name: PMC Crew Chief
-  description: au14-job-description-govfordcc
-  setPreference: false
-  canBeAntag: false
+  spawnMenuRoleName: Dropship Crew Chief (WYPMC)
   ranks:
     AU14RankWeYuSeniorCrewChief:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDCC
       time: 108000 # 30 hours
     AU14RankWeYuCrewChief: []
-  startingGear: AU14GearGOVFORDCC
-  dummyStartingGear: AU14GearGOVFORDCCDummy
-  icon: "AU14JobIconDCC"
-  requireAdminNotify: false
-  spawnMenuRoleName: Dropship Crew Chief (WYPMC)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforPilot
-  - AU14GovforCorpsman
-  - AU14GovforSquad
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
@@ -41,8 +27,3 @@
         RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORDCCWYPMC
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-  hidden: true

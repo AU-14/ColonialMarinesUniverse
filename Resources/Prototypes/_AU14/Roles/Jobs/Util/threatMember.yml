@@ -2,6 +2,7 @@
   parent: CMJobXenoBase
   id: AU14JobThreatMember
   name: au-job-name-threat-member
+  description: au-job-description-threat-member
   setPreference: true
   playTimeTracker: AUJobThreatMember
   hidden: false
@@ -14,17 +15,3 @@
 
 - type: playTimeTracker
   id: AUJobThreatMember
-
-
-- type: job
-  abstract: true
-  parent: CMJobBase
-  id: AUThreatJobBase
-  description: null
-  joinNotifyCrew: false
-  icon: "AU14JobIconThreatMember"
-  supervisors: au-job-name-threat-leader
-  accessGroups:
-  - CMAccessXeno
-  hasIcon: false
-  hidden: true

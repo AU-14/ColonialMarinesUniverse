@@ -12,6 +12,28 @@
   - AU14AccessGovforPilot
   - AU14AccessGovforReq
   - CMAccessBrig
+  - CMAccessArmory
+
+- type: accessGroup
+  parent: AU14GovforCommand # NOTE: AA inheritance for MPs
+  id: AU14GovforSecurity
+
+- type: accessGroup
+  id: AU14Govfor
+  tags:
+  - AU14AccessGovfor
+  - AU14AccessGovforSquad
+
+- type: accessGroup
+  parent: AU14Govfor
+  id: AU14GovforSquad
+
+- type: accessGroup
+  id: AU14GovforFTL
+  tags:
+  - AU14AccessGovfor
+  - AU14AccessGovforSquad
+  - AU14AccessGovforFTL
 
 - type: accessGroup
   id: AU14GovforEngineer
@@ -29,18 +51,10 @@
   - AU14AccessGovforReq
 
 - type: accessGroup
-  id: AU14GovforFTL
-  tags:
-  - AU14AccessGovfor
-  - AU14AccessGovforSquad
-  - AU14AccessGovforFTL
-
-- type: accessGroup
   id: AU14GovforPilot
   tags:
   - AU14AccessGovfor
   - AU14AccessGovforPilot
-  - AU14AccessGovforReq
 
 - type: accessGroup
   id: AU14GovforGunner
@@ -54,19 +68,3 @@
   tags:
   - AU14AccessGovfor
   - AU14AccessGovforMedical
-
-- type: accessGroup
-  id: AU14GovforSquad
-  tags:
-  - AU14AccessGovfor
-  - AU14AccessGovforSquad
-
-- type: accessGroup
-  id: AU14Govfor
-  tags:
-  - AU14AccessGovfor
-  - AU14AccessGovforSquad
-
-- type: accessGroup
-  parent: AU14GovforCommand # NOTE: AA inheritance for MPs
-  id: AU14GovforSecurity

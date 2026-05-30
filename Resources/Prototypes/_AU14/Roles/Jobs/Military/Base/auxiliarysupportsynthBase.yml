@@ -1,14 +1,100 @@
 - type: job
-  parent: CMJobBase
-  id: AU14JobAuxSupportSynthBase
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobAuxSupportSynthBaseAbstract
   name: au14-job-name-govforauxsupportsynth
   description: au14-job-description-govforauxsupportsynth
+  icon: "AU14JobIconGovSynth"
+  spawnMenuRoleName: Support Synth (GOVFOR)
+  startingGear: AU14GearGOVFORAuxSupportSynth
+  dummyStartingGear: AU14GearGOVFORAuxSupportSynthDummy
+  supervisors: au14-job-supervisors-govforplatco
   playTimeTracker: AU14JobGOVFORAuxSupportSynth
-  basePlaytimeTracker: true
+  canBeAntag: false
   whitelisted: true
   whitelistParent: AU14JobGeneralWhitelist
-  hidden: true
+  accessGroups:
+  - AU14GovforCommand
+  - CMCargoTech
+
+- type: job
+  abstract: true
+  parent: AU14JobAuxSupportSynthBaseAbstract
+  id: AU14JobAuxSupportSynthBase
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - SocialAnxietyHeavy
+    - FrontalLisp
+    - NonResuscitable
+    - Epilepsy
+  ranks:
+    RMCRankChiefWarrantOfficer5:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORAuxSupportSynth
+      time: 270000 #75 hours
+    RMCRankChiefWarrantOfficer4:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORAuxSupportSynth
+      time: 180000 #50 hours
+    RMCRankChiefWarrantOfficer3:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORAuxSupportSynth
+      time: 86400 #24 hours
+    RMCRankChiefWarrantOfficer:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORAuxSupportSynth
+      time: 36000 #10 hours
+    RMCRankWarrantOfficer: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      preset: AU14SkillPresetPlatoonAuxiliarySupportSynth
+    - type: JobPrefix
+      prefix: au14-job-prefix-govforauxsupportsynth
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: MeleeWeapon
+      soundHit:
+        path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+        params:
+          variation: 0.15
+          volume: -1
+      angle: 30
+      animation: WeaponArcFist
+      attackRate: 1
+      damage:
+        types:
+          Blunt: 35
+    - type: Synth
 
 - type: playTimeTracker
   id: AU14JobGOVFORAuxSupportSynth
   isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORAuxSupportSynth
+  equipment:
+    ears: AU14HeadsetGovforCommand
+    ears2: RMCM5CameraGear
+
+- type: startingGear
+  id: AU14GearGOVFORAuxSupportSynthDummy
+  equipment:
+    head: AU14CivBallCapBlack
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORAuxSupportSynth
+  name: Spawn Point GOVFOR Support Synth
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORAuxSupportSynth
+  - type: Sprite
+    state: syn_spawn

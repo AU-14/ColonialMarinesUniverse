@@ -1,3 +1,4 @@
+using System;
 using Content.Shared.Ghost;
 using Content.Shared.Verbs;
 using Robust.Shared.Utility;
@@ -7,6 +8,8 @@ namespace Content.Shared.Examine
     public abstract partial class ExamineSystemShared : EntitySystem
     {
         public const string DefaultIconTexture = "/Textures/Interface/examine-star.png";
+        private const string RsiTextureMarker = ".rsi/";
+        private const string PngExtension = ".png";
 
         public override void Initialize()
         {
@@ -155,11 +158,26 @@ namespace Content.Shared.Examine
                 Text = verbText,
                 Message = hoverMessage,
                 Category = VerbCategory.Examine,
-                Icon = new SpriteSpecifier.Texture(new(iconTexture)),
+                Icon = GetDetailedExamineIcon(iconTexture),
                 HoverVerb = isHoverExamine
             };
 
             verbsEvent.Verbs.Add(examineVerb);
+        }
+
+        private static SpriteSpecifier GetDetailedExamineIcon(string iconTexture)
+        {
+            var normalized = iconTexture.Replace('\\', '/');
+            var rsiIndex = normalized.IndexOf(RsiTextureMarker, StringComparison.OrdinalIgnoreCase);
+            if (rsiIndex == -1 || !normalized.EndsWith(PngExtension, StringComparison.OrdinalIgnoreCase))
+                return new SpriteSpecifier.Texture(new ResPath(iconTexture));
+
+            var rsiPath = normalized[..(rsiIndex + ".rsi".Length)];
+            var state = normalized[(rsiIndex + RsiTextureMarker.Length)..^PngExtension.Length];
+            if (state.Length == 0 || state.Contains('/'))
+                return new SpriteSpecifier.Texture(new ResPath(iconTexture));
+
+            return new SpriteSpecifier.Rsi(new ResPath(rsiPath), state);
         }
 
         /// <summary>

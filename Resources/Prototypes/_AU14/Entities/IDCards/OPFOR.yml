@@ -1,4 +1,19 @@
-﻿- type: entity
+- type: entity
+  id: OPFOR
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IFFFaction
+  - type: FactionFrequencies
+    channels:
+    - radioOpforAlpha
+    - radioOpforBravo
+    - radioOpforCharlie
+    - radioOpforCommand
+    - radioOpforIntel
+    - radioOpforJTAC
+    - radioOpforMILP
+
+- type: entity
   parent: CMIDCardBase
   id: AU14IDCardopforPlatCo
   name: platoon commander ID card
@@ -115,6 +130,17 @@
   components:
   - type: PresetIdCard
     job: AU14JobOPFORAuxSupportSynth
+  - type: ItemIFF
+    factions:
+    - OPFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14JobIDCardOPFORAuxTech
+  name: auxiliary technician ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORAuxTech
   - type: ItemIFF
     factions:
     - OPFOR

@@ -1,0 +1,184 @@
+
+
+#Negative
+- type: reagentProperty
+  abstract: true
+  id: CMUProcgenChemNegative
+  name: procgen chemical negative parent YOU SHOULD NOT SEE THIS!
+  rarity: disabled
+  category: toxicant
+  hint: negative
+  value: -2
+
+- type: reagentProperty
+  id: CMUProcgenChemHypoxemic
+  parent: CMUProcgenChemNegative
+  name: cmu-reagent-property-name-hypoxemic
+  code: HPX
+  description: cmu-reagent-property-desc-hypoxemic
+  rarity: common
+  value: -1
+  
+- type: reagentProperty
+  id: CMUProcgenChemToxic
+  parent: CMUProcgenChemNegative
+  name: cmu-reagent-property-name-toxic
+  description: cmu-reagent-property-desc-toxic
+  rarity: common
+  starter: true
+  value: -1
+  code: TXC
+
+- type: reagentProperty
+  id: CMUProcgenChemCorrosive
+  parent: CMUProcgenChemNegative
+  name: cmu-reagent-property-name-corrosive
+  description: cmu-reagent-property-desc-corrosive
+  code: CRS
+  starter: true
+  rarity: common
+  value: 1
+  costPenalty: false
+
+- type: reagentProperty
+  id: CMUProcgenChemBiocidic
+  parent: CMUProcgenChemNegative
+  name: cmu-reagent-property-name-biocidic
+  description: cmu-reagent-property-desc-biocidic
+  code: BCD
+  rarity: common
+  starter: true
+  value: -1
+
+- type: reagentProperty
+  id: CMUProcgenChemNeuropathic
+  parent: CMUProcgenChemNegative
+  name: cmu-reagent-property-name-neuropathic
+  code: NPT
+  description: cmu-reagent-property-desc-neuropathic
+  rarity: uncommon
+  category: stimulant
+  value: -1
+
+- type: reagentProperty
+  id: CMUProcgenChemHemolytic
+  parent: CMUProcgenChemNegative
+  name: cmu-reagent-property-name-hemolytic
+  description: cmu-reagent-property-desc-hemolytic
+  rarity: uncommon
+  code: HML
+
+- type: reagentProperty
+  id: CMUProcgenChemHemorrhaging
+  parent: CMUProcgenChemNegative
+  name: cmu-reagent-property-name-hemorrhaging
+  code: HMR
+  description: cmu-reagent-property-desc-hemorrhaging
+  rarity: uncommon
+  value: 1
+  costPenalty: false
+
+- type: reagentProperty
+  id: CMUProcgenChemCarcinogenic
+  parent: CMUProcgenChemNegative
+  name: cmu-reagent-property-name-carcinogenic
+  description: cmu-reagent-property-desc-carcinogenic
+  rarity: common
+  code: CRG
+
+- type: reagentProperty
+  id: CMUProcgenChemHepatotoxic
+  parent: CMUProcgenChemNegative
+  name: cmu-reagent-property-name-hepatotoxic
+  description: cmu-reagent-property-desc-hepatotoxic
+  rarity: uncommon
+  code: HPT
+
+- type: reagentProperty
+  id: CMUProcgenChemIntravenous
+  code: INV
+  parent: CMUProcgenChemNegative
+  name: cmu-reagent-property-name-intravenous
+  description: cmu-reagent-property-desc-intravenous
+  rarity: common
+  category: metabolite
+
+- type: reagentProperty
+  id: CMUProcgenChemNephrotoxic
+  name: cmu-reagent-property-name-nephrotoxic
+  code: NPT
+  parent: CMUProcgenChemNegative
+  description: cmu-reagent-property-desc-nephrotoxic
+  rarity: uncommon
+
+- type: reagentProperty
+  id: CMUProcgenChemPneumotoxic
+  name: cmu-reagent-property-name-pneumotoxic
+  code: PNT
+  parent: CMUProcgenChemNegative
+  description: cmu-reagent-property-desc-pneumotoxic
+  rarity: uncommon
+
+- type: reagentProperty
+  id: CMUProcgenChemOculotoxic
+  name: cmu-reagent-property-name-oculotoxic
+  code: OCT
+  parent: CMUProcgenChemNegative
+  description: cmu-reagent-property-desc-oculotoxic
+  rarity: uncommon
+
+- type: reagentProperty
+  id: CMUProcgenChemCardiotoxic
+  name: cmu-reagent-property-name-cardiotoxic
+  parent: CMUProcgenChemNegative
+  code: CDT
+  description: cmu-reagent-property-desc-cardiotoxic
+  rarity: common
+
+- type: reagentProperty
+  id: CMUProcgenChemNeurotoxic
+  parent: CMUProcgenChemNegative
+  name: cmu-reagent-property-name-neurotoxic
+  code: NRT
+  description: cmu-reagent-property-desc-neurotoxic
+  rarity: common
+  category: toxicant, stimulant
+  costPenalty: false
+
+- type: reagentProperty
+  id: CMUProcgenChemHypermetabolic
+  parent: CMUProcgenChemNegative
+  name: cmu-reagent-property-name-hypermetabolic
+  code: EMB
+  rarity: uncommon
+  category: metabolite
+  description: cmu-reagent-property-desc-hypermetabolic
+
+- type: reagentProperty
+  parent: CMUProcgenChemNegative
+  id: CMUProcgenChemAddictive
+  name: cmu-reagent-property-name-addictive
+  code: ADT
+  description: cmu-reagent-property-desc-addictive
+  rarity: rare
+  category: stimulant
+
+- type: reagentProperty
+  parent: CMUProcgenChemNegative
+  id: CMUProcgenChemHemositic
+  name: cmu-reagent-property-name-hemositic
+  code: HST
+  description: cmu-reagent-property-desc-hemositic
+  rarity: disabled
+  value: 2
+  category: reactant, anomalous
+
+- type: reagentProperty
+  parent: CMUProcgenChemNegative
+  id: CMUProcgenChemIgniting
+  name: cmu-reagent-property-name-igniting
+  code: IGT
+  description: cmu-reagent-property-desc-igniting
+  rarity: disabled
+  value: 1
+  category: reactant, combustible

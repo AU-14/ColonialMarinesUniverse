@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Server.Chat.Systems;
 using Content.Server.Movement.Systems;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Tackle;
 using Content.Shared.Actions.Events;
 using Content.Shared.Administration.Components;
@@ -24,6 +25,7 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
     [Dependency] private DamageExamineSystem _damageExamine = default!;
     [Dependency] private LagCompensationSystem _lag = default!;
     [Dependency] private SharedColorFlashEffectSystem _color = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     public override void Initialize()
     {
@@ -90,7 +92,12 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
 
     protected override void DoDamageEffect(List<EntityUid> targets, EntityUid? user, TransformComponent targetXform)
     {
-        var filter = Filter.Pvs(targetXform.Coordinates, entityMan: EntityManager).RemoveWhereAttachedEntity(o => o == user);
+        var targetCoordinates = TransformSystem.ToMapCoordinates(targetXform.Coordinates);
+        var filter = _zLevels.AddZLevelViewers(
+                Filter.Pvs(targetXform.Coordinates, entityMan: EntityManager),
+                targetCoordinates)
+            .RemoveWhereAttachedEntity(o => o == user);
+
         foreach (var grouping in targets.GroupBy(GetDamageEffectColor))
         {
             _color.RaiseEffect(grouping.Key, grouping.ToList(), filter);
@@ -112,6 +119,9 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
         {
             filter = Filter.Pvs(user, entityManager: EntityManager);
         }
+
+        var userCoordinates = TransformSystem.ToMapCoordinates(Transform(user).Coordinates);
+        filter = _zLevels.AddZLevelViewers(filter, userCoordinates);
 
         RaiseNetworkEvent(new MeleeLungeEvent(GetNetEntity(user), GetNetEntity(weapon), angle, localPos, animation), filter);
     }

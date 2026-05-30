@@ -19,7 +19,7 @@ namespace Content.Client.Flash
         [Dependency] private IGameTiming _timing = default!;
 
         private readonly SharedFlashSystem _flash;
-        private readonly StatusEffectsSystem _statusSys;
+        private readonly StatusEffectQuerySystem _statusEffectQuery;
 
         public override OverlaySpace Space => OverlaySpace.WorldSpace;
         private readonly ShaderInstance _shader;
@@ -31,7 +31,7 @@ namespace Content.Client.Flash
             IoCManager.InjectDependencies(this);
             _shader = _prototypeManager.Index(FlashedEffectShader).InstanceUnique();
             _flash = _entityManager.System<SharedFlashSystem>();
-            _statusSys = _entityManager.System<StatusEffectsSystem>();
+            _statusEffectQuery = _entityManager.System<StatusEffectQuerySystem>();
         }
 
         protected override void FrameUpdate(FrameEventArgs args)
@@ -45,7 +45,7 @@ namespace Content.Client.Flash
                 || !_entityManager.TryGetComponent<StatusEffectsComponent>(playerEntity, out var status))
                 return;
 
-            if (!_statusSys.TryGetTime(playerEntity.Value, _flash.FlashedKey, out var time, status))
+            if (!_statusEffectQuery.TryGetTime(playerEntity.Value, _flash.FlashedKey, out var time, status))
                 return;
 
             var curTime = _timing.CurTime;

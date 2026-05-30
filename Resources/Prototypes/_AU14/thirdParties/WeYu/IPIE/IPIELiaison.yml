@@ -104,7 +104,7 @@
     jumpsuit: CMJumpsuitLiaisonBlack
     shoes: RMCShoesLaceup
     back: CMSatchel
-    ears2: AU14ColonyWeylandHeadset
+    ears: AU14ColonyWeylandHeadset
   inhand:
   - RMCPortableVendorCorporate
   storage:

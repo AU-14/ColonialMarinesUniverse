@@ -1,0 +1,145 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobPARTSPartySynthetic
+  name: Prodigy Sierra Support Synthetic
+  description: au14-prodigyparty-description
+  playTimeTracker: AU14JobPARTSPartySyntheticTracker
+  whitelisted: true
+  ranks:
+    AU14RankPrDSynth5:
+    - !type:RoleTimeRequirement
+      role: AU14JobPARTSPartySyntheticTracker
+      time: 252000 #70 hours
+    AU14RankPrDSynth4:
+    - !type:RoleTimeRequirement
+      role: AU14JobPARTSPartySyntheticTracker
+      time: 180000 #50 hours
+    AU14RankPrDSynth3:
+    - !type:RoleTimeRequirement
+      role: AU14JobPARTSPartySyntheticTracker
+      time: 36000 #10 hours
+    AU14RankPrDSynth2:
+    - !type:RoleTimeRequirement
+      role: AU14JobPARTSPartySyntheticTracker
+      time: 18000 #5 hours
+    AU14RankPrDSynth1: []
+  spawnMenuRoleName: Prodigy Sierra Support Synthetic (AU14, 3rd Party)
+  startingGear: AU14GearPARTSPartySynth
+  greeting: au14-prodigyparty-greeting
+  icon: "RMCJobIconReconSynthetic"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-psc
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: forecon_synth
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Skills
+      skills:
+        RMCSkillCqc: 5
+        RMCSkillEngineer: 4
+        RMCSkillConstruction: 3
+        RMCSkillFirearms: 2
+        RMCSkillOverwatch: 1
+        RMCSkillMedical: 4
+        RMCSkillSurgery: 3
+        RMCSkillResearch: 1
+        RMCSkillMeleeWeapons: 2
+        RMCSkillPilot: 2
+        RMCSkillPolice: 2
+        RMCSkillFireman: 5
+        RMCSkillPowerLoader: 2
+        RMCSkillVehicles: 2
+        RMCSkillJtac: 3
+        RMCSkillIntel: 2
+        RMCSkillDomestics: 2
+        RMCSkillNavigations: 1
+    - type: DemoSpecWhitelist
+    - type: GrenadeSpecWhitelist
+    - type: ScoutWhitelist
+    - type: SniperWhitelist
+    - type: PyroWhitelist
+    - type: JobPrefix
+      prefix: rmc-job-prefix-synth
+    - type: MeleeWeapon
+      soundHit:
+        path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+        params:
+          variation: 0.15
+          volume: -1
+      angle: 30
+      animation: WeaponArcFist
+      attackRate: 1
+      damage:
+        types:
+          Blunt: 35
+    - type: Synth
+
+- type: entity
+  parent: AU14BaseMobSpeciesSyntheticProdigy
+  id: AU14JobPARTSPartySynthetic
+  name: Prodigy Sierra Support Synthetic (AU14, 3rd Party)
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPARTS
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-part-synth
+    description: au14-prodigyparty-description
+    reregister: false
+    job: AU14JobPARTSPartySynthetic
+    raffle:
+      settings: short
+    rules: au14-prodigyparty-description
+
+- type: startingGear
+  id: AU14GearPARTSPartySynth
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14ArmorProdigyXAS23S
+    jumpsuit: AU14ProdigyFatiguesRUSynth
+    shoes: RMCBootsSPPBlackFilled
+    gloves: AU14HandsProdigyRU
+    belt: AU14BeltMedicBagProdigyFilled
+    pocket1: AU14PouchToolsFilledSupportSynthetic
+    pocket2: AU14PouchMedicalProdigyFilled
+    back: RMCSatchelWelderRU #21 slots
+    ears: AU14HeadsetPART
+    ears2: RMCM5CameraGear
+    suitstorage: RMCSynthBreachingHammer
+  storage:
+    back:
+    - AU14CMDefibrillator
+    - AU14CMDefibrillator
+    - CMSheetMetal50
+    - CMSheetMetal50
+    - CMSheetMetal50
+    - CMSheetPlasteel50
+    - CMSheetPlasteel50
+    - CMSheetPlasteel50
+    jumpsuit:
+    - AU14SynthResetKeyProdigy
+    - AU14SynthResetKeyProdigy
+    - AU14ProdigyLaptop
+    - RMCHandcuffs
+    - RMCHandcuffs
+    outerClothing:
+    - CMOintment10
+    - CMSyringe
+    - AU14Tourniquet
+    - AU14Tourniquet
+
+- type: playTimeTracker
+  id: AU14JobPARTSPartySyntheticTracker

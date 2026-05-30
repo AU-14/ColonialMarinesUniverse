@@ -287,7 +287,7 @@ public sealed partial class MachineFrameSystem : EntitySystem
                 else
                     component.MaterialProgress[type] += stack.Count;
 
-                continue;
+               continue;
             }
 
             // I have many regrets.

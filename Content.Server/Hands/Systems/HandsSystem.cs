@@ -3,6 +3,7 @@ using Content.Server.Stack;
 using Content.Server.Stunnable;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Body.Part;
+using Content.Shared.Body.Systems;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Explosion;
@@ -112,9 +113,7 @@ namespace Content.Server.Hands.Systems
             if (args.Part.Comp.PartType != BodyPartType.Hand)
                 return;
 
-            // If this annoys you, which it should.
-            // Ping Smugleaf.
-            var location = args.Part.Comp.Symmetry switch
+            var location = HandLocationForSlot(args.Slot) ?? args.Part.Comp.Symmetry switch
             {
                 BodyPartSymmetry.None => HandLocation.Middle,
                 BodyPartSymmetry.Left => HandLocation.Left,
@@ -122,7 +121,78 @@ namespace Content.Server.Hands.Systems
                 _ => throw new ArgumentOutOfRangeException(nameof(args.Part.Comp.Symmetry))
             };
 
-            AddHand(ent.AsNullable(), args.Slot, location);
+            if (!TrySetHandLocation(ent.AsNullable(), args.Slot, location))
+                AddHand(ent.AsNullable(), args.Slot, location);
+
+            NormalizeBodyHandOrder(ent);
+        }
+
+        private static HandLocation? HandLocationForSlot(string slot)
+        {
+            var bareSlot = BarePartSlot(slot);
+            return bareSlot switch
+            {
+                "left_hand" => HandLocation.Left,
+                "right_hand" => HandLocation.Right,
+                _ => null,
+            };
+        }
+
+        private static string BarePartSlot(string slot)
+        {
+            const string prefix = SharedBodySystem.PartSlotContainerIdPrefix;
+            return slot.StartsWith(prefix, StringComparison.Ordinal)
+                ? slot.Substring(prefix.Length)
+                : slot;
+        }
+
+        private void NormalizeBodyHandOrder(Entity<HandsComponent> ent)
+        {
+            var sortedHands = ent.Comp.SortedHands;
+            if (sortedHands.Count < 2)
+                return;
+
+            var ordered = new List<string>(sortedHands.Count);
+            AddCanonicalHand(sortedHands, ordered, "right_hand");
+            AddCanonicalHand(sortedHands, ordered, "left_hand");
+
+            foreach (var hand in sortedHands)
+            {
+                if (!ordered.Contains(hand))
+                    ordered.Add(hand);
+            }
+
+            if (ordered.Count == sortedHands.Count)
+            {
+                var changed = false;
+                for (var i = 0; i < sortedHands.Count; i++)
+                {
+                    if (sortedHands[i] == ordered[i])
+                        continue;
+
+                    changed = true;
+                    break;
+                }
+
+                if (!changed)
+                    return;
+            }
+
+            sortedHands.Clear();
+            sortedHands.AddRange(ordered);
+            Dirty(ent);
+        }
+
+        private static void AddCanonicalHand(IReadOnlyList<string> sortedHands, List<string> ordered, string canonicalSlot)
+        {
+            foreach (var hand in sortedHands)
+            {
+                if (BarePartSlot(hand) != canonicalSlot || ordered.Contains(hand))
+                    continue;
+
+                ordered.Add(hand);
+                return;
+            }
         }
 
         private void HandleBodyPartRemoved(EntityUid uid, HandsComponent component, ref BodyPartRemovedEvent args)

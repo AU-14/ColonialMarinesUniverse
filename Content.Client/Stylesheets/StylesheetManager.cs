@@ -17,11 +17,33 @@ namespace Content.Client.Stylesheets
 
         public void Initialize()
         {
+            StyleNano.SetCrtUiEnabled(_configurationManager.GetCVar(CCVars.CrtUiEnabled));
             StyleNano.SetCrtPalette(_configurationManager.GetCVar(CCVars.CrtUiColor));
             RefreshNanoSheet();
             SheetSpace = new StyleSpace(_resourceCache).Stylesheet;
 
+            _configurationManager.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _configurationManager.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+        }
+
+        public void PreviewCrtUi(bool enabled, string color)
+        {
+            StyleNano.SetCrtUiEnabled(enabled);
+            StyleNano.SetCrtPalette(color);
+            RefreshNanoSheet();
+        }
+
+        public void ResetCrtUiPreview()
+        {
+            StyleNano.SetCrtUiEnabled(_configurationManager.GetCVar(CCVars.CrtUiEnabled));
+            StyleNano.SetCrtPalette(_configurationManager.GetCVar(CCVars.CrtUiColor));
+            RefreshNanoSheet();
+        }
+
+        private void OnCrtUiEnabledChanged(bool enabled)
+        {
+            StyleNano.SetCrtUiEnabled(enabled);
+            RefreshNanoSheet();
         }
 
         private void OnCrtUiColorChanged(string color)

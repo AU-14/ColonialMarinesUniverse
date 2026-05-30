@@ -83,8 +83,8 @@
     head: AU14CivBallCapBlack
     belt: AU14BeltUtilityGeneralBlack
     back: RMCSatchelLightpackWeYa
-    ears2: AU14ColonyWeylandHeadset
-    ears: RMCM5CameraGear
+    ears: AU14ColonyWeylandHeadset
+    ears2: RMCM5CameraGear
     suitstorage: RMCM77BeltPMCFilled
 
 - type: entity

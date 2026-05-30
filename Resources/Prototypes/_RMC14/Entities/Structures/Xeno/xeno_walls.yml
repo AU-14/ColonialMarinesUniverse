@@ -37,6 +37,12 @@
   - type: XenoStructureUpgradeable
     to: WallXenoResinThick
     cost: 50
+  - type: Appearance
+  - type: Flamability
+    chance: 1.0
+    rate: 15.0
+    range: 0.8
+    spread: 0.8
   - type: MeleeReceivedMultiplier
     xenoDamage:
       types:
@@ -73,6 +79,11 @@
     requiredVehicleTag: VehicleHeavy
     smashSound:
       collection: XenoResinBreak
+  - type: Flamability
+    chance: 0.8
+    rate: 22.5
+    range: 0.7
+    spread: 0.6
   - type: MeleeReceivedMultiplier
     xenoDamage:
       types:

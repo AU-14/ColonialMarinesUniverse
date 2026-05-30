@@ -4,83 +4,70 @@ au14-department-govforces = Government Forces
 au14-job-supervisors-govforplatco = High Command
 au14-job-supervisors-govfor = Platoon Commander
 
-AU14JobGOVFORPlatCo = Commander
 au14-job-name-govforplatco = Commander
 au14-job-description-govforplatco = Command the unit. Manage strategy, unit coordination and liaise with command from the CIC.
 au14-job-prefix-govforplatco = CMNDR
 
-AU14JobGOVFORPlatOp = Junior Officer
 au14-job-name-govforplatop = Junior Officer
 au14-job-description-govforplatop = Assist the Commander with logistics, coordination, and operational oversight.
 au14-job-prefix-govforplatop = JO
 
-AU14JobGOVFORDSPilot = Dropship Pilot
 au14-job-name-govfordspilot = Dropship Pilot
 au14-job-description-govfordspilot = Fly the dropship. Insert troops, extract casualties, and deliver fire support.
 au14-job-prefix-govfordspilot = DP
 
-AU14JobGOVFORDCC = Dropship Crew Chief
 au14-job-name-govfordcc = Dropship Crew Chief
-au14-job-description-govfordcc = Maintain the bird. Coordinate cargo, passengers, and assist the pilot.
+au14-job-description-govfordcc = Maintain the dropships. Coordinate cargo, passengers, and assist the pilots.
 au14-job-prefix-govfordcc = DCC
 
-AU14JobGOVFORSectionSergeant = Senior Sergeant
 au14-job-name-govforSSG = Senior Sergeant
-au14-job-description-govforSSG = Senior enlisted. Keep the platoon running .
+au14-job-description-govforSSG = Senior enlisted. Keep the platoon running.
 au14-job-prefix-govforSSG = SNRSRGT
 
-AU14JobGOVFORSquadSergeant = Squad Leader
 au14-job-name-govforsquadsergeant = Squad Leader
 au14-job-description-govforsquadsergeant = Lead a Squad. Follow orders from the top and get your people home.
 au14-job-prefix-govforsquadsergeant = SL
 
-AU14JobGOVFORSquadRifleman = Rifleman
 au14-job-name-govforsquadrifleman = Rifleman
 au14-job-description-govforsquadrifleman = The backbone of the unit. Follow orders, pull security, and shoot straight.
 au14-job-prefix-govforsquadrifleman = RFN
 
-AU14JobGOVFORSquadAutomaticRifleman = Automatic Rifleman
 au14-job-name-govforsquadautomaticrifleman = Automatic Rifleman
+au14-job-name-govforsquadautomaticrifleman-plural = Automatic Riflemen
 au14-job-description-govforsquadautomaticrifleman = Lay down suppressive fire. Keep the enemy's head down and your squad moving.
 au14-job-prefix-govforsquadautomaticrifleman = ARFN
 
-AU14JobGOVFORPlatoonCorpsman = Hospital Corpsman
 au14-job-name-govforplatooncorpsman = Hospital Corpsman
 au14-job-description-govforplatooncorpsman = Provide field medical aid. Patch them up, keep them breathing, and get them back in the fight.
+au14-job-name-govforplatooncorpsman-plural = Hospital Corpsmen
 au14-job-prefix-govforplatooncorpsman = HM
 
-AU14JobGOVFORRadioTelephoneOperator =  Fireteam Lead
 au14-job-name-radiotelephoneoperator = Fireteam Leader
+au14-job-name-radiotelephoneoperator-alt = Radio Telephone Operator
 au14-job-description-radiotelephoneoperator = Operate long-range comms and lead fireteams.
 au14-job-prefix-radiotelephoneoperator = FTL
 
-AU14JobGOVFORAuxSupportSynth = Support Synthetic
 au14-job-name-govforauxsupportsynth = Support Synthetic
 au14-job-description-govforauxsupportsynth = Provide logistics, medical, police and command support for your faction.
 au14-job-prefix-govforauxsupportsynth = SYNTH
 
-AU14JobGOVFORSquadCombatTech = Combat Technician
 au14-job-name-govforsquadcombattech = Combat Technician
 au14-job-description-govforsquadcombattech = Provide engineering and construction support for your faction.
 au14-job-prefix-govforsquadcombattech = CT
 
-AU14JobGOVFORadvisor = Advisor
 au14-job-name-govforadvisor = Advisor
 au14-job-description-govforadvisor = Advise command, mentor new soldiers and provide assistance wherever needed.
 au14-job-prefix-govforadvisor = ADV
 
-AU14JobMilitaryDoctorBase = Doctor
 au14-job-name-govforMilitaryDoctor = Doctor
 au14-job-description-govforMilitaryDoctor = Provide your faction with higher levels of medical care.
 au14-job-prefix-govforMilitaryDoctor = DOC
 
-AU14JobGOVFORMilitaryPoliceMan = Military Policeman
 au14-job-name-govformilitarypoliceman = Military Policeman
 au14-job-description-govformilitarypoliceman = Provide your faction with police support.
 au14-job-prefix-govformilitarypoliceman = MP
 
-AU14JobGOVFORAuxTech = Auxiliary Technician
-au14-job-name-govforAuxTech = Auxiliary Technician
+au14-job-name-govforAuxTech = Technician
 au14-job-description-govforAuxTech = Run requisitions, keep the ship running and tidy. Provide your faction with shipside logistics and engineering support.
 au14-job-prefix-govforAuxTech = AXT
 
@@ -136,8 +123,6 @@ au14-job-prefix-govforspecialist-pointmanRMC = PNM
 au14-job-name-govforspecialist-grenadierRMC = Grenadier
 au14-job-prefix-govforspecialist-grenadierRMC = GNR
 
-au14-job-prefix-govfork9handler = K9
-
 au-14-job-name-rmcrrt-commander = Commander
 au-14-job-prefix-rmcrrt-commander = CMD
 
@@ -153,13 +138,10 @@ au-14-job-prefix-uppgrom-squadleader = SL
 
 au14-job-name-juniorofficer-so = Staff Officer
 au14-job-prefix-juniorofficer-so = SO
-
 au14-job-name-juniorofficer-io = Intelligence Officer
 au14-job-prefix-juniorofficer-io = IO
-
 au14-job-name-juniorofficer-eo = Engineering Officer
 au14-job-prefix-juniorofficer-eo = EO
-
 au14-job-name-juniorofficer-adj = Adjutant Officer
 au14-job-prefix-juniorofficer-adj = AO
 

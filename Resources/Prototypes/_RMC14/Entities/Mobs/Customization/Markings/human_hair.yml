@@ -1079,14 +1079,6 @@
       state: hair_aviator
 
 - type: marking
-  id: RMCHumanHairGantlePonytail
-  bodyPart: Hair
-  markingCategory: Hair
-  sprites:
-    - sprite: _RMC14/Mobs/Customization/human_hair.rsi
-      state: hair_gantleponytail
-
-- type: marking
   id: RMCHumanHairEdgar
   bodyPart: Hair
   markingCategory: Hair

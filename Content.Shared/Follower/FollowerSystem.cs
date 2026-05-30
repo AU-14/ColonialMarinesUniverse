@@ -34,11 +34,15 @@ public sealed partial class FollowerSystem : EntitySystem
     [Dependency] private INetManager _netMan = default!;
     [Dependency] private ISharedAdminManager _adminManager = default!;
 
+    private EntityQuery<TransformComponent> _xformQuery;
+
     private static readonly ProtoId<TagPrototype> ForceableFollowTag = "ForceableFollow";
 
     public override void Initialize()
     {
         base.Initialize();
+
+        _xformQuery = GetEntityQuery<TransformComponent>();
 
         SubscribeLocalEvent<GetVerbsEvent<AlternativeVerb>>(OnGetAlternativeVerbs);
         SubscribeLocalEvent<FollowerComponent, MoveInputEvent>(OnFollowerMove);
@@ -189,14 +193,21 @@ public sealed partial class FollowerSystem : EntitySystem
     /// <param name="entity">The entity to be followed</param>
     public void StartFollowingEntity(EntityUid follower, EntityUid entity)
     {
+        if (!CanFollow(follower, out _) ||
+            !CanFollow(entity, out var targetXform) ||
+            follower == entity)
+        {
+            return;
+        }
+
         // No recursion for you
-        var targetXform = Transform(entity);
         while (targetXform.ParentUid.IsValid())
         {
             if (targetXform.ParentUid == follower)
                 return;
 
-            targetXform = Transform(targetXform.ParentUid);
+            if (!CanFollow(targetXform.ParentUid, out targetXform))
+                return;
         }
 
         // Cleanup old following.
@@ -227,7 +238,8 @@ public sealed partial class FollowerSystem : EntitySystem
         _containerSystem.AttachParentToContainerOrGrid((follower, xform));
 
         // If we didn't get to parent's container.
-        if (xform.ParentUid != Transform(xform.ParentUid).ParentUid)
+        if (!CanFollow(xform.ParentUid, out var parentXform) ||
+            xform.ParentUid != parentXform.ParentUid)
         {
             _transform.SetCoordinates(follower, xform, new EntityCoordinates(entity, Vector2.Zero), rotation: Angle.Zero);
         }
@@ -251,6 +263,14 @@ public sealed partial class FollowerSystem : EntitySystem
     /// <param name="deparent">Should the entity deparent itself</param>
     public void StopFollowingEntity(EntityUid uid, EntityUid target, FollowedComponent? followed = null, bool deparent = true, bool removeComp = true)
     {
+        if (!uid.IsValid() ||
+            !Exists(uid) ||
+            !target.IsValid() ||
+            !Exists(target))
+        {
+            return;
+        }
+
         if (!Resolve(target, ref followed, false))
             return;
 
@@ -340,6 +360,23 @@ public sealed partial class FollowerSystem : EntitySystem
         }
 
         return picked;
+    }
+
+    private bool CanFollow(EntityUid uid, out TransformComponent xform)
+    {
+        xform = default!;
+
+        if (!uid.IsValid() ||
+            !Exists(uid) ||
+            TerminatingOrDeleted(uid) ||
+            !_xformQuery.TryComp(uid, out var foundXform) ||
+            foundXform == null)
+        {
+            return false;
+        }
+
+        xform = foundXform;
+        return true;
     }
 }
 

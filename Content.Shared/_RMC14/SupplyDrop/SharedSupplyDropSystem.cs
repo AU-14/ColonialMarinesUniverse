@@ -212,7 +212,7 @@ public abstract partial class SharedSupplyDropSystem : EntitySystem
         return true;
     }
 
-    public bool TryLaunchSupplyDropPopup(Entity<SupplyDropComputerComponent> computer, EntityUid user)
+    public virtual bool TryLaunchSupplyDropPopup(Entity<SupplyDropComputerComponent> computer, EntityUid user)
     {
         var time = _timing.CurTime;
         if (time < computer.Comp.NextLaunchAt)

@@ -55,6 +55,8 @@
         layer:
         - MidImpassable
         - LowImpassable
+  #CMU
+  - type: CMUZPhysics
   - type: Anchorable
 
 # For use with yaml composition, so that all wheeled structures can easily be changed.

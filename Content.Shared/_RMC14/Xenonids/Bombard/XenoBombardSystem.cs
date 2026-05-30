@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Projectiles;
 using Content.Shared._RMC14.Xenonids.GasToggle;
@@ -26,6 +27,7 @@ public sealed partial class XenoBombardSystem : EntitySystem
     [Dependency] private RMCProjectileSystem _rmcProjectile = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private CMUZLevelShootingSystem _zLevelShooting = default!;
 
     public override void Initialize()
     {
@@ -39,21 +41,31 @@ public sealed partial class XenoBombardSystem : EntitySystem
     {
         var source = _transform.GetMapCoordinates(ent);
         var target = _transform.ToMapCoordinates(args.Target);
-        if (source.MapId != target.MapId)
+        if (!_zLevelShooting.TryAdjustShotMapCoordinates(ent, source, target, out var adjustedSource, out var adjustedTarget) ||
+            adjustedSource.MapId != adjustedTarget.MapId)
+        {
             return;
+        }
+
+        _zLevelShooting.TryGetProjectileVisualOffset(ent, source, adjustedSource, out var projectileVisualOffset);
 
         args.Handled = true;
 
         if (!_xenoPlasma.HasPlasmaPopup(ent.Owner, ent.Comp.PlasmaCost))
             return;
 
-        var direction = target.Position - source.Position;
+        var direction = adjustedTarget.Position - adjustedSource.Position;
         if (direction.Length() > ent.Comp.Range)
-            target = source.Offset(direction.Normalized() * ent.Comp.Range);
+            adjustedTarget = adjustedSource.Offset(direction.Normalized() * ent.Comp.Range);
 
         _audio.PlayPredicted(ent.Comp.PrepareSound, ent, ent);
 
-        var ev = new XenoBombardDoAfterEvent { Coordinates = target, };
+        var ev = new XenoBombardDoAfterEvent
+        {
+            SourceCoordinates = adjustedSource,
+            Coordinates = adjustedTarget,
+            ProjectileVisualOffset = projectileVisualOffset,
+        };
         var doAfter = new DoAfterArgs(EntityManager, ent, ent.Comp.Delay, ev, ent, args.Action) { BreakOnMove = true, RootEntity = true };
         if (_doAfter.TryStartDoAfter(doAfter))
         {
@@ -94,7 +106,7 @@ public sealed partial class XenoBombardSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        var source = _transform.GetMapCoordinates(ent);
+        var source = args.SourceCoordinates;
         if (source.MapId != args.Coordinates.MapId)
             return;
 
@@ -106,6 +118,7 @@ public sealed partial class XenoBombardSystem : EntitySystem
         _rmcProjectile.SetMaxRange((projectile, max), direction.Length());
 
         _gun.ShootProjectile(projectile, direction, Vector2.Zero, ent, ent, speed: 7.5f);
+        _zLevelShooting.ApplyProjectileVisualOffset(projectile, args.ProjectileVisualOffset);
         _audio.PlayEntity(ent.Comp.ShootSound, ent, ent);
 
         _rmcActions.ActivateSharedCooldown(action, ent);

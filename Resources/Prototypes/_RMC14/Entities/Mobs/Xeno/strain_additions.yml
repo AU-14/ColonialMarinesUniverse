@@ -1,0 +1,242 @@
+- type: entity
+  parent: CMXenoDefender
+  id: CMXenoDefenderHeatshield
+  suffix: Heatshield
+  components:
+  - type: Sprite
+    sprite: _CM13/Mobs/Xenos/Defender/heatshield_defender.rsi
+  - type: Xeno
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailSlam
+    - ActionXenoToggleCrest
+    - ActionXenoVomitBile
+    - ActionXenoSelfImmolate
+    - ActionXenoThermoregulation
+    - ActionXenoDevolve
+  - type: XenoStrain
+    name: rmc-xeno-heatshield-name
+    description: rmc-xeno-heatshield-description
+    popup: rmc-xeno-heatshield-popup
+  - type: XenoHeatshield
+  - type: CMArmor
+    xenoArmor: 25
+    explosionArmor: 50
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1.75
+    baseSprintSpeed: 3.1
+  - type: XenoHidden
+  - type: RMCActionOrder
+    id: CMXenoDefenderHeatshield
+
+- type: entity
+  parent: CMXenoSpitter
+  id: CMXenoSpitterVenator
+  suffix: Venator
+  components:
+  - type: Sprite
+    sprite: _CM13/Mobs/Xenos/Spitter/venator_spitter.rsi
+  - type: Xeno
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoVenatorCorrosiveSpit
+    - ActionXenoVenatorAcidBlob
+    - ActionXenoVenatorEnzymaticBreath
+    - ActionXenoStoreAcid
+    - ActionXenoDevolve
+  - type: XenoStrain
+    name: rmc-xeno-venator-name
+    description: rmc-xeno-venator-description
+    popup: rmc-xeno-venator-popup
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      400: Critical
+      500: Dead
+  - type: XenoPlasma
+    plasma: 600
+    maxPlasma: 600
+    plasmaRegenOnWeeds: 4.5
+  - type: CMArmor
+    xenoArmor: 25
+    explosionArmor: 20
+  - type: MeleeWeapon
+    damage:
+      groups:
+        Brute: 22.5
+  - type: XenoTailStab
+    inject: {}
+    tailDamage:
+      groups:
+        Brute: 36
+  - type: RMCXenoDamageVisuals
+    prefix: venator
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1.8
+    baseSprintSpeed: 3.2
+  - type: Evasion
+    evasion: 0
+  - type: XenoVenator
+  - type: XenoHidden
+  - type: RMCActionOrder
+    id: CMXenoSpitterVenator
+
+- type: entity
+  parent: CMXenoSpitter
+  id: CMXenoSpitterAlchemist
+  suffix: Alchemist
+  components:
+  - type: Xeno
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailInjection
+    - ActionXenoSelectChemical
+    - ActionXenoProduceChemical
+    - ActionXenoRemoveChemical
+    - ActionXenoDevolve
+  - type: XenoStrain
+    name: rmc-xeno-alchemist-name
+    description: rmc-xeno-alchemist-description
+    popup: rmc-xeno-alchemist-popup
+  - type: XenoAlchemist
+  - type: CMArmor
+    xenoArmor: 10
+    explosionArmor: 15
+  - type: MeleeWeapon
+    damage:
+      groups:
+        Brute: 22.5
+  - type: XenoHidden
+  - type: RMCActionOrder
+    id: CMXenoSpitterAlchemist
+
+- type: entity
+  parent: CMXenoWarrior
+  id: CMXenoWarriorBulwark
+  suffix: Bulwark
+  components:
+  - type: Sprite
+    sprite: _CM13/Mobs/Xenos/Warrior/bulwark_warrior.rsi
+    layers:
+    - map: [ "enum.XenoVisualLayers.Base" ]
+      state: alive
+    - map: [ "enum.RMCDamageVisualLayers.Base" ]
+      visible: false
+    - map: [ "enum.XenoInhandVisualLayers.Left" ]
+      visible: false
+    - map: [ "enum.XenoInhandVisualLayers.Right" ]
+      visible: false
+    - map: [ "enum.RMCShieldVisuals.Base" ]
+      sprite: _RMC14/Effects/xeno_shields.rsi
+      visible: false
+  - type: Xeno
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoEncasedPlates
+    - ActionXenoPlateBash
+    - ActionXenoBulwarkTailSwing
+    - ActionXenoReflectiveShield
+    - ActionXenoDevolve
+  - type: XenoStrain
+    name: rmc-xeno-bulwark-name
+    description: rmc-xeno-bulwark-description
+    popup: rmc-xeno-bulwark-popup
+  - type: XenoBulwark
+  - type: Tackle
+    min: 4
+    max: 5
+  - type: XenoHidden
+  - type: RMCActionOrder
+    id: CMXenoWarriorBulwark
+
+- type: entity
+  parent: RMCXenoCarrierBase
+  id: CMXenoReaper
+  name: Reaper
+  description: A xeno support beast that harvests fallen flesh into resin.
+  components:
+  - type: Sprite
+    sprite: _CM13/Mobs/Xenos/Reaper/reaper.rsi
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      650: Critical
+      750: Dead
+  - type: Xeno
+    role: CMXenoCarrier
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoAcidNormal
+    - ActionXenoPheromones
+    - ActionXenoOrderConstruction
+    - ActionXenoPlantWeeds
+    - ActionXenoChooseStructure
+    - ActionXenoSecreteStructure
+    - ActionXenoFleshHarvest
+    - ActionXenoFleshBloom
+    - ActionXenoCarrionMantle
+    - ActionXenoRapture
+    - ActionXenoReaperRedGas
+    - ActionXenoDevolve
+    tier: 3
+    hudOffset: -0.1,0.1
+    unlockAt: 900
+  - type: XenoDevolve
+    devolvesTo:
+    - CMXenoCarrier
+  - type: XenoPlasma
+    plasma: 500
+    maxPlasma: 500
+    plasmaRegenOnWeeds: 4
+  - type: XenoPheromones
+    pheromonesMultiplier: 3
+    pheroSuffix: strong
+  - type: CMArmor
+    xenoArmor: 0
+    explosionArmor: 20
+  - type: RMCXenoDamageVisuals
+    prefix: reaper
+  - type: MeleeWeapon
+    damage:
+      groups:
+        Brute: 35
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 30
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1.8
+    baseSprintSpeed: 3.25
+  - type: RemoveComponents
+    components:
+    - type: XenoEggRetriever
+  - type: XenoConstruction
+    buildDelay: 2
+    canBuild:
+    - WallXenoResin
+    - WallXenoMembrane
+    - DoorXenoResin
+    - XenoStickyResin
+    - XenoFastResin
+    canOrderConstruction:
+    - HiveCoreXenoConstructionNode
+    - HiveEggMorpherXenoConstructionNode
+    - HiveClusterXenoConstructionNode
+    - HiveRecoveryNodeXenoConstructionNode
+    - HivePlasmaTreeXenoConstructionNode
+  - type: XenoReaper
+  - type: RMCActionOrder
+    id: CMXenoReaper

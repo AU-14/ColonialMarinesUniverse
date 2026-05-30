@@ -37,7 +37,7 @@
 - type: entity
   parent: AU14TrafficDirectorProp
   id: AU14PropTrafficDirector1
-  suffix: TrafficDirector
+  suffix: Evac Center
   name: Traffic Director
   description: A Traffic Director.
   components:
@@ -54,11 +54,14 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: RequireProjectileTarget
+  - type: Construction
+    graph: AU14SignGraph
+    node: sign_evaccenter
 
 - type: entity
   parent: AU14TrafficDirectorProp
   id: AU14PropTrafficDirector2
-  suffix: TrafficDirector
+  suffix: Checkpoint Ahead
   name: Traffic Director
   description: A Traffic Director.
   components:
@@ -75,11 +78,14 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: RequireProjectileTarget
+  - type: Construction
+    graph: AU14SignGraph
+    node: sign_cpahead
 
 - type: entity
   parent: AU14TrafficDirectorProp
   id: AU14PropTrafficDirector3
-  suffix: TrafficDirector
+  suffix: Follow Army Orders
   name: Traffic Director
   description: A Traffic Director.
   components:
@@ -96,11 +102,14 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: RequireProjectileTarget
+  - type: Construction
+    graph: AU14SignGraph
+    node: sign_armyorders
 
 - type: entity
   parent: AU14TrafficDirectorProp
   id: AU14PropTrafficDirector4
-  suffix: TrafficDirector
+  suffix: Tune to Freq 91.7am
   name: Traffic Director
   description: A Traffic Director.
   components:
@@ -117,11 +126,14 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: RequireProjectileTarget
+  - type: Construction
+    graph: AU14SignGraph
+    node: sign_freqtune
 
 - type: entity
   parent: AU14TrafficDirectorProp
   id: AU14PropTrafficDirector5
-  suffix: TrafficDirector
+  suffix: Slow Down
   name: Traffic Director
   description: A Traffic Director.
   components:
@@ -138,11 +150,14 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: RequireProjectileTarget
+  - type: Construction
+    graph: AU14SignGraph
+    node: sign_slowdown
 
 - type: entity
   parent: AU14TrafficDirectorProp
   id: AU14PropTrafficDirector6
-  suffix: TrafficDirector
+  suffix: Empty
   name: Traffic Director
   description: A Traffic Director.
   components:
@@ -159,3 +174,6 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: RequireProjectileTarget
+  - type: Construction
+    graph: AU14SignGraph
+    node: sign_empty

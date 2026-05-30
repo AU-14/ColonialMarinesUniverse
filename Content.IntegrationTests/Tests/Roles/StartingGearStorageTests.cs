@@ -39,14 +39,17 @@ public sealed class StartingGearPrototypeStorageTest
                 foreach (var (slot, entProtos) in gearProto.Storage)
                 {
                     ents.Clear();
+                    if (entProtos == null)
+                        Assert.Fail($"StartingGearPrototype {gearProto.ID} has a null storage list for slot {slot}");
+
+                    if (entProtos.Count == 0)
+                        continue;
+
                     var storageProto = ((IEquipmentLoadout)gearProto).GetGear(slot);
                     if (storageProto == string.Empty)
                         continue;
 
                     var bag = server.EntMan.SpawnEntity(storageProto, coords);
-                    if (entProtos.Count == 0)
-                        continue;
-
                     foreach (var ent in entProtos)
                     {
                         ents.Add(server.EntMan.SpawnEntity(ent, coords));

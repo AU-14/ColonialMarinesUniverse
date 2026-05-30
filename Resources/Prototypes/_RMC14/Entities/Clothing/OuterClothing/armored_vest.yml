@@ -12,7 +12,7 @@
     walkModifier: 0.725
     sprintModifier: 0.725
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 20
     bio: 20
     explosionArmor: 10
@@ -36,7 +36,7 @@
       Classic: _RMC14/Objects/Clothing/OuterClothing/Armor/pilot/classic.rsi
       Urban: _RMC14/Objects/Clothing/OuterClothing/Armor/pilot/urban.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 20
     bio: 10
     explosionArmor: 10
@@ -45,7 +45,7 @@
   parent: RMCArmorVest
   id: RMCArmorVestWeYa
   name: We-Ya security armor vest
-  description: An armored vest that protects against some damage. This one has a Weston-Yamada corporate badge.
+  description: An armored vest that protects against some damage. This one has a Weyland-Yutani corporate badge.
 
 - type: entity
   parent: RMCArmorVestWeYa
@@ -169,7 +169,7 @@
   description: A type of body armor designed for mobility. It absorbs the impact of firearm projectiles, while retaining ease of movement. Does not protect against explosions, or bio-threats. Not recommended for direct combat.
   components:
   - type: CMArmor
-    melee: 10
+    melee: 20
     bullet: 10
     bio: 0
     explosionArmor: 0
@@ -196,7 +196,7 @@
   description: A type of body armor designed for mobility with additional padding for senior officers. It absorbs the impact of firearm projectiles, while retaining ease of movement. Does not protect against explosions. Not recommended for direct combat.
   components:
   - type: CMArmor
-    melee: 10
+    melee: 20
     bullet: 10
     bio: 10
     explosionArmor: 0

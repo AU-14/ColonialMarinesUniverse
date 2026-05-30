@@ -30,7 +30,7 @@ public sealed partial class RMCReagentSystem : EntitySystem
         var dict = new Dictionary<string, Reagent>();
         foreach (var reagentProto in _prototypes.EnumeratePrototypes<ReagentPrototype>())
         {
-            object? reagentObj = new Reagent();
+            object? reagentObj = System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(Reagent));
             _serialization.CopyTo(reagentProto, ref reagentObj);
             if (reagentObj is not Reagent reagent)
                 continue;

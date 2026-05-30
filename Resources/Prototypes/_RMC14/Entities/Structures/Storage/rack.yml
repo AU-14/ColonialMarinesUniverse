@@ -65,6 +65,13 @@
     destroy: true
   - type: XenoCrusherChargable
     instantDestroy: true
+  - type: Flamability
+    chance: 0.04
+    rate: 0.15
+    spread: 0.1
+    range: 0.5
+    burnDurationMin: 70
+    burnDurationMax: 620
 
 - type: entity
   parent: CMRack

@@ -64,7 +64,6 @@ public abstract partial class SimpleDoAfterEvent : DoAfterEvent
 
 // Placeholder for obsolete async do afters
 [Serializable, NetSerializable]
-[Obsolete("Dont use async DoAfters")]
 public sealed partial class AwaitedDoAfterEvent : SimpleDoAfterEvent
 {
 }

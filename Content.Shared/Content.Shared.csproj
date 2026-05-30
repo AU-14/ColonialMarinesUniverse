@@ -43,8 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Explosion\Components\CMUOnLightTimerTriggerComponent.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Update="Explosion\Components\CMUOnLightTimerTriggerComponent.cs" />
   </ItemGroup>
 </Project>

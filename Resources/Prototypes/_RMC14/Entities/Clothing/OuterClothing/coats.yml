@@ -259,7 +259,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/cmp.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
 
 
 # Military Warden
@@ -274,7 +274,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/warden.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
 
 # Military Police
 - type: entity
@@ -288,7 +288,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/mp.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
 
 # Logistics Officer
 - type: entity
@@ -315,7 +315,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/chef.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
 
 # Auxiliary Supply Officer
 - type: entity
@@ -329,7 +329,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/aso/jungle.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
   - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
@@ -350,7 +350,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/aso/black.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
 
 - type: entity
   parent: RMCBaseJacket
@@ -363,7 +363,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/aso/white.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
 
 - type: entity
   parent: RMCBaseJacket
@@ -376,7 +376,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/aso/black_alt.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
 
 - type: entity
   parent: RMCCoatASOBlackAlt
@@ -407,7 +407,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/pilot.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
   - type: FoldableClothing
     foldedEquippedPrefix: jacket
     foldedHeldPrefix: jacket
@@ -424,7 +424,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/CO/jacket.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
 
 - type: entity
   parent: CMCoatCO
@@ -437,7 +437,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/CO/bomber.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
   - type: Appearance
   - type: Foldable
     canFoldInsideContainer: true
@@ -516,7 +516,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/CO/formal_black.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
 
 - type: entity
   parent: CMCoatCO
@@ -529,7 +529,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/CO/formal_white.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
 
 - type: entity
   parent: CMCoatCO
@@ -588,7 +588,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/coat_formal.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
 
 - type: entity
   parent: RMCBaseJacket
@@ -600,7 +600,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/officer.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
 
 - type: entity
   parent: [CMCoatOfficer, RMCBaseJacketButtonable]
@@ -613,7 +613,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/service/jungle.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
   - type: Appearance
   - type: ItemCamouflage
     camouflageVariations:
@@ -727,7 +727,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Synthetic/synth_utility.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
   - type: Appearance
 
 # Normal utility vest
@@ -985,7 +985,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Snowsuits/normal.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 15
     bio: 20
     explosionArmor: 0
@@ -1017,8 +1017,22 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Snowsuits/security.rsi
 
+# Original RMC deputy parka prototype - start
+# - type: entity
+#   parent: RMCCoatSnowSurvivor
+#   id: RMCCoatSnowSurvivorCMBDeputy
+#   name: CMB deputy parka
+#   description: A snow suit tailored to the CMB's needs. It can protect the wearer from extreme cold. The back is enscribed with the powerful letters of 'DEPUTY' representing justice, authority, and protection in the outer rim.
+#   components:
+#   - type: Sprite
+#     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Snowsuits/cmb.rsi
+#   - type: Clothing
+#     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Snowsuits/cmb.rsi
+# Original RMC - end
+
+#AU-14 - start
 - type: entity
-  parent: RMCCoatSnowSurvivor
+  parent: [ClothingOuterStorageBase, RMCAllowSuitStorageClothingExternalWebbing]
   id: RMCCoatSnowSurvivorCMBDeputy
   name: CMB deputy parka
   description: A snow suit tailored to the CMB's needs. It can protect the wearer from extreme cold. The back is enscribed with the powerful letters of 'DEPUTY' representing justice, authority, and protection in the outer rim.
@@ -1027,6 +1041,28 @@
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Snowsuits/cmb.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Snowsuits/cmb.rsi
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,3,1 # 2 slots
+  - type: FixedItemSizeStorage
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - MRE
+      - PillPacket
+      - PillCanister
+      - CMSurgicalCase
+  - type: CMArmor
+    melee: 30
+    bullet: 15
+    bio: 20
+    explosionArmor: 0
+  - type: CMHardArmor
+  - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_VERY_LIGHT
+    walkModifier: 0.897
+    sprintModifier: 0.897
+#AU-14 - end
 
 - type: entity
   parent: RMCCoatSnowSurvivor
@@ -1088,7 +1124,7 @@
   parent: RMCCoatSnow
   id: RMCCoatSnowLiaison
   name: liaison's wintercoat
-  description: A Weston-Yamada winter coat. Only the best comfort for the liaison in a cold environment.
+  description: A Weyland-Yutani winter coat. Only the best comfort for the liaison in a cold environment.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Snowsuits/liaison.rsi

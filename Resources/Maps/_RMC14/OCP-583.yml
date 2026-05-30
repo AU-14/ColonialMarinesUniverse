@@ -8369,7 +8369,7 @@ entities:
   - uid: 3365
     components:
     - type: MetaData
-      name: We-Ya Mart To-Go
+      name: We-Yu Mart To-Go
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 54.5,52.5
@@ -8556,7 +8556,7 @@ entities:
   - uid: 124
     components:
     - type: MetaData
-      name: We-Ya-LWI Hauler HR-685
+      name: We-Yu-LWI Hauler HR-685
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 24.5,-14.5
@@ -8564,7 +8564,7 @@ entities:
   - uid: 5587
     components:
     - type: MetaData
-      name: We-Ya-LWI Hauler HR-685
+      name: We-Yu-LWI Hauler HR-685
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 20.5,-10.5
@@ -8572,7 +8572,7 @@ entities:
   - uid: 5588
     components:
     - type: MetaData
-      name: We-Ya-LWI Hauler HR-685
+      name: We-Yu-LWI Hauler HR-685
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 20.5,-9.5
@@ -8580,7 +8580,7 @@ entities:
   - uid: 5591
     components:
     - type: MetaData
-      name: We-Ya-LWI Hauler HR-685
+      name: We-Yu-LWI Hauler HR-685
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 26.5,-9.5
@@ -8588,7 +8588,7 @@ entities:
   - uid: 5592
     components:
     - type: MetaData
-      name: We-Ya-LWI Hauler HR-685
+      name: We-Yu-LWI Hauler HR-685
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 26.5,-10.5
@@ -8596,7 +8596,7 @@ entities:
   - uid: 5648
     components:
     - type: MetaData
-      name: We-Ya-LWI Hauler HR-685
+      name: We-Yu-LWI Hauler HR-685
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 22.5,-14.5
@@ -8604,7 +8604,7 @@ entities:
   - uid: 5649
     components:
     - type: MetaData
-      name: We-Ya-LWI Hauler HR-685
+      name: We-Yu-LWI Hauler HR-685
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 23.5,-14.5
@@ -11342,7 +11342,7 @@ entities:
   - uid: 2786
     components:
     - type: MetaData
-      name: Weston-Yamada Conference Room
+      name: Weyland-Yutani Conference Room
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 62.5,32.5
@@ -11350,7 +11350,7 @@ entities:
   - uid: 2813
     components:
     - type: MetaData
-      name: Weston-Yamada Offices
+      name: Weyland-Yutani Offices
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 59.5,20.5
@@ -11358,21 +11358,21 @@ entities:
   - uid: 2814
     components:
     - type: MetaData
-      name: Weston-Yamada Offices
+      name: Weyland-Yutani Offices
     - type: Transform
       pos: 59.5,21.5
       parent: 23
   - uid: 2815
     components:
     - type: MetaData
-      name: Weston-Yamada Office Entrance
+      name: Weyland-Yutani Office Entrance
     - type: Transform
       pos: 51.5,21.5
       parent: 23
   - uid: 2816
     components:
     - type: MetaData
-      name: Weston-Yamada Office Entrance
+      name: Weyland-Yutani Office Entrance
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 51.5,20.5
@@ -11380,7 +11380,7 @@ entities:
   - uid: 2913
     components:
     - type: MetaData
-      name: Weston-Yamada Conference Room
+      name: Weyland-Yutani Conference Room
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 63.5,32.5
@@ -11388,14 +11388,14 @@ entities:
   - uid: 3844
     components:
     - type: MetaData
-      name: Weston-Yamada Office Elevator
+      name: Weyland-Yutani Office Elevator
     - type: Transform
       pos: 77.5,30.5
       parent: 23
   - uid: 3847
     components:
     - type: MetaData
-      name: Weston-Yamada Office Elevator
+      name: Weyland-Yutani Office Elevator
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 77.5,29.5
@@ -34406,7 +34406,7 @@ entities:
   - uid: 3848
     components:
     - type: MetaData
-      name: Weston-Yamada Office Stairs
+      name: Weyland-Yutani Office Stairs
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 78.5,25.5
@@ -34414,7 +34414,7 @@ entities:
   - uid: 3849
     components:
     - type: MetaData
-      name: Weston-Yamada Office Stairs
+      name: Weyland-Yutani Office Stairs
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 78.5,26.5
@@ -41298,7 +41298,7 @@ entities:
   - uid: 125
     components:
     - type: MetaData
-      name: We-Ya-LWI Hauler HR-685
+      name: We-Yu-LWI Hauler HR-685
     - type: Transform
       pos: 23.5,-5.5
       parent: 23

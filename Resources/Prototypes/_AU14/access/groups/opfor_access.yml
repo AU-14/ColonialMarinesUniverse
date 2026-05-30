@@ -33,3 +33,11 @@
 - type: accessLevel
   id: AU14AccessOpforPilot
   name: Opfor Pilot
+
+- type: accessLevel
+  id: AU14AccessOpforJuniorOfficer
+  name: Junior Officer
+
+- type: accessLevel
+  id: AU14AccessOpforReq
+  name: Govfor Requisitions

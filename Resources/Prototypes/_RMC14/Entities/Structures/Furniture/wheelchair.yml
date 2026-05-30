@@ -24,6 +24,7 @@
     - DoorBumpOpener
   - type: Physics
     bodyType: KinematicController
+  - type: CMUZPhysics
   - type: Clickable
   - type: Fixtures
     fixtures:
@@ -31,7 +32,7 @@
         shape:
           !type:PhysShapeCircle
           radius: 0.35
-        density: 500
+        density: 30
         mask:
         - MobMask
         layer:

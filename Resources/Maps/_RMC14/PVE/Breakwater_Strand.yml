@@ -53685,7 +53685,7 @@ entities:
     - type: Transform
       pos: -0.5,49.5
       parent: 2
-- proto: RMCSensorTowerOn
+- proto: AU14SensorTowerOn
   entities:
   - uid: 1385
     components:

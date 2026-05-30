@@ -80,7 +80,7 @@
   - type: RMCArmorSpeedTier
     speedTier: light
   - type: CMArmor
-    melee: 10
+    melee: 20
     bullet: 10
     bio: 10
     explosionArmor: 10

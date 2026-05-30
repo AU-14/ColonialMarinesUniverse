@@ -17,7 +17,7 @@ public sealed partial class XenoFightOrFlightSystem : EntitySystem
     [Dependency] private XenoEnergySystem _energy = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
-    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedPopupSystem _popup = default!;

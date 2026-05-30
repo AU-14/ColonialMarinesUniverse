@@ -12,98 +12,97 @@ namespace Content.Server.AU14.Threats;
 
 public sealed partial class KillAllApeRuleSystem : GameRuleSystem<KillAllApeRuleComponent>
 {
-	[Dependency] private IEntityManager _entityManager = default!;
-	[Dependency] private GameTicker _gameTicker = default!;
-	[Dependency] private Round.AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private Round.AuRoundSystem _auRoundSystem = default!;
 
-	private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
+    private EntityQuery<EvacuatedGridComponent> _evacuatedQuery;
 
-	public override void Initialize()
-	{
-		base.Initialize();
-		_evacuatedQuery = GetEntityQuery<EvacuatedGridComponent>();
-		SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
-		SubscribeLocalEvent<EvacuationLaunchedEvent>(OnEvacuationLaunched);
-	}
+    public override void Initialize()
+    {
+        base.Initialize();
+        _evacuatedQuery = GetEntityQuery<EvacuatedGridComponent>();
+        SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<EvacuationLaunchedEvent>(OnEvacuationLaunched);
+    }
 
-	private bool IsEvacuated(EntityUid uid)
-	{
-		var xform = Transform(uid);
-		return xform.GridUid is { } grid && _evacuatedQuery.HasComp(grid);
-	}
+    private bool IsEvacuated(EntityUid uid)
+    {
+        var xform = Transform(uid);
+        return xform.GridUid is { } grid && _evacuatedQuery.HasComp(grid);
+    }
 
-	private void OnEvacuationLaunched(ref EvacuationLaunchedEvent ev)
-	{
-		if (_gameTicker.IsGameRuleActive<KillAllApeRuleComponent>())
-			CheckVictoryCondition();
-	}
+    private void OnEvacuationLaunched(ref EvacuationLaunchedEvent ev)
+    {
+        if (_gameTicker.IsGameRuleActive<KillAllApeRuleComponent>())
+            CheckVictoryCondition();
+    }
 
-	private void OnMobStateChanged(MobStateChangedEvent ev)
-	{
-		// Only run this logic when the KillAllApe rule is active
-		if (!_gameTicker.IsGameRuleActive<KillAllApeRuleComponent>())
-			return;
+    private void OnMobStateChanged(MobStateChangedEvent ev)
+    {
+        // Only run this logic when the KillAllApe rule is active
+        if (!_gameTicker.IsGameRuleActive<KillAllApeRuleComponent>())
+            return;
 
-		// Only care about dead mobs
-		if (ev.NewMobState != MobState.Dead)
-			return;
+        // Only care about dead mobs
+        if (ev.NewMobState != MobState.Dead)
+            return;
 
-		CheckVictoryCondition();
-	}
+        CheckVictoryCondition();
+    }
 
-	private void CheckVictoryCondition()
-	{
-		// Get the active rule entity and its component to read Percent
-		var queryRule = EntityQueryEnumerator<KillAllApeRuleComponent, GameRuleComponent>();
-		if (!queryRule.MoveNext(out var ruleEnt, out var ruleComp, out var gameRuleComp) || !GameTicker.IsGameRuleActive(ruleEnt, gameRuleComp))
-			return;
+    private void CheckVictoryCondition()
+    {
+        var queryRule = QueryActiveRules();
+        if (!queryRule.MoveNext(out _, out _, out var ruleComp, out _))
+            return;
 
-		var requiredPercent = Math.Clamp(ruleComp.Percent, 1, 100);
+        var requiredPercent = Math.Clamp(ruleComp!.Percent, 1, 100);
 
-		// Count total and dead Ape mobs (excluding evacuated)
-		var total = 0;
-		var dead = 0;
+        // Count total and dead Ape mobs (excluding evacuated)
+        var total = 0;
+        var dead = 0;
 
-		var query = _entityManager.EntityQueryEnumerator<MobStateComponent>();
-		while (query.MoveNext(out var uid, out var mobState))
-		{
-			if (!_entityManager.HasComponent<ApeComponent>(uid))
-				continue;
+        var query = _entityManager.EntityQueryEnumerator<MobStateComponent>();
+        while (query.MoveNext(out var uid, out var mobState))
+        {
+            if (!_entityManager.HasComponent<ApeComponent>(uid))
+                continue;
 
-			// If the entity's grid was evacuated, count them as dead (do not skip)
-			if (IsEvacuated(uid))
-			{
-				total++;
-				dead++;
-				continue;
-			}
+            // If the entity's grid was evacuated, count them as dead (do not skip)
+            if (IsEvacuated(uid))
+            {
+                total++;
+                dead++;
+                continue;
+            }
 
-			total++;
-			if (mobState.CurrentState == MobState.Dead)
-				dead++;
-		}
+            total++;
+            if (mobState.CurrentState == MobState.Dead)
+                dead++;
+        }
 
-		if (total == 0)
-			return; // nothing to count
+        if (total == 0)
+            return; // nothing to count
 
-		var percentDead = (int) ((double)dead / total * 100.0);
+        var percentDead = (int)((double)dead / total * 100.0);
 
-		if (percentDead >= requiredPercent)
-		{
-			if (_gameTicker.RunLevel != GameRunLevel.InRound)
-				return;
+        if (percentDead >= requiredPercent)
+        {
+            if (_gameTicker.RunLevel != GameRunLevel.InRound)
+                return;
 
-			var winMessage = _auRoundSystem._selectedthreat?.WinMessage;
-			if (!string.IsNullOrEmpty(winMessage))
-			{
-				_gameTicker.EndRound(winMessage);
-			}
-			else
-			{
-				_gameTicker.EndRound("The Threat has been Eliminated");
-			}
-		}
-	}
+            var winMessage = _auRoundSystem._selectedthreat?.WinMessage;
+            if (!string.IsNullOrEmpty(winMessage))
+            {
+                _gameTicker.EndRound(winMessage);
+            }
+            else
+            {
+                _gameTicker.EndRound("The Threat has been Eliminated");
+            }
+        }
+    }
 }
 
 

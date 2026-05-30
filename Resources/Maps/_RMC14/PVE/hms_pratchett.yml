@@ -25553,7 +25553,7 @@ entities:
   - uid: 3380
     components:
     - type: MetaData
-      desc: An advanced artificial intelligence system installed in the HMS Pratchett. Like many other military-grade AI systems, this one was built by We-Ya.
+      desc: An advanced artificial intelligence system installed in the HMS Pratchett. Like many other military-grade AI systems, this one was built by We-Yu.
       name: SHIVA v7.1
     - type: Transform
       pos: -42.5,-71.5
@@ -26588,7 +26588,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - 3552
           - 3551
         paper_label: !type:ContainerSlot
           showEnts: False
@@ -43674,15 +43673,6 @@ entities:
     - type: Transform
       pos: -91.5,-89.5
       parent: 1
-- proto: RMCTabletCO
-  entities:
-  - uid: 3552
-    components:
-    - type: Transform
-      parent: 3550
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
 - proto: RMCTacticalMapTableLargeRotated
   entities:
   - uid: 6165

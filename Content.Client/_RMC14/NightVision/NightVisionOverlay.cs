@@ -13,12 +13,15 @@ namespace Content.Client._RMC14.NightVision;
 
 public sealed partial class NightVisionOverlay : Overlay
 {
+    private static readonly ProtoId<ShaderPrototype> NightVisionShader = "RMCNightVision";
+
     [Dependency] private IEntityManager _entity = default!;
     [Dependency] private IPlayerManager _players = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
 
     private readonly ContainerSystem _container;
     private readonly ExamineSystem _examine;
+    private readonly SpriteSystem _sprite;
     private readonly TransformSystem _transform;
     private readonly EntityQuery<XenoComponent> _xenoQuery;
 
@@ -33,10 +36,11 @@ public sealed partial class NightVisionOverlay : Overlay
 
         _container = _entity.System<ContainerSystem>();
         _examine = _entity.System<ExamineSystem>();
+        _sprite = _entity.System<SpriteSystem>();
         _transform = _entity.System<TransformSystem>();
         _xenoQuery = _entity.GetEntityQuery<XenoComponent>();
 
-        _shader = _prototype.Index<ShaderPrototype>("RMCNightVision").Instance().Duplicate();
+        _shader = _prototype.Index(NightVisionShader).Instance().Duplicate();
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -134,12 +138,12 @@ public sealed partial class NightVisionOverlay : Overlay
         if (transparency != null)
         {
             var color = sprite.Color * Color.White.WithAlpha(transparency.Value);
-            sprite.Color = color;
+            _sprite.SetColor((uid, sprite), color);
         }
-        sprite.Render(handle, eyeRot, rotation, position: position);
+        _sprite.RenderSprite((uid, sprite), handle, eyeRot, rotation, position);
         if (transparency != null)
         {
-            sprite.Color = colorCache;
+            _sprite.SetColor((uid, sprite), colorCache);
         }
     }
 }
