@@ -352,3 +352,12 @@ au14-prodigyrescue-greeting = You are a part of "Prodigy Tactical Advanced Searc
     Prodigy Security - Repairing Our World
 
     You are neutral to all WeYu units
+
+au14-job-name-msg-commander = Commander
+au14-job-name-msg-watchstander = Watch Stander
+au14-job-prefix-msg-watchstander = WS
+au14-job-description-msg = You are a part of Marine Security Guard. You were called to ensure safety of UA Embassy in the colony.
+
+au14-job-greeting-msg = You are a part of Marine Security Guard.
+    You were called to ensure safety of UA Embassy on the colony.
+    You are NOT a part of GOVFOR nor hostile to them.
