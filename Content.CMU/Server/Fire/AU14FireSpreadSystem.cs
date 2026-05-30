@@ -53,8 +53,8 @@ public sealed class AU14FireSpreadSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
 
-    private const float BaseSpreadRadiusTiles = 2.9f;
-    private static readonly TimeSpan BaseSpreadInterval = TimeSpan.FromSeconds(98);
+    private const float BaseSpreadRadiusTiles = 3.35f;
+    private static readonly TimeSpan BaseSpreadInterval = TimeSpan.FromSeconds(70);
     private static readonly TimeSpan DamageInterval = TimeSpan.FromSeconds(2);
     private static readonly TimeSpan TileFireStepDelay = TimeSpan.FromSeconds(1.3);
 
