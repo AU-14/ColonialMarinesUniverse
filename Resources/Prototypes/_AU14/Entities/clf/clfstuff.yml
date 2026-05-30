@@ -40,9 +40,6 @@
       - id: RMCWeaponRifleType71C
         amount: 1
         points: 9
-      - id: RMCWeaponRifleType73
-        amount: 1
-        points: 12
     - name: Shotguns
       entries:
       - id: RMCWeaponShotgunHG3712
@@ -93,7 +90,7 @@
         points: 15
       - id: RMCM2CMount
         amount: 1
-        points: 19
+        points: 17
     - name: Rifle Ammunition
       entries:
       - id: RMCMagazineRifleM16
