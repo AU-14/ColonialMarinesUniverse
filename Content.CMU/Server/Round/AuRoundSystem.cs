@@ -713,7 +713,7 @@ namespace Content.Server.AU14.Round
                 !threat.whitelistedgamemodes.Any(s => s.Equals(preset, StringComparison.OrdinalIgnoreCase)))
                 return false;
 
-            if (threat.MaxPlayers < playerCount || threat.MinPlayers > playerCount)
+            if (threat.MinPlayers > playerCount)
                 return false;
 
             if (govforId != null && threat.BlacklistedPlatoons.Any(p => p.Equals(govforId, StringComparison.OrdinalIgnoreCase)))
