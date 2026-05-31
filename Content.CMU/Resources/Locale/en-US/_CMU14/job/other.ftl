@@ -361,3 +361,13 @@ au14-job-description-msg = You are a part of Marine Security Guard. You were cal
 au14-job-greeting-msg = You are a part of Marine Security Guard.
     You were called to ensure safety of UA Embassy on the colony.
     You are NOT a part of GOVFOR nor hostile to them.
+
+au14-wysurv-greeting = Everything has gone wrong, this is a complete disaster.
+
+    Ensure your survival at all costs, the knowledge you posess was paid for with many lifes.
+
+    Company's profit is your goal.
+
+    Weyland-Yutani - building better worlds.
+
+au14-wysurv-description = You are whats left of the local Weyland-Yutani employees. Survive and ensure your knowledge reaches the company.
