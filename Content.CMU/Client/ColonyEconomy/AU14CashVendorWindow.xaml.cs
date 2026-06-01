@@ -11,6 +11,7 @@ namespace Content.Client.AU14.ColonyEconomy;
 public sealed partial class AU14CashVendorWindow : FancyWindow
 {
     public event Action<int>? OnBuyPressed;
+    public event Action? OnScanIdPressed;
 
     private AU14CashVendorBuiState? _lastState;
     private readonly IPrototypeManager _protoManager;
@@ -20,6 +21,7 @@ public sealed partial class AU14CashVendorWindow : FancyWindow
         RobustXamlLoader.Load(this);
         _protoManager = IoCManager.Resolve<IPrototypeManager>();
         SearchBar.OnTextChanged += _ => RefreshList();
+        ScanIdBtn.OnPressed += _ => OnScanIdPressed?.Invoke();
     }
 
     public void UpdateState(AU14CashVendorBuiState state)
@@ -30,6 +32,14 @@ public sealed partial class AU14CashVendorWindow : FancyWindow
         TaxFooterLabel.Text = state.SalesTaxPercent > 0
             ? $"Sales Tax: {state.SalesTaxPercent:F0}%"
             : "No sales tax";
+
+        ScanIdBtn.Visible = state.AllowDepartmentBudget;
+        ScanIdBtn.Text = state.HasDepartmentMode ? "Clear Dept" : "Scan ID";
+
+        DeptBudgetRow.Visible = state.HasDepartmentMode;
+        if (state.HasDepartmentMode)
+            DeptBudgetLabel.Text = $"${state.DepartmentBudget:F0}  ({state.DepartmentName})";
+
         RefreshList();
     }
 
@@ -55,7 +65,6 @@ public sealed partial class AU14CashVendorWindow : FancyWindow
                 HorizontalExpand = true
             };
 
-            // Entity icon — only show if prototype exists
             if (_protoManager.HasIndex<EntityPrototype>(item.ItemProtoId))
             {
                 var icon = new EntityPrototypeView
@@ -68,11 +77,9 @@ public sealed partial class AU14CashVendorWindow : FancyWindow
             }
             else
             {
-                // Placeholder for missing prototype
                 row.AddChild(new Robust.Client.UserInterface.Control { MinSize = new System.Numerics.Vector2(32, 32) });
             }
 
-            // Name label
             var nameLabel = new Label
             {
                 Text = item.Name,
@@ -81,7 +88,6 @@ public sealed partial class AU14CashVendorWindow : FancyWindow
                 SizeFlagsStretchRatio = 3
             };
 
-            // Price label
             var priceLabel = new Label
             {
                 Text = $"${item.EffectivePrice}",
@@ -89,10 +95,13 @@ public sealed partial class AU14CashVendorWindow : FancyWindow
                 HorizontalAlignment = HAlignment.Right
             };
 
-            // Buy button
+            var canAfford = _lastState.HasDepartmentMode
+                ? _lastState.DepartmentBudget >= item.EffectivePrice
+                : _lastState.InsertedCash >= item.EffectivePrice;
+
             var buyBtn = new Button { Text = "Buy", MinWidth = 50 };
             var idxCopy = item.Index;
-            buyBtn.Disabled = _lastState.InsertedCash < item.EffectivePrice;
+            buyBtn.Disabled = !canAfford;
             buyBtn.OnPressed += _ => OnBuyPressed?.Invoke(idxCopy);
 
             row.AddChild(nameLabel);

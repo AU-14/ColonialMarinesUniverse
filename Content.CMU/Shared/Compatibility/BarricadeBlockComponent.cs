@@ -21,7 +21,12 @@ public sealed partial class BarricadeBlockComponent : Component
     [DataField("bidirectional")]
     public bool Bidirectional = true;
 
-
+    /// <summary>
+    /// Maximum distance (in tiles) a shooter can be from this barricade for a directionally-aligned
+    /// shot to pass over instead of being subject to block chance.
+    /// </summary>
+    [DataField("distance")]
+    public float Distance = 3.5f;
 
 }
 
