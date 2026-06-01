@@ -195,46 +195,36 @@ namespace Content.Server.AU14.Round
                             return;
                         }
 
-                        var options = new List<(string text, object data)>();
-                        foreach (var planet in planetProtos)
-                        {
-                            // Use VoteName if available, otherwise fallback to MapId
-                            var displayName = string.IsNullOrWhiteSpace(planet.VoteName)
-                                ? planet.MapId
-                                : planet.VoteName;
-                            options.Add((displayName, planet));
-                        }
-
-                        var vote = new VoteOptions
-                        {
-                            Title = "Select Planet",
-                            Options = options,
-                            Duration = TimeSpan.FromSeconds(30),
-                        };
+                        var vote = BuildPlanetVoteOptions(preset.ID, planetProtos, TimeSpan.FromSeconds(30));
                         vote.SetInitiatorOrServer(null);
+                        var planetByMapId = planetProtos
+                            .GroupBy(planet => planet.MapId, StringComparer.OrdinalIgnoreCase)
+                            .ToDictionary(group => group.Key, group => group.First(), StringComparer.OrdinalIgnoreCase);
                         var handle = _voteManager.CreateVote(vote);
 
                         // Use OnFinished handler to set _selectedPlanet
                         handle.OnFinished += (_, args) =>
                         {
-                            object? picked = null;
-                            if (args.Winner != null)
-                                picked = args.Winner;
+                            string? picked = null;
+                            if (args.Winner is string winner)
+                                picked = winner;
                             else if (args.Winners is var winnersArray && winnersArray.Length > 0)
-                                picked = winnersArray[0];
-                            if (picked == null && options.Count > 0)
-                                picked = options[0].data;
-                            if (picked != null)
+                                picked = winnersArray[0] as string;
+                            if (picked == null && vote.Options.Count > 0)
+                                picked = vote.Options[0].data as string;
+                            if (picked != null && planetByMapId.TryGetValue(picked, out var planet))
+                            {
                                 args.ResolveWinner(picked);
-                            _selectedPlanet = picked as RMCPlanetMapPrototypeComponent;
+                                _selectedPlanet = planet;
+                            }
                         };
 
                         Timer.Spawn(TimeSpan.FromSeconds(32),
                             () =>
                             {
                                 // Fallback: if _selectedPlanet wasn't set by handler, pick manually
-                                if (_selectedPlanet == null && options.Count > 0)
-                                    _selectedPlanet = options[0].data as RMCPlanetMapPrototypeComponent;
+                                if (_selectedPlanet == null && planetProtos.Count > 0)
+                                    _selectedPlanet = planetProtos[0];
                                 SetCamoType();
                                 StartPlatoonVotes();
                             });
@@ -294,6 +284,41 @@ namespace Content.Server.AU14.Round
                 return false;
 
             return true;
+        }
+
+        internal static VoteOptions BuildPlanetVoteOptions(
+            string presetId,
+            IReadOnlyList<RMCPlanetMapPrototypeComponent> planets,
+            TimeSpan duration)
+        {
+            var options = new List<(string text, object data)>();
+            foreach (var planet in planets)
+            {
+                var displayName = string.IsNullOrWhiteSpace(planet.VoteName)
+                    ? planet.MapId
+                    : planet.VoteName;
+                options.Add((displayName, planet.MapId));
+            }
+
+            return new VoteOptions
+            {
+                Title = "Select Planet",
+                Options = options,
+                Duration = duration,
+                CarryoverEnabled = true,
+                CarryoverKey = BuildPlanetVoteCarryoverKey(presetId, planets),
+            };
+        }
+
+        private static string BuildPlanetVoteCarryoverKey(
+            string presetId,
+            IEnumerable<RMCPlanetMapPrototypeComponent> planets)
+        {
+            var mapIds = planets
+                .Select(planet => planet.MapId)
+                .Order(StringComparer.OrdinalIgnoreCase);
+
+            return $"au14-planet:{presetId}:{string.Join(",", mapIds)}";
         }
 
         private static bool ContainsIgnoreCase(IEnumerable<string> values, string value)
