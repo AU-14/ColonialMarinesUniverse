@@ -1,0 +1,35 @@
+- type: rank
+  id: UPPSOF_Operator
+  name: UPP SOF Operator
+  prefix: UPP SOF Operator
+  paygrade: UPPSOFOPR
+
+- type: rank
+  id: UPPSOF_MedicalTechnician
+  name: UPP SOF Medical Technician
+  prefix: UPP SOF Medic
+  paygrade: UPPSOFMED
+
+- type: rank
+  id: UPPSOF_Sniper
+  name: UPP SOF Sniper
+  prefix: UPP SOF Sniper
+  paygrade: UPPSOFSNPR
+
+- type: rank
+  id: VAI_Engineer
+  name: VASC Engineering Specialist
+  prefix: UPP SOF Pointman
+  paygrade: UPPSOFPNM
+
+- type: rank
+  id: VAI_Synthetic
+  name: SOF Synthetic
+  prefix: UPPSOF SYN
+  paygrade: UPPSOFSYN
+
+- type: rank
+  id: UPPSOF_TeamLeader
+  name: UPP Team Leader
+  prefix: UPPSOF TL
+  paygrade: UPPSOFTL
