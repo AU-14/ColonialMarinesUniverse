@@ -29,3 +29,8 @@ au14-job-name-clfcellleader = CLF Cell Leader
 au14-job-description-clfcellleader = Lead your men and take over the colony. Push out, capture and/or kill any government forces that don't surrender. Convince the local civilians to join your cause.
 au14-job-prefix-clfcellleader = CIV
 AU14JobCLFCellLeader = CLF Cell Leader
+
+au14-clfsurv-greeting = You are no longer fighting for freedom from far away governments and corporate oppression. This is a naked fight for survival now.
+au14-clfsurv-desription = The people whos freedom you were fighting for are dead, killed by horrors you could never imagine.
+
+    The only thing left now is avenging the dead and your diminishing hope of survival.
