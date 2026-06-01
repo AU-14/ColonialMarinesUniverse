@@ -17,13 +17,13 @@
   paygrade: UPPSOFSNPR
 
 - type: rank
-  id: VAI_Engineer
-  name: VASC Engineering Specialist
+  id: UPPSOF_Engineer
+  name: UPP SOF Engineering Specialist
   prefix: UPP SOF Pointman
   paygrade: UPPSOFPNM
 
 - type: rank
-  id: VAI_Synthetic
+  id: UPPSOF_Synthetic
   name: SOF Synthetic
   prefix: UPPSOF SYN
   paygrade: UPPSOFSYN

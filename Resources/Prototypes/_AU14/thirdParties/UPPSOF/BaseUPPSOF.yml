@@ -1,0 +1,192 @@
+- type: entity
+  parent: CMMobHuman
+  id: AU14BaseMobSpeciesOrganicUPPSOF
+  abstract: true
+  suffix: AU14, UPP, UPPSOF
+  components:
+  - type: GhostTakeoverAvailable
+  - type: NpcFactionMember
+    factions:
+    - AUUpp
+  - type: RandomHumanoidAppearance
+  - type: RandomHumanoidAppearanceWhitelisted
+    allowedMaleHairStyles:
+    - RMCHumanHairCrew
+    - RMCHumanHairAviator
+    - RMCHumanHairJensen
+    - RMCHumanHairAverageJoe
+    - AU14HumanHairCIA5
+    - RMCHumanHairCombover
+    - RMCHumanHairCombover2
+    - RMCHumanHairCplDietrich
+    - RMCHumanHairCut
+    - RMCHumanHairHeadStubble
+    - RMCHumanHairHighAndTight
+    - RMCHumanHairHighfade
+    - RMCHumanHairHighlight
+    - AU14HumanHairIRS
+    - RMCHumanHairLtRasczak
+    - RMCHumanHairMarineFade
+    - RMCHumanHairMarineFlatTop
+    - RMCHumanHairMedfade
+    - RMCHumanHairNofade
+    - RMCHumanHairShavedpart
+    - RMCHumanHairShavedHead
+    - RMCHumanHairShort
+    - RMCHumanHairSideUndercutHang
+    - RMCHumanHairSkinhead
+    - RMCHumanHairTaper
+    - RMCHumanHairWardaddy
+    - RMCHumanHairUndercut
+    - RMCHumanHairUndercutTop
+    allowedFemaleHairStyles:
+    - RMCHumanHairShortbangs
+    - RMCHumanHairBobcurl
+    - RMCHumanHairMarineBun
+    - RMCHumanHairBun
+    - RMCHumanHairFringetail
+    - AU14HumanHairLowBun
+    - AU14HumanHairLowPonyTail
+    - AU14HumanHairLowPonyTailAlt
+    - RMCHumanHairPonytail1
+    - RMCHumanHairPonytail7
+    - RMCHumanHairPvtRedding
+    - RMCHumanHairPvtVasquez
+    - RMCHumanHairLong
+    - RMCHumanHairPixieCutLeft
+    - RMCHumanHairPixieCutRight
+    allowedHairColorsHex:
+    - "#0B0B0B"
+    - "#1A1A1A"
+    - "#222222"
+    - "#2B1B0F"
+    - "#3B2314"
+    - "#4A2E1A"
+    - "#5A3A22"
+    - "#6B4A2F"
+    - "#9C8651"
+    - "#B79A5A"
+    - "#4A1F12"
+    - "#7A5E42"
+    allowedEyeColorsHex: [ "#000000" ]
+    beardChance: 0.1
+
+
+# Equipment
+
+
+
+- type: entity
+  parent: AU14SatchelMarineIntelBlack
+  id: AU14UPPSOFBackpack
+  suffix: Full, AU14, UPPSOF
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCExplosiveBreachingCharge
+      amount: 4
+    - id: RMCLaserDesignator
+    - id: AU14PacketGrenadeIncendiaryUPPFilled
+    - id: AU14PacketGrenadeHighExplosiveUPPFilled
+    - id: RMCMagazineRifleAK4047AP
+      amount: 2
+
+- type: entity
+  parent: AU14SatchelMarineIntelBlack
+  id: AU14UPPSOFBackpackPointMan
+  suffix: Full, AU14, UPPSOF
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCExplosiveBreachingCharge
+      amount: 4
+    - id: RMCLaserDesignator
+    - id: RMCShellShotgunHeavyBuckshot
+      amount: 2
+    - id: RMCSentryMiniSPP
+    - id: CMSheetMetal50
+    - id: CMSheetPlasteel50
+
+- type: entity
+  parent: AU14SatchelMarineIntelBlack
+  id: AU14UPPSOFBackpackTeamLead
+  suffix: Full, AU14, UPPSOF
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCExplosiveBreachingCharge
+      amount: 4
+    - id: RMCLaserDesignator
+    - id: RMCBoxZiptie
+      amount: 2
+    - id: AU14PacketGrenadeHighExplosiveUPPFilled
+    - id: RMCMagazineRifleAK4047AP
+      amount: 2
+
+- type: entity
+  parent: AU14SatchelMarineIntelBlack
+  id: AU14UPPSOFBackpackSynth
+  suffix: Full, AU14, UPPSOF
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMPortableSurgicalBedSpawnFolded
+    - id: CMSurgicalLine
+    - id: CMSynthGraft
+    - id: AU14CMFirstAidKitTraumaKitAdvanced
+    - id: AU14CMFirstAidKitBurnKitAdvanced
+    - id: AU14CMDefibrillator
+      amount: 2
+    - id: RMCBoxZiptie
+
+
+- type: entity
+  parent: CMFirstAidKit
+  id: AU14CMFirstAidKitTraumaKitAdvanced
+  suffix: Filled, AU14, Medical
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUpgradedTraumaKit10
+      amount: 7
+
+
+- type: entity
+  parent: CMFirstAidKit
+  id: AU14CMFirstAidKitBurnKitAdvanced
+  suffix: Filled, AU14, Medical
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUpgradedBurnKit10
+      amount: 7
+
+- type: entity
+  parent: AU14SatchelMarineIntelBlack
+  id: AU14UPPSOFBackpackMedic
+  suffix: Full, AU14, UPPSOF
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMPortableSurgicalBedSpawnFolded
+    - id: CMSurgicalLine
+    - id: CMSynthGraft
+    - id: AU14CMFirstAidKitTraumaKitAdvanced
+    - id: AU14CMFirstAidKitBurnKitAdvanced
+    - id: AU14CMDefibrillator
+      amount: 2
+
+
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: AU14LargeMagPouchAK4047AP
+  suffix: Full, AU14, UPPSOF
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleAK4047AP
+      amount: 4
+
+
+
+

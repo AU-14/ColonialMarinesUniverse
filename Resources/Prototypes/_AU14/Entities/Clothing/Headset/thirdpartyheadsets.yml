@@ -77,6 +77,20 @@
     channels:
     - VAI
 
+
+
+
+- type: entity
+  parent: AU14ColonyAdminHeadset
+  id: AU14HeadsetUPPSOFColony
+  name: UPPSOF headset
+  description: A special headset used by UPPSOF, features a non-standard brace.
+  suffix: UPPSOF, Colony
+  components:
+  - type: RMCHeadset
+    channels:
+    - UPPSOF
+
 - type: entity
   parent: AU14ColonyAdminHeadset
   id: AU14HeadsetVAIColony
