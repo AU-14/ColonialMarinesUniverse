@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.AU14.Threats;
 using Content.Shared.Preferences;
 using Content.Shared.AU14.Threats;
 using Content.Shared.AU14.util;
@@ -20,6 +21,38 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
 
 
     public Dictionary<NetUserId, string> ForcedJobAssignments { get; } = new();
+
+
+    public List<NetUserId> AssignThreatVotePoolJobs(
+        Dictionary<NetUserId, HumanoidCharacterProfile> profiles,
+        IReadOnlyList<ProtoId<ThreatPrototype>> candidateThreats,
+        int heldCount,
+        string? presetId)
+    {
+        ForcedJobAssignments.Clear();
+
+        if (profiles.Count == 0 || candidateThreats.Count == 0 || heldCount <= 0)
+            return new List<NetUserId>();
+
+        var shuffledPlayers = profiles.Keys.ToList();
+        _random.Shuffle(shuffledPlayers);
+
+        var eligiblePlayers = shuffledPlayers
+            .Where(player => profiles.TryGetValue(player, out var profile) &&
+                             ThreatVoteSelection.CanEnterThreatVotePool(profile, presetId, candidateThreats))
+            .ToList();
+
+        var assignments = ThreatVoteSelection.BuildHeldAssignments(eligiblePlayers, heldCount);
+        foreach (var assignment in assignments)
+        {
+            ForcedJobAssignments[assignment.Player] = assignment.Job.Id;
+        }
+
+        Logger.GetSawmill("au14.jobs").Debug(
+            $"[DEBUG] Held {assignments.Count} threat vote player(s): {string.Join(", ", assignments.Select(a => a.Player.ToString()))}");
+
+        return assignments.Select(assignment => assignment.Player).ToList();
+    }
 
 
     public void AssignThreatAndThirdPartyJobs(Dictionary<NetUserId, HumanoidCharacterProfile> profiles)

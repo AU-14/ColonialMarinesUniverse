@@ -7,6 +7,7 @@ using Robust.Shared.Configuration;
 using System.Linq;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
+using Content.Server.AU14.Threats;
 using Content.Server.Voting;
 using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Rules;
@@ -59,6 +60,20 @@ namespace Content.Server.AU14.Round
         private string? _selectedOpforShip;
         public void SetOpforShip(string shipId) => _selectedOpforShip = shipId;
         public void SetGovforShip(string shipId) => _selectedGovforShip = shipId;
+        public void SetSelectedThreat(ThreatPrototype? threat) => _selectedthreat = threat ?? null!;
+
+        public bool UsesPostRoundstartThreatVote()
+        {
+            var presetId = _selectedPreset?.ID;
+            return IsPostRoundstartThreatVotePreset(presetId);
+        }
+
+        public static bool IsPostRoundstartThreatVotePreset(string? presetId)
+        {
+            return presetId != null &&
+                   (presetId.Equals("DistressSignal", StringComparison.OrdinalIgnoreCase) ||
+                    presetId.Equals("ColonyFall", StringComparison.OrdinalIgnoreCase));
+        }
 
         private List<AuThirdPartyPrototype> _selectedThirdParties = new();
         public IReadOnlyList<AuThirdPartyPrototype> SelectedThirdParties => _selectedThirdParties;
@@ -347,6 +362,11 @@ namespace Content.Server.AU14.Round
                 else
                     _selectedThirdParties.Add(party);
             }
+        }
+
+        public void PreselectThirdPartiesForSelectedThreat()
+        {
+            PreselectThirdParties();
         }
 
         private void StartPlatoonVotes()
@@ -638,6 +658,13 @@ namespace Content.Server.AU14.Round
             }
 
             var presetId = _selectedPreset?.ID;
+            if (IsPostRoundstartThreatVotePreset(presetId))
+            {
+                _selectedthreat = null!;
+                Logger.GetSawmill("content").Debug($"[AuRoundSystem] Deferring threat selection for post-roundstart vote preset: {presetId}");
+                return;
+            }
+
             var allowedPresets = new[] { "Prometheus", "ColonyFall", "DistressSignal", "Jailbreak" };
             if (string.IsNullOrEmpty(presetId) ||
                 !allowedPresets.Any(p => p.Equals(presetId, StringComparison.InvariantCultureIgnoreCase)) ||
@@ -655,7 +682,7 @@ namespace Content.Server.AU14.Round
             foreach (var threatId in planet.AllowedThreats)
             {
                 if (!_prototypeManager.TryIndex(threatId, out ThreatPrototype? threatProto) ||
-                    !IsThreatAllowed(threatProto, presetId, govforId, opforId, playerCount))
+                    !ThreatVoteSelection.IsThreatAllowed(threatProto, presetId, govforId, opforId, playerCount))
                 {
                     continue;
                 }
@@ -697,39 +724,6 @@ namespace Content.Server.AU14.Round
                 ? threatSelected
                 : null!;
 
-        }
-
-        private static bool IsThreatAllowed(
-            ThreatPrototype threat,
-            string preset,
-            string? govforId,
-            string? opforId,
-            int playerCount)
-        {
-            if (threat.BlacklistedGamemodes.Any(s => s.Equals(preset, StringComparison.OrdinalIgnoreCase)))
-                return false;
-
-            if (threat.whitelistedgamemodes.Count > 0 &&
-                !threat.whitelistedgamemodes.Any(s => s.Equals(preset, StringComparison.OrdinalIgnoreCase)))
-                return false;
-
-            if (threat.MinPlayers > playerCount)
-                return false;
-
-            if (govforId != null && threat.BlacklistedPlatoons.Any(p => p.Equals(govforId, StringComparison.OrdinalIgnoreCase)))
-                return false;
-
-            if (opforId != null && threat.BlacklistedPlatoons.Any(p => p.Equals(opforId, StringComparison.OrdinalIgnoreCase)))
-                return false;
-
-            if (threat.WhitelistedPlatoons.Any() &&
-                ((govforId != null && !threat.WhitelistedPlatoons.Any(p => p.Equals(govforId, StringComparison.OrdinalIgnoreCase))) ||
-                 (opforId != null && !threat.WhitelistedPlatoons.Any(p => p.Equals(opforId, StringComparison.OrdinalIgnoreCase)))))
-            {
-                return false;
-            }
-
-            return true;
         }
 
         public void StartThreatWinConditions(ThreatPrototype threat)
