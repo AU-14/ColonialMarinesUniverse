@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Derived for CMU14 from existing RMC14/CMSS13 medical stack sprites; bottom-right purpose marker edits by OpenAI Codex on 2026-05-31.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "packed_gauze"
+    },
+    {
+      "name": "packed_trauma_kit"
+    },
+    {
+      "name": "hemostatic_gauze"
+    },
+    {
+      "name": "hemostatic_trauma_kit"
+    },
+    {
+      "name": "antiseptic_gauze"
+    },
+    {
+      "name": "antiseptic_trauma_kit"
+    },
+    {
+      "name": "burn_gel_gauze"
+    },
+    {
+      "name": "burn_gel_trauma_kit"
+    },
+    {
+      "name": "sealing_gauze"
+    },
+    {
+      "name": "sealing_trauma_kit"
+    },
+    {
+      "name": "compression_gauze"
+    },
+    {
+      "name": "compression_trauma_kit"
+    },
+    {
+      "name": "coagulant_powder"
+    },
+    {
+      "name": "antiseptic"
+    },
+    {
+      "name": "burn_gel"
+    },
+    {
+      "name": "tissue_sealant"
+    },
+    {
+      "name": "trauma_foam"
+    }
+  ]
+}
