@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobPARTSPartyContractorBase
   id: AU14JobPARTDCC
   name: Prodigy Extraction Crewchief
   description: au14-prodigyparty-description
@@ -37,11 +37,10 @@
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicProdigy
-  id: AU14JobPARTDCCBase
+  id: AU14JobPARTDCC
   name: Prodigy Extraction Crewchief (3rd party)
   components:
   - type: GhostTakeoverAvailable

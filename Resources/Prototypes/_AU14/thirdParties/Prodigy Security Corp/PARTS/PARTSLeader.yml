@@ -39,7 +39,6 @@
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: synth
     - type: MarineOrders
-  hidden: false
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicProdigy
