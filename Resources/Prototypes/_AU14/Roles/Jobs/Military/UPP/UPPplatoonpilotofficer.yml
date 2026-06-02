@@ -3,8 +3,6 @@
   id: AU14JobGOVFORDSPilotUPP
   name: Dropship Pilot
   spawnMenuRoleName: Pilot Officer (UPP)
-  startingGear: AU14GearGOVFORDSPilot
-  dummyStartingGear: AU14GearGOVFORDSPilotDummy
   ranks:
     UPP_Lieutenant:
     - !type:RoleTimeRequirement
@@ -22,18 +20,6 @@
   special:
   - !type:AddComponentSpecial
     components:
-    - type: Marine
-      Faction: govfor
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: UserIFF
-      factions:
-      - GOVFOR
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: pilot
     - type: Skills
       skills:
         RMCSkillFirearms: 2

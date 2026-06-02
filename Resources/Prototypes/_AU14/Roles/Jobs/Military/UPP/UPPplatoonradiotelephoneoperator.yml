@@ -4,8 +4,6 @@
   name: au14-job-name-radiotelephoneoperator-alt
   spawnMenuRoleName: Fireteam Leader (UPP)
   overwatchRoleName: au14-job-name-radiotelephoneoperator-alt
-  startingGear: AU14GearGOVFORRadioTelephoneOperator
-  dummyStartingGear: AU14GearGOVFORRadioTelephoneOperatorDummy
   ranks:
     UPP_SeniorGefreiter:
     - !type:RoleTimeRequirement

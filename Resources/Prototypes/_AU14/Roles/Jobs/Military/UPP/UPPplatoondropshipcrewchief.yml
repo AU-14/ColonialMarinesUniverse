@@ -3,8 +3,6 @@
   id: AU14JobGOVFORDCCUPP
   name: Dropship Crew Chief
   spawnMenuRoleName: Dropship Crew Chief (UPP)
-  startingGear: AU14GearGOVFORDCC
-  dummyStartingGear: AU14GearGOVFORDCCDummy
   ranks:
     UPP_Chotar:
     - !type:RoleTimeRequirement

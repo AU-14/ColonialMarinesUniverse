@@ -2,8 +2,6 @@
   parent: AU14JobSquadCombatTechBase
   id: AU14JobGOVFORSquadCombatTechUPP
   spawnMenuRoleName: Combat Tech (UPP)
-  startingGear: AU14GearGOVFORSquadCombatTech
-  dummyStartingGear: AU14GearGOVFORCTDummy
   ranks:
     UPP_Corporal:
     - !type:RoleTimeRequirement

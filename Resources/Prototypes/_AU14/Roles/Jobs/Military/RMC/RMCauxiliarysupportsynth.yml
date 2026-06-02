@@ -3,8 +3,6 @@
   id: AU14JobGOVFORAuxSupportSynthRMC
   name: au14-job-name-govforauxsupportsynthRMC
   spawnMenuRoleName: Support Synth (TWE RMC)
-  startingGear: AU14GearGOVFORAuxSupportSynth
-  dummyStartingGear: AU14GearGOVFORAuxSupportSynthDummyRMC
   requirements:
   - !type:OverallPlaytimeRequirement
     time: 7200 # 2 hours

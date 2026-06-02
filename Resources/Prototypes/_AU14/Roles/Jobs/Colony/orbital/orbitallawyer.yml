@@ -90,12 +90,12 @@
 - type: rank
   id: AU14RankOrbitalLawyer
   name: Orbital Counsel
-  prefix: Orb. Csnl.
+  prefix: Orb. Cnsl.
 
 - type: rank
   id: AU14RankSeniorOrbitalLawyer
   name: Senior Orbital Counsel
-  prefix: Sr. Orb. Csnl.
+  prefix: Sr. Orb. Cnsl.
 
 - type: entity
   parent: ClothingNeckLawyerbadge

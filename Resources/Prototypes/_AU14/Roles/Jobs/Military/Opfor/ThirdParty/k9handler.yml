@@ -1,0 +1,36 @@
+- type: job
+  parent: AU14JobThirdPartyK9Handler
+  id: AU14JobOPFORk9handler # Deprecated (K9 is neutral 3rd party)
+  icon: "AU14JobIconOPFORK9Handler"
+  spawnMenuRoleName: K9 Handler (OPFOR)
+  ranks:
+    RMCRankStaffSergeant: []
+  startingGear: AU14GearThirdPartyK9Handler
+  # accessGroups:
+  # - AU14OpforCorpsman
+  # - AU14OpforSquad
+  # special:
+  # - !type:AddComponentSpecial
+  #   components:
+  #   - type: NpcFactionMember
+  #     factions:
+  #     - OPFOR
+  #   - type: Marine
+  #     Faction: opfor
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORK9Handler
+  icon:
+    sprite: _AU14/Interface/au14opforjobicons.rsi
+    state: k9handler
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFORK9Handler
+  name: (DO NOT MAP) Spawn Point OPFOR K9 Handler
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORk9handler
+  - type: Sprite
+    state: syn_spawn

@@ -1,12 +1,11 @@
 - type: job
   abstract: true
-  parent: CMJobBase
+  parent: AU14JobMilitaryBase
   id: AU14JobMilitaryPoliceBaseAbstract
   name: au14-job-name-govformilitarypoliceman
   description: au14-job-description-govformilitarypoliceman
   icon: "AU14JobIconRFN"
   spawnMenuRoleName: Military Policeman (GOVFOR)
-  supervisors: au14-job-supervisors-govfor
   startingGear: AU14GearGOVFORMilitaryPoliceMan
   dummyStartingGear: AU14GearGOVFORMilitaryPoliceManDummy
   playTimeTracker: AU14JobGOVFORMilitaryPoliceMan
@@ -14,7 +13,6 @@
   canBeAntag: false
   accessGroups:
   - AU14GovforSecurity
-  roleWeight: 0.25
 
 - type: job
   abstract: true
@@ -49,14 +47,6 @@
   special:
   - !type:AddComponentSpecial
     components:
-    - type: Marine
-      Faction: govfor
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: UserIFF
-      factions:
-      - GOVFOR
     - type: Skills
       preset: AU14SkillPresetMilitaryPolice
     - type: JobPrefix
