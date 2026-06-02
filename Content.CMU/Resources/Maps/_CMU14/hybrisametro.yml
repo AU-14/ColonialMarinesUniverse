@@ -170088,7 +170088,7 @@ entities:
   - uid: 16481
     components:
     - type: MetaData
-      name: WeyaMart Lockdown
+      name: WeyMart Lockdown
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -159.5,-99.5
@@ -170096,7 +170096,7 @@ entities:
   - uid: 16482
     components:
     - type: MetaData
-      name: WeyaMart Lockdown
+      name: WeyMart Lockdown
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -159.5,-100.5
