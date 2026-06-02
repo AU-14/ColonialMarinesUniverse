@@ -17,7 +17,7 @@ au14-job-description-govfordspilot = Fly the dropship. Insert troops, extract ca
 au14-job-prefix-govfordspilot = DP
 
 au14-job-name-govfordcc = Dropship Crew Chief
-au14-job-description-govfordcc = Maintain the bird. Coordinate cargo, passengers, and assist the pilot.
+au14-job-description-govfordcc = Maintain the dropships. Coordinate cargo, passengers, and assist the pilots.
 au14-job-prefix-govfordcc = DCC
 
 au14-job-name-govforSSG = Senior Sergeant

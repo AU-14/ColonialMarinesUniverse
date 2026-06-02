@@ -30722,7 +30722,7 @@ entities:
       parent: 3699
     - type: Physics
       canCollide: False
-- proto: RMCGuidebookLawMarine
+- proto: AU14GuidebookLawMarine
   entities:
   - uid: 3701
     components:
@@ -30748,7 +30748,7 @@ entities:
       parent: 3704
     - type: Physics
       canCollide: False
-- proto: RMCGuidebookLawMarineProvost
+- proto: AU14GuidebookLawMarineProvost
   entities:
   - uid: 3702
     components:
@@ -30756,7 +30756,7 @@ entities:
       parent: 3699
     - type: Physics
       canCollide: False
-- proto: RMCGuidebookSOP
+- proto: AU14GuidebookSOP
   entities:
   - uid: 3703
     components:

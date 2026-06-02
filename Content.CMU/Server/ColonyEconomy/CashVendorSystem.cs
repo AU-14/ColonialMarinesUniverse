@@ -1,6 +1,8 @@
 using System.Linq;
 using Content.Server.Stack;
+using Content.Shared.Access.Systems;
 using Content.Shared.AU14.ColonyEconomy;
+using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
@@ -15,19 +17,29 @@ public sealed partial class AU14CashVendorSystem : EntitySystem
     [Dependency] private AdminConsoleSystem _adminConsole = default!;
     [Dependency] private StackSystem _stack = default!;
     [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<AU14CashVendorComponent, BoundUIOpenedEvent>(OnUiOpened);
+        SubscribeLocalEvent<AU14CashVendorComponent, BoundUIClosedEvent>(OnUiClosed);
         SubscribeLocalEvent<AU14CashVendorComponent, EntInsertedIntoContainerMessage>(OnCashInserted);
         SubscribeLocalEvent<AU14CashVendorComponent, AU14CashVendorBuyBuiMsg>(OnBuy);
         SubscribeLocalEvent<AU14CashVendorComponent, AU14CashVendorReturnChangeBuiMsg>(OnReturnChange);
+        SubscribeLocalEvent<AU14CashVendorComponent, AU14CashVendorScanIDBuiMsg>(OnScanId);
     }
 
     private void OnUiOpened(EntityUid uid, AU14CashVendorComponent comp, BoundUIOpenedEvent args)
     {
+        comp.ScannedDepartmentConsole = null;
         UpdateUi(uid, comp);
+    }
+
+    private void OnUiClosed(EntityUid uid, AU14CashVendorComponent comp, BoundUIClosedEvent args)
+    {
+        comp.ScannedDepartmentConsole = null;
     }
 
     private void OnCashInserted(EntityUid uid, AU14CashVendorComponent comp, EntInsertedIntoContainerMessage args)
@@ -41,6 +53,41 @@ public sealed partial class AU14CashVendorSystem : EntitySystem
         UpdateUi(uid, comp);
     }
 
+    private void OnScanId(EntityUid uid, AU14CashVendorComponent comp, AU14CashVendorScanIDBuiMsg msg)
+    {
+        // Toggle: if already linked, clear it
+        if (comp.ScannedDepartmentConsole != null)
+        {
+            comp.ScannedDepartmentConsole = null;
+            UpdateUi(uid, comp);
+            return;
+        }
+
+        if (!comp.AllowDepartmentBudget)
+            return;
+
+        var mob = msg.Actor;
+
+        if (!_idCard.TryFindIdCard(mob, out var idCard))
+        {
+            _popup.PopupCursor("No ID card found.", mob, PopupType.SmallCaution);
+            return;
+        }
+
+        var query = EntityQueryEnumerator<DepartmentConsoleComponent>();
+        while (query.MoveNext(out var consoleUid, out var console))
+        {
+            if (!console.Members.Contains(idCard.Owner))
+                continue;
+
+            comp.ScannedDepartmentConsole = consoleUid;
+            UpdateUi(uid, comp);
+            return;
+        }
+
+        _popup.PopupCursor("No department found for this ID card.", mob, PopupType.SmallCaution);
+    }
+
     private void OnBuy(EntityUid uid, AU14CashVendorComponent comp, AU14CashVendorBuyBuiMsg msg)
     {
         if (msg.ItemIndex < 0 || msg.ItemIndex >= comp.Items.Count)
@@ -49,19 +96,26 @@ public sealed partial class AU14CashVendorSystem : EntitySystem
         var item = comp.Items[msg.ItemIndex];
         var tax = _adminConsole.GetSalesTax();
         var effectivePrice = (int) Math.Ceiling(item.BasePrice * (1f + tax));
-
-        if (comp.InsertedCash < effectivePrice)
-            return;
-
-        comp.InsertedCash -= effectivePrice;
-
-        // Tax revenue goes to colony budget
         var taxRevenue = effectivePrice - item.BasePrice;
+
+        if (comp.ScannedDepartmentConsole is { } consoleUid &&
+            TryComp(consoleUid, out DepartmentConsoleComponent? deptConsole))
+        {
+            if (deptConsole.DepartmentBudget < effectivePrice)
+                return;
+            deptConsole.DepartmentBudget -= effectivePrice;
+        }
+        else
+        {
+            if (comp.InsertedCash < effectivePrice)
+                return;
+            comp.InsertedCash -= effectivePrice;
+        }
+
         if (taxRevenue > 0)
             _colonyBudget.AddToBudget(taxRevenue);
 
-        var coords = Transform(uid).Coordinates;
-        Spawn(item.ItemId, coords);
+        Spawn(item.ItemId, Transform(uid).Coordinates);
         UpdateUi(uid, comp);
     }
 
@@ -86,7 +140,20 @@ public sealed partial class AU14CashVendorSystem : EntitySystem
             return new AU14CashVendorItemState(idx, name, effectivePrice, entry.ItemId);
         }).ToList();
 
-        _ui.SetUiState(uid, AU14CashVendorUi.Key, new AU14CashVendorBuiState(comp.InsertedCash, items, tax * 100f));
+        bool hasDeptMode = false;
+        float deptBudget = 0f;
+        var deptName = string.Empty;
+
+        if (comp.ScannedDepartmentConsole is { } consoleUid &&
+            TryComp(consoleUid, out DepartmentConsoleComponent? deptConsole))
+        {
+            hasDeptMode = true;
+            deptBudget = deptConsole.DepartmentBudget;
+            deptName = deptConsole.DepartmentName;
+        }
+
+        _ui.SetUiState(uid, AU14CashVendorUi.Key, new AU14CashVendorBuiState(
+            comp.InsertedCash, items, tax * 100f, comp.AllowDepartmentBudget, hasDeptMode, deptBudget, deptName));
     }
 }
 

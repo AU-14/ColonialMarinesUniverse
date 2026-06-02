@@ -1,4 +1,3 @@
-
 au14-department-colony-labor-description = Colonists who perform jobs such as mining and farming, this is the most essential and common department of the colony, often a stepping stone for colonists to move into other departments.
 au14-department-colony-labor = Colony Labor
 
@@ -34,6 +33,9 @@ au14-department-colony-medical-description = Responsible for healthcare and emer
 
 au14-department-colony-security = Colony Security and Law Enforcement
 au14-department-colony-security-description = Enforces law, conducts arrests, protects personnel, and upholds order.
+
+au14-department-orbitalstation = Orbital Station
+au14-department-orbitalstation-description = Operates the orbital station, managing trade and salvage, handle cargo and docking, enforce regulations, and administer justice.
 
 au14-job-supervisors-colonycivilian = Colony Administrator
 au14-job-supervisors-colonyadministrator = The Colonial Administration
@@ -177,6 +179,14 @@ au14-job-prefix-orbitalmanager = Orb. Man.
 au14-job-name-orbitalsecurity = Orbital Security
 au14-job-description-orbitalsecurity = Ensure orbital manager and station are safe.
 au14-job-prefix-orbitalsecurity = Orb. Sec.
+
+au14-job-name-orbitalarbiter = Orbital Arbiter
+au14-job-description-orbitalarbiter = Uphold justice. Interpret the law, deliver verdicts and preside over court trials.
+au14-job-prefix-orbitalarbiter = Orb. Arb.
+
+au14-job-name-orbitallawyer = Orbital Counsel
+au14-job-description-orbitallawyer = Defend the innocent (and guilty), prosecute, or just argue until someone pays you.
+au14-job-prefix-orbitallawyer = Orb. Cnsl.
 
 au14-job-name-civiliancolonyadminasssistant = Administrative Assistant
 au14-job-description-civiliancolonyadminassistant = Be the right hand of the Colony Administrator.

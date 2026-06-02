@@ -33,12 +33,21 @@ public sealed class AU14CashVendorBuiState : BoundUserInterfaceState
     public float InsertedCash { get; }
     public List<AU14CashVendorItemState> Items { get; }
     public float SalesTaxPercent { get; }
+    public bool AllowDepartmentBudget { get; }
+    public bool HasDepartmentMode { get; }
+    public float DepartmentBudget { get; }
+    public string DepartmentName { get; }
 
-    public AU14CashVendorBuiState(float insertedCash, List<AU14CashVendorItemState> items, float salesTaxPercent = 0f)
+    public AU14CashVendorBuiState(float insertedCash, List<AU14CashVendorItemState> items, float salesTaxPercent = 0f,
+        bool allowDepartmentBudget = false, bool hasDepartmentMode = false, float departmentBudget = 0f, string departmentName = "")
     {
         InsertedCash = insertedCash;
         Items = items;
         SalesTaxPercent = salesTaxPercent;
+        AllowDepartmentBudget = allowDepartmentBudget;
+        HasDepartmentMode = hasDepartmentMode;
+        DepartmentBudget = departmentBudget;
+        DepartmentName = departmentName;
     }
 }
 
@@ -51,4 +60,7 @@ public sealed class AU14CashVendorBuyBuiMsg : BoundUserInterfaceMessage
 
 [Serializable, NetSerializable]
 public sealed class AU14CashVendorReturnChangeBuiMsg : BoundUserInterfaceMessage { }
+
+[Serializable, NetSerializable]
+public sealed class AU14CashVendorScanIDBuiMsg : BoundUserInterfaceMessage { }
 
