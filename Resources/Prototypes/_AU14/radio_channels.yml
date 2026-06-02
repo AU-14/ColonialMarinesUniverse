@@ -265,3 +265,11 @@
   color: "#92969A"
   longRange: true
   tower: true
+
+- type: radioChannel
+  id: radioNEMO
+  name: chat-radio-nemo
+  keycode: "n"
+  frequency: 1984
+  color: "#800000"
+  longRange: true

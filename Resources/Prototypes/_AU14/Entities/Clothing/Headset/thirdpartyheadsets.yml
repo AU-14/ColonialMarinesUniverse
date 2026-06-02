@@ -108,3 +108,76 @@
     defaultMode: SquadLeader
     trackerModes:
     - SquadLeader
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: AU14HeadsetGovforCommand
+  name: GOVFOR Command radio headset
+  description: This is used by Nautrical Exmination Marshals Office members to communicate on the radio.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGOVFORNEMO
+      - AU14EncryptionKeyOPFORNEMO
+      - AU14EncryptionKeyNEMO
+  - type: GrantSquadLeaderTracker
+    defaultMode: SquadLeader
+    trackerModes:
+    - SquadLeader
+
+- type: entity
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyNEMO
+  name: NEMO GOVFORencryption key
+  description: An encryption key used to communicate on the NEMO channel, and all GOVFOR channels for emergencies.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioNEMO
+    - MarineHighCommand
+    - Colony
+    - radioCMB
+    defaultChannel: radioNEMO
+
+- type: entity
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyGOVFORNEMO
+  name: NEMO GOVFORencryption key
+  description: An encryption key used to communicate on the NEMO channel, and all GOVFOR channels for emergencies.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioNEMO
+    - MarineHighCommand
+    - Colony
+    - radioCMB
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+    - radioGovforCommand
+    - radioGovforIntel
+    - radioGovforJTAC
+    - radioGovforMILP
+    defaultChannel: radioNEMO
+
+- type: entity
+  parent: AU14EncryptionKeyGovfor
+  id: AU14EncryptionKeyOPFORNEMO
+  name: NEMO OPFOR encryption key
+  description: An encryption key used to communicate on the NEMO channel, and all OPFOR channels for emergencies.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioNEMO
+    - MarineHighCommand
+    - Colony
+    - radioCMB
+    - radioOpforAlpha
+    - radioOpforCharlie
+    - radioOpforBravo
+    - radioOpforCommand
+    - radioOpforIntel
+    - radioOpforJTAC
+    - radioOpforMILP
+    defaultChannel: radioNEMO

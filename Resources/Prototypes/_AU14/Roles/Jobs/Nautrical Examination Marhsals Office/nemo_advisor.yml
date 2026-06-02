@@ -1,0 +1,84 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AU14NEMOAdvisor
+  name: au14-job-name-corp-nemo-advisor
+  description: au14-job-description-corp-nemo-advisor
+  playTimeTracker: AU14JobProvostAdvisor
+  ranks:
+    AU14RankNEMOAdvisor: []
+  startingGear: AU14GearProvostAdvisor
+  icon: RMCJobIconProvostAdvisor
+  joinNotifyCrew: false
+  accessGroups:
+  - ShipMasterAccess
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 1
+        RMCSkillCqc: 3
+        RMCSkillEndurance: 2
+        RMCSkillEngineer: 1
+        RMCSkillOverwatch: 1
+        RMCSkillFirearms: 1
+        RMCSkillFireman: 3
+        RMCSkillVehicles: 1
+        RMCSkillJtac: 1
+        RMCSkillPolice: 2
+    - type: SquadArmorWearer
+    - type: JobPrefix
+      prefix: au14-job-prefix-provost-advisor
+    - type: RMCTrackable
+  hidden: true
+
+- type: entity
+  id: RMCRandomHumanoidProvostAdvisor
+  name: provost ghost role advisor
+  suffix: Spawner, Player, Friendly, Low Law Understanding
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: RMCProvostAdvisor
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: RMCProvostAdvisor
+  components:
+  - type: GhostRole
+    name: au14-ghost-name-corp-provost-advisor
+    description: au14-ghost-role-information-provost-description
+    rules: au14-ghost-role-information-provost-rules
+    reregister: false
+    job: CMProvostAdvisor
+    raffle:
+      settings: short
+  - type: GhostRoleApplySpecial
+
+- type: startingGear
+  id: AU14GearProvostAdvisor
+  equipment:
+    head: RMCHeadBeretProvostSenior
+    eyes: CMGlassesSecurity
+    ears: RMCHeadsetProvost
+    jumpsuit: CMJumpsuitProvostSenior
+    outerClothing: RMCProvostJacketFilled
+    gloves: CMHandsBlackMarine # TODO RMC14 black gloves
+    shoes: CMBootsBlackFilled
+    id: RMCIDCardProvostAdvisor
+    belt: CMBeltSecurityMPFilled
+    back: CMSatchelSecurityFilledProvost
+    pocket1: RMCUniversalRecorder
+    pocket2: RMCPouchGeneralLarge # TODO RMC14 3 listening devices
+
+- type: playTimeTracker
+  id: AU14JobProvostAdvisor
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RMCJobIconProvostAdvisor
+  icon:
+    sprite: _RMC14/Interface/cm_job_icons.rsi
+    state: hudsquad_pva

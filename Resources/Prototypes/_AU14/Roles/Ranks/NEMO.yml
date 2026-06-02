@@ -1,0 +1,112 @@
+# Host rank, reserved for Troy/EG
+- type: rank
+  id: AU14RankNEMOChiefMarshal
+  name: Chief Marshal
+  prefix: PvCM.
+  paygrade: O10C
+
+# Host rank, reserved for Troy/EG
+- type: rank
+  id: AU14RankNEMODeputyChiefMarshal
+  name: Deputy Chief Marshal
+  prefix: PvDM.
+  paygrade: O10
+
+#  Head admin rank, reserved for Headmin Twinkle
+- type: rank
+  id: AU14RankNEMOSectorMarshal
+  name: Sector Marshal
+  prefix: PvSM.
+  paygrade: O9
+
+# Any Sr.Admin/Sr.Mod with high law understanding
+- type: rank
+  id: AU14RankNEMOSeniorMarshal
+  name: Senior Marshal
+  prefix: PvSnM.
+  paygrade: O8
+
+# Any Moderator/Admin with medium law understanding, or wanting a lower rank
+- type: rank
+  id: AU14RankNEMOMarshal
+  name: Marshal
+  prefix: PvM.
+  paygrade: O7
+
+# Any Jr. Moderator with low law understanding, or wanting a lower rank
+- type: rank
+  id: AU14RankNEMODeputyMarshal
+  name: Deputy Marshal
+  prefix: PvDM.
+  paygrade: O6
+
+# Any whitelisted Mentor With High
+- type: rank
+  id: AU14RankNEMOChiefInspector
+  name: Chief Inspector
+  prefix: PvCI.
+  paygrade: O5
+
+# Any WL'd player with mediumlaw understanding
+- type: rank
+  id: AU14RankNEMOExaminer
+  name: Examiner
+  prefix: PvI.
+  paygrade: O4
+
+# Any WL'd player with low law understanding, with guidance
+- type: rank
+  id: AU14RankNEMOJrExaminer
+  name: JuniorExaminer
+  prefix: ComOff.
+  paygrade: O2
+
+# Fax responder
+- type: rank
+  id: AU14RankNEMOCommunicationsOfficer
+  name: Communications Officer
+  prefix: ComOff.
+  paygrade: O2
+
+# Any whitelisted Mentor with Medium law understanding
+- type: rank
+  id: AU14RankNEMOSgtMaj
+  name: Sergeant Major
+  prefix: SgtMaj.
+  paygrade: E9E
+
+# Any whitelisted Mentor
+- type: rank
+  id: AU14RankNEMOAdvisor
+  name: NEMO Advisor
+  prefix: NEMO Adv.
+  paygrade: E9
+
+# Any player with given objective, possible team leader
+- type: rank
+  id: AU14RankNEMOTeamLeader
+  name: Master Sergeant
+  prefix: MSgt.
+  paygrade: E8
+
+# TODO: randomize Enforcer ranks on-spawn
+# Any player with given objective, squad senior
+- type: rank
+  id: AU14RankNEMOSeniorEnforcer
+  name: Gunnery Sergeant
+  prefix: GySgt.
+  paygrade: E7
+
+# Any player with given objective, squad member
+- type: rank
+  id: AU14RankNEMOEnforcer
+  name: Staff Sergeant
+  prefix: SSgt.
+  paygrade: E6
+
+# Any player with given objective, squad junior
+- type: rank
+  id: AU14RankNEMOJuniorEnforcer
+  name: Sergeant
+  prefix: Sgt.
+  paygrade: E5

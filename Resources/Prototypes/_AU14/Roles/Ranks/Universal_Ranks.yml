@@ -1,0 +1,188 @@
+# Officers
+
+# Host rank, reserved for special occasions or events
+- type: rank
+  id: AU14RankCommandantOfTheMarineCorps
+  name: Commandant of the Marine Corps
+  prefix: CMC.
+  paygrade: O10S
+
+# Host rank, reserved for special occasions or events
+- type: rank
+  id: AU14RankAssistantCommandantOfTheMarineCorps
+  name: Assistant Commandant of the Marine Corps
+  prefix: ACMC.
+  paygrade: O10C
+
+- type: rank
+  id: AU14RankGeneral
+  name: General
+  prefix: Gen.
+  paygrade: O10
+
+- type: rank
+  id: AU14RankLieutenantGeneral
+  name: Lieutenant General
+  prefix: LtGen.
+  paygrade: O9
+
+- type: rank
+  id: AU14RankMajorGeneral
+  name: Major General
+  prefix: MajGen.
+  paygrade: O8
+
+- type: rank
+  id: AU14RankBrigadierGeneral
+  name: Brigadier General
+  prefix: BGen.
+  paygrade: O7
+
+- type: rank
+  id: AU14RankColonel
+  name: Colonel
+  prefix: Col.
+  paygrade: O6
+
+- type: rank
+  id: AU14RankLieutenantColonel
+  name: Lieutenant Colonel
+  prefix: LtCol.
+  paygrade: O5
+
+- type: rank
+  id: AU14RankMajor
+  name: Major
+  prefix: Maj.
+  paygrade: O4
+
+- type: rank
+  id: AU14RankCaptain
+  name: Captain
+  prefix: Capt.
+  paygrade: O3
+
+- type: rank
+  id: AU14RankFirstLT
+  name: First Lieutenant
+  prefix: 1stLt.
+  paygrade: O2
+
+- type: rank
+  id: AU14RankSecondLT
+  name: Second Lieutenant
+  prefix: 2ndLt.
+  paygrade: O1
+
+# Warrant Officers
+
+- type: rank
+  id: AU14RankChiefWarrantOfficer5
+  name: Chief Warrant Officer 5
+  prefix: CWarOff5.
+  paygrade: CWO5
+
+- type: rank
+  id: AU14RankChiefWarrantOfficer4
+  name: Chief Warrant Officer 4
+  prefix: CWarOff4.
+  paygrade: CWO4
+
+- type: rank
+  id: AU14RankChiefWarrantOfficer3
+  name: Chief Warrant Officer 3
+  prefix: CWarOff3.
+  paygrade: CWO3
+
+- type: rank
+  id: AU14RankChiefWarrantOfficer
+  name: Chief Warrant Officer 2
+  prefix:  CWarOff2.
+  paygrade: CWO2
+
+- type: rank
+  id: AU14RankWarrantOfficer
+  name: Warrant Officer
+  prefix: WarOff.
+  paygrade: WO1
+
+# Enlisted
+
+# Host rank, reserved for special occasions or events
+- type: rank
+  id: RMCRankSergeantMajorOfTheCorps
+  name: Sergeant Major of the Corps
+  prefix: SMCMC.
+  paygrade: E9C
+
+- type: rank
+  id: AU14RankSergeantMajor
+  name: Sergeant Major
+  prefix: SgtMaj.
+  paygrade: E9E
+
+- type: rank
+  id: AU14RankMasterGunnerySergeant
+  name: Master Gunnery Sergeant
+  prefix: MGySgt.
+  paygrade: E9
+
+- type: rank
+  id: AU14RankFirstSergeant
+  name: First Sergeant
+  prefix: 1stSgt.
+  paygrade: E8E
+
+- type: rank
+  id: AU14RankMasterSergeant
+  name: Master Sergeant
+  prefix: MSgt.
+  paygrade: E8
+
+- type: rank
+  id: AU14RankGunnerySergeant
+  name: Gunnery Sergeant
+  prefix: GySgt.
+  paygrade: E7
+
+- type: rank
+  id: AU14RankStaffSergeant
+  name: Staff Sergeant
+  prefix: SSgt.
+  paygrade: E6
+
+- type: rank
+  id: AU14RankSergeant
+  name: Sergeant
+  prefix: Sgt.
+  paygrade: E5
+
+- type: rank
+  id: AU14RankCorporal
+  name: Corporal
+  prefix: Cpl.
+  paygrade: E4
+
+- type: rank
+  id: AU14RankLanceCorporal
+  name: Lance Corporal
+  prefix: LCpl.
+  paygrade: E3
+
+- type: rank
+  id: AU14RankPrivateFirstClass
+  name: Private First Class
+  prefix: PFC.
+  paygrade: E2
+
+- type: rank
+  id: AU14RankPrivate
+  name: Private
+  prefix: PVT.
+  paygrade: E1
+
+- type: rank
+  id: AU14RankRecruit
+  name: Recruit
+  prefix: Rct.
+  paygrade: E0

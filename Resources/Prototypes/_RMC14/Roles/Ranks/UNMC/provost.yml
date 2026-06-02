@@ -1,3 +1,10 @@
+# Host rank, reserved for Troy/EG
+- type: rank
+  id: RMCRankProvostChiefMarshal
+  name: Chief Marshal
+  prefix: PvCM.
+  paygrade: O10C
+
 # Whisper
 - type: rank
   id: RMCRankProvostSectorMarshal
@@ -54,6 +61,15 @@
   prefix: SgtMaj.
   paygrade: E9E
 
+# TODO: randomize Enforcer ranks on-spawn
+# Any player with given objective, squad senior
+- type: rank
+  id: RMCRankProvostSeniorEnforcer
+  name: Gunnery Sergeant
+  prefix: GySgt.
+  paygrade: E7
+# place below standar
+
 # Any player with given objective, possible team leader
 - type: rank
   id: RMCRankProvostProvostTeamLeader
@@ -67,3 +83,10 @@
   name: Staff Sergeant
   prefix: SSgt.
   paygrade: E6
+
+# Any player with given objective, squad junior
+- type: rank
+  id: RMCRankProvostJuniorEnforcer
+  name: Sergeant
+  prefix: Sgt.
+  paygrade: E5

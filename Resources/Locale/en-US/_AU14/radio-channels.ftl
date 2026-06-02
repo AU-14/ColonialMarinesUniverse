@@ -33,3 +33,4 @@ chat-radio-twe = TWE
 chat-radio-icsc = ICSC
 chat-radio-vai = VAI
 chat-radio-part = Prodigy
+chat-radio-nemo = NEMO
