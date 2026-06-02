@@ -18,8 +18,3 @@
       role: AU14JobGOVFORSquadCombatTech
       time: 54000 # 15 hours
     UPP_Private: []
-  special:
-  - !type:AddComponentSpecial
-    components:
-    - type: Skills
-      preset: AU14SkillPresetPlatoonCombatTechnician

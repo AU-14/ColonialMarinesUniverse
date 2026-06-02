@@ -8,8 +8,3 @@
       role: AU14JobGOVFORadvisor
       time: 360000 # 100 hours
     RMC_WarrantOfficer2: []
-  special:
-  - !type:AddComponentSpecial
-    components:
-    - type: Skills
-      preset: AU14SkillPresetPlatoonAdvisor

@@ -58,6 +58,8 @@
       preset: AU14SkillPresetPlatoonCommander
     - type: JobPrefix
       prefix: au14-job-prefix-govforplatco
+    - type: RMCSpeechBubbleSpecificStyle
+      speechStyleClass: commanderSpeech
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
