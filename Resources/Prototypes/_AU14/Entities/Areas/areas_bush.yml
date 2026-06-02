@@ -12,7 +12,7 @@
     fulton: false
     mortarPlacement: false
     mortarFire: false
-    lasing: true
+    lasing: false
     medevac: false
     paradropping: false
     OB: false
