@@ -26,23 +26,25 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
     public List<NetUserId> AssignThreatVotePoolJobs(
         Dictionary<NetUserId, HumanoidCharacterProfile> profiles,
         IReadOnlyList<ProtoId<ThreatPrototype>> candidateThreats,
-        int heldCount,
+        ThreatVoteBodyCount heldBodyCount,
         string? presetId)
     {
         ForcedJobAssignments.Clear();
 
-        if (profiles.Count == 0 || candidateThreats.Count == 0 || heldCount <= 0)
+        if (profiles.Count == 0 || candidateThreats.Count == 0 || heldBodyCount.Total <= 0)
             return new List<NetUserId>();
 
         var shuffledPlayers = profiles.Keys.ToList();
         _random.Shuffle(shuffledPlayers);
 
-        var eligiblePlayers = shuffledPlayers
-            .Where(player => profiles.TryGetValue(player, out var profile) &&
-                             ThreatVoteSelection.CanEnterThreatVotePool(profile, presetId, candidateThreats))
-            .ToList();
+        var assignments = ThreatVoteSelection.BuildHeldAssignments(
+            shuffledPlayers,
+            profiles,
+            candidateThreats,
+            heldBodyCount.Leaders,
+            heldBodyCount.Members,
+            presetId);
 
-        var assignments = ThreatVoteSelection.BuildHeldAssignments(eligiblePlayers, heldCount);
         foreach (var assignment in assignments)
         {
             ForcedJobAssignments[assignment.Player] = assignment.Job.Id;

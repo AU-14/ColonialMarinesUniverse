@@ -4,10 +4,13 @@ using Content.Shared._CMU14.Medical.Bones;
 using Content.Shared._CMU14.Medical.Items;
 using Content.Shared._CMU14.Medical.Organs;
 using Content.Shared._CMU14.Medical.Organs.Heart;
+using Content.Shared._CMU14.Medical.Shrapnel;
+using Content.Shared._CMU14.Medical.Stabilizers;
 using Content.Shared._CMU14.Medical.StatusEffects;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Scanner;
+using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
@@ -28,6 +31,7 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
     [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedPainShockSystem _pain = default!;
+    [Dependency] private SharedCMUTraumaGovernorSystem _traumaGovernor = default!;
     [Dependency] private SkillsSystem _skills = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
@@ -66,6 +70,7 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
         }
         var state = args.State;
 
+        state.CMUTraumaGovernor = _traumaGovernor.GetReadout(args.Patient);
         FillBodyParts(args.Patient, state);
         if (skill >= 2)
         {
@@ -117,12 +122,19 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
             // symmetry into the dictionary key by offsetting the enum value
             // when symmetric.
             var dictKey = ToDictKey(partComp.PartType, partComp.Symmetry);
+            TryComp<CMUShrapnelComponent>(partUid, out var shrapnel);
+            var woundReadout = TryComp<BodyPartWoundComponent>(partUid, out var pw)
+                ? WorstUntreatedWoundReadout(pw)
+                : null;
             parts[dictKey] = new CMUBodyPartReadout(
                 partComp.PartType,
                 partComp.Symmetry,
                 ph.Current,
                 ph.Max,
-                TryComp<BodyPartWoundComponent>(partUid, out var pw) ? WorstUntreatedWoundDescriptor(pw) : null,
+                woundReadout?.Size,
+                woundReadout?.Mechanism,
+                shrapnel?.Fragments ?? 0,
+                shrapnel?.Severity ?? 0f,
                 HasComp<CMUEscharComponent>(partUid),
                 HasComp<CMUSplintedComponent>(partUid),
                 HasComp<CMUCastComponent>(partUid),
@@ -131,21 +143,34 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
         state.CMUParts = parts;
     }
 
-    private static WoundSize? WorstUntreatedWoundDescriptor(BodyPartWoundComponent wounds)
+    private static (WoundSize Size, WoundMechanism Mechanism)? WorstUntreatedWoundReadout(BodyPartWoundComponent wounds)
     {
-        WoundSize? worst = null;
+        (WoundSize Size, WoundMechanism Mechanism)? worst = null;
         for (var i = 0; i < wounds.Wounds.Count; i++)
         {
-            if (wounds.Wounds[i].Treated)
+            var wound = wounds.Wounds[i];
+            if (wound.Treated)
                 continue;
 
             var size = i < wounds.Sizes.Count ? wounds.Sizes[i] : WoundSize.Deep;
-            if (worst is null || (byte)size > (byte)worst.Value)
-                worst = size;
+            if (worst is not null && (byte)size <= (byte)worst.Value.Size)
+                continue;
+
+            var mechanism = i < wounds.Mechanisms.Count
+                ? wounds.Mechanisms[i]
+                : LegacyMechanismFor(wound.Type);
+            worst = (size, mechanism);
         }
 
         return worst;
     }
+
+    private static WoundMechanism LegacyMechanismFor(WoundType type) => type switch
+    {
+        WoundType.Burn => WoundMechanism.Burn,
+        WoundType.Surgery => WoundMechanism.Surgical,
+        _ => WoundMechanism.Generic,
+    };
 
     private static BodyPartType ToDictKey(BodyPartType type, BodyPartSymmetry sym)
     {
@@ -225,22 +250,15 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
         }
         state.CMUInternalBleeds = bleeds;
 
-        var now = _timing.CurTime;
         foreach (var (partUid, _) in _body.GetBodyChildren(patient))
         {
             if (!TryComp<BodyPartWoundComponent>(partUid, out var pw))
                 continue;
-            foreach (var wound in pw.Wounds)
-            {
-                if (wound.Treated)
-                    continue;
-                if (wound.StopBleedAt is { } stopAt && now >= stopAt)
-                    continue;
-                if (wound.Bloodloss <= 0f)
-                    continue;
-                state.CMUExternalBleeding = true;
-                return;
-            }
+            if (pw.ExternalBleeding == ExternalBleedTier.None)
+                continue;
+
+            state.CMUExternalBleeding = true;
+            return;
         }
     }
 

@@ -162,10 +162,6 @@ au14-job-description-leoleader = Colony Law Enforcement (Map specific)
 au14-job-name-leo = Law Enforcement Officer
 au14-job-description-leo = Colony Law Enforcement (Map specific)
 
-au14-job-name-3rdparty9handler = K9 Handler
-au14-job-description-3rdpartyk9handler = Provide specialized aid where your Search and Rescue skills are needed, train your companion and meet new people.
-au14-job-prefix-3rdpartyk9handler = K9
-
 au14-job-name-workingjoe = Working Joe
 au14-job-description-workingjoe = You are a Working Joe!  You are held to a higher standard and are required to obey not only the Server Rules but Law and Synthetic Rules.  Your primary job is to maintain the cleanliness of the ship, putting things in their proper place.  Your capacities are limited, but you have all the equipment you need, and the central AI has a plan! (WARNING: THIS ROLE REQUIRES HIGH ROLEPLAY PROWESS)
 
