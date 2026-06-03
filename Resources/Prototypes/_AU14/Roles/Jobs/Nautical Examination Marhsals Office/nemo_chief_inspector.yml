@@ -1,18 +1,18 @@
 ﻿- type: job
   parent: CMJobBase
-  id: CMProvostChiefInspector
-  name: rmc-job-name-corp-provost-chief
-  description: rmc-job-description-inspector
+  id: AU14NEMOChief
+  name: au14-job-name-corp-nemo-chief
+  description: au14-job-description-inspector
   whitelisted: true
-  playTimeTracker: CMJobProvostChiefInspector
+  playTimeTracker: AU14JobNEMOChief
 #  requirements:
 #  - !type:RoleTimeRequirement
 #    role: CMJobProvostInspector
 #    time: 108000 # 30 hours
   ranks:
     RMCRankProvostChiefInspector: []
-  startingGear: RMCGearProvostChiefInspector
-  icon: RMCJobIconProvostChiefInspector
+  startingGear: AU14GearNEMOChief
+  icon: AU14JobIconNEMOChief
   joinNotifyCrew: false
   marineAuthorityLevel: 0
   supervisors: cm-job-supervisors-marine-high-command
@@ -33,7 +33,7 @@
         RMCSkillMedical: 1
         RMCSkillOverwatch: 1
     - type: JobPrefix
-      prefix: rmc-job-prefix-provost-chief
+      prefix: au14-job-prefix-nemo-chief
     - type: RMCTrackable
       hidden: true
     - type: MarineOrders
@@ -73,24 +73,25 @@
 
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid
-  id: RMCProvostChiefInspector
+  id: AU14NEMOChief
   components:
   - type: GhostRole
-    name: rmc-ghost-name-corp-provost-chief
-    description: rmc-ghost-role-information-provost-description
-    rules: rmc-ghost-role-information-provost-rules
+    name: au14-ghost-name-corp-nemo-chief
+    description: au14-ghost-role-information-nemo-description
+    rules: au14-ghost-role-information-nemo-rules
     reregister: false
-    job: CMProvostChiefInspector
+    job: AU14NEMOChief
     raffle:
       settings: short
   - type: GhostRoleApplySpecial
 
 - type: startingGear
-  id: RMCGearProvostChiefInspector
+  id: AU14GearNEMOChief
   equipment:
     head: RMCProvostCommandBeret
     eyes: CMGlassesSecurity
-    ears: RMCHeadsetProvost
+    ears: AU14HeadsetNEMO
+    ears2: RMCM5CameraGear
     jumpsuit: CMJumpsuitProvostSenior # TODO RMC14 provost command uniform
     outerClothing: RMCProvostCommandJacketFilled
     gloves: CMHandsBlackMarine # TODO RMC14 black gloves
@@ -102,11 +103,27 @@
     pocket2: RMCPouchGeneralLarge # TODO RMC14 3 listening devices
 
 - type: playTimeTracker
-  id: CMJobProvostChiefInspector
+  id: AU14JobNEMOChief
 
 - type: jobIcon
   parent: CMJobIconBase
-  id: RMCJobIconProvostChiefInspector
+  id: AU14JobIconNEMOChief
   icon:
-    sprite: _RMC14/Interface/cm_job_icons.rsi
-    state: hudsquad_pvi
+    sprite: _AU14/Interface/job_icons.rsi
+    state: hudsquad_nemo_lead_team
+
+- type: entity
+  parent: CMIDCardGold
+  id: RMCIDCardNEMOChief
+  name: NEMO Chief ID card
+  description: Issued to members of the Nautical Examination Marshal's Office.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+  - type: PresetIdCard
+    job: AU14NEMOChief

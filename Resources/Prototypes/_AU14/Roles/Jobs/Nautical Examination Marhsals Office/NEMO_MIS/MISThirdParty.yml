@@ -1,0 +1,22 @@
+# NEMO Marshal Intelligence Service
+- type: partySpawn
+  id: NEMOMISSpawn
+  leadersToSpawn:
+    AU14MISExaminer: 1
+  gruntsToSpawn:
+    AU14MISEnforcer: 1
+    AU14MISTeamLead: 1
+    AU14MISMedic: 1
+    AU14MISSynthetic: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: NEMOMISParty
+  partyspawn: NEMOMISSpawn
+  entrymethod: shuttle
+  weight: 10
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 5
+  roundstart: false

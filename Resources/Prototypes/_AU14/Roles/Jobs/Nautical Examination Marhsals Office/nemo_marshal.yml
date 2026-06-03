@@ -1,13 +1,13 @@
 ﻿- type: job
   parent: CMJobBase
-  id: CMProvostMarshal
-  name: rmc-job-name-corp-provost-marshal
-  description: rmc-ghost-role-information-provost-description
-  playTimeTracker: CMJobProvostMarshal
+  id: AU14NEMOMarshal
+  name: au14-ghost-name-corp-nemo-marshal
+  description: au14-ghost-role-information-nemo-description
+  playTimeTracker: AU14JobNEMOMarshal
   ranks:
     RMCRankProvostMarshal: []
-  startingGear: RMCGearProvostMarshal
-  icon: RMCJobIconProvostMarshal
+  startingGear: AU14GearNEMOMarshal
+  icon: AU14JobIconNEMOMarshal
   joinNotifyCrew: false
   accessGroups:
   - ShipMasterAccess
@@ -52,30 +52,31 @@
     - type: SniperWhitelist
     - type: PyroWhitelist
     - type: JobPrefix
-      prefix: rmc-job-prefix-provost-marshal
+      prefix: au14-job-prefix-nemo-marshal
     - type: RMCTrackable
   hidden: true
 
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid
-  id: RMCProvostMarshal
+  id: AU14NEMOMarshal
   components:
   - type: GhostRole
-    name: rmc-ghost-name-corp-provost-marshal
-    description: rmc-ghost-role-information-provost-description
-    rules: rmc-ghost-role-information-provost-rules
+    name: au14-ghost-name-corp-nemo-marshal
+    description: au14-ghost-role-information-nemo-description
+    rules: au14-ghost-role-information-nemo-rules
     reregister: false
-    job: CMProvostMarshal
+    job: AU14NEMOMarshal
     raffle:
       settings: short
   - type: GhostRoleApplySpecial
 
 - type: startingGear
-  id: RMCGearProvostMarshal
+  id: AU14GearNEMOMarshal
   equipment:
     head: RMCArmorCapProvost
     eyes: CMGlassesSecurity
-    ears: CMHeadsetHighCommand
+    ears: AU14HeadsetNEMO
+    ears2: RMCM5CameraGear
     jumpsuit: CMJumpsuitProvostMarshal
     outerClothing: RMCProvostCoatMarshalFilled
     gloves: CMHandsBlackMarine # TODO RMC14 black gloves
@@ -87,14 +88,14 @@
     pocket2: RMCPouchMagazinePistolFilledMateba # TODO RMC14 3 listening devices
 
 - type: playTimeTracker
-  id: CMJobProvostMarshal
+  id: AU14JobNEMOMarshal
 
 - type: jobIcon
   parent: CMJobIconBase
-  id: RMCJobIconProvostMarshal
+  id: AU14JobIconNEMOMarshal
   icon:
-    sprite: _RMC14/Interface/cm_job_icons.rsi
-    state: hudsquad_pvtml
+    sprite: _AU14/Interface/job_icons.rsi
+    state: hudsquad_nemo_commander
 
 # Guidebook
 - type: entity
@@ -106,3 +107,19 @@
   components:
   - type: Sprite
     state: provost_marshal
+
+- type: entity
+  parent: CMIDCardGold
+  id: RMCIDCardNEMOMarshal
+  name: NEMO Marshal ID card
+  description: Issued to members of the Nautical Examination Marshal's Office.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+  - type: PresetIdCard
+    job: AU14NEMOMarshal

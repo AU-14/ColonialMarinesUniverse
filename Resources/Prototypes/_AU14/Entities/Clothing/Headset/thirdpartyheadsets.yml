@@ -111,8 +111,8 @@
 
 - type: entity
   parent: AU14HeadsetGovforMarine
-  id: AU14HeadsetGovforCommand
-  name: GOVFOR Command radio headset
+  id: AU14HeadsetNEMO
+  name: NEMO Longrange radio headset
   description: This is used by Nautrical Exmination Marshals Office members to communicate on the radio.
   components:
   - type: ContainerFill

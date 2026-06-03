@@ -1,13 +1,13 @@
 ﻿- type: job
   parent: CMJobBase
-  id: CMProvostTeamLeader
-  name: rmc-job-name-corp-provost-team-leader
-  description: rmc-ghost-role-information-provost-squad-description
-  playTimeTracker: CMJobProvostTeamLeader
+  id: AU14NEMOTeamLeader
+  name: au14-job-name-corp-nemo-team-leader
+  description: au14-ghost-role-information-nemo-squad-description
+  playTimeTracker: AU14JobNEMOTeamLeader
   ranks:
     RMCRankProvostProvostTeamLeader: []
-  startingGear: RMCGearProvostTeamLeader
-  icon: RMCJobIconProvostTeamLeader
+  startingGear: AU14GearNEMOTeamLeader
+  icon: AU14JobIconNEMOTeamLeader
   joinNotifyCrew: false
   accessGroups:
   - ShipMasterAccess
@@ -49,7 +49,7 @@
         state: hudsquad_pvl
     - type: RMCPointing
     - type: JobPrefix
-      prefix: rmc-job-prefix-provost-team-leader
+      prefix: au14-job-prefix-nemo-team-leader
     - type: RMCTrackable
   hidden: true
 
@@ -66,28 +66,28 @@
 
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid
-  id: RMCProvostTeamLeader
+  id: AU14NEMOTeamLeader
   components:
   - type: GhostRole
-    name: rmc-ghost-name-corp-provost-team-leader
-    description: rmc-ghost-role-information-provost-squad-description
-    rules: rmc-ghost-role-information-provost-rules
+    name: au14-ghost-name-corp-nemo-team-leader
+    description: au14-ghost-role-information-nemo-squad-description
+    rules: au14-ghost-role-information-nemo-rules
     reregister: false
-    job: CMProvostTeamLeader
+    job: AU14NEMOTeamLeader
     raffle:
       settings: short
     requirements:
     - !type:RoleTimeRequirement
-      role: CMJobSquadLeader
+      role: AU14JobSquadRiflemanBase
       time: 18000 # 5 Hours
     - !type:RoleTimeRequirement
-      role: CMJobMilitaryPolice
+      role: AU14JobMilitaryPoliceBaseAbstract
       time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
     squad: SquadProvost
 
 - type: startingGear
-  id: RMCGearProvostTeamLeader
+  id: AU14GearNEMOTeamLeader
   equipment:
     head: RMCHeadBeretProvostSenior
     eyes: CMGlassesSecurity
@@ -101,13 +101,31 @@
     back: CMSatchelSecurityFilledProvostEnforcer
     pocket1: RMCPouchShotgunLargeBeanbag
     pocket2: RMCPouchShotgunLargeSlugs # TODO RMC14 big tear gas grenade box, riot shield
+    ears: AU14HeadsetNEMO
+    ears2: RMCM5CameraGear
 
 - type: playTimeTracker
-  id: CMJobProvostTeamLeader
+  id: AU14JobNEMOTeamLeader
 
 - type: jobIcon
   parent: CMJobIconBase
-  id: RMCJobIconProvostTeamLeader
+  id: AU14JobIconNEMOTeamLeader
   icon:
-    sprite: _RMC14/Interface/cm_job_icons.rsi
-    state: hudsquad_pvl
+    sprite: _AU14/Interface/job_icons.rsi
+    state: hudsquad_nemo_lead_team
+
+- type: entity
+  parent: CMIDCardGold
+  id: RMCIDCardNEMOTeamLeader
+  name: NEMO Team Leader ID card
+  description: Issued to members of the Nautical Examination Marshal's Office.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+  - type: PresetIdCard
+    job: AU14NEMOTeamLeader

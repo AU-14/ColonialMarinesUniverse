@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/1c026464019b7baae4975e4b1470a18b37dd1d1c/icons/mob/hud/factions/marine.dmi. threat_leader, threat_member, third_party_leader, third_party_member, working_joe by potatoed on Discord. synth by nnzy.",
+  "copyright": "taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/1c026464019b7baae4975e4b1470a18b37dd1d1c/icons/mob/hud/factions/marine.dmi. threat_leader, threat_member, third_party_leader, third_party_member, working_joe by potatoed on Discord. synth by nnzy. NEMO by kenya0151 on discord",
   "size": {
     "x": 16,
     "y": 16
@@ -47,7 +47,58 @@
             "name": "working_joe"
         },
         {
-            "name": "synth"
+            "name": "hudsquad_nemo_clear_blank"
+        },
+        {
+            "name": "hudsquad_nemo_kill_enforcer"
+        },
+        {
+            "name": "hudsquad_nemo_kill_leader"
+        },
+        {
+            "name": "hudsquad_nemo_kill_sgo"
+        },
+        {
+            "name": "hudsquad_nemo_kill_synth"
+        },
+        {
+            "name": "hudsquad_nemo_lead_clear_blank"
+        },
+        {
+            "name": "hudsquad_nemo_lead_synth"
+        },
+        {
+            "name": "hudsquad_nemo_synth"
+        },
+        {
+            "name": "hudsquad_nemo_commander"
+        }   ,
+        {
+            "name": "hudsquad_nemo_commander"
+        }  ,
+        {
+            "name": "hudsquad_nemo_lead_team"
+        }    ,
+        {
+            "name": "hudsquad_nemo_lead_kill_team"
+        },
+        {
+            "name": "hudsquad_nemo_kill_lead_spec"
+        },
+        {
+            "name": "hudsquad_nemo_kill_pointman"
+        },
+        {
+            "name": "hudsquad_nemo_lead_spec"
+        },
+        {
+            "name": "hudsquad_nemo_medic_lead"
+        },
+        {
+            "name": "hudsquad_nemo_medic"
+        },
+        {
+            "name": "hudsquad_nemo_kill_medic"
         }
     ]
 }

@@ -1,0 +1,26 @@
+# NEMO Civil Protection Stability & Defense Force
+- type: partySpawn
+  id: NEMOCPSDFSpawn
+  leadersToSpawn:
+    AU14CPISPInspector: 1
+    AU14CPISPLeader: 1
+    AU14CPISPTeamLead: 1
+  gruntsToSpawn:
+    AU14CPISPEnforcer: 1
+    AU14CPISPMedic: 1
+    AU14CPISPOperator: 1
+    AU14CPISPPointman: 1
+    AU14CPISPSpecialist: 1
+    AU14CPISPSynthetic: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: NEMOCPSDFParty
+  partyspawn: NEMOCPSDFSpawn
+  entrymethod: shuttle
+  weight: 10
+  minplayers: 9
+  maxplayers: 400
+  GhostsNeeded: 9
+  roundstart: false

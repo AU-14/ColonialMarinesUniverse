@@ -1,6 +1,6 @@
 - type: job
   parent: CMJobBase
-  id: CMNEMOFaxResponder
+  id: AU14NEMOFaxResponder
   name: au14-job-name-nemo-fax-responder
   description: au14-job-description-nemo-fax-responder
   playTimeTracker: AU14JobNEMOFaxResponder
@@ -39,7 +39,8 @@
   equipment:
     head: RMCHeadBeretProvost
     eyes: CMGlassesSecurity # TODO: replace with sec hud
-    ears: RMCHeadsetProvost
+    ears: AU14HeadsetNEMO
+    ears2: RMCM5CameraGear
     jumpsuit: CMJumpsuitProvost
     outerClothing: RMCProvostCommandJacket
     gloves: CMHandsBlackMarine
@@ -66,7 +67,7 @@
     - idcard
     sprite: _RMC14/Objects/CMIDs/provost.rsi
   - type: PresetIdCard
-    job: CMProvostResponder
+    job: AU14NEMOFaxResponder
 
 - type: playTimeTracker
   id: AU14JobNEMOFaxResponder

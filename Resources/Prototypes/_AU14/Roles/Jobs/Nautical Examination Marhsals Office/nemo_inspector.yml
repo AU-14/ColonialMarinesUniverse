@@ -1,10 +1,10 @@
 ﻿- type: job
   parent: CMJobBase
-  id: CMProvostInspector
-  name: rmc-job-name-corp-provost-inspector
-  description: rmc-job-description-inspector
+  id: AU14NEMOInspector
+  name: au14-job-name-corp-nemo-inspector
+  description: au14-job-description-inspector
   whitelisted: true
-  playTimeTracker: CMJobProvostInspector
+  playTimeTracker: AU14JobNEMOInspector
   requirements:
   - !type:DepartmentTimeRequirement
     department: CMSquad
@@ -13,15 +13,15 @@
     department: CMMilitaryPolice
     time: 108000 # 30 hours
   - !type:RoleTimeRequirement
-    role: CMJobMilitaryWarden
+    role: AU14JobMilitaryPoliceBaseAbstract
     time: 108000 # 30 hours
   - !type:RoleTimeRequirement
-    role: CMJobChiefMP
+    role: AU14JobMilitaryPoliceBaseAbstract
     time: 108000 # 30 hours
   ranks:
     RMCRankProvostInspector: []
-  startingGear: RMCGearProvostInspector
-  icon: RMCJobIconProvostInspector
+  startingGear: AU14GearNEMOInspector
+  icon: AU14JobIconNEMOInspector
   joinNotifyCrew: true
   marineAuthorityLevel: 0
   supervisors: cm-job-supervisors-marine-high-command
@@ -42,7 +42,7 @@
         RMCSkillMedical: 1
         RMCSkillOverwatch: 1
     - type: JobPrefix
-      prefix: rmc-job-prefix-provost-inspector
+      prefix: au14-job-prefix-nemo-inspector
     - type: MarineOrders
       moveOrderSoundMale:
         collection: AU14MaleMoveOrder
@@ -74,16 +74,17 @@
   name: Provost Inspector spawn point
   components:
   - type: SpawnPoint
-    job_id: CMProvostInspector
+    job_id: AU14NEMOInspector
   - type: Sprite
     state: x # todo rmc14 need a spawn location sprite
 
 - type: startingGear
-  id: RMCGearProvostInspector
+  id: AU14GearNEMOInspector
   equipment:
     head: RMCHeadBeretProvostSenior
     eyes: CMGlassesSecurity
-    ears: RMCHeadsetProvost
+    ears: AU14HeadsetNEMO
+    ears2: RMCM5CameraGear
     jumpsuit: CMJumpsuitProvostSenior
     gloves: CMHandsBlackMarine # TODO RMC14 black gloves
     shoes: CMBootsBlackFilled
@@ -93,11 +94,27 @@
     pocket2: RMCPouchGeneralLarge # TODO RMC14 3 listening devices
 
 - type: playTimeTracker
-  id: CMJobProvostInspector
+  id: AU14JobNEMOInspector
 
 - type: jobIcon
   parent: CMJobIconBase
-  id: RMCJobIconProvostInspector
+  id: AU14JobIconNEMOInspector
   icon:
-    sprite: _RMC14/Interface/cm_job_icons.rsi
-    state: hudsquad_pvi
+    sprite: _AU14/Interface/job_icons.rsi
+    state: hudsquad_nemo_lead_team
+
+- type: entity
+  parent: CMIDCardGold
+  id: RMCIDCardNEMOInspector
+  name: NEMO Inspector ID card
+  description: Issued to members of the Nautical Examination Marshal's Office.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+  - type: PresetIdCard
+    job: AU14NEMOInspector
