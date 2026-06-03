@@ -54,15 +54,15 @@
   hidden: true
 
 - type: entity
-  id: RMCRandomHumanoidProvostTeamLeader
+  id: AU14RandomHumanoidNEMOTeamLeader
   name: provost ghost role team leader
-  suffix: Spawner, Player, Friendly
+  suffix: Spawner, Player, Friendly, High Law Understanding
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi
     state: provost
   - type: RandomHumanoidSpawner
-    settings: RMCProvostTeamLeader
+    settings: AU14NEMOTeamLeader
 
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid

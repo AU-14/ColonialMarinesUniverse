@@ -61,7 +61,7 @@
         state: background_mp
 
 - type: entity
-  id: RMCRandomHumanoidProvostChiefInspector
+  id: AU14RandomHumanoidNEMOChief
   name: provost ghost role chief inspector
   suffix: Spawner, Player, Friendly, High Law Understanding
   components:
@@ -69,7 +69,7 @@
     sprite: _RMC14/Objects/CMIDs/provost.rsi
     state: provost
   - type: RandomHumanoidSpawner
-    settings: RMCProvostChiefInspector
+    settings: AU14NEMOChief
 
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid

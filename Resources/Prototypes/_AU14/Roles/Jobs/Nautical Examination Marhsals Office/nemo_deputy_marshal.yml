@@ -57,15 +57,15 @@
   hidden: true
 
 - type: entity
-  id: RMCRandomHumanoidProvostDeputyMarshal
+  id: AU14RandomHumanoidNEMODeputyMarshal
   name: provost ghost role deputy marshal
-  suffix: Spawner, Player, Friendly, Whitelisted COs
+  suffix: Spawner, Player, Friendly, High Law Understanding
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi
     state: provost
   - type: RandomHumanoidSpawner
-    settings: RMCProvostDeputyMarshal
+    settings: AU14NEMODeputyMarshal
 
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid

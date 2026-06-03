@@ -28,7 +28,7 @@
   hidden: true
 
 - type: entity
-  id: RMCRandomHumanoidProvostEnforcer
+  id: AU14RandomHumanoidMISTeamLead
   name: provost ghost role enforcer
   suffix: Spawner, Player, Friendly
   components:
@@ -36,7 +36,7 @@
     sprite: _RMC14/Objects/CMIDs/provost.rsi
     state: provost
   - type: RandomHumanoidSpawner
-    settings: RMCProvostEnforcer
+    settings: AU14MISTeamLead
 
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid
