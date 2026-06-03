@@ -85406,7 +85406,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 182.5,-42.5
       parent: 1
-- proto: CMEncryptionKeyWEYAColony
+- proto: CMEncryptionKeyWEYUColony
   entities:
   - uid: 2016
     components:
