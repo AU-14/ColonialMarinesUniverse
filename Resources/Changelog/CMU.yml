@@ -2005,5 +2005,57 @@
   id: 182
   time: '2026-06-02T04:47:38.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1188
+- author: troytroy400
+  changes:
+  - message: USS Bush Z-Levels, second and third floor.
+    type: Add
+  - message: Slot scaling for AuxTech capped at five.
+    type: Tweak
+  - message: Random lore primer grammar.
+    type: Fix
+  - message: Camo is now correct for certain maps. No more snow camo on Kutjevo.
+    type: Fix
+  id: 183
+  time: '2026-06-02T21:34:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1151
+- author: toot521
+  changes:
+  - message: CLF Doctors and Surgeons now start with their Armband on the ground instead
+      of on their neckslot
+    type: Tweak
+  id: 184
+  time: '2026-06-02T23:03:10.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1197
+- author: ver0098
+  changes:
+  - message: M5A1 SLAW Added to UPP Requisitions purchase for 1.5k credits.
+    type: Add
+  - message: Multiple UPP Requisition items purchase tweaked.
+    type: Add
+  id: 185
+  time: '2026-06-02T23:04:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1194
+- author: Piticzu
+  changes:
+  - message: M85A1 grenade launcher now requires opening and closing the breech between
+      shots.
+    type: Tweak
+  id: 186
+  time: '2026-06-02T23:05:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1192
+- author: troytroy400
+  changes:
+  - message: MultiZ USS Bush now loads properly.
+    type: Fix
+  id: 187
+  time: '2026-06-03T01:46:04.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1201
+- author: toot521
+  changes:
+  - message: CLF survivor third party prototypes
+    type: Add
+  id: 188
+  time: '2026-06-03T09:12:26.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1193
 Name: CMU
 Order: -1
