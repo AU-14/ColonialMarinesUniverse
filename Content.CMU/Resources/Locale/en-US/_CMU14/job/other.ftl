@@ -371,3 +371,26 @@ au14-wysurv-greeting = Everything has gone wrong, this is a complete disaster.
     Weyland-Yutani - building better worlds.
 
 au14-wysurv-description = You are whats left of the local Weyland-Yutani employees. Survive and ensure your knowledge reaches the company.
+
+au14-job-name-tweiasf-paratrooper = Rifleman
+au14-job-name-tweiasf-ce = Assault Engineer
+au14-job-name-tweiasf-cm = Medical Technician
+au14-job-name-tweiasf-tl = Team Lead
+
+au14-job-prefix-paramarine = 24/PARA
+au14-job-prefix-tweiasf-sl = 24/PARA TL
+
+au14-job-name-tweiasf-co = Commander
+au14-job-prefix-tweiasf-co = 24/PARA CDR
+au14-job-name-tweiasf-pl = Fleet Air Arm Pilot
+au14-job-prefix-tweiasf-pl = 24/PARA PL
+
+au14-job-description-twepara = You are a member of the 24th Paramarine Regiment. Follow your orders.
+
+au14-job-description-parasurv = You are a stranded member of the 24th Paramarine Regiment. Your outpost has been overrun, fight for your life.
+
+au14-job-greeting-parasurv = It has been a week since you sent out the distress Signal.
+    The armory ran out of ammo 3 days ago, the perimeter got breached yesterday.
+    You and your team barely made it out.
+
+    No choice but to keep fighting and hope someone heard your signal.
