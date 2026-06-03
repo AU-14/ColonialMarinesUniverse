@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server._CMU14.ZLevels.Core;
 using Content.Server.AU14.VendorMarker;
 using Robust.Shared.Prototypes;
 using Content.Server.GameTicking.Rules;
@@ -26,6 +27,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
     [Dependency] private MapLoaderSystem _mapLoader = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private CMUZLevelsSystem _zLevels = default!;
 
     // Store selected platoons in the system
     private PlatoonPrototype? _selectedGovforPlatoon;
@@ -81,9 +83,12 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         // --- SHIP VENDOR MARKER LOGIC ---
         if ((planetComp.GovforInShip || planetComp.OpforInShip))
         {
+            var usedShipMarkers = new HashSet<EntityUid>();
             var factionShipsQuery = AllEntityQuery<ShipFactionComponent>();
             while (factionShipsQuery.MoveNext(out var shipUid, out var shipFaction))
             {
+                var shipTransform = _entityManager.GetComponent<TransformComponent>(shipUid);
+
                 // Ensure any existing rotary phones that belong to this ship inherit the ship faction
                 if (!string.IsNullOrEmpty(shipFaction.Faction))
                     SetPhonesFactionForParent(shipUid, shipFaction.Faction);
@@ -100,8 +105,12 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 while (shipMarkers.MoveNext(out var markerUid, out var markerComp))
                 {
                     var transform = _entityManager.GetComponent<TransformComponent>(markerUid);
-                    if (!markerComp.Ship || transform.ParentUid != shipUid)
+                    if (!markerComp.Ship ||
+                        !IsMarkerOnShipOrZLevel(shipUid, shipTransform, transform) ||
+                        !usedShipMarkers.Add(markerUid))
+                    {
                         continue;
+                    }
 
                     // --- DOOR MARKER LOGIC ---
                     string? doorProtoId = null;
@@ -842,6 +851,29 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         var opforFighters = planetComp.opforfighters;
         HandlePlatoonConsoles(govPlatoon, "govfor", govforDropships, govforFighters);
         HandlePlatoonConsoles(opPlatoon, "opfor", opforDropships, opforFighters);
+    }
+
+    private bool IsMarkerOnShipOrZLevel(EntityUid shipUid, TransformComponent shipTransform, TransformComponent markerTransform)
+    {
+        if (markerTransform.ParentUid == shipUid || markerTransform.GridUid == shipUid)
+            return true;
+
+        if (shipTransform.MapUid is not { } shipMap ||
+            markerTransform.MapUid is not { } markerMap)
+        {
+            return false;
+        }
+
+        if (markerMap == shipMap)
+            return false;
+
+        if (!_zLevels.TryGetZNetwork(shipMap, out var shipNetwork) ||
+            !_zLevels.TryGetZNetwork(markerMap, out var markerNetwork))
+        {
+            return false;
+        }
+
+        return shipNetwork.Value.Owner == markerNetwork.Value.Owner;
     }
 
     protected override void Ended(EntityUid uid, PlatoonSpawnRuleComponent component, GameRuleComponent gameRule, GameRuleEndedEvent args)
