@@ -1,9 +1,12 @@
 using System.Numerics;
 using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared._RMC14.Fireman;
 using Content.Shared.Chasm;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Movement.Pulling.Components;
+using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Throwing;
 using JetBrains.Annotations;
 using Robust.Shared.Audio;
@@ -40,6 +43,7 @@ public abstract partial class CMUSharedZLevelsSystem
     private static readonly ProtoId<DamageTypePrototype> BluntDamageType = "Blunt";
 
     private EntityQuery<CMUZLevelHighGroundComponent> _highgroundQuery;
+    [Dependency] private PullingSystem _pulling = default!;
 
     private void InitMovement()
     {
@@ -651,7 +655,7 @@ public abstract partial class CMUSharedZLevelsSystem
     }
 
     [PublicAPI]
-    public bool TryMove(EntityUid ent, int offset, Entity<CMUZLevelMapComponent?>? map = null)
+    public bool TryMove(EntityUid ent, int offset, Entity<CMUZLevelMapComponent?>? map = null, Vector2? worldPosition = null)
     {
         map ??= Transform(ent).MapUid;
 
@@ -661,12 +665,67 @@ public abstract partial class CMUSharedZLevelsSystem
         if (!TryMapOffset(map.Value, offset, out _, out var targetMapComp))
             return false;
 
-        _transform.SetMapCoordinates(ent, new MapCoordinates(_transform.GetWorldPosition(ent), targetMapComp.MapId));
-
-        var ev = new CMUZLevelMoveEvent(offset);
-        RaiseLocalEvent(ent, ev);
+        var target = new MapCoordinates(worldPosition ?? _transform.GetWorldPosition(ent), targetMapComp.MapId);
+        MoveEntityAndPulledTarget(ent, target, offset);
 
         return true;
+    }
+
+    private void MoveEntityAndPulledTarget(EntityUid ent, MapCoordinates target, int offset)
+    {
+        if (TryComp(ent, out PullableComponent? otherPullable) &&
+            otherPullable.Puller != null)
+        {
+            _pulling.TryStopPull(ent, otherPullable, otherPullable.Puller.Value);
+        }
+
+        if (TryComp(ent, out PullerComponent? puller) &&
+            TryComp(puller.Pulling, out PullableComponent? pullable))
+        {
+            var pulled = puller.Pulling.Value;
+
+            if (HasComp<BeingFiremanCarriedComponent>(pulled))
+            {
+                _transform.SetMapCoordinates(ent, target);
+                RaiseLocalEvent(ent, new CMUZLevelMoveEvent(offset));
+                MoveFiremanCarriedTarget(ent, target, offset);
+                return;
+            }
+
+            if (TryComp(pulled, out PullerComponent? otherPullingPuller) &&
+                TryComp(otherPullingPuller.Pulling, out PullableComponent? otherPullingPullable))
+            {
+                _pulling.TryStopPull(otherPullingPuller.Pulling.Value, otherPullingPullable, pulled);
+            }
+
+            _pulling.TryStopPull(pulled, pullable, ent);
+            _transform.SetMapCoordinates(ent, target);
+            _transform.SetMapCoordinates(pulled, target);
+            _pulling.TryStartPull(ent, pulled);
+
+            RaiseLocalEvent(ent, new CMUZLevelMoveEvent(offset));
+            RaiseLocalEvent(pulled, new CMUZLevelMoveEvent(offset));
+            return;
+        }
+
+        _transform.SetMapCoordinates(ent, target);
+        RaiseLocalEvent(ent, new CMUZLevelMoveEvent(offset));
+        MoveFiremanCarriedTarget(ent, target, offset);
+    }
+
+    private void MoveFiremanCarriedTarget(EntityUid carrier, MapCoordinates target, int offset)
+    {
+        if (!TryComp<CanFiremanCarryComponent>(carrier, out var carry) ||
+            carry.Carrying is not { } carried ||
+            TerminatingOrDeleted(carried))
+        {
+            return;
+        }
+
+        if (Transform(carried).ParentUid != carrier)
+            _transform.SetMapCoordinates(carried, target);
+
+        RaiseLocalEvent(carried, new CMUZLevelMoveEvent(offset));
     }
 
     [PublicAPI]
