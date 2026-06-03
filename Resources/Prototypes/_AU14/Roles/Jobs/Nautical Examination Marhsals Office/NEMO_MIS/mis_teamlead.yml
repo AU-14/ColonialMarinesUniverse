@@ -55,8 +55,11 @@
       role: AU14JobSquadRiflemanBase
       time: 18000 # 5 Hours
     - !type:RoleTimeRequirement
-      role: AU14JobMilitaryPoliceBaseAbstract
+      role: AU14JobGOVFORMilitaryPoliceMan
       time: 18000 # 5 Hours
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORRadioTelephoneOperator
+      time: 3600 # 1 Hour
   - type: GhostRoleApplySpecial
     squad: SquadProvost
 

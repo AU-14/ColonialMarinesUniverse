@@ -6,18 +6,12 @@
   whitelisted: true
   playTimeTracker: AU14JobNEMOInspector
   requirements:
-  - !type:DepartmentTimeRequirement
-    department: CMSquad
-    time: 126000 # 35 hours, any roles
-  - !type:DepartmentTimeRequirement
-    department: CMMilitaryPolice
-    time: 108000 # 30 hours
-  - !type:RoleTimeRequirement
-    role: AU14JobMilitaryPoliceBaseAbstract
-    time: 108000 # 30 hours
-  - !type:RoleTimeRequirement
-    role: AU14JobMilitaryPoliceBaseAbstract
-    time: 108000 # 30 hours
+  #- !type:RoleTimeRequirement
+  #  role: AU14JobSquadRiflemanBase
+  #  time: 108000 # 30 hours
+  #- !type:RoleTimeRequirement
+  #  role: AU14JobGOVFORMilitaryPoliceMan
+  #  time: 108000 # 30 hours
   ranks:
     RMCRankProvostInspector: []
   startingGear: AU14GearNEMOInspector

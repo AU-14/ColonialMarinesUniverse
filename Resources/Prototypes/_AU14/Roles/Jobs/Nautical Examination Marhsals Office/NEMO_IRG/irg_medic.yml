@@ -52,10 +52,13 @@
       settings: short
     requirements:
     - !type:RoleTimeRequirement
-      role: AU14JobSquadRiflemanBase
+      role: AU14JobGOVFORSquadRifleman
       time: 18000 # 5 Hours
     - !type:RoleTimeRequirement
-      role: AU14JobMilitaryPoliceBaseAbstract
+      role: AU14JobGOVFORMilitaryPoliceMan
+      time: 18000 # 5 Hours
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatoonCorpsman
       time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
     squad: SquadProvost
