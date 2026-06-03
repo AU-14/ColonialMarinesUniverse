@@ -10,7 +10,6 @@ au14-ghost-role-information-nemo-squad-description = Ensure compliance with UCMJ
 au14-job-name-corp-nemo-advisor = NEMO Advisor
 au14-ghost-name-corp-nemo-advisor = NEMO Advisor (Friendly)
 au14-job-description-corp-nemo-advisor = You are apart of the Nautical Examination Marshals Office (NEMO)! You are apart of the Mentoring and Insutrctional division, and help new policemen or NEMO officals with their tasks or teaching them.
-au14-job-name-corp-nemo-advisor = NEMO Advisor
 au14-job-prefix-nemo-advisor = MeA
 
 au14-job-name-nemo-fax-responder = NEMO Fax Responder
@@ -49,10 +48,6 @@ au14-ghost-role-information-nemo-hostile-rules = You are a [color=red][bold]Prov
                                              You are absolutely [color=green]ALLOWED[/color] to remember, say, name, the situtation of which you were called
                                              You are to [color=red]ATTEMPT[/color] to arrest all people of interests assigned, you should [color=red]NOT FIRE[/color], unless fired upon.
                                              You are absolutely [color=green]ALLOWED[/color] to adminster warning shots NEAR someone if they fail to comply.
-
-au14-ghost-name-corp-nemo-enforcer = NEMO Enforcer (GOVFOR Hostile)
-au14-job-name-corp-nemo-hostile-enforcer = Specialized Enforcer
-au14-job-prefix-nemo-enforcer = MeSE
 
 au14-nemo-isd = Internal Stability Division
 
