@@ -82,7 +82,7 @@
     factioneutral: false
     id: clfkillplatcoobj
     applicableModes:
-    - insurgency
+    - Insurgency
     possiblefactions:
     - clf
     repeating: false
@@ -106,7 +106,7 @@
     id: killclfleaderobj
     factioneutral: false
     applicableModes:
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     repeating: false
@@ -131,7 +131,7 @@
     id: killinsurgentsobj
     factioneutral: false
     applicableModes:
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     repeating: true
@@ -154,7 +154,7 @@
     id: killgovforobj
     factioneutral: false
     applicableModes:
-    - insurgency
+    - Insurgency
     possiblefactions:
     - clf
     repeating: true
