@@ -312,7 +312,7 @@ public sealed partial class AuObjectiveSystem : AuSharedObjectiveSystem
         {
             if (obj.FactionNeutral && !obj.Active)
             {
-                if (obj.ApplicableModes.Contains(presetId ?? string.Empty))
+                if (obj.ApplicableModes.Contains(presetId ?? string.Empty, StringComparer.OrdinalIgnoreCase))
                 {
                     if (obj.Factions.Count > 0)
                     {
@@ -349,7 +349,7 @@ public sealed partial class AuObjectiveSystem : AuSharedObjectiveSystem
             case "opfor":
                 selectedPlatoonId = _platoonSpawnRuleSystem.SelectedOpforPlatoon?.ID;
                 break;
-            // Add more cases if other factions can have platoons
+                // Add more cases if other factions can have platoons
         }
         foreach (var (objUid, objective) in allObjectives)
         {
@@ -622,7 +622,7 @@ public sealed partial class AuObjectiveSystem : AuSharedObjectiveSystem
 
     private void TryUnlockOrSpawnNextTier(EntityUid completedUid, AuObjectiveComponent completedObjective, string completingFaction)
     {
-            Logger.GetSawmill("content").Info($"[OBJ NEXT DEBUG] Attempting to spawn next-tier for prototype='{completedObjective.NextTier}' for faction {completingFaction}");
+        Logger.GetSawmill("content").Info($"[OBJ NEXT DEBUG] Attempting to spawn next-tier for prototype='{completedObjective.NextTier}' for faction {completingFaction}");
 
         // Nothing to do if NextTier is empty
         var nextTier = completedObjective.NextTier;
@@ -638,7 +638,7 @@ public sealed partial class AuObjectiveSystem : AuSharedObjectiveSystem
             return;
 
         // Ensure the referenced prototype actually contains an AuObjectiveComponent
-        if (!nextTier.Value.TryGet(out AuObjectiveComponent? _ , _proto, EntityManager.ComponentFactory))
+        if (!nextTier.Value.TryGet(out AuObjectiveComponent? _, _proto, EntityManager.ComponentFactory))
         {
             Logger.GetSawmill("content").Warning($"[OBJ NEXT DEBUG] Next tier prototype '{protoIdStr}' does not contain an AuObjectiveComponent or is missing");
             return;

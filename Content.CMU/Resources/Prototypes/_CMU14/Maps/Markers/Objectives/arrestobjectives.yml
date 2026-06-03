@@ -35,7 +35,7 @@
     id: govforarrestclfobj
     factioneutral: false
     applicableModes:
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     repeating: true
@@ -59,7 +59,7 @@
     id: clfarrestgovforobj
     factioneutral: false
     applicableModes:
-    - insurgency
+    - Insurgency
     possiblefactions:
     - clf
     repeating: true

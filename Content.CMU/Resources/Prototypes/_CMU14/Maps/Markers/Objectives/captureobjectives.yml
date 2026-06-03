@@ -41,7 +41,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -89,7 +89,6 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-
     possiblefactions:
     - govfor
     - opfor
@@ -120,7 +119,6 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-
     possiblefactions:
     - govfor
     - opfor
@@ -154,7 +152,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -186,7 +184,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -216,7 +214,6 @@
     factioneutral: true
     applicableModes:
     - ForceOnForce
-    - DistressSignal
     - DistressSignal
     possiblefactions:
     - govfor
@@ -249,7 +246,6 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-
     possiblefactions:
     - govfor
     - opfor
@@ -280,7 +276,6 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-
     possiblefactions:
     - govfor
     - opfor
@@ -312,7 +307,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -343,7 +338,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -374,7 +369,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -406,7 +401,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -436,7 +431,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -466,7 +461,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -496,7 +491,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -526,7 +521,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -556,7 +551,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -586,7 +581,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -616,7 +611,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -646,7 +641,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -676,7 +671,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -708,7 +703,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -738,7 +733,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -768,7 +763,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -798,7 +793,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor
@@ -828,7 +823,7 @@
     applicableModes:
     - ForceOnForce
     - DistressSignal
-    - insurgency
+    - Insurgency
     possiblefactions:
     - govfor
     - opfor

@@ -233,7 +233,7 @@
     factioneutral: true
     applicableModes:
     - ForceOnForce
-    - insurgency
+    - Insurgency
     - DistressSignal
     possiblefactions:
     - opfor
