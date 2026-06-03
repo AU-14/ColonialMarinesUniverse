@@ -17,12 +17,30 @@
     sprite: _RMC14/Structures/stairs.rsi
     state: p_stair_full
     drawdepth: FloorTiles
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      slowdown:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        layer:
+        - SlipLayer
+        mask:
+        - ItemMask
+        density: 1000
+        hard: false
   - type: CMUZLevelHighGround
     heightCurve:
     - 1.05
     - 1.05
+    - 0.575
     - 0.1
     stick: true
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.6
+    sprintSpeedModifier: 0.6
 
 - type: entity
   parent: CMUMultiZStairs

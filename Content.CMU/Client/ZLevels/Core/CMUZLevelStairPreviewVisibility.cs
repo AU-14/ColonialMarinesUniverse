@@ -6,11 +6,12 @@ namespace Content.Client._CMU14.ZLevels.Core;
 internal static class CMUZLevelStairPreviewVisibility
 {
     private const float DirectionEpsilon = 0.001f;
+    private const float StairFootprintHalfExtent = 0.5f + DirectionEpsilon;
 
     public static bool IsInFrontOfStair(Vector2 viewerPosition, Vector2 stairPosition, Vector2 targetPosition)
     {
         var stairForward = stairPosition - viewerPosition;
-        if (stairForward.LengthSquared() <= DirectionEpsilon)
+        if (ViewerInsideStairFootprint(viewerPosition, stairPosition))
             return true;
 
         var stairToTarget = targetPosition - stairPosition;
@@ -27,5 +28,12 @@ internal static class CMUZLevelStairPreviewVisibility
                IsInFrontOfStair(viewerPosition, stairPosition, bounds.TopLeft - renderOffset) &&
                IsInFrontOfStair(viewerPosition, stairPosition, bounds.TopRight - renderOffset) &&
                IsInFrontOfStair(viewerPosition, stairPosition, bounds.BottomRight - renderOffset);
+    }
+
+    private static bool ViewerInsideStairFootprint(Vector2 viewerPosition, Vector2 stairPosition)
+    {
+        var delta = viewerPosition - stairPosition;
+        return MathF.Abs(delta.X) <= StairFootprintHalfExtent &&
+               MathF.Abs(delta.Y) <= StairFootprintHalfExtent;
     }
 }

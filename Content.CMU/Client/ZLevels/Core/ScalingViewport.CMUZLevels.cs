@@ -506,7 +506,7 @@ public sealed partial class ScalingViewport
 
             var worldBounds = GetStairPreviewSpriteBounds(uid, sprite, xform, xformQuery);
             var target = new MapCoordinates(worldBounds.Center, mapId);
-            if (CanAnyStairPreviewOriginSeeSprite(target, worldBounds, mapId, _stairPreviewEye.VisualZOffset))
+            if (CanAnyStairPreviewOriginSeeBounds(target, worldBounds, mapId, _stairPreviewEye.VisualZOffset))
             {
                 continue;
             }
@@ -653,10 +653,10 @@ public sealed partial class ScalingViewport
             foreach (var tile in _mapSystem.GetTilesIntersecting(grid.Owner, grid.Comp, worldAabb, ignoreEmpty: true))
             {
                 var localBounds = _lookup.GetLocalBounds(tile, grid.Comp.TileSize).Enlarged(0.01f);
-                var targetPosition = Vector2.Transform(localBounds.Center, gridMatrix);
-                var target = new MapCoordinates(targetPosition, mapId);
+                var worldBounds = gridMatrix.TransformBox(localBounds);
+                var target = new MapCoordinates(worldBounds.Center, mapId);
 
-                if (!CanAnyStairPreviewOriginSee(target, mapId, _stairPreviewEye.VisualZOffset))
+                if (!CanAnyStairPreviewOriginSeeBounds(target, worldBounds, mapId, _stairPreviewEye.VisualZOffset))
                     continue;
 
                 screen.DrawRect(GetCompositeScreenBox(localBounds, gridMatrix, drawBox), Color.White);
@@ -693,30 +693,7 @@ public sealed partial class ScalingViewport
         }
     }
 
-    private bool CanAnyStairPreviewOriginSee(MapCoordinates target, MapId mapId, Vector2 renderOffset)
-    {
-        if (_examine is null)
-            return false;
-
-        foreach (var origin in _stairPreviewOrigins)
-        {
-            if (!CMUZLevelStairPreviewVisibility.IsInFrontOfStair(
-                    origin.ViewerPosition,
-                    origin.Position,
-                    target.Position - renderOffset))
-            {
-                continue;
-            }
-
-            var originCoordinates = new MapCoordinates(origin.Position, mapId);
-            if (_examine.InRangeUnOccluded(originCoordinates, target, 0f, null))
-                return true;
-        }
-
-        return false;
-    }
-
-    private bool CanAnyStairPreviewOriginSeeSprite(
+    private bool CanAnyStairPreviewOriginSeeBounds(
         MapCoordinates target,
         Box2 bounds,
         MapId mapId,
