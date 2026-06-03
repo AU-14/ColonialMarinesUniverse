@@ -48,6 +48,8 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private EntityQuery<CMUZLevelHighGroundComponent> _highgroundQuery;
     private readonly HashSet<EntityUid> _moveSnapSuppressed = new();
+    private readonly HashSet<(EntityUid Puller, EntityUid Pulled)> _deferredPullJointRefreshes = new();
+    private readonly List<(EntityUid Puller, EntityUid Pulled)> _deferredPullJointRefreshBuffer = new();
     [Dependency] private PullingSystem _pulling = default!;
 
     private void InitMovement()
@@ -56,6 +58,13 @@ public abstract partial class CMUSharedZLevelsSystem
 
         SubscribeLocalEvent<DamageableComponent, CMUZLevelHitEvent>(OnFallDamage);
         SubscribeLocalEvent<PhysicsComponent, CMUZLevelHitEvent>(OnFallAreaImpact);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        FlushDeferredPullJointRefreshes();
     }
 
     protected void OnZPhysicsMoveGroundSnap(Entity<CMUZPhysicsComponent> ent, ref MoveEvent args)
@@ -1020,9 +1029,11 @@ public abstract partial class CMUSharedZLevelsSystem
 
             if (HasComp<BeingFiremanCarriedComponent>(pulled))
             {
+                _pulling.TryDetachPullJointForTransfer(ent, pulled, puller, pullable);
                 SetMapCoordinatesWithoutMoveSnap(ent, target);
                 RaiseLocalEvent(ent, new CMUZLevelMoveEvent(offset));
                 MoveFiremanCarriedTarget(ent, target, offset);
+                QueuePullJointRefresh(ent, pulled);
                 return;
             }
 
@@ -1032,10 +1043,10 @@ public abstract partial class CMUSharedZLevelsSystem
                 _pulling.TryStopPull(otherPullingPuller.Pulling.Value, otherPullingPullable, pulled);
             }
 
-            _pulling.TryStopPull(pulled, pullable, ent);
+            _pulling.TryDetachPullJointForTransfer(ent, pulled, puller, pullable);
             SetMapCoordinatesWithoutMoveSnap(ent, target);
             SetMapCoordinatesWithoutMoveSnap(pulled, target);
-            _pulling.TryStartPull(ent, pulled);
+            QueuePullJointRefresh(ent, pulled);
 
             RaiseLocalEvent(ent, new CMUZLevelMoveEvent(offset));
             RaiseLocalEvent(pulled, new CMUZLevelMoveEvent(offset));
@@ -1074,6 +1085,46 @@ public abstract partial class CMUSharedZLevelsSystem
             SetMapCoordinatesWithoutMoveSnap(carried, target);
 
         RaiseLocalEvent(carried, new CMUZLevelMoveEvent(offset));
+    }
+
+    private void QueuePullJointRefresh(EntityUid puller, EntityUid pulled)
+    {
+        if (TerminatingOrDeleted(puller) ||
+            TerminatingOrDeleted(pulled))
+        {
+            return;
+        }
+
+        _deferredPullJointRefreshes.Add((puller, pulled));
+    }
+
+    private void FlushDeferredPullJointRefreshes()
+    {
+        if (_deferredPullJointRefreshes.Count == 0)
+            return;
+
+        _deferredPullJointRefreshBuffer.Clear();
+        _deferredPullJointRefreshBuffer.AddRange(_deferredPullJointRefreshes);
+        _deferredPullJointRefreshes.Clear();
+
+        foreach (var (puller, pulled) in _deferredPullJointRefreshBuffer)
+        {
+            if (TerminatingOrDeleted(puller) ||
+                TerminatingOrDeleted(pulled) ||
+                !TryComp<PullerComponent>(puller, out var pullerComp) ||
+                !TryComp<PullableComponent>(pulled, out var pullableComp))
+            {
+                continue;
+            }
+
+            if (pullerComp.Pulling == pulled &&
+                pullableComp.Puller == puller)
+            {
+                _pulling.TryRefreshPullJointForTransfer(puller, pulled, pullerComp, pullableComp);
+            }
+        }
+
+        _deferredPullJointRefreshBuffer.Clear();
     }
 
     [PublicAPI]
