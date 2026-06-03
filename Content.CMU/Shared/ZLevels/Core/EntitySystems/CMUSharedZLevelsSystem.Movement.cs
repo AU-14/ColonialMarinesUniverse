@@ -29,6 +29,7 @@ public abstract partial class CMUSharedZLevelsSystem
     /// The maximum height at which a player will automatically climb higher when stepping on a highground entity.
     /// </summary>
     private const float MaxStepHeight = 0.5f;
+    private const float GroundSnapDistance = 0.05f;
 
     /// <summary>
     /// How far past a tile edge high ground is allowed to support an entity.
@@ -119,7 +120,7 @@ public abstract partial class CMUSharedZLevelsSystem
 
             var distanceToGround = DistanceToGround((uid, zPhys), out var stickyGround);
 
-            if ((distanceToGround <= 0.05f || stickyGround) && distanceToGround <= MaxStepHeight)
+            if (ShouldSnapToGround(distanceToGround, stickyGround))
             {
                 zPhys.LocalPosition -= distanceToGround;
                 if (stickyGround)
@@ -127,7 +128,7 @@ public abstract partial class CMUSharedZLevelsSystem
                     zPhys.Velocity = 0;
                 }
             }
-            if (distanceToGround <= 0.05f) //Theres a ground
+            if (distanceToGround <= GroundSnapDistance) //Theres a ground
             {
                 if (MathF.Abs(zPhys.Velocity) >= ImpactVelocityLimit)
                 {
@@ -221,6 +222,14 @@ public abstract partial class CMUSharedZLevelsSystem
 
             DirtyZPhysics(uid, zPhys, oldVelocity, oldHeight);
         }
+    }
+
+    private static bool ShouldSnapToGround(float distanceToGround, bool stickyGround)
+    {
+        if (stickyGround)
+            return true;
+
+        return distanceToGround <= GroundSnapDistance && distanceToGround <= MaxStepHeight;
     }
 
     private void StopZMovement(EntityUid uid, CMUZPhysicsComponent zPhys)
