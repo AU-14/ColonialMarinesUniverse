@@ -7,5 +7,6 @@ public sealed class CMUKeyFunctions
 {
     public static readonly BoundKeyFunction CMUCycleBodyZoneTarget = "CMUCycleBodyZoneTarget";
     public static readonly BoundKeyFunction CMUCycleBodyZoneTargetReverse = "CMUCycleBodyZoneTargetReverse";
+    public static readonly BoundKeyFunction CMUInspectInjuries = "CMUInspectInjuries";
     public static readonly BoundKeyFunction CMUToggleShootDownZLevel = "CMUToggleShootDownZLevel";
 }
