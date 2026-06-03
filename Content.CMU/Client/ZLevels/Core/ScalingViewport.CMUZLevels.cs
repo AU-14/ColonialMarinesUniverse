@@ -9,6 +9,7 @@ using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Maps;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.Placement;
 using Robust.Shared.Containers;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
@@ -29,6 +30,7 @@ public sealed partial class ScalingViewport
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private ProfManager _prof = default!;
     [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IPlacementManager _placement = default!;
 
     private static readonly ProtoId<ShaderPrototype> StencilClearShader = "StencilClear";
     private static readonly ProtoId<ShaderPrototype> StencilMaskShader = "StencilMask";
@@ -139,8 +141,10 @@ public sealed partial class ScalingViewport
         ClearZLevelCompositeState();
 
         if (_eye is null ||
-            !_config.GetCVar(CMUZLevelsCVars.Enabled) ||
-            !_config.GetCVar(CMUZLevelsCVars.RenderEnabled))
+            !ShouldUseZLevelRenderPasses(
+                _placement.IsActive,
+                _config.GetCVar(CMUZLevelsCVars.Enabled),
+                _config.GetCVar(CMUZLevelsCVars.RenderEnabled)))
         {
             viewport.Render();
             return;
@@ -304,6 +308,13 @@ public sealed partial class ScalingViewport
         // Restore the Eye
         Eye = fallbackEye;
         viewport.Eye = Eye;
+    }
+
+    internal static bool ShouldUseZLevelRenderPasses(bool placementActive, bool zLevelsEnabled, bool renderEnabled)
+    {
+        return !placementActive &&
+               zLevelsEnabled &&
+               renderEnabled;
     }
 
     private bool TryGetZLevelViewEntity(
