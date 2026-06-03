@@ -98,15 +98,15 @@
     state: hudsquad_nemo_commander
 
 # Guidebook
-- type: entity
-  parent: CMGuidebookRole
-  id: RMCGuidebookRolePvM
-  name: Provost Marshal
-  description: Provost Marshal
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    state: provost_marshal
+#- type: entity
+#  parent: CMGuidebookRole
+#  id: RMCGuidebookRolePvM
+#  name: Provost Marshal
+#  description: Provost Marshal
+#  categories: [ HideSpawnMenu ]
+#  components:
+#  - type: Sprite
+#    state: provost_marshal
 
 - type: entity
   parent: CMIDCardGold
