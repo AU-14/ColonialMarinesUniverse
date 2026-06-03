@@ -129,7 +129,7 @@
 - type: entity
   parent: AU14EncryptionKeyGovfor
   id: AU14EncryptionKeyNEMO
-  name: NEMO GOVFORencryption key
+  name: NEMO Encryption key
   description: An encryption key used to communicate on the NEMO channel, and all GOVFOR channels for emergencies.
   components:
   - type: EncryptionKey
@@ -143,7 +143,7 @@
 - type: entity
   parent: AU14EncryptionKeyGovfor
   id: AU14EncryptionKeyGOVFORNEMO
-  name: NEMO GOVFORencryption key
+  name: NEMO GOVFOR Encryption key
   description: An encryption key used to communicate on the NEMO channel, and all GOVFOR channels for emergencies.
   components:
   - type: EncryptionKey
@@ -164,7 +164,7 @@
 - type: entity
   parent: AU14EncryptionKeyGovfor
   id: AU14EncryptionKeyOPFORNEMO
-  name: NEMO OPFOR encryption key
+  name: NEMO OPFOR Encryption key
   description: An encryption key used to communicate on the NEMO channel, and all OPFOR channels for emergencies.
   components:
   - type: EncryptionKey
