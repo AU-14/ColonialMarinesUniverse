@@ -322,7 +322,11 @@ public sealed class TraumaContactIntegrationTest
     private static void ForceBallistic(IConfigurationManager cfg, float bone, float organ, float vascular)
     {
         cfg.SetCVar(CMUMedicalCCVars.BoneProjectileHighDamageThreshold, 60f);
+        cfg.SetCVar(CMUMedicalCCVars.BoneProjectileHeadChance, bone);
         cfg.SetCVar(CMUMedicalCCVars.BoneProjectileTorsoChance, bone);
+        cfg.SetCVar(CMUMedicalCCVars.BoneProjectileArmChance, bone);
+        cfg.SetCVar(CMUMedicalCCVars.BoneProjectileLegChance, bone);
+        cfg.SetCVar(CMUMedicalCCVars.BoneProjectileOtherChance, bone);
         cfg.SetCVar(CMUMedicalCCVars.TraumaBallisticTorsoOrganChance, organ);
         cfg.SetCVar(CMUMedicalCCVars.TraumaBallisticVascularChance, vascular);
     }

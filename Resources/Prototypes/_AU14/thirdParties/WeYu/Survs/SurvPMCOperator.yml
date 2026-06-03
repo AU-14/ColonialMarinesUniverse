@@ -73,8 +73,5 @@
     head: AU14ArmorHelmetPMCTactical
     gloves: AU14PVEHandsInsulatedBlackMarine
     belt: RMCMK80BeltPMCFilled
-    pocket2: RMCPouchFirstAidPMCFill
+    pocket2: AU14PouchIFAKFill
     ears: RMCHeadsetDistressWeYa
-  storage:
-    pocket2:
-    - AU14Tourniquet

@@ -133,13 +133,13 @@
   components:
   - type: StorageFill
     contents:
-    - id: CMSurgicalLine
-    - id: CMSynthGraft
-    - id: CMPillCanisterKelotaneDermaline
-    - id: RMCPillCanisterMeralyneBicaridine
-    - id: CMTricordrazineAutoInjector
-    - id: CMTricordrazineAutoInjector
-    - id: CMHealthAnalyzer
+    - id: CMUPlainGauze10
+    - id: AU14Tourniquet
+    - id: AU14PacketPillsTramadol
+    - id: CMUHemostaticGauze6
+    - id: CMUBurnGelGauze6
+    - id: CMUSplintItem
+    - id: CMUSplintItem
 
 - type: entity
   parent: RMCPouchMagazinePistolLarge

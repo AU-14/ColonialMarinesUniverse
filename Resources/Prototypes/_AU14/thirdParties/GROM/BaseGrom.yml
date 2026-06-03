@@ -128,7 +128,7 @@
     contents:
     - id: RMCRadioHandheldColony
     - id: AU14MagazineRifleAG80
-      amount: 1
+      amount: 2
     - id: AU14MagazineRifleAG80Ext
       amount: 1
 
@@ -183,6 +183,13 @@
     contents:
     - id: CMBurnKit10
       amount: 1
+    - id: CMUPlainGauze10
+    - id: CMUPlainTraumaDressing10
+    - id: CMUCoagulantPowder
+    - id: CMUAntiseptic
+    - id: CMUBurnGel
+    - id: CMUTissueSealant
+    - id: CMUTraumaFoam
     - id: CMHandsLatex
     - id: CMSyringe
     - id: CMPillCanisterBicaridine
@@ -197,6 +204,13 @@
     contents:
     - id: CMSurgicalLine
     - id: CMSynthGraft
+    - id: CMUPlainGauze10
+    - id: CMUPlainTraumaDressing10
+    - id: CMUCoagulantPowder
+    - id: CMUAntiseptic
+    - id: CMUBurnGel
+    - id: CMUTissueSealant
+    - id: CMUTraumaFoam
     - id: CMPillCanisterBicaridine
     - id: CMPillCanisterKelotane
 
@@ -221,6 +235,7 @@
     - id: RMCMagazinePistolT73
       amount: 2
     - id: RMCMagazineLMGQYJ72
+      amount: 3
 
 - type: entity
   parent: RMCPouchMagazine
@@ -230,6 +245,7 @@
   - type: StorageFill
     contents:
     - id: AU14MagazineRifleAG80
+      amount: 3
 
 - type: entity
   parent: RMCHeadsetMarine

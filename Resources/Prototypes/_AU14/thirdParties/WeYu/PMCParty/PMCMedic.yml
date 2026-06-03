@@ -72,7 +72,7 @@
     gloves: AU14PVEHandsInsulatedBlackMarine
     belt: CMUBeltMedicBagSupportSynth
     pocket1: RMCPouchMagazineLargePMC
-    pocket2: RMCPouchFirstAidPMCFill
+    pocket2: AU14PouchIFAKFill
     back: RMCSatchelLightpackWeYa
     ears: RMCHeadsetDistressWeYa
     suitstorage: RMCWeaponRifleM54C2
@@ -85,8 +85,6 @@
     - CMMagazineRifleM54CAP
     - CMMagazineRifleM54CAP
     - CMMagazineRifleM54CAP
-    pocket2:
-    - AU14Tourniquet
     back:
     - RMCMREWeYa
     - CMCanteen

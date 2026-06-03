@@ -111,5 +111,13 @@
     - id: AU14PillCanisterNephronate
     - id: AU14PillCanisterOsteoCalc
     - id: AU14PillCanisterPulmovine
+    - id: CMUPlainGauze10
+    - id: CMUPlainTraumaDressing10
+    - id: CMUCoagulantPowder
+    - id: CMUAntiseptic
+    - id: CMUBurnGel
+    - id: CMUTissueSealant
+    - id: CMUTraumaFoam
     - id: CMEpinephrineAutoInjector
     - id: AU14NaloxoneAutoInjector
+    - id: CMHealthAnalyzer

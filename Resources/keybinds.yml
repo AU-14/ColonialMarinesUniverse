@@ -652,6 +652,12 @@ binds:
   key: Space
   mod1: Shift
   mod2: Control
+- function: CMUInspectInjuries
+  type: State
+  key: MouseLeft
+  canFocus: true
+  mod1: Alt
+  priority: 1
 - function: CMUniqueAction
   type: State
   key: Space

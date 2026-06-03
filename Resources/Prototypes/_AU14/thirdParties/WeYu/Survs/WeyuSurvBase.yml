@@ -107,4 +107,5 @@
     - [ AU14BeltPostelPistolM48A5Surv ]
     - [ RMCM77BeltPMCFilledNearEmpty ]
     - [ RMCBeltHolsterPistolWeYaMK80Fill ]
+    - [ RMCM1984BeltFilled ]
     tryEquipRandomWeapon: true

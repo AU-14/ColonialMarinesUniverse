@@ -37,10 +37,42 @@
     vehicles:
     - name: humvee
       vehicle: VehicleHumvee
-      unlock: VehicleHumvee
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: VehicleHumveeTurretArmed
+          name: cannon turret
+          item: VehicleHumveeTurretArmed
+          slot: turret
+      - id: armor
+        name: Armor
+        options: []
+      - id: support
+        name: Support
+        options:
+        - id: VehicleHumveeWheel
+          name: wheel
+          item: VehicleHumveeWheel
+          slot: wheel-1
+        - id: VehicleHumveeSnowplow
+          name: snowplow
+          item: VehicleHumveeSnowplow
+          slot: front
+        - id: VehicleHumveeOverlight
+          name: overlight
+          item: VehicleHumveeOverlight
+          slot: roof
+        - id: VehicleHumveeHatch
+          name: hatch
+          item: VehicleHumveeHatch
+          slot: roof
       hardpoints:
       - VehicleHumveeTurret
+      - VehicleHumveeTurretArmed
+      - VehicleHumveeARCTurret
       - VehicleHumveeCannon
+      - VehicleHumveeARCCannon
       - VehicleHumveeLauncher
       - VehicleHumveeSnowplow
       - VehicleHumveeOverlight
@@ -48,7 +80,32 @@
       - VehicleHumveeWheel
     - name: humvee (medical)
       vehicle: VehicleHumveeMedical
-      unlock: VehicleHumveeMedical
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options: []
+      - id: armor
+        name: Armor
+        options: []
+      - id: support
+        name: Support
+        options:
+        - id: VehicleHumveeWheel
+          name: wheel
+          item: VehicleHumveeWheel
+          slot: wheel-1
+        - id: VehicleHumveeSnowplow
+          name: snowplow
+          item: VehicleHumveeSnowplow
+          slot: front
+        - id: VehicleHumveeOverlight
+          name: overlight
+          item: VehicleHumveeOverlight
+          slot: roof
+        - id: VehicleHumveeHatch
+          name: hatch
+          item: VehicleHumveeHatch
+          slot: roof
       hardpoints:
       - VehicleHumveeSnowplow
       - VehicleHumveeOverlight
@@ -56,7 +113,32 @@
       - VehicleHumveeWheel
     - name: humvee (transport)
       vehicle: VehicleHumveeTransport
-      unlock: VehicleHumveeTransport
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options: []
+      - id: armor
+        name: Armor
+        options: []
+      - id: support
+        name: Support
+        options:
+        - id: VehicleHumveeWheel
+          name: wheel
+          item: VehicleHumveeWheel
+          slot: wheel-1
+        - id: VehicleHumveeSnowplow
+          name: snowplow
+          item: VehicleHumveeSnowplow
+          slot: front
+        - id: VehicleHumveeOverlight
+          name: overlight
+          item: VehicleHumveeOverlight
+          slot: roof
+        - id: VehicleHumveeHatch
+          name: hatch
+          item: VehicleHumveeHatch
+          slot: roof
       hardpoints:
       - VehicleHumveeSnowplow
       - VehicleHumveeOverlight
@@ -64,7 +146,40 @@
       - VehicleHumveeWheel
     - name: apc
       vehicle: VehicleAPC
-      unlock: VehicleAPC
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: RMCAPCDualCannon
+          name: dual cannon
+          item: RMCAPCDualCannon
+          slot: primary
+        - id: RMCAPCFrontCannon
+          name: frontal cannon
+          item: RMCAPCFrontCannon
+          slot: secondary
+      - id: armor
+        name: Armor
+        options: []
+      - id: support
+        name: Support
+        options:
+        - id: RMCAPCWheel
+          name: wheel
+          item: RMCAPCWheel
+          slot: wheel-1
+        - id: RMCAPCCommsRelay
+          name: comms relay
+          item: RMCAPCCommsRelay
+          slot: support
+        - id: RMCAPCFlareLauncher
+          name: flare launcher
+          item: RMCAPCFlareLauncher
+          slot: support
+        - id: RMCAPCFreightStorage
+          name: freight storage
+          item: RMCAPCFreightStorage
+          slot: support
       hardpoints:
       - RMCAPCDualCannon
       - RMCAPCFrontCannon
@@ -74,7 +189,40 @@
       - RMCAPCWheel
     - name: apc (medical)
       vehicle: VehicleAPCMed
-      unlock: VehicleAPCMed
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: RMCAPCDualCannon
+          name: dual cannon
+          item: RMCAPCDualCannon
+          slot: primary
+        - id: RMCAPCFrontCannon
+          name: frontal cannon
+          item: RMCAPCFrontCannon
+          slot: secondary
+      - id: armor
+        name: Armor
+        options: []
+      - id: support
+        name: Support
+        options:
+        - id: RMCAPCWheel
+          name: wheel
+          item: RMCAPCWheel
+          slot: wheel-1
+        - id: RMCAPCCommsRelay
+          name: comms relay
+          item: RMCAPCCommsRelay
+          slot: support
+        - id: RMCAPCFlareLauncher
+          name: flare launcher
+          item: RMCAPCFlareLauncher
+          slot: support
+        - id: RMCAPCFreightStorage
+          name: freight storage
+          item: RMCAPCFreightStorage
+          slot: support
       hardpoints:
       - RMCAPCDualCannon
       - RMCAPCFrontCannon
@@ -84,7 +232,40 @@
       - RMCAPCWheel
     - name: apc (command)
       vehicle: VehicleAPCCommand
-      unlock: VehicleAPCCommand
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: RMCAPCDualCannon
+          name: dual cannon
+          item: RMCAPCDualCannon
+          slot: primary
+        - id: RMCAPCFrontCannon
+          name: frontal cannon
+          item: RMCAPCFrontCannon
+          slot: secondary
+      - id: armor
+        name: Armor
+        options: []
+      - id: support
+        name: Support
+        options:
+        - id: RMCAPCWheel
+          name: wheel
+          item: RMCAPCWheel
+          slot: wheel-1
+        - id: RMCAPCCommsRelay
+          name: comms relay
+          item: RMCAPCCommsRelay
+          slot: support
+        - id: RMCAPCFlareLauncher
+          name: flare launcher
+          item: RMCAPCFlareLauncher
+          slot: support
+        - id: RMCAPCFreightStorage
+          name: freight storage
+          item: RMCAPCFreightStorage
+          slot: support
       hardpoints:
       - RMCAPCDualCannon
       - RMCAPCFrontCannon
@@ -92,10 +273,145 @@
       - RMCAPCFlareLauncher
       - RMCAPCFreightStorage
       - RMCAPCWheel
+    - name: SPP apc
+      vehicle: VehicleSPPAPC
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: VehicleSPPAPCMinigun
+          name: minigun
+          item: VehicleSPPAPCMinigun
+          slot: primary::turret-cannon
+        - id: VehicleSPPAPCAutocannon
+          name: autocannon
+          item: VehicleSPPAPCAutocannon
+          slot: secondary
+        - id: VehicleSPPAPCHJ35Launcher
+          name: HJ35 launcher
+          item: VehicleSPPAPCHJ35Launcher
+          slot: secondary
+      - id: armor
+        name: Armor
+        options: []
+      - id: support
+        name: Support
+        options:
+        - id: VehicleSPPAPCWheel
+          name: wheel
+          item: VehicleSPPAPCWheel
+          slot: wheel-1
+        - id: VehicleSPPAPCFlareLauncher
+          name: flare launcher
+          item: VehicleSPPAPCFlareLauncher
+          slot: support
+      hardpoints:
+      - VehicleSPPAPCWheel
+      - VehicleSPPAPCTurret
+      - VehicleSPPAPCMinigun
+      - VehicleSPPAPCAutocannon
+      - VehicleSPPAPCHJ35Launcher
+      - VehicleSPPAPCFlareLauncher
     - name: tank
       vehicle: VehicleTank
-      unlock: VehicleTank
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: VehicleTankLTAAAPMinigun
+          name: LTAAAP minigun
+          item: VehicleTankLTAAAPMinigun
+          slot: primary::turret-cannon
+        - id: VehicleTankLTBCannon
+          name: LTB cannon
+          item: VehicleTankLTBCannon
+          slot: primary::turret-cannon
+        - id: VehicleTankAceAutocannon
+          name: ACE autocannon
+          item: VehicleTankAceAutocannon
+          slot: primary::turret-cannon
+        - id: VehicleTankDragonFlamer
+          name: DRG-N flamer
+          item: VehicleTankDragonFlamer
+          slot: primary::turret-cannon
+        - id: VehicleTankFlamer
+          name: flamer
+          item: VehicleTankFlamer
+          slot: primary::turret-launcher
+        - id: VehicleTankGrenadeLauncher
+          name: grenade launcher
+          item: VehicleTankGrenadeLauncher
+          slot: primary::turret-launcher
+        - id: VehicleTankTowLauncher
+          name: TOW launcher
+          item: VehicleTankTowLauncher
+          slot: primary::turret-launcher
+        - id: VehicleTankM56Cupola
+          name: M56 cupola
+          item: VehicleTankM56Cupola
+          slot: primary::turret-launcher
+        - id: VehicleTankRERE700
+          name: RE-RE 700
+          item: VehicleTankRERE700
+          slot: primary::turret-launcher
+      - id: armor
+        name: Armor
+        options:
+        - id: VehicleTankArmorBallistic
+          name: ballistic armor
+          item: VehicleTankArmorBallistic
+          slot: armor
+        - id: VehicleTankArmorConcussive
+          name: concussive armor
+          item: VehicleTankArmorConcussive
+          slot: armor
+        - id: VehicleTankArmorCaustic
+          name: caustic armor
+          item: VehicleTankArmorCaustic
+          slot: armor
+        - id: VehicleTankArmorPaladin
+          name: paladin armor
+          item: VehicleTankArmorPaladin
+          slot: armor
+        - id: VehicleTankSnowplow
+          name: snowplow
+          item: VehicleTankSnowplow
+          slot: armor
+      - id: support
+        name: Support
+        options:
+        - id: VehicleTankTreads
+          name: treads
+          item: VehicleTankTreads
+          slot: wheel-1
+        - id: VehicleTankReinforcedTreads
+          name: reinforced treads
+          item: VehicleTankReinforcedTreads
+          slot: wheel-1
+        - id: VehicleTankWarningArray
+          name: warning array
+          item: VehicleTankWarningArray
+          slot: support
+        - id: VehicleTankOverdriveEnhancer
+          name: overdrive enhancer
+          item: VehicleTankOverdriveEnhancer
+          slot: support
+        - id: VehicleTankRocketLauncher
+          name: rocket launcher
+          item: VehicleTankRocketLauncher
+          slot: support
+        - id: VehicleTankFlareModule
+          name: flare module
+          item: VehicleTankFlareModule
+          slot: support
+        - id: VehicleTankArtilleryModule
+          name: artillery module
+          item: VehicleTankArtilleryModule
+          slot: support
       hardpoints:
+      - VehicleTankTurret
+      - VehicleTankTreads
+      - VehicleTankReinforcedTreads
       - VehicleTankArmorBallistic
       - VehicleTankArmorConcussive
       - VehicleTankArmorCaustic
@@ -107,26 +423,336 @@
       - VehicleTankDragonFlamer
       - VehicleTankFlamer
       - VehicleTankGrenadeLauncher
+      - VehicleTankTowLauncher
+      - VehicleTankM56Cupola
       - VehicleTankRERE700
       - VehicleTankWarningArray
       - VehicleTankOverdriveEnhancer
       - VehicleTankRocketLauncher
-      - VehicleTankTowLauncher
       - VehicleTankFlareModule
       - VehicleTankArtilleryModule
-      - VehicleTankReinforcedTreads
+    - name: SPP tank
+      vehicle: VehicleSPPTank
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: VehicleSPPTankP17702
+          name: P-17702 rotary cannon
+          item: VehicleSPPTankP17702
+          slot: primary::turret-cannon
+        - id: VehicleSPPTankRailgun
+          name: railgun
+          item: VehicleSPPTankRailgun
+          slot: primary::turret-cannon
+        - id: VehicleSPPTankHJ35TLauncher
+          name: HJ35T launcher
+          item: VehicleSPPTankHJ35TLauncher
+          slot: primary::turret-launcher
+        - id: VehicleSPPTankCupola
+          name: T60P3M cupola
+          item: VehicleSPPTankCupola
+          slot: primary::turret-launcher
+      - id: armor
+        name: Armor
+        options:
+        - id: VehicleSPPTankReactiveArmor
+          name: reactive armor
+          item: VehicleSPPTankReactiveArmor
+          slot: armor
+      - id: support
+        name: Support
+        options:
+        - id: VehicleTankTreads
+          name: treads
+          item: VehicleTankTreads
+          slot: wheel-1
+        - id: VehicleTankReinforcedTreads
+          name: reinforced treads
+          item: VehicleTankReinforcedTreads
+          slot: wheel-1
+        - id: VehicleSPPTankRocketLauncher
+          name: smoke launcher
+          item: VehicleSPPTankRocketLauncher
+          slot: support
+        - id: VehicleSPPTankFlareModule
+          name: flare module
+          item: VehicleSPPTankFlareModule
+          slot: support
+        - id: VehicleSPPTankWarningArray
+          name: warning array
+          item: VehicleSPPTankWarningArray
+          slot: support
+        - id: VehicleSPPTankOverdriveEnhancer
+          name: overdrive enhancer
+          item: VehicleSPPTankOverdriveEnhancer
+          slot: support
+        - id: VehicleSPPTankArtilleryModule
+          name: artillery module
+          item: VehicleSPPTankArtilleryModule
+          slot: support
+      hardpoints:
+      - VehicleSPPTankTurret
       - VehicleTankTreads
+      - VehicleTankReinforcedTreads
+      - VehicleSPPTankP17702
+      - VehicleSPPTankRailgun
+      - VehicleSPPTankHJ35TLauncher
+      - VehicleSPPTankCupola
+      - VehicleSPPTankReactiveArmor
+      - VehicleSPPTankRocketLauncher
+      - VehicleSPPTankFlareModule
+      - VehicleSPPTankWarningArray
+      - VehicleSPPTankOverdriveEnhancer
+      - VehicleSPPTankArtilleryModule
+    - name: SPP tank (command)
+      vehicle: VehicleSPPTankCommand
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: VehicleSPPTankP17702
+          name: P-17702 rotary cannon
+          item: VehicleSPPTankP17702
+          slot: primary::turret-cannon
+        - id: VehicleSPPTankRailgun
+          name: railgun
+          item: VehicleSPPTankRailgun
+          slot: primary::turret-cannon
+        - id: VehicleSPPTankHJ35TLauncher
+          name: HJ35T launcher
+          item: VehicleSPPTankHJ35TLauncher
+          slot: primary::turret-launcher
+        - id: VehicleSPPTankCupola
+          name: T60P3M cupola
+          item: VehicleSPPTankCupola
+          slot: primary::turret-launcher
+      - id: armor
+        name: Armor
+        options:
+        - id: VehicleSPPTankReactiveArmor
+          name: reactive armor
+          item: VehicleSPPTankReactiveArmor
+          slot: armor
+      - id: support
+        name: Support
+        options:
+        - id: VehicleTankTreads
+          name: treads
+          item: VehicleTankTreads
+          slot: wheel-1
+        - id: VehicleTankReinforcedTreads
+          name: reinforced treads
+          item: VehicleTankReinforcedTreads
+          slot: wheel-1
+        - id: VehicleSPPTankRocketLauncher
+          name: smoke launcher
+          item: VehicleSPPTankRocketLauncher
+          slot: support
+        - id: VehicleSPPTankFlareModule
+          name: flare module
+          item: VehicleSPPTankFlareModule
+          slot: support
+        - id: VehicleSPPTankWarningArray
+          name: warning array
+          item: VehicleSPPTankWarningArray
+          slot: support
+        - id: VehicleSPPTankOverdriveEnhancer
+          name: overdrive enhancer
+          item: VehicleSPPTankOverdriveEnhancer
+          slot: support
+        - id: VehicleSPPTankArtilleryModule
+          name: artillery module
+          item: VehicleSPPTankArtilleryModule
+          slot: support
+      hardpoints:
+      - VehicleSPPTankTurret
+      - VehicleTankTreads
+      - VehicleTankReinforcedTreads
+      - VehicleSPPTankP17702
+      - VehicleSPPTankRailgun
+      - VehicleSPPTankHJ35TLauncher
+      - VehicleSPPTankCupola
+      - VehicleSPPTankReactiveArmor
+      - VehicleSPPTankRocketLauncher
+      - VehicleSPPTankFlareModule
+      - VehicleSPPTankWarningArray
+      - VehicleSPPTankOverdriveEnhancer
+      - VehicleSPPTankArtilleryModule
     - name: humvee (arc)
       vehicle: VehicleHumveeARC
-      unlock: VehicleHumveeARC
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: VehicleHumveeARCTurret
+          name: ARC turret
+          item: VehicleHumveeARCTurret
+          slot: turret
+      - id: armor
+        name: Armor
+        options: []
+      - id: support
+        name: Support
+        options:
+        - id: VehicleHumveeWheel
+          name: wheel
+          item: VehicleHumveeWheel
+          slot: wheel-1
+        - id: VehicleHumveeSnowplow
+          name: snowplow
+          item: VehicleHumveeSnowplow
+          slot: front
+        - id: VehicleHumveeOverlight
+          name: overlight
+          item: VehicleHumveeOverlight
+          slot: roof
+        - id: VehicleHumveeHatch
+          name: hatch
+          item: VehicleHumveeHatch
+          slot: roof
       hardpoints:
       - VehicleHumveeTurret
+      - VehicleHumveeTurretArmed
+      - VehicleHumveeARCTurret
+      - VehicleHumveeCannon
       - VehicleHumveeARCCannon
       - VehicleHumveeLauncher
       - VehicleHumveeSnowplow
       - VehicleHumveeOverlight
       - VehicleHumveeHatch
       - VehicleHumveeWheel
+    - name: blackfoot
+      vehicle: VehicleBlackfoot
+      bundle:
+      - CMUBlackfootLandingPadFoldedProp
+      - CMUBlackfootFuelPumpCrate
+      - CMUBlackfootFlightComputerCrate
+      - CMUBlackfootAerospaceTug
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: VehicleBlackfootLaunchers
+          name: flare launchers
+          item: VehicleBlackfootLaunchers
+          slot: launchers
+      - id: armor
+        name: Armor
+        options: []
+      - id: support
+        name: Support
+        options:
+        - id: VehicleBlackfootReconSystem
+          name: recon system
+          item: VehicleBlackfootReconSystem
+          slot: support
+      hardpoints:
+      - VehicleBlackfootThrusters
+      - VehicleBlackfootLaunchers
+      - VehicleBlackfootReconSystem
+    - name: blackfoot (door gun)
+      vehicle: VehicleBlackfootDoorGunVariant
+      bundle:
+      - CMUBlackfootLandingPadFoldedProp
+      - CMUBlackfootFuelPumpCrate
+      - CMUBlackfootFlightComputerCrate
+      - CMUBlackfootAerospaceTug
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: VehicleBlackfootLaunchers
+          name: flare launchers
+          item: VehicleBlackfootLaunchers
+          slot: launchers
+        - id: VehicleBlackfootDoorGun
+          name: door gun
+          item: VehicleBlackfootDoorGun
+          slot: door-gun
+      - id: armor
+        name: Armor
+        options: []
+      - id: support
+        name: Support
+        options:
+        - id: VehicleBlackfootReconSystem
+          name: recon system
+          item: VehicleBlackfootReconSystem
+          slot: support
+      hardpoints:
+      - VehicleBlackfootThrusters
+      - VehicleBlackfootLaunchers
+      - VehicleBlackfootDoorGun
+      - VehicleBlackfootReconSystem
+    - name: blackfoot (recon)
+      vehicle: VehicleBlackfootRecon
+      bundle:
+      - CMUBlackfootLandingPadFoldedProp
+      - CMUBlackfootFuelPumpCrate
+      - CMUBlackfootFlightComputerCrate
+      - CMUBlackfootAerospaceTug
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: VehicleBlackfootLaunchers
+          name: flare launchers
+          item: VehicleBlackfootLaunchers
+          slot: launchers
+        - id: VehicleBlackfootDoorGun
+          name: door gun
+          item: VehicleBlackfootDoorGun
+          slot: door-gun
+      - id: armor
+        name: Armor
+        options: []
+      - id: support
+        name: Support
+        options:
+        - id: VehicleBlackfootReconSystem
+          name: recon system
+          item: VehicleBlackfootReconSystem
+          slot: recon
+        - id: VehicleBlackfootSensorArray
+          name: sensor array
+          item: VehicleBlackfootSensorArray
+          slot: sensors
+      hardpoints:
+      - VehicleBlackfootThrusters
+      - VehicleBlackfootLaunchers
+      - VehicleBlackfootDoorGun
+      - VehicleBlackfootReconSystem
+      - VehicleBlackfootSensorArray
+    - name: blackfoot (transport)
+      vehicle: VehicleBlackfootTransport
+      bundle:
+      - CMUBlackfootLandingPadFoldedProp
+      - CMUBlackfootFuelPumpCrate
+      - CMUBlackfootFlightComputerCrate
+      - CMUBlackfootAerospaceTug
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: VehicleBlackfootLaunchers
+          name: flare launchers
+          item: VehicleBlackfootLaunchers
+          slot: launchers
+      - id: armor
+        name: Armor
+        options: []
+      - id: support
+        name: Support
+        options:
+        - id: VehicleBlackfootReconSystem
+          name: recon system
+          item: VehicleBlackfootReconSystem
+          slot: support
+      hardpoints:
+      - VehicleBlackfootThrusters
+      - VehicleBlackfootLaunchers
+      - VehicleBlackfootReconSystem
   - type: PointLight
     radius: 1.5
     energy: 1.6

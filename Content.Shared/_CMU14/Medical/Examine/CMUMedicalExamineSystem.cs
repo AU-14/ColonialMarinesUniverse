@@ -149,6 +149,9 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
             {
                 for (var i = 0; i < wounds.Wounds.Count; i++)
                 {
+                    if (IsOptimallyTreatedForDetailedExamine(wounds, i))
+                        continue;
+
                     sections.Add(DescribeDetailedWound(wounds, i));
                 }
 
@@ -188,6 +191,13 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         }
 
         return string.Join('\n', lines);
+    }
+
+    private static bool IsOptimallyTreatedForDetailedExamine(BodyPartWoundComponent wounds, int index)
+    {
+        var cleanup = index < wounds.Cleanup.Count ? wounds.Cleanup[index] : WoundCleanupFlags.None;
+        return GetTreatmentQuality(wounds, index) == WoundTreatmentQuality.Optimal &&
+               cleanup == WoundCleanupFlags.None;
     }
 
     private List<(BodyPartType Type, BodyPartSymmetry Symmetry)> GetMissingPartSlots(EntityUid body)

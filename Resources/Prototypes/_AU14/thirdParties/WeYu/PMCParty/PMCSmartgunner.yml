@@ -69,14 +69,10 @@
     gloves: AU14PVEHandsInsulatedBlackMarine
     belt: RMCBeltSmartGunOperatorPistolPMCFilled
     pocket1: RMCPouchDrumPMCFill
-    pocket2: RMCPouchFirstAidPMCFill
+    pocket2: AU14PouchIFAKFill
     back: RMCScabbardMacheteSGFilled
     eyes: RMCGlassesSmartGunSight
     ears: RMCHeadsetDistressWeYa
     suitstorage: RMCSmartGunPMC
-  storage:
-    pocket2:
-    - AU14Tourniquet
-
 - type: playTimeTracker
   id: AU14JobWYPMCPartySmartgunner

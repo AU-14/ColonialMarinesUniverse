@@ -17,7 +17,7 @@
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
   possibleships:
-      - USSBush
+      - USSBushRedux
   jobSlotOverride:
     SquadRifleman: 12
     PlatoonCorpsman: 1
@@ -55,7 +55,7 @@
   compatibleFighters:
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml
   possibleships:
-      - USSBush
+      - USSBushRedux
   techTree: RMCIntelTechTree_ua
 
 - type: platoon
@@ -82,7 +82,7 @@
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
     ReqVend: AU14LACNRequisitionVendor
   possibleships:
-    - USSBush
+    - USSBushRedux
   #platoonflag: uaflag
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
@@ -114,7 +114,7 @@
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
     ReqVend: AU14UPPRequisitionVendor
   possibleships:
-      - USSBush
+      - USSBushRedux
   jobClassOverride:
     SquadRifleman: AU14JobGOVFORSquadRiflemanUPP
     PlatCo: AU14JobGOVFORPlatCoUPP
@@ -172,7 +172,7 @@
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   possibleships:
-      - USSBush
+      - USSBushRedux
   compatibleFighters:
   - /Maps/_AU14/ShuttlesDropships/f84owl.yml
   - /Maps/_AU14/ShuttlesDropships/ud_6.yml
@@ -215,7 +215,7 @@
 #  DSPilot: 1
 #    SectionSergeant: 1
   possibleships:
-      - USSBush
+      - USSBushRedux
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
@@ -247,7 +247,7 @@
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
     ReqVend: AU14HAZOPSRequisitionVendor
   possibleships:
-      - USSBush
+      - USSBushRedux
   CompatibleDropships:
   - /Maps/_CMU14/Shuttles/osprey.yml
   - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
@@ -288,7 +288,7 @@
     - /Maps/_AU14/ShuttlesDropships/f84owl.yml
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml
   possibleships:
-      - USSBush
+      - USSBushRedux
   techTree: RMCIntelTechTree_ua
 
 - type: platoon
@@ -322,7 +322,7 @@
     - /Maps/_AU14/ShuttlesDropships/f84owl.yml
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml
   possibleships:
-      - USSBush
+      - USSBushRedux
   techTree: RMCIntelTechTree_ua
 
 - type: platoon
@@ -370,7 +370,7 @@
     - /Maps/_AU14/ShuttlesDropships/f84owl.yml
     - /Maps/_AU14/ShuttlesDropships/ud_6.yml
   possibleships: #TODO: RMC Ship
-      - USSBush
+      - USSBushRedux
   techTree: RMCIntelTechTree_ua
 
 # Add more platoons as needed

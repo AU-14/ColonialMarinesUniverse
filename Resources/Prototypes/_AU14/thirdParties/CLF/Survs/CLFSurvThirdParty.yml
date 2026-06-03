@@ -1,0 +1,56 @@
+- type: partySpawn
+  id: CLFSurvsSpawnBig
+  leadersToSpawn:
+    AU14CLFSurvLeader: 1
+  gruntsToSpawn:
+    AU14CLFSurvFighter: 7
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: CLFSurvsBig
+  partyspawn: CLFSurvsSpawnBig
+  entrymethod: ground
+  weight: 25
+  minplayers: 101
+  maxplayers: 400
+  GhostsNeeded: 0
+  roundstart: true
+
+- type: partySpawn
+  id: CLFSurvsSpawnMedium
+  leadersToSpawn:
+    AU14CLFSurvLeader: 1
+  gruntsToSpawn:
+    AU14CLFSurvFighter: 5
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: CLFSurvsMedium
+  partyspawn: CLFSurvsSpawnBig
+  entrymethod: ground
+  weight: 25
+  minplayers: 51
+  maxplayers: 100
+  GhostsNeeded: 0
+  roundstart: true
+
+- type: partySpawn
+  id: CLFSurvsSpawnSmall
+  leadersToSpawn:
+    AU14CLFSurvLeader: 1
+  gruntsToSpawn:
+    AU14JobCLFSurvFighter: 3
+  scalewithpop: false
+  spawnTogether: true
+
+- type: auThirdParty
+  id: CLFSurvsSmall
+  partyspawn: CLFSurvsSpawnBig
+  entrymethod: ground
+  weight: 25
+  minplayers: 20
+  maxplayers: 50
+  GhostsNeeded: 0
+  roundstart: true

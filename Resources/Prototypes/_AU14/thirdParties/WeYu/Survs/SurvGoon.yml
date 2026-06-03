@@ -75,13 +75,11 @@
     head: RMCArmorHelmetPMCCorporateHybrisa
     gloves: AU14PVEHandsInsulatedBlackMarine
     belt: RMCM77BeltPMCFilled
-    pocket2: RMCPouchFirstAidPMCFill
+    pocket2: AU14PouchIFAKFill
     back: RMCSatchelLightpackWeYa
     eyes: CMGlassesSecurity
     ears: RMCHeadsetDistressWeYa
   storage:
-    pocket2:
-    - AU14Tourniquet
     back:
     - AU14CBRNKitWeYu
     - RMCMREWeYa

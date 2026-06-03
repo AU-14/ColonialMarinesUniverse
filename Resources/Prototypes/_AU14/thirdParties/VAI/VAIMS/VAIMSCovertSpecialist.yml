@@ -64,7 +64,7 @@
     id: AU14IDCardVAIMercenary
     ears: AU14HeadsetVAI
     jumpsuit: AU14JumpsuitCivilianBlueVAIWebbingSurgical
-    pocket1: RMCPouchMedkitFillAdvanced
+    pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchMagazineLargeFilledMAR40
     suitstorage: AU14WeaponRifleMAR30Tactical
     eyes: RMCGlassesMedicalHUDGlasses
@@ -79,6 +79,13 @@
     - RMCPillCanisterIron
     - CMPillCanisterBicaridine
     - CMPillCanisterKelotane
+    - CMUPlainGauze10
+    - CMUPlainTraumaDressing10
+    - CMUCoagulantPowder
+    - CMUAntiseptic
+    - CMUBurnGel
+    - CMUTissueSealant
+    - CMUTraumaFoam
     - CMEpinephrineAutoInjector
     - AU14NaloxoneAutoInjector
     - CMHealthAnalyzer

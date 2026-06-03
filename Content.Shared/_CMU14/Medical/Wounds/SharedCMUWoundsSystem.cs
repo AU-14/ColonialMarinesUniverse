@@ -1475,11 +1475,11 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         if (args.Impact.Contact == DamageImpactContact.Fragment)
             return WoundMechanism.Fragment;
 
-        if (args.Impact.Delivery == DamageImpactDelivery.Projectile)
-            return WoundMechanism.Bullet;
-
         if (burn > brute && burn > FixedPoint2.Zero)
             return WoundMechanism.Burn;
+
+        if (args.Impact.Delivery == DamageImpactDelivery.Projectile)
+            return WoundMechanism.Bullet;
 
         return args.Trauma.Mechanism switch
         {
@@ -1493,6 +1493,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     private static WoundMechanism ClassifyMechanismFromImpact(DamageImpact impact, FixedPoint2 brute, FixedPoint2 burn)
     {
+        if (burn > brute && burn > FixedPoint2.Zero)
+            return WoundMechanism.Burn;
+
         if (impact.Delivery == DamageImpactDelivery.Projectile)
             return WoundMechanism.Bullet;
 

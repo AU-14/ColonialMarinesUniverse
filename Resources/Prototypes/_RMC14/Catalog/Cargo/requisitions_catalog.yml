@@ -92,6 +92,8 @@
         crate: RMCCrateMedicalFilled
       - cost: 370
         crate: RMCCrateMedicalPill
+      - cost: 500
+        crate: CMUCrateMedicalFieldTreatments
       - cost: 320
         crate: AU14CrateBoxHospitalBeds
       - cost: 475
@@ -182,4 +184,3 @@
 
       - cost: 350
         crate: RMCTelevision
-

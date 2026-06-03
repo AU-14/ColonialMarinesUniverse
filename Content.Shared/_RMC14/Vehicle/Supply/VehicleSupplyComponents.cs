@@ -8,6 +8,37 @@ namespace Content.Shared._RMC14.Vehicle.Supply;
 
 [DataDefinition]
 [Serializable, NetSerializable]
+public sealed partial class VehicleSupplyLoadoutOption
+{
+    [DataField(required: true)]
+    public string Id = string.Empty;
+
+    [DataField]
+    public string? Name;
+
+    [DataField(required: true)]
+    public EntProtoId Item;
+
+    [DataField(required: true)]
+    public string Slot = string.Empty;
+}
+
+[DataDefinition]
+[Serializable, NetSerializable]
+public sealed partial class VehicleSupplyLoadoutCategory
+{
+    [DataField(required: true)]
+    public string Id = string.Empty;
+
+    [DataField]
+    public string? Name;
+
+    [DataField]
+    public List<VehicleSupplyLoadoutOption> Options = new();
+}
+
+[DataDefinition]
+[Serializable, NetSerializable]
 public sealed partial class VehicleSupplyEntry
 {
     [DataField]
@@ -21,6 +52,12 @@ public sealed partial class VehicleSupplyEntry
 
     [DataField]
     public List<EntProtoId> Hardpoints = new();
+
+    [DataField]
+    public List<VehicleSupplyLoadoutCategory> LoadoutCategories = new();
+
+    [DataField]
+    public List<EntProtoId> Bundle = new();
 }
 
 [RegisterComponent]
@@ -37,6 +74,9 @@ public sealed partial class VehicleSupplyConsoleComponent : Component
 
     [DataField]
     public int SelectedVehicleCopyIndex;
+
+    [DataField]
+    public Dictionary<string, string> SelectedLoadouts = new();
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]

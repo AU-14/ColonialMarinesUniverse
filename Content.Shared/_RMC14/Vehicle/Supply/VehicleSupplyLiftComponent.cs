@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
@@ -69,6 +70,12 @@ public sealed partial class VehicleSupplyLiftComponent : Component
 
     [NonSerialized]
     public EntityUid? PendingVehicleEntity;
+
+    [NonSerialized]
+    public readonly List<VehicleSupplyLoadoutOption> PendingLoadouts = new();
+
+    [NonSerialized]
+    public readonly List<EntProtoId> PendingBundle = new();
 
     [NonSerialized]
     public EntityUid? ActiveVehicle;

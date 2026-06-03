@@ -951,11 +951,11 @@
         amount: 1
     - name: Engineering Supplies
       entries:
-      - id: CMSandbagEmpty25
+      - id: CMSandbagEmpty50
         recommended: true
-        amount: 1
+        amount: 5
       - id: BarbedWire15
-        amount: 2
+        amount: 4
       - id: CMSheetMetal50
         amount: 2
       - id: CMSheetPlasteel50
@@ -1166,7 +1166,7 @@
   parent: CMVendorBundleRiflemanApparel
   id: AU14VendorBundleCombatTechnicianEssentials
   name: essential engineer set
-  description: Contains 50 metal, 40 plasteel, 25 sandbags, a high-capacity power cell, a light replacer, a welding visor, and a nailgun.
+  description: Contains 50 metal, 50 plasteel, 50 sandbags, a high-capacity power cell, a light replacer, a welding visor, and a nailgun.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Tools/wrench.rsi
@@ -1174,9 +1174,11 @@
   - type: CMVendorBundle
     bundle:
     - RMCExplosivePlastic
-    - CMSandbagEmpty25
+    - RMCEngineerKit
+    - CMSandbagEmpty50
+    - RMCPlankWood
     - CMSheetMetal50
-    - CMSheetPlasteel40
+    - CMSheetPlasteel50
     - RMCPowerCellHigh
     - RMCLightReplacer
     - CMAPCElectronics
@@ -1319,6 +1321,8 @@
         amount: 200
       - id: CMMagazineRifleM54CMK1AP
         amount: 15
+      - id: CMMagazineRifleM54CMK1Tracer
+        amount: 5
       - id: CMMagazineSMGM63
         amount: 200
       - id: CMMagazineSMGM63AP
@@ -1341,8 +1345,6 @@
         amount: 10
       - id: RMCMagazineRifleM54CWP
         amount: 5
-      - id: RMCMagazineRifleM54CHEAPEmpty
-        amount: 0
       - id: RMCBoxShotgunBuckshot
         amount: 20
       - id: RMCBoxShotgunFlechette

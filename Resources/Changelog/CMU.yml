@@ -1979,5 +1979,31 @@
   id: 180
   time: '2026-06-02T01:47:15.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1187
+- author: 7-62x54r
+  changes:
+  - message: Added pheromones to burrower (for real this time i hope)
+    type: Fix
+  id: 181
+  time: '2026-06-02T01:50:29.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1182
+- author: troytroy400
+  changes:
+  - message: Tracer magazines for the M41A Mk1 and M2C.
+    type: Add
+  - message: HAZOPs can now get MK2 from req.
+    type: Add
+  - message: AP rockets are no longer free.
+    type: Fix
+  - message: Modified blowtorch description fixed/loreified.
+    type: Fix
+  - message: Equipment vendors now start with five sandbags and four barbed wire as
+      opposed to one.
+    type: Tweak
+  - message: CT essential kits now have an engineering kit, a stack of wood and full
+      versions of the material stacks.
+    type: Tweak
+  id: 182
+  time: '2026-06-02T04:47:38.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1188
 Name: CMU
 Order: -1

@@ -78,7 +78,7 @@
     belt: CMUBeltMedicBagSupportSynth
     back: RMCSatchelChemistry
     pocket1: RMCFlashlight
-    pocket2: RMCPouchFirstAidPMCFill
+    pocket2: AU14PouchIFAKFill
   storage:
     back:
     - AU14CBRNKitWeYu

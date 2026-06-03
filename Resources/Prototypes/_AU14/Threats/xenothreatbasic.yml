@@ -55,7 +55,7 @@
   id: AU14PrimerThreatXeno
   threattext: You are a member of the hive, grow and evolve!"
   KnowledgeLevelsGovforThreat:
-    "Threat Unknown": 1
+    "Threat Unknown.": 1
     "Threat is biological in nature.": 2
     "XX-121 Xenomorphs have been identified as the threat.": 3
 

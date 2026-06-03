@@ -163,9 +163,9 @@ public sealed class ChatLogPanel : PanelContainer
         _pendingScrollToBottomFrames--;
     }
 
-    private void OnUserMouseWheel(float deltaY)
+    private void OnUserMouseWheel(float deltaY, float previousTarget, float currentTarget)
     {
-        if (deltaY <= 0 || !CanScrollUp())
+        if (deltaY <= 0 || currentTarget >= previousTarget - ScrollDirectionTolerance)
             return;
 
         StopFollowingBottom();
@@ -192,17 +192,12 @@ public sealed class ChatLogPanel : PanelContainer
         _pendingLayoutRefreshFrames = 8;
     }
 
-    private bool CanScrollUp()
-    {
-        var hasScrollableContent = _rows.DesiredSize.Y > _scroll.Height + BottomTolerance;
-        return hasScrollableContent && (_scroll.VScroll > 0 || _scroll.VScrollTarget > 0);
-    }
-
     private void StopFollowingBottom()
     {
         _isAtBottom = false;
         _followingBottom = false;
         _pendingScrollToBottomFrames = 0;
+        _lastScrollTarget = _scroll.VScrollTarget;
         _scrollToLatest.Visible = true;
     }
 
@@ -212,12 +207,15 @@ public sealed class ChatLogPanel : PanelContainer
         var scrolledUp = scrollTarget < _lastScrollTarget - ScrollDirectionTolerance;
         _lastScrollTarget = scrollTarget;
 
-        if (scrolledUp && _pendingScrollToBottomFrames <= 0 && _pendingLayoutRefreshFrames <= 0)
-            _followingBottom = false;
-
         var scrollBottom = scrollTarget + _scroll.Height + BottomTolerance;
         var contentHeight = _rows.DesiredSize.Y;
         _isAtBottom = scrollBottom >= contentHeight;
+
+        if (scrolledUp && !_isAtBottom)
+        {
+            StopFollowingBottom();
+            return;
+        }
 
         if (_isAtBottom)
         {
@@ -241,12 +239,13 @@ public sealed class ChatLogPanel : PanelContainer
 
     private sealed class ChatScrollContainer : ScrollContainer
     {
-        public event Action<float>? OnUserMouseWheel;
+        public event Action<float, float, float>? OnUserMouseWheel;
 
         protected override void MouseWheel(GUIMouseWheelEventArgs args)
         {
-            OnUserMouseWheel?.Invoke(args.Delta.Y);
+            var previousTarget = VScrollTarget;
             base.MouseWheel(args);
+            OnUserMouseWheel?.Invoke(args.Delta.Y, previousTarget, VScrollTarget);
         }
     }
 }

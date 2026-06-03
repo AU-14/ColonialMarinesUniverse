@@ -1,5 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Numerics;
 using Content.Shared._CMU14.Blackfoot;
 using Content.Shared._RMC14.Vehicle;
@@ -13,11 +15,14 @@ using Content.Shared.Physics;
 using Content.Shared.UserInterface;
 using Content.Shared.Vehicle;
 using Content.Shared.Vehicle.Components;
+using Robust.Shared.ContentPack;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
 using Robust.Shared.Physics;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 using Robust.UnitTesting;
+using YamlDotNet.RepresentationModel;
 
 namespace Content.IntegrationTests._CMU14.Blackfoot;
 
@@ -201,6 +206,87 @@ public sealed class BlackfootPrototypeTest
         });
 
         await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task DoorGunInteriorPassengerSeatsStayBesidePilot()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var resources = server.ResolveDependency<IResourceManager>();
+            var (passengerSeats, pilot, m866) = ReadDoorGunSeatLayout(resources);
+
+            Assert.That(pilot, Is.Not.Null);
+            Assert.That(m866, Is.Not.Null);
+            Assert.That(passengerSeats, Has.Count.EqualTo(4));
+            Assert.That(passengerSeats.All(pos => pos.Y < m866!.Value.Y - 1f), Is.True);
+            Assert.That(passengerSeats.All(pos => Vector2.Distance(pos, pilot!.Value) < 2f), Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static (List<Vector2> PassengerSeats, Vector2? Pilot, Vector2? M866) ReadDoorGunSeatLayout(IResourceManager resources)
+    {
+        using var file = resources.ContentFileRead(new ResPath("/Maps/_CMU14/Vehicles/Blackfoot/blackfoot_doorgun.yml"));
+        using var reader = new StreamReader(file);
+        var yamlStream = new YamlStream();
+        yamlStream.Load(reader);
+
+        var root = yamlStream.Documents[0].RootNode;
+        var yamlEntities = (YamlSequenceNode) root["entities"];
+        var passengerSeats = new List<Vector2>();
+        Vector2? pilot = null;
+        Vector2? m866 = null;
+
+        foreach (var group in yamlEntities.Cast<YamlMappingNode>())
+        {
+            var proto = group["proto"].AsString();
+            if (proto != "CMUSeatBlackfootPassenger" &&
+                proto != "CMUSeatBlackfootPilot" &&
+                proto != "CMUSeatBlackfootDoorGunner")
+                continue;
+
+            foreach (var entity in ((YamlSequenceNode) group["entities"]).Cast<YamlMappingNode>())
+            {
+                var position = ReadEntityPosition(entity);
+                if (proto == "CMUSeatBlackfootPassenger")
+                {
+                    passengerSeats.Add(position);
+                    continue;
+                }
+
+                if (proto == "CMUSeatBlackfootPilot")
+                    pilot = position;
+                else
+                    m866 = position;
+            }
+        }
+
+        return (passengerSeats, pilot, m866);
+    }
+
+    private static Vector2 ReadEntityPosition(YamlMappingNode entity)
+    {
+        var components = (YamlSequenceNode) entity["components"];
+        foreach (var component in components.Cast<YamlMappingNode>())
+        {
+            if (component["type"].AsString() != "Transform")
+                continue;
+
+            var pos = component["pos"].AsString();
+            var coordinates = pos.Split(',');
+            Assert.That(coordinates, Has.Length.EqualTo(2));
+            return new Vector2(
+                float.Parse(coordinates[0], CultureInfo.InvariantCulture),
+                float.Parse(coordinates[1], CultureInfo.InvariantCulture));
+        }
+
+        Assert.Fail("Seat entity has no Transform position.");
+        return default;
     }
 
     private static void AssertDeployable(

@@ -3,9 +3,9 @@
   id: AU14JobCLFGuerillaReinforcement
   name: au14-job-name-clfguerilla
   description: au14-job-description-clfguerilla-alt
+  playTimeTracker: AU14JobCLFGuerilla
   setPreference: true
   ignoreAllegiance: true
-  playTimeTracker: AU14JobCLFGuerilla
   requirements:
   - !type:OverallPlaytimeRequirement
     time: 7200 # 2 hours
@@ -74,7 +74,7 @@
       - [ CMSatchel ]
 
 - type: entity
-  parent: AU14BaseMobSpeciesOrganicBaseMilitary
+  parent: AU14BaseMobSpeciesOrganicCLF
   id: AU14IntelThirdPartyCLFInsurgentReinforcements
   name: Insurgent Reinforcements
   components:

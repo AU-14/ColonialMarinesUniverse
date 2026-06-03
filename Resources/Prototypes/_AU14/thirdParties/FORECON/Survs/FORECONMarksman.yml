@@ -87,6 +87,7 @@
     - RMCAttachmentRailFlashlight
     - RMCMagazineRifleM4SPRA19
     - RMCMagazineRifleM4SPRA19
+    - RMCMagazineRifleM4SPRA19
 
 - type: playTimeTracker
   id: AU14JobFORECONMarksman

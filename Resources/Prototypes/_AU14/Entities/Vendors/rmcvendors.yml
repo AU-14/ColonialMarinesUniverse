@@ -331,11 +331,11 @@
         amount: 1
     - name: Engineering Supplies
       entries:
-      - id: CMSandbagEmpty25
+      - id: CMSandbagEmpty50
         recommended: true
-        amount: 2
+        amount: 5
       - id: BarbedWire15
-        amount: 3
+        amount: 4
       - id: CMSheetMetal50
         amount: 1
       - id: CMSheetPlasteel50

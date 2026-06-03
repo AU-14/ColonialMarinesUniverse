@@ -56,11 +56,11 @@
     outerClothing: AU14ArmorBallisticVest
     gloves: CMHandsInsulated
     shoes: RMCBootsPMCFilled
-    neck: RMCCLFArmband
     jumpsuit: AU14CMJumpsuitColonistCLF
     id: AU14IDCardColonyColonist
   inhand:
   - RMCWeaponLMGM60
+  - RMCCLFArmband
 
 - type: entity
   parent: CMSpawnPointJobBase

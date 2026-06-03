@@ -461,6 +461,7 @@
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
+
 - type: entity
   id: AUPlanetCorsatStation
   name: Corsat Station
@@ -470,7 +471,7 @@
     mapId: aucorsat
     lorePrimer: AU14PrimerPlanetCorsatStation
     Allegiance: UA
-    camouflage: Desert
+    camouflage: Urban
     announcement: "Weyland-Yutani has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weyland-Yutani."
     platoonsOpfor:
     - ProdigySF
@@ -735,7 +736,7 @@
     mapId: auKutjevo
     lorePrimer: AU14PrimerPlanetKutjevo
     Allegiance: UA
-    camouflage: Snow
+    camouflage: Desert
     announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
     platoonsGovfor:
     - USCM
@@ -832,34 +833,35 @@
 
 - type: lorePrimer
   id: AU14PrimerPlanetShepherdsPride
-  planetText: "Date 2181 - Shepherds' Pride. wildlife reserve"
+  planetText: "Date 2181 - Shepherds' Pride wildlife reserve."
 
 - type: lorePrimer
   id: AU14PrimerPlanetStableGarrison
-  planetText: "Date 2181 - Stable Garrison. UA controlled frontier world with a joint base and sizeable urban community"
+  planetText: "Date 2182 - Stable Garrison. UA controlled frontier world with a joint base and sizeable urban community."
 
 - type: lorePrimer
   id: AU14PrimerPlanetLV624
-  planetText: "Date 2181 - LV624 Green Hell,  UA controlled"
+  planetText: "Date 2181 - LV624 Green Hell,  UA controlled."
+
 - type: lorePrimer
   id: AU14PrimerPlanetGixensCaverns
   planetText: "Date 2181 - Gixens Caverns."
 
 - type: lorePrimer
   id: AU14PrimerPlanetFlight
-  planetText: "Date 2181 - Flight. Multiple story colony  megastructure"
+  planetText: "Date 2181 - Flight. A multiple story colony residential megastructure."
 
 - type: lorePrimer
   id: AU14PrimerPlanetLV759
-  planetText: "Date 2181 - Hybrisa Metropolitan. Three World Empire territory"
+  planetText: "Date 2181 - Hybrisa Metropolitan. Three World Empire territory."
 
 - type: lorePrimer
   id: AU14PrimerPlanetLV327
-  planetText: "Date 2181 - Port Neroid: valuable waterport on a frontier world, UA controlled"
+  planetText: "Date 2181 - Port Neroid: valuable waterport on a frontier world, UA controlled."
 
 - type: lorePrimer
   id: AU14PrimerPlanetCorsatStation
-  planetText: "Date 2181 - Corsat Station. WeYu operated research  station"
+  planetText: "Date 2181 - Corsat Station. WeYu operated research and prison station."
 
 - type: lorePrimer
   id: AU14PrimerPlanetLament
@@ -867,20 +869,20 @@
 
 - type: lorePrimer
   id: AU14PrimerPlanetSorokyne
-  planetText: "Date 2181 - Sorokyne Strata. Union of progressive peoples frotntier outpost"
+  planetText: "Date 2186 - Sorokyne Strata. Union of Progressive People's research outpost."
 
 - type: lorePrimer
   id: AU14PrimerPlanetTrijent
-  planetText: "Date 2182 - LV-670 Raijin Hydroelectric (formerly known as 'Trijent Dam'), a Three World Empire water treatment facility."
+  planetText: "Date 2179 - LV-670 Raijin Hydroelectric (formerly known as Trijent Dam), a Three World Empire water treatment facility serving a major prospera."
 
 - type: lorePrimer
   id: AU14PrimerPlanetShivasSnowball
-  planetText: "Date 2181 - Shivas' Snowball. United Americas mining and research  colony."
+  planetText: "Date 2177 - Shivas' Snowball. United Americas mining and research colony."
 
 - type: lorePrimer
   id: AU14PrimerPlanetKutjevo
-  planetText: "Date 2181 - Kutjevo Biolab. Level 3 facility operated by the Weyland-Yutani Corporation."
+  planetText: "Date 2181 - Kutjevo Biolab. Level three facility operated by the Weyland-Yutani Corporation."
 
 - type: lorePrimer
   id: AU14PrimerPlanetFiorina
-  planetText: "Date 2181 - Fiorina Prison. Privately owned  and operated by the weyland-yutani corporation, Fiorina 161 is a maximum security prison for the most dangerous criminals in the system."
+  planetText: "Date 2181 - Fiorina Prison. Privately owned and operated by the Weyland-Yutani corporation, Fiorina 161 is a maximum security prison for the most dangerous criminals in the Neroid sector."

@@ -72,7 +72,7 @@
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     id: RMCIDCardCLFMedic
-    belt: CMBeltMedicalFilled
+    belt: CMBeltMedical
     back: RMCSatchelLightpack
     pocket1: RMCFlashlight
     pocket2: RMCPouchMagazineLarge

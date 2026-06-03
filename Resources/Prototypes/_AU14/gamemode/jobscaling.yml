@@ -41,6 +41,7 @@
       scale: 0.03   # ~33 slots
       whenToBeginScaling: 50
       benchmark: 2  # 2 slots available at 50 (whenToBeginScaling)
+      maximum: 5
     AU14JobGOVFORWorkingJoe:
       scale: 0.034  # ~29 slots
       whenToBeginScaling: 50
@@ -80,6 +81,7 @@
       scale: 0.03
       whenToBeginScaling: 60
       benchmark: 2
+      maximum: 5
     AU14JobGOVFORWorkingJoe:
       scale: 0.034
       whenToBeginScaling: 50

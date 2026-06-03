@@ -82,6 +82,7 @@
     - id: AU14MagazinePistolM48A4
       amount: 2
     - id: RMCMagazineSmartGun
+      amount: 3
 
 - type: entity
   parent: AU14ArmorSmartGunJungleCombatHarness

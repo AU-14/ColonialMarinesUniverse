@@ -926,6 +926,8 @@
         amount: 70
       - id: CMMagazineRifleM54CMK1AP
         amount: 10
+      - id: CMMagazineRifleM54CMK1Tracer
+        amount: 10
       - id: RMCBoxShotgunBuckshot
         amount: 20
       - id: RMCBoxShotgunFlechette

@@ -51,6 +51,7 @@ public sealed class VehicleSupplyBui : BoundUserInterface
         _suppressEvents = true;
         UpdateStatus(uiState);
         UpdateLists(uiState);
+        UpdateLoadouts(uiState);
         _window.SetPreview(uiState.Preview);
         _suppressEvents = false;
     }
@@ -233,6 +234,60 @@ public sealed class VehicleSupplyBui : BoundUserInterface
 
             UpdateCopySelection(vehicleId);
             UpdateCopyExpanded(vehicleId);
+        }
+    }
+
+    private void UpdateLoadouts(VehicleSupplyBuiState state)
+    {
+        if (_window == null)
+            return;
+
+        _window.LoadoutColumns.DisposeAllChildren();
+        _window.LoadoutPanel.Visible = state.Loadouts.Count > 0;
+
+        if (state.Loadouts.Count == 0)
+            return;
+
+        foreach (var category in state.Loadouts)
+        {
+            var column = new BoxContainer
+            {
+                Orientation = BoxContainer.LayoutOrientation.Vertical,
+                SeparationOverride = 4,
+                HorizontalExpand = true,
+                VerticalExpand = true
+            };
+
+            column.AddChild(new Label
+            {
+                Text = category.Name,
+                FontColorOverride = Color.FromHex("#C7D7EA")
+            });
+
+            foreach (var option in category.Options)
+            {
+                var button = new HardpointButton
+                {
+                    LabelText = option.Name,
+                    HorizontalExpand = true,
+                    MinSize = new Vector2(0, 24)
+                };
+
+                var categoryId = category.Id;
+                var optionId = option.Id;
+                button.OnPressed += _ =>
+                {
+                    if (_suppressEvents)
+                        return;
+
+                    SendMessage(new VehicleSupplySelectLoadoutMsg(categoryId, optionId));
+                };
+
+                ApplySelectionStyle(button, option.Id == category.SelectedOption);
+                column.AddChild(button);
+            }
+
+            _window.LoadoutColumns.AddChild(column);
         }
     }
 

@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Atmos;
+using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Explosion.Implosion;
 using Content.Shared.Damage;
@@ -97,4 +97,7 @@ public sealed partial class AmmoInFlightComponent : Component
 
     [DataField, AutoNetworkedField]
     public RMCFire? Fire;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan MarkerDuration;
 }

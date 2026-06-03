@@ -10,11 +10,11 @@
         crate: RMCCrateEmptySandbags
       - cost: 1000
         crate: RMCCrateSandbagsConstructionKit
-      - cost: 2000
+      - cost: 700
         crate: RMCCrateMetalSheets
-      - cost: 3000
+      - cost: 800
         crate: RMCCratePlasteelSheets
-      - cost: 1000
+      - cost: 650
         crate: RMCCrateGlassSheets
       - cost: 500
         crate: RMCCrateWoodenPlanks
@@ -26,61 +26,61 @@
 #        crate: RMCCrateFoldingBarricades
 #      - cost: 3000
 #        crate: RMCCrateSuperconductingMagneticCoil
-      - cost: 1000
+      - cost: 700
         crate: RMCCrateElectricalMaintenance
-      - cost: 1000
+      - cost: 700
         crate: RMCCrateMechanicalMaintenance
-      - cost: 500
+      - cost: 200
         crate: RMCCrateInflatableBarriers
       - cost: 1000
         crate: RMCCrateReplacementLights
-      - cost: 2000
+      - cost: 1500
         crate: RMCCratePacmanParts
       - cost: 3000
         crate: RMCCrateSuperPacmanParts
       - cost: 500
         crate: RMCCrateFlashlights
-      - cost: 1000
+      - cost: 7000
         crate: RMCCrateHighCapacityPowerCell
       - cost: 1000
         crate: AU14CrateBoxFirefighting
     - name: Explosives
       entries:
-      - cost: 3000
+      - cost: 900
         crate: AU14CrateGrenadesHighExplosiveUPP
-      - cost: 4000
+      - cost: 700
         crate: AU14CrateGrenadesIncendiaryUPP
-      - cost: 1000
+      - cost: 5000
         crate: AU14CrateGrenadesSmokeUPP
-      - cost: 3000
-        crate: RMCCratePlasticExplosives
       - cost: 4000
+        crate: RMCCratePlasticExplosives
+      - cost: 2000
         crate: RMCCrateBreachingCharges
-      - cost: 5900
+      - cost: 1500
         crate: AU14CrateGrenadesHighExplosiveBoxUPP
-      - cost: 7800
+      - cost: 1300
         crate: AU14CrateGrenadesIncendiaryBoxUPP
       - cost: 1800
         crate: AU14CrateGrenadesSmokeBoxUPP
-      - cost: 10000
+      - cost: 1800
         crate: RMCCrateGrenadesAirburstFragBox
-      - cost: 10000
+      - cost: 2000
         crate: RMCCrateBoxAGMI
-      - cost: 4000
+      - cost: 2000
         crate: RMCCrateGrenadesAirburstFrag
-      - cost: 4000
+      - cost: 2000
         crate: RMCCrateGrenadesAirburstIncendiary
       - cost: 1200
         crate: RMCCrateGrenadesAirburstSmoke
-      - cost: 4000
+      - cost: 1900
         crate: RMCCrateGrenadesAirburstHornet
-      - cost: 4000
+      - cost: 1800
         crate: RMCCrateGrenadesAirburstStarShell
       - cost: 1000
         crate: RMCCrateGrenadesBatonSlug
-      - cost: 6000
+      - cost: 1600
         crate: RMCCrateExplosiveClaymoreMine
-      - cost: 3000
+      - cost: 1500
         crate: RMCCrateM6HBruteRockets
     - name: Food
       entries:
@@ -90,19 +90,19 @@
         crate: RMCCrateFoodIngredients
     - name: Gear
       entries:
-      - cost: 2000
+      - cost: 1200
         crate: AU14CrateTacticalMonocular
-      - cost: 4000
+      - cost: 1700
         crate: AU14CrateTacticalMonocularDesignator
       - cost: 1500
         crate: RMCCrateGearPackFlare
-      - cost: 4000
+      - cost: 1000
         crate: AU14CrateMotionDetectors
-      - cost: 3000
+      - cost: 1000
         crate: RMCCrateGearPackFlareCAS
       - cost: 2000
         crate: RMCCrateGearFulton
-      - cost: 2000
+      - cost: 400
         crate: RMCCrateGearParachute
     - name: Medical
       entries:
@@ -110,6 +110,8 @@
         crate: AU14CrateMedicalVendor
       - cost: 3500
         crate: AU14CrateMedicalBloodVendor
+      - cost: 2000
+        crate: CMUCrateMedicalFieldTreatments
       - cost: 2500
         crate: RMCCrateMedicalSurgery
       - cost: 1000
@@ -150,27 +152,29 @@
 #      entries: []
     - name: Weapons
       entries:
-      - cost: 3000
+      - cost: 800
         crate: RMCCrateMK80
-      - cost: 4000
+      - cost: 400
         crate: RMCCrateXM88
-      - cost: 3000
+      - cost: 1000
         crate: RMCCrateMOU53
-      - cost: 4000
+      - cost: 400
         crate: RMCCrateM85A1
-      - cost: 500
+      - cost: 200
         crate: AU14CrateAssortedKnives
-      - cost: 6000
+      - cost: 1000
         crate: AU14CrateFlamerSpec
-      - cost: 9500
+      - cost: 2200
         crate: AU14CrateHJRA12
-      - cost: 9500
+      - cost: 1200
         crate: AU14CrateOG60
+      - cost: 1500
+        crate: AU14CrateM5A1SLAW
     - name: Ammo
       entries:
       - cost: 2500
         crate: RMCCrateBoxMagazinePistolMK80
-      - cost: 4000
+      - cost: 750
         crate: RMCCrateBoxAmmo458
       - cost: 4000
         crate: RMCCrateBoxMagazineSentry
@@ -184,21 +188,21 @@
         crate: RMCCrateBoxShellsShotgunFlechette
       - cost: 2000
         crate: RMCCrateBoxShellsShotgunBuckshot
-      - cost: 3000
+      - cost: 200
         crate: AU14CrateHJRA12ATRocket
-      - cost: 2500
+      - cost: 350
         crate: AU14CrateHJRA12MixedRocket
-      - cost: 2000
+      - cost: 150
         crate: AU14CrateHJRA12HERocket
       - cost: 3000
         crate: AU14CrateHJRA12EIIRocket
-      - cost: 3000
+      - cost: 400
         crate: AU14CrateMagazineType88
-      - cost: 3000
+      - cost: 250
         crate: AU14CrateMagazineType23Mixed
     - name: AP Ammo
       entries:
-      - cost: 2000
+      - cost: 1500
         crate: AU14CrateBoxMagazineRifleAG80AP
     - name: Dropship Parts
       entries:
@@ -214,9 +218,9 @@
         crate: RMCDropshipTargetingSystem
     - name: Dropship Munitions
       entries:
-      - cost: 1000
+      - cost: 400
         crate: RMCDropshipAttachmentAmmoRocketHarpoon
-      - cost: 1500
+      - cost: 800
         crate: RMCDropshipAttachmentAmmoRocketBanshee
       - cost: 2000
         crate: AU14DropshipAttachmentAmmoCBU250
