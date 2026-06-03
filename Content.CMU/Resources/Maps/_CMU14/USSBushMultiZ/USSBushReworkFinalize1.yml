@@ -9433,14 +9433,14 @@ entities:
   - uid: 3561
     components:
     - type: MetaData
-      name: Medical
+      name: Random
     - type: Transform
       pos: -11.5,43.5
       parent: 1
   - uid: 4002
     components:
     - type: MetaData
-      name: Upper Bunks
+      name: Random
     - type: Transform
       pos: -0.5,-13.5
       parent: 1

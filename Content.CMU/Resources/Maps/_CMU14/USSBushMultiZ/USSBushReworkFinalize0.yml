@@ -11171,14 +11171,14 @@ entities:
   - uid: 4150
     components:
     - type: MetaData
-      name: Briefing Hall
+      name: Random
     - type: Transform
       pos: -0.5,-40.5
       parent: 1
   - uid: 4260
     components:
     - type: MetaData
-      name: Mess Hall
+      name: Random
     - type: Transform
       pos: -0.5,-26.5
       parent: 1
