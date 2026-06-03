@@ -85,6 +85,16 @@
     state: hudsquad_nemo_commander
 
 - type: entity
+  parent: CMSpawnPointJobBase
+  id: RMCSpawnPointProvostAdvisor
+  name: NEMO Advisor spawn point
+  components:
+  - type: SpawnPoint
+    job_id: AU14NEMOAdvisor
+  - type: Sprite
+    state: x # todo rmc14 need a spawn location sprite
+
+- type: entity
   parent: CMIDCardGold
   id: RMCIDCardNEMOAdvisor
   name: NEMO Advisor ID card

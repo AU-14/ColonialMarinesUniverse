@@ -68,16 +68,6 @@
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: background_mp
 
-- type: entity
-  parent: CMSpawnPointJobBase
-  id: RMCSpawnPointProvostInspector
-  name: Provost Inspector spawn point
-  components:
-  - type: SpawnPoint
-    job_id: AU14NEMOInspector
-  - type: Sprite
-    state: x # todo rmc14 need a spawn location sprite
-
 - type: startingGear
   id: AU14GearNEMOInspector
   equipment:
