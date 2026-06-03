@@ -47,6 +47,9 @@
             "name": "working_joe"
         },
         {
+            "name": "synth"
+        },
+        {
             "name": "hudsquad_nemo_clear_blank"
         },
         {
@@ -75,6 +78,9 @@
         },   
         {
             "name": "hudsquad_nemo_commander"
+        },   
+        {
+            "name": "hudsquad_nemo_kill_commander"
         },  
         {
             "name": "hudsquad_nemo_lead_team"
