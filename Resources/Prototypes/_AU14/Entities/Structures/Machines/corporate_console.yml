@@ -48,6 +48,7 @@
     state: terminal1_old
   - type: CorporateConsole
     callableParties:
+      WYPMCCommando: 9000
       WYPMCParty: 7500
       WYHT: 6000
       IPIESynth: 3500

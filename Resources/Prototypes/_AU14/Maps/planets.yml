@@ -55,6 +55,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
+    - WYPMCCommando
     - abominationThirdParty
     - tribalThirdParty
     - DrugSmuggler
@@ -119,6 +120,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
+    - WYPMCCommando
     - abominationThirdParty
     - tribalThirdParty
     - DrugSmuggler
@@ -189,6 +191,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
+    - WYPMCCommando
     - abominationThirdParty
     - tribalThirdParty
     - DrugSmuggler
@@ -259,6 +262,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
+    - WYPMCCommando
     - abominationThirdParty
     - tribalThirdParty
     - DrugSmuggler
@@ -397,6 +401,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
+    - WYPMCCommando
     - abominationThirdParty
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianNSPAInspector
@@ -455,6 +460,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
+    - WYPMCCommando
     - abominationThirdParty
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
@@ -502,6 +508,7 @@
     - ApeThirdParty
     - WYPMCParty
     - WYPMCPartyAlt
+    - WYPMCCommando
     - abominationThirdParty
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
@@ -544,6 +551,7 @@
     - IPIESynth
     - WYPMCParty
     - WYPMCPartyAlt
+    - WYPMCCommando
     - CMBInvestigationParty
     - CMBInvestigationPartyAlt
     - UPPGROM
@@ -616,6 +624,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
+    - WYPMCCommando
     - abominationThirdParty
     threats:
     - cultistThreat
@@ -669,6 +678,7 @@
     - FORECONFirstRecon
     - WYPMCParty
     - WYPMCPartyAlt
+    - WYPMCCommando
     - abominationThirdParty
     threats:
     - XenoThreat
@@ -719,6 +729,7 @@
     - ProfessorVonBandolier
     - WYPMCParty
     - WYPMCPartyAlt
+    - WYPMCCommando
     - abominationThirdParty
     threats:
     - XenoThreat
@@ -769,6 +780,7 @@
     - ProfessorVonBandolier
     - WYPMCParty
     - WYPMCPartyAlt
+    - WYPMCCommando
     - abominationThirdParty
     threats:
     - XenoThreat
@@ -820,6 +832,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
+    - WYPMCCommando
     - abominationThirdParty
     threats:
     - abominationsThreatDistress

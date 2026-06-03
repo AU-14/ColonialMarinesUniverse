@@ -1,0 +1,96 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobWYPMCPartyCommando
+  name: PMC Commando
+  description: au14-wypmccommando-description
+  playTimeTracker: AU14JobWYPMCPartyCommando
+  ranks:
+    RMCRankWeYaCommando: []
+  spawnMenuRoleName: WY Corporate Commando (3rd party)
+  startingGear: AU14GearWYPMCPartyCommando
+  greeting: au14-wypmccommando-greeting
+  icon: "RMCJobIconPMCCommando"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - SquadPMC
+    - type: NpcFactionMember
+      factions:
+      - AUWeYu
+    - type: Skills
+      preset: RMCSkillPresetPMCCommando
+    - type: JobPrefix
+      prefix: au14-job-prefix-weyu-commando
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: AU14JobWYPMCPartyCommando
+  name: WY PMC Commando
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: PMC Commando
+    description: au14-wypmccommando-description
+    reregister: false
+    job: AU14JobWYPMCPartyCommando
+    raffle:
+      settings: short
+    rules: au14-wypmccommando-description
+
+- type: startingGear
+  id: AU14GearWYPMCPartyCommando
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: CMArmorM4PMCCommando
+    jumpsuit: RMCJumpsuitVeteranPMCCommando
+    shoes: RMCBootsPMCCommandoFilled
+    mask: RMCMaskCoifPMC
+    eyes: RMCGlassesMedicalHUDGlasses
+    head: ArmorHelmetPMCCommando
+    gloves: RMCHandsVeteranPMCCommando
+    belt: RMCBeltPMC
+    pocket1: RMCPouchToolsSocFilledTactical
+    pocket2: RMCPouchFirstAidPMCFill
+    back: RMCSatchelPMC
+    ears: RMCHeadsetDistressWeYa
+    suitstorage: RMCWeaponRifleM54C2Commando
+  storage:
+    belt:
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    pocket2:
+    - AU14Tourniquet
+    back:
+    - CMSurgicalLine
+    - CMSynthGraft
+    - RMCMREWeYa
+    - RMCRangefinder
+    - CMStunbaton
+    - RMCHandcuffs
+    - RMCHandcuffs
+    - RMCHandcuffs
+    - RMCGrenadeBlastM12
+
+- type: playTimeTracker
+  id: AAU14JobWYPMCPartyCommando
