@@ -1,13 +1,7 @@
 using System.Linq;
-using Content.Shared.AU14.Objectives.Capture;
-using Robust.Shared.IoC;
-using Robust.Shared.Log;
 using Content.Server.Popups;
-using Content.Shared.Damage;
-using Content.Shared.Interaction;
-using Content.Shared.Pinpointer;
+using Content.Shared.AU14.Objectives.Capture;
 using Content.Shared.Popups;
-using Robust.Client.GameObjects;
 
 namespace Content.Server.AU14.Objectives.Capture;
 
@@ -33,7 +27,7 @@ public sealed partial class CaptureObjectiveSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        _sawmill = _logManager.GetSawmill("capture-obj");
+        _sawmill = _logManager.GetSawmill("au14-captureobj");
         SubscribeLocalEvent<CaptureObjectiveComponent, FlagHoistStartedEvent>(OnFlagHoistStarted);
         SubscribeLocalEvent<CaptureObjectiveComponent, HoistFlagDoAfterEvent>(OnHoistFlagDoAfter); // Subscribe to DoAfter completion
         // Removed broken damage event subscription
@@ -196,18 +190,18 @@ public sealed partial class CaptureObjectiveSystem : EntitySystem
                 comp.TimesIncrementedPerFaction[factionKey]++;
                 // Award points
                 _objectiveSystem.AwardPointsToFaction(comp.CurrentController, objComp);
-                _sawmill.Info($"[CAPTURE OBJ] Awarded points to {comp.CurrentController} for {uid} (increment {comp.timesincremented}/{comp.MaxHoldTimes})");
+                _sawmill.Debug($"[CAPTURE OBJ] Awarded points to '{comp.CurrentController}' for ({uid}) (increment {comp.timesincremented}/{comp.MaxHoldTimes})");
                 // If OnceOnly, complete after first increment
                 if (comp.OnceOnly && comp.timesincremented > 0)
                 {
                     _objectiveSystem.CompleteObjectiveForFaction(uid, objComp, comp.CurrentController);
-                    _sawmill.Info($"[CAPTURE OBJ] Completed once-only capture objective {uid} for {comp.CurrentController}");
+                    _sawmill.Debug($"[CAPTURE OBJ] Completed once-only capture objective ({uid}) for '{comp.CurrentController}'");
                 }
                 // If reached max hold times, complete (but only if maxholdtimes > 0)
                 if (!comp.OnceOnly && comp.MaxHoldTimes > 0 && comp.timesincremented >= comp.MaxHoldTimes)
                 {
                     _objectiveSystem.CompleteObjectiveForFaction(uid, objComp, comp.CurrentController);
-                    _sawmill.Info($"[CAPTURE OBJ] Completed capture objective {uid} for {comp.CurrentController} after max hold times");
+                    _sawmill.Debug($"[CAPTURE OBJ] Completed capture objective ({uid}) for '{comp.CurrentController}' after max hold times");
                 }
             }
             // --- Hoist/Lower timer logic removed ---

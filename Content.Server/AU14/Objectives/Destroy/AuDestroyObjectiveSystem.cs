@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using Content.Shared.AU14.Objectives.Destroy;
-using Content.Shared.AU14.Objectives;
-using Robust.Shared.GameStates;
-using Robust.Shared.Map;
-using Robust.Shared.Log;
 using System.Runtime.CompilerServices;
+using Content.Shared.AU14.Objectives;
+using Content.Shared.AU14.Objectives.Destroy;
+using Content.Shared.AU14.Objectives.Fetch;
 using Robust.Shared.Timing;
 
 namespace Content.Server.AU14.Objectives.Destroy;
@@ -13,9 +9,7 @@ namespace Content.Server.AU14.Objectives.Destroy;
 public sealed partial class AuDestroyObjectiveSystem : EntitySystem
 {
     [Robust.Shared.IoC.Dependency] private IEntityManager _entManager = default!;
-    [Robust.Shared.IoC.Dependency] private EntityLookupSystem _lookup = default!;
     [Robust.Shared.IoC.Dependency] private AuObjectiveSystem _objectiveSystem = default!;
-    [Robust.Shared.IoC.Dependency] private SharedTransformSystem _xformSys = default!;
     [Robust.Shared.IoC.Dependency] private ILogManager _logManager = default!;
 
     private ISawmill _sawmill = default!;
@@ -57,7 +51,7 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         // Destroy objectives cannot be faction-neutral
         if (objcomp.FactionNeutral)
         {
-            _sawmill.Warning($"[DESTROY OBJ] Objective {uid} is faction-neutral which is invalid for destroy objectives. Deactivating.");
+            _sawmill.Warning($"[DESTROY OBJ] Objective ({uid}) is faction-neutral which is invalid for destroy objectives. Deactivating...");
             objcomp.Active = false;
             return;
         }
@@ -68,7 +62,7 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
 
         var markers = new List<EntityUid>();
         var genericMarkers = new List<EntityUid>();
-        var markerQuery = AllEntityQuery<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveMarkerComponent, TransformComponent>();
+        var markerQuery = AllEntityQuery<FetchObjectiveMarkerComponent, TransformComponent>();
         while (markerQuery.MoveNext(out var markerUid, out var markerComp, out _))
         {
             if (markerComp.Used)
@@ -271,11 +265,11 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
             var factionKey = factionToCredit.ToLowerInvariant();
 
             destroyComp.AmountDestroyed++;
-            _sawmill.Info($"[DESTROY DEBUG] Objective {objectiveUid} counted destruction of proto {protoId} for faction {factionKey}. Total: {destroyComp.AmountDestroyed}/{destroyComp.AmountToDestroy}");
+            _sawmill.Debug($"[DESTROY DEBUG] Objective ({objectiveUid}) counted destruction of proto '{protoId}' for faction '{factionKey}'. Total: {destroyComp.AmountDestroyed}/{destroyComp.AmountToDestroy}");
 
             if (destroyComp.AmountDestroyed >= destroyComp.AmountToDestroy)
             {
-                _sawmill.Info($"[DESTROY DEBUG] Objective {objectiveUid} completed for faction {factionKey}!");
+                _sawmill.Info($"[DESTROY DEBUG] Objective ({objectiveUid}) completed for faction '{factionKey}'!");
                 _objectiveSystem.CompleteObjectiveForFaction(objectiveUid, auObj, factionToCredit);
                 objectivesToRemove.Add(objectiveUid);
 
