@@ -39,4 +39,4 @@ au14-clfsurv-greeting = Your cell has had no choice but to expose itself after t
 
 au14-clfsurv-desription = You are a fighter for the Colonial Liberation Front. But right now you are fighting for your survival.
 
-au14-clfsurv-rules = You are HOSTILE to the local government and not subject to any other besides the CLF.
+au14-clfsurv-rules = You are HOSTILE to the local government and not subject to any other besides the CLF. You are fully aware of the local threat after having witnessed it for several days.
