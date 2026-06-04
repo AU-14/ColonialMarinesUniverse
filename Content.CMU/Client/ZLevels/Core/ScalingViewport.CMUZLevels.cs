@@ -7,11 +7,14 @@ using Content.Shared._CMU14.ZLevels.Core;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Maps;
+using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.Placement;
 using Robust.Shared.Containers;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Graphics;
+using Robust.Shared.IoC;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
@@ -27,10 +30,12 @@ public sealed partial class ScalingViewport
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private ProfManager _prof = default!;
     [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IPlacementManager _placement = default!;
 
     private static readonly ProtoId<ShaderPrototype> StencilClearShader = "StencilClear";
     private static readonly ProtoId<ShaderPrototype> StencilMaskShader = "StencilMask";
     private static readonly ProtoId<ShaderPrototype> StencilEqualDrawShader = "StencilEqualDraw";
+    private static readonly Color StairPreviewTint = new(0.05f, 0.05f, 0.05f, 0.48f);
 
     private CMUClientZLevelsSystem? _zLevels;
     private SharedMapSystem? _mapSystem;
@@ -38,6 +43,7 @@ public sealed partial class ScalingViewport
     private EntityLookupSystem? _lookup;
     private ExamineSystem? _examine;
     private SharedContainerSystem? _containers;
+    private SpriteSystem? _sprite;
     private ShaderInstance? _stencilClearShaderInstance;
     private ShaderInstance? _stencilMaskShaderInstance;
     private ShaderInstance? _stencilEqualDrawShaderInstance;
@@ -46,7 +52,9 @@ public sealed partial class ScalingViewport
 
     private List<Entity<MapGridComponent>> _zLevelGrids = new();
     private List<Entity<MapGridComponent>> _stairPreviewGrids = new();
-    private readonly List<Vector2> _stairPreviewOrigins = new(CMUZLevelViewerComponent.MaxStairPreviewPositions);
+    private readonly List<StairPreviewOrigin> _stairPreviewOrigins = new(CMUZLevelViewerComponent.MaxStairPreviewPositions);
+    private readonly HashSet<Entity<SpriteComponent>> _stairPreviewSpriteCandidates = new();
+    private readonly Dictionary<EntityUid, bool> _stairPreviewHiddenSpriteVisibility = new();
     private readonly List<Box2> _zOpeningBounds = new();
     private readonly ZEye _zEye = new();
     private readonly ZEye _stairPreviewEye = new();
@@ -54,6 +62,8 @@ public sealed partial class ScalingViewport
     private bool _drawStairPreviewComposite;
     private EntityUid? _lastZLevelEyeEntity;
     private EntityUid? _lastZLevelViewEntity;
+
+    private SpriteSystem Sprite => _sprite ??= _entityManager.System<SpriteSystem>();
 
     /// <summary>
     /// We are looking for at least one empty tile on the screen.
@@ -131,8 +141,10 @@ public sealed partial class ScalingViewport
         ClearZLevelCompositeState();
 
         if (_eye is null ||
-            !_config.GetCVar(CMUZLevelsCVars.Enabled) ||
-            !_config.GetCVar(CMUZLevelsCVars.RenderEnabled))
+            !ShouldUseZLevelRenderPasses(
+                _placement.IsActive,
+                _config.GetCVar(CMUZLevelsCVars.Enabled),
+                _config.GetCVar(CMUZLevelsCVars.RenderEnabled)))
         {
             viewport.Render();
             return;
@@ -214,7 +226,29 @@ public sealed partial class ScalingViewport
             {
                 if (depth == 0)
                 {
-                    viewport.Eye = fallbackEye;
+                    if (zLevelViewer.LookUp)
+                    {
+                        _zEye.LowestDepth = lowestDepth;
+                        _zEye.Depth = 0;
+                        _zEye.HighestDepth = lookUp;
+                        _zEye.BaseMapId = viewXform.MapID;
+                        _zEye.WeatherSourceMapId = viewXform.MapID;
+                        _zEye.Position = fallbackEye.Position;
+                        _zEye.DrawFov = fallbackEye.DrawFov;
+                        _zEye.DrawLight = fallbackEye.DrawLight;
+                        _zEye.Offset = fallbackEye.Offset;
+                        _zEye.Rotation = fallbackEye.Rotation;
+                        _zEye.Scale = fallbackEye.Scale;
+                        _zEye.VisualZOffset = Vector2.Zero;
+                        _zEye.BlurCurrentLevel = true;
+                        _zEye.ConfigureVisibleEntityIndicators(false, _zOpeningBounds);
+
+                        viewport.Eye = _zEye;
+                    }
+                    else
+                    {
+                        viewport.Eye = fallbackEye;
+                    }
                 }
                 else
                 {
@@ -232,11 +266,11 @@ public sealed partial class ScalingViewport
 
                     if (separateStairPreview)
                     {
-                        SetStairPreviewOrigins(zLevelViewer);
+                        SetStairPreviewOrigins(zLevelViewer, _transform.GetWorldPosition(viewXform));
                         if (_stairPreviewOrigins.Count == 0)
                             continue;
 
-                        fovPosition = _stairPreviewOrigins[0];
+                        fovPosition = _stairPreviewOrigins[0].Position;
                         eyeOffset += renderPosition - fovPosition;
                     }
 
@@ -251,6 +285,8 @@ public sealed partial class ScalingViewport
                     _zEye.Offset = eyeOffset;
                     _zEye.Rotation = fallbackEye.Rotation;
                     _zEye.Scale = fallbackEye.Scale;
+                    _zEye.VisualZOffset = offset;
+                    _zEye.BlurCurrentLevel = false;
                     _zEye.ConfigureVisibleEntityIndicators(
                         _config.GetCVar(CMUZLevelsCVars.VisibleEntityIndicators) && depth == 1 && !separateStairPreview,
                         _zOpeningBounds);
@@ -272,6 +308,13 @@ public sealed partial class ScalingViewport
         // Restore the Eye
         Eye = fallbackEye;
         viewport.Eye = Eye;
+    }
+
+    internal static bool ShouldUseZLevelRenderPasses(bool placementActive, bool zLevelsEnabled, bool renderEnabled)
+    {
+        return !placementActive &&
+               zLevelsEnabled &&
+               renderEnabled;
     }
 
     private bool TryGetZLevelViewEntity(
@@ -423,8 +466,84 @@ public sealed partial class ScalingViewport
 
         _stairPreviewViewport.Eye = _stairPreviewEye;
         _stairPreviewViewport.ClearColor = Color.Transparent;
-        _stairPreviewViewport.Render();
+        CullStairPreviewSprites(_stairPreviewEye.Position.MapId);
+        try
+        {
+            _stairPreviewViewport.Render();
+        }
+        finally
+        {
+            RestoreStairPreviewSprites();
+        }
+
         _drawStairPreviewComposite = true;
+    }
+
+    private void CullStairPreviewSprites(MapId mapId)
+    {
+        if (_stairPreviewViewport is null ||
+            _lookup is null ||
+            _transform is null ||
+            _xformQuery is not { } xformQuery ||
+            !TryGetViewportWorldAabb(_stairPreviewViewport, out var worldAabb))
+        {
+            return;
+        }
+
+        _stairPreviewSpriteCandidates.Clear();
+        _lookup.GetEntitiesIntersecting(mapId, worldAabb, _stairPreviewSpriteCandidates, LookupFlags.All);
+
+        foreach (var candidate in _stairPreviewSpriteCandidates)
+        {
+            var uid = candidate.Owner;
+            var sprite = candidate.Comp;
+            if (!sprite.Visible ||
+                !xformQuery.TryComp(uid, out var xform) ||
+                xform.MapID != mapId)
+            {
+                continue;
+            }
+
+            var worldBounds = GetStairPreviewSpriteBounds(uid, sprite, xform, xformQuery);
+            var target = new MapCoordinates(worldBounds.Center, mapId);
+            if (CanAnyStairPreviewOriginSeeBounds(target, worldBounds, mapId, _stairPreviewEye.VisualZOffset))
+            {
+                continue;
+            }
+
+            if (!_stairPreviewHiddenSpriteVisibility.TryAdd(uid, sprite.Visible))
+                continue;
+
+            Sprite.SetVisible((uid, sprite), false);
+        }
+    }
+
+    private void RestoreStairPreviewSprites()
+    {
+        foreach (var (uid, wasVisible) in _stairPreviewHiddenSpriteVisibility)
+        {
+            if (!wasVisible ||
+                !_entityManager.TryGetComponent<SpriteComponent>(uid, out var sprite) ||
+                sprite.Visible)
+            {
+                continue;
+            }
+
+            Sprite.SetVisible((uid, sprite), true);
+        }
+
+        _stairPreviewHiddenSpriteVisibility.Clear();
+        _stairPreviewSpriteCandidates.Clear();
+    }
+
+    private Box2 GetStairPreviewSpriteBounds(
+        EntityUid uid,
+        SpriteComponent sprite,
+        TransformComponent xform,
+        EntityQuery<TransformComponent> xformQuery)
+    {
+        var worldPos = _transform!.GetWorldPosition(xform, xformQuery);
+        return Sprite.GetLocalBounds((uid, sprite)).Translated(worldPos);
     }
 
     private void EnsureStairPreviewViewport(IClydeViewport sourceViewport)
@@ -460,6 +579,8 @@ public sealed partial class ScalingViewport
         target.Offset = source.Offset;
         target.Rotation = source.Rotation;
         target.Scale = source.Scale;
+        target.VisualZOffset = source.VisualZOffset;
+        target.BlurCurrentLevel = source.BlurCurrentLevel;
     }
 
     private void DrawZLevelComposites(IRenderHandle handle, UIBox2i drawBox)
@@ -485,6 +606,7 @@ public sealed partial class ScalingViewport
 
         screen.UseShader(GetStencilEqualDrawShader());
         screen.DrawTextureRect(_stairPreviewViewport.RenderTarget.Texture, drawBox);
+        screen.DrawRect(drawBox, StairPreviewTint);
 
         screen.UseShader(GetStencilClearShader());
         screen.DrawRect(drawBox, Color.White);
@@ -531,10 +653,10 @@ public sealed partial class ScalingViewport
             foreach (var tile in _mapSystem.GetTilesIntersecting(grid.Owner, grid.Comp, worldAabb, ignoreEmpty: true))
             {
                 var localBounds = _lookup.GetLocalBounds(tile, grid.Comp.TileSize).Enlarged(0.01f);
-                var targetPosition = Vector2.Transform(localBounds.Center, gridMatrix);
-                var target = new MapCoordinates(targetPosition, mapId);
+                var worldBounds = gridMatrix.TransformBox(localBounds);
+                var target = new MapCoordinates(worldBounds.Center, mapId);
 
-                if (!CanAnyStairPreviewOriginSee(target, mapId))
+                if (!CanAnyStairPreviewOriginSeeBounds(target, worldBounds, mapId, _stairPreviewEye.VisualZOffset))
                     continue;
 
                 screen.DrawRect(GetCompositeScreenBox(localBounds, gridMatrix, drawBox), Color.White);
@@ -544,7 +666,7 @@ public sealed partial class ScalingViewport
         _stairPreviewGrids.Clear();
     }
 
-    private void SetStairPreviewOrigins(CMUZLevelViewerComponent viewer)
+    private void SetStairPreviewOrigins(CMUZLevelViewerComponent viewer, Vector2 viewerPosition)
     {
         _stairPreviewOrigins.Clear();
 
@@ -567,19 +689,40 @@ public sealed partial class ScalingViewport
             if (position == default)
                 continue;
 
-            _stairPreviewOrigins.Add(position);
+            _stairPreviewOrigins.Add(new StairPreviewOrigin(position, viewerPosition));
         }
     }
 
-    private bool CanAnyStairPreviewOriginSee(MapCoordinates target, MapId mapId)
+    private bool CanAnyStairPreviewOriginSeeBounds(
+        MapCoordinates target,
+        Box2 bounds,
+        MapId mapId,
+        Vector2 renderOffset)
     {
         if (_examine is null)
             return false;
 
-        foreach (var originPosition in _stairPreviewOrigins)
+        foreach (var origin in _stairPreviewOrigins)
         {
-            var origin = new MapCoordinates(originPosition, mapId);
-            if (_examine.InRangeUnOccluded(origin, target, 0f, null))
+            if (!CMUZLevelStairPreviewVisibility.IsInFrontOfStair(
+                    origin.ViewerPosition,
+                    origin.Position,
+                    target.Position - renderOffset))
+            {
+                continue;
+            }
+
+            if (!CMUZLevelStairPreviewVisibility.ProjectedBoundsStayInFrontOfStair(
+                    origin.ViewerPosition,
+                    origin.Position,
+                    bounds,
+                    renderOffset))
+            {
+                continue;
+            }
+
+            var originCoordinates = new MapCoordinates(origin.Position, mapId);
+            if (_examine.InRangeUnOccluded(originCoordinates, target, 0f, null))
                 return true;
         }
 
@@ -640,8 +783,11 @@ public sealed partial class ScalingViewport
     {
         _stairPreviewViewport?.Dispose();
         _stairPreviewViewport = null;
+        RestoreStairPreviewSprites();
         ClearZLevelCompositeState();
     }
+
+    private readonly record struct StairPreviewOrigin(Vector2 Position, Vector2 ViewerPosition);
 
     public sealed class ZEye : Robust.Shared.Graphics.Eye
     {
@@ -652,6 +798,8 @@ public sealed partial class ScalingViewport
         public int HighestDepth;
         public MapId BaseMapId;
         public MapId WeatherSourceMapId;
+        public Vector2 VisualZOffset;
+        public bool BlurCurrentLevel;
 
         public IReadOnlyList<Box2> VisibleEntityIndicatorBounds => _visibleEntityIndicatorBounds;
         public bool DrawVisibleEntityIndicators { get; private set; }

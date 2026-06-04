@@ -19,6 +19,8 @@ cmu-zlevel-voice-from-up = {$name} (from above)
 cmu-zlevel-voice-from-down = {$name} (from below)
 
 cmu-zlevel-ladder-no-level = The ladder doesn't continue there.
+cmu-zlevel-ladder-look-up = Look up
+cmu-zlevel-ladder-look-down = Look down
 cmu-zlevel-ladder-start-self = You start climbing the ladder.
 cmu-zlevel-ladder-start-others = {$user} starts climbing the ladder.
 cmu-zlevel-ladder-finish-self = You climb the ladder.
