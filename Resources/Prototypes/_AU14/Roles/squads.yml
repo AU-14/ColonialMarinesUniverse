@@ -572,22 +572,22 @@
     - AU14SquadMORW
 
 - type: Tag
-  id: SquadCPISP
+  id: AU14SquadCPISP
 
 - type: Tag
-  id: SquadIRG
+  id: AU14SquadIRG
 
 - type: Tag
-  id: SquadMIG
+  id: AU14SquadMIG
 
 - type: Tag
-  id: SquadMIS
+  id: AU14SquadMIS
 
 - type: Tag
-  id: SquadSED
+  id: AU14SquadSED
 
 - type: Tag
-  id: SquadMORW
+  id: AU14SquadMORW
 
 - type: Tag
   id: SquadHRT
