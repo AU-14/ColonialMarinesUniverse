@@ -89,4 +89,4 @@
   id: AU14JobIconCPISPTeamLead
   icon:
     sprite: _AU14/Interface/job_icons.rsi
-    state: hudsquad_nemo_lead_kil_team
+    state: hudsquad_nemo_lead_kill_team
