@@ -1215,12 +1215,18 @@
         amount: 10
     - name: special issue firearms
       entries:
-      - id: RMCWeaponShotgunM3717
+      - id: RMCL49Case
         amount: 3
       - id: RMCWeaponRifleL90A1
         amount: 5
       - id: RMCWeaponRifleL90A2
         amount: 3
+      - id: RMCWeaponRifleL91SWS
+        amount: 1
+      - id: RMCWeaponRifleL89A1
+        amount: 1
+      - id: RMCWeaponRifleL89A2
+        amount: 1
       - id: AU14Mk86Case
         amount: 1
     - name: primary ammunition
@@ -1243,6 +1249,10 @@
         amount: 10
       - id: RMCMagazineRifleL90DrumAP
         amount: 1
+      - id: RMCMagazineRifleL88
+        amount: 16
+      - id: RMCMagazineRifleL88AP
+        amount: 4
       - id: RMCBoxShotgunBuckshot
         amount: 20
       - id: RMCBoxShotgunFlechette
@@ -1271,6 +1281,10 @@
         amount: 2
       - id: RMCBoxClaymoreMineFilled
         amount: 3
+      - id: AU14PacketGrenadeTearGasFilled
+        amount: 2
+      - id: AU14PacketGrenadeTearGasFilledAirburst
+        amount: 1
       - id: AU14Packet20MMGrenadeHERMCFilled
         amount: 4
       - id: AU14Packet20MMGrenadeHESHRMCFilled
@@ -1285,7 +1299,7 @@
         amount: 6
       - id: RMCExplosivePlastic
         amount: 8
-      - id: RMCWeaponLauncherDisposableFolded
+      - id: RMCWeaponLauncherL33
         amount: 2
       - id: RMCRocketM5510Brute
         amount: 12

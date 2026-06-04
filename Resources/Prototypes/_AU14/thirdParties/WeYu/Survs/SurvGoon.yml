@@ -79,9 +79,11 @@
     back: RMCSatchelLightpackWeYa
     eyes: CMGlassesSecurity
     ears: RMCHeadsetDistressWeYa
+    inhand: RMCFlashlight
   storage:
     back:
     - AU14CBRNKitWeYu
     - RMCMREWeYa
     - CMCanteen
     - CMSheetMetal30
+    - RMCFlashlight 

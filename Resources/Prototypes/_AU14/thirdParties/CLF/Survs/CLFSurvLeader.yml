@@ -1,13 +1,15 @@
 - type: job
   parent: CMJobBase
   id: AU14JobCLFSurvLeader
-  name: au14-job-name-clfcellleader
+  name: au14-job-name-
   description: au14-clfsurv-greeting
   playTimeTracker: AU14CLFSurvivorLead
   startingGear: AU14GearCLFSurvLeader
   greeting: au14-clfsurv-greeting
   icon: "CMJobIconEmpty"
   joinNotifyCrew: false
+  ranks:
+    RMCRankCivilian: []
   supervisors: au14-job-supervisors-clfcellleader
   accessGroups:
   - Colonist
@@ -60,7 +62,7 @@
     job: AU14JobCLFSurvLeader
     raffle:
       settings: short
-    rules: au14-clfsurv-desription
+    rules: au14-clfsurv-rules
 
 - type: entity
   id: AU14CLFSurvLeaderPreset
@@ -104,11 +106,6 @@
       - [ ]
       - [ ]
       - [ ]
-    -
-      - [ AU14BeltHolsterPistolFilledB92FS ]
-      - [ RMCM44BeltFilled ]
-      - [ AU14BeltHolsterPistolUPPPAP ]
-      - [ RMCM1984BeltFilled ]
     randomWeapon: # Weapon with ammo pouches and stuff
     - [ RMCWeaponRifleType71C, AU14PouchMagazineLargeFilledType71, AU14PouchIFAKFill ]
 # lowk debated giving the CLF leader LMGs for aura, decided not to for now
@@ -123,10 +120,10 @@
     id: AU14IDCardCLFCellLeader
     shoes: RMCShoesJackboots
     belt: AU14BeltConstructionCLFSurv
+    suitstorage: RMCFlashlight
   inhand:
   - AU14CLFHeadset
   - AU14FlagCarriableCLF
-  - RMCCLFArmband
-
+  - RMCFlashlight
 - type: playTimeTracker
   id: AU14CLFSurvivorLead

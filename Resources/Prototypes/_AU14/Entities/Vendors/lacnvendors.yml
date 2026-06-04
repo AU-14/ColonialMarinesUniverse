@@ -955,6 +955,10 @@
         amount: 2
       - id: RMCBoxClaymoreMineFilled
         amount: 3
+      - id: AU14PacketGrenadeTearGasFilled
+        amount: 2
+      - id: AU14PacketGrenadeTearGasFilledAirburst
+        amount: 1
       - id: RMCPacketGrenadeM74AGMFFilled
         amount: 4
       - id: RMCPacketGrenadeM74AGMSHornetFilled

@@ -2057,5 +2057,99 @@
   id: 188
   time: '2026-06-03T09:12:26.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1193
+- author: 400Ferrets
+  changes:
+  - message: USS Bush is now weedable.
+    type: Tweak
+  - message: USS Bush now has a thick roof.
+    type: Map
+  id: 189
+  time: '2026-06-03T18:48:17.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1202
+- author: toot521
+  changes:
+  - message: Weyland Yutani Survivors now have more Flashlights and on average worse
+      guns
+    type: Tweak
+  id: 190
+  time: '2026-06-03T21:12:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1198
+- author: toot521
+  changes:
+  - message: 'Added WeYu Survivors to: Corsat Station'
+    type: Add
+  - message: 'Added CLF Survivors to: Sorokyne Strata'
+    type: Add
+  - message: 'Added CLF and WeYu Survivors to: Solaris Gulch, LV624 Green Hell, Hybrisa
+      Metropolitan, Port Neroid, Raijin Hydroelectric, Shiva''s Snowball, Kutjevo
+      Biolab, Fiorina Prison'
+    type: Add
+  id: 191
+  time: '2026-06-03T21:21:15.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1199
+- author: HotdogMan52
+  changes:
+  - message: M19, a handheld CS grenade
+    type: Add
+  - message: AGM-PDC, a CS Gas canister for the M85A1 Grenade Launcher
+    type: Add
+  - message: teargassmoke.yml which is just boiler gas but non-lethal and different
+      color
+    type: Add
+  id: 192
+  time: '2026-06-03T21:25:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1206
+- author: toot521
+  changes:
+  - message: CLF Survivor Surgeon to CLF survs
+    type: Add
+  - message: CLF Survs are now clearly labeled as hostile to their local government
+    type: Tweak
+  - message: CLF Surv Leader now has a flashlight roundstart
+    type: Tweak
+  id: 193
+  time: '2026-06-04T00:50:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1209
+- author: troytroy400
+  changes:
+  - message: The L33 DAAMSL, the TWE version of the SLAW. Replaces the SLAW on the
+      TWE Royal Marines platoon.
+    type: Add
+  - message: The L49 shotgun, a replacement for the old non-TWE shotgun. Comes with
+      its own unique breaching ammunition and storage belt.
+    type: Add
+  - message: Various unused TWE weapons added to the RMC platoon and loreified. Includes
+      two variants of marksman rifle and an automatic support weapon.
+    type: Add
+  - message: Prodigy moved to OPFOR on Trijent.
+    type: Tweak
+  - message: Added teargas grenade packets and adds them to relevant req vendors.
+    type: Add
+  - message: Teargas detonate delay changed from 3.5 to 4.5.
+    type: Tweak
+  - message: The surgical case now starts with a surgical saw and bonegel.
+    type: Tweak
+  - message: Medical vendors buffed to have more of most items, medicines moved into
+      subcategories as QOL for new players.
+    type: Tweak
+  - message: Corpsmen now get four first-aid packs, a rethemed first-aid kit.
+    type: Tweak
+  id: 194
+  time: '2026-06-04T03:46:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1210
+- author: KeiKiyomi
+  changes:
+  - message: Fixed "ML79A 'Breaker' smart gun" damage and firerate
+    type: Fix
+  id: 195
+  time: '2026-06-04T03:56:29.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1190
+- author: 400Ferrets
+  changes:
+  - message: CORSAT weedkiller fog area is now much larger!
+    type: Add
+  id: 196
+  time: '2026-06-04T08:52:13.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1211
 Name: CMU
 Order: -1

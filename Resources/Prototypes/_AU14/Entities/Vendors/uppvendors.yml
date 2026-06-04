@@ -756,7 +756,7 @@
       takeAll: CMUAREssentialEquipment
       entries:
       - id: AU14ArmorSmartGunDesertCombatHarnessUPP
-      
+
     - name: Firearm System
       choices: { CMUPlatoonMG: 1 }
       entries:
@@ -775,7 +775,7 @@
         amount: 40
       - id: RMCMagazineLMGQYJ72
         amount: 40
-        
+
 - type: entity
   parent: ColMarTechBase
   id: AU14UPPSectionLeaderVendor
@@ -1127,9 +1127,15 @@
       - id: RMCWeaponPistolNPZ92
         amount: 2
       - id: RMCWeaponRevolverZHNK72Empty
-        amount: 1
+        amount: 3
+      - id: RMCWeaponSMGType19
+        amount: 3
+      - id: RMCWeaponShotgunType23
+        amount: 3
     - name: primary ammunition
       entries:
+      - id: AU14MagazineSmartGunUPP
+        amount: 40
       - id: AU14MagazineRifleAG80
         amount: 200
       - id: AU14MagazineRifleAG80AP
@@ -1138,6 +1144,8 @@
         amount: 10
       - id: RMCMagazineRifleAK4047
         amount: 60
+      - id: RMCMagazineRifleAK4047AP
+        amount: 15
       - id: RMCMagazineRifleType71
         amount: 150
       - id: RMCMagazineRifleType71AP
@@ -1150,6 +1158,8 @@
         amount: 20
       - id: RMCMagazineLMGQYJ72
         amount: 25
+      - id: RMCMagazineSMGType64
+        amount: 200
     - name: secondary ammunition
       entries:
       - id: RMCMagazinePistolT73
@@ -1159,7 +1169,11 @@
       - id: RMCMagazinePistolNP92
         amount: 100
       - id: RMCSpeedLoaderZHNK72
-        amount: 10
+        amount: 40
+      - id: RMCMagazineSMGType19
+        amount: 100
+      - id: RMCMagazineSMGType19Drum
+        amount: 40
     - name: explosives
       entries:
       - id: AU14PacketGrenadeHighExplosiveUPPFilled
@@ -1168,6 +1182,8 @@
         amount: 4
       - id: AU14PacketGrenadeSmokeUPPFilled
         amount: 6
+      - id: AU14PacketGrenadeTearGasFilled
+        amount: 3
       - id: RMCBoxClaymoreMineFilled
         amount: 3
       - id: RMCExplosiveBreachingCharge
@@ -1208,6 +1224,8 @@
         amount: 4
     - name: Devices
       entries:
+      - id: AU14PowerCellSmartgunUPP
+        amount: 20
       - id: RMCIntelDetector
         amount: 4
       - id: RMCFulton20

@@ -1,0 +1,121 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCLFSurvSurgeon
+  name: au14-job-name-clfsurgeon
+  description: au14-clfsurv-desription
+  spawnMenuRoleName: CLF Surgen (Survivor)
+  playTimeTracker: AU14CLFSurvSurgeon
+  startingGear: AU14GearCLFSurvDoctor
+  greeting: au14-clfsurv-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clflrs
+  ranks:
+    RMCRankCivilian: []
+  accessGroups:
+  - Colonist
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - CLF
+    - type: Skills
+      skills:
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillMedical: 3
+        RMCSkillResearch: 1
+        RMCSkillSurgery: 3
+        RMCSkillFirearms: 2
+        RMCSkillPolice: 1
+    - type: EquipEntityPreset
+      preset: AU14CLFSurvMedicPreset
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicCLF
+  id: AU14JCLFSurvSurgeon
+  name: CLF Surgeon (Survivor)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-clfsurgeon
+    description: au14-clfsurv-desription
+    reregister: false
+    job: AU14JobCLFSurvSurgeon
+    raffle:
+      settings: short
+    rules: au14-clfsurv-rules
+
+- type: startingGear
+  id: AU14GearCLFSurvDoctor
+  equipment:
+    id: AU14IDCardCLFCivilian
+    shoes: RMCShoesJackboots
+    belt: CMUBeltMedicBagSupportSynth
+    suitstorage: AU14CMDefibrillator
+  inhand:
+  - AU14CLFHeadset
+
+- type: entity
+  id: AU14CLFSurvMedicPreset
+  name: clf surv medic preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomOutfits:
+    - [ CMJumpsuitTShirtWhiteCLFArmband  ] # uniform
+    - [ CMJumpsuitTShirtGrayCLFArmband ]
+    - [ RMCJumpsuitCivilianCLFArmband  ] 
+    - [ CMJumpsuitColonistCLFArmband ] 
+    randomWeapon: # Weapon with ammo pouches and stuff
+    - [ AU14WeaponRifleM16A1, AU14PouchMagazineLargeFilledM16, AU14PouchIFAKFill ]
+    - [ AU14WeaponRifleAR10, AU14PouchMagazineLargeFilledAR10, AU14PouchIFAKFill ]
+    - [ RMCWeaponBoltActionRifle, AU14PouchMagazineLargeFilledHuntingRifle, AU14PouchIFAKFill ]
+    - [ AU14WeaponRifleM16A1, AU14PouchMagazineLargeFilledM16, AU14PouchIFAKFill ]
+    - [ AU14WeaponRifleAR10, AU14PouchMagazineLargeFilledAR10, AU14PouchIFAKFill ]
+    - [ RMCWeaponBoltActionRifle, AU14PouchMagazineLargeFilledHuntingRifle, AU14PouchIFAKFill ]
+    - [ WeaponRifleMAR40, AU14PouchMagazineLargeFilledMAR40normal, AU14PouchIFAKFill ]
+    - [ RMCWeaponShotgunHG3712, AU14PouchShotgunLargeBuckshot, AU14PouchIFAKFill ]
+    - [ WeaponShotgunM357, AU14PouchShotgunLargeBuckshot, AU14PouchIFAKFill ]
+    tryEquipRandomWeapon: true
+    randomGearOther:
+    -
+      - [ AU14ArmorBallisticVest ] # armor
+      - [ RMCCoatMilitiaBrace ]
+      - [ RMCCoatMilitiaHauberk ]
+      - [ RMCCoatMilitiaVest ]
+      - [ RMCArmorBulletproof ]
+    -
+      - [ RMCGogglesBallisticBlack ] # eyes
+      - [ RMCGogglesM1A1Ballistic ]
+      - [ RMCGogglesBallistic ]
+      - [ RMCMaskScarfGray ]
+      - [ CMMaskCoif ]
+      - [ CMMaskGas ]
+      - [ RMCMaskKeffiyehBlack ]
+      - [ ]
+      - [ ]
+      - [ ]
+      - [ ]
+      - [ ]
+    -
+      - [ RMCHeadMilitiaHood ] # head
+      - [ RMCHeadCapTruckerBlue ]
+      - [ ArmorHelmetPMCRiot ]
+      - [ RMCHeadBeanie ]
+      - [ AU14UACGHelmet ]
+      - [ ]
+      - [ ]
+      - [ ]
+      - [ ]
+      - [ ]
+
+- type: playTimeTracker
+  id: AU14CLFSurvSurgeon

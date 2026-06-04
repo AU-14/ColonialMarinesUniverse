@@ -21,15 +21,15 @@
       - id: CMUPlainTraumaDressing10
         amount: 30
       - id: CMUCoagulantPowder
-        amount: 20
+        amount: 25
       - id: CMUAntiseptic
-        amount: 20
+        amount: 25
       - id: CMUBurnGel
-        amount: 20
+        amount: 25
       - id: CMUTissueSealant
-        amount: 20
+        amount: 25
       - id: CMUTraumaFoam
-        amount: 20
+        amount: 25
       - id: CMUHemostaticGauze6
         amount: 25
       - id: CMUAntisepticGauze6
@@ -41,15 +41,15 @@
       - id: CMUCompressionGauze6
         amount: 25
       - id: CMUHemostaticTraumaDressing4
-        amount: 15
+        amount: 25
       - id: CMUAntisepticTraumaDressing4
-        amount: 15
+        amount: 25
       - id: CMUBurnTraumaDressing4
-        amount: 15
+        amount: 25
       - id: CMUSealingTraumaDressing4
-        amount: 15
+        amount: 25
       - id: CMUCompressionTraumaDressing4
-        amount: 15
+        amount: 25
       - id: AU14HemostaticGauzePacket
         amount: 40
       - id: AU14Tourniquet
@@ -84,20 +84,23 @@
         amount: 10
       - id: RMCPillCanisterIron
         amount: 10
-      - id: AU14PillCanisterCryoxadone
-        amount: 7
-      - id: AU14PillCanisterLeporazine
-        amount: 7
-      - id: AU14PillCanisterImidazoline
-        amount: 7
+# disabled until we get cryo med
+#      - id: AU14PillCanisterCryoxadone
+#        amount: 7
+#      - id: AU14PillCanisterLeporazine
+#        amount: 7
       - id: AU14PillCanisterEthylredoxrazine
-        amount: 7
+        amount: 10
+    - name: Painkiller Pill Bottles
+      entries:
       - id: AU14PillCanisterParacetamol
         amount: 10
       - id: AU14PillCanisterTramadol
         amount: 10
       - id: AU14PillCanisterOxycodone
         amount: 10
+    - name: Organ Med Pill Bottles
+      entries:
       - id: AU14PillCanisterCardiocaine
         amount: 10
       - id: AU14PillCanisterHepatocytin
@@ -108,14 +111,16 @@
         amount: 10
       - id: AU14PillCanisterPulmovine
         amount: 10
+      - id: AU14PillCanisterImidazoline
+        amount: 10
     - name: Injectors
       entries:
       - id: CMEpinephrineAutoInjector
-        amount: 14
+        amount: 25
       - id: AU14NaloxoneAutoInjector
-        amount: 14
+        amount: 25
       - id: RMCIronAutoInjector
-        amount: 20
+        amount: 25
       - id: CMInaprovalineAutoInjector
         amount: 25
       - id: CMDexalinPlusAutoInjector
@@ -126,20 +131,22 @@
         amount: 25
       - id: CMKelotaneAutoInjector
         amount: 25
+    - name: Painkiller Injectors
+      entries:
       - id: AU14ParacetamolAutoInjector
-        amount: 20
+        amount: 25
       - id: AU14TramadolAutoInjector
-        amount: 20
+        amount: 25
       - id: AU14OxycodoneAutoInjector
-        amount: 20
+        amount: 25
     - name: Medical Utilities
       entries:
       - id: CMRollerBedSpawnFolded
-        amount: 25
+        amount: 10
       - id: CMPortableSurgicalBedSpawnFolded
         amount: 5
       - id: AU14Wheelchair
-        amount: 10
+        amount: 4
       - id: RMCBoxBodyBag
         amount: 4
       - id: RMCBoxSterileMask

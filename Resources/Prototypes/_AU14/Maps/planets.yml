@@ -34,6 +34,12 @@
     - wendigoThreat
     - abominationsThreatDistress
     thirdparties:
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
     - FORECON
     - FORECONAlt
     - FORECONAlt2
@@ -239,6 +245,12 @@
     opforinship: true
     daycycleenabled: true
     thirdparties:
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
     - ICRCReliefParty
     - TimeSharesSalesman
     - UACGLostTeam
@@ -381,6 +393,12 @@
     - wendigoThreat
     - abominationsThreatDistress
     thirdparties:
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
     - USArmy
     - USArmyAlt
     - USArmyAlt2
@@ -438,6 +456,12 @@
     - wendigoThreat
     - abominationsThreatDistress
     thirdparties:
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
     - FORECON
     - FORECONAlt
     - FORECONAlt2
@@ -496,6 +520,9 @@
     - XenoThreatCF
     - TribalsThreat
     thirdparties:
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
     - NSPAInvestigationParty
     - UPPGROMAlt
     - cultistThirdPartyNoQueen
@@ -605,6 +632,12 @@
     - UPPGROM
     - UPPGROMAlt
     - UPPGROMAlt2
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
     - UPPTDLostTeam
     - PAPInvestigationPartyAlt
     - PAPInvestigationParty
@@ -642,18 +675,24 @@
     - UPP
     - WEYU
     - VAIPO
+    - ProdigySF
     platoonsGovfor:
     - LACN
-    - ProdigySF
     - USCM
     - RMC
-    defaultgovfor: UPP
-    defaultopfor: RMC
+    defaultgovfor: RMC
+    defaultopfor: VAIPO
     govforinship: true
     opforinship: true
     daycycleenabled: true
     faction: ua
     thirdparties:
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
     - ICRCReliefParty
     - cultistThirdParty
     - cultistThirdPartyNoQueen
@@ -705,6 +744,12 @@
     - USArmyAlt
     - USArmyAlt2
     - USArmyTank
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
     - ICRCReliefParty
     - TimeSharesSalesman
     - UACGLostTeam
@@ -756,6 +801,12 @@
     - USArmyAlt
     - USArmyAlt2
     - USArmyTank
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
     - ICRCReliefParty
     - TimeSharesSalesman
     - UACGLostTeam
@@ -804,6 +855,12 @@
     - USArmyAlt
     - USArmyAlt2
     - USArmyTank
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
     - ICRCReliefParty
     - TimeSharesSalesman
     - UACGLostTeam
@@ -829,43 +886,42 @@
 
 - type: lorePrimer
   id: AU14PrimerPlanetLV747
-  planetText: "Date 2181 - Solaris Gulch. UA  controlled"
+  planetText: "Date 2181 - Solaris Gulch, UA controlled."
 
 - type: lorePrimer
   id: AU14PrimerPlanetShepherdsPride
-  planetText: "Date 2181 - Shepherds' Pride wildlife reserve."
+  planetText: "Date 2181 - Shepherds' Pride, a wildlife reserve."
 
 - type: lorePrimer
   id: AU14PrimerPlanetStableGarrison
-  planetText: "Date 2182 - Stable Garrison. UA controlled frontier world with a joint base and sizeable urban community."
+  planetText: "Date 2181 - Stable Garrison, a UA controlled frontier world with a joint base and sizeable urban community."
 
 - type: lorePrimer
   id: AU14PrimerPlanetLV624
-  planetText: "Date 2181 - LV624 Green Hell,  UA controlled."
-
+  planetText: "Date 2181 - LV624 Green Hell, UA controlled."
 - type: lorePrimer
   id: AU14PrimerPlanetGixensCaverns
   planetText: "Date 2181 - Gixens Caverns."
 
 - type: lorePrimer
   id: AU14PrimerPlanetFlight
-  planetText: "Date 2181 - Flight. A multiple story colony residential megastructure."
+  planetText: "Date 2181 - Flight, a multistory colony megastructure."
 
 - type: lorePrimer
   id: AU14PrimerPlanetLV759
-  planetText: "Date 2181 - Hybrisa Metropolitan. Three World Empire territory."
+  planetText: "Date 2181 - Hybrisa Metropolitan, Three World Empire territory."
 
 - type: lorePrimer
   id: AU14PrimerPlanetLV327
-  planetText: "Date 2181 - Port Neroid: valuable waterport on a frontier world, UA controlled."
+  planetText: "Date 2181 - Port Neroid, valuable waterport on a frontier world, UA controlled."
 
 - type: lorePrimer
   id: AU14PrimerPlanetCorsatStation
-  planetText: "Date 2181 - Corsat Station. WeYu operated research and prison station."
+  planetText: "Date 2181 - Corsat Station, Weyland-Yutani operated research station."
 
 - type: lorePrimer
   id: AU14PrimerPlanetLament
-  planetText: "Date 2181 - Barker's Lament, mining and farming colony on the planet of LV-376 'Ulixes'. Primarily under the control of the United Americas, despite the constant interference of Weyland-Yutani."
+  planetText: "Date 2181 - Barker's Lament, a mining and farming colony on the planet of LV-376 'Ulixes'. Primarily under the control of the United Americas, despite the constant interference of Weyland-Yutani."
 
 - type: lorePrimer
   id: AU14PrimerPlanetSorokyne
@@ -885,4 +941,4 @@
 
 - type: lorePrimer
   id: AU14PrimerPlanetFiorina
-  planetText: "Date 2181 - Fiorina Prison. Privately owned and operated by the Weyland-Yutani corporation, Fiorina 161 is a maximum security prison for the most dangerous criminals in the Neroid sector."
+  planetText: "Date 2181 - Fiorina Prison. Privately owned  and operated by the Weyland-Yutani corporation, Fiorina 161 is a maximum security prison for the most dangerous criminals in the system."

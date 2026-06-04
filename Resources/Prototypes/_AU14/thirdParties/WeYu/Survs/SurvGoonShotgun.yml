@@ -85,7 +85,7 @@
     - RMCMREWeYa
     - CMCanteen
     - CMSheetMetal30
-
+    - RMCFlashlight 
 - type: entity
   parent: AU14JumpsuitVeteranPMCCorporate
   id: AU14JumpsuitVeteranPMCCorporateShotgun

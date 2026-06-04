@@ -170,7 +170,7 @@ public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovf
             }
             else
             {
-                var winMessage = _auRoundSystem._selectedthreat.WinMessage;
+                var winMessage = _auRoundSystem._selectedthreat?.WinMessage;
                 if (!string.IsNullOrEmpty(winMessage))
                 {
                     _gameTicker.EndRound(winMessage);

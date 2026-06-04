@@ -74,6 +74,8 @@
   components:
     - type: Sprite
       state: sigma_hallway_north
+    - type: Area
+      linkedLz: dropship_lz2
 
 - type: entity
   parent: RMCAreaCorsatSigma
@@ -93,6 +95,8 @@
   components:
     - type: Sprite
       state: monorail
+    - type: Area
+      linkedLz: dropship_lz2
 
 - type: entity
   parent: RMCAreaCorsatSigmaHangarMonorail
@@ -101,6 +105,8 @@
   components:
     - type: Sprite
       state: monorail
+    - type: Area
+      linkedLz: dropship_lz2
 
 - type: entity
   parent: RMCAreaCorsatSigmaHangarMonorail
@@ -110,6 +116,7 @@
     - type: Sprite
       state: railcart
     - type: Area
+      linkedLz: dropship_lz2
       CAS: false
       fulton: false
       lasing: false
@@ -154,6 +161,8 @@
   components:
     - type: Sprite
       state: sigma_hangar
+    - type: Area
+      linkedLz: dropship_lz2
 
 - type: entity
   parent: RMCAreaCorsatSigmaHangar
@@ -162,6 +171,8 @@
   components:
     - type: Sprite
       state: corsat_id
+    - type: Area
+      linkedLz: dropship_lz2
 
 - type: entity
   parent: RMCAreaCorsatSigmaHangar
@@ -170,6 +181,8 @@
   components:
     - type: Sprite
       state: sigma_arrivals
+    - type: Area
+      linkedLz: dropship_lz2
 
 - type: entity
   parent: RMCAreaCorsatSigmaHangar
@@ -178,6 +191,8 @@
   components:
     - type: Sprite
       state: sigma_hangar_office
+    - type: Area
+      linkedLz: dropship_lz2
 
 - type: entity
   parent: RMCAreaCorsatSigmaHangar
@@ -186,6 +201,8 @@
   components:
     - type: Sprite
       state: sigma_hangar_security
+    - type: Area
+      linkedLz: dropship_lz2
 
 - type: entity
   parent: RMCAreaCorsatSigma
@@ -194,6 +211,8 @@
   components:
     - type: Sprite
       state: sigma_airlock_east
+    - type: Area
+      linkedLz: dropship_lz2
 
 - type: entity
   parent: RMCAreaCorsatSigmaAirlockEast
@@ -202,6 +221,8 @@
   components:
     - type: Sprite
       state: corsat_id
+    - type: Area
+      linkedLz: dropship_lz2
 
 - type: entity
   parent: RMCAreaCorsatSigma
@@ -234,6 +255,8 @@
   components:
     - type: Sprite
       state: sigma_cargo
+    - type: Area
+      linkedLz: dropship_lz2
 
 - type: entity
   parent: RMCAreaCorsatSigma
@@ -242,6 +265,8 @@
   components:
     - type: Sprite
       state: sigma_laundry
+    - type: Area
+      linkedLz: dropship_lz2
 
 - type: entity
   parent: RMCAreaCorsatSigma
@@ -250,6 +275,8 @@
   components:
     - type: Sprite
       state: sigma_lavatory
+    - type: Area
+      linkedLz: dropship_lz2
 
 - type: entity
   parent: RMCAreaCorsatSigma
@@ -258,6 +285,8 @@
   components:
     - type: Sprite
       state: sigma_cafe
+    - type: Area
+      linkedLz: dropship_lz2
 
 - type: entity
   parent: RMCAreaCorsatSigma
@@ -266,6 +295,8 @@
   components:
     - type: Sprite
       state: sigma_residential
+    - type: Area
+      linkedLz: dropship_lz2
 
 - type: entity
   parent: RMCAreaCorsatSigma
@@ -274,6 +305,8 @@
   components:
     - type: Sprite
       state: sigma_security_checkpoint
+    - type: Area
+      linkedLz: dropship_lz2
 
 - type: entity
   parent: RMCAreaCorsatSigma
@@ -495,6 +528,8 @@
   components:
     - type: Sprite
       state: monorail
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGammaHangarMonorail
@@ -512,6 +547,7 @@
     - type: Sprite
       state: railcart
     - type: Area
+      linkedLz: dropship_lz1
       CAS: false
       fulton: false
       lasing: false
@@ -529,6 +565,8 @@
   components:
     - type: Sprite
       state: gamma_hangar
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGammaHangar
@@ -537,6 +575,8 @@
   components:
     - type: Sprite
       state: gamma_hangar
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGammaHangar
@@ -545,6 +585,8 @@
   components:
     - type: Sprite
       state: gamma_hangar_office
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGammaHangar
@@ -553,6 +595,8 @@
   components:
     - type: Sprite
       state: flight_center
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGammaHangar
@@ -561,6 +605,8 @@
   components:
     - type: Sprite
       state: gamma_hangar_security
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGammaHangar
@@ -569,6 +615,8 @@
   components:
     - type: Sprite
       state: gamma_arrivals
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGamma
@@ -577,6 +625,8 @@
   components:
     - type: Sprite
       state: gamma_foyer
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGamma
@@ -601,6 +651,8 @@
   components:
     - type: Sprite
       state: gamma_hallway_main
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGammaResidential
@@ -617,6 +669,8 @@
   components:
     - type: Sprite
       state: gamma_residential_east
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGammaResidential
@@ -657,6 +711,8 @@
   components:
     - type: Sprite
       state: gamma_showers
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGammaResidential
@@ -673,6 +729,8 @@
   components:
     - type: Sprite
       state: gamma_cargo
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGammaCargo
@@ -681,6 +739,8 @@
   components:
     - type: Sprite
       state: gamma_cargo_lobby
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGammaCargo
@@ -739,6 +799,8 @@
   components:
     - type: Sprite
       state: corsat_hydroponics
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGamma
@@ -763,6 +825,8 @@
   components:
     - type: Sprite
       state: food_storage
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGamma
@@ -782,6 +846,7 @@
     - type: Sprite
       state: gamma_security
     - type: Area
+      linkedLz: dropship_lz1
       minimapColor: "#a22d2dee"
 
 - type: entity
@@ -791,6 +856,8 @@
   components:
     - type: Sprite
       state: security_cell
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGammaSecurity
@@ -799,6 +866,8 @@
   components:
     - type: Sprite
       state: corsat_armory
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGamma
@@ -807,6 +876,8 @@
   components:
     - type: Sprite
       state: corsat_rnr
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGammaRnr
@@ -815,6 +886,8 @@
   components:
     - type: Sprite
       state: corsat_bar
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGammaRnr
@@ -823,6 +896,8 @@
   components:
     - type: Sprite
       state: corsat_arcade
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGammaRnr
@@ -840,6 +915,7 @@
     - type: Sprite
       state: gamma_engineering
     - type: Area
+      linkedLz: dropship_lz1
       minimapColor: "#c19504e7"
 
 - type: entity
@@ -865,6 +941,8 @@
   components:
     - type: Sprite
       state: corsat_core
+    - type: Area
+      linkedLz: dropship_lz1
 
 - type: entity
   parent: RMCAreaCorsatGamma

@@ -4,6 +4,7 @@
     AU14CLFSurvLeader: 1
   gruntsToSpawn:
     AU14CLFSurvFighter: 7
+    AU14JCLFSurvSurgeon: 1
   scalewithpop: false
   spawnTogether: true
 
@@ -22,7 +23,8 @@
   leadersToSpawn:
     AU14CLFSurvLeader: 1
   gruntsToSpawn:
-    AU14CLFSurvFighter: 5
+    AU14CLFSurvFighter: 4
+    AU14JCLFSurvSurgeon: 1
   scalewithpop: false
   spawnTogether: true
 
@@ -41,7 +43,8 @@
   leadersToSpawn:
     AU14CLFSurvLeader: 1
   gruntsToSpawn:
-    AU14JobCLFSurvFighter: 3
+    AU14JobCLFSurvFighter: 2
+    AU14JCLFSurvSurgeon: 1
   scalewithpop: false
   spawnTogether: true
 

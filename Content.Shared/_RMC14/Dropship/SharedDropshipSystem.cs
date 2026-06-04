@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Utility.Components;
@@ -52,6 +53,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private TimeSpan _dropshipInitialDelay;
     private TimeSpan _hijackInitialDelay;
@@ -350,18 +352,52 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
         while (almayerQuery.MoveNext(out _, out _, out var xform))
         {
-            if (xform.MapUid is { } mapUid)
-                shipMaps.Add(mapUid);
+            AddShipMapAndConnectedZLevels(shipMaps, xform.MapUid);
         }
 
         var shipQuery = EntityQueryEnumerator<ShipFactionComponent, TransformComponent>();
         while (shipQuery.MoveNext(out _, out _, out var xform2))
         {
-            if (xform2.MapUid is { } mapUid)
-                shipMaps.Add(mapUid);
+            AddShipMapAndConnectedZLevels(shipMaps, xform2.MapUid);
         }
 
         return shipMaps;
+    }
+
+    private void AddShipMapAndConnectedZLevels(HashSet<EntityUid> shipMaps, EntityUid? mapUid)
+    {
+        if (mapUid is not { } map)
+            return;
+
+        if (_zLevels.TryGetZNetwork(map, out var network) &&
+            _zLevels.TryGetDepthBounds(network.Value, out var minDepth, out var maxDepth))
+        {
+            var connectedMaps = new List<EntityUid>();
+            for (var depth = minDepth; depth <= maxDepth; depth++)
+            {
+                if (_zLevels.TryGetMapAtDepth(network.Value, depth, out var connectedMap))
+                    connectedMaps.Add(connectedMap);
+            }
+
+            AddShipMapAndConnectedZLevels(shipMaps, map, connectedMaps);
+            return;
+        }
+
+        AddShipMapAndConnectedZLevels(shipMaps, map, null);
+    }
+
+    private static void AddShipMapAndConnectedZLevels(
+        HashSet<EntityUid> shipMaps,
+        EntityUid mapUid,
+        IEnumerable<EntityUid>? connectedMaps)
+    {
+        shipMaps.Add(mapUid);
+
+        if (connectedMaps == null)
+            return;
+
+        foreach (var connectedMap in connectedMaps)
+            shipMaps.Add(connectedMap);
     }
 
     private void OnNavigationOpen(Entity<DropshipNavigationComputerComponent> ent, ref AfterActivatableUIOpenEvent args)
@@ -774,6 +810,9 @@ public abstract partial class SharedDropshipSystem : EntitySystem
     private void OnHijackerDestinationChosenMsg(Entity<DropshipNavigationComputerComponent> ent,
         ref DropshipHijackerDestinationChosenBuiMsg args)
     {
+        if (_net.IsClient)
+            return;
+
         _ui.CloseUi(ent.Owner, DropshipHijackerUiKey.Key, args.Actor);
 
         if (!TryGetEntity(args.Destination, out var destination))

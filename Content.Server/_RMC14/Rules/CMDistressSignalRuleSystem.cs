@@ -68,6 +68,7 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.Xenonids.Maturing;
 using Content.Shared._RMC14.Xenonids.Parasite;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Actions;
 using Content.Shared.AU14;
 using Content.Shared.CCVar;
@@ -98,6 +99,7 @@ using Robust.Shared.Collections;
 using Robust.Shared.Configuration;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -164,6 +166,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     [Dependency] private GhostSystem _ghost = default!;
     [Dependency] private ISerializationManager _serialization = default!;
     [Dependency] private XenoMaturingSystem _maturing = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private readonly HashSet<string> _operationNames = new();
     private readonly HashSet<string> _operationPrefixes = new();
@@ -857,7 +860,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                 if (!string.IsNullOrEmpty(shipFaction.Faction) &&
                     string.Equals(shipFaction.Faction, ev.HijackerFaction, StringComparison.OrdinalIgnoreCase))
                 {
-                    targetShipMaps.Add(shipXform.MapID);
+                    AddShipMapAndConnectedZLevelMapIds(targetShipMaps, shipXform.MapUid);
                 }
             }
 
@@ -865,16 +868,13 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
             while (almayerQuery.MoveNext(out _, out var aXform))
             {
-                targetShipMaps.Add(aXform.MapID);
+                AddShipMapAndConnectedZLevelMapIds(targetShipMaps, aXform.MapUid);
             }
         }
         else
         {
-            // Legacy xeno hijack: use Almayer maps
-            foreach (var mapId in _almayerMaps)
-            {
-                targetShipMaps.Add(mapId);
-            }
+            // Xeno hijack: use all ship maps, including connected z-level maps.
+            AddAllShipMapIds(targetShipMaps);
         }
 
         // Only do xeno-specific cleanup for xeno hijacks
@@ -1031,34 +1031,18 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
         var didCameraShake = false;
 
-        // Stun everyone on Almayer grids on the target map
-        var warshipQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
-        while (warshipQuery.MoveNext(out var uid, out _, out var xform))
+        var targetMaps = new HashSet<MapId>();
+        AddShipMapAndConnectedZLevelMapIds(targetMaps, ev.Map);
+
+        var gridQuery = EntityQueryEnumerator<BecomesStationComponent, MapGridComponent, TransformComponent>();
+        while (gridQuery.MoveNext(out var uid, out _, out _, out var xform))
         {
-            if (_transform.GetMapId(uid) != _transform.GetMapId(ev.Map))
+            var map = _transform.GetMapId(uid);
+            if (!targetMaps.Contains(map))
                 continue;
 
             if (!didCameraShake)
             {
-                var map = _transform.GetMapId(uid);
-                var sameMap = Filter.BroadcastMap(map);
-                _rmcCameraShake.ShakeCamera(sameMap, 10, 2);
-                didCameraShake = true;
-            }
-
-            StunAllOnShip(xform);
-        }
-
-        // Also stun on ShipFactionComponent grids on the target map
-        var shipQuery = EntityQueryEnumerator<ShipFactionComponent, TransformComponent>();
-        while (shipQuery.MoveNext(out var uid, out _, out var xform))
-        {
-            if (_transform.GetMapId(uid) != _transform.GetMapId(ev.Map))
-                continue;
-
-            if (!didCameraShake)
-            {
-                var map = _transform.GetMapId(uid);
                 var sameMap = Filter.BroadcastMap(map);
                 _rmcCameraShake.ShakeCamera(sameMap, 10, 2);
                 didCameraShake = true;
@@ -1188,18 +1172,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
             // Collect all ship maps (Almayer + ShipFaction) for the "abandoned" alive check
             _almayerMaps.Clear();
-            var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
-            while (almayerQuery.MoveNext(out _, out var xform))
-            {
-                _almayerMaps.Add(xform.MapID);
-            }
-
-            var shipFacQuery = EntityQueryEnumerator<ShipFactionComponent, TransformComponent>();
-            while (shipFacQuery.MoveNext(out _, out var xform))
-            {
-                if (!_almayerMaps.Contains(xform.MapID))
-                    _almayerMaps.Add(xform.MapID);
-            }
+            AddAllShipMapIds(_almayerMaps);
 
             var xenosAlive = false;
             var xenos = EntityQueryEnumerator<ActorComponent, XenoComponent, MobStateComponent, TransformComponent>();
@@ -2042,6 +2015,46 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
         {
             xenoConstruction.RemoveQueenBoost(queen);
         }
+    }
+
+    private void AddAllShipMapIds(ICollection<MapId> shipMaps)
+    {
+        var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
+        while (almayerQuery.MoveNext(out _, out var xform))
+        {
+            AddShipMapAndConnectedZLevelMapIds(shipMaps, xform.MapUid);
+        }
+
+        var shipQuery = EntityQueryEnumerator<ShipFactionComponent, TransformComponent>();
+        while (shipQuery.MoveNext(out _, out var xform))
+        {
+            AddShipMapAndConnectedZLevelMapIds(shipMaps, xform.MapUid);
+        }
+    }
+
+    private void AddShipMapAndConnectedZLevelMapIds(ICollection<MapId> shipMaps, EntityUid? mapUid)
+    {
+        if (mapUid is not { } map)
+            return;
+
+        AddMapId(shipMaps, map);
+
+        if (!_zLevels.TryGetZNetwork(map, out var network) ||
+            !_zLevels.TryGetDepthBounds(network.Value, out var minDepth, out var maxDepth))
+            return;
+
+        for (var depth = minDepth; depth <= maxDepth; depth++)
+        {
+            if (_zLevels.TryGetMapAtDepth(network.Value, depth, out var connectedMap))
+                AddMapId(shipMaps, connectedMap);
+        }
+    }
+
+    private void AddMapId(ICollection<MapId> shipMaps, EntityUid map)
+    {
+        var mapId = _transform.GetMapId(map);
+        if (!shipMaps.Contains(mapId))
+            shipMaps.Add(mapId);
     }
 
     /// <summary>

@@ -19,15 +19,18 @@
   - type: Storage
     maxItemSize: Small
     grid:
-    - 0,0,11,1
+    - 0,0,15,1
     whitelist:
       components:
       - CMScalpel
       - CMHemostat
       - CMRetractor
+      - CMBoneGel
+      - CMCircularSaw
       - CMCautery
       tags:
       - CMSurgicalLine
+      - CMBoneSaw
       - CMSynthGraft
       #TODO FixoVein
   - type: FixedItemSizeStorage
@@ -63,6 +66,8 @@
     - id: CMHemostat
     - id: CMRetractor
     - id: CMCautery
+    - id: CMCircularSaw
+    - id: CMBoneGel
     - id: CMSurgicalLine
     - id: CMSynthGraft
 

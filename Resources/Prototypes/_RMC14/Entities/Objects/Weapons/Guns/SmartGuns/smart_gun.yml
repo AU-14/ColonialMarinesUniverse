@@ -238,14 +238,32 @@
   - type: RMCSelectiveFire
     recoilWielded: 3
     scatterWielded: 10
-    baseFireRate: 10
+    baseFireRate: 15
     burstScatterMult: 1
     modifiers:
       FullAuto:
         maxScatterModifier: 0
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 80
+        shotsToMaxScatter: 250
+  - type: GunToggleableAmmo
+    settings:
+    - damage:
+        types:
+          Piercing: 62
+      armorPiercing: 20
+      name: rmc-toggleable-ammo-highly-precise
+      icon:
+        sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
+        state: ammo_swap_normal
+    - damage:
+        types:
+          Piercing: 53
+      armorPiercing: 60
+      name: rmc-toggleable-ammo-armor-shredding
+      icon:
+        sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
+        state: ammo_swap_ap
 
 - type: entity
   parent: RMCSmartGunNoCamo

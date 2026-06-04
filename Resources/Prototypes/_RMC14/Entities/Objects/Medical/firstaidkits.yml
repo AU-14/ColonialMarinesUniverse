@@ -307,7 +307,7 @@
 - type: entity
   parent: CMFirstAidKit
   id: RMCStandardAidKitPVE
-  name: standard-issue first-aid pack
+  name: first-aid pack
   description: A soft first-aid pack typically containing essential medical supplies for use in the field.
   suffix: PVE
   components:
@@ -336,7 +336,7 @@
 - type: entity
   parent: CMFirstAidKit
   id: RMCBruteAidKitPVE
-  name: brute first-aid pack
+  name: first-aid pack
   description: A soft first-aid pack containing equipment for physical treatment in the field.
   suffix: PVE
   components:
@@ -365,7 +365,7 @@
 - type: entity
   parent: CMFirstAidKit
   id: RMCBurnAidKitPVE
-  name: burn first-aid pack
+  name: first-aid pack
   description: A soft first-aid pack containing equipment for burns treatment in the field.
   suffix: PVE
   components:

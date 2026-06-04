@@ -29,6 +29,32 @@
       amount: 4
 
 - type: entity
+  parent: RMCPouchMagazineLarge
+  id: AU14PouchMagazineLargeFilledFP9000
+  suffix: Filled, FP9000
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSMGFP9000
+      amount: 4
+
+- type: entity
+  parent: RMCSatchelLightpackWeYa
+  id: AU14BackpackWeYuSurvSatchelFilledFP9000
+  suffix: Filled, FP9000
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMREWeYa
+    - id: CMCanteen
+    - id: RMCMagazineSMGFP9000
+    - id: RMCMagazineSMGFP9000
+    - id: RMCMagazineSMGFP9000
+    - id: RMCGrenadeBlastM12
+    - id: RMCGrenadeBlastM12
+
+
+- type: entity
   parent: RMCSatchelLightpackWeYa
   id: AU14BackpackWeYuSurvSatchelFilledNSG23
   suffix: Filled, NSG-23
@@ -80,9 +106,11 @@
   components:
   - type: EntityPreset
     randomWeapon:
-    - [ RMCWeaponRifleSSG45, AU14PouchMagazineLargeFilledNSG23, AU14BackpackWeYuSurvSatchelFilledNSG23]
-    - [ RMCWeaponRifleM54C2, AU14PouchMagazineLargeFilledM54C2, AU14BackpackWeYuSurvSatchelFilledM54C2 ]
-    - [ AU14WeaponRifleF44AALock, AU14PouchMagazineLargeFilledF44AA, AU14BackpackWeYuSurvSatchelFilledF44AA ]
+    - [ RMCWeaponRifleSSG45, AU14PouchMagazineLargeFilledNSG23, AU14BackpackWeYuSurvSatchelFilledNSG23] # 1 in 5
+    - [ RMCWeaponRifleM54C2, AU14PouchMagazineLargeFilledM54C2, AU14BackpackWeYuSurvSatchelFilledM54C2 ] # 1 in 5
+    - [ AU14WeaponRifleF44AALock, AU14PouchMagazineLargeFilledF44AA, AU14BackpackWeYuSurvSatchelFilledF44AA ] # 1 in 5
+    - [ RMCWeaponSMGFP9000PMC, AU14PouchMagazineLargeFilledFP9000, AU14BackpackWeYuSurvSatchelFilledFP9000] # 2 in 5
+    - [ RMCWeaponSMGFP9000PMC, AU14PouchMagazineLargeFilledFP9000, AU14BackpackWeYuSurvSatchelFilledFP9000]
     tryEquipRandomWeapon: true
 
 - type: entity
@@ -92,9 +120,11 @@
   components:
   - type: EntityPreset
     randomWeapon:
-    - [ RMCWeaponRifleSSG45, AU14PouchMagazineLargeFilledNSG23 ]
-    - [ RMCWeaponRifleM54C2, AU14PouchMagazineLargeFilledM54C2 ]
-    - [ AU14WeaponRifleF44AALock, AU14PouchMagazineLargeFilledF44AA ]
+    - [ RMCWeaponRifleSSG45, AU14PouchMagazineLargeFilledNSG23 ] # 1 in 5
+    - [ RMCWeaponRifleM54C2, AU14PouchMagazineLargeFilledM54C2 ] # 1 in 5
+    - [ AU14WeaponRifleF44AALock, AU14PouchMagazineLargeFilledF44AA ] # 1 in 5
+    - [ RMCWeaponSMGFP9000PMC, AU14PouchMagazineLargeFilledFP9000, AU14BackpackWeYuSurvSatchelFilledFP9000] # 2 in 5
+    - [ RMCWeaponSMGFP9000PMC, AU14PouchMagazineLargeFilledFP9000, AU14BackpackWeYuSurvSatchelFilledFP9000]
     tryEquipRandomWeapon: true
 
 - type: entity

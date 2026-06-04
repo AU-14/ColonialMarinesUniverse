@@ -1028,6 +1028,7 @@
     - name: Equipment
       takeAll: CMStandard
       entries:
+      - id: CMArmorHelmetM12
       - id: RMCLaserDesignator
       - id: RMCWhistle
       - id: RMCPackFlareCAS
@@ -1198,6 +1199,7 @@
   - type: CMVendorBundle
     bundle:
     - RMCVisorMedical
+    - RMCGlassesMedicalHUDGlasses
     - AU14CMDefibrillator
     - CMHealthAnalyzer
     - RMCFlashlightPen
@@ -1206,12 +1208,12 @@
     - CMPortableSurgicalBedSpawnFolded
     - RMCMedevacStretcherFolded
     - AU14IVFoldableFolded
-    - CMSurgicalLine
-    - CMSynthGraft
     - CMStasisBagFolded
     - CMSurgicalCaseFilled
-    - CMFirstAidKit
-    - CMMedicalUpgradeKitFilledCommando
+    - RMCStandardAidKitPVE
+    - RMCStandardAidKitPVE
+    - RMCBurnAidKitPVE
+    - RMCBruteAidKitPVE
 
 - type: entity
   parent: ColMarTechBase
@@ -1383,6 +1385,10 @@
         amount: 2
       - id: RMCBoxClaymoreMineFilled
         amount: 3
+      - id: AU14PacketGrenadeTearGasFilled
+        amount: 2
+      - id: AU14PacketGrenadeTearGasFilledAirburst
+        amount: 1
       - id: RMCPacketGrenadeM74AGMFFilled
         amount: 4
       - id: RMCPacketGrenadeM74AGMSHornetFilled

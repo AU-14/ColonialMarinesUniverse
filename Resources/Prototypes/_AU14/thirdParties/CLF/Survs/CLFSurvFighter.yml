@@ -10,6 +10,8 @@
   icon: "CMJobIconEmpty"
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-clflrs
+  ranks:
+    RMCRankCivilian: []
   accessGroups:
   - Colonist
   special:
@@ -48,11 +50,11 @@
     job: AU14JobCLFSurvFighter
     raffle:
       settings: short
-    rules: au14-clfsurv-desription
+    rules: au14-clfsurv-rules
 
 - type: entity
   id: AU14CLFSurvFighterPreset
-  name: clf surv leader preset
+  name: clf surv fighter preset
   categories: [ HideSpawnMenu ]
   components:
   - type: EntityPreset

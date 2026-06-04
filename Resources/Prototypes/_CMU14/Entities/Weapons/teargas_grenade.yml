@@ -1,0 +1,19 @@
+- type: entity
+  parent:
+  - CMGrenadeSmoke
+  - RMCM40DPTags
+  id: CMU14TearGasGrenade
+  name: M19-NL gas grenade
+  description: Sometimes referred to as the "Fogger", the M19 nonlethal gas grenade was intended for boarding actions against pirate vessels or putting down civil unrest, saturating spaces with an irritating aerosol with temporary neuromuscular effects.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Weapons/Grenades/M19TearGas.rsi
+  - type: SpawnOnTrigger
+    proto: CMU14TearGas
+  - type: OnUseTimerTrigger
+    delay: 4.5
+  - type: Tag
+    tags:
+    - Grenade
+    - RMCGrenadeM40
+    - RMCGrenadeHEDP

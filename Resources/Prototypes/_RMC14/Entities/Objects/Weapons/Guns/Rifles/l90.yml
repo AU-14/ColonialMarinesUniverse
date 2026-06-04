@@ -177,8 +177,8 @@
 - type: entity
   parent: RMCWeaponRifleL90A2
   id: RMCWeaponRifleL91SWS
-  name: L91 SWS
-  description: The L91 Support Weapon System features a significantly longer and heavier barrel than the L90. While this makes it more unwieldy, the added length, weight, and durability enable accurate and sustained fire from a stationary position. Chambered in 7x43mm.
+  name: SLR SWS
+  description: The SLR Support Weapon System features a significantly longer and heavier barrel than the L90. While this makes it more unwieldy, the added length, weight, and durability enable accurate and sustained fire from a stationary position. Chambered in 7x43mm.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/l91.rsi

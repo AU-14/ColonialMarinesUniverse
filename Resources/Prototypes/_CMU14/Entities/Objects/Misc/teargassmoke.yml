@@ -1,0 +1,85 @@
+- type: entity
+  id: CMU14TearGas
+  name: Tear Gas
+  #categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        mask:
+        - MobMask
+        layer:
+        - MidImpassable
+  - type: Occluder
+  - type: Sprite
+    sprite: _RMC14/Effects/smoke.rsi
+    state: smoke2
+    color: "#B9DBE1"
+  - type: SpriteColor
+    color: "#B9DBE1"
+  - type: TimedDespawn
+    lifetime: 12
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: Appearance
+  - type: ActiveEdgeSpreader
+  - type: EdgeSpreader
+    id: CMU14TearGas
+  - type: EvenSmoke
+    spawn: CMU14TearGas
+    range: 2
+
+    #values tweaked to remove damage and prioritize incapacitating without any ouchies since it's meant to be a crowd control nade
+  - type: NeurotoxinInjector
+    neuroPerSecond: 2.3
+    #current neuro allows for someone who stands in the gas for the entire duration to get knocked out but without the hallucinations of CAS/mortar
+    affectsDead: false
+    affectsInfectedNested: false
+    toxinDamage:
+        groups:
+          Toxin: 0
+    oxygenDamage:
+        types:
+          Asphyxiation: 0
+    coughDamage:
+        groups:
+          Brute: 0
+
+    #just makes it so that you have audible feedback upon inhaling smoke
+  - type: DamageOverTime
+    affectsDead: false
+    affectsInfectedNested: false
+    emotes:
+    - Cough
+    - Gasp
+  
+  - type: DeleteOnExplosion
+
+  #current values allow for a unit with a HAZOPS gas mask filter to stand within the duration of 4 and a half tear gas nades 
+  - type: GasMaskFilterDamage
+    damage: 0.5
+    neurotoxin: true
+
+- type: edgeSpreader
+  id: CMU14TearGas
+  updatesPerSecond: 3
+
+
+- type: entity
+  id: CMU14InstantTearGas
+  parent: CMU14TearGas
+  name: Tear Gas
+  components:
+  - type: TimedDespawn
+    lifetime: 6
+  - type: EdgeSpreader
+    id: CMU14TearGas
+    updatesPerSecond: 1.5

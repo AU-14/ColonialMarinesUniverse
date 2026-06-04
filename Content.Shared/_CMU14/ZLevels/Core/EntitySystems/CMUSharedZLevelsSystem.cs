@@ -9,6 +9,8 @@ using JetBrains.Annotations;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Network;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Profiling;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -23,6 +25,7 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
     public const float ZLevelVisualOffset = 0.7f;
 
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _net = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private DamageableSystem _damage = default!;
@@ -31,6 +34,7 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] protected ProfManager Prof = default!;

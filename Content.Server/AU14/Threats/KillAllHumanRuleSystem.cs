@@ -187,7 +187,7 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
             }
             else
             {
-                var winMessage = _auRoundSystem._selectedthreat.WinMessage;
+                var winMessage = _auRoundSystem._selectedthreat?.WinMessage;
                 if (!string.IsNullOrEmpty(winMessage))
                 {
                     _gameTicker.EndRound(winMessage);
