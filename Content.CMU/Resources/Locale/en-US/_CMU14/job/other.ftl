@@ -387,10 +387,12 @@ au14-job-prefix-tweiasf-pl = 24/PARA PL
 
 au14-job-description-twepara = You are a member of the 24th Paramarine Regiment. Follow your orders.
 
-au14-job-description-parasurv = You are a stranded member of the 24th Paramarine Regiment. Your outpost has been overrun, fight for your life.
+au14-job-description-parasurv = You are a stranded member of the 24th Paramarine Regiment. Fight for Empress, country and also your life.
 
-au14-job-greeting-parasurv = It has been a week since you sent out the distress Signal.
-    The armory ran out of ammo 3 days ago, the perimeter got breached yesterday.
-    You and your team barely made it out.
+au14-job-greeting-parasurv = You have been stranded in this colony, dropship out of fuel and almost out of ammunition
+    Most of your squad is dead, you are all thats left... For now
 
-    No choice but to keep fighting and hope someone heard your signal.
+    You are a member of the TWE, you are NEUTRAL to civilians and other countries and HOSTILE to the CLF.
+
+au14-job-rules-parasurv = You are a member of the TWE, you are NEUTRAL civilians and other countries and HOSTILE to the CLF.
+    You are fully aware of the threat after having witnessed it for several days.
