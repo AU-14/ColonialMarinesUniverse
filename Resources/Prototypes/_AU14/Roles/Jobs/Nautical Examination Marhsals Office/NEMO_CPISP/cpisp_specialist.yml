@@ -86,4 +86,4 @@
   id: AU14JobIconCPISPSpecialist
   icon:
     sprite: _AU14/Interface/job_icons.rsi
-    state: hudsquad_nemo_kill_spec
+    state: hudsquad_nemo_kill_lead_spec
