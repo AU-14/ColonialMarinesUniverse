@@ -439,6 +439,156 @@
     tags:
     - AU14SquadMSG
 
+- type: entity
+  parent: SquadBase
+  id: AU14SquadCPISP
+  name: NEMO CPISP
+  components:
+  - type: SquadTeam
+    color: "#800000"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: radioNEMO
+    minimapBackground:
+      sprite: /Textures/_AU14/Interface/au14map_blips.rsi
+      state: background_nemo
+    canSupplyDrop: false
+    group: CPISP
+  - type: Tag
+    tags:
+    - AU14SquadCPISP
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadIRG
+  name: NEMO IRG
+  components:
+  - type: SquadTeam
+    color: "#800000"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: radioNEMO
+    minimapBackground:
+      sprite: /Textures/_AU14/Interface/au14map_blips.rsi
+      state: background_nemo
+    canSupplyDrop: false
+    group: IRG
+  - type: Tag
+    tags:
+    - AU14SquadIRG
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadMIG
+  name: NEMO MIG
+  components:
+  - type: SquadTeam
+    color: "#800000"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: radioNEMO
+    minimapBackground:
+      sprite: /Textures/_AU14/Interface/au14map_blips.rsi
+      state: background_nemo
+    canSupplyDrop: false
+    group: MIG
+  - type: Tag
+    tags:
+    - AU14SquadMIG
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadMIS
+  name: NEMO MIS
+  components:
+  - type: SquadTeam
+    color: "#800000"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: radioNEMO
+    minimapBackground:
+      sprite: /Textures/_AU14/Interface/au14map_blips.rsi
+      state: background_nemo
+    canSupplyDrop: false
+    group: MIS
+  - type: Tag
+    tags:
+    - AU14SquadMIS
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadSED
+  name: NEMO SED
+  components:
+  - type: SquadTeam
+    color: "#800000"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: radioNEMO
+    minimapBackground:
+      sprite: /Textures/_AU14/Interface/au14map_blips.rsi
+      state: background_nemo
+    canSupplyDrop: false
+    group: SED
+  - type: Tag
+    tags:
+    - AU14SquadSED
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadMORW
+  name: NEMO MORW
+  components:
+  - type: SquadTeam
+    color: "#800000"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: radioNEMO
+    minimapBackground:
+      sprite: /Textures/_AU14/Interface/au14map_blips.rsi
+      state: background_nemo
+    canSupplyDrop: false
+    group: MORW
+  - type: Tag
+    tags:
+    - AU14SquadMORW
+
+- type: Tag
+  id: SquadCPISP
+
+- type: Tag
+  id: SquadIRG
+
+- type: Tag
+  id: SquadMIG
+
+- type: Tag
+  id: SquadMIS
+
+- type: Tag
+  id: SquadSED
+
+- type: Tag
+  id: SquadMORW
+
 - type: Tag
   id: SquadHRT
 

@@ -61,7 +61,7 @@
       role: AU14JobGOVFORSquadSergeant
       time: 3600 # 1 Hour
   - type: GhostRoleApplySpecial
-    squad: SquadProvost
+    squad: AU14SquadCPISP
 
 - type: startingGear
   id: AU14GearCPISPLeader

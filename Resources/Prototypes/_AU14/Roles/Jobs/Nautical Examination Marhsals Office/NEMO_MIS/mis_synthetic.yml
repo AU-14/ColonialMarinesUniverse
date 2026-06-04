@@ -61,7 +61,7 @@
       role: AU14JobGOVFORAuxSupportSynth
       time: 3600 # 1 Hour
   - type: GhostRoleApplySpecial
-    squad: SquadProvost
+    squad: AU14SquadMIS
 
 - type: startingGear
   id: AU14GearMISSynthetic

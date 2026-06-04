@@ -1,6 +1,6 @@
-# NEMO Civil Protection Stability & Defense Force
+# NEMO Civil Protection Insurrection Stability & Protection Force
 - type: partySpawn
-  id: NEMOCPSDFSpawn
+  id: NEMOCPISPSpawn
   leadersToSpawn:
     AU14CPISPInspector: 1
     AU14CPISPLeader: 1
@@ -16,8 +16,8 @@
   spawnTogether: true
 
 - type: auThirdParty
-  id: NEMOCPSDFParty
-  partyspawn: NEMOCPSDFSpawn
+  id: NEMOCPISPParty
+  partyspawn: NEMOCPISPSpawn
   entrymethod: shuttle
   weight: 10
   minplayers: 400

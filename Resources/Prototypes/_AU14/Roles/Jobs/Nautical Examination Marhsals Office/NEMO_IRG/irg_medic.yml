@@ -61,7 +61,7 @@
       role: AU14JobGOVFORPlatoonCorpsman
       time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
-    squad: SquadProvost
+    squad: AU14SquadIRG
 
 - type: startingGear
   id: AU14GearIRGMedic

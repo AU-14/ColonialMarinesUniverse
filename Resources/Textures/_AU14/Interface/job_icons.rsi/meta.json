@@ -75,10 +75,10 @@
         },
         {
             "name": "hudsquad_nemo_commander"
-        },   
+        },
         {
             "name": "hudsquad_nemo_kill_commander"
-        },  
+        },
         {
             "name": "hudsquad_nemo_lead_team"
         },
@@ -102,6 +102,12 @@
         },
         {
             "name": "hudsquad_nemo_kill_medic"
+        },
+        {
+            "name": "hudsquad_nemo_dp"
+        },
+        {
+            "name": "hudsquad_nemo_dcc"
         }
     ]
 }

@@ -58,7 +58,7 @@
       role: AU14JobGOVFORMilitaryPoliceMan
       time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
-    squad: SquadProvost
+    squad: AU14SquadIRG
 
 - type: startingGear
   id: AU14GearIRGEnforcer

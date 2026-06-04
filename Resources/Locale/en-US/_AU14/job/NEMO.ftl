@@ -56,19 +56,19 @@ au14-nemo-mig = Marshal Intervention Group
 au14-nemo-irg = Instability Response Group
 au14-nemo-srt = Special Response Team
 au14-nemo-mis = Marshal Intelligence Service
-au14-nemo-cpsdf = Civil Protection Stability & Defense Force
+au14-nemo-cpisp = Civil Protection Insurrection Stability & Protection Force
 
-# CPISP - Civil Protection Stability & Defense Force
+# CPISP - Civil Protection Insurrection Stability & Protection Force
 au14-job-name-corp-nemo-cpisp-specialist = CPISP Specialist
-au14-job-description-corp-nemo-cpisp-specialist = You are part of the elite Civil Protection Stability & Defense Force! Deployed on high-risk missions and protection tasks of high-ranking officials. Only the best NEMO operatives make it here.
+au14-job-description-corp-nemo-cpisp-specialist = You are part of the elite Civil Protection Insurrection Stability & Protection Force! Deployed on high-risk missions and protection tasks of high-ranking officials. Only the best NEMO operatives make it here.
 au14-job-prefix-nemo-cpisp-specialist = CPISP-S
 
 au14-job-name-corp-nemo-cpisp-enforcer = CPISP Enforcer
-au14-job-description-corp-nemo-cpisp-enforcer = You are an enforcer in the elite Civil Protection Stability & Defense Force! Ready for high-risk tactical operations protecting high-ranking officials.
+au14-job-description-corp-nemo-cpisp-enforcer = You are an enforcer in the elite Civil Protection Insurrection Stability & Protection Force! Ready for high-risk tactical operations protecting high-ranking officials.
 au14-job-prefix-nemo-cpisp-enforcer = CPISP-E
 
 au14-job-name-corp-nemo-cpisp-inspector = CPISP Inspector
-au14-job-description-corp-nemo-cpisp-inspector = You are an inspector in the elite Civil Protection Stability & Defense Force! Coordinate protective operations and tactical assessments for high-value targets.
+au14-job-description-corp-nemo-cpisp-inspector = You are an inspector in the elite Civil Protection Insurrection Stability & Protection Force! Coordinate protective operations and tactical assessments for high-value targets.
 au14-job-prefix-nemo-cpisp-inspector = CPISP-I
 
 au14-job-name-corp-nemo-cpisp-leader = CPISP Team Leader
@@ -80,7 +80,7 @@ au14-job-description-corp-nemo-cpisp-medic = You are the medical specialist of t
 au14-job-prefix-nemo-cpisp-medic = CPISP-M
 
 au14-job-name-corp-nemo-cpisp-operator = CPISP Operator
-au14-job-description-corp-nemo-cpisp-operator = You are an operator in the elite Civil Protection Stability & Defense Force! Execute specialized tactical operations with maximum precision.
+au14-job-description-corp-nemo-cpisp-operator = You are an operator in the elite Civil Protection Insurrection Stability & Protection Force! Execute specialized tactical operations with maximum precision.
 au14-job-prefix-nemo-cpisp-operator = CPISP-OP
 
 au14-job-name-corp-nemo-cpisp-pointman = CPISP Pointman
