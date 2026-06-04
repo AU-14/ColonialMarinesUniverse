@@ -20,7 +20,7 @@
   partyspawn: NEMOCPSDFSpawn
   entrymethod: shuttle
   weight: 10
-  minplayers: 9
+  minplayers: 400
   maxplayers: 400
   GhostsNeeded: 9
   roundstart: false
