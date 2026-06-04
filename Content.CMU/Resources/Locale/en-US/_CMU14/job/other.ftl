@@ -392,7 +392,7 @@ au14-job-description-IASFsurv = You are a stranded member of the IASF 24th Parac
 au14-job-greeting-IASFsurv = You have been stranded in this colony, dropship out of fuel and almost out of ammunition
     Most of your squad is dead, you are all thats left... For now
 
-    You are a member of the TWE, you are NEUTRAL to civilians and other countries and HOSTILE to the CLF.
+    You are a member of the Three World Empires Imperial Armed Space Forces, you are NEUTRAL to civilians and other countries and HOSTILE to the CLF.
 
-au14-job-rules-IASFsurv = You are a member of the TWEs IASF, you are NEUTRAL civilians and other countries and HOSTILE to the CLF.
+au14-job-rules-IASFsurv = You are a member of the TWEs IASF, you are NEUTRAL to civilians and other countries and HOSTILE to the CLF.
     You are fully aware of the threat after having witnessed it for several days.
