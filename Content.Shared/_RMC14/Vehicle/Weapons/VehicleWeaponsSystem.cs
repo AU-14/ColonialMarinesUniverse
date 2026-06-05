@@ -148,7 +148,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
         target = default;
 
         if (!_turretSystem.TryResolveRotationTarget(gunUid, out var rotationTurretUid, out var rotationTurret) ||
-            !_turretSystem.TryGetTurretOrigin(rotationTurretUid, rotationTurret, out var origin))
+            !_turretSystem.TryGetTurretOrigin(rotationTurretUid, out var origin))
         {
             return false;
         }

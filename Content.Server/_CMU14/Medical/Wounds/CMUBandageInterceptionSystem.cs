@@ -72,9 +72,6 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
             return;
         }
 
-        if (ShouldYieldToArmedSurgeryTool(args.User, patient, used))
-            return;
-
         var woundTarget = PickBandageTarget(args.User, patient, treater);
         if (woundTarget is not { } targetPart)
         {
@@ -82,6 +79,12 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
                                  PickDamageOnlyTarget(args.User, patient, treater);
             if (fallbackTarget is not { } fallbackPart)
             {
+                if (TryHandleArmedSurgeryTool(args.User, patient, used, out var surgeryHandled))
+                {
+                    args.Handled = surgeryHandled;
+                    return;
+                }
+
                 _popup.PopupEntity(Loc.GetString("cmu-medical-bandage-no-wounds"), patient, args.User, PopupType.SmallCaution);
                 args.Handled = true;
                 return;
@@ -91,7 +94,7 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         }
 
         if (woundTarget != null
-            && treater.InstantWoundTreatment
+            && CanApplyInstantWoundTreatment(args.User, treater)
             && TryApplyInstantWoundTreatment(args.User, patient, targetPart, used, treater))
         {
             args.Handled = true;
@@ -254,14 +257,21 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         };
     }
 
-    private bool ShouldYieldToArmedSurgeryTool(EntityUid medic, EntityUid patient, EntityUid used)
+    private bool TryHandleArmedSurgeryTool(EntityUid medic, EntityUid patient, EntityUid used, out bool handled)
     {
+        handled = false;
+
         if (!TryComp<CMUSurgeryArmedStepComponent>(patient, out var armed))
             return false;
 
-        return armed.Surgeon == medic
-            && armed.RequiredToolCategory is { } category
-            && _surgery.ToolMatchesCategory(used, category);
+        if (armed.Surgeon != medic
+            || armed.RequiredToolCategory is not { } category
+            || !_surgery.ToolMatchesCategory(used, category))
+        {
+            return false;
+        }
+
+        return _surgery.TryHandleArmedToolUse(patient, armed, medic, used, patient, out handled, out _);
     }
 
     private EntityUid? PickDamageOnlyTarget(EntityUid medic, EntityUid patient, WoundTreaterComponent treater)
@@ -446,6 +456,13 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         }
 
         return worst is { } w ? WoundSizeProfile.BandageDelay(w) : TreatDelay;
+    }
+
+    private bool CanApplyInstantWoundTreatment(EntityUid user, WoundTreaterComponent treater)
+    {
+        return treater.InstantWoundTreatment ||
+               (treater.InstantWoundTreatmentSkills.Count > 0 &&
+                _skills.HasAllSkills(user, treater.InstantWoundTreatmentSkills));
     }
 
     private void OnBandageDoAfter(Entity<CMUBandagePendingComponent> ent, ref CMUBandageDoAfterEvent args)

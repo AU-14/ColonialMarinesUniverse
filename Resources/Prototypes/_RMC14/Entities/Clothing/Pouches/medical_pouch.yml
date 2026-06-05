@@ -6,6 +6,11 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Pouches/medical.rsi
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - pocket
+    sprite: _RMC14/Objects/Clothing/Pouches/medical.rsi
   - type: Storage
     maxItemSize: Large
     grid:
@@ -34,6 +39,7 @@
       - Hypospray
       components:
       - Hypospray
+      - Defibrillator
   - type: FixedItemSizeStorage
 
 - type: entity

@@ -98,7 +98,11 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     public static bool CollisionDebugEnabled { get; set; }
     public static bool MovementDebugEnabled { get; set; }
 
+    private readonly HashSet<EntityUid> _intersecting = new();
+    private readonly List<EntityUid>[] _hitsBuffers = { new(), new(), new() };
+    private int _hitsDepth;
     private readonly Dictionary<EntityUid, TimeSpan> _lastMobCollision = new();
+    private readonly DamageSpecifier _mobCollisionDamage = new() { DamageDict = { [CollisionDamageType] = MobCollisionDamage } };
     private readonly Dictionary<EntityUid, TimeSpan> _nextImmobilePopupAt = new();
     private readonly HashSet<EntityUid> _immobileAnnounced = new();
     private static readonly TimeSpan ImmobilePopupCooldown = TimeSpan.FromSeconds(4);
@@ -108,6 +112,9 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     private readonly Dictionary<EntityUid, EntityUid> _activeXenoPushers = new();
     private readonly HashSet<EntityUid> _directMoveBlockers = new();
     private readonly HashSet<EntityUid> _pushIgnoredEntities = new();
+    private readonly HashSet<EntityUid> _vehiclePushIgnored = new();
+    private readonly HashSet<EntityUid> _bypassInitialBlockers = new();
+    private readonly HashSet<EntityUid> _bypassSampleBlockers = new();
 
     private enum VehicleCollisionClass : byte
     {

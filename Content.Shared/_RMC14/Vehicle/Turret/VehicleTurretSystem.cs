@@ -141,7 +141,7 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         if (!targetTurret.RotateToCursor)
             return;
 
-        if (!TryGetTurretOrigin(targetUid, targetTurret, out var originCoords))
+        if (!TryGetTurretOrigin(targetUid, out var originCoords))
             return;
 
         var targetCoords = GetCoordinates(args.Coordinates);
@@ -262,7 +262,7 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         _transform.SetLocalRotation(visual, visualLocalRot, visualXform);
     }
 
-    private void TryGetAnchorTurret(
+    public void TryGetAnchorTurret(
         EntityUid turretUid,
         VehicleTurretComponent turret,
         out EntityUid anchorUid,
@@ -281,18 +281,18 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         anchorTurret = parentTurret;
     }
 
-    public bool TryGetTurretOrigin(EntityUid turretUid, VehicleTurretComponent turret, out EntityCoordinates origin)
+    public bool TryGetTurretOrigin(EntityUid turretUid, out EntityCoordinates origin)
     {
         origin = default;
 
-        if (!TryGetVehicle(turretUid, out var vehicle))
+        if (!TryGetVehicle(turretUid, out _))
             return false;
 
         origin = _transform.GetMoverCoordinates(turretUid);
         return true;
     }
 
-    private Vector2 GetPixelOffset(VehicleTurretComponent turret, Angle facing)
+    public Vector2 GetPixelOffset(VehicleTurretComponent turret, Angle facing)
     {
         if (!turret.UseDirectionalOffsets)
             return turret.PixelOffset;
@@ -333,7 +333,7 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         return dir.ToAngle();
     }
 
-    private Angle GetVehicleFacingAngle(EntityUid vehicle, Angle vehicleRot)
+    public Angle GetVehicleFacingAngle(EntityUid vehicle, Angle vehicleRot)
     {
         if (TryComp(vehicle, out GridVehicleMoverComponent? mover) && mover.CurrentDirection != Vector2i.Zero)
             return new Vector2(mover.CurrentDirection.X, mover.CurrentDirection.Y).ToWorldAngle();
@@ -341,7 +341,7 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         return vehicleRot;
     }
 
-    private Angle GetOffsetFacing(
+    public Angle GetOffsetFacing(
         VehicleTurretComponent turret,
         VehicleTurretComponent anchorTurret,
         Angle vehicleRot,
@@ -353,7 +353,7 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         return (vehicleRot + anchorTurret.WorldRotation).Reduced();
     }
 
-    private bool TryGetVehicle(EntityUid turretUid, out EntityUid vehicle)
+    public bool TryGetVehicle(EntityUid turretUid, out EntityUid vehicle)
     {
         vehicle = default;
         var current = turretUid;
@@ -407,7 +407,7 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         return true;
     }
 
-    private bool TryGetParentTurret(
+    public bool TryGetParentTurret(
         EntityUid turretUid,
         out EntityUid parentUid,
         out VehicleTurretComponent parentTurret)
@@ -445,7 +445,7 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         if (!TryGetVehicle(targetUid, out var vehicle))
             return false;
 
-        if (!TryGetTurretOrigin(targetUid, targetTurret, out var originCoords))
+        if (!TryGetTurretOrigin(targetUid, out var originCoords))
             return false;
 
         targetCoords = Transform(target).Coordinates;
@@ -617,14 +617,16 @@ public sealed partial class VehicleTurretSystem : EntitySystem
 
         var vehicleRot = _transform.GetWorldRotation(vehicle);
 
+        var aimChecked = false;
         if (args.ToCoordinates != null &&
-            TryGetTurretOrigin(targetUid, targetTurret, out var originCoords))
+            TryGetTurretOrigin(targetUid, out var originCoords))
         {
             var originMap = _transform.ToMapCoordinates(originCoords);
             var targetMap = _transform.ToMapCoordinates(args.ToCoordinates.Value);
             var direction = targetMap.Position - originMap.Position;
             if (direction.LengthSquared() > 0.0001f)
             {
+                aimChecked = true;
                 var desiredWorldRotation = direction.ToWorldAngle();
                 var currentWorldRotation = (targetTurret.WorldRotation + vehicleRot).Reduced();
                 var desiredDelta = Angle.ShortestDistance(currentWorldRotation, desiredWorldRotation);
@@ -637,20 +639,23 @@ public sealed partial class VehicleTurretSystem : EntitySystem
             }
         }
 
-        var worldRotation = (targetTurret.WorldRotation + vehicleRot).Reduced();
-        var targetWorldRotation = targetTurret.StabilizedRotation
-            ? targetTurret.TargetRotation
-            : (targetTurret.TargetRotation + vehicleRot).Reduced();
-
-        var delta = Angle.ShortestDistance(worldRotation, targetWorldRotation);
-        if (Math.Abs(delta.Theta) <= alignmentTolerance)
+        if (!aimChecked)
         {
-            ApplyShotDirectionConstraint(ent.Comp, targetTurret, targetUid, vehicle, ref args);
-            return;
+            var worldRotation = (targetTurret.WorldRotation + vehicleRot).Reduced();
+            var targetWorldRotation = targetTurret.StabilizedRotation
+                ? targetTurret.TargetRotation
+                : (targetTurret.TargetRotation + vehicleRot).Reduced();
+
+            var delta = Angle.ShortestDistance(worldRotation, targetWorldRotation);
+            if (Math.Abs(delta.Theta) > alignmentTolerance)
+            {
+                args.Cancelled = true;
+                args.ResetCooldown = true;
+                return;
+            }
         }
 
-        args.Cancelled = true;
-        args.ResetCooldown = true;
+        ApplyShotDirectionConstraint(ent.Comp, targetTurret, targetUid, vehicle, ref args);
     }
 
     private void ApplyShotDirectionConstraint(
@@ -787,7 +792,7 @@ public sealed partial class VehicleTurretSystem : EntitySystem
     private bool CanOperatorUseTurret(EntityUid turretUid, EntityUid user)
     {
         if (!TryGetVehicle(turretUid, out var vehicle))
-            return true;
+            return false;
 
         if (!TryComp(user, out VehicleWeaponsOperatorComponent? operatorComp) ||
             operatorComp.Vehicle != vehicle)

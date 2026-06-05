@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Content.Shared._CMU14.Medical.Organs.Events;
 using Content.Shared._CMU14.Medical.Organs.Lungs.Events;
+using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
@@ -26,6 +27,7 @@ public abstract partial class SharedLungsSystem : EntitySystem
     [Dependency] protected SharedStatusEffectsSystem Status = default!;
 
     private static readonly EntProtoId PulmonaryEdema = "StatusEffectCMUPulmonaryEdema";
+    private static readonly FixedPoint2 MissingLungsAsphyxPerSecond = FixedPoint2.New(5);
 
     private const float AsphyxScanInterval = 1f;
     private float _asphyxScanAccumulator;
@@ -47,6 +49,8 @@ public abstract partial class SharedLungsSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<LungsComponent, OrganStageChangedEvent>(OnStageChanged);
         SubscribeLocalEvent<LungsComponent, ComponentStartup>(OnLungsStartup);
+        SubscribeLocalEvent<LungsComponent, OrganRemovedFromBodyEvent>(OnLungsRemovedFromBody);
+        SubscribeLocalEvent<LungsComponent, OrganAddedToBodyEvent>(OnLungsAddedToBody);
         SubscribeLocalEvent<CMUHumanMedicalComponent, LungEfficiencyMultiplyEvent>(OnEfficiencyMultiply);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
@@ -56,6 +60,27 @@ public abstract partial class SharedLungsSystem : EntitySystem
     private void OnLungsStartup(Entity<LungsComponent> ent, ref ComponentStartup args)
     {
         ent.Comp.NextAsphyxTick = Timing.CurTime + TimeSpan.FromSeconds(1);
+    }
+
+    private void OnLungsRemovedFromBody(Entity<LungsComponent> ent, ref OrganRemovedFromBodyEvent args)
+    {
+        if (!_medicalEnabled || !_organEnabled)
+            return;
+        if (TerminatingOrDeleted(args.OldBody))
+            return;
+
+        var missing = EnsureComp<MissingLungsComponent>(args.OldBody);
+        missing.NextAsphyxTick = Timing.CurTime;
+
+        Status.TrySetStatusEffectDuration(args.OldBody, PulmonaryEdema, duration: null);
+    }
+
+    private void OnLungsAddedToBody(Entity<LungsComponent> ent, ref OrganAddedToBodyEvent args)
+    {
+        RemCompDeferred<MissingLungsComponent>(args.Body);
+
+        if (ent.Comp.Efficiency >= 0.5f)
+            Status.TryRemoveStatusEffect(args.Body, PulmonaryEdema);
     }
 
     private void OnStageChanged(Entity<LungsComponent> ent, ref OrganStageChangedEvent args)
@@ -125,6 +150,33 @@ public abstract partial class SharedLungsSystem : EntitySystem
 
             ApplyAsphyx(body.Value, uid, rate);
         }
+
+        var missingQuery = EntityQueryEnumerator<MissingLungsComponent>();
+        while (missingQuery.MoveNext(out var uid, out var missing))
+        {
+            if (Body.GetBodyOrganEntityComps<LungsComponent>(uid).Count != 0)
+            {
+                RemCompDeferred<MissingLungsComponent>(uid);
+                continue;
+            }
+
+            TickMissingLungs((uid, missing), now);
+        }
+    }
+
+    private void TickMissingLungs(Entity<MissingLungsComponent> ent, TimeSpan now)
+    {
+        if (ent.Comp.NextAsphyxTick > now)
+            return;
+        ent.Comp.NextAsphyxTick = now + TimeSpan.FromSeconds(1);
+
+        if (TryComp<MobStateComponent>(ent.Owner, out var mob) && mob.CurrentState == MobState.Dead)
+            return;
+
+        Status.TrySetStatusEffectDuration(ent.Owner, PulmonaryEdema, duration: null);
+
+        if (MissingLungsAsphyxPerSecond > FixedPoint2.Zero)
+            ApplyAsphyx(ent.Owner, ent.Owner, MissingLungsAsphyxPerSecond);
     }
 
     protected virtual void ApplyAsphyx(EntityUid body, EntityUid lung, FixedPoint2 amount)

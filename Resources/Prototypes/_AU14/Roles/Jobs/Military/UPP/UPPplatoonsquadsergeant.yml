@@ -19,6 +19,8 @@
       - GOVFOR
     - type: Skills
       preset: AU14SkillPresetPlatoonSergeant
+    - type: RMCSpeechBubbleSpecificStyle
+      speechStyleClass: commanderSpeech
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORSquadSergeantUPP
     - type: TacticalMapIcon

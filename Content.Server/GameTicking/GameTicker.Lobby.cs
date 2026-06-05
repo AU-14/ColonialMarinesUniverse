@@ -229,6 +229,41 @@ namespace Content.Server.GameTicking
             return Paused;
         }
 
+        private bool HasEnoughPlayersForLobbyStart()
+        {
+            return LobbyMinimumPlayerGate.HasEnoughPlayers(_playerManager.PlayerCount, LobbyMinimumPlayers);
+        }
+
+        private void UpdateLobbyCountdownForPlayerCount(bool notify = true, bool resetCountdown = false)
+        {
+            if (!LobbyEnabled || RunLevel != GameRunLevel.PreRoundLobby)
+                return;
+
+            if (!HasEnoughPlayersForLobbyStart())
+            {
+                if (_roundStartCountdownHasNotStartedYetDueToNoPlayers && _roundStartTime == TimeSpan.Zero)
+                    return;
+
+                _roundStartCountdownHasNotStartedYetDueToNoPlayers = true;
+                _roundStartTime = TimeSpan.Zero;
+            }
+            else
+            {
+                if (!resetCountdown && !_roundStartCountdownHasNotStartedYetDueToNoPlayers && _roundStartTime != TimeSpan.Zero)
+                    return;
+
+                _roundStartCountdownHasNotStartedYetDueToNoPlayers = false;
+                _roundStartTime = _gameTiming.CurTime + LobbyDuration;
+            }
+
+            if (!notify)
+                return;
+
+            RaiseNetworkEvent(new TickerLobbyCountdownEvent(_roundStartTime, Paused));
+            SendStatusToAll();
+            UpdateInfoText();
+        }
+
         public void ToggleReadyAll(bool ready)
         {
             var status = ready ? PlayerGameStatus.ReadyToPlay : PlayerGameStatus.NotReadyToPlay;

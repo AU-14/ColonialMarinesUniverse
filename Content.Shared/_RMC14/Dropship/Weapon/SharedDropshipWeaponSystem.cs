@@ -1920,15 +1920,21 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         Entity<DropshipTargetComponent?> target,
         out EntityUid eye)
     {
-        if (HasComp<EyeComponent>(target))
-        {
-            eye = target;
-            return true;
-        }
-
         if (Resolve(target, ref target.Comp, false) &&
             target.Comp.Eyes.TryGetValue(terminal, out eye))
         {
+            return true;
+        }
+
+        if (target.Comp != null)
+        {
+            eye = default;
+            return false;
+        }
+
+        if (HasComp<EyeComponent>(target))
+        {
+            eye = target;
             return true;
         }
 

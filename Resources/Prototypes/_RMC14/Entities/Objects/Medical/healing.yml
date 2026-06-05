@@ -35,8 +35,13 @@
   - type: WoundTreater
     wound: Burn
     treats: true
+    instantWoundTreatment: true
+    woundsTreatedPerUse: 2
     consumable: true
     group: Burn
+    cmuMechanisms: 16
+    cmuTreatmentQuality: Optimal
+    cmuCleanupClears: 20
     damage: -5
     unskilledDamage: -5
     canUseUnskilled: true
@@ -294,6 +299,9 @@
     treats: true
     instantWoundTreatment: true
     woundsTreatedPerUse: 2
+    cmuMechanisms: 16
+    cmuTreatmentQuality: Optimal
+    cmuCleanupClears: 20
     group: Burn
     consumable: true
     damage: -9
@@ -672,6 +680,8 @@
     controlsBleeding: true
     stopsArterialBleeding: true
     bleedControlDelay: 1
+    instantBleedControlSkills:
+      RMCSkillMedical: 2
   - type: Stack
     stackType: CMUPlainTraumaDressing
     count: 50
@@ -913,6 +923,8 @@
     - CMTraumaKit
   - type: WoundTreater
     instantWoundTreatment: false
+    instantWoundTreatmentSkills:
+      RMCSkillMedical: 2
     woundsTreatedPerUse: 2
     cmuStopsArterialBleeding: true
   - type: StackPrice
@@ -1084,6 +1096,9 @@
     treats: true
     instantWoundTreatment: true
     woundsTreatedPerUse: 2
+    cmuMechanisms: 16
+    cmuTreatmentQuality: Optimal
+    cmuCleanupClears: 20
     group: Burn
     consumable: true
     damage: -36

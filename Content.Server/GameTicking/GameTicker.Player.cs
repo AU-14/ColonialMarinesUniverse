@@ -71,12 +71,6 @@ namespace Content.Server.GameTicking
                             Filter.Empty().AddPlayers(_adminManager.ActiveAdmins), false,
                             audioParams: new AudioParams { Volume = -5f });
 
-                    if (LobbyEnabled && _roundStartCountdownHasNotStartedYetDueToNoPlayers)
-                    {
-                        _roundStartCountdownHasNotStartedYetDueToNoPlayers = false;
-                        _roundStartTime = _gameTiming.CurTime + LobbyDuration;
-                    }
-
                     break;
                 }
 
@@ -132,6 +126,9 @@ namespace Content.Server.GameTicking
                     break;
                 }
             }
+
+            UpdateLobbyCountdownForPlayerCount();
+
             //When the status of a player changes, update the server info text
             UpdateInfoText();
 

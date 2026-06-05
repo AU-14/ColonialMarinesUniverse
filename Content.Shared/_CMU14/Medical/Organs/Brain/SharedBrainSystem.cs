@@ -1,5 +1,6 @@
 using Content.Shared._CMU14.Medical.Organs.Events;
 using Content.Shared._RMC14.Medical.Unrevivable;
+using Content.Shared.Body.Events;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Systems;
 using Content.Shared.StatusEffectNew;
@@ -36,9 +37,26 @@ public abstract partial class SharedBrainSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<CMUBrainComponent, OrganStageChangedEvent>(OnStageChanged);
+        SubscribeLocalEvent<CMUBrainComponent, OrganRemovedFromBodyEvent>(OnBrainRemovedFromBody);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.OrganEnabled, v => _organEnabled = v, true);
+    }
+
+    private void OnBrainRemovedFromBody(Entity<CMUBrainComponent> ent, ref OrganRemovedFromBodyEvent args)
+    {
+        if (!_medicalEnabled || !_organEnabled)
+            return;
+        if (TerminatingOrDeleted(args.OldBody))
+            return;
+
+        if (!ent.Comp.PermadeathApplied)
+        {
+            ent.Comp.PermadeathApplied = true;
+            Dirty(ent);
+        }
+
+        ApplyPermadeath(args.OldBody);
     }
 
     private void OnStageChanged(Entity<CMUBrainComponent> ent, ref OrganStageChangedEvent args)

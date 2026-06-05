@@ -348,6 +348,7 @@
     qualities:
     - Sawing
     speedModifier: 1.5
+  - type: CMCircularSaw
   - type: CMBoneSaw
   - type: Tag
     tags:

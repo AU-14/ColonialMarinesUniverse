@@ -1983,7 +1983,7 @@ public sealed partial class HardpointSystem : EntitySystem
         return "rmc-hardpoint-condition-critical";
     }
 
-    public bool DamageHardpoint(EntityUid vehicle, EntityUid hardpoint, float amount, HardpointIntegrityComponent? integrity = null)
+    public bool DamageHardpoint(EntityUid vehicle, EntityUid hardpoint, float amount, HardpointIntegrityComponent? integrity = null, bool skipWheelUpdate = false)
     {
         if (_net.IsClient || amount <= 0f)
             return false;
@@ -2010,7 +2010,7 @@ public sealed partial class HardpointSystem : EntitySystem
         if (hardpoint == vehicle)
             _lock.RefreshForcedOpen(vehicle);
 
-        if (TryComp(hardpoint, out VehicleWheelItemComponent? _))
+        if (!skipWheelUpdate && TryComp(hardpoint, out VehicleWheelItemComponent? _))
             _wheels.OnWheelDamaged(vehicle);
 
         if (previous > 0f && integrity.Integrity <= 0f)

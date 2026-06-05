@@ -1,5 +1,6 @@
 ﻿using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._CMU14.Medical.Wounds;
+using System.Collections.Generic;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
@@ -24,6 +25,9 @@ public sealed partial class WoundTreaterComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool InstantWoundTreatment;
+
+    [DataField]
+    public Dictionary<EntProtoId<SkillDefinitionComponent>, int> InstantWoundTreatmentSkills = new();
 
     [DataField, AutoNetworkedField]
     public int WoundsTreatedPerUse = 1;
