@@ -2151,5 +2151,133 @@
   id: 196
   time: '2026-06-04T08:52:13.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1211
+- author: TheHellFireo
+  changes:
+  - message: '"Added a dedicated injury report window for Inspect Injuries, showing
+      bleeding tier, grouped wound types, cleanup needs, optimal treatment hints,'
+    type: Add
+  - message: '"Corpsmen now inspect injuries in 0.4 seconds instead of 2 seconds."'
+    type: Tweak
+  - message: '"Medical examine text now distinguishes adequately treated wounds from
+      optimally treated wounds."'
+    type: Tweak
+  - message: '"Prepared trauma dressings and packed trauma kit bleed control are now
+      instant for corpsmen."'
+    type: Tweak
+  - message: '"Fixed burn treatments so ointment, burn kits, and upgraded burn kits
+      properly count as optimal burn treatment and clear burn cleanup issues."'
+    type: Fix
+  - message: '"Added missing field-treatment supplies to platoon medical vendors,
+      including packed gauze, packed trauma kits, ingredients, prepared gauze, and'
+    type: Tweak
+  - message: '"Medical pouches can now store medium sized items"'
+    type: Tweak
+  - message: '"Bulwark reflective shield now shows a blue aura and shield visual effect
+      when activated."'
+    type: Add
+  - message: '"Larva queue can now offer abandoned adult xeno bodies when no larvae
+      are available."'
+    type: Add
+  - message: '"Disconnected xenos now take 10 minutes before being marked abandoned
+      for queue recovery."'
+    type: Tweak
+  - message: '"Larva queue confirmations now keep the player at the front of the queue
+      if the offered target is deleted or already claimed."'
+    type: Fix
+  - message: '"Humanoid ghost roles now keep the ghost role entity name instead of
+      taking the joining player''s selected character name."'
+    type: Fix
+  - message: '"Edge spreaders now support per-entity update-rate overrides."'
+    type: Tweak
+  - message: '"Removed a duplicate WY PMC squad combat tech job prefix localization
+      entry."'
+    type: Fix
+  - message: '"Added an Alt+C medical crafting menu for humans, Yautja, and tribals
+      to craft available prepared gauze and trauma dressings from packed'
+    type: Add
+  - message: '"Inspect Injuries now lists arterial bleeding in its own body-part section
+      and uses a distinct color for untreated wound locations."'
+    type: Tweak
+  - message: '"Adequately treated wounds now restore 50% more of their remaining field-treatment
+      health cap."'
+    type: Tweak
+  - message: '"Reduced movement slowdown from damage: 60 damage now slows to 85% speed,
+      and 80 damage now slows to 75% speed."'
+    type: Tweak
+  - message: '"Fire Spreading is now disabled by default."'
+    type: Tweak
+  - message: '"Removed vital organs now have consequences: missing brains cause permanent
+      death, missing hearts cause cardiac arrest and asphyxiation, and'
+    type: Add
+  - message: '"Added rmc.lobby_min_players to hold the lobby countdown and AU vote
+      sequence until enough players are connected."'
+    type: Add
+  - message: '"Fixed AU vote sequences so planet selection uses the actual preset
+      vote winner and ignores stale vote callbacks."'
+    type: Fix
+  - message: '"Added a missing observer spawn point to USSBushRedux."'
+    type: Fix
+  - message: '"Optimized CMU Z-level rendering to only render lower levels and projected
+      lighting through visible openings, reducing multi-Z rendering'
+    type: Tweak
+  - message: '"Added the cmu_zrender_debug client console command for inspecting multi-Z
+      render and projected lighting performance."'
+    type: Add
+  - message: '"Chat font styling now preserves existing radio message font sizes unless
+      an explicit style font size override is set."'
+    type: Fix
+  - message: '"Command roles now properly use command-sized speech bubbles without
+      giving junior officers innate command speech."'
+    type: Fix
+  - message: '"Added an updating Discord round status webhook embed."'
+    type: Add
+  id: 197
+  time: '2026-06-05T01:03:04.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1208
+- author: OmerF-afk
+  changes:
+  - message: Added Cleaner Sprays in CM13 spritework and Experimental cleaning spray
+    type: Add
+  - message: Added a component that makes synthetics hammers actually heavy.
+    type: Add
+  id: 198
+  time: '2026-06-05T13:59:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1218
+- author: mikusssssss
+  changes:
+  - message: Added 2 new colors of the lifesaver bag to synthetic loadouts
+    type: Add
+  id: 199
+  time: '2026-06-05T14:13:52.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1140
+- author: KriegersMustDie
+  changes:
+  - message: PO ranks reshuffled until proper overhaul.
+    type: Tweak
+  id: 200
+  time: '2026-06-05T16:09:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1217
+- author: 400Ferrets
+  changes:
+  - message: Colony Physician no longer gets a spare ID.
+    type: Fix
+  id: 201
+  time: '2026-06-05T16:20:27.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1221
+- author: TheHellFireo
+  changes:
+  - message: Adds back Smart gun damage fall of at 6 tiles
+    type: Tweak
+  - message: Adds use delay to the M34-T Incinerator
+    type: Tweak
+  - message: Bone breaking sound now only plays on simple and above fractures
+    type: Tweak
+  - message: Queen enter ghost queue if they leave
+    type: Fix
+  - message: Adjust xeno scaling by 0.3 for DS and 0.1 For CF
+    type: Tweak
+  id: 202
+  time: '2026-06-05T16:56:26.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1226
 Name: CMU
 Order: -1

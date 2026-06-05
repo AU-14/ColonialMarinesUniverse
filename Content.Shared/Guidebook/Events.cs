@@ -1,3 +1,4 @@
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Guidebook;
@@ -21,5 +22,19 @@ public sealed class UpdateGuidebookDataEvent : EntityEventArgs
     public UpdateGuidebookDataEvent(GuidebookData data)
     {
         Data = data;
+    }
+}
+
+/// <summary>
+/// Raised by the server at a specific client to open guidebook entries.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class OpenGuidebookEvent : EntityEventArgs
+{
+    public List<ProtoId<GuideEntryPrototype>> Guides { get; }
+
+    public OpenGuidebookEvent(List<ProtoId<GuideEntryPrototype>> guides)
+    {
+        Guides = guides;
     }
 }

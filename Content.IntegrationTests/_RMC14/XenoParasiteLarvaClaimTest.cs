@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.IntegrationTests.Pair;
 using Content.Server.Mind;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -9,6 +10,7 @@ using Content.Shared.Ghost;
 using Content.Shared.Mind;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Network;
 
 namespace Content.IntegrationTests._RMC14;
 
@@ -110,7 +112,7 @@ public sealed class XenoParasiteLarvaClaimTest
             Assert.That(mindComp!.CurrentEntity, Is.EqualTo(infected.SpawnedLarva));
         });
 
-        await pair.CleanReturnAsync();
+        await CleanReturnDisconnected(pair);
     }
 
     [Test]
@@ -211,7 +213,7 @@ public sealed class XenoParasiteLarvaClaimTest
             Assert.That(mindComp!.CurrentEntity, Is.EqualTo(infected.SpawnedLarva));
         });
 
-        await pair.CleanReturnAsync();
+        await CleanReturnDisconnected(pair);
     }
 
     [Test]
@@ -265,6 +267,18 @@ public sealed class XenoParasiteLarvaClaimTest
             Assert.That(player.AttachedEntity, Is.Not.EqualTo(infected.SpawnedLarva));
             Assert.That(entMan.HasComponent<GhostComponent>(player.AttachedEntity), Is.True);
         });
+
+        await CleanReturnDisconnected(pair);
+    }
+
+    private static async Task CleanReturnDisconnected(TestPair pair)
+    {
+        var net = pair.Client.ResolveDependency<IClientNetManager>();
+        if (net.IsConnected)
+        {
+            await pair.Client.WaitPost(() => net.ClientDisconnect("Xeno parasite larva claim test cleanup disconnect."));
+            await pair.RunTicksSync(1);
+        }
 
         await pair.CleanReturnAsync();
     }

@@ -12,6 +12,9 @@ namespace Content.Shared._CMU14.Medical.Trauma;
 
 public sealed partial class SharedCMUTraumaSystem : EntitySystem
 {
+    private const float TorsoOrganPassThroughMultiplier = 1.3f;
+    private const int XenoTorsoOrganPassThroughMinimumTier = 2;
+
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IRobustRandom _random = default!;
 
@@ -79,6 +82,7 @@ public sealed partial class SharedCMUTraumaSystem : EntitySystem
         var brute = GetTypeAmount(damage, "Blunt") +
                     GetTypeAmount(damage, "Slash") +
                     GetTypeAmount(damage, "Piercing");
+        var settings = GetContactSettings(partType, mechanism, origin, tool);
 
         return CMUTraumaContactModel.Create(
             mechanism,
@@ -87,8 +91,56 @@ public sealed partial class SharedCMUTraumaSystem : EntitySystem
             brute,
             hasOrgans,
             _random.NextFloat(),
-            _settings);
+            settings);
     }
+
+    private CMUTraumaContactSettings GetContactSettings(
+        BodyPartType partType,
+        CMUTraumaMechanism mechanism,
+        EntityUid? origin,
+        EntityUid? tool)
+    {
+        if (partType != BodyPartType.Torso)
+            return _settings;
+
+        if (mechanism == CMUTraumaMechanism.Ballistic)
+        {
+            return _settings with
+            {
+                BallisticOrganPassThrough = MultiplyTorsoPassThrough(_settings.BallisticOrganPassThrough),
+                HighEnergyOrganPassThrough = MultiplyTorsoPassThrough(_settings.HighEnergyOrganPassThrough),
+            };
+        }
+
+        if (!TryGetXenoSource(origin, tool, out _, out var xeno) ||
+            xeno.Tier < XenoTorsoOrganPassThroughMinimumTier)
+        {
+            return _settings;
+        }
+
+        return mechanism switch
+        {
+            CMUTraumaMechanism.Pierce => _settings with
+            {
+                PierceOrganPassThrough = MultiplyTorsoPassThrough(_settings.PierceOrganPassThrough),
+                HighEnergyOrganPassThrough = MultiplyTorsoPassThrough(_settings.HighEnergyOrganPassThrough),
+            },
+            CMUTraumaMechanism.Slash => _settings with
+            {
+                SlashOrganPassThrough = MultiplyTorsoPassThrough(_settings.SlashOrganPassThrough),
+                HighEnergyOrganPassThrough = MultiplyTorsoPassThrough(_settings.HighEnergyOrganPassThrough),
+            },
+            CMUTraumaMechanism.Blunt => _settings with
+            {
+                BluntOrganPassThrough = MultiplyTorsoPassThrough(_settings.BluntOrganPassThrough),
+                HighEnergyOrganPassThrough = MultiplyTorsoPassThrough(_settings.HighEnergyOrganPassThrough),
+            },
+            _ => _settings,
+        };
+    }
+
+    private static float MultiplyTorsoPassThrough(float value)
+        => value * TorsoOrganPassThroughMultiplier;
 
     private DamageImpact ResolveImpact(
         DamageSpecifier damage,

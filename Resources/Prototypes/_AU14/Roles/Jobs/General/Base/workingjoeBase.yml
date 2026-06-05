@@ -30,9 +30,8 @@
       belt:
       - AU14MaintenanceJack
       back:
-      - SprayBottleSpaceCleaner
-      - SprayBottleSpaceCleaner
-      - RMCBucket
+      - AU14SprayCleanerExperimental
+      - RMCBucketJanitorial
       - CMMop
       - CMWetSign
       - RMCLightReplacer

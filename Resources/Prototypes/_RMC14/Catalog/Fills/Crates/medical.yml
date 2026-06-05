@@ -124,23 +124,9 @@
   components:
   - type: StorageFill
     contents:
-      - id: CMUPlainGauze10
       - id: CMUPlainTraumaDressing10
       - id: CMUCoagulantPowder
-      - id: CMUAntiseptic
       - id: CMUBurnGel
-      - id: CMUTissueSealant
-      - id: CMUTraumaFoam
-      - id: CMUHemostaticGauze6
-      - id: CMUAntisepticGauze6
-      - id: CMUBurnGelGauze6
-      - id: CMUSealingGauze6
-      - id: CMUCompressionGauze6
-      - id: CMUHemostaticTraumaDressing4
-      - id: CMUAntisepticTraumaDressing4
-      - id: CMUBurnTraumaDressing4
-      - id: CMUSealingTraumaDressing4
-      - id: CMUCompressionTraumaDressing4
       - id: CMBloodPackFull
       - id: CMBloodPack
 

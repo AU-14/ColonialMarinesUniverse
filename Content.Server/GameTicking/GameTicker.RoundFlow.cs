@@ -1,6 +1,6 @@
 using System.Linq;
+using System.Net;
 using System.Numerics;
-using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Content.Server.Announcements;
 using Content.Server.AU14.Threats;
@@ -25,6 +25,7 @@ using JetBrains.Annotations;
 using Prometheus;
 using Robust.Shared.Asynchronous;
 using Robust.Shared.Audio;
+using Robust.Shared.ContentPack;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
@@ -44,6 +45,9 @@ namespace Content.Server.GameTicking
         [Dependency] private SharedRMCPowerSystem _power = default!;
         [Dependency] private RoundEndSystem _roundEndSystem = default!;
 
+        private static readonly ResPath RoundStatusWebhookMessageIdsPath =
+            new("/discord/round-status-webhook-message-ids.json");
+
         private static readonly Counter RoundNumberMetric = Metrics.CreateCounter(
             "ss14_round_number",
             "Round number.");
@@ -59,6 +63,8 @@ namespace Content.Server.GameTicking
 
         [ViewVariables]
         private bool _startingRound;
+
+        private readonly List<RoundStatusRecentGamemode> _recentRoundStatusGamemodes = new();
 
         [ViewVariables]
         private GameRunLevel _runLevel;
@@ -594,14 +600,15 @@ namespace Content.Server.GameTicking
             //Tell every client the round has ended.
             var gamemodeTitle = CurrentPreset != null ? Loc.GetString(CurrentPreset.ModeTitle) : string.Empty;
 
+            //Get the timespan of the round.
+            var roundDuration = RoundDuration();
+            RememberRoundStatusGamemode(RoundId, gamemodeTitle, roundDuration);
+
             // Let things add text here.
             var textEv = new RoundEndTextAppendEvent();
             RaiseLocalEvent(textEv);
 
             var roundEndText = $"{text}\n{textEv.Text}";
-
-            //Get the timespan of the round.
-            var roundDuration = RoundDuration();
 
             //Generate a list of basic player info to display in the end round summary.
             var listOfPlayerInfo = new List<RoundEndMessageEvent.RoundEndPlayerInfo>();
@@ -698,7 +705,8 @@ namespace Content.Server.GameTicking
         {
             try
             {
-                await SendRoundStatusDiscordMessage(RoundStatusWebhookKind.Ended, true);
+                await SendRoundStatusDiscordMessage(RoundStatusWebhookKind.Ended, false);
+                await SendRoundStatusRolePingMessage(RoundStatusPingMessageKind.RoundEnd, GetRoundEndRoleIds());
             }
             catch (Exception e)
             {
@@ -706,15 +714,21 @@ namespace Content.Server.GameTicking
             }
         }
 
-        private async Task SendRoundStatusDiscordMessage(RoundStatusWebhookKind kind, bool pingRoles)
+        private Task SendRoundStatusDiscordMessage(RoundStatusWebhookKind kind, bool pingRoles)
+        {
+            var roles = pingRoles
+                ? GetRoundStatusRoleIds(true)
+                : Array.Empty<string>();
+
+            return SendRoundStatusDiscordMessage(kind, roles);
+        }
+
+        private async Task SendRoundStatusDiscordMessage(RoundStatusWebhookKind kind, IEnumerable<string> roles)
         {
             if (_webhookIdentifier == null)
                 return;
 
             var status = GetRoundStatusWebhookData(GetRoundStatusDuration(kind));
-            var roles = pingRoles
-                ? GetRoundStatusRoleIds()
-                : Array.Empty<string?>();
             var payload = RoundStatusWebhook.CreatePayload(kind, status, roles, DiscordRoundStatusColors);
 
             if (_roundStatusWebhookMessageId == 0)
@@ -727,11 +741,19 @@ namespace Content.Server.GameTicking
             var response = await _discord.EditMessage(_webhookIdentifier.Value, _roundStatusWebhookMessageId, payload);
             if (response.IsSuccessStatusCode)
             {
+                SaveRoundStatusWebhookMessageIds();
+                ScheduleNextRoundStatusWebhookUpdate();
+                return;
+            }
+
+            if (response.StatusCode != HttpStatusCode.NotFound)
+            {
                 ScheduleNextRoundStatusWebhookUpdate();
                 return;
             }
 
             _roundStatusWebhookMessageId = 0;
+            SaveRoundStatusWebhookMessageIds();
             await CreateRoundStatusWebhookMessage(payload);
             ScheduleNextRoundStatusWebhookUpdate();
         }
@@ -740,10 +762,55 @@ namespace Content.Server.GameTicking
         {
             var response = await _discord.CreateMessage(_webhookIdentifier!.Value, payload);
             var content = await response.Content.ReadAsStringAsync();
-            var id = JsonNode.Parse(content)?["id"]?.GetValue<string>();
 
-            if (ulong.TryParse(id, out var messageId))
+            if (RoundStatusWebhook.TryGetMessageId(content, out var messageId))
+            {
                 _roundStatusWebhookMessageId = messageId;
+                SaveRoundStatusWebhookMessageIds();
+            }
+        }
+
+        private void LoadRoundStatusWebhookMessageIds()
+        {
+            try
+            {
+                if (!_resourceManager.UserData.TryReadAllText(RoundStatusWebhookMessageIdsPath, out var json))
+                    return;
+
+                if (!RoundStatusWebhook.TryDeserializeMessageIds(json, out var ids))
+                {
+                    Log.Warning("Failed to parse persisted Discord round status webhook message IDs.");
+                    return;
+                }
+
+                _roundStatusWebhookMessageId = ids.StatusMessageId;
+                _roundStatusRoundEndPingMessageId = ids.RoundEndPingMessageId;
+                _roundStatusGamemodeVotePingMessageId = ids.GamemodeVotePingMessageId;
+            }
+            catch (Exception e)
+            {
+                Log.Warning($"Error while loading Discord round status webhook message IDs:\n{e}");
+            }
+        }
+
+        private void SaveRoundStatusWebhookMessageIds()
+        {
+            try
+            {
+                var ids = new RoundStatusWebhookMessageIds(
+                    _roundStatusWebhookMessageId,
+                    _roundStatusRoundEndPingMessageId,
+                    _roundStatusGamemodeVotePingMessageId);
+
+                _resourceManager.UserData.CreateDir(RoundStatusWebhookMessageIdsPath.Directory);
+                _resourceManager.UserData.WriteAllText(
+                    RoundStatusWebhookMessageIdsPath,
+                    RoundStatusWebhook.SerializeMessageIds(ids));
+            }
+            catch (Exception e)
+            {
+                Log.Warning($"Error while saving Discord round status webhook message IDs:\n{e}");
+            }
         }
 
         private RoundStatusWebhookData GetRoundStatusWebhookData(TimeSpan? duration)
@@ -761,7 +828,26 @@ namespace Content.Server.GameTicking
                 GetDiscordMapName(),
                 govfor,
                 gamemode,
+                _recentRoundStatusGamemodes.ToArray(),
                 duration);
+        }
+
+        private void RememberRoundStatusGamemode(int roundId, string gamemode, TimeSpan duration)
+        {
+            if (roundId <= 0)
+                return;
+
+            if (string.IsNullOrWhiteSpace(gamemode))
+                gamemode = Loc.GetString("ui-escape-status-unknown");
+
+            var existingIndex = _recentRoundStatusGamemodes.FindIndex(round => round.RoundId == roundId);
+            if (existingIndex >= 0)
+                _recentRoundStatusGamemodes.RemoveAt(existingIndex);
+
+            _recentRoundStatusGamemodes.Insert(0, new RoundStatusRecentGamemode(roundId, gamemode, duration));
+
+            if (_recentRoundStatusGamemodes.Count > 3)
+                _recentRoundStatusGamemodes.RemoveRange(3, _recentRoundStatusGamemodes.Count - 3);
         }
 
         private TimeSpan? GetRoundStatusDuration(RoundStatusWebhookKind kind)
@@ -775,6 +861,22 @@ namespace Content.Server.GameTicking
         private void ScheduleNextRoundStatusWebhookUpdate()
         {
             _nextRoundStatusWebhookUpdate = _gameTiming.CurTime + DiscordRoundStatusUpdateInterval;
+        }
+
+        internal static bool TryGetPeriodicRoundStatusWebhookKind(GameRunLevel runLevel, out RoundStatusWebhookKind kind)
+        {
+            switch (runLevel)
+            {
+                case GameRunLevel.PreRoundLobby:
+                    kind = RoundStatusWebhookKind.Lobby;
+                    return true;
+                case GameRunLevel.InRound:
+                    kind = RoundStatusWebhookKind.Running;
+                    return true;
+                default:
+                    kind = default;
+                    return false;
+            }
         }
 
         private void TrySendInitialRoundStatusDiscordMessage()
@@ -793,7 +895,8 @@ namespace Content.Server.GameTicking
             try
             {
                 _roundStatusWebhookWakeSent = true;
-                await SendRoundStatusDiscordMessage(RoundStatusWebhookKind.Starting, false);
+                await DeleteRoundStatusPingMessages();
+                await SendRoundStatusDiscordMessage(RoundStatusWebhookKind.Lobby, false);
             }
             catch (Exception e)
             {
@@ -827,7 +930,7 @@ namespace Content.Server.GameTicking
             }
         }
 
-        private async void UpdateRoundStatusDiscordMessage()
+        private async void UpdateRoundStatusDiscordMessage(RoundStatusWebhookKind kind)
         {
             if (_roundStatusWebhookUpdatePending)
                 return;
@@ -835,7 +938,7 @@ namespace Content.Server.GameTicking
             try
             {
                 _roundStatusWebhookUpdatePending = true;
-                await SendRoundStatusDiscordMessage(RoundStatusWebhookKind.Running, false);
+                await SendRoundStatusDiscordMessage(kind, false);
             }
             catch (Exception e)
             {
@@ -848,14 +951,116 @@ namespace Content.Server.GameTicking
             }
         }
 
-        private IEnumerable<string?> GetRoundStatusRoleIds()
+        internal async void SendGamemodeVoteWinnerDiscordPing(string? presetId)
         {
-            yield return DiscordRoundEndRole;
-            yield return RoundStatusWebhook.GetGamemodeRole(
-                CurrentPreset?.ID ?? Preset?.ID,
+            if (_webhookIdentifier == null || DummyTicker)
+                return;
+
+            var role = RoundStatusWebhook.GetGamemodeRole(
+                presetId,
                 DiscordRoundStatusDistressSignalRole,
                 DiscordRoundStatusColonyFallRole,
                 DiscordRoundStatusInsurgencyRole);
+
+            if (role == null)
+                return;
+
+            try
+            {
+                await SendRoundStatusRolePingMessage(RoundStatusPingMessageKind.GamemodeVote, new[] { role });
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Error while sending discord gamemode vote ping:\n{e}");
+            }
+        }
+
+        private async Task SendRoundStatusRolePingMessage(RoundStatusPingMessageKind kind, IEnumerable<string> roles)
+        {
+            if (_webhookIdentifier == null)
+                return;
+
+            var message = kind == RoundStatusPingMessageKind.GamemodeVote
+                ? Loc.GetString("discord-round-notifications-gamemode-voted")
+                : null;
+            var payload = RoundStatusWebhook.CreateRolePingPayload(roles, message);
+            if (string.IsNullOrWhiteSpace(payload.Content))
+                return;
+
+            var response = await _discord.CreateMessage(_webhookIdentifier.Value, payload);
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode || !RoundStatusWebhook.TryGetMessageId(content, out var messageId))
+                return;
+
+            var previousMessageId = GetRoundStatusPingMessageId(kind);
+            SetRoundStatusPingMessageId(kind, messageId);
+            SaveRoundStatusWebhookMessageIds();
+
+            if (RoundStatusWebhook.TryGetMessageIdToDelete(previousMessageId, messageId, out var deleteMessageId))
+                await _discord.DeleteMessage(_webhookIdentifier.Value, deleteMessageId);
+        }
+
+        private async Task DeleteRoundStatusPingMessages()
+        {
+            await DeleteRoundStatusPingMessage(RoundStatusPingMessageKind.RoundEnd);
+            await DeleteRoundStatusPingMessage(RoundStatusPingMessageKind.GamemodeVote);
+        }
+
+        private async Task DeleteRoundStatusPingMessage(RoundStatusPingMessageKind kind)
+        {
+            if (_webhookIdentifier == null)
+                return;
+
+            var messageId = GetRoundStatusPingMessageId(kind);
+            if (messageId == 0)
+                return;
+
+            var response = await _discord.DeleteMessage(_webhookIdentifier.Value, messageId);
+            if (!response.IsSuccessStatusCode && response.StatusCode != HttpStatusCode.NotFound)
+                return;
+
+            SetRoundStatusPingMessageId(kind, 0);
+            SaveRoundStatusWebhookMessageIds();
+        }
+
+        private ulong GetRoundStatusPingMessageId(RoundStatusPingMessageKind kind)
+        {
+            return kind switch
+            {
+                RoundStatusPingMessageKind.RoundEnd => _roundStatusRoundEndPingMessageId,
+                RoundStatusPingMessageKind.GamemodeVote => _roundStatusGamemodeVotePingMessageId,
+                _ => 0,
+            };
+        }
+
+        private void SetRoundStatusPingMessageId(RoundStatusPingMessageKind kind, ulong messageId)
+        {
+            switch (kind)
+            {
+                case RoundStatusPingMessageKind.RoundEnd:
+                    _roundStatusRoundEndPingMessageId = messageId;
+                    break;
+                case RoundStatusPingMessageKind.GamemodeVote:
+                    _roundStatusGamemodeVotePingMessageId = messageId;
+                    break;
+            }
+        }
+
+        private IEnumerable<string> GetRoundStatusRoleIds(bool includeRoundEndRole)
+        {
+            return RoundStatusWebhook.GetRoundStatusRoleIds(
+                includeRoundEndRole,
+                CurrentPreset?.ID ?? Preset?.ID,
+                DiscordRoundEndRole,
+                DiscordRoundStatusDistressSignalRole,
+                DiscordRoundStatusColonyFallRole,
+                DiscordRoundStatusInsurgencyRole);
+        }
+
+        private IEnumerable<string> GetRoundEndRoleIds()
+        {
+            if (DiscordRoundEndRole is { } roundEndRole)
+                yield return roundEndRole;
         }
 
         public void RestartRound()
@@ -957,17 +1162,16 @@ namespace Content.Server.GameTicking
         private void UpdateRoundFlow(float frameTime)
         {
             if (RunLevel == GameRunLevel.InRound)
-            {
                 RoundLengthMetric.Inc(frameTime);
 
-                if (RoundStatusWebhook.ShouldUpdate(
+            if (TryGetPeriodicRoundStatusWebhookKind(RunLevel, out var updateKind) &&
+                RoundStatusWebhook.ShouldUpdate(
                         _gameTiming.CurTime,
                         _nextRoundStatusWebhookUpdate,
                         DiscordRoundStatusUpdateInterval,
                         _roundStatusWebhookMessageId != 0))
-                {
-                    UpdateRoundStatusDiscordMessage();
-                }
+            {
+                UpdateRoundStatusDiscordMessage(updateKind);
             }
 
             if (RunLevel == GameRunLevel.PreRoundLobby && LobbyEnabled && !HasEnoughPlayersForLobbyStart())
@@ -1032,6 +1236,12 @@ namespace Content.Server.GameTicking
         PreRoundLobby = 0,
         InRound = 1,
         PostRound = 2
+    }
+
+    internal enum RoundStatusPingMessageKind
+    {
+        RoundEnd,
+        GamemodeVote,
     }
 
     public sealed partial class GameRunLevelChangedEvent

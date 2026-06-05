@@ -78,7 +78,6 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     /// </summary>
     public const float HealPerSecond = 0.6f;
 
-    private const float AdequateCleanupBurdenMultiplier = 0.5f;
     private const float WoundScanInterval = 0.5f;
 
     private float _woundScanAccumulator;
@@ -154,6 +153,16 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             false), size, mechanism, secondary, cleanup);
         UpgradeExternalBleeding(partWound, ComputeExternalBleedTier(mechanism, secondary, size));
         Dirty(ent.Owner, partWound);
+
+        var woundApplied = new BodyPartWoundAppliedEvent(
+            args.Body,
+            args.Part,
+            args.Type,
+            args.Delta,
+            args.Tool,
+            args.Impact,
+            args.Trauma);
+        RaiseLocalEvent(ent.Owner, ref woundApplied);
 
         // No-op when a catastrophic fracture or other source already drives a
         // higher rate (recompute picks the max).
@@ -562,11 +571,6 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         if (!Resolve(part, ref comp, logMissing: false))
             return false;
 
-        // Defence-in-depth gate: the picker UI pre-filters eschar parts, but
-        // direct API callers (admin verbs, tests) reach this path too.
-        if (HasComp<CMUEscharComponent>(part))
-            return false;
-
         EnsureBandageSlots(comp);
 
         var idx = -1;
@@ -588,27 +592,8 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             }
         }
 
-        if (idx < 0 && quality == WoundTreatmentQuality.Optimal)
-            idx = FindCleanupTreatmentTarget(comp, type, mechanismMask, cleanupClears);
-
         if (idx < 0)
             return false;
-
-        if (comp.Wounds[idx].Treated)
-        {
-            CompleteWoundTreatment(part, comp, idx, quality, cleanupClears);
-            ClearExternalBleeding(comp, stopArterialBleeding);
-            Dirty(part, comp);
-
-            if (TryGetBodyOwner(part) is { } cleanupBody)
-            {
-                var cleanupEv = new WoundTreatedEvent(cleanupBody, part);
-                RaiseLocalEvent(ref cleanupEv);
-            }
-
-            completed = true;
-            return true;
-        }
 
         var size = GetWoundSize(comp, idx);
         var required = WoundSizeProfile.BandagesRequired(size);
@@ -656,11 +641,6 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         if (!Resolve(part, ref comp, logMissing: false))
             return false;
 
-        // Defence-in-depth gate: the picker UI pre-filters eschar parts, but
-        // direct API callers (admin verbs, tests) reach this path too.
-        if (HasComp<CMUEscharComponent>(part))
-            return false;
-
         EnsureBandageSlots(comp);
 
         var now = Timing.CurTime;
@@ -680,16 +660,6 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             };
             CompleteWoundTreatment(part, comp, idx, quality, cleanupClears);
 
-            treated++;
-            changed = true;
-        }
-
-        while (treated < maxWounds &&
-               quality == WoundTreatmentQuality.Optimal &&
-               FindCleanupTreatmentTarget(comp, type, mechanismMask, cleanupClears) is var idx &&
-               idx >= 0)
-        {
-            CompleteWoundTreatment(part, comp, idx, quality, cleanupClears);
             treated++;
             changed = true;
         }
@@ -720,30 +690,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         bool stopArterialBleeding = true)
     {
         completed = false;
-        if (!Resolve(part, ref comp, logMissing: false))
-            return false;
-
-        if (HasComp<CMUEscharComponent>(part))
-            return false;
-
-        EnsureBandageSlots(comp);
-
-        var idx = FindCleanupTreatmentTarget(comp, null, mechanismMask, cleanupClears);
-        if (idx < 0)
-            return false;
-
-        CompleteWoundTreatment(part, comp, idx, WoundTreatmentQuality.Optimal, cleanupClears);
-        ClearExternalBleeding(comp, stopArterialBleeding);
-        Dirty(part, comp);
-
-        if (TryGetBodyOwner(part) is { } body)
-        {
-            var ev = new WoundTreatedEvent(body, part);
-            RaiseLocalEvent(ref ev);
-        }
-
-        completed = true;
-        return true;
+        return false;
     }
 
     private static bool TryPickWorstUntreatedWound(
@@ -767,46 +714,6 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         }
 
         return idx >= 0;
-    }
-
-    private static int FindCleanupTreatmentTarget(
-        BodyPartWoundComponent comp,
-        WoundType? type,
-        WoundMechanismFlags mechanismMask,
-        WoundCleanupFlags cleanupClears)
-    {
-        EnsureWoundMetadataSlots(comp);
-
-        var idx = -1;
-        var worst = FixedPoint2.Zero;
-        for (var i = 0; i < comp.Wounds.Count; i++)
-        {
-            var wound = comp.Wounds[i];
-            if (!wound.Treated ||
-                (type is { } woundType && wound.Type != woundType) ||
-                !MatchesMechanism(comp, i, mechanismMask) ||
-                !CleanupCanBeTreated(comp.Cleanup[i], cleanupClears))
-            {
-                continue;
-            }
-
-            if (idx >= 0 && wound.Damage <= worst)
-                continue;
-
-            idx = i;
-            worst = wound.Damage;
-        }
-
-        return idx;
-    }
-
-    private static bool CleanupCanBeTreated(WoundCleanupFlags cleanup, WoundCleanupFlags cleanupClears)
-    {
-        if (cleanup == WoundCleanupFlags.None)
-            return false;
-
-        return cleanupClears == WoundCleanupFlags.None ||
-               (cleanup & cleanupClears) != WoundCleanupFlags.None;
     }
 
     private static bool MatchesMechanism(
@@ -877,24 +784,8 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         if (index < 0 || index >= comp.Wounds.Count)
             return;
 
-        if (quality == WoundTreatmentQuality.Optimal)
-        {
-            comp.Cleanup[index] = cleanupClears == WoundCleanupFlags.None
-                ? WoundCleanupFlags.None
-                : comp.Cleanup[index] & ~cleanupClears;
-
-            if (comp.Cleanup[index] == WoundCleanupFlags.None)
-            {
-                comp.TreatmentQualities[index] = WoundTreatmentQuality.Optimal;
-                return;
-            }
-
-            comp.TreatmentQualities[index] = WoundTreatmentQuality.Adequate;
-            RestorePartToFieldCap(part, comp);
-            return;
-        }
-
-        comp.TreatmentQualities[index] = quality;
+        comp.Cleanup[index] = WoundCleanupFlags.None;
+        comp.TreatmentQualities[index] = WoundTreatmentQuality.Adequate;
         RestorePartToFieldCap(part, comp);
     }
 
@@ -913,13 +804,13 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             if (!WoundAppliesCapBurden(comp, i))
                 continue;
 
-            penalty += FieldTreatmentPenalty(comp, i);
+            penalty += FieldTreatmentPenalty(GetWoundSize(comp, i));
         }
 
         return Math.Clamp(1f - penalty, 0.35f, 1f);
     }
 
-    private static bool HasCleanupBurden(BodyPartWoundComponent comp)
+    private static bool HasUntreatedBurden(BodyPartWoundComponent comp)
     {
         EnsureWoundMetadataSlots(comp);
 
@@ -937,37 +828,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         if (index < 0 || index >= comp.Wounds.Count)
             return false;
 
-        var quality = index < comp.TreatmentQualities.Count
-            ? comp.TreatmentQualities[index]
-            : comp.Wounds[index].Treated
-                ? WoundTreatmentQuality.Adequate
-                : WoundTreatmentQuality.Untreated;
-
-        var cleanup = index < comp.Cleanup.Count
-            ? comp.Cleanup[index]
-            : WoundCleanupFlags.None;
-
-        return quality == WoundTreatmentQuality.Untreated || cleanup != WoundCleanupFlags.None;
-    }
-
-    private static float FieldTreatmentPenalty(BodyPartWoundComponent comp, int index)
-    {
-        var penalty = FieldTreatmentPenalty(GetWoundSize(comp, index));
-        if (index < 0 || index >= comp.Wounds.Count)
-            return penalty;
-
-        var quality = index < comp.TreatmentQualities.Count
-            ? comp.TreatmentQualities[index]
-            : comp.Wounds[index].Treated
-                ? WoundTreatmentQuality.Adequate
-                : WoundTreatmentQuality.Untreated;
-        var cleanup = index < comp.Cleanup.Count
-            ? comp.Cleanup[index]
-            : WoundCleanupFlags.None;
-
-        return quality == WoundTreatmentQuality.Adequate && cleanup != WoundCleanupFlags.None
-            ? penalty * AdequateCleanupBurdenMultiplier
-            : penalty;
+        return !comp.Wounds[index].Treated;
     }
 
     private static float FieldTreatmentPenalty(WoundSize size) => size switch
@@ -1041,11 +902,11 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             EnsureBandageSlots(pw);
 
             var dirty = false;
-            var cleanupBlocked = HasCleanupBurden(pw);
+            var untreatedBlocked = HasUntreatedBurden(pw);
             for (var i = pw.Wounds.Count - 1; i >= 0; i--)
             {
                 var w = pw.Wounds[i];
-                if (!w.Treated || cleanupBlocked)
+                if (!w.Treated || untreatedBlocked)
                     continue;
 
                 // Scale by the 1s tick cadence, not frameTime.

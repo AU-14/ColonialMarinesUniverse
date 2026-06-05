@@ -1,4 +1,5 @@
 using Content.Server.Body.Systems;
+using Content.Shared._CMU14.Medical;
 using Content.Shared._RMC14.Humanoid;
 using Content.Shared._RMC14.Medical.HUD.Components;
 using Content.Shared._RMC14.Synth;
@@ -58,6 +59,10 @@ public sealed partial class SynthSystem : SharedSynthSystem
                 [RMCHealthIconTypes.HCDead] = "CMHealthIconHCDead",
             };
         }
+
+        // CMU medical bodies define organ-health slots that synth diagnostics and surgery expect.
+        if (HasComp<CMUHumanMedicalComponent>(ent.Owner))
+            return;
 
         if (!TryComp<BodyComponent>(ent.Owner, out var body))
             return;

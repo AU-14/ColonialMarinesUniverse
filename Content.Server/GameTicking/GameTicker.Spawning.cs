@@ -238,6 +238,7 @@ namespace Content.Server.GameTicking
             var presetId = CurrentPreset?.ID ?? Preset?.ID ?? _auRoundSystem.SelectedPreset?.ID;
             var assignmentProfiles = GetGamemodeAssignmentProfiles(profiles, presetId);
 
+            _auThreatVoteSystem.ClearRoundJoinBlocks();
             var usesPostRoundstartThreatVote = _auRoundSystem.UsesPostRoundstartThreatVote();
             var threatVotePrepared = false;
             if (usesPostRoundstartThreatVote)
@@ -249,6 +250,7 @@ namespace Content.Server.GameTicking
                 catch (Exception threatVoteEx)
                 {
                     Log.Error($"TryPrepareThreatVote threw â€” round will continue without a threat vote. {threatVoteEx}");
+                    _auThreatVoteSystem.ClearRoundJoinBlocks();
                     _auJobSelectionSystem.ForcedJobAssignments.Clear();
                 }
             }
@@ -352,6 +354,7 @@ namespace Content.Server.GameTicking
                 catch (Exception threatVoteEx)
                 {
                     Log.Error($"StartPreparedThreatVote threw â€” round will continue without a threat vote. {threatVoteEx}");
+                    _auThreatVoteSystem.ClearRoundJoinBlocks();
                     var removed = AuThreatSystem.RemoveThreatJobAssignments(assignedJobs);
                     if (removed > 0)
                         Log.Warning($"Removed {removed} held threat assignment(s) after threat vote start failed.");
@@ -389,6 +392,9 @@ namespace Content.Server.GameTicking
             bool lateJoin = true,
             bool silent = false)
         {
+            if (IsThreatVoteRoundJoinBlocked(player))
+                return;
+
             var character = GetPlayerProfile(player);
 
             var jobBans = _banManager.GetJobBans(player.UserId);
@@ -417,6 +423,15 @@ namespace Content.Server.GameTicking
             SpawnPlayer(player, resolvedProfile, station, jobId, lateJoin, silent);
         }
 
+        private bool IsThreatVoteRoundJoinBlocked(ICommonSession player)
+        {
+            if (!_auThreatVoteSystem.IsRoundJoinBlocked(player.UserId))
+                return false;
+
+            _chatManager.DispatchServerMessage(player, Loc.GetString("au14-threat-vote-round-join-blocked"));
+            return true;
+        }
+
         private void SpawnPlayer(ICommonSession player,
             HumanoidCharacterProfile character,
             EntityUid station,
@@ -426,6 +441,9 @@ namespace Content.Server.GameTicking
         {
             // Can't spawn players with a dummy ticker!
             if (DummyTicker)
+                return;
+
+            if (IsThreatVoteRoundJoinBlocked(player))
                 return;
 
             if (station == EntityUid.Invalid)

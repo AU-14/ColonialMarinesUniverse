@@ -32,23 +32,9 @@ public sealed class CMUMedicalAsrsCatalogTest
 
     private static readonly Dictionary<EntProtoId, int> ExpectedFieldTreatmentContents = new()
     {
-        ["CMUPlainGauze10"] = 1,
         ["CMUPlainTraumaDressing10"] = 1,
         ["CMUCoagulantPowder"] = 1,
-        ["CMUAntiseptic"] = 1,
         ["CMUBurnGel"] = 1,
-        ["CMUTissueSealant"] = 1,
-        ["CMUTraumaFoam"] = 1,
-        ["CMUHemostaticGauze6"] = 1,
-        ["CMUAntisepticGauze6"] = 1,
-        ["CMUBurnGelGauze6"] = 1,
-        ["CMUSealingGauze6"] = 1,
-        ["CMUCompressionGauze6"] = 1,
-        ["CMUHemostaticTraumaDressing4"] = 1,
-        ["CMUAntisepticTraumaDressing4"] = 1,
-        ["CMUBurnTraumaDressing4"] = 1,
-        ["CMUSealingTraumaDressing4"] = 1,
-        ["CMUCompressionTraumaDressing4"] = 1,
         ["CMBloodPackFull"] = 1,
         ["CMBloodPack"] = 1,
     };
@@ -73,6 +59,8 @@ public sealed class CMUMedicalAsrsCatalogTest
 
             Assert.Multiple(() =>
             {
+                Assert.That(actualContents.Keys, Is.EquivalentTo(ExpectedFieldTreatmentContents.Keys));
+
                 foreach (var (id, amount) in ExpectedFieldTreatmentContents)
                 {
                     Assert.That(actualContents.TryGetValue(id, out var actualAmount), Is.True,

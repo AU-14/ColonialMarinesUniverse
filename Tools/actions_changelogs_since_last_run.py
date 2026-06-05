@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """
-Sends updates to a Discord webhook for new changelog entries since the last GitHub Actions publish run.
-Automatically figures out the last run and changelog contents with the GitHub API.
+Sends updates to a Discord webhook for new changelog entries.
+By default it compares against the last successful GitHub Actions run. Workflows can
+also pass CHANGELOG_PREVIOUS_REF to compare against a local git ref.
 """
 
 import itertools
 import os
+import subprocess
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -21,7 +23,8 @@ GITHUB_API_URL = os.environ.get("GITHUB_API_URL", "https://api.github.com")
 DISCORD_SPLIT_LIMIT = 2000
 DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
 
-CHANGELOG_FILE = "Resources/Changelog/CMU.yml"
+CHANGELOG_FILE = os.environ.get("CHANGELOG_FILE", "Resources/Changelog/CMU.yml")
+CHANGELOG_PREVIOUS_REF = os.environ.get("CHANGELOG_PREVIOUS_REF")
 
 TYPES_TO_EMOJI = {
     "Fix": "🔧",
@@ -45,6 +48,8 @@ def main():
         # to debug this script locally, you can use
         # a separate local file as the old changelog
         last_changelog_stream = DEBUG_CHANGELOG_FILE_OLD.read_text()
+    elif CHANGELOG_PREVIOUS_REF:
+        last_changelog_stream = get_last_changelog_by_ref(CHANGELOG_PREVIOUS_REF)
     else:
         # when running this normally in a GitHub actions workflow,
         # it will get the old changelog from the GitHub API
@@ -135,6 +140,16 @@ def get_last_changelog_by_sha(
     )
     resp.raise_for_status()
     return resp.text
+
+
+def get_last_changelog_by_ref(ref: str) -> str:
+    """
+    Get the previous changelog from a local git ref.
+    """
+    return subprocess.check_output(
+        ["git", "show", f"{ref}:{CHANGELOG_FILE}"],
+        text=True,
+    )
 
 
 def diff_changelog(

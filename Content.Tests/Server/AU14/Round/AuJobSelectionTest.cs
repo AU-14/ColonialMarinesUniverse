@@ -114,6 +114,23 @@ public sealed class AuJobSelectionTest
     }
 
     [Test]
+    public void ThreatVoteRoundJoinBlockTracksHeldPlayersUntilCleared()
+    {
+        var held = new NetUserId(new Guid("00000000-0000-0000-0000-000000000001"));
+        var other = new NetUserId(new Guid("00000000-0000-0000-0000-000000000002"));
+        var vote = new AuThreatVoteSystem();
+
+        vote.BlockRoundJoinsForHeldPlayers([held]);
+
+        Assert.That(vote.IsRoundJoinBlocked(held), Is.True);
+        Assert.That(vote.IsRoundJoinBlocked(other), Is.False);
+
+        vote.ClearRoundJoinBlocks();
+
+        Assert.That(vote.IsRoundJoinBlocked(held), Is.False);
+    }
+
+    [Test]
     public void PlanetVoteOptionsUseStableCarryoverKey()
     {
         var planets = new List<RMCPlanetMapPrototypeComponent>

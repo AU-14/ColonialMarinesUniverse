@@ -5,6 +5,7 @@ using Content.Server.AU14.Threats;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
 using Content.Shared._RMC14.Rules;
+using Content.Shared.AU14;
 using Content.Shared.AU14.Threats;
 using Robust.Shared.ContentPack;
 using Robust.Shared.GameObjects;
@@ -21,7 +22,7 @@ public sealed class DistressSignalThreatMarkerTest
     private const int MarkerValidationPlayerCount = 100;
 
     [Test]
-    public async Task TribalThreatIsAvailableForDistressSignal()
+    public async Task TribalThreatIsNotAvailableForDistressSignal()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -33,14 +34,14 @@ public sealed class DistressSignalThreatMarkerTest
 
             Assert.That(
                 ThreatVoteSelection.IsThreatAllowed(tribalThreat, "DistressSignal", null, null, playerCount: 1),
-                Is.True);
+                Is.False);
         });
 
         await pair.CleanReturnAsync();
     }
 
     [Test]
-    public async Task DistressSignalPlanetsOfferTribalThreat()
+    public async Task DistressSignalPlanetsDoNotOfferSelectableTribalThreat()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -50,7 +51,8 @@ public sealed class DistressSignalThreatMarkerTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var factory = server.ResolveDependency<IComponentFactory>();
             var preset = prototypes.Index<GamePresetPrototype>("DistressSignal");
-            var missing = new List<string>();
+            var offenders = new List<string>();
+            var tribalThreat = prototypes.Index<ThreatPrototype>(TribalThreat);
 
             foreach (var planetId in preset.SupportedPlanets)
             {
@@ -58,11 +60,47 @@ public sealed class DistressSignalThreatMarkerTest
                 if (!planetProto.TryGetComponent<RMCPlanetMapPrototypeComponent>(out var planet, factory))
                     continue;
 
-                if (planet.AllowedThreats.All(threat => threat.Id != TribalThreat))
-                    missing.Add($"{planetId} ({planet.MapId})");
+                if (planet.AllowedThreats.Any(threat => threat.Id == TribalThreat) &&
+                    ThreatVoteSelection.IsThreatAllowed(tribalThreat, "DistressSignal", null, null, MarkerValidationPlayerCount))
+                {
+                    offenders.Add($"{planetId} ({planet.MapId})");
+                }
             }
 
-            Assert.That(missing, Is.Empty, $"Distress Signal planets missing {TribalThreat}: {string.Join(", ", missing)}");
+            Assert.That(offenders, Is.Empty,
+                $"Distress Signal planets offer selectable {TribalThreat}: {string.Join(", ", offenders)}");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task DistressSignalThreatWinConditionsDoNotCountColonists()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var factory = server.ResolveDependency<IComponentFactory>();
+            var offenders = new List<string>();
+
+            foreach (var threat in prototypes.EnumeratePrototypes<ThreatPrototype>())
+            {
+                if (!ThreatVoteSelection.IsThreatAllowed(threat, "DistressSignal", null, null, MarkerValidationPlayerCount))
+                    continue;
+
+                foreach (var ruleId in threat.WinConditions)
+                {
+                    var rulePrototype = prototypes.Index<EntityPrototype>(ruleId);
+                    if (rulePrototype.TryGetComponent<KillAllColonistRuleComponent>(out _, factory))
+                        offenders.Add($"{threat.ID}:{ruleId}");
+                }
+            }
+
+            Assert.That(offenders, Is.Empty,
+                $"Distress Signal threats should not count dead colonists: {string.Join(", ", offenders)}");
         });
 
         await pair.CleanReturnAsync();

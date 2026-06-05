@@ -54,6 +54,7 @@
   children:
   - RMCSurvivor
   - RMCMedical
+  - AU14MedicalV2
   - RMCRequisitions
   - RMCIntel
   - RMCGuideRoleMilitaryPolice
@@ -80,6 +81,13 @@
   priority: 2
   name: "Medical"
   text: "/ServerInfo/Guidebook/_RMC14/Guides/RMCMedical.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14MedicalV2
+  priority: 2
+  name: "Medical V2"
+  text: "/ServerInfo/Guidebook/_RMC14/Guides/AU14MedicalV2.xml"
 
 - type: guideEntry
   parent: RMC

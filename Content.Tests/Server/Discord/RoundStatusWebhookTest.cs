@@ -17,6 +17,12 @@ public sealed class RoundStatusWebhookTest
             "Kutjevo",
             "5th Platoon",
             "Distress Signal",
+            new[]
+            {
+                new RoundStatusRecentGamemode(41, "Colony Fall", TimeSpan.FromMinutes(75)),
+                new RoundStatusRecentGamemode(40, "Insurgency", TimeSpan.FromSeconds(2703)),
+                new RoundStatusRecentGamemode(39, "Distress Signal", TimeSpan.FromSeconds(3550)),
+            },
             TimeSpan.FromMinutes(91));
 
         var payload = RoundStatusWebhook.CreatePayload(
@@ -29,15 +35,18 @@ public sealed class RoundStatusWebhookTest
         Assert.That(payload.Embeds, Has.Count.EqualTo(1));
 
         var embed = payload.Embeds![0];
-        Assert.That(embed.Title, Is.EqualTo("Round #42 ended"));
+        Assert.That(embed.Title, Is.EqualTo("CMU Round #42 - Ended"));
+        Assert.That(embed.Description, Is.EqualTo("Round ended."));
 
         var fields = embed.Fields.ToDictionary(field => field.Name, field => field.Value);
-        Assert.That(fields["Current Players"], Is.EqualTo("17"));
-        Assert.That(fields["Current Map"], Is.EqualTo("Kutjevo"));
-        Assert.That(fields["Current GOVFOR"], Is.EqualTo("5th Platoon"));
-        Assert.That(fields["Current Gamemode"], Is.EqualTo("Distress Signal"));
-        Assert.That(fields["Round ID"], Is.EqualTo("#42"));
-        Assert.That(fields["Duration"], Is.EqualTo("1h 31m 0s"));
+        Assert.That(fields["State"], Is.EqualTo("Ended"));
+        Assert.That(fields["Players"], Is.EqualTo("17"));
+        Assert.That(fields["Map"], Is.EqualTo("Kutjevo"));
+        Assert.That(fields["GOVFOR"], Is.EqualTo("5th Platoon"));
+        Assert.That(fields["Mode"], Is.EqualTo("Distress Signal"));
+        Assert.That(fields["Round"], Is.EqualTo("#42"));
+        Assert.That(fields["Last 3 Rounds"], Is.EqualTo("#41 Colony Fall 1h15m\n#40 Insurgency 45m03s\n#39 Distress Signal 59m10s"));
+        Assert.That(fields["Runtime"], Is.EqualTo("1h 31m 0s"));
     }
 
     [Test]
@@ -65,7 +74,8 @@ public sealed class RoundStatusWebhookTest
             12,
             "Shiva's Snowball",
             "8th Platoon",
-            "Insurgency");
+            "Insurgency",
+            Array.Empty<RoundStatusRecentGamemode>());
 
         var payload = RoundStatusWebhook.CreatePayload(
             RoundStatusWebhookKind.Running,
@@ -74,6 +84,91 @@ public sealed class RoundStatusWebhookTest
 
         Assert.That(payload.Content, Is.EqualTo(string.Empty));
         Assert.That(payload.AllowedMentions.Parse, Is.Empty);
+    }
+
+    [Test]
+    public void GamemodeVoteRolePingPayloadIncludesVotedMessage()
+    {
+        var payload = RoundStatusWebhook.CreateRolePingPayload(
+            new[] { "333" },
+            "Has been voted");
+
+        Assert.That(payload.Content, Is.EqualTo("<@&333> Has been voted"));
+        Assert.That(payload.AllowedMentions.Parse, Has.Member("roles"));
+    }
+
+    [Test]
+    public void MessageIdStateRoundTripsThroughJson()
+    {
+        var ids = new RoundStatusWebhookMessageIds(11, 22, 33);
+
+        var json = RoundStatusWebhook.SerializeMessageIds(ids);
+
+        Assert.That(RoundStatusWebhook.TryDeserializeMessageIds(json, out var parsed), Is.True);
+        Assert.That(parsed, Is.EqualTo(ids));
+    }
+
+    [Test]
+    public void MalformedMessageIdStateReturnsFalseAndDefaultIds()
+    {
+        Assert.That(
+            RoundStatusWebhook.TryDeserializeMessageIds("{ nope", out var parsed),
+            Is.False);
+        Assert.That(parsed, Is.EqualTo(default(RoundStatusWebhookMessageIds)));
+    }
+
+    [Test]
+    public void PayloadShortensLongVariableFieldsToAvoidAwkwardWrapping()
+    {
+        var status = new RoundStatusWebhookData(
+            43,
+            12,
+            "Fiorina Orbital Penitentiary",
+            "United States Colonial Marines",
+            "Distress Signal With An Extremely Long Name",
+            new[]
+            {
+                new RoundStatusRecentGamemode(42, "Distress Signal With An Extremely Long Name", TimeSpan.FromSeconds(3723)),
+            });
+
+        var payload = RoundStatusWebhook.CreatePayload(
+            RoundStatusWebhookKind.Lobby,
+            status,
+            Array.Empty<string>());
+
+        var fields = payload.Embeds![0].Fields.ToDictionary(field => field.Name, field => field.Value);
+        Assert.That(fields["Map"], Is.EqualTo("Fiorina Orbital Penit..."));
+        Assert.That(fields["GOVFOR"], Is.EqualTo("United States Colonia..."));
+        Assert.That(fields["Mode"], Is.EqualTo("Distress Signal With..."));
+        Assert.That(fields["Last 3 Rounds"], Is.EqualTo("#42 Distress Sig... 1h02m"));
+    }
+
+    [Test]
+    public void OfflinePayloadDoesNotIncludeStaleRoundFields()
+    {
+        var status = new RoundStatusWebhookData(
+            44,
+            9,
+            "Some Old Map",
+            "Some Old GOVFOR",
+            "Some Old Mode",
+            new[]
+            {
+                new RoundStatusRecentGamemode(43, "Some Old Mode", TimeSpan.FromMinutes(12)),
+            },
+            TimeSpan.FromSeconds(12));
+
+        var payload = RoundStatusWebhook.CreatePayload(
+            RoundStatusWebhookKind.Shutdown,
+            status,
+            Array.Empty<string>());
+
+        var embed = payload.Embeds![0];
+        Assert.That(embed.Title, Is.EqualTo("CMU Round Status - Offline"));
+        Assert.That(embed.Description, Is.EqualTo("Server offline."));
+        Assert.That(embed.Fields, Has.Count.EqualTo(1));
+        Assert.That(embed.Fields[0].Name, Is.EqualTo("State"));
+        Assert.That(embed.Fields[0].Value, Is.EqualTo("Offline"));
     }
 
     [Test]
@@ -120,13 +215,15 @@ public sealed class RoundStatusWebhookTest
             "unknown",
             "unknown",
             "unknown",
+            Array.Empty<RoundStatusRecentGamemode>(),
             TimeSpan.FromSeconds(12));
         var colors = new RoundStatusWebhookColors(1, 2, 3, 4);
 
-        AssertState(RoundStatusWebhookKind.Starting, "Server starting", 1);
-        AssertState(RoundStatusWebhookKind.Running, "Round #44 running", 2);
-        AssertState(RoundStatusWebhookKind.Ended, "Round #44 ended", 3);
-        AssertState(RoundStatusWebhookKind.Shutdown, "Server shutting down", 4);
+        AssertState(RoundStatusWebhookKind.Starting, "CMU Round Status - Starting", 1);
+        AssertState(RoundStatusWebhookKind.Lobby, "CMU Round Status - Lobby", 1);
+        AssertState(RoundStatusWebhookKind.Running, "CMU Round #44 - Running", 2);
+        AssertState(RoundStatusWebhookKind.Ended, "CMU Round #44 - Ended", 3);
+        AssertState(RoundStatusWebhookKind.Shutdown, "CMU Round Status - Offline", 4);
 
         void AssertState(RoundStatusWebhookKind kind, string title, int color)
         {

@@ -244,40 +244,12 @@
         amount: 1
     - name: Medical Supplies
       entries:
-      - id: CMUPlainGauze10
-        amount: 20
       - id: CMUPlainTraumaDressing10
         amount: 16
       - id: CMUCoagulantPowder
         amount: 12
-      - id: CMUAntiseptic
-        amount: 12
       - id: CMUBurnGel
         amount: 12
-      - id: CMUTissueSealant
-        amount: 12
-      - id: CMUTraumaFoam
-        amount: 12
-      - id: CMUHemostaticGauze6
-        amount: 16
-      - id: CMUAntisepticGauze6
-        amount: 16
-      - id: CMUBurnGelGauze6
-        amount: 16
-      - id: CMUSealingGauze6
-        amount: 16
-      - id: CMUCompressionGauze6
-        amount: 16
-      - id: CMUHemostaticTraumaDressing4
-        amount: 10
-      - id: CMUAntisepticTraumaDressing4
-        amount: 10
-      - id: CMUBurnTraumaDressing4
-        amount: 10
-      - id: CMUSealingTraumaDressing4
-        amount: 10
-      - id: CMUCompressionTraumaDressing4
-        amount: 10
       - id: CMBloodPackFull
         name: blood bag (O-)
         amount: 16

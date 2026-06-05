@@ -19,6 +19,7 @@ namespace Content.Server._CMU14.Medical.FieldTreatments;
 public sealed partial class CMUMedicalFieldMixingSystem : EntitySystem
 {
     private const float CraftingRange = 2f;
+    private const string PackedTraumaDressingStack = "CMUPlainTraumaDressing";
 
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
@@ -89,8 +90,11 @@ public sealed partial class CMUMedicalFieldMixingSystem : EntitySystem
                     continue;
                 }
 
-                if (!TryGetProduct(ingredient, mixingBase.Kind, out var product))
+                if (!IsAllowedRecipe(ingredient, mixingBase, baseStack) ||
+                    !TryGetProduct(ingredient, mixingBase.Kind, out var product))
+                {
                     continue;
+                }
 
                 var key = (ingredient.Family, mixingBase.Kind);
                 if (!seen.Add(key))
@@ -162,6 +166,9 @@ public sealed partial class CMUMedicalFieldMixingSystem : EntitySystem
 
         var cost = ResolveIngredientUnitCost(_skills.GetSkill(user, ingredient.Skill));
         if (ingredientStack.Count < cost || baseStack.Count < 1)
+            return false;
+
+        if (!IsAllowedRecipe(ingredient, mixingBase, baseStack))
             return false;
 
         var productId = mixingBase.Kind switch
@@ -258,6 +265,7 @@ public sealed partial class CMUMedicalFieldMixingSystem : EntitySystem
     {
         ingredientUid = default;
         baseUid = default;
+        CMUMedicalIngredientComponent? selectedIngredient = null;
 
         var items = GetAccessibleItems(user);
         foreach (var candidate in items)
@@ -275,10 +283,11 @@ public sealed partial class CMUMedicalFieldMixingSystem : EntitySystem
                 continue;
 
             ingredientUid = candidate;
+            selectedIngredient = ingredient;
             break;
         }
 
-        if (ingredientUid == default)
+        if (ingredientUid == default || selectedIngredient == null)
             return false;
 
         foreach (var candidate in items)
@@ -286,7 +295,8 @@ public sealed partial class CMUMedicalFieldMixingSystem : EntitySystem
             if (!TryComp<CMUMedicalMixingBaseComponent>(candidate, out var mixingBase) ||
                 mixingBase.Kind != baseKind ||
                 !TryComp<StackComponent>(candidate, out var baseStack) ||
-                baseStack.Count < 1)
+                baseStack.Count < 1 ||
+                !IsAllowedRecipe(selectedIngredient, mixingBase, baseStack))
             {
                 continue;
             }
@@ -365,5 +375,15 @@ public sealed partial class CMUMedicalFieldMixingSystem : EntitySystem
         };
 
         return product != default;
+    }
+
+    private static bool IsAllowedRecipe(
+        CMUMedicalIngredientComponent ingredient,
+        CMUMedicalMixingBaseComponent mixingBase,
+        StackComponent baseStack)
+    {
+        return ingredient.Family is CMUFieldTreatmentFamily.Hemostatic or CMUFieldTreatmentFamily.BurnGel &&
+               mixingBase.Kind == CMUFieldTreatmentBaseKind.TraumaDressing &&
+               baseStack.StackTypeId == PackedTraumaDressingStack;
     }
 }

@@ -62,7 +62,7 @@ public static class ChatUserSettings
 
     private static readonly Regex FirstColorTag = new(@"\[color=[^\]]+\]", RegexOptions.IgnoreCase);
     private static readonly Regex FirstFontTag = new(@"\[font(?<attrs>[^\]]*)\]", RegexOptions.IgnoreCase);
-    private static readonly Regex FontSizeAttribute = new(@"\s+size=\d+", RegexOptions.IgnoreCase);
+    private static readonly Regex FontSizeAttribute = new(@"\s+size=(?<size>\d+)", RegexOptions.IgnoreCase);
 
     public static readonly ChatStyleTarget[] BaseStyleTargets =
     {
@@ -310,6 +310,19 @@ public static class ChatUserSettings
     public static int? ResolveFontSize(ChatStyleSettings? style)
     {
         return NormalizeFontSize(style?.FontSize);
+    }
+
+    public static int? ResolveMarkupFontSize(string markup)
+    {
+        var fontMatch = FirstFontTag.Match(markup);
+        if (!fontMatch.Success)
+            return null;
+
+        var sizeMatch = FontSizeAttribute.Match(fontMatch.Groups["attrs"].Value);
+        if (!sizeMatch.Success)
+            return null;
+
+        return NormalizeFontSize(sizeMatch.Groups["size"].Value);
     }
 
     public static string ApplyFontMarkup(string markup, ChatStyleSettings? style, int? fallbackFontSize = null)

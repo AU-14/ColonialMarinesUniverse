@@ -21,6 +21,7 @@ using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
+using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
@@ -962,6 +963,47 @@ public sealed class ConditionDrivenSurgeryTest
     }
 
     [Test]
+    public async Task AutodocOffersWoundRepairForHandWounds()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var autodoc = entMan.System<CMUAutodocSystem>();
+
+            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var surgeon = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+
+            try
+            {
+                entMan.EnsureComponent<CMUAutodocContainedPatientComponent>(human);
+
+                var hand = GetBodyPart(entMan, human, BodyPartType.Hand, BodyPartSymmetry.Right);
+                AddBodyPartWound(entMan, hand, WoundType.Brute);
+
+                var entries = BuildAutodocPartEntries(autodoc, human, surgeon);
+                var handEntry = entries.Find(entry =>
+                    entry.Type == BodyPartType.Hand &&
+                    entry.Symmetry == BodyPartSymmetry.Right);
+
+                Assert.That(handEntry, Is.Not.Null);
+                Assert.That(
+                    handEntry!.EligibleSurgeries.ConvertAll(entry => entry.SurgeryId),
+                    Does.Contain("CMUAutodocRepairWounds"));
+            }
+            finally
+            {
+                entMan.DeleteEntity(human);
+                entMan.DeleteEntity(surgeon);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task OrganRemovalSurgeriesAdvanceToClosureAfterExtractionStep()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -1662,5 +1704,40 @@ public sealed class ConditionDrivenSurgeryTest
 
         Assert.Fail($"Expected CMU human to have {symmetry} {type}.");
         return EntityUid.Invalid;
+    }
+
+    private static void AddBodyPartWound(IEntityManager entMan, EntityUid part, WoundType type)
+    {
+        var wounds = entMan.EnsureComponent<BodyPartWoundComponent>(part);
+        GetWoundField<List<Wound>>(wounds, nameof(BodyPartWoundComponent.Wounds))
+            .Add(new Wound(FixedPoint2.New(10), FixedPoint2.Zero, 0f, null, type, false));
+        GetWoundField<List<WoundSize>>(wounds, nameof(BodyPartWoundComponent.Sizes)).Add(WoundSize.Deep);
+        GetWoundField<List<int>>(wounds, nameof(BodyPartWoundComponent.Bandages)).Add(0);
+        GetWoundField<List<WoundMechanism>>(wounds, nameof(BodyPartWoundComponent.Mechanisms))
+            .Add(type == WoundType.Burn ? WoundMechanism.Burn : WoundMechanism.Generic);
+        GetWoundField<List<WoundMechanismFlags>>(wounds, nameof(BodyPartWoundComponent.SecondaryMechanisms))
+            .Add(WoundMechanismFlags.None);
+        GetWoundField<List<WoundTreatmentQuality>>(wounds, nameof(BodyPartWoundComponent.TreatmentQualities))
+            .Add(WoundTreatmentQuality.Untreated);
+        GetWoundField<List<WoundCleanupFlags>>(wounds, nameof(BodyPartWoundComponent.Cleanup))
+            .Add(WoundCleanupFlags.None);
+    }
+
+    private static T GetWoundField<T>(BodyPartWoundComponent comp, string name)
+        => (T) typeof(BodyPartWoundComponent).GetField(
+            name,
+            BindingFlags.Instance | BindingFlags.Public)!.GetValue(comp)!;
+
+    private static List<CMUSurgeryPartEntry> BuildAutodocPartEntries(
+        CMUAutodocSystem autodoc,
+        EntityUid patient,
+        EntityUid viewer)
+    {
+        var method = typeof(CMUAutodocSystem).GetMethod(
+            "BuildAutodocPartEntries",
+            BindingFlags.Instance | BindingFlags.NonPublic);
+
+        Assert.That(method, Is.Not.Null);
+        return (List<CMUSurgeryPartEntry>) method!.Invoke(autodoc, [patient, viewer])!;
     }
 }

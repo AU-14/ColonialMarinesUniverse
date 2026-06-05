@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Content.Server.Discord;
 
 public enum RoundStatusWebhookKind
 {
     Starting,
+    Lobby,
     Running,
     Ended,
     Shutdown,
@@ -25,15 +28,32 @@ public readonly record struct RoundStatusWebhookData(
     string MapName,
     string Govfor,
     string Gamemode,
+    IReadOnlyList<RoundStatusRecentGamemode> RecentGamemodes,
     TimeSpan? Duration = null);
+
+public readonly record struct RoundStatusRecentGamemode(int RoundId, string Gamemode, TimeSpan Duration);
+
+public readonly record struct RoundStatusWebhookMessageIds(
+    ulong StatusMessageId,
+    ulong RoundEndPingMessageId,
+    ulong GamemodeVotePingMessageId);
 
 public static class RoundStatusWebhook
 {
+    private const int InlineValueLength = 24;
+    private const int RecentGamemodeLength = 15;
+
     public static readonly RoundStatusWebhookColors DefaultColors = new(
         0xF0C419,
         0x23EB49,
         0xCD1010,
         0x6B7280);
+
+    private static readonly JsonSerializerOptions MessageIdsJsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        PropertyNameCaseInsensitive = true,
+    };
 
     public static WebhookPayload CreatePayload(
         RoundStatusWebhookKind kind,
@@ -43,17 +63,23 @@ public static class RoundStatusWebhook
     {
         colors ??= DefaultColors;
         var content = BuildRoleMentions(roleIds);
+
+        if (kind == RoundStatusWebhookKind.Shutdown)
+            return CreateOfflinePayload(content, colors.Value);
+
         var fields = new List<WebhookEmbedField>
         {
-            new() { Name = "Current Players", Value = status.PlayerCount.ToString(), Inline = true },
-            new() { Name = "Current Map", Value = UnknownIfEmpty(status.MapName), Inline = true },
-            new() { Name = "Current GOVFOR", Value = UnknownIfEmpty(status.Govfor), Inline = true },
-            new() { Name = "Current Gamemode", Value = UnknownIfEmpty(status.Gamemode), Inline = true },
-            new() { Name = "Round ID", Value = $"#{status.RoundId}", Inline = true },
+            new() { Name = "State", Value = GetState(kind), Inline = true },
+            new() { Name = "Players", Value = status.PlayerCount.ToString(CultureInfo.InvariantCulture), Inline = true },
+            new() { Name = "Round", Value = $"#{status.RoundId}", Inline = true },
+            new() { Name = "Map", Value = Shorten(status.MapName, InlineValueLength), Inline = true },
+            new() { Name = "GOVFOR", Value = Shorten(status.Govfor, InlineValueLength), Inline = true },
+            new() { Name = "Mode", Value = Shorten(status.Gamemode, InlineValueLength), Inline = true },
+            new() { Name = "Last 3 Rounds", Value = FormatRecentGamemodes(status.RecentGamemodes), Inline = false },
         };
 
         if (status.Duration is { } duration)
-            fields.Add(new WebhookEmbedField { Name = "Duration", Value = FormatDuration(duration), Inline = true });
+            fields.Add(new WebhookEmbedField { Name = "Runtime", Value = FormatDuration(duration), Inline = true });
 
         var payload = new WebhookPayload
         {
@@ -63,7 +89,7 @@ public static class RoundStatusWebhook
                 new()
                 {
                     Title = GetTitle(kind, status.RoundId),
-                    Description = "Server status",
+                    Description = GetDescription(kind),
                     Color = GetColor(kind, colors.Value),
                     Fields = fields,
                 },
@@ -74,6 +100,74 @@ public static class RoundStatusWebhook
             payload.AllowedMentions.AllowRoleMentions();
 
         return payload;
+    }
+
+    private static WebhookPayload CreateOfflinePayload(string content, RoundStatusWebhookColors colors)
+    {
+        var payload = new WebhookPayload
+        {
+            Content = content,
+            Embeds = new List<WebhookEmbed>
+            {
+                new()
+                {
+                    Title = GetTitle(RoundStatusWebhookKind.Shutdown, 0),
+                    Description = "Server offline.",
+                    Color = colors.Shutdown,
+                    Fields = new List<WebhookEmbedField>
+                    {
+                        new() { Name = "State", Value = "Offline", Inline = true },
+                    },
+                },
+            },
+        };
+
+        if (!string.IsNullOrWhiteSpace(content))
+            payload.AllowedMentions.AllowRoleMentions();
+
+        return payload;
+    }
+
+    public static WebhookPayload CreateRolePingPayload(IEnumerable<string?> roleIds, string? message = null)
+    {
+        var content = BuildRoleMentions(roleIds);
+        if (!string.IsNullOrWhiteSpace(content) && !string.IsNullOrWhiteSpace(message))
+            content = $"{content} {message.Trim()}";
+
+        var payload = new WebhookPayload
+        {
+            Content = content,
+        };
+
+        if (!string.IsNullOrWhiteSpace(content))
+            payload.AllowedMentions.AllowRoleMentions();
+
+        return payload;
+    }
+
+    public static string SerializeMessageIds(RoundStatusWebhookMessageIds messageIds)
+    {
+        return JsonSerializer.Serialize(messageIds, MessageIdsJsonOptions);
+    }
+
+    public static bool TryDeserializeMessageIds(string? json, out RoundStatusWebhookMessageIds messageIds)
+    {
+        messageIds = default;
+
+        if (string.IsNullOrWhiteSpace(json))
+            return false;
+
+        try
+        {
+            messageIds = JsonSerializer.Deserialize<RoundStatusWebhookMessageIds>(
+                json,
+                MessageIdsJsonOptions);
+            return true;
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
     }
 
     public static int ParseColor(string? value, int fallback)
@@ -111,6 +205,50 @@ public static class RoundStatusWebhook
         return null;
     }
 
+    public static IEnumerable<string> GetRoundStatusRoleIds(
+        bool includeRoundEndRole,
+        string? presetId,
+        string? roundEndRole,
+        string? distressSignalRole,
+        string? colonyFallRole,
+        string? insurgencyRole)
+    {
+        if (includeRoundEndRole && NullIfEmpty(roundEndRole) is { } endRole)
+            yield return endRole;
+
+        if (GetGamemodeRole(presetId, distressSignalRole, colonyFallRole, insurgencyRole) is { } gamemodeRole)
+            yield return gamemodeRole;
+    }
+
+    public static bool TryGetMessageId(string? responseContent, out ulong messageId)
+    {
+        messageId = 0;
+
+        if (string.IsNullOrWhiteSpace(responseContent))
+            return false;
+
+        try
+        {
+            var id = JsonNode.Parse(responseContent)?["id"]?.GetValue<string>();
+            return ulong.TryParse(id, out messageId);
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public static bool TryGetMessageIdToDelete(ulong previousMessageId, ulong newMessageId, out ulong messageId)
+    {
+        messageId = 0;
+
+        if (previousMessageId == 0 || previousMessageId == newMessageId)
+            return false;
+
+        messageId = previousMessageId;
+        return true;
+    }
+
     public static bool ShouldUpdate(TimeSpan now, TimeSpan nextUpdate, TimeSpan interval, bool hasStatusMessage)
     {
         return hasStatusMessage &&
@@ -132,11 +270,12 @@ public static class RoundStatusWebhook
     {
         return kind switch
         {
-            RoundStatusWebhookKind.Starting => "Server starting",
-            RoundStatusWebhookKind.Running => $"Round #{roundId} running",
-            RoundStatusWebhookKind.Ended => $"Round #{roundId} ended",
-            RoundStatusWebhookKind.Shutdown => "Server shutting down",
-            _ => "Server status",
+            RoundStatusWebhookKind.Starting => "CMU Round Status - Starting",
+            RoundStatusWebhookKind.Lobby => "CMU Round Status - Lobby",
+            RoundStatusWebhookKind.Running => $"CMU Round #{roundId} - Running",
+            RoundStatusWebhookKind.Ended => $"CMU Round #{roundId} - Ended",
+            RoundStatusWebhookKind.Shutdown => "CMU Round Status - Offline",
+            _ => "CMU Round Status",
         };
     }
 
@@ -145,6 +284,7 @@ public static class RoundStatusWebhook
         return kind switch
         {
             RoundStatusWebhookKind.Starting => colors.Starting,
+            RoundStatusWebhookKind.Lobby => colors.Starting,
             RoundStatusWebhookKind.Running => colors.Running,
             RoundStatusWebhookKind.Ended => colors.Ended,
             RoundStatusWebhookKind.Shutdown => colors.Shutdown,
@@ -152,11 +292,69 @@ public static class RoundStatusWebhook
         };
     }
 
+    private static string GetDescription(RoundStatusWebhookKind kind)
+    {
+        return kind switch
+        {
+            RoundStatusWebhookKind.Starting => "Server starting.",
+            RoundStatusWebhookKind.Lobby => "Online - in lobby.",
+            RoundStatusWebhookKind.Running => "Round in progress.",
+            RoundStatusWebhookKind.Ended => "Round ended.",
+            RoundStatusWebhookKind.Shutdown => "Server offline.",
+            _ => "Server status.",
+        };
+    }
+
+    private static string GetState(RoundStatusWebhookKind kind)
+    {
+        return kind switch
+        {
+            RoundStatusWebhookKind.Starting => "Starting",
+            RoundStatusWebhookKind.Lobby => "Lobby",
+            RoundStatusWebhookKind.Running => "Running",
+            RoundStatusWebhookKind.Ended => "Ended",
+            RoundStatusWebhookKind.Shutdown => "Offline",
+            _ => "Unknown",
+        };
+    }
+
+    private static string FormatRecentGamemodes(IReadOnlyList<RoundStatusRecentGamemode> recentGamemodes)
+    {
+        if (recentGamemodes.Count == 0)
+            return "No completed rounds";
+
+        return string.Join(
+            "\n",
+            recentGamemodes
+                .Take(3)
+                .Select(round => $"#{round.RoundId} {Shorten(round.Gamemode, RecentGamemodeLength)} {FormatShortDuration(round.Duration)}"));
+    }
+
     private static string UnknownIfEmpty(string value)
     {
         return string.IsNullOrWhiteSpace(value)
-            ? "unknown"
-            : value;
+            ? "Unknown"
+            : value.Trim();
+    }
+
+    private static string Shorten(string value, int maxLength)
+    {
+        value = UnknownIfEmpty(value)
+            .Replace('\r', ' ')
+            .Replace('\n', ' ')
+            .Trim();
+
+        while (value.Contains("  ", StringComparison.Ordinal))
+        {
+            value = value.Replace("  ", " ");
+        }
+
+        if (value.Length <= maxLength)
+            return value;
+
+        return maxLength <= 3
+            ? value[..maxLength]
+            : $"{value[..(maxLength - 3)].TrimEnd()}...";
     }
 
     private static string? NullIfEmpty(string? value)
@@ -169,5 +367,12 @@ public static class RoundStatusWebhook
     private static string FormatDuration(TimeSpan duration)
     {
         return $"{(int) duration.TotalHours}h {duration.Minutes}m {duration.Seconds}s";
+    }
+
+    private static string FormatShortDuration(TimeSpan duration)
+    {
+        return duration.TotalHours >= 1
+            ? $"{(int) duration.TotalHours}h{duration.Minutes:D2}m"
+            : $"{duration.Minutes}m{duration.Seconds:D2}s";
     }
 }

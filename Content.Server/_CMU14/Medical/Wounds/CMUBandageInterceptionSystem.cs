@@ -26,6 +26,11 @@ namespace Content.Server._CMU14.Medical.Wounds;
 
 public sealed partial class CMUBandageInterceptionSystem : EntitySystem
 {
+    private const int CorpsmanMedicalSkillLevel = 2;
+    private const string BurnKitStack = "CMBurnKit";
+    private const string TraumaKitStack = "CMTraumaKit";
+    private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
+
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -93,9 +98,10 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
             targetPart = fallbackPart;
         }
 
-        if (woundTarget != null
-            && CanApplyInstantWoundTreatment(args.User, treater)
-            && TryApplyInstantWoundTreatment(args.User, patient, targetPart, used, treater))
+        var canInstantWound = woundTarget != null && CanApplyInstantWoundTreatment(args.User, treater);
+        var canInstantKit = CanApplyInstantKit(args.User, used);
+        if ((canInstantWound || canInstantKit) &&
+            TryApplyInstantTreatment(args.User, patient, targetPart, used, treater))
         {
             args.Handled = true;
             return;
@@ -142,119 +148,36 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
 
         if (aimed is { } zone &&
             PartForZone(patient, zone) is { } aimedPart &&
-            PartHasTreatableWound(aimedPart, treater, exactMechanism: true))
+            PartHasTreatableWound(aimedPart, treater))
         {
             return aimedPart;
         }
 
         foreach (var fallbackZone in BandageFallbackOrder)
         {
-            if (PartForZone(patient, fallbackZone) is { } fallback && PartHasTreatableWound(fallback, treater, exactMechanism: true))
-                return fallback;
-        }
-
-        if (treater.CMUMechanisms == WoundMechanismFlags.None)
-            return null;
-
-        if (aimed is { } fallbackZoneAimed &&
-            PartForZone(patient, fallbackZoneAimed) is { } fallbackAimedPart &&
-            PartHasTreatableWound(fallbackAimedPart, treater, exactMechanism: false))
-        {
-            return fallbackAimedPart;
-        }
-
-        foreach (var fallbackZone in BandageFallbackOrder)
-        {
-            if (PartForZone(patient, fallbackZone) is { } fallback && PartHasTreatableWound(fallback, treater, exactMechanism: false))
+            if (PartForZone(patient, fallbackZone) is { } fallback && PartHasTreatableWound(fallback, treater))
                 return fallback;
         }
 
         return null;
     }
 
-    private bool PartHasTreatableWound(EntityUid part, WoundTreaterComponent treater, bool exactMechanism)
+    private bool PartHasTreatableWound(EntityUid part, WoundTreaterComponent treater)
     {
         if (!treater.CMUTreatsWounds)
             return false;
 
-        if (HasComp<CMUEscharComponent>(part))
-            return false;
         if (!TryComp<BodyPartWoundComponent>(part, out var pw))
             return false;
 
         for (var i = 0; i < pw.Wounds.Count; i++)
         {
             var wound = pw.Wounds[i];
-
-            if (exactMechanism && !MatchesMechanism(pw, i, treater.CMUMechanisms))
-                continue;
-
-            if (wound.Treated)
-            {
-                if (treater.CMUTreatmentQuality == WoundTreatmentQuality.Optimal &&
-                    CleanupCanBeTreated(GetCleanup(pw, i), treater.CMUCleanupClears))
-                {
-                    return true;
-                }
-
-                continue;
-            }
-
-            if (wound.Type == treater.Wound)
+            if (!wound.Treated && wound.Type == treater.Wound)
                 return true;
         }
 
         return false;
-    }
-
-    private static WoundCleanupFlags GetCleanup(BodyPartWoundComponent comp, int index)
-    {
-        return index >= 0 && index < comp.Cleanup.Count
-            ? comp.Cleanup[index]
-            : WoundCleanupFlags.None;
-    }
-
-    private static bool CleanupCanBeTreated(WoundCleanupFlags cleanup, WoundCleanupFlags cleanupClears)
-    {
-        if (cleanup == WoundCleanupFlags.None)
-            return false;
-
-        return cleanupClears == WoundCleanupFlags.None ||
-               (cleanup & cleanupClears) != WoundCleanupFlags.None;
-    }
-
-    private static bool MatchesMechanism(
-        BodyPartWoundComponent comp,
-        int index,
-        WoundMechanismFlags mechanismMask)
-    {
-        if (mechanismMask == WoundMechanismFlags.None)
-            return true;
-
-        var primary = index >= 0 && index < comp.Mechanisms.Count
-            ? ToFlag(comp.Mechanisms[index])
-            : WoundMechanismFlags.Generic;
-        var secondary = index >= 0 && index < comp.SecondaryMechanisms.Count
-            ? comp.SecondaryMechanisms[index]
-            : WoundMechanismFlags.None;
-
-        return ((primary | secondary) & mechanismMask) != WoundMechanismFlags.None;
-    }
-
-    private static WoundMechanismFlags ToFlag(WoundMechanism mechanism)
-    {
-        return mechanism switch
-        {
-            WoundMechanism.Bullet => WoundMechanismFlags.Bullet,
-            WoundMechanism.Stab => WoundMechanismFlags.Stab,
-            WoundMechanism.Slash => WoundMechanismFlags.Slash,
-            WoundMechanism.Crush => WoundMechanismFlags.Crush,
-            WoundMechanism.Burn => WoundMechanismFlags.Burn,
-            WoundMechanism.Blast => WoundMechanismFlags.Blast,
-            WoundMechanism.Fragment => WoundMechanismFlags.Fragment,
-            WoundMechanism.Surgical => WoundMechanismFlags.Surgical,
-            _ => WoundMechanismFlags.Generic,
-        };
     }
 
     private bool TryHandleArmedSurgeryTool(EntityUid medic, EntityUid patient, EntityUid used, out bool handled)
@@ -465,6 +388,15 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
                 _skills.HasAllSkills(user, treater.InstantWoundTreatmentSkills));
     }
 
+    private bool CanApplyInstantKit(EntityUid user, EntityUid treaterUid)
+    {
+        if (!TryComp<StackComponent>(treaterUid, out var stack))
+            return false;
+
+        return (stack.StackTypeId == BurnKitStack || stack.StackTypeId == TraumaKitStack) &&
+               _skills.HasSkill(user, MedicalSkill, CorpsmanMedicalSkillLevel);
+    }
+
     private void OnBandageDoAfter(Entity<CMUBandagePendingComponent> ent, ref CMUBandageDoAfterEvent args)
     {
         var medic = ent.Owner;
@@ -578,8 +510,7 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
     {
         if (treater.CMUTreatsWounds &&
             IsAttachedPart(patient, currentPart) &&
-            (PartHasTreatableWound(currentPart, treater, exactMechanism: true) ||
-             (treater.CMUMechanisms != WoundMechanismFlags.None && PartHasTreatableWound(currentPart, treater, exactMechanism: false))))
+            PartHasTreatableWound(currentPart, treater))
         {
             return currentPart;
         }
@@ -591,35 +522,6 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
 
     private bool TryTreatOneWoundWithTreater(EntityUid part, WoundTreaterComponent treater, out bool completed)
     {
-        if (_wounds.TryTreatWound(
-                part,
-                treater.Wound,
-                out completed,
-                mechanismMask: treater.CMUMechanisms,
-                quality: treater.CMUTreatmentQuality,
-                cleanupClears: treater.CMUCleanupClears,
-                stopArterialBleeding: treater.CMUStopsArterialBleeding))
-        {
-            return true;
-        }
-
-        if (treater.CMUMechanisms == WoundMechanismFlags.None ||
-            treater.CMUTreatmentQuality != WoundTreatmentQuality.Optimal)
-        {
-            return false;
-        }
-
-        if (treater.CMUCleanupClears != WoundCleanupFlags.None &&
-            _wounds.TryTreatWoundCleanup(
-                part,
-                out completed,
-                mechanismMask: treater.CMUMechanisms,
-                cleanupClears: treater.CMUCleanupClears,
-                stopArterialBleeding: treater.CMUStopsArterialBleeding))
-        {
-            return true;
-        }
-
         return _wounds.TryTreatWound(
             part,
             treater.Wound,
@@ -630,31 +532,6 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
 
     private bool TryTreatWoundsWithTreater(EntityUid part, WoundTreaterComponent treater, int maxWounds, out int treated)
     {
-        if (_wounds.TryTreatWounds(
-                part,
-                treater.Wound,
-                maxWounds,
-                out treated,
-                mechanismMask: treater.CMUMechanisms,
-                quality: treater.CMUTreatmentQuality,
-                cleanupClears: treater.CMUCleanupClears,
-                stopArterialBleeding: treater.CMUStopsArterialBleeding))
-        {
-            return true;
-        }
-
-        if (treater.CMUMechanisms == WoundMechanismFlags.None ||
-            treater.CMUTreatmentQuality != WoundTreatmentQuality.Optimal)
-        {
-            return false;
-        }
-
-        if (treater.CMUCleanupClears != WoundCleanupFlags.None &&
-            TryCleanupWoundsWithTreater(part, treater, maxWounds, out treated))
-        {
-            return true;
-        }
-
         return _wounds.TryTreatWounds(
             part,
             treater.Wound,
@@ -664,24 +541,7 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
             stopArterialBleeding: treater.CMUStopsArterialBleeding);
     }
 
-    private bool TryCleanupWoundsWithTreater(EntityUid part, WoundTreaterComponent treater, int maxWounds, out int treated)
-    {
-        treated = 0;
-        while (treated < maxWounds &&
-               _wounds.TryTreatWoundCleanup(
-                   part,
-                   out _,
-                   mechanismMask: treater.CMUMechanisms,
-                   cleanupClears: treater.CMUCleanupClears,
-                   stopArterialBleeding: treater.CMUStopsArterialBleeding))
-        {
-            treated++;
-        }
-
-        return treated > 0;
-    }
-
-    private bool TryApplyInstantWoundTreatment(
+    private bool TryApplyInstantTreatment(
         EntityUid medic,
         EntityUid patient,
         EntityUid firstPart,
@@ -691,7 +551,7 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         var maxWounds = Math.Max(1, treater.WoundsTreatedPerUse);
         var treatedWounds = 0;
         var part = firstPart;
-        while (treatedWounds < maxWounds)
+        while (treater.CMUTreatsWounds && treatedWounds < maxWounds)
         {
             if (!TryTreatWoundsWithTreater(part, treater, maxWounds - treatedWounds, out var treatedOnPart))
                 break;
@@ -706,11 +566,41 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
             part = nextPart;
         }
 
-        if (treatedWounds <= 0)
-            return false;
+        var treated = treatedWounds > 0;
+        var damageOnly = false;
+
+        if (!treated)
+        {
+            if (!PartHasStoppableBleeding(patient, part, treater) &&
+                PickBleedingTarget(medic, patient, treater) is { } bleedingPart)
+            {
+                part = bleedingPart;
+            }
+
+            treated = TryStopBleedingWithTreater(patient, part, treater);
+        }
+
+        if (!treated)
+        {
+            if (!HasTreatableDamage(medic, patient, treater))
+                return false;
+
+            if (!PartHasDamageHealingRoom(patient, part))
+            {
+                if (PickDamageOnlyTarget(medic, patient, treater) is not { } damagePart)
+                    return false;
+
+                part = damagePart;
+            }
+
+            treated = true;
+            damageOnly = true;
+        }
 
         var treaterDamage = ResolveTreaterDamage(medic, treater);
-        _wounds.TryApplyTreaterDamage(patient, medic, treaterUid, treater.Group, treaterDamage, firstPart);
+        var appliedTreaterDamage = _wounds.TryApplyTreaterDamage(patient, medic, treaterUid, treater.Group, treaterDamage, part);
+        if (damageOnly && !appliedTreaterDamage)
+            return false;
 
         _audio.PlayPvs(treater.TreatEndSound, medic);
         ConsumeTreater(treaterUid, treater);

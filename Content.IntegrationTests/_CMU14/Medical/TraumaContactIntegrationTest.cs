@@ -104,6 +104,44 @@ public sealed class TraumaContactIntegrationTest
     }
 
     [Test]
+    public async Task BallisticTorsoOrganPassThroughIsBoostedButHeadIsNot()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var trauma = entMan.System<SharedCMUTraumaSystem>();
+            var projectile = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
+
+            try
+            {
+                entMan.EnsureComponent<ProjectileComponent>(projectile);
+                var damage = Damage("Piercing", 75);
+
+                var torso = trauma.CreateContactResult(BodyPartType.Torso, damage, true, tool: projectile);
+                var head = trauma.CreateContactResult(BodyPartType.Head, damage, true, tool: projectile);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(torso.OrganContact, Is.True);
+                    Assert.That(head.OrganContact, Is.True);
+                    Assert.That(torso.HighEnergy, Is.True);
+                    Assert.That(head.HighEnergy, Is.True);
+                    Assert.That(torso.OrganPassThrough, Is.EqualTo(head.OrganPassThrough * 1.3f).Within(0.0001f));
+                });
+            }
+            finally
+            {
+                entMan.DeleteEntity(projectile);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task HighDamageBallisticForcesBoneAndOrganButNotDirectVascular()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -224,6 +262,43 @@ public sealed class TraumaContactIntegrationTest
             finally
             {
                 entMan.DeleteEntity(human);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [TestCase("CMXenoWarrior")]
+    [TestCase("CMXenoRavager")]
+    public async Task TierTwoAndThreeXenoTorsoOrganPassThroughIsBoostedButHeadIsNot(string xenoPrototype)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var trauma = entMan.System<SharedCMUTraumaSystem>();
+            var xeno = entMan.SpawnEntity(xenoPrototype, MapCoordinates.Nullspace);
+
+            try
+            {
+                var damage = Damage("Slash", 45);
+                var torso = trauma.CreateContactResult(BodyPartType.Torso, damage, true, origin: xeno, tool: null);
+                var head = trauma.CreateContactResult(BodyPartType.Head, damage, true, origin: xeno, tool: null);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(torso.OrganContact, Is.True);
+                    Assert.That(head.OrganContact, Is.True);
+                    Assert.That(torso.HighEnergy, Is.True);
+                    Assert.That(head.HighEnergy, Is.True);
+                    Assert.That(torso.OrganPassThrough, Is.EqualTo(head.OrganPassThrough * 1.3f).Within(0.0001f));
+                });
+            }
+            finally
+            {
+                entMan.DeleteEntity(xeno);
             }
         });
 

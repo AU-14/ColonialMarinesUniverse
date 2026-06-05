@@ -1,6 +1,7 @@
 - type: entity
   parent: RMCBaseMobSpeciesOrganic
   id: AU14BaseMobSpeciesOrganicCultist
+  abstract: true
   suffix: AU14, Cultist
   components:
   - type: Threat

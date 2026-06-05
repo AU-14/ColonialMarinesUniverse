@@ -3,6 +3,7 @@ using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared._CMU14.Medical.Bones;
 using Content.Shared._CMU14.Medical.StatusEffects;
 using Content.Shared._CMU14.Medical.Wounds;
+using Content.Shared._CMU14.Medical.Wounds.Events;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
@@ -64,6 +65,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
         SubscribeLocalEvent<CMUShrapnelExtractorComponent, CMUShrapnelExtractDoAfterEvent>(OnExtractorDoAfter);
         SubscribeLocalEvent<CMUHumanMedicalComponent, MoveEvent>(OnHumanMove);
         SubscribeLocalEvent<CMUHumanMedicalComponent, ComponentRemove>(OnHumanRemove);
+        SubscribeLocalEvent<BodyPartComponent, BodyPartWoundAppliedEvent>(OnBodyPartWoundApplied);
 
         _cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         _cfg.OnValueChanged(CMUMedicalCCVars.PainEnabled, v => _painEnabled = v, true);
@@ -100,6 +102,19 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
         _wounds.MarkRetainedFragmentCleanup(part, shrapnel.Fragments, shrapnel.Severity);
         RaiseShrapnelChanged(part, removed: false);
         return true;
+    }
+
+    private void OnBodyPartWoundApplied(Entity<BodyPartComponent> ent, ref BodyPartWoundAppliedEvent args)
+    {
+        if (!IsLayerEnabled())
+            return;
+        if (args.Tool is not { } tool ||
+            !TryComp<CMUProjectileShrapnelComponent>(tool, out var projectileShrapnel))
+        {
+            return;
+        }
+
+        AddShrapnel(ent.Owner, projectileShrapnel.Fragments, projectileShrapnel.Severity);
     }
 
     public int TryApplyExplosionShrapnel(

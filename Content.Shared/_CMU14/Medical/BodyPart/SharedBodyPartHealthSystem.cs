@@ -372,11 +372,11 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
     }
 
     /// <summary>
-    ///     An eschar from a third-degree burn blocks passive heal — the part is
-    ///     closed-skin but biologically dead until debrided.
+    ///     Passive repair waits on open wounds. Eschar remains visible and
+    ///     surgical, but no longer blocks the simple field-treatment loop.
     /// </summary>
     protected virtual bool HasOpenWound(EntityUid partUid)
-        => HasComp<BodyPartWoundComponent>(partUid) || HasComp<CMUEscharComponent>(partUid);
+        => HasComp<BodyPartWoundComponent>(partUid);
 
     private bool IsSeveranceLocked(BodyPartType type) => type switch
     {

@@ -27,42 +27,12 @@
       - id: CMTraumaKit10
         points: 2
         recommended: true
-      - id: CMUPlainGauze10
-        points: 1
       - id: CMUPlainTraumaDressing10
         points: 2
       - id: CMUCoagulantPowder
         points: 4
-      - id: CMUAntiseptic
-        points: 4
       - id: CMUBurnGel
         points: 4
-      - id: CMUTissueSealant
-        points: 4
-      - id: CMUTraumaFoam
-        points: 4
-      - id: CMUHemostaticGauze6
-        points: 2
-        recommended: true
-      - id: CMUAntisepticGauze6
-        points: 2
-      - id: CMUBurnGelGauze6
-        points: 2
-        recommended: true
-      - id: CMUSealingGauze6
-        points: 2
-      - id: CMUCompressionGauze6
-        points: 2
-      - id: CMUHemostaticTraumaDressing4
-        points: 3
-      - id: CMUAntisepticTraumaDressing4
-        points: 3
-      - id: CMUBurnTraumaDressing4
-        points: 3
-      - id: CMUSealingTraumaDressing4
-        points: 3
-      - id: CMUCompressionTraumaDressing4
-        points: 3
     #    CMMedicalSplints: 1P
 #        recommended: true
       - id: CMBloodPackFull # TODO RMC14 O-

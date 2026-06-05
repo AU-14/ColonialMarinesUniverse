@@ -48,12 +48,30 @@ public sealed partial class AuThreatVoteSystem : EntitySystem
     }
 
     private PreparedThreatVote? _prepared;
+    private readonly HashSet<NetUserId> _roundJoinBlockedPlayers = new();
+
+    public bool IsRoundJoinBlocked(NetUserId playerId)
+    {
+        return _roundJoinBlockedPlayers.Contains(playerId);
+    }
+
+    public void ClearRoundJoinBlocks()
+    {
+        _roundJoinBlockedPlayers.Clear();
+    }
+
+    internal void BlockRoundJoinsForHeldPlayers(IEnumerable<NetUserId> heldPlayers)
+    {
+        _roundJoinBlockedPlayers.Clear();
+        _roundJoinBlockedPlayers.UnionWith(heldPlayers);
+    }
 
     public bool TryPrepareThreatVote(
         Dictionary<NetUserId, HumanoidCharacterProfile> profiles,
         MapId mapId)
     {
         _prepared = null;
+        ClearRoundJoinBlocks();
 
         if (!_auRound.UsesPostRoundstartThreatVote())
             return false;
@@ -87,6 +105,7 @@ public sealed partial class AuThreatVoteSystem : EntitySystem
             candidateIds,
             heldBodyCount,
             presetId);
+        BlockRoundJoinsForHeldPlayers(heldPlayers);
 
         _prepared = new PreparedThreatVote
         {
@@ -104,10 +123,14 @@ public sealed partial class AuThreatVoteSystem : EntitySystem
     public bool StartPreparedThreatVote(Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs)
     {
         if (_prepared == null)
+        {
+            ClearRoundJoinBlocks();
             return false;
+        }
 
         var prepared = _prepared;
         _prepared = null;
+        BlockRoundJoinsForHeldPlayers(prepared.HeldPlayers);
 
         var voteOptions = new VoteOptions
         {
@@ -124,11 +147,15 @@ public sealed partial class AuThreatVoteSystem : EntitySystem
         voteOptions.SetInitiatorOrServer(null);
 
         var handle = _voteManager.CreateVote(voteOptions);
+        handle.OnCancelled += _ => ClearRoundJoinBlocks();
         handle.OnFinished += (_, args) =>
         {
             var selected = ResolveThreatWinner(args.Winner, args.Winners, prepared.Candidates);
             if (selected == null)
+            {
+                ClearRoundJoinBlocks();
                 return;
+            }
 
             args.ResolveWinner(selected);
             FinishThreatVote(prepared, selected, assignedJobs);

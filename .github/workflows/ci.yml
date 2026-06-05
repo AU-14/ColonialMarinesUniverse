@@ -21,6 +21,33 @@ env:
   CONFIGURATION: DebugOpt
 
 jobs:
+  pr-metadata:
+    name: PR Metadata
+    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Write PR metadata
+        shell: bash
+        run: |
+          mkdir -p ci-pr-metadata
+          cat > ci-pr-metadata/pr.json <<'EOF'
+          {
+            "number": ${{ github.event.pull_request.number }},
+            "head_sha": "${{ github.event.pull_request.head.sha }}",
+            "head_ref": "${{ github.event.pull_request.head.ref }}",
+            "head_repo_full_name": "${{ github.event.pull_request.head.repo.full_name }}"
+          }
+          EOF
+
+      - name: Upload PR metadata
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: ci-pr-metadata
+          path: ci-pr-metadata/pr.json
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
+
   source-guards:
     name: Source Guards
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
@@ -384,7 +411,12 @@ jobs:
       fail-fast: false
       matrix:
         shard:
-          - name: root
+          - name: root_1
+            root_group: 0
+            root_groups: 2
+          - name: root_2
+            root_group: 1
+            root_groups: 2
           - name: admin_access_ui
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Administration
@@ -505,7 +537,7 @@ jobs:
           cp -r RobustToolbox/Resources/* bin/RobustToolbox/Resources/
 
       - name: Runtime diagnostics
-        if: matrix.shard.name == 'root'
+        if: matrix.shard.name == 'root_1'
         shell: bash
         run: |
           set -euo pipefail
@@ -522,7 +554,9 @@ jobs:
           export DOTNET_gcServer=1
           shard="${{ matrix.shard.name }}"
 
-          if [ "$shard" = "root" ]; then
+          if [[ "$shard" == root_* ]]; then
+            root_group='${{ matrix.shard.root_group }}'
+            root_groups='${{ matrix.shard.root_groups }}'
             shopt -s nullglob
             files=(Content.IntegrationTests/Tests/*.cs)
             if [ ${#files[@]} -eq 0 ]; then
@@ -530,10 +564,18 @@ jobs:
               exit 1
             fi
             FILTER=""
-            for f in "${files[@]}"; do
+            for i in "${!files[@]}"; do
+              if (( i % root_groups != root_group )); then
+                continue
+              fi
+              f="${files[$i]}"
               base=$(basename "$f" .cs)
               FILTER="${FILTER:+$FILTER | }FullyQualifiedName~Content.IntegrationTests.Tests.$base"
             done
+            if [ -z "$FILTER" ]; then
+              echo "::error::$shard shard: no test files assigned!"
+              exit 1
+            fi
           else
             FILTER='${{ matrix.shard.filter }}'
           fi

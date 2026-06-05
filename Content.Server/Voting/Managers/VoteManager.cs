@@ -146,7 +146,7 @@ namespace Content.Server.Voting.Managers
         {
             // Handle active votes.
             var remQueue = new RemQueue<int>();
-            foreach (var v in _votes.Values)
+            foreach (var v in _votes.Values.ToArray())
             {
                 // Logger.GetSawmill("content").Debug($"{_timing.ServerTime}");
                 if (_timing.RealTime >= v.EndTime)

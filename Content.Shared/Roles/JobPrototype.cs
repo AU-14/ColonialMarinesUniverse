@@ -184,6 +184,12 @@ namespace Content.Shared.Roles
         /// </summary>
         [DataField]
         public List<ProtoId<GuideEntryPrototype>>? Guides;
+
+        /// <summary>
+        /// Optional list of guides that should be opened automatically when the player spawns as this job.
+        /// </summary>
+        [DataField]
+        public List<ProtoId<GuideEntryPrototype>>? AutoOpenGuides;
     }
 
     /// <summary>

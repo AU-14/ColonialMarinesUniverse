@@ -564,11 +564,15 @@ public sealed partial class CMUAutodocSystem : EntitySystem
     {
         var source = _dispatch.BuildPartEntries(patient, viewer, ignoreSkillRequirements: true);
         var result = new List<CMUSurgeryPartEntry>(source.Count);
+        var listedParts = new HashSet<EntityUid>();
 
         foreach (var part in source)
         {
             var surgeries = new List<CMUSurgeryEntry>();
             var partUid = GetEntity(part.Part);
+            if (partUid.IsValid())
+                listedParts.Add(partUid);
+
             if (NeedsAutodocWoundRepair(partUid, part.Type, part.Symmetry))
                 surgeries.Add(BuildAutodocWoundRepairEntry());
 
@@ -591,7 +595,41 @@ public sealed partial class CMUAutodocSystem : EntitySystem
                 surgeries));
         }
 
+        AddWoundRepairOnlyPartEntries(patient, result, listedParts);
         return result;
+    }
+
+    private void AddWoundRepairOnlyPartEntries(
+        EntityUid patient,
+        List<CMUSurgeryPartEntry> result,
+        HashSet<EntityUid> listedParts)
+    {
+        foreach (var (partUid, part) in _body.GetBodyChildren(patient))
+        {
+            if (listedParts.Contains(partUid) || !NeedsAutodocWoundRepair(partUid))
+                continue;
+
+            result.Add(new CMUSurgeryPartEntry(
+                GetNetEntity(partUid),
+                part.PartType,
+                part.Symmetry,
+                SharedCMUSurgeryFlowSystem.FormatPartName(part.PartType, part.Symmetry),
+                BuildAutodocWoundRepairConditionSummary(partUid),
+                false,
+                false,
+                [BuildAutodocWoundRepairEntry()]));
+        }
+    }
+
+    private string BuildAutodocWoundRepairConditionSummary(EntityUid part)
+    {
+        if (HasComp<CMUEscharComponent>(part))
+            return Loc.GetString("cmu-medical-surgery-condition-eschar");
+
+        if (TryComp<BodyPartWoundComponent>(part, out var wounds) && wounds.Wounds.Count > 0)
+            return Loc.GetString("cmu-medical-surgery-condition-wounds");
+
+        return Loc.GetString("cmu-medical-surgery-condition-damaged");
     }
 
     private CMUSurgeryEntry BuildAutodocWoundRepairEntry()

@@ -48,8 +48,8 @@
   - type: BallisticAmmoProvider
     whitelist:
       tags:
-      - CMCartridgePistol9mm
-    proto: CMCartridgePistol9mm
+      - AU14CartridgeMinigunHAZOPS9mm
+    proto: AU14CartridgeMinigunHAZOPS9mm
     capacity: 1500
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/SmartGuns/magazine_smart_gun.rsi
@@ -64,5 +64,32 @@
   - type: Item
     size: Normal
 
+- type: entity
+  parent: CMCartridgePistol9mm
+  id: AU14CartridgeMinigunHAZOPS9mm
+  name: cartridge (9mm)
+  components:
+  - type: CartridgeAmmo
+    proto: AU14BulletMinigunHAZOPS9mm
+  - type: Tag
+    tags:
+    - AU14CartridgeMinigunHAZOPS9mm
+
+- type: entity
+  parent: CMBulletPistol9mm
+  id: AU14BulletMinigunHAZOPS9mm
+  name: bullet (9mm)
+  components:
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 12
+      falloff: 9999
+      ignoreModifiers: true
+    - range: 7
+      falloff: 4
+
 - type: Tag
   id: AU14MagazineMinigunHAZOPS
+
+- type: Tag
+  id: AU14CartridgeMinigunHAZOPS9mm

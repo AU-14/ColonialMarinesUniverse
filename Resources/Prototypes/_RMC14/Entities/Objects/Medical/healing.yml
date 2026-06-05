@@ -297,7 +297,9 @@
   - type: WoundTreater
     wound: Burn
     treats: true
-    instantWoundTreatment: true
+    instantWoundTreatment: false
+    instantWoundTreatmentSkills:
+      RMCSkillMedical: 2
     woundsTreatedPerUse: 2
     cmuMechanisms: 16
     cmuTreatmentQuality: Optimal
@@ -376,7 +378,9 @@
   - type: WoundTreater
     wound: Brute
     treats: true
-    instantWoundTreatment: true
+    instantWoundTreatment: false
+    instantWoundTreatmentSkills:
+      RMCSkillMedical: 2
     woundsTreatedPerUse: 2
     cmuStopsArterialBleeding: true
     group: Brute
@@ -461,7 +465,7 @@
   - type: CMUMedicalIngredient
     family: Hemostatic
     gauzeProduct: CMUHemostaticGauze1
-    traumaProduct: CMUHemostaticTraumaDressing1
+    traumaProduct: CMTraumaKit1
   - type: Stack
     stackType: CMUCoagulantPowder
     count: 50
@@ -525,7 +529,7 @@
   - type: CMUMedicalIngredient
     family: BurnGel
     gauzeProduct: CMUBurnGelGauze1
-    traumaProduct: CMUBurnTraumaDressing1
+    traumaProduct: CMBurnKit1
   - type: Stack
     stackType: CMUBurnGel
     count: 50

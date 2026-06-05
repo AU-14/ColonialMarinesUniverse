@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
+using Content.Server.Mind.Commands;
 using Content.Shared.AU14.Threats;
 using Content.Server.AU14.Round;
 using Robust.Shared.Timing;
@@ -36,6 +38,7 @@ public sealed partial class AuThreatSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     public readonly ProtoId<NpcFactionPrototype> threatnpcfaction = "THREAT";
     [Dependency] private SharedRoleSystem _roles = default!;
+    [Dependency] private GhostRoleSystem _ghostRole = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -470,6 +473,10 @@ public sealed partial class AuThreatSystem : EntitySystem
         var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
         ticker.PlayerJoinGame(session, silent: true);
 
+        GhostRoleComponent? ghostRole = null;
+        if (TryComp(entity, out ghostRole) && ghostRole.MakeSentient)
+            MakeSentientCommand.MakeSentient(entity, EntityManager, ghostRole.AllowMovement, ghostRole.AllowSpeech);
+
         var data = session.ContentData();
         var mind = _mindSystem.GetMind(playerNetId);
         if (mind == null)
@@ -483,10 +490,24 @@ public sealed partial class AuThreatSystem : EntitySystem
         Logger.GetSawmill("au14.threat").Debug(
             $"[DEBUG] Assigned threat mind {mind.Value} to entity {entity} for player {playerNetId} as {jobId.Id}");
 
-        _roles.MindAddJobRole(mind.Value, silent: true, jobPrototype: jobId);
+        var entityJob = ghostRole?.JobProto ?? jobId;
+        _roles.MindAddJobRole(mind.Value, silent: true, jobPrototype: entityJob);
+        AddStartingMindRole(entity, mind.Value);
         _roles.MindAddRole(mind.Value, "MindRoleThreat", silent: true);
         AddThreatFaction(entity);
+
+        if (ghostRole != null)
+        {
+            _ghostRole.UnregisterGhostRole((entity, ghostRole));
+        }
+
         return true;
+    }
+
+    private void AddStartingMindRole(EntityUid entity, EntityUid mind)
+    {
+        if (TryComp(entity, out StartingMindRoleComponent? starting))
+            _roles.MindAddRole(mind, starting.MindRole, silent: starting.Silent);
     }
 
     private void AddGhostRolesForUnassigned(

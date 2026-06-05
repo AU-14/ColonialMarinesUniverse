@@ -158,11 +158,13 @@ public sealed class RMCHumanPrototypeRegressionTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var skills = entMan.System<SkillsSystem>();
             var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var treater = entMan.SpawnEntity(treaterId, MapCoordinates.Nullspace);
 
             try
             {
+                skills.SetSkill(patient, "RMCSkillMedical", 2);
                 var part = GetFirstBodyPart(entMan, patient);
                 AddBodyPartWound(entMan, part, woundType);
                 AddBodyPartWound(entMan, part, woundType);
@@ -200,6 +202,70 @@ public sealed class RMCHumanPrototypeRegressionTest
         await pair.CleanReturnAsync();
     }
 
+    [TestCase("CMTraumaKit10", WoundType.Brute, WoundCleanupFlags.PoorClosure, true)]
+    [TestCase("CMGauze10", WoundType.Brute, WoundCleanupFlags.PoorClosure, false)]
+    [TestCase("AU14HemostaticGauze", WoundType.Brute, WoundCleanupFlags.RetainedFragment, true)]
+    [TestCase("CMBurnKit10", WoundType.Burn, WoundCleanupFlags.PoorClosure, true)]
+    [TestCase("CMOintment10", WoundType.Burn, WoundCleanupFlags.PoorClosure, true)]
+    public async Task CmuBaseWoundTreatersClearCleanupBurdenAndAllowPassiveHealing(
+        string treaterId,
+        WoundType woundType,
+        WoundCleanupFlags cleanup,
+        bool instantTreatment)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        EntityUid patient = default;
+        EntityUid treater = default;
+        EntityUid part = default;
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            var partHealth = entMan.System<SharedBodyPartHealthSystem>();
+            var skills = entMan.System<SkillsSystem>();
+            patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            treater = entMan.SpawnEntity(treaterId, MapCoordinates.Nullspace);
+            part = GetFirstBodyPart(entMan, patient);
+
+            skills.SetSkill(patient, "RMCSkillMedical", 2);
+            AddBodyPartWound(entMan, part, woundType, FixedPoint2.New(1), cleanup, WoundSize.Small);
+            var health = entMan.GetComponent<BodyPartHealthComponent>(part);
+            partHealth.SetCurrent((part, health), health.Max - FixedPoint2.New(4));
+
+            var interact = new AfterInteractEvent(patient, treater, patient, default, true);
+            entMan.EventBus.RaiseLocalEvent(treater, interact);
+
+            Assert.That(interact.Handled, Is.True);
+            Assert.That(entMan.HasComponent<CMUBandagePendingComponent>(patient), Is.EqualTo(!instantTreatment));
+        });
+
+        await pair.RunSeconds(12);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var health = entMan.GetComponent<BodyPartHealthComponent>(part);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(entMan.HasComponent<BodyPartWoundComponent>(part), Is.False);
+                Assert.That(health.Current, Is.EqualTo(health.Max));
+            });
+        });
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            if (entMan.EntityExists(treater))
+                entMan.DeleteEntity(treater);
+            if (entMan.EntityExists(patient))
+                entMan.DeleteEntity(patient);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [TestCase("CMTraumaKit10", true, 9)]
     [TestCase("CMGauze10", false, 10)]
     public async Task CmuWoundTreatersPreferDeadShrapnelPatientWoundsOverArmedSurgery(
@@ -216,12 +282,14 @@ public sealed class RMCHumanPrototypeRegressionTest
             var flow = entMan.System<CMUSurgeryFlowSystem>();
             var mobState = entMan.System<MobStateSystem>();
             var shrapnel = entMan.System<SharedCMUShrapnelSystem>();
+            var skills = entMan.System<SkillsSystem>();
             var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var surgeon = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var treater = entMan.SpawnEntity(treaterId, MapCoordinates.Nullspace);
 
             try
             {
+                skills.SetSkill(surgeon, "RMCSkillMedical", 2);
                 var part = GetFirstBodyPart(entMan, patient);
                 AddBodyPartWound(entMan, part, WoundType.Brute);
                 shrapnel.AddShrapnel(part, 1, 10f);
@@ -1855,12 +1923,22 @@ public sealed class RMCHumanPrototypeRegressionTest
         return EntityUid.Invalid;
     }
 
-    private static void AddBodyPartWound(IEntityManager entMan, EntityUid part, WoundType type, FixedPoint2? damage = null)
+    private static void AddBodyPartWound(
+        IEntityManager entMan,
+        EntityUid part,
+        WoundType type,
+        FixedPoint2? damage = null,
+        WoundCleanupFlags cleanup = WoundCleanupFlags.None,
+        WoundSize size = WoundSize.Deep)
     {
         var wounds = entMan.EnsureComponent<BodyPartWoundComponent>(part);
         GetField<List<Wound>>(wounds, nameof(BodyPartWoundComponent.Wounds)).Add(new Wound(damage ?? FixedPoint2.New(10), FixedPoint2.Zero, 0f, null, type, false));
-        GetField<List<WoundSize>>(wounds, nameof(BodyPartWoundComponent.Sizes)).Add(WoundSize.Deep);
+        GetField<List<WoundSize>>(wounds, nameof(BodyPartWoundComponent.Sizes)).Add(size);
         GetField<List<int>>(wounds, nameof(BodyPartWoundComponent.Bandages)).Add(0);
+        GetField<List<WoundMechanism>>(wounds, nameof(BodyPartWoundComponent.Mechanisms)).Add(type == WoundType.Burn ? WoundMechanism.Burn : WoundMechanism.Generic);
+        GetField<List<WoundMechanismFlags>>(wounds, nameof(BodyPartWoundComponent.SecondaryMechanisms)).Add(WoundMechanismFlags.None);
+        GetField<List<WoundTreatmentQuality>>(wounds, nameof(BodyPartWoundComponent.TreatmentQualities)).Add(WoundTreatmentQuality.Untreated);
+        GetField<List<WoundCleanupFlags>>(wounds, nameof(BodyPartWoundComponent.Cleanup)).Add(cleanup);
     }
 
     private static int CountTreatedWounds(BodyPartWoundComponent comp, WoundType type)

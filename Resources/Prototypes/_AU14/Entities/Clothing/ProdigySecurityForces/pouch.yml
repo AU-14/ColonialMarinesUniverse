@@ -42,13 +42,20 @@
   components:
   - type: StorageFill
     contents:
-    - id: CMUPlainGauze10
+    - id: CMHealthAnalyzer
+    - id: CMTraumaKit10
+    - id: CMBurnKit10
+    - id: CMBloodPackFull
+    - id: CMSynthGraft
+    - id: CMSurgicalLine
+    - id: CMSurgicalCaseFilled
+    - id: AU14CMDefibrillator
+    - id: CMPortableSurgicalBedSpawnFolded
     - id: AU14Tourniquet
-    - id: AU14PacketPillsTramadol
-    - id: CMUHemostaticGauze6
-    - id: CMUBurnGelGauze6
+    - id: CMUCastItem
     - id: CMUSplintItem
     - id: CMUSplintItem
+      # splint
 
 - type: entity
   parent: RMCPouchMagazineLargePMC
@@ -141,10 +148,10 @@
   components:
   - type: StorageFill
     contents:
-    - id: CMUPlainGauze10
+    - id: AU14HemostaticGauzePacket
     - id: AU14Tourniquet
+    - id: CMPacketPillsTricordrazine
     - id: AU14PacketPillsTramadol
-    - id: CMUHemostaticGauze6
-    - id: CMUBurnGelGauze6
     - id: CMUSplintItem
-    - id: CMUSplintItem
+    - id: CMBicaridineAutoInjector
+    - id: CMKelotaneAutoInjector

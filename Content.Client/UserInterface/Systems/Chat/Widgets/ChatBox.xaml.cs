@@ -1116,7 +1116,9 @@ public partial class ChatBox : UIWidget
     {
         var style = ChatUserSettings.ResolveStyle(_styles, msg);
         var styleColor = ChatUserSettings.ResolveColor(style);
-        var fontSize = ChatUserSettings.ResolveFontSize(style) ?? ChatUserSettings.DefaultFontSize;
+        var fontSize = ChatUserSettings.ResolveFontSize(style) ??
+                       ChatUserSettings.ResolveMarkupFontSize(msg.WrappedMessage) ??
+                       ChatUserSettings.DefaultFontSize;
         var accentColor = styleColor ?? msg.Display?.AccentColor;
         var messageColor = styleColor ?? msg.MessageColorOverride ?? msg.Display?.AccentColor ?? msg.Channel.TextColor();
         var bodyColor = _colorWholeMessage ? messageColor : StructuredMessageTextColor;

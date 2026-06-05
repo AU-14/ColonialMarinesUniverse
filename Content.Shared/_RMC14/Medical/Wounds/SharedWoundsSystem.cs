@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Content.Shared._CMU14.Medical;
+using Content.Shared._CMU14.Medical.Wounds.Events;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Damage;
@@ -123,6 +124,17 @@ public abstract partial class SharedWoundsSystem : EntitySystem
 
     private void OnWoundTreaterUseInHand(Entity<WoundTreaterComponent> ent, ref UseInHandEvent args)
     {
+        if (HasComp<CMUHumanMedicalComponent>(args.User))
+        {
+            var ev = new CMUWoundTreaterInterceptEvent(args.User, ent.Owner, args.User);
+            RaiseLocalEvent(ref ev);
+            if (ev.Handled)
+            {
+                args.Handled = true;
+                return;
+            }
+        }
+
         StartTreatment(args.User, args.User, ent, out var handled);
         args.Handled = handled;
     }

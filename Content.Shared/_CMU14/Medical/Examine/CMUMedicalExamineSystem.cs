@@ -30,10 +30,6 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
     private const string DetailedBurnColor = "#ff704d";
     private const string DetailedBleedColor = "#ff5f5f";
     private const string DetailedUntreatedColor = "#ffd166";
-    private const string DetailedAdequateColor = "#f0c85a";
-    private const string DetailedOptimalColor = "#7bd88f";
-    private const string DetailedCleanupColor = "#d987ff";
-    private const string DetailedHintColor = "#83c9ff";
 
     public override void Initialize()
     {
@@ -74,16 +70,13 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
             if (includeWounds)
             {
                 var untreated = new List<string>();
-                var adequate = new List<string>();
-                var treated = new List<string>();
+                var treatedWounds = 0;
                 if (TryComp<BodyPartWoundComponent>(partUid, out var wounds))
                 {
                     for (var i = 0; i < wounds.Wounds.Count; i++)
                     {
-                        if (GetTreatmentQuality(wounds, i) == WoundTreatmentQuality.Adequate)
-                            adequate.Add(DescribeVisibleWound(wounds, i));
-                        else if (IsWoundTreatedForExamine(wounds, i))
-                            treated.Add(DescribeVisibleWound(wounds, i));
+                        if (wounds.Wounds[i].Treated)
+                            treatedWounds++;
                         else
                             untreated.Add(DescribeVisibleWound(wounds, i));
                     }
@@ -98,11 +91,8 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
                 if (untreated.Count > 0)
                     sections.Add($"[color={UntreatedWoundColor}]{ToSentence(untreated)}[/color]");
 
-                if (adequate.Count > 0)
-                    sections.Add($"[color={DetailedAdequateColor}]{ToSentence(adequate)}[/color]");
-
-                if (treated.Count > 0)
-                    sections.Add($"[color={TreatedWoundColor}]{ToSentence(treated)}[/color]");
+                if (treatedWounds > 0)
+                    sections.Add($"[color={TreatedWoundColor}]{DescribeVisibleTreatedWounds(treatedWounds, "treated")}[/color]");
             }
 
             if (includeFractures
@@ -156,9 +146,6 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
             {
                 for (var i = 0; i < wounds.Wounds.Count; i++)
                 {
-                    if (IsOptimallyTreatedForDetailedExamine(wounds, i))
-                        continue;
-
                     sections.Add(DescribeDetailedWound(wounds, i));
                 }
 
@@ -213,14 +200,12 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
             {
                 for (var i = 0; i < wounds.Wounds.Count; i++)
                 {
-                    if (IsOptimallyTreatedForDetailedExamine(wounds, i))
+                    var wound = wounds.Wounds[i];
+                    if (wound.Treated)
                         continue;
 
-                    var wound = wounds.Wounds[i];
                     var size = i < wounds.Sizes.Count ? wounds.Sizes[i] : WoundSize.Deep;
                     var mechanism = i < wounds.Mechanisms.Count ? wounds.Mechanisms[i] : LegacyMechanismFor(wound.Type);
-                    var quality = GetTreatmentQuality(wounds, i);
-                    var cleanup = i < wounds.Cleanup.Count ? wounds.Cleanup[i] : WoundCleanupFlags.None;
                     var header = GetInspectWoundHeader(mechanism, wound.Type);
                     var key = header;
 
@@ -234,7 +219,7 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
                         group.Order = partOrder;
                     }
 
-                    group.AddWound(partName, size, quality, wound.Treated, cleanup, DescribeOptimalHint(mechanism, wound.Type, cleanup));
+                    group.AddWound(partName, size);
                 }
 
                 if (wounds.ExternalBleeding == ExternalBleedTier.Arterial)
@@ -256,7 +241,7 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
                     group.Order = partOrder;
                 }
 
-                group.AddCleanup("Charred Tissue Cleanup Required");
+                group.AddSite("charred tissue");
             }
         }
 
@@ -335,13 +320,6 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         }
 
         group.AddSite(partName);
-    }
-
-    private static bool IsOptimallyTreatedForDetailedExamine(BodyPartWoundComponent wounds, int index)
-    {
-        var cleanup = index < wounds.Cleanup.Count ? wounds.Cleanup[index] : WoundCleanupFlags.None;
-        return GetTreatmentQuality(wounds, index) == WoundTreatmentQuality.Optimal &&
-               cleanup == WoundCleanupFlags.None;
     }
 
     private List<(BodyPartType Type, BodyPartSymmetry Symmetry)> GetMissingPartSlots(EntityUid body)
@@ -440,19 +418,13 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
             _ => GetVisibleWoundKind(wounds, index),
         };
 
-        var treated = DescribeVisibleTreatment(wounds, index);
-        return $"a {treated}{sizeText} {kind}";
+        return $"a {sizeText} {kind}";
     }
 
-    private static string DescribeVisibleTreatment(BodyPartWoundComponent wounds, int index)
+    private static string DescribeVisibleTreatedWounds(int count, string treatment)
     {
-        var quality = GetTreatmentQuality(wounds, index);
-        return quality switch
-        {
-            WoundTreatmentQuality.Adequate => "adequately treated ",
-            WoundTreatmentQuality.Optimal => "treated ",
-            _ => wounds.Wounds[index].Treated ? "treated " : string.Empty,
-        };
+        var noun = count == 1 ? "wound" : "wounds";
+        return $"{noun} {treatment}";
     }
 
     private static string GetVisibleWoundKind(BodyPartWoundComponent wounds, int index)
@@ -511,65 +483,21 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         _ => "Moderate",
     };
 
-    private static string DescribeInspectCleanupRequired(WoundCleanupFlags cleanup)
-    {
-        if (cleanup == WoundCleanupFlags.None)
-            return "Cleanup Required";
-
-        var entries = new List<string>(4);
-        if ((cleanup & WoundCleanupFlags.RetainedFragment) != WoundCleanupFlags.None)
-            entries.Add("Retained Fragments");
-        if ((cleanup & WoundCleanupFlags.PoorClosure) != WoundCleanupFlags.None)
-            entries.Add("Poor Closure");
-        if ((cleanup & WoundCleanupFlags.CharredTissue) != WoundCleanupFlags.None)
-            entries.Add("Charred Tissue");
-        if ((cleanup & WoundCleanupFlags.CrushDebris) != WoundCleanupFlags.None)
-            entries.Add("Crush Debris");
-        if ((cleanup & WoundCleanupFlags.DirtyDressing) != WoundCleanupFlags.None)
-            entries.Add("Dirty Dressing");
-
-        return $"{ToSentence(entries)} Cleanup Required";
-    }
-
     private static DetailedWoundDetails GetDetailedWoundDetails(BodyPartWoundComponent wounds, int index)
     {
         var wound = wounds.Wounds[index];
         var size = index < wounds.Sizes.Count ? wounds.Sizes[index] : WoundSize.Deep;
         var mechanism = index < wounds.Mechanisms.Count ? wounds.Mechanisms[index] : LegacyMechanismFor(wound.Type);
-        var quality = GetTreatmentQuality(wounds, index);
-        var cleanup = index < wounds.Cleanup.Count ? wounds.Cleanup[index] : WoundCleanupFlags.None;
 
         var header = Color($"{DescribeDetailedSize(size)} {DescribeMechanism(mechanism, wound.Type)}", WoundColorFor(mechanism, wound.Type));
         var details = new List<string>
         {
             Color(
-                DescribeTreatment(quality, wound.Treated),
-                TreatmentColorFor(quality, wound.Treated)),
+                DescribeTreatment(wound.Treated),
+                TreatmentColorFor(wound.Treated)),
         };
 
-        var cleanupText = quality == WoundTreatmentQuality.Adequate
-            ? DescribeCleanup(cleanup)
-            : string.Empty;
-        if (cleanupText.Length > 0)
-            details.Add(Color(cleanupText, DetailedCleanupColor));
-
-        var optimalHint = DescribeOptimalHint(mechanism, wound.Type, cleanup);
-        if (quality != WoundTreatmentQuality.Optimal && optimalHint.Length > 0)
-            details.Add(Color($"optimal: {optimalHint}", DetailedHintColor));
-
         return new DetailedWoundDetails(header, ToDetailedLines(details));
-    }
-
-    private static bool IsWoundTreatedForExamine(BodyPartWoundComponent wounds, int index)
-    {
-        return wounds.Wounds[index].Treated || GetTreatmentQuality(wounds, index) != WoundTreatmentQuality.Untreated;
-    }
-
-    private static WoundTreatmentQuality GetTreatmentQuality(BodyPartWoundComponent wounds, int index)
-    {
-        return index < wounds.TreatmentQualities.Count
-            ? wounds.TreatmentQualities[index]
-            : WoundTreatmentQuality.Untreated;
     }
 
     private static string ToDetailedLines(List<string> sections)
@@ -595,14 +523,9 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         return DetailedWoundColor;
     }
 
-    private static string TreatmentColorFor(WoundTreatmentQuality quality, bool treated)
+    private static string TreatmentColorFor(bool treated)
     {
-        return quality switch
-        {
-            WoundTreatmentQuality.Optimal => DetailedOptimalColor,
-            WoundTreatmentQuality.Adequate => DetailedAdequateColor,
-            _ => treated ? TreatedWoundColor : DetailedUntreatedColor,
-        };
+        return treated ? TreatedWoundColor : DetailedUntreatedColor;
     }
 
     private static string DescribeDetailedFracture(FractureSeverity severity, bool stabilized)
@@ -640,55 +563,7 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         _ => type == WoundType.Burn ? "burn" : "wound",
     };
 
-    private static string DescribeTreatment(WoundTreatmentQuality quality, bool treated) => quality switch
-    {
-        WoundTreatmentQuality.Optimal => "optimal treatment",
-        WoundTreatmentQuality.Adequate => "adequate treatment",
-        _ => treated ? "treated" : "untreated",
-    };
-
-    private static string DescribeCleanup(WoundCleanupFlags cleanup)
-    {
-        if (cleanup == WoundCleanupFlags.None)
-            return string.Empty;
-
-        var entries = new List<string>(4);
-        if ((cleanup & WoundCleanupFlags.RetainedFragment) != WoundCleanupFlags.None)
-            entries.Add("retained fragments");
-        if ((cleanup & WoundCleanupFlags.PoorClosure) != WoundCleanupFlags.None)
-            entries.Add("poor closure");
-        if ((cleanup & WoundCleanupFlags.CharredTissue) != WoundCleanupFlags.None)
-            entries.Add("charred tissue");
-        if ((cleanup & WoundCleanupFlags.CrushDebris) != WoundCleanupFlags.None)
-            entries.Add("crush debris");
-        if ((cleanup & WoundCleanupFlags.DirtyDressing) != WoundCleanupFlags.None)
-            entries.Add("dirty dressing");
-
-        return $"cleanup needed: {ToSentence(entries)}";
-    }
-
-    private static string DescribeOptimalHint(WoundMechanism mechanism, WoundType type, WoundCleanupFlags cleanup)
-    {
-        if ((cleanup & WoundCleanupFlags.RetainedFragment) != WoundCleanupFlags.None)
-            return "remove shrapnel";
-        if ((cleanup & WoundCleanupFlags.PoorClosure) != WoundCleanupFlags.None)
-            return "sealing dressing";
-        if ((cleanup & WoundCleanupFlags.CharredTissue) != WoundCleanupFlags.None)
-            return "burn gel dressing";
-        if ((cleanup & WoundCleanupFlags.CrushDebris) != WoundCleanupFlags.None)
-            return "compression dressing";
-
-        return mechanism switch
-        {
-            WoundMechanism.Bullet or WoundMechanism.Stab or WoundMechanism.Fragment => "hemostatic dressing",
-            WoundMechanism.Slash or WoundMechanism.Surgical => "sealing dressing",
-            WoundMechanism.Crush or WoundMechanism.Blast => "compression dressing",
-            WoundMechanism.Burn => "burn gel dressing",
-            _ when type == WoundType.Burn => "burn gel dressing",
-            _ when (cleanup & WoundCleanupFlags.DirtyDressing) != WoundCleanupFlags.None => "antiseptic dressing",
-            _ => string.Empty,
-        };
-    }
+    private static string DescribeTreatment(bool treated) => treated ? "treated" : "untreated";
 
     private static string DescribeBleedTier(ExternalBleedTier tier) => tier switch
     {
@@ -775,14 +650,10 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
 
     private sealed class InspectInjuryGroup
     {
-        private readonly HashSet<string> _cleanupLines = new();
-        private readonly HashSet<string> _optimalLines = new();
         private readonly HashSet<string> _siteLines = new();
 
         public int Order;
         public readonly string Header;
-        public readonly List<string> CleanupLines = new();
-        public readonly List<string> OptimalLines = new();
         public readonly List<string> SiteLines = new();
         private readonly string _siteColor;
 
@@ -793,34 +664,9 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
             _siteColor = siteColor;
         }
 
-        public void AddWound(
-            string part,
-            WoundSize size,
-            WoundTreatmentQuality quality,
-            bool treated,
-            WoundCleanupFlags cleanup,
-            string optimalTreatment)
+        public void AddWound(string part, WoundSize size)
         {
-            if (quality == WoundTreatmentQuality.Adequate)
-                AddCleanup(DescribeInspectCleanupRequired(cleanup));
-
-            if (optimalTreatment.Length > 0)
-                AddOptimal($"Optimal Treatment: {optimalTreatment}");
-
-            if (quality == WoundTreatmentQuality.Untreated && !treated)
-                AddSite($"{InspectSeverity(size)} {part}");
-        }
-
-        public void AddCleanup(string cleanup)
-        {
-            if (_cleanupLines.Add(cleanup))
-                CleanupLines.Add(cleanup);
-        }
-
-        public void AddOptimal(string treatment)
-        {
-            if (_optimalLines.Add(treatment))
-                OptimalLines.Add(treatment);
+            AddSite($"{InspectSeverity(size)} {part}");
         }
 
         public void AddSite(string site)
@@ -835,12 +681,6 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
             {
                 $"[bold]{Header}[/bold]",
             };
-
-            foreach (var cleanup in CleanupLines)
-                lines.Add($"  {Color(cleanup, DetailedCleanupColor)}");
-
-            foreach (var treatment in OptimalLines)
-                lines.Add($"  {Color(treatment, DetailedHintColor)}");
 
             if (SiteLines.Count > 0)
                 lines.Add($"  {Color(string.Join(", ", SiteLines), _siteColor)}");

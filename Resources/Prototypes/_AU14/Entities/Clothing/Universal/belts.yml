@@ -20,13 +20,6 @@
       amount: 3
     - id: CMBurnKit10
       amount: 3
-    - id: CMUPlainGauze10
-    - id: CMUPlainTraumaDressing10
-    - id: CMUCoagulantPowder
-    - id: CMUAntiseptic
-    - id: CMUBurnGel
-    - id: CMUTissueSealant
-    - id: CMUTraumaFoam
     # - id: RMCSplint
     - id: AU14NaloxoneAutoInjector
     - id: CMEpinephrineAutoInjector
@@ -36,6 +29,7 @@
 - type: entity
   parent: CMUBeltMedicBagSupportSynth
   id: CMUBeltMedicBagSupportSynthRMC
+  suffix: Filled, Support Synth, RMC
   components:
   - type: Sprite
     sprite: _AU14/Clothing/RMC/belt/medicbag.rsi
@@ -43,6 +37,30 @@
     sprite: _AU14/Clothing/RMC/belt/medicbag.rsi
   - type: ItemCamouflage
     camouflageVariations: {}
+
+- type: entity
+  parent: CMUBeltMedicBagSupportSynth
+  id: CMUBeltMedicBagSupportSynthBlack
+  suffix: Filled, Support Synth, Black
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UniversalBelts/Black/medicbag.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UniversalBelts/Black/medicbag.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMBeltMedicBag
+  id: AU14BeltMedicBagBlack
+  suffix: Black, AU14
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/UniversalBelts/Black/medicbag.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/UniversalBelts/Black/medicbag.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
 
 - type: entity
   parent: CMBeltUtility
@@ -328,71 +346,6 @@
           - RMCWeaponPistolHandcannonWyvern
   - type: ItemCamouflage
     camouflageVariations: { }
-
-- type: entity
-  parent: CMBeltMedical
-  id: AU14BeltMedicBagBlack
-  name: M276 pattern lifesaver bag
-  suffix: Black, AU14
-  description: The M276 is standard load-bearing equipment. This configuration mounts a duffel bag filled with a range of injectors and light medical supplies, and is common among medics.
-  components:
-  - type: Sprite
-    sprite: _AU14/Clothing/UniversalBelts/Black/medicbag.rsi
-  - type: Clothing
-    sprite: _AU14/Clothing/UniversalBelts/Black/medicbag.rsi
-  - type: Storage
-    maxItemSize: Small
-    grid:
-    - 0,0,13,5 # 21 slots
-    whitelist:
-      tags:
-      - DiscreteHealthAnalyzer
-      - Dropper
-      - GlassBeaker
-      - Bottle
-      - PillCanister
-      - Syringe
-      - CMSurgicalLine
-      - CMSynthGraft
-      - Brutepack
-      - CMBloodPack
-      - Gauze
-      - Ointment
-      - CMOintment
-      - CMTraumaKit
-      - CMBurnKit
-      #      - # TODO RMC14 splints
-      - CMAutoInjector
-      - CMRollerItem
-      - BodyBag
-      - RMCGlovesLatex
-      - SterileMask
-      - Hypospray
-      - CigPack
-      - RMCPenlight
-      - Flare
-      #      - # TODO RMC14 minitank (needs full implementation and a tag to fit it in here, but the item exists as CMMiniTank)
-      #      - # TODO RMC14 reagent analyzer
-      #      - # TODO RMC14 plant analyzer
-      components:
-      - Hypospray
-      - Defibrillator
-      - Pill
-      - RMCHandLabeler
-      - RMCStethoscope
-      - CMUCastItem
-      - CMUSplintItem
-      - RMCLighter
-  - type: FixedItemSizeStorage
-  - type: IgnoreContentsSize
-    items:
-      tags:
-      - PillCanister
-  - type: ItemCamouflage
-    camouflageVariations: { }
-  - type: Tag
-    tags:
-    - RMCBeltMedical
 
 - type: entity
   parent: CMBeltMarine

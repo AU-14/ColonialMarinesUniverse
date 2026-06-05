@@ -57,24 +57,6 @@
       amount: 1
     - id: CMTraumaKit10
       amount: 1
-    - id: CMUPlainGauze10
-      amount: 1
-    - id: CMUPlainTraumaDressing10
-      amount: 1
-    - id: CMUHemostaticGauze6
-      amount: 1
-    - id: CMUBurnGelGauze6
-      amount: 1
-    - id: CMUCoagulantPowder
-      amount: 1
-    - id: CMUAntiseptic
-      amount: 1
-    - id: CMUBurnGel
-      amount: 1
-    - id: CMUTissueSealant
-      amount: 1
-    - id: CMUTraumaFoam
-      amount: 1
 
 - type: entity
   parent: CMBeltMedicalFilled
@@ -98,24 +80,6 @@
       amount: 1
     - id: CMTraumaKit10
       amount: 1
-    - id: CMUPlainGauze10
-      amount: 1
-    - id: CMUPlainTraumaDressing10
-      amount: 1
-    - id: CMUHemostaticGauze6
-      amount: 1
-    - id: CMUBurnGelGauze6
-      amount: 1
-    - id: CMUCoagulantPowder
-      amount: 1
-    - id: CMUAntiseptic
-      amount: 1
-    - id: CMUBurnGel
-      amount: 1
-    - id: CMUTissueSealant
-      amount: 1
-    - id: CMUTraumaFoam
-      amount: 1
     - id: CMDefibrillator
       amount: 1
     - id: CMHealthAnalyzer
@@ -132,28 +96,6 @@
       amount: 2
     - id: CMTraumaKit10
       amount: 2
-    - id: CMUPlainGauze10
-      amount: 1
-    - id: CMUPlainTraumaDressing10
-      amount: 1
-    - id: CMUHemostaticGauze6
-      amount: 1
-    - id: CMUBurnGelGauze6
-      amount: 1
-    - id: CMUHemostaticTraumaDressing4
-      amount: 1
-    - id: CMUBurnTraumaDressing4
-      amount: 1
-    - id: CMUCoagulantPowder
-      amount: 1
-    - id: CMUAntiseptic
-      amount: 1
-    - id: CMUBurnGel
-      amount: 1
-    - id: CMUTissueSealant
-      amount: 1
-    - id: CMUTraumaFoam
-      amount: 1
     - id: CMEpinephrineAutoInjector
       amount: 1
     - id: CMDexalinPlusAutoInjector

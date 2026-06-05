@@ -5,8 +5,8 @@ using Content.Server.GameTicking.Presets;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared.CCVar;
-using Content.Shared.Movement.Components;
 using Robust.Shared.Configuration;
+using Robust.Shared.Network;
 
 namespace Content.IntegrationTests._RMC14;
 
@@ -20,12 +20,22 @@ public sealed class PlanetMapLoadTests
         {
             Dirty = true,
             DummyTicker = false,
-            InLobby = true,
         });
 
         var server = pair.Server;
+        var clientNet = pair.Client.ResolveDependency<INetManager>();
         var distress = server.System<CMDistressSignalRuleSystem>();
         var ticker = server.System<GameTicker>();
+        var config = server.ResolveDependency<IConfigurationManager>();
+
+        Assert.That(clientNet.IsConnected, Is.False);
+
+        await server.WaitPost(() =>
+        {
+            config.SetCVar(CCVars.GameLobbyEnabled, true);
+            ticker.RestartRound();
+        });
+        await PoolManager.WaitUntil(server, () => ticker.RunLevel == GameRunLevel.PreRoundLobby);
 
         var planets = new List<RMCPlanet>();
         await server.WaitPost(() =>
@@ -47,15 +57,6 @@ public sealed class PlanetMapLoadTests
                 await PoolManager.WaitUntil(server, () => ticker.RunLevel != GameRunLevel.PreRoundLobby);
             }, $"Failed to load planet {planet.Proto.Name}!");
 
-            await server.WaitPost(() =>
-            {
-                // https://github.com/RMC-14/RMC-14/actions/runs/19488437482/job/55775559108
-                foreach (var allEntity in server.EntMan.AllEntities<InputMoverComponent>())
-                {
-                    server.EntMan.DeleteEntity(allEntity);
-                }
-            });
-
             Assert.Multiple(() =>
             {
                 Assert.That(ticker.RunLevel, Is.Not.EqualTo(GameRunLevel.PreRoundLobby));
@@ -69,7 +70,6 @@ public sealed class PlanetMapLoadTests
 
         await server.WaitIdleAsync();
 
-        var config = server.ResolveDependency<IConfigurationManager>();
         await server.WaitPost(() =>
         {
             config.SetCVar(CCVars.GameLobbyEnabled, false);

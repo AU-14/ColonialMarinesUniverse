@@ -45,8 +45,6 @@
 
 - type: startingGear
   id: AU14GearCivilianPhysician
-  equipment:
-    id: AU14IDCardColonyPhysician
 
 - type: entity
   parent: CMSpawnPointJobBase
