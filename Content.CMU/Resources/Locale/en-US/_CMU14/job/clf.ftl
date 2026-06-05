@@ -29,3 +29,14 @@ au14-job-name-clfcellleader = CLF Cell Leader
 au14-job-description-clfcellleader = Lead your men and take over the colony. Push out, capture and/or kill any government forces that don't surrender. Convince the local civilians to join your cause.
 au14-job-prefix-clfcellleader = CIV
 AU14JobCLFCellLeader = CLF Cell Leader
+
+au14-clfsurv-greeting = Your cell has had no choice but to expose itself after the horrors of the last few days.
+
+    Out of supplies and low on manpower, this is your final stand.
+    Fight or die for the CLF.
+
+    You are HOSTILE to the LOCAL government and not subject to any other besides the CLF.
+
+au14-clfsurv-desription = You are a fighter for the Colonial Liberation Front. But right now you are fighting for your survival.
+
+au14-clfsurv-rules = You are HOSTILE to the LOCAL government and not subject to any other besides the CLF. You are fully aware of the local threat after having witnessed it for several days.

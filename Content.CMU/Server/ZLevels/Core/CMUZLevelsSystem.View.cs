@@ -27,10 +27,12 @@ public sealed partial class CMUZLevelsSystem
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private IMapManager _viewMapManager = default!;
 
     private readonly EntProtoId _zEyeProto = "CMUZLevelEye";
     private const int ZProbeOpeningTileRadius = 24;
     private const float StairPreviewProbeRadius = 5f;
+    private const int MaxProbeOpeningLosChecks = 24;
 
     private bool _zLevelsEnabled = true;
     private int _maxRenderDepth = 1;
@@ -45,6 +47,8 @@ public sealed partial class CMUZLevelsSystem
     private readonly CMUZLevelOpeningCache _zOpeningCache = new();
     private readonly List<int> _wantedProbeDepths = new();
     private readonly List<int> _probeDepthsToRemove = new();
+    private readonly List<(Vector2 Center, float Distance)> _probeOpeningCandidates = new();
+    private readonly List<Entity<MapGridComponent>> _probeOpeningGrids = new();
     private readonly List<Vector2> _stairPreviewPositions = new(CMUZLevelViewerComponent.MaxStairPreviewPositions);
     private EntityQuery<MapGridComponent> _viewGridQuery;
     private EntityQuery<CMUZLevelHighGroundComponent> _viewHighGroundQuery;
@@ -498,7 +502,7 @@ public sealed partial class CMUZLevelsSystem
             if (!TryMapOffset(map, -i, out _))
                 break;
 
-            if (!HasZOpeningPath(map, globalPos, -i))
+            if (!HasZOpeningPath(map, globalPos, -i, requireVisibleFirstStep: true))
                 break;
 
             depths.Add(-i);
@@ -644,7 +648,11 @@ public sealed partial class CMUZLevelsSystem
         return globalPos + eyeOffset;
     }
 
-    private bool HasZOpeningPath(EntityUid map, Vector2 globalPos, int targetDepth)
+    private bool HasZOpeningPath(
+        EntityUid map,
+        Vector2 globalPos,
+        int targetDepth,
+        bool requireVisibleFirstStep = false)
     {
         var step = targetDepth < 0 ? -1 : 1;
 
@@ -659,11 +667,56 @@ public sealed partial class CMUZLevelsSystem
                 checkingMap = offsetMap.Value;
             }
 
-            if (!HasZOpeningNear(checkingMap, globalPos))
+            var hasOpening = requireVisibleFirstStep && depth == 0
+                ? HasVisibleZOpeningNear(checkingMap, globalPos)
+                : HasZOpeningNear(checkingMap, globalPos);
+
+            if (!hasOpening)
                 return false;
         }
 
         return true;
+    }
+
+    private bool HasVisibleZOpeningNear(EntityUid map, Vector2 globalPos)
+    {
+        if (!_viewGridQuery.TryComp(map, out var grid))
+            return true;
+
+        var mapId = _transform.GetMapId(map);
+        if (mapId == MapId.Nullspace)
+            return true;
+
+        if (CMUZLevelOpeningCache.IsOpeningTile(map, grid, globalPos, _map, TilDefMan))
+            return true;
+
+        _probeOpeningCandidates.Clear();
+        _zOpeningCache.FindOpeningCentersNear(
+            mapId,
+            globalPos,
+            ZProbeOpeningTileRadius * grid.TileSize,
+            _probeOpeningCandidates,
+            _probeOpeningGrids,
+            _viewMapManager,
+            _map,
+            _transform,
+            TilDefMan);
+
+        if (_probeOpeningCandidates.Count == 0)
+            return false;
+
+        _probeOpeningCandidates.Sort((a, b) => a.Distance.CompareTo(b.Distance));
+
+        var origin = new MapCoordinates(globalPos, mapId);
+        var checkCount = Math.Min(_probeOpeningCandidates.Count, MaxProbeOpeningLosChecks);
+        for (var i = 0; i < checkCount; i++)
+        {
+            var target = new MapCoordinates(_probeOpeningCandidates[i].Center, mapId);
+            if (_examine.InRangeUnOccluded(origin, target, 0f, null))
+                return true;
+        }
+
+        return false;
     }
 
     private bool HasZOpeningNear(EntityUid map, Vector2 globalPos)
