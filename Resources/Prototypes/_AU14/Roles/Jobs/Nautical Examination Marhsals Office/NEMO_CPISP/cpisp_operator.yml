@@ -5,13 +5,13 @@
   description: au14-job-description-corp-nemo-cpisp-operator
   playTimeTracker: AU14JobCPISPOperator
   ranks:
-    RMCRankProvostProvostEnforcer: []
+    AU14RankNEMOJuniorEnforcer: []
   startingGear: AU14GearCPISPOperator
   icon: AU14JobIconCPISPOperator
   joinNotifyCrew: false
   accessGroups:
-  - ShipMasterAccess
-  spawnMenuRoleName: Provost Enforcer
+  - AllAccess
+  spawnMenuRoleName: NEMO CPISP Smartgun Operator
   special:
   - !type:AddComponentSpecial
     components:
@@ -29,8 +29,8 @@
 
 - type: entity
   id: AU14RandomHumanoidCPISPOperator
-  name: provost ghost role enforcer
-  suffix: Spawner, Player, Friendly
+  name: NEMO CPISP ghost role operator
+  suffix: Ghostrole, Hostile, Deathsquad
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi

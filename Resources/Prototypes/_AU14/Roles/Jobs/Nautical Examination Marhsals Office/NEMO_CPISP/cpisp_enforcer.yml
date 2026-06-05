@@ -10,8 +10,8 @@
   icon: AU14JobIconCPISPEnforcer
   joinNotifyCrew: false
   accessGroups:
-  - ShipMasterAccess
-  spawnMenuRoleName: Provost Enforcer
+  - AllAccess
+  spawnMenuRoleName: NEMO CPISP Enforcer
   special:
   - !type:AddComponentSpecial
     components:
@@ -29,8 +29,8 @@
 
 - type: entity
   id: AU14RandomHumanoidCPISPEnforcer
-  name: provost ghost role enforcer
-  suffix: Spawner, Player, Friendly
+  name: NEMO CPISP ghost role enforcer
+  suffix: Ghostrole, Hostile, Deathsquad
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi

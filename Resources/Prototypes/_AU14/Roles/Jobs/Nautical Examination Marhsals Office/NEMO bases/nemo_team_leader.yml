@@ -5,7 +5,7 @@
   description: au14-ghost-role-information-nemo-squad-description
   playTimeTracker: AU14JobNEMOTeamLeader
   ranks:
-    RMCRankProvostProvostTeamLeader: []
+    AU14RankNEMOEnforcer: []
   startingGear: AU14GearNEMOTeamLeader
   icon: AU14JobIconNEMOTeamLeader
   joinNotifyCrew: false

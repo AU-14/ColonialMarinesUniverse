@@ -5,13 +5,13 @@
   description: au14-job-description-corp-nemo-cpisp-pointman
   playTimeTracker: AU14JobCPISPPointman
   ranks:
-    RMCRankProvostProvostEnforcer: []
+    AU14RankNEMOJuniorEnforcer: []
   startingGear: AU14GearCPISPPointman
   icon: AU14JobIconCPISPPointman
   joinNotifyCrew: false
   accessGroups:
-  - ShipMasterAccess
-  spawnMenuRoleName: Provost Enforcer
+  - AllAccess
+  spawnMenuRoleName: NEMO CPISP Pointman
   special:
   - !type:AddComponentSpecial
     components:
@@ -29,8 +29,8 @@
 
 - type: entity
   id: AU14RandomHumanoidCPISPPointman
-  name: provost ghost role enforcer
-  suffix: Spawner, Player, Friendly
+  name: NEMO CPISP ghost role pointman
+  suffix: Ghostrole, Hostile, Deathsquad
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi

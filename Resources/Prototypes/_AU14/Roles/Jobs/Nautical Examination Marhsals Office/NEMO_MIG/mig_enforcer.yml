@@ -5,13 +5,13 @@
   description: au14-job-description-corp-nemo-mig-enforcer
   playTimeTracker: AU14JobMIGEnforcer
   ranks:
-    RMCRankProvostProvostEnforcer: []
+    AU14RankNEMOJuniorEnforcer: []
   startingGear: AU14GearMIGEnforcer
   icon: AU14JobIconMIGEnforcer
   joinNotifyCrew: false
   accessGroups:
-  - ShipMasterAccess
-  spawnMenuRoleName: Provost Enforcer
+  - AllAccess
+  spawnMenuRoleName: NEMO MIG Enforcer
   special:
   - !type:AddComponentSpecial
     components:
@@ -29,8 +29,8 @@
 
 - type: entity
   id: AU14RandomHumanoidMIGEnforcer
-  name: provost ghost role enforcer
-  suffix: Spawner, Player, Friendly
+  name: NEMO MIG ghost role enforcer
+  suffix: Ghostrole, Friendly
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi

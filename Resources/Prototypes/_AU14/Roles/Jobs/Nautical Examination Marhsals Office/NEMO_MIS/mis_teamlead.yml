@@ -10,8 +10,8 @@
   icon: AU14JobIconMISLeader
   joinNotifyCrew: false
   accessGroups:
-  - ShipMasterAccess
-  spawnMenuRoleName: Provost Enforcer
+  - AllAccess
+  spawnMenuRoleName: MIS Team Leader
   special:
   - !type:AddComponentSpecial
     components:
@@ -29,8 +29,8 @@
 
 - type: entity
   id: AU14RandomHumanoidMISTeamLead
-  name: provost ghost role enforcer
-  suffix: Spawner, Player, Friendly
+  name: NEMO MIS ghost role team lead
+  suffix: Ghostrole, Friendly
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi

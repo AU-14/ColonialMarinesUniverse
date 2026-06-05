@@ -1,6 +1,7 @@
 ﻿- type: job
   parent: CMJobBase
   id: CMProvostMarshal
+  categories: [ HideSpawnMenu ]
   name: rmc-job-name-corp-provost-marshal
   description: rmc-ghost-role-information-provost-description
   playTimeTracker: CMJobProvostMarshal
@@ -59,6 +60,7 @@
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid
   id: RMCProvostMarshal
+  categories: [ HideSpawnMenu ]
   components:
   - type: GhostRole
     name: rmc-ghost-name-corp-provost-marshal
@@ -72,6 +74,7 @@
 
 - type: startingGear
   id: RMCGearProvostMarshal
+  categories: [ HideSpawnMenu ]
   equipment:
     head: RMCArmorCapProvost
     eyes: CMGlassesSecurity

@@ -1,6 +1,7 @@
 ﻿- type: job
   parent: CMJobBase
   id: CMProvostInspector
+  categories: [ HideSpawnMenu ]
   name: rmc-job-name-corp-provost-inspector
   description: rmc-job-description-inspector
   whitelisted: true
@@ -71,6 +72,7 @@
 - type: entity
   parent: CMSpawnPointJobBase
   id: RMCSpawnPointProvostInspector
+  categories: [ HideSpawnMenu ]
   name: Provost Inspector spawn point
   components:
   - type: SpawnPoint
@@ -80,6 +82,7 @@
 
 - type: startingGear
   id: RMCGearProvostInspector
+  categories: [ HideSpawnMenu ]
   equipment:
     head: RMCHeadBeretProvostSenior
     eyes: CMGlassesSecurity

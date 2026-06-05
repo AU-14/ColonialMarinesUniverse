@@ -1,6 +1,7 @@
 ﻿- type: job
   parent: CMJobBase
   id: CMProvostEnforcer
+  categories: [ HideSpawnMenu ]
   name: rmc-job-name-corp-provost-enforcer
   description: rmc-ghost-role-information-provost-squad-description
   playTimeTracker: CMJobProvostEnforcer
@@ -29,6 +30,7 @@
 
 - type: entity
   id: RMCRandomHumanoidProvostEnforcer
+  categories: [ HideSpawnMenu ]
   name: provost ghost role enforcer
   suffix: Spawner, Player, Friendly
   components:
@@ -62,6 +64,7 @@
 
 - type: startingGear
   id: RMCGearProvostEnforcer
+  categories: [ HideSpawnMenu ]
   equipment:
     head: RMCHeadBeretProvost
     eyes: CMGlassesSecurity

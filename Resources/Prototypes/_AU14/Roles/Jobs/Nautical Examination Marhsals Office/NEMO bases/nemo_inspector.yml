@@ -13,14 +13,14 @@
   #  role: AU14JobGOVFORMilitaryPoliceMan
   #  time: 108000 # 30 hours
   ranks:
-    RMCRankProvostInspector: []
+    AU14RankNEMOJrExaminer: []
   startingGear: AU14GearNEMOInspector
   icon: AU14JobIconNEMOInspector
   joinNotifyCrew: true
   marineAuthorityLevel: 0
   supervisors: cm-job-supervisors-marine-high-command
   accessGroups:
-  - ShipMasterAccess
+  - AllAccess
   special:
   - !type:AddComponentSpecial
     components:
@@ -85,7 +85,7 @@
   id: AU14JobIconNEMOInspector
   icon:
     sprite: _AU14/Interface/job_icons.rsi
-    state: hudsquad_nemo_lead_team
+    state: hudsquad_nemo_inspector
 
 - type: entity
   parent: CMIDCardGold

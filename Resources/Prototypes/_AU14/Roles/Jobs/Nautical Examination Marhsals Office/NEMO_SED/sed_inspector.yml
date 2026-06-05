@@ -10,8 +10,8 @@
   icon: AU14JobIconSEDInspector
   joinNotifyCrew: false
   accessGroups:
-  - ShipMasterAccess
-  spawnMenuRoleName: Provost Enforcer
+  - AllAccess
+  spawnMenuRoleName: NEMO SED Inspector
   special:
   - !type:AddComponentSpecial
     components:
@@ -29,8 +29,8 @@
 
 - type: entity
   id: AU14RandomHumanoidSEDInspector
-  name: provost ghost role enforcer
-  suffix: Spawner, Player, Friendly
+  name: NEMO SED ghost role inspector
+  suffix: Ghostrole, Friendly
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi

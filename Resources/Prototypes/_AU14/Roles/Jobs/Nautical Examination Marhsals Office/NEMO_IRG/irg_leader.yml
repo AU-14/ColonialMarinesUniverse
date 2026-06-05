@@ -5,13 +5,13 @@
   description: au14-job-description-corp-nemo-irg-leader
   playTimeTracker: AU14JobIRGLeader
   ranks:
-    RMCRankProvostProvostEnforcer: []
+    AU14RankNEMOSeniorEnforcer: []
   startingGear: AU14GearIRGLeader
   icon: AU14JobIconIRGLeader
   joinNotifyCrew: false
   accessGroups:
-  - ShipMasterAccess
-  spawnMenuRoleName: Provost Enforcer
+  - AllAccess
+  spawnMenuRoleName: NEMO IRG Leader
   special:
   - !type:AddComponentSpecial
     components:
@@ -29,8 +29,8 @@
 
 - type: entity
   id: AU14RandomHumanoidIRGLeader
-  name: provost ghost role enforcer
-  suffix: Spawner, Player, Friendly
+  name: NEMO IRG ghost role leader
+  suffix: Ghostrole, Neutral
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi

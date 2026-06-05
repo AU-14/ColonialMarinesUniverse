@@ -322,3 +322,192 @@
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
     state: trackon-southwest_fsl
   description: Tracks the Marine Guard Squad Leader.
+
+- type: alert
+  parent: SquadTracker
+  id: SquadTrackerCPISP
+  category: SquadTracker
+  icons:
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackoff
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-direct_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-south_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-southeast_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-east_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-northeast_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-north_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-northwest_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-west_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-southwest_fsl
+  description: Tracks the NEMO CPISP Squad Leader.
+
+- type: alert
+  parent: SquadTracker
+  id: SquadTrackerIRG
+  category: SquadTracker
+  icons:
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackoff
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-direct_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-south_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-southeast_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-east_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-northeast_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-north_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-northwest_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-west_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-southwest_fsl
+  description: Tracks the NEMO IRG Squad Leader.
+
+- type: alert
+  parent: SquadTracker
+  id: SquadTrackerMIG
+  category: SquadTracker
+  icons:
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackoff
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-direct_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-south_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-southeast_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-east_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-northeast_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-north_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-northwest_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-west_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-southwest_fsl
+  description: Tracks the NEMO MIG Squad Leader.
+
+- type: alert
+  parent: SquadTracker
+  id: SquadTrackerMIS
+  category: SquadTracker
+  icons:
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackoff
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-direct_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-south_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-southeast_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-east_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-northeast_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-north_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-northwest_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-west_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-southwest_fsl
+  description: Tracks the NEMO MIS Squad Leader.
+
+- type: alert
+  parent: SquadTracker
+  id: SquadTrackerMORW
+  category: SquadTracker
+  icons:
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackoff
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-direct_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-south_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-southeast_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-east_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-northeast_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-north_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-northwest_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-west_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-southwest_fsl
+  description: Tracks the NEMO MORW Squad Leader.
+
+- type: alert
+  parent: SquadTracker
+  id: SquadTrackerSED
+  category: SquadTracker
+  icons:
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackoff
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-direct_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-south_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-southeast_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-east_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-northeast_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-north_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-northwest_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-west_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-southwest_fsl
+  description: Tracks the NEMO SED Squad Leader.
+
+- type: alert
+  parent: SquadTracker
+  id: SquadTrackerProvost
+  category: SquadTracker
+  icons:
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackoff
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-direct_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-south_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-southeast_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-east_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-northeast_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-north_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-northwest_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-west_fsl
+  - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
+    state: trackon-southwest_fsl
+  description: Tracks the NEMO Provost Squad Leader.

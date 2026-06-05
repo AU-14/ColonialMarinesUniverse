@@ -1,6 +1,7 @@
 ﻿- type: job
   parent: CMJobBase
   id: CMProvostAdvisor
+  categories: [ HideSpawnMenu ]
   name: rmc-job-name-corp-provost-advisor
   description: rmc-ghost-role-information-provost-description
   playTimeTracker: CMJobProvostAdvisor
@@ -30,6 +31,7 @@
 
 - type: entity
   id: RMCRandomHumanoidProvostAdvisor
+  categories: [ HideSpawnMenu ]
   name: provost ghost role advisor
   suffix: Spawner, Player, Friendly, Low Law Understanding
   components:
@@ -42,6 +44,7 @@
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid
   id: RMCProvostAdvisor
+  categories: [ HideSpawnMenu ]
   components:
   - type: GhostRole
     name: rmc-ghost-name-corp-provost-advisor
@@ -55,6 +58,7 @@
 
 - type: startingGear
   id: RMCGearProvostAdvisor
+  categories: [ HideSpawnMenu ]
   equipment:
     head: RMCHeadBeretProvostSenior
     eyes: CMGlassesSecurity

@@ -1,6 +1,7 @@
 ﻿- type: entity
   parent: RMCHeadsetShip
   id: RMCHeadsetProvost
+  categories: [ HideSpawnMenu ]
   name: UNMC provost headset
   components:
   - type: ContainerFill

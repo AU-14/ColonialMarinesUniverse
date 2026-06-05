@@ -1,38 +1,41 @@
 ﻿- type: job
   parent: CMJobBase
-  id: AU14NEMODeputyMarshal
-  name: au14-job-name-corp-nemo-deputy-marshal
-  description: au14-ghost-role-information-nemo-description
-  playTimeTracker: AU14JobNEMODeputyMarshal
+  id: AU14NEMOChief
+  name: au14-job-name-corp-nemo-chief
+  description: au14-job-description-inspector
+  whitelisted: true
+  playTimeTracker: AU14JobNEMOChief
+#  requirements:
+#  - !type:RoleTimeRequirement
+#    role: CMJobProvostInspector
+#    time: 108000 # 30 hours
   ranks:
-    RMCRankProvostDeputyMarshal: []
-  startingGear: AU14GearNEMODeputyMarshal
-  icon: AU14JobIconNEMODeputyMarshal
+    AU14RankNEMOChiefInspector: []
+  startingGear: AU14GearNEMOChief
+  icon: AU14JobIconNEMOChief
   joinNotifyCrew: false
+  marineAuthorityLevel: 0
+  supervisors: cm-job-supervisors-marine-high-command
   accessGroups:
-  - ShipMasterAccess
+  - AllAccess
   special:
   - !type:AddComponentSpecial
     components:
     - type: Skills
       skills:
-        RMCSkillConstruction: 2
-        RMCSkillCqc: 1
-        RMCSkillEndurance: 5
-        RMCSkillEngineer: 2
-        RMCSkillExecution: 1
+        RMCSkillCqc: 3
+        RMCSkillEndurance: 3
         RMCSkillFirearms: 2
         RMCSkillFireman: 2
-        RMCSkillIntel: 2
-        RMCSkillJtac: 4
-        RMCSkillLeadership: 3
-        RMCSkillMedical: 3
         RMCSkillMeleeWeapons: 1
-        RMCSkillOverwatch: 1
         RMCSkillPolice: 2
-        RMCSkillPowerLoader: 2
-        RMCSkillSmartGun: 1
-        RMCSkillVehicles: 2
+        RMCSkillLeadership: 2
+        RMCSkillMedical: 1
+        RMCSkillOverwatch: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-nemo-chief
+    - type: RMCTrackable
+      hidden: true
     - type: MarineOrders
       moveOrderSoundMale:
         collection: AU14MaleMoveOrder
@@ -46,72 +49,73 @@
         collection: AU14MaleHoldOrder
       holdOrderSoundFemale:
         collection: AU14FemaleHoldOrder
-    - type: DemoSpecWhitelist
-    - type: GrenadeSpecWhitelist
-    - type: ScoutWhitelist
-    - type: SniperWhitelist
-    - type: PyroWhitelist
-    - type: JobPrefix
-      prefix: au14-job-prefix-nemo-deputy-marshal
-    - type: RMCTrackable
-  hidden: true
+    - type: CommandAccent
+    - type: InnateCommandSpeech
+    - type: RMCPointing
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: pve_chief_inspector
+      background:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: background_mp
 
 - type: entity
-  id: AU14RandomHumanoidNEMODeputyMarshal
-  name: provost ghost role deputy marshal
+  id: AU14RandomHumanoidNEMOChief
+  name: provost ghost role chief inspector
   suffix: Spawner, Player, Friendly, High Law Understanding
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi
     state: provost
   - type: RandomHumanoidSpawner
-    settings: AU14NEMODeputyMarshal
+    settings: AU14NEMOChief
 
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid
-  id: AU14NEMODeputyMarshal
+  id: AU14NEMOChief
   components:
   - type: GhostRole
-    name: au14-job-name-corp-nemo-deputy-marshal
+    name: au14-ghost-name-corp-nemo-chief
     description: au14-ghost-role-information-nemo-description
     rules: au14-ghost-role-information-nemo-rules
     reregister: false
-    job: AU14NEMODeputyMarshal
+    job: AU14NEMOChief
     raffle:
       settings: short
   - type: GhostRoleApplySpecial
 
 - type: startingGear
-  id: AU14GearNEMODeputyMarshal
+  id: AU14GearNEMOChief
   equipment:
-    head: RMCArmorCapProvost
+    head: RMCProvostCommandBeret
     eyes: CMGlassesSecurity
     ears: AU14HeadsetNEMO
     ears2: RMCM5CameraGear
-    jumpsuit: CMJumpsuitProvostMarshal
-    outerClothing: RMCProvostCoatMarshalFilled
+    jumpsuit: CMJumpsuitProvostSenior # TODO RMC14 provost command uniform
+    outerClothing: RMCProvostCommandJacketFilled
     gloves: CMHandsBlackMarine # TODO RMC14 black gloves
     shoes: CMBootsBlackFilled
-    id: RMCIDCardProvostDeputyMarshal
-    belt: RMCMatebaBeltLuxuriousFilled
-    back: CMSatchelSecurityFilledProvostDeputyMarshal
+    id: RMCIDCardProvostChiefInspector
+    belt: RMCM1984BeltFilled
+    back: CMSatchelSecurityFilledProvost
     pocket1: RMCUniversalRecorder
-    pocket2: RMCPouchMagazinePistolFilledMateba # TODO RMC14 3 listening devices
+    pocket2: RMCPouchGeneralLarge # TODO RMC14 3 listening devices
 
 - type: playTimeTracker
-  id: AU14JobNEMODeputyMarshal
+  id: AU14JobNEMOChief
 
 - type: jobIcon
   parent: CMJobIconBase
-  id: AU14JobIconNEMODeputyMarshal
+  id: AU14JobIconNEMOChief
   icon:
     sprite: _AU14/Interface/job_icons.rsi
     state: hudsquad_nemo_lead_team
 
 - type: entity
   parent: CMIDCardGold
-  id: RMCIDCardNEMODeputyMarshal
-  name: NEMO Deputy Marshal ID card
+  id: RMCIDCardNEMOChief
+  name: NEMO Chief ID card
   description: Issued to members of the Nautical Examination Marshal's Office.
   components:
   - type: Sprite
@@ -122,4 +126,4 @@
     - idcard
     sprite: _RMC14/Objects/CMIDs/provost.rsi
   - type: PresetIdCard
-    job: AU14NEMODeputyMarshal
+    job: AU14NEMOChief

@@ -5,12 +5,12 @@
   description: au14-ghost-role-information-nemo-squad-description
   playTimeTracker: AU14JobNEMOEnforcer
   ranks:
-    RMCRankProvostProvostEnforcer: []
+    AU14RankNEMOJuniorEnforcer: []
   startingGear: AU14GearNEMOEnforcer
   icon: AU14JobIconNEMOEnforcer
   joinNotifyCrew: false
   accessGroups:
-  - ShipMasterAccess
+  - AllAccess
   spawnMenuRoleName: Provost Enforcer
   special:
   - !type:AddComponentSpecial
@@ -86,7 +86,7 @@
   id: AU14JobIconNEMOEnforcer
   icon:
     sprite: _AU14/Interface/job_icons.rsi
-    state: hudsquad_nemo_clear_blank
+    state: hudsquad_nemo_enforcer
 
 - type: entity
   parent: CMIDCardGold

@@ -5,13 +5,13 @@
   description: au14-job-description-corp-nemo-irg-pointman
   playTimeTracker: AU14JobIRGPointman
   ranks:
-    RMCRankProvostProvostEnforcer: []
+    AU14RankNEMOJuniorEnforcer: []
   startingGear: AU14GearIRGPointman
   icon: AU14JobIconIRGPointman
   joinNotifyCrew: false
   accessGroups:
-  - ShipMasterAccess
-  spawnMenuRoleName: Provost Enforcer
+  - AllAccess
+  spawnMenuRoleName: NEMO IRG Pointman
   special:
   - !type:AddComponentSpecial
     components:
@@ -29,8 +29,8 @@
 
 - type: entity
   id: AU14RandomHumanoidIRGPointman
-  name: provost ghost role enforcer
-  suffix: Spawner, Player, Friendly
+  name: NEMO IRG ghost role pointman
+  suffix: Ghostrole, Neutral
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi
@@ -86,4 +86,4 @@
   id: AU14JobIconIRGPointman
   icon:
     sprite: _AU14/Interface/job_icons.rsi
-    state: hudsquad_nemo_lead_clear_blank
+    state: hudsquad_nemo_lead_pointman

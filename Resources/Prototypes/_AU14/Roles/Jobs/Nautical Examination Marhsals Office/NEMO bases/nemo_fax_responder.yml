@@ -11,7 +11,7 @@
   joinNotifyCrew: false
   supervisors: cm-job-supervisors-staff
   accessGroups:
-  - ShipMasterAccess
+  - AllAccess
   - RMCWeYa
   special:
   - !type:AddComponentSpecial

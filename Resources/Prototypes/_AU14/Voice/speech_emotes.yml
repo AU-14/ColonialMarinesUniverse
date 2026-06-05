@@ -3,3 +3,9 @@
   name: chat-emote-name-deathgasp
   icon: Interface/Emotes/deathgasp.png
   chatMessages: ["au14-species-working-joe-death-emote"]
+
+- type: emote
+  id: AU14NEMODeathGasp
+  name: chat-emote-name-deathgasp
+  icon: Interface/Emotes/deathgasp.png
+  chatMessages: ["au14-job-nemo-death-emote"]

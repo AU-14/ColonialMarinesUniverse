@@ -92,6 +92,12 @@
             "name": "hudsquad_nemo_kill_pointman"
         },
         {
+            "name": "hudsquad_nemo_lead_pointman"
+        },
+        {
+            "name": "hudsquad_nemo_pointman"
+        },
+        {
             "name": "hudsquad_nemo_lead_spec"
         },
         {
@@ -108,6 +114,30 @@
         },
         {
             "name": "hudsquad_nemo_dcc"
+        },
+        {
+            "name": "hudsquad_nemo_lead_enforcer"
+        },
+        {
+            "name": "hudsquad_nemo_enforcer"
+        },
+        {
+            "name": "hudsquad_nemo_lead_kill_inspector"
+        },
+        {
+            "name": "hudsquad_nemo_lead_inspector"
+        },
+        {
+            "name": "hudsquad_nemo_inspector"
+        },
+        {
+            "name": "hudsquad_nemo_alt_commander"
+        },
+        {
+            "name": "hudsquad_nemo_lead_responder"
+        },
+        {
+            "name": "hudsquad_nemo_responder"
         }
     ]
 }

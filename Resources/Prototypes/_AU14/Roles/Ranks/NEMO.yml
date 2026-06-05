@@ -2,63 +2,63 @@
 - type: rank
   id: AU14RankNEMOChiefMarshal
   name: Chief Marshal
-  prefix: PvCM.
+  prefix: Ch. Marsh.
   paygrade: O10C
 
 # Host rank, reserved for Troy/EG
 - type: rank
   id: AU14RankNEMODeputyChiefMarshal
   name: Deputy Chief Marshal
-  prefix: PvDM.
+  prefix: Dep. ChM.
   paygrade: O10
 
 #  Head admin rank, reserved for Headmin Twinkle
 - type: rank
   id: AU14RankNEMOSectorMarshal
   name: Sector Marshal
-  prefix: PvSM.
+  prefix: Sec. Marsh.
   paygrade: O9
 
 # Any Sr.Admin/Sr.Mod with high law understanding
 - type: rank
   id: AU14RankNEMOSeniorMarshal
   name: Senior Marshal
-  prefix: PvSnM.
+  prefix: Sr. Marsh.
   paygrade: O8
 
 # Any Moderator/Admin with medium law understanding, or wanting a lower rank
 - type: rank
   id: AU14RankNEMOMarshal
   name: Marshal
-  prefix: PvM.
+  prefix: Marsh.
   paygrade: O7
 
 # Any Jr. Moderator with low law understanding, or wanting a lower rank
 - type: rank
   id: AU14RankNEMODeputyMarshal
   name: Deputy Marshal
-  prefix: PvDM.
+  prefix: DM.
   paygrade: O6
 
-# Any whitelisted Mentor With High
+# Any whitelisted Mentor With High law understanding
 - type: rank
   id: AU14RankNEMOChiefInspector
   name: Chief Inspector
-  prefix: PvCI.
+  prefix: CI.
   paygrade: O5
 
-# Any WL'd player with mediumlaw understanding
+# Any WL'd player with medium law understanding
 - type: rank
   id: AU14RankNEMOExaminer
   name: Examiner
-  prefix: PvI.
+  prefix: Exam.
   paygrade: O4
 
 # Any WL'd player with low law understanding, with guidance
 - type: rank
   id: AU14RankNEMOJrExaminer
   name: JuniorExaminer
-  prefix: ComOff.
+  prefix: JrE.
   paygrade: O2
 
 # Fax responder
@@ -67,6 +67,41 @@
   name: Communications Officer
   prefix: ComOff.
   paygrade: O2
+
+# Any whitelisted synth with high law knowledge
+- type: rank
+  id: AU14RankNEMOWO5
+  name: NEMO Grade 5 Synthetic
+  prefix: G5 Syn.
+  paygrade: WO5
+
+# Any whitelisted synth with medium law knowledge
+- type: rank
+  id: AU14RankNEMOWO4
+  name: NEMO Grade 4 Synthetic
+  prefix: G4 Syn.
+  paygrade: WO4
+
+# Any whitelisted synth with low law knowledge
+- type: rank
+  id: AU14RankNEMOWO3
+  name: NEMO Grade 3 Synthetic
+  prefix: G3 Syn.
+  paygrade: WO3
+
+# Any whitelisted synth with guidance
+- type: rank
+  id: AU14RankNEMOWO2
+  name: NEMO Grade 2 Synthetic
+  prefix: G2 Syn.
+  paygrade: WO2
+
+# Any player with extreme guidance
+- type: rank
+  id: AU14RankNEMOWO1
+  name: NEMO Grade 1 Synthetic
+  prefix: G1 Syn.
+  paygrade: WO1
 
 # Any whitelisted Mentor with Medium law understanding
 - type: rank
@@ -90,14 +125,14 @@
   paygrade: E8
 
 # TODO: randomize Enforcer ranks on-spawn
-# Any player with given objective, squad senior
+# Any player with given objective, squad senior (possible squad leader)
 - type: rank
   id: AU14RankNEMOSeniorEnforcer
   name: Gunnery Sergeant
   prefix: GySgt.
   paygrade: E7
 
-# Any player with given objective, squad member
+# Any player with given objective, squad member (possible team leader)
 - type: rank
   id: AU14RankNEMOEnforcer
   name: Staff Sergeant
@@ -110,3 +145,10 @@
   name: Sergeant
   prefix: Sgt.
   paygrade: E5
+
+# Any player with given objective, squad trainee
+- type: rank
+  id: AU14RankNEMOTraineeEnforcer
+  name: Corporal
+  prefix: Cpl.
+  paygrade: E4

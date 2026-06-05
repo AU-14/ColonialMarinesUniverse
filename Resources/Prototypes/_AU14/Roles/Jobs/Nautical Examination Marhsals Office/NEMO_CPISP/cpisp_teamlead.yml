@@ -5,13 +5,13 @@
   description: au14-job-description-corp-nemo-cpisp-specialist
   playTimeTracker: AU14JobCPISPTeamLead
   ranks:
-    RMCRankProvostProvostEnforcer: []
+    AU14RankNEMOEnforcer: []
   startingGear: AU14GearCPISPTeamLead
   icon: AU14JobIconCPISPTeamLead
   joinNotifyCrew: false
   accessGroups:
-  - ShipMasterAccess
-  spawnMenuRoleName: Provost Enforcer
+  - AllAccess
+  spawnMenuRoleName: NEMO CPISP Team Lead
   special:
   - !type:AddComponentSpecial
     components:
@@ -29,8 +29,8 @@
 
 - type: entity
   id: AU14RandomHumanoidCPISPTeamLead
-  name: provost ghost role enforcer
-  suffix: Spawner, Player, Friendly
+  name: NEMO CPISP ghost role team lead
+  suffix: Ghostrole, Hostile, Deathsquad
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi

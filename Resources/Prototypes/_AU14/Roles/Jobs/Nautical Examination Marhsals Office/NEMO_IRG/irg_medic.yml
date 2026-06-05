@@ -5,13 +5,13 @@
   description: au14-job-description-corp-nemo-irg-medic
   playTimeTracker: AU14JobIRGMedic
   ranks:
-    RMCRankProvostProvostEnforcer: []
+    AU14RankNEMOJuniorEnforcer: []
   startingGear: AU14GearIRGMedic
   icon: AU14JobIconIRGMedic
   joinNotifyCrew: false
   accessGroups:
-  - ShipMasterAccess
-  spawnMenuRoleName: Provost Enforcer
+  - AllAccess
+  spawnMenuRoleName: NEMO IRG Medic
   special:
   - !type:AddComponentSpecial
     components:
@@ -29,8 +29,8 @@
 
 - type: entity
   id: AU14RandomHumanoidIRGMedic
-  name: provost ghost role enforcer
-  suffix: Spawner, Player, Friendly
+  name: NEMO IRG ghost role medic
+  suffix: Ghostrole, Neutral
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi
@@ -43,7 +43,7 @@
   id: AU14IRGMedic
   components:
   - type: GhostRole
-    name: au14-ghost-name-corp-nemo-enforcer
+    name: au14-ghost-name-corp-nemo-medic
     description: au14-job-description-corp-nemo-irg-medic
     rules: au14-ghost-role-information-nemo-rules
     reregister: false
@@ -89,4 +89,4 @@
   id: AU14JobIconIRGMedic
   icon:
     sprite: _AU14/Interface/job_icons.rsi
-    state: hudsquad_nemo_medic
+    state: hudsquad_nemo_lead_medic

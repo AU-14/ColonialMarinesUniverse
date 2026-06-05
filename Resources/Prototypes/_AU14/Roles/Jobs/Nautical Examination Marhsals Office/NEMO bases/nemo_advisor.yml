@@ -10,7 +10,7 @@
   icon: AU14JobIconNEMOAdvisor
   joinNotifyCrew: false
   accessGroups:
-  - ShipMasterAccess
+   - AllAccess
   special:
   - !type:AddComponentSpecial
     components:

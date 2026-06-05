@@ -1,6 +1,7 @@
 ﻿- type: job
   parent: CMJobBase
   id: CMProvostChiefInspector
+  categories: [ HideSpawnMenu ]
   name: rmc-job-name-corp-provost-chief
   description: rmc-job-description-inspector
   whitelisted: true
@@ -62,6 +63,7 @@
 
 - type: entity
   id: RMCRandomHumanoidProvostChiefInspector
+  categories: [ HideSpawnMenu ]
   name: provost ghost role chief inspector
   suffix: Spawner, Player, Friendly, High Law Understanding
   components:
@@ -74,6 +76,7 @@
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid
   id: RMCProvostChiefInspector
+  categories: [ HideSpawnMenu ]
   components:
   - type: GhostRole
     name: rmc-ghost-name-corp-provost-chief
@@ -87,6 +90,7 @@
 
 - type: startingGear
   id: RMCGearProvostChiefInspector
+  categories: [ HideSpawnMenu ]
   equipment:
     head: RMCProvostCommandBeret
     eyes: CMGlassesSecurity

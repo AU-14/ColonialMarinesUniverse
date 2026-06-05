@@ -5,12 +5,12 @@
   description: au14-ghost-role-information-nemo-description
   playTimeTracker: AU14JobNEMOMarshal
   ranks:
-    RMCRankProvostMarshal: []
+    AU14RankNEMOMarshal: []
   startingGear: AU14GearNEMOMarshal
   icon: AU14JobIconNEMOMarshal
   joinNotifyCrew: false
   accessGroups:
-  - ShipMasterAccess
+  - AllAccess
   special:
   - !type:AddComponentSpecial
     components:
