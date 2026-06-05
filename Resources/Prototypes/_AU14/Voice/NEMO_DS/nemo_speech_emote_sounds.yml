@@ -1,6 +1,0 @@
-- type: emoteSounds
-  id: AU14WorkingJoeSounds
-  parent: RMCBaseHumanoidSounds
-  sounds:
-    AU14WallhammerTest:
-      collection: AU14WallhammerTest

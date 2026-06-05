@@ -17,8 +17,8 @@
     components:
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: forecon_synth
+        sprite: /Textures/_AU14/Interface/au14map_blips.rsi
+        state: background_nemo
     - type: NpcFactionMember
       factions:
       - GOVFOR
@@ -33,13 +33,13 @@
         RMCSkillSurgery: 3
         RMCSkillResearch: 1
         RMCSkillMeleeWeapons: 2
-        RMCSkillPilot: 2
-        RMCSkillPolice: 2
+        RMCSkillPilot: 1
+        RMCSkillPolice: 5
         RMCSkillFireman: 5
         RMCSkillPowerLoader: 2
         RMCSkillVehicles: 2
-        RMCSkillJtac: 3
-        RMCSkillIntel: 2
+        RMCSkillJtac: 1
+        RMCSkillIntel: 1
         RMCSkillDomestics: 2
         RMCSkillNavigations: 1
     - type: DemoSpecWhitelist

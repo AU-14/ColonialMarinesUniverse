@@ -15,17 +15,54 @@
   special:
   - !type:AddComponentSpecial
     components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14map_blips.rsi
+        state: background_nemo
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
     - type: Skills
       skills:
-        RMCSkillCqc: 3
-        RMCSkillEndurance: 3
+        RMCSkillCqc: 5
+        RMCSkillEngineer: 4
+        RMCSkillConstruction: 3
         RMCSkillFirearms: 2
-        RMCSkillFireman: 2
-        RMCSkillMeleeWeapons: 1
-        RMCSkillPolice: 2
+        RMCSkillOverwatch: 1
+        RMCSkillMedical: 4
+        RMCSkillSurgery: 3
+        RMCSkillResearch: 1
+        RMCSkillMeleeWeapons: 2
+        RMCSkillPilot: 1
+        RMCSkillPolice: 5
+        RMCSkillFireman: 5
+        RMCSkillPowerLoader: 2
+        RMCSkillVehicles: 2
+        RMCSkillJtac: 1
+        RMCSkillIntel: 1
+        RMCSkillDomestics: 2
+        RMCSkillNavigations: 1
+    - type: DemoSpecWhitelist
+    - type: GrenadeSpecWhitelist
+    - type: ScoutWhitelist
+    - type: SniperWhitelist
+    - type: PyroWhitelist
     - type: JobPrefix
-      prefix: au14-job-prefix-nemo-enforcer
-  hidden: true
+      prefix: au14-job-prefix-nemo-synthetic
+    - type: MeleeWeapon
+      soundHit:
+        path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+        params:
+          variation: 0.15
+          volume: -1
+      angle: 30
+      animation: WeaponArcFist
+      attackRate: 1
+      damage:
+        types:
+          Blunt: 35
+    - type: Synth
+  hidden: false
 
 - type: entity
   id: AU14RandomHumanoidIRGSynthetic

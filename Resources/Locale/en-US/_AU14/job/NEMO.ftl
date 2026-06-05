@@ -4,7 +4,23 @@ au14-ghost-role-information-nemo-rules = You are a [color=red][bold]NEMO Member[
                                              You are absolutely [color=red]NOT[/color] allowed to remember, say, the name, appearance, etc. of your previous character.
                                              You are absolutely [color=green]ALLOWED[/color] to remember, say, name, the situtation of which you were called
 
-au14-ghost-role-information-nemo-description = Enforce UCMJ, turn to your superiors for guidance. Authority is tied to your chain of command.
+au14-ghost-role-information-nemo-hostile-rules = You are a [color=red][bold]Provost Member[/bold][/color]. You are hostile to GOVFOR and neutrual with all other factions.
+                                             You don't remember any of your previous life, and you don't remember anything you learned as a ghost.
+                                             You are allowed to remember knowledge about the game in general, such as how to cook, how to use objects, etc.
+                                             You are absolutely [color=red]NOT[/color] allowed to remember, say, the name, appearance, etc. of your previous character.
+                                             You are absolutely [color=green]ALLOWED[/color] to remember, say, name, the situtation of which you were called
+                                             You are to [color=red]ATTEMPT[/color] to arrest all people of interests assigned, you should [color=red]NOT FIRE[/color], unless fired upon.
+                                             You are absolutely [color=green]ALLOWED[/color] to adminster warning shots NEAR someone if they fail to comply.
+
+au14-nemo-isd = Internal Stability Division
+au14-nemo-sed = Special Enforcement Detachment
+au14-nemo-mig = Marshal Intervention Group
+au14-nemo-irg = Instability Response Group
+au14-nemo-srt = Special Response Team
+au14-nemo-mis = Marshal Intelligence Service
+au14-nemo-cpisp = Civil Protection Insurrection Stability & Protection Force
+
+au14-ghost-role-information-nemo-description = Enforce UCMJ, you are the final say on any questions or ruling regarding UCMJ. If issues arise dont be afraid to turn to your superiors.
 au14-ghost-role-information-nemo-squad-description = Ensure compliance with UCMJ, quell riots and protect any NEMO Officials.
 
 au14-job-name-corp-nemo-advisor = NEMO Advisor
@@ -13,7 +29,7 @@ au14-job-description-corp-nemo-advisor = You are apart of the Nautical Examinati
 au14-job-prefix-nemo-advisor = MeA
 
 au14-job-name-nemo-fax-responder = NEMO Fax Responder
-au14-job-description-nemo-fax-responder = You are apart of the Nautical Examination Marshals Office (NEMO)! You are apart of the communications division and respond to FAX's and Phonecalls.
+au14-job-description-nemo-fax-responder = You are apart of the Nautical Examination Marshals Office (NEMO)! You are apart of the communications division and respond to facsimiles and Phonecalls.
 
 au14-ghost-name-corp-nemo-chief = NEMO Chief Inspector (Friendly)
 au14-job-name-corp-nemo-chief = NEMO Chief Inspector
@@ -40,23 +56,6 @@ au14-job-prefix-nemo-marshal = MeM
 au14-ghost-name-corp-nemo-team-leader = NEMO Team Leader (Friendly)
 au14-job-name-corp-nemo-team-leader = Team Leader
 au14-job-prefix-nemo-team-leader = MeTML
-
-au14-ghost-role-information-nemo-hostile-rules = You are a [color=red][bold]Provost Member[/bold][/color]. You are hostile to GOVFOR and neutrual with all other factions.
-                                             You don't remember any of your previous life, and you don't remember anything you learned as a ghost.
-                                             You are allowed to remember knowledge about the game in general, such as how to cook, how to use objects, etc.
-                                             You are absolutely [color=red]NOT[/color] allowed to remember, say, the name, appearance, etc. of your previous character.
-                                             You are absolutely [color=green]ALLOWED[/color] to remember, say, name, the situtation of which you were called
-                                             You are to [color=red]ATTEMPT[/color] to arrest all people of interests assigned, you should [color=red]NOT FIRE[/color], unless fired upon.
-                                             You are absolutely [color=green]ALLOWED[/color] to adminster warning shots NEAR someone if they fail to comply.
-
-au14-nemo-isd = Internal Stability Division
-
-au14-nemo-sed = Special Enforcement Detachment
-au14-nemo-mig = Marshal Intervention Group
-au14-nemo-irg = Instability Response Group
-au14-nemo-srt = Special Response Team
-au14-nemo-mis = Marshal Intelligence Service
-au14-nemo-cpisp = Civil Protection Insurrection Stability & Protection Force
 
 # CPISP - Civil Protection Insurrection Stability & Protection Force
 au14-job-name-corp-nemo-cpisp-specialist = CPISP Specialist
@@ -158,3 +157,16 @@ au14-job-prefix-nemo-sed-inspector = SED-I
 au14-job-name-corp-nemo-sed-synthetic = SED Synthetic
 au14-job-description-corp-nemo-sed-synthetic = You are a synthetic operative in the Special Enforcement Detachment! Assist investigations and evidence collection during criminal appeal operations.
 au14-job-prefix-nemo-sed-synthetic = SED-SY
+
+# MORW - Marshal Orbital Response Wing
+au14-job-name-corp-nemo-morw-pilot = MORW Flight Officer
+au14-job-description-corp-nemo-morw-pilot = You are a Flight Officer for the 2nd Marshal Orbital Response Wing Special Operations Detachment, fly down and retreive any relevant NEMO operatives and or prisoners.
+au14-job-prefix-nemo-morw-pilot = MFO
+
+au14-job-name-corp-nemo-morw-dcc = MORW Crew Chief
+au14-job-description-corp-nemo-morw-dcc = You are a Crew Chief for the 2nd Marshal Orbital Response Wing Special Operations Detachment, assist your pilot and retreive any relevant NEMO operatives and or prisoners.
+au14-job-prefix-nemo-morw-dcc = MCC
+
+au14-job-name-corp-nemo-morw-enforcer = MORW Flight Security
+au14-job-description-corp-nemo-morw-enforcer = You are a Flight Security Enforcer for the 2nd Marshal Orbital Response Wing Special Operations Detachment, assist your aircraft and retreive any relevant NEMO operatives and or prisoners.
+au14-job-prefix-nemo-morw-enforcer = MFS
