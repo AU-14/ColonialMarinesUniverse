@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Content.Server.Popups;
 using Content.Shared.AU14.Objectives;
 using Content.Shared.AU14.Objectives.Fetch;
@@ -15,20 +14,22 @@ namespace Content.Server.AU14.Objectives.Interact;
 /// </summary>
 public sealed partial class AuInteractObjectiveSystem : EntitySystem
 {
-    [Robust.Shared.IoC.Dependency] private IEntityManager _entManager = default!;
-    [Robust.Shared.IoC.Dependency] private AuObjectiveSystem _objectiveSystem = default!;
-    [Robust.Shared.IoC.Dependency] private PopupSystem _popup = default!;
-    [Robust.Shared.IoC.Dependency] private ILogManager _logManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private AuObjectiveSystem _objectiveSystem = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private ILogManager _logManager = default!;
 
     private ISawmill _sawmill = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        _sawmill = _logManager.GetSawmill("au14-interactobj");
+        _sawmill = _logManager.GetSawmill("obj-interact");
         SubscribeLocalEvent<InteractObjectiveComponent, ComponentStartup>(OnObjectiveStartup);
         SubscribeLocalEvent<InteractObjectiveTrackerComponent, InteractObjectiveDoAfterEvent>(OnInteractDoAfter);
     }
+
+    private void OnObjectiveStartup(EntityUid uid, InteractObjectiveComponent component, ref ComponentStartup _) => StartupInteractObjective(uid, component);
 
     /// <summary>
     /// Called when the Interact objective is activated. Spawns or registers interactable entities.
@@ -39,10 +40,11 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
             return;
         if (!comp.Active || interactComp.EntitiesSpawned)
             return;
-        OnObjectiveStartup(uid, interactComp, ref Unsafe.NullRef<ComponentStartup>());
+
+        StartupInteractObjective(uid, interactComp);
     }
 
-    private void OnObjectiveStartup(EntityUid uid, InteractObjectiveComponent component, ref ComponentStartup args)
+    private void StartupInteractObjective(EntityUid uid, InteractObjectiveComponent component)
     {
         if (component.EntitiesSpawned)
             return;
@@ -278,9 +280,7 @@ public sealed partial class AuInteractObjectiveSystem : EntitySystem
 
         // Re-register/re-spawn entities
         if (component.Spawn)
-        {
-            OnObjectiveStartup(uid, component, ref Unsafe.NullRef<ComponentStartup>());
-        }
+            StartupInteractObjective(uid, component);
         else
         {
             var registered = RegisterPreplacedEntities(uid, component);

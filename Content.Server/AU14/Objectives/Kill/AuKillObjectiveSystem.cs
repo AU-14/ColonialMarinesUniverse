@@ -4,6 +4,7 @@ using Content.Server.Roles.Jobs;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.AU14.Objectives;
 using Content.Shared.AU14.Objectives.Arrest;
+using Content.Shared.AU14.Objectives.Fetch;
 using Content.Shared.AU14.Objectives.Kill;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
@@ -25,7 +26,7 @@ namespace Content.Server.AU14.Objectives.Kill
         public override void Initialize()
         {
             base.Initialize();
-            _sawmill = _logManager.GetSawmill("au14-killobj");
+            _sawmill = _logManager.GetSawmill("obj-kill");
             _shuttingDown = false;
             SubscribeLocalEvent<KillObjectiveTrackerComponent, ComponentStartup>(OnMobStateStartup);
             SubscribeLocalEvent<MarkedForKillComponent, MobStateChangedEvent>(OnMobStateChanged);
@@ -43,6 +44,7 @@ namespace Content.Server.AU14.Objectives.Kill
             {
                 if (_shuttingDown || !Exists(uid))
                     return;
+
                 TryMarkForKillDelayed(uid);
             });
         }
@@ -55,11 +57,6 @@ namespace Content.Server.AU14.Objectives.Kill
                     if (faction == "govfor") return "opfor";
                     if (faction == "opfor") return "govfor";
                     break;
-                case "distresssignal":
-                    if (faction == "clf") return "govfor";
-                    if (faction == "govfor") return "clf";
-
-                    break;
                 case "insurgency":
                     if (faction == "clf") return "govfor";
                     if (faction == "govfor") return "clf";
@@ -70,21 +67,19 @@ namespace Content.Server.AU14.Objectives.Kill
 
         private void TryMarkForKillDelayed(EntityUid uid)
         {
-            if (_shuttingDown)
-                return;
+
+            if (_shuttingDown) return;
+            if (HasComp<MarkedForKillComponent>(uid)) return;
 
             var meta = EntityManager.GetComponentOrNull<MetaDataComponent>(uid);
             var protoId = meta?.EntityPrototype?.ID ?? string.Empty;
             var factionComp = EntityManager.GetComponentOrNull<NpcFactionMemberComponent>(uid);
             var factions = factionComp?.Factions.Select(f => f.ToString().ToLowerInvariant()).ToHashSet() ?? new HashSet<string>();
-            _sawmill.Debug($"[KILL START] DELAYED - Mob ({uid}) proto='{protoId}' factions=[{string.Join(",", factions)}]");
-
             var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
             var presetId = ticker.Preset?.ID?.ToLowerInvariant();
-
             var mindContainer = EntityManager.GetComponentOrNull<MindContainerComponent>(uid);
             var mind = mindContainer?.Mind;
-            _sawmill.Debug($"[KILL DEBUG] TryMarkForKillDelayed: Entity ({uid}) has MindContainerComponent: {mindContainer != null}, Mind: {mind != null}");
+            _sawmill.Debug($"[KILL START] DELAYED - Mob ({uid}) proto='{protoId}' factions=[{string.Join(",", factions)}] - has MindContainerComponent: {mindContainer != null}, Mind: {mind != null}");
 
             var query = EntityQueryEnumerator<KillObjectiveComponent>();
             while (query.MoveNext(out var objUid, out var killObj))
@@ -108,13 +103,13 @@ namespace Content.Server.AU14.Objectives.Kill
                 }
                 else
                 {
-                    _sawmill.Debug($"[KILL TRACE] DELAYED - Mob ({uid}) proto={protoId} factions=[{string.Join(",", factions)}]");
+                    _sawmill.Debug($"[KILL TRACE]   Mob ({uid}) proto={protoId} factions=[{string.Join(",", factions)}]");
                     _sawmill.Debug($"[KILL TRACE]     Objective faction: {(string.IsNullOrEmpty(auObj.Faction) ? "null/empty" : auObj.Faction.ToLowerInvariant())}");
 
                     var targetFaction = killObj.FactionToKill.ToLowerInvariant();
                     if (factions.Contains(targetFaction))
                     {
-                        _sawmill.Debug($"[KILL MATCH] Mob ({uid}) MATCHES target faction '{targetFaction}' for objective {objUid}");
+                        _sawmill.Debug($"[KILL MATCH]   Mob ({uid}) MATCHES target faction '{targetFaction}' for objective {objUid}");
                         var mark = EnsureComp<MarkedForKillComponent>(uid);
                         mark.AssociatedObjectives[objUid] = auObj.Faction.ToLowerInvariant();
                         // Cache job info if needed
@@ -132,7 +127,7 @@ namespace Content.Server.AU14.Objectives.Kill
                     }
                     else
                     {
-                        _sawmill.Debug($"[KILL NOMATCH] Mob ({uid}) does NOT match target faction '{targetFaction}' for objective {objUid}");
+                        _sawmill.Debug($"[KILL MATCH]   Mob ({uid}) does NOT match target faction '{targetFaction}' for objective {objUid}");
                     }
                 }
             }
@@ -150,8 +145,8 @@ namespace Content.Server.AU14.Objectives.Kill
             var killedFactionComp = EntityManager.GetComponentOrNull<NpcFactionMemberComponent>(uid);
             var killedFactions = killedFactionComp?.Factions.Select(f => f.ToString().ToLowerInvariant()).ToHashSet() ?? new HashSet<string>();
             if (killedFactions.Count == 0)
-                _sawmill.Warning($"[KILL WARNING] Entity ({uid}) killed but has no factions! Check prototype setup.");
-            _sawmill.Debug($"[KILL DEBUG] Entity ({uid}) killed. Factions: [{string.Join(",", killedFactions)}]");
+                _sawmill.Warning($"[KILL WARN] Entity ({uid}) killed but has no factions! Check prototype setup.");
+            _sawmill.Debug($"[KILL DEBUG]   Entity ({uid}) killed. Factions: [{string.Join(",", killedFactions)}]");
 
             var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
             var presetId = ticker.Preset?.ID?.ToLowerInvariant();
@@ -186,7 +181,7 @@ namespace Content.Server.AU14.Objectives.Kill
                 {
                     if (auObj.FactionStatuses.TryGetValue(factionKey, out var status) && status == AuObjectiveComponent.ObjectiveStatus.Completed)
                     {
-                        _sawmill.Warning($"[KILL SKIP] Objective {objectiveUid} already completed for faction '{factionKey}'.");
+                        _sawmill.Warning($"[KILL SKIP]   Objective {objectiveUid} already completed for faction '{factionKey}'.");
                         objectivesToRemove.Add(objectiveUid);
                         continue;
                     }
@@ -196,7 +191,7 @@ namespace Content.Server.AU14.Objectives.Kill
                     var assignedFaction = auObj.Faction.ToLowerInvariant();
                     if (auObj.FactionStatuses.TryGetValue(assignedFaction, out var status) && status == AuObjectiveComponent.ObjectiveStatus.Completed)
                     {
-                        _sawmill.Warning($"[KILL SKIP] Objective {objectiveUid} already completed for faction '{assignedFaction}'.");
+                        _sawmill.Warning($"[KILL SKIP]   Objective {objectiveUid} already completed for faction '{assignedFaction}'.");
                         objectivesToRemove.Add(objectiveUid);
                         continue;
                     }
@@ -209,7 +204,7 @@ namespace Content.Server.AU14.Objectives.Kill
                         cachedJobId == null ||
                         cachedJobId.ToLowerInvariant() != killObj.SpecificJob.ToLowerInvariant())
                     {
-                        _sawmill.Warning($"[KILL SKIP] Entity ({uid}) did NOT have required job '{killObj.SpecificJob}' for objective {objectiveUid} at marking time.");
+                        _sawmill.Warning($"[KILL SKIP]   Entity ({uid}) did NOT have required job '{killObj.SpecificJob}' for objective {objectiveUid} at marking time.");
                         continue;
                     }
                 }
@@ -218,7 +213,7 @@ namespace Content.Server.AU14.Objectives.Kill
                 {
                     if (!HasComp<SynthComponent>(uid))
                     {
-                        _sawmill.Warning($"[KILL SKIP] Entity ({uid}) does NOT have SynthComponent for objective {objectiveUid}.");
+                        _sawmill.Warning($"[KILL SKIP]   Entity ({uid}) does NOT have SynthComponent for objective {objectiveUid}.");
                         continue;
                     }
                 }
@@ -230,7 +225,7 @@ namespace Content.Server.AU14.Objectives.Kill
 
                     if (!string.Equals(protoId, killObj.MobToKill, StringComparison.OrdinalIgnoreCase))
                     {
-                        _sawmill.Warning($"[KILL SKIP] Entity ({uid}) does NOT match required mob prototype '{killObj.MobToKill}' for objective {objectiveUid}.");
+                        _sawmill.Warning($"[KILL SKIP]   Entity ({uid}) does NOT match required mob prototype '{killObj.MobToKill}' for objective {objectiveUid}.");
                         continue;
                     }
                 }
@@ -238,7 +233,7 @@ namespace Content.Server.AU14.Objectives.Kill
                 // Only increment if the killed entity matches the target faction for the objective
                 if (!killedFactions.Contains(targetFaction))
                 {
-                    _sawmill.Warning($"[KILL SKIP] Entity ({uid}) does NOT match target faction '{targetFaction}' for objective {objectiveUid} (mode={presetId}). Factions: [{string.Join(",", killedFactions)}]");
+                    _sawmill.Warning($"[KILL SKIP]   Entity ({uid}) does NOT match target faction '{targetFaction}' for objective {objectiveUid} (mode={presetId}). Factions: [{string.Join(",", killedFactions)}]");
                     continue;
                 }
 
@@ -248,13 +243,13 @@ namespace Content.Server.AU14.Objectives.Kill
                 // Prevent incrementing if already at or above required amount
                 if (killObj.AmountKilledPerFaction[factionKey] >= killObj.AmountToKill)
                 {
-                    _sawmill.Warning($"[KILL SKIP] Faction '{factionToCredit}' already reached required kills for objective {objectiveUid}.");
+                    _sawmill.Warning($"[KILL SKIP]   Faction '{factionToCredit}' already reached required kills for objective {objectiveUid}.");
                     objectivesToRemove.Add(objectiveUid);
                     continue;
                 }
 
                 killObj.AmountKilledPerFaction[factionKey]++;
-                _sawmill.Debug($"[KILL UPDATE] Faction '{factionToCredit}' killed entity ({uid}). Total kills: {killObj.AmountKilledPerFaction[factionKey]} / {killObj.AmountToKill}");
+                _sawmill.Debug($"[KILL UPDATE]   Faction '{factionToCredit}' killed entity ({uid}). Total kills: {killObj.AmountKilledPerFaction[factionKey]} / {killObj.AmountToKill}");
 
                 // If CountArrest is true, remove MarkedForArrestComponent so this entity can't also count for arrest objectives
                 if (killObj.CountArrest)
@@ -263,7 +258,7 @@ namespace Content.Server.AU14.Objectives.Kill
                 if (killObj.AmountKilledPerFaction[factionKey] >= killObj.AmountToKill)
                 {
                     _objectiveSystem.CompleteObjectiveForFaction(objectiveUid, auObj, factionToCredit);
-                    _sawmill.Info($"[KILL COMPLETE] Objective {objectiveUid} completed for faction '{factionToCredit}'.");
+                    _sawmill.Info($"[KILL COMPLETE]   Objective {objectiveUid} completed for faction '{factionToCredit}'.");
                     objectivesToRemove.Add(objectiveUid);
                 }
             }
@@ -275,7 +270,7 @@ namespace Content.Server.AU14.Objectives.Kill
             }
         }
 
-        public void ActivateKillObjectiveIfNeeded(EntityUid uid, AuObjectiveComponent comp)
+        public void ActivateKillObjectiveIfNeeded(EntityUid uid, AuObjectiveComponent _)
         {
             if (!TryComp(uid, out KillObjectiveComponent? killObj))
                 return;
@@ -285,8 +280,8 @@ namespace Content.Server.AU14.Objectives.Kill
             // Find all relevant markers
             var markers = new List<EntityUid>();
             var genericMarkers = new List<EntityUid>();
-            var markerQuery = AllEntityQuery<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveMarkerComponent, TransformComponent>();
-            while (markerQuery.MoveNext(out var markerUid, out var markerComp, out _))
+            var markerQuery = AllEntityQuery<FetchObjectiveMarkerComponent>();
+            while (markerQuery.MoveNext(out var markerUid, out var markerComp))
             {
                 if (!string.IsNullOrEmpty(killObj.SpawnMarker) && markerComp.FetchId == killObj.SpawnMarker)
                     markers.Add(markerUid);

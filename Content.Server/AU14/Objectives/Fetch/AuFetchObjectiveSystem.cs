@@ -5,6 +5,8 @@ using Content.Shared.DragDrop;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Movement.Pulling.Events;
 using Robust.Shared.GameStates;
+using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.AU14.Objectives.Fetch;
 
@@ -20,14 +22,17 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        _logs = Logger.GetSawmill("au14-fetchobj");
+        _logs = Logger.GetSawmill("obj-fetch");
         SubscribeLocalEvent<FetchObjectiveComponent, ComponentStartup>(OnObjectiveStartup);
-        SubscribeLocalEvent<FetchObjectiveComponent, ComponentHandleState>(OnFetchObjectiveHandleState);
         SubscribeLocalEvent<AuFetchItemComponent, DroppedEvent>(OnFetchItemDropped);
         SubscribeLocalEvent<AuFetchItemComponent, PullStoppedMessage>(OnFetchItemUndragged);
         SubscribeLocalEvent<FetchObjectiveReturnPointComponent, DragDropTargetEvent>(OnReturnPointDragDropTarget);
         SubscribeLocalEvent<AuFetchItemComponent, EntityTerminatingEvent>(OnFetchItemDestroyed);
     }
+
+    private void OnObjectiveStartup(EntityUid uid, FetchObjectiveComponent component, ref ComponentStartup _) => StartupFetchObjective(uid, component);
+    private void OnFetchItemDropped(EntityUid uid, AuFetchItemComponent comp, ref DroppedEvent _) => TryHandleFetchItemDropOrUndrag(uid, comp);
+    private void OnFetchItemUndragged(EntityUid uid, AuFetchItemComponent comp, ref PullStoppedMessage _) => TryHandleFetchItemDropOrUndrag(uid, comp);
 
     public void ActivateFetchObjectiveIfNeeded(EntityUid uid, AuObjectiveComponent comp)
     {
@@ -35,7 +40,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
             return;
         if (!comp.Active || fetchComp.ItemsSpawned)
             return;
-        OnObjectiveStartup(uid, fetchComp, ref Unsafe.NullRef<ComponentStartup>());
+        StartupFetchObjective(uid, fetchComp);
     }
 
     /// <summary>
@@ -92,11 +97,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         return registered;
     }
 
-    private void OnFetchObjectiveHandleState(EntityUid uid, FetchObjectiveComponent component, ref ComponentHandleState args)
-    {
-    }
-
-    private void OnObjectiveStartup(EntityUid uid, FetchObjectiveComponent component, ref ComponentStartup args)
+    private void StartupFetchObjective(EntityUid uid, FetchObjectiveComponent component)
     {
         // Prevent duplicate spawns
         if (component.ItemsSpawned)
@@ -195,20 +196,9 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
                     return;
             }
 
-            OnObjectiveStartup(uid, component, ref Unsafe.NullRef<ComponentStartup>());
+            StartupFetchObjective(uid, component);
         }
     }
-
-    private void OnFetchItemDropped(EntityUid uid, AuFetchItemComponent comp, ref DroppedEvent args)
-    {
-        TryHandleFetchItemDropOrUndrag(uid, comp);
-    }
-
-    private void OnFetchItemUndragged(EntityUid uid, AuFetchItemComponent comp, ref PullStoppedMessage args)
-    {
-        TryHandleFetchItemDropOrUndrag(uid, comp);
-    }
-
     private void TryHandleFetchItemDropOrUndrag(EntityUid uid, AuFetchItemComponent comp)
     {
         _logs.Debug($"[FETCH START] TryHandleFetchItemDropOrUndrag called for ({uid})");
@@ -437,7 +427,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         if (fetchComp.RespawnOnRepeat)
         {
             fetchComp.ItemsSpawned = false; // Reset so items can respawn
-            OnObjectiveStartup(uid, fetchComp, ref Unsafe.NullRef<ComponentStartup>());
+            StartupFetchObjective(uid, fetchComp);
         }
     }
 
@@ -476,5 +466,141 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
                 }
             }
         }
+    }
+
+    public void SpawnMissingFetchObjectives(
+        string presetId,
+        EntityCoordinates fallbackCoords,
+        ObjectiveMasterComponent master,
+        List<(EntityUid Uid, AuObjectiveComponent Comp)> allObjectives,
+        IPrototypeManager proto,
+        ISawmill logs)
+    {
+        var compFactory = EntityManager.ComponentFactory;
+
+        // Gather unused generic marker positions
+        var markerPositions = new List<EntityCoordinates>();
+        var markerQuery = EntityQueryEnumerator<FetchObjectiveMarkerComponent, TransformComponent>();
+        while (markerQuery.MoveNext(out _, out var marker, out var xform))
+        {
+            if (marker.Generic && !marker.Used)
+                markerPositions.Add(xform.Coordinates);
+        }
+
+        if (markerPositions.Count == 0)
+        {
+            logs.Warning("[OBJ SPAWN] No generic fetch markers found, mappers must place them!");
+            return;
+        }
+
+        // Shuffle markers
+        var rng = new Random();
+        for (int i = markerPositions.Count - 1; i > 0; i--)
+        {
+            int j = rng.Next(i + 1);
+            (markerPositions[i], markerPositions[j]) = (markerPositions[j], markerPositions[i]);
+        }
+        int markerIdx = 0;
+
+        // Per-faction, per-level spawning respecting limits
+        foreach (var faction in new[] { "govfor", "opfor", "clf", "scientist" })
+        {
+            var (minMinor, maxMinor, minMajor, maxMajor) = GetFactionObjectiveBounds(master, faction);
+
+            int currentMinor = allObjectives.Count(o =>
+                !o.Comp.Active &&
+                o.Comp.Factions.Any(f => f.ToLowerInvariant() == faction) &&
+                o.Comp.ObjectiveLevel == 1 &&
+                o.Comp.ApplicableModes.Any(m => m.Equals(presetId, StringComparison.OrdinalIgnoreCase)));
+
+            int currentMajor = allObjectives.Count(o =>
+                !o.Comp.Active &&
+                o.Comp.Factions.Any(f => f.ToLowerInvariant() == faction) &&
+                o.Comp.ObjectiveLevel == 2 &&
+                o.Comp.ApplicableModes.Any(m => m.Equals(presetId, StringComparison.OrdinalIgnoreCase)));
+
+            SpawnObjectivesOfType(faction, 1, Math.Max(0, maxMinor - currentMinor), presetId, markerPositions, ref markerIdx, allObjectives, proto, logs);
+            SpawnObjectivesOfType(faction, 2, Math.Max(0, maxMajor - currentMajor), presetId, markerPositions, ref markerIdx, allObjectives, proto, logs);
+        }
+
+        // Neutral objectives
+        int currentNeutral = allObjectives.Count(o =>
+            !o.Comp.Active &&
+            o.Comp.FactionNeutral &&
+            o.Comp.ApplicableModes.Any(m => m.Equals(presetId, StringComparison.OrdinalIgnoreCase)));
+
+        SpawnObjectivesOfType(null, 1, Math.Max(0, master.MaxNeutralObjectives - currentNeutral), presetId, markerPositions, ref markerIdx, allObjectives, proto, logs);
+    }
+
+    private void SpawnObjectivesOfType(
+        string? faction,
+        int level,
+        int count,
+        string presetId,
+        List<EntityCoordinates> markerPositions,
+        ref int markerIdx,
+        List<(EntityUid Uid, AuObjectiveComponent Comp)> allObjectives,
+        IPrototypeManager proto,
+        ISawmill logs)
+    {
+        if (count <= 0) return;
+
+        var compFactory = EntityManager.ComponentFactory;
+        var candidates = new List<EntityPrototype>();
+
+        foreach (var p in proto.EnumeratePrototypes<EntityPrototype>())
+        {
+            if (!p.TryGetComponent<AuObjectiveComponent>(out var objComp, compFactory))
+                continue;
+
+            if (!objComp.ApplicableModes.Any(m => m.Equals(presetId, StringComparison.OrdinalIgnoreCase)))
+                continue;
+
+            if (faction != null)
+            {
+                if (!objComp.Factions.Any(f => f.ToLowerInvariant() == faction))
+                    continue;
+            }
+            else
+            {
+                if (!objComp.FactionNeutral)
+                    continue;
+            }
+
+            if (objComp.ObjectiveLevel != level)
+                continue;
+
+            if (allObjectives.Any(o => o.Comp.ID == objComp.ID))
+                continue;
+
+            candidates.Add(p);
+        }
+
+        var rng = new Random();
+        for (int i = 0; i < count && candidates.Count > 0; i++)
+        {
+            int idx = rng.Next(candidates.Count);
+            var proto = candidates[idx];
+            var coords = markerPositions[markerIdx % markerPositions.Count];
+            markerIdx++;
+
+            Spawn(proto.ID, coords);
+            logs.Debug($"[OBJ SPAWN] Spawned missing objective '{proto.ID}' at {coords} for {faction ?? "neutral"} L{level}.");
+
+            candidates.RemoveAt(idx);
+        }
+    }
+
+    // Helper to get faction bounds (can be shared or duplicated)
+    private static (int? MinMinor, int MaxMinor, int? MinMajor, int MaxMajor) GetFactionObjectiveBounds(ObjectiveMasterComponent master, string faction)
+    {
+        return faction switch
+        {
+            "govfor" => (master.MinGovforMinorObjectives, master.GovforMinorObjectives, master.MinGovforMajorObjectives, master.GovforMajorObjectives),
+            "opfor" => (master.MinOpforMinorObjectives, master.OpforMinorObjectives, master.MinOpforMajorObjectives, master.OpforMajorObjectives),
+            "clf" => (master.MinCLFMinorObjectives, master.CLFMinorObjectives, master.MinCLFMajorObjectives, master.CLFMajorObjectives),
+            "scientist" => (master.MinScientistMinorObjectives, master.ScientistMinorObjectives, master.MinScientistMajorObjectives, master.ScientistMajorObjectives),
+            _ => (null, 0, null, 0)
+        };
     }
 }

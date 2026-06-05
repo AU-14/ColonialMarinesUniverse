@@ -2,94 +2,82 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.AU14.Objectives;
 
+/// <summary>No scope set (legacy): determined via IsOnPlanet() / RMCPlanetComponent for selection</summary>
+public enum MasterMapScope : byte
+{
+    Unset = 0,
+    Planet = 1,
+    Ship = 2,
+    Station = 3,
+}
+
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class ObjectiveMasterComponent : Component
 {
+    [NonSerialized] public HashSet<string> FinalObjectiveGivenFactions = new();
+    [AutoNetworkedField] public bool IsActive;
 
-    [DataField("Mode", required: true)]
-    public string Mode = "ForceOnForce";
+    [DataField(required: true)]
+    public string GamePreset = "ForceOnForce";
 
+    /// <summary>Which maptype this ObjectiveMasterComponent is for, leaving it unset is obsolete - for legacy fallback</summary>
+    [DataField]
+    public MasterMapScope MapScope = MasterMapScope.Unset;
 
-    [DataField("govforMinorObjectives", required: false)]
-    public int GovforMinorObjectives = 10;
+    [DataField]
+    public int MaxNeutralObjectives = 5;
+    [DataField]
+    public int? MinNeutralObjectives;
 
-    [DataField("govforMajorObjectives", required: false)]
-    public int GovforMajorObjectives = 8;
-
-
-    [DataField("opforMinorObjectives", required: false)]
-    public int OpforMinorObjectives = 10;
-
-    [DataField("opforMajorObjectives", required: false)]
-    public int OpforMajorObjectives = 8;
-
-
-    [DataField("clfMinorObjectives", required: false)]
-    public int CLFMinorObjectives = 10;
-
-    [DataField("clfMajorObjectives", required: false)]
-    public int CLFMajorObjectives = 8;
-
-
-    [DataField("scientistMinorObjectives", required: false)]
-    public int ScientistMinorObjectives = 10;
-
-    [DataField("scientistMajorObjectives", required: false)]
-    public int ScientistMajorObjectives = 8;
-
-
-    [DataField("currentwinpointsgovfor"), AutoNetworkedField]
-    public int CurrentWinPointsGovfor = 0;
-    [DataField("currentwinpointsopfor"), AutoNetworkedField]
-    public int CurrentWinPointsOpfor = 0;
-    [DataField("currentwinpointsclf"), AutoNetworkedField]
-    public int CurrentWinPointsClf = 0;
-    [DataField("currentwinpointsscientist"), AutoNetworkedField]
-    public int CurrentWinPointsScientist = 0;
-
-
-    [AutoNetworkedField]
-    public bool IsActive;
-
-    [DataField("requiredwinpointsgovfor")]
+    [DataField, AutoNetworkedField]
+    public int CurrentWinPointsGovfor;
+    [DataField]
     public int RequiredWinPointsGovfor = 100;
-    [DataField("requiredwinpointsopfor")]
+    [DataField]
+    public int GovforMinorObjectives = 10;
+    [DataField]
+    public int GovforMajorObjectives = 5;
+    [DataField]
+    public int? MinGovforMinorObjectives;
+    [DataField]
+    public int? MinGovforMajorObjectives;
+
+    [DataField, AutoNetworkedField]
+    public int CurrentWinPointsOpfor;
+    [DataField]
     public int RequiredWinPointsOpfor = 100;
-    [DataField("requiredwinpointsclf")]
+    [DataField]
+    public int OpforMinorObjectives = 10;
+    [DataField]
+    public int OpforMajorObjectives = 5;
+    [DataField]
+    public int? MinOpforMinorObjectives;
+    [DataField]
+    public int? MinOpforMajorObjectives;
+
+    [DataField, AutoNetworkedField]
+    public int CurrentWinPointsClf = 0;
+    [DataField]
     public int RequiredWinPointsClf = 100;
-    [DataField("requiredwinpointsscientist")]
+    [DataField]
+    public int CLFMinorObjectives = 10;
+    [DataField]
+    public int CLFMajorObjectives = 5;
+    [DataField]
+    public int? MinCLFMinorObjectives;
+    [DataField]
+    public int? MinCLFMajorObjectives;
+
+    [DataField, AutoNetworkedField]
+    public int CurrentWinPointsScientist;
+    [DataField]
     public int RequiredWinPointsScientist = 100;
-
-    // --- NEW: Track completed objectives ---
-    [DataField("completedObjectives")]
-    public List<CompletedObjectiveRecord> CompletedObjectives = new();
-
-    [Serializable]
-    public sealed class CompletedObjectiveRecord
-    {
-        public EntityUid ObjectiveUid;
-    }
-
-    [NonSerialized]
-    public HashSet<string> FinalObjectiveGivenFactions = new();
-
-    [DataField("minGovforMinorObjectives", required: false)]
-    public int? MinGovforMinorObjectives = null;
-    [DataField("minGovforMajorObjectives", required: false)]
-    public int? MinGovforMajorObjectives = null;
-    [DataField("minOpforMinorObjectives", required: false)]
-    public int? MinOpforMinorObjectives = null;
-    [DataField("minOpforMajorObjectives", required: false)]
-    public int? MinOpforMajorObjectives = null;
-    [DataField("minCLFMinorObjectives", required: false)]
-    public int? MinCLFMinorObjectives = null;
-    [DataField("minCLFMajorObjectives", required: false)]
-    public int? MinCLFMajorObjectives = null;
-    [DataField("minScientistMinorObjectives", required: false)]
-    public int? MinScientistMinorObjectives = null;
-    [DataField("minScientistMajorObjectives", required: false)]
-    public int? MinScientistMajorObjectives = null;
-
-    // if set, then allows a random amount to be selected (min-normal)
-
+    [DataField]
+    public int ScientistMinorObjectives = 10;
+    [DataField]
+    public int ScientistMajorObjectives = 5;
+    [DataField]
+    public int? MinScientistMinorObjectives;
+    [DataField]
+    public int? MinScientistMajorObjectives;
 }

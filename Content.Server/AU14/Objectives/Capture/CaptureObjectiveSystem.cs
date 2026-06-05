@@ -27,7 +27,7 @@ public sealed partial class CaptureObjectiveSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        _sawmill = _logManager.GetSawmill("au14-captureobj");
+        _sawmill = _logManager.GetSawmill("obj-capture");
         SubscribeLocalEvent<CaptureObjectiveComponent, FlagHoistStartedEvent>(OnFlagHoistStarted);
         SubscribeLocalEvent<CaptureObjectiveComponent, HoistFlagDoAfterEvent>(OnHoistFlagDoAfter); // Subscribe to DoAfter completion
         // Removed broken damage event subscription
