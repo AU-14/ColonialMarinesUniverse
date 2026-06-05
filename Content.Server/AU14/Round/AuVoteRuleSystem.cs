@@ -74,21 +74,19 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
 
         _waitingForMinimumPlayers = false;
         var voteManagerSystem = _entityManager.System<AuRoundSystem>();
-        voteManagerSystem.StartVoteSequence(() => {});
+        voteManagerSystem.StartVoteSequence(() => { });
     }
-
-
 
     protected override void Started(EntityUid uid, AuVoteRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
+        Logger.GetSawmill("content").Debug("[RULE SYS] Running AuVoteRuleSystem.Started (FIXME: remove this debug testing)");
         base.Started(uid, component, gameRule, args);
         // No vote call here; only after restart cleanup.
-        var auRoundSystem = _entityManager.System<AuRoundSystem>();
-        var sawmill = Logger.GetSawmill("game");
-        var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
-        var mapLoader = _entityManager.EntitySysManager.GetEntitySystem<MapLoaderSystem>();
-        var mapSystem = _entityManager.EntitySysManager.GetEntitySystem<MapSystem>();
+        // var auRoundSystem = _entityManager.System<AuRoundSystem>();
+        // var sawmill = Logger.GetSawmill("game");
+        // var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
+        // var mapLoader = _entityManager.EntitySysManager.GetEntitySystem<MapLoaderSystem>();
+        // var mapSystem = _entityManager.EntitySysManager.GetEntitySystem<MapSystem>();
         //auRoundSystem.LoadSelectedPlanetMap();
-
     }
 }

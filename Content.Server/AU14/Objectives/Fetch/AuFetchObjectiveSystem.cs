@@ -22,12 +22,15 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         base.Initialize();
         _logs = Logger.GetSawmill("au14-fetchobj");
         SubscribeLocalEvent<FetchObjectiveComponent, ComponentStartup>(OnObjectiveStartup);
-        SubscribeLocalEvent<FetchObjectiveComponent, ComponentHandleState>(OnFetchObjectiveHandleState);
         SubscribeLocalEvent<AuFetchItemComponent, DroppedEvent>(OnFetchItemDropped);
         SubscribeLocalEvent<AuFetchItemComponent, PullStoppedMessage>(OnFetchItemUndragged);
         SubscribeLocalEvent<FetchObjectiveReturnPointComponent, DragDropTargetEvent>(OnReturnPointDragDropTarget);
         SubscribeLocalEvent<AuFetchItemComponent, EntityTerminatingEvent>(OnFetchItemDestroyed);
     }
+
+    private void OnObjectiveStartup(EntityUid uid, FetchObjectiveComponent component, ref ComponentStartup _) => StartupFetchObjective(uid, component);
+    private void OnFetchItemDropped(EntityUid uid, AuFetchItemComponent comp, ref DroppedEvent _) => TryHandleFetchItemDropOrUndrag(uid, comp);
+    private void OnFetchItemUndragged(EntityUid uid, AuFetchItemComponent comp, ref PullStoppedMessage _) => TryHandleFetchItemDropOrUndrag(uid, comp);
 
     public void ActivateFetchObjectiveIfNeeded(EntityUid uid, AuObjectiveComponent comp)
     {
@@ -35,7 +38,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
             return;
         if (!comp.Active || fetchComp.ItemsSpawned)
             return;
-        OnObjectiveStartup(uid, fetchComp, ref Unsafe.NullRef<ComponentStartup>());
+        StartupFetchObjective(uid, fetchComp);
     }
 
     /// <summary>
@@ -92,11 +95,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         return registered;
     }
 
-    private void OnFetchObjectiveHandleState(EntityUid uid, FetchObjectiveComponent component, ref ComponentHandleState args)
-    {
-    }
-
-    private void OnObjectiveStartup(EntityUid uid, FetchObjectiveComponent component, ref ComponentStartup args)
+    private void StartupFetchObjective(EntityUid uid, FetchObjectiveComponent component)
     {
         // Prevent duplicate spawns
         if (component.ItemsSpawned)
@@ -195,20 +194,9 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
                     return;
             }
 
-            OnObjectiveStartup(uid, component, ref Unsafe.NullRef<ComponentStartup>());
+            StartupFetchObjective(uid, component);
         }
     }
-
-    private void OnFetchItemDropped(EntityUid uid, AuFetchItemComponent comp, ref DroppedEvent args)
-    {
-        TryHandleFetchItemDropOrUndrag(uid, comp);
-    }
-
-    private void OnFetchItemUndragged(EntityUid uid, AuFetchItemComponent comp, ref PullStoppedMessage args)
-    {
-        TryHandleFetchItemDropOrUndrag(uid, comp);
-    }
-
     private void TryHandleFetchItemDropOrUndrag(EntityUid uid, AuFetchItemComponent comp)
     {
         _logs.Debug($"[FETCH START] TryHandleFetchItemDropOrUndrag called for ({uid})");
@@ -437,7 +425,7 @@ public sealed partial class AuFetchObjectiveSystem : EntitySystem
         if (fetchComp.RespawnOnRepeat)
         {
             fetchComp.ItemsSpawned = false; // Reset so items can respawn
-            OnObjectiveStartup(uid, fetchComp, ref Unsafe.NullRef<ComponentStartup>());
+            StartupFetchObjective(uid, fetchComp);
         }
     }
 

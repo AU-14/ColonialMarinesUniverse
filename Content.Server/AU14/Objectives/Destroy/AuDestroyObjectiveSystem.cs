@@ -1,16 +1,15 @@
-using System.Runtime.CompilerServices;
 using Content.Shared.AU14.Objectives;
 using Content.Shared.AU14.Objectives.Destroy;
 using Content.Shared.AU14.Objectives.Fetch;
-using Robust.Shared.Timing;
+using Timer = Robust.Shared.Timing.Timer;
 
 namespace Content.Server.AU14.Objectives.Destroy;
 
 public sealed partial class AuDestroyObjectiveSystem : EntitySystem
 {
-    [Robust.Shared.IoC.Dependency] private IEntityManager _entManager = default!;
-    [Robust.Shared.IoC.Dependency] private AuObjectiveSystem _objectiveSystem = default!;
-    [Robust.Shared.IoC.Dependency] private ILogManager _logManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private AuObjectiveSystem _objectiveSystem = default!;
+    [Dependency] private ILogManager _logManager = default!;
 
     private ISawmill _sawmill = default!;
 
@@ -31,16 +30,19 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         SubscribeLocalEvent<MetaDataComponent, ComponentStartup>(OnEntityMetaStartup);
     }
 
+    private void OnObjectiveStartup(EntityUid uid, DestroyObjectiveComponent component, ref ComponentStartup _) => StartupDestroyObjective(uid, component);
+
     public void ActivateDestroyObjectiveIfNeeded(EntityUid uid, AuObjectiveComponent comp)
     {
         if (!_entManager.TryGetComponent(uid, out DestroyObjectiveComponent? destroyComp))
             return;
         if (!comp.Active || destroyComp.EntitiesSpawned)
             return;
-        OnObjectiveStartup(uid, destroyComp, ref Unsafe.NullRef<ComponentStartup>());
+
+        StartupDestroyObjective(uid, destroyComp);
     }
 
-    private void OnObjectiveStartup(EntityUid uid, DestroyObjectiveComponent component, ref ComponentStartup args)
+    private void StartupDestroyObjective(EntityUid uid, DestroyObjectiveComponent component)
     {
         if (component.EntitiesSpawned)
             return;
@@ -83,7 +85,7 @@ public sealed partial class AuDestroyObjectiveSystem : EntitySystem
         for (var i = 0; i < toSpawn; i++)
         {
             var markerUid = markers[i];
-            var markerComp = Comp<Content.Shared.AU14.Objectives.Fetch.FetchObjectiveMarkerComponent>(markerUid);
+            var markerComp = Comp<FetchObjectiveMarkerComponent>(markerUid);
             if (markerComp.Used)
                 continue;
             var xform = Comp<TransformComponent>(markerUid);

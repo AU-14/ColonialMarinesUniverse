@@ -1,9 +1,9 @@
-## stable garrison
+# ├──[ Stable Garrison ]─────────────────────────────────────────────┤
 - type: entity
   name: Capture the Street
   parent: AU14WallFlagUA
   id: captureuaflagobjective
-  description: "Capture mainstreet  for your faction."
+  description: "Capture mainstreet for your faction."
   components:
     - type: AuObjective
       id: captureuaflagobj
@@ -17,7 +17,7 @@
         - clf
       objectivelevel: 2
       custompoints: 5
-      ObjectiveDescription: "Capture mainstreet  for your faction."
+      ObjectiveDescription: "Capture mainstreet for your faction."
       roundEndMessage: "By capturing the UA flag"
     - type: CaptureObjective
       hoisttime: 8
@@ -28,12 +28,11 @@
     - type: NavMapBeacon
       text: Main Street
 
-
 - type: entity
   name: Capture the Supermarket
   parent: AU14WallFlagUA
   id: capturesupermarketobjective
-  description: "Capture the supermarket  for your faction."
+  description: "Capture the supermarket for your faction."
   components:
   - type: AuObjective
     id: capturesupermarketobjective
@@ -48,7 +47,7 @@
     - clf
     objectivelevel: 2
     custompoints: 5
-    ObjectiveDescription: "Capture the supermarket  for your faction."
+    ObjectiveDescription: "Capture the supermarket for your faction."
     roundEndMessage: "By capturing the UA flag"
     intelTiers:
     - supermarkettier0
@@ -95,7 +94,7 @@
     - clf
     objectivelevel: 2
     custompoints: 5
-    ObjectiveDescription: "Capture the Tunnel  for your faction."
+    ObjectiveDescription: "Capture the Tunnel for your faction."
     roundEndMessage: "By capturing the Tunnel"
   - type: CaptureObjective
     hoisttime: 8
@@ -111,7 +110,7 @@
   name: Capture the Desert
   parent: AU14WallFlagUA
   id: capturedesertobjective
-  description: "Capture the Desert  for your faction."
+  description: "Capture the Desert for your faction."
   components:
   - type: AuObjective
     id: capturedesertobjective
@@ -125,7 +124,7 @@
     - clf
     objectivelevel: 1
     custompoints: 3
-    ObjectiveDescription: "Capture the Desert  for your faction."
+    ObjectiveDescription: "Capture the Desert for your faction."
     roundEndMessage: "By capturing the Desert"
   - type: CaptureObjective
     hoisttime: 8
@@ -136,8 +135,7 @@
   - type: NavMapBeacon
     text: Desert
 
-#gixens
-
+# ├──[ Gixens ]──────────────────────────────────────────────────────┤
 - type: entity
   name: Capture the mine
   parent: AU14WallFlagUA
@@ -169,9 +167,7 @@
     visibleonmap: true
     flaghealth: 250
 
-
-
-#solaris
+# ├──[ Solaris ]─────────────────────────────────────────────────────┤
 - type: entity
   name: Capture Solar Farms
   parent: AU14WallFlagUA
@@ -200,8 +196,6 @@
     flaghealth: 100
   - type: NavMapBeacon
     text: Solar Farms
-
-
 
 - type: entity
   name: Capture the cabin
@@ -232,8 +226,6 @@
     text: Hermits Cabin
   - type: AreaLabel
 
-
-
 - type: entity
   name: Capture the Admins Office
   parent: AU14WallFlagUA
@@ -263,7 +255,6 @@
     text: Admins Office
   - type: AreaLabel
 
-
 - type: entity
   name: Capture the Abandoned Camp
   parent: AU14WallFlagUA
@@ -292,9 +283,7 @@
   - type: NavMapBeacon
     text: Abandoned Camp
 
-
-
-# Flight
+# ├──[ Flight ]──────────────────────────────────────────────────────┤
 - type: entity
   name: Capture the Basement
   parent: AU14WallFlagUA
@@ -324,7 +313,6 @@
   - type: NavMapBeacon
     text: Basement
   - type: AreaLabel
-
 
 - type: entity
   name: Capture the Roof
@@ -356,7 +344,6 @@
     text: Roof
   - type: AreaLabel
 
-
 - type: entity
   name: Capture the Middle Floor
   parent: AU14WallFlagUA
@@ -387,8 +374,7 @@
     text: Middle Floor
   - type: AreaLabel
 
-#Port Neroid
-
+# ├──[ Port Neroid ]─────────────────────────────────────────────────┤
 - type: entity
   name: Capture the PAEK-500 Reactor Control
   parent: AU14WallFlagUA
@@ -689,8 +675,7 @@
   - type: NavMapBeacon
     text: Cargo Pier
 
-#Corsat
-
+# ├──[ Corsat ]──────────────────────────────────────────────────────┤
 - type: entity
   name: Capture Biodome Theta
   parent: AU14WallFlagUA

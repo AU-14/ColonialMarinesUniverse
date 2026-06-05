@@ -482,146 +482,146 @@ namespace Content.Server.AU14.Round
                     PreselectThirdParties();
                 });
 
-                    var govforPlatoons = planetProto.PlatoonsGovfor;
-                    var opforPlatoons = planetProto.PlatoonsOpfor;
-                    var duration = TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.VotePlatoonDuration));
-                    var platoonSpawnRuleSystem =
-                        _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
+            var govforPlatoons = planetProto.PlatoonsGovfor;
+            var opforPlatoons = planetProto.PlatoonsOpfor;
+            var duration = TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.VotePlatoonDuration));
+            var platoonSpawnRuleSystem =
+                _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
 
-                    void StartShipVote(List<string> possibleShips, string title, Action<string> onShipSelected)
+            void StartShipVote(List<string> possibleShips, string title, Action<string> onShipSelected)
+            {
+
+                if (possibleShips.Count == 0)
+                {
+                    onShipSelected(string.Empty);
+                    return;
+                }
+
+                var shipOptions = possibleShips.Select(id => (id, (object)id)).ToList();
+                var voteopt = new VoteOptions
+                {
+                    Title = title,
+                    Options = shipOptions,
+                    Duration = duration
+                };
+                voteopt.SetInitiatorOrServer(null);
+
+                var handle = _voteManager.CreateVote(voteopt);
+                handle.OnFinished += (_, args) =>
+                {
+                    string? winner = args.Winner as string;
+                    if (winner == null && args.Winners is var arr && arr.Length > 0)
+                        winner = arr[0] as string;
+                    if (winner == null && shipOptions.Count > 0)
+                        winner = shipOptions[0].id;
+                    if (winner != null)
+                        args.ResolveWinner(winner);
+                    onShipSelected(winner ?? string.Empty);
+                };
+            }
+
+
+
+            if (presetProto.RequiresGovforVote && govforPlatoons.Count > 0)
+            {
+                var optionsplatoons = new List<(string text, object data)>();
+                foreach (var platoonId in govforPlatoons)
+                {
+                    var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
+                    optionsplatoons.Add((platoon.Name, platoon));
+                }
+
+                var voteopt = new VoteOptions
+                {
+                    Title = "Govfor Vote",
+                    Options = optionsplatoons,
+                    Duration = duration
+                };
+                voteopt.SetInitiatorOrServer(null);
+                var handle = _voteManager.CreateVote(voteopt);
+                handle.OnFinished += (_, args) =>
+                {
+                    var winnerId = args.Winner as PlatoonPrototype;
+                    if (winnerId == null && args.Winners is var winnersArray && winnersArray.Length > 0)
+                        winnerId = winnersArray[0] as PlatoonPrototype;
+
+                    if (winnerId != null)
                     {
+                        args.ResolveWinner(winnerId);
+                        platoonSpawnRuleSystem.SelectedGovforPlatoon = winnerId;
 
-                        if (possibleShips.Count == 0)
+                        // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
+                        var intelSys = _entityManager.EntitySysManager.GetEntitySystem<Content.Shared._RMC14.Intel.IntelSystem>();
+                        if (!string.IsNullOrEmpty(winnerId.TechTree))
                         {
-                            onShipSelected(string.Empty);
-                            return;
+                            intelSys.SetTeamTechTreeOverride(Team.GovFor, winnerId.TechTree);
                         }
 
-                        var shipOptions = possibleShips.Select(id => (id, (object)id)).ToList();
-                        var voteopt = new VoteOptions
+                        // Only start ship vote if planet allows govfor in ship
+                        if (planetProto.GovforInShip)
                         {
-                            Title = title,
-                            Options = shipOptions,
-                            Duration = duration
-                        };
-                        voteopt.SetInitiatorOrServer(null);
+                            Timer.Spawn(TimeSpan.FromMilliseconds(100),
+                                () =>
+                                {
 
-                        var handle = _voteManager.CreateVote(voteopt);
-                        handle.OnFinished += (_, args) =>
-                        {
-                            string? winner = args.Winner as string;
-                            if (winner == null && args.Winners is var arr && arr.Length > 0)
-                                winner = arr[0] as string;
-                            if (winner == null && shipOptions.Count > 0)
-                                winner = shipOptions[0].id;
-                            if (winner != null)
-                                args.ResolveWinner(winner);
-                            onShipSelected(winner ?? string.Empty);
-                        };
+                                    StartShipVote(winnerId.PossibleShips,
+                                        "Govfor Ship Vote",
+                                        shipId => _selectedGovforShip = shipId);
+                                });
+                        }
                     }
+                };
+            }
 
+            if (presetProto.RequiresOpforVote && opforPlatoons.Count > 0)
+            {
+                var optionsplatoons = new List<(string text, object data)>();
+                foreach (var platoonId in opforPlatoons)
+                {
+                    var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
+                    optionsplatoons.Add((platoon.Name, platoon));
+                }
 
+                var voteopt = new VoteOptions
+                {
+                    Title = "Opfor Vote",
+                    Options = optionsplatoons,
+                    Duration = duration
+                };
+                voteopt.SetInitiatorOrServer(null);
+                var handle = _voteManager.CreateVote(voteopt);
+                handle.OnFinished += (_, args) =>
+                {
+                    var winnerId = args.Winner as PlatoonPrototype;
+                    if (winnerId == null && args.Winners is var winnersArray && winnersArray.Length > 0)
+                        winnerId = winnersArray[0] as PlatoonPrototype;
 
-                    if (presetProto.RequiresGovforVote && govforPlatoons.Count > 0)
+                    if (winnerId != null)
                     {
-                        var optionsplatoons = new List<(string text, object data)>();
-                        foreach (var platoonId in govforPlatoons)
+                        args.ResolveWinner(winnerId);
+                        platoonSpawnRuleSystem.SelectedOpforPlatoon = winnerId;
+
+                        // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
+                        var intelSys = _entityManager.EntitySysManager.GetEntitySystem<Content.Shared._RMC14.Intel.IntelSystem>();
+                        if (intelSys != null && !string.IsNullOrEmpty(winnerId.TechTree))
                         {
-                            var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
-                            optionsplatoons.Add((platoon.Name, platoon));
+                            intelSys.SetTeamTechTreeOverride(Team.OpFor, winnerId.TechTree);
                         }
 
-                        var voteopt = new VoteOptions
+                        // Only start ship vote if planet allows opfor in ship
+                        if (planetProto.OpforInShip)
                         {
-                            Title = "Govfor Vote",
-                            Options = optionsplatoons,
-                            Duration = duration
-                        };
-                        voteopt.SetInitiatorOrServer(null);
-                        var handle = _voteManager.CreateVote(voteopt);
-                        handle.OnFinished += (_, args) =>
-                        {
-                            var winnerId = args.Winner as PlatoonPrototype;
-                            if (winnerId == null && args.Winners is var winnersArray && winnersArray.Length > 0)
-                                winnerId = winnersArray[0] as PlatoonPrototype;
-
-                            if (winnerId != null)
-                            {
-                                args.ResolveWinner(winnerId);
-                                platoonSpawnRuleSystem.SelectedGovforPlatoon = winnerId;
-
-                                // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
-                                var intelSys = _entityManager.EntitySysManager.GetEntitySystem<Content.Shared._RMC14.Intel.IntelSystem>();
-                                if (!string.IsNullOrEmpty(winnerId.TechTree))
+                            Timer.Spawn(TimeSpan.FromMilliseconds(100),
+                                () =>
                                 {
-                                    intelSys.SetTeamTechTreeOverride(Team.GovFor, winnerId.TechTree);
-                                }
-
-                                // Only start ship vote if planet allows govfor in ship
-                                if (planetProto.GovforInShip)
-                                {
-                                    Timer.Spawn(TimeSpan.FromMilliseconds(100),
-                                        () =>
-                                        {
-
-                                            StartShipVote(winnerId.PossibleShips,
-                                                "Govfor Ship Vote",
-                                                shipId => _selectedGovforShip = shipId);
-                                        });
-                                }
-                            }
-                        };
-                    }
-
-                    if (presetProto.RequiresOpforVote && opforPlatoons.Count > 0)
-                    {
-                        var optionsplatoons = new List<(string text, object data)>();
-                        foreach (var platoonId in opforPlatoons)
-                        {
-                            var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
-                            optionsplatoons.Add((platoon.Name, platoon));
+                                    StartShipVote(winnerId.PossibleShips,
+                                        "Opfor Ship Vote",
+                                        shipId => _selectedOpforShip = shipId);
+                                });
                         }
-
-                        var voteopt = new VoteOptions
-                        {
-                            Title = "Opfor Vote",
-                            Options = optionsplatoons,
-                            Duration = duration
-                        };
-                        voteopt.SetInitiatorOrServer(null);
-                        var handle = _voteManager.CreateVote(voteopt);
-                        handle.OnFinished += (_, args) =>
-                        {
-                            var winnerId = args.Winner as PlatoonPrototype;
-                            if (winnerId == null && args.Winners is var winnersArray && winnersArray.Length > 0)
-                                winnerId = winnersArray[0] as PlatoonPrototype;
-
-                            if (winnerId != null)
-                            {
-                                args.ResolveWinner(winnerId);
-                                platoonSpawnRuleSystem.SelectedOpforPlatoon = winnerId;
-
-                                // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
-                                var intelSys = _entityManager.EntitySysManager.GetEntitySystem<Content.Shared._RMC14.Intel.IntelSystem>();
-                                if (intelSys != null && !string.IsNullOrEmpty(winnerId.TechTree))
-                                {
-                                    intelSys.SetTeamTechTreeOverride(Team.OpFor, winnerId.TechTree);
-                                }
-
-                                // Only start ship vote if planet allows opfor in ship
-                                if (planetProto.OpforInShip)
-                                {
-                                    Timer.Spawn(TimeSpan.FromMilliseconds(100),
-                                        () =>
-                                        {
-                                            StartShipVote(winnerId.PossibleShips,
-                                                "Opfor Ship Vote",
-                                                shipId => _selectedOpforShip = shipId);
-                                        });
-                                }
-                            }
-                        };
                     }
+                };
+            }
 
         }
 
@@ -662,7 +662,8 @@ namespace Content.Server.AU14.Round
         }
 
         // --- PLANET LOGIC: Load planet like cmdistress does after round starts ---
-        public void LoadSelectedPlanetMap()
+        // Dead code - never called - legacy from AuVoteRuleSystem class
+        public void LoadSelectedPlanetMap_()
         {
             if (_selectedPlanet == null)
                 return;
@@ -670,8 +671,8 @@ namespace Content.Server.AU14.Round
             var mapLoader = _entityManager.EntitySysManager.GetEntitySystem<MapLoaderSystem>();
             var mapSystem = _entityManager.EntitySysManager.GetEntitySystem<MapSystem>();
             var sawmill = Logger.GetSawmill("game");
-            var compFactory = IoCManager.Resolve<IComponentFactory>();
-            var serialization = IoCManager.Resolve<ISerializationManager>();
+            // var compFactory = IoCManager.Resolve<IComponentFactory>();
+            // var serialization = IoCManager.Resolve<ISerializationManager>();
 
             // Try to load the selected planet's map
             if (!_prototypeManager.TryIndex<GameMapPrototype>(_selectedPlanet.MapId, out var mapProto))
@@ -681,7 +682,7 @@ namespace Content.Server.AU14.Round
                 return;
             }
 
-            if (!mapLoader.TryLoadMap(mapProto.MapPath, out var mapNullable, out var grids))
+            if (!mapLoader.TryLoadMap(mapProto.MapPath, out var mapNullable, out var _))
             {
                 sawmill.Error($"[AuRoundSystem] Failed to load selected planet map: {mapProto.MapPath}");
                 return;
@@ -695,8 +696,6 @@ namespace Content.Server.AU14.Round
                 _entityManager.AddComponent<RMCPlanetComponent>(map);
             if (!_entityManager.HasComponent<TacticalMapComponent>(map))
                 _entityManager.AddComponent<TacticalMapComponent>(map);
-
-
         }
 
         public void SetOpfor(string opfor)

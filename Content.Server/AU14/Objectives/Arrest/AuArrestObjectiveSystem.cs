@@ -28,7 +28,6 @@ namespace Content.Server.AU14.Objectives.Arrest
         {
             base.Initialize();
             _sawmill = _logManager.GetSawmill("au14-arrestobj");
-            _shuttingDown = false;
             SubscribeLocalEvent<ArrestObjectiveTrackerComponent, ComponentStartup>(OnMobStateStartup);
             SubscribeLocalEvent<MarkedForArrestComponent, CuffedStateChangeEvent>(OnCuffStateChanged);
         }
@@ -71,9 +70,8 @@ namespace Content.Server.AU14.Objectives.Arrest
 
         private void TryMarkForArrestDelayed(EntityUid uid)
         {
-            if (_shuttingDown)
-                return;
-
+            if (_shuttingDown) return;
+            if (HasComp<MarkedForArrestComponent>(uid)) return;
             var meta = EntityManager.GetComponentOrNull<MetaDataComponent>(uid);
             var protoId = meta?.EntityPrototype?.ID ?? string.Empty;
             var factionComp = EntityManager.GetComponentOrNull<NpcFactionMemberComponent>(uid);
@@ -85,7 +83,7 @@ namespace Content.Server.AU14.Objectives.Arrest
 
             var mindContainer = EntityManager.GetComponentOrNull<MindContainerComponent>(uid);
             var mind = mindContainer?.Mind;
-            _sawmill.Debug($"[ARREST DEBUG] TryMarkForArrestDelayed: Entity ({uid}) has MindContainerComponent: {mindContainer != null}, Mind: {mind != null}");
+            _sawmill.Debug($"[ARREST DEBUG]   TryMarkForArrestDelayed: Entity ({uid}) has MindContainerComponent: {mindContainer != null}, Mind: {mind != null}");
 
             var query = EntityQueryEnumerator<ArrestObjectiveComponent>();
             while (query.MoveNext(out var objUid, out var arrestObj))
@@ -109,7 +107,7 @@ namespace Content.Server.AU14.Objectives.Arrest
                 else
                 {
                     _sawmill.Debug($"[ARREST TRACE] DELAYED - Mob ({uid}) proto='{protoId}' factions=[{string.Join(",", factions)}]");
-                    _sawmill.Debug($"[ARREST TRACE]     Objective faction: {(string.IsNullOrEmpty(auObj.Faction) ? "null" : auObj.Faction.ToLowerInvariant())}");
+                    _sawmill.Debug($"[ARREST TRACE]   Objective faction: {(string.IsNullOrEmpty(auObj.Faction) ? "null" : auObj.Faction.ToLowerInvariant())}");
 
                     var targetFaction = arrestObj.FactionToArrest.ToLowerInvariant();
                     if (factions.Contains(targetFaction))
@@ -132,7 +130,7 @@ namespace Content.Server.AU14.Objectives.Arrest
                     }
                     else
                     {
-                        _sawmill.Warning($"[ARREST NOMATCH] Mob ({uid}) does NOT match target faction '{targetFaction}' for objective {objUid}");
+                        _sawmill.Warning($"[ARREST MATCH] Mob ({uid}) does NOT match target faction '{targetFaction}' for objective {objUid}");
                     }
                 }
             }
@@ -154,8 +152,8 @@ namespace Content.Server.AU14.Objectives.Arrest
             var arrestedFactionComp = EntityManager.GetComponentOrNull<NpcFactionMemberComponent>(uid);
             var arrestedFactions = arrestedFactionComp?.Factions.Select(f => f.ToString().ToLowerInvariant()).ToHashSet() ?? new HashSet<string>();
             if (arrestedFactions.Count == 0)
-                _sawmill.Warning($"[ARREST WARNING] Entity ({uid}) arrested but has no factions! Check prototype setup.");
-            _sawmill.Debug($"[ARREST DEBUG] Entity ({uid}) arrested. Factions: [{string.Join(",", arrestedFactions)}]");
+                _sawmill.Warning($"[ARREST WARN] Entity ({uid}) arrested but has no factions! Check prototype setup.");
+            _sawmill.Debug($"[ARREST DEBUG]   Entity ({uid}) arrested. Factions: [{string.Join(",", arrestedFactions)}]");
 
             var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
             var presetId = ticker.Preset?.ID?.ToLowerInvariant();
@@ -214,7 +212,7 @@ namespace Content.Server.AU14.Objectives.Arrest
                         cachedJobId == null ||
                         cachedJobId.ToLowerInvariant() != arrestObj.SpecificJob.ToLowerInvariant())
                     {
-                        _sawmill.Warning($"[ARREST SKIP] Entity ({uid}) did NOT have required job '{arrestObj.SpecificJob}' for objective {objectiveUid} at marking time.");
+                        _sawmill.Warning($"[ARREST SKIP]   Entity ({uid}) did NOT have required job '{arrestObj.SpecificJob}' for objective {objectiveUid} at marking time.");
                         continue;
                     }
                 }
@@ -223,7 +221,7 @@ namespace Content.Server.AU14.Objectives.Arrest
                 {
                     if (!HasComp<SynthComponent>(uid))
                     {
-                        _sawmill.Warning($"[ARREST SKIP] Entity ({uid}) does NOT have SynthComponent for objective {objectiveUid}.");
+                        _sawmill.Warning($"[ARREST SKIP]   Entity ({uid}) does NOT have SynthComponent for objective {objectiveUid}.");
                         continue;
                     }
                 }
@@ -235,7 +233,7 @@ namespace Content.Server.AU14.Objectives.Arrest
 
                     if (!string.Equals(protoId, arrestObj.MobToArrest, StringComparison.OrdinalIgnoreCase))
                     {
-                        _sawmill.Warning($"[ARREST SKIP] Entity ({uid}) does NOT match required mob prototype '{arrestObj.MobToArrest}' for objective {objectiveUid}.");
+                        _sawmill.Warning($"[ARREST SKIP]   Entity ({uid}) does NOT match required mob prototype '{arrestObj.MobToArrest}' for objective {objectiveUid}.");
                         continue;
                     }
                 }
@@ -243,7 +241,7 @@ namespace Content.Server.AU14.Objectives.Arrest
                 // Only increment if the arrested entity matches the target faction for the objective
                 if (!arrestedFactions.Contains(targetFaction))
                 {
-                    _sawmill.Warning($"[ARREST SKIP] Entity ({uid}) does NOT match target faction '{targetFaction}' for objective {objectiveUid} (mode={presetId}). Factions: [{string.Join(",", arrestedFactions)}]");
+                    _sawmill.Warning($"[ARREST SKIP]   Entity ({uid}) does NOT match target faction '{targetFaction}' for objective {objectiveUid} (mode={presetId}). Factions: [{string.Join(",", arrestedFactions)}]");
                     continue;
                 }
 
@@ -253,13 +251,13 @@ namespace Content.Server.AU14.Objectives.Arrest
                 // Prevent incrementing if already at or above required amount
                 if (arrestObj.AmountArrestedPerFaction[factionKey] >= arrestObj.AmountToArrest)
                 {
-                    _sawmill.Warning($"[ARREST SKIP] Faction '{factionToCredit}' already reached required arrests for objective {objectiveUid}.");
+                    _sawmill.Warning($"[ARREST SKIP]   Faction '{factionToCredit}' already reached required arrests for objective {objectiveUid}.");
                     objectivesToRemove.Add(objectiveUid);
                     continue;
                 }
 
                 arrestObj.AmountArrestedPerFaction[factionKey]++;
-                _sawmill.Debug($"[ARREST UPDATE] Faction '{factionToCredit}' arrested entity ({uid}). Total arrests: {arrestObj.AmountArrestedPerFaction[factionKey]} / {arrestObj.AmountToArrest}");
+                _sawmill.Debug($"[ARREST UPDATE]   Faction '{factionToCredit}' arrested entity ({uid}). Total arrests: {arrestObj.AmountArrestedPerFaction[factionKey]} / {arrestObj.AmountToArrest}");
 
                 // If RemoveKillMark is true, remove MarkedForKillComponent so this entity can't also count for kill objectives
                 if (arrestObj.RemoveKillMark)
@@ -268,7 +266,7 @@ namespace Content.Server.AU14.Objectives.Arrest
                 if (arrestObj.AmountArrestedPerFaction[factionKey] >= arrestObj.AmountToArrest)
                 {
                     _objectiveSystem.CompleteObjectiveForFaction(objectiveUid, auObj, factionToCredit);
-                    _sawmill.Info($"[ARREST COMPLETE] Objective {objectiveUid} completed for faction '{factionToCredit}'.");
+                    _sawmill.Info($"[ARREST COMPLETE]   Objective {objectiveUid} completed for faction '{factionToCredit}'.");
                     objectivesToRemove.Add(objectiveUid);
                 }
             }
