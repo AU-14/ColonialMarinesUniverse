@@ -7,3 +7,6 @@ cmu-medical-detailed-examine-verb = Inspect injuries
 cmu-medical-detailed-examine-verb-message = Take a closer look at their injuries.
 cmu-medical-detailed-examine-start = You begin checking { THE($target) } for injuries.
 cmu-medical-detailed-examine-none = No obvious injuries found.
+cmu-medical-detailed-examine-window-title = Injuries - { $target }
+cmu-medical-detailed-examine-window-heading = Injury report
+cmu-medical-detailed-examine-window-bleeding = Bleeding: { $tier }

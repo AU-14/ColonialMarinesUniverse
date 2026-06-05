@@ -29,3 +29,11 @@ public sealed partial class LungsComponent : Component
     [DataField, AutoPausedField]
     public TimeSpan NextAsphyxTick;
 }
+
+[RegisterComponent]
+[Access(typeof(SharedLungsSystem))]
+public sealed partial class MissingLungsComponent : Component
+{
+    [DataField]
+    public TimeSpan NextAsphyxTick;
+}

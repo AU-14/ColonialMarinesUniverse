@@ -20,6 +20,22 @@
     hideLayersOnEquip:
     - Hair
     - Snout
+  - type: CMUHumanMedical
+  - type: HitLocation
+  - type: PainShock
+  - type: BodyZoneTargeting
+  - type: CMSurgeryTarget
+  - type: Body
+    prototype: CMUHumanBody
+    requiredLegs: 2
+  - type: UserInterface
+    interfaces:
+      enum.HumanoidMarkingModifierKey.Key:
+        type: HumanoidMarkingModifierBoundUserInterface
+      enum.StrippingUiKey.Key:
+        type: StrippableBoundUserInterface
+      enum.CMSurgeryUIKey.Key:
+        type: CMSurgeryBui
   - type: Inventory
     femaleDisplacements:
       jumpsuit:

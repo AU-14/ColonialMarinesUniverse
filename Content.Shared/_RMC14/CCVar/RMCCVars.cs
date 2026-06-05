@@ -325,7 +325,7 @@ public sealed partial class RMCCVars : CVars
         CVarDef.Create("rmc.playtime_xeno_postfix_two_time_hours", 0, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<int> RMCDisconnectedXenoGhostRoleTimeSeconds =
-        CVarDef.Create("rmc.disconnected_xeno_ghost_role_time_seconds", 300, CVar.REPLICATED | CVar.SERVER);
+        CVarDef.Create("rmc.disconnected_xeno_ghost_role_time_seconds", 600, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> RMCMarineScalingNormal =
         CVarDef.Create("rmc.marine_scaling_normal", 50f, CVar.REPLICATED | CVar.SERVER);
@@ -535,6 +535,9 @@ public sealed partial class RMCCVars : CVars
 
     public static readonly CVarDef<bool> RMCLobbyStartPaused =
         CVarDef.Create("rmc.lobby_start_paused", false, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCLobbyMinimumPlayers =
+        CVarDef.Create("rmc.lobby_min_players", 1, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<int> RMCChatRepeatHistory =
         CVarDef.Create("rmc.chat_repeat_history", 4, CVar.REPLICATED | CVar.SERVER);

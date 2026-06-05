@@ -2,6 +2,7 @@ using Content.Server.GameTicking;
 using Content.Server.Mind;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server.Roles;
+using Content.Server._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -82,16 +83,24 @@ public sealed partial class XenoRoleSystem : EntitySystem
     private void OnPlayerAttached(Entity<XenoComponent> xeno, ref PlayerAttachedEvent args)
     {
         RemCompDeferred<XenoDisconnectedComponent>(xeno);
+        RemCompDeferred<AbandonedXenoQueueableComponent>(xeno);
         _toUpdate.Add(xeno);
     }
 
     private void OnPlayerDetached(Entity<XenoComponent> xeno, ref PlayerDetachedEvent args)
     {
-        if(TerminatingOrDeleted(xeno))
+        if (TerminatingOrDeleted(xeno))
             return;
 
-        var disconnected = EnsureComp<XenoDisconnectedComponent>(xeno);
-        disconnected.At = _timing.CurTime;
+        if (!_mind.TryGetMind(xeno, out _, out _))
+        {
+            MarkAbandonedForQueue(xeno);
+        }
+        else
+        {
+            var disconnected = EnsureComp<XenoDisconnectedComponent>(xeno);
+            disconnected.At = _timing.CurTime;
+        }
 
         if (_hive.GetHive(xeno.Owner) is {} hive)
             _pvsOverride.RemoveForceSend(hive, args.Player);
@@ -225,12 +234,19 @@ public sealed partial class XenoRoleSystem : EntitySystem
 
             if (!_mind.TryGetMind(uid, out var mindId, out var mind))
             {
+                MarkAbandonedForQueue(uid);
                 RemCompDeferred<XenoDisconnectedComponent>(uid);
                 continue;
             }
 
+            MarkAbandonedForQueue(uid);
             _mind.TransferTo(mindId, null, createGhost: true, mind: mind);
             RemCompDeferred<XenoDisconnectedComponent>(uid);
         }
+    }
+
+    private void MarkAbandonedForQueue(EntityUid uid)
+    {
+        EnsureComp<AbandonedXenoQueueableComponent>(uid);
     }
 }

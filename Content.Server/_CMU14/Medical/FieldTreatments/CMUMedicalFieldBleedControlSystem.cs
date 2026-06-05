@@ -3,6 +3,7 @@ using Content.Shared._CMU14.Medical;
 using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared._CMU14.Medical.FieldTreatments;
 using Content.Shared._CMU14.Medical.Wounds;
+using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
@@ -25,6 +26,7 @@ public sealed partial class CMUMedicalFieldBleedControlSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedStackSystem _stacks = default!;
     [Dependency] private CMUWoundsSystem _wounds = default!;
+    [Dependency] private SkillsSystem _skills = default!;
 
     public override void Initialize()
     {
@@ -58,7 +60,8 @@ public sealed partial class CMUMedicalFieldBleedControlSystem : EntitySystem
             return;
         }
 
-        if (ent.Comp.BleedControlDelay <= TimeSpan.Zero)
+        var delay = ResolveBleedControlDelay(args.User, ent.Comp);
+        if (delay <= TimeSpan.Zero)
         {
             if (TryApplyBleedControl(args.User, patient, ent, part))
                 args.Handled = true;
@@ -66,7 +69,7 @@ public sealed partial class CMUMedicalFieldBleedControlSystem : EntitySystem
         }
 
         var ev = new CMUFieldBleedControlDoAfterEvent(GetNetEntity(part));
-        var doAfter = new DoAfterArgs(EntityManager, args.User, ent.Comp.BleedControlDelay, ev,
+        var doAfter = new DoAfterArgs(EntityManager, args.User, delay, ev,
             ent.Owner, target: patient, used: ent.Owner)
         {
             BreakOnMove = true,
@@ -83,6 +86,20 @@ public sealed partial class CMUMedicalFieldBleedControlSystem : EntitySystem
 
         _popup.PopupEntity(Loc.GetString("cmu-field-treatment-bleed-control-start"), patient, args.User);
         args.Handled = true;
+    }
+
+    private TimeSpan ResolveBleedControlDelay(EntityUid user, CMUMedicalMixingBaseComponent comp)
+    {
+        if (comp.BleedControlDelay <= TimeSpan.Zero)
+            return TimeSpan.Zero;
+
+        if (comp.InstantBleedControlSkills.Count > 0 &&
+            _skills.HasAllSkills(user, comp.InstantBleedControlSkills))
+        {
+            return TimeSpan.Zero;
+        }
+
+        return comp.BleedControlDelay;
     }
 
     private void OnBleedControlDoAfter(Entity<CMUMedicalMixingBaseComponent> ent, ref CMUFieldBleedControlDoAfterEvent args)

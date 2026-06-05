@@ -183,6 +183,9 @@
       enum.CMUTraumaGovernorUI.Key:
         type: CMUTraumaGovernorBui
         requireInputValidation: false
+      enum.CMUMedicalFieldCraftingUI.Key:
+        type: CMUMedicalFieldCraftingBui
+        requireInputValidation: false
   - type: Infectable
   - type: Tackleable
   - type: XenoNestable

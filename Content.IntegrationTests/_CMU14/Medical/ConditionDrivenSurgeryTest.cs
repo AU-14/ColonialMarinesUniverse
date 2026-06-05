@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Content.Server._CMU14.Medical.Surgery;
+using Content.Shared._CMU14.Medical;
 using Content.Shared._CMU14.Medical.Bones;
 using Content.Shared._CMU14.Medical.Organs;
 using Content.Shared._CMU14.Medical.Organs.Brain;
@@ -910,6 +911,51 @@ public sealed class ConditionDrivenSurgeryTest
                 BodyPartType.Head,
                 BodyPartSymmetry.None,
                 "hemostat");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task DamagedNormalHumanBrainAppearsAsRepairableHeadSurgery()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var dispatch = entMan.System<CMUSurgeryDispatchSystem>();
+            var organHealth = entMan.System<SharedOrganHealthSystem>();
+            var skills = entMan.System<SkillsSystem>();
+
+            var human = entMan.SpawnEntity("MobHuman", MapCoordinates.Nullspace);
+            var surgeon = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+
+            try
+            {
+                Assert.That(entMan.HasComponent<CMUHumanMedicalComponent>(human), Is.True);
+                entMan.EnsureComponent<CMUAutodocContainedPatientComponent>(human);
+                skills.SetSkill(surgeon, "RMCSkillSurgery", 3);
+
+                var head = GetBodyPart(entMan, human, BodyPartType.Head, BodyPartSymmetry.None);
+                DamageOrgan<CMUBrainComponent>(entMan, organHealth, human, head);
+
+                var entries = dispatch.BuildPartEntries(human, surgeon);
+                var headEntry = entries.Find(entry =>
+                    entry.Type == BodyPartType.Head &&
+                    entry.Symmetry == BodyPartSymmetry.None);
+
+                Assert.That(headEntry, Is.Not.Null);
+                Assert.That(
+                    headEntry!.EligibleSurgeries.ConvertAll(entry => entry.SurgeryId),
+                    Does.Contain("CMUSurgeryRepairBrain"));
+            }
+            finally
+            {
+                entMan.DeleteEntity(human);
+                entMan.DeleteEntity(surgeon);
+            }
         });
 
         await pair.CleanReturnAsync();

@@ -20,6 +20,8 @@
       Faction: govfor
     - type: Skills
       preset: AU14SkillPresetPlatoonJuniorOfficer
+    - type: RMCSpeechBubbleSpecificStyle
+      speechStyleClass: commanderSpeech
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORPlatOpUPP
     - type: TacticalMapIcon

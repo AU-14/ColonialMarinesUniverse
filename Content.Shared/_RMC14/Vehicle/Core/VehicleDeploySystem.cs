@@ -602,7 +602,7 @@ public sealed partial class VehicleDeploySystem : EntitySystem
         var targetCoords = Transform(target).Coordinates;
         if (TryGetVehicleTurret(vehicle, out var turretUid) &&
             TryComp(turretUid, out VehicleTurretComponent? turret) &&
-            _turret.TryGetTurretOrigin(turretUid, turret, out var originCoords))
+            _turret.TryGetTurretOrigin(turretUid, out var originCoords))
         {
             var originMap = _transform.ToMapCoordinates(originCoords);
             var targetMap = _transform.ToMapCoordinates(targetCoords);

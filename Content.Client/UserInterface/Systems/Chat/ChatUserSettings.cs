@@ -314,17 +314,27 @@ public static class ChatUserSettings
 
     public static string ApplyFontMarkup(string markup, ChatStyleSettings? style, int? fallbackFontSize = null)
     {
-        var fontSize = ResolveFontSize(style) ?? NormalizeFontSize(fallbackFontSize);
-        if (fontSize == null)
-            return markup;
+        var styleFontSize = ResolveFontSize(style);
+        var fallback = NormalizeFontSize(fallbackFontSize);
 
         if (FirstFontTag.IsMatch(markup))
         {
             return FirstFontTag.Replace(
                 markup,
-                match => BuildFontTag(match.Groups["attrs"].Value, fontSize),
+                match =>
+                {
+                    var attrs = match.Groups["attrs"].Value;
+                    if (styleFontSize == null && FontSizeAttribute.IsMatch(attrs))
+                        return match.Value;
+
+                    return BuildFontTag(attrs, styleFontSize ?? fallback);
+                },
                 1);
         }
+
+        var fontSize = styleFontSize ?? fallback;
+        if (fontSize == null)
+            return markup;
 
         return $"{BuildFontTag(string.Empty, fontSize)}{markup}[/font]";
     }

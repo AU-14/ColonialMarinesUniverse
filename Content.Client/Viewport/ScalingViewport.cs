@@ -160,6 +160,7 @@ namespace Content.Client.Viewport
                 RenderZLevelPasses(_viewport!);
             else
             {
+                NoteZRenderBypassed("viewport RenderZLevels=false");
                 ClearZLevelCompositeState();
                 _viewport!.Render();
             }

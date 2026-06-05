@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared._RMC14.Aura;
 using Content.Shared._RMC14.Xenonids.Bulwark;
 using Content.Shared.Actions.Components;
 using Content.Shared.Damage;
@@ -16,6 +17,8 @@ namespace Content.IntegrationTests._RMC14;
 [TestFixture]
 public sealed class XenoBulwarkTest
 {
+    private const string ShieldEffectPrototype = "RMCEffectShieldBlue";
+
     [TestPrototypes]
     private const string Prototypes = @"
 - type: entity
@@ -197,6 +200,46 @@ public sealed class XenoBulwarkTest
     }
 
     [Test]
+    public async Task ReflectiveShieldShowsSpikeShieldVisualEffect()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var xeno = entMan.SpawnEntity("CMXenoWarriorBulwark", map.GridCoords);
+            var encaseAction = SpawnAction(entMan);
+            var reflectAction = SpawnAction(entMan);
+
+            try
+            {
+                var effectsBefore = CountPrototype(entMan, ShieldEffectPrototype);
+
+                RaiseEncasedPlates(entMan, xeno, encaseAction);
+                RaiseReflectiveShield(entMan, xeno, reflectAction);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(entMan.TryGetComponent<AuraComponent>(xeno, out var aura), Is.True);
+                    Assert.That(aura!.Color, Is.EqualTo(Color.Blue));
+                    Assert.That(aura.OutlineWidth, Is.EqualTo(2));
+                    Assert.That(CountPrototype(entMan, ShieldEffectPrototype), Is.EqualTo(effectsBefore + 1));
+                });
+            }
+            finally
+            {
+                entMan.DeleteEntity(xeno);
+                entMan.DeleteEntity(encaseAction.Owner);
+                entMan.DeleteEntity(reflectAction.Owner);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task ReflectiveShieldRandomizesProjectileIntoReturnHalfCircle()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -287,6 +330,17 @@ public sealed class XenoBulwarkTest
         entMan.EventBus.RaiseLocalEvent(xeno, ev);
     }
 
+    private static void RaiseReflectiveShield(IEntityManager entMan, EntityUid xeno, Entity<ActionComponent> action)
+    {
+        var ev = new XenoReflectiveShieldActionEvent
+        {
+            Performer = xeno,
+            Action = action,
+        };
+
+        entMan.EventBus.RaiseLocalEvent(xeno, ev);
+    }
+
     private static void RaiseTailSwing(IEntityManager entMan, EntityUid xeno, Entity<ActionComponent> action)
     {
         var ev = new XenoBulwarkTailSwingActionEvent
@@ -301,5 +355,18 @@ public sealed class XenoBulwarkTest
     private static float TotalDamage(IEntityManager entMan, EntityUid target)
     {
         return entMan.GetComponent<DamageableComponent>(target).Damage.GetTotal().Float();
+    }
+
+    private static int CountPrototype(IEntityManager entMan, string prototypeId)
+    {
+        var count = 0;
+        var query = entMan.EntityQueryEnumerator<MetaDataComponent>();
+        while (query.MoveNext(out _, out var metadata))
+        {
+            if (metadata.EntityPrototype?.ID == prototypeId)
+                count++;
+        }
+
+        return count;
     }
 }

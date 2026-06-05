@@ -252,7 +252,7 @@ public sealed partial class VehicleWheelSystem : EntitySystem
                 slot.Item is not { } wheel)
                 continue;
 
-            if (_hardpoints.DamageHardpoint(vehicle, wheel, amount))
+            if (_hardpoints.DamageHardpoint(vehicle, wheel, amount, skipWheelUpdate: true))
                 changed = true;
         }
 

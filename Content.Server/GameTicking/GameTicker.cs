@@ -116,12 +116,14 @@ namespace Content.Server.GameTicking
                 RestartRound();
 
             _postInitialized = true;
+            TrySendInitialRoundStatusDiscordMessage();
         }
 
         public override void Shutdown()
         {
             base.Shutdown();
 
+            SendServerShutdownDiscordMessage();
             ShutdownGameRules();
         }
 

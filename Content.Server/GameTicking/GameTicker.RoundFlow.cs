@@ -1,5 +1,7 @@
 using System.Linq;
 using System.Numerics;
+using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 using Content.Server.Announcements;
 using Content.Server.AU14.Threats;
 using Content.Server.RoundEnd;
@@ -696,33 +698,7 @@ namespace Content.Server.GameTicking
         {
             try
             {
-                if (_webhookIdentifier == null) return;
-
-                var duration = RoundDuration();
-                var mapName = GetDiscordMapName();
-                var content = Loc.GetString("discord-round-notifications-end",
-                    ("id", RoundId),
-                    ("map", mapName),
-                    ("hours", Math.Truncate(duration.TotalHours)),
-                    ("minutes", duration.Minutes),
-                    ("seconds", duration.Seconds));
-
-                // if (_distressSignal.SelectedPlanetMapName is { } planet
-                //     && _distressSignal.OperationName is { } operation)
-                // {
-                //     var mapName = GetDiscordMapName();
-                //     content = Loc.GetString("rmc-discord-round-notifications-end",
-                //         ("id", RoundId),
-                //         ("operation", operation),
-                //         ("planet", planet),
-                //         ("ship", mapName),
-                //         ("hours", Math.Truncate(duration.TotalHours)),
-                //         ("minutes", duration.Minutes),
-                //         ("seconds", duration.Seconds));
-                // }
-
-                var payload = new WebhookPayload { Content = content };
-                await _discord.CreateMessage(_webhookIdentifier.Value, payload);
+                await SendRoundStatusDiscordMessage(RoundStatusWebhookKind.Ended, true);
             }
             catch (Exception e)
             {
@@ -730,25 +706,156 @@ namespace Content.Server.GameTicking
             }
         }
 
-        private async void SendRoundEndPingDiscordMessage(bool isRebooting = false)
+        private async Task SendRoundStatusDiscordMessage(RoundStatusWebhookKind kind, bool pingRoles)
         {
+            if (_webhookIdentifier == null)
+                return;
+
+            var status = GetRoundStatusWebhookData(GetRoundStatusDuration(kind));
+            var roles = pingRoles
+                ? GetRoundStatusRoleIds()
+                : Array.Empty<string?>();
+            var payload = RoundStatusWebhook.CreatePayload(kind, status, roles, DiscordRoundStatusColors);
+
+            if (_roundStatusWebhookMessageId == 0)
+            {
+                await CreateRoundStatusWebhookMessage(payload);
+                ScheduleNextRoundStatusWebhookUpdate();
+                return;
+            }
+
+            var response = await _discord.EditMessage(_webhookIdentifier.Value, _roundStatusWebhookMessageId, payload);
+            if (response.IsSuccessStatusCode)
+            {
+                ScheduleNextRoundStatusWebhookUpdate();
+                return;
+            }
+
+            _roundStatusWebhookMessageId = 0;
+            await CreateRoundStatusWebhookMessage(payload);
+            ScheduleNextRoundStatusWebhookUpdate();
+        }
+
+        private async Task CreateRoundStatusWebhookMessage(WebhookPayload payload)
+        {
+            var response = await _discord.CreateMessage(_webhookIdentifier!.Value, payload);
+            var content = await response.Content.ReadAsStringAsync();
+            var id = JsonNode.Parse(content)?["id"]?.GetValue<string>();
+
+            if (ulong.TryParse(id, out var messageId))
+                _roundStatusWebhookMessageId = messageId;
+        }
+
+        private RoundStatusWebhookData GetRoundStatusWebhookData(TimeSpan? duration)
+        {
+            var gamemode = CurrentPreset != null
+                ? Loc.GetString(CurrentPreset.ModeTitle)
+                : Preset != null
+                    ? Loc.GetString(Preset.ModeTitle)
+                    : string.Empty;
+            var govfor = _platoonSpawnRuleSystem.SelectedGovforPlatoon?.Name ?? string.Empty;
+
+            return new RoundStatusWebhookData(
+                RoundId,
+                _playerManager.PlayerCount,
+                GetDiscordMapName(),
+                govfor,
+                gamemode,
+                duration);
+        }
+
+        private TimeSpan? GetRoundStatusDuration(RoundStatusWebhookKind kind)
+        {
+            if (kind == RoundStatusWebhookKind.Ended || RunLevel != GameRunLevel.PreRoundLobby)
+                return RoundDuration();
+
+            return null;
+        }
+
+        private void ScheduleNextRoundStatusWebhookUpdate()
+        {
+            _nextRoundStatusWebhookUpdate = _gameTiming.CurTime + DiscordRoundStatusUpdateInterval;
+        }
+
+        private void TrySendInitialRoundStatusDiscordMessage()
+        {
+            if (!_postInitialized || DummyTicker || _webhookIdentifier == null || _roundStatusWebhookWakeSent)
+                return;
+
+            SendRoundStartingDiscordMessage();
+        }
+
+        private async void SendRoundStartingDiscordMessage()
+        {
+            if (_webhookIdentifier == null)
+                return;
+
             try
             {
-                if (_webhookIdentifier == null || DiscordRoundEndRole == null) return;
-
-                var pingKey = isRebooting
-                    ? "discord-round-notifications-end-ping-reboot"
-                    : "discord-round-notifications-end-ping-restart";
-
-                var content = Loc.GetString(pingKey, ("roleId", DiscordRoundEndRole));
-                var payload = new WebhookPayload { Content = content };
-                payload.AllowedMentions.AllowRoleMentions();
-                await _discord.CreateMessage(_webhookIdentifier.Value, payload);
+                _roundStatusWebhookWakeSent = true;
+                await SendRoundStatusDiscordMessage(RoundStatusWebhookKind.Starting, false);
             }
             catch (Exception e)
             {
-                Log.Error($"Error while sending discord round end ping message:\n{e}");
+                _roundStatusWebhookWakeSent = false;
+                Log.Error($"Error while sending discord round starting status message:\n{e}");
             }
+        }
+
+        private void SendServerShutdownDiscordMessage()
+        {
+            if (_webhookIdentifier == null || DummyTicker)
+                return;
+
+            try
+            {
+                var sendTask = SendRoundStatusDiscordMessage(RoundStatusWebhookKind.Shutdown, false);
+                var waitTask = Task.WhenAny(sendTask, Task.Delay(TimeSpan.FromSeconds(5)));
+                _taskManager.BlockWaitOnTask(waitTask);
+
+                if (!sendTask.IsCompleted)
+                {
+                    Log.Warning("Timed out while sending discord shutdown status message.");
+                    return;
+                }
+
+                _taskManager.BlockWaitOnTask(sendTask);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Error while sending discord shutdown status message:\n{e}");
+            }
+        }
+
+        private async void UpdateRoundStatusDiscordMessage()
+        {
+            if (_roundStatusWebhookUpdatePending)
+                return;
+
+            try
+            {
+                _roundStatusWebhookUpdatePending = true;
+                await SendRoundStatusDiscordMessage(RoundStatusWebhookKind.Running, false);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Error while updating discord round status message:\n{e}");
+                ScheduleNextRoundStatusWebhookUpdate();
+            }
+            finally
+            {
+                _roundStatusWebhookUpdatePending = false;
+            }
+        }
+
+        private IEnumerable<string?> GetRoundStatusRoleIds()
+        {
+            yield return DiscordRoundEndRole;
+            yield return RoundStatusWebhook.GetGamemodeRole(
+                CurrentPreset?.ID ?? Preset?.ID,
+                DiscordRoundStatusDistressSignalRole,
+                DiscordRoundStatusColonyFallRole,
+                DiscordRoundStatusInsurgencyRole);
         }
 
         public void RestartRound()
@@ -758,7 +865,6 @@ namespace Content.Server.GameTicking
 
             if (_serverUpdates.RoundEnded())
             {
-                SendRoundEndPingDiscordMessage(isRebooting: true);
                 return;
             }
 
@@ -773,17 +879,13 @@ namespace Content.Server.GameTicking
             RandomizeLobbyBackground();
             ResettingCleanup();
             IncrementRoundNumber();
-            SendRoundEndPingDiscordMessage();
-            // SendRoundStartingDiscordMessage();
+            SendRoundStartingDiscordMessage();
 
             if (!LobbyEnabled)
                 StartRound();
             else
             {
-                if (_playerManager.PlayerCount == 0)
-                    _roundStartCountdownHasNotStartedYetDueToNoPlayers = true;
-                else
-                    _roundStartTime = _gameTiming.CurTime + LobbyDuration;
+                UpdateLobbyCountdownForPlayerCount(false, true);
 
                 SendStatusToAll();
                 UpdateInfoText();
@@ -794,21 +896,6 @@ namespace Content.Server.GameTicking
                     PauseStart();
             }
         }
-
-        // private async void SendRoundStartingDiscordMessage()
-        // {
-        //     try
-        //     {
-        //         if (_webhookIdentifier == null) return;
-        //         var content = Loc.GetString("discord-round-notifications-new");
-        //         var payload = new WebhookPayload { Content = content };
-        //         await _discord.CreateMessage(_webhookIdentifier.Value, payload);
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         Log.Error($"Error while sending discord round starting message:\n{e}");
-        //     }
-        // }
 
         /// <summary>
         ///     Cleanup that has to run to clear up anything from the previous round.
@@ -872,6 +959,21 @@ namespace Content.Server.GameTicking
             if (RunLevel == GameRunLevel.InRound)
             {
                 RoundLengthMetric.Inc(frameTime);
+
+                if (RoundStatusWebhook.ShouldUpdate(
+                        _gameTiming.CurTime,
+                        _nextRoundStatusWebhookUpdate,
+                        DiscordRoundStatusUpdateInterval,
+                        _roundStatusWebhookMessageId != 0))
+                {
+                    UpdateRoundStatusDiscordMessage();
+                }
+            }
+
+            if (RunLevel == GameRunLevel.PreRoundLobby && LobbyEnabled && !HasEnoughPlayersForLobbyStart())
+            {
+                UpdateLobbyCountdownForPlayerCount();
+                return;
             }
 
             if (_roundStartTime == TimeSpan.Zero ||
@@ -916,25 +1018,7 @@ namespace Content.Server.GameTicking
         {
             try
             {
-                if (_webhookIdentifier == null)
-                    return;
-
-                var mapName = GetDiscordMapName();
-                var content = Loc.GetString("discord-round-notifications-started", ("id", RoundId), ("map", mapName));
-
-                // if (_distressSignal.SelectedPlanetMapName is { } planet &&
-                //     _distressSignal.OperationName is { } operation)
-                // {
-                //     content = Loc.GetString("rmc-discord-round-notifications-started",
-                //         ("id", RoundId),
-                //         ("operation", operation),
-                //         ("planet", planet),
-                //         ("ship", mapName));
-                // }
-
-                var payload = new WebhookPayload { Content = content };
-
-                await _discord.CreateMessage(_webhookIdentifier.Value, payload);
+                await SendRoundStatusDiscordMessage(RoundStatusWebhookKind.Running, false);
             }
             catch (Exception e)
             {

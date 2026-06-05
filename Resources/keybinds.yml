@@ -658,6 +658,10 @@ binds:
   canFocus: true
   mod1: Alt
   priority: 1
+- function: CMUOpenMedicalCraftingMenu
+  type: State
+  key: C
+  mod1: Alt
 - function: CMUniqueAction
   type: State
   key: Space
