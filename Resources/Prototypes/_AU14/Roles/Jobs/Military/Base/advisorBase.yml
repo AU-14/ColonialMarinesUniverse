@@ -44,6 +44,8 @@
     - type: SeeNewPlayers
     - type: Skills
       preset: AU14SkillPresetPlatoonAdvisor
+    - type: RMCSpeechBubbleSpecificStyle
+      speechStyleClass: commanderSpeech
     - type: JobPrefix
       prefix: au14-job-prefix-govforadvisor
     - type: TacticalMapIcon

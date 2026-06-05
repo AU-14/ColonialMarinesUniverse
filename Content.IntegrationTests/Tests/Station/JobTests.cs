@@ -17,18 +17,12 @@ public sealed class JobTest
 
     private static readonly string[] CommandBubbleOverrideJobs =
     [
-        "CMExecutiveOfficer",
+        // Variants all derive from the same base
+        "AU14JobGOVFORPlatCo",
         "AU14JobGOVFORPlatOp",
-        "AU14JobOpforPlatOp",
-        "AU14JobGOVFORPlatOpRMC",
-        "AU14JobGOVFORPlatOpWYPMC",
-        "AU14JobGOVFORPlatOpUPP",
-        "AU14JobGOVFORSquadSergeant",
-        "AU14JobOpforSquadSergeant",
-        "AU14JobGOVFORSquadSergeantRMC",
-        "AU14JobGOVFORSquadSergeantWYPMC",
-        "AU14JobGOVFORSquadSergeantUPP",
-        "AU14JobGOVFORSquadSergeantCMBCIU",
+        "AU14JobGOVFORadvisor",
+        "AU14JobGOVFORSectionSergeant",
+        "AU14JobGOVFORSquadSergeant"
     ];
 
     private static readonly string[] AU14JuniorOfficerJobs =

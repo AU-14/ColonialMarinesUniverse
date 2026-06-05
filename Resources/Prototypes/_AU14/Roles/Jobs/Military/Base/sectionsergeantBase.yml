@@ -41,6 +41,8 @@
     components:
     - type: Skills
       preset: AU14SkillPresetPlatoonSeniorSergeant
+    - type: RMCSpeechBubbleSpecificStyle
+      speechStyleClass: commanderSpeech
     - type: JobPrefix
       prefix: au14-job-prefix-govforSSG
     - type: TacticalMapIcon
