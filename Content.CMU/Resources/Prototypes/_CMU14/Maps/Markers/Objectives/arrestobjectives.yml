@@ -23,7 +23,6 @@
     amounttoarrest: 2
     removekillmark: true
 
-
 - type: entity
   name: Arrest CLF Objective
   parent: MarkerBase
@@ -42,7 +41,7 @@
     objectivelevel: 1
     custompoints: 25
     maxrepeatable: 3
-    ObjectiveDescription: "Arrest  insurgents"
+    ObjectiveDescription: "Arrest insurgents"
   - type: ArrestObjective
     factiontoarrest: clf
     amounttoarrest: 2
@@ -71,5 +70,3 @@
     factiontoarrest: govfor
     amounttoarrest: 2
     removekillmark: true
-
-

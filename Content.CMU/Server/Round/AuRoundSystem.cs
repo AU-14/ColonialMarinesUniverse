@@ -698,7 +698,8 @@ namespace Content.Server.AU14.Round
         }
 
         // --- PLANET LOGIC: Load planet like cmdistress does after round starts ---
-        public void LoadSelectedPlanetMap()
+        // Dead code - never called - legacy from AuVoteRuleSystem class
+        public void LoadSelectedPlanetMap_()
         {
             if (_selectedPlanet == null)
                 return;
@@ -706,8 +707,8 @@ namespace Content.Server.AU14.Round
             var mapLoader = _entityManager.EntitySysManager.GetEntitySystem<MapLoaderSystem>();
             var mapSystem = _entityManager.EntitySysManager.GetEntitySystem<MapSystem>();
             var sawmill = Logger.GetSawmill("game");
-            var compFactory = IoCManager.Resolve<IComponentFactory>();
-            var serialization = IoCManager.Resolve<ISerializationManager>();
+            // var compFactory = IoCManager.Resolve<IComponentFactory>();
+            // var serialization = IoCManager.Resolve<ISerializationManager>();
 
             // Try to load the selected planet's map
             if (!_prototypeManager.TryIndex<GameMapPrototype>(_selectedPlanet.MapId, out var mapProto))
@@ -717,7 +718,7 @@ namespace Content.Server.AU14.Round
                 return;
             }
 
-            if (!mapLoader.TryLoadMap(mapProto.MapPath, out var mapNullable, out var grids))
+            if (!mapLoader.TryLoadMap(mapProto.MapPath, out var mapNullable, out var _))
             {
                 sawmill.Error($"[AuRoundSystem] Failed to load selected planet map: {mapProto.MapPath}");
                 return;
