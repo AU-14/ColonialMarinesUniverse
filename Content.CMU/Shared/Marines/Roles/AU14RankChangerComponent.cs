@@ -17,4 +17,7 @@ public sealed partial class RankChangerComponent : Component
 
     [DataField]
     public bool Override = true;
+
+    [DataField]
+    public bool Applied = false;
 }

@@ -3,9 +3,10 @@ using Content.Shared.Inventory.Events;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Content.Shared._AU14.Marines.Roles.Ranks;
-using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared.Hands;
 using Content.Server._RMC14.Marines.Roles.Ranks;
+using Content.Shared.Inventory;
+using Content.Shared._RMC14.UniformAccessories;
 
 namespace Content.Server._AU14.Marines.Roles.Ranks;
 
@@ -23,7 +24,8 @@ public sealed partial class RankChangerSystem : EntitySystem
         SubscribeLocalEvent<RankChangerComponent, GotUnequippedEvent>(OnUnequipped);
         SubscribeLocalEvent<RankChangerComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<RankChangerComponent, GotEquippedHandEvent>(OnEquippedHand);
-    SubscribeLocalEvent<RankChangerComponent, GotUnequippedHandEvent>(OnUnequippedHand);
+        SubscribeLocalEvent<RankChangerComponent, GotUnequippedHandEvent>(OnUnequippedHand);
+    
     }
 
     private void OnEquipped(Entity<RankChangerComponent> ent, ref GotEquippedEvent args)
@@ -42,53 +44,104 @@ public sealed partial class RankChangerSystem : EntitySystem
             RevertRank(container.Owner, ent.Comp);
     }
 
-    private void OnAccessoryInserted(EntityUid uid, UniformAccessoryHolderComponent comp, EntInsertedIntoContainerMessage args)
-    {
-        if (args.Container.ID != comp.ContainerId)
-            return;
-
-        if (TryComp<RankChangerComponent>(args.Entity, out var changer))
-            ApplyRank(uid, changer);
-    }
-
-    private void OnAccessoryRemoved(EntityUid uid, UniformAccessoryHolderComponent comp, EntRemovedFromContainerMessage args)
-    {
-        if (args.Container.ID != comp.ContainerId)
-            return;
-
-        if (TryComp<RankChangerComponent>(args.Entity, out var changer))
-            RevertRank(uid, changer);
-    }
-
     public void ApplyRank(EntityUid wearer, RankChangerComponent comp)
     {
+        // Check inventory and accessory slots for any already-applied RankChanger
+        if (IsAnyChevronActive(wearer, comp))
+            return;
+
         if (!_prototypes.TryIndex(comp.Rank, out var rankProto))
             return;
 
+        comp.Applied = true;
         _rank.SetRank(wearer, rankProto);
     }
 
     public void RevertRank(EntityUid wearer, RankChangerComponent comp)
     {
+        if (!comp.Applied)
+            return;
+
+        comp.Applied = false;
+
         if (!TryComp<RankComponent>(wearer, out var rankComp) || rankComp.Rank != comp.Rank)
             return;
 
-        // Check if another RankChanger is still active
-        var enumerator = AllComps<RankChangerComponent>(wearer);
-        foreach (var other in enumerator)
+        // Check if another chevron is present — apply that instead
+        if (!TryComp<InventoryComponent>(wearer, out var inventory))
         {
-            if (other == comp)
-                continue;
+            _rank.ReapplyJobRank(wearer);
+            return;
+        }
 
-            if (_prototypes.TryIndex(other.Rank, out var otherProto))
+        var invSystem = EntityManager.System<InventorySystem>();
+        foreach (var item in invSystem.GetHandOrInventoryEntities(wearer))
+        {
+            // Check item itself
+            if (TryComp<RankChangerComponent>(item, out var changer) && changer != comp)
             {
-                _rank.SetRank(wearer, otherProto);
-                return;
+                if (_prototypes.TryIndex(changer.Rank, out var otherProto))
+                {
+                    changer.Applied = true;
+                    _rank.SetRank(wearer, otherProto);
+                    return;
+                }
+            }
+
+            // Check accessory slot on item
+            if (TryComp<UniformAccessoryHolderComponent>(item, out var holder)
+                && _containers.TryGetContainer(item, holder.ContainerId, out var container))
+            {
+                foreach (var accessory in container.ContainedEntities)
+                {
+                    if (TryComp<RankChangerComponent>(accessory, out var accessoryChanger)
+                        && accessoryChanger != comp)
+                    {
+                        if (_prototypes.TryIndex(accessoryChanger.Rank, out var otherProto))
+                        {
+                            accessoryChanger.Applied = true;
+                            _rank.SetRank(wearer, otherProto);
+                            return;
+                        }
+                    }
+                }
             }
         }
 
-        // Restore job rank instead of clearing
+        // No other chevron found — restore job rank
         _rank.ReapplyJobRank(wearer);
+    }
+
+    private bool IsAnyChevronActive(EntityUid wearer, RankChangerComponent excluded)
+    {
+        // Check inventory slots
+        if (!TryComp<InventoryComponent>(wearer, out var inventory))
+            return false;
+
+        var invSystem = EntityManager.System<InventorySystem>();
+        foreach (var item in invSystem.GetHandOrInventoryEntities(wearer))
+        {
+            // Check item itself
+            if (TryComp<RankChangerComponent>(item, out var changer)
+                && changer != excluded
+                && changer.Applied)
+                return true;
+
+            // Check accessory slot on item
+            if (TryComp<UniformAccessoryHolderComponent>(item, out var holder)
+                && _containers.TryGetContainer(item, holder.ContainerId, out var container))
+            {
+                foreach (var accessory in container.ContainedEntities)
+                {
+                    if (TryComp<RankChangerComponent>(accessory, out var accessoryChanger)
+                        && accessoryChanger != excluded
+                        && accessoryChanger.Applied)
+                        return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private void OnEquippedHand(Entity<RankChangerComponent> ent, ref GotEquippedHandEvent args)
