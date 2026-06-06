@@ -5,10 +5,11 @@
   description: au14-job-description-corp-nemo-sed-synthetic
   playTimeTracker: AU14JobSEDSynthetic
   ranks:
-    RMCRankProvostProvostEnforcer: []
+    AU14RankNEMOWO2: []
   startingGear: AU14GearSEDSynthetic
   icon: AU14JobIconSEDSynthetic
   joinNotifyCrew: false
+  whitelisted: true
   accessGroups:
    - AllAccess
   spawnMenuRoleName: NEMO SED Synthetic

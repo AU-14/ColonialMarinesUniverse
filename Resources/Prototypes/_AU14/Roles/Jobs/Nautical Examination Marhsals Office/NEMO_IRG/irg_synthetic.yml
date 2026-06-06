@@ -9,7 +9,7 @@
   startingGear: AU14GearIRGSynthetic
   icon: AU14JobIconIRGSynthetic
   joinNotifyCrew: false
-  whitelist: true
+  whitelisted: true
   accessGroups:
   - AllAccess
   spawnMenuRoleName: NEMO IRG Synthetic

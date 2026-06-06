@@ -9,6 +9,7 @@
   startingGear: AU14GearNEMOFaxResponder
   icon: "CMJobIconEmpty"
   joinNotifyCrew: false
+  whitelisted: true
   supervisors: cm-job-supervisors-staff
   accessGroups:
   - AllAccess

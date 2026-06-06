@@ -9,7 +9,7 @@
   startingGear: AU14GearCPISPSynthetic
   icon: AU14JobIconCPISPSynthetic
   joinNotifyCrew: false
-  whitelist: true
+  whitelisted: true
   accessGroups:
   - AllAccess
   spawnMenuRoleName: NEMO CPISP Synthetic

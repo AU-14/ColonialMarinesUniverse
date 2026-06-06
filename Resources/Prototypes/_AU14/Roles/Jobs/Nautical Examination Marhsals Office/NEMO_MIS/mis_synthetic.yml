@@ -9,7 +9,7 @@
   startingGear: AU14GearMISSynthetic
   icon: AU14JobIconMISSynthetic
   joinNotifyCrew: false
-  whitelist: true
+  whitelisted: true
   accessGroups:
   - AllAccess
   spawnMenuRoleName: NEMO MIS Synthetic

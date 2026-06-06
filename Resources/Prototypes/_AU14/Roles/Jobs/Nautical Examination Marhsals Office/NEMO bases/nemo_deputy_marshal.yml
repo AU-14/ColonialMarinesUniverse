@@ -9,6 +9,7 @@
   startingGear: AU14GearNEMODeputyMarshal
   icon: AU14JobIconNEMODeputyMarshal
   joinNotifyCrew: false
+  whitelisted: true
   accessGroups:
   - AllAccess
   special:

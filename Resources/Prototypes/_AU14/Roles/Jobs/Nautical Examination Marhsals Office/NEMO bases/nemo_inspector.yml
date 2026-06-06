@@ -17,6 +17,7 @@
   startingGear: AU14GearNEMOInspector
   icon: AU14JobIconNEMOInspector
   joinNotifyCrew: true
+  whitelisted: true
   marineAuthorityLevel: 0
   supervisors: cm-job-supervisors-marine-high-command
   accessGroups:

@@ -9,7 +9,7 @@
   startingGear: AU14GearNEMOSynthetic
   icon: AU14JobIconNEMOSynthetic
   joinNotifyCrew: false
-  #whitelist: true # Free use synthetic, requires admin guidance
+  #  whitelisted: true # Free use synthetic, requires admin guidance
   accessGroups:
   - AllAccess
   spawnMenuRoleName: NEMO Synthetic
