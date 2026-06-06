@@ -1,0 +1,129 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AU14NEMOChief
+  name: au14-job-name-corp-nemo-chief
+  description: au14-job-description-inspector
+  playTimeTracker: AU14JobNEMOChief
+#  requirements:
+#  - !type:RoleTimeRequirement
+#    role: CMJobProvostInspector
+#    time: 108000 # 30 hours
+  ranks:
+    AU14RankNEMOChiefInspector: []
+  startingGear: AU14GearNEMOChief
+  icon: AU14JobIconNEMOChief
+  joinNotifyCrew: false
+  whitelisted: true
+  marineAuthorityLevel: 0
+  supervisors: cm-job-supervisors-marine-high-command
+  accessGroups:
+  - AllAccess
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillCqc: 3
+        RMCSkillEndurance: 3
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 2
+        RMCSkillMeleeWeapons: 1
+        RMCSkillPolice: 2
+        RMCSkillLeadership: 2
+        RMCSkillMedical: 1
+        RMCSkillOverwatch: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-nemo-chief
+    - type: RMCTrackable
+      hidden: true
+    - type: MarineOrders
+      moveOrderSoundMale:
+        collection: AU14MaleMoveOrder
+      moveOrderSoundFemale:
+        collection: AU14FemaleMoveOrder
+      focusOrderSoundMale:
+        collection: AU14MaleFocusOrder
+      focusOrderSoundFemale:
+        collection: AU14FemaleFocusOrder
+      holdOrderSoundMale:
+        collection: AU14MaleHoldOrder
+      holdOrderSoundFemale:
+        collection: AU14FemaleHoldOrder
+    - type: CommandAccent
+    - type: InnateCommandSpeech
+    - type: RMCPointing
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: pve_chief_inspector
+      background:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: background_mp
+
+- type: entity
+  id: AU14RandomHumanoidNEMOChief
+  name: provost ghost role chief inspector
+  suffix: Spawner, Player, Friendly, High Law Understanding
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: AU14NEMOChief
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: AU14NEMOChief
+  components:
+  - type: GhostRole
+    name: au14-ghost-name-corp-nemo-chief
+    description: au14-ghost-role-information-nemo-description
+    rules: au14-ghost-role-information-nemo-rules
+    reregister: false
+    job: AU14NEMOChief
+    raffle:
+      settings: short
+  - type: GhostRoleApplySpecial
+
+- type: startingGear
+  id: AU14GearNEMOChief
+  equipment:
+    head: RMCProvostCommandBeret
+    eyes: CMGlassesSecurity
+    ears: AU14HeadsetNEMO
+    ears2: RMCM5CameraGear
+    jumpsuit: CMJumpsuitProvostSenior # TODO RMC14 provost command uniform
+    outerClothing: RMCProvostCommandJacketFilled
+    gloves: CMHandsBlackMarine # TODO RMC14 black gloves
+    shoes: CMBootsBlackFilled
+    id: RMCIDCardProvostChiefInspector
+    belt: RMCM1984BeltFilled
+    back: CMSatchelSecurityFilledProvost
+    pocket1: RMCUniversalRecorder
+    pocket2: RMCPouchGeneralLarge # TODO RMC14 3 listening devices
+
+- type: playTimeTracker
+  id: AU14JobNEMOChief
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconNEMOChief
+  icon:
+    sprite: _AU14/Interface/job_icons.rsi
+    state: hudsquad_nemo_lead_team
+
+- type: entity
+  parent: CMIDCardGold
+  id: RMCIDCardNEMOChief
+  name: NEMO Chief ID card
+  description: Issued to members of the Nautical Examination Marshal's Office.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+  - type: PresetIdCard
+    job: AU14NEMOChief

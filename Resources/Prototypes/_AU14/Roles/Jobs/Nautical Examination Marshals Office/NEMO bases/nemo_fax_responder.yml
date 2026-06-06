@@ -1,0 +1,75 @@
+- type: job
+  parent: CMJobBase
+  id: AU14NEMOFaxResponder
+  name: au14-job-name-nemo-fax-responder
+  description: au14-job-description-nemo-fax-responder
+  playTimeTracker: AU14JobNEMOFaxResponder
+  ranks:
+    AU14RankNEMOCommunicationsOfficer: []
+  startingGear: AU14GearNEMOFaxResponder
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  whitelisted: true
+  supervisors: cm-job-supervisors-staff
+  accessGroups:
+  - AllAccess
+  - RMCWeYa
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 2
+        RMCSkillEndurance: 1
+        RMCSkillEngineer: 2
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 3
+        RMCSkillMedical: 2
+        RMCSkillOverwatch: 1
+        RMCSkillPolice: 1
+        RMCSkillPowerLoader: 1
+        RMCSkillSurgery: 1
+        RMCSkillVehicles: 2
+  hasIcon: false
+  hidden: true
+
+- type: startingGear
+  id: AU14GearNEMOFaxResponder
+  equipment:
+    head: RMCHeadBeretProvost
+    eyes: CMGlassesSecurity # TODO: replace with sec hud
+    ears: AU14HeadsetNEMO
+    ears2: RMCM5CameraGear
+    jumpsuit: CMJumpsuitProvost
+    outerClothing: RMCProvostCommandJacket
+    gloves: CMHandsBlackMarine
+    shoes: CMBootsBlackFilled
+    id: RMCIDCardNEMOFaxResponder
+    belt: CMClipboard
+    back: CMSatchelSecurityFilledFaxResponder
+    pocket1: RMCPouchDocument
+    pocket2: RMCPouchGeneralLarge
+  inhand:
+    - CMStampProvost
+
+- type: entity
+  parent: CMIDCardGold
+  id: RMCIDCardNEMOFaxResponder
+  name: NEMO Fax Responder ID card
+  description: Issued to members of the Nautical Examination Marshal's Office.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+  - type: PresetIdCard
+    job: AU14NEMOFaxResponder
+
+- type: playTimeTracker
+  id: AU14JobNEMOFaxResponder
+

@@ -1,0 +1,89 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AU14IRGPointman
+  name: au14-job-name-corp-nemo-irg-pointman
+  description: au14-job-description-corp-nemo-irg-pointman
+  playTimeTracker: AU14JobIRGPointman
+  ranks:
+    AU14RankNEMOJuniorEnforcer: []
+  startingGear: AU14GearIRGPointman
+  icon: AU14JobIconIRGPointman
+  joinNotifyCrew: false
+  accessGroups:
+  - AllAccess
+  spawnMenuRoleName: NEMO IRG Pointman
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillCqc: 3
+        RMCSkillEndurance: 3
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 2
+        RMCSkillMeleeWeapons: 1
+        RMCSkillPolice: 2
+    - type: JobPrefix
+      prefix: au14-job-prefix-nemo-enforcer
+  hidden: true
+
+- type: entity
+  id: AU14RandomHumanoidIRGPointman
+  name: NEMO IRG ghost role pointman
+  suffix: Ghostrole, Neutral
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: AU14IRGPointman
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: AU14IRGPointman
+  components:
+  - type: GhostRole
+    name: au14-ghost-name-corp-nemo-enforcer
+    description: au14-job-description-corp-nemo-irg-pointman
+    rules: au14-ghost-role-information-nemo-rules
+    reregister: false
+    job: AU14IRGPointman
+    raffle:
+      settings: short
+    requirements:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadRifleman
+      time: 18000 # 5 Hours
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORMilitaryPoliceMan
+      time: 18000 # 5 Hours
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadIRG
+
+- type: startingGear
+  id: AU14GearIRGPointman
+  equipment:
+    head: RMCHeadBeretProvost
+    eyes: CMGlassesSecurity
+    ears: AU14HeadsetNEMO
+    ears2: RMCM5CameraGear
+    jumpsuit: CMJumpsuitProvost
+    outerClothing: RMCArmorProvost
+    gloves: CMHandsBlackMarine # TODO RMC14 black gloves
+    shoes: CMBootsBlackFilled
+    suitstorage: WeaponShotgunM890
+    id: RMCIDCardProvostEnforcer
+    belt: RMCM1984BeltFilled
+    back: CMSatchelSecurityFilledProvostEnforcer
+    pocket1: RMCPouchShotgunLargeBeanbag
+    pocket2: RMCPouchShotgunLargeSlugs # TODO RMC14 riot shield
+
+- type: playTimeTracker
+  id: AU14JobIRGPointman
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconIRGPointman
+  icon:
+    sprite: _AU14/Interface/job_icons.rsi
+    state: hudsquad_nemo_lead_pointman

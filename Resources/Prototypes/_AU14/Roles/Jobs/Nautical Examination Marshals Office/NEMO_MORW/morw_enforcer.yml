@@ -1,0 +1,92 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AU14MORWEnforcer
+  name: au14-job-name-corp-nemo-morw-enforcer
+  description: au14-job-description-corp-nemo-morw-enforcer
+  playTimeTracker: AU14JobMORWEnforcer
+  ranks:
+    RMCRankProvostProvostEnforcer: []
+  startingGear: AU14GearMORWEnforcer
+  icon: AU14JobIconMORWEnforcer
+  joinNotifyCrew: false
+  accessGroups:
+  - AllAccess
+  spawnMenuRoleName: NEMO MORW Enforcer
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 2
+        RMCSkillFirearms: 2
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFireman: 2
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+        RMCSkillSurgery: 1
+        RMCSkillMedical: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-nemo-morw-enforcer
+  hidden: true
+
+- type: entity
+  id: AU14RandomHumanoidMORWEnforcer
+  name: NEMO MORW ghost role enforcer
+  suffix: Ghostrole, Friendly, Extraction
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: AU14MORWEnforcer
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: AU14MORWEnforcer
+  components:
+  - type: GhostRole
+    name: au14-job-name-corp-nemo-morw-enforcer
+    description: au14-job-description-corp-nemo-morw-enforcer
+    rules: au14-ghost-role-information-nemo-rules
+    reregister: false
+    job: AU14MORWEnforcer
+    raffle:
+      settings: short
+    requirements:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadRifleman
+      time: 18000 # 5 Hours
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORMilitaryPoliceMan
+      time: 18000 # 5 Hours
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadMORW
+
+- type: startingGear
+  id: AU14GearMORWEnforcer
+  equipment:
+    head: RMCHeadBeretProvost
+    eyes: CMGlassesSecurity
+    ears: AU14HeadsetNEMO
+    ears2: RMCM5CameraGear
+    jumpsuit: CMJumpsuitProvost
+    outerClothing: RMCArmorProvost
+    gloves: CMHandsBlackMarine # TODO RMC14 black gloves
+    shoes: CMBootsBlackFilled
+    suitstorage: WeaponShotgunM890
+    id: RMCIDCardProvostEnforcer
+    belt: RMCM1984BeltFilled
+    back: CMSatchelSecurityFilledProvostEnforcer
+    pocket1: RMCPouchShotgunLargeBeanbag
+    pocket2: RMCPouchShotgunLargeSlugs # TODO RMC14 riot shield
+
+- type: playTimeTracker
+  id: AU14JobMORWEnforcer
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconMORWEnforcer
+  icon:
+    sprite: _AU14/Interface/job_icons.rsi
+    state: hudsquad_nemo_lead_enforcer

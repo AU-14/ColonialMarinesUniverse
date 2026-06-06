@@ -1,0 +1,130 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AU14IRGSynthetic
+  name: au14-job-name-corp-nemo-irg-synthetic
+  description: au14-job-description-corp-nemo-irg-synthetic
+  playTimeTracker: AU14JobIRGSynthetic
+  ranks:
+    AU14RankNEMOWO2: []
+  startingGear: AU14GearIRGSynthetic
+  icon: AU14JobIconIRGSynthetic
+  joinNotifyCrew: false
+  whitelisted: true
+  accessGroups:
+  - AllAccess
+  spawnMenuRoleName: NEMO IRG Synthetic
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14map_blips.rsi
+        state: background_nemo
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Skills
+      skills:
+        RMCSkillCqc: 5
+        RMCSkillEngineer: 4
+        RMCSkillConstruction: 3
+        RMCSkillFirearms: 2
+        RMCSkillOverwatch: 1
+        RMCSkillMedical: 4
+        RMCSkillSurgery: 3
+        RMCSkillResearch: 1
+        RMCSkillMeleeWeapons: 2
+        RMCSkillPilot: 1
+        RMCSkillPolice: 5
+        RMCSkillFireman: 5
+        RMCSkillPowerLoader: 2
+        RMCSkillVehicles: 2
+        RMCSkillJtac: 1
+        RMCSkillIntel: 1
+        RMCSkillDomestics: 2
+        RMCSkillNavigations: 1
+    - type: DemoSpecWhitelist
+    - type: GrenadeSpecWhitelist
+    - type: ScoutWhitelist
+    - type: SniperWhitelist
+    - type: PyroWhitelist
+    - type: JobPrefix
+      prefix: au14-job-prefix-nemo-synthetic
+    - type: MeleeWeapon
+      soundHit:
+        path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+        params:
+          variation: 0.15
+          volume: -1
+      angle: 30
+      animation: WeaponArcFist
+      attackRate: 1
+      damage:
+        types:
+          Blunt: 35
+    - type: Synth
+  hidden: false
+
+- type: entity
+  id: AU14RandomHumanoidIRGSynthetic
+  name: NEMO IRG ghost role synthetic
+  suffix: Ghostrole, Neutral
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: AU14IRGSynthetic
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: AU14IRGSynthetic
+  components:
+  - type: GhostRole
+    name: au14-ghost-name-corp-nemo-enforcer
+    description: au14-job-description-corp-nemo-irg-synthetic
+    rules: au14-ghost-role-information-nemo-rules
+    reregister: false
+    job: AU14IRGSynthetic
+    raffle:
+      settings: short
+    requirements:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadRifleman
+      time: 18000 # 5 Hours
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORMilitaryPoliceMan
+      time: 18000 # 5 Hours
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORAuxSupportSynth
+      time: 3600 # 1 Hour
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadIRG
+
+- type: startingGear
+  id: AU14GearIRGSynthetic
+  equipment:
+    head: RMCHeadBeretProvost
+    eyes: CMGlassesSecurity
+    ears: AU14HeadsetNEMO
+    ears2: RMCM5CameraGear
+    jumpsuit: CMJumpsuitProvost
+    outerClothing: RMCArmorProvost
+    gloves: CMHandsBlackMarine # TODO RMC14 black gloves
+    shoes: CMBootsBlackFilled
+    suitstorage: WeaponShotgunM890
+    id: RMCIDCardProvostEnforcer
+    belt: RMCM1984BeltFilled
+    back: CMSatchelSecurityFilledProvostEnforcer
+    pocket1: RMCPouchShotgunLargeBeanbag
+    pocket2: RMCPouchShotgunLargeSlugs # TODO RMC14 riot shield
+
+- type: playTimeTracker
+  id: AU14JobIRGSynthetic
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconIRGSynthetic
+  icon:
+    sprite: _AU14/Interface/job_icons.rsi
+    state: hudsquad_nemo_lead_synth

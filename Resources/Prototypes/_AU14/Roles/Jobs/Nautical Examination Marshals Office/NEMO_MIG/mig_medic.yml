@@ -1,0 +1,92 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AU14MIGMedic
+  name: au14-job-name-corp-nemo-mig-medic
+  description: au14-job-description-corp-nemo-mig-medic
+  playTimeTracker: AU14JobMIGMedic
+  ranks:
+    AU14RankNEMOJuniorEnforcer: []
+  startingGear: AU14GearMIGMedic
+  icon: AU14JobIconMIGMedic
+  joinNotifyCrew: false
+  accessGroups:
+  - AllAccess
+  spawnMenuRoleName: NEMO MIG Medic
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillCqc: 3
+        RMCSkillEndurance: 3
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 2
+        RMCSkillMeleeWeapons: 1
+        RMCSkillPolice: 2
+    - type: JobPrefix
+      prefix: au14-job-prefix-nemo-mig-medic
+  hidden: true
+
+- type: entity
+  id: AU14RandomHumanoidMIGMedic
+  name: NEMO MIG ghost role medic
+  suffix: Ghostrole, Friendly
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: AU14MIGMedic
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: AU14MIGMedic
+  components:
+  - type: GhostRole
+    name: au14-ghost-name-corp-nemo-mig-medic
+    description: au14-job-description-corp-nemo-mig-medic
+    rules: au14-ghost-role-information-nemo-rules
+    reregister: false
+    job: AU14MIGMedic
+    raffle:
+      settings: short
+    requirements:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadRifleman
+      time: 18000 # 5 Hours
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORMilitaryPoliceMan
+      time: 18000 # 5 Hours
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatoonCorpsman
+      time: 3600 # 1 Hour
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadMIG
+
+- type: startingGear
+  id: AU14GearMIGMedic
+  equipment:
+    head: RMCHeadBeretProvost
+    eyes: CMGlassesSecurity
+    ears: AU14HeadsetNEMO
+    ears2: RMCM5CameraGear
+    jumpsuit: CMJumpsuitProvost
+    outerClothing: RMCArmorProvost
+    gloves: CMHandsBlackMarine # TODO RMC14 black gloves
+    shoes: CMBootsBlackFilled
+    suitstorage: WeaponShotgunM890
+    id: RMCIDCardProvostEnforcer
+    belt: RMCM1984BeltFilled
+    back: CMSatchelSecurityFilledProvostEnforcer
+    pocket1: RMCPouchShotgunLargeBeanbag
+    pocket2: RMCPouchShotgunLargeSlugs # TODO RMC14 riot shield
+
+- type: playTimeTracker
+  id: AU14JobMIGMedic
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconMIGMedic
+  icon:
+    sprite: _AU14/Interface/job_icons.rsi
+    state: hudsquad_nemo_medic

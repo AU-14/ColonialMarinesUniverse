@@ -1,0 +1,134 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AU14NEMOTeamLeader
+  name: au14-job-name-corp-nemo-team-leader
+  description: au14-ghost-role-information-nemo-squad-description
+  playTimeTracker: AU14JobNEMOTeamLeader
+  ranks:
+    AU14RankNEMOEnforcer: []
+  startingGear: AU14GearNEMOTeamLeader
+  icon: AU14JobIconNEMOTeamLeader
+  joinNotifyCrew: false
+  accessGroups:
+  - ShipMasterAccess
+  spawnMenuRoleName: Provost Team Leader
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillCqc: 2
+        RMCSkillPolice: 2
+        RMCSkillFireman: 2
+        RMCSkillLeadership: 2
+        RMCSkillOverwatch: 1
+        RMCSkillEndurance: 2
+        RMCSkillJtac: 3
+        RMCSkillMedical: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 2
+        RMCSkillMeleeWeapons: 1
+        RMCSkillIntel: 1
+        RMCSkillFirearms: 2
+    - type: MarineOrders
+      moveOrderSoundMale:
+        collection: AU14MaleMoveOrder
+      moveOrderSoundFemale:
+        collection: AU14FemaleMoveOrder
+      focusOrderSoundMale:
+        collection: AU14MaleFocusOrder
+      focusOrderSoundFemale:
+        collection: AU14FemaleFocusOrder
+      holdOrderSoundMale:
+        collection: AU14MaleHoldOrder
+      holdOrderSoundFemale:
+        collection: AU14FemaleHoldOrder
+    - type: SquadLeader
+      icon:
+        sprite: _RMC14/Interface/cm_job_icons.rsi
+        state: hudsquad_pvl
+    - type: RMCPointing
+    - type: JobPrefix
+      prefix: au14-job-prefix-nemo-team-leader
+    - type: RMCTrackable
+  hidden: true
+
+- type: entity
+  id: AU14RandomHumanoidNEMOTeamLeader
+  name: provost ghost role team leader
+  suffix: Spawner, Player, Friendly, High Law Understanding
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: AU14NEMOTeamLeader
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: AU14NEMOTeamLeader
+  components:
+  - type: GhostRole
+    name: au14-ghost-name-corp-nemo-team-leader
+    description: au14-ghost-role-information-nemo-squad-description
+    rules: au14-ghost-role-information-nemo-rules
+    reregister: false
+    job: AU14NEMOTeamLeader
+    raffle:
+      settings: short
+    requirements:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadRifleman
+      time: 18000 # 5 Hours
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORMilitaryPoliceMan
+      time: 18000 # 5 Hours
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORRadioTelephoneOperator
+      time: 3600 # 1 Hour
+  - type: GhostRoleApplySpecial
+    squad: SquadProvost
+
+- type: startingGear
+  id: AU14GearNEMOTeamLeader
+  equipment:
+    head: RMCHeadBeretProvostSenior
+    eyes: CMGlassesSecurity
+    jumpsuit: CMJumpsuitProvostSenior
+    outerClothing: RMCArmorProvostSeniorFilled
+    gloves: CMHandsBlackMarine # TODO RMC14 black gloves
+    shoes: CMBootsBlackFilled
+    suitstorage: WeaponShotgunM890
+    id: RMCIDCardProvostTeamLeader
+    belt: RMCMK80BeltFilled
+    back: CMSatchelSecurityFilledProvostEnforcer
+    pocket1: RMCPouchShotgunLargeBeanbag
+    pocket2: RMCPouchShotgunLargeSlugs # TODO RMC14 big tear gas grenade box, riot shield
+    ears: AU14HeadsetNEMO
+    ears2: RMCM5CameraGear
+
+- type: playTimeTracker
+  id: AU14JobNEMOTeamLeader
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconNEMOTeamLeader
+  icon:
+    sprite: _AU14/Interface/job_icons.rsi
+    state: hudsquad_nemo_lead_team
+
+- type: entity
+  parent: CMIDCardGold
+  id: RMCIDCardNEMOTeamLeader
+  name: NEMO Team Leader ID card
+  description: Issued to members of the Nautical Examination Marshal's Office.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+  - type: PresetIdCard
+    job: AU14NEMOTeamLeader

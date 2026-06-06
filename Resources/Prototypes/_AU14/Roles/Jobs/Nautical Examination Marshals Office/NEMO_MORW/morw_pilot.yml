@@ -1,0 +1,97 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AU14MORWPilot
+  name: au14-job-name-corp-nemo-morw-pilot
+  description: au14-job-description-corp-nemo-morw-pilot
+  playTimeTracker: AU14JobMORWPilot
+  ranks:
+    RMCRankProvostProvostEnforcer: []
+  startingGear: AU14GearMORWPilot
+  icon: AU14JobIconMORWPilot
+  joinNotifyCrew: false
+  accessGroups:
+  - AllAccess
+  spawnMenuRoleName: NEMO MORW Pilot
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 3
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 3
+        RMCSkillOverwatch: 1
+        RMCSkillPilot: 3
+        RMCSkillPowerLoader: 2
+        RMCSkillSurgery: 3
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-nemo-enforcer
+  hidden: true
+
+- type: entity
+  id: AU14RandomHumanoidMORWPilot
+  name: NEMO MORW ghost role pilot
+  suffix: Ghostrole, Friendly
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: AU14MORWPilot
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: AU14MORWPilot
+  components:
+  - type: GhostRole
+    name: au14-ghost-name-corp-nemo-morw-pilot
+    description: au14-job-description-corp-nemo-morw-pilot
+    rules: au14-ghost-role-information-nemo-rules
+    reregister: false
+    job: AU14MORWPilot
+    raffle:
+      settings: short
+    requirements:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadRifleman
+      time: 18000 # 5 Hours
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORMilitaryPoliceMan
+      time: 18000 # 5 Hours
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDSPilot
+      time: 3600 # 1 Hour
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadMORW
+
+- type: startingGear
+  id: AU14GearMORWPilot
+  equipment:
+    head: RMCHeadBeretProvost
+    eyes: CMGlassesSecurity
+    ears: AU14HeadsetNEMO
+    ears2: RMCM5CameraGear
+    jumpsuit: CMJumpsuitProvost
+    outerClothing: RMCArmorProvost
+    gloves: CMHandsBlackMarine # TODO RMC14 black gloves
+    shoes: CMBootsBlackFilled
+    suitstorage: WeaponShotgunM890
+    id: RMCIDCardProvostEnforcer
+    belt: RMCM1984BeltFilled
+    back: CMSatchelSecurityFilledProvostEnforcer
+    pocket1: RMCPouchShotgunLargeBeanbag
+    pocket2: RMCPouchShotgunLargeSlugs # TODO RMC14 riot shield
+
+- type: playTimeTracker
+  id: AU14JobMORWPilot
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconMORWPilot
+  icon:
+    sprite: _AU14/Interface/job_icons.rsi
+    state: hudsquad_nemo_dp
