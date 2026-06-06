@@ -3,7 +3,6 @@
   id: AU14NEMOInspector
   name: au14-job-name-corp-nemo-inspector
   description: au14-job-description-inspector
-  whitelisted: true
   playTimeTracker: AU14JobNEMOInspector
   requirements:
   #- !type:RoleTimeRequirement
