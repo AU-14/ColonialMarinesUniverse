@@ -258,7 +258,19 @@ au14-ipie-greeting = You are Weyland-Yutani's Personal Protection Officer. Prote
 
     Weyland-Yutani - building better worlds.
 
+au14-wypmccommando-description = You are one of Weyland-Yutani's Corporate Commandos. You were called for a special mission in the area. Secure and protect the Corporation's assets and ensure the Company's interests are maintained.
+
+au14-wypmccommando-greeting =  You are one of Weyland-Yutani's Corporate Commandos!
+
+     You were called in to secure and protect the Corporation's assets, as well ensuring corporate interests are maintained. You answer solely to the highest ranking executive.
+
+    Company's profit is your goal.
+
+    Weyland-Yutani - building better worlds.
+
 au14-lacncommando-description = You have been loaned to the United Americas Allied Command by the LACN for a special mission on this planet, the details of which have not been disclosed to you. You have been ordered to investigate the area and report to the local GOVFOR command.
+
+au14-job-prefix-weyu-commando = COM.
 
 au14-job-name-vai-mercenary = Contractor
 au14-vai-mercenary-description = You are Vanguard's Arrow Incorporated Mercenary. Follow your contract. For details, consult your primer.
@@ -276,7 +288,7 @@ au14-job-prefix-vai-engi = VAIE
 au14-job-name-vai-machinegunner = Machinegunner
 au14-job-prefix-vai-machinegunner = VAIMG
 
-au14-vaipo-greeting = You are part of Vanguard's Arrow Incorporated Primary Operations. 
+au14-vaipo-greeting = You are part of Vanguard's Arrow Incorporated Primary Operations.
 
     You received a call from local UA Ambassador and to investigate it.
     Ensure safety of Ambassador for all cost.
