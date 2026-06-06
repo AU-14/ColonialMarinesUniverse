@@ -9,6 +9,7 @@
   startingGear: AU14GearNEMOSynthetic
   icon: AU14JobIconNEMOSynthetic
   joinNotifyCrew: false
+  #whitelist: true # Free use synthetic, requires admin guidance
   accessGroups:
   - AllAccess
   spawnMenuRoleName: NEMO Synthetic
@@ -67,7 +68,7 @@
 - type: entity
   id: AU14RandomHumanoidNEMOSynthetic
   name: NEMO ghost role synthetic
-  suffix: Ghostrole, Friendly
+  suffix: Ghostrole, Friendly, UNWL'd
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi

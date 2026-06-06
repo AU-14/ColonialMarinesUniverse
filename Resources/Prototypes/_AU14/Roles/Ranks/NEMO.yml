@@ -5,56 +5,56 @@
   prefix: Ch. Marsh.
   paygrade: O10C
 
-# Host rank, reserved for Troy/EG
+# Host rank, reserved for Troy/EG (Or mins with permission)
 - type: rank
   id: AU14RankNEMODeputyChiefMarshal
   name: Deputy Chief Marshal
   prefix: Dep. ChM.
   paygrade: O10
 
-#  Head admin rank, reserved for Headmin Twinkle
+#  Head admin rank, reserved for Headmin Twinkle (Or mins with permission)
 - type: rank
   id: AU14RankNEMOSectorMarshal
   name: Sector Marshal
   prefix: Sec. Marsh.
   paygrade: O9
 
-# Any Sr.Admin/Sr.Mod with high law understanding
+# Any Sr.Admin/Sr.Mod with high law understanding (Or mins with permission)
 - type: rank
   id: AU14RankNEMOSeniorMarshal
   name: Senior Marshal
   prefix: Sr. Marsh.
   paygrade: O8
 
-# Any Moderator/Admin with medium law understanding, or wanting a lower rank
+# Any Moderator/Admin with medium law understanding, or wanting a lower rank (Or WL'd players with permission)
 - type: rank
   id: AU14RankNEMOMarshal
   name: Marshal
   prefix: Marsh.
   paygrade: O7
 
-# Any Jr. Moderator with low law understanding, or wanting a lower rank
+# Any Jr. Moderator with low law understanding, or wanting a lower rank (Or WL'd players with permission)
 - type: rank
   id: AU14RankNEMODeputyMarshal
   name: Deputy Marshal
   prefix: DM.
   paygrade: O6
 
-# Any whitelisted Mentor With High law understanding
+# Any whitelisted Mentor With High law understanding (Or WL'd players with permission)
 - type: rank
   id: AU14RankNEMOChiefInspector
   name: Chief Inspector
   prefix: CI.
   paygrade: O5
 
-# Any WL'd player with medium law understanding
+# Any WL'd player with medium law understanding (Or players with permission)
 - type: rank
   id: AU14RankNEMOExaminer
   name: Examiner
   prefix: Exam.
   paygrade: O4
 
-# Any WL'd player with low law understanding, with guidance
+# Any WL'd player with low law understanding, with guidance (Or players with permission)
 - type: rank
   id: AU14RankNEMOJrExaminer
   name: JuniorExaminer

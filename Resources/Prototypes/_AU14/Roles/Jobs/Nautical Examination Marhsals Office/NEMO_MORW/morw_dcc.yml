@@ -1,13 +1,13 @@
 ﻿- type: job
   parent: CMJobBase
-  id: AU14SEDEnforcer
-  name: au14-job-name-corp-nemo-sed-enforcer
-  description: au14-job-description-corp-nemo-sed-enforcer
-  playTimeTracker: AU14JobSEDEnforcer
+  id: AU14MORWDCC
+  name: au14-job-name-corp-nemo-morw-dcc
+  description: au14-job-description-corp-nemo-morw-dcc
+  playTimeTracker: AU14JobMORWDCC
   ranks:
     RMCRankProvostProvostEnforcer: []
-  startingGear: AU14GearSEDEnforcer
-  icon: AU14JobIconSEDEnforcer
+  startingGear: AU14GearMORWDCC
+  icon: AU14JobIconMORWDCC
   joinNotifyCrew: false
   accessGroups:
   - AllAccess
@@ -33,26 +33,26 @@
   hidden: true
 
 - type: entity
-  id: AU14RandomHumanoidSEDEnforcer
-  name: NEMO SED ghost role enforcer
+  id: AU14RandomHumanoidMORWDCC
+  name: NEMO MORW ghost role enforcer
   suffix: Ghostrole, Friendly
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi
     state: provost
   - type: RandomHumanoidSpawner
-    settings: AU14SEDEnforcer
+    settings: AU14MORWDCC
 
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid
-  id: AU14SEDEnforcer
+  id: AU14MORWDCC
   components:
   - type: GhostRole
-    name: au14-ghost-name-corp-nemo-enforcer
-    description: au14-job-description-corp-nemo-sed-enforcer
+    name: au14-ghost-name-corp-nemo-morw-dcc
+    description: au14-job-description-corp-nemo-morw-dcc
     rules: au14-ghost-role-information-nemo-rules
     reregister: false
-    job: AU14SEDEnforcer
+    job: AU14MORWDCC
     raffle:
       settings: short
     requirements:
@@ -62,11 +62,14 @@
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORMilitaryPoliceMan
       time: 18000 # 5 Hours
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORDCC
+      time: 3600 # 1 Hour
   - type: GhostRoleApplySpecial
-    squad: AU14SquadSED
+    squad: AU14SquadMORW
 
 - type: startingGear
-  id: AU14GearSEDEnforcer
+  id: AU14GearMORWDCC
   equipment:
     head: RMCHeadBeretProvost
     eyes: CMGlassesSecurity
@@ -84,11 +87,11 @@
     pocket2: RMCPouchShotgunLargeSlugs # TODO RMC14 riot shield
 
 - type: playTimeTracker
-  id: AU14JobSEDEnforcer
+  id: AU14JobMORWDCC
 
 - type: jobIcon
   parent: CMJobIconBase
-  id: AU14JobIconSEDEnforcer
+  id: AU14JobIconMORWDCC
   icon:
     sprite: _AU14/Interface/job_icons.rsi
-    state: hudsquad_nemo_clear_blank
+    state: hudsquad_nemo_dcc

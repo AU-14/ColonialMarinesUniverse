@@ -80,7 +80,7 @@
   id: AU14SEDSynthetic
   components:
   - type: GhostRole
-    name: au14-ghost-name-corp-nemo-enforcer
+    name: au14-ghost-name-corp-nemo-sed-synthetic
     description: au14-job-description-corp-nemo-sed-synthetic
     rules: au14-ghost-role-information-nemo-rules
     reregister: false

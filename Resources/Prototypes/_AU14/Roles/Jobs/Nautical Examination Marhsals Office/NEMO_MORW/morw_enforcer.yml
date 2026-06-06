@@ -1,17 +1,17 @@
 ﻿- type: job
   parent: CMJobBase
-  id: AU14SEDEnforcer
-  name: au14-job-name-corp-nemo-sed-enforcer
-  description: au14-job-description-corp-nemo-sed-enforcer
-  playTimeTracker: AU14JobSEDEnforcer
+  id: AU14MORWEnforcer
+  name: au14-job-name-corp-nemo-morw-enforcer
+  description: au14-job-description-corp-nemo-morw-enforcer
+  playTimeTracker: AU14JobMORWEnforcer
   ranks:
     RMCRankProvostProvostEnforcer: []
-  startingGear: AU14GearSEDEnforcer
-  icon: AU14JobIconSEDEnforcer
+  startingGear: AU14GearMORWEnforcer
+  icon: AU14JobIconMORWEnforcer
   joinNotifyCrew: false
   accessGroups:
   - AllAccess
-  spawnMenuRoleName: NEMO SED Enforcer
+  spawnMenuRoleName: NEMO MORW Enforcer
   special:
   - !type:AddComponentSpecial
     components:
@@ -27,30 +27,30 @@
         RMCSkillSurgery: 1
         RMCSkillMedical: 1
     - type: JobPrefix
-      prefix: au14-job-prefix-nemo-enforcer
+      prefix: au14-job-prefix-nemo-morw-enforcer
   hidden: true
 
 - type: entity
-  id: AU14RandomHumanoidSEDEnforcer
-  name: NEMO SED ghost role enforcer
-  suffix: Ghostrole, Friendly
+  id: AU14RandomHumanoidMORWEnforcer
+  name: NEMO MORW ghost role enforcer
+  suffix: Ghostrole, Friendly, Extraction
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi
     state: provost
   - type: RandomHumanoidSpawner
-    settings: AU14SEDEnforcer
+    settings: AU14MORWEnforcer
 
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid
-  id: AU14SEDEnforcer
+  id: AU14MORWEnforcer
   components:
   - type: GhostRole
-    name: au14-ghost-name-corp-nemo-enforcer
-    description: au14-job-description-corp-nemo-sed-enforcer
+    name: au14-job-name-corp-nemo-morw-enforcer
+    description: au14-job-description-corp-nemo-morw-enforcer
     rules: au14-ghost-role-information-nemo-rules
     reregister: false
-    job: AU14SEDEnforcer
+    job: AU14MORWEnforcer
     raffle:
       settings: short
     requirements:
@@ -61,10 +61,10 @@
       role: AU14JobGOVFORMilitaryPoliceMan
       time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
-    squad: AU14SquadSED
+    squad: AU14SquadMORW
 
 - type: startingGear
-  id: AU14GearSEDEnforcer
+  id: AU14GearMORWEnforcer
   equipment:
     head: RMCHeadBeretProvost
     eyes: CMGlassesSecurity
@@ -82,11 +82,11 @@
     pocket2: RMCPouchShotgunLargeSlugs # TODO RMC14 riot shield
 
 - type: playTimeTracker
-  id: AU14JobSEDEnforcer
+  id: AU14JobMORWEnforcer
 
 - type: jobIcon
   parent: CMJobIconBase
-  id: AU14JobIconSEDEnforcer
+  id: AU14JobIconMORWEnforcer
   icon:
     sprite: _AU14/Interface/job_icons.rsi
-    state: hudsquad_nemo_clear_blank
+    state: hudsquad_nemo_lead_enforcer

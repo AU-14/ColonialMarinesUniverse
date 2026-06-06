@@ -5,10 +5,11 @@
   description: au14-job-description-corp-nemo-cpisp-specialist
   playTimeTracker: AU14JobCPISPSynthetic
   ranks:
-    RMCRankProvostProvostEnforcer: []
+    AU14RankNEMOWO2: []
   startingGear: AU14GearCPISPSynthetic
   icon: AU14JobIconCPISPSynthetic
   joinNotifyCrew: false
+  whitelist: true
   accessGroups:
   - AllAccess
   spawnMenuRoleName: NEMO CPISP Synthetic

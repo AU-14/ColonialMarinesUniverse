@@ -1,18 +1,18 @@
 ﻿- type: job
   parent: CMJobBase
-  id: AU14MISSynthetic
-  name: au14-job-name-corp-nemo-mis-synthetic
-  description: au14-job-description-corp-nemo-mis-synthetic
-  playTimeTracker: AU14JobMISSynthetic
+  id: AU14NEMOSynthetic2
+  name: au14-job-name-corp-nemo-sed-enforcer
+  description: au14-job-description-corp-nemo-sed-synthetic
+  playTimeTracker: AU14JobNEMOSynthetic2
   ranks:
     AU14RankNEMOWO2: []
-  startingGear: AU14GearMISSynthetic
-  icon: AU14JobIconMISSynthetic
+  startingGear: AU14GearNEMOSynthetic2
+  icon: AU14JobIconNEMOSynthetic2
   joinNotifyCrew: false
   whitelist: true
   accessGroups:
   - AllAccess
-  spawnMenuRoleName: NEMO MIS Synthetic
+  spawnMenuRoleName: NEMO Synthetic
   special:
   - !type:AddComponentSpecial
     components:
@@ -66,26 +66,26 @@
   hidden: false
 
 - type: entity
-  id: AU14RandomHumanoidMISSynthetic
-  name: NEMO MIS ghost role synthetic
-  suffix: Ghostrole, Friendly
+  id: AU14RandomHumanoidNEMOSynthetic
+  name: NEMO ghost role synthetic
+  suffix: Ghostrole, Friendly, WL'd (No knowledge)
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi
     state: provost
   - type: RandomHumanoidSpawner
-    settings: AU14MISSynthetic
+    settings: AU14NEMOSynthetic2
 
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid
-  id: AU14MISSynthetic
+  id: AU14NEMOSynthetic2
   components:
   - type: GhostRole
-    name: au14-ghost-name-corp-nemo-enforcer
-    description: au14-job-description-corp-nemo-mis-synthetic
+    name: au14-ghost-name-corp-nemo-synthetic
+    description: au14-job-description-corp-nemo-synthetic
     rules: au14-ghost-role-information-nemo-rules
     reregister: false
-    job: AU14MISSynthetic
+    job: AU14NEMOSynthetic2
     raffle:
       settings: short
     requirements:
@@ -99,10 +99,10 @@
       role: AU14JobGOVFORAuxSupportSynth
       time: 3600 # 1 Hour
   - type: GhostRoleApplySpecial
-    squad: AU14SquadMIS
+    squad: AU14SquadNEMO
 
 - type: startingGear
-  id: AU14GearMISSynthetic
+  id: AU14GearNEMOSynthetic2
   equipment:
     head: RMCHeadBeretProvost
     eyes: CMGlassesSecurity
@@ -120,11 +120,11 @@
     pocket2: RMCPouchShotgunLargeSlugs # TODO RMC14 riot shield
 
 - type: playTimeTracker
-  id: AU14JobMISSynthetic
+  id: AU14JobNEMOSynthetic2
 
 - type: jobIcon
   parent: CMJobIconBase
-  id: AU14JobIconMISSynthetic
+  id: AU14JobIconNEMOSynthetic2
   icon:
     sprite: _AU14/Interface/job_icons.rsi
     state: hudsquad_nemo_synth

@@ -5,10 +5,11 @@
   description: au14-job-description-corp-nemo-irg-synthetic
   playTimeTracker: AU14JobIRGSynthetic
   ranks:
-    RMCRankProvostProvostEnforcer: []
+    AU14RankNEMOWO2: []
   startingGear: AU14GearIRGSynthetic
   icon: AU14JobIconIRGSynthetic
   joinNotifyCrew: false
+  whitelist: true
   accessGroups:
   - AllAccess
   spawnMenuRoleName: NEMO IRG Synthetic
