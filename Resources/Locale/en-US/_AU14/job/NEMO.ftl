@@ -57,6 +57,10 @@ au14-ghost-name-corp-nemo-team-leader = NEMO Team Leader (Friendly)
 au14-job-name-corp-nemo-team-leader = Team Leader
 au14-job-prefix-nemo-team-leader = MeTML
 
+au14-job-name-corp-nemo-synthetic = NEMO Synthetic
+au14-job-description-corp-nemo-synthetic = You are a synthetic assigned to the Nautical Examination Marshals Office (NEMO)! Your enhanced capabilities make you invaluable for capture and enforcement operations.
+au14-job-prefix-nemo-synthetic = Syn.
+
 # CPISP - Civil Protection Insurrection Stability & Protection Force
 au14-job-name-corp-nemo-cpisp-specialist = CPISP Specialist
 au14-job-description-corp-nemo-cpisp-specialist = You are part of the elite Civil Protection Insurrection Stability & Protection Force! Deployed on high-risk missions and protection tasks of high-ranking officials. Only the best NEMO operatives make it here.
