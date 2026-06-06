@@ -7,6 +7,9 @@ SKIP_WIN_EXT = { ".bat", ".cmd", ".ps1" }
 def main() -> int:
     any_failed = False
     for file_name in get_text_files():
+        if is_placeholder_file(file_name):
+            continue
+
         if is_file_crlf(file_name):
             print(f"::error file={file_name},title=File contains CRLF line endings::The file '{file_name}' was committed with CRLF new lines. Please make sure your git client is configured correctly and you are not uploading files directly to GitHub via the web interface.")
             any_failed = True
@@ -34,5 +37,9 @@ def is_file_crlf(path: str) -> bool:
                 return True
 
     return False
+
+def is_placeholder_file(path: str) -> bool:
+    with open(path, "rb") as f:
+        return f.read().strip() == b"# This Space intentionally left blank"
 
 exit(main())
