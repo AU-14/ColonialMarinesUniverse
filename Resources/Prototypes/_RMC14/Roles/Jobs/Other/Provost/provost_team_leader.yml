@@ -91,7 +91,6 @@
 
 - type: startingGear
   id: RMCGearProvostTeamLeader
-  categories: [ HideSpawnMenu ]
   equipment:
     head: RMCHeadBeretProvostSenior
     eyes: CMGlassesSecurity

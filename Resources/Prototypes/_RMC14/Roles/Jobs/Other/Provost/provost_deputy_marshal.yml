@@ -86,7 +86,6 @@
 
 - type: startingGear
   id: RMCGearProvostDeputyMarshal
-  categories: [ HideSpawnMenu ]
   equipment:
     head: RMCArmorCapProvost
     eyes: CMGlassesSecurity

@@ -64,7 +64,6 @@
 
 - type: startingGear
   id: RMCGearProvostEnforcer
-  categories: [ HideSpawnMenu ]
   equipment:
     head: RMCHeadBeretProvost
     eyes: CMGlassesSecurity

@@ -89,4 +89,4 @@
   id: AU14JobIconIRGMedic
   icon:
     sprite: _AU14/Interface/job_icons.rsi
-    state: hudsquad_nemo_lead_medic
+    state: hudsquad_nemo_medic_lead

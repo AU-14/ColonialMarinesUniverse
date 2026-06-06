@@ -82,7 +82,6 @@
 
 - type: startingGear
   id: RMCGearProvostInspector
-  categories: [ HideSpawnMenu ]
   equipment:
     head: RMCHeadBeretProvostSenior
     eyes: CMGlassesSecurity
