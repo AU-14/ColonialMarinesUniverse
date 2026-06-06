@@ -36,3 +36,16 @@
   - type: GuideHelp
     guides:
     - AU14SOP
+
+# NEMO SOP
+- type: entity
+  parent: RMCGuidebookBase
+  id: AU14GuidebookNEMOSOP
+  name: Nautrical Marshals Examination Office SOP
+  description: "An MPs right hand man and a Commanders worst nightmare, contains operations, guidelines, procedures, and other useless information on use cases for faxing NEMO or special requests. This one has a note written on the inside cover, signed by a captain saying 'They wont get me again this time' interesting."
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/Books/Other/NEMO_SOP.rsi
+  #- type: GuideHelp
+  #  guides:
+  #  - AU14SOP
