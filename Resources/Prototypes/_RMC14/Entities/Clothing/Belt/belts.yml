@@ -933,6 +933,20 @@
     - id: RMCMagazinePistolNP92
       amount: 5
 
+
+- type: entity
+  parent: RMCBeltHolsterPistolSPP
+  id: RMCBeltHolsterPistolSPPNPZ92Tactical
+  suffix: Tactical NPZ92
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponPistolNPZ92Tactical
+    - id: RMCMagazinePistolNP92
+      amount: 4
+    - id: RMCMagazinePistolNP92Extended
+      amount: 2
+
 - type: entity
   parent: RMCBeltHolsterPistol
   id: RMCBeltHolsterPistolTSE
@@ -1053,6 +1067,18 @@
     - id: RMCSpeedLoaderZHNK72
       amount: 6
     - id: RMCWeaponRevolverZHNK72
+
+
+- type: entity
+  parent: RMCBeltHolsterRevolver
+  id: RMCBeltHolsterRevolverZHNK72FillTactical
+  suffix: Tactical
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpeedLoaderZHNK72
+      amount: 6
+    - id: RMCWeaponRevolverZHNK72Tactical
 
 - type: entity
   parent: ClothingBeltBase # Can't have storage slots on this one

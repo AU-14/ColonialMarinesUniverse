@@ -1,0 +1,8 @@
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUPPSOF
+  categories: [ HideSpawnMenu ]
+  name: UPP SOF ID card
+  components:
+  - type: PresetIdCard
+    job: AU14SOFOperator

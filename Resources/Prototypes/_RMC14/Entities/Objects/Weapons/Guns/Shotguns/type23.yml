@@ -81,3 +81,41 @@
 
 - type: Tag
   id: RMCWeaponShotgunType23
+
+
+- type: entity
+  parent: RMCWeaponShotgunType23
+  id: RMCWeaponShotgunType23Tactical
+  suffix: Tactical
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        startingAttachable: RMCM5Bayonet
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentRecoilCompensator
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: RMCAttachmentS6ReflexSight
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-stock:
+        startingAttachable: RMCAttachmentType23Stock
+        whitelist:
+          tags:
+          - RMCAttachmentType23Stock
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentBurstFireAssembly
+        whitelist:
+          tags:
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentExtinguisher
+          - RMCAttachmentBurstFireAssembly

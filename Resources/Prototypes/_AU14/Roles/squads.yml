@@ -50,6 +50,31 @@
 
 - type: entity
   parent: SquadBase
+  id: AU14SquadSOFClandestine
+  name: UPPSOF Reconnaissance
+  components:
+  - type: SquadTeam
+    color: "#edae72"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UPPSOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_spp_alpha
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: upp_lt
+    canSupplyDrop: false
+    group: UPPSOF Reconnaissance
+  - type: Tag
+    tags:
+    - UPPSOF Reconnaissance
+
+- type: entity
+  parent: SquadBase
   id: AU14SquadTD
   name: Territorial Defense
   components:

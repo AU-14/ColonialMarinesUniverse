@@ -148,6 +148,32 @@
       rmc-aslot-barrel: 0.625, 0.125
       rmc-aslot-rail: -0.13, 0.185
 
+
+- type: entity
+  parent: RMCWeaponPistolNPZ92
+  id: RMCWeaponPistolNPZ92Tactical
+  suffix: Tactical
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        locked: true
+        startingAttachable: RMCAttachmentSuppressorNPZ92
+        whitelist:
+          tags:
+          - RMCAttachmentSuppressorNPZ92
+      rmc-aslot-rail:
+        startingAttachable: RMCAttachmentS6ReflexSight
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+
+
+
+
+
 - type: entity
   parent: RMCWeaponPistolNP92
   id: RMCWeaponPistolNP92Empty
@@ -163,6 +189,7 @@
         whitelist:
           tags:
           - RMCMagazinePistolNP92
+
 
 - type: entity
   parent: CMBaseMagazinePistol

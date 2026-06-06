@@ -85,6 +85,33 @@
     - null
     - null
 
+
+- type: entity
+  parent: RMCWeaponRevolverZHNK72
+  id: RMCWeaponRevolverZHNK72Tactical
+  suffix: Tactical
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        locked: false
+        startingAttachable: RMCAttachmentSuppressorCompact
+        whitelist:
+          tags:
+          - RMCAttachmentSuppressorCompact
+      rmc-aslot-rail:
+        startingAttachable: RMCAttachmentS6ReflexSight
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentLaserSight
+        whitelist:
+          tags:
+          - RMCAttachmentLaserSight
+
 - type: entity
   id: RMCBaseSpeedLoaderZHNK72
   name: "Speed loader (7.62mm)"

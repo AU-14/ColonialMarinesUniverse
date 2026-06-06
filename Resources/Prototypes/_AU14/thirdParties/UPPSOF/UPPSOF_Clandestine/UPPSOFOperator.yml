@@ -1,0 +1,99 @@
+- type: job
+  parent: CMJobBase
+  id: AU14UPPSOFOperator
+  name: au14-job-name-UPPSOF-Operator
+  description: au14-job-description-UPPSOF-Operator
+  playTimeTracker: AU14UPPSOFOperator
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: job
+  parent: AU14UPPSOFOperator
+  id: UPPSOF_Operator
+  name: au14-job-name-uppsof-operator
+  description: au14-job-description-uppsof-operator
+
+  spawnMenuRoleName: UPP SOF Operator (AU14, 3rd Party)
+  startingGear: AU14GearUPPSOFOperator
+  greeting: au14-uppsof-clandestine-greeting
+  icon: "AU14JobIconUSArmyTrooper"
+  joinNotifyCrew: false
+  supervisors: cm-job-name-squad-leader
+  accessGroups:
+  - auadmin
+  - Colonist
+  - CMCargoTech
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadUPPSOF
+    - type: Skills
+      skills:
+        RMCSkillCqc: 5
+        RMCSkillEngineer: 1
+        RMCSkillConstruction: 1
+        RMCSkillFirearms: 3
+        RMCSkillMedical: 1
+        RMCSkillMeleeWeapons: 1
+        RMCSkillPolice: 2
+        RMCSkillFireman: 3
+        RMCSkillVehicles: 2
+        RMCSkillJtac: 1
+        RMCSkillEndurance: 2
+    - type: EquipEntityPreset
+      preset: AU14VAISOPreset
+    - type: JobPrefix
+      prefix: au14-job-prefix-UPPSOF-Operator
+  hidden: false
+
+
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUPPSOF
+  id: AU14JobUPPSOFOperator
+  name: UPP SOF Operator (AU14, 3rd Party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUPPSOF
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-uppsof-operator
+    description: au14-job-description-uppsof-operator
+    reregister: false
+    job: AU14JobUPPSOFOperator
+    raffle:
+      settings: short
+    rules: au14-uppsof-rules
+
+- type: startingGear
+  id: AU14GearUPPSOFOperator
+  equipment:
+    id: AU14UPPSOFOperator
+    outerClothing: RMCArmorRoyalLightPVE
+    jumpsuit: RMCJumpsuitMarsoc
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: RMCScoutShoes
+    head: RMCHeadBeanieGray
+    mask: RMCMaskCoifPMC
+    belt: RMCBeltHolsterPistolSPPNPZ92Tactical
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14LargeMagPouchAK4047AP
+    back: UPPSOFOperatorBackpack
+    ears: RMCHeadsetDistressBureau
+    suitstorage: RMCWeaponRifleAK4047M
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconUSArmyTrooper
+  icon:
+    sprite: _AU14/Interface/job_icons.rsi
+    state: hudsquad_trpr
+
+- type: playTimeTracker
+  id: UPPSOFOperator

@@ -23,12 +23,7 @@
     worn: false
   - type: Corrodible
     isCorrodible: false
-  - type: ClothingRequireEquipped
-    autoUnequip: true
-    denyReason: rmc-armor-not-tse-jumpsuit
-    whitelist:
-      tags:
-      - RMCUniformTSE
+
   - type: WebbingClothing
     whitelist:
       tags:
@@ -40,6 +35,17 @@
   suffix: PVE, RCM
   name: L3S Kestrel modular vest
   description: The light Support variant of the L3 Kestrel modular vest, standard issue body armor for officers and support personnel of the Royal Crown Marines.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/PVE/Royal/kestrellight.rsi
+
+
+- type: entity
+  parent: RMCArmorRoyalPVE
+  id: RMCArmorRoyalLightPVE
+  suffix: PVE, RCM
+  name: SOF Vest
+  description: A lightweight tactical vest, standard issue body armor for a force of unknown.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/PVE/Royal/kestrellight.rsi
