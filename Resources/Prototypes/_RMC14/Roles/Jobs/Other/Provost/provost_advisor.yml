@@ -43,7 +43,6 @@
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid
   id: RMCProvostAdvisor
-  categories: [ HideSpawnMenu ]
   components:
   - type: GhostRole
     name: rmc-ghost-name-corp-provost-advisor

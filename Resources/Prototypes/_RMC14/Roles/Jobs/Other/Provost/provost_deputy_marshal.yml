@@ -71,7 +71,6 @@
 - type: randomHumanoidSettings
   parent: RMCEventHumanoid
   id: RMCProvostDeputyMarshal
-  categories: [ HideSpawnMenu ]
   components:
   - type: GhostRole
     name: rmc-job-name-corp-provost-deputy-marshal
