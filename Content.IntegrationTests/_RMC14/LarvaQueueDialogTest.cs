@@ -227,6 +227,61 @@ public sealed class LarvaQueueJoinXenoUiTest
     }
 
     [Test]
+    public async Task LarvaQueueOffersGhostedLesserDroneWhenNoLarvaAvailable()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+            DummyTicker = false,
+        });
+
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        var entMan = server.EntMan;
+        var hiveSystem = entMan.System<SharedXenoHiveSystem>();
+        var mind = entMan.System<MindSystem>();
+        var player = server.PlayerMan.Sessions.Single();
+
+        EntityUid ghost = default;
+        EntityUid hive = default;
+        EntityUid lesser = default;
+        NetEntity ghostNet = default;
+        string lesserName = string.Empty;
+        await server.WaitAssertion(() =>
+        {
+            ghost = entMan.SpawnEntity(GameTicker.ObserverPrototypeName, map.GridCoords);
+            BypassRoundstartDelay(entMan, ghost);
+            hive = entMan.SpawnEntity("CMXenoHive", map.GridCoords.Offset(new Vector2(1, 0)));
+            lesser = entMan.SpawnEntity("CMXenoLesserDrone", map.GridCoords.Offset(new Vector2(2, 0)));
+            hiveSystem.SetHive(lesser, hive);
+            lesserName = entMan.GetComponent<MetaDataComponent>(lesser).EntityName;
+
+            var mindId = mind.CreateMind(player.UserId, "Lesser Drone");
+            mind.TransferTo(mindId, lesser);
+            mind.TransferTo(mindId, ghost);
+            mind.SetUserId(mindId, player.UserId);
+            ghostNet = entMan.GetNetEntity(ghost);
+
+            entMan.EventBus.RaiseLocalEvent(ghost, new JoinLarvaQueueEvent(entMan.GetNetEntity(hive)));
+        });
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(player.AttachedEntity, Is.EqualTo(ghost));
+            AssertConfirmDialog(entMan, ghost, lesserName);
+        });
+
+        await DeclineDialog(pair, ghostNet);
+        await pair.RunTicksSync(5);
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task LarvaQueueDoesNotOfferGhostedLesserXeno()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
@@ -1000,6 +1055,16 @@ public sealed class LarvaQueueJoinXenoUiTest
 
     private static async Task ConfirmDialog(TestPair pair, NetEntity ghostNet)
     {
+        await ChooseDialogOption(pair, ghostNet, 0);
+    }
+
+    private static async Task DeclineDialog(TestPair pair, NetEntity ghostNet)
+    {
+        await ChooseDialogOption(pair, ghostNet, 1);
+    }
+
+    private static async Task ChooseDialogOption(TestPair pair, NetEntity ghostNet, int option)
+    {
         await pair.Client.WaitAssertion(() =>
         {
             var clientEntMan = pair.Client.EntMan;
@@ -1013,7 +1078,7 @@ public sealed class LarvaQueueJoinXenoUiTest
             var clientEntMan = pair.Client.EntMan;
             var clientGhost = clientEntMan.GetEntity(ghostNet);
             var ui = clientEntMan.GetComponent<UserInterfaceComponent>(clientGhost);
-            ui.ClientOpenInterfaces[DialogUiKey.Key].SendPredictedMessage(new DialogOptionBuiMsg(0));
+            ui.ClientOpenInterfaces[DialogUiKey.Key].SendPredictedMessage(new DialogOptionBuiMsg(option));
         });
     }
 

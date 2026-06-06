@@ -23,6 +23,13 @@ public sealed partial class BlurryVisionComponent : Component
     [ViewVariables(VVAccess.ReadWrite), DataField("correctionPower"), AutoNetworkedField]
     public float CorrectionPower;
 
+    /// <summary>
+    ///     Exponent that controls the distortion level of the effect.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite), DataField("distortionPower"), AutoNetworkedField]
+    public float DistortionPower = DefaultDistortionPower;
+
     public const float MaxMagnitude = 6;
     public const float DefaultCorrectionPower = 2f;
+    public const float DefaultDistortionPower = 2f;
 }

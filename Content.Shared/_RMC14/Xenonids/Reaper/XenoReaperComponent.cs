@@ -22,19 +22,16 @@ public sealed partial class XenoReaperComponent : Component
     public int MeleeGain = 5;
 
     [DataField, AutoNetworkedField]
-    public int PassiveDrain = 1;
+    public int PassiveGain = 2;
 
     [DataField, AutoNetworkedField]
-    public TimeSpan PassiveDrainEvery = TimeSpan.FromSeconds(4);
+    public TimeSpan PassiveGainEvery = TimeSpan.FromSeconds(1);
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField]
-    public TimeSpan NextPassiveDrainAt;
+    public TimeSpan NextPassiveGainAt;
 
     [DataField, AutoNetworkedField]
-    public int HighFleshResinDrainThreshold = 300;
-
-    [DataField, AutoNetworkedField]
-    public int HighFleshResinDrain = 0;
+    public int PassiveGainMaxFleshResin = 300;
 
     [DataField, AutoNetworkedField]
     public int FleshHarvestGain = 150;
@@ -50,12 +47,6 @@ public sealed partial class XenoReaperComponent : Component
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier RaptureSound = new SoundCollectionSpecifier("AlienClaw");
-
-    [DataField, AutoNetworkedField]
-    public TimeSpan DrainPauseAfterAbility = TimeSpan.FromSeconds(10);
-
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField]
-    public TimeSpan PauseDrainUntil;
 
     [DataField, AutoNetworkedField]
     public int FleshBloomCost = 120;

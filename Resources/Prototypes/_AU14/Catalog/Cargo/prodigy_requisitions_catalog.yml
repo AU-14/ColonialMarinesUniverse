@@ -144,6 +144,8 @@
         crate: RMCCrateSupplyJanitor
     - name: Weapons
       entries:
+      - cost: 4000
+        crate: RMCCrateXM51
       - cost: 3000
         crate: RMCCrateMK80
       - cost: 4000
@@ -162,6 +164,8 @@
         crate: AU14CrateOG60
     - name: Ammo
       entries:
+      - cost: 1000
+        crate: RMCCrateBoxShellsShotgunBreaching
       - cost: 2500
         crate: RMCCrateBoxMagazinePistolMK80
       - cost: 4000

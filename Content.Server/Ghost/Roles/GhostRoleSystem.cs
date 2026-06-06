@@ -26,6 +26,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Players;
 using Content.Shared.Roles;
 using Content.Shared.Verbs;
+using Content.Shared._RMC14.Xenonids;
 using JetBrains.Annotations;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
@@ -69,6 +70,8 @@ public sealed partial class GhostRoleSystem : EntitySystem
 
     private readonly Dictionary<ICommonSession, GhostRolesEui> _openUis = new();
     private readonly Dictionary<ICommonSession, MakeGhostRoleEui> _openMakeGhostRoleUis = new();
+
+    private static readonly ProtoId<JobPrototype> XenoLarvaRole = "CMXenoLarva";
 
     [ViewVariables]
     public IReadOnlyCollection<Entity<GhostRoleComponent>> GhostRoles => _ghostRoles.Values;
@@ -902,13 +905,20 @@ public sealed partial class GhostRoleSystem : EntitySystem
         return Resolve(uid, ref component, false) &&
                !component.Taken &&
                !MetaData(uid).EntityPaused &&
-               !IsControlledGhostRole(uid);
+               !IsControlledGhostRole(uid) &&
+               !IsBlockedXenoGhostRole(uid);
     }
 
     private bool IsControlledGhostRole(EntityUid uid)
     {
         return HasComp<ActorComponent>(uid) ||
                TryComp(uid, out MindContainerComponent? mind) && mind.HasMind;
+    }
+
+    private bool IsBlockedXenoGhostRole(EntityUid uid)
+    {
+        return TryComp(uid, out XenoComponent? xeno) &&
+               xeno.Role == XenoLarvaRole;
     }
 
     private void OnTakeoverTakeRole(EntityUid uid, GhostTakeoverAvailableComponent component, ref TakeGhostRoleEvent args)

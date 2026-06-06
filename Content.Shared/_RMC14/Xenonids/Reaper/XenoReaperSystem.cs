@@ -80,6 +80,8 @@ public sealed partial class XenoReaperSystem : EntitySystem
 
     private void OnReaperMapInit(Entity<XenoReaperComponent> xeno, ref MapInitEvent args)
     {
+        xeno.Comp.NextPassiveGainAt = _timing.CurTime + xeno.Comp.PassiveGainEvery;
+        Dirty(xeno);
         UpdateFleshAlert(xeno);
     }
 
@@ -138,7 +140,6 @@ public sealed partial class XenoReaperSystem : EntitySystem
         EnsureComp<XenoFleshHarvestedComponent>(target);
         RipLimbsFromCorpse(target);
         AddFleshResin(xeno, xeno.Comp.FleshHarvestGain);
-        PauseDrain(xeno);
     }
 
     private void OnRaptureAction(Entity<XenoReaperComponent> xeno, ref XenoRaptureActionEvent args)
@@ -156,7 +157,6 @@ public sealed partial class XenoReaperSystem : EntitySystem
             SpawnAttachedTo(xeno.Comp.RaptureEffect, args.Target.ToCoordinates());
 
         AddFleshResin(xeno, xeno.Comp.RaptureGain);
-        PauseDrain(xeno);
     }
 
     private void OnFleshBloomAction(Entity<XenoReaperComponent> xeno, ref XenoFleshBloomActionEvent args)
@@ -200,7 +200,6 @@ public sealed partial class XenoReaperSystem : EntitySystem
             return;
 
         args.Handled = true;
-        PauseDrain(xeno);
 
         if (_net.IsClient)
             return;
@@ -226,7 +225,6 @@ public sealed partial class XenoReaperSystem : EntitySystem
             return;
 
         args.Handled = true;
-        PauseDrain(xeno);
 
         if (_net.IsServer)
             TryStartRedGasStepDoAfter(xeno, ToNetPath(path), 0);
@@ -277,7 +275,6 @@ public sealed partial class XenoReaperSystem : EntitySystem
         _movementSpeed.RefreshMovementSpeedModifiers(args.Target);
         _armor.UpdateArmorValue((args.Target, null));
         _popup.PopupClient(Loc.GetString("cm-xeno-reaper-carrion-mantle"), args.Target, xeno);
-        PauseDrain(xeno);
     }
 
     private void OnCarrionMantleGetArmor(Entity<XenoCarrionMantleComponent> ent, ref CMGetArmorEvent args)
@@ -305,25 +302,19 @@ public sealed partial class XenoReaperSystem : EntitySystem
         var query = EntityQueryEnumerator<XenoReaperComponent>();
         while (query.MoveNext(out var uid, out var reaper))
         {
-            if (time < reaper.PauseDrainUntil)
-            {
-                reaper.NextPassiveDrainAt = time + reaper.PassiveDrainEvery;
-                Dirty(uid, reaper);
-                continue;
-            }
-
-            if (time < reaper.NextPassiveDrainAt)
+            if (time < reaper.NextPassiveGainAt)
                 continue;
 
-            reaper.NextPassiveDrainAt = time + reaper.PassiveDrainEvery;
-            if (reaper.FleshResin <= reaper.HighFleshResinDrainThreshold)
+            reaper.NextPassiveGainAt = time + reaper.PassiveGainEvery;
+            var passiveCap = Math.Min(reaper.MaxFleshResin, reaper.PassiveGainMaxFleshResin);
+            if (passiveCap <= 0 || reaper.FleshResin >= passiveCap)
                 continue;
 
-            var drain = Math.Max(0, reaper.PassiveDrain + reaper.HighFleshResinDrain);
-            if (drain == 0)
+            var gain = Math.Max(0, reaper.PassiveGain);
+            if (gain == 0)
                 continue;
 
-            reaper.FleshResin = Math.Max(reaper.HighFleshResinDrainThreshold, reaper.FleshResin - drain);
+            reaper.FleshResin = Math.Min(passiveCap, reaper.FleshResin + gain);
             Dirty(uid, reaper);
             UpdateFleshAlert((uid, reaper));
         }
@@ -687,12 +678,6 @@ public sealed partial class XenoReaperSystem : EntitySystem
         Dirty(reaper);
         UpdateFleshAlert(reaper);
         return true;
-    }
-
-    private void PauseDrain(Entity<XenoReaperComponent> reaper)
-    {
-        reaper.Comp.PauseDrainUntil = _timing.CurTime + reaper.Comp.DrainPauseAfterAbility;
-        Dirty(reaper);
     }
 
     private void UpdateFleshAlert(Entity<XenoReaperComponent> reaper)

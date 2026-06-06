@@ -668,14 +668,16 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         float accumulationSuppression,
         int tierSuppression,
         float decayBonus,
-        TimeSpan duration)
+        TimeSpan duration,
+        float reductionDecreaseRate = 0f)
         => AddPainSuppressionProfile(
             body,
             accumulationSuppression,
             tierSuppression,
             decayBonus,
             duration,
-            additive: false);
+            additive: false,
+            reductionDecreaseRate);
 
     public void AddAdditivePainSuppressionProfile(
         EntityUid body,
@@ -689,7 +691,8 @@ public abstract partial class SharedPainShockSystem : EntitySystem
             tierSuppression,
             decayBonus,
             duration,
-            additive: true);
+            additive: true,
+            reductionDecreaseRate: 0f);
 
     public void AddPainPulse(EntityUid body, FixedPoint2 amount)
     {
@@ -716,7 +719,8 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         int tierSuppression,
         float decayBonus,
         TimeSpan duration,
-        bool additive)
+        bool additive,
+        float reductionDecreaseRate)
     {
         if (Net.IsClient || duration <= TimeSpan.Zero)
             return;
@@ -728,7 +732,7 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         }
 
         var sup = EnsureComp<PainSuppressionComponent>(effectUid);
-        ResolveSuppressionProfile((effectUid, sup), dirty: false);
+        ResolveSuppressionProfile(body, (effectUid, sup), dirty: false);
         var oldAccumulation = sup.AccumulationSuppression;
         var oldTier = sup.TierSuppression;
         var oldDecay = sup.DecayBonus;
@@ -738,11 +742,12 @@ public abstract partial class SharedPainShockSystem : EntitySystem
             AccumulationSuppression = Math.Clamp(accumulationSuppression, 0f, 1f),
             TierSuppression = Math.Max(0, tierSuppression),
             DecayBonus = Math.Max(0f, decayBonus),
+            ReductionDecreaseRate = Math.Max(0f, reductionDecreaseRate),
             Additive = additive,
             ExpiresAt = Timing.CurTime + duration,
         });
 
-        ResolveSuppressionProfile((effectUid, sup));
+        ResolveSuppressionProfile(body, (effectUid, sup));
         RefreshTier(body);
 
         if (TryComp<PainShockComponent>(body, out var pain))
@@ -795,15 +800,16 @@ public abstract partial class SharedPainShockSystem : EntitySystem
 
         sup = suppression;
         if (Net.IsServer)
-            ResolveSuppressionProfile((effect, sup));
+            ResolveSuppressionProfile(body, (effect, sup));
 
         return sup.AccumulationSuppression > 0f || sup.TierSuppression > 0 || sup.DecayBonus > 0f;
     }
 
-    private void ResolveSuppressionProfile(Entity<PainSuppressionComponent> ent, bool dirty = true)
+    private void ResolveSuppressionProfile(EntityUid body, Entity<PainSuppressionComponent> ent, bool dirty = true)
     {
         var now = Timing.CurTime;
         var removed = ent.Comp.ActiveProfiles.RemoveAll(entry => entry.ExpiresAt <= now) > 0;
+        var painFraction = GetPainSuppressionPainFraction(body);
 
         var bestAccumulation = 0f;
         var bestTier = 0;
@@ -813,19 +819,24 @@ public abstract partial class SharedPainShockSystem : EntitySystem
         var additiveDecay = 0f;
         foreach (var entry in ent.Comp.ActiveProfiles)
         {
+            var effectiveness = GetPainSuppressionEffectiveness(entry, painFraction);
+            var accumulation = entry.AccumulationSuppression * effectiveness;
+            var tier = (int)MathF.Floor(entry.TierSuppression * effectiveness + 0.001f);
+            var decay = entry.DecayBonus * effectiveness;
+
             if (entry.Additive)
             {
-                additiveAccumulation += entry.AccumulationSuppression;
-                additiveTier += entry.TierSuppression;
-                additiveDecay += entry.DecayBonus;
+                additiveAccumulation += accumulation;
+                additiveTier += tier;
+                additiveDecay += decay;
                 continue;
             }
 
-            if (IsProfileStronger(entry, bestAccumulation, bestTier, bestDecay))
+            if (IsProfileStronger(accumulation, tier, decay, bestAccumulation, bestTier, bestDecay))
             {
-                bestAccumulation = entry.AccumulationSuppression;
-                bestTier = entry.TierSuppression;
-                bestDecay = entry.DecayBonus;
+                bestAccumulation = accumulation;
+                bestTier = tier;
+                bestDecay = decay;
             }
         }
 
@@ -846,17 +857,35 @@ public abstract partial class SharedPainShockSystem : EntitySystem
             Dirty(ent);
     }
 
+    private float GetPainSuppressionPainFraction(EntityUid body)
+    {
+        if (!TryComp<PainShockComponent>(body, out var pain) || pain.PainMax <= FixedPoint2.Zero)
+            return 0f;
+
+        return Math.Clamp(pain.Pain.Float() / pain.PainMax.Float(), 0f, 1f);
+    }
+
+    private static float GetPainSuppressionEffectiveness(PainSuppressionEntry entry, float painFraction)
+    {
+        if (entry.ReductionDecreaseRate <= 0f || painFraction <= 0f)
+            return 1f;
+
+        return Math.Clamp(1f - painFraction * entry.ReductionDecreaseRate, 0f, 1f);
+    }
+
     private static bool IsProfileStronger(
-        PainSuppressionEntry entry,
+        float accumulation,
+        int tier,
+        float decay,
         float bestAccumulation,
         int bestTier,
         float bestDecay)
     {
-        if (entry.TierSuppression != bestTier)
-            return entry.TierSuppression > bestTier;
-        if (MathF.Abs(entry.AccumulationSuppression - bestAccumulation) > 0.001f)
-            return entry.AccumulationSuppression > bestAccumulation;
-        return entry.DecayBonus > bestDecay;
+        if (tier != bestTier)
+            return tier > bestTier;
+        if (MathF.Abs(accumulation - bestAccumulation) > 0.001f)
+            return accumulation > bestAccumulation;
+        return decay > bestDecay;
     }
 
     private static bool SuppressionImproved(

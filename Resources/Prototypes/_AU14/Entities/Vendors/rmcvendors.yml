@@ -360,10 +360,8 @@
         amount: 5
       - id: AU14PackFlareRMC
         amount: 12
-      - id: RMCBoxPackFlareCAS
-        amount: 1
       - id: RMCPackFlareCAS
-        amount: 7
+        amount: 8
     - name: Optics
       entries:
       - id: RMCLaserDesignatorPVE

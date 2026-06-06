@@ -115,6 +115,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
 
     private void OnMapInit(Entity<HiveComponent> ent, ref MapInitEvent args)
     {
+        ent.Comp.InstantBuildsRemaining = ent.Comp.MaxInstantBuilds;
         ent.Comp.AnnouncedUnlocks.Clear();
         ent.Comp.Unlocks.Clear();
         ent.Comp.AnnouncementsLeft.Clear();

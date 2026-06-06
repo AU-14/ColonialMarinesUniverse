@@ -1,0 +1,21 @@
+- type: entity
+  parent: RMCBaseEffect
+  id: RMCEffectXenoFireSpew
+  name: fire spew
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Effects/fire.rsi
+    noRot: true
+    drawdepth: WallTops
+    layers:
+    - state: red_4
+  - type: PointLight
+    radius: 3
+    color: "#bf6d02"
+  - type: TimedDespawn
+    lifetime: 0.6
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu

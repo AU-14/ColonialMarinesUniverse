@@ -2279,5 +2279,94 @@
   id: 202
   time: '2026-06-05T16:56:26.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1226
+- author: Tyzemol
+  changes:
+  - message: GOVFOR has way less signal flares now.
+    type: Tweak
+  id: 203
+  time: '2026-06-05T18:47:05.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1227
+- author: TheHellFireo
+  changes:
+  - message: Heatshield Vomit Bile now spews fire in 3 tiles infront of it
+    type: Add
+  - message: "Added a flamer burst sound to Heatshield\u2019s burning Vomit Bile spray."
+    type: Add
+  - message: Increased Heatshield Vomit Bile targeting range by 20%, from 1.5 to 1.8.
+    type: Tweak
+  - message: Reaper now passively gains flesh resin up to 300.
+    type: Add
+  - message: Reaper passive flesh gain is 2 flesh per second instead of draining stored
+      flesh.
+    type: Tweak
+  - message: Reapers Red mist no longer gives toxin to synths
+    type: Fix
+  - message: Set M240 use delay to 2s, M34-T use delay to 3s, and smartgun falloff
+      start to 4.5 tiles.
+    type: Tweak
+  - message: Made the M34/M34-T flamer and SMAW meltable.
+    type: Fix
+  - message: Join Xeno abandoned-body filtering now allows actual hive-core lesser
+      drones while keeping non-drone lesser xeno
+    type: Tweak
+  - message: Larva no longer appear as normal ghost roles, and ghosted lesser drones
+      can be offered through Join Xeno.
+    type: Fix
+  - message: 'Alchemist injections now apply immediate debuffs: Noctine dazes and
+      stutters, Pyrinine dazes, Crynine slows.'
+    type: Add
+  - message: Alchemist manual and melee chemical generation are now doubled.
+    type: Tweak
+  - message: Alchemist toxin effects now apply over ~50 seconds with doubled potency
+      and purge rates.
+    type: Tweak
+  - message: Vapinine now purges blood and oxygen support chemicals.
+    type: Tweak
+  - message: Injected Alchemist mixtures now apply their intended immediate combat
+      effects to human targets.
+    type: Fix
+  - message: Xeno hives now get a shared 200-use instant-build pool for the first
+      30 minutes of the round.
+    type: Add
+  - message: "Secrete structure actions show the hive\u2019s remaining instant builds\
+      \ in the lower-right while available."
+    type: Tweak
+  - message: Hive instant builds no longer consume plasma and refund their charge
+      if placement fails.
+    type: Fix
+  - message: coils opening synth surgery before burn repair.
+    type: Fix
+  - message: synths metabolizing reagents, bleeding, and accepting tourniquets.
+    type: Fix
+  - message: organic wound/TQ/eschar/necrosis/internal bleed state persisting on limbs
+      reattached to synths.
+    type: Fix
+  - message: Heart repair surgery now restarts repaired non-dead hearts through the
+      existing heart system.
+    type: Fix
+  - message: Fixed repaired hearts staying stopped and continuing oxygen damage after
+      surgery.
+    type: Fix
+  - message: Signal flares created by flare projectiles and air shots now preserve
+      the user's faction for dropship targeting.
+    type: Fix
+  - message: Fixed firemission flare targeting/PVS cleanup so pilots don't stay subscribed
+      to the wrong signal flare target.
+    type: Fix
+  - message: Severe and shock pain now apply player-facing feedback, including pain
+      visuals, pain emotes, stuttering, drunkenness, and shock slurring.
+    type: Add
+  - message: Inaprovaline and epinephrine now reduce pain, with inaprovaline providing
+      stronger relief.
+    type: Add
+  - message: Shock pain blur now ramps faster after shock threshold instead of instantly
+      jumping to full strength.
+    type: Tweak
+  - message: Strong painkiller relief now weakens as pain rises, and tramadol/oxycodone
+      overdoses can cause drunkenness.
+    type: Tweak
+  id: 204
+  time: '2026-06-06T00:48:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1231
 Name: CMU
 Order: -1

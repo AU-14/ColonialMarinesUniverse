@@ -1,6 +1,8 @@
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Content.Shared.CCVar;
+using Robust.Shared.Maths;
+using Robust.Shared.Timing;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
 using Content.Shared.Eye.Blinding.Components;
@@ -22,11 +24,15 @@ namespace Content.Client.Eye.Blinding
         public override OverlaySpace Space => OverlaySpace.WorldSpace;
         private readonly ShaderInstance _cataractsShader;
         private readonly ShaderInstance _circleMaskShader;
-        private float _magnitude;
+        private float _currentMagnitude;
         private float _correctionPower = 2.0f;
-
-        private const float Distortion_Pow = 2.0f; // Exponent for the distortion effect
+        private float _distortionPower = 2.0f;
         private const float Cloudiness_Pow = 1.0f; // Exponent for the cloudiness effect
+
+        public void Reset()
+        {
+            _currentMagnitude = 0f;
+        }
 
         private const float NoMotion_Radius = 30.0f; // Base radius for the nomotion variant at its full strength
         private const float NoMotion_Pow = 0.2f; // Exponent for the nomotion variant's gradient
@@ -45,6 +51,30 @@ namespace Content.Client.Eye.Blinding
             _circleMaskShader.SetParameter("CircleMult", NoMotion_Mult);
         }
 
+        protected override void FrameUpdate(FrameEventArgs args)
+        {
+            var playerEntity = _playerManager.LocalSession?.AttachedEntity;
+            var targetMagnitude = 0f;
+
+            if (playerEntity != null
+                && _entityManager.TryGetComponent<BlurryVisionComponent>(playerEntity.Value, out var blurComp)
+                && (!_entityManager.TryGetComponent<BlindableComponent>(playerEntity.Value, out var blindComp) || !blindComp.IsBlind))
+            {
+                targetMagnitude = blurComp.Magnitude;
+                _correctionPower = blurComp.CorrectionPower;
+                _distortionPower = blurComp.DistortionPower;
+            }
+
+            if (!MathHelper.CloseTo(_currentMagnitude, targetMagnitude, 0.001f))
+            {
+                _currentMagnitude += (targetMagnitude - _currentMagnitude) * 5f * args.DeltaSeconds;
+            }
+            else
+            {
+                _currentMagnitude = targetMagnitude;
+            }
+        }
+
         protected override bool BeforeDraw(in OverlayDrawArgs args)
         {
             if (!_entityManager.TryGetComponent(_playerManager.LocalSession?.AttachedEntity, out EyeComponent? eyeComp))
@@ -53,24 +83,7 @@ namespace Content.Client.Eye.Blinding
             if (args.Viewport.Eye != eyeComp.Eye)
                 return false;
 
-            var playerEntity = _playerManager.LocalSession?.AttachedEntity;
-
-            if (playerEntity == null)
-                return false;
-
-            if (!_entityManager.TryGetComponent<BlurryVisionComponent>(playerEntity, out var blurComp))
-                return false;
-
-            if (blurComp.Magnitude <= 0)
-                return false;
-
-            if (_entityManager.TryGetComponent<BlindableComponent>(playerEntity, out var blindComp)
-                && blindComp.IsBlind)
-                return false;
-
-            _magnitude = blurComp.Magnitude;
-            _correctionPower = blurComp.CorrectionPower;
-            return true;
+            return _currentMagnitude > 0.01f;
         }
 
         protected override void Draw(in OverlayDrawArgs args)
@@ -82,7 +95,7 @@ namespace Content.Client.Eye.Blinding
 
             var worldHandle = args.WorldHandle;
             var viewport = args.WorldBounds;
-            var strength = (float) Math.Pow(Math.Min(_magnitude / BlurryVisionComponent.MaxMagnitude, 1.0f), _correctionPower);
+            var strength = (float) Math.Pow(Math.Min(_currentMagnitude / BlurryVisionComponent.MaxMagnitude, 1.0f), _correctionPower);
 
             var zoom = 1.0f;
             if (_entityManager.TryGetComponent<EyeComponent>(playerEntity, out var eyeComponent))
@@ -109,7 +122,7 @@ namespace Content.Client.Eye.Blinding
 
             _cataractsShader.SetParameter("Zoom", zoom);
 
-            _cataractsShader.SetParameter("DistortionScalar", (float) Math.Pow(strength, Distortion_Pow));
+            _cataractsShader.SetParameter("DistortionScalar", (float) Math.Pow(strength, _distortionPower));
             _cataractsShader.SetParameter("CloudinessScalar", (float) Math.Pow(strength, Cloudiness_Pow));
 
             worldHandle.UseShader(_cataractsShader);

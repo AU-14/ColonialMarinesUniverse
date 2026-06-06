@@ -1,6 +1,8 @@
 using Content.Shared._CMU14.Medical;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Armor;
+using Content.Shared._RMC14.Slow;
+using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Plasma;
@@ -32,9 +34,11 @@ public sealed partial class XenoAlchemistSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private SharedRMCMeleeWeaponSystem _rmcMelee = default!;
+    [Dependency] private RMCSlowSystem _rmcSlow = default!;
     [Dependency] private SharedSolutionContainerSystem _solution = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private MovementSpeedModifierSystem _speed = default!;
+    [Dependency] private RMCDazedSystem _dazed = default!;
     [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
     [Dependency] private XenoSystem _xeno = default!;
 
@@ -369,7 +373,13 @@ public sealed partial class XenoAlchemistSystem : EntitySystem
 
     private void ApplyMixture(Entity<XenoAlchemistComponent> xeno, EntityUid target, AlchemistMixture mixture, int potency, bool injected)
     {
-        if (injected || !HasComp<XenoComponent>(target))
+        if (injected)
+        {
+            ApplyInjectedMixture(xeno, target, mixture, potency);
+            return;
+        }
+
+        if (!HasComp<XenoComponent>(target))
             return;
 
         var damage = mixture switch
@@ -396,6 +406,29 @@ public sealed partial class XenoAlchemistSystem : EntitySystem
 
         if (mixture == AlchemistMixture.Vapinine && TryComp(target, out XenoPlasmaComponent? plasma))
             _xenoPlasma.RemovePlasma((target, plasma), potency * 4);
+    }
+
+    private void ApplyInjectedMixture(Entity<XenoAlchemistComponent> xeno, EntityUid target, AlchemistMixture mixture, int potency)
+    {
+        var multiplier = Math.Clamp((float) potency / xeno.Comp.MaxStockpile, 0.25f, 1f);
+
+        switch (mixture)
+        {
+            case AlchemistMixture.Noctine:
+                _dazed.TryDaze(target, ScaleDuration(xeno.Comp.NoctineDazeTime, multiplier), true, stutter: true);
+                break;
+            case AlchemistMixture.Pyrinine:
+                _dazed.TryDaze(target, ScaleDuration(xeno.Comp.PyrinineDazeTime, multiplier), true);
+                break;
+            case AlchemistMixture.Crynine:
+                _rmcSlow.TrySlowdown(target, ScaleDuration(xeno.Comp.CrynineSlowTime, multiplier), ignoreDurationModifier: true);
+                break;
+        }
+    }
+
+    private static TimeSpan ScaleDuration(TimeSpan duration, float multiplier)
+    {
+        return TimeSpan.FromSeconds(duration.TotalSeconds * multiplier);
     }
 
     private void SetTailInjectionCooldown(Entity<XenoAlchemistComponent> xeno, int total)
