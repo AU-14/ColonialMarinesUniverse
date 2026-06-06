@@ -66,7 +66,7 @@
   hidden: false
 
 - type: entity
-  id: AU14RandomHumanoidNEMOSynthetic
+  id: AU14RandomHumanoidNEMOSynthetic2
   name: NEMO ghost role synthetic
   suffix: Ghostrole, Friendly, WL'd (No knowledge)
   components:
