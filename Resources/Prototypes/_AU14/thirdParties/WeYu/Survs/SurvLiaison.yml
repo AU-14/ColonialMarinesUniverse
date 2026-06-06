@@ -98,8 +98,14 @@
     ears: RMCHeadsetDistressWeYa
     ears2: RMCM5CameraGear
     pocket1: AU14WEYULiasonSurvIntel
+    pocket2: RMCRadioHandheldColonyOff
   inhand:
   - RMCPortableVendorCorporate
+  storage:
+    outerClothing:
+    - CMCrowbar
+    - RMCFlashlight
+
 
 - type: entity
   parent: RMCPouchDocumentSmall

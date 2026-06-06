@@ -77,7 +77,7 @@
     eyes: RMCGlassesMedicalHUDGlasses
     belt: CMUBeltMedicBagSupportSynth
     back: RMCSatchelChemistry
-    pocket1: RMCFlashlight
+    pocket1: CMSurgicalCaseFilled
     pocket2: AU14PouchIFAKFill
   storage:
     back:
@@ -87,3 +87,7 @@
     - CMHandsLatex
     - CMHealthAnalyzer
     - AU14CMDefibrillator
+    - RMCRadioHandheldColonyOff
+    outerClothing:
+    - CMCrowbar
+    - RMCFlashlight

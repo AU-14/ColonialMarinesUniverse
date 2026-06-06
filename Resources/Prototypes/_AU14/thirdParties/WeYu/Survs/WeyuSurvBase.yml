@@ -48,8 +48,8 @@
     - id: RMCMREWeYa
     - id: CMCanteen
     - id: RMCMagazineSMGFP9000
-    - id: RMCMagazineSMGFP9000
-    - id: RMCMagazineSMGFP9000
+    - id: RMCRadioHandheldColonyOff
+    - id: CMCrowbar
     - id: RMCGrenadeBlastM12
     - id: RMCGrenadeBlastM12
 
@@ -64,8 +64,8 @@
     - id: RMCMREWeYa
     - id: CMCanteen
     - id: RMCMagazineRifleSSG45
-    - id: RMCMagazineRifleSSG45
-    - id: RMCMagazineRifleSSG45
+    - id: RMCRadioHandheldColonyOff
+    - id: CMCrowbar
     - id: RMCGrenadeBlastM12
     - id: RMCGrenadeBlastM12
 
@@ -79,8 +79,8 @@
     - id: RMCMREWeYa
     - id: CMCanteen
     - id: CMMagazineRifleM54C
-    - id: CMMagazineRifleM54C
-    - id: CMMagazineRifleM54C
+    - id: RMCRadioHandheldColonyOff
+    - id: CMCrowbar
     - id: RMCGrenadeBlastM12
     - id: RMCGrenadeBlastM12
 
@@ -94,8 +94,8 @@
     - id: RMCMREWeYa
     - id: CMCanteen
     - id: AU14MagazineRifleF44AA
-    - id: AU14MagazineRifleF44AA
-    - id: AU14MagazineRifleF44AA
+    - id: RMCRadioHandheldColonyOff
+    - id: CMCrowbar
     - id: RMCGrenadeBlastM12
     - id: RMCGrenadeBlastM12
   
