@@ -85,7 +85,7 @@
     description: au14-job-description-corp-nemo-synthetic
     rules: au14-ghost-role-information-nemo-rules
     reregister: false
-    job: AU14NEMOSynthetic
+    job: AU14NEMOSynthetic5
     raffle:
       settings: short
     requirements:
