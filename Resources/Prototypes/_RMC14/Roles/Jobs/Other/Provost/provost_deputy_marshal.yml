@@ -1,7 +1,6 @@
 ﻿- type: job
   parent: CMJobBase
   id: CMProvostDeputyMarshal
-  categories: [ HideSpawnMenu ]
   name: rmc-job-name-corp-provost-deputy-marshal
   description: rmc-ghost-role-information-provost-description
   playTimeTracker: CMJobProvostDeputyMarshal

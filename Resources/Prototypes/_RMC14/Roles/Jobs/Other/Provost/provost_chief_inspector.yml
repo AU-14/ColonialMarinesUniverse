@@ -1,7 +1,6 @@
 ﻿- type: job
   parent: CMJobBase
   id: CMProvostChiefInspector
-  categories: [ HideSpawnMenu ]
   name: rmc-job-name-corp-provost-chief
   description: rmc-job-description-inspector
   whitelisted: true

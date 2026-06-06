@@ -1,7 +1,6 @@
 ﻿- type: job
   parent: CMJobBase
   id: CMProvostEnforcer
-  categories: [ HideSpawnMenu ]
   name: rmc-job-name-corp-provost-enforcer
   description: rmc-ghost-role-information-provost-squad-description
   playTimeTracker: CMJobProvostEnforcer
