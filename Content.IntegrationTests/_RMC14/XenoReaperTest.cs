@@ -49,6 +49,13 @@ public sealed class XenoReaperTest
 
 - type: entity
   parent: CMXenoReaper
+  id: RMCTestXenoReaperFlesh298
+  components:
+  - type: XenoReaper
+    fleshResin: 298
+
+- type: entity
+  parent: CMXenoReaper
   id: RMCTestXenoReaperFlesh301
   components:
   - type: XenoReaper
@@ -60,6 +67,7 @@ public sealed class XenoReaperTest
   components:
   - type: XenoReaper
     fleshResin: 40
+    passiveGain: 0
 ";
 
     [Test]
@@ -386,33 +394,37 @@ public sealed class XenoReaperTest
     }
 
     [Test]
-    public async Task PassiveFleshDrainOnlyRemovesOneAboveThreeHundred()
+    public async Task PassiveFleshGainAddsTwoPerSecondUpToThreeHundred()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var map = await pair.CreateTestMap();
 
+        EntityUid belowThreshold = default;
         EntityUid atThreshold = default;
         EntityUid overThreshold = default;
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            atThreshold = entMan.SpawnEntity("RMCTestXenoReaperFlesh300", map.GridCoords);
-            overThreshold = entMan.SpawnEntity("RMCTestXenoReaperFlesh301", map.GridCoords.Offset(new Vector2(1, 0)));
+            belowThreshold = entMan.SpawnEntity("RMCTestXenoReaperFlesh298", map.GridCoords);
+            atThreshold = entMan.SpawnEntity("RMCTestXenoReaperFlesh300", map.GridCoords.Offset(new Vector2(1, 0)));
+            overThreshold = entMan.SpawnEntity("RMCTestXenoReaperFlesh301", map.GridCoords.Offset(new Vector2(2, 0)));
         });
 
-        await server.WaitRunTicks(5);
+        await server.WaitRunTicks(70);
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
             Assert.Multiple(() =>
             {
+                Assert.That(entMan.GetComponent<XenoReaperComponent>(belowThreshold).FleshResin, Is.EqualTo(300));
                 Assert.That(entMan.GetComponent<XenoReaperComponent>(atThreshold).FleshResin, Is.EqualTo(300));
-                Assert.That(entMan.GetComponent<XenoReaperComponent>(overThreshold).FleshResin, Is.EqualTo(300));
+                Assert.That(entMan.GetComponent<XenoReaperComponent>(overThreshold).FleshResin, Is.EqualTo(301));
             });
 
+            entMan.DeleteEntity(belowThreshold);
             entMan.DeleteEntity(atThreshold);
             entMan.DeleteEntity(overThreshold);
         });

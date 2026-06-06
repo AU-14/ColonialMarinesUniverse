@@ -1,5 +1,6 @@
 using Content.Shared._CMU14.Medical;
 using Content.Shared._CMU14.Medical.Bones;
+using Content.Shared._CMU14.Medical.EntityEffects;
 using Content.Shared._CMU14.Medical.Organs;
 using Content.Shared._CMU14.Medical.Organs.Heart;
 using Content.Shared._CMU14.Medical.Organs.Lungs;
@@ -10,13 +11,19 @@ using Content.Shared._CMU14.Medical.StatusEffects;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Part;
+using Content.Shared.Body.Prototypes;
 using Content.Shared.Body.Systems;
+using Content.Shared.Chemistry.Reagent;
+using Content.Shared.EntityEffects;
+using Content.Shared.EntityEffects.EffectConditions;
+using Content.Shared.EntityEffects.Effects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Verbs;
 using Content.Server.Verbs;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -438,6 +445,102 @@ public sealed class PainShockReworkTest
         await pair.CleanReturnAsync();
     }
 
+    [Test]
+    public async Task DrugPainSuppressionWeakensAsPainRises()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var painSystem = entMan.System<SharedPainShockSystem>();
+            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+
+            try
+            {
+                var pain = entMan.EnsureComponent<PainShockComponent>(human);
+                pain.Pain = 90;
+                pain.PainTarget = 90;
+                pain.CachedRiseRate = 0;
+
+                painSystem.AddPainSuppressionProfile(
+                    human,
+                    0.75f,
+                    4,
+                    1.25f,
+                    TimeSpan.FromSeconds(30),
+                    reductionDecreaseRate: 0.25f);
+                painSystem.RefreshTier(human);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(pain.RawTier, Is.EqualTo(PainTier.Shock));
+                    Assert.That(painSystem.GetTierSuppression(human), Is.EqualTo(3));
+                    Assert.That(pain.Tier, Is.EqualTo(PainTier.Mild));
+                    Assert.That(painSystem.GetAccumulationSuppression(human), Is.LessThan(0.75f));
+                    Assert.That(painSystem.GetDecayBonus(human), Is.LessThan(1.25f));
+                });
+            }
+            finally
+            {
+                entMan.DeleteEntity(human);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task StrongPainkillerOverdosesApplyDrunkenness()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+
+            AssertPainkillerHasDrunkOverdoseEffect(
+                prototypes.Index<ReagentPrototype>("CMUTramadol"),
+                FixedPoint2.New(30));
+
+            AssertPainkillerHasDrunkOverdoseEffect(
+                prototypes.Index<ReagentPrototype>("CMUOxycodone"),
+                FixedPoint2.New(20));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task EpinephrineAndInaprovalineReducePain()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var epinephrine = AssertReagentHasPainSuppression(
+                prototypes.Index<ReagentPrototype>("CMEpinephrine"),
+                1);
+            var inaprovaline = AssertReagentHasPainSuppression(
+                prototypes.Index<ReagentPrototype>("CMInaprovaline"),
+                2);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(epinephrine.Additive, Is.True);
+                Assert.That(inaprovaline.Additive, Is.True);
+                Assert.That(inaprovaline.TierSuppression, Is.GreaterThan(epinephrine.TierSuppression));
+                Assert.That(inaprovaline.DecayBonus, Is.GreaterThan(epinephrine.DecayBonus));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     private static EntityUid GetFirstPart(IEntityManager entMan, EntityUid bodyUid)
     {
         var body = entMan.System<SharedBodySystem>();
@@ -529,6 +632,59 @@ public sealed class PainShockReworkTest
         foreach (var verb in verbs)
         {
             if (verb.Text == text)
+                return true;
+        }
+
+        return false;
+    }
+
+    private static void AssertPainkillerHasDrunkOverdoseEffect(ReagentPrototype reagent, FixedPoint2 min)
+    {
+        var metabolism = reagent.Metabolisms![new ProtoId<MetabolismGroupPrototype>("Medicine")];
+        foreach (var effect in metabolism.Effects)
+        {
+            if (effect is not Drunk drunk || !drunk.SlurSpeech)
+                continue;
+
+            if (HasReagentThreshold(effect, min))
+                return;
+        }
+
+        Assert.Fail($"{reagent.ID} must apply drunkenness at overdose threshold {min}.");
+    }
+
+    private static CMUApplyPainSuppressionEffect AssertReagentHasPainSuppression(
+        ReagentPrototype reagent,
+        int minTierSuppression)
+    {
+        var metabolism = reagent.Metabolisms![new ProtoId<MetabolismGroupPrototype>("Medicine")];
+        foreach (var effect in metabolism.Effects)
+        {
+            if (effect is not CMUApplyPainSuppressionEffect suppression)
+                continue;
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(suppression.TierSuppression, Is.GreaterThanOrEqualTo(minTierSuppression));
+                Assert.That(suppression.DurationPerUnit, Is.GreaterThan(0f));
+                Assert.That(suppression.ReductionDecreaseRate, Is.EqualTo(0f));
+            });
+
+            return suppression;
+        }
+
+        Assert.Fail($"{reagent.ID} must apply CMU pain suppression.");
+        return default!;
+    }
+
+    private static bool HasReagentThreshold(EntityEffect effect, FixedPoint2 min)
+    {
+        if (effect.Conditions == null)
+            return false;
+
+        foreach (var condition in effect.Conditions)
+        {
+            if (condition is ReagentThreshold threshold && threshold.Min == min)
                 return true;
         }
 

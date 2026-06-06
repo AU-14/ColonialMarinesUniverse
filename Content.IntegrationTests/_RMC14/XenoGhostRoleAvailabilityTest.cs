@@ -12,6 +12,34 @@ namespace Content.IntegrationTests._RMC14;
 public sealed class XenoGhostRoleAvailabilityTest
 {
     [Test]
+    public async Task LarvaDoesNotRegisterAsGhostRole()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+            DummyTicker = false,
+        });
+
+        var server = pair.Server;
+        var entMan = server.EntMan;
+        var ghostRole = entMan.System<GhostRoleSystem>();
+
+        EntityUid larva = default;
+
+        await server.WaitAssertion(() =>
+        {
+            larva = entMan.SpawnEntity("CMXenoLarva", MapCoordinates.Nullspace);
+
+            var larvaNet = entMan.GetNetEntity(larva);
+            Assert.That(ghostRole.GetGhostRoleCount(), Is.EqualTo(0));
+            Assert.That(ghostRole.GetGhostRolesInfo(null).Any(info => info.Entity == larvaNet), Is.False);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task ControlledEntityDoesNotRegisterAsGhostRole()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings

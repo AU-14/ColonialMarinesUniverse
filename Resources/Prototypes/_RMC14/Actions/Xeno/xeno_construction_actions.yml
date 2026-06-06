@@ -66,6 +66,7 @@
     checkStructureSelected: true
     checkWeeds: true
     canUpgrade: true
+  - type: XenoHiveInstantBuildAction
   - type: RMCDazeableAction
 
 - type: entity
@@ -98,6 +99,7 @@
     checkStructureSelected: true
     checkWeeds: true
     canUpgrade: false
+  - type: XenoHiveInstantBuildAction
   - type: RMCDazeableAction
 
 - type: entity

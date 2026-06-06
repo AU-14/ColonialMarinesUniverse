@@ -434,7 +434,7 @@
   id: ActionXenoVomitBile
   parent: ActionXenoBase
   name: Vomit Bile (40)
-  description: Extinguishes a nearby hivemate or coats an enemy in volatile bile.
+  description: Extinguishes a nearby hivemate or sprays volatile bile over enemies in the three tiles in front of you.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -443,7 +443,7 @@
       state: xeno_spit
     useDelay: 8
   - type: TargetAction
-    range: 1.5
+    range: 1.8
     checkCanAccess: false
   - type: EntityTargetAction
     targetCheckCanInteract: false

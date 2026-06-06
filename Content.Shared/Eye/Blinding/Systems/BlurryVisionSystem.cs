@@ -39,6 +39,7 @@ public sealed class BlurryVisionSystem : EntitySystem
         var blurry = EnsureComp<BlurryVisionComponent>(ent);
         blurry.Magnitude = blur;
         blurry.CorrectionPower = ev.CorrectionPower;
+        blurry.DistortionPower = ev.DistortionPower;
         Dirty(ent, blurry);
     }
 
@@ -58,6 +59,7 @@ public sealed class GetBlurEvent : EntityEventArgs, IInventoryRelayEvent
     public readonly float BaseBlur;
     public float Blur;
     public float CorrectionPower = BlurryVisionComponent.DefaultCorrectionPower;
+    public float DistortionPower = BlurryVisionComponent.DefaultDistortionPower;
 
     public GetBlurEvent(float blur)
     {

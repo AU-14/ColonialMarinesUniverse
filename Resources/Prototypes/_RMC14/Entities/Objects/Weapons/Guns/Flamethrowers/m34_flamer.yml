@@ -33,6 +33,8 @@
     - FullAuto
     soundGunshot:
       collection: RMCFlamerShoot
+  - type: UseDelay
+    delay: 2
   - type: ShootUseDelay
   - type: ContainerContainer
     containers:

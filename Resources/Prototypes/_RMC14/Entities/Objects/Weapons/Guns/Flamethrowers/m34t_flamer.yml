@@ -5,7 +5,7 @@
   description: An improved version of the M34 incinerator unit, the M34-T model is capable of dispersing a larger variety of fuel types.
   components:
   - type: Corrodible
-    isCorrodible: false
+    isCorrodible: true
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Flamethrower/m34t.rsi
   - type: Item
@@ -13,7 +13,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Weapons/Guns/Flamethrower/m34t.rsi
   - type: UseDelay
-    delay: 0.5
+    delay: 3
   - type: AttachableHolder # NOTE: The nozzle is only for the base M34.
     slots:
       rmc-aslot-rail:

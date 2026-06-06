@@ -115,6 +115,7 @@
   - type: CMUHumanMedical
   - type: HitLocation
   - type: PainShock
+  - type: CMUPainFeedback
   - type: Damageable
     damageContainer: Biological
     damageModifierSet: null

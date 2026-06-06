@@ -81,7 +81,7 @@
     soundGunshot:
       path: /Audio/_RMC14/Weapons/Guns/Gunshots/m5_shoot.ogg
   - type: Corrodible
-    isCorrodible: false
+    isCorrodible: true
   - type: RMCMagneticItem
 
 # 84mm HE

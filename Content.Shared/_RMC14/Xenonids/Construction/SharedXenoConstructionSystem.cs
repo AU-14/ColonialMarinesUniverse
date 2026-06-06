@@ -35,6 +35,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Doors.Components;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
+using Content.Shared.GameTicking;
 using Content.Shared.Interaction;
 using Content.Shared.Maps;
 using Content.Shared.Popups;
@@ -67,6 +68,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
     [Dependency] private IComponentFactory _compFactory = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedGameTicker _gameTicker = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private IMapManager _map = default!;
@@ -105,13 +107,16 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
     private EntityQuery<XenoEggComponent> _xenoEggQuery;
     private EntityQuery<XenoTunnelComponent> _xenoTunnelQuery;
     private EntityQuery<QueenBuildingBoostComponent> _queenBoostQuery;
+    private EntityQuery<XenoHiveInstantBuildActionComponent> _xenoInstantBuildActionQuery;
 
     private const string XenoStructuresAnimation = "RMCEffect";
     private const string XenoHiveCoreNodeId = "HiveCoreXenoConstructionNode";
     private const float VehicleConstructionBlockRange = 3f;
+    private static readonly TimeSpan InstantBuildCounterRefreshInterval = TimeSpan.FromSeconds(1);
 
     private float _densityThreshold;
     private TimeSpan _newResinPreventCollideTime;
+    private TimeSpan _nextInstantBuildCounterRefresh;
 
     private readonly HashSet<EntityUid> _intersectingResin = new();
 
@@ -127,6 +132,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         _xenoEggQuery = GetEntityQuery<XenoEggComponent>();
         _xenoTunnelQuery = GetEntityQuery<XenoTunnelComponent>();
         _queenBoostQuery = GetEntityQuery<QueenBuildingBoostComponent>();
+        _xenoInstantBuildActionQuery = GetEntityQuery<XenoHiveInstantBuildActionComponent>();
 
         SubscribeLocalEvent<NewXenoEvolvedEvent>(OnNewXenoEvolved);
         SubscribeLocalEvent<XenoDevolvedEvent>(OnXenoDevolved);
@@ -502,7 +508,8 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             return;
         }
 
-        if (!CanSecreteOnTilePopup(xeno, choice, args.Target, true, true))
+        var canUseHiveInstantBuild = CanUseHiveInstantBuild(xeno.Owner);
+        if (!CanSecreteOnTilePopup(xeno, choice, args.Target, true, true, checkPlasma: !canUseHiveInstantBuild))
             return;
 
         var attempt = new XenoSecreteStructureAttemptEvent(args.Target);
@@ -524,6 +531,26 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             buildMult *= boostComp.BuildSpeedMultiplier;
 
         var finalBuildTime = xeno.Comp.BuildDelay * buildMult;
+
+        if (TryUseHiveInstantBuild(xeno.Owner, out var hive))
+        {
+            if (TryCompleteSecreteStructure(xeno, coordinates, choice, false))
+            {
+                args.Handled = true;
+            }
+            else if (hive is { } hiveEnt)
+            {
+                RefundHiveInstantBuild(hiveEnt);
+            }
+
+            return;
+        }
+
+        if (canUseHiveInstantBuild &&
+            !CanSecreteOnTilePopup(xeno, choice, args.Target, true, true))
+        {
+            return;
+        }
 
         if (_net.IsServer && _prototype.HasIndex(effectId))
         {
@@ -561,6 +588,138 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         Dirty(xeno);
     }
 
+    public int GetHiveInstantBuildsRemaining(EntityUid hive)
+    {
+        return TryComp(hive, out HiveComponent? comp)
+            ? comp.InstantBuildsRemaining
+            : 0;
+    }
+
+    public bool TryUseHiveInstantBuild(EntityUid hive)
+    {
+        if (!TryComp(hive, out HiveComponent? comp))
+            return false;
+
+        return TryUseHiveInstantBuild((hive, comp));
+    }
+
+    private bool TryUseHiveInstantBuild(Entity<HiveComponent> hive)
+    {
+        if (!CanUseHiveInstantBuild(hive))
+            return false;
+
+        hive.Comp.InstantBuildsRemaining--;
+        Dirty(hive);
+
+        if (_net.IsServer)
+            RefreshHiveInstantBuildActionCounters(hive);
+
+        return true;
+    }
+
+    private void RefundHiveInstantBuild(Entity<HiveComponent> hive)
+    {
+        var refunded = Math.Min(hive.Comp.InstantBuildsRemaining + 1, hive.Comp.MaxInstantBuilds);
+        if (refunded == hive.Comp.InstantBuildsRemaining)
+            return;
+
+        hive.Comp.InstantBuildsRemaining = refunded;
+        Dirty(hive);
+
+        if (_net.IsServer)
+            RefreshHiveInstantBuildActionCounters(hive);
+    }
+
+    private bool TryUseHiveInstantBuild(EntityUid user, out Entity<HiveComponent>? hive)
+    {
+        hive = _hive.GetHive(user);
+        if (hive is not { } hiveEnt)
+            return false;
+
+        if (!TryUseHiveInstantBuild(hiveEnt))
+            return false;
+
+        hive = hiveEnt;
+        return true;
+    }
+
+    private bool CanUseHiveInstantBuild(Entity<HiveComponent> hive)
+    {
+        return hive.Comp.InstantBuildsRemaining > 0 &&
+               IsHiveInstantBuildActive(hive);
+    }
+
+    private bool CanUseHiveInstantBuild(EntityUid user)
+    {
+        var hive = _hive.GetHive(user);
+        return hive is { } hiveEnt &&
+               CanUseHiveInstantBuild(hiveEnt);
+    }
+
+    private bool IsHiveInstantBuildActive(Entity<HiveComponent> hive)
+    {
+        return _gameTicker.RoundDuration() < hive.Comp.InstantBuildDuration;
+    }
+
+    private bool ShouldShowHiveInstantBuildCounter(Entity<HiveComponent> hive)
+    {
+        return IsHiveInstantBuildActive(hive) ||
+               hive.Comp.InstantBuildsRemaining > 0;
+    }
+
+    public void RefreshHiveInstantBuildActionCounters(EntityUid hiveUid)
+    {
+        if (!TryComp(hiveUid, out HiveComponent? hive))
+            return;
+
+        RefreshHiveInstantBuildActionCounters((hiveUid, hive));
+    }
+
+    private void RefreshAllHiveInstantBuildActionCounters()
+    {
+        var hives = EntityQueryEnumerator<HiveComponent>();
+        while (hives.MoveNext(out var hiveUid, out var hive))
+        {
+            RefreshHiveInstantBuildActionCounters((hiveUid, hive));
+        }
+    }
+
+    private void RefreshHiveInstantBuildActionCounters(Entity<HiveComponent> hive)
+    {
+        if (_net.IsClient)
+            return;
+
+        var showCounter = ShouldShowHiveInstantBuildCounter(hive);
+        var buildsLeft = Math.Max(0, hive.Comp.InstantBuildsRemaining);
+        var xenos = EntityQueryEnumerator<XenoComponent, HiveMemberComponent>();
+        while (xenos.MoveNext(out _, out var xeno, out var member))
+        {
+            if (member.Hive != hive.Owner)
+                continue;
+
+            foreach (var actionId in xeno.Actions.Values)
+            {
+                if (!_xenoInstantBuildActionQuery.TryComp(actionId, out var counter))
+                    continue;
+
+                SetInstantBuildActionCounter((actionId, counter), buildsLeft, showCounter);
+            }
+        }
+    }
+
+    private void SetInstantBuildActionCounter(Entity<XenoHiveInstantBuildActionComponent> action, int buildsLeft, bool visible)
+    {
+        if (action.Comp.BuildsLeft == buildsLeft &&
+            action.Comp.Visible == visible)
+        {
+            return;
+        }
+
+        action.Comp.BuildsLeft = buildsLeft;
+        action.Comp.Visible = visible;
+        Dirty(action);
+    }
+
     private void OnXenoSecreteStructureDoAfter(Entity<XenoConstructionComponent> xeno, ref XenoSecreteStructureDoAfterEvent args)
     {
         if (_net.IsServer && args.Effect != null)
@@ -569,46 +728,54 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         if (args.Handled || args.Cancelled)
             return;
 
-        var coordinates = GetCoordinates(args.Coordinates);
+        if (TryCompleteSecreteStructure(xeno, args.Coordinates, args.StructureId))
+            args.Handled = true;
+    }
+
+    private bool TryCompleteSecreteStructure(Entity<XenoConstructionComponent> xeno, NetCoordinates netCoordinates, EntProtoId structureId, bool consumePlasma = true)
+    {
+        var coordinates = GetCoordinates(netCoordinates);
         if (!coordinates.IsValid(EntityManager) ||
-            !xeno.Comp.CanBuild.Contains(args.StructureId) ||
-            !CanSecreteOnTilePopup(xeno, args.StructureId, GetCoordinates(args.Coordinates), true, true))
+            !xeno.Comp.CanBuild.Contains(structureId) ||
+            !CanSecreteOnTilePopup(xeno, structureId, coordinates, true, true, checkPlasma: consumePlasma))
         {
-            return;
+            return false;
         }
 
         var hasBoost = _queenBoostQuery.HasComp(xeno.Owner);
-        if (_area.TryGetArea(GetCoordinates(args.Coordinates), out var area, out _) &&
-            GetStructurePlasmaCost(args.StructureId) is { } baseCost)
+        if (_area.TryGetArea(coordinates, out var area, out _) &&
+            GetStructurePlasmaCost(structureId) is { } baseCost)
         {
             var cost = baseCost;
             if (area.Value.Comp.ResinConstructCount != 0 &&
                 !area.Value.Comp.Unweedable &&
-                _prototype.TryIndex(args.StructureId, out var structure) &&
+                _prototype.TryIndex(structureId, out var structure) &&
                 structure.TryGetComponent(out XenoConstructionPlasmaCostComponent? plasmaCost, _compFactory) &&
                 plasmaCost.ScalingCost)
             {
                 cost = GetDensityCost(area.Value, xeno, cost);
             }
 
-            var plasmaMult = GetDesignNodePlasmaCostMultiplier(xeno.Owner, coordinates, args.StructureId);
+            var plasmaMult = GetDesignNodePlasmaCostMultiplier(xeno.Owner, coordinates, structureId);
             if (plasmaMult > 0f && plasmaMult != 1f)
                 cost = Math.Ceiling(cost.Float() * plasmaMult);
 
-            if (!hasBoost && !_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, cost))
-                return;
+            if (consumePlasma &&
+                !hasBoost &&
+                !_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, cost))
+            {
+                return false;
+            }
         }
-
-        args.Handled = true;
 
         if (_net.IsServer)
         {
-            var structureToSpawn = args.StructureId;
+            var structureToSpawn = structureId;
             structureToSpawn = ResolveDesignerDesignNodeChoice(xeno.Owner, structureToSpawn);
 
             if (hasBoost)
             {
-                var queenVariant = GetQueenVariant(args.StructureId);
+                var queenVariant = GetQueenVariant(structureId);
                 if (_prototype.HasIndex(queenVariant))
                 {
                     structureToSpawn = queenVariant;
@@ -708,6 +875,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         }
 
         _audio.PlayPredicted(xeno.Comp.BuildSound, coordinates, xeno);
+        return true;
     }
 
     private void OnXenoOrderConstructionAction(Entity<XenoConstructionComponent> xeno, ref XenoOrderConstructionActionEvent args)
@@ -1310,7 +1478,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         return true;
     }
 
-    public bool CanSecreteOnTilePopup(Entity<XenoConstructionComponent> xeno, EntProtoId? buildChoice, EntityCoordinates target, bool checkStructureSelected, bool checkWeeds, bool popup = true)
+    public bool CanSecreteOnTilePopup(Entity<XenoConstructionComponent> xeno, EntProtoId? buildChoice, EntityCoordinates target, bool checkStructureSelected, bool checkWeeds, bool popup = true, bool checkPlasma = true)
     {
         if (checkStructureSelected && buildChoice == null)
         {
@@ -1412,7 +1580,8 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             }
         }
 
-        if (checkStructureSelected &&
+        if (checkPlasma &&
+            checkStructureSelected &&
             GetStructurePlasmaCost(buildChoice) is { } cost &&
             !hasBoost &&
             !_xenoPlasma.HasPlasmaPopup(xeno.Owner, cost, doPopup: popup))
@@ -1842,6 +2011,12 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
     public override void Update(float frameTime)
     {
         var time = _timing.CurTime;
+        if (_net.IsServer && time >= _nextInstantBuildCounterRefresh)
+        {
+            _nextInstantBuildCounterRefresh = time + InstantBuildCounterRefreshInterval;
+            RefreshAllHiveInstantBuildActionCounters();
+        }
+
         var query = EntityQueryEnumerator<XenoRecentlyConstructedComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {

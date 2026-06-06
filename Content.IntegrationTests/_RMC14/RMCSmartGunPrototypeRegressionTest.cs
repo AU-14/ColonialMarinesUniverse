@@ -12,11 +12,11 @@ public sealed class RMCSmartGunPrototypeRegressionTest
     private const string HazopsCartridge = "AU14CartridgeMinigunHAZOPS9mm";
     private const string HazopsBullet = "AU14BulletMinigunHAZOPS9mm";
 
-    [TestCase("CMBulletSmartGun10x30mm", 12f, 7f, 4)]
-    [TestCase("RMCBulletSmartGun10x30mmirradiated", 12f, 7f, 4)]
-    [TestCase("RMCBulletSmartGun10x30mmHT", 12f, 7f, 4)]
-    [TestCase("AU14CartridgeSmartGun127x40mm", 10f, 7f, 4)]
-    [TestCase(HazopsBullet, 12f, 7f, 4)]
+    [TestCase("CMBulletSmartGun10x30mm", 12f, 4.5f, 4)]
+    [TestCase("RMCBulletSmartGun10x30mmirradiated", 12f, 4.5f, 4)]
+    [TestCase("RMCBulletSmartGun10x30mmHT", 12f, 4.5f, 4)]
+    [TestCase("AU14CartridgeSmartGun127x40mm", 10f, 4.5f, 4)]
+    [TestCase(HazopsBullet, 12f, 4.5f, 4)]
     public async Task SmartGunProjectilesKeepDamageFalloff(
         string projectileId,
         float expectedCapRange,

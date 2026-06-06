@@ -85,7 +85,7 @@ public sealed partial class RMCAirShotSystem : EntitySystem
                     {
                         var id = _dropship.ComputeNextId();
                         var flareIdentifier = _dropship.GetUserAbbreviation(args.User, id);
-                        _dropship.MakeDropshipTarget(spawned, flareIdentifier);
+                        _dropship.MakeDropshipTarget(spawned, flareIdentifier, _dropship.GetUserFaction(args.User));
 
                         ent.Comp.LastFlareId = flareIdentifier;
                         Dirty(ent);

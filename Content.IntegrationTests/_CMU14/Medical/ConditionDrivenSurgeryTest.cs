@@ -25,8 +25,10 @@ using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
+using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.StatusEffectNew;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
@@ -912,6 +914,111 @@ public sealed class ConditionDrivenSurgeryTest
                 BodyPartType.Head,
                 BodyPartSymmetry.None,
                 "hemostat");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task RepairingFailingStoppedHeartEndsCardiacArrestTicks()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        EntityUid human = default;
+        EntityUid surgeon = default;
+        EntityUid torso = default;
+        EntityUid heart = default;
+        FixedPoint2 damageAfterRepair = default;
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            var organHealth = entMan.System<SharedOrganHealthSystem>();
+            var traits = entMan.System<SharedCMUSurgicalTraitSystem>();
+
+            human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            surgeon = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            entMan.EnsureComponent<BypassSkillChecksComponent>(surgeon);
+            entMan.EnsureComponent<CMUAutodocContainedPatientComponent>(human);
+
+            torso = GetBodyPart(entMan, human, BodyPartType.Torso, BodyPartSymmetry.None);
+            OpenBoneCavity(entMan, torso);
+            ClearSurgicalTraits(traits, torso);
+
+            heart = GetPartOrgan<HeartComponent>(entMan, torso);
+            var health = entMan.GetComponent<OrganHealthComponent>(heart);
+            SetPublicField(health, nameof(OrganHealthComponent.Current), FixedPoint2.New(8));
+            organHealth.RecomputeStage((heart, health), human);
+
+            var heartComp = entMan.GetComponent<HeartComponent>(heart);
+            SetPublicField(heartComp, nameof(HeartComponent.StopGracePeriod), TimeSpan.Zero);
+
+            Assert.That(health.Stage, Is.EqualTo(OrganDamageStage.Failing));
+        });
+
+        await pair.RunSeconds(8);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var status = entMan.System<SharedStatusEffectsSystem>();
+            var heartComp = entMan.GetComponent<HeartComponent>(heart);
+            var damage = entMan.GetComponent<DamageableComponent>(human);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(heartComp.Stopped, Is.True);
+                Assert.That(status.HasStatusEffect(human, "StatusEffectCMUCardiacArrest"), Is.True);
+                Assert.That(damage.TotalDamage, Is.GreaterThan(FixedPoint2.Zero));
+            });
+        });
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            var flow = entMan.System<CMUSurgeryFlowSystem>();
+            var traits = entMan.System<SharedCMUSurgicalTraitSystem>();
+            ClearSurgicalTraits(traits, torso);
+
+            var armed = ArmStep(
+                flow,
+                surgeon,
+                human,
+                torso,
+                "CMUSurgeryRepairHeart",
+                BodyPartType.Torso,
+                BodyPartSymmetry.None,
+                "CMUSurgeryRepairHeart");
+
+            armed = CompleteExpectedStep(entMan, flow, human, surgeon, armed, "organ_clamp", "CMUSurgeryRepairHeart")!;
+            CompleteExpectedStep(entMan, flow, human, surgeon, armed, "hemostat", "CMUSurgeryRepairHeart");
+            AssertAwaitingClosure(entMan, human, torso, "CMUSurgeryRepairHeart");
+
+            damageAfterRepair = entMan.GetComponent<DamageableComponent>(human).TotalDamage;
+
+            var heartComp = entMan.GetComponent<HeartComponent>(heart);
+            var health = entMan.GetComponent<OrganHealthComponent>(heart);
+            var status = entMan.System<SharedStatusEffectsSystem>();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(health.Stage, Is.EqualTo(OrganDamageStage.Healthy));
+                Assert.That(heartComp.Stopped, Is.False);
+                Assert.That(status.HasStatusEffect(human, "StatusEffectCMUCardiacArrest"), Is.False);
+            });
+        });
+
+        await pair.RunSeconds(3);
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            var damage = entMan.GetComponent<DamageableComponent>(human);
+
+            Assert.That(damage.TotalDamage, Is.LessThanOrEqualTo(damageAfterRepair));
+
+            entMan.DeleteEntity(human);
+            entMan.DeleteEntity(surgeon);
         });
 
         await pair.CleanReturnAsync();

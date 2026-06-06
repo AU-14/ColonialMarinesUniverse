@@ -3,6 +3,7 @@ using Content.Shared._CMU14.Medical.Bones;
 using Content.Shared._CMU14.Medical.Items;
 using Content.Shared._CMU14.Medical.Organs;
 using Content.Shared._CMU14.Medical.Organs.Events;
+using Content.Shared._CMU14.Medical.Organs.Heart;
 using Content.Shared._CMU14.Medical.Surgery.Conditions;
 using Content.Shared._CMU14.Medical.Surgery.Effects;
 using Content.Shared._CMU14.Medical.Surgery.Traits;
@@ -35,6 +36,7 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
     [Dependency] protected SharedBoneSystem Bone = default!;
     [Dependency] protected SharedContainerSystem Containers = default!;
     [Dependency] protected SharedFractureSystem Fracture = default!;
+    [Dependency] protected SharedHeartSystem Heart = default!;
     [Dependency] protected SharedOrganHealthSystem OrganHealth = default!;
     [Dependency] protected SharedCMUSurgicalTraitSystem SurgicalTraits = default!;
     [Dependency] protected SharedCMUShrapnelSystem Shrapnel = default!;
@@ -221,7 +223,14 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
         if (!TryComp<OrganHealthComponent>(organ, out var oh))
             return;
 
+        HeartComponent? heart = null;
+        var canRestartHeart = oh.Stage != OrganDamageStage.Dead &&
+                              TryComp(organ, out heart);
+
         OrganHealth.HealOrgan((organ, oh), args.Body, oh.Max - oh.Current);
+        if (canRestartHeart)
+            Heart.TryRestartHeart((organ, heart));
+
         Wounds.RecomputeInternalBleed(args.Part);
     }
 

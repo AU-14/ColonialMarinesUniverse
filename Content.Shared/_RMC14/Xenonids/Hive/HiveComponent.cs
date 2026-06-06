@@ -10,7 +10,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared._RMC14.Xenonids.Hive;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
-[Access(typeof(SharedXenoHiveSystem), typeof(SharedXenoPylonSystem), typeof(XenoTunnelSystem))]
+[Access(typeof(SharedXenoHiveSystem), typeof(SharedXenoConstructionSystem), typeof(SharedXenoPylonSystem), typeof(XenoTunnelSystem))]
 public sealed partial class HiveComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -25,6 +25,15 @@ public sealed partial class HiveComponent : Component
 
     [DataField, AutoNetworkedField]
     public Dictionary<EntProtoId, int> HiveStructureSlots = new() { ["HiveCoreXeno"] = 1, ["HiveClusterXeno"] = 8, ["HivePylonXeno"] = 2, ["HiveEggMorpherXeno"] = 6, ["HiveRecoveryNodeXeno"] = 6, ["HivePlasmaTreeXeno"] = 3 };
+
+    [DataField, AutoNetworkedField]
+    public int MaxInstantBuilds = 200;
+
+    [DataField, AutoNetworkedField]
+    public int InstantBuildsRemaining = 200;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan InstantBuildDuration = TimeSpan.FromMinutes(30);
 
     [DataField, AutoNetworkedField]
     public Dictionary<TimeSpan, List<EntProtoId>> Unlocks = new();

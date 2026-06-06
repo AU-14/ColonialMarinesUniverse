@@ -3,6 +3,7 @@ using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Components;
+using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -16,6 +17,7 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
 {
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
@@ -42,7 +44,8 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
         if (rate <= 0f || tickSeconds <= 0f)
             return;
 
-        DrainBlood(body, rate * tickSeconds);
+        if (TryComp<BloodstreamComponent>(body, out var bloodstream))
+            _bloodstream.TryModifyBloodLevel((body, bloodstream), FixedPoint2.New(-(rate * tickSeconds)));
     }
 
     private void DrainBlood(EntityUid body, float amount)

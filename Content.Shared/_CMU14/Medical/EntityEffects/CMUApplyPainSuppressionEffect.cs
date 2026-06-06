@@ -21,6 +21,12 @@ public sealed partial class CMUApplyPainSuppressionEffect : EntityEffect
     public float DecayBonus = 0.75f;
 
     [DataField]
+    public float ReductionDecreaseRate = 0.25f;
+
+    [DataField]
+    public bool Additive;
+
+    [DataField]
     public float DurationPerUnit = 60f;
 
     public override void Effect(EntityEffectBaseArgs args)
@@ -28,12 +34,26 @@ public sealed partial class CMUApplyPainSuppressionEffect : EntityEffect
         if (args is not EntityEffectReagentArgs reagent)
             return;
         var duration = TimeSpan.FromSeconds(DurationPerUnit * (float)reagent.Quantity);
-        args.EntityManager.System<SharedPainShockSystem>().AddPainSuppressionProfile(
-            reagent.TargetEntity,
-            AccumulationSuppression,
-            TierSuppression,
-            DecayBonus,
-            duration);
+        var pain = args.EntityManager.System<SharedPainShockSystem>();
+        if (Additive)
+        {
+            pain.AddAdditivePainSuppressionProfile(
+                reagent.TargetEntity,
+                AccumulationSuppression,
+                TierSuppression,
+                DecayBonus,
+                duration);
+        }
+        else
+        {
+            pain.AddPainSuppressionProfile(
+                reagent.TargetEntity,
+                AccumulationSuppression,
+                TierSuppression,
+                DecayBonus,
+                duration,
+                ReductionDecreaseRate);
+        }
     }
 
     protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
@@ -41,5 +61,6 @@ public sealed partial class CMUApplyPainSuppressionEffect : EntityEffect
             ("percent", (int)(AccumulationSuppression * 100f)),
             ("tiers", TierSuppression),
             ("decay", DecayBonus),
+            ("decrease", ReductionDecreaseRate),
             ("seconds", DurationPerUnit));
 }
