@@ -72,6 +72,7 @@ public sealed partial class CMUZLevelsSystem
         SubscribeLocalEvent<CMUZLevelViewerComponent, MetaFlagRemoveAttemptEvent>(OnViewerMetaFlagRemoveAttempt);
         SubscribeLocalEvent<CMUZLevelViewerComponent, MapUidChangedEvent>(OnViewerMapUidChanged);
         SubscribeLocalEvent<CMUZLevelViewerComponent, EntParentChangedMessage>(OnViewerParentChange);
+        SubscribeLocalEvent<CMUZLevelsNetworkComponent, CMUZLevelNetworkUpdatedEvent>(OnZLevelNetworkUpdated);
         SubscribeLocalEvent<EyeComponent, EntityTerminatingEvent>(OnEyeTerminating);
         SubscribeLocalEvent<CMUZPhysicsComponent, CMUZLevelFallEvent>(OnZLevelFall);
         SubscribeLocalEvent<GridRemovalEvent>(OnGridShutdown);
@@ -170,6 +171,31 @@ public sealed partial class CMUZLevelsSystem
     private void OnViewerParentChange(Entity<CMUZLevelViewerComponent> ent, ref EntParentChangedMessage args)
     {
         UpdateViewer(ent);
+    }
+
+    private void OnZLevelNetworkUpdated(Entity<CMUZLevelsNetworkComponent> ent, ref CMUZLevelNetworkUpdatedEvent args)
+    {
+        RefreshViewersForNetwork(ent);
+    }
+
+    public void RefreshZLevelViewer(EntityUid uid)
+    {
+        if (!TryComp<CMUZLevelViewerComponent>(uid, out var viewer))
+            return;
+
+        UpdateViewer((uid, viewer));
+    }
+
+    private void RefreshViewersForNetwork(Entity<CMUZLevelsNetworkComponent> network)
+    {
+        var query = EntityQueryEnumerator<CMUZLevelViewerComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var viewer, out var xform))
+        {
+            if (!CMUZLevelViewerRefresh.ShouldRefreshViewerForNetwork(xform.MapUid, network.Comp))
+                continue;
+
+            UpdateViewer((uid, viewer));
+        }
     }
 
     private void UpdateViewer(Entity<CMUZLevelViewerComponent> ent)
