@@ -1,6 +1,5 @@
 using System.Numerics;
 using Content.Server._RMC14.Atmos;
-using Content.Shared._AU14.CCVar;
 using Content.Shared._AU14.Fire;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared.Atmos;
@@ -15,7 +14,6 @@ using Content.Shared.Item;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
@@ -46,7 +44,6 @@ namespace Content.Server._AU14.Fire;
 public sealed partial class AU14FireSpreadSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
@@ -78,7 +75,6 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
     private readonly List<(TimeSpan SpawnAt, MapCoordinates Pos)> _pendingFires = new();
     private readonly HashSet<EntityUid> _pendingVisualSpawns = new();
     private readonly Dictionary<EntityUid, (EntityUid Holder, TimeSpan NextTick)> _heldBurningItems = new();
-    private bool _fireSpreadingEnabled;
 
     // Tracks currently burning FlamabilityComponent entities to avoid a full
     // entity-query scan every frame. Maintained by Ignite/Extinguish and the
@@ -103,9 +99,6 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<TileFireComponent, ComponentInit>(OnTileFireInit);
-
-        Subs.CVar(_config, AU14CCVars.FireSpreading, OnFireSpreadingChanged, true);
-
         SubscribeLocalEvent<TileFireComponent, EntityTerminatingEvent>(OnTileFireTerminating);
         SubscribeLocalEvent<FlamabilityComponent, EntityTerminatingEvent>(OnFlamabilityTerminating);
         SubscribeLocalEvent<FlamabilityComponent, ExtinguishEvent>(OnFlamabilityExtinguish);
@@ -117,9 +110,6 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-
-        if (!_fireSpreadingEnabled)
-            return;
 
         var now = _timing.CurTime;
 
@@ -228,9 +218,6 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
     /// <summary>Sets an entity on fire via the FlamabilityComponent system.</summary>
     public bool Ignite(EntityUid uid, FlamabilityComponent? flam = null)
     {
-        if (!_fireSpreadingEnabled)
-            return false;
-
         if (!Resolve(uid, ref flam, false))
             return false;
 
@@ -292,40 +279,6 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
     {
         _burningEntities.Remove(uid);
         _nextMobIgniteTime.Remove(uid);
-    }
-
-    private void OnFireSpreadingChanged(bool enabled)
-    {
-        _fireSpreadingEnabled = enabled;
-
-        if (enabled)
-            return;
-
-        _pendingFires.Clear();
-        _pendingVisualSpawns.Clear();
-        _tileFireNextSpread.Clear();
-        _heldBurningItems.Clear();
-
-        var query = EntityQueryEnumerator<FlamabilityComponent>();
-        while (query.MoveNext(out var uid, out var flam))
-        {
-            if (flam.FireVisualEntity is { } visual)
-            {
-                QueueDel(visual);
-                flam.FireVisualEntity = null;
-            }
-
-            if (!flam.OnFire && flam.CurrentPats == 0 && !flam.Burnt)
-                continue;
-
-            flam.OnFire = false;
-            flam.CurrentPats = 0;
-            flam.Burnt = false;
-            flam.BurnEndTime = TimeSpan.Zero;
-            flam.NextDamageTime = TimeSpan.Zero;
-            flam.NextSpreadTime = TimeSpan.Zero;
-            Dirty(uid, flam);
-        }
     }
 
     private void OnFlamabilityExtinguish(EntityUid uid, FlamabilityComponent comp, ExtinguishEvent args)
