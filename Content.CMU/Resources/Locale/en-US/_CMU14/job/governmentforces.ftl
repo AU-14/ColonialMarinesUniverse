@@ -79,7 +79,9 @@ au14-job-prefix-AU14JobGOVFORDSPilotWYPMC = PO
 au14-job-prefix-AU14JobGOVFORRadioTelephoneOperatorWYPMC = COMS
 au14-job-prefix-AU14JobGOVFORSectionSergeantWYPMC = PLDFR
 au14-job-prefix-AU14JobGOVFORSquadAutomaticRiflemanWYPMC = SG
+au14-job-prefix-AU14JobGOVFORSquadCombatTechWYPMC = CT
 au14-job-prefix-AU14JobGOVFORSquadRiflemanWYPMC = CNTR
+au14-job-prefix-AU14JobGOVFORSquadCombatTechWYPMC = CT
 au14-job-prefix-AU14JobGOVFORSquadSergeantWYPMC = SL
 
 au14-job-prefix-AU14JobGOVFORPlatCoUPP = PLTCO
@@ -122,6 +124,9 @@ au14-job-name-govforspecialist-pointmanRMC = Pointman
 au14-job-prefix-govforspecialist-pointmanRMC = PNM
 au14-job-name-govforspecialist-grenadierRMC = Grenadier
 au14-job-prefix-govforspecialist-grenadierRMC = GNR
+
+au14-job-name-govfork9handler = K9 Handler
+au14-job-prefix-govfork9handler = K9
 
 au-14-job-name-rmcrrt-commander = Commander
 au-14-job-prefix-rmcrrt-commander = CMD

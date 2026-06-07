@@ -11,7 +11,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.AU14.AllianceConsole;
 
-public sealed class AllianceConsoleSystem : EntitySystem
+public sealed partial class AllianceConsoleSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private InventorySystem _inventory = default!;
@@ -190,7 +190,7 @@ public sealed class AllianceConsoleSystem : EntitySystem
             Dirty(uid, access);
         }
 
-        granted.RemoveWhere(uid => !EntityManager.EntityExists(uid));
+        granted.RemoveWhere(uid => !Exists(uid));
         _grantedIdCards.Remove(key);
     }
 
@@ -199,8 +199,8 @@ public sealed class AllianceConsoleSystem : EntitySystem
         return sideFaction switch
         {
             "GOVFOR" => GovforRiflemanTags,
-            "OPFOR"  => OpforRiflemanTags,
-            _        => Array.Empty<ProtoId<AccessLevelPrototype>>(),
+            "OPFOR" => OpforRiflemanTags,
+            _ => Array.Empty<ProtoId<AccessLevelPrototype>>(),
         };
     }
 
