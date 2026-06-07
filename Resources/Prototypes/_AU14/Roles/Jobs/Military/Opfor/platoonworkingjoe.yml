@@ -1,6 +1,22 @@
 - type: job
+  abstract: true
   parent: AU14JobWorkingJoeBase
+  id: AU14JobOPFORWorkingJoeBase
+  icon: "AU14JobIconOPFORWorkingJoe"
+  spawnMenuRoleName: Working Joe (OPFOR)
+  supervisors: au14-job-supervisors-workingjoe-military
+  dummyStartingGear: AU14GearOPFORWorkingJoe
+  usePlayerProfile: false
+  jobEntity: AU14MobWorkingJoeOPFOR
+  accessGroups:
+  - AU14OpforCommand
+  - AUPrisonStaff
+  - auwy
+
+- type: job
+  parent: AU14JobOPFORWorkingJoeBase
   id: AU14JobOPFORWorkingJoe
+  hidden: true
   requirements:
   - !type:RoleTimeRequirement
     role: AU14JobGOVFORAuxSupportSynth
@@ -12,14 +28,12 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
-  icon: "AU14JobIconOPFORWorkingJoe"
-  spawnMenuRoleName: Working Joe (OPFOR)
-  supervisors: au14-job-supervisors-workingjoe-military
-  accessGroups:
-  - AU14OpforCommand
   special:
   - !type:AddComponentSpecial
     components:
+    - type: UserIFF
+      factions:
+      - OPFOR
     - type: IntrinsicRadioTransmitter
       channels:
       - radioAI
@@ -38,11 +52,6 @@
       - radioOpforBravo
       - radioOpforIntel
       - radioOpforJTAC
-    - type: Access
-      groups:
-      - AU14OpforCommand
-      - AUPrisonStaff
-      - auwy
     - type: Tag
       tags:
       - WorkingJoe
@@ -51,8 +60,6 @@
       - DoorBumpOpener
     - type: Loadout
       prototypes: [ AU14GearOPFORWorkingJoe ]
-  dummyStartingGear: AU14GearOPFORWorkingJoe
-  hidden: true
 
 - type: startingGear
   parent: AU14GearWorkingJoeBase
@@ -62,6 +69,7 @@
     ears: AU14HeadsetWorkingJoe
     ears2: RMCM5CameraGear
     back: AU14IMPBackpackMarine
+    pocket1: AU14StampJoe
 
 - type: entity
   parent: CMSpawnPointJobBase

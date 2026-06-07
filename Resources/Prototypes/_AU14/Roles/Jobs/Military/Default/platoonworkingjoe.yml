@@ -7,6 +7,7 @@
   supervisors: au14-job-supervisors-workingjoe-military
   dummyStartingGear: AU14GearGOVFORWorkingJoe
   usePlayerProfile: false
+  jobEntity: AU14MobWorkingJoeGOVFOR
   accessGroups:
   - AU14GovforCommand
   - AUPrisonStaff
@@ -52,6 +53,12 @@
       - radioGovforBravo
       - radioGovforIntel
       - radioGovforMILP
+    - type: Tag
+      tags:
+      - WorkingJoe
+      - CanPilot
+      - FootstepSound
+      - DoorBumpOpener
     - type: Loadout
       prototypes: [ AU14GearGOVFORWorkingJoe ]
 
@@ -63,6 +70,7 @@
     ears: AU14HeadsetWorkingJoe
     ears2: RMCM5CameraGear
     back: AU14IMPBackpackMarine
+    pocket1: AU14StampJoe
 
 - type: entity
   parent: CMSpawnPointJobBase
