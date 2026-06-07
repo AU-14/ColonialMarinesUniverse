@@ -28,7 +28,7 @@ namespace Content.Server._AU14.Fire;
 /// <summary>
 /// Drives the <see cref="FlamabilityComponent"/> fire spread and damage logic.
 ///
-/// Spread tick interval: base 8 s, scaled by <c>Spread</c>. Each tick:
+/// Spread tick interval: base 70 s, scaled by <c>Spread</c>. Each tick:
 ///   1. Deals Heat damage equal to <c>Rate</c> HP/s.
 ///   2. Rolls per-neighbour ignition chance against every nearby
 ///      <see cref="FlamabilityComponent"/> entity within (<c>Range</c> × 3) tiles.
@@ -65,14 +65,11 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
     private static readonly EntProtoId FireVisualProto = "AU14FireVisualOverlay";
     private const float TileFireSpawnChance = 0.6f;
 
-    private const float DenseFillRadius = 13f;
-    private const int DenseFillThreshold = 6;
-    private const float DenseFillChance = 0.3f;
-
-    // Chance per-second that a mob standing on the same tile as a burning entity is ignited.
-    // Scaled by the burning entity's Chance field so highly-flammable things spread more aggressively.
+    // Mob ignite is rate-limited independently from damage ticks — 8 s is frequent enough
+    // to feel responsive without hammering the spatial index every damage tick.
     private const float MobIgniteChancePerSecond = 0.015f;
     private const float MobIgniteRadius = 1.2f;
+    private static readonly TimeSpan MobIgniteInterval = TimeSpan.FromSeconds(8);
 
     private const float HeldBurnDamagePerSecond = 10f;
     private static readonly TimeSpan HeldDamageInterval = TimeSpan.FromSeconds(1);
@@ -83,15 +80,34 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
     private readonly Dictionary<EntityUid, (EntityUid Holder, TimeSpan NextTick)> _heldBurningItems = new();
     private bool _fireSpreadingEnabled;
 
+    // Tracks currently burning FlamabilityComponent entities to avoid a full
+    // entity-query scan every frame. Maintained by Ignite/Extinguish and the
+    // EntityTerminating handler.
+    private readonly HashSet<EntityUid> _burningEntities = new();
+
+    // Snapshot buffer for safe iteration when _burningEntities may be modified
+    // mid-loop (e.g. Ignite called from TrySpreadFrom).
+    private readonly List<EntityUid> _processBuffer = new();
+
+    // Reused spatial-query buffer — never allocated inside hot paths.
+    // Safe to reuse because all callers run sequentially and none are re-entrant.
+    private readonly HashSet<EntityUid> _nearbyBuffer = new();
+
+    // Per-entity cooldown for the mob-ignite range check, separate from the
+    // damage tick so we can reduce it without affecting damage frequency.
+    private readonly Dictionary<EntityUid, TimeSpan> _nextMobIgniteTime = new();
+
     // ── EntitySystem overrides ───────────────────────────────────────────────
 
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<TileFireComponent, ComponentInit>(OnTileFireInit);
 
         Subs.CVar(_config, AU14CCVars.FireSpreading, OnFireSpreadingChanged, true);
 
         SubscribeLocalEvent<TileFireComponent, EntityTerminatingEvent>(OnTileFireTerminating);
+        SubscribeLocalEvent<FlamabilityComponent, EntityTerminatingEvent>(OnFlamabilityTerminating);
         SubscribeLocalEvent<FlamabilityComponent, ExtinguishEvent>(OnFlamabilityExtinguish);
         SubscribeLocalEvent<FlamabilityComponent, InteractHandEvent>(OnFlamabilityInteractHand);
         SubscribeLocalEvent<FlamabilityComponent, GotEquippedHandEvent>(OnFlamabilityPickedUp);
@@ -117,18 +133,12 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
             _pendingFires.RemoveAt(i);
         }
 
-        // Collect burning entities first — processing them directly inside the enumerator is unsafe
-        // because ApplyFireDamage can trigger DestructibleSystem, which may spawn debris entities
-        // that have FlamabilityComponent, modifying the dictionary mid-iteration.
-        var burningEntities = new List<EntityUid>();
-        var flamCollect = EntityQueryEnumerator<FlamabilityComponent, TransformComponent>();
-        while (flamCollect.MoveNext(out var uid, out var flam, out _))
-        {
-            if (flam.OnFire)
-                burningEntities.Add(uid);
-        }
+        // Snapshot burning entities before the loop — Ignite/Extinguish can modify
+        // _burningEntities mid-iteration (e.g. via TrySpreadFrom → Ignite).
+        _processBuffer.Clear();
+        _processBuffer.AddRange(_burningEntities);
 
-        foreach (var uid in burningEntities)
+        foreach (var uid in _processBuffer)
         {
             if (Deleted(uid) || !TryComp<FlamabilityComponent>(uid, out var flam) || !flam.OnFire)
                 continue;
@@ -151,8 +161,16 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
             {
                 flam.NextDamageTime = now + DamageInterval;
                 ApplyFireDamage(uid, flam.Rate);
-                if (!Deleted(uid))
-                    TryIgniteNearbyMobs(uid, xform, flam.Chance);
+            }
+
+            if (Deleted(uid))
+                continue;
+
+            // Mob ignite runs on its own slower interval to avoid a spatial query every damage tick.
+            if (_nextMobIgniteTime.TryGetValue(uid, out var nextMobIgnite) && now >= nextMobIgnite)
+            {
+                _nextMobIgniteTime[uid] = now + MobIgniteInterval;
+                TryIgniteNearbyMobs(uid, xform, flam.Chance);
             }
 
             if (!Deleted(uid) && now >= flam.NextSpreadTime)
@@ -189,22 +207,11 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
         var tileQuery = EntityQueryEnumerator<TileFireComponent, TransformComponent>();
         while (tileQuery.MoveNext(out var uid, out _, out var xform))
         {
-            if (!_tileFireNextSpread.TryGetValue(uid, out var nextSpread))
-                nextSpread = TimeSpan.Zero;
-
-            if (now < nextSpread)
+            if (!_tileFireNextSpread.TryGetValue(uid, out var nextSpread) || now < nextSpread)
                 continue;
 
             _tileFireNextSpread[uid] = now + BaseSpreadInterval;
             TrySpreadFrom(uid, xform, 1f, 1f, null, spreadToFlamability: false);
-
-            // Dense area gap-filling: if many tile fires are nearby, scatter a few more to cover gaps.
-            var worldPos = _transform.GetWorldPosition(xform);
-            if (CountNearbyTileFires(worldPos, xform.MapID, DenseFillRadius) >= DenseFillThreshold
-                && _random.Prob(DenseFillChance))
-            {
-                QueueScatterFires(worldPos, DenseFillRadius, 1, 2, xform.MapID, now);
-            }
         }
 
         foreach (var pending in _pendingVisualSpawns)
@@ -239,6 +246,8 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
                           (flam.BurnDurationMax - flam.BurnDurationMin).TotalSeconds * _random.NextDouble();
         flam.BurnEndTime = now + TimeSpan.FromSeconds(burnSeconds);
 
+        _burningEntities.Add(uid);
+        _nextMobIgniteTime[uid] = now + MobIgniteInterval;
         _pendingVisualSpawns.Add(uid);
         Dirty(uid, flam);
         return true;
@@ -255,6 +264,8 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
 
         flam.OnFire = false;
         flam.CurrentPats = 0;
+        _burningEntities.Remove(uid);
+        _nextMobIgniteTime.Remove(uid);
         _heldBurningItems.Remove(uid);
         if (flam.FireVisualEntity is { } visual)
         {
@@ -266,9 +277,21 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
 
     // ── Private helpers ──────────────────────────────────────────────────────
 
+    private void OnTileFireInit(EntityUid uid, TileFireComponent _, ComponentInit args)
+    {
+        // Stagger initial spread so a batch of new fires doesn't all query at once.
+        _tileFireNextSpread[uid] = _timing.CurTime + BaseSpreadInterval;
+    }
+
     private void OnTileFireTerminating(EntityUid uid, TileFireComponent comp, EntityTerminatingEvent args)
     {
         _tileFireNextSpread.Remove(uid);
+    }
+
+    private void OnFlamabilityTerminating(EntityUid uid, FlamabilityComponent _, EntityTerminatingEvent args)
+    {
+        _burningEntities.Remove(uid);
+        _nextMobIgniteTime.Remove(uid);
     }
 
     private void OnFireSpreadingChanged(bool enabled)
@@ -362,10 +385,10 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
     private void TryIgniteNearbyMobs(EntityUid source, TransformComponent xform, float sourceChance)
     {
         var worldPos = _transform.GetWorldPosition(xform);
-        var nearby = new HashSet<EntityUid>();
-        _lookup.GetEntitiesInRange(xform.MapID, worldPos, MobIgniteRadius, nearby, LookupFlags.Dynamic);
+        _nearbyBuffer.Clear();
+        _lookup.GetEntitiesInRange(xform.MapID, worldPos, MobIgniteRadius, _nearbyBuffer, LookupFlags.Dynamic);
 
-        foreach (var candidate in nearby)
+        foreach (var candidate in _nearbyBuffer)
         {
             if (candidate == source)
                 continue;
@@ -398,17 +421,17 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
     {
         var radius = BaseSpreadRadiusTiles * range;
         var worldPos = _transform.GetWorldPosition(xform);
-        var nearby = new HashSet<EntityUid>();
+        _nearbyBuffer.Clear();
         _lookup.GetEntitiesInRange(
             xform.MapID,
             worldPos,
             radius,
-            nearby,
+            _nearbyBuffer,
             LookupFlags.Dynamic | LookupFlags.Static | LookupFlags.Sundries);
 
         var now = _timing.CurTime;
 
-        foreach (var candidate in nearby)
+        foreach (var candidate in _nearbyBuffer)
         {
             if (candidate == source)
                 continue;
@@ -436,19 +459,6 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
                     sourceFlam.ScatterFireMinCount, sourceFlam.ScatterFireMaxCount,
                     xform.MapID, now);
         }
-    }
-
-    private int CountNearbyTileFires(Vector2 worldPos, MapId mapId, float radius)
-    {
-        var nearby = new HashSet<EntityUid>();
-        _lookup.GetEntitiesInRange(mapId, worldPos, radius, nearby, LookupFlags.Static);
-        var count = 0;
-        foreach (var ent in nearby)
-        {
-            if (HasComp<TileFireComponent>(ent))
-                count++;
-        }
-        return count;
     }
 
     /// <summary>

@@ -371,3 +371,28 @@ au14-wysurv-greeting = Everything has gone wrong, this is a complete disaster.
     Weyland-Yutani - building better worlds.
 
 au14-wysurv-description = You are whats left of the local Weyland-Yutani employees. Survive and ensure your knowledge reaches the company.
+
+au14-job-name-tweiasf-paratrooper = Rifleman
+au14-job-name-tweiasf-ce = Assault Engineer
+au14-job-name-tweiasf-cm = Medical Technician
+au14-job-name-tweiasf-tl = Team Lead
+
+au14-job-prefix-iasf = 24/PARA
+au14-job-prefix-tweiasf-sl = 24/PARA TL
+
+au14-job-name-tweiasf-co = Commander
+au14-job-prefix-tweiasf-co = 24/PARA CDR
+au14-job-name-tweiasf-pl = Fleet Air Arm Pilot
+au14-job-prefix-tweiasf-pl = 24/PARA PL
+
+au14-job-description-twepara = You are a member of the Imperial Armed Space Forces 24th Parachute Regiment. Follow your orders.
+
+au14-job-description-IASFsurv = You are a stranded member of the IASF 24th Parachute Regiment. Fight for Empress, country and also your life.
+
+au14-job-greeting-IASFsurv = You have been stranded in this colony, dropship out of fuel and almost out of ammunition
+    Most of your squad is dead, you are all thats left... For now
+
+    You are a member of the Three World Empires Imperial Armed Space Forces, you are NEUTRAL to civilians and other countries and HOSTILE to the CLF.
+
+au14-job-rules-IASFsurv = You are a member of the TWEs IASF, you are NEUTRAL to civilians and other countries and HOSTILE to the CLF.
+    You are fully aware of the threat after having witnessed it for several days.
