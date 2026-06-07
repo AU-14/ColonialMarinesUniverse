@@ -92,22 +92,57 @@ public sealed partial class CMUZLevelsSystem
 
         using var profile = Prof.Group("CMU Z PVS Probes");
 
+        var viewers = 0;
+        var probeEyes = 0;
         var query = EntityQueryEnumerator<CMUZLevelViewerComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var viewer, out var xform))
         {
+            viewers++;
             SyncViewerProbes((uid, viewer), xform);
 
             var globalPos = _transform.GetWorldPosition(xform);
             var eyeOffset = GetViewerProbeOffset(uid);
-            if (_viewerProbeEyes.TryGetValue(uid, out var probes))
-            {
-                foreach (var (depth, eye) in probes)
-                {
-                    _transform.SetWorldPosition(eye, GetProbeWorldPosition(viewer, depth, globalPos, eyeOffset));
-                    SyncZLevelEye(uid, eye);
-                }
-            }
+            probeEyes += UpdateProbeEyes(uid, viewer, globalPos, eyeOffset);
         }
+
+        if (!Prof.IsEnabled)
+            return;
+
+        Prof.WriteValue("CMU Z PVS Viewers", viewers);
+        Prof.WriteValue("CMU Z PVS Probe Eyes", probeEyes);
+    }
+
+    private int UpdateProbeEyes(
+        EntityUid viewerUid,
+        CMUZLevelViewerComponent viewer,
+        Vector2 globalPos,
+        Vector2 eyeOffset)
+    {
+        if (!Prof.IsEnabled)
+            return UpdateProbeEyesCore(viewerUid, viewer, globalPos, eyeOffset);
+
+        using var profile = Prof.Group("CMU Z PVS MoveProbeEyes");
+        return UpdateProbeEyesCore(viewerUid, viewer, globalPos, eyeOffset);
+    }
+
+    private int UpdateProbeEyesCore(
+        EntityUid viewerUid,
+        CMUZLevelViewerComponent viewer,
+        Vector2 globalPos,
+        Vector2 eyeOffset)
+    {
+        if (!_viewerProbeEyes.TryGetValue(viewerUid, out var probes))
+            return 0;
+
+        var count = 0;
+        foreach (var (depth, eye) in probes)
+        {
+            _transform.SetWorldPosition(eye, GetProbeWorldPosition(viewer, depth, globalPos, eyeOffset));
+            SyncZLevelEye(viewerUid, eye);
+            count++;
+        }
+
+        return count;
     }
 
     private void OnViewerStartup(Entity<CMUZLevelViewerComponent> ent, ref ComponentStartup args)
@@ -215,6 +250,18 @@ public sealed partial class CMUZLevelsSystem
     }
 
     private void SyncViewerProbes(Entity<CMUZLevelViewerComponent> ent, TransformComponent? xform = null)
+    {
+        if (!Prof.IsEnabled)
+        {
+            SyncViewerProbesCore(ent, xform);
+            return;
+        }
+
+        using var profile = Prof.Group("CMU Z PVS SyncViewerProbes");
+        SyncViewerProbesCore(ent, xform);
+    }
+
+    private void SyncViewerProbesCore(Entity<CMUZLevelViewerComponent> ent, TransformComponent? xform = null)
     {
         if (!_zLevelsEnabled ||
             _maxViewProbesPerPlayer <= 0 ||
@@ -501,6 +548,18 @@ public sealed partial class CMUZLevelsSystem
 
     private void BuildWantedProbeDepths(EntityUid map, Vector2 globalPos, List<int> depths, bool forceUpperPreview)
     {
+        if (!Prof.IsEnabled)
+        {
+            BuildWantedProbeDepthsCore(map, globalPos, depths, forceUpperPreview);
+            return;
+        }
+
+        using var profile = Prof.Group("CMU Z PVS BuildWantedDepths");
+        BuildWantedProbeDepthsCore(map, globalPos, depths, forceUpperPreview);
+    }
+
+    private void BuildWantedProbeDepthsCore(EntityUid map, Vector2 globalPos, List<int> depths, bool forceUpperPreview)
+    {
         depths.Clear();
 
         var remainingProbes = _maxViewProbesPerPlayer;
@@ -547,6 +606,20 @@ public sealed partial class CMUZLevelsSystem
     }
 
     private bool CanPreviewUpperZFromStair(
+        Entity<CMUZLevelViewerComponent> viewer,
+        TransformComponent viewerXform,
+        EntityUid map,
+        Vector2 globalPos,
+        List<Vector2> previewPositions)
+    {
+        if (!Prof.IsEnabled)
+            return CanPreviewUpperZFromStairCore(viewer, viewerXform, map, globalPos, previewPositions);
+
+        using var profile = Prof.Group("CMU Z PVS StairPreview");
+        return CanPreviewUpperZFromStairCore(viewer, viewerXform, map, globalPos, previewPositions);
+    }
+
+    private bool CanPreviewUpperZFromStairCore(
         Entity<CMUZLevelViewerComponent> viewer,
         TransformComponent viewerXform,
         EntityUid map,
@@ -674,6 +747,19 @@ public sealed partial class CMUZLevelsSystem
         int targetDepth,
         bool requireVisibleFirstStep = false)
     {
+        if (!Prof.IsEnabled)
+            return HasZOpeningPathCore(map, globalPos, targetDepth, requireVisibleFirstStep);
+
+        using var profile = Prof.Group("CMU Z PVS OpeningPath");
+        return HasZOpeningPathCore(map, globalPos, targetDepth, requireVisibleFirstStep);
+    }
+
+    private bool HasZOpeningPathCore(
+        EntityUid map,
+        Vector2 globalPos,
+        int targetDepth,
+        bool requireVisibleFirstStep = false)
+    {
         var step = targetDepth < 0 ? -1 : 1;
 
         for (var depth = 0; depth != targetDepth; depth += step)
@@ -699,6 +785,15 @@ public sealed partial class CMUZLevelsSystem
     }
 
     private bool HasVisibleZOpeningNear(EntityUid map, Vector2 globalPos)
+    {
+        if (!Prof.IsEnabled)
+            return HasVisibleZOpeningNearCore(map, globalPos);
+
+        using var profile = Prof.Group("CMU Z PVS VisibleOpening");
+        return HasVisibleZOpeningNearCore(map, globalPos);
+    }
+
+    private bool HasVisibleZOpeningNearCore(EntityUid map, Vector2 globalPos)
     {
         if (!_viewGridQuery.TryComp(map, out var grid))
             return true;
@@ -740,6 +835,15 @@ public sealed partial class CMUZLevelsSystem
     }
 
     private bool HasZOpeningNear(EntityUid map, Vector2 globalPos)
+    {
+        if (!Prof.IsEnabled)
+            return HasZOpeningNearCore(map, globalPos);
+
+        using var profile = Prof.Group("CMU Z PVS OpeningNear");
+        return HasZOpeningNearCore(map, globalPos);
+    }
+
+    private bool HasZOpeningNearCore(EntityUid map, Vector2 globalPos)
     {
         if (!TryComp<MapGridComponent>(map, out var grid))
             return true;
@@ -825,6 +929,18 @@ public sealed partial class CMUZLevelsSystem
     }
 
     private void SyncZLevelEye(EntityUid viewer, EntityUid zEye)
+    {
+        if (!Prof.IsEnabled)
+        {
+            SyncZLevelEyeCore(viewer, zEye);
+            return;
+        }
+
+        using var profile = Prof.Group("CMU Z PVS SyncEye");
+        SyncZLevelEyeCore(viewer, zEye);
+    }
+
+    private void SyncZLevelEyeCore(EntityUid viewer, EntityUid zEye)
     {
         var eye = EnsureComp<EyeComponent>(zEye);
         var pvsScale = _minProbePvsScale;

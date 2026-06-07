@@ -69,6 +69,18 @@ public abstract partial class CMUSharedZLevelsSystem
 
     protected void OnZPhysicsMoveGroundSnap(Entity<CMUZPhysicsComponent> ent, ref MoveEvent args)
     {
+        if (!Prof.IsEnabled)
+        {
+            OnZPhysicsMoveGroundSnapCore(ent, ref args);
+            return;
+        }
+
+        using var profile = Prof.Group("CMU Z Move Snap");
+        OnZPhysicsMoveGroundSnapCore(ent, ref args);
+    }
+
+    private void OnZPhysicsMoveGroundSnapCore(Entity<CMUZPhysicsComponent> ent, ref MoveEvent args)
+    {
         if (_moveSnapSuppressed.Contains(ent.Owner))
             return;
 
@@ -146,9 +158,12 @@ public abstract partial class CMUSharedZLevelsSystem
     {
         using var profile = Prof.Group("CMU Z Movement");
 
+        var processed = 0;
         var query = EntityQueryEnumerator<CMUZPhysicsComponent, CMUZFallingComponent, TransformComponent, PhysicsComponent>();
         while (query.MoveNext(out var uid, out var zPhys, out _, out var xform, out var physics))
         {
+            processed++;
+
             if (xform.ParentUid != xform.MapUid)
             {
                 StopZMovement(uid, zPhys);
@@ -222,6 +237,9 @@ public abstract partial class CMUSharedZLevelsSystem
 
             DirtyZPhysics(uid, zPhys, oldVelocity, oldHeight);
         }
+
+        if (Prof.IsEnabled)
+            Prof.WriteValue("CMU Z Movement Entities", processed);
     }
 
     private static bool ShouldSnapToGround(float distanceToGround, bool stickyGround)
@@ -353,6 +371,18 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private void TryProcessZLevelBoundary(EntityUid uid, CMUZPhysicsComponent zPhys, bool stickyGround)
     {
+        if (!Prof.IsEnabled)
+        {
+            TryProcessZLevelBoundaryCore(uid, zPhys, stickyGround);
+            return;
+        }
+
+        using var profile = Prof.Group("CMU Z Boundary");
+        TryProcessZLevelBoundaryCore(uid, zPhys, stickyGround);
+    }
+
+    private void TryProcessZLevelBoundaryCore(EntityUid uid, CMUZPhysicsComponent zPhys, bool stickyGround)
+    {
         if (zPhys.LocalPosition < 0) //We wanna fall down on ZLevel below
         {
             if (CanProcessZLevelTransition(uid, -1))
@@ -453,6 +483,15 @@ public abstract partial class CMUSharedZLevelsSystem
     /// <returns></returns>
     public float DistanceToGround(Entity<CMUZPhysicsComponent?> target, out bool stickyGround, int maxFloors = 1)
     {
+        if (!Prof.IsEnabled)
+            return DistanceToGroundCore(target, out stickyGround, maxFloors);
+
+        using var profile = Prof.Group("CMU Z DistanceToGround");
+        return DistanceToGroundCore(target, out stickyGround, maxFloors);
+    }
+
+    private float DistanceToGroundCore(Entity<CMUZPhysicsComponent?> target, out bool stickyGround, int maxFloors)
+    {
         stickyGround = false;
         if (!Resolve(target, ref target.Comp, false))
             return 0; //maybe in future: simpler distance calculation for entities without zPhysComp?
@@ -498,6 +537,39 @@ public abstract partial class CMUSharedZLevelsSystem
     }
 
     private bool TryGetHighGroundDistance(
+        Entity<CMUZPhysicsComponent?> target,
+        Entity<CMUZLevelMapComponent> checkingMap,
+        MapGridComponent checkingGrid,
+        Vector2i checkingTile,
+        Vector2 worldPos,
+        int floor,
+        out float distance,
+        ref bool stickyGround)
+    {
+        if (!Prof.IsEnabled)
+            return TryGetHighGroundDistanceCore(
+                target,
+                checkingMap,
+                checkingGrid,
+                checkingTile,
+                worldPos,
+                floor,
+                out distance,
+                ref stickyGround);
+
+        using var profile = Prof.Group("CMU Z HighGroundDistance");
+        return TryGetHighGroundDistanceCore(
+            target,
+            checkingMap,
+            checkingGrid,
+            checkingTile,
+            worldPos,
+            floor,
+            out distance,
+            ref stickyGround);
+    }
+
+    private bool TryGetHighGroundDistanceCore(
         Entity<CMUZPhysicsComponent?> target,
         Entity<CMUZLevelMapComponent> checkingMap,
         MapGridComponent checkingGrid,
@@ -562,6 +634,30 @@ public abstract partial class CMUSharedZLevelsSystem
     }
 
     private bool TryGetSweptStickyMoveGroundSnapDistance(
+        Entity<CMUZPhysicsComponent> target,
+        MoveEvent args,
+        float currentDistanceToGround,
+        bool currentStickyGround,
+        out float distance)
+    {
+        if (!Prof.IsEnabled)
+            return TryGetSweptStickyMoveGroundSnapDistanceCore(
+                target,
+                args,
+                currentDistanceToGround,
+                currentStickyGround,
+                out distance);
+
+        using var profile = Prof.Group("CMU Z Move Snap Sweep");
+        return TryGetSweptStickyMoveGroundSnapDistanceCore(
+            target,
+            args,
+            currentDistanceToGround,
+            currentStickyGround,
+            out distance);
+    }
+
+    private bool TryGetSweptStickyMoveGroundSnapDistanceCore(
         Entity<CMUZPhysicsComponent> target,
         MoveEvent args,
         float currentDistanceToGround,
@@ -999,6 +1095,15 @@ public abstract partial class CMUSharedZLevelsSystem
 
     [PublicAPI]
     public bool TryMove(EntityUid ent, int offset, Entity<CMUZLevelMapComponent?>? map = null, Vector2? worldPosition = null)
+    {
+        if (!Prof.IsEnabled)
+            return TryMoveCore(ent, offset, map, worldPosition);
+
+        using var profile = Prof.Group("CMU Z TryMove");
+        return TryMoveCore(ent, offset, map, worldPosition);
+    }
+
+    private bool TryMoveCore(EntityUid ent, int offset, Entity<CMUZLevelMapComponent?>? map, Vector2? worldPosition)
     {
         map ??= Transform(ent).MapUid;
 
