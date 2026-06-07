@@ -72,7 +72,6 @@ public sealed partial class CMUZLevelsSystem
         SubscribeLocalEvent<CMUZLevelViewerComponent, MetaFlagRemoveAttemptEvent>(OnViewerMetaFlagRemoveAttempt);
         SubscribeLocalEvent<CMUZLevelViewerComponent, MapUidChangedEvent>(OnViewerMapUidChanged);
         SubscribeLocalEvent<CMUZLevelViewerComponent, EntParentChangedMessage>(OnViewerParentChange);
-        SubscribeLocalEvent<CMUZLevelsNetworkComponent, CMUZLevelNetworkUpdatedEvent>(OnZLevelNetworkUpdated);
         SubscribeLocalEvent<EyeComponent, EntityTerminatingEvent>(OnEyeTerminating);
         SubscribeLocalEvent<CMUZPhysicsComponent, CMUZLevelFallEvent>(OnZLevelFall);
         SubscribeLocalEvent<GridRemovalEvent>(OnGridShutdown);
@@ -171,11 +170,6 @@ public sealed partial class CMUZLevelsSystem
     private void OnViewerParentChange(Entity<CMUZLevelViewerComponent> ent, ref EntParentChangedMessage args)
     {
         UpdateViewer(ent);
-    }
-
-    private void OnZLevelNetworkUpdated(Entity<CMUZLevelsNetworkComponent> ent, ref CMUZLevelNetworkUpdatedEvent args)
-    {
-        RefreshViewersForNetwork(ent);
     }
 
     public void RefreshZLevelViewer(EntityUid uid)
