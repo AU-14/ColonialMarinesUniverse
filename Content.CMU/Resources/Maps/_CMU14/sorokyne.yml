@@ -55456,7 +55456,7 @@ entities:
     - type: Transform
       pos: 138.5,120.5
       parent: 1
-- proto: CMVendorCola
+- proto: AU14CashVendorSodas
   entities:
   - uid: 1654
     components:
