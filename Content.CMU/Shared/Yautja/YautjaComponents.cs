@@ -974,7 +974,7 @@ public sealed partial class YautjaHivebreakerComponent : Component
     public TimeSpan DoAfter = TimeSpan.FromSeconds(3);
 
     [DataField]
-    public bool RequireCritical = true;
+    public TimeSpan DeadUseWindow = TimeSpan.FromMinutes(1);
 
     [DataField]
     public SoundSpecifier StartSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");

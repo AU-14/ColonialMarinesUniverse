@@ -172,6 +172,26 @@ public sealed partial class CMUZLevelsSystem
         UpdateViewer(ent);
     }
 
+    public void RefreshZLevelViewer(EntityUid uid)
+    {
+        if (!TryComp<CMUZLevelViewerComponent>(uid, out var viewer))
+            return;
+
+        UpdateViewer((uid, viewer));
+    }
+
+    private void RefreshViewersForNetwork(Entity<CMUZLevelsNetworkComponent> network)
+    {
+        var query = EntityQueryEnumerator<CMUZLevelViewerComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var viewer, out var xform))
+        {
+            if (!CMUZLevelViewerRefresh.ShouldRefreshViewerForNetwork(xform.MapUid, network.Comp))
+                continue;
+
+            UpdateViewer((uid, viewer));
+        }
+    }
+
     private void UpdateViewer(Entity<CMUZLevelViewerComponent> ent)
     {
         ClearViewerProbes(ent);
