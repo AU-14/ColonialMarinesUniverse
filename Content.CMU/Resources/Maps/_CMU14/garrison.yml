@@ -96888,7 +96888,7 @@ entities:
     - type: Transform
       pos: 33.5,-3.5
       parent: 1
-- proto: CMVendorCoffee
+- proto: AU14CashVendorHotDrinks
   entities:
   - uid: 3994
     components:
@@ -97045,7 +97045,7 @@ entities:
     - type: Transform
       pos: 268.5,-143.5
       parent: 1
-- proto: CMVendorCola
+- proto: AU14CashVendorSodas
   entities:
   - uid: 4025
     components:
