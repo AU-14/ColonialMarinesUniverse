@@ -29,3 +29,11 @@
 - type: accessLevel
   id: AU14AccessColonyAmbassador
   name: au14-job-name-civilianambassador
+
+- type: accessLevel
+  id: AU14AccessOrbitalManagement
+  name: au14-job-name-civilianorbitalmanager
+
+- type: accessLevel
+  id: AU14AccessOrbitalLaw
+  name: au14-job-name-orbitallawyer

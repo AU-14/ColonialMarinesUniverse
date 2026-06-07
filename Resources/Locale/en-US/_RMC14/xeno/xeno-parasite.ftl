@@ -23,3 +23,8 @@ rmc-xeno-parasite-ghost-carrier-reserved = {THE($xeno)} has reserved the remaini
 rmc-xeno-parasite-ghost-carrier-dead = {THE($xeno)} is dead and all {POSS-ADJ($xeno)} children died with {OBJECT($xeno)}.
 
 rmc-xeno-parasite-carrier-death = The chittering mass of tiny aliens try to escape {THE($xeno)}!
+
+rmc-xeno-parasite-larva-claim-title = Become the larva?
+rmc-xeno-parasite-larva-claim-message = Do you want to become the larva if this host spawns one?
+rmc-xeno-parasite-larva-claim-yes = Yes
+rmc-xeno-parasite-larva-claim-no = No

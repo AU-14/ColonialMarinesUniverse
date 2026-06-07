@@ -291,6 +291,10 @@
     damage:
       types:
         Blunt: 12
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
   - type: CMSurgeryTool
   - type: CMRetractor
   - type: CMBoneSetter
@@ -319,6 +323,10 @@
         Blunt: 25
     soundHit:
       path: /Audio/_RMC14/Weapons/genhit3.ogg
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
 
 - type: entity
   parent: [BaseItem, RMCBaseMeleeWeapon]
@@ -362,6 +370,11 @@
         Structural: 30
     soundHit:
       collection: MetalThud
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+      energy: Medium
   - type: RMCSynthItemRestriction
     checkPickup: false
   - type: PhysicalComposition

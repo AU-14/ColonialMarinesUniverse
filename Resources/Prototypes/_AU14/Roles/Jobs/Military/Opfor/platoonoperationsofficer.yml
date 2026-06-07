@@ -21,12 +21,29 @@
     - type: UserIFF
       factions:
       - OPFOR
+    - type: Skills
+      preset: AU14SkillPresetPlatoonJuniorOfficer
+    - type: RMCSpeechBubbleSpecificStyle
+      speechStyleClass: commanderSpeech
     - type: JobPrefix
       prefix: au14-job-prefix-opforplatop
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14opforhud.rsi
         state: po
+    - type: MarineOrders
+      moveOrderSoundMale:
+        collection: AU14MaleMoveOrder
+      moveOrderSoundFemale:
+        collection: AU14FemaleMoveOrder
+      focusOrderSoundMale:
+        collection: AU14MaleFocusOrder
+      focusOrderSoundFemale:
+        collection: AU14FemaleFocusOrder
+      holdOrderSoundMale:
+        collection: AU14MaleHoldOrder
+      holdOrderSoundFemale:
+        collection: AU14FemaleHoldOrder
 
 - type: startingGear
   id: AU14GearOpforPlatOp

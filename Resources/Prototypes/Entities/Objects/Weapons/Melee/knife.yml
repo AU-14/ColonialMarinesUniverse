@@ -19,6 +19,13 @@
         Slash: 10
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
+  - type: DamageImpactProfile
+    melee:
+      contact: Stab
+      penetration: Low
+    thrown:
+      contact: Stab
+      penetration: Medium
   - type: Sprite
   - type: Item
     size: Small
@@ -29,6 +36,11 @@
       path: /Audio/Items/Culinary/chop.ogg
   - type: CMSurgeryTool
   - type: CMScalpel
+  - type: CMUShrapnelExtractor
+    removeCount: 2
+    delay: 2.25
+    painPenalty: 7
+    damageOnExtract: 3
   - type: CMRetractor
   - type: CMUImprovisedSurgeryTool
     delayMultiplier: 1.8
@@ -79,6 +91,13 @@
     damage:
       types:
         Slash: 13
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
+    thrown:
+      contact: Fragment
+      penetration: Low
   - type: Item
     size: Normal
     sprite: Objects/Weapons/Melee/cleaver.rsi
@@ -153,6 +172,13 @@
     damage:
       types:
         Slash: 15
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
+    thrown:
+      contact: Fragment
+      penetration: Low
   - type: Item
     sprite: Objects/Weapons/Melee/kukri_knife.rsi
     storedSprite: null
@@ -218,6 +244,10 @@
     damage:
       types:
         Slash: 5.5
+  - type: DamageImpactProfile
+    melee:
+      contact: Stab
+      penetration: Low
   - type: Item
     sprite: Objects/Weapons/Melee/shiv.rsi
   - type: DisarmMalus
@@ -310,6 +340,14 @@
       types:
         Slash: 10
         Piercing: 15
+  - type: DamageImpactProfile
+    melee:
+      contact: Stab
+      penetration: Low
+    thrown:
+      contact: Stab
+      penetration: Medium
+      energy: Medium
   - type: Item
     sprite: Objects/Weapons/Melee/throwing_knife.rsi
   - type: ThrowingAngle

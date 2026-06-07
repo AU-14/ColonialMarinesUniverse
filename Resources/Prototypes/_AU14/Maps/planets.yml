@@ -34,6 +34,12 @@
     - wendigoThreat
     - abominationsThreatDistress
     thirdparties:
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
     - FORECON
     - FORECONAlt
     - FORECONAlt2
@@ -57,6 +63,15 @@
     - WYPMCPartyAlt
     - abominationThirdParty
     - tribalThirdParty
+    - DrugSmuggler
+    - CMBParoleeTransport
+    - CMBParoleeTransportBig
+    - ForeignCrimeGang
+    - MigratingCivs
+    - MigratingCivsMedium
+    - MigratingCivsLarge
+    - MissionariesParty
+    - MissionariesPartyMedium
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
@@ -112,9 +127,19 @@
     - WYPMCPartyAlt
     - abominationThirdParty
     - tribalThirdParty
+    - DrugSmuggler
+    - CMBParoleeTransport
+    - CMBParoleeTransportBig
+    - ForeignCrimeGang
+    - MigratingCivs
+    - MigratingCivsMedium
+    - MigratingCivsLarge
+    - MissionariesParty
+    - MissionariesPartyMedium
     threats:
     - cultistThreat
     - XenoThreat
+    - XenoThreatCF
     - wendigoThreat
     - abominationsThreat
     - abominationsThreatDistress
@@ -172,7 +197,19 @@
     - WYPMCPartyAlt
     - abominationThirdParty
     - tribalThirdParty
+    - DrugSmuggler
+    - CMBParoleeTransport
+    - CMBParoleeTransportBig
+    - ForeignCrimeGang
+    - MigratingCivs
+    - MigratingCivsMedium
+    - MigratingCivsLarge
+    - MissionariesParty
+    - MissionariesPartyMedium
     threats:
+    - cultistThreat
+    - XenoThreatCF
+    - wendigoThreat
     - abominationsThreat
     - abominationsThreatDistress
     joboverrides:
@@ -208,6 +245,12 @@
     opforinship: true
     daycycleenabled: true
     thirdparties:
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
     - ICRCReliefParty
     - TimeSharesSalesman
     - UACGLostTeam
@@ -230,6 +273,15 @@
     - WYPMCPartyAlt
     - abominationThirdParty
     - tribalThirdParty
+    - DrugSmuggler
+    - CMBParoleeTransport
+    - CMBParoleeTransportBig
+    - ForeignCrimeGang
+    - MigratingCivs
+    - MigratingCivsMedium
+    - MigratingCivsLarge
+    - MissionariesParty
+    - MissionariesPartyMedium
     threats:
     - cultistThreat
     - wendigoThreat
@@ -304,7 +356,6 @@
     - USArmyAlt2
    # - cultistThirdParty
     - abominationThirdParty
-    - tribalThirdParty
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
@@ -342,6 +393,15 @@
     - wendigoThreat
     - abominationsThreatDistress
     thirdparties:
+    - IASFSurvLarge
+    - IASFSurvMedium
+    - IASFSurvSmall
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
     - USArmy
     - USArmyAlt
     - USArmyAlt2
@@ -359,7 +419,6 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianNSPAInspector
       AU14JobLEOBase: AU14JobCiviliannspaConstable
@@ -400,6 +459,12 @@
     - wendigoThreat
     - abominationsThreatDistress
     thirdparties:
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
     - FORECON
     - FORECONAlt
     - FORECONAlt2
@@ -418,12 +483,12 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     joboverrides:
-      AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
-      AU14JobLEOBase: AU14JobCivilianCMBDeputy
+      AU14JobLEOLeaderBase: AU14JobCivilianNSPAInspector
+      AU14JobLEOBase: AU14JobCiviliannspaConstable
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
+
 - type: entity
   id: AUPlanetCorsatStation
   name: Corsat Station
@@ -433,7 +498,7 @@
     mapId: aucorsat
     lorePrimer: AU14PrimerPlanetCorsatStation
     Allegiance: UA
-    camouflage: Desert
+    camouflage: Urban
     announcement: "Weyland-Yutani has lost contact with one of its Biological Storage Facilities, Solaris Ridge, on the planet of LV-1413. The UNS Almayer has been requested to look into the blackout by Weyland-Yutani."
     platoonsOpfor:
     - ProdigySF
@@ -456,8 +521,11 @@
     - cultistThreat
     - XenoThreat
     - XenoThreatCF
-    - abominationsThreatDistress
+    - TribalsThreat
     thirdparties:
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
     - NSPAInvestigationParty
     - UPPGROMAlt
     - cultistThirdPartyNoQueen
@@ -466,7 +534,6 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
       AU14JobLEOBase: AU14JobCivilianCMBDeputy
@@ -516,9 +583,20 @@
     - USArmy
     - abominationThirdParty
     - tribalThirdParty
+    - DrugSmuggler
+    - CMBParoleeTransport
+    - CMBParoleeTransportBig
+    - ForeignCrimeGang
+    - MigratingCivs
+    - MigratingCivsMedium
+    - MigratingCivsLarge
+    - MissionariesParty
+    - MissionariesPartyMedium
     threats:
     - cultistThreatOnMarker
     - XenoThreat
+    - XenoThreatCF
+    - wendigoThreat
     - abominationsThreat
     - abominationsThreatDistress
     joboverrides:
@@ -557,6 +635,12 @@
     - UPPGROM
     - UPPGROMAlt
     - UPPGROMAlt2
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
     - UPPTDLostTeam
     - PAPInvestigationPartyAlt
     - PAPInvestigationParty
@@ -570,11 +654,11 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     threats:
     - cultistThreat
     - XenoThreat
     - wendigoThreat
+    - TribalsThreat
     - abominationsThreatDistress
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
@@ -594,18 +678,27 @@
     - UPP
     - WEYU
     - VAIPO
+    - ProdigySF
     platoonsGovfor:
     - LACN
-    - ProdigySF
     - USCM
     - RMC
-    defaultgovfor: UPP
-    defaultopfor: RMC
+    defaultgovfor: RMC
+    defaultopfor: VAIPO
     govforinship: true
     opforinship: true
     daycycleenabled: true
     faction: ua
     thirdparties:
+    - IASFSurvLarge
+    - IASFSurvMedium
+    - IASFSurvSmall
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
     - ICRCReliefParty
     - cultistThirdParty
     - cultistThirdPartyNoQueen
@@ -623,10 +716,9 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     threats:
     - XenoThreat
-    - abominationsThreatDistress
+    - TribalsThreat
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
@@ -658,6 +750,12 @@
     - USArmyAlt
     - USArmyAlt2
     - USArmyTank
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
     - ICRCReliefParty
     - TimeSharesSalesman
     - UACGLostTeam
@@ -674,10 +772,9 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     threats:
     - XenoThreat
-    - abominationsThreatDistress
+    - TribalsThreat
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
@@ -690,7 +787,7 @@
     mapId: auKutjevo
     lorePrimer: AU14PrimerPlanetKutjevo
     Allegiance: UA
-    camouflage: Snow
+    camouflage: Desert
     announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
     platoonsGovfor:
     - USCM
@@ -710,6 +807,12 @@
     - USArmyAlt
     - USArmyAlt2
     - USArmyTank
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
     - ICRCReliefParty
     - TimeSharesSalesman
     - UACGLostTeam
@@ -725,10 +828,9 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     threats:
     - XenoThreat
-    - abominationsThreatDistress
+    - TribalsThreat
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
@@ -759,6 +861,12 @@
     - USArmyAlt
     - USArmyAlt2
     - USArmyTank
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
     - ICRCReliefParty
     - TimeSharesSalesman
     - UACGLostTeam
@@ -777,68 +885,129 @@
     - WYPMCParty
     - WYPMCPartyAlt
     - abominationThirdParty
-    - tribalThirdParty
     threats:
     - abominationsThreatDistress
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
+
+- type: entity
+  id: AuPlanetChances
+  name: Chances Claim
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Chances Claim"
+    mapId: auchances
+    lorePrimer: AU14PrimerPlanetChances
+    Allegiance: UA
+    camouflage: Urban
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsGovfor:
+    - USCM
+    - WEYU
+    - VAIPO
+    - UPP
+    - HAZOPS
+    - ProdigySF
+    - RMC
+    - UPP
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: false
+    thirdparties:
+    - USArmy
+    - USArmyAlt
+    - USArmyAlt2
+    - USArmyTank
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - UACGLostTeam
+    - NSPAInvestigationParty
+    - LACNSniperteam
+    - RMCRRT
+    - USArmyArmored
+    - CMBInvestigationParty
+    - CMBInvestigationPartyAlt
+    - XenoParasiteRunnerParty
+    - ApeThirdPartys
+    - ProfessorVonBandolier
+    - IPIE
+    - IPIESynth
+    - WYHT
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    threats:
+    - abominationsThreatDistress
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+    joboverrides:
+      AU14JobLEOLeaderBase: AU14JobCivilianColonySecurityLeader
+      AU14JobLEOBase: AU14JobCivilianColonySecurityOfficer
+      AU14JobCivillianColonyAdministrtor: AU14JobCivilianCorporateAdministrator
+
+- type: lorePrimer
+  id: AU14PrimerPlanetChances
+  planetText: "Date 2181 -  Chances Claim - Weyland Administrated Frontier Colony entangled with organized crime"
+
+
 - type: lorePrimer
   id: AU14PrimerPlanetLV747
-  planetText: "Date 2181 - Solaris Gulch. UA  controlled"
+  planetText: "Date 2181 - Solaris Gulch, UA controlled."
 
 - type: lorePrimer
   id: AU14PrimerPlanetShepherdsPride
-  planetText: "Date 2181 - Shepherds' Pride. wildlife reserve"
+  planetText: "Date 2181 - Shepherds' Pride, a wildlife reserve."
 
 - type: lorePrimer
   id: AU14PrimerPlanetStableGarrison
-  planetText: "Date 2181 - Stable Garrison. UA controlled frontier world with a joint base and sizeable urban community"
+  planetText: "Date 2181 - Stable Garrison, a UA controlled frontier world with a joint base and sizeable urban community."
 
 - type: lorePrimer
   id: AU14PrimerPlanetLV624
-  planetText: "Date 2181 - LV624 Green Hell,  UA controlled"
+  planetText: "Date 2181 - LV624 Green Hell, UA controlled."
 - type: lorePrimer
   id: AU14PrimerPlanetGixensCaverns
   planetText: "Date 2181 - Gixens Caverns."
 
 - type: lorePrimer
   id: AU14PrimerPlanetFlight
-  planetText: "Date 2181 - Flight. Multiple story colony  megastructure"
+  planetText: "Date 2181 - Flight, a multistory colony megastructure."
 
 - type: lorePrimer
   id: AU14PrimerPlanetLV759
-  planetText: "Date 2181 - Hybrisa Metropolitan. Three World Empire territory"
+  planetText: "Date 2181 - Hybrisa Metropolitan, Three World Empire territory."
 
 - type: lorePrimer
   id: AU14PrimerPlanetLV327
-  planetText: "Date 2181 - Port Neroid: valuable waterport on a frontier world, UA controlled"
+  planetText: "Date 2181 - Port Neroid, valuable waterport on a frontier world, UA controlled."
 
 - type: lorePrimer
   id: AU14PrimerPlanetCorsatStation
-  planetText: "Date 2181 - Corsat Station. WeYu operated research  station"
+  planetText: "Date 2181 - Corsat Station, Weyland-Yutani operated research station."
 
 - type: lorePrimer
   id: AU14PrimerPlanetLament
-  planetText: "Date 2181 - Barker's Lament, mining and farming colony on the planet of LV-376 'Ulixes'. Primarily under the control of the United Americas, despite the constant interference of Weyland-Yutani."
+  planetText: "Date 2181 - Barker's Lament, a mining and farming colony on the planet of LV-376 'Ulixes'. Primarily under the control of the United Americas, despite the constant interference of Weyland-Yutani."
 
 - type: lorePrimer
   id: AU14PrimerPlanetSorokyne
-  planetText: "Date 2181 - Sorokyne Strata. Union of progressive peoples frotntier outpost"
+  planetText: "Date 2186 - Sorokyne Strata. Union of Progressive People's research outpost."
 
 - type: lorePrimer
   id: AU14PrimerPlanetTrijent
-  planetText: "Date 2182 - LV-670 Raijin Hydroelectric (formerly known as 'Trijent Dam'), a Three World Empire water treatment facility."
+  planetText: "Date 2179 - LV-670 Raijin Hydroelectric (formerly known as Trijent Dam), a Three World Empire water treatment facility serving a major prospera."
 
 - type: lorePrimer
   id: AU14PrimerPlanetShivasSnowball
-  planetText: "Date 2181 - Shivas' Snowball. United Americas mining and research  colony."
+  planetText: "Date 2177 - Shivas' Snowball. United Americas mining and research colony."
 
 - type: lorePrimer
   id: AU14PrimerPlanetKutjevo
-  planetText: "Date 2181 - Kutjevo Biolab. Level 3 facility operated by the Weyland-Yutani Corporation."
+  planetText: "Date 2181 - Kutjevo Biolab. Level three facility operated by the Weyland-Yutani Corporation."
 
 - type: lorePrimer
   id: AU14PrimerPlanetFiorina
-  planetText: "Date 2181 - Fiorina Prison. Privately owned  and operated by the weyland-yutani corporation, Fiorina 161 is a maximum security prison for the most dangerous criminals in the system."
-
+  planetText: "Date 2181 - Fiorina Prison. Privately owned  and operated by the Weyland-Yutani corporation, Fiorina 161 is a maximum security prison for the most dangerous criminals in the system."

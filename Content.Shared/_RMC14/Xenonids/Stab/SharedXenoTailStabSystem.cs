@@ -152,7 +152,17 @@ public abstract partial class SharedXenoTailStabSystem : EntitySystem
                 RaiseLocalEvent(hit, attackedEv);
 
                 var modifiedDamage = DamageSpecifier.ApplyModifierSets(damage + hitEvent.BonusDamage + attackedEv.BonusDamage, hitEvent.ModifiersList);
-                var change = _damageable.TryChangeDamage(hit, _xeno.TryApplyXenoSlashDamageMultiplier(hit, modifiedDamage), origin: stab , tool: stab);
+                var finalDamage = _xeno.TryApplyXenoSlashDamageMultiplier(hit, modifiedDamage);
+                var change = _damageable.TryChangeDamage(
+                    hit,
+                    finalDamage,
+                    origin: stab,
+                    tool: stab,
+                    impact: DamageImpact.XenoRendingSlash(3) with
+                    {
+                        Contact = DamageImpactContact.Stab,
+                        Penetration = DamageImpactPenetration.High,
+                    });
 
                 if (change?.GetTotal() > FixedPoint2.Zero)
                 {

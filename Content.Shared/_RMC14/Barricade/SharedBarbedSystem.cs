@@ -71,7 +71,7 @@ public abstract partial class SharedBarbedSystem : EntitySystem
         if (!barbed.Comp.IsBarbed)
             return;
 
-        _damageableSystem.TryChangeDamage(args.User, barbed.Comp.ThornsDamage, origin: barbed, tool: barbed);
+        _damageableSystem.TryChangeDamage(args.User, barbed.Comp.ThornsDamage, origin: barbed, tool: barbed, impact: DamageImpact.SnaggingContact);
         _popupSystem.PopupClient(Loc.GetString("barbed-wire-damage"), barbed, args.User, PopupType.SmallCaution);
     }
 
@@ -216,7 +216,7 @@ public abstract partial class SharedBarbedSystem : EntitySystem
         if (!ent.Comp.IsBarbed)
             return;
 
-        _damageableSystem.TryChangeDamage(args.Leaper, ent.Comp.ThornsDamage, origin: ent, tool: ent);
+        _damageableSystem.TryChangeDamage(args.Leaper, ent.Comp.ThornsDamage, origin: ent, tool: ent, impact: DamageImpact.SnaggingContact);
     }
 
     protected void UpdateBarricade(Entity<BarbedComponent> barbed, bool updateBarbed = false)

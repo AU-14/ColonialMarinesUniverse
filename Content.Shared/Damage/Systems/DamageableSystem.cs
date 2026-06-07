@@ -154,8 +154,14 @@ namespace Content.Shared.Damage
         ///     This updates cached damage information, flags the component as dirty, and raises a damage changed event.
         ///     The damage changed event is used by other systems, such as damage thresholds.
         /// </remarks>
-        public void DamageChanged(EntityUid uid, DamageableComponent component, DamageSpecifier? damageDelta = null,
-            bool interruptsDoAfters = true, EntityUid? origin = null, EntityUid? tool = null)
+        public void DamageChanged(
+            EntityUid uid,
+            DamageableComponent component,
+            DamageSpecifier? damageDelta = null,
+            bool interruptsDoAfters = true,
+            EntityUid? origin = null,
+            EntityUid? tool = null,
+            DamageImpact impact = default)
         {
             component.Damage.GetDamagePerGroup(_prototypeManager, component.DamagePerGroup);
             component.TotalDamage = component.Damage.GetTotal();
@@ -166,7 +172,7 @@ namespace Content.Shared.Damage
                 var data = new DamageVisualizerGroupData(component.DamagePerGroup.Keys.ToList());
                 _appearance.SetData(uid, DamageVisualizerKeys.DamageUpdateGroups, data, appearance);
             }
-            RaiseLocalEvent(uid, new DamageChangedEvent(component, damageDelta, interruptsDoAfters, origin, tool));
+            RaiseLocalEvent(uid, new DamageChangedEvent(component, damageDelta, interruptsDoAfters, origin, tool, impact));
         }
 
         /// <summary>
@@ -182,7 +188,7 @@ namespace Content.Shared.Damage
         ///     null if the user had no applicable components that can take damage.
         /// </returns>
         public DamageSpecifier? TryChangeDamage(EntityUid? uid, DamageSpecifier damage, bool ignoreResistances = false,
-            bool interruptsDoAfters = true, DamageableComponent? damageable = null, EntityUid? origin = null, EntityUid? tool = null, int armorPiercing = 0)
+            bool interruptsDoAfters = true, DamageableComponent? damageable = null, EntityUid? origin = null, EntityUid? tool = null, int armorPiercing = 0, DamageImpact impact = default)
         {
             if (!uid.HasValue || !_damageableQuery.Resolve(uid.Value, ref damageable, false))
             {
@@ -195,7 +201,7 @@ namespace Content.Shared.Damage
                 return damage;
             }
 
-            var before = new BeforeDamageChangedEvent(damage, origin, tool); //RMC14, added a parameter
+            var before = new BeforeDamageChangedEvent(damage, origin, tool, impact); //RMC14, added a parameter
             RaiseLocalEvent(uid.Value, ref before);
 
             if (before.Cancelled)
@@ -212,9 +218,10 @@ namespace Content.Shared.Damage
                     damage = DamageSpecifier.ApplyModifierSet(damage, modifierSet);
                 }
 
-                var ev = new DamageModifyEvent(damage, origin, tool, armorPiercing);
+                var ev = new DamageModifyEvent(damage, origin, tool, armorPiercing, impact);
                 RaiseLocalEvent(uid.Value, ev);
                 damage = ev.Damage;
+                impact = ev.Impact;
 
                 if (damage.Empty)
                 {
@@ -222,9 +229,10 @@ namespace Content.Shared.Damage
                 }
             }
 
-            var evd = new DamageModifyAfterResistEvent(damage, origin, tool);
+            var evd = new DamageModifyAfterResistEvent(damage, origin, tool, impact);
             RaiseLocalEvent(uid.Value, evd);
             damage = evd.Damage;
+            impact = evd.Impact;
 
             if (damage.Empty)
             {
@@ -255,9 +263,24 @@ namespace Content.Shared.Damage
             }
 
             if (delta.DamageDict.Count > 0)
-                DamageChanged(uid.Value, damageable, delta, interruptsDoAfters, origin, tool);
+                DamageChanged(uid.Value, damageable, delta, interruptsDoAfters, origin, tool, impact);
 
             return delta;
+        }
+
+        public DamageSpecifier? TryChangeDamage(EntityUid? uid, DamageInstance instance, bool ignoreResistances = false,
+            bool interruptsDoAfters = true, DamageableComponent? damageable = null)
+        {
+            return TryChangeDamage(
+                uid,
+                instance.Damage,
+                ignoreResistances,
+                interruptsDoAfters,
+                damageable,
+                instance.Origin,
+                instance.Tool,
+                instance.ArmorPiercing,
+                instance.Impact);
         }
 
         /// <summary>
@@ -387,7 +410,7 @@ namespace Content.Shared.Damage
     ///     Raised before damage is done, so stuff can cancel it if necessary.
     /// </summary>
     [ByRefEvent]
-    public record struct BeforeDamageChangedEvent(DamageSpecifier Damage, EntityUid? Origin = null, EntityUid? Source = null, bool Cancelled = false); //RMC14
+    public record struct BeforeDamageChangedEvent(DamageSpecifier Damage, EntityUid? Origin = null, EntityUid? Source = null, DamageImpact Impact = default, bool Cancelled = false); //RMC14
 
     /// <summary>
     ///     Raised on an entity when damage is about to be dealt,
@@ -406,14 +429,16 @@ namespace Content.Shared.Damage
         public EntityUid? Origin;
         public EntityUid? Tool;
         public int ArmorPiercing;
+        public DamageImpact Impact;
 
-        public DamageModifyEvent(DamageSpecifier damage, EntityUid? origin = null, EntityUid? tool = null, int armorPiercing = 0)
+        public DamageModifyEvent(DamageSpecifier damage, EntityUid? origin = null, EntityUid? tool = null, int armorPiercing = 0, DamageImpact impact = default)
         {
             OriginalDamage = damage;
             Damage = damage;
             Origin = origin;
             Tool = tool;
             ArmorPiercing = armorPiercing;
+            Impact = impact;
         }
     }
 
@@ -453,13 +478,15 @@ namespace Content.Shared.Damage
         public readonly EntityUid? Origin;
 
         public readonly EntityUid? Tool;
+        public readonly DamageImpact Impact;
 
-        public DamageChangedEvent(DamageableComponent damageable, DamageSpecifier? damageDelta, bool interruptsDoAfters, EntityUid? origin, EntityUid? tool)
+        public DamageChangedEvent(DamageableComponent damageable, DamageSpecifier? damageDelta, bool interruptsDoAfters, EntityUid? origin, EntityUid? tool, DamageImpact impact = default)
         {
             Damageable = damageable;
             DamageDelta = damageDelta;
             Origin = origin;
             Tool = tool;
+            Impact = impact;
 
             if (DamageDelta == null)
                 return;

@@ -139,9 +139,14 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
     private void OnOrbitalCannonChanged(ref OrbitalCannonChangedEvent ev)
     {
         var hasOrbital = ev.Cannon.Comp.Status == OrbitalCannonStatus.Chambered;
+        var cannonFaction = ev.Cannon.Comp.Faction;
         var consoles = EntityQueryEnumerator<OverwatchConsoleComponent>();
         while (consoles.MoveNext(out var uid, out var console))
         {
+            if (!string.IsNullOrEmpty(cannonFaction) &&
+                !string.Equals(console.Group, cannonFaction, StringComparison.OrdinalIgnoreCase))
+                continue;
+
             console.HasOrbital = hasOrbital;
             Dirty(uid, console);
         }
@@ -149,9 +154,14 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
     private void OnOrbitalCannonLaunch(ref OrbitalCannonLaunchEvent ev)
     {
+        var cannonFaction = ev.CannonFaction;
         var consoles = EntityQueryEnumerator<OverwatchConsoleComponent>();
         while (consoles.MoveNext(out var uid, out var console))
         {
+            if (!string.IsNullOrEmpty(cannonFaction) &&
+                !string.Equals(console.Group, cannonFaction, StringComparison.OrdinalIgnoreCase))
+                continue;
+
             console.NextOrbitalLaunch = _timing.CurTime + ev.Cooldown;
             Dirty(uid, console);
         }
@@ -521,7 +531,7 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
         if (!ent.Comp.CanOrbitalBombardment)
             return;
 
-        if (!_orbitalCannon.TryGetClosestCannon(ent, out var cannon))
+        if (!_orbitalCannon.TryGetClosestCannon(ent, out var cannon, string.IsNullOrEmpty(ent.Comp.Group) ? null : ent.Comp.Group))
             return;
 
         EntityUid squad = default;

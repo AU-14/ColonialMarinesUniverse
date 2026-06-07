@@ -17,6 +17,10 @@
         Blunt: 8
     soundHit:
       collection: MetalThud
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
   - type: Tool
     qualities:
       - Prying

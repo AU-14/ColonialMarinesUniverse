@@ -14,7 +14,6 @@ using Content.Shared.NPC.Prototypes;
 using Content.Shared.Popups;
 using Content.Shared.Prototypes;
 using Content.Shared.Weapons.Ranged.Events;
-using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -56,6 +55,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         SubscribeLocalEvent<HiveMemberComponent, ComponentStartup>(OnHiveStartup);
 
         SubscribeLocalEvent<XenoEvolutionGranterComponent, MobStateChangedEvent>(OnGranterMobStateChanged);
+        SubscribeLocalEvent<XenoEvolutionGranterComponent, EntityTerminatingEvent>(OnGranterTerminating);
 
         SubscribeLocalEvent<AutoAssignHiveComponent, ComponentStartup>(OnAutoAssignHiveAdded);
 
@@ -103,18 +103,20 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         if (args.NewMobState != MobState.Dead)
             return;
 
-        if (GetHive(ent.Owner) is { } hive)
-        {
-            hive.Comp.LastQueenDeath = _timing.CurTime;
-            hive.Comp.CurrentQueen = null;
-            hive.Comp.AnnouncedQueenDeathCooldownOver = false;
-            hive.Comp.NewQueenAt = _timing.CurTime + hive.Comp.NewQueenCooldown;
-            Dirty(hive);
-        }
+        ClearHiveQueen(ent.Owner, died: true);
+    }
+
+    private void OnGranterTerminating(Entity<XenoEvolutionGranterComponent> ent, ref EntityTerminatingEvent args)
+    {
+        if (_mobState.IsDead(ent))
+            return;
+
+        ClearHiveQueen(ent.Owner);
     }
 
     private void OnMapInit(Entity<HiveComponent> ent, ref MapInitEvent args)
     {
+        ent.Comp.InstantBuildsRemaining = ent.Comp.MaxInstantBuilds;
         ent.Comp.AnnouncedUnlocks.Clear();
         ent.Comp.Unlocks.Clear();
         ent.Comp.AnnouncementsLeft.Clear();
@@ -192,6 +194,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
             hive.Allies.Remove(faction);
         }
     }
+
     public void SetHiveIndividualAlly(EntityUid ent, EntityUid hiveEnt, bool alliance)
     {
         if (!TryComp<HiveComponent>(hiveEnt, out var hive))
@@ -205,13 +208,13 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
             hive.IndividualAllies.Remove(ent);
         }
     }
+
     public void ClearHiveIndividualAllies(EntityUid hiveEnt)
     {
         if (!TryComp<HiveComponent>(hiveEnt, out var hive))
             return;
         hive.IndividualAllies.Clear();
     }
-
 
     /// <summary>
     /// Returns true if the entity uid is at all in any way shape or form considered an "ally" of the hive.
@@ -224,6 +227,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
     {
         if (hiveEnt is null)
             return false;
+
         // if there's no hive comp then just return false
         if (!TryComp<HiveComponent>(hiveEnt, out var hive))
             return false;
@@ -287,6 +291,14 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         Dirty(member, comp);
         UpdateHiveAppearance(member.Owner, hiveEnt);
 
+        if (HasComp<XenoEvolutionGranterComponent>(member) &&
+            old is { } oldHiveUid &&
+            _query.TryComp(oldHiveUid, out var oldHiveComp) &&
+            oldHiveComp.CurrentQueen == member.Owner)
+        {
+            ClearHiveQueen((oldHiveUid, oldHiveComp));
+        }
+
         if (HasComp<XenoEvolutionGranterComponent>(member) && hiveEnt.HasValue)
             SetHiveQueen(member, hiveEnt.Value);
 
@@ -336,9 +348,40 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
 
     public bool SetHiveQueen(EntityUid queen, Entity<HiveComponent> hive)
     {
+        if (hive.Comp.CurrentQueen == queen)
+            return true;
+
         hive.Comp.CurrentQueen = queen;
         Dirty(hive);
+
+        var ev = new XenoHiveQueenChangedEvent();
+        RaiseLocalEvent(hive.Owner, ref ev);
         return true;
+    }
+
+    private void ClearHiveQueen(EntityUid queen, bool died = false)
+    {
+        if (GetHive(queen) is not { } hive || hive.Comp.CurrentQueen != queen)
+            return;
+
+        ClearHiveQueen(hive, died);
+    }
+
+    private void ClearHiveQueen(Entity<HiveComponent> hive, bool died = false)
+    {
+        hive.Comp.CurrentQueen = null;
+
+        if (died)
+        {
+            hive.Comp.LastQueenDeath = _timing.CurTime;
+            hive.Comp.AnnouncedQueenDeathCooldownOver = false;
+            hive.Comp.NewQueenAt = _timing.CurTime + hive.Comp.NewQueenCooldown;
+        }
+
+        Dirty(hive);
+
+        var ev = new XenoHiveQueenChangedEvent();
+        RaiseLocalEvent(hive.Owner, ref ev);
     }
 
     public bool HasHiveCore(Entity<HiveComponent> hive)
@@ -427,24 +470,32 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         return hive.Comp.FreeSlots.TryGetValue(caste, out value);
     }
 
-    public void IncreaseBurrowedLarva(int amount)
+    public void ChangeBurrowedLarva(int amount)
     {
         var hives = EntityQueryEnumerator<HiveComponent>();
         while (hives.MoveNext(out var uid, out var hive))
         {
-            IncreaseBurrowedLarva((uid, hive), amount);
+            ChangeBurrowedLarva((uid, hive), amount);
         }
     }
 
-    public void IncreaseBurrowedLarva(Entity<HiveComponent> hive, int amount)
+    public void ChangeBurrowedLarva(Entity<HiveComponent> hive, int amount)
     {
         SetHiveBurrowedLarva(hive, hive.Comp.BurrowedLarva + amount);
     }
 
     private void SetHiveBurrowedLarva(Entity<HiveComponent> hive, int larva)
     {
+        var initial = hive.Comp.BurrowedLarva;
         hive.Comp.BurrowedLarva = larva;
         Dirty(hive);
+
+        var added = larva - initial;
+        if (added > 0)
+        {
+            var addedEv = new BurrowedLarvaAddedEvent(hive.Owner, added);
+            RaiseLocalEvent(ref addedEv);
+        }
 
         var ev = new BurrowedLarvaChangedEvent(larva);
         RaiseLocalEvent(hive, ref ev, true);
@@ -490,7 +541,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         if (larva == null)
             return false;
 
-        IncreaseBurrowedLarva(hive, -1);
+        ChangeBurrowedLarva(hive, -1);
 
         _xeno.MakeXeno(larva.Value);
         SetHive(larva.Value, hive);

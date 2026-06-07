@@ -297,7 +297,7 @@
       Classic: _RMC14/Objects/Clothing/Head/Helmets/m30/classic.rsi
       Urban: _RMC14/Objects/Clothing/Head/Helmets/m30/urban.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     explosionArmor: 15
     # armor_internaldamage = 15
   - type: CycleableVisor

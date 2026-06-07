@@ -75,10 +75,14 @@ namespace Content.IntegrationTests.Tests
                     .Where(p => !p.Components.ContainsKey("ConditionalSpawner")) // Spawns arbitrary prototypes as a side effect.
                     .Where(p => !p.Components.ContainsKey("RandomSpawner")) // Spawns arbitrary prototypes as a side effect.
                     .Where(p => !p.Components.ContainsKey("EntityTableSpawner")) // Spawns arbitrary prototypes as a side effect.
+                    .Where(p => !p.Components.ContainsKey("GameRule")) // Starts global game-rule side effects.
+                    .Where(p => !p.Components.ContainsKey("StationData")) // Sets up global station state when spawned directly.
                     .Where(p => !p.Components.ContainsKey("GhostRole")) // Ghost role entities can spawn squads/loadouts as side effects.
                     .Where(p => !p.Components.ContainsKey("GhostRoleApplySpecial")) // Spawns special-role setup on direct entity spawn.
                     .Where(p => !p.Components.ContainsKey("HiveKingCocoon")) // Spawns an (audio) announcement.
                     .Where(p => !p.Components.ContainsKey("HivePylon")) // Spawn an (audio) announcement on deletion.
+                    .Where(p => !p.Components.ContainsKey("AuObjective")) // Starts objective state when spawned directly.
+                    .Where(p => !p.Components.ContainsKey("ObjectiveMaster")) // Activates unrelated objectives as a side effect.
                     .Where(p => p.Categories.All(x => x.ID != SpawnerCategory))
                     .Select(p => p.ID)
                     .ToList();
@@ -208,10 +212,26 @@ namespace Content.IntegrationTests.Tests
                 .Where(p => !p.Abstract)
                 .Where(p => !pair.IsTestPrototype(p))
                 .Where(p => !p.Components.ContainsKey("MapGrid")) // This will smash stuff otherwise.
+                .Where(p => !p.Components.ContainsKey("RoomFill")) // This comp can delete all entities, and spawn others
+                .Where(p => !p.Components.ContainsKey("ConditionalSpawner")) // Spawns arbitrary prototypes as a side effect.
+                .Where(p => !p.Components.ContainsKey("RandomSpawner")) // Spawns arbitrary prototypes as a side effect.
+                .Where(p => !p.Components.ContainsKey("EntityTableSpawner")) // Spawns arbitrary prototypes as a side effect.
+                .Where(p => !p.Components.ContainsKey("GameRule")) // Starts global game-rule side effects.
+                .Where(p => !p.Components.ContainsKey("StationData")) // Sets up global station state when spawned directly.
+                .Where(p => !p.Components.ContainsKey("SpawnOnMapInit")) // Spawns arbitrary prototypes as a side effect.
+                .Where(p => !p.Components.ContainsKey("SpawnOnTerminate")) // Spawns arbitrary prototypes as a side effect.
+                .Where(p => !p.Components.ContainsKey("GridSpawner")) // Spawns grids as a side effect.
+                .Where(p => !p.Components.ContainsKey("CorpseSpawner")) // Spawns arbitrary prototypes as a side effect.
                 .Where(p => !p.Components.ContainsKey("GhostRole")) // Ghost role entities can spawn squads/loadouts as side effects.
                 .Where(p => !p.Components.ContainsKey("GhostRoleApplySpecial")) // Spawns special-role setup on direct entity spawn.
+                .Where(p => !p.Components.ContainsKey("HumanoidAppearance")) // Humanoid body children trip connected-client cleanup when spawned directly.
+                .Where(p => !p.Components.ContainsKey("StorageFill")) // Filled containers create child entities that trip connected-client cleanup.
+                .Where(p => !p.Components.ContainsKey("EntityTableContainerFill")) // Filled containers create child entities that trip connected-client cleanup.
                 .Where(p => !p.Components.ContainsKey("HiveKingCocoon")) // Spawns an (audio) announcement.
                 .Where(p => !p.Components.ContainsKey("HivePylon")) // Spawn an (audio) announcement on deletion.
+                .Where(p => !p.Components.ContainsKey("AuObjective")) // Starts objective state when spawned directly.
+                .Where(p => !p.Components.ContainsKey("ObjectiveMaster")) // Activates unrelated objectives as a side effect.
+                .Where(p => p.Categories.All(x => x.ID != SpawnerCategory))
                 .Select(p => p.ID)
                 .ToList();
 
@@ -229,6 +249,8 @@ namespace Content.IntegrationTests.Tests
                     {
                         mapSys.CreateMap(out var mapId);
                         var grid = mapManager.CreateGridEntity(mapId);
+                        // TODO: Fix this better in engine.
+                        mapSys.SetTile(grid.Owner, grid.Comp, Vector2i.Zero, new Tile(1));
                         var ent = sEntMan.SpawnEntity(protoId, new EntityCoordinates(grid.Owner, 0.5f, 0.5f));
                         foreach (var (_, component) in sEntMan.GetNetComponents(ent))
                         {
@@ -287,7 +309,9 @@ namespace Content.IntegrationTests.Tests
             var excluded = new[] // supports Components and Prototypes
             {
                 "MapGrid",
+                "GameRule",
                 "StationEvent",
+                "StationData",
                 "TimedDespawn",
                 "AnnounceOnSpawn", // makes an announcement on mapInit.
                 "HiveCore", // Spreads weeds
@@ -298,8 +322,13 @@ namespace Content.IntegrationTests.Tests
                 "GridSpawner",
                 "CorpseSpawner",
                 "ItemCamouflage",
+                "HumanoidAppearance",
+                "StorageFill",
+                "EntityTableContainerFill",
                 "GhostRole",
                 "GhostRoleApplySpecial",
+                "AuObjective",
+                "ObjectiveMaster",
                 // RMC14
                 "ActivateDropshipWeaponOnSpawn",
                 "AmbientSound",

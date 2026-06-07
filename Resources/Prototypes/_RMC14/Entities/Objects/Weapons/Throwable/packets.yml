@@ -606,5 +606,55 @@
     - id: RMCGrenade20mmIncendiary
       amount: 8
 
+- type: entity
+  parent: CMPacketBase
+  id: AU14PacketGrenadeTearGas
+  name: M19-NL tear gas grenade packet
+  description: It contains three M19-Non Lethal gas grenades.
+  components:
+  - type: Sprite
+    layers:
+    - state: teargas_packet
+      map: [ "closedLayer" ]
+    - state: teargas_packet_e
+      map: [ "openLayer", "emptyLayer"]
+
+- type: entity
+  parent: AU14PacketGrenadeTearGas
+  id: AU14PacketGrenadeTearGasFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMU14TearGasGrenade
+      amount: 3
+
+- type: entity
+  parent: CMPacketBase
+  id: AU14PacketGrenadeTearGasAirbust
+  name: M74 AGM-PDC tear gas grenade packet
+  description: It contains five M74 Airburst Grenade Munition-Personnel Denial Canister rounds.
+  components:
+  - type: Sprite
+    layers:
+    - state: teargas_airburst_packet
+      map: [ "closedLayer" ]
+    - state: teargas_airburst_packet_e
+      map: [ "openLayer", "emptyLayer"]
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,1 # 5 slots
+
+- type: entity
+  parent: AU14PacketGrenadeTearGasAirbust
+  id: AU14PacketGrenadeTearGasFilledAirburst
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CM14AirBurstTearGas
+      amount: 5
+
 - type: Tag
   id: RMCGrenadePacket20mm

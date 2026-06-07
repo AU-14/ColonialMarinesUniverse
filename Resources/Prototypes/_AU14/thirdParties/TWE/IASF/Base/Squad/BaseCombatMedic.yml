@@ -1,0 +1,49 @@
+- type: job
+  parent: CMJobBase
+  id: AU14IASFMedicalTechnicianBase
+  name: au14-job-name-tweiasf-cm
+  playTimeTracker: AU14IASFCombatMedicalTechnician
+  description: au14-job-description-twepara
+  ranks:
+    RMC_LanceCorporal: []
+  spawnMenuRoleName: IASF Medical Technician (Base)
+  joinNotifyCrew: false
+  icon: RMCJobIconParaMedicalTechnican
+  startingGear: AU14RMCGearParaMedicalTechnician
+  supervisors: au14-job-name-tweiasf-tl
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: rmc_medic
+      background:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: background_para
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadIASF
+    - type: Skills
+      preset: AU14SkillPresetPlatoonHospitalCorpsman
+    - type: JobPrefix
+      prefix: au14-job-prefix-iasf
+  hidden: true
+
+- type: startingGear
+  parent: AU14RMCGearIASFBase
+  id: AU14RMCGearParaMedicalTechnician
+  equipment:
+    back: AU14CMDefibrillator
+    jumpsuit: AU14JumpsuitIASFL90
+    suitstorage: AU14WeaponRifleL90Full
+    belt: AU14BeltMedicBagSupportSynthRMC
+    pocket2: RMCSurgicalCaseRCMFilled
+    id: AU14IDCardIASFMedic
+  storage:
+    outerClothing:
+    - RMCRadioHandheldColony
+
+- type: playTimeTracker
+  id: AU14IASFCombatMedicalTechnician

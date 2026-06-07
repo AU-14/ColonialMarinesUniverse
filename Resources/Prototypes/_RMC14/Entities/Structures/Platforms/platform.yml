@@ -80,6 +80,9 @@
     snap:
     - Wall
   components:
+  - type: XenoCrusherChargable
+    instantDestroy: true
+    passOnDestroy: true
   - type: Physics
   - type: Fixtures
     fixtures:

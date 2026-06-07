@@ -15,7 +15,7 @@
       time: 108000 # 30 hours
     UPP_Sergeant: []
   startingGear: AU14GearGOVFORSectionSergeant
-  dummyStartingGear: AU14GearGOVFORPlatoonSergeantDummy
+  dummyStartingGear: AU14GearGOVFORPlatoonSergantDummy
   icon: "AU14JobIconPlatoonSarge"
   requireAdminNotify: true
   spawnMenuRoleName: Platoon Sergeant (UPP)
@@ -30,6 +30,14 @@
   special:
   - !type:AddComponentSpecial
     components:
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Marine
+      Faction: govfor
+    - type: UserIFF
+      factions:
+      - GOVFOR
     - type: Skills
       skills:
         RMCSkillConstruction: 2

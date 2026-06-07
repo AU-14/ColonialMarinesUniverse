@@ -46,6 +46,103 @@
   - ThirteenLokoRMC
 # id SmokablesRMC
 
+# WY
+# Liaison
+- type: loadoutGroup
+  id: WYCLOuterwearAU14
+  name: au14-loadout-group-corporate-outerwear
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - CivilianJacketOrangePufferJacketAU14
+  - WYFancySuitJacketBlackAU14
+  - WYFancySuitJacketBrownAU14
+  - WYFancySuitJacketLightBrownAU14
+  - WYLiaisonManagerJacketAU14
+
+- type: loadoutGroup
+  id: WYCLJumpsuitAU14
+  name: au14-loadout-group-corporate-jumpsuit
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - CivilianWorkwearBlueAU14
+  - WYJumpsuitLiaisonBlackAU14
+  - WYJumpsuitLiaisonBlazerAU14
+  - WYJumpsuitLiaisonFormalAU14
+  - WYJumpsuitLiaisonOutingAU14
+  - WYJumpsuitLiaisonOutingRedAU14
+  - WYJumpsuitLiaisonSuspendersAU14
+  - WYLiaisonManagerJumpsuitAU14
+
+- type: loadoutGroup
+  id: WYCLHeadwearAU14
+  name: au14-loadout-group-corporate-headwear
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - WYHeadCapWeylandYutaniDarkAU14
+  - WYLiaisonManagerCapAU14
+
+- type: loadoutGroup
+  id: WYCLFootwearAU14
+  name: au14-loadout-group-corporate-footwear
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - ShoesLaceupAU14
+  - ShoesLaceupBrownAU14
+  - ShoesBlackAU14
+  - ShoesFancyLeatherAU14
+  - BootsCorporateAU14
+
+# security guard
+- type: loadoutGroup
+  id: WYGuardJumpsuitAU14
+  name: au14-loadout-group-corporate-jumpsuit
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - WYJumpsuitSecurityUniformRigAU14
+  - WYJumpsuitMPCorporateAU14
+  - WYJumpsuitGuardFatiguesAU14
+  - WYJumpsuitVeteranPMCCorporateLeadAU14
+  - WYJumpsuitVeteranPMCCorporateAU14
+  - WYJumpsuitVeteranPMCKutjevoAU14
+
+- type: loadoutGroup
+  id: WYGuardLeftPouchAU14
+  name: au14-loadout-group-corporate-pouches
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - WYGuardPouchM88RubberAU14
+  - PouchFirstAidPMCFilledAU14
+  - PouchPoliceEquipmentSupportSynthAU14
+  - RMCPouchGeneralAU14
+
+- type: loadoutGroup
+  id: WYGuardRightPouchAU14
+  name: au14-loadout-group-corporate-pouches-right
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - WYGuardPouchM88RubberRightAU14
+  - PouchFirstAidPMCFilledRightAU14
+  - PouchPoliceEquipmentSupportSynthRightAU14
+  - RMCPouchGeneralRightAU14
+
+- type: loadoutGroup
+  id: WYGuardHeadwearAU14
+  name: au14-loadout-group-corporate-headwear
+  minLimit: 1
+  maxLimit: 2
+  loadouts:
+  - WYArmorHelmetPMCCorporateAU14
+  - WYArmorHelmetPMCCorporateHybrisaAU14
+  - WYArmorHelmetPMCKutjevoSecurityAU14
+  - WYHeadCapWeylandYutaniDarkAU14
+
 # civs
 # colonist
 - type: loadoutGroup
@@ -817,6 +914,8 @@
   maxLimit: 1
   loadouts:
   - BeltMedicBagSupportSynthAU14
+  - BeltMedicBagRMCSupporSynthAU14
+  - BeltMedicBagBlackSupportSynthAU14
   - BeltUtilityFilledAU14
   - BeltMedicalFilledAU14
   - BeltHolsterNailgunFillAU14
@@ -907,6 +1006,7 @@
   - SynthBreachingHammerAU14
   - MaintenanceJackAU14
   - PortableDialysisAU14
+  - AU14SprayCleanerExperimentalAU14
 
 - type: loadoutGroup
   id: SynthAccesoriesSpecialAU14

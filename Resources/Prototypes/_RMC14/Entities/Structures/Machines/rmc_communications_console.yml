@@ -77,11 +77,28 @@
   id: RMCGroundsideOperationsConsoleGovfor
   suffix: Govfor
   components:
+  - type: MarineCommunicationsComputer
+    faction: govfor
   - type: OverwatchConsole
     canMessageSquad: false
     group: GOVFOR
   - type: TacticalMapComputer
     faction: govfor
+
+- type: entity
+  parent: RMCGroundsideOperationsConsole
+  id: RMCGroundsideOperationsConsoleOpfor
+  suffix: Opfor
+  components:
+  - type: MarineCommunicationsComputer
+    faction: opfor
+  - type: OverwatchConsole
+    canMessageSquad: false
+    group: OPFOR
+  - type: TacticalMapComputer
+    faction: opfor
+  - type: AccessReader
+    access: [ [ "AU14AccessOpforCommand" ] ]
 
 - type: entity
   parent: RMCCommunicationsConsoleBase

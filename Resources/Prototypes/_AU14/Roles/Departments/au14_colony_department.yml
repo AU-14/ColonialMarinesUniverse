@@ -88,6 +88,10 @@
     - AU14JobCivilianPaPOfficer
     - AU14JobCivilianCMBMarshal
     - AU14JobCivilianCMBDeputy
+    - AU14JobCiviliannspaConstable
+    - AU14JobCivilianNSPAInspector
+    - AU14JobCivilianColonySecurityLeader
+    - AU14JobCivilianColonySecurityOfficer
   departmentRadio: null
   headOfDepartment: AU14JobCivilianCMBMarshal
   faction: colonist
@@ -113,6 +117,8 @@
   description: au14-department-colony-corporate-description
   color: "#e3ce94"
   roles:
+    - AU14JobCivilianCorporateAdministrator
+    - AU14JobCivilianCorporateAdminAssistant
     - AU14JobCivilianCorporateLiaison
     - AU14JobWYGuard
     - AU14JobCivilianScientist
@@ -120,7 +126,7 @@
     - AU14JobCivilianCorporateAssistant
     - AU14JobColonyWorkingJoe
   departmentRadio: null
-  headOfDepartment: AU14JobCivilianCorporateLiaison
+  headOfDepartment: AU14JobCivilianCorporateAdministrator
   faction: colonist
 
 - type: department
@@ -139,7 +145,7 @@
 
 - type: department
   parent: CMDepartmentBase
-  id: AU14DepartmentOrbital
+  id: AU14DepartmentAmbassadors
   name: au14-department-ambassadors
   description: au14-department-ambassadors-description
   color: "#e3ce94"
@@ -168,3 +174,16 @@
   departmentRadio: null
   headOfDepartment: AU14JobCivilianForeman
   faction: colonist
+
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentOrbital
+  name: au14-department-orbitalstation
+  description: au14-department-orbitalstation-description
+  color: "#e3ce94"
+  roles:
+    - AU14JobCivilianOrbitalArbiter
+    - AU14JobCivilianOrbitalLawyer
+  departmentRadio: null
+  headOfDepartment: AU14JobCivilianOrbitalManager
+  faction: colonist # TODO: orbital faction

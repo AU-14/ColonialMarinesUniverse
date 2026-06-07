@@ -62,6 +62,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
+        SubscribeLocalEvent<VehicleSupplyConsoleComponent, MapInitEvent>(OnConsoleMapInit);
         SubscribeLocalEvent<VehicleSupplyConsoleComponent, BeforeActivatableUIOpenEvent>(OnConsoleBeforeUiOpen);
         SubscribeLocalEvent<VehicleHardpointVendorComponent, MapInitEvent>(OnVendorMapInit);
         SubscribeLocalEvent<VehicleHardpointVendorComponent, BeforeActivatableUIOpenEvent>(OnVendorBeforeUiOpen);
@@ -71,6 +72,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         Subs.BuiEvents<VehicleSupplyConsoleComponent>(VehicleSupplyUIKey.Key, subs =>
         {
             subs.Event<VehicleSupplySelectMsg>(OnVehicleSelected);
+            subs.Event<VehicleSupplySelectLoadoutMsg>(OnLoadoutSelected);
             subs.Event<VehicleSupplyLiftMsg>(OnLiftToggleRequested);
         });
 
@@ -296,7 +298,14 @@ public sealed partial class VehicleSupplySystem : EntitySystem
 
     private void OnConsoleBeforeUiOpen(Entity<VehicleSupplyConsoleComponent> ent, ref BeforeActivatableUIOpenEvent args)
     {
+        BackfillLiftFromConsole(ent);
         SendConsoleState(ent.Owner, ent.Comp);
+    }
+
+    private void OnConsoleMapInit(Entity<VehicleSupplyConsoleComponent> ent, ref MapInitEvent args)
+    {
+        if (BackfillLiftFromConsole(ent))
+            UpdateVendorSectionsAll();
     }
 
     private void OnLiftMapInit(Entity<VehicleSupplyLiftComponent> ent, ref MapInitEvent args)
@@ -424,8 +433,36 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         if (GetStoredCount(lift.Comp, idKey) <= 0)
             return;
 
+        if (Normalize(ent.Comp.SelectedVehicle) != idKey)
+            ent.Comp.SelectedLoadouts.Clear();
+
         ent.Comp.SelectedVehicle = id;
         ent.Comp.SelectedVehicleCopyIndex = Math.Max(0, args.CopyIndex);
+        SendConsoleStateAll();
+    }
+
+    private void OnLoadoutSelected(Entity<VehicleSupplyConsoleComponent> ent, ref VehicleSupplySelectLoadoutMsg args)
+    {
+        if (string.IsNullOrWhiteSpace(ent.Comp.SelectedVehicle))
+            return;
+
+        if (!TryGetEntry(ent.Comp, ent.Comp.SelectedVehicle, out var entry))
+            return;
+
+        if (!TryGetLoadoutCategory(entry, args.CategoryId, out var category))
+            return;
+
+        if (string.IsNullOrWhiteSpace(args.OptionId))
+        {
+            ent.Comp.SelectedLoadouts.Remove(category.Id);
+            SendConsoleStateAll();
+            return;
+        }
+
+        if (!TryGetLoadoutOption(category, args.OptionId, out _))
+            return;
+
+        ent.Comp.SelectedLoadouts[category.Id] = args.OptionId;
         SendConsoleStateAll();
     }
 
@@ -450,6 +487,9 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         {
             if (comp.Mode == VehicleSupplyLiftMode.Raised)
                 return;
+
+            ClearPendingLoadout(comp);
+
             var selected = console.Comp.SelectedVehicle;
             var canQueueVehicle = false;
             string? nextVehicle = null;
@@ -472,8 +512,10 @@ public sealed partial class VehicleSupplySystem : EntitySystem
                                 if (TryTakeStoredEntity(comp, key, console.Comp.SelectedVehicleCopyIndex, out var pendingEntity))
                                     comp.PendingVehicleEntity = pendingEntity;
 
+                                QueuePendingLoadout(comp, entry, console.Comp);
                                 console.Comp.SelectedVehicle = string.Empty;
                                 console.Comp.SelectedVehicleCopyIndex = 0;
+                                console.Comp.SelectedLoadouts.Clear();
                             }
                         }
                     }
@@ -488,6 +530,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
             {
                 comp.PendingVehicle = string.Empty;
                 comp.PendingVehicleEntity = null;
+                ClearPendingLoadout(comp);
             }
 
             UpdateVendorSectionsAll();
@@ -669,11 +712,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
             var mapCoords = _transform.ToMapCoordinates(moverCoords);
             _transform.SetMapCoordinates(pendingEntity, mapCoords);
 
-            comp.ActiveVehicle = pendingEntity;
-            comp.ActiveVehicleId = pending;
-            comp.PendingVehicle = string.Empty;
-            comp.PendingVehicleEntity = null;
-            comp.Deployed.Add(key);
+            FinishRaisedVehicle(lift, pendingEntity, pending, key);
             return;
         }
 
@@ -684,10 +723,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
             var mapCoords = _transform.ToMapCoordinates(moverCoords);
             _transform.SetMapCoordinates(stored, mapCoords);
 
-            comp.ActiveVehicle = stored;
-            comp.ActiveVehicleId = pending;
-            comp.PendingVehicle = string.Empty;
-            comp.Deployed.Add(key);
+            FinishRaisedVehicle(lift, stored, pending, key);
             return;
         }
 
@@ -695,6 +731,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         {
             AddStored(comp, key);
             comp.PendingVehicle = string.Empty;
+            ClearPendingLoadout(comp);
             UpdateVendorSectionsAll();
             return;
         }
@@ -702,10 +739,138 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         var spawnCoords = _transform.GetMoverCoordinates(lift);
         var vehicle = SpawnAtPosition(pending, spawnCoords);
 
-        comp.ActiveVehicle = vehicle;
-        comp.ActiveVehicleId = pending;
-        comp.PendingVehicle = string.Empty;
-        comp.Deployed.Add(key);
+        FinishRaisedVehicle(lift, vehicle, pending, key);
+    }
+
+    private void FinishRaisedVehicle(Entity<VehicleSupplyLiftComponent> lift, EntityUid vehicle, string vehicleId, string key)
+    {
+        lift.Comp.ActiveVehicle = vehicle;
+        lift.Comp.ActiveVehicleId = vehicleId;
+        lift.Comp.PendingVehicle = string.Empty;
+        lift.Comp.PendingVehicleEntity = null;
+        lift.Comp.Deployed.Add(key);
+
+        ApplyPendingLoadout(vehicle, lift.Comp);
+        SpawnPendingBundle(lift);
+        ClearPendingLoadout(lift.Comp);
+    }
+
+    private static void ClearPendingLoadout(VehicleSupplyLiftComponent lift)
+    {
+        lift.PendingLoadouts.Clear();
+        lift.PendingBundle.Clear();
+    }
+
+    private static void QueuePendingLoadout(
+        VehicleSupplyLiftComponent lift,
+        VehicleSupplyEntry entry,
+        VehicleSupplyConsoleComponent console)
+    {
+        ClearPendingLoadout(lift);
+
+        foreach (var option in CollectSelectedLoadoutOptions(entry, console.SelectedLoadouts))
+        {
+            lift.PendingLoadouts.Add(option);
+        }
+
+        lift.PendingBundle.AddRange(entry.Bundle);
+    }
+
+    private void ApplyPendingLoadout(EntityUid vehicle, VehicleSupplyLiftComponent lift)
+    {
+        foreach (var option in lift.PendingLoadouts)
+        {
+            TryInstallLoadoutOption(vehicle, option);
+        }
+    }
+
+    private void SpawnPendingBundle(Entity<VehicleSupplyLiftComponent> lift)
+    {
+        if (lift.Comp.PendingBundle.Count == 0)
+            return;
+
+        var origin = _transform.GetMoverCoordinates(lift);
+        var offsets = new[]
+        {
+            new Vector2(-1.5f, -1.5f),
+            new Vector2(1.5f, -1.5f),
+            new Vector2(0f, -2f),
+            new Vector2(-2f, 0f),
+            new Vector2(2f, 0f),
+        };
+
+        for (var i = 0; i < lift.Comp.PendingBundle.Count; i++)
+        {
+            var proto = lift.Comp.PendingBundle[i];
+            if (!_prototypes.TryIndex<EntityPrototype>(proto, out _))
+                continue;
+
+            SpawnAtPosition(proto.Id, origin.Offset(offsets[i % offsets.Length]));
+        }
+    }
+
+    private bool TryInstallLoadoutOption(EntityUid vehicle, VehicleSupplyLoadoutOption option)
+    {
+        if (string.IsNullOrWhiteSpace(option.Slot))
+            return false;
+
+        if (!_prototypes.TryIndex<EntityPrototype>(option.Item, out _))
+            return false;
+
+        if (!TryResolveLoadoutSlot(vehicle, option.Slot, out var slotOwner, out var slot))
+            return false;
+
+        if (slot.Item is { })
+        {
+            if (!_itemSlots.TryEject(slotOwner, slot, null, out var removed, excludeUserAudio: true))
+                return false;
+
+            if (removed is { } removedEntity && !Deleted(removedEntity))
+                QueueDel(removedEntity);
+        }
+
+        var item = Spawn(option.Item.Id, Transform(vehicle).Coordinates);
+        if (!_itemSlots.TryInsert(slotOwner, slot, item, null, excludeUserAudio: true))
+        {
+            QueueDel(item);
+            return false;
+        }
+
+        if (slot.Item == item)
+            return true;
+
+        if (!Deleted(item))
+            QueueDel(item);
+
+        return false;
+    }
+
+    private bool TryResolveLoadoutSlot(
+        EntityUid owner,
+        string slotId,
+        out EntityUid slotOwner,
+        out ItemSlot slot)
+    {
+        slotOwner = default;
+        slot = default!;
+
+        if (VehicleTurretSlotIds.TryParse(slotId, out var parentSlotId, out var childSlotId))
+        {
+            if (!TryResolveLoadoutSlot(owner, parentSlotId, out _, out var parentSlot) ||
+                parentSlot.Item is not { } attached)
+            {
+                return false;
+            }
+
+            return TryResolveLoadoutSlot(attached, childSlotId, out slotOwner, out slot);
+        }
+
+        if (!_itemSlots.TryGetSlot(owner, slotId, out var itemSlot))
+            return false;
+
+        slotOwner = owner;
+        slot = itemSlot;
+        return true;
     }
 
     private void StoreVehicle(Entity<VehicleSupplyLiftComponent> lift)
@@ -814,7 +979,8 @@ public sealed partial class VehicleSupplySystem : EntitySystem
             available.Add(new VehicleSupplyEntryState(entry.Vehicle.Id, GetEntryName(entry), 1));
         }
 
-        var state = new VehicleSupplyBuiState(mode, busy, activeId, selectedId, selectedCopyIndex, preview, available);
+        var loadouts = BuildLoadoutStates(console, selectedId);
+        var state = new VehicleSupplyBuiState(mode, busy, activeId, selectedId, selectedCopyIndex, preview, available, loadouts);
         _ui.SetUiState(uid, VehicleSupplyUIKey.Key, state);
     }
 
@@ -1172,6 +1338,16 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         return true;
     }
 
+    private bool BackfillLiftFromConsole(Entity<VehicleSupplyConsoleComponent> console)
+    {
+        if (!TryGetLift(console.Owner, console.Comp, out var lift))
+            return false;
+
+        SeedStoredFromConsoles(lift);
+        Dirty(lift);
+        return true;
+    }
+
     public void DebugEnsureVehicleInConsoles(EntityUid liftUid, string vehicleId)
     {
         if (!_prototypes.TryIndex<EntityPrototype>(vehicleId, out var proto))
@@ -1190,7 +1366,6 @@ public sealed partial class VehicleSupplySystem : EntitySystem
             console.Vehicles.Add(new VehicleSupplyEntry
             {
                 Vehicle = vehicleId,
-                Unlock = vehicleId,
                 Name = proto.Name
             });
 
@@ -1198,6 +1373,32 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         }
 
         UpdateVendorSectionsAll();
+    }
+
+    public bool DebugApplyLoadoutForTest(
+        EntityUid vehicle,
+        VehicleSupplyEntry entry,
+        IReadOnlyDictionary<string, string> selections)
+    {
+        var applied = false;
+        foreach (var option in CollectSelectedLoadoutOptions(entry, selections))
+        {
+            applied |= TryInstallLoadoutOption(vehicle, option);
+        }
+
+        return applied;
+    }
+
+    public bool DebugSpawnBundleForTest(EntityUid liftUid, VehicleSupplyEntry entry)
+    {
+        if (!TryComp(liftUid, out VehicleSupplyLiftComponent? lift))
+            return false;
+
+        ClearPendingLoadout(lift);
+        lift.PendingBundle.AddRange(entry.Bundle);
+        SpawnPendingBundle((liftUid, lift));
+        ClearPendingLoadout(lift);
+        return true;
     }
 
     private bool TryGetLift(EntityUid consoleUid, VehicleSupplyConsoleComponent console, out Entity<VehicleSupplyLiftComponent> lift)
@@ -1283,6 +1484,153 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         }
 
         entry = default!;
+        return false;
+    }
+
+    private List<VehicleSupplyLoadoutCategoryState> BuildLoadoutStates(
+        VehicleSupplyConsoleComponent console,
+        string? selectedVehicleId)
+    {
+        var states = new List<VehicleSupplyLoadoutCategoryState>();
+        if (string.IsNullOrWhiteSpace(selectedVehicleId))
+            return states;
+
+        if (!TryGetEntry(console, selectedVehicleId, out var entry))
+            return states;
+
+        foreach (var category in entry.LoadoutCategories)
+        {
+            var options = new List<VehicleSupplyLoadoutOptionState>
+            {
+                new(string.Empty, "None")
+            };
+
+            foreach (var option in category.Options)
+            {
+                options.Add(new VehicleSupplyLoadoutOptionState(
+                    option.Id,
+                    GetLoadoutOptionName(option)));
+            }
+
+            var selected = string.Empty;
+            if (TryGetSelectedLoadoutId(console.SelectedLoadouts, category.Id, out var selectedId) &&
+                TryGetLoadoutOption(category, selectedId, out _))
+            {
+                selected = selectedId;
+            }
+
+            states.Add(new VehicleSupplyLoadoutCategoryState(
+                category.Id,
+                GetLoadoutCategoryName(category),
+                selected,
+                options));
+        }
+
+        return states;
+    }
+
+    private string GetLoadoutCategoryName(VehicleSupplyLoadoutCategory category)
+    {
+        if (!string.IsNullOrWhiteSpace(category.Name))
+            return category.Name;
+
+        return category.Id switch
+        {
+            "primary" => "Primary",
+            "armor" => "Armor",
+            "support" => "Support",
+            _ => category.Id
+        };
+    }
+
+    private string GetLoadoutOptionName(VehicleSupplyLoadoutOption option)
+    {
+        if (!string.IsNullOrWhiteSpace(option.Name))
+            return option.Name;
+
+        return GetPrototypeName(option.Item.Id);
+    }
+
+    private static List<VehicleSupplyLoadoutOption> CollectSelectedLoadoutOptions(
+        VehicleSupplyEntry entry,
+        IReadOnlyDictionary<string, string> selections)
+    {
+        var options = new List<VehicleSupplyLoadoutOption>();
+        foreach (var category in entry.LoadoutCategories)
+        {
+            if (!TryGetSelectedLoadoutId(selections, category.Id, out var optionId))
+                continue;
+
+            if (string.IsNullOrWhiteSpace(optionId))
+                continue;
+
+            if (TryGetLoadoutOption(category, optionId, out var option))
+                options.Add(option);
+        }
+
+        return options;
+    }
+
+    private static bool TryGetLoadoutCategory(
+        VehicleSupplyEntry entry,
+        string categoryId,
+        out VehicleSupplyLoadoutCategory category)
+    {
+        var key = Normalize(categoryId);
+        foreach (var candidate in entry.LoadoutCategories)
+        {
+            if (Normalize(candidate.Id) == key)
+            {
+                category = candidate;
+                return true;
+            }
+        }
+
+        category = default!;
+        return false;
+    }
+
+    private static bool TryGetLoadoutOption(
+        VehicleSupplyLoadoutCategory category,
+        string optionId,
+        out VehicleSupplyLoadoutOption option)
+    {
+        var key = Normalize(optionId);
+        foreach (var candidate in category.Options)
+        {
+            if (Normalize(candidate.Id) == key)
+            {
+                option = candidate;
+                return true;
+            }
+        }
+
+        option = default!;
+        return false;
+    }
+
+    private static bool TryGetSelectedLoadoutId(
+        IReadOnlyDictionary<string, string> selections,
+        string categoryId,
+        out string optionId)
+    {
+        optionId = string.Empty;
+        if (selections.TryGetValue(categoryId, out var exact))
+        {
+            optionId = exact;
+            return true;
+        }
+
+        var key = Normalize(categoryId);
+        foreach (var (category, selected) in selections)
+        {
+            if (Normalize(category) != key)
+                continue;
+
+            optionId = selected;
+            return true;
+        }
+
         return false;
     }
 

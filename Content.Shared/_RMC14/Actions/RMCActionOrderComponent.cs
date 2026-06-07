@@ -13,4 +13,10 @@ public sealed partial class RMCActionOrderComponent : Component
 
     [DataField, AutoNetworkedField]
     public ImmutableArray<EntProtoId>? Order;
+
+    [DataField, AutoNetworkedField]
+    public ImmutableArray<EntProtoId>? HiddenActions;
+
+    [DataField, AutoNetworkedField]
+    public bool HiddenActionsKnown;
 }

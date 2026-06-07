@@ -38,11 +38,11 @@ public sealed partial class CrusherShieldComponent : Component
     public EntProtoId Effect = "RMCEffectEmpowerBrown";
 
     [DataField, AutoNetworkedField]
-    public float ReflectChanceFront = 0.4f;
+    public float ReflectChanceFront = 0.1f;
 
     [DataField, AutoNetworkedField]
-    public float ReflectChanceSide = 0.3f;
+    public float ReflectChanceSide = 0f;
 
     [DataField, AutoNetworkedField]
-    public float ReflectChanceBack = 0.25f;
+    public float ReflectChanceBack = 0f;
 }

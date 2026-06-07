@@ -91,6 +91,8 @@
     belt: RMCBeltHolsterPistolHandcannonFilled
     pocket1: RMCUniversalRecorder
     pocket2: RMCPouchGeneralLarge # TODO RMC14 3 listening devices
+  inhand:
+    - AU14StampProvostInspector
 
 - type: playTimeTracker
   id: CMJobProvostInspector

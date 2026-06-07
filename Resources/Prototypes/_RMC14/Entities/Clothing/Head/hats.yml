@@ -813,7 +813,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Head/Hats/weya_pilot_cap.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 15
     bio: 10
     explosionArmor: 15
@@ -1000,7 +1000,7 @@
   - type: ItemCamouflage
     camouflageVariations: {}
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 15
     bio: 15
     explosionArmor: 10

@@ -1,0 +1,27 @@
+- type: job
+  parent: AU14JobSquadCombatTechBase
+  id: AU14JobGOVFORSquadCombatTechWYPMC
+  name: PMC Combat Technician
+  spawnMenuRoleName: Combat Tech (WYPMC)
+  startingGear: AU14GearGOVFORSquadCombatTech
+  dummyStartingGear: AU14GearGOVFORCTDummy
+  ranks:
+    AU14RankWeYuSeniorOperator:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadCombatTech
+      time: 108000 # 30 hours
+    AU14RankWeYuOperator: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 1
+        RMCSkillFirearms: 2
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadCombatTechWYPMC

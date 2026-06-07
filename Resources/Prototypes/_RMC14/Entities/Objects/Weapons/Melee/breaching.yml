@@ -20,9 +20,29 @@
       collection: GenericHit
     wideAnimationRotation: 90
   - type: MeleeRequiresWield
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+      energy: High
+    heavyMelee:
+      contact: Crush
+      penetration: None
+      energy: High
   - type: RMCStructuralBreacher
   - type: WhitelistPickupBy
     whitelist:
       components:
         - Synth
   - type: RMCSynthItemRestriction
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 300
+        mask:
+        - MobMask
+        layer:
+        - MobLayer

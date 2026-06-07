@@ -459,7 +459,7 @@
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Armor/m3/light/padded/jungle.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 15
     bio: 15
     explosionArmor: 15
@@ -626,7 +626,7 @@
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Armor/m3/vl.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 30
     bio: 5
     explosionArmor: 10

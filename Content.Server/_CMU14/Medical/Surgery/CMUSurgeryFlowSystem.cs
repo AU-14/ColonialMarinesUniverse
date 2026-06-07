@@ -147,6 +147,12 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
 
     protected override void RunStepEffect(EntityUid patient, CMUSurgeryArmedStepComponent armed, EntityUid surgeon, EntityUid? tool, EntityUid? targetPart)
     {
+        var leafId = string.IsNullOrEmpty(armed.LeafSurgeryId) ? armed.SurgeryId : armed.LeafSurgeryId;
+        var stepPart = ResolveStepPart(patient, armed, targetPart, leafId);
+
+        if (TryRearmInjectedStep(patient, armed, stepPart, leafId))
+            return;
+
         // Resolve the step proto id from the CURRENTLY RESOLVED surgery
         // (which may be a prereq like CMSurgeryOpenIncision, not the leaf
         // the medic picked) so V1 SharedCMUSurgerySystem applies the
@@ -164,29 +170,9 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             return;
         }
 
-        var leafId = string.IsNullOrEmpty(armed.LeafSurgeryId) ? armed.SurgeryId : armed.LeafSurgeryId;
-        EntityUid stepPart = patient;
-        if (targetPart is { } part
-            && TryComp<BodyPartComponent>(part, out var targetPartComp)
-            && targetPartComp.PartType == armed.TargetPartType
-            && targetPartComp.Symmetry == armed.TargetSymmetry)
-        {
-            stepPart = part;
-        }
-        else if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(leafId)
-                 && targetPart is { } reattachAnchor
-                 && HasComp<BodyPartComponent>(reattachAnchor))
-        {
-            stepPart = reattachAnchor;
-        }
-        else if (TryFindClickedPart(patient, null, armed.TargetPartType, armed.TargetSymmetry, out var foundPart))
-        {
-            stepPart = foundPart;
-        }
-
         if (TryFailSurgeryStep(patient, stepProtoId, armed.RequiredToolCategory, surgeon, tool))
         {
-            RemComp<CMUSurgeryArmedStepComponent>(patient);
+            RearmAfterFailedStep(patient, armed, surgeon, stepPart, leafId);
             _dispatch.RefreshUiForPatient(patient);
             return;
         }
@@ -221,63 +207,8 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
         var leafDisplay = ResolveLeafDisplayName(leafId);
         EnsureSurgeryInFlight(patient, stepPart, surgeon, leafId, leafDisplay, armed.TargetPartType, armed.TargetSymmetry);
 
-        if (RmcSurgery.GetSingleton(leafId) is { } leafEnt
-            && TryComp<CMSurgeryComponent>(leafEnt, out var leafComp)
-            && armed.SurgeryId == leafId)
-        {
-            if (armed.StepIndex >= leafComp.Steps.Count - 1)
-            {
-                MarkFracturePostOpIfNeeded(patient, stepPart, surgeon, leafId);
-                var completeEvLast = new CMSurgeryCompleteEvent(patient, surgeon, leafId);
-                RaiseLocalEvent(patient, ref completeEvLast);
-                RemComp<CMUSurgeryArmedStepComponent>(patient);
-                ClearSurgeryInFlight(patient);
-                _dispatch.RefreshUiForPatient(patient);
-                return;
-            }
-
-            if (TryResolveStepAt(leafId, armed.StepIndex + 1, out var nextLinear, stepPart))
-            {
-                if (!IsCloseUpSurgeryId(leafId)
-                    && IsClosureStep(nextLinear.ResolvedSurgeryId, nextLinear.StepIndex))
-                {
-                    MarkFracturePostOpIfNeeded(patient, stepPart, surgeon, leafId);
-                    var completeEvFunctional = new CMSurgeryCompleteEvent(patient, surgeon, leafId);
-                    RaiseLocalEvent(patient, ref completeEvFunctional);
-
-                    RemComp<CMUSurgeryArmedStepComponent>(patient);
-                    SetAwaitingClosureChoice(patient, stepPart);
-                    Popup.PopupEntity(
-                        Loc.GetString("cmu-medical-surgery-choose-repair-or-close"),
-                        patient,
-                        surgeon,
-                        PopupType.Medium);
-                    _dispatch.RefreshUiForPatient(patient);
-                    return;
-                }
-
-                armed.SurgeryId = nextLinear.ResolvedSurgeryId;
-                armed.StepIndex = nextLinear.StepIndex;
-                armed.RequiredToolCategory = nextLinear.ToolCategory;
-                armed.StepLabel = nextLinear.StepLabel;
-                armed.ArmedAt = Timing.CurTime;
-                Dirty(patient, armed);
-                _dispatch.RefreshUiForPatient(patient);
-                return;
-            }
-        }
-
-        if (TryResolveNextStep(patient, stepPart, leafId, out var next))
-        {
-            armed.SurgeryId = next.ResolvedSurgeryId;
-            armed.StepIndex = next.StepIndex;
-            armed.RequiredToolCategory = next.ToolCategory;
-            armed.StepLabel = next.StepLabel;
-            armed.ArmedAt = Timing.CurTime;
-            Dirty(patient, armed);
-            _dispatch.RefreshUiForPatient(patient);
+        if (TryArmResolvedContinuationOrAwaitClosure(patient, armed, surgeon, stepPart, leafId))
             return;
-        }
 
         var completeEv = new CMSurgeryCompleteEvent(patient, surgeon, leafId);
         MarkFracturePostOpIfNeeded(patient, stepPart, surgeon, leafId);
@@ -287,9 +218,132 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
         _dispatch.RefreshUiForPatient(patient);
     }
 
+    private EntityUid ResolveStepPart(EntityUid patient, CMUSurgeryArmedStepComponent armed, EntityUid? targetPart, string leafId)
+    {
+        if (targetPart is { } part
+            && TryComp<BodyPartComponent>(part, out var targetPartComp)
+            && targetPartComp.PartType == armed.TargetPartType
+            && targetPartComp.Symmetry == armed.TargetSymmetry)
+        {
+            return part;
+        }
+
+        if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(leafId)
+            && targetPart is { } reattachAnchor
+            && HasComp<BodyPartComponent>(reattachAnchor))
+        {
+            return reattachAnchor;
+        }
+
+        return TryFindClickedPart(patient, null, armed.TargetPartType, armed.TargetSymmetry, out var foundPart)
+            ? foundPart
+            : patient;
+    }
+
+    private bool TryRearmInjectedStep(
+        EntityUid patient,
+        CMUSurgeryArmedStepComponent armed,
+        EntityUid stepPart,
+        string leafId)
+    {
+        if (!TryResolveInjectedCleanupStep(stepPart, leafId, out var resolved))
+            return false;
+        if (ArmedMatchesResolvedStep(armed, resolved))
+            return false;
+
+        ApplyResolvedStep(patient, armed, resolved);
+        _dispatch.RefreshUiForPatient(patient);
+        return true;
+    }
+
+    private void RearmAfterFailedStep(
+        EntityUid patient,
+        CMUSurgeryArmedStepComponent armed,
+        EntityUid surgeon,
+        EntityUid stepPart,
+        string leafId)
+    {
+        if (TryResolveNextStep(patient, stepPart, leafId, out var resolved))
+        {
+            ApplyResolvedStep(patient, armed, resolved);
+            return;
+        }
+
+        var completeEv = new CMSurgeryCompleteEvent(patient, surgeon, leafId);
+        MarkFracturePostOpIfNeeded(patient, stepPart, surgeon, leafId);
+        RaiseLocalEvent(patient, ref completeEv);
+        RemComp<CMUSurgeryArmedStepComponent>(patient);
+        ClearSurgeryInFlight(patient);
+    }
+
+    private bool TryArmResolvedContinuationOrAwaitClosure(
+        EntityUid patient,
+        CMUSurgeryArmedStepComponent armed,
+        EntityUid surgeon,
+        EntityUid stepPart,
+        string leafId)
+    {
+        var resumeAfterLeafStepIndex = armed.LastCompletedLeafStepIndex;
+        if (armed.SurgeryId == leafId)
+        {
+            resumeAfterLeafStepIndex = armed.StepIndex;
+            armed.LastCompletedLeafStepIndex = resumeAfterLeafStepIndex;
+        }
+
+        if (!TryResolveNextStepAfterCompletedStep(
+                patient,
+                stepPart,
+                leafId,
+                armed.SurgeryId,
+                armed.StepIndex,
+                resumeAfterLeafStepIndex,
+                out var next))
+        {
+            return false;
+        }
+
+        if (!SharedCMUSurgeryFlowSystem.IsCloseUpSurgeryId(leafId)
+            && IsClosureStep(next.ResolvedSurgeryId, next.StepIndex))
+        {
+            MarkFracturePostOpIfNeeded(patient, stepPart, surgeon, leafId);
+            var completeEvFunctional = new CMSurgeryCompleteEvent(patient, surgeon, leafId);
+            RaiseLocalEvent(patient, ref completeEvFunctional);
+
+            RemComp<CMUSurgeryArmedStepComponent>(patient);
+            SetAwaitingClosureChoice(patient, stepPart);
+            Popup.PopupEntity(
+                Loc.GetString("cmu-medical-surgery-choose-repair-or-close"),
+                patient,
+                surgeon,
+                PopupType.Medium);
+            _dispatch.RefreshUiForPatient(patient);
+            return true;
+        }
+
+        ApplyResolvedStep(patient, armed, next);
+        _dispatch.RefreshUiForPatient(patient);
+        return true;
+    }
+
+    private void ApplyResolvedStep(EntityUid patient, CMUSurgeryArmedStepComponent armed, CMUResolvedStep resolved)
+    {
+        armed.SurgeryId = resolved.ResolvedSurgeryId;
+        armed.StepIndex = resolved.StepIndex;
+        armed.RequiredToolCategory = resolved.ToolCategory;
+        armed.StepLabel = resolved.StepLabel;
+        armed.ArmedAt = Timing.CurTime;
+        Dirty(patient, armed);
+    }
+
+    private static bool ArmedMatchesResolvedStep(CMUSurgeryArmedStepComponent armed, CMUResolvedStep resolved)
+    {
+        return armed.SurgeryId == resolved.ResolvedSurgeryId
+            && armed.StepIndex == resolved.StepIndex;
+    }
+
     private void MarkFracturePostOpIfNeeded(EntityUid patient, EntityUid part, EntityUid surgeon, string leafId)
     {
-        if (!IsFractureSurgeryId(leafId))
+        if (!SharedCMUSurgeryFlowSystem.IsFractureSurgeryId(leafId))
             return;
         if (!TryComp<BodyPartComponent>(part, out var partComp))
             return;
@@ -308,16 +362,6 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             patient,
             surgeon,
             PopupType.SmallCaution);
-    }
-
-    private static bool IsFractureSurgeryId(string surgeryId)
-    {
-        return surgeryId is "CMUSurgerySetSimpleFracture"
-            or "CMUSurgerySetSimpleFractureCavity"
-            or "CMUSurgerySetCompoundFracture"
-            or "CMUSurgerySetCompoundFractureCavity"
-            or "CMUSurgerySetComminutedFracture"
-            or "CMUSurgerySetComminutedFractureCavity";
     }
 
     private bool ShouldOfferRepairOrClose(EntityUid patient, EntityUid surgeon, EntityUid stepPart, string currentLeafId)
@@ -446,14 +490,6 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
 
         EnsureComp<T>(target);
         RemComp<T>(source);
-    }
-
-    private static bool IsCloseUpSurgeryId(string surgeryId)
-    {
-        return surgeryId is "CMUSurgeryCloseIncision"
-            or "CMUSurgeryCloseBoneCavity"
-            or "CMSurgeryCloseIncision"
-            or "CMSurgeryCloseRibcage";
     }
 
     private static bool CanAutoContinueCategory(string category)

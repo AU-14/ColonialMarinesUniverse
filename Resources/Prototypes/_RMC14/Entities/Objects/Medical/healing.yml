@@ -35,8 +35,13 @@
   - type: WoundTreater
     wound: Burn
     treats: true
+    instantWoundTreatment: true
+    woundsTreatedPerUse: 2
     consumable: true
     group: Burn
+    cmuMechanisms: 16
+    cmuTreatmentQuality: Optimal
+    cmuCleanupClears: 20
     damage: -5
     unskilledDamage: -5
     canUseUnskilled: true
@@ -135,6 +140,11 @@
     count: 10
   - type: StackPrice
     price: 10
+  - type: CMUMedicalMixingBase
+    kind: Gauze
+    controlsBleeding: false
+    stopsArterialBleeding: false
+    bleedControlDelay: 0
   - type: CMHemostat
   - type: CMUImprovisedSurgeryTool
     delayMultiplier: 2.4
@@ -182,6 +192,8 @@
     wound: Brute
     treats: true
     group: Brute
+    cmuTreatsWounds: false
+    cmuStopsArterialBleeding: true
     consumable: false
     scalingDoAfter: 0.07
     damage: -16
@@ -234,6 +246,7 @@
     wound: Burn
     treats: false
     group: Burn
+    cmuTreatsWounds: false
     consumable: false
     scalingDoAfter: 0.07
     damage: -16
@@ -284,8 +297,13 @@
   - type: WoundTreater
     wound: Burn
     treats: true
-    instantWoundTreatment: true
+    instantWoundTreatment: false
+    instantWoundTreatmentSkills:
+      RMCSkillMedical: 2
     woundsTreatedPerUse: 2
+    cmuMechanisms: 16
+    cmuTreatmentQuality: Optimal
+    cmuCleanupClears: 20
     group: Burn
     consumable: true
     damage: -9
@@ -360,8 +378,11 @@
   - type: WoundTreater
     wound: Brute
     treats: true
-    instantWoundTreatment: true
+    instantWoundTreatment: false
+    instantWoundTreatmentSkills:
+      RMCSkillMedical: 2
     woundsTreatedPerUse: 2
+    cmuStopsArterialBleeding: true
     group: Brute
     consumable: true
     damage: -9
@@ -383,6 +404,11 @@
   - type: MedicallyUnskilledDoAfter
     min: 1
     doAfter: 2
+  - type: CMUMedicalMixingBase
+    kind: TraumaDressing
+    controlsBleeding: false
+    stopsArterialBleeding: true
+    bleedControlDelay: 0
   - type: CMHemostat
 
 - type: entity
@@ -409,6 +435,658 @@
   maxCount: 10
 
 - type: entity
+  parent: CMBaseHealingItem
+  abstract: true
+  id: CMUFieldIngredientBase
+  name: medical ingredient
+  description: A measured field-treatment ingredient cartridge.
+  suffix: Fifty
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: coagulant_powder
+  - type: Item
+    heldPrefix: ointment
+  - type: Tag
+    tags:
+    - Bottle
+  - type: StackPrice
+    price: 5
+
+- type: entity
+  parent: CMUFieldIngredientBase
+  id: CMUCoagulantPowder
+  name: coagulant powder
+  description: A clotting compound used to mix hemostatic wound dressings.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: coagulant_powder
+  - type: CMUMedicalIngredient
+    family: Hemostatic
+    gauzeProduct: CMUHemostaticGauze1
+    traumaProduct: CMTraumaKit1
+  - type: Stack
+    stackType: CMUCoagulantPowder
+    count: 50
+
+- type: entity
+  parent: CMUCoagulantPowder
+  id: CMUCoagulantPowder1
+  suffix: One
+  components:
+  - type: Stack
+    count: 1
+
+- type: stack
+  id: CMUCoagulantPowder
+  name: coagulant powder
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: coagulant_powder }
+  spawn: CMUCoagulantPowder1
+  maxCount: 50
+
+- type: entity
+  parent: CMUFieldIngredientBase
+  id: CMUAntiseptic
+  name: antiseptic
+  description: A sterilizing compound used to clean contaminated wound dressings.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: antiseptic
+  - type: CMUMedicalIngredient
+    family: Antiseptic
+    gauzeProduct: CMUAntisepticGauze1
+    traumaProduct: CMUAntisepticTraumaDressing1
+  - type: Stack
+    stackType: CMUAntiseptic
+    count: 50
+
+- type: entity
+  parent: CMUAntiseptic
+  id: CMUAntiseptic1
+  suffix: One
+  components:
+  - type: Stack
+    count: 1
+
+- type: stack
+  id: CMUAntiseptic
+  name: antiseptic
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: antiseptic }
+  spawn: CMUAntiseptic1
+  maxCount: 50
+
+- type: entity
+  parent: CMUFieldIngredientBase
+  id: CMUBurnGel
+  name: burn gel
+  description: A cooling gel used to mix burn wound dressings.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: burn_gel
+  - type: CMUMedicalIngredient
+    family: BurnGel
+    gauzeProduct: CMUBurnGelGauze1
+    traumaProduct: CMBurnKit1
+  - type: Stack
+    stackType: CMUBurnGel
+    count: 50
+
+- type: entity
+  parent: CMUBurnGel
+  id: CMUBurnGel1
+  suffix: One
+  components:
+  - type: Stack
+    count: 1
+
+- type: stack
+  id: CMUBurnGel
+  name: burn gel
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: burn_gel }
+  spawn: CMUBurnGel1
+  maxCount: 50
+
+- type: entity
+  parent: CMUFieldIngredientBase
+  id: CMUTissueSealant
+  name: tissue sealant
+  description: A sealing compound used to mix closure-focused wound dressings.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: tissue_sealant
+  - type: CMUMedicalIngredient
+    family: TissueSealant
+    gauzeProduct: CMUSealingGauze1
+    traumaProduct: CMUSealingTraumaDressing1
+  - type: Stack
+    stackType: CMUTissueSealant
+    count: 50
+
+- type: entity
+  parent: CMUTissueSealant
+  id: CMUTissueSealant1
+  suffix: One
+  components:
+  - type: Stack
+    count: 1
+
+- type: stack
+  id: CMUTissueSealant
+  name: tissue sealant
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: tissue_sealant }
+  spawn: CMUTissueSealant1
+  maxCount: 50
+
+- type: entity
+  parent: CMUFieldIngredientBase
+  id: CMUTraumaFoam
+  name: trauma foam
+  description: An expanding foam used to mix compression wound dressings.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: trauma_foam
+  - type: CMUMedicalIngredient
+    family: TraumaFoam
+    gauzeProduct: CMUCompressionGauze1
+    traumaProduct: CMUCompressionTraumaDressing1
+  - type: Stack
+    stackType: CMUTraumaFoam
+    count: 50
+
+- type: entity
+  parent: CMUTraumaFoam
+  id: CMUTraumaFoam1
+  suffix: One
+  components:
+  - type: Stack
+    count: 1
+
+- type: stack
+  id: CMUTraumaFoam
+  name: trauma foam
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: trauma_foam }
+  spawn: CMUTraumaFoam1
+  maxCount: 50
+
+- type: entity
+  parent: CMBaseHealingItem
+  abstract: true
+  id: CMUPlainGauze
+  name: packed gauze
+  description: Sterile packed gauze used for non-arterial bleed control or field mixing.
+  suffix: Fifty
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: packed_gauze
+  - type: Item
+    heldPrefix: gauze
+  - type: Tag
+    tags:
+    - Brutepack
+  - type: CMUMedicalMixingBase
+    kind: Gauze
+    controlsBleeding: true
+    stopsArterialBleeding: false
+    bleedControlDelay: 0
+  - type: Stack
+    stackType: CMUPlainGauze
+    count: 50
+  - type: StackPrice
+    price: 5
+
+- type: entity
+  id: CMUPlainGauze1
+  parent: CMUPlainGauze
+  suffix: One
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  id: CMUPlainGauze10
+  parent: CMUPlainGauze
+  suffix: Fifty
+  components:
+  - type: Stack
+    count: 50
+
+- type: stack
+  id: CMUPlainGauze
+  name: packed gauze
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: packed_gauze }
+  spawn: CMUPlainGauze1
+  maxCount: 50
+
+- type: entity
+  parent: CMBaseHealingItem
+  abstract: true
+  id: CMUPlainTraumaDressing
+  name: packed trauma kit
+  description: A packed trauma kit used for bleed control, arterial bleed control, or field mixing.
+  suffix: Fifty
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: packed_trauma_kit
+  - type: Item
+    heldPrefix: traumakit
+  - type: Tag
+    tags:
+    - CMTraumaKit
+  - type: CMUMedicalMixingBase
+    kind: TraumaDressing
+    controlsBleeding: true
+    stopsArterialBleeding: true
+    bleedControlDelay: 1
+    instantBleedControlSkills:
+      RMCSkillMedical: 2
+  - type: Stack
+    stackType: CMUPlainTraumaDressing
+    count: 50
+  - type: StackPrice
+    price: 8
+
+- type: entity
+  id: CMUPlainTraumaDressing1
+  parent: CMUPlainTraumaDressing
+  suffix: One
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  id: CMUPlainTraumaDressing10
+  parent: CMUPlainTraumaDressing
+  suffix: Fifty
+  components:
+  - type: Stack
+    count: 50
+
+- type: stack
+  id: CMUPlainTraumaDressing
+  name: packed trauma kit
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: packed_trauma_kit }
+  spawn: CMUPlainTraumaDressing1
+  maxCount: 50
+
+- type: entity
+  parent: CMBaseHealingItem
+  abstract: true
+  id: CMUPreparedGauzeBase
+  name: prepared gauze
+  description: A field-mixed gauze dressing.
+  suffix: One
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: hemostatic_gauze
+  - type: Item
+    heldPrefix: gauze
+  - type: Tag
+    tags:
+    - Brutepack
+  - type: WoundTreater
+    wound: Brute
+    treats: true
+    instantWoundTreatment: true
+    woundsTreatedPerUse: 1
+    group: Brute
+    consumable: true
+    canUseUnskilled: true
+    skills:
+      RMCSkillMedical: 2
+    cmuTreatmentQuality: Optimal
+    treatBeginSound:
+      path: "/Audio/_RMC14/Medical/bandage.ogg"
+    treatEndSound:
+      path: "/Audio/Items/Medical/brutepack_end.ogg"
+    userPopup: cm-gauze-user-popup
+    targetPopup: cm-gauze-target-popup
+    othersPopup: cm-gauze-others-popup
+    noneSelfPopup: cm-gauze-none-self-popup
+    noneOtherPopup: cm-gauze-none-other-popup
+    noWoundsOnUserPopup: cm-wounds-already-treated-self-popup
+    noWoundsOnTargetPopup: cm-wounds-already-treated-target-popup
+  - type: Stack
+    count: 1
+  - type: StackPrice
+    price: 8
+
+- type: entity
+  parent: CMUPreparedGauzeBase
+  id: CMUHemostaticGauze1
+  name: hemostatic gauze
+  description: Gauze mixed with coagulant powder for ballistic and sharp wounds.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: hemostatic_gauze
+  - type: WoundTreater
+    cmuMechanisms: 7
+    cmuCleanupClears: 16
+  - type: Stack
+    stackType: CMUHemostaticGauze
+
+- type: entity
+  parent: CMUHemostaticGauze1
+  id: CMUHemostaticGauze6
+  suffix: Ten
+  components:
+  - type: Stack
+    count: 10
+
+- type: stack
+  id: CMUHemostaticGauze
+  name: hemostatic gauze
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: hemostatic_gauze }
+  spawn: CMUHemostaticGauze1
+  maxCount: 10
+
+- type: entity
+  parent: CMUPreparedGauzeBase
+  id: CMUAntisepticGauze1
+  name: antiseptic gauze
+  description: Gauze mixed with antiseptic for contaminated wounds.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: antiseptic_gauze
+  - type: WoundTreater
+    cmuMechanisms: 511
+    cmuCleanupClears: 16
+  - type: Stack
+    stackType: CMUAntisepticGauze
+
+- type: entity
+  parent: CMUAntisepticGauze1
+  id: CMUAntisepticGauze6
+  suffix: Ten
+  components:
+  - type: Stack
+    count: 10
+
+- type: stack
+  id: CMUAntisepticGauze
+  name: antiseptic gauze
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: antiseptic_gauze }
+  spawn: CMUAntisepticGauze1
+  maxCount: 10
+
+- type: entity
+  parent: CMUPreparedGauzeBase
+  id: CMUBurnGelGauze1
+  name: burn gel gauze
+  description: Gauze mixed with burn gel for thermal wounds.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: burn_gel_gauze
+  - type: WoundTreater
+    wound: Burn
+    group: Burn
+    cmuMechanisms: 16
+    cmuCleanupClears: 20
+  - type: Stack
+    stackType: CMUBurnGelGauze
+
+- type: entity
+  parent: CMUBurnGelGauze1
+  id: CMUBurnGelGauze6
+  suffix: Ten
+  components:
+  - type: Stack
+    count: 10
+
+- type: stack
+  id: CMUBurnGelGauze
+  name: burn gel gauze
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: burn_gel_gauze }
+  spawn: CMUBurnGelGauze1
+  maxCount: 10
+
+- type: entity
+  parent: CMUPreparedGauzeBase
+  id: CMUSealingGauze1
+  name: sealing gauze
+  description: Gauze mixed with tissue sealant for cut and surgical wounds.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: sealing_gauze
+  - type: WoundTreater
+    cmuMechanisms: 134
+    cmuCleanupClears: 18
+  - type: Stack
+    stackType: CMUSealingGauze
+
+- type: entity
+  parent: CMUSealingGauze1
+  id: CMUSealingGauze6
+  suffix: Ten
+  components:
+  - type: Stack
+    count: 10
+
+- type: stack
+  id: CMUSealingGauze
+  name: sealing gauze
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: sealing_gauze }
+  spawn: CMUSealingGauze1
+  maxCount: 10
+
+- type: entity
+  parent: CMUPreparedGauzeBase
+  id: CMUCompressionGauze1
+  name: compression gauze
+  description: Gauze mixed with trauma foam for crush and blast wounds.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: compression_gauze
+  - type: WoundTreater
+    cmuMechanisms: 40
+    cmuCleanupClears: 24
+  - type: Stack
+    stackType: CMUCompressionGauze
+
+- type: entity
+  parent: CMUCompressionGauze1
+  id: CMUCompressionGauze6
+  suffix: Ten
+  components:
+  - type: Stack
+    count: 10
+
+- type: stack
+  id: CMUCompressionGauze
+  name: compression gauze
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: compression_gauze }
+  spawn: CMUCompressionGauze1
+  maxCount: 10
+
+- type: entity
+  parent: CMUPreparedGauzeBase
+  abstract: true
+  id: CMUPreparedTraumaDressingBase
+  name: prepared trauma dressing
+  description: A field-mixed trauma dressing.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: hemostatic_trauma_kit
+  - type: Item
+    heldPrefix: traumakit
+  - type: Tag
+    tags:
+    - CMTraumaKit
+  - type: WoundTreater
+    instantWoundTreatment: false
+    instantWoundTreatmentSkills:
+      RMCSkillMedical: 2
+    woundsTreatedPerUse: 2
+    cmuStopsArterialBleeding: true
+  - type: StackPrice
+    price: 12
+
+- type: entity
+  parent: CMUPreparedTraumaDressingBase
+  id: CMUHemostaticTraumaDressing1
+  name: hemostatic trauma dressing
+  description: A heavy coagulant dressing for ballistic and sharp wounds.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: hemostatic_trauma_kit
+  - type: WoundTreater
+    cmuMechanisms: 7
+    cmuCleanupClears: 16
+  - type: Stack
+    stackType: CMUHemostaticTraumaDressing
+
+- type: entity
+  parent: CMUHemostaticTraumaDressing1
+  id: CMUHemostaticTraumaDressing4
+  suffix: Six
+  components:
+  - type: Stack
+    count: 6
+
+- type: stack
+  id: CMUHemostaticTraumaDressing
+  name: hemostatic trauma dressing
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: hemostatic_trauma_kit }
+  spawn: CMUHemostaticTraumaDressing1
+  maxCount: 6
+
+- type: entity
+  parent: CMUPreparedTraumaDressingBase
+  id: CMUAntisepticTraumaDressing1
+  name: antiseptic trauma dressing
+  description: A heavy antiseptic dressing for contaminated wounds.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: antiseptic_trauma_kit
+  - type: WoundTreater
+    cmuMechanisms: 511
+    cmuCleanupClears: 16
+  - type: Stack
+    stackType: CMUAntisepticTraumaDressing
+
+- type: entity
+  parent: CMUAntisepticTraumaDressing1
+  id: CMUAntisepticTraumaDressing4
+  suffix: Six
+  components:
+  - type: Stack
+    count: 6
+
+- type: stack
+  id: CMUAntisepticTraumaDressing
+  name: antiseptic trauma dressing
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: antiseptic_trauma_kit }
+  spawn: CMUAntisepticTraumaDressing1
+  maxCount: 6
+
+- type: entity
+  parent: CMUPreparedTraumaDressingBase
+  id: CMUBurnTraumaDressing1
+  name: burn trauma dressing
+  description: A heavy burn gel dressing for thermal wounds.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: burn_gel_trauma_kit
+  - type: WoundTreater
+    wound: Burn
+    group: Burn
+    cmuMechanisms: 16
+    cmuCleanupClears: 20
+  - type: Stack
+    stackType: CMUBurnTraumaDressing
+
+- type: entity
+  parent: CMUBurnTraumaDressing1
+  id: CMUBurnTraumaDressing4
+  suffix: Six
+  components:
+  - type: Stack
+    count: 6
+
+- type: stack
+  id: CMUBurnTraumaDressing
+  name: burn trauma dressing
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: burn_gel_trauma_kit }
+  spawn: CMUBurnTraumaDressing1
+  maxCount: 6
+
+- type: entity
+  parent: CMUPreparedTraumaDressingBase
+  id: CMUSealingTraumaDressing1
+  name: sealing trauma dressing
+  description: A heavy tissue-sealant dressing for cut and surgical wounds.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: sealing_trauma_kit
+  - type: WoundTreater
+    cmuMechanisms: 134
+    cmuCleanupClears: 18
+  - type: Stack
+    stackType: CMUSealingTraumaDressing
+
+- type: entity
+  parent: CMUSealingTraumaDressing1
+  id: CMUSealingTraumaDressing4
+  suffix: Six
+  components:
+  - type: Stack
+    count: 6
+
+- type: stack
+  id: CMUSealingTraumaDressing
+  name: sealing trauma dressing
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: sealing_trauma_kit }
+  spawn: CMUSealingTraumaDressing1
+  maxCount: 6
+
+- type: entity
+  parent: CMUPreparedTraumaDressingBase
+  id: CMUCompressionTraumaDressing1
+  name: compression trauma dressing
+  description: A heavy trauma-foam dressing for crush and blast wounds.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Medical/field_treatments.rsi
+    state: compression_trauma_kit
+  - type: WoundTreater
+    cmuMechanisms: 40
+    cmuCleanupClears: 24
+  - type: Stack
+    stackType: CMUCompressionTraumaDressing
+
+- type: entity
+  parent: CMUCompressionTraumaDressing1
+  id: CMUCompressionTraumaDressing4
+  suffix: Six
+  components:
+  - type: Stack
+    count: 6
+
+- type: stack
+  id: CMUCompressionTraumaDressing
+  name: compression trauma dressing
+  icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: compression_trauma_kit }
+  spawn: CMUCompressionTraumaDressing1
+  maxCount: 6
+
+- type: entity
   parent: CMBurnKit
   abstract: true
   id: CMUpgradedBurnKit
@@ -422,6 +1100,9 @@
     treats: true
     instantWoundTreatment: true
     woundsTreatedPerUse: 2
+    cmuMechanisms: 16
+    cmuTreatmentQuality: Optimal
+    cmuCleanupClears: 20
     group: Burn
     consumable: true
     damage: -36

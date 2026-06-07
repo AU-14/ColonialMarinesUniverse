@@ -10,5 +10,6 @@
   - type: Tag
     tags:
       - ProximitySensor
+      - SalvageTier1
   - type: StaticPrice
     price: 40

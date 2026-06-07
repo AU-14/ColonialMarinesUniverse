@@ -1,12 +1,44 @@
 - type: job
   parent: AU14JobPlatCoBase
   id: AU14JobGOVFORPlatCoCMBCIU
+  requirements: []
   name: Platoon Commander
+  description: au14-job-description-govforplatco
+  icon: "AU14JobIconPlatCo"
   spawnMenuRoleName: Platoon Commander (CMBCIU)
   ranks:
     AU14RankCMBMarshal: []
   special:
   - !type:AddComponentSpecial
     components:
+    - type: CommendationGiver
+    - type: InnateCommandSpeech
+    - type: Marine
+      Faction: govfor
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: UserIFF
+      factions:
+      - GOVFOR
+    - type: Skills
+      preset: AU14SkillPresetPlatoonCommander
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORPlatCoCMBCIU
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: co
+    - type: MarineOrders
+      moveOrderSoundMale:
+        collection: AU14MaleMoveOrder
+      moveOrderSoundFemale:
+        collection: AU14FemaleMoveOrder
+      focusOrderSoundMale:
+        collection: AU14MaleFocusOrder
+      focusOrderSoundFemale:
+        collection: AU14FemaleFocusOrder
+      holdOrderSoundMale:
+        collection: AU14MaleHoldOrder
+      holdOrderSoundFemale:
+        collection: AU14FemaleHoldOrder

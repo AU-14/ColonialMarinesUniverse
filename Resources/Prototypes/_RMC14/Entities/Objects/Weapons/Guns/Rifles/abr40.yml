@@ -23,7 +23,7 @@
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_rifle.ogg
+      path: /Audio/_AU14/Weapons/l42a/ltrifle.ogg
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
@@ -123,14 +123,14 @@
     - FullAuto
     recoilWielded: 1
     recoilUnwielded: 2
-    scatterWielded: 6
+    scatterWielded: 5
     scatterUnwielded: 16
-    baseFireRate: 5
+    baseFireRate: 6
     modifiers:
       SemiAuto:
-        fireDelay: 0.2555
+        fireDelay: 0.2855
       FullAuto:
-        maxScatterModifier: 30
+        maxScatterModifier: 25
         shotsToMaxScatter: 4
   - type: RMCWeaponDamageFalloff
     falloffMultiplier: 0

@@ -269,7 +269,7 @@
       #- id: CMSparePDTLBattleBuddyKit
       #  amount: 3
       - id: CMSandbagEmpty25
-        amount: 30
+        amount: 2
       - id: RMCPowerCellHigh
         amount: 5
       - id: BedrollFolded
@@ -322,6 +322,12 @@
         amount: 60
       - id: CMOintment10
         amount: 60
+      - id: CMUPlainTraumaDressing10
+        amount: 40
+      - id: CMUCoagulantPowder
+        amount: 30
+      - id: CMUBurnGel
+        amount: 30
       - id: CMBurnKit10
         amount: 30
       - id: CMTraumaKit10
@@ -891,14 +897,18 @@
       entries:
       - id: CMPacketGrenadeHighExplosiveFilled
         amount: 6
+      - id: AU14PacketGrenadeFragM12Filled
+        amount: 4
       - id: RMCPacketGrenadeIncendiaryFilled
         amount: 3
-      - id: RMCGrenadeBlastM12
-        amount: 12
       - id: RMCPacketGrenadeSmokeFilled
         amount: 6
       - id: RMCBoxClaymoreMineFilled
         amount: 3
+      - id: AU14PacketGrenadeTearGasFilled
+        amount: 2
+      - id: AU14PacketGrenadeTearGasFilledAirburst
+        amount: 1
       - id: RMCPacketGrenadeM74AGMFFilled
         amount: 4
       - id: RMCPacketGrenadeM74AGMSHornetFilled

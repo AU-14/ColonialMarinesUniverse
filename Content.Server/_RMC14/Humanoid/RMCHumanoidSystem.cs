@@ -1,6 +1,8 @@
+using System.Linq;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Jobs;
 using Content.Shared.Clothing.Components;
+using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._RMC14.Humanoid;
@@ -36,10 +38,33 @@ public sealed partial class RMCHumanoidSystem : EntitySystem
             AddComp(ent, loadout);
         }
 
+        var addComponents = job.InheritAddComponentSpecials     // prototype Boolean
+            ? GetAllAddComponentSpecials(job)                   // merged inheritance chain
+            : [.. job.Special.OfType<AddComponentSpecial>()];   // original behavior
+
+        foreach (var add in addComponents)
+            EntityManager.AddComponents(ent, add.Components, add.RemoveExisting);
+    }
+
+    private List<AddComponentSpecial> GetAllAddComponentSpecials(JobPrototype job)
+    {
+        var results = new List<AddComponentSpecial>();
+
+        if (job.Parents is { Length: > 0 })
+        {
+            foreach (var parentId in job.Parents)
+            {
+                if (_prototype.TryIndex<JobPrototype>(parentId, out var parentJob))
+                    results.AddRange(GetAllAddComponentSpecials(parentJob));
+            }
+        }
+
         foreach (var special in job.Special)
         {
-            if (special is AddComponentSpecial add)
-                EntityManager.AddComponents(ent, add.Components, add.RemoveExisting);
+            if (special is AddComponentSpecial addComp)
+                results.Add(addComp);
         }
+
+        return results;
     }
 }

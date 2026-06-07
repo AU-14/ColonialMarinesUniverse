@@ -152,7 +152,7 @@
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Royal/para_vest.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 20 # CLOTHING_ARMOR_MEDIUMHIGH
     explosionArmor: 15 # CLOTHING_ARMOR_MEDIUM
   - type: RMCArmorSpeedTier

@@ -1,11 +1,11 @@
 - type: job
-  abstract: true
   parent: CMJobBase
   id: AU14JobPARTSPartyContractorBase
   name: PMC Contractor Base
   description: au14-prodigyparty-description
   playTimeTracker: AU14JobPARTSPartyContractorTracker
   basePlaytimeTracker: true
+  hidden: true
 
 - type: job
   parent: AU14JobPARTSPartyContractorBase
@@ -41,6 +41,7 @@
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: synth
+  hidden: false
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicProdigy

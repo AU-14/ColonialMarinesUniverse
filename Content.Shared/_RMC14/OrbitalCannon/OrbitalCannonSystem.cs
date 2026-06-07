@@ -492,7 +492,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
         CannonStatusChanged(cannon);
     }
 
-    public bool TryGetClosestCannon(EntityUid to, out Entity<OrbitalCannonComponent> cannon)
+    public bool TryGetClosestCannon(EntityUid to, out Entity<OrbitalCannonComponent> cannon, string? faction = null)
     {
         cannon = default;
         if (!TryComp(to, out TransformComponent? transform))
@@ -502,6 +502,11 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
         var query = EntityQueryEnumerator<OrbitalCannonComponent, TransformComponent>();
         while (query.MoveNext(out var cannonId, out var cannonComp, out var cannonTransform))
         {
+            if (!string.IsNullOrEmpty(faction) &&
+                !string.IsNullOrEmpty(cannonComp.Faction) &&
+                !string.Equals(cannonComp.Faction, faction, StringComparison.OrdinalIgnoreCase))
+                continue;
+
             if (transform.Coordinates.TryDistance(EntityManager,
                     _transform,
                     cannonTransform.Coordinates,
@@ -694,7 +699,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
         var logMessage = $"{ToPrettyString(user)} launched orbital bombardment at {fireCoordinates} for squad {ToPrettyString(squad)}, misfuel: {misfuel}, final coords: {adjustedCoords}";
         _adminLog.Add(LogType.RMCOrbitalBombardment, $"{logMessage}");
 
-        var ev = new OrbitalCannonLaunchEvent(cannon.Comp.FireCooldown + firing.ImpactDelay);
+        var ev = new OrbitalCannonLaunchEvent(cannon.Comp.FireCooldown + firing.ImpactDelay, cannon.Comp.Faction);
         RaiseLocalEvent(ref ev);
         return true;
     }

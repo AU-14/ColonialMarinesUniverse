@@ -241,7 +241,7 @@
     gloves: AU14PVEHandsInsulatedBlackMarine
     belt: RMCMK80BeltPMCFilled
     pocket1: RMCPouchMagazineLargePMC
-    pocket2: RMCPouchFirstAidPMCFill
+    pocket2: AU14PouchIFAKFill
     back: RMCSatchelLightpackWeYa
     ears: RMCHeadsetDistressWeYa
     suitstorage: RMCWeaponRifleM54C2
@@ -251,8 +251,6 @@
     - CMMagazineRifleM54CAP
     - CMMagazineRifleM54CAP
     - CMMagazineRifleM54CAP
-    pocket2:
-    - AU14Tourniquet
     back:
     - RMCMREWeYa
     - CMCanteen
@@ -274,8 +272,6 @@
     - CMMagazineSMGM63AP
     - CMMagazineSMGM63AP
     - CMMagazineSMGM63AP
-    pocket2:
-    - AU14Tourniquet
     back:
     - RMCMREWeYa
     - CMCanteen
@@ -296,8 +292,6 @@
     - RMCMagazineRifleSSG45AP
     - RMCMagazineRifleSSG45AP
     - RMCMagazineRifleSSG45AP
-    pocket2:
-    - AU14Tourniquet
     back:
     - RMCMREWeYa
     - CMCanteen
@@ -320,8 +314,6 @@
     - CMMagazineSniperM96S
     - CMMagazineSniperM96S
     - CMMagazineSniperM96S
-    pocket2:
-    - AU14Tourniquet
     back:
     - RMCMREWeYa
     - CMCanteen

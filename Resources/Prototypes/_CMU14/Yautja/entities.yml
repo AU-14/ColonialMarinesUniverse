@@ -354,6 +354,11 @@
       types:
         Slash: 15
         Piercing: 15
+  - type: DamageImpactProfile
+    thrown:
+      contact: Fragment
+      penetration: Low
+      energy: Medium
   - type: StaminaDamageOnCollide
     damage: 67.5
   - type: StaminaDamageOnEmbed
@@ -458,6 +463,13 @@
     damage:
       types:
         Slash: 24
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
+    thrown:
+      contact: Fragment
+      penetration: Low
   - type: DisarmMalus
     malus: 0.225
   - type: YautjaStoredGear
@@ -501,6 +513,13 @@
       types:
         Slash: 30
         Piercing: 6
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
+    thrown:
+      contact: Fragment
+      penetration: Low
   - type: DisarmMalus
     malus: 0.45
   - type: YautjaStoredGear
@@ -536,6 +555,11 @@
     amount: 0
   - type: StaminaDamageOnHit
     damage: 15
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+      energy: Medium
   - type: DisarmMalus
     malus: 0.2
   - type: YautjaStoredGear

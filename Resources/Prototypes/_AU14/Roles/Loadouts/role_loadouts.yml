@@ -248,8 +248,11 @@
   id: JobAU14JobWYGuard
   points: 7
   groups:
-  - CivSatchelAU14
   - PaperworkRMC
+  - WYGuardJumpsuitAU14
+  - WYGuardLeftPouchAU14
+  - WYGuardRightPouchAU14
+  - WYGuardHeadwearAU14
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
@@ -262,6 +265,10 @@
   groups:
   - CivSatchelAU14
   - PaperworkRMC
+  - WYCLJumpsuitAU14
+  - WYCLOuterwearAU14
+  - WYCLHeadwearAU14
+  - WYCLFootwearAU14
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC

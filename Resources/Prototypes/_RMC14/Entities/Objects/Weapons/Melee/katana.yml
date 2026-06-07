@@ -18,6 +18,10 @@
     damage:
       types:
         Slash: 45
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
   - type: UsableWhileDevoured
 
 - type: entity

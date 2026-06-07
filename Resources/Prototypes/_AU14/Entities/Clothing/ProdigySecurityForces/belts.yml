@@ -113,3 +113,4 @@
     - id: AU14PillCanisterPulmovine
     - id: CMEpinephrineAutoInjector
     - id: AU14NaloxoneAutoInjector
+    - id: CMHealthAnalyzer

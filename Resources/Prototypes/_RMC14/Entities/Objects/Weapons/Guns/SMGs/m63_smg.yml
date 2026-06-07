@@ -24,25 +24,27 @@
     - FullAuto
     recoilWielded: 1
     recoilUnwielded: 1
-    scatterWielded: 14
+    scatterWielded: 10
     scatterUnwielded: 14
     baseFireRate: 6.667
     burstScatterMult: 4
     modifiers:
       Burst:
         fireDelay: 0.0999
-        maxScatterModifier: 10
+        maxScatterModifier: 2.5
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 6
       FullAuto:
-        maxScatterModifier: 3
+        maxScatterModifier: 3.5
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 4
   - type: RMCWeaponAccuracy
-    accuracyMultiplier: 1
+    accuracyMultiplier: 1.15
     accuracyMultiplierUnwielded: 0.75
+  - type: GunDamageModifier
+    multiplier: 1.2
   - type: ItemSlots
     slots:
       gun_magazine:

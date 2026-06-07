@@ -297,11 +297,11 @@
       entries:
       - id: CMSandbagEmpty25
         recommended: true
-        amount: 60
+        amount: 2
       - id: BarbedWire15
         amount: 6
       - id: CMSheetMetal50
-        amount: 3
+        amount: 2
       - id: CMSheetPlasteel50
         amount: 1
       - id: RMCBoxMagazinePowerCellsHighFilled
@@ -324,10 +324,8 @@
         amount: 5
       - id: CMPackFlare
         amount: 12
-      - id: RMCBoxPackFlareCAS
-        amount: 1
       - id: RMCPackFlareCAS
-        amount: 7
+        amount: 8
     - name: Optics
       entries:
       - id: RMCLaserDesignatorPVE
@@ -345,9 +343,9 @@
         amount: 8
       - id: BedrollFolded
         amount: 20
-      - id: RMCGuidebookLawMarine
+      - id: AU14GuidebookLawMarine
         amount: 3
-      - id: RMCGuidebookSOP
+      - id: AU14GuidebookSOP
         amount: 3
 
 - type: entity
@@ -391,8 +389,16 @@
         amount: 60
       - id: AU14Tourniquet
         amount: 60
+      - id: CMUSplintItem
+        amount: 60
       - id: CMOintment10
         amount: 60
+      - id: CMUPlainTraumaDressing10
+        amount: 40
+      - id: CMUCoagulantPowder
+        amount: 30
+      - id: CMUBurnGel
+        amount: 30
       - id: CMBurnKit10
         amount: 30
       - id: CMTraumaKit10
@@ -755,6 +761,12 @@
     - name: Essential Equipment
       takeAll: CMUAREssentialEquipment
       entries:
+      - id: AU14ArmorSmartGunDesertCombatHarnessUPP
+
+    - name: Firearm System
+      choices: { CMUPlatoonMG: 1 }
+      entries:
+      - id: AU14SmartGunUPP
       - id: RMCWeaponLMGQYJ72
     - name: Belt
       choices: { CMUPlatoonMGBelt: 1 }
@@ -763,6 +775,10 @@
       - id: AU14BeltSmartGunOperatorPistolUPP
     - name: Gun Munitions
       entries:
+      - id: AU14MagazineSmartGunUPP
+        amount: 40
+      - id: AU14PowerCellSmartgunUPP
+        amount: 40
       - id: RMCMagazineLMGQYJ72
         amount: 40
 
@@ -1034,8 +1050,8 @@
       - id: CMGlassesSecurity
       - id: CMBeltSecurityMPFilled
       - id: RMCBoxZiptie
-      - id: RMCGuidebookLawMarine
-      - id: RMCGuidebookSOP
+      - id: AU14GuidebookLawMarine
+      - id: AU14GuidebookSOP
       - id: AU14Scissors
     - name: Uniform
       choices: { AU14Uniform: 1 }
@@ -1117,9 +1133,15 @@
       - id: RMCWeaponPistolNPZ92
         amount: 2
       - id: RMCWeaponRevolverZHNK72Empty
-        amount: 1
+        amount: 3
+      - id: RMCWeaponSMGType19
+        amount: 3
+      - id: RMCWeaponShotgunType23
+        amount: 3
     - name: primary ammunition
       entries:
+      - id: AU14MagazineSmartGunUPP
+        amount: 40
       - id: AU14MagazineRifleAG80
         amount: 200
       - id: AU14MagazineRifleAG80AP
@@ -1128,6 +1150,8 @@
         amount: 10
       - id: RMCMagazineRifleAK4047
         amount: 60
+      - id: RMCMagazineRifleAK4047AP
+        amount: 15
       - id: RMCMagazineRifleType71
         amount: 150
       - id: RMCMagazineRifleType71AP
@@ -1140,6 +1164,8 @@
         amount: 20
       - id: RMCMagazineLMGQYJ72
         amount: 25
+      - id: RMCMagazineSMGType64
+        amount: 200
     - name: secondary ammunition
       entries:
       - id: RMCMagazinePistolT73
@@ -1149,7 +1175,11 @@
       - id: RMCMagazinePistolNP92
         amount: 100
       - id: RMCSpeedLoaderZHNK72
-        amount: 10
+        amount: 40
+      - id: RMCMagazineSMGType19
+        amount: 100
+      - id: RMCMagazineSMGType19Drum
+        amount: 40
     - name: explosives
       entries:
       - id: AU14PacketGrenadeHighExplosiveUPPFilled
@@ -1158,6 +1188,8 @@
         amount: 4
       - id: AU14PacketGrenadeSmokeUPPFilled
         amount: 6
+      - id: AU14PacketGrenadeTearGasFilled
+        amount: 3
       - id: RMCBoxClaymoreMineFilled
         amount: 3
       - id: RMCExplosiveBreachingCharge
@@ -1198,6 +1230,8 @@
         amount: 4
     - name: Devices
       entries:
+      - id: AU14PowerCellSmartgunUPP
+        amount: 20
       - id: RMCIntelDetector
         amount: 4
       - id: RMCFulton20

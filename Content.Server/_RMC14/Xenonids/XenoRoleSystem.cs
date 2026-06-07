@@ -2,6 +2,8 @@ using Content.Server.GameTicking;
 using Content.Server.Mind;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server.Roles;
+using Content.Server._RMC14.PlayTimeTracking;
+using Content.Server._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -31,10 +33,15 @@ public sealed partial class XenoRoleSystem : EntitySystem
     [Dependency] private PlayTimeTrackingManager _playTimeManager = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private PvsOverrideSystem _pvsOverride = default!;
+    [Dependency] private RMCPlayTimeManager _rmcPlaytime = default!;
     [Dependency] private RoleSystem _role = default!;
     [Dependency] private IGameTiming _timing = default!;
 
+    private static readonly ProtoId<JobPrototype> LesserDroneRole = "CMXenoLesserDrone";
+    private static readonly ProtoId<JobPrototype> LarvaRole = "CMXenoLarva";
+
     private TimeSpan _disconnectedXenoGhostRoleTime;
+    private float _larvaRankScaleFactor = 1.0f;
 
     private TimeSpan _rankTwoTime;
     private TimeSpan _rankThreeTime;
@@ -42,6 +49,8 @@ public sealed partial class XenoRoleSystem : EntitySystem
     private TimeSpan _rankFiveTime;
     private TimeSpan _rankSixTime;
     private TimeSpan _rankSevenTime;
+    private TimeSpan _rankEightTime;
+    private TimeSpan _rankNineTime;
 
     private readonly List<Entity<XenoComponent>> _toUpdate = new();
 
@@ -59,12 +68,15 @@ public sealed partial class XenoRoleSystem : EntitySystem
 
         SubscribeLocalEvent<XenoRankComponent, RefreshNameModifiersEvent>(OnRankRefreshName, before: new[] { typeof(SharedXenoNameSystem) });
 
+        Subs.CVar(_config, RMCCVars.RMCPlaytimeLarvaRankScaleFactor, v => _larvaRankScaleFactor = v, true);
         Subs.CVar(_config, RMCCVars.RMCPlaytimeBronzeMedalTimeHours, v => _rankTwoTime = TimeSpan.FromHours(v), true);
         Subs.CVar(_config, RMCCVars.RMCPlaytimeSilverMedalTimeHours, v => _rankThreeTime = TimeSpan.FromHours(v), true);
         Subs.CVar(_config, RMCCVars.RMCPlaytimeGoldMedalTimeHours, v => _rankFourTime = TimeSpan.FromHours(v), true);
         Subs.CVar(_config, RMCCVars.RMCPlaytimePlatinumMedalTimeHours, v => _rankFiveTime = TimeSpan.FromHours(v), true);
         Subs.CVar(_config, RMCCVars.RMCPlaytimeRubyMedalTimeHours, v => _rankSixTime = TimeSpan.FromHours(v), true);
         Subs.CVar(_config, RMCCVars.RMCPlaytimeAmethystMedalTimeHours, v => _rankSevenTime = TimeSpan.FromHours(v), true);
+        Subs.CVar(_config, RMCCVars.RMCPlaytimeEmeraldMedalTimeHours, v => _rankEightTime = TimeSpan.FromHours(v), true);
+        Subs.CVar(_config, RMCCVars.RMCPlaytimePrismaticMedalTimeHours, v => _rankNineTime = TimeSpan.FromHours(v), true);
         Subs.CVar(_config, RMCCVars.RMCDisconnectedXenoGhostRoleTimeSeconds, v => _disconnectedXenoGhostRoleTime = TimeSpan.FromSeconds(v), true);
     }
 
@@ -82,16 +94,24 @@ public sealed partial class XenoRoleSystem : EntitySystem
     private void OnPlayerAttached(Entity<XenoComponent> xeno, ref PlayerAttachedEvent args)
     {
         RemCompDeferred<XenoDisconnectedComponent>(xeno);
+        RemCompDeferred<AbandonedXenoQueueableComponent>(xeno);
         _toUpdate.Add(xeno);
     }
 
     private void OnPlayerDetached(Entity<XenoComponent> xeno, ref PlayerDetachedEvent args)
     {
-        if(TerminatingOrDeleted(xeno))
+        if (TerminatingOrDeleted(xeno))
             return;
 
-        var disconnected = EnsureComp<XenoDisconnectedComponent>(xeno);
-        disconnected.At = _timing.CurTime;
+        if (!_mind.TryGetMind(xeno, out _, out _))
+        {
+            MarkAbandonedForQueue(xeno);
+        }
+        else
+        {
+            var disconnected = EnsureComp<XenoDisconnectedComponent>(xeno);
+            disconnected.At = _timing.CurTime;
+        }
 
         if (_hive.GetHive(xeno.Owner) is {} hive)
             _pvsOverride.RemoveForceSend(hive, args.Player);
@@ -131,7 +151,18 @@ public sealed partial class XenoRoleSystem : EntitySystem
             return;
 
         var time = TimeSpan.Zero;
-        if (_prototype.TryIndex(jobId, out JobPrototype? job) &&
+        if (jobId == LarvaRole)
+        {
+            try
+            {
+                time = _rmcPlaytime.GetTotalXenoPlaytime(player) / _larvaRankScaleFactor;
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Error reading total xeno playtime:\n{e}");
+            }
+        }
+        else if (_prototype.TryIndex(jobId, out JobPrototype? job) &&
             _playTimeManager.TryGetTrackerTime(player, job.PlayTimeTracker, out var nullableTime))
         {
             time = nullableTime.Value;
@@ -140,8 +171,12 @@ public sealed partial class XenoRoleSystem : EntitySystem
         int rank;
         if (!profile.PlaytimePerks)
             rank = 1;
+        else if (time > _rankNineTime)
+            rank = 9;
+        else if (time > _rankEightTime)
+            rank = 8;
         else if (time > _rankSevenTime)
-            rank = 6;
+            rank = 7;
         else if (time > _rankSixTime)
             rank = 6;
         else if (time > _rankFiveTime)
@@ -225,12 +260,25 @@ public sealed partial class XenoRoleSystem : EntitySystem
 
             if (!_mind.TryGetMind(uid, out var mindId, out var mind))
             {
+                MarkAbandonedForQueue(uid);
                 RemCompDeferred<XenoDisconnectedComponent>(uid);
                 continue;
             }
 
+            MarkAbandonedForQueue(uid);
             _mind.TransferTo(mindId, null, createGhost: true, mind: mind);
             RemCompDeferred<XenoDisconnectedComponent>(uid);
         }
+    }
+
+    private void MarkAbandonedForQueue(EntityUid uid)
+    {
+        if (TryComp(uid, out XenoComponent? xeno) &&
+            xeno.Role == LesserDroneRole)
+        {
+            return;
+        }
+
+        EnsureComp<AbandonedXenoQueueableComponent>(uid);
     }
 }

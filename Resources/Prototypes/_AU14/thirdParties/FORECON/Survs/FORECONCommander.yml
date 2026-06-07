@@ -95,6 +95,9 @@
   storage:
     back:
     - RMCAttachmentRailFlashlight
+    - CMMagazineRifleM4SPR
+    - CMMagazineRifleM4SPR
+    - CMMagazineRifleM4SPR
 
 - type: playTimeTracker
   id: AU14JobFORECONCommander

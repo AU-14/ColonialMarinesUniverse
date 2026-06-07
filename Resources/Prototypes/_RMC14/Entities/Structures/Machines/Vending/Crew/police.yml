@@ -83,9 +83,9 @@
       - id: RMCWebbingBlackSmall
     - name: Books
       entries:
-      - id: RMCGuidebookLawMarine
+      - id: AU14GuidebookLawMarine
         amount: 10
-      - id: RMCGuidebookSOP
+      - id: AU14GuidebookSOP
         amount: 10
     - name: Investigation
       entries:
@@ -179,9 +179,9 @@
       - id: CMWebbing
     - name: Books
       entries:
-      - id: RMCGuidebookLawMarine
+      - id: AU14GuidebookLawMarine
         amount: 10
-      - id: RMCGuidebookSOP
+      - id: AU14GuidebookSOP
         amount: 10
     - name: Investigation
       entries:

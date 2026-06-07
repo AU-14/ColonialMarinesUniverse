@@ -2,6 +2,8 @@
   parent: AU14JobSquadRiflemanBase
   id: AU14JobGOVFORSquadRiflemanCMBCIU
   name: Tactical Officer
+  description: au14-job-description-govforsquadrifleman
+  setPreference: false
   ranks:
     AU14RankCMBSrDeputy:
     - !type:RoleTimeRequirement
@@ -12,7 +14,17 @@
       role: AU14JobGOVFORSquadRifleman
       time: 1200 # 2 hours
     AU14RankCMBProbDeputy: []
+  startingGear: AU14GearGOVFORSquadRifleman
+  dummyStartingGear: AU14GearGOVFORRiflemanDummy
+  icon: "AU14JobIconGovRifleman"
+  requireAdminNotify: false
   spawnMenuRoleName: Operations Officer (CMBCIU)
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14OpforSquad
+  hasIcon: false
+  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
@@ -27,3 +39,8 @@
         RMCSkillPolice: 2
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORSquadRiflemanCMBCIU
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: true

@@ -957,7 +957,7 @@ public sealed partial class ChatUIController : UIController
         // Color any words chosen by the client.
         foreach (var highlight in _highlights)
         {
-            msg.WrappedMessage = SharedChatSystem.InjectTagAroundString(msg, highlight, "color", _highlightsColor);
+            msg.WrappedMessage = SharedChatSystem.InjectTagAroundString(msg, highlight, "color", _highlightsColor, targetIsRegex: true);
         }
 
         // Color any codewords for minds that have roles that use them

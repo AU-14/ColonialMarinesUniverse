@@ -35,6 +35,10 @@
                        StyleClasses="LabelKeyText"/>
                 <CheckBox Name="OpaqueStorageWindowCheckBox" Text="{Loc 'ui-options-opaque-storage-window'}" />
                 <CheckBox Name="StaticStorageUI" Text="{Loc 'ui-options-static-storage-ui'}" />
+		<Label Text="{Loc 'ui-options-general-area-echo'}"
+                	StyleClasses="LabelKeyText"/> <!-- Mono -->
+                <CheckBox Name="AreaEchoCheckBox" Text="{Loc 'ui-options-area-echo-enabled'}" /> <!-- Mono -->
+                <CheckBox Name="AreaEchoHighResolutionCheckBox" Text="{Loc 'ui-options-area-echo-highres'}" /> <!-- Mono -->
                 <!-- <CheckBox Name="ToggleWalk" Text="{Loc 'ui-options-hotkey-toggle-walk'}" /> -->
             </BoxContainer>
         </ScrollContainer>

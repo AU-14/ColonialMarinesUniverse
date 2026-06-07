@@ -1,5 +1,7 @@
 using Content.Shared._RMC14.Attachable.Components;
 using Content.Shared._RMC14.Attachable.Events;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.FixedPoint;
 using Content.Shared.Weapons.Melee.Events;
 
@@ -62,6 +64,18 @@ public sealed partial class AttachableModifiersSystem : EntitySystem
 
         if (modSet.BonusDamage != null)
             args.BonusDamage += modSet.BonusDamage;
+
+        if (modSet.Impact is { IsSpecified: true } impact)
+        {
+            var fallback = args.Impact.IsSpecified ? args.Impact : default;
+            args.Impact = impact.ApplyTo(fallback, DamageImpactDelivery.Melee);
+        }
+        else if (TryComp<DamageImpactProfileComponent>(attachable, out var impactProfile))
+        {
+            var heavy = args.Direction != null;
+            var fallback = args.Impact.IsSpecified ? args.Impact : default;
+            args.Impact = impactProfile.GetMeleeImpact(fallback, heavy);
+        }
 
         if (args.BonusDamage.GetTotal() < FixedPoint2.Zero)
         {

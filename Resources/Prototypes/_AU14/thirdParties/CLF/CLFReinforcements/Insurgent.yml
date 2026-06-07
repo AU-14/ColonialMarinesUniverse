@@ -1,0 +1,90 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCLFGuerillaReinforcement
+  name: au14-job-name-clfguerilla
+  description: au14-job-description-clfguerilla-alt
+  playTimeTracker: AU14JobCLFGuerilla
+  setPreference: true
+  ignoreAllegiance: true
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 7200 # 2 hours
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCLFGuerilla
+  spawnMenuRoleName: CLF Guerilla Fighter (Reinforcements)
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clflrs
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: EquipEntityPreset
+      preset: AU14CLFGuerillaReinforcement
+    - type: NpcFactionMember
+      factions:
+      - CLF
+    - type: CLFMember
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 1
+        RMCSkillFirearms: 1
+        RMCSkillConstruction: 1
+        RMCSkillEngineer: 1
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillPowerLoader: 1
+        RMCSkillMeleeWeapons: 1
+        RMCSkillJtac: 1
+        RMCSkillPolice: 2
+    - type: JobPrefix
+      prefix: au14-job-prefix-clfguerilla
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: ShowMarineIcons
+      factions:
+      - CLF
+  hidden: false
+
+- type: entity
+  id: AU14CLFGuerillaReinforcement
+  name: returning colonist preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomGearOther:
+    -
+      - [ CMJumpsuitColonist ]
+      - [ RMCJumpsuitCivilian ]
+      - [ CMJumpsuitTShirtWhite ]
+      - [ CMJumpsuitTShirtGray ]
+    -
+      - [ RMCShoesBlack ]
+      - [ RMCBootsVanBandolier ]
+      - [ RMCShoesBrown ]
+    -
+      - [ AU14SlingSatchelBlue ]
+      - [ AU14SlingSatchelBlack ]
+      - [ CMSatchel ]
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicCLF
+  id: AU14IntelThirdPartyCLFInsurgentReinforcements
+  name: Insurgent Reinforcements
+  components:
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Insurgent Reinforcements
+    description: You have been sent from a neighboring insurgent cell to aid the uprising in this area. Report to the local cell leader for orders.
+    job: AU14JobCLFGuerillaReinforcement
+    raffle:
+      settings: short

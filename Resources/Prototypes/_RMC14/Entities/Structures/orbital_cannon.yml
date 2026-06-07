@@ -47,6 +47,22 @@
     - RMCOrbitalCannonWarheadAegis
 
 - type: entity
+  parent: RMCOrbitalCannon
+  id: AU14OrbitalCannonGovfor
+  suffix: Govfor
+  components:
+  - type: OrbitalCannon
+    faction: GOVFOR
+
+- type: entity
+  parent: RMCOrbitalCannon
+  id: AU14OrbitalCannonOpfor
+  suffix: Opfor
+  components:
+  - type: OrbitalCannon
+    faction: OPFOR
+
+- type: entity
   id: RMCOrbitalCannonFuel
   name: solid fuel
   placement:

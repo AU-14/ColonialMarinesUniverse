@@ -19,6 +19,4 @@ public sealed partial class XenoCrusherChargableComponent : Component
     [DataField]
     public FixedPoint2? DestroyDamage;
 
-    [DataField]
-    public float? ThrowRange;
 }

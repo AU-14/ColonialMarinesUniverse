@@ -453,6 +453,9 @@ public sealed partial class StationJobsSystem
                 assignedJobs.Add(player, (chosenOverflow, station));
                 break;
             }
+
+            if (!assignedJobs.ContainsKey(player))
+                assignedJobs.Add(player, (null, EntityUid.Invalid));
         }
     }
 

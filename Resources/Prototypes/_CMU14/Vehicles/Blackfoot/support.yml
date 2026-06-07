@@ -37,6 +37,9 @@
   components:
   - type: Transform
     anchored: false
+  - type: Physics
+    bodyType: Static
+    canCollide: false
   - type: Sprite
     sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_structures.rsi
     state: fuel-pump

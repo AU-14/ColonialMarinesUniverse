@@ -1,20 +1,24 @@
 - type: job
   abstract: true
-  parent: AU14JobMilitaryBase
+  parent: CMJobBase
   id: AU14JobSquadSergeantBaseAbstract # Squad Leader Abstraction
   name: au14-job-name-govforsquadsergeant
   description: au14-job-description-govforsquadsergeant
   icon: "AU14JobIconSarge"
+  #icon: "AU14JobIconPlatoonSarge" # unused
   spawnMenuRoleName: Squad Sergeant (GOVFOR)
+  supervisors: au14-job-supervisors-govfor
   startingGear: AU14GearGOVFORSquadSergeant
   dummyStartingGear: AU14GearGOVFORSquadSergeantDummy
   playTimeTracker: AU14JobGOVFORSquadSergeant
   overwatchRoleName: Squad Lead
   overwatchShowName: true
   overwatchSortPriority: -5
+  setPreference: false
   canBeAntag: false
   accessGroups:
   - AU14GovforFTL
+  roleWeight: 0.25
 
 - type: job
   abstract: true
@@ -37,14 +41,37 @@
   special:
   - !type:AddComponentSpecial
     components:
+    - type: Marine
+      Faction: govfor
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: UserIFF
+      factions:
+      - GOVFOR
     - type: Skills
       preset: AU14SkillPresetPlatoonSergeant
+    - type: RMCSpeechBubbleSpecificStyle
+      speechStyleClass: commanderSpeech
     - type: JobPrefix
       prefix: au14-job-prefix-govforsquadsergeant
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: leader
+    - type: MarineOrders
+      moveOrderSoundMale:
+        collection: AU14MaleMoveOrder
+      moveOrderSoundFemale:
+        collection: AU14FemaleMoveOrder
+      focusOrderSoundMale:
+        collection: AU14MaleFocusOrder
+      focusOrderSoundFemale:
+        collection: AU14FemaleFocusOrder
+      holdOrderSoundMale:
+        collection: AU14MaleHoldOrder
+      holdOrderSoundFemale:
+        collection: AU14FemaleHoldOrder
 
 - type: playTimeTracker
   id: AU14JobGOVFORSquadSergeant
@@ -56,15 +83,6 @@
     id: AU14IDCardSquadSergeant
     ears: AU14HeadsetGovforCommand
 
-- type: startingGear
-  id: AU14GearGOVFORSquadSergeantDummy
-  equipment:
-    outerClothing: AU14ArmorM3JungleOne
-    shoes: CMBootsBrown
-    head: AU14JungleBoonieHat
-    jumpsuit: AU14JungleFatigues
-    earss: AU14HeadsetGovforCommand
-
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORSquadSergeant
@@ -74,3 +92,12 @@
     job_id: AU14JobGOVFORSquadSergeant
   - type: Sprite
     state: syn_spawn
+
+- type: startingGear
+  id: AU14GearGOVFORSquadSergeantDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleOne
+    shoes: CMBootsBrown
+    head: AU14JungleBoonieHat
+    jumpsuit: AU14JungleFatigues
+    earss: AU14HeadsetGovforCommand

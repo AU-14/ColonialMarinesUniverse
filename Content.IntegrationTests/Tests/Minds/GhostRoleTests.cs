@@ -1,14 +1,12 @@
-﻿#nullable enable
+#nullable enable
 using System.Linq;
 using Content.Server.GameTicking;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
-using Content.Server.Preferences.Managers;
 using Content.Shared.Ghost;
 using Content.Shared.GameTicking;
 using Content.Shared.Mind;
 using Content.Shared.Players;
-using Content.Shared.Preferences;
 using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
@@ -146,7 +144,7 @@ public sealed class GhostRoleTests
     }
 
     [Test]
-    public async Task LobbyHumanoidGhostRoleUsesSelectedCharacterName()
+    public async Task LobbyHumanoidGhostRoleKeepsRoleEntityName()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -157,18 +155,10 @@ public sealed class GhostRoleTests
         var mapData = await pair.CreateTestMap();
 
         var entMan = server.ResolveDependency<IEntityManager>();
-        var preferences = server.ResolveDependency<IServerPreferencesManager>();
         var sPlayerMan = server.ResolveDependency<Robust.Server.Player.IPlayerManager>();
         var session = sPlayerMan.Sessions.Single();
         var ghostRoleSystem = entMan.System<GhostRoleSystem>();
         var mindSystem = entMan.System<SharedMindSystem>();
-
-        string? characterName = null;
-        await server.WaitPost(() =>
-        {
-            var profile = (HumanoidCharacterProfile) preferences.GetPreferences(session.UserId).SelectedCharacter;
-            characterName = profile.Name;
-        });
 
         EntityUid ghostRole = default;
         await server.WaitPost(() => ghostRole = entMan.SpawnEntity(HumanoidGhostRoleProtoId, mapData.GridCoords));
@@ -195,8 +185,8 @@ public sealed class GhostRoleTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(entityName, Is.EqualTo(characterName));
-            Assert.That(mindName, Is.EqualTo(characterName));
+            Assert.That(entityName, Is.EqualTo("Ghost Role Loadout Name"));
+            Assert.That(mindName, Is.EqualTo("Ghost Role Loadout Name"));
         });
 
         await pair.CleanReturnAsync();
@@ -408,7 +398,7 @@ public sealed class GhostRoleTests
             Assert.That(ghostTwo, Is.Not.EqualTo(ghostRole));
             Assert.That(session.ContentData()?.Mind, Is.EqualTo(ghostRoleMindId));
 
-            if(adminGhost)
+            if (adminGhost)
             {
                 // aghost case, the ghost role mind should be owned by the ghost role entity,
                 // the ghost role mind is visiting the new ghost

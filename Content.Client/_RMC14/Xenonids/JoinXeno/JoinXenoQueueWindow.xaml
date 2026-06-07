@@ -1,0 +1,59 @@
+<cc:JoinXenoQueueWindow xmlns="https://spacestation14.io"
+                        xmlns:cc="clr-namespace:Content.Client._RMC14.Xenonids.JoinXeno"
+                        Title="{Loc rmc-xeno-larva-queue-title}"
+                        MinSize="620 420"
+                        SetSize="620 420">
+    <PanelContainer StyleClasses="CrtPanel" HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical"
+                      HorizontalExpand="True"
+                      VerticalExpand="True"
+                      SeparationOverride="8"
+                      Margin="8">
+            <BoxContainer Orientation="Horizontal"
+                          HorizontalExpand="True"
+                          MinHeight="34"
+                          SeparationOverride="8">
+                <LineEdit Name="SearchBar"
+                          Access="Public"
+                          PlaceHolder="{Loc rmc-xeno-larva-queue-search}"
+                          HorizontalExpand="True"
+                          MinHeight="34"
+                          SetHeight="34" />
+                <Label Name="CountLabel"
+                       Access="Public"
+                       Text=""
+                       StyleClasses="CrtDimText"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       MinWidth="96" />
+            </BoxContainer>
+
+            <PanelContainer Name="ContentPanel"
+                            Access="Public"
+                            StyleClasses="CrtInsetPanel"
+                            HorizontalExpand="True"
+                            VerticalExpand="True">
+                <ScrollContainer Name="HiveScroll"
+                                 Access="Public"
+                                 VerticalExpand="True"
+                                 HorizontalExpand="True"
+                                 HScrollEnabled="False">
+                    <BoxContainer Orientation="Vertical"
+                                  Name="HiveContainer"
+                                  Access="Public"
+                                  SeparationOverride="8"
+                                  Margin="8"
+                                  VerticalExpand="True" />
+                </ScrollContainer>
+            </PanelContainer>
+
+            <Label Name="NoHivesMessage"
+                   Access="Public"
+                   Text="{Loc rmc-xeno-larva-queue-empty}"
+                   StyleClasses="CrtHeading"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Visible="False" />
+        </BoxContainer>
+    </PanelContainer>
+</cc:JoinXenoQueueWindow>

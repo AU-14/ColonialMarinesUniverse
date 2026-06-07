@@ -40,6 +40,7 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         _overlay.AddOverlay(_visibleEntityOverlay);
 
         SubscribeLocalEvent<CMUZPhysicsComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<CMUZPhysicsComponent, MoveEvent>(OnZPhysicsMoveGroundSnapClient);
         SubscribeLocalEvent<CMUZPhysicsComponent, GetEyeOffsetEvent>(OnEyeOffset);
         SubscribeLocalEvent<CMUZFallingComponent, ComponentShutdown>(OnFallingShutdown);
         SubscribeLocalEvent<CMUZLevelProjectileVisualOffsetComponent, ComponentStartup>(OnProjectileVisualOffsetStartup);
@@ -72,6 +73,19 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         args.Offset += offset;
     }
 
+    private void OnZPhysicsMoveGroundSnapClient(Entity<CMUZPhysicsComponent> ent, ref MoveEvent args)
+    {
+        OnZPhysicsMoveGroundSnap(ent, ref args);
+
+        if (!_config.GetCVar(CMUZLevelsCVars.Enabled) ||
+            !TryComp<SpriteComponent>(ent, out var sprite))
+        {
+            return;
+        }
+
+        ApplyZPhysicsVisuals(ent.Owner, ent.Comp, sprite);
+    }
+
     private void OnFallingShutdown(Entity<CMUZFallingComponent> ent, ref ComponentShutdown args)
     {
         if (!TryComp<CMUZPhysicsComponent>(ent, out var zPhys) ||
@@ -79,6 +93,9 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         {
             return;
         }
+
+        if (MathF.Abs(zPhys.LocalPosition) > 0.001f)
+            return;
 
         sprite.NoRotation = zPhys.NoRotDefault;
         _sprite.SetOffset((ent.Owner, sprite), zPhys.SpriteOffsetDefault);
@@ -206,20 +223,10 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         if (!_config.GetCVar(CMUZLevelsCVars.Enabled))
             return;
 
-        var query = EntityQueryEnumerator<CMUZFallingComponent, CMUZPhysicsComponent, SpriteComponent>();
-        while (query.MoveNext(out var uid, out var _, out var zPhys, out var sprite))
+        var query = EntityQueryEnumerator<CMUZPhysicsComponent, SpriteComponent>();
+        while (query.MoveNext(out var uid, out var zPhys, out var sprite))
         {
-            var targetNoRotation = zPhys.LocalPosition != 0 || zPhys.NoRotDefault;
-            if (sprite.NoRotation != targetNoRotation)
-                sprite.NoRotation = targetNoRotation;
-
-            var targetOffset = zPhys.SpriteOffsetDefault + new Vector2(0, zPhys.LocalPosition * ZLevelOffset);
-            if (sprite.Offset != targetOffset)
-                _sprite.SetOffset((uid, sprite), targetOffset);
-
-            var targetDrawDepth = zPhys.LocalPosition > 0 ? (int)Shared.DrawDepth.DrawDepth.OverMobs : zPhys.DrawDepthDefault;
-            if (sprite.DrawDepth != targetDrawDepth)
-                _sprite.SetDrawDepth((uid, sprite), targetDrawDepth);
+            ApplyZPhysicsVisuals(uid, zPhys, sprite);
         }
 
         var projectileQuery = EntityQueryEnumerator<CMUZLevelProjectileVisualOffsetComponent, SpriteComponent, TransformComponent>();
@@ -248,6 +255,21 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
                 sprite,
                 xform);
         }
+    }
+
+    private void ApplyZPhysicsVisuals(EntityUid uid, CMUZPhysicsComponent zPhys, SpriteComponent sprite)
+    {
+        var targetNoRotation = zPhys.LocalPosition != 0 || zPhys.NoRotDefault;
+        if (sprite.NoRotation != targetNoRotation)
+            sprite.NoRotation = targetNoRotation;
+
+        var targetOffset = zPhys.SpriteOffsetDefault + new Vector2(0, zPhys.LocalPosition * ZLevelOffset);
+        if (sprite.Offset != targetOffset)
+            _sprite.SetOffset((uid, sprite), targetOffset);
+
+        var targetDrawDepth = zPhys.LocalPosition > 0 ? (int)Shared.DrawDepth.DrawDepth.OverMobs : zPhys.DrawDepthDefault;
+        if (sprite.DrawDepth != targetDrawDepth)
+            _sprite.SetDrawDepth((uid, sprite), targetDrawDepth);
     }
 
     private bool TryApplyProjectileVisualOffset(

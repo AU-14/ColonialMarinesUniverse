@@ -235,3 +235,21 @@
   components:
   - type: Sprite
     sprite: _AU14/Clothing/desertfatigues.rsi
+
+- type: entity
+  parent: RMCMarineUniformBase
+  id: AU14MarineUniformDressEnlistedD
+  name: marine enlisted dress blues uniform
+  description: The undershirt and trousers of the legendary Marine dress blues, virtually unchanged since the 19th century. This unadorned variant is for enlisted personnel, E-1 thru E-3. This one is 'D' variant.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMC/Uniform/DressBlues/d_enlisted.rsi
+
+- type: entity
+  parent: RMCMarineUniformBase
+  id: AU14MarineUniformDressSeniorD
+  name: marine senior dress blues uniform
+  description: The undershirt and trousers of the legendary Marine dress blues, virtually unchanged since the 19th century. This variant features the iconic Blood Stripe, worn by NCOs and officers. This one is 'D' variant.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/USCMC/Uniform/DressBlues/d_senior.rsi

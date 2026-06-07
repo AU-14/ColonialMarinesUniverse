@@ -3,8 +3,11 @@ using Content.Shared._CMU14.Medical.Bones;
 using Content.Shared._CMU14.Medical.Items;
 using Content.Shared._CMU14.Medical.Organs;
 using Content.Shared._CMU14.Medical.Organs.Events;
+using Content.Shared._CMU14.Medical.Organs.Heart;
 using Content.Shared._CMU14.Medical.Surgery.Conditions;
 using Content.Shared._CMU14.Medical.Surgery.Effects;
+using Content.Shared._CMU14.Medical.Surgery.Traits;
+using Content.Shared._CMU14.Medical.Shrapnel;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Conditions;
@@ -33,7 +36,10 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
     [Dependency] protected SharedBoneSystem Bone = default!;
     [Dependency] protected SharedContainerSystem Containers = default!;
     [Dependency] protected SharedFractureSystem Fracture = default!;
+    [Dependency] protected SharedHeartSystem Heart = default!;
     [Dependency] protected SharedOrganHealthSystem OrganHealth = default!;
+    [Dependency] protected SharedCMUSurgicalTraitSystem SurgicalTraits = default!;
+    [Dependency] protected SharedCMUShrapnelSystem Shrapnel = default!;
     [Dependency] protected SharedCMUWoundsSystem Wounds = default!;
 
     private bool _medicalEnabled;
@@ -48,6 +54,8 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
         SubscribeLocalEvent<CMUOrganDamagedSurgeryConditionComponent, CMSurgeryStepCompleteCheckEvent>(OnOrganDamagedCompleteCheck);
         SubscribeLocalEvent<CMUInternalBleedingSurgeryConditionComponent, CMSurgeryValidEvent>(OnInternalBleedingValid);
         SubscribeLocalEvent<CMUEscharSurgeryConditionComponent, CMSurgeryValidEvent>(OnEscharValid);
+        SubscribeLocalEvent<CMUSurgicalTraitConditionComponent, CMSurgeryValidEvent>(OnSurgicalTraitValid);
+        SubscribeLocalEvent<CMUSurgicalTraitConditionComponent, CMSurgeryStepCompleteCheckEvent>(OnSurgicalTraitCompleteCheck);
 
         SubscribeLocalEvent<CMUSurgeryStepRemoveOrganEffectComponent, CMSurgeryStepEvent>(OnRemoveOrganStep);
         SubscribeLocalEvent<CMUSurgeryStepReinsertOrganEffectComponent, CMSurgeryStepEvent>(OnReinsertOrganStep);
@@ -58,6 +66,7 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
         SubscribeLocalEvent<CMUSurgeryStepReattachLimbEffectComponent, CMSurgeryStepEvent>(OnReattachLimbStep);
         SubscribeLocalEvent<CMUSurgeryStepRemoveLimbEffectComponent, CMSurgeryStepEvent>(OnRemoveLimbStep);
         SubscribeLocalEvent<CMUSurgeryStepDebrideEscharEffectComponent, CMSurgeryStepEvent>(OnDebrideEscharStep);
+        SubscribeLocalEvent<CMUSurgeryStepResolveTraitEffectComponent, CMSurgeryStepEvent>(OnResolveSurgicalTraitStep);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.SurgeryEnabled, v => _surgeryEnabled = v, true);
@@ -122,6 +131,20 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
     private void OnEscharValid(Entity<CMUEscharSurgeryConditionComponent> ent, ref CMSurgeryValidEvent args)
     {
         if (!HasComp<CMUEscharComponent>(args.Part))
+            args.Cancelled = true;
+    }
+
+    private void OnSurgicalTraitValid(Entity<CMUSurgicalTraitConditionComponent> ent, ref CMSurgeryValidEvent args)
+    {
+        if (!SurgicalTraits.HasTrait(args.Part, ent.Comp.Trait))
+            args.Cancelled = true;
+    }
+
+    private void OnSurgicalTraitCompleteCheck(Entity<CMUSurgicalTraitConditionComponent> ent, ref CMSurgeryStepCompleteCheckEvent args)
+    {
+        if (args.Cancelled)
+            return;
+        if (SurgicalTraits.HasTrait(args.Part, ent.Comp.Trait))
             args.Cancelled = true;
     }
 
@@ -200,7 +223,14 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
         if (!TryComp<OrganHealthComponent>(organ, out var oh))
             return;
 
+        HeartComponent? heart = null;
+        var canRestartHeart = oh.Stage != OrganDamageStage.Dead &&
+                              TryComp(organ, out heart);
+
         OrganHealth.HealOrgan((organ, oh), args.Body, oh.Max - oh.Current);
+        if (canRestartHeart)
+            Heart.TryRestartHeart((organ, heart));
+
         Wounds.RecomputeInternalBleed(args.Part);
     }
 
@@ -231,6 +261,19 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
             return;
         if (HasComp<CMUEscharComponent>(args.Part))
             RemComp<CMUEscharComponent>(args.Part);
+    }
+
+    private void OnResolveSurgicalTraitStep(Entity<CMUSurgeryStepResolveTraitEffectComponent> ent, ref CMSurgeryStepEvent args)
+    {
+        if (!IsSurgeryEnabled())
+            return;
+        if (!SurgicalTraits.RemoveTrait(args.Part, ent.Comp.Trait))
+            return;
+
+        if (ent.Comp.Trait == CMUSurgicalTrait.VascularTear)
+            Wounds.SuppressInternalBleed(args.Part);
+        else if (ent.Comp.Trait == CMUSurgicalTrait.EmbeddedForeignBody)
+            Shrapnel.TryClearShrapnel(args.Part);
     }
 
     protected virtual void ApplyOrganRemovalSideEffects(EntityUid user, EntityUid body, EntityUid organ, string slot)

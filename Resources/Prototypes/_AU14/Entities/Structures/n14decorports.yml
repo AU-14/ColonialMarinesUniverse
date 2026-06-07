@@ -513,6 +513,12 @@
   - type: Sprite
     state: pallet
         # add destruction drop for materials
+  - type: Appearance
+  - type: Flamability
+    chance: 1.0
+    rate: 0.8
+    range: 1.0
+    spread: 1.0
 
 - type: entity
   parent: DecorFloorWorldBase
@@ -524,6 +530,12 @@
   - type: Sprite
     state: pallet_stack
         # add destruction drop for materials
+  - type: Appearance
+  - type: Flamability
+    chance: 1.0
+    rate: 0.8
+    range: 1.0
+    spread: 1.2
   - type: Fixtures
     fixtures:
       fix1:

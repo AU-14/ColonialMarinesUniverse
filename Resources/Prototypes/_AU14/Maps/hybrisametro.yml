@@ -50,6 +50,10 @@
             AU14JobWYGuard: [2, 2]
             AU14JobCivilianScientist: [4, 4]
 
+            # Orbital
+            AU14JobCivilianOrbitalArbiter: [1, 1]
+            AU14JobCivilianOrbitalLawyer: [2, 3]
+
             # Other
             AU14JobCivilianMiner: [10, 10]
             AU14JobCivilianPrisoner: [3, 3]

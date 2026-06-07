@@ -4,7 +4,7 @@
     xmlns:ui="clr-namespace:Robust.Client.UserInterface.Controls;assembly=Robust.Client"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:rmcui="clr-namespace:Content.Client._RMC14.Vehicle.Ui"
-    MinSize="720 360">
+    MinSize="900 400">
     <PanelContainer HorizontalExpand="True" VerticalExpand="True">
         <PanelContainer.PanelOverride>
             <graphics:StyleBoxFlat
@@ -35,6 +35,20 @@
                         <BoxContainer Name="AvailableRows" Access="Public" Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True" />
                     </ScrollContainer>
                 </BoxContainer>
+                </PanelContainer>
+
+                <PanelContainer Name="LoadoutPanel" Access="Public" MinSize="280 0" HorizontalExpand="True" VerticalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat
+                            BackgroundColor="#0B131F"
+                            BorderColor="#1E3450"
+                            BorderThickness="1"/>
+                    </PanelContainer.PanelOverride>
+
+                    <BoxContainer Orientation="Vertical" SeparationOverride="6" Margin="10" HorizontalExpand="True" VerticalExpand="True">
+                        <Label Text="Vehicle Loadout" FontColorOverride="#C7D7EA"/>
+                        <BoxContainer Name="LoadoutColumns" Access="Public" Orientation="Horizontal" SeparationOverride="8" HorizontalExpand="True" VerticalExpand="True"/>
+                    </BoxContainer>
                 </PanelContainer>
 
                 <PanelContainer Name="PreviewPanel" MinSize="160 0" VerticalExpand="True">

@@ -1,5 +1,5 @@
 - type: job
-  parent: AU14JobPARTYPartyContractorBase
+  parent: CMJobBase
   id: AU14JobWYProdigyPartyMedic #m41a/2
   name: Prodigy Yankee Combat Lifesaver
   description: au14-prodigyparty-description
@@ -35,6 +35,8 @@
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: synth
+  hidden: false
+
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu

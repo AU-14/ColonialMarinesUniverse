@@ -25,6 +25,10 @@
     attackRate: 2 #open and close that shit on their arm like hell! because you sure aren't doing any damage with this
     soundHit:
       path: "/Audio/Items/wirecutter.ogg"
+  - type: DamageImpactProfile
+    melee:
+      contact: Stab
+      penetration: Low
   - type: Tool
     qualities:
       - Cutting
@@ -80,6 +84,10 @@
         Piercing: 6
     soundHit:
       path: "/Audio/Weapons/bladeslice.ogg"
+  - type: DamageImpactProfile
+    melee:
+      contact: Stab
+      penetration: Low
   - type: Tool
     qualities:
       - Screwing
@@ -131,6 +139,10 @@
         Blunt: 4.5
     soundHit:
       collection: MetalThud
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
   - type: Tool
     qualities:
       - Anchoring
@@ -498,6 +510,10 @@
         Blunt: 14
     soundHit:
       collection: MetalThud
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
   - type: Item
     size: Normal
     sprite: Objects/Tools/shovel.rsi

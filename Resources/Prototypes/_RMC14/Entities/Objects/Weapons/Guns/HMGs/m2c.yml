@@ -72,6 +72,7 @@
         whitelist:
           tags:
           - RMCMagazineM2C
+          - AU14MagazineM2CTracter
   - type: GunDamageModifier
     multiplier: 1
   - type: GunRequiresSkills
@@ -134,6 +135,23 @@
     slots:
     - suitStorage
 
+- type: entity
+  parent: RMCMagazineM2C
+  id: AU14MagazineM2CTracter
+  name: M2C Tracer Ammunition Box (10x28mm tungsten tracer rounds)
+  description: A box of 125, 10x28mm caseless tungsten green tracer rounds for the M2C heavy machine gun system.
+  components:
+  - type: Tag
+    tags:
+    - AU14MagazineM2CTracter
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - AU14CartridgeHMG10x28mmTungstenTracer
+    proto: AU14CartridgeHMG10x28mmTungstenTracer
+    capacity: 125
+    deleteWhenEmpty: false
+
 # Cartridges
 
 - type: entity
@@ -151,6 +169,17 @@
   - type: Tag
     tags:
     - RMCCartridgeHMG10x28mmTungsten
+
+- type: entity
+  parent: RMCCartridgeHMG10x28mmTungsten
+  id: AU14CartridgeHMG10x28mmTungstenTracer
+  name: cartridge (10x28mm Tungsten Tracer)
+  components:
+  - type: CartridgeAmmo
+    proto: AU14BulletHMG10x28mmTungstenTracer
+  - type: Tag
+    tags:
+    - AU14CartridgeHMG10x28mmTungstenTracer
 
 # Projectiles
 
@@ -183,9 +212,24 @@
     - range: 6 # porting this 1:1, which is what the component mentions, from cm13(10), makes it too accurate at high ranges so I lowered it
       falloff: 5
 
+- type: entity
+  parent: RMCBulletHMG10x28mmTungsten
+  id: AU14BulletHMG10x28mmTungstenTracer
+  name: bullet (10x28mm Tungsten Tracer)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    enabled: true
+    color: "#ff4300"
+    radius: 2.0
+    energy: 7.0
+
 # Tags
 - type: Tag
   id: RMCMagazineM2C
+
+- type: Tag
+  id: AU14MagazineM2CTracter
 
 - type: Tag
   id: RMCMachineGunM2C
@@ -193,3 +237,5 @@
 - type: Tag
   id: RMCCartridgeHMG10x28mmTungsten
 
+- type: Tag
+  id: AU14CartridgeHMG10x28mmTungstenTracer

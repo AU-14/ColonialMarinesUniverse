@@ -1,4 +1,5 @@
 ﻿using Robust.Shared.GameStates;
+using Robust.Shared.Network;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared._RMC14.Xenonids.Parasite;
@@ -33,4 +34,14 @@ public sealed partial class XenoParasiteComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool FellOff;
+
+    /// <summary>
+    ///     Player who controlled this parasite when it successfully infected a host.
+    /// </summary>
+    public NetUserId? InfectorUser;
+
+    /// <summary>
+    ///     Whether the infector accepted becoming the larva from this infection.
+    /// </summary>
+    public bool InfectorWantsLarva;
 }

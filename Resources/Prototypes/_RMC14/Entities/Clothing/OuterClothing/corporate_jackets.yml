@@ -236,7 +236,7 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/Coats/Corporate/corporate_manager.rsi
   - type: CMArmor
-    melee: 10
+    melee: 20
     bullet: 10
 
 - type: entity

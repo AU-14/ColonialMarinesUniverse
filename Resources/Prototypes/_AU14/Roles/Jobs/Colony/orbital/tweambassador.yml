@@ -56,6 +56,7 @@
     id: AU14IDCardColonyCorporateLiaison
     outerClothing: AU14CivilianJacketOldCoat
     ears: AU14ColonyAmbassadorTWEHeadset
+    pocket1: AU14StampTWEA
   inhand:
   - RMCPortableVendorCorporate
 

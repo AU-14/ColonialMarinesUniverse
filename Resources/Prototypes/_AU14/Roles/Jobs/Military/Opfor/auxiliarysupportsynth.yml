@@ -88,7 +88,7 @@
     gloves: CMHandsInsulated
     shoes: CMBootsBlackFilled
     jumpsuit: AU14CivilianBoilerSuitDarkBlueSynth
-    belt: CMUBeltMedicBagSupportSynth
+    belt: AU14BeltMedicBagSupportSynth
     head: AU14CivBallCapBlack
     back: AU14SmartpackBlackFilled
     pocket1: AU14PouchToolsFilledSupportSynthetic
@@ -111,7 +111,7 @@
     gloves: CMHandsInsulated
     shoes: CMBootsBlackFilled
     jumpsuit: AU14CivilianBoilerSuitDarkBlueSynth
-    belt: CMUBeltMedicBagSupportSynth
+    belt: AU14BeltMedicBagSupportSynth
     head: AU14CivBallCapBlack
     back: AU14SmartpackBlackFilled
     eyes: RMCGlassesMedicalHUDGlasses

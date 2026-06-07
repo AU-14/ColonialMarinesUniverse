@@ -27,6 +27,9 @@ jobs:
           - name: server-win-x64
             command: server --platform win-x64
             restore: dotnet restore --runtime win-x64 /p:TargetOs=Windows
+          - name: server-linux-x64
+            command: server --platform linux-x64
+            restore: dotnet restore --runtime linux-x64 /p:TargetOs=Linux
 
     steps:
       - uses: actions/checkout@v6.0.2

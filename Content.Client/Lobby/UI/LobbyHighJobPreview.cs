@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
+using Robust.Shared.IoC;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client.Lobby.UI;
@@ -52,7 +53,7 @@ internal static class LobbyHighJobPreview
     public static string GetDisplayJobName(JobPrototype job)
     {
         var name = !string.IsNullOrWhiteSpace(job.SpawnMenuRoleName)
-            ? (Loc.TryGetString(job.SpawnMenuRoleName, out var loc) ? loc : job.SpawnMenuRoleName)
+            ? (IoCManager.Resolve<ILocalizationManager>().TryGetString(job.SpawnMenuRoleName, out var loc) ? loc : job.SpawnMenuRoleName)
             : job.LocalizedName;
         return TrimHiddenFactionSuffix(name);
     }

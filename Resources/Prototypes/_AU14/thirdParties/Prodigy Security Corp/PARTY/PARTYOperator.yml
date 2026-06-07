@@ -1,5 +1,5 @@
 - type: job
-  parent: AU14JobPARTYPartyContractorBase
+  parent: CMJobBase
   id: AU14JobProdigyPartySmartgunner
   name: PMC Smartgun Operator
   description: au14-prodigyparty-description
@@ -35,6 +35,8 @@
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: smartgunner
+  hidden: false
+
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicProdigy

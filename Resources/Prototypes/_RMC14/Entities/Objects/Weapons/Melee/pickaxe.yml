@@ -25,6 +25,11 @@
         Blunt: 60
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
+  - type: DamageImpactProfile
+    melee:
+      contact: Stab
+      penetration: Medium
+      energy: High
   - type: Tag
     tags:
     - Pickaxe

@@ -16,6 +16,7 @@ public sealed partial class SpawnThirdPartyToolSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private UseDelaySystem _useDelay = default!;
     [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private AuThirdPartySystem _thirdPartySystem = default!;
 
     public override void Initialize()
     {
@@ -63,8 +64,7 @@ public sealed partial class SpawnThirdPartyToolSystem : EntitySystem
             return false;
         }
 
-        var thirdPartySystem = EntitySystem.Get<AuThirdPartySystem>();
-        var spawned = thirdPartySystem.SpawnThirdParty(party, partySpawnProto, false, null, component.Comp.Dropship);
+        var spawned = _thirdPartySystem.SpawnThirdParty(party, partySpawnProto, false, null, component.Comp.Dropship);
 
         if (!spawned)
         {
@@ -72,8 +72,8 @@ public sealed partial class SpawnThirdPartyToolSystem : EntitySystem
             return false;
         }
 
-        EntityManager.DeleteEntity(component.Owner);
         _popup.PopupEntity($"Called in third party {component.Comp.Party.Id}.", user, user);
+        Del(component.Owner);
         return true;
     }
 }

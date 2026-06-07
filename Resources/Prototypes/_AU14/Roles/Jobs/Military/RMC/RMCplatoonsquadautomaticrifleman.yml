@@ -2,14 +2,9 @@
   parent: AU14JobSquadAutomaticRiflemanBase
   id: AU14JobGOVFORSquadAutomaticRiflemanRMC
   name: au14-job-name-govforsquadautomaticriflemanRMC
-  description: au14-job-description-govforsquadautomaticrifleman
-  setPreference: true
-  requirements:
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
-    - NonResuscitable
+  spawnMenuRoleName: Automatic Rifleman (TWE RMC)
+  startingGear: AU14GearGOVFORSquadAutomaticRifleman
+  dummyStartingGear: AU14GearGOVFORAutoRiflemanDummy
   ranks:
     RMC_Corporal:
     - !type:RoleTimeRequirement
@@ -20,34 +15,17 @@
       role: AU14JobGOVFORSquadAutomaticRifleman
       time: 54000 # 15 hours
     RMC_Marine: []
-  startingGear: AU14GearGOVFORSquadAutomaticRifleman
-  dummyStartingGear: AU14GearGOVFORAutoRiflemanDummy
-  icon: "AU14JobIconAFN"
-  requireAdminNotify: false
-  spawnMenuRoleName: Automatic Rifleman (TWE RMC)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforGunner
-  overwatchSortPriority: -3
-  overwatchShowName: true
-  overwatchRoleName: au14-job-name-govforsquadautomaticrifleman-plural
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: Marine
-      Faction: govfor
     - type: Skills
-      preset: AU14SkillPresetPlatoonAutomaticRifleman
-    - type: SquadArmorWearer
+      skills:
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillJtac: 1
+        RMCSkillSmartGun: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillPolice: 1
     - type: JobPrefix
-      prefix: au14-job-prefix-govforsquadautomaticrifleman
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: smartgunner
-  hidden: true
+      prefix: au14-job-prefix-govforsquadautomaticriflemanRMC

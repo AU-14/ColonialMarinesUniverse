@@ -44,8 +44,11 @@ public sealed partial class TestPair : IAsyncDisposable
 
         if (TestMap != null)
         {
+            var reconnect = await DisconnectClientForTestMapCleanup();
             await Server.WaitPost(() => Server.EntMan.DeleteEntity(TestMap.MapUid));
             TestMap = null;
+            if (reconnect)
+                await ReconnectClientAfterTestMapCleanup();
         }
 
         await RevertModifiedCvars();
@@ -86,6 +89,28 @@ public sealed partial class TestPair : IAsyncDisposable
         var returnTime = Watch.Elapsed;
         await _testOut.WriteLineAsync($"{nameof(CleanReturnAsync)}: PoolManager took {returnTime.TotalMilliseconds} ms to put pair {Id} back into the pool");
         State = PairState.Ready;
+    }
+
+    private async Task<bool> DisconnectClientForTestMapCleanup()
+    {
+        var netMgr = Client.ResolveDependency<IClientNetManager>();
+        if (!netMgr.IsConnected)
+            return false;
+
+        await Client.WaitPost(() => netMgr.ClientDisconnect("Test map cleanup disconnect"));
+        await RunTicksSync(1);
+        return Settings.ShouldBeConnected;
+    }
+
+    private async Task ReconnectClientAfterTestMapCleanup()
+    {
+        var netMgr = Client.ResolveDependency<IClientNetManager>();
+        if (netMgr.IsConnected)
+            return;
+
+        Client.SetConnectTarget(Server);
+        await Client.WaitPost(() => netMgr.ClientConnect(null!, 0, null!));
+        await ReallyBeIdle(10);
     }
 
     private async Task ResetModifiedPreferences()

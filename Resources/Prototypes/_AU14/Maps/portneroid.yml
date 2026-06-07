@@ -24,8 +24,8 @@
             AU14JobCivilianColonySynthetic: [2, 2]
 
             # Colony Command (non department)
-            AU14JobCivilianCorporateLiaison: [1, 1]
-            AU14JobCivilianColonyAdministrator: [1, 1]
+            AU14JobCivilianNSPAInspector: [1, 1]
+            AU14JobCiviliannspaConstable: [5, 5]
 
             # Security/LEO
             AU14JobCivilianCMBMarshal: [1, 1]
@@ -43,5 +43,15 @@
             AU14JobCivilianEthicsAndWellnessAdvisor: [1, 1]
             AU14JobCivilianEmergencyResponseOfficer: [1, 1]
 
+            # Orbital
+            AU14JobCivilianOrbitalArbiter: [1, 1]
+            AU14JobCivilianOrbitalLawyer: [2, 3]
+
             # Other
             AU14JobCivilianMiner: [8, 8]
+            AU14JobCivilianShopkeep: [2, 2]
+            AU14JobMobBoss: [1, 1]
+            AU14JobMobGoon: [3, 3]
+            AU14JobCivilianHeadPhysician : [1, 1]
+            AU14JobCivilianHeadOfEngineering: [ 1, 1 ]
+            AU14JobCivilianHeadOfService: [ 1, 1 ]

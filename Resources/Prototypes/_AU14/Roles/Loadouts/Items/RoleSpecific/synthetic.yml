@@ -223,7 +223,17 @@
 - type: loadout
   id: BeltMedicBagSupportSynthAU14
   equipment:
-    belt: CMUBeltMedicBagSupportSynth
+    belt: AU14BeltMedicBagSupportSynth
+
+- type: loadout
+  id: BeltMedicBagRMCSupporSynthAU14
+  equipment:
+    belt: AU14BeltMedicBagSupportSynthRMC
+
+- type: loadout
+  id: BeltMedicBagBlackSupportSynthAU14
+  equipment:
+    belt: AU14BeltMedicBagSupportSynthBlack
 
 - type: loadout
   id: BeltHolsterNailgunFillAU14
@@ -277,4 +287,9 @@
   id: PortableDialysisAU14
   inhand:
   - RMCPortableDialysis
+
+- type: loadout
+  id: AU14SprayCleanerExperimentalAU14
+  inhand:
+  - AU14SprayCleanerExperimental
 # Civilian Synth Specializations

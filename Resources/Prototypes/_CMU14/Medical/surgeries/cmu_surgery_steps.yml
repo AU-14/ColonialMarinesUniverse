@@ -143,6 +143,127 @@
     sprite: _RMC14/Objects/Medical/Surgery/bonesetter.rsi
     state: bonesetter
 
+# ---- Condition-driven cleanup steps ----------------------------------
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepTieVascularTear
+  name: Tie off torn vessel
+  components:
+  - type: CMSurgeryStep
+    skill: 1
+    tool:
+    - type: CMHemostat
+  - type: CMUSurgicalTraitCondition
+    trait: VascularTear
+  - type: CMUSurgeryStepResolveTraitEffect
+    trait: VascularTear
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepExtractForeignBody
+  name: Extract foreign body
+  components:
+  - type: CMSurgeryStep
+    skill: 1
+    tool:
+    - type: CMHemostat
+  - type: CMUSurgicalTraitCondition
+    trait: EmbeddedForeignBody
+  - type: CMUSurgeryStepResolveTraitEffect
+    trait: EmbeddedForeignBody
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepRelieveCompartmentPressure
+  name: Relieve compartment pressure
+  components:
+  - type: CMSurgeryStep
+    skill: 1
+    tool:
+    - type: CMScalpel
+  - type: CMUSurgicalTraitCondition
+    trait: CompartmentPressure
+  - type: CMUSurgeryStepResolveTraitEffect
+    trait: CompartmentPressure
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/scalpel.rsi
+    state: scalpel
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepDebrideContaminatedWound
+  name: Debride contaminated tissue
+  components:
+  - type: CMSurgeryStep
+    skill: 1
+    tool:
+    - type: CMScalpel
+  - type: CMUSurgicalTraitCondition
+    trait: ContaminatedWound
+  - type: CMUSurgeryStepResolveTraitEffect
+    trait: ContaminatedWound
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/scalpel.rsi
+    state: scalpel
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepRemoveBoneFragments
+  name: Remove bone fragments
+  components:
+  - type: CMSurgeryStep
+    skill: 1
+    tool:
+    - type: CMHemostat
+  - type: CMUSurgicalTraitCondition
+    trait: BoneSplintered
+  - type: CMUSurgeryStepResolveTraitEffect
+    trait: BoneSplintered
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepFreeOrganAdhesions
+  name: Free organ adhesions
+  components:
+  - type: CMSurgeryStep
+    skill: 2
+    tool:
+    - type: CMScalpel
+  - type: CMUSurgicalTraitCondition
+    trait: OrganAdhesion
+  - type: CMUSurgeryStepResolveTraitEffect
+    trait: OrganAdhesion
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/scalpel.rsi
+    state: scalpel
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepPackOrganBleed
+  name: Pack organ bleed
+  components:
+  - type: CMSurgeryStep
+    skill: 2
+    tool:
+    - type: CMUOrganClamp
+  - type: CMUSurgicalTraitCondition
+    trait: OrganHemorrhage
+  - type: CMUSurgeryStepResolveTraitEffect
+    trait: OrganHemorrhage
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+
 # ---- Internal-bleed clamp step ---------------------------------------
 
 - type: entity

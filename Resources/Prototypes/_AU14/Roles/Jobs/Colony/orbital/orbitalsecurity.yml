@@ -22,6 +22,7 @@
   accessGroups:
   - auwy
   - AUPrisonStaff
+  - auorbitalmanagement
   roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
@@ -54,7 +55,7 @@
     head: AU14CivBallCapBlack
     belt: AU14BeltUtilityGeneralBlack
     back: RMCSatchelLightpackWeYa
-    ears: AU14ColonyAdminHeadset
+    ears: AU14OrbitalHeadsetManagement
     ears2: RMCM5CameraGear
     suitstorage: RMCM77BeltPMCFilled
 

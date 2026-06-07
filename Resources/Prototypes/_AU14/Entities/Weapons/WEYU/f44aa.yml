@@ -86,7 +86,7 @@
         whitelist:
           tags:
           - RMCAttachmentAngledGrip
-          - RMCAttachmentBipod
+          #- RMCAttachmentBipod (SHIT WAS SO FUCKING OP IT AINT EVEN FAIR)
           - RMCAttachmentFlashlightGrip
           - RMCAttachmentGyroscopicStabilizer
           - RMCAttachmentLaserSight

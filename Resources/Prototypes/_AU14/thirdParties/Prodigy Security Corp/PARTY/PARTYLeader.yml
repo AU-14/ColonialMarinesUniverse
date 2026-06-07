@@ -1,5 +1,5 @@
 - type: job
-  parent: AU14JobPARTYPartyContractorBase
+  parent: CMJobBase
   id: AU14JobProdigyPartyLeader #m41a/2
   name: Prodigy Yankee Party Leader
   description: au14-prodigyparty-description
@@ -39,6 +39,8 @@
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: synth
     - type: MarineOrders
+  hidden: false
+
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicProdigy

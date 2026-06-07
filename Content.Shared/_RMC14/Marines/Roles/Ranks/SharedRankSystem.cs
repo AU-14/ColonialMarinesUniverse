@@ -90,17 +90,19 @@ public abstract partial class SharedRankSystem : EntitySystem
 
         if (isShort)
         {
+            var localizedPrefix = Loc.TryGetString($"rank-{rank.ID}.prefix", out var lp) ? lp : rank.Prefix;
+
             if (rank.FemalePrefix == null || rank.MalePrefix == null)
-                return rank.Prefix;
+                return localizedPrefix;
 
             if (!TryComp<HumanoidAppearanceComponent>(uid, out var humanoidAppearance))
-                return rank.Prefix;
+                return localizedPrefix;
 
             var genderPrefix = humanoidAppearance.Gender switch
             {
-                Gender.Female => rank.FemalePrefix,
-                Gender.Male => rank.MalePrefix,
-                _ => rank.Prefix,
+                Gender.Female => Loc.TryGetString($"rank-{rank.ID}.prefix-female", out var fp) ? fp : rank.FemalePrefix,
+                Gender.Male   => Loc.TryGetString($"rank-{rank.ID}.prefix-male",   out var mp) ? mp : rank.MalePrefix,
+                _             => localizedPrefix,
             };
 
             return genderPrefix;
@@ -109,7 +111,7 @@ public abstract partial class SharedRankSystem : EntitySystem
         if (hasPaygrade && rank.Paygrade != null)
             return $"({Loc.GetString(rank.Paygrade)}) {Loc.GetString(rank.Name)}";
 
-        return rank.Name;
+        return Loc.TryGetString($"rank-{rank.ID}", out var localizedName) ? localizedName : rank.Name;
     }
 
     /// <summary>

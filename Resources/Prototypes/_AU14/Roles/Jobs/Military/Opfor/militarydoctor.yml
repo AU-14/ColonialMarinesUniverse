@@ -75,7 +75,7 @@
     jumpsuit: AU14ScrubsGreenDoctorSurgical
     head: CMHeadCapSurgGreen
     shoes: CMBootsBlackFilled
-    belt: CMUBeltMedicBagSupportSynth
+    belt: AU14BeltMedicBagSupportSynth
     pocket1: AU14PouchFirstResponderFilledMilitaryDoctor
     pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
     back: AU14SatchelMilitaryDoctor
@@ -104,7 +104,7 @@
   equipment:
     jumpsuit: AU14ScrubsGreenDoctorSurgical
     shoes: CMBootsBlackFilled
-    belt: CMUBeltMedicBagSupportSynth
+    belt: AU14BeltMedicBagSupportSynth
     back: CMSatchelMarine
     outerClothing: RMCLabcoat
     id: AU14IDCardOPFORDoctor

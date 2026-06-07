@@ -36,7 +36,7 @@
     modifiers:
       Burst:
         fireDelay: 0.08
-        maxScatterModifier: 6
+        maxScatterModifier: 4
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 3

@@ -19,8 +19,8 @@
 
 
   <Box>
-    <GuideEntityEmbed Entity="RMCGuidebookLawMarine"/>
-    <GuideEntityEmbed Entity="RMCGuidebookSOP"/>
+    <GuideEntityEmbed Entity="AU14GuidebookLawMarine"/>
+    <GuideEntityEmbed Entity="AU14GuidebookSOP"/>
   </Box>
 
   ## The various members of the Military Police on the Almayer

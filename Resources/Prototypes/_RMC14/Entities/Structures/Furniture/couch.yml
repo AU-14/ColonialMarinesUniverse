@@ -42,6 +42,12 @@
             max: 1
       - !type:DoActsBehavior
         acts: ["Destruction"]
+  - type: Flamability
+    chance: 0.7
+    rate: 2.5
+    spread: 1.2
+    burnDurationMin: 70
+    burnDurationMax: 620
 
 - type: entity
   parent: RMCCouchMid

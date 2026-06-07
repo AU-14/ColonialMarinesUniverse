@@ -1,0 +1,67 @@
+# Pouches
+- type: loadout
+  id: WYGuardPouchM88RubberAU14
+  equipment:
+    pocket1: RMCPouchMagazinePistolFilledM88Rubber
+
+- type: loadout
+  id: PouchFirstAidPMCFilledAU14
+  equipment:
+    pocket1: RMCPouchFirstAidPMCFill
+
+- type: loadout
+  id: WYGuardPouchM88RubberRightAU14
+  equipment:
+    pocket2: RMCPouchMagazinePistolFilledM88Rubber
+
+- type: loadout
+  id: PouchFirstAidPMCFilledRightAU14
+  equipment:
+    pocket2: RMCPouchFirstAidPMCFill
+
+# uniforms
+- type: loadout
+  id: WYJumpsuitSecurityUniformRigAU14
+  equipment:
+    jumpsuit: AU14WYSecurityUniformRig
+
+- type: loadout
+  id: WYJumpsuitMPCorporateAU14
+  equipment:
+    jumpsuit: RMCJumpsuitMPCorporate
+
+- type: loadout
+  id: WYJumpsuitGuardFatiguesAU14
+  equipment:
+    jumpsuit: AU14WYGuardFatigues
+
+- type: loadout
+  id: WYJumpsuitVeteranPMCCorporateLeadAU14
+  equipment:
+    jumpsuit: AU14JumpsuitVeteranPMCCorporateLead
+
+- type: loadout
+  id: WYJumpsuitVeteranPMCCorporateAU14
+  equipment:
+    jumpsuit: AU14JumpsuitVeteranPMCCorporate
+
+- type: loadout
+  id: WYJumpsuitVeteranPMCKutjevoAU14
+  equipment:
+    jumpsuit: RMCJumpsuitVeteranPMCKutjevo
+
+# helmets
+- type: loadout
+  id: WYArmorHelmetPMCCorporateAU14
+  equipment:
+    head: ArmorHelmetPMCCorporate
+
+- type: loadout
+  id: WYArmorHelmetPMCCorporateHybrisaAU14
+  equipment:
+    head: RMCArmorHelmetPMCCorporateHybrisa
+
+- type: loadout
+  id: WYArmorHelmetPMCKutjevoSecurityAU14
+  equipment:
+    head: RMCArmorHelmetPMCKutjevoSecurity

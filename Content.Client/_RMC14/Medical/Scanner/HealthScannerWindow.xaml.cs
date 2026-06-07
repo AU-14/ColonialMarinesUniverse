@@ -14,7 +14,7 @@ namespace Content.Client._RMC14.Medical.Scanner;
 public sealed partial class HealthScannerWindow : DefaultWindow
 {
     private const string RememberedSizeKey = "cmu-health-scanner";
-    private static readonly Vector2 PreferredWindowSize = new(980f, 820f);
+    private static readonly Vector2 PreferredWindowSize = new(860f, 820f);
     private static readonly Vector2 MinimumWindowSize = new(520f, 420f);
     private static readonly TimeSpan ServerLoadingPulse = TimeSpan.FromSeconds(0.4);
 

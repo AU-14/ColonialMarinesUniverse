@@ -478,6 +478,9 @@
       sprite: Objects/Weapons/Melee/e_shield.rsi
       size: Small
       heldPrefix: eshield
+    - type: Tag
+      tags:
+      - SalvageTier3
 
 - type: entity
   name: telescopic shield

@@ -76,6 +76,66 @@ public sealed partial class CMUMedicalCCVars : CVars
     public static readonly CVarDef<float> BoneHealRate =
         CVarDef.Create("cmu.medical.bone.heal_rate", 1.0f, CVar.REPLICATED | CVar.SERVER);
 
+    public static readonly CVarDef<float> BoneProjectileHighDamageThreshold =
+        CVarDef.Create("cmu.medical.bone.projectile_high_damage_threshold", 45f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> BoneProjectileBruteMultiplier =
+        CVarDef.Create("cmu.medical.bone.projectile_brute_multiplier", 1.25f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> BoneProjectileHeadChance =
+        CVarDef.Create("cmu.medical.bone.projectile_head_chance", 0.65f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> BoneProjectileTorsoChance =
+        CVarDef.Create("cmu.medical.bone.projectile_torso_chance", 0.30f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> BoneProjectileArmChance =
+        CVarDef.Create("cmu.medical.bone.projectile_arm_chance", 0.60f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> BoneProjectileLegChance =
+        CVarDef.Create("cmu.medical.bone.projectile_leg_chance", 0.60f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> BoneProjectileOtherChance =
+        CVarDef.Create("cmu.medical.bone.projectile_other_chance", 0.35f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> TraumaMeleeHighDamageThreshold =
+        CVarDef.Create("cmu.medical.trauma.melee_high_damage_threshold", 45f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> TraumaBallisticHeadOrganChance =
+        CVarDef.Create("cmu.medical.trauma.ballistic_head_organ_chance", 0.55f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> TraumaBallisticTorsoOrganChance =
+        CVarDef.Create("cmu.medical.trauma.ballistic_torso_organ_chance", 0.50f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> TraumaBallisticVascularChance =
+        CVarDef.Create("cmu.medical.trauma.ballistic_vascular_chance", 0.03f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> TraumaPierceBoneChance =
+        CVarDef.Create("cmu.medical.trauma.pierce_bone_chance", 0.20f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> TraumaPierceOrganChance =
+        CVarDef.Create("cmu.medical.trauma.pierce_organ_chance", 0.35f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> TraumaPierceVascularChance =
+        CVarDef.Create("cmu.medical.trauma.pierce_vascular_chance", 0.04f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> TraumaSlashBoneChance =
+        CVarDef.Create("cmu.medical.trauma.slash_bone_chance", 0.10f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> TraumaSlashOrganChance =
+        CVarDef.Create("cmu.medical.trauma.slash_organ_chance", 0.20f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> TraumaSlashVascularChance =
+        CVarDef.Create("cmu.medical.trauma.slash_vascular_chance", 0.05f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> TraumaBluntBoneChance =
+        CVarDef.Create("cmu.medical.trauma.blunt_bone_chance", 0.50f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> TraumaBluntOrganChance =
+        CVarDef.Create("cmu.medical.trauma.blunt_organ_chance", 0.10f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> TraumaBluntVascularChance =
+        CVarDef.Create("cmu.medical.trauma.blunt_vascular_chance", 0.02f, CVar.REPLICATED | CVar.SERVER);
+
     public static readonly CVarDef<float> FractureCompoundInternalBleed =
         CVarDef.Create("cmu.medical.fracture.compound_internal_bleed", 0.5f, CVar.REPLICATED | CVar.SERVER);
 

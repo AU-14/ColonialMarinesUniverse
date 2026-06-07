@@ -15,6 +15,10 @@
         Blunt: 25
     soundHit:
       path: /Audio/_RMC14/Weapons/genhit3.ogg
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
   - type: Item
     size: Normal
     sprite: _RMC14/Objects/Weapons/Melee/baseball_bat.rsi
@@ -32,5 +36,10 @@
     damage:
       types:
         Blunt: 35
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+      energy: Medium
   - type: Item
     sprite: _RMC14/Objects/Weapons/Melee/metal_bat.rsi

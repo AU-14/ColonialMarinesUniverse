@@ -207,7 +207,7 @@
   components:
   - type: SkillPreset
     skills:
-      RMCSkillConstruction: 2
+      RMCSkillConstruction: 1
       RMCSkillCqc: 1
       RMCSkillEndurance: 1
       RMCSkillEngineer: 2
@@ -232,10 +232,10 @@
   components:
   - type: SkillPreset
     skills:
-      RMCSkillConstruction: 1
+      RMCSkillConstruction: 2
       RMCSkillCqc: 1
       RMCSkillEndurance: 1
-      RMCSkillEngineer: 1
+      RMCSkillEngineer: 3
       RMCSkillFirearms: 1
       RMCSkillFireman: 2
       RMCSkillVehicles: 2

@@ -32,4 +32,6 @@ rmc-loadout-group-synthetic-shoes = Synthetic Shoes
 rmc-loadout-group-synthetic-headwear = Synthetic Headwear
 rmc-loadout-group-synthetic-suits = Synthetic Outerwear
 
+
+
 loadout-group-points-insufficient = You have insufficient points!

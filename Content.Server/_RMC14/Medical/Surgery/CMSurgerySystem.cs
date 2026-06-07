@@ -42,7 +42,9 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private SharedSynthSystem _synth = default!;
     [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] private RMCRepairableSystem _repairable = default!;
     [Dependency] private WoundsSystem _wounds = default!;
     [Dependency] private CMUSurgeryDispatchSystem _cmuDispatch = default!;
     [Dependency] private CMUSurgeryFlowSystem _cmuFlow = default!;
@@ -91,6 +93,9 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
                 args.Handled = handled;
             return;
         }
+
+        if (IsSynthRepairToolForCurrentDamage(ent, args.User, args.Used))
+            return;
 
         if (!HasMissingSynthLimbSlot(ent.Owner))
             return;
@@ -169,6 +174,21 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
         return HasComp<BlowtorchComponent>(used) ||
                HasComp<RMCCableCoilComponent>(used) ||
                HasComp<BodyPartComponent>(used);
+    }
+
+    private bool IsSynthRepairToolForCurrentDamage(Entity<SynthComponent> synth, EntityUid user, EntityUid used)
+    {
+        if (HasComp<RMCCableCoilComponent>(used))
+            return _synth.HasDamage(synth.Owner, synth.Comp.CableCoilDamageGroup);
+
+        if (HasComp<BlowtorchComponent>(used) &&
+            _tool.HasQuality(used, synth.Comp.RepairQuality) &&
+            _synth.HasDamage(synth.Owner, synth.Comp.WelderDamageGroup))
+        {
+            return _repairable.UseFuel(used, user, 5, true);
+        }
+
+        return false;
     }
 
     private bool HasMissingSynthLimbSlot(EntityUid patient)

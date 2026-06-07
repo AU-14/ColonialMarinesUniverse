@@ -70,6 +70,13 @@
     bluntStaminaDamageFactor: 2.0
     angle: 60
     animation: WeaponArcThrust
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+    thrown:
+      contact: Crush
+      penetration: None
   - type: RMCStaminaDamageOnCollide
     damage: 35
   - type: LandAtCursor # it deals stamina damage when thrown

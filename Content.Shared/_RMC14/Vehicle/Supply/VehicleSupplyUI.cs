@@ -37,6 +37,7 @@ public sealed class VehicleSupplyBuiState : BoundUserInterfaceState
     public int SelectedCopyIndex;
     public VehicleSupplyPreviewState? Preview;
     public List<VehicleSupplyEntryState> Available;
+    public List<VehicleSupplyLoadoutCategoryState> Loadouts;
 
     public VehicleSupplyBuiState(
         VehicleSupplyLiftMode? liftMode,
@@ -45,7 +46,8 @@ public sealed class VehicleSupplyBuiState : BoundUserInterfaceState
         string? selectedVehicleId,
         int selectedCopyIndex,
         VehicleSupplyPreviewState? preview,
-        List<VehicleSupplyEntryState> available)
+        List<VehicleSupplyEntryState> available,
+        List<VehicleSupplyLoadoutCategoryState>? loadouts = null)
     {
         LiftMode = liftMode;
         Busy = busy;
@@ -54,6 +56,41 @@ public sealed class VehicleSupplyBuiState : BoundUserInterfaceState
         SelectedCopyIndex = selectedCopyIndex;
         Preview = preview;
         Available = available;
+        Loadouts = loadouts ?? new List<VehicleSupplyLoadoutCategoryState>();
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class VehicleSupplyLoadoutOptionState
+{
+    public string Id;
+    public string Name;
+
+    public VehicleSupplyLoadoutOptionState(string id, string name)
+    {
+        Id = id;
+        Name = name;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class VehicleSupplyLoadoutCategoryState
+{
+    public string Id;
+    public string Name;
+    public string SelectedOption;
+    public List<VehicleSupplyLoadoutOptionState> Options;
+
+    public VehicleSupplyLoadoutCategoryState(
+        string id,
+        string name,
+        string selectedOption,
+        List<VehicleSupplyLoadoutOptionState> options)
+    {
+        Id = id;
+        Name = name;
+        SelectedOption = selectedOption;
+        Options = options;
     }
 }
 
@@ -124,6 +161,19 @@ public sealed class VehicleSupplySelectMsg : BoundUserInterfaceMessage
     {
         VehicleId = vehicleId;
         CopyIndex = copyIndex;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class VehicleSupplySelectLoadoutMsg : BoundUserInterfaceMessage
+{
+    public string CategoryId;
+    public string OptionId;
+
+    public VehicleSupplySelectLoadoutMsg(string categoryId, string optionId)
+    {
+        CategoryId = categoryId;
+        OptionId = optionId;
     }
 }
 

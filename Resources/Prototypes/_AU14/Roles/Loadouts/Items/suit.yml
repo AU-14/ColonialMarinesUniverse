@@ -17,6 +17,12 @@
     - AU14CivilianJacketGrayPufferVest
 
 - type: loadout
+  id: CivilianJacketOrangePufferJacketAU14
+  storage:
+    back:
+    - AU14CivilianJacketOrangePufferJacket
+
+- type: loadout
   id: WindbreakerBlueAU14
   storage:
     back:
@@ -83,3 +89,19 @@
   storage:
     back:
     - AU14CivilianHazardVestParamedicGreen
+
+- type: loadout
+  id: WYFancySuitJacketBlackAU14
+  equipment:
+    outerClothing: RMCFancySuitJacketBlack
+
+- type: loadout
+  id: WYFancySuitJacketBrownAU14
+  equipment:
+    outerClothing: RMCFancySuitJacketBrown
+
+- type: loadout
+  id: WYFancySuitJacketLightBrownAU14
+  equipment:
+    outerClothing: RMCFancySuitJacketLightBrown
+

@@ -1,7 +1,9 @@
 using Content.Shared._CMU14.Medical.Wounds;
+using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Components;
+using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -15,6 +17,7 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
 {
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
@@ -24,6 +27,29 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
         if (amount <= 0f)
             return;
 
+        DrainBlood(body, amount);
+    }
+
+    protected override void ApplyExternalBleed(EntityUid body, EntityUid part, ExternalBleedTier tier, float tickSeconds)
+    {
+        var rate = tier switch
+        {
+            ExternalBleedTier.Minor => 0.08f,
+            ExternalBleedTier.Moderate => 0.18f,
+            ExternalBleedTier.Severe => 0.35f,
+            ExternalBleedTier.Arterial => 0.70f,
+            _ => 0f,
+        };
+
+        if (rate <= 0f || tickSeconds <= 0f)
+            return;
+
+        if (TryComp<BloodstreamComponent>(body, out var bloodstream))
+            _bloodstream.TryModifyBloodLevel((body, bloodstream), FixedPoint2.New(-(rate * tickSeconds)));
+    }
+
+    private void DrainBlood(EntityUid body, float amount)
+    {
         if (!TryComp<BloodstreamComponent>(body, out var bloodstream))
             return;
 
@@ -73,6 +99,46 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
             origin: part);
     }
 
+    protected override void OnPartWoundsCleared(EntityUid body, EntityUid part)
+    {
+        if (TryComp<BodyPartHealthComponent>(part, out var health))
+            PartHealth.SetCurrent((part, health), health.Max);
+
+        if (!HasRemainingWounds(body, WoundType.Brute))
+            HealRemainingDamageGroup(body, part, BruteGroup);
+        if (!HasRemainingWounds(body, WoundType.Burn))
+            HealRemainingDamageGroup(body, part, BurnGroup);
+    }
+
+    private bool HasRemainingWounds(EntityUid body, WoundType type)
+    {
+        foreach (var (partUid, _) in Body.GetBodyChildren(body))
+        {
+            if (!TryComp<BodyPartWoundComponent>(partUid, out var wounds))
+                continue;
+
+            foreach (var wound in wounds.Wounds)
+            {
+                if (wound.Type == type)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void HealRemainingDamageGroup(EntityUid body, EntityUid part, ProtoId<DamageGroupPrototype> group)
+    {
+        if (!TryComp<DamageableComponent>(body, out var damageable))
+            return;
+        if (!Proto.TryIndex(group, out var groupProto))
+            return;
+        if (!damageable.Damage.TryGetDamageInGroup(groupProto, out var amount) || amount <= FixedPoint2.Zero)
+            return;
+
+        ApplyWoundHealingDamage(body, part, group, amount);
+    }
+
     public bool TryApplyTreaterDamage(
         EntityUid body,
         EntityUid user,
@@ -81,6 +147,10 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
         FixedPoint2 damage,
         EntityUid? origin = null)
     {
+        if (damage == FixedPoint2.Zero)
+            return false;
+
+        damage = LimitHealingToWoundCap(damage, origin);
         if (damage == FixedPoint2.Zero)
             return false;
 
@@ -98,5 +168,27 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
             damageable: damageable,
             origin: origin ?? user,
             tool: tool) is not null;
+    }
+
+    private FixedPoint2 LimitHealingToWoundCap(FixedPoint2 damage, EntityUid? origin)
+    {
+        if (damage >= FixedPoint2.Zero || origin is not { } part)
+            return damage;
+
+        if (!TryComp<BodyPartHealthComponent>(part, out var health) ||
+            !TryComp<BodyPartWoundComponent>(part, out var wounds))
+        {
+            return damage;
+        }
+
+        var cap = health.Max * ComputeFieldTreatmentCap(wounds);
+        var room = cap - health.Current;
+        if (room <= FixedPoint2.Zero)
+            return FixedPoint2.Zero;
+
+        var requestedHealing = -damage;
+        return requestedHealing <= room
+            ? damage
+            : -room;
     }
 }

@@ -25,3 +25,12 @@ cmu-medical-pain-reflection-shock-3 = Can't think. Can't breathe. Make it stop.
 cmu-medical-pain-relief-1 = The painkiller starts to take the edge off.
 cmu-medical-pain-relief-2 = The pain dulls. You can breathe a little easier.
 cmu-medical-pain-relief-3 = The worst of it softens, for now.
+
+cmu-medical-shrapnel-none = No embedded shrapnel is found.
+cmu-medical-shrapnel-extract-verb = Remove shrapnel
+cmu-medical-shrapnel-extract-start = You begin removing embedded shrapnel.
+cmu-medical-shrapnel-extract-finish = Removed { $count } embedded fragment{ $count ->
+    [one] {""}
+   *[other] s
+}.
+cmu-medical-shrapnel-movement-pain = Embedded shrapnel shifts painfully.

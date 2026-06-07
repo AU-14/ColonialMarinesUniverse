@@ -66,6 +66,7 @@
     id: AU14IDCardColonyCMBDeputy
     ears: AU14CMBHeadset
     outerClothing: AU14CMBDeputyWindbreaker
+    pocket1: AU14GuidebookLawColonial
 
 - type: entity
   parent: CMSpawnPointJobBase

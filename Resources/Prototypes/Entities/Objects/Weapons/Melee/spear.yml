@@ -47,6 +47,17 @@
     damage:
       types:
         Piercing: 15
+  - type: DamageImpactProfile
+    melee:
+      contact: Stab
+      penetration: Medium
+    heavyMelee:
+      contact: Stab
+      penetration: Medium
+      energy: Medium
+    thrown:
+      contact: Stab
+      penetration: Medium
   - type: Item
     size: Ginormous
   - type: Clothing

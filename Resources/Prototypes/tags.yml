@@ -1329,6 +1329,9 @@
   id: SpreaderIgnore
 
 - type: Tag
+  id: Stamp
+
+- type: Tag
   id: StationAi
 
 - type: Tag

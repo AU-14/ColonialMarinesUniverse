@@ -6,6 +6,9 @@
   description: It's a basic storage unit.
   suffix: Unanchored
   components:
+  - type: XenoCrusherChargable
+    instantDestroy: true
+    passOnDestroy: true
   - type: Physics
     bodyType: Static
   - type: Sprite

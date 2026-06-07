@@ -1,19 +1,22 @@
+#
+# You're probably looking for: _AU14/Entities/Objects/Guidebook/guidebooks.yml
+#
 # LAWS
-- type: entity
-  parent: RMCGuidebookBase
-  id: RMCGuidebookLawMarine
-  name: uniform code of military justice
-  description: "Usually being the favorite read of any member of the Military Police of the military, it's whole meaning is to work as the scales for the sword of justice that brandishes onboard the vessels of many militaries, so peace and order can be maintained. It's nicknames may include but are not limited to: Devil's Red Book, Bible of All Sinners, THE Book, UCMJ, Red Brick, Torture Manual, Red Devil's Torture Bible of All Sinners."
-  components:
-  - type: Sprite
-    sprite: _RMC14/Objects/Misc/Books/Other/marine_law.rsi
-  - type: GuideHelp
-    guides:
-    - AU14UCMJ
+# - type: entity
+#   parent: RMCGuidebookBase
+#   id: AU14GuidebookLawMarine
+#   name: uniform code of military justice
+#   description: "Usually being the favorite read of any member of the Military Police of the military, it's whole meaning is to work as the scales for the sword of justice that brandishes onboard the vessels of many militaries, so peace and order can be maintained. It's nicknames may include but are not limited to: Devil's Red Book, Bible of All Sinners, THE Book, UCMJ, Red Brick, Torture Manual, Red Devil's Torture Bible of All Sinners."
+#   components:
+#   - type: Sprite
+#     sprite: _RMC14/Objects/Misc/Books/Other/marine_law.rsi
+#   - type: GuideHelp
+#     guides:
+#     - AU14UCMJ
 
 - type: entity
-  parent: RMCGuidebookLawMarine
-  id: RMCGuidebookLawMarineProvost
+  parent: AU14GuidebookLawMarine
+  id: AU14GuidebookLawMarineProvost
   name: "Marine Law: limited provost edition"
   suffix: Guidebook, Admeme
   components:
@@ -38,14 +41,14 @@
     malus: 0.225
 
 # SOP
-- type: entity
-  parent: RMCGuidebookBase
-  id: RMCGuidebookSOP
-  name: standard operating procedure
-  description: One of the most important books onboard any military vessel, or at least that's how you are supposed to feel about it. The book carries within it's pages the military guidelines and procedures regarding all kinds of situations.
-  components:
-  - type: Sprite
-    sprite: _RMC14/Objects/Misc/Books/Other/SOP.rsi
-  - type: GuideHelp
-    guides:
-    - AU14SOP
+# - type: entity
+#   parent: RMCGuidebookBase
+#   id: AU14GuidebookSOP
+#   name: standard operating procedure
+#   description: One of the most important books onboard any military vessel, or at least that's how you are supposed to feel about it. The book carries within it's pages the military guidelines and procedures regarding all kinds of situations.
+#   components:
+#   - type: Sprite
+#     sprite: _RMC14/Objects/Misc/Books/Other/SOP.rsi
+#   - type: GuideHelp
+#     guides:
+#     - AU14SOP

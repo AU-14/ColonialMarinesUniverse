@@ -45,7 +45,7 @@
         shotsToMaxScatter: 6
       FullAuto:
         fireDelay: 0
-        maxScatterModifier: 26
+        maxScatterModifier: 8
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 4

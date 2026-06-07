@@ -265,7 +265,7 @@
       #- id: CMSparePDTLBattleBuddyKit
       #  amount: 3
       - id: CMSandbagEmpty25
-        amount: 30
+        amount: 2
       - id: RMCPowerCellHigh
         amount: 5
       - id: RMCZipties
@@ -324,8 +324,16 @@
         amount: 60
       - id: AU14Tourniquet
         amount: 60
+      - id: CMUSplintItem
+        amount: 60
       - id: CMOintment10
         amount: 60
+      - id: CMUPlainTraumaDressing10
+        amount: 40
+      - id: CMUCoagulantPowder
+        amount: 30
+      - id: CMUBurnGel
+        amount: 30
       - id: CMBurnKit10
         amount: 30
       - id: CMTraumaKit10
@@ -845,8 +853,8 @@
       - id: CMGlassesSecurity
       - id: CMBeltSecurityMPFilled
       - id: RMCBoxZiptie
-      - id: RMCGuidebookLawMarine
-      - id: RMCGuidebookSOP
+      - id: AU14GuidebookLawMarine
+      - id: AU14GuidebookSOP
       - id: AU14Scissors
     - name: Uniform
       choices: { AU14Uniform: 1 }
@@ -955,6 +963,10 @@
         amount: 2
       - id: RMCBoxClaymoreMineFilled
         amount: 3
+      - id: AU14PacketGrenadeTearGasFilled
+        amount: 2
+      - id: AU14PacketGrenadeTearGasFilledAirburst
+        amount: 1
       - id: RMCPacketGrenadeM74AGMFFilled
         amount: 4
       - id: RMCPacketGrenadeM74AGMSHornetFilled

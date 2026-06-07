@@ -45,7 +45,7 @@ public sealed class PvsCommandTest
         await pair.RunTicksSync(10);
         Assert.That(meta.LastStateApplied, Is.GreaterThan(lastApplied));
 
-        await server.WaitPost(() => server.EntMan.DeleteEntity(entity));
+        await pair.DeleteEntityTreeLeafFirst(entity);
         await pair.CleanReturnAsync();
     }
 }

@@ -148,6 +148,13 @@
       effects:
       - !type:Electrogenetic
         potency: 2
+      - !type:CMUApplyPainSuppressionEffect
+        accumulationSuppression: 0.15
+        tierSuppression: 1
+        decayBonus: 0.25
+        reductionDecreaseRate: 0
+        durationPerUnit: 20
+        additive: true
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -183,6 +190,13 @@
         damage:
           types:
             Asphyxiation: -1
+      - !type:CMUApplyPainSuppressionEffect
+        accumulationSuppression: 0.3
+        tierSuppression: 2
+        decayBonus: 0.5
+        reductionDecreaseRate: 0
+        durationPerUnit: 8
+        additive: true
       - !type:Jitter
         conditions:
         - !type:ReagentThreshold

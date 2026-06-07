@@ -219,6 +219,8 @@
     damage:
       types:
         Slash: 8
+  - type: CMUProjectileShrapnel
+    severity: 8
   - type: ProjectileMaxRange
     max: 5
 

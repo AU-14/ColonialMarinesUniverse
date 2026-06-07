@@ -59,7 +59,7 @@
       types:
         Blunt: 750
         ## workaround since it doesnt accept Structural.
-    throwRange: 2
+
   - type: RMCMesonsNonviewable
   - type: InteractedBlacklist
     blacklist:

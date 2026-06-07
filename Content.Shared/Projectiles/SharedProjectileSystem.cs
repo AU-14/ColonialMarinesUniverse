@@ -150,14 +150,15 @@ public abstract partial class SharedProjectileSystem : EntitySystem
                 ev.Damage,
                 component.IgnoreResistances,
                 origin: component.Shooter,
-                tool: uid)
+                tool: uid,
+                impact: DamageImpact.Projectile)
             : new DamageSpecifier(ev.Damage);
         var deleted = Deleted(target);
 
         // RMC14 this is already done on the server in TryChangeDamage.
         if (_net.IsClient)
         {
-            var modifyEvent = new DamageModifyEvent(ev.Damage, component.Shooter, uid);
+            var modifyEvent = new DamageModifyEvent(ev.Damage, component.Shooter, uid, impact: DamageImpact.Projectile);
             RaiseLocalEvent(target, modifyEvent);
             modifiedDamage = modifyEvent.Damage;
         }
@@ -433,7 +434,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
                     var BarricadeBlockCoords = Transform(args.OtherEntity).Coordinates;
 
                     if (shooterCoords.TryDistance(EntityManager, BarricadeBlockCoords, out var distance) &&
-                        distance <= 1.5f)
+                        distance <= BarricadeBlock.Distance)
                     {
                         alwaysPassThrough = true;
                     }

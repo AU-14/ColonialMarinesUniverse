@@ -17,6 +17,10 @@
     damage:
       types:
         Slash: 6
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
   - type: Item
     sprite: Objects/Tools/Hydroponics/hoe.rsi
   - type: PhysicalComposition
@@ -40,6 +44,10 @@
     damage:
       types:
         Slash: 7
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
   - type: Item
     sprite: Objects/Tools/Hydroponics/clippers.rsi
     storedRotation: -90
@@ -62,6 +70,10 @@
     damage:
       types:
         Slash: 10
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
   - type: Item
     size: Normal
   - type: Clothing
@@ -95,6 +107,10 @@
       types:
         Slash: 8
         Piercing: 2
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
   - type: Item
     sprite: Objects/Tools/Hydroponics/hatchet.rsi
   - type: PhysicalComposition
@@ -129,6 +145,10 @@
         Piercing: 2 # I guess you can stab it into them?
     soundHit:
       collection: MetalThud
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
   - type: Item
     sprite: Objects/Tools/Hydroponics/spade.rsi
   - type: Shovel

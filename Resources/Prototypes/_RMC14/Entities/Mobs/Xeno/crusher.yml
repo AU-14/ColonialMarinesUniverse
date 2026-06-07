@@ -109,8 +109,8 @@
   - type: XenoBrutalize
     damage:
       types:
-        Blunt: 20
-    armorPiercing: 10
+        Blunt: 15
+    armorPiercing: 5
   - type: RMCSize
     size: Immobile
   - type: RMCXenoDamageVisuals
@@ -149,9 +149,11 @@
     heal: 120
   - type: CrusherShield
   - type: XenoCharge
+    chargeWindupSound:
+      path: /Audio/_RMC14/Xeno/crusher_windup_sound.ogg
     damage:
       types:
-        Blunt: 90
+        Blunt: 80
         Structural: 750
   - type: XenoShield
   - type: XenoEvolution

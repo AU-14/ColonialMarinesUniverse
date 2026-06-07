@@ -10,6 +10,24 @@
     - prefRoles: [ RunawaySynthRole ]
       max: 1
       playerRatio: 15
+      jobBlacklist:
+      - AU14JobGOVFORPlatCo
+      - AU14JobGOVFORPlatoonCorpsman
+      - AU14JobGOVFORDCC
+      - AU14JobGOVFORPlatOp
+      - AU14JobGOVFORDSPilot
+      - AU14JobGOVFORRadioTelephoneOperator
+      - AU14JobGOVFORSquadSergeant
+      - AU14JobGOVFORSquadAutomaticRifleman
+      - AU14JobGOVFORSquadCombatTech
+      - AU14JobGOVFORSquadRifleman
+      - AU14JobGOVFORAuxSupportSynth
+      - AU14JobGOVFORadvisor
+      - AU14JobGOVFORMilitaryDoctor
+      - AU14JobGOVFORMilitaryPoliceMan
+      - AU14JobGOVFORSectionSergeant
+      - AU14JobGOVFORAuxTech
+      - AU14JobGOVFORWorkingJoe
       briefing:
         text: runawaysynth-role-greeting
         color: CornflowerBlue
@@ -210,6 +228,24 @@
     - prefRoles: [ FugitiveRole ]
       max: 1
       playerRatio: 15
+      jobBlacklist:
+      - AU14JobGOVFORPlatCo
+      - AU14JobGOVFORPlatoonCorpsman
+      - AU14JobGOVFORDCC
+      - AU14JobGOVFORPlatOp
+      - AU14JobGOVFORDSPilot
+      - AU14JobGOVFORRadioTelephoneOperator
+      - AU14JobGOVFORSquadSergeant
+      - AU14JobGOVFORSquadAutomaticRifleman
+      - AU14JobGOVFORSquadCombatTech
+      - AU14JobGOVFORSquadRifleman
+      - AU14JobGOVFORAuxSupportSynth
+      - AU14JobGOVFORadvisor
+      - AU14JobGOVFORMilitaryDoctor
+      - AU14JobGOVFORMilitaryPoliceMan
+      - AU14JobGOVFORSectionSergeant
+      - AU14JobGOVFORAuxTech
+      - AU14JobGOVFORWorkingJoe
       briefing:
         text: fugitive-role-greeting
         color: CornflowerBlue
@@ -275,6 +311,24 @@
     - prefRoles: [ DrugDealerRole ]
       max: 1
       playerRatio: 15
+      jobBlacklist:
+      - AU14JobGOVFORPlatCo
+      - AU14JobGOVFORPlatoonCorpsman
+      - AU14JobGOVFORDCC
+      - AU14JobGOVFORPlatOp
+      - AU14JobGOVFORDSPilot
+      - AU14JobGOVFORRadioTelephoneOperator
+      - AU14JobGOVFORSquadSergeant
+      - AU14JobGOVFORSquadAutomaticRifleman
+      - AU14JobGOVFORSquadCombatTech
+      - AU14JobGOVFORSquadRifleman
+      - AU14JobGOVFORAuxSupportSynth
+      - AU14JobGOVFORadvisor
+      - AU14JobGOVFORMilitaryDoctor
+      - AU14JobGOVFORMilitaryPoliceMan
+      - AU14JobGOVFORSectionSergeant
+      - AU14JobGOVFORAuxTech
+      - AU14JobGOVFORWorkingJoe
       briefing:
         text: dealer-role-greeting
         color: MediumVioletRed
@@ -340,6 +394,24 @@
     - prefRoles: [ CorporateSpyRole ]
       max: 1
       playerRatio: 15
+      jobBlacklist:
+      - AU14JobGOVFORPlatCo
+      - AU14JobGOVFORPlatoonCorpsman
+      - AU14JobGOVFORDCC
+      - AU14JobGOVFORPlatOp
+      - AU14JobGOVFORDSPilot
+      - AU14JobGOVFORRadioTelephoneOperator
+      - AU14JobGOVFORSquadSergeant
+      - AU14JobGOVFORSquadAutomaticRifleman
+      - AU14JobGOVFORSquadCombatTech
+      - AU14JobGOVFORSquadRifleman
+      - AU14JobGOVFORAuxSupportSynth
+      - AU14JobGOVFORadvisor
+      - AU14JobGOVFORMilitaryDoctor
+      - AU14JobGOVFORMilitaryPoliceMan
+      - AU14JobGOVFORSectionSergeant
+      - AU14JobGOVFORAuxTech
+      - AU14JobGOVFORWorkingJoe
       briefing:
         text: spy-role-greeting
         color: DarkSlateGray
@@ -402,6 +474,9 @@
       - AU14JobGOVFORSquadCombatTech
       - AU14JobGOVFORadvisor
       - AU14JobGOVFORMilitaryDoctor
+      - AU14JobGOVFORMilitaryPoliceMan
+      - AU14JobGOVFORAuxTech
+      - AU14JobGOVFORWorkingJoe
       - AU14JobCLFGuerilla
       - AU14JobCLFCellLeader
       - AU14JobCLFPhysician
@@ -465,6 +540,24 @@
     - prefRoles: [ StrikeOrganizerRole ]
       max: 1
       playerRatio: 15
+      jobBlacklist:
+      - AU14JobGOVFORPlatCo
+      - AU14JobGOVFORPlatoonCorpsman
+      - AU14JobGOVFORDCC
+      - AU14JobGOVFORPlatOp
+      - AU14JobGOVFORDSPilot
+      - AU14JobGOVFORRadioTelephoneOperator
+      - AU14JobGOVFORSquadSergeant
+      - AU14JobGOVFORSquadAutomaticRifleman
+      - AU14JobGOVFORSquadCombatTech
+      - AU14JobGOVFORSquadRifleman
+      - AU14JobGOVFORAuxSupportSynth
+      - AU14JobGOVFORadvisor
+      - AU14JobGOVFORMilitaryDoctor
+      - AU14JobGOVFORMilitaryPoliceMan
+      - AU14JobGOVFORSectionSergeant
+      - AU14JobGOVFORAuxTech
+      - AU14JobGOVFORWorkingJoe
       briefing:
         text: strikeorganizer-role-greeting
         color: DarkRed
@@ -567,6 +660,24 @@
     - prefRoles: [ SerialKillerRole ]
       max: 1
       playerRatio: 15
+      jobBlacklist:
+      - AU14JobGOVFORPlatCo
+      - AU14JobGOVFORPlatoonCorpsman
+      - AU14JobGOVFORDCC
+      - AU14JobGOVFORPlatOp
+      - AU14JobGOVFORDSPilot
+      - AU14JobGOVFORRadioTelephoneOperator
+      - AU14JobGOVFORSquadSergeant
+      - AU14JobGOVFORSquadAutomaticRifleman
+      - AU14JobGOVFORSquadCombatTech
+      - AU14JobGOVFORSquadRifleman
+      - AU14JobGOVFORAuxSupportSynth
+      - AU14JobGOVFORadvisor
+      - AU14JobGOVFORMilitaryDoctor
+      - AU14JobGOVFORMilitaryPoliceMan
+      - AU14JobGOVFORSectionSergeant
+      - AU14JobGOVFORAuxTech
+      - AU14JobGOVFORWorkingJoe
       briefing:
         text: serialkiller-role-greeting
         color: DarkRed
@@ -593,4 +704,50 @@
   category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-serialkiller-objective
+  isCM: true
+
+## CLF Sleeper Agent
+- type: entity
+  id: CLFSleeperAgent
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: CLFSleeperAgentRule
+  - type: AntagSelection
+    selectionTime: PostPlayerSpawn
+    definitions:
+    - prefRoles: [ CLFSleeperAgentRole ]
+      max: 1
+      playerRatio: 20
+      jobWhitelist:
+      - AU14JobGOVFORSquadSergeant
+      - AU14JobGOVFORSectionSergeant
+      - AU14JobGOVFORPlatOp
+      - AU14JobGOVFORMilitaryPoliceMan
+      briefing:
+        text: clf-sleeper-agent-role-greeting
+        color: OliveDrab
+        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+      components:
+      - type: CLFSleeperAgent
+      mindRoles:
+      - MindRoleCLFSleeperAgent
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCLFSleeperAgent
+  name: CLF Sleeper Agent Role
+  components:
+  - type: MindRole
+    antagPrototype: CLFSleeperAgentRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+
+- type: antag
+  id: CLFSleeperAgentRole
+  name: roles-antag-clf-sleeper-agent-name
+  antagonist: true
+  category: roles-antag-category-colony
+  setPreference: true
+  objective: roles-antag-clf-sleeper-agent-objective
   isCM: true

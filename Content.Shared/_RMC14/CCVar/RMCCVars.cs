@@ -278,11 +278,20 @@ public sealed partial class RMCCVars : CVars
     public static readonly CVarDef<float> RMCLateJoinsBurrowedLarvaDeathTimeIgnoreBeforeMinutes =
         CVarDef.Create("rmc.late_joins_burrowed_larva_death_time_ignore_before_minutes", 2.5f, CVar.REPLICATED | CVar.SERVER);
 
+    public static readonly CVarDef<int> RMCLarvaQueueRoundstartDelaySeconds =
+        CVarDef.Create("rmc.larva_queue_roundstart_delay_seconds", 120, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCLarvaQueueWaitSeconds =
+        CVarDef.Create("rmc.larva_queue_wait_seconds", 0, CVar.REPLICATED | CVar.SERVER);
+
     public static readonly CVarDef<int> RMCBurrowedLarvaSacrificeTimeMinutes =
         CVarDef.Create("rmc.burrowed_larva_sacrifice_time_minutes", 15, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<int> RMCBurrowedLarvaEvolutionPointsPer =
         CVarDef.Create("rmc.burrowed_larva_evolution_points_per", 250, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<float> RMCPlaytimeLarvaRankScaleFactor =
+        CVarDef.Create("rmc.playtime_larva_rank_scale_factor", 3.0f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<int> RMCPlaytimeBronzeMedalTimeHours =
         CVarDef.Create("rmc.playtime_bronze_medal_time_hours", 10, CVar.REPLICATED | CVar.SERVER);
@@ -319,7 +328,7 @@ public sealed partial class RMCCVars : CVars
         CVarDef.Create("rmc.playtime_xeno_postfix_two_time_hours", 0, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<int> RMCDisconnectedXenoGhostRoleTimeSeconds =
-        CVarDef.Create("rmc.disconnected_xeno_ghost_role_time_seconds", 300, CVar.REPLICATED | CVar.SERVER);
+        CVarDef.Create("rmc.disconnected_xeno_ghost_role_time_seconds", 600, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> RMCMarineScalingNormal =
         CVarDef.Create("rmc.marine_scaling_normal", 50f, CVar.REPLICATED | CVar.SERVER);
@@ -431,7 +440,7 @@ public sealed partial class RMCCVars : CVars
     CVarDef.Create("rmc.tacmap_alert_max_process_time_milliseconds", 1f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> RMCParasiteSpawnInitialDelayMinutes =
-        CVarDef.Create("rmc.parasite_spawn_initial_delay_minutes", 15f, CVar.REPLICATED | CVar.SERVER);
+        CVarDef.Create("rmc.parasite_spawn_initial_delay_minutes", 0f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<float> RMCXenoSpawnInitialMuteDurationSeconds =
         CVarDef.Create("rmc.xeno_spawn_initial_mute_duration_seconds", 180f, CVar.REPLICATED | CVar.SERVER);
@@ -529,6 +538,9 @@ public sealed partial class RMCCVars : CVars
 
     public static readonly CVarDef<bool> RMCLobbyStartPaused =
         CVarDef.Create("rmc.lobby_start_paused", false, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCLobbyMinimumPlayers =
+        CVarDef.Create("rmc.lobby_min_players", 20, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<int> RMCChatRepeatHistory =
         CVarDef.Create("rmc.chat_repeat_history", 4, CVar.REPLICATED | CVar.SERVER);

@@ -55,9 +55,6 @@
       maxItemSize: Large
       grid:
         - 0,0,4,1
-      blacklist:
-        tags:
-          - Backpack
     - type: CMStorageVisualizer
       storageClosed: null
       storageOpen: null
@@ -137,3 +134,17 @@
       sprite: _AU14/Clothing/US_Army/Back/molle_satchel.rsi
     - type: ItemCamouflage
       camouflageVariations: {}
+
+- type: entity
+  parent: AU14IMPBackpackMarine
+  id: AU14IMPBackpackMarineGuardFilled
+  suffix: Guard, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14ArmorM3DesertOne
+    - id: AU14WeaponRifleXM4RATwoPointSling
+    - id: AU14PouchMagazineFilledM4RA
+    - id: AU14DesertM10Helmet
+    - id: AU14PouchIFAKFill
+    - id: CMMagazineRifleM4SPR

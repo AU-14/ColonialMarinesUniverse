@@ -7,7 +7,7 @@
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Armor/m3/standard/padded/jungle.rsi
   - type: CMArmor
-    melee: 20
+    melee: 35
     bullet: 20
     bio: 20
     explosionArmor: 15
@@ -99,7 +99,7 @@
     walkModifier: 0.725
     sprintModifier: 0.725
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 15
     bio: 20
     explosionArmor: 10
@@ -184,7 +184,7 @@
     walkModifier: 0.725
     sprintModifier: 0.725
   - type: CMArmor
-    melee: 10
+    melee: 20
     bullet: 10
     bio: 20
     explosionArmor: 10

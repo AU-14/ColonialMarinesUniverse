@@ -124,6 +124,9 @@
       amount: 3
     - id: CMBurnKit10
       amount: 3
+    - id: CMUPlainTraumaDressing10
+    - id: CMUCoagulantPowder
+    - id: CMUBurnGel
     # - id: RMCSplint
     - id: AU14NaloxoneAutoInjector
     - id: CMEpinephrineAutoInjector

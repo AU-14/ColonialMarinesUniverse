@@ -3,8 +3,8 @@
 /// free software and would prefer this code be shared freely without restrictions.
 using Content.Shared._RMC14.Xenonids.Construction.ResinWhisper;
 using Content.Shared._RMC14.Xenonids.Hive;
+using Content.Shared.AU14;
 using Content.Shared.Doors;
-using System;
 
 namespace Content.Shared._AU14.Xeno.Construction;
 
@@ -21,23 +21,33 @@ public sealed partial class ResinDoorSystem : EntitySystem
 
     private void OnBeforeDoorOpen(Entity<ResinDoorComponent> ent, ref BeforeDoorOpenedEvent args)
     {
-        if (args.User is not null)
-        {
-            if (!_hive.IsAllyOfHive(args.User.Value, _hive.GetHive(ent.Owner)))
-            {
-                args.Cancel();
-            }
-        }
+        if (args.User is null) return;
+
+        if (!CanAccess(args.User.Value, ent.Owner))
+            args.Cancel();
     }
 
     private void OnBeforeDoorClose(Entity<ResinDoorComponent> ent, ref BeforeDoorClosedEvent args)
     {
-        if (args.User is not null)
+        if (args.User is null) return;
+
+        if (!CanAccess(args.User.Value, ent.Owner))
+            args.Cancel();
+    }
+
+    private bool CanAccess(EntityUid user, EntityUid door)
+    {
+        // cultists are xeno admirers (non-hostiles)
+        if (HasComp<CultistComponent>(user))
+            return true;
+
+        var hive = _hive.GetHive(door);
+        if (hive is null)
         {
-            if (!_hive.IsAllyOfHive(args.User.Value, _hive.GetHive(ent.Owner)))
-            {
-                args.Cancel();
-            }
+            Logger.GetSawmill("hive").Warning($"Resin door ({door}) is missing a Hive, permitting access");
+            return true; // IsAllyOfHive early-returns false when Hive is null
         }
+
+        return _hive.IsAllyOfHive(user, hive);
     }
 }

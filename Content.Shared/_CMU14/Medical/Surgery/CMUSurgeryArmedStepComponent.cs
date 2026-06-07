@@ -27,6 +27,9 @@ public sealed partial class CMUSurgeryArmedStepComponent : Component
     public int StepIndex;
 
     [DataField, AutoNetworkedField]
+    public int LastCompletedLeafStepIndex = -1;
+
+    [DataField, AutoNetworkedField]
     public BodyPartType TargetPartType;
 
     [DataField, AutoNetworkedField]

@@ -4404,7 +4404,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 18.5,15.5
       parent: 1
-- proto: RMCGuidebookSOP
+- proto: AU14GuidebookSOP
   entities:
   - uid: 420
     components:

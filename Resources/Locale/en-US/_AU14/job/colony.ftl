@@ -1,4 +1,3 @@
-
 au14-department-colony-labor-description = Colonists who perform jobs such as mining and farming, this is the most essential and common department of the colony, often a stepping stone for colonists to move into other departments.
 au14-department-colony-labor = Colony Labor
 
@@ -34,6 +33,9 @@ au14-department-colony-medical-description = Responsible for healthcare and emer
 
 au14-department-colony-security = Colony Security and Law Enforcement
 au14-department-colony-security-description = Enforces law, conducts arrests, protects personnel, and upholds order.
+
+au14-department-orbitalstation = Orbital Station
+au14-department-orbitalstation-description = Operates the orbital station, managing trade and salvage, handle cargo and docking, enforce regulations, and administer justice.
 
 au14-job-supervisors-colonycivilian = Colony Administrator
 au14-job-supervisors-colonyadministrator = The Colonial Administration
@@ -83,6 +85,14 @@ au14-job-name-civiliancorporateliaison = Liaison
 au14-job-description-civiliancorporateliaison = Ensure corporate interests are upheld and company policy is followed.
 au14-job-prefix-corporateliaison = CL
 
+au14-job-name-civiliancorporateadministrator = Corporate Administrator
+au14-job-description-civiliancorporateadministrator = The senior Weyland-Yutani executive on-colony. Manage corporate interests, coordinate with the Colony Administrator, and oversee all WEYu personnel.
+au14-job-prefix-civiliancorporateadministrator = CORP ADM
+
+au14-job-name-civiliancorporateadminassistant = Corporate Admin Assistant
+au14-job-description-civiliancorporateadminassistant = Support the Corporate Administrator in managing WEYu day-to-day operations on the colony.
+au14-job-prefix-civiliancorporateadminassistant = CORP ASST
+
 au14-job-name-civilianphysician = Physician
 au14-job-name-civiliangeneralpractitioner = General Practitioner
 au14-job-name-civiliansurgeon = Surgeon
@@ -106,6 +116,8 @@ au14-job-name-colonyemergencyresponseofficer = Emergency Response Officer
 au14-job-description-colonyemergencyresponseofficer = Provide medical attention and care in hard to reach areas. Work with local security/law enforcement to do search and rescue.
 au14-job-prefix-emergencyresponseofficer = ERO
 
+au14-med-vendor-locked = Medical supplies are restricted until Government Forces have deployed planetside.
+
 au14-job-name-civiliancmbdeputy = CMB Deputy
 au14-job-description-civiliancmbdeputy = You're a deputy of the Colonial Marshal Bureau. Help the Marshal provide the colony with rule of law and help execute arrests and warrants. (Role avalible on LV-624 and LV-747)
 au14-job-prefix-cmbdeputy = CMBDEP
@@ -113,6 +125,14 @@ au14-job-prefix-cmbdeputy = CMBDEP
 au14-job-name-civiliancmbmarshal = CMB Marshal
 au14-job-description-civiliancmbmarshal = You're a Marshal of the Colonial Marshal Bureau. Provide the colony with rule of law and execute arrests and warrants. (Role avalible on LV-624 and LV-747)
 au14-job-prefix-cmbmarshal = CMBMAR
+
+au14-job-name-colonysecurityofficer = Colony Security Officer
+au14-job-description-colonysecurityofficer = A joint CMB and corporate-backed security officer. Maintain order, enforce colony law, and coordinate with both the Marshal Bureau and Weyland-Yutani on-colony.
+au14-job-prefix-colonysecurityofficer = CSEC
+
+au14-job-name-colonysecurityleader = Colony Security Leader
+au14-job-description-colonysecurityleader = Senior Colony Security Officer. Lead security operations across both the CMB and corporate security apparatus on-colony.
+au14-job-prefix-colonysecurityleader = CSLDR
 
 au14-job-name-civilianscientist = Scientist
 au14-job-description-civilianscientist = You're a scientist employed by the Weyland-Yutani corporation or government institution.
@@ -160,10 +180,6 @@ au14-job-description-leoleader = Colony Law Enforcement (Map specific)
 au14-job-name-leo = Law Enforcement Officer
 au14-job-description-leo = Colony Law Enforcement (Map specific)
 
-au14-job-name-3rdparty9handler = K9 Handler
-au14-job-description-3rdpartyk9handler = Provide specialized aid where your Search and Rescue skills are needed, train your companion and meet new people.
-au14-job-prefix-3rdpartyk9handler = K9
-
 au14-job-name-workingjoe = Working Joe
 au14-job-description-workingjoe = You are a Working Joe!  You are held to a higher standard and are required to obey not only the Server Rules but Law and Synthetic Rules.  Your primary job is to maintain the cleanliness of the ship, putting things in their proper place.  Your capacities are limited, but you have all the equipment you need, and the central AI has a plan! (WARNING: THIS ROLE REQUIRES HIGH ROLEPLAY PROWESS)
 
@@ -181,6 +197,14 @@ au14-job-prefix-orbitalmanager = Orb. Man.
 au14-job-name-orbitalsecurity = Orbital Security
 au14-job-description-orbitalsecurity = Ensure orbital manager and station are safe.
 au14-job-prefix-orbitalsecurity = Orb. Sec.
+
+au14-job-name-orbitalarbiter = Orbital Arbiter
+au14-job-description-orbitalarbiter = Uphold justice. Interpret the law, deliver verdicts and preside over court trials.
+au14-job-prefix-orbitalarbiter = Orb. Arb.
+
+au14-job-name-orbitallawyer = Orbital Counsel
+au14-job-description-orbitallawyer = Defend the innocent (and guilty), prosecute, or just argue until someone pays you.
+au14-job-prefix-orbitallawyer = Orb. Cnsl.
 
 au14-job-name-civiliancolonyadminasssistant = Administrative Assistant
 au14-job-description-civiliancolonyadminassistant = Be the right hand of the Colony Administrator.

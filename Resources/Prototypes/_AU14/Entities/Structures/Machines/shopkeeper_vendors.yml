@@ -9,6 +9,10 @@
   description: A customisable vendor. Authorized staff can stock it with items and set prices.
   components:
   - type: AU14ShopkeeperVendor
+    stockBlacklist:
+      components:
+      - IdCard
+      - Headset
   - type: ItemSlots
     slots:
       shopkeeper_cash:
@@ -50,6 +54,7 @@
     - state: "base"
   - type: InteractionOutline
   - type: Appearance
+
 - type: entity
   id: AU14ShopkeeperVendor
   parent: AU14ShopkeeperVendorBase

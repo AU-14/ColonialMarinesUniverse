@@ -1,0 +1,44 @@
+- type: construction
+  parent: RMC
+  name: Wooden Wall
+  id: AU14WoodWall
+  graph: AU14WoodWallGraph
+  startNode: start
+  targetNode: woodWall
+  category: construction-category-cm-structures
+  description: A wall built from wooden planks. Effective but flammable.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: constructionGraph
+  parent: RMC
+  id: AU14WoodWallGraph
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DeleteEntity
+    edges:
+    - to: woodWall
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: RMCWood
+        amount: 500
+        doAfter: 30
+
+  - node: woodWall
+    entity: CMWallWood
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: RMCPlankWood50
+        amount: 5
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 10

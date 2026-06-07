@@ -652,6 +652,10 @@ binds:
   key: Space
   mod1: Shift
   mod2: Control
+- function: CMUOpenMedicalCraftingMenu
+  type: State
+  key: C
+  mod1: Alt
 - function: CMUniqueAction
   type: State
   key: Space

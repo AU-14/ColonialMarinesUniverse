@@ -402,6 +402,7 @@
   - type: FaxMachine
     name: "Colony Liberation Front"
     notifyAdmins: true
+  - type: CLFFaxReceiver
 # Inscribed M44 - Unique CLF Veteran sidearm
 - type: entity
   parent: RMCWeaponRevolverM44Custom

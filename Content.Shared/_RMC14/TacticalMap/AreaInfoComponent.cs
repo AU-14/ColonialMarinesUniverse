@@ -16,4 +16,10 @@ public sealed partial class AreaInfoComponent : Component
 
     [DataField]
     public TimeSpan UpdateInterval = TimeSpan.FromSeconds(2);
+
+    // Local throttle bookkeeping. Move events can be predicted on clients, so this must not be networked or dirtied.
+    public TimeSpan LastMoveUpdate;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan LastMoveInterval = TimeSpan.FromSeconds(1);
 }

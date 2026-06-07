@@ -73,7 +73,7 @@
     gloves: AU14PVEHandsInsulatedBlackMarine
     belt: RMCM77BeltPMCFilled
     pocket1: RMCPouchMagazineLargePMC
-    pocket2: RMCPouchFirstAidPMCFill
+    pocket2: AU14PouchIFAKFill
     back: RMCSatchelLightpackWeYa
     eyes: CMGlassesSecurity
     ears: RMCHeadsetDistressWeYa
@@ -84,8 +84,6 @@
     - AU14MagazineRifleF44AA
     - AU14MagazineRifleF44AA
     - AU14MagazineRifleF44AA
-    pocket2:
-    - AU14Tourniquet
     back:
     - AU14CBRNKitWeYu
     - RMCMREWeYa

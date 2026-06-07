@@ -25,6 +25,7 @@ using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Eye;
 using Content.Shared._RMC14.Xenonids.HiveLeader;
+using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Actions;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared.AU14.Objectives;
@@ -35,6 +36,7 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Popups;
 using Content.Shared.Roles;
 using Content.Shared.Traits.Assorted;
 using Content.Shared.UserInterface;
@@ -60,11 +62,13 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
     [Dependency] private MarineAnnounceSystem _marineAnnounce = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SquadSystem _squad = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedXenoWeedsSystem _weeds = default!;
     [Dependency] private XenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private RMCUnrevivableSystem _unrevivableSystem = default!;
 
@@ -996,7 +1000,15 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             return;
 
         var tileCoords = new Vector2(position.X, position.Y);
-        var worldPos = _transform.ToMapCoordinates(new EntityCoordinates(map.Owner, tileCoords * grid.TileSize));
+        var targetCoords = new EntityCoordinates(map.Owner, tileCoords * grid.TileSize);
+
+        if (!_weeds.IsOnWeeds((map.Owner, grid), targetCoords))
+        {
+            _popup.PopupCursor(Loc.GetString("rmc-xeno-queen-eye-no-weeds"), user, PopupType.MediumCaution);
+            return;
+        }
+
+        var worldPos = _transform.ToMapCoordinates(targetCoords);
 
         _transform.SetWorldPosition(eye, worldPos.Position);
     }
@@ -2413,10 +2425,13 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 // Advance the timer immediately to avoid re-entrancy causing multiple updates this tick.
                 map.NextUpdatePerFaction[faction] = time + _mapUpdateEvery;
 
-                // Update open computers that are configured for this faction
+                // Update open computers that are configured for this faction (skip overwatch consoles — they use per-console timers)
                 var computers = EntityQueryEnumerator<TacticalMapComputerComponent>();
                 while (computers.MoveNext(out var computerId, out var computer))
                 {
+                    if (HasComp<OverwatchConsoleComponent>(computerId))
+                        continue;
+
                     if (!_ui.IsUiOpen(computerId, TacticalMapComputerUi.Key))
                         continue;
 
@@ -2480,6 +2495,20 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                     else if (faction == "CLF" && tunnelUserComp.Clf)
                         UpdateUserData((tunnelUserId, tunnelUserComp), map);
                 }
+            }
+
+            // Per-console timer updates for overwatch consoles (independent of faction timers).
+            var overwatchConsoles = EntityQueryEnumerator<TacticalMapComputerComponent, OverwatchConsoleComponent>();
+            while (overwatchConsoles.MoveNext(out var consoleId, out var consoleComp, out _))
+            {
+                if (!_ui.IsUiOpen(consoleId, TacticalMapComputerUi.Key))
+                    continue;
+
+                if (time < consoleComp.NextUpdate)
+                    continue;
+
+                consoleComp.NextUpdate = time + _mapUpdateEvery;
+                UpdateMapData((consoleId, consoleComp), map);
             }
 
             // We've processed per-faction updates for this map this tick; clear dirty flag.

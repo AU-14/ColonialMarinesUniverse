@@ -66,6 +66,7 @@
     shoes: RMCBootsPMCFilled
     id: AU14IDCardciviliannspaConstable
     ears: AU14CMBHeadset
+    pocket1: AU14GuidebookLawColonial
 
 - type: entity
   parent: CMSpawnPointJobBase

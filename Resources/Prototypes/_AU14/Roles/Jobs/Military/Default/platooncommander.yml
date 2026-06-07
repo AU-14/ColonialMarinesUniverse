@@ -1,5 +1,6 @@
 - type: job
   parent: AU14JobPlatCoBase
   id: AU14JobGOVFORPlatCo
+  hidden: false
   setPreference: true
   basePlaytimeTracker: true

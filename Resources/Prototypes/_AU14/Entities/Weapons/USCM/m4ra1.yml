@@ -1,0 +1,256 @@
+﻿- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  name: XM4RA carbine
+  id: AU14WeaponRifleXM4RA
+  description: The XM4RA carbine is being developed for the United States Colonial Marines Corps as a part of Special Operations Peculiar Carbine (SOPCAR). Originally started as a weapon for the Marine Raiders, this carbine became a prototype for a new generation self defense weapon for tank crews and Marine Secuity Guard.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/USCM/xm4ra1_32x64.rsi
+    layers:
+    - state: bolt-open
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Item
+    sprite: _AU14/Weapons/Guns/USCM/xm4ra1_32x32.rsi
+    size: Large
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/USCM/xm4ra1_32x32.rsi
+  - type: Gun
+    shotsPerBurst: 3
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_m4spr.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    recoilUnwielded: 2
+    scatterWielded: 6
+    baseFireRate: 2.86
+    burstFireRateMultiplier: 2
+    modifiers:
+      Burst:
+        fireDelay: 0.1
+        maxScatterModifier: 2
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 1
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.25
+    accuracyMultiplierUnwielded: 0.6
+  - type: RMCWeaponDamageFalloff
+    falloffMultiplier: 0
+  - type: WieldDelay
+    baseDelay: 0.1
+  - type: WieldableSpeedModifiers
+    base: 0.725
+    light: 0.9
+    medium: 0.9
+    heavy: 0.9
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineRifleM4SPR
+          - CMMagazineRifleM4SPRAP
+          - CMMagazineRifleM4SPRExt
+          - RMCMagazineRifleM4SPRWP
+          - RMCMagazineRifleM4SPRIncendiary
+          - RMCMagazineRifleM4SPRHEAP
+  - type: GunDamageModifier
+    multiplier: 1.1
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentB8SmartScope
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentU1GrenadeLauncher
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentBipod
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentLaserSight
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentExtinguisher
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 1, 0.0
+      rmc-aslot-rail: 0.15, 0.225
+      rmc-aslot-underbarrel: 0.4, -0.31
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: Tag
+    tags:
+    - AU14WeaponRifleXM4RA
+
+- type: entity
+  parent: AU14WeaponRifleXM4RA
+  id: AU14WeaponRifleXM4RATwoPointSling
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentB8SmartScope
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentU1GrenadeLauncher
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentBipod
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentLaserSight
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentExtinguisher
+
+- type: entity
+  parent: AU14WeaponRifleXM4RA
+  name: XM4RA1 carbine
+  id: AU14WeaponRifleXM4RA1
+  description: The XM4RA1 carbine is a part of Special Operations Peculiar Carbine (SOPCAR). Originally started as a weapon for the Marine Raiders, this carbine became a prototype for a new generation self defense weapon for tank crews and Marine Secuity Guard. This modification has full-auto firemode.
+  components:
+  - type: Gun
+    shotsPerBurst: 3
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_m4spr.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilUnwielded: 2
+    scatterWielded: 6
+    baseFireRate: 2.86
+    burstFireRateMultiplier: 2
+    modifiers:
+      Burst:
+        fireDelay: 0.1
+        maxScatterModifier: 2
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 1
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: Tag
+    tags:
+    - AU14WeaponRifleXM4RA1
+
+- type: entity
+  parent: AU14WeaponRifleXM4RA1
+  name: XM4RA1 SOPMOD carbine
+  id: AU14WeaponRifleXM4RA1SOPMOD
+  description: The XM4RA1 SOPMOD carbine is a part of new self-defense and special operations program for USCMC. Specifically SOPMOD modification is being developed for Marine Raiders needs.  
+  components:
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilUnwielded: 2
+    scatterWielded: 6
+    baseFireRate: 2.86
+    burstFireRateMultiplier: 2
+    modifiers:
+      Burst:
+        fireDelay: 0.1
+        maxScatterModifier: 0.3
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 1
+  - type: GunDamageModifier
+    multiplier: 1.4
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        startingAttachable: RMCAttachmentSuppressor 
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        locked: true
+        whitelist:
+          tags:
+          - RMCAttachmentB8SmartScope
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+        random:
+          - RMCAttachmentB8SmartScope
+          - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentU1GrenadeLauncher
+        whitelist:
+          tags:
+          - RMCAttachmentU1GrenadeLauncher
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 1, 0.0
+      rmc-aslot-rail: 0.15, 0.225
+      rmc-aslot-underbarrel: 0.4, -0.4
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: Tag
+    tags:
+    - AU14WeaponRifleXM4RA1SOPMOD
+
+- type: Tag
+  id: AU14WeaponRifleXM4RA1
+
+- type: Tag
+  id: AU14WeaponRifleXM4RA
+
+- type: Tag
+  id: AU14WeaponRifleXM4RA1SOPMOD

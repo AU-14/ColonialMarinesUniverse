@@ -1,0 +1,95 @@
+# Potential for language system addition in the future
+
+- type: job
+  parent: AU14JobLEOBase
+  id: AU14JobMigratingColonistJob
+  name: New Colonist
+  description: Wether by choice, necessity or force you have arrived in orbit of this colony to establish your new life on the frontier. Time to get to work.
+  setPreference: true
+  playTimeTracker: AU14JobReturningColonistPlaytime
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianColonist
+  spawnMenuRoleName: Colonist (3rd party)
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: EquipEntityPreset
+      preset: AU14JobMigratingColonistPreset
+    - type: Skills
+      skills:
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillFirearms: 2
+    - type: JobPrefix
+      prefix: au14-job-prefix-civiliancolonist
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: AU14JobMigratingColonist
+  name: New Colonist (civilian)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: New Colonist (civilian)
+    description: Wether by choice, necessity or force you have arrived in orbit of this colony to establish your new life on the frontier. Time to get to work.
+    reregister: false
+    job: AU14JobMigratingColonistJob
+    raffle:
+      settings: short
+    rules: You do not know what is going on in the colony.
+
+- type: entity
+  id: AU14JobMigratingColonistPreset
+  name: returning colonist preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomGearOther:
+    -
+      - [ CMJumpsuitColonist ]
+      - [ RMCJumpsuitCivilian ]
+      - [ CMJumpsuitTShirtWhite ]
+      - [ CMJumpsuitTShirtGray ]
+    -
+      - [ RMCShoesBlack ]
+      - [ RMCBootsVanBandolier ]
+      - [ RMCShoesBrown ]
+    -
+      - [ AU14SlingSatchelBlue ]
+      - [ AU14SlingSatchelBlack ]
+      - [ CMSatchel ]
+    -
+      - [ RMCSpaceCash100 ]
+      - [ RMCSpaceCash100 ]
+      - [ RMCSpaceCash100 ]
+      - [ RMCSpaceCash10 ]
+      - [ RMCSpaceCash20 ]
+      - [ RMCSpaceCash20 ]
+      - [ RMCSpaceCash20 ]
+      - [ RMCSpaceCash200 ]
+      - [ RMCSpaceCash50 ]
+      - [ RMCSpaceCash50 ]
+      - [ RMCSpaceCash50 ]
+      - [ RMCSpaceCash50 ]
+
+- type: playTimeTracker
+  id: AU14JobReturningColonistPlaytime
+  isHumanoid: true

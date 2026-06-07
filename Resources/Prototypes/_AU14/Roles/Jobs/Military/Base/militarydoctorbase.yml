@@ -1,78 +1,12 @@
 - type: job
-  abstract: true
-  parent: AU14JobMilitaryBase
-  id: AU14JobMilitaryBaseAbstract
+  parent: CMJobBase
+  id: AU14JobMilitaryDoctorBase
   name: au14-job-name-govforMilitaryDoctor
   description: au14-job-description-govforMilitaryDoctor
-  icon: "AU14JobIconCorpsman"
-  spawnMenuRoleName: Military Doctor (GOVFOR)
-  startingGear: AU14GearGOVFORMilitaryDoctor
-  dummyStartingGear: AU14GearGOVFORMilitaryDoctorDummy
   playTimeTracker: AU14JobGOVFORMilitaryDoctor
-  requireAdminNotify: true
-  overwatchRoleName: au14-job-name-govforMilitaryDoctor
-  overwatchSortPriority: -6
-  overwatchShowName: true
-  accessGroups:
-  - AU14GovforCorpsman
-  - AU14GovforSquad
-  access:
-  - CMAccessMedical
-  - CMAccessChemistry
-
-- type: job
-  abstract: true
-  parent: AU14JobMilitaryBaseAbstract
-  id: AU14JobMilitaryDoctorBase
-  requirements:
-  - !type:AgeRequirement
-    requiredAge: 25
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - NonResuscitable
-    - Epilepsy
-  ranks:
-    RMCRankFirstLT:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORMilitaryDoctor
-      time: 86400 #24 hours
-    RMCRankSecondLT: []
-  special:
-  - !type:AddComponentSpecial
-    components:
-    - type: Skills
-      preset: AU14SkillPresetMilitaryDoctor
-    - type: JobPrefix
-      prefix: au14-job-prefix-govforMilitaryDoctor
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_AU14/Interface/au14govforhud.rsi
-        state: govfor_corpsman # TODO: MD icon
+  basePlaytimeTracker: true
+  hidden: true
 
 - type: playTimeTracker
   id: AU14JobGOVFORMilitaryDoctor
   isHumanoid: true
-
-- type: startingGear
-  id: AU14GearGOVFORMilitaryDoctor
-  equipment:
-    shoes: CMBootsBlackFilled
-    ears: AU14HeadsetGovforAuxiliary
-    ears2: RMCM5CameraGear
-
-- type: startingGear
-  id: AU14GearGOVFORMilitaryDoctorDummy
-  equipment:
-    shoes: CMBootsBlackFilled
-    back: CMSatchelMarine
-
-- type: entity
-  parent: CMSpawnPointJobBase
-  id: AU14SpawnPointGOVFORMilitaryDoctor
-  name: Spawn Point GOVFOR Doctor
-  components:
-  - type: SpawnPoint
-    job_id: AU14JobGOVFORMilitaryDoctor
-  - type: Sprite
-    state: syn_spawn

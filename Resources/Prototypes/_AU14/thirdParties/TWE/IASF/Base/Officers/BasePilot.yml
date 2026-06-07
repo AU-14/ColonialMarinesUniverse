@@ -1,0 +1,50 @@
+- type: job
+  parent: CMJobBase
+  id: AU14IASFPilotBase
+  name: au14-job-name-tweiasf-pl
+  playTimeTracker: AU14IASFPilot
+  description: au14-job-description-twepara
+  ranks:
+    RMC_WarrantOfficer2: []
+  spawnMenuRoleName: IASF Pilot (Base)
+  joinNotifyCrew: false
+  icon: RMCJobIconParaPilot
+  supervisors: au14-job-name-tweiasf-co
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: rmc_marksman
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadIASF
+    - type: Skills
+      preset: AU14SkillPresetPlatoonDP
+    - type: JobPrefix
+      prefix: au14-job-prefix-tweiasf-pl
+  hidden: true
+
+- type: startingGear
+  id: AU14RMCGearIASFPilot
+  equipment:
+    head: RMCHeadRoyalFlightHelmet
+    jumpsuit: AU14JumpsuitIASFL90A2
+    gloves: RMCHandsVeteranRoyalMarine
+    outerClothing: RMCArmorParaVest
+    suitstorage: AU14WeaponSMGL90A2oldnoattachments
+    shoes: RMCBootsRoyalFilled
+    ears: RMCHeadsetPara
+    belt: RMCBeltHolsterPistolFilledL54
+    pocket1: AU14PouchIFAKFill 
+    pocket2: AU14IASFPouchMagazineL90A2
+    back: RMCSatchelLightpackFilledPara
+    id: AU14IDCardIASFPilot
+  storage:
+    outerClothing:
+    - RMCFlashlight
+
+- type: playTimeTracker
+  id: AU14IASFPilot

@@ -5,6 +5,7 @@ using Content.Shared.Atmos;
 using Content.Shared.Maps;
 using Content.Shared.Spreader;
 using Content.Shared.Tag;
+using System.Globalization;
 using Robust.Shared.Collections;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -35,6 +36,11 @@ public sealed partial class SpreaderSystem : EntitySystem
     /// </summary>
     // TODO PERFORMANCE Assign each prototype to an index and convert dictionary to array
     private readonly Dictionary<EntityUid, Dictionary<string, int>> _gridUpdates = [];
+
+    /// <summary>
+    /// Fractional update carry for per-entity spread-rate overrides.
+    /// </summary>
+    private readonly Dictionary<EntityUid, Dictionary<string, float>> _gridUpdateRemainders = [];
 
     private EntityQuery<EdgeSpreaderComponent> _query;
 
@@ -142,7 +148,10 @@ public sealed partial class SpreaderSystem : EntitySystem
                 continue;
             }
 
-            if (!groupUpdates.TryGetValue(spreader.Id, out var updates) || updates < 1)
+            var updateKey = GetUpdateKey(spreader);
+            var updates = ResolveUpdates(xform.GridUid.Value, groupUpdates, spreader, updateKey);
+
+            if (updates < 1)
                 continue;
 
             // Edge detection logic is to be handled
@@ -151,10 +160,42 @@ public sealed partial class SpreaderSystem : EntitySystem
             Spread(uid, xform, spreader.Id, ref updates);
 
             if (updates < 1)
-                groupUpdates.Remove(spreader.Id);
+                groupUpdates[updateKey] = 0;
             else
-                groupUpdates[spreader.Id] = updates;
+                groupUpdates[updateKey] = updates;
         }
+    }
+
+    private int ResolveUpdates(
+        EntityUid grid,
+        Dictionary<string, int> groupUpdates,
+        EdgeSpreaderComponent spreader,
+        string updateKey)
+    {
+        if (groupUpdates.TryGetValue(updateKey, out var updates))
+            return updates;
+
+        if (spreader.UpdatesPerSecond <= 0)
+            return 0;
+
+        if (!_gridUpdateRemainders.TryGetValue(grid, out var remainders))
+        {
+            remainders = [];
+            _gridUpdateRemainders[grid] = remainders;
+        }
+
+        var available = spreader.UpdatesPerSecond + remainders.GetValueOrDefault(updateKey);
+        updates = (int) Math.Floor(available);
+        remainders[updateKey] = available - updates;
+        groupUpdates[updateKey] = updates;
+        return updates;
+    }
+
+    private static string GetUpdateKey(EdgeSpreaderComponent spreader)
+    {
+        return spreader.UpdatesPerSecond > 0
+            ? $"{spreader.Id}:{spreader.UpdatesPerSecond.ToString(CultureInfo.InvariantCulture)}"
+            : spreader.Id;
     }
 
     private void Spread(EntityUid uid, TransformComponent xform, ProtoId<EdgeSpreaderPrototype> prototype, ref int updates)

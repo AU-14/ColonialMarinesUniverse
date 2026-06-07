@@ -30,6 +30,12 @@ public sealed partial class GhostRoleEntryButtons : BoxContainer
         }
 
         UpdateRequestButton();
+        if (IsActiveRaffle(_ghostRoleKind))
+        {
+            Orientation = LayoutOrientation.Vertical;
+            RequestButton.SizeFlagsStretchRatio = 1;
+        }
+
         RequestButton.AddStyleClass(StyleNano.StyleClassCrtAttentionButton);
         CrtLobbyTheme.Apply(this);
     }

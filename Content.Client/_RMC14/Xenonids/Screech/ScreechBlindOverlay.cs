@@ -6,16 +6,16 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._RMC14.Xenonids.Screech;
 
-public sealed class ScreechBlindOverlay : Overlay
+public sealed partial class ScreechBlindOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> ScreechBlindShader = "RMCScreechBlind";
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;
 
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
 
     private readonly ShaderInstance _shader;
 
@@ -42,8 +42,8 @@ public sealed class ScreechBlindOverlay : Overlay
 
         var handle = args.WorldHandle;
         _shader.SetParameter("SCREEN_TEXTURE", ScreenTexture);
-        _shader.SetParameter("innerRadius", (float) innerRadius);
-        _shader.SetParameter("outerRadius", (float) outerRadius);
+        _shader.SetParameter("innerRadius", (float)innerRadius);
+        _shader.SetParameter("outerRadius", (float)outerRadius);
 
         handle.UseShader(_shader);
         handle.DrawRect(args.WorldBounds, Color.White);

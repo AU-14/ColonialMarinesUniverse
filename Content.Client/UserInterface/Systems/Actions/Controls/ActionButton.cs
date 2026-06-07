@@ -5,6 +5,7 @@ using Content.Client.Cooldown;
 using Content.Client.Stylesheets;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
+using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared.Charges.Components;
 using Content.Shared.Charges.Systems;
 using Robust.Client.GameObjects;
@@ -55,6 +56,7 @@ public sealed class ActionButton : Control, IEntityControl
     public readonly CooldownGraphic Cooldown;
     private readonly SpriteView _smallItemSpriteView;
     private readonly SpriteView _bigItemSpriteView;
+    private readonly Label _counterLabel;
 
     private Texture? _buttonBackgroundTexture;
 
@@ -108,6 +110,14 @@ public sealed class ActionButton : Control, IEntityControl
             VerticalAlignment = VAlignment.Top,
             Margin = new Thickness(5, 0, 0, 0)
         };
+        _counterLabel = new Label
+        {
+            Name = "CounterLabel",
+            HorizontalAlignment = HAlignment.Right,
+            VerticalAlignment = VAlignment.Bottom,
+            Margin = new Thickness(0, 0, 5, 3),
+            Visible = false,
+        };
         _bigItemSpriteView = new SpriteView
         {
             Name = "Big Sprite",
@@ -153,6 +163,7 @@ public sealed class ActionButton : Control, IEntityControl
         AddChild(_bigItemSpriteView);
         AddChild(HighlightRect);
         AddChild(Label);
+        AddChild(_counterLabel);
         AddChild(Cooldown);
         AddChild(paddingBoxItemIcon);
 
@@ -171,6 +182,7 @@ public sealed class ActionButton : Control, IEntityControl
         base.OnThemeUpdated();
         _buttonBackgroundTexture = Theme.ResolveTexture("SlotBackground");
         Label.FontColorOverride = Theme.ResolveColorOrSpecified("whiteText");
+        _counterLabel.FontColorOverride = Theme.ResolveColorOrSpecified("whiteText");
     }
 
     private void OnPressed(GUIBoundKeyEventArgs args)
@@ -357,6 +369,7 @@ public sealed class ActionButton : Control, IEntityControl
         Action = system.GetAction(actionId);
 
         Label.Visible = Action != null;
+        UpdateCounterLabel();
         UpdateIcons();
     }
 
@@ -366,6 +379,7 @@ public sealed class ActionButton : Control, IEntityControl
         Cooldown.Visible = false;
         Cooldown.Progress = 1;
         Label.Visible = false;
+        _counterLabel.Visible = false;
         UpdateIcons();
     }
 
@@ -379,11 +393,27 @@ public sealed class ActionButton : Control, IEntityControl
         if (Action?.Comp is not {} action)
             return;
 
+        UpdateCounterLabel();
+
         if (action.Cooldown is {} cooldown)
             Cooldown.FromTime(cooldown.Start, cooldown.End);
 
         if (_toggled != action.Toggled)
             _toggled = action.Toggled;
+    }
+
+    private void UpdateCounterLabel()
+    {
+        if (Action is not { } action ||
+            !_entities.TryGetComponent(action, out XenoHiveInstantBuildActionComponent? counter) ||
+            !counter.Visible)
+        {
+            _counterLabel.Visible = false;
+            return;
+        }
+
+        _counterLabel.Text = counter.BuildsLeft.ToString();
+        _counterLabel.Visible = true;
     }
 
     protected override void MouseEntered()

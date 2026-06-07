@@ -1,0 +1,129 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCLFSurvLeader
+  name: au14-job-name-
+  description: au14-clfsurv-greeting
+  playTimeTracker: AU14CLFSurvivorLead
+  startingGear: AU14GearCLFSurvLeader
+  greeting: au14-clfsurv-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  ranks:
+    RMCRankCivilian: []
+  supervisors: au14-job-supervisors-clfcellleader
+  accessGroups:
+  - Colonist
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - CLF
+    - type: Skills
+      skills:
+        RMCSkillCqc: 2
+        RMCSkillConstruction: 2
+        RMCSkillEndurance: 2
+        RMCSkillEngineer: 2
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 2
+        RMCSkillIntel: 2
+        RMCSkillJtac: 4
+        RMCSkillLeadership: 3
+        RMCSkillMedical: 1
+        RMCSkillNavigations: 1
+        RMCSkillOverwatch: 1
+        RMCSkillPolice: 1
+        RMCSkillPowerLoader: 1
+        RMCSkillSurgery: 1
+        RMCSkillVehicles: 1
+    - type: EquipEntityPreset
+      preset: AU14CLFSurvLeaderPreset
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicCLF
+  id: AU14CLFSurvLeader
+  name: CLF CellLeader (Survivor)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-clfcellleader
+    description: au14-clfsurv-desription
+    reregister: false
+    job: AU14JobCLFSurvLeader
+    raffle:
+      settings: short
+    rules: au14-clfsurv-rules
+
+- type: entity
+  id: AU14CLFSurvLeaderPreset
+  name: clf surv leader preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomOutfits:
+    - [ CMJumpsuitTShirtWhiteCLFArmband  ] # uniform
+    - [ CMJumpsuitTShirtGrayCLFArmband ]
+    - [ RMCJumpsuitCivilianCLFArmband  ] 
+    - [ CMJumpsuitColonistCLFArmband ]
+    randomGearOther:
+    -
+      - [ AU14ArmorBallisticVest ] # armor
+      - [ RMCCoatMilitiaBrace ]
+      - [ RMCCoatMilitiaHauberk ]
+      - [ RMCCoatMilitiaVest ]
+      - [ RMCArmorBulletproof ]
+    -
+      - [ RMCGogglesBallisticBlack ] # eyes
+      - [ RMCGogglesM1A1Ballistic ]
+      - [ RMCGogglesBallistic ]
+      - [ RMCMaskScarfGray ]
+      - [ CMMaskCoif ]
+      - [ CMMaskGas ]
+      - [ RMCMaskKeffiyehBlack ]
+      - [ ]
+      - [ ]
+      - [ ]
+      - [ ]
+      - [ ]
+    -
+      - [ RMCHeadMilitiaHood ] # head
+      - [ RMCHeadCapTruckerBlue ]
+      - [ ArmorHelmetPMCRiot ]
+      - [ RMCHeadBeanie ]
+      - [ AU14UACGHelmet ]
+      - [ ]
+      - [ ]
+      - [ ]
+      - [ ]
+      - [ ]
+    randomWeapon: # Weapon with ammo pouches and stuff
+    - [ RMCWeaponRifleType71C, AU14PouchMagazineLargeFilledType71, AU14PouchIFAKFill ]
+# lowk debated giving the CLF leader LMGs for aura, decided not to for now
+#    - [ RMCWeaponLMGM60, AU14PouchGeneralLargeFilledM60, AU14PouchIFAKFill ]
+#    - [ AU14WeaponMar50LMGTactical, AU14PouchGeneralLargeFilledMAR50, AU14PouchIFAKFill ]
+    tryEquipRandomWeapon: true
+
+
+- type: startingGear
+  id: AU14GearCLFSurvLeader
+  equipment:
+    id: AU14IDCardCLFCellLeader
+    shoes: RMCShoesJackboots
+    belt: AU14BeltConstructionCLFSurv
+    suitstorage: RMCFlashlight
+  inhand:
+  - AU14CLFHeadset
+  - AU14FlagCarriableCLF
+  - RMCFlashlight
+- type: playTimeTracker
+  id: AU14CLFSurvivorLead

@@ -3,7 +3,7 @@
 - type: entity
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   id: RMCWeaponRifleL89A1
-  name: L89A1 marksman rifle
+  name: L88A1 marksman rifle
   description: The L89A1 is the standard-issue DMR of the RMC's Paramarine regiments, a lightweight and reliable marksman rifle that boasts an integrated 2x optic.
   components:
   - type: Sprite
@@ -94,7 +94,7 @@
 - type: entity
   parent: RMCWeaponRifleL89A1
   id: RMCWeaponRifleL89A2
-  name: L89A2 marksman rifle
+  name: L88A2 marksman rifle
   description: The L89A2 is the upgraded DMR of the RMC's Paramarine regiments, a lightweight and reliable marksman rifle that boasts an integrated 2x optic now with greater modularity with a rail spanning the underside of the handguard.
   components:
   - type: AttachableHolder

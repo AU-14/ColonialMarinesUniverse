@@ -1,0 +1,141 @@
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: AU14PouchMagazineLargeFilledNSG23
+  suffix: Filled, NSG-23
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleSSG45
+      amount: 4
+
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: AU14PouchMagazineLargeFilledM54C2
+  suffix: Filled, M54C2
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineRifleM54C
+      amount: 4
+
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: AU14PouchMagazineLargeFilledF44AA
+  suffix: Filled, F44AA
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineRifleF44AA
+      amount: 4
+
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: AU14PouchMagazineLargeFilledFP9000
+  suffix: Filled, FP9000
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSMGFP9000
+      amount: 4
+
+- type: entity
+  parent: RMCSatchelLightpackWeYa
+  id: AU14BackpackWeYuSurvSatchelFilledFP9000
+  suffix: Filled, FP9000
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMREWeYa
+    - id: CMCanteen
+    - id: RMCMagazineSMGFP9000
+    - id: RMCRadioHandheldColonyOff
+    - id: CMCrowbar
+    - id: RMCGrenadeBlastM12
+    - id: RMCGrenadeBlastM12
+
+
+- type: entity
+  parent: RMCSatchelLightpackWeYa
+  id: AU14BackpackWeYuSurvSatchelFilledNSG23
+  suffix: Filled, NSG-23
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMREWeYa
+    - id: CMCanteen
+    - id: RMCMagazineRifleSSG45
+    - id: RMCRadioHandheldColonyOff
+    - id: CMCrowbar
+    - id: RMCGrenadeBlastM12
+    - id: RMCGrenadeBlastM12
+
+- type: entity
+  parent: RMCSatchelLightpackWeYa
+  id: AU14BackpackWeYuSurvSatchelFilledM54C2
+  suffix: Filled, M54C2
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMREWeYa
+    - id: CMCanteen
+    - id: CMMagazineRifleM54C
+    - id: RMCRadioHandheldColonyOff
+    - id: CMCrowbar
+    - id: RMCGrenadeBlastM12
+    - id: RMCGrenadeBlastM12
+
+- type: entity
+  parent: RMCSatchelLightpackWeYa
+  id: AU14BackpackWeYuSurvSatchelFilledF44AA
+  suffix: Filled, F44AA
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMREWeYa
+    - id: CMCanteen
+    - id: AU14MagazineRifleF44AA
+    - id: RMCRadioHandheldColonyOff
+    - id: CMCrowbar
+    - id: RMCGrenadeBlastM12
+    - id: RMCGrenadeBlastM12
+  
+- type: entity
+  id: AU14WYSurvRifleBackpackPreset
+  name: weyu surv rifle Backpack preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomWeapon:
+    - [ RMCWeaponRifleSSG45, AU14PouchMagazineLargeFilledNSG23, AU14BackpackWeYuSurvSatchelFilledNSG23] # 1 in 5
+    - [ RMCWeaponRifleM54C2, AU14PouchMagazineLargeFilledM54C2, AU14BackpackWeYuSurvSatchelFilledM54C2 ] # 1 in 5
+    - [ AU14WeaponRifleF44AALock, AU14PouchMagazineLargeFilledF44AA, AU14BackpackWeYuSurvSatchelFilledF44AA ] # 1 in 5
+    - [ RMCWeaponSMGFP9000PMC, AU14PouchMagazineLargeFilledFP9000, AU14BackpackWeYuSurvSatchelFilledFP9000] # 2 in 5
+    - [ RMCWeaponSMGFP9000PMC, AU14PouchMagazineLargeFilledFP9000, AU14BackpackWeYuSurvSatchelFilledFP9000]
+    tryEquipRandomWeapon: true
+
+- type: entity
+  id: AU14WYSurvRiflePreset
+  name: weyu surv rifle preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomWeapon:
+    - [ RMCWeaponRifleSSG45, AU14PouchMagazineLargeFilledNSG23 ] # 1 in 5
+    - [ RMCWeaponRifleM54C2, AU14PouchMagazineLargeFilledM54C2 ] # 1 in 5
+    - [ AU14WeaponRifleF44AALock, AU14PouchMagazineLargeFilledF44AA ] # 1 in 5
+    - [ RMCWeaponSMGFP9000PMC, AU14PouchMagazineLargeFilledFP9000, AU14BackpackWeYuSurvSatchelFilledFP9000] # 2 in 5
+    - [ RMCWeaponSMGFP9000PMC, AU14PouchMagazineLargeFilledFP9000, AU14BackpackWeYuSurvSatchelFilledFP9000]
+    tryEquipRandomWeapon: true
+
+- type: entity
+  id: AU14WeYuSurvPistolPreset
+  name: WY Surv Pistol Preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomWeapon:
+    - [ AU14BeltPostelPistolM48A5Surv ]
+    - [ RMCM77BeltPMCFilledNearEmpty ]
+    - [ RMCBeltHolsterPistolWeYaMK80Fill ]
+    - [ RMCM1984BeltFilled ]
+    tryEquipRandomWeapon: true

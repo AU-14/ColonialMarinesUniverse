@@ -68,9 +68,9 @@
     ears2: RMCFlashlightPen
     suitstorage: RMCFlashlight
     id: AU14IDCardCLFSurgeon
-    neck: RMCCLFArmband
   inhand:
   - AU14CLFHeadset
+  - RMCCLFArmband
 
 - type: entity
   parent: CMSpawnPointJobBase

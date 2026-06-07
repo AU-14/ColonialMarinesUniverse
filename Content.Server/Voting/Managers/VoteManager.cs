@@ -115,6 +115,9 @@ namespace Content.Server.Voting.Managers
             if (!IsValidOption(v, option))
                 throw new ArgumentOutOfRangeException(nameof(option), "Invalid vote option ID");
 
+            if (option != null && !CheckVoterEligibility(player, v))
+                return;
+
             if (v.CastVotes.TryGetValue(player, out var existingOption))
             {
                 v.Entries[existingOption].Votes -= 1;
@@ -143,7 +146,7 @@ namespace Content.Server.Voting.Managers
         {
             // Handle active votes.
             var remQueue = new RemQueue<int>();
-            foreach (var v in _votes.Values)
+            foreach (var v in _votes.Values.ToArray())
             {
                 // Logger.GetSawmill("content").Debug($"{_timing.ServerTime}");
                 if (_timing.RealTime >= v.EndTime)
@@ -231,7 +234,9 @@ namespace Content.Server.Voting.Managers
                 options.TargetEntity,
                 carryoverKey,
                 optionKeys,
-                carryoverVotes);
+                carryoverVotes,
+                options.AllowedVoters,
+                options.RandomizeMissingVotes);
 
             var handle = new VoteHandle(this, reg);
 
@@ -267,7 +272,7 @@ namespace Content.Server.Voting.Managers
             msg.VoteId = v.Id;
             msg.VoteActive = !v.Finished;
 
-            if (!CheckVoterEligibility(player, v.VoterEligibility))
+            if (!CheckVoterEligibility(player, v))
             {
                 msg.VoteActive = false;
                 player.Channel.SendMessage(msg);
@@ -403,14 +408,17 @@ namespace Content.Server.Voting.Managers
             }
 
             // Remove ineligible votes that somehow slipped through
-            foreach (var playerVote in v.CastVotes)
+            foreach (var playerVote in v.CastVotes.ToArray())
             {
-                if (!CheckVoterEligibility(playerVote.Key, v.VoterEligibility))
+                if (!CheckVoterEligibility(playerVote.Key, v))
                 {
                     v.Entries[playerVote.Value].Votes -= 1;
                     v.CastVotes.Remove(playerVote.Key);
                 }
             }
+
+            if (v.RandomizeMissingVotes)
+                RandomizeMissingVotes(v);
 
             var effectiveVotes = GetEffectiveVotes(v);
 
@@ -436,6 +444,24 @@ namespace Content.Server.Voting.Managers
             v.OnFinished?.Invoke(_voteHandles[v.Id], args);
             UpdateCarryoverVotes(v, args);
             DirtyCanCallVoteAll();
+        }
+
+        private void RandomizeMissingVotes(VoteReg v)
+        {
+            if (v.Entries.Length == 0)
+                return;
+
+            foreach (var player in _playerManager.Sessions)
+            {
+                if (player.Status == SessionStatus.Disconnected ||
+                    v.CastVotes.ContainsKey(player) ||
+                    !CheckVoterEligibility(player, v))
+                {
+                    continue;
+                }
+
+                CastVote(v, player, _random.Next(v.Entries.Length));
+            }
         }
 
         private string? GetCarryoverKey(VoteOptions options)
@@ -555,6 +581,14 @@ namespace Content.Server.Voting.Managers
             return true;
         }
 
+        private bool CheckVoterEligibility(ICommonSession player, VoteReg vote)
+        {
+            if (!CheckVoterEligibility(player, vote.VoterEligibility))
+                return false;
+
+            return vote.AllowedVoters == null || vote.AllowedVoters.Contains(player.UserId);
+        }
+
         public IEnumerable<IVoteHandle> ActiveVotes => _voteHandles.Values;
 
         public bool TryGetVote(int voteId, [NotNullWhen(true)] out IVoteHandle? vote)
@@ -608,6 +642,8 @@ namespace Content.Server.Voting.Managers
             public readonly string? CarryoverKey;
             public readonly string[] OptionKeys;
             public readonly int[] CarryoverVotes;
+            public readonly HashSet<NetUserId>? AllowedVoters;
+            public readonly bool RandomizeMissingVotes;
 
             public bool Cancelled;
             public bool Finished;
@@ -626,7 +662,9 @@ namespace Content.Server.Voting.Managers
                 NetEntity? targetEntity,
                 string? carryoverKey,
                 string[] optionKeys,
-                int[] carryoverVotes)
+                int[] carryoverVotes,
+                HashSet<NetUserId>? allowedVoters,
+                bool randomizeMissingVotes)
             {
                 Id = id;
                 Entries = entries;
@@ -641,6 +679,8 @@ namespace Content.Server.Voting.Managers
                 CarryoverKey = carryoverKey;
                 OptionKeys = optionKeys;
                 CarryoverVotes = carryoverVotes;
+                AllowedVoters = allowedVoters;
+                RandomizeMissingVotes = randomizeMissingVotes;
             }
         }
 

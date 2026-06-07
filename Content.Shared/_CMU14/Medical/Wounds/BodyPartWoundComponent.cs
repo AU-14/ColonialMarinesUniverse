@@ -33,6 +33,27 @@ public sealed partial class BodyPartWoundComponent : Component
     [DataField, AutoNetworkedField]
     public List<int> Bandages = new();
 
+    [DataField, AutoNetworkedField]
+    public List<WoundMechanism> Mechanisms = new();
+
+    [DataField, AutoNetworkedField]
+    public List<WoundMechanismFlags> SecondaryMechanisms = new();
+
+    [DataField, AutoNetworkedField]
+    public List<WoundTreatmentQuality> TreatmentQualities = new();
+
+    [DataField, AutoNetworkedField]
+    public List<WoundCleanupFlags> Cleanup = new();
+
+    [DataField, AutoNetworkedField]
+    public ExternalBleedTier ExternalBleeding;
+
+    [DataField, AutoPausedField]
+    public TimeSpan ExternalBleedSuppressedUntil;
+
+    [DataField, AutoPausedField]
+    public TimeSpan NextExternalBleedTick;
+
     [DataField, AutoPausedField]
     public TimeSpan NextHealTick;
 }

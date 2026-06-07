@@ -262,6 +262,14 @@
         reagents:
         - ReagentId: Cellulose
           Quantity: 10
+  - type: Flamability
+    chance: 1.0
+    rate: 0.4
+    range: 0.8
+    spread: 0.8
+    destroyAnyway: true
+    burnDurationMin: 70
+    burnDurationMax: 620
 
 - type: entity
   parent: MaterialWoodPlank

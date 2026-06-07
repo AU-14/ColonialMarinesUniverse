@@ -4,10 +4,10 @@ using Robust.Client.Player;
 
 namespace Content.Client._RMC14.Xenonids.Screech;
 
-public sealed class ScreechBlindSystem : EntitySystem
+public sealed partial class ScreechBlindSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     public override void Initialize()
     {

@@ -1,6 +1,7 @@
 #nullable enable
 using System.Numerics;
 using Content.IntegrationTests.Tests.Interaction;
+using Content.Shared.Movement.Systems;
 using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests.Tests.Movement;
@@ -44,6 +45,10 @@ public abstract class MovementTest : InteractionTest
 
         await AddGravity();
         await AddAtmosphere();
+
+        await Server.WaitPost(() =>
+            SEntMan.System<MovementSpeedModifierSystem>().RefreshMovementSpeedModifiers(SEntMan.GetEntity(Player)));
+        await Pair.ReallyBeIdle(5);
     }
 
     /// <summary>

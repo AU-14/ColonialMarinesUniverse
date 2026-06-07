@@ -23,10 +23,8 @@ public sealed partial class MindTests
         Assert.That(pair.Client.EntMan.EntityExists(pair.Client.AttachedEntity));
         Assert.That(pair.Server.EntMan.EntityExists(pair.PlayerData?.Mind));
 
-        // Delete **everything**
-        var conHost = pair.Server.ResolveDependency<IConsoleHost>();
-        await pair.Server.WaitPost(() => conHost.ExecuteCommand("entities delete"));
-        await pair.RunTicksSync(5);
+        // Delete **everything** without deleting attached parent/child hierarchies in the same game state.
+        await pair.DeleteAllEntitiesLeafFirst();
 
         Assert.That(pair.Server.EntMan.EntityCount, Is.EqualTo(0));
 

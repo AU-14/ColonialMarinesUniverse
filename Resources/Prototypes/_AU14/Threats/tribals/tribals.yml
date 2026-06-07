@@ -2,14 +2,11 @@
   id: TribalsThreat
   lorePrimer: AU14PrimerThreatTribals
   roundstartspawns: tribalsParty
-  whitelistedgamemodes:
-  - DistressSignal
   blacklistedgamemodes:
   - DistressSignal
   winconditions:
-  - KillAllColonistRule
   - KillAllTribeRule
-  minplayers: 400 # off
+  minplayers: 0
 
 
 

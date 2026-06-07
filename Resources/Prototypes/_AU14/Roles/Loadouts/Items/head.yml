@@ -79,3 +79,8 @@
   id: BeretADJAU14
   equipment:
     head: AU14HeadBeretADJ
+
+- type: loadout
+  id: WYHeadCapWeylandYutaniDarkAU14
+  equipment:
+    head: RMCHeadCapWestonYamadaDark

@@ -37,7 +37,7 @@
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/Misc/firefighter.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bio: 15
     bullet: 10
     explosionArmor: 10

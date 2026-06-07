@@ -1,0 +1,79 @@
+- type: job
+  parent: AU14JobLEOBase
+  id: AU14JobParoleeReleaseCMBDeputyJob
+  name: au14-job-name-civiliancmbdeputy
+  description: You have been transferred to this planet as the parole officer of a convicted criminal. Report to the local Marshal and ensure the prisoner in your care is reintegrated into civilian life.
+  setPreference: false
+  canBeAntag: false
+  requirements:
+  ranks:
+    AU14RankCMBDeputy: []
+  startingGear: AU14JobParoleeReleaseCMBDeputyGear
+  icon: "RMCJobIconBureauDeputy"
+  spawnMenuRoleName: CMB Deputy (3rd party)
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - aucmb
+  - Colonist
+  - AUPrisonStaff
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - AUBureau
+    - type: Skills
+      skills:
+        RMCSkillCqc: 2
+        RMCSkillEndurance: 2
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 2
+        RMCSkillIntel: 1
+        RMCSkillMedical: 1
+        RMCSkillMeleeWeapons: 1
+        RMCSkillOverwatch: 1
+        RMCSkillPolice: 2
+        RMCSkillVehicles: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-cmbdeputy
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14JobParoleeReleaseCMBDeputyGear
+  equipment:
+    id: AU14IDCardColonyCMBDeputy
+    outerClothing: AU14CMBDeputyWindbreaker
+    jumpsuit: AU14CMBUniform
+    shoes: RMCBootsPMCFilled
+    head: RMCHeadCapBureau
+    belt: AU14BeltHolsterPistolCMBHG45
+    pocket1: AU14PouchPoliceEquipmentSupportSynth
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelTSEPA
+    ears: AU14CMBHeadsetOnlyCMB
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicCMB
+  id: AU14JobParoleeReleaseCMBDeputy
+  name: CMB Deputy
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-civiliancmbdeputy
+    description: You have been transferred to this planets Bureau by the colonial administration and tasked with transporting a local colonist who has finished his sentence offworld. Report to the local Marshal and ensure the prisoner in your care is reintegrated into the colony.
+    reregister: false
+    job: AU14JobParoleeReleaseCMBDeputyJob
+    raffle:
+      settings: short
+    rules: You do not know what is going on in the colony.

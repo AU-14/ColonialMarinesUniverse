@@ -22,7 +22,7 @@
     - forceonforce
     - colonyfall
   entrymethod: ground
-  weight: 20
+  weight: 100
   minplayers: 100
   maxplayers: 400
   GhostsNeeded: 0
@@ -48,7 +48,7 @@
     - forceonforce
     - colonyfall
   entrymethod: ground
-  weight: 20
+  weight: 100
   minplayers: 25
   maxplayers: 50
   GhostsNeeded: 0
@@ -76,7 +76,7 @@
     - forceonforce
     - colonyfall
   entrymethod: ground
-  weight: 20
+  weight: 100
   minplayers: 51
   maxplayers: 99
   GhostsNeeded: 5

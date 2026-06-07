@@ -68,8 +68,13 @@
     ears: AU14ColonyAdminHeadset
     outerClothing: AU14CivilianJacketGrayPufferVest
     back: CMSatchel
+  storage:
+    back:
+    - RMCRadioHandheldColonyOff
+    - CMPaperBin30
+    - CMPaperBin30
   inhand:
-  - RMCRadioHandheldColonyOff
+    - AU14BriefcaseLawBundle
 
 - type: entity
   parent: CMSpawnPointJobBase

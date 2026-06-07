@@ -5,6 +5,7 @@ using Content.Shared._CMU14.Medical.Items;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Unrevivable;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.DoAfter;
@@ -70,6 +71,10 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         {
             return;
         }
+        if (HasComp<SynthComponent>(target))
+        {
+            return;
+        }
 
         if (!TryFindTourniquetTargetPart(args.User, target, out var part, out var alreadyOn))
         {
@@ -100,6 +105,10 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         if (args.Cancelled || args.Target is not { } target)
             return;
         if (!IsLayerEnabled())
+        {
+            return;
+        }
+        if (HasComp<SynthComponent>(target))
         {
             return;
         }
@@ -181,6 +190,10 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
     public bool ApplyTourniquetToPart(Entity<CMUTourniquetItemComponent> ent, EntityUid part)
     {
         if (!HasComp<BodyPartComponent>(part))
+            return false;
+        if (HasComp<SynthComponent>(part))
+            return false;
+        if (Wounds.TryGetBodyOwner(part) is { } body && HasComp<SynthComponent>(body))
             return false;
 
         var now = Timing.CurTime;
@@ -340,7 +353,7 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUTourniquetComponent, BodyPartComponent>();
         while (query.MoveNext(out var partUid, out var tq, out var part))
         {
-            if (part.Body is not { } body || Unrevivable.IsUnrevivable(body))
+            if (part.Body is not { } body || Unrevivable.IsUnrevivable(body) || HasComp<SynthComponent>(body))
                 continue;
 
             if (tq.NextUpdate > now)

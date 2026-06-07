@@ -773,7 +773,7 @@
       state: ready_charge
     useDelay: 14
   - type: TargetAction
-    range: 9
+    range: 15 # actual range is in XenoChargeComponent, this allows max-range clamp cast
     checkCanAccess: false
   - type: WorldTargetAction
     event: !type:XenoChargeActionEvent

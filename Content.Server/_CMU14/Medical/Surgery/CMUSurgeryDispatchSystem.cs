@@ -9,6 +9,7 @@ using Content.Shared._CMU14.Medical.Organs;
 using Content.Shared._CMU14.Medical.Surgery;
 using Content.Shared._CMU14.Medical.Surgery.Conditions;
 using Content.Shared._CMU14.Medical.Surgery.Effects;
+using Content.Shared._CMU14.Medical.Surgery.Traits;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Marines.Skills;
@@ -43,6 +44,7 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private SharedCMUSurgeryFlowSystem _flowSurgery = default!;
+    [Dependency] private SharedCMUSurgicalTraitSystem _surgicalTraits = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
 
@@ -406,6 +408,10 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             bits.Add(Loc.GetString("cmu-medical-surgery-condition-internal-bleed"));
         if (HasComp<CMUEscharComponent>(part))
             bits.Add(Loc.GetString("cmu-medical-surgery-condition-eschar"));
+        foreach (var trait in _surgicalTraits.EnumerateOrderedTraits(part))
+        {
+            bits.Add(Loc.GetString(CMUSurgicalTraitMetadata.ConditionLocId(trait)));
+        }
         return string.Join(" · ", bits);
     }
 

@@ -160,6 +160,7 @@ namespace Content.Client.Viewport
                 RenderZLevelPasses(_viewport!);
             else
             {
+                NoteZRenderBypassed("viewport RenderZLevels=false");
                 ClearZLevelCompositeState();
                 _viewport!.Render();
             }
@@ -294,7 +295,7 @@ namespace Content.Client.Viewport
             Matrix3x2.Invert(GetLocalToScreenMatrix(), out var matrix);
             coords = Vector2.Transform(coords, matrix);
 
-            return _viewport!.LocalToWorld(coords);
+            return ProjectViewportLocalToMap(coords);
         }
 
         /// <inheritdoc/>
@@ -311,7 +312,39 @@ namespace Content.Client.Viewport
             var ev = new PixelToMapEvent(coords, this, _viewport!);
             _entityManager.EventBus.RaiseEvent(EventSource.Local, ref ev);
 
-            return _viewport!.LocalToWorld(ev.VisiblePosition);
+            return ProjectViewportLocalToMap(ev.VisiblePosition);
+        }
+
+        private MapCoordinates ProjectViewportLocalToMap(Vector2 coords)
+        {
+            DebugTools.AssertNotNull(_viewport);
+
+            var projectionEye = GetInputProjectionEye(_eye, _viewport!.Eye);
+            return projectionEye == null
+                ? default
+                : ProjectViewportLocalToMap(coords, _viewport.Size, _viewport.RenderScale, projectionEye);
+        }
+
+        internal static IEye? GetInputProjectionEye(IEye? controlEye, IEye? renderEye)
+        {
+            return renderEye is ZEye && controlEye != null
+                ? controlEye
+                : renderEye;
+        }
+
+        internal static MapCoordinates ProjectViewportLocalToMap(
+            Vector2 point,
+            Vector2i viewportSize,
+            Vector2 renderScale,
+            IEye eye)
+        {
+            point -= viewportSize / 2f;
+            point *= new Vector2(1, -1) / EyeManager.PixelsPerMeter;
+
+            eye.GetViewMatrixInv(out var viewMatrixInv, renderScale);
+            point = Vector2.Transform(point, viewMatrixInv);
+
+            return new MapCoordinates(point, eye.Position.MapId);
         }
 
         public Vector2 WorldToScreen(Vector2 map)

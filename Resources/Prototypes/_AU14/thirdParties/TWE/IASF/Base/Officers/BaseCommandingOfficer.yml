@@ -1,0 +1,52 @@
+- type: job
+  parent: CMJobBase
+  id: AU14IASFCommanderBase
+  name: au14-job-name-tweiasf-co
+  playTimeTracker: AU14IASFCommander
+  description: au14-job-description-twepara
+  ranks:
+    RMC_Lieutenant: []
+  icon: RMCJobIconParaCommander
+  spawnMenuRoleName: IASF Commander (Base)
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govforplatco
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: rmc_commander
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadIASF
+    - type: Skills
+      preset: AU14SkillPresetPlatoonCommander
+    - type: JobPrefix
+      prefix: au14-job-prefix-tweiasf-co
+    - type: RMCTrackable
+    - type: RMCPointing
+    - type: MarineOrders
+  hidden: true
+
+- type: startingGear
+  parent: AU14RMCGearIASFBase
+  id: AU14RMCGearIASFCommander
+  equipment:
+    id: AU14IDCardIASFCommander
+    jumpsuit: RMCJumpsuitMarineParaService
+    shoes: RMCBootsRoyalFilled
+    head: RMCHeadCapPeakedPara
+    ears: RMCHeadsetParaOfficer
+    eyes: RMCGlassesAviators
+    outerClothing: RMCJacketParaCOJacketFilled
+    gloves: RMCHandsVeteranRoyalMarine
+    belt: RMCBeltHolsterPistolParaM44
+    back: RMCSatchelLightpackFilledParaSL
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14RMCRTTPouchMagazineL90
+    suitstorage: AU14WeaponRifleL90Full
+
+- type: playTimeTracker
+  id: AU14IASFCommander

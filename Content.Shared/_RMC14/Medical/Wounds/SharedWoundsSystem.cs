@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using Content.Shared._CMU14.Medical;
+using Content.Shared._CMU14.Medical.Wounds.Events;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Damage;
@@ -85,7 +87,7 @@ public abstract partial class SharedWoundsSystem : EntitySystem
 
         TryHealWounds((ent.Owner, args.Damageable), args.DamageDelta, limit);
 
-        if (args.DamageIncreased)
+        if (args.DamageIncreased && CanCreateRMCWounds(ent.Owner))
         {
             TryAddWound(ent, ent.Comp.BruteWoundGroup, args.DamageDelta, WoundType.Brute);
             TryAddWound(ent, ent.Comp.BurnWoundGroup, args.DamageDelta, WoundType.Burn);
@@ -122,6 +124,17 @@ public abstract partial class SharedWoundsSystem : EntitySystem
 
     private void OnWoundTreaterUseInHand(Entity<WoundTreaterComponent> ent, ref UseInHandEvent args)
     {
+        if (HasComp<CMUHumanMedicalComponent>(args.User))
+        {
+            var ev = new CMUWoundTreaterInterceptEvent(args.User, ent.Owner, args.User);
+            RaiseLocalEvent(ref ev);
+            if (ev.Handled)
+            {
+                args.Handled = true;
+                return;
+            }
+        }
+
         StartTreatment(args.User, args.User, ent, out var handled);
         args.Handled = handled;
     }
@@ -449,6 +462,9 @@ public abstract partial class SharedWoundsSystem : EntitySystem
         DamageSpecifier damage,
         WoundType type)
     {
+        if (!CanCreateRMCWounds(woundable.Owner))
+            return;
+
         if (!_prototypes.TryIndex(groupId, out var group) ||
             !damage.TryGetDamageInGroup(group, out var total) ||
             total <= FixedPoint2.Zero)
@@ -530,6 +546,9 @@ public abstract partial class SharedWoundsSystem : EntitySystem
 
     public void AddWound(Entity<WoundableComponent?> woundable, FixedPoint2 total, WoundType type, TimeSpan? fixedDuration = null)
     {
+        if (!CanCreateRMCWounds(woundable.Owner))
+            return;
+
         if (!Resolve(woundable, ref woundable.Comp, false))
             return;
 
@@ -574,6 +593,9 @@ public abstract partial class SharedWoundsSystem : EntitySystem
         wounded.Wounds.Add(new Wound(total, FixedPoint2.Zero, bloodloss, newDuration, type, false));
         Dirty(woundable, wounded);
     }
+
+    private bool CanCreateRMCWounds(EntityUid uid)
+        => !HasComp<CMUHumanMedicalComponent>(uid);
 
     public void RemoveWounds(Entity<WoundedComponent?> wounded, WoundType type)
     {

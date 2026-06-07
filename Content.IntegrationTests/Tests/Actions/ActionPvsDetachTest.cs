@@ -59,7 +59,6 @@ public sealed class ActionPvsDetachTest
         Assert.That(sys.GetActions(ent).Count(), Is.EqualTo(initActions));
         Assert.That(cSys.GetActions(cEnt).Count(), Is.EqualTo(initActions));
 
-        await server.WaitPost(() => server.EntMan.DeleteEntity(map.MapUid));
         await pair.CleanReturnAsync();
     }
 }

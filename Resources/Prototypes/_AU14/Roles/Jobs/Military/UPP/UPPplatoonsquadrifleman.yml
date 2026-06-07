@@ -2,25 +2,15 @@
   parent: AU14JobSquadRiflemanBase
   id: AU14JobGOVFORSquadRiflemanUPP
   name: Rifleman
-  description: au14-job-description-govforsquadrifleman
-  setPreference: false
+  spawnMenuRoleName: Rifleman (UPP)
+  startingGear: AU14GearGOVFORSquadRifleman
+  dummyStartingGear: AU14GearGOVFORRiflemanDummy
   ranks:
     UPP_Gefreiter:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORSquadRifleman
       time: 108000 # 30 hours
     UPP_Private: []
-  startingGear: AU14GearGOVFORSquadRifleman
-  dummyStartingGear: AU14GearGOVFORRiflemanDummy
-  icon: "AU14JobIconGovRifleman"
-  requireAdminNotify: false
-  spawnMenuRoleName: Rifleman (UPP)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforSquad
-  hasIcon: false
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
@@ -35,8 +25,3 @@
         RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORSquadRiflemanUPP
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-  hidden: true

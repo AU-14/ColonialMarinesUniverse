@@ -182,16 +182,16 @@
   toxin: true
   metabolisms:
     Poison:
-      metabolismRate: 0.2
+      metabolismRate: 0.4
       effects:
       - !type:Biocidic
-        potency: 2
+        potency: 4
       - !type:AdjustReagent
         reagent: CMBicaridine
-        amount: -0.2
+        amount: -0.4
       - !type:AdjustReagent
         reagent: CMMeralyne
-        amount: -0.2
+        amount: -0.4
 
 - type: reagent
   parent: CMReagent
@@ -204,16 +204,16 @@
   toxin: true
   metabolisms:
     Poison:
-      metabolismRate: 0.2
+      metabolismRate: 0.4
       effects:
       - !type:Corrosive
-        potency: 2
+        potency: 4
       - !type:AdjustReagent
         reagent: CMKelotane
-        amount: -0.2
+        amount: -0.4
       - !type:AdjustReagent
         reagent: CMDermaline
-        amount: -0.2
+        amount: -0.4
 
 - type: reagent
   parent: CMReagent
@@ -226,21 +226,21 @@
   toxin: true
   metabolisms:
     Poison:
-      metabolismRate: 0.2
+      metabolismRate: 0.4
       effects:
       - !type:RMCAlchemistPain
-        potency: 4
+        potency: 8
       - !type:Jitter
         probability: 0.1
       - !type:AdjustReagent
         reagent: CMUParacetamol
-        amount: -0.2
+        amount: -0.4
       - !type:AdjustReagent
         reagent: CMUTramadol
-        amount: -0.2
+        amount: -0.4
       - !type:AdjustReagent
         reagent: CMUOxycodone
-        amount: -0.2
+        amount: -0.4
 
 - type: reagent
   parent: CMReagent
@@ -253,12 +253,12 @@
   toxin: true
   metabolisms:
     Poison:
-      metabolismRate: 0.2
+      metabolismRate: 0.4
       effects:
       - !type:Corrosive
-        potency: 2
+        potency: 4
       - !type:AdjustTemperature
-        amount: 6000
+        amount: 12000
 
 - type: reagent
   parent: CMReagent
@@ -271,10 +271,22 @@
   toxin: true
   metabolisms:
     Poison:
-      metabolismRate: 0.2
+      metabolismRate: 0.4
       effects:
       - !type:Hemolytic
-        potency: 1
+        potency: 2
+      - !type:AdjustReagent
+        reagent: CMDexalin
+        amount: -0.4
+      - !type:AdjustReagent
+        reagent: CMDexalinPlus
+        amount: -0.4
+      - !type:AdjustReagent
+        reagent: CMInaprovaline
+        amount: -0.4
+      - !type:AdjustReagent
+        reagent: RMCIron
+        amount: -0.4
 
 - type: reagent
   parent: CMReagent
@@ -287,16 +299,16 @@
   toxin: true
   metabolisms:
     Poison:
-      metabolismRate: 0.2
+      metabolismRate: 0.4
       effects:
       - !type:AdjustTemperature
-        amount: -6000
+        amount: -12000
       - !type:AdjustReagent
         reagent: CMCryoxadone
-        amount: -0.2
+        amount: -0.4
       - !type:AdjustReagent
         reagent: CMClonexadone
-        amount: -0.2
+        amount: -0.4
 
 - type: reagent
   parent: CMReagent
@@ -309,7 +321,7 @@
   toxin: true
   metabolisms:
     Poison:
-      metabolismRate: 0.2
+      metabolismRate: 0.4
       effects:
       - !type:RMCAlchemistPurgeNonToxins
-        amount: 0.2
+        amount: 0.4

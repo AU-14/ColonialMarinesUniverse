@@ -377,7 +377,7 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                 if (marine.Rank != null)
                 {
                     if (_prototypes.TryIndex(marine.Rank, out var rank))
-                        rankName = rank.Prefix;
+                        rankName = _localization.TryGetString($"rank-{rank.ID}.prefix", out var lp) ? lp : rank.Prefix;
                 }
 
                 var name = rankName != null ? $"{rankName} {marine.Name}" : marine.Name;
@@ -626,7 +626,7 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                     Margin = new Thickness(0, 3, 0, 3)
                 };
                 var localeName = role.OverwatchRoleName is { } raw
-                    ? (Loc.TryGetString(raw, out var loc) ? loc : raw)
+                    ? (_localization.TryGetString(raw, out var loc) ? loc : raw)
                     : string.Empty;
                 roleNameLabel.SetMarkupPermissive($"[bold]{localeName}[/bold]");
 

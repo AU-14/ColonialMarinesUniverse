@@ -51,11 +51,29 @@ public sealed partial class CMUZLevelsCVars : CVars
     public static readonly CVarDef<int> MaxOpeningRectsPerPass =
         CVarDef.Create("cmu.zlevels.max_opening_rects_per_pass", 512, CVar.CLIENTONLY | CVar.ARCHIVE);
 
+    public static readonly CVarDef<float> LowerRenderVisibilityGrace =
+        CVarDef.Create("cmu.zlevels.lower_render_visibility_grace", 0.18f, CVar.CLIENTONLY | CVar.ARCHIVE);
+
     public static readonly CVarDef<bool> ProjectedLightingEnabled =
         CVarDef.Create("cmu.zlevels.projected_lighting", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     public static readonly CVarDef<int> MaxProjectedLightsPerLevel =
         CVarDef.Create("cmu.zlevels.projected_lighting_max_per_level", 16, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    public static readonly CVarDef<float> ProjectedLightingVisibilityGrace =
+        CVarDef.Create("cmu.zlevels.projected_lighting_visibility_grace", 0.18f, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    public static readonly CVarDef<bool> ProjectedLightingLowerReceivers =
+        CVarDef.Create("cmu.zlevels.projected_lighting_lower_receivers", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    public static readonly CVarDef<bool> ProjectedLightingLowerSources =
+        CVarDef.Create("cmu.zlevels.projected_lighting_lower_sources", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    public static readonly CVarDef<int> ProjectedLightingMaxSourceLightsPerMap =
+        CVarDef.Create("cmu.zlevels.projected_lighting_max_source_lights_per_map", 32, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    public static readonly CVarDef<int> ProjectedLightingMaxOpeningsPerSource =
+        CVarDef.Create("cmu.zlevels.projected_lighting_max_openings_per_source", 4, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     public static readonly CVarDef<float> ProjectedLightAttenuationPerDepth =
         CVarDef.Create("cmu.zlevels.projected_lighting_atten_depth", 0.5f, CVar.CLIENTONLY | CVar.ARCHIVE);

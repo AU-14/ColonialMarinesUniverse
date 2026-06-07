@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Content.Shared._CMU14.Medical.Trauma;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
@@ -14,4 +15,6 @@ public readonly record struct BodyPartDamagedEvent(
     DamageSpecifier Delta,
     FixedPoint2 NewCurrent,
     IReadOnlyList<EntityUid> ContainedOrgans,
-    EntityUid? Tool);
+    EntityUid? Tool,
+    DamageImpact Impact,
+    CMUTraumaContactResult Trauma);

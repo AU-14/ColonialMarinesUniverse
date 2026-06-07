@@ -23,8 +23,8 @@
   - type: StorageFill
     contents:
     - id: CMPen
-    - id: RMCGuidebookSOP
-    - id: RMCGuidebookLawMarine
+    - id: AU14GuidebookSOP
+    - id: AU14GuidebookLawMarine
     - id: AU14Scissors
     - id: RMCCPRDummy
     - id: RMCGrenadeTraining

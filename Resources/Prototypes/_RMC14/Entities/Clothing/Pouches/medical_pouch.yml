@@ -6,10 +6,15 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Pouches/medical.rsi
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - pocket
+    sprite: _RMC14/Objects/Clothing/Pouches/medical.rsi
   - type: Storage
     maxItemSize: Large
     grid:
-    - 0,0,7,1 #4 slots
+    - 0,0,13,1 #7 slots
     whitelist:
       tags:
       - DiscreteHealthAnalyzer
@@ -34,6 +39,7 @@
       - Hypospray
       components:
       - Hypospray
+      - Defibrillator
   - type: FixedItemSizeStorage
 
 - type: entity

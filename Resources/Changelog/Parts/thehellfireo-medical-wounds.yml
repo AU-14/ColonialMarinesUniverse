@@ -1,0 +1,10 @@
+author: TheHellFireo
+changes:
+  - type: Add
+    message: Added a wound-driven medical foundation with mechanism wound types, limb health caps, bleeding control, and detailed injury examination.
+  - type: Add
+    message: Added field-mixed gauze and trauma dressing treatments with new medical ingredients and treatment sprites.
+  - type: Tweak
+    message: Updated health analyzers, surgery flow, medical vendors, rifleman equipment vendors, and ASRS medical purchasing for the new wound system.
+  - type: Fix
+    message: Fixed surgical lines, synth grafts, retained fragments, and trauma governor interactions against the new wound and limb recovery rules.

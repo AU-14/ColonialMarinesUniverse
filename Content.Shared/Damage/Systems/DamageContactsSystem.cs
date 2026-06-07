@@ -34,7 +34,7 @@ public sealed partial class DamageContactsSystem : EntitySystem
             damaged.NextSecond = _timing.CurTime + TimeSpan.FromSeconds(1);
 
             if (damaged.Damage != null)
-                _damageable.TryChangeDamage(ent, damaged.Damage, interruptsDoAfters: false);
+                _damageable.TryChangeDamage(ent, damaged.Damage, interruptsDoAfters: false, impact: damaged.Impact);
         }
     }
 
@@ -70,5 +70,6 @@ public sealed partial class DamageContactsSystem : EntitySystem
 
         var damagedByContact = EnsureComp<DamagedByContactComponent>(otherUid);
         damagedByContact.Damage = component.Damage;
+        damagedByContact.Impact = DamageImpact.ForContact(component.Damage);
     }
 }

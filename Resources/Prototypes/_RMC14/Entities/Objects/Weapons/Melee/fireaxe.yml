@@ -19,6 +19,10 @@
     soundHit:
       collection: GenericHit
     wideAnimationRotation: 90
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
   - type: IncreaseDamageOnWield
     damage:
       types:

@@ -7,12 +7,10 @@ using Content.Shared._CMU14.Medical.Organs.Events;
 using Content.Shared._CMU14.Medical.Organs.Heart;
 using Content.Shared._CMU14.Medical.Organs.Lungs;
 using Content.Shared._RMC14.Medical.Unrevivable;
-using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Body.Organ;
-using Content.Shared.Projectiles;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
@@ -35,8 +33,6 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
     private const float CompoundOrganPassThrough = 0.30f;
     private const float ComminutedOrganPassThrough = 0.50f;
     private const float NegativePartPassThroughBonus = 0.15f;
-    private const float BallisticOrganBypassChance = 0.02f;
-    private const float BallisticOrganBypassPassThrough = 0.12f;
     private float _regenScanAccumulator;
 
     private bool _medicalEnabled;
@@ -76,16 +72,14 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
         if (args.ContainedOrgans.Count == 0)
             return;
 
-        var passThrough = 1f;
+        var traumaOrganContact = args.Trauma.OrganContact && args.Trauma.OrganPassThrough > 0f;
+        var passThrough = traumaOrganContact ? args.Trauma.OrganPassThrough : 0f;
         var heavyOrganHit = false;
-        var ballisticBypass = TryRollBallisticOrganBypass(args, out var bypassPassThrough);
 
         // Bone shielding: while a part's BoneShieldsOrgans flag is on, the
         // rib cage / skull / etc. limits pass-through by fracture severity and
         // part condition. Parts with no BoneComponent (V2 cybernetics, etc.)
-        // skip the shielding step and route damage through unconditionally.
-        // Ballistic head / torso hits can occasionally slip past intact bone,
-        // but only with a small organ pass-through compared to fracture trauma.
+        // skip the shielding step and use the shared trauma contact result.
         if (ent.Comp.BoneShieldsOrgans && HasComp<BoneComponent>(ent))
         {
             var severity = TryComp<FractureComponent>(ent, out var fracture)
@@ -93,43 +87,29 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
                 : FractureSeverity.None;
             if (!severity.IsAtLeast(FractureSeverity.Compound))
             {
-                if (!ballisticBypass)
+                if (!traumaOrganContact)
                     return;
-
-                passThrough = bypassPassThrough;
             }
             else
             {
-                passThrough = ComputeOrganPassThrough(ent.Comp, severity, args.NewCurrent);
+                var fracturePassThrough = ComputeOrganPassThrough(ent.Comp, severity, args.NewCurrent);
+                passThrough = MathF.Max(passThrough, fracturePassThrough);
                 if (passThrough <= 0f)
                     return;
-
-                if (ballisticBypass)
-                    passThrough = MathF.Max(passThrough, bypassPassThrough);
 
                 heavyOrganHit = severity.IsAtLeast(FractureSeverity.Comminuted) ||
                                 args.NewCurrent < FixedPoint2.Zero;
             }
         }
+        else if (!traumaOrganContact)
+        {
+            return;
+        }
+
+        if (args.Trauma.HighEnergy)
+            heavyOrganHit = true;
 
         DistributeOrganDamage(args.Body, args.Delta, args.ContainedOrgans, passThrough, heavyOrganHit);
-    }
-
-    private bool TryRollBallisticOrganBypass(BodyPartDamagedEvent args, out float passThrough)
-    {
-        passThrough = 0f;
-
-        if (args.Type is not (BodyPartType.Head or BodyPartType.Torso))
-            return false;
-
-        if (args.Tool is not { } tool || !HasComp<ProjectileComponent>(tool))
-            return false;
-
-        if (!Random.Prob(BallisticOrganBypassChance))
-            return false;
-
-        passThrough = BallisticOrganBypassPassThrough;
-        return true;
     }
 
     public void DistributeOrganDamage(

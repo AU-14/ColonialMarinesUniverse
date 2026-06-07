@@ -55,6 +55,7 @@
     id: AU14IDCardColonyWorkingJoe
     ears: AU14HeadsetWorkingJoe
     back: AU14IMPBackpackMarine
+    pocket1: AU14StampJoe
 
 - type: entity
   parent: CMSpawnPointJobBase

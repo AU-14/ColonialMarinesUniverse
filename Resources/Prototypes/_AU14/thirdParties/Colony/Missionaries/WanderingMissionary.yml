@@ -1,0 +1,89 @@
+# Using reallife Mormon Missionaries as the Base but kept purposefully ambigous 
+# To avoid people not knowing anything about mormon or even christian religion doing slop RP
+
+- type: job
+  parent: AU14JobLEOBase
+  id: AU14JobWanderingMissionaryJob
+  name: Wandering Missionary
+  description: You have been sent by your church to do missionary work on the frontier. Provide community serivce and humanitarian aid where needed and preach the good word to the hungry souls out here.
+  setPreference: true
+  playTimeTracker: AU14JobReturningColonist
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianColonist
+  spawnMenuRoleName: Missionary (3rd party)
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loners
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: EquipEntityPreset
+      preset: AU14WanderingMissionaryPreset
+    - type: Skills
+      skills:
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillFirearms: 2
+        RMCSkillMedical: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-civiliancolonist
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: AU14JobWanderingMissionary
+  name: Wandering Missionary (civilian)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Missionary (civilian)
+    description:  You have been sent by your church to do missionary work on the frontier. Provide community serivce and humanitarian aid where needed and preach the good word to the hungry souls out here.
+    reregister: false
+    job: AU14JobWanderingMissionaryJob
+    raffle:
+      settings: short
+    rules: You do not know what is going on in the colony.
+
+- type: entity
+  id: AU14WanderingMissionaryPreset
+  name: wandering missionary preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomGearOther:
+    -
+      - [ RMCJumpsuitChaplain ]
+      - [ RMCJumpsuitBlackTailored ]
+      - [ RMCJumpsuitCharcoalTailored ]
+      - [ RMCJumpsuitBlackPantsUniform ]
+    -
+      - [ AU14CivilianJacketKhakiPufferJacket ]
+      - [ AU14CivilianJacketOrangePufferJacket ]
+      - [ AU14CivilianJacketKhakiPufferVest ]
+      - [ ]
+      - [ ]
+    -
+      - [ RMCShoesBlack ]
+      - [ RMCBootsVanBandolier ]
+      - [ RMCShoesBrown ]
+    -
+      - [ AU14SlingSatchelBlue ]
+      - [ AU14SlingSatchelBlack ]
+      - [ CMSatchel ]
+    -
+      - [ RMCBible ]
+      

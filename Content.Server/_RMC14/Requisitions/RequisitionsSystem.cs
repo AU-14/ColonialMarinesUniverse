@@ -280,7 +280,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         {
             case "govfor":
             case "opfor":
-                comp.Balance = 8000;
+                comp.Balance = 20000;
                 break;
             case "colony":
                 comp.Balance = 450;
@@ -485,11 +485,8 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
     private bool Sell(Entity<RequisitionsElevatorComponent> elevator)
     {
-        // Deposits from selling items go to the elevator's nearest account based on faction
-        var account = GetAccount(elevator.Comp.Faction);
          var entities = _lookup.GetEntitiesIntersecting(elevator);
          var soldAny = false;
-         var rewards = 0;
          foreach (var entity in entities)
          {
              if (entity == elevator.Comp.Audio)
@@ -498,36 +495,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
              if (HasComp<CargoSellBlacklistComponent>(entity))
                  continue;
 
-             var entityRewards = SubmitInvoices(entity);
-
-             if (TryComp(entity, out RequisitionsCrateComponent? crate))
-             {
-                 entityRewards += crate.Reward;
-             }
-             else
-             {
-                 entityRewards += (int) Math.Round(_pricing.GetPrice(entity));
-             }
-
-             if (entityRewards > 0)
-                 soldAny = true;
-
-             rewards += entityRewards;
-
+             soldAny = true;
              QueueDel(entity);
          }
-
-         // Colony ASRS does not receive budget or feedback for selling items
-         if (elevator.Comp.Faction != "colony")
-         {
-             if (rewards > 0)
-                 SendUIFeedback(Loc.GetString("requisition-paperwork-reward-message", ("amount", rewards)));
-
-             account.Comp.Balance += rewards;
-         }
-
-         if (soldAny)
-             Dirty(account);
 
          return soldAny;
      }
@@ -863,5 +833,19 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         {
             _slots.TryInsert(crate, label.LabelSlot, paper, null);
         }
+    }
+
+    /// <summary>
+    /// Attempts to deduct <paramref name="amount"/> from the specified faction's requisitions account.
+    /// Returns false if the account has insufficient funds.
+    /// </summary>
+    public bool TrySpendFunds(string faction, int amount)
+    {
+        var account = GetAccount(faction);
+        if (!TryComp(account, out RequisitionsAccountComponent? comp) || comp.Balance < amount)
+            return false;
+
+        comp.Balance -= amount;
+        return true;
     }
 }

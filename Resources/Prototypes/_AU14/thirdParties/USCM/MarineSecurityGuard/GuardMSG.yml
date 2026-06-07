@@ -1,0 +1,93 @@
+- type: job
+  parent: CMJobBase
+  id: AU14MSGWatchStander
+  name: au14-job-name-msg-watchstander
+  description: au14-job-description-msg
+  playTimeTracker: AU14MSGWatchStander
+  ranks:
+    RMCRankLanceCorporal: []
+  spawnMenuRoleName: Marine Guard (3rd party)
+  startingGear: AU14GearMSGWatchStander
+  greeting: au14-job-greeting-msg
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: au14-job-name-msg-commander
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: private
+      background:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: background_ua
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadMSG
+    - type: Skills
+      preset: AU14SkillPresetPlatoonRifleman
+    - type: JobPrefix
+      prefix: au14-job-prefix-msg-watchstander
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  id: AU14JobMSGWatchStander
+  name: Marine Guard (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadMSG
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-msg-watchstander
+    description: au14-job-description-msg
+    reregister: false
+    job: AU14MSGWatchStander
+    raffle:
+      settings: short
+    rules: au14-job-description-msg
+
+- type: startingGear
+  id: AU14GearMSGWatchStander
+  equipment:
+    id: AU14IDCardMSGWatchStander
+    jumpsuit: AU14MarineUniformDressEnlistedD
+    shoes: RMCShoesLaceupDress
+    head: CMHeadDressBlues
+    belt: CMBeltSecurityMP
+    pocket1: AU14PouchPoliceEquipmentSupportSynth
+    pocket2: RMCPouchDocument
+    back: CMSatchel
+    ears: AU14AmbassadorUAHeadset
+  inhand:
+    - AU14IMPBackpackMarineGuardFilled
+  storage:
+    back:
+    - CMPen
+    - CMMRE
+    belt:
+    - CMWeaponPistolM1984
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    - RMCHandcuffs
+    - RMCHandcuffs
+    - RMCHandcuffs
+    pocket2:
+    - CMPaper
+    - CMPaper
+    - CMPaper
+    - CMPaper
+    - CMPaper
+    - CMPaper
+
+- type: playTimeTracker
+  id: AU14MSGWatchStander

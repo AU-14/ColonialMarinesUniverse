@@ -118,8 +118,23 @@ jobs:
               });
               const changed = files.reduce((sum, file) => sum + file.additions + file.deletions, 0);
               const size = changed >= 5000 ? 'XL' : changed >= 1000 ? 'L' : changed >= 100 ? 'M' : changed >= 10 ? 'S' : 'XS';
-              await remove(pr.number, ['XS', 'S', 'M', 'L', 'XL']);
-              await add(pr.number, [size]);
+              const sizeLabels = ['XS', 'S', 'M', 'L', 'XL'];
+              const current = await github.paginate(github.rest.issues.listLabelsOnIssue, {
+                owner,
+                repo,
+                issue_number: pr.number,
+                per_page: 100,
+              });
+              const currentNames = new Set(current.map(label => label.name));
+              const staleSizes = sizeLabels.filter(label => label !== size && currentNames.has(label));
+
+              if (staleSizes.length > 0) {
+                await remove(pr.number, staleSizes);
+              }
+
+              if (!currentNames.has(size)) {
+                await add(pr.number, [size]);
+              }
             }
 
             async function applyMergeConflict(pr) {

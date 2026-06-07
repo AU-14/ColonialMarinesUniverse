@@ -76,7 +76,7 @@
       amount: 0.5
   effects:
     - !type:AreaReactionEffect
-      duration: 14
+      duration: 22
       prototypeId: RMCSmokeChemical
       sound:
         path: /Audio/Effects/smoke.ogg

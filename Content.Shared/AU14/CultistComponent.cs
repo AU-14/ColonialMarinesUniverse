@@ -16,4 +16,3 @@ public sealed partial class CultistComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? Hive;
 }
-

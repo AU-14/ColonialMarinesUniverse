@@ -1,11 +1,12 @@
 - type: job
   abstract: true
-  parent: AU14JobMilitaryBase
+  parent: CMJobBase
   id: AU14JobAuxTechBaseAbstract
   name: au14-job-name-govforAuxTech
   description: au14-job-description-govforAuxTech
   icon: "AU14JobIconRTO"
   spawnMenuRoleName: Auxiliary Technician (GOVFOR)
+  supervisors: au14-job-supervisors-govfor
   startingGear: AU14GearGOVFORAuxTech
   dummyStartingGear: AU14GearGOVFORAuxTechDummy
   playTimeTracker: AU14JobGOVFORAuxTech
@@ -14,6 +15,7 @@
   overwatchSortPriority: -6
   accessGroups:
   - AU14GovforAuxTech
+  roleWeight: 0.25
 
 - type: job
   abstract: true
@@ -46,6 +48,14 @@
   special:
   - !type:AddComponentSpecial
     components:
+    - type: Marine
+      Faction: govfor
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: UserIFF
+      factions:
+      - GOVFOR
     - type: Skills
       preset: AU14SkillPresetPlatoonAuxTech
     - type: JobPrefix
@@ -54,6 +64,19 @@
       icon:
         sprite: /Textures/_AU14/Interface/au14govforhud.rsi
         state: govfor_rto
+    - type: MarineOrders
+      moveOrderSoundMale:
+        collection: AU14MaleMoveOrder
+      moveOrderSoundFemale:
+        collection: AU14FemaleMoveOrder
+      focusOrderSoundMale:
+        collection: AU14MaleFocusOrder
+      focusOrderSoundFemale:
+        collection: AU14FemaleFocusOrder
+      holdOrderSoundMale:
+        collection: AU14MaleHoldOrder
+      holdOrderSoundFemale:
+        collection: AU14FemaleHoldOrder
 
 - type: playTimeTracker
   id: AU14JobGOVFORAuxTech
@@ -69,6 +92,7 @@
   storage:
     back:
     - CMStampApproved
+    - AU14StampAUX
 
 - type: startingGear
   id: AU14GearGOVFORAuxTechDummy

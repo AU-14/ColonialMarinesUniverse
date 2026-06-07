@@ -144,7 +144,7 @@ public sealed partial class KillAllColonistRuleSystem : GameRuleSystem<KillAllCo
             if (_gameTicker.RunLevel != GameRunLevel.InRound)
                 return;
 
-            var winMessage = _auRoundSystem._selectedthreat.WinMessage;
+            var winMessage = _auRoundSystem._selectedthreat?.WinMessage;
             if (!string.IsNullOrEmpty(winMessage))
             {
                 _gameTicker.EndRound(winMessage);

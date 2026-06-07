@@ -55,17 +55,19 @@ public sealed partial class SquadInfoBui : BoundUserInterface
             backgroundColor = ownerMember.BackgroundColor;
         }
 
-        // Only allow the local viewer to change tracker settings if they are the squad leader.
         var isSquadLeader = EntMan.HasComponent<SquadLeaderComponent>(PlayerManager.LocalEntity);
+        var localNetEntity = EntMan.GetNetEntity(PlayerManager.LocalEntity);
+        var isOverwatchOperator = localNetEntity != null && tracker.TemporaryOverwatchEditors.Contains(localNetEntity.Value);
+        var canManageFireteams = isSquadLeader || isOverwatchOperator;
+
         var squadLeader = tracker.Fireteams.SquadLeader == null
             ? Loc.GetString("rmc-squad-info-squad-leader-none")
             : Loc.GetString("rmc-squad-info-squad-leader-name", ("leader", tracker.Fireteams.SquadLeader));
         _window.SquadLeaderLabel.Text = squadLeader;
-        _window.ChangeTrackerButton.Visible = isSquadLeader;
-        if (isSquadLeader)
-        {
-            _window.ChangeTrackerButton.OnPressed += _ => SendPredictedMessage(new SquadLeaderTrackerChangeTrackedMsg());
-        }
+
+        // Changing the client-side tracker is allowed for every client that has the component
+        _window.ChangeTrackerButton.Visible = true;
+        _window.ChangeTrackerButton.OnPressed += _ => SendPredictedMessage(new SquadLeaderTrackerChangeTrackedMsg());
 
         // Get squad objectives from state
         Dictionary<SquadObjectiveType, string> objectives = new();
@@ -108,7 +110,7 @@ public sealed partial class SquadInfoBui : BoundUserInterface
 
             var container = new SquadFireteamContainer();
             // Show edit nickname button; server will validate permissions when message is sent.
-            container.EditNicknameButton.Visible = true;
+            container.EditNicknameButton.Visible = canManageFireteams;
             var fireteamIndex = i;
             container.EditNicknameButton.OnPressed += _ =>
             {
@@ -132,11 +134,11 @@ public sealed partial class SquadInfoBui : BoundUserInterface
                 : Loc.GetString("rmc-squad-info-team-leader-name", ("leader", fireteam.Leader.Value.Name));
             container.LeaderLabel.Text = teamLeader;
 
-            var fireatemIndex = i;
+            var fireteamIdx = i;
             container.RemoveLeaderButton.OnPressed +=
-                _ => SendPredictedMessage(new SquadLeaderTrackerDemoteFireteamLeaderMsg(fireatemIndex));
-            // Allow Overwatch to remove a fireteam leader too; only hide tracker-mode change for non-leaders.
-            container.RemoveLeaderButton.Visible = fireteam.Leader != null;
+                _ => SendPredictedMessage(new SquadLeaderTrackerDemoteFireteamLeaderMsg(fireteamIdx));
+            // Hide tracker-mode clientside-change for non-leaders, serverside verifies if OW or SL.
+            container.RemoveLeaderButton.Visible = fireteam.Leader != null && canManageFireteams;
             var fireteamLabel = Loc.GetString("rmc-squad-info-fireteam", ("fireteam", i + 1));
             if (!string.IsNullOrWhiteSpace(fireteam.Nickname))
                 fireteamLabel += $": {fireteam.Nickname}";
@@ -163,7 +165,7 @@ public sealed partial class SquadInfoBui : BoundUserInterface
                 };
 
                 // Allow Overwatch actors to promote as well; server will validate permission.
-                promoteButton.Visible = true;
+                promoteButton.Visible = canManageFireteams;
                 promoteButton.OnPressed += _ =>
                     SendPredictedMessage(new SquadLeaderTrackerPromoteFireteamLeaderMsg(member.Id));
 
@@ -182,7 +184,7 @@ public sealed partial class SquadInfoBui : BoundUserInterface
                 };
 
                 // Allow Overwatch actors to unassign members too; server will validate permission.
-                unassignButton.Visible = true;
+                unassignButton.Visible = canManageFireteams;
                 unassignButton.OnPressed += _ =>
                     SendPredictedMessage(new SquadLeaderTrackerUnassignFireteamMsg(member.Id));
 

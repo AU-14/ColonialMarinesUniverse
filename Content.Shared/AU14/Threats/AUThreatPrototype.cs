@@ -59,7 +59,7 @@ public sealed partial class ThreatPrototype : IPrototype
 
 
     [DataField("maxplayers")]
-    public int MaxPlayers { get; private set; } = 100;
+    public int MaxPlayers { get; private set; } = 0;
 
     [DataField("minplayers")]
     public int MinPlayers { get; private set; } = 0;
@@ -78,7 +78,7 @@ public sealed partial class ThreatPrototype : IPrototype
 
     [DataField("thirdpartyinterval", required: false)]
 
-    public int ThirdPartyInterval { get; private set; } = 18000;
+    public int ThirdPartyInterval { get; private set; } = 14000;
 
     [DataField("lorePrimer")]
     public ProtoId<LorePrimerPrototype>? LorePrimer { get; private set; }
@@ -93,5 +93,17 @@ public sealed partial class ThreatPrototype : IPrototype
     /// </summary>
     [DataField("jobScaling", required: false)]
     public ProtoId<JobScalePrototype>? JobScaling { get; private set; }
+
+    /// <summary>
+    /// Minimum seconds after round start before threat entities spawn and win conditions activate.
+    /// </summary>
+    [DataField("spawnDelayMin")]
+    public int SpawnDelayMin { get; private set; } = 1200;
+
+    /// <summary>
+    /// Maximum seconds after round start before threat entities spawn and win conditions activate.
+    /// </summary>
+    [DataField("spawnDelayMax")]
+    public int SpawnDelayMax { get; private set; } = 2400;
 
 }

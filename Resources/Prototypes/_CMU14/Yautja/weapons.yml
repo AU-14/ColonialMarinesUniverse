@@ -20,6 +20,13 @@
         Blunt: 12
     soundHit:
       path: /Audio/Weapons/smash.ogg
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+    thrown:
+      contact: Crush
+      penetration: None
   - type: MeleeDamageMultiplier
     multiplier: 0
     whitelist:
@@ -62,6 +69,14 @@
       types:
         Piercing: 26
         Slash: 6
+  - type: DamageImpactProfile
+    melee:
+      contact: Stab
+      penetration: Medium
+    thrown:
+      contact: Stab
+      penetration: Medium
+      energy: Medium
   - type: YautjaRecallable
     range: 12
 
@@ -90,6 +105,13 @@
       types:
         Slash: 24
         Blunt: 4
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
+    thrown:
+      contact: Fragment
+      penetration: Low
   - type: YautjaRecallable
     range: 12
 
@@ -115,6 +137,13 @@
     damage:
       types:
         Slash: 27
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
+    thrown:
+      contact: Fragment
+      penetration: Low
 
 - type: entity
   parent: CMUYautjaClanSword
@@ -142,6 +171,13 @@
       types:
         Slash: 27
         Piercing: 12
+  - type: DamageImpactProfile
+    melee:
+      contact: Stab
+      penetration: Medium
+    thrown:
+      contact: Fragment
+      penetration: Low
 
 - type: entity
   parent: CMUYautjaClanSword
@@ -183,6 +219,13 @@
     damage:
       types:
         Slash: 28
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
+    thrown:
+      contact: Fragment
+      penetration: Low
 
 - type: entity
   parent: CMUYautjaDualWarScythe
@@ -220,6 +263,15 @@
     damage:
       types:
         Blunt: 26
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+      energy: Medium
+    thrown:
+      contact: Crush
+      penetration: None
+      energy: Medium
 
 - type: entity
   parent: CMUYautjaWeaponBase
@@ -247,6 +299,14 @@
       types:
         Piercing: 29
         Slash: 6
+  - type: DamageImpactProfile
+    melee:
+      contact: Stab
+      penetration: Medium
+    thrown:
+      contact: Stab
+      penetration: Medium
+      energy: Medium
   - type: EmbeddableProjectile
     sound: /Audio/Weapons/star_hit.ogg
   - type: LandAtCursor
@@ -278,6 +338,13 @@
       types:
         Slash: 28
         Blunt: 5
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
+    thrown:
+      contact: Fragment
+      penetration: Low
   - type: LandAtCursor
   - type: YautjaRecallable
     range: 12
@@ -307,6 +374,13 @@
       types:
         Piercing: 16
         Slash: 4
+  - type: DamageImpactProfile
+    melee:
+      contact: Stab
+      penetration: Low
+    thrown:
+      contact: Stab
+      penetration: Medium
 
 - type: entity
   parent: BaseItem
@@ -423,6 +497,18 @@
     damage:
       types:
         Piercing: 28
+  - type: DamageImpactProfile
+    melee:
+      contact: Stab
+      penetration: Medium
+    heavyMelee:
+      contact: Stab
+      penetration: Medium
+      energy: Medium
+    thrown:
+      contact: Stab
+      penetration: Medium
+      energy: Medium
   - type: LandAtCursor
   - type: YautjaRecallable
     range: 12
@@ -459,6 +545,13 @@
       types:
         Slash: 28
         Piercing: 4
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
+    thrown:
+      contact: Fragment
+      penetration: Low
 
 - type: entity
   parent: CMUYautjaWarGlaive
@@ -531,6 +624,13 @@
     damage:
       types:
         Slash: 22
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
+    thrown:
+      contact: Fragment
+      penetration: Low
 
 - type: entity
   parent: CMUYautjaWeaponBase
@@ -556,6 +656,14 @@
     damage:
       types:
         Blunt: 22
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+      energy: Medium
+    thrown:
+      contact: Crush
+      penetration: None
 
 - type: entity
   parent: CMUYautjaWeaponBase
@@ -581,6 +689,13 @@
     damage:
       types:
         Slash: 24
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
+    thrown:
+      contact: Fragment
+      penetration: Low
   - type: LandAtCursor
 
 - type: entity
@@ -608,6 +723,13 @@
       types:
         Slash: 18
         Piercing: 4
+  - type: DamageImpactProfile
+    melee:
+      contact: Stab
+      penetration: Low
+    thrown:
+      contact: Stab
+      penetration: Low
 
 - type: entity
   parent: BaseBullet

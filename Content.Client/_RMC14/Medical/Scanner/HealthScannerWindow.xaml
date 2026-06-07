@@ -6,7 +6,7 @@
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     MinSize="520 420"
-    SetSize="980 820">
+    SetSize="860 820">
     <PanelContainer Name="ScaleRoot" Access="Public">
         <PanelContainer.PanelOverride>
             <graphics:StyleBoxFlat BackgroundColor="#0E1418" BorderColor="#527078" BorderThickness="2" />

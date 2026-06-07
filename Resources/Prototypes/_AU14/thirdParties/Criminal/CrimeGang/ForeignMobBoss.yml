@@ -1,0 +1,62 @@
+- type: job
+  parent: AU14JobLEOBase
+  id: AU14JobForeignMobBossJob
+  name: au14-job-name-mobboss
+  description: You have been ousted from your old territory and lost everything. But old habits die hard, move into rival territory with your Family and begin anew.
+  setPreference: false
+  playTimeTracker: AU14JobMobBoss
+  startingGear: AU14ForeignGearMobBossGear
+  icon: "AU14JobIconColonyMobBoss"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-mobboss
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+  ranks:
+    RMCRankCivilian: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillFirearms: 2
+    - type: JobPrefix
+      prefix: au14-job-prefix-mobboss
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: AU14JobForeignMobBoss
+  name: Mob Boss (Criminal)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Mob Boss (Criminal)
+    description: You have been ousted from your old territory and lost everything. But old habits die hard, move into rival territory with your Family and begin anew.
+    reregister: false
+    job: AU14JobForeignMobBossJob
+    raffle:
+      settings: short
+    rules: You do not know what is going on in the colony.
+
+
+- type: startingGear
+  id: AU14ForeignGearMobBossGear
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonCharcoal
+    shoes: RMCShoesLaceup
+    id: AU14IDCardColonyColonist
+    back: CMSatchel

@@ -95338,7 +95338,7 @@ entities:
     - type: Transform
       pos: -218.5,-133.5
       parent: 1
-- proto: CMEncryptionKeyWEYA
+- proto: CMEncryptionKeyWEYU
   entities:
   - uid: 4637
     components:

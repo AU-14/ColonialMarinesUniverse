@@ -54,7 +54,12 @@ public sealed partial class WendigoVoiceBui : BoundUserInterface
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        if (disposing)
-            _window?.Dispose();
+        if (!disposing || _window == null)
+            return;
+
+        _window.OnClose -= Close;
+        _window.OnLineSelected -= OnLineSelected;
+        _window.Orphan();
+        _window = null;
     }
 }

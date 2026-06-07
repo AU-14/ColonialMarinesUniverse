@@ -20,6 +20,7 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
     private static readonly Regex StartDoubleQuote = new("\"$");
     private static readonly Regex EndDoubleQuote = new("^\"|(?<=^@)\"");
     private static readonly Regex StartAtSign = new("^@");
+    private const string AfterSpeakerHighlightContext = "(?<=(?<=/name.*)|(?<=/bold.*\".*)|(?<=,.*\"\".*))";
 
     /// <summary>
     ///     The list of words to be highlighted in the chatbox.
@@ -117,7 +118,7 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
             }
 
             // Make sure any name tagged as ours gets highlighted only when others say it.
-            keyword = StartAtSign.Replace(keyword, "(?<=(?<=/name.*)|(?<=,.*\"\".*))");
+            keyword = StartAtSign.Replace(keyword, AfterSpeakerHighlightContext);
 
             _highlights.Add(keyword);
         }

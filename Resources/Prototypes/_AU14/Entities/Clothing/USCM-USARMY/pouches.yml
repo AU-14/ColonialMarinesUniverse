@@ -1,0 +1,9 @@
+- type: entity
+  parent: RMCPouchMagazine
+  id: AU14PouchMagazineFilledM4RA
+  suffix: M4RA, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineRifleM4SPR
+      amount: 3

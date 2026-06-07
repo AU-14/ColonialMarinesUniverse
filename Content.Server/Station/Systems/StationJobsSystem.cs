@@ -424,14 +424,13 @@ public sealed partial class StationJobsSystem : EntitySystem
         if (station == EntityUid.Invalid)
             return null;
 
-        var available = GetAvailableJobs(station);
+        var available = GetAvailableJobs(station).ToHashSet();
         bool TryPick(JobPriority priority, [NotNullWhen(true)] out ProtoId<JobPrototype>? jobId)
         {
             var filtered = jobPriorities
                 .Where(p =>
                             p.Value == priority
-                            && disallowedJobs != null
-                            && !disallowedJobs.Contains(p.Key)
+                            && (disallowedJobs == null || !disallowedJobs.Contains(p.Key))
                             && available.Contains(p.Key))
                 .Select(p => p.Key)
                 .ToList();
@@ -464,7 +463,9 @@ public sealed partial class StationJobsSystem : EntitySystem
         if (!pickOverflows)
             return null;
 
-        var overflows = GetOverflowJobs(station);
+        var overflows = GetOverflowJobs(station)
+            .Where(job => disallowedJobs == null || !disallowedJobs.Contains(job))
+            .ToList();
         if (overflows.Count == 0)
             return null;
 

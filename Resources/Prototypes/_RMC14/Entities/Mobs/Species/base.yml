@@ -115,6 +115,7 @@
   - type: CMUHumanMedical
   - type: HitLocation
   - type: PainShock
+  - type: CMUPainFeedback
   - type: Damageable
     damageContainer: Biological
     damageModifierSet: null
@@ -180,6 +181,12 @@
         type: BodyPartPickerBui
       enum.CMUSurgeryUIKey.Key:
         type: CMUSurgeryBui
+      enum.CMUTraumaGovernorUI.Key:
+        type: CMUTraumaGovernorBui
+        requireInputValidation: false
+      enum.CMUMedicalFieldCraftingUI.Key:
+        type: CMUMedicalFieldCraftingBui
+        requireInputValidation: false
   - type: Infectable
   - type: Tackleable
   - type: XenoNestable
@@ -385,6 +392,10 @@
     whitelist:
       tags:
       - SurvivalPouch
+  - type: TileFirePatter
+    removeDuration: 3.75
+    sound:
+      path: /Audio/_RMC14/Weapons/genhit1.ogg
   - type: HumanoidAppearance
     species: Human
     hideLayersOnEquip:

@@ -54,7 +54,7 @@ public sealed partial class CrusherShieldSystem : EntitySystem
         args.Handled = true;
 
         EnsureComp<XenoShieldComponent>(xeno);
-        _shield.ApplyShield(xeno, XenoShieldSystem.ShieldType.Crusher, xeno.Comp.Amount);
+        _shield.ApplyShield(xeno, XenoShieldSystem.ShieldType.Crusher, xeno.Comp.Amount, visualState: "king-shield", maxShield: xeno.Comp.Amount.Double());
         ApplyEffects(xeno);
 
         if (_net.IsClient)

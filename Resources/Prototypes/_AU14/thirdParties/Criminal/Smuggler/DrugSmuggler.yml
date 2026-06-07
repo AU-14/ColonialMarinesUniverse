@@ -1,0 +1,99 @@
+- type: job
+  parent: AU14JobLEOBase
+  id: AU14DrugSmugglerJob
+  name: Drug Smuggler
+  description: You barely made it out as the CMB raided your old drug lab, luckily you managed to escape with some of the product and they didnt catch your name. Time to try again.
+  setPreference: false
+  startingGear: AU14DrugSmugglerGear
+  icon: "CMJobIconEmpty"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loners
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+  ranks:
+    RMCRankCivilian: []
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillFirearms: 2
+    - type: EquipEntityPreset
+      preset: AU14DrugSmugglerPreset
+    - type: JobPrefix
+      prefix: au14-job-prefix-mobboss
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: AU14DrugSmuggler
+  name: Drug Dealer (Criminal)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Drug Dealer (Criminal)
+    description:  You barely made it out as the CMB raided your old drug lab, luckily you managed to escape with some of the product and they didnt catch your name. Time to try again.
+    reregister: false
+    job: AU14DrugSmugglerJob
+    raffle:
+      settings: short
+    rules: You do not know what is going on in the colony.
+
+- type: startingGear
+  id: AU14DrugSmugglerGear
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonCharcoal
+    shoes: RMCShoesLaceup
+    id: AU14IDCardMobGoon
+    ears: AU14HeadsetMob
+
+- type: entity
+  id: AU14DrugSmugglerPreset
+  name: drug smuggler preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomGearOther:
+    -
+      - [ AU14SatchelFilledDrugs ]
+      - [ AU14SatchelFilledDrugsAlt]
+
+- type: entity
+  parent: CMSatchel
+  id: AU14SatchelFilledDrugs
+  components:
+  - type: StorageFill
+    contents:
+    - id: JointRainbow
+      amount: 4
+    - id: PillSpaceDrugs
+      amount: 3
+    - id: StrangePill
+      amount: 3
+
+- type: entity
+  parent: CMSatchel
+  id: AU14SatchelFilledDrugsAlt
+  components:
+  - type: StorageFill
+    contents:
+    - id: Joint
+      amount: 4
+    - id: StrangePill
+      amount: 3
+    - id: RMCSyringeDrugs
+      amount: 1

@@ -1,5 +1,5 @@
 - type: job
-  parent: AU14JobTARSPartyContractorBase
+  parent: CMJobBase
   id: AU14JobProdigyTARSPartySynth
   name: Prodigy TARS Support Synthetic
   description: au14-prodigyrescue-description
@@ -82,6 +82,7 @@
         types:
           Blunt: 35
     - type: Synth
+  hidden: false
 
 - type: entity
   parent: AU14BaseMobSpeciesSyntheticProdigy

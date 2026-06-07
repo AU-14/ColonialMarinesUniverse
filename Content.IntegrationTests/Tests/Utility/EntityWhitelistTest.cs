@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Whitelist;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests.Utility
 {
@@ -11,6 +12,7 @@ namespace Content.IntegrationTests.Tests.Utility
     {
         private const string InvalidComponent = "Sprite";
         private const string ValidComponent = "Physics";
+        private static readonly EntProtoId CircularSawPrototype = "CMCircularSaw";
 
         [TestPrototypes]
         private const string Prototypes = $@"
@@ -111,6 +113,27 @@ namespace Content.IntegrationTests.Tests.Utility
                     Assert.That(sys.IsValid(whitelistSer, WhitelistTestInvalidTag), Is.False);
                 });
             });
+            await pair.CleanReturnAsync();
+        }
+
+        [Test]
+        public async Task CircularSawComponentNameIsValidForWhitelists()
+        {
+            await using var pair = await PoolManager.GetServerClient();
+            var server = pair.Server;
+
+            await server.WaitAssertion(() =>
+            {
+                var compFactory = server.ResolveDependency<IComponentFactory>();
+                var protoManager = server.ResolveDependency<IPrototypeManager>();
+
+                Assert.That(compFactory.GetComponentAvailability("CMCircularSaw"),
+                    Is.EqualTo(ComponentAvailability.Available));
+
+                Assert.That(protoManager.TryIndex<EntityPrototype>(CircularSawPrototype, out var saw), Is.True);
+                Assert.That(saw!.Components.ContainsKey("CMCircularSaw"), Is.True);
+            });
+
             await pair.CleanReturnAsync();
         }
     }

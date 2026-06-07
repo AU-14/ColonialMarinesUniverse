@@ -4899,7 +4899,7 @@ entities:
     - type: Transform
       pos: 10.720065,4.515682
       parent: 1
-- proto: RMCGuidebookSOP
+- proto: AU14GuidebookSOP
   entities:
   - uid: 729
     components:

@@ -102,3 +102,43 @@
   id: CCAFUniformAU14
   equipment:
     jumpsuit: AU14CCAFUniform
+
+- type: loadout
+  id: WYJumpsuitLiaisonBlackAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlack
+
+- type: loadout
+  id: WYJumpsuitLiaisonBlazerAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlazer
+
+- type: loadout
+  id: WYJumpsuitLiaisonAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaison
+
+- type: loadout
+  id: WYJumpsuitLiaisonCharcoalAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonCharcoal
+
+- type: loadout
+  id: WYJumpsuitLiaisonFormalAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonFormal
+
+- type: loadout
+  id: WYJumpsuitLiaisonOutingAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonOuting
+
+- type: loadout
+  id: WYJumpsuitLiaisonOutingRedAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonOutingRed
+
+- type: loadout
+  id: WYJumpsuitLiaisonSuspendersAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonSuspenders

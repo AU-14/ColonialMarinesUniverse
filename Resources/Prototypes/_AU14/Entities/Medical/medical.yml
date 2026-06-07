@@ -1008,11 +1008,16 @@
   - type: WoundTreater
     wound: Brute
     treats: true
+    instantWoundTreatment: true
+    woundsTreatedPerUse: 1
     group: Brute
     consumable: true
     canUseUnskilled: true
     skills:
       RMCSkillMedical: 2
+    cmuMechanisms: 7
+    cmuTreatmentQuality: Optimal
+    cmuCleanupClears: 16
     treatBeginSound:
       path: "/Audio/_RMC14/Medical/bandage.ogg"
     treatEndSound:

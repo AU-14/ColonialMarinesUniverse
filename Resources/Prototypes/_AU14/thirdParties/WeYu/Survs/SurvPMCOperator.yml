@@ -1,0 +1,77 @@
+- type: job
+  parent: AU14JobWYPMCPartyContractorBase
+  id: AU14JobWYSurvPMC
+  name: au14-job-name-wypmc
+  description: au14-wysurv-greeting
+  ranks:
+    AU14RankWeYuRecruit: []
+  spawnMenuRoleName: WY PMC Contractor (Survivor, NSG-23)
+  startingGear: AU14GearWYSurvPMC
+  greeting: au14-wysurv-greeting
+  icon: "RMCJobIconPMCStandard"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: NpcFactionMember
+      factions:
+      - AUWeYu
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 1
+        RMCSkillFirearms: 2
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    - type: EquipEntityPreset
+      preset: AU14WYSurvRifleBackpackPreset
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadRiflemanWYPMC
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - SquadPMC
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: AU14JobWYSurvPMC
+  name: WY PMC Contractor (Survivor)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: PMC Contractor
+    description: au14-wysurv-description
+    reregister: false
+    job: AU14JobWYSurvPMC
+    raffle:
+      settings: short
+    rules: au14-wysurv-description
+
+- type: startingGear
+  id: AU14GearWYSurvPMC
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14WYPMCArmor
+    jumpsuit: AU14WYPMCFatigues
+    shoes: RMCBootsPMCFilled
+    head: AU14ArmorHelmetPMCTactical
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    belt: RMCMK80BeltPMCFilled
+    pocket2: AU14PouchIFAKFill
+    ears: RMCHeadsetDistressWeYa

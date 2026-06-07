@@ -42,7 +42,9 @@
     maxItemSize: Normal
     grid:
     - 0,0,20,1
-    blacklist: {}
+    blacklist:
+      tags:
+        - Backpack
   - type: ContainerContainer
     containers:
       storagebase: !type:Container
@@ -391,7 +393,7 @@
     - 0,0,17,1
   - type: StorageCloseOnMove
     skipInHand: true
-    
+
 - type: entity
   parent: RMCBackpackRCMMedium
   id: RMCBackpackRCMMediumPVP
@@ -424,7 +426,7 @@
     maxItemSize: Normal
     grid:
     - 0,0,23,1
-      
+
 - type: entity
   parent: RMCBackpackRCMLarge
   id: RMCBackpackRCMLargePVP
@@ -492,7 +494,7 @@
     - 0,0,23,1 # 24 Slots
 
 - type: entity
-  parent: RMCBackpackRCMMedicPVP 
+  parent: RMCBackpackRCMMedicPVP
   id: RMCBackpackRCMMedicPVPFilledParaMedic
   suffix: Filled, Paramarine Medic
   components:

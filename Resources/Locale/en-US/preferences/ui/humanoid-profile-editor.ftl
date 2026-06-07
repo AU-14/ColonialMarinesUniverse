@@ -84,3 +84,11 @@ humanoid-profile-editor-trait-count-hint = Points available: [{$current}/{$max}]
 trait-category-disabilities = Disabilities
 trait-category-speech = Speech traits
 trait-category-quirks = Quirks
+
+
+humanoid-profile-editor-government-forces-label = Government Forces / { $segmentTitle }
+
+humanoid-profile-editor-segment-command = Command
+humanoid-profile-editor-segment-flight = Flight
+humanoid-profile-editor-segment-support = Support
+humanoid-profile-editor-segment-line = Line Infantry

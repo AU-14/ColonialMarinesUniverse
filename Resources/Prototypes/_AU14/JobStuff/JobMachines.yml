@@ -57,12 +57,12 @@
     probability: 100
   - type: SubmissionStorage
     rewards:
-      SteelOre: 100
+      SteelOre: 30
       AUwood: 25
       Vegetable: 10
-      Fruit: 20
-      CottonBoll: 15
-      CMUGrain: 15
+      Fruit: 2
+      CottonBoll: 4
+      CMUGrain: 2
   - type: ContainerContainer
     containers:
       submission: !type:Container
@@ -86,7 +86,7 @@
   components:
   - type: SubmissionStorage
     rewards:
-      SteelOre: 100
+      SteelOre: 10
   - type: DisposalUnit
     whitelist:
       tags:
@@ -101,7 +101,7 @@
   components:
   - type: SubmissionStorage
     rewards:
-      AUwood: 25
+      AUwood: 20
   - type: DisposalUnit
     whitelist:
       tags:
@@ -116,7 +116,7 @@
   components:
   - type: SubmissionStorage
     rewards:
-      Vegetable: 10
+      Vegetable: 2
   - type: DisposalUnit
     whitelist:
       tags:
@@ -130,7 +130,7 @@
   components:
   - type: SubmissionStorage
     rewards:
-      Fruit: 20
+      Fruit: 2
   - type: DisposalUnit
     whitelist:
       tags:

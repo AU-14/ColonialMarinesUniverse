@@ -146,6 +146,71 @@
   - type: CMUFracturedSurgeryCondition
     requireSeverity: Comminuted
 
+# ---- Condition-driven cleanup steps ----------------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryTieVascularTear
+  name: Tie Off Torn Vessel
+  components:
+  - type: CMSurgery
+    steps:
+    - CMUSurgeryStepTieVascularTear
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryExtractForeignBody
+  name: Extract Foreign Body
+  components:
+  - type: CMSurgery
+    steps:
+    - CMUSurgeryStepExtractForeignBody
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRelieveCompartmentPressure
+  name: Relieve Compartment Pressure
+  components:
+  - type: CMSurgery
+    steps:
+    - CMUSurgeryStepRelieveCompartmentPressure
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryDebrideContaminatedWound
+  name: Debride Contaminated Tissue
+  components:
+  - type: CMSurgery
+    steps:
+    - CMUSurgeryStepDebrideContaminatedWound
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryRemoveBoneFragments
+  name: Remove Bone Fragments
+  components:
+  - type: CMSurgery
+    steps:
+    - CMUSurgeryStepRemoveBoneFragments
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryFreeOrganAdhesions
+  name: Free Organ Adhesions
+  components:
+  - type: CMSurgery
+    steps:
+    - CMUSurgeryStepFreeOrganAdhesions
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryPackOrganBleed
+  name: Pack Organ Bleed
+  components:
+  - type: CMSurgery
+    steps:
+    - CMUSurgeryStepPackOrganBleed
+
 # ---- Internal-bleed clamp + close ------------------------------------
 
 - type: entity

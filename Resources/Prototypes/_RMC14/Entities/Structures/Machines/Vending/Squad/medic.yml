@@ -27,6 +27,12 @@
       - id: CMTraumaKit10
         points: 2
         recommended: true
+      - id: CMUPlainTraumaDressing10
+        points: 2
+      - id: CMUCoagulantPowder
+        points: 4
+      - id: CMUBurnGel
+        points: 4
     #    CMMedicalSplints: 1P
 #        recommended: true
       - id: CMBloodPackFull # TODO RMC14 O-

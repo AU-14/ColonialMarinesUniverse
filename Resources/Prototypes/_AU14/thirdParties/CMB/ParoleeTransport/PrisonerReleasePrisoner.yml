@@ -1,0 +1,62 @@
+- type: job
+  parent: AU14JobLEOBase
+  id: AU14JobTransportParoleeJob
+  name: au14-job-name-civilianprisoner
+  description: You are being transported back to your home to be released on parole after serving a sentence for your previous crimes.
+  setPreference: false
+  canBeAntag: false
+  requirements:
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCMBParoleeGear
+  icon: "CMJobIconEmpty"
+  spawnMenuRoleName: Colony Parolee (3rd party)
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillFirearms: 2
+    - type: JobPrefix
+      prefix: au14-job-prefix-civilianprisoner
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCMBParoleeGear
+  equipment:
+    id: AU14IDCardColonyColonist
+    jumpsuit: AU14CivilianPrisonJumpsuit
+    shoes: RMCShoesBlack
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: AU14JobTransportParolee
+  name: Parolee (civilian)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Parolee (civilian)
+    description: After having served your sentence you are being transported back home to be released on parole.
+    reregister: false
+    job: AU14JobTransportParoleeJob
+    raffle:
+      settings: short
+    rules: You do not know what is going on in the colony.
+

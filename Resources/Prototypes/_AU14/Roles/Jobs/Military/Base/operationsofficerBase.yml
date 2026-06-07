@@ -1,18 +1,21 @@
 - type: job
   abstract: true
-  parent: AU14JobMilitaryBase
+  parent: CMJobBase
   id: AU14JobPlatOpBaseAbstract
   name: au14-job-name-govforplatop
   description: au14-job-description-govforplatop
   icon: "AU14JobIconOpsOfc"
   spawnMenuRoleName: Junior Officer (GOVFOR)
+  supervisors: au14-job-supervisors-govfor
   startingGear: AU14GearGOVFORPlatOp
   dummyStartingGear: AU14GearGOVFORPlatOpDummy
   playTimeTracker: AU14JobGOVFORPlatOp
   requireAdminNotify: true
+  setPreference: false
   canBeAntag: false
   accessGroups:
   - AU14GovforCommand
+  roleWeight: 0.25
 
 - type: job
   abstract: true
@@ -37,14 +40,37 @@
   special:
   - !type:AddComponentSpecial
     components:
+    - type: NpcFactionMember
+      factions:
+      - GOVFOR
+    - type: Marine
+      Faction: govfor
     - type: Skills
       preset: AU14SkillPresetPlatoonJuniorOfficer
+    - type: RMCSpeechBubbleSpecificStyle
+      speechStyleClass: commanderSpeech
     - type: JobPrefix
       prefix: au14-job-prefix-govforplatop
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: so
+    - type: MarineOrders
+      moveOrderSoundMale:
+        collection: AU14MaleMoveOrder
+      moveOrderSoundFemale:
+        collection: AU14FemaleMoveOrder
+      focusOrderSoundMale:
+        collection: AU14MaleFocusOrder
+      focusOrderSoundFemale:
+        collection: AU14FemaleFocusOrder
+      holdOrderSoundMale:
+        collection: AU14MaleHoldOrder
+      holdOrderSoundFemale:
+        collection: AU14FemaleHoldOrder
+    - type: UserIFF
+      factions:
+      - GOVFOR
 
 - type: playTimeTracker
   id: AU14JobGOVFORPlatOp
@@ -55,15 +81,6 @@
   equipment:
     id: AU14IDCardGOVFORPlatOp
     ears: AU14HeadsetGovforCommand
-
-- type: startingGear
-  id: AU14GearGOVFORPlatOpDummy
-  equipment:
-    shoes: CMBootsBlack
-    head: AU14JunglePatrolCap
-    jumpsuit: CMJumpsuitXOFormal
-    ears: AU14HeadsetGovforCommand
-
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORPlatOp
@@ -73,3 +90,11 @@
     job_id: AU14JobGOVFORPlatOp
   - type: Sprite
     state: syn_spawn
+
+- type: startingGear
+  id: AU14GearGOVFORPlatOpDummy
+  equipment:
+    shoes: CMBootsBlack
+    head: AU14JunglePatrolCap
+    jumpsuit: CMJumpsuitXOFormal
+    ears: AU14HeadsetGovforCommand

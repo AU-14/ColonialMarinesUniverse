@@ -2,8 +2,9 @@
   parent: AU14JobSquadRiflemanBase
   id: AU14JobGOVFORSquadRiflemanWYPMC
   name: PMC Contractor
-  description: au14-job-description-govforsquadrifleman
-  setPreference: false
+  spawnMenuRoleName: Rifleman (WYPMC)
+  startingGear: AU14GearGOVFORSquadRifleman
+  dummyStartingGear: AU14GearGOVFORRiflemanDummy
   ranks:
     AU14RankWeYuSeniorOperator:
     - !type:RoleTimeRequirement
@@ -14,17 +15,6 @@
       role: AU14JobGOVFORSquadRifleman
       time: 1200 # 2 hours
     AU14RankWeYuRecruit: []
-  startingGear: AU14GearGOVFORSquadRifleman
-  dummyStartingGear: AU14GearGOVFORRiflemanDummy
-  icon: "AU14JobIconGovRifleman"
-  requireAdminNotify: false
-  spawnMenuRoleName: Rifleman (WYPMC)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforSquad
-  hasIcon: false
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
@@ -39,8 +29,3 @@
         RMCSkillPolice: 1
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORSquadRiflemanWYPMC
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-  hidden: true

@@ -69,6 +69,12 @@
   - type: BarricadeBlock
     bidirectional: true
     blocking: 75
+  - type: Appearance
+  - type: Flamability
+    chance: 0.3
+    rate: 0.8
+    range: 0.5
+    spread: 0.3
 
 
 - type: entity
@@ -94,6 +100,11 @@
   - type: Stack
     stackType: CMSandbagEmpty
     count: 1
+  - type: Flamability
+    chance: 0.7
+    rate: 0.2
+    range: 0.4
+    spread: 0.3
 
 - type: entity
   parent: CMSandbagEmpty
@@ -145,6 +156,11 @@
   - type: Stack
     stackType: CMSandbagFull
     count: 1
+  - type: Flamability
+    chance: 0.2
+    rate: 0.1
+    range: 0.3
+    spread: 0.2
   - type: InteractedBlacklist
     blacklist:
       components:

@@ -46,6 +46,7 @@ namespace Content.Server.GameTicking
         [Dependency] private MarinePresenceAnnounceSystem _marinePresenceAnnounce = default!;
         [Dependency] private AuJobSelectionSystem _auJobSelectionSystem = default!;
         [Dependency] private AuThreatSystem _auThreatSystem = default!;
+        [Dependency] private AuThreatVoteSystem _auThreatVoteSystem = default!;
         [Dependency] private Content.Server.AU14.ThirdParty.AuThirdPartySystem _auThirdParty = default!;
         [Dependency] private Content.Server.AU14.Allegiance.AllegianceSystem _allegianceSystem = default!;
         [Dependency] private Content.Server.AU14.Origin.OriginSystem _originSystem = default!;
@@ -237,7 +238,26 @@ namespace Content.Server.GameTicking
             var presetId = CurrentPreset?.ID ?? Preset?.ID ?? _auRoundSystem.SelectedPreset?.ID;
             var assignmentProfiles = GetGamemodeAssignmentProfiles(profiles, presetId);
 
-            _auJobSelectionSystem.AssignThreatAndThirdPartyJobs(assignmentProfiles);
+            _auThreatVoteSystem.ClearRoundJoinBlocks();
+            var usesPostRoundstartThreatVote = _auRoundSystem.UsesPostRoundstartThreatVote();
+            var threatVotePrepared = false;
+            if (usesPostRoundstartThreatVote)
+            {
+                try
+                {
+                    threatVotePrepared = _auThreatVoteSystem.TryPrepareThreatVote(assignmentProfiles, DefaultMap);
+                }
+                catch (Exception threatVoteEx)
+                {
+                    Log.Error($"TryPrepareThreatVote threw â€” round will continue without a threat vote. {threatVoteEx}");
+                    _auThreatVoteSystem.ClearRoundJoinBlocks();
+                    _auJobSelectionSystem.ForcedJobAssignments.Clear();
+                }
+            }
+            else
+            {
+                _auJobSelectionSystem.AssignThreatAndThirdPartyJobs(assignmentProfiles);
+            }
 
             var spawnableStations = GetSpawnableStations();
             var assignedJobs = _stationJobs.AssignJobs(assignmentProfiles, spawnableStations);
@@ -246,7 +266,7 @@ namespace Content.Server.GameTicking
             // EXCEPTION_TOLERANCE catch (only enabled in Release/Tools builds), which calls
             // RestartRound() — making the round appear to "instantly restart at start" in
             // production. Wrap the threat spawn so a single subsystem can't take the round down.
-            if (_auRoundSystem._selectedthreat != null)
+            if (!usesPostRoundstartThreatVote && _auRoundSystem._selectedthreat != null)
             {
                 try
                 {
@@ -255,6 +275,9 @@ namespace Content.Server.GameTicking
                 catch (Exception threatEx)
                 {
                     Log.Error($"SpawnThreatAtRoundStart threw — round will continue without threat spawn. {threatEx}");
+                    var removed = AuThreatSystem.RemoveThreatJobAssignments(assignedJobs);
+                    if (removed > 0)
+                        Log.Warning($"Removed {removed} threat assignment(s) after threat spawning failed so overflow assignment can handle those players.");
                 }
             }
             else {
@@ -322,7 +345,22 @@ namespace Content.Server.GameTicking
 
             // Defensive: same rationale as the SpawnThreatAtRoundStart try/catch above. Without
             // this, an exception inside third-party spawning kills the entire round at start.
-            if (_auRoundSystem._selectedthreat != null)
+            if (threatVotePrepared)
+            {
+                try
+                {
+                    _auThreatVoteSystem.StartPreparedThreatVote(assignedJobs);
+                }
+                catch (Exception threatVoteEx)
+                {
+                    Log.Error($"StartPreparedThreatVote threw â€” round will continue without a threat vote. {threatVoteEx}");
+                    _auThreatVoteSystem.ClearRoundJoinBlocks();
+                    var removed = AuThreatSystem.RemoveThreatJobAssignments(assignedJobs);
+                    if (removed > 0)
+                        Log.Warning($"Removed {removed} held threat assignment(s) after threat vote start failed.");
+                }
+            }
+            else if (_auRoundSystem._selectedthreat != null)
             {
                 try
                 {
@@ -338,8 +376,12 @@ namespace Content.Server.GameTicking
             }
 
             // Allow rules to add roles to players who have been spawned in. (For example, on-station traitors)
+            var jobsAssignedPlayers = assignedJobs
+                .Where(x => !(threatVotePrepared && AuThreatSystem.IsThreatJob(x.Value.Item1)))
+                .Select(x => _playerManager.GetSessionById(x.Key))
+                .ToArray();
             RaiseLocalEvent(new RulePlayerJobsAssignedEvent(
-                assignedJobs.Keys.Select(x => _playerManager.GetSessionById(x)).ToArray(),
+                jobsAssignedPlayers,
                 profiles,
                 force));
         }
@@ -350,6 +392,9 @@ namespace Content.Server.GameTicking
             bool lateJoin = true,
             bool silent = false)
         {
+            if (IsThreatVoteRoundJoinBlocked(player))
+                return;
+
             var character = GetPlayerProfile(player);
 
             var jobBans = _banManager.GetJobBans(player.UserId);
@@ -378,6 +423,15 @@ namespace Content.Server.GameTicking
             SpawnPlayer(player, resolvedProfile, station, jobId, lateJoin, silent);
         }
 
+        private bool IsThreatVoteRoundJoinBlocked(ICommonSession player)
+        {
+            if (!_auThreatVoteSystem.IsRoundJoinBlocked(player.UserId))
+                return false;
+
+            _chatManager.DispatchServerMessage(player, Loc.GetString("au14-threat-vote-round-join-blocked"));
+            return true;
+        }
+
         private void SpawnPlayer(ICommonSession player,
             HumanoidCharacterProfile character,
             EntityUid station,
@@ -387,6 +441,9 @@ namespace Content.Server.GameTicking
         {
             // Can't spawn players with a dummy ticker!
             if (DummyTicker)
+                return;
+
+            if (IsThreatVoteRoundJoinBlocked(player))
                 return;
 
             if (station == EntityUid.Invalid)

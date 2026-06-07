@@ -5,6 +5,7 @@ using Content.Shared.CombatMode;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.Player;
+using Robust.Client.ResourceManagement;
 using Robust.Shared.Configuration;
 
 namespace Content.Client.CombatMode;
@@ -16,6 +17,7 @@ public sealed partial class CombatModeSystem : SharedCombatModeSystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IInputManager _inputManager = default!;
     [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     /// <summary>
     /// Raised whenever combat mode changes.
@@ -84,7 +86,9 @@ public sealed partial class CombatModeSystem : SharedCombatModeSystem
                 EntityManager,
                 _eye,
                 this,
-                EntityManager.System<HandsSystem>()));
+                EntityManager.System<HandsSystem>(),
+                _playerManager,
+                _resourceCache));
         }
         else
         {

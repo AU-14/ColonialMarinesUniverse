@@ -93,6 +93,8 @@
     - AU14AccessColonyHeadOfService
     - AU14AccessCorporateWEYULiaison
     - AU14AccessColonyAmbassador
+    - AU14AccessOrbitalManagement
+    - AU14AccessOrbitalLaw
 
     privilegedIdSlot:
       name: id-card-console-privileged-id

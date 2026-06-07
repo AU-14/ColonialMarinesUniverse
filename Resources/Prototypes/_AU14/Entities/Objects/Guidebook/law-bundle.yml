@@ -1,0 +1,38 @@
+- type: entity
+  parent: RMCBriefcase
+  id: AU14BriefcaseLawBundle
+  name: counselor's law bundle
+  description: "A sturdy brown briefcase containing the complete legal library of the colony: the Colonial Civil Code (the Blue Book), the UCMJ (the Devil's Red Book), the SOP, and bureaucratic legal weaponry. Lawyers call it the 'Counselor's Burden', everybody else just calls it the briefcase full of trouble. Everything a budding legal mind needs to ruin someone's day with a technicality."
+  components:
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,20,1
+    whitelist:
+      tags:
+        - Book
+        - Document
+        - Write
+        - Paper
+        - Folder
+        - Stamp
+  - type: StorageFill
+    contents:
+      - id: AU14GuidebookLawMarine
+        amount: 1
+      - id: AU14GuidebookLawColonial
+        amount: 1
+      - id: AU14GuidebookSOP
+        amount: 1
+      - id: CMPenFountain
+        amount: 1
+      - id: RubberStampLawyer # temporary
+        amount: 1
+      - id: CMFolderBlue
+        amount: 1
+      - id: CMStampApproved
+        amount: 1
+      - id: CMStampDenied
+        amount: 1
+      - id: CMClipboard
+        amount: 1

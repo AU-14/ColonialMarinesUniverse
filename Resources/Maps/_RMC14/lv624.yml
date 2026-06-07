@@ -151363,7 +151363,7 @@ entities:
     - type: Transform
       pos: 49.5,-15.5
       parent: 1
-- proto: RMCGuidebookSOP
+- proto: AU14GuidebookSOP
   entities:
   - uid: 18
     components:

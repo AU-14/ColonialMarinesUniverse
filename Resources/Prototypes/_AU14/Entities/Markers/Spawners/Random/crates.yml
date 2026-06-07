@@ -2,7 +2,7 @@
   parent: MarkerBase
   id: AU14SpawnerRandomWeYuSupply
   name: WeYu experimental supply spawner
-  description: Spawns either set of xeno eggs, romerol or demon speed pills for experiments.
+  description: Spawns a research experiment crate, consisting of drugs and other goodies for WY researchers.
   components:
   - type: Sprite
     sprite: _RMC14/Markers/landmarks.rsi
@@ -17,5 +17,4 @@
       - AU14CrateSecureWeYuMindBreaker
       - AU14CrateSecureWeYuDrug # x2
       - AU14CrateSecureWeYuDrug
-      - AU14CrateSecureWeYuClottedSyringes # x2
-      - AU14CrateSecureWeYuClottedSyringes
+      - AU14CrateSecureWeYuClottedSyringes # x1 abom toxin sucks

@@ -1004,9 +1004,9 @@
       jobs:
       - CMChiefMP
       entries:
-      - id: RMCGuidebookLawMarine
+      - id: AU14GuidebookLawMarine
         amount: 10
-      - id: RMCGuidebookSOP
+      - id: AU14GuidebookSOP
         amount: 10
     # ////////////////////////////////////
     # Chief Engineer

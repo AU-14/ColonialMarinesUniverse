@@ -1,4 +1,5 @@
 using Content.Server.Voting.Managers;
+using Robust.Shared.Network;
 using Robust.Shared.Player;
 
 namespace Content.Server.Voting
@@ -48,6 +49,16 @@ namespace Content.Server.Voting
         ///     Stable key used to group repeated votes for carryover purposes. Defaults to <see cref="Title"/> when null.
         /// </summary>
         public string? CarryoverKey { get; set; }
+
+        /// <summary>
+        ///     Optional exact set of player user IDs allowed to see and vote in this vote.
+        /// </summary>
+        public HashSet<NetUserId>? AllowedVoters { get; set; }
+
+        /// <summary>
+        ///     Whether eligible players who do not vote should receive a random option before the vote resolves.
+        /// </summary>
+        public bool RandomizeMissingVotes { get; set; }
 
         /// <summary>
         ///     Which sessions may send a vote. Used when only a subset of players should be able to vote. Defaults to all.

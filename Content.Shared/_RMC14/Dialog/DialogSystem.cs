@@ -1,4 +1,5 @@
 using System.Text;
+using Robust.Shared.Network;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -7,6 +8,7 @@ namespace Content.Shared._RMC14.Dialog;
 public sealed partial class DialogSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _net = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     public override void Initialize()
@@ -24,6 +26,9 @@ public sealed partial class DialogSystem : EntitySystem
     {
         _ui.CloseUi(ent.Owner, DialogUiKey.Key);
 
+        if (_net.IsClient)
+            return;
+
         var index = args.Index;
         if (index < 0 || !ent.Comp.Options.TryGetValue(index, out var option))
             return;
@@ -39,6 +44,9 @@ public sealed partial class DialogSystem : EntitySystem
     {
         _ui.CloseUi(ent.Owner, DialogUiKey.Key);
 
+        if (_net.IsClient)
+            return;
+
         if (ent.Comp.InputEvent == null)
             return;
 
@@ -51,6 +59,9 @@ public sealed partial class DialogSystem : EntitySystem
     private void OnDialogConfirm(Entity<DialogComponent> ent, ref DialogConfirmBuiMsg args)
     {
         _ui.CloseUi(ent.Owner, DialogUiKey.Key);
+
+        if (_net.IsClient)
+            return;
 
         if (ent.Comp.ConfirmEvent != null)
             RaiseLocalEvent(ent, ent.Comp.ConfirmEvent);

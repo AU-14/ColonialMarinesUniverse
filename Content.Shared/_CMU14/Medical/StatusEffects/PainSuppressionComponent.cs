@@ -37,6 +37,9 @@ public sealed partial class PainSuppressionEntry
     [DataField]
     public float DecayBonus;
 
+    [DataField]
+    public float ReductionDecreaseRate;
+
     /// <summary>
     ///     Drug profiles compete with each other; non-drug morale/order
     ///     profiles add on top of the strongest drug profile.

@@ -12,7 +12,7 @@ using Robust.Shared.Random;
 
 namespace Content.Server._RMC14.Xenonids.Melee;
 
-public sealed class XenoMeleeSeverSystem : EntitySystem
+public sealed partial class XenoMeleeSeverSystem : EntitySystem
 {
     [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private IRobustRandom _random = default!;

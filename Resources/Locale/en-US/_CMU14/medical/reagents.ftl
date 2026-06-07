@@ -1,5 +1,5 @@
 cmu-medical-heal-organ-guidebook            = Heals { $amount } HP per cycle on the patient's { $organ }.
-cmu-medical-pain-suppression-guidebook       = Suppresses { $percent }% of pain accumulation, masks { $tiers } pain tier(s), and adds { $decay } pain/sec decay for { $seconds } seconds per unit. Strongest active painkiller profile wins.
+cmu-medical-pain-suppression-guidebook       = Suppresses { $percent }% of pain accumulation, masks { $tiers } pain tier(s), and adds { $decay } pain/sec decay for { $seconds } seconds per unit. Effect weakens by { $decrease } per max-pain fraction; non-additive profiles keep the strongest active profile.
 cmu-medical-bone-regen-boost-guidebook       = Multiplies bone healing rate by { $multiplier } while active.
 cmu-medical-restart-heart-guidebook          = { $chance }% chance per cycle to restart a stopped heart (only on hearts that are not yet at the Dead stage).
 

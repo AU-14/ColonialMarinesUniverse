@@ -171,10 +171,15 @@ public sealed partial class XenoStompSystem : EntitySystem
         _receivers.Clear();
         _entityLookup.GetEntitiesInRange(xform.Coordinates, xeno.Comp.Range, _receivers);
 
+        var origin = _transform.GetMapCoordinates(xeno);
+
         using var targetingSuppression = _hitLocation.SuppressBodyZoneTargeting(xeno.Owner);
         foreach (var receiver in _receivers)
         {
             if (!_xeno.CanAbilityAttackTarget(xeno, receiver))
+                continue;
+
+            if (IsBlockedByObstacle(origin, _transform.GetMapCoordinates(receiver), xeno.Owner))
                 continue;
 
             if (xeno.Comp.SlowBigInsteadOfStun && _size.TryGetSize(receiver, out var size) && size >= RMCSizes.Big)
@@ -238,7 +243,7 @@ public sealed partial class XenoStompSystem : EntitySystem
                         continue;
 
                     // Raycast to check for barricades blocking the tile.
-                    if (IsBlockedByBarricade(origin, new MapCoordinates(worldPos, origin.MapId), xeno.Owner))
+                    if (IsBlockedByObstacle(origin, new MapCoordinates(worldPos, origin.MapId), xeno.Owner))
                         continue;
 
                     var tileCenter = _map.GridTileToLocal(gridId, grid, tilePos);
@@ -267,7 +272,7 @@ public sealed partial class XenoStompSystem : EntitySystem
                 continue;
 
             // Barricade line-of-sight check.
-            if (IsBlockedByBarricade(origin, entMap, xeno.Owner))
+            if (IsBlockedByObstacle(origin, entMap, xeno.Owner))
                 continue;
 
             var stompDamage = xeno.Comp.Damage;
@@ -308,7 +313,7 @@ public sealed partial class XenoStompSystem : EntitySystem
         }
     }
 
-    private bool IsBlockedByBarricade(MapCoordinates origin, MapCoordinates target, EntityUid ignore)
+    private bool IsBlockedByObstacle(MapCoordinates origin, MapCoordinates target, EntityUid ignore)
     {
         if (origin.MapId != target.MapId)
             return true;
@@ -318,7 +323,8 @@ public sealed partial class XenoStompSystem : EntitySystem
         if (distance < 0.1f)
             return false;
 
-        var ray = new CollisionRay(origin.Position, diff.Normalized(), (int) CollisionGroup.BarricadeImpassable);
+        var mask = (int) (CollisionGroup.Impassable | CollisionGroup.InteractImpassable | CollisionGroup.BarricadeImpassable);
+        var ray = new CollisionRay(origin.Position, diff.Normalized(), mask);
         foreach (var _ in _physics.IntersectRay(origin.MapId, ray, distance, ignore, returnOnFirstHit: true))
         {
             return true;

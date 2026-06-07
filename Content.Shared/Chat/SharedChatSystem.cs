@@ -321,10 +321,16 @@ public abstract partial class SharedChatSystem : EntitySystem
     /// Injects a tag around all found instances of a specific string in a ChatMessage.
     /// Excludes strings inside other tags and brackets.
     /// </summary>
-    public static string InjectTagAroundString(ChatMessage message, string targetString, string tag, string? tagParameter)
+    public static string InjectTagAroundString(
+        ChatMessage message,
+        string targetString,
+        string tag,
+        string? tagParameter,
+        bool targetIsRegex = false)
     {
         var rawmsg = message.WrappedMessage;
-        var regex = new Regex("(?i)(" + Regex.Escape(targetString) + ")(?-i)(?![^[]*])");
+        var targetPattern = targetIsRegex ? targetString : Regex.Escape(targetString);
+        var regex = new Regex("(?i)(" + targetPattern + ")(?-i)(?![^[]*])");
         rawmsg = regex.Replace(rawmsg, $"[{tag}={tagParameter}]$1[/{tag}]");
         return rawmsg;
     }

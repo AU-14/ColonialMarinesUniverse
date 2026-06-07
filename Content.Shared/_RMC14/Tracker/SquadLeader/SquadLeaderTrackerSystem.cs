@@ -2,11 +2,13 @@ using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Marines.Skills.Pamphlets;
 using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.Roles;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
 using Content.Shared.Database;
+using Content.Shared.IdentityManagement;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Robust.Shared.Map;
@@ -14,8 +16,6 @@ using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using Content.Shared._RMC14.Overwatch;
-using Content.Shared.IdentityManagement;
 
 namespace Content.Shared._RMC14.Tracker.SquadLeader;
 
@@ -34,21 +34,18 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
     [Dependency] private TrackerSystem _tracker = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
-
-    // New: logging
     [Dependency] private ILogManager _logManager = default!;
-    private ISawmill _sawmill = default!;
 
-    private readonly Dictionary<EntityUid, MapCoordinates> _squadLeaders = new();
+    private readonly Dictionary<EntityUid, MapCoordinates> _squadLeaders = [];
     private readonly Dictionary<EntityUid, MapCoordinates>?[] _fireteamLeaders =
         new Dictionary<EntityUid, MapCoordinates>?[3];
-
     private EntityQuery<FireteamLeaderComponent> _fireteamLeaderQuery;
     private EntityQuery<FireteamMemberComponent> _fireteamMemberQuery;
     private EntityQuery<OriginalRoleComponent> _originalRoleQuery;
     private EntityQuery<SquadLeaderTrackerComponent> _squadLeaderTrackerQuery;
     private EntityQuery<SquadMemberComponent> _squadMemberQuery;
 
+    private ISawmill _sawmill = default!;
     private const string SquadTrackerCategory = "SquadTracker";
     private const string SquadLeaderMode = "SquadLeader";
     private const string FireteamLeader = "FireteamLeader";
@@ -90,7 +87,6 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
                 subs.Event<SquadLeaderTrackerSetFireteamNicknameMsg>(OnSetFireteamNicknameMsg);
             });
 
-        // Initialize sawmill for logging
         _sawmill = _logManager.GetSawmill("squadleader");
     }
 
@@ -159,7 +155,7 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
     private void OnRemove(Entity<SquadLeaderTrackerComponent> ent, ref ComponentRemove args)
     {
         _prototypeManager.TryIndex(ent.Comp.Mode, out var trackerMode);
-        if(trackerMode == null)
+        if (trackerMode == null)
             return;
 
         _alerts.ClearAlert(ent, trackerMode.Alert);
@@ -173,7 +169,7 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        Dictionary<SquadObjectiveType, string> objectives = new();
+        Dictionary<SquadObjectiveType, string> objectives = [];
         if (_squadMemberQuery.TryComp(ent, out var squadMember) &&
             squadMember.Squad != null &&
             TryComp(squadMember.Squad.Value, out SquadTeamComponent? squadTeam))
@@ -186,10 +182,10 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
 
     private void OnSquadLeaderTrackerChangeMode(Entity<SquadLeaderTrackerComponent> ent, ref SquadLeaderTrackerChangeModeEvent args)
     {
-        if(!_timing.IsFirstTimePredicted)
+        if (!_timing.IsFirstTimePredicted)
             return;
 
-        if(!TryFindTargets(args.Mode, out var options, out var trackingOptions))
+        if (!TryFindTargets(args.Mode, out var options, out var trackingOptions))
             return;
 
         // Remove targets that are not in the same squad as the tracking entity.
@@ -387,7 +383,7 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
             return;
 
         // Diagnostic logging to help trace who is attempting to set a nickname and why it may be rejected.
-        Log.Debug($"OnSetFireteamNicknameMsg called: TrackerOwner={ent.Owner} Index={args.Index} Nick='{args.Nickname}' Actor={args.Actor}");
+        _sawmill.Debug($"OnSetFireteamNicknameMsg called: TrackerOwner={ent.Owner} Index={args.Index} Nick='{args.Nickname}' Actor={args.Actor}");
 
         if (args.Index < 0 || args.Index >= ent.Comp.Fireteams.Fireteams.Length)
             return;
@@ -425,7 +421,7 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
         if (!isOverwatchOperator && ent.Comp.TemporaryOverwatchEditors.Contains(actorNet))
             isOverwatchOperator = true;
 
-        Log.Debug($"OnSetFireteamNicknameMsg permission: isSquadLeader={isSquadLeader} isOverwatchOperator={isOverwatchOperator}");
+        _sawmill.Debug($"OnSetFireteamNicknameMsg permission: isSquadLeader={isSquadLeader} isOverwatchOperator={isOverwatchOperator}");
 
         if (!isSquadLeader && !isOverwatchOperator)
             return;
@@ -441,7 +437,7 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
         const int maxLen = 64;
         if (nickname != null && nickname.Length > maxLen)
         {
-            nickname = nickname.Substring(0, maxLen);
+            nickname = nickname[..maxLen];
         }
 
         ft.Nickname = nickname;
@@ -585,10 +581,10 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
                 {
                     if (TryGetEntity(fireteam.Leader?.Id, out var fireteamLeaderUid))
                     {
-                        if (fireteamLeaderUid != member)
+                        if (fireteamLeaderUid != member && tempTracker.Mode == default)
                         {
-                            ProtoId<TrackerModePrototype> mode = "FireteamLeader";
                             SetTarget((member, tempTracker), fireteamLeaderUid);
+                            ProtoId<TrackerModePrototype> mode = "FireteamLeader";
                             SetMode((member, tempTracker), mode);
                         }
                     }
@@ -650,14 +646,16 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
         _alerts.ClearAlertCategory(ent, SquadTrackerCategory);
 
         _prototypeManager.TryIndex(ent.Comp.Mode, out var trackerMode);
-        if(trackerMode == null)
+        if (trackerMode == null)
             return;
 
         var alert = trackerMode.Alert;
         var severity = TrackerSystem.CenterSeverity;
 
         if (ent.Comp.Mode == SquadLeaderMode)
-            alert += squad;
+            alert = _prototypeManager.HasIndex<AlertPrototype>(alert + squad)
+            ? alert + squad
+            : "SquadTrackerFallback"; // this tracker is named: BUG - Fallback Tracker
 
         if (coordinates != null)
             severity = _tracker.GetAlertSeverity(ent.Owner, coordinates.Value);
@@ -792,7 +790,7 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
             // Swap target to the new SquadLeader after it is swapped.
             if (tracker.Target != null && tracker.Mode == SquadLeaderMode && !HasComp<SquadLeaderComponent>(tracker.Target))
             {
-                _sawmill.Debug("BattleBuddy for {0} is invalid: {1}");
+                _sawmill.Debug("SquadLeader tracker target is no longer a squad leader: target={0}, uid={1}", tracker.Target, uid);
 
                 if (_squadMemberQuery.TryComp(tracker.Target.Value, out var target) &&
                     target.Squad is { } targetSquad &&
@@ -843,11 +841,14 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
             }
 
             // New: BattleBuddy mode - if set, point towards your battle buddy
+            // When a new team is formed, unlinked buddies get their state reset (SetBattleBuddy)
             if (tracker.Mode == "BattleBuddy" && tracker.BattleBuddy != null)
             {
                 var buddy = tracker.BattleBuddy.Value;
                 if (TerminatingOrDeleted(buddy))
                 {
+                    tracker.BattleBuddy = null;
+                    Dirty(uid, tracker);
                 }
                 else
                 {
@@ -909,29 +910,41 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
 
     public void SetBattleBuddy(EntityUid a, EntityUid b)
     {
-        _sawmill.Debug("SetBattleBuddy called for {0} and {1}", a, b);
-        if (a == b)
-        {
-            _sawmill.Debug("SetBattleBuddy aborted: same entity");
+        if (a == b) return;
+        if (!TryComp<SquadLeaderTrackerComponent>(a, out var compA) || !TryComp<SquadLeaderTrackerComponent>(b, out var compB))
             return;
+        if (compA.BattleBuddy == b && compB.BattleBuddy == a)
+            return;
+
+        // Clean up previous battlebuddy (c and d)
+        if (compA.BattleBuddy != null)
+        {
+            var compC = compA.BattleBuddy.Value;
+            if (TryComp<SquadLeaderTrackerComponent>(compC, out var oldCompC))
+            {
+                oldCompC.BattleBuddy = null;
+                oldCompC.Mode = default;
+                Dirty(compC, oldCompC);
+            }
         }
 
-        if (!TryComp<SquadLeaderTrackerComponent>(a, out var compA) || !TryComp<SquadLeaderTrackerComponent>(b, out var compB))
+        if (compB.BattleBuddy != null)
         {
-            _sawmill.Debug("SetBattleBuddy aborted: missing tracker component on either {0} or {1}", a, b);
-            return;
+            var compD = compB.BattleBuddy.Value;
+            if (TryComp<SquadLeaderTrackerComponent>(compD, out var oldCompD))
+            {
+                oldCompD.BattleBuddy = null;
+                oldCompD.Mode = default;
+                Dirty(compD, oldCompD);
+            }
         }
 
         compA.BattleBuddy = b;
         compB.BattleBuddy = a;
-
         Dirty(a, compA);
         Dirty(b, compB);
 
-        var nameA = Name(a);
-        var nameB = Name(b);
-
-        _sawmill.Info("Set battle buddies: {0} <-> {1}", nameA, nameB);
+        _sawmill.Debug("Set battle buddies: {0} <-> {1}", Name(a), Name(b));
     }
 
     // Handle squad updates (e.g., fireteam nickname changes) and push those changes to any

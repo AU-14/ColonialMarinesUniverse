@@ -716,6 +716,7 @@
       tags:
       - M2CMount
       - RMCMagazineM2C
+      - AU14MagazineM2CTracter
       - RMCSkillPamphlet
       - RMCMachineGunnerRig
   - type: StorageFill
@@ -725,5 +726,5 @@
     - id: RMCMagazineM2C
     - id: RMCMagazineM2C
     - id: RMCMagazineM2C
-    - id: RMCMagazineM2C
+    - id: AU14MagazineM2CTracter
     - id: RMCBeltMachineGunner

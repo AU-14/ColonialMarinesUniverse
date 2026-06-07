@@ -97,10 +97,10 @@
   - RMCM40DPTags
   id: CMGrenadeSmoke
   name: 30mm HSDP smoke grenade
-  description: The 30mm HSDP is a small, but powerful smoke grenade. Based off the same platform as the 30mm HEDP. It is set to detonate in 1 second.
+  description: The 30mm HSDP is a small, but powerful smoke grenade. Based off the same platform as the 30mm HEDP. It is set to detonate in 2.5 seconds.
   components:
   - type: OnUseTimerTrigger
-    delay: 1
+    delay: 2.5
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40smoke.rsi
   - type: SpawnOnTrigger

@@ -78,3 +78,9 @@
     graph: Bookshelf
     node: bookshelf
   - type: BlockWeather
+  - type: Flamability
+    chance: 0.9
+    rate: 4.0
+    spread: 1.5
+    burnDurationMin: 70
+    burnDurationMax: 620

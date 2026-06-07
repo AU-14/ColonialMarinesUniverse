@@ -357,7 +357,7 @@ public sealed partial class CMArmorSystem : EntitySystem
             }
         }
 
-        if (args.Origin is { } origin)
+        if (args.Origin is { } origin && Exists(origin))
         {
             var originCoords = _transform.GetMapCoordinates(origin);
             var armorCoords = _transform.GetMapCoordinates(ent);

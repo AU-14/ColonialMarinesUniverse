@@ -25,19 +25,19 @@
     - FullAuto
     recoilWielded: 1
     recoilUnwielded: 1
-    scatterWielded: 4
+    scatterWielded: 5
     scatterUnwielded: 14
     baseFireRate: 4
     burstScatterMult: 7
     modifiers:
       Burst:
         fireDelay: 0.0999
-        maxScatterModifier: 10
+        maxScatterModifier: 1.75
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 6
       FullAuto:
-        maxScatterModifier: 2
+        maxScatterModifier: 1.85
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 4
@@ -119,19 +119,19 @@
     - FullAuto
     recoilWielded: 1
     recoilUnwielded: 1
-    scatterWielded: 4
+    scatterWielded: 5
     scatterUnwielded: 14
     baseFireRate: 4
     burstScatterMult: 7
     modifiers:
       Burst:
         fireDelay: 0.0999
-        maxScatterModifier: 10
+        maxScatterModifier: 1.65
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 6
       FullAuto:
-        maxScatterModifier: 2
+        maxScatterModifier: 1.85
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 20
@@ -226,7 +226,7 @@
   - type: Tag
     tags:
     - Cartridge
-    - RMCBullet57x28mmFP9000
+    - RMCCartridge57x28mmFP9000
   - type: CartridgeAmmo
     proto: RMCBullet57x28mmFP9000
 
@@ -238,15 +238,24 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 26
+        Piercing: 30
   - type: CMArmorPiercing
     amount: 30
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 24
+      falloff: 9999
+      ignoreModifiers: true
+    - range: 7
+      falloff: 4
+  - type: RMCProjectileAccuracy
+    accuracy: 105
+    thresholds:
+    - range: 16
+      falloff: 10
 
 - type: Tag
   id: RMCMagazineSMGFP9000
 
 - type: Tag
   id: RMCCartridge57x28mmFP9000
-
-- type: Tag
-  id: RMCBullet57x28mmFP9000

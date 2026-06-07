@@ -3,7 +3,6 @@
   id: AU14JobPARTExtractionContractor
   name: PART Extraction Response Unit (M41A/2)
   description: au14-prodigyextract-description
-  playTimeTracker: AU14JobPARTPartyContractorTracker
   ranks:
     AU14RankPrDAssociate: []
   spawnMenuRoleName: Prodigy Extraction Contractor (3rd party, M41A/2)
@@ -35,6 +34,7 @@
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: synth
+  hidden: false
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicProdigy

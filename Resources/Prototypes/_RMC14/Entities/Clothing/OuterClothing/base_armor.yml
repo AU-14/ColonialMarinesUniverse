@@ -366,6 +366,19 @@
   parent: [ RMCBaseMarineArmorNoAccessory, RMCBaseUniformAccessoryItemOuterClothing ]
   id: RMCBaseMarineArmor
   abstract: true
+  components:
+  - type: UniformAccessoryHolder
+    allowedCategories:
+    - Patch
+    - Medal
+    - Armband
+    - PridePin
+    - Rank
+    - Decor
+    - Poncho
+    - Mask
+    - Utility
+    startingAccessories: [ CMUTraumaGovernorAttachment ]
 
 - type: entity
   parent: RMCBaseMarineArmorNoAccessory
@@ -452,6 +465,19 @@
   parent: [ RMCBaseMarineArmorLightNoAccessory, RMCBaseUniformAccessoryItemOuterClothing ]
   id: RMCBaseMarineArmorLight
   abstract: true
+  components:
+  - type: UniformAccessoryHolder
+    allowedCategories:
+    - Patch
+    - Medal
+    - Armband
+    - PridePin
+    - Rank
+    - Decor
+    - Poncho
+    - Mask
+    - Utility
+    startingAccessories: [ CMUTraumaGovernorAttachment ]
 
 - type: entity
   parent: RMCBaseMarineArmorLight

@@ -1,11 +1,9 @@
-using Content.Shared.Verbs;
+using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Tracker.SquadLeader;
-using Content.Shared._RMC14.Dialog;
 using Content.Shared.Database;
-using Robust.Shared.Log;
+using Content.Shared.Verbs;
 using Robust.Shared.Utility;
-using Robust.Shared.GameObjects;
 
 namespace Content.Server._RMC14.Tracker
 {
@@ -14,7 +12,6 @@ namespace Content.Server._RMC14.Tracker
         [Dependency] private SquadLeaderTrackerSystem _trackerSys = default!;
         [Dependency] private ILogManager _log = default!;
         [Dependency] private DialogSystem _dialog = default!;
-
         private ISawmill _sawmill = default!;
 
         public override void Initialize()
@@ -31,7 +28,7 @@ namespace Content.Server._RMC14.Tracker
             var user = args.User;
             var target = args.Target;
 
-            _sawmill.Debug("Checking battle buddy verb conditions for user {0} target {1}", user, target);
+            _sawmill.Debug("Checking battle buddy verb conditions for user={0} target={1}", user, target);
 
             if (user == target)
             {
@@ -47,7 +44,7 @@ namespace Content.Server._RMC14.Tracker
 
             if (!HasComp<MarineComponent>(user) || !HasComp<MarineComponent>(target))
             {
-                _sawmill.Debug("Skipping: either user or target is not marine");
+                _sawmill.Debug("Skipping: either user or target is not a marine");
                 return;
             }
 
@@ -59,7 +56,7 @@ namespace Content.Server._RMC14.Tracker
 
             if (string.IsNullOrEmpty(userMarine.Faction) || userMarine.Faction != targetMarine.Faction)
             {
-                _sawmill.Debug("Skipping: factions don't match or are empty ({0} vs {1})", userMarine.Faction, targetMarine.Faction);
+                _sawmill.Debug("Skipping: factions don't match or are empty ('{0}' vs. '{1}')", userMarine.Faction, targetMarine.Faction);
                 return;
             }
 
@@ -78,12 +75,12 @@ namespace Content.Server._RMC14.Tracker
             };
 
             args.Verbs.Add(verb);
-            _sawmill.Info("Added 'Invite as buddy' verb for {0} -> {1}", user, target);
+            _sawmill.Debug("Added 'Invite as buddy' verb for {0} -> {1}", user, target);
         }
 
         private void SendBuddyRequest(EntityUid requester, EntityUid target)
         {
-            _sawmill.Debug("SendBuddyRequest: requester={0} target={1}", requester, target);
+            _sawmill.Debug("SendBuddyRequest: requester={0} -> target={1}", requester, target);
             var options = new List<DialogOption>
             {
                 new DialogOption(Loc.GetString("Accept"), new BattleBuddyAcceptEvent(GetNetEntity(requester), GetNetEntity(target))),
@@ -93,10 +90,8 @@ namespace Content.Server._RMC14.Tracker
             var title = Loc.GetString("Battle Buddy Invitation");
             var message = Loc.GetString($"{Name(requester)} has invited you to be their battle buddy.");
 
-
-            // Open the options UI for the invited player (target). The 'actor' parameter decides which client's UI opens.
             _dialog.OpenOptions(target, target, title, options, message);
-            _sawmill.Info("Sent battle buddy request from {0} to {1}", requester, target);
+            _sawmill.Info("Sent battle buddy request from {0} -> {1}", requester, target);
         }
 
         private void OnBattleBuddyAccept(BattleBuddyAcceptEvent ev)

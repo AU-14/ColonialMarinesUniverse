@@ -1,15 +1,9 @@
 - type: job
   parent: AU14JobSquadCombatTechBase
   id: AU14JobGOVFORSquadCombatTechUPP
-  name: au14-job-name-govforsquadcombattech
-  description: au14-job-description-govforsquadcombattech
-  setPreference: true
-  requirements:
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
-    - NonResuscitable
+  spawnMenuRoleName: Combat Tech (UPP)
+  startingGear: AU14GearGOVFORSquadCombatTech
+  dummyStartingGear: AU14GearGOVFORCTDummy
   ranks:
     UPP_Corporal:
     - !type:RoleTimeRequirement
@@ -24,34 +18,8 @@
       role: AU14JobGOVFORSquadCombatTech
       time: 54000 # 15 hours
     UPP_Private: []
-  startingGear: AU14GearGOVFORSquadCombatTech
-  dummyStartingGear: AU14GearGOVFORCTDummy
-  icon: "AU14JobIconGovCT"
-  requireAdminNotify: false
-  spawnMenuRoleName: Combat Tech (UPP)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforEngineer
-  hasIcon: true
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: Marine
-      Faction: govfor
     - type: Skills
       preset: AU14SkillPresetPlatoonCombatTechnician
-    - type: JobPrefix
-      prefix: au14-job-prefix-govforsquadcombattech
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-    - type: CMVendorUser
-      id: AU14JobGOVFORSquadCombatTech
-      points: 50
-  hidden: true

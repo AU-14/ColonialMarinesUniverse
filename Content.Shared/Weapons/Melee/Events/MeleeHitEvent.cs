@@ -66,6 +66,11 @@ public sealed class MeleeHitEvent : HandledEntityEventArgs
     /// </remarks>
     public bool IsHit = true;
 
+    /// <summary>
+    /// Optional medical impact metadata supplied by weapon-specific systems or attachments.
+    /// </summary>
+    public DamageImpact Impact;
+
     public MeleeHitEvent(List<EntityUid> hitEntities, EntityUid user, EntityUid weapon, DamageSpecifier baseDamage, Vector2? direction)
     {
         HitEntities = hitEntities;

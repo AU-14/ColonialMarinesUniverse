@@ -10,6 +10,13 @@
   - type: FlavorProfile
     flavors:
     - nutriment
+  - type: Flamability
+    chance: 0.5
+    rate: 0.4
+    spread: 0.8
+    destroyAnyway: true
+    burnDurationMin: 70
+    burnDurationMax: 620
 
 - type: entity
   parent: RMCFoodDonut

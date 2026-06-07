@@ -1,12 +1,14 @@
 using System.Numerics;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Armor;
+using Content.Shared._RMC14.Aura;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared._RMC14.Xenonids.Sweep;
 using Content.Shared.Actions;
+using Content.Shared.Coordinates;
 using Content.Shared.Damage;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
@@ -30,6 +32,7 @@ namespace Content.Shared._RMC14.Xenonids.Bulwark;
 public sealed partial class XenoBulwarkSystem : EntitySystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedAuraSystem _aura = default!;
     [Dependency] private CMArmorSystem _armor = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private DamageableSystem _damageable = default!;
@@ -253,6 +256,8 @@ public sealed partial class XenoBulwarkSystem : EntitySystem
         xeno.Comp.ReflectStartedAt = _timing.CurTime;
         xeno.Comp.ReflectExpiresAt = _timing.CurTime + xeno.Comp.ReflectDuration;
         Dirty(xeno);
+        _aura.GiveAura(xeno, Color.Blue, xeno.Comp.ReflectDuration, 2);
+        Spawn(xeno.Comp.ReflectEffectId, xeno.Owner.ToCoordinates());
 
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoReflectiveShieldActionEvent>(xeno))
             _actions.SetToggled(action.AsNullable(), true);

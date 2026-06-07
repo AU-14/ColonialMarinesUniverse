@@ -1,5 +1,6 @@
 - type: job
   parent: AU14JobMilitaryPoliceBase
   id: AU14JobGOVFORMilitaryPoliceMan
+  hidden: false
   setPreference: true
   basePlaytimeTracker: true

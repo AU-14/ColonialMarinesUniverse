@@ -62,7 +62,7 @@ public static class ChatUserSettings
 
     private static readonly Regex FirstColorTag = new(@"\[color=[^\]]+\]", RegexOptions.IgnoreCase);
     private static readonly Regex FirstFontTag = new(@"\[font(?<attrs>[^\]]*)\]", RegexOptions.IgnoreCase);
-    private static readonly Regex FontSizeAttribute = new(@"\s+size=\d+", RegexOptions.IgnoreCase);
+    private static readonly Regex FontSizeAttribute = new(@"\s+size=(?<size>\d+)", RegexOptions.IgnoreCase);
 
     public static readonly ChatStyleTarget[] BaseStyleTargets =
     {
@@ -312,19 +312,42 @@ public static class ChatUserSettings
         return NormalizeFontSize(style?.FontSize);
     }
 
+    public static int? ResolveMarkupFontSize(string markup)
+    {
+        var fontMatch = FirstFontTag.Match(markup);
+        if (!fontMatch.Success)
+            return null;
+
+        var sizeMatch = FontSizeAttribute.Match(fontMatch.Groups["attrs"].Value);
+        if (!sizeMatch.Success)
+            return null;
+
+        return NormalizeFontSize(sizeMatch.Groups["size"].Value);
+    }
+
     public static string ApplyFontMarkup(string markup, ChatStyleSettings? style, int? fallbackFontSize = null)
     {
-        var fontSize = ResolveFontSize(style) ?? NormalizeFontSize(fallbackFontSize);
-        if (fontSize == null)
-            return markup;
+        var styleFontSize = ResolveFontSize(style);
+        var fallback = NormalizeFontSize(fallbackFontSize);
 
         if (FirstFontTag.IsMatch(markup))
         {
             return FirstFontTag.Replace(
                 markup,
-                match => BuildFontTag(match.Groups["attrs"].Value, fontSize),
+                match =>
+                {
+                    var attrs = match.Groups["attrs"].Value;
+                    if (styleFontSize == null && FontSizeAttribute.IsMatch(attrs))
+                        return match.Value;
+
+                    return BuildFontTag(attrs, styleFontSize ?? fallback);
+                },
                 1);
         }
+
+        var fontSize = styleFontSize ?? fallback;
+        if (fontSize == null)
+            return markup;
 
         return $"{BuildFontTag(string.Empty, fontSize)}{markup}[/font]";
     }

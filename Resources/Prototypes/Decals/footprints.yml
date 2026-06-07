@@ -1,0 +1,44 @@
+- type: decal
+  id: FootprintDragging1
+  showMenu: false
+  defaultCleanable: true
+  defaultSnap: false
+  sprite:
+    sprite: Effects/footprints.rsi
+    state: dragging-1
+
+- type: decal
+  id: FootprintDragging2
+  showMenu: false
+  defaultCleanable: true
+  defaultSnap: false
+  sprite:
+    sprite: Effects/footprints.rsi
+    state: dragging-2
+
+- type: decal
+  id: FootprintDragging3
+  showMenu: false
+  defaultCleanable: true
+  defaultSnap: false
+  sprite:
+    sprite: Effects/footprints.rsi
+    state: dragging-3
+
+- type: decal
+  id: FootprintDragging4
+  showMenu: false
+  defaultCleanable: true
+  defaultSnap: false
+  sprite:
+    sprite: Effects/footprints.rsi
+    state: dragging-4
+
+- type: decal
+  id: FootprintDragging5
+  showMenu: false
+  defaultCleanable: true
+  defaultSnap: false
+  sprite:
+    sprite: Effects/footprints.rsi
+    state: dragging-5

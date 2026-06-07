@@ -52,6 +52,8 @@
   - AU14AccessColonyHeadOfService
   - AU14AccessCorporateWEYULiaison
   - AU14AccessColonyAmbassador
+  - AU14AccessOrbitalManagement
+  - AU14AccessOrbitalLaw
 
 - type: accessGroup
   id: CO

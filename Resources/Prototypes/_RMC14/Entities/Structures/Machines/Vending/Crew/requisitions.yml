@@ -242,6 +242,20 @@
         amount: 1
       - id: RMCPouchShotgunLarge
         amount: 1
+    - name: Medical Supplies
+      entries:
+      - id: CMUPlainTraumaDressing10
+        amount: 16
+      - id: CMUCoagulantPowder
+        amount: 12
+      - id: CMUBurnGel
+        amount: 12
+      - id: CMBloodPackFull
+        name: blood bag (O-)
+        amount: 16
+      - id: CMBloodPack
+        name: empty blood pack
+        amount: 8
     - name: Essential Devices
       entries:
       - id: RMCMotionDetector
@@ -837,7 +851,7 @@
         amount: 15
     - name: Books
       entries:
-      - id: RMCGuidebookLawMarine
+      - id: AU14GuidebookLawMarine
         amount: 10
-      - id: RMCGuidebookSOP
+      - id: AU14GuidebookSOP
         amount: 10

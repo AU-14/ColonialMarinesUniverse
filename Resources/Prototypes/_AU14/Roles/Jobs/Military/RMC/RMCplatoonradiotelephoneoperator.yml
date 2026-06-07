@@ -2,14 +2,10 @@
   parent: AU14JobRadioTelephoneOperatorBase
   id: AU14JobGOVFORRadioTelephoneOperatorRMC
   name: au14-job-name-radiotelephoneoperatorRMC
-  description: au14-job-description-radiotelephoneoperator
-  setPreference: true
-  requirements:
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
-    - NonResuscitable
+  spawnMenuRoleName: Fireteam Leader (TWE RMC)
+  overwatchRoleName: au14-job-name-radiotelephoneoperator-alt
+  startingGear: AU14GearGOVFORRadioTelephoneOperator
+  dummyStartingGear: AU14GearGOVFORRadioTelephoneOperatorDummy
   ranks:
     RMC_Corporal:
     - !type:RoleTimeRequirement
@@ -20,26 +16,9 @@
       role: AU14JobGOVFORSquadAutomaticRifleman
       time: 108000 # 30 hours
     RMC_Marine: []
-  startingGear: AU14GearGOVFORRadioTelephoneOperator
-  dummyStartingGear: AU14GearGOVFORRadioTelephoneOperatorDummy
-  icon: "AU14JobIconRTO"
-  requireAdminNotify: false
-  spawnMenuRoleName: Fireteam Leader (TWE RMC)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforFTL
-  overwatchSortPriority: -5
-  overwatchRoleName: au14-job-name-radiotelephoneoperator-alt
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: Marine
-      Faction: govfor
     - type: Skills
       skills:
         RMCSkillConstruction: 2
@@ -48,23 +27,3 @@
         RMCSkillFireman: 1
         RMCSkillJtac: 3
         RMCSkillPolice: 1
-    - type: JobPrefix
-      prefix: au14-job-prefix-radiotelephoneoperator
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
-  hidden: true

@@ -1,5 +1,6 @@
 - type: job
   parent: AU14JobSquadSergeantBase # parent does the heavy lifting
   id: AU14JobGOVFORSquadSergeant # Default Squad Leader
+  hidden: false
   setPreference: true
   basePlaytimeTracker: true

@@ -5,7 +5,7 @@
   playTimeTracker: AU14VAISPMercenary
   icon: "CMJobIconEmpty"
   greeting: au14-vaisp-greeting
-  startingGear: AU14GearVAIMercenary
+  startingGear: AU14GearVAIPOMercenary
   basePlaytimeTracker: true
   accessGroups:
   - auadmin

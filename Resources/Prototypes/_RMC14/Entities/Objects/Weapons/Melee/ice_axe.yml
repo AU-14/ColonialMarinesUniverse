@@ -20,6 +20,13 @@
     damage:
       types:
         Slash: 18
+  - type: DamageImpactProfile
+    melee:
+      contact: Stab
+      penetration: Low
+    thrown:
+      contact: Stab
+      penetration: Low
   - type: Item
     size: Small
     sprite: _RMC14/Objects/Weapons/Melee/ice_axe.rsi

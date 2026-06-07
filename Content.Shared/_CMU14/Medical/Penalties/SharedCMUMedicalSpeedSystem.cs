@@ -163,14 +163,19 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
             };
         }
 
+        var hasLungs = false;
+        var impairedLungs = false;
         foreach (var organ in Body.GetBodyOrgans(body))
         {
-            if (TryComp<LungsComponent>(organ.Id, out var lungs) && lungs.Efficiency < 0.5f)
-            {
-                mult *= 0.85f;
-                break;
-            }
+            if (!TryComp<LungsComponent>(organ.Id, out var lungs))
+                continue;
+
+            hasLungs = true;
+            impairedLungs |= lungs.Efficiency < 0.5f;
         }
+
+        if (!hasLungs || impairedLungs)
+            mult *= 0.85f;
 
         if (HasComp<RecoveringFromSurgeryComponent>(body))
             mult = MathF.Min(mult, 0.7f);

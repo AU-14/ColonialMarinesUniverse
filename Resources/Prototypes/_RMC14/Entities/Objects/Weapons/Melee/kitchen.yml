@@ -24,6 +24,13 @@
     damage:
       types:
         Slash: 10
+  - type: DamageImpactProfile
+    melee:
+      contact: Stab
+      penetration: Low
+    thrown:
+      contact: Stab
+      penetration: Low
   - type: DisarmMalus
     malus: 0.225
   - type: UsableWhileDevoured
@@ -43,6 +50,13 @@
   components:
   - type: Sprite
     state: plastic
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: None
+    thrown:
+      contact: Fragment
+      penetration: None
   - type: PhysicalComposition
     materialComposition: {}
 
@@ -60,3 +74,10 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Melee/Kitchen/cleaver.rsi
+  - type: DamageImpactProfile
+    melee:
+      contact: Slash
+      penetration: Low
+    thrown:
+      contact: Fragment
+      penetration: Low

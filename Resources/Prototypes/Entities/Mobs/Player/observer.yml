@@ -80,6 +80,9 @@
       enum.XenoFindParasiteUI.Key:
         type: FindParasiteBoundUserInterface
         requireInputValidation: false
+      enum.JoinXenoUIKey.Key:
+        type: JoinXenoBui
+        requireInputValidation: false
       enum.DialogUiKey.Key:
         type: DialogBui
         requireInputValidation: false

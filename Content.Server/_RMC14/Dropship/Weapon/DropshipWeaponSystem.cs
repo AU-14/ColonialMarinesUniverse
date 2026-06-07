@@ -39,7 +39,7 @@ public sealed partial class DropshipWeaponSystem : SharedDropshipWeaponSystem
 
     protected override void RemovePvs(Entity<DropshipTerminalWeaponsComponent> terminal, Entity<ActorComponent?> actor)
     {
-        base.AddPvs(terminal, actor);
+        base.RemovePvs(terminal, actor);
 
         if (terminal.Comp.Target is not { } target)
             return;

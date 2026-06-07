@@ -460,6 +460,8 @@
         amount: 20
     - name: special issue firearms
       entries:
+      - id: RMCWeaponRifleM54CFilled
+        amount: 10
       - id: WeaponShotgunM42A1
         amount: 3
       - id: WeaponRifleM4SPR
@@ -474,8 +476,12 @@
       entries:
       - id: AU14MagazineXMP5A6
         amount: 200
+      - id: CMMagazineRifleM54C
+        amount: 100
       - id: CMMagazineRifleM54CAP
         amount: 15
+      - id: RMCMagazineRifleM54CWP
+        amount: 5
       - id: CMMagazineRifleM4SPR
         amount: 60
       - id: CMMagazineRifleM4SPRAP
@@ -510,6 +516,8 @@
         amount: 6
       - id: RMCPacketGrenadeIncendiaryFilled
         amount: 3
+      - id: RMCPacketGrenadeWhitePhosphorusFilled
+        amount: 3
       - id: CMPacketGrenadeFragFilled
         amount: 6
       - id: RMCPacketGrenadeSmokeFilled
@@ -518,6 +526,10 @@
         amount: 2
       - id: RMCBoxClaymoreMineFilled
         amount: 3
+      - id: AU14PacketGrenadeTearGasFilled
+        amount: 2
+      - id: AU14PacketGrenadeTearGasFilledAirburst
+        amount: 1
       - id: RMCPacketGrenadeM74AGMFFilled
         amount: 4
       - id: RMCPacketGrenadeM74AGMSHornetFilled

@@ -18,6 +18,10 @@
     - type: UserIFF
       factions:
       - OPFOR
+    - type: Skills
+      preset: AU14SkillPresetMilitaryPolice
+    - type: JobPrefix
+      prefix: au14-job-prefix-opformilitarypoliceman
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14opforhud.rsi

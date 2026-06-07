@@ -1,5 +1,5 @@
 - type: job
-  parent: AU14JobPARTSPartyContractorBase
+  parent: CMJobBase
   id: AU14JobPARTPilot
   name: Prodigy Extraction Pilot
   description: au14-prodigyparty-description
@@ -37,6 +37,7 @@
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: synth
+  hidden: false
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicProdigy

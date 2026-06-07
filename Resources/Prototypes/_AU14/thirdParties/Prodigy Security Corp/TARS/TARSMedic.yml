@@ -1,5 +1,5 @@
 - type: job
-  parent: AU14JobTARSPartyContractorBase
+  parent: CMJobBase
   id: AU14JobTARSPartyMedic #m41a/2
   name: Prodigy TARS Combat Lifesaver
   description: au14-prodigyrescue-description
@@ -35,6 +35,8 @@
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: synth
+  hidden: false
+
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicWeYu

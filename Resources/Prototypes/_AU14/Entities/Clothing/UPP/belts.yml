@@ -112,6 +112,7 @@
     - 0,0,13,1 # 7 slots
     whitelist:
       tags:
+      - AU14MagazineSmartGunUPP
       - CMMagazinePistol
       - CMMagazineRifle
       - RMCMagazineShotgun
@@ -158,6 +159,7 @@
     - 0,0,9,1 # 5 slots
     whitelist:
       tags:
+      - AU14MagazineSmartGunUPP
       - Sidearm
       - CMMagazinePistol
       - RMCMagazineRevolver

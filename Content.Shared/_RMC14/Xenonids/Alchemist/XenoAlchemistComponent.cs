@@ -53,10 +53,10 @@ public sealed partial class XenoAlchemistComponent : Component
     public int MaxStockpile = 20;
 
     [DataField, AutoNetworkedField]
-    public int ProduceAmount = 2;
+    public int ProduceAmount = 4;
 
     [DataField, AutoNetworkedField]
-    public int SlashGenerateAmount = 1;
+    public int SlashGenerateAmount = 2;
 
     [DataField, AutoNetworkedField]
     public TimeSpan ProduceDelay = TimeSpan.FromSeconds(2);
@@ -69,6 +69,15 @@ public sealed partial class XenoAlchemistComponent : Component
     {
         DamageDict = { ["Piercing"] = 20 },
     };
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan NoctineDazeTime = TimeSpan.FromSeconds(3);
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan PyrinineDazeTime = TimeSpan.FromSeconds(2);
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan CrynineSlowTime = TimeSpan.FromSeconds(4);
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier TailInjectionSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_tail_attack.ogg");

@@ -77,3 +77,19 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianOrbitalManager
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: AU14IDCardMSGWatchStander
+  name: marine guard watch stander ID card
+  components:
+  - type: PresetIdCard
+    job: AU14MSGWatchStander
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: AU14IDCardMSGCommander
+  name: marine guard commander ID card
+  components:
+  - type: PresetIdCard
+    job: AU14MSGCommander

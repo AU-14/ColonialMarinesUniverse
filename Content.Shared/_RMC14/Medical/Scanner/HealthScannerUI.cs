@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Content.Shared._CMU14.Medical.Bones;
 using Content.Shared._CMU14.Medical.Organs;
+using Content.Shared._CMU14.Medical.Stabilizers;
 using Content.Shared._CMU14.Medical.Wounds;
 using Content.Shared.Body.Part;
 using Content.Shared.Chemistry.Components;
@@ -32,6 +33,7 @@ public sealed class HealthScannerBuiState(
     public List<CMUInternalBleedReadout>? CMUInternalBleeds;
     public int? CMUHeartBpm;
     public bool? CMUHeartStopped;
+    public CMUTraumaGovernorReadout? CMUTraumaGovernor;
     public CMUPainShockRisk? CMUPainShockRisk;
     public bool CMUPainShockSuppressed;
     public bool CMUExternalBleeding;
@@ -89,6 +91,9 @@ public readonly record struct CMUBodyPartReadout(
     FixedPoint2 Current,
     FixedPoint2 Max,
     WoundSize? WoundDescriptor,
+    WoundMechanism? WoundMechanism,
+    int ShrapnelFragments,
+    float ShrapnelSeverity,
     bool Eschar,
     bool Splinted,
     bool Cast,

@@ -23,6 +23,13 @@ au14-loadout-group-civilian-pouch = Civilian pouches (left)
 au14-loadout-group-civilian-pouch-right = Civilian pouches (right)
 au14-loadout-group-civilian-masks = Civilian masks
 
+au14-loadout-group-corporate-pouches = Security Pouches (left)
+au14-loadout-group-corporate-pouches-right = Security Pouches (right)
+au14-loadout-group-corporate-outerwear = Corporate Outerwear
+au14-loadout-group-corporate-jumpsuit = Corporate Uniforms
+au14-loadout-group-corporate-footwear = Corporate Shoes
+au14-loadout-group-corporate-headwear = Corporate Headwear
+
 au14-loadout-group-military-hats = Military hats
 au14-loadout-group-military-jumpsuit = Military fatigues
 au14-loadout-group-military-patches = Military patches

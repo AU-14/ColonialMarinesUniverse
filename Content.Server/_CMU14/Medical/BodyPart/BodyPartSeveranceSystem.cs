@@ -3,6 +3,9 @@ using Content.Server.StatusEffectNew;
 using Content.Shared._CMU14.Medical;
 using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared._CMU14.Medical.BodyPart.Events;
+using Content.Shared._CMU14.Medical.Wounds;
+using Content.Shared._RMC14.Damage;
+using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
@@ -31,6 +34,7 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
@@ -39,6 +43,8 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private IRobustRandom _random = default!;
     private static readonly ProtoId<DamageTypePrototype> Bloodloss = "Bloodloss";
+    private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
+    private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
     private const float StumpBleedDamage = 30f;
     private static readonly SoundSpecifier SeveranceSound =
         new SoundPathSpecifier("/Audio/_CMU14/Medical/crackandbleed.ogg");
@@ -75,6 +81,7 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
             return;
         }
 
+        RemoveSeveredPartWoundDamage(args.Body, args.Part);
         FlingPartFromBody(args.Body, args.Part);
         HideHumanoidLimbLayer(args.Body, args.Type, symmetry);
         ApplyStumpBleed(args.Body);
@@ -136,6 +143,52 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
             return false;
 
         return _containers.Remove(part, container);
+    }
+
+    private void RemoveSeveredPartWoundDamage(EntityUid body, EntityUid part)
+    {
+        if (!TryComp<BodyPartWoundComponent>(part, out var wounds))
+            return;
+
+        var brute = FixedPoint2.Zero;
+        var burn = FixedPoint2.Zero;
+        for (var i = 0; i < wounds.Wounds.Count; i++)
+        {
+            var wound = wounds.Wounds[i];
+            var remaining = wound.Damage - wound.Healed;
+            if (remaining <= FixedPoint2.Zero)
+                continue;
+
+            switch (wound.Type)
+            {
+                case WoundType.Brute:
+                    brute += remaining;
+                    break;
+                case WoundType.Burn:
+                    burn += remaining;
+                    break;
+            }
+        }
+
+        HealDamageGroup(body, part, BruteGroup, brute);
+        HealDamageGroup(body, part, BurnGroup, burn);
+    }
+
+    private void HealDamageGroup(EntityUid body, EntityUid origin, ProtoId<DamageGroupPrototype> group, FixedPoint2 amount)
+    {
+        if (amount <= FixedPoint2.Zero)
+            return;
+
+        if (!TryComp<DamageableComponent>(body, out var damageable))
+            return;
+
+        var spec = _rmcDamageable.DistributeHealing((body, damageable), group, amount);
+        if (spec.Empty)
+            return;
+
+        var adjusted = damageable.Damage + spec;
+        adjusted.ClampMin(FixedPoint2.Zero);
+        _damageable.SetDamage(body, damageable, adjusted);
     }
 
     private void ApplyStumpBleed(EntityUid body)

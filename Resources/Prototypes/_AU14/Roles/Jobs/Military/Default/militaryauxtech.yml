@@ -1,5 +1,6 @@
 - type: job
   parent: AU14JobAuxTechBase
   id: AU14JobGOVFORAuxTech
+  hidden: false
   setPreference: true
   basePlaytimeTracker: true

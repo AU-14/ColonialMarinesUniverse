@@ -1,0 +1,151 @@
+# Corporate Administrator and Corporate Admin Assistant — the Weyland-Yutani corporate
+# executive equivalent of the Colony Administrator. Manages corporate interests on-colony.
+
+- type: job
+  parent: AU14JobCivilianColonyAdministrator
+  id: AU14JobCivilianCorporateAdministrator
+  name: au14-job-name-civiliancorporateadministrator
+  description: au14-job-description-civiliancorporateadministrator
+  setPreference: false
+  playTimeTracker: AU14JobCivilianCorporateAdministrator
+  canBeAntag: false
+  startingGear: AU14GearCivilianCorporateAdministrator
+  icon: "CMJobIconLiaison"
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: Corporate Administrator (CMU)
+  accessGroups:
+  - auwy
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  access:
+  - AU14AccessCorporateWEYULiaison
+  - AU14AccessColonyAdministrator
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillCqc: 1
+        RMCSkillEngineer: 1
+        RMCSkillConstruction: 1
+        RMCSkillOverwatch: 1
+        RMCSkillResearch: 1
+        RMCSkillPolice: 1
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillIntel: 1
+        RMCSkillDomestics: 1
+        RMCSkillNavigations: 1
+        RMCSkillFirearms: 2
+    - type: JobPrefix
+      prefix: au14-job-prefix-civiliancorporateadministrator
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - SquadPMC
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianCorporateAdministrator
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlack
+    shoes: RMCShoesLaceupBrown
+    id: AU14IDCardColonyCorporateLiaison
+    ears: AU14ColonyWeylandHeadset
+    outerClothing: RMCJacketCorporateBlue
+  inhand:
+  - RMCRadioHandheldColonyOff
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianCorporateAdministrator
+  name: Spawn Point Corporate Administrator
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianCorporateAdministrator
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianCorporateAdministrator
+  isHumanoid: true
+
+# ── Corporate Admin Assistant ───────────────────────────────────────────────
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianCorporateAdminAssistant
+  name: au14-job-name-civiliancorporateadminassistant
+  description: au14-job-description-civiliancorporateadminassistant
+  setPreference: false
+  playTimeTracker: AU14JobCivilianCorporateAdminAssistant
+  canBeAntag: false
+  startingGear: AU14GearCivilianCorporateAdminAssistant
+  icon: "AU14JobIconCorporateAssistant"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  spawnMenuRoleName: Corporate Admin Assistant (CMU)
+  accessGroups:
+  - auwy
+  - Colonist
+  - AUPrisonStaff
+  access:
+  - AU14AccessCorporateWEYULiaison
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillDomestics: 1
+        RMCSkillFirearms: 1
+        RMCSkillIntel: 1
+        RMCSkillOverwatch: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-civiliancorporateadminassistant
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: synth
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - SquadPMC
+  hidden: false
+
+- type: startingGear
+  id: AU14GearCivilianCorporateAdminAssistant
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlack
+    shoes: RMCShoesLaceupBrown
+    id: AU14IDCardColonyCorporateLiaison
+    ears: AU14ColonyWeylandHeadset
+    outerClothing: AU14CivilianJacketGrayPufferVest
+    back: CMSatchel
+  inhand:
+  - RMCRadioHandheldColonyOff
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianCorporateAdminAssistant
+  name: Spawn Point Corporate Admin Assistant
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianCorporateAdminAssistant
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianCorporateAdminAssistant
+  isHumanoid: true

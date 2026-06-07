@@ -2,38 +2,18 @@
   parent: AU14JobSquadRiflemanBase
   id: AU14JobGOVFORSquadRiflemanRMC
   name: au14-job-name-govforsquadriflemanRMC
-  description: au14-job-description-govforsquadrifleman
-  setPreference: true
-  requirements:
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
+  spawnMenuRoleName: Rifleman (TWE RMC)
+  startingGear: AU14GearGOVFORSquadRifleman
+  dummyStartingGear: AU14GearGOVFORRiflemanDummy
   ranks:
     RMC_LanceCorporal:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORSquadRifleman
       time: 54000 # 15 hours
     RMC_Marine: []
-  startingGear: AU14GearGOVFORSquadRifleman
-  dummyStartingGear: AU14GearGOVFORRiflemanDummy
-  icon: "CMJobIconEmpty"
-  requireAdminNotify: false
-  spawnMenuRoleName: Rifleman (TWE RMC)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-govfor
-  accessGroups:
-  - AU14GovforSquad
-  hasIcon: false
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: Marine
-      Faction: govfor
     - type: Skills
       skills:
         RMCSkillEndurance: 1
@@ -43,10 +23,3 @@
         RMCSkillFireman: 1
         RMCSkillVehicles: 1
         RMCSkillPolice: 1
-    - type: JobPrefix
-      prefix: au14-job-prefix-govforsquadrifleman
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-  hidden: true

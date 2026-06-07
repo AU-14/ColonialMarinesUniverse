@@ -63,6 +63,7 @@ public sealed partial class RMCPullingSystem : EntitySystem
     private const string PullEffect = "CMEffectGrab";
 
     private EntityQuery<FiremanCarriableComponent> _firemanQuery;
+    private readonly List<(EntityUid Pulled, EntityUid Puller)> _facePullerBuffer = new();
 
     public override void Initialize()
     {
@@ -591,6 +592,7 @@ public sealed partial class RMCPullingSystem : EntitySystem
             RemCompDeferred<SynthStunCancelOnMoveComponent>(uid);
         }
 
+        _facePullerBuffer.Clear();
         var pullableQuery = EntityQueryEnumerator<BeingPulledComponent, PullableComponent>();
         while (pullableQuery.MoveNext(out var uid, out _, out var pullable))
         {
@@ -600,6 +602,19 @@ public sealed partial class RMCPullingSystem : EntitySystem
             var puller = pullable.Puller.Value;
             if (!Exists(puller))
                 continue;
+
+            _facePullerBuffer.Add((uid, puller));
+        }
+
+        foreach (var (uid, puller) in _facePullerBuffer)
+        {
+            if (!HasComp<BeingPulledComponent>(uid) ||
+                !TryComp<PullableComponent>(uid, out var pullable) ||
+                pullable.Puller != puller ||
+                !Exists(puller))
+            {
+                continue;
+            }
 
             if (_firemanQuery.TryComp(uid, out var fireman) && fireman.BeingCarried)
                 continue;
@@ -616,5 +631,7 @@ public sealed partial class RMCPullingSystem : EntitySystem
             var angle = (pulledCoords - pullerCoords).ToWorldAngle().GetCardinalDir().ToAngle();
             _rotateTo.TryFaceAngle(puller, angle);
         }
+
+        _facePullerBuffer.Clear();
     }
 }

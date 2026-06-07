@@ -8,7 +8,7 @@
     walkModifier: 0.825
     sprintModifier: 0.825
   - type: CMArmor
-    melee: 10
+    melee: 20
     bullet: 15
     bio: 10
     explosionArmor: 20

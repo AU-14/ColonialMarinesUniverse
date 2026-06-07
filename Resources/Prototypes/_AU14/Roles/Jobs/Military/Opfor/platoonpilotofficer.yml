@@ -23,7 +23,7 @@
     RMCRankFirstLT:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORDSPilot
-      time: 216000 # 60 hours
+      time: 86400 # 24 hours
     RMCRankSecondLT: []
   startingGear: AU14GearopforDSPilot
   dummyStartingGear: AU14GearopforDSPilotDummy

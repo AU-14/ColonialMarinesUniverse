@@ -1,0 +1,58 @@
+- type: job
+  parent: CMJobBase
+  id: AU14IASFTeamLeadBase
+  name: au14-job-name-tweiasf-tl
+  playTimeTracker: AU14IASFTeamLead
+  description: au14-job-description-twepara
+  ranks:
+    RMC_Sergeant: []
+  spawnMenuRoleName: IASF Team Leader (Base)
+  joinNotifyCrew: false
+  supervisors: au14-job-name-tweiasf-co
+  icon: RMCJobIconParaTeamLeader
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: SquadLeader
+      icon:
+        sprite: _RMC14/Interface/cm_job_icons.rsi
+        state: para_teamleader_alt
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: rmc_teamleader
+      background:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: background_para
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadIASF
+    - type: Skills
+      preset: AU14SkillPresetPlatoonSergeant
+    - type: JobPrefix
+      prefix: au14-job-prefix-tweiasf-sl
+    - type: RMCTrackable
+    - type: RMCPointing
+    - type: MarineOrders
+  hidden: true
+
+- type: startingGear
+  parent: AU14RMCGearIASFBase
+  id: AU14RMCGearIASFTeamLead
+  equipment:
+    id: AU14IDCardIASFTL
+    jumpsuit: AU14JumpsuitIASFL90
+    ears: RMCHeadsetParaTeamLead
+    suitstorage: AU14WeaponRifleL90Full
+    back: RMCSatchelLightpackFilledParaSL
+    outerclothing: RMCArmorParaVest
+  storage:
+    outerclothing:
+    - RMCRangefinder
+    - RMCFlashlight
+
+
+
+- type: playTimeTracker
+  id: AU14IASFTeamLead

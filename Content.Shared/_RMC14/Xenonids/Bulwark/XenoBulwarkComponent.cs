@@ -37,6 +37,9 @@ public sealed partial class XenoBulwarkComponent : Component
     public float ReflectCooldownPerSecond = 2f;
 
     [DataField, AutoNetworkedField]
+    public EntProtoId ReflectEffectId = "RMCEffectShieldBlue";
+
+    [DataField, AutoNetworkedField]
     public TimeSpan TailSwingMissCooldown = TimeSpan.FromSeconds(0.3);
 
     [DataField, AutoNetworkedField]

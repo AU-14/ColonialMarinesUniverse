@@ -21,8 +21,9 @@ public sealed partial class BoneSystem : SharedBoneSystem
 
     private void OnFractured(Entity<BoneComponent> ent, ref BoneFracturedEvent args)
     {
-        if (!args.New.IsAtLeast(FractureSeverity.Compound))
+        if (args.New < FractureSeverity.Simple || args.New <= args.Old)
             return;
-        _audio.PlayPvs(BoneBreakSound, ent.Owner);
+
+        _audio.PlayPvs(BoneBreakSound, args.Body);
     }
 }

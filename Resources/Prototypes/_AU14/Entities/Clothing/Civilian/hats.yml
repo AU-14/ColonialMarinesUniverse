@@ -86,7 +86,7 @@
   - type: Clothing
     sprite: _AU14/Clothing/Head/pith.rsi
   - type: CMArmor
-    melee: 15
+    melee: 30
     bullet: 15
     bio: 15
     explosionArmor: 10

@@ -966,6 +966,142 @@
     sprite: _RMC14/Structures/Machines/rmc_groundside_communications_console.rsi
     state: on
 
+- type: entity
+  name: Ship Groundside Operations Console Govfor Marker
+  id: VMarkerShipGroundsideOpsGovfor
+  parent: VmarkerShip
+  components:
+  - type: VendorMarker
+    ship: true
+    class: GroundsideOpsGovfor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/rmc_groundside_communications_console.rsi
+    state: on
+
+- type: entity
+  name: Ship Groundside Operations Console Opfor Marker
+  id: VMarkerShipGroundsideOpsOpfor
+  parent: VmarkerShip
+  components:
+  - type: VendorMarker
+    ship: true
+    class: GroundsideOpsOpfor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/rmc_groundside_communications_console.rsi
+    state: on
+
+# Alliance Console markers
+- type: entity
+  name: Ship Alliance Console Govfor Marker
+  id: VMarkerShipAllianceConsoleGovfor
+  parent: VmarkerShip
+  components:
+  - type: VendorMarker
+    ship: true
+    class: AllianceConsoleGovfor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+
+- type: entity
+  name: Ship Alliance Console Opfor Marker
+  id: VMarkerShipAllianceConsoleOpfor
+  parent: VmarkerShip
+  components:
+  - type: VendorMarker
+    ship: true
+    class: AllianceConsoleOpfor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+
+# Orbital Cannon markers
+- type: entity
+  name: Ship Orbital Cannon Govfor Marker
+  id: VMarkerShipOrbitalCannonGovfor
+  parent: VmarkerShip
+  components:
+  - type: VendorMarker
+    ship: true
+    class: OrbitalCannonGovfor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: ob_console
+
+- type: entity
+  name: Ship Orbital Cannon Opfor Marker
+  id: VMarkerShipOrbitalCannonOpfor
+  parent: VmarkerShip
+  components:
+  - type: VendorMarker
+    ship: true
+    class: OrbitalCannonOpfor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: ob_console
+
+# Withdraw Console markers
+- type: entity
+  name: Ship Withdraw Console Govfor Marker
+  id: VMarkerShipWithdrawConsoleGovfor
+  parent: VmarkerShip
+  components:
+  - type: VendorMarker
+    ship: true
+    class: WithdrawConsoleGovfor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+
+- type: entity
+  name: Ship Withdraw Console Opfor Marker
+  id: VMarkerShipWithdrawConsoleOpfor
+  parent: VmarkerShip
+  components:
+  - type: VendorMarker
+    ship: true
+    class: WithdrawConsoleOpfor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+
+- type: entity
+  name: Ship Withdraw Console Colony Marker
+  id: VMarkerShipWithdrawConsoleColony
+  parent: VmarkerShip
+  components:
+  - type: VendorMarker
+    ship: true
+    class: WithdrawConsoleColony
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+
+# Command Tablet markers
+- type: entity
+  name: Ship Command Tablet Govfor Marker
+  id: VMarkerShipCommandTabletGovfor
+  parent: VmarkerShip
+  components:
+  - type: VendorMarker
+    ship: true
+    class: CommandTabletGovfor
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/command_tablet.rsi
+    state: cotablet
+
+- type: entity
+  name: Ship Command Tablet Opfor Marker
+  id: VMarkerShipCommandTabletOpfor
+  parent: VmarkerShip
+  components:
+  - type: VendorMarker
+    ship: true
+    class: CommandTabletOpfor
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/command_tablet.rsi
+    state: cotablet
+
 
 
 - type: entity

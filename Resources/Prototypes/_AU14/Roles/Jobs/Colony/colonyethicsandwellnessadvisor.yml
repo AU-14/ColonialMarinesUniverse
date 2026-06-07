@@ -42,7 +42,6 @@
     shoes: RMCShoesBlack
     id: AU14IDCardColonyEthicsAndWellnessAdvisor
     outerClothing: AU14CivilianJacketGrayPufferJacket
-    back: CMSatchel
 
 - type: entity
   parent: CMSpawnPointJobBase

@@ -5,6 +5,7 @@
   description: An automated supply vendor hooked up to a storage of medical supplies.
   suffix: AU14 MED
   components:
+  - type: AU14MedVendorDistressLock
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/med.rsi
     layers:
@@ -16,6 +17,12 @@
       entries:
       - id: CMOintment10
         amount: 40
+      - id: CMUPlainTraumaDressing10
+        amount: 30
+      - id: CMUCoagulantPowder
+        amount: 20
+      - id: CMUBurnGel
+        amount: 20
       - id: AU14HemostaticGauzePacket
         amount: 40
       - id: AU14Tourniquet
@@ -50,20 +57,23 @@
         amount: 10
       - id: RMCPillCanisterIron
         amount: 10
-      - id: AU14PillCanisterCryoxadone
-        amount: 7
-      - id: AU14PillCanisterLeporazine
-        amount: 7
-      - id: AU14PillCanisterImidazoline
-        amount: 7
+# disabled until we get cryo med
+#      - id: AU14PillCanisterCryoxadone
+#        amount: 7
+#      - id: AU14PillCanisterLeporazine
+#        amount: 7
       - id: AU14PillCanisterEthylredoxrazine
-        amount: 7
+        amount: 10
+    - name: Painkiller Pill Bottles
+      entries:
       - id: AU14PillCanisterParacetamol
         amount: 10
       - id: AU14PillCanisterTramadol
         amount: 10
       - id: AU14PillCanisterOxycodone
         amount: 10
+    - name: Organ Med Pill Bottles
+      entries:
       - id: AU14PillCanisterCardiocaine
         amount: 10
       - id: AU14PillCanisterHepatocytin
@@ -74,14 +84,16 @@
         amount: 10
       - id: AU14PillCanisterPulmovine
         amount: 10
+      - id: AU14PillCanisterImidazoline
+        amount: 10
     - name: Injectors
       entries:
       - id: CMEpinephrineAutoInjector
-        amount: 14
+        amount: 25
       - id: AU14NaloxoneAutoInjector
-        amount: 14
+        amount: 25
       - id: RMCIronAutoInjector
-        amount: 20
+        amount: 25
       - id: CMInaprovalineAutoInjector
         amount: 25
       - id: CMDexalinPlusAutoInjector
@@ -92,20 +104,22 @@
         amount: 25
       - id: CMKelotaneAutoInjector
         amount: 25
+    - name: Painkiller Injectors
+      entries:
       - id: AU14ParacetamolAutoInjector
-        amount: 20
+        amount: 25
       - id: AU14TramadolAutoInjector
-        amount: 20
+        amount: 25
       - id: AU14OxycodoneAutoInjector
-        amount: 20
+        amount: 25
     - name: Medical Utilities
       entries:
       - id: CMRollerBedSpawnFolded
-        amount: 25
+        amount: 10
       - id: CMPortableSurgicalBedSpawnFolded
         amount: 5
       - id: AU14Wheelchair
-        amount: 10
+        amount: 4
       - id: RMCBoxBodyBag
         amount: 4
       - id: RMCBoxSterileMask
@@ -129,6 +143,7 @@
   description: The WeYu Med-Sci Brand Blood Pack Dispensary is the premier, top-of-the-line blood dispenser of 2105! Get yours today! #dont update year, that`s a joke from cm13
   suffix: AU14 MED
   components:
+  - type: AU14MedVendorDistressLock
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/blood.rsi
     snapCardinals: true
@@ -164,6 +179,7 @@
   description: The WeYu Med-Sci Brand Blood Pack Dispensary is the premier, top-of-the-line blood dispenser of 2105! Get yours today! #dont update year, that`s a joke from cm13
   suffix: AU14 MED
   components:
+  - type: AU14MedVendorDistressLock
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/blood.rsi
     snapCardinals: true
