@@ -81,7 +81,6 @@ au14-job-prefix-AU14JobGOVFORSectionSergeantWYPMC = PLDFR
 au14-job-prefix-AU14JobGOVFORSquadAutomaticRiflemanWYPMC = SG
 au14-job-prefix-AU14JobGOVFORSquadCombatTechWYPMC = CT
 au14-job-prefix-AU14JobGOVFORSquadRiflemanWYPMC = CNTR
-au14-job-prefix-AU14JobGOVFORSquadCombatTechWYPMC = CT
 au14-job-prefix-AU14JobGOVFORSquadSergeantWYPMC = SL
 
 au14-job-prefix-AU14JobGOVFORPlatCoUPP = PLTCO
