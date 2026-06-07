@@ -57,3 +57,7 @@ roles-antag-cannibal-objective = Feed your hunger, don't get caught
 roles-antag-serialkiller-name = Serial Killer
 serialkiller-role-greeting = You have an insatiable urge to kill. Find your victims and don't leave witnesses. Law enforcement has your fingerprints from previous crime scenes.
 roles-antag-serialkiller-objective = Kill and avoid capture
+
+roles-antag-clf-sleeper-agent-name = CLF Sleeper Agent
+clf-sleeper-agent-role-greeting = You are a CLF sleeper agent embedded within Government Forces. You have worked your way into a position of trust. Help the insurgents however you can — leak intel, sabotage operations, misdirect your unit. Do not reveal yourself unless you have no other choice.
+roles-antag-clf-sleeper-agent-objective = Aid the CLF insurgents from within. Undermine Government Forces operations without exposing your cover.
