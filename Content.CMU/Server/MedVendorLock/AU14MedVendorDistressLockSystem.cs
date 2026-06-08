@@ -16,9 +16,9 @@ namespace Content.Server.AU14.MedVendorLock;
 /// The moment any dropship lands on the planet map the lock is lifted, since that is when
 /// govfor is considered "planetside" and medbay can operate normally.
 /// </summary>
-public sealed class AU14MedVendorDistressLockSystem : EntitySystem
+public sealed partial class AU14MedVendorDistressLockSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     // Reset each round; set true when the first dropship lands on the planet.
     private bool _govforHasLanded;
