@@ -209,6 +209,7 @@ public partial class SharedBodySystem
         BodyPartComponent? rootPart = null)
     {
         if (!Resolve(id, ref body, logMissing: false)
+            || body.RootContainer is null
             || body.RootContainer.ContainedEntity is null
             || !Resolve(body.RootContainer.ContainedEntity.Value, ref rootPart))
         {
@@ -233,6 +234,7 @@ public partial class SharedBodySystem
     {
         if (id is null
             || !Resolve(id.Value, ref body, logMissing: false)
+            || body.RootContainer is null
             || body.RootContainer.ContainedEntity is null
             || !Resolve(body.RootContainer.ContainedEntity.Value, ref rootPart))
         {
@@ -272,6 +274,7 @@ public partial class SharedBodySystem
         BodyComponent? body = null)
     {
         if (!Resolve(bodyId, ref body, logMissing: false)
+            || body.RootContainer is null
             || body.RootContainer.ContainedEntity is null)
         {
             yield break;

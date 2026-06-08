@@ -75,6 +75,7 @@
     head: AU14CivBallCapBlack
     id: AU14IDCardCLFCellLeader
     eyes: RMCGlassesAviators
+    pocket1: AU14StampCLFCell
   inhand:
   - AU14CLFCellKit
   - AU14CLFHeadset

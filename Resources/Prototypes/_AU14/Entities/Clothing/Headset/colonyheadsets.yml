@@ -181,6 +181,31 @@
     channels:
     - ICSCSOF
 
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyColonySecurity
+  name: colony security encryption key
+  description: An encryption key used to communicate on colony, CMB, and Weyland radio channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - Colony
+    - radioCMB
+    - radioWEYU
+    defaultChannel: Colony
+
+- type: entity
+  parent: RMCHeadsetLiaison
+  id: AU14ColonySecurityHeadset
+  name: colony security headset
+  description: A headset used by colony security to coordinate on CMB and Weyland channels.
+  suffix: Colony, CMB, WEYU
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyColonySecurity
+
 # ├──[ ORBITAL HEADSETS ]────────────────────────────────────────────┤
 - type: entity
   parent: AU14HeadsetColonist

@@ -1,6 +1,7 @@
 using Content.Server.Actions;
 using Content.Server.Chat.Systems;
 using Content.Shared._RMC14.Marines.Orders;
+using Content.Shared._RMC14.Marines.Squads;
 using Robust.Shared.Random;
 
 namespace Content.Server._RMC14.Marines.Orders;
@@ -21,16 +22,11 @@ public sealed partial class MarineOrdersSystem : SharedMarineOrdersSystem
     {
         var comp = ent.Comp;
         if (comp.MoveActionEntity != null || comp.HoldActionEntity != null || comp.FocusActionEntity != null) return;
+        if (!HasComp<SquadLeaderComponent>(ent.Owner)
+            && _skills.GetSkill(ent.Owner, comp.Skill) <= 0)
+            return;
 
-        // All the SetUseDelay calls are required because even tho we set the cooldown on all of them once an order
-        // is issued for some reason the order that was pressed uses its delays and does not care about its cooldown
-        // being set.
-        _actions.AddAction(ent, ref comp.MoveActionEntity, comp.MoveAction);
-        _actions.SetUseDelay(comp.MoveActionEntity, comp.Cooldown);
-        _actions.AddAction(ent, ref comp.HoldActionEntity, comp.HoldAction);
-        _actions.SetUseDelay(comp.HoldActionEntity, comp.Cooldown);
-        _actions.AddAction(ent, ref comp.FocusActionEntity, comp.FocusAction);
-        _actions.SetUseDelay(comp.FocusActionEntity, comp.Cooldown);
+        EnsureOrderActions(ent);
     }
 
     private void OnOrdersShutdown(Entity<MarineOrdersComponent> ent, ref ComponentShutdown ev)

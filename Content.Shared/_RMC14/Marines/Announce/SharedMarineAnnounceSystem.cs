@@ -40,6 +40,7 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
     public static readonly SoundSpecifier DefaultAnnouncementSound = new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");
     public static readonly SoundSpecifier DefaultSquadSound = new SoundPathSpecifier("/Audio/_RMC14/Effects/tech_notification.ogg");
     public static readonly SoundSpecifier AresAnnouncementSound = new SoundPathSpecifier("/Audio/_RMC14/AI/announce.ogg");
+    public const string DefaultAnnouncementFaction = "govfor";
 
     public int CharacterLimit = 1000;
 
@@ -121,7 +122,7 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
         if (text.Length > CharacterLimit)
             text = text[..CharacterLimit].Trim();
 
-        AnnounceSigned(args.Actor, text, name: ent.Comp.AnnounceName, faction: ent.Comp.Faction);
+        AnnounceSigned(args.Actor, text, name: ent.Comp.AnnounceName, faction: ResolveAnnouncementFaction(ent));
 
         ent.Comp.LastAnnouncement = time;
         Dirty(ent);
@@ -206,6 +207,41 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
         EntityUid receiver,
         SoundSpecifier? sound = null)
     {
+    }
+
+    public static string ResolveAnnouncementFaction(string? configuredFaction, string? overwatchGroup = null)
+    {
+        if (!string.IsNullOrWhiteSpace(configuredFaction))
+            return configuredFaction.Trim().ToLowerInvariant();
+
+        if (!string.IsNullOrWhiteSpace(overwatchGroup))
+        {
+            var group = overwatchGroup.Trim().ToLowerInvariant();
+            if (group is "govfor" or "opfor")
+                return group;
+        }
+
+        return DefaultAnnouncementFaction;
+    }
+
+    public static bool IsMarineAnnouncementRecipient(string? marineFaction, string? targetFaction)
+    {
+        if (string.IsNullOrWhiteSpace(marineFaction))
+            return false;
+
+        return string.Equals(
+            marineFaction.Trim(),
+            ResolveAnnouncementFaction(targetFaction),
+            StringComparison.OrdinalIgnoreCase);
+    }
+
+    protected string ResolveAnnouncementFaction(Entity<MarineCommunicationsComputerComponent> computer)
+    {
+        var overwatchGroup = TryComp<OverwatchConsoleComponent>(computer.Owner, out var overwatch)
+            ? overwatch.Group
+            : null;
+
+        return ResolveAnnouncementFaction(computer.Comp.Faction, overwatchGroup);
     }
 
     public virtual void AnnounceOverwatchSquad(

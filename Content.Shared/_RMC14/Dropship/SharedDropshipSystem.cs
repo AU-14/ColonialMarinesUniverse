@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Utility.Components;
@@ -12,6 +13,7 @@ using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Thunderdome;
 using Content.Shared._RMC14.Tracker;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Announce;
 using Content.Shared._RMC14.Xenonids.Maturing;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
@@ -41,6 +43,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
 {
     [Dependency] protected SharedAudioSystem Audio = default!;
 
+    [Dependency] private AreaSystem _areas = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private SharedContainerSystem _container = default!;
@@ -53,6 +56,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private TimeSpan _dropshipInitialDelay;
@@ -564,6 +568,12 @@ public abstract partial class SharedDropshipSystem : EntitySystem
                 if (FlyTo((computerId, computer), closestDestination.Value, user))
                 {
                     _popup.PopupEntity("You call down one of the dropships to your location", user, user, PopupType.LargeCaution);
+                    var locationName = Loc.GetString("rmc-dropship-hijack-queen-call-unknown-location");
+                    if (_areas.TryGetArea(closestDestination.Value, out _, out var areaProto))
+                        locationName = areaProto.Name;
+
+                    _xenoAnnounce.AnnounceSameHiveDefaultSound(user,
+                        Loc.GetString("rmc-dropship-hijack-queen-call-announcement", ("location", locationName)));
                     return;
                 }
             }

@@ -3,81 +3,30 @@
   id: AU14JobOpforDSPilot
   name: au14-job-name-opfordspilot
   description: au14-job-description-opfordspilot
-  setPreference: false
-  canBeAntag: false
-  requirements:
-  - !type:AgeRequirement
-    requiredAge: 25
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - SocialAnxietyHeavy
-    - FrontalLisp
-    - NonResuscitable
-    - Epilepsy
-  ranks:
-    RMCRankSecondLT:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORDSPilot
-      time: 360000 # 100 hours
-    RMCRankChiefWarrantOfficer5:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORDSPilot
-      time: 180000 # 50 hours
-    RMCRankChiefWarrantOfficer4:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORDSPilot
-      time: 86400 # 24 hours
-    RMCRankChiefWarrantOfficer3:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORDSPilot
-      time: 36000 # 10 hours
-    RMCRankChiefWarrantOfficer: []
+  icon: "AU14JobIconOPFORPilotOfficer"
+  spawnMenuRoleName: Pilot Officer (OPFOR)
+  supervisors: au14-job-supervisors-opfor
   startingGear: AU14GearopforDSPilot
   dummyStartingGear: AU14GearopforDSPilotDummy
-  icon: "AU14JobIconOPFORPilotOfficer"
-  requireAdminNotify: true
-  spawnMenuRoleName: Pilot Officer (OPFOR)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-opfor
   accessGroups:
   - AU14OpforPilot
   - AU14OpforCorpsman
   - AU14OpforSquad
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-      - OPFOR
     - type: Marine
       Faction: opfor
-    - type: Skills
-      preset: AU14SkillPresetPlatoonDP
-    - type: JobPrefix
-      prefix: au14-job-prefix-opfordspilot
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: pilot
     - type: UserIFF
       factions:
       - OPFOR
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
-  hidden: false
+    - type: NpcFactionMember
+      factions:
+      - OPFOR
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforhud.rsi
+        state: po
 
 - type: startingGear
   id: AU14GearopforDSPilot

@@ -7,12 +7,14 @@ using Content.Shared._CMU14.Medical.Wounds.Events;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.Explosion;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Verbs;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
@@ -62,6 +64,8 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CMUHumanMedicalComponent, GetVerbsEvent<InteractionVerb>>(OnGetShrapnelVerbs);
+        SubscribeLocalEvent<DamageableComponent, GetVerbsEvent<AlternativeVerb>>(OnGetShrapnelAltVerbs);
+        SubscribeLocalEvent<CMUShrapnelExtractorComponent, UseInHandEvent>(OnExtractorUseInHand);
         SubscribeLocalEvent<CMUShrapnelExtractorComponent, CMUShrapnelExtractDoAfterEvent>(OnExtractorDoAfter);
         SubscribeLocalEvent<CMUHumanMedicalComponent, MoveEvent>(OnHumanMove);
         SubscribeLocalEvent<CMUHumanMedicalComponent, ComponentRemove>(OnHumanRemove);
@@ -180,7 +184,13 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
         {
             var damage = new DamageSpecifier();
             damage.DamageDict[tool.Comp.DamageType] = tool.Comp.DamageOnExtract;
-            _damageable.TryChangeDamage(body, damage, origin: tool.Owner);
+            _damageable.TryChangeDamage(
+                body,
+                damage,
+                interruptsDoAfters: false,
+                origin: tool.Owner,
+                tool: tool.Owner,
+                impact: DamageImpact.SnaggingContact);
         }
 
         if (tool.Comp.PainPenalty > 0f)
@@ -261,6 +271,42 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
         });
     }
 
+    private void OnGetShrapnelAltVerbs(Entity<DamageableComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
+    {
+        if (!IsLayerEnabled() || !args.CanAccess || !args.CanInteract)
+            return;
+        if (!HasComp<CMUHumanMedicalComponent>(ent.Owner))
+            return;
+        if (args.Using is not { } tool || !TryComp<CMUShrapnelExtractorComponent>(tool, out var extractor))
+            return;
+
+        if (!TryFindExtractionPart(ent.Owner, out var part, args.User))
+            return;
+
+        var user = args.User;
+        var target = ent.Owner;
+        args.Verbs.Add(new AlternativeVerb
+        {
+            Act = () => StartExtraction(user, target, tool, part),
+            Text = Loc.GetString("cmu-medical-shrapnel-extract-verb"),
+            Icon = extractor.VerbIcon,
+            Priority = 10,
+        });
+    }
+
+    private void OnExtractorUseInHand(Entity<CMUShrapnelExtractorComponent> ent, ref UseInHandEvent args)
+    {
+        if (args.Handled || !IsLayerEnabled())
+            return;
+        if (!HasComp<CMUHumanMedicalComponent>(args.User))
+            return;
+        if (!TryFindExtractionPart(args.User, out var part, args.User))
+            return;
+
+        args.Handled = true;
+        StartExtraction(args.User, args.User, ent.Owner, part);
+    }
+
     private void StartExtraction(EntityUid user, EntityUid target, EntityUid tool, EntityUid selectedPart)
     {
         if (!IsLayerEnabled() || !HasComp<CMUHumanMedicalComponent>(target))
@@ -290,13 +336,17 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
 
     private void OnExtractorDoAfter(Entity<CMUShrapnelExtractorComponent> ent, ref CMUShrapnelExtractDoAfterEvent args)
     {
+        var preSelectedPart = args.PreSelectedPart;
+        args.Repeat = false;
+        args.PreSelectedPart = null;
+
         if (args.Cancelled || args.Target is not { } target)
             return;
         if (!HasComp<CMUHumanMedicalComponent>(target))
             return;
 
         EntityUid? preferred = null;
-        if (args.PreSelectedPart is { } netPart && TryGetEntity(netPart, out var part))
+        if (preSelectedPart is { } netPart && TryGetEntity(netPart, out var part))
             preferred = part.Value;
 
         if (TryExtractShrapnel(target, ent, out var removed, args.User, preferred))
@@ -306,6 +356,12 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
                 target,
                 args.User);
             _audio.PlayPredicted(ent.Comp.ExtractSound, target, args.User);
+
+            if (TryFindExtractionPart(target, out var nextPart, args.User))
+            {
+                args.PreSelectedPart = GetNetEntity(nextPart);
+                args.Repeat = true;
+            }
         }
     }
 

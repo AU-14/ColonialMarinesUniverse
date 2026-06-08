@@ -102,3 +102,24 @@
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
     state: rifleman
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconGovAdjutant
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: govfor_adj
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconGovEO
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: govfor_eo
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconGovIO
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: govfor_io

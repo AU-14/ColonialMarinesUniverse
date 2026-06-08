@@ -131,6 +131,9 @@
   id: RMCPortableGeneratorBase # TODO RMC14 - Functionality
   parent: [ BaseMachine, SmallConstructibleMachine, StructureWheeled]
   components:
+    - type: XenoCrusherChargable
+      instantDestroy: true
+      passOnDestroy: true
     - type: GuideHelp
       guides:
       - RMCGuideRoleCombatTechnician

@@ -69,6 +69,7 @@
     ears: AU14OrbitalHeadset
     back: CMSatchel
     neck: AU14MedalLawyerBadge
+    pocket1: AU14StampOrbitalCnsl
   storage:
     back:
     - RMCRadioHandheldColonyOff
@@ -89,12 +90,12 @@
 - type: rank
   id: AU14RankOrbitalLawyer
   name: Orbital Counsel
-  prefix: Orb. Csnl.
+  prefix: Orb. Cnsl.
 
 - type: rank
   id: AU14RankSeniorOrbitalLawyer
   name: Senior Orbital Counsel
-  prefix: Sr. Orb. Csnl.
+  prefix: Sr. Orb. Cnsl.
 
 - type: entity
   parent: ClothingNeckLawyerbadge

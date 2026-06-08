@@ -23,6 +23,13 @@ on:
       - 'RobustToolbox'
       - 'RobustToolbox/**'
 
+permissions:
+  contents: read
+
+concurrency:
+  group: test-packaging-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 env:
   DOTNET_VERSION: 10.0.x
   CONFIGURATION: Release
@@ -46,7 +53,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.2
         with:
-          persist-credentials: true
+          persist-credentials: false
           submodules: false
 
       - name: Checkout submodules
@@ -72,4 +79,4 @@ jobs:
         run: dotnet build Content.Packaging --configuration ${{ env.CONFIGURATION }} --no-restore /m
 
       - name: Package ${{ matrix.name }}
-        run: dotnet run --project Content.Packaging --configuration ${{ env.CONFIGURATION }} --no-build -- ${{ matrix.command }} --no-restore
+        run: dotnet run --project Content.Packaging --configuration ${{ env.CONFIGURATION }} --no-build --no-restore -- ${{ matrix.command }} --no-restore

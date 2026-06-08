@@ -49,6 +49,18 @@ public sealed partial class CMUZLevelsSystem
 
     public override void WakeZPhysics(Entity<CMUZPhysicsComponent?> ent)
     {
+        if (!Prof.IsEnabled)
+        {
+            WakeZPhysicsCore(ent);
+            return;
+        }
+
+        using var profile = Prof.Group("CMU Z Wake");
+        WakeZPhysicsCore(ent);
+    }
+
+    private void WakeZPhysicsCore(Entity<CMUZPhysicsComponent?> ent)
+    {
         if (!_zLevelsEnabled ||
             !Resolve(ent, ref ent.Comp, false))
         {

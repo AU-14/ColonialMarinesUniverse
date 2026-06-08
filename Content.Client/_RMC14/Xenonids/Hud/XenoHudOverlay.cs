@@ -7,10 +7,12 @@ using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Energy;
 using Content.Shared._RMC14.Xenonids.Dancer;
+using Content.Shared._RMC14.Xenonids.Despoiler;
 using Content.Shared._RMC14.Xenonids.Maturing;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Stacks;
+using Content.Shared._RMC14.Xenonids.Despoiler;
 using Content.Shared._RMC14.Xenonids.Rank;
 using Content.Shared.Damage;
 using Content.Shared.Ghost;
@@ -64,6 +66,7 @@ public sealed partial class XenoHudOverlay : Overlay
     private readonly EntityQuery<XenoShieldComponent> _xenoShieldQuery;
     private readonly EntityQuery<EntityActiveInvisibleComponent> _invisQuery;
     private readonly EntityQuery<XenoComponent> _xenoQuery;
+    private readonly EntityQuery<XenoDespoilerHypertensionComponent> _hyperQuery;
 
     private readonly ShaderInstance _shader;
 
@@ -75,6 +78,7 @@ public sealed partial class XenoHudOverlay : Overlay
     private readonly ResPath _dancerMarksRsiPath = new("/Textures/_CM13/Interface/Hud/dancer_marks.rsi");
     private readonly ResPath _rsiPathSlow = new("/Textures/_RMC14/Effects/xeno_stomp.rsi");
     private readonly ResPath _rsiPathFreeze = new("/Textures/_RMC14/Effects/xeno_freeze.rsi");
+    private readonly ResPath _rsiPathHypertension = new("/Textures/_RMC14/Interface/Alerts/hypertension.rsi");
 
     public XenoHudOverlay()
     {
@@ -98,6 +102,7 @@ public sealed partial class XenoHudOverlay : Overlay
         _xenoShieldQuery = _entity.GetEntityQuery<XenoShieldComponent>();
         _invisQuery = _entity.GetEntityQuery<EntityActiveInvisibleComponent>();
         _xenoQuery = _entity.GetEntityQuery<XenoComponent>();
+        _hyperQuery = _entity.GetEntityQuery<XenoDespoilerHypertensionComponent>();
 
         _shader = _prototype.Index(UnshadedShader).Instance();
         ZIndex = 1;
@@ -187,6 +192,7 @@ public sealed partial class XenoHudOverlay : Overlay
             UpdatePlasma((uid, xeno, sprite), handle);
             UpdateShields((uid, xeno, sprite), handle);
             UpdateEnergy((uid, xeno, sprite), handle);
+            UpdateHypertension((uid, xeno, sprite), handle);
         }
     }
 
@@ -278,7 +284,7 @@ public sealed partial class XenoHudOverlay : Overlay
         var ranks = _entity.EntityQueryEnumerator<XenoRankComponent, SpriteComponent, TransformComponent>();
         while (ranks.MoveNext(out var uid, out var comp, out var sprite, out var xform))
         {
-            if (comp.Rank < 2 || comp.Rank > 7 || _xenoMaturingQuery.HasComp(uid))
+            if (comp.Rank < 2 || _xenoMaturingQuery.HasComp(uid))
                 continue;
 
             if (xform.MapID != args.MapId)
@@ -301,11 +307,9 @@ public sealed partial class XenoHudOverlay : Overlay
             var matrix = Matrix3x2.Multiply(rotationMatrix, scaledWorld);
             handle.SetTransform(matrix);
 
-            // Highest playtime rank is still 6 in XenoRoleSystem, but the tier-7 RSI art is the intended top icon
-            // (matches RMCPlaytimeStatsWindow using hudxenoupgrade7-ui for Ruby+).
             var rankState = comp.Rank switch
             {
-                7 => "hudxenoupgrade8",
+                >= 7 => "hudxenoupgrade8",
                 6 => "hudxenoupgrade7",
                 _ => $"hudxenoupgrade{comp.Rank}"
             };
@@ -637,6 +641,23 @@ public sealed partial class XenoHudOverlay : Overlay
 
         var position = new Vector2(xOffset, yOffset);
         handle.DrawTexture(texture, position);
+    }
+
+    private void UpdateHypertension(Entity<XenoComponent, SpriteComponent> ent, DrawingHandleWorld handle)
+    {
+        var (uid, xeno, sprite) = ent;
+        if (!_hyperQuery.TryComp(uid, out var hyper))
+            return;
+
+        var level = Math.Clamp(hyper.Stacks, 0, hyper.MaxStacks);
+        var icon = new Rsi(_rsiPathHypertension, $"level_{level}");
+        var texture = _sprite.GetFrame(icon, _timing.CurTime);
+
+        var bounds = _sprite.GetLocalBounds((uid, sprite));
+        var yOffset = (bounds.Height + sprite.Offset.Y) / 2f - (float) texture.Height / EyeManager.PixelsPerMeter * bounds.Height + xeno.HudOffset.Y;
+        var xOffset = (bounds.Width + sprite.Offset.X) / 2f - (float) texture.Width / EyeManager.PixelsPerMeter * bounds.Width + xeno.HudOffset.X + (float) texture.Width / EyeManager.PixelsPerMeter;
+
+        handle.DrawTexture(texture, new Vector2(xOffset, yOffset));
     }
 
     private void UpdateShields(Entity<XenoComponent, SpriteComponent> ent, DrawingHandleWorld handle)

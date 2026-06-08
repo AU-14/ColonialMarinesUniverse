@@ -3,8 +3,6 @@
   id: AU14JobGOVFORDSPilotUPP
   name: Dropship Pilot
   spawnMenuRoleName: Pilot Officer (UPP)
-  startingGear: AU14GearGOVFORDSPilot
-  dummyStartingGear: AU14GearGOVFORDSPilotDummy
   ranks:
     UPP_Lieutenant:
     - !type:RoleTimeRequirement

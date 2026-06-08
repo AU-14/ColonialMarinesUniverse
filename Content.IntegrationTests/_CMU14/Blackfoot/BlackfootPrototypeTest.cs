@@ -19,6 +19,7 @@ using Robust.Shared.ContentPack;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Robust.UnitTesting;
@@ -165,6 +166,8 @@ public sealed class BlackfootPrototypeTest
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(FuelPumpId, out var fuelPumpProto), Is.True);
             Assert.That(fuelPumpProto!.TryGetComponent<BlackfootFuelPumpComponent>(out _, factory), Is.True);
+            Assert.That(fuelPumpProto.TryGetComponent<PhysicsComponent>(out var fuelPumpPhysics, factory), Is.True);
+            Assert.That(fuelPumpPhysics!.CanCollide, Is.False);
             AssertMountedPadSupport(prototypes, factory, FuelPumpId);
             AssertPackable(prototypes, factory, FuelPumpId, FuelPumpCrateId);
 

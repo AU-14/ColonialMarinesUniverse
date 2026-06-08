@@ -3,48 +3,29 @@
   id: AU14JobOpforPlatoonCorpsman
   name: au14-job-name-opforplatooncorpsman
   description: au14-job-description-opforplatooncorpsman
-  setPreference: false
-  playTimeTracker: AU14JobGOVFORPlatoonCorpsman
-  requirements:
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
-    - NonResuscitable
-  ranks:
-    RMCRankCorporal:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORPlatoonCorpsman
-      time: 108000 # 30 hours
-    RMCRankLanceCorporal: []
+  icon: "AU14JobIconOPFORCorpsman"
+  spawnMenuRoleName: Hospital Coprsman (OPFOR)
+  supervisors: au14-job-supervisors-opfor
   startingGear: AU14GearopforPlatoonCorpsman
   dummyStartingGear: AU14GearopforCorpsmanDummy
-  icon: "AU14JobIconOPFORCorpsman"
-  requireAdminNotify: false
-  spawnMenuRoleName: Hospital Coprsman (OPFOR)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-opfor
   accessGroups:
   - AU14OpforCorpsman
   - AU14OpforSquad
-  overwatchSortPriority: -2
-  overwatchRoleName: au14-job-name-govforplatooncorpsman-plural
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: Skills
-      preset: AU14SkillPresetPlatoonHospitalCorpsman
-    - type: JobPrefix
-      prefix: au14-job-prefix-opforplatooncorpsman
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: medic
+    - type: Marine
+      Faction: opfor
     - type: UserIFF
       factions:
       - OPFOR
-  hidden: false
+    - type: NpcFactionMember
+      factions:
+      - OPFOR
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforhud.rsi
+        state: corpsman
 
 - type: startingGear
   id: AU14GearopforPlatoonCorpsman

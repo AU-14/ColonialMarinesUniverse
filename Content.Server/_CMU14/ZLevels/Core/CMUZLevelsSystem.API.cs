@@ -71,7 +71,10 @@ public sealed partial class CMUZLevelsSystem
         }
 
         if (maps.Count > 0)
+        {
             RaiseLocalEvent(network, new CMUZLevelNetworkUpdatedEvent());
+            RefreshViewersForNetwork(network);
+        }
 
         return true;
     }

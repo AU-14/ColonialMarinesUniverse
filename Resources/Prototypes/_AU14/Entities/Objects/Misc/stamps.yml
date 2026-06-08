@@ -1,0 +1,541 @@
+# Base
+
+- type: entity
+  parent: RubberStampBase
+  id: AU14StampBase
+  abstract: true
+  name: rubber stamp
+  description: A rubber stamp for stamping important documents.
+  components:
+  - type: Item
+    heldPrefix: stamp
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    state: stamp-def
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-default
+    stampState: "paper_stamp-def"
+
+# GOVFOR
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampAO
+  name: adjutant's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-hop
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-ao
+    stampedColor: "#3681bb"
+    stampState: "paper_stamp-cap"
+
+- type: entity
+  parent: AU14StampAO
+  id: AU14StampCO
+  name: commanding officer's rubber stamp
+  components:
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-co
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampSO
+  name: staff officer's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-ce
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-so
+    stampedColor: "#b0901b"
+    stampState: "paper_stamp-hop"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampIO
+  name: intelligence officer's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-clown
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-io
+    stampedColor: "#6F4922"
+    stampState: "paper_stamp-detective"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampCMP
+  name: military police officer's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-hos
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-mp
+    stampedColor: "#b34444"
+    stampState: "paper_stamp-hos"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampMO
+  name: medical officer's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-cmo
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-mo
+    stampedColor: "#4e806a"
+    stampState: "paper_stamp-cmo"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampAUX
+  name: auxiliary technician's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-ro
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-aux
+    stampedColor: "#725c0e"
+    stampState: "paper_stamp-ro"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampEO
+  name: engineering officer's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-ce
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-eo
+    stampedColor: "#d19f2a"
+    stampState: "paper_stamp-ce"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampSEA
+  name: advisor's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-sea
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-sea
+    stampedColor: "#d19f2a"
+    stampState: "paper_stamp-sea"
+
+# Liaisons and Ambassadors
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampLiaison
+  name: corporate liaison's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-we_ya
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-cl
+    stampedColor: "#3681bb"
+    stampState: "paper_stamp-we_ya"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampLLiaison
+  name: laselle liaison's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-rd
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-ll
+    stampedColor: "#3681bb"
+    stampState: "paper_stamp-wizard"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampUAA
+  name: ua ambassador's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-marine
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-cl
+    stampedColor: "#3681bb"
+    stampState: "paper_stamp-cmb"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampUPPA
+  name: upp ambassador's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-spp
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-cl
+    stampedColor: "#A70707"
+    stampState: "paper_stamp-spp"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampTWEA
+  name: twe ambassador's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-tse
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-cl
+    stampedColor: "#BE601B"
+    stampState: "paper_stamp-tse"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampISCSA
+  name: iscs ambassador's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-rd
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-cl
+    stampedColor: "#808080"
+    stampState: "paper_stamp-circle"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampCCAA
+  name: cca ambassador's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-cap
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-cl
+    stampedColor: "#ffae00"
+    stampState: "paper_stamp-cca"
+
+# Colony
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampAdmin
+  name: colony administrator's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-hop
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-admin
+    stampedColor: "#3681bb"
+    stampState: "paper_stamp-circle"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampFore
+  name: foreman's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-ro
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-fore
+    stampedColor: "#725c0e"
+    stampState: "paper_stamp-ro"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampHENG
+  name: head of engineering rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-ce
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-heng
+    stampedColor: "#d19f2a"
+    stampState: "paper_stamp-ce"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampHOS
+  name: head of service rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-cap
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-hos
+    stampedColor: "#725c0e"
+    stampState: "paper_stamp-dots"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampHPHY
+  name: head physician's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-cmo
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-hphy
+    stampedColor: "#4e806a"
+    stampState: "paper_stamp-cmo"
+
+- type: entity
+  parent: AU14StampCMB
+  id: AU14StampCMBM
+  name: cmb marshal's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-hos
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-cmbm
+
+- type: entity
+  parent: AU14StampLiaison
+  id: AU14StampKelland
+  name: kelland warden's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-we_ya
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-kw
+    stampState: "paper_stamp-warden"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampJoe
+  name: working joe's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-free-press
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-joe
+    stampedColor: "#000000"
+    stampState: "paper_stamp-greytide"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampRecruiter
+  name: ua recruiter's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-marine
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-uarec
+    stampedColor: "#4e806a"
+    stampState: "paper_stamp-marine"
+
+# Orbital
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampOrbitalMan
+  name: orbital manager's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-rd
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-oman
+    stampedColor: "#b0901b"
+    stampState: "paper_stamp-cmb"
+
+- type: entity
+  parent: AU14StampOrbitalMan
+  id: AU14StampOrbitalArb
+  name: orbital arbiter's rubber stamp
+  components:
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-oarb
+
+- type: entity
+  parent: AU14StampOrbitalMan
+  id: AU14StampOrbitalCnsl
+  name: orbital counsel's rubber stamp
+  components:
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-ocnsl
+    stampedColor: "#cb0000"
+    stampState: "paper_stamp-lawyer"
+
+# Third Parties
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampInterstellarObserver
+  name: ihro rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-provost
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-ihro
+    stampedColor: "#3681bb"
+    stampState: "paper_stamp-trader"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampNSPA
+  name: nspa inspector's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-provost
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-nspa
+    stampedColor: "#cb0000"
+    stampState: "paper_stamp-wizard"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampProvostInspector
+  name: provost inspector rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-provost
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-pvi
+    stampedColor: "#cb0000"
+    stampState: "paper_stamp-provost-inspector"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampInterstellarLiaison
+  name: icc liaison's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-provost
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-iccl
+    stampedColor: "#3681bb"
+    stampState: "paper_stamp-lawyer"
+
+# Evil
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampCLFCell
+  name: cell lead's rubber stamp
+  suffix: CLF
+  components:
+  - type: Sprite
+    state: stamp-clf
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-clfcel
+    stampedColor: "#6B6B6B"
+    stampState: "paper_stamp-clf"
+
+# Simple
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampApproved
+  name: APPROVED rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-approve
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-approve
+    stampedColor: "#164600"
+    stampState: "paper_stamp-approve"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampDenied
+  name: DENIED rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-deny
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-deny
+    stampedColor: "#660000"
+    stampState: "paper_stamp-deny"
+
+# Admin Only
+
+- type: entity
+  parent: AU14StampLiaison
+  id: AU14StampWeYu
+  name: weyland-yutani rubber stamp
+  suffix: Admin
+  components:
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-we-yu
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampMarine
+  name: marine rubber stamp
+  suffix: Admin, UNMC
+  components:
+  - type: Sprite
+    state: stamp-marine
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-marine
+    stampedColor: "#4e806a"
+    stampState: "paper_stamp-marine"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampCMB
+  name: colony marshal bureau rubber stamp
+  suffix: Admin, CMB
+  components:
+  - type: Sprite
+    state: stamp-cmb
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-cmb
+    stampedColor: "#b0901b"
+    stampState: "paper_stamp-cmb"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampProvost
+  name: provost rubber stamp
+  suffix: Admin, Provost
+  components:
+  - type: Sprite
+    state: stamp-provost # RMC14 Todo: update sprite
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-provost
+    stampedColor: "#cb0000"
+    stampState: "paper_stamp-provost"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampCLF
+  name: colony liberation front rubber stamp
+  suffix: Admin, CLF
+  components:
+  - type: Sprite
+    state: stamp-clf
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-clf
+    stampedColor: "#6B6B6B"
+    stampState: "paper_stamp-clf"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampSPP
+  name: socialist progressive peoples rubber stamp
+  suffix: Admin, UPP
+  components:
+  - type: Sprite
+    state: stamp-spp
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-upp
+    stampedColor: "#A70707"
+    stampState: "paper_stamp-spp"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampTWE
+  name: three world empire rubber stamp
+  suffix: Admin, TWE
+  components:
+  - type: Sprite
+    state: stamp-tse
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-twe
+    stampedColor: "#BE601B"
+    stampState: "paper_stamp-tse"
+
+- type: entity
+  parent: AU14StampBase
+  id: AU14StampFreePress
+  name: free press rubber stamp
+  suffix: Admin, Press
+  components:
+  - type: Sprite
+    state: stamp-free-press
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-free-press
+    stampedColor: "#1e5bd2"
+    stampState: "paper_stamp-free-press"

@@ -299,13 +299,15 @@ public abstract partial class SharedMarineControlComputerSystem : EntitySystem
 
         ent.Comp.LastShipAnnouncement = _timing.CurTime;
         var map = _warship.TryGetWarshipMap(ent, out var warshipMap) ? warshipMap : _transform.GetMapId(ent.Owner);
+        var faction = SharedMarineAnnounceSystem.ResolveAnnouncementFaction(ent.Comp.Faction);
         _marineAnnounce.AnnounceSigned(
             user,
             args.Message,
             Loc.GetString("rmc-announcement-author-shipside"),
             sound: SharedMarineAnnounceSystem.AresAnnouncementSound,
-            filter: Filter.BroadcastMap(map).RemoveWhereAttachedEntity(e => !HasComp<MarineComponent>(e) && !HasComp<GhostComponent>(e)),
-            excludeSurvivors: false
+            filter: Filter.BroadcastMap(map).RemoveWhereAttachedEntity(e => !IsShipAnnouncementRecipient(e, faction)),
+            excludeSurvivors: false,
+            faction: faction
         );
     }
 
@@ -595,6 +597,14 @@ public abstract partial class SharedMarineControlComputerSystem : EntitySystem
         }
 
         return true;
+    }
+
+    private bool IsShipAnnouncementRecipient(EntityUid uid, string faction)
+    {
+        if (TryComp<MarineComponent>(uid, out var marine))
+            return SharedMarineAnnounceSystem.IsMarineAnnouncementRecipient(marine.Faction, faction);
+
+        return HasComp<GhostComponent>(uid);
     }
 
     public bool TryAddAwardRecommendation(MarineAwardRecommendationInfo recommendation)

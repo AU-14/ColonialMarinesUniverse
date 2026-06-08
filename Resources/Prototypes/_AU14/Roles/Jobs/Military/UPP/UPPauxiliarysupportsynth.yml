@@ -2,8 +2,6 @@
   parent: AU14JobAuxSupportSynthBase
   id: AU14JobGOVFORAuxSupportSynthUPP
   spawnMenuRoleName: Support Synth (UPP)
-  startingGear: AU14GearGOVFORAuxSupportSynth
-  dummyStartingGear: AU14GearGOVFORAuxSupportSynthDummy
   requirements:
   - !type:OverallPlaytimeRequirement
     time: 7200 # 2 hours

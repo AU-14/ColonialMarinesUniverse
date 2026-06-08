@@ -3,8 +3,6 @@
   id: AU14JobGOVFORDCCWYPMC
   name: PMC Crew Chief
   spawnMenuRoleName: Dropship Crew Chief (WYPMC)
-  startingGear: AU14GearGOVFORDCC
-  dummyStartingGear: AU14GearGOVFORDCCDummy
   ranks:
     AU14RankWeYuSeniorCrewChief:
     - !type:RoleTimeRequirement

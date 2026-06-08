@@ -36,17 +36,21 @@ public sealed class RoundStatusWebhookTest
 
         var embed = payload.Embeds![0];
         Assert.That(embed.Title, Is.EqualTo("CMU Round #42 - Ended"));
-        Assert.That(embed.Description, Is.EqualTo("Round ended."));
+        Assert.That(embed.Description, Is.EqualTo("Round ended. Final operation summary is below."));
+        Assert.That(embed.Footer?.Text, Is.EqualTo("CMU Status Network"));
 
         var fields = embed.Fields.ToDictionary(field => field.Name, field => field.Value);
-        Assert.That(fields["State"], Is.EqualTo("Ended"));
+        Assert.That(fields["Status"], Is.EqualTo("Ended"));
         Assert.That(fields["Players"], Is.EqualTo("17"));
-        Assert.That(fields["Map"], Is.EqualTo("Kutjevo"));
-        Assert.That(fields["GOVFOR"], Is.EqualTo("5th Platoon"));
-        Assert.That(fields["Mode"], Is.EqualTo("Distress Signal"));
         Assert.That(fields["Round"], Is.EqualTo("#42"));
-        Assert.That(fields["Last 3 Rounds"], Is.EqualTo("#41 Colony Fall 1h15m\n#40 Insurgency 45m03s\n#39 Distress Signal 59m10s"));
         Assert.That(fields["Runtime"], Is.EqualTo("1h 31m 0s"));
+        Assert.That(fields["Operation"], Is.EqualTo("**Map:** Kutjevo\n**GOVFOR:** 5th Platoon\n**Mode:** Distress Signal"));
+        Assert.That(fields["Recent Rounds"], Is.EqualTo("`#41` Colony Fall - 1h15m\n`#40` Insurgency - 45m03s\n`#39` Distress Signal - 59m10s"));
+
+        var operation = embed.Fields.Single(field => field.Name == "Operation");
+        var recentRounds = embed.Fields.Single(field => field.Name == "Recent Rounds");
+        Assert.That(operation.Inline, Is.False);
+        Assert.That(recentRounds.Inline, Is.False);
     }
 
     [Test]
@@ -118,7 +122,7 @@ public sealed class RoundStatusWebhookTest
     }
 
     [Test]
-    public void PayloadShortensLongVariableFieldsToAvoidAwkwardWrapping()
+    public void PayloadUsesFullWidthOperationFieldsWithoutTruncatingDetails()
     {
         var status = new RoundStatusWebhookData(
             43,
@@ -137,10 +141,8 @@ public sealed class RoundStatusWebhookTest
             Array.Empty<string>());
 
         var fields = payload.Embeds![0].Fields.ToDictionary(field => field.Name, field => field.Value);
-        Assert.That(fields["Map"], Is.EqualTo("Fiorina Orbital Penit..."));
-        Assert.That(fields["GOVFOR"], Is.EqualTo("United States Colonia..."));
-        Assert.That(fields["Mode"], Is.EqualTo("Distress Signal With..."));
-        Assert.That(fields["Last 3 Rounds"], Is.EqualTo("#42 Distress Sig... 1h02m"));
+        Assert.That(fields["Operation"], Is.EqualTo("**Map:** Fiorina Orbital Penitentiary\n**GOVFOR:** United States Colonial Marines\n**Mode:** Distress Signal With An Extremely Long Name"));
+        Assert.That(fields["Recent Rounds"], Is.EqualTo("`#42` Distress Signal With An Extremely Long Name - 1h02m"));
     }
 
     [Test]
@@ -167,7 +169,7 @@ public sealed class RoundStatusWebhookTest
         Assert.That(embed.Title, Is.EqualTo("CMU Round Status - Offline"));
         Assert.That(embed.Description, Is.EqualTo("Server offline."));
         Assert.That(embed.Fields, Has.Count.EqualTo(1));
-        Assert.That(embed.Fields[0].Name, Is.EqualTo("State"));
+        Assert.That(embed.Fields[0].Name, Is.EqualTo("Status"));
         Assert.That(embed.Fields[0].Value, Is.EqualTo("Offline"));
     }
 

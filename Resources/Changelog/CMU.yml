@@ -2368,5 +2368,322 @@
   id: 204
   time: '2026-06-06T00:48:41.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1231
+- author: troytroy400
+  changes:
+  - message: Sounds in large areas now have an echo. This effect can be disabled in
+      settings. This is all client-side.
+    type: Add
+  id: 205
+  time: '2026-06-06T05:18:36.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1230
+- author: toot521
+  changes:
+  - message: All WeYu Survs now actually have lightsources and crowbars
+    type: Tweak
+  id: 206
+  time: '2026-06-06T10:00:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1213
+- author: HotdogMan52
+  changes:
+  - message: Added teargas_airburst_packet_e and teargas_airburst_packet
+    type: Add
+  - message: Increased the AGM-PDC packet to include five rounds instead of three
+    type: Tweak
+  - message: Replaced teargas_packet and teargas_packet_e with new versions
+    type: Tweak
+  - message: fixed updatePerSecond in teargassmoke.yml because the wrong value was
+      saved when I commit the last PR
+    type: Fix
+  id: 207
+  time: '2026-06-06T15:28:53.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1215
+- author: maertayn
+  changes:
+  - message: IdCards are blacklisted from Shopkeep vendor stoc
+    type: Fix
+  - message: WeYu Security has +1 CQC/Endurance/Fireman/Engi/Firearms
+    type: Tweak
+  - message: Vending machines (cash vendors) sprites
+    type: Fix
+  - message: Stereo .ogg audio files converted to mono (1-channel) - affected audio
+      should now be dimensional
+    type: Fix
+  - message: Wooden/metal crates used as cades against Xeno - charge can destroy &
+      sharp claws can destroy metal
+    type: Fix
+  - message: Cultists can use resin doors (any hive - they're xeno non-hostiles)
+    type: Fix
+  id: 208
+  time: '2026-06-06T16:09:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1229
+- author: maertayn
+  changes:
+  - message: Squad tracker breaking when assigning/reassigning SLs
+    type: Fix
+  - message: Squad tracker reverting back to FTL tracking when someone joins the fireteam
+    type: Fix
+  - message: Squad tracker could previously only be set/changed by the squad leader
+    type: Fix
+  - message: Fireteam management hidden if you can't interact with it (only SL/OW
+      can use it)
+    type: Fix
+  - message: Battle Buddy system would track stale state if your partner found a new
+      buddy
+    type: Fix
+  - message: Marine Orders (move/hold/focus) only if you have leadership>=1 or assigned
+      SL (duration is based on leadership)
+    type: Tweak
+  - message: Additional localization support (overwatch.ftl) for the OW consoles
+    type: Code
+  id: 209
+  time: '2026-06-06T16:10:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1233
+- author: toot521
+  changes:
+  - message: Added Imperial Armed Space Forces (IASF) Survivors
+    type: Add
+  - message: Added IASF Surv spawns to Hybrisa Metropolitan and Raijin Hydroelectric
+    type: Add
+  id: 210
+  time: '2026-06-06T16:13:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1214
+- author: Piticzu
+  changes:
+  - message: Crusher charge now plays a windup sound during the 0.6s delay before
+      charging.
+    type: Add
+  - message: Fixed crusher charge phasing through walls when aimed at the seam between
+      two tiles.
+    type: Fix
+  - message: Fixed crusher charge not hitting or flinging marines at range.
+    type: Fix
+  - message: Fixed crusher charge not damaging doors on impact.
+    type: Fix
+  - message: Crusher charge now plows through props (closets, lockers, racks, barrels,
+      filing cabinets, floodlights, disposal units, generators, platforms, hospital
+      dividers).
+    type: Tweak
+  - message: Doors, shutters, and non-loadout vendors now take structural damage from
+      crusher charge.
+    type: Tweak
+  - message: Crusher charge rewritten to use direct physics impulse instead of ThrownItemSystem,
+      matching the xeno leap pattern.
+    type: Code
+  id: 211
+  time: '2026-06-06T18:34:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1223
+- author: RomiGur
+  changes:
+  - message: Added localization key lookup (rank-{ID}) for rank names in examine text
+    type: Code
+  id: 212
+  time: '2026-06-06T22:16:17.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1238
+- author: KriegersMustDie
+  changes:
+  - message: Stamps.
+    type: Add
+  id: 213
+  time: '2026-06-06T22:55:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1239
+- author: TheHellFireo
+  changes:
+  - message: Simple fractures show on examine.
+    type: Add
+  - message: Hairline fractures stay hidden on examine.
+    type: Fix
+  - message: Ghosted Lesser Drones are not added to larva queue.
+    type: Fix
+  - message: Ghosted Lesser Drones are not offered by larva queue.
+    type: Fix
+  - message: Pain shock blur starts minimally at severe pain.
+    type: Tweak
+  - message: Pain shock blur is stronger at shock.
+    type: Tweak
+  - message: Looking up no longer stops pain shock visuals.
+    type: Fix
+  - message: Z starts shrapnel removal when you have shrapnel.
+    type: Add
+  - message: Alt-click with knife starts shrapnel removal.
+    type: Add
+  - message: Shrapnel removal continues until all shrapnel is gone.
+    type: Tweak
+  - message: Shrapnel removal damage cannot break bones or cause internal bleeding.
+    type: Fix
+  id: 214
+  time: '2026-06-07T00:09:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1240
+- author: toot521
+  changes:
+  - message: CLF Survs can now actually only spawn on distress signal
+    type: Fix
+  id: 215
+  time: '2026-06-07T09:21:53.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1243
+- author: TheHellFireo
+  changes:
+  - message: Refresh z-level viewers when mapping and Z mapping networks change, so
+      upper/lower z-level openings render instead of turning black.
+    type: Fix
+  - message: Improve the round status Discord embed layout for clearer round state
+      reporting.
+    type: Tweak
+  - message: Rework ghost warp grouping so ghost/admin warp menus are easier to scan.
+    type: Tweak
+  - message: Add a richer round-end summary with player manifests, round stats, and
+      medical telemetry such as injuries, surgeries, pain shock, organ crises, defibs,
+      bleeding, shrapnel, and limb events.
+    type: Add
+  - message: Redesign the admin logs player-log UI for better readability.
+    type: Tweak
+  - message: Hide redundant ghost warp subtabs.
+    type: Tweak
+  - message: Improve admin log message formatting.
+    type: Tweak
+  - message: Fix z-level visibility updates and throttle tactical map area alert updates
+      to reduce lag from frequent movement updates.
+    type: Fix
+  - message: Add lag profiling commands to help trace expensive server systems.
+    type: Add
+  - message: Clean up build warnings.
+    type: Fix
+  - message: Reduce extreme pain/shock blur. Shock pain now reuses the severe blur
+      curve instead of jumping to very high blur values, keeping feedback noticeable
+      without overwhelming vision.
+    type: Tweak
+  - message: Hivebreaker can now be used on freshly dead xenos for 1 minute, reviving
+      and converting them instead of requiring a critical-but-alive target.
+    type: Add
+  - message: Update round-end summary styling.
+    type: Tweak
+  - message: Improve round-end summary spacing and layout so the outcome, stats, and
+      manifest are less cramped.
+    type: Tweak
+  - message: Fix tactical map prediction state that could dirty/network local movement
+      throttle data.
+    type: Fix
+  - message: Larva ranks now use total xeno playtime scaled by a larva rank factor,
+      and xeno ranks now support higher rank thresholds up to rank 9.
+    type: Add
+  - message: Wide melee swings now prioritize valid living targets, avoid dead mobs,
+      avoid same-hive xenos, and respect barricades/walls before choosing a hit target.
+    type: Fix
+  - message: Queen-called hijacked dropships now announce their destination area to
+      the hive.
+    type: Add
+  - message: Resin Surge previews and effects now use predicted spawning, making reinforce/sticky/unstable
+      wall feedback more responsive for players.
+    type: Tweak
+  - message: Add resin spikes for drone, hivelord, and queen construction. Resin spikes
+      cost 80 plasma, are limited to 15, deal 8 piercing damage with 50 armor penetration
+      on contact, and can hit again after targets leave and re-enter.
+    type: Add
+  - message: 'Add queen psychic communication: Psychic Whisper within 7 tiles, Psychic
+      Radiance within 12 tiles for 100 plasma, and Give Order to the watched xeno
+      for 100 plasma.'
+    type: Add
+  - message: 'Fix drone evolution rules: drones can early-evolve into lurker, spitter,
+      or warrior before marines land, cannot early-evolve after landing, and cannot
+      evolve into queen while a living queen already exists.'
+    type: Fix
+  - message: Add reflective resin walls for hivelord and queen construction. Reflective
+      walls cost 145 plasma with scaling cost, have 300 structural health, resist
+      piercing, are weaker to heat, and can reflect projectiles with reduced reflected
+      damage.
+    type: Add
+  - message: Queen eye now stays leashed near weeds, can expand weeds while the queen
+      is in ovipositor mode, and ovipositor cost is reduced from 700 to 500 plasma.
+    type: Fix
+  id: 216
+  time: '2026-06-07T16:13:58.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1246
+- author: JaSeNeSaJ
+  changes:
+  - message: Chair rotation
+    type: Fix
+  - message: Xeno kudzu
+    type: Remove
+  - message: Cleaned formatting on gamemodes.yml
+    type: Tweak
+  id: 217
+  time: '2026-06-07T21:19:19.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/991
+- author: maertayn
+  changes:
+  - message: Job Normalization - for military jobs -> only apply overrides (use the
+      new "inheritAddComponentSpecials"), let the base abstract prototype do all the
+      heavy lifting - one centralized definition will prevent maintaining from becoming
+      a chore and adding custom factions becomes a breeze
+    type: Code
+  - message: Opfor/Govfor have faction colored TacMap icons per role (gets rid of
+      the synth/smiley icons!)
+    type: Add
+  id: 218
+  time: '2026-06-08T00:38:32.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1250
+- author: potatoed6
+  changes:
+  - message: EO, Adjutant and IO icons for govfor
+    type: Add
+  - message: 'Now kits are limited: 1 Adjutant, 2 IOs, 2 SOs, 2 EOs'
+    type: Tweak
+  - message: CO icon is a bit cooler now
+    type: Tweak
+  id: 219
+  time: '2026-06-08T00:39:15.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1216
+- author: Kadeo64
+  changes:
+  - message: Removed chances and sorokyne from insurgency map rotation.
+    type: Remove
+  id: 220
+  time: '2026-06-08T00:41:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1253
+- author: troytroy400
+  changes:
+  - message: Port Neroid made MultiZ
+    type: Add
+  - message: Store racks now act as shopkeeper stores.
+    type: Add
+  - message: Sheperds Pride and Stable Garrison temporarily removed from Distress
+      Signal.
+    type: Tweak
+  id: 221
+  time: '2026-06-08T06:52:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1257
+- author: 400Ferrets
+  changes:
+  - message: Port Neroid grass is now semi-weedable, instead of unweedable. (Clusters,
+      Gardener weeds only)
+    type: Fix
+  id: 222
+  time: '2026-06-08T11:37:08.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1261
+- author: deepdarkdepths
+  changes:
+  - message: Added the Despoiler, a new Tier 3 xeno.
+    type: Add
+  id: 223
+  time: '2026-06-08T12:16:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1256
+- author: TheHellFireo
+  changes:
+  - message: Ported RMC-14#9832 parasite duplicate infection behavior.
+    type: Tweak
+  - message: Ported RMC-14#9963 xeno lag compensation updates.
+    type: Tweak
+  - message: Ported RMC-14#9905 weld effects and paired door behavior.
+    type: Tweak
+  - message: Ported RMC-14#9999 MB-6 folding barricades.
+    type: Add
+  - message: Ported RMC-14#9956 Despoiler with restored CM13 sprites.
+    type: Add
+  - message: Added the MB-6 to all AU14 platoon engineer vendors.
+    type: Add
+  - message: Restored timestamps in the new admin logs panel.
+    type: Fix
+  id: 224
+  time: '2026-06-08T12:29:49.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1262
 Name: CMU
 Order: -1

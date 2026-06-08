@@ -222,7 +222,7 @@
 - type: entity
   parent: SquadBase
   id: SquadPara
-  name: Para Marines
+  name: IASF
   components:
   - type: SquadTeam
     color: "#3D6F43"

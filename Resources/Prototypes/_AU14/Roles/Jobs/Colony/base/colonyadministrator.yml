@@ -68,6 +68,7 @@
     ears: AU14ColonyAdminHeadset
     outerClothing: RMCJacketCorporateBlue
     pocket1: AU14GuidebookLawColonial
+    pocket2: AU14StampAdmin
   inhand:
   - RMCRadioHandheldColonyOff
 

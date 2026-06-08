@@ -65,6 +65,7 @@
     outerClothing: RMCJacketCorporateBlack
     ears: AU14ColonyAdminHeadset # todo laselle headset
     eyes: RMCGlassesTriMaxBlack
+    pocket1: AU14StampLLiaison
   inhand:
   - RMCPortableVendorCorporate
 

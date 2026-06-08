@@ -56,6 +56,7 @@
     id: AU14IDCardColonyCorporateLiaison
     outerClothing: RMCCoatSPP
     ears: AU14AmbassadorUPPHeadset
+    pocket1: AU14StampUPPA
   inhand:
   - RMCPortableVendorCorporate
 

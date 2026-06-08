@@ -14,6 +14,7 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Controllers;
 using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Timing;
 
 namespace Content.Shared.Friction
 {
@@ -24,6 +25,7 @@ namespace Content.Shared.Friction
         [Dependency] private SharedGravitySystem _gravity = default!;
         [Dependency] private SharedMoverController _mover = default!;
         [Dependency] private SharedMapSystem _map = default!;
+        [Dependency] private IGameTiming _timing = default!;
 
         private EntityQuery<TileFrictionModifierComponent> _frictionQuery;
         private EntityQuery<TransformComponent> _xformQuery;
@@ -69,12 +71,15 @@ namespace Content.Shared.Friction
                     continue;
 
                 var xform = ent.Comp2;
-                float friction;
+                float friction = 0;
 
                 // If we're not touching the ground, don't use tileFriction.
                 // TODO: Make IsWeightless event-based; we already have grid traversals tracked so just raise events
                 if (body.BodyStatus == BodyStatus.InAir || _gravity.IsWeightless(uid, body, xform) || !xform.Coordinates.IsValid(EntityManager))
-                    friction = xform.GridUid == null || !_gridQuery.HasComp(xform.GridUid) ? _offGridDamping : _airDamping;
+                {
+                    if (_timing.IsFirstTimePredicted)
+                        friction = xform.GridUid == null || !_gridQuery.HasComp(xform.GridUid) ? _offGridDamping : _airDamping;
+                }
                 else
                     friction = _frictionModifier * GetTileFriction(uid, body, xform);
 

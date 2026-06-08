@@ -30,10 +30,6 @@ jobs:
               'S: Awaiting Changes': { color: 'd93f0b', description: 'Changes requested by review.' },
               'S: Approved': { color: '0e8a16', description: 'Approved by a trusted reviewer.' },
               'S: Merge Conflict': { color: 'b60205', description: 'Pull request has merge conflicts.' },
-              'S: Required Checks Passed': { color: '0e8a16', description: 'Required CI checks passed for the current pull request head.' },
-              'S: Required Checks Failed': { color: 'd93f0b', description: 'Required CI checks failed for the current pull request head.' },
-              'S: Integration Tests Passed': { color: '0e8a16', description: 'Integration tests passed for the current pull request head.' },
-              'S: Integration Tests Failed': { color: 'd93f0b', description: 'Integration tests failed for the current pull request head.' },
               'Branch: Stable': { color: '5319e7', description: 'Targets the stable branch.' },
               'Branch: Staging': { color: '1d76db', description: 'Targets the staging branch.' },
               'Changes: Sprites': { color: 'c5def5', description: 'Changes sprite image assets.' },
@@ -57,28 +53,41 @@ jobs:
 
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const existing = new Map((await github.paginate(github.rest.issues.listLabelsForRepo, {
-              owner,
-              repo,
-              per_page: 100,
-            })).map(label => [label.name, label]));
-            const deletedLabels = ['S: Untriaged', 'S: Needs Review'];
+            const deletedLabels = [
+              'S: Untriaged',
+              'S: Needs Review',
+              'S: Required Checks Passed',
+              'S: Required Checks Failed',
+              'S: Integration Tests Passed',
+              'S: Integration Tests Failed',
+            ];
+            const syncLabels =
+              context.eventName === 'issues' ||
+              (context.eventName === 'pull_request_target' && ['opened', 'reopened'].includes(context.payload.action));
 
-            for (const [name, config] of Object.entries(labels)) {
-              const current = existing.get(name);
-              if (!current) {
-                await github.rest.issues.createLabel({ owner, repo, name, ...config });
-                continue;
+            if (syncLabels) {
+              const existing = new Map((await github.paginate(github.rest.issues.listLabelsForRepo, {
+                owner,
+                repo,
+                per_page: 100,
+              })).map(label => [label.name, label]));
+
+              for (const [name, config] of Object.entries(labels)) {
+                const current = existing.get(name);
+                if (!current) {
+                  await github.rest.issues.createLabel({ owner, repo, name, ...config });
+                  continue;
+                }
+
+                if (current.color.toLowerCase() !== config.color || (current.description || '') !== config.description) {
+                  await github.rest.issues.updateLabel({ owner, repo, name, new_name: name, ...config });
+                }
               }
 
-              if (current.color.toLowerCase() !== config.color || (current.description || '') !== config.description) {
-                await github.rest.issues.updateLabel({ owner, repo, name, new_name: name, ...config });
-              }
-            }
-
-            for (const name of deletedLabels) {
-              if (existing.has(name)) {
-                await github.rest.issues.deleteLabel({ owner, repo, name });
+              for (const name of deletedLabels) {
+                if (existing.has(name)) {
+                  await github.rest.issues.deleteLabel({ owner, repo, name });
+                }
               }
             }
 
@@ -184,10 +193,6 @@ jobs:
                 await remove(pr.number, [
                   'S: Approved',
                   'S: Awaiting Changes',
-                  'S: Required Checks Passed',
-                  'S: Required Checks Failed',
-                  'S: Integration Tests Passed',
-                  'S: Integration Tests Failed',
                 ]);
               }
 

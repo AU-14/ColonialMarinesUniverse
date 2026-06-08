@@ -4,8 +4,6 @@
   name: PMC Communications Specialist
   spawnMenuRoleName: Fireteam Leader (WYPMC)
   overwatchRoleName: au14-job-name-radiotelephoneoperator-alt
-  startingGear: AU14GearGOVFORRadioTelephoneOperator
-  dummyStartingGear: AU14GearGOVFORRadioTelephoneOperatorDummy
   ranks:
     AU14RankWeYuSeniorOperator:
     - !type:RoleTimeRequirement

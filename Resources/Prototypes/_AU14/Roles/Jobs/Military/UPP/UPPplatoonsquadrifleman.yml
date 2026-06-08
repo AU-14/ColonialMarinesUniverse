@@ -3,8 +3,6 @@
   id: AU14JobGOVFORSquadRiflemanUPP
   name: Rifleman
   spawnMenuRoleName: Rifleman (UPP)
-  startingGear: AU14GearGOVFORSquadRifleman
-  dummyStartingGear: AU14GearGOVFORRiflemanDummy
   ranks:
     UPP_Gefreiter:
     - !type:RoleTimeRequirement

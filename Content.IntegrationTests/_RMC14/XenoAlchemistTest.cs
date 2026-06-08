@@ -81,6 +81,14 @@ public sealed class XenoAlchemistTest
         "RMCXenoAlchPurge",
     ];
 
+    private static readonly ProtoId<ReagentPrototype> AlchemistBrute = "RMCXenoAlchBrute";
+    private static readonly ProtoId<ReagentPrototype> AlchemistBurn = "RMCXenoAlchBurn";
+    private static readonly ProtoId<ReagentPrototype> AlchemistPain = "RMCXenoAlchPain";
+    private static readonly ProtoId<ReagentPrototype> AlchemistFire = "RMCXenoAlchFire";
+    private static readonly ProtoId<ReagentPrototype> AlchemistBloodloss = "RMCXenoAlchBloodloss";
+    private static readonly ProtoId<ReagentPrototype> AlchemistFreeze = "RMCXenoAlchFreeze";
+    private static readonly ProtoId<ReagentPrototype> AlchemistPurge = "RMCXenoAlchPurge";
+
     [Test]
     public async Task TailInjectionCannotTargetSameHiveXenos()
     {
@@ -206,13 +214,13 @@ public sealed class XenoAlchemistTest
 
         await server.WaitAssertion(() =>
         {
-            var brute = prototypes.Index<ReagentPrototype>("RMCXenoAlchBrute");
-            var burn = prototypes.Index<ReagentPrototype>("RMCXenoAlchBurn");
-            var pain = prototypes.Index<ReagentPrototype>("RMCXenoAlchPain");
-            var fire = prototypes.Index<ReagentPrototype>("RMCXenoAlchFire");
-            var bloodloss = prototypes.Index<ReagentPrototype>("RMCXenoAlchBloodloss");
-            var freeze = prototypes.Index<ReagentPrototype>("RMCXenoAlchFreeze");
-            var purge = prototypes.Index<ReagentPrototype>("RMCXenoAlchPurge");
+            var brute = prototypes.Index(AlchemistBrute);
+            var burn = prototypes.Index(AlchemistBurn);
+            var pain = prototypes.Index(AlchemistPain);
+            var fire = prototypes.Index(AlchemistFire);
+            var bloodloss = prototypes.Index(AlchemistBloodloss);
+            var freeze = prototypes.Index(AlchemistFreeze);
+            var purge = prototypes.Index(AlchemistPurge);
 
             foreach (var reagent in new[] { brute, burn, pain, fire, bloodloss, freeze, purge })
             {

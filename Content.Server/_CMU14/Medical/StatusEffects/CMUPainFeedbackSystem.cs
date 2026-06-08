@@ -32,6 +32,7 @@ public sealed partial class CMUPainFeedbackSystem : EntitySystem
     [Dependency] private SharedDrunkSystem _drunk = default!;
 
     private static readonly ProtoId<StatusEffectPrototype> Stutter = "Stutter";
+    private const float SevereBlurMax = 0.49f;
 
     public override void Initialize()
     {
@@ -55,7 +56,7 @@ public sealed partial class CMUPainFeedbackSystem : EntitySystem
             if (mob.CurrentState == MobState.Dead || HasComp<SynthComponent>(uid))
                 continue;
 
-            if (pain.Tier < PainTier.Moderate)
+            if (pain.Tier < PainTier.Severe)
             {
                 feedback.NextEffect = TimeSpan.Zero;
                 continue;
@@ -72,41 +73,41 @@ public sealed partial class CMUPainFeedbackSystem : EntitySystem
     private void ApplyFeedback(EntityUid uid, CMUPainFeedbackComponent feedback, PainShockComponent pain)
     {
         var tier = pain.Tier;
-        var shock = tier == PainTier.Shock;
+        if (tier < PainTier.Severe)
+            return;
 
         ApplyTemporaryBlur(
             uid,
             GetBlurDuration(feedback, tier),
             GetBlurAmount(feedback, pain));
 
-        if (tier < PainTier.Severe)
+        if (tier < PainTier.Shock)
             return;
 
         ApplyTimedStatus<StutteringAccentComponent>(
             uid,
             Stutter,
-            shock ? feedback.ShockStutterDuration : feedback.SevereStutterDuration);
+            feedback.ShockStutterDuration);
 
         ApplyDrunkenness(
             uid,
-            shock ? feedback.ShockDrunkPower : feedback.SevereDrunkPower,
-            shock);
+            feedback.ShockDrunkPower,
+            slur: true);
 
         ApplyAsphyxiation(
             uid,
-            shock ? feedback.ShockAsphyxiation : feedback.SevereAsphyxiation);
+            feedback.ShockAsphyxiation);
 
         TryPainEmote(
             uid,
-            shock ? feedback.ShockEmoteChance : feedback.SevereEmoteChance,
-            shock ? feedback.ShockEmotes : feedback.SevereEmotes);
+            feedback.ShockEmoteChance,
+            feedback.ShockEmotes);
     }
 
     private TimeSpan GetBlurDuration(CMUPainFeedbackComponent feedback, PainTier tier)
     {
         return tier switch
         {
-            PainTier.Moderate => feedback.SevereBlurDuration,
             PainTier.Severe => feedback.SevereBlurDuration,
             PainTier.Shock => feedback.ShockBlurDuration,
             _ => TimeSpan.Zero,
@@ -116,21 +117,26 @@ public sealed partial class CMUPainFeedbackSystem : EntitySystem
     private float GetBlurAmount(CMUPainFeedbackComponent feedback, PainShockComponent pain)
     {
         var value = pain.Pain.Float();
-        var moderate = PainTierThresholds.UpwardThresholds[(int) PainTier.Moderate - 1].Float();
         var severe = PainTierThresholds.UpwardThresholds[(int) PainTier.Severe - 1].Float();
         var shock = _pain.ShockThreshold.Float();
 
-        if (value < moderate)
+        if (value < severe)
             return 0f;
 
-        if (value < severe)
-            return Lerp(0.02f, feedback.SevereBlurStartAmount, InverseLerp(moderate, severe, value));
-
         if (value < shock)
-            return Lerp(feedback.SevereBlurStartAmount, feedback.ShockBlurStartAmount, InverseLerp(severe, shock, value));
+            return GetSevereBlurAmount(feedback, severe, shock, feedback.SevereBlurEquivalentPain);
 
-        var shockEnd = Math.Max(feedback.ShockBlurFullPain, shock);
-        return Lerp(feedback.ShockBlurStartAmount, feedback.ShockBlurAmount, InverseLerp(shock, shockEnd, value));
+        return GetSevereBlurAmount(feedback, severe, shock, feedback.ShockBlurEquivalentPain);
+    }
+
+    private static float GetSevereBlurAmount(
+        CMUPainFeedbackComponent feedback,
+        float severe,
+        float shock,
+        float value)
+    {
+        var severeAmount = Math.Min(feedback.SevereBlurAmount, SevereBlurMax);
+        return Lerp(feedback.SevereBlurStartAmount, severeAmount, InverseLerp(severe, shock, value));
     }
 
     private static float InverseLerp(float from, float to, float value)

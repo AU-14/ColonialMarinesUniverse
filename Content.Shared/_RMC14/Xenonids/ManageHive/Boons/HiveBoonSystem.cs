@@ -10,6 +10,7 @@ using Content.Shared._RMC14.GameTicking;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Announce;
+using Content.Shared._RMC14.PlayTimeTracking;
 using Content.Shared._RMC14.Repairable;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids.Announce;
@@ -21,9 +22,7 @@ using Content.Shared.Examine;
 using Content.Shared.GameTicking;
 using Content.Shared.Mind;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Popups;
-using Content.Shared.Roles;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
@@ -49,13 +48,13 @@ public sealed partial class HiveBoonSystem : EntitySystem
     [Dependency] private SharedMindSystem _mind = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private INetManager _net = default!;
-    [Dependency] private ISharedPlaytimeManager _playtime = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedRMCGameTickerSystem _rmcGameTicker = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
     [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private SharedRMCPlayTimeManager _rmcPlaytime = default!;
     [Dependency] private ISerializationManager _serialization = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
@@ -79,8 +78,6 @@ public sealed partial class HiveBoonSystem : EntitySystem
     private TimeSpan _kingVoteStartHatchingTime;
 
     private EntityQuery<ExcludedFromKingVoteComponent> _excludedFromKingVoteQuery;
-
-    private readonly HashSet<ProtoId<PlayTimeTrackerPrototype>> _xenoJobs = new();
 
     public override void Initialize()
     {
@@ -354,8 +351,6 @@ public sealed partial class HiveBoonSystem : EntitySystem
 
     private void StartKingVote(Entity<HiveKingCocoonComponent> cocoon)
     {
-        RefreshXenoJobs();
-
         var hasEligibleCandidate = false;
         var xenosQuery = EntityQueryEnumerator<ActorComponent, XenoComponent>();
         while (xenosQuery.MoveNext(out var uid, out var actor, out _))
@@ -380,8 +375,6 @@ public sealed partial class HiveBoonSystem : EntitySystem
 
     private void OpenKingVoteForVoters(Entity<HiveKingCocoonComponent> cocoon)
     {
-        RefreshXenoJobs();
-
         var vote = EnsureVote(cocoon);
         var netCocoon = GetNetEntity(cocoon);
 
@@ -407,16 +400,6 @@ public sealed partial class HiveBoonSystem : EntitySystem
                 continue;
 
             _dialog.OpenOptions(uid, "Choose a sister", options, "Vote for a sister you wish to become the King.");
-        }
-    }
-
-    private void RefreshXenoJobs()
-    {
-        _xenoJobs.Clear();
-        foreach (var prototype in _prototype.EnumeratePrototypes<PlayTimeTrackerPrototype>())
-        {
-            if (prototype.IsXeno)
-                _xenoJobs.Add(prototype.ID);
         }
     }
 
@@ -448,27 +431,16 @@ public sealed partial class HiveBoonSystem : EntitySystem
         }
 
         canVote = true;
-        IReadOnlyDictionary<string, TimeSpan> playTimes;
+
         try
         {
-            playTimes = _playtime.GetPlayTimes(xeno.Comp.PlayerSession);
+            if (_rmcPlaytime.GetTotalXenoPlaytime(xeno.Comp.PlayerSession) < _kingVoteCandidateTimeRequired)
+                return;
         }
         catch
         {
             return;
         }
-
-        var totalTime = TimeSpan.Zero;
-        foreach (var (jobId, jobTime) in playTimes)
-        {
-            if (!_xenoJobs.Contains(jobId))
-                continue;
-
-            totalTime += jobTime;
-        }
-
-        if (totalTime < _kingVoteCandidateTimeRequired)
-            return;
 
         canBeKing = true;
     }

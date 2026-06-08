@@ -32,7 +32,6 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
         private SpriteSystem? _spriteSystem;
         private readonly List<TabState> _tabs = new();
         private readonly List<RowState> _rows = new();
-        private readonly List<SectionState> _sections = new();
         private readonly List<EntityUid> _previewDummies = new();
         private TabState? _activeTab;
         private List<GhostWarp> _warps = new();
@@ -87,6 +86,11 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
             foreach (var tab in _tabs)
             {
                 CrtLobbyTheme.Apply(tab.Button);
+
+                foreach (var subTab in tab.SubTabs)
+                {
+                    CrtLobbyTheme.Apply(subTab.Button);
+                }
             }
 
             foreach (var row in _rows)
@@ -115,10 +119,10 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
             var previousTab = _activeTab?.Name;
             ClearPreviewDummies();
             FactionTabBar.DisposeAllChildren();
+            SubTabBar.DisposeAllChildren();
             TabContentRoot.DisposeAllChildren();
             _tabs.Clear();
             _rows.Clear();
-            _sections.Clear();
             _activeTab = null;
             _rowDensity = GetRowDensity(_warps
                 .GroupBy(GetTabName)
@@ -150,7 +154,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 HScrollEnabled = false,
             };
 
-            var tabTitle = GetTabTitle(tabName, warps.Count, warps.Count);
+            var tabTitle = GetTabTitle(tabName, warps.Count, warps.Count, ShouldCompactTopTabs());
             var tabButton = new Button
             {
                 Text = tabTitle,
@@ -160,7 +164,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 MinWidth = GetTabMinWidth(tabTitle),
                 MinHeight = 28,
                 TextAlign = Label.AlignMode.Center,
-                ToolTip = $"{tabName} ({warps.Count})",
+                ToolTip = $"{GetDisplayName(tabName)} ({warps.Count})",
             };
 
             var container = new BoxContainer
@@ -181,11 +185,13 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
 
             AddTabHeader(container, tabName, warps.Count);
 
-            foreach (var sectionGroup in warps.GroupBy(GetSectionName)
-                         .OrderBy(group => GetSectionOrder(group.Key))
-                         .ThenBy(group => group.Key, OrdinalComparer))
+            foreach (var warp in warps)
             {
-                AddSection(tab, container, sectionGroup.Key, sectionGroup.ToList());
+                var row = CreateWarpRow(warp, _rowDensity);
+                var rowState = new RowState(warp, row);
+                tab.Rows.Add(rowState);
+                _rows.Add(rowState);
+                container.AddChild(row);
             }
 
             FactionTabBar.AddChild(tabButton);
@@ -210,7 +216,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
 
             headerBox.AddChild(new Label
             {
-                Text = tabName.ToUpperInvariant(),
+                Text = GetDisplayName(tabName).ToUpperInvariant(),
                 StyleClasses = { StyleNano.StyleClassCrtHeading },
                 HorizontalExpand = true,
             });
@@ -225,69 +231,6 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
 
             header.AddChild(headerBox);
             container.AddChild(header);
-        }
-
-        private void AddSection(TabState tab, BoxContainer tabContainer, string sectionName, List<GhostWarp> warps)
-        {
-            var sectionContainer = new BoxContainer
-            {
-                Orientation = BoxContainer.LayoutOrientation.Vertical,
-                SeparationOverride = 6,
-                HorizontalExpand = true,
-            };
-
-            var header = CreateSectionHeader(sectionName, warps.Count, out var countLabel);
-            var section = new SectionState(sectionContainer, countLabel);
-            _sections.Add(section);
-            tab.Sections.Add(section);
-
-            sectionContainer.AddChild(header);
-
-            foreach (var warp in warps)
-            {
-                var row = CreateWarpRow(warp, _rowDensity);
-                var rowState = new RowState(warp, row);
-                section.Rows.Add(rowState);
-                _rows.Add(rowState);
-                sectionContainer.AddChild(row);
-            }
-
-            tabContainer.AddChild(sectionContainer);
-        }
-
-        private Control CreateSectionHeader(string sectionName, int count, out Label countLabel)
-        {
-            var panel = new PanelContainer
-            {
-                StyleClasses = { StyleNano.StyleClassCrtHeaderPanel },
-                HorizontalExpand = true,
-            };
-
-            var box = new BoxContainer
-            {
-                Orientation = BoxContainer.LayoutOrientation.Horizontal,
-                Margin = new Thickness(8, 4),
-                HorizontalExpand = true,
-            };
-
-            box.AddChild(new Label
-            {
-                Text = sectionName.ToUpperInvariant(),
-                StyleClasses = { StyleNano.StyleClassCrtHeading },
-                HorizontalExpand = true,
-            });
-
-            countLabel = new Label
-            {
-                Text = count.ToString(),
-                StyleClasses = { StyleNano.StyleClassCrtDimText },
-                Align = Label.AlignMode.Right,
-            };
-
-            box.AddChild(countLabel);
-
-            panel.AddChild(box);
-            return panel;
         }
 
         private Button CreateWarpRow(GhostWarp warp, WarpRowDensity density)
@@ -568,7 +511,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
         {
             foreach (var row in _rows)
             {
-                row.Button.Visible = WarpIsVisible(row.Warp);
+                row.SearchVisible = WarpIsVisible(row.Warp);
             }
 
             TabState? firstVisibleTab = null;
@@ -576,19 +519,10 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
 
             foreach (var tab in _tabs)
             {
-                var visibleInTab = 0;
-
-                foreach (var section in tab.Sections)
-                {
-                    var visibleInSection = section.Rows.Count(row => row.Button.Visible);
-                    visibleInTab += visibleInSection;
-                    section.Container.Visible = visibleInSection > 0;
-                    section.CountLabel.Text = GetCountText(visibleInSection, section.Rows.Count);
-                }
-
+                var visibleInTab = tab.Rows.Count(row => row.SearchVisible);
                 var tabVisible = visibleInTab > 0;
                 tab.Button.Visible = tabVisible;
-                var tabTitle = GetTabTitle(tab.Name, visibleInTab, tab.TotalCount);
+                var tabTitle = GetTabTitle(tab.Name, visibleInTab, tab.TotalCount, ShouldCompactTopTabs());
                 tab.Button.Text = tabTitle;
                 tab.Button.MinWidth = GetTabMinWidth(tabTitle);
                 tab.Scroll.SetScrollValue(Vector2.Zero);
@@ -606,6 +540,8 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 SetActiveTab(_activeTab);
 
             TabBarScroll.Visible = anyVisibleTabs;
+            SubTabBarScroll.Visible = anyVisibleTabs &&
+                                      _activeTab?.SubTabs.Any(subTab => subTab.Button.Visible) == true;
             ContentPanel.Visible = anyVisibleTabs;
             EmptyLabel.Text = string.IsNullOrWhiteSpace(_searchText)
                 ? Loc.GetString("ghost-target-window-empty")
@@ -635,30 +571,161 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                     ? Color.White
                     : StyleNano.CrtGreenDim;
             }
+
+            RefreshSubTabs();
+            UpdateActiveTabRows();
+        }
+
+        private void RefreshSubTabs()
+        {
+            SubTabBar.DisposeAllChildren();
+
+            if (_activeTab == null)
+            {
+                SubTabBarScroll.Visible = false;
+                return;
+            }
+
+            _activeTab.SubTabs.Clear();
+
+            var sections = _activeTab.Rows
+                .Select(row => GetSectionName(row.Warp))
+                .Distinct()
+                .OrderBy(GetSectionOrder)
+                .ThenBy(section => section, OrdinalComparer)
+                .ToList();
+
+            if (sections.Count <= 1)
+            {
+                _activeTab.ActiveSubTab = GhostWarpGrouping.SectionAll;
+                SubTabBarScroll.Visible = false;
+                return;
+            }
+
+            sections.Insert(0, GhostWarpGrouping.SectionAll);
+
+            var compact = sections.Count >= 6;
+            SubTabBarScroll.Visible = sections.Count > 0;
+
+            foreach (var section in sections)
+            {
+                var visible = GetVisibleSubTabCount(_activeTab, section);
+                var total = GetTotalSubTabCount(_activeTab, section);
+                var title = GetSubTabTitle(section, visible, total, compact);
+                var button = new Button
+                {
+                    Text = title,
+                    HorizontalExpand = true,
+                    SizeFlagsStretchRatio = 1,
+                    ClipText = true,
+                    MinWidth = GetSubTabMinWidth(title),
+                    MinHeight = 26,
+                    TextAlign = Label.AlignMode.Center,
+                    ToolTip = $"{GetDisplayName(section)} ({visible}/{total})",
+                    Visible = visible > 0,
+                };
+                var subTab = new SubTabState(section, button);
+                _activeTab.SubTabs.Add(subTab);
+                button.OnPressed += _ =>
+                {
+                    _activeTab.ActiveSubTab = section;
+                    RefreshSubTabs();
+                    UpdateActiveTabRows();
+                };
+
+                SubTabBar.AddChild(button);
+                CrtLobbyTheme.Apply(button);
+            }
+
+            if (_activeTab.SubTabs.All(subTab => subTab.Name != _activeTab.ActiveSubTab || !subTab.Button.Visible))
+                _activeTab.ActiveSubTab = _activeTab.SubTabs.FirstOrDefault(subTab => subTab.Button.Visible)?.Name ?? GhostWarpGrouping.SectionAll;
+
+            foreach (var subTab in _activeTab.SubTabs)
+            {
+                var active = subTab.Name == _activeTab.ActiveSubTab && subTab.Button.Visible;
+                if (active)
+                {
+                    if (!subTab.Button.HasStyleClass(StyleNano.StyleClassCrtAttentionButton))
+                        subTab.Button.AddStyleClass(StyleNano.StyleClassCrtAttentionButton);
+                }
+                else
+                {
+                    subTab.Button.RemoveStyleClass(StyleNano.StyleClassCrtAttentionButton);
+                }
+
+                subTab.Button.Modulate = active
+                    ? Color.White
+                    : StyleNano.CrtGreenDim;
+            }
+        }
+
+        private static int GetVisibleSubTabCount(TabState tab, string section)
+        {
+            return section == GhostWarpGrouping.SectionAll
+                ? tab.Rows.Count(row => row.SearchVisible)
+                : tab.Rows.Count(row => row.SearchVisible && GetSectionName(row.Warp) == section);
+        }
+
+        private static int GetTotalSubTabCount(TabState tab, string section)
+        {
+            return section == GhostWarpGrouping.SectionAll
+                ? tab.TotalCount
+                : tab.Rows.Count(row => GetSectionName(row.Warp) == section);
+        }
+
+        private void UpdateActiveTabRows()
+        {
+            foreach (var tab in _tabs)
+            {
+                foreach (var row in tab.Rows)
+                {
+                    row.Button.Visible = tab == _activeTab &&
+                                         row.SearchVisible &&
+                                         SubTabMatches(tab.ActiveSubTab, row.Warp);
+                }
+            }
+        }
+
+        private static bool SubTabMatches(string activeSubTab, GhostWarp warp)
+        {
+            return activeSubTab == GhostWarpGrouping.SectionAll ||
+                   GetSectionName(warp) == activeSubTab;
         }
 
         private static int GetTabOrder(string tab)
         {
             return tab switch
             {
-                "Military" => 0,
-                "Xenos" => 1,
-                "Survivors" => 2,
-                "WeYa/PMC" => 3,
-                "CLF" => 4,
-                "SPP" => 5,
-                "TSE/Royal" => 6,
-                "CMB/Provost" => 7,
-                "Locations" => 98,
-                "Other" => 99,
+                GhostWarpGrouping.TabMilitary => 0,
+                GhostWarpGrouping.TabXenos => 1,
+                GhostWarpGrouping.TabCorruptedHive => 2,
+                GhostWarpGrouping.TabOpfor => 3,
+                GhostWarpGrouping.TabYautja => 4,
+                GhostWarpGrouping.TabThirdParty => 5,
+                GhostWarpGrouping.TabSurvivors => 6,
+                GhostWarpGrouping.TabWeYaPmc => 7,
+                GhostWarpGrouping.TabClf => 8,
+                GhostWarpGrouping.TabSpp => 9,
+                GhostWarpGrouping.TabTseRoyal => 10,
+                GhostWarpGrouping.TabCmbProvost => 11,
+                GhostWarpGrouping.TabThreat => 12,
+                GhostWarpGrouping.TabApe => 13,
+                GhostWarpGrouping.TabLocations => 98,
+                GhostWarpGrouping.TabOther => 99,
                 _ => 50,
             };
         }
 
         private static int GetSectionOrder(string section)
         {
-            if (section == "Queen")
+            if (section == GhostWarpGrouping.SectionAll)
                 return 0;
+
+            if (section == GhostWarpGrouping.SectionQueen ||
+                section == GhostWarpGrouping.SectionWarpPoints)
+            {
+                return 1;
+            }
 
             if (section.StartsWith("Tier ", StringComparison.OrdinalIgnoreCase) &&
                 int.TryParse(section["Tier ".Length..], out var tier))
@@ -668,13 +735,22 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
 
             return section switch
             {
-                "High Command" => 0,
-                "Command" => 1,
-                "Specialists" => 2,
-                "Line Personnel" => 3,
-                "Personnel" => 4,
-                "Warp Points" => 0,
-                _ => 10,
+                GhostWarpGrouping.SectionHighCommand => 20,
+                GhostWarpGrouping.SectionCommand => 21,
+                GhostWarpGrouping.SectionSquadLeads => 22,
+                GhostWarpGrouping.SectionLeaders => 23,
+                GhostWarpGrouping.SectionSpecialists => 24,
+                GhostWarpGrouping.SectionPilotsCrew => 25,
+                GhostWarpGrouping.SectionHunters => 26,
+                GhostWarpGrouping.SectionThralls => 27,
+                GhostWarpGrouping.SectionAbominations => 28,
+                GhostWarpGrouping.SectionMembers => 29,
+                GhostWarpGrouping.SectionLine => 30,
+                GhostWarpGrouping.SectionLinePersonnel => 31,
+                GhostWarpGrouping.SectionPersonnel => 32,
+                GhostWarpGrouping.SectionUnknownTier => 90,
+                GhostWarpGrouping.SectionOther => 99,
+                _ => 50,
             };
         }
 
@@ -684,8 +760,8 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 return warp.Tab;
 
             return warp.IsWarpPoint
-                ? "Locations"
-                : "Other";
+                ? GhostWarpGrouping.TabLocations
+                : GhostWarpGrouping.TabOther;
         }
 
         private static string GetSectionName(GhostWarp warp)
@@ -694,8 +770,8 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 return warp.Section;
 
             return warp.IsWarpPoint
-                ? "Warp Points"
-                : "Personnel";
+                ? GhostWarpGrouping.SectionWarpPoints
+                : GhostWarpGrouping.SectionPersonnel;
         }
 
         private static string GetRoleName(GhostWarp warp)
@@ -734,33 +810,124 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
             if (warp.IsWarpPoint || role == section)
                 return role;
 
-            return $"{role} - {section}";
+            return $"{role} - {GetDisplayName(section)}";
         }
 
         private static string GetSearchText(GhostWarp warp)
         {
-            return $"{warp.DisplayName} {GetRoleName(warp)} {GetTabName(warp)} {GetSectionName(warp)}";
+            return $"{warp.DisplayName} {GetRoleName(warp)} {GetDisplayName(GetTabName(warp))} {GetDisplayName(GetSectionName(warp))}";
         }
 
-        private static string GetTabTitle(string tab, int visible, int total)
+        private bool ShouldCompactTopTabs()
         {
-            var label = tab.ToUpperInvariant();
+            return _warps
+                .Select(GetTabName)
+                .Distinct()
+                .Count() >= 8;
+        }
+
+        private static string GetTabTitle(string tab, int visible, int total, bool compact)
+        {
+            var label = compact
+                ? GhostWarpGrouping.GetCompactTabName(tab)
+                : GetDisplayName(tab);
+            label = label.ToUpperInvariant();
             return visible == total
                 ? $"{label} {total}"
                 : $"{label} {visible}/{total}";
         }
 
-        private static float GetTabMinWidth(string title)
+        private static string GetSubTabTitle(string section, int visible, int total, bool compact)
         {
-            return Math.Max(96, (title.Length * 9) + 32);
+            var label = compact
+                ? GetCompactSubTabName(section)
+                : GetDisplayName(section);
+            label = label.ToUpperInvariant();
+            return visible == total
+                ? $"{label} {total}"
+                : $"{label} {visible}/{total}";
         }
 
-        private string GetCountText(int visible, int total)
+        private static string GetDisplayName(string name)
         {
-            if (string.IsNullOrWhiteSpace(_searchText) || visible == total)
-                return total.ToString();
+            if (name.StartsWith("Tier ", StringComparison.OrdinalIgnoreCase) &&
+                int.TryParse(name["Tier ".Length..], out var tier))
+            {
+                return Loc.GetString("ghost-target-window-subtab-tier", ("tier", tier));
+            }
 
-            return $"{visible}/{total}";
+            return name switch
+            {
+                GhostWarpGrouping.TabMilitary => Loc.GetString("ghost-target-window-tab-military"),
+                GhostWarpGrouping.TabXenos => Loc.GetString("ghost-target-window-tab-xenos"),
+                GhostWarpGrouping.TabCorruptedHive => Loc.GetString("ghost-target-window-tab-corrupted-hive"),
+                GhostWarpGrouping.TabOpfor => Loc.GetString("ghost-target-window-tab-opfor"),
+                GhostWarpGrouping.TabYautja => Loc.GetString("ghost-target-window-tab-yautja"),
+                GhostWarpGrouping.TabThirdParty => Loc.GetString("ghost-target-window-tab-third-party"),
+                GhostWarpGrouping.TabSurvivors => Loc.GetString("ghost-target-window-tab-survivors"),
+                GhostWarpGrouping.TabWeYaPmc => Loc.GetString("ghost-target-window-tab-weya-pmc"),
+                GhostWarpGrouping.TabClf => Loc.GetString("ghost-target-window-tab-clf"),
+                GhostWarpGrouping.TabSpp => Loc.GetString("ghost-target-window-tab-spp"),
+                GhostWarpGrouping.TabTseRoyal => Loc.GetString("ghost-target-window-tab-tse-royal"),
+                GhostWarpGrouping.TabCmbProvost => Loc.GetString("ghost-target-window-tab-cmb-provost"),
+                GhostWarpGrouping.TabThreat => Loc.GetString("ghost-target-window-tab-threat"),
+                GhostWarpGrouping.TabApe => Loc.GetString("ghost-target-window-tab-ape"),
+                GhostWarpGrouping.TabLocations => Loc.GetString("ghost-target-window-tab-locations"),
+                GhostWarpGrouping.TabOther => Loc.GetString("ghost-target-window-tab-other"),
+                GhostWarpGrouping.SectionAll => Loc.GetString("ghost-target-window-subtab-all"),
+                GhostWarpGrouping.SectionCommand => Loc.GetString("ghost-target-window-subtab-command"),
+                GhostWarpGrouping.SectionHighCommand => Loc.GetString("ghost-target-window-subtab-high-command"),
+                GhostWarpGrouping.SectionSquadLeads => Loc.GetString("ghost-target-window-subtab-squad-leads"),
+                GhostWarpGrouping.SectionSpecialists => Loc.GetString("ghost-target-window-subtab-specialists"),
+                GhostWarpGrouping.SectionPilotsCrew => Loc.GetString("ghost-target-window-subtab-pilots-crew"),
+                GhostWarpGrouping.SectionLine => Loc.GetString("ghost-target-window-subtab-line"),
+                GhostWarpGrouping.SectionLinePersonnel => Loc.GetString("ghost-target-window-subtab-line-personnel"),
+                GhostWarpGrouping.SectionPersonnel => Loc.GetString("ghost-target-window-subtab-personnel"),
+                GhostWarpGrouping.SectionQueen => Loc.GetString("ghost-target-window-subtab-queen"),
+                GhostWarpGrouping.SectionUnknownTier => Loc.GetString("ghost-target-window-subtab-unknown-tier"),
+                GhostWarpGrouping.SectionHunters => Loc.GetString("ghost-target-window-subtab-hunters"),
+                GhostWarpGrouping.SectionThralls => Loc.GetString("ghost-target-window-subtab-thralls"),
+                GhostWarpGrouping.SectionAbominations => Loc.GetString("ghost-target-window-subtab-abominations"),
+                GhostWarpGrouping.SectionLeaders => Loc.GetString("ghost-target-window-subtab-leaders"),
+                GhostWarpGrouping.SectionMembers => Loc.GetString("ghost-target-window-subtab-members"),
+                GhostWarpGrouping.SectionWarpPoints => Loc.GetString("ghost-target-window-subtab-warp-points"),
+                _ => name,
+            };
+        }
+
+        private static string GetCompactSubTabName(string section)
+        {
+            if (section.StartsWith("Tier ", StringComparison.OrdinalIgnoreCase) &&
+                int.TryParse(section["Tier ".Length..], out var tier))
+            {
+                return $"T{tier}";
+            }
+
+            return section switch
+            {
+                GhostWarpGrouping.SectionAll => "All",
+                GhostWarpGrouping.SectionHighCommand => "HC",
+                GhostWarpGrouping.SectionCommand => "Cmd",
+                GhostWarpGrouping.SectionSquadLeads => "SL",
+                GhostWarpGrouping.SectionSpecialists => "Spec",
+                GhostWarpGrouping.SectionPilotsCrew => "Crew",
+                GhostWarpGrouping.SectionLinePersonnel => "Line",
+                GhostWarpGrouping.SectionPersonnel => "Pers",
+                GhostWarpGrouping.SectionUnknownTier => "Unk",
+                GhostWarpGrouping.SectionAbominations => "Abom",
+                GhostWarpGrouping.SectionWarpPoints => "Warp",
+                _ => GetDisplayName(section),
+            };
+        }
+
+        private static float GetTabMinWidth(string title)
+        {
+            return Math.Max(74, (title.Length * 8) + 26);
+        }
+
+        private static float GetSubTabMinWidth(string title)
+        {
+            return Math.Max(68, (title.Length * 8) + 22);
         }
 
         private void OnSearchTextChanged(LineEdit.LineEditEventArgs args)
@@ -777,26 +944,15 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
             Dense,
         }
 
-        private sealed partial class SectionState
-        {
-            public readonly BoxContainer Container;
-            public readonly Label CountLabel;
-            public readonly List<RowState> Rows = new();
-
-            public SectionState(BoxContainer container, Label countLabel)
-            {
-                Container = container;
-                CountLabel = countLabel;
-            }
-        }
-
         private sealed partial class TabState
         {
             public readonly string Name;
             public readonly Button Button;
             public readonly ScrollContainer Scroll;
             public readonly int TotalCount;
-            public readonly List<SectionState> Sections = new();
+            public readonly List<RowState> Rows = new();
+            public readonly List<SubTabState> SubTabs = new();
+            public string ActiveSubTab = GhostWarpGrouping.SectionAll;
 
             public TabState(string name, Button button, ScrollContainer scroll, int totalCount)
             {
@@ -807,10 +963,23 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
             }
         }
 
+        private sealed partial class SubTabState
+        {
+            public readonly string Name;
+            public readonly Button Button;
+
+            public SubTabState(string name, Button button)
+            {
+                Name = name;
+                Button = button;
+            }
+        }
+
         private sealed partial class RowState
         {
             public readonly GhostWarp Warp;
             public readonly Button Button;
+            public bool SearchVisible = true;
 
             public RowState(GhostWarp warp, Button button)
             {

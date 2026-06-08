@@ -12,7 +12,7 @@
   - type: ContainerFill
     containers:
       key_slots:
-      - CMEncryptionKeyWEYAColony
+      - CMEncryptionKeyWEYUColony
 
   - type: GrantSquadLeaderTracker
     defaultMode: LeaderPmc
@@ -31,7 +31,7 @@
   - type: ContainerFill
     containers:
       key_slots:
-      - CMEncryptionKeyWEYAColony
+      - CMEncryptionKeyWEYUColony
       # TODO RMC14: /obj/item/device/encryptionkey/pmc/medic
 
 - type: entity
@@ -42,7 +42,7 @@
   - type: ContainerFill
     containers:
       key_slots:
-      - CMEncryptionKeyWEYAColony
+      - CMEncryptionKeyWEYUColony
       # TODO RMC14: /obj/item/device/encryptionkey/pmc/engi
 
 - type: entity
@@ -53,7 +53,7 @@
   - type: ContainerFill
     containers:
       key_slots:
-      - CMEncryptionKeyWEYAColony
+      - CMEncryptionKeyWEYUColony
       # TODO RMC14: /obj/item/device/encryptionkey/pmc/command
 
 - type: entity
@@ -66,5 +66,5 @@
   - type: ContainerFill
     containers:
       key_slots:
-      - CMEncryptionKeyWEYAColony
+      - CMEncryptionKeyWEYUColony
       # TODO RMC14: /obj/item/device/encryptionkey/pmc

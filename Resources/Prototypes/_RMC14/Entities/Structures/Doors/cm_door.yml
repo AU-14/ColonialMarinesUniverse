@@ -109,6 +109,8 @@
   components:
   - type: Weldable
     time: 3
+  - type: RMCWeldEffectSource
+    startingOffset: 0, -0.5
   - type: WiresVisuals
   - type: ExtensionCableReceiver
   - type: Electrified
@@ -170,7 +172,9 @@
     stageLoss: 2
     percentageDamage: 0.25
   - type: XenoCrusherChargable
-    instantDestroy: true
+    setDamage:
+      types:
+        Structural: 750
   - type: Flamability
     chance: 0.04
     rate: 0.15

@@ -16,7 +16,7 @@ namespace Content.IntegrationTests._CMU14.Medical;
 public sealed class PainPlayerFeedbackTest
 {
     [Test]
-    public async Task SeverePainAppliesPlayerFacingFeedback()
+    public async Task SeverePainAppliesBlurOnly()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -35,23 +35,19 @@ public sealed class PainPlayerFeedbackTest
         {
             var entMan = server.EntMan;
             var oldStatus = entMan.System<StatusEffectQuerySystem>();
-            var prototypes = server.ResolveDependency<IPrototypeManager>();
             var feedback = entMan.GetComponent<CMUPainFeedbackComponent>(human);
             var damageable = entMan.GetComponent<DamageableComponent>(human);
 
             Assert.Multiple(() =>
             {
-                Assert.That(oldStatus.HasStatusEffect(human, "Stutter"), Is.True);
-                Assert.That(oldStatus.HasStatusEffect(human, "Drunk"), Is.True);
+                Assert.That(oldStatus.HasStatusEffect(human, "Stutter"), Is.False);
+                Assert.That(oldStatus.HasStatusEffect(human, "Drunk"), Is.False);
                 Assert.That(oldStatus.HasStatusEffect(human, "SlurredSpeech"), Is.False);
                 Assert.That(entMan.HasComponent<BlurryVisionComponent>(human), Is.True);
                 Assert.That(entMan.GetComponent<BlurryVisionComponent>(human).Magnitude,
                     Is.EqualTo(feedback.SevereBlurStartAmount));
-                Assert.That(feedback.SevereBlurStartAmount,
-                    Is.LessThanOrEqualTo(0.2f),
-                    "Severe pain should start the cataracts barely visible instead of snapping to the full severe amount.");
-                Assert.That(damageable.Damage.DamageDict["Asphyxiation"], Is.GreaterThan(FixedPoint2.Zero));
-                AssertPainEmotesExist(prototypes, feedback);
+                Assert.That(feedback.SevereBlurStartAmount, Is.LessThan(0.5f));
+                Assert.That(damageable.Damage.DamageDict["Asphyxiation"], Is.EqualTo(FixedPoint2.Zero));
             });
 
             entMan.DeleteEntity(human);
@@ -149,8 +145,7 @@ public sealed class PainPlayerFeedbackTest
                 Assert.That(oldStatus.HasStatusEffect(human, "Stutter"), Is.False);
                 Assert.That(oldStatus.HasStatusEffect(human, "Drunk"), Is.False);
                 Assert.That(oldStatus.HasStatusEffect(human, "SlurredSpeech"), Is.False);
-                Assert.That(entMan.HasComponent<BlurryVisionComponent>(human), Is.True);
-                Assert.That(entMan.GetComponent<BlurryVisionComponent>(human).Magnitude, Is.EqualTo(0.02f).Within(0.001f));
+                Assert.That(entMan.HasComponent<BlurryVisionComponent>(human), Is.False);
                 Assert.That(damageable.Damage.DamageDict["Asphyxiation"], Is.EqualTo(FixedPoint2.Zero));
             });
 
@@ -171,7 +166,7 @@ public sealed class PainPlayerFeedbackTest
         {
             var entMan = server.EntMan;
             human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            SetPainValue(entMan, human, (FixedPoint2)61);
+            SetPainValue(entMan, human, (FixedPoint2)84);
         });
 
         await pair.RunTicksSync(pair.SecondsToTicks(2));
@@ -181,15 +176,12 @@ public sealed class PainPlayerFeedbackTest
             var entMan = server.EntMan;
             var feedback = entMan.GetComponent<CMUPainFeedbackComponent>(human);
             var blur = entMan.GetComponent<BlurryVisionComponent>(human).Magnitude;
-            const float expectedProgress = (61f - 60f) / (85f - 60f);
-            var expected = feedback.SevereBlurStartAmount +
-                (feedback.ShockBlurStartAmount - feedback.SevereBlurStartAmount) * expectedProgress;
+            var expected = GetExpectedPainBlur(feedback, feedback.SevereBlurEquivalentPain);
 
             Assert.Multiple(() =>
             {
                 Assert.That(blur, Is.EqualTo(expected).Within(0.01f));
-                Assert.That(blur, Is.GreaterThan(feedback.SevereBlurStartAmount));
-                Assert.That(blur, Is.LessThan(0.2f));
+                Assert.That(blur, Is.LessThan(0.5f));
             });
 
             entMan.DeleteEntity(human);
@@ -218,22 +210,42 @@ public sealed class PainPlayerFeedbackTest
         {
             var entMan = server.EntMan;
             var feedback = entMan.GetComponent<CMUPainFeedbackComponent>(human);
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
             var blur = entMan.GetComponent<BlurryVisionComponent>(human).Magnitude;
-            const float expectedProgress = (90f - 85f) / (95f - 85f);
-            var expected = feedback.ShockBlurStartAmount +
-                (feedback.ShockBlurAmount - feedback.ShockBlurStartAmount) * expectedProgress;
+            var expected = GetExpectedPainBlur(feedback, feedback.ShockBlurEquivalentPain);
 
             Assert.Multiple(() =>
             {
                 Assert.That(blur, Is.EqualTo(expected).Within(0.01f));
-                Assert.That(blur, Is.GreaterThan(feedback.ShockBlurStartAmount));
-                Assert.That(blur, Is.LessThan(feedback.ShockBlurAmount));
+                Assert.That(blur, Is.GreaterThan(feedback.SevereBlurStartAmount));
+                Assert.That(blur, Is.LessThan(GetMaxSeverePainBlur(feedback)));
+                AssertPainEmotesExist(prototypes, feedback);
             });
 
             entMan.DeleteEntity(human);
         });
 
         await pair.CleanReturnAsync();
+    }
+
+    private static float GetExpectedPainBlur(CMUPainFeedbackComponent feedback, float equivalentPain)
+    {
+        const float severeThreshold = 60f;
+        const float shockThreshold = 85f;
+        var severeAmount = GetMaxSeverePainBlur(feedback);
+        var progress = Math.Clamp(
+            (equivalentPain - severeThreshold) / (shockThreshold - severeThreshold),
+            0f,
+            1f);
+
+        return feedback.SevereBlurStartAmount +
+            (severeAmount - feedback.SevereBlurStartAmount) * progress;
+    }
+
+    private static float GetMaxSeverePainBlur(CMUPainFeedbackComponent feedback)
+    {
+        const float severeBlurMax = 0.49f;
+        return Math.Min(feedback.SevereBlurAmount, severeBlurMax);
     }
 
     [Test]
@@ -307,9 +319,9 @@ public sealed class PainPlayerFeedbackTest
             Assert.Multiple(() =>
             {
                 Assert.That(shockDamage, Is.GreaterThan(severeDamage));
-                Assert.That(oldStatus.TryGetTime(severe, "Drunk", out var severeDrunkTime), Is.True);
+                Assert.That(oldStatus.TryGetTime(severe, "Drunk", out _), Is.False);
                 Assert.That(oldStatus.TryGetTime(shock, "Drunk", out var shockDrunkTime), Is.True);
-                Assert.That(shockDrunkTime!.Value.Item2, Is.GreaterThan(severeDrunkTime!.Value.Item2));
+                Assert.That(shockDrunkTime!.Value.Item2, Is.GreaterThan(TimeSpan.Zero));
                 Assert.That(oldStatus.HasStatusEffect(shock, "SlurredSpeech"), Is.True);
                 Assert.That(oldStatus.HasStatusEffect(shock, "Stutter"), Is.True);
                 Assert.That(shockBlur, Is.GreaterThan(severeBlur));

@@ -149,6 +149,8 @@
     heal: 120
   - type: CrusherShield
   - type: XenoCharge
+    chargeWindupSound:
+      path: /Audio/_RMC14/Xeno/crusher_windup_sound.ogg
     damage:
       types:
         Blunt: 80

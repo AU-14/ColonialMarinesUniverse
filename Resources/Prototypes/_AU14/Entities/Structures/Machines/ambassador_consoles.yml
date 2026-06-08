@@ -20,7 +20,7 @@
     key: enum.AmbassadorConsoleUi.Key
   - type: AmbassadorConsole
     budget: 500
-    replenishAmount: 25
+    replenishAmount: 10
     replenishInterval: 60
   - type: UserInterface
     interfaces:
@@ -55,7 +55,7 @@
   - type: AmbassadorConsole
     factionName: UPP
     budget: 500
-    replenishAmount: 25
+    replenishAmount: 10
     replenishInterval: 60
     callableParties:
       UPPGROM: 7500
@@ -76,7 +76,7 @@
   - type: AmbassadorConsole
     factionName: United Americas
     budget: 500
-    replenishAmount: 25
+    replenishAmount: 10
     replenishInterval: 60
     callableParties:
       MarineSecurityGuard: 2000
@@ -97,7 +97,7 @@
   - type: AmbassadorConsole
     factionName: Three World Empire
     budget: 500
-    replenishAmount: 25
+    replenishAmount: 10
     replenishInterval: 60
     callableParties:
       RMCRRT: 9000
@@ -117,6 +117,6 @@
   - type: AmbassadorConsole
     factionName: Independent Core System Colonies
     budget: 500
-    replenishAmount: 25
+    replenishAmount: 10
     replenishInterval: 60
 

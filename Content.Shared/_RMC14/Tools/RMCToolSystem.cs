@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Coordinates;
+using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
@@ -113,4 +114,20 @@ public sealed partial class RMCToolSystem : EntitySystem
 ///     Raised on a tool when it's being used to possibly alter the delay of it's action.
 /// </summary>
 [ByRefEvent]
-public record struct RMCToolUseEvent(EntityUid User, TimeSpan Delay, bool Handled = false);
+public record struct RMCToolUseEvent(EntityUid User, EntityUid? Target, TimeSpan Delay, bool Handled = false);
+
+public sealed class RMCToolDoAfterEvent(
+    EntityUid user,
+    EntityUid used,
+    EntityUid? target,
+    DoAfterId doAfter,
+    DoAfterEvent wrappedEvent,
+    bool cancelled) : EntityEventArgs
+{
+    public readonly EntityUid User = user;
+    public readonly EntityUid Used = used;
+    public readonly EntityUid? Target = target;
+    public readonly DoAfterId DoAfter = doAfter;
+    public readonly DoAfterEvent WrappedEvent = wrappedEvent;
+    public readonly bool Cancelled = cancelled;
+}

@@ -58,7 +58,8 @@
     pocket2: RMCPouchGeneralLargeBureauObserverFill
     suitstorage: RMCFlashlight
   inhand: # TODO RMC14 camera
-  - CMHealthAnalyzer
+    - CMHealthAnalyzer
+    - AU14StampInterstellarObserver
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicCMB

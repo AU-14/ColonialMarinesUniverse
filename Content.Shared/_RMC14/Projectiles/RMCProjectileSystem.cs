@@ -255,10 +255,12 @@ public sealed partial class RMCProjectileSystem : EntitySystem
             args.Cancelled = true;
     }
 
-    public void SetMaxRange(Entity<ProjectileMaxRangeComponent> ent, float max)
+    public void SetMaxRange(EntityUid projectile, float max)
     {
-        ent.Comp.Max = max;
-        Dirty(ent);
+        var maxRange = EnsureComp<ProjectileMaxRangeComponent>(projectile);
+
+        maxRange.Max = max;
+        Dirty(projectile, maxRange);
     }
 
     private void StopProjectile(Entity<ProjectileMaxRangeComponent> ent)
@@ -291,6 +293,14 @@ public sealed partial class RMCProjectileSystem : EntitySystem
 
         args.Cancelled = true;
         StopProjectile(ent);
+    }
+
+    public void SetProjectileAccuracy(EntityUid projectile, float accuracy)
+    {
+        var accuracyComponent = EnsureComp<RMCProjectileAccuracyComponent>(projectile);
+
+        accuracyComponent.Accuracy = FixedPoint2.New(accuracy);
+        Dirty(projectile, accuracyComponent);
     }
 
     public override void Update(float frameTime)

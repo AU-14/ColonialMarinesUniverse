@@ -35,9 +35,10 @@ public sealed partial class RMCRepairableSystem : EntitySystem
     [Dependency] private SharedSolutionContainerSystem _solution = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private RMCWeldEffectSystem _weldEffect = default!;
 
-    const string SOLUTION_WELDER = "Welder";
-    const string REAGENT_WELDER = "WeldingFuel";
+    private const string SolutionWelder = "Welder";
+    private const string ReagentWelder = "WeldingFuel";
 
     public override void Initialize()
     {
@@ -111,7 +112,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
             DuplicateCondition = DuplicateConditions.SameEvent
         };
 
-        var toolEvent = new RMCToolUseEvent(user, doAfter.Delay);
+        var toolEvent = new RMCToolUseEvent(user, repairable, doAfter.Delay);
         RaiseLocalEvent(args.Used, ref toolEvent);
         if (toolEvent.Handled)
             doAfter.Delay = toolEvent.Delay;
@@ -121,6 +122,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
             var selfMsg = Loc.GetString("rmc-repairable-start-self", ("target", repairable));
             var othersMsg = Loc.GetString("rmc-repairable-start-others", ("user", user), ("target", repairable));
             _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+            _weldEffect.SpawnWeldEffect(repairable, doAfter.Delay);
         }
     }
 
@@ -168,10 +170,10 @@ public sealed partial class RMCRepairableSystem : EntitySystem
             return false;
         }
 
-        if (!_solution.TryGetSolution((tool, welderCon), SOLUTION_WELDER, out var solutionComp, out var solution))
+        if (!_solution.TryGetSolution((tool, welderCon), SolutionWelder, out var solutionComp, out var solution))
             return false;
 
-        if (solution.GetTotalPrototypeQuantity(REAGENT_WELDER) == 0 || solution.GetTotalPrototypeQuantity(REAGENT_WELDER) < fuelUsed)
+        if (solution.GetTotalPrototypeQuantity(ReagentWelder) == 0 || solution.GetTotalPrototypeQuantity(ReagentWelder) < fuelUsed)
         {
             _popup.PopupClient(Loc.GetString("welder-component-no-fuel-message"), user, PopupType.SmallCaution);
             return false;
@@ -179,7 +181,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
 
         if (!attempt && _net.IsServer)
         {
-            _solution.RemoveReagent(solutionComp.Value, REAGENT_WELDER, fuelUsed);
+            _solution.RemoveReagent(solutionComp.Value, ReagentWelder, fuelUsed);
             Dirty(solutionComp.Value);
         }
 

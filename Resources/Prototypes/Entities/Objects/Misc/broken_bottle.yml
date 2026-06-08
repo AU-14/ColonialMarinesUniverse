@@ -24,6 +24,7 @@
   - type: Tag
     tags:
     - Trash
+    - SalvageTier1
   - type: PhysicalComposition
     materialComposition:
       Glass: 50

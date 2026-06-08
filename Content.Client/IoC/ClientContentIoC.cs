@@ -24,6 +24,7 @@ using Content.Client.Screenshot;
 using Content.Client.Stylesheets;
 using Content.Client.Viewport;
 using Content.Client.Voting;
+using Content.Shared._RMC14.PlayTimeTracking;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Administration.Managers;
 using Content.Shared.Chat;
@@ -70,6 +71,7 @@ namespace Content.Client.IoC
             // RMC14
             collection.Register<LinkAccountManager>();
             collection.Register<RMCPlayTimeManager>();
+            collection.Register<SharedRMCPlayTimeManager, RMCPlayTimeManager>();
             collection.Register<CommendationsManager>();
             collection.Register<TacticalMapSettingsManager>();
         }

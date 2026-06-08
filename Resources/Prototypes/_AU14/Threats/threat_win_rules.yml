@@ -70,6 +70,15 @@
       percent: 85
 
 - type: entity
+  id: KillAllYautjaRule
+  parent: BaseGameRule
+  name: Kill All Yautja
+  description: Threat wins when all Yautja are dead.
+  components:
+  - type: KillAllYautjaRule
+    percent: 100
+
+- type: entity
   id: InsWinConditionsRule
   parent: BaseGameRule
   name: Kill All Govfor/killallclf respectively

@@ -1,0 +1,352 @@
+# Salvage spawner entities. Interact with empty hands for a 10-second doafter, then a random junk item spawns.
+# Uses n14 deco visuals so they blend into the environment.
+
+- type: entity
+  id: SalvageSpawnerBase
+  abstract: true
+  components:
+  - type: SalvageSpawner
+    doAfterTime: 10
+    loot:
+    # Tier 1
+    - ScrapBucket
+    - ScrapCanister2
+    - ScrapCamera
+    - ScrapMedkit
+    - ScrapTube
+    - BrokenBottle
+    - TreasureCoinIron
+    - TreasureSampleTube
+    - ProximitySensor
+    # Tier 2
+    - ScrapAirlock2
+    - ScrapCanister1
+    - ScrapFireExtinguisher
+    - ScrapIntercom
+    - ScrapPAI
+    - ScrapMopBucket
+    - TreasureCoinSilver
+    - TreasureHardDiskDrive
+    - TreasureFlopDiskDrive
+    - TreasureCDDrive
+    - MicroManipulatorStockPart
+    # Tier 3
+    - ScrapFaxMachine
+    - ScrapFirelock3
+    - ScrapAirlock1
+    - ScrapSteel
+    - ScrapGlass
+    - ScrapJetpack
+    - BrokenEnergyShield
+    - TreasureCoinGold
+    - TreasureDatadiskEncrypted
+    - TreasureCPUSupercharged
+    # Tier 4
+    - ScrapFirelock1
+    - ScrapFirelock2
+    - ScrapCloset
+    - ScrapGeneratorFrame
+    - ScrapGeneratorFuelTank
+    - ScrapGeneratorPlasma
+    - ScrapGeneratorUranium
+    - TreasureCoinAdamantine
+    - ScrapPAIGold
+    # Tier 5
+    - ScrapGeneratorPlasmaLeaking
+    - ScrapGeneratorUraniumLeaking
+    - TreasureCoinDiamond
+
+# --- Existing n14 deco types ---
+
+- type: entity
+  parent: [ DecorBarrels, SalvageSpawnerBase ]
+  id: SalvageSpawnerBarrels
+  name: salvage barrels
+  description: A cluster of old rusty barrels. Something useful might be stuffed inside.
+
+- type: entity
+  parent: [ DecorFloorTrashbags1, SalvageSpawnerBase ]
+  id: SalvageSpawnerTrashbags
+  name: salvage trash heap
+  description: A heap of old trash bags. Hard to say what someone left in there.
+  components:
+  - type: Sprite
+    layers:
+    - state: trashbags_1
+      map: [ "body" ]
+  - type: RandomSprite
+    available:
+    - body:
+        trashbags_1: ""
+        trashbags_2: ""
+        trashbags_3: ""
+        trashbags_4: ""
+        trashbags_5: ""
+        trashbags_6: ""
+
+- type: entity
+  parent: [ DecorFloorScrapwood, SalvageSpawnerBase ]
+  id: SalvageSpawnerScrapwood
+  name: salvage wood pile
+  description: A tangle of old scrap lumber. Something might be buried underneath.
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+            radius: 0.25
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+
+- type: entity
+  parent: [ DecorFloorBrickrubble, SalvageSpawnerBase ]
+  id: SalvageSpawnerRubble
+  name: salvage rubble
+  description: Crumbled brick and mortar with something glinting underneath.
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+            radius: 0.25
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+
+- type: entity
+  parent: [ DecorFloorCardboard, SalvageSpawnerBase ]
+  id: SalvageSpawnerCardboard
+  name: salvage boxes
+  description: A stack of battered cardboard boxes. Something might be packed inside.
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+            radius: 0.25
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+
+# --- New n14 deco salvage types ---
+
+- type: entity
+  parent: [ DecorFloorWorldBase, SalvageSpawnerBase ]
+  id: SalvageSpawnerTrashbin
+  name: salvage trash bin
+  description: A dented metal trash bin. Plenty of junk to sift through.
+  components:
+  - type: Sprite
+    layers:
+    - state: trashbin
+      map: [ "body" ]
+  - type: RandomSprite
+    available:
+    - body:
+        trashbin: ""
+        trashbin-1: ""
+        trashbin-2: ""
+        trashbin-3: ""
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+            radius: 0.22
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+
+- type: entity
+  parent: [ DecorFloorGlass1, SalvageSpawnerBase ]
+  id: SalvageSpawnerGlassBottles
+  name: salvage glass pile
+  description: A scatter of old glass bottles and jars. Watch your step.
+  components:
+  - type: Sprite
+    layers:
+    - state: glass_1
+      map: [ "body" ]
+  - type: RandomSprite
+    available:
+    - body:
+        glass_1: ""
+        glass_2: ""
+        glass_3: ""
+        glass_4: ""
+        glass_5: ""
+        glass_6: ""
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+            radius: 0.20
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+
+- type: entity
+  parent: [ DecorFloorWorldBase, SalvageSpawnerBase ]
+  id: SalvageSpawnerMailbox
+  name: salvage mailbox
+  description: An old rusted mailbox. Junk mail of a different kind inside.
+  components:
+  - type: Sprite
+    layers:
+    - state: mailbox_old
+      map: [ "body" ]
+  - type: RandomSprite
+    available:
+    - body:
+        mailbox_old: ""
+        mailbox_old-open: ""
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+            radius: 0.22
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+
+- type: entity
+  parent: [ DecorFloorWorldBase, SalvageSpawnerBase ]
+  id: SalvageSpawnerPayphone
+  name: salvage payphone
+  description: A defunct payphone bolted to nothing. The coin slot might have something stuck in it.
+  components:
+  - type: Sprite
+    layers:
+    - state: payphone
+      map: [ "body" ]
+  - type: RandomSprite
+    available:
+    - body:
+        payphone: ""
+        payphone_alt: ""
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+            radius: 0.20
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+
+- type: entity
+  parent: [ DecorFloorWorldBase, SalvageSpawnerBase ]
+  id: SalvageSpawnerPots
+  name: salvage pots
+  description: Old clay pots, cracked and gathering dust. Something might be rattling around inside.
+  components:
+  - type: Sprite
+    layers:
+    - state: pot_1
+      map: [ "body" ]
+  - type: RandomSprite
+    available:
+    - body:
+        pot_1: ""
+        pot_2: ""
+        pot_3: ""
+        pot_4: ""
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+            radius: 0.20
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+
+- type: entity
+  parent: [ DecorFloorFood1, SalvageSpawnerBase ]
+  id: SalvageSpawnerFoodstuff
+  name: salvage food crates
+  description: Rotting food crates and old containers. Something non-edible might be mixed in.
+  components:
+  - type: Sprite
+    layers:
+    - state: foodstuff_1
+      map: [ "body" ]
+  - type: RandomSprite
+    available:
+    - body:
+        foodstuff_1: ""
+        foodstuff_2: ""
+        foodstuff_3: ""
+        foodstuff_4: ""
+        foodstuff_5: ""
+        foodstuff_6: ""
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+            radius: 0.22
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+
+- type: entity
+  parent: [ DecorMinecart, SalvageSpawnerBase ]
+  id: SalvageSpawnerMinecart
+  name: salvage minecart
+  description: A toppled mining cart, long abandoned. Whatever was being hauled is still in there.
+
+- type: entity
+  parent: [ DecorFloorBookPile1, SalvageSpawnerBase ]
+  id: SalvageSpawnerBookpile
+  name: salvage book pile
+  description: A heap of mouldering books and papers. Old colony records sometimes hide valuables between the pages.
+  components:
+  - type: Sprite
+    layers:
+    - state: bookpile_1
+      map: [ "body" ]
+  - type: RandomSprite
+    available:
+    - body:
+        bookpile_1: ""
+        bookpile_2: ""
+        bookpile_3: ""
+        bookpile_4: ""
+        bookpile_5: ""
+        bookpile_6: ""
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+            radius: 0.22
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer

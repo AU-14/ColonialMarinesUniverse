@@ -56,6 +56,7 @@
     id: AU14IDCardColonyCorporateLiaison
     outerClothing: RMCFancySuitJacketBrown
     ears: AU14AmbassadorUAHeadset
+    pocket1: AU14StampUAA
   inhand:
   - RMCPortableVendorCorporate
 

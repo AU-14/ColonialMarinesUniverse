@@ -28,6 +28,7 @@
   id: XenoThreatCF
   lorePrimer: AU14PrimerThreatXeno
   roundstartspawns: XenoThreatSpawnsCF
+  thirdpartyinterval: 9100
   whitelistedgamemodes:
   - ColonyFall
   blacklistedgamemodes:

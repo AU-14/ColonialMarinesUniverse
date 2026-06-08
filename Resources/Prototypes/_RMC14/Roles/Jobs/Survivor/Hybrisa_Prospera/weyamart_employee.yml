@@ -4,7 +4,7 @@
   name: rmc-job-name-survivor-hybrisa-weyamart-employee
   description: cm-job-description-survivor
   startingGear: RMCGearSurvivorHybrisaWeyamartEmployee
-  spawnMenuRoleName: Civilian - Weyamart Employee (Hybrisa Survivor)
+  spawnMenuRoleName: Civilian - WeyMart Employee (Hybrisa Survivor)
   special:
   - !type:AddComponentSpecial
     components:
@@ -35,7 +35,7 @@
 - type: entity
   parent: CMSpawnPointJobBase
   id: RMCSpawnPointSurvivorHybrisaWeyamartEmployee
-  name: hybrisa weyamart employee spawn point
+  name: hybrisa weymart employee spawn point
   components:
   - type: SpawnPoint
     job_id: CMSurvivor

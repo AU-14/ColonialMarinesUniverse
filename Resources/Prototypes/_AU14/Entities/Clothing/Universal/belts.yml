@@ -1,6 +1,6 @@
 - type: entity
   parent: CMBeltMedicBag
-  id: CMUBeltMedicBagSupportSynth
+  id: AU14BeltMedicBagSupportSynth
   suffix: Filled, Support Synth
   components:
   - type: StorageFill
@@ -27,8 +27,8 @@
     - id: CMHandsLatex
 
 - type: entity
-  parent: CMUBeltMedicBagSupportSynth
-  id: CMUBeltMedicBagSupportSynthRMC
+  parent: AU14BeltMedicBagSupportSynth
+  id: AU14BeltMedicBagSupportSynthRMC
   suffix: Filled, Support Synth, RMC
   components:
   - type: Sprite
@@ -36,11 +36,11 @@
   - type: Clothing
     sprite: _AU14/Clothing/RMC/belt/medicbag.rsi
   - type: ItemCamouflage
-    camouflageVariations: {}
+    camouflageVariations: { }
 
 - type: entity
-  parent: CMUBeltMedicBagSupportSynth
-  id: CMUBeltMedicBagSupportSynthBlack
+  parent: AU14BeltMedicBagSupportSynth
+  id: AU14BeltMedicBagSupportSynthBlack
   suffix: Filled, Support Synth, Black
   components:
   - type: Sprite
@@ -53,7 +53,7 @@
 - type: entity
   parent: CMBeltMedicBag
   id: AU14BeltMedicBagBlack
-  suffix: Black, AU14
+  suffix: Empty, Black
   components:
   - type: Sprite
     sprite: _AU14/Clothing/UniversalBelts/Black/medicbag.rsi

@@ -62,6 +62,7 @@
     jumpsuit: RMCScrubsLightBlue
     shoes: RMCShoesBlack
     outerClothing: RMCLabcoatOpened
+    pocket1: AU14StampHPHY
 
 - type: entity
   parent: CMSpawnPointJobBase

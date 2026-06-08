@@ -27,3 +27,16 @@
     inverted: true
   - type: TimedDespawn
     lifetime: 1200
+
+
+- type: entity
+  parent: RMCFogWallPermanent
+  id: CMUFogWall_distress_inverted30min
+  description: It looks way too dangerous to traverse. Best wait until it has cleared up.
+  suffix: ForceOnForce Inverted, 20 minutes
+  components:
+  - type: DestroyOnPreset
+    preset: DistressSignal
+    inverted: true
+  - type: TimedDespawn
+    lifetime: 1200

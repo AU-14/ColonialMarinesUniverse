@@ -441,16 +441,33 @@
 
 - type: entity
   parent: SquadBase
-  id: AU14SquadCPISP
-  name: NEMO CPISP
+  id: AU14SquadIASF
+  name: IASF
   components:
   - type: SquadTeam
-    color: "#800000"
+    color: "#3D6F43"
     blacklistedSquadArmor:
     - Helmet
     - Goggles
     - Armor
     - Gloves
+    radio: TWESOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_twe
+    canSupplyDrop: false
+    group: VAIPO
+  - type: Tag
+    tags:
+    - AU14SquadIASF
+
+- type: entity
+  parent: SquadBase
+  id: AU14SquadCPISP
+  name: NEMO CPISP
+  components:
+  - type: SquadTeam
+    color: "#800000"
     radio: radioNEMO
     minimapBackground:
       sprite: /Textures/_AU14/Interface/au14map_blips.rsi
@@ -661,3 +678,6 @@
 
 - type: Tag
   id: AU14SquadMSG
+
+- type: Tag
+  id: AU14SquadIASF

@@ -626,7 +626,7 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                     Margin = new Thickness(0, 3, 0, 3)
                 };
                 var localeName = role.OverwatchRoleName is { } raw
-                    ? (Loc.TryGetString(raw, out var loc) ? loc : raw)
+                    ? (_localization.TryGetString(raw, out var loc) ? loc : raw)
                     : string.Empty;
                 roleNameLabel.SetMarkupPermissive($"[bold]{localeName}[/bold]");
 

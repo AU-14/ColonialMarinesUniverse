@@ -69,6 +69,7 @@
     id: AU14IDCardOrbitalLawyer
     ears: AU14OrbitalHeadsetManagement
     back: CMSatchel
+    pocket1: AU14StampOrbitalArb
   storage:
     back:
     - RMCRadioHandheldColonyOff

@@ -195,6 +195,9 @@ public static class CMUTraumaContactModel
         FixedPoint2 bruteDamage,
         CMUTraumaContactSettings settings)
     {
+        if (impact.IsSpecified && impact.Contact is DamageImpactContact.Burn or DamageImpactContact.Snag)
+            return false;
+
         if (impact is { Delivery: DamageImpactDelivery.Explosion } ||
             impact is { Energy: DamageImpactEnergy.Severe })
         {

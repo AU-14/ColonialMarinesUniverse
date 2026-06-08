@@ -333,11 +333,11 @@
       entries:
       - id: CMSandbagEmpty50
         recommended: true
-        amount: 5
+        amount: 2
       - id: BarbedWire15
         amount: 4
       - id: CMSheetMetal50
-        amount: 1
+        amount: 2
       - id: CMSheetPlasteel50
         amount: 1
       - id: RMCBoxMagazinePowerCellsHighFilled
@@ -377,6 +377,8 @@
         amount: 1
       - id: CMRollerBedSpawnFolded
         amount: 8
+      - id: CMFoldingBarricadesMB6x3
+        amount: 2
       - id: BedrollFolded
         amount: 20
       - id: AU14GuidebookSOP

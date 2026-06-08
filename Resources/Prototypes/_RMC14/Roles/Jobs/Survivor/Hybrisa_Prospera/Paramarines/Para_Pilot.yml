@@ -26,7 +26,6 @@
           background:
             sprite: /Textures/_RMC14/Interface/map_blips.rsi
             state: background_para
-
         - type: JobPrefix
           prefix: rmc-job-prefix-paramarine
   hidden: true

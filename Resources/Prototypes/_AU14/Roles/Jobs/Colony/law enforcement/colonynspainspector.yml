@@ -59,6 +59,7 @@
     belt: CMBeltSecurityMarshalFilled
     back: RMCSatchelTSEPA
     ears: AU14CMBHeadset
+    pocket1: AU14StampNSPA
   storage:
     back:
     - AU14GuidebookLawColonial

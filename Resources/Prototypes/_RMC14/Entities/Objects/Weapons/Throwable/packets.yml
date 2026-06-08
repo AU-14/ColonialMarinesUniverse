@@ -610,7 +610,7 @@
   parent: CMPacketBase
   id: AU14PacketGrenadeTearGas
   name: M19-NL tear gas grenade packet
-  description: It contains three M19-Nonlethal gas grenades.
+  description: It contains three M19-Non Lethal gas grenades.
   components:
   - type: Sprite
     layers:
@@ -633,14 +633,18 @@
   parent: CMPacketBase
   id: AU14PacketGrenadeTearGasAirbust
   name: M74 AGM-PDC tear gas grenade packet
-  description: It contains three M74 Airburst Grenade Munition Personnel Denial Canister rounds.
+  description: It contains five M74 Airburst Grenade Munition-Personnel Denial Canister rounds.
   components:
   - type: Sprite
     layers:
-    - state: teargas_packet
+    - state: teargas_airburst_packet
       map: [ "closedLayer" ]
-    - state: teargas_packet_e
+    - state: teargas_airburst_packet_e
       map: [ "openLayer", "emptyLayer"]
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,1 # 5 slots
 
 - type: entity
   parent: AU14PacketGrenadeTearGasAirbust
@@ -650,7 +654,7 @@
   - type: StorageFill
     contents:
     - id: CM14AirBurstTearGas
-      amount: 3
+      amount: 5
 
 - type: Tag
   id: RMCGrenadePacket20mm

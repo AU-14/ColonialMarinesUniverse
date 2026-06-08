@@ -94570,7 +94570,7 @@ entities:
     - type: Transform
       pos: -15.5,-147.5
       parent: 1
-- proto: CMEncryptionKeyWEYA
+- proto: CMEncryptionKeyWEYU
   entities:
   - uid: 4698
     components:

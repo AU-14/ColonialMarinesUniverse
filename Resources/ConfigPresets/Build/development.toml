@@ -1,4 +1,4 @@
-﻿[build]
+[build]
 engine_version = "v264.0.2-fix-physics"
 
 [game]
@@ -7,6 +7,10 @@ defaultpreset = "ColonyFall"
 lobbyenabled = false
 map = "USSBushRedux"
 role_timers = false
+
+[rmc]
+distress_xenos_minimum = 0
+lobby_min_players = 0
 
 [events]
 enabled = false
@@ -45,7 +49,6 @@ preload_grids = false
 
 [admin]
 see_own_notes = true
-
 
 [ic]
 # random_characters = true

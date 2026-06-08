@@ -1,0 +1,52 @@
+- type: job
+  parent: CMJobBase
+  id: AU14IASFRiflemanBase
+  name: au14-job-name-tweiasf-paratrooper
+  icon: RMCJobIconParamarine
+  playTimeTracker: AU14IASFRifleman
+  description: au14-job-description-twepara
+  ranks:
+    RMC_Marine: []
+  spawnMenuRoleName: IASF Rifleman (Base)
+  joinNotifyCrew: false
+  supervisors: au14-job-name-tweiasf-tl
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: rmc_rifleman
+      background:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: background_para
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadIASF
+    - type: Skills
+      preset: AU14SkillPresetPlatoonRifleman
+    - type: JobPrefix
+      prefix: au14-job-prefix-iasf
+  hidden: true
+
+- type: startingGear
+  parent: AU14RMCGearIASFBase
+  id: AU14RMCGearIASFRifle
+  equipment:
+    id: AU14IDCardIASF
+    jumpsuit: AU14JumpsuitIASFL90
+    suitstorage: AU14WeaponRifleL90Full
+    back: RMCSatchelLightpackFilledPara
+
+- type: startingGear
+  parent: AU14RMCGearIASFBase
+  id: AU14RMCGearIASFAmmobackpack
+  equipment:
+    id: AU14IDCardIASF
+    jumpsuit: AU14JumpsuitIASFL90
+    suitstorage: AU14WeaponRifleL90Full
+    back: AU14BackpackAmmoRCMSurvL90
+
+- type: playTimeTracker
+  id: AU14IASFRifleman

@@ -1,11 +1,10 @@
 - type: job
+  abstract: true
   parent: CMJobBase
   id: AU14JobPARTYPartyContractorBase
   name: Prodigy Yankee Contractor Base
   description: au14-prodigyparty-description
   playTimeTracker: AU14JobPARTYPartyContractor
-  basePlaytimeTracker: true
-  hidden: true
 
 - type: job
   parent: AU14JobPARTYPartyContractorBase
@@ -20,6 +19,7 @@
   icon: "RMCJobIconPMCStandard"
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-psc
+  basePlaytimeTracker: true
   accessGroups:
   - auwy
   - AUPrisonStaff
@@ -41,7 +41,6 @@
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicProdigy

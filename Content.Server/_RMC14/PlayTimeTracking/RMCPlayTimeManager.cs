@@ -10,7 +10,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._RMC14.PlayTimeTracking;
 
-public sealed partial class RMCPlayTimeManager : IPostInjectInit
+public sealed partial class RMCPlayTimeManager : SharedRMCPlayTimeManager
 {
     [Dependency] private IServerDbManager _db = default!;
     [Dependency] private INetManager _net = default!;
@@ -18,6 +18,16 @@ public sealed partial class RMCPlayTimeManager : IPostInjectInit
     [Dependency] private UserDbDataManager _userDb = default!;
 
     private readonly Dictionary<NetUserId, HashSet<string>> _excluded = [];
+
+    protected override void PostInject()
+    {
+        base.PostInject();
+
+        _net.RegisterNetMessage<RMCExcludedTimersMsg>();
+        _userDb.AddOnLoadPlayer(LoadData);
+        _userDb.AddOnFinishLoad(FinishLoad);
+        _userDb.AddOnPlayerDisconnect(ClientDisconnected);
+    }
 
     private async Task LoadData(ICommonSession player, CancellationToken cancel)
     {
@@ -91,13 +101,5 @@ public sealed partial class RMCPlayTimeManager : IPostInjectInit
         }
 
         return true;
-    }
-
-    void IPostInjectInit.PostInject()
-    {
-        _net.RegisterNetMessage<RMCExcludedTimersMsg>();
-        _userDb.AddOnLoadPlayer(LoadData);
-        _userDb.AddOnFinishLoad(FinishLoad);
-        _userDb.AddOnPlayerDisconnect(ClientDisconnected);
     }
 }

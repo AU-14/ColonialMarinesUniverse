@@ -70,7 +70,7 @@
   - type: ContainerFill
     containers:
       key_slots:
-      - CMEncryptionKeyWEYAColony
+      - CMEncryptionKeyWEYUColony
 
 # For WeYa PMC
 - type: entity
@@ -104,7 +104,7 @@
   - type: ContainerFill
     containers:
       key_slots:
-      - CMEncryptionKeyWEYA
+      - CMEncryptionKeyWEYU
   - type: GrantSquadLeaderTracker
     defaultMode: SquadLeader
     trackerModes:

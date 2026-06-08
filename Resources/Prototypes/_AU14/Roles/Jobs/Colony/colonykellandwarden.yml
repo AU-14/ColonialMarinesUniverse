@@ -51,6 +51,7 @@
     id: AU14IDCardCivilianKellandWarden
     ears: AU14ColonyAdminHeadset #no kelland headset yet
     outerClothing: RMCJacketCorporateBlue
+    pocket1: AU14StampKelland
 
 - type: entity
   parent: CMSpawnPointJobBase

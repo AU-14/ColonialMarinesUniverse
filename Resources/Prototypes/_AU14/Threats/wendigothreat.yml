@@ -2,6 +2,7 @@
   id: wendigoThreat
   lorePrimer: AU14PrimerThreatWendigo
   roundstartspawns: wendigoParty
+  thirdpartyinterval: 9100
   whitelistedgamemodes:
   - ColonyFall
   blacklistedgamemodes:

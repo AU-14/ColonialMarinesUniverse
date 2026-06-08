@@ -41,6 +41,16 @@
                                                  HorizontalExpand="True"
                                                  SeparationOverride="6" />
                 </ScrollContainer>
+                <ScrollContainer Name="SubTabBarScroll"
+                                 HorizontalExpand="True"
+                                 HScrollEnabled="True"
+                                 VScrollEnabled="False"
+                                 ReserveScrollbarSpace="False"
+                                 MinHeight="34">
+                    <ghost:UniformWidthContainer Name="SubTabBar"
+                                                 HorizontalExpand="True"
+                                                 SeparationOverride="5" />
+                </ScrollContainer>
                 <PanelContainer Name="ContentPanel" StyleClasses="CrtInsetPanel" HorizontalExpand="True" VerticalExpand="True">
                     <BoxContainer Name="TabContentRoot"
                                   Orientation="Vertical"

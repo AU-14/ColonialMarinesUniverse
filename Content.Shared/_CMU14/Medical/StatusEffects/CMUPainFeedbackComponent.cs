@@ -25,13 +25,13 @@ public sealed partial class CMUPainFeedbackComponent : Component
     public float SevereBlurStartAmount = 0.1f;
 
     [DataField]
-    public float ShockBlurStartAmount = 2.25f;
+    public float SevereBlurAmount = 0.45f;
 
     [DataField]
-    public float ShockBlurAmount = 4f;
+    public float SevereBlurEquivalentPain = 60f;
 
     [DataField]
-    public float ShockBlurFullPain = 95f;
+    public float ShockBlurEquivalentPain = 65f;
 
     [DataField]
     public TimeSpan SevereStutterDuration = TimeSpan.FromSeconds(4);
