@@ -1,0 +1,36 @@
+- type: guideEntry
+  parent: RMC
+  id: AU14NEMOSOP
+  name: Nautrical Marshals Examination Office SOP
+  text: "/ServerInfo/Guidebook/_AU14/NEMOSOP/AU14NEMOOVERVIEW.xml"
+  priority: 4
+  children:
+  - AU14NEMOSOPRulesofEngagement
+
+- type: guideEntry
+  parent: RMC
+  id: AU14NEMOSOP
+  name: NEMO Standard Operating Procedure
+  priority: 0
+  text: "/ServerInfo/Guidebook/_AU14/NEMOSOP/AU14NEMOSOP.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14NEMODeploymentLaw
+  name: NEMO Facsimile Regulations
+  priority: 1
+  text: "/ServerInfo/Guidebook/_AU14/NEMOSOP/AU14NEMOFacsimileregs.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14NEMODeploymentLaw
+  name: NEMO Deployment Rules & Regulations
+  priority: 1
+  text: "/ServerInfo/Guidebook/_AU14/NEMOSOP/AU14NEMODeploymentLaw.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14NEMOGlossary
+  name: NEMO Glossary and Definitions
+  priority: 1
+  text: "/ServerInfo/Guidebook/_AU14/NEMOSOP/AU14NEMOGlossary.xml"
