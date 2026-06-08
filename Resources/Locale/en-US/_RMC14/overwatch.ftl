@@ -10,6 +10,7 @@ rmc-overwatch-console-hide-squad-info = Hide Squad Info
 rmc-overwatch-console-squad-monitor = Squad Monitor
 rmc-overwatch-console-supply-drop = Supply Drop
 rmc-overwatch-console-orbital-bombardment = Orbital Bombardment
+rmc-overwatch-console-fireteams = Fireteams
 rmc-overwatch-console-monitor = Monitor
 rmc-overwatch-console-shown-all = Shown: all
 rmc-overwatch-console-show-dead = Show dead

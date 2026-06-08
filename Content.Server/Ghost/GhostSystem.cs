@@ -7,8 +7,10 @@ using Content.Server.Ghost.Components;
 using Content.Server.Mind;
 using Content.Server.Roles.Jobs;
 using Content.Server.Warps;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Ghost;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Actions;
 using Content.Shared.CCVar;
 using Content.Shared.Damage;
@@ -73,69 +75,13 @@ namespace Content.Server.Ghost
         [Dependency] private IRobustRandom _random = default!;
         [Dependency] private TagSystem _tag = default!;
         [Dependency] private NameModifierSystem _nameMod = default!;
+        [Dependency] private SharedXenoHiveSystem _xenoHive = default!;
 
         private EntityQuery<GhostComponent> _ghostQuery;
         private EntityQuery<PhysicsComponent> _physicsQuery;
 
         private static readonly ProtoId<TagPrototype> AllowGhostShownByEventTag = "AllowGhostShownByEvent";
         private static readonly ProtoId<DamageTypePrototype> AsphyxiationDamageType = "Asphyxiation";
-
-        private static readonly Dictionary<string, string> FactionTabNames = new(StringComparer.OrdinalIgnoreCase)
-        {
-            ["RMCXeno"] = "Xenos",
-            ["Xeno"] = "Xenos",
-            ["UNMC"] = "Military",
-            ["GOVFOR"] = "Military",
-            ["RoyalMarines"] = "TSE/Royal",
-            ["TSE"] = "TSE/Royal",
-            ["SPP"] = "SPP",
-            ["WeYa"] = "WeYa/PMC",
-            ["AUWeYu"] = "WeYa/PMC",
-            ["Halcyon"] = "WeYa/PMC",
-            ["CLF"] = "CLF",
-            ["Bureau"] = "CMB/Provost",
-            ["AUBureau"] = "CMB/Provost",
-            ["Civilian"] = "Survivors",
-            ["AUColonist"] = "Survivors",
-            ["ColonySynth"] = "Survivors",
-            ["OPFOR"] = "OPFOR",
-            ["THREAT"] = "Threat",
-            ["CMUAPE"] = "APE",
-        };
-
-        private static readonly string[] FactionPriority =
-        {
-            "RMCXeno",
-            "Xeno",
-            "UNMC",
-            "GOVFOR",
-            "RoyalMarines",
-            "TSE",
-            "SPP",
-            "WeYa",
-            "AUWeYu",
-            "Halcyon",
-            "CLF",
-            "Bureau",
-            "AUBureau",
-            "Civilian",
-            "AUColonist",
-            "ColonySynth",
-            "OPFOR",
-            "THREAT",
-            "CMUAPE",
-        };
-
-        private static readonly HashSet<string> MarineDepartments = new(StringComparer.Ordinal)
-        {
-            "CMAuxiliarySupport",
-            "CMCommand",
-            "CMEngineering",
-            "CMSquad",
-            "CMMedbay",
-            "CMMilitaryPolice",
-            "CMRequisitions",
-        };
 
         public override void Initialize()
         {
@@ -259,8 +205,8 @@ namespace Content.Server.Ghost
 
             if (_gameTicker.RunLevel != GameRunLevel.PostRound)
             {
-                _visibilitySystem.AddLayer((uid, visibility), (int) VisibilityFlags.Ghost, false);
-                _visibilitySystem.RemoveLayer((uid, visibility), (int) VisibilityFlags.Normal, false);
+                _visibilitySystem.AddLayer((uid, visibility), (int)VisibilityFlags.Ghost, false);
+                _visibilitySystem.RemoveLayer((uid, visibility), (int)VisibilityFlags.Normal, false);
                 _visibilitySystem.RefreshVisibility(uid, visibilityComponent: visibility);
             }
 
@@ -278,8 +224,8 @@ namespace Content.Server.Ghost
             // Entity can't be seen by ghosts anymore.
             if (TryComp(uid, out VisibilityComponent? visibility))
             {
-                _visibilitySystem.RemoveLayer((uid, visibility), (int) VisibilityFlags.Ghost, false);
-                _visibilitySystem.AddLayer((uid, visibility), (int) VisibilityFlags.Normal, false);
+                _visibilitySystem.RemoveLayer((uid, visibility), (int)VisibilityFlags.Ghost, false);
+                _visibilitySystem.AddLayer((uid, visibility), (int)VisibilityFlags.Normal, false);
                 _visibilitySystem.RefreshVisibility(uid, visibilityComponent: visibility);
             }
 
@@ -336,7 +282,7 @@ namespace Content.Server.Ghost
 
         private void OnGhostReturnToBodyRequest(GhostReturnToBodyRequest msg, EntitySessionEventArgs args)
         {
-            if (args.SenderSession.AttachedEntity is not {Valid: true} attached
+            if (args.SenderSession.AttachedEntity is not { Valid: true } attached
                 || !_ghostQuery.TryComp(attached, out var ghost)
                 || !ghost.CanReturnToBody
                 || !TryComp(attached, out ActorComponent? actor))
@@ -359,7 +305,7 @@ namespace Content.Server.Ghost
 
         private void OnGhostWarpsRequest(GhostWarpsRequestEvent msg, EntitySessionEventArgs args)
         {
-            if (args.SenderSession.AttachedEntity is not {Valid: true} entity
+            if (args.SenderSession.AttachedEntity is not { Valid: true } entity
                 || !_ghostQuery.HasComp(entity))
             {
                 Log.Warning($"User {args.SenderSession.Name} sent a {nameof(GhostWarpsRequestEvent)} without being a ghost.");
@@ -372,7 +318,7 @@ namespace Content.Server.Ghost
 
         private void OnGhostWarpToTargetRequest(GhostWarpToTargetRequestEvent msg, EntitySessionEventArgs args)
         {
-            if (args.SenderSession.AttachedEntity is not {Valid: true} attached
+            if (args.SenderSession.AttachedEntity is not { Valid: true } attached
                 || !_ghostQuery.HasComp(attached))
             {
                 Log.Warning($"User {args.SenderSession.Name} tried to warp to {msg.Target} without being a ghost.");
@@ -392,14 +338,14 @@ namespace Content.Server.Ghost
 
         private void OnGhostnadoRequest(GhostnadoRequestEvent msg, EntitySessionEventArgs args)
         {
-            if (args.SenderSession.AttachedEntity is not {} uid
+            if (args.SenderSession.AttachedEntity is not { } uid
                 || !_ghostQuery.HasComp(uid))
             {
                 Log.Warning($"User {args.SenderSession.Name} tried to ghostnado without being a ghost.");
                 return;
             }
 
-            if (_followerSystem.GetMostGhostFollowed() is not {} target)
+            if (_followerSystem.GetMostGhostFollowed() is not { } target)
                 return;
 
             WarpTo(uid, target);
@@ -425,6 +371,16 @@ namespace Content.Server.Ghost
         private IEnumerable<GhostWarp> GetLocationWarps()
         {
             var allQuery = AllEntityQuery<WarpPointComponent>();
+            var grouping = GhostWarpGrouping.Classify(
+                isWarpPoint: true,
+                jobId: null,
+                departmentId: null,
+                factions: null,
+                isXeno: false,
+                isYautja: false,
+                isCorruptedHive: false,
+                xenoTier: null,
+                realDisplayWeight: 0);
 
             while (allQuery.MoveNext(out var uid, out var warp))
             {
@@ -432,8 +388,8 @@ namespace Content.Server.Ghost
                     GetNetEntity(uid),
                     warp.Location ?? Name(uid),
                     true,
-                    tab: "Locations",
-                    section: "Warp Points");
+                    tab: grouping.Tab,
+                    section: grouping.Section);
             }
         }
 
@@ -441,7 +397,7 @@ namespace Content.Server.Ghost
         {
             foreach (var player in _player.Sessions)
             {
-                if (player.AttachedEntity is not {Valid: true} attached)
+                if (player.AttachedEntity is not { Valid: true } attached)
                     continue;
 
                 if (attached == except) continue;
@@ -457,8 +413,26 @@ namespace Content.Server.Ghost
                     job = xenoJob;
 
                 var department = GetDepartment(job);
-                var tab = GetFactionTab(attached, job, xeno, department);
-                var section = GetSection(tab, job, xeno, department);
+                var factions = TryComp<NpcFactionMemberComponent>(attached, out var faction)
+                    ? faction.Factions.Select(factionId => factionId.ToString()).ToList()
+                    : null;
+                var isYautja = HasComp<YautjaComponent>(attached);
+                var isYautjaThrall = HasComp<YautjaThrallComponent>(attached);
+                var isYautjaAbomination = HasComp<YautjaAbominationComponent>(attached);
+                var isCorruptedHive = xeno != null &&
+                                      _xenoHive.GetHive(attached) is { Comp.Corrupted: true };
+                var grouping = GhostWarpGrouping.Classify(
+                    isWarpPoint: false,
+                    jobId: job?.ID,
+                    departmentId: department?.ID,
+                    factions: factions,
+                    isXeno: xeno != null,
+                    isYautja: isYautja,
+                    isCorruptedHive: isCorruptedHive,
+                    xenoTier: xeno?.Tier,
+                    realDisplayWeight: job?.RealDisplayWeight ?? 0,
+                    isYautjaThrall: isYautjaThrall,
+                    isYautjaAbomination: isYautjaAbomination);
                 var roleName = job?.LocalizedName ?? Loc.GetString("generic-unknown-title");
                 var meta = Comp<MetaDataComponent>(attached);
 
@@ -467,14 +441,15 @@ namespace Content.Server.Ghost
                     meta.EntityName,
                     false,
                     roleName,
-                    tab,
-                    section,
+                    grouping.Tab,
+                    grouping.Section,
                     job?.Icon.ToString(),
                     job?.JobPreviewEntity?.ToString() ?? meta.EntityPrototype?.ID,
                     job?.ID,
                     job?.RealDisplayWeight ?? 0,
                     xeno?.Tier,
-                    xeno != null || IsXenoJob(job));
+                    xeno != null ||
+                    job?.ID.StartsWith("CMXeno", StringComparison.OrdinalIgnoreCase) == true);
             }
         }
 
@@ -488,143 +463,6 @@ namespace Content.Server.Ghost
                 .Where(department => department.Roles.Contains(jobId))
                 .OrderBy(department => department, DepartmentUIComparer.Instance)
                 .FirstOrDefault();
-        }
-
-        private string GetFactionTab(
-            EntityUid uid,
-            JobPrototype? job,
-            XenoComponent? xeno,
-            DepartmentPrototype? department)
-        {
-            if (xeno != null || IsXenoJob(job))
-                return "Xenos";
-
-            if (TryComp<NpcFactionMemberComponent>(uid, out var faction) &&
-                TryGetFactionTab(faction, out var factionTab))
-            {
-                return factionTab;
-            }
-
-            if (department != null)
-            {
-                if (department.ID == "CMSurvivor")
-                    return "Survivors";
-
-                if (MarineDepartments.Contains(department.ID))
-                    return "Military";
-            }
-
-            if (job != null && TryGetJobIdTab(job.ID, out var jobTab))
-                return jobTab;
-
-            return "Other";
-        }
-
-        private static bool IsXenoJob(JobPrototype? job)
-        {
-            return job?.ID.StartsWith("CMXeno", StringComparison.OrdinalIgnoreCase) == true;
-        }
-
-        private static bool TryGetFactionTab(NpcFactionMemberComponent faction, out string tab)
-        {
-            foreach (var priority in FactionPriority)
-            {
-                if (!faction.Factions.Any(factionId => factionId.ToString().Equals(priority, StringComparison.OrdinalIgnoreCase)))
-                    continue;
-
-                tab = FactionTabNames[priority];
-                return true;
-            }
-
-            foreach (var factionId in faction.Factions)
-            {
-                if (!FactionTabNames.TryGetValue(factionId.ToString(), out tab!))
-                    continue;
-
-                return true;
-            }
-
-            tab = faction.Factions.FirstOrDefault().ToString() ?? "Other";
-            return !string.IsNullOrWhiteSpace(tab);
-        }
-
-        private static bool TryGetJobIdTab(string jobId, out string tab)
-        {
-            if (jobId.Contains("CLF", StringComparison.OrdinalIgnoreCase))
-            {
-                tab = "CLF";
-                return true;
-            }
-
-            if (jobId.Contains("SPP", StringComparison.OrdinalIgnoreCase))
-            {
-                tab = "SPP";
-                return true;
-            }
-
-            if (jobId.Contains("PMC", StringComparison.OrdinalIgnoreCase) ||
-                jobId.Contains("WeYa", StringComparison.OrdinalIgnoreCase) ||
-                jobId.Contains("Corporate", StringComparison.OrdinalIgnoreCase))
-            {
-                tab = "WeYa/PMC";
-                return true;
-            }
-
-            if (jobId.Contains("Bureau", StringComparison.OrdinalIgnoreCase) ||
-                jobId.Contains("CMB", StringComparison.OrdinalIgnoreCase) ||
-                jobId.Contains("Provost", StringComparison.OrdinalIgnoreCase))
-            {
-                tab = "CMB/Provost";
-                return true;
-            }
-
-            if (jobId.Contains("Royal", StringComparison.OrdinalIgnoreCase) ||
-                jobId.Contains("TSE", StringComparison.OrdinalIgnoreCase))
-            {
-                tab = "TSE/Royal";
-                return true;
-            }
-
-            tab = string.Empty;
-            return false;
-        }
-
-        private string GetSection(
-            string tab,
-            JobPrototype? job,
-            XenoComponent? xeno,
-            DepartmentPrototype? department)
-        {
-            if (tab == "Xenos")
-            {
-                if (job?.ID.Contains("Queen", StringComparison.OrdinalIgnoreCase) == true)
-                    return "Queen";
-
-                return xeno?.Tier != null
-                    ? $"Tier {xeno.Tier}"
-                    : "Unknown Tier";
-            }
-
-            if (tab == "Military" && department != null)
-                return Loc.GetString(department.Name);
-
-            if (tab == "Survivors")
-                return "Survivors";
-
-            if (job == null)
-                return "Personnel";
-
-            var weight = job.RealDisplayWeight;
-            if (weight >= 10)
-                return "High Command";
-
-            if (weight >= 5)
-                return "Command";
-
-            if (weight >= 2)
-                return "Specialists";
-
-            return weight > 0 ? "Line Personnel" : "Personnel";
         }
 
         #endregion
@@ -656,13 +494,13 @@ namespace Content.Server.Ghost
 
                 if (visible)
                 {
-                    _visibilitySystem.AddLayer((uid, vis), (int) VisibilityFlags.Normal, false);
-                    _visibilitySystem.RemoveLayer((uid, vis), (int) VisibilityFlags.Ghost, false);
+                    _visibilitySystem.AddLayer((uid, vis), (int)VisibilityFlags.Normal, false);
+                    _visibilitySystem.RemoveLayer((uid, vis), (int)VisibilityFlags.Ghost, false);
                 }
                 else
                 {
-                    _visibilitySystem.AddLayer((uid, vis), (int) VisibilityFlags.Ghost, false);
-                    _visibilitySystem.RemoveLayer((uid, vis), (int) VisibilityFlags.Normal, false);
+                    _visibilitySystem.AddLayer((uid, vis), (int)VisibilityFlags.Ghost, false);
+                    _visibilitySystem.RemoveLayer((uid, vis), (int)VisibilityFlags.Normal, false);
                 }
                 _visibilitySystem.RefreshVisibility(uid, visibilityComponent: vis);
             }

@@ -48,6 +48,8 @@
         crate: RMCCrateGlassSheets
       - cost: 350
         crate: RMCCrateWoodenPlanks
+      - cost: 2000
+        crate: RMCCrateFoldingBarricades
       - cost: 350
         crate: RMCCrateSuppliesBoxes
     - name: Food and Drinks

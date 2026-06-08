@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "made by Nzzy for CMU-14",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "f_grass"
+    },
+    {
+      "name": "single_edge"
+    },
+    {
+      "name": "double_edge"
+    },
+    {
+      "name": "triple_edge"
+    }
+  ]
+}

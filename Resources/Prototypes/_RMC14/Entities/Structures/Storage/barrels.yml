@@ -46,6 +46,9 @@
   categories: [ HideSpawnMenu ]
   description: A storage barrel.
   components:
+  - type: XenoCrusherChargable
+    instantDestroy: true
+    passOnDestroy: true
   - type: VehicleSmashable
   - type: Sprite
     sprite: _RMC14/Structures/barrels.rsi

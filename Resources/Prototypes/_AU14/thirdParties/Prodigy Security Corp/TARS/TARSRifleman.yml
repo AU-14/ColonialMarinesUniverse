@@ -1,11 +1,10 @@
 - type: job
+  abstract: true
   parent: CMJobBase
   id: AU14JobTARSPartyContractorBase
   name: Prodigy TARS Contractor Base
   description: au14-prodigyrescue-description
   playTimeTracker: AU14JobTARSPartyContractorTracker
-  basePlaytimeTracker: true
-  hidden: true
 
 - type: job
   parent: AU14JobTARSPartyContractorBase
@@ -41,7 +40,6 @@
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicProdigy

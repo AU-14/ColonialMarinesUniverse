@@ -1,0 +1,58 @@
+- type: gameMap
+  id: auchances
+  mapName: Chances Claim
+  mapPath: /Maps/_CMU14/chances.yml
+  mapsBelow:
+  - /Maps/_CMU14/chances_below.yml
+  mapsAbove:
+  - /Maps/_CMU14/chances_above.yml
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    ChancesClaim:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'ChancesClaim'
+        - type: StationJobs
+          availableJobs:
+            AU14JobCivilianColonist: [ -1, -1 ]
+            AU14JobCivilianFoodServiceWorker: [4, 4]
+            AU14JobCivilianJournalist: [1, 1]
+            AU14JobCivilianColonySynthetic: [1, 1]
+            AU14JobCivilianShopkeep: [2, 2]
+            AU14JobCivilianHeadOfService: [1, 1]
+
+
+            AU14JobCivilianCorporateAdministrator: [1, 1]
+            AU14JobMobGoon: [9, 9]
+            AU14JobMobBoss : [1, 1]
+            # Security/LEO
+            AU14JobCivilianColonySecurityOfficer: [7, 7]
+            AU14JobCivilianColonySecurityLeader : [1, 1]
+            # Engineering/Logi
+            AU14JobCivilianForeman: [1, 1]
+            AU14JobCivilianFreightSystemsSpecialist: [3, 3]
+            AU14JobCivilianEngineer: [6, 6]
+            AU14JobCivilianHeadOfEngineering: [ 1, 1]
+
+            AU14JobCivilianWasteManagementSpecialist: [2, 2]
+
+            # Medical
+            AU14JobCivilianPhysician: [1, 1]
+            AU14JobCivilianNurse: [3, 3]
+            AU14JobCivilianEthicsAndWellnessAdvisor: [3, 3]
+            AU14JobCivilianEmergencyResponseOfficer: [1, 1]
+            AU14JobCivilianHeadPhysician : [1, 1]
+
+            # We-Yu
+
+            AU14JobCivilianScientist: [6, 6]
+            AU14JobCivilianCorporateLiaison: [4, 4]
+
+            # Orbital
+            AU14JobCivilianOrbitalArbiter: [1, 1]
+            AU14JobCivilianOrbitalLawyer: [2, 3]
+

@@ -62,6 +62,7 @@
     shoes: RMCBootsCorporate
     id: AU14IDCardColonyForeman
     ears: AU14ColonyAdminHeadset
+    pocket1: AU14StampFore
 
 - type: entity
   parent: CMSpawnPointJobBase

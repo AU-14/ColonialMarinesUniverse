@@ -372,8 +372,8 @@
 - type: entity
   parent: CMBeltBaseStorage
   id: CMBeltMedical
-  name: M276 pattern medical storage rig
-  description: The M276 is the standard load-bearing equipment of the USCM. It consists of a modular belt with various clips. This version is a less common configuration, designed to transport bulkier medical supplies.
+  name: M276 pattern medical storage rig # TODO: differentiate from pattern lifesaver
+  description: The M276 is standard load-bearing equipment. It consists of a modular belt with various clips. This version is a less common configuration, designed to transport bulkier medical supplies.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Belt/medical.rsi
@@ -428,7 +428,6 @@
       - Hypospray
       - Defibrillator
       - Pill
-      - CMUSplintItem
       - RMCHandLabeler
       - RMCStethoscope
       - RMCLighter

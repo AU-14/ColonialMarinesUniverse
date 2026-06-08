@@ -66,6 +66,7 @@
     id: AU14IDCardCivilianOrbitalManager
     ears: AU14OrbitalHeadsetManagement
     outerClothing: RMCJacketCorporateBlue
+    pocket1: AU14StampOrbitalMan
   inhand:
     - AU14BriefcaseLawBundle
 

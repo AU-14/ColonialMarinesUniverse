@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: AU14JobPARTYPartyContractorBase
   id: AU14JobPARTYPartyEngineer #m41a/2
   name: Prodigy Yankee Combat Engineer
   description: au14-prodigyparty-description
@@ -26,8 +26,6 @@
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: synth
-  hidden: false
-
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicProdigy

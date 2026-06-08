@@ -1,4 +1,4 @@
-﻿<controls:OverwatchSquadView
+<controls:OverwatchSquadView
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Overwatch"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
@@ -68,7 +68,7 @@
                         <Button Name="OrbitalBombardmentButton" Access="Public" Text="{Loc rmc-overwatch-console-orbital-bombardment}"
                                 StyleClasses="ActionButton" VerticalAlignment="Top"
                                 Margin="0 10 0 0" MinWidth="250" />
-                        <Button Name="FireteamsButton" Access="Public" Text="Fireteams"
+                        <Button Name="FireteamsButton" Access="Public" Text="{Loc rmc-overwatch-console-fireteams}"
                                 StyleClasses="ActionButton" VerticalAlignment="Top"
                                 Margin="0 10 0 0" MinWidth="250" />
                     </BoxContainer>
@@ -224,7 +224,7 @@
                                     BackgroundColor="#1A1A1A" />
                                 </PanelContainer.PanelOverride>
                                 <BoxContainer Orientation="Horizontal" Margin="5">
-                                    <Label Text="Fireteams" />
+                                    <Label Text="{Loc rmc-overwatch-console-fireteams}" />
                                     <Control HorizontalExpand="True" />
                                 </BoxContainer>
                             </PanelContainer>

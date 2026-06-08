@@ -96,8 +96,8 @@
 - type: entity
   parent: RMCHazardVest
   id: RMCHazardVestWeyamart
-  name: weyamart vest
-  description: A blue 'Weyamart' employee vest, with name tag and all.
+  name: weymart vest
+  description: A blue 'WeyMart' employee vest, with name tag and all.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/HazardVests/weyamart.rsi

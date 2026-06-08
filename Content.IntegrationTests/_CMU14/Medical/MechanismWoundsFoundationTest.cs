@@ -690,6 +690,50 @@ public sealed class MechanismWoundsFoundationTest
     }
 
     [Test]
+    public async Task NormalExamineShowsSimpleFracturesButHidesHairlines()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var fractureSystem = entMan.System<SharedFractureSystem>();
+            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+
+            try
+            {
+                var leftArm = GetBodyPart(entMan, human, BodyPartType.Arm, BodyPartSymmetry.Left);
+                var rightArm = GetBodyPart(entMan, human, BodyPartType.Arm, BodyPartSymmetry.Right);
+
+                var simple = entMan.EnsureComponent<FractureComponent>(leftArm);
+                fractureSystem.SetSeverity((leftArm, simple), FractureSeverity.Simple);
+
+                var hairline = entMan.EnsureComponent<FractureComponent>(rightArm);
+                fractureSystem.SetSeverity((rightArm, hairline), FractureSeverity.Hairline);
+
+                var examine = new ExaminedEvent(new FormattedMessage(), human, human, true, false);
+                entMan.EventBus.RaiseLocalEvent(human, examine);
+                var text = examine.GetTotalMessage().ToMarkup();
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(text, Does.Contain("Left arm"));
+                    Assert.That(text, Does.Contain("simple fracture"));
+                    Assert.That(text, Does.Not.Contain("Right arm"));
+                    Assert.That(text, Does.Not.Contain("hairline fracture"));
+                });
+            }
+            finally
+            {
+                entMan.DeleteEntity(human);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task DetailedExamineOrdersHeadTorsoThenLimbsAndUsesMarkup()
     {
         await using var pair = await PoolManager.GetServerClient();

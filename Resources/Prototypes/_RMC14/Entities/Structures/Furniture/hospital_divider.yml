@@ -4,6 +4,9 @@
   name: hospital divider
   description: A hospital divider for privacy.
   components:
+  - type: XenoCrusherChargable
+    instantDestroy: true
+    passOnDestroy: true
   - type: Transform
     noRot: true
   - type: VehicleSmashable

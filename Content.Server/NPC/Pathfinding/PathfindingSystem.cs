@@ -18,6 +18,7 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
+using Robust.Shared.Profiling;
 using Robust.Shared.Random;
 using Robust.Shared.Threading;
 using Robust.Shared.Timing;
@@ -51,6 +52,7 @@ namespace Content.Server.NPC.Pathfinding
         [Dependency] private NPCSystem _npc = default!;
         [Dependency] private SharedMapSystem _maps = default!;
         [Dependency] private SharedPhysicsSystem _physics = default!;
+        [Dependency] private ProfManager _prof = default!;
         [Dependency] private SharedTransformSystem _transform = default!;
 
         private readonly Dictionary<ICommonSession, PathfindingDebugMode> _subscribedSessions = new();
@@ -114,44 +116,103 @@ namespace Content.Server.NPC.Pathfinding
                 MaxDegreeOfParallelism = _parallel.ParallelProcessCount,
             };
 
-            UpdateGrid(options);
+            var profiling = _prof.IsEnabled;
+            if (profiling)
+            {
+                using var profile = _prof.Group("PathfinderSystem.UpdateGrid");
+                UpdateGrid(options);
+            }
+            else
+            {
+                UpdateGrid(options);
+            }
+
             _stopwatch.Restart();
+            var queued = _pathRequests.Count;
             var amount = Math.Min(PathTickLimit, _pathRequests.Count);
             var results = ArrayPool<PathResult>.Shared.Rent(amount);
 
-
-            Parallel.For(0, amount, options, i =>
+            if (profiling)
             {
-                // If we're over the limit (either time-sliced or hard cap).
-                if (_stopwatch.Elapsed >= PathTime)
+                using var profile = _prof.Group("PathfinderSystem.ProcessRequests");
+                Parallel.For(0, amount, options, i =>
                 {
-                    results[i] = PathResult.Continuing;
-                    return;
-                }
-
-                var request = _pathRequests[i];
-
-                try
+                    ProcessPathRequest(results, i);
+                });
+            }
+            else
+            {
+                Parallel.For(0, amount, options, i =>
                 {
-                    switch (request)
-                    {
-                        case AStarPathRequest astar:
-                            results[i] = UpdateAStarPath(astar);
-                            break;
-                        case BFSPathRequest bfs:
-                            results[i] = UpdateBFSPath(_random, bfs);
-                            break;
-                        default:
-                            throw new NotImplementedException();
-                    }
-                }
-                catch (Exception)
-                {
-                    results[i] = PathResult.NoPath;
-                    throw;
-                }
-            });
+                    ProcessPathRequest(results, i);
+                });
+            }
 
+            var continuing = 0;
+            var completed = 0;
+            var noPath = 0;
+
+            if (profiling)
+            {
+                using var profile = _prof.Group("PathfinderSystem.CleanupRequests");
+                CleanupPathRequests(results, amount, ref continuing, ref completed, ref noPath);
+            }
+            else
+            {
+                CleanupPathRequests(results, amount, ref continuing, ref completed, ref noPath);
+            }
+
+            if (profiling)
+            {
+                _prof.WriteValue("PathfinderSystem Queued Requests", queued);
+                _prof.WriteValue("PathfinderSystem Processed Requests", amount);
+                _prof.WriteValue("PathfinderSystem Continuing Requests", continuing);
+                _prof.WriteValue("PathfinderSystem Completed Requests", completed);
+                _prof.WriteValue("PathfinderSystem NoPath Requests", noPath);
+            }
+
+            ArrayPool<PathResult>.Shared.Return(results);
+        }
+
+        private void ProcessPathRequest(PathResult[] results, int i)
+        {
+            // If we're over the limit (either time-sliced or hard cap).
+            if (_stopwatch.Elapsed >= PathTime)
+            {
+                results[i] = PathResult.Continuing;
+                return;
+            }
+
+            var request = _pathRequests[i];
+
+            try
+            {
+                switch (request)
+                {
+                    case AStarPathRequest astar:
+                        results[i] = UpdateAStarPath(astar);
+                        break;
+                    case BFSPathRequest bfs:
+                        results[i] = UpdateBFSPath(_random, bfs);
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+            catch (Exception)
+            {
+                results[i] = PathResult.NoPath;
+                throw;
+            }
+        }
+
+        private void CleanupPathRequests(
+            PathResult[] results,
+            int amount,
+            ref int continuing,
+            ref int completed,
+            ref int noPath)
+        {
             var offset = 0;
 
             // then, single-threaded cleanup.
@@ -169,10 +230,20 @@ namespace Content.Server.NPC.Pathfinding
                 switch (result)
                 {
                     case PathResult.Continuing:
+                        continuing++;
                         break;
                     case PathResult.PartialPath:
                     case PathResult.Path:
+                        completed++;
+                        SendDebug(path);
+                        // Don't use RemoveSwap because we still want to try and process them in order.
+                        _pathRequests.RemoveAt(resultIndex);
+                        offset--;
+                        path.Tcs.SetResult(result);
+                        SendRoute(path);
+                        break;
                     case PathResult.NoPath:
+                        noPath++;
                         SendDebug(path);
                         // Don't use RemoveSwap because we still want to try and process them in order.
                         _pathRequests.RemoveAt(resultIndex);
@@ -184,8 +255,6 @@ namespace Content.Server.NPC.Pathfinding
                         throw new NotImplementedException();
                 }
             }
-
-            ArrayPool<PathResult>.Shared.Return(results);
         }
 
         /// <summary>

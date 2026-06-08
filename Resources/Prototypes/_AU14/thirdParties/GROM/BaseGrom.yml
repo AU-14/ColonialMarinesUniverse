@@ -93,7 +93,7 @@
   parent: AU14BeltHolsterPistolUPP
   id: AU14BeltHolsterPistolUPPFull
   suffix: Full, T74, GROM
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: RMCWeaponPistolT74
@@ -104,7 +104,7 @@
   parent: RMCOuterClothingExternalWebbing
   id: RMCOuterClothingExternalWebbingBrownFull
   suffix: Full, Crowbar
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: RMCTacticalPrybar
@@ -113,7 +113,7 @@
   parent: AU14WebbingDropPouchUPP
   id: AU14WebbingDropPouchUPPFull
   suffix: Full, GROM
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: AU14MREUPP
@@ -123,7 +123,7 @@
   parent: RMCSatchelSPP
   id: RMCSatchelSPPFull
   suffix: Full, GROM
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: RMCRadioHandheldColony
@@ -136,7 +136,7 @@
   parent: RMCSatchelSPP
   id: RMCSatchelSPPFullMarksman
   suffix: Full, GROM
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: RMCRadioHandheldColony
@@ -150,7 +150,7 @@
   parent: RMCSatchelSPP
   id: RMCSatchelSPPFullMachinegunner
   suffix: Full, GROM
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: RMCRadioHandheldColony
@@ -159,7 +159,7 @@
   parent: RMCPouchCommand
   id: RMCPouchCommandFull
   suffix: Full, GROM
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: RMCWeaponRevolverZHNK72
@@ -168,7 +168,7 @@
   parent: AU14ShotgunShellLoadingRigUPP
   id: AU14ShotgunShellLoadingRigUPPFull
   suffix: Full, GROM
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: RMCShellShotgunHeavySlugs
@@ -178,7 +178,7 @@
   parent: AU14BeltMedicalUPP
   id: AU14BeltMedicalUPPFull
   suffix: Full, GROM
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: CMBurnKit10
@@ -195,7 +195,7 @@
   parent: AU14BeltMedicalUPP
   id: AU14BeltMedicalUPPFullSupportTech
   suffix: Full, GROM
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: CMSurgicalLine
@@ -210,7 +210,7 @@
   parent: AU14PouchPistolAlt
   id: AU14PouchPistolAltFull
   suffix: Full, GROM, T74
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: RMCWeaponPistolT74
@@ -220,7 +220,7 @@
   parent: AU14BeltSmartGunOperatorPistolUPP
   id: AU14BeltSmartGunOperatorPistolUPPFull
   suffix: Full, GROM, T74
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: RMCWeaponPistolT74
@@ -233,7 +233,7 @@
   parent: RMCPouchMagazine
   id: RMCPouchMagazineUPPFull
   suffix: Full, GROM, AG80
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: AU14MagazineRifleAG80
@@ -261,3 +261,5 @@
     trackerModes:
     - GROMCommandingOfficer
     - SquadLeader
+    - BattleBuddy
+    - PrimaryLandingZone

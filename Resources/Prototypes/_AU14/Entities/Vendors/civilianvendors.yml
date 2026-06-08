@@ -473,7 +473,7 @@
       - id: CMBeltUtilityFilled
         name: M276 pattern toolbelt rig (filled)
       - id: RMCBeltUtilityGeneral
-      - id: CMUBeltMedicBagSupportSynth
+      - id: AU14BeltMedicBagSupportSynth
         name: M276 pattern lifesaver bag (filled, advanced)
     - name: Bags
       choices: { CMUciviliansynthstoragebag: 1 }

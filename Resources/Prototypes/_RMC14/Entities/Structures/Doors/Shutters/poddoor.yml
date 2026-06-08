@@ -104,7 +104,9 @@
   - type: Door
     canPry: true
   - type: XenoCrusherChargable
-    instantDestroy: true
+    setDamage:
+      types:
+        Structural: 750
 
 - type: entity
   parent: RMCPodDoor

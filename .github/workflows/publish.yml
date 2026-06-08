@@ -59,7 +59,7 @@ jobs:
         run: dotnet build Content.Packaging --configuration ${{ env.CONFIGURATION }} --no-restore /m
 
       - name: Package ${{ matrix.name }}
-        run: dotnet run --project Content.Packaging --configuration ${{ env.CONFIGURATION }} --no-build -- ${{ matrix.command }} --no-restore
+        run: dotnet run --project Content.Packaging --configuration ${{ env.CONFIGURATION }} --no-build --no-restore -- ${{ matrix.command }} --no-restore
 
       - name: Upload ${{ matrix.name }} package
         uses: actions/upload-artifact@v7.0.1

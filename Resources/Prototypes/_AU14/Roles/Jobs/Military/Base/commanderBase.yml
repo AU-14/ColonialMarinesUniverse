@@ -1,6 +1,6 @@
 - type: job
   abstract: true
-  parent: CMJobBase
+  parent: AU14JobMilitaryBase
   id: AU14JobPlatCoBaseAbstract
   name: au14-job-name-govforplatco
   description: au14-job-description-govforplatco
@@ -12,11 +12,9 @@
   playTimeTracker: AU14JobGOVFORPlatCo
   requireAdminNotify: true
   joinNotifyCrew: true
-  setPreference: false
   canBeAntag: false
   accessGroups:
   - AU14GovforCommand
-  roleWeight: 0.25
 
 - type: job
   abstract: true
@@ -46,35 +44,16 @@
     components:
     - type: CommendationGiver
     - type: InnateCommandSpeech
-    - type: Marine
-      Faction: govfor
-    - type: NpcFactionMember
-      factions:
-      - GOVFOR
-    - type: UserIFF
-      factions:
-      - GOVFOR
     - type: Skills
       preset: AU14SkillPresetPlatoonCommander
     - type: JobPrefix
       prefix: au14-job-prefix-govforplatco
+    - type: RMCSpeechBubbleSpecificStyle
+      speechStyleClass: commanderSpeech
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: co
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
+        sprite: /Textures/_AU14/Interface/au14govforhud.rsi
+        state: govfor_platco
 
 - type: playTimeTracker
   id: AU14JobGOVFORPlatCo
@@ -87,6 +66,7 @@
     ears: AU14HeadsetGovforCommand
   inhand:
     -  AU14TabletGovfor
+    -  AU14StampCO
 
 - type: startingGear
   id: AU14GearGOVFORPlatCoDummy

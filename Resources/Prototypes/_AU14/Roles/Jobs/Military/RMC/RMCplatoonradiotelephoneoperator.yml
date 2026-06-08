@@ -4,8 +4,6 @@
   name: au14-job-name-radiotelephoneoperatorRMC
   spawnMenuRoleName: Fireteam Leader (TWE RMC)
   overwatchRoleName: au14-job-name-radiotelephoneoperator-alt
-  startingGear: AU14GearGOVFORRadioTelephoneOperator
-  dummyStartingGear: AU14GearGOVFORRadioTelephoneOperatorDummy
   ranks:
     RMC_Corporal:
     - !type:RoleTimeRequirement

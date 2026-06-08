@@ -62,7 +62,7 @@
     mask: RMCMaskScarfTan
     head: AU14HeadHelmetRMCMedic
     gloves: AU14HandsRMC
-    belt: CMUBeltMedicBagSupportSynthRMC
+    belt: AU14BeltMedicBagSupportSynthRMC
     pocket1: AU14RMCRTTPouchMagazineL90A2
     pocket2: AU14PouchIFAKFill
     back: AU14CMDefibrillator

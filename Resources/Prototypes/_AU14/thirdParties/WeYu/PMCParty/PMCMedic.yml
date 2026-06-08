@@ -70,7 +70,7 @@
     eyes: RMCGlassesMedicalHUDGlasses
     head: AU14ArmorHelmetPMCTactical
     gloves: AU14PVEHandsInsulatedBlackMarine
-    belt: CMUBeltMedicBagSupportSynth
+    belt: AU14BeltMedicBagSupportSynth
     pocket1: RMCPouchMagazineLargePMC
     pocket2: AU14PouchIFAKFill
     back: RMCSatchelLightpackWeYa

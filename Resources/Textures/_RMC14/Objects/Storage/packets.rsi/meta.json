@@ -26,6 +26,12 @@
       "name": "teargas_packet_e"
     },
     {
+      "name": "teargas_airburst_packet"
+    },
+    {
+      "name": "teargas_airburst_packet_e"
+    },
+    {
       "name": "d_nade_placeholder"
     },
     {

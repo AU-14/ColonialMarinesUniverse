@@ -3,63 +3,31 @@
   id: AU14JobOPFORSquadCombatTech
   name: au14-job-name-opforsquadcombattech
   description: au14-job-description-opforsquadcombattech
-  setPreference: false
-  overwatchSortPriority: -5
-  overwatchRoleName: au14-job-name-govforsquadcombattech
-  requirements:
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
-    - NonResuscitable
-  ranks:
-    RMCRankCorporal:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadCombatTech
-      time: 216000 # 60 hours
-    RMCRankLanceCorporal:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadCombatTech
-      time: 108000 # 30 hours
-    RMCRankPrivateFirstClass:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadCombatTech
-      time: 54000 # 15 hours
-    RMCRankPrivate: []
+  icon: "AU14JobIconOPFORCT"
+  spawnMenuRoleName: Combat Tech (OPFOR)
+  supervisors: au14-job-supervisors-opfor
   startingGear: AU14GearOPFORSquadCombatTech
   dummyStartingGear: AU14GearOPFORCTDummy
-  icon: "AU14JobIconOPFORCT"
-  requireAdminNotify: false
-  spawnMenuRoleName: Combat Tech (OPFOR)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-opfor
   accessGroups:
   - AU14OpforEngineer
-  hasIcon: true
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-      - OPFOR
     - type: Marine
       Faction: opfor
-    - type: Skills
-      preset: AU14SkillPresetPlatoonCombatTechnician
-    - type: JobPrefix
-      prefix: au14-job-prefix-opforsquadcombattech
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: engi
-    - type: CMVendorUser
-      id: AU14JobOPFORSquadCombatTech
-      points: 50
     - type: UserIFF
       factions:
       - OPFOR
-  hidden: false
+    - type: NpcFactionMember
+      factions:
+      - OPFOR
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforhud.rsi
+        state: ct
+    - type: CMVendorUser
+      id: AU14JobOPFORSquadCombatTech
+      points: 50
 
 - type: startingGear
   id: AU14GearOPFORSquadCombatTech

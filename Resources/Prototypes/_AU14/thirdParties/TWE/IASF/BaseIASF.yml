@@ -1,0 +1,242 @@
+
+- type: entity
+  parent: CMMobHuman
+  id: AU14BaseMobSpeciesOrganicTWEIASF
+  abstract: true
+  components:
+  - type: GhostTakeoverAvailable
+  - type: NpcFactionMember
+    factions:
+    - CMUTWE
+  - type: RandomHumanoidAppearance
+  - type: RandomHumanoidAppearanceWhitelisted
+    allowedMaleHairStyles:
+    - RMCHumanHairCrew
+    - RMCHumanHairAviator
+    - RMCHumanHairJensen
+    - RMCHumanHairAverageJoe
+    - AU14HumanHairCIA5
+    - RMCHumanHairCombover
+    - RMCHumanHairCombover2
+    - RMCHumanHairCplDietrich
+    - RMCHumanHairCut
+    - RMCHumanHairHeadStubble
+    - RMCHumanHairHighAndTight
+    - RMCHumanHairHighfade
+    - RMCHumanHairHighlight
+    - AU14HumanHairIRS
+    - RMCHumanHairLtRasczak
+    - RMCHumanHairMarineFade
+    - RMCHumanHairMarineFlatTop
+    - RMCHumanHairMedfade
+    - RMCHumanHairNofade
+    - RMCHumanHairShavedpart
+    - RMCHumanHairShavedHead
+    - RMCHumanHairShort
+    - RMCHumanHairSideUndercutHang
+    - RMCHumanHairSkinhead
+    - RMCHumanHairTaper
+    - RMCHumanHairWardaddy
+    - RMCHumanHairUndercut
+    - RMCHumanHairUndercutTop
+    allowedFemaleHairStyles:
+    - RMCHumanHairShortbangs
+    - RMCHumanHairBobcurl
+    - RMCHumanHairMarineBun
+    - RMCHumanHairBun
+    - RMCHumanHairFringetail
+    - AU14HumanHairLowBun
+    - AU14HumanHairLowPonyTail
+    - AU14HumanHairLowPonyTailAlt
+    - RMCHumanHairPonytail1
+    - RMCHumanHairPonytail7
+    - RMCHumanHairPvtRedding
+    - RMCHumanHairPvtVasquez
+    - RMCHumanHairLong
+    - RMCHumanHairPixieCutLeft
+    - RMCHumanHairPixieCutRight
+    allowedHairColorsHex:
+    - "#0B0B0B"
+    - "#1A1A1A"
+    - "#222222"
+    - "#2B1B0F"
+    - "#3B2314"
+    - "#4A2E1A"
+    - "#5A3A22"
+    - "#6B4A2F"
+    - "#9C8651"
+    - "#B79A5A"
+    - "#4A1F12"
+    - "#7A5E42"
+    allowedEyeColorsHex: [ "#000000" ]
+    beardChance: 0.1
+
+- type: startingGear
+  id: AU14RMCGearIASFBase
+  equipment:
+    head: RMCHeadParaBeret
+    jumpsuit: RMCJumpsuitMarinePara
+    gloves: RMCHandsVeteranRoyalMarine
+    shoes: RMCBootsRoyalFilled
+    outerClothing: RMCArmorParaVest
+    ears: RMCHeadsetPara
+    belt: RMCBeltHolsterPistolFilledL54
+    pocket1: AU14PouchIFAKFill 
+    pocket2: RMCPouchFlareL96Filled
+  storage:
+    outerClothing:
+    - RMCFlashlight
+
+# equipment
+- type: entity
+  parent: RMCJumpsuitMarinePara
+  id: AU14JumpsuitIASFL90
+  suffix: Webbing, L90
+  components:
+    - type: WebbingClothing
+      startingWebbing: AU14WebbingIASFL90
+
+- type: entity
+  parent: RMCParaWebbing
+  id: AU14WebbingIASFL90
+  name: iasf webbing
+  suffix: Filled, L90
+  components:
+    - type: StorageFill
+      contents:
+        - id: RMCTacticalPrybar
+        - id: AU14MagazineRifleL90
+        - id: AU14MagazineRifleL90
+
+- type: entity
+  parent: RMCJumpsuitMarinePara
+  id: AU14JumpsuitIASFL90A2
+  suffix: Webbing, L90A2
+  components:
+    - type: WebbingClothing
+      startingWebbing: AU14WebbingIASFL90A2
+
+- type: entity
+  parent: RMCParaWebbing
+  id: AU14WebbingIASFL90A2
+  name: iasf webbing
+  suffix: Filled, L90A2
+  components:
+    - type: StorageFill
+      contents:
+        - id: RMCTacticalPrybar
+        - id: RMCFlashlight
+        - id: AU14MagazineSMGL90A2
+
+- type: entity
+  parent: RMCPouchMagazine
+  id: AU14IASFPouchMagazineL90A2
+  suffix: Filled, IASF, L90A2
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineSMGL90A2
+      amount: 3
+
+ # ammo box L90
+- type: entity
+  parent: RMCBoxMagazineRifleBase
+  id: AU14BoxMagazineRifleL90Empty
+  name: magazine box (L90 x 12)
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#3a3a4b"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffc000"
+    - state: rifle_box_90
+      color: "#ffa126"
+    - state: rifle_box_marking
+      color: "#7c4c1b"
+    - state: rifle_lid
+      map: [ "lid" ]
+      color: "#3a3a4b"
+    - state: rifle_lid_marking
+      map: [ "lid_marking" ]
+      color: "#7c4c1b"
+  - type: CMItemSlots
+    count: 12
+    slot:
+      whitelist:
+        tags:
+        - AU14MagazineRifleL90
+
+- type: entity
+  parent: AU14BoxMagazineRifleL90Empty
+  id: AU14BoxMagazineRifleL90
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: AU14MagazineRifleL90
+    count: 12
+    slot:
+      whitelist:
+        tags:
+        - AU14MagazineRifleL90
+
+- type: entity
+  parent: RMCBackpackAmmoRCM
+  id: AU14BackpackAmmoRCMSurvL90
+  suffix: Survivor, L90
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14BoxMagazineRifleL90
+    - id: AU14BoxMagazineRifleL90
+
+- type: entity
+  parent: AU14BeltUtilityCombatRMC
+  id: AU14BeltUtilityCombatRMCFilledSurvivor
+  suffix: Warwick MKVII, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponRevolverWarwickMkVII
+    - id: RMCSpeedLoaderM44
+    - id: RMCSpeedLoaderM44
+    - id: CMWelder
+    - id: CMScrewdriver
+    - id: CMWirecutter
+    - id: CMWrench
+    - id: CMMultitool
+
+- type: entity
+  parent: RMCPouchConstruction
+  id: RMCPouchConstructionSurvivor
+  suffix: Survivor filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMSheetMetal
+    - id: CMSheetMetal
+
+- type: entity
+  parent: RMCSatchelLightpack5Slot
+  id: RMCSatchelLightpackFilledParaSL
+  suffix: SL, Survivor, Filled
+  components:
+    - type: StorageFill
+      contents:
+        - id: CMSheetMetal50
+        - id: RMCRadioHandheldColony
+        - id: RMCPackFlareL96
+        - id: RMCPackFlareL96
+
+- type: entity
+  parent: RMCPouchMagazine
+  id: AU14RMCRTTPouchMagazineL90
+  suffix: Filled, L90A
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineRifleL90
+      amount: 3

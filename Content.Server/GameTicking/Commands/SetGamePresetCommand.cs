@@ -56,7 +56,11 @@ namespace Content.Server.GameTicking.Commands
                 foreach (var preset in gamePresets)
                 {
                     options.Add(preset.ID);
-                    options.AddRange(preset.Alias);
+                    foreach (var alias in preset.Alias)
+                    {
+                        if (!string.Equals(alias, preset.ID, StringComparison.OrdinalIgnoreCase))
+                            options.Add(alias);
+                    }
                 }
 
                 return CompletionResult.FromHintOptions(options, "<id>");

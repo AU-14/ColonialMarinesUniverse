@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.IntegrationTests.Pair;
+using Content.Server._RMC14.Xenonids.JoinXeno;
 using Content.Server._RMC14.Xenonids.Parasite;
 using Content.Server.GameTicking;
 using Content.Server.Mind;
@@ -227,7 +228,7 @@ public sealed class LarvaQueueJoinXenoUiTest
     }
 
     [Test]
-    public async Task LarvaQueueOffersGhostedLesserDroneWhenNoLarvaAvailable()
+    public async Task LarvaQueueDoesNotOfferGhostedLesserDrone()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -247,8 +248,6 @@ public sealed class LarvaQueueJoinXenoUiTest
         EntityUid ghost = default;
         EntityUid hive = default;
         EntityUid lesser = default;
-        NetEntity ghostNet = default;
-        string lesserName = string.Empty;
         await server.WaitAssertion(() =>
         {
             ghost = entMan.SpawnEntity(GameTicker.ObserverPrototypeName, map.GridCoords);
@@ -256,13 +255,11 @@ public sealed class LarvaQueueJoinXenoUiTest
             hive = entMan.SpawnEntity("CMXenoHive", map.GridCoords.Offset(new Vector2(1, 0)));
             lesser = entMan.SpawnEntity("CMXenoLesserDrone", map.GridCoords.Offset(new Vector2(2, 0)));
             hiveSystem.SetHive(lesser, hive);
-            lesserName = entMan.GetComponent<MetaDataComponent>(lesser).EntityName;
 
             var mindId = mind.CreateMind(player.UserId, "Lesser Drone");
             mind.TransferTo(mindId, lesser);
             mind.TransferTo(mindId, ghost);
             mind.SetUserId(mindId, player.UserId);
-            ghostNet = entMan.GetNetEntity(ghost);
 
             entMan.EventBus.RaiseLocalEvent(ghost, new JoinLarvaQueueEvent(entMan.GetNetEntity(hive)));
         });
@@ -272,11 +269,15 @@ public sealed class LarvaQueueJoinXenoUiTest
         await server.WaitAssertion(() =>
         {
             Assert.That(player.AttachedEntity, Is.EqualTo(ghost));
-            AssertConfirmDialog(entMan, ghost, lesserName);
-        });
+            Assert.That(entMan.HasComponent<AbandonedXenoQueueableComponent>(lesser), Is.False);
+            Assert.That(entMan.HasComponent<DialogComponent>(ghost), Is.False);
 
-        await DeclineDialog(pair, ghostNet);
-        await pair.RunTicksSync(5);
+            OpenJoinXenoUi(entMan, ghost);
+            var state = GetJoinXenoState(entMan, ghost);
+            var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
+            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.Queued));
+            Assert.That(entry.Position, Is.EqualTo(1));
+        });
 
         await pair.CleanReturnAsync();
     }

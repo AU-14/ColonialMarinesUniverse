@@ -12,7 +12,6 @@
     - NonResuscitable
   ranks:
     RMCRankCivilianDoctor: []
-  startingGear: AU14GearCivilianPhysician
   icon: "AU14JobIconColonyPhysician"
   hasIcon: false
   requireAdminNotify: false
@@ -42,9 +41,6 @@
         sprite: /Textures/_RMC14/Interface/map_blips.rsi
         state: synth
   hidden: false
-
-- type: startingGear
-  id: AU14GearCivilianPhysician
 
 - type: entity
   parent: CMSpawnPointJobBase

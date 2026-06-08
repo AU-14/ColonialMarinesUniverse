@@ -21,33 +21,6 @@ env:
   CONFIGURATION: DebugOpt
 
 jobs:
-  pr-metadata:
-    name: PR Metadata
-    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
-    runs-on: ubuntu-latest
-    steps:
-      - name: Write PR metadata
-        shell: bash
-        run: |
-          mkdir -p ci-pr-metadata
-          cat > ci-pr-metadata/pr.json <<'EOF'
-          {
-            "number": ${{ github.event.pull_request.number }},
-            "head_sha": "${{ github.event.pull_request.head.sha }}",
-            "head_ref": "${{ github.event.pull_request.head.ref }}",
-            "head_repo_full_name": "${{ github.event.pull_request.head.repo.full_name }}"
-          }
-          EOF
-
-      - name: Upload PR metadata
-        uses: actions/upload-artifact@v7.0.1
-        with:
-          name: ci-pr-metadata
-          path: ci-pr-metadata/pr.json
-          if-no-files-found: error
-          retention-days: 1
-          compression-level: 0
-
   source-guards:
     name: Source Guards
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
@@ -417,6 +390,15 @@ jobs:
           - name: root_2
             root_group: 1
             root_groups: 2
+          - name: entity_spawn_delete_maps
+            filter: FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.SpawnAndDeleteAllEntitiesOnDifferentMaps
+          - name: entity_spawn_dirty
+            filter: FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.SpawnAndDirtyAllEntities
+          - name: entity_counts
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.AllComponentsOneToOneDeleteTest
+              | FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.SpawnAndDeleteAllEntitiesInTheSameSpot
+              | FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.SpawnAndDeleteEntityCountTest
           - name: admin_access_ui
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Administration
@@ -468,7 +450,9 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Climbing
               | FullyQualifiedName~Content.IntegrationTests.Tests.Cloning
               | FullyQualifiedName~Content.IntegrationTests.Tests.DoAfter
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Interaction
+          - name: gameplay_runtime
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Interaction
               | FullyQualifiedName~Content.IntegrationTests.Tests.Internals
               | FullyQualifiedName~Content.IntegrationTests.Tests.Minds
               | FullyQualifiedName~Content.IntegrationTests.Tests.Movement
@@ -483,7 +467,9 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Lathe
               | FullyQualifiedName~Content.IntegrationTests.Tests.Materials
               | FullyQualifiedName~Content.IntegrationTests.Tests.Sprite
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Storage
+          - name: storage_crafting_misc
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Storage
               | FullyQualifiedName~Content.IntegrationTests.Tests.Strip
               | FullyQualifiedName~Content.IntegrationTests.Tests.Tag
               | FullyQualifiedName~Content.IntegrationTests.Tests.Utility
@@ -565,11 +551,11 @@ jobs:
             fi
             FILTER=""
             for i in "${!files[@]}"; do
-              if (( i % root_groups != root_group )); then
-                continue
-              fi
               f="${files[$i]}"
               base=$(basename "$f" .cs)
+              if [[ "$base" == "EntityTest" ]] || (( i % root_groups != root_group )); then
+                continue
+              fi
               FILTER="${FILTER:+$FILTER | }FullyQualifiedName~Content.IntegrationTests.Tests.$base"
             done
             if [ -z "$FILTER" ]; then

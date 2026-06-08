@@ -17,7 +17,7 @@
   - type: GhostRole
     name: cm-job-name-xeno-spitter
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Spitter/spitter.rsi # AU14-Edit
+    sprite: _RMC14/Mobs/Xenonids/Spitter/spitter.rsi
   - type: MobState
     allowedStates:
     - Alive
@@ -60,8 +60,9 @@
   - type: XenoEvolution
     max: 500
     evolvesTo:
-    - RMCXenoBoiler
+    - CMXenoBoiler
     - CMXenoPraetorian
+    - RMCXenoDespoiler
     strains:
     - CMXenoSpitterVenator
     - CMXenoSpitterAlchemist

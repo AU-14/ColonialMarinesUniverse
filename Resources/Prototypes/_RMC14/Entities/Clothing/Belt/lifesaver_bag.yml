@@ -1,8 +1,8 @@
 - type: entity
   parent: CMBeltMedical
   id: CMBeltMedicBag
-  name: M276 pattern lifesaver bag
-  description: The M276 is the standard load-bearing equipment of the USCM. This configuration mounts a duffel bag filled with a range of injectors and light medical supplies, and is common among medics.
+  name: M276 pattern lifesaver bag # TODO: differentiate from medical storage rig
+  description: The M276 is standard load-bearing equipment. This configuration mounts a duffel bag filled with a range of injectors and light medical supplies, and is common among medics.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Belt/medicbag/jungle-classic.rsi
@@ -56,6 +56,8 @@
       - Hypospray
       - Defibrillator
       - Pill
+      - RMCHandLabeler
+      - RMCStethoscope
       - RMCLighter
   - type: FixedItemSizeStorage
   - type: IgnoreContentsSize

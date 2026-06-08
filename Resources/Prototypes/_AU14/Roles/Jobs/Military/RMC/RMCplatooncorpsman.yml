@@ -3,8 +3,6 @@
   id: AU14JobGOVFORPlatoonCorpsmanRMC
   name: au14-job-name-govforplatooncorpsmanRMC
   spawnMenuRoleName: Hospital Corpsman (TWE RMC)
-  startingGear: AU14GearGOVFORPlatoonCorpsman
-  dummyStartingGear: AU14GearGOVFORCorpsmanDummy
   ranks:
     RMC_Corporal:
     - !type:RoleTimeRequirement

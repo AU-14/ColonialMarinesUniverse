@@ -925,7 +925,7 @@
       entries:
       - id: CMSandbagEmpty50
         recommended: true
-        amount: 5
+        amount: 2
       - id: BarbedWire15
         amount: 4
       - id: CMSheetMetal50
@@ -971,8 +971,8 @@
       #  amount: 5
       - id: CMRollerBedSpawnFolded
         amount: 8
-      #- id: CMFoldingBarricadesMB6x3
-      #  amount: 2
+      - id: CMFoldingBarricadesMB6x3
+        amount: 2
       #- id: CMSparePDTLBattleBuddyKit
       #  amount: 3
       - id: BedrollFolded

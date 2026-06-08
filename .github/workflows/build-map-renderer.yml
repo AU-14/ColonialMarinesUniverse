@@ -8,18 +8,22 @@ on:
     types: [opened, reopened, synchronize, ready_for_review]
     branches: [master, staging, stable]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: map-renderer-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
-    if: github.event.pull_request.draft == false
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v6.0.2
         with:
-          persist-credentials: true
+          persist-credentials: false
           submodules: false
 
       - name: Setup Submodule
@@ -36,12 +40,18 @@ jobs:
         uses: actions/setup-dotnet@v5.2.0
         with:
           dotnet-version: 10.0.x
+          cache: true
+          cache-dependency-path: |
+            **/*.csproj
+            **/*.props
+            **/*.targets
+            **/packages.lock.json
 
       - name: Install dependencies
-        run: dotnet restore
+        run: dotnet restore Content.MapRenderer/Content.MapRenderer.csproj
 
       - name: Build Project
-        run: dotnet build Content.MapRenderer --configuration Release --no-restore /m
+        run: dotnet build Content.MapRenderer/Content.MapRenderer.csproj --configuration Release --no-restore /m
 
       - name: Run Map Renderer
-        run: dotnet run --project Content.MapRenderer Dev
+        run: dotnet run --project Content.MapRenderer/Content.MapRenderer.csproj --configuration Release --no-build --no-restore -- Dev

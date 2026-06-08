@@ -57,6 +57,7 @@
     shoes: RMCShoesBlack
     id: AU14IDCardColonyHeadOfService
     outerClothing: RMCMedicalApron
+    pocket1: AU14StampHOS
 
 - type: entity
   parent: CMSpawnPointJobBase

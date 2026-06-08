@@ -232,6 +232,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             before: [typeof(ArrivalsSystem), typeof(SpawnPointSystem)]);
         SubscribeLocalEvent<RoundEndMessageEvent>(OnRoundEndMessage);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+        SubscribeLocalEvent<DropshipLandedOnPlanetEvent>(OnDropshipLandedOnPlanet);
         SubscribeLocalEvent<DropshipHijackStartEvent>(OnDropshipHijackStart);
         SubscribeLocalEvent<DropshipHijackLandedEvent>(OnDropshipHijackLanded);
 
@@ -1006,6 +1007,27 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             Log.Info($"Human faction hijack by '{ev.HijackerFaction}': found {crewOnShip} crew on target ship maps, {targetShipMaps.Count} ship map(s) scanned.");
         }
     }
+
+    private void OnDropshipLandedOnPlanet(ref DropshipLandedOnPlanetEvent ev)
+    {
+        var rules = QueryActiveRules();
+        while (rules.MoveNext(out var uid, out _, out var rule, out var gameRule))
+        {
+            if (!GameTicker.IsGameRuleAdded(uid, gameRule))
+                continue;
+
+            if (rule.MarinesLanded)
+                return;
+
+            rule.MarinesLanded = true;
+            Dirty(uid, rule);
+
+            var landedEv = new MarinesLandedChangedEvent(true);
+            RaiseLocalEvent(ref landedEv);
+            return;
+        }
+    }
+
     private void OnDropshipHijackLanded(ref DropshipHijackLandedEvent ev)
     {
         var rules = QueryActiveRules();

@@ -4,6 +4,9 @@
   name: small floodlight
   description: A small bit of light in the darkness.
   components:
+  - type: XenoCrusherChargable
+    instantDestroy: true
+    passOnDestroy: true
   - type: VehicleSmashable
   - type: Transform
     anchored: true

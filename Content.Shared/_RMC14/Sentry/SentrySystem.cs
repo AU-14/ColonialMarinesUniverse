@@ -36,6 +36,7 @@ namespace Content.Shared._RMC14.Sentry;
 
 public sealed partial class SentrySystem : EntitySystem
 {
+    private static readonly ProtoId<ToolQualityPrototype> AnchoringQuality = "Anchoring";
     private static readonly ProtoId<ToolQualityPrototype> ScrewingQuality = "Screwing";
 
     [Dependency] private SharedAppearanceSystem _appearance = default!;
@@ -213,7 +214,7 @@ public sealed partial class SentrySystem : EntitySystem
             return;
         }
 
-        if (_tools.HasQuality(used, "Anchoring"))
+        if (_tools.HasQuality(used, AnchoringQuality))
         {
             StartDisassemble(sentry, user);
             return;
@@ -226,7 +227,7 @@ public sealed partial class SentrySystem : EntitySystem
             return;
         }
 
-        if (_tools.HasQuality(used, "Screwing"))
+        if (_tools.HasQuality(used, ScrewingQuality))
 
         {
             if (sentry.Comp.Mode == SentryMode.Off)

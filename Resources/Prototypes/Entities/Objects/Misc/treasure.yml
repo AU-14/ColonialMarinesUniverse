@@ -16,6 +16,9 @@
     energy: 0.5
     castShadows: false
     color: "#0000ff"
+  - type: Tag
+    tags:
+    - SalvageTier3
   - type: StaticPrice
     price: 500
 
@@ -38,6 +41,9 @@
         harddisk: ""
         harddisk_mini: ""
         harddisk_micro: ""
+  - type: Tag
+    tags:
+    - SalvageTier2
   - type: StaticPrice
     price: 275
 
@@ -53,6 +59,9 @@
     - state: flopdrive
   - type: Item
     storedRotation: -90
+  - type: Tag
+    tags:
+    - SalvageTier2
   - type: StaticPrice
     price: 350
 
@@ -68,6 +77,9 @@
     - state: cddrive
   - type: Item
     storedRotation: -90
+  - type: Tag
+    tags:
+    - SalvageTier2
   - type: StaticPrice
     price: 300
 
@@ -83,6 +95,9 @@
     - state: cpu_super
   - type: Item
     size: Tiny
+  - type: Tag
+    tags:
+    - SalvageTier5
   - type: StaticPrice
     price: 750
 
@@ -106,6 +121,9 @@
         energy: ""
         synchronizer: ""
         stabilizer: ""
+  - type: Tag
+    tags:
+    - SalvageTier1
   - type: StaticPrice
     price: 120
 
@@ -150,6 +168,9 @@
     state: coin_iron
   - type: Item
     size: Tiny
+  - type: Tag
+    tags:
+    - SalvageTier1
   - type: StaticPrice
     price: 75
 
@@ -159,6 +180,9 @@
   components:
   - type: Sprite
     state: coin_silver
+  - type: Tag
+    tags:
+    - SalvageTier2
   - type: StaticPrice
     price: 125
 
@@ -168,6 +192,9 @@
   components:
   - type: Sprite
     state: coin_gold
+  - type: Tag
+    tags:
+    - SalvageTier3
   - type: StaticPrice
     price: 175
 
@@ -177,6 +204,9 @@
   components:
   - type: Sprite
     state: coin_adamantine
+  - type: Tag
+    tags:
+    - SalvageTier4
   - type: StaticPrice
     price: 250
 
@@ -186,6 +216,9 @@
   components:
   - type: Sprite
     state: coin_diamond
+  - type: Tag
+    tags:
+    - SalvageTier5
   - type: StaticPrice
     price: 500
 

@@ -1,7 +1,6 @@
 using Content.Server.GameTicking;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
-using Content.Server._RMC14.Xenonids.Construction;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Dropship;
@@ -381,8 +380,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
             return false;
         }
 
-        return xeno.Role != LesserDroneRole ||
-               HasComp<XenoHiveCoreRoleComponent>(uid);
+        return xeno.Role != LesserDroneRole;
     }
 
     private bool TryOfferEntityClaim(EntityUid uid, Entity<HiveComponent> hive, LarvaQueueState queue)

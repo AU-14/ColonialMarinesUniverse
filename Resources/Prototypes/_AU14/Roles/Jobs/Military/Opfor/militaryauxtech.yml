@@ -8,7 +8,6 @@
   supervisors: au14-job-supervisors-opfor
   startingGear: AU14GearOPFORAuxTech
   dummyStartingGear: AU14GearOPFORAuxTechDummy
-  overwatchRoleName: au14-job-name-opforAuxTech
   accessGroups:
   - AU14OpforAuxTech
   special:
@@ -16,33 +15,16 @@
     components:
     - type: Marine
       Faction: opfor
-    - type: NpcFactionMember
-      factions:
-      - OPFOR
     - type: UserIFF
       factions:
       - OPFOR
-    - type: Skills
-      preset: AU14SkillPresetPlatoonAuxTech
-    - type: JobPrefix
-      prefix: au14-job-prefix-opforAuxTech
+    - type: NpcFactionMember
+      factions:
+      - OPFOR
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14opforhud.rsi
         state: rto
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
 
 - type: startingGear
   id: AU14GearOPFORAuxTech
@@ -54,6 +36,7 @@
   storage:
     back:
     - CMStampApproved
+    - AU14StampAUX
 
 - type: startingGear
   id: AU14GearOPFORAuxTechDummy
@@ -63,6 +46,7 @@
   storage:
     back:
     - CMStampApproved
+    - AU14StampAUX
 
 - type: entity
   parent: CMSpawnPointJobBase

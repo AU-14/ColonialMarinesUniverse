@@ -6,6 +6,8 @@ rmc-dropship-hijack-no-intel = Your faction does not have enough intel points to
 rmc-dropship-hijack-no-enemy-lz = No enemy primary landing zones are available to hijack to.
 rmc-dropship-hijack-thirdparty = This shuttle's navigation systems are incompatible with your override device.
 rmc-dropship-terminal-wrong-faction = This terminal does not recognize your credentials.
+rmc-dropship-hijack-queen-call-unknown-location = Unknown
+rmc-dropship-hijack-queen-call-announcement = The Queen has commanded the metal bird to the hive at {$location}
 
 rmc-dropship-weapons-title = Weapons Console
 

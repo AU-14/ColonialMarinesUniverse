@@ -2,6 +2,7 @@
   id: cultistThreat
   lorePrimer: AU14PrimerThreatCultist
   roundstartspawns: cultistPartyThreat
+  thirdpartyinterval: 9100
   whitelistedgamemodes:
   - ColonyFall
   blacklistedgamemodes:
@@ -13,6 +14,7 @@
 - type: threat
   id: cultistThreatOnMarker
   roundstartspawns: cultistPartyThreatOnMarkers
+  thirdpartyinterval: 9100
   whitelistedgamemodes:
   - ColonyFall
   blacklistedgamemodes:

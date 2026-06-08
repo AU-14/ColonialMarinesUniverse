@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Evasion;
+using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._CMU14.Medical.StatusEffects;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Marines.Skills;
@@ -27,8 +28,8 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPainShockSystem _pain = default!;
-    [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] protected SkillsSystem _skills = default!;
 
     private readonly HashSet<Entity<MarineComponent>> _receivers = new();
 
@@ -55,6 +56,25 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
         SubscribeLocalEvent<MoveOrderComponent, DidUnequipEvent>(OnMoveOrderDidUnequip);
 
         SubscribeLocalEvent<HoldOrderComponent, DamageModifyEvent>(OnDamageModify);
+    }
+
+    private void OnMoveOrderDidEquip(Entity<MoveOrderComponent> ent, ref DidEquipEvent args) => _movementSpeed.RefreshMovementSpeedModifiers(ent);
+
+    private void OnMoveOrderDidUnequip(Entity<MoveOrderComponent> ent, ref DidUnequipEvent args) => _movementSpeed.RefreshMovementSpeedModifiers(ent);
+
+    protected virtual void OnAction(Entity<MarineOrdersComponent> orders, ref FocusActionEvent args) => OnAction<FocusOrderComponent>(orders, args);
+
+    protected virtual void OnAction(Entity<MarineOrdersComponent> orders, ref HoldActionEvent args) => OnAction<HoldOrderComponent>(orders, args);
+
+    protected virtual void OnAction(Entity<MarineOrdersComponent> orders, ref MoveActionEvent args) => OnAction<MoveOrderComponent>(orders, args);
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        RemoveExpired<MoveOrderComponent>();
+        RemoveExpired<FocusOrderComponent>();
+        RemoveExpired<HoldOrderComponent>();
     }
 
     private void OnDamageModify(Entity<HoldOrderComponent> orders, ref DamageModifyEvent args)
@@ -127,31 +147,6 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
         args.Evasion += entity.Comp.Received[0].Multiplier * entity.Comp.EvasionModifier;
     }
 
-    private void OnMoveOrderDidEquip(Entity<MoveOrderComponent> ent, ref DidEquipEvent args)
-    {
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
-    }
-
-    private void OnMoveOrderDidUnequip(Entity<MoveOrderComponent> ent, ref DidUnequipEvent args)
-    {
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
-    }
-
-    protected virtual void OnAction(Entity<MarineOrdersComponent> orders, ref FocusActionEvent args)
-    {
-        OnAction<FocusOrderComponent>(orders, args);
-    }
-
-    protected virtual void OnAction(Entity<MarineOrdersComponent> orders, ref HoldActionEvent args)
-    {
-        OnAction<HoldOrderComponent>(orders, args);
-    }
-
-    protected virtual void OnAction(Entity<MarineOrdersComponent> orders, ref MoveActionEvent args)
-    {
-        OnAction<MoveOrderComponent>(orders, args);
-    }
-
     private void OnAction<T>(Entity<MarineOrdersComponent> orders, InstantActionEvent args) where T : IOrderComponent, new()
     {
         if (args.Handled)
@@ -163,13 +158,15 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
 
     private bool HandleAction<T>(Entity<MarineOrdersComponent> orders) where T : IOrderComponent, new()
     {
-        if (!TryComp(orders, out TransformComponent? xform) ||
-            _mobState.IsDead(orders))
-        {
+        if (!TryComp(orders, out TransformComponent? xform)
+            || _mobState.IsDead(orders))
             return false;
-        }
 
-        var level = Math.Max(1, _skills.GetSkill(orders.Owner, orders.Comp.Skill));
+        var leadershipSkill = _skills.GetSkill(orders.Owner, orders.Comp.Skill);
+        if (leadershipSkill <= 0 && !HasComp<SquadLeaderComponent>(orders.Owner))
+            return false;
+
+        var level = Math.Max(1, leadershipSkill);
         var duration = orders.Comp.Duration * (level + 1);
 
         _actions.SetCooldown(orders.Comp.FocusActionEntity, orders.Comp.Cooldown);
@@ -191,7 +188,7 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
         }
 
         // Order Handler, checks which order should be played - server side only
-        if (_net.IsServer && (typeof(T) == typeof(MoveOrderComponent) || typeof(T) == typeof(FocusOrderComponent)|| typeof(T) == typeof(HoldOrderComponent)))
+        if (_net.IsServer && (typeof(T) == typeof(MoveOrderComponent) || typeof(T) == typeof(FocusOrderComponent) || typeof(T) == typeof(HoldOrderComponent)))
         {
             SoundSpecifier? sound = null;
             if (typeof(T) == typeof(MoveOrderComponent))
@@ -208,6 +205,31 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
         }
 
         return true;
+    }
+
+    public void StartActionUseDelay(Entity<MarineOrdersComponent> orders)
+    {
+        _actions.StartUseDelay(orders.Comp.HoldActionEntity);
+        _actions.StartUseDelay(orders.Comp.MoveActionEntity);
+        _actions.StartUseDelay(orders.Comp.FocusActionEntity);
+    }
+
+    // All the SetUseDelay calls are required because even tho we set the cooldown on all of them once an order
+    // is issued for some reason the order that was pressed uses its delays and does not care about its cooldown
+    // being set.
+    public void EnsureOrderActions(Entity<MarineOrdersComponent> ent)
+    {
+        var comp = ent.Comp;
+        if (comp.MoveActionEntity == null)
+            _actions.AddAction(ent, ref comp.MoveActionEntity, comp.MoveAction);
+        if (comp.HoldActionEntity == null)
+            _actions.AddAction(ent, ref comp.HoldActionEntity, comp.HoldAction);
+        if (comp.FocusActionEntity == null)
+            _actions.AddAction(ent, ref comp.FocusActionEntity, comp.FocusAction);
+
+        _actions.SetUseDelay(comp.MoveActionEntity, comp.Cooldown);
+        _actions.SetUseDelay(comp.HoldActionEntity, comp.Cooldown);
+        _actions.SetUseDelay(comp.FocusActionEntity, comp.Cooldown);
     }
 
     private SoundSpecifier? GetMoveSound(Entity<MarineOrdersComponent> orders)
@@ -318,21 +340,5 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
             if (comp.Received.Count == 0)
                 RemCompDeferred<T>(uid);
         }
-    }
-
-    public void StartActionUseDelay(Entity<MarineOrdersComponent> orders)
-    {
-        _actions.StartUseDelay(orders.Comp.HoldActionEntity);
-        _actions.StartUseDelay(orders.Comp.MoveActionEntity);
-        _actions.StartUseDelay(orders.Comp.FocusActionEntity);
-    }
-
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-
-        RemoveExpired<MoveOrderComponent>();
-        RemoveExpired<FocusOrderComponent>();
-        RemoveExpired<HoldOrderComponent>();
     }
 }

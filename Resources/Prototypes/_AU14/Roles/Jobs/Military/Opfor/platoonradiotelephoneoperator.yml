@@ -3,68 +3,28 @@
   id: AU14JobOpforRadioTelephoneOperator
   name: au14-job-name-radiotelephoneoperator
   description: au14-job-description-radiotelephoneoperator
-  setPreference: false
-  requirements:
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
-    - NonResuscitable
-  ranks:
-#   RMCRankSergeant:
-#   - !type:RoleTimeRequirement
-#     role: AU14JobGOVFORRadioTelephoneOperator
-#     time: 216000 # 60 hours
-    RMCRankCorporal:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORRadioTelephoneOperator
-      time: 108000 # 30 hours
-    RMCRankLanceCorporal: []
+  icon: "AU14JobIconOPFORSarge"
   startingGear: AU14GearopforRadioTelephoneOperator
   dummyStartingGear: AU14GearopforRadioTelephoneOperatorDummy
-  icon: "AU14JobIconOPFORSarge"
-  requireAdminNotify: false
   spawnMenuRoleName: Fireteam Leader (OPFOR)
-  joinNotifyCrew: false
   supervisors: au14-job-supervisors-opfor
   accessGroups:
   - AU14OpforFTL
-  overwatchSortPriority: -3
-  overwatchRoleName: Fire Team Leaders
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-      - OPFOR
     - type: Marine
       Faction: opfor
-    - type: Skills
-      preset: AU14SkillPresetPlatoonRTO
-    - type: JobPrefix
-      prefix: au14-job-prefix-radiotelephoneoperator
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: tl
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
     - type: UserIFF
       factions:
       - OPFOR
-  hidden: false
+    - type: NpcFactionMember
+      factions:
+      - OPFOR
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforhud.rsi
+        state: rto
 
 - type: startingGear
   id: AU14GearopforRadioTelephoneOperator

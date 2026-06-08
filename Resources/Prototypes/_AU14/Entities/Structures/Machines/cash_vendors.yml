@@ -83,6 +83,8 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/coffee.rsi
     layers:
     - state: "off"
+  - type: AU14CashVendor
+    percentToColony: 0.6
 
 # Hot drinks machine — mirrors CMVendorCoffee
 - type: entity
@@ -95,7 +97,9 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/coffee.rsi
     layers:
+    - state: "off"
     - state: "normal-unshaded"
+      shader: unshaded
   - type: AU14CashVendor
     allowDepartmentBudget: true
     items:
@@ -123,7 +127,9 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/cola.rsi
     layers:
+    - state: "off"
     - state: "normal-unshaded"
+      shader: unshaded
   - type: AU14CashVendor
     allowDepartmentBudget: true
     items:
@@ -181,7 +187,9 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/snack.rsi
     layers:
+    - state: "off"
     - state: "normal-unshaded"
+      shader: unshaded
   - type: AU14CashVendor
     allowDepartmentBudget: true
     items:
@@ -279,7 +287,9 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/dinnerware.rsi
     layers:
+    - state: "off"
     - state: "normal-unshaded"
+      shader: unshaded
   - type: AU14CashVendor
     allowDepartmentBudget: true
     items:
@@ -352,8 +362,11 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/cassette_player.rsi
     layers:
+    - state: "off"
     - state: "normal-unshaded"
+      shader: unshaded
   - type: AU14CashVendor
+    percentToColony: 0.6
     items:
     - id: RMCCassettePlayer
       name: Cassette Player
@@ -412,8 +425,11 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/cigs.rsi
     layers:
+    - state: "off"
     - state: "normal-unshaded"
+      shader: unshaded
   - type: AU14CashVendor
+    percentToColony: 0.6
     items:
     - id: RMCCigarettePackLuckySloths
       name: Lucky Sloths
@@ -454,7 +470,9 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/tool.rsi
     layers:
+    - state: "off"
     - state: "normal-unshaded"
+      shader: unshaded
   - type: AU14CashVendor
     allowDepartmentBudget: true
     items:
@@ -494,7 +512,9 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/med.rsi
     layers:
+    - state: "off"
     - state: "normal-unshaded"
+      shader: unshaded
   - type: AU14CashVendor
     allowDepartmentBudget: true
     items:
@@ -570,7 +590,9 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/chem.rsi
     layers:
+    - state: "off"
     - state: "normal-unshaded"
+      shader: unshaded
   - type: AU14CashVendor
     allowDepartmentBudget: true
     items:
@@ -667,7 +689,9 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/med.rsi
     layers:
+    - state: "off"
     - state: "normal-unshaded"
+      shader: unshaded
   - type: AU14CashVendor
     allowDepartmentBudget: true
     items:
@@ -725,7 +749,9 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/sec.rsi
     layers:
+    - state: "off"
     - state: "normal-unshaded"
+      shader: unshaded
   - type: AU14CashVendor
     allowDepartmentBudget: true
     items:
@@ -770,6 +796,7 @@
     layers:
     - state: "off"
   - type: AU14CashVendor
+    percentToColony: 0.6
     items:
     - id: RMCFoodSnackBarcaridine
       name: Barcaridine Bar

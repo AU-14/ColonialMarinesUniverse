@@ -1,0 +1,48 @@
+- type: job
+  parent: CMJobBase
+  id: AU14IASFCombatEngineerBase
+  name: au14-job-name-tweiasf-ce
+  playTimeTracker: AU14IASFCombatEngineer
+  description: au14-job-description-tweiasf
+  ranks:
+    RMC_LanceCorporal: []
+  spawnMenuRoleName: IASF Engineer (Base)
+  joinNotifyCrew: false
+  icon: RMCJobIconParaAssaultEngineer
+  startingGear: AU14RMCGearParaAssaultEngineer
+  supervisors: au14-job-name-tweiasf-tl
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: rmc_breacher
+      background:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: background_para
+    - type: AssignSquad
+      whitelist:
+        tags:
+        - AU14SquadIASF
+    - type: Skills
+      preset: AU14SkillPresetPlatoonCombatTechnician
+    - type: JobPrefix
+      prefix: au14-job-prefix-iasf
+  hidden: true
+  
+- type: startingGear
+  parent: AU14RMCGearIASFBase
+  id: AU14RMCGearParaAssaultEngineer
+  equipment:
+    id: AU14IDCardIASFEngineer
+    eyes: RMCWeldingGoggles
+    jumpsuit: AU14JumpsuitIASFL90
+    suitstorage: AU14WeaponRifleL90Full
+    belt: AU14BeltUtilityFilled
+    pocket2: RMCPouchConstructionSurvivor
+    back: RMCSatchelLightpackFilledPara
+
+- type: playTimeTracker
+  id: AU14IASFCombatEngineer
+

@@ -3,8 +3,6 @@
   id: AU14JobGOVFORDSPilotWYPMC
   name: PMC Pilot Officer
   spawnMenuRoleName: Pilot Officer (WYPMC)
-  startingGear: AU14GearGOVFORDSPilot
-  dummyStartingGear: AU14GearGOVFORDSPilotDummy
   ranks:
     AU14RankWeYuSeniorCrewChief:
     - !type:RoleTimeRequirement

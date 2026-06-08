@@ -40,5 +40,14 @@ public sealed partial class AU14CashVendorComponent : Component
 
     /// <summary>The department console linked by a successful ID scan (server-side only).</summary>
     public EntityUid? ScannedDepartmentConsole = null;
+
+    /// <summary>
+    ///     Fraction of the item base price returned to the colony budget on a cash purchase (0–1).
+    ///     Department budget purchases are never counted — only physical cash.
+    ///     Set to 0 for dept vendors so the money is fully consumed; set to e.g. 0.6 for
+    ///     public vendors so 60 % of each sale circulates back into the colony economy.
+    /// </summary>
+    [DataField]
+    public float PercentToColony = 0f;
 }
 

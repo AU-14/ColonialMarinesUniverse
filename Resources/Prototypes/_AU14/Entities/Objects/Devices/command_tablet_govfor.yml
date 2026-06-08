@@ -13,3 +13,6 @@
     faction: govfor
   - type: TacticalMapComputer
     faction: govfor
+  - type: MarineControlComputer
+    faction: govfor
+    canPrintCommendations: false

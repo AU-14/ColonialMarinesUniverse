@@ -3,71 +3,29 @@
   id: AU14JobOPFORMilitaryDoctor
   name: au14-job-name-opforMilitaryDoctor
   description: au14-job-description-opforMilitaryDoctor
-  setPreference: false
-  requirements:
-  - !type:AgeRequirement
-    requiredAge: 25
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - NonResuscitable
-    - Epilepsy
-  ranks:
-    RMCRankFirstLT:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORMilitaryDoctor
-      time: 180000 #50 hours
-    RMCRankSecondLT: []
+  icon: "AU14JobIconOPFORCorpsman"
+  spawnMenuRoleName: Military Doctor (OPFOR)
+  supervisors: au14-job-supervisors-opfor
   startingGear: AU14GearOPFORMilitaryDoctor
   dummyStartingGear: AU14GearOPFORMilitaryDoctorDummy
-  icon: "AU14JobIconOPFORCorpsman"
-  requireAdminNotify: true
-  spawnMenuRoleName: Military Doctor (OPFOR)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-opfor
   accessGroups:
   - AU14OpforCorpsman
   - AU14OpforSquad
-  access:
-  - CMAccessMedical
-  - CMAccessChemistry
-  overwatchSortPriority: -6
-  overwatchShowName: true
-  overwatchRoleName: au14-job-name-govforMilitaryDoctor
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-      - OPFOR
     - type: Marine
       Faction: opfor
-    - type: Skills
-      preset: AU14SkillPresetMilitaryDoctor
-    - type: JobPrefix
-      prefix: au14-job-prefix-opforMilitaryDoctor
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: synth
-    - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
     - type: UserIFF
       factions:
       - OPFOR
-  hidden: false
+    - type: NpcFactionMember
+      factions:
+      - OPFOR
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforhud.rsi
+        state: corpsman # TODO: MD icon
 
 - type: startingGear
   id: AU14GearOPFORMilitaryDoctor
@@ -75,7 +33,7 @@
     jumpsuit: AU14ScrubsGreenDoctorSurgical
     head: CMHeadCapSurgGreen
     shoes: CMBootsBlackFilled
-    belt: CMUBeltMedicBagSupportSynth
+    belt: AU14BeltMedicBagSupportSynth
     pocket1: AU14PouchFirstResponderFilledMilitaryDoctor
     pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
     back: AU14SatchelMilitaryDoctor
@@ -104,7 +62,7 @@
   equipment:
     jumpsuit: AU14ScrubsGreenDoctorSurgical
     shoes: CMBootsBlackFilled
-    belt: CMUBeltMedicBagSupportSynth
+    belt: AU14BeltMedicBagSupportSynth
     back: CMSatchelMarine
     outerClothing: RMCLabcoat
     id: AU14IDCardOPFORDoctor

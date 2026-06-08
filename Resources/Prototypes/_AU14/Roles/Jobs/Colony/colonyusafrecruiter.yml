@@ -44,6 +44,7 @@
   id: AU14GearCivilianUSASFRecruiter
   equipment:
     shoes: RMCBootsCorporate
+    pocket1: AU14StampRecruiter
 
 - type: entity
   parent: CMSpawnPointJobBase

@@ -2,6 +2,7 @@
   id: apethreatcf
   lorePrimer: AU14PrimerThreatApe
   roundstartspawns: apePartycf
+  thirdpartyinterval: 9100
   whitelistedgamemodes:
   - ColonyFall
   blacklistedgamemodes:

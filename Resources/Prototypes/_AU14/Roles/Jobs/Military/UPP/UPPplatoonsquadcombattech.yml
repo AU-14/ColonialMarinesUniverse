@@ -2,8 +2,6 @@
   parent: AU14JobSquadCombatTechBase
   id: AU14JobGOVFORSquadCombatTechUPP
   spawnMenuRoleName: Combat Tech (UPP)
-  startingGear: AU14GearGOVFORSquadCombatTech
-  dummyStartingGear: AU14GearGOVFORCTDummy
   ranks:
     UPP_Corporal:
     - !type:RoleTimeRequirement
@@ -18,8 +16,3 @@
       role: AU14JobGOVFORSquadCombatTech
       time: 54000 # 15 hours
     UPP_Private: []
-  special:
-  - !type:AddComponentSpecial
-    components:
-    - type: Skills
-      preset: AU14SkillPresetPlatoonCombatTechnician

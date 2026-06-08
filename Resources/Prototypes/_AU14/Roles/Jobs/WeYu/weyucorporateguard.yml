@@ -53,14 +53,15 @@
     components:
     - type: Skills
       skills:
-        RMCSkillCqc: 1
-        RMCSkillEndurance: 1
-        RMCSkillFirearms: 1
-        RMCSkillFireman: 1
-        RMCSkillIntel: 1
         RMCSkillOverwatch: 1
-        RMCSkillPolice: 2
+        RMCSkillFirearms: 2
+        RMCSkillCqc: 2
+        RMCSkillEndurance: 2
+        RMCSkillFireman: 2
+        RMCSkillEngineer: 1
+        RMCSkillIntel: 1
         RMCSkillVehicles: 1
+        RMCSkillPolice: 2
     - type: JobPrefix
       prefix: au14-job-prefix-wyguard
     - type: TacticalMapIcon

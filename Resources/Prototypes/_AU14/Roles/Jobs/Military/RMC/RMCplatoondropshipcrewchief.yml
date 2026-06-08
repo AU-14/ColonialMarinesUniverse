@@ -3,8 +3,6 @@
   id: AU14JobGOVFORDCCRMC
   name: au14-job-name-govfordccRMC
   spawnMenuRoleName: Dropship Crew Chief (TWE RMC)
-  startingGear: AU14GearGOVFORDCC
-  dummyStartingGear: AU14GearGOVFORDCCDummy
   ranks:
     RMC_WarrantOfficer1:
     - !type:RoleTimeRequirement

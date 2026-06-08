@@ -3,8 +3,6 @@
   id: AU14JobGOVFORSquadCombatTechWYPMC
   name: PMC Combat Technician
   spawnMenuRoleName: Combat Tech (WYPMC)
-  startingGear: AU14GearGOVFORSquadCombatTech
-  dummyStartingGear: AU14GearGOVFORCTDummy
   ranks:
     AU14RankWeYuSeniorOperator:
     - !type:RoleTimeRequirement
@@ -23,5 +21,3 @@
         RMCSkillFireman: 1
         RMCSkillVehicles: 1
         RMCSkillPolice: 1
-    - type: JobPrefix
-      prefix: au14-job-prefix-AU14JobGOVFORSquadCombatTechWYPMC

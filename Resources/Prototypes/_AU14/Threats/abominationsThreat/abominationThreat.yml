@@ -6,6 +6,7 @@
   id: abominationsThreat
   lorePrimer: AU14PrimerThreatAbomination
   roundstartspawns: abominationsParty
+  thirdpartyinterval: 9100
   whitelistedgamemodes:
   - ColonyFall
   blacklistedgamemodes:

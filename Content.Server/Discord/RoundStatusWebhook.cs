@@ -40,8 +40,9 @@ public readonly record struct RoundStatusWebhookMessageIds(
 
 public static class RoundStatusWebhook
 {
-    private const int InlineValueLength = 24;
-    private const int RecentGamemodeLength = 15;
+    private const int DetailValueLength = 96;
+    private const int RecentGamemodeLength = 72;
+    private const string FooterText = "CMU Status Network";
 
     public static readonly RoundStatusWebhookColors DefaultColors = new(
         0xF0C419,
@@ -69,17 +70,16 @@ public static class RoundStatusWebhook
 
         var fields = new List<WebhookEmbedField>
         {
-            new() { Name = "State", Value = GetState(kind), Inline = true },
+            new() { Name = "Status", Value = GetState(kind), Inline = true },
             new() { Name = "Players", Value = status.PlayerCount.ToString(CultureInfo.InvariantCulture), Inline = true },
             new() { Name = "Round", Value = $"#{status.RoundId}", Inline = true },
-            new() { Name = "Map", Value = Shorten(status.MapName, InlineValueLength), Inline = true },
-            new() { Name = "GOVFOR", Value = Shorten(status.Govfor, InlineValueLength), Inline = true },
-            new() { Name = "Mode", Value = Shorten(status.Gamemode, InlineValueLength), Inline = true },
-            new() { Name = "Last 3 Rounds", Value = FormatRecentGamemodes(status.RecentGamemodes), Inline = false },
         };
 
         if (status.Duration is { } duration)
             fields.Add(new WebhookEmbedField { Name = "Runtime", Value = FormatDuration(duration), Inline = true });
+
+        fields.Add(new WebhookEmbedField { Name = "Operation", Value = FormatOperation(status), Inline = false });
+        fields.Add(new WebhookEmbedField { Name = "Recent Rounds", Value = FormatRecentGamemodes(status.RecentGamemodes), Inline = false });
 
         var payload = new WebhookPayload
         {
@@ -91,6 +91,7 @@ public static class RoundStatusWebhook
                     Title = GetTitle(kind, status.RoundId),
                     Description = GetDescription(kind),
                     Color = GetColor(kind, colors.Value),
+                    Footer = new WebhookEmbedFooter { Text = FooterText },
                     Fields = fields,
                 },
             },
@@ -114,9 +115,10 @@ public static class RoundStatusWebhook
                     Title = GetTitle(RoundStatusWebhookKind.Shutdown, 0),
                     Description = "Server offline.",
                     Color = colors.Shutdown,
+                    Footer = new WebhookEmbedFooter { Text = FooterText },
                     Fields = new List<WebhookEmbedField>
                     {
-                        new() { Name = "State", Value = "Offline", Inline = true },
+                        new() { Name = "Status", Value = "Offline", Inline = true },
                     },
                 },
             },
@@ -296,10 +298,10 @@ public static class RoundStatusWebhook
     {
         return kind switch
         {
-            RoundStatusWebhookKind.Starting => "Server starting.",
-            RoundStatusWebhookKind.Lobby => "Online - in lobby.",
-            RoundStatusWebhookKind.Running => "Round in progress.",
-            RoundStatusWebhookKind.Ended => "Round ended.",
+            RoundStatusWebhookKind.Starting => "Server starting. Preparing the next operation.",
+            RoundStatusWebhookKind.Lobby => "Server online in pre-round lobby.",
+            RoundStatusWebhookKind.Running => "Round in progress. Live operation status is below.",
+            RoundStatusWebhookKind.Ended => "Round ended. Final operation summary is below.",
             RoundStatusWebhookKind.Shutdown => "Server offline.",
             _ => "Server status.",
         };
@@ -318,16 +320,25 @@ public static class RoundStatusWebhook
         };
     }
 
+    private static string FormatOperation(RoundStatusWebhookData status)
+    {
+        return string.Join(
+            "\n",
+            $"**Map:** {Shorten(status.MapName, DetailValueLength)}",
+            $"**GOVFOR:** {Shorten(status.Govfor, DetailValueLength)}",
+            $"**Mode:** {Shorten(status.Gamemode, DetailValueLength)}");
+    }
+
     private static string FormatRecentGamemodes(IReadOnlyList<RoundStatusRecentGamemode> recentGamemodes)
     {
         if (recentGamemodes.Count == 0)
-            return "No completed rounds";
+            return "No completed rounds yet.";
 
         return string.Join(
             "\n",
             recentGamemodes
                 .Take(3)
-                .Select(round => $"#{round.RoundId} {Shorten(round.Gamemode, RecentGamemodeLength)} {FormatShortDuration(round.Duration)}"));
+                .Select(round => $"`#{round.RoundId}` {Shorten(round.Gamemode, RecentGamemodeLength)} - {FormatShortDuration(round.Duration)}"));
     }
 
     private static string UnknownIfEmpty(string value)

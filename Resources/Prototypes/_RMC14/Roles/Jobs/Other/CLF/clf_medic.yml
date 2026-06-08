@@ -1,4 +1,4 @@
-﻿- type: job
+- type: job
   parent: CMJobBase
   id: RMCCLFMedic
   name: rmc-clf-medic
@@ -72,15 +72,12 @@
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     id: RMCIDCardCLFMedic
-    belt: CMBeltMedical
+    belt: CMBeltMedicalFilled
     back: RMCSatchelLightpack
     pocket1: RMCFlashlight
     pocket2: RMCPouchMagazineLarge
   inhand:
   - WeaponSMGMAC15  # TODO RMC14 - Make randomized
-  - CMDefibrillator
-  - CMHealthAnalyzer
-  - CMRollerBedSpawnFolded
   storage:
     back:
     - RMCGrenadeIED
@@ -90,6 +87,9 @@
     - RMCMRECLF
     - CMSynthGraft
     - CMCrowbar
+    - CMDefibrillator
+    - CMHealthAnalyzer
+    - CMRollerBedSpawnFolded
     pocket2:
     - RMCMagazineSMGMAC15
     - RMCMagazineSMGMAC15

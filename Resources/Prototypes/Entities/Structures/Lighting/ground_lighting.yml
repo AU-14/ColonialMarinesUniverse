@@ -5,6 +5,9 @@
   suffix: Always Powered
   parent: BaseStructure
   components:
+  - type: XenoCrusherChargable
+    instantDestroy: true
+    passOnDestroy: true
   - type: Sprite
     sprite: Structures/Lighting/LightPosts/small_light_post.rsi
     snapCardinals: true

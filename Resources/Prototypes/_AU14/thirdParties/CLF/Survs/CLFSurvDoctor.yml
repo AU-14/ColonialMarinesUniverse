@@ -58,7 +58,7 @@
   equipment:
     id: AU14IDCardCLFCivilian
     shoes: RMCShoesJackboots
-    belt: CMUBeltMedicBagSupportSynth
+    belt: AU14BeltMedicBagSupportSynth
     suitstorage: AU14CMDefibrillator
   inhand:
   - AU14CLFHeadset

@@ -3,8 +3,6 @@
   id: AU14JobGOVFORSquadAutomaticRiflemanWYPMC
   name: PMC Smartgun Operator
   spawnMenuRoleName: Automatic Rifleman (WYPMC)
-  startingGear: AU14GearGOVFORSquadAutomaticRifleman
-  dummyStartingGear: AU14GearGOVFORAutoRiflemanDummy
   ranks:
     AU14RankWeYuSeniorOperator:
     - !type:RoleTimeRequirement

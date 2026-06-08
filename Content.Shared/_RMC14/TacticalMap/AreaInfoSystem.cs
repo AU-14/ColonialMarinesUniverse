@@ -7,6 +7,7 @@ using Content.Shared.Inventory.Events;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Profiling;
 using Robust.Shared.Timing;
 using System.Linq;
 
@@ -22,6 +23,7 @@ public sealed partial class AreaInfoSystem : EntitySystem
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ProfManager _prof = default!;
 
     private readonly Queue<Entity<AreaInfoComponent>> _marineAlertCopyQueue = new();
 
@@ -61,13 +63,7 @@ public sealed partial class AreaInfoSystem : EntitySystem
     }
     private void OnMapInit(Entity<AreaInfoComponent> ent, ref MapInitEvent args)
     {
-        var (areaName, ceilingLevel, restrictions) = GetAreaInfo(ent);
-        _alerts.ShowAlert(ent, ent.Comp.Alert,
-            severity: ceilingLevel,
-            dynamicMessage: Loc.GetString("rmc-area-info",
-                ("area", areaName),
-                ("ceilingLevel", ceilingLevel),
-                ("restrictions", restrictions)));
+        UpdateAreaInfoAlert(ent, false);
     }
     private void OnRemove(Entity<AreaInfoComponent> ent, ref ComponentRemove args)
     {
@@ -78,8 +74,35 @@ public sealed partial class AreaInfoSystem : EntitySystem
     {
         if (_timing.ApplyingState)
             return;
+
+        if (_prof.IsEnabled)
+        {
+            using var profile = _prof.Group("AreaInfoSystem.OnMoveEvent");
+            UpdateAreaInfoAlert(ent, true);
+            return;
+        }
+
         // update the alert when they move to a new area
-        var (areaName, ceilingLevel, restrictions) = GetAreaInfo(ent);
+        UpdateAreaInfoAlert(ent, true);
+    }
+
+    private void UpdateAreaInfoAlert(Entity<AreaInfoComponent> ent, bool checkMove)
+    {
+        if (_prof.IsEnabled)
+        {
+            using var profile = _prof.Group("AreaInfoSystem.UpdateAlert");
+            UpdateAreaInfoAlertCore(ent, checkMove);
+            return;
+        }
+
+        UpdateAreaInfoAlertCore(ent, checkMove);
+    }
+
+    private void UpdateAreaInfoAlertCore(Entity<AreaInfoComponent> ent, bool checkMove)
+    {
+        if (GetAreaInfo(ent, checkMove) is not { areaName: var areaName, ceilingLevel: var ceilingLevel, restrictions: var restrictions })
+            return;
+
         _alerts.ShowAlert(ent, ent.Comp.Alert,
             severity: ceilingLevel,
             dynamicMessage: Loc.GetString("rmc-area-info",
@@ -88,12 +111,29 @@ public sealed partial class AreaInfoSystem : EntitySystem
                 ("restrictions", restrictions)));
     }
 
-    private (string areaName, short ceilingLevel, string restrictions) GetAreaInfo(EntityUid ent)
+    private (string areaName, short ceilingLevel, string restrictions)? GetAreaInfo(Entity<AreaInfoComponent> ent, bool checkMove)
     {
-        var coordinates = ent.ToCoordinates();
+        if (!_prof.IsEnabled)
+            return GetAreaInfoCore(ent, checkMove);
+
+        using var profile = _prof.Group("AreaInfoSystem.GetAreaInfo");
+        return GetAreaInfoCore(ent, checkMove);
+    }
+
+    private (string areaName, short ceilingLevel, string restrictions)? GetAreaInfoCore(Entity<AreaInfoComponent> ent, bool checkMove)
+    {
+        var coordinates = ent.Owner.ToCoordinates();
         if (!_area.TryGetArea(coordinates, out var area, out var areaProto))
             return (Loc.GetString("rmc-tacmap-alert-no-area"), 0, string.Empty);
 
+        var time = _timing.CurTime;
+        if (checkMove)
+        {
+            if (!AreaInfoUpdateThrottle.ShouldUpdate(time, ent.Comp.LastMoveUpdate, ent.Comp.LastMoveInterval))
+                return null;
+
+            ent.Comp.LastMoveUpdate = time;
+        }
 
         short ceilingLevel = 0;
         short severityToUse = 0;
@@ -207,17 +247,46 @@ public sealed partial class AreaInfoSystem : EntitySystem
 
     private bool IsProtectedByRoofing(EntityCoordinates coordinates, Predicate<Entity<RoofingEntityComponent>> predicate)
     {
+        if (_prof.IsEnabled)
+        {
+            using var profile = _prof.Group("AreaInfoSystem.IsProtectedByRoofing");
+            return IsProtectedByRoofingCore(coordinates, predicate);
+        }
+
+        return IsProtectedByRoofingCore(coordinates, predicate);
+    }
+
+    private bool IsProtectedByRoofingCore(EntityCoordinates coordinates, Predicate<Entity<RoofingEntityComponent>> predicate)
+    {
+        var scanned = 0;
+        var matched = 0;
         var roofs = EntityQueryEnumerator<RoofingEntityComponent>();
         while (roofs.MoveNext(out var uid, out var roof))
         {
+            scanned++;
+
             if (!predicate((uid, roof)))
                 continue;
+
+            matched++;
 
             if (coordinates.TryDistance(_entityManager, uid.ToCoordinates(), out var distance) &&
                 distance <= roof.Range)
             {
+                if (_prof.IsEnabled)
+                {
+                    _prof.WriteValue("AreaInfoSystem Roofing Entities Scanned", scanned);
+                    _prof.WriteValue("AreaInfoSystem Roofing Predicate Matches", matched);
+                }
+
                 return true;
             }
+        }
+
+        if (_prof.IsEnabled)
+        {
+            _prof.WriteValue("AreaInfoSystem Roofing Entities Scanned", scanned);
+            _prof.WriteValue("AreaInfoSystem Roofing Predicate Matches", matched);
         }
 
         return false;
@@ -239,13 +308,7 @@ public sealed partial class AreaInfoSystem : EntitySystem
                 if (TerminatingOrDeleted(ent))
                     continue;
 
-                var (areaName, ceilingLevel, restrictions) = GetAreaInfo(ent);
-                _alerts.ShowAlert(ent, ent.Comp.Alert,
-                    severity: ceilingLevel,
-                    dynamicMessage: Loc.GetString("rmc-area-info",
-                        ("area", areaName),
-                        ("ceilingLevel", ceilingLevel),
-                        ("restrictions", restrictions)));
+                UpdateAreaInfoAlert(ent, false);
             }
         }
 

@@ -3,61 +3,28 @@
   id: AU14JobOpforSquadAutomaticRifleman
   name: au14-job-name-opforsquadautomaticrifleman
   description: au14-job-description-opforsquadautomaticrifleman
-  setPreference: false
-  requirements:
-  - !type:TraitsRequirement
-    inverted: true
-    traits:
-    - Epilepsy
-    - NonResuscitable
-  ranks:
-    RMCRankCorporal:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadAutomaticRifleman
-      time: 216000 # 60 hours
-    RMCRankLanceCorporal:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadAutomaticRifleman
-      time: 108000 # 30 hours
-    RMCRankPrivateFirstClass:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadAutomaticRifleman
-      time: 54000 # 15 hours
-    RMCRankPrivate: []
+  icon: "AU14JobIconOPFORAFN"
+  spawnMenuRoleName: Automatic Rifleman (OPFOR)
+  supervisors: au14-job-supervisors-opfor
   startingGear: AU14GearopforSquadAutomaticRifleman
   dummyStartingGear: AU14GearopforAutoRiflemanDummy
-  icon: "AU14JobIconOPFORAFN"
-  requireAdminNotify: false
-  spawnMenuRoleName: Automatic Rifleman (OPFOR)
-  joinNotifyCrew: false
-  supervisors: au14-job-supervisors-opfor
   accessGroups:
   - AU14OpforGunner
-  overwatchSortPriority: -6
-  overwatchRoleName: au14-job-name-govforsquadautomaticrifleman-plural
-  overwatchShowName: true
-  roleWeight: 0.25
   special:
   - !type:AddComponentSpecial
     components:
-    - type: NpcFactionMember
-      factions:
-       - OPFOR
     - type: Marine
       Faction: opfor
-    - type: Skills
-      preset: AU14SkillPresetPlatoonAutomaticRifleman
-    - type: SquadArmorWearer
-    - type: JobPrefix
-      prefix: au14-job-prefix-opforsquadautomaticrifleman
-    - type: TacticalMapIcon
-      icon:
-        sprite: /Textures/_RMC14/Interface/map_blips.rsi
-        state: smartgunner
     - type: UserIFF
       factions:
       - OPFOR
-  hidden: false
+    - type: NpcFactionMember
+      factions:
+       - OPFOR
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforhud.rsi
+        state: afn
 
 - type: startingGear
   id: AU14GearopforSquadAutomaticRifleman

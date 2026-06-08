@@ -339,6 +339,7 @@ public partial class SharedBodySystem
     {
         return Resolve(bodyId, ref body)
             && Resolve(partId, ref part)
+            && body.RootContainer is not null
             && body.RootContainer.ContainedEntity is null
             && bodyId != part.Body;
     }
@@ -349,6 +350,7 @@ public partial class SharedBodySystem
     public (EntityUid Entity, BodyPartComponent BodyPart)? GetRootPartOrNull(EntityUid bodyId, BodyComponent? body = null)
     {
         if (!Resolve(bodyId, ref body)
+            || body.RootContainer is null
             || body.RootContainer.ContainedEntity is null)
         {
             return null;
@@ -649,6 +651,7 @@ public partial class SharedBodySystem
         BodyPartComponent? part = null)
     {
         return Resolve(bodyId, ref body, logMissing: false)
+            && body.RootContainer is not null
             && body.RootContainer.ContainedEntity is not null
             && Resolve(partId, ref part, logMissing: false)
             && TryComp(body.RootContainer.ContainedEntity, out BodyPartComponent? rootPart)

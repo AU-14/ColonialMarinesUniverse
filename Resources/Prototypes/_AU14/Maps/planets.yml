@@ -393,6 +393,9 @@
     - wendigoThreat
     - abominationsThreatDistress
     thirdparties:
+    - IASFSurvLarge
+    - IASFSurvMedium
+    - IASFSurvSmall
     - WEYUSurvLarge
     - WEYUSurvMedium
     - WEYUSurvSmall
@@ -481,8 +484,8 @@
     - WYPMCPartyAlt
     - abominationThirdParty
     joboverrides:
-      AU14JobLEOLeaderBase: AU14JobCivilianCMBMarshal
-      AU14JobLEOBase: AU14JobCivilianCMBDeputy
+      AU14JobLEOLeaderBase: AU14JobCivilianNSPAInspector
+      AU14JobLEOBase: AU14JobCiviliannspaConstable
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
@@ -687,6 +690,9 @@
     daycycleenabled: true
     faction: ua
     thirdparties:
+    - IASFSurvLarge
+    - IASFSurvMedium
+    - IASFSurvSmall
     - WEYUSurvLarge
     - WEYUSurvMedium
     - WEYUSurvSmall
@@ -883,6 +889,69 @@
     - abominationsThreatDistress
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
+
+
+- type: entity
+  id: AuPlanetChances
+  name: Chances Claim
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Chances Claim"
+    mapId: auchances
+    lorePrimer: AU14PrimerPlanetChances
+    Allegiance: UA
+    camouflage: Urban
+    announcement: "A remote research outpost, Shepherd's Pride, has gone silent. The UNS Almayer is dispatched to investigate the mysterious circumstances."
+    platoonsGovfor:
+    - USCM
+    - WEYU
+    - VAIPO
+    - UPP
+    - HAZOPS
+    - ProdigySF
+    - RMC
+    - UPP
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: false
+    thirdparties:
+    - USArmy
+    - USArmyAlt
+    - USArmyAlt2
+    - USArmyTank
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - UACGLostTeam
+    - NSPAInvestigationParty
+    - LACNSniperteam
+    - RMCRRT
+    - USArmyArmored
+    - CMBInvestigationParty
+    - CMBInvestigationPartyAlt
+    - XenoParasiteRunnerParty
+    - ApeThirdParty
+    - ProfessorVonBandolier
+    - IPIE
+    - IPIESynth
+    - WYHT
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - abominationThirdParty
+    threats:
+    - abominationsThreatDistress
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+    joboverrides:
+      AU14JobLEOLeaderBase: AU14JobCivilianColonySecurityLeader
+      AU14JobLEOBase: AU14JobCivilianColonySecurityOfficer
+      AU14JobCivilianColonyAdministrator: AU14JobCivilianCorporateAdministrator
+
+- type: lorePrimer
+  id: AU14PrimerPlanetChances
+  planetText: "Date 2181 -  Chances Claim - Weyland Administrated Frontier Colony entangled with organized crime"
+
 
 - type: lorePrimer
   id: AU14PrimerPlanetLV747

@@ -77,6 +77,8 @@
   id: RMCGroundsideOperationsConsoleGovfor
   suffix: Govfor
   components:
+  - type: MarineCommunicationsComputer
+    faction: govfor
   - type: OverwatchConsole
     canMessageSquad: false
     group: GOVFOR
@@ -88,6 +90,8 @@
   id: RMCGroundsideOperationsConsoleOpfor
   suffix: Opfor
   components:
+  - type: MarineCommunicationsComputer
+    faction: opfor
   - type: OverwatchConsole
     canMessageSquad: false
     group: OPFOR

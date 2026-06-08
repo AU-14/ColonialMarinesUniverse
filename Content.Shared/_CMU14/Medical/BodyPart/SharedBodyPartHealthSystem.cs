@@ -60,12 +60,10 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
 
     private void OnDamageChanged(Entity<HitLocationComponent> ent, ref DamageChangedEvent args)
     {
-        if (!_medicalEnabled || !_bodyPartEnabled)
+        if (!ShouldProcessDamageChanged(_medicalEnabled, _bodyPartEnabled, Timing.ApplyingState, args.DamageDelta))
             return;
 
-        if (args.DamageDelta is not { } delta)
-            return;
-
+        var delta = args.DamageDelta!;
         var positive = DamageSpecifier.GetPositive(delta);
         var localizable = ExtractLocalizableDamage(positive);
         if (!localizable.Empty)
@@ -74,6 +72,18 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         var healing = GetHealingInGroup(delta, BruteGroup) + GetHealingInGroup(delta, BurnGroup);
         if (healing > FixedPoint2.Zero)
             HealDamagedParts(ent.Owner, healing * (FixedPoint2)_bodyPartDamagePropagation, args.Origin);
+    }
+
+    private static bool ShouldProcessDamageChanged(
+        bool medicalEnabled,
+        bool bodyPartEnabled,
+        bool applyingState,
+        DamageSpecifier? damageDelta)
+    {
+        return medicalEnabled &&
+            bodyPartEnabled &&
+            !applyingState &&
+            damageDelta is not null;
     }
 
     private void ApplyPartDamage(Entity<HitLocationComponent> ent, DamageSpecifier damage, EntityUid? origin, EntityUid? tool, DamageImpact impact)

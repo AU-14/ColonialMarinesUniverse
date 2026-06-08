@@ -226,7 +226,7 @@
   - type: Tag
     tags:
     - Cartridge
-    - RMCBullet57x28mmFP9000
+    - RMCCartridge57x28mmFP9000
   - type: CartridgeAmmo
     proto: RMCBullet57x28mmFP9000
 
@@ -259,6 +259,3 @@
 
 - type: Tag
   id: RMCCartridge57x28mmFP9000
-
-- type: Tag
-  id: RMCBullet57x28mmFP9000

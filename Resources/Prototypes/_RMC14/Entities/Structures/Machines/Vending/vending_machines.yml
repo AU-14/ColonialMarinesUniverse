@@ -114,7 +114,6 @@
       - !type:PlaySoundBehavior
         sound:
           collection: MetalGlassBreak
-  - type: XenoCrusherChargable #TODO RMC14 tip over
 
 - type: vendingMachineInventory
   id: CMVendomat
@@ -127,6 +126,10 @@
   name: Hot Drinks machine
   description: A vending machine which dispenses hot drinks.
   components:
+  - type: XenoCrusherChargable
+    setDamage:
+      types:
+        Structural: 750
   - type: VehicleSmashable
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/coffee.rsi
@@ -179,6 +182,10 @@
   name: Hot Foods Machine
   description: A vending machine full of ready to cook meals, mhmmmm taste the nutritional goodness!
   components:
+  - type: XenoCrusherChargable
+    setDamage:
+      types:
+        Structural: 750
   - type: VehicleSmashable
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/snack.rsi
@@ -230,6 +237,10 @@
   name: Souto Softdrinks
   description: A softdrink vendor provided by Souto Soda Company, Havana.
   components:
+  - type: XenoCrusherChargable
+    setDamage:
+      types:
+        Structural: 750
   - type: VehicleSmashable
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/cola.rsi
@@ -319,6 +330,10 @@
   name: Cold Drinks machine
   description: A vending machine that contains cold drinks. This one appears to be produced by Tsumetai-Umi, a subsidairy of Neterai Foods International, which itself is subsidiary of Weyland-Yutani.
   components:
+  - type: XenoCrusherChargable
+    setDamage:
+      types:
+        Structural: 750
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/sodavend.rsi
   - type: VendingMachine
@@ -347,6 +362,10 @@
   name: Cigarette Machine
   description: If you want to get cancer, might as well do it in style!
   components:
+  - type: XenoCrusherChargable
+    setDamage:
+      types:
+        Structural: 750
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/cigs.rsi
   - type: VendingMachine
@@ -579,6 +598,10 @@
   name: NutriMax
   description: A plant nutrients vendor.
   components:
+  - type: XenoCrusherChargable
+    setDamage:
+      types:
+        Structural: 750
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/nutri.rsi
   - type: VendingMachine
@@ -611,6 +634,10 @@
   name: MegaSeed Servitor
   description: When you need seeds fast!
   components:
+  - type: XenoCrusherChargable
+    setDamage:
+      types:
+        Structural: 750
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/seeds.rsi
   - type: VendingMachine
@@ -788,6 +815,10 @@
   name: BODA
   description: An old sweet water vending machine, how did this end up here?
   components:
+  - type: XenoCrusherChargable
+    setDamage:
+      types:
+        Structural: 750
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/sovietsoda.rsi
   - type: VendingMachine

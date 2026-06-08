@@ -38,3 +38,5 @@ au14-loadout-group-militarylabcoat = Labcoats
 au14-loadout-group-auxtech = Fatigues
 
 au14-loadout-group-role-clf-id = Fake ID's
+
+au14-vending-machine-jo-max = This officer kit was already taken!

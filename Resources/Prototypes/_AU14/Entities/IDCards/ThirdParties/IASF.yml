@@ -1,0 +1,71 @@
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardIASFCommander
+  categories: [ HideSpawnMenu ]
+  name: IASF Commander ID card
+  components:
+  - type: PresetIdCard
+    job: AU14IASFCommanderBase
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardIASFPilot
+  categories: [ HideSpawnMenu ]
+  name: IASF Fleet Air Arm Pilot ID card
+  components:
+  - type: PresetIdCard
+    job: AU14IASFPilotBase
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardIASFEngineer
+  categories: [ HideSpawnMenu ]
+  name: IASF Assault Engineer ID card
+  components:
+  - type: PresetIdCard
+    job: AU14IASFCombatEngineerBase
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardIASFTL
+  categories: [ HideSpawnMenu ]
+  name: IASF Team Lead ID card
+  components:
+  - type: PresetIdCard
+    job: AU14IASFTeamLeadBase
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardIASF
+  categories: [ HideSpawnMenu ]
+  name: IASF Rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: AU14IASFRiflemanBase
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardIASFMedic
+  categories: [ HideSpawnMenu ]
+  name: IASF Medical Technician ID card
+  components:
+  - type: PresetIdCard
+    job: AU14IASFMedicalTechnicianBase
+  - type: ItemIFF
+    factions:
+    - GOVFOR

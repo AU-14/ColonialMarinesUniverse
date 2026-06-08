@@ -3,6 +3,10 @@ name: Map checker
 permissions:
   contents: read
 
+concurrency:
+  group: map-checker-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 on:
   pull_request:
     branches: ["master"]
@@ -47,28 +51,35 @@ jobs:
       - name: Build
         run: cd .github/map_checker && cargo b --release
 
-      - name: Check _RMC14
-        id: check_rmc14
-        continue-on-error: true
-        run: ./.github/map_checker/target/release/map_checker -c .github/map_checker/matchers.yml -m Resources/Maps/_RMC14
-
-      - name: Check _CMU14
-        id: check_cmu14
-        continue-on-error: true
-        run: ./.github/map_checker/target/release/map_checker -c .github/map_checker/matchers.yml -m Resources/Maps/_CMU14
-
-      - name: Check _AU14
-        id: check_au14
-        continue-on-error: true
-        run: ./.github/map_checker/target/release/map_checker -c .github/map_checker/matchers.yml -m Resources/Maps/_AU14
-
-      - name: Failure Detected
-        if: |
-          steps.check_rmc14.outcome == 'failure'
-          || steps.check_cmu14.outcome == 'failure'
-          || steps.check_au14.outcome == 'failure'
+      - name: Check map trees
+        shell: bash
         run: |
-          echo "_RMC14: ${{ steps.check_rmc14.outcome }}"
-          echo "_CMU14: ${{ steps.check_cmu14.outcome }}"
-          echo "_AU14:  ${{ steps.check_au14.outcome }}"
-          exit 1
+          set +e
+
+          names=("_RMC14" "_CMU14" "_AU14")
+          paths=("Resources/Maps/_RMC14" "Resources/Maps/_CMU14" "Resources/Maps/_AU14")
+          pids=()
+          status=0
+
+          mkdir -p /tmp/map-checker
+
+          for i in "${!names[@]}"; do
+            ./.github/map_checker/target/release/map_checker \
+              -c .github/map_checker/matchers.yml \
+              -m "${paths[$i]}" \
+              > "/tmp/map-checker/${names[$i]}.log" 2>&1 &
+            pids+=("$!")
+          done
+
+          for i in "${!names[@]}"; do
+            name="${names[$i]}"
+            if ! wait "${pids[$i]}"; then
+              echo "::error title=Map checker failed::$name"
+              status=1
+            fi
+
+            echo "===== $name ====="
+            cat "/tmp/map-checker/$name.log"
+          done
+
+          exit "$status"

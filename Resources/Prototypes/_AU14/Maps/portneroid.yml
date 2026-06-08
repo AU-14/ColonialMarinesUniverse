@@ -1,11 +1,12 @@
 - type: gameMap
   id: portneroid
   mapName: LV-327 Port Neroid
-  mapPath: /Maps/_AU14/portneroid.yml
+  mapPath: /Maps/_AU14/PortNeroidMultiZ/portneroidmultiz0.yml
   mapsBelow:
-  - /Maps/_AU14/portneroid_below.yml
+  - /Maps/_AU14/PortNeroidMultiZ/portneroidmultiz-1.yml
   mapsAbove:
-  - /Maps/_AU14/portneroid_above.yml
+  - /Maps/_AU14/PortNeroidMultiZ/portneroidmultiz1.yml
+  - /Maps/_AU14/PortNeroidMultiZ/portneroidmultiz2.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0
@@ -24,8 +25,8 @@
             AU14JobCivilianColonySynthetic: [2, 2]
 
             # Colony Command (non department)
-            AU14JobCivilianCorporateLiaison: [1, 1]
-            AU14JobCivilianColonyAdministrator: [1, 1]
+            AU14JobCivilianNSPAInspector: [1, 1]
+            AU14JobCiviliannspaConstable: [5, 5]
 
             # Security/LEO
             AU14JobCivilianCMBMarshal: [1, 1]
@@ -49,3 +50,9 @@
 
             # Other
             AU14JobCivilianMiner: [8, 8]
+            AU14JobCivilianShopkeep: [2, 2]
+            AU14JobMobBoss: [1, 1]
+            AU14JobMobGoon: [3, 3]
+            AU14JobCivilianHeadPhysician : [1, 1]
+            AU14JobCivilianHeadOfEngineering: [ 1, 1 ]
+            AU14JobCivilianHeadOfService: [ 1, 1 ]

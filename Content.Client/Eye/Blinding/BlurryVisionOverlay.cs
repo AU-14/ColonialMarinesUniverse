@@ -1,5 +1,6 @@
 using Robust.Client.Graphics;
 using Robust.Client.Player;
+using Content.Client.Viewport;
 using Content.Shared.CCVar;
 using Robust.Shared.Maths;
 using Robust.Shared.Timing;
@@ -80,10 +81,16 @@ namespace Content.Client.Eye.Blinding
             if (!_entityManager.TryGetComponent(_playerManager.LocalSession?.AttachedEntity, out EyeComponent? eyeComp))
                 return false;
 
-            if (args.Viewport.Eye != eyeComp.Eye)
+            if (!ShouldDrawForViewportEye(args.Viewport.Eye, eyeComp.Eye))
                 return false;
 
             return _currentMagnitude > 0.01f;
+        }
+
+        internal static bool ShouldDrawForViewportEye(Robust.Shared.Graphics.IEye? viewportEye, Robust.Shared.Graphics.IEye playerEye)
+        {
+            return ReferenceEquals(viewportEye, playerEye) ||
+                   viewportEye is ScalingViewport.ZEye { Depth: 0, BlurCurrentLevel: true };
         }
 
         protected override void Draw(in OverlayDrawArgs args)

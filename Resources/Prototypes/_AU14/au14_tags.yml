@@ -9,3 +9,18 @@
 
 - type: Tag
   id: Wendigo
+
+- type: Tag
+  id: SalvageTier1
+
+- type: Tag
+  id: SalvageTier2
+
+- type: Tag
+  id: SalvageTier3
+
+- type: Tag
+  id: SalvageTier4
+
+- type: Tag
+  id: SalvageTier5

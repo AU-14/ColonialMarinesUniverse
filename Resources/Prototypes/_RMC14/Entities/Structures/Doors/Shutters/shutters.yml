@@ -90,7 +90,9 @@
     destroy: true
     minimumStage: 4
   - type: XenoCrusherChargable
-    instantDestroy: true
+    setDamage:
+      types:
+        Structural: 750
 
 - type: entity
   parent: RMCShutterBase

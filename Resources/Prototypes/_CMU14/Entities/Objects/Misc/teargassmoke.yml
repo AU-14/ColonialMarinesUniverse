@@ -68,10 +68,6 @@
     damage: 0.5
     neurotoxin: true
 
-- type: edgeSpreader
-  id: CMU14TearGas
-  updatesPerSecond: 3
-
 
 - type: entity
   id: CMU14InstantTearGas
@@ -80,6 +76,12 @@
   components:
   - type: TimedDespawn
     lifetime: 6
-  - type: EdgeSpreader
-    id: CMU14TearGas
-    updatesPerSecond: 1.5
+
+
+- type: edgeSpreader
+  id: CMU14TearGas
+  updatesPerSecond: 1
+
+- type: edgeSpreader
+  id: CMU14InstantTearGas
+  updatesPerSecond: 3

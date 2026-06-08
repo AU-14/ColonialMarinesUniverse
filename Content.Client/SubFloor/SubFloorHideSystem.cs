@@ -2,6 +2,7 @@ using Content.Client.UserInterface.Systems.Sandbox;
 using Content.Shared.SubFloor;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
+using Robust.Shared.Network;
 using Robust.Shared.Player;
 
 namespace Content.Client.SubFloor;
@@ -11,6 +12,7 @@ public sealed partial class SubFloorHideSystem : SharedSubFloorHideSystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private IUserInterfaceManager _ui = default!;
+    [Dependency] private INetManager _net = default!;
 
     private bool _showAll;
 
@@ -23,6 +25,9 @@ public sealed partial class SubFloorHideSystem : SharedSubFloorHideSystem
             if (_showAll == value) return;
             _showAll = value;
             _ui.GetUIController<SandboxUIController>().SetToggleSubfloors(value);
+
+            if (!_net.IsConnected)
+                return;
 
             var ev = new ShowSubfloorRequestEvent()
             {

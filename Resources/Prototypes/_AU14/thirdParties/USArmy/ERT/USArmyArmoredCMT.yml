@@ -82,7 +82,7 @@
     eyes: RMCWeldingGoggles
     mask: RMCMaskKeffiyehBlue
     head: AU14HelmetUSArmy
-    belt: CMUBeltMedicBagSupportSynthRMC
+    belt: AU14BeltMedicBagSupportSynthRMC
     pocket1: AU14PouchIFAKFill
     pocket2: RMCPouchMagazine
     back: AU14CMDefibrillator

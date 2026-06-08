@@ -37,6 +37,9 @@
         amount: 1
       - id: RMCLaserDesignatorPVE
         amount: 1
+      - id: AU14StampSO
+        amount: 1
+
 
 - type: entity
   parent: AU14KitPlatoonOfficer
@@ -79,6 +82,8 @@
         amount: 1
       - id: RMCPackFlareCAS
         amount: 1
+      - id: AU14StampIO
+        amount: 1
 
 - type: entity
   parent: AU14KitPlatoonOfficer
@@ -107,6 +112,8 @@
         amount: 1
       - id: RMCMagazineSMGNailgun
         amount: 2
+      - id: AU14StampEO
+        amount: 1
 
 - type: entity
   parent: AU14KitPlatoonOfficer
@@ -131,7 +138,11 @@
         amount: 1
       - id: RMCM5CameraGear
         amount: 1
-      - id: AU14StampAdjutant
+      - id: AU14StampAO
+        amount: 1
+      - id: CMStampApproved
+        amount: 1
+      - id: CMStampDenied
         amount: 1
       - id: CMPen
         amount: 1

@@ -1,4 +1,5 @@
 using Content.Shared._CMU14.Medical;
+using Content.Shared._CMU14.Medical.BodyPart;
 using Content.Shared._CMU14.Medical.Bones;
 using Content.Shared._CMU14.Medical.EntityEffects;
 using Content.Shared._CMU14.Medical.Organs;
@@ -14,6 +15,7 @@ using Content.Shared.Body.Part;
 using Content.Shared.Body.Prototypes;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Reagent;
+using Content.Shared.DoAfter;
 using Content.Shared.EntityEffects;
 using Content.Shared.EntityEffects.EffectConditions;
 using Content.Shared.EntityEffects.Effects;
@@ -32,6 +34,11 @@ namespace Content.IntegrationTests._CMU14.Medical;
 [TestFixture]
 public sealed class PainShockReworkTest
 {
+    private static readonly ProtoId<ReagentPrototype> Tramadol = "CMUTramadol";
+    private static readonly ProtoId<ReagentPrototype> Oxycodone = "CMUOxycodone";
+    private static readonly ProtoId<ReagentPrototype> Epinephrine = "CMEpinephrine";
+    private static readonly ProtoId<ReagentPrototype> Inaprovaline = "CMInaprovaline";
+
     [Test]
     public async Task ComminutedFractureAloneIsSeverePressureNotShock()
     {
@@ -290,6 +297,181 @@ public sealed class PainShockReworkTest
     }
 
     [Test]
+    public async Task ShrapnelExtractionAlternativeVerbRequiresHeldExtractor()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var hands = entMan.System<SharedHandsSystem>();
+            var shrapnel = entMan.System<SharedCMUShrapnelSystem>();
+            var verbs = entMan.System<VerbSystem>();
+            var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var user = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var tool = entMan.SpawnEntity("KitchenKnife", MapCoordinates.Nullspace);
+
+            try
+            {
+                var part = GetFirstPart(entMan, patient);
+                shrapnel.AddShrapnel(part, 2, 12f);
+
+                var withoutTool = verbs.GetLocalVerbs(patient, user, typeof(AlternativeVerb), force: true);
+                Assert.That(ContainsVerb(withoutTool, "Remove shrapnel"), Is.False);
+
+                Assert.That(hands.TryPickupAnyHand(user, tool, checkActionBlocker: false), Is.True);
+
+                var withTool = verbs.GetLocalVerbs(patient, user, typeof(AlternativeVerb), force: true);
+                Assert.That(ContainsVerb(withTool, "Remove shrapnel"), Is.True);
+            }
+            finally
+            {
+                entMan.DeleteEntity(patient);
+                entMan.DeleteEntity(user);
+                entMan.DeleteEntity(tool);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task UseInHandExtractorStartsSelfShrapnelRemoval()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var hands = entMan.System<SharedHandsSystem>();
+            var shrapnel = entMan.System<SharedCMUShrapnelSystem>();
+            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var tool = entMan.SpawnEntity("KitchenKnife", MapCoordinates.Nullspace);
+
+            try
+            {
+                var part = GetFirstPart(entMan, human);
+                shrapnel.AddShrapnel(part, 2, 12f);
+
+                Assert.That(hands.TryPickupAnyHand(human, tool, checkActionBlocker: false), Is.True);
+                Assert.That(hands.TryUseItemInHand(human), Is.True);
+                Assert.That(entMan.TryGetComponent<DoAfterComponent>(human, out var doAfter), Is.True);
+                Assert.That(HasActiveShrapnelExtractionDoAfter(doAfter!), Is.True);
+            }
+            finally
+            {
+                entMan.DeleteEntity(human);
+                entMan.DeleteEntity(tool);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ShrapnelExtractionDoAfterRepeatsUntilFragmentsAreGone()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var shrapnel = entMan.System<SharedCMUShrapnelSystem>();
+            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var tool = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
+
+            try
+            {
+                var part = GetFirstPart(entMan, human);
+                shrapnel.AddShrapnel(part, 5, 25f);
+
+                entMan.EnsureComponent<CMUShrapnelExtractorComponent>(tool);
+                var ev = new CMUShrapnelExtractDoAfterEvent();
+                ev.DoAfter = new DoAfter(
+                    0,
+                    new DoAfterArgs(entMan, human, TimeSpan.FromSeconds(1), ev, tool, target: human, used: tool),
+                    TimeSpan.Zero);
+
+                entMan.EventBus.RaiseLocalEvent(tool, ev);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(entMan.GetComponent<CMUShrapnelComponent>(part).Fragments, Is.EqualTo(3));
+                    Assert.That(ev.Repeat, Is.True);
+                    Assert.That(ev.PreSelectedPart, Is.Not.Null);
+                });
+
+                entMan.EventBus.RaiseLocalEvent(tool, ev);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(entMan.GetComponent<CMUShrapnelComponent>(part).Fragments, Is.EqualTo(1));
+                    Assert.That(ev.Repeat, Is.True);
+                    Assert.That(ev.PreSelectedPart, Is.Not.Null);
+                });
+
+                entMan.EventBus.RaiseLocalEvent(tool, ev);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(entMan.HasComponent<CMUShrapnelComponent>(part), Is.False);
+                    Assert.That(ev.Repeat, Is.False);
+                    Assert.That(ev.PreSelectedPart, Is.Null);
+                });
+            }
+            finally
+            {
+                entMan.DeleteEntity(human);
+                entMan.DeleteEntity(tool);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ShrapnelExtractionDamageDoesNotFractureOrCauseInternalBleeding()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            server.CfgMan.SetCVar(CMUMedicalCCVars.TraumaPierceBoneChance, 1f);
+            server.CfgMan.SetCVar(CMUMedicalCCVars.TraumaPierceVascularChance, 1f);
+
+            var entMan = server.EntMan;
+            var hitLocation = entMan.System<SharedHitLocationSystem>();
+            var shrapnel = entMan.System<SharedCMUShrapnelSystem>();
+            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var tool = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
+
+            try
+            {
+                var torso = GetBodyPart(entMan, human, BodyPartType.Torso, BodyPartSymmetry.None);
+                shrapnel.AddShrapnel(torso, 1, 12f);
+                AssertNoFracturesOrInternalBleeding(entMan, human);
+
+                hitLocation.SetForcedHit(human, BodyPartType.Torso);
+                var extractor = entMan.EnsureComponent<CMUShrapnelExtractorComponent>(tool);
+                SetField(extractor, nameof(CMUShrapnelExtractorComponent.DamageOnExtract), FixedPoint2.New(100));
+                SetField(extractor, nameof(CMUShrapnelExtractorComponent.PainPenalty), 0f);
+
+                Assert.That(shrapnel.TryExtractShrapnel(human, (tool, extractor), out var removed, human, torso), Is.True);
+                Assert.That(removed, Is.EqualTo(1));
+                AssertNoFracturesOrInternalBleeding(entMan, human);
+            }
+            finally
+            {
+                entMan.DeleteEntity(human);
+                entMan.DeleteEntity(tool);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task ShrapnelAndLegFracturesPulsePainOnMovement()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -502,11 +684,11 @@ public sealed class PainShockReworkTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
 
             AssertPainkillerHasDrunkOverdoseEffect(
-                prototypes.Index<ReagentPrototype>("CMUTramadol"),
+                prototypes.Index(Tramadol),
                 FixedPoint2.New(30));
 
             AssertPainkillerHasDrunkOverdoseEffect(
-                prototypes.Index<ReagentPrototype>("CMUOxycodone"),
+                prototypes.Index(Oxycodone),
                 FixedPoint2.New(20));
         });
 
@@ -523,10 +705,10 @@ public sealed class PainShockReworkTest
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var epinephrine = AssertReagentHasPainSuppression(
-                prototypes.Index<ReagentPrototype>("CMEpinephrine"),
+                prototypes.Index(Epinephrine),
                 1);
             var inaprovaline = AssertReagentHasPainSuppression(
-                prototypes.Index<ReagentPrototype>("CMInaprovaline"),
+                prototypes.Index(Inaprovaline),
                 2);
 
             Assert.Multiple(() =>
@@ -619,6 +801,34 @@ public sealed class PainShockReworkTest
         }
 
         return false;
+    }
+
+    private static bool HasActiveShrapnelExtractionDoAfter(DoAfterComponent comp)
+    {
+        foreach (var doAfter in comp.DoAfters.Values)
+        {
+            if (!doAfter.Cancelled &&
+                !doAfter.Completed &&
+                doAfter.Args.Event is CMUShrapnelExtractDoAfterEvent)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static void AssertNoFracturesOrInternalBleeding(IEntityManager entMan, EntityUid bodyUid)
+    {
+        var body = entMan.System<SharedBodySystem>();
+        foreach (var (partUid, _) in body.GetBodyChildren(bodyUid))
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(entMan.HasComponent<FractureComponent>(partUid), Is.False);
+                Assert.That(entMan.HasComponent<InternalBleedingComponent>(partUid), Is.False);
+            });
+        }
     }
 
     private static T GetField<T>(BodyPartWoundComponent comp, string name)

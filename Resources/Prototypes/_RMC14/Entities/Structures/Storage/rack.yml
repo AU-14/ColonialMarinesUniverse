@@ -65,6 +65,7 @@
     destroy: true
   - type: XenoCrusherChargable
     instantDestroy: true
+    passOnDestroy: true
   - type: Flamability
     chance: 0.04
     rate: 0.15

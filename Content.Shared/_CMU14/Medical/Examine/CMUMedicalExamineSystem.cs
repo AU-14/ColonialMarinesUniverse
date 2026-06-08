@@ -97,7 +97,7 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
 
             if (includeFractures
                 && TryComp<FractureComponent>(partUid, out var fracture)
-                && fracture.Severity is FractureSeverity.Compound or FractureSeverity.Comminuted)
+                && fracture.Severity.IsAtLeast(FractureSeverity.Simple))
             {
                 var stabilized = HasComp<CMUSplintedComponent>(partUid) || HasComp<CMUCastComponent>(partUid);
                 sections.Add($"[color={FractureColor}]{DescribeVisibleFracture(fracture.Severity, stabilized)}[/color]");
@@ -440,6 +440,7 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
         var prefix = stabilized ? "stabilized " : string.Empty;
         return severity switch
         {
+            FractureSeverity.Simple => $"a {prefix}simple fracture",
             FractureSeverity.Compound => $"a {prefix}compound fracture",
             FractureSeverity.Comminuted => $"a {prefix}shattered bone",
             _ => "a broken bone",
