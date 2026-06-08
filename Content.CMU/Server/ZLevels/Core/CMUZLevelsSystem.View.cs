@@ -50,6 +50,23 @@ public sealed partial class CMUZLevelsSystem
     private readonly List<(Vector2 Center, float Distance)> _probeOpeningCandidates = new();
     private readonly List<Entity<MapGridComponent>> _probeOpeningGrids = new();
     private readonly List<Vector2> _stairPreviewPositions = new(CMUZLevelViewerComponent.MaxStairPreviewPositions);
+    private int _profilePvsSkippedViewers;
+    private int _profilePvsWantedDepths;
+    private int _profilePvsExistingProbeEyes;
+    private int _profilePvsCreatedProbeEyes;
+    private int _profilePvsRemovedProbeEyes;
+    private int _profilePvsReusedProbeEyes;
+    private int _profilePvsSubscriberAdds;
+    private int _profilePvsStairTiles;
+    private int _profilePvsStairAnchored;
+    private int _profilePvsStairCandidates;
+    private int _profilePvsStairLosChecks;
+    private int _profilePvsVisibleOpeningTileHits;
+    private int _profilePvsVisibleOpeningCandidates;
+    private int _profilePvsVisibleOpeningLosChecks;
+    private int _profilePvsOpeningPathSteps;
+    private int _profilePvsOpeningNearChecks;
+    private int _profilePvsOpeningNearTileBoundsChecks;
     private EntityQuery<MapGridComponent> _viewGridQuery;
     private EntityQuery<CMUZLevelHighGroundComponent> _viewHighGroundQuery;
 
@@ -91,6 +108,9 @@ public sealed partial class CMUZLevelsSystem
         _nextZLevelViewerUpdate = _gameTiming.CurTime + _zLevelViewerUpdateRate;
 
         using var profile = Prof.Group("CMU Z PVS Probes");
+        var profiling = Prof.IsEnabled;
+        if (profiling)
+            ResetPvsProfileCounters();
 
         var viewers = 0;
         var probeEyes = 0;
@@ -105,11 +125,54 @@ public sealed partial class CMUZLevelsSystem
             probeEyes += UpdateProbeEyes(uid, viewer, globalPos, eyeOffset);
         }
 
-        if (!Prof.IsEnabled)
+        if (!profiling)
             return;
 
         Prof.WriteValue("CMU Z PVS Viewers", viewers);
         Prof.WriteValue("CMU Z PVS Probe Eyes", probeEyes);
+        WritePvsProfileCounters();
+    }
+
+    private void ResetPvsProfileCounters()
+    {
+        _profilePvsSkippedViewers = 0;
+        _profilePvsWantedDepths = 0;
+        _profilePvsExistingProbeEyes = 0;
+        _profilePvsCreatedProbeEyes = 0;
+        _profilePvsRemovedProbeEyes = 0;
+        _profilePvsReusedProbeEyes = 0;
+        _profilePvsSubscriberAdds = 0;
+        _profilePvsStairTiles = 0;
+        _profilePvsStairAnchored = 0;
+        _profilePvsStairCandidates = 0;
+        _profilePvsStairLosChecks = 0;
+        _profilePvsVisibleOpeningTileHits = 0;
+        _profilePvsVisibleOpeningCandidates = 0;
+        _profilePvsVisibleOpeningLosChecks = 0;
+        _profilePvsOpeningPathSteps = 0;
+        _profilePvsOpeningNearChecks = 0;
+        _profilePvsOpeningNearTileBoundsChecks = 0;
+    }
+
+    private void WritePvsProfileCounters()
+    {
+        Prof.WriteValue("CMU Z PVS Skipped Viewers", _profilePvsSkippedViewers);
+        Prof.WriteValue("CMU Z PVS Wanted Depths", _profilePvsWantedDepths);
+        Prof.WriteValue("CMU Z PVS Existing Probe Eyes", _profilePvsExistingProbeEyes);
+        Prof.WriteValue("CMU Z PVS Reused Probe Eyes", _profilePvsReusedProbeEyes);
+        Prof.WriteValue("CMU Z PVS Created Probe Eyes", _profilePvsCreatedProbeEyes);
+        Prof.WriteValue("CMU Z PVS Removed Probe Eyes", _profilePvsRemovedProbeEyes);
+        Prof.WriteValue("CMU Z PVS Subscriber Adds", _profilePvsSubscriberAdds);
+        Prof.WriteValue("CMU Z PVS Stair Tiles", _profilePvsStairTiles);
+        Prof.WriteValue("CMU Z PVS Stair Anchored Entities", _profilePvsStairAnchored);
+        Prof.WriteValue("CMU Z PVS Stair Candidates", _profilePvsStairCandidates);
+        Prof.WriteValue("CMU Z PVS Stair LOS Checks", _profilePvsStairLosChecks);
+        Prof.WriteValue("CMU Z PVS Visible Opening Tile Hits", _profilePvsVisibleOpeningTileHits);
+        Prof.WriteValue("CMU Z PVS Visible Opening Candidates", _profilePvsVisibleOpeningCandidates);
+        Prof.WriteValue("CMU Z PVS Visible Opening LOS Checks", _profilePvsVisibleOpeningLosChecks);
+        Prof.WriteValue("CMU Z PVS Opening Path Steps", _profilePvsOpeningPathSteps);
+        Prof.WriteValue("CMU Z PVS Opening Near Checks", _profilePvsOpeningNearChecks);
+        Prof.WriteValue("CMU Z PVS Opening Tile Bounds Checks", _profilePvsOpeningNearTileBoundsChecks);
     }
 
     private int UpdateProbeEyes(
@@ -267,6 +330,9 @@ public sealed partial class CMUZLevelsSystem
             _maxViewProbesPerPlayer <= 0 ||
             !HasViewerProbeSubscribers(ent))
         {
+            if (Prof.IsEnabled)
+                _profilePvsSkippedViewers++;
+
             ClearViewerProbes(ent);
             return;
         }
@@ -276,6 +342,9 @@ public sealed partial class CMUZLevelsSystem
 
         if (map is null)
         {
+            if (Prof.IsEnabled)
+                _profilePvsSkippedViewers++;
+
             ClearViewerProbes(ent);
             return;
         }
@@ -293,6 +362,12 @@ public sealed partial class CMUZLevelsSystem
             _viewerProbeEyes[ent.Owner] = probes;
         }
 
+        if (Prof.IsEnabled)
+        {
+            _profilePvsWantedDepths += _wantedProbeDepths.Count;
+            _profilePvsExistingProbeEyes += probes.Count;
+        }
+
         _probeDepthsToRemove.Clear();
         foreach (var (depth, eye) in probes)
         {
@@ -308,6 +383,9 @@ public sealed partial class CMUZLevelsSystem
             if (!probes.Remove(depth, out var eye))
                 continue;
 
+            if (Prof.IsEnabled)
+                _profilePvsRemovedProbeEyes++;
+
             ent.Comp.Eyes.Remove(eye);
             QueueDeleteProbeEye(eye);
         }
@@ -315,7 +393,12 @@ public sealed partial class CMUZLevelsSystem
         foreach (var depth in _wantedProbeDepths)
         {
             if (probes.ContainsKey(depth))
+            {
+                if (Prof.IsEnabled)
+                    _profilePvsReusedProbeEyes++;
+
                 continue;
+            }
 
             if (!TryMapOffset(map.Value, depth, out var probeMap))
                 continue;
@@ -329,6 +412,9 @@ public sealed partial class CMUZLevelsSystem
             _probeEyeIndex[newEye] = (ent.Owner, depth);
             ent.Comp.Eyes.Add(newEye);
             AddViewerProbeSubscribers(ent, newEye);
+
+            if (Prof.IsEnabled)
+                _profilePvsCreatedProbeEyes++;
         }
 
         _wantedProbeDepths.Clear();
@@ -337,8 +423,24 @@ public sealed partial class CMUZLevelsSystem
 
     private void AddViewerProbeSubscribers(EntityUid viewer, EntityUid zEye)
     {
+        if (Prof.IsEnabled)
+        {
+            using var profile = Prof.Group("CMU Z PVS AddSubscribers");
+            AddViewerProbeSubscribersCore(viewer, zEye);
+            return;
+        }
+
+        AddViewerProbeSubscribersCore(viewer, zEye);
+    }
+
+    private void AddViewerProbeSubscribersCore(EntityUid viewer, EntityUid zEye)
+    {
         if (TryComp<ActorComponent>(viewer, out var actor))
+        {
             _viewSubscriber.AddViewSubscriber(zEye, actor.PlayerSession);
+            if (Prof.IsEnabled)
+                _profilePvsSubscriberAdds++;
+        }
 
         if (!_extraViewerProbeSubscribers.TryGetValue(viewer, out var subscribers))
             return;
@@ -346,6 +448,8 @@ public sealed partial class CMUZLevelsSystem
         foreach (var session in subscribers.Keys)
         {
             _viewSubscriber.AddViewSubscriber(zEye, session);
+            if (Prof.IsEnabled)
+                _profilePvsSubscriberAdds++;
         }
     }
 
@@ -637,15 +741,22 @@ public sealed partial class CMUZLevelsSystem
         var origin = new MapCoordinates(globalPos, viewerXform.MapID);
         var centerTile = _map.WorldToTile(map, grid, globalPos);
         var tileRadius = Math.Max(1, (int) MathF.Ceiling(StairPreviewProbeRadius / grid.TileSize));
+        var profiling = Prof.IsEnabled;
 
         for (var x = -tileRadius; x <= tileRadius; x++)
         {
             for (var y = -tileRadius; y <= tileRadius; y++)
             {
+                if (profiling)
+                    _profilePvsStairTiles++;
+
                 var tile = centerTile + new Vector2i(x, y);
                 var query = _map.GetAnchoredEntitiesEnumerator(map, grid, tile);
                 while (query.MoveNext(out var uid))
                 {
+                    if (profiling)
+                        _profilePvsStairAnchored++;
+
                     if (uid is not { } highGroundUid ||
                         !_viewHighGroundQuery.TryComp(highGroundUid, out var highGround) ||
                         !highGround.PreviewUpLevel ||
@@ -659,6 +770,12 @@ public sealed partial class CMUZLevelsSystem
                     var range = highGround.PreviewRange + 0.05f;
                     if (Vector2.DistanceSquared(origin.Position, target.Position) > range * range)
                         continue;
+
+                    if (profiling)
+                    {
+                        _profilePvsStairCandidates++;
+                        _profilePvsStairLosChecks++;
+                    }
 
                     if (_examine.InRangeUnOccluded(origin, target, highGround.PreviewRange, ent => ent == viewer.Owner || ent == highGroundUid))
                     {
@@ -685,6 +802,21 @@ public sealed partial class CMUZLevelsSystem
     }
 
     private void SetStairPreviewUp(
+        Entity<CMUZLevelViewerComponent> viewer,
+        bool enabled,
+        IReadOnlyList<Vector2>? previewPositions = null)
+    {
+        if (Prof.IsEnabled)
+        {
+            using var profile = Prof.Group("CMU Z PVS SetStairPreview");
+            SetStairPreviewUpCore(viewer, enabled, previewPositions);
+            return;
+        }
+
+        SetStairPreviewUpCore(viewer, enabled, previewPositions);
+    }
+
+    private void SetStairPreviewUpCore(
         Entity<CMUZLevelViewerComponent> viewer,
         bool enabled,
         IReadOnlyList<Vector2>? previewPositions = null)
@@ -761,9 +893,13 @@ public sealed partial class CMUZLevelsSystem
         bool requireVisibleFirstStep = false)
     {
         var step = targetDepth < 0 ? -1 : 1;
+        var profiling = Prof.IsEnabled;
 
         for (var depth = 0; depth != targetDepth; depth += step)
         {
+            if (profiling)
+                _profilePvsOpeningPathSteps++;
+
             var checkingMap = map;
             if (depth != 0)
             {
@@ -803,29 +939,65 @@ public sealed partial class CMUZLevelsSystem
             return true;
 
         if (CMUZLevelOpeningCache.IsOpeningTile(map, grid, globalPos, _map, TilDefMan))
+        {
+            if (Prof.IsEnabled)
+                _profilePvsVisibleOpeningTileHits++;
+
             return true;
+        }
 
         _probeOpeningCandidates.Clear();
-        _zOpeningCache.FindOpeningCentersNear(
-            mapId,
-            globalPos,
-            ZProbeOpeningTileRadius * grid.TileSize,
-            _probeOpeningCandidates,
-            _probeOpeningGrids,
-            _viewMapManager,
-            _map,
-            _transform,
-            TilDefMan);
+        if (Prof.IsEnabled)
+        {
+            using var profile = Prof.Group("CMU Z PVS FindOpeningCenters");
+            _zOpeningCache.FindOpeningCentersNear(
+                mapId,
+                globalPos,
+                ZProbeOpeningTileRadius * grid.TileSize,
+                _probeOpeningCandidates,
+                _probeOpeningGrids,
+                _viewMapManager,
+                _map,
+                _transform,
+                TilDefMan);
+        }
+        else
+        {
+            _zOpeningCache.FindOpeningCentersNear(
+                mapId,
+                globalPos,
+                ZProbeOpeningTileRadius * grid.TileSize,
+                _probeOpeningCandidates,
+                _probeOpeningGrids,
+                _viewMapManager,
+                _map,
+                _transform,
+                TilDefMan);
+        }
+
+        if (Prof.IsEnabled)
+            _profilePvsVisibleOpeningCandidates += _probeOpeningCandidates.Count;
 
         if (_probeOpeningCandidates.Count == 0)
             return false;
 
-        _probeOpeningCandidates.Sort((a, b) => a.Distance.CompareTo(b.Distance));
+        if (Prof.IsEnabled)
+        {
+            using var profile = Prof.Group("CMU Z PVS VisibleOpeningSort");
+            _probeOpeningCandidates.Sort(static (a, b) => a.Distance.CompareTo(b.Distance));
+        }
+        else
+        {
+            _probeOpeningCandidates.Sort(static (a, b) => a.Distance.CompareTo(b.Distance));
+        }
 
         var origin = new MapCoordinates(globalPos, mapId);
         var checkCount = Math.Min(_probeOpeningCandidates.Count, MaxProbeOpeningLosChecks);
         for (var i = 0; i < checkCount; i++)
         {
+            if (Prof.IsEnabled)
+                _profilePvsVisibleOpeningLosChecks++;
+
             var target = new MapCoordinates(_probeOpeningCandidates[i].Center, mapId);
             if (_examine.InRangeUnOccluded(origin, target, 0f, null))
                 return true;
@@ -857,6 +1029,14 @@ public sealed partial class CMUZLevelsSystem
         var start = center - new Vector2i(ZProbeOpeningTileRadius, ZProbeOpeningTileRadius);
         var end = center + new Vector2i(ZProbeOpeningTileRadius, ZProbeOpeningTileRadius);
         var gridEnt = new Entity<MapGridComponent>(map, grid);
+
+        if (Prof.IsEnabled)
+        {
+            _profilePvsOpeningNearChecks++;
+            using var profile = Prof.Group("CMU Z PVS OpeningTileBounds");
+            _profilePvsOpeningNearTileBoundsChecks++;
+            return _zOpeningCache.HasOpeningInTileBounds(gridEnt, start, end, _map, TilDefMan);
+        }
 
         return _zOpeningCache.HasOpeningInTileBounds(gridEnt, start, end, _map, TilDefMan);
     }
