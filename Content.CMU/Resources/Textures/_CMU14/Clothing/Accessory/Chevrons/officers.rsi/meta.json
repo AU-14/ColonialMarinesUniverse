@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/items/clothing/accessory/ranks.dmi, https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/clothing/accessory/ranks.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "big_o1"
+    },
+    {
+      "name": "ranks_o1"
+    },
+    {
+      "name": "big_o2"
+    },
+    {
+      "name": "ranks_o2"
+    },
+    {
+      "name": "big_o3"
+    },
+    {
+      "name": "ranks_o3"
+    },
+    {
+      "name": "big_o4"
+    },
+    {
+      "name": "ranks_o4"
+    },
+    {
+      "name": "big_o5"
+    },
+    {
+      "name": "ranks_o5"
+    },
+    {
+      "name": "big_o6"
+    },
+    {
+      "name": "ranks_o6"
+    },
+    {
+      "name": "big_o7"
+    },
+    {
+      "name": "ranks_o7"
+    },
+    {
+      "name": "big_o8"
+    },
+    {
+      "name": "ranks_o8"
+    },
+    {
+      "name": "big_o9"
+    },
+    {
+      "name": "ranks_o9"
+    },
+    {
+      "name": "big_o10"
+    },
+    {
+      "name": "ranks_o10"
+    },
+    {
+      "name": "big_o11"
+    },
+    {
+      "name": "ranks_o11"
+    },
+    {
+      "name": "equipped-ranks_o1",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_o2",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_o3",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_o4",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_o5",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_o6",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_o7",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_o8",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_o9",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_o10",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_o11",
+      "directions": 4
+    }
+  ]
+}

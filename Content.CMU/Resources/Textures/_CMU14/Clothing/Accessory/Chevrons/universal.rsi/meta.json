@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/items/clothing/accessory/ranks.dmi, https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/clothing/accessory/ranks.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "ranks_chiefwarrant"
+    },
+    {
+      "name": "ranks_enlisted"
+    },
+    {
+      "name": "ranks_flagofficer"
+    },
+    {
+      "name": "ranks_nco"
+    },
+    {
+      "name": "ranks_officer"
+    },
+    {
+      "name": "ranks_pvst"
+    },
+    {
+      "name": "ranks_pvstofficer"
+    },
+    {
+      "name": "ranks_seniorofficer"
+    },
+    {
+      "name": "ranks_snco"
+    },
+    {
+      "name": "ranks_warrant"
+    },
+    {
+      "name": "equipped-ranks_enlisted",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_flagofficer",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_nco",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_officer",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_pvst",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_pvstofficer",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_snco",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_warrant",
+      "directions": 4
+    }
+  ]
+}
