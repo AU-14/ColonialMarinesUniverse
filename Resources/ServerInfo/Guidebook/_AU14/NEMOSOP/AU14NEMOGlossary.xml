@@ -1,18 +1,27 @@
 <Document>
   # NEMO Glossary and Definitions
 
-  ## Conduct of Briefing
-  The Acting Commander is responsible for ensuring a proper briefing is conducted before any operation begins and personnel are deployed.
-  - It must be performed in an area where a proper inspection of personnel can be held and where personnel can hear any orders.
-  - Areas that interfere with non-combat personnel must be avoided, for example the medbay.
-  - Briefings at minimum must include all deploying faction command (SLs, JOs, etc).
+  ## Primary Terms
+    - **NEMO**: The Nautical Examination Marshal's Office, the highest authority on military law, police oversight, and judicial compliance throughout the frontier worlds.
+    - **SED**: The Special Enforcement Detachment, a NEMO team that investigates allegations of injustice, corruption, unlawful punishment, and criminal appeals.
+    - **MIG**: The Marshal Intervention Group, a NEMO team that executes arrests, detentions, and enforcement actions resulting from NEMO investigations.
+    - **MIS**: The Marshal Intelligence Service, a NEMO team that conducts covert surveillance, intelligence gathering, infiltration, and evidence collection operations.
+    - **IRG**: The Instability Response Group, a NEMO team that deploys during riots, mutinies, and internal security incidents, restoring order through measured force and non-lethal intervention.
+    - **CPISP**: The Civil Protection Insurrection Stability & Protection Force, NEMO's premier tactical unit, protecting senior officials and responding to severe threats against government authority.
+    - **MORW**: The Marshal Orbital Response Wing, a NEMO team that provides aerospace transportation, extraction, prisoner transfer, and rapid deployment capabilities for NEMO operations across the frontier.
+  ## Secondary Terms
+    - **Facsimile**: A formal request sent to NEMO, containing detailed information about an issue and any relevant evidence or documentation, used to request NEMO's involvement in a matter of military justice. For short a fax.
+    - **Deployment**: The act of NEMO personnel being sent to a location to investigate, intervene, or enforce military justice in response to a situation that meets the criteria for NEMO involvement.
+    - **UCMJ**: The Uniform Code of Military Justice, the legal framework governing the conduct of military personnel, which NEMO is responsible for enforcing and overseeing.
+    - **Military Police**: Local law enforcement personnel within the military who are responsible for maintaining order and enforcing laws within their respective commands, but are subject to oversight and review by NEMO.
+    - **Commanding Officers**: Military leaders who have authority over their units and personnel, but whose decisions can be reviewed and potentially overruled by NEMO in matters of law and military justice.
+    - **Mutiny**: A rebellion or uprising against authority, often involving military personnel refusing to obey orders or attempting to overthrow their leaders, which can be investigated and suppressed by NEMO.
+    - **Unlawful Detention**: The act of holding someone in custody without legal justification, which can be investigated by NEMO if it is alleged to have been ordered by a commanding officer or carried out by military personnel.
+    - **Unlawful Punishment**: The imposition of penalties or disciplinary actions on military personnel that violate the UCMJ or other legal standards, which can be investigated by NEMO if it is alleged to have been ordered by a commanding officer or carried out by military personnel.
+    - **Unlawful Arrest**: The act of apprehending and detaining someone without legal justification, which can be investigated by NEMO if it is alleged to have been ordered by a commanding officer or carried out by military personnel.
+    - **Command Corruption**: The abuse of power or authority by commanding officers for personal gain or to the    detriment of their personnel, which can be investigated by NEMO if it is alleged to have occurred within a command.
+    - **Command Injustice**: The failure of commanding officers to uphold justice and fairness within their commands, which can be investigated by NEMO if it is alleged to have occurred within a command.
+    - **Criminal Appeals**: The process by which convicted individuals can request a review of their case by NEMO, which can lead to a potential overturning of their conviction if it is found to be unjust or unlawful.
 
-  ## Command Field Deployment
-  The Command Staff has the right to deploy to the frontline for the sake of commanding their personnel from a direct point of view. Deployments must be for the sake of the personnel and operation, and not for the personal glory of the Command Staff. At least one member of Command Staff must remain on the ship/installation to man the CIC.
-
-  When Deployed:
-  - The deploying Command Staff must still command and communicate frequently with their faction.
-  - Combat should be reserved when assisting personnel in a supporting capacity, in defense of others and self, or directly leading an offensive maneuver.
-  - They should avoid unnecessarily putting themselves in danger and remain close to personnel to focus on providing clear orders.
 
 </Document>

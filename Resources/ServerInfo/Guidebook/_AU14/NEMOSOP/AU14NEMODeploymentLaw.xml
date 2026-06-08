@@ -1,18 +1,35 @@
 <Document>
   # NEMO Deployment Rules & Regulations
 
-  ## Conduct of Briefing
-  The Acting Commander is responsible for ensuring a proper briefing is conducted before any operation begins and personnel are deployed.
-  - It must be performed in an area where a proper inspection of personnel can be held and where personnel can hear any orders.
-  - Areas that interfere with non-combat personnel must be avoided, for example the medbay.
-  - Briefings at minimum must include all deploying faction command (SLs, JOs, etc).
+  ## Deployment Information
+  When [textlink="faxing" link="AU14NEMOFacsimileregs"] NEMO it should be noted sending a facsimile outside of good faith, doctored, or other reasons is grounds for arrest and/or punishment. It should also be noted that the facsimile is not the only way NEMO may show up. Due to the Information Release Act, NEMO may also show up on their own accord.
 
-  ## Command Field Deployment
-  The Command Staff has the right to deploy to the frontline for the sake of commanding their personnel from a direct point of view. Deployments must be for the sake of the personnel and operation, and not for the personal glory of the Command Staff. At least one member of Command Staff must remain on the ship/installation to man the CIC.
+  ## Deployment Criteria
+  When requesting a NEMO Specialization team there is certain criteria that must be met, per team. Some squads cannot be requested at all, and some have specific requirements. These are as follows:
 
-  When Deployed:
-  - The deploying Command Staff must still command and communicate frequently with their faction.
-  - Combat should be reserved when assisting personnel in a supporting capacity, in defense of others and self, or directly leading an offensive maneuver.
-  - They should avoid unnecessarily putting themselves in danger and remain close to personnel to focus on providing clear orders.
+    - The Special Enforcement Detachment (SED) can be requested for any investigation, regarding the following categories:
+      - Unlawful Punishment by Command
+      - Unlawful Detention by Command
+      - Unlawful Arrest by Command
+      - Several Unlawful Command Decisions
+      - Command Corruption
+      - Command Injustice
 
+    - The Marshal Intervention Group (MIG) can be requested for any of the following:
+      - Any arrest, detention, or enforcement action resulting from a SED investigation.
+
+    - The Marshal Intelligence Service (MIS) can NOT be requested, but may show up for any of the following:
+      - Any covert surveillance, intelligence gathering, infiltration, and evidence collection operations resulting from a SED investigation.
+
+    - The Instability Response Group (IRG) can be requested for any of the following:
+      - Any riot, mutiny, or internal security incident resulting from a SED investigation.
+      - Any situation where measured force and non-lethal intervention is required to restore order, and MPs or Command Staff are unable to do so.
+
+    - The Civil Protection Insurrection Stability & Protection Force (CPISP) can NOT be requested, but may show up for any of the following:
+      - Any severe threat against government authority resulting from a SED investigation.
+      - Any situation where the use of lethal force is required to restore order.
+
+    - The Marshal Orbital Response Wing (MORW) can be NOT requested but may show up for any of the following:
+      - Any aerospace transportation, extraction, prisoner transfer, and rapid deployment operations resulting from a SED investigation.
+      - Any situation where rapid deployment of NEMO personnel is required to restore order
 </Document>

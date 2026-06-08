@@ -46,6 +46,6 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Misc/Books/Other/NEMO_SOP.rsi
-  #- type: GuideHelp
-  #  guides:
-  #  - AU14NEMOSOP
+  - type: GuideHelp
+    guides:
+    - AU14NEMOSOP
