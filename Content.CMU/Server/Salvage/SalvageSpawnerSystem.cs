@@ -32,7 +32,7 @@ public sealed partial class SalvageSpawnerSystem : EntitySystem
             EntityManager,
             args.User,
             comp.DoAfterTime,
-            new SalvageSpawnerDoAfterEvent { User = GetNetEntity(args.User) },
+            new SalvageSpawnerDoAfterEvent(),
             uid)
         {
             BreakOnMove = true,
@@ -51,7 +51,7 @@ public sealed partial class SalvageSpawnerSystem : EntitySystem
         if (args.Cancelled || comp.Loot.Count == 0)
             return;
 
-        var user = GetEntity(args.User);
+        var user = args.User;
         var pick = _random.Pick(comp.Loot);
         Spawn(pick, Transform(user).Coordinates);
         _popup.PopupEntity("You find something worth salvaging!", uid, user);
