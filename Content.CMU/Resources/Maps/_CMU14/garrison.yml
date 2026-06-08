@@ -131602,13 +131602,12 @@ entities:
           showEnts: False
           occludes: True
           ents:
+          - 77
           - 78
-          - 82
           - 80
           - 81
-          - 79
+          - 82
           - 83
-          - 77
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
