@@ -89,7 +89,6 @@
   id: AU14JobHRTPartySynthetic
   name: Prodigy Hazard Support Synthetic (AU14, 3rd Party)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadPARTS
