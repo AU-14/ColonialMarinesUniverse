@@ -89,7 +89,6 @@
   id: AU14JobProdigyPARTSynth
   name: Prodigy Yankee Support Synthetic (AU14, 3rd Party)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadPARTY
