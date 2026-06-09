@@ -5,7 +5,7 @@
   description: au14-ghost-role-information-nemo-squad-description
   playTimeTracker: AU14JobNEMOTeamLeader
   ranks:
-    AU14RankNEMOEnforcer: []
+    AU14RankNEMOSeniorEnforcer: []
   startingGear: AU14GearNEMOTeamLeader
   icon: AU14JobIconNEMOTeamLeader
   joinNotifyCrew: false
@@ -55,8 +55,8 @@
 
 - type: entity
   id: AU14RandomHumanoidNEMOTeamLeader
-  name: provost ghost role team leader
-  suffix: Spawner, Player, Friendly, High Law Understanding
+  name: NEMO ghost role team leader
+  suffix: Ghostrole, Friendly, E7
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi
@@ -132,3 +132,30 @@
     sprite: _RMC14/Objects/CMIDs/provost.rsi
   - type: PresetIdCard
     job: AU14NEMOTeamLeader
+
+# Enforcer Squad Leader
+
+- type: job
+  parent: AU14NEMOTeamLeader
+  id: AU14NEMOSqaudLeader
+  ranks:
+    AU14RankNEMOTeamLeader: []
+
+- type: entity
+  parent: AU14RandomHumanoidNEMOTeamLeader
+  id: AU14RandomHumanoidNEMOSqaudLeader
+  suffix: Ghostrole, Friendly, E8
+
+- type: randomHumanoidSettings
+  parent: AU14NEMOEnforcer
+  id: AU14NEMOEnforcerTrainee
+
+- type: jobIcon
+  parent: AU14JobIconNEMOEnforcer
+  id: AU14JobIconNEMOEnforcerTrainee
+
+- type: entity
+  parent: RMCIDCardNEMOTeamLeader
+  id: RMCIDCardNEMOSqaudLeader
+  name: NEMO Sqaud Leader ID card
+  description: Issued to members of the Nautical Examination Marshal's Office.

@@ -30,7 +30,7 @@
 - type: entity
   id: AU14RandomHumanoidNEMOEnforcer
   name: provost ghost role enforcer
-  suffix: Spawner, Player, Friendly
+  suffix: Ghostrole, Player, E5
   components:
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/provost.rsi
@@ -58,7 +58,7 @@
       role: AU14JobGOVFORMilitaryPoliceMan
       time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
-    squad: SquadProvost
+    squad: SquadNEMO
 
 - type: startingGear
   id: AU14GearNEMOEnforcer
@@ -103,3 +103,45 @@
     sprite: _RMC14/Objects/CMIDs/provost.rsi
   - type: PresetIdCard
     job: AU14NEMOEnforcer
+
+# Enforcer Senior
+
+- type: job
+  parent: AU14NEMOEnforcer
+  id: AU14NEMOEnforcerSenior
+  ranks:
+    AU14RankNEMOEnforcer: []
+
+- type: entity
+  parent: AU14RandomHumanoidNEMOEnforcer
+  id: AU14RandomHumanoidNEMOEnforcerSenior
+  suffix: Ghostrole, Friendly, E6
+
+- type: randomHumanoidSettings
+  parent: AU14NEMOEnforcer
+  id: AU14NEMOEnforcerSenior
+
+- type: jobIcon
+  parent: AU14JobIconNEMOEnforcer
+  id: AU14JobIconNEMOEnforcerSenior
+
+# Enforcer Trainee
+
+- type: job
+  parent: AU14NEMOEnforcer
+  id: AU14NEMOEnforcerTrainee
+  ranks:
+    AU14RankNEMOTraineeEnforcer: []
+
+- type: entity
+  parent: AU14RandomHumanoidNEMOEnforcer
+  id: AU14RandomHumanoidNEMOEnforcerTrainee
+  suffix: Ghostrole, Friendly, E4
+
+- type: randomHumanoidSettings
+  parent: AU14NEMOEnforcer
+  id: AU14NEMOEnforcerTrainee
+
+- type: jobIcon
+  parent: AU14JobIconNEMOEnforcer
+  id: AU14JobIconNEMOEnforcerTrainee

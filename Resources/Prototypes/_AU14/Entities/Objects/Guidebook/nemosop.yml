@@ -9,7 +9,7 @@
 
 - type: guideEntry
   parent: RMC
-  id: AU14NEMOSOP
+  id: AU14NEMOSOPOverview
   name: NEMO Standard Operating Procedure
   priority: 0
   text: "/ServerInfo/Guidebook/_AU14/NEMOSOP/AU14NEMOSOP.xml"

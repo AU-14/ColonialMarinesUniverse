@@ -128,3 +128,87 @@
   icon:
     sprite: _AU14/Interface/job_icons.rsi
     state: hudsquad_nemo_synth
+
+# Grade 2
+
+- type: job
+  parent: AU14NEMOSynthetic
+  id: AU14NEMOSynthetic2
+  ranks:
+    AU14RankNEMOWO2: []
+
+- type: entity
+  parent: AU14RandomHumanoidNEMOSynthetic
+  id: AU14RandomHumanoidNEMOSynthetic2
+  suffix: Ghostrole, Friendly, WL'd (No knowledge)
+
+- type: randomHumanoidSettings
+  parent: AU14NEMOSynthetic
+  id: AU14NEMOSynthetic2
+
+- type: jobIcon
+  parent: AU14JobIconNEMOSynthetic
+  id: AU14JobIconNEMOSynthetic2
+
+# Grade 3
+
+- type: job
+  parent: AU14NEMOSynthetic
+  id: AU14NEMOSynthetic3
+  ranks:
+    AU14RankNEMOWO3: []
+
+- type: entity
+  parent: AU14RandomHumanoidNEMOSynthetic
+  id: AU14RandomHumanoidNEMOSynthetic3
+  suffix: Ghostrole, Friendly, WL'd (Low Knowledge)
+
+- type: randomHumanoidSettings
+  parent: AU14NEMOSynthetic
+  id: AU14NEMOSynthetic3
+
+- type: jobIcon
+  parent: AU14JobIconNEMOSynthetic
+  id: AU14JobIconNEMOSynthetic3
+
+# Grade 4
+
+- type: job
+  parent: AU14NEMOSynthetic
+  id: AU14NEMOSynthetic4
+  ranks:
+    AU14RankNEMOWO4: []
+
+- type: entity
+  parent: AU14RandomHumanoidNEMOSynthetic
+  id: AU14RandomHumanoidNEMOSynthetic4
+  suffix: Ghostrole, Friendly, WL'd (Med Knowledge)
+
+- type: randomHumanoidSettings
+  parent: AU14NEMOSynthetic
+  id: AU14NEMOSynthetic4
+
+- type: jobIcon
+  parent: AU14JobIconNEMOSynthetic
+  id: AU14JobIconNEMOSynthetic4
+
+# Grade 5
+
+- type: job
+  parent: AU14NEMOSynthetic
+  id: AU14NEMOSynthetic5
+  ranks:
+    AU14RankNEMOWO2: []
+
+- type: entity
+  parent: AU14RandomHumanoidNEMOSynthetic
+  id: AU14RandomHumanoidNEMOSynthetic5
+  suffix: Ghostrole, Friendly, WL'd (High Knowledge)
+
+- type: randomHumanoidSettings
+  parent: AU14NEMOSynthetic
+  id: AU14NEMOSynthetic5
+
+- type: jobIcon
+  parent: AU14JobIconNEMOSynthetic
+  id: AU14JobIconNEMOSynthetic5

@@ -117,22 +117,23 @@
   prefix: NEMO Adv.
   paygrade: E9
 
-# Any player with given objective, possible team leader
+# TODO: randomize Enforcer ranks on-spawn
+# Any player with given objective, (possible squad leader)
 - type: rank
   id: AU14RankNEMOTeamLeader
   name: Master Sergeant
   prefix: MSgt.
   paygrade: E8
 
-# TODO: randomize Enforcer ranks on-spawn
-# Any player with given objective, squad senior (possible squad leader)
+
+# Any player with given objective, squad senior (possible team leader)
 - type: rank
   id: AU14RankNEMOSeniorEnforcer
   name: Gunnery Sergeant
   prefix: GySgt.
   paygrade: E7
 
-# Any player with given objective, squad member (possible team leader)
+# Any player with given objective, squad member
 - type: rank
   id: AU14RankNEMOEnforcer
   name: Staff Sergeant
