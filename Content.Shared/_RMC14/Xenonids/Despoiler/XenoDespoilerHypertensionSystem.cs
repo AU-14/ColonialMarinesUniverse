@@ -2,9 +2,9 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Xenonids.Despoiler;
 
-public sealed class XenoDespoilerHypertensionSystem : EntitySystem
+public sealed partial class XenoDespoilerHypertensionSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public void AddSlashPoints(EntityUid uid, XenoDespoilerHypertensionComponent comp)
     {

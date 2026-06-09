@@ -43,6 +43,7 @@
   - RMCAccessTSEPA # tsepa
   - RMCAccessDatabase
   - RMCAccessSeniorCommand
+  - RMCAccessLogs
   # CMU14
   - AU14AccessColonyHeadPhysician
   - AU14AccessColonyHeadEngineer
@@ -100,6 +101,7 @@
   - RMCAccessTSEPA # tsepa
   - RMCAccessDatabase
   - RMCAccessSeniorCommand
+  - RMCAccessLogs
 
 # all ship-side access that is not CO
 # SEA uses this.
@@ -145,6 +147,7 @@
   - CMAccessMarineRifleman
   - RMCAccessDatabase
   - RMCAccessSeniorCommand
+  - RMCAccessLogs
 
 - type: accessGroup
   id: SEA
@@ -187,6 +190,7 @@
   - CMAccessMarineRifleman
   - RMCAccessDatabase
   - RMCAccessSeniorCommand
+  - RMCAccessLogs
 
 - type: accessGroup
   id: SO

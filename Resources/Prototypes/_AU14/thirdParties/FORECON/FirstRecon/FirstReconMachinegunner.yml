@@ -4,7 +4,11 @@
   name: au14-job-name-govforsquadautomaticriflemanRMC
   description: au14-job-description-forecon-firstrecon
   ranks:
-    RMCRankLanceCorporal: []
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankLanceCorporal:
+      entity: AU14ChevronUSCMLanceCorporal
+      requirements: []
   spawnMenuRoleName: FORECON Automatic Rifleman (AU14, 3rd party)
   startingGear: AU14GearFORECONFirstReconSmartGunOperator
   greeting: au14-job-description-forecon-firstrecon-greeting

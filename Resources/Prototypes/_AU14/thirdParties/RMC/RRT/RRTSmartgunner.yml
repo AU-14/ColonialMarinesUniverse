@@ -5,7 +5,11 @@
   description: au14-rmcert-rules
   playTimeTracker: AU14JobRMCRRTSmartgunner
   ranks:
-    RMC_LanceCorporal: []
+    RMCRankCivilian: []
+  chevrons:
+    RMC_LanceCorporal:
+      entity: AU14ChevronRMCLanceCorporal
+      requirements: []
   spawnMenuRoleName: RMC RRT Machinegunner
   startingGear: AU14GearRMCRRTSmartgunner
   icon: "RMCJobIconRoyalSmartGunOperator"

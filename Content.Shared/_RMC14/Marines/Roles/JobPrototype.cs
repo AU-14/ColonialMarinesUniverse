@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Prototypes;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
+using Content.Shared._AU14.Marines.Roles.Chevrons;
 
 // ReSharper disable CheckNamespace
 namespace Content.Shared.Roles;
@@ -48,6 +49,9 @@ public sealed partial class JobPrototype : IInheritingPrototype, ICMSpecific
 
     [DataField]
     public Dictionary<ProtoId<RankPrototype>, HashSet<JobRequirement>?>? Ranks;
+
+    [DataField]
+    public Dictionary<string, ChevronDefinition>? Chevrons { get; set; }
 
     [DataField]
     public Dictionary<RMCPlaytimeMedalType, EntProtoId>? Medals;

@@ -10,7 +10,8 @@
 - type: auThirdParty
   id: CLFCellReinforcementsIntel
   partyspawn: CLFReinforcementsSpawnIntel
-  entrymethod: ground
+  entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml
   weight: 1
   minplayers: 0
   maxplayers: 600
@@ -29,7 +30,8 @@
 - type: auThirdParty
   id: CLFCellReinforcementsIntelMachineGunner
   partyspawn: CLFReinforcementsSpawnIntelMachineGunner
-  entrymethod: ground
+  entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml
   weight: 1
   minplayers: 0
   maxplayers: 600

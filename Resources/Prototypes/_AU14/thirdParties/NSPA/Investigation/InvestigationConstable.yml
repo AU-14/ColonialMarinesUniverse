@@ -7,7 +7,11 @@
   canBeAntag: false
   requirements:
   ranks:
-    AU14RankNSPASeniorConstable: []
+    RMCRankCivilian: []
+  chevrons:
+    SeniorConstable:
+      entity: AU14ChevronNSPASeniorConstable
+      requirements: []
   startingGear: AU14GearNSPAConstableInvestigationSMG
   icon: "RMCJobIconTSEPASeniorConstable"
   spawnMenuRoleName: NSPA Constable (3rd party)

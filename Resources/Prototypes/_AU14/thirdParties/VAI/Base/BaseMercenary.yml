@@ -5,7 +5,11 @@
   playTimeTracker: AU14VAIMercenary
   description: au14-vai-mercenary-description
   ranks:
-    VAI_Mercenary: []
+    RMCRankCivilian: []
+  chevrons:
+    VAI_Mercenary:
+      entity: AU14ChevronVASCMercenary
+      requirements: []
   icon: "CMJobIconEmpty"
   spawnMenuRoleName: VAI Contractor (Base)
   joinNotifyCrew: false

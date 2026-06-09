@@ -5,11 +5,17 @@
   description: cm-job-description-commanding-officer
   playTimeTracker: AU14JobUSArmyCommander
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     USArmy_Major:
-    - !type:RoleTimeRequirement
-      role: AU14JobUSArmyCommander
-      time: 18000 # 5 hours
-    USArmy_Captain: []
+      entity: AU14ChevronMajor
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmyCommander
+        time: 18000 # 5 hours
+    USArmy_Captain:
+      entity: AU14ChevronCaptain
+      requirements: []
   spawnMenuRoleName: US Army Commander (AU14, surv)
   startingGear: AU14GearUSArmyCommander
   greeting: au14-usarmy-greeting

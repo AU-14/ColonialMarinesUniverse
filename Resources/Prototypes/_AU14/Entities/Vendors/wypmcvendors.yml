@@ -665,6 +665,12 @@
         amount: 1
       - id: RMCPackFlareCAS
         amount: 6
+    - name: Chevrons
+      entries:
+      - id: AU14ChevronWeYuAssociateOperator
+        amount: 2
+      - id: AU14PortableVendorWeYuRanks
+        amount: 1
 
 - type: entity
   parent: ColMarTechBase

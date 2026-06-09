@@ -49,6 +49,9 @@ rmc-job-prefix-weapons-specialist-demo = DEMO
 rmc-job-name-weapons-specialist-grenadier = Grenadier Specialist
 rmc-job-prefix-weapons-specialist-grenadier = GRND
 
+rmc-job-name-weapons-specialist-sharp = SHARP Operator Specialist
+rmc-job-prefix-weapons-specialist-sharp = SHRP
+
 rmc-job-name-weapons-specialist-sniper = Sniper Specialist
 rmc-job-prefix-weapons-specialist-sniper = SNPR
 

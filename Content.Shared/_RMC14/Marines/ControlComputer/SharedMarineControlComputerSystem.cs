@@ -1,4 +1,6 @@
 using Content.Shared._RMC14.AlertLevel;
+using Content.Shared._RMC14.ARES;
+using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Commendations;
 using Content.Shared._RMC14.Dialog;
@@ -28,6 +30,7 @@ public abstract partial class SharedMarineControlComputerSystem : EntitySystem
     [Dependency] private RMCAlertLevelSystem _alertLevel = default!;
     [Dependency] private SharedCommendationSystem _commendation = default!;
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private ARESCoreSystem _core = default!;
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private SharedEvacuationSystem _evacuation = default!;
     [Dependency] private SharedMarineAnnounceSystem _marineAnnounce = default!;
@@ -38,6 +41,8 @@ public abstract partial class SharedMarineControlComputerSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private WarshipSystem _warship = default!;
+
+    private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabAnnouncementLogs";
 
     private int _characterLimit = 1000;
 
@@ -309,6 +314,8 @@ public abstract partial class SharedMarineControlComputerSystem : EntitySystem
             excludeSurvivors: false,
             faction: faction
         );
+
+        _core.CreateARESLog(ent, LogCat, (string) $"{Name(user)} sent a Warship Announcement: {args.Message}");
     }
 
     private void OnMedal(Entity<MarineControlComputerComponent> ent, ref MarineControlComputerMedalMsg args)

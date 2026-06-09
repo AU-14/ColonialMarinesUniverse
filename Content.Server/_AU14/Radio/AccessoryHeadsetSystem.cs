@@ -5,6 +5,9 @@ using Content.Shared.Clothing;
 using Content.Shared.Inventory;
 using Content.Shared.Radio;
 using Robust.Shared.Containers;
+using Content.Server._AU14.Marines.Roles.Ranks;
+using Content.Shared._AU14.Marines.Roles.Ranks;
+using Content.Server._RMC14.Marines.Roles.Ranks;
 
 namespace Content.Server._AU14.Radio;
 
@@ -17,6 +20,8 @@ public sealed partial class AccessoryHeadsetSystem : EntitySystem
 {
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private RankChangerSystem _rankChanger = default!;
+    [Dependency] private RankSystem _rank = default!;
 
     public override void Initialize()
     {
@@ -79,13 +84,16 @@ public sealed partial class AccessoryHeadsetSystem : EntitySystem
         {
             if (TryComp<AccessoryHeadsetComponent>(accessory, out var headset))
                 GrantRadio((accessory, headset), args.Wearer);
+
+            if (TryComp<RankChangerComponent>(accessory, out var changer))
+                _rankChanger.ApplyRank(args.Wearer, changer);
         }
     }
 
     /// <summary>
     ///     Uniform unequipped. Revoke radio from any earpiece accessories inside it.
     /// </summary>
-    private void OnHolderUnequipped(Entity<UniformAccessoryHolderComponent> ent, ref ClothingGotUnequippedEvent args)
+        private void OnHolderUnequipped(Entity<UniformAccessoryHolderComponent> ent, ref ClothingGotUnequippedEvent args)
     {
         if (!_container.TryGetContainer(ent, ent.Comp.ContainerId, out var container))
             return;
@@ -94,6 +102,9 @@ public sealed partial class AccessoryHeadsetSystem : EntitySystem
         {
             if (TryComp<AccessoryHeadsetComponent>(accessory, out var headset))
                 RevokeRadio((accessory, headset));
+
+            if (HasComp<RankChangerComponent>(accessory))
+                _rank.ReapplyJobRank(args.Wearer);
         }
     }
 

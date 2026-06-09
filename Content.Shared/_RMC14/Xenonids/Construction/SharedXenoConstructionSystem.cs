@@ -120,6 +120,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
 
     private readonly HashSet<EntityUid> _intersectingResin = new();
     private readonly List<Entity<XenoWeedsComponent>> _adjacentNodes = new();
+    private readonly HashSet<EntityUid> _upgradingStructures = new();
 
     public override void Initialize()
     {
@@ -460,7 +461,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         };
     }
 
-    private EntProtoId GetQueenAnimationVariant(EntProtoId originalId)
+    private EntProtoId GetResinUpgradeTarget(EntProtoId originalId)
     {
         return originalId.Id switch
         {
@@ -504,8 +505,18 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             if (_net.IsClient)
                 return;
 
-            QueueDel(upgradeable);
-            var spawn = Spawn(to, snapped);
+            EntityUid spawn;
+            try
+            {
+                BeginStructureUpgrade(upgradeable);
+                Del(upgradeable);
+                spawn = Spawn(to, snapped);
+            }
+            finally
+            {
+                EndStructureUpgrade(upgradeable);
+            }
+
             _hive.SetSameHive(xeno.Owner, spawn);
             args.Handled = true;
             return;
@@ -536,7 +547,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         if (attempt.Cancelled)
             return;
 
-        var animationChoice = hasBoost ? GetQueenAnimationVariant(choice) : choice;
+        var animationChoice = hasBoost ? GetResinUpgradeTarget(choice) : choice;
         var effectId = XenoStructuresAnimation + animationChoice;
         var coordinates = GetNetCoordinates(args.Target);
         var entityCoords = GetCoordinates(coordinates);
@@ -1170,6 +1181,10 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         args.PushMarkup(Loc.GetString("cm-xeno-construction-plasma-left", ("construction", node.Owner), ("plasma", plasmaLeft)));
     }
 
+    public void BeginStructureUpgrade(EntityUid uid) => _upgradingStructures.Add(uid);
+
+    public void EndStructureUpgrade(EntityUid uid) => _upgradingStructures.Remove(uid);
+
     private void OnHiveConstructionNodeActivated(Entity<HiveConstructionNodeComponent> node, ref ActivateInWorldEvent args)
     {
         var user = args.User;
@@ -1319,6 +1334,9 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
 
     private void OnCheckAdjacentCollapse<T>(Entity<XenoConstructionSupportComponent> ent, ref T args)
     {
+        if (_upgradingStructures.Contains(ent.Owner))
+            return;
+
         if (!_transformQuery.TryComp(ent, out var xform) ||
             _transform.GetGrid((ent, xform)) is not { Valid: true } gridId ||
             !TryComp(gridId, out MapGridComponent? grid))

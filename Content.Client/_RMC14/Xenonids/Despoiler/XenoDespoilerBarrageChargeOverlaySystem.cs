@@ -11,9 +11,9 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._RMC14.Xenonids.Despoiler;
 
-public sealed class XenoDespoilerBarrageChargeOverlaySystem : EntitySystem
+public sealed partial class XenoDespoilerBarrageChargeOverlaySystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
 
     public override void Initialize()
     {
@@ -27,7 +27,7 @@ public sealed class XenoDespoilerBarrageChargeOverlaySystem : EntitySystem
     }
 }
 
-public sealed class XenoDespoilerBarrageChargeOverlay : Overlay
+public sealed partial class XenoDespoilerBarrageChargeOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
     private static readonly ResPath BarSprite = new("/Textures/Interface/Misc/progress_bar.rsi");
@@ -40,10 +40,10 @@ public sealed class XenoDespoilerBarrageChargeOverlay : Overlay
     private const float SpriteCullPad = 2f;
     private const float SpriteHeadroom = 0.05f;
 
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly SpriteSystem _sprite;
     private readonly TransformSystem _transform;

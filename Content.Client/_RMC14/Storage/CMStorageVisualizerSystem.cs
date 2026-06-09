@@ -30,15 +30,50 @@ public sealed partial class CMStorageVisualizerSystem : VisualizerSystem<CMStora
             storage.Container.ContainedEntities.Count == holster.Contents.Count)
             used = 0;
 
+        // Lockable storage uses a custom presentation:
+        // locked storage rests closed but still shows open while actively viewed,
+        // while unlocked storage rests open when empty and closed when it contains items.
+        if (TryComp(uid, out RMCIdLockableStorageComponent? lockable))
+        {
+            if (component.StorageEmpty != null)
+                _sprite.LayerSetVisible((uid, args.Sprite), component.StorageEmpty, false);
+
+            if (!AppearanceSystem.TryGetData<bool>(uid, StorageVisuals.Open, out var lockableOpen, args.Component))
+                return;
+
+            if (lockable.Locked)
+            {
+                if (component.StorageOpen != null)
+                    _sprite.LayerSetVisible((uid, args.Sprite), component.StorageOpen, lockableOpen);
+                if (component.StorageClosed != null)
+                    _sprite.LayerSetVisible((uid, args.Sprite), component.StorageClosed, !lockableOpen);
+                return;
+            }
+
+            var emptyUnlocked = used == 0;
+            var showOpen = lockableOpen || emptyUnlocked;
+            if (component.StorageOpen != null)
+                _sprite.LayerSetVisible((uid, args.Sprite), component.StorageOpen, showOpen);
+            if (component.StorageClosed != null)
+                _sprite.LayerSetVisible((uid, args.Sprite), component.StorageClosed, !showOpen);
+            return;
+        }
+
         if (used == 0)
         {
-            if (component.StorageOpen != null)
-                _sprite.LayerSetVisible((uid, args.Sprite), component.StorageOpen, false);
-            if (component.StorageClosed != null)
-                _sprite.LayerSetVisible((uid, args.Sprite), component.StorageClosed, false);
+            if (!component.ShowOpenClosedWhenEmpty)
+            {
+                if (component.StorageOpen != null)
+                    _sprite.LayerSetVisible((uid, args.Sprite), component.StorageOpen, false);
+                if (component.StorageClosed != null)
+                    _sprite.LayerSetVisible((uid, args.Sprite), component.StorageClosed, false);
+                if (component.StorageEmpty != null)
+                    _sprite.LayerSetVisible((uid, args.Sprite), component.StorageEmpty, true);
+                return;
+            }
+
             if (component.StorageEmpty != null)
-                _sprite.LayerSetVisible((uid, args.Sprite), component.StorageEmpty, true);
-            return;
+                _sprite.LayerSetVisible((uid, args.Sprite), component.StorageEmpty, false);
         }
         else
         {

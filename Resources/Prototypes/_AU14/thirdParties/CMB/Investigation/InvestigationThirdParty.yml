@@ -23,6 +23,7 @@
   id: CMBInvestigationPartyAlt
   partyspawn: CMBInvestigationPartySpawnAlt
   entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_cmb_shuttle.yml
   weight: 10
   minplayers: 0
   maxplayers: 400
@@ -33,6 +34,7 @@
   id: CMBInvestigationParty
   partyspawn: CMBInvestigationPartySpawn
   entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_cmb_shuttle.yml
   weight: 20
   minplayers: 0
   maxplayers: 400

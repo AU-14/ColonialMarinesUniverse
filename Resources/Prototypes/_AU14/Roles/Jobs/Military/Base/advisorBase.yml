@@ -29,15 +29,23 @@
     traits:
     - Epilepsy
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMCRankSergeantMajor:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORadvisor
-      time: 360000 # 100 hours
+      entity: AU14ChevronUSCMSergeantMajor
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORadvisor
+        time: 360000
     RMCRankMasterGunnerySergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORadvisor
-      time: 86400 # 24 hours
-    RMCRankFirstSergeant: []
+      entity: AU14ChevronUSCMMasterGunnerySergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORadvisor
+        time: 86400
+    RMCRankFirstSergeant:
+      entity: AU14ChevronUSCMFirstSergeant
+      requirements: []
   special:
   - !type:AddComponentSpecial
     components:

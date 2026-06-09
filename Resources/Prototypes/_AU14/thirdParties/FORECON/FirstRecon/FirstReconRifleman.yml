@@ -4,7 +4,11 @@
   name: cm-job-name-rifleman
   description: au14-job-description-forecon-firstrecon
   ranks:
-    RMCRankCorporal: []
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankCorporal:
+      entity: AU14ChevronUSCMCorporal
+      requirements: []
   spawnMenuRoleName: FORECON Rifleman (AU14, 3rd party)
   startingGear: AU14GearFORECONFirstReconRifleman
   greeting: au14-job-description-forecon-firstrecon-greeting

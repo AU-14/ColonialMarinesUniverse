@@ -656,6 +656,29 @@
 
 - type: entity
   parent: CMBeltMarine
+  id: RMCBeltSharp
+  name: M103 pattern SHARP magazine belt
+  description: A modified M103 pattern rig designed to hold P9 SHARP rifle magazines.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Belt/tankbelt.rsi
+  - type: Clothing
+    slots:
+    - belt
+    sprite: _RMC14/Objects/Clothing/Belt/tankbelt.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,15,1 # 8 slots
+    whitelist:
+      tags:
+      - RMCMagazineRifleSharp
+  - type: FixedItemSizeStorage
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMBeltMarine
   id: RMCBeltSmartPistol
   name: M276 pattern SU-6 smart pistol holster rig
   description: The M276 is the standard load-bearing equipment of the USCM. It consists of a modular belt with various clips. This version is for the SU-6 smartpistol.
@@ -2002,6 +2025,32 @@
           - Defibrillator
           - Pill
           - RMCLighter
+
+- type: entity
+  parent: RMCMedicalL75RCM
+  id: RMCMedicalL75RCMFilled
+  suffix: RCM, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMPillCanisterBicaridine
+    - id: CMPillCanisterBicaridine
+    - id: CMPillCanisterKelotane
+    - id: CMPillCanisterKelotane
+    # - id: CMPillCanisterTramadol
+    # - id: CMPillCanisterTramadol
+    - id: CMPillCanisterDylovene
+    # - id: CMPillCanisterPeridaxon
+    - id: CMPillCanisterDexalin
+    # - id: CMPillCanisterAlkysine
+    - id: RMCPillCanisterImidazoline
+    - id: CMTraumaKit10
+      amount: 3
+    - id: CMBurnKit10
+      amount: 3
+    # - id: RMCSplint
+    - id: CMDexalinPlusAutoInjector
+    - id: CMHealthAnalyzer
 
 - type: entity
   parent: RMCMedicalL75RCM

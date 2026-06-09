@@ -5,15 +5,23 @@
   description: au14-job-description-usarmy
   playTimeTracker: AU14JobUSArmyMarksman
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     USArmy_Sergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobUSArmyMarksman
-      time: 36000 #10 hours
+      entity: AU14ChevronUSArmySergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmyMarksman
+        time: 36000
     USArmy_Corporal:
-    - !type:RoleTimeRequirement
-      role: AU14JobUSArmyMarksman
-      time: 18000 #5 hours
-    USArmy_Specialist: []
+      entity: AU14ChevronUSArmyCorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmyMarksman
+        time: 18000
+    USArmy_Specialist:
+      entity: AU14ChevronUSArmySpecialist
+      requirements: []
   spawnMenuRoleName: US Army Marksman (AU14, surv)
   startingGear: AU14GearUSArmyMarksman
   greeting: au14-usarmy-greeting

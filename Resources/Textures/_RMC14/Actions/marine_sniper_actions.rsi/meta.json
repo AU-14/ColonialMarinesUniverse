@@ -1,26 +1,56 @@
 {
-  "version": 1,
-  "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/cf0f0a1dee0cb79286ebda17962fc5e25b46c646/icons/mob/hud/actions.dmi",
-  "size": {
-    "x": 32,
-    "y": 32
-  },
-  "states": [
-    {
-      "name": "prepare_position"
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/9a18c8ffcbdcafedcb81428aef1a4d134b1428c5/icons/mob/hud/actions.dmi. Vulture scope adjustment states made for CMU based on the existing CM13 action style.",
+    "size": {
+        "x": 32,
+        "y": 32
     },
-    {
-      "name": "sniper_toggle_laser_off"
-    },
-    {
-      "name": "sniper_toggle_laser_on"
-    },
-    {
-      "name": "spotter_target"
-    },
-    {
-      "name": "sniper_aim"
-    }
-  ]
+    "states": [
+        {
+            "name": "prepare_position"
+        },
+        {
+            "name": "sniper_toggle_laser_off"
+        },
+        {
+            "name": "sniper_toggle_laser_on"
+        },
+        {
+            "name": "spotter_target"
+        },
+        {
+            "name": "sniper_aim"
+        },
+        {
+            "name": "zoom_scope"
+        },
+        {
+            "name": "unzoom_scope"
+        },
+        {
+            "name": "zoom_in"
+        },
+        {
+            "name": "zoom_out"
+        },
+        {
+            "name": "scope_angle_left"
+        },
+        {
+            "name": "scope_angle_right"
+        },
+        {
+            "name": "windage_left"
+        },
+        {
+            "name": "windage_right"
+        },
+        {
+            "name": "elevation_up"
+        },
+        {
+            "name": "elevation_down"
+        }
+    ]
 }

@@ -2,20 +2,32 @@
 
 - type: loadout
   id: ColonyUSASFRecruiterSpecializationDefaultAU14
+  dummyEntity: AU14IDCardColonyUSASFRecruiter
   equipment:
     id: AU14IDCardColonyUSASFRecruiter
+  inhand:
+  - AU14ChevronUSASFTechnicalSergeant
 
 - type: loadout
   id: ColonyUSASFRecruiterSpecializationMarinesAU14
+  dummyEntity: AU14IDCardColonyUSASFRecruiterMarines
   equipment:
     id: AU14IDCardColonyUSASFRecruiterMarines
+  inhand:
+  - AU14ChevronUSCMStaffSergeant
 
 - type: loadout
   id: ColonyUSASFRecruiterSpecializationUSArmyAU14
+  dummyEntity: AU14IDCardColonyUSASFRecruiterUSArmy
   equipment:
     id: AU14IDCardColonyUSASFRecruiterUSArmy
+  inhand:
+  - AU14ChevronUSArmyStaffSergeant
 
 - type: loadout
   id: ColonyUSASFRecruiterSpecializationCCAFAU14
+  dummyEntity: AU14IDCardColonyUSASFRecruiterCCAF
   equipment:
     id: AU14IDCardColonyUSASFRecruiterCCAF
+  inhand:
+  - AU14ChevronUSArmyStaffSergeant # TODO CCAF RANKS

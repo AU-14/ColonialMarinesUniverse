@@ -5,7 +5,11 @@
   description: au14-job-description-msg
   playTimeTracker: AU14MSGWatchStander
   ranks:
-    RMCRankLanceCorporal: []
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankLanceCorporal:
+      entity: AU14ChevronUSCMLanceCorporal
+      requirements: []
   spawnMenuRoleName: Marine Guard (3rd party)
   startingGear: AU14GearMSGWatchStander
   greeting: au14-job-greeting-msg

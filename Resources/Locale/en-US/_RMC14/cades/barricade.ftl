@@ -17,3 +17,6 @@ rmc-folding-barricade-collapse-start = You begin collapsing {THE($barricade)}.
 rmc-folding-barricade-collapse-start-others = {$user} begins collapsing {THE($barricade)}.
 rmc-folding-barricade-collapse-finish = You collapse {THE($barricade)}.
 rmc-folding-barricade-collapse-crowbar-untrained = You do not know how to collapse {THE($barricade)} with a crowbar.
+rmc-folding-barricade-link-set = You set up {THE($barricade)} for linking.
+rmc-folding-barricade-link-removed = You remove the linking from {THE($barricade)}.
+rmc-folding-barricade-link-no-points = {CAPITALIZE(THE($barricade))} has no linking points.

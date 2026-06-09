@@ -1,0 +1,88 @@
+# base
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronCMBBase
+  abstract: true
+  suffix: CMB Rank Chevron
+  description: Colonial Marshals Bureau rank insignia. Wearing this makes you feel like Virgil Earp, but you know you'll never be as cool as a cowboy.
+
+# Deputies
+- type: entity
+  parent: AU14ChevronCMBBase
+  id: AU14ChevronCMBProbDeputy
+  name: probationary deputy chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: AU14RankCMBProbDeputy
+    override: true
+
+- type: entity
+  parent: AU14ChevronCMBBase
+  id: AU14ChevronCMBDeputy
+  name: deputy chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_nco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_nco
+  - type: RankChanger
+    rank: AU14RankCMBDeputy
+    override: true
+
+- type: entity
+  parent: AU14ChevronCMBBase
+  id: AU14ChevronCMBSrDeputy
+  name: senior deputy chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_nco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_nco
+  - type: RankChanger
+    rank: AU14RankCMBSrDeputy
+    override: true
+
+- type: entity
+  parent: AU14ChevronCMBBase
+  id: AU14ChevronCMBChiefDeputy
+  name: chief deputy chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: AU14RankCMBChiefDeputy
+    override: true
+
+- type: entity
+  parent: AU14ChevronCMBBase
+  id: AU14ChevronCMBMarshal
+  name: cmb marshal chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: AU14RankCMBMarshal
+    override: true

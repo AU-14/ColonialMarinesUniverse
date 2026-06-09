@@ -116,7 +116,8 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
         DropshipTerminalWeaponsScreen State,
         NetEntity? Weapon,
         NetEntity? System,
-        int? FireMissionId
+        int? FireMissionId,
+        bool QuickMode
     );
 
     [DataRecord]

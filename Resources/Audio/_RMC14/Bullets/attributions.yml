@@ -62,3 +62,8 @@
   license: "CC-BY-SA-3.0"
   copyright: "Taken from cmss13"
   source: "https://github.com/cmss13-devs/cmss13/blob/ffbfb98e07642857222dbe0792d029c0ceb2b38c/sound/bullets/shield_impact_c4.ogg"
+
+- files: ["bullet_vulture_impact.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13"
+  source: "https://github.com/cmss13-devs/cmss13/blob/7cb618c69b75873f3ce893022fe08d1233b3152d/sound/bullets/bullet_vulture_impact.ogg"

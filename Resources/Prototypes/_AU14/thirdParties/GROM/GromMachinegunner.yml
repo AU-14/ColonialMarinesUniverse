@@ -5,15 +5,23 @@
   description: au14-uppgrom-description
   playTimeTracker: AU14JobUPPGROMMachinegunner
   ranks:
-    UPP_StaffSergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobUPPGROMMachinegunner
-      time: 36000 #10 hours
+    RMCRankCivilian: []
+  chevrons:
+    UPP_SeniorSergeant:
+      entity: AU14ChevronUPPNISeniorSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUPPGROMMachinegunner
+        time: 36000 # 10 hours
     UPP_Sergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobUPPGROMMachinegunner
-      time: 18000 #5 hours
-    UPP_Plutonowy: []
+      entity: AU14ChevronUPPNISergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUPPGROMMachinegunner
+        time: 18000 # 5 hours
+    UPP_Plutonowy:
+      entity: AU14ChevronUPPNIPlutonowy
+      requirements: []
   spawnMenuRoleName: UPP GROM Machinegunner (Survivor)
   startingGear: AU14GearUPPGROMMachinegunner
   greeting: au14-uppgrom-greeting

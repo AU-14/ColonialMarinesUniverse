@@ -29,11 +29,17 @@
   name: cm-job-name-squad-leader
   description: rmc-job-description-forecon
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMCRankFirstLT:
-    - !type:RoleTimeRequirement
-      role: AU14JobFORECONSquadLeader
-      time: 36000 #10 hours
-    RMCRankSecondLT: []
+      entity: AU14ChevronFirstLT
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONSquadLeader
+        time: 36000 #10 hours
+    RMCRankSecondLT:
+      entity: AU14ChevronSecondLT
+      requirements: []
   spawnMenuRoleName: FORECON Section Leader (AU14, surv)
   startingGear: AU14GearFORECONSquadleader
   greeting: au14-forecon-greeting

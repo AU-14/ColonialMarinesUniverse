@@ -48,6 +48,8 @@
   - type: InteractionOutline
   - type: RMCMesonsNonviewable
   - type: DamageExaminable
+  - type: RMCHealthExaminable
+    speciesType: Mechanical
   - type: Sprite
     drawdepth: Mobs
     noRot: true

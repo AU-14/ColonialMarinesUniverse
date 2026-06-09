@@ -2,9 +2,9 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Xenonids.Despoiler;
 
-public sealed class XenoDespoilerCatalyzeFlagSystem : EntitySystem
+public sealed partial class XenoDespoilerCatalyzeFlagSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public bool IsEmpowered(EntityUid uid, XenoDespoilerComponent comp)
     {

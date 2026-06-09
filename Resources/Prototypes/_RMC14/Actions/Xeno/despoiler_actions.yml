@@ -1,8 +1,6 @@
 - type: entity
   parent: ActionXenoBase
   id: RMCActionXenoDespoilerAcidBarrage
-  name: rmc-action-despoiler-acid-barrage-name
-  description: rmc-action-despoiler-acid-barrage-desc
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -37,8 +35,6 @@
 - type: entity
   parent: ActionXenoBase
   id: RMCActionXenoDespoilerCausticEmbrace
-  name: rmc-action-despoiler-caustic-embrace-name
-  description: rmc-action-despoiler-caustic-embrace-desc
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -73,8 +69,6 @@
 - type: entity
   parent: ActionXenoBase
   id: RMCActionXenoDespoilerOozingWounds
-  name: rmc-action-despoiler-oozing-wounds-name
-  description: rmc-action-despoiler-oozing-wounds-desc
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -103,8 +97,6 @@
 - type: entity
   parent: ActionXenoBase
   id: RMCActionXenoDespoilerCatalyze
-  name: rmc-action-despoiler-catalyze-name
-  description: rmc-action-despoiler-catalyze-desc
   components:
   - type: Action
     itemIconStyle: NoItem

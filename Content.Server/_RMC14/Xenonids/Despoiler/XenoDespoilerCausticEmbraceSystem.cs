@@ -15,24 +15,24 @@ using Robust.Shared.Random;
 
 namespace Content.Server._RMC14.Xenonids.Despoiler;
 
-public sealed class XenoDespoilerCausticEmbraceSystem : EntitySystem
+public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
 {
     private const float TileHalfExtent = 0.5f;
     private const float UnobstructedRangeBuffer = 1f;
 
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly XenoDespoilerCatalyzeFlagSystem _catalyze = default!;
-    [Dependency] private readonly XenoDespoilerAcidSystem _acid = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private XenoDespoilerCatalyzeFlagSystem _catalyze = default!;
+    [Dependency] private XenoDespoilerAcidSystem _acid = default!;
 
     private EntityQuery<XenoDespoilerLingeringAcidComponent> _lingeringQuery;
 

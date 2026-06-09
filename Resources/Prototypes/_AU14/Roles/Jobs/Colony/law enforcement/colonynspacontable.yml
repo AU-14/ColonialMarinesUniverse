@@ -13,15 +13,23 @@
     - Epilepsy
   canBeAntag: false
   ranks:
-    AU14RankNSPAInspector:
-    - !type:RoleTimeRequirement
-      role: AU14JobCivilianCMBDeputy
-      time: 90000 # 25 hours
-    AU14RankNSPASeniorConstable:
-    - !type:RoleTimeRequirement
-      role: AU14JobCivilianCMBDeputy
-      time: 36000 # 10 hours
-    AU14RankNSPAConstable: []
+    RMCRankCivilian: []
+  chevrons:
+    Inspector:
+      entity: AU14ChevronNSPAInspector
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobCivilianCMBDeputy
+        time: 90000 # 25 hours
+    SeniorConstable:
+      entity: AU14ChevronNSPASeniorConstable
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobCivilianCMBDeputy
+        time: 36000 # 10 hours
+    Constable:
+      entity: AU14ChevronNSPAConstable
+      requirements: []
   startingGear: AU14GearCiviliannspaConstable
   icon: "RMCJobIconTSEPAConstable"
   requireAdminNotify: false

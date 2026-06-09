@@ -11,6 +11,7 @@
   id: AU14IntelThirdPartyMarksmanGOVFOR
   partyspawn: AU14IntelThirdPartyMarksmanFORECONGOVFORSpawner
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
   weight: 1
   minplayers: 500
   maxplayers: 600
@@ -30,6 +31,7 @@
   id: AU14IntelThirdPartySniperGOVFOR
   partyspawn: AU14IntelThirdPartySniperFORECONGOVFORSpawner
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
   weight: 1
   minplayers: 500
   maxplayers: 600

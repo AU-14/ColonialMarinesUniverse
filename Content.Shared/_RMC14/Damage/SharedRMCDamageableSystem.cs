@@ -21,6 +21,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Maps;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Silicons.Borgs;
@@ -30,6 +31,7 @@ using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
@@ -55,6 +57,7 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private RMCPullingSystem _rmcPulling = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -644,6 +647,31 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
             {
                 if (!_damageOverTimeQuery.TryComp(contact, out var damage))
                     continue;
+
+                if (damage.Cover != null)
+                {
+                    var userCoordinates = Transform(user).Coordinates;
+                    var covered = false;
+
+                    if (_transform.GetGrid(userCoordinates) is { } gridUid &&
+                        TryComp<MapGridComponent>(gridUid, out var grid))
+                    {
+                        var tileIndices = _mapSystem.TileIndicesFor(gridUid, grid, userCoordinates);
+                        var anchoredEntities = _mapSystem.GetAnchoredEntities(gridUid, grid, tileIndices);
+
+                        foreach (var anchored in anchoredEntities)
+                        {
+                            if (_entityWhitelist.IsWhitelistPass(damage.Cover, anchored))
+                            {
+                                covered = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (covered)
+                        continue;
+                }
 
                 if (!damage.AffectsDead && _mobState.IsDead(user))
                     continue;

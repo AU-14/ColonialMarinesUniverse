@@ -10,10 +10,11 @@ using Content.Client.Items;
 using Content.Client.Weapons.Ranged.Components;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
+using Content.Shared.CCVar;
 using Content.Shared.CombatMode;
+using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
-using Content.Shared.Weapons.Ranged.Components;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -21,6 +22,7 @@ using Robust.Client.Input;
 using Robust.Client.Player;
 using Robust.Client.State;
 using Robust.Shared.Animations;
+using Robust.Shared.Configuration;
 using Robust.Shared.Input;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -39,6 +41,7 @@ public sealed partial class GunSystem : SharedGunSystem
     [Dependency] private IStateManager _state = default!;
     [Dependency] private AnimationPlayerSystem _animPlayer = default!;
     [Dependency] private InputSystem _inputSystem = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private SharedMapSystem _maps = default!;
     [Dependency] private SharedTransformSystem _xform = default!;
     [Dependency] private SpriteSystem _sprite = default!;
@@ -218,13 +221,21 @@ public sealed partial class GunSystem : SharedGunSystem
         if (_itemPickup.RecentItemPickUp)
             return;
 
-        var projectiles = _gunPrediction.ShootRequested(GetNetEntity(gunUid), GetNetCoordinates(coordinates), target, null, session);
+        Log.Debug($"Sending shoot request tick {Timing.CurTick} / {Timing.CurTime}");
+
+        // RMC rearm instead of treating every held-fire request as continuous fire.
+        var rearmSemiAuto =
+            _cfg.GetCVar(CCVars.ControlHoldToAttackRanged) &&
+            gun.SelectedMode == SelectiveFire.SemiAuto &&
+            !HasComp<GunClickToFireComponent>(gunUid);
+        var projectiles = _gunPrediction.ShootRequested(GetNetEntity(gunUid), GetNetCoordinates(coordinates), target, null, session, rearmSemiAuto);
 
         RaisePredictiveEvent(new RequestShootEvent()
         {
             Target = target,
             Coordinates = GetNetCoordinates(coordinates),
             Gun = GetNetEntity(gunUid),
+            RearmSemiAuto = rearmSemiAuto,
             Shot = projectiles?.Select(e => e.Id).ToList(),
             LastRealTick = _rmcLagCompensation.GetLastRealTick(null),
         });

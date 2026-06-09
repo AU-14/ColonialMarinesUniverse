@@ -15,20 +15,20 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._RMC14.Xenonids.Despoiler;
 
-public sealed class XenoDespoilerAcidBarrageSystem : EntitySystem
+public sealed partial class XenoDespoilerAcidBarrageSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly RMCProjectileSystem _rmcProjectile = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly XenoDespoilerCatalyzeFlagSystem _catalyze = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private RMCProjectileSystem _rmcProjectile = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private XenoDespoilerCatalyzeFlagSystem _catalyze = default!;
 
     private EntityQuery<XenoDespoilerComponent> _despoilerQuery;
     private EntityQuery<XenoDespoilerArmedBarrageComponent> _armedQuery;

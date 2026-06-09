@@ -5,11 +5,17 @@
   playTimeTracker: AU14LACNCommandoSniper
   description: au14-lacncommando-description
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMCRankChiefWarrantOfficer:
-    - !type:RoleTimeRequirement
-      role: AU14LACNCommandoSniper
-      time: 18000 #5 hours
-    RMCRankWarrantOfficer: []
+      entity: AU14ChevronLACNMasterChief
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14LACNCommandoSniper
+        time: 18000 # 5 hours
+    RMCRankWarrantOfficer:
+      entity: AU14ChevronLACNSeniorChief
+      requirements: []
   spawnMenuRoleName: LACN Commando Sniper (AU14, 3rd Party)
   icon: "CMJobIconEmpty"
   startingGear: AU14GearLACNCommandoSniperTeamSniper

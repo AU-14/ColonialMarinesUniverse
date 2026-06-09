@@ -16,11 +16,17 @@ public sealed partial class RMCLightOffsetSystem : EntitySystem
 
     private readonly HashSet<EntityUid> ToUpdate = new();
 
-
     public override void Initialize()
     {
+        SubscribeLocalEvent<RMCLightOffsetComponent, ComponentStartup>(OnLightStartup);
         SubscribeLocalEvent<RMCLightOffsetComponent, MapInitEvent>(OnLightUpdate);
         SubscribeLocalEvent<RMCLightOffsetComponent, EntParentChangedMessage>(OnLightUpdate);
+    }
+
+    private void OnLightStartup(Entity<RMCLightOffsetComponent> ent, ref ComponentStartup args)
+    {
+        if (_net.IsClient)
+            OffsetLight(ent);
     }
 
     private void OnLightUpdate<T>(Entity<RMCLightOffsetComponent> ent, ref T args)
@@ -39,6 +45,11 @@ public sealed partial class RMCLightOffsetSystem : EntitySystem
         if (TerminatingOrDeleted(ent))
             return;
 
+        OffsetLight(ent);
+    }
+
+    private void OffsetLight(Entity<RMCLightOffsetComponent> ent)
+    {
         var sprite = EnsureComp<SpriteSetRenderOrderComponent>(ent);
         var direction = Transform(ent).LocalRotation.GetDir();
         ApplyPointLightOffset(ent, direction);

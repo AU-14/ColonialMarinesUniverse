@@ -5,11 +5,11 @@
   description: au14-upptd-description
   playTimeTracker: AU14JobUPPTerritorialDefenseSquadLeader
   ranks:
-    UPP_Sergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobUPPTerritorialDefenseSquadLeader
-      time: 18000 #5 hours
-    UPP_Plutonowy: []
+    RMCRankCivilian: []
+  chevrons:
+    UPP_Plutonowy:
+      entity: AU14ChevronUPPNIPlutonowy 
+      requirements: []
   spawnMenuRoleName: UPP TD Squad Leader (3rd party)
   startingGear: AU14GearUPPTerritorialDefenseSquadLeader
   greeting: au14-upptd-greeting

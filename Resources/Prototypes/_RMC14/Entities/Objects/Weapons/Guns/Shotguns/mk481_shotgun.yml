@@ -1,0 +1,236 @@
+- type: entity
+  parent: [ RMCBaseWeaponShotgun, RMCBaseAttachableHolder ]
+  id: RMCWeaponShotgunMK481
+  name: MK481 heavy shotgun
+  description: The bulky MK481, known to many as "the broomstick", is an aging relic within the UNMC arsenal. The pump-action system can chamber standard 12 gauge shotgun shells or 18.5mm high-dispersive shock grenades.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Shotguns/mk481/mk481_inhands.rsi
+    layers:
+    - sprite: _RMC14/Objects/Weapons/Guns/Shotguns/mk481/mk481_icon.rsi
+      state: icon
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Shotguns/mk481/mk481_inhands.rsi
+    slots:
+    - Back
+  - type: Gun
+    shotsPerBurst: 1
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_mk481_fire.wav
+  - type: ShootUseDelay
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilWielded: 3
+    recoilUnwielded: 5
+    scatterWielded: 8
+    scatterUnwielded: 20
+    baseFireRate: 0.455
+    burstScatterMult: 5
+  - type: BallisticAmmoProvider
+    capacity: 5
+    proto: CMShellShotgunBuckshot
+    whitelist:
+      tags:
+      - RMCShellShotgunBuckshot
+      - RMCShellShotgunSlugs
+      - RMCShellShotgunFlechette
+      - RMCShellShotgunIncendiaryBuckshot
+      - RMCShellShotgunIncendiary
+      - RMCShellShotgunBeanbag
+      - RMCShellShotgunHDSG
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.2
+    accuracyMultiplierUnwielded: 0.4
+  - type: PumpAction
+  - type: ItemCamouflage
+    camouflageVariations: {}
+  - type: Tag
+    tags:
+    - RMCWeaponShotgunMK481
+    - RMCWeaponShotgun
+
+- type: entity
+  parent: RMCWeaponShotgunMK481
+  id: RMCWeaponShotgunMK481Filled
+  suffix: Filled
+  components:
+  - type: BallisticAmmoProvider
+    proto: RMCShellShotgunHDSG
+
+- type: entity
+  parent: CMShellShotgunBase
+  id: RMCShellShotgunHDSG
+  name: handful of high-dispersive shock grenades
+  description: A handful of 18.5mm high-dispersive shock grenades, also called firecrackers.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Handfuls/shotgun_hdsg_handfuls.rsi
+    layers:
+    - state: hdsg_1
+      map: [ "base" ]
+  - type: CartridgeAmmo
+    proto: RMCPelletShotgunHDSG
+  - type: Stack
+    count: 5
+    stackType: RMCShellShotgunHDSG
+    baseLayer: base
+    layerStates:
+    - hdsg_1
+    - hdsg_1
+    - hdsg_2
+    - hdsg_3
+    - hdsg_4
+    - hdsg_5
+  - type: Tag
+    tags:
+    - RMCHandful
+    - Cartridge
+    - RMCShellShotgunHDSG
+
+- type: stack
+  id: RMCShellShotgunHDSG
+  name: handful of high-dispersive shock grenades
+  icon: { sprite: /Textures/_RMC14/Objects/Weapons/Guns/Ammunition/Handfuls/shotgun_hdsg_handfuls.rsi, state: hdsg_1 }
+  spawn: RMCShellShotgunHDSG
+  maxCount: 5
+
+- type: entity
+  parent: RMCBoxShotgunBase
+  id: RMCBoxShotgunHDSG
+  name: box of HDSG grenades
+  description: A box filled with 18.5mm high-dispersive shock grenades.
+  components:
+  - type: Storage
+    whitelist:
+      tags:
+      - RMCShellShotgunHDSG
+  - type: StorageFill
+    contents:
+    - id: RMCShellShotgunHDSG
+      amount: 3
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Boxes/hdsg.rsi
+    layers:
+    - state: full
+      map: [ "full" ]
+    - state: empty
+      map: [ "empty" ]
+      visible: false
+  - type: Tag
+    tags:
+    - RMCBoxShotgunShells
+    - RMCBoxShotgunHDSG
+
+- type: entity
+  parent: CMPelletShotgunBase
+  id: RMCPelletShotgunHDSG
+  categories: [ HideSpawnMenu ]
+  name: 18.5mm high-dispersive shock grenade
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/hdsg_projectiles.rsi
+    layers:
+    - state: hdsg
+      shader: unshaded
+  - type: TriggerOnFixedDistanceStop
+    delay: 0
+  - type: TriggerOnCollide
+    fixtureID: projectile
+    ignoreOtherNonHard: false
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 6
+    intensitySlope: 4
+    totalIntensity: 45
+    canCreateVacuum: false
+    maxTileBreak: 0
+  - type: ProjectileGrenade
+    evenSpread: true
+    minVelocity: 0.5
+    maxVelocity: 1.5
+    fillPrototype: RMCPelletShotgunHDSGBomblet
+    rebounds: true
+    capacity: 3
+    spreadAngle: 200
+  - type: Projectile
+    deleteOnCollide: false
+    impactEffect: BulletImpactEffect
+    maxFixedRange: 5
+    damage:
+      types:
+        Piercing: 60
+    soundHit:
+      path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+  - type: CMArmorPiercing
+    amount: 10
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 5
+      falloff: 9999
+      ignoreModifiers: true
+    - range: 0
+      falloff: 1
+  - type: RMCProjectileAccuracy
+    accuracy: 85
+    thresholds:
+    - range: 3
+      falloff: 20
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+  - type: ClusterLimitHits
+    limit: 0
+    ignoreFirstHit: true
+  - type: CMExplosionEffect
+    maxShrapnel: 0
+  - type: IgnorePredictionHide
+
+- type: entity
+  parent: CMPelletShotgunBase
+  id: RMCPelletShotgunHDSGBomblet
+  categories: [ HideSpawnMenu ]
+  name: high-dispersive cluster bomblet
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/hdsg_projectiles.rsi
+    layers:
+    - state: hdsg_bomblet
+      shader: unshaded
+  - type: TriggerOnFixedDistanceStop
+    delay: 0
+  - type: TriggerOnCollide
+    fixtureID: projectile
+    ignoreOtherNonHard: false
+  - type: ExplodeOnTrigger
+  - type: DeleteOnTrigger
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 8
+    intensitySlope: 5
+    totalIntensity: 80
+    canCreateVacuum: false
+    maxTileBreak: 0
+  - type: Projectile
+    deleteOnCollide: false
+    impactEffect: BulletImpactEffect
+    maxFixedRange: 1
+    damage:
+      types:
+        Blunt: 5
+    soundHit:
+      path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+  - type: CMExplosionEffect
+    maxShrapnel: 0
+  - type: IgnorePredictionHide
+
+- type: Tag
+  id: RMCWeaponShotgunMK481
+
+- type: Tag
+  id: RMCShellShotgunHDSG
+
+- type: Tag
+  id: RMCBoxShotgunHDSG

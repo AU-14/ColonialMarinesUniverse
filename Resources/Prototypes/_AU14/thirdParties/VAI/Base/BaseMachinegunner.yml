@@ -4,7 +4,11 @@
   name: au14-job-name-vai-machinegunner
   description: au14-vai-mercenary-description
   ranks:
-    VAI_Mercenary: []
+    RMCRankCivilian: []
+  chevrons:
+    VAI_Machinegunner:
+      entity: AU14ChevronVASCMachinegunner
+      requirements: []
   icon: "CMJobIconEmpty"
   playTimeTracker: AU14VAIMachinegunner
   spawnMenuRoleName: VAI Machinegunner (Base)

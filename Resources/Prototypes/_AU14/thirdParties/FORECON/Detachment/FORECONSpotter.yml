@@ -13,11 +13,11 @@
   name: au14-job-name-forecon-spotter
   description: rmc-job-description-forecon-detachment
   ranks:
-    RMCRankChiefWarrantOfficer:
-    - !type:RoleTimeRequirement
-      role: AU14FORECONSpotterDetachment
-      time: 18000 #5 hours
-    RMCRankWarrantOfficer: []
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankWarrantOfficer:
+      entity: AU14ChevronUSCMChiefWarrantOfficer2
+      requirements: []
   spawnMenuRoleName: FORECON Spotter (AU14, Detachment)
   startingGear: AU14GearFORECONSpotterDetachment
   greeting: au14-forecon-detachment-greeting

@@ -129,6 +129,10 @@
     materialComposition:
       CMSteel: 70
       CMGlass: 30
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
 
 - type: entity
   parent: RMCWelderBase

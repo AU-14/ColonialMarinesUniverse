@@ -5,11 +5,17 @@
   description: au14-papthirdparty-description-observer
   playTimeTracker: AU14JobPaPThirdpartyObserver
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     UPP_SeniorLieutenant:
-    - !type:RoleTimeRequirement
-      role: AU14JobPaPThirdpartyObserver
-      time: 18000 #5 hours
-    UPP_Lieutenant: []
+      entity: AU14ChevronUPPNISeniorLieutenant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobPaPThirdpartyInvestigator
+        time: 36000 # 10 hours
+    UPP_Lieutenant:
+      entity: AU14ChevronUPPNILieutenant
+      requirements: []
   spawnMenuRoleName: UPP PaP Observer (3rd party)
   startingGear: AU14GearPAPThirdpartyObserver
   greeting: au14-papthirdparty-greeting

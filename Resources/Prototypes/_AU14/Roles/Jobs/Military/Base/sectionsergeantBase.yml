@@ -31,11 +31,17 @@
     - NonResuscitable
     - Epilepsy
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMCRankStaffSergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSectionSergeant
-      time: 36000 # 10 hours
-    RMCRankSergeant: []
+      entity: AU14ChevronUSCMStaffSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORSectionSergeant
+        time: 36000
+    RMCRankSergeant:
+      entity: AU14ChevronUSCMSergeant
+      requirements: []
   special:
   - !type:AddComponentSpecial
     components:

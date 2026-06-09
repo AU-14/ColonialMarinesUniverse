@@ -6,14 +6,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._RMC14.Xenonids.Despoiler;
 
-public sealed class XenoDespoilerCatalyzeSystem : EntitySystem
+public sealed partial class XenoDespoilerCatalyzeSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly XenoDespoilerHypertensionSystem _hyper = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private XenoDespoilerHypertensionSystem _hyper = default!;
 
     public override void Initialize()
     {

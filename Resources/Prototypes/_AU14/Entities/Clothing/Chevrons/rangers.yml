@@ -1,0 +1,54 @@
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronCWPSBase
+  abstract: true
+  suffix: CWPS Ranger Chevron
+  description: Colonial Wildlands Protection Service rank insignia.
+
+- type: entity
+  parent: AU14ChevronCWPSBase
+  id: AU14ChevronCWPSRangerTrainee
+  name: probationary ranger chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: AU14RankCWPSRangerTrainee
+    override: true
+
+- type: entity
+  parent: AU14ChevronCWPSBase
+  id: AU14ChevronCWPSRanger
+  name: ranger chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_nco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_nco
+  - type: RankChanger
+    rank: AU14RankCWPSRanger
+    override: true
+
+- type: entity
+  parent: AU14ChevronCWPSBase
+  id: AU14ChevronCWPSSeniorRanger
+  name: senior ranger chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: AU14RankCWPSSeniorRanger
+    override: true

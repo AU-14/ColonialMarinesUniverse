@@ -13,6 +13,8 @@
     - machine_parts
     graph: CMMachineFrame
     node: missingWires
+  - type: Corrodible
+    isCorrodible: true
   - type: Destructible
     thresholds:
     - trigger:
@@ -40,6 +42,8 @@
     containers:
     - machine_board
     - machine_parts
+  - type: Corrodible
+    isCorrodible: true
   - type: Destructible
     thresholds:
     - trigger:

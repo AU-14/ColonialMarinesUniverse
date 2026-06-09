@@ -32,7 +32,7 @@ namespace Content.Server._RMC14.Roles;
 
 public sealed partial class MarineCommandOverrideSystem : EntitySystem
 {
-    [Dependency] private ARESSystem _ares = default!;
+    [Dependency] private ARESCoreSystem _aresCore = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IGameTiming _gameTiming = default!;
     [Dependency] private InventorySystem _inventory = default!;
@@ -104,7 +104,6 @@ public sealed partial class MarineCommandOverrideSystem : EntitySystem
     /// </remarks>
     private void CheckForSeniorCommandPresence()
     {
-        var ares = _ares.EnsureARES();
         var foundAny = false;
 
         var query = EntityQueryEnumerator<MarineComponent, OriginalRoleComponent, MobStateComponent, MindContainerComponent>();
@@ -133,7 +132,7 @@ public sealed partial class MarineCommandOverrideSystem : EntitySystem
         if (!foundAny) // there is no one 0_0
             return;
 
-        _marineAnnounce.AnnounceARESStaging(ares, Loc.GetString("rmc-marine-command-override-no-senior-command-found"));
+        AnnounceARESStaging(Loc.GetString("rmc-marine-command-override-no-senior-command-found"));
 
         _adaptationTimerEndTime = _gameTiming.CurTime + TimeSpan.FromMinutes(1);
     }
@@ -152,8 +151,6 @@ public sealed partial class MarineCommandOverrideSystem : EntitySystem
     /// </remarks>
     private void CommanderSelection()
     {
-        var ares = _ares.EnsureARES();
-
         // In fact, List contains only entities with the maximum (the same among themselves) non-zero authority level (MarineAuthorityLevel)
         List<EntityUid> candidates = [];
 
@@ -176,7 +173,7 @@ public sealed partial class MarineCommandOverrideSystem : EntitySystem
 
             if (jobProto.MarineAuthorityLevel >= _seniorAuthorityLevel) // Senior command found
             {
-                _marineAnnounce.AnnounceARESStaging(ares, Loc.GetString("rmc-marine-command-override-senior-command-found"));
+                AnnounceARESStaging(Loc.GetString("rmc-marine-command-override-senior-command-found"));
                 return;
             }
 
@@ -198,7 +195,7 @@ public sealed partial class MarineCommandOverrideSystem : EntitySystem
 
         if (candidates.Count == 0) // No candidates found
         {
-            _marineAnnounce.AnnounceARESStaging(ares, Loc.GetString("rmc-marine-command-override-no-candidates-found"));
+            AnnounceARESStaging(Loc.GetString("rmc-marine-command-override-no-candidates-found"));
             return;
         }
 
@@ -212,7 +209,7 @@ public sealed partial class MarineCommandOverrideSystem : EntitySystem
 
             if (highestRankCandidates == null) // All entities have invalid rank (in this case it is impossible) or an empty dataset was passed
             {
-                _marineAnnounce.AnnounceARESStaging(ares, Loc.GetString("rmc-marine-command-override-no-candidates-found"));
+                AnnounceARESStaging(Loc.GetString("rmc-marine-command-override-no-candidates-found"));
                 return;
             }
 
@@ -254,8 +251,16 @@ public sealed partial class MarineCommandOverrideSystem : EntitySystem
         if (_accessesAdded)
             announceText = $"{announceText}\n{Loc.GetString("rmc-marine-command-override-access-added")}";
 
-        _marineAnnounce.AnnounceARESStaging(ares, announceText, null, null);
+        AnnounceARESStaging(announceText);
 
+    }
+
+    private void AnnounceARESStaging(string message)
+    {
+        if (!_aresCore.TryGetMarineARES(out var ares) || ares == null)
+            return;
+
+        _marineAnnounce.AnnounceARESStaging(ares.Value.Owner, message, null, null);
     }
 
     /// <summary>

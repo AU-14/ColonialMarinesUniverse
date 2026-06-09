@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13-devs/cmss13 PR #4253 (TotalEpicness, Ranged66, Windhealer)",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "vulture_tripod"
+    },
+    {
+      "name": "vulture_scope",
+      "directions": 4
+    }
+  ]
+}

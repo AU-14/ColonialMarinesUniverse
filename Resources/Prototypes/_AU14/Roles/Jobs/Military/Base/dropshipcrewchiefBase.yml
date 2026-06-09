@@ -27,19 +27,29 @@
     - Epilepsy
     - NonResuscitable
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     AU14RankUSASFCMSgt:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORDCC
-      time: 360000 # 100 hours
+      entity: AU14ChevronUSASFChiefMasterSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORDCC
+        time: 360000
     AU14RankUSASFSMSgt:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORDCC
-      time: 216000 # 60 hours
+      entity: AU14ChevronUSASFSeniorMasterSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORDCC
+        time: 216000
     AU14RankUSASFMasterSergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORDCC
-      time: 43200 # 12 hours
-    AU14RankUSASFTechnicalSergeant: []
+      entity: AU14ChevronUSASFMasterSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORDCC
+        time: 43200
+    AU14RankUSASFTechnicalSergeant:
+      entity: AU14ChevronUSASFTechnicalSergeant
+      requirements: []
   special:
   - !type:AddComponentSpecial
     components:

@@ -1,5 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Shared._RMC14.ARES;
+using Content.Shared._RMC14.ARES.Logs;
+using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Chemistry.SmartFridge;
 using Content.Shared._RMC14.IconLabel;
 using Content.Shared._RMC14.Storage;
@@ -23,6 +26,7 @@ using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Chemistry.ChemMaster;
 
@@ -32,6 +36,7 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private ARESCoreSystem _core = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
@@ -39,6 +44,7 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
     [Dependency] private LabelSystem _label = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private SharedRMCIconLabelSystem _rmcIconLabel = default!;
     [Dependency] private SharedRMCSmartFridgeSystem _rmcSmartFridge = default!;
     [Dependency] private RMCStorageSystem _rmcStorage = default!;
@@ -47,6 +53,8 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
     [Dependency] private SharedStorageSystem _storage = default!;
 
     private readonly List<EntityUid> _toFill = new();
+
+    private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabMedicalLogs";
 
     public override void Initialize()
     {
@@ -434,6 +442,8 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
 
         var originalSolution = string.Join(", ",
             buffer.Value.Comp.Solution.Contents.Select(c => $"{c.Quantity}u {c.Reagent.Prototype}"));
+        var originalSolutionNamed = string.Join(", ",
+            buffer.Value.Comp.Solution.Contents.Select(c => $"{c.Quantity}u {_reagent.Index(c.Reagent.Prototype).LocalizedName}"));
         var coords = Transform(ent).Coordinates;
 
         var reagentsPerPill = buffer.Value.Comp.Solution.Contents
@@ -487,6 +497,7 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
             Pill bottle IDs: {string.Join(", ", ent.Comp.SelectedBottles):bottleIds}
             """);
 
+        _core.CreateARESLog(ent, LogCat, (string) $"{Name(args.Actor)} created {ent.Comp.PillAmount} {(double) perPill}u pills with a solution of {Loc.GetString(originalSolutionNamed)}.");
         Dirty(ent);
     }
 

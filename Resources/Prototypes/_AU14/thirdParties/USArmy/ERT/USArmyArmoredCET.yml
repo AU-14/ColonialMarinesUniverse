@@ -13,15 +13,23 @@
   name: au14-job-name-usarmy-cet
   description: au14-job-description-usarmy
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     USArmy_Corporal:
-    - !type:RoleTimeRequirement
-      role: AU14JobUSArmyCET
-      time: 36000 #10 hours
+      entity: AU14ChevronUSArmyCorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmyCET
+        time: 36000 #10 hours
     USArmy_Specialist:
-    - !type:RoleTimeRequirement
-      role: AU14JobUSArmyCET
-      time: 18000 #5 hours
-    USArmy_PFC: []
+      entity: AU14ChevronUSArmySpecialist
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmyCET
+        time: 18000 #5 hours
+    USArmy_PFC:
+      entity: AU14ChevronUSArmyPFC 
+      requirements: []
   spawnMenuRoleName: US Army Combat Engineer Tech (AU14, ERT)
   startingGear: AU14GearUSArmyCETArmored
   greeting: au14-usarmy-armored-greeting

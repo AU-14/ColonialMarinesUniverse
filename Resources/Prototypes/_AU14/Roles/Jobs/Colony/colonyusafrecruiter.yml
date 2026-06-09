@@ -11,7 +11,7 @@
     - Epilepsy
   playTimeTracker: AU14JobCivilianUSASFRecruiter
   ranks:
-    AU14RankUSASFTechnicalSergeant: []
+    RMCRankCivilian: []
   startingGear: AU14GearCivilianUSASFRecruiter
   icon: "AU14JobIconRFN"
   requireAdminNotify: false

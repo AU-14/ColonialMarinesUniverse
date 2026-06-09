@@ -5,7 +5,11 @@
   description: au14-rmcert-rules
   playTimeTracker: AU14JobRMCRRTRifleman
   ranks:
-    RMC_Marine: []
+    RMCRankCivilian: []
+  chevrons:
+    RMC_Marine:
+      entity: AU14ChevronRMCMarine
+      requirements: []
   spawnMenuRoleName: RMC RRT Rifleman
   startingGear: AU14GearRMCRRTRifleman
   icon: "RMCJobIconRoyalCommando"

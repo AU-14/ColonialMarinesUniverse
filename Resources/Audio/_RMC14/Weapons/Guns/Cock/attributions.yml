@@ -17,3 +17,13 @@
   license: "CC-BY-SA-3.0"
   copyright: "Taken from cmss13"
   source: "https://github.com/cmss13-devs/cmss13/blob/b72dc18a26d2f4b5072d2b65145d6130036e0755/sound/machines/click.ogg"
+
+- files: ["gun_vulture_bolt_close.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13"
+  source: "https://github.com/cmss13-devs/cmss13/blob/7cb618c69b75873f3ce893022fe08d1233b3152d/sound/weapons/handling/gun_vulture_bolt_close.ogg"
+
+- files: ["gun_vulture_bolt_eject.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13"
+  source: "https://github.com/cmss13-devs/cmss13/blob/7cb618c69b75873f3ce893022fe08d1233b3152d/sound/weapons/handling/gun_vulture_bolt_eject.ogg"

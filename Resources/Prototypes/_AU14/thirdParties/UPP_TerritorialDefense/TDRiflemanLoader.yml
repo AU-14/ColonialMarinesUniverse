@@ -4,15 +4,11 @@
   name: au-14-job-name-upptd-loader
   description: au14-upptd-description
   ranks:
-    UPP_SeniorGefreiter:
-    - !type:RoleTimeRequirement
-      role: AU14JobUPPTerritorialDefenseRifleman
-      time: 36000 #10 hours
-    UPP_Gefreiter:
-    - !type:RoleTimeRequirement
-      role: AU14JobUPPTerritorialDefenseRifleman
-      time: 18000 #5 hours
-    UPP_Private: []
+    RMCRankCivilian: []
+  chevrons:
+    UPP_Private:
+      entity: AU14ChevronUPPNIPrivate 
+      requirements: []
   spawnMenuRoleName: UPP TD Loader (3rd party)
   startingGear: AU14GearUPPTerritorialDefenseLoader
   greeting: au14-upptd-greeting

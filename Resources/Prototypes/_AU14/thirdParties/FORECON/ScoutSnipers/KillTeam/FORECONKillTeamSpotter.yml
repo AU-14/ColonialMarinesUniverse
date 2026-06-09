@@ -5,11 +5,11 @@
   description: au14-job-description-forecon-killteam
   playTimeTracker: AU14FORECONSpotterDetachment
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMCRankChiefWarrantOfficer:
-    - !type:RoleTimeRequirement
-      role: AU14FORECONSpotterDetachment
-      time: 18000 #5 hours
-    RMCRankWarrantOfficer: []
+      entity: AU14ChevronUSCMChiefWarrantOfficer2
+      requirements: []
   spawnMenuRoleName: FORECON Spotter (AU14, KillTeam)
   startingGear: AU14GearFORECONKillTeamSpotter
   greeting: au14-job-description-forecon-killteam-greeting

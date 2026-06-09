@@ -21,6 +21,8 @@
     capacity: 99999
   - type: Damageable
     damageContainer: Inorganic
+  - type: RMCHealthExaminable
+    speciesType: Mechanical
   - type: Destructible
     thresholds:
     - trigger:

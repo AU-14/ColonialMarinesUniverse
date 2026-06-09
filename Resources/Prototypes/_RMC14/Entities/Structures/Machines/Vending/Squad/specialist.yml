@@ -34,6 +34,17 @@
         giveMapBlip:
           sprite: /Textures/_RMC14/Interface/map_blips.rsi
           state: spec_grenadier
+      - id: RMCSharpSpecEquipmentCase
+        giveSquadRoleName: rmc-job-name-weapons-specialist-sharp
+        isAppendSquadRoleName: false
+        givePrefix: rmc-job-prefix-weapons-specialist-sharp
+        isAppendPrefix: true
+        giveIcon:
+          sprite: _RMC14/Interface/cm_job_icons.rsi
+          state: hudsquad_spec_grenadier
+        giveMapBlip:
+          sprite: /Textures/_RMC14/Interface/map_blips.rsi
+          state: spec_grenadier
       - id: RMCPyroSpecEquipmentCase
         giveSquadRoleName: rmc-job-name-weapons-specialist-pyro
         isAppendSquadRoleName: false
@@ -84,6 +95,14 @@
       - id: RMCMagazineRifleM4SPRA19Incendiary
         points: 40
       - id: RMCMagazineRifleM4SPRA19
+        points: 40
+    - name: Extra SHARP Ammunition
+      entries:
+      - id: RMCMagazineRifleSharpExplosive
+        points: 40
+      - id: RMCMagazineRifleSharpIncendiary
+        points: 40
+      - id: RMCMagazineRifleSharpFlechette
         points: 40
     - name: Extra Sniper Ammunition
       entries:

@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/items/clothing/accessory/ranks.dmi, https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/clothing/accessory/ranks.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "ranks_ae1"
+    },
+    {
+      "name": "big_ae2"
+    },
+    {
+      "name": "ranks_ae2"
+    },
+    {
+      "name": "big_ae3"
+    },
+    {
+      "name": "ranks_ae3"
+    },
+    {
+      "name": "big_ae4"
+    },
+    {
+      "name": "ranks_ae4"
+    },
+    {
+      "name": "big_ae4s"
+    },
+    {
+      "name": "ranks_ae4s"
+    },
+    {
+      "name": "big_ae5"
+    },
+    {
+      "name": "ranks_ae5"
+    },
+    {
+      "name": "big_ae6"
+    },
+    {
+      "name": "ranks_ae6"
+    },
+    {
+      "name": "big_ae7"
+    },
+    {
+      "name": "ranks_ae7"
+    },
+    {
+      "name": "equipped-ranks_ae1",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_ae2",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_ae3",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_ae4",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_ae4s",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_ae5",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_ae6",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_ae7",
+      "directions": 4
+    }
+  ]
+}

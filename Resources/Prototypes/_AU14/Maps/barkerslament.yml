@@ -1,11 +1,12 @@
 - type: gameMap
   id: CMULV376BarkersLament
   mapName: LV-376 Ulixes
-  mapPath: /Maps/_CMU14/lament.yml
+  mapPath: /Maps/_AU14/BarkersMultiZ/barkers0.yml
   mapsBelow:
-  - /Maps/_CMU14/lament_below.yml
+  - /Maps/_AU14/BarkersMultiZ/barkers-1.yml
   mapsAbove:
-  - /Maps/_CMU14/lament_above.yml
+  - /Maps/_AU14/BarkersMultiZ/barkers1.yml
+  - /Maps/_AU14/BarkersMultiZ/barkers2.yml
   minPlayers: 40
   maxPlayers: 140
   maxRandomOffset: 0

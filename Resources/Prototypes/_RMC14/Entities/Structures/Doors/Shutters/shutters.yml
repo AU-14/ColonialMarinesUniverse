@@ -74,6 +74,9 @@
     channel: Environment
   - type: RMCOpenOnAlertLevel
   - type: RMCMesonsNonviewable
+  - type: Tag
+    tags:
+      - ForceNoFixRotations
 
 - type: entity
   parent: RMCShutterBaseIndestructible

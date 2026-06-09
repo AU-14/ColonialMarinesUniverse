@@ -18,13 +18,11 @@ public sealed partial class XenoWatchSystem : SharedXenoWatchSystem
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private PopupSystem _popup = default!;
-    [Dependency] private TransformSystem _transform = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private ViewSubscriberSystem _viewSubscriber = default!;
     [Dependency] private XenoEvolutionSystem _xenoEvolution = default!;
 
     private EntityQuery<ActorComponent> _actorQuery;
-    private EntityQuery<XenoWatchedComponent> _xenoWatchedQuery;
 
     private readonly Dictionary<ICommonSession, ICChatRecipientData> _recipients = new();
 
@@ -33,7 +31,6 @@ public sealed partial class XenoWatchSystem : SharedXenoWatchSystem
         base.Initialize();
 
         _actorQuery = GetEntityQuery<ActorComponent>();
-        _xenoWatchedQuery = GetEntityQuery<XenoWatchedComponent>();
 
         SubscribeLocalEvent<XenoWatchedComponent, ComponentRemove>(OnWatchedRemove);
         SubscribeLocalEvent<XenoWatchedComponent, EntityTerminatingEvent>(OnWatchedRemove);
@@ -62,31 +59,25 @@ public sealed partial class XenoWatchSystem : SharedXenoWatchSystem
 
     private void OnExpandRecipients(ExpandICChatRecipientsEvent ev)
     {
-        var sourceTransform = Transform(ev.Source);
-        var sourcePos = _transform.GetWorldPosition(sourceTransform);
-
+        var sourceCoordinates = Transform(ev.Source).Coordinates;
         _recipients.Clear();
-        foreach (var session in ev.Recipients)
+        var query = EntityQueryEnumerator<XenoWatchedComponent>();
+        while (query.MoveNext(out var watchedUid, out var watched))
         {
-            if (session.Key.AttachedEntity is not { } recipient ||
-                !_xenoWatchedQuery.TryComp(recipient, out var watched))
-            {
-                continue;
-            }
-
-            var recipientTransform = Transform(recipient);
-            if (sourceTransform.MapID != recipientTransform.MapID)
+            var watchedCoordinates = Transform(watchedUid).Coordinates;
+            if (!watchedCoordinates.TryDistance(EntityManager, sourceCoordinates, out var distance))
                 continue;
 
-            var recipientPos = _transform.GetWorldPosition(recipientTransform);
-            var range = (sourcePos - recipientPos).Length();
+            if (distance > ev.VoiceRange)
+                continue;
+
             foreach (var watching in watched.Watching)
             {
                 if (!_actorQuery.TryComp(watching, out var actor))
                     continue;
 
                 if (!ev.Recipients.ContainsKey(actor.PlayerSession))
-                    _recipients.TryAdd(actor.PlayerSession, new ICChatRecipientData(range, false, true));
+                    _recipients.TryAdd(actor.PlayerSession, new ICChatRecipientData(distance, false, true));
             }
         }
 

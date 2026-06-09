@@ -34,11 +34,17 @@
     - NonResuscitable
     - Epilepsy
   ranks:
+  RMCRankCivilian: []
+  chevrons:
     RMCRankMajor:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORPlatCo
-      time: 180000 # 50 hours
-    RMCRankCaptain: []
+      entity: AU14ChevronMajor
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORPlatCo
+        time: 180000 # 50 hours
+    RMCRankCaptain:
+      entity: AU14ChevronCaptain
+      requirements: []
   special:
   - !type:AddComponentSpecial
     components:

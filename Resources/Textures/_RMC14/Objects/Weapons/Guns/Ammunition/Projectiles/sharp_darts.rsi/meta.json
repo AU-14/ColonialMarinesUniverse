@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13-devs/cmss13 PR #8569 (Windhealer, totalepicness, monkeysfist101)",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "sharp_explosive_dart"
+    },
+    {
+      "name": "sharp_incendiary_dart"
+    },
+    {
+      "name": "sharp_flechette_dart"
+    }
+  ]
+}

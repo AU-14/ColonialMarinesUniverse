@@ -37,7 +37,7 @@
   equipment:
     id: RMCIDCardHalcyon
     jumpsuit: RMCJumpsuitLiaisonBrownTie
-    back: CMSatchel # TODO RMC14 - Lockable
+    back: CMSatchelLiaisonSecure
     shoes: RMCBootsSPP
     gloves: RMCHandsVeteran
     pocket2: CMClipboard # RMC14, replace with document pouch when fixed

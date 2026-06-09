@@ -1,6 +1,8 @@
 using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.ARES;
+using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.CameraShake;
 using Content.Shared._RMC14.CrashLand;
 using Content.Shared._RMC14.Extensions;
@@ -33,6 +35,7 @@ public abstract partial class SharedSupplyDropSystem : EntitySystem
     [Dependency] private AreaSystem _area = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private ARESCoreSystem _core = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedCrashLandSystem _crashLand = default!;
     [Dependency] private DamageableSystem _damageable = default!;
@@ -56,6 +59,8 @@ public abstract partial class SharedSupplyDropSystem : EntitySystem
 
     private readonly HashSet<Entity<CanBeSupplyDroppedComponent>> _crates = new();
     private readonly HashSet<EntityUid> _intersecting = new();
+
+    private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabRequisitionsLogs";
 
     public override void Initialize()
     {
@@ -275,6 +280,7 @@ public abstract partial class SharedSupplyDropSystem : EntitySystem
         computer.Comp.LastLaunchAt = time;
         computer.Comp.NextLaunchAt = time + computer.Comp.Cooldown;
         Dirty(computer);
+        _core.CreateARESLog(computer.Owner, LogCat, (string) $"{Name(user)} launched a crate {Name(crate)} to {mapCoordinates.X}, {mapCoordinates.Y}.");
 
         return true;
     }

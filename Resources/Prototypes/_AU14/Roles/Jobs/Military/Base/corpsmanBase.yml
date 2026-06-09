@@ -26,11 +26,17 @@
     - Epilepsy
     - NonResuscitable
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMCRankLanceCorporal:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORPlatoonCorpsman
-      time: 36000 # 10 hours
-    RMCRankPrivateFirstClass: []
+      entity: AU14ChevronUSCMLanceCorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORPlatoonCorpsman
+        time: 36000
+    RMCRankPrivateFirstClass:
+      entity: AU14ChevronUSCMPrivateFirstClass
+      requirements: []
   special:
   - !type:AddComponentSpecial
     components:

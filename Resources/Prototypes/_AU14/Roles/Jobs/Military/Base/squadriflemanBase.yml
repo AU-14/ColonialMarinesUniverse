@@ -23,11 +23,17 @@
     traits:
     - Epilepsy
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMCRankPrivateFirstClass:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadRifleman
-      time: 36000 # 10 hours
-    RMCRankPrivate: []
+      entity: AU14ChevronUSCMPrivateFirstClass
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORSquadRifleman
+        time: 36000 # 10 hours
+    RMCRankPrivate:
+      entity: AU14ChevronUSCMPrivate
+      requirements: []
   special:
   - !type:AddComponentSpecial
     components:

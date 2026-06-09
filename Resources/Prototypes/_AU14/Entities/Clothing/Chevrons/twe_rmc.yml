@@ -1,0 +1,369 @@
+# base
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronRMCBase
+  abstract: true
+  suffix: RMC Chevron
+  description: Royal Marines rank insignia. The badge of a Marine who could operate in any extreme environment, too bad you'll spend most of your career on ships.
+
+# ├──[ Enlisted ]────────────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCRecruit
+  name: recruit chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: RMC_Recruit
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCMarine
+  name: marine chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: RMC_Marine
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCLanceCorporal
+  name: lance corporal chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: RMC_LanceCorporal
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCCorporal
+  name: corporal chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: RMC_Corporal
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCSergent
+  name: sergeant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: RMC_Sergeant
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCCoourlourSergeant
+  name: colour sergeant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: RMC_ColourSergeant
+    override: true
+
+# ├──[ Warrant Officers ]────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCWarrantOfficer2
+  name: warrant officer class 2 chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_warrant
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_warrant
+  - type: RankChanger
+    rank: RMC_WarrantOfficer2
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCWarrantOfficer1
+  name: warrant officer class 1 chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_chiefwarrant
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_warrant
+  - type: RankChanger
+    rank: RMC_WarrantOfficer1
+    override: true
+
+# ├──[ Officers ]────────────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCOCdt
+  name: officer cadet chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: RMC_OfficerCader
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCSecondLieutenant
+  name: second lieutenant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: RMC_2Lieutenant
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCLieutenant
+  name: lieutenant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: RMC_Lieutenant
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCCaptain
+  name: captain chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_seniorofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: RMC_Captain
+    override: true
+
+# ├──[ Field Officers ]──────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCMajor
+  name: major chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_seniorofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: RMC_Major
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCLieutenantColonel
+  name: lieutenant colonel chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: RMC_LieutenantColonel
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCColonel
+  name: colonel chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: RMC_Colonel
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCBrigadier
+  name: brigadier chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: RMC_Brigadier
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCDeputyCommandant
+  name: deputy commandant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: RMC_CommandantDeputy
+    override: true
+
+# ├──[ Generals ]────────────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCMajorGeneral
+  name: major general chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: RMC_MajorGeneral
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCLieutenantGeneral
+  name: lieutenant general chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: RMC_LieutenantGeneral
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCGeneral
+  name: general chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: RMC_General
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCCommandantGeneral
+  name: commandant general chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: RMC_CommandantGeneral
+    override: true
+
+- type: entity
+  parent: AU14ChevronRMCBase
+  id: AU14ChevronRMCCaptainGeneral
+  name: captain general chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: RMC_CaptainGeneral
+    override: true

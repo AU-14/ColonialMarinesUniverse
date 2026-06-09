@@ -1,4 +1,5 @@
 ﻿using Content.Shared._RMC14.Emplacements;
+using Content.Shared._RMC14.Weapons.Ranged.Vulture;
 using Content.Shared.Camera;
 using Content.Shared.Mobs;
 using Content.Shared.Movement.Events;
@@ -37,8 +38,11 @@ public partial class SharedScopeSystem
         if (!args.HasDirectionalMovement)
             return;
 
-        if (!ent.Comp.AllowMovement)
+        if (!ent.Comp.AllowMovement ||
+            IsUsingMountedVultureSpotterScope(ent))
+        {
             UserStopScoping(ent);
+        }
     }
 
     private void OnPullStarted(Entity<ScopingComponent> ent, ref PullStartedMessage args)
@@ -97,10 +101,20 @@ public partial class SharedScopeSystem
 
     private void UserStopScoping(Entity<ScopingComponent> ent)
     {
+        if (_net.IsClient)
+            return;
+
         var scope = ent.Comp.Scope;
         RemCompDeferred<ScopingComponent>(ent);
 
         if (TryComp(scope, out ScopeComponent? scopeComponent) && scopeComponent.User == ent)
             Unscope((scope.Value, scopeComponent));
+    }
+
+    private bool IsUsingMountedVultureSpotterScope(Entity<ScopingComponent> user)
+    {
+        return user.Comp.Scope is { } scope &&
+               _container.TryGetContainingContainer((scope, null), out var container) &&
+               HasComp<VultureSpotterTripodComponent>(container.Owner);
     }
 }

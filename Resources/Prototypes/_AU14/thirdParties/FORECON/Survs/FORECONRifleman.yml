@@ -13,15 +13,23 @@
   name: cm-job-name-rifleman
   description: rmc-job-description-forecon
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMCRankStaffSergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobFORECONRifleman
-      time: 36000 #10 hours
+      entity: AU14ChevronUSCMStaffSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONRifleman
+        time: 36000 #10 hours
     RMCRankSergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobFORECONRifleman
-      time: 18000 #5 hours
-    RMCRankCorporal: []
+      entity: AU14ChevronUSCMSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONRifleman
+        time: 18000 #5 hours
+    RMCRankCorporal:
+      entity: AU14ChevronUSCMCorporal
+      requirements: []
   spawnMenuRoleName: FORECON Rifleman (AU14, surv)
   startingGear: AU14GearFORECONRifleman
   greeting: au14-forecon-greeting

@@ -1,0 +1,536 @@
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  id: RMCWeaponRifleSharp
+  name: P9 SHARP rifle
+  description: An experimental harpoon launcher rifle, produced by AEGIS Armaments. It uses specialized 9X dart magazines and is designed to deny areas with embedded explosive and incendiary payloads.
+  components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleSpecGrenadier
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/sharp/sharp_inhands.rsi
+    layers:
+    - state: base
+      sprite: _RMC14/Objects/Weapons/Guns/Rifles/sharp/sharp_icon.rsi
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/sharp/sharp_inhands.rsi
+  - type: SharpGun
+  - type: GunRequiresWield
+  - type: GunIFF
+    intrinsic: true
+    enabled: true
+  - type: ShootAtFixedPoint
+    maxFixedRange: 7
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilWielded: 0
+    recoilUnwielded: 0
+    scatterWielded: 0
+    scatterUnwielded: 0
+    baseFireRate: 0.3125
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1
+    accuracyMultiplierUnwielded: 1
+  - type: Gun
+    projectileSpeed: 20
+    shotsPerBurst: 1
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_sharp.ogg
+  - type: GunUserWhitelist
+    whitelist:
+      components:
+      - SharpSpecWhitelist
+  - type: Corrodible
+    isCorrodible: false
+  - type: ExplosionResistance
+    damageCoefficient: 0
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentMagneticHarness
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: 0.0, 0.185
+  - type: WieldableSpeedModifiers
+    base: 0.725
+    light: 1
+    medium: 1
+    heavy: 1
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_unload.ogg
+        priority: 2
+        startingItem: RMCMagazineRifleSharpExplosive
+        whitelist:
+          tags:
+          - RMCMagazineRifleSharp
+  - type: Item
+    size: Huge
+  - type: Tag
+    tags:
+    - RMCWeaponRifleSharp
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: RMCMagazineRifleSharpExplosive
+  name: 9X-E sticky explosive dart magazine
+  description: A specialized P9 SHARP rifle magazine loaded with sticky explosive darts.
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - RMCMagazineRifleSharp
+  - type: BallisticAmmoProvider
+    mayTransfer: false
+    proto: RMCCartridgeRifleSharpExplosive
+    capacity: 10
+    whitelist:
+      tags:
+      - RMCCartridgeRifleSharp
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/sharp.rsi
+    layers:
+    - state: sharp_explosive_mag
+
+- type: entity
+  parent: RMCMagazineRifleSharpExplosive
+  id: RMCMagazineRifleSharpIncendiary
+  name: 9X-T sticky incendiary dart magazine
+  description: A specialized P9 SHARP rifle magazine loaded with sticky incendiary darts.
+  components:
+  - type: BallisticAmmoProvider
+    proto: RMCCartridgeRifleSharpIncendiary
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/sharp.rsi
+    layers:
+    - state: sharp_incendiary_mag
+
+- type: entity
+  parent: RMCMagazineRifleSharpExplosive
+  id: RMCMagazineRifleSharpFlechette
+  name: 9X-F flechette dart magazine
+  description: A specialized P9 SHARP rifle magazine loaded with flechette darts.
+  components:
+  - type: BallisticAmmoProvider
+    proto: RMCCartridgeRifleSharpFlechette
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/sharp.rsi
+    layers:
+    - state: sharp_flechette_mag
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: RMCCartridgeRifleSharpExplosive
+  name: cartridge (9X-E sticky explosive dart)
+  description: A 9X-E sticky explosive dart cartridge. Fits in P9 SHARP rifle magazines.
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - RMCCartridgeRifleSharp
+  - type: CartridgeAmmo
+    proto: RMCProjectileSharpExplosive
+
+- type: entity
+  parent: RMCCartridgeRifleSharpExplosive
+  id: RMCCartridgeRifleSharpIncendiary
+  name: cartridge (9X-T sticky incendiary dart)
+  description: A 9X-T sticky incendiary dart cartridge. Fits in P9 SHARP rifle magazines.
+  components:
+  - type: CartridgeAmmo
+    proto: RMCProjectileSharpIncendiary
+
+- type: entity
+  parent: RMCCartridgeRifleSharpExplosive
+  id: RMCCartridgeRifleSharpFlechette
+  name: cartridge (9X-F flechette dart)
+  description: A 9X-F flechette dart cartridge. Fits in P9 SHARP rifle magazines.
+  components:
+  - type: CartridgeAmmo
+    proto: RMCProjectileSharpFlechette
+
+- type: entity
+  parent: RMCBaseBullet
+  id: RMCProjectileSharpExplosive
+  name: explosive dart
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/sharp_darts.rsi
+    drawdepth: Effects
+    layers:
+    - state: sharp_explosive_dart
+      shader: unshaded
+  - type: DeleteOnFixedDistanceStop
+  - type: Projectile
+    deleteOnCollide: true
+    impactEffect: BulletImpactEffect
+    maxFixedRange: 7
+    damage:
+      types:
+        Piercing: 35
+    soundHit:
+      path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+  - type: RMCProjectileAccuracy
+    accuracy: 105
+    thresholds:
+    - range: 12
+      falloff: 0
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 7
+      falloff: 9999
+      ignoreModifiers: true
+  - type: SharpProjectile
+    kind: Explosive
+    mine: RMCSharpExplosiveDartMine
+    directEffect: RMCSharpExplosiveDirectEffect
+
+- type: entity
+  parent: RMCProjectileSharpExplosive
+  id: RMCProjectileSharpIncendiary
+  name: incendiary dart
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/sharp_darts.rsi
+    layers:
+    - state: sharp_incendiary_dart
+      shader: unshaded
+  - type: SharpProjectile
+    kind: Incendiary
+    mine: RMCSharpIncendiaryDartMine
+    directEffect: RMCSharpIncendiaryDirectEffect
+
+- type: entity
+  parent: RMCProjectileSharpExplosive
+  id: RMCProjectileSharpFlechette
+  name: flechette dart
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/sharp_darts.rsi
+    layers:
+    - state: sharp_flechette_dart
+      shader: unshaded
+  - type: Projectile
+    deleteOnCollide: false
+    impactEffect: BulletImpactEffect
+    maxFixedRange: 7
+    damage:
+      types:
+        Piercing: 35
+    soundHit:
+      path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+  - type: SharpProjectile
+    kind: Flechette
+  - type: TriggerOnFixedDistanceStop
+    delay: 0
+  - type: ProjectileGrenade
+    evenSpread: true
+    minVelocity: 0.5
+    maxVelocity: 1.5
+    fillPrototype: RMCSharpFlechetteShard
+    rebounds: true
+    capacity: 8
+    spreadAngle: 40
+    inheritIFF: true
+  - type: ClusterLimitHits
+    limit: 5
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+
+- type: entity
+  parent: MarkerBase
+  id: RMCSharpExplosiveDirectEffect
+  name: SHARP explosive dart impact
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 20
+    intensitySlope: 8
+    totalIntensity: 150
+    canCreateVacuum: false
+  - type: ExplodeOnTrigger
+  - type: CMExplosionEffect
+  - type: RMCScorchEffect
+    radius: 2
+  - type: SoundOnTrigger
+    sound:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_sharp_explode.ogg
+  - type: DeleteOnTrigger
+
+- type: entity
+  parent: RMCSharpExplosiveDirectEffect
+  id: RMCSharpExplosiveMineEffect1
+  name: SHARP explosive mine detonation level 1
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 25
+    intensitySlope: 8
+    totalIntensity: 220
+    canCreateVacuum: false
+  - type: RMCScorchEffect
+    radius: 3
+
+- type: entity
+  parent: RMCSharpExplosiveMineEffect1
+  id: RMCSharpExplosiveMineEffect2
+  name: SHARP explosive mine detonation level 2
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 25
+    intensitySlope: 6
+    totalIntensity: 260
+    canCreateVacuum: false
+
+- type: entity
+  parent: RMCSharpExplosiveMineEffect1
+  id: RMCSharpExplosiveMineEffect3
+  name: SHARP explosive mine detonation level 3
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 30
+    intensitySlope: 7
+    totalIntensity: 300
+    canCreateVacuum: false
+
+- type: entity
+  parent: RMCSharpExplosiveMineEffect1
+  id: RMCSharpExplosiveMineEffect4
+  name: SHARP explosive mine detonation level 4
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 30
+    intensitySlope: 6
+    totalIntensity: 340
+    canCreateVacuum: false
+
+- type: entity
+  parent: MarkerBase
+  id: RMCSharpIncendiaryDirectEffect
+  name: SHARP incendiary dart impact
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TileFireOnTrigger
+    spawn: RMCTileFire
+    range: 2
+    sound:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_sharp_explode.ogg
+  - type: DeleteOnTrigger
+
+- type: entity
+  parent: RMCSharpIncendiaryDirectEffect
+  id: RMCSharpIncendiaryMineEffect1
+  name: SHARP incendiary mine detonation level 1
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: RMCSharpIncendiaryDirectEffect
+  id: RMCSharpIncendiaryMineEffect2
+  name: SHARP incendiary mine detonation level 2
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TileFireOnTrigger
+    spawn: RMCTileFireGreen
+    range: 2
+    sound:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_sharp_explode.ogg
+
+- type: entity
+  parent: RMCSharpIncendiaryDirectEffect
+  id: RMCSharpIncendiaryMineEffect3
+  name: SHARP incendiary mine detonation level 3
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TileFireOnTrigger
+    spawn: RMCTileFireNapalm
+    range: 2
+    sound:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_sharp_explode.ogg
+
+- type: entity
+  parent: RMCSharpIncendiaryDirectEffect
+  id: RMCSharpIncendiaryMineEffect4
+  name: SHARP incendiary mine detonation level 4
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TileFireOnTrigger
+    spawn: RMCTileFireNapalm
+    range: 3
+    sound:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_sharp_explode.ogg
+
+- type: entity
+  parent: CMPelletShotgunBase
+  id: RMCSharpFlechetteShard
+  name: flechette shard
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/shotgun_projectiles.rsi
+    layers:
+    - state: flechette
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 30
+  - type: CMArmorPiercing
+    amount: 35
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 12
+      falloff: 9999
+      ignoreModifiers: true
+    - range: 0
+      falloff: 1
+
+- type: entity
+  parent: BaseItem
+  id: RMCSharpExplosiveDartMine
+  name: SHARP explosive dart mine
+  description: A SHARP explosive dart embedded in the ground. It deploys into a proximity mine shortly after landing and grows more dangerous the longer it is left armed.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Explosives/Mines/sharp_darts.rsi
+    drawdepth: BelowMobs
+    layers:
+    - state: sharp_explosive_mine
+      map: [ "enum.SharpMineVisuals.Layer" ]
+  - type: Fixtures
+    fixtures:
+      trigger:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.5,-1.5,1.5,1.5"
+        hard: false
+        layer:
+        - Opaque
+        mask:
+        - MobLayer
+      hitbox:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        hard: false
+        layer:
+        - XenoProjectileImpassable
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.SharpMineVisuals.State:
+        enum.SharpMineVisuals.Layer:
+          Inactive: { state: sharp_explosive_mine }
+          Active1: { state: sharp_explosive_mine_active }
+          Active2: { state: sharp_explosive_mine_active_2 }
+          Active3: { state: sharp_explosive_mine_active_3 }
+          Active4: { state: sharp_explosive_mine_active_4 }
+          Disarmed: { state: sharp_mine_disarmed }
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:TriggerBehavior
+  - type: RMCLandmine
+    placementDelay: 3
+    disarmDelay: 3
+    shotStackLimit: 1
+    deploySound:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_sharp_explode.ogg
+  - type: SharpMine
+    kind: Explosive
+    triggerRadius: 1.5
+    effects:
+    - RMCSharpExplosiveMineEffect1
+    - RMCSharpExplosiveMineEffect2
+    - RMCSharpExplosiveMineEffect3
+    - RMCSharpExplosiveMineEffect4
+  - type: StepTrigger
+    active: false
+    requiredTriggeredSpeed: 0
+  - type: RMCMesonsNonviewable
+  - type: Flammable
+    fireSpread: false
+    damage:
+      types:
+        Heat: 1
+  - type: Tag
+    tags:
+    - RMCSharpDartMine
+
+- type: entity
+  parent: RMCSharpExplosiveDartMine
+  id: RMCSharpIncendiaryDartMine
+  name: SHARP incendiary dart mine
+  description: A SHARP incendiary dart embedded in the ground. It deploys into a proximity mine shortly after landing and grows more dangerous the longer it is left armed.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Explosives/Mines/sharp_darts.rsi
+    layers:
+    - state: sharp_incendiary_mine
+      map: [ "enum.SharpMineVisuals.Layer" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.SharpMineVisuals.State:
+        enum.SharpMineVisuals.Layer:
+          Inactive: { state: sharp_incendiary_mine }
+          Active1: { state: sharp_incendiary_mine_active }
+          Active2: { state: sharp_incendiary_mine_active_2 }
+          Active3: { state: sharp_incendiary_mine_active_3 }
+          Active4: { state: sharp_incendiary_mine_active_4 }
+          Disarmed: { state: sharp_mine_disarmed }
+  - type: SharpMine
+    kind: Incendiary
+    inactiveState: sharp_incendiary_mine
+    activeState: sharp_incendiary_mine_active
+    effects:
+    - RMCSharpIncendiaryMineEffect1
+    - RMCSharpIncendiaryMineEffect2
+    - RMCSharpIncendiaryMineEffect3
+    - RMCSharpIncendiaryMineEffect4
+
+- type: Tag
+  id: RMCWeaponRifleSharp
+
+- type: Tag
+  id: RMCMagazineRifleSharp
+
+- type: Tag
+  id: RMCCartridgeRifleSharp
+
+- type: Tag
+  id: RMCSharpDartMine

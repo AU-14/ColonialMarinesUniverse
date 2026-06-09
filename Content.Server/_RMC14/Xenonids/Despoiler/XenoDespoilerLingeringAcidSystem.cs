@@ -10,10 +10,10 @@ using Robust.Shared.Spawners;
 
 namespace Content.Server._RMC14.Xenonids.Despoiler;
 
-public sealed class XenoDespoilerLingeringAcidSystem : EntitySystem
+public sealed partial class XenoDespoilerLingeringAcidSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
 
     private EntityQuery<MobStateComponent> _mobStateQuery;
     private EntityQuery<XenoComponent> _xenoQuery;

@@ -1,6 +1,8 @@
 using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.ARES;
+using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Dialog;
@@ -45,6 +47,7 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private AreaSystem _area = default!;
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private ARESCoreSystem _core = default!;
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private SharedEyeSystem _eye = default!;
     [Dependency] private InventorySystem _inventory = default!;
@@ -80,6 +83,8 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
     private TimeSpan _updateEvery;
     private readonly Dictionary<Entity<SquadTeamComponent>, Queue<EntityUid>> _toProcess = new();
     private readonly HashSet<Entity<SquadTeamComponent>> _toRemove = new();
+
+    private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabAnnouncementLogs";
 
     public override void Initialize()
     {
@@ -577,6 +582,7 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
         Dirty(ent);
 
         _adminLog.Add(LogType.RMCMarineAnnounce, $"{ToPrettyString(args.Actor)} sent {squadProto.Name} squad message: {args.Message}");
+        _core.CreateARESLog(ent, LogCat, (string) $"{Name(args.Actor)} sent a squad announcement: {args.Message}");
         if (TryComp(squad.Value, out SquadTeamComponent? squadComp))
         {
             var squadColor = squadComp.AccessibleColor ?? squadComp.Color;

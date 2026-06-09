@@ -1,0 +1,317 @@
+- type: entity
+  parent: RMCPortableVendor
+  id: AU14PortableVendorSEAUSCM
+  name: senior advisor chevrons briefcase
+  suffix: USCM
+  description: A suitcase-sized automated storage and retrieval system. Designed to efficiently store and selectively dispense small items.
+  components:
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORadvisor
+    sections:
+    - name: Enlisted
+      entries:
+      - id: AU14ChevronUSCMPrivate
+        amount: 5
+      - id: AU14ChevronUSCMPrivateFirstClass
+        amount: 5
+      - id: AU14ChevronUSCMLanceCorporal
+        amount: 5
+      - id: AU14ChevronUSCMCorporal
+        amount: 5
+      - id: AU14ChevronUSCMSergeant
+        amount: 5
+      - id: AU14ChevronUSCMStaffSergeant
+        amount: 5
+      - id: AU14ChevronUSCMGunnerySergeant
+        amount: 5
+      - id: AU14ChevronUSCMMasterSergeant
+        amount: 5
+      - id: AU14ChevronUSCMFirstSergeant
+        amount: 5
+      - id: AU14ChevronUSCMMasterGunnerySergeant
+        amount: 5
+      - id: AU14ChevronUSCMSergeantMajor
+        amount: 5
+    - name: Warrant Officers
+      entries:
+      - id: AU14ChevronUSCMWarrantOfficer
+        amount: 5
+      - id: AU14ChevronUSCMChiefWarrantOfficer2
+        amount: 5
+      - id: AU14ChevronUSCMChiefWarrantOfficer3
+        amount: 5
+      - id: AU14ChevronUSCMChiefWarrantOfficer4
+        amount: 5
+      - id: AU14ChevronUSCMChiefWarrantOfficer5
+        amount: 5
+    - name: Officers
+      entries:
+      - id: AU14ChevronSecondLT
+        amount: 5
+      - id: AU14ChevronFirstLT
+        amount: 5
+      - id: AU14ChevronCaptain
+        amount: 5
+      - id: AU14ChevronMajor
+        amount: 5
+
+- type: entity
+  parent: RMCPortableVendor
+  id: AU14PortableVendorRMCRanks
+  name: royal marines rank chevrons briefcase
+  suffix: RMC
+  description: A compact RMC-issued rank storage case. Holds standardized chevrons for field replacement and ceremonial use.
+  components:
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORadvisor
+    sections:
+    - name: Enlisted
+      entries:
+      - id: AU14ChevronRMCRecruit
+        amount: 5
+      - id: AU14ChevronRMCMarine
+        amount: 5
+      - id: AU14ChevronRMCLanceCorporal
+        amount: 5
+      - id: AU14ChevronRMCCorporal
+        amount: 5
+      - id: AU14ChevronRMCSergent
+        amount: 5
+      - id: AU14ChevronRMCCoourlourSergeant
+        amount: 5
+    - name: Warrant Officers
+      entries:
+      - id: AU14ChevronRMCWarrantOfficer2
+        amount: 5
+      - id: AU14ChevronRMCWarrantOfficer1
+        amount: 5
+    - name: Officers
+      entries:
+      - id: AU14ChevronRMCOCdt
+        amount: 5
+      - id: AU14ChevronRMCSecondLieutenant
+        amount: 5
+      - id: AU14ChevronRMCLieutenant
+        amount: 5
+      - id: AU14ChevronRMCCaptain
+        amount: 5
+    - name: Field Officers
+      entries:
+      - id: AU14ChevronRMCMajor
+        amount: 5
+
+- type: entity
+  parent: RMCPortableVendor
+  id: AU14PortableVendorUPPNIRanks
+  name: upp naval infantry rank chevrons briefcase
+  suffix: UPP
+  description: A compact UPP-issue rank case. Heavy, red-stamped, and politically overcorrect in every way imaginable.
+  components:
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORadvisor
+    sections:
+    - name: Enlisted
+      entries:
+      - id: AU14ChevronUPPNIPrivate
+        amount: 5
+      - id: AU14ChevronUPPNIGefreiter
+        amount: 5
+      - id: AU14ChevronUPPNISeniorGefreiter
+        amount: 5
+      - id: AU14ChevronUPPNICorporal
+        amount: 5
+      - id: AU14ChevronUPPNIPlutonowy
+        amount: 5
+      - id: AU14ChevronUPPNISergeant
+        amount: 5
+      - id: AU14ChevronUPPNISeniorSergeant
+        amount: 5
+      - id: AU14ChevronUPPNIFirstSergeant
+        amount: 5
+      - id: AU14ChevronUPPNISergeantSergeant
+        amount: 5
+    - name: Warrant Officers
+      entries:
+      - id: AU14ChevronUPPNIWarrantOfficer
+        amount: 5
+      - id: AU14ChevronUPPNISeniorWarrantOfficer
+        amount: 5
+    - name: Officers
+      entries:
+      - id: AU14ChevronUPPNIJuniorLieutenant
+        amount: 5
+      - id: AU14ChevronUPPNILieutenant
+        amount: 5
+      - id: AU14ChevronUPPNISeniorLieutenant
+        amount: 5
+      - id: AU14ChevronUPPNICaptain
+        amount: 5
+    - name: Field Officers
+      entries:
+      - id: AU14ChevronUPPNIMajor
+        amount: 5
+
+- type: entity
+  parent: RMCPortableVendor
+  id: AU14PortableVendorWeYuRanks
+  name: weyu pmc rank chevrons briefcase
+  suffix: WeYu
+  description: A corporate-issued rank storage unit. Everything is color-coded, optimized, and slightly threatening.
+  components:
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORadvisor
+    sections:
+    - name: Operators
+      entries:
+      - id: AU14ChevronWeYuAssociateOperator
+        amount: 5
+      - id: AU14ChevronWeYuOperator
+        amount: 5
+      - id: AU14ChevronWeYuSeniorOperator
+        amount: 5
+    - name: Enforcers
+      entries:
+      - id: AU14ChevronWeYuEnforcer
+        amount: 5
+      - id: AU14ChevronWeYuEnforcerSenior
+        amount: 5
+      - id: AU14ChevronWeYuEnforcerLead
+        amount: 5
+    - name: Command
+      entries:
+      - id: AU14ChevronWeYuAdjutant
+        amount: 5
+      - id: AU14ChevronWeYuCommander
+        amount: 5
+      - id: AU14ChevronWeYuCommanderSenior
+        amount: 5
+    - name: Aviation
+      entries:
+      - id: AU14ChevronWeYuPilot
+        amount: 5
+      - id: AU14ChevronWeYuSeniorPilot
+        amount: 5
+      - id: AU14ChevronWeYuCrewChief
+        amount: 5
+      - id: AU14ChevronWeYuSeniorCrewChief
+        amount: 5
+
+- type: entity
+  parent: RMCPortableVendor
+  id: AU14PortableVendorPrDRanks
+  name: prd response unit rank chevrons briefcase
+  suffix: PrD
+  description: A cheaply manufactured contractor briefcase filled with laminated rank chevrons and corporate optimism.
+  components:
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORadvisor
+    sections:
+    - name: Response Units
+      entries:
+      - id: AU14ChevronPrDRecruit
+        amount: 5
+      - id: AU14ChevronPrDAssociate
+        amount: 5
+      - id: AU14ChevronPrDOperator
+        amount: 5
+      - id: AU14ChevronPrDSeniorOperator
+        amount: 5
+      - id: AU14ChevronPrDEnforcer
+        amount: 5
+      - id: AU14ChevronPrDEnforcerSenior
+        amount: 5
+      - id: AU14ChevronPrDEnforcerLead
+        amount: 5
+      - id: AU14ChevronPrDAdjutant
+        amount: 5
+      - id: AU14ChevronPrDCommander
+        amount: 5
+      - id: AU14ChevronPrDCommanderSenior
+        amount: 5
+    - name: Aviation
+      entries:
+      - id: AU14ChevronPrDPilot
+        amount: 5
+      - id: AU14ChevronPrDSeniorPilot
+        amount: 5
+      - id: AU14ChevronPrDCrewChief
+        amount: 5
+      - id: AU14ChevronPrDSeniorCrewChief
+        amount: 5
+    - name: Synthetic
+      entries:
+      - id: AU14ChevronPrDSynth1
+        amount: 5
+      - id: AU14ChevronPrDSynth2
+        amount: 5
+      - id: AU14ChevronPrDSynth3
+        amount: 5
+      - id: AU14ChevronPrDSynth4
+        amount: 5
+      - id: AU14ChevronPrDSynth5
+        amount: 5
+    - name: Command
+      entries:
+      - id: AU14ChevronPrDDeputyDirector
+        amount: 5
+      - id: AU14ChevronPrDOperationsDirector
+        amount: 5
+
+- type: entity
+  parent: RMCPortableVendor
+  id: AU14PortableVendorSEALACN
+  name: senior advisor chevrons briefcase
+  suffix: LACN
+  description: A suitcase-sized automated storage and retrieval system. Designed to efficiently store and selectively dispense naval rank insignia.
+  components:
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORadvisor
+    sections:
+    - name: Enlisted
+      entries:
+      - id: AU14ChevronLACNSeamanRecruit
+        amount: 5
+      - id: AU14ChevronLACNSeamanApprentice
+        amount: 5
+      - id: AU14ChevronLACNSeaman
+        amount: 5
+    - name: Petty Officers
+      entries:
+      - id: AU14ChevronLACNPettyOfficerThirdClass
+        amount: 5
+      - id: AU14ChevronLACNPettyOfficerSecondClass
+        amount: 5
+      - id: AU14ChevronLACNPettyOfficerFirstClass
+        amount: 5
+      - id: AU14ChevronLACNChiefPettyOfficer
+        amount: 5
+      - id: AU14ChevronLACNSeniorChief
+        amount: 5
+      - id: AU14ChevronLACNMasterChief
+        amount: 5
+    - name: Officers
+      entries:
+      - id: AU14ChevronLACNSubEnsign
+        amount: 5
+      - id: AU14ChevronLACNEnsign
+        amount: 5
+      - id: AU14ChevronLACNLieutenantJuniorGrade
+        amount: 5
+      - id: AU14ChevronLACNLieutenant
+        amount: 5
+      - id: AU14ChevronLACNLieutenantCommander
+        amount: 5
+      - id: AU14ChevronLACNCommander
+        amount: 5
+      - id: AU14ChevronLACNCaptain
+        amount: 5
+    - name: Flag Officers
+      entries:
+      - id: AU14ChevronLACNRearAdmiral
+        amount: 5

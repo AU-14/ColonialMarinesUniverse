@@ -676,6 +676,12 @@
         amount: 1
       - id: RMCPackFlareCAS
         amount: 6
+    - name: Chevrons
+      entries:
+      - id: AU14ChevronLACNSeamanRecruit
+        amount: 2
+      - id: AU14PortableVendorSEALACN
+        amount: 1
 
 - type: entity
   parent: ColMarTechBase

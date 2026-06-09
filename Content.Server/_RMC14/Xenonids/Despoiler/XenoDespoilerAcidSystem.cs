@@ -11,11 +11,11 @@ using Content.Shared.Weapons.Melee.Events;
 
 namespace Content.Server._RMC14.Xenonids.Despoiler;
 
-public sealed class XenoDespoilerAcidSystem : SharedXenoDespoilerAcidSystem
+public sealed partial class XenoDespoilerAcidSystem : SharedXenoDespoilerAcidSystem
 {
-    [Dependency] private readonly XenoDespoilerHypertensionSystem _hyper = default!;
-    [Dependency] private readonly XenoSpitSystem _xenoSpit = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private XenoDespoilerHypertensionSystem _hyper = default!;
+    [Dependency] private XenoSpitSystem _xenoSpit = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
 
     private EntityQuery<XenoComponent> _xenoQuery;
     private EntityQuery<XenoDespoilerComponent> _despoilerQuery;
