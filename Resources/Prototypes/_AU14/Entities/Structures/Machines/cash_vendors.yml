@@ -782,6 +782,9 @@
     - id: AU14GuidebookSOP
       name: SOP Guidebook
       price: 5
+    - id: AU14GuidebookNEMOSOP
+      name: NEMO SOP Guidebook
+      price: 5
 
 # Corporate snack machine — sells food for cash
 - type: entity

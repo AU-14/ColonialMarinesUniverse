@@ -385,6 +385,8 @@
         amount: 3
       - id: AU14GuidebookLawMarine
         amount: 3
+      - id: AU14GuidebookNEMOSOP
+        amount: 3
 
 #corpsman
 - type: entity

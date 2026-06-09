@@ -1008,6 +1008,8 @@
         amount: 10
       - id: AU14GuidebookSOP
         amount: 10
+      - id: AU14GuidebookNEMOSOP
+        amount: 10
     # ////////////////////////////////////
     # Chief Engineer
     # ////////////////////////////////////

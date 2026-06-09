@@ -349,6 +349,8 @@
         amount: 3
       - id: AU14GuidebookSOP
         amount: 3
+      - id: AU14GuidebookNEMOSOP
+        amount: 3
 
 - type: entity
   parent: ColMarTechBase
@@ -1054,6 +1056,7 @@
       - id: RMCBoxZiptie
       - id: AU14GuidebookLawMarine
       - id: AU14GuidebookSOP
+      - id: AU14GuidebookNEMOSOP
       - id: AU14Scissors
     - name: Uniform
       choices: { AU14Uniform: 1 }

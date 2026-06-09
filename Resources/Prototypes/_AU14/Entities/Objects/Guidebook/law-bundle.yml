@@ -24,6 +24,8 @@
         amount: 1
       - id: AU14GuidebookSOP
         amount: 1
+      - id: AU14GuidebookNEMOSOP
+        amount: 1
       - id: CMPenFountain
         amount: 1
       - id: RubberStampLawyer # temporary

@@ -304,6 +304,7 @@
       - id: RMCBoxZiptie
       - id: AU14GuidebookLawMarine
       - id: AU14GuidebookSOP
+      - id: AU14GuidebookNEMOSOP
       - id: AU14Scissors
     - name: Hat
       choices: { CMHat: 1 }
