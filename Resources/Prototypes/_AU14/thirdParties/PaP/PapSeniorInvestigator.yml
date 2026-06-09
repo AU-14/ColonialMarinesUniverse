@@ -5,11 +5,17 @@
   description: au14-papthirdparty-description
   playTimeTracker: AU14JobPaPThirdpartySeniorInvestigator
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     UPP_Major:
-    - !type:RoleTimeRequirement
-      role: AU14JobPaPThirdpartySeniorInvestigator
-      time: 18000 #5 hours
-    UPP_Captain: []
+      entity: AU14ChevronUPPNIMajor
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUPPGROMCommander
+        time: 18000 # 5 hours
+    UPP_Captain:
+      entity: AU14ChevronUPPNICaptain
+      requirements: []
   spawnMenuRoleName: UPP PaP Senior Investigator (3rd party)
   startingGear: AU14GearPAPThirdpartySeniorInvestigator
   greeting: au14-papthirdparty-greeting

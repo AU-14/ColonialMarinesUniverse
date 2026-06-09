@@ -6,10 +6,10 @@ using Content.Shared.Weapons.Melee.Events;
 
 namespace Content.Server._RMC14.Xenonids.Despoiler;
 
-public sealed class XenoDespoilerFinishingStabSystem : EntitySystem
+public sealed partial class XenoDespoilerFinishingStabSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly XenoDespoilerAcidSystem _acid = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private XenoDespoilerAcidSystem _acid = default!;
 
     private EntityQuery<UserAcidedComponent> _acidQuery;
 

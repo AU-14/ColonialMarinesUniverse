@@ -45,6 +45,7 @@ public sealed partial class RMCProjectileSystem : EntitySystem
 
         SubscribeLocalEvent<SpawnOnTerminateComponent, MapInitEvent>(OnSpawnOnTerminatingMapInit);
         SubscribeLocalEvent<SpawnOnTerminateComponent, EntityTerminatingEvent>(OnSpawnOnTerminatingTerminate);
+        SubscribeLocalEvent<SpawnOnTerminateComponent, ProjectileHitEvent>(OnSpawnOnTerminateProjectileHit);
 
         SubscribeLocalEvent<PreventCollideWithDeadComponent, PreventCollideEvent>(OnPreventCollideWithDead);
 
@@ -228,14 +229,27 @@ public sealed partial class RMCProjectileSystem : EntitySystem
         var coordinates = transform.Coordinates;
         if (ent.Comp.ProjectileAdjust &&
             ent.Comp.Origin is { } origin &&
-            coordinates.TryDelta(EntityManager, _transform, origin, out var delta) &&
-            delta.Length() > 0)
+            coordinates.TryDelta(EntityManager, _transform, origin, out var delta))
         {
-            coordinates = coordinates.Offset(delta.Normalized() / -2);
+            var deltaLength = delta.Length();
 
-            if (HasComp<RMCFireProjectileComponent>(ent))
+            if (deltaLength > 0f)
             {
-                coordinates = coordinates.Offset(delta.Normalized()); // Apparently that works...
+                var direction = delta / deltaLength;
+
+                if (TryComp(ent, out ProjectileMaxRangeComponent? projectileMaxRange) &&
+                    deltaLength > projectileMaxRange.Max)
+                {
+                    deltaLength = projectileMaxRange.Max;
+                    delta = direction * deltaLength;
+                    coordinates = origin.Offset(delta);
+                }
+
+                if (ent.Comp.AdjustSpawn && ent.Comp.SpawnOffset != 0f)
+                    coordinates = coordinates.Offset(direction * ent.Comp.SpawnOffset);
+
+                if (ent.Comp.AdjustSpawn && HasComp<RMCFireProjectileComponent>(ent))
+                    coordinates = coordinates.Offset(direction);
             }
         }
 
@@ -244,6 +258,18 @@ public sealed partial class RMCProjectileSystem : EntitySystem
 
         if (ent.Comp.Popup is { } popup)
             _popup.PopupCoordinates(Loc.GetString(popup), coordinates, ent.Comp.PopupType ?? PopupType.Small);
+    }
+
+    private void OnSpawnOnTerminateProjectileHit(Entity<SpawnOnTerminateComponent> ent, ref ProjectileHitEvent args)
+    {
+        ent.Comp.AdjustSpawn = true;
+        Dirty(ent);
+    }
+
+    public void SetSpawnOffset(Entity<SpawnOnTerminateComponent> ent, float offset)
+    {
+        ent.Comp.SpawnOffset = offset;
+        Dirty(ent);
     }
 
     private void OnPreventCollideWithDead(Entity<PreventCollideWithDeadComponent> ent, ref PreventCollideEvent args)

@@ -5,11 +5,17 @@
   description: au14-job-description-usarmy-tankccrew
   playTimeTracker: AU14JobUSArmyTankGunner
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     USArmy_StaffSergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobUSArmyTankGunner
-      time: 18000 #5 hours
-    USArmy_Sergeant: []
+      entity: AU14ChevronUSArmyStaffSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmyTankGunner
+        time: 18000 #5 hours
+    USArmy_Sergeant:
+      entity: AU14ChevronUSArmySergeant
+      requirements: []
   spawnMenuRoleName: US Army Tank Gunner (AU14, 3rd Party)
   startingGear: AU14GearUSArmyTankGunner
   greeting: au14-usarmy-tank-greeting

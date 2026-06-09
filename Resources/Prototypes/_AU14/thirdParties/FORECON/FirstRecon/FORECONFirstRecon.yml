@@ -13,6 +13,7 @@
   id: FORECONFirstRecon
   partyspawn: AU14FORECONFirstReconSpawner
   entrymethod: shuttle 
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
   weight: 10
   minplayers: 50
   maxplayers: 600

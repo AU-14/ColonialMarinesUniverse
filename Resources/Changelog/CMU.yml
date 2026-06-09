@@ -2685,5 +2685,221 @@
   id: 224
   time: '2026-06-08T12:29:49.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1262
+- author: NzzyFk
+  changes:
+  - message: Some new basic tiles
+    type: Add
+  id: 225
+  time: '2026-06-08T16:41:49.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1258
+- author: maertayn
+  changes:
+  - message: Fluent localization example for Xeno Despoiler (use ent- and .desc)
+    type: Code
+  id: 226
+  time: '2026-06-08T17:51:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1263
+- author: potatoed6
+  changes:
+  - message: added chevrons for LEOs and platoons
+    type: Add
+  - message: added chevron briefcases for SEAs
+    type: Add
+  - message: added recruit chevrons for govfor recruiting civilians
+    type: Add
+  - message: WJs time reqs changed to 2 hours - 1h WMS and 1h CT/colony engi respectably
+      for govfor and colony WJ.
+    type: Tweak
+  - message: Added chevrons components and system, rankchanger system, tweaked jobprototype,
+      sharedranksystem, jobtitlechangersystem.
+    type: Code
+  id: 227
+  time: '2026-06-08T18:24:27.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1228
+- author: TheHellFireo
+  changes:
+  - message: ARES core, logging, and terminal UI.
+    type: Add
+  - message: Dropship fabricator print queue.
+    type: Add
+  - message: PDTL Battle Buddy Kit.
+    type: Add
+  - message: Reusable ID-lockable satchels.
+    type: Add
+  - message: Imaginary Friend.
+    type: Add
+  - message: Barricade downgrading.
+    type: Add
+  - message: Hijack explosions and server performance follow-up.
+    type: Add
+  - message: Seven RMC ERT shuttles as AU third-party dropships.
+    type: Add
+  - message: Monkey and small-host mob variants.
+    type: Add
+  - message: New computer disks, disk spawners, and document pouch disk storage.
+    type: Add
+  - message: Department biosuits, biohoods, RMC/security bomb suits, and locker fills.
+    type: Add
+  - message: Linked folding plasteel barricades.
+    type: Add
+  - message: RMC parity boxes and vending swaps.
+    type: Add
+  - message: Civilian/WEYA portable bag phones.
+    type: Add
+  - message: PVE Syracuse pump-action shotgun and storage case.
+    type: Add
+  - message: Ponchos, watches, watch cases, loadouts, and vendor wiring.
+    type: Add
+  - message: Acid holes, wall girder repair/replacement support, and wall structure
+      sprites.
+    type: Add
+  - message: PMC lifesaver belt.
+    type: Add
+  - message: Medic lightpack.
+    type: Add
+  - message: Playing card actions are now predicted; card hands/decks are tiny.
+    type: Tweak
+  - message: Water can extinguish mobs resisting fire.
+    type: Tweak
+  - message: Dropship weapons console has quick target mode.
+    type: Tweak
+  - message: Spawn-on-terminate coordinates clamp to projectile max range.
+    type: Tweak
+  - message: Mentor help UI sorting, unread state, and close-state handling improved.
+    type: Tweak
+  - message: Acid holes and walls received stricter blocking, timing, and threshold
+      behavior.
+    type: Tweak
+  - message: Slow, super-slow, and root effect expiry is predicted.
+    type: Tweak
+  - message: Light fixtures keep offset correctly while maps are paused.
+    type: Tweak
+  - message: Couch, sofa, potted plant, and palm assets updated.
+    type: Tweak
+  - message: Leap/headbutt impulses no longer inherit xeno movement.
+    type: Tweak
+  - message: Mounted weapons and sentries show health indicators.
+    type: Tweak
+  - message: Xeno build buttons use toggle behavior.
+    type: Tweak
+  - message: Bipod inactive fire-delay modifier corrected.
+    type: Tweak
+  - message: XenoZoom now increases PVS range.
+    type: Tweak
+  - message: MP27 sprites, sounds, and attachment offsets updated.
+    type: Tweak
+  - message: Girder fixtures now fill tiles.
+    type: Tweak
+  - message: Separated HUD alerts expand vertically.
+    type: Tweak
+  - message: GOVFOR/OPFOR platoon headsets keep AU14 platoon defaults.
+    type: Tweak
+  - message: Xeno watch can hear nearby chat through watched targets.
+    type: Tweak
+  - message: Resin wall upgrades attached to single doors no longer delete the door.
+    type: Fix
+  - message: Resin spikes and acid pillars now have build animations.
+    type: Fix
+  - message: Folding barricade suit storage and collapse doafters are covered.
+    type: Fix
+  - message: Doafter bars render correctly over xenos and hide occluded non-xeno bars.
+    type: Fix
+  - message: Toxic water damage respects catwalk cover.
+    type: Fix
+  - message: Continuous fire no longer slightly reduces fire rate.
+    type: Fix
+  - message: Walls no longer eat CAS missiles.
+    type: Fix
+  - message: Interaction range corrected.
+    type: Fix
+  - message: Double resin wall stacking behavior covered.
+    type: Fix
+  - message: Burrowers can no longer acid things while burrowed.
+    type: Fix
+  - message: Xeno interaction/corrosion blacklists added to affected props/items.
+    type: Fix
+  - message: Shield visual layer restored on base carriers.
+    type: Fix
+  - message: Squad tracker no longer resets manual tracking to FTL.
+    type: Fix
+  - message: Catwalk water slowdown refresh behavior corrected.
+    type: Fix
+  - message: Valkyrie retrieve rejects dead xenonids.
+    type: Fix
+  - message: Throwing items into disposal bins works with bullet-blocking fixtures.
+    type: Fix
+  - message: Xenos no longer dismount weapon mounts by left-clicking them.
+    type: Fix
+  - message: Sentry launcher follow-up behavior audited/preserved.
+    type: Fix
+  - message: Camera consoles can watch dropship targets.
+    type: Fix
+  - message: Startup/typecheck blockers from the port batch were fixed.
+    type: Fix
+  - message: Despoiler Acid Barrage no longer damages same-hive friendly xenos.
+    type: Fix
+  id: 228
+  time: '2026-06-08T20:40:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1266
+- author: 400Ferrets
+  changes:
+  - message: Dropship sentries are in govfor ASRS for $600 instead of the dropship
+      fabricator.
+    type: Tweak
+  id: 229
+  time: '2026-06-09T02:35:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1260
+- author: 400Ferrets
+  changes:
+  - message: Second floor of the USS Bush is now weedable.
+    type: Fix
+  id: 230
+  time: '2026-06-09T02:36:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1259
+- author: troytroy400
+  changes:
+  - message: USS George W. Bush now has an orbital cannon and supply console.
+    type: Add
+  - message: USS George W. Bush requisitions starts with basic supplies.
+    type: Add
+  - message: USS George W. Bush AI stairwell fixed.
+    type: Fix
+  id: 231
+  time: '2026-06-09T12:24:35.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1269
+- author: TheHellFireo
+  changes:
+  - message: Added the M37A1 pump shotgun with camouflage sprites, inhand/wielded
+      sprites, attachment support, and a dedicated gun case.
+    type: Add
+  - message: Increased the M37A1 fire rate so it cycles faster than the initial port.
+    type: Tweak
+  - message: Added the MK481 heavy shotgun with HDSG grenade rounds, ammo boxes, projectile
+      sprites, and a dedicated gun case.
+    type: Add
+  - message: Lowered MK481 scatter and tuned HDSG behavior so its cluster bomblets
+      detonate at the intended impact/stop point.
+    type: Tweak
+  - message: Added the P9 SHARP rifle, SHARP operator equipment case, SHARP magazine
+      belt, operator pamphlet, explosive/incendiary/flechette magazines, dart projectiles,
+      deployed dart mines, mine sprites, direct-hit effects, and ammo crates.
+    type: Add
+  - message: 'SHARP explosive and incendiary darts can toggle direct-hit detonation
+      delay, spawn armed 360-degree proximity mines on range expiry, and apply flashing
+      target outlines: red for explosive and yellow for incendiary.'
+    type: Tweak
+  - message: Added the M707 Vulture anti-materiel rifle with disassembled case setup,
+      integrated barrel/scope/bipod/stock attachments, 20x102mm magazine/ammo, spotter
+      scope, deployable spotter tripod, instructional pamphlet, Vulture action icons,
+      and scope overlay assets.
+    type: Add
+  - message: 'Added Vulture scoped-fire mechanics: fixed 5x5 firing window, scope
+      zoom/angle controls, windage/elevation adjustments, crosshair drift, hold-breath
+      stabilization, spotter-linked view support, heavy bullet penetration, impact
+      audio, and enhanced bullet fly-by sound.'
+    type: Add
+  id: 232
+  time: '2026-06-09T15:31:37.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1270
 Name: CMU
 Order: -1

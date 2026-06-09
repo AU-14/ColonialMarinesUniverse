@@ -13,15 +13,23 @@
     traits:
     - Epilepsy
   ranks:
-    AU14RankCMBSrDeputy:
-    - !type:RoleTimeRequirement
-      role: AU14JobCivilianCMBDeputy
-      time: 72000 # 20 hours
-    AU14RankCMBDeputy:
-    - !type:RoleTimeRequirement
-      role: AU14JobCivilianCMBDeputy
-      time: 7200 # 2 hours
-    AU14RankCMBProbDeputy: []
+    RMCRankCivilian: []
+  chevrons:
+    SrDeputy:
+      entity: AU14ChevronCMBSrDeputy
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobCivilianCMBDeputy
+        time: 72000 # 20 hours
+    Deputy:
+      entity: AU14ChevronCMBDeputy
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobCivilianCMBDeputy
+        time: 7200 # 2 hours
+    ProbDeputy:
+      entity: AU14ChevronCMBProbDeputy
+      requirements: []
   startingGear: AU14GearCivilianCMBDeputy
   icon: "RMCJobIconBureauDeputy"
   requireAdminNotify: false

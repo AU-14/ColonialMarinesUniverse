@@ -13,6 +13,9 @@ public sealed partial class RankSystem : SharedRankSystem
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IEntityManager _entityManager = default!;
 
+    // Store mob -> (player, jobId, profile) on spawn so we can reapply later
+    private readonly Dictionary<EntityUid, PlayerSpawnCompleteEvent> _spawnData = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -35,6 +38,25 @@ public sealed partial class RankSystem : SharedRankSystem
         if (ev.JobId == null)
             return;
 
+        _spawnData[ev.Mob] = ev;
+
+        ApplyJobRank(ev.Mob);
+    }
+
+    public void ReapplyJobRank(EntityUid mob)
+    {
+        if (_spawnData.TryGetValue(mob, out var ev))
+            ApplyJobRank(mob);
+    }
+
+    private void ApplyJobRank(EntityUid mob)
+    {
+        if (!_spawnData.TryGetValue(mob, out var ev))
+            return;
+
+        if (ev.JobId == null)
+            return;
+
         if (!_prototypes.TryIndex<JobPrototype>(ev.JobId, out var jobPrototype))
             return;
 
@@ -43,7 +65,6 @@ public sealed partial class RankSystem : SharedRankSystem
 
         if (!_tracking.TryGetTrackerTimes(ev.Player, out var playTimes))
         {
-            // Playtimes haven't loaded.
             Log.Error($"Playtimes weren't ready yet for {ev.Player} on roundstart!");
             playTimes ??= new Dictionary<string, TimeSpan>();
         }
@@ -51,13 +72,12 @@ public sealed partial class RankSystem : SharedRankSystem
         foreach (var rank in jobPrototype.Ranks)
         {
             var failed = false;
-            var jobRequirements = rank.Value;
 
             if (_prototypes.TryIndex<RankPrototype>(rank.Key, out var rankPrototype) && rankPrototype != null)
             {
-                if (jobRequirements != null)
+                if (rank.Value != null)
                 {
-                    foreach (var req in jobRequirements)
+                    foreach (var req in rank.Value)
                     {
                         if (!req.Check(_entityManager, _prototypes, ev.Profile, playTimes, out _))
                             failed = true;
@@ -66,8 +86,8 @@ public sealed partial class RankSystem : SharedRankSystem
 
                 if (!failed)
                 {
-                    SetRank(ev.Mob, rankPrototype);
-                    break;
+                    SetRank(mob, rankPrototype);
+                    return;
                 }
             }
         }

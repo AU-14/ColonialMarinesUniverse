@@ -13,15 +13,23 @@
   name: au-14-job-name-papthirdparty-investigator
   description: au14-papthirdparty-description
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     UPP_SeniorLieutenant:
-    - !type:RoleTimeRequirement
-      role: AU14JobPaPThirdpartyInvestigator
-      time: 36000 #10 hours
+      entity: AU14ChevronUPPNISeniorLieutenant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobPaPThirdpartyInvestigator
+        time: 36000 # 10 hours
     UPP_Lieutenant:
-    - !type:RoleTimeRequirement
-      role: AU14JobPaPThirdpartyInvestigator
-      time: 18000 #5 hours
-    UPP_JuniorLieutenant: []
+      entity: AU14ChevronUPPNILieutenant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobPaPThirdpartyInvestigator
+        time: 18000 # 5 hours
+    UPP_JuniorLieutenant:
+      entity: AU14ChevronUPPNIJuniorLieutenant
+      requirements: []
   spawnMenuRoleName: UPP PaP Investigator (3rd party)
   startingGear: AU14GearPAPThirdpartyInvestigator
   greeting: au14-papthirdparty-greeting

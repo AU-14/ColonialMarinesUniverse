@@ -20,6 +20,7 @@
   id: CMBParoleeTransport
   partyspawn: CMBParoleeTransportSpawn
   entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_cmb_shuttle.yml
   weight: 20
   minplayers: 20
   maxplayers: 79
@@ -33,6 +34,7 @@
   id: CMBParoleeTransportBig
   partyspawn: CMBParoleeTransportBigSpawn
   entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_cmb_shuttle.yml
   weight: 20
   minplayers: 80
   maxplayers: 600
@@ -41,4 +43,3 @@
   whitelistedgamemodes:
     - insurgency
     - colonyfall
-

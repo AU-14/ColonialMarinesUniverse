@@ -7,7 +7,11 @@
   canBeAntag: false
   requirements:
   ranks:
-    AU14RankCMBDeputy: []
+    RMCRankCivilian: []
+  chevrons:
+    Deputy:
+      entity: AU14ChevronCMBDeputy
+      requirements: []
   startingGear: AU14JobParoleeReleaseCMBDeputyGear
   icon: "RMCJobIconBureauDeputy"
   spawnMenuRoleName: CMB Deputy (3rd party)

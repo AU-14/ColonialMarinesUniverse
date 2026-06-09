@@ -6,7 +6,11 @@
   setPreference: false
   canBeAntag: false
   ranks:
-    AU14RankCMBMarshal: []
+    RMCRankCivilian: []
+  chevrons:
+    Marshal:
+      entity: AU14ChevronCMBMarshal
+      requirements: []
   startingGear: AU14GearCMBMarshalInvestigation
   icon: "RMCJobIconBureauMarshal"
   spawnMenuRoleName: CMB Marshal (3rd party)

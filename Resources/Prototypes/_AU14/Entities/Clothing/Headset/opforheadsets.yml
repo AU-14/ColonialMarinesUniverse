@@ -123,6 +123,9 @@
       - AU14EncryptionKeyOpforIntel
       - AU14EncryptionKeyOpforJTAC
       - AU14EncryptionKeyOpforMILP
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: radioOpforCommand
 
 - type: entity
   parent: AU14HeadsetOpforMarine
@@ -161,6 +164,9 @@
       - AU14EncryptionKeyOpfor
       - AU14EncryptionKeyOpforCommandOnly
       - AU14EncryptionKeyOpforIntel
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: radioOpforCommand
 
 - type: entity
   parent: AU14HeadsetOpforMarine
@@ -175,3 +181,6 @@
       - AU14EncryptionKeyOpforCommand
 #     - AU14EncryptionKeyOpforCommandOnly
       - AU14EncryptionKeyOpforMILP
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: radioOpforCommand

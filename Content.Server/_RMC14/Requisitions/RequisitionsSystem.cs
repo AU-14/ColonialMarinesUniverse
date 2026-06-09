@@ -15,6 +15,8 @@ using Content.Shared.Labels.Components;
 using Content.Shared.Lock;
 using Content.Shared.Paper;
 using Content.Server.Store.Components;
+using Content.Shared._RMC14.ARES;
+using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
@@ -52,6 +54,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     [Dependency] private ChasmSystem _chasm = default!;
     [Dependency] private ChatSystem _chatSystem = default!;
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private ARESCoreSystem _core = default!;
     [Dependency] private EntityStorageSystem _entityStorage = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private INetManager _net = default!;
@@ -73,6 +76,8 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     private int _freeCratesXenoDivider;
 
     private readonly HashSet<Entity<MobStateComponent>> _toPit = new();
+
+    private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabRequisitionsLogs";
 
     public override void Initialize()
     {
@@ -206,6 +211,13 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         elevator.Comp.Orders.Add(order);
         SendUIStateAll();
         _adminLogs.Add(LogType.RMCRequisitionsBuy, $"{ToPrettyString(args.Actor):actor} bought requisitions crate {order.Name} with crate {order.Crate} for {order.Cost}");
+
+        if (!_prototypeManager.TryIndex<EntityPrototype>(order.Crate, out var prototype))
+            return;
+
+        _core.CreateARESLog(computer.Owner,
+            LogCat,
+            (string) $"{Name(actor)} bought {prototype.Name} for {order.Cost}$");
     }
 
     private void OnPlatform(Entity<RequisitionsComputerComponent> computer, ref RequisitionsPlatformMsg args)
@@ -250,6 +262,11 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         comp.Busy = true;
         SetMode(elevator, Preparing, nextMode);
         Dirty(elevator);
+
+        if (nextMode == Raising)
+            _core.CreateARESLog(computer.Owner, LogCat, (string) $"{Name(args.Actor)} raised the requisitions elevator");
+        if (nextMode == Lowering)
+            _core.CreateARESLog(computer.Owner, LogCat, (string) $"{Name(args.Actor)} lowered the requisitions elevator");
     }
 
     // Returns the first existing account matching faction, or creates a new one.

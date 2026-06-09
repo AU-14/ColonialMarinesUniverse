@@ -10,15 +10,15 @@ using Robust.Shared.Map;
 
 namespace Content.Client._RMC14.Xenonids.Despoiler;
 
-public sealed class XenoDespoilerBarrageInputSystem : EntitySystem
+public sealed partial class XenoDespoilerBarrageInputSystem : EntitySystem
 {
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly MapSystem _map = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private MapSystem _map = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private TransformSystem _transform = default!;
 
     private EntityQuery<XenoDespoilerArmedBarrageComponent> _armedQuery;
     private EntityQuery<XenoDespoilerChargingBarrageComponent> _chargingQuery;

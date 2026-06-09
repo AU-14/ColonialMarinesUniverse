@@ -85,6 +85,44 @@
 
 - type: entity
   parent: RMCBaseEquipmentCase
+  id: RMCSharpSpecEquipmentCase
+  name: SHARP operator equipment case
+  description: "A large case containing a P9 SHARP rifle, M103 SHARP magazine belt, M3-G4 grenadier armor and helmet, several specialized 9X dart magazines, an instructional pamphlet, and additional pieces of equipment.\n\nNOTE: You cannot put items back inside this case."
+  components:
+  - type: Sprite
+    layers:
+    - state: closed
+      map: [ base ]
+    - state: grenadier
+      map: [ label ]
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,21,3
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponRifleSharp
+    - id: RMCBeltSharp
+    - id: RMCMagazineRifleSharpExplosive
+      amount: 4
+    - id: RMCMagazineRifleSharpFlechette
+      amount: 2
+    - id: RMCMagazineRifleSharpIncendiary
+      amount: 2
+    - id: RMCHandsM3G4
+    - id: RMCArmorM3G4
+    - id: RMCArmorHelmetM3G4
+    - id: RMCMK80
+    - id: CMMagazinePistolMK80
+      amount: 2
+    - id: RMCBinoculars
+    - id: RMCPamphletSharp
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: SharpSpecWhitelist
+
+- type: entity
+  parent: RMCBaseEquipmentCase
   id: RMCDemoSpecEquipmentCase
   name: demolitionist equipment case
   description: "A large case containing a heavy-caliber M5 Anti-Tank Launcher, reinforced M3-T light armor, five 84mm rockets, and additional pieces of equipment.\n\nNOTE: You cannot put items back inside this case."

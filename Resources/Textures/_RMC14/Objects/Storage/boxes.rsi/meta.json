@@ -38,6 +38,9 @@
       "name": "implant"
     },
     {
+      "name": "inf_box"
+    },
+    {
       "name": "mousetraps"
     },
     {
@@ -99,6 +102,9 @@
     },
     {
       "name": "l96_e"
+    },
+    {
+      "name": "vial"
     }
   ]
 }

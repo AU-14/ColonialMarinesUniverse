@@ -3,9 +3,9 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client._RMC14.Xenonids.Despoiler;
 
-public sealed class XenoDespoilerAcidBarrageProjectileVisualSystem : EntitySystem
+public sealed partial class XenoDespoilerAcidBarrageProjectileVisualSystem : EntitySystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

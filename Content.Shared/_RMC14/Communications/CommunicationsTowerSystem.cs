@@ -262,13 +262,13 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
         UpdateAppearance(tower);
     }
 
-    public bool CanTransmit(ProtoId<RadioChannelPrototype> channel)
+    public bool CanTransmit(ProtoId<RadioChannelPrototype>? channel = null)
     {
         var towers = EntityQueryEnumerator<CommunicationsTowerComponent>();
         while (towers.MoveNext(out var tower))
         {
             if (tower.State != CommunicationsTowerState.On ||
-                !tower.Channels.Contains(channel))
+                channel != null && !tower.Channels.Contains(channel.Value))
             {
                 continue;
             }

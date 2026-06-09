@@ -1,7 +1,6 @@
 using System.Numerics;
 using Content.Shared._RMC14.PlayingCards;
 using Content.Shared.Hands;
-using Content.Shared.Hands.EntitySystems;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Containers;
@@ -13,7 +12,6 @@ namespace Content.Client._RMC14.PlayingCards;
 public sealed partial class PlayingCardSystem : SharedPlayingCardSystem
 {
     [Dependency] private SharedContainerSystem _container = default!;
-    [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private ISharedPlayerManager _player = default!;
     [Dependency] private SpriteSystem _sprite = default!;
 
@@ -69,7 +67,7 @@ public sealed partial class PlayingCardSystem : SharedPlayingCardSystem
         if (showFaceUp &&
             _container.TryGetContainingContainer(ent.Owner, out var container) &&
             container.Owner != _player.LocalEntity &&
-            _hands.IsHolding(container.Owner, ent.Owner))
+            Hands.IsHolding(container.Owner, ent.Owner))
         {
             showFaceUp = false;
         }
@@ -121,7 +119,7 @@ public sealed partial class PlayingCardSystem : SharedPlayingCardSystem
     private void OnHandStateChanged(Entity<PlayingCardHandComponent> ent, ref AfterAutoHandleStateEvent args)
     {
         UpdateHandSprite(ent);
-        if (_ui.TryGetOpenUi<PlayingCardHandBui>(ent.Owner, PlayingCardHandUi.Key, out var bui))
+        if (Ui.TryGetOpenUi<PlayingCardHandBui>(ent.Owner, PlayingCardHandUi.Key, out var bui))
         {
             try
             {
@@ -181,7 +179,7 @@ public sealed partial class PlayingCardSystem : SharedPlayingCardSystem
         if (showFaceUp &&
             _container.TryGetContainingContainer(ent.Owner, out var container) &&
             container.Owner != _player.LocalEntity &&
-            _hands.IsHolding(container.Owner, ent.Owner))
+            Hands.IsHolding(container.Owner, ent.Owner))
         {
             showFaceUp = false;
         }

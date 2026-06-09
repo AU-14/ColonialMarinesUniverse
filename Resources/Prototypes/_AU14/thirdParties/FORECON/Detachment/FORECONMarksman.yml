@@ -5,11 +5,11 @@
   description: rmc-job-description-forecon-detachment
   playTimeTracker: AU14FORECONMarksmanDetachment
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMCRankChiefWarrantOfficer:
-    - !type:RoleTimeRequirement
-      role: AU14FORECONMarksmanDetachment
-      time: 18000 #5 hours
-    RMCRankWarrantOfficer: []
+      entity: AU14ChevronUSCMChiefWarrantOfficer2
+      requirements: []
   spawnMenuRoleName: FORECON Marksman (AU14, Detachment)
   startingGear: AU14GearFORECONMarksmanDetachment
   greeting: au14-forecon-detachment-greeting

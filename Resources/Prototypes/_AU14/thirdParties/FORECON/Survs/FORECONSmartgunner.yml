@@ -13,15 +13,23 @@
   name: cm-job-name-smart-gun-operator
   description: rmc-job-description-forecon
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMCRankStaffSergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobFORECONSmartGunOperator
-      time: 36000 #10 hours
+      entity: AU14ChevronUSCMStaffSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONSmartGunOperator
+        time: 36000 #10 hours
     RMCRankSergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobFORECONSmartGunOperator
-      time: 18000 #5 hours
-    RMCRankCorporal: []
+      entity: AU14ChevronUSCMSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONSmartGunOperator
+        time: 18000 #5 hours
+    RMCRankCorporal:
+      entity: AU14ChevronUSCMCorporal
+      requirements: []
   spawnMenuRoleName: FORECON Smart Gun Operator (AU14, surv)
   startingGear: AU14GearFORECONSmartGunOperator
   greeting: au14-forecon-greeting

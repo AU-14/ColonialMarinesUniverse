@@ -4,11 +4,11 @@
   name: Platoon Leader
   spawnMenuRoleName: Platoon Sergeant (UPP)
   ranks:
-    UPP_Chotar:
+    UPP_FirstSergeant:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORSectionSergeant
       time: 216000 # 60 hours
-    UPP_StaffSergeant:
+    UPP_SeniorSergeant:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORSectionSergeant
       time: 108000 # 30 hours

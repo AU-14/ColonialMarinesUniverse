@@ -12,6 +12,7 @@
   id: UPPTDLostTeam
   partyspawn: UPPTDLostTeamSpawn
   entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml
   weight:  20
   minplayers: 0
   maxplayers: 400

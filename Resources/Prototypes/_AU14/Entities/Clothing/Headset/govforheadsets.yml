@@ -124,6 +124,9 @@
       - AU14EncryptionKeyGovforIntel
       - AU14EncryptionKeyGovforJTAC
       - AU14EncryptionKeyGovforMILP
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: radioGovforCommand
 
 - type: entity
   parent: AU14HeadsetGovforMarine
@@ -162,6 +165,9 @@
       - AU14EncryptionKeyGovfor
       - AU14EncryptionKeyGovforCommandOnly
       - AU14EncryptionKeyGovforIntel
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: radioGovforCommand
 
 - type: entity
   parent: AU14HeadsetGovforMarine
@@ -176,3 +182,6 @@
       - AU14EncryptionKeyGovforCommand
 #     - AU14EncryptionKeyGovforCommandOnly
       - AU14EncryptionKeyGovforMILP
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: radioGovforCommand

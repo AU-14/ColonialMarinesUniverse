@@ -1,5 +1,5 @@
 - type: entity
-  parent: CMMobMonkey
+  parent: CMMobSmallHostMonkey
   id: CMUMobApe
   name: Ape
   description: A capable and dangerous megafauna, high caloric needs.
@@ -257,4 +257,3 @@
       - feet
     feet:
       part: FeetAnimal
-

@@ -3,8 +3,8 @@
   id: AU14JobGOVFORadvisorUPP
   spawnMenuRoleName: Platoon Advisor (UPP)
   ranks:
-    UPP_FirstSergeant:
+    UPP_SeniorCommissar:
     - !type:RoleTimeRequirement
       role: AU14JobGOVFORadvisor
       time: 360000 # 100 hours
-    UPP_Chotar: []
+    UPP_SergeantMajor: []

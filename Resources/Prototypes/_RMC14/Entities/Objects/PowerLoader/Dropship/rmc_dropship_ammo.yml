@@ -321,8 +321,6 @@
   - type: Sprite
     sprite: _RMC14/Objects/dropship_ammo.rsi
     state: launchable_sentry
-  - type: DropshipFabricatorPrintable
-    cost: 200
   - type: PowerLoaderAttachable
     attachableTypes:
     - RMCDropshipUtilityPoint

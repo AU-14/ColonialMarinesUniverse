@@ -607,6 +607,12 @@ public sealed partial class SquadSystem : EntitySystem
                         keyComp.Channels.Remove(rStr);
                         changed = true;
                     }
+
+                    if (keyComp.DefaultChannel == rStr)
+                    {
+                        keyComp.DefaultChannel = null;
+                        changed = true;
+                    }
                 }
 
                 if (addRadio is { } a)
@@ -615,6 +621,12 @@ public sealed partial class SquadSystem : EntitySystem
                     if (!keyComp.Channels.Contains(aStr))
                     {
                         keyComp.Channels.Add(aStr);
+                        changed = true;
+                    }
+
+                    if (keyComp.DefaultChannel != aStr)
+                    {
+                        keyComp.DefaultChannel = aStr;
                         changed = true;
                     }
                 }
@@ -1076,4 +1088,3 @@ public sealed partial class SquadSystem : EntitySystem
         _membersToUpdate.Clear();
     }
 }
-

@@ -9,6 +9,7 @@ namespace Content.Shared._RMC14.Xenonids.Designer;
 
 public sealed partial class DesignerRemoteThickenResinSystem : EntitySystem
 {
+    [Dependency] private SharedXenoConstructionSystem _xenoConstruction = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -63,10 +64,20 @@ public sealed partial class DesignerRemoteThickenResinSystem : EntitySystem
         var coords = Transform(target).Coordinates;
         var rotation = Transform(target).LocalRotation;
 
-        var thickened = Spawn(upgradeable.To.Value, coords);
+        EntityUid thickened;
+        try
+        {
+            _xenoConstruction.BeginStructureUpgrade(target);
+            Del(target);
+            thickened = Spawn(upgradeable.To.Value, coords);
+        }
+        finally
+        {
+            _xenoConstruction.EndStructureUpgrade(target);
+        }
+
         _transform.SetLocalRotation(thickened, rotation);
         _hive.SetSameHive(ent.Owner, thickened);
-        QueueDel(target);
 
         _popup.PopupClient(Loc.GetString("rmc-xeno-designer-thicken-success"), ent.Owner, ent.Owner);
     }

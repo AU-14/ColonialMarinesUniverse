@@ -4,7 +4,11 @@
   name: au14-job-name-vai-medic
   description: au14-vai-mercenary-description
   ranks:
-    VAI_MedicalSpecialist: []
+    RMCRankCivilian: []
+  chevrons:
+    VAI_MedicalSpecialist:
+      entity: AU14ChevronVASCMedicalSpecialist
+      requirements: []
   icon: "CMJobIconEmpty"
   playTimeTracker: AU14VAIMedic
   spawnMenuRoleName: VAI Medic (Base)

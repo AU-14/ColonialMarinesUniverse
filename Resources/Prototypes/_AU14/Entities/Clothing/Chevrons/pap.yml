@@ -1,0 +1,57 @@
+# base
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronPAPBase
+  abstract: true
+  suffix: PAP Chevron
+  description: People's Armed Police rank insignia. Wearing this makes you remember what is the goal of your work. Punch some people as armed police, right?
+
+# ├──[ Militsiya ]────────────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronPAPBase
+  id: AU14ChevronPAPMilitsioner
+  name: militsioner chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: RMCRankSPPMlts
+    override: true
+
+- type: entity
+  parent: AU14ChevronPAPBase
+  id: AU14ChevronPAPStarshiyMilitsioner
+  name: senior militsioner chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_nco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_nco
+  - type: RankChanger
+    rank: RMCRankSPPSMlts
+    override: true
+
+- type: entity
+  parent: AU14ChevronPAPBase
+  id: AU14ChevronPAPStarshina
+  name: starshina chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: RMCRankSPPStrsh
+    override: true

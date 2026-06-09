@@ -21,7 +21,7 @@
   id: UPP_Corporal
   name: Corporal
   prefix: Corp.
-  paygrade: E3
+  paygrade: E4
 
 - type: rank
   id: UPP_Plutonowy
@@ -36,22 +36,22 @@
   paygrade: E5
 
 - type: rank
-  id: UPP_StaffSergeant
-  name: Staff Sergeant
+  id: UPP_SeniorSergeant
+  name: Senior Sergeant
   prefix: SSgt.
   paygrade: E6
-
-- type: rank
-  id: UPP_Chotar
-  name: Chotar
-  prefix: Chot.
-  paygrade: E7
 
 - type: rank
   id: UPP_FirstSergeant
   name: First Sergeant
   prefix: 1stSgt.
-  paygrade: E8
+  paygrade: E7
+
+- type: rank
+  id: UPP_SergeantMajor
+  name: Sergeant Major
+  prefix: SgtMaj.
+  paygrade: E7
 
 #  warrant Officers
 - type: rank
@@ -100,9 +100,9 @@
   paygrade: O4
 
 - type: rank
-  id: UPP_LieutenantColonel
-  name: Lieutenant Colonel
-  prefix: Lt Col.
+  id: UPP_JuniorColonel
+  name: Junior Colonel
+  prefix: JCol.
   paygrade: O5
 
 - type: rank
@@ -145,4 +145,9 @@
 - type: rank
   id: UPP_Commissar
   name: Commissar
+  prefix: Comrade
+
+- type: rank
+  id: UPP_SeniorCommissar
+  name: Senior Commissar
   prefix: Comrade

@@ -13,15 +13,23 @@
     traits:
     - Epilepsy
   ranks:
-    AU14RankCWPSSeniorRanger:
-    - !type:RoleTimeRequirement
-      role: AU14JobCivilianCMBDeputy
-      time: 72000 # 20 hours
-    AU14RankCWPSRanger:
-    - !type:RoleTimeRequirement
-      role: AU14JobCivilianCMBDeputy
-      time: 7200 # 2 hours
-    AU14RankCWPSRangerTrainee: []
+    RMCRankCivilian: []
+  chevrons:
+    SeniorRanger:
+      entity: AU14ChevronCWPSSeniorRanger
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobCivilianCMBDeputy
+        time: 72000 # 20 hours
+    Ranger:
+      entity: AU14ChevronCWPSRanger
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobCivilianCMBDeputy
+        time: 7200 # 2 hours
+    RangerTrainee:
+      entity: AU14ChevronCWPSRangerTrainee
+      requirements: []
   startingGear: AU14GearCivilianCWPSRanger
   icon: "RMCJobIconBureauDeputy"
   requireAdminNotify: false

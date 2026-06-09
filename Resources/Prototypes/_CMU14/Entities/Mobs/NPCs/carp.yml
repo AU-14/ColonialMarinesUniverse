@@ -99,6 +99,11 @@
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: alive
       sprite: _AU14/Mobs/Animals/carp.rsi
+    - map: [ "enum.HumanoidVisualLayers.Handcuffs" ]
+      color: "#ffffff"
+      sprite: Objects/Misc/handcuffs.rsi
+      state: body-overlay-2
+      visible: false
     - map: [ "mask" ]
   - type: InteractionPopup
     interactSuccessString: petting-success-carp

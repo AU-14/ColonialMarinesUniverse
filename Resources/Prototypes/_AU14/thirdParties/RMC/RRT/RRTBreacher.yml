@@ -5,7 +5,11 @@
   description: au14-rmcert-rules
   playTimeTracker: AU14JobRMCRRTBreacher
   ranks:
-    RMC_LanceCorporal: []
+    RMCRankCivilian: []
+  chevrons:
+    RMC_LanceCorporal:
+      entity: AU14ChevronRMCLanceCorporal
+      requirements: []
   spawnMenuRoleName: RMC RRT Breacher
   startingGear: AU14GearRMCRRTBreacher
   icon: "RMCJobIconRoyalBreacher"

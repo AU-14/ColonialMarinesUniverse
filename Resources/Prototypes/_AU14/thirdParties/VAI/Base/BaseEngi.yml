@@ -4,7 +4,11 @@
   name: au14-job-name-vai-engi
   description: au14-vai-mercenary-description
   ranks:
-    VAI_Mercenary: []
+    RMCRankCivilian: []
+  chevrons:
+    VAI_Engineer:
+      entity: AU14ChevronVASCEngineer
+      requirements: []
   icon: "CMJobIconEmpty"
   playTimeTracker: AU14VAIEngi
   spawnMenuRoleName: VAI Engineer (Base)

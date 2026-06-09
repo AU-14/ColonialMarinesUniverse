@@ -20,6 +20,9 @@
   components:
   - type: Sprite
     state: alpha_headset
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: MarineAlpha
   - type: ContainerFill
     containers:
       key_slots:
@@ -93,6 +96,9 @@
   components:
   - type: Sprite
     state: bravo_headset
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: MarineBravo
   - type: ContainerFill
     containers:
       key_slots:
@@ -166,6 +172,9 @@
   components:
   - type: Sprite
     state: charlie_headset
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: MarineCharlie
   - type: ContainerFill
     containers:
       key_slots:
@@ -239,6 +248,9 @@
   components:
   - type: Sprite
     state: delta_headset
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: MarineDelta
   - type: ContainerFill
     containers:
       key_slots:
@@ -312,6 +324,9 @@
   components:
   - type: Sprite
     state: echo_headset
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: MarineEcho
   - type: ContainerFill
     containers:
       key_slots:
@@ -385,6 +400,9 @@
   components:
   - type: Sprite
     state: cryo_headset
+  - type: RMCStaticDefaultChannel
+  - type: EncryptionKeyHolder
+    defaultChannel: MarineFoxtrot
   - type: ContainerFill
     containers:
       key_slots:

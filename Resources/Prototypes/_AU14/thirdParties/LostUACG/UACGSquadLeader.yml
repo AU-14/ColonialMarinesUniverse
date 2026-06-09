@@ -5,11 +5,17 @@
   description: au14-uacg-description
   playTimeTracker: AU14JobUACGSquadLeader
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMCRankSergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobUACGSquadLeader
-      time: 18000 #5 hours
-    RMCRankCorporal: []
+      entity: AU14ChevronUSArmySergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUACGSquadLeader
+        time: 18000 #5 hours
+    RMCRankCorporal:
+      entity: AU14ChevronUSArmyCorporal
+      requirements: []
   spawnMenuRoleName: UACG Squad Leader (3rd party)
   startingGear: AU14GearUACGLostSquadLeader
   greeting: au14-uacg-greeting

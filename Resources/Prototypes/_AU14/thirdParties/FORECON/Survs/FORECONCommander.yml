@@ -5,11 +5,17 @@
   description: cm-job-description-commanding-officer
   playTimeTracker: AU14JobFORECONCommander
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMCRankMajor:
-    - !type:RoleTimeRequirement
-      role: AU14JobFORECONCommander
-      time: 18000 # 5 hours
-    RMCRankCaptain: []
+      entity: AU14ChevronMajor
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORPlatCo
+        time: 18000 # 5 hours
+    RMCRankCaptain:
+      entity: AU14ChevronCaptain
+      requirements: []
   spawnMenuRoleName: FORECON Commander (AU14, surv)
   startingGear: AU14GearFORECONCommander
   greeting: au14-forecon-greeting

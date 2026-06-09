@@ -22,7 +22,11 @@
   parent: AU14Jobk9handlerBase
   id: AU14JobThirdPartyK9Handler
   ranks:
-    RMCRankStaffSergeant: []
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankStaffSergeant:
+      entity: AU14ChevronUSCMStaffSergeant
+      requirements: []
   special:
   - !type:AddComponentSpecial
     components:

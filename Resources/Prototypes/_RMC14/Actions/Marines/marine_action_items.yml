@@ -245,6 +245,177 @@
 
 - type: entity
   parent: ActionMarineBase
+  id: RMCActionVultureScope
+  name: M707 Vulture Scope
+  description: Use the Vulture's integrated scope.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: zoom_scope
+    iconOn:
+      sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: unzoom_scope
+    useDelay: 0.25
+  - type: InstantAction
+    event: !type:AttachableToggleActionEvent
+
+- type: entity
+  parent: ActionMarineBase
+  id: RMCActionVultureCycleZoomLevel
+  name: Cycle Vulture Scope Zoom
+  description: Change the Vulture scope's magnification.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: zoom_scope
+    useDelay: 0.25
+  - type: InstantAction
+    event: !type:ScopeCycleZoomLevelEvent
+  - type: Tag
+    tags:
+    - RMCActionCycleZoomLevel
+
+- type: entity
+  parent: ActionMarineBase
+  id: RMCActionVultureScopeForward
+  name: Scope Forward
+  description: Move the Vulture scope view further away.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: zoom_in
+    useDelay: 0.1
+  - type: InstantAction
+    event: !type:VultureScopeForwardActionEvent
+
+- type: entity
+  parent: ActionMarineBase
+  id: RMCActionVultureScopeBackward
+  name: Scope Back
+  description: Move the Vulture scope view closer.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: zoom_out
+    useDelay: 0.1
+  - type: InstantAction
+    event: !type:VultureScopeBackwardActionEvent
+
+- type: entity
+  parent: ActionMarineBase
+  id: RMCActionVultureScopeLeft
+  name: Scope Left
+  description: Move the Vulture scope view to the left.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: scope_angle_left
+    useDelay: 0.1
+  - type: InstantAction
+    event: !type:VultureScopeLeftActionEvent
+
+- type: entity
+  parent: ActionMarineBase
+  id: RMCActionVultureScopeRight
+  name: Scope Right
+  description: Move the Vulture scope view to the right.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: scope_angle_right
+    useDelay: 0.1
+  - type: InstantAction
+    event: !type:VultureScopeRightActionEvent
+
+- type: entity
+  parent: ActionMarineBase
+  id: RMCActionVultureWindageLeft
+  name: Windage Left
+  description: Adjust the Vulture crosshair left.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: windage_left
+    useDelay: 0.1
+  - type: InstantAction
+    event: !type:VultureWindageLeftActionEvent
+
+- type: entity
+  parent: ActionMarineBase
+  id: RMCActionVultureWindageRight
+  name: Windage Right
+  description: Adjust the Vulture crosshair right.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: windage_right
+    useDelay: 0.1
+  - type: InstantAction
+    event: !type:VultureWindageRightActionEvent
+
+- type: entity
+  parent: ActionMarineBase
+  id: RMCActionVultureElevationUp
+  name: Elevation Up
+  description: Adjust the Vulture crosshair up.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: elevation_up
+    useDelay: 0.1
+  - type: InstantAction
+    event: !type:VultureElevationUpActionEvent
+
+- type: entity
+  parent: ActionMarineBase
+  id: RMCActionVultureElevationDown
+  name: Elevation Down
+  description: Adjust the Vulture crosshair down.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: elevation_down
+    useDelay: 0.1
+  - type: InstantAction
+    event: !type:VultureElevationDownActionEvent
+
+- type: entity
+  parent: ActionMarineToggleable
+  id: RMCActionVultureBreath
+  name: Breath Control
+  description: Hold your breath to temporarily stabilize the Vulture crosshair.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: prepare_position
+    useDelay: 0.25
+  - type: InstantAction
+    event: !type:VultureBreathActionEvent
+
+- type: entity
+  parent: ActionMarineBase
   id: RMCActionBroiler
   name: Switch Tank
   description: Switch to a different fuel tank.

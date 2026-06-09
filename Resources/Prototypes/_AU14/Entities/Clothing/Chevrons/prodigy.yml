@@ -1,0 +1,367 @@
+# base
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronPrDBase
+  abstract: true
+  suffix: PSC Rank Chevron
+  description: Private Security Contractor response unit rank insignia. 3D printed, with laminate tailings and an alligator clip to hold it to your lapel. Tacky as always.
+
+# ├──[ Platoon Ranks ]───────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDRecruit
+  name: response unit in training chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: AU14RankPrDRecruit
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDAssociate
+  name: associate response unit chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: AU14RankPrDAssociate
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDOperator
+  name: response unit operator chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: AU14RankPrDOperator
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDSeniorOperator
+  name: senior operator chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: AU14RankPrDSeniorOperator
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDEnforcer
+  name: response unit enforcer chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_nco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_nco
+  - type: RankChanger
+    rank: AU14RankPrDEnforcer
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDEnforcerSenior
+  name: senior response unit enforcer chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_nco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_nco
+  - type: RankChanger
+    rank: AU14RankPrDEnforcerSenior
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDEnforcerLead
+  name: lead response unit enforcer chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: AU14RankPrDEnforcerLead
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDAdjutant
+  name: response unit adjutant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: AU14RankPrDAdjutant
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDCommander
+  name: response unit commander chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: AU14RankPrDCommander
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDCommanderSenior
+  name: senior response unit commander chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: AU14RankPrDCommanderSenior
+    override: true
+
+# ├──[ Synthetic ]────────────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDSynth1
+  name: synthetic grade 1 chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_warrant
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_warrant
+  - type: RankChanger
+    rank: AU14RankPrDSynth1
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDSynth2
+  name: synthetic grade 2 chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_warrant
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_warrant
+  - type: RankChanger
+    rank: AU14RankPrDSynth2
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDSynth3
+  name: synthetic grade 3 chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_warrant
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_warrant
+  - type: RankChanger
+    rank: AU14RankPrDSynth3
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDSynth4
+  name: synthetic grade 4 chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_warrant
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_warrant
+  - type: RankChanger
+    rank: AU14RankPrDSynth4
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDSynth5
+  name: synthetic grade 5 chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_warrant
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_warrant
+  - type: RankChanger
+    rank: AU14RankPrDSynth5
+    override: true
+
+# ├──[ Aviation ]─────────────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDPilot
+  name: response unit pilot chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: AU14RankPrDPilot
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDSeniorPilot
+  name: senior response unit pilot chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: AU14RankPrDSeniorPilot
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDCrewChief
+  name: response unit crew chief chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: AU14RankPrDCrewChief
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDSeniorCrewChief
+  name: senior response unit crew chief chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: AU14RankPrDSeniorCrewChief
+    override: true
+
+# ├──[ Command ]──────────────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDDeputyDirector
+  name: deputy director of operations chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: AU14RankPrDDeputyDirector
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDOperationsDirector
+  name: director of operations chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: AU14RankPrDOperationsDirector
+    override: true
+
+- type: entity
+  parent: AU14ChevronPrDBase
+  id: AU14ChevronPrDRegionDirector
+  name: regional director chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: AU14RankPrDRegionDirector
+    override: true

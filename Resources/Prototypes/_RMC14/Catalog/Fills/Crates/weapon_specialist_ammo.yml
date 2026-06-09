@@ -142,6 +142,50 @@
 
 - type: entity
   parent: RMCCrateAmmo
+  id: RMCCrateMagazineSharpMixed
+  name: P9 SHARP Mixed Dart Magazine Crate (explosive x2, flechette x2, incendiary x2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleSharpExplosive
+      amount: 2
+    - id: RMCMagazineRifleSharpFlechette
+      amount: 2
+    - id: RMCMagazineRifleSharpIncendiary
+      amount: 2
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateMagazineSharpExplosive
+  name: P9 SHARP Explosive Dart Magazine Crate (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleSharpExplosive
+      amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateMagazineSharpFlechette
+  name: P9 SHARP Flechette Dart Magazine Crate (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleSharpFlechette
+      amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateMagazineSharpIncendiary
+  name: P9 SHARP Incendiary Dart Magazine Crate (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleSharpIncendiary
+      amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
   id: RMCCratePyroTankMixed
   name: M34-T Mixed Fuel Tank Crate (extended x1, type-B x1, type-X x1)
   components:

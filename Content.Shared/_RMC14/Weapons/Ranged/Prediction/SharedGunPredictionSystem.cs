@@ -23,7 +23,7 @@ public abstract partial class SharedGunPredictionSystem : EntitySystem
         Subs.CVar(_config, RMCCVars.RMCGunPrediction, v => GunPrediction = v, true);
     }
 
-    public List<EntityUid>? ShootRequested(NetEntity netGun, NetCoordinates coordinates, NetEntity? target, List<int>? projectiles, ICommonSession session)
+    public List<EntityUid>? ShootRequested(NetEntity netGun, NetCoordinates coordinates, NetEntity? target, List<int>? projectiles, ICommonSession session, bool rearmSemiAuto = false)
     {
         var user = session.AttachedEntity;
 
@@ -59,7 +59,10 @@ public abstract partial class SharedGunPredictionSystem : EntitySystem
         gun.ShootCoordinates = shootCoordinates;
         gun.Target = targetUid;
 #pragma warning restore RA0002
-        return _gun.AttemptShoot(user.Value, ent, gun, projectiles, session);
+        if (rearmSemiAuto)
+            _gun.ResetShotCounter(ent, gun);
+
+        return _gun.AttemptShoot(user.Value, ent, gun, projectiles, session, rearmSemiAuto);
     }
 
     protected bool IsSameMap(EntityUid entity, EntityUid other)

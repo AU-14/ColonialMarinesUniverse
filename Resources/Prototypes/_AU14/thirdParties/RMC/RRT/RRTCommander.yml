@@ -5,7 +5,11 @@
   description: au14-rmcert-rules
   playTimeTracker: AU14JobRMCRRTCommander
   ranks:
-    RMC_2Lieutenant: []
+    RMCRankCivilian: []
+  chevrons:
+    RMC_2Lieutenant:
+      entity: AU14ChevronRMCSecondLieutenant
+      requirements: []
   spawnMenuRoleName: RMC RRT Commander
   startingGear: AU14GearRMCRRTCommander
   icon: "RMCJobIconRoyalLieutenant"

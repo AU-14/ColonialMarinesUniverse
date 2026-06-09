@@ -1,0 +1,89 @@
+# base
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronWYSecurityBase
+  abstract: true
+  suffix: WeYu Security Chevron
+  description: WeYu Corporate Security rank insignia. Wearing this makes you feel like you have the power to do anything, as long as you read the memo first.
+
+# ├──[ Corporate Security ]───────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronWYSecurityBase
+  id: AU14ChevronWYSecurityOfficerJunior
+  name: junior corporate security officer chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: AU14RankWYSecurityOfficerJunior
+    override: true
+
+- type: entity
+  parent: AU14ChevronWYSecurityBase
+  id: AU14ChevronWYSecurityOfficer
+  name: corporate security officer chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: AU14RankWYSecurityOfficer
+    override: true
+
+- type: entity
+  parent: AU14ChevronWYSecurityBase
+  id: AU14ChevronWYSecurityOfficerSenior
+  name: senior corporate security officer chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_nco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_nco
+  - type: RankChanger
+    rank: AU14RankWYSecurityOfficerSenior
+    override: true
+
+- type: entity
+  parent: AU14ChevronWYSecurityBase
+  id: AU14ChevronWYSecurityOfficerMaster
+  name: master corporate security officer chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: AU14RankWYSecurityOfficerMaster
+    override: true
+
+- type: entity
+  parent: AU14ChevronWYSecurityBase
+  id: AU14ChevronWYSecurityOfficerChief
+  name: chief corporate security officer chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: AU14RankWYSecurityOfficerChief
+    override: true

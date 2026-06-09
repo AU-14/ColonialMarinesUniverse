@@ -28,23 +28,29 @@
     - NonResuscitable
     - Epilepsy
   ranks:
+  RMCRankCivilian: []
+  chevrons:
     RMCRankGunnerySergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORMilitaryPoliceMan
-      time: 360000 # 100 hours
+      entity: AU14ChevronUSCMGunnerySergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORMilitaryPoliceMan
+        time: 360000 # 100 hours
     RMCRankStaffSergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORMilitaryPoliceMan
-      time: 180000 # 50 hours
+      entity: AU14ChevronUSCMStaffSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORMilitaryPoliceMan
+        time: 180000 # 50 hours
     RMCRankSergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORMilitaryPoliceMan
-      time: 86400 # 24 hours
-    #RMCRankCorporal:
-    #- !type:RoleTimeRequirement
-    #  role: AU14JobGOVFORMilitaryPoliceMan
-    #  time: 36000 # 10 hours
-    RMCRankCorporal: []
+      entity: AU14ChevronUSCMSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORMilitaryPoliceMan
+        time: 86400 # 24 hours
+    RMCRankCorporal:
+      entity: AU14ChevronUSCMCorporal
+      requirements: []
   special:
   - !type:AddComponentSpecial
     components:

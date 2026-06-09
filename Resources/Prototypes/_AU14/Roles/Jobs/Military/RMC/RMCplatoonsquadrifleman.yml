@@ -4,11 +4,17 @@
   name: au14-job-name-govforsquadriflemanRMC
   spawnMenuRoleName: Rifleman (TWE RMC)
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMC_LanceCorporal:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadRifleman
-      time: 54000 # 15 hours
-    RMC_Marine: []
+      entity: AU14ChevronRMCLanceCorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORSquadRifleman
+        time: 54000 # 15 hours
+    RMC_Marine:
+      entity: AU14ChevronRMCMarine
+      requirements: []
   special:
   - !type:AddComponentSpecial
     components:

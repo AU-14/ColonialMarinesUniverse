@@ -1,0 +1,519 @@
+- type: entity
+  parent: RMCBaseWeaponSniperRifle
+  id: RMCWeaponSniperM707Vulture
+  name: M707 "Vulture" anti-materiel rifle
+  description: A massive bolt-action anti-materiel rifle chambered in 20x102mm. It carries an integrated spotting scope and bipod, and its recoil is punishing without a deployed firing position.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Unsorted/vulture/desert.rsi
+    layers:
+    - state: empty
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Item
+    size: Large
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Unsorted/vulture/desert.rsi
+    slots:
+    - Back
+  - type: Tag
+    tags:
+    - RMCWeaponSniperM707Vulture
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 12
+  - type: Gun
+    shotsPerBurst: 1
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_vulture_fire.ogg
+  - type: RMCSelectiveFire
+    recoilWielded: 2
+    scatterWielded: 1
+    baseFireRate: 0.5
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.35
+  - type: WieldDelay
+    baseDelay: 1.5
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RMCMagazineSniperM707Vulture
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RMCMagazineSniperM707Vulture
+  - type: GunRequiresWield
+  - type: Corrodible
+    isCorrodible: false
+  - type: GunIFF
+    enabled: true
+  - type: RMCNameItemOnVend
+    item: PrimaryGun
+  - type: GunUserWhitelist
+    whitelist:
+      components:
+      - VultureWhitelist
+  - type: VultureRifle
+  - type: VultureAim
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        locked: true
+        startingAttachable: RMCVultureBarrel
+        whitelist:
+          tags:
+          - RMCVultureBarrel
+      rmc-aslot-rail:
+        locked: true
+        startingAttachable: RMCVultureScope
+        whitelist:
+          tags:
+          - RMCVultureScope
+      rmc-aslot-underbarrel:
+        locked: true
+        startingAttachable: RMCVultureBipod
+        whitelist:
+          tags:
+          - RMCVultureBipod
+      rmc-aslot-stock:
+        locked: true
+        startingAttachable: RMCVultureStock
+        whitelist:
+          tags:
+          - RMCVultureStock
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.53125, 0.09375
+      rmc-aslot-rail: -0.15625, 0.25
+      rmc-aslot-underbarrel: 0.28125, -0.0625
+      rmc-aslot-stock: -0.58125, 0.04375
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _RMC14/Objects/Weapons/Guns/Unsorted/vulture/jungle.rsi
+      Desert: _RMC14/Objects/Weapons/Guns/Unsorted/vulture/desert.rsi
+      Snow: _RMC14/Objects/Weapons/Guns/Unsorted/vulture/snow.rsi
+      Classic: _RMC14/Objects/Weapons/Guns/Unsorted/vulture/classic.rsi
+      Urban: _RMC14/Objects/Weapons/Guns/Unsorted/vulture/urban.rsi
+  - type: RemoveComponents
+    components:
+    - type: AimedShot
+    - type: TargetingLaser
+    - type: GunToggleableLaser
+      settings:
+      - icon:
+          sprite: _RMC14/Actions/marine_sniper_actions.rsi
+          state: sniper_toggle_laser_on
+      - icon:
+          sprite: _RMC14/Actions/marine_sniper_actions.rsi
+          state: sniper_toggle_laser_off
+  - type: RMCGunChamber
+    enabled: false
+
+- type: entity
+  parent: RMCWeaponSniperM707Vulture
+  id: RMCWeaponSniperM707VultureCase
+  suffix: Case, Disassembled
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: null
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RMCMagazineSniperM707Vulture
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        locked: false
+        startingAttachable: null
+        whitelist:
+          tags:
+          - RMCVultureBarrel
+      rmc-aslot-rail:
+        locked: false
+        startingAttachable: null
+        whitelist:
+          tags:
+          - RMCVultureScope
+      rmc-aslot-underbarrel:
+        locked: false
+        startingAttachable: null
+        whitelist:
+          tags:
+          - RMCVultureBipod
+      rmc-aslot-stock:
+        locked: false
+        startingAttachable: null
+        whitelist:
+          tags:
+          - RMCVultureStock
+
+- type: entity
+  parent: CMMagazineSniperM96S
+  id: RMCMagazineSniperM707Vulture
+  name: M707 "Vulture" magazine (20x102mm)
+  description: A four-round magazine of 20x102mm anti-materiel rounds for the M707 "Vulture".
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineSniper
+    - RMCMagazineSniperM707Vulture
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - RMCCartridgeSniper20x102mmVulture
+    proto: RMCCartridgeSniper20x102mmVulture
+    capacity: 4
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/vulture.rsi
+    layers:
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+
+- type: entity
+  parent: CMCartridgeSniper10x28mm
+  id: RMCCartridgeSniper20x102mmVulture
+  name: cartridge (20x102mm)
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - RMCCartridgeSniper20x102mmVulture
+  - type: CartridgeAmmo
+    proto: RMCBulletSniper20x102mmVulture
+
+- type: entity
+  parent: RMCBaseBullet
+  id: RMCBulletSniper20x102mmVulture
+  name: bullet (20x102mm)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: FlyBySound
+    prob: 1
+    range: 4
+    sound:
+      collection: BulletMiss
+      params:
+        volume: 16
+        referenceDistance: 8
+        maxDistance: 24
+        variation: 0.05
+  - type: VultureProjectile
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.1,-0.1,0.1,0.1"
+        hard: false
+        mask:
+        - Impassable
+        - BulletImpassable
+      fly-by:
+        shape: !type:PhysShapeCircle
+          radius: 2.5
+        layer:
+        - Impassable
+        - MidImpassable
+        - HighImpassable
+        - LowImpassable
+        hard: false
+  - type: Projectile
+    deleteOnCollide: false
+    damage:
+      types:
+        Piercing: 400
+        Structural: 1800
+    soundHit:
+      path: /Audio/_RMC14/Bullets/bullet_vulture_impact.ogg
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 32
+      falloff: 9999
+      ignoreModifiers: true
+  - type: CMArmorPiercing
+    amount: 50
+  - type: RMCPenetratingProjectile
+    range: 40
+    rangeLossPerHit: 3
+    damageMultiplierLossPerHit: 0.18
+  - type: RMCStoppingPower
+  - type: RMCStunOnHit
+    stuns:
+    - maxRange: 32
+      knockBackPowerMin: 3
+      knockBackPowerMax: 3
+      knockBackSpeed: 8
+      stunTime: 0
+      superSlowTime: 0
+      slowTime: 3
+  - type: RMCProjectileAccuracy
+    accuracy: 125
+    thresholds:
+    - range: 32
+      falloff: 10
+    - range: 10
+      falloff: 15
+      buildup: true
+  - type: AimedShotEffect
+    extraHits: 0.8
+
+- type: entity
+  parent: RMCBarrelAttachmentBase
+  id: RMCVultureBarrel
+  name: M707 barrel
+  description: A heavy fixed barrel for the M707 "Vulture".
+  components:
+  - type: Sprite
+    state: vulture_barrel
+  - type: AttachableVisuals
+    suffix: ""
+  - type: Tag
+    tags:
+    - RMCAttachmentBarrel
+    - RMCVultureBarrel
+
+- type: entity
+  parent: RMCM96SIntegratedScope
+  id: RMCVultureScope
+  name: M707 integrated scope
+  description: The fixed optics package for the M707 "Vulture".
+  components:
+  - type: Sprite
+    state: vulture_scope
+  - type: AttachableVisuals
+    suffix: ""
+  - type: Tag
+    tags:
+    - RMCAttachmentRail
+    - RMCVultureScope
+  - type: AttachableToggleable
+    actionId: RMCActionVultureScope
+    icon:
+      sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: zoom_scope
+    iconActive:
+      sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: unzoom_scope
+    actionName: M707 Vulture Scope
+    actionDesc: Use the Vulture's integrated scope.
+  - type: Scope
+    scopingToggleAction: null
+    cycleZoomLevelAction: RMCActionVultureCycleZoomLevel
+    zoomLevels:
+    - name: 8x
+      zoom: 1.8
+      offset: 15
+      allowMovement: false
+      doAfter: 0
+    - name: 4x
+      zoom: 1.2
+      offset: 15
+      allowMovement: false
+      doAfter: 0
+  - type: Appearance
+  - type: ItemCamouflage
+    states:
+      Jungle: vulture_scope
+      Desert: d_vulture_scope
+      Snow: s_vulture_scope
+      Classic: c_vulture_scope
+      Urban: u_vulture_scope
+
+- type: entity
+  parent: RMCAttachmentBipod
+  id: RMCVultureBipod
+  name: M707 heavy bipod
+  description: A heavy integrated bipod for the M707 "Vulture".
+  components:
+  - type: Sprite
+    state: vulture_bipod
+  - type: Tag
+    tags:
+    - RMCAttachmentUnderbarrel
+    - RMCAttachmentBipod
+    - RMCVultureBipod
+  - type: AttachableToggleable
+    icon:
+      sprite: _RMC14/Objects/Weapons/Guns/Attachments/under.rsi
+      state: vulture_bipod
+    iconActive:
+      sprite: _RMC14/Objects/Weapons/Guns/Attachments/under.rsi
+      state: vulture_bipod-on
+    actionName: Deploy Heavy Bipod
+    actionDesc: Deploy the bipod and brace the Vulture for firing.
+  - type: AttachableVisuals
+    suffix: ""
+    showActive: true
+  - type: Appearance
+  - type: ItemCamouflage
+    states:
+      Jungle: vulture_bipod
+      Desert: d_vulture_bipod
+      Snow: s_vulture_bipod
+      Classic: c_vulture_bipod
+      Urban: u_vulture_bipod
+
+- type: entity
+  parent: RMCStockAttachmentBase
+  id: RMCVultureStock
+  name: M707 stock
+  description: A fixed reinforced stock for the M707 "Vulture".
+  components:
+  - type: Sprite
+    state: vulture_stock
+  - type: AttachableVisuals
+    suffix: ""
+  - type: Tag
+    tags:
+    - RMCAttachmentStock
+    - RMCVultureStock
+  - type: Appearance
+  - type: ItemCamouflage
+    states:
+      Jungle: vulture_stock
+      Desert: d_vulture_stock
+      Snow: s_vulture_stock
+      Classic: c_vulture_stock
+      Urban: u_vulture_stock
+
+- type: entity
+  parent: BaseItem
+  id: RMCVultureSpotterScope
+  name: M707 spotter scope
+  description: A high-powered spotting scope intended to support the M707 "Vulture".
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/vulture_spotter.rsi
+    state: vulture_scope
+  - type: Item
+    size: Small
+  - type: Scope
+    useInHand: true
+    canUseInsideContainer: true
+    zoomLevels:
+    - zoom: 1.8
+      offset: 17
+      allowMovement: true
+      doAfter: 0
+  - type: Tag
+    tags:
+    - RMCVultureSpotter
+    - RMCVultureSpotterScope
+
+- type: entity
+  parent: BaseItem
+  id: RMCVultureSpotterTripod
+  name: M707 spotter tripod
+  description: A collapsible tripod for the M707 spotter scope.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/vulture_spotter.rsi
+    state: vulture_tripod
+  - type: Item
+    size: Normal
+  - type: RMCDeployable
+    deployTime: 1.5
+    collapseTime: 1.5
+    deployArea:
+      !type:PhysShapeAabb
+      bounds: "-0.45,-0.45,0.45,0.45"
+    collapseToolPrototype: CMScrewdriver
+    areaBlockedCheck: false
+    failIfNotSurface: false
+    deploySetups:
+    - prototype: RMCVultureSpotterTripodDeployed
+      neverRedeployableSetup: false
+      mode: ReactiveParental
+      anchor: true
+      offset: 0, 0
+      angle: 0
+  - type: Tag
+    tags:
+    - RMCVultureSpotter
+
+- type: entity
+  parent: BaseStructure
+  id: RMCVultureSpotterTripodDeployed
+  name: M707 spotter tripod
+  description: A deployed tripod for supporting the M707 spotter scope.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/vulture_spotter.rsi
+    layers:
+    - state: vulture_tripod
+      map: [ "enum.VultureSpotterTripodVisualLayers.Base" ]
+  - type: Transform
+    anchored: true
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 50
+        mask:
+        - SmallMobMask
+        layer:
+        - MachineLayer
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.VultureSpotterTripodVisuals.HasScope:
+        enum.VultureSpotterTripodVisualLayers.Base:
+          True: { state: vulture_scope }
+          False: { state: vulture_tripod }
+  - type: ItemSlots
+    slots:
+      vulture_spotter_scope:
+        name: rmc-vulture-spotter-scope-slot
+        ejectOnBreak: true
+        insertVerbText: rmc-vulture-spotter-insert-scope
+        ejectVerbText: rmc-vulture-spotter-eject-scope
+        whitelistFailPopup: rmc-vulture-spotter-scope-only
+        whitelist:
+          tags:
+          - RMCVultureSpotterScope
+  - type: VultureSpotterTripod
+
+- type: Tag
+  id: RMCWeaponSniperM707Vulture
+
+- type: Tag
+  id: RMCMagazineSniperM707Vulture
+
+- type: Tag
+  id: RMCCartridgeSniper20x102mmVulture
+
+- type: Tag
+  id: RMCVultureBarrel
+
+- type: Tag
+  id: RMCVultureScope
+
+- type: Tag
+  id: RMCVultureBipod
+
+- type: Tag
+  id: RMCVultureStock
+
+- type: Tag
+  id: RMCVultureSpotter
+
+- type: Tag
+  id: RMCVultureSpotterScope

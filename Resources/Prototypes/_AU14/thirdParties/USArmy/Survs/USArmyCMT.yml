@@ -5,15 +5,23 @@
   description: au14-job-description-usarmy
   playTimeTracker: AU14JobUSArmyCMT
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     USArmy_Corporal:
-    - !type:RoleTimeRequirement
-      role: AU14JobUSArmyCMT
-      time: 36000 #10 hours
+      entity: AU14ChevronUSArmyCorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmyCMT
+        time: 36000
     USArmy_Specialist:
-    - !type:RoleTimeRequirement
-      role: AU14JobUSArmyCMT
-      time: 18000 #5 hours
-    USArmy_PFC: []
+      entity: AU14ChevronUSArmySpecialist
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmyCMT
+        time: 18000
+    USArmy_PFC:
+      entity: AU14ChevronUSArmyPFC
+      requirements: []
   spawnMenuRoleName: US Army Combat Medical Tech (AU14, surv)
   startingGear: AU14GearUSArmyCMT
   greeting: au14-usarmy-greeting

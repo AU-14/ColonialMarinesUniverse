@@ -22,6 +22,8 @@
         name: Essential Reporter's Set
       - id: CMSatchel
         name: Leather Satchel
+      - id: RMCBackpackRTOBagPhone
+        name: Portable Phone Bag
       - id: RMCCameraBroadcasting
         name: Press Broadcasting Camera
         recommended: true

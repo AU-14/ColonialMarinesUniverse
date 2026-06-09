@@ -18,6 +18,7 @@ using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Wieldable;
 using Content.Shared.Wieldable.Components;
 using Robust.Shared.Containers;
+using Robust.Shared.Network;
 
 namespace Content.Shared._RMC14.Scoping;
 
@@ -31,6 +32,7 @@ public abstract partial class SharedScopeSystem : EntitySystem
     [Dependency] private SharedEyeSystem _eye = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedItemSystem _item = default!;
+    [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private PullingSystem _pulling = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -124,6 +126,9 @@ public abstract partial class SharedScopeSystem : EntitySystem
 
         args.Handled = true;
 
+        if (_net.IsClient)
+            return;
+
         if (scope.Comp.CurrentZoomLevel >= scope.Comp.ZoomLevels.Count - 1)
             scope.Comp.CurrentZoomLevel = 0;
         else
@@ -161,6 +166,9 @@ public abstract partial class SharedScopeSystem : EntitySystem
             return;
 
         args.Handled = true;
+
+        if (_net.IsClient)
+            return;
 
         if (args.Cancelled)
         {
@@ -253,6 +261,9 @@ public abstract partial class SharedScopeSystem : EntitySystem
 
     public virtual Direction? StartScoping(Entity<ScopeComponent> scope, EntityUid user)
     {
+        if (_net.IsClient)
+            return null;
+
         if (!CanScopePopup(scope, user))
             return null;
 
@@ -319,6 +330,9 @@ public abstract partial class SharedScopeSystem : EntitySystem
 
     public virtual bool Unscope(Entity<ScopeComponent> scope)
     {
+        if (_net.IsClient)
+            return false;
+
         if (scope.Comp.User is not { } user)
             return false;
 
@@ -362,6 +376,9 @@ public abstract partial class SharedScopeSystem : EntitySystem
 
     private void ToggleScoping(Entity<ScopeComponent> scope, EntityUid user)
     {
+        if (_net.IsClient)
+            return;
+
         if (TryComp(user, out ScopingComponent? scoping))
         {
             UserStopScoping((user, scoping));

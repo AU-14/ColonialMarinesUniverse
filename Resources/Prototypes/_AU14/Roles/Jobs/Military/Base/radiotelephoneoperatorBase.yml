@@ -25,7 +25,11 @@
     - Epilepsy
     - NonResuscitable
   ranks:
-    RMCRankCorporal: []
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankCorporal:
+      entity: AU14ChevronUSCMCorporal
+      requirements: []
   special:
   - !type:AddComponentSpecial
     components:

@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.ARES;
+using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Dropship;
@@ -10,7 +11,9 @@ using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Power;
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared.Access.Systems;
 using Content.Shared.Actions;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -43,12 +46,13 @@ public sealed partial class IntelSystem : EntitySystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private AreaSystem _area = default!;
-    [Dependency] private ARESSystem _ares = default!;
+    [Dependency] private ARESCoreSystem _aresCore = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedEntityStorageSystem _entityStorage = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
     [Dependency] private SharedMarineAnnounceSystem _marineAnnounce = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private NameModifierSystem _nameModifier = default!;
@@ -147,6 +151,8 @@ public sealed partial class IntelSystem : EntitySystem
     private readonly HashSet<Entity<IntelContainerComponent>> _nearby = new();
 
     private EntityQuery<IntelReadObjectiveComponent> _readObjectiveQuery;
+
+    private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabIntelLogs";
 
     public override void Initialize()
     {
@@ -547,7 +553,17 @@ public sealed partial class IntelSystem : EntitySystem
             if (args.Amount == 0)
                 _popup.PopupEntity("...and you have nothing new to add...", ent, args.User, PopupType.Medium);
             else
+            {
                 _popup.PopupEntity($"...and done! You uploaded {args.Amount} entries!", ent, args.User, PopupType.Medium);
+            }
+
+            if (_idCard.TryFindIdCard(args.User, out var idCard) && TryComp(idCard, out ItemIFFComponent? idCardIFF))
+            {
+                foreach (var faction in idCardIFF.Factions)
+                {
+                    _aresCore.CreateARESLog(faction, LogCat, (string) $"{Name(args.User)} processed {args.Amount} intel entries");
+                }
+            }
         }
 
         if (!TryComp(args.User, out IntelKnowledgeComponent? knowledge))
@@ -1022,7 +1038,10 @@ public sealed partial class IntelSystem : EntitySystem
             tree.Value.Comp.LastAnnounceAt = time + _announceEvery;
             Dirty(tree.Value);
 
-            var ares = _ares.EnsureARES();
+            EntityUid? ares = null;
+            if (_aresCore.TryGetMarineARES(out var aresEnt) && aresEnt != null)
+                ares = aresEnt.Value.Owner;
+
             // Announcements reflect the intel tree's internal FixedPoint2 points only.
             var points = tree.Value.Comp.Tree.Points;
 
@@ -1037,7 +1056,8 @@ public sealed partial class IntelSystem : EntitySystem
                     ? Loc.GetString("rmc-intel-announcement-gain", ("points", points), ("change", change))
                     : Loc.GetString("rmc-intel-announcement", ("points", points));
 
-                _marineAnnounce.AnnounceRadio(ares, announcement, channel);
+                if (ares != null)
+                    _marineAnnounce.AnnounceRadio(ares.Value, announcement, channel);
             }
         }
 

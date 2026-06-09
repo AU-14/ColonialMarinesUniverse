@@ -13,15 +13,23 @@
   name: cm-job-name-squad-leader
   description: au14-job-description-usarmy
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     USArmy_FirstSergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobUSArmySquadLeader
-      time: 36000 #10 hours
+      entity: AU14ChevronUSArmyFirstSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmySquadLeader
+        time: 36000
     USArmy_MasterSergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobUSArmySquadLeader
-      time: 18000 #5 hours
-    USArmy_SergeantFirstClass: []
+      entity: AU14ChevronUSArmyMasterSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmySquadLeader
+        time: 18000
+    USArmy_SergeantFirstClass:
+      entity: AU14ChevronUSArmySergeantFirstClass
+      requirements: []
   spawnMenuRoleName: US Army Squad Leader (AU14, 3rd Party)
   startingGear: AU14GearUSArmySquadleaderArmored
   greeting: au14-usarmy-armored-greeting

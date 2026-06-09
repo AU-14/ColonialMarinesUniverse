@@ -4,11 +4,11 @@
   name: rmc-job-name-forecon-sniper
   description: au14-job-description-forecon-killteam
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMCRankChiefWarrantOfficer:
-    - !type:RoleTimeRequirement
-      role: AU14FORECONSniperDetachment
-      time: 18000 #5 hours
-    RMCRankWarrantOfficer: []
+      entity: AU14ChevronUSCMChiefWarrantOfficer2
+      requirements: []
   spawnMenuRoleName: FORECON Sniper (AU14, KillTeam)
   icon: "CMJobIconEmpty"
   startingGear: AU14GearFORECONKillTeamSniper

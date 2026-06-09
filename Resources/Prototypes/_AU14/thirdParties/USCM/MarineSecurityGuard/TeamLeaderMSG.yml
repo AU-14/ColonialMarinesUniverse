@@ -5,7 +5,11 @@
   description: au14-job-description-msg
   playTimeTracker: AU14MSGCommander
   ranks:
-    RMCRankStaffSergeant: []
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankLanceCorporal:
+      entity: AU14ChevronUSCMStaffSergeant
+      requirements: []
   spawnMenuRoleName: Marine Guard Commander (3rd party)
   startingGear: AU14GearMSGCommander
   greeting: au14-job-greeting-msg

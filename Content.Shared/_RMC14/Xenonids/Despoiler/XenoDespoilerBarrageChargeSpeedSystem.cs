@@ -2,9 +2,9 @@ using Content.Shared.Movement.Systems;
 
 namespace Content.Shared._RMC14.Xenonids.Despoiler;
 
-public sealed class XenoDespoilerBarrageChargeSpeedSystem : EntitySystem
+public sealed partial class XenoDespoilerBarrageChargeSpeedSystem : EntitySystem
 {
-    [Dependency] private readonly MovementSpeedModifierSystem _speed = default!;
+    [Dependency] private MovementSpeedModifierSystem _speed = default!;
 
     public override void Initialize()
     {

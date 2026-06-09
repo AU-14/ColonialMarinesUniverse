@@ -13,23 +13,35 @@
   name: rmc-job-name-forecon-synth
   description: au14-job-description-usarmy
   ranks:
+    RMCRankSyntheticColonist: []
+  chevrons:
     USArmy_ChiefWarrantOfficer5:
-    - !type:RoleTimeRequirement
-      role: AU14JobUSArmySynth
-      time: 252000 #70 hours
+      entity: AU14ChevronUSArmyChiefWarrantOfficer5
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmySynth
+        time: 252000
     USArmy_ChiefWarrantOfficer4:
-    - !type:RoleTimeRequirement
-      role: AU14JobUSArmySynth
-      time: 180000 #50 hours
+      entity: AU14ChevronUSArmyChiefWarrantOfficer4
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmySynth
+        time: 180000
     USArmy_ChiefWarrantOfficer3:
-    - !type:RoleTimeRequirement
-      role: AU14JobUSArmySynth
-      time: 36000 #10 hours
+      entity: AU14ChevronUSArmyChiefWarrantOfficer3
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmySynth
+        time: 36000
     USArmy_ChiefWarrantOfficer2:
-    - !type:RoleTimeRequirement
-      role: AU14JobUSArmySynth
-      time: 18000 #5 hours
-    USArmy_WarrantOfficer1: []
+      entity: AU14ChevronUSArmyChiefWarrantOfficer2
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmySynth
+        time: 18000
+    USArmy_WarrantOfficer1:
+      entity: AU14ChevronUSArmyWarrantOfficer
+      requirements: []
   spawnMenuRoleName: US Army Synthetic (AU14, 3rd Party)
   startingGear: AU14GearUSArmySynthArmored
   greeting: au14-usarmy-armored-greeting

@@ -16,6 +16,7 @@
         Heat: 20
         Piercing: 0
     deleteOnCollide: true
+  - type: XenoProjectile
   - type: XenoDespoilerAcidBarrageProjectile
     lingeringAcidChance: 0.25
     lingeringAcidProto: RMCEffectDespoilerLingeringAcid

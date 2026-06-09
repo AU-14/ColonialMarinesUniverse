@@ -36,6 +36,7 @@
   id: AU14IntelThirdPartyK9
   partyspawn: AU14IntelThirdPartyK9HandlerSpawn
   entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
   weight: 1
   minplayers: 500
   maxplayers: 600

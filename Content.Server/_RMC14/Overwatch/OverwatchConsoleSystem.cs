@@ -1,6 +1,7 @@
 using Content.Server.Chat.Systems;
+using Content.Shared._RMC14.Communications;
 using Content.Shared._RMC14.Overwatch;
-using Content.Shared.Inventory;
+using Content.Shared._RMC14.Rules;
 using Robust.Server.GameObjects;
 using Robust.Shared.Player;
 using static Content.Server.Chat.Systems.ChatSystem;
@@ -9,22 +10,15 @@ namespace Content.Server._RMC14.Overwatch;
 
 public sealed partial class OverwatchConsoleSystem : SharedOverwatchConsoleSystem
 {
+    [Dependency] private CommunicationsTowerSystem _communicationsTower = default!;
     [Dependency] private SharedEyeSystem _eye = default!;
-    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private ISharedPlayerManager _playerManager = default!;
     [Dependency] private TransformSystem _transform = default!;
     [Dependency] private ViewSubscriberSystem _viewSubscriber = default!;
-
-    private EntityQuery<ActorComponent> _actorQuery;
-    private EntityQuery<OverwatchCameraComponent> _cameraQuery;
-
-    private readonly Dictionary<ICommonSession, ICChatRecipientData> _recipients = new();
 
     public override void Initialize()
     {
         base.Initialize();
-
-        _actorQuery = GetEntityQuery<ActorComponent>();
-        _cameraQuery = GetEntityQuery<OverwatchCameraComponent>();
 
         SubscribeLocalEvent<OverwatchCameraComponent, ComponentRemove>(OnWatchedRemove);
         SubscribeLocalEvent<OverwatchCameraComponent, EntityTerminatingEvent>(OnWatchedRemove);
@@ -36,37 +30,33 @@ public sealed partial class OverwatchConsoleSystem : SharedOverwatchConsoleSyste
 
     private void OnExpandRecipients(ExpandICChatRecipientsEvent ev)
     {
-        if (!_inventory.TryGetInventoryEntity<OverwatchCameraComponent>(ev.Source, out var camera))
-            return;
-
-        if (!_cameraQuery.TryComp(camera, out var cameraComp) || cameraComp.Watching.Count == 0)
-            return;
-
-        var sourceTransform = Transform(ev.Source);
-        var sourcePos = _transform.GetWorldPosition(sourceTransform);
-
-        _recipients.Clear();
-        foreach (var watcher in cameraComp.Watching)
+        var sourceCoordinates = Transform(ev.Source).Coordinates;
+        foreach (var session in _playerManager.Sessions)
         {
-            if (!_actorQuery.TryComp(watcher, out var actor))
+            if (session.AttachedEntity is not { Valid: true } watcher)
                 continue;
 
-            if (ev.Recipients.ContainsKey(actor.PlayerSession))
+            if (!TryComp(watcher, out OverwatchWatchingComponent? overwatch) ||
+                overwatch.Watching is not { } target)
                 continue;
 
-            var watcherTransform = Transform(watcher);
-            float range;
-            if (watcherTransform.MapID == sourceTransform.MapID)
-                range = (sourcePos - _transform.GetWorldPosition(watcherTransform)).Length();
-            else
-                range = -1;
+            var targetCoordinates = _transform.GetMoverCoordinates(target);
+            var targetMap = _transform.GetMap(targetCoordinates);
+            var watcherMap = _transform.GetMap(_transform.GetMoverCoordinates(watcher));
+            if (HasComp<RMCPlanetComponent>(targetMap) &&
+                targetMap != watcherMap &&
+                !_communicationsTower.CanTransmit())
+            {
+                continue;
+            }
 
-            _recipients.TryAdd(actor.PlayerSession, new ICChatRecipientData(range, false, false));
-        }
+            if (!targetCoordinates.TryDistance(EntityManager, sourceCoordinates, out var distance))
+                continue;
 
-        foreach (var recipient in _recipients)
-        {
-            ev.Recipients.TryAdd(recipient.Key, recipient.Value);
+            if (distance > ev.VoiceRange)
+                continue;
+
+            ev.Recipients.TryAdd(session, new ICChatRecipientData(distance, false));
         }
     }
 

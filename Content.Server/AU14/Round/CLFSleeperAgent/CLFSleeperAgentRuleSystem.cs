@@ -8,7 +8,7 @@ namespace Content.Server.AU14.Round.CLFSleeperAgent;
 
 public sealed partial class CLFSleeperAgentRuleSystem : GameRuleSystem<CLFSleeperAgentRuleComponent>
 {
-    [Dependency] private readonly WantedSystem _wantedSystem = default!;
+    [Dependency] private WantedSystem _wantedSystem = default!;
 
     public override void Initialize()
     {

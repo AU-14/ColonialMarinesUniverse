@@ -16,6 +16,7 @@
     - insurgency
     - colonyfall
   entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
   weight: 20
   minplayers: 30
   maxplayers: 400

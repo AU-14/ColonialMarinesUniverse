@@ -6,7 +6,11 @@
   setPreference: false
   canBeAntag: false
   ranks:
-    RMCRankTSEPAInspector: []
+    RMCRankCivilian: []
+  chevrons:
+    Inspector:
+      entity: AU14ChevronNSPAInspector
+      requirements: []
   startingGear: AU14GearNSPAInspectorInvestigation
   icon: "RMCJobIconTSEPAInspector"
   spawnMenuRoleName: NSPA Inspector (3rd party)

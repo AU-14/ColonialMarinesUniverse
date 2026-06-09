@@ -5,23 +5,35 @@
   description: rmc-job-description-forecon
   playTimeTracker: AU14JobFORECONSynth
   ranks:
+    RMCRankSyntheticColonist: []
+  chevrons:
     RMCRankChiefWarrantOfficer5:
-    - !type:RoleTimeRequirement
-      role: AU14JobFORECONSynth
-      time: 252000 #70 hours
+      entity: AU14ChevronUSCMChiefWarrantOfficer5
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONSynth
+        time: 252000 #70 hours
     RMCRankChiefWarrantOfficer4:
-    - !type:RoleTimeRequirement
-      role: AU14JobFORECONSynth
-      time: 180000 #50 hours
+      entity: AU14ChevronUSCMChiefWarrantOfficer4
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONSynth
+        time: 180000 #50 hours
     RMCRankChiefWarrantOfficer3:
-    - !type:RoleTimeRequirement
-      role: AU14JobFORECONSynth
-      time: 36000 #10 hours
+      entity: AU14ChevronUSCMChiefWarrantOfficer3
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONSynth
+        time: 36000 #10 hours
     RMCRankChiefWarrantOfficer:
-    - !type:RoleTimeRequirement
-      role: AU14JobFORECONSynth
-      time: 18000 #5 hours
-    RMCRankWarrantOfficer: []
+      entity: AU14ChevronUSCMChiefWarrantOfficer2
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONSynth
+        time: 18000 #5 hours
+    RMCRankWarrantOfficer:
+      entity: AU14ChevronUSCMWarrantOfficer
+      requirements: []
   spawnMenuRoleName: FORECON Synthetic (AU14, surv)
   startingGear: AU14GearFORECONSynth
   greeting: au14-forecon-greeting

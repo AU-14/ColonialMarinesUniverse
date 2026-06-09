@@ -44,12 +44,14 @@ using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
+using Content.Shared.Tag;
 using Content.Shared.Throwing;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
@@ -67,6 +69,8 @@ namespace Content.Shared._RMC14.Dropship.Weapon;
 
 public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 {
+    private static readonly ProtoId<TagPrototype> WallTag = "Wall";
+
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private AreaSystem _area = default!;
@@ -102,7 +106,11 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     [Dependency] private SquadSystem _squad = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private TagSystem _tagSystem = default!;
+
+    private EntityQuery<RMCWallExplosionDeletableComponent> _wallDeletableQuery;
 
     private static readonly EntProtoId DropshipTargetMarker = "RMCLaserDropshipTarget";
     private const string SpotlightState = "spotlights_";
@@ -144,11 +152,13 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         SubscribeLocalEvent<DropshipAmmoComponent, PowerLoaderInteractEvent>(OnAmmoInteract);
 
         SubscribeLocalEvent<ActivateDropshipWeaponOnSpawnComponent, MapInitEvent>(OnDropshipWeaponOnSpawnFire);
+        _wallDeletableQuery = GetEntityQuery<RMCWallExplosionDeletableComponent>();
 
         Subs.BuiEvents<DropshipTerminalWeaponsComponent>(DropshipTerminalWeaponsUi.Key,
             subs =>
             {
                 subs.Event<DropshipTerminalWeaponsChangeScreenMsg>(OnWeaponsChangeScreenMsg);
+                subs.Event<DropshipTerminalWeaponsQuickModeMsg>(OnWeaponsQuickModeMsg);
                 subs.Event<DropshipTerminalWeaponsChooseWeaponMsg>(OnWeaponsChooseWeaponMsg);
                 subs.Event<DropshipTerminalWeaponsChooseMedevacMsg>(OnWeaponsChooseMedevacMsg);
                 subs.Event<DropshipTerminalWeaponsChooseFultonMsg>(OnWeaponsChooseFultonMsg);
@@ -553,6 +563,19 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         RefreshWeaponsUI(ent);
     }
 
+    private void OnWeaponsQuickModeMsg(Entity<DropshipTerminalWeaponsComponent> ent, ref DropshipTerminalWeaponsQuickModeMsg args)
+    {
+        ref var screen = ref args.First ? ref ent.Comp.ScreenOne : ref ent.Comp.ScreenTwo;
+        if (screen.State is not (Target or Strike or StrikeWeapon))
+            return;
+
+        screen.QuickMode = args.Enabled;
+        screen.State = Target;
+
+        Dirty(ent);
+        RefreshWeaponsUI(ent);
+    }
+
     private void OnWeaponsChooseWeaponMsg(Entity<DropshipTerminalWeaponsComponent> ent, ref DropshipTerminalWeaponsChooseWeaponMsg args)
     {
         if (!TryGetEntity(args.Weapon, out var weapon) ||
@@ -705,10 +728,14 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
         var time = _timing.CurTime;
 
+        var spawnTarget = _transform.GetMoverCoordinates(active).SnapToGrid(EntityManager, _mapManager);
+        if (ammo.Explosion != null && HasNonDeletableWallOnTile(spawnTarget))
+            spawnTarget = FindAlternateLandingTile(spawnTarget, 3);
+
         var inFlight = Spawn(null, MapCoordinates.Nullspace);
         var inFlightComp = new AmmoInFlightComponent
         {
-            Target = _transform.GetMoverCoordinates(active).SnapToGrid(EntityManager, _mapManager),
+            Target = spawnTarget,
             MarkerAt = time + ammo.TravelTime,
             ShotsLeft = ammo.RoundsPerShot,
             ShotsPerVolley = ammo.ShotsPerVolley,
@@ -1321,6 +1348,19 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
     private void UpdateTarget(Entity<DropshipTerminalWeaponsComponent> ent, EntityUid target)
     {
+        if (ent.Comp.Target == target)
+        {
+            if (EnsureTargetEye(ent, ent.Comp.Target) is { } currentTargetEye)
+            {
+                _eye.SetOffset(currentTargetEye, ent.Comp.Offset);
+                _eye.SetDrawLight(currentTargetEye, !ent.Comp.NightVision);
+            }
+
+            RefreshWeaponsUI(ent);
+            Dirty(ent);
+            return;
+        }
+
         SetTarget(ent, target);
         if (TryUpdateCameraTarget(ent, target, terminalComp: ent.Comp))
             return;
@@ -1741,18 +1781,21 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
                 if (flight.BulletSpread > 0)
                     spread = _random.NextVector2(-flight.BulletSpread, flight.BulletSpread + 1);
 
-                var target = _transform.ToMapCoordinates(flight.Target).Offset(spread);
+                var landing = flight.Target.Offset(spread);
+
+                var targetMap = _transform.ToMapCoordinates(landing.SnapToGrid(EntityManager, _mapManager));
+
                 foreach (var effect in flight.ImpactEffects)
                 {
                     var rotation = GetImpactEffectRotation(_random.NextAngle(), ImpactEffectHasOccluder(effect));
-                    Spawn(effect, target, rotation: rotation);
+                    Spawn(effect, targetMap, rotation: rotation);
                 }
 
                 if (flight.Damage != null)
                 {
                     _damageables.Clear();
+                    _entityLookup.GetEntitiesInRange(targetMap, 0.49f, _damageables, LookupFlags.Uncontained);
 
-                    _entityLookup.GetEntitiesInRange(target, 0.49f, _damageables, LookupFlags.Uncontained);
                     foreach (var damageable in _damageables)
                     {
                         _damageable.TryChangeDamage(
@@ -1766,7 +1809,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
                 if (flight.Implosion != null)
                 {
-                    _rmcImplosion.Implode(flight.Implosion, target);
+                    _rmcImplosion.Implode(flight.Implosion, targetMap);
                 }
 
                 if (flight.Fire != null)
@@ -1829,7 +1872,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
                 if (flight.Explosion != null)
                 {
-                    _rmcExplosion.QueueExplosion(target,
+                    TryDeleteDestructibleWallAt(landing);
+                    _rmcExplosion.QueueExplosion(targetMap,
                         flight.Explosion.Type,
                         flight.Explosion.Total,
                         flight.Explosion.Slope,
@@ -1878,6 +1922,75 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     {
         return _prototypes.TryIndex<EntityPrototype>(effect, out var prototype) &&
                prototype.Components.ContainsKey("Occluder");
+    }
+
+    private bool IsWall(EntityUid uid)
+    {
+        return _tagSystem.HasTag(uid, WallTag);
+    }
+
+    private bool HasNonDeletableWallOnTile(EntityCoordinates impactCoords)
+    {
+        if (_transform.GetGrid(impactCoords) is not { } gridUid ||
+            !TryComp(gridUid, out MapGridComponent? grid))
+            return false;
+
+        var tile = _map.LocalToTile(gridUid, grid, impactCoords);
+        var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+
+        var foundWall = false;
+        while (anchored.MoveNext(out var uid))
+        {
+            if (!IsWall(uid.Value))
+                continue;
+
+            foundWall = true;
+            if (_wallDeletableQuery.HasComp(uid.Value))
+                return false;
+        }
+        return foundWall;
+    }
+
+    private EntityCoordinates FindAlternateLandingTile(EntityCoordinates desired, int maxRadius = 3)
+    {
+        var origin = desired.SnapToGrid(EntityManager, _mapManager);
+
+        for (var r = 1; r <= maxRadius; r++)
+        {
+            for (var x = -r; x <= r; x++)
+            for (var y = -r; y <= r; y++)
+            {
+                if (Math.Abs(x) != r && Math.Abs(y) != r)
+                    continue;
+
+                var candidate = origin.Offset(new Vector2i(x, y));
+                if (!HasNonDeletableWallOnTile(candidate))
+                    return candidate;
+            }
+        }
+
+        return origin;
+    }
+
+    private bool TryDeleteDestructibleWallAt(EntityCoordinates impactCoords)
+    {
+        if (_transform.GetGrid(impactCoords) is not { } gridUid ||
+            !TryComp(gridUid, out MapGridComponent? grid))
+            return false;
+
+        var tile = _map.LocalToTile(gridUid, grid, impactCoords);
+        var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+
+        while (anchored.MoveNext(out var uid))
+        {
+            if (!_wallDeletableQuery.HasComp(uid.Value))
+                continue;
+
+            QueueDel(uid.Value);
+            return true;
+        }
+
+        return false;
     }
 
     public void TargetUpdated(Entity<DropshipTargetComponent> ent)
@@ -2333,6 +2446,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         var targetCoords = targetCoordinates;
         if (spread != 0)
             targetCoords = targetCoords.Offset(_random.NextVector2(-spread, spread + 1));
+
+        if (ev.Explosion != null && HasNonDeletableWallOnTile(targetCoords))
+            targetCoords = FindAlternateLandingTile(targetCoords, 3);
 
         var inFlight = Spawn(null, MapCoordinates.Nullspace);
         var inFlightComp = new AmmoInFlightComponent

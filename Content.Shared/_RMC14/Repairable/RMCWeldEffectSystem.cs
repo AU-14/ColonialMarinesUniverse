@@ -12,9 +12,9 @@ using Robust.Shared.Spawners;
 
 namespace Content.Shared._RMC14.Repairable;
 
-public sealed class RMCWeldEffectSystem : EntitySystem
+public sealed partial class RMCWeldEffectSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private INetManager _net = default!;
 
     public static readonly EntProtoId WeldEffect = "RMCEffectWeldingSparks";
     private static readonly Vector2 DefaultStartOffset = new(0f, -0.45f);

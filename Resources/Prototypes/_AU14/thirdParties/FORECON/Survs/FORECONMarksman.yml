@@ -5,15 +5,23 @@
   description: rmc-job-description-forecon
   playTimeTracker: AU14JobFORECONMarksman
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMCRankGunnerySergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobFORECONMarksman
-      time: 36000 #10 hours
+      entity: AU14ChevronUSCMGunnerySergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONMarksman
+        time: 36000 #10 hours
     RMCRankStaffSergeant:
-    - !type:RoleTimeRequirement
-      role: AU14JobFORECONMarksman
-      time: 18000 #5 hours
-    RMCRankSergeant: []
+      entity: AU14ChevronUSCMStaffSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONMarksman
+        time: 18000 #5 hours
+    RMCRankSergeant:
+      entity: AU14ChevronUSCMSergeant
+      requirements: []
   spawnMenuRoleName: FORECON Marksman (AU14, surv)
   startingGear: AU14GearFORECONMarksman
   greeting: au14-forecon-greeting

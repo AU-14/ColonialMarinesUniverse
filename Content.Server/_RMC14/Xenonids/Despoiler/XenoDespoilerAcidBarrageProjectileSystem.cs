@@ -5,10 +5,10 @@ using Robust.Shared.Random;
 
 namespace Content.Server._RMC14.Xenonids.Despoiler;
 
-public sealed class XenoDespoilerAcidBarrageProjectileSystem : EntitySystem
+public sealed partial class XenoDespoilerAcidBarrageProjectileSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
 
     private EntityQuery<TransformComponent> _xformQuery;
     private EntityQuery<XenoDespoilerLingeringAcidComponent> _lingeringQuery;

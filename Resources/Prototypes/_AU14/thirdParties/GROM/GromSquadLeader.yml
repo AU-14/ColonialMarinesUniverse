@@ -5,15 +5,23 @@
   description: au14-uppgrom-description
   playTimeTracker: AU14JobUPPGROMSquadLeader
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     UPP_SeniorLieutenant:
-    - !type:RoleTimeRequirement
-      role: AU14JobUPPGROMSquadLeader
-      time: 36000 #10 hours
+      entity: AU14ChevronUPPNISeniorLieutenant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUPPGROMSquadLeader
+        time: 36000 # 10 hours
     UPP_Lieutenant:
-    - !type:RoleTimeRequirement
-      role: AU14JobUPPGROMSquadLeader
-      time: 18000 #5 hours
-    UPP_JuniorLieutenant: []
+      entity: AU14ChevronUPPNILieutenant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUPPGROMSquadLeader
+        time: 18000 # 5 hours
+    UPP_JuniorLieutenant:
+      entity: AU14ChevronUPPNIJuniorLieutenant
+      requirements: []
   spawnMenuRoleName: UPP GROM Squad Leader (Survivor)
   startingGear: AU14GearUPPGROMSquadleader
   greeting: au14-uppgrom-greeting

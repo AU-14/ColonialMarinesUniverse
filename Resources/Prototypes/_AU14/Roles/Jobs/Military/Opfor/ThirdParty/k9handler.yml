@@ -3,9 +3,6 @@
   id: AU14JobOPFORk9handler # Deprecated (K9 is neutral 3rd party)
   icon: "AU14JobIconOPFORK9Handler"
   spawnMenuRoleName: K9 Handler (OPFOR)
-  ranks:
-    RMCRankStaffSergeant: []
-  startingGear: AU14GearThirdPartyK9Handler
   # accessGroups:
   # - AU14OpforCorpsman
   # - AU14OpforSquad

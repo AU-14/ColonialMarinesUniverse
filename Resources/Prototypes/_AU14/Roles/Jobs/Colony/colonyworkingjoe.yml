@@ -3,8 +3,11 @@
   id: AU14JobColonyWorkingJoe
   requirements:
   - !type:RoleTimeRequirement
-    role: AU14JobCivilianColonySynthetic
-    time: 9000 # 2.5 hours
+    role: AU14JobCivilianEngineer
+    time: 3600 # 1 hour
+  - !type:RoleTimeRequirement
+    role: AU14JobCivilianWasteManagementSpecialist
+    time: 3600 # 1 hour
   - !type:TraitsRequirement
     inverted: true
     traits:

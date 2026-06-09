@@ -3,17 +3,17 @@ rmc-xeno-despoiler-description = Огромный, сгорбленный ксе
 
 rmc-job-name-xeno-despoiler = Дисбойлер
 
-rmc-action-despoiler-acid-barrage-name = Кислотный шквал
-rmc-action-despoiler-acid-barrage-desc = Активируй способность — она подсветится. Зажми ЛКМ для зарядки залпа: чем дольше держишь, тем больше снарядов. Отпусти ЛКМ — залп уйдёт в направлении курсора.
+ent-RMCActionXenoDespoilerAcidBarrage = Кислотный шквал
+    .desc = Активируй способность — она подсветится. Зажми ЛКМ для зарядки залпа: чем дольше держишь, тем больше снарядов. Отпусти ЛКМ — залп уйдёт в направлении курсора.
 
-rmc-action-despoiler-caustic-embrace-name = Едкое объятие
-rmc-action-despoiler-caustic-embrace-desc = Прыжок в направлении клика с кислотным выплеском. Эмпауэр позволяет атаковать выбранную цель на дистанции до 5 клеток и накладывает кислотный DoT.
+ent-RMCActionXenoDespoilerCausticEmbrace = Едкое объятие
+    .desc = Прыжок в направлении клика с кислотным выплеском. Эмпауэр позволяет атаковать выбранную цель на дистанции до 5 клеток и накладывает кислотный DoT.
 
-rmc-action-despoiler-oozing-wounds-name = Сочащиеся раны
-rmc-action-despoiler-oozing-wounds-desc = Создаёт кольцо кислотного спрея вокруг себя. Радиус растёт по мере падения собственного HP. Усиленный вариант оглушает и накладывает кислоту.
+ent-RMCActionXenoDespoilerOozingWounds = Сочащиеся раны
+    .desc = Создаёт кольцо кислотного спрея вокруг себя. Радиус растёт по мере падения собственного HP. Усиленный вариант оглушает и накладывает кислоту.
 
-rmc-action-despoiler-catalyze-name = Катализ
-rmc-action-despoiler-catalyze-desc = Расходует 1 стэк Гипертензии и усиливает следующую активную способность.
+ent-RMCActionXenoDespoilerCatalyze = Катализ
+    .desc = Расходует 1 стэк Гипертензии и усиливает следующую активную способность.
 
 rmc-despoiler-no-hypertension = Недостаточно стэков Гипертензии.
 rmc-despoiler-catalyze-active = Следующая способность усилена!

@@ -734,8 +734,10 @@
         amount: 12
       - id: DrinkShaker
         amount: 8
-      - id: DrinkGlass
+      - id: RMCDrinkGlass
         amount: 40
+      - id: DrinkGlass
+        amount: 4
       - id: ClothingOuterApronChef
         amount: 5
       - id: RMCCondimentSmallSalt

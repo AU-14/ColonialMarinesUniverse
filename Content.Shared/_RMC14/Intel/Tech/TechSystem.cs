@@ -1,9 +1,13 @@
 using System.Numerics;
+using Content.Shared._RMC14.ARES;
+using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.Dropship.Fabricator;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared._RMC14.Scaling;
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
+using Content.Shared.Access.Systems;
 using Content.Shared.AU14.Threats;
 using Content.Shared.AU14.Util;
 using Content.Shared.GameTicking;
@@ -18,7 +22,9 @@ namespace Content.Shared._RMC14.Intel.Tech;
 
 public sealed partial class TechSystem : EntitySystem
 {
+    [Dependency] private ARESCoreSystem _core = default!;
     [Dependency] private DropshipFabricatorSystem _dropshipFabricator = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
     [Dependency] private SharedGameTicker _ticker = default!;
     [Dependency] private IntelSystem _intel = default!;
     [Dependency] private SharedMapSystem _map = default!;
@@ -29,6 +35,9 @@ public sealed partial class TechSystem : EntitySystem
     // NOTE: Do not depend on platform-specific AuThirdPartySystem here (shared) — use ExecuteTechPartySpawn helper
     // to let server code call the server-side spawn implementation.
     [Dependency] private IPrototypeManager _proto = default!;
+
+    private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabIntelLogs";
+
     public override void Initialize()
     {
         SubscribeLocalEvent<TechAnnounceEvent>(OnTechAnnounce);
@@ -181,6 +190,18 @@ public sealed partial class TechSystem : EntitySystem
         }
 
         _intel.UpdateTree(tree);
+
+        if (_idCard.TryFindIdCard(args.Actor, out var idCard) && TryComp(idCard, out ItemIFFComponent? idCardIFF))
+        {
+            foreach (var faction in idCardIFF.Factions)
+            {
+                _core.CreateARESLog(faction, LogCat, (string) $"{Name(args.Actor)} purchased intel node: {option.Name}");
+            }
+        }
+        else
+        {
+            _core.CreateARESLog(ent, LogCat, (string) $"{Name(args.Actor)} purchased intel node: {option.Name}");
+        }
     }
 
     /// <summary>

@@ -1,0 +1,129 @@
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronSecondLT
+  name: second lieutenant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+    state: ranks_o1
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+      state: equipped-ranks_o1
+  - type: RankChanger
+    rank: RMCRankSecondLT
+    override: true
+
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronFirstLT
+  name: first lieutenant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+    state: ranks_o2
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+      state: equipped-ranks_o2
+  - type: RankChanger
+    rank: RMCRankFirstLT
+    override: true
+
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronCaptain
+  name: captain chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+    state: ranks_o3
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+      state: equipped-ranks_o3
+  - type: RankChanger
+    rank: RMCRankCaptain
+    override: true
+
+# field officers
+
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronMajor
+  name: major chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+    state: ranks_o4
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+      state: equipped-ranks_o4
+  - type: RankChanger
+    rank: RMCRankMajor
+    override: true
+
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronLieutenantColonel
+  name: lieutenant colonel chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+    state: ranks_o5
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+      state: equipped-ranks_o5
+  - type: RankChanger
+    rank: RMCRankLieutenantColonel
+    override: true
+
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronColonel
+  name: colonel chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+    state: ranks_o6
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+      state: equipped-ranks_o6
+  - type: RankChanger
+    rank: RMCRankColonel
+    override: true
+
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronBrigadierGeneral
+  name: brigadier general chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+    state: ranks_o7
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+      state: equipped-ranks_o7
+  - type: RankChanger
+    rank: RMCRankBrigadierGeneral
+    override: true
+
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronMajorGeneral
+  name: major general chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+    state: ranks_o8
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/officers.rsi
+      state: equipped-ranks_o8
+  - type: RankChanger
+    rank: RMCRankMajorGeneral
+    override: true

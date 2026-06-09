@@ -4,11 +4,17 @@
   name: au-14-job-name-uacg-ammobearer
   description: au14-uacg-description
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMCRankPrivateFirstClass:
-    - !type:RoleTimeRequirement
-      role: AU14JobUACGRifleman
-      time: 18000 #5 hours
-    RMCRankPrivate: []
+      entity: AU14ChevronUSArmyPFC
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUACGRifleman
+        time: 18000 #5 hours
+    RMCRankPrivate:
+      entity: AU14ChevronUSArmyPrivate2
+      requirements: []
   spawnMenuRoleName: UACG Ammo Bearer (3rd party)
   startingGear: AU14GearUACGLostAmmobearer
   greeting: au14-uacg-greeting

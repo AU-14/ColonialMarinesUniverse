@@ -44,6 +44,25 @@
     - id: RMCMagazineRifleL90
       amount: 10
 
+- type: entity
+  parent: RMCSecureCase
+  id: RMCSecureCaseM707Vulture
+  name: M707 anti-materiel rifle crate
+  description: A secure crate containing one M707 "Vulture" anti-materiel rifle case.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/secure_vulture.rsi
+    noRot: true
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/secure_vulture.rsi
+    state: icon
+  - type: CrateOpenable
+    spawn:
+    - id: RMCM707VultureCase
+
 # Strapped
 
 - type: entity

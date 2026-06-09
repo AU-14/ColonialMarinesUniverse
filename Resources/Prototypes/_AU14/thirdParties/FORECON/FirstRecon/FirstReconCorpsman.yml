@@ -4,7 +4,11 @@
   name: au14-job-name-forecon-corpsman
   description: au14-job-description-forecon-firstrecon
   ranks:
+    RMCRankCivilian: []
+  chevrons:
     RMCRankSergeant:
+      entity: AU14ChevronUSCMSergeant
+      requirements: []
   spawnMenuRoleName: FORECON Corpsman (AU14, 3rd party)
   startingGear: AU14GearFORECONFirstReconCorpsman
   greeting: au14-job-description-forecon-firstrecon-greeting

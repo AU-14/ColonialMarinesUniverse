@@ -258,6 +258,21 @@
   copyright: "Taken from cmss13"
   source: "https://github.com/cmss13-devs/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/sound/weapons/gun_shotgun_heavy.ogg"
 
+- files: ["gun_mk481_fire.wav"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13 and converted to mono WAV"
+  source: "https://github.com/cmss13-devs/cmss13/blob/8b42d3f865bcf81d24307f239ca3da0df8c6588b/sound/weapons/mk481_fire.ogg"
+
+- files: ["gun_sharp.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13"
+  source: "https://github.com/cmss13-devs/cmss13/blob/e856d2974d6c1a26f672d7570a99a383b0ddc9cb/sound/weapons/gun_sharp.ogg"
+
+- files: ["gun_sharp_explode.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13"
+  source: "https://github.com/cmss13-devs/cmss13/blob/e856d2974d6c1a26f672d7570a99a383b0ddc9cb/sound/weapons/gun_sharp_explode.ogg"
+
 - files: ["gun_kt42.ogg"]
   license: "CC-BY-SA-3.0"
   copyright: "Taken from cmss13"
@@ -322,3 +337,13 @@
   license: "CC-BY-SA-3.0"
   copyright: "Created by GreenFireSound, modified by kleinerstation13 (Github)"
   source: "https://freesound.org/people/GreenFireSound/sounds/396271/"
+
+- files: ["gun_vulture_fire.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13"
+  source: "https://github.com/cmss13-devs/cmss13/blob/7cb618c69b75873f3ce893022fe08d1233b3152d/sound/weapons/gun_vulture_fire.ogg"
+
+- files: ["gun_vulture_report.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13"
+  source: "https://github.com/cmss13-devs/cmss13/blob/7cb618c69b75873f3ce893022fe08d1233b3152d/sound/weapons/gun_vulture_report.ogg"

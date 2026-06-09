@@ -5,7 +5,11 @@
   description: au14-rmcert-rules
   playTimeTracker: AU14JobRMCRRTCorpsman
   ranks:
-    RMC_LanceCorporal: []
+    RMCRankCivilian: []
+  chevrons:
+    RMC_LanceCorporal:
+      entity: AU14ChevronRMCLanceCorporal
+      requirements: []
   spawnMenuRoleName: RMC RRT Corpsman
   startingGear: AU14GearRMCRRTCorpsman
   icon: "RMCJobIconRoyalMedic"
