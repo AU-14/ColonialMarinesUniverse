@@ -88,7 +88,6 @@
   id: AU14JobProdigyTARSPartySynth
   name: Prodigy TARS Support Synthetic (AU14, 3rd Party)
   components:
-  - type: Threat
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadTARS
