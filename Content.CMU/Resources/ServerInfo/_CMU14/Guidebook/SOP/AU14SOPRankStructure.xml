@@ -26,4 +26,75 @@
    - The SL can relinquish authority to another individual of higher rank on their own will, only with approval from the CO or XO, and only to complete objectives relevant to the new authority (IOs gathering Intel, SEA conducting training, MPs conducting a field arrest.)
    - The Commanding Officer, following the line of succession, has full authority over their unit regardless of the presence of an individual of higher rank on their vessel or installation, unless that individual commands a unit of greater scale such as a Battalion, Brigade, etc., or unless that individual has signed permission from the Commanding Officer's own superior. (I.E. A Major Pilot cannot overwrite a Captain CO, nor can a LtCol. Company Commander overwrite the CO of another Marine Company without express permission.)
 
+  # Current Rank Structure
+
+    Below is the currently enforced rank structure for use, subject to change at demand of High Command
+
+
+
+  ## The Commanding Officer (O4-05) 
+  The following report to the above role
+    - Adjutant Officer (O3)
+      - Staff Officer (O2)
+      - Support Synth (WO1)
+      - Working Joe (N/A)
+    - Apollo (AI)
+      - Support Synth (WO1)
+      - Working Joe (N/A)
+    - Advisor (E6-E9)
+
+  ## Operation Command consisnts of the above jobs and is directed by the Advisor (E6-E9) and Staff Officer (O2)
+  The follow report to the above role
+    - Logistics
+    - Military Police
+    - Medical
+    - Combat Arms
+    - Intelligence
+    - Vehicle Crew
+    - Engineering
+
+  ## Logisitics Reports to Operation Command
+  The following jobs are apart of Logisitcs
+    - Logistics Officer (O1)
+      - Requisitions Technician (E2-E4)
+
+  ## Military Police Reports to Operation Command
+  The following jobs are apart of Military Police
+    - Chief Military Policeman (O1)
+      - Military Policeman (E3-E6)
+
+  ## Medical Reports to Operation Command
+  The following jobs are apart of Medical
+    - Chief Medical Officer (O2)
+      - Doctor (O1)
+      - Medical Technician (E2-E4)
+
+  ## Intelligence Reports to Operation Command
+  The following jobs are apart of Intelligence
+    - Intelligence Officer (O1)
+      - Intelligence Technician (E2-E4)
+
+  ## Engineering Reports to Operation Command
+  The following jobs are apart of Engineering
+    - Engineering Officer (O1)
+      - Maintenance Technician (E2-E4)
+      - Ordance Technician (E2-E4)
+
+  ## Vehilce Crew Reports to Operation Command
+  The following jobs are apart of Vehilce Crew
+    - Dropship Pilot (CW2-CW3)
+      - Dropship Crew Chief (E5-E6)
+    - Vehicle Commander (CW2-CW3)
+      - Vehicle Crewman (E2-E4)
+
+  ## Combat Arms Reports to Operation Command
+  The following jobs are apart of Combat Arms
+    - Sqaud Leader (E5-E6)
+      - Fire Team Leader (E4)
+      - Corpsman (E3)
+        - Combat Technician (E1-E2)
+        - Automatic Rifleman (E1-E2)
+        - Rifleman (E1-E2)
+        - Weapons Specialist (E1-E2)
+
   </Document>
