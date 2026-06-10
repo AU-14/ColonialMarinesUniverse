@@ -1,6 +1,12 @@
 ﻿<Document>
   # Command Regulations
 
+  ## Command Arms
+  Command must obide by the following regulations regarding arming themselves on the ship or in the field:
+  - Command may not take any type of special weapon from Req or Vendors, and may only use standard issue arms found in their respective armory, or rifleman prep. (This does not include magazines)
+  - Command may only arm with a Pistol, PDW, or SMG while shipside and it must be stored on their belt, back, or in a bag unchambered (it may be chambered if on a ground based installation)
+  - Command are allowed to operative heavy weapons only if no one else in the vincinity is doing so or there is a emergency situtation going on.
+
   ## Conduct of Briefing
   The Acting Commander is responsible for ensuring a proper briefing is conducted before any operation begins and personnel are deployed.
   - It must be performed in an area where a proper inspection of personnel can be held and where personnel can hear any orders.
@@ -9,10 +15,26 @@
 
   ## Command Field Deployment
   The Command Staff has the right to deploy to the frontline for the sake of commanding their personnel from a direct point of view. Deployments must be for the sake of the personnel and operation, and not for the personal glory of the Command Staff. At least one member of Command Staff must remain on the ship/installation to man the CIC.
+    - The CO or Adjutant(XO) may deploy to the field if they beleive it is more beneficial to the operation. However BOTH cannot be deployed and only one or the other may be deployed.
 
   When Deployed:
   - The deploying Command Staff must still command and communicate frequently with their faction.
   - Combat should be reserved when assisting personnel in a supporting capacity, in defense of others and self, or directly leading an offensive maneuver.
   - They should avoid unnecessarily putting themselves in danger and remain close to personnel to focus on providing clear orders.
 
+## Detainment Authority
+  The follow regulations apply in the regards of Command ordering detainment or being detained.
+    - All orders from the detained command personnel are null and void, and shall not be followed by anyone.
+    - Command may not order the arrest of someone on grounds of suspicion
+    - Command may not pardon anyone of a crime, unless for the sakes of an emergency, this does not apply to Capital crimes, or violent crimes (i.e. Murder)
+    - The CMO may order arrests on the grounds of Insanity if done so after a proper examination with documentation. Under no other circumstances shall a person be ordered to be arrested for Insanity.
+
+## Command Arrests
+ When arresting a member of command (CO, XO, JOs, etc) a facsimile must sent to the marshal office before hand with a DETAILED report with reasoning. A response is not required to proceed with the arrest. Once a fax has been sent the CMP (if presents) must be present for the arrest and one other MP. The command member must be read their rights in its entirety and if they are the commander of the operation they are given 10 minutes to hand over command properly. This may be EXTENDED in emergency situations (i.e. shipside emergencies).
+
+## Do Not Revive Orders
+  The follow regulations apply for DNR orders issued by MPs or Command
+    - DNRs may not be issued by the XO or CO without proper documentation received from NEMO or HighComm.
+    - CO or XO may request for a DNR through NEMO or HighComm.
+    - If a person requests a DNR from the CMO for themselves and it is approved, it must be followed by law, chargeable by VoL (major crimes).
 </Document>

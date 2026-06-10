@@ -1,8 +1,23 @@
 ﻿<Document>
-  # Rules of Engagement
+  # Rank Structure
 
-  Authority is determined by rank. The highest ranking individual present is the acting authority and holds final decision making power, unless command is explicitly delegated by an individual of higher rank.
+  ## Rank Authority
+  Authority is determined by rank if two individuals are NOT in the same department. The highest ranking individual present is the acting authority and holds final decision making power, unless command is explicitly delegated by an individual of higher rank.
 
   If two individuals of equal rank are present, authority defaults to the individual with greater seniority (time served).
 
-</Document>
+  ## Department Authority
+  Heads of Department (LO, CMP, CMO, IO, EO, and APOLLO) hold the final authority over those operating in their department regardless of rank. If cross department operations would be required (LO and EO working on logisitcs together) it then falls to highest rank.
+
+  Departments members may not have their orders overruled by anyone unless approved by the XO or CO.
+
+  XO and CO hold final authority on all department decisions including dismissal of a Department Head if found to be in violations of SOP or health standards.
+
+  ## Specialized Authority
+  Certain jobs and roles have specialized authority depending on their location and use, these are outlined below.
+    - Logistic Technicians hold authority over Req, and may order the arrest of any member that violate their orders in regard of REQ MATTERS (i.e. a rifleman is refusing to leave the line / REQ interior. NOT the CO is refusing to increase budget after already doing so once)
+    - Ordnance Technicians hold authority over their workshop, if anyone poses a hazard they may be dismissed (i.e. a rifleman is refusing to disable the pilot light on their M34 or a pyro on their M34T)
+    - DCCs hold the same authority as a DP in regards to aircraft interiors, and may dismiss anyone from the interior if they find them disruptive to operations
+    - Weapon Specialists hold the sole authority over their preferred speciality. They cannot be ordered by Command or their SL to pick a certain speciality. This does NOT apply to WS called in or awoken by Command
+
+  </Document>
