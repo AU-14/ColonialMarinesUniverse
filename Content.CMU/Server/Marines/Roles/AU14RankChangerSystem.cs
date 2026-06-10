@@ -1,12 +1,15 @@
+using Content.Server._RMC14.Marines.Roles.Ranks;
+using Content.Shared._AU14.Marines.Roles.Ranks;
+using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
+using Content.Shared._RMC14.UniformAccessories;
+using Content.Shared.Access.Components;
+using Content.Shared.Hands;
+using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
+using Content.Shared.Roles;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
-using Content.Shared._AU14.Marines.Roles.Ranks;
-using Content.Shared.Hands;
-using Content.Server._RMC14.Marines.Roles.Ranks;
-using Content.Shared.Inventory;
-using Content.Shared._RMC14.UniformAccessories;
 
 namespace Content.Server._AU14.Marines.Roles.Ranks;
 
@@ -15,6 +18,7 @@ public sealed partial class RankChangerSystem : EntitySystem
     [Dependency] private RankSystem _rank = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedMarineSystem _marine = default!;
 
     public override void Initialize()
     {
@@ -25,7 +29,7 @@ public sealed partial class RankChangerSystem : EntitySystem
         SubscribeLocalEvent<RankChangerComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<RankChangerComponent, GotEquippedHandEvent>(OnEquippedHand);
         SubscribeLocalEvent<RankChangerComponent, GotUnequippedHandEvent>(OnUnequippedHand);
-    
+
     }
 
     private void OnEquipped(Entity<RankChangerComponent> ent, ref GotEquippedEvent args)
@@ -55,6 +59,13 @@ public sealed partial class RankChangerSystem : EntitySystem
 
         comp.Applied = true;
         _rank.SetRank(wearer, rankProto);
+
+        var jobId = _rank.GetJobId(wearer);
+        if (jobId != null
+            && _prototypes.TryIndex<JobPrototype>(jobId.Value, out var jobProto)
+            && jobProto.HasIcon
+            && _prototypes.TryIndex(jobProto.Icon, out var iconProto))
+            _marine.SetMarineIcon(wearer, iconProto.Icon);
     }
 
     public void RevertRank(EntityUid wearer, RankChangerComponent comp)
@@ -68,7 +79,7 @@ public sealed partial class RankChangerSystem : EntitySystem
             return;
 
         // Check if another chevron is present — apply that instead
-        if (!TryComp<InventoryComponent>(wearer, out var inventory))
+        if (!HasComp<InventoryComponent>(wearer))
         {
             _rank.ReapplyJobRank(wearer);
             return;
@@ -110,6 +121,7 @@ public sealed partial class RankChangerSystem : EntitySystem
 
         // No other chevron found — restore job rank
         _rank.ReapplyJobRank(wearer);
+        _marine.ClearMarineIcon(wearer);
     }
 
     private bool IsAnyChevronActive(EntityUid wearer, RankChangerComponent excluded)
