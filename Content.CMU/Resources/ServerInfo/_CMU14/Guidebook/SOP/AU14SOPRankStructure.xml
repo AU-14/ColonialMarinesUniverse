@@ -43,7 +43,7 @@
       - Working Joe (N/A)
         - Advisor (E6-E9)
 
-  ## Operation Command consisnts of the above jobs and is directed by the Advisor (E6-E9) and Staff Officer (O2)
+  ## Operation Command (OPSCOM) consisnts of the above jobs and is directed by the Advisor (E6-E9) and Staff Officer (O2)
   The follow report to the above role
     - Logistics
     - Military Police
@@ -53,42 +53,42 @@
     - Vehicle Crew
     - Engineering
 
-  ## Logisitics Reports to Operation Command
-  The following jobs are apart of Logisitcs
+  ## Logisitics (LOGI) Reports to Operation Command
+  The following jobs are apart of LOGI
     - Logistics Officer (O1)
       - Requisitions Technician (E2-E4)
 
-  ## Military Police Reports to Operation Command
-  The following jobs are apart of Military Police
+  ## Military Police (MP) Reports to Operation Command
+  The following jobs are apart of MP
     - Chief Military Policeman (O1)
       - Military Policeman (E3-E6)
 
-  ## Medical Reports to Operation Command
-  The following jobs are apart of Medical
+  ## Medical (MED) Reports to Operation Command
+  The following jobs are apart of MED
     - Chief Medical Officer (O2)
       - Doctor (O1)
       - Medical Technician (E2-E4)
 
-  ## Intelligence Reports to Operation Command
-  The following jobs are apart of Intelligence
+  ## Intelligence (INTI.) Reports to Operation Command
+  The following jobs are apart of INTI
     - Intelligence Officer (O1)
       - Intelligence Technician (E2-E4)
 
-  ## Engineering Reports to Operation Command
-  The following jobs are apart of Engineering
+  ## Engineering (ENGI) Reports to Operation Command
+  The following jobs are apart of ENGI
     - Engineering Officer (O1)
       - Maintenance Technician (E2-E4)
       - Ordance Technician (E2-E4)
 
-  ## Vehilce Crew Reports to Operation Command
-  The following jobs are apart of Vehilce Crew
+  ## Vehilce Crew (VC) Reports to Operation Command
+  The following jobs are apart of VC
     - Dropship Pilot (CW2-CW3)
       - Dropship Crew Chief (E5-E6)
     - Vehicle Commander (CW2-CW3)
       - Vehicle Crewman (E2-E4)
 
-  ## Combat Arms Reports to Operation Command
-  The following jobs are apart of Combat Arms
+  ## Combat Arms (COMARMS) Reports to Operation Command
+  The following jobs are apart of COMARMS
     - Sqaud Leader (E5-E6)
       - Fire Team Leader (E4)
       - Corpsman (E3)
