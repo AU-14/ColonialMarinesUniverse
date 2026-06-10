@@ -4,7 +4,7 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 06/10/2026 03:58:27
+  time: 06/10/2026 04:07:12
   entityCount: 40163
 maps:
 - 1
@@ -12052,7 +12052,7 @@ entities:
         110,41: RMCAreaPortNereidSpaceport
         110,40: RMCAreaPortNereidSpaceport
         110,39: RMCAreaPortNereidSpaceport
-        111,63: RMCAreaPortNereidSpaceport
+        111,63: CMUAreaPortNereidNorthLZ2Comms
         111,62: RMCAreaPortNereidSpaceport
         111,61: RMCAreaPortNereidSpaceport
         111,60: RMCAreaPortNereidSpaceport
@@ -12077,7 +12077,7 @@ entities:
         111,41: RMCAreaPortNereidSpaceport
         111,40: RMCAreaPortNereidSpaceport
         111,39: RMCAreaPortNereidSpaceport
-        112,63: RMCAreaPortNereidSpaceport
+        112,63: CMUAreaPortNereidNorthLZ2Comms
         112,62: RMCAreaPortNereidSpaceport
         112,61: RMCAreaPortNereidSpaceport
         112,60: RMCAreaPortNereidSpaceport
@@ -12102,7 +12102,7 @@ entities:
         112,41: RMCAreaPortNereidSpaceport
         112,40: RMCAreaPortNereidSpaceport
         112,39: RMCAreaPortNereidSpaceport
-        113,63: RMCAreaPortNereidSpaceport
+        113,63: CMUAreaPortNereidNorthLZ2Comms
         113,62: RMCAreaPortNereidSpaceport
         113,61: RMCAreaPortNereidSpaceport
         113,60: RMCAreaPortNereidSpaceport
@@ -12127,7 +12127,7 @@ entities:
         113,41: RMCAreaPortNereidSpaceport
         113,40: RMCAreaPortNereidSpaceport
         113,39: RMCAreaPortNereidSpaceport
-        114,63: RMCAreaPortNereidSpaceport
+        114,63: CMUAreaPortNereidNorthLZ2Comms
         114,62: RMCAreaPortNereidSpaceport
         114,61: RMCAreaPortNereidSpaceport
         114,60: RMCAreaPortNereidSpaceport
@@ -13511,53 +13511,53 @@ entities:
         110,66: RMCAreaPortNereidSouthEastJungle
         110,64: RMCAreaPortNereidSouthEastJungle
         111,70: RMCAreaPortNereidSouthEastJungle
-        111,69: RMCAreaPortNereidSouthEastJungle
-        111,68: RMCAreaPortNereidSouthEastJungle
-        111,67: RMCAreaPortNereidSouthEastJungle
-        111,66: RMCAreaPortNereidSouthEastJungle
+        111,69: CMUAreaPortNereidNorthLZ2Comms
+        111,68: CMUAreaPortNereidNorthLZ2Comms
+        111,67: CMUAreaPortNereidNorthLZ2Comms
+        111,66: CMUAreaPortNereidNorthLZ2Comms
         111,71: RMCAreaPortNereidSouthEastJungle
-        111,65: RMCAreaPortNereidSouthEastJungle
+        111,65: CMUAreaPortNereidNorthLZ2Comms
         112,71: RMCAreaPortNereidSouthEastJungle
         112,70: RMCAreaPortNereidSouthEastJungle
-        111,64: RMCAreaPortNereidSouthEastJungle
-        112,69: RMCAreaPortNereidSouthEastJungle
-        112,67: RMCAreaPortNereidSouthEastJungle
-        112,68: RMCAreaPortNereidSouthEastJungle
-        112,65: RMCAreaPortNereidSouthEastJungle
-        112,64: RMCAreaPortNereidSouthEastJungle
+        111,64: CMUAreaPortNereidNorthLZ2Comms
+        112,69: CMUAreaPortNereidNorthLZ2Comms
+        112,67: CMUAreaPortNereidNorthLZ2Comms
+        112,68: CMUAreaPortNereidNorthLZ2Comms
+        112,65: CMUAreaPortNereidNorthLZ2Comms
+        112,64: CMUAreaPortNereidNorthLZ2Comms
         113,70: RMCAreaPortNereidSouthEastJungle
         113,71: RMCAreaPortNereidSouthEastJungle
-        112,66: RMCAreaPortNereidSouthEastJungle
-        113,69: RMCAreaPortNereidSouthEastJungle
-        113,67: RMCAreaPortNereidSouthEastJungle
-        113,68: RMCAreaPortNereidSouthEastJungle
-        113,66: RMCAreaPortNereidSouthEastJungle
-        113,65: RMCAreaPortNereidSouthEastJungle
-        113,64: RMCAreaPortNereidSouthEastJungle
+        112,66: CMUAreaPortNereidNorthLZ2Comms
+        113,69: CMUAreaPortNereidNorthLZ2Comms
+        113,67: CMUAreaPortNereidNorthLZ2Comms
+        113,68: CMUAreaPortNereidNorthLZ2Comms
+        113,66: CMUAreaPortNereidNorthLZ2Comms
+        113,65: CMUAreaPortNereidNorthLZ2Comms
+        113,64: CMUAreaPortNereidNorthLZ2Comms
         114,71: RMCAreaPortNereidSouthEastJungle
         114,70: RMCAreaPortNereidSouthEastJungle
-        114,69: RMCAreaPortNereidSouthEastJungle
-        114,68: RMCAreaPortNereidSouthEastJungle
-        114,67: RMCAreaPortNereidSouthEastJungle
-        114,66: RMCAreaPortNereidSouthEastJungle
-        114,65: RMCAreaPortNereidSouthEastJungle
-        114,64: RMCAreaPortNereidSouthEastJungle
+        114,69: CMUAreaPortNereidNorthLZ2Comms
+        114,68: CMUAreaPortNereidNorthLZ2Comms
+        114,67: CMUAreaPortNereidNorthLZ2Comms
+        114,66: CMUAreaPortNereidNorthLZ2Comms
+        114,65: CMUAreaPortNereidNorthLZ2Comms
+        114,64: CMUAreaPortNereidNorthLZ2Comms
         115,71: RMCAreaPortNereidSouthEastJungle
         115,70: RMCAreaPortNereidSouthEastJungle
-        115,69: RMCAreaPortNereidSouthEastJungle
-        115,68: RMCAreaPortNereidSouthEastJungle
-        115,67: RMCAreaPortNereidSouthEastJungle
-        115,66: RMCAreaPortNereidSouthEastJungle
-        115,65: RMCAreaPortNereidSouthEastJungle
-        115,64: RMCAreaPortNereidSouthEastJungle
+        115,69: CMUAreaPortNereidNorthLZ2Comms
+        115,68: CMUAreaPortNereidNorthLZ2Comms
+        115,67: CMUAreaPortNereidNorthLZ2Comms
+        115,66: CMUAreaPortNereidNorthLZ2Comms
+        115,65: CMUAreaPortNereidNorthLZ2Comms
+        115,64: CMUAreaPortNereidNorthLZ2Comms
         116,71: RMCAreaPortNereidSouthEastJungle
         116,70: RMCAreaPortNereidSouthEastJungle
-        116,69: RMCAreaPortNereidSouthEastJungle
-        116,68: RMCAreaPortNereidSouthEastJungle
-        116,67: RMCAreaPortNereidSouthEastJungle
-        116,66: RMCAreaPortNereidSouthEastJungle
-        116,65: RMCAreaPortNereidSouthEastJungle
-        116,64: RMCAreaPortNereidSouthEastJungle
+        116,69: CMUAreaPortNereidNorthLZ2Comms
+        116,68: CMUAreaPortNereidNorthLZ2Comms
+        116,67: CMUAreaPortNereidNorthLZ2Comms
+        116,66: CMUAreaPortNereidNorthLZ2Comms
+        116,65: CMUAreaPortNereidNorthLZ2Comms
+        116,64: CMUAreaPortNereidNorthLZ2Comms
         117,71: RMCAreaPortNereidSouthEastJungle
         117,70: RMCAreaPortNereidSouthEastJungle
         117,69: RMCAreaPortNereidSouthEastJungle
@@ -17309,12 +17309,12 @@ entities:
         78,14: RMCAreaPortNereidSouthEastJungle
         78,15: RMCAreaPortNereidSouthEastJungle
         78,16: RMCAreaPortNereidSouthEastJungle
-        78,17: RMCAreaPortNereidSouthEastJungle
-        78,18: RMCAreaPortNereidSouthEastJungle
-        78,19: RMCAreaPortNereidSouthEastJungle
-        78,20: RMCAreaPortNereidSouthEastJungle
-        78,21: RMCAreaPortNereidSouthEastJungle
-        78,22: RMCAreaPortNereidSouthEastJungle
+        78,17: CMUAreaPortNereidSouthLZ2Comms
+        78,18: CMUAreaPortNereidSouthLZ2Comms
+        78,19: CMUAreaPortNereidSouthLZ2Comms
+        78,20: CMUAreaPortNereidSouthLZ2Comms
+        78,21: CMUAreaPortNereidSouthLZ2Comms
+        78,22: CMUAreaPortNereidSouthLZ2Comms
         78,23: RMCAreaPortNereidSouthEastJungle
         78,24: RMCAreaPortNereidSouthEastJungle
         78,25: RMCAreaPortNereidSouthEastJungle
@@ -17343,12 +17343,12 @@ entities:
         77,14: RMCAreaPortNereidSouthEastJungle
         77,15: RMCAreaPortNereidSouthEastJungle
         77,16: RMCAreaPortNereidSouthEastJungle
-        77,17: RMCAreaPortNereidSouthEastJungle
-        77,18: RMCAreaPortNereidSouthEastJungle
-        77,19: RMCAreaPortNereidSouthEastJungle
-        77,20: RMCAreaPortNereidSouthEastJungle
-        77,21: RMCAreaPortNereidSouthEastJungle
-        77,22: RMCAreaPortNereidSouthEastJungle
+        77,17: CMUAreaPortNereidSouthLZ2Comms
+        77,18: CMUAreaPortNereidSouthLZ2Comms
+        77,19: CMUAreaPortNereidSouthLZ2Comms
+        77,20: CMUAreaPortNereidSouthLZ2Comms
+        77,21: CMUAreaPortNereidSouthLZ2Comms
+        77,22: CMUAreaPortNereidSouthLZ2Comms
         77,23: RMCAreaPortNereidSouthEastJungle
         77,24: RMCAreaPortNereidSouthEastJungle
         77,25: RMCAreaPortNereidSouthEastJungle
@@ -17377,12 +17377,12 @@ entities:
         76,14: RMCAreaPortNereidSouthEastJungle
         76,15: RMCAreaPortNereidSouthEastJungle
         76,16: RMCAreaPortNereidSouthEastJungle
-        76,17: RMCAreaPortNereidSouthEastJungle
-        76,18: RMCAreaPortNereidSouthEastJungle
-        76,19: RMCAreaPortNereidSouthEastJungle
-        76,20: RMCAreaPortNereidSouthEastJungle
-        76,21: RMCAreaPortNereidSouthEastJungle
-        76,22: RMCAreaPortNereidSouthEastJungle
+        76,17: CMUAreaPortNereidSouthLZ2Comms
+        76,18: CMUAreaPortNereidSouthLZ2Comms
+        76,19: CMUAreaPortNereidSouthLZ2Comms
+        76,20: CMUAreaPortNereidSouthLZ2Comms
+        76,21: CMUAreaPortNereidSouthLZ2Comms
+        76,22: CMUAreaPortNereidSouthLZ2Comms
         76,23: RMCAreaPortNereidSouthEastJungle
         76,24: RMCAreaPortNereidSouthEastJungle
         76,25: RMCAreaPortNereidSouthEastJungle
@@ -17411,12 +17411,12 @@ entities:
         75,14: RMCAreaPortNereidSouthEastJungle
         75,15: RMCAreaPortNereidSouthEastJungle
         75,16: RMCAreaPortNereidSouthEastJungle
-        75,17: RMCAreaPortNereidSouthEastJungle
-        75,18: RMCAreaPortNereidSouthEastJungle
-        75,19: RMCAreaPortNereidSouthEastJungle
-        75,20: RMCAreaPortNereidSouthEastJungle
-        75,21: RMCAreaPortNereidSouthEastJungle
-        75,22: RMCAreaPortNereidSouthEastJungle
+        75,17: CMUAreaPortNereidSouthLZ2Comms
+        75,18: CMUAreaPortNereidSouthLZ2Comms
+        75,19: CMUAreaPortNereidSouthLZ2Comms
+        75,20: CMUAreaPortNereidSouthLZ2Comms
+        75,21: CMUAreaPortNereidSouthLZ2Comms
+        75,22: CMUAreaPortNereidSouthLZ2Comms
         75,23: RMCAreaPortNereidSouthEastJungle
         75,24: RMCAreaPortNereidSouthEastJungle
         75,25: RMCAreaPortNereidSouthEastJungle
@@ -17445,12 +17445,12 @@ entities:
         74,14: RMCAreaPortNereidSouthEastJungle
         74,15: RMCAreaPortNereidSouthEastJungle
         74,16: RMCAreaPortNereidSouthEastJungle
-        74,17: RMCAreaPortNereidSouthEastJungle
-        74,18: RMCAreaPortNereidSouthEastJungle
-        74,19: RMCAreaPortNereidSouthEastJungle
-        74,20: RMCAreaPortNereidSouthEastJungle
-        74,21: RMCAreaPortNereidSouthEastJungle
-        74,22: RMCAreaPortNereidSouthEastJungle
+        74,17: CMUAreaPortNereidSouthLZ2Comms
+        74,18: CMUAreaPortNereidSouthLZ2Comms
+        74,19: CMUAreaPortNereidSouthLZ2Comms
+        74,20: CMUAreaPortNereidSouthLZ2Comms
+        74,21: CMUAreaPortNereidSouthLZ2Comms
+        74,22: CMUAreaPortNereidSouthLZ2Comms
         74,23: RMCAreaPortNereidSouthEastJungle
         74,24: RMCAreaPortNereidSouthEastJungle
         74,25: RMCAreaPortNereidSouthEastJungle
@@ -17479,12 +17479,12 @@ entities:
         73,14: RMCAreaPortNereidSouthEastJungle
         73,15: RMCAreaPortNereidSouthEastJungle
         73,16: RMCAreaPortNereidSouthEastJungle
-        73,17: RMCAreaPortNereidSouthEastJungle
-        73,18: RMCAreaPortNereidSouthEastJungle
-        73,19: RMCAreaPortNereidSouthEastJungle
-        73,20: RMCAreaPortNereidSouthEastJungle
-        73,21: RMCAreaPortNereidSouthEastJungle
-        73,22: RMCAreaPortNereidSouthEastJungle
+        73,17: CMUAreaPortNereidSouthLZ2Comms
+        73,18: CMUAreaPortNereidSouthLZ2Comms
+        73,19: CMUAreaPortNereidSouthLZ2Comms
+        73,20: CMUAreaPortNereidSouthLZ2Comms
+        73,21: CMUAreaPortNereidSouthLZ2Comms
+        73,22: CMUAreaPortNereidSouthLZ2Comms
         73,23: RMCAreaPortNereidSouthEastJungle
         73,24: RMCAreaPortNereidSouthEastJungle
         73,25: RMCAreaPortNereidSouthEastJungle
@@ -23868,12 +23868,12 @@ entities:
         -20,101: RMCAreaPortNereidNorthWestJungle
         -20,102: RMCAreaPortNereidNorthWestJungle
         -19,90: RMCAreaPortNereidNorthWestJungle
-        -19,91: RMCAreaPortNereidNorthWestJungle
-        -19,92: RMCAreaPortNereidNorthWestJungle
-        -19,93: RMCAreaPortNereidNorthWestJungle
-        -19,94: RMCAreaPortNereidNorthWestJungle
-        -19,95: RMCAreaPortNereidNorthWestJungle
-        -19,96: RMCAreaPortNereidNorthWestJungle
+        -19,91: CMUAreaPortNereidNorthJungleComms
+        -19,92: CMUAreaPortNereidNorthJungleComms
+        -19,93: CMUAreaPortNereidNorthJungleComms
+        -19,94: CMUAreaPortNereidNorthJungleComms
+        -19,95: CMUAreaPortNereidNorthJungleComms
+        -19,96: CMUAreaPortNereidNorthJungleComms
         -19,97: RMCAreaPortNereidNorthWestJungle
         -19,98: RMCAreaPortNereidNorthWestJungle
         -19,99: RMCAreaPortNereidNorthWestJungle
@@ -23881,12 +23881,12 @@ entities:
         -19,101: RMCAreaPortNereidNorthWestJungle
         -19,102: RMCAreaPortNereidNorthWestJungle
         -18,90: RMCAreaPortNereidNorthWestJungle
-        -18,91: RMCAreaPortNereidNorthWestJungle
-        -18,92: RMCAreaPortNereidNorthWestJungle
-        -18,93: RMCAreaPortNereidNorthWestJungle
-        -18,94: RMCAreaPortNereidNorthWestJungle
-        -18,95: RMCAreaPortNereidNorthWestJungle
-        -18,96: RMCAreaPortNereidNorthWestJungle
+        -18,91: CMUAreaPortNereidNorthJungleComms
+        -18,92: CMUAreaPortNereidNorthJungleComms
+        -18,93: CMUAreaPortNereidNorthJungleComms
+        -18,94: CMUAreaPortNereidNorthJungleComms
+        -18,95: CMUAreaPortNereidNorthJungleComms
+        -18,96: CMUAreaPortNereidNorthJungleComms
         -18,97: RMCAreaPortNereidNorthWestJungle
         -18,98: RMCAreaPortNereidNorthWestJungle
         -18,99: RMCAreaPortNereidNorthWestJungle
@@ -23894,12 +23894,12 @@ entities:
         -18,101: RMCAreaPortNereidNorthWestJungle
         -18,102: RMCAreaPortNereidNorthWestJungle
         -17,90: RMCAreaPortNereidNorthWestJungle
-        -17,91: RMCAreaPortNereidNorthWestJungle
-        -17,92: RMCAreaPortNereidNorthWestJungle
-        -17,93: RMCAreaPortNereidNorthWestJungle
-        -17,94: RMCAreaPortNereidNorthWestJungle
-        -17,95: RMCAreaPortNereidNorthWestJungle
-        -17,96: RMCAreaPortNereidNorthWestJungle
+        -17,91: CMUAreaPortNereidNorthJungleComms
+        -17,92: CMUAreaPortNereidNorthJungleComms
+        -17,93: CMUAreaPortNereidNorthJungleComms
+        -17,94: CMUAreaPortNereidNorthJungleComms
+        -17,95: CMUAreaPortNereidNorthJungleComms
+        -17,96: CMUAreaPortNereidNorthJungleComms
         -17,97: RMCAreaPortNereidNorthWestJungle
         -17,98: RMCAreaPortNereidNorthWestJungle
         -17,99: RMCAreaPortNereidNorthWestJungle
@@ -23907,12 +23907,12 @@ entities:
         -17,101: RMCAreaPortNereidNorthWestJungle
         -17,102: RMCAreaPortNereidNorthWestJungle
         -16,90: RMCAreaPortNereidNorthWestJungle
-        -16,91: RMCAreaPortNereidNorthWestJungle
-        -16,92: RMCAreaPortNereidNorthWestJungle
-        -16,93: RMCAreaPortNereidNorthWestJungle
-        -16,94: RMCAreaPortNereidNorthWestJungle
-        -16,95: RMCAreaPortNereidNorthWestJungle
-        -16,96: RMCAreaPortNereidNorthWestJungle
+        -16,91: CMUAreaPortNereidNorthJungleComms
+        -16,92: CMUAreaPortNereidNorthJungleComms
+        -16,93: CMUAreaPortNereidNorthJungleComms
+        -16,94: CMUAreaPortNereidNorthJungleComms
+        -16,95: CMUAreaPortNereidNorthJungleComms
+        -16,96: CMUAreaPortNereidNorthJungleComms
         -16,97: RMCAreaPortNereidNorthWestJungle
         -16,98: RMCAreaPortNereidNorthWestJungle
         -16,99: RMCAreaPortNereidNorthWestJungle
@@ -23920,12 +23920,12 @@ entities:
         -16,101: RMCAreaPortNereidNorthWestJungle
         -16,102: RMCAreaPortNereidNorthWestJungle
         -15,90: RMCAreaPortNereidNorthWestJungle
-        -15,91: RMCAreaPortNereidNorthWestJungle
-        -15,92: RMCAreaPortNereidNorthWestJungle
-        -15,93: RMCAreaPortNereidNorthWestJungle
-        -15,94: RMCAreaPortNereidNorthWestJungle
-        -15,95: RMCAreaPortNereidNorthWestJungle
-        -15,96: RMCAreaPortNereidNorthWestJungle
+        -15,91: CMUAreaPortNereidNorthJungleComms
+        -15,92: CMUAreaPortNereidNorthJungleComms
+        -15,93: CMUAreaPortNereidNorthJungleComms
+        -15,94: CMUAreaPortNereidNorthJungleComms
+        -15,95: CMUAreaPortNereidNorthJungleComms
+        -15,96: CMUAreaPortNereidNorthJungleComms
         -15,97: RMCAreaPortNereidNorthWestJungle
         -15,98: RMCAreaPortNereidNorthWestJungle
         -15,99: RMCAreaPortNereidNorthWestJungle
@@ -23933,12 +23933,12 @@ entities:
         -15,101: RMCAreaPortNereidNorthWestJungle
         -15,102: RMCAreaPortNereidNorthWestJungle
         -14,90: RMCAreaPortNereidNorthWestJungle
-        -14,91: RMCAreaPortNereidNorthWestJungle
-        -14,92: RMCAreaPortNereidNorthWestJungle
-        -14,93: RMCAreaPortNereidNorthWestJungle
-        -14,94: RMCAreaPortNereidNorthWestJungle
-        -14,95: RMCAreaPortNereidNorthWestJungle
-        -14,96: RMCAreaPortNereidNorthWestJungle
+        -14,91: CMUAreaPortNereidNorthJungleComms
+        -14,92: CMUAreaPortNereidNorthJungleComms
+        -14,93: CMUAreaPortNereidNorthJungleComms
+        -14,94: CMUAreaPortNereidNorthJungleComms
+        -14,95: CMUAreaPortNereidNorthJungleComms
+        -14,96: CMUAreaPortNereidNorthJungleComms
         -14,97: RMCAreaPortNereidNorthWestJungle
         -14,98: RMCAreaPortNereidNorthWestJungle
         -14,99: RMCAreaPortNereidNorthWestJungle
@@ -96647,17 +96647,17 @@ entities:
   - uid: 22460
     components:
     - type: Transform
-      pos: 116.5,65.5
+      pos: 116.5,67.5
       parent: 1
   - uid: 22642
     components:
     - type: Transform
-      pos: 116.5,67.5
+      pos: 115.5,66.5
       parent: 1
   - uid: 22649
     components:
     - type: Transform
-      pos: 115.5,66.5
+      pos: 116.5,65.5
       parent: 1
   - uid: 22650
     components:
@@ -178750,7 +178750,7 @@ entities:
     - type: CMDoubleDoor
       lastOpeningAt: 17408.4159249
     - type: Door
-      secondsUntilStateChange: -50658.793
+      secondsUntilStateChange: -50910.66
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -178764,7 +178764,7 @@ entities:
     - type: CMDoubleDoor
       lastOpeningAt: 17408.4159249
     - type: Door
-      secondsUntilStateChange: -50658.793
+      secondsUntilStateChange: -50910.66
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
