@@ -303,33 +303,6 @@ entities:
     - type: MetaData
       name: Mapping LV-327 Port Neroid
     - type: Transform
-    - type: DayNightCycle
-      timeEntries:
-      - time: 0.04
-        colorHex: '#02020B'
-      - time: 0.08
-        colorHex: '#241A13'
-      - time: 0.17
-        colorHex: '#3B2A1E'
-      - time: 0.25
-        colorHex: '#7A5436'
-      - time: 0.33
-        colorHex: '#DCA865'
-      - time: 0.42
-        colorHex: '#FFF4E3'
-      - time: 0.5
-      - time: 0.58
-        colorHex: '#F7F7F7'
-      - time: 0.67
-        colorHex: '#F6C07E'
-      - time: 0.75
-        colorHex: '#DC8F42'
-      - time: 0.83
-        colorHex: '#5A3A69'
-      - time: 0.92
-        colorHex: '#02020B'
-      - time: 1
-        colorHex: '#000000'
     - type: RMCWeatherCycle
       minTimeBetweenEvents: 20
       weatherEvents:
