@@ -252,5 +252,3 @@
         crate: RMCDropshipAttachmentAmmoGAUAP
       - cost: 4500
         crate: RMCDropshipAttachmentAmmoLaserCannon
-      - cost: 600
-        crate: RMCDropshipAttachmentAmmoLaunchableSentry
