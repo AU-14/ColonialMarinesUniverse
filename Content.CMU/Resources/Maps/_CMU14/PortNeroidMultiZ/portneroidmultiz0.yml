@@ -4,7 +4,7 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 06/10/2026 03:20:02
+  time: 06/10/2026 03:58:27
   entityCount: 40163
 maps:
 - 1
@@ -9846,12 +9846,12 @@ entities:
         31,21: RMCAreaPortNereidSouthWestJungle
         31,20: RMCAreaPortNereidSouthWestJungle
         31,19: RMCAreaPortNereidSouthWestJungle
-        31,18: RMCAreaPortNereidSouthWestJungle
-        31,17: RMCAreaPortNereidSouthWestJungle
-        31,16: RMCAreaPortNereidSouthWestJungle
-        31,15: RMCAreaPortNereidSouthWestJungle
-        31,14: RMCAreaPortNereidSouthWestJungle
-        31,13: RMCAreaPortNereidSouthWestJungle
+        31,18: CMUAreaPortNereidSouthLZ1Comms
+        31,17: CMUAreaPortNereidSouthLZ1Comms
+        31,16: CMUAreaPortNereidSouthLZ1Comms
+        31,15: CMUAreaPortNereidSouthLZ1Comms
+        31,14: CMUAreaPortNereidSouthLZ1Comms
+        31,13: CMUAreaPortNereidSouthLZ1Comms
         31,12: RMCAreaPortNereidSouthWestJungle
         31,11: RMCAreaPortNereidSouthWestJungle
         31,10: RMCAreaPortNereidSouthWestJungle
@@ -9879,12 +9879,12 @@ entities:
         32,21: RMCAreaPortNereidSouthWestJungle
         32,20: RMCAreaPortNereidSouthWestJungle
         32,19: RMCAreaPortNereidSouthWestJungle
-        32,18: RMCAreaPortNereidSouthWestJungle
-        32,17: RMCAreaPortNereidSouthWestJungle
-        32,16: RMCAreaPortNereidSouthWestJungle
-        32,15: RMCAreaPortNereidSouthWestJungle
-        32,14: RMCAreaPortNereidSouthWestJungle
-        32,13: RMCAreaPortNereidSouthWestJungle
+        32,18: CMUAreaPortNereidSouthLZ1Comms
+        32,17: CMUAreaPortNereidSouthLZ1Comms
+        32,16: CMUAreaPortNereidSouthLZ1Comms
+        32,15: CMUAreaPortNereidSouthLZ1Comms
+        32,14: CMUAreaPortNereidSouthLZ1Comms
+        32,13: CMUAreaPortNereidSouthLZ1Comms
         32,12: RMCAreaPortNereidSouthWestJungle
         32,11: RMCAreaPortNereidSouthWestJungle
         32,10: RMCAreaPortNereidSouthWestJungle
@@ -9912,12 +9912,12 @@ entities:
         33,21: RMCAreaPortNereidSouthWestJungle
         33,20: RMCAreaPortNereidSouthWestJungle
         33,19: RMCAreaPortNereidSouthWestJungle
-        33,18: RMCAreaPortNereidSouthWestJungle
-        33,17: RMCAreaPortNereidSouthWestJungle
-        33,16: RMCAreaPortNereidSouthWestJungle
-        33,15: RMCAreaPortNereidSouthWestJungle
-        33,14: RMCAreaPortNereidSouthWestJungle
-        33,13: RMCAreaPortNereidSouthWestJungle
+        33,18: CMUAreaPortNereidSouthLZ1Comms
+        33,17: CMUAreaPortNereidSouthLZ1Comms
+        33,16: CMUAreaPortNereidSouthLZ1Comms
+        33,15: CMUAreaPortNereidSouthLZ1Comms
+        33,14: CMUAreaPortNereidSouthLZ1Comms
+        33,13: CMUAreaPortNereidSouthLZ1Comms
         33,12: RMCAreaPortNereidSouthWestJungle
         33,11: RMCAreaPortNereidSouthWestJungle
         33,10: RMCAreaPortNereidSouthWestJungle
@@ -9945,12 +9945,12 @@ entities:
         34,21: RMCAreaPortNereidSouthWestJungle
         34,20: RMCAreaPortNereidSouthWestJungle
         34,19: RMCAreaPortNereidSouthWestJungle
-        34,18: RMCAreaPortNereidSouthWestJungle
-        34,17: RMCAreaPortNereidSouthWestJungle
-        34,16: RMCAreaPortNereidSouthWestJungle
-        34,15: RMCAreaPortNereidSouthWestJungle
-        34,14: RMCAreaPortNereidSouthWestJungle
-        34,13: RMCAreaPortNereidSouthWestJungle
+        34,18: CMUAreaPortNereidSouthLZ1Comms
+        34,17: CMUAreaPortNereidSouthLZ1Comms
+        34,16: CMUAreaPortNereidSouthLZ1Comms
+        34,15: CMUAreaPortNereidSouthLZ1Comms
+        34,14: CMUAreaPortNereidSouthLZ1Comms
+        34,13: CMUAreaPortNereidSouthLZ1Comms
         34,12: RMCAreaPortNereidSouthWestJungle
         34,11: RMCAreaPortNereidSouthWestJungle
         34,10: RMCAreaPortNereidSouthWestJungle
@@ -9978,12 +9978,12 @@ entities:
         35,21: RMCAreaPortNereidSouthWestJungle
         35,20: RMCAreaPortNereidSouthWestJungle
         35,19: RMCAreaPortNereidSouthWestJungle
-        35,18: RMCAreaPortNereidSouthWestJungle
-        35,17: RMCAreaPortNereidSouthWestJungle
-        35,16: RMCAreaPortNereidSouthWestJungle
-        35,15: RMCAreaPortNereidSouthWestJungle
-        35,14: RMCAreaPortNereidSouthWestJungle
-        35,13: RMCAreaPortNereidSouthWestJungle
+        35,18: CMUAreaPortNereidSouthLZ1Comms
+        35,17: CMUAreaPortNereidSouthLZ1Comms
+        35,16: CMUAreaPortNereidSouthLZ1Comms
+        35,15: CMUAreaPortNereidSouthLZ1Comms
+        35,14: CMUAreaPortNereidSouthLZ1Comms
+        35,13: CMUAreaPortNereidSouthLZ1Comms
         35,12: RMCAreaPortNereidSouthWestJungle
         35,11: RMCAreaPortNereidSouthWestJungle
         35,10: RMCAreaPortNereidSouthWestJungle
@@ -10675,12 +10675,12 @@ entities:
         36,21: RMCAreaPortNereidSouthWestJungle
         36,20: RMCAreaPortNereidSouthWestJungle
         36,19: RMCAreaPortNereidSouthWestJungle
-        36,18: RMCAreaPortNereidSouthWestJungle
-        36,17: RMCAreaPortNereidSouthWestJungle
-        36,16: RMCAreaPortNereidSouthWestJungle
-        36,15: RMCAreaPortNereidSouthWestJungle
-        36,14: RMCAreaPortNereidSouthWestJungle
-        36,13: RMCAreaPortNereidSouthWestJungle
+        36,18: CMUAreaPortNereidSouthLZ1Comms
+        36,17: CMUAreaPortNereidSouthLZ1Comms
+        36,16: CMUAreaPortNereidSouthLZ1Comms
+        36,15: CMUAreaPortNereidSouthLZ1Comms
+        36,14: CMUAreaPortNereidSouthLZ1Comms
+        36,13: CMUAreaPortNereidSouthLZ1Comms
         36,12: RMCAreaPortNereidSouthWestJungle
         36,11: RMCAreaPortNereidSouthWestJungle
         36,10: RMCAreaPortNereidSouthWestJungle
@@ -178750,7 +178750,7 @@ entities:
     - type: CMDoubleDoor
       lastOpeningAt: 17408.4159249
     - type: Door
-      secondsUntilStateChange: -50527.23
+      secondsUntilStateChange: -50658.793
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -178764,7 +178764,7 @@ entities:
     - type: CMDoubleDoor
       lastOpeningAt: 17408.4159249
     - type: Door
-      secondsUntilStateChange: -50527.23
+      secondsUntilStateChange: -50658.793
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
