@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13-pve/blob/6f01c67985480f7db0f88ace56788ec3ff721c19/icons/obj/items/binoculars.dmi, inhands done by UnicornOnLSD (GitHub) for CMU14",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "monocular"
+    },
+    {
+      "name": "monocular-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "monocular-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "monocular_eyes-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "monocular_eyes-inhand-left",
+      "directions": 4
+    }
+  ]
+}
