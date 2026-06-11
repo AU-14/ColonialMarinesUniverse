@@ -4,8 +4,8 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 06/09/2026 12:15:05
-  entityCount: 5978
+  time: 06/11/2026 17:35:16
+  entityCount: 5998
 maps:
 - 1
 grids:
@@ -26387,7 +26387,7 @@ entities:
       lastSignals:
         DoorStatus: True
     - type: Door
-      secondsUntilStateChange: -152804.92
+      secondsUntilStateChange: -152875.75
       state: Opening
   - uid: 3567
     components:
@@ -29505,7 +29505,7 @@ entities:
       pos: -5.5,-11.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -170365.11
+      secondsUntilStateChange: -170435.94
       state: Closing
   - uid: 4102
     components:
@@ -33251,6 +33251,148 @@ entities:
     - type: Transform
       pos: -31.5,12.5
       parent: 1
+- proto: RMCOrbitalCannonFuel
+  entities:
+  - uid: 4603
+    components:
+    - type: Transform
+      pos: -29.5,13.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4604
+    components:
+    - type: Transform
+      pos: -29.5,15.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4605
+    components:
+    - type: Transform
+      pos: -29.5,13.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4606
+    components:
+    - type: Transform
+      pos: -29.5,15.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4607
+    components:
+    - type: Transform
+      pos: -29.5,13.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4608
+    components:
+    - type: Transform
+      pos: -29.5,15.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4609
+    components:
+    - type: Transform
+      pos: -29.5,13.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4637
+    components:
+    - type: Transform
+      pos: -29.5,15.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4638
+    components:
+    - type: Transform
+      pos: -29.5,13.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4639
+    components:
+    - type: Transform
+      pos: -29.5,15.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4640
+    components:
+    - type: Transform
+      pos: -29.5,13.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4641
+    components:
+    - type: Transform
+      pos: -29.5,15.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4642
+    components:
+    - type: Transform
+      pos: -29.5,13.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4643
+    components:
+    - type: Transform
+      pos: -29.5,15.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4644
+    components:
+    - type: Transform
+      pos: -29.5,13.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4645
+    components:
+    - type: Transform
+      pos: -29.5,15.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4646
+    components:
+    - type: Transform
+      pos: -29.5,13.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4647
+    components:
+    - type: Transform
+      pos: -29.5,15.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4648
+    components:
+    - type: Transform
+      pos: -29.5,13.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4739
+    components:
+    - type: Transform
+      pos: -29.5,15.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
 - proto: RMCOrbitalCannonWarheadSpawner
   entities:
   - uid: 4435
