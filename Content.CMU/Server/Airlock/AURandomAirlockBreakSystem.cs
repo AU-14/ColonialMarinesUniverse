@@ -1,4 +1,6 @@
+using Content.Server.GameTicking;
 using Content.Server.Wires;
+using Content.Shared._RMC14.Rules;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -8,6 +10,7 @@ public sealed partial class AURandomAirlockBreakSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
 
     public override void Initialize()
     {
@@ -24,6 +27,9 @@ public sealed partial class AURandomAirlockBreakSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        if (_gameTicker.IsGameRuleActive<CMDistressSignalRuleComponent>())
+            return;
 
         var now = _timing.CurTime;
         var query = EntityQueryEnumerator<AURandomAirlockBreakComponent, WiresComponent>();
