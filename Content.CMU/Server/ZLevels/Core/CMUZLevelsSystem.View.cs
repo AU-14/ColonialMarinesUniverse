@@ -767,7 +767,10 @@ public sealed partial class CMUZLevelsSystem
                     }
 
                     var target = _transform.GetMapCoordinates(highGroundUid);
-                    var range = highGround.PreviewRange + 0.05f;
+                    var range = Math.Min(highGround.PreviewRange + 0.05f, ExamineSystemShared.MaxRaycastRange);
+                    if (highGround.PreviewRange + 0.05f > ExamineSystemShared.MaxRaycastRange)
+                        Logger.GetSawmill("content").Warning($"CanPreviewUpperZFromStairCore: range ({highGround.PreviewRange + 0.05f}) exceeds max raycast range ({ExamineSystemShared.MaxRaycastRange})!");
+
                     if (Vector2.DistanceSquared(origin.Position, target.Position) > range * range)
                         continue;
 
@@ -777,7 +780,7 @@ public sealed partial class CMUZLevelsSystem
                         _profilePvsStairLosChecks++;
                     }
 
-                    if (_examine.InRangeUnOccluded(origin, target, highGround.PreviewRange, ent => ent == viewer.Owner || ent == highGroundUid))
+                    if (_examine.InRangeUnOccluded(origin, target, range, ent => ent == viewer.Owner || ent == highGroundUid))
                     {
                         AddStairPreviewPosition(previewPositions, target.Position);
                         if (previewPositions.Count >= CMUZLevelViewerComponent.MaxStairPreviewPositions)
