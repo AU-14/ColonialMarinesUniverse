@@ -2,16 +2,15 @@
   # Rank Structure
 
   ## Rank Authority
-  Authority is determined by rank if two individuals are NOT in the same department. The highest ranking individual present is the acting authority and holds final decision making power, unless command is explicitly delegated by an individual of higher rank.
-
+  Authority is determined by rank. The highest ranking individual present is the acting authority and holds final decision making power, unless command is explicitly delegated by an individual of higher rank. Department heads have sole authority over their departments and may only be overridden by the Acting Commander or Executive Officer.
   If two individuals of equal rank are present, authority defaults to the individual with greater seniority (time served).
 
   ## Department Authority
   Heads of Department (LO, CMP, CMO, IO, EO, and APOLLO) hold the final authority over those operating in their department regardless of rank. If cross department operations would be required (LO and EO working on logisitcs together) it then falls to highest rank.
 
-  Departments members may not have their orders overruled by anyone unless approved by the XO or CO.
+  Departments members may not have their orders overruled by anyone unless approved by the XO or ACO.
 
-  XO and CO hold final authority on all department decisions including dismissal of a Department Head if found to be in violations of SOP or health standards.
+  XO and CO hold final authority on all department decisions including dismissal of a Department Head if found to be in violation of SOP or UCMJ.
 
   ## Specialized Authority
   Certain jobs and roles have specialized authority depending on their location and use, these are outlined below.
@@ -22,9 +21,9 @@
 
   ## Field & Tactical Authority
   Tactical Authority refers to the right to direct placement and employment of members of a combat arms unit, and the unit itself.
-   - The Squad Leader and relative Staff Officers have tactical authority over their respective squad which cannot be overwritten by any personnel not directly involved with the tactical operations of the combat arms, this includes Junior Officers or Senior Enlisted who have deployed and attached to squads. 
-   - The SL can relinquish authority to another individual of higher rank on their own will, only with approval from the CO or XO, and only to complete objectives relevant to the new authority (IOs gathering Intel, SEA conducting training, MPs conducting a field arrest.)
-   - The Commanding Officer, following the line of succession, has full authority over their unit regardless of the presence of an individual of higher rank on their vessel or installation, unless that individual commands a unit of greater scale such as a Battalion, Brigade, etc., or unless that individual has signed permission from the Commanding Officer's own superior. (I.E. A Major Pilot cannot overwrite a Captain CO, nor can a LtCol. Company Commander overwrite the CO of another Marine Company without express permission.)
+   - The Squad Leader and relative Staff Officers have tactical authority over their respective squad which cannot be overwritten by any personnel not directly involved with the tactical operations of the combat arms, this includes Junior Officers or Senior Enlisted who have deployed and attached to squads.
+   - The SL can relinquish authority to another individual of higher rank on their own will, only with approval from the ACO or XO, and only to complete objectives relevant to the new authority (IOs gathering Intel, SEA conducting training, MPs conducting a field arrest.)
+   - The Acting Commanding Officer, following the line of succession, has full authority over their unit regardless of the presence of an individual of higher rank on their vessel or installation, unless that individual commands a unit of greater scale such as a Battalion, Brigade, etc., or unless that individual has signed permission from the Commanding Officer's own superior. (I.E. A Major Pilot cannot overwrite a Captain CO, nor can a LtCol. Company Commander overwrite the CO of another Marine Company without express permission.)
 
   # Current Rank Structure
 
@@ -32,16 +31,16 @@
 
 
 
-  ## The Commanding Officer (O4-05) 
+  ## The Acting Commanding Officer
   The following report to the above role
     - Apollo (AI)
-      - Support Synth (WO1)
-      - Working Joe (N/A)
-    - Adjutant Officer (O3)
-      - Staff Officer (O2)
-      - Support Synth (WO1)
-      - Working Joe (N/A)
-        - Advisor (E6-E9)
+      - Support Synth
+      - Working Joe
+    - Adjutant Officer
+      - Staff Officer
+      - Support Synth
+      - Working Joe
+        - Advisor
 
   ## Operation Command (OPSCOM) consisnts of the above jobs and is directed by the Advisor (E6-E9) and Staff Officer (O2)
   The follow report to the above role
@@ -55,46 +54,46 @@
 
   ## Logisitics (LOGI) Reports to Operation Command
   The following jobs are apart of LOGI and report to their Head
-    - Logistics Officer (O1)
-      - Requisitions Technician (E2-E4)
+    - Logistics Officer
+      - Requisitions Technician
 
   ## Military Police (MP) Reports to Operation Command
   The following jobs are apart of MP and report to their Head
-    - Chief Military Policeman (O1)
-      - Military Policeman (E3-E6)
+    - Chief Military Policeman
+      - Military Policeman
 
   ## Medical (MED) Reports to Operation Command
   The following jobs are apart of MED and report to their Head
-    - Chief Medical Officer (O2)
-      - Doctor (O1)
-      - Medical Technician (E2-E4)
+    - Chief Medical Officer
+      - Doctor
+      - Medical Technician
 
   ## Intelligence (INTI.) Reports to Operation Command
   The following jobs are apart of INTI and report to their Head
-    - Intelligence Officer (O1)
-      - Intelligence Technician (E2-E4)
+    - Intelligence Officer
+      - Intelligence Technician
 
   ## Engineering (ENGI) Reports to Operation Command
   The following jobs are apart of ENGI and report to their Head
-    - Engineering Officer (O1)
-      - Maintenance Technician (E2-E4)
-      - Ordance Technician (E2-E4)
+    - Engineering Officer
+      - Maintenance Technician
+      - Ordance Technician
 
   ## Vehilce Crew (VC) Reports to Operation Command
   The following jobs are apart of VC and report to their Head
-    - Dropship Pilot (CW2-CW3)
-      - Dropship Crew Chief (E5-E6)
-    - Vehicle Commander (CW2-CW3)
-      - Vehicle Crewman (E2-E4)
+    - Dropship Pilot
+      - Dropship Crew Chief
+    - Vehicle Commander
+      - Vehicle Crewman
 
   ## Combat Arms (COMARMS) Reports to Operation Command
   The following jobs are apart of COMARMS and report to their Head
-    - Sqaud Leader (E5-E6)
-      - Fire Team Leader (E4)
-      - Corpsman (E3)
-        - Combat Technician (E1-E2)
-        - Automatic Rifleman (E1-E2)
-        - Rifleman (E1-E2)
-        - Weapons Specialist (E1-E2)
+    - Sqaud Leader
+      - Fire Team Leader
+        - Corpsman
+          - Combat Technician
+          - Automatic Rifleman
+          - Rifleman
+          - Weapons Specialist
 
   </Document>
