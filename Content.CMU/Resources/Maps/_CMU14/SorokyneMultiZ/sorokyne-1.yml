@@ -21,7 +21,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Mapping LV-976 Sorokyne Strata [-1]
+      name: LV-976 Sorokyne Strata [-1]
     - type: Transform
     - type: Map
       mapPaused: True
