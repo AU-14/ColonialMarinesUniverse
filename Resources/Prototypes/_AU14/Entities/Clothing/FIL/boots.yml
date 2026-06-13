@@ -1,0 +1,26 @@
+- type: entity
+  parent: CMBootsBrown
+  id: AU14BootsBrownFIL
+  name: french combat boots
+  suffix: FIL, Filled
+  components:
+  - type: ContainerContainer
+    containers:
+      item: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      item:
+        name: cm-knife
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        whitelist:
+          tags:
+          - Knife
+          - Holdout
+          - Screwdriver
+          - RMCScalpel
+          - ThrowingKnife
+        startingItem: AU14FMB51Bayonet
+  - type: CMItemSlots
+    startingItem: AU14FMB51Bayonet
+  - type: Appearance

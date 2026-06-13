@@ -1,0 +1,24 @@
+- type: entity
+  parent: CMM2132Machete
+  id: AU14CSAMMachete
+  name: CSAM machete
+  description: A French design made for to slice and cut. Especially heavily designed for cutting down vegetation and combat melee weapon with more power. This particular model is big enough to cut a tree down.
+  components:
+  - type: Tag
+    tags:
+    - AU14CSAMMachete
+    - Machete
+  - type: Sprite
+    sprite: _AU14/Weapons/Melee/FIL/csam_machete.rsi
+    state: icon
+  - type: Item
+    size: Large
+    sprite: _AU14/Weapons/Melee/FIL/csam_machete.rsi
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 52
+  - type: UsableWhileDevoured
+
+- type: Tag
+  id: AU14CSAMMachete

@@ -1,0 +1,121 @@
+- type: entity
+  parent: [RMCBaseSlideMagazineVisualsBallistic, RMCWeaponRevolverBase]
+  id: AU14WeaponRevolverRMR6
+  name: RMR-6 revolver
+  description: Revolver Manuhrin model 6 a rather more interesting design by Manuhrin the only one who made revolvers. This one is used by both military and police forces for it's powerful force, versatibility, and tradition. Chambered in .357 magnum.
+  components:
+  - type: Tag
+    tags:
+    - Sidearm
+    - RMCRevolver
+    - AU14WeaponRevolverRMR6
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/FIL/rmr6.rsi
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/FIL/rmr6.rsi
+  - type: RevolverAmmoProvider
+    whitelist:
+      tags:
+      - RMCSpeedLoader357
+      - RMCSpeedLoader357Hollowpoint
+      - RMCCartridgeRevolver357
+      - RMCCartridgeRevolver357Hollowpoint
+    proto: RMCCartridgeRevolver357
+    capacity: 6
+    chambers: [ True, True, True, True, True, True ]
+    ammoSlots: [ null, null, null, null, null, null ]
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      collection: RMCCMBSpearheadShoot
+    soundEmpty:
+      path: /Audio/_RMC14/Weapons/Guns/gun_cmb_click1.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilWielded: 1
+    recoilUnwielded: 3
+    scatterWielded: 8
+    scatterUnwielded: 12
+    baseFireRate: 1.67
+    burstScatterMult: 4
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentRecoilCompensator
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+          - RMCAttachmentSuppressorCompact
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS5MicroRedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentS84xTelescopicScope
+      rmc-aslot-stock:
+        whitelist:
+          tags:
+          - RMCAttachmentM44MagnumSharpshooterStock
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentLaserSight
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentBipod
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.75, 0.1
+      rmc-aslot-rail: -0.14, 0.158
+      rmc-aslot-stock: -0.59375, 0.09375
+      rmc-aslot-underbarrel: 0.38, -0.185
+
+- type: entity
+  parent: AU14WeaponRevolverRMR6
+  id: AU14WeaponRevolverRMR6Empty
+  suffix: Empty
+  components:
+  - type: RevolverAmmoProvider
+    proto: null
+    chambers:
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+
+- type: entity
+  parent: RMCBaseSpeedLoader357
+  id: AU14SpeedLoader357RMR6
+  name: "french speed loader (.357)"
+  description: A revolver speed loader.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/rmr6.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: base-5
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: MagazineVisuals
+    magState: base
+    steps: 6
+    zeroVisible: false
+  - type: BallisticAmmoProvider
+    proto: RMCCartridgeRevolver357
+    capacity: 6
+  - type: Appearance
+
+
+- type: Tag
+  id: AU14WeaponRevolverRMR6

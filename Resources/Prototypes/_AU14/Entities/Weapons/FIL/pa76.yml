@@ -1,0 +1,164 @@
+- type: entity
+  parent: [RMCBaseSlideMagazineVisuals, CMWeaponPistolBase]
+  id: AU14WeaponPistolPA76
+  name: PA76 pistol
+  description: Pistolete automatique model 76, is a French pistol model made from SACM engineering company. A rather bit archaic but reliable pistol that is chambered in 7.65mm longue.
+  components:
+  - type: RMCSelectiveFire
+    scatterWielded: 7
+    scatterUnwielded: 8
+    baseFireRate: 7.5
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/FIL/pa76.rsi
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/FIL/pa76.rsi
+  - type: Tag
+    tags:
+    - Sidearm
+    - AU14WeaponPistolPA76
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazinePistolPA76
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_88m4_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazinePistolPA76
+  - type: GunDamageModifier
+    multiplier: 1
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.25
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentLaserSight
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.71, 0.095
+      rmc-aslot-rail: -0.065, 0.125
+      rmc-aslot-underbarrel: 0.312, -0.25
+
+- type: entity
+  parent: CMBaseMagazinePistol
+  id: AU14MagazinePistolPA76
+  name: PA76 magazine (7.65x20mm)
+  description: A pistol magazine used by the PA76 pistol.
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - AU14MagazinePistolPA76
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - AU14CartridgePistol76x20mm
+    proto: AU14CartridgePistol76x20mm
+    capacity: 7
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/pa76.rsi
+    layers:
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+
+- type: entity
+  parent: CMBaseMagazinePistol
+  id: AU14MagazinePistolPA76AP
+  name: PA76 AP magazine (7.65x20mm)
+  description: A pistol magazine used by the PA76 pistol.
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - AU14MagazinePistolPA76
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - AU14CartridgePistol76x20mmAP
+    proto: AU14CartridgePistol76x20mmAP
+    capacity: 7
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/pa76.rsi
+    layers:
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: band
+      color: "#1F951F"
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: AU14CartridgePistol76x20mm
+  name: cartridge (7.65x20mm)
+  description: A 7.65x20mm pistol cartridge
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14CartridgePistol76x20mm
+  - type: CartridgeAmmo
+    proto: AU14BulletPistol76x20mm
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: AU14CartridgePistol76x20mmAP
+  name: AP cartridge (7.65x20mm)
+  description: A 7.65x20mm pistol cartridge
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14CartridgePistol76x20mmAP
+  - type: CartridgeAmmo
+    proto: AU14BulletPistol76x20mmAP
+
+- type: entity
+  parent: BulletRifle10x24mm
+  id: AU14BulletPistol76x20mm
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+       types:
+         Piercing: 45
+  - type: CMArmorPiercing
+    amount: 15
+
+- type: entity
+  parent: BulletRifle10x24mm
+  id: AU14BulletPistol76x20mmAP
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+       types:
+         Piercing: 35
+  - type: CMArmorPiercing
+    amount: 45
+
+- type: Tag
+  id: AU14CartridgePistol76x20mm
+
+- type: Tag
+  id: AU14CartridgePistol76x20mmAP
+
+- type: Tag
+  id: AU14MagazinePistolPA76
+
+- type: Tag
+  id: AU14WeaponPistolPA76

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/1c026464019b7baae4975e4b1470a18b37dd1d1c/icons/mob/hud/factions/marine.dmi. threat_leader, threat_member, third_party_leader, third_party_member, working_joe by potatoed on Discord. synth by nnzy.",
+  "copyright": "taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/1c026464019b7baae4975e4b1470a18b37dd1d1c/icons/mob/hud/factions/marine.dmi, https://github.com/CactusMouth/PvE-CMSS13/blob/52b70ce5671ee19f3f7660e99c65c5a7de540820/icons/mob/hud/marine_hud.dmi. threat_leader, threat_member, third_party_leader, third_party_member, working_joe by potatoed on Discord. synth by nnzy.",
   "size": {
     "x": 16,
     "y": 16
@@ -48,6 +48,51 @@
         },
         {
             "name": "synth"
+        },
+        {
+            "name": "fil_aux"
+        },
+        {
+            "name": "fil_aux_sl"
+        },
+        {
+            "name": "fil_co"
+        },
+        {
+            "name": "fil_elite"
+        },
+        {
+            "name": "fil_elite_sl"
+        },
+        {
+            "name": "fil_flamer"
+        },
+        {
+            "name": "fil_flamer_sl"
+        },
+        {
+            "name": "fil_lt"
+        },
+        {
+            "name": "fil_medic"
+        },
+        {
+            "name": "fil_mg"
+        },
+        {
+            "name": "fil_rifle"
+        },
+        {
+            "name": "fil_scout"
+        },
+        {
+            "name": "fil_sl"
+        },
+        {
+            "name": "fil_sniper"
+        },
+        {
+            "name": "fil_tech"
         }
     ]
 }

@@ -1,0 +1,76 @@
+- type: entity
+  parent: RMCWeaponFlamer
+  id: AU14WeaponFlamerD60
+  name: LFUIM-D60 heavy incinerator
+  description: Lance-flammes à usage intensif Marianne Model De 60 is a French flamethrower based off of a design going back a decade. It has many modifications from the original design, especially with making the coolant system more sophisticated. High intensity flamethrower good for close quarters and encampments.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/FIL/d60.rsi
+  - type: Item
+    sprite: _AU14/Weapons/Guns/FIL/d60.rsi
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/FIL/d60.rsi
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Tank
+        startingItem: AU14TankFlamerD60
+        insertSound: /Audio/_RMC14/Weapons/Handling/flamer_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Handling/flamer_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14TankFlamerD60
+  - type: AttachableHolder # TODO RMC14 barrel nozzle
+    slots:
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+      rmc-aslot-stock:
+        locked: true
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentExtinguisher
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: 0.155, 0.2
+      rmc-aslot-stock: -0.468, 0.064
+      rmc-aslot-underbarrel: 0.284, -0.313
+
+- type: entity
+  parent: RMCTankFlamer
+  id: AU14TankFlamerD60
+  name: large D60 incinerator tank
+  description: A large fuel tank for use in the D60 incinerator unit. This one has been modified with a pressure regulator and a large internal propellant tank. Must be manually attached.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/d60.rsi
+    state: d60
+    layers:
+    - state: d60
+    - state: d60_strip2
+    - state: d60_strip2
+      map: [ "enum.SolutionContainerLayers.Fill" ]
+  - type: SolutionContainerVisuals
+    maxFillLevels: 2
+    fillBaseName: d60_strip
+  - type: Tag
+    tags:
+    - AU14TankFlamerD60
+  - type: SolutionContainerManager
+    solutions:
+      rmc_flamer_tank:
+        maxVol: 250
+        reagents:
+        - ReagentId: RMCNapalmUT
+          Quantity: 250
+  - type: RMCFlamerTank
+    maxIntensity: 80
+    maxRange: 5
+    maxDuration: 24
+
+- type: Tag
+  id: AU14TankFlamerD60

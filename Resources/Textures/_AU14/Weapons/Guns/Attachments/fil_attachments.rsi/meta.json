@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/CactusMouth/PvE-CMSS13/blob/52b70ce5671ee19f3f7660e99c65c5a7de540820/icons/obj/items/weapons/guns/attachments/stock.dmi, https://github.com/CactusMouth/PvE-CMSS13/blob/52b70ce5671ee19f3f7660e99c65c5a7de540820/icons/obj/items/weapons/guns/attachments/under.dmi, https://github.com/CactusMouth/PvE-CMSS13/blob/52b70ce5671ee19f3f7660e99c65c5a7de540820/icons/obj/items/weapons/guns/attachments/rail.dmi, https://github.com/CactusMouth/PvE-CMSS13/blob/52b70ce5671ee19f3f7660e99c65c5a7de540820/icons/obj/items/weapons/guns/attachments/barrel.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "fn107_stock"
+    },
+    {
+      "name": "fn107_stock_a"
+    },
+    {
+      "name": "fpsa_stock"
+    },
+    {
+      "name": "fpsa_stock_a"
+    },
+    {
+      "name": "fr2_bipod"
+    },
+    {
+      "name": "masm_bipod"
+    },
+    {
+      "name": "masm_bipod_a"
+    },
+    {
+      "name": "masm_bipod-on"
+    },
+    {
+      "name": "masm_bipod_a-on"
+    },
+    {
+      "name": "fr2_bipod-on"
+    },
+    {
+      "name": "fr2_bipod_a"
+    },
+    {
+      "name": "fr2_bipod_a-on"
+    },
+    {
+      "name": "fr2_scope_a"
+    },
+    {
+      "name": "fr2_scope"
+    },
+    {
+      "name": "fr_barrel"
+    },
+    {
+      "name": "fr_barrel_a"
+    },
+    {
+      "name": "masm_barrel"
+    },
+    {
+      "name": "masm_barrel_a"
+    },
+    {
+      "name": "famas_stock"
+    },
+    {
+      "name": "famas_stock_a"
+    }
+  ]
+}

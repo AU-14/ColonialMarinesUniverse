@@ -1,0 +1,20 @@
+- type: entity
+  parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
+  id: AU14MaskGasFIL
+  name: ARP F3 gasmask
+  description: The ARP F3 gas mask, often used by the French Armed Forces and French aligned mercenaries.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/FIL/mask/gasmask.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/FIL/mask/gasmask.rsi
+  - type: HideLayerClothing
+    slots:
+    - HeadTop
+    - HeadSide
+    - Snout
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - GasMask

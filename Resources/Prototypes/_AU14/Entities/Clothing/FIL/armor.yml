@@ -1,0 +1,44 @@
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14ArmorFIL
+  name: QT-9 standard vest
+  description: The standard body armor system of the French Armed Forces. Composed of a shell of hard-wearing weatherproof inflammable polymer, aluminum oxide strike face, and ultra high molecular weight polyethylene backer. Integrated mounting brackets for the LBE system are included. Thermal camouflage patterns have been applied to the polymer shell, though radar absorbing properties are poor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/FIL/armor/fil_armor.rsi
+
+- type: entity
+  parent: AU14BaseArmorLight
+  id: AU14ArmorLightFIL
+  name: QT-7 light armor
+  suffix: AU14
+  description: The standard body armor system of the French Armed Forces. Composed of a shell of hard-wearing weatherproof inflammable polymer, aluminum oxide strike face, and ultra high molecular weight polyethylene backer. Integrated mounting brackets for the LBE system are included. Thermal camouflage patterns have been applied to the polymer shell, though radar absorbing properties are poor.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/FIL/armor/fil_aux.rsi
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14ArmorFILFire
+  name: QT-10-IF Heavy Incinerator armor
+  description: The standard body armor system of the French Armed Forces. This one has been modded to have increased protection against most forms of damage, mainly towards fire and similar sources of heat.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/FIL/armor/fil_fire.rsi
+  - type: TemperatureProtection
+    heatingCoefficient: 0.001
+    coolingCoefficient: 0.3
+  - type: ClothingGrantComponents
+    components:
+    - type: RMCImmuneToIgnition
+      immuneToDirectHits: false
+  - type: FirewalkArmor
+    whitelist:
+      components:
+      - Marine
+    addComponentsOnFirewalk:
+    - type: RMCImmuneToFireTileDamage
+      bypassWhitelist:
+        components:
+        - RMCFireImmunityBypass
+    auraColor: "#03FCC6"

@@ -1,0 +1,294 @@
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  name: MASM55 Medium Machinegun
+  id: AU14WeaponMASM
+  description: Though many groups and factions throughout modern day have switched to either Smartguns or LMGs, the MASM55 is still used for heavy suppression and are commonly found within the hands of Mercenaries. Created by Saint Etienne during 2155 due to the older French MGs were subpar, it has a radiator cooler for more stable fire.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/FIL/masm.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/FIL/masm.rsi
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: Gun
+    shotsPerBurst: 5
+    selectedMode: FullAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    soundGunshot:
+      collection: AU14M41FireSound
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilWielded: 1
+    recoilUnwielded: 4
+    scatterWielded: 10
+    scatterUnwielded: 20
+    baseFireRate: 5
+    burstScatterMult: 3
+    modifiers:
+      FullAuto:
+        maxScatterModifier: 14
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 30
+      Burst:
+        fireDelay: 0.1332
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 0.8
+    accuracyMultiplierUnwielded: 0.65
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineRifleMASM
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleMASM
+  - type: GunDamageModifier
+    multiplier: 1
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        startingAttachable: AU14AttachmentBarrelMASM
+        locked: true
+        whitelist:
+          tags:
+          - AU14AttachmentBarrelMASM
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-underbarrel:
+        startingAttachable: AU14AttachmentBipodMASM
+        whitelist:
+          tags:
+          - AU14AttachmentBipodMASM
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.69, 0.095
+      rmc-aslot-rail: 0.1, 0.25
+      rmc-aslot-underbarrel: 0.6, -0.145
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: Tag
+    tags:
+    - AU14WeaponMASM
+  - type: GunRequiresWield
+
+- type: entity
+  parent: CMMagazineRifleM54C
+  id: AU14MagazineRifleMASM
+  name: "MASM55 box magazine (12x30mm)"
+  description: A large 12mm box magazine for the MASM55, commonly used by the FIL.
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleMASM
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - AU14CartridgeRifle12x30mm
+    proto: AU14CartridgeRifle12x30mm
+    capacity: 120
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/masm.rsi
+    layers:
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifle
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: AU14CartridgeRifle12x30mm
+  name: cartridge (12x30mm)
+  description: A 12x30 rifle cartridge
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14CartridgeRifle12x30mm
+  - type: CartridgeAmmo
+    proto: AU14BulletRifle12x30mm
+
+
+- type: entity
+  parent: BulletRifle10x24mm
+  id: AU14BulletRifle12x30mm
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+       types:
+         Piercing: 50
+  - type: CMArmorPiercing
+    amount: 10
+
+- type: entity
+  parent: RMCBarrelAttachmentBase
+  id: AU14AttachmentBarrelMASM
+  name: MASM50 barrel
+  description: A heavy barrel.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Attachments/fil_attachments.rsi
+    state: masm_barrel
+  - type: Tag
+    tags:
+    - RMCAttachmentBarrel
+    - AU14AttachmentBarrelMASM
+  - type: AttachableVisuals
+  - type: AttachableWeaponRangedMods
+    modifiers:
+    - accuracyAddMult: 0.15
+    - scatterFlat: -6
+
+- type: entity
+  parent: RMCAttachmentBipod
+  id: AU14AttachmentBipodMASM
+  name: MASM55 bipod
+  description: An integrated bipod for the MASM55 Medium Machinegun.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Attachments/fil_attachments.rsi
+    state: masm_bipod
+  - type: Tag
+    tags:
+    - RMCAttachmentUnderbarrel
+    - RMCAttachmentBipod
+    - AU14AttachmentBipodMASM
+  - type: AttachableToggleable
+    activateOnMove: false
+    heldOnlyActivate: true
+    userOnly: true
+    doInterrupt: true
+    attachedOnly: true
+    breakOnMove: true
+    breakOnFullRotate: true
+    breakOnDrop: true
+    slowOnBreak: true
+    doAfter: 1.5
+    deactivateDoAfter: 0
+    doAfterNeedHand: false
+    instantToggle: Brace
+    useDelay: 0.5
+    activatePopupText: attachable-popup-activate-deploy-on-ground
+    deactivatePopupText: attachable-popup-deactivate-retract
+    activateSound:
+      path: /Audio/_RMC14/Attachable/bipod_toggle.ogg
+      params:
+        volume: -3
+    deactivateSound:
+      path: /Audio/_RMC14/Attachable/bipod_toggle.ogg
+      params:
+        volume: -3
+    icon:
+      sprite: _AU14/Weapons/Guns/Attachments/fil_attachments.rsi
+      state: masm_bipod
+    iconActive:
+      sprite: _AU14/Weapons/Guns/Attachments/fil_attachments.rsi
+      state: masm_bipod-on
+    actionName: Deploy Bipod
+    actionDesc: Deploy the bipod and get into a firing position.
+  - type: AttachableVisuals
+    showActive: true
+  - type: AttachableTemporarySpeedMods
+    alteration: Interrupted
+  - type: AttachableSizeMods
+    modifiers:
+    - size: 2
+  - type: AttachableWieldDelayMods
+    modifiers:
+    - delay: 0.4
+  - type: AttachableWeaponMeleeMods
+    modifiers:
+    - bonusDamage:
+        types:
+          Blunt: -10
+  - type: AttachableWeaponRangedMods
+    fireModeMods:
+    - conditions:
+        activeOnly: true
+        whitelist:
+          tags:
+          - RMCGunBipodFullAuto
+      extraFireModes: FullAuto
+      setFireMode: FullAuto
+    modifiers:
+    - conditions:
+        inactiveOnly: true
+      fireDelayFlat: 0.05
+    - conditions:
+        wieldedOnly: true
+        inactiveOnly: true
+      accuracyAddMult: -0.05
+      scatterFlat: 1
+      recoilFlat: 1
+      fireDelayFlat: 0.02
+    - conditions:
+        wieldedOnly: true
+        activeOnly: true
+      scatterFlat: -1
+      recoilFlat: -2
+    - conditions:
+        activeOnly: true
+      accuracyAddMult: 0.25
+      burstScatterAddMult: -3
+      fireDelayFlat: -0.05
+    - conditions:
+        activeOnly: true
+        whitelist:
+          tags:
+          - CMM96SSniperRifle
+      fireDelayFlat: -0.4
+    - conditions:
+        activeOnly: true
+        whitelist:
+          tags:
+          - RMCWeaponLMGM60
+      fireDelayFlat: -0.060
+
+- type: Tag
+  id: AU14WeaponMASM
+
+- type: Tag
+  id: AU14CartridgeRifle12x30mm
+
+- type: Tag
+  id: AU14MagazineRifleMASM
+
+
+- type: Tag
+  id: AU14AttachmentBipodMASM
+
+- type: Tag
+  id: AU14AttachmentBarrelMASM

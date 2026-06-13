@@ -1,0 +1,240 @@
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  id: AU14FPSASniperRifle
+  name: FPSA/76 Pulse DMR
+  description: "A domestically produced rifle developed and manufactured by Saint Etienne, 2176. Primarily meant for use by French Armed Forces, it has nonetheless made an impressive impact on the foreign market. The rifle boasts an effective engagement range of over a 1000m, and is chambered in 7.5x50mm high-velocity caseless."
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/FIL/fpsa.rsi
+    layers:
+    - state: bolt-open
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+    - sprite: _AU14/Weapons/Guns/Attachments/fil_attachments.rsi
+      state: fpsa_stock
+      offset: -0.5, 0.045
+    - sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
+      state: sniperscope_a
+      offset: -0.1, 0.175
+  - type: Item
+    size: Large
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/FIL/fpsa.rsi
+  - type: Tag
+    tags:
+    - AU14FPSASniperRifle
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 12
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    shotsPerBurst: 1
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_type88.ogg
+  - type: RMCSelectiveFire
+    recoilWielded: 1
+    scatterWielded: 0
+    baseFireRate: 3
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 3
+  - type: WieldableSpeedModifiers
+    base: 0.5
+    light: 0.69
+    medium: 0.75
+    heavy: 0.806
+  - type: WieldDelay
+    baseDelay: 1.2
+  - type: GunDualWielding
+    weaponGroup: Rifle
+  - type: GunPointBlank
+  - type: WieldedCrosshair
+    rsi:
+      sprite: _RMC14/Interface/MousePointer/sniper_mouse.rsi
+      state: all
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineSniperFPSA
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mar40_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineSniperFPSA
+  - type: GunRequiresWield
+  - type: Corrodible
+    isCorrodible: false
+  - type: GunIFF
+    enabled: false
+  - type: RMCNameItemOnVend
+    item: PrimaryGun
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-rail:
+        locked: true
+        startingAttachable: RMCM96SIntegratedScope
+        whitelist:
+          tags:
+          - RMCM96SIntegratedScope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBipod
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-underbarrel: 0.25, -0.25
+      rmc-aslot-rail: 0.5, 0.5
+  - type: ItemCamouflage
+    camouflageVariations: {}
+  - type: RMCGunChamber
+    enabled: false
+
+- type: entity
+  parent: BaseItem
+  id: AU14MagazineSniperFPSA
+  name: "FPSA/76 DMR magazine (7.5x50mm)"
+  description: A standard caseless magazine for the FPSA/76 Pulse DMR, often used by mercenary and french armed forces.
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineSniper
+    - AU14MagazineSniperFPSA
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - AU14CartridgeRifleFPSA
+    proto: AU14CartridgeRifleFPSA
+    capacity: 40
+  - type: Item
+    size: Normal
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/fpsa.rsi
+    layers:
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+    zeroOnlyOnEmpty: true
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+  - type: Appearance
+  - type: Clothing
+    slots:
+    - suitStorage
+
+- type: entity
+  parent: BaseItem
+  id: AU14MagazineSniperFPSAAP
+  name: "FPSA/76 DMR AP tracer magazine (7.5x50mm)"
+  description: A standard caseless AP tracer magazine for the FPSA/76 Pulse DMR, often used by mercenary and french armed forces.
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineSniper
+    - AU14MagazineSniperFPSAAP
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - AU14CartridgeRifleFPSAAP
+    proto: AU14CartridgeRifleFPSAAP
+    capacity: 40
+  - type: Item
+    size: Normal
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/fpsa.rsi
+    layers:
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: band
+      color: "#1F951F"
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+    zeroOnlyOnEmpty: true
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+  - type: Appearance
+  - type: Clothing
+    slots:
+    - suitStorage
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: AU14CartridgeRifleFPSA
+  name: cartridge (7.5x50mm)
+  description: A 7.5x50mm rifle cartridge
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14CartridgeRifleFPSA
+  - type: CartridgeAmmo
+    proto: AU14BulletRifle75x50mm
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: AU14CartridgeRifleFPSAAP
+  name: AP cartridge (7.5x50mm)
+  description: A 7.5x50mm AP rifle cartridge
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - AU14CartridgeRifleFPSAAP
+  - type: CartridgeAmmo
+    proto: AU14BulletRifle75x50mmAP
+
+- type: entity
+  parent: BulletRifle10x24mm
+  id: AU14BulletRifle75x50mm
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+       types:
+         Piercing: 45
+  - type: CMArmorPiercing
+    amount: 10
+
+- type: entity
+  parent: BulletRifle10x24mm
+  id: AU14BulletRifle75x50mmAP
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+       types:
+         Piercing: 45
+  - type: CMArmorPiercing
+    amount: 45
+
+- type: Tag
+  id: AU14CartridgeRifleFPSA
+
+- type: Tag
+  id: AU14CartridgeRifleFPSAAP
+
+- type: Tag
+  id: AU14FPSASniperRifle
+
+- type: Tag
+  id: AU14MagazineSniperFPSA
+
+- type: Tag
+  id: AU14MagazineSniperFPSAAP

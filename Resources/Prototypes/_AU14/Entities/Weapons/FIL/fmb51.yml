@@ -1,0 +1,18 @@
+- type: entity
+  parent: RMCM5Bayonet
+  id: AU14FMB51Bayonet
+  name: FMB51 combat knife
+  description: A relitively modern combat knife, which is utilised by French Armed Forces and those correlated to them.
+  components:
+  - type: Clothing
+    slots:
+    - mask
+    - pocket
+    - suitstorage
+    sprite: _AU14/Weapons/Melee/FIL/fmb51.rsi
+  - type: Sprite
+    sprite: _AU14/Weapons/Melee/FIL/fmb51.rsi
+    state: icon
+  - type: Item
+    size: Small
+    sprite: _AU14/Weapons/Melee/FIL/fmb51.rsi

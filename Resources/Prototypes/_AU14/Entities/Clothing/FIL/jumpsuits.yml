@@ -1,0 +1,11 @@
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14FatiguesFIL
+  name: french combat uniform
+  description: Standard-issue french military uniform, given out to most if not all of their soldiers in the field.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/FIL/jumpsuits/fil.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - AU14FrenchPatch
