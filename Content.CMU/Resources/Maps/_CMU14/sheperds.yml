@@ -4,8 +4,8 @@ meta:
   engineVersion: v277.0.0
   forkId: ""
   forkVersion: ""
-  time: 06/14/2026 14:41:03
-  entityCount: 36473
+  time: 06/14/2026 19:39:55
+  entityCount: 36502
 maps:
 - 1
 grids:
@@ -59638,6 +59638,28 @@ entities:
     - type: Transform
       pos: 50.5,-111.5
       parent: 1
+- proto: AU14BeltHolsterPistolBlack
+  entities:
+  - uid: 344128
+    components:
+    - type: Transform
+      pos: 32.5,134.5
+      parent: 1
+  - uid: 344129
+    components:
+    - type: Transform
+      pos: 32.5,134.5
+      parent: 1
+  - uid: 344130
+    components:
+    - type: Transform
+      pos: 32.5,134.5
+      parent: 1
+  - uid: 344131
+    components:
+    - type: Transform
+      pos: 32.5,134.5
+      parent: 1
 - proto: AU14CashVendorCigarettes
   entities:
   - uid: 315
@@ -59966,6 +59988,28 @@ entities:
       containers:
         storagebase: !type:Container
           ents: []
+- proto: AU14ExternalWebbing
+  entities:
+  - uid: 344132
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344133
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344134
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344135
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
 - proto: AU14FlightStairs
   entities:
   - uid: 287857
@@ -76495,6 +76539,16 @@ entities:
     - type: Transform
       pos: 2,-46.5
       parent: 1
+- proto: ChemistryHotplate
+  entities:
+  - uid: 344081
+    components:
+    - type: Transform
+      pos: -0.5,-63.5
+      parent: 1
+    - type: ApcPowerReceiver
+      powerLoad: 0
+      needsPower: False
 - proto: ClothingHeadFishCap
   entities:
   - uid: 243512
@@ -80991,6 +81045,13 @@ entities:
     - type: Transform
       pos: 70.5,-144.375
       parent: 1
+- proto: CMPaperBin30
+  entities:
+  - uid: 344115
+    components:
+    - type: Transform
+      pos: 25.5,133.75
+      parent: 1
 - proto: CMPen
   entities:
   - uid: 278981
@@ -81042,6 +81103,26 @@ entities:
     components:
     - type: Transform
       pos: 33.5,-127.5
+      parent: 1
+  - uid: 344109
+    components:
+    - type: Transform
+      pos: 30.5,132.5
+      parent: 1
+  - uid: 344110
+    components:
+    - type: Transform
+      pos: 30.5,132.5
+      parent: 1
+  - uid: 344111
+    components:
+    - type: Transform
+      pos: 30.5,132.5
+      parent: 1
+  - uid: 344136
+    components:
+    - type: Transform
+      pos: 25.5,133.75
       parent: 1
 - proto: CMPenClicky
   entities:
@@ -157971,6 +158052,18 @@ entities:
     - type: Transform
       pos: 36.5,-128.25
       parent: 1
+- proto: RMCBoxShotgunBuckshot
+  entities:
+  - uid: 344093
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344094
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
 - proto: RMCBoxZiptie
   entities:
   - uid: 316519
@@ -231350,6 +231443,80 @@ entities:
     - type: Transform
       pos: 10.75,65.5
       parent: 1
+- proto: RMCMagazineRifleABR40
+  entities:
+  - uid: 344095
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344096
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344097
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344098
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344099
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344100
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+- proto: RMCMagazineRifleHunting
+  entities:
+  - uid: 344101
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344102
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344103
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344104
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344105
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344106
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344107
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344108
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
 - proto: RMCMagazineSMGFP9000
   entities:
   - uid: 137
@@ -248423,14 +248590,4 @@ entities:
       rot: 4.71238898038469 rad
       pos: -31.5,-35.5
       parent: 1
-- proto: ChemistryHotplate
-  entities:
-  - uid: 344081
-    components:
-    - type: Transform
-      pos: -0.5,-63.5
-      parent: 1
-    - type: ApcPowerReceiver
-      powerLoad: 0
-      needsPower: False
 ...
