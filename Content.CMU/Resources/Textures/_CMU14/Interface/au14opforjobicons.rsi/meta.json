@@ -8,13 +8,22 @@
   },
   "states": [
     {
+      "name": "adj"
+    },
+    {
+      "name": "advisor"
+    },
+    {
       "name": "afn"
     },
     {
-      "name": "corpsman"
+      "name": "auxtech"
     },
     {
-      "name": "k9handler"
+      "name": "background"
+    },
+    {
+      "name": "corpsman"
     },
     {
       "name": "ct"
@@ -23,37 +32,46 @@
       "name": "dcc"
     },
     {
-      "name": "opsofc"
+      "name": "doctor"
     },
     {
-      "name": "advisor"
+      "name": "eo"
+    },
+    {
+      "name": "ftl"
+    },
+    {
+      "name": "io"
+    },
+    {
+      "name": "k9handler"
+    },
+    {
+      "name": "mp"
+    },
+    {
+      "name": "opsofc"
     },
     {
       "name": "platco"
     },
-    {
-      "name": "synth"
-    },
-    {
-      "name": "platoonsergeant"
-    },
-    {
+	{
       "name": "po"
     },
-    {
-      "name": "rto"
+	{
+      "name": "rifleman"
     },
-    {
-      "name": "rfn"
-    },
-    {
+	{
       "name": "sergeant"
     },
-    {
-      "name": "working_joe"
+	{
+      "name": "synth"
     },
-    {
-      "name": "rifleman"
+	{
+      "name": "weaponsspecialist"
+    },
+	{
+      "name": "working_joe"
     }
   ]
 }

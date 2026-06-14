@@ -32,10 +32,7 @@
             "name": "hudsquad_trpr"
         },
         {
-            "name": "threat_leader"
-        },
-        {
-            "name": "threat_member"
+            "name": "synth"
         },
         {
             "name": "third_party_leader"
@@ -44,10 +41,13 @@
             "name": "third_party_member"
         },
         {
-            "name": "working_joe"
+            "name": "threat_leader"
         },
         {
-            "name": "synth"
+            "name": "threat_member"
+        },
+        {
+            "name": "working_joe"
         }
     ]
 }

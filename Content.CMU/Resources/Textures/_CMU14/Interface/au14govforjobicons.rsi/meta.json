@@ -8,13 +8,22 @@
   },
   "states": [
     {
+      "name": "govfor_adj"
+    },
+    {
+      "name": "govfor_advisor"
+    },
+    {
       "name": "govfor_afn"
     },
     {
-      "name": "govfor_corpsman"
+      "name": "govfor_auxtech"
     },
     {
-      "name": "govfor_k9handler"
+      "name": "govfor_background"
+    },
+    {
+      "name": "govfor_corpsman"
     },
     {
       "name": "govfor_ct"
@@ -23,46 +32,46 @@
       "name": "govfor_dcc"
     },
     {
-      "name": "govfor_opsofc"
-    },
-    {
-      "name": "govfor_advisor"
-    },
-    {
-      "name": "govfor_syn"
-    },
-    {
-      "name": "govfor_platco"
-    },
-    {
-      "name": "govfor_platoonsergeant"
-    },
-    {
-      "name": "govfor_po"
-    },
-    {
-      "name": "govfor_rto"
-    },
-    {
-      "name": "govfor_rfn"
-    },
-    {
-      "name": "govfor_sergeant"
-    },
-    {
-      "name": "working_joe"
-    },
-    {
-      "name": "rifleman"
-    },
-    {
-      "name": "govfor_adj"
+      "name": "govfor_doctor"
     },
     {
       "name": "govfor_eo"
     },
     {
+      "name": "govfor_ftl"
+    },
+    {
       "name": "govfor_io"
+    },
+    {
+      "name": "govfor_k9handler"
+    },
+    {
+      "name": "govfor_mp"
+    },
+    {
+      "name": "govfor_opsofc"
+    },
+    {
+      "name": "govfor_platco"
+    },
+    {
+      "name": "govfor_po"
+    },
+    {
+      "name": "govfor_sergeant"
+    },
+    {
+      "name": "govfor_synth"
+    },
+	{
+      "name": "govfor_ws"
+    },
+	{
+      "name": "rifleman"
+    },
+	{
+      "name": "working_joe"
     }
   ]
 }
