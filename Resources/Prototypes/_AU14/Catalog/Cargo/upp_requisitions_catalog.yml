@@ -126,16 +126,18 @@
         crate: RMCCrateMedicalPill
     - name: Mortar
       entries:
-      - cost: 10000
+      - cost: 3000
         crate: AU14CrateMortarKitRMC
       - cost: 500
-        crate: AU14CrateMortarShellFlareRMC
-      - cost: 1000
-        crate: AU14CrateMortarShellHERMC
-      - cost: 1500
-        crate: AU14CrateMortarShellIncendiaryRMC
-      - cost: 1500
-        crate: AU14CrateMortarShellFlareHEATMP
+        crate: AU14CrateMortarShellFlareRMC # 12 shells
+      - cost: 650
+        crate: AU14CrateMortarShellHERMC # 12 shells
+      - cost: 750
+        crate: AU14CrateMortarShellIncendiaryRMC # 12 shells
+      - cost: 800
+        crate: AU14CrateMortarShellHEATRMC # 12 shells
+      - cost: 950
+        crate: AU14CrateMortarMixed # 12 shells
 #    - name: Operations
 #      entries: []
     - name: Supplies

@@ -42,10 +42,26 @@
 
 - type: entity
   parent: RMCCrateMortarAmmo
-  id: AU14CrateMortarShellFlareHEATMP
+  id: AU14CrateMortarShellHEATRMC
   name: L53A1 light mortar shells crate (x12 HEAT-MP)
   components:
   - type: StorageFill
     contents:
-    - id: RMCMortarShellFlare
+    - id: AU14MortarShellHEATMP
       amount: 12
+
+- type: entity
+  parent: RMCCrateMortarAmmo
+  id: AU14CrateMortarMixed
+  name: L53A1 light mortar mixed shells crate (x3 HE, 3x HE-INC, 3x ILLUM-OBS, 3x HEAT-MP)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMortarShellHE
+      amount: 3
+    - id: RMCMortarShellIncendiary
+      amount: 3
+    - id: RMCMortarShellFlare
+      amount: 3
+    - id: AU14MortarShellHEATMP
+      amount: 3
