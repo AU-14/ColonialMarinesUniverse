@@ -108,7 +108,7 @@
   - type: Sprite
     sprite: _RMC14/Objects/Medical/Surgery/hemostat.rsi
     state: hemostat
-  - type: CMSurgeryOperatingTableCondition
+  #- type: CMSurgeryOperatingTableCondition
   - type: RMCSurgeryStepLarvaEffect
 
 - type: entity
