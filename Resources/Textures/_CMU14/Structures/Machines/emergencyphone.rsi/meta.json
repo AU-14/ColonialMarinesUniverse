@@ -1,0 +1,43 @@
+﻿{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made by Lopz",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "wall_phone",
+      "directions": 4
+    },
+    {
+      "name": "wall_phone_ring",
+      "directions": 4,
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3
+        ]
+      ]
+    },
+    {
+      "name": "wall_phone_ear",
+      "directions": 4
+    }
+  ]
+}

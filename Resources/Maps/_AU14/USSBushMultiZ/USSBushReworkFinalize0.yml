@@ -4,8 +4,8 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 06/09/2026 12:15:05
-  entityCount: 5978
+  time: 06/14/2026 18:28:14
+  entityCount: 5982
 maps:
 - 1
 grids:
@@ -12958,6 +12958,13 @@ entities:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 32.5,14.5
+      parent: 1
+- proto: CMSemioticBridge
+  entities:
+  - uid: 4603
+    components:
+    - type: Transform
+      pos: -3.0628173,53.5
       parent: 1
 - proto: CMSemioticEscapepod
   entities:
@@ -26387,7 +26394,7 @@ entities:
       lastSignals:
         DoorStatus: True
     - type: Door
-      secondsUntilStateChange: -152804.92
+      secondsUntilStateChange: -155366.66
       state: Opening
   - uid: 3567
     components:
@@ -29505,7 +29512,7 @@ entities:
       pos: -5.5,-11.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -170365.11
+      secondsUntilStateChange: -172926.84
       state: Closing
   - uid: 4102
     components:
@@ -29851,6 +29858,33 @@ entities:
     - type: Transform
       pos: 9.5,43.5
       parent: 1
+- proto: RMCEmergencyPhone
+  entities:
+  - uid: 4604
+    components:
+    - type: MetaData
+      name: emergency phone - West Stern Hallway
+    - type: Transform
+      pos: -18.5,-25.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4605
+    components:
+    - type: MetaData
+      name: emergency phone - Hangar
+    - type: Transform
+      pos: 1.5,37.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4606
+    components:
+    - type: Transform
+      pos: 17.5,-25.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
 - proto: RMCExtinguisherCabinetAltFilled
   entities:
   - uid: 4154

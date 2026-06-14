@@ -66,6 +66,14 @@
           Ear: { state: wall_phone_ear }
 
 - type: entity
+  parent: RMCRotaryPhoneWallmount
+  id: RMCEmergencyPhone
+  name: emergency phone
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Machines/emergencyphone.rsi
+
+- type: entity
   parent: BaseItem
   id: RMCTelephone
   name: telephone

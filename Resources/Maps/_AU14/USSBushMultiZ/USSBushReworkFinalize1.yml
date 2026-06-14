@@ -4,8 +4,8 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 06/09/2026 12:15:06
-  entityCount: 4805
+  time: 06/14/2026 18:28:15
+  entityCount: 4810
 maps:
 - 1
 grids:
@@ -10318,6 +10318,20 @@ entities:
     - type: Transform
       pos: 3.5,53.5
       parent: 1
+- proto: CMSemioticBathunisex
+  entities:
+  - uid: 4008
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -2.5,-14.5
+      parent: 1
+  - uid: 4009
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -14.5,-14.5
+      parent: 1
 - proto: CMSemioticBiohazard
   entities:
   - uid: 2033
@@ -11554,7 +11568,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11563,7 +11577,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11572,7 +11586,7 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11583,9 +11597,9 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: Heart
-      nextPulseUpdate: 39.3006421
+      nextPulseUpdate: 123.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11594,9 +11608,9 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: Heart
-      nextPulseUpdate: 39.3006421
+      nextPulseUpdate: 123.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11605,9 +11619,9 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: Heart
-      nextPulseUpdate: 39.3006421
+      nextPulseUpdate: 123.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11618,9 +11632,9 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: Kidneys
-      nextSelfDamageTick: 35.3006421
+      nextSelfDamageTick: 119.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11629,9 +11643,9 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: Kidneys
-      nextSelfDamageTick: 35.3006421
+      nextSelfDamageTick: 119.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11640,9 +11654,9 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: Kidneys
-      nextSelfDamageTick: 35.3006421
+      nextSelfDamageTick: 119.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11653,9 +11667,9 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: Liver
-      nextSelfDamageTick: 35.3006421
+      nextSelfDamageTick: 119.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11664,9 +11678,9 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: Liver
-      nextSelfDamageTick: 35.3006421
+      nextSelfDamageTick: 119.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11675,9 +11689,9 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: Liver
-      nextSelfDamageTick: 35.3006421
+      nextSelfDamageTick: 119.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11688,9 +11702,9 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: Lungs
-      nextAsphyxTick: 35.3006421
+      nextAsphyxTick: 119.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11699,9 +11713,9 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: Lungs
-      nextAsphyxTick: 35.3006421
+      nextAsphyxTick: 119.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11710,9 +11724,9 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: Lungs
-      nextAsphyxTick: 35.3006421
+      nextAsphyxTick: 119.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11723,9 +11737,9 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: CMUStomach
-      nextVomitCheck: 44.3006421
+      nextVomitCheck: 128.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11734,9 +11748,9 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: CMUStomach
-      nextVomitCheck: 44.3006421
+      nextVomitCheck: 128.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -11745,9 +11759,9 @@ entities:
     - type: Transform
       parent: 1670
     - type: OrganHealth
-      nextRegenTick: 44.3006421
+      nextRegenTick: 128.3871632
     - type: CMUStomach
-      nextVomitCheck: 44.3006421
+      nextVomitCheck: 128.3871632
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
@@ -25133,7 +25147,7 @@ entities:
       pos: -1.5,-35.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -41702.914
+      secondsUntilStateChange: -44264.645
       state: Closing
   - uid: 1021
     components:
@@ -25286,6 +25300,35 @@ entities:
       rot: 3.141592653589793 rad
       pos: 18.643343,35.59528
       parent: 1
+- proto: RMCEmergencyPhone
+  entities:
+  - uid: 4096
+    components:
+    - type: MetaData
+      name: emergency phone -  Upper Starboard Hallway
+    - type: Transform
+      pos: 15.5,36.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4102
+    components:
+    - type: MetaData
+      name: emergency phone - Fuel Pumps
+    - type: Transform
+      pos: -0.5,-36.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 4105
+    components:
+    - type: MetaData
+      name: emergency phone - Upper Port Hallway
+    - type: Transform
+      pos: -21.5,34.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
 - proto: RMCEntityDesertWaterShallow
   entities:
   - uid: 539
