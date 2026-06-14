@@ -1,11 +1,11 @@
 meta:
   format: 7
   category: Map
-  engineVersion: v264.0.2-fix-physics
+  engineVersion: v277.0.0
   forkId: ""
   forkVersion: ""
-  time: 06/13/2026 14:37:56
-  entityCount: 36463
+  time: 06/14/2026 14:41:03
+  entityCount: 36472
 maps:
 - 1
 grids:
@@ -59761,6 +59761,18 @@ entities:
     - type: Transform
       pos: 28.5,138.5
       parent: 1
+- proto: AU14CommunicationsTower
+  entities:
+  - uid: 315948
+    components:
+    - type: Transform
+      pos: 54.5,104.5
+      parent: 1
+  - uid: 315960
+    components:
+    - type: Transform
+      pos: -6.5,-119.5
+      parent: 1
 - proto: AU14CorporateASRSConsole
   entities:
   - uid: 289228
@@ -60117,6 +60129,13 @@ entities:
     components:
     - type: Transform
       pos: 36.5,-125.5
+      parent: 1
+- proto: AU14SensorTowerOffset
+  entities:
+  - uid: 315952
+    components:
+    - type: Transform
+      pos: 26.5,-54.5
       parent: 1
 - proto: AU14ShopkeeperVendor
   entities:
@@ -60967,6 +60986,58 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -6.5,76.5
+      parent: 1
+- proto: AUColonyATM
+  entities:
+  - uid: 715
+    components:
+    - type: Transform
+      pos: 25.5,69.5
+      parent: 1
+  - uid: 717
+    components:
+    - type: Transform
+      pos: 29.5,96.5
+      parent: 1
+  - uid: 719
+    components:
+    - type: Transform
+      pos: 24.5,129.5
+      parent: 1
+  - uid: 721
+    components:
+    - type: Transform
+      pos: 48.5,49.5
+      parent: 1
+  - uid: 1341
+    components:
+    - type: Transform
+      pos: -27.5,-44.5
+      parent: 1
+  - uid: 1342
+    components:
+    - type: Transform
+      pos: -2.5,-52.5
+      parent: 1
+  - uid: 1343
+    components:
+    - type: Transform
+      pos: 58.5,-129.5
+      parent: 1
+  - uid: 1344
+    components:
+    - type: Transform
+      pos: 33.5,-145.5
+      parent: 1
+  - uid: 1345
+    components:
+    - type: Transform
+      pos: 77.5,-141.5
+      parent: 1
+  - uid: 1346
+    components:
+    - type: Transform
+      pos: 68.5,-117.5
       parent: 1
 - proto: AUColonyCommsConsole
   entities:
@@ -84133,12 +84204,6 @@ entities:
       parent: 1
 - proto: CMUMultiZStairsKutjevoSolo
   entities:
-  - uid: 287675
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 49.5,-130.5
-      parent: 1
   - uid: 343910
     components:
     - type: Transform
@@ -157954,18 +158019,6 @@ entities:
     - type: Transform
       pos: 75.625,-150.5
       parent: 1
-- proto: AU14CommunicationsTower
-  entities:
-  - uid: 315948
-    components:
-    - type: Transform
-      pos: 54.5,104.5
-      parent: 1
-  - uid: 315960
-    components:
-    - type: Transform
-      pos: -6.5,-119.5
-      parent: 1
 - proto: RMCCrateConstruction
   entities:
   - uid: 287543
@@ -158401,7 +158454,6 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - CMAccessColonyCommand
       - - CMAccessColonyMedbay
   - uid: 289629
     components:
@@ -158436,7 +158488,6 @@ entities:
     - type: AccessReader
       access:
       - - CMAccessColonyMedbay
-      - - CMAccessColonyCommand
   - uid: 322508
     components:
     - type: MetaData
@@ -158446,7 +158497,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - AUAccessPrison
+      - - AU14AccessCorporateWEYU
 - proto: RMCDoubleDoorCommandGlass
   entities:
   - uid: 286768
@@ -158479,12 +158530,18 @@ entities:
       rot: 4.71238898038469 rad
       pos: 33.5,97.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - CMAccessColonyEngineering
   - uid: 319023
     components:
     - type: Transform
       rot: 4.71238898038469 rad
       pos: 37.5,97.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - CMAccessColonyEngineering
 - proto: RMCDoubleDoorEngineerGlassEngineering
   entities:
   - uid: 287454
@@ -158506,8 +158563,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - CMAccessColonyCommand
-      - - CMAccessColonyLogistics
+      - - CMAccessRequisitions
 - proto: RMCDoubleDoorGenericGlass
   entities:
   - uid: 243156
@@ -158555,9 +158611,6 @@ entities:
     - type: Transform
       pos: 24.5,66.5
       parent: 1
-    - type: AccessReader
-      access:
-      - - CMAccessColonyPublic
 - proto: RMCDoubleDoorMedicalGlassMedical
   entities:
   - uid: 286219
@@ -239795,13 +239848,6 @@ entities:
     - type: Transform
       pos: 33.5,-30.5
       parent: 1
-- proto: AU14SensorTowerOffset
-  entities:
-  - uid: 315952
-    components:
-    - type: Transform
-      pos: 26.5,-54.5
-      parent: 1
 - proto: RMCShoesBlack
   entities:
   - uid: 167
@@ -240327,40 +240373,20 @@ entities:
     - type: Transform
       pos: 4.5,89.5
       parent: 1
-  - uid: 715
-    components:
-    - type: Transform
-      pos: 4.5,86.5
-      parent: 1
   - uid: 716
     components:
     - type: Transform
       pos: 4.5,83.5
-      parent: 1
-  - uid: 717
-    components:
-    - type: Transform
-      pos: 4.5,80.5
       parent: 1
   - uid: 718
     components:
     - type: Transform
       pos: 23.5,80.5
       parent: 1
-  - uid: 719
-    components:
-    - type: Transform
-      pos: 23.5,83.5
-      parent: 1
   - uid: 720
     components:
     - type: Transform
       pos: 23.5,86.5
-      parent: 1
-  - uid: 721
-    components:
-    - type: Transform
-      pos: 23.5,89.5
       parent: 1
   - uid: 722
     components:
@@ -240653,6 +240679,14 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 44.5,-146.5
       parent: 1
+- proto: RMCStairsKutjevoSolo
+  entities:
+  - uid: 344077
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 49.5,-130.5
+      parent: 1
 - proto: RMCStool
   entities:
   - uid: 339795
@@ -240666,6 +240700,23 @@ entities:
     - type: Transform
       rot: 4.71238898038469 rad
       pos: 50.5,-132.5
+      parent: 1
+- proto: RMCStoragePlantBag
+  entities:
+  - uid: 344078
+    components:
+    - type: Transform
+      pos: 11.5,101.5
+      parent: 1
+  - uid: 344079
+    components:
+    - type: Transform
+      pos: 12.5,101.5
+      parent: 1
+  - uid: 344080
+    components:
+    - type: Transform
+      pos: 12.5,100.5
       parent: 1
 - proto: RMCStructureLatticeDoubleC
   entities:
