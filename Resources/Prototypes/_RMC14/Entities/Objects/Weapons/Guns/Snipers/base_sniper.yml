@@ -19,7 +19,6 @@
     baseDelay: 0.8
   - type: GunDualWielding
     weaponGroup: Rifle
-  - type: GunPointBlank
   - type: WieldedCrosshair
     rsi:
       sprite: _RMC14/Interface/MousePointer/sniper_mouse.rsi

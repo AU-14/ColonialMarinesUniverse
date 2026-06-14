@@ -1237,6 +1237,15 @@
         amount: 2
       - id: RMCBoxClaymoreMineFilled
         amount: 3
+<<<<<<< HEAD
+=======
+      - id: AU14BoxClaymoreMineIncendiaryFilled
+        amount: 1
+      - id: AU14PacketGrenadeTearGasFilled
+        amount: 2
+      - id: AU14PacketGrenadeTearGasFilledAirburst
+        amount: 1
+>>>>>>> master
       - id: AU14Packet20MMGrenadeHERMCFilled
         amount: 4
       - id: AU14Packet20MMGrenadeHESHRMCFilled

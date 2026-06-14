@@ -14,7 +14,7 @@
   - type: Storage
     maxItemSize: Small
     grid:
-    - 0,0,9,1
+    - 0,0,7,1
     whitelist:
       tags:
       - RMCExplosiveClaymoreMine
@@ -32,4 +32,23 @@
   - type: StorageFill
     contents:
     - id: RMCExplosiveClaymoreMine
-      amount: 5
+      amount: 4
+
+- type: entity
+  parent: RMCBoxSmallBase
+  id: AU14BoxClaymoreMineIncendiaryFilled
+  name: M20 incendiary mine box
+  suffix: Filled
+  description: A secure box holding five M20 incendiary anti-personnel proximity mines.
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14ExplosiveClaymoreMineIncendiary
+      amount: 4
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/packets.rsi
+    layers:
+    - state: mineboxi
+      map: [ "closedLayer" ]
+    - state: minebox_ei
+      map: [ "openLayer", "emptyLayer" ]
