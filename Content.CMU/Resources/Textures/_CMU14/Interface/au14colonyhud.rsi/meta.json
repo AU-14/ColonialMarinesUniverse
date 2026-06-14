@@ -11,40 +11,22 @@
       "name": "admin"
     },
     {
+      "name": "admin_assistant"
+    },
+    {
       "name": "advisor"
     },
     {
-      "name": "colony_pilot"
+      "name": "background"
     },
     {
       "name": "cca_ambassador"
     },
     {
-      "name": "icsc_ambassador"
-    },
-    {
-      "name": "laselle_liaison"
-    },
-    {
-      "name": "twe_ambassador"
-    },
-    {
-      "name": "ua_ambassador"
-    },
-    {
-      "name": "upp_ambassador"
+      "name": "colony_pilot"
     },
     {
       "name": "corporate_assistant"
-    },
-    {
-      "name": "admin_assistant"
-    },
-    {
-      "name": "orbital_manager"
-    },
-    {
-      "name": "orbital_security"
     },
     {
       "name": "icrc_cmo"
@@ -54,6 +36,27 @@
     },
     {
       "name": "icrc_nurse"
+    },
+    {
+      "name": "icsc_ambassador"
+    },
+    {
+      "name": "laselle_liaison"
+    },
+    {
+      "name": "orbital_manager"
+    },
+    {
+      "name": "orbital_security"
+    },
+    {
+      "name": "twe_ambassador"
+    },
+    {
+      "name": "ua_ambassador"
+    },
+	{
+      "name": "upp_ambassador"
     }
   ]
 }
