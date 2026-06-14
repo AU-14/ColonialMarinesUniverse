@@ -1,11 +1,11 @@
 meta:
   format: 7
   category: Map
-  engineVersion: v264.0.2-fix-physics
+  engineVersion: v277.0.0
   forkId: ""
   forkVersion: ""
-  time: 06/13/2026 10:08:06
-  entityCount: 1665
+  time: 06/14/2026 14:52:30
+  entityCount: 1667
 maps:
 - 1
 grids:
@@ -2016,6 +2016,47 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -8.5,77.5
       parent: 1
+- proto: AU14KitWeaponBasira
+  entities:
+  - uid: 320140
+    components:
+    - type: Transform
+      pos: 34.5,-15.5
+      parent: 1
+- proto: AU14KitWeaponM4A3
+  entities:
+  - uid: 320135
+    components:
+    - type: Transform
+      pos: 30.5,-9.5
+      parent: 1
+  - uid: 320136
+    components:
+    - type: Transform
+      pos: 30.5,-9.5
+      parent: 1
+  - uid: 320137
+    components:
+    - type: Transform
+      pos: 30.5,-12.5
+      parent: 1
+  - uid: 320138
+    components:
+    - type: Transform
+      pos: 30.5,-12.5
+      parent: 1
+  - uid: 320139
+    components:
+    - type: Transform
+      pos: 34.5,-15.5
+      parent: 1
+- proto: AU14WithdrawConsoleColony
+  entities:
+  - uid: 320141
+    components:
+    - type: Transform
+      pos: -6.5,78.5
+      parent: 1
 - proto: CandleInfinite
   entities:
   - uid: 319791
@@ -2351,6 +2392,11 @@ entities:
     - type: Transform
       pos: -8.5,78.5
       parent: 1
+  - uid: 320142
+    components:
+    - type: Transform
+      pos: -6.5,78.5
+      parent: 1
 - proto: CMTableWoodenGambling
   entities:
   - uid: 319847
@@ -2445,7 +2491,7 @@ entities:
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
-      pos: -8.5,78.5
+      pos: -8.5,78
       parent: 1
 - proto: CMUMultiZStairsKutjevoSolo
   entities:
@@ -10010,6 +10056,28 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -6.5,70.5
       parent: 1
+- proto: RMCBaseballBatMetal
+  entities:
+  - uid: 320130
+    components:
+    - type: Transform
+      pos: 30.5,-9.5
+      parent: 1
+  - uid: 320132
+    components:
+    - type: Transform
+      pos: 30.5,-9.5
+      parent: 1
+  - uid: 320133
+    components:
+    - type: Transform
+      pos: 30.5,-12.5
+      parent: 1
+  - uid: 320134
+    components:
+    - type: Transform
+      pos: 30.5,-12.5
+      parent: 1
 - proto: RMCBedBunkGreen
   entities:
   - uid: 319585
@@ -10331,61 +10399,5 @@ entities:
     components:
     - type: Transform
       pos: -7.5,78.5
-      parent: 1
-- proto: RMCBaseballBatMetal
-  entities:
-  - uid: 320130
-    components:
-    - type: Transform
-      pos: 30.5,-9.5
-      parent: 1
-  - uid: 320132
-    components:
-    - type: Transform
-      pos: 30.5,-9.5
-      parent: 1
-  - uid: 320133
-    components:
-    - type: Transform
-      pos: 30.5,-12.5
-      parent: 1
-  - uid: 320134
-    components:
-    - type: Transform
-      pos: 30.5,-12.5
-      parent: 1
-- proto: AU14KitWeaponM4A3
-  entities:
-  - uid: 320135
-    components:
-    - type: Transform
-      pos: 30.5,-9.5
-      parent: 1
-  - uid: 320136
-    components:
-    - type: Transform
-      pos: 30.5,-9.5
-      parent: 1
-  - uid: 320137
-    components:
-    - type: Transform
-      pos: 30.5,-12.5
-      parent: 1
-  - uid: 320138
-    components:
-    - type: Transform
-      pos: 30.5,-12.5
-      parent: 1
-  - uid: 320139
-    components:
-    - type: Transform
-      pos: 34.5,-15.5
-      parent: 1
-- proto: AU14KitWeaponBasira
-  entities:
-  - uid: 320140
-    components:
-    - type: Transform
-      pos: 34.5,-15.5
       parent: 1
 ...

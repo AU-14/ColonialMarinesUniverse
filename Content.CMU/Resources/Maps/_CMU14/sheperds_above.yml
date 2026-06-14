@@ -1,10 +1,10 @@
 meta:
   format: 7
   category: Map
-  engineVersion: v264.0.2-fix-physics
+  engineVersion: v277.0.0
   forkId: ""
   forkVersion: ""
-  time: 06/13/2026 14:31:03
+  time: 06/14/2026 14:58:07
   entityCount: 8386
 maps:
 - 1
@@ -1959,13 +1959,16 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - CMAccessColonyCommand
+      - - AU14AccessColonyForeman
   - uid: 319783
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 32.5,102.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - AU14AccessColonyHeadEngineer
   - uid: 319963
     components:
     - type: Transform
@@ -1973,7 +1976,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - CMAccessColonyCommand
+      - - AU14AccessColonyHeadPhysician
 - proto: CMAirlockMedicalLockedColony
   entities:
   - uid: 319595
@@ -42710,7 +42713,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - CMAccessColonyCommand
+      - - AU14AccessColonyHeadEngineer
   - uid: 319980
     components:
     - type: MetaData
@@ -42720,7 +42723,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - CMAccessColonyCommand
+      - - AU14AccessColonyHeadPhysician
 - proto: RMCFogWallPermanent
   entities:
   - uid: 324014

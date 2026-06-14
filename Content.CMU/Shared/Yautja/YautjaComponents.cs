@@ -72,6 +72,24 @@ public sealed partial class YautjaComponent : Component
     public bool SkinColorRandomized;
 
     [DataField]
+    public float SkinHueMin = 0f;
+
+    [DataField]
+    public float SkinHueMax = 1f;
+
+    [DataField]
+    public float SkinSaturationMin = 0f;
+
+    [DataField]
+    public float SkinSaturationMax = 1f;
+
+    [DataField]
+    public float SkinValueMin = 0f;
+
+    [DataField]
+    public float SkinValueMax = 1f;
+
+    [DataField]
     public List<ProtoId<EmotePrototype>> AllowedEmotes = GetDefaultAllowedEmotes();
 
     [DataField]
@@ -108,6 +126,12 @@ public sealed partial class YautjaComponent : Component
     public EntityUid? VoicePainAction;
 
     [DataField]
+    public EntProtoId VoiceDistractActionId = "CMUActionYautjaVoiceDistract";
+
+    [ViewVariables]
+    public EntityUid? VoiceDistractAction;
+
+    [DataField]
     public EntProtoId VoiceDeathCryActionId = "CMUActionYautjaVoiceDeathCry";
 
     [ViewVariables]
@@ -131,6 +155,7 @@ public sealed partial class YautjaComponent : Component
         emotes.Add("CMUYautjaLaugh");
         emotes.Add("CMUYautjaGrowl");
         emotes.Add("CMUYautjaPain");
+        emotes.Add("CMUYautjaDistract");
         emotes.Add("CMUYautjaDeathCry");
         emotes.Add("CMUYautjaDeathLaugh");
         return emotes;
@@ -193,6 +218,9 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public EntityUid? OpenMarkPanelAction;
 
     [DataField]
+    public bool EnableRecall = true;
+
+    [DataField]
     public EntProtoId RecallActionId = "CMUActionYautjaRecall";
 
     [ViewVariables]
@@ -233,12 +261,6 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
 
     [ViewVariables]
     public EntityUid? CreateHumanStabilisingCrystalAction;
-
-    [DataField]
-    public EntProtoId CreateHealingCapsuleActionId = "CMUActionYautjaCreateHealingCapsule";
-
-    [ViewVariables]
-    public EntityUid? CreateHealingCapsuleAction;
 
     [DataField]
     public EntProtoId CreateHuntingTrapActionId = "CMUActionYautjaCreateHuntingTrap";
@@ -286,13 +308,10 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public bool IdChipDeployed;
 
     [DataField]
-    public EntProtoId StabilisingCrystalPrototype = "CMUYautjaStabilisingCrystal";
+    public EntProtoId StabilisingCrystalPrototype = "CMUYautjaHealthShard";
 
     [DataField]
     public EntProtoId HumanStabilisingCrystalPrototype = "CMUYautjaHumanStabilisingCrystal";
-
-    [DataField]
-    public EntProtoId HealingCapsulePrototype = "CMUYautjaHealingCapsule";
 
     [DataField]
     public EntProtoId HuntingTrapPrototype = "CMUYautjaHuntingTrap";
@@ -303,17 +322,11 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     [DataField]
     public FixedPoint2 HumanStabilisingCrystalCost = 400;
 
-    [DataField]
-    public FixedPoint2 HealingCapsuleCost = 600;
-
      [DataField]
     public FixedPoint2 HuntingTrapCost = 300;
 
     [DataField]
     public TimeSpan StabilisingCrystalCooldown = TimeSpan.FromMinutes(2);
-
-    [DataField]
-    public TimeSpan HealingCapsuleCooldown = TimeSpan.FromMinutes(4);
 
     [DataField]
     public TimeSpan HuntingTrapCooldown = TimeSpan.FromMinutes(4);
@@ -322,10 +335,6 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public TimeSpan NextStabilisingCrystal;
 
     [DataField]
-    public TimeSpan NextHealingCapsule;
-
-    [DataField]
-
     public TimeSpan NextHuntingTrap;
 
     [DataField, AutoNetworkedField]
@@ -365,13 +374,13 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public float SelfDestructEquipmentDestroyRadius = 2f;
 
     [DataField]
-    public SoundSpecifier EquipSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
+    public SoundSpecifier EquipSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
 
     [DataField]
-    public SoundSpecifier CloakOnSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_cloakon.wav");
+    public SoundSpecifier CloakOnSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_cloakon.wav");
 
     [DataField]
-    public SoundSpecifier CloakOffSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_cloakoff.wav");
+    public SoundSpecifier CloakOffSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_cloakoff.wav");
 
     [DataField]
     public float CloakOpacity = 0.02f;
@@ -389,6 +398,27 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public TimeSpan CloakUncloakWeaponLock = TimeSpan.FromSeconds(1);
 
     [DataField]
+    public TimeSpan CloakDuration = TimeSpan.Zero;
+
+    [DataField]
+    public TimeSpan CloakCooldown = TimeSpan.Zero;
+
+    [DataField]
+    public TimeSpan CloakWarningBefore = TimeSpan.FromSeconds(5);
+
+    [DataField]
+    public SoundSpecifier? CloakWarningSound;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan CloakExpiresAt;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan CloakCooldownUntil;
+
+    [ViewVariables]
+    public bool CloakWarningPlayed;
+
+    [DataField]
     public EntProtoId CloakEffect = "RMCEffectCloak";
 
     [DataField]
@@ -402,22 +432,31 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     };
 
     [DataField]
-    public SoundSpecifier RecallSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_attach.wav");
+    public SoundSpecifier RecallSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_attach.wav");
 
     [DataField]
-    public SoundSpecifier SelfDestructArmSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_countdown.ogg", AudioParams.Default.WithVolume(8f).WithMaxDistance(40f));
+    public SoundSpecifier SelfDestructArmSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_countdown.ogg", AudioParams.Default.WithVolume(8f).WithMaxDistance(40f));
 
     [DataField]
-    public SoundSpecifier SelfDestructCancelSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_plasmacaster_off.wav");
+    public SoundSpecifier SelfDestructCancelSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_off.wav");
 
     [DataField]
-    public SoundSpecifier SelfDestructWarningSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav", AudioParams.Default.WithVolume(6f).WithMaxDistance(35f));
+    public SoundSpecifier SelfDestructWarningSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav", AudioParams.Default.WithVolume(6f).WithMaxDistance(35f));
 
     [DataField]
-    public SoundSpecifier SelfDestructLaughSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_deathlaugh.wav", AudioParams.Default.WithVolume(8f).WithMaxDistance(40f));
+    public SoundSpecifier SelfDestructLaughSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Voice/Death/pred_deathlaugh.wav", AudioParams.Default.WithVolume(8f).WithMaxDistance(40f));
 
     [DataField]
-    public SoundSpecifier LockSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
+    public SoundSpecifier OverloadDoAfterSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/self_destruct_doafter.wav");
+
+    [DataField]
+    public TimeSpan OverloadDoAfterDuration = TimeSpan.FromSeconds(4);
+
+    [DataField]
+    public TimeSpan OverloadDetonationDelay = TimeSpan.FromSeconds(8);
+
+    [DataField]
+    public SoundSpecifier LockSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
 
     [DataField]
     public SoundSpecifier TranslatorSound = new SoundCollectionSpecifier("CMUYautjaTranslator");
@@ -426,10 +465,10 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public FixedPoint2 TranslatorCost = 50;
 
     [DataField]
-    public SoundSpecifier IdChipSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_attach.wav");
+    public SoundSpecifier IdChipSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_attach.wav");
 
     [DataField]
-    public SoundSpecifier FabricateSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
+    public SoundSpecifier FabricateSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
 
     [DataField]
     public DamageSpecifier TechShockDamage = new()
@@ -524,13 +563,13 @@ public sealed partial class YautjaMaskComponent : Component, IClothingSlots
     public SlotFlags Slots { get; set; } = SlotFlags.MASK;
 
     [DataField]
-    public SoundSpecifier ToggleVisorSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_vision.wav");
+    public SoundSpecifier ToggleVisorSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_vision.wav");
 
     [DataField]
-    public SoundSpecifier ZoomOnSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_vision.wav");
+    public SoundSpecifier ZoomOnSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_vision.wav");
 
     [DataField]
-    public SoundSpecifier ZoomOffSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_vision.wav");
+    public SoundSpecifier ZoomOffSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_vision.wav");
 }
 
 [RegisterComponent]
@@ -756,7 +795,7 @@ public sealed partial class YautjaAbominationComponent : Component
     public SoundSpecifier RoarSound = new SoundCollectionSpecifier("CMUPredalienRoar");
 
     [DataField]
-    public SoundSpecifier RushSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/predalien_click.ogg");
+    public SoundSpecifier RushSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Predalien/predalien_click.ogg");
 
     [DataField]
     public SoundSpecifier SmashSound = new SoundCollectionSpecifier("CMUYautjaSlam");
@@ -876,13 +915,19 @@ public sealed partial class YautjaCasterComponent : Component
     public FixedPoint2 PowerCost = 100;
 
     [DataField]
-    public SoundSpecifier FireSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_plasmacaster_fire.wav");
+    public SoundSpecifier FireSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav");
 
     [DataField]
     public List<YautjaCasterMode> Modes = new();
 
     [DataField, AutoNetworkedField]
     public int CurrentMode;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan CooldownUntil;
+
+    [DataField]
+    public SoundSpecifier? CooldownSound;
 }
 
 [DataDefinition]
@@ -898,7 +943,10 @@ public sealed partial class YautjaCasterMode
     public FixedPoint2 PowerCost = 100;
 
     [DataField]
-    public SoundSpecifier FireSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_plasmacaster_fire.wav");
+    public SoundSpecifier FireSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav");
+
+    [DataField]
+    public TimeSpan Cooldown = TimeSpan.Zero;
 }
 
 [RegisterComponent, NetworkedComponent]
@@ -977,10 +1025,10 @@ public sealed partial class YautjaHivebreakerComponent : Component
     public TimeSpan DeadUseWindow = TimeSpan.FromMinutes(1);
 
     [DataField]
-    public SoundSpecifier StartSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
+    public SoundSpecifier StartSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
 
     [DataField]
-    public SoundSpecifier FinishSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_roar1.wav");
+    public SoundSpecifier FinishSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Voice/Roars/pred_roar1.wav");
 
     [DataField]
     public bool BloodOnConversion = true;
@@ -1023,14 +1071,14 @@ public sealed partial class YautjaHivebreakerComponent : Component
 public sealed partial class YautjaRelayBeaconComponent : Component
 {
     [DataField]
-    public SoundSpecifier PulseSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
+    public SoundSpecifier PulseSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
 }
 
 [RegisterComponent]
 public sealed partial class YautjaHoundPadComponent : Component
 {
     [DataField]
-    public SoundSpecifier PulseSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_vision.wav");
+    public SoundSpecifier PulseSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_vision.wav");
 }
 
 [RegisterComponent]
@@ -1110,22 +1158,22 @@ public sealed partial class YautjaThrallBracerComponent : Component, IClothingSl
     public TimeSpan StunTime = TimeSpan.FromSeconds(10);
 
     [DataField]
-    public SoundSpecifier EquipSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
+    public SoundSpecifier EquipSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
 
     [DataField]
-    public SoundSpecifier LinkSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
+    public SoundSpecifier LinkSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
 
     [DataField]
-    public SoundSpecifier MessageSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
+    public SoundSpecifier MessageSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
 
     [DataField]
-    public SoundSpecifier LockSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
+    public SoundSpecifier LockSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
 
     [DataField]
     public SoundSpecifier ShockSound = new SoundPathSpecifier("/Audio/Effects/Lightning/lightningshock.ogg");
 
     [DataField]
-    public SoundSpecifier SelfDestructWarningSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
+    public SoundSpecifier SelfDestructWarningSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
 }
 
 [RegisterComponent]
@@ -1185,22 +1233,22 @@ public sealed partial class YautjaGearContainerComponent : Component, IClothingS
     public Dictionary<YautjaGearKind, EntProtoId> GearPrototypes = GetDefaultGearPrototypes();
 
     [DataField]
-    public SoundSpecifier DeploySound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_attach.wav");
+    public SoundSpecifier DeploySound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_attach.wav");
 
     [DataField]
-    public SoundSpecifier RetractSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_attach.wav");
+    public SoundSpecifier RetractSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_attach.wav");
 
     [DataField]
-    public SoundSpecifier CasterDeploySound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_plasmacaster_on.wav");
+    public SoundSpecifier CasterDeploySound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_on.wav");
 
     [DataField]
-    public SoundSpecifier CasterRetractSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_plasmacaster_off.wav");
+    public SoundSpecifier CasterRetractSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_off.wav");
 
     [DataField]
-    public SoundSpecifier WristBladesDeploySound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/wristblades_on.wav");
+    public SoundSpecifier WristBladesDeploySound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Weapons/WristBlades/wristblades_on.wav");
 
     [DataField]
-    public SoundSpecifier WristBladesRetractSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/wristblades_off.wav");
+    public SoundSpecifier WristBladesRetractSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Weapons/WristBlades/wristblades_off.wav");
 
     [DataField]
     public Dictionary<YautjaGearKind, EntityUid> Gear = new();
@@ -1326,13 +1374,13 @@ public sealed partial class YautjaRitualDuelComponent : Component
     public TimeSpan DuelStartedAt;
 
     [DataField]
-    public SoundSpecifier ClaimSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_roar1.wav");
+    public SoundSpecifier ClaimSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Voice/Roars/pred_roar1.wav");
 
     [DataField]
-    public SoundSpecifier DuelSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_roar2.wav");
+    public SoundSpecifier DuelSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Voice/Roars/pred_roar2.wav");
 
     [DataField]
-    public SoundSpecifier ReleaseSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_click1.wav");
+    public SoundSpecifier ReleaseSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Voice/Clicks/pred_click1.wav");
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -1358,10 +1406,10 @@ public sealed partial class YautjaTrapComponent : Component
     public TimeSpan ParalyzeTime = TimeSpan.FromSeconds(4);
 
     [DataField]
-    public SoundSpecifier ArmSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_attach.wav");
+    public SoundSpecifier ArmSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_attach.wav");
 
     [DataField]
-    public SoundSpecifier DisarmSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_attach.wav");
+    public SoundSpecifier DisarmSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_attach.wav");
 
     [DataField]
     public SoundSpecifier TriggerSound = new SoundPathSpecifier("/Audio/Effects/snap.ogg");

@@ -17602,13 +17602,6 @@ entities:
     - type: Transform
       pos: -1.5,-8.5
       parent: 1
-- proto: RMCFigurinePatronChadScott
-  entities:
-  - uid: 7109
-    components:
-    - type: Transform
-      pos: 15.205021,31.884274
-      parent: 1
 - proto: RMCFireAxe
   entities:
   - uid: 1242

@@ -1,11 +1,11 @@
 meta:
   format: 7
   category: Map
-  engineVersion: v264.0.2-fix-physics
+  engineVersion: v277.0.0
   forkId: ""
   forkVersion: ""
-  time: 06/13/2026 14:37:56
-  entityCount: 36463
+  time: 06/14/2026 19:39:55
+  entityCount: 36502
 maps:
 - 1
 grids:
@@ -59638,6 +59638,28 @@ entities:
     - type: Transform
       pos: 50.5,-111.5
       parent: 1
+- proto: AU14BeltHolsterPistolBlack
+  entities:
+  - uid: 344128
+    components:
+    - type: Transform
+      pos: 32.5,134.5
+      parent: 1
+  - uid: 344129
+    components:
+    - type: Transform
+      pos: 32.5,134.5
+      parent: 1
+  - uid: 344130
+    components:
+    - type: Transform
+      pos: 32.5,134.5
+      parent: 1
+  - uid: 344131
+    components:
+    - type: Transform
+      pos: 32.5,134.5
+      parent: 1
 - proto: AU14CashVendorCigarettes
   entities:
   - uid: 315
@@ -59760,6 +59782,18 @@ entities:
     components:
     - type: Transform
       pos: 28.5,138.5
+      parent: 1
+- proto: AU14CommunicationsTower
+  entities:
+  - uid: 315948
+    components:
+    - type: Transform
+      pos: 54.5,104.5
+      parent: 1
+  - uid: 315960
+    components:
+    - type: Transform
+      pos: -6.5,-119.5
       parent: 1
 - proto: AU14CorporateASRSConsole
   entities:
@@ -59954,6 +59988,28 @@ entities:
       containers:
         storagebase: !type:Container
           ents: []
+- proto: AU14ExternalWebbing
+  entities:
+  - uid: 344132
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344133
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344134
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344135
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
 - proto: AU14FlightStairs
   entities:
   - uid: 287857
@@ -60117,6 +60173,13 @@ entities:
     components:
     - type: Transform
       pos: 36.5,-125.5
+      parent: 1
+- proto: AU14SensorTowerOffset
+  entities:
+  - uid: 315952
+    components:
+    - type: Transform
+      pos: 26.5,-54.5
       parent: 1
 - proto: AU14ShopkeeperVendor
   entities:
@@ -60967,6 +61030,58 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -6.5,76.5
+      parent: 1
+- proto: AUColonyATM
+  entities:
+  - uid: 715
+    components:
+    - type: Transform
+      pos: 25.5,69.5
+      parent: 1
+  - uid: 717
+    components:
+    - type: Transform
+      pos: 29.5,96.5
+      parent: 1
+  - uid: 719
+    components:
+    - type: Transform
+      pos: 24.5,129.5
+      parent: 1
+  - uid: 721
+    components:
+    - type: Transform
+      pos: 48.5,49.5
+      parent: 1
+  - uid: 1341
+    components:
+    - type: Transform
+      pos: -27.5,-44.5
+      parent: 1
+  - uid: 1342
+    components:
+    - type: Transform
+      pos: -2.5,-52.5
+      parent: 1
+  - uid: 1343
+    components:
+    - type: Transform
+      pos: 58.5,-129.5
+      parent: 1
+  - uid: 1344
+    components:
+    - type: Transform
+      pos: 33.5,-145.5
+      parent: 1
+  - uid: 1345
+    components:
+    - type: Transform
+      pos: 77.5,-141.5
+      parent: 1
+  - uid: 1346
+    components:
+    - type: Transform
+      pos: 68.5,-117.5
       parent: 1
 - proto: AUColonyCommsConsole
   entities:
@@ -76424,6 +76539,16 @@ entities:
     - type: Transform
       pos: 2,-46.5
       parent: 1
+- proto: ChemistryHotplate
+  entities:
+  - uid: 344081
+    components:
+    - type: Transform
+      pos: -0.5,-63.5
+      parent: 1
+    - type: ApcPowerReceiver
+      powerLoad: 0
+      needsPower: False
 - proto: ClothingHeadFishCap
   entities:
   - uid: 243512
@@ -76493,7 +76618,7 @@ entities:
           friction: 0.4
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 286446
     components:
     - type: MetaData
@@ -76531,7 +76656,7 @@ entities:
           friction: 0.4
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 287390
     components:
     - type: MetaData
@@ -76569,7 +76694,7 @@ entities:
           friction: 0.4
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 287761
     components:
     - type: MetaData
@@ -76613,7 +76738,7 @@ entities:
       canPry: False
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 314700
     components:
     - type: Transform
@@ -80920,6 +81045,13 @@ entities:
     - type: Transform
       pos: 70.5,-144.375
       parent: 1
+- proto: CMPaperBin30
+  entities:
+  - uid: 344115
+    components:
+    - type: Transform
+      pos: 25.5,133.75
+      parent: 1
 - proto: CMPen
   entities:
   - uid: 278981
@@ -80971,6 +81103,26 @@ entities:
     components:
     - type: Transform
       pos: 33.5,-127.5
+      parent: 1
+  - uid: 344109
+    components:
+    - type: Transform
+      pos: 30.5,132.5
+      parent: 1
+  - uid: 344110
+    components:
+    - type: Transform
+      pos: 30.5,132.5
+      parent: 1
+  - uid: 344111
+    components:
+    - type: Transform
+      pos: 30.5,132.5
+      parent: 1
+  - uid: 344136
+    components:
+    - type: Transform
+      pos: 25.5,133.75
       parent: 1
 - proto: CMPenClicky
   entities:
@@ -84133,12 +84285,6 @@ entities:
       parent: 1
 - proto: CMUMultiZStairsKutjevoSolo
   entities:
-  - uid: 287675
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 49.5,-130.5
-      parent: 1
   - uid: 343910
     components:
     - type: Transform
@@ -156367,7 +156513,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 316460
     components:
     - type: Transform
@@ -156376,7 +156522,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 316461
     components:
     - type: MetaData
@@ -157906,6 +158052,18 @@ entities:
     - type: Transform
       pos: 36.5,-128.25
       parent: 1
+- proto: RMCBoxShotgunBuckshot
+  entities:
+  - uid: 344093
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344094
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
 - proto: RMCBoxZiptie
   entities:
   - uid: 316519
@@ -157953,18 +158111,6 @@ entities:
     components:
     - type: Transform
       pos: 75.625,-150.5
-      parent: 1
-- proto: AU14CommunicationsTower
-  entities:
-  - uid: 315948
-    components:
-    - type: Transform
-      pos: 54.5,104.5
-      parent: 1
-  - uid: 315960
-    components:
-    - type: Transform
-      pos: -6.5,-119.5
       parent: 1
 - proto: RMCCrateConstruction
   entities:
@@ -158254,7 +158400,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 286471
     components:
     - type: Transform
@@ -158262,7 +158408,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 286472
     components:
     - type: Transform
@@ -158270,7 +158416,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 287117
     components:
     - type: Transform
@@ -158278,7 +158424,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 287118
     components:
     - type: Transform
@@ -158286,7 +158432,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 287282
     components:
     - type: Transform
@@ -158295,7 +158441,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 316320
     components:
     - type: Transform
@@ -158303,7 +158449,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 316321
     components:
     - type: Transform
@@ -158311,7 +158457,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 316322
     components:
     - type: MetaData
@@ -158322,7 +158468,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 316323
     components:
     - type: Transform
@@ -158331,7 +158477,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 316324
     components:
     - type: MetaData
@@ -158341,7 +158487,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 316325
     components:
     - type: MetaData
@@ -158352,7 +158498,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 316327
     components:
     - type: Transform
@@ -158361,7 +158507,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 316328
     components:
     - type: Transform
@@ -158370,7 +158516,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 316329
     components:
     - type: Transform
@@ -158379,7 +158525,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 316454
     components:
     - type: MetaData
@@ -158401,7 +158547,6 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - CMAccessColonyCommand
       - - CMAccessColonyMedbay
   - uid: 289629
     components:
@@ -158436,7 +158581,6 @@ entities:
     - type: AccessReader
       access:
       - - CMAccessColonyMedbay
-      - - CMAccessColonyCommand
   - uid: 322508
     components:
     - type: MetaData
@@ -158446,7 +158590,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - AUAccessPrison
+      - - AU14AccessCorporateWEYU
 - proto: RMCDoubleDoorCommandGlass
   entities:
   - uid: 286768
@@ -158479,12 +158623,18 @@ entities:
       rot: 4.71238898038469 rad
       pos: 33.5,97.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - CMAccessColonyEngineering
   - uid: 319023
     components:
     - type: Transform
       rot: 4.71238898038469 rad
       pos: 37.5,97.5
       parent: 1
+    - type: AccessReader
+      access:
+      - - CMAccessColonyEngineering
 - proto: RMCDoubleDoorEngineerGlassEngineering
   entities:
   - uid: 287454
@@ -158496,7 +158646,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 315127
     components:
     - type: MetaData
@@ -158506,8 +158656,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - CMAccessColonyCommand
-      - - CMAccessColonyLogistics
+      - - CMAccessRequisitions
 - proto: RMCDoubleDoorGenericGlass
   entities:
   - uid: 243156
@@ -158555,9 +158704,6 @@ entities:
     - type: Transform
       pos: 24.5,66.5
       parent: 1
-    - type: AccessReader
-      access:
-      - - CMAccessColonyPublic
 - proto: RMCDoubleDoorMedicalGlassMedical
   entities:
   - uid: 286219
@@ -158570,7 +158716,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: RMCDoubleDoorPersonalGlass
   entities:
   - uid: 343813
@@ -158583,7 +158729,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 343814
     components:
     - type: MetaData
@@ -158593,7 +158739,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 343815
     components:
     - type: MetaData
@@ -158604,7 +158750,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: RMCDoubleDoorPersonalSolid
   entities:
   - uid: 286019
@@ -158616,7 +158762,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 286022
     components:
     - type: MetaData
@@ -158626,7 +158772,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 286970
     components:
     - type: MetaData
@@ -158637,7 +158783,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 287119
     components:
     - type: MetaData
@@ -158647,7 +158793,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 287120
     components:
     - type: MetaData
@@ -158657,7 +158803,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 287121
     components:
     - type: MetaData
@@ -158667,7 +158813,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 287287
     components:
     - type: MetaData
@@ -158678,7 +158824,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
   - uid: 316330
     components:
     - type: MetaData
@@ -158689,7 +158835,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - RMCAccessWeYa
+      - - AU14AccessCorporateWEYU
 - proto: RMCDoubleDoorSecurityGlassBrig
   entities:
   - uid: 278948
@@ -230610,27 +230756,18 @@ entities:
       rot: 3.141592653589793 rad
       pos: 40.5,-123.501
       parent: 1
-    - type: ApcPowerReceiver
-      powerLoad: 0
-      needsPower: False
   - uid: 287882
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 42.5,-123.501
       parent: 1
-    - type: ApcPowerReceiver
-      powerLoad: 0
-      needsPower: False
   - uid: 287883
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 44.5,-123.501
       parent: 1
-    - type: ApcPowerReceiver
-      powerLoad: 0
-      needsPower: False
   - uid: 289059
     components:
     - type: Transform
@@ -230776,6 +230913,9 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -4.5,-49.5
       parent: 1
+    - type: ApcPowerReceiver
+      powerLoad: 0
+      needsPower: False
   - uid: 246
     components:
     - type: Transform
@@ -231302,6 +231442,80 @@ entities:
     components:
     - type: Transform
       pos: 10.75,65.5
+      parent: 1
+- proto: RMCMagazineRifleABR40
+  entities:
+  - uid: 344095
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344096
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344097
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344098
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344099
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344100
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+- proto: RMCMagazineRifleHunting
+  entities:
+  - uid: 344101
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344102
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344103
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344104
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344105
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344106
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344107
+    components:
+    - type: Transform
+      pos: 30.5,134.5
+      parent: 1
+  - uid: 344108
+    components:
+    - type: Transform
+      pos: 30.5,134.5
       parent: 1
 - proto: RMCMagazineSMGFP9000
   entities:
@@ -239795,13 +240009,6 @@ entities:
     - type: Transform
       pos: 33.5,-30.5
       parent: 1
-- proto: AU14SensorTowerOffset
-  entities:
-  - uid: 315952
-    components:
-    - type: Transform
-      pos: 26.5,-54.5
-      parent: 1
 - proto: RMCShoesBlack
   entities:
   - uid: 167
@@ -240327,40 +240534,20 @@ entities:
     - type: Transform
       pos: 4.5,89.5
       parent: 1
-  - uid: 715
-    components:
-    - type: Transform
-      pos: 4.5,86.5
-      parent: 1
   - uid: 716
     components:
     - type: Transform
       pos: 4.5,83.5
-      parent: 1
-  - uid: 717
-    components:
-    - type: Transform
-      pos: 4.5,80.5
       parent: 1
   - uid: 718
     components:
     - type: Transform
       pos: 23.5,80.5
       parent: 1
-  - uid: 719
-    components:
-    - type: Transform
-      pos: 23.5,83.5
-      parent: 1
   - uid: 720
     components:
     - type: Transform
       pos: 23.5,86.5
-      parent: 1
-  - uid: 721
-    components:
-    - type: Transform
-      pos: 23.5,89.5
       parent: 1
   - uid: 722
     components:
@@ -240544,7 +240731,7 @@ entities:
     - type: Transform
       pos: 72.5,-132.5
       parent: 1
-- proto: RMCSpawnerEvacuationPodSouth
+- proto: RMCSpawnerEvacuationPodNorth
   entities:
   - uid: 398
     components:
@@ -240653,6 +240840,14 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 44.5,-146.5
       parent: 1
+- proto: RMCStairsKutjevoSolo
+  entities:
+  - uid: 344077
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 49.5,-130.5
+      parent: 1
 - proto: RMCStool
   entities:
   - uid: 339795
@@ -240666,6 +240861,23 @@ entities:
     - type: Transform
       rot: 4.71238898038469 rad
       pos: 50.5,-132.5
+      parent: 1
+- proto: RMCStoragePlantBag
+  entities:
+  - uid: 344078
+    components:
+    - type: Transform
+      pos: 11.5,101.5
+      parent: 1
+  - uid: 344079
+    components:
+    - type: Transform
+      pos: 12.5,101.5
+      parent: 1
+  - uid: 344080
+    components:
+    - type: Transform
+      pos: 12.5,100.5
       parent: 1
 - proto: RMCStructureLatticeDoubleC
   entities:
