@@ -1159,8 +1159,6 @@
         amount: 6
       - id: RMCBoxClaymoreMineFilled
         amount: 3
-      - id: AU14BoxClaymoreMineIncendiaryFilled
-        amount: 1
       - id: RMCExplosiveBreachingCharge
         amount: 6
       - id: RMCExplosivePlastic
