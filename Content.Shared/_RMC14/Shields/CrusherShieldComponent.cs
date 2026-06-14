@@ -20,7 +20,7 @@ public sealed partial class CrusherShieldComponent : Component
     public int ExplosionResistance = 1000;
 
     [DataField, AutoNetworkedField]
-    public int DamageReduction = 8;
+    public int DamageReduction = 10;
 
     [DataField, AutoNetworkedField]
     public TimeSpan ExplosionResistanceDuration = TimeSpan.FromSeconds(2.5);
@@ -32,13 +32,13 @@ public sealed partial class CrusherShieldComponent : Component
     public FixedPoint2 PlasmaCost = FixedPoint2.New(50);
 
     [DataField, AutoNetworkedField]
-    public FixedPoint2 Amount = FixedPoint2.New(100);
+    public FixedPoint2 Amount = FixedPoint2.New(200);
 
     [DataField, AutoNetworkedField]
     public EntProtoId Effect = "RMCEffectEmpowerBrown";
 
     [DataField, AutoNetworkedField]
-    public float ReflectChanceFront = 0.1f;
+    public float ReflectChanceFront = 0.2f;
 
     [DataField, AutoNetworkedField]
     public float ReflectChanceSide = 0f;
