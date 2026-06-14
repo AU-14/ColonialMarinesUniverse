@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 06/14/2026 14:41:03
-  entityCount: 36472
+  entityCount: 36473
 maps:
 - 1
 grids:
@@ -230663,27 +230663,18 @@ entities:
       rot: 3.141592653589793 rad
       pos: 40.5,-123.501
       parent: 1
-    - type: ApcPowerReceiver
-      powerLoad: 0
-      needsPower: False
   - uid: 287882
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 42.5,-123.501
       parent: 1
-    - type: ApcPowerReceiver
-      powerLoad: 0
-      needsPower: False
   - uid: 287883
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 44.5,-123.501
       parent: 1
-    - type: ApcPowerReceiver
-      powerLoad: 0
-      needsPower: False
   - uid: 289059
     components:
     - type: Transform
@@ -230829,6 +230820,9 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -4.5,-49.5
       parent: 1
+    - type: ApcPowerReceiver
+      powerLoad: 0
+      needsPower: False
   - uid: 246
     components:
     - type: Transform
@@ -240570,7 +240564,7 @@ entities:
     - type: Transform
       pos: 72.5,-132.5
       parent: 1
-- proto: RMCSpawnerEvacuationPodSouth
+- proto: RMCSpawnerEvacuationPodNorth
   entities:
   - uid: 398
     components:
@@ -248429,4 +248423,14 @@ entities:
       rot: 4.71238898038469 rad
       pos: -31.5,-35.5
       parent: 1
+- proto: ChemistryHotplate
+  entities:
+  - uid: 344081
+    components:
+    - type: Transform
+      pos: -0.5,-63.5
+      parent: 1
+    - type: ApcPowerReceiver
+      powerLoad: 0
+      needsPower: False
 ...
