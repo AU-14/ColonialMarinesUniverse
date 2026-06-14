@@ -4,8 +4,8 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 06/13/2026 18:57:19
-  entityCount: 31185
+  time: 06/14/2026 16:59:38
+  entityCount: 31187
 maps:
 - 1
 grids:
@@ -6434,10 +6434,10 @@ entities:
         38,58: RMCAreaStrataInteriorOutOfBounds
         33,60: RMCAreaStrataInteriorOutOfBounds
         32,60: RMCAreaStrataInteriorOutOfBounds
-        15,73: RMCAreaStrataInteriorOutOfBounds
-        16,73: RMCAreaStrataInteriorOutOfBounds
-        17,73: RMCAreaStrataInteriorOutOfBounds
-        16,72: RMCAreaStrataInteriorOutOfBounds
+        15,73: RMCAreaStrataExteriorMarshRiver
+        16,73: RMCAreaStrataExteriorMarshRiver
+        17,73: RMCAreaStrataExteriorMarshRiver
+        16,72: RMCAreaStrataExteriorMarshRiver
         1,66: RMCAreaStrataInteriorOutOfBounds
         1,67: RMCAreaStrataInteriorOutOfBounds
         1,68: RMCAreaStrataInteriorOutOfBounds
@@ -10038,169 +10038,169 @@ entities:
         88,169: RMCAreaStrataInteriorOutOfBounds
         89,155: RMCAreaStrataInteriorOutOfBounds
         89,156: RMCAreaStrataInteriorOutOfBounds
-        89,157: RMCAreaStrataInteriorOutOfBounds
-        89,158: RMCAreaStrataInteriorOutOfBounds
-        89,159: RMCAreaStrataInteriorOutOfBounds
-        89,160: RMCAreaStrataInteriorOutOfBounds
-        89,161: RMCAreaStrataInteriorOutOfBounds
-        89,162: RMCAreaStrataInteriorOutOfBounds
-        89,163: RMCAreaStrataInteriorOutOfBounds
+        89,157: RMCAreaStrataInteriorBballCave
+        89,158: RMCAreaStrataInteriorBballCave
+        89,159: RMCAreaStrataInteriorBballCave
+        89,160: RMCAreaStrataInteriorBballCave
+        89,161: RMCAreaStrataInteriorBballCave
+        89,162: RMCAreaStrataInteriorBballCave
+        89,163: RMCAreaStrataInteriorBballCave
         89,164: RMCAreaStrataInteriorOutOfBounds
-        89,165: RMCAreaStrataInteriorOutOfBounds
-        89,166: RMCAreaStrataInteriorOutOfBounds
-        89,167: RMCAreaStrataInteriorOutOfBounds
-        89,168: RMCAreaStrataInteriorOutOfBounds
-        89,169: RMCAreaStrataInteriorOutOfBounds
+        89,165: RMCAreaStrataInteriorBballCave
+        89,166: RMCAreaStrataInteriorBballCave
+        89,167: RMCAreaStrataInteriorBballCave
+        89,168: RMCAreaStrataInteriorBballCave
+        89,169: RMCAreaStrataInteriorBballCave
         90,155: RMCAreaStrataInteriorOutOfBounds
         90,156: RMCAreaStrataInteriorOutOfBounds
-        90,157: RMCAreaStrataInteriorOutOfBounds
-        90,158: RMCAreaStrataInteriorOutOfBounds
-        90,159: RMCAreaStrataInteriorOutOfBounds
-        90,160: RMCAreaStrataInteriorOutOfBounds
-        90,161: RMCAreaStrataInteriorOutOfBounds
-        90,162: RMCAreaStrataInteriorOutOfBounds
-        90,163: RMCAreaStrataInteriorOutOfBounds
-        90,164: RMCAreaStrataInteriorOutOfBounds
-        90,165: RMCAreaStrataInteriorOutOfBounds
-        90,166: RMCAreaStrataInteriorOutOfBounds
-        90,167: RMCAreaStrataInteriorOutOfBounds
-        90,168: RMCAreaStrataInteriorOutOfBounds
-        90,169: RMCAreaStrataInteriorOutOfBounds
+        90,157: RMCAreaStrataInteriorBballCave
+        90,158: RMCAreaStrataInteriorBballCave
+        90,159: RMCAreaStrataInteriorBballCave
+        90,160: RMCAreaStrataInteriorBballCave
+        90,161: RMCAreaStrataInteriorBballCave
+        90,162: RMCAreaStrataInteriorBballCave
+        90,163: RMCAreaStrataInteriorBballCave
+        90,164: RMCAreaStrataInteriorBballCave
+        90,165: RMCAreaStrataInteriorBballCave
+        90,166: RMCAreaStrataInteriorBballCave
+        90,167: RMCAreaStrataInteriorBballCave
+        90,168: RMCAreaStrataInteriorBballCave
+        90,169: RMCAreaStrataInteriorBballCave
         91,155: RMCAreaStrataInteriorOutOfBounds
         91,156: RMCAreaStrataInteriorOutOfBounds
-        91,157: RMCAreaStrataInteriorOutOfBounds
-        91,158: RMCAreaStrataInteriorOutOfBounds
+        91,157: RMCAreaStrataInteriorBballCave
+        91,158: RMCAreaStrataInteriorBballCave
         91,159: RMCAreaStrataInteriorOutOfBounds
         91,160: RMCAreaStrataInteriorOutOfBounds
         91,161: RMCAreaStrataInteriorOutOfBounds
         91,162: RMCAreaStrataInteriorOutOfBounds
-        91,163: RMCAreaStrataInteriorOutOfBounds
-        91,164: RMCAreaStrataInteriorOutOfBounds
-        91,165: RMCAreaStrataInteriorOutOfBounds
-        91,166: RMCAreaStrataInteriorOutOfBounds
-        91,167: RMCAreaStrataInteriorOutOfBounds
-        91,168: RMCAreaStrataInteriorOutOfBounds
-        91,169: RMCAreaStrataInteriorOutOfBounds
+        91,163: RMCAreaStrataInteriorBballCave
+        91,164: RMCAreaStrataInteriorBballCave
+        91,165: RMCAreaStrataInteriorBballCave
+        91,166: RMCAreaStrataInteriorBballCave
+        91,167: RMCAreaStrataInteriorBballCave
+        91,168: RMCAreaStrataInteriorBballCave
+        91,169: RMCAreaStrataInteriorBballCave
         92,155: RMCAreaStrataInteriorOutOfBounds
         92,156: RMCAreaStrataInteriorOutOfBounds
-        92,157: RMCAreaStrataInteriorOutOfBounds
-        92,158: RMCAreaStrataInteriorOutOfBounds
-        92,159: RMCAreaStrataInteriorOutOfBounds
-        92,160: RMCAreaStrataInteriorOutOfBounds
+        92,157: RMCAreaStrataInteriorBballCave
+        92,158: RMCAreaStrataInteriorBballCave
+        92,159: RMCAreaStrataInteriorBballCave
+        92,160: RMCAreaStrataInteriorBballCave
         92,161: RMCAreaStrataInteriorOutOfBounds
         92,162: RMCAreaStrataInteriorOutOfBounds
-        92,163: RMCAreaStrataInteriorOutOfBounds
-        92,164: RMCAreaStrataInteriorOutOfBounds
-        92,165: RMCAreaStrataInteriorOutOfBounds
-        92,166: RMCAreaStrataInteriorOutOfBounds
-        92,167: RMCAreaStrataInteriorOutOfBounds
-        92,168: RMCAreaStrataInteriorOutOfBounds
-        92,169: RMCAreaStrataInteriorOutOfBounds
+        92,163: RMCAreaStrataInteriorBballCave
+        92,164: RMCAreaStrataInteriorBballCave
+        92,165: RMCAreaStrataInteriorBballCave
+        92,166: RMCAreaStrataInteriorBballCave
+        92,167: RMCAreaStrataInteriorBballCave
+        92,168: RMCAreaStrataInteriorBballCave
+        92,169: RMCAreaStrataInteriorBballCave
         93,155: RMCAreaStrataInteriorOutOfBounds
         93,156: RMCAreaStrataInteriorOutOfBounds
         93,157: RMCAreaStrataInteriorOutOfBounds
         93,158: RMCAreaStrataInteriorOutOfBounds
-        93,159: RMCAreaStrataInteriorOutOfBounds
-        93,160: RMCAreaStrataInteriorOutOfBounds
+        93,159: RMCAreaStrataInteriorBballCave
+        93,160: RMCAreaStrataInteriorBballCave
         93,161: RMCAreaStrataInteriorOutOfBounds
         93,162: RMCAreaStrataInteriorOutOfBounds
-        93,163: RMCAreaStrataInteriorOutOfBounds
-        93,164: RMCAreaStrataInteriorOutOfBounds
-        93,165: RMCAreaStrataInteriorOutOfBounds
-        93,166: RMCAreaStrataInteriorOutOfBounds
-        93,167: RMCAreaStrataInteriorOutOfBounds
-        93,168: RMCAreaStrataInteriorOutOfBounds
-        93,169: RMCAreaStrataInteriorOutOfBounds
+        93,163: RMCAreaStrataInteriorBballCave
+        93,164: RMCAreaStrataInteriorBballCave
+        93,165: RMCAreaStrataInteriorBballCave
+        93,166: RMCAreaStrataInteriorBballCave
+        93,167: RMCAreaStrataInteriorBballCave
+        93,168: RMCAreaStrataInteriorBballCave
+        93,169: RMCAreaStrataInteriorBballCave
         94,155: RMCAreaStrataInteriorOutOfBounds
         94,156: RMCAreaStrataInteriorOutOfBounds
         94,157: RMCAreaStrataInteriorOutOfBounds
         94,158: RMCAreaStrataInteriorOutOfBounds
-        94,159: RMCAreaStrataInteriorOutOfBounds
-        94,160: RMCAreaStrataInteriorOutOfBounds
+        94,159: RMCAreaStrataInteriorBballCave
+        94,160: RMCAreaStrataInteriorBballCave
         94,161: RMCAreaStrataInteriorOutOfBounds
         94,162: RMCAreaStrataInteriorOutOfBounds
-        94,163: RMCAreaStrataInteriorOutOfBounds
-        94,164: RMCAreaStrataInteriorOutOfBounds
-        94,165: RMCAreaStrataInteriorOutOfBounds
-        94,166: RMCAreaStrataInteriorOutOfBounds
-        94,167: RMCAreaStrataInteriorOutOfBounds
-        94,168: RMCAreaStrataInteriorOutOfBounds
-        94,169: RMCAreaStrataInteriorOutOfBounds
+        94,163: RMCAreaStrataInteriorBballCave
+        94,164: RMCAreaStrataInteriorBballCave
+        94,165: RMCAreaStrataInteriorBballCave
+        94,166: RMCAreaStrataInteriorBballCave
+        94,167: RMCAreaStrataInteriorBballCave
+        94,168: RMCAreaStrataInteriorBballCave
+        94,169: RMCAreaStrataInteriorBballCave
         95,155: RMCAreaStrataInteriorOutOfBounds
         95,156: RMCAreaStrataInteriorOutOfBounds
         95,157: RMCAreaStrataInteriorOutOfBounds
         95,158: RMCAreaStrataInteriorOutOfBounds
-        95,159: RMCAreaStrataInteriorOutOfBounds
-        95,160: RMCAreaStrataInteriorOutOfBounds
-        95,161: RMCAreaStrataInteriorOutOfBounds
+        95,159: RMCAreaStrataInteriorBballCave
+        95,160: RMCAreaStrataInteriorBballCave
+        95,161: RMCAreaStrataInteriorBballCave
         95,162: RMCAreaStrataInteriorOutOfBounds
-        95,163: RMCAreaStrataInteriorOutOfBounds
-        95,164: RMCAreaStrataInteriorOutOfBounds
-        95,165: RMCAreaStrataInteriorOutOfBounds
-        95,166: RMCAreaStrataInteriorOutOfBounds
-        95,167: RMCAreaStrataInteriorOutOfBounds
-        95,168: RMCAreaStrataInteriorOutOfBounds
-        95,169: RMCAreaStrataInteriorOutOfBounds
+        95,163: RMCAreaStrataInteriorBballCave
+        95,164: RMCAreaStrataInteriorBballCave
+        95,165: RMCAreaStrataInteriorBballCave
+        95,166: RMCAreaStrataInteriorBballCave
+        95,167: RMCAreaStrataInteriorBballCave
+        95,168: RMCAreaStrataInteriorBballCave
+        95,169: RMCAreaStrataInteriorBballCave
         96,155: RMCAreaStrataInteriorOutOfBounds
         96,156: RMCAreaStrataInteriorOutOfBounds
         96,157: RMCAreaStrataInteriorOutOfBounds
         96,158: RMCAreaStrataInteriorOutOfBounds
         96,159: RMCAreaStrataInteriorOutOfBounds
-        96,160: RMCAreaStrataInteriorOutOfBounds
-        96,161: RMCAreaStrataInteriorOutOfBounds
+        96,160: RMCAreaStrataInteriorBballCave
+        96,161: RMCAreaStrataInteriorBballCave
         96,162: RMCAreaStrataInteriorOutOfBounds
-        96,163: RMCAreaStrataInteriorOutOfBounds
-        96,164: RMCAreaStrataInteriorOutOfBounds
-        96,165: RMCAreaStrataInteriorOutOfBounds
-        96,166: RMCAreaStrataInteriorOutOfBounds
-        96,167: RMCAreaStrataInteriorOutOfBounds
-        96,168: RMCAreaStrataInteriorOutOfBounds
-        96,169: RMCAreaStrataInteriorOutOfBounds
+        96,163: RMCAreaStrataInteriorBballCave
+        96,164: RMCAreaStrataInteriorBballCave
+        96,165: RMCAreaStrataInteriorBballCave
+        96,166: RMCAreaStrataInteriorBballCave
+        96,167: RMCAreaStrataInteriorBballCave
+        96,168: RMCAreaStrataInteriorBballCave
+        96,169: RMCAreaStrataInteriorBballCave
         97,155: RMCAreaStrataInteriorOutOfBounds
         97,156: RMCAreaStrataInteriorOutOfBounds
         97,157: RMCAreaStrataInteriorOutOfBounds
         97,158: RMCAreaStrataInteriorOutOfBounds
         97,159: RMCAreaStrataInteriorOutOfBounds
-        97,160: RMCAreaStrataInteriorOutOfBounds
-        97,161: RMCAreaStrataInteriorOutOfBounds
+        97,160: RMCAreaStrataInteriorBballCave
+        97,161: RMCAreaStrataInteriorBballCave
         97,162: RMCAreaStrataInteriorOutOfBounds
-        97,163: RMCAreaStrataInteriorOutOfBounds
-        97,164: RMCAreaStrataInteriorOutOfBounds
-        97,165: RMCAreaStrataInteriorOutOfBounds
-        97,166: RMCAreaStrataInteriorOutOfBounds
-        97,167: RMCAreaStrataInteriorOutOfBounds
-        97,168: RMCAreaStrataInteriorOutOfBounds
-        97,169: RMCAreaStrataInteriorOutOfBounds
+        97,163: RMCAreaStrataInteriorBballCave
+        97,164: RMCAreaStrataInteriorBballCave
+        97,165: RMCAreaStrataInteriorBballCave
+        97,166: RMCAreaStrataInteriorBballCave
+        97,167: RMCAreaStrataInteriorBballCave
+        97,168: RMCAreaStrataInteriorBballCave
+        97,169: RMCAreaStrataInteriorBballCave
         98,155: RMCAreaStrataInteriorOutOfBounds
         98,156: RMCAreaStrataInteriorOutOfBounds
         98,157: RMCAreaStrataInteriorOutOfBounds
         98,158: RMCAreaStrataInteriorOutOfBounds
         98,159: RMCAreaStrataInteriorOutOfBounds
-        98,160: RMCAreaStrataInteriorOutOfBounds
-        98,161: RMCAreaStrataInteriorOutOfBounds
+        98,160: RMCAreaStrataInteriorBballCave
+        98,161: RMCAreaStrataInteriorBballCave
         98,162: RMCAreaStrataInteriorOutOfBounds
-        98,163: RMCAreaStrataInteriorOutOfBounds
-        98,164: RMCAreaStrataInteriorOutOfBounds
-        98,165: RMCAreaStrataInteriorOutOfBounds
-        98,166: RMCAreaStrataInteriorOutOfBounds
-        98,167: RMCAreaStrataInteriorOutOfBounds
-        98,168: RMCAreaStrataInteriorOutOfBounds
-        98,169: RMCAreaStrataInteriorOutOfBounds
+        98,163: RMCAreaStrataInteriorBballCave
+        98,164: RMCAreaStrataInteriorBballCave
+        98,165: RMCAreaStrataInteriorBballCave
+        98,166: RMCAreaStrataInteriorBballCave
+        98,167: RMCAreaStrataInteriorBballCave
+        98,168: RMCAreaStrataInteriorBballCave
+        98,169: RMCAreaStrataInteriorBballCave
         99,155: RMCAreaStrataInteriorOutOfBounds
         99,156: RMCAreaStrataInteriorOutOfBounds
         99,157: RMCAreaStrataInteriorOutOfBounds
         99,158: RMCAreaStrataInteriorOutOfBounds
         99,159: RMCAreaStrataInteriorOutOfBounds
         99,160: RMCAreaStrataInteriorOutOfBounds
-        99,161: RMCAreaStrataInteriorOutOfBounds
+        99,161: RMCAreaStrataInteriorBballCave
         99,162: RMCAreaStrataInteriorOutOfBounds
-        99,163: RMCAreaStrataInteriorOutOfBounds
-        99,164: RMCAreaStrataInteriorOutOfBounds
-        99,165: RMCAreaStrataInteriorOutOfBounds
-        99,166: RMCAreaStrataInteriorOutOfBounds
-        99,167: RMCAreaStrataInteriorOutOfBounds
-        99,168: RMCAreaStrataInteriorOutOfBounds
-        99,169: RMCAreaStrataInteriorOutOfBounds
+        99,163: RMCAreaStrataInteriorBballCave
+        99,164: RMCAreaStrataInteriorBballCave
+        99,165: RMCAreaStrataInteriorBballCave
+        99,166: RMCAreaStrataInteriorBballCave
+        99,167: RMCAreaStrataInteriorBballCave
+        99,168: RMCAreaStrataInteriorBballCave
+        99,169: RMCAreaStrataInteriorBballCave
         83,154: RMCAreaStrataInteriorOutOfBounds
         84,154: RMCAreaStrataInteriorOutOfBounds
         85,154: RMCAreaStrataInteriorOutOfBounds
@@ -10223,15 +10223,15 @@ entities:
         101,160: RMCAreaStrataInteriorOutOfBounds
         100,159: RMCAreaStrataInteriorOutOfBounds
         100,160: RMCAreaStrataInteriorOutOfBounds
-        100,161: RMCAreaStrataInteriorOutOfBounds
+        100,161: RMCAreaStrataInteriorBballCave
         100,162: RMCAreaStrataInteriorOutOfBounds
         100,163: RMCAreaStrataInteriorOutOfBounds
         100,164: RMCAreaStrataInteriorOutOfBounds
-        100,165: RMCAreaStrataInteriorOutOfBounds
-        100,166: RMCAreaStrataInteriorOutOfBounds
-        100,167: RMCAreaStrataInteriorOutOfBounds
-        100,168: RMCAreaStrataInteriorOutOfBounds
-        100,169: RMCAreaStrataInteriorOutOfBounds
+        100,165: RMCAreaStrataInteriorBballCave
+        100,166: RMCAreaStrataInteriorBballCave
+        100,167: RMCAreaStrataInteriorBballCave
+        100,168: RMCAreaStrataInteriorBballCave
+        100,169: RMCAreaStrataInteriorBballCave
         100,158: RMCAreaStrataInteriorOutOfBounds
         101,164: RMCAreaStrataInteriorOutOfBounds
         101,165: RMCAreaStrataInteriorOutOfBounds
@@ -17030,7 +17030,7 @@ entities:
         212,17: RMCAreaStrataInteriorOutOfBounds
         204,18: RMCAreaStrataInteriorOutOfBounds
         204,17: RMCAreaStrataInteriorOutOfBounds
-        186,8: RMCAreaStrataInteriorOutOfBounds
+        186,8: RMCAreaStrataInteriorUndergroundDormsBotany
         187,8: RMCAreaStrataInteriorOutOfBounds
         188,8: RMCAreaStrataInteriorOutOfBounds
         189,8: RMCAreaStrataInteriorOutOfBounds
@@ -17046,40 +17046,40 @@ entities:
         188,9: RMCAreaStrataInteriorOutOfBounds
         189,9: RMCAreaStrataInteriorOutOfBounds
         190,9: RMCAreaStrataInteriorOutOfBounds
-        186,13: RMCAreaStrataInteriorOutOfBounds
-        185,13: RMCAreaStrataInteriorOutOfBounds
-        184,13: RMCAreaStrataInteriorOutOfBounds
-        183,13: RMCAreaStrataInteriorOutOfBounds
-        182,13: RMCAreaStrataInteriorOutOfBounds
-        181,13: RMCAreaStrataInteriorOutOfBounds
-        180,13: RMCAreaStrataInteriorOutOfBounds
-        179,13: RMCAreaStrataInteriorOutOfBounds
-        178,13: RMCAreaStrataInteriorOutOfBounds
-        177,13: RMCAreaStrataInteriorOutOfBounds
-        176,13: RMCAreaStrataInteriorOutOfBounds
-        175,13: RMCAreaStrataInteriorOutOfBounds
-        174,13: RMCAreaStrataInteriorOutOfBounds
-        173,13: RMCAreaStrataInteriorOutOfBounds
-        175,14: RMCAreaStrataInteriorOutOfBounds
-        176,14: RMCAreaStrataInteriorOutOfBounds
-        177,14: RMCAreaStrataInteriorOutOfBounds
-        178,14: RMCAreaStrataInteriorOutOfBounds
-        179,14: RMCAreaStrataInteriorOutOfBounds
-        180,14: RMCAreaStrataInteriorOutOfBounds
-        181,14: RMCAreaStrataInteriorOutOfBounds
-        182,14: RMCAreaStrataInteriorOutOfBounds
-        183,14: RMCAreaStrataInteriorOutOfBounds
-        184,14: RMCAreaStrataInteriorOutOfBounds
-        185,14: RMCAreaStrataInteriorOutOfBounds
-        182,15: RMCAreaStrataInteriorOutOfBounds
-        181,15: RMCAreaStrataInteriorOutOfBounds
-        180,15: RMCAreaStrataInteriorOutOfBounds
-        179,15: RMCAreaStrataInteriorOutOfBounds
-        178,15: RMCAreaStrataInteriorOutOfBounds
-        177,15: RMCAreaStrataInteriorOutOfBounds
-        178,16: RMCAreaStrataInteriorOutOfBounds
-        179,16: RMCAreaStrataInteriorOutOfBounds
-        180,16: RMCAreaStrataInteriorOutOfBounds
+        186,13: RMCAreaStrataExteriorDeepJungleTearlake
+        185,13: RMCAreaStrataInteriorUndergroundDormsBotany
+        184,13: RMCAreaStrataInteriorUndergroundDormsBotany
+        183,13: RMCAreaStrataInteriorUndergroundDormsBotany
+        182,13: RMCAreaStrataInteriorUndergroundDormsBotany
+        181,13: RMCAreaStrataInteriorUndergroundDormsBotany
+        180,13: RMCAreaStrataInteriorUndergroundDormsBotany
+        179,13: RMCAreaStrataInteriorUndergroundDormsBotany
+        178,13: RMCAreaStrataInteriorUndergroundDormsBotany
+        177,13: RMCAreaStrataInteriorUndergroundDormsBotany
+        176,13: RMCAreaStrataInteriorUndergroundDormsBotany
+        175,13: RMCAreaStrataInteriorUndergroundDormsBotany
+        174,13: RMCAreaStrataInteriorUndergroundDormsBotany
+        173,13: RMCAreaStrataInteriorUndergroundDormsBotany
+        175,14: RMCAreaStrataInteriorUndergroundDormsBotany
+        176,14: RMCAreaStrataInteriorUndergroundDormsBotany
+        177,14: RMCAreaStrataInteriorUndergroundDormsBotany
+        178,14: RMCAreaStrataInteriorUndergroundDormsBotany
+        179,14: RMCAreaStrataInteriorUndergroundDormsBotany
+        180,14: RMCAreaStrataInteriorUndergroundDormsBotany
+        181,14: RMCAreaStrataInteriorUndergroundDormsBotany
+        182,14: RMCAreaStrataInteriorUndergroundDormsBotany
+        183,14: RMCAreaStrataInteriorUndergroundDormsBotany
+        184,14: RMCAreaStrataInteriorUndergroundDormsBotany
+        185,14: RMCAreaStrataInteriorUndergroundDormsBotany
+        182,15: RMCAreaStrataInteriorUndergroundDormsBotany
+        181,15: RMCAreaStrataInteriorUndergroundDormsBotany
+        180,15: RMCAreaStrataInteriorUndergroundDormsBotany
+        179,15: RMCAreaStrataInteriorUndergroundDormsBotany
+        178,15: RMCAreaStrataInteriorUndergroundDormsBotany
+        177,15: RMCAreaStrataInteriorUndergroundDormsBotany
+        178,16: RMCAreaStrataInteriorUndergroundDormsBotany
+        179,16: RMCAreaStrataInteriorUndergroundDormsBotany
+        180,16: RMCAreaStrataInteriorUndergroundDormsBotany
         197,7: RMCAreaStrataInteriorOutOfBounds
         197,6: RMCAreaStrataInteriorOutOfBounds
         197,5: RMCAreaStrataInteriorOutOfBounds
@@ -17340,7 +17340,7 @@ entities:
         173,1: RMCAreaStrataInteriorOutOfBounds
         173,0: RMCAreaStrataInteriorOutOfBounds
         173,-1: RMCAreaStrataInteriorOutOfBounds
-        172,8: RMCAreaStrataInteriorOutOfBounds
+        172,8: RMCAreaStrataInteriorUndergroundDormsBotany
         172,7: RMCAreaStrataInteriorOutOfBounds
         172,6: RMCAreaStrataInteriorOutOfBounds
         172,5: RMCAreaStrataInteriorOutOfBounds
@@ -21392,7 +21392,7 @@ entities:
         55,50: RMCAreaStrataExteriorMarshCenter
         55,51: RMCAreaStrataExteriorMarshCenter
         55,52: RMCAreaStrataExteriorMarshCenter
-        55,53: RMCAreaStrataInteriorOutOfBounds
+        55,53: RMCAreaStrataExteriorMarshCenter
         54,54: RMCAreaStrataExteriorMarshCenter
         54,53: RMCAreaStrataExteriorMarshCenter
         53,55: RMCAreaStrataExteriorMarshCenter
@@ -23721,7 +23721,7 @@ entities:
         39,68: RMCAreaStrataExteriorMarshSpringMarshes
         39,69: RMCAreaStrataExteriorMarshSpringMarshes
         39,70: RMCAreaStrataExteriorMarshSpringMarshes
-        47,77: RMCAreaStrataInteriorCheckpointsNorth
+        47,77: RMCAreaStrataExteriorTcommsMiningCaves
         47,76: RMCAreaStrataInteriorCheckpointsNorth
         47,75: RMCAreaStrataInteriorCheckpointsNorth
         47,74: RMCAreaStrataInteriorCheckpointsNorth
@@ -23918,7 +23918,7 @@ entities:
         20,69: RMCAreaStrataExteriorMarshRiver
         20,68: RMCAreaStrataExteriorMarshRiver
         20,67: RMCAreaStrataExteriorMarshRiver
-        15,72: RMCAreaStrataInteriorOutOfBounds
+        15,72: RMCAreaStrataExteriorMarshRiver
         17,72: RMCAreaStrataExteriorMarshRiver
         21,68: RMCAreaStrataExteriorMarshRiver
         21,69: RMCAreaStrataExteriorMarshRiver
@@ -26269,7 +26269,7 @@ entities:
         43,108: RMCAreaStrataInteriorMiningOutpost
         47,116: RMCAreaStrataInteriorMiningOutpost
         44,116: RMCAreaStrataInteriorMiningOutpost
-        42,110: RMCAreaStrataInteriorMiningOutpost
+        42,110: RMCAreaStrataExteriorMiningOutpostExterior
         42,111: RMCAreaStrataInteriorMiningOutpost
         42,112: RMCAreaStrataInteriorMiningOutpost
         42,113: RMCAreaStrataInteriorMiningOutpost
@@ -37198,7 +37198,7 @@ entities:
         153,151: RMCAreaStrataInteriorWoodenHospital
         153,150: RMCAreaStrataInteriorWoodenHospital
         153,149: RMCAreaStrataInteriorWoodenHospital
-        153,148: RMCAreaStrataInteriorWoodenHospital
+        153,148: RMCAreaStrataExteriorFarNorthOutpost
         152,151: RMCAreaStrataInteriorWoodenHospital
         152,150: RMCAreaStrataInteriorWoodenHospital
         152,149: RMCAreaStrataInteriorWoodenHospital
@@ -45307,9 +45307,9 @@ entities:
         182,21: RMCAreaStrataExteriorDeepJungleTearlake
         182,20: RMCAreaStrataExteriorDeepJungleTearlake
         182,19: RMCAreaStrataExteriorDeepJungleTearlake
-        182,18: RMCAreaStrataExteriorDeepJungleTearlake
-        182,17: RMCAreaStrataExteriorDeepJungleTearlake
-        182,16: RMCAreaStrataExteriorDeepJungleTearlake
+        182,18: RMCAreaStrataInteriorUndergroundDormsBotany
+        182,17: RMCAreaStrataInteriorUndergroundDormsBotany
+        182,16: RMCAreaStrataInteriorUndergroundDormsBotany
         186,12: RMCAreaStrataExteriorDeepJungleTearlake
         186,11: RMCAreaStrataExteriorDeepJungleTearlake
         186,10: RMCAreaStrataExteriorDeepJungleTearlake
@@ -45573,26 +45573,26 @@ entities:
         186,16: RMCAreaStrataExteriorDeepJungleTearlake
         186,15: RMCAreaStrataExteriorDeepJungleTearlake
         186,14: RMCAreaStrataExteriorDeepJungleTearlake
-        185,15: RMCAreaStrataExteriorDeepJungleTearlake
-        185,16: RMCAreaStrataExteriorDeepJungleTearlake
-        185,17: RMCAreaStrataExteriorDeepJungleTearlake
-        185,18: RMCAreaStrataExteriorDeepJungleTearlake
+        185,15: RMCAreaStrataInteriorUndergroundDormsBotany
+        185,16: RMCAreaStrataInteriorUndergroundDormsBotany
+        185,17: RMCAreaStrataInteriorUndergroundDormsBotany
+        185,18: RMCAreaStrataInteriorUndergroundDormsBotany
         185,19: RMCAreaStrataExteriorDeepJungleTearlake
         185,20: RMCAreaStrataExteriorDeepJungleTearlake
         185,21: RMCAreaStrataExteriorDeepJungleTearlake
         185,22: RMCAreaStrataExteriorDeepJungleTearlake
-        184,15: RMCAreaStrataExteriorDeepJungleTearlake
-        184,16: RMCAreaStrataExteriorDeepJungleTearlake
-        184,17: RMCAreaStrataExteriorDeepJungleTearlake
-        184,18: RMCAreaStrataExteriorDeepJungleTearlake
+        184,15: RMCAreaStrataInteriorUndergroundDormsBotany
+        184,16: RMCAreaStrataInteriorUndergroundDormsBotany
+        184,17: RMCAreaStrataInteriorUndergroundDormsBotany
+        184,18: RMCAreaStrataInteriorUndergroundDormsBotany
         184,19: RMCAreaStrataExteriorDeepJungleTearlake
         184,20: RMCAreaStrataExteriorDeepJungleTearlake
         184,21: RMCAreaStrataExteriorDeepJungleTearlake
         184,22: RMCAreaStrataExteriorDeepJungleTearlake
-        183,15: RMCAreaStrataExteriorDeepJungleTearlake
-        183,16: RMCAreaStrataExteriorDeepJungleTearlake
-        183,17: RMCAreaStrataExteriorDeepJungleTearlake
-        183,18: RMCAreaStrataExteriorDeepJungleTearlake
+        183,15: RMCAreaStrataInteriorUndergroundDormsBotany
+        183,16: RMCAreaStrataInteriorUndergroundDormsBotany
+        183,17: RMCAreaStrataInteriorUndergroundDormsBotany
+        183,18: RMCAreaStrataInteriorUndergroundDormsBotany
         183,19: RMCAreaStrataExteriorDeepJungleTearlake
         183,20: RMCAreaStrataExteriorDeepJungleTearlake
         183,21: RMCAreaStrataExteriorDeepJungleTearlake
@@ -45877,61 +45877,61 @@ entities:
         172,21: RMCAreaStrataExteriorDeepJungleTearlake
         172,20: RMCAreaStrataExteriorDeepJungleTearlake
         172,19: RMCAreaStrataExteriorDeepJungleTearlake
-        173,14: RMCAreaStrataExteriorDeepJungleTearlake
-        174,14: RMCAreaStrataExteriorDeepJungleTearlake
-        176,15: RMCAreaStrataExteriorDeepJungleTearlake
-        175,15: RMCAreaStrataExteriorDeepJungleTearlake
-        174,15: RMCAreaStrataExteriorDeepJungleTearlake
-        173,15: RMCAreaStrataExteriorDeepJungleTearlake
-        177,16: RMCAreaStrataExteriorDeepJungleTearlake
-        177,17: RMCAreaStrataExteriorDeepJungleTearlake
-        177,18: RMCAreaStrataExteriorDeepJungleTearlake
+        173,14: RMCAreaStrataInteriorUndergroundDormsBotany
+        174,14: RMCAreaStrataInteriorUndergroundDormsBotany
+        176,15: RMCAreaStrataInteriorUndergroundDormsBotany
+        175,15: RMCAreaStrataInteriorUndergroundDormsBotany
+        174,15: RMCAreaStrataInteriorUndergroundDormsBotany
+        173,15: RMCAreaStrataInteriorUndergroundDormsBotany
+        177,16: RMCAreaStrataInteriorUndergroundDormsBotany
+        177,17: RMCAreaStrataInteriorUndergroundDormsBotany
+        177,18: RMCAreaStrataInteriorUndergroundDormsBotany
         177,19: RMCAreaStrataExteriorDeepJungleTearlake
         177,20: RMCAreaStrataExteriorDeepJungleTearlake
         177,21: RMCAreaStrataExteriorDeepJungleTearlake
         177,22: RMCAreaStrataExteriorDeepJungleTearlake
-        176,16: RMCAreaStrataExteriorDeepJungleTearlake
-        176,17: RMCAreaStrataExteriorDeepJungleTearlake
-        176,18: RMCAreaStrataExteriorDeepJungleTearlake
+        176,16: RMCAreaStrataInteriorUndergroundDormsBotany
+        176,17: RMCAreaStrataInteriorUndergroundDormsBotany
+        176,18: RMCAreaStrataInteriorUndergroundDormsBotany
         176,19: RMCAreaStrataExteriorDeepJungleTearlake
         176,20: RMCAreaStrataExteriorDeepJungleTearlake
         176,21: RMCAreaStrataExteriorDeepJungleTearlake
         176,22: RMCAreaStrataExteriorDeepJungleTearlake
-        175,16: RMCAreaStrataExteriorDeepJungleTearlake
-        175,17: RMCAreaStrataExteriorDeepJungleTearlake
-        175,18: RMCAreaStrataExteriorDeepJungleTearlake
+        175,16: RMCAreaStrataInteriorUndergroundDormsBotany
+        175,17: RMCAreaStrataInteriorUndergroundDormsBotany
+        175,18: RMCAreaStrataInteriorUndergroundDormsBotany
         175,19: RMCAreaStrataExteriorDeepJungleTearlake
         175,20: RMCAreaStrataExteriorDeepJungleTearlake
         175,21: RMCAreaStrataExteriorDeepJungleTearlake
         175,22: RMCAreaStrataExteriorDeepJungleTearlake
-        174,16: RMCAreaStrataExteriorDeepJungleTearlake
-        174,17: RMCAreaStrataExteriorDeepJungleTearlake
-        174,18: RMCAreaStrataExteriorDeepJungleTearlake
+        174,16: RMCAreaStrataInteriorUndergroundDormsBotany
+        174,17: RMCAreaStrataInteriorUndergroundDormsBotany
+        174,18: RMCAreaStrataInteriorUndergroundDormsBotany
         174,19: RMCAreaStrataExteriorDeepJungleTearlake
         174,20: RMCAreaStrataExteriorDeepJungleTearlake
         174,21: RMCAreaStrataExteriorDeepJungleTearlake
         174,22: RMCAreaStrataExteriorDeepJungleTearlake
-        173,16: RMCAreaStrataExteriorDeepJungleTearlake
-        173,17: RMCAreaStrataExteriorDeepJungleTearlake
+        173,16: RMCAreaStrataInteriorUndergroundDormsBotany
+        173,17: RMCAreaStrataInteriorUndergroundDormsBotany
         173,18: RMCAreaStrataExteriorDeepJungleTearlake
         173,19: RMCAreaStrataExteriorDeepJungleTearlake
         173,20: RMCAreaStrataExteriorDeepJungleTearlake
         173,21: RMCAreaStrataExteriorDeepJungleTearlake
         173,22: RMCAreaStrataExteriorDeepJungleTearlake
-        179,17: RMCAreaStrataExteriorDeepJungleTearlake
-        179,18: RMCAreaStrataExteriorDeepJungleTearlake
+        179,17: RMCAreaStrataInteriorUndergroundDormsBotany
+        179,18: RMCAreaStrataInteriorUndergroundDormsBotany
         179,19: RMCAreaStrataExteriorDeepJungleTearlake
         179,20: RMCAreaStrataExteriorDeepJungleTearlake
         179,21: RMCAreaStrataExteriorDeepJungleTearlake
         179,22: RMCAreaStrataExteriorDeepJungleTearlake
-        180,17: RMCAreaStrataExteriorDeepJungleTearlake
-        180,18: RMCAreaStrataExteriorDeepJungleTearlake
+        180,17: RMCAreaStrataInteriorUndergroundDormsBotany
+        180,18: RMCAreaStrataInteriorUndergroundDormsBotany
         180,19: RMCAreaStrataExteriorDeepJungleTearlake
         180,20: RMCAreaStrataExteriorDeepJungleTearlake
         180,21: RMCAreaStrataExteriorDeepJungleTearlake
         180,22: RMCAreaStrataExteriorDeepJungleTearlake
-        181,17: RMCAreaStrataExteriorDeepJungleTearlake
-        181,18: RMCAreaStrataExteriorDeepJungleTearlake
+        181,17: RMCAreaStrataInteriorUndergroundDormsBotany
+        181,18: RMCAreaStrataInteriorUndergroundDormsBotany
         181,19: RMCAreaStrataExteriorDeepJungleTearlake
         181,20: RMCAreaStrataExteriorDeepJungleTearlake
         181,21: RMCAreaStrataExteriorDeepJungleTearlake
@@ -45940,9 +45940,9 @@ entities:
         178,21: RMCAreaStrataExteriorDeepJungleTearlake
         178,20: RMCAreaStrataExteriorDeepJungleTearlake
         178,19: RMCAreaStrataExteriorDeepJungleTearlake
-        178,18: RMCAreaStrataExteriorDeepJungleTearlake
-        178,17: RMCAreaStrataExteriorDeepJungleTearlake
-        181,16: RMCAreaStrataExteriorDeepJungleTearlake
+        178,18: RMCAreaStrataInteriorUndergroundDormsBotany
+        178,17: RMCAreaStrataInteriorUndergroundDormsBotany
+        181,16: RMCAreaStrataInteriorUndergroundDormsBotany
         185,12: RMCAreaStrataInteriorUndergroundDormsBotany
         185,11: RMCAreaStrataInteriorUndergroundDormsBotany
         185,10: RMCAreaStrataInteriorUndergroundDormsBotany
@@ -46376,6 +46376,16 @@ entities:
         17,56: RMCAreaStrataExteriorMarshCrash
         17,55: RMCAreaStrataExteriorMarshCrash
         61,23: RMCAreaStrataInteriorOutOfBounds
+        196,47: RMCAreaStrataExteriorDeepJunglePlanetCoreResearchStationExterior
+        196,46: RMCAreaStrataExteriorDeepJunglePlanetCoreResearchStationExterior
+        196,49: RMCAreaStrataExteriorDeepJunglePlanetCoreResearchStationExterior
+        196,50: RMCAreaStrataExteriorDeepJunglePlanetCoreResearchStationExterior
+        196,51: RMCAreaStrataExteriorDeepJunglePlanetCoreResearchStationExterior
+        196,52: RMCAreaStrataExteriorDeepJunglePlanetCoreResearchStationExterior
+        196,48: RMCAreaStrataExteriorDeepJunglePlanetCoreResearchStationExterior
+        196,53: RMCAreaStrataExteriorDeepJunglePlanetCoreResearchStationExterior
+        97,51: RMCAreaStrataExteriorSouthOutpost
+        106,166: RMCAreaStrataInteriorBballCave
 - proto: ActionToggleLight
   entities:
   - uid: 3
@@ -49054,59 +49064,11 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 182.5,110.5
       parent: 1
-  - uid: 427
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 69.5,57.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.7,-1.45
-  - uid: 428
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 150.5,151.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 429
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 132.5,129.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 430
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 95.5,145.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 431
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 56.5,117.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
   - uid: 432
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 228.5,33.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 433
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 236.5,54.5
       parent: 1
     - type: SpriteSetRenderOrder
       offset: -0.5,-1.5
@@ -49118,21 +49080,6 @@ entities:
       parent: 1
     - type: SpriteSetRenderOrder
       offset: 0.7,-1.45
-  - uid: 435
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 229.5,81.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.7,-1.45
-  - uid: 436
-    components:
-    - type: Transform
-      pos: 206.5,105.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.45,-0.32
   - uid: 437
     components:
     - type: Transform
@@ -49141,49 +49088,11 @@ entities:
       parent: 1
     - type: SpriteSetRenderOrder
       offset: -0.7,-0.4
-  - uid: 438
-    components:
-    - type: Transform
-      pos: 192.5,126.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.45,-0.32
-  - uid: 439
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 172.5,71.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.7,-0.4
-  - uid: 440
-    components:
-    - type: Transform
-      pos: 168.5,62.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.45,-0.32
   - uid: 441
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 166.5,32.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 442
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 16.5,17.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 443
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 15.5,71.5
       parent: 1
     - type: SpriteSetRenderOrder
       offset: -0.5,-1.5
@@ -49195,280 +49104,6 @@ entities:
       parent: 1
     - type: SpriteSetRenderOrder
       offset: -0.5,-1.5
-  - uid: 445
-    components:
-    - type: Transform
-      pos: 47.5,78.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.45,-0.32
-  - uid: 446
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 203.5,51.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 447
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 191.5,41.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.7,-0.4
-  - uid: 448
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 208.5,78.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.7,-1.45
-  - uid: 449
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 221.5,123.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.7,-0.4
-  - uid: 450
-    components:
-    - type: Transform
-      pos: 144.5,33.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.45,-0.32
-  - uid: 451
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 160.5,37.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.7,-1.45
-  - uid: 452
-    components:
-    - type: Transform
-      pos: 131.5,39.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.45,-0.32
-  - uid: 453
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 157.5,48.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 454
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 180.5,38.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.7,-0.4
-  - uid: 455
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 178.5,90.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.7,-1.45
-  - uid: 456
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 152.5,147.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 457
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 123.5,157.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.7,-0.4
-  - uid: 458
-    components:
-    - type: Transform
-      pos: 121.5,132.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.45,-0.32
-  - uid: 459
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 167.5,98.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.7,-0.4
-  - uid: 460
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 163.5,109.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 461
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 143.5,94.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 462
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 134.5,79.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.7,-0.4
-  - uid: 463
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 133.5,59.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 464
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 130.5,118.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.7,-1.45
-  - uid: 465
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 132.5,98.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 466
-    components:
-    - type: Transform
-      pos: 107.5,75.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.45,-0.32
-  - uid: 467
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 87.5,80.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.7,-0.4
-  - uid: 468
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 111.5,111.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 469
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 101.5,63.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 470
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 98.5,51.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.7,-0.4
-  - uid: 471
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 74.5,46.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.7,-0.4
-  - uid: 472
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 78.5,65.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.7,-0.4
-  - uid: 473
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 63.5,26.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 474
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 61.5,22.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 475
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 75.5,30.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 476
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 30.5,37.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 477
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 55.5,52.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 478
-    components:
-    - type: Transform
-      pos: 45.5,61.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.45,-0.32
-  - uid: 479
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 25.5,58.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
   - uid: 480
     components:
     - type: Transform
@@ -49477,14 +49112,6 @@ entities:
       parent: 1
     - type: SpriteSetRenderOrder
       offset: -0.7,-0.4
-  - uid: 481
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 86.5,120.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.7,-1.45
   - uid: 482
     components:
     - type: Transform
@@ -49493,54 +49120,6 @@ entities:
       parent: 1
     - type: SpriteSetRenderOrder
       offset: -0.7,-0.4
-  - uid: 483
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 67.5,83.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 484
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 50.5,71.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.7,-1.45
-  - uid: 485
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 45.5,97.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 486
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 33.5,111.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.7,-1.45
-  - uid: 487
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 14.5,92.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.7,-1.45
-  - uid: 488
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 4.5,129.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
   - uid: 489
     components:
     - type: Transform
@@ -49548,66 +49127,386 @@ entities:
       parent: 1
     - type: SpriteSetRenderOrder
       offset: 0.45,-0.32
-  - uid: 490
+  - uid: 498
+    components:
+    - type: Transform
+      pos: 174.5,9.5
+      parent: 1
+- proto: CMApcLowCapacity
+  entities:
+  - uid: 427
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 69.5,57.5
+      parent: 1
+  - uid: 428
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 150.5,151.5
+      parent: 1
+  - uid: 429
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 132.5,129.5
+      parent: 1
+  - uid: 430
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 95.5,145.5
+      parent: 1
+  - uid: 431
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 56.5,117.5
+      parent: 1
+  - uid: 433
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 236.5,54.5
+      parent: 1
+  - uid: 435
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 229.5,81.5
+      parent: 1
+  - uid: 436
+    components:
+    - type: Transform
+      pos: 206.5,105.5
+      parent: 1
+  - uid: 438
+    components:
+    - type: Transform
+      pos: 192.5,126.5
+      parent: 1
+  - uid: 439
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
-      pos: 29.5,133.5
+      pos: 172.5,71.5
       parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.7,-0.4
+  - uid: 440
+    components:
+    - type: Transform
+      pos: 168.5,62.5
+      parent: 1
+  - uid: 442
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 16.5,17.5
+      parent: 1
+  - uid: 443
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 15.5,71.5
+      parent: 1
+  - uid: 445
+    components:
+    - type: Transform
+      pos: 47.5,78.5
+      parent: 1
+  - uid: 446
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 203.5,51.5
+      parent: 1
+  - uid: 447
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 191.5,41.5
+      parent: 1
+  - uid: 448
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 208.5,78.5
+      parent: 1
+  - uid: 449
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 221.5,124.5
+      parent: 1
+  - uid: 450
+    components:
+    - type: Transform
+      pos: 144.5,33.5
+      parent: 1
+  - uid: 451
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 160.5,37.5
+      parent: 1
+  - uid: 452
+    components:
+    - type: Transform
+      pos: 131.5,39.5
+      parent: 1
+  - uid: 453
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 157.5,48.5
+      parent: 1
+  - uid: 454
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 180.5,38.5
+      parent: 1
+  - uid: 455
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 178.5,90.5
+      parent: 1
+  - uid: 456
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 153.5,147.5
+      parent: 1
+  - uid: 457
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 123.5,157.5
+      parent: 1
+  - uid: 458
+    components:
+    - type: Transform
+      pos: 121.5,132.5
+      parent: 1
+  - uid: 459
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 167.5,98.5
+      parent: 1
+  - uid: 460
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 163.5,109.5
+      parent: 1
+  - uid: 461
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 143.5,97.5
+      parent: 1
+  - uid: 462
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 134.5,79.5
+      parent: 1
+  - uid: 463
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 133.5,59.5
+      parent: 1
+  - uid: 464
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 130.5,119.5
+      parent: 1
+  - uid: 465
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 132.5,98.5
+      parent: 1
+  - uid: 466
+    components:
+    - type: Transform
+      pos: 107.5,75.5
+      parent: 1
+  - uid: 467
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 87.5,79.5
+      parent: 1
+  - uid: 468
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 111.5,111.5
+      parent: 1
+  - uid: 469
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 101.5,63.5
+      parent: 1
+  - uid: 470
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 98.5,51.5
+      parent: 1
+  - uid: 471
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 74.5,46.5
+      parent: 1
+  - uid: 472
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 78.5,65.5
+      parent: 1
+  - uid: 473
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 63.5,26.5
+      parent: 1
+  - uid: 474
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 61.5,22.5
+      parent: 1
+  - uid: 475
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 74.5,30.5
+      parent: 1
+  - uid: 476
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 30.5,37.5
+      parent: 1
+  - uid: 477
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 55.5,52.5
+      parent: 1
+  - uid: 478
+    components:
+    - type: Transform
+      pos: 45.5,61.5
+      parent: 1
+  - uid: 479
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 25.5,58.5
+      parent: 1
+  - uid: 481
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 86.5,120.5
+      parent: 1
+  - uid: 483
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 68.5,83.5
+      parent: 1
+  - uid: 484
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 50.5,71.5
+      parent: 1
+  - uid: 485
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 45.5,97.5
+      parent: 1
+  - uid: 486
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 33.5,111.5
+      parent: 1
+  - uid: 487
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 14.5,92.5
+      parent: 1
+  - uid: 490
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 44.5,126.5
+      parent: 1
   - uid: 491
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 97.5,94.5
       parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.7,-0.4
   - uid: 492
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 66.5,64.5
       parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
   - uid: 493
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 199.5,45.5
+      rot: 1.5707963267948966 rad
+      pos: 195.5,46.5
       parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
   - uid: 494
     components:
     - type: Transform
       rot: 3.141592653589793 rad
-      pos: 175.5,62.5
+      pos: 176.5,63.5
       parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
   - uid: 495
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 42.5,109.5
       parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
   - uid: 497
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 23.5,133.5
+      rot: -1.5707963267948966 rad
+      pos: 22.5,132.5
       parent: 1
-    - type: SpriteSetRenderOrder
-      offset: -0.5,-1.5
-  - uid: 498
+  - uid: 6367
     components:
     - type: Transform
-      pos: 174.5,9.5
+      rot: 3.141592653589793 rad
+      pos: 193.5,138.5
+      parent: 1
+  - uid: 21091
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 5.5,130.5
+      parent: 1
+  - uid: 31186
+    components:
+    - type: Transform
+      pos: 173.5,19.5
       parent: 1
 - proto: CMASRSConsoleColony
   entities:
@@ -80338,7 +80237,7 @@ entities:
       pos: 165.5,120.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -34881.527
+      secondsUntilStateChange: -36806.63
       state: Opening
   - uid: 4762
     components:
@@ -89133,12 +89032,6 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 217.5,131.5
       parent: 1
-  - uid: 6367
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 221.5,124.5
-      parent: 1
   - uid: 6368
     components:
     - type: Transform
@@ -90457,6 +90350,36 @@ entities:
       rot: 3.141592653589793 rad
       pos: 73.5,82.5
       parent: 1
+  - uid: 6597
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 116.5,67.5
+      parent: 1
+  - uid: 6599
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 102.5,63.5
+      parent: 1
+  - uid: 6601
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 100.5,64.5
+      parent: 1
+  - uid: 21092
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 113.5,68.5
+      parent: 1
+  - uid: 31187
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 221.5,123.5
+      parent: 1
 - proto: RMCLightFixtureOffset
   entities:
   - uid: 6596
@@ -90465,41 +90388,17 @@ entities:
       rot: 3.141592653589793 rad
       pos: 133.5,83.5
       parent: 1
-  - uid: 6597
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 129.5,91.5
-      parent: 1
   - uid: 6598
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 96.5,96.5
       parent: 1
-  - uid: 6599
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 114.5,66.5
-      parent: 1
   - uid: 6600
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 137.5,62.5
-      parent: 1
-  - uid: 6601
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 103.5,63.5
-      parent: 1
-  - uid: 6602
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 99.5,64.5
       parent: 1
   - uid: 6603
     components:
@@ -154988,6 +154887,18 @@ entities:
       parent: 1
 - proto: RMCWallStrataHull
   entities:
+  - uid: 488
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 4.5,132.5
+      parent: 1
+  - uid: 6602
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 4.5,131.5
+      parent: 1
   - uid: 19794
     components:
     - type: Transform
@@ -156321,7 +156232,8 @@ entities:
   - uid: 20060
     components:
     - type: Transform
-      pos: 4.5,132.5
+      rot: 3.141592653589793 rad
+      pos: 5.5,131.5
       parent: 1
   - uid: 20061
     components:
@@ -156331,6 +156243,7 @@ entities:
   - uid: 20062
     components:
     - type: Transform
+      rot: 3.141592653589793 rad
       pos: 5.5,132.5
       parent: 1
   - uid: 20063
@@ -161509,16 +161422,6 @@ entities:
     components:
     - type: Transform
       pos: 6.5,131.5
-      parent: 1
-  - uid: 21091
-    components:
-    - type: Transform
-      pos: 5.5,131.5
-      parent: 1
-  - uid: 21092
-    components:
-    - type: Transform
-      pos: 4.5,131.5
       parent: 1
   - uid: 21093
     components:
