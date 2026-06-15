@@ -72,6 +72,27 @@
     },
 	{
       "name": "working_joe"
+    },
+	{
+      "name": "old_govfor_afn"
+    },
+	{
+      "name": "old_govfor_opsofc"
+    },
+	{
+      "name": "old_govfor_platco"
+    },
+	{
+      "name": "old_govfor_platoonsergeant"
+    },
+	{
+      "name": "old_govfor_rfn"
+    },
+	{
+      "name": "old_govfor_rto"
+    },
+	{
+      "name": "old_govfor_sergeant"
     }
   ]
 }
