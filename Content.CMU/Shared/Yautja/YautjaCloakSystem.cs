@@ -48,6 +48,41 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(OnProjectileHit);
     }
 
+    public override void Update(float frameTime)
+    {
+        if (_net.IsClient)
+            return;
+
+        var now = _timing.CurTime;
+        var query = EntityQueryEnumerator<YautjaBracerComponent>();
+        while (query.MoveNext(out var uid, out var bracer))
+        {
+            if (bracer.CloakDuration <= TimeSpan.Zero ||
+                bracer.User is not { } user ||
+                !HasComp<EntityActiveInvisibleComponent>(user))
+            {
+                continue;
+            }
+
+            if (!bracer.CloakWarningPlayed &&
+                bracer.CloakWarningSound != null &&
+                now >= bracer.CloakExpiresAt - bracer.CloakWarningBefore)
+            {
+                bracer.CloakWarningPlayed = true;
+                _audio.PlayEntity(bracer.CloakWarningSound, user, user);
+                _popup.PopupEntity(Loc.GetString("cmu-yautja-cloak-fizzle"), user, user, PopupType.MediumCaution);
+            }
+
+            if (now >= bracer.CloakExpiresAt)
+            {
+                ForceDecloak(user);
+                bracer.CloakCooldownUntil = now + bracer.CloakCooldown;
+                Dirty(uid, bracer);
+                _actions.SetCooldown(bracer.ToggleCloakAction, bracer.CloakCooldown);
+            }
+        }
+    }
+
     private void OnToggleCloak(Entity<YautjaBracerComponent> ent, ref YautjaToggleCloakActionEvent args)
     {
         if (args.Handled)
@@ -83,11 +118,39 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         }
 
         var enabling = !HasComp<EntityActiveInvisibleComponent>(user);
-        if (enabling && !_power.HasPowerPopup(user, 25))
-            return false;
+
+        if (enabling)
+        {
+            if (bracer.Comp.CloakCooldown > TimeSpan.Zero &&
+                _timing.CurTime < bracer.Comp.CloakCooldownUntil)
+            {
+                var remaining = (int) Math.Ceiling((bracer.Comp.CloakCooldownUntil - _timing.CurTime).TotalSeconds);
+                _popup.PopupClient(Loc.GetString("cmu-yautja-cloak-cooldown", ("seconds", remaining)), user, user, PopupType.SmallCaution);
+                return false;
+            }
+
+            if (!_power.HasPowerPopup(user, 25))
+                return false;
+        }
 
         if (TrySetInvisibility(bracer, user, enabling, false) && enabling)
+        {
             _power.TryRemovePower(user, 25);
+
+            if (bracer.Comp.CloakDuration > TimeSpan.Zero)
+            {
+                bracer.Comp.CloakExpiresAt = _timing.CurTime + bracer.Comp.CloakDuration;
+                bracer.Comp.CloakWarningPlayed = false;
+                Dirty(bracer);
+            }
+        }
+
+        if (!enabling && bracer.Comp.CloakCooldown > TimeSpan.Zero)
+        {
+            bracer.Comp.CloakCooldownUntil = _timing.CurTime + bracer.Comp.CloakCooldown;
+            Dirty(bracer);
+            _actions.SetCooldown(bracer.Comp.ToggleCloakAction, bracer.Comp.CloakCooldown);
+        }
 
         _actions.SetToggled(bracer.Comp.ToggleCloakAction, enabling);
         return true;
