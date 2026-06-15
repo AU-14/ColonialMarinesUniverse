@@ -3434,5 +3434,50 @@
   id: 273
   time: '2026-06-14T20:15:17.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1321
+- author: KeiKiyomi
+  changes:
+  - message: Added a fun tool in IO kits and Synth loadouts for Intel purposes, for
+      now Intel staff (Synths, IOs, Techs) will have to shell for it.
+    type: Add
+  id: 274
+  time: '2026-06-14T22:39:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1307
+- author: KeiKiyomi
+  changes:
+  - message: Added full mortar kits to all factions mortar crate, instead of just
+      the mortar
+    type: Add
+  - message: Changed all mortar shell crates amount from 6 to 12 to match RMC light
+      mortar
+    type: Tweak
+  - message: Mortar CRATE price changed to 3k
+    type: Tweak
+  - message: Mortar HE price changed to 650
+    type: Tweak
+  - message: Mortar illum price changed to 500
+    type: Tweak
+  - message: Mortar incen price changed to 750
+    type: Tweak
+  - message: Mortar HEAT price changed to 800
+    type: Tweak
+  - message: Mortar mixed price changed to 950
+    type: Tweak
+  id: 275
+  time: '2026-06-14T22:46:32.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1323
+- author: troytroy400
+  changes:
+  - message: The Corpsman room on the USS George W. Bush now properly gets a med and
+      blood vendor.
+    type: Add
+  - message: The USS George W. Bush now has proper under-tile fuel pipes mapped, meaning
+      the ship will slowly tear itself apart with sub-explosions during hijack.
+    type: Tweak
+  - message: The USS George W. Bush now has proper areas mapped, meaning hijack, evacuation,
+      fuel pumps and APC power should now work properly.
+    type: Fix
+  id: 276
+  time: '2026-06-14T23:25:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1324
 Name: CMU
 Order: -1
