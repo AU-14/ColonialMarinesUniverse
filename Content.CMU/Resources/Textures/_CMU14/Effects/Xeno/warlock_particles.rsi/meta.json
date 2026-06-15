@@ -1,7 +1,7 @@
 {
     "version": 1,
-    "license": "AGPL-3.0-or-later",
-    "copyright": "Taken from TGMC TerraGov-Marine-Corps generic_particles.dmi",
+    "license": "CC-BY-NC-SA-4.0",
+    "copyright": "Taken from tgstation/TerraGov-Marine-Corps generic_particles.dmi. License and authorship per TGMC README asset table.",
     "size": {
         "x": 32,
         "y": 32
