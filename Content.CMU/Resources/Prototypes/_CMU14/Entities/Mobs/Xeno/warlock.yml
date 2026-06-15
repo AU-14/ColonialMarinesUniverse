@@ -1,0 +1,102 @@
+- type: entity
+  parent:
+  - CMXenoDeveloped
+  - CMXenoTail
+  - CMXenoFlammable
+  - RMCXenoSpeechSounds
+  - RMCXenoCommendationReceiver
+  - RMCXenoMobCollision
+  id: CMXenoWarlock
+  name: Warlock
+  description: A psychic xeno that crushes minds and shields itself with plasma.
+  components:
+  - type: GhostRole
+    name: cm-job-name-xeno-warlock
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Warlock/warlock.rsi
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      325: Critical
+      425: Dead
+  - type: Xeno
+    role: CMXenoWarlock
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - CMUActionXenoPsychicCrush
+    - CMUActionXenoPsychicBlast
+    - CMUActionXenoPsychicShield
+    - ActionXenoTransferPlasmaHivelord
+    - ActionXenoPsychicWhisper
+    - ActionXenoDevolve
+    tier: 3
+    hudOffset: -0.15,0.2
+    unlockAt: 900
+  - type: XenoRegen
+    restHealMultiplier: 1.25
+  - type: XenoLight
+  - type: XenoDevolve
+    devolvesTo:
+    - CMXenoWarrior
+  - type: XenoDevour
+  - type: XenoPlasma
+    plasma: 1700
+    maxPlasma: 1700
+    plasmaRegenOnWeeds: 60
+  - type: CMUXenoWarlock
+  - type: XenoPsychicCommunication
+    whisperRange: 7
+  - type: CMArmor
+    xenoArmor: 10
+    explosionArmor: 30
+  - type: XenoClaws
+    clawType: Sharp
+  - type: MeleeWeapon
+    damage:
+      groups:
+        Brute: 18
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 30
+  - type: Tackle
+    max: 3
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.6
+    baseSprintSpeed: 4.5
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.45
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 0.5
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 0.36
+      whitelist:
+        components:
+        - XenoHeavy
+  - type: RMCXenoDamageVisuals
+    prefix: warlock
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spitter
+  - type: IntelRecoverCorpseObjectiveOnDeath
+    value: 0.5
+  - type: FixedIdentity
+    name: cm-job-name-xeno-warlock
+  - type: RMCSurgeryXenoHeart
+    item: RMCOrganXenoHeartT3
+  - type: RMCActionOrder
+    id: CMXenoWarlock
