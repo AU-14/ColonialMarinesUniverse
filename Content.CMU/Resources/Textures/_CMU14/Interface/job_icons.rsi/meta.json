@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/1c026464019b7baae4975e4b1470a18b37dd1d1c/icons/mob/hud/factions/marine.dmi. threat_leader, threat_member, third_party_leader, third_party_member, working_joe by potatoed on Discord. synth by nnzy.",
+  "copyright": "taken from cmss13 at https://github.com/Steelpoint/cmss13/blob/1c026464019b7baae4975e4b1470a18b37dd1d1c/icons/mob/hud/factions/marine.dmi. threat_leader, threat_member, third_party_leader, third_party_member, working_joe by potatoed. | synth by nnzy. | Minor change in hudsquad_trpr, added reflection and shade to the third_party_leader and threat_leader crowns, by hutcrime. | All authors mentioned are mentioned as their usernames (preferrably), or nicknames (if their username is unknown), on Discord.",
   "size": {
     "x": 16,
     "y": 16
