@@ -4,7 +4,7 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 06/14/2026 21:39:23
+  time: 06/15/2026 04:14:53
   entityCount: 2551
 maps:
 - 1
@@ -2858,6 +2858,42 @@ entities:
         253,102: RMCAreaStrataInteriorOutOfBounds
         253,103: RMCAreaStrataInteriorOutOfBounds
         253,104: RMCAreaStrataInteriorOutOfBounds
+        182,111: RMCAreaStrataICSCAmbRoof
+        182,110: RMCAreaStrataICSCAmbRoof
+        182,109: RMCAreaStrataICSCAmbRoof
+        182,107: RMCAreaStrataICSCAmbRoof
+        182,108: RMCAreaStrataICSCAmbRoof
+        182,106: RMCAreaStrataICSCAmbRoof
+        183,111: RMCAreaStrataICSCAmbRoof
+        183,110: RMCAreaStrataICSCAmbRoof
+        183,107: RMCAreaStrataICSCAmbRoof
+        183,106: RMCAreaStrataICSCAmbRoof
+        184,111: RMCAreaStrataICSCAmbRoof
+        184,110: RMCAreaStrataICSCAmbRoof
+        184,109: RMCAreaStrataICSCAmbRoof
+        184,108: RMCAreaStrataICSCAmbRoof
+        183,109: RMCAreaStrataICSCAmbRoof
+        184,107: RMCAreaStrataICSCAmbRoof
+        184,106: RMCAreaStrataICSCAmbRoof
+        185,111: RMCAreaStrataICSCAmbRoof
+        185,110: RMCAreaStrataICSCAmbRoof
+        183,108: RMCAreaStrataICSCAmbRoof
+        185,109: RMCAreaStrataICSCAmbRoof
+        185,108: RMCAreaStrataICSCAmbRoof
+        185,107: RMCAreaStrataICSCAmbRoof
+        185,106: RMCAreaStrataICSCAmbRoof
+        186,111: RMCAreaStrataICSCAmbRoof
+        186,110: RMCAreaStrataICSCAmbRoof
+        186,109: RMCAreaStrataICSCAmbRoof
+        186,108: RMCAreaStrataICSCAmbRoof
+        186,107: RMCAreaStrataICSCAmbRoof
+        186,106: RMCAreaStrataICSCAmbRoof
+        187,111: RMCAreaStrataICSCAmbRoof
+        187,110: RMCAreaStrataICSCAmbRoof
+        187,109: RMCAreaStrataICSCAmbRoof
+        187,108: RMCAreaStrataICSCAmbRoof
+        187,107: RMCAreaStrataICSCAmbRoof
+        187,106: RMCAreaStrataICSCAmbRoof
 - proto: CMWallShuttleOrange
   entities:
   - uid: 3

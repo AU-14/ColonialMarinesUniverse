@@ -4,7 +4,7 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 06/14/2026 21:39:22
+  time: 06/15/2026 04:14:52
   entityCount: 31154
 maps:
 - 1
@@ -11313,8 +11313,8 @@ entities:
         181,145: RMCAreaStrataInteriorOutOfBounds
         180,145: RMCAreaStrataInteriorOutOfBounds
         179,145: RMCAreaStrataInteriorOutOfBounds
-        178,144: RMCAreaStrataInteriorOutOfBounds
-        178,145: RMCAreaStrataInteriorOutOfBounds
+        178,144: RMCAreaStrataExteriorFarNorthOutpost
+        178,145: RMCAreaStrataExteriorFarNorthOutpost
         177,144: RMCAreaStrataInteriorOutOfBounds
         177,145: RMCAreaStrataInteriorOutOfBounds
         176,144: RMCAreaStrataInteriorOutOfBounds
@@ -11326,7 +11326,7 @@ entities:
         175,146: RMCAreaStrataInteriorOutOfBounds
         176,146: RMCAreaStrataInteriorOutOfBounds
         177,146: RMCAreaStrataInteriorOutOfBounds
-        178,146: RMCAreaStrataInteriorOutOfBounds
+        178,146: RMCAreaStrataExteriorFarNorthOutpost
         179,146: RMCAreaStrataInteriorOutOfBounds
         180,146: RMCAreaStrataInteriorOutOfBounds
         181,146: RMCAreaStrataInteriorOutOfBounds
@@ -11395,13 +11395,13 @@ entities:
         176,152: RMCAreaStrataInteriorOutOfBounds
         178,151: RMCAreaStrataInteriorOutOfBounds
         178,150: RMCAreaStrataInteriorOutOfBounds
-        179,152: RMCAreaStrataInteriorOutOfBounds
+        179,152: RMCAreaStrataMiningTop
         179,151: RMCAreaStrataInteriorOutOfBounds
         179,150: RMCAreaStrataInteriorOutOfBounds
-        180,152: RMCAreaStrataInteriorOutOfBounds
+        180,152: RMCAreaStrataMiningTop
         180,151: RMCAreaStrataInteriorOutOfBounds
         180,150: RMCAreaStrataInteriorOutOfBounds
-        181,152: RMCAreaStrataInteriorOutOfBounds
+        181,152: RMCAreaStrataMiningTop
         181,151: RMCAreaStrataInteriorOutOfBounds
         181,150: RMCAreaStrataInteriorOutOfBounds
         182,152: RMCAreaStrataInteriorOutOfBounds
@@ -11412,12 +11412,12 @@ entities:
         183,150: RMCAreaStrataInteriorOutOfBounds
         170,152: RMCAreaStrataInteriorOutOfBounds
         170,153: RMCAreaStrataInteriorOutOfBounds
-        170,154: RMCAreaStrataInteriorOutOfBounds
+        170,154: RMCAreaStrataMiningTop
         170,155: RMCAreaStrataInteriorOutOfBounds
-        170,156: RMCAreaStrataInteriorOutOfBounds
-        170,157: RMCAreaStrataInteriorOutOfBounds
-        170,158: RMCAreaStrataInteriorOutOfBounds
-        170,159: RMCAreaStrataInteriorOutOfBounds
+        170,156: RMCAreaStrataMiningTop
+        170,157: RMCAreaStrataMiningTop
+        170,158: RMCAreaStrataMiningTop
+        170,159: RMCAreaStrataMiningTop
         170,161: RMCAreaStrataInteriorOutOfBounds
         170,162: RMCAreaStrataInteriorOutOfBounds
         170,163: RMCAreaStrataInteriorOutOfBounds
@@ -11428,13 +11428,13 @@ entities:
         170,168: RMCAreaStrataInteriorOutOfBounds
         170,169: RMCAreaStrataInteriorOutOfBounds
         171,153: RMCAreaStrataInteriorOutOfBounds
-        170,160: RMCAreaStrataInteriorOutOfBounds
-        171,155: RMCAreaStrataInteriorOutOfBounds
-        171,156: RMCAreaStrataInteriorOutOfBounds
-        171,157: RMCAreaStrataInteriorOutOfBounds
-        171,158: RMCAreaStrataInteriorOutOfBounds
-        171,159: RMCAreaStrataInteriorOutOfBounds
-        171,160: RMCAreaStrataInteriorOutOfBounds
+        170,160: RMCAreaStrataMiningTop
+        171,155: RMCAreaStrataMiningTop
+        171,156: RMCAreaStrataMiningTop
+        171,157: RMCAreaStrataMiningTop
+        171,158: RMCAreaStrataMiningTop
+        171,159: RMCAreaStrataMiningTop
+        171,160: RMCAreaStrataMiningTop
         171,161: RMCAreaStrataInteriorOutOfBounds
         171,162: RMCAreaStrataInteriorOutOfBounds
         171,164: RMCAreaStrataInteriorOutOfBounds
@@ -11443,14 +11443,14 @@ entities:
         171,167: RMCAreaStrataInteriorOutOfBounds
         171,168: RMCAreaStrataInteriorOutOfBounds
         171,169: RMCAreaStrataInteriorOutOfBounds
-        172,153: RMCAreaStrataInteriorOutOfBounds
-        172,154: RMCAreaStrataInteriorOutOfBounds
-        172,155: RMCAreaStrataInteriorOutOfBounds
-        172,156: RMCAreaStrataInteriorOutOfBounds
-        172,157: RMCAreaStrataInteriorOutOfBounds
-        172,158: RMCAreaStrataInteriorOutOfBounds
-        172,159: RMCAreaStrataInteriorOutOfBounds
-        172,160: RMCAreaStrataInteriorOutOfBounds
+        172,153: RMCAreaStrataMiningTop
+        172,154: RMCAreaStrataMiningTop
+        172,155: RMCAreaStrataMiningTop
+        172,156: RMCAreaStrataMiningTop
+        172,157: RMCAreaStrataMiningTop
+        172,158: RMCAreaStrataMiningTop
+        172,159: RMCAreaStrataMiningTop
+        172,160: RMCAreaStrataMiningTop
         172,161: RMCAreaStrataInteriorOutOfBounds
         172,162: RMCAreaStrataInteriorOutOfBounds
         172,163: RMCAreaStrataInteriorOutOfBounds
@@ -11460,14 +11460,14 @@ entities:
         172,167: RMCAreaStrataInteriorOutOfBounds
         172,168: RMCAreaStrataInteriorOutOfBounds
         172,169: RMCAreaStrataInteriorOutOfBounds
-        173,153: RMCAreaStrataInteriorOutOfBounds
-        173,154: RMCAreaStrataInteriorOutOfBounds
-        173,155: RMCAreaStrataInteriorOutOfBounds
-        173,156: RMCAreaStrataInteriorOutOfBounds
-        173,157: RMCAreaStrataInteriorOutOfBounds
-        173,158: RMCAreaStrataInteriorOutOfBounds
-        173,159: RMCAreaStrataInteriorOutOfBounds
-        173,160: RMCAreaStrataInteriorOutOfBounds
+        173,153: RMCAreaStrataMiningTop
+        173,154: RMCAreaStrataMiningTop
+        173,155: RMCAreaStrataMiningTop
+        173,156: RMCAreaStrataMiningTop
+        173,157: RMCAreaStrataMiningTop
+        173,158: RMCAreaStrataMiningTop
+        173,159: RMCAreaStrataMiningTop
+        173,160: RMCAreaStrataMiningTop
         173,161: RMCAreaStrataInteriorOutOfBounds
         173,162: RMCAreaStrataInteriorOutOfBounds
         173,163: RMCAreaStrataInteriorOutOfBounds
@@ -11475,16 +11475,16 @@ entities:
         173,165: RMCAreaStrataInteriorOutOfBounds
         173,166: RMCAreaStrataInteriorOutOfBounds
         173,167: RMCAreaStrataInteriorOutOfBounds
-        171,154: RMCAreaStrataInteriorOutOfBounds
+        171,154: RMCAreaStrataMiningTop
         173,169: RMCAreaStrataInteriorOutOfBounds
         173,168: RMCAreaStrataInteriorOutOfBounds
-        174,154: RMCAreaStrataInteriorOutOfBounds
-        174,155: RMCAreaStrataInteriorOutOfBounds
-        174,156: RMCAreaStrataInteriorOutOfBounds
-        174,153: RMCAreaStrataInteriorOutOfBounds
-        174,158: RMCAreaStrataInteriorOutOfBounds
-        174,159: RMCAreaStrataInteriorOutOfBounds
-        174,157: RMCAreaStrataInteriorOutOfBounds
+        174,154: RMCAreaStrataMiningTop
+        174,155: RMCAreaStrataMiningTop
+        174,156: RMCAreaStrataMiningTop
+        174,153: RMCAreaStrataMiningTop
+        174,158: RMCAreaStrataMiningTop
+        174,159: RMCAreaStrataMiningTop
+        174,157: RMCAreaStrataMiningTop
         174,161: RMCAreaStrataInteriorOutOfBounds
         174,162: RMCAreaStrataInteriorOutOfBounds
         174,163: RMCAreaStrataInteriorOutOfBounds
@@ -11494,14 +11494,14 @@ entities:
         174,167: RMCAreaStrataInteriorOutOfBounds
         174,168: RMCAreaStrataInteriorOutOfBounds
         174,169: RMCAreaStrataInteriorOutOfBounds
-        175,153: RMCAreaStrataInteriorOutOfBounds
-        175,154: RMCAreaStrataInteriorOutOfBounds
-        174,160: RMCAreaStrataInteriorOutOfBounds
-        175,156: RMCAreaStrataInteriorOutOfBounds
-        175,157: RMCAreaStrataInteriorOutOfBounds
-        175,158: RMCAreaStrataInteriorOutOfBounds
-        175,159: RMCAreaStrataInteriorOutOfBounds
-        175,160: RMCAreaStrataInteriorOutOfBounds
+        175,153: RMCAreaStrataMiningTop
+        175,154: RMCAreaStrataMiningTop
+        174,160: RMCAreaStrataMiningTop
+        175,156: RMCAreaStrataMiningTop
+        175,157: RMCAreaStrataMiningTop
+        175,158: RMCAreaStrataMiningTop
+        175,159: RMCAreaStrataMiningTop
+        175,160: RMCAreaStrataMiningTop
         175,161: RMCAreaStrataInteriorOutOfBounds
         175,162: RMCAreaStrataInteriorOutOfBounds
         175,163: RMCAreaStrataInteriorOutOfBounds
@@ -11509,18 +11509,18 @@ entities:
         175,165: RMCAreaStrataInteriorOutOfBounds
         175,166: RMCAreaStrataInteriorOutOfBounds
         175,167: RMCAreaStrataInteriorOutOfBounds
-        175,155: RMCAreaStrataInteriorOutOfBounds
+        175,155: RMCAreaStrataMiningTop
         171,163: RMCAreaStrataInteriorOutOfBounds
         175,168: RMCAreaStrataInteriorOutOfBounds
         175,169: RMCAreaStrataInteriorOutOfBounds
-        176,153: RMCAreaStrataInteriorOutOfBounds
-        176,154: RMCAreaStrataInteriorOutOfBounds
-        176,155: RMCAreaStrataInteriorOutOfBounds
-        176,156: RMCAreaStrataInteriorOutOfBounds
-        176,157: RMCAreaStrataInteriorOutOfBounds
-        176,158: RMCAreaStrataInteriorOutOfBounds
-        176,159: RMCAreaStrataInteriorOutOfBounds
-        176,160: RMCAreaStrataInteriorOutOfBounds
+        176,153: RMCAreaStrataMiningTop
+        176,154: RMCAreaStrataMiningTop
+        176,155: RMCAreaStrataMiningTop
+        176,156: RMCAreaStrataMiningTop
+        176,157: RMCAreaStrataMiningTop
+        176,158: RMCAreaStrataMiningTop
+        176,159: RMCAreaStrataMiningTop
+        176,160: RMCAreaStrataMiningTop
         176,161: RMCAreaStrataInteriorOutOfBounds
         176,162: RMCAreaStrataInteriorOutOfBounds
         176,163: RMCAreaStrataInteriorOutOfBounds
@@ -11530,16 +11530,16 @@ entities:
         176,167: RMCAreaStrataInteriorOutOfBounds
         176,168: RMCAreaStrataInteriorOutOfBounds
         176,169: RMCAreaStrataInteriorOutOfBounds
-        177,153: RMCAreaStrataInteriorOutOfBounds
-        177,154: RMCAreaStrataInteriorOutOfBounds
-        177,155: RMCAreaStrataInteriorOutOfBounds
-        177,156: RMCAreaStrataInteriorOutOfBounds
-        177,157: RMCAreaStrataInteriorOutOfBounds
-        177,158: RMCAreaStrataInteriorOutOfBounds
-        177,159: RMCAreaStrataInteriorOutOfBounds
-        177,160: RMCAreaStrataInteriorOutOfBounds
-        177,161: RMCAreaStrataInteriorOutOfBounds
-        177,162: RMCAreaStrataInteriorOutOfBounds
+        177,153: RMCAreaStrataMiningTop
+        177,154: RMCAreaStrataMiningTop
+        177,155: RMCAreaStrataMiningTop
+        177,156: RMCAreaStrataMiningTop
+        177,157: RMCAreaStrataMiningTop
+        177,158: RMCAreaStrataMiningTop
+        177,159: RMCAreaStrataMiningTop
+        177,160: RMCAreaStrataMiningTop
+        177,161: RMCAreaStrataMiningTop
+        177,162: RMCAreaStrataMiningTop
         177,163: RMCAreaStrataInteriorOutOfBounds
         177,164: RMCAreaStrataInteriorOutOfBounds
         177,165: RMCAreaStrataInteriorOutOfBounds
@@ -11547,101 +11547,101 @@ entities:
         177,167: RMCAreaStrataInteriorOutOfBounds
         177,168: RMCAreaStrataInteriorOutOfBounds
         177,169: RMCAreaStrataInteriorOutOfBounds
-        178,153: RMCAreaStrataInteriorOutOfBounds
-        178,154: RMCAreaStrataInteriorOutOfBounds
-        178,155: RMCAreaStrataInteriorOutOfBounds
-        178,156: RMCAreaStrataInteriorOutOfBounds
-        178,157: RMCAreaStrataInteriorOutOfBounds
-        178,158: RMCAreaStrataInteriorOutOfBounds
-        178,159: RMCAreaStrataInteriorOutOfBounds
-        178,160: RMCAreaStrataInteriorOutOfBounds
-        178,161: RMCAreaStrataInteriorOutOfBounds
-        178,162: RMCAreaStrataInteriorOutOfBounds
-        178,163: RMCAreaStrataInteriorOutOfBounds
+        178,153: RMCAreaStrataMiningTop
+        178,154: RMCAreaStrataMiningTop
+        178,155: RMCAreaStrataMiningTop
+        178,156: RMCAreaStrataMiningTop
+        178,157: RMCAreaStrataMiningTop
+        178,158: RMCAreaStrataMiningTop
+        178,159: RMCAreaStrataMiningTop
+        178,160: RMCAreaStrataMiningTop
+        178,161: RMCAreaStrataMiningTop
+        178,162: RMCAreaStrataMiningTop
+        178,163: RMCAreaStrataMiningTop
         178,164: RMCAreaStrataInteriorOutOfBounds
         178,165: RMCAreaStrataInteriorOutOfBounds
         178,166: RMCAreaStrataInteriorOutOfBounds
         178,167: RMCAreaStrataInteriorOutOfBounds
         178,168: RMCAreaStrataInteriorOutOfBounds
         178,169: RMCAreaStrataInteriorOutOfBounds
-        179,153: RMCAreaStrataInteriorOutOfBounds
-        179,154: RMCAreaStrataInteriorOutOfBounds
-        179,155: RMCAreaStrataInteriorOutOfBounds
-        179,156: RMCAreaStrataInteriorOutOfBounds
-        179,157: RMCAreaStrataInteriorOutOfBounds
-        179,158: RMCAreaStrataInteriorOutOfBounds
-        179,159: RMCAreaStrataInteriorOutOfBounds
-        179,160: RMCAreaStrataInteriorOutOfBounds
-        179,161: RMCAreaStrataInteriorOutOfBounds
-        179,162: RMCAreaStrataInteriorOutOfBounds
-        179,163: RMCAreaStrataInteriorOutOfBounds
+        179,153: RMCAreaStrataMiningTop
+        179,154: RMCAreaStrataMiningTop
+        179,155: RMCAreaStrataMiningTop
+        179,156: RMCAreaStrataMiningTop
+        179,157: RMCAreaStrataMiningTop
+        179,158: RMCAreaStrataMiningTop
+        179,159: RMCAreaStrataMiningTop
+        179,160: RMCAreaStrataMiningTop
+        179,161: RMCAreaStrataMiningTop
+        179,162: RMCAreaStrataMiningTop
+        179,163: RMCAreaStrataMiningTop
         179,164: RMCAreaStrataInteriorOutOfBounds
         179,165: RMCAreaStrataInteriorOutOfBounds
         179,166: RMCAreaStrataInteriorOutOfBounds
         179,167: RMCAreaStrataInteriorOutOfBounds
         179,168: RMCAreaStrataInteriorOutOfBounds
         179,169: RMCAreaStrataInteriorOutOfBounds
-        180,153: RMCAreaStrataInteriorOutOfBounds
-        180,154: RMCAreaStrataInteriorOutOfBounds
-        180,155: RMCAreaStrataInteriorOutOfBounds
-        180,156: RMCAreaStrataInteriorOutOfBounds
-        180,157: RMCAreaStrataInteriorOutOfBounds
-        180,158: RMCAreaStrataInteriorOutOfBounds
-        180,159: RMCAreaStrataInteriorOutOfBounds
-        180,160: RMCAreaStrataInteriorOutOfBounds
-        180,161: RMCAreaStrataInteriorOutOfBounds
-        180,162: RMCAreaStrataInteriorOutOfBounds
-        180,163: RMCAreaStrataInteriorOutOfBounds
+        180,153: RMCAreaStrataMiningTop
+        180,154: RMCAreaStrataMiningTop
+        180,155: RMCAreaStrataMiningTop
+        180,156: RMCAreaStrataMiningTop
+        180,157: RMCAreaStrataMiningTop
+        180,158: RMCAreaStrataMiningTop
+        180,159: RMCAreaStrataMiningTop
+        180,160: RMCAreaStrataMiningTop
+        180,161: RMCAreaStrataMiningTop
+        180,162: RMCAreaStrataMiningTop
+        180,163: RMCAreaStrataMiningTop
         180,164: RMCAreaStrataInteriorOutOfBounds
         180,165: RMCAreaStrataInteriorOutOfBounds
         180,166: RMCAreaStrataInteriorOutOfBounds
         180,167: RMCAreaStrataInteriorOutOfBounds
         180,168: RMCAreaStrataInteriorOutOfBounds
         180,169: RMCAreaStrataInteriorOutOfBounds
-        181,153: RMCAreaStrataInteriorOutOfBounds
-        181,154: RMCAreaStrataInteriorOutOfBounds
-        181,155: RMCAreaStrataInteriorOutOfBounds
-        181,156: RMCAreaStrataInteriorOutOfBounds
-        181,157: RMCAreaStrataInteriorOutOfBounds
-        181,158: RMCAreaStrataInteriorOutOfBounds
-        181,159: RMCAreaStrataInteriorOutOfBounds
-        181,160: RMCAreaStrataInteriorOutOfBounds
-        181,161: RMCAreaStrataInteriorOutOfBounds
-        181,162: RMCAreaStrataInteriorOutOfBounds
-        181,163: RMCAreaStrataInteriorOutOfBounds
+        181,153: RMCAreaStrataMiningTop
+        181,154: RMCAreaStrataMiningTop
+        181,155: RMCAreaStrataMiningTop
+        181,156: RMCAreaStrataMiningTop
+        181,157: RMCAreaStrataMiningTop
+        181,158: RMCAreaStrataMiningTop
+        181,159: RMCAreaStrataMiningTop
+        181,160: RMCAreaStrataMiningTop
+        181,161: RMCAreaStrataMiningTop
+        181,162: RMCAreaStrataMiningTop
+        181,163: RMCAreaStrataMiningTop
         181,164: RMCAreaStrataInteriorOutOfBounds
         181,165: RMCAreaStrataInteriorOutOfBounds
         181,166: RMCAreaStrataInteriorOutOfBounds
         181,167: RMCAreaStrataInteriorOutOfBounds
         181,168: RMCAreaStrataInteriorOutOfBounds
         181,169: RMCAreaStrataInteriorOutOfBounds
-        182,153: RMCAreaStrataInteriorOutOfBounds
-        182,154: RMCAreaStrataInteriorOutOfBounds
-        182,155: RMCAreaStrataInteriorOutOfBounds
-        182,156: RMCAreaStrataInteriorOutOfBounds
-        182,157: RMCAreaStrataInteriorOutOfBounds
-        182,158: RMCAreaStrataInteriorOutOfBounds
-        182,159: RMCAreaStrataInteriorOutOfBounds
-        182,160: RMCAreaStrataInteriorOutOfBounds
-        182,161: RMCAreaStrataInteriorOutOfBounds
-        182,162: RMCAreaStrataInteriorOutOfBounds
-        182,163: RMCAreaStrataInteriorOutOfBounds
+        182,153: RMCAreaStrataMiningTop
+        182,154: RMCAreaStrataMiningTop
+        182,155: RMCAreaStrataMiningTop
+        182,156: RMCAreaStrataMiningTop
+        182,157: RMCAreaStrataMiningTop
+        182,158: RMCAreaStrataMiningTop
+        182,159: RMCAreaStrataMiningTop
+        182,160: RMCAreaStrataMiningTop
+        182,161: RMCAreaStrataMiningTop
+        182,162: RMCAreaStrataMiningTop
+        182,163: RMCAreaStrataMiningTop
         182,164: RMCAreaStrataInteriorOutOfBounds
         182,165: RMCAreaStrataInteriorOutOfBounds
         182,166: RMCAreaStrataInteriorOutOfBounds
         182,167: RMCAreaStrataInteriorOutOfBounds
         182,168: RMCAreaStrataInteriorOutOfBounds
         182,169: RMCAreaStrataInteriorOutOfBounds
-        183,153: RMCAreaStrataInteriorOutOfBounds
-        183,154: RMCAreaStrataInteriorOutOfBounds
-        183,155: RMCAreaStrataInteriorOutOfBounds
-        183,156: RMCAreaStrataInteriorOutOfBounds
-        183,157: RMCAreaStrataInteriorOutOfBounds
-        183,158: RMCAreaStrataInteriorOutOfBounds
-        183,159: RMCAreaStrataInteriorOutOfBounds
-        183,160: RMCAreaStrataInteriorOutOfBounds
-        183,161: RMCAreaStrataInteriorOutOfBounds
-        183,162: RMCAreaStrataInteriorOutOfBounds
+        183,153: RMCAreaStrataMiningTop
+        183,154: RMCAreaStrataMiningTop
+        183,155: RMCAreaStrataMiningTop
+        183,156: RMCAreaStrataMiningTop
+        183,157: RMCAreaStrataMiningTop
+        183,158: RMCAreaStrataMiningTop
+        183,159: RMCAreaStrataMiningTop
+        183,160: RMCAreaStrataMiningTop
+        183,161: RMCAreaStrataMiningTop
+        183,162: RMCAreaStrataMiningTop
         183,163: RMCAreaStrataInteriorOutOfBounds
         183,164: RMCAreaStrataInteriorOutOfBounds
         183,165: RMCAreaStrataInteriorOutOfBounds
@@ -11839,166 +11839,166 @@ entities:
         203,138: RMCAreaStrataInteriorOutOfBounds
         202,137: RMCAreaStrataInteriorOutOfBounds
         202,138: RMCAreaStrataInteriorOutOfBounds
-        208,138: RMCAreaStrataInteriorOutOfBounds
-        209,138: RMCAreaStrataInteriorOutOfBounds
-        210,138: RMCAreaStrataInteriorOutOfBounds
+        208,138: RMCAreaStrataMiningTop
+        209,138: RMCAreaStrataMiningTop
+        210,138: RMCAreaStrataMiningTop
         215,136: RMCAreaStrataInteriorOutOfBounds
         215,137: RMCAreaStrataInteriorOutOfBounds
         215,138: RMCAreaStrataInteriorOutOfBounds
-        215,139: RMCAreaStrataInteriorOutOfBounds
+        215,139: RMCAreaStrataMiningTop
         214,136: RMCAreaStrataInteriorOutOfBounds
         214,137: RMCAreaStrataInteriorOutOfBounds
         214,138: RMCAreaStrataInteriorOutOfBounds
-        214,139: RMCAreaStrataInteriorOutOfBounds
+        214,139: RMCAreaStrataMiningTop
         213,137: RMCAreaStrataInteriorOutOfBounds
         213,138: RMCAreaStrataInteriorOutOfBounds
-        213,139: RMCAreaStrataInteriorOutOfBounds
+        213,139: RMCAreaStrataMiningTop
         212,137: RMCAreaStrataInteriorOutOfBounds
         212,138: RMCAreaStrataInteriorOutOfBounds
-        212,139: RMCAreaStrataInteriorOutOfBounds
-        211,139: RMCAreaStrataInteriorOutOfBounds
-        210,139: RMCAreaStrataInteriorOutOfBounds
-        209,139: RMCAreaStrataInteriorOutOfBounds
-        208,139: RMCAreaStrataInteriorOutOfBounds
-        206,139: RMCAreaStrataInteriorOutOfBounds
-        205,139: RMCAreaStrataInteriorOutOfBounds
-        204,139: RMCAreaStrataInteriorOutOfBounds
-        203,139: RMCAreaStrataInteriorOutOfBounds
-        202,139: RMCAreaStrataInteriorOutOfBounds
-        207,139: RMCAreaStrataInteriorOutOfBounds
-        202,140: RMCAreaStrataInteriorOutOfBounds
-        202,141: RMCAreaStrataInteriorOutOfBounds
-        202,142: RMCAreaStrataInteriorOutOfBounds
-        202,143: RMCAreaStrataInteriorOutOfBounds
-        203,140: RMCAreaStrataInteriorOutOfBounds
-        203,141: RMCAreaStrataInteriorOutOfBounds
-        203,142: RMCAreaStrataInteriorOutOfBounds
-        203,143: RMCAreaStrataInteriorOutOfBounds
-        204,140: RMCAreaStrataInteriorOutOfBounds
-        204,141: RMCAreaStrataInteriorOutOfBounds
-        204,142: RMCAreaStrataInteriorOutOfBounds
-        204,143: RMCAreaStrataInteriorOutOfBounds
-        205,140: RMCAreaStrataInteriorOutOfBounds
-        205,141: RMCAreaStrataInteriorOutOfBounds
-        205,142: RMCAreaStrataInteriorOutOfBounds
-        205,143: RMCAreaStrataInteriorOutOfBounds
-        206,140: RMCAreaStrataInteriorOutOfBounds
-        206,141: RMCAreaStrataInteriorOutOfBounds
-        206,142: RMCAreaStrataInteriorOutOfBounds
-        206,143: RMCAreaStrataInteriorOutOfBounds
-        207,140: RMCAreaStrataInteriorOutOfBounds
-        207,141: RMCAreaStrataInteriorOutOfBounds
-        207,142: RMCAreaStrataInteriorOutOfBounds
-        207,143: RMCAreaStrataInteriorOutOfBounds
-        208,140: RMCAreaStrataInteriorOutOfBounds
-        208,141: RMCAreaStrataInteriorOutOfBounds
-        208,142: RMCAreaStrataInteriorOutOfBounds
-        208,143: RMCAreaStrataInteriorOutOfBounds
-        209,140: RMCAreaStrataInteriorOutOfBounds
-        209,141: RMCAreaStrataInteriorOutOfBounds
-        209,142: RMCAreaStrataInteriorOutOfBounds
-        209,143: RMCAreaStrataInteriorOutOfBounds
-        210,140: RMCAreaStrataInteriorOutOfBounds
-        210,141: RMCAreaStrataInteriorOutOfBounds
-        210,142: RMCAreaStrataInteriorOutOfBounds
-        210,143: RMCAreaStrataInteriorOutOfBounds
-        211,140: RMCAreaStrataInteriorOutOfBounds
-        211,141: RMCAreaStrataInteriorOutOfBounds
-        211,142: RMCAreaStrataInteriorOutOfBounds
-        211,143: RMCAreaStrataInteriorOutOfBounds
-        212,140: RMCAreaStrataInteriorOutOfBounds
-        212,141: RMCAreaStrataInteriorOutOfBounds
-        212,142: RMCAreaStrataInteriorOutOfBounds
-        213,140: RMCAreaStrataInteriorOutOfBounds
-        213,141: RMCAreaStrataInteriorOutOfBounds
-        213,142: RMCAreaStrataInteriorOutOfBounds
-        213,143: RMCAreaStrataInteriorOutOfBounds
-        214,140: RMCAreaStrataInteriorOutOfBounds
-        214,141: RMCAreaStrataInteriorOutOfBounds
-        214,142: RMCAreaStrataInteriorOutOfBounds
-        214,143: RMCAreaStrataInteriorOutOfBounds
-        215,140: RMCAreaStrataInteriorOutOfBounds
-        215,141: RMCAreaStrataInteriorOutOfBounds
-        215,142: RMCAreaStrataInteriorOutOfBounds
-        215,143: RMCAreaStrataInteriorOutOfBounds
-        216,140: RMCAreaStrataInteriorOutOfBounds
-        216,141: RMCAreaStrataInteriorOutOfBounds
-        216,142: RMCAreaStrataInteriorOutOfBounds
-        216,143: RMCAreaStrataInteriorOutOfBounds
-        217,140: RMCAreaStrataInteriorOutOfBounds
-        217,141: RMCAreaStrataInteriorOutOfBounds
-        217,142: RMCAreaStrataInteriorOutOfBounds
-        217,143: RMCAreaStrataInteriorOutOfBounds
-        218,140: RMCAreaStrataInteriorOutOfBounds
-        218,141: RMCAreaStrataInteriorOutOfBounds
-        218,142: RMCAreaStrataInteriorOutOfBounds
-        218,143: RMCAreaStrataInteriorOutOfBounds
-        219,140: RMCAreaStrataInteriorOutOfBounds
-        219,141: RMCAreaStrataInteriorOutOfBounds
-        219,142: RMCAreaStrataInteriorOutOfBounds
-        219,143: RMCAreaStrataInteriorOutOfBounds
-        212,143: RMCAreaStrataInteriorOutOfBounds
-        219,144: RMCAreaStrataInteriorOutOfBounds
-        219,145: RMCAreaStrataInteriorOutOfBounds
-        218,144: RMCAreaStrataInteriorOutOfBounds
-        218,145: RMCAreaStrataInteriorOutOfBounds
-        217,144: RMCAreaStrataInteriorOutOfBounds
-        217,145: RMCAreaStrataInteriorOutOfBounds
-        216,144: RMCAreaStrataInteriorOutOfBounds
-        216,145: RMCAreaStrataInteriorOutOfBounds
-        215,144: RMCAreaStrataInteriorOutOfBounds
-        215,145: RMCAreaStrataInteriorOutOfBounds
-        214,144: RMCAreaStrataInteriorOutOfBounds
-        214,145: RMCAreaStrataInteriorOutOfBounds
-        213,144: RMCAreaStrataInteriorOutOfBounds
-        213,145: RMCAreaStrataInteriorOutOfBounds
-        212,144: RMCAreaStrataInteriorOutOfBounds
-        212,145: RMCAreaStrataInteriorOutOfBounds
-        211,144: RMCAreaStrataInteriorOutOfBounds
-        211,145: RMCAreaStrataInteriorOutOfBounds
-        210,144: RMCAreaStrataInteriorOutOfBounds
-        210,145: RMCAreaStrataInteriorOutOfBounds
-        209,144: RMCAreaStrataInteriorOutOfBounds
-        209,145: RMCAreaStrataInteriorOutOfBounds
-        208,144: RMCAreaStrataInteriorOutOfBounds
-        208,145: RMCAreaStrataInteriorOutOfBounds
-        207,144: RMCAreaStrataInteriorOutOfBounds
-        207,145: RMCAreaStrataInteriorOutOfBounds
-        206,144: RMCAreaStrataInteriorOutOfBounds
-        206,145: RMCAreaStrataInteriorOutOfBounds
-        205,144: RMCAreaStrataInteriorOutOfBounds
-        205,145: RMCAreaStrataInteriorOutOfBounds
-        204,144: RMCAreaStrataInteriorOutOfBounds
-        204,145: RMCAreaStrataInteriorOutOfBounds
-        203,144: RMCAreaStrataInteriorOutOfBounds
-        203,145: RMCAreaStrataInteriorOutOfBounds
-        202,144: RMCAreaStrataInteriorOutOfBounds
-        202,145: RMCAreaStrataInteriorOutOfBounds
-        201,144: RMCAreaStrataInteriorOutOfBounds
-        201,145: RMCAreaStrataInteriorOutOfBounds
-        200,144: RMCAreaStrataInteriorOutOfBounds
-        200,145: RMCAreaStrataInteriorOutOfBounds
-        199,144: RMCAreaStrataInteriorOutOfBounds
-        199,145: RMCAreaStrataInteriorOutOfBounds
-        198,144: RMCAreaStrataInteriorOutOfBounds
-        198,145: RMCAreaStrataInteriorOutOfBounds
-        197,144: RMCAreaStrataInteriorOutOfBounds
-        197,145: RMCAreaStrataInteriorOutOfBounds
-        196,144: RMCAreaStrataInteriorOutOfBounds
-        196,145: RMCAreaStrataInteriorOutOfBounds
-        195,144: RMCAreaStrataInteriorOutOfBounds
-        195,145: RMCAreaStrataInteriorOutOfBounds
-        194,144: RMCAreaStrataInteriorOutOfBounds
-        194,145: RMCAreaStrataInteriorOutOfBounds
-        193,145: RMCAreaStrataInteriorOutOfBounds
-        192,144: RMCAreaStrataInteriorOutOfBounds
-        192,145: RMCAreaStrataInteriorOutOfBounds
-        191,144: RMCAreaStrataInteriorOutOfBounds
-        191,145: RMCAreaStrataInteriorOutOfBounds
-        190,144: RMCAreaStrataInteriorOutOfBounds
-        190,145: RMCAreaStrataInteriorOutOfBounds
-        193,144: RMCAreaStrataInteriorOutOfBounds
-        189,145: RMCAreaStrataInteriorOutOfBounds
+        212,139: RMCAreaStrataMiningTop
+        211,139: RMCAreaStrataMiningTop
+        210,139: RMCAreaStrataMiningTop
+        209,139: RMCAreaStrataMiningTop
+        208,139: RMCAreaStrataMiningTop
+        206,139: RMCAreaStrataMiningTop
+        205,139: RMCAreaStrataMiningTop
+        204,139: RMCAreaStrataMiningTop
+        203,139: RMCAreaStrataMiningTop
+        202,139: RMCAreaStrataMiningTop
+        207,139: RMCAreaStrataMiningTop
+        202,140: RMCAreaStrataMiningTop
+        202,141: RMCAreaStrataMiningTop
+        202,142: RMCAreaStrataMiningTop
+        202,143: RMCAreaStrataMiningTop
+        203,140: RMCAreaStrataMiningTop
+        203,141: RMCAreaStrataMiningTop
+        203,142: RMCAreaStrataMiningTop
+        203,143: RMCAreaStrataMiningTop
+        204,140: RMCAreaStrataMiningTop
+        204,141: RMCAreaStrataMiningTop
+        204,142: RMCAreaStrataMiningTop
+        204,143: RMCAreaStrataMiningTop
+        205,140: RMCAreaStrataMiningTop
+        205,141: RMCAreaStrataMiningTop
+        205,142: RMCAreaStrataMiningTop
+        205,143: RMCAreaStrataMiningTop
+        206,140: RMCAreaStrataMiningTop
+        206,141: RMCAreaStrataMiningTop
+        206,142: RMCAreaStrataMiningTop
+        206,143: RMCAreaStrataMiningTop
+        207,140: RMCAreaStrataMiningTop
+        207,141: RMCAreaStrataMiningTop
+        207,142: RMCAreaStrataMiningTop
+        207,143: RMCAreaStrataMiningTop
+        208,140: RMCAreaStrataMiningTop
+        208,141: RMCAreaStrataMiningTop
+        208,142: RMCAreaStrataMiningTop
+        208,143: RMCAreaStrataMiningTop
+        209,140: RMCAreaStrataMiningTop
+        209,141: RMCAreaStrataMiningTop
+        209,142: RMCAreaStrataMiningTop
+        209,143: RMCAreaStrataMiningTop
+        210,140: RMCAreaStrataMiningTop
+        210,141: RMCAreaStrataMiningTop
+        210,142: RMCAreaStrataMiningTop
+        210,143: RMCAreaStrataMiningTop
+        211,140: RMCAreaStrataMiningTop
+        211,141: RMCAreaStrataMiningTop
+        211,142: RMCAreaStrataMiningTop
+        211,143: RMCAreaStrataMiningTop
+        212,140: RMCAreaStrataMiningTop
+        212,141: RMCAreaStrataMiningTop
+        212,142: RMCAreaStrataMiningTop
+        213,140: RMCAreaStrataMiningTop
+        213,141: RMCAreaStrataMiningTop
+        213,142: RMCAreaStrataMiningTop
+        213,143: RMCAreaStrataMiningTop
+        214,140: RMCAreaStrataMiningTop
+        214,141: RMCAreaStrataMiningTop
+        214,142: RMCAreaStrataMiningTop
+        214,143: RMCAreaStrataMiningTop
+        215,140: RMCAreaStrataMiningTop
+        215,141: RMCAreaStrataMiningTop
+        215,142: RMCAreaStrataMiningTop
+        215,143: RMCAreaStrataMiningTop
+        216,140: RMCAreaStrataMiningTop
+        216,141: RMCAreaStrataMiningTop
+        216,142: RMCAreaStrataMiningTop
+        216,143: RMCAreaStrataMiningTop
+        217,140: RMCAreaStrataMiningTop
+        217,141: RMCAreaStrataMiningTop
+        217,142: RMCAreaStrataMiningTop
+        217,143: RMCAreaStrataMiningTop
+        218,140: RMCAreaStrataMiningTop
+        218,141: RMCAreaStrataMiningTop
+        218,142: RMCAreaStrataMiningTop
+        218,143: RMCAreaStrataMiningTop
+        219,140: RMCAreaStrataMiningTop
+        219,141: RMCAreaStrataMiningTop
+        219,142: RMCAreaStrataMiningTop
+        219,143: RMCAreaStrataMiningTop
+        212,143: RMCAreaStrataMiningTop
+        219,144: RMCAreaStrataMiningTop
+        219,145: RMCAreaStrataMiningTop
+        218,144: RMCAreaStrataMiningTop
+        218,145: RMCAreaStrataMiningTop
+        217,144: RMCAreaStrataMiningTop
+        217,145: RMCAreaStrataMiningTop
+        216,144: RMCAreaStrataMiningTop
+        216,145: RMCAreaStrataMiningTop
+        215,144: RMCAreaStrataMiningTop
+        215,145: RMCAreaStrataMiningTop
+        214,144: RMCAreaStrataMiningTop
+        214,145: RMCAreaStrataMiningTop
+        213,144: RMCAreaStrataMiningTop
+        213,145: RMCAreaStrataMiningTop
+        212,144: RMCAreaStrataMiningTop
+        212,145: RMCAreaStrataMiningTop
+        211,144: RMCAreaStrataMiningTop
+        211,145: RMCAreaStrataMiningTop
+        210,144: RMCAreaStrataMiningTop
+        210,145: RMCAreaStrataMiningTop
+        209,144: RMCAreaStrataMiningTop
+        209,145: RMCAreaStrataMiningTop
+        208,144: RMCAreaStrataMiningTop
+        208,145: RMCAreaStrataMiningTop
+        207,144: RMCAreaStrataMiningTop
+        207,145: RMCAreaStrataMiningTop
+        206,144: RMCAreaStrataMiningTop
+        206,145: RMCAreaStrataMiningTop
+        205,144: RMCAreaStrataMiningTop
+        205,145: RMCAreaStrataMiningTop
+        204,144: RMCAreaStrataMiningTop
+        204,145: RMCAreaStrataMiningTop
+        203,144: RMCAreaStrataMiningTop
+        203,145: RMCAreaStrataMiningTop
+        202,144: RMCAreaStrataMiningTop
+        202,145: RMCAreaStrataMiningTop
+        201,144: RMCAreaStrataMiningTop
+        201,145: RMCAreaStrataMiningTop
+        200,144: RMCAreaStrataMiningTop
+        200,145: RMCAreaStrataMiningTop
+        199,144: RMCAreaStrataMiningTop
+        199,145: RMCAreaStrataMiningTop
+        198,144: RMCAreaStrataMiningTop
+        198,145: RMCAreaStrataMiningTop
+        197,144: RMCAreaStrataMiningTop
+        197,145: RMCAreaStrataMiningTop
+        196,144: RMCAreaStrataMiningTop
+        196,145: RMCAreaStrataMiningTop
+        195,144: RMCAreaStrataMiningTop
+        195,145: RMCAreaStrataMiningTop
+        194,144: RMCAreaStrataMiningTop
+        194,145: RMCAreaStrataMiningTop
+        193,145: RMCAreaStrataMiningTop
+        192,144: RMCAreaStrataMiningTop
+        192,145: RMCAreaStrataMiningTop
+        191,144: RMCAreaStrataMiningTop
+        191,145: RMCAreaStrataMiningTop
+        190,144: RMCAreaStrataMiningTop
+        190,145: RMCAreaStrataMiningTop
+        193,144: RMCAreaStrataMiningTop
+        189,145: RMCAreaStrataMiningTop
         184,146: RMCAreaStrataInteriorOutOfBounds
         184,147: RMCAreaStrataInteriorOutOfBounds
         184,148: RMCAreaStrataInteriorOutOfBounds
@@ -12006,16 +12006,16 @@ entities:
         184,150: RMCAreaStrataInteriorOutOfBounds
         184,151: RMCAreaStrataInteriorOutOfBounds
         184,152: RMCAreaStrataInteriorOutOfBounds
-        184,153: RMCAreaStrataInteriorOutOfBounds
-        184,154: RMCAreaStrataInteriorOutOfBounds
-        184,155: RMCAreaStrataInteriorOutOfBounds
-        184,156: RMCAreaStrataInteriorOutOfBounds
-        184,157: RMCAreaStrataInteriorOutOfBounds
-        184,158: RMCAreaStrataInteriorOutOfBounds
-        184,159: RMCAreaStrataInteriorOutOfBounds
-        184,160: RMCAreaStrataInteriorOutOfBounds
-        184,161: RMCAreaStrataInteriorOutOfBounds
-        184,162: RMCAreaStrataInteriorOutOfBounds
+        184,153: RMCAreaStrataMiningTop
+        184,154: RMCAreaStrataMiningTop
+        184,155: RMCAreaStrataMiningTop
+        184,156: RMCAreaStrataMiningTop
+        184,157: RMCAreaStrataMiningTop
+        184,158: RMCAreaStrataMiningTop
+        184,159: RMCAreaStrataMiningTop
+        184,160: RMCAreaStrataMiningTop
+        184,161: RMCAreaStrataMiningTop
+        184,162: RMCAreaStrataMiningTop
         184,163: RMCAreaStrataInteriorOutOfBounds
         184,164: RMCAreaStrataInteriorOutOfBounds
         184,165: RMCAreaStrataInteriorOutOfBounds
@@ -12030,21 +12030,21 @@ entities:
         185,150: RMCAreaStrataInteriorOutOfBounds
         185,151: RMCAreaStrataInteriorOutOfBounds
         185,152: RMCAreaStrataInteriorOutOfBounds
-        185,153: RMCAreaStrataInteriorOutOfBounds
-        185,154: RMCAreaStrataInteriorOutOfBounds
-        185,155: RMCAreaStrataInteriorOutOfBounds
-        185,156: RMCAreaStrataInteriorOutOfBounds
-        185,157: RMCAreaStrataInteriorOutOfBounds
-        185,158: RMCAreaStrataInteriorOutOfBounds
-        185,159: RMCAreaStrataInteriorOutOfBounds
-        185,160: RMCAreaStrataInteriorOutOfBounds
-        185,161: RMCAreaStrataInteriorOutOfBounds
-        185,162: RMCAreaStrataInteriorOutOfBounds
+        185,153: RMCAreaStrataMiningTop
+        185,154: RMCAreaStrataMiningTop
+        185,155: RMCAreaStrataMiningTop
+        185,156: RMCAreaStrataMiningTop
+        185,157: RMCAreaStrataMiningTop
+        185,158: RMCAreaStrataMiningTop
+        185,159: RMCAreaStrataMiningTop
+        185,160: RMCAreaStrataMiningTop
+        185,161: RMCAreaStrataMiningTop
+        185,162: RMCAreaStrataMiningTop
         185,163: RMCAreaStrataInteriorOutOfBounds
         185,164: RMCAreaStrataInteriorOutOfBounds
-        185,165: RMCAreaStrataInteriorOutOfBounds
-        185,166: RMCAreaStrataInteriorOutOfBounds
-        185,167: RMCAreaStrataInteriorOutOfBounds
+        185,165: RMCAreaStrataMiningTop
+        185,166: RMCAreaStrataMiningTop
+        185,167: RMCAreaStrataMiningTop
         185,168: RMCAreaStrataInteriorOutOfBounds
         185,169: RMCAreaStrataInteriorOutOfBounds
         186,146: RMCAreaStrataInteriorOutOfBounds
@@ -12053,21 +12053,21 @@ entities:
         186,150: RMCAreaStrataInteriorOutOfBounds
         186,151: RMCAreaStrataInteriorOutOfBounds
         186,152: RMCAreaStrataInteriorOutOfBounds
-        186,153: RMCAreaStrataInteriorOutOfBounds
-        186,154: RMCAreaStrataInteriorOutOfBounds
-        186,155: RMCAreaStrataInteriorOutOfBounds
-        186,156: RMCAreaStrataInteriorOutOfBounds
-        186,157: RMCAreaStrataInteriorOutOfBounds
-        186,158: RMCAreaStrataInteriorOutOfBounds
-        186,159: RMCAreaStrataInteriorOutOfBounds
+        186,153: RMCAreaStrataMiningTop
+        186,154: RMCAreaStrataMiningTop
+        186,155: RMCAreaStrataMiningTop
+        186,156: RMCAreaStrataMiningTop
+        186,157: RMCAreaStrataMiningTop
+        186,158: RMCAreaStrataMiningTop
+        186,159: RMCAreaStrataMiningTop
         186,160: RMCAreaStrataInteriorOutOfBounds
         186,161: RMCAreaStrataInteriorOutOfBounds
         186,162: RMCAreaStrataInteriorOutOfBounds
         186,163: RMCAreaStrataInteriorOutOfBounds
         186,164: RMCAreaStrataInteriorOutOfBounds
-        186,165: RMCAreaStrataInteriorOutOfBounds
-        186,166: RMCAreaStrataInteriorOutOfBounds
-        186,167: RMCAreaStrataInteriorOutOfBounds
+        186,165: RMCAreaStrataMiningTop
+        186,166: RMCAreaStrataMiningTop
+        186,167: RMCAreaStrataMiningTop
         186,168: RMCAreaStrataInteriorOutOfBounds
         186,169: RMCAreaStrataInteriorOutOfBounds
         187,146: RMCAreaStrataInteriorOutOfBounds
@@ -12077,934 +12077,934 @@ entities:
         187,150: RMCAreaStrataInteriorOutOfBounds
         187,151: RMCAreaStrataInteriorOutOfBounds
         187,152: RMCAreaStrataInteriorOutOfBounds
-        187,153: RMCAreaStrataInteriorOutOfBounds
-        187,154: RMCAreaStrataInteriorOutOfBounds
-        187,155: RMCAreaStrataInteriorOutOfBounds
-        187,156: RMCAreaStrataInteriorOutOfBounds
-        187,157: RMCAreaStrataInteriorOutOfBounds
-        187,158: RMCAreaStrataInteriorOutOfBounds
-        187,159: RMCAreaStrataInteriorOutOfBounds
-        187,160: RMCAreaStrataInteriorOutOfBounds
+        187,153: RMCAreaStrataMiningTop
+        187,154: RMCAreaStrataMiningTop
+        187,155: RMCAreaStrataMiningTop
+        187,156: RMCAreaStrataMiningTop
+        187,157: RMCAreaStrataMiningTop
+        187,158: RMCAreaStrataMiningTop
+        187,159: RMCAreaStrataMiningTop
+        187,160: RMCAreaStrataMiningTop
         187,161: RMCAreaStrataInteriorOutOfBounds
         187,162: RMCAreaStrataInteriorOutOfBounds
         187,163: RMCAreaStrataInteriorOutOfBounds
         187,164: RMCAreaStrataInteriorOutOfBounds
-        187,165: RMCAreaStrataInteriorOutOfBounds
-        187,166: RMCAreaStrataInteriorOutOfBounds
-        187,167: RMCAreaStrataInteriorOutOfBounds
+        187,165: RMCAreaStrataMiningTop
+        187,166: RMCAreaStrataMiningTop
+        187,167: RMCAreaStrataMiningTop
         187,168: RMCAreaStrataInteriorOutOfBounds
         187,169: RMCAreaStrataInteriorOutOfBounds
         188,146: RMCAreaStrataInteriorOutOfBounds
         188,147: RMCAreaStrataInteriorOutOfBounds
         188,148: RMCAreaStrataInteriorOutOfBounds
-        188,149: RMCAreaStrataInteriorOutOfBounds
-        188,150: RMCAreaStrataInteriorOutOfBounds
-        188,151: RMCAreaStrataInteriorOutOfBounds
+        188,149: RMCAreaStrataMiningTop
+        188,150: RMCAreaStrataMiningTop
+        188,151: RMCAreaStrataMiningTop
         188,152: RMCAreaStrataInteriorOutOfBounds
-        188,153: RMCAreaStrataInteriorOutOfBounds
-        188,154: RMCAreaStrataInteriorOutOfBounds
-        188,155: RMCAreaStrataInteriorOutOfBounds
-        188,156: RMCAreaStrataInteriorOutOfBounds
-        188,157: RMCAreaStrataInteriorOutOfBounds
-        188,158: RMCAreaStrataInteriorOutOfBounds
-        188,159: RMCAreaStrataInteriorOutOfBounds
-        188,160: RMCAreaStrataInteriorOutOfBounds
+        188,153: RMCAreaStrataMiningTop
+        188,154: RMCAreaStrataMiningTop
+        188,155: RMCAreaStrataMiningTop
+        188,156: RMCAreaStrataMiningTop
+        188,157: RMCAreaStrataMiningTop
+        188,158: RMCAreaStrataMiningTop
+        188,159: RMCAreaStrataMiningTop
+        188,160: RMCAreaStrataMiningTop
         188,161: RMCAreaStrataInteriorOutOfBounds
         188,162: RMCAreaStrataInteriorOutOfBounds
         188,163: RMCAreaStrataInteriorOutOfBounds
         188,164: RMCAreaStrataInteriorOutOfBounds
-        188,165: RMCAreaStrataInteriorOutOfBounds
-        188,166: RMCAreaStrataInteriorOutOfBounds
-        188,167: RMCAreaStrataInteriorOutOfBounds
+        188,165: RMCAreaStrataMiningTop
+        188,166: RMCAreaStrataMiningTop
+        188,167: RMCAreaStrataMiningTop
         186,148: RMCAreaStrataInteriorOutOfBounds
-        188,168: RMCAreaStrataInteriorOutOfBounds
-        189,146: RMCAreaStrataInteriorOutOfBounds
-        189,147: RMCAreaStrataInteriorOutOfBounds
+        188,168: RMCAreaStrataMiningTop
+        189,146: RMCAreaStrataMiningTop
+        189,147: RMCAreaStrataMiningTop
         189,148: RMCAreaStrataInteriorOutOfBounds
-        189,149: RMCAreaStrataInteriorOutOfBounds
-        189,150: RMCAreaStrataInteriorOutOfBounds
-        189,151: RMCAreaStrataInteriorOutOfBounds
-        189,152: RMCAreaStrataInteriorOutOfBounds
-        189,153: RMCAreaStrataInteriorOutOfBounds
-        189,154: RMCAreaStrataInteriorOutOfBounds
-        189,155: RMCAreaStrataInteriorOutOfBounds
-        189,156: RMCAreaStrataInteriorOutOfBounds
-        189,157: RMCAreaStrataInteriorOutOfBounds
-        189,158: RMCAreaStrataInteriorOutOfBounds
-        189,159: RMCAreaStrataInteriorOutOfBounds
-        189,160: RMCAreaStrataInteriorOutOfBounds
-        189,161: RMCAreaStrataInteriorOutOfBounds
+        189,149: RMCAreaStrataMiningTop
+        189,150: RMCAreaStrataMiningTop
+        189,151: RMCAreaStrataMiningTop
+        189,152: RMCAreaStrataMiningTop
+        189,153: RMCAreaStrataMiningTop
+        189,154: RMCAreaStrataMiningTop
+        189,155: RMCAreaStrataMiningTop
+        189,156: RMCAreaStrataMiningTop
+        189,157: RMCAreaStrataMiningTop
+        189,158: RMCAreaStrataMiningTop
+        189,159: RMCAreaStrataMiningTop
+        189,160: RMCAreaStrataMiningTop
+        189,161: RMCAreaStrataMiningTop
         189,162: RMCAreaStrataInteriorOutOfBounds
         189,163: RMCAreaStrataInteriorOutOfBounds
         189,164: RMCAreaStrataInteriorOutOfBounds
-        189,165: RMCAreaStrataInteriorOutOfBounds
-        189,166: RMCAreaStrataInteriorOutOfBounds
-        189,167: RMCAreaStrataInteriorOutOfBounds
-        189,168: RMCAreaStrataInteriorOutOfBounds
-        189,169: RMCAreaStrataInteriorOutOfBounds
-        190,146: RMCAreaStrataInteriorOutOfBounds
-        190,147: RMCAreaStrataInteriorOutOfBounds
+        189,165: RMCAreaStrataMiningTop
+        189,166: RMCAreaStrataMiningTop
+        189,167: RMCAreaStrataMiningTop
+        189,168: RMCAreaStrataMiningTop
+        189,169: RMCAreaStrataMiningTop
+        190,146: RMCAreaStrataMiningTop
+        190,147: RMCAreaStrataMiningTop
         190,148: RMCAreaStrataInteriorOutOfBounds
-        190,149: RMCAreaStrataInteriorOutOfBounds
-        190,150: RMCAreaStrataInteriorOutOfBounds
-        190,151: RMCAreaStrataInteriorOutOfBounds
+        190,149: RMCAreaStrataMiningTop
+        190,150: RMCAreaStrataMiningTop
+        190,151: RMCAreaStrataMiningTop
         188,169: RMCAreaStrataInteriorOutOfBounds
-        190,153: RMCAreaStrataInteriorOutOfBounds
-        190,154: RMCAreaStrataInteriorOutOfBounds
-        190,152: RMCAreaStrataInteriorOutOfBounds
-        190,156: RMCAreaStrataInteriorOutOfBounds
-        190,157: RMCAreaStrataInteriorOutOfBounds
-        190,158: RMCAreaStrataInteriorOutOfBounds
-        190,159: RMCAreaStrataInteriorOutOfBounds
-        190,155: RMCAreaStrataInteriorOutOfBounds
-        190,160: RMCAreaStrataInteriorOutOfBounds
-        190,161: RMCAreaStrataInteriorOutOfBounds
+        190,153: RMCAreaStrataMiningTop
+        190,154: RMCAreaStrataMiningTop
+        190,152: RMCAreaStrataMiningTop
+        190,156: RMCAreaStrataMiningTop
+        190,157: RMCAreaStrataMiningTop
+        190,158: RMCAreaStrataMiningTop
+        190,159: RMCAreaStrataMiningTop
+        190,155: RMCAreaStrataMiningTop
+        190,160: RMCAreaStrataMiningTop
+        190,161: RMCAreaStrataMiningTop
         190,162: RMCAreaStrataInteriorOutOfBounds
         190,163: RMCAreaStrataInteriorOutOfBounds
         190,164: RMCAreaStrataInteriorOutOfBounds
-        190,165: RMCAreaStrataInteriorOutOfBounds
-        190,166: RMCAreaStrataInteriorOutOfBounds
-        190,167: RMCAreaStrataInteriorOutOfBounds
-        190,168: RMCAreaStrataInteriorOutOfBounds
-        190,169: RMCAreaStrataInteriorOutOfBounds
-        191,146: RMCAreaStrataInteriorOutOfBounds
+        190,165: RMCAreaStrataMiningTop
+        190,166: RMCAreaStrataMiningTop
+        190,167: RMCAreaStrataMiningTop
+        190,168: RMCAreaStrataMiningTop
+        190,169: RMCAreaStrataMiningTop
+        191,146: RMCAreaStrataMiningTop
         191,148: RMCAreaStrataInteriorOutOfBounds
-        191,149: RMCAreaStrataInteriorOutOfBounds
-        191,150: RMCAreaStrataInteriorOutOfBounds
-        191,151: RMCAreaStrataInteriorOutOfBounds
-        191,152: RMCAreaStrataInteriorOutOfBounds
-        191,153: RMCAreaStrataInteriorOutOfBounds
-        191,154: RMCAreaStrataInteriorOutOfBounds
-        191,155: RMCAreaStrataInteriorOutOfBounds
-        191,156: RMCAreaStrataInteriorOutOfBounds
-        191,157: RMCAreaStrataInteriorOutOfBounds
-        191,158: RMCAreaStrataInteriorOutOfBounds
-        191,159: RMCAreaStrataInteriorOutOfBounds
-        191,160: RMCAreaStrataInteriorOutOfBounds
-        191,147: RMCAreaStrataInteriorOutOfBounds
-        191,162: RMCAreaStrataInteriorOutOfBounds
-        191,163: RMCAreaStrataInteriorOutOfBounds
-        191,164: RMCAreaStrataInteriorOutOfBounds
-        191,165: RMCAreaStrataInteriorOutOfBounds
-        191,166: RMCAreaStrataInteriorOutOfBounds
-        191,167: RMCAreaStrataInteriorOutOfBounds
-        191,168: RMCAreaStrataInteriorOutOfBounds
-        191,169: RMCAreaStrataInteriorOutOfBounds
-        192,146: RMCAreaStrataInteriorOutOfBounds
-        192,147: RMCAreaStrataInteriorOutOfBounds
-        192,148: RMCAreaStrataInteriorOutOfBounds
-        192,149: RMCAreaStrataInteriorOutOfBounds
-        192,150: RMCAreaStrataInteriorOutOfBounds
-        192,151: RMCAreaStrataInteriorOutOfBounds
-        192,152: RMCAreaStrataInteriorOutOfBounds
-        192,153: RMCAreaStrataInteriorOutOfBounds
-        192,154: RMCAreaStrataInteriorOutOfBounds
-        192,155: RMCAreaStrataInteriorOutOfBounds
-        192,156: RMCAreaStrataInteriorOutOfBounds
-        192,157: RMCAreaStrataInteriorOutOfBounds
-        192,158: RMCAreaStrataInteriorOutOfBounds
-        192,159: RMCAreaStrataInteriorOutOfBounds
-        192,160: RMCAreaStrataInteriorOutOfBounds
-        192,161: RMCAreaStrataInteriorOutOfBounds
-        192,162: RMCAreaStrataInteriorOutOfBounds
-        192,163: RMCAreaStrataInteriorOutOfBounds
-        192,164: RMCAreaStrataInteriorOutOfBounds
-        192,165: RMCAreaStrataInteriorOutOfBounds
-        192,166: RMCAreaStrataInteriorOutOfBounds
-        192,167: RMCAreaStrataInteriorOutOfBounds
-        192,168: RMCAreaStrataInteriorOutOfBounds
-        192,169: RMCAreaStrataInteriorOutOfBounds
-        193,146: RMCAreaStrataInteriorOutOfBounds
-        193,147: RMCAreaStrataInteriorOutOfBounds
-        193,148: RMCAreaStrataInteriorOutOfBounds
-        193,149: RMCAreaStrataInteriorOutOfBounds
-        193,150: RMCAreaStrataInteriorOutOfBounds
-        193,151: RMCAreaStrataInteriorOutOfBounds
-        193,152: RMCAreaStrataInteriorOutOfBounds
-        193,153: RMCAreaStrataInteriorOutOfBounds
-        193,154: RMCAreaStrataInteriorOutOfBounds
-        193,155: RMCAreaStrataInteriorOutOfBounds
-        193,156: RMCAreaStrataInteriorOutOfBounds
-        193,157: RMCAreaStrataInteriorOutOfBounds
-        193,158: RMCAreaStrataInteriorOutOfBounds
-        193,159: RMCAreaStrataInteriorOutOfBounds
-        193,160: RMCAreaStrataInteriorOutOfBounds
-        193,161: RMCAreaStrataInteriorOutOfBounds
-        193,162: RMCAreaStrataInteriorOutOfBounds
-        193,163: RMCAreaStrataInteriorOutOfBounds
-        193,164: RMCAreaStrataInteriorOutOfBounds
-        193,165: RMCAreaStrataInteriorOutOfBounds
-        193,166: RMCAreaStrataInteriorOutOfBounds
-        193,167: RMCAreaStrataInteriorOutOfBounds
-        193,168: RMCAreaStrataInteriorOutOfBounds
-        193,169: RMCAreaStrataInteriorOutOfBounds
-        194,146: RMCAreaStrataInteriorOutOfBounds
-        194,147: RMCAreaStrataInteriorOutOfBounds
-        194,148: RMCAreaStrataInteriorOutOfBounds
-        194,149: RMCAreaStrataInteriorOutOfBounds
-        194,150: RMCAreaStrataInteriorOutOfBounds
-        194,151: RMCAreaStrataInteriorOutOfBounds
-        194,152: RMCAreaStrataInteriorOutOfBounds
-        194,153: RMCAreaStrataInteriorOutOfBounds
-        194,154: RMCAreaStrataInteriorOutOfBounds
-        194,155: RMCAreaStrataInteriorOutOfBounds
-        194,156: RMCAreaStrataInteriorOutOfBounds
-        194,157: RMCAreaStrataInteriorOutOfBounds
-        194,158: RMCAreaStrataInteriorOutOfBounds
-        191,161: RMCAreaStrataInteriorOutOfBounds
-        194,160: RMCAreaStrataInteriorOutOfBounds
-        194,161: RMCAreaStrataInteriorOutOfBounds
-        194,159: RMCAreaStrataInteriorOutOfBounds
-        194,163: RMCAreaStrataInteriorOutOfBounds
-        194,164: RMCAreaStrataInteriorOutOfBounds
-        194,165: RMCAreaStrataInteriorOutOfBounds
-        194,162: RMCAreaStrataInteriorOutOfBounds
-        194,167: RMCAreaStrataInteriorOutOfBounds
-        194,168: RMCAreaStrataInteriorOutOfBounds
-        194,169: RMCAreaStrataInteriorOutOfBounds
-        195,146: RMCAreaStrataInteriorOutOfBounds
-        195,147: RMCAreaStrataInteriorOutOfBounds
-        195,148: RMCAreaStrataInteriorOutOfBounds
-        195,149: RMCAreaStrataInteriorOutOfBounds
-        195,150: RMCAreaStrataInteriorOutOfBounds
-        195,151: RMCAreaStrataInteriorOutOfBounds
-        195,152: RMCAreaStrataInteriorOutOfBounds
-        195,153: RMCAreaStrataInteriorOutOfBounds
-        195,154: RMCAreaStrataInteriorOutOfBounds
-        195,155: RMCAreaStrataInteriorOutOfBounds
-        194,166: RMCAreaStrataInteriorOutOfBounds
-        195,157: RMCAreaStrataInteriorOutOfBounds
-        195,158: RMCAreaStrataInteriorOutOfBounds
-        195,159: RMCAreaStrataInteriorOutOfBounds
-        195,156: RMCAreaStrataInteriorOutOfBounds
-        195,160: RMCAreaStrataInteriorOutOfBounds
-        195,161: RMCAreaStrataInteriorOutOfBounds
-        195,162: RMCAreaStrataInteriorOutOfBounds
-        195,163: RMCAreaStrataInteriorOutOfBounds
-        195,164: RMCAreaStrataInteriorOutOfBounds
-        195,166: RMCAreaStrataInteriorOutOfBounds
-        195,167: RMCAreaStrataInteriorOutOfBounds
-        195,168: RMCAreaStrataInteriorOutOfBounds
-        195,169: RMCAreaStrataInteriorOutOfBounds
-        196,146: RMCAreaStrataInteriorOutOfBounds
-        196,147: RMCAreaStrataInteriorOutOfBounds
-        196,148: RMCAreaStrataInteriorOutOfBounds
-        196,149: RMCAreaStrataInteriorOutOfBounds
-        196,150: RMCAreaStrataInteriorOutOfBounds
-        196,151: RMCAreaStrataInteriorOutOfBounds
-        196,152: RMCAreaStrataInteriorOutOfBounds
-        196,153: RMCAreaStrataInteriorOutOfBounds
-        196,154: RMCAreaStrataInteriorOutOfBounds
-        196,155: RMCAreaStrataInteriorOutOfBounds
-        196,156: RMCAreaStrataInteriorOutOfBounds
-        196,157: RMCAreaStrataInteriorOutOfBounds
-        196,158: RMCAreaStrataInteriorOutOfBounds
-        196,159: RMCAreaStrataInteriorOutOfBounds
-        196,160: RMCAreaStrataInteriorOutOfBounds
-        196,161: RMCAreaStrataInteriorOutOfBounds
-        196,162: RMCAreaStrataInteriorOutOfBounds
-        196,163: RMCAreaStrataInteriorOutOfBounds
-        196,164: RMCAreaStrataInteriorOutOfBounds
-        196,165: RMCAreaStrataInteriorOutOfBounds
-        196,166: RMCAreaStrataInteriorOutOfBounds
-        196,167: RMCAreaStrataInteriorOutOfBounds
-        196,168: RMCAreaStrataInteriorOutOfBounds
+        191,149: RMCAreaStrataMiningTop
+        191,150: RMCAreaStrataMiningTop
+        191,151: RMCAreaStrataMiningTop
+        191,152: RMCAreaStrataMiningTop
+        191,153: RMCAreaStrataMiningTop
+        191,154: RMCAreaStrataMiningTop
+        191,155: RMCAreaStrataMiningTop
+        191,156: RMCAreaStrataMiningTop
+        191,157: RMCAreaStrataMiningTop
+        191,158: RMCAreaStrataMiningTop
+        191,159: RMCAreaStrataMiningTop
+        191,160: RMCAreaStrataMiningTop
+        191,147: RMCAreaStrataMiningTop
+        191,162: RMCAreaStrataMiningTop
+        191,163: RMCAreaStrataMiningTop
+        191,164: RMCAreaStrataMiningTop
+        191,165: RMCAreaStrataMiningTop
+        191,166: RMCAreaStrataMiningTop
+        191,167: RMCAreaStrataMiningTop
+        191,168: RMCAreaStrataMiningTop
+        191,169: RMCAreaStrataMiningTop
+        192,146: RMCAreaStrataMiningTop
+        192,147: RMCAreaStrataMiningTop
+        192,148: RMCAreaStrataMiningTop
+        192,149: RMCAreaStrataMiningTop
+        192,150: RMCAreaStrataMiningTop
+        192,151: RMCAreaStrataMiningTop
+        192,152: RMCAreaStrataMiningTop
+        192,153: RMCAreaStrataMiningTop
+        192,154: RMCAreaStrataMiningTop
+        192,155: RMCAreaStrataMiningTop
+        192,156: RMCAreaStrataMiningTop
+        192,157: RMCAreaStrataMiningTop
+        192,158: RMCAreaStrataMiningTop
+        192,159: RMCAreaStrataMiningTop
+        192,160: RMCAreaStrataMiningTop
+        192,161: RMCAreaStrataMiningTop
+        192,162: RMCAreaStrataMiningTop
+        192,163: RMCAreaStrataMiningTop
+        192,164: RMCAreaStrataMiningTop
+        192,165: RMCAreaStrataMiningTop
+        192,166: RMCAreaStrataMiningTop
+        192,167: RMCAreaStrataMiningTop
+        192,168: RMCAreaStrataMiningTop
+        192,169: RMCAreaStrataMiningTop
+        193,146: RMCAreaStrataMiningTop
+        193,147: RMCAreaStrataMiningTop
+        193,148: RMCAreaStrataMiningTop
+        193,149: RMCAreaStrataMiningTop
+        193,150: RMCAreaStrataMiningTop
+        193,151: RMCAreaStrataMiningTop
+        193,152: RMCAreaStrataMiningTop
+        193,153: RMCAreaStrataMiningTop
+        193,154: RMCAreaStrataMiningTop
+        193,155: RMCAreaStrataMiningTop
+        193,156: RMCAreaStrataMiningTop
+        193,157: RMCAreaStrataMiningTop
+        193,158: RMCAreaStrataMiningTop
+        193,159: RMCAreaStrataMiningTop
+        193,160: RMCAreaStrataMiningTop
+        193,161: RMCAreaStrataMiningTop
+        193,162: RMCAreaStrataMiningTop
+        193,163: RMCAreaStrataMiningTop
+        193,164: RMCAreaStrataMiningTop
+        193,165: RMCAreaStrataMiningTop
+        193,166: RMCAreaStrataMiningTop
+        193,167: RMCAreaStrataMiningTop
+        193,168: RMCAreaStrataMiningTop
+        193,169: RMCAreaStrataMiningTop
+        194,146: RMCAreaStrataMiningTop
+        194,147: RMCAreaStrataMiningTop
+        194,148: RMCAreaStrataMiningTop
+        194,149: RMCAreaStrataMiningTop
+        194,150: RMCAreaStrataMiningTop
+        194,151: RMCAreaStrataMiningTop
+        194,152: RMCAreaStrataMiningTop
+        194,153: RMCAreaStrataMiningTop
+        194,154: RMCAreaStrataMiningTop
+        194,155: RMCAreaStrataMiningTop
+        194,156: RMCAreaStrataMiningTop
+        194,157: RMCAreaStrataMiningTop
+        194,158: RMCAreaStrataMiningTop
+        191,161: RMCAreaStrataMiningTop
+        194,160: RMCAreaStrataMiningTop
+        194,161: RMCAreaStrataMiningTop
+        194,159: RMCAreaStrataMiningTop
+        194,163: RMCAreaStrataMiningTop
+        194,164: RMCAreaStrataMiningTop
+        194,165: RMCAreaStrataMiningTop
+        194,162: RMCAreaStrataMiningTop
+        194,167: RMCAreaStrataMiningTop
+        194,168: RMCAreaStrataMiningTop
+        194,169: RMCAreaStrataMiningTop
+        195,146: RMCAreaStrataMiningTop
+        195,147: RMCAreaStrataMiningTop
+        195,148: RMCAreaStrataMiningTop
+        195,149: RMCAreaStrataMiningTop
+        195,150: RMCAreaStrataMiningTop
+        195,151: RMCAreaStrataMiningTop
+        195,152: RMCAreaStrataMiningTop
+        195,153: RMCAreaStrataMiningTop
+        195,154: RMCAreaStrataMiningTop
+        195,155: RMCAreaStrataMiningTop
+        194,166: RMCAreaStrataMiningTop
+        195,157: RMCAreaStrataMiningTop
+        195,158: RMCAreaStrataMiningTop
+        195,159: RMCAreaStrataMiningTop
+        195,156: RMCAreaStrataMiningTop
+        195,160: RMCAreaStrataMiningTop
+        195,161: RMCAreaStrataMiningTop
+        195,162: RMCAreaStrataMiningTop
+        195,163: RMCAreaStrataMiningTop
+        195,164: RMCAreaStrataMiningTop
+        195,166: RMCAreaStrataMiningTop
+        195,167: RMCAreaStrataMiningTop
+        195,168: RMCAreaStrataMiningTop
+        195,169: RMCAreaStrataMiningTop
+        196,146: RMCAreaStrataMiningTop
+        196,147: RMCAreaStrataMiningTop
+        196,148: RMCAreaStrataMiningTop
+        196,149: RMCAreaStrataMiningTop
+        196,150: RMCAreaStrataMiningTop
+        196,151: RMCAreaStrataMiningTop
+        196,152: RMCAreaStrataMiningTop
+        196,153: RMCAreaStrataMiningTop
+        196,154: RMCAreaStrataMiningTop
+        196,155: RMCAreaStrataMiningTop
+        196,156: RMCAreaStrataMiningTop
+        196,157: RMCAreaStrataMiningTop
+        196,158: RMCAreaStrataMiningTop
+        196,159: RMCAreaStrataMiningTop
+        196,160: RMCAreaStrataMiningTop
+        196,161: RMCAreaStrataMiningTop
+        196,162: RMCAreaStrataMiningTop
+        196,163: RMCAreaStrataMiningTop
+        196,164: RMCAreaStrataMiningTop
+        196,165: RMCAreaStrataMiningTop
+        196,166: RMCAreaStrataMiningTop
+        196,167: RMCAreaStrataMiningTop
+        196,168: RMCAreaStrataMiningTop
         196,169: RMCAreaStrataInteriorOutOfBounds
-        197,146: RMCAreaStrataInteriorOutOfBounds
-        197,147: RMCAreaStrataInteriorOutOfBounds
-        197,148: RMCAreaStrataInteriorOutOfBounds
-        197,149: RMCAreaStrataInteriorOutOfBounds
-        197,150: RMCAreaStrataInteriorOutOfBounds
-        197,151: RMCAreaStrataInteriorOutOfBounds
-        197,152: RMCAreaStrataInteriorOutOfBounds
-        197,153: RMCAreaStrataInteriorOutOfBounds
-        197,154: RMCAreaStrataInteriorOutOfBounds
-        197,155: RMCAreaStrataInteriorOutOfBounds
-        197,156: RMCAreaStrataInteriorOutOfBounds
-        197,157: RMCAreaStrataInteriorOutOfBounds
-        197,158: RMCAreaStrataInteriorOutOfBounds
-        197,159: RMCAreaStrataInteriorOutOfBounds
-        197,160: RMCAreaStrataInteriorOutOfBounds
-        197,161: RMCAreaStrataInteriorOutOfBounds
-        197,162: RMCAreaStrataInteriorOutOfBounds
-        197,163: RMCAreaStrataInteriorOutOfBounds
-        197,164: RMCAreaStrataInteriorOutOfBounds
-        197,165: RMCAreaStrataInteriorOutOfBounds
-        197,166: RMCAreaStrataInteriorOutOfBounds
-        197,167: RMCAreaStrataInteriorOutOfBounds
-        197,168: RMCAreaStrataInteriorOutOfBounds
+        197,146: RMCAreaStrataMiningTop
+        197,147: RMCAreaStrataMiningTop
+        197,148: RMCAreaStrataMiningTop
+        197,149: RMCAreaStrataMiningTop
+        197,150: RMCAreaStrataMiningTop
+        197,151: RMCAreaStrataMiningTop
+        197,152: RMCAreaStrataMiningTop
+        197,153: RMCAreaStrataMiningTop
+        197,154: RMCAreaStrataMiningTop
+        197,155: RMCAreaStrataMiningTop
+        197,156: RMCAreaStrataMiningTop
+        197,157: RMCAreaStrataMiningTop
+        197,158: RMCAreaStrataMiningTop
+        197,159: RMCAreaStrataMiningTop
+        197,160: RMCAreaStrataMiningTop
+        197,161: RMCAreaStrataMiningTop
+        197,162: RMCAreaStrataMiningTop
+        197,163: RMCAreaStrataMiningTop
+        197,164: RMCAreaStrataMiningTop
+        197,165: RMCAreaStrataMiningTop
+        197,166: RMCAreaStrataMiningTop
+        197,167: RMCAreaStrataMiningTop
+        197,168: RMCAreaStrataMiningTop
         197,169: RMCAreaStrataInteriorOutOfBounds
-        198,146: RMCAreaStrataInteriorOutOfBounds
-        198,147: RMCAreaStrataInteriorOutOfBounds
-        198,148: RMCAreaStrataInteriorOutOfBounds
-        198,149: RMCAreaStrataInteriorOutOfBounds
-        198,150: RMCAreaStrataInteriorOutOfBounds
-        198,151: RMCAreaStrataInteriorOutOfBounds
-        198,152: RMCAreaStrataInteriorOutOfBounds
-        198,153: RMCAreaStrataInteriorOutOfBounds
-        198,154: RMCAreaStrataInteriorOutOfBounds
-        198,155: RMCAreaStrataInteriorOutOfBounds
-        198,156: RMCAreaStrataInteriorOutOfBounds
-        198,157: RMCAreaStrataInteriorOutOfBounds
-        198,158: RMCAreaStrataInteriorOutOfBounds
-        198,159: RMCAreaStrataInteriorOutOfBounds
-        198,160: RMCAreaStrataInteriorOutOfBounds
-        198,161: RMCAreaStrataInteriorOutOfBounds
-        198,162: RMCAreaStrataInteriorOutOfBounds
-        198,163: RMCAreaStrataInteriorOutOfBounds
-        198,164: RMCAreaStrataInteriorOutOfBounds
-        198,165: RMCAreaStrataInteriorOutOfBounds
-        198,166: RMCAreaStrataInteriorOutOfBounds
-        198,167: RMCAreaStrataInteriorOutOfBounds
-        198,168: RMCAreaStrataInteriorOutOfBounds
+        198,146: RMCAreaStrataMiningTop
+        198,147: RMCAreaStrataMiningTop
+        198,148: RMCAreaStrataMiningTop
+        198,149: RMCAreaStrataMiningTop
+        198,150: RMCAreaStrataMiningTop
+        198,151: RMCAreaStrataMiningTop
+        198,152: RMCAreaStrataMiningTop
+        198,153: RMCAreaStrataMiningTop
+        198,154: RMCAreaStrataMiningTop
+        198,155: RMCAreaStrataMiningTop
+        198,156: RMCAreaStrataMiningTop
+        198,157: RMCAreaStrataMiningTop
+        198,158: RMCAreaStrataMiningTop
+        198,159: RMCAreaStrataMiningTop
+        198,160: RMCAreaStrataMiningTop
+        198,161: RMCAreaStrataMiningTop
+        198,162: RMCAreaStrataMiningTop
+        198,163: RMCAreaStrataMiningTop
+        198,164: RMCAreaStrataMiningTop
+        198,165: RMCAreaStrataMiningTop
+        198,166: RMCAreaStrataMiningTop
+        198,167: RMCAreaStrataMiningTop
+        198,168: RMCAreaStrataMiningTop
         198,169: RMCAreaStrataInteriorOutOfBounds
-        199,146: RMCAreaStrataInteriorOutOfBounds
-        199,147: RMCAreaStrataInteriorOutOfBounds
-        199,148: RMCAreaStrataInteriorOutOfBounds
-        199,149: RMCAreaStrataInteriorOutOfBounds
-        199,150: RMCAreaStrataInteriorOutOfBounds
-        199,151: RMCAreaStrataInteriorOutOfBounds
-        199,152: RMCAreaStrataInteriorOutOfBounds
-        199,153: RMCAreaStrataInteriorOutOfBounds
-        199,154: RMCAreaStrataInteriorOutOfBounds
-        199,155: RMCAreaStrataInteriorOutOfBounds
-        199,156: RMCAreaStrataInteriorOutOfBounds
-        199,157: RMCAreaStrataInteriorOutOfBounds
-        199,158: RMCAreaStrataInteriorOutOfBounds
-        199,159: RMCAreaStrataInteriorOutOfBounds
-        199,160: RMCAreaStrataInteriorOutOfBounds
-        199,161: RMCAreaStrataInteriorOutOfBounds
-        199,162: RMCAreaStrataInteriorOutOfBounds
-        199,163: RMCAreaStrataInteriorOutOfBounds
-        199,164: RMCAreaStrataInteriorOutOfBounds
-        199,165: RMCAreaStrataInteriorOutOfBounds
-        199,166: RMCAreaStrataInteriorOutOfBounds
-        199,167: RMCAreaStrataInteriorOutOfBounds
-        199,168: RMCAreaStrataInteriorOutOfBounds
+        199,146: RMCAreaStrataMiningTop
+        199,147: RMCAreaStrataMiningTop
+        199,148: RMCAreaStrataMiningTop
+        199,149: RMCAreaStrataMiningTop
+        199,150: RMCAreaStrataMiningTop
+        199,151: RMCAreaStrataMiningTop
+        199,152: RMCAreaStrataMiningTop
+        199,153: RMCAreaStrataMiningTop
+        199,154: RMCAreaStrataMiningTop
+        199,155: RMCAreaStrataMiningTop
+        199,156: RMCAreaStrataMiningTop
+        199,157: RMCAreaStrataMiningTop
+        199,158: RMCAreaStrataMiningTop
+        199,159: RMCAreaStrataMiningTop
+        199,160: RMCAreaStrataMiningTop
+        199,161: RMCAreaStrataMiningTop
+        199,162: RMCAreaStrataMiningTop
+        199,163: RMCAreaStrataMiningTop
+        199,164: RMCAreaStrataMiningTop
+        199,165: RMCAreaStrataMiningTop
+        199,166: RMCAreaStrataMiningTop
+        199,167: RMCAreaStrataMiningTop
+        199,168: RMCAreaStrataMiningTop
         199,169: RMCAreaStrataInteriorOutOfBounds
-        200,146: RMCAreaStrataInteriorOutOfBounds
-        200,147: RMCAreaStrataInteriorOutOfBounds
-        200,148: RMCAreaStrataInteriorOutOfBounds
-        200,149: RMCAreaStrataInteriorOutOfBounds
-        200,150: RMCAreaStrataInteriorOutOfBounds
-        200,151: RMCAreaStrataInteriorOutOfBounds
-        200,152: RMCAreaStrataInteriorOutOfBounds
-        200,153: RMCAreaStrataInteriorOutOfBounds
-        200,154: RMCAreaStrataInteriorOutOfBounds
-        200,155: RMCAreaStrataInteriorOutOfBounds
-        200,156: RMCAreaStrataInteriorOutOfBounds
-        200,157: RMCAreaStrataInteriorOutOfBounds
-        200,158: RMCAreaStrataInteriorOutOfBounds
-        200,159: RMCAreaStrataInteriorOutOfBounds
-        200,160: RMCAreaStrataInteriorOutOfBounds
-        200,161: RMCAreaStrataInteriorOutOfBounds
-        200,162: RMCAreaStrataInteriorOutOfBounds
-        200,163: RMCAreaStrataInteriorOutOfBounds
-        200,164: RMCAreaStrataInteriorOutOfBounds
-        200,165: RMCAreaStrataInteriorOutOfBounds
-        200,166: RMCAreaStrataInteriorOutOfBounds
-        200,167: RMCAreaStrataInteriorOutOfBounds
-        200,168: RMCAreaStrataInteriorOutOfBounds
+        200,146: RMCAreaStrataMiningTop
+        200,147: RMCAreaStrataMiningTop
+        200,148: RMCAreaStrataMiningTop
+        200,149: RMCAreaStrataMiningTop
+        200,150: RMCAreaStrataMiningTop
+        200,151: RMCAreaStrataMiningTop
+        200,152: RMCAreaStrataMiningTop
+        200,153: RMCAreaStrataMiningTop
+        200,154: RMCAreaStrataMiningTop
+        200,155: RMCAreaStrataMiningTop
+        200,156: RMCAreaStrataMiningTop
+        200,157: RMCAreaStrataMiningTop
+        200,158: RMCAreaStrataMiningTop
+        200,159: RMCAreaStrataMiningTop
+        200,160: RMCAreaStrataMiningTop
+        200,161: RMCAreaStrataMiningTop
+        200,162: RMCAreaStrataMiningTop
+        200,163: RMCAreaStrataMiningTop
+        200,164: RMCAreaStrataMiningTop
+        200,165: RMCAreaStrataMiningTop
+        200,166: RMCAreaStrataMiningTop
+        200,167: RMCAreaStrataMiningTop
+        200,168: RMCAreaStrataMiningTop
         200,169: RMCAreaStrataInteriorOutOfBounds
-        201,146: RMCAreaStrataInteriorOutOfBounds
-        201,147: RMCAreaStrataInteriorOutOfBounds
-        201,148: RMCAreaStrataInteriorOutOfBounds
-        201,149: RMCAreaStrataInteriorOutOfBounds
-        201,150: RMCAreaStrataInteriorOutOfBounds
-        201,151: RMCAreaStrataInteriorOutOfBounds
-        201,152: RMCAreaStrataInteriorOutOfBounds
-        201,153: RMCAreaStrataInteriorOutOfBounds
-        201,154: RMCAreaStrataInteriorOutOfBounds
-        201,155: RMCAreaStrataInteriorOutOfBounds
-        201,156: RMCAreaStrataInteriorOutOfBounds
-        201,157: RMCAreaStrataInteriorOutOfBounds
-        201,158: RMCAreaStrataInteriorOutOfBounds
-        201,159: RMCAreaStrataInteriorOutOfBounds
-        201,160: RMCAreaStrataInteriorOutOfBounds
-        201,161: RMCAreaStrataInteriorOutOfBounds
-        201,162: RMCAreaStrataInteriorOutOfBounds
-        201,163: RMCAreaStrataInteriorOutOfBounds
-        201,164: RMCAreaStrataInteriorOutOfBounds
-        201,165: RMCAreaStrataInteriorOutOfBounds
-        201,166: RMCAreaStrataInteriorOutOfBounds
-        201,167: RMCAreaStrataInteriorOutOfBounds
-        201,168: RMCAreaStrataInteriorOutOfBounds
+        201,146: RMCAreaStrataMiningTop
+        201,147: RMCAreaStrataMiningTop
+        201,148: RMCAreaStrataMiningTop
+        201,149: RMCAreaStrataMiningTop
+        201,150: RMCAreaStrataMiningTop
+        201,151: RMCAreaStrataMiningTop
+        201,152: RMCAreaStrataMiningTop
+        201,153: RMCAreaStrataMiningTop
+        201,154: RMCAreaStrataMiningTop
+        201,155: RMCAreaStrataMiningTop
+        201,156: RMCAreaStrataMiningTop
+        201,157: RMCAreaStrataMiningTop
+        201,158: RMCAreaStrataMiningTop
+        201,159: RMCAreaStrataMiningTop
+        201,160: RMCAreaStrataMiningTop
+        201,161: RMCAreaStrataMiningTop
+        201,162: RMCAreaStrataMiningTop
+        201,163: RMCAreaStrataMiningTop
+        201,164: RMCAreaStrataMiningTop
+        201,165: RMCAreaStrataMiningTop
+        201,166: RMCAreaStrataMiningTop
+        201,167: RMCAreaStrataMiningTop
+        201,168: RMCAreaStrataMiningTop
         201,169: RMCAreaStrataInteriorOutOfBounds
-        202,146: RMCAreaStrataInteriorOutOfBounds
-        202,147: RMCAreaStrataInteriorOutOfBounds
-        202,148: RMCAreaStrataInteriorOutOfBounds
-        202,149: RMCAreaStrataInteriorOutOfBounds
-        202,150: RMCAreaStrataInteriorOutOfBounds
-        202,151: RMCAreaStrataInteriorOutOfBounds
-        202,152: RMCAreaStrataInteriorOutOfBounds
-        202,153: RMCAreaStrataInteriorOutOfBounds
-        202,154: RMCAreaStrataInteriorOutOfBounds
-        202,155: RMCAreaStrataInteriorOutOfBounds
-        202,156: RMCAreaStrataInteriorOutOfBounds
-        202,157: RMCAreaStrataInteriorOutOfBounds
-        202,158: RMCAreaStrataInteriorOutOfBounds
-        202,159: RMCAreaStrataInteriorOutOfBounds
-        202,160: RMCAreaStrataInteriorOutOfBounds
-        202,161: RMCAreaStrataInteriorOutOfBounds
-        202,162: RMCAreaStrataInteriorOutOfBounds
-        202,163: RMCAreaStrataInteriorOutOfBounds
-        202,164: RMCAreaStrataInteriorOutOfBounds
-        202,165: RMCAreaStrataInteriorOutOfBounds
-        202,166: RMCAreaStrataInteriorOutOfBounds
-        202,167: RMCAreaStrataInteriorOutOfBounds
-        202,168: RMCAreaStrataInteriorOutOfBounds
+        202,146: RMCAreaStrataMiningTop
+        202,147: RMCAreaStrataMiningTop
+        202,148: RMCAreaStrataMiningTop
+        202,149: RMCAreaStrataMiningTop
+        202,150: RMCAreaStrataMiningTop
+        202,151: RMCAreaStrataMiningTop
+        202,152: RMCAreaStrataMiningTop
+        202,153: RMCAreaStrataMiningTop
+        202,154: RMCAreaStrataMiningTop
+        202,155: RMCAreaStrataMiningTop
+        202,156: RMCAreaStrataMiningTop
+        202,157: RMCAreaStrataMiningTop
+        202,158: RMCAreaStrataMiningTop
+        202,159: RMCAreaStrataMiningTop
+        202,160: RMCAreaStrataMiningTop
+        202,161: RMCAreaStrataMiningTop
+        202,162: RMCAreaStrataMiningTop
+        202,163: RMCAreaStrataMiningTop
+        202,164: RMCAreaStrataMiningTop
+        202,165: RMCAreaStrataMiningTop
+        202,166: RMCAreaStrataMiningTop
+        202,167: RMCAreaStrataMiningTop
+        202,168: RMCAreaStrataMiningTop
         202,169: RMCAreaStrataInteriorOutOfBounds
-        203,146: RMCAreaStrataInteriorOutOfBounds
-        203,147: RMCAreaStrataInteriorOutOfBounds
-        203,148: RMCAreaStrataInteriorOutOfBounds
-        203,149: RMCAreaStrataInteriorOutOfBounds
-        203,150: RMCAreaStrataInteriorOutOfBounds
-        203,151: RMCAreaStrataInteriorOutOfBounds
-        203,152: RMCAreaStrataInteriorOutOfBounds
-        203,153: RMCAreaStrataInteriorOutOfBounds
-        203,154: RMCAreaStrataInteriorOutOfBounds
-        203,155: RMCAreaStrataInteriorOutOfBounds
-        203,156: RMCAreaStrataInteriorOutOfBounds
-        203,157: RMCAreaStrataInteriorOutOfBounds
-        203,158: RMCAreaStrataInteriorOutOfBounds
-        203,159: RMCAreaStrataInteriorOutOfBounds
-        203,160: RMCAreaStrataInteriorOutOfBounds
-        203,161: RMCAreaStrataInteriorOutOfBounds
-        203,162: RMCAreaStrataInteriorOutOfBounds
-        203,163: RMCAreaStrataInteriorOutOfBounds
-        203,164: RMCAreaStrataInteriorOutOfBounds
-        203,165: RMCAreaStrataInteriorOutOfBounds
-        203,166: RMCAreaStrataInteriorOutOfBounds
-        203,167: RMCAreaStrataInteriorOutOfBounds
-        203,168: RMCAreaStrataInteriorOutOfBounds
+        203,146: RMCAreaStrataMiningTop
+        203,147: RMCAreaStrataMiningTop
+        203,148: RMCAreaStrataMiningTop
+        203,149: RMCAreaStrataMiningTop
+        203,150: RMCAreaStrataMiningTop
+        203,151: RMCAreaStrataMiningTop
+        203,152: RMCAreaStrataMiningTop
+        203,153: RMCAreaStrataMiningTop
+        203,154: RMCAreaStrataMiningTop
+        203,155: RMCAreaStrataMiningTop
+        203,156: RMCAreaStrataMiningTop
+        203,157: RMCAreaStrataMiningTop
+        203,158: RMCAreaStrataMiningTop
+        203,159: RMCAreaStrataMiningTop
+        203,160: RMCAreaStrataMiningTop
+        203,161: RMCAreaStrataMiningTop
+        203,162: RMCAreaStrataMiningTop
+        203,163: RMCAreaStrataMiningTop
+        203,164: RMCAreaStrataMiningTop
+        203,165: RMCAreaStrataMiningTop
+        203,166: RMCAreaStrataMiningTop
+        203,167: RMCAreaStrataMiningTop
+        203,168: RMCAreaStrataMiningTop
         203,169: RMCAreaStrataInteriorOutOfBounds
-        204,146: RMCAreaStrataInteriorOutOfBounds
-        204,147: RMCAreaStrataInteriorOutOfBounds
-        204,148: RMCAreaStrataInteriorOutOfBounds
-        204,149: RMCAreaStrataInteriorOutOfBounds
-        204,150: RMCAreaStrataInteriorOutOfBounds
-        204,151: RMCAreaStrataInteriorOutOfBounds
-        204,152: RMCAreaStrataInteriorOutOfBounds
-        204,153: RMCAreaStrataInteriorOutOfBounds
-        204,154: RMCAreaStrataInteriorOutOfBounds
-        204,155: RMCAreaStrataInteriorOutOfBounds
-        204,156: RMCAreaStrataInteriorOutOfBounds
-        204,157: RMCAreaStrataInteriorOutOfBounds
-        204,158: RMCAreaStrataInteriorOutOfBounds
-        204,159: RMCAreaStrataInteriorOutOfBounds
-        204,160: RMCAreaStrataInteriorOutOfBounds
-        204,161: RMCAreaStrataInteriorOutOfBounds
-        204,162: RMCAreaStrataInteriorOutOfBounds
-        204,163: RMCAreaStrataInteriorOutOfBounds
-        204,164: RMCAreaStrataInteriorOutOfBounds
-        204,165: RMCAreaStrataInteriorOutOfBounds
-        204,166: RMCAreaStrataInteriorOutOfBounds
-        204,167: RMCAreaStrataInteriorOutOfBounds
-        204,168: RMCAreaStrataInteriorOutOfBounds
-        204,169: RMCAreaStrataInteriorOutOfBounds
-        205,146: RMCAreaStrataInteriorOutOfBounds
-        205,147: RMCAreaStrataInteriorOutOfBounds
-        205,148: RMCAreaStrataInteriorOutOfBounds
-        205,149: RMCAreaStrataInteriorOutOfBounds
-        205,150: RMCAreaStrataInteriorOutOfBounds
-        205,151: RMCAreaStrataInteriorOutOfBounds
-        205,152: RMCAreaStrataInteriorOutOfBounds
-        205,153: RMCAreaStrataInteriorOutOfBounds
-        205,154: RMCAreaStrataInteriorOutOfBounds
-        205,155: RMCAreaStrataInteriorOutOfBounds
-        205,156: RMCAreaStrataInteriorOutOfBounds
-        205,157: RMCAreaStrataInteriorOutOfBounds
-        205,158: RMCAreaStrataInteriorOutOfBounds
-        205,159: RMCAreaStrataInteriorOutOfBounds
-        205,160: RMCAreaStrataInteriorOutOfBounds
-        205,161: RMCAreaStrataInteriorOutOfBounds
-        205,162: RMCAreaStrataInteriorOutOfBounds
-        205,163: RMCAreaStrataInteriorOutOfBounds
-        205,164: RMCAreaStrataInteriorOutOfBounds
-        205,165: RMCAreaStrataInteriorOutOfBounds
-        205,166: RMCAreaStrataInteriorOutOfBounds
-        205,167: RMCAreaStrataInteriorOutOfBounds
-        205,168: RMCAreaStrataInteriorOutOfBounds
-        205,169: RMCAreaStrataInteriorOutOfBounds
-        206,146: RMCAreaStrataInteriorOutOfBounds
-        206,147: RMCAreaStrataInteriorOutOfBounds
-        206,148: RMCAreaStrataInteriorOutOfBounds
-        206,149: RMCAreaStrataInteriorOutOfBounds
-        206,150: RMCAreaStrataInteriorOutOfBounds
-        206,151: RMCAreaStrataInteriorOutOfBounds
-        206,152: RMCAreaStrataInteriorOutOfBounds
-        206,153: RMCAreaStrataInteriorOutOfBounds
-        206,154: RMCAreaStrataInteriorOutOfBounds
-        206,155: RMCAreaStrataInteriorOutOfBounds
-        206,156: RMCAreaStrataInteriorOutOfBounds
-        206,157: RMCAreaStrataInteriorOutOfBounds
-        206,158: RMCAreaStrataInteriorOutOfBounds
-        206,159: RMCAreaStrataInteriorOutOfBounds
-        206,160: RMCAreaStrataInteriorOutOfBounds
-        206,161: RMCAreaStrataInteriorOutOfBounds
-        206,162: RMCAreaStrataInteriorOutOfBounds
-        206,163: RMCAreaStrataInteriorOutOfBounds
-        206,164: RMCAreaStrataInteriorOutOfBounds
-        206,165: RMCAreaStrataInteriorOutOfBounds
-        206,166: RMCAreaStrataInteriorOutOfBounds
-        206,167: RMCAreaStrataInteriorOutOfBounds
-        206,168: RMCAreaStrataInteriorOutOfBounds
-        206,169: RMCAreaStrataInteriorOutOfBounds
-        207,146: RMCAreaStrataInteriorOutOfBounds
-        207,147: RMCAreaStrataInteriorOutOfBounds
-        207,148: RMCAreaStrataInteriorOutOfBounds
-        207,149: RMCAreaStrataInteriorOutOfBounds
-        207,150: RMCAreaStrataInteriorOutOfBounds
-        207,151: RMCAreaStrataInteriorOutOfBounds
-        207,152: RMCAreaStrataInteriorOutOfBounds
-        207,153: RMCAreaStrataInteriorOutOfBounds
-        207,154: RMCAreaStrataInteriorOutOfBounds
-        207,155: RMCAreaStrataInteriorOutOfBounds
-        207,156: RMCAreaStrataInteriorOutOfBounds
-        207,157: RMCAreaStrataInteriorOutOfBounds
-        207,158: RMCAreaStrataInteriorOutOfBounds
-        207,159: RMCAreaStrataInteriorOutOfBounds
-        207,160: RMCAreaStrataInteriorOutOfBounds
-        207,161: RMCAreaStrataInteriorOutOfBounds
-        207,162: RMCAreaStrataInteriorOutOfBounds
-        207,163: RMCAreaStrataInteriorOutOfBounds
-        207,164: RMCAreaStrataInteriorOutOfBounds
-        207,165: RMCAreaStrataInteriorOutOfBounds
-        207,166: RMCAreaStrataInteriorOutOfBounds
-        207,167: RMCAreaStrataInteriorOutOfBounds
-        207,168: RMCAreaStrataInteriorOutOfBounds
+        204,146: RMCAreaStrataMiningTop
+        204,147: RMCAreaStrataMiningTop
+        204,148: RMCAreaStrataMiningTop
+        204,149: RMCAreaStrataMiningTop
+        204,150: RMCAreaStrataMiningTop
+        204,151: RMCAreaStrataMiningTop
+        204,152: RMCAreaStrataMiningTop
+        204,153: RMCAreaStrataMiningTop
+        204,154: RMCAreaStrataMiningTop
+        204,155: RMCAreaStrataMiningTop
+        204,156: RMCAreaStrataMiningTop
+        204,157: RMCAreaStrataMiningTop
+        204,158: RMCAreaStrataMiningTop
+        204,159: RMCAreaStrataMiningTop
+        204,160: RMCAreaStrataMiningTop
+        204,161: RMCAreaStrataMiningTop
+        204,162: RMCAreaStrataMiningTop
+        204,163: RMCAreaStrataMiningTop
+        204,164: RMCAreaStrataMiningTop
+        204,165: RMCAreaStrataMiningTop
+        204,166: RMCAreaStrataMiningTop
+        204,167: RMCAreaStrataMiningTop
+        204,168: RMCAreaStrataMiningTop
+        204,169: RMCAreaStrataMiningTop
+        205,146: RMCAreaStrataMiningTop
+        205,147: RMCAreaStrataMiningTop
+        205,148: RMCAreaStrataMiningTop
+        205,149: RMCAreaStrataMiningTop
+        205,150: RMCAreaStrataMiningTop
+        205,151: RMCAreaStrataMiningTop
+        205,152: RMCAreaStrataMiningTop
+        205,153: RMCAreaStrataMiningTop
+        205,154: RMCAreaStrataMiningTop
+        205,155: RMCAreaStrataMiningTop
+        205,156: RMCAreaStrataMiningTop
+        205,157: RMCAreaStrataMiningTop
+        205,158: RMCAreaStrataMiningTop
+        205,159: RMCAreaStrataMiningTop
+        205,160: RMCAreaStrataMiningTop
+        205,161: RMCAreaStrataMiningTop
+        205,162: RMCAreaStrataMiningTop
+        205,163: RMCAreaStrataMiningTop
+        205,164: RMCAreaStrataMiningTop
+        205,165: RMCAreaStrataMiningTop
+        205,166: RMCAreaStrataMiningTop
+        205,167: RMCAreaStrataMiningTop
+        205,168: RMCAreaStrataMiningTop
+        205,169: RMCAreaStrataMiningTop
+        206,146: RMCAreaStrataMiningTop
+        206,147: RMCAreaStrataMiningTop
+        206,148: RMCAreaStrataMiningTop
+        206,149: RMCAreaStrataMiningTop
+        206,150: RMCAreaStrataMiningTop
+        206,151: RMCAreaStrataMiningTop
+        206,152: RMCAreaStrataMiningTop
+        206,153: RMCAreaStrataMiningTop
+        206,154: RMCAreaStrataMiningTop
+        206,155: RMCAreaStrataMiningTop
+        206,156: RMCAreaStrataMiningTop
+        206,157: RMCAreaStrataMiningTop
+        206,158: RMCAreaStrataMiningTop
+        206,159: RMCAreaStrataMiningTop
+        206,160: RMCAreaStrataMiningTop
+        206,161: RMCAreaStrataMiningTop
+        206,162: RMCAreaStrataMiningTop
+        206,163: RMCAreaStrataMiningTop
+        206,164: RMCAreaStrataMiningTop
+        206,165: RMCAreaStrataMiningTop
+        206,166: RMCAreaStrataMiningTop
+        206,167: RMCAreaStrataMiningTop
+        206,168: RMCAreaStrataMiningTop
+        206,169: RMCAreaStrataMiningTop
+        207,146: RMCAreaStrataMiningTop
+        207,147: RMCAreaStrataMiningTop
+        207,148: RMCAreaStrataMiningTop
+        207,149: RMCAreaStrataMiningTop
+        207,150: RMCAreaStrataMiningTop
+        207,151: RMCAreaStrataMiningTop
+        207,152: RMCAreaStrataMiningTop
+        207,153: RMCAreaStrataMiningTop
+        207,154: RMCAreaStrataMiningTop
+        207,155: RMCAreaStrataMiningTop
+        207,156: RMCAreaStrataMiningTop
+        207,157: RMCAreaStrataMiningTop
+        207,158: RMCAreaStrataMiningTop
+        207,159: RMCAreaStrataMiningTop
+        207,160: RMCAreaStrataMiningTop
+        207,161: RMCAreaStrataMiningTop
+        207,162: RMCAreaStrataMiningTop
+        207,163: RMCAreaStrataMiningTop
+        207,164: RMCAreaStrataMiningTop
+        207,165: RMCAreaStrataMiningTop
+        207,166: RMCAreaStrataMiningTop
+        207,167: RMCAreaStrataMiningTop
+        207,168: RMCAreaStrataMiningTop
         207,169: RMCAreaStrataInteriorOutOfBounds
-        208,146: RMCAreaStrataInteriorOutOfBounds
-        208,147: RMCAreaStrataInteriorOutOfBounds
-        208,148: RMCAreaStrataInteriorOutOfBounds
-        208,149: RMCAreaStrataInteriorOutOfBounds
-        208,150: RMCAreaStrataInteriorOutOfBounds
-        208,151: RMCAreaStrataInteriorOutOfBounds
-        208,152: RMCAreaStrataInteriorOutOfBounds
-        208,153: RMCAreaStrataInteriorOutOfBounds
-        208,154: RMCAreaStrataInteriorOutOfBounds
-        208,155: RMCAreaStrataInteriorOutOfBounds
-        208,156: RMCAreaStrataInteriorOutOfBounds
-        208,157: RMCAreaStrataInteriorOutOfBounds
-        208,158: RMCAreaStrataInteriorOutOfBounds
-        208,159: RMCAreaStrataInteriorOutOfBounds
-        208,160: RMCAreaStrataInteriorOutOfBounds
-        208,161: RMCAreaStrataInteriorOutOfBounds
-        208,162: RMCAreaStrataInteriorOutOfBounds
-        208,163: RMCAreaStrataInteriorOutOfBounds
-        208,164: RMCAreaStrataInteriorOutOfBounds
-        208,165: RMCAreaStrataInteriorOutOfBounds
-        208,166: RMCAreaStrataInteriorOutOfBounds
-        208,167: RMCAreaStrataInteriorOutOfBounds
-        208,168: RMCAreaStrataInteriorOutOfBounds
+        208,146: RMCAreaStrataMiningTop
+        208,147: RMCAreaStrataMiningTop
+        208,148: RMCAreaStrataMiningTop
+        208,149: RMCAreaStrataMiningTop
+        208,150: RMCAreaStrataMiningTop
+        208,151: RMCAreaStrataMiningTop
+        208,152: RMCAreaStrataMiningTop
+        208,153: RMCAreaStrataMiningTop
+        208,154: RMCAreaStrataMiningTop
+        208,155: RMCAreaStrataMiningTop
+        208,156: RMCAreaStrataMiningTop
+        208,157: RMCAreaStrataMiningTop
+        208,158: RMCAreaStrataMiningTop
+        208,159: RMCAreaStrataMiningTop
+        208,160: RMCAreaStrataMiningTop
+        208,161: RMCAreaStrataMiningTop
+        208,162: RMCAreaStrataMiningTop
+        208,163: RMCAreaStrataMiningTop
+        208,164: RMCAreaStrataMiningTop
+        208,165: RMCAreaStrataMiningTop
+        208,166: RMCAreaStrataMiningTop
+        208,167: RMCAreaStrataMiningTop
+        208,168: RMCAreaStrataMiningTop
         208,169: RMCAreaStrataInteriorOutOfBounds
-        209,146: RMCAreaStrataInteriorOutOfBounds
-        209,147: RMCAreaStrataInteriorOutOfBounds
-        209,148: RMCAreaStrataInteriorOutOfBounds
-        209,149: RMCAreaStrataInteriorOutOfBounds
-        209,150: RMCAreaStrataInteriorOutOfBounds
-        209,151: RMCAreaStrataInteriorOutOfBounds
-        209,152: RMCAreaStrataInteriorOutOfBounds
-        209,153: RMCAreaStrataInteriorOutOfBounds
-        209,154: RMCAreaStrataInteriorOutOfBounds
-        209,155: RMCAreaStrataInteriorOutOfBounds
-        209,156: RMCAreaStrataInteriorOutOfBounds
-        209,157: RMCAreaStrataInteriorOutOfBounds
-        209,158: RMCAreaStrataInteriorOutOfBounds
-        209,159: RMCAreaStrataInteriorOutOfBounds
-        209,160: RMCAreaStrataInteriorOutOfBounds
-        209,161: RMCAreaStrataInteriorOutOfBounds
-        209,162: RMCAreaStrataInteriorOutOfBounds
-        209,163: RMCAreaStrataInteriorOutOfBounds
-        209,164: RMCAreaStrataInteriorOutOfBounds
-        209,165: RMCAreaStrataInteriorOutOfBounds
-        209,166: RMCAreaStrataInteriorOutOfBounds
-        209,167: RMCAreaStrataInteriorOutOfBounds
-        209,168: RMCAreaStrataInteriorOutOfBounds
+        209,146: RMCAreaStrataMiningTop
+        209,147: RMCAreaStrataMiningTop
+        209,148: RMCAreaStrataMiningTop
+        209,149: RMCAreaStrataMiningTop
+        209,150: RMCAreaStrataMiningTop
+        209,151: RMCAreaStrataMiningTop
+        209,152: RMCAreaStrataMiningTop
+        209,153: RMCAreaStrataMiningTop
+        209,154: RMCAreaStrataMiningTop
+        209,155: RMCAreaStrataMiningTop
+        209,156: RMCAreaStrataMiningTop
+        209,157: RMCAreaStrataMiningTop
+        209,158: RMCAreaStrataMiningTop
+        209,159: RMCAreaStrataMiningTop
+        209,160: RMCAreaStrataMiningTop
+        209,161: RMCAreaStrataMiningTop
+        209,162: RMCAreaStrataMiningTop
+        209,163: RMCAreaStrataMiningTop
+        209,164: RMCAreaStrataMiningTop
+        209,165: RMCAreaStrataMiningTop
+        209,166: RMCAreaStrataMiningTop
+        209,167: RMCAreaStrataMiningTop
+        209,168: RMCAreaStrataMiningTop
         209,169: RMCAreaStrataInteriorOutOfBounds
-        210,146: RMCAreaStrataInteriorOutOfBounds
-        210,147: RMCAreaStrataInteriorOutOfBounds
-        210,148: RMCAreaStrataInteriorOutOfBounds
-        210,149: RMCAreaStrataInteriorOutOfBounds
-        210,150: RMCAreaStrataInteriorOutOfBounds
-        210,151: RMCAreaStrataInteriorOutOfBounds
-        210,152: RMCAreaStrataInteriorOutOfBounds
-        210,153: RMCAreaStrataInteriorOutOfBounds
-        210,154: RMCAreaStrataInteriorOutOfBounds
-        210,155: RMCAreaStrataInteriorOutOfBounds
-        210,156: RMCAreaStrataInteriorOutOfBounds
-        210,157: RMCAreaStrataInteriorOutOfBounds
-        210,158: RMCAreaStrataInteriorOutOfBounds
-        210,159: RMCAreaStrataInteriorOutOfBounds
-        210,160: RMCAreaStrataInteriorOutOfBounds
-        210,161: RMCAreaStrataInteriorOutOfBounds
-        210,162: RMCAreaStrataInteriorOutOfBounds
-        210,163: RMCAreaStrataInteriorOutOfBounds
-        210,164: RMCAreaStrataInteriorOutOfBounds
-        210,165: RMCAreaStrataInteriorOutOfBounds
-        210,166: RMCAreaStrataInteriorOutOfBounds
-        210,167: RMCAreaStrataInteriorOutOfBounds
-        210,168: RMCAreaStrataInteriorOutOfBounds
+        210,146: RMCAreaStrataMiningTop
+        210,147: RMCAreaStrataMiningTop
+        210,148: RMCAreaStrataMiningTop
+        210,149: RMCAreaStrataMiningTop
+        210,150: RMCAreaStrataMiningTop
+        210,151: RMCAreaStrataMiningTop
+        210,152: RMCAreaStrataMiningTop
+        210,153: RMCAreaStrataMiningTop
+        210,154: RMCAreaStrataMiningTop
+        210,155: RMCAreaStrataMiningTop
+        210,156: RMCAreaStrataMiningTop
+        210,157: RMCAreaStrataMiningTop
+        210,158: RMCAreaStrataMiningTop
+        210,159: RMCAreaStrataMiningTop
+        210,160: RMCAreaStrataMiningTop
+        210,161: RMCAreaStrataMiningTop
+        210,162: RMCAreaStrataMiningTop
+        210,163: RMCAreaStrataMiningTop
+        210,164: RMCAreaStrataMiningTop
+        210,165: RMCAreaStrataMiningTop
+        210,166: RMCAreaStrataMiningTop
+        210,167: RMCAreaStrataMiningTop
+        210,168: RMCAreaStrataMiningTop
         210,169: RMCAreaStrataInteriorOutOfBounds
-        211,146: RMCAreaStrataInteriorOutOfBounds
-        211,147: RMCAreaStrataInteriorOutOfBounds
-        211,149: RMCAreaStrataInteriorOutOfBounds
-        211,150: RMCAreaStrataInteriorOutOfBounds
-        211,151: RMCAreaStrataInteriorOutOfBounds
-        211,152: RMCAreaStrataInteriorOutOfBounds
-        211,153: RMCAreaStrataInteriorOutOfBounds
-        211,154: RMCAreaStrataInteriorOutOfBounds
-        211,155: RMCAreaStrataInteriorOutOfBounds
-        211,156: RMCAreaStrataInteriorOutOfBounds
-        211,157: RMCAreaStrataInteriorOutOfBounds
-        211,158: RMCAreaStrataInteriorOutOfBounds
-        211,159: RMCAreaStrataInteriorOutOfBounds
-        211,160: RMCAreaStrataInteriorOutOfBounds
-        211,161: RMCAreaStrataInteriorOutOfBounds
-        211,162: RMCAreaStrataInteriorOutOfBounds
-        211,163: RMCAreaStrataInteriorOutOfBounds
-        211,164: RMCAreaStrataInteriorOutOfBounds
-        211,165: RMCAreaStrataInteriorOutOfBounds
-        211,166: RMCAreaStrataInteriorOutOfBounds
-        211,167: RMCAreaStrataInteriorOutOfBounds
-        211,168: RMCAreaStrataInteriorOutOfBounds
+        211,146: RMCAreaStrataMiningTop
+        211,147: RMCAreaStrataMiningTop
+        211,149: RMCAreaStrataMiningTop
+        211,150: RMCAreaStrataMiningTop
+        211,151: RMCAreaStrataMiningTop
+        211,152: RMCAreaStrataMiningTop
+        211,153: RMCAreaStrataMiningTop
+        211,154: RMCAreaStrataMiningTop
+        211,155: RMCAreaStrataMiningTop
+        211,156: RMCAreaStrataMiningTop
+        211,157: RMCAreaStrataMiningTop
+        211,158: RMCAreaStrataMiningTop
+        211,159: RMCAreaStrataMiningTop
+        211,160: RMCAreaStrataMiningTop
+        211,161: RMCAreaStrataMiningTop
+        211,162: RMCAreaStrataMiningTop
+        211,163: RMCAreaStrataMiningTop
+        211,164: RMCAreaStrataMiningTop
+        211,165: RMCAreaStrataMiningTop
+        211,166: RMCAreaStrataMiningTop
+        211,167: RMCAreaStrataMiningTop
+        211,168: RMCAreaStrataMiningTop
         211,169: RMCAreaStrataInteriorOutOfBounds
-        212,146: RMCAreaStrataInteriorOutOfBounds
-        212,147: RMCAreaStrataInteriorOutOfBounds
-        212,148: RMCAreaStrataInteriorOutOfBounds
-        212,149: RMCAreaStrataInteriorOutOfBounds
-        212,150: RMCAreaStrataInteriorOutOfBounds
-        212,151: RMCAreaStrataInteriorOutOfBounds
-        212,152: RMCAreaStrataInteriorOutOfBounds
-        212,153: RMCAreaStrataInteriorOutOfBounds
-        212,154: RMCAreaStrataInteriorOutOfBounds
-        212,155: RMCAreaStrataInteriorOutOfBounds
-        212,156: RMCAreaStrataInteriorOutOfBounds
-        212,157: RMCAreaStrataInteriorOutOfBounds
-        212,158: RMCAreaStrataInteriorOutOfBounds
-        212,159: RMCAreaStrataInteriorOutOfBounds
-        212,160: RMCAreaStrataInteriorOutOfBounds
-        212,161: RMCAreaStrataInteriorOutOfBounds
-        212,162: RMCAreaStrataInteriorOutOfBounds
-        212,163: RMCAreaStrataInteriorOutOfBounds
-        212,164: RMCAreaStrataInteriorOutOfBounds
-        212,165: RMCAreaStrataInteriorOutOfBounds
-        212,166: RMCAreaStrataInteriorOutOfBounds
-        212,167: RMCAreaStrataInteriorOutOfBounds
-        212,168: RMCAreaStrataInteriorOutOfBounds
+        212,146: RMCAreaStrataMiningTop
+        212,147: RMCAreaStrataMiningTop
+        212,148: RMCAreaStrataMiningTop
+        212,149: RMCAreaStrataMiningTop
+        212,150: RMCAreaStrataMiningTop
+        212,151: RMCAreaStrataMiningTop
+        212,152: RMCAreaStrataMiningTop
+        212,153: RMCAreaStrataMiningTop
+        212,154: RMCAreaStrataMiningTop
+        212,155: RMCAreaStrataMiningTop
+        212,156: RMCAreaStrataMiningTop
+        212,157: RMCAreaStrataMiningTop
+        212,158: RMCAreaStrataMiningTop
+        212,159: RMCAreaStrataMiningTop
+        212,160: RMCAreaStrataMiningTop
+        212,161: RMCAreaStrataMiningTop
+        212,162: RMCAreaStrataMiningTop
+        212,163: RMCAreaStrataMiningTop
+        212,164: RMCAreaStrataMiningTop
+        212,165: RMCAreaStrataMiningTop
+        212,166: RMCAreaStrataMiningTop
+        212,167: RMCAreaStrataMiningTop
+        212,168: RMCAreaStrataMiningTop
         212,169: RMCAreaStrataInteriorOutOfBounds
-        213,146: RMCAreaStrataInteriorOutOfBounds
-        213,147: RMCAreaStrataInteriorOutOfBounds
-        211,148: RMCAreaStrataInteriorOutOfBounds
-        213,149: RMCAreaStrataInteriorOutOfBounds
-        213,148: RMCAreaStrataInteriorOutOfBounds
-        213,151: RMCAreaStrataInteriorOutOfBounds
-        213,152: RMCAreaStrataInteriorOutOfBounds
-        213,153: RMCAreaStrataInteriorOutOfBounds
-        213,150: RMCAreaStrataInteriorOutOfBounds
-        213,155: RMCAreaStrataInteriorOutOfBounds
-        213,156: RMCAreaStrataInteriorOutOfBounds
-        213,157: RMCAreaStrataInteriorOutOfBounds
-        213,158: RMCAreaStrataInteriorOutOfBounds
-        213,159: RMCAreaStrataInteriorOutOfBounds
-        213,160: RMCAreaStrataInteriorOutOfBounds
-        213,161: RMCAreaStrataInteriorOutOfBounds
-        213,162: RMCAreaStrataInteriorOutOfBounds
-        213,163: RMCAreaStrataInteriorOutOfBounds
-        213,164: RMCAreaStrataInteriorOutOfBounds
-        213,165: RMCAreaStrataInteriorOutOfBounds
-        213,166: RMCAreaStrataInteriorOutOfBounds
-        213,167: RMCAreaStrataInteriorOutOfBounds
-        213,168: RMCAreaStrataInteriorOutOfBounds
+        213,146: RMCAreaStrataMiningTop
+        213,147: RMCAreaStrataMiningTop
+        211,148: RMCAreaStrataMiningTop
+        213,149: RMCAreaStrataMiningTop
+        213,148: RMCAreaStrataMiningTop
+        213,151: RMCAreaStrataMiningTop
+        213,152: RMCAreaStrataMiningTop
+        213,153: RMCAreaStrataMiningTop
+        213,150: RMCAreaStrataMiningTop
+        213,155: RMCAreaStrataMiningTop
+        213,156: RMCAreaStrataMiningTop
+        213,157: RMCAreaStrataMiningTop
+        213,158: RMCAreaStrataMiningTop
+        213,159: RMCAreaStrataMiningTop
+        213,160: RMCAreaStrataMiningTop
+        213,161: RMCAreaStrataMiningTop
+        213,162: RMCAreaStrataMiningTop
+        213,163: RMCAreaStrataMiningTop
+        213,164: RMCAreaStrataMiningTop
+        213,165: RMCAreaStrataMiningTop
+        213,166: RMCAreaStrataMiningTop
+        213,167: RMCAreaStrataMiningTop
+        213,168: RMCAreaStrataMiningTop
         213,169: RMCAreaStrataInteriorOutOfBounds
-        214,146: RMCAreaStrataInteriorOutOfBounds
-        214,147: RMCAreaStrataInteriorOutOfBounds
-        214,148: RMCAreaStrataInteriorOutOfBounds
-        214,149: RMCAreaStrataInteriorOutOfBounds
-        214,150: RMCAreaStrataInteriorOutOfBounds
-        214,151: RMCAreaStrataInteriorOutOfBounds
-        214,152: RMCAreaStrataInteriorOutOfBounds
-        214,153: RMCAreaStrataInteriorOutOfBounds
-        214,154: RMCAreaStrataInteriorOutOfBounds
-        214,155: RMCAreaStrataInteriorOutOfBounds
-        214,156: RMCAreaStrataInteriorOutOfBounds
-        214,157: RMCAreaStrataInteriorOutOfBounds
-        214,158: RMCAreaStrataInteriorOutOfBounds
-        214,159: RMCAreaStrataInteriorOutOfBounds
-        214,160: RMCAreaStrataInteriorOutOfBounds
-        214,161: RMCAreaStrataInteriorOutOfBounds
-        214,162: RMCAreaStrataInteriorOutOfBounds
-        214,163: RMCAreaStrataInteriorOutOfBounds
-        214,164: RMCAreaStrataInteriorOutOfBounds
-        214,165: RMCAreaStrataInteriorOutOfBounds
-        214,166: RMCAreaStrataInteriorOutOfBounds
-        214,167: RMCAreaStrataInteriorOutOfBounds
-        214,168: RMCAreaStrataInteriorOutOfBounds
+        214,146: RMCAreaStrataMiningTop
+        214,147: RMCAreaStrataMiningTop
+        214,148: RMCAreaStrataMiningTop
+        214,149: RMCAreaStrataMiningTop
+        214,150: RMCAreaStrataMiningTop
+        214,151: RMCAreaStrataMiningTop
+        214,152: RMCAreaStrataMiningTop
+        214,153: RMCAreaStrataMiningTop
+        214,154: RMCAreaStrataMiningTop
+        214,155: RMCAreaStrataMiningTop
+        214,156: RMCAreaStrataMiningTop
+        214,157: RMCAreaStrataMiningTop
+        214,158: RMCAreaStrataMiningTop
+        214,159: RMCAreaStrataMiningTop
+        214,160: RMCAreaStrataMiningTop
+        214,161: RMCAreaStrataMiningTop
+        214,162: RMCAreaStrataMiningTop
+        214,163: RMCAreaStrataMiningTop
+        214,164: RMCAreaStrataMiningTop
+        214,165: RMCAreaStrataMiningTop
+        214,166: RMCAreaStrataMiningTop
+        214,167: RMCAreaStrataMiningTop
+        214,168: RMCAreaStrataMiningTop
         214,169: RMCAreaStrataInteriorOutOfBounds
-        215,146: RMCAreaStrataInteriorOutOfBounds
-        215,147: RMCAreaStrataInteriorOutOfBounds
-        215,148: RMCAreaStrataInteriorOutOfBounds
-        215,149: RMCAreaStrataInteriorOutOfBounds
-        215,150: RMCAreaStrataInteriorOutOfBounds
-        213,154: RMCAreaStrataInteriorOutOfBounds
-        215,152: RMCAreaStrataInteriorOutOfBounds
-        215,153: RMCAreaStrataInteriorOutOfBounds
-        215,154: RMCAreaStrataInteriorOutOfBounds
-        215,155: RMCAreaStrataInteriorOutOfBounds
-        215,156: RMCAreaStrataInteriorOutOfBounds
-        215,157: RMCAreaStrataInteriorOutOfBounds
-        215,158: RMCAreaStrataInteriorOutOfBounds
-        215,159: RMCAreaStrataInteriorOutOfBounds
-        215,160: RMCAreaStrataInteriorOutOfBounds
-        215,161: RMCAreaStrataInteriorOutOfBounds
-        215,162: RMCAreaStrataInteriorOutOfBounds
-        215,163: RMCAreaStrataInteriorOutOfBounds
-        215,164: RMCAreaStrataInteriorOutOfBounds
-        215,165: RMCAreaStrataInteriorOutOfBounds
-        215,166: RMCAreaStrataInteriorOutOfBounds
-        215,167: RMCAreaStrataInteriorOutOfBounds
-        215,168: RMCAreaStrataInteriorOutOfBounds
+        215,146: RMCAreaStrataMiningTop
+        215,147: RMCAreaStrataMiningTop
+        215,148: RMCAreaStrataMiningTop
+        215,149: RMCAreaStrataMiningTop
+        215,150: RMCAreaStrataMiningTop
+        213,154: RMCAreaStrataMiningTop
+        215,152: RMCAreaStrataMiningTop
+        215,153: RMCAreaStrataMiningTop
+        215,154: RMCAreaStrataMiningTop
+        215,155: RMCAreaStrataMiningTop
+        215,156: RMCAreaStrataMiningTop
+        215,157: RMCAreaStrataMiningTop
+        215,158: RMCAreaStrataMiningTop
+        215,159: RMCAreaStrataMiningTop
+        215,160: RMCAreaStrataMiningTop
+        215,161: RMCAreaStrataMiningTop
+        215,162: RMCAreaStrataMiningTop
+        215,163: RMCAreaStrataMiningTop
+        215,164: RMCAreaStrataMiningTop
+        215,165: RMCAreaStrataMiningTop
+        215,166: RMCAreaStrataMiningTop
+        215,167: RMCAreaStrataMiningTop
+        215,168: RMCAreaStrataMiningTop
         215,169: RMCAreaStrataInteriorOutOfBounds
-        216,146: RMCAreaStrataInteriorOutOfBounds
-        216,147: RMCAreaStrataInteriorOutOfBounds
-        216,148: RMCAreaStrataInteriorOutOfBounds
-        216,149: RMCAreaStrataInteriorOutOfBounds
-        216,150: RMCAreaStrataInteriorOutOfBounds
-        216,151: RMCAreaStrataInteriorOutOfBounds
-        216,152: RMCAreaStrataInteriorOutOfBounds
-        216,153: RMCAreaStrataInteriorOutOfBounds
-        216,154: RMCAreaStrataInteriorOutOfBounds
-        216,155: RMCAreaStrataInteriorOutOfBounds
-        215,151: RMCAreaStrataInteriorOutOfBounds
-        216,157: RMCAreaStrataInteriorOutOfBounds
-        216,158: RMCAreaStrataInteriorOutOfBounds
-        216,159: RMCAreaStrataInteriorOutOfBounds
-        216,160: RMCAreaStrataInteriorOutOfBounds
-        216,161: RMCAreaStrataInteriorOutOfBounds
-        216,162: RMCAreaStrataInteriorOutOfBounds
-        216,156: RMCAreaStrataInteriorOutOfBounds
-        216,164: RMCAreaStrataInteriorOutOfBounds
-        216,165: RMCAreaStrataInteriorOutOfBounds
-        216,166: RMCAreaStrataInteriorOutOfBounds
-        216,167: RMCAreaStrataInteriorOutOfBounds
-        216,168: RMCAreaStrataInteriorOutOfBounds
-        216,163: RMCAreaStrataInteriorOutOfBounds
+        216,146: RMCAreaStrataMiningTop
+        216,147: RMCAreaStrataMiningTop
+        216,148: RMCAreaStrataMiningTop
+        216,149: RMCAreaStrataMiningTop
+        216,150: RMCAreaStrataMiningTop
+        216,151: RMCAreaStrataMiningTop
+        216,152: RMCAreaStrataMiningTop
+        216,153: RMCAreaStrataMiningTop
+        216,154: RMCAreaStrataMiningTop
+        216,155: RMCAreaStrataMiningTop
+        215,151: RMCAreaStrataMiningTop
+        216,157: RMCAreaStrataMiningTop
+        216,158: RMCAreaStrataMiningTop
+        216,159: RMCAreaStrataMiningTop
+        216,160: RMCAreaStrataMiningTop
+        216,161: RMCAreaStrataMiningTop
+        216,162: RMCAreaStrataMiningTop
+        216,156: RMCAreaStrataMiningTop
+        216,164: RMCAreaStrataMiningTop
+        216,165: RMCAreaStrataMiningTop
+        216,166: RMCAreaStrataMiningTop
+        216,167: RMCAreaStrataMiningTop
+        216,168: RMCAreaStrataMiningTop
+        216,163: RMCAreaStrataMiningTop
         216,169: RMCAreaStrataInteriorOutOfBounds
-        217,146: RMCAreaStrataInteriorOutOfBounds
-        217,147: RMCAreaStrataInteriorOutOfBounds
-        217,148: RMCAreaStrataInteriorOutOfBounds
-        217,149: RMCAreaStrataInteriorOutOfBounds
-        217,150: RMCAreaStrataInteriorOutOfBounds
-        217,151: RMCAreaStrataInteriorOutOfBounds
-        217,152: RMCAreaStrataInteriorOutOfBounds
-        217,153: RMCAreaStrataInteriorOutOfBounds
-        217,154: RMCAreaStrataInteriorOutOfBounds
-        217,155: RMCAreaStrataInteriorOutOfBounds
-        217,156: RMCAreaStrataInteriorOutOfBounds
-        217,157: RMCAreaStrataInteriorOutOfBounds
-        217,158: RMCAreaStrataInteriorOutOfBounds
-        217,159: RMCAreaStrataInteriorOutOfBounds
-        217,160: RMCAreaStrataInteriorOutOfBounds
-        217,161: RMCAreaStrataInteriorOutOfBounds
-        217,162: RMCAreaStrataInteriorOutOfBounds
-        217,163: RMCAreaStrataInteriorOutOfBounds
-        217,164: RMCAreaStrataInteriorOutOfBounds
-        217,165: RMCAreaStrataInteriorOutOfBounds
-        217,166: RMCAreaStrataInteriorOutOfBounds
-        217,167: RMCAreaStrataInteriorOutOfBounds
-        217,168: RMCAreaStrataInteriorOutOfBounds
+        217,146: RMCAreaStrataMiningTop
+        217,147: RMCAreaStrataMiningTop
+        217,148: RMCAreaStrataMiningTop
+        217,149: RMCAreaStrataMiningTop
+        217,150: RMCAreaStrataMiningTop
+        217,151: RMCAreaStrataMiningTop
+        217,152: RMCAreaStrataMiningTop
+        217,153: RMCAreaStrataMiningTop
+        217,154: RMCAreaStrataMiningTop
+        217,155: RMCAreaStrataMiningTop
+        217,156: RMCAreaStrataMiningTop
+        217,157: RMCAreaStrataMiningTop
+        217,158: RMCAreaStrataMiningTop
+        217,159: RMCAreaStrataMiningTop
+        217,160: RMCAreaStrataMiningTop
+        217,161: RMCAreaStrataMiningTop
+        217,162: RMCAreaStrataMiningTop
+        217,163: RMCAreaStrataMiningTop
+        217,164: RMCAreaStrataMiningTop
+        217,165: RMCAreaStrataMiningTop
+        217,166: RMCAreaStrataMiningTop
+        217,167: RMCAreaStrataMiningTop
+        217,168: RMCAreaStrataMiningTop
         217,169: RMCAreaStrataInteriorOutOfBounds
-        218,146: RMCAreaStrataInteriorOutOfBounds
-        218,147: RMCAreaStrataInteriorOutOfBounds
-        218,148: RMCAreaStrataInteriorOutOfBounds
-        218,149: RMCAreaStrataInteriorOutOfBounds
-        218,150: RMCAreaStrataInteriorOutOfBounds
-        218,151: RMCAreaStrataInteriorOutOfBounds
-        218,152: RMCAreaStrataInteriorOutOfBounds
-        218,153: RMCAreaStrataInteriorOutOfBounds
-        218,154: RMCAreaStrataInteriorOutOfBounds
-        218,155: RMCAreaStrataInteriorOutOfBounds
-        218,156: RMCAreaStrataInteriorOutOfBounds
-        218,157: RMCAreaStrataInteriorOutOfBounds
-        218,158: RMCAreaStrataInteriorOutOfBounds
-        218,159: RMCAreaStrataInteriorOutOfBounds
-        218,161: RMCAreaStrataInteriorOutOfBounds
-        218,162: RMCAreaStrataInteriorOutOfBounds
-        218,163: RMCAreaStrataInteriorOutOfBounds
-        218,164: RMCAreaStrataInteriorOutOfBounds
-        218,165: RMCAreaStrataInteriorOutOfBounds
-        218,166: RMCAreaStrataInteriorOutOfBounds
-        218,167: RMCAreaStrataInteriorOutOfBounds
-        218,168: RMCAreaStrataInteriorOutOfBounds
+        218,146: RMCAreaStrataMiningTop
+        218,147: RMCAreaStrataMiningTop
+        218,148: RMCAreaStrataMiningTop
+        218,149: RMCAreaStrataMiningTop
+        218,150: RMCAreaStrataMiningTop
+        218,151: RMCAreaStrataMiningTop
+        218,152: RMCAreaStrataMiningTop
+        218,153: RMCAreaStrataMiningTop
+        218,154: RMCAreaStrataMiningTop
+        218,155: RMCAreaStrataMiningTop
+        218,156: RMCAreaStrataMiningTop
+        218,157: RMCAreaStrataMiningTop
+        218,158: RMCAreaStrataMiningTop
+        218,159: RMCAreaStrataMiningTop
+        218,161: RMCAreaStrataMiningTop
+        218,162: RMCAreaStrataMiningTop
+        218,163: RMCAreaStrataMiningTop
+        218,164: RMCAreaStrataMiningTop
+        218,165: RMCAreaStrataMiningTop
+        218,166: RMCAreaStrataMiningTop
+        218,167: RMCAreaStrataMiningTop
+        218,168: RMCAreaStrataMiningTop
         218,169: RMCAreaStrataInteriorOutOfBounds
-        219,146: RMCAreaStrataInteriorOutOfBounds
-        219,147: RMCAreaStrataInteriorOutOfBounds
-        219,148: RMCAreaStrataInteriorOutOfBounds
-        219,149: RMCAreaStrataInteriorOutOfBounds
-        219,150: RMCAreaStrataInteriorOutOfBounds
-        219,151: RMCAreaStrataInteriorOutOfBounds
-        219,152: RMCAreaStrataInteriorOutOfBounds
-        219,153: RMCAreaStrataInteriorOutOfBounds
-        219,154: RMCAreaStrataInteriorOutOfBounds
-        219,155: RMCAreaStrataInteriorOutOfBounds
-        219,156: RMCAreaStrataInteriorOutOfBounds
-        219,157: RMCAreaStrataInteriorOutOfBounds
-        219,158: RMCAreaStrataInteriorOutOfBounds
-        219,159: RMCAreaStrataInteriorOutOfBounds
-        219,160: RMCAreaStrataInteriorOutOfBounds
-        219,161: RMCAreaStrataInteriorOutOfBounds
-        219,162: RMCAreaStrataInteriorOutOfBounds
-        219,163: RMCAreaStrataInteriorOutOfBounds
-        219,164: RMCAreaStrataInteriorOutOfBounds
-        219,165: RMCAreaStrataInteriorOutOfBounds
-        219,166: RMCAreaStrataInteriorOutOfBounds
-        219,167: RMCAreaStrataInteriorOutOfBounds
-        219,168: RMCAreaStrataInteriorOutOfBounds
+        219,146: RMCAreaStrataMiningTop
+        219,147: RMCAreaStrataMiningTop
+        219,148: RMCAreaStrataMiningTop
+        219,149: RMCAreaStrataMiningTop
+        219,150: RMCAreaStrataMiningTop
+        219,151: RMCAreaStrataMiningTop
+        219,152: RMCAreaStrataMiningTop
+        219,153: RMCAreaStrataMiningTop
+        219,154: RMCAreaStrataMiningTop
+        219,155: RMCAreaStrataMiningTop
+        219,156: RMCAreaStrataMiningTop
+        219,157: RMCAreaStrataMiningTop
+        219,158: RMCAreaStrataMiningTop
+        219,159: RMCAreaStrataMiningTop
+        219,160: RMCAreaStrataMiningTop
+        219,161: RMCAreaStrataMiningTop
+        219,162: RMCAreaStrataMiningTop
+        219,163: RMCAreaStrataMiningTop
+        219,164: RMCAreaStrataMiningTop
+        219,165: RMCAreaStrataMiningTop
+        219,166: RMCAreaStrataMiningTop
+        219,167: RMCAreaStrataMiningTop
+        219,168: RMCAreaStrataMiningTop
         219,169: RMCAreaStrataInteriorOutOfBounds
-        220,146: RMCAreaStrataInteriorOutOfBounds
-        220,147: RMCAreaStrataInteriorOutOfBounds
-        220,148: RMCAreaStrataInteriorOutOfBounds
-        220,149: RMCAreaStrataInteriorOutOfBounds
-        220,150: RMCAreaStrataInteriorOutOfBounds
-        220,151: RMCAreaStrataInteriorOutOfBounds
-        220,152: RMCAreaStrataInteriorOutOfBounds
-        220,153: RMCAreaStrataInteriorOutOfBounds
-        220,154: RMCAreaStrataInteriorOutOfBounds
-        218,160: RMCAreaStrataInteriorOutOfBounds
-        220,155: RMCAreaStrataInteriorOutOfBounds
-        220,156: RMCAreaStrataInteriorOutOfBounds
-        220,157: RMCAreaStrataInteriorOutOfBounds
-        220,158: RMCAreaStrataInteriorOutOfBounds
-        220,159: RMCAreaStrataInteriorOutOfBounds
-        220,160: RMCAreaStrataInteriorOutOfBounds
-        220,161: RMCAreaStrataInteriorOutOfBounds
-        220,162: RMCAreaStrataInteriorOutOfBounds
-        220,163: RMCAreaStrataInteriorOutOfBounds
-        220,164: RMCAreaStrataInteriorOutOfBounds
-        220,165: RMCAreaStrataInteriorOutOfBounds
-        220,166: RMCAreaStrataInteriorOutOfBounds
-        220,167: RMCAreaStrataInteriorOutOfBounds
-        220,168: RMCAreaStrataInteriorOutOfBounds
+        220,146: RMCAreaStrataMiningTop
+        220,147: RMCAreaStrataMiningTop
+        220,148: RMCAreaStrataMiningTop
+        220,149: RMCAreaStrataMiningTop
+        220,150: RMCAreaStrataMiningTop
+        220,151: RMCAreaStrataMiningTop
+        220,152: RMCAreaStrataMiningTop
+        220,153: RMCAreaStrataMiningTop
+        220,154: RMCAreaStrataMiningTop
+        218,160: RMCAreaStrataMiningTop
+        220,155: RMCAreaStrataMiningTop
+        220,156: RMCAreaStrataMiningTop
+        220,157: RMCAreaStrataMiningTop
+        220,158: RMCAreaStrataMiningTop
+        220,159: RMCAreaStrataMiningTop
+        220,160: RMCAreaStrataMiningTop
+        220,161: RMCAreaStrataMiningTop
+        220,162: RMCAreaStrataMiningTop
+        220,163: RMCAreaStrataMiningTop
+        220,164: RMCAreaStrataMiningTop
+        220,165: RMCAreaStrataMiningTop
+        220,166: RMCAreaStrataMiningTop
+        220,167: RMCAreaStrataMiningTop
+        220,168: RMCAreaStrataMiningTop
         220,169: RMCAreaStrataInteriorOutOfBounds
-        221,146: RMCAreaStrataInteriorOutOfBounds
-        221,147: RMCAreaStrataInteriorOutOfBounds
-        221,148: RMCAreaStrataInteriorOutOfBounds
-        221,149: RMCAreaStrataInteriorOutOfBounds
-        221,150: RMCAreaStrataInteriorOutOfBounds
-        221,151: RMCAreaStrataInteriorOutOfBounds
-        221,152: RMCAreaStrataInteriorOutOfBounds
-        221,153: RMCAreaStrataInteriorOutOfBounds
-        221,154: RMCAreaStrataInteriorOutOfBounds
-        221,155: RMCAreaStrataInteriorOutOfBounds
-        221,156: RMCAreaStrataInteriorOutOfBounds
-        221,157: RMCAreaStrataInteriorOutOfBounds
-        221,158: RMCAreaStrataInteriorOutOfBounds
-        221,159: RMCAreaStrataInteriorOutOfBounds
-        221,160: RMCAreaStrataInteriorOutOfBounds
-        221,161: RMCAreaStrataInteriorOutOfBounds
-        221,162: RMCAreaStrataInteriorOutOfBounds
-        221,163: RMCAreaStrataInteriorOutOfBounds
-        221,164: RMCAreaStrataInteriorOutOfBounds
-        221,165: RMCAreaStrataInteriorOutOfBounds
-        221,166: RMCAreaStrataInteriorOutOfBounds
-        221,167: RMCAreaStrataInteriorOutOfBounds
+        221,146: RMCAreaStrataMiningTop
+        221,147: RMCAreaStrataMiningTop
+        221,148: RMCAreaStrataMiningTop
+        221,149: RMCAreaStrataMiningTop
+        221,150: RMCAreaStrataMiningTop
+        221,151: RMCAreaStrataMiningTop
+        221,152: RMCAreaStrataMiningTop
+        221,153: RMCAreaStrataMiningTop
+        221,154: RMCAreaStrataMiningTop
+        221,155: RMCAreaStrataMiningTop
+        221,156: RMCAreaStrataMiningTop
+        221,157: RMCAreaStrataMiningTop
+        221,158: RMCAreaStrataMiningTop
+        221,159: RMCAreaStrataMiningTop
+        221,160: RMCAreaStrataMiningTop
+        221,161: RMCAreaStrataMiningTop
+        221,162: RMCAreaStrataMiningTop
+        221,163: RMCAreaStrataMiningTop
+        221,164: RMCAreaStrataMiningTop
+        221,165: RMCAreaStrataMiningTop
+        221,166: RMCAreaStrataMiningTop
+        221,167: RMCAreaStrataMiningTop
         221,168: RMCAreaStrataInteriorOutOfBounds
         221,169: RMCAreaStrataInteriorOutOfBounds
-        222,146: RMCAreaStrataInteriorOutOfBounds
-        222,147: RMCAreaStrataInteriorOutOfBounds
-        222,148: RMCAreaStrataInteriorOutOfBounds
-        222,149: RMCAreaStrataInteriorOutOfBounds
-        222,150: RMCAreaStrataInteriorOutOfBounds
-        222,151: RMCAreaStrataInteriorOutOfBounds
-        222,152: RMCAreaStrataInteriorOutOfBounds
-        222,153: RMCAreaStrataInteriorOutOfBounds
-        222,154: RMCAreaStrataInteriorOutOfBounds
-        222,155: RMCAreaStrataInteriorOutOfBounds
-        222,156: RMCAreaStrataInteriorOutOfBounds
-        222,157: RMCAreaStrataInteriorOutOfBounds
-        222,158: RMCAreaStrataInteriorOutOfBounds
-        222,159: RMCAreaStrataInteriorOutOfBounds
-        222,160: RMCAreaStrataInteriorOutOfBounds
-        222,161: RMCAreaStrataInteriorOutOfBounds
-        222,162: RMCAreaStrataInteriorOutOfBounds
-        222,163: RMCAreaStrataInteriorOutOfBounds
-        222,164: RMCAreaStrataInteriorOutOfBounds
-        222,165: RMCAreaStrataInteriorOutOfBounds
-        222,166: RMCAreaStrataInteriorOutOfBounds
-        222,167: RMCAreaStrataInteriorOutOfBounds
+        222,146: RMCAreaStrataMiningTop
+        222,147: RMCAreaStrataMiningTop
+        222,148: RMCAreaStrataMiningTop
+        222,149: RMCAreaStrataMiningTop
+        222,150: RMCAreaStrataMiningTop
+        222,151: RMCAreaStrataMiningTop
+        222,152: RMCAreaStrataMiningTop
+        222,153: RMCAreaStrataMiningTop
+        222,154: RMCAreaStrataMiningTop
+        222,155: RMCAreaStrataMiningTop
+        222,156: RMCAreaStrataMiningTop
+        222,157: RMCAreaStrataMiningTop
+        222,158: RMCAreaStrataMiningTop
+        222,159: RMCAreaStrataMiningTop
+        222,160: RMCAreaStrataMiningTop
+        222,161: RMCAreaStrataMiningTop
+        222,162: RMCAreaStrataMiningTop
+        222,163: RMCAreaStrataMiningTop
+        222,164: RMCAreaStrataMiningTop
+        222,165: RMCAreaStrataMiningTop
+        222,166: RMCAreaStrataMiningTop
+        222,167: RMCAreaStrataMiningTop
         222,168: RMCAreaStrataInteriorOutOfBounds
         222,169: RMCAreaStrataInteriorOutOfBounds
-        223,146: RMCAreaStrataInteriorOutOfBounds
-        223,147: RMCAreaStrataInteriorOutOfBounds
-        223,148: RMCAreaStrataInteriorOutOfBounds
-        223,149: RMCAreaStrataInteriorOutOfBounds
-        223,150: RMCAreaStrataInteriorOutOfBounds
-        223,151: RMCAreaStrataInteriorOutOfBounds
-        223,152: RMCAreaStrataInteriorOutOfBounds
+        223,146: RMCAreaStrataMiningTop
+        223,147: RMCAreaStrataMiningTop
+        223,148: RMCAreaStrataMiningTop
+        223,149: RMCAreaStrataMiningTop
+        223,150: RMCAreaStrataMiningTop
+        223,151: RMCAreaStrataMiningTop
+        223,152: RMCAreaStrataMiningTop
         223,153: RMCAreaStrataInteriorOutOfBounds
         223,154: RMCAreaStrataInteriorOutOfBounds
-        223,155: RMCAreaStrataInteriorOutOfBounds
-        223,156: RMCAreaStrataInteriorOutOfBounds
-        223,157: RMCAreaStrataInteriorOutOfBounds
-        223,158: RMCAreaStrataInteriorOutOfBounds
-        223,159: RMCAreaStrataInteriorOutOfBounds
+        223,155: RMCAreaStrataMiningTop
+        223,156: RMCAreaStrataMiningTop
+        223,157: RMCAreaStrataMiningTop
+        223,158: RMCAreaStrataMiningTop
+        223,159: RMCAreaStrataMiningTop
         223,160: RMCAreaStrataInteriorOutOfBounds
         223,161: RMCAreaStrataInteriorOutOfBounds
-        223,162: RMCAreaStrataInteriorOutOfBounds
-        223,163: RMCAreaStrataInteriorOutOfBounds
-        223,164: RMCAreaStrataInteriorOutOfBounds
-        223,165: RMCAreaStrataInteriorOutOfBounds
-        223,166: RMCAreaStrataInteriorOutOfBounds
-        223,167: RMCAreaStrataInteriorOutOfBounds
-        223,168: RMCAreaStrataInteriorOutOfBounds
+        223,162: RMCAreaStrataMiningTop
+        223,163: RMCAreaStrataMiningTop
+        223,164: RMCAreaStrataMiningTop
+        223,165: RMCAreaStrataMiningTop
+        223,166: RMCAreaStrataMiningTop
+        223,167: RMCAreaStrataMiningTop
+        223,168: RMCAreaStrataMiningTop
         223,169: RMCAreaStrataInteriorOutOfBounds
-        224,146: RMCAreaStrataInteriorOutOfBounds
-        224,147: RMCAreaStrataInteriorOutOfBounds
-        224,148: RMCAreaStrataInteriorOutOfBounds
-        224,149: RMCAreaStrataInteriorOutOfBounds
-        224,150: RMCAreaStrataInteriorOutOfBounds
-        224,151: RMCAreaStrataInteriorOutOfBounds
-        224,152: RMCAreaStrataInteriorOutOfBounds
+        224,146: RMCAreaStrataMiningTop
+        224,147: RMCAreaStrataMiningTop
+        224,148: RMCAreaStrataMiningTop
+        224,149: RMCAreaStrataMiningTop
+        224,150: RMCAreaStrataMiningTop
+        224,151: RMCAreaStrataMiningTop
+        224,152: RMCAreaStrataMiningTop
         224,153: RMCAreaStrataInteriorOutOfBounds
         224,154: RMCAreaStrataInteriorOutOfBounds
-        224,155: RMCAreaStrataInteriorOutOfBounds
-        224,156: RMCAreaStrataInteriorOutOfBounds
-        224,157: RMCAreaStrataInteriorOutOfBounds
-        224,158: RMCAreaStrataInteriorOutOfBounds
-        224,159: RMCAreaStrataInteriorOutOfBounds
+        224,155: RMCAreaStrataMiningTop
+        224,156: RMCAreaStrataMiningTop
+        224,157: RMCAreaStrataMiningTop
+        224,158: RMCAreaStrataMiningTop
+        224,159: RMCAreaStrataMiningTop
         224,160: RMCAreaStrataInteriorOutOfBounds
         224,161: RMCAreaStrataInteriorOutOfBounds
-        224,162: RMCAreaStrataInteriorOutOfBounds
-        224,163: RMCAreaStrataInteriorOutOfBounds
-        224,164: RMCAreaStrataInteriorOutOfBounds
-        224,165: RMCAreaStrataInteriorOutOfBounds
-        224,166: RMCAreaStrataInteriorOutOfBounds
-        224,167: RMCAreaStrataInteriorOutOfBounds
-        224,168: RMCAreaStrataInteriorOutOfBounds
+        224,162: RMCAreaStrataMiningTop
+        224,163: RMCAreaStrataMiningTop
+        224,164: RMCAreaStrataMiningTop
+        224,165: RMCAreaStrataMiningTop
+        224,166: RMCAreaStrataMiningTop
+        224,167: RMCAreaStrataMiningTop
+        224,168: RMCAreaStrataMiningTop
         224,169: RMCAreaStrataInteriorOutOfBounds
         225,146: RMCAreaStrataInteriorOutOfBounds
         225,147: RMCAreaStrataInteriorOutOfBounds
-        225,148: RMCAreaStrataInteriorOutOfBounds
-        225,149: RMCAreaStrataInteriorOutOfBounds
-        225,150: RMCAreaStrataInteriorOutOfBounds
-        225,151: RMCAreaStrataInteriorOutOfBounds
+        225,148: RMCAreaStrataMiningTop
+        225,149: RMCAreaStrataMiningTop
+        225,150: RMCAreaStrataMiningTop
+        225,151: RMCAreaStrataMiningTop
         225,152: RMCAreaStrataInteriorOutOfBounds
         225,153: RMCAreaStrataInteriorOutOfBounds
         225,154: RMCAreaStrataInteriorOutOfBounds
-        225,155: RMCAreaStrataInteriorOutOfBounds
-        225,156: RMCAreaStrataInteriorOutOfBounds
-        225,157: RMCAreaStrataInteriorOutOfBounds
-        225,158: RMCAreaStrataInteriorOutOfBounds
-        225,159: RMCAreaStrataInteriorOutOfBounds
+        225,155: RMCAreaStrataMiningTop
+        225,156: RMCAreaStrataMiningTop
+        225,157: RMCAreaStrataMiningTop
+        225,158: RMCAreaStrataMiningTop
+        225,159: RMCAreaStrataMiningTop
         225,160: RMCAreaStrataInteriorOutOfBounds
         225,161: RMCAreaStrataInteriorOutOfBounds
-        225,162: RMCAreaStrataInteriorOutOfBounds
-        225,163: RMCAreaStrataInteriorOutOfBounds
-        225,164: RMCAreaStrataInteriorOutOfBounds
-        225,165: RMCAreaStrataInteriorOutOfBounds
-        225,166: RMCAreaStrataInteriorOutOfBounds
-        225,167: RMCAreaStrataInteriorOutOfBounds
-        225,168: RMCAreaStrataInteriorOutOfBounds
+        225,162: RMCAreaStrataMiningTop
+        225,163: RMCAreaStrataMiningTop
+        225,164: RMCAreaStrataMiningTop
+        225,165: RMCAreaStrataMiningTop
+        225,166: RMCAreaStrataMiningTop
+        225,167: RMCAreaStrataMiningTop
+        225,168: RMCAreaStrataMiningTop
         225,169: RMCAreaStrataInteriorOutOfBounds
         226,146: RMCAreaStrataInteriorOutOfBounds
         226,147: RMCAreaStrataInteriorOutOfBounds
@@ -13015,20 +13015,20 @@ entities:
         226,152: RMCAreaStrataInteriorOutOfBounds
         226,153: RMCAreaStrataInteriorOutOfBounds
         226,154: RMCAreaStrataInteriorOutOfBounds
-        226,155: RMCAreaStrataInteriorOutOfBounds
-        226,156: RMCAreaStrataInteriorOutOfBounds
-        226,157: RMCAreaStrataInteriorOutOfBounds
+        226,155: RMCAreaStrataMiningTop
+        226,156: RMCAreaStrataMiningTop
+        226,157: RMCAreaStrataMiningTop
         226,158: RMCAreaStrataInteriorOutOfBounds
         226,159: RMCAreaStrataInteriorOutOfBounds
         226,160: RMCAreaStrataInteriorOutOfBounds
         226,161: RMCAreaStrataInteriorOutOfBounds
-        226,162: RMCAreaStrataInteriorOutOfBounds
-        226,163: RMCAreaStrataInteriorOutOfBounds
-        226,164: RMCAreaStrataInteriorOutOfBounds
-        226,165: RMCAreaStrataInteriorOutOfBounds
-        226,166: RMCAreaStrataInteriorOutOfBounds
-        226,167: RMCAreaStrataInteriorOutOfBounds
-        226,168: RMCAreaStrataInteriorOutOfBounds
+        226,162: RMCAreaStrataMiningTop
+        226,163: RMCAreaStrataMiningTop
+        226,164: RMCAreaStrataMiningTop
+        226,165: RMCAreaStrataMiningTop
+        226,166: RMCAreaStrataMiningTop
+        226,167: RMCAreaStrataMiningTop
+        226,168: RMCAreaStrataMiningTop
         226,169: RMCAreaStrataInteriorOutOfBounds
         227,146: RMCAreaStrataInteriorOutOfBounds
         227,147: RMCAreaStrataInteriorOutOfBounds
@@ -13046,13 +13046,13 @@ entities:
         227,159: RMCAreaStrataInteriorOutOfBounds
         227,160: RMCAreaStrataInteriorOutOfBounds
         227,161: RMCAreaStrataInteriorOutOfBounds
-        227,162: RMCAreaStrataInteriorOutOfBounds
-        227,163: RMCAreaStrataInteriorOutOfBounds
-        227,164: RMCAreaStrataInteriorOutOfBounds
-        227,165: RMCAreaStrataInteriorOutOfBounds
-        227,166: RMCAreaStrataInteriorOutOfBounds
-        227,167: RMCAreaStrataInteriorOutOfBounds
-        227,168: RMCAreaStrataInteriorOutOfBounds
+        227,162: RMCAreaStrataMiningTop
+        227,163: RMCAreaStrataMiningTop
+        227,164: RMCAreaStrataMiningTop
+        227,165: RMCAreaStrataMiningTop
+        227,166: RMCAreaStrataMiningTop
+        227,167: RMCAreaStrataMiningTop
+        227,168: RMCAreaStrataMiningTop
         227,169: RMCAreaStrataInteriorOutOfBounds
         228,146: RMCAreaStrataInteriorOutOfBounds
         228,147: RMCAreaStrataInteriorOutOfBounds
@@ -13068,15 +13068,15 @@ entities:
         228,157: RMCAreaStrataInteriorOutOfBounds
         228,158: RMCAreaStrataInteriorOutOfBounds
         228,159: RMCAreaStrataInteriorOutOfBounds
-        228,160: RMCAreaStrataInteriorOutOfBounds
-        228,161: RMCAreaStrataInteriorOutOfBounds
-        228,162: RMCAreaStrataInteriorOutOfBounds
-        228,163: RMCAreaStrataInteriorOutOfBounds
-        228,164: RMCAreaStrataInteriorOutOfBounds
-        228,165: RMCAreaStrataInteriorOutOfBounds
-        228,166: RMCAreaStrataInteriorOutOfBounds
-        228,167: RMCAreaStrataInteriorOutOfBounds
-        228,168: RMCAreaStrataInteriorOutOfBounds
+        228,160: RMCAreaStrataMiningTop
+        228,161: RMCAreaStrataMiningTop
+        228,162: RMCAreaStrataMiningTop
+        228,163: RMCAreaStrataMiningTop
+        228,164: RMCAreaStrataMiningTop
+        228,165: RMCAreaStrataMiningTop
+        228,166: RMCAreaStrataMiningTop
+        228,167: RMCAreaStrataMiningTop
+        228,168: RMCAreaStrataMiningTop
         228,169: RMCAreaStrataInteriorOutOfBounds
         229,146: RMCAreaStrataInteriorOutOfBounds
         229,147: RMCAreaStrataInteriorOutOfBounds
@@ -13091,16 +13091,16 @@ entities:
         229,156: RMCAreaStrataInteriorOutOfBounds
         229,157: RMCAreaStrataInteriorOutOfBounds
         229,158: RMCAreaStrataInteriorOutOfBounds
-        229,159: RMCAreaStrataInteriorOutOfBounds
-        229,160: RMCAreaStrataInteriorOutOfBounds
-        229,161: RMCAreaStrataInteriorOutOfBounds
-        229,162: RMCAreaStrataInteriorOutOfBounds
-        229,163: RMCAreaStrataInteriorOutOfBounds
-        229,164: RMCAreaStrataInteriorOutOfBounds
-        229,165: RMCAreaStrataInteriorOutOfBounds
-        229,166: RMCAreaStrataInteriorOutOfBounds
-        229,167: RMCAreaStrataInteriorOutOfBounds
-        229,168: RMCAreaStrataInteriorOutOfBounds
+        229,159: RMCAreaStrataMiningTop
+        229,160: RMCAreaStrataMiningTop
+        229,161: RMCAreaStrataMiningTop
+        229,162: RMCAreaStrataMiningTop
+        229,163: RMCAreaStrataMiningTop
+        229,164: RMCAreaStrataMiningTop
+        229,165: RMCAreaStrataMiningTop
+        229,166: RMCAreaStrataMiningTop
+        229,167: RMCAreaStrataMiningTop
+        229,168: RMCAreaStrataMiningTop
         229,169: RMCAreaStrataInteriorOutOfBounds
         230,146: RMCAreaStrataInteriorOutOfBounds
         230,147: RMCAreaStrataInteriorOutOfBounds
@@ -13114,15 +13114,15 @@ entities:
         230,155: RMCAreaStrataInteriorOutOfBounds
         230,156: RMCAreaStrataInteriorOutOfBounds
         230,157: RMCAreaStrataInteriorOutOfBounds
-        230,158: RMCAreaStrataInteriorOutOfBounds
-        230,159: RMCAreaStrataInteriorOutOfBounds
-        230,160: RMCAreaStrataInteriorOutOfBounds
-        230,161: RMCAreaStrataInteriorOutOfBounds
-        230,162: RMCAreaStrataInteriorOutOfBounds
-        230,163: RMCAreaStrataInteriorOutOfBounds
-        230,164: RMCAreaStrataInteriorOutOfBounds
-        230,165: RMCAreaStrataInteriorOutOfBounds
-        230,166: RMCAreaStrataInteriorOutOfBounds
+        230,158: RMCAreaStrataMiningTop
+        230,159: RMCAreaStrataMiningTop
+        230,160: RMCAreaStrataMiningTop
+        230,161: RMCAreaStrataMiningTop
+        230,162: RMCAreaStrataMiningTop
+        230,163: RMCAreaStrataMiningTop
+        230,164: RMCAreaStrataMiningTop
+        230,165: RMCAreaStrataMiningTop
+        230,166: RMCAreaStrataMiningTop
         230,167: RMCAreaStrataInteriorOutOfBounds
         230,168: RMCAreaStrataInteriorOutOfBounds
         230,169: RMCAreaStrataInteriorOutOfBounds
@@ -13138,14 +13138,14 @@ entities:
         231,155: RMCAreaStrataInteriorOutOfBounds
         231,156: RMCAreaStrataInteriorOutOfBounds
         231,157: RMCAreaStrataInteriorOutOfBounds
-        231,158: RMCAreaStrataInteriorOutOfBounds
-        231,159: RMCAreaStrataInteriorOutOfBounds
-        231,160: RMCAreaStrataInteriorOutOfBounds
-        231,161: RMCAreaStrataInteriorOutOfBounds
-        231,162: RMCAreaStrataInteriorOutOfBounds
-        231,163: RMCAreaStrataInteriorOutOfBounds
-        231,164: RMCAreaStrataInteriorOutOfBounds
-        231,165: RMCAreaStrataInteriorOutOfBounds
+        231,158: RMCAreaStrataMiningTop
+        231,159: RMCAreaStrataMiningTop
+        231,160: RMCAreaStrataMiningTop
+        231,161: RMCAreaStrataMiningTop
+        231,162: RMCAreaStrataMiningTop
+        231,163: RMCAreaStrataMiningTop
+        231,164: RMCAreaStrataMiningTop
+        231,165: RMCAreaStrataMiningTop
         231,166: RMCAreaStrataInteriorOutOfBounds
         231,167: RMCAreaStrataInteriorOutOfBounds
         231,168: RMCAreaStrataInteriorOutOfBounds
@@ -13162,15 +13162,15 @@ entities:
         232,155: RMCAreaStrataInteriorOutOfBounds
         232,156: RMCAreaStrataInteriorOutOfBounds
         232,157: RMCAreaStrataInteriorOutOfBounds
-        232,158: RMCAreaStrataInteriorOutOfBounds
-        232,159: RMCAreaStrataInteriorOutOfBounds
-        232,160: RMCAreaStrataInteriorOutOfBounds
-        232,161: RMCAreaStrataInteriorOutOfBounds
-        232,162: RMCAreaStrataInteriorOutOfBounds
-        232,163: RMCAreaStrataInteriorOutOfBounds
-        232,164: RMCAreaStrataInteriorOutOfBounds
-        232,165: RMCAreaStrataInteriorOutOfBounds
-        232,166: RMCAreaStrataInteriorOutOfBounds
+        232,158: RMCAreaStrataMiningTop
+        232,159: RMCAreaStrataMiningTop
+        232,160: RMCAreaStrataMiningTop
+        232,161: RMCAreaStrataMiningTop
+        232,162: RMCAreaStrataMiningTop
+        232,163: RMCAreaStrataMiningTop
+        232,164: RMCAreaStrataMiningTop
+        232,165: RMCAreaStrataMiningTop
+        232,166: RMCAreaStrataMiningTop
         232,167: RMCAreaStrataInteriorOutOfBounds
         232,168: RMCAreaStrataInteriorOutOfBounds
         232,169: RMCAreaStrataInteriorOutOfBounds
@@ -13186,15 +13186,15 @@ entities:
         233,155: RMCAreaStrataInteriorOutOfBounds
         233,156: RMCAreaStrataInteriorOutOfBounds
         233,157: RMCAreaStrataInteriorOutOfBounds
-        233,158: RMCAreaStrataInteriorOutOfBounds
-        233,159: RMCAreaStrataInteriorOutOfBounds
-        233,160: RMCAreaStrataInteriorOutOfBounds
-        233,161: RMCAreaStrataInteriorOutOfBounds
-        233,162: RMCAreaStrataInteriorOutOfBounds
-        233,163: RMCAreaStrataInteriorOutOfBounds
-        233,164: RMCAreaStrataInteriorOutOfBounds
-        233,165: RMCAreaStrataInteriorOutOfBounds
-        233,166: RMCAreaStrataInteriorOutOfBounds
+        233,158: RMCAreaStrataMiningTop
+        233,159: RMCAreaStrataMiningTop
+        233,160: RMCAreaStrataMiningTop
+        233,161: RMCAreaStrataMiningTop
+        233,162: RMCAreaStrataMiningTop
+        233,163: RMCAreaStrataMiningTop
+        233,164: RMCAreaStrataMiningTop
+        233,165: RMCAreaStrataMiningTop
+        233,166: RMCAreaStrataMiningTop
         233,167: RMCAreaStrataInteriorOutOfBounds
         233,168: RMCAreaStrataInteriorOutOfBounds
         233,169: RMCAreaStrataInteriorOutOfBounds
@@ -13210,15 +13210,15 @@ entities:
         234,155: RMCAreaStrataInteriorOutOfBounds
         234,156: RMCAreaStrataInteriorOutOfBounds
         234,157: RMCAreaStrataInteriorOutOfBounds
-        234,158: RMCAreaStrataInteriorOutOfBounds
-        234,159: RMCAreaStrataInteriorOutOfBounds
-        234,160: RMCAreaStrataInteriorOutOfBounds
-        234,161: RMCAreaStrataInteriorOutOfBounds
-        234,162: RMCAreaStrataInteriorOutOfBounds
-        234,163: RMCAreaStrataInteriorOutOfBounds
-        234,164: RMCAreaStrataInteriorOutOfBounds
-        234,165: RMCAreaStrataInteriorOutOfBounds
-        234,166: RMCAreaStrataInteriorOutOfBounds
+        234,158: RMCAreaStrataMiningTop
+        234,159: RMCAreaStrataMiningTop
+        234,160: RMCAreaStrataMiningTop
+        234,161: RMCAreaStrataMiningTop
+        234,162: RMCAreaStrataMiningTop
+        234,163: RMCAreaStrataMiningTop
+        234,164: RMCAreaStrataMiningTop
+        234,165: RMCAreaStrataMiningTop
+        234,166: RMCAreaStrataMiningTop
         234,167: RMCAreaStrataInteriorOutOfBounds
         234,168: RMCAreaStrataInteriorOutOfBounds
         234,169: RMCAreaStrataInteriorOutOfBounds
@@ -13235,12 +13235,12 @@ entities:
         235,156: RMCAreaStrataInteriorOutOfBounds
         235,157: RMCAreaStrataInteriorOutOfBounds
         235,158: RMCAreaStrataInteriorOutOfBounds
-        235,159: RMCAreaStrataInteriorOutOfBounds
-        235,160: RMCAreaStrataInteriorOutOfBounds
-        235,161: RMCAreaStrataInteriorOutOfBounds
-        235,162: RMCAreaStrataInteriorOutOfBounds
-        235,163: RMCAreaStrataInteriorOutOfBounds
-        235,164: RMCAreaStrataInteriorOutOfBounds
+        235,159: RMCAreaStrataMiningTop
+        235,160: RMCAreaStrataMiningTop
+        235,161: RMCAreaStrataMiningTop
+        235,162: RMCAreaStrataMiningTop
+        235,163: RMCAreaStrataMiningTop
+        235,164: RMCAreaStrataMiningTop
         235,165: RMCAreaStrataInteriorOutOfBounds
         235,166: RMCAreaStrataInteriorOutOfBounds
         235,167: RMCAreaStrataInteriorOutOfBounds
@@ -13261,9 +13261,9 @@ entities:
         236,158: RMCAreaStrataInteriorOutOfBounds
         236,159: RMCAreaStrataInteriorOutOfBounds
         236,160: RMCAreaStrataInteriorOutOfBounds
-        236,161: RMCAreaStrataInteriorOutOfBounds
-        236,162: RMCAreaStrataInteriorOutOfBounds
-        236,163: RMCAreaStrataInteriorOutOfBounds
+        236,161: RMCAreaStrataMiningTop
+        236,162: RMCAreaStrataMiningTop
+        236,163: RMCAreaStrataMiningTop
         236,164: RMCAreaStrataInteriorOutOfBounds
         236,165: RMCAreaStrataInteriorOutOfBounds
         236,166: RMCAreaStrataInteriorOutOfBounds
@@ -13295,7 +13295,7 @@ entities:
         237,168: RMCAreaStrataInteriorOutOfBounds
         237,169: RMCAreaStrataInteriorOutOfBounds
         238,146: RMCAreaStrataInteriorOutOfBounds
-        195,165: RMCAreaStrataInteriorOutOfBounds
+        195,165: RMCAreaStrataMiningTop
         238,147: RMCAreaStrataInteriorOutOfBounds
         238,148: RMCAreaStrataInteriorOutOfBounds
         238,149: RMCAreaStrataInteriorOutOfBounds
@@ -35532,59 +35532,59 @@ entities:
         185,101: RMCAreaStrataExteriorDeepJunglePlatformEast
         184,102: RMCAreaStrataExteriorDeepJunglePlatformEast
         185,100: RMCAreaStrataExteriorDeepJunglePlatformEast
-        181,109: RMCAreaStrataExteriorDeepJungleRuin
-        181,108: RMCAreaStrataExteriorDeepJungleRuin
-        182,108: RMCAreaStrataExteriorDeepJungleRuin
-        182,107: RMCAreaStrataExteriorDeepJungleRuin
-        183,108: RMCAreaStrataExteriorDeepJungleRuin
-        183,107: RMCAreaStrataExteriorDeepJungleRuin
-        183,106: RMCAreaStrataExteriorDeepJungleRuin
-        183,105: RMCAreaStrataExteriorDeepJungleRuin
-        184,108: RMCAreaStrataExteriorDeepJungleRuin
-        184,107: RMCAreaStrataExteriorDeepJungleRuin
-        184,106: RMCAreaStrataExteriorDeepJungleRuin
-        184,105: RMCAreaStrataExteriorDeepJungleRuin
-        185,108: RMCAreaStrataExteriorDeepJungleRuin
-        185,107: RMCAreaStrataExteriorDeepJungleRuin
-        185,106: RMCAreaStrataExteriorDeepJungleRuin
-        185,105: RMCAreaStrataExteriorDeepJungleRuin
-        182,106: RMCAreaStrataExteriorDeepJungleRuin
-        182,105: RMCAreaStrataExteriorDeepJungleRuin
-        185,103: RMCAreaStrataExteriorDeepJungleRuin
-        185,104: RMCAreaStrataExteriorDeepJungleRuin
-        186,103: RMCAreaStrataExteriorDeepJungleRuin
-        186,104: RMCAreaStrataExteriorDeepJungleRuin
-        186,105: RMCAreaStrataExteriorDeepJungleRuin
-        186,106: RMCAreaStrataExteriorDeepJungleRuin
-        186,107: RMCAreaStrataExteriorDeepJungleRuin
-        186,108: RMCAreaStrataExteriorDeepJungleRuin
-        187,103: RMCAreaStrataExteriorDeepJungleRuin
-        187,104: RMCAreaStrataExteriorDeepJungleRuin
-        187,105: RMCAreaStrataExteriorDeepJungleRuin
-        187,106: RMCAreaStrataExteriorDeepJungleRuin
-        187,107: RMCAreaStrataExteriorDeepJungleRuin
-        187,108: RMCAreaStrataExteriorDeepJungleRuin
-        188,104: RMCAreaStrataExteriorDeepJungleRuin
-        188,105: RMCAreaStrataExteriorDeepJungleRuin
-        188,106: RMCAreaStrataExteriorDeepJungleRuin
-        188,107: RMCAreaStrataExteriorDeepJungleRuin
-        188,108: RMCAreaStrataExteriorDeepJungleRuin
-        188,109: RMCAreaStrataExteriorDeepJungleRuin
-        188,110: RMCAreaStrataExteriorDeepJungleRuin
-        189,105: RMCAreaStrataExteriorDeepJungleRuin
-        189,106: RMCAreaStrataExteriorDeepJungleRuin
-        189,107: RMCAreaStrataExteriorDeepJungleRuin
-        189,109: RMCAreaStrataExteriorDeepJungleRuin
-        189,110: RMCAreaStrataExteriorDeepJungleRuin
-        190,105: RMCAreaStrataExteriorDeepJungleRuin
-        190,106: RMCAreaStrataExteriorDeepJungleRuin
-        190,107: RMCAreaStrataExteriorDeepJungleRuin
-        190,108: RMCAreaStrataExteriorDeepJungleRuin
-        190,109: RMCAreaStrataExteriorDeepJungleRuin
-        190,110: RMCAreaStrataExteriorDeepJungleRuin
-        189,108: RMCAreaStrataExteriorDeepJungleRuin
-        187,109: RMCAreaStrataExteriorDeepJungleRuin
-        185,109: RMCAreaStrataExteriorDeepJungleRuin
+        181,109: RMCAreaStrataICSCAmb
+        181,108: RMCAreaStrataICSCAmb
+        182,108: RMCAreaStrataICSCAmb
+        182,107: RMCAreaStrataICSCAmb
+        183,108: RMCAreaStrataICSCAmb
+        183,107: RMCAreaStrataICSCAmb
+        183,106: RMCAreaStrataICSCAmb
+        183,105: RMCAreaStrataICSCAmb
+        184,108: RMCAreaStrataICSCAmb
+        184,107: RMCAreaStrataICSCAmb
+        184,106: RMCAreaStrataICSCAmb
+        184,105: RMCAreaStrataICSCAmb
+        185,108: RMCAreaStrataICSCAmb
+        185,107: RMCAreaStrataICSCAmb
+        185,106: RMCAreaStrataICSCAmb
+        185,105: RMCAreaStrataICSCAmb
+        182,106: RMCAreaStrataICSCAmb
+        182,105: RMCAreaStrataICSCAmb
+        185,103: RMCAreaStrataICSCAmb
+        185,104: RMCAreaStrataICSCAmb
+        186,103: RMCAreaStrataICSCAmb
+        186,104: RMCAreaStrataICSCAmb
+        186,105: RMCAreaStrataICSCAmb
+        186,106: RMCAreaStrataICSCAmb
+        186,107: RMCAreaStrataICSCAmb
+        186,108: RMCAreaStrataICSCAmb
+        187,103: RMCAreaStrataICSCAmb
+        187,104: RMCAreaStrataICSCAmb
+        187,105: RMCAreaStrataICSCAmb
+        187,106: RMCAreaStrataICSCAmb
+        187,107: RMCAreaStrataICSCAmb
+        187,108: RMCAreaStrataICSCAmb
+        188,104: RMCAreaStrataICSCAmb
+        188,105: RMCAreaStrataICSCAmb
+        188,106: RMCAreaStrataICSCAmb
+        188,107: RMCAreaStrataICSCAmb
+        188,108: RMCAreaStrataICSCAmb
+        188,109: RMCAreaStrataICSCAmb
+        188,110: RMCAreaStrataICSCAmb
+        189,105: RMCAreaStrataICSCAmb
+        189,106: RMCAreaStrataICSCAmb
+        189,107: RMCAreaStrataICSCAmb
+        189,109: RMCAreaStrataICSCAmb
+        189,110: RMCAreaStrataICSCAmb
+        190,105: RMCAreaStrataICSCAmb
+        190,106: RMCAreaStrataICSCAmb
+        190,107: RMCAreaStrataICSCAmb
+        190,108: RMCAreaStrataICSCAmb
+        190,109: RMCAreaStrataICSCAmb
+        190,110: RMCAreaStrataICSCAmb
+        189,108: RMCAreaStrataICSCAmb
+        187,109: RMCAreaStrataICSCAmb
+        185,109: RMCAreaStrataICSCAmb
         191,109: RMCAreaStrataExteriorDeepJungleOldTunnels
         192,109: RMCAreaStrataExteriorDeepJungleOldTunnels
         191,110: RMCAreaStrataExteriorDeepJungleOldTunnels
@@ -35609,17 +35609,17 @@ entities:
         180,107: RMCAreaStrataExteriorDeepJungleOldTunnels
         180,108: RMCAreaStrataExteriorDeepJungleOldTunnels
         180,109: RMCAreaStrataExteriorDeepJungleOldTunnels
-        182,109: RMCAreaStrataExteriorDeepJungleRuin
-        183,109: RMCAreaStrataExteriorDeepJungleRuin
-        184,109: RMCAreaStrataExteriorDeepJungleRuin
-        186,109: RMCAreaStrataExteriorDeepJungleRuin
-        187,110: RMCAreaStrataExteriorDeepJungleRuin
-        186,110: RMCAreaStrataExteriorDeepJungleRuin
-        185,110: RMCAreaStrataExteriorDeepJungleRuin
-        184,110: RMCAreaStrataExteriorDeepJungleRuin
-        183,110: RMCAreaStrataExteriorDeepJungleRuin
-        182,110: RMCAreaStrataExteriorDeepJungleRuin
-        181,110: RMCAreaStrataExteriorDeepJungleRuin
+        182,109: RMCAreaStrataICSCAmb
+        183,109: RMCAreaStrataICSCAmb
+        184,109: RMCAreaStrataICSCAmb
+        186,109: RMCAreaStrataICSCAmb
+        187,110: RMCAreaStrataICSCAmb
+        186,110: RMCAreaStrataICSCAmb
+        185,110: RMCAreaStrataICSCAmb
+        184,110: RMCAreaStrataICSCAmb
+        183,110: RMCAreaStrataICSCAmb
+        182,110: RMCAreaStrataICSCAmb
+        181,110: RMCAreaStrataICSCAmb
         180,110: RMCAreaStrataExteriorDeepJungleOldTunnels
         179,110: RMCAreaStrataExteriorDeepJungleOldTunnels
         178,110: RMCAreaStrataExteriorDeepJungleOldTunnels
@@ -35635,21 +35635,21 @@ entities:
         179,112: RMCAreaStrataExteriorDeepJungleOldTunnels
         180,111: RMCAreaStrataExteriorDeepJungleOldTunnels
         180,112: RMCAreaStrataExteriorDeepJungleOldTunnels
-        181,111: RMCAreaStrataExteriorDeepJungleRuin
-        181,112: RMCAreaStrataExteriorDeepJungleRuin
-        182,111: RMCAreaStrataExteriorDeepJungleRuin
-        182,112: RMCAreaStrataExteriorDeepJungleRuin
-        183,111: RMCAreaStrataExteriorDeepJungleRuin
-        183,112: RMCAreaStrataExteriorDeepJungleRuin
-        184,111: RMCAreaStrataExteriorDeepJungleRuin
-        184,112: RMCAreaStrataExteriorDeepJungleRuin
-        185,111: RMCAreaStrataExteriorDeepJungleRuin
-        186,111: RMCAreaStrataExteriorDeepJungleRuin
-        186,112: RMCAreaStrataExteriorDeepJungleRuin
-        187,111: RMCAreaStrataExteriorDeepJungleRuin
-        187,112: RMCAreaStrataExteriorDeepJungleRuin
-        188,111: RMCAreaStrataExteriorDeepJungleRuin
-        188,112: RMCAreaStrataExteriorDeepJungleRuin
+        181,111: RMCAreaStrataICSCAmb
+        181,112: RMCAreaStrataICSCAmb
+        182,111: RMCAreaStrataICSCAmb
+        182,112: RMCAreaStrataICSCAmb
+        183,111: RMCAreaStrataICSCAmb
+        183,112: RMCAreaStrataICSCAmb
+        184,111: RMCAreaStrataICSCAmb
+        184,112: RMCAreaStrataICSCAmb
+        185,111: RMCAreaStrataICSCAmb
+        186,111: RMCAreaStrataICSCAmb
+        186,112: RMCAreaStrataICSCAmb
+        187,111: RMCAreaStrataICSCAmb
+        187,112: RMCAreaStrataICSCAmb
+        188,111: RMCAreaStrataICSCAmb
+        188,112: RMCAreaStrataICSCAmb
         189,111: RMCAreaStrataExteriorDeepJungleOldTunnels
         189,112: RMCAreaStrataExteriorDeepJungleOldTunnels
         190,111: RMCAreaStrataExteriorDeepJungleOldTunnels
@@ -35664,7 +35664,7 @@ entities:
         194,112: RMCAreaStrataExteriorDeepJungleOldTunnels
         195,111: RMCAreaStrataExteriorDeepJungleOldTunnels
         195,112: RMCAreaStrataExteriorDeepJungleOldTunnels
-        185,112: RMCAreaStrataExteriorDeepJungleRuin
+        185,112: RMCAreaStrataICSCAmb
         197,113: RMCAreaStrataExteriorDeepJungleOldTunnels
         196,113: RMCAreaStrataExteriorDeepJungleOldTunnels
         195,113: RMCAreaStrataExteriorDeepJungleOldTunnels
@@ -35673,13 +35673,13 @@ entities:
         192,113: RMCAreaStrataExteriorDeepJungleOldTunnels
         191,113: RMCAreaStrataExteriorDeepJungleOldTunnels
         190,113: RMCAreaStrataExteriorDeepJungleOldTunnels
-        187,113: RMCAreaStrataExteriorDeepJungleRuin
-        186,113: RMCAreaStrataExteriorDeepJungleRuin
-        185,113: RMCAreaStrataExteriorDeepJungleRuin
-        184,113: RMCAreaStrataExteriorDeepJungleRuin
-        183,113: RMCAreaStrataExteriorDeepJungleRuin
-        182,113: RMCAreaStrataExteriorDeepJungleRuin
-        181,113: RMCAreaStrataExteriorDeepJungleRuin
+        187,113: RMCAreaStrataICSCAmb
+        186,113: RMCAreaStrataICSCAmb
+        185,113: RMCAreaStrataICSCAmb
+        184,113: RMCAreaStrataICSCAmb
+        183,113: RMCAreaStrataICSCAmb
+        182,113: RMCAreaStrataICSCAmb
+        181,113: RMCAreaStrataICSCAmb
         180,113: RMCAreaStrataExteriorDeepJungleOldTunnels
         179,113: RMCAreaStrataExteriorDeepJungleOldTunnels
         178,113: RMCAreaStrataExteriorDeepJungleOldTunnels
@@ -40115,11 +40115,11 @@ entities:
         220,142: RMCAreaStrataInteriorResearch
         220,141: RMCAreaStrataInteriorResearch
         220,140: RMCAreaStrataInteriorResearch
-        220,139: RMCAreaStrataInteriorResearch
-        216,139: RMCAreaStrataInteriorResearch
-        216,138: RMCAreaStrataInteriorResearch
-        216,137: RMCAreaStrataInteriorResearch
-        216,136: RMCAreaStrataInteriorResearch
+        220,139: RMCAreaStrataUPPAmb
+        216,139: RMCAreaStrataUPPAmb
+        216,138: RMCAreaStrataUPPAmb
+        216,137: RMCAreaStrataUPPAmb
+        216,136: RMCAreaStrataUPPAmb
         216,134: RMCAreaStrataInteriorResearch
         216,133: RMCAreaStrataInteriorResearch
         216,132: RMCAreaStrataInteriorResearch
@@ -40127,24 +40127,24 @@ entities:
         216,130: RMCAreaStrataInteriorResearch
         216,129: RMCAreaStrataInteriorResearch
         216,128: RMCAreaStrataInteriorResearch
-        217,139: RMCAreaStrataInteriorResearch
-        217,138: RMCAreaStrataInteriorResearch
-        216,135: RMCAreaStrataInteriorResearch
-        217,137: RMCAreaStrataInteriorResearch
-        217,136: RMCAreaStrataInteriorResearch
-        217,135: RMCAreaStrataInteriorResearch
+        217,139: RMCAreaStrataUPPAmb
+        217,138: RMCAreaStrataUPPAmb
+        216,135: RMCAreaStrataUPPAmb
+        217,137: RMCAreaStrataUPPAmb
+        217,136: RMCAreaStrataUPPAmb
+        217,135: RMCAreaStrataUPPAmb
         217,134: RMCAreaStrataInteriorResearch
         217,133: RMCAreaStrataInteriorResearch
         217,132: RMCAreaStrataInteriorResearch
         217,131: RMCAreaStrataInteriorResearch
         217,130: RMCAreaStrataInteriorResearch
         217,129: RMCAreaStrataInteriorResearch
-        218,139: RMCAreaStrataInteriorResearch
-        218,138: RMCAreaStrataInteriorResearch
+        218,139: RMCAreaStrataUPPAmb
+        218,138: RMCAreaStrataUPPAmb
         217,128: RMCAreaStrataInteriorResearch
-        218,136: RMCAreaStrataInteriorResearch
-        218,135: RMCAreaStrataInteriorResearch
-        218,137: RMCAreaStrataInteriorResearch
+        218,136: RMCAreaStrataUPPAmb
+        218,135: RMCAreaStrataUPPAmb
+        218,137: RMCAreaStrataUPPAmb
         218,134: RMCAreaStrataInteriorResearch
         218,133: RMCAreaStrataInteriorResearch
         218,132: RMCAreaStrataInteriorResearch
@@ -40152,22 +40152,22 @@ entities:
         218,130: RMCAreaStrataInteriorResearch
         218,129: RMCAreaStrataInteriorResearch
         218,128: RMCAreaStrataInteriorResearch
-        219,139: RMCAreaStrataInteriorResearch
-        219,138: RMCAreaStrataInteriorResearch
-        219,137: RMCAreaStrataInteriorResearch
-        219,135: RMCAreaStrataInteriorResearch
-        219,136: RMCAreaStrataInteriorResearch
+        219,139: RMCAreaStrataUPPAmb
+        219,138: RMCAreaStrataUPPAmb
+        219,137: RMCAreaStrataUPPAmb
+        219,135: RMCAreaStrataUPPAmb
+        219,136: RMCAreaStrataUPPAmb
         219,133: RMCAreaStrataInteriorResearch
         219,132: RMCAreaStrataInteriorResearch
         219,131: RMCAreaStrataInteriorResearch
         219,130: RMCAreaStrataInteriorResearch
         219,129: RMCAreaStrataInteriorResearch
         219,128: RMCAreaStrataInteriorResearch
-        220,138: RMCAreaStrataInteriorResearch
-        220,137: RMCAreaStrataInteriorResearch
+        220,138: RMCAreaStrataUPPAmb
+        220,137: RMCAreaStrataUPPAmb
         219,134: RMCAreaStrataInteriorResearch
-        220,135: RMCAreaStrataInteriorResearch
-        220,136: RMCAreaStrataInteriorResearch
+        220,135: RMCAreaStrataUPPAmb
+        220,136: RMCAreaStrataUPPAmb
         220,133: RMCAreaStrataInteriorResearch
         220,132: RMCAreaStrataInteriorResearch
         220,134: RMCAreaStrataInteriorResearch
@@ -46392,6 +46392,861 @@ entities:
         196,53: RMCAreaStrataExteriorDeepJunglePlanetCoreResearchStationExterior
         97,51: RMCAreaStrataExteriorSouthOutpost
         106,166: RMCAreaStrataInteriorBballCave
+        255,170: RMCAreaStrataInteriorOutOfBounds
+        253,170: RMCAreaStrataInteriorOutOfBounds
+        254,170: RMCAreaStrataInteriorOutOfBounds
+        251,170: RMCAreaStrataInteriorOutOfBounds
+        250,170: RMCAreaStrataInteriorOutOfBounds
+        249,170: RMCAreaStrataInteriorOutOfBounds
+        248,170: RMCAreaStrataInteriorOutOfBounds
+        247,170: RMCAreaStrataInteriorOutOfBounds
+        252,170: RMCAreaStrataInteriorOutOfBounds
+        246,170: RMCAreaStrataInteriorOutOfBounds
+        245,170: RMCAreaStrataInteriorOutOfBounds
+        244,170: RMCAreaStrataInteriorOutOfBounds
+        243,170: RMCAreaStrataInteriorOutOfBounds
+        242,170: RMCAreaStrataInteriorOutOfBounds
+        241,170: RMCAreaStrataInteriorOutOfBounds
+        240,170: RMCAreaStrataInteriorOutOfBounds
+        239,170: RMCAreaStrataInteriorOutOfBounds
+        237,170: RMCAreaStrataInteriorOutOfBounds
+        238,170: RMCAreaStrataInteriorOutOfBounds
+        236,170: RMCAreaStrataInteriorOutOfBounds
+        235,170: RMCAreaStrataInteriorOutOfBounds
+        234,170: RMCAreaStrataInteriorOutOfBounds
+        233,170: RMCAreaStrataInteriorOutOfBounds
+        230,170: RMCAreaStrataInteriorOutOfBounds
+        229,170: RMCAreaStrataInteriorOutOfBounds
+        228,170: RMCAreaStrataInteriorOutOfBounds
+        232,170: RMCAreaStrataInteriorOutOfBounds
+        231,170: RMCAreaStrataInteriorOutOfBounds
+        227,170: RMCAreaStrataInteriorOutOfBounds
+        225,170: RMCAreaStrataInteriorOutOfBounds
+        224,170: RMCAreaStrataInteriorOutOfBounds
+        223,170: RMCAreaStrataInteriorOutOfBounds
+        222,170: RMCAreaStrataInteriorOutOfBounds
+        221,170: RMCAreaStrataInteriorOutOfBounds
+        220,170: RMCAreaStrataInteriorOutOfBounds
+        219,170: RMCAreaStrataInteriorOutOfBounds
+        218,170: RMCAreaStrataInteriorOutOfBounds
+        217,170: RMCAreaStrataInteriorOutOfBounds
+        216,170: RMCAreaStrataInteriorOutOfBounds
+        215,170: RMCAreaStrataInteriorOutOfBounds
+        214,170: RMCAreaStrataInteriorOutOfBounds
+        213,170: RMCAreaStrataInteriorOutOfBounds
+        212,170: RMCAreaStrataInteriorOutOfBounds
+        211,170: RMCAreaStrataInteriorOutOfBounds
+        210,170: RMCAreaStrataInteriorOutOfBounds
+        209,170: RMCAreaStrataInteriorOutOfBounds
+        207,170: RMCAreaStrataInteriorOutOfBounds
+        206,170: RMCAreaStrataInteriorOutOfBounds
+        208,170: RMCAreaStrataInteriorOutOfBounds
+        204,170: RMCAreaStrataInteriorOutOfBounds
+        202,170: RMCAreaStrataInteriorOutOfBounds
+        205,170: RMCAreaStrataInteriorOutOfBounds
+        201,170: RMCAreaStrataInteriorOutOfBounds
+        200,170: RMCAreaStrataInteriorOutOfBounds
+        199,170: RMCAreaStrataInteriorOutOfBounds
+        198,170: RMCAreaStrataInteriorOutOfBounds
+        197,170: RMCAreaStrataInteriorOutOfBounds
+        196,170: RMCAreaStrataInteriorOutOfBounds
+        195,170: RMCAreaStrataInteriorOutOfBounds
+        194,170: RMCAreaStrataInteriorOutOfBounds
+        193,170: RMCAreaStrataInteriorOutOfBounds
+        203,170: RMCAreaStrataInteriorOutOfBounds
+        190,170: RMCAreaStrataInteriorOutOfBounds
+        189,170: RMCAreaStrataInteriorOutOfBounds
+        192,170: RMCAreaStrataInteriorOutOfBounds
+        191,170: RMCAreaStrataInteriorOutOfBounds
+        187,170: RMCAreaStrataInteriorOutOfBounds
+        186,170: RMCAreaStrataInteriorOutOfBounds
+        184,170: RMCAreaStrataInteriorOutOfBounds
+        183,170: RMCAreaStrataInteriorOutOfBounds
+        182,170: RMCAreaStrataInteriorOutOfBounds
+        181,170: RMCAreaStrataInteriorOutOfBounds
+        180,170: RMCAreaStrataInteriorOutOfBounds
+        179,170: RMCAreaStrataInteriorOutOfBounds
+        188,170: RMCAreaStrataInteriorOutOfBounds
+        178,170: RMCAreaStrataInteriorOutOfBounds
+        177,170: RMCAreaStrataInteriorOutOfBounds
+        185,170: RMCAreaStrataInteriorOutOfBounds
+        176,170: RMCAreaStrataInteriorOutOfBounds
+        175,170: RMCAreaStrataInteriorOutOfBounds
+        174,170: RMCAreaStrataInteriorOutOfBounds
+        173,170: RMCAreaStrataInteriorOutOfBounds
+        172,170: RMCAreaStrataInteriorOutOfBounds
+        171,170: RMCAreaStrataInteriorOutOfBounds
+        170,170: RMCAreaStrataInteriorOutOfBounds
+        169,170: RMCAreaStrataInteriorOutOfBounds
+        168,170: RMCAreaStrataInteriorOutOfBounds
+        167,170: RMCAreaStrataInteriorOutOfBounds
+        166,170: RMCAreaStrataInteriorOutOfBounds
+        165,170: RMCAreaStrataInteriorOutOfBounds
+        164,170: RMCAreaStrataInteriorOutOfBounds
+        163,170: RMCAreaStrataInteriorOutOfBounds
+        162,170: RMCAreaStrataInteriorOutOfBounds
+        161,170: RMCAreaStrataInteriorOutOfBounds
+        160,170: RMCAreaStrataInteriorOutOfBounds
+        159,170: RMCAreaStrataInteriorOutOfBounds
+        158,170: RMCAreaStrataInteriorOutOfBounds
+        157,170: RMCAreaStrataInteriorOutOfBounds
+        156,170: RMCAreaStrataInteriorOutOfBounds
+        155,170: RMCAreaStrataInteriorOutOfBounds
+        154,170: RMCAreaStrataInteriorOutOfBounds
+        153,170: RMCAreaStrataInteriorOutOfBounds
+        152,170: RMCAreaStrataInteriorOutOfBounds
+        151,170: RMCAreaStrataInteriorOutOfBounds
+        150,170: RMCAreaStrataInteriorOutOfBounds
+        226,170: RMCAreaStrataInteriorOutOfBounds
+        149,170: RMCAreaStrataInteriorOutOfBounds
+        148,170: RMCAreaStrataInteriorOutOfBounds
+        146,170: RMCAreaStrataInteriorOutOfBounds
+        144,170: RMCAreaStrataInteriorOutOfBounds
+        145,170: RMCAreaStrataInteriorOutOfBounds
+        140,170: RMCAreaStrataInteriorOutOfBounds
+        141,170: RMCAreaStrataInteriorOutOfBounds
+        143,170: RMCAreaStrataInteriorOutOfBounds
+        134,170: RMCAreaStrataInteriorOutOfBounds
+        147,170: RMCAreaStrataInteriorOutOfBounds
+        137,170: RMCAreaStrataInteriorOutOfBounds
+        133,170: RMCAreaStrataInteriorOutOfBounds
+        132,170: RMCAreaStrataInteriorOutOfBounds
+        138,170: RMCAreaStrataInteriorOutOfBounds
+        142,170: RMCAreaStrataInteriorOutOfBounds
+        139,170: RMCAreaStrataInteriorOutOfBounds
+        130,170: RMCAreaStrataInteriorOutOfBounds
+        136,170: RMCAreaStrataInteriorOutOfBounds
+        131,170: RMCAreaStrataInteriorOutOfBounds
+        128,170: RMCAreaStrataInteriorOutOfBounds
+        135,170: RMCAreaStrataInteriorOutOfBounds
+        127,170: RMCAreaStrataInteriorOutOfBounds
+        129,170: RMCAreaStrataInteriorOutOfBounds
+        126,170: RMCAreaStrataInteriorOutOfBounds
+        125,170: RMCAreaStrataInteriorOutOfBounds
+        124,170: RMCAreaStrataInteriorOutOfBounds
+        123,170: RMCAreaStrataInteriorOutOfBounds
+        122,170: RMCAreaStrataInteriorOutOfBounds
+        121,170: RMCAreaStrataInteriorOutOfBounds
+        120,170: RMCAreaStrataInteriorOutOfBounds
+        119,170: RMCAreaStrataInteriorOutOfBounds
+        118,170: RMCAreaStrataInteriorOutOfBounds
+        117,170: RMCAreaStrataInteriorOutOfBounds
+        116,170: RMCAreaStrataInteriorOutOfBounds
+        115,170: RMCAreaStrataInteriorOutOfBounds
+        114,170: RMCAreaStrataInteriorOutOfBounds
+        113,170: RMCAreaStrataInteriorOutOfBounds
+        112,170: RMCAreaStrataInteriorOutOfBounds
+        111,170: RMCAreaStrataInteriorOutOfBounds
+        110,170: RMCAreaStrataInteriorOutOfBounds
+        109,170: RMCAreaStrataInteriorOutOfBounds
+        108,170: RMCAreaStrataInteriorOutOfBounds
+        107,170: RMCAreaStrataInteriorOutOfBounds
+        106,170: RMCAreaStrataInteriorOutOfBounds
+        105,170: RMCAreaStrataInteriorOutOfBounds
+        104,170: RMCAreaStrataInteriorOutOfBounds
+        103,170: RMCAreaStrataInteriorOutOfBounds
+        102,170: RMCAreaStrataInteriorOutOfBounds
+        101,170: RMCAreaStrataInteriorOutOfBounds
+        100,170: RMCAreaStrataInteriorOutOfBounds
+        99,170: RMCAreaStrataInteriorOutOfBounds
+        98,170: RMCAreaStrataInteriorOutOfBounds
+        97,170: RMCAreaStrataInteriorOutOfBounds
+        96,170: RMCAreaStrataInteriorOutOfBounds
+        95,170: RMCAreaStrataInteriorOutOfBounds
+        94,170: RMCAreaStrataInteriorOutOfBounds
+        93,170: RMCAreaStrataInteriorOutOfBounds
+        92,170: RMCAreaStrataInteriorOutOfBounds
+        91,170: RMCAreaStrataInteriorOutOfBounds
+        90,170: RMCAreaStrataInteriorOutOfBounds
+        89,170: RMCAreaStrataInteriorOutOfBounds
+        88,170: RMCAreaStrataInteriorOutOfBounds
+        87,170: RMCAreaStrataInteriorOutOfBounds
+        86,170: RMCAreaStrataInteriorOutOfBounds
+        85,170: RMCAreaStrataInteriorOutOfBounds
+        84,170: RMCAreaStrataInteriorOutOfBounds
+        83,170: RMCAreaStrataInteriorOutOfBounds
+        82,170: RMCAreaStrataInteriorOutOfBounds
+        81,170: RMCAreaStrataInteriorOutOfBounds
+        80,170: RMCAreaStrataInteriorOutOfBounds
+        79,170: RMCAreaStrataInteriorOutOfBounds
+        78,170: RMCAreaStrataInteriorOutOfBounds
+        77,170: RMCAreaStrataInteriorOutOfBounds
+        76,170: RMCAreaStrataInteriorOutOfBounds
+        75,170: RMCAreaStrataInteriorOutOfBounds
+        74,170: RMCAreaStrataInteriorOutOfBounds
+        73,170: RMCAreaStrataInteriorOutOfBounds
+        72,170: RMCAreaStrataInteriorOutOfBounds
+        71,170: RMCAreaStrataInteriorOutOfBounds
+        70,170: RMCAreaStrataInteriorOutOfBounds
+        69,170: RMCAreaStrataInteriorOutOfBounds
+        68,170: RMCAreaStrataInteriorOutOfBounds
+        67,170: RMCAreaStrataInteriorOutOfBounds
+        66,170: RMCAreaStrataInteriorOutOfBounds
+        65,170: RMCAreaStrataInteriorOutOfBounds
+        64,170: RMCAreaStrataInteriorOutOfBounds
+        63,170: RMCAreaStrataInteriorOutOfBounds
+        62,170: RMCAreaStrataInteriorOutOfBounds
+        61,170: RMCAreaStrataInteriorOutOfBounds
+        60,170: RMCAreaStrataInteriorOutOfBounds
+        59,170: RMCAreaStrataInteriorOutOfBounds
+        58,170: RMCAreaStrataInteriorOutOfBounds
+        57,170: RMCAreaStrataInteriorOutOfBounds
+        56,170: RMCAreaStrataInteriorOutOfBounds
+        55,170: RMCAreaStrataInteriorOutOfBounds
+        54,170: RMCAreaStrataInteriorOutOfBounds
+        53,170: RMCAreaStrataInteriorOutOfBounds
+        52,170: RMCAreaStrataInteriorOutOfBounds
+        51,170: RMCAreaStrataInteriorOutOfBounds
+        50,170: RMCAreaStrataInteriorOutOfBounds
+        49,170: RMCAreaStrataInteriorOutOfBounds
+        48,170: RMCAreaStrataInteriorOutOfBounds
+        47,170: RMCAreaStrataInteriorOutOfBounds
+        46,170: RMCAreaStrataInteriorOutOfBounds
+        45,170: RMCAreaStrataInteriorOutOfBounds
+        44,170: RMCAreaStrataInteriorOutOfBounds
+        43,170: RMCAreaStrataInteriorOutOfBounds
+        42,170: RMCAreaStrataInteriorOutOfBounds
+        41,170: RMCAreaStrataInteriorOutOfBounds
+        40,170: RMCAreaStrataInteriorOutOfBounds
+        39,170: RMCAreaStrataInteriorOutOfBounds
+        38,170: RMCAreaStrataInteriorOutOfBounds
+        37,170: RMCAreaStrataInteriorOutOfBounds
+        36,170: RMCAreaStrataInteriorOutOfBounds
+        35,170: RMCAreaStrataInteriorOutOfBounds
+        34,170: RMCAreaStrataInteriorOutOfBounds
+        33,170: RMCAreaStrataInteriorOutOfBounds
+        32,170: RMCAreaStrataInteriorOutOfBounds
+        31,170: RMCAreaStrataInteriorOutOfBounds
+        30,170: RMCAreaStrataInteriorOutOfBounds
+        29,170: RMCAreaStrataInteriorOutOfBounds
+        28,170: RMCAreaStrataInteriorOutOfBounds
+        27,170: RMCAreaStrataInteriorOutOfBounds
+        26,170: RMCAreaStrataInteriorOutOfBounds
+        25,170: RMCAreaStrataInteriorOutOfBounds
+        24,170: RMCAreaStrataInteriorOutOfBounds
+        23,170: RMCAreaStrataInteriorOutOfBounds
+        22,170: RMCAreaStrataInteriorOutOfBounds
+        21,170: RMCAreaStrataInteriorOutOfBounds
+        20,170: RMCAreaStrataInteriorOutOfBounds
+        19,170: RMCAreaStrataInteriorOutOfBounds
+        18,170: RMCAreaStrataInteriorOutOfBounds
+        17,170: RMCAreaStrataInteriorOutOfBounds
+        16,170: RMCAreaStrataInteriorOutOfBounds
+        14,170: RMCAreaStrataInteriorOutOfBounds
+        15,170: RMCAreaStrataInteriorOutOfBounds
+        11,170: RMCAreaStrataInteriorOutOfBounds
+        10,170: RMCAreaStrataInteriorOutOfBounds
+        9,170: RMCAreaStrataInteriorOutOfBounds
+        8,170: RMCAreaStrataInteriorOutOfBounds
+        7,170: RMCAreaStrataInteriorOutOfBounds
+        13,170: RMCAreaStrataInteriorOutOfBounds
+        6,170: RMCAreaStrataInteriorOutOfBounds
+        5,170: RMCAreaStrataInteriorOutOfBounds
+        12,170: RMCAreaStrataInteriorOutOfBounds
+        4,170: RMCAreaStrataInteriorOutOfBounds
+        3,170: RMCAreaStrataInteriorOutOfBounds
+        2,170: RMCAreaStrataInteriorOutOfBounds
+        1,170: RMCAreaStrataInteriorOutOfBounds
+        0,170: RMCAreaStrataInteriorOutOfBounds
+        0,168: RMCAreaStrataInteriorOutOfBounds
+        0,169: RMCAreaStrataInteriorOutOfBounds
+        0,166: RMCAreaStrataInteriorOutOfBounds
+        0,165: RMCAreaStrataInteriorOutOfBounds
+        0,164: RMCAreaStrataInteriorOutOfBounds
+        0,163: RMCAreaStrataInteriorOutOfBounds
+        0,162: RMCAreaStrataInteriorOutOfBounds
+        0,161: RMCAreaStrataInteriorOutOfBounds
+        0,160: RMCAreaStrataInteriorOutOfBounds
+        0,167: RMCAreaStrataInteriorOutOfBounds
+        0,159: RMCAreaStrataInteriorOutOfBounds
+        0,158: RMCAreaStrataInteriorOutOfBounds
+        0,157: RMCAreaStrataInteriorOutOfBounds
+        0,153: RMCAreaStrataInteriorOutOfBounds
+        0,152: RMCAreaStrataInteriorOutOfBounds
+        0,151: RMCAreaStrataInteriorOutOfBounds
+        0,150: RMCAreaStrataInteriorOutOfBounds
+        0,149: RMCAreaStrataInteriorOutOfBounds
+        0,154: RMCAreaStrataInteriorOutOfBounds
+        0,148: RMCAreaStrataInteriorOutOfBounds
+        0,156: RMCAreaStrataInteriorOutOfBounds
+        0,147: RMCAreaStrataInteriorOutOfBounds
+        0,155: RMCAreaStrataInteriorOutOfBounds
+        0,142: RMCAreaStrataInteriorOutOfBounds
+        0,141: RMCAreaStrataInteriorOutOfBounds
+        0,145: RMCAreaStrataInteriorOutOfBounds
+        0,138: RMCAreaStrataInteriorOutOfBounds
+        0,137: RMCAreaStrataInteriorOutOfBounds
+        0,136: RMCAreaStrataInteriorOutOfBounds
+        0,135: RMCAreaStrataInteriorOutOfBounds
+        0,139: RMCAreaStrataInteriorOutOfBounds
+        0,134: RMCAreaStrataInteriorOutOfBounds
+        0,133: RMCAreaStrataInteriorOutOfBounds
+        0,132: RMCAreaStrataInteriorOutOfBounds
+        0,143: RMCAreaStrataInteriorOutOfBounds
+        0,131: RMCAreaStrataInteriorOutOfBounds
+        0,144: RMCAreaStrataInteriorOutOfBounds
+        0,130: RMCAreaStrataInteriorOutOfBounds
+        0,128: RMCAreaStrataInteriorOutOfBounds
+        0,127: RMCAreaStrataInteriorOutOfBounds
+        0,126: RMCAreaStrataInteriorOutOfBounds
+        0,146: RMCAreaStrataInteriorOutOfBounds
+        0,124: RMCAreaStrataInteriorOutOfBounds
+        0,122: RMCAreaStrataInteriorOutOfBounds
+        0,123: RMCAreaStrataInteriorOutOfBounds
+        0,121: RMCAreaStrataInteriorOutOfBounds
+        0,120: RMCAreaStrataInteriorOutOfBounds
+        0,119: RMCAreaStrataInteriorOutOfBounds
+        0,118: RMCAreaStrataInteriorOutOfBounds
+        0,115: RMCAreaStrataInteriorOutOfBounds
+        0,116: RMCAreaStrataInteriorOutOfBounds
+        0,117: RMCAreaStrataInteriorOutOfBounds
+        0,114: RMCAreaStrataInteriorOutOfBounds
+        0,113: RMCAreaStrataInteriorOutOfBounds
+        0,112: RMCAreaStrataInteriorOutOfBounds
+        0,111: RMCAreaStrataInteriorOutOfBounds
+        0,109: RMCAreaStrataInteriorOutOfBounds
+        0,110: RMCAreaStrataInteriorOutOfBounds
+        0,108: RMCAreaStrataInteriorOutOfBounds
+        0,107: RMCAreaStrataInteriorOutOfBounds
+        0,106: RMCAreaStrataInteriorOutOfBounds
+        0,105: RMCAreaStrataInteriorOutOfBounds
+        0,104: RMCAreaStrataInteriorOutOfBounds
+        0,103: RMCAreaStrataInteriorOutOfBounds
+        0,102: RMCAreaStrataInteriorOutOfBounds
+        0,101: RMCAreaStrataInteriorOutOfBounds
+        0,100: RMCAreaStrataInteriorOutOfBounds
+        0,99: RMCAreaStrataInteriorOutOfBounds
+        0,98: RMCAreaStrataInteriorOutOfBounds
+        0,97: RMCAreaStrataInteriorOutOfBounds
+        0,96: RMCAreaStrataInteriorOutOfBounds
+        0,95: RMCAreaStrataInteriorOutOfBounds
+        0,94: RMCAreaStrataInteriorOutOfBounds
+        0,93: RMCAreaStrataInteriorOutOfBounds
+        0,92: RMCAreaStrataInteriorOutOfBounds
+        0,91: RMCAreaStrataInteriorOutOfBounds
+        0,90: RMCAreaStrataInteriorOutOfBounds
+        0,89: RMCAreaStrataInteriorOutOfBounds
+        0,88: RMCAreaStrataInteriorOutOfBounds
+        0,87: RMCAreaStrataInteriorOutOfBounds
+        0,86: RMCAreaStrataInteriorOutOfBounds
+        0,85: RMCAreaStrataInteriorOutOfBounds
+        0,84: RMCAreaStrataInteriorOutOfBounds
+        0,83: RMCAreaStrataInteriorOutOfBounds
+        0,82: RMCAreaStrataInteriorOutOfBounds
+        0,81: RMCAreaStrataInteriorOutOfBounds
+        0,80: RMCAreaStrataInteriorOutOfBounds
+        0,79: RMCAreaStrataInteriorOutOfBounds
+        0,78: RMCAreaStrataInteriorOutOfBounds
+        0,77: RMCAreaStrataInteriorOutOfBounds
+        0,76: RMCAreaStrataInteriorOutOfBounds
+        0,75: RMCAreaStrataInteriorOutOfBounds
+        0,74: RMCAreaStrataInteriorOutOfBounds
+        0,73: RMCAreaStrataInteriorOutOfBounds
+        0,72: RMCAreaStrataInteriorOutOfBounds
+        0,71: RMCAreaStrataInteriorOutOfBounds
+        0,70: RMCAreaStrataInteriorOutOfBounds
+        0,69: RMCAreaStrataInteriorOutOfBounds
+        0,68: RMCAreaStrataInteriorOutOfBounds
+        0,67: RMCAreaStrataInteriorOutOfBounds
+        0,66: RMCAreaStrataInteriorOutOfBounds
+        0,65: RMCAreaStrataInteriorOutOfBounds
+        0,64: RMCAreaStrataInteriorOutOfBounds
+        0,63: RMCAreaStrataInteriorOutOfBounds
+        0,62: RMCAreaStrataInteriorOutOfBounds
+        0,61: RMCAreaStrataInteriorOutOfBounds
+        0,60: RMCAreaStrataInteriorOutOfBounds
+        0,59: RMCAreaStrataInteriorOutOfBounds
+        0,58: RMCAreaStrataInteriorOutOfBounds
+        0,57: RMCAreaStrataInteriorOutOfBounds
+        0,56: RMCAreaStrataInteriorOutOfBounds
+        0,55: RMCAreaStrataInteriorOutOfBounds
+        0,54: RMCAreaStrataInteriorOutOfBounds
+        0,53: RMCAreaStrataInteriorOutOfBounds
+        0,52: RMCAreaStrataInteriorOutOfBounds
+        0,51: RMCAreaStrataInteriorOutOfBounds
+        0,50: RMCAreaStrataInteriorOutOfBounds
+        0,49: RMCAreaStrataInteriorOutOfBounds
+        0,48: RMCAreaStrataInteriorOutOfBounds
+        0,47: RMCAreaStrataInteriorOutOfBounds
+        0,46: RMCAreaStrataInteriorOutOfBounds
+        0,45: RMCAreaStrataInteriorOutOfBounds
+        0,44: RMCAreaStrataInteriorOutOfBounds
+        0,43: RMCAreaStrataInteriorOutOfBounds
+        0,42: RMCAreaStrataInteriorOutOfBounds
+        0,41: RMCAreaStrataInteriorOutOfBounds
+        0,40: RMCAreaStrataInteriorOutOfBounds
+        0,39: RMCAreaStrataInteriorOutOfBounds
+        0,38: RMCAreaStrataInteriorOutOfBounds
+        0,37: RMCAreaStrataInteriorOutOfBounds
+        0,36: RMCAreaStrataInteriorOutOfBounds
+        0,35: RMCAreaStrataInteriorOutOfBounds
+        0,34: RMCAreaStrataInteriorOutOfBounds
+        0,33: RMCAreaStrataInteriorOutOfBounds
+        0,32: RMCAreaStrataInteriorOutOfBounds
+        0,31: RMCAreaStrataInteriorOutOfBounds
+        0,30: RMCAreaStrataInteriorOutOfBounds
+        0,29: RMCAreaStrataInteriorOutOfBounds
+        0,28: RMCAreaStrataInteriorOutOfBounds
+        0,27: RMCAreaStrataInteriorOutOfBounds
+        0,26: RMCAreaStrataInteriorOutOfBounds
+        0,25: RMCAreaStrataInteriorOutOfBounds
+        0,24: RMCAreaStrataInteriorOutOfBounds
+        0,23: RMCAreaStrataInteriorOutOfBounds
+        0,22: RMCAreaStrataInteriorOutOfBounds
+        0,21: RMCAreaStrataInteriorOutOfBounds
+        0,20: RMCAreaStrataInteriorOutOfBounds
+        0,19: RMCAreaStrataInteriorOutOfBounds
+        0,18: RMCAreaStrataInteriorOutOfBounds
+        0,17: RMCAreaStrataInteriorOutOfBounds
+        0,16: RMCAreaStrataInteriorOutOfBounds
+        0,15: RMCAreaStrataInteriorOutOfBounds
+        0,14: RMCAreaStrataInteriorOutOfBounds
+        0,13: RMCAreaStrataInteriorOutOfBounds
+        0,12: RMCAreaStrataInteriorOutOfBounds
+        0,11: RMCAreaStrataInteriorOutOfBounds
+        0,10: RMCAreaStrataInteriorOutOfBounds
+        0,9: RMCAreaStrataInteriorOutOfBounds
+        0,8: RMCAreaStrataInteriorOutOfBounds
+        0,7: RMCAreaStrataInteriorOutOfBounds
+        0,6: RMCAreaStrataInteriorOutOfBounds
+        0,5: RMCAreaStrataInteriorOutOfBounds
+        0,4: RMCAreaStrataInteriorOutOfBounds
+        0,3: RMCAreaStrataInteriorOutOfBounds
+        0,2: RMCAreaStrataInteriorOutOfBounds
+        0,1: RMCAreaStrataInteriorOutOfBounds
+        0,0: RMCAreaStrataInteriorOutOfBounds
+        0,-1: RMCAreaStrataInteriorOutOfBounds
+        0,-2: RMCAreaStrataInteriorOutOfBounds
+        0,129: RMCAreaStrataInteriorOutOfBounds
+        0,125: RMCAreaStrataInteriorOutOfBounds
+        0,140: RMCAreaStrataInteriorOutOfBounds
+        1,-2: RMCAreaStrataInteriorOutOfBounds
+        2,-2: RMCAreaStrataInteriorOutOfBounds
+        3,-2: RMCAreaStrataInteriorOutOfBounds
+        4,-2: RMCAreaStrataInteriorOutOfBounds
+        5,-2: RMCAreaStrataInteriorOutOfBounds
+        6,-2: RMCAreaStrataInteriorOutOfBounds
+        7,-2: RMCAreaStrataInteriorOutOfBounds
+        8,-2: RMCAreaStrataInteriorOutOfBounds
+        9,-2: RMCAreaStrataInteriorOutOfBounds
+        10,-2: RMCAreaStrataInteriorOutOfBounds
+        12,-2: RMCAreaStrataInteriorOutOfBounds
+        15,-2: RMCAreaStrataInteriorOutOfBounds
+        16,-2: RMCAreaStrataInteriorOutOfBounds
+        17,-2: RMCAreaStrataInteriorOutOfBounds
+        18,-2: RMCAreaStrataInteriorOutOfBounds
+        19,-2: RMCAreaStrataInteriorOutOfBounds
+        20,-2: RMCAreaStrataInteriorOutOfBounds
+        21,-2: RMCAreaStrataInteriorOutOfBounds
+        23,-2: RMCAreaStrataInteriorOutOfBounds
+        24,-2: RMCAreaStrataInteriorOutOfBounds
+        22,-2: RMCAreaStrataInteriorOutOfBounds
+        26,-2: RMCAreaStrataInteriorOutOfBounds
+        27,-2: RMCAreaStrataInteriorOutOfBounds
+        25,-2: RMCAreaStrataInteriorOutOfBounds
+        28,-2: RMCAreaStrataInteriorOutOfBounds
+        11,-2: RMCAreaStrataInteriorOutOfBounds
+        31,-2: RMCAreaStrataInteriorOutOfBounds
+        32,-2: RMCAreaStrataInteriorOutOfBounds
+        33,-2: RMCAreaStrataInteriorOutOfBounds
+        34,-2: RMCAreaStrataInteriorOutOfBounds
+        35,-2: RMCAreaStrataInteriorOutOfBounds
+        36,-2: RMCAreaStrataInteriorOutOfBounds
+        37,-2: RMCAreaStrataInteriorOutOfBounds
+        29,-2: RMCAreaStrataInteriorOutOfBounds
+        38,-2: RMCAreaStrataInteriorOutOfBounds
+        39,-2: RMCAreaStrataInteriorOutOfBounds
+        40,-2: RMCAreaStrataInteriorOutOfBounds
+        13,-2: RMCAreaStrataInteriorOutOfBounds
+        41,-2: RMCAreaStrataInteriorOutOfBounds
+        14,-2: RMCAreaStrataInteriorOutOfBounds
+        30,-2: RMCAreaStrataInteriorOutOfBounds
+        42,-2: RMCAreaStrataInteriorOutOfBounds
+        43,-2: RMCAreaStrataInteriorOutOfBounds
+        44,-2: RMCAreaStrataInteriorOutOfBounds
+        45,-2: RMCAreaStrataInteriorOutOfBounds
+        46,-2: RMCAreaStrataInteriorOutOfBounds
+        47,-2: RMCAreaStrataInteriorOutOfBounds
+        48,-2: RMCAreaStrataInteriorOutOfBounds
+        49,-2: RMCAreaStrataInteriorOutOfBounds
+        50,-2: RMCAreaStrataInteriorOutOfBounds
+        51,-2: RMCAreaStrataInteriorOutOfBounds
+        52,-2: RMCAreaStrataInteriorOutOfBounds
+        53,-2: RMCAreaStrataInteriorOutOfBounds
+        54,-2: RMCAreaStrataInteriorOutOfBounds
+        55,-2: RMCAreaStrataInteriorOutOfBounds
+        56,-2: RMCAreaStrataInteriorOutOfBounds
+        57,-2: RMCAreaStrataInteriorOutOfBounds
+        58,-2: RMCAreaStrataInteriorOutOfBounds
+        59,-2: RMCAreaStrataInteriorOutOfBounds
+        60,-2: RMCAreaStrataInteriorOutOfBounds
+        61,-2: RMCAreaStrataInteriorOutOfBounds
+        62,-2: RMCAreaStrataInteriorOutOfBounds
+        63,-2: RMCAreaStrataInteriorOutOfBounds
+        64,-2: RMCAreaStrataInteriorOutOfBounds
+        65,-2: RMCAreaStrataInteriorOutOfBounds
+        66,-2: RMCAreaStrataInteriorOutOfBounds
+        67,-2: RMCAreaStrataInteriorOutOfBounds
+        68,-2: RMCAreaStrataInteriorOutOfBounds
+        69,-2: RMCAreaStrataInteriorOutOfBounds
+        70,-2: RMCAreaStrataInteriorOutOfBounds
+        71,-2: RMCAreaStrataInteriorOutOfBounds
+        72,-2: RMCAreaStrataInteriorOutOfBounds
+        73,-2: RMCAreaStrataInteriorOutOfBounds
+        74,-2: RMCAreaStrataInteriorOutOfBounds
+        75,-2: RMCAreaStrataInteriorOutOfBounds
+        76,-2: RMCAreaStrataInteriorOutOfBounds
+        77,-2: RMCAreaStrataInteriorOutOfBounds
+        78,-2: RMCAreaStrataInteriorOutOfBounds
+        79,-2: RMCAreaStrataInteriorOutOfBounds
+        80,-2: RMCAreaStrataInteriorOutOfBounds
+        81,-2: RMCAreaStrataInteriorOutOfBounds
+        82,-2: RMCAreaStrataInteriorOutOfBounds
+        83,-2: RMCAreaStrataInteriorOutOfBounds
+        84,-2: RMCAreaStrataInteriorOutOfBounds
+        85,-2: RMCAreaStrataInteriorOutOfBounds
+        86,-2: RMCAreaStrataInteriorOutOfBounds
+        87,-2: RMCAreaStrataInteriorOutOfBounds
+        88,-2: RMCAreaStrataInteriorOutOfBounds
+        89,-2: RMCAreaStrataInteriorOutOfBounds
+        90,-2: RMCAreaStrataInteriorOutOfBounds
+        91,-2: RMCAreaStrataInteriorOutOfBounds
+        92,-2: RMCAreaStrataInteriorOutOfBounds
+        93,-2: RMCAreaStrataInteriorOutOfBounds
+        94,-2: RMCAreaStrataInteriorOutOfBounds
+        95,-2: RMCAreaStrataInteriorOutOfBounds
+        96,-2: RMCAreaStrataInteriorOutOfBounds
+        97,-2: RMCAreaStrataInteriorOutOfBounds
+        98,-2: RMCAreaStrataInteriorOutOfBounds
+        99,-2: RMCAreaStrataInteriorOutOfBounds
+        100,-2: RMCAreaStrataInteriorOutOfBounds
+        101,-2: RMCAreaStrataInteriorOutOfBounds
+        102,-2: RMCAreaStrataInteriorOutOfBounds
+        103,-2: RMCAreaStrataInteriorOutOfBounds
+        104,-2: RMCAreaStrataInteriorOutOfBounds
+        105,-2: RMCAreaStrataInteriorOutOfBounds
+        106,-2: RMCAreaStrataInteriorOutOfBounds
+        107,-2: RMCAreaStrataInteriorOutOfBounds
+        108,-2: RMCAreaStrataInteriorOutOfBounds
+        109,-2: RMCAreaStrataInteriorOutOfBounds
+        110,-2: RMCAreaStrataInteriorOutOfBounds
+        111,-2: RMCAreaStrataInteriorOutOfBounds
+        112,-2: RMCAreaStrataInteriorOutOfBounds
+        113,-2: RMCAreaStrataInteriorOutOfBounds
+        114,-2: RMCAreaStrataInteriorOutOfBounds
+        115,-2: RMCAreaStrataInteriorOutOfBounds
+        116,-2: RMCAreaStrataInteriorOutOfBounds
+        117,-2: RMCAreaStrataInteriorOutOfBounds
+        118,-2: RMCAreaStrataInteriorOutOfBounds
+        119,-2: RMCAreaStrataInteriorOutOfBounds
+        120,-2: RMCAreaStrataInteriorOutOfBounds
+        121,-2: RMCAreaStrataInteriorOutOfBounds
+        122,-2: RMCAreaStrataInteriorOutOfBounds
+        123,-2: RMCAreaStrataInteriorOutOfBounds
+        124,-2: RMCAreaStrataInteriorOutOfBounds
+        125,-2: RMCAreaStrataInteriorOutOfBounds
+        126,-2: RMCAreaStrataInteriorOutOfBounds
+        127,-2: RMCAreaStrataInteriorOutOfBounds
+        128,-2: RMCAreaStrataInteriorOutOfBounds
+        129,-2: RMCAreaStrataInteriorOutOfBounds
+        130,-2: RMCAreaStrataInteriorOutOfBounds
+        131,-2: RMCAreaStrataInteriorOutOfBounds
+        132,-2: RMCAreaStrataInteriorOutOfBounds
+        133,-2: RMCAreaStrataInteriorOutOfBounds
+        134,-2: RMCAreaStrataInteriorOutOfBounds
+        135,-2: RMCAreaStrataInteriorOutOfBounds
+        136,-2: RMCAreaStrataInteriorOutOfBounds
+        137,-2: RMCAreaStrataInteriorOutOfBounds
+        138,-2: RMCAreaStrataInteriorOutOfBounds
+        139,-2: RMCAreaStrataInteriorOutOfBounds
+        140,-2: RMCAreaStrataInteriorOutOfBounds
+        141,-2: RMCAreaStrataInteriorOutOfBounds
+        142,-2: RMCAreaStrataInteriorOutOfBounds
+        143,-2: RMCAreaStrataInteriorOutOfBounds
+        144,-2: RMCAreaStrataInteriorOutOfBounds
+        145,-2: RMCAreaStrataInteriorOutOfBounds
+        146,-2: RMCAreaStrataInteriorOutOfBounds
+        147,-2: RMCAreaStrataInteriorOutOfBounds
+        148,-2: RMCAreaStrataInteriorOutOfBounds
+        149,-2: RMCAreaStrataInteriorOutOfBounds
+        150,-2: RMCAreaStrataInteriorOutOfBounds
+        151,-2: RMCAreaStrataInteriorOutOfBounds
+        152,-2: RMCAreaStrataInteriorOutOfBounds
+        153,-2: RMCAreaStrataInteriorOutOfBounds
+        154,-2: RMCAreaStrataInteriorOutOfBounds
+        155,-2: RMCAreaStrataInteriorOutOfBounds
+        156,-2: RMCAreaStrataInteriorOutOfBounds
+        157,-2: RMCAreaStrataInteriorOutOfBounds
+        158,-2: RMCAreaStrataInteriorOutOfBounds
+        159,-2: RMCAreaStrataInteriorOutOfBounds
+        160,-2: RMCAreaStrataInteriorOutOfBounds
+        161,-2: RMCAreaStrataInteriorOutOfBounds
+        162,-2: RMCAreaStrataInteriorOutOfBounds
+        163,-2: RMCAreaStrataInteriorOutOfBounds
+        164,-2: RMCAreaStrataInteriorOutOfBounds
+        165,-2: RMCAreaStrataInteriorOutOfBounds
+        166,-2: RMCAreaStrataInteriorOutOfBounds
+        167,-2: RMCAreaStrataInteriorOutOfBounds
+        168,-2: RMCAreaStrataInteriorOutOfBounds
+        169,-2: RMCAreaStrataInteriorOutOfBounds
+        170,-2: RMCAreaStrataInteriorOutOfBounds
+        171,-2: RMCAreaStrataInteriorOutOfBounds
+        172,-2: RMCAreaStrataInteriorOutOfBounds
+        173,-2: RMCAreaStrataInteriorOutOfBounds
+        174,-2: RMCAreaStrataInteriorOutOfBounds
+        175,-2: RMCAreaStrataInteriorOutOfBounds
+        176,-2: RMCAreaStrataInteriorOutOfBounds
+        177,-2: RMCAreaStrataInteriorOutOfBounds
+        178,-2: RMCAreaStrataInteriorOutOfBounds
+        179,-2: RMCAreaStrataInteriorOutOfBounds
+        180,-2: RMCAreaStrataInteriorOutOfBounds
+        181,-2: RMCAreaStrataInteriorOutOfBounds
+        182,-2: RMCAreaStrataInteriorOutOfBounds
+        183,-2: RMCAreaStrataInteriorOutOfBounds
+        184,-2: RMCAreaStrataInteriorOutOfBounds
+        185,-2: RMCAreaStrataInteriorOutOfBounds
+        186,-2: RMCAreaStrataInteriorOutOfBounds
+        187,-2: RMCAreaStrataInteriorOutOfBounds
+        188,-2: RMCAreaStrataInteriorOutOfBounds
+        189,-2: RMCAreaStrataInteriorOutOfBounds
+        190,-2: RMCAreaStrataInteriorOutOfBounds
+        191,-2: RMCAreaStrataInteriorOutOfBounds
+        192,-2: RMCAreaStrataInteriorOutOfBounds
+        193,-2: RMCAreaStrataInteriorOutOfBounds
+        194,-2: RMCAreaStrataInteriorOutOfBounds
+        195,-2: RMCAreaStrataInteriorOutOfBounds
+        196,-2: RMCAreaStrataInteriorOutOfBounds
+        197,-2: RMCAreaStrataInteriorOutOfBounds
+        198,-2: RMCAreaStrataInteriorOutOfBounds
+        199,-2: RMCAreaStrataInteriorOutOfBounds
+        200,-2: RMCAreaStrataInteriorOutOfBounds
+        201,-2: RMCAreaStrataInteriorOutOfBounds
+        202,-2: RMCAreaStrataInteriorOutOfBounds
+        203,-2: RMCAreaStrataInteriorOutOfBounds
+        204,-2: RMCAreaStrataInteriorOutOfBounds
+        205,-2: RMCAreaStrataInteriorOutOfBounds
+        206,-2: RMCAreaStrataInteriorOutOfBounds
+        207,-2: RMCAreaStrataInteriorOutOfBounds
+        208,-2: RMCAreaStrataInteriorOutOfBounds
+        209,-2: RMCAreaStrataInteriorOutOfBounds
+        210,-2: RMCAreaStrataInteriorOutOfBounds
+        211,-2: RMCAreaStrataInteriorOutOfBounds
+        212,-2: RMCAreaStrataInteriorOutOfBounds
+        213,-2: RMCAreaStrataInteriorOutOfBounds
+        214,-2: RMCAreaStrataInteriorOutOfBounds
+        215,-2: RMCAreaStrataInteriorOutOfBounds
+        216,-2: RMCAreaStrataInteriorOutOfBounds
+        217,-2: RMCAreaStrataInteriorOutOfBounds
+        218,-2: RMCAreaStrataInteriorOutOfBounds
+        219,-2: RMCAreaStrataInteriorOutOfBounds
+        220,-2: RMCAreaStrataInteriorOutOfBounds
+        221,-2: RMCAreaStrataInteriorOutOfBounds
+        222,-2: RMCAreaStrataInteriorOutOfBounds
+        223,-2: RMCAreaStrataInteriorOutOfBounds
+        224,-2: RMCAreaStrataInteriorOutOfBounds
+        225,-2: RMCAreaStrataInteriorOutOfBounds
+        226,-2: RMCAreaStrataInteriorOutOfBounds
+        227,-2: RMCAreaStrataInteriorOutOfBounds
+        228,-2: RMCAreaStrataInteriorOutOfBounds
+        229,-2: RMCAreaStrataInteriorOutOfBounds
+        230,-2: RMCAreaStrataInteriorOutOfBounds
+        231,-2: RMCAreaStrataInteriorOutOfBounds
+        232,-2: RMCAreaStrataInteriorOutOfBounds
+        233,-2: RMCAreaStrataInteriorOutOfBounds
+        234,-2: RMCAreaStrataInteriorOutOfBounds
+        235,-2: RMCAreaStrataInteriorOutOfBounds
+        236,-2: RMCAreaStrataInteriorOutOfBounds
+        237,-2: RMCAreaStrataInteriorOutOfBounds
+        238,-2: RMCAreaStrataInteriorOutOfBounds
+        239,-2: RMCAreaStrataInteriorOutOfBounds
+        240,-2: RMCAreaStrataInteriorOutOfBounds
+        241,-2: RMCAreaStrataInteriorOutOfBounds
+        242,-2: RMCAreaStrataInteriorOutOfBounds
+        243,-2: RMCAreaStrataInteriorOutOfBounds
+        244,-2: RMCAreaStrataInteriorOutOfBounds
+        245,-2: RMCAreaStrataInteriorOutOfBounds
+        246,-2: RMCAreaStrataInteriorOutOfBounds
+        247,-2: RMCAreaStrataInteriorOutOfBounds
+        248,-2: RMCAreaStrataInteriorOutOfBounds
+        249,-2: RMCAreaStrataInteriorOutOfBounds
+        250,-2: RMCAreaStrataInteriorOutOfBounds
+        251,-2: RMCAreaStrataInteriorOutOfBounds
+        252,-2: RMCAreaStrataInteriorOutOfBounds
+        253,-2: RMCAreaStrataInteriorOutOfBounds
+        254,-2: RMCAreaStrataInteriorOutOfBounds
+        255,-2: RMCAreaStrataInteriorOutOfBounds
+        255,-1: RMCAreaStrataInteriorOutOfBounds
+        255,1: RMCAreaStrataInteriorOutOfBounds
+        255,2: RMCAreaStrataInteriorOutOfBounds
+        255,3: RMCAreaStrataInteriorOutOfBounds
+        255,4: RMCAreaStrataInteriorOutOfBounds
+        255,5: RMCAreaStrataInteriorOutOfBounds
+        255,6: RMCAreaStrataInteriorOutOfBounds
+        255,0: RMCAreaStrataInteriorOutOfBounds
+        255,8: RMCAreaStrataInteriorOutOfBounds
+        255,9: RMCAreaStrataInteriorOutOfBounds
+        255,10: RMCAreaStrataInteriorOutOfBounds
+        255,11: RMCAreaStrataInteriorOutOfBounds
+        255,7: RMCAreaStrataInteriorOutOfBounds
+        255,12: RMCAreaStrataInteriorOutOfBounds
+        255,13: RMCAreaStrataInteriorOutOfBounds
+        255,14: RMCAreaStrataInteriorOutOfBounds
+        255,15: RMCAreaStrataInteriorOutOfBounds
+        255,16: RMCAreaStrataInteriorOutOfBounds
+        255,17: RMCAreaStrataInteriorOutOfBounds
+        255,18: RMCAreaStrataInteriorOutOfBounds
+        255,19: RMCAreaStrataInteriorOutOfBounds
+        255,20: RMCAreaStrataInteriorOutOfBounds
+        255,21: RMCAreaStrataInteriorOutOfBounds
+        255,22: RMCAreaStrataInteriorOutOfBounds
+        255,23: RMCAreaStrataInteriorOutOfBounds
+        255,24: RMCAreaStrataInteriorOutOfBounds
+        255,25: RMCAreaStrataInteriorOutOfBounds
+        255,26: RMCAreaStrataInteriorOutOfBounds
+        255,27: RMCAreaStrataInteriorOutOfBounds
+        255,28: RMCAreaStrataInteriorOutOfBounds
+        255,29: RMCAreaStrataInteriorOutOfBounds
+        255,30: RMCAreaStrataInteriorOutOfBounds
+        255,31: RMCAreaStrataInteriorOutOfBounds
+        255,32: RMCAreaStrataInteriorOutOfBounds
+        255,33: RMCAreaStrataInteriorOutOfBounds
+        255,34: RMCAreaStrataInteriorOutOfBounds
+        255,35: RMCAreaStrataInteriorOutOfBounds
+        255,36: RMCAreaStrataInteriorOutOfBounds
+        255,37: RMCAreaStrataInteriorOutOfBounds
+        255,38: RMCAreaStrataInteriorOutOfBounds
+        255,39: RMCAreaStrataInteriorOutOfBounds
+        255,40: RMCAreaStrataInteriorOutOfBounds
+        255,41: RMCAreaStrataInteriorOutOfBounds
+        255,42: RMCAreaStrataInteriorOutOfBounds
+        255,43: RMCAreaStrataInteriorOutOfBounds
+        255,44: RMCAreaStrataInteriorOutOfBounds
+        255,45: RMCAreaStrataInteriorOutOfBounds
+        255,46: RMCAreaStrataInteriorOutOfBounds
+        255,47: RMCAreaStrataInteriorOutOfBounds
+        255,48: RMCAreaStrataInteriorOutOfBounds
+        255,49: RMCAreaStrataInteriorOutOfBounds
+        255,50: RMCAreaStrataInteriorOutOfBounds
+        255,51: RMCAreaStrataInteriorOutOfBounds
+        255,52: RMCAreaStrataInteriorOutOfBounds
+        255,53: RMCAreaStrataInteriorOutOfBounds
+        255,54: RMCAreaStrataInteriorOutOfBounds
+        255,55: RMCAreaStrataInteriorOutOfBounds
+        255,56: RMCAreaStrataInteriorOutOfBounds
+        255,57: RMCAreaStrataInteriorOutOfBounds
+        255,58: RMCAreaStrataInteriorOutOfBounds
+        255,59: RMCAreaStrataInteriorOutOfBounds
+        255,60: RMCAreaStrataInteriorOutOfBounds
+        255,61: RMCAreaStrataInteriorOutOfBounds
+        255,62: RMCAreaStrataInteriorOutOfBounds
+        255,66: RMCAreaStrataInteriorOutOfBounds
+        255,67: RMCAreaStrataInteriorOutOfBounds
+        255,68: RMCAreaStrataInteriorOutOfBounds
+        255,63: RMCAreaStrataInteriorOutOfBounds
+        255,69: RMCAreaStrataInteriorOutOfBounds
+        255,70: RMCAreaStrataInteriorOutOfBounds
+        255,71: RMCAreaStrataInteriorOutOfBounds
+        255,65: RMCAreaStrataInteriorOutOfBounds
+        255,64: RMCAreaStrataInteriorOutOfBounds
+        255,72: RMCAreaStrataInteriorOutOfBounds
+        255,73: RMCAreaStrataInteriorOutOfBounds
+        255,74: RMCAreaStrataInteriorOutOfBounds
+        255,75: RMCAreaStrataInteriorOutOfBounds
+        255,76: RMCAreaStrataInteriorOutOfBounds
+        255,77: RMCAreaStrataInteriorOutOfBounds
+        255,78: RMCAreaStrataInteriorOutOfBounds
+        255,79: RMCAreaStrataInteriorOutOfBounds
+        255,80: RMCAreaStrataInteriorOutOfBounds
+        255,81: RMCAreaStrataInteriorOutOfBounds
+        255,82: RMCAreaStrataInteriorOutOfBounds
+        255,84: RMCAreaStrataInteriorOutOfBounds
+        255,85: RMCAreaStrataInteriorOutOfBounds
+        255,86: RMCAreaStrataInteriorOutOfBounds
+        255,87: RMCAreaStrataInteriorOutOfBounds
+        255,83: RMCAreaStrataInteriorOutOfBounds
+        255,88: RMCAreaStrataInteriorOutOfBounds
+        255,89: RMCAreaStrataInteriorOutOfBounds
+        255,91: RMCAreaStrataInteriorOutOfBounds
+        255,92: RMCAreaStrataInteriorOutOfBounds
+        255,93: RMCAreaStrataInteriorOutOfBounds
+        255,94: RMCAreaStrataInteriorOutOfBounds
+        255,95: RMCAreaStrataInteriorOutOfBounds
+        255,96: RMCAreaStrataInteriorOutOfBounds
+        255,97: RMCAreaStrataInteriorOutOfBounds
+        255,98: RMCAreaStrataInteriorOutOfBounds
+        255,99: RMCAreaStrataInteriorOutOfBounds
+        255,90: RMCAreaStrataInteriorOutOfBounds
+        255,100: RMCAreaStrataInteriorOutOfBounds
+        255,101: RMCAreaStrataInteriorOutOfBounds
+        255,102: RMCAreaStrataInteriorOutOfBounds
+        255,104: RMCAreaStrataInteriorOutOfBounds
+        255,103: RMCAreaStrataInteriorOutOfBounds
+        255,105: RMCAreaStrataInteriorOutOfBounds
+        255,106: RMCAreaStrataInteriorOutOfBounds
+        255,107: RMCAreaStrataInteriorOutOfBounds
+        255,108: RMCAreaStrataInteriorOutOfBounds
+        255,109: RMCAreaStrataInteriorOutOfBounds
+        255,112: RMCAreaStrataInteriorOutOfBounds
+        255,111: RMCAreaStrataInteriorOutOfBounds
+        255,110: RMCAreaStrataInteriorOutOfBounds
+        255,113: RMCAreaStrataInteriorOutOfBounds
+        255,114: RMCAreaStrataInteriorOutOfBounds
+        255,115: RMCAreaStrataInteriorOutOfBounds
+        255,116: RMCAreaStrataInteriorOutOfBounds
+        255,117: RMCAreaStrataInteriorOutOfBounds
+        255,118: RMCAreaStrataInteriorOutOfBounds
+        255,120: RMCAreaStrataInteriorOutOfBounds
+        255,121: RMCAreaStrataInteriorOutOfBounds
+        255,123: RMCAreaStrataInteriorOutOfBounds
+        255,119: RMCAreaStrataInteriorOutOfBounds
+        255,125: RMCAreaStrataInteriorOutOfBounds
+        255,124: RMCAreaStrataInteriorOutOfBounds
+        255,126: RMCAreaStrataInteriorOutOfBounds
+        255,127: RMCAreaStrataInteriorOutOfBounds
+        255,129: RMCAreaStrataInteriorOutOfBounds
+        255,130: RMCAreaStrataInteriorOutOfBounds
+        255,131: RMCAreaStrataInteriorOutOfBounds
+        255,132: RMCAreaStrataInteriorOutOfBounds
+        255,128: RMCAreaStrataInteriorOutOfBounds
+        255,133: RMCAreaStrataInteriorOutOfBounds
+        255,122: RMCAreaStrataInteriorOutOfBounds
+        255,135: RMCAreaStrataInteriorOutOfBounds
+        255,136: RMCAreaStrataInteriorOutOfBounds
+        255,134: RMCAreaStrataInteriorOutOfBounds
+        255,137: RMCAreaStrataInteriorOutOfBounds
+        255,138: RMCAreaStrataInteriorOutOfBounds
+        255,139: RMCAreaStrataInteriorOutOfBounds
+        255,140: RMCAreaStrataInteriorOutOfBounds
+        255,141: RMCAreaStrataInteriorOutOfBounds
+        255,142: RMCAreaStrataInteriorOutOfBounds
+        255,143: RMCAreaStrataInteriorOutOfBounds
+        255,144: RMCAreaStrataInteriorOutOfBounds
+        255,145: RMCAreaStrataInteriorOutOfBounds
+        255,146: RMCAreaStrataInteriorOutOfBounds
+        255,147: RMCAreaStrataInteriorOutOfBounds
+        255,148: RMCAreaStrataInteriorOutOfBounds
+        255,149: RMCAreaStrataInteriorOutOfBounds
+        255,150: RMCAreaStrataInteriorOutOfBounds
+        255,151: RMCAreaStrataInteriorOutOfBounds
+        255,152: RMCAreaStrataInteriorOutOfBounds
+        255,153: RMCAreaStrataInteriorOutOfBounds
+        255,154: RMCAreaStrataInteriorOutOfBounds
+        255,155: RMCAreaStrataInteriorOutOfBounds
+        255,156: RMCAreaStrataInteriorOutOfBounds
+        255,157: RMCAreaStrataInteriorOutOfBounds
+        255,158: RMCAreaStrataInteriorOutOfBounds
+        255,159: RMCAreaStrataInteriorOutOfBounds
+        255,160: RMCAreaStrataInteriorOutOfBounds
+        255,161: RMCAreaStrataInteriorOutOfBounds
+        255,162: RMCAreaStrataInteriorOutOfBounds
+        255,163: RMCAreaStrataInteriorOutOfBounds
+        255,164: RMCAreaStrataInteriorOutOfBounds
+        255,165: RMCAreaStrataInteriorOutOfBounds
+        255,166: RMCAreaStrataInteriorOutOfBounds
+        255,167: RMCAreaStrataInteriorOutOfBounds
+        255,168: RMCAreaStrataInteriorOutOfBounds
+        255,169: RMCAreaStrataInteriorOutOfBounds
+        252,81: RMCAreaStrataExteriorDeepJungleHotSprings
 - proto: ActionToggleLight
   entities:
   - uid: 3
@@ -49075,14 +49930,6 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 182.5,110.5
       parent: 1
-  - uid: 434
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 251.5,81.5
-      parent: 1
-    - type: SpriteSetRenderOrder
-      offset: 0.7,-1.45
   - uid: 437
     components:
     - type: Transform
@@ -49147,6 +49994,12 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 236.5,54.5
+      parent: 1
+  - uid: 434
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 251.5,81.5
       parent: 1
   - uid: 435
     components:
@@ -80082,7 +80935,7 @@ entities:
       pos: 165.5,120.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -42791.93
+      secondsUntilStateChange: -43301.27
       state: Opening
   - uid: 4762
     components:
