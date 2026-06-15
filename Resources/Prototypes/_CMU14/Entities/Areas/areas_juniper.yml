@@ -4,7 +4,7 @@
   suffix: Juniper Area
   components:
   - type: Sprite
-    sprite: _RMC14/Areas/areas_Juniper.rsi
+    sprite: _RMC14/Areas/areas_almayer.rsi
     state: Almayer
   - type: Area
     CAS: true
