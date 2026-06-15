@@ -64,6 +64,15 @@
     spawn: AU14VendorBlood
 
 - type: entity
+  parent: RMCSecureCaseMedicalBig #Medical Vendor Crate
+  id: AU14CrateMedicalOperatingTable
+  name: Surgical Operating Table crate
+  description: A crate containing one operating table.
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMOperatingTable
+
+- type: entity
   parent: RMCCrateWeapons
   id: AU14CrateM5A1SLAW
   name: M5A1 SLAW disposable anti-tank launcher crate (x4 M5A1 SLAW)
