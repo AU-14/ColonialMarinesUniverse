@@ -19116,7 +19116,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 6850
     components:
