@@ -1,8 +1,6 @@
 - type: job
   parent: AU14JobSquadSergeantBase
   id: AU14JobOpforSquadSergeant
-  name: au14-job-name-opforsquadsergeant
-  description: au14-job-description-opforsquadsergeant
   icon: "AU14JobIconOPFORPlatoonSarge"
   spawnMenuRoleName: Squad Sergeant (OPFOR)
   supervisors: au14-job-supervisors-opfor

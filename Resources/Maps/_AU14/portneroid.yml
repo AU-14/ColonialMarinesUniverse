@@ -185444,7 +185444,7 @@ entities:
     - type: Transform
       pos: 47.5,160.5
       parent: 1
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 23925
     components:

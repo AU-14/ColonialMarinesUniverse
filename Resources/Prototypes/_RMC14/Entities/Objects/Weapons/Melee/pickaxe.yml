@@ -22,7 +22,7 @@
     damage:
       types:
         Slash: 15
-        Blunt: 60
+        Blunt: 27
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: DamageImpactProfile

@@ -1,8 +1,6 @@
 - type: job
   parent: AU14JobDSPilotBase
   id: AU14JobOpforDSPilot
-  name: au14-job-name-opfordspilot
-  description: au14-job-description-opfordspilot
   icon: "AU14JobIconOPFORPilotOfficer"
   spawnMenuRoleName: Pilot Officer (OPFOR)
   supervisors: au14-job-supervisors-opfor

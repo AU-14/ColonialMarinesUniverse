@@ -690,12 +690,11 @@ namespace Content.Server.AU14.Round
             mapSystem.InitializeMap((map, map));
 
             // Attach RMCPlanetComponent, TacticalMapComponent, etc. (if not already present)
+            // TODO: Look at how multiple Z levels tackle this
             if (!_entityManager.HasComponent<RMCPlanetComponent>(map))
                 _entityManager.AddComponent<RMCPlanetComponent>(map);
             if (!_entityManager.HasComponent<TacticalMapComponent>(map))
                 _entityManager.AddComponent<TacticalMapComponent>(map);
-
-
         }
 
         public void SetOpfor(string opfor)

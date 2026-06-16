@@ -1,11 +1,12 @@
 - type: gameMap
   id: au14sorokyne
   mapName: LV-976 Sorokyne Strata
-  mapPath: /Maps/_AU14/sorokyne.yml
+  mapPath: /Maps/_AU14/SorokyneMultiZ/sorokyne0.yml
   mapsBelow:
-  - /Maps/_AU14/sorokyne_below.yml
+  - /Maps/_AU14/SorokyneMultiZ/sorokyne-1.yml
   mapsAbove:
-  - /Maps/_AU14/sorokyne_above.yml
+  - /Maps/_AU14/SorokyneMultiZ/sorokyne1.yml
+  - /Maps/_AU14/SorokyneMultiZ/sorokyne2.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0
@@ -34,6 +35,8 @@
             AU14JobCivilianColonyAdministrator: [1, 1]
             AU14JobCivilianColonyAdminAssistant: [1, 1]
             # Ambassadors
+            AU14JobCivilianAmbassadorICSC: [1, 1]
+            AU14JobCivilianAmbassadorUPP: [1, 1]
 
             # Corporate
             AU14JobCivilianCorporateLiaison: [1, 1]

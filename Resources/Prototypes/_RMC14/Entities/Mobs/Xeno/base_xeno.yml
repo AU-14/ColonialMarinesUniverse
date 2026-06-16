@@ -150,6 +150,9 @@
   - type: Physics
     bodyType: KinematicController
   - type: CMUZPhysics
+  # CMU14
+  - type: CMUXenoZJump
+  # CMU14
   - type: Fixtures
     fixtures:
       fix1:
@@ -489,6 +492,9 @@
     stacks: -5
   - type: RMCHandEmotes
   - type: XenoToggleChargingKnockback
+  # CMU14
+  - type: CMUXenoBullChargeTarget
+  # CMU14
   - type: XenoCanAddPlasmaToConstruct
 
 - type: entity

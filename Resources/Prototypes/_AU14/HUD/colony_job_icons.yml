@@ -7,6 +7,27 @@
 
 - type: jobIcon
   parent: CMJobIconBase
+  id: AU14JobIconCivilianFreightSystemsSpecialist
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: fss
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconCivilianForeman
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: foreman
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconCivilianHeadOfService
+  icon:
+    sprite: _AU14/Interface/au14colonyjobicons.rsi
+    state: head_of_service
+
+- type: jobIcon
+  parent: CMJobIconBase
   id: AU14JobIconColonyAdvisor
   icon:
     sprite: _AU14/Interface/au14colonyjobicons.rsi

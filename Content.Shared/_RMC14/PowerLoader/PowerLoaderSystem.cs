@@ -880,7 +880,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         if (_container.TryGetContainer(target, containerId, out var utilityContainer) &&
             utilityContainer.ContainedEntities.Count > 0)
         {
-            slot = (ContainerSlot) utilityContainer;
+            slot = (ContainerSlot)utilityContainer;
         }
 
         if (slot == null)
@@ -1361,8 +1361,9 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
         if (_hands.TryDrop(loader.Owner, item, coords, false))
         {
-            if (_powerLoaderGrabbableQuery.HasComp(item))
-                _transform.AnchorEntity((item, Transform(item)));
+            // CMU: Do not anchor the entity
+            //if (_powerLoaderGrabbableQuery.HasComp(item))
+            //    _transform.AnchorEntity((item, Transform(item)));
 
             SyncHands((loader, loader.Comp));
         }

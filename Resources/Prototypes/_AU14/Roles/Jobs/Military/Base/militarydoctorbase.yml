@@ -4,7 +4,7 @@
   id: AU14JobMilitaryBaseAbstract
   name: au14-job-name-govforMilitaryDoctor
   description: au14-job-description-govforMilitaryDoctor
-  icon: "AU14JobIconCorpsman"
+  icon: "AU14JobIconDoctor"
   spawnMenuRoleName: Military Doctor (GOVFOR)
   startingGear: AU14GearGOVFORMilitaryDoctor
   dummyStartingGear: AU14GearGOVFORMilitaryDoctorDummy
@@ -54,7 +54,7 @@
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14govforhud.rsi
-        state: govfor_corpsman # TODO: MD icon
+        state: govfor_doctor
 
 - type: playTimeTracker
   id: AU14JobGOVFORMilitaryDoctor

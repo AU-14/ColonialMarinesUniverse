@@ -18,7 +18,7 @@
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianForeman
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconCivilianForeman"
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonyadministrator

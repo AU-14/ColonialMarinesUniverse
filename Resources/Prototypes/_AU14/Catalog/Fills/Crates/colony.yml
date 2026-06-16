@@ -380,7 +380,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: CMM2132Machete
+    - id: AU14ToolMachete
       amount: 2
     - id: RMCM5Bayonet
       amount: 4

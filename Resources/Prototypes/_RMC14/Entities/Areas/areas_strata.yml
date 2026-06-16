@@ -490,6 +490,17 @@
   - type: Sprite
     state: dorms_0
   - type: Area
+    CAS: true
+    fulton: false
+    mortarPlacement: false
+    mortarFire: true
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: true
+    supplyDrop: true
+    weatherEnabled: false
+    noTunnel: false
     minimapColor: "#4d3619e7"
     linkedLz: dropship_lz1
 
@@ -502,14 +513,16 @@
     state: dorms_3
   - type: Area
     CAS: true
-    fulton: true
-    mortarPlacement: true
+    fulton: false
+    mortarPlacement: false
     mortarFire: true
-    lasing: true
-    medevac: true
-    paradropping: true
+    lasing: false
+    medevac: false
+    paradropping: false
     OB: true
     supplyDrop: true
+    weatherEnabled: false
+    noTunnel: false
 
 - type: entity
   parent: RMCAreaStrataInteriorMiningOutpost
@@ -518,6 +531,18 @@
   components:
   - type: Sprite
     state: outpost_maint
+  - type: Area
+    CAS: true
+    fulton: false
+    mortarPlacement: false
+    mortarFire: true
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: true
+    supplyDrop: true
+    weatherEnabled: false
+    noTunnel: false
 
 - type: entity
   parent: RMCAreaStrataInteriorMiningOutpost
@@ -526,6 +551,18 @@
   components:
   - type: Sprite
     state: dorms_beno
+  - type: Area
+    CAS: true
+    fulton: false
+    mortarPlacement: false
+    mortarFire: true
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: true
+    supplyDrop: true
+    weatherEnabled: false
+    noTunnel: false
 
 - type: entity
   parent: RMCAreaStrataInteriorMiningOutpost
@@ -536,14 +573,16 @@
     state: dorms_canteen
   - type: Area
     CAS: true
-    fulton: true
-    mortarPlacement: true
+    fulton: false
+    mortarPlacement: false
     mortarFire: true
-    lasing: true
-    medevac: true
-    paradropping: true
+    lasing: false
+    medevac: false
+    paradropping: false
     OB: true
     supplyDrop: true
+    weatherEnabled: false
+    noTunnel: false
 
 - type: entity
   parent: RMCAreaStrataInteriorMiningOutpost
@@ -552,6 +591,18 @@
   components:
   - type: Sprite
     state: dorms_lobby
+  - type: Area
+    CAS: true
+    fulton: false
+    mortarPlacement: false
+    mortarFire: true
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: true
+    supplyDrop: true
+    weatherEnabled: false
+    noTunnel: false
 
 - type: entity
   parent: RMCAreaStrataInterior

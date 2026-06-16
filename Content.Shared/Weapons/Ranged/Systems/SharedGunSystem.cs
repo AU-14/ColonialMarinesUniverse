@@ -316,8 +316,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         EntityUid gunUid,
         GunComponent gun,
         List<int>? predictedProjectiles = null,
-        ICommonSession? userSession = null,
-        bool preserveCadence = false) // RMC
+        ICommonSession? userSession = null)
     {
         if (gun.FireRateModified <= 0f ||
             !_actionBlockerSystem.CanAttack(user))
@@ -360,8 +359,7 @@ public abstract partial class SharedGunSystem : EntitySystem
         // Previously we checked shotcounter but in some cases all the bullets got dumped at once
         // curTime - fireRate is insufficient because if you time it just right you can get a 3rd shot out slightly quicker.
         var nextFireBeforeAttempt = gun.NextFire;
-        if (!preserveCadence && // RMC
-            (gun.NextFire < curTime - fireRate || gun.ShotCounter == 0 && gun.NextFire < curTime))
+        if (gun.NextFire < curTime - fireRate || gun.ShotCounter == 0 && gun.NextFire < curTime)
             gun.NextFire = curTime;
 
         var shots = 0;

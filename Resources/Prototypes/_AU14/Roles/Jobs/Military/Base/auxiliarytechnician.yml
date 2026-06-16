@@ -65,7 +65,7 @@
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14govforhud.rsi
-        state: govfor_rto
+        state: govfor_auxtech
 
 - type: playTimeTracker
   id: AU14JobGOVFORAuxTech

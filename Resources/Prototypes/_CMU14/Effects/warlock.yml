@@ -1,0 +1,265 @@
+- type: entity
+  id: CMUXenoPsychicShieldSegment
+  categories: [HideSpawnMenu]
+  name: psychic shield
+  components:
+    - type: Physics
+      bodyType: Static
+    - type: Fixtures
+      fixtures:
+        shield:
+          shape: !type:PolygonShape
+            vertices:
+              - "-1.5,-0.5"
+              - "1.5,-0.5"
+              - "1.5,0.5"
+              - "-1.5,0.5"
+          hard: true
+          layer:
+            - BulletImpassable
+    - type: CMUXenoPsychicShieldSegment
+    - type: IgnorePredictionHit
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  parent: CMUXenoPsychicShieldSegment
+  id: CMUXenoPsychicShield
+  categories: [HideSpawnMenu]
+  name: psychic shield
+  components:
+    - type: Sprite
+      drawdepth: Effects
+      sprite: _CMU14/Effects/Xeno/warlock_shield.rsi
+      state: shield
+    - type: PointLight
+      radius: 2
+      energy: 1.5
+      color: "#7fb7ff"
+
+- type: entity
+  id: CMUXenoPsychicCrushWarning
+  categories: [HideSpawnMenu]
+  name: psychic crush warning
+  components:
+    - type: TimedDespawn
+      lifetime: 0.7
+    - type: Sprite
+      drawdepth: Effects
+      sprite: _CMU14/Effects/Xeno/warlock_crush_warning.rsi
+      noRot: true
+      state: crush_warning
+    - type: EffectVisuals
+    - type: CMUXenoWarlockParticleEmitter
+      effect: CrushWarning
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoPsychicCrushOrb
+  categories: [HideSpawnMenu]
+  name: psychic crush
+  components:
+    - type: Sprite
+      drawdepth: Overlays
+      sprite: _CMU14/Effects/Xeno/warlock_crush_orb.rsi
+      noRot: true
+      state: orb_charge
+    - type: PointLight
+      radius: 2
+      energy: 1.5
+      color: "#6a59b3"
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoPsychicCrushSmooth
+  categories: [HideSpawnMenu]
+  name: psychic crush
+  components:
+    - type: TimedDespawn
+      lifetime: 0.5
+    - type: Sprite
+      drawdepth: Overlays
+      sprite: _CMU14/Effects/Xeno/warlock_crush_orb.rsi
+      noRot: true
+      state: crush_smooth
+    - type: EffectVisuals
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoPsychicCrushHard
+  categories: [HideSpawnMenu]
+  name: psychic crush
+  components:
+    - type: TimedDespawn
+      lifetime: 0.4
+    - type: Sprite
+      drawdepth: Overlays
+      sprite: _CMU14/Effects/Xeno/warlock_crush_orb.rsi
+      noRot: true
+      state: crush_hard
+    - type: EffectVisuals
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoPsychicCrushBlur
+  categories: [HideSpawnMenu]
+  name: psychic crush
+  components:
+    - type: TimedDespawn
+      lifetime: 1
+    - type: CMUXenoPsychicCrushBlur
+      duration: 1
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoWarlockCrushChannelEffect
+  categories: [HideSpawnMenu]
+  name: psychic crush
+  components:
+    - type: PointLight
+      radius: 3
+      energy: 1.8
+      color: "#6a59b3"
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoWarlockCrushParticles
+  categories: [HideSpawnMenu]
+  name: psychic crush
+  components:
+    - type: CMUXenoWarlockParticleEmitter
+      effect: PsychicCrushCharge
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoWarlockBlastChannelEffect
+  categories: [HideSpawnMenu]
+  name: psychic blast
+  components:
+    - type: PointLight
+      radius: 3
+      energy: 2
+      color: "#970f0f"
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoWarlockBlastParticles
+  categories: [HideSpawnMenu]
+  name: psychic blast
+  components:
+    - type: CMUXenoWarlockParticleEmitter
+      effect: PsychicBlastCharge
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  parent: CMUXenoWarlockBlastParticles
+  id: CMUXenoWarlockLanceParticles
+  categories: [HideSpawnMenu]
+  name: psychic lance
+  components:
+    - type: CMUXenoWarlockParticleEmitter
+      effect: PsychicLanceCharge
+
+- type: entity
+  id: CMUXenoWarlockShieldChannelEffect
+  categories: [HideSpawnMenu]
+  name: psychic shield
+  components:
+    - type: PointLight
+      radius: 3
+      energy: 1.4
+      color: "#5999b3"
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  parent: XenoBaseProjectile
+  id: CMUXenoPsychicBlastProjectile
+  categories: [HideSpawnMenu]
+  name: psychic blast
+  components:
+    - type: Sprite
+      sprite: _RMC14/Effects/beam.rsi
+      state: laser_beam
+      drawdepth: Effects
+      color: "#970f0f"
+    - type: ProjectileMaxRange
+      max: 7
+      delete: false
+    - type: RMCProjectileAccuracy
+      accuracy: 999
+    - type: CMUXenoPsychicBlastProjectile
+      mode: Blast
+      radius: 1.25
+      damage:
+        types:
+          Blunt: 35
+      slow: 1.5
+      impactSound:
+        path: /Audio/_CMU14/Xeno/Warlock/EMPulse.ogg
+      impactEffectId: CMUXenoPsychicBlastShockwave
+    - type: PointLight
+      radius: 1.5
+      energy: 1.2
+      color: "#970f0f"
+
+- type: entity
+  parent: CMUXenoPsychicBlastProjectile
+  id: CMUXenoPsychicLanceProjectile
+  categories: [HideSpawnMenu]
+  name: psychic lance
+  components:
+    - type: Sprite
+      sprite: _RMC14/Effects/beam.rsi
+      state: laser_beam_intense
+      drawdepth: Effects
+      color: "#CB0166"
+    - type: CMUXenoPsychicBlastProjectile
+      mode: Lance
+      radius: 0.75
+      damage:
+        types:
+          Blunt: 60
+      slow: 2
+      impactSound:
+        path: /Audio/_CMU14/Xeno/Warlock/EMPulse.ogg
+      impactEffectId: CMUXenoPsychicBlastShockwave
+    - type: PointLight
+      radius: 1.5
+      energy: 1.6
+      color: "#CB0166"
+
+- type: entity
+  id: CMUXenoPsychicBlastShockwave
+  categories: [HideSpawnMenu]
+  name: psychic blast shockwave
+  components:
+    - type: TimedDespawn
+      lifetime: 0.6
+    - type: RMCExplosionShockWave
+      falloffPower: 25
+      sharpness: 12
+      width: 0.6
+    - type: Tag
+      tags:
+        - HideContextMenu

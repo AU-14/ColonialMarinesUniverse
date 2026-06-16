@@ -1,8 +1,6 @@
 - type: job
   parent: AU14JobSquadCombatTechBase
   id: AU14JobOPFORSquadCombatTech
-  name: au14-job-name-opforsquadcombattech
-  description: au14-job-description-opforsquadcombattech
   icon: "AU14JobIconOPFORCT"
   spawnMenuRoleName: Combat Tech (OPFOR)
   supervisors: au14-job-supervisors-opfor

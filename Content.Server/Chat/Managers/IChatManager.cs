@@ -49,5 +49,9 @@ namespace Content.Server.Chat.Managers
         /// <param name="player">The player sending a chat message.</param>
         /// <returns>False if the player has violated rate limits and should be blocked from sending further messages.</returns>
         RateLimitStatus HandleRateLimit(ICommonSession player);
+
+        // CMU14
+        string AddGhostFollowButton(string wrappedMessage, EntityUid source, INetChannel recipient);
+        // CMU14
     }
 }

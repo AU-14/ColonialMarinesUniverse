@@ -195,8 +195,7 @@ public sealed partial class BioscanSystem : EntitySystem
             ("onPlanet", alivePlanet)
         );
 
-        foreach (var faction in new[] { "govfor", "opfor", "scientist" })
-            _marineAnnounce.AnnounceARESStaging(null, message, bioscan.Comp.MarineSound, "rmc-bioscan-ares-announcement", faction);
+        _marineAnnounce.AnnounceARESStaging(null, message, bioscan.Comp.MarineSound, "rmc-bioscan-ares-announcement", "govfor");
         Dirty(bioscan);
     }
 

@@ -514,6 +514,10 @@
   components:
   - type: PresetIdCard
     job: AU14JobCivilianCWPSRanger
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+    - FactionCMB
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF

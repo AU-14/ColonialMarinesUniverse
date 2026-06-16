@@ -98416,7 +98416,7 @@ entities:
     - type: Transform
       pos: -126.433876,-60.25896
       parent: 1
-- proto: CMM2132Machete
+- proto: AU14ToolMachete
   entities:
   - uid: 4970
     components:
@@ -201600,7 +201600,7 @@ entities:
     - type: Transform
       pos: -34.458923,-125.26866
       parent: 1
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 5353
     components:

@@ -1,8 +1,6 @@
 - type: job
   parent: AU14JobPlatCoBase
   id: AU14JobOpforPlatCo
-  name: au14-job-name-opforplatco
-  description: au14-job-description-opforplatco
   icon: "AU14JobIconOPFORPlatCo"
   spawnMenuRoleName: Platoon Commander (OPFOR)
   supervisors: au14-job-supervisors-opforplatco

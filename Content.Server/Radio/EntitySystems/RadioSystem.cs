@@ -77,8 +77,29 @@ public sealed partial class RadioSystem : EntitySystem
 
     private void OnIntrinsicReceive(EntityUid uid, IntrinsicRadioReceiverComponent component, ref RadioReceiveEvent args)
     {
-        if (TryComp(uid, out ActorComponent? actor))
+        if (!TryComp(uid, out ActorComponent? actor))
+            return;
+
+        // CMU14
+        var wrappedMessage = _chatManager.AddGhostFollowButton(
+            args.ChatMsg.Message.WrappedMessage,
+            args.MessageSource,
+            actor.PlayerSession.Channel);
+        if (wrappedMessage == args.ChatMsg.Message.WrappedMessage)
+        {
             _netMan.ServerSendMessage(args.ChatMsg, actor.PlayerSession.Channel);
+            return;
+        }
+
+        var msg = new MsgChatMessage
+        {
+            Message = new ChatMessage(args.ChatMsg.Message)
+            {
+                WrappedMessage = wrappedMessage,
+            },
+        };
+        _netMan.ServerSendMessage(msg, actor.PlayerSession.Channel);
+        // CMU14
     }
 
     /// <summary>

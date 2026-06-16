@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Client.Projectiles;
+using Content.Shared._CMU14.Xenonids.Warlock;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Ranged.Events;
@@ -25,6 +26,7 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 
     private EntityQuery<IgnorePredictionHideComponent> _ignorePredictionHideQuery;
     private EntityQuery<IgnorePredictionHitComponent> _ignorePredictionHitQuery;
+    private EntityQuery<CMUXenoFrozenProjectileComponent> _warlockFrozenProjectileQuery;
     private EntityQuery<SpriteComponent> _spriteQuery;
 
     public override void Initialize()
@@ -33,6 +35,7 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 
         _ignorePredictionHideQuery = GetEntityQuery<IgnorePredictionHideComponent>();
         _ignorePredictionHitQuery = GetEntityQuery<IgnorePredictionHitComponent>();
+        _warlockFrozenProjectileQuery = GetEntityQuery<CMUXenoFrozenProjectileComponent>();
         _spriteQuery = GetEntityQuery<SpriteComponent>();
 
         SubscribeLocalEvent<PhysicsUpdateBeforeSolveEvent>(OnBeforeSolve);
@@ -43,6 +46,9 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
         SubscribeLocalEvent<PredictedProjectileClientComponent, StartCollideEvent>(OnClientProjectileStartCollide);
 
         SubscribeLocalEvent<PredictedProjectileServerComponent, ComponentStartup>(OnServerProjectileStartup);
+        // CMU14
+        SubscribeLocalEvent<PredictedProjectileServerComponent, ComponentRemove>(OnServerProjectileRemove);
+        // CMU14
 
         UpdatesBefore.Add(typeof(TransformSystem));
     }
@@ -63,6 +69,12 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
         var query = EntityQueryEnumerator<PredictedProjectileClientComponent>();
         while (query.MoveNext(out var uid, out var predicted))
         {
+            if (!ShouldRestorePredictedProjectileCoordinates(_warlockFrozenProjectileQuery.HasComp(uid)))
+            {
+                predicted.Coordinates = null;
+                continue;
+            }
+
             if (predicted.Coordinates is { } coordinates)
                 _transform.SetCoordinates(uid, coordinates);
 
@@ -76,6 +88,23 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
             return;
 
         ShootRequested(ev.Gun, ev.Coordinates, ev.Target, ev.Shot, args.SenderSession, ev.RearmSemiAuto);
+    }
+
+    public static bool ShouldRestorePredictedProjectileCoordinates(bool frozenByWarlockShield)
+    {
+        return !frozenByWarlockShield;
+    }
+
+    public static bool ShouldRetirePredictedProjectileCopy(
+        bool serverProjectileBelongsToLocalPlayer,
+        bool clientCopyExists,
+        bool clientCopyIsClientSide,
+        bool clientCopyIsPredicted)
+    {
+        return serverProjectileBelongsToLocalPlayer &&
+               clientCopyExists &&
+               clientCopyIsClientSide &&
+               clientCopyIsPredicted;
     }
 
     private void OnClientProjectileUpdateIsPredicted(Entity<PredictedProjectileClientComponent> ent, ref UpdateIsPredictedEvent args)
@@ -116,6 +145,38 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
         if (_spriteQuery.TryComp(ent, out var sprite))
             _sprite.SetVisible((ent, sprite), false);
     }
+
+    // CMU14
+    private void OnServerProjectileRemove(Entity<PredictedProjectileServerComponent> ent, ref ComponentRemove args)
+    {
+        if (!GunPrediction)
+            return;
+
+        var localProjectile = ent.Comp.ClientEnt == _player.LocalEntity;
+        if (!localProjectile)
+            return;
+
+        RetirePredictedProjectileCopy(ent.Comp.ClientId, localProjectile);
+
+        if (_ignorePredictionHideQuery.HasComp(ent))
+            return;
+
+        if (_spriteQuery.TryComp(ent, out var sprite))
+            _sprite.SetVisible((ent, sprite), true);
+    }
+
+    private void RetirePredictedProjectileCopy(int clientId, bool localProjectile)
+    {
+        var predicted = new EntityUid(clientId);
+        var exists = Exists(predicted);
+        var isClientSide = exists && IsClientSide(predicted);
+        var isPredicted = exists && HasComp<PredictedProjectileClientComponent>(predicted);
+        if (!ShouldRetirePredictedProjectileCopy(localProjectile, exists, isClientSide, isPredicted))
+            return;
+
+        QueueDel(predicted);
+    }
+    // CMU14
 
     public override void Update(float frameTime)
     {

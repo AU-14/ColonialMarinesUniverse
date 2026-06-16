@@ -1,8 +1,6 @@
 - type: job
   parent: AU14JobMilitaryDoctorBase
   id: AU14JobOPFORMilitaryDoctor
-  name: au14-job-name-opforMilitaryDoctor
-  description: au14-job-description-opforMilitaryDoctor
   icon: "AU14JobIconOPFORCorpsman"
   spawnMenuRoleName: Military Doctor (OPFOR)
   supervisors: au14-job-supervisors-opfor
@@ -25,7 +23,7 @@
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_AU14/Interface/au14opforhud.rsi
-        state: corpsman # TODO: MD icon
+        state: doctor
 
 - type: startingGear
   id: AU14GearOPFORMilitaryDoctor

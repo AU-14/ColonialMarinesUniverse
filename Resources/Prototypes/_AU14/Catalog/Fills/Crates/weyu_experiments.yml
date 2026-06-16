@@ -11,6 +11,8 @@
         amount: 2
       - id: RMCTentUNMCStandardMedicalFolded
       - id: AU14TentBigFoldedSurgical
+      - id: CMUYautjaHivebreaker
+        prob: 0.1
 
 - type: entity
   id: AU14CrateSecureWeYuMindBreaker

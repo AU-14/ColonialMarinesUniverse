@@ -33,7 +33,7 @@
     pocket1: RMCPouchSurvivalFill
     pocket2: RMCPouchToolsFill
   inhand:
-    - RMCPickaxe
+    - AU14ToolPickaxe
 
 - type: entity
   parent: CMSpawnPointJobBase

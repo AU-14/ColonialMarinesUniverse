@@ -1,8 +1,6 @@
 - type: job
   parent: AU14JobSquadAutomaticRiflemanBase
   id: AU14JobOpforSquadAutomaticRifleman
-  name: au14-job-name-opforsquadautomaticrifleman
-  description: au14-job-description-opforsquadautomaticrifleman
   icon: "AU14JobIconOPFORAFN"
   spawnMenuRoleName: Automatic Rifleman (OPFOR)
   supervisors: au14-job-supervisors-opfor

@@ -3479,5 +3479,216 @@
   id: 276
   time: '2026-06-14T23:25:40.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1324
+- author: JaSeNeSaJ
+  changes:
+  - message: CWPS Ranger ID IFF (comm towers)
+    type: Fix
+  - message: Sheperds' from Distress Signal rotation
+    type: Remove
+  id: 277
+  time: '2026-06-15T06:49:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1331
+- author: Piticzu
+  changes:
+  - message: Bad Blood Yautja threat enabled on all Distress Signal maps.
+    type: Add
+  id: 278
+  time: '2026-06-15T14:16:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1325
+- author: TheHellFireo
+  changes:
+  - message: Added optional ghost follow buttons next to chat messages.
+    type: Add
+  - message: Fixed full-auto-capable guns incorrectly rearming like semi-auto weapons
+      while holding fire.
+    type: Fix
+  - message: Fixed medical round-end summary stats missing surgery, defib, and shrapnel
+      telemetry.
+    type: Fix
+  id: 279
+  time: '2026-06-15T16:04:57.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1332
+- author: TheHellFireo
+  changes:
+  - message: Added the Bull xeno caste.
+    type: Add
+  - message: Added the Warlock xeno caste.
+    type: Add
+  - message: Added a xeno Z-level jump ability.
+    type: Add
+  - message: Added Warlock psychic blast, crush, and shield abilities with matching
+      visuals, sounds, and projectiles.
+    type: Add
+  - message: Added Bull plow, headbutt, and gore abilities with matching effects.
+    type: Add
+  - message: Fixed Warlock shield projectile freezing, release, and reflection behavior.
+    type: Fix
+  - message: Fixed Z-level jump windup and jump trajectory behavior.
+    type: Fix
+  id: 280
+  time: '2026-06-15T16:06:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1333
+- author: 400Ferrets
+  changes:
+  - message: Sorokyne Colony ASRS functions.
+    type: Add
+  - message: Sorokyne has many more faxes and phones.
+    type: Add
+  - message: Sorokyne has engineering spawn points.
+    type: Add
+  - message: Sorokyne now has Mining, Woodcutting, and a more equipped Hydroponics.
+    type: Add
+  - message: Sorokyne now has many more ATMs.
+    type: Add
+  - message: Sorokyne department computers are easier to find.
+    type: Add
+  - message: Sorokyne sinks are now facing the right way.
+    type: Add
+  - message: Sorokyne APCs are now firmly affixed to the walls.
+    type: Add
+  - message: Sorokyne now has two Ambassadors, ICSC and UPP.
+    type: Add
+  - message: Sorokyne now has basic zlevels.
+    type: Add
+  - message: Sorokyne mining has a hole for you to fall in.
+    type: Add
+  - message: Sorokyne hydroponics no longer has a leaky roof.
+    type: Add
+  - message: Sorokyne northwest LZ no longer has a spooky shadow south of it.
+    type: Add
+  id: 281
+  time: '2026-06-15T16:11:38.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1330
+- author: sunzu432
+  changes:
+  - message: Hope's Retreat, a map intended for Colony Fall, Insurgency and Distress
+      Signal.
+    type: Add
+  id: 282
+  time: '2026-06-15T16:14:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1322
+- author: Crime481
+  changes:
+  - message: New icons for majority of GOVFOR roles,  this includes the Auxiliary
+      Technician, Fireteam Leader, Military Doctor and Military Police.
+    type: Add
+  - message: New icons for majority of OPFOR roles, this includes the Auxiliary Technician,
+      Fireteam Leader, Military Doctor and Military Police.
+    type: Add
+  - message: New icons for majority of Colony roles, this includes the Foreman, Head
+      of Service and Freight Systems Specialist.
+    type: Add
+  - message: Threat Leader and Third Party Leader job icons now have contrast on their
+      crowns.
+    type: Tweak
+  id: 283
+  time: '2026-06-15T20:03:39.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1329
+- author: sunzu432
+  changes:
+  - message: 'Hope''s Retreat: Ladders to allow access to most of the outer colony''s
+      roofs.'
+    type: Add
+  - message: 'Hope''s Retreat: Small adjustments to colony sirens to avoid overlapping
+      sounds.'
+    type: Tweak
+  - message: 'Hope''s Retreat: Z-levels should have correct areas now.'
+    type: Fix
+  - message: 'Hope''s Retreat: GOVFOR should now have weapons vendors in their barracks.'
+    type: Fix
+  - message: 'Hope''s Retreat: Colony recreation center should now have a roof mapped.'
+    type: Fix
+  - message: 'Hope''s Retreat: Most mapped containers and power-loaders should now
+      be fixed.'
+    type: Fix
+  id: 284
+  time: '2026-06-16T02:01:32.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1335
+- author: JaSeNeSaJ
+  changes:
+  - message: 'Sheperds'': MultiZ stair gameplay (1x2 holes, no handrails)'
+    type: Tweak
+  - message: 'Sheperds'': New tree entities (reduced hitbox, table collision, no fading,
+      no right click context menu, and xeno 5x damage)'
+    type: Add
+  - message: 'Sheperds'': We-Yu Labs now Lvl 4 Roof'
+    type: Tweak
+  - message: 'Sheperds'': We-Yu Labs power (areas & apcs)'
+    type: Tweak
+  - message: 'Sheperds'': Handrails in Labs Containment'
+    type: Remove
+  - message: 'Sheperds'': CWPS Armory (gunlocker access fixed)'
+    type: Tweak
+  - message: 'Sheperds'': Colony Administrator office & saferoom'
+    type: Tweak
+  - message: 'Sheperds'': Chem to medbay 2nd floor'
+    type: Add
+  id: 285
+  time: '2026-06-16T06:17:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1336
+- author: maertayn
+  changes:
+  - message: Bioscan x3 spam & xeno x4 tac-map spam (map is still bugged sorry)
+    type: Fix
+  - message: Shop keep vendors would use a stock whitelist for ID/Headsets instead
+      of blacklist
+    type: Fix
+  - message: JO Kit limits conflicting instead of being per section
+    type: Fix
+  - message: Powerloader doesn't anchor dropped items anymore
+    type: Tweak
+  - message: Cartridge item for the UPP Smart gun was missing -> cycling mag dropped
+      a bullet entity
+    type: Fix
+  - message: Z-Level support for Evacuation (pumps/lifeboats/evac-doors) -> lifeboats
+      may still need mapping, enjoy the spacewalk around Bush
+    type: Add
+  - message: You can now use dots in your character name (like John A.B. Doe)
+    type: Add
+  - message: Wooden barricades required x500 wooden planks -> x50 now
+    type: Tweak
+  - message: Disabled the silly automatic-fire for semi-automatic and burst modes
+    type: Remove
+  - message: "Melee weapons can no longer be throw-spammed to chop down trees (new\
+      \ meta: \U0001F525)"
+    type: Remove
+  - message: Machete does x3 damage against trees (chops 1250HP down in 9 hits) &
+      Pickaxe damage nerf (10sl./33bl.), but multiplied so that fragile-rock remains
+      3-hits.
+    type: Tweak
+  - message: Yautja (& bad bloods) trackable by motion detectors
+    type: Fix
+  id: 286
+  time: '2026-06-16T06:28:12.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1334
+- author: Kadeo64
+  changes:
+  - message: WY Xeno Egg experiment crates have a 10% chance to come with a single
+      Hivebreaker remote. Use wisely.
+    type: Tweak
+  id: 287
+  time: '2026-06-16T06:36:36.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1337
+- author: KeiKiyomi
+  changes:
+  - message: Added all vehicle hardpoints to the ASRS
+    type: Add
+  - message: Added all Blackfoot hardpoints to the ASRS
+    type: Add
+  - message: Added all vehicle ammo to the ASRS
+    type: Add
+  - message: Added all blackfoot hardpoints to the ASRS
+    type: Add
+  - message: Added a crate with all 3 componets for the blackfoot landing pad (and
+      added it to ASRS)
+    type: Add
+  - message: Added 2 new ammo crates, each containing 3 blackfoot flare ammo and blackfoot
+      doorgun ammo
+    type: Add
+  - message: Added blackfoot tug to ASRS (incase you loose the original)
+    type: Add
+  id: 288
+  time: '2026-06-16T07:15:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1167
 Name: CMU
 Order: -1

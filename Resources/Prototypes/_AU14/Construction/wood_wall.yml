@@ -27,7 +27,7 @@
       - !type:SnapToGrid
       steps:
       - material: RMCWood
-        amount: 500
+        amount: 50
         doAfter: 30
 
   - node: woodWall

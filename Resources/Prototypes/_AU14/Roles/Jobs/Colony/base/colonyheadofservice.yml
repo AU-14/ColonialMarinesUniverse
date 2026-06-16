@@ -21,7 +21,7 @@
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianHeadOfService
-  icon: "CMJobIconEmpty"
+  icon: "AU14JobIconCivilianHeadOfService"
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonyadministrator

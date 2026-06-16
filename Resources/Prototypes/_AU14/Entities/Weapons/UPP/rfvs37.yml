@@ -33,7 +33,7 @@
           - SmartGunBattery
 
 - type: entity
-  parent: CMMagazineRifleBase
+  parent: RMCMagazineSmartGun
   id: AU14MagazineSmartGunUPP
   name: "RVS-37 drum magazine (12.7x40mm)"
   components:
@@ -53,41 +53,28 @@
       map: ["enum.GunVisualLayers.Base"]
     - state: mag-1
       map: ["enum.GunVisualLayers.Mag"]
-  - type: Clothing
-    slots:
-    - suitStorage
-  - type: RefillableByBulletBox
-    bulletType: RMCBoxBulletsSmartGun
 
 - type: entity
-  parent: CMBulletBase
+  parent: CMCartridgeSmartGun10x30mm
   id: AU14CartridgeSmartGun127x40mm
+  name: cartridge (12.7x40mm)
+  components:
+  - type: CartridgeAmmo
+    proto: AU14BulletSmartGun127x40mm
+  - type: Tag
+    tags:
+    - AU14CartridgeSmartGun127x40mm
+
+- type: entity
+  parent: CMBulletSmartGun10x30mm
+  id: AU14BulletSmartGun127x40mm
   name: bullet (12.7x40mm)
   categories: [ HideSpawnMenu ]
   components:
-  - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/bullet_projectiles.rsi
-    layers:
-    - state: bullet
-      shader: unshaded
   - type: Projectile
     damage:
       types:
         Piercing: 45
-  - type: CMArmorPiercing
-    amount: 0
-  - type: RMCProjectileDamageFalloff
-    thresholds:
-    - range: 10
-      falloff: 9999
-      ignoreModifiers: true
-    - range: 4.5
-      falloff: 4
-  - type: RMCProjectileAccuracy
-    accuracy: 105
-    thresholds:
-    - range: 5
-      falloff: 10
 
 - type: entity
   parent: RMCPowerCell
