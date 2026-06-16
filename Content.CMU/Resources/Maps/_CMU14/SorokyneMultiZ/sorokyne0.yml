@@ -4,8 +4,8 @@ meta:
   engineVersion: v264.0.2-fix-physics
   forkId: ""
   forkVersion: ""
-  time: 06/16/2026 20:00:36
-  entityCount: 31154
+  time: 06/16/2026 22:16:21
+  entityCount: 31156
 maps:
 - 1
 grids:
@@ -48710,6 +48710,13 @@ entities:
     - type: Transform
       pos: 146.5,93.5
       parent: 1
+- proto: AUSalvageSubmissionPoint
+  entities:
+  - uid: 15293
+    components:
+    - type: Transform
+      pos: 71.5,30.5
+      parent: 1
 - proto: AUSubmissionPointBase
   entities:
   - uid: 31044
@@ -49349,7 +49356,7 @@ entities:
       parent: 1
     - type: AccessReader
       access:
-      - - CMAccessColonyLogistics
+      - - CMAccessColonyCommand
   - uid: 296
     components:
     - type: Transform
@@ -50118,6 +50125,14 @@ entities:
     components:
     - type: Transform
       pos: 174.5,9.5
+      parent: 1
+- proto: CMApcHighCapacity
+  entities:
+  - uid: 15292
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 219.5,136.5
       parent: 1
 - proto: CMApcLowCapacity
   entities:
@@ -56621,7 +56636,7 @@ entities:
   - uid: 1524
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
+      rot: -1.5707963267948966 rad
       pos: 214,123.5
       parent: 1
   - uid: 1526
@@ -81054,7 +81069,7 @@ entities:
       pos: 165.5,120.5
       parent: 1
     - type: Door
-      secondsUntilStateChange: -47270.617
+      secondsUntilStateChange: -47618.79
       state: Opening
   - uid: 4762
     components:
@@ -91173,6 +91188,11 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 102.5,63.5
       parent: 1
+  - uid: 6600
+    components:
+    - type: Transform
+      pos: 137.5,62.5
+      parent: 1
   - uid: 6601
     components:
     - type: Transform
@@ -91185,6 +91205,11 @@ entities:
       rot: 3.141592653589793 rad
       pos: 118.5,67.5
       parent: 1
+  - uid: 6606
+    components:
+    - type: Transform
+      pos: 147.5,62.5
+      parent: 1
   - uid: 6608
     components:
     - type: Transform
@@ -91196,6 +91221,12 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 100.5,71.5
+      parent: 1
+  - uid: 6610
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 149.5,64.5
       parent: 1
   - uid: 7294
     components:
@@ -91223,35 +91254,17 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 96.5,96.5
       parent: 1
-  - uid: 6600
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 137.5,62.5
-      parent: 1
   - uid: 6604
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 66.5,25.5
       parent: 1
-  - uid: 6606
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 146.5,62.5
-      parent: 1
   - uid: 6607
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 63.5,27.5
-      parent: 1
-  - uid: 6610
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 149.5,62.5
       parent: 1
 - proto: RMCLightFixtureSmall
   entities:
@@ -120131,11 +120144,6 @@ entities:
     components:
     - type: Transform
       pos: 112.716225,113.66288
-      parent: 1
-  - uid: 11687
-    components:
-    - type: Transform
-      pos: 217.74367,138.69223
       parent: 1
   - uid: 11688
     components:
@@ -209744,6 +209752,13 @@ entities:
     components:
     - type: Transform
       pos: 74.70232,82.549484
+      parent: 1
+- proto: SalvageSpawnerMinecart
+  entities:
+  - uid: 11687
+    components:
+    - type: Transform
+      pos: 73.5,21.5
       parent: 1
 - proto: SeedExtractor
   entities:
