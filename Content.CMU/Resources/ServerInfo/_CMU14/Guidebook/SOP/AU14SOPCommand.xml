@@ -1,6 +1,12 @@
 ﻿<Document>
   # Command Regulations
 
+  ## Command Arms
+  Command must obide by the following regulations regarding arming themselves on the ship or in the field:
+  - Command may not take any type of special weapon from Req or Vendors, and may only use standard issue arms found in their respective armory, or rifleman prep. (This does not include magazines)
+  - Command may only arm with a Pistol, PDW, or SMG while shipside and it must be stored on their belt, back, or in a bag unchambered (it may be chambered if on a ground based installation)
+  - Command are allowed to operative heavy weapons only if no one else in the vincinity is doing so or there is a emergency situtation going on.
+
   ## Conduct of Briefing
   The Acting Commander is responsible for ensuring a proper briefing is conducted before any operation begins and personnel are deployed.
   - It must be performed in an area where a proper inspection of personnel can be held and where personnel can hear any orders.
@@ -9,6 +15,8 @@
 
   ## Command Field Deployment
   The Command Staff has the right to deploy to the frontline for the sake of commanding their personnel from a direct point of view. Deployments must be for the sake of the personnel and operation, and not for the personal glory of the Command Staff. At least one member of Command Staff must remain on the ship/installation to man the CIC.
+    - The Adjutant(XO) may deploy to the field if they beleive it is more beneficial to the operation. However cannot be deployed if they are the Acting Commander.
+    - The LO and CMP may never deploy to the area of operations unless for emergency situtations or granted special permission by the acting commander.
 
   When Deployed:
   - The deploying Command Staff must still command and communicate frequently with their faction.

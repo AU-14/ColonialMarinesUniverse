@@ -39366,20 +39366,6 @@ entities:
     - type: Transform
       pos: 7.5,146.5
       parent: 2
-- proto: RMCFigurinePatronChadScott
-  entities:
-  - uid: 6911
-    components:
-    - type: Transform
-      pos: 52.51701,72.64217
-      parent: 2
-- proto: RMCFigurinePatronOrionBlackburn
-  entities:
-  - uid: 6912
-    components:
-    - type: Transform
-      pos: 45.436466,86.63706
-      parent: 2
 - proto: RMCFlashlight
   entities:
   - uid: 6913
@@ -39926,7 +39912,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 12.5,-6.5
       parent: 2
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 134
     components:

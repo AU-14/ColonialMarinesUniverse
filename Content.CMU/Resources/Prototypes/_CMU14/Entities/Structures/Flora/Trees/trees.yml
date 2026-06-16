@@ -1,0 +1,77 @@
+- type: entity
+  parent: RMCBaseTree
+  id: CMUFloraTree
+  components:
+  - type: Sprite
+    layers:
+    - state: tree01
+      map: [ "body" ]
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+            radius: 0.35
+            position: 0,0
+        density: 1000
+        mask: # tables should collide with other tables
+        - TableMask
+        layer:
+        - TableLayer
+        - BulletImpassable
+  - type: RandomSprite
+    available:
+    - body:
+        tree01: ""
+        tree02: ""
+        tree03: ""
+        tree04: ""
+        tree05: ""
+        tree06: ""
+  - type: MeleeReceivedMultiplier
+    xenoMultiplier: 5
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: RemoveComponents
+    components:
+    - type: SpriteFade
+
+- type: entity
+  parent: RMCBaseTreeLarge
+  id: CMUFloraTreeLarge
+  components:
+  - type: Sprite
+    layers:
+    - state: treelarge01
+      map: [ "body" ]
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+            radius: 0.18
+            position: 0,0
+        density: 2000
+        mask: # tables should collide with other tables
+        - TableMask
+        layer:
+        - TableLayer
+        - BulletImpassable
+  - type: RandomSprite
+    available:
+    - body:
+        treelarge01: ""
+        treelarge02: ""
+        treelarge03: ""
+        treelarge04: ""
+        treelarge05: ""
+        treelarge06: ""
+  - type: MeleeReceivedMultiplier
+    xenoMultiplier: 5
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: RemoveComponents
+    components:
+    - type: SpriteFade

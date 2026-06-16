@@ -93,7 +93,7 @@ public sealed partial class AccessoryHeadsetSystem : EntitySystem
     /// <summary>
     ///     Uniform unequipped. Revoke radio from any earpiece accessories inside it.
     /// </summary>
-        private void OnHolderUnequipped(Entity<UniformAccessoryHolderComponent> ent, ref ClothingGotUnequippedEvent args)
+    private void OnHolderUnequipped(Entity<UniformAccessoryHolderComponent> ent, ref ClothingGotUnequippedEvent args)
     {
         if (!_container.TryGetContainer(ent, ent.Comp.ContainerId, out var container))
             return;
@@ -103,8 +103,8 @@ public sealed partial class AccessoryHeadsetSystem : EntitySystem
             if (TryComp<AccessoryHeadsetComponent>(accessory, out var headset))
                 RevokeRadio((accessory, headset));
 
-            if (HasComp<RankChangerComponent>(accessory))
-                _rank.ReapplyJobRank(args.Wearer);
+            if (TryComp<RankChangerComponent>(accessory, out var changer))
+                _rankChanger.RevertRank(args.Wearer, changer);
         }
     }
 

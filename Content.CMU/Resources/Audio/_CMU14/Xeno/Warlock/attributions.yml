@@ -1,0 +1,11 @@
+- files:
+  - "EMPulse.ogg"
+  - "magic.ogg"
+  - "portal.ogg"
+  - "roar_warlock.ogg"
+  - "volkite_4.ogg"
+  - "woosh_swoosh.ogg"
+  - "xadarblast.ogg"
+  license: "CC-BY-NC-SA-3.0"
+  copyright: "Taken from tgstation/TerraGov-Marine-Corps at commit 3fc0dc2bf1dd46b3396c2dc3168b0098ff5a2d18. License and authorship per TGMC README asset table."
+  source: "https://github.com/tgstation/TerraGov-Marine-Corps/tree/3fc0dc2bf1dd46b3396c2dc3168b0098ff5a2d18/sound"
