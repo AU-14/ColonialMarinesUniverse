@@ -5,6 +5,7 @@ using Content.Client.Viewport;
 using Content.Shared._CMU14.ZLevels;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.Examine;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Robust.Client.ComponentTrees;
@@ -476,7 +477,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         {
             var targetIndex = spreadChecks == 1
                 ? _currentViewOpeningBounds.Count / 2
-                : (int) MathF.Round(i * (_currentViewOpeningBounds.Count - 1) / (float) (spreadChecks - 1));
+                : (int)MathF.Round(i * (_currentViewOpeningBounds.Count - 1) / (float)(spreadChecks - 1));
             var index = FindUncheckedOpeningAround(targetIndex, _currentViewOpeningBounds.Count, _checkedOpeningIndices);
             if (index < 0)
                 break;
@@ -508,7 +509,12 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     private bool CanSeeCurrentViewOpeningPoint(MapCoordinates origin, MapId mapId, Vector2 targetPosition)
     {
         LastProjectedLightingDebugStats.CurrentOpeningLosChecks++;
-        return _examine.InRangeUnOccluded(origin, new MapCoordinates(targetPosition, mapId), 0f, null);
+        var target = new MapCoordinates(targetPosition, mapId);
+        var distSquared = (origin.Position - target.Position).LengthSquared();
+        if (distSquared > ExamineSystemShared.MaxRaycastRange * ExamineSystemShared.MaxRaycastRange)
+            return false;
+
+        return _examine.InRangeUnOccluded(origin, target, 0f, null);
     }
 
     private static Vector2 InsetOpeningPoint(Vector2 point, Vector2 center)
@@ -1146,7 +1152,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
                 if (rayLength > 0.01f)
                 {
                     LastProjectedLightingDebugStats.Raycasts++;
-                    var ray = new CollisionRay(sourceLight.WorldPosition, rayDirection.Normalized(), (int) CollisionGroup.Opaque);
+                    var ray = new CollisionRay(sourceLight.WorldPosition, rayDirection.Normalized(), (int)CollisionGroup.Opaque);
                     var blocked = false;
                     foreach (var _ in _physics.IntersectRay(adjacentMapId, ray, rayLength, ignoredEnt: sourceLight.Entity, returnOnFirstHit: true))
                     {
@@ -1321,8 +1327,8 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     private static OpeningCandidateBucketKey GetOpeningCandidateBucketKey(Vector2 openingCenter)
     {
         return new OpeningCandidateBucketKey(
-            (int) MathF.Floor(openingCenter.X / OpeningConnectionDistance),
-            (int) MathF.Floor(openingCenter.Y / OpeningConnectionDistance));
+            (int)MathF.Floor(openingCenter.X / OpeningConnectionDistance),
+            (int)MathF.Floor(openingCenter.Y / OpeningConnectionDistance));
     }
 
     private static bool AreConnectedOpenings(ProjectedLightCandidate left, ProjectedLightCandidate right)
@@ -1350,7 +1356,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
 
         var length = maxAlong - minAlong;
         var sampleCount = Math.Clamp(
-            (int) MathF.Ceiling(length / StripSampleSpacing) + 1,
+            (int)MathF.Ceiling(length / StripSampleSpacing) + 1,
             2,
             Math.Min(component.Count, MaxStripSamples));
         var energyScale = 1f / MathF.Sqrt(sampleCount);
@@ -1359,7 +1365,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         {
             var index = sampleCount == 1
                 ? 0
-                : (int) MathF.Round(i * (component.Count - 1) / (sampleCount - 1f));
+                : (int)MathF.Round(i * (component.Count - 1) / (sampleCount - 1f));
             var baseCandidate = component[Math.Clamp(index, 0, component.Count - 1)];
             var candidate = baseCandidate with
             {
@@ -1747,7 +1753,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             return false;
         }
 
-        var elapsedSeconds = Math.Max(0f, (float) (_timing.CurTime - projected.LastActiveTime).TotalSeconds);
+        var elapsedSeconds = Math.Max(0f, (float)(_timing.CurTime - projected.LastActiveTime).TotalSeconds);
         if (elapsedSeconds >= visibilityGraceSeconds)
             return false;
 

@@ -49,3 +49,25 @@
   components:
   - type: CMUZLevelHighGround
     previewUpLevel: false
+
+- type: entity
+  parent: CMUMultiZStairsNoPreview
+  id: CMUMultiZStairsSolo
+  components:
+  - type: Sprite
+    drawdepth: WallMountedItems
+    noRot: true
+    sprite: _CMU14/Structures/stairs.rsi
+    state: p_stair_solo_cap
+    offset: 0,0.5
+
+- type: entity
+  parent: CMUMultiZStairsNoPreview
+  id: CMUMultiZStairsKutjevoSolo
+  components:
+  - type: Sprite
+    drawdepth: WallMountedItems
+    noRot: true
+    sprite: _CMU14/Structures/stairs.rsi
+    state: p_stair_kutjevo_solo_cap
+    offset: 0,0.5

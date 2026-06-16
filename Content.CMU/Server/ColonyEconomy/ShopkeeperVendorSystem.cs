@@ -67,7 +67,7 @@ public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
             return;
         if (!_accessReader.IsAllowed(args.User, uid))
             return;
-        if (comp.StockBlacklist != null && _whitelist.IsWhitelistFail(comp.StockBlacklist, args.Used))
+        if (comp.StockBlacklist != null && _whitelist.IsWhitelistPass(comp.StockBlacklist, args.Used))
         {
             args.Handled = true;
             return;

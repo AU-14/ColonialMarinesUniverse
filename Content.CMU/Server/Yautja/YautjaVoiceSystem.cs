@@ -19,6 +19,7 @@ public sealed partial class YautjaVoiceSystem : EntitySystem
     private static readonly ProtoId<EmotePrototype> LaughEmote = "CMUYautjaLaugh";
     private static readonly ProtoId<EmotePrototype> GrowlEmote = "CMUYautjaGrowl";
     private static readonly ProtoId<EmotePrototype> PainEmote = "CMUYautjaPain";
+    private static readonly ProtoId<EmotePrototype> DistractEmote = "CMUYautjaDistract";
     private static readonly ProtoId<EmotePrototype> DeathCryEmote = "CMUYautjaDeathCry";
     private static readonly ProtoId<EmotePrototype> DeathLaughEmote = "CMUYautjaDeathLaugh";
 
@@ -30,6 +31,7 @@ public sealed partial class YautjaVoiceSystem : EntitySystem
         SubscribeLocalEvent<YautjaComponent, YautjaVoiceLaughActionEvent>(OnVoiceLaugh);
         SubscribeLocalEvent<YautjaComponent, YautjaVoiceGrowlActionEvent>(OnVoiceGrowl);
         SubscribeLocalEvent<YautjaComponent, YautjaVoicePainActionEvent>(OnVoicePain);
+        SubscribeLocalEvent<YautjaComponent, YautjaVoiceDistractActionEvent>(OnVoiceDistract);
         SubscribeLocalEvent<YautjaComponent, YautjaVoiceDeathCryActionEvent>(OnVoiceDeathCry);
         SubscribeLocalEvent<YautjaComponent, YautjaVoiceDeathLaughActionEvent>(OnVoiceDeathLaugh);
     }
@@ -41,6 +43,7 @@ public sealed partial class YautjaVoiceSystem : EntitySystem
         _actions.AddAction(ent.Owner, ref ent.Comp.VoiceLaughAction, ent.Comp.VoiceLaughActionId);
         _actions.AddAction(ent.Owner, ref ent.Comp.VoiceGrowlAction, ent.Comp.VoiceGrowlActionId);
         _actions.AddAction(ent.Owner, ref ent.Comp.VoicePainAction, ent.Comp.VoicePainActionId);
+        _actions.AddAction(ent.Owner, ref ent.Comp.VoiceDistractAction, ent.Comp.VoiceDistractActionId);
         _actions.AddAction(ent.Owner, ref ent.Comp.VoiceDeathCryAction, ent.Comp.VoiceDeathCryActionId);
         _actions.AddAction(ent.Owner, ref ent.Comp.VoiceDeathLaughAction, ent.Comp.VoiceDeathLaughActionId);
     }
@@ -52,6 +55,7 @@ public sealed partial class YautjaVoiceSystem : EntitySystem
         _actions.RemoveAction(ent.Owner, ent.Comp.VoiceLaughAction);
         _actions.RemoveAction(ent.Owner, ent.Comp.VoiceGrowlAction);
         _actions.RemoveAction(ent.Owner, ent.Comp.VoicePainAction);
+        _actions.RemoveAction(ent.Owner, ent.Comp.VoiceDistractAction);
         _actions.RemoveAction(ent.Owner, ent.Comp.VoiceDeathCryAction);
         _actions.RemoveAction(ent.Owner, ent.Comp.VoiceDeathLaughAction);
     }
@@ -79,6 +83,11 @@ public sealed partial class YautjaVoiceSystem : EntitySystem
     private void OnVoicePain(Entity<YautjaComponent> ent, ref YautjaVoicePainActionEvent args)
     {
         PlayVoice(ent, args, PainEmote);
+    }
+
+    private void OnVoiceDistract(Entity<YautjaComponent> ent, ref YautjaVoiceDistractActionEvent args)
+    {
+        PlayVoice(ent, args, DistractEmote);
     }
 
     private void OnVoiceDeathCry(Entity<YautjaComponent> ent, ref YautjaVoiceDeathCryActionEvent args)
