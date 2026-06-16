@@ -55,6 +55,7 @@
       - RMCMetalRodBuild
       - RMCWallGirderBuild
       - RMCWindowFrameBuild
+      - AU14JukeboxMachineBuild
       # Airlock assembly
       # large airlock assembly
       - RMCDividerConstruction

@@ -98,6 +98,16 @@
   skill: RMCSkillConstruction
   requiredSkillLevel: 2
 
+- type: rmcConstruction
+  id: AU14JukeboxMachineBuild
+  name: jukebox machine
+  prototype: AU14Jukebox
+  noRotate: true
+  doAfterTime: 3
+  materialCost: 2
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 1
+
 # Bed
 - type: rmcConstruction
   id: RMCBedBuild
