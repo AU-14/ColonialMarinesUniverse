@@ -94476,7 +94476,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -156.45798,-87.14483
       parent: 1
-- proto: CMM2132Machete
+- proto: AU14ToolMachete
   entities:
   - uid: 3625
     components:
@@ -154848,7 +154848,7 @@ entities:
     - type: Transform
       pos: -143.5,-85.5
       parent: 1
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 13891
     components:
