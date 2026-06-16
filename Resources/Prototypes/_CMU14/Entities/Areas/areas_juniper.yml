@@ -60,9 +60,44 @@
     unweedable: false
 
 - type: entity
+  parent: RMCAreaJuniperCommandCic
+  id: RMCAreaJuniperCommandCicNArm
+  name: CIC North Armory
+
+- type: entity
+  parent: RMCAreaJuniperCommandCic
+  id: RMCAreaJuniperCommandCicSArm
+  name: CIC South Armory
+
+- type: entity
+  parent: RMCAreaJuniperCommandCic
+  id: RMCAreaJuniperCommandCicNIntel
+  name: CIC North Intel
+
+- type: entity
   parent: RMCAreaJuniperCommand
   id: RMCAreaJuniperCommandCichallway
   name: Secure Command Hallway
+  components:
+  - type: Sprite
+    state: airoom
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaJuniperCommand
+  id: RMCAreaJuniperCommandCichallwayladders
+  name: Secure Command Hallway Ladders
+  components:
+  - type: Sprite
+    state: airoom
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaJuniperCommand
+  id: RMCAreaJuniperCommandCichallwaystairs
+  name: Secure Command Hallway Stairs
   components:
   - type: Sprite
     state: airoom
@@ -196,6 +231,11 @@
   name: Ordnance Workshop
 
 - type: entity
+  parent: RMCAreaJuniperEngineeringLowerWorkshop
+  id: RMCAreaJuniperEngineeringLowerReactorHangar
+  name: Hangar Reactors and Pump
+
+- type: entity
   parent: RMCAreaJuniperEngineeringLower
   id: RMCAreaJuniperEngineeringLowerEngineCore
   name: Engine Reactor Core Room
@@ -299,7 +339,7 @@
 - type: entity
   parent: RMCAreaJuniperShipboard
   id: RMCAreaJuniperShipboardPanic
-  name: Hangar Panic Room
+  name: Hangar Storage Room
   components:
   - type: Sprite
     state: brig
@@ -530,6 +570,46 @@
     zLevel: 2
 
 - type: entity
+  parent: RMCAreaJuniperHallwaysHangar
+  id: RMCAreaJuniperHallwaysReqInner
+  name: Requisitions Inner
+  components:
+  - type: Sprite
+    state: hangar
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaJuniperHallwaysHangar
+  id: RMCAreaJuniperHallwaysReqOutter
+  name: Requisitions Outer
+  components:
+  - type: Sprite
+    state: hangar
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaJuniperHallwaysHangar
+  id: RMCAreaJuniperHallwaysVicBayOne
+  name: Vehicle Bay One
+  components:
+  - type: Sprite
+    state: hangar
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaJuniperHallwaysHangar
+  id: RMCAreaJuniperHallwaysVicBayTwo
+  name: Vehicle Bay Two
+  components:
+  - type: Sprite
+    state: hangar
+  - type: Area
+    zLevel: 2
+
+- type: entity
   parent: RMCAreaJuniperHallways
   id: RMCAreaJuniperHallwaysLower
   components:
@@ -539,7 +619,7 @@
 - type: entity
   parent: RMCAreaJuniperHallwaysLower
   id: RMCAreaJuniperHallwaysLowerVehiclehangar
-  name: Lower Deck Vehicle Storage
+  name: Vehicle Storage
   components:
   - type: Sprite
     state: exoarmor
@@ -547,7 +627,7 @@
 - type: entity
   parent: RMCAreaJuniperHallwaysLower
   id: RMCAreaJuniperHallwaysLowerRepairBay
-  name: Lower Deck Deployment Workshop
+  name: Deployment Workshop
   components:
   - type: Sprite
     state: dropshiprepair
@@ -936,6 +1016,16 @@
 
 - type: entity
   parent: RMCAreaJuniperLiving
+  id: RMCAreaJuniperLivingHangarBriefing
+  name: Hangar Briefing Area
+  components:
+  - type: Sprite
+    state: briefing
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaJuniperLiving
   id: RMCAreaJuniperLivingPortEmb
   name: Lower Deck Port Extended Mission Bunks
   components:
@@ -1111,8 +1201,38 @@
 
 - type: entity
   parent: RMCAreaJuniperLiving
+  id: RMCAreaJuniperLivingJanicloset
+  name: Juniper Janitorial Suite
+  components:
+  - type: Sprite
+    state: livingspace
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaJuniperLiving
   id: RMCAreaJuniperLivingSynthcloset
-  name: Upper Deck Synthetic Storage Closet
+  name: Juniper Synthetic Offices
+  components:
+  - type: Sprite
+    state: livingspace
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaJuniperLiving
+  id: RMCAreaJuniperLivingSynthMeeting
+  name: Juniper Synthetic Meeting Room
+  components:
+  - type: Sprite
+    state: livingspace
+  - type: Area
+    zLevel: 1
+
+- type: entity
+  parent: RMCAreaJuniperLiving
+  id: RMCAreaJuniperLivingSynthRepair
+  name: Juniper Synthetic Repair Bay
   components:
   - type: Sprite
     state: livingspace
@@ -1308,6 +1428,46 @@
     zLevel: 2
 
 - type: entity
+  parent: RMCAreaJuniperMedical
+  id: RMCAreaJuniperMedicalLowerMedicalHalls
+  name: Medical Lower Halls
+  components:
+  - type: Sprite
+    state: medical
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaJuniperMedical
+  id: RMCAreaJuniperMedicalLowerMedicalOffice
+  name: Medical Lower Office
+  components:
+  - type: Sprite
+    state: medical
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaJuniperMedical
+  id: RMCAreaJuniperMedicalUpperMedicalOffice
+  name: Medical Upper Office
+  components:
+  - type: Sprite
+    state: medical
+  - type: Area
+    zLevel: 2
+
+- type: entity
+  parent: RMCAreaJuniperMedical
+  id: RMCAreaJuniperMedicalLowerMedicalChemical
+  name: Medical Lower Chemical Storage
+  components:
+  - type: Sprite
+    state: medical
+  - type: Area
+    zLevel: 2
+
+- type: entity
   parent: RMCAreaJuniper
   id: RMCAreaJuniperDeployment
   components:
@@ -1375,6 +1535,21 @@
   parent: RMCAreaJuniperDeployment
   id: RMCAreaJuniperDeploymentSLPrep
   name: Juniper Deployment SL Prep
+
+- type: entity
+  parent: RMCAreaJuniperDeployment
+  id: RMCAreaJuniperDeploymentHall
+  name: Juniper Deployment Hallway
+
+- type: entity
+  parent: RMCAreaJuniperDeploymentHall
+  id: RMCAreaJuniperDeploymentHallStairs
+  name: Juniper Deployment Hallway Stairs
+
+- type: entity
+  parent: RMCAreaJuniperDeploymentHall
+  id: RMCAreaJuniperDeploymentHallLadder
+  name: Juniper Deployment Hallway Ladder
 
 - type: entity
   parent: RMCAreaJuniper
