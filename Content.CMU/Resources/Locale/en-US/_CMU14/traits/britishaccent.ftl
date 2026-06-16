@@ -3,8 +3,8 @@ trait-british-desc = You speak like a person from England! Wagwan mate.
 
 accent-british-words-1 = guy
 accent-british-words-replace-1 = bloke
-accent-british-words-2 = right
-accent-british-words-replace-2 = innit
+accent-british-words-2 = boss
+accent-british-words-replace-2 = bossman
 accent-british-words-3 = mom
 accent-british-words-replace-3 = mum
 accent-british-words-4 = color
