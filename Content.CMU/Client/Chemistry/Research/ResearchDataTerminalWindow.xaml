@@ -5,6 +5,6 @@
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:uiControls="clr-namespace:Content.Client.UserInterface.Controls"
     Title="{Loc ui-research-data-terminal-name}"
-    minSize="400 300">
+    MinSize="400 300">
     
 </controls:ResearchDataTerminalWindow>
