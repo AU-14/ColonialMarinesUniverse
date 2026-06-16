@@ -6,7 +6,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CMU14.Chemistry.Effects.Special;
 
-public sealed partial class CrossCiphering : RMCChemicalEffect
+public sealed partial class Crossciphering : RMCChemicalEffect
 {
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {

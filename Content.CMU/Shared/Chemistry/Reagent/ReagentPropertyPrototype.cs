@@ -62,6 +62,9 @@ public partial class ReagentPropertyPrototype : IPrototype, IInheritingPrototype
     public bool GenerationDisabled = false;
 
     [ViewVariables(VVAccess.ReadOnly), DataField]
+    public string EffectName;
+
+    [ViewVariables(VVAccess.ReadOnly), DataField]
     public bool Starter = false;
 
     [ViewVariables(VVAccess.ReadOnly), DataField]
